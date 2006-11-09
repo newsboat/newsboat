@@ -1,38 +1,39 @@
 #include <rss.h>
-#include <raptor.h>
 
 using namespace noos;
 
-static void do_handle(void* user_data, const raptor_statement* triple) {
-	rss_handler * h = static_cast<rss_handler *>(user_data);
-	if (h) {
-		h->handle(triple);
-	}
-}
+rss_parser::rss_parser(const char * uri) : my_uri(uri), mrss(0) { }
 
-rss_uri::rss_uri(const char * uri_string) : uri_str(uri_string) {
-	unsigned char * uris = raptor_uri_filename_to_uri_string(uri_str.c_str());
-	uri = raptor_new_uri(uris);
-	raptor_free_memory(uris);
-}
-
-rss_uri::~rss_uri() {
-	raptor_free_uri(uri);
-}
-
-rss_parser::rss_parser(const rss_uri& uri) : my_uri(uri), handler(0) {
-	parser = raptor_new_parser("guess"); // or rdfxml?
-}
-
-rss_parser::~rss_parser() {
-	raptor_free_parser(parser);
-}
-
-void rss_parser::set_handler(rss_handler * h) {
-	handler = h;
-}
+rss_parser::~rss_parser() { }
 
 void rss_parser::parse() {
-	raptor_set_statement_handler(parser, handler, do_handle);
-	raptor_parse_file(parser, my_uri.uri, NULL);
+	mrss_error_t err = mrss_parse_url(const_cast<char *>(my_uri.c_str()), &mrss);
+	if (err != MRSS_OK) {
+		// TODO: throw exception
+		if (mrss) {
+			mrss_free(mrss);
+		}
+		return;
+	}
+
+	if (feed.items().size() > 0) {
+		feed.items().erase(feed.items().begin(),feed.items().end());
+	}
+
+	if (mrss->title) feed.title() = mrss->title;
+	if (mrss->description) feed.description() = mrss->description;
+	if (mrss->link) feed.link() = mrss->link;
+	if (mrss->pubDate) feed.pubDate() = mrss->pubDate;
+
+	for (mrss_item_t * item = mrss->item; item != NULL; item = item->next ) {
+		rss_item x;
+		if (item->title) x.title() = item->title;
+		if (item->link) x.link() = item->link;
+		if (item->author) x.author() = item->author;
+		if (item->description) x.description() = item->description;
+		if (item->pubDate) x.pubDate() = item->pubDate;
+		feed.items().push_back(x);
+	}
+
+	mrss_free(mrss);
 }

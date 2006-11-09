@@ -2,7 +2,7 @@ CC=cc
 CXX=c++
 CFLAGS=-g -I./include
 CXXFLAGS=-g -I./include
-LDFLAGS=-g -lstfl -lraptor
+LDFLAGS=-g -lstfl -lmrss -lnxml
 OUTPUT=noos
 SRC=$(wildcard *.cpp) $(wildcard src/*.cpp)
 OBJS=$(patsubst %.cpp,%.o,$(SRC))
@@ -15,7 +15,7 @@ RM=rm -f
 all: $(OUTPUT)
 
 $(OUTPUT): $(OBJS)
-	$(CXX) -o $(OUTPUT) $(CXXFLAGS) $(LDFLAGS) $(OBJS)
+	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $(OUTPUT) $(OBJS)
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -o $@ -c $<

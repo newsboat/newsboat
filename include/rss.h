@@ -2,41 +2,59 @@
 #define NOOS_RSS__H
 
 #include <string>
+#include <vector>
 
-#include <raptor.h>
+extern "C" {
+#include <mrss.h>
+}
 
 namespace noos {
 
-	class rss_parser;
-	class rss_handler;
-
-	class rss_uri {
+	class rss_item {
 		public:
-			rss_uri(const char * uri_string = NULL);
-			~rss_uri();
+			rss_item() { }
+			~rss_item() { }
+			inline std::string& title() { return title_; }
+			inline std::string& link() { return link_; }
+			inline std::string& author() { return author_; }
+			inline std::string& description() { return description_; }
+			inline std::string& pubDate() { return pubDate_; }
 		private:
-			raptor_uri *uri;
-			std::string uri_str;
+			std::string title_;
+			std::string link_;
+			std::string author_;
+			std::string description_;
+			std::string pubDate_;
+	};
 
-		friend class rss_parser;
+	class rss_feed {
+		public:
+			rss_feed() { }
+			~rss_feed() { }
+			inline std::string& title() { return title_; }
+			inline std::string& description() { return description_; }
+			inline std::string& link() { return link_; }
+			inline std::string& pubDate() { return pubDate_; }
+			inline std::vector<rss_item>& items() { return items_; }
+
+		private:
+			std::string title_;
+			std::string description_;
+			std::string link_;
+			std::string pubDate_;
+			std::vector<rss_item> items_;
 	};
 
 	class rss_parser {
 		public:
-			rss_parser(const rss_uri& uri);
+			rss_parser(const char * uri);
 			~rss_parser();
 			void parse();
-			void set_handler(rss_handler * h);
+			inline rss_feed& get_feed() { return feed; }
 		private:
-			raptor_parser * parser;
-			const rss_uri& my_uri;
-			rss_handler * handler;
-	};
-
-	class rss_handler {
-		public:
-			rss_handler() { }
-			virtual void handle(const raptor_statement* ) = 0;
+			std::string my_uri;
+			mrss_t * mrss;
+			rss_feed feed;
 	};
 
 }
