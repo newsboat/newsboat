@@ -2,8 +2,6 @@
 
 #include <rss.h>
 
-#include "stfl/test.h"
-
 using namespace noos;
 
 int main(int argc, char * argv[]) {

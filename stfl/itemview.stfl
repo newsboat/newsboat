@@ -1,0 +1,10 @@
+vbox
+  @style_normal:bg=black,fg=white
+  @info#style_normal:bg=white,fg=black
+  label#info
+    text[head]:"Article '#'"
+    .expand:h
+  textview[article]
+    style_end:fg=blue,attr=bold
+    .expand:vh
+    .offset:0

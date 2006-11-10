@@ -1,0 +1,14 @@
+vbox
+  @style_normal:bg=black,fg=white
+  @info#style_normal:bg=white,fg=black
+  label#info
+    text[head]:"Articles for '#'"
+    .expand:h
+  list[items]
+    .expand:vh
+    style_focus:fg=black,bg=white,attr=bold
+    pos_name[itemposname]:
+    pos[itempos]:0
+  label#info
+    text[help]:"q:Quit ENTER:Open s:Save"
+    .expand:h
