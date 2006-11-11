@@ -1,11 +1,14 @@
 #include <iostream>
 
 #include <rss.h>
+#include <view.h>
+#include <controller.h>
 
 using namespace noos;
 
 int main(int argc, char * argv[]) {
 
+/*
 	if (argc < 2) {
 		std::cout << "usage: " << argv[0] << " <URL>" << std::endl;
 		return 1;
@@ -27,6 +30,13 @@ int main(int argc, char * argv[]) {
 		std::cout << "  * Link: " << it->link() << std::endl;
 		std::cout << "  * Description: " << it->description() << std::endl << std::endl;
 	}
+*/
+
+	controller c;
+	view v(&c);
+	c.set_view(&v);
+
+	c.run();
 
 	return 0;
 }

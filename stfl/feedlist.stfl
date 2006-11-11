@@ -2,13 +2,16 @@ vbox
   @style_normal:bg=black,fg=white
   @info#style_normal:bg=white,fg=black
   label#info
-    text[head]:"Your feeds"
+    text:"Your feeds"
     .expand:h
-  list[feeds]
-    .expand:vh
+  !list[feeds]
     style_focus:fg=black,bg=white,attr=bold
+    .expand:vh
     pos_name[feedposname]:
     pos[feedpos]:0
   label#info
     text[help]:"q:Quit ENTER:Open r:Reload R:Reload All"
+    .expand:h
+  label
+    text[msg]:""
     .expand:h
