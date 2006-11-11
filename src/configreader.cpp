@@ -26,3 +26,8 @@ void configreader::reload() {
 		} while (!f.eof());
 	}
 }
+
+void configreader::load_config(const std::string& file) {
+	filename = file;
+	reload();
+}

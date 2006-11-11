@@ -4,6 +4,7 @@
 #include <controller.h>
 #include <vector>
 #include <string>
+#include <rss.h>
 
 extern "C" {
 #include <stfl.h>
@@ -16,9 +17,11 @@ namespace noos {
 			view(controller * );
 			~view();
 			void run_feedlist();
-			void run_itemlist();
+			void run_itemlist(rss_feed& feed);
 			void run_itemview();
 			void set_feedlist(const std::vector<std::string>& feeds);
+			void feedlist_error(char * msg);
+			void feedlist_status(char * msg);
 		private:
 			controller * ctrl;
 			stfl_form * feedlist_form;

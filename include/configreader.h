@@ -8,8 +8,9 @@ namespace noos {
 
 	class configreader {
 		public:
-			configreader(const std::string& file);
+			configreader(const std::string& file = "");
 			~configreader();
+			void load_config(const std::string& file);
 			const std::vector<std::string>& get_urls();
 			void reload();
 		private:
