@@ -26,6 +26,10 @@ void controller::run() {
 	v->run_feedlist();
 }
 
+void controller::open_item(rss_item& item) {
+	v->run_itemview(item);
+}
+
 void controller::open_feed(unsigned int pos) {
 	if (pos <= cfg.get_urls().size()) {
 		std::string feedurl = cfg.get_urls()[pos];

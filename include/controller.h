@@ -2,6 +2,7 @@
 #define NOOS_CONTROLLER__H
 
 #include <configreader.h>
+#include <rss.h>
 
 namespace noos {
 
@@ -13,6 +14,7 @@ namespace noos {
 			void set_view(view * vv);
 			void run();
 			void open_feed(unsigned int pos);
+			void open_item(rss_item& item);
 		private:
 			view * v;
 			configreader cfg;

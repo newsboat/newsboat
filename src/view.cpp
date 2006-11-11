@@ -33,10 +33,21 @@ void view::feedlist_status(char * msg) {
 	stfl_run(feedlist_form,-1);
 }
 
+void view::itemlist_status(char * msg) {
+	stfl_set(itemlist_form,"msg",msg);
+	stfl_run(itemlist_form,-1);
+}
+
 void view::feedlist_error(char * msg) {
 	feedlist_status(msg);
 	::sleep(2);
 	feedlist_status("");
+}
+
+void view::itemlist_error(char * msg) {
+	itemlist_status(msg);
+	::sleep(2);
+	itemlist_status("");
 }
 
 void view::run_feedlist() {
@@ -110,7 +121,15 @@ void view::run_itemlist(rss_feed& feed) {
 		if (!event) continue;
 
 		if (strcmp(event,"ENTER")==0) {
-			// c->open_item();
+			const char * itemposname = stfl_get(itemlist_form, "itemposname");
+			if (itemposname) {
+				std::istringstream posname(itemposname);
+				unsigned int pos = 0;
+				posname >> pos;
+				ctrl->open_item(items[pos]);
+			} else {
+				itemlist_error("Error: no item selected!"); // should not happen
+			}
 		} else if (strncmp(event,"CHAR(",5)==0) {
 
 			unsigned int x;
@@ -132,8 +151,68 @@ void view::run_itemlist(rss_feed& feed) {
 	} while (!quit);
 }
 
-void view::run_itemview() {
+void view::run_itemview(rss_item& item) {
+	bool quit = false;
 
+	std::string code = "{list";
+
+	code.append("{listitem text:");
+	std::ostringstream title;
+	title << "Title: ";
+	title << item.title();
+	code.append(stfl_quote(title.str().c_str()));
+	code.append("}");
+
+	code.append("{listitem text:");
+	std::ostringstream author;
+	author << "Author: ";
+	author << item.author();
+	code.append(stfl_quote(author.str().c_str()));
+	code.append("}");
+
+	code.append("{listitem text:");
+	std::ostringstream link;
+	link << "Link: ";
+	link << item.link();
+	code.append(stfl_quote(link.str().c_str()));
+	code.append("}");
+
+	code.append("{listitem text:\"\"}");
+
+	code.append("{listitem text:");
+	code.append(stfl_quote(item.description().c_str()));
+	code.append("}");
+
+	code.append("}");
+
+	stfl_modify(itemview_form,"article","replace_inner",code.c_str());
+
+	do {
+		const char * event = stfl_run(itemview_form,0);
+		if (!event) continue;
+
+		if (strcmp(event,"ENTER")==0) {
+			// nothing
+		} else if (strncmp(event,"CHAR(",5)==0) {
+
+			unsigned int x;
+			char c;
+			sscanf(event,"CHAR(%d)",&x); // XXX: refactor
+
+			c = static_cast<char>(x);
+
+			switch (c) {
+				case 's':
+					// TODO: save currently selected article
+					break;
+				case 'q':
+					quit = true;
+					break;
+			}
+		}
+
+
+	} while (!quit);
 }
 
 void view::set_feedlist(const std::vector<std::string>& feeds) {

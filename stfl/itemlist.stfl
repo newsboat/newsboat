@@ -12,3 +12,6 @@ vbox
   label#info
     text[help]:"q:Quit ENTER:Open s:Save"
     .expand:h
+  label
+    text[msg]:""
+    .expand:h
