@@ -4,6 +4,10 @@
 #include <sstream>
 #include <fstream>
 #include <iostream>
+#include <cassert>
+#include <rss.h>
+
+using namespace noos;
 
 //-------------------------------------------
 
@@ -17,12 +21,39 @@ struct cb_handler {
 
 static int count_callback(void * handler, int argc, char ** argv, char ** azColName) {
 	cb_handler * cbh = (cb_handler *)handler;
+	std::cerr << "inside count_callback" << std::endl;
 	if (argc>0) {
 		std::istringstream is(argv[0]);
 		int x;
 		is >> x;
 		cbh->set_count(x);
 	}
+	std::cerr << "count_callback: count = " << cbh->count() << std::endl;
+	return 0;
+}
+
+static int rssfeed_callback(void * myfeed, int argc, char ** argv, char ** azColName) {
+	rss_feed * feed = (rss_feed *)myfeed;
+	assert(argc == 2);
+	assert(argv[0] != NULL);
+	assert(argv[1] != NULL);
+	feed->title() = argv[0];
+	feed->link() = argv[1];
+	std::cerr << "callback: feed->title = " << feed->title() << std::endl;
+	return 0;
+}
+
+static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** azColName) {
+	rss_feed * feed = (rss_feed *)myfeed;
+	assert (argc == 6);
+	rss_item item;
+	item.guid() = argv[0];
+	item.title() = argv[1];
+	item.author() = argv[2];
+	item.link() = argv[3];
+	item.pubDate() = argv[4];
+	item.description() = argv[5];
+	feed->items().push_back(item);
 	return 0;
 }
 
@@ -30,7 +61,6 @@ static int count_callback(void * handler, int argc, char ** argv, char ** azColN
 
 
 
-using namespace noos;
 
 cache::cache(const std::string& cachefile) : db(0) {
 	bool file_exists = false;
@@ -59,7 +89,8 @@ void cache::populate_tables() {
 	int rc;
 
 	rc = sqlite3_exec(db,"CREATE TABLE rss_feed ( "
-						" url VARCHAR(1024) PRIMARY KEY NOT NULL, "
+						" rssurl VARCHAR(1024) PRIMARY KEY NOT NULL, "
+						" url VARCHAR(1024) NOT NULL, "
 						" title VARCHAR(1024) NOT NULL ); " , NULL, NULL, NULL);
 
 	rc = sqlite3_exec(db,"CREATE TABLE rss_item ( "
@@ -74,27 +105,73 @@ void cache::populate_tables() {
 
 
 void cache::externalize_rssfeed(rss_feed& feed) {
-	// XXX: protect from SQL injection!!!!
 	std::ostringstream query;
-	query << "SELECT count(*) FROM rss_feed WHERE url = '" << feed.link() << "';";
+	query << "SELECT count(*) FROM rss_feed WHERE rssurl = '" << feed.rssurl() << "';";
 	cb_handler count_cbh;
 	int rc = sqlite3_exec(db,query.str().c_str(),count_callback,&count_cbh,NULL);
-	std::cerr << "externalize: count rc = " << rc << std::endl;
+	// std::cerr << "externalize: count rc = " << rc << std::endl;
 	int count = count_cbh.count();
-	std::cerr << "externalize: count = " << count << std::endl;
+	// std::cerr << "externalize: count = " << count << std::endl;
 	if (count > 0) {
-		char * updatequery = sqlite3_mprintf("UPDATE rss_feed SET title = '%q' WHERE url = '%q';",feed.title().c_str(),feed.link().c_str());
+		char * updatequery = sqlite3_mprintf("UPDATE rss_feed SET title = '%q', url = '%q' WHERE rssurl = '%q';",feed.title().c_str(),feed.link().c_str(), feed.rssurl().c_str());
 		rc = sqlite3_exec(db,updatequery,NULL,NULL,NULL);
 		free(updatequery);
-		std::cerr << "externalize: update rc = " << rc << " query = " << updatequery << std::endl;
+		// std::cerr << "externalize: update rc = " << rc << " query = " << updatequery << std::endl;
 	} else {
-		char * insertquery = sqlite3_mprintf("INSERT INTO rss_feed (url, title) VALUES ( '%q', '%q' );", feed.link().c_str(), feed.title().c_str());
+		char * insertquery = sqlite3_mprintf("INSERT INTO rss_feed (rssurl, url, title) VALUES ( '%q', '%q', '%q' );", feed.rssurl().c_str(), feed.link().c_str(), feed.title().c_str());
 		rc = sqlite3_exec(db,insertquery,NULL,NULL,NULL);
 		free(insertquery);
-		std::cerr << "externalize: insert rc = " << rc << " query = " << insertquery << std::endl;
+		// std::cerr << "externalize: insert rc = " << rc << " query = " << insertquery << std::endl;
+	}
+
+	for (std::vector<rss_item>::iterator it=feed.items().begin(); it != feed.items().end(); ++it) {
+		char * query = sqlite3_mprintf("SELECT count(*) FROM rss_item WHERE guid = '%q';",it->guid().c_str());
+		cb_handler count_cbh;
+		int rc = sqlite3_exec(db,query,count_callback,&count_cbh,NULL);
+		assert(rc == SQLITE_OK);
+		free(query);
+		if (count_cbh.count() > 0) {
+			char * update = sqlite3_mprintf("UPDATE rss_item SET title = '%q', author = '%q', url = '%q', feedurl = '%q', pubDate = '%q', content = '%q' WHERE guid = '%q'",
+				it->title().c_str(), it->author().c_str(), it->link().c_str(), 
+				feed.rssurl().c_str(), it->pubDate().c_str(), it->description().c_str(), it->guid().c_str());
+			rc = sqlite3_exec(db,update,NULL,NULL,NULL);
+			assert(rc == SQLITE_OK);
+			free(update);
+		} else {
+			char * insert = sqlite3_mprintf("INSERT INTO rss_item (guid,title,author,url,feedurl,pubDate,content) "
+											"VALUES ('%q','%q','%q','%q','%q','%q','%q')",
+											it->guid().c_str(), it->title().c_str(), it->author().c_str(), 
+											it->link().c_str(), feed.rssurl().c_str(), it->pubDate().c_str(), it->description().c_str());
+			rc = sqlite3_exec(db,insert,NULL,NULL,NULL);
+			assert(rc == SQLITE_OK);
+			free(insert);
+		}
 	}
 }
 
 void cache::internalize_rssfeed(rss_feed& feed) {
-	// TODO
+	char * query = sqlite3_mprintf("SELECT count(*) FROM rss_feed WHERE rssurl = '%q';",feed.rssurl().c_str());
+	cb_handler count_cbh;
+	int rc = sqlite3_exec(db,query,count_callback,&count_cbh,NULL);
+	assert(rc == SQLITE_OK);
+	std::cerr << "internalize: query = " << query << std::endl;
+	free(query);
+
+	if (count_cbh.count() == 0)
+		return;
+
+	query = sqlite3_mprintf("SELECT title, url FROM rss_feed WHERE rssurl = '%q';",feed.rssurl().c_str());
+	rc = sqlite3_exec(db,query,rssfeed_callback,&feed,NULL);
+	assert(rc == SQLITE_OK);
+	std::cerr << "internalize: query = " << query << std::endl;
+	free(query);
+
+	if (feed.items().size() > 0) {
+		feed.items().erase(feed.items().begin(),feed.items().end());
+	}
+
+	query = sqlite3_mprintf("SELECT guid,title,author,url,pubDate,content FROM rss_item WHERE feedurl = '%q';",feed.rssurl().c_str());
+	rc = sqlite3_exec(db,query,rssitem_callback,&feed,NULL);
+	assert(rc == SQLITE_OK);
+	free(query);
 }

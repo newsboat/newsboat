@@ -19,11 +19,11 @@ namespace noos {
 			void run_feedlist();
 			void run_itemlist(rss_feed& feed);
 			void run_itemview(rss_item& item);
-			void set_feedlist(const std::vector<std::string>& feeds);
-			void feedlist_error(char * msg);
-			void itemlist_error(char * msg);
-			void feedlist_status(char * msg);
-			void itemlist_status(char * msg);
+			void set_feedlist(std::vector<rss_feed>& feeds);
+			void feedlist_error(const char * msg);
+			void itemlist_error(const char * msg);
+			void feedlist_status(const char * msg);
+			void itemlist_status(const char * msg);
 		private:
 			controller * ctrl;
 			stfl_form * feedlist_form;

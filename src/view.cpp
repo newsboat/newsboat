@@ -28,23 +28,23 @@ view::~view() {
 	stfl_free(itemview_form);
 }
 
-void view::feedlist_status(char * msg) {
+void view::feedlist_status(const char * msg) {
 	stfl_set(feedlist_form,"msg",msg);
 	stfl_run(feedlist_form,-1);
 }
 
-void view::itemlist_status(char * msg) {
+void view::itemlist_status(const char * msg) {
 	stfl_set(itemlist_form,"msg",msg);
 	stfl_run(itemlist_form,-1);
 }
 
-void view::feedlist_error(char * msg) {
+void view::feedlist_error(const char * msg) {
 	feedlist_status(msg);
 	::sleep(2);
 	feedlist_status("");
 }
 
-void view::itemlist_error(char * msg) {
+void view::itemlist_error(const char * msg) {
 	itemlist_status(msg);
 	::sleep(2);
 	itemlist_status("");
@@ -75,11 +75,20 @@ void view::run_feedlist() {
 			c = static_cast<char>(x);
 
 			switch (c) {
-				case 'r':
-					// ctrl->reload();
+				case 'r': {
+						const char * feedposname = stfl_get(feedlist_form, "feedposname");
+						if (feedposname) {
+							std::istringstream posname(feedposname);
+							unsigned int pos = 0;
+							posname >> pos;
+							ctrl->reload(pos);
+						} else {
+							feedlist_error("Error: no feed selected!"); // should not happen
+						}
+					}
 					break;
 				case 'R':
-					// ctrl->reload_all();
+					ctrl->reload_all();
 					break;
 				case 'q':
 					quit = true;
@@ -215,17 +224,21 @@ void view::run_itemview(rss_item& item) {
 	} while (!quit);
 }
 
-void view::set_feedlist(const std::vector<std::string>& feeds) {
+void view::set_feedlist(std::vector<rss_feed>& feeds) {
 	std::string code = "{list";
 
 	unsigned int i = 0;
-	for (std::vector<std::string>::const_iterator it = feeds.begin(); it != feeds.end(); ++it, ++i) {
+	for (std::vector<rss_feed>::iterator it = feeds.begin(); it != feeds.end(); ++it, ++i) {
+		std::string title = it->title();
+		if (title == "") {
+			title = it->rssurl(); // rssurl must always be present.
+		}
 		std::string line = "{listitem[";
 		std::ostringstream num;
 		num << i;
 		line.append(num.str());
 		line.append("] text:");
-		line.append(stfl_quote(it->c_str()));
+		line.append(stfl_quote(title.c_str()));
 		line.append("}");
 
 		code.append(line);

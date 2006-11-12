@@ -19,12 +19,14 @@ namespace noos {
 			inline std::string& author() { return author_; }
 			inline std::string& description() { return description_; }
 			inline std::string& pubDate() { return pubDate_; }
+			inline std::string& guid() { return guid_; }
 		private:
 			std::string title_;
 			std::string link_;
 			std::string author_;
 			std::string description_;
 			std::string pubDate_;
+			std::string guid_;
 	};
 
 	class rss_feed {
@@ -36,12 +38,14 @@ namespace noos {
 			inline std::string& link() { return link_; }
 			inline std::string& pubDate() { return pubDate_; }
 			inline std::vector<rss_item>& items() { return items_; }
+			inline std::string& rssurl() { return rssurl_; }
 
 		private:
 			std::string title_;
 			std::string description_;
 			std::string link_;
 			std::string pubDate_;
+			std::string rssurl_;
 			std::vector<rss_item> items_;
 	};
 

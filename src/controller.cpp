@@ -17,6 +17,13 @@ controller::controller() : v(0), rsscache(0) {
 	}
 
 	rsscache = new cache("cache.db");
+
+	for (std::vector<std::string>::const_iterator it=cfg.get_urls().begin(); it != cfg.get_urls().end(); ++it) {
+		rss_feed feed;
+		feed.rssurl() = *it;
+		rsscache->internalize_rssfeed(feed);
+		feeds.push_back(feed);
+	}
 }
 
 controller::~controller() {
@@ -29,7 +36,7 @@ void controller::set_view(view * vv) {
 }
 
 void controller::run() {
-	v->set_feedlist(cfg.get_urls());
+	v->set_feedlist(feeds);
 	v->run_feedlist();
 }
 
@@ -38,15 +45,10 @@ void controller::open_item(rss_item& item) {
 }
 
 void controller::open_feed(unsigned int pos) {
-	if (pos <= cfg.get_urls().size()) {
-		std::string feedurl = cfg.get_urls()[pos];
+	if (pos < feeds.size()) {
 		v->feedlist_status("Opening feed...");
 
-		rss_parser parser(feedurl.c_str());
-		parser.parse();
-		rss_feed& feed = parser.get_feed();
-
-		rsscache->externalize_rssfeed(feed);
+		rss_feed& feed = feeds[pos];
 
 		v->feedlist_status("");
 
@@ -57,5 +59,28 @@ void controller::open_feed(unsigned int pos) {
 		}
 	} else {
 		v->feedlist_error("Error: invalid feed!");
+	}
+}
+
+void controller::reload(unsigned int pos) {
+	if (pos < feeds.size()) {
+		std::string msg = "Loading ";
+		msg.append(feeds[pos].rssurl());
+		msg.append("...");
+		v->feedlist_status(msg.c_str());
+		rss_parser parser(feeds[pos].rssurl().c_str());
+		parser.parse();
+		feeds[pos] = parser.get_feed();
+		rsscache->externalize_rssfeed(feeds[pos]);
+		v->feedlist_status("");
+		v->set_feedlist(feeds);
+	} else {
+		v->feedlist_error("Error: invalid feed!");
+	}
+}
+
+void controller::reload_all() {
+	for (unsigned int i=0;i<feeds.size();++i) {
+		this->reload(i);
 	}
 }

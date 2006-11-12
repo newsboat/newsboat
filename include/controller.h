@@ -17,10 +17,13 @@ namespace noos {
 			void run();
 			void open_feed(unsigned int pos);
 			void open_item(rss_item& item);
+			void reload(unsigned int pos);
+			void reload_all();
 		private:
 			view * v;
 			configreader cfg;
 			cache * rsscache;
+			std::vector<rss_feed> feeds;
 	};
 
 }

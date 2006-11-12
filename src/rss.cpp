@@ -20,6 +20,8 @@ void rss_parser::parse() {
 		feed.items().erase(feed.items().begin(),feed.items().end());
 	}
 
+	feed.rssurl() = my_uri;
+
 	if (mrss->title) feed.title() = mrss->title;
 	if (mrss->description) feed.description() = mrss->description;
 	if (mrss->link) feed.link() = mrss->link;
@@ -32,6 +34,10 @@ void rss_parser::parse() {
 		if (item->author) x.author() = item->author;
 		if (item->description) x.description() = item->description;
 		if (item->pubDate) x.pubDate() = item->pubDate;
+		if (item->guid) 
+			x.guid() = item->guid;
+		else
+			x.guid() = item->link; // XXX hash something to get a better alternative GUID
 		feed.items().push_back(x);
 	}
 
