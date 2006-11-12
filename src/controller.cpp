@@ -6,7 +6,7 @@
 
 using namespace noos;
 
-controller::controller() : v(0) {
+controller::controller() : v(0), rsscache(0) {
 	std::ostringstream cfgfile;
 	cfgfile << "urls.txt"; // XXX refactor
 	cfg.load_config(cfgfile.str());
@@ -15,6 +15,13 @@ controller::controller() : v(0) {
 		std::cerr << "error: no URLs configured." << std::endl;
 		::exit(1);
 	}
+
+	rsscache = new cache("cache.db");
+}
+
+controller::~controller() {
+	if (rsscache)
+		delete rsscache;
 }
 
 void controller::set_view(view * vv) {
@@ -38,6 +45,8 @@ void controller::open_feed(unsigned int pos) {
 		rss_parser parser(feedurl.c_str());
 		parser.parse();
 		rss_feed& feed = parser.get_feed();
+
+		rsscache->externalize_rssfeed(feed);
 
 		v->feedlist_status("");
 
