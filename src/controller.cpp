@@ -42,6 +42,7 @@ void controller::run() {
 
 void controller::open_item(rss_item& item) {
 	v->run_itemview(item);
+	item.unread() = false; // XXX: see TODO list
 }
 
 void controller::open_feed(unsigned int pos) {
@@ -56,6 +57,8 @@ void controller::open_feed(unsigned int pos) {
 			v->feedlist_error("Error: feed contains no items!");
 		} else {
 			v->run_itemlist(feed);
+			rsscache->externalize_rssfeed(feed); // save possibly changed unread flags
+			v->set_feedlist(feeds);
 		}
 	} else {
 		v->feedlist_error("Error: invalid feed!");
@@ -72,6 +75,7 @@ void controller::reload(unsigned int pos) {
 		parser.parse();
 		feeds[pos] = parser.get_feed();
 		rsscache->externalize_rssfeed(feeds[pos]);
+		rsscache->internalize_rssfeed(feeds[pos]);
 		v->feedlist_status("");
 		v->set_feedlist(feeds);
 	} else {

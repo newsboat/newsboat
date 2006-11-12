@@ -103,29 +103,40 @@ void view::run_feedlist() {
 
 void view::run_itemlist(rss_feed& feed) {
 	bool quit = false;
-
+	bool rebuild_list = true;
 	std::vector<rss_item>& items = feed.items();
 
-	std::string code = "{list";
-
-	unsigned int i=0;
-	for (std::vector<rss_item>::iterator it = items.begin(); it != items.end(); ++it, ++i) {
-		std::string line = "{listitem[";
-		std::ostringstream x;
-		x << i;
-		line.append(x.str());
-		line.append("] text:");
-		std::string title = it->title();
-		line.append(stfl_quote(title.c_str()));
-		line.append("}");
-		code.append(line);
-	}
-
-	code.append("}");
-
-	stfl_modify(itemlist_form,"items","replace_inner",code.c_str());
-
 	do {
+		if (rebuild_list) {
+
+			std::string code = "{list";
+
+			unsigned int i=0;
+			for (std::vector<rss_item>::iterator it = items.begin(); it != items.end(); ++it, ++i) {
+				std::string line = "{listitem[";
+				std::ostringstream x;
+				x << i;
+				line.append(x.str());
+				line.append("] text:");
+				std::string title = " ";
+				if (it->unread()) {
+					title.append("N ");
+				} else {
+					title.append("  ");
+				}
+				title.append(it->title());
+				line.append(stfl_quote(title.c_str()));
+				line.append("}");
+				code.append(line);
+			}
+
+			code.append("}");
+
+			stfl_modify(itemlist_form,"items","replace_inner",code.c_str());
+
+			rebuild_list = false;
+		}
+
 		const char * event = stfl_run(itemlist_form,0);
 		if (!event) continue;
 
@@ -136,6 +147,7 @@ void view::run_itemlist(rss_feed& feed) {
 				unsigned int pos = 0;
 				posname >> pos;
 				ctrl->open_item(items[pos]);
+				rebuild_list = true;
 			} else {
 				itemlist_error("Error: no item selected!"); // should not happen
 			}
@@ -233,6 +245,23 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 		if (title == "") {
 			title = it->rssurl(); // rssurl must always be present.
 		}
+
+		// TODO: refactor
+		char buf[20];
+		char buf2[20];
+		unsigned int unread_count = 0;
+		if (it->items().size() > 0) {
+			for (std::vector<rss_item>::iterator rit = it->items().begin(); rit != it->items().end(); ++rit) {
+				if (rit->unread())
+					++unread_count;
+			}
+		}
+		snprintf(buf,sizeof(buf),"(%u/%u) ",unread_count,it->items().size());
+		snprintf(buf2,sizeof(buf2),"%14s",buf);
+		std::string newtitle(buf2);
+		newtitle.append(title);
+		title = newtitle;
+
 		std::string line = "{listitem[";
 		std::ostringstream num;
 		num << i;

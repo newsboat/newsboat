@@ -12,7 +12,7 @@ namespace noos {
 
 	class rss_item {
 		public:
-			rss_item() { }
+			rss_item() : unread_(true) { }
 			~rss_item() { }
 			inline std::string& title() { return title_; }
 			inline std::string& link() { return link_; }
@@ -20,6 +20,7 @@ namespace noos {
 			inline std::string& description() { return description_; }
 			inline std::string& pubDate() { return pubDate_; }
 			inline std::string& guid() { return guid_; }
+			inline bool& unread() { return unread_; }
 		private:
 			std::string title_;
 			std::string link_;
@@ -27,6 +28,7 @@ namespace noos {
 			std::string description_;
 			std::string pubDate_;
 			std::string guid_;
+			bool unread_;
 	};
 
 	class rss_feed {

@@ -45,7 +45,7 @@ static int rssfeed_callback(void * myfeed, int argc, char ** argv, char ** azCol
 
 static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** azColName) {
 	rss_feed * feed = (rss_feed *)myfeed;
-	assert (argc == 6);
+	assert (argc == 7);
 	rss_item item;
 	item.guid() = argv[0];
 	item.title() = argv[1];
@@ -53,6 +53,7 @@ static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** azCol
 	item.link() = argv[3];
 	item.pubDate() = argv[4];
 	item.description() = argv[5];
+	item.unread() = (std::string("1") == argv[6]);
 	feed->items().push_back(item);
 	return 0;
 }
@@ -100,7 +101,8 @@ void cache::populate_tables() {
 						" url VARCHAR(1024) NOT NULL, "
 						" feedurl VARCHAR(1024) NOT NULL, "
 						" pubDate DATETIME NOT NULL, "
-						" content VARCHAR(65535) NOT NULL );", NULL, NULL, NULL);
+						" content VARCHAR(65535) NOT NULL,"
+						" unread INT(1) NOT NULL );", NULL, NULL, NULL);
 }
 
 
@@ -131,20 +133,30 @@ void cache::externalize_rssfeed(rss_feed& feed) {
 		assert(rc == SQLITE_OK);
 		free(query);
 		if (count_cbh.count() > 0) {
-			char * update = sqlite3_mprintf("UPDATE rss_item SET title = '%q', author = '%q', url = '%q', feedurl = '%q', pubDate = '%q', content = '%q' WHERE guid = '%q'",
-				it->title().c_str(), it->author().c_str(), it->link().c_str(), 
-				feed.rssurl().c_str(), it->pubDate().c_str(), it->description().c_str(), it->guid().c_str());
+			char * update;
+			
+			if (!it->unread()) {
+				update = sqlite3_mprintf("UPDATE rss_item SET title = '%q', author = '%q', url = '%q', feedurl = '%q', pubDate = '%q', content = '%q', unread = '0' WHERE guid = '%q'",
+					it->title().c_str(), it->author().c_str(), it->link().c_str(), 
+					feed.rssurl().c_str(), it->pubDate().c_str(), it->description().c_str(), it->guid().c_str());
+			} else {
+				update = sqlite3_mprintf("UPDATE rss_item SET title = '%q', author = '%q', url = '%q', feedurl = '%q', pubDate = '%q', content = '%q' WHERE guid = '%q'",
+					it->title().c_str(), it->author().c_str(), it->link().c_str(), 
+					feed.rssurl().c_str(), it->pubDate().c_str(), it->description().c_str(), it->guid().c_str());
+			}
 			rc = sqlite3_exec(db,update,NULL,NULL,NULL);
 			assert(rc == SQLITE_OK);
+			std::cerr << "item update query:" << update << " |" << std::endl;
 			free(update);
 		} else {
-			char * insert = sqlite3_mprintf("INSERT INTO rss_item (guid,title,author,url,feedurl,pubDate,content) "
-											"VALUES ('%q','%q','%q','%q','%q','%q','%q')",
+			char * insert = sqlite3_mprintf("INSERT INTO rss_item (guid,title,author,url,feedurl,pubDate,content,unread) "
+											"VALUES ('%q','%q','%q','%q','%q','%q','%q',1)",
 											it->guid().c_str(), it->title().c_str(), it->author().c_str(), 
 											it->link().c_str(), feed.rssurl().c_str(), it->pubDate().c_str(), it->description().c_str());
 			rc = sqlite3_exec(db,insert,NULL,NULL,NULL);
 			assert(rc == SQLITE_OK);
 			free(insert);
+			std::cerr << "item insert" << std::endl;
 		}
 	}
 }
@@ -170,7 +182,7 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 		feed.items().erase(feed.items().begin(),feed.items().end());
 	}
 
-	query = sqlite3_mprintf("SELECT guid,title,author,url,pubDate,content FROM rss_item WHERE feedurl = '%q';",feed.rssurl().c_str());
+	query = sqlite3_mprintf("SELECT guid,title,author,url,pubDate,content,unread FROM rss_item WHERE feedurl = '%q';",feed.rssurl().c_str());
 	rc = sqlite3_exec(db,query,rssitem_callback,&feed,NULL);
 	assert(rc == SQLITE_OK);
 	free(query);
