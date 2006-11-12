@@ -8,6 +8,7 @@ extern "C" {
 
 #include <view.h>
 #include <rss.h>
+#include <htmlrenderer.h>
 #include <cstring>
 #include <cstdio>
 #include <iostream>
@@ -106,6 +107,8 @@ void view::run_itemlist(rss_feed& feed) {
 	bool rebuild_list = true;
 	std::vector<rss_item>& items = feed.items();
 
+	stfl_set(itemlist_form,"itempos","0");
+
 	do {
 		if (rebuild_list) {
 
@@ -200,9 +203,14 @@ void view::run_itemview(rss_item& item) {
 
 	code.append("{listitem text:\"\"}");
 
-	code.append("{listitem text:");
-	code.append(stfl_quote(item.description().c_str()));
-	code.append("}");
+	htmlrenderer rnd;
+
+	std::vector<std::string> lines = rnd.render(item.description());
+
+	for (std::vector<std::string>::iterator it = lines.begin(); it != lines.end(); ++it) {
+		std::string line = std::string("{listitem text:") + std::string(stfl_quote(it->c_str())) + std::string("}");
+		code.append(line);
+	}
 
 	code.append("}");
 
