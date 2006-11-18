@@ -172,6 +172,10 @@ void view::run_itemlist(rss_feed& feed) {
 				case 'n':
 					jump_to_next_unread_item(items);
 					break;
+				case 'A':
+					mark_all_read(items);
+					rebuild_list = true;
+					break;
 				default:
 					break;
 			}
@@ -323,4 +327,10 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 	// std::cerr << code << std::endl;
 
 	stfl_modify(feedlist_form,"feeds","replace_inner",code.c_str());
+}
+
+void view::mark_all_read(std::vector<rss_item>& items) {
+	for (std::vector<rss_item>::iterator it = items.begin(); it != items.end(); ++it) {
+		it->unread() = false;
+	}
 }

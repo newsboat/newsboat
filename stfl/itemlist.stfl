@@ -1,16 +1,16 @@
 vbox
   @style_normal:bg=black,fg=white
-  @info#style_normal:bg=white,fg=black
+  @info#style_normal:bg=blue,fg=yellow,attr=bold
   label#info
     text[head]:"Articles for '#'"
     .expand:h
   list[items]
     .expand:vh
-    style_focus:fg=black,bg=white,attr=bold
+    style_focus:fg=yellow,bg=blue,attr=bold
     pos_name[itemposname]:
     pos[itempos]:0
   label#info
-    text[help]:"q:Quit ENTER:Open s:Save n:Next Unread"
+    text[help]:"q:Quit ENTER:Open s:Save n:Next Unread A:Mark All Read"
     .expand:h
   label
     text[msg]:""

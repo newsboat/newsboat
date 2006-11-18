@@ -1,6 +1,6 @@
 vbox
   @style_normal:bg=black,fg=white
-  @info#style_normal:bg=white,fg=black
+  @info#style_normal:bg=blue,fg=yellow,attr=bold
   label#info
     text[head]:"Article '#'"
     .expand:h
