@@ -10,7 +10,7 @@ configreader::configreader(const std::string& file) : filename(file) {
 
 configreader::~configreader() { }
 
-const std::vector<std::string>& configreader::get_urls() {
+std::vector<std::string>& configreader::get_urls() {
 	return urls;
 }
 
@@ -30,4 +30,14 @@ void configreader::reload() {
 void configreader::load_config(const std::string& file) {
 	filename = file;
 	reload();
+}
+
+void configreader::write_config() {
+	std::fstream f;
+	f.open(filename.c_str(),std::fstream::out);
+	if (f.is_open()) {
+		for (std::vector<std::string>::iterator it=urls.begin(); it != urls.end(); ++it) {
+			f << *it << std::endl;
+		}
+	}
 }

@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include <iostream>
 
+#include <nxml.h>
+
 using namespace noos;
 
 controller::controller() : v(0), rsscache(0) {
@@ -113,7 +115,57 @@ void controller::usage(char * argv0) {
 }
 
 void controller::import_opml(char * filename) {
-	std::cout << "Error: unimplemented!" << std::endl;
+	nxml_t *data;
+	nxml_data_t * root, * body, * outline;
+	nxml_error_t ret;
+
+	ret = nxml_new (&data);
+	if (ret != NXML_OK) {
+		puts (nxml_strerror (ret)); // TODO
+		return;
+	}
+
+	ret = nxml_parse_file (data, filename);
+	if (ret != NXML_OK) {
+		puts (nxml_strerror (ret)); // TODO
+		return;
+	}
+
+	nxml_root_element (data, &root);
+
+	if (root) {
+		body = nxmle_find_element(data, root, "body", NULL);
+
+		if (body) {
+			outline = nxmle_find_element(data, body, "outline", NULL);
+
+			while (outline) { // TODO: check if this is correct
+				char * url = nxmle_find_attribute(outline, "xmlUrl", NULL);
+				char * type = nxmle_find_attribute(outline, "type", NULL);
+
+				if (outline->type == NXML_TYPE_ELEMENT && strcmp(outline->value,"outline")==0 && strcmp(type,"rss")==0 && url) {
+
+					bool found = false;
+
+					for (std::vector<std::string>::iterator it = cfg.get_urls().begin(); it != cfg.get_urls().end(); ++it) {
+						if (*it == url) {
+							found = true;
+						}
+					}
+
+					if (!found) {
+						cfg.get_urls().push_back(std::string(url));
+					}
+
+				}
+
+				outline = outline->next;
+			}
+			cfg.write_config();
+		}
+	}
+	nxml_free(data);
+	std::cout << "Import of " << filename << " finished." << std::endl;
 }
 
 void controller::export_opml() {

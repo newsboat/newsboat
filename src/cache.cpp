@@ -21,14 +21,14 @@ struct cb_handler {
 
 static int count_callback(void * handler, int argc, char ** argv, char ** azColName) {
 	cb_handler * cbh = (cb_handler *)handler;
-	std::cerr << "inside count_callback" << std::endl;
+	// std::cerr << "inside count_callback" << std::endl;
 	if (argc>0) {
 		std::istringstream is(argv[0]);
 		int x;
 		is >> x;
 		cbh->set_count(x);
 	}
-	std::cerr << "count_callback: count = " << cbh->count() << std::endl;
+	// std::cerr << "count_callback: count = " << cbh->count() << std::endl;
 	return 0;
 }
 
@@ -39,7 +39,7 @@ static int rssfeed_callback(void * myfeed, int argc, char ** argv, char ** azCol
 	assert(argv[1] != NULL);
 	feed->title() = argv[0];
 	feed->link() = argv[1];
-	std::cerr << "callback: feed->title = " << feed->title() << std::endl;
+	// std::cerr << "callback: feed->title = " << feed->title() << std::endl;
 	return 0;
 }
 
@@ -146,7 +146,7 @@ void cache::externalize_rssfeed(rss_feed& feed) {
 			}
 			rc = sqlite3_exec(db,update,NULL,NULL,NULL);
 			assert(rc == SQLITE_OK);
-			std::cerr << "item update query:" << update << " |" << std::endl;
+			// std::cerr << "item update query:" << update << " |" << std::endl;
 			free(update);
 		} else {
 			char * insert = sqlite3_mprintf("INSERT INTO rss_item (guid,title,author,url,feedurl,pubDate,content,unread) "
@@ -156,7 +156,7 @@ void cache::externalize_rssfeed(rss_feed& feed) {
 			rc = sqlite3_exec(db,insert,NULL,NULL,NULL);
 			assert(rc == SQLITE_OK);
 			free(insert);
-			std::cerr << "item insert" << std::endl;
+			// std::cerr << "item insert" << std::endl;
 		}
 	}
 }
@@ -166,7 +166,7 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 	cb_handler count_cbh;
 	int rc = sqlite3_exec(db,query,count_callback,&count_cbh,NULL);
 	assert(rc == SQLITE_OK);
-	std::cerr << "internalize: query = " << query << std::endl;
+	// std::cerr << "internalize: query = " << query << std::endl;
 	free(query);
 
 	if (count_cbh.count() == 0)
@@ -175,7 +175,7 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 	query = sqlite3_mprintf("SELECT title, url FROM rss_feed WHERE rssurl = '%q';",feed.rssurl().c_str());
 	rc = sqlite3_exec(db,query,rssfeed_callback,&feed,NULL);
 	assert(rc == SQLITE_OK);
-	std::cerr << "internalize: query = " << query << std::endl;
+	// std::cerr << "internalize: query = " << query << std::endl;
 	free(query);
 
 	if (feed.items().size() > 0) {
@@ -207,7 +207,7 @@ void cache::cleanup_cache(std::vector<rss_feed>& feeds) {
 	std::string cleanup_rss_feeds_statement = std::string("DELETE FROM rss_feed WHERE rssurl NOT IN ") + list + ";";
 	std::string cleanup_rss_items_statement = std::string("DELETE FROM rss_item WHERE feedurl NOT IN ") + list + ";";
 
-	std::cerr << "statements: " << cleanup_rss_feeds_statement << " " << cleanup_rss_items_statement << std::endl;
+	// std::cerr << "statements: " << cleanup_rss_feeds_statement << " " << cleanup_rss_items_statement << std::endl;
 
 	rc = sqlite3_exec(db,cleanup_rss_feeds_statement.c_str(),NULL,NULL,NULL);
 	assert(rc == SQLITE_OK);

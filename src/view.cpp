@@ -186,7 +186,7 @@ void view::run_itemlist(rss_feed& feed) {
 
 void view::jump_to_next_unread_item(std::vector<rss_item>& items) {
 	const char * itemposname = stfl_get(itemlist_form, "itemposname");
-	std::cerr << "jump_to_next_unread_item" << std::endl;
+	// std::cerr << "jump_to_next_unread_item" << std::endl;
 
 	if (itemposname) {
 		std::istringstream posname(itemposname);
@@ -197,7 +197,7 @@ void view::jump_to_next_unread_item(std::vector<rss_item>& items) {
 				std::ostringstream posname;
 				posname << i;
 				stfl_set(itemlist_form,"itempos",posname.str().c_str());
-				std::cerr << "setting itemposname to " << posname.str().c_str() << std::endl;
+				// std::cerr << "setting itemposname to " << posname.str().c_str() << std::endl;
 				return;
 			}
 		}
@@ -206,7 +206,7 @@ void view::jump_to_next_unread_item(std::vector<rss_item>& items) {
 				std::ostringstream posname;
 				posname << i;
 				stfl_set(itemlist_form,"itempos",posname.str().c_str());
-				std::cerr << "setting itemposname to " << posname.str().c_str() << std::endl;
+				// std::cerr << "setting itemposname to " << posname.str().c_str() << std::endl;
 				return;
 			}
 		}

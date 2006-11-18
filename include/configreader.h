@@ -11,7 +11,8 @@ namespace noos {
 			configreader(const std::string& file = "");
 			~configreader();
 			void load_config(const std::string& file);
-			const std::vector<std::string>& get_urls();
+			void write_config();
+			std::vector<std::string>& get_urls();
 			void reload();
 		private:
 			std::vector<std::string> urls;
