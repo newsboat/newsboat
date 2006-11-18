@@ -275,6 +275,9 @@ void view::run_itemview(rss_item& item) {
 				case 's':
 					// TODO: save currently selected article
 					break;
+				case 'o':
+					open_in_browser(item.link());
+					break;
 				case 'q':
 					quit = true;
 					break;
@@ -283,6 +286,14 @@ void view::run_itemview(rss_item& item) {
 
 
 	} while (!quit);
+}
+
+void view::open_in_browser(const std::string& url) {
+	std::string cmdline = "links '";
+	stfl_reset();
+	cmdline.append(url);
+	cmdline.append("'");
+	system(cmdline.c_str());
 }
 
 void view::set_feedlist(std::vector<rss_feed>& feeds) {

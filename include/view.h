@@ -27,6 +27,7 @@ namespace noos {
 		private:
 			void jump_to_next_unread_item(std::vector<rss_item>& items);
 			void mark_all_read(std::vector<rss_item>& items);
+			void open_in_browser(const std::string& url);
 
 			controller * ctrl;
 			stfl_form * feedlist_form;
