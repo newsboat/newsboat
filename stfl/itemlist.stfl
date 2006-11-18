@@ -10,7 +10,7 @@ vbox
     pos_name[itemposname]:
     pos[itempos]:0
   label#info
-    text[help]:"q:Quit ENTER:Open s:Save"
+    text[help]:"q:Quit ENTER:Open s:Save n:Next Unread"
     .expand:h
   label
     text[msg]:""

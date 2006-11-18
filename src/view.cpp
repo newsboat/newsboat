@@ -169,10 +169,47 @@ void view::run_itemlist(rss_feed& feed) {
 				case 'q':
 					quit = true;
 					break;
+				case 'n':
+					jump_to_next_unread_item(items);
+					break;
+				default:
+					break;
 			}
 		}
 
 	} while (!quit);
+}
+
+void view::jump_to_next_unread_item(std::vector<rss_item>& items) {
+	const char * itemposname = stfl_get(itemlist_form, "itemposname");
+	std::cerr << "jump_to_next_unread_item" << std::endl;
+
+	if (itemposname) {
+		std::istringstream posname(itemposname);
+		unsigned int pos = 0;
+		posname >> pos;
+		for (unsigned int i=pos;i<items.size();++i) {
+			if (items[i].unread()) {
+				std::ostringstream posname;
+				posname << i;
+				stfl_set(itemlist_form,"itempos",posname.str().c_str());
+				std::cerr << "setting itemposname to " << posname.str().c_str() << std::endl;
+				return;
+			}
+		}
+		for (unsigned int i=0;i<pos;++i) {
+			if (items[i].unread()) {
+				std::ostringstream posname;
+				posname << i;
+				stfl_set(itemlist_form,"itempos",posname.str().c_str());
+				std::cerr << "setting itemposname to " << posname.str().c_str() << std::endl;
+				return;
+			}
+		}
+		itemlist_error("No unread items.");
+	} else {
+		itemlist_error("Error: no item selected!");
+	}
 }
 
 void view::run_itemview(rss_item& item) {

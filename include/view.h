@@ -25,6 +25,8 @@ namespace noos {
 			void feedlist_status(const char * msg);
 			void itemlist_status(const char * msg);
 		private:
+			void jump_to_next_unread_item(std::vector<rss_item>& items);
+
 			controller * ctrl;
 			stfl_form * feedlist_form;
 			stfl_form * itemlist_form;
