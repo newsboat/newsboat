@@ -14,12 +14,16 @@ namespace noos {
 			controller();
 			~controller();
 			void set_view(view * vv);
-			void run();
+			void run(int argc = 0, char * argv[] = NULL);
 			void open_feed(unsigned int pos);
 			void open_item(rss_item& item);
 			void reload(unsigned int pos);
 			void reload_all();
 		private:
+			void usage(char * argv0);
+			void import_opml(char * filename);
+			void export_opml();
+
 			view * v;
 			configreader cfg;
 			cache * rsscache;

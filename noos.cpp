@@ -13,7 +13,7 @@ int main(int argc, char * argv[]) {
 	view v(&c);
 	c.set_view(&v);
 
-	c.run();
+	c.run(argc,argv);
 
 	return 0;
 }

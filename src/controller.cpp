@@ -12,7 +12,7 @@ controller::controller() : v(0), rsscache(0) {
 	cfg.load_config(cfgfile.str());
 
 	if (cfg.get_urls().size() == 0) {
-		std::cerr << "error: no URLs configured." << std::endl;
+		std::cout << "error: no URLs configured." << std::endl;
 		::exit(1);
 	}
 
@@ -24,8 +24,8 @@ controller::controller() : v(0), rsscache(0) {
 		rsscache->internalize_rssfeed(feed);
 		feeds.push_back(feed);
 	}
-
 	rsscache->cleanup_cache(feeds);
+
 }
 
 controller::~controller() {
@@ -37,7 +37,21 @@ void controller::set_view(view * vv) {
 	v = vv;
 }
 
-void controller::run() {
+void controller::run(int argc, char * argv[]) {
+	if (argc>1) {
+		if (strcmp(argv[1],"-e")==0) {
+			export_opml();
+		} else if (strcmp(argv[1],"-i")==0) {
+			if (argc>2) {
+				import_opml(argv[2]);
+			} else {
+				usage(argv[0]);
+			}
+		} else
+			usage(argv[0]);
+		return;
+	}
+
 	v->set_feedlist(feeds);
 	v->run_feedlist();
 }
@@ -89,4 +103,27 @@ void controller::reload_all() {
 	for (unsigned int i=0;i<feeds.size();++i) {
 		this->reload(i);
 	}
+}
+
+void controller::usage(char * argv0) {
+	std::cout << argv0 << ": usage: " << argv0 << " [-i <file>|-e]" << std::endl;
+	std::cout << "\t-e\texport OPML feed to stdout" << std::endl;
+	std::cout << "\t-i <file>\timport OPML file" << std::endl;
+	::exit(1);
+}
+
+void controller::import_opml(char * filename) {
+	std::cout << "Error: unimplemented!" << std::endl;
+}
+
+void controller::export_opml() {
+	std::cout << "<?xml version=\"1.0\"?>" << std::endl;
+	std::cout << "<opml version=\"1.0\">" << std::endl;
+	std::cout << "\t<head>" << std::endl << "\t\t<title>noos - Exported Feeds</title>" << std::endl << "\t</head>" << std::endl;
+	std::cout << "\t<body>" << std::endl;
+	for (std::vector<rss_feed>::iterator it=feeds.begin(); it != feeds.end(); ++it) {
+		std::cout << "\t\t<outline type=\"rss\" xmlUrl=\"" << it->rssurl() << "\" text=\"" << it->title() << "\" />" << std::endl;
+	}
+	std::cout << "\t</body>" << std::endl;
+	std::cout << "</opml>" << std::endl;
 }
