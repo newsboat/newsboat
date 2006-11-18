@@ -12,6 +12,7 @@ class cache {
 		~cache();
 		void externalize_rssfeed(rss_feed& feed);
 		void internalize_rssfeed(rss_feed& feed);
+		void cleanup_cache(std::vector<rss_feed>& feeds);
 	private:
 		void populate_tables();
 		sqlite3 * db;

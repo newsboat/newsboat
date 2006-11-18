@@ -24,6 +24,8 @@ controller::controller() : v(0), rsscache(0) {
 		rsscache->internalize_rssfeed(feed);
 		feeds.push_back(feed);
 	}
+
+	rsscache->cleanup_cache(feeds);
 }
 
 controller::~controller() {

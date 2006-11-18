@@ -187,3 +187,34 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 	assert(rc == SQLITE_OK);
 	free(query);
 }
+
+void cache::cleanup_cache(std::vector<rss_feed>& feeds) {
+	std::string list = "(";
+	int rc;
+	unsigned int i = 0;
+	unsigned int feed_size = feeds.size();
+
+	for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it,++i) {
+		char * name = sqlite3_mprintf("'%q'",it->rssurl().c_str());
+		list.append(name);
+		if (i < feed_size-1) {
+			list.append(", ");
+		}
+		free(name);
+	}
+	list.append(")");
+
+	std::string cleanup_rss_feeds_statement = std::string("DELETE FROM rss_feed WHERE rssurl NOT IN ") + list + ";";
+	std::string cleanup_rss_items_statement = std::string("DELETE FROM rss_item WHERE feedurl NOT IN ") + list + ";";
+
+	std::cerr << "statements: " << cleanup_rss_feeds_statement << " " << cleanup_rss_items_statement << std::endl;
+
+	rc = sqlite3_exec(db,cleanup_rss_feeds_statement.c_str(),NULL,NULL,NULL);
+	assert(rc == SQLITE_OK);
+
+	rc = sqlite3_exec(db,cleanup_rss_items_statement.c_str(),NULL,NULL,NULL);
+	assert(rc == SQLITE_OK);
+
+	rc = sqlite3_exec(db,"VACUUM;",NULL,NULL,NULL);
+	assert(rc == SQLITE_OK);
+}

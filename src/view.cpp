@@ -1,6 +1,6 @@
-#include "feedlist.h"
-#include "itemlist.h"
-#include "itemview.h"
+#include <feedlist.h>
+#include <itemlist.h>
+#include <itemview.h>
 
 extern "C" {
 #include <stfl.h>

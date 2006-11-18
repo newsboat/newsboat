@@ -1,6 +1,4 @@
-CC=cc
 CXX=c++
-CFLAGS=-g -I./include -I./stfl
 CXXFLAGS=-g -I./include -I./stfl
 LDFLAGS=-g
 LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3
@@ -28,6 +26,6 @@ clean:
 	$(RM) $(OUTPUT) $(OBJS) $(STFLHDRS) core *.core Makefile.deps
 
 Makefile.deps: $(SRC)
-	$(CXX) -MM -MG $(SRC) > Makefile.deps
+	$(CXX) $(CXXFLAGS) -MM -MG $(SRC) > Makefile.deps
 
 include Makefile.deps

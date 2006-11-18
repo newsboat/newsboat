@@ -25,6 +25,7 @@ std::vector<std::string> htmlrenderer::render(const std::string& source) {
 		} else {
 			if (*begin == '>') {
 				addchar = true;
+				cleaned_source.append(" ");
 			}
 		}
 		++begin;
@@ -33,7 +34,8 @@ std::vector<std::string> htmlrenderer::render(const std::string& source) {
 	begin = cleaned_source.c_str();
 	while (strlen(begin) >= w) {
 		const char * end = begin + w;
-		while (end > begin && !strchr(" \t\r\n",*end)) ++end;
+		while (end > begin && *end != ' ') 
+			--end;
 		if (begin == end) {
 			char x[w+1];
 			strncpy(x,begin,w);
