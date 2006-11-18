@@ -257,6 +257,8 @@ void view::run_itemview(rss_item& item) {
 
 	stfl_modify(itemview_form,"article","replace_inner",code.c_str());
 
+	stfl_set(itemview_form,"articleoffset","0");
+
 	do {
 		const char * event = stfl_run(itemview_form,0);
 		if (!event) continue;
