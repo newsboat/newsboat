@@ -303,9 +303,13 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 
 	unsigned int i = 0;
 	for (std::vector<rss_feed>::iterator it = feeds.begin(); it != feeds.end(); ++it, ++i) {
+		rss_feed feed = *it;
 		std::string title = it->title();
-		if (title == "") {
+		if (title.length()==0) {
 			title = it->rssurl(); // rssurl must always be present.
+			if (title.length()==0) {
+				title = "<no title>"; // shouldn't happen
+			}
 		}
 
 		// TODO: refactor

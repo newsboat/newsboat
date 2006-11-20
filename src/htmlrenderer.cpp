@@ -36,7 +36,7 @@ std::vector<std::string> htmlrenderer::render(const std::string& source) {
 		++begin;
 	}
 
-	std::cerr << "cleaned_source: `" << cleaned_source << "'" << std::endl;
+	// std::cerr << "cleaned_source: `" << cleaned_source << "'" << std::endl;
 
 	begin = cleaned_source.c_str();
 	while (strlen(begin) >= w) {

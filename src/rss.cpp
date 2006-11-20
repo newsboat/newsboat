@@ -1,4 +1,5 @@
 #include <rss.h>
+#include <config.h>
 
 using namespace noos;
 
@@ -6,21 +7,22 @@ rss_parser::rss_parser(const char * uri) : my_uri(uri), mrss(0) { }
 
 rss_parser::~rss_parser() { }
 
-void rss_parser::parse() {
-	mrss_error_t err = mrss_parse_url(const_cast<char *>(my_uri.c_str()), &mrss);
+rss_feed rss_parser::parse() {
+	rss_feed feed;
+
+	feed.rssurl() = my_uri;
+
+	mrss_options_t * options = mrss_options_new(-1, NULL, NULL, NULL, NULL, 0, NULL, USER_AGENT);
+	mrss_error_t err = mrss_parse_url_with_options(const_cast<char *>(my_uri.c_str()), &mrss, options);
+	mrss_options_free(options);
+
 	if (err != MRSS_OK) {
 		// TODO: throw exception
 		if (mrss) {
 			mrss_free(mrss);
 		}
-		return;
+		return feed;
 	}
-
-	if (feed.items().size() > 0) {
-		feed.items().erase(feed.items().begin(),feed.items().end());
-	}
-
-	feed.rssurl() = my_uri;
 
 	if (mrss->title) feed.title() = mrss->title;
 	if (mrss->description) feed.description() = mrss->description;
@@ -42,4 +44,6 @@ void rss_parser::parse() {
 	}
 
 	mrss_free(mrss);
+
+	return feed;
 }

@@ -4,6 +4,7 @@
 #include <configreader.h>
 #include <rss.h>
 #include <cache.h>
+#include <nxml.h>
 
 namespace noos {
 
@@ -21,13 +22,17 @@ namespace noos {
 			void reload_all();
 		private:
 			void usage(char * argv0);
-			void import_opml(char * filename);
+			void import_opml(const char * filename);
 			void export_opml();
+			void rec_find_rss_outlines(nxml_data_t * node);
 
 			view * v;
 			configreader cfg;
 			cache * rsscache;
 			std::vector<rss_feed> feeds;
+			std::string config_dir;
+			std::string url_file;
+			std::string cache_file;
 	};
 
 }

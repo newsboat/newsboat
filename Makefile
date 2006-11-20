@@ -1,5 +1,5 @@
 CXX=c++
-CXXFLAGS=-g -I./include -I./stfl
+CXXFLAGS=-g -I./include -I./stfl -I.
 LDFLAGS=-g
 LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3
 OUTPUT=noos

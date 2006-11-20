@@ -55,12 +55,10 @@ namespace noos {
 		public:
 			rss_parser(const char * uri);
 			~rss_parser();
-			void parse();
-			inline rss_feed& get_feed() { return feed; }
+			rss_feed parse();
 		private:
 			std::string my_uri;
 			mrss_t * mrss;
-			rss_feed feed;
 	};
 
 }

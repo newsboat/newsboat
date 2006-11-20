@@ -74,7 +74,7 @@ cache::cache(const std::string& cachefile) : db(0) {
 	if (error != SQLITE_OK) {
 		// TODO: error message
 		sqlite3_close(db);
-		::exit(1);
+		::exit(EXIT_FAILURE);
 	}
 	// if (!file_exists) {
 	populate_tables();
