@@ -40,6 +40,7 @@ rss_feed rss_parser::parse() {
 			x.guid() = item->guid;
 		else
 			x.guid() = item->link; // XXX hash something to get a better alternative GUID
+		x.set_dirty();
 		feed.items().push_back(x);
 	}
 

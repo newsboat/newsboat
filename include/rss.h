@@ -21,6 +21,9 @@ namespace noos {
 			inline std::string& pubDate() { return pubDate_; }
 			inline std::string& guid() { return guid_; }
 			inline bool& unread() { return unread_; }
+			inline bool is_dirty() { return dirtyness; }
+			inline void set_dirty() { dirtyness = true; }
+			inline void wash() { dirtyness = false; }
 		private:
 			std::string title_;
 			std::string link_;
@@ -29,6 +32,7 @@ namespace noos {
 			std::string pubDate_;
 			std::string guid_;
 			bool unread_;
+			bool dirtyness;
 	};
 
 	class rss_feed {

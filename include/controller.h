@@ -18,8 +18,11 @@ namespace noos {
 			void run(int argc = 0, char * argv[] = NULL);
 			void open_feed(unsigned int pos);
 			void open_item(rss_item& item);
-			void reload(unsigned int pos);
+			void reload(unsigned int pos, unsigned int max = 0);
 			void reload_all();
+			void update_feedlist();
+			void mark_all_read(unsigned int pos);
+			void catchup_all();
 		private:
 			void usage(char * argv0);
 			void import_opml(const char * filename);

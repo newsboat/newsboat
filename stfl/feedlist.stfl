@@ -10,7 +10,7 @@ vbox
     pos_name[feedposname]:
     pos[feedpos]:0
   label#info
-    text[help]:"q:Quit ENTER:Open r:Reload R:Reload All"
+    text[help]:"q:Quit ENTER:Open r:Reload R:Reload All A:Mark All Read C:Catchup All"
     .expand:h
   label
     text[msg]:""

@@ -127,12 +127,43 @@ void controller::run(int argc, char * argv[]) {
 
 	v->set_feedlist(feeds);
 	v->run_feedlist();
+
+	std::cout << "Storing articles in cache...";
+	std::cout.flush();
+	for (std::vector<rss_feed>::iterator it=feeds.begin(); it != feeds.end(); ++it) {
+		rsscache->externalize_rssfeed(*it);
+	}
+	std::cout << "done." << std::endl;
+}
+
+void controller::update_feedlist() {
+	v->set_feedlist(feeds);
 }
 
 void controller::open_item(rss_item& item) {
 	v->run_itemview(item);
 	item.unread() = false; // XXX: see TODO list
+	item.set_dirty();
 }
+
+void controller::catchup_all() {
+	for (unsigned int i=0;i<feeds.size();++i) {
+		mark_all_read(i);
+	}
+}
+
+void controller::mark_all_read(unsigned int pos) {
+	if (pos < feeds.size()) {
+		rss_feed& feed = feeds[pos];
+		for (std::vector<rss_item>::iterator it = feed.items().begin(); it != feed.items().end(); ++it) {
+			it->unread() = false;
+			it->set_dirty();
+		}
+		rsscache->externalize_rssfeed(feed);
+	}
+}
+
+
 
 void controller::open_feed(unsigned int pos) {
 	if (pos < feeds.size()) {
@@ -154,12 +185,23 @@ void controller::open_feed(unsigned int pos) {
 	}
 }
 
-void controller::reload(unsigned int pos) {
+void controller::reload(unsigned int pos, unsigned int max) {
 	if (pos < feeds.size()) {
 		rss_feed feed = feeds[pos];
 		std::string msg = "Loading ";
 		msg.append(feed.rssurl());
 		msg.append("...");
+		if (max > 0) {
+			msg.append(" (");
+			std::ostringstream posstr;
+			posstr << (pos+1);
+			msg.append(posstr.str());
+			msg.append("/");
+			std::ostringstream maxstr;
+			maxstr << max;
+			msg.append(maxstr.str());
+			msg.append(") ");
+		}
 		v->feedlist_status(msg.c_str());
 		rss_parser parser(feed.rssurl().c_str());
 		feed = parser.parse();
@@ -175,7 +217,7 @@ void controller::reload(unsigned int pos) {
 
 void controller::reload_all() {
 	for (unsigned int i=0;i<feeds.size();++i) {
-		this->reload(i);
+		this->reload(i,feeds.size());
 	}
 }
 

@@ -54,6 +54,7 @@ static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** azCol
 	item.pubDate() = argv[4];
 	item.description() = argv[5];
 	item.unread() = (std::string("1") == argv[6]);
+	item.wash();
 	feed->items().push_back(item);
 	return 0;
 }
@@ -135,19 +136,22 @@ void cache::externalize_rssfeed(rss_feed& feed) {
 		if (count_cbh.count() > 0) {
 			char * update;
 			
-			if (!it->unread()) {
-				update = sqlite3_mprintf("UPDATE rss_item SET title = '%q', author = '%q', url = '%q', feedurl = '%q', pubDate = '%q', content = '%q', unread = '0' WHERE guid = '%q'",
-					it->title().c_str(), it->author().c_str(), it->link().c_str(), 
-					feed.rssurl().c_str(), it->pubDate().c_str(), it->description().c_str(), it->guid().c_str());
-			} else {
-				update = sqlite3_mprintf("UPDATE rss_item SET title = '%q', author = '%q', url = '%q', feedurl = '%q', pubDate = '%q', content = '%q' WHERE guid = '%q'",
-					it->title().c_str(), it->author().c_str(), it->link().c_str(), 
-					feed.rssurl().c_str(), it->pubDate().c_str(), it->description().c_str(), it->guid().c_str());
+			if (it->is_dirty()) {
+				if (!it->unread()) {
+					update = sqlite3_mprintf("UPDATE rss_item SET title = '%q', author = '%q', url = '%q', feedurl = '%q', pubDate = '%q', content = '%q', unread = '0' WHERE guid = '%q'",
+						it->title().c_str(), it->author().c_str(), it->link().c_str(), 
+						feed.rssurl().c_str(), it->pubDate().c_str(), it->description().c_str(), it->guid().c_str());
+				} else {
+					update = sqlite3_mprintf("UPDATE rss_item SET title = '%q', author = '%q', url = '%q', feedurl = '%q', pubDate = '%q', content = '%q' WHERE guid = '%q'",
+						it->title().c_str(), it->author().c_str(), it->link().c_str(), 
+						feed.rssurl().c_str(), it->pubDate().c_str(), it->description().c_str(), it->guid().c_str());
+				}
+				rc = sqlite3_exec(db,update,NULL,NULL,NULL);
+				assert(rc == SQLITE_OK);
+				// std::cerr << "item update query:" << update << " |" << std::endl;
+				free(update);
+				it->wash();
 			}
-			rc = sqlite3_exec(db,update,NULL,NULL,NULL);
-			assert(rc == SQLITE_OK);
-			// std::cerr << "item update query:" << update << " |" << std::endl;
-			free(update);
 		} else {
 			char * insert = sqlite3_mprintf("INSERT INTO rss_item (guid,title,author,url,feedurl,pubDate,content,unread) "
 											"VALUES ('%q','%q','%q','%q','%q','%q','%q',1)",
@@ -215,6 +219,6 @@ void cache::cleanup_cache(std::vector<rss_feed>& feeds) {
 	rc = sqlite3_exec(db,cleanup_rss_items_statement.c_str(),NULL,NULL,NULL);
 	assert(rc == SQLITE_OK);
 
-	rc = sqlite3_exec(db,"VACUUM;",NULL,NULL,NULL);
-	assert(rc == SQLITE_OK);
+	//rc = sqlite3_exec(db,"VACUUM;",NULL,NULL,NULL);
+	// assert(rc == SQLITE_OK);
 }

@@ -53,7 +53,15 @@ void view::itemlist_error(const char * msg) {
 
 void view::run_feedlist() {
 	bool quit = false;
+	bool update = false;
+
 	do {
+
+		if (update) {
+			update = false;
+			ctrl->update_feedlist();
+		}
+
 		const char * event = stfl_run(feedlist_form,0);
 		if (!event) continue;
 
@@ -91,6 +99,23 @@ void view::run_feedlist() {
 				case 'R':
 					ctrl->reload_all();
 					break;
+				case 'A': {
+						const char * feedposname = stfl_get(feedlist_form, "feedposname");
+						if (feedposname) {
+							std::istringstream posname(feedposname);
+							unsigned int pos = 0;
+							posname >> pos;
+							ctrl->mark_all_read(pos);
+							update = true;
+						} else {
+							feedlist_error("Error: no feed selected!"); // should not happen
+						}
+					}
+					break;
+				case 'C':
+					ctrl->catchup_all();
+					update = true;
+					break;
 				case 'q':
 					quit = true;
 					break;
@@ -100,6 +125,8 @@ void view::run_feedlist() {
 
 		}
 	} while (!quit);
+
+	stfl_reset();
 }
 
 void view::run_itemlist(rss_feed& feed) {
@@ -322,21 +349,23 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 					++unread_count;
 			}
 		}
-		snprintf(buf,sizeof(buf),"(%u/%u) ",unread_count,it->items().size());
-		snprintf(buf2,sizeof(buf2),"%14s",buf);
-		std::string newtitle(buf2);
-		newtitle.append(title);
-		title = newtitle;
+		if (unread_count > 0) { // only show feeds with unread items
+			snprintf(buf,sizeof(buf),"(%u/%u) ",unread_count,it->items().size());
+			snprintf(buf2,sizeof(buf2),"%14s",buf);
+			std::string newtitle(buf2);
+			newtitle.append(title);
+			title = newtitle;
 
-		std::string line = "{listitem[";
-		std::ostringstream num;
-		num << i;
-		line.append(num.str());
-		line.append("] text:");
-		line.append(stfl_quote(title.c_str()));
-		line.append("}");
+			std::string line = "{listitem[";
+			std::ostringstream num;
+			num << i;
+			line.append(num.str());
+			line.append("] text:");
+			line.append(stfl_quote(title.c_str()));
+			line.append("}");
 
-		code.append(line);
+			code.append(line);
+		}
 	}
 
 	code.append("}");
@@ -349,5 +378,6 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 void view::mark_all_read(std::vector<rss_item>& items) {
 	for (std::vector<rss_item>::iterator it = items.begin(); it != items.end(); ++it) {
 		it->unread() = false;
+		it->set_dirty();
 	}
 }
