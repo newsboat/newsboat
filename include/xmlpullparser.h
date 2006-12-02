@@ -36,6 +36,10 @@ private:
 	void add_attribute(const std::string& s);
 	std::string read_tag();
 	event determine_tag_type();
+	std::string decode_attribute(const std::string& s);
+	std::string decode_entities(const std::string& s);
+	std::string decode_entity(std::string s);
+	void remove_trailing_whitespace(std::string& s);
 	
 };
 
