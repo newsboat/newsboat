@@ -32,8 +32,10 @@ private:
 	event current_event;
 	
 	int skip_whitespace();
-	std::vector<std::string> tokenize(const std::string& s);
+	std::vector<std::string> tokenize(const std::string& str, const std::string& delimiters = " \r\n\t");
 	void add_attribute(const std::string& s);
+	std::string read_tag();
+	event determine_tag_type();
 	
 };
 
