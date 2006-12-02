@@ -39,6 +39,11 @@ void view::itemlist_status(const char * msg) {
 	stfl_run(itemlist_form,-1);
 }
 
+void view::itemview_status(const char * msg) {
+	stfl_set(itemview_form,"msg",msg);
+	stfl_run(itemview_form,-1);
+}
+
 void view::feedlist_error(const char * msg) {
 	feedlist_status(msg);
 	::sleep(2);
@@ -49,6 +54,12 @@ void view::itemlist_error(const char * msg) {
 	itemlist_status(msg);
 	::sleep(2);
 	itemlist_status("");
+}
+
+void view::itemview_error(const char * msg) {
+	itemview_status(msg);
+	::sleep(2);
+	itemview_status("");
 }
 
 void view::run_feedlist() {
@@ -305,7 +316,9 @@ void view::run_itemview(rss_item& item) {
 					// TODO: save currently selected article
 					break;
 				case 'o':
+					itemview_status("Starting browser...");
 					open_in_browser(item.link());
+					itemview_status("");
 					break;
 				case 'q':
 					quit = true;

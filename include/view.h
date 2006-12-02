@@ -22,8 +22,10 @@ namespace noos {
 			void set_feedlist(std::vector<rss_feed>& feeds);
 			void feedlist_error(const char * msg);
 			void itemlist_error(const char * msg);
+			void itemview_error(const char * msg);
 			void feedlist_status(const char * msg);
 			void itemlist_status(const char * msg);
+			void itemview_status(const char * msg);
 		private:
 			void jump_to_next_unread_item(std::vector<rss_item>& items);
 			void mark_all_read(std::vector<rss_item>& items);
