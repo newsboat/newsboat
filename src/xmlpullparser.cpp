@@ -1,4 +1,5 @@
 #include <xmlpullparser.h>
+#include <exceptions.h>
 #include <stdexcept>
 #include <istream>
 #include <sstream>
@@ -94,7 +95,13 @@ xmlpullparser::event xmlpullparser::next() {
 					remove_trailing_whitespace(text);
 					current_event = TEXT;
 				} else {
-					std::string s = read_tag();
+					std::string s;
+					try {
+						s = read_tag();
+					} catch (const xmlexception &) {
+						current_event = END_DOCUMENT;
+						break;
+					}
 					
 					if (s.find("?xml",0) == 0) {
 						c = skip_whitespace();
@@ -102,7 +109,12 @@ xmlpullparser::event xmlpullparser::next() {
 							current_event = END_DOCUMENT;
 							break;
 						}
-						s = read_tag();
+						try {
+							s = read_tag();
+						} catch (const xmlexception &) {
+							current_event = END_DOCUMENT;
+							break;
+						}
 					}
 					
 					std::vector<std::string> tokens = tokenize(s);
@@ -115,7 +127,7 @@ xmlpullparser::event xmlpullparser::next() {
 							++it;	
 						}
 					} else {
-						throw 1; // TODO: throw exception that an empty tag was found	
+						throw xmlexception("empty tag found");	
 					}
 					current_event = determine_tag_type();
 				}
@@ -126,36 +138,46 @@ xmlpullparser::event xmlpullparser::next() {
 			{
 				char c;
 				*inputstream >> c;
-				if (c == '<') {
-					std::string s = read_tag();
-					std::vector<std::string> tokens = tokenize(s);
-					if (tokens.size() > 0) {
-						text = tokens[0];
-						std::vector<std::string>::iterator it = tokens.begin();
-						++it;
-						while (it != tokens.end()) {
-							add_attribute(*it);
-							++it;	
+				if (!inputstream->eof()) {
+					if (c == '<') {
+						std::string s = read_tag();
+						std::vector<std::string> tokens = tokenize(s);
+						if (tokens.size() > 0) {
+							text = tokens[0];
+							std::vector<std::string>::iterator it = tokens.begin();
+							++it;
+							while (it != tokens.end()) {
+								add_attribute(*it);
+								++it;	
+							}
+						} else {
+							throw xmlexception("empty tag found");	
 						}
+						current_event = determine_tag_type();
 					} else {
-						throw 1;// TODO: throw exception that an empty tag was found	
+						// read text
+						while (!inputstream->eof() && c != '<') {
+							text.append(1,c);
+							// *inputstream >> c;
+							inputstream->read(&c,1);
+						}
+						remove_trailing_whitespace(text);
+						current_event = TEXT;
 					}
-					current_event = determine_tag_type();
 				} else {
-					// read text
-					while (!inputstream->eof() && c != '<') {
-						text.append(1,c);
-						// *inputstream >> c;
-						inputstream->read(&c,1);
-					}
-					remove_trailing_whitespace(text);
-					current_event = TEXT;
+					current_event = END_DOCUMENT;
 				}
 			}
 			break;
 		case TEXT:
 			{
-				std::string s = read_tag();
+				std::string s;
+				try {
+					s = read_tag();
+				} catch (const xmlexception &) {
+					current_event = END_DOCUMENT;
+					break;
+				}
 				std::vector<std::string> tokens = tokenize(s);
 				if (tokens.size() > 0) {
 					text = tokens[0];
@@ -166,7 +188,7 @@ xmlpullparser::event xmlpullparser::next() {
 						++it;	
 					}
 				} else {
-					throw 1; // TODO: throw exception that an empty tag was found	
+					throw xmlexception("empty tag found");	
 				}
 				current_event = determine_tag_type();	
 			}
@@ -226,7 +248,7 @@ std::string xmlpullparser::read_tag() {
 		inputstream->read(&c,1);
 	}
 	if (inputstream->eof()) {
-		throw 1; // TODO: throw exception that EOF was hit before '>'	
+		throw xmlexception("EOF found while reading XML tag");	
 	}
 	return s;
 }
@@ -242,8 +264,10 @@ xmlpullparser::event xmlpullparser::determine_tag_type() {
 std::string xmlpullparser::decode_attribute(const std::string& s) {
 	std::string s1 = s;
 	if ((s1[0] == '"' && s1[s1.length()-1] == '"') || (s1[0] == '\'' && s1[s1.length()-1] == '\'')) {
-		s1.erase(0,1);
-		s1.erase(s1.length()-1,1);	
+		if (s1.length() > 0)
+			s1.erase(0,1);
+		if (s1.length() > 0)
+			s1.erase(s1.length()-1,1);	
 	}
 	return decode_entities(s1);
 }
