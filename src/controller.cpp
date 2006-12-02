@@ -234,7 +234,7 @@ void controller::usage(char * argv0) {
 
 void controller::import_opml(const char * filename) {
 	nxml_t *data;
-	nxml_data_t * root, * body, * outline;
+	nxml_data_t * root, * body;
 	nxml_error_t ret;
 
 	ret = nxml_new (&data);

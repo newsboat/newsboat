@@ -350,7 +350,7 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 			}
 		}
 		if (unread_count > 0) { // only show feeds with unread items
-			snprintf(buf,sizeof(buf),"(%u/%u) ",unread_count,it->items().size());
+			snprintf(buf,sizeof(buf),"(%u/%u) ",unread_count,static_cast<unsigned int>(it->items().size()));
 			snprintf(buf2,sizeof(buf2),"%14s",buf);
 			std::string newtitle(buf2);
 			newtitle.append(title);
