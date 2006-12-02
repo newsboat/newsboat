@@ -8,7 +8,6 @@
 using namespace noos;
 
 int main(int argc, char * argv[]) {
-	cache ch("cache.db");
 	controller c;
 	view v(&c);
 	c.set_view(&v);

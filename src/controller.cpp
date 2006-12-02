@@ -108,7 +108,7 @@ void controller::run(int argc, char * argv[]) {
 		std::cout << "Loading articles from cache...";
 	std::cout.flush();
 
-	rsscache = new cache(cache_file.c_str());
+	rsscache = new cache(cache_file);
 
 	for (std::vector<std::string>::const_iterator it=cfg.get_urls().begin(); it != cfg.get_urls().end(); ++it) {
 		rss_feed feed;

@@ -24,6 +24,9 @@ public:
 	std::string getText() const;
 	bool isWhitespace() const;
 	event next();
+	
+	static std::vector<std::string> tokenize(const std::string& str, std::string delimiters = " \r\n\t");
+	
 private:
 	typedef std::pair<std::string,std::string> attribute;
 	std::vector<attribute> attributes;
@@ -32,7 +35,6 @@ private:
 	event current_event;
 	
 	int skip_whitespace();
-	std::vector<std::string> tokenize(const std::string& str, const std::string& delimiters = " \r\n\t");
 	void add_attribute(const std::string& s);
 	std::string read_tag();
 	event determine_tag_type();

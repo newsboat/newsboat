@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <istream>
 #include <sstream>
+#include <iostream>
 
 namespace noos
 {
@@ -187,7 +188,7 @@ int xmlpullparser::skip_whitespace() {
 	return c;
 }
 
-std::vector<std::string> xmlpullparser::tokenize(const std::string& str, const std::string& delimiters) {
+std::vector<std::string> xmlpullparser::tokenize(const std::string& str, std::string delimiters) {
     std::vector<std::string> tokens;
     std::string::size_type last_pos = str.find_first_not_of(delimiters, 0);
     std::string::size_type pos = str.find_first_of(delimiters, last_pos);
@@ -201,16 +202,17 @@ std::vector<std::string> xmlpullparser::tokenize(const std::string& str, const s
 }
 
 void xmlpullparser::add_attribute(const std::string& s) {
-	std::vector<std::string> tokens = tokenize(s,"=");
+	std::string::size_type equalpos = s.find_first_of("=",0);
 	std::string attribname, attribvalue;
-	if (tokens.size() > 0) {
-		attribname = tokens[0];
-		if (tokens.size() > 1)
-			attribvalue = tokens[1];
-		else
-			attribvalue = tokens[0];
+	
+	if (equalpos != std::string::npos) {
+		attribname = s.substr(0,equalpos);
+		attribvalue = s.substr(equalpos+1,s.length()-(equalpos+1));
+	} else {
+		attribname = attribvalue = s;
 	}
 	attribvalue = decode_attribute(attribvalue);
+	// std::cerr << "add_attribute: " << attribname << "=" << attribvalue << std::endl;
 	attributes.push_back(attribute(attribname,attribvalue));
 }
 
