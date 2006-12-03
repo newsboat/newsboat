@@ -6,10 +6,10 @@
 
 namespace noos {
 
-	class configreader {
+	class urlreader {
 		public:
-			configreader(const std::string& file = "");
-			~configreader();
+			urlreader(const std::string& file = "");
+			~urlreader();
 			void load_config(const std::string& file);
 			void write_config();
 			std::vector<std::string>& get_urls();

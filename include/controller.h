@@ -30,7 +30,7 @@ namespace noos {
 			void rec_find_rss_outlines(nxml_data_t * node);
 
 			view * v;
-			configreader cfg;
+			urlreader cfg;
 			cache * rsscache;
 			std::vector<rss_feed> feeds;
 			std::string config_dir;

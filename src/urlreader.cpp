@@ -4,17 +4,17 @@
 
 using namespace noos;
 
-configreader::configreader(const std::string& file) : filename(file) {
+urlreader::urlreader(const std::string& file) : filename(file) {
 	reload();
 }
 
-configreader::~configreader() { }
+urlreader::~urlreader() { }
 
-std::vector<std::string>& configreader::get_urls() {
+std::vector<std::string>& urlreader::get_urls() {
 	return urls;
 }
 
-void configreader::reload() {
+void urlreader::reload() {
 	std::fstream f;
 	f.open(filename.c_str(),std::fstream::in);
 	if (f.is_open()) {
@@ -27,12 +27,12 @@ void configreader::reload() {
 	}
 }
 
-void configreader::load_config(const std::string& file) {
+void urlreader::load_config(const std::string& file) {
 	filename = file;
 	reload();
 }
 
-void configreader::write_config() {
+void urlreader::write_config() {
 	std::fstream f;
 	f.open(filename.c_str(),std::fstream::out);
 	if (f.is_open()) {
