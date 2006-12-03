@@ -346,11 +346,17 @@ void view::run_itemview(rss_item& item) {
 }
 
 void view::open_in_browser(const std::string& url) {
-	std::string cmdline = "links '";
-	stfl_reset();
+	std::string cmdline;
+	std::string browser = cfg->get_configvalue("browser");
+	if (browser != "")
+		cmdline.append(browser);
+	else
+		cmdline.append("lynx");
+	cmdline.append(" '");
 	cmdline.append(url);
 	cmdline.append("'");
-	system(cmdline.c_str());
+	stfl_reset();
+	::system(cmdline.c_str());
 }
 
 void view::set_feedlist(std::vector<rss_feed>& feeds) {
