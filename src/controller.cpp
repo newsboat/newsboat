@@ -210,11 +210,9 @@ void controller::open_feed(unsigned int pos) {
 void controller::reload(unsigned int pos, unsigned int max) {
 	if (pos < feeds.size()) {
 		rss_feed feed = feeds[pos];
-		std::string msg = "Loading ";
-		msg.append(feed.rssurl());
-		msg.append("...");
+		std::string msg;	
 		if (max > 0) {
-			msg.append(" (");
+			msg.append("(");
 			std::ostringstream posstr;
 			posstr << (pos+1);
 			msg.append(posstr.str());
@@ -224,6 +222,9 @@ void controller::reload(unsigned int pos, unsigned int max) {
 			msg.append(maxstr.str());
 			msg.append(") ");
 		}
+		msg.append("Loading ");
+		msg.append(feed.rssurl());
+		msg.append("...");
 		v->feedlist_status(msg.c_str());
 		rss_parser parser(feed.rssurl().c_str());
 		feed = parser.parse();

@@ -12,6 +12,8 @@ std::vector<std::string> htmlrenderer::render(const std::string& source) {
 	unsigned int link_count = 0;
 	std::string curline;
 	int indent_level = 0;
+	bool inside_list = false, inside_li = false, is_ol = false;
+	unsigned int ol_count = 1;
 	
 	std::istringstream input(source);
 	xmlpullparser xpp;
@@ -51,8 +53,47 @@ std::vector<std::string> htmlrenderer::render(const std::string& source) {
 				} else if (xpp.getText() == "p") {
 					if (curline.length() > 0)
 						lines.push_back(curline);
+					if (lines[lines.size()-1].length() > static_cast<unsigned int>(indent_level*2))
+						lines.push_back(std::string(""));
+					prepare_newline(curline, indent_level);	
+				} else if (xpp.getText() == "ol") {
+					inside_list = true;
+					is_ol = true;
+					ol_count = 1;
+					if (curline.length() > 0)
+						lines.push_back(curline);	
 					lines.push_back(std::string(""));
 					prepare_newline(curline, indent_level);	
+				} else if (xpp.getText() == "ul") {
+					inside_list = true;
+					is_ol = false;
+					if (curline.length() > 0)
+						lines.push_back(curline);
+					lines.push_back(std::string(""));
+					prepare_newline(curline, indent_level);						
+				} else if (xpp.getText() == "li") {
+					if (inside_li) {
+						indent_level-=2;
+						if (curline.length() > 0)
+							lines.push_back(curline);
+						prepare_newline(curline, indent_level);	
+					}
+					inside_li = true;
+					if (curline.length() > 0)
+						lines.push_back(curline);
+					prepare_newline(curline, indent_level);
+					indent_level+=2;
+					if (is_ol) {
+						std::ostringstream num;
+						num << ol_count;
+						if (ol_count < 10)
+							curline.append(" ");
+						curline.append(num.str());
+						curline.append(". ");
+						++ol_count;
+					} else {
+						curline.append("  * ");
+					}
 				}
 				break;
 			case xmlpullparser::END_TAG:
@@ -63,6 +104,24 @@ std::vector<std::string> htmlrenderer::render(const std::string& source) {
 					if (curline.length() > 0)
 						lines.push_back(curline);
 					lines.push_back(std::string(""));
+					prepare_newline(curline, indent_level);
+				} else if (xpp.getText() == "ol" || xpp.getText() == "ul") {
+					inside_list = false;
+					if (inside_li) {
+						indent_level-=2;
+						if (curline.length() > 0)
+							lines.push_back(curline);
+						prepare_newline(curline, indent_level);
+					}
+					if (curline.length() > 0)
+						lines.push_back(curline);
+					lines.push_back(std::string(""));
+					prepare_newline(curline, indent_level);	
+				} else if (xpp.getText() == "li") {
+					indent_level-=2;
+					inside_li = false;
+					if (curline.length() > 0)
+						lines.push_back(curline);
 					prepare_newline(curline, indent_level);
 				}
 				break;
