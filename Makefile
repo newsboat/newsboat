@@ -1,6 +1,6 @@
 CXX=c++
 CXXFLAGS=-g -I./include -I./stfl -I. -I/usr/local/include -I/sw/include -Wall
-LDFLAGS=-g -L/usr/local/lib -L/sw/lib
+LDFLAGS=-L/usr/local/lib -L/sw/lib
 LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn
 OUTPUT=noos
 SRC=$(wildcard *.cpp) $(wildcard src/*.cpp)
@@ -23,7 +23,10 @@ $(OUTPUT): $(STFLHDRS) $(OBJS)
 	$(STFLCONV) $< > $@
 
 clean:
-	$(RM) $(OUTPUT) $(OBJS) $(STFLHDRS) core *.core # Makefile.deps
+	$(RM) $(OUTPUT) $(OBJS) $(STFLHDRS) core *.core
+
+distclean: clean
+	$(RM) Makefile.deps
 
 Makefile.deps: $(SRC)
 	$(CXX) $(CXXFLAGS) -MM -MG $(SRC) > Makefile.deps
