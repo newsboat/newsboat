@@ -11,6 +11,7 @@ std::vector<std::string> htmlrenderer::render(const std::string& source) {
 	std::vector<std::string> links;
 	unsigned int link_count = 0;
 	std::string curline;
+	int indent_level = 0;
 	
 	std::istringstream input(source);
 	xmlpullparser xpp;
@@ -40,6 +41,25 @@ std::vector<std::string> htmlrenderer::render(const std::string& source) {
 						link_count++;
 						curline.append(ref.str());
 					}					
+				} else if (xpp.getText() == "blockquote") {
+					++indent_level;
+					lines.push_back(curline);
+					lines.push_back(std::string(""));
+					prepare_newline(curline, indent_level);	
+				} else if (xpp.getText() == "p") {
+					lines.push_back(curline);
+					lines.push_back(std::string(""));
+					prepare_newline(curline, indent_level);	
+				}
+				break;
+			case xmlpullparser::END_TAG:
+				if (xpp.getText() == "blockquote") {
+					--indent_level;
+					if (indent_level < 0)
+					  indent_level = 0;
+					lines.push_back(curline);
+					lines.push_back(std::string(""));
+					prepare_newline(curline, indent_level);
 				}
 				break;
 			case xmlpullparser::TEXT:
@@ -49,7 +69,7 @@ std::vector<std::string> htmlrenderer::render(const std::string& source) {
 					for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it,++i) {
 						if ((curline.length() + it->length()) >= w) {
 							lines.push_back(curline);
-							curline = "";
+							prepare_newline(curline, indent_level);
 						}
 						curline.append(*it);
 						if (i < words.size()-1)
@@ -75,4 +95,11 @@ std::vector<std::string> htmlrenderer::render(const std::string& source) {
 	}
 
 	return lines;
+}
+
+void htmlrenderer::prepare_newline(std::string& line, int indent_level) {
+	line = "";
+	for (int i=0;i<indent_level;++i) {
+		line.append("  ");	
+	}
 }

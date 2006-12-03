@@ -286,8 +286,18 @@ void view::run_itemview(rss_item& item) {
 	code.append("}");
 
 	code.append("{listitem text:\"\"}");
+	
+	stfl_run(itemview_form,-1); // XXX HACK: render once so that we get a proper widget width
+	const char * widthstr = stfl_get(itemview_form,"article:w");
+	unsigned int render_width = 80;
+	if (widthstr) {
+		std::istringstream is(widthstr);
+		is >> render_width;
+		if (render_width - 5 > 0)
+	  		render_width -= 5; 	
+	}
 
-	htmlrenderer rnd;
+	htmlrenderer rnd(render_width);
 
 	std::vector<std::string> lines = rnd.render(item.description());
 
