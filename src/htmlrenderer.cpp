@@ -30,8 +30,9 @@ std::vector<std::string> htmlrenderer::render(const std::string& source) {
 						curline.append(ref.str());
 					}
 				} else if (xpp.getText() == "br") {
-					lines.push_back(curline);
-					curline = "";	
+					if (curline.length() > 0)
+						lines.push_back(curline);
+					prepare_newline(curline, indent_level);	
 				} else if (xpp.getText() == "img") {
 					std::string imgurl = xpp.getAttributeValue("src");
 					if (imgurl.length() > 0) {
@@ -43,11 +44,13 @@ std::vector<std::string> htmlrenderer::render(const std::string& source) {
 					}					
 				} else if (xpp.getText() == "blockquote") {
 					++indent_level;
-					lines.push_back(curline);
+					if (curline.length() > 0)
+						lines.push_back(curline);
 					lines.push_back(std::string(""));
 					prepare_newline(curline, indent_level);	
 				} else if (xpp.getText() == "p") {
-					lines.push_back(curline);
+					if (curline.length() > 0)
+						lines.push_back(curline);
 					lines.push_back(std::string(""));
 					prepare_newline(curline, indent_level);	
 				}
@@ -56,8 +59,9 @@ std::vector<std::string> htmlrenderer::render(const std::string& source) {
 				if (xpp.getText() == "blockquote") {
 					--indent_level;
 					if (indent_level < 0)
-					  indent_level = 0;
-					lines.push_back(curline);
+						indent_level = 0;
+					if (curline.length() > 0)
+						lines.push_back(curline);
 					lines.push_back(std::string(""));
 					prepare_newline(curline, indent_level);
 				}
