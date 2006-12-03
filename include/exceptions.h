@@ -14,6 +14,15 @@ class xmlexception : public std::exception {
 	private:
 		std::string msg;
 };
+
+class configexception : public std::exception {
+	public:
+		configexception(const std::string& errmsg) : msg(errmsg) { }
+		virtual ~configexception() throw() { }
+		virtual const char * what() const throw() { return msg.c_str(); }
+	private:
+		std::string msg;	
+};
 	
 }
 

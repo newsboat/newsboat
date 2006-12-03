@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 
 namespace noos {
 
@@ -10,6 +11,7 @@ namespace noos {
 
 	struct config_action_handler {
 		virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params) = 0;
+		virtual ~config_action_handler() { }
 	};
 
 	class configparser {

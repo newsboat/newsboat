@@ -1,5 +1,8 @@
 #include <view.h>
 #include <controller.h>
+#include <configparser.h>
+#include <configcontainer.h>
+#include <exceptions.h>
 #include <sstream>
 #include <cstdlib>
 #include <iostream>
@@ -13,7 +16,7 @@
 
 using namespace noos;
 
-controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db") {
+controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config") {
 	std::ostringstream cfgfile;
 
 	if (getenv("HOME")) {
@@ -35,6 +38,7 @@ controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cach
 
 	url_file = config_dir + std::string(NOOS_PATH_SEP) + url_file;
 	cache_file = config_dir + std::string(NOOS_PATH_SEP) + cache_file;
+	config_file = config_dir + std::string(NOOS_PATH_SEP) + config_file;
 }
 
 controller::~controller() {
@@ -53,7 +57,7 @@ void controller::run(int argc, char * argv[]) {
 	std::string importfile;
 
 	do {
-		c = ::getopt(argc,argv,"i:ehu:c:");
+		c = ::getopt(argc,argv,"i:ehu:c:C:");
 		if (c < 0)
 			continue;
 		switch (c) {
@@ -80,6 +84,9 @@ void controller::run(int argc, char * argv[]) {
 				break;
 			case 'c':
 				cache_file = optarg;
+				break;
+			case 'C':
+				config_file = optarg;
 				break;
 			default:
 				std::cout << argv[0] << ": unknown option: -" << static_cast<char>(c) << std::endl;
@@ -124,6 +131,20 @@ void controller::run(int argc, char * argv[]) {
 		export_opml();
 		return;
 	}
+	
+	std::cout << "Loading configuration...";
+	std::cout.flush();
+	
+	configparser cfgparser(config_file.c_str());
+	configcontainer cfg;
+	cfg.register_commands(cfgparser);
+	try {
+		cfgparser.parse();
+	} catch (const configexception& ex) {
+		std::cout << ex.what() << std::endl;
+		return;	
+	}
+	std::cout << "done." << std::endl;
 
 	v->set_feedlist(feeds);
 	v->run_feedlist();
@@ -228,6 +249,7 @@ void controller::usage(char * argv0) {
 	std::cout << "-i <file>       import OPML file" << std::endl;
 	std::cout << "-u <urlfile>    read RSS feed URLs from <urlfile>" << std::endl;
 	std::cout << "-c <cachefile>  use <cachefile> as cache file" << std::endl;
+	std::cout << "-C <configfile> read configuration from <configfile>" << std::endl;
 	std::cout << "-h              this help" << std::endl;
 	::exit(EXIT_FAILURE);
 }

@@ -36,6 +36,7 @@ namespace noos {
 			std::string config_dir;
 			std::string url_file;
 			std::string cache_file;
+			std::string config_file;
 	};
 
 }
