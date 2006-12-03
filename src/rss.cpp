@@ -1,5 +1,6 @@
 #include <rss.h>
 #include <config.h>
+#include <stringprep.h>
 
 using namespace noos;
 
@@ -31,10 +32,18 @@ rss_feed rss_parser::parse() {
 
 	for (mrss_item_t * item = mrss->item; item != NULL; item = item->next ) {
 		rss_item x;
-		if (item->title) x.title() = item->title;
+		if (item->title) {
+			char * str = stringprep_convert(item->title,stringprep_locale_charset(),mrss->encoding);
+			x.title() = str;
+			free(str);
+		}
 		if (item->link) x.link() = item->link;
 		if (item->author) x.author() = item->author;
-		if (item->description) x.description() = item->description;
+		if (item->description) {
+			char * str = stringprep_convert(item->description,stringprep_locale_charset(),mrss->encoding);
+			x.description() = str;
+			free(str);
+		}
 		if (item->pubDate) x.pubDate() = item->pubDate;
 		if (item->guid)
 			x.guid() = item->guid;

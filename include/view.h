@@ -2,6 +2,7 @@
 #define NOOS_VIEW__H
 
 #include <controller.h>
+#include <configcontainer.h>
 #include <vector>
 #include <string>
 #include <rss.h>
@@ -20,6 +21,7 @@ namespace noos {
 			void run_itemlist(rss_feed& feed);
 			void run_itemview(rss_item& item);
 			void set_feedlist(std::vector<rss_feed>& feeds);
+			void set_config_container(configcontainer * cfgcontainer);
 			void feedlist_error(const char * msg);
 			void itemlist_error(const char * msg);
 			void itemview_error(const char * msg);
@@ -35,6 +37,7 @@ namespace noos {
 			stfl_form * feedlist_form;
 			stfl_form * itemlist_form;
 			stfl_form * itemview_form;
+			configcontainer * cfg;
 	};
 
 }

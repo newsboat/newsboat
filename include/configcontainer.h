@@ -18,7 +18,6 @@ public:
 	std::string get_configvalue(const std::string& key);
 private:
 	std::map<std::string,std::string> config_data;
-	// TODO: store private data
 	
 	bool is_bool(const std::string& s);
 };

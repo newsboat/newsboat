@@ -14,7 +14,7 @@ void configparser::parse() {
 	std::fstream f(filename.c_str());
 	std::string line;
 	getline(f,line);
-	while (!f.eof()) {
+	while (f.is_open() && !f.eof()) {
 		std::vector<std::string> tokens = xmlpullparser::tokenize(line); // TODO: write other tokenizer
 		if (tokens.size() > 0) {
 			std::string cmd = tokens[0];

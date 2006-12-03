@@ -1,6 +1,7 @@
 #include <configcontainer.h>
 #include <configparser.h>
 #include <sstream>
+#include <iostream>
 
 namespace noos
 {
@@ -29,6 +30,7 @@ action_handler_status configcontainer::handle_action(const std::string& action, 
 			return AHS_INVALID_PARAMS;
 		}
 		config_data[action] = params[0];
+		// std::cerr << "setting " << action << " to `" << params[0] << "'" << std::endl;
 		return AHS_OK; 
 	}
 	return AHS_INVALID_COMMAND;	
@@ -55,7 +57,7 @@ int configcontainer::get_configvalue_as_int(const std::string& key) {
 }
 
 bool configcontainer::get_configvalue_as_bool(const std::string& key) {
-	if (key == "true" || key == "yes")
+	if (config_data[key] == "true" || config_data[key] == "yes")
 		return true;
 	return false;	
 }

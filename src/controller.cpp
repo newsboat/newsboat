@@ -95,14 +95,14 @@ void controller::run(int argc, char * argv[]) {
 		}
 	} while (c != -1);
 
-	cfg.load_config(url_file);
+	urlcfg.load_config(url_file);
 
 	if (do_import) {
 		import_opml(importfile.c_str());
 		return;
 	}
 
-	if (cfg.get_urls().size() == 0) {
+	if (urlcfg.get_urls().size() == 0) {
 		std::cout << "Error: no URLs configured. Please fill the file " << url_file << " with RSS feed URLs or import an OPML file." << std::endl << std::endl;
 		usage(argv[0]);
 	}
@@ -117,7 +117,7 @@ void controller::run(int argc, char * argv[]) {
 
 	rsscache = new cache(cache_file);
 
-	for (std::vector<std::string>::const_iterator it=cfg.get_urls().begin(); it != cfg.get_urls().end(); ++it) {
+	for (std::vector<std::string>::const_iterator it=urlcfg.get_urls().begin(); it != urlcfg.get_urls().end(); ++it) {
 		rss_feed feed;
 		feed.rssurl() = *it;
 		rsscache->internalize_rssfeed(feed);
@@ -146,6 +146,7 @@ void controller::run(int argc, char * argv[]) {
 	}
 	std::cout << "done." << std::endl;
 
+	v->set_config_container(&cfg);
 	v->set_feedlist(feeds);
 	v->run_feedlist();
 
@@ -277,7 +278,7 @@ void controller::import_opml(const char * filename) {
 		body = nxmle_find_element(data, root, "body", NULL);
 		if (body) {
 			rec_find_rss_outlines(body);
-			cfg.write_config();
+			urlcfg.write_config();
 		}
 	}
 
@@ -306,14 +307,14 @@ void controller::rec_find_rss_outlines(nxml_data_t * node) {
 
 			bool found = false;
 
-			for (std::vector<std::string>::iterator it = cfg.get_urls().begin(); it != cfg.get_urls().end(); ++it) {
+			for (std::vector<std::string>::iterator it = urlcfg.get_urls().begin(); it != urlcfg.get_urls().end(); ++it) {
 				if (*it == url) {
 					found = true;
 				}
 			}
 
 			if (!found) {
-				cfg.get_urls().push_back(std::string(url));
+				urlcfg.get_urls().push_back(std::string(url));
 			}
 
 		}

@@ -1,6 +1,6 @@
 #include <fstream>
 
-#include <configreader.h>
+#include <urlreader.h>
 
 using namespace noos;
 

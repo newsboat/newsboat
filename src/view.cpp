@@ -1,6 +1,7 @@
 #include <feedlist.h>
 #include <itemlist.h>
 #include <itemview.h>
+#include <iostream>
 
 extern "C" {
 #include <stfl.h>
@@ -16,7 +17,7 @@ extern "C" {
 
 using namespace noos;
 
-view::view(controller * c) : ctrl(c) { 
+view::view(controller * c) : ctrl(c), cfg(0) { 
 	feedlist_form = stfl_create(feedlist_str);
 	itemlist_form = stfl_create(itemlist_str);
 	itemview_form = stfl_create(itemview_str);
@@ -27,6 +28,10 @@ view::~view() {
 	stfl_free(feedlist_form);
 	stfl_free(itemlist_form);
 	stfl_free(itemview_form);
+}
+
+void view::set_config_container(configcontainer * cfgcontainer) {
+	cfg = cfgcontainer;	
 }
 
 void view::feedlist_status(const char * msg) {
@@ -340,6 +345,12 @@ void view::open_in_browser(const std::string& url) {
 
 void view::set_feedlist(std::vector<rss_feed>& feeds) {
 	std::string code = "{list";
+	
+	assert(cfg != NULL); // must not happen
+	
+	bool show_read_feeds = cfg->get_configvalue_as_bool("show-read-feeds");
+	
+	// std::cerr << "show-read-feeds" << (show_read_feeds?"true":"false") << std::endl;
 
 	unsigned int i = 0;
 	for (std::vector<rss_feed>::iterator it = feeds.begin(); it != feeds.end(); ++it, ++i) {
@@ -362,7 +373,8 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 					++unread_count;
 			}
 		}
-		if (unread_count > 0 || 1) { // XXX add configuration option!!!
+
+		if (show_read_feeds || unread_count > 0) {
 			snprintf(buf,sizeof(buf),"(%u/%u) ",unread_count,static_cast<unsigned int>(it->items().size()));
 			snprintf(buf2,sizeof(buf2),"%14s",buf);
 			std::string newtitle(buf2);

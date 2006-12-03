@@ -1,7 +1,7 @@
 #ifndef NOOS_CONTROLLER__H
 #define NOOS_CONTROLLER__H
 
-#include <configreader.h>
+#include <urlreader.h>
 #include <rss.h>
 #include <cache.h>
 #include <nxml.h>
@@ -30,7 +30,7 @@ namespace noos {
 			void rec_find_rss_outlines(nxml_data_t * node);
 
 			view * v;
-			urlreader cfg;
+			urlreader urlcfg;
 			cache * rsscache;
 			std::vector<rss_feed> feeds;
 			std::string config_dir;
