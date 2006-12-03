@@ -29,6 +29,8 @@ void configparser::parse() {
 						os << "invalid parameters.";
 					} else if (status == AHS_TOO_FEW_PARAMS) {
 						os << "too few parameters.";
+					} else if (status == AHS_INVALID_COMMAND) {
+						os << "unknown command (bug).";
 					} else {
 						os << "unknown error (bug).";
 					}
