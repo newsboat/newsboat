@@ -234,7 +234,6 @@ void xmlpullparser::add_attribute(const std::string& s) {
 }
 
 std::string xmlpullparser::read_tag() {
-	char c;
 	std::string s;
 	getline(*inputstream,s,'>');
 	if (inputstream->eof()) {
@@ -264,8 +263,6 @@ std::string xmlpullparser::decode_attribute(const std::string& s) {
 
 std::string xmlpullparser::decode_entities(const std::string& s) {
 	std::string result, current_entity;
-	bool reading_entity = false;
-	unsigned int i = 0;
 	std::istringstream sbuf(s);
 	std::string tmp;
 	getline(sbuf,tmp,'&');
