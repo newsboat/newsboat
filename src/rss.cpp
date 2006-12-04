@@ -34,15 +34,19 @@ rss_feed rss_parser::parse() {
 		rss_item x;
 		if (item->title) {
 			char * str = stringprep_convert(item->title,stringprep_locale_charset(),mrss->encoding);
-			x.title() = str;
-			free(str);
+			if (str) {
+				x.title() = str;
+				free(str);
+			}
 		}
 		if (item->link) x.link() = item->link;
 		if (item->author) x.author() = item->author;
 		if (item->description) {
 			char * str = stringprep_convert(item->description,stringprep_locale_charset(),mrss->encoding);
-			x.description() = str;
-			free(str);
+			if (str) {
+				x.description() = str;
+				free(str);
+			}
 		}
 		if (item->pubDate) x.pubDate() = item->pubDate;
 		if (item->guid)

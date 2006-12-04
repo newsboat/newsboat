@@ -86,13 +86,11 @@ xmlpullparser::event xmlpullparser::next() {
 					break;
 				}
 				if (c != '<') {
-					// read text
-					while (!inputstream->eof() && c != '<') {
-						text.append(1,c);
-						// *inputstream >> c;
-						inputstream->read(&c,1);
-					}
-					remove_trailing_whitespace(text);
+					text.append(1,c);
+					std::string tmp;
+					getline(*inputstream,tmp,'<');
+					remove_trailing_whitespace(tmp);
+					text.append(tmp);
 					current_event = TEXT;
 				} else {
 					std::string s;
@@ -155,13 +153,11 @@ xmlpullparser::event xmlpullparser::next() {
 						}
 						current_event = determine_tag_type();
 					} else {
-						// read text
-						while (!inputstream->eof() && c != '<') {
-							text.append(1,c);
-							// *inputstream >> c;
-							inputstream->read(&c,1);
-						}
-						remove_trailing_whitespace(text);
+						text.append(1,c);
+						std::string tmp;
+						getline(*inputstream,tmp,'<');
+						remove_trailing_whitespace(tmp);
+						text.append(tmp);
 						current_event = TEXT;
 					}
 				} else {
@@ -234,21 +230,15 @@ void xmlpullparser::add_attribute(const std::string& s) {
 		attribname = attribvalue = s;
 	}
 	attribvalue = decode_attribute(attribvalue);
-	// std::cerr << "add_attribute: " << attribname << "=" << attribvalue << std::endl;
 	attributes.push_back(attribute(attribname,attribvalue));
 }
 
 std::string xmlpullparser::read_tag() {
 	char c;
 	std::string s;
-	inputstream->read(&c,1);
-	while (!inputstream->eof() && c != '>') {
-		s.append(1,c);
-		// std::cout << "read `" << c << "'" << std::endl;
-		inputstream->read(&c,1);
-	}
+	getline(*inputstream,s,'>');
 	if (inputstream->eof()) {
-		throw xmlexception("EOF found while reading XML tag");	
+		throw xmlexception("EOF found while reading XML tag");	// TODO: test whether this works reliably
 	}
 	return s;
 }
@@ -276,24 +266,16 @@ std::string xmlpullparser::decode_entities(const std::string& s) {
 	std::string result, current_entity;
 	bool reading_entity = false;
 	unsigned int i = 0;
-	while (i < s.length()) {
-		if (reading_entity) {	
-			if (s[i] == ';') {
-				reading_entity = false;
-				result.append(decode_entity(current_entity));
-			} else {
-				current_entity.append(1,s[i]);	
-			}
-		} else {
-			if (s[i] == '&') {
-				reading_entity = true;
-				current_entity = "";
-			} else {
-				result.append(1,s[i]);	
-			}
-		}
-		++i;
+	std::istringstream sbuf(s);
+	std::string tmp;
+	getline(sbuf,tmp,'&');
+	while (!sbuf.eof()) {
+		result.append(tmp);
+		getline(sbuf,tmp,';');
+		result.append(decode_entity(tmp));
+		getline(sbuf,tmp,'&');
 	}
+	result.append(tmp);
 	return result;
 }
 
@@ -331,7 +313,7 @@ std::string xmlpullparser::decode_entity(std::string s) {
 
 void xmlpullparser::remove_trailing_whitespace(std::string& s) {
 	while (s.length() > 0 && isspace(s[s.length()-1])) {
-		s.erase(s.length()-1,1);	
+		s.erase(s.length()-1,1);
 	}
 }
 

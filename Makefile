@@ -22,6 +22,9 @@ $(OUTPUT): $(STFLHDRS) $(OBJS)
 %.h: %.stfl
 	$(STFLCONV) $< > $@
 
+testpp: src/xmlpullparser.cpp testpp.cpp
+	$(CXX) -I./include -pg -g -D_TESTPP src/xmlpullparser.cpp testpp.cpp -o testpp
+
 clean:
 	$(RM) $(OUTPUT) $(OBJS) $(STFLHDRS) core *.core
 
