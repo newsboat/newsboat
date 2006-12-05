@@ -418,7 +418,7 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 
 void view::mark_all_read(std::vector<rss_item>& items) {
 	for (std::vector<rss_item>::iterator it = items.begin(); it != items.end(); ++it) {
-		it->unread() = false;
-		it->set_dirty();
+		it->set_unread(false);
+		// it->set_dirty();
 	}
 }

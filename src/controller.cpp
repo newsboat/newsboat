@@ -7,6 +7,9 @@
 #include <cstdlib>
 #include <iostream>
 
+#include <sys/time.h>
+#include <ctime>
+
 #include <nxml.h>
 
 #include <sys/types.h>
@@ -118,8 +121,8 @@ void controller::run(int argc, char * argv[]) {
 	rsscache = new cache(cache_file);
 
 	for (std::vector<std::string>::const_iterator it=urlcfg.get_urls().begin(); it != urlcfg.get_urls().end(); ++it) {
-		rss_feed feed;
-		feed.rssurl() = *it;
+		rss_feed feed(rsscache);
+		feed.set_rssurl(*it);
 		rsscache->internalize_rssfeed(feed);
 		feeds.push_back(feed);
 	}
@@ -150,11 +153,14 @@ void controller::run(int argc, char * argv[]) {
 	v->set_feedlist(feeds);
 	v->run_feedlist();
 
-	std::cout << "Storing articles in cache...";
+	std::cout << "Cleaning up cache...";
 	std::cout.flush();
+	rsscache->cleanup_cache(feeds);
+	/*
 	for (std::vector<rss_feed>::iterator it=feeds.begin(); it != feeds.end(); ++it) {
-		rsscache->externalize_rssfeed(*it);
+		// rsscache->externalize_rssfeed(*it);
 	}
+	*/
 	std::cout << "done." << std::endl;
 }
 
@@ -164,8 +170,8 @@ void controller::update_feedlist() {
 
 void controller::open_item(rss_item& item) {
 	v->run_itemview(item);
-	item.unread() = false; // XXX: see TODO list
-	item.set_dirty();
+	item.set_unread(false); // XXX: see TODO list
+	// item.set_dirty();
 }
 
 void controller::catchup_all() {
@@ -178,10 +184,10 @@ void controller::mark_all_read(unsigned int pos) {
 	if (pos < feeds.size()) {
 		rss_feed& feed = feeds[pos];
 		for (std::vector<rss_item>::iterator it = feed.items().begin(); it != feed.items().end(); ++it) {
-			it->unread() = false;
-			it->set_dirty();
+			it->set_unread(false);
+			// it->set_dirty();
 		}
-		rsscache->externalize_rssfeed(feed);
+		// rsscache->externalize_rssfeed(feed);
 	}
 }
 
@@ -199,7 +205,7 @@ void controller::open_feed(unsigned int pos) {
 			v->feedlist_error("Error: feed contains no items!");
 		} else {
 			v->run_itemlist(feed);
-			rsscache->externalize_rssfeed(feed); // save possibly changed unread flags
+			// rsscache->externalize_rssfeed(feed); // save possibly changed unread flags
 			v->set_feedlist(feeds);
 		}
 	} else {
@@ -226,11 +232,29 @@ void controller::reload(unsigned int pos, unsigned int max) {
 		msg.append(feed.rssurl());
 		msg.append("...");
 		v->feedlist_status(msg.c_str());
-		rss_parser parser(feed.rssurl().c_str());
+				
+		rss_parser parser(feed.rssurl().c_str(), rsscache);
 		feed = parser.parse();
+		
+		/*
+		struct timeval tv1, tv2;
+		gettimeofday(&tv1, NULL);
+		*/
+		
 		rsscache->externalize_rssfeed(feed);
+		
+		/*
+		gettimeofday(&tv2, NULL);
+		
+		unsigned long long t1 = tv1.tv_sec*1000000 + tv1.tv_usec;
+		unsigned long long t2 = tv2.tv_sec*1000000 + tv2.tv_usec;
+		
+		std::cerr << "time for externalizing: " << (t2-t1)/1000 << " ms" << std::endl;
+		*/
+		
 		rsscache->internalize_rssfeed(feed);
 		feeds[pos] = feed;
+		
 		v->feedlist_status("");
 		v->set_feedlist(feeds);
 	} else {
