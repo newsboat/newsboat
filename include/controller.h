@@ -17,7 +17,7 @@ namespace noos {
 			void set_view(view * vv);
 			void run(int argc = 0, char * argv[] = NULL);
 			void open_feed(unsigned int pos);
-			void open_item(rss_item& item);
+			bool open_item(rss_item& item);
 			void reload(unsigned int pos, unsigned int max = 0);
 			void reload_all();
 			void update_feedlist();

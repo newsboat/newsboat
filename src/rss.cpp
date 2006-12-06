@@ -100,3 +100,4 @@ void rss_item::set_unread(bool u) {
 	unread_ = u;
 	if (ch) ch->update_rssitem_unread(*this, feedurl); 
 }
+

@@ -9,7 +9,7 @@ vbox
     .expand:vh
     offset[articleoffset]:0
   label#info
-    text[help]:"q:Quit s:Save o:Open in Browser"
+    text[help]:"q:Quit s:Save o:Open in Browser n:Next Unread"
     .expand:h
   label
     text[msg]:""

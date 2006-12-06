@@ -19,7 +19,7 @@ namespace noos {
 			~view();
 			void run_feedlist();
 			void run_itemlist(rss_feed& feed);
-			void run_itemview(rss_item& item);
+			bool run_itemview(rss_item& item);
 			void set_feedlist(std::vector<rss_feed>& feeds);
 			void set_config_container(configcontainer * cfgcontainer);
 			void feedlist_error(const char * msg);
@@ -29,7 +29,7 @@ namespace noos {
 			void itemlist_status(const char * msg);
 			void itemview_status(const char * msg);
 		private:
-			void jump_to_next_unread_item(std::vector<rss_item>& items);
+			bool jump_to_next_unread_item(std::vector<rss_item>& items);
 			void mark_all_read(std::vector<rss_item>& items);
 			void open_in_browser(const std::string& url);
 

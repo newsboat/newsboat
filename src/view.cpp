@@ -187,16 +187,24 @@ void view::run_itemlist(rss_feed& feed) {
 		if (!event) continue;
 
 		if (strcmp(event,"ENTER")==0) {
-			const char * itemposname = stfl_get(itemlist_form, "itemposname");
-			if (itemposname) {
-				std::istringstream posname(itemposname);
-				unsigned int pos = 0;
-				posname >> pos;
-				ctrl->open_item(items[pos]);
-				rebuild_list = true;
-			} else {
-				itemlist_error("Error: no item selected!"); // should not happen
-			}
+			bool open_next_item = false;
+			do {
+				const char * itemposname = stfl_get(itemlist_form, "itempos");
+				if (itemposname) {
+					std::istringstream posname(itemposname);
+					unsigned int pos = 0;
+					posname >> pos;
+					open_next_item = ctrl->open_item(items[pos]);
+					rebuild_list = true;
+				} else {
+					itemlist_error("Error: no item selected!"); // should not happen
+				}
+				if (open_next_item) {
+					if (!jump_to_next_unread_item(items)) {
+						open_next_item = false;
+					}
+				}
+			} while (open_next_item);
 		} else if (strncmp(event,"CHAR(",5)==0) {
 
 			unsigned int x;
@@ -227,7 +235,7 @@ void view::run_itemlist(rss_feed& feed) {
 	} while (!quit);
 }
 
-void view::jump_to_next_unread_item(std::vector<rss_item>& items) {
+bool view::jump_to_next_unread_item(std::vector<rss_item>& items) {
 	const char * itemposname = stfl_get(itemlist_form, "itemposname");
 	// std::cerr << "jump_to_next_unread_item" << std::endl;
 
@@ -241,7 +249,7 @@ void view::jump_to_next_unread_item(std::vector<rss_item>& items) {
 				posname << i;
 				stfl_set(itemlist_form,"itempos",posname.str().c_str());
 				// std::cerr << "setting itemposname to " << posname.str().c_str() << std::endl;
-				return;
+				return true;
 			}
 		}
 		for (unsigned int i=0;i<pos;++i) {
@@ -250,17 +258,19 @@ void view::jump_to_next_unread_item(std::vector<rss_item>& items) {
 				posname << i;
 				stfl_set(itemlist_form,"itempos",posname.str().c_str());
 				// std::cerr << "setting itemposname to " << posname.str().c_str() << std::endl;
-				return;
+				return true;
 			}
 		}
 		itemlist_error("No unread items.");
 	} else {
 		itemlist_error("Error: no item selected!");
 	}
+	return false;
 }
 
-void view::run_itemview(rss_item& item) {
+bool view::run_itemview(rss_item& item) {
 	bool quit = false;
+	bool retval = false;
 
 	std::string code = "{list";
 
@@ -335,6 +345,8 @@ void view::run_itemview(rss_item& item) {
 					open_in_browser(item.link());
 					itemview_status("");
 					break;
+				case 'n':
+					retval = true;
 				case 'q':
 					quit = true;
 					break;
@@ -343,6 +355,8 @@ void view::run_itemview(rss_item& item) {
 
 
 	} while (!quit);
+
+	return retval;
 }
 
 void view::open_in_browser(const std::string& url) {

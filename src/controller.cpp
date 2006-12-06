@@ -168,10 +168,10 @@ void controller::update_feedlist() {
 	v->set_feedlist(feeds);
 }
 
-void controller::open_item(rss_item& item) {
-	v->run_itemview(item);
+bool controller::open_item(rss_item& item) {
+	bool show_next_unread = v->run_itemview(item);
 	item.set_unread(false); // XXX: see TODO list
-	// item.set_dirty();
+	return show_next_unread;
 }
 
 void controller::catchup_all() {
