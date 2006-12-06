@@ -1,13 +1,18 @@
 #include <htmlrenderer.h>
 #include <xmlpullparser.h>
 #include <sstream>
+#include <iostream>
 
 using namespace noos;
 
 htmlrenderer::htmlrenderer(unsigned int width) : w(width) { }
 
-std::vector<std::string> htmlrenderer::render(const std::string& source) {
-	std::vector<std::string> lines;
+void htmlrenderer::render(const std::string& source, std::vector<std::string>& lines) {
+	std::istringstream input(source);
+	render(input, lines);
+}
+
+void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines) {
 	std::vector<std::string> links;
 	unsigned int link_count = 0;
 	std::string curline;
@@ -15,7 +20,6 @@ std::vector<std::string> htmlrenderer::render(const std::string& source) {
 	bool inside_list = false, inside_li = false, is_ol = false;
 	unsigned int ol_count = 1;
 	
-	std::istringstream input(source);
 	xmlpullparser xpp;
 	xpp.setInput(input);
 	
@@ -53,7 +57,7 @@ std::vector<std::string> htmlrenderer::render(const std::string& source) {
 				} else if (xpp.getText() == "p") {
 					if (curline.length() > 0)
 						lines.push_back(curline);
-					if (lines[lines.size()-1].length() > static_cast<unsigned int>(indent_level*2))
+					if (lines.size() > 0 && lines[lines.size()-1].length() > static_cast<unsigned int>(indent_level*2))
 						lines.push_back(std::string(""));
 					prepare_newline(curline, indent_level);	
 				} else if (xpp.getText() == "ol") {
@@ -131,7 +135,8 @@ std::vector<std::string> htmlrenderer::render(const std::string& source) {
 					unsigned int i=0;
 					for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it,++i) {
 						if ((curline.length() + it->length()) >= w) {
-							lines.push_back(curline);
+							if (curline.length() > 0)
+								lines.push_back(curline);
 							prepare_newline(curline, indent_level);
 						}
 						curline.append(*it);
@@ -145,7 +150,8 @@ std::vector<std::string> htmlrenderer::render(const std::string& source) {
 				break;
 		}
 	}
-	lines.push_back(curline);
+	if (curline.length() > 0)
+		lines.push_back(curline);
 	
 	if (links.size() > 0) {
 		lines.push_back(std::string(""));
@@ -157,7 +163,6 @@ std::vector<std::string> htmlrenderer::render(const std::string& source) {
 		}
 	}
 
-	return lines;
 }
 
 void htmlrenderer::prepare_newline(std::string& line, int indent_level) {

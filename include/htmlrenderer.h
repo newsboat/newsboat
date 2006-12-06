@@ -3,13 +3,15 @@
 
 #include <vector>
 #include <string>
+#include <istream>
 
 namespace noos {
 
 	class htmlrenderer {
 		public:
 			htmlrenderer(unsigned int width = 80);
-			std::vector<std::string> render(const std::string& source);
+			void render(const std::string&, std::vector<std::string>& );
+			void render(std::istream &, std::vector<std::string>& );
 		private:
 			unsigned int w;
 			void prepare_newline(std::string& line, int indent_level);

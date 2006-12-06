@@ -117,12 +117,15 @@ xmlpullparser::event xmlpullparser::next() {
 					
 					std::vector<std::string> tokens = tokenize(s);
 					if (tokens.size() > 0) {
-						text = tokens[0];
-						std::vector<std::string>::iterator it = tokens.begin();
-						++it;
-						while (it != tokens.end()) {
-							add_attribute(*it);
-							++it;	
+						if (tokens[0].length() > 0)
+							text = tokens[0];
+						if (tokens.size() > 1) {
+							std::vector<std::string>::iterator it = tokens.begin();
+							++it;
+							while (it != tokens.end()) {
+								add_attribute(*it);
+								++it;	
+							}
 						}
 					} else {
 						throw xmlexception("empty tag found");	
@@ -158,6 +161,7 @@ xmlpullparser::event xmlpullparser::next() {
 						getline(*inputstream,tmp,'<');
 						remove_trailing_whitespace(tmp);
 						text.append(tmp);
+						text = decode_entities(text);
 						current_event = TEXT;
 					}
 				} else {

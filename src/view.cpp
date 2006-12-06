@@ -2,6 +2,7 @@
 #include <itemlist.h>
 #include <itemview.h>
 #include <iostream>
+#include <assert.h>
 
 extern "C" {
 #include <stfl.h>
@@ -309,7 +310,11 @@ bool view::run_itemview(rss_item& item) {
 
 	htmlrenderer rnd(render_width);
 
-	std::vector<std::string> lines = rnd.render(item.description());
+	// const char * desc = item.description().c_str();
+	// std::cerr << desc << std::endl;
+	std::vector<std::string> lines;
+	// std::cerr << "`" << item.description() << "'" << std::endl;
+	rnd.render(item.description(), lines);
 
 	for (std::vector<std::string>::iterator it = lines.begin(); it != lines.end(); ++it) {
 		std::string line = std::string("{listitem text:") + std::string(stfl_quote(it->c_str())) + std::string("}");
@@ -406,7 +411,7 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 
 		if (show_read_feeds || unread_count > 0) {
 			snprintf(buf,sizeof(buf),"(%u/%u) ",unread_count,static_cast<unsigned int>(it->items().size()));
-			snprintf(buf2,sizeof(buf2),"%14s",buf);
+			snprintf(buf2,sizeof(buf2)," %c %11s",unread_count > 0 ? 'N' : ' ',buf);
 			std::string newtitle(buf2);
 			newtitle.append(title);
 			title = newtitle;
