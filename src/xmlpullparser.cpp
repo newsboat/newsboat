@@ -117,8 +117,7 @@ xmlpullparser::event xmlpullparser::next() {
 					
 					std::vector<std::string> tokens = tokenize(s);
 					if (tokens.size() > 0) {
-						if (tokens[0].length() > 0)
-							text = tokens[0];
+						text = tokens[0];
 						if (tokens.size() > 1) {
 							std::vector<std::string>::iterator it = tokens.begin();
 							++it;
@@ -126,6 +125,9 @@ xmlpullparser::event xmlpullparser::next() {
 								add_attribute(*it);
 								++it;	
 							}
+						} else {
+							if (text.length() > 0 && text[text.length()-1] == '/')
+								text.erase(text.length()-1, 1);
 						}
 					} else {
 						throw xmlexception("empty tag found");	
@@ -145,11 +147,16 @@ xmlpullparser::event xmlpullparser::next() {
 						std::vector<std::string> tokens = tokenize(s);
 						if (tokens.size() > 0) {
 							text = tokens[0];
-							std::vector<std::string>::iterator it = tokens.begin();
-							++it;
-							while (it != tokens.end()) {
-								add_attribute(*it);
-								++it;	
+							if (tokens.size() > 1) {
+								std::vector<std::string>::iterator it = tokens.begin();
+								++it;
+								while (it != tokens.end()) {
+									add_attribute(*it);
+									++it;	
+								}
+							} else {
+								if (text.length() > 0 && text[text.length()-1] == '/')
+									text.erase(text.length()-1, 1);
 							}
 						} else {
 							throw xmlexception("empty tag found");	
@@ -181,11 +188,16 @@ xmlpullparser::event xmlpullparser::next() {
 				std::vector<std::string> tokens = tokenize(s);
 				if (tokens.size() > 0) {
 					text = tokens[0];
-					std::vector<std::string>::iterator it = tokens.begin();
-					++it;
-					while (it != tokens.end()) {
-						add_attribute(*it);
-						++it;	
+					if (tokens.size() > 1) {
+						std::vector<std::string>::iterator it = tokens.begin();
+						++it;
+						while (it != tokens.end()) {
+							add_attribute(*it);
+							++it;	
+						}
+					} else {
+						if (text.length() > 0 && text[text.length()-1] == '/')
+							text.erase(text.length()-1, 1);
 					}
 				} else {
 					throw xmlexception("empty tag found");	
@@ -223,7 +235,11 @@ std::vector<std::string> xmlpullparser::tokenize(const std::string& str, std::st
     return tokens;
 }
 
-void xmlpullparser::add_attribute(const std::string& s) {
+void xmlpullparser::add_attribute(std::string s) {
+	if (s.length() > 0 && s[s.length()-1] == '/')
+		s.erase(s.length()-1,1);
+	if (s.length() == 0)
+		return;
 	std::string::size_type equalpos = s.find_first_of("=",0);
 	std::string attribname, attribvalue;
 	

@@ -35,7 +35,7 @@ private:
 	event current_event;
 	
 	int skip_whitespace();
-	void add_attribute(const std::string& s);
+	void add_attribute(std::string s);
 	std::string read_tag();
 	event determine_tag_type();
 	std::string decode_attribute(const std::string& s);

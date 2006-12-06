@@ -127,6 +127,10 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines) 
 					if (curline.length() > 0)
 						lines.push_back(curline);
 					prepare_newline(curline, indent_level);
+				} else if (xpp.getText() == "p") {
+					if (curline.length() > 0)
+						lines.push_back(curline);
+					prepare_newline(curline, indent_level);
 				}
 				break;
 			case xmlpullparser::TEXT:

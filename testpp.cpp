@@ -14,7 +14,6 @@ int main(int argc, char * argv[]) {
 	xpp.setInput(f);
 
 	for (xmlpullparser::event e = xpp.next(); e != xmlpullparser::END_DOCUMENT; e = xpp.next()) {
-	/*
 		switch (e) {
 			case xmlpullparser::START_TAG:
 				cout << "start tag: " << xpp.getText() << endl;
@@ -29,7 +28,6 @@ int main(int argc, char * argv[]) {
 				cout << "end tag: " << xpp.getText() << endl;
 				break;
 		}
-		*/
 	}
 
 	return 0;
