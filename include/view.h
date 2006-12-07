@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <rss.h>
+#include <keymap.h>
 
 extern "C" {
 #include <stfl.h>
@@ -21,6 +22,7 @@ namespace noos {
 			void run_itemlist(rss_feed& feed);
 			bool run_itemview(rss_item& item);
 			void set_feedlist(std::vector<rss_feed>& feeds);
+			void set_keymap(keymap * k);
 			void set_config_container(configcontainer * cfgcontainer);
 			void feedlist_error(const char * msg);
 			void itemlist_error(const char * msg);
@@ -38,6 +40,7 @@ namespace noos {
 			stfl_form * itemlist_form;
 			stfl_form * itemview_form;
 			configcontainer * cfg;
+			keymap * keys;
 	};
 
 }

@@ -18,7 +18,7 @@ extern "C" {
 
 using namespace noos;
 
-view::view(controller * c) : ctrl(c), cfg(0) { 
+view::view(controller * c) : ctrl(c), cfg(0), keys(0) { 
 	feedlist_form = stfl_create(feedlist_str);
 	itemlist_form = stfl_create(itemlist_str);
 	itemview_form = stfl_create(itemview_str);
@@ -33,6 +33,10 @@ view::~view() {
 
 void view::set_config_container(configcontainer * cfgcontainer) {
 	cfg = cfgcontainer;	
+}
+
+void view::set_keymap(keymap * k) {
+	keys = k;
 }
 
 void view::feedlist_status(const char * msg) {
@@ -82,64 +86,58 @@ void view::run_feedlist() {
 		const char * event = stfl_run(feedlist_form,0);
 		if (!event) continue;
 
-		if (strcmp(event,"ENTER")==0) {
-			const char * feedposname = stfl_get(feedlist_form, "feedposname");
-			if (feedposname) {
-				std::istringstream posname(feedposname);
-				unsigned int pos = 0;
-				posname >> pos;
-				ctrl->open_feed(pos);
-			} else {
-				feedlist_error("Error: no feed selected!"); // should not happen
-			}
-		} else if (strncmp(event,"CHAR(",5)==0) {
+		operation op = keys->get_operation(event);
 
-			unsigned int x;
-			char c;
-			sscanf(event,"CHAR(%d)",&x); // XXX: refactor
-
-			c = static_cast<char>(x);
-
-			switch (c) {
-				case 'r': {
-						const char * feedposname = stfl_get(feedlist_form, "feedposname");
-						if (feedposname) {
-							std::istringstream posname(feedposname);
-							unsigned int pos = 0;
-							posname >> pos;
-							ctrl->reload(pos);
-						} else {
-							feedlist_error("Error: no feed selected!"); // should not happen
-						}
+		switch (op) {
+			case OP_OPEN: {
+					const char * feedposname = stfl_get(feedlist_form, "feedposname");
+					if (feedposname) {
+						std::istringstream posname(feedposname);
+						unsigned int pos = 0;
+						posname >> pos;
+						ctrl->open_feed(pos);
+					} else {
+						feedlist_error("Error: no feed selected!"); // should not happen
 					}
-					break;
-				case 'R':
-					ctrl->reload_all();
-					break;
-				case 'A': {
-						const char * feedposname = stfl_get(feedlist_form, "feedposname");
-						if (feedposname) {
-							std::istringstream posname(feedposname);
-							unsigned int pos = 0;
-							posname >> pos;
-							ctrl->mark_all_read(pos);
-							update = true;
-						} else {
-							feedlist_error("Error: no feed selected!"); // should not happen
-						}
+				}
+				break;
+			case OP_RELOAD: {
+					const char * feedposname = stfl_get(feedlist_form, "feedposname");
+					if (feedposname) {
+						std::istringstream posname(feedposname);
+						unsigned int pos = 0;
+						posname >> pos;
+						ctrl->reload(pos);
+					} else {
+						feedlist_error("Error: no feed selected!"); // should not happen
 					}
-					break;
-				case 'C':
-					ctrl->catchup_all();
-					update = true;
-					break;
-				case 'q':
-					quit = true;
-					break;
-				default:
-					break;
-			}
-
+				}
+				break;
+			case OP_RELOADALL:
+				ctrl->reload_all();
+				break;
+			case OP_MARKFEEDREAD: {
+					const char * feedposname = stfl_get(feedlist_form, "feedposname");
+					if (feedposname) {
+						std::istringstream posname(feedposname);
+						unsigned int pos = 0;
+						posname >> pos;
+						ctrl->mark_all_read(pos);
+						update = true;
+					} else {
+						feedlist_error("Error: no feed selected!"); // should not happen
+					}
+				}
+				break;
+			case OP_MARKALLFEEDSREAD:
+				ctrl->catchup_all();
+				update = true;
+				break;
+			case OP_QUIT:
+				quit = true;
+				break;
+			default:
+				break;
 		}
 	} while (!quit);
 
@@ -187,50 +185,45 @@ void view::run_itemlist(rss_feed& feed) {
 		const char * event = stfl_run(itemlist_form,0);
 		if (!event) continue;
 
-		if (strcmp(event,"ENTER")==0) {
-			bool open_next_item = false;
-			do {
-				const char * itemposname = stfl_get(itemlist_form, "itempos");
-				if (itemposname) {
-					std::istringstream posname(itemposname);
-					unsigned int pos = 0;
-					posname >> pos;
-					open_next_item = ctrl->open_item(items[pos]);
-					rebuild_list = true;
-				} else {
-					itemlist_error("Error: no item selected!"); // should not happen
+		operation op = keys->get_operation(event);
+
+		switch (op) {
+			case OP_OPEN: {
+					bool open_next_item = false;
+					do {
+						const char * itemposname = stfl_get(itemlist_form, "itempos");
+						if (itemposname) {
+							std::istringstream posname(itemposname);
+							unsigned int pos = 0;
+							posname >> pos;
+							open_next_item = ctrl->open_item(items[pos]);
+							rebuild_list = true;
+						} else {
+							itemlist_error("Error: no item selected!"); // should not happen
+						}
+						if (open_next_item) {
+							if (!jump_to_next_unread_item(items)) {
+								open_next_item = false;
+							}
+						}
+					} while (open_next_item);
 				}
-				if (open_next_item) {
-					if (!jump_to_next_unread_item(items)) {
-						open_next_item = false;
-					}
-				}
-			} while (open_next_item);
-		} else if (strncmp(event,"CHAR(",5)==0) {
-
-			unsigned int x;
-			char c;
-			sscanf(event,"CHAR(%d)",&x); // XXX: refactor
-
-			c = static_cast<char>(x);
-
-			switch (c) {
-				case 's':
-					// TODO: save currently selected article
-					break;
-				case 'q':
-					quit = true;
-					break;
-				case 'n':
-					jump_to_next_unread_item(items);
-					break;
-				case 'A':
-					mark_all_read(items);
-					rebuild_list = true;
-					break;
-				default:
-					break;
-			}
+				break;
+			case OP_SAVE:
+				// TODO: save currently selected article
+				break;
+			case OP_QUIT:
+				quit = true;
+				break;
+			case OP_NEXTUNREAD:
+				jump_to_next_unread_item(items);
+				break;
+			case OP_MARKFEEDREAD:
+				mark_all_read(items);
+				rebuild_list = true;
+				break;
+			default:
+				break;
 		}
 
 	} while (!quit);
@@ -238,7 +231,6 @@ void view::run_itemlist(rss_feed& feed) {
 
 bool view::jump_to_next_unread_item(std::vector<rss_item>& items) {
 	const char * itemposname = stfl_get(itemlist_form, "itemposname");
-	// std::cerr << "jump_to_next_unread_item" << std::endl;
 
 	if (itemposname) {
 		std::istringstream posname(itemposname);
@@ -331,33 +323,28 @@ bool view::run_itemview(rss_item& item) {
 		const char * event = stfl_run(itemview_form,0);
 		if (!event) continue;
 
-		if (strcmp(event,"ENTER")==0) {
-			// nothing
-		} else if (strncmp(event,"CHAR(",5)==0) {
+		operation op = keys->get_operation(event);
 
-			unsigned int x;
-			char c;
-			sscanf(event,"CHAR(%d)",&x); // XXX: refactor
-
-			c = static_cast<char>(x);
-
-			switch (c) {
-				case 's':
-					// TODO: save currently selected article
-					break;
-				case 'o':
-					itemview_status("Starting browser...");
-					open_in_browser(item.link());
-					itemview_status("");
-					break;
-				case 'n':
-					retval = true;
-				case 'q':
-					quit = true;
-					break;
-			}
+		switch (op) {
+			case OP_OPEN:
+				// nothing
+				break;
+			case OP_SAVE:
+				// TODO: save currently selected article
+				break;
+			case OP_OPENINBROWSER:
+				itemview_status("Starting browser...");
+				open_in_browser(item.link());
+				itemview_status("");
+				break;
+			case OP_NEXTUNREAD:
+				retval = true;
+			case OP_QUIT:
+				quit = true;
+				break;
+			default:
+				break;
 		}
-
 
 	} while (!quit);
 

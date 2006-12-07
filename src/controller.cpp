@@ -140,7 +140,10 @@ void controller::run(int argc, char * argv[]) {
 	
 	configparser cfgparser(config_file.c_str());
 	configcontainer cfg;
+	keymap keys;
 	cfg.register_commands(cfgparser);
+	cfgparser.register_handler("bind-key",&keys);
+
 	try {
 		cfgparser.parse();
 	} catch (const configexception& ex) {
@@ -150,6 +153,7 @@ void controller::run(int argc, char * argv[]) {
 	std::cout << "done." << std::endl;
 
 	v->set_config_container(&cfg);
+	v->set_keymap(&keys);
 	v->set_feedlist(feeds);
 	v->run_feedlist();
 
