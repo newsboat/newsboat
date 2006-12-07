@@ -4,6 +4,7 @@
 #include <istream>
 #include <sstream>
 #include <iostream>
+#include <cstdlib>
 
 namespace noos
 {
@@ -91,6 +92,7 @@ xmlpullparser::event xmlpullparser::next() {
 					getline(*inputstream,tmp,'<');
 					remove_trailing_whitespace(tmp);
 					text.append(tmp);
+					text = decode_entities(text);
 					current_event = TEXT;
 				} else {
 					std::string s;
@@ -310,18 +312,22 @@ std::string xmlpullparser::decode_entity(std::string s) {
 		return "&";
 	} else if (s.length() > 1 && s[0] == '#') {
 		std::string result;
+		unsigned int wc;
+		char mbc[MB_CUR_MAX];
 		if (s[1] == 'x') {
 			s.erase(0,2);
 			std::istringstream is(s);
-			unsigned int i;
-			is >> std::hex >> i;
-			result.append(1,static_cast<char>(i));
+			is >> std::hex >> wc;
 		} else {
 			s.erase(0,1);
 			std::istringstream is(s);
-			unsigned int i;
-			is >> i;
-			result.append(1,static_cast<char>(i));
+			is >> wc;
+		}
+		int pos = wctomb(mbc,static_cast<wchar_t>(wc));
+		// std::cerr << "value: " << wc << " " << static_cast<wchar_t>(wc) << " pos: " << pos << std::endl;
+		if (pos > 0) {
+			mbc[pos] = '\0';
+			result.append(mbc);
 		}
 		return result;
 	}

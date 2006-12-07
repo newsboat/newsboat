@@ -1,5 +1,6 @@
 #include <keymap.h>
 #include <vector>
+#include <iostream>
 
 namespace noos {
 
@@ -44,7 +45,6 @@ operation keymap::get_opcode(const std::string& opstr) {
 }
 
 operation keymap::get_operation(const std::string& keycode) {
-	// TODO: decode ctrl combinations
 	std::string key;
 	if (keycode.length() > 0) {
 		if (keycode == "ENTER") {
@@ -58,8 +58,16 @@ operation keymap::get_operation(const std::string& keycode) {
 			unsigned int x;
 			char c;
 			sscanf(keycode.c_str(),"CHAR(%d)",&x);
-			c = static_cast<char>(x);
-			key.append(1,c);
+			// std::cerr << x << std::endl;
+			if (x >= 32 && x <= 126) {
+				c = static_cast<char>(x);
+				key.append(1,c);
+			} else if (x >= 0 && x<=26) {
+				key.append("^");
+				key.append(1,static_cast<char>(0x60 + x));
+			} else {
+				// TODO: handle special keys
+			}
 		}
 	} else {
 		key = "NIL";
