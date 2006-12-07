@@ -17,8 +17,10 @@ namespace noos {
 			keymap();
 			~keymap();
 			void set_key(operation op, const std::string& key);
+			void unset_key(const std::string& key);
 			operation get_opcode(const std::string& opstr);
 			operation get_operation(const std::string& keycode);
+			std::string getkey(operation );
 			virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
 		private:
 			std::map<std::string,operation> keymap_;

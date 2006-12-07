@@ -143,6 +143,7 @@ void controller::run(int argc, char * argv[]) {
 	keymap keys;
 	cfg.register_commands(cfgparser);
 	cfgparser.register_handler("bind-key",&keys);
+	cfgparser.register_handler("unbind-key",&keys);
 
 	try {
 		cfgparser.parse();
@@ -189,9 +190,7 @@ void controller::mark_all_read(unsigned int pos) {
 		rss_feed& feed = feeds[pos];
 		for (std::vector<rss_item>::iterator it = feed.items().begin(); it != feed.items().end(); ++it) {
 			it->set_unread(false);
-			// it->set_dirty();
 		}
-		// rsscache->externalize_rssfeed(feed);
 	}
 }
 

@@ -14,6 +14,7 @@ keymap::keymap() {
 	keymap_["s"] = OP_SAVE;
 	keymap_["n"] = OP_NEXTUNREAD;
 	keymap_["o"] = OP_OPENINBROWSER;
+	keymap_["NIL"] = OP_NIL;
 }
 
 keymap::~keymap() { }
@@ -21,6 +22,10 @@ keymap::~keymap() { }
 
 void keymap::set_key(operation op, const std::string& key) {
 	keymap_[key] = op;
+}
+
+void keymap::unset_key(const std::string& key) {
+	keymap_[key] = OP_NIL;	
 }
 
 operation keymap::get_opcode(const std::string& opstr) {
@@ -80,11 +85,27 @@ action_handler_status keymap::handle_action(const std::string& action, const std
 		if (params.size() < 2) {
 			return AHS_TOO_FEW_PARAMS;
 		} else {
-			keymap_[params[0]] = get_opcode(params[1]);
+			set_key(get_opcode(params[1]), params[0]);
+			// keymap_[params[0]] = get_opcode(params[1]);
 			return AHS_OK;
+		}
+	} else if (action == "unbind-key") {
+		if (params.size() < 1) {
+			return AHS_TOO_FEW_PARAMS;
+		} else {
+			unset_key(params[0]);
+			return AHS_OK;	
 		}
 	} else
 		return AHS_INVALID_PARAMS;
+}
+
+std::string keymap::getkey(operation op) {
+	for (std::map<std::string,operation>::iterator it=keymap_.begin(); it!=keymap_.end(); ++it) {
+		if (it->second == op)
+			return it->first;	
+	}	
+	return "<none>";
 }
 
 

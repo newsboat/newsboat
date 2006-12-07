@@ -75,6 +75,8 @@ void view::itemview_error(const char * msg) {
 void view::run_feedlist() {
 	bool quit = false;
 	bool update = false;
+	
+	set_feedlist_keymap_hint();
 
 	do {
 
@@ -150,6 +152,8 @@ void view::run_itemlist(rss_feed& feed) {
 	std::vector<rss_item>& items = feed.items();
 
 	stfl_set(itemlist_form,"itempos","0");
+	
+	set_itemlist_keymap_hint();
 
 	do {
 		if (rebuild_list) {
@@ -264,6 +268,8 @@ bool view::jump_to_next_unread_item(std::vector<rss_item>& items) {
 bool view::run_itemview(rss_item& item) {
 	bool quit = false;
 	bool retval = false;
+	
+	set_itemview_keymap_hint();
 
 	std::string code = "{list";
 
@@ -417,14 +423,67 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 
 	code.append("}");
 
-	// std::cerr << code << std::endl;
-
 	stfl_modify(feedlist_form,"feeds","replace_inner",code.c_str());
 }
 
 void view::mark_all_read(std::vector<rss_item>& items) {
 	for (std::vector<rss_item>::iterator it = items.begin(); it != items.end(); ++it) {
 		it->set_unread(false);
-		// it->set_dirty();
 	}
+}
+
+struct keymap_hint_entry {
+	operation op; 
+	char * text;
+};
+
+std::string view::prepare_keymaphint(keymap_hint_entry * hints) {
+	std::string keymap_hint;
+	for (int i=0;hints[i].op != OP_NIL; ++i) {
+		keymap_hint.append(keys->getkey(hints[i].op));
+		keymap_hint.append(":");
+		keymap_hint.append(hints[i].text);
+		keymap_hint.append(" ");
+	}
+	return keymap_hint;	
+}
+
+void view::set_itemview_keymap_hint() {
+	keymap_hint_entry hints[] = {
+		{ OP_QUIT, "Quit" },
+		{ OP_OPEN, "Open" },
+		{ OP_SAVE, "Save" },
+		{ OP_NEXTUNREAD, "Next Unread" },
+		{ OP_MARKFEEDREAD, "Mark All Read" },
+		{ OP_NIL, NULL }
+	};
+	std::string keymap_hint = prepare_keymaphint(hints);
+	stfl_set(itemview_form,"help", keymap_hint.c_str());
+}
+
+void view::set_feedlist_keymap_hint() {
+	keymap_hint_entry hints[] = {
+		{ OP_QUIT, "Quit" },
+		{ OP_OPEN, "Open" },
+		{ OP_RELOAD, "Reload" },
+		{ OP_RELOADALL, "Reload All" },
+		{ OP_MARKFEEDREAD, "Mark Read" },
+		{ OP_MARKALLFEEDSREAD, "Catchup All" },
+		{ OP_NIL, NULL }
+	};
+	std::string keymap_hint = prepare_keymaphint(hints);
+	stfl_set(feedlist_form,"help", keymap_hint.c_str());
+}
+
+void view::set_itemlist_keymap_hint() {
+	keymap_hint_entry hints[] = {
+		{ OP_QUIT, "Quit" },
+		{ OP_OPEN, "Open" },
+		{ OP_SAVE, "Save" },
+		{ OP_NEXTUNREAD, "Next Unread" },
+		{ OP_OPENINBROWSER, "Open in Browser" },
+		{ OP_NIL, NULL }
+	};
+	std::string keymap_hint = prepare_keymaphint(hints);
+	stfl_set(itemlist_form,"help", keymap_hint.c_str());
 }

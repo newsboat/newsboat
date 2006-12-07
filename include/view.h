@@ -34,6 +34,17 @@ namespace noos {
 			bool jump_to_next_unread_item(std::vector<rss_item>& items);
 			void mark_all_read(std::vector<rss_item>& items);
 			void open_in_browser(const std::string& url);
+			
+			void set_itemview_keymap_hint();
+			void set_itemlist_keymap_hint();
+			void set_feedlist_keymap_hint();
+			
+			struct keymap_hint_entry {
+				operation op; 
+				char * text;
+			};
+
+			std::string prepare_keymaphint(keymap_hint_entry * hints);
 
 			controller * ctrl;
 			stfl_form * feedlist_form;
