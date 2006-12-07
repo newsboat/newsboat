@@ -21,6 +21,7 @@ void configcontainer::register_commands(configparser& cfgparser)
 {
 	cfgparser.register_handler("show-read-feeds", this);
 	cfgparser.register_handler("browser", this);
+	cfgparser.register_handler("max-items", this);
 }
 
 action_handler_status configcontainer::handle_action(const std::string& action, const std::vector<std::string>& params) {
@@ -35,6 +36,12 @@ action_handler_status configcontainer::handle_action(const std::string& action, 
 		// std::cerr << "setting " << action << " to `" << params[0] << "'" << std::endl;
 		return AHS_OK; 
 	} else if (action == "browser") {
+		if (params.size() < 1) {
+			return AHS_TOO_FEW_PARAMS;
+		}
+		config_data[action] = params[0];
+		return AHS_OK;	
+	} else if (action == "max-items") {
 		if (params.size() < 1) {
 			return AHS_TOO_FEW_PARAMS;
 		}

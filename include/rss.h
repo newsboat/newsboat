@@ -40,7 +40,9 @@ namespace noos {
 			void set_unread(bool u);
 			
 			inline void set_cache(cache * c) { ch = c; }
-			inline void set_feedurl(const std::string& f) { feedurl = f; }
+			inline void set_feedurl(const std::string& f) { feedurl_ = f; }
+			
+			inline const std::string& feedurl() const { return feedurl_; }
 			
 		private:
 			std::string title_;
@@ -49,7 +51,7 @@ namespace noos {
 			std::string description_;
 			std::string pubDate_;
 			std::string guid_;
-			std::string feedurl;
+			std::string feedurl_;
 			bool unread_;
 			cache * ch;
 	};

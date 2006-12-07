@@ -1,5 +1,6 @@
 #include <cache.h>
 #include <sqlite3.h>
+#include <configcontainer.h>
 
 #include <sstream>
 #include <fstream>
@@ -64,7 +65,7 @@ static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** azCol
 
 
 
-cache::cache(const std::string& cachefile) : db(0) {
+cache::cache(const std::string& cachefile, configcontainer * c) : db(0),cfg(c) {
 	bool file_exists = false;
 	std::fstream f;
 	f.open(cachefile.c_str(), std::fstream::in | std::fstream::out);
@@ -106,14 +107,15 @@ void cache::populate_tables() {
 						" title VARCHAR(1024) NOT NULL ); " , NULL, NULL, NULL);
 
 	rc = sqlite3_exec(db,"CREATE TABLE rss_item ( "
-						" guid VARCHAR(64) PRIMARY KEY NOT NULL, "
+						" id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+						" guid VARCHAR(64) NOT NULL, "
 						" title VARCHAR(1024) NOT NULL, "
 						" author VARCHAR(1024) NOT NULL, "
 						" url VARCHAR(1024) NOT NULL, "
 						" feedurl VARCHAR(1024) NOT NULL, "
-						" pubDate DATETIME NOT NULL, "
+						" pubDate DATE NOT NULL, "
 						" content VARCHAR(65535) NOT NULL,"
-						" unread INT(1) NOT NULL );", NULL, NULL, NULL);
+						" unread INTEGER(1) NOT NULL );", NULL, NULL, NULL);
 }
 
 
@@ -138,10 +140,22 @@ void cache::externalize_rssfeed(rss_feed& feed) {
 		free(insertquery);
 		// std::cerr << "externalize: insert rc = " << rc << " query = " << insertquery << std::endl;
 	}
+	
+	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
+	
+	if (max_items > 0 && feed.items().size() > max_items) {
+		std::vector<rss_item>::iterator it=feed.items().begin();
+		for (unsigned int i=0;i<max_items-1;++i)
+			++it;	
+		feed.items().erase(it, feed.items().end()); // delete entries that are too much
+	}
 
-	for (std::vector<rss_item>::iterator it=feed.items().begin(); it != feed.items().end(); ++it) {
+	// the reverse iterator is there for the sorting foo below (think about it)
+	for (std::vector<rss_item>::reverse_iterator it=feed.items().rbegin(); it != feed.items().rend(); ++it) {
 		update_rssitem(*it, feed.rssurl());
 	}
+	
+	
 }
 
 void cache::internalize_rssfeed(rss_feed& feed) {
@@ -165,14 +179,36 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 		feed.items().erase(feed.items().begin(),feed.items().end());
 	}
 
-	query = sqlite3_mprintf("SELECT guid,title,author,url,pubDate,content,unread FROM rss_item WHERE feedurl = '%q';",feed.rssurl().c_str());
+	query = sqlite3_mprintf("SELECT guid,title,author,url,pubDate,content,unread FROM rss_item WHERE feedurl = '%q' ORDER BY id DESC;",feed.rssurl().c_str());
 	rc = sqlite3_exec(db,query,rssitem_callback,&feed,NULL);
 	assert(rc == SQLITE_OK);
 	free(query);
 	for (std::vector<rss_item>::iterator it=feed.items().begin(); it != feed.items().end(); ++it) {
 		it->set_cache(this);	
 		it->set_feedurl(feed.rssurl());
+		// std::cerr << feed.rssurl() << ": " << it->pubDate() << std::endl;
 	}
+	
+	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
+	
+	if (max_items > 0 && feed.items().size() > max_items) {
+		std::vector<rss_item>::iterator it=feed.items().begin();
+		for (unsigned int i=0;i<max_items;++i)
+			++it;
+		for (unsigned int i=max_items;i<feed.items().size();++i) {
+			delete_item(feed.items()[i]);	
+		}	
+		feed.items().erase(it, feed.items().end()); // delete old entries
+	}
+
+
+}
+
+void cache::delete_item(const rss_item& item) {
+	char * query = sqlite3_mprintf("DELETE FROM rss_item WHERE guid = '%q';",item.guid().c_str());
+	int rc = sqlite3_exec(db,query,NULL,NULL,NULL);
+	assert(rc == SQLITE_OK);
+	free(query);
 }
 
 void cache::cleanup_cache(std::vector<rss_feed>& feeds) {
@@ -250,7 +286,7 @@ void cache::update_rssitem_unread(rss_item& item, const std::string& feedurl) {
 		free(update);
 	} else {
 		char * insert = sqlite3_mprintf("INSERT INTO rss_item (guid,title,author,url,feedurl,pubDate,content,unread) "
-										"VALUES ('%q','%q','%q','%q','%q','%q','%q',1)",
+										"VALUES ('%q','%q','%q','%q','%q',datetime('YYYY-MM-DD HH:MM:SS','%q'),'%q',1)",
 										item.guid().c_str(), item.title().c_str(), item.author().c_str(), 
 										item.link().c_str(), feedurl.c_str(), item.pubDate().c_str(), item.description().c_str());
 		// std::cerr << insert << std::endl;

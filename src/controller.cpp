@@ -113,29 +113,9 @@ void controller::run(int argc, char * argv[]) {
 	if (!do_export) {
 		std::cout << "Starting " << PROGRAM_NAME << " " << PROGRAM_VERSION << "..." << std::endl << std::endl;
 	}
-
-	if (!do_export)
-		std::cout << "Loading articles from cache...";
-	std::cout.flush();
-
-	rsscache = new cache(cache_file);
-
-	for (std::vector<std::string>::const_iterator it=urlcfg.get_urls().begin(); it != urlcfg.get_urls().end(); ++it) {
-		rss_feed feed(rsscache);
-		feed.set_rssurl(*it);
-		rsscache->internalize_rssfeed(feed);
-		feeds.push_back(feed);
-	}
-	rsscache->cleanup_cache(feeds);
-	if (!do_export)
-		std::cout << "done." << std::endl;
-
-	if (do_export) {
-		export_opml();
-		return;
-	}
 	
-	std::cout << "Loading configuration...";
+	if (!do_export)
+		std::cout << "Loading configuration...";
 	std::cout.flush();
 	
 	configparser cfgparser(config_file.c_str());
@@ -151,7 +131,30 @@ void controller::run(int argc, char * argv[]) {
 		std::cout << ex.what() << std::endl;
 		return;	
 	}
-	std::cout << "done." << std::endl;
+	
+	if (!do_export)
+		std::cout << "done." << std::endl;
+
+	if (!do_export)
+		std::cout << "Loading articles from cache...";
+	std::cout.flush();
+
+	rsscache = new cache(cache_file,&cfg);
+
+	for (std::vector<std::string>::const_iterator it=urlcfg.get_urls().begin(); it != urlcfg.get_urls().end(); ++it) {
+		rss_feed feed(rsscache);
+		feed.set_rssurl(*it);
+		rsscache->internalize_rssfeed(feed);
+		feeds.push_back(feed);
+	}
+	// rsscache->cleanup_cache(feeds);
+	if (!do_export)
+		std::cout << "done." << std::endl;
+
+	if (do_export) {
+		export_opml();
+		return;
+	}
 
 	v->set_config_container(&cfg);
 	v->set_keymap(&keys);
