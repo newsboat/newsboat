@@ -2,6 +2,9 @@
 #include <config.h>
 #include <stringprep.h>
 #include <cache.h>
+#include <xmlpullparser.h>
+#include <sstream>
+#include <iostream>
 
 using namespace noos;
 
@@ -29,7 +32,10 @@ rss_feed rss_parser::parse() {
 	if (mrss->title) feed.set_title(mrss->title);
 	if (mrss->description) feed.set_description(mrss->description);
 	if (mrss->link) feed.set_link(mrss->link);
-	if (mrss->pubDate) feed.set_pubDate(mrss->pubDate);
+	if (mrss->pubDate) 
+		feed.set_pubDate(parse_date(mrss->pubDate));
+	else
+		feed.set_pubDate(::time(NULL));
 
 	for (mrss_item_t * item = mrss->item; item != NULL; item = item->next ) {
 		rss_item x(ch);
@@ -49,7 +55,11 @@ rss_feed rss_parser::parse() {
 				free(str);
 			}
 		}
-		if (item->pubDate) x.set_pubDate(item->pubDate);
+		if (item->pubDate) 
+			x.set_pubDate(parse_date(item->pubDate));
+		else
+			x.set_pubDate(::time(NULL));
+			
 		if (item->guid)
 			x.set_guid(item->guid);
 		else
@@ -86,8 +96,8 @@ void rss_item::set_description(const std::string& d) {
 	// if (ch) ch->update_rssitem(*this, feedurl);
 }
 
-void rss_item::set_pubDate(const std::string& d) { 
-	pubDate_ = d; 
+void rss_item::set_pubDate(time_t t) { 
+	pubDate_ = t; 
 	// if (ch) ch->update_rssitem(*this, feedurl);
 }
 
@@ -98,6 +108,66 @@ void rss_item::set_guid(const std::string& g) {
 
 void rss_item::set_unread(bool u) { 
 	unread_ = u;
-	if (ch) ch->update_rssitem_unread(*this, feedurl); 
+	if (ch) ch->update_rssitem_unread(*this, feedurl_); 
+}
+
+time_t rss_parser::parse_date(const std::string& datestr) {
+	// TODO: refactor	
+	std::istringstream is(datestr);
+	std::string monthstr, time, tmp;
+	struct tm stm;
+	
+	memset(&stm,0,sizeof(stm));
+	
+	is >> tmp;
+	if (tmp[tmp.length()-1] == ',')
+		is >> tmp;
+	
+	std::istringstream dayis(tmp);
+	dayis >> stm.tm_mday;
+	
+	is >> monthstr;
+	
+	if (monthstr == "Jan")
+		stm.tm_mon = 0;
+	else if (monthstr == "Feb")
+		stm.tm_mon = 1;
+	else if (monthstr == "Mar")
+		stm.tm_mon = 2;
+	else if (monthstr == "Apr")
+		stm.tm_mon = 3;
+	else if (monthstr == "May")
+		stm.tm_mon = 4;
+	else if (monthstr == "Jun")
+		stm.tm_mon = 5;
+	else if (monthstr == "Jul")
+		stm.tm_mon = 6;
+	else if (monthstr == "Aug")
+		stm.tm_mon = 7;
+	else if (monthstr == "Sep")
+		stm.tm_mon = 8;
+	else if (monthstr == "Oct")
+		stm.tm_mon = 9;
+	else if (monthstr == "Nov")
+		stm.tm_mon = 10;
+	else if (monthstr == "Dec")
+		stm.tm_mon = 11;
+	
+	int year;
+	is >> year;
+	stm.tm_year = year - 1900;
+	
+	is >> time;
+	
+	std::vector<std::string> tkns = xmlpullparser::tokenize(time,":");
+	std::istringstream hs(tkns[0]);
+	hs >> stm.tm_hour;
+	std::istringstream ms(tkns[1]);
+	ms >> stm.tm_min;
+	std::istringstream ss(tkns[2]);
+	ss >> stm.tm_sec;
+	
+	time_t value = mktime(&stm);
+	return value;
 }
 

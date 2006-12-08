@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="http://www.oasis-open.org/docbook/xml/5.0b5/rng/docbook.rng" type="xml"?>
+<book xmlns="http://docbook.org/ns/docbook">
+    <info>
+        <title>The Noos RSS Feedreader</title>
+        <author>
+            <personname>
+                <firstname>Andreas</firstname>
+                <surname>Krennmair</surname>
+            </personname>
+            <email>ak@synflood.at</email>
+        </author>
+    </info>
+    <chapter>
+        <title>Introduction</title>
+        <para>
+            Noos is an RSS feedreader. RSS is a number of widely-used XML formats
+            to transmit to publish and syndicate articles, for example news or blog
+            articles. It is designed to be used on text terminals on Unix or Unix-like
+            systems such as Linux, BSD or Mac OS X.
+        </para>
+        <para>
+            More blabla. ?
+        </para>
+    </chapter>
+    <chapter>
+        <title>Installation</title>
+        <para>
+            Description how to install noos, including all dependencies.
+        </para>
+    </chapter>
+    <chapter>
+        <title>First Steps</title>
+        <para>
+            Description of first steps.
+        </para>
+    </chapter>
+    <chapter>
+        <title>Advanced Topics</title>
+        <para>
+            Something about advanced topics such as scripting and the like.
+        </para>
+    </chapter>
+    <chapter>
+        <title>Reference</title>
+        <para>
+            Description of all available configuration items.
+        </para>
+    </chapter>
+</book>

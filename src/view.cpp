@@ -293,6 +293,13 @@ bool view::run_itemview(rss_item& item) {
 	link << item.link();
 	code.append(stfl_quote(link.str().c_str()));
 	code.append("}");
+	
+	code.append("{listitem text:");
+	std::ostringstream date;
+	date << "Date: ";
+	date << item.pubDate();
+	code.append(stfl_quote(date.str().c_str()));
+	code.append("}");
 
 	code.append("{listitem text:\"\"}");
 	

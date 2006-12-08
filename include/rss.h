@@ -30,8 +30,15 @@ namespace noos {
 			inline const std::string& description() const { return description_; }
 			void set_description(const std::string& d);
 			
-			inline const std::string& pubDate() const { return pubDate_; }
-			void set_pubDate(const std::string& d);
+			inline std::string pubDate() const {
+				char text[1024];
+				strftime(text,sizeof(text),"%c", gmtime(&pubDate_)); 
+				return std::string(text);
+			}
+			inline time_t pubDate_timestamp() const {
+				return pubDate_;
+			}
+			void set_pubDate(time_t t);
 			
 			inline const std::string& guid() const { return guid_; }
 			void set_guid(const std::string& g);
@@ -49,7 +56,7 @@ namespace noos {
 			std::string link_;
 			std::string author_;
 			std::string description_;
-			std::string pubDate_;
+			time_t pubDate_;
 			std::string guid_;
 			std::string feedurl_;
 			bool unread_;
@@ -69,8 +76,8 @@ namespace noos {
 			inline const std::string& link() const { return link_; }
 			inline void set_link(const std::string& l) { link_ = l; }
 			
-			inline const std::string& pubDate() const { return pubDate_; }
-			inline void set_pubDate(const std::string& p) { pubDate_ = p; }
+			inline std::string pubDate() const { return "TODO"; }
+			inline void set_pubDate(time_t t) { pubDate_ = t; }
 			
 			inline std::vector<rss_item>& items() { return items_; }
 			
@@ -81,7 +88,7 @@ namespace noos {
 			std::string title_;
 			std::string description_;
 			std::string link_;
-			std::string pubDate_;
+			time_t pubDate_;
 			std::string rssurl_;
 			std::vector<rss_item> items_;
 			
@@ -93,6 +100,7 @@ namespace noos {
 			rss_parser(const char * uri, cache * c);
 			~rss_parser();
 			rss_feed parse();
+			static time_t parse_date(const std::string& datestr);
 		private:
 			std::string my_uri;
 			cache * ch;
