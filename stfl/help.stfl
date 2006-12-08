@@ -1,0 +1,16 @@
+vbox
+  @style_normal:bg=black,fg=white
+  @info#style_normal:bg=blue,fg=yellow,attr=bold
+  label#info
+    text[head]:"Help"
+    .expand:h
+  textview[helptext]
+    style_end:fg=blue,attr=bold
+    .expand:vh
+    offset[helpoffset]:0
+  label#info
+    text[help]:"q:Quit"
+    .expand:h
+  label
+    text[msg]:""
+    .expand:h

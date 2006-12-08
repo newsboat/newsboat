@@ -3,6 +3,25 @@
 #include <iostream>
 
 namespace noos {
+	
+struct op_desc {
+	operation op;
+	char * help_text;
+};
+
+op_desc opdescs[] = {
+	{ OP_OPEN, "Open feed/article" },
+	{ OP_QUIT, "Return to previous dialog/Quit" },
+	{ OP_RELOAD, "Reload currently selected feed" },
+	{ OP_RELOADALL, "Reload all feeds" },
+	{ OP_MARKFEEDREAD, "Mark feed read" },
+	{ OP_MARKALLFEEDSREAD, "Mark all feeds read" },
+	{ OP_SAVE, "Save article" },
+	{ OP_NEXTUNREAD, "Go to next unread article" },
+	{ OP_OPENINBROWSER, "Open article in browser" },
+	{ OP_HELP, "Open help dialog" },
+	{ OP_NIL, NULL }
+};
 
 keymap::keymap() { 
 	keymap_["enter"] = OP_OPEN;
@@ -14,7 +33,21 @@ keymap::keymap() {
 	keymap_["s"] = OP_SAVE;
 	keymap_["n"] = OP_NEXTUNREAD;
 	keymap_["o"] = OP_OPENINBROWSER;
+	keymap_["?"] = OP_HELP;
 	keymap_["NIL"] = OP_NIL;
+}
+
+void keymap::get_keymap_descriptions(std::vector<std::pair<std::string,std::string> >& descs) {
+	for (std::map<std::string,operation>::iterator it=keymap_.begin();it!=keymap_.end();++it) {
+		operation op = it->second;
+		if (op != OP_NIL) {
+			std::string helptext;
+			for (int i=0;opdescs[i].help_text;++i)
+				if (opdescs[i].op == op)
+					helptext = opdescs[i].help_text;
+			descs.push_back(std::pair<std::string,std::string>(it->first, helptext));
+		}
+	}
 }
 
 keymap::~keymap() { }
@@ -39,6 +72,7 @@ operation keymap::get_opcode(const std::string& opstr) {
 		{ "save", OP_SAVE },
 		{ "next-unread", OP_NEXTUNREAD },
 		{ "open-in-browser", OP_OPENINBROWSER },
+		{ "help", OP_HELP },
 		{ NULL, OP_NIL }
 	};
 	for (int i=0;opcode_map[i].opstr;++i) {

@@ -3,6 +3,8 @@
 
 #include <string>
 #include <map>
+#include <utility>
+#include <vector>
 
 #include <configparser.h>
 
@@ -10,7 +12,8 @@
 
 namespace noos {
 
-	enum operation { OP_NIL = 0, OP_QUIT, OP_RELOAD, OP_RELOADALL, OP_MARKFEEDREAD, OP_MARKALLFEEDSREAD, OP_OPEN, OP_SAVE, OP_NEXTUNREAD, OP_OPENINBROWSER };
+	enum operation { OP_NIL = 0, OP_QUIT, OP_RELOAD, OP_RELOADALL, OP_MARKFEEDREAD, 
+					OP_MARKALLFEEDSREAD, OP_OPEN, OP_SAVE, OP_NEXTUNREAD, OP_OPENINBROWSER, OP_HELP };
 
 	class keymap : public config_action_handler {
 		public:
@@ -22,6 +25,7 @@ namespace noos {
 			operation get_operation(const std::string& keycode);
 			std::string getkey(operation );
 			virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
+			void keymap::get_keymap_descriptions(std::vector<std::pair<std::string,std::string> >& descs);
 		private:
 			std::map<std::string,operation> keymap_;
 	};

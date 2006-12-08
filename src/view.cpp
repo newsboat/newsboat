@@ -1,6 +1,7 @@
 #include <feedlist.h>
 #include <itemlist.h>
 #include <itemview.h>
+#include <help.h>
 #include <iostream>
 #include <assert.h>
 
@@ -22,6 +23,7 @@ view::view(controller * c) : ctrl(c), cfg(0), keys(0) {
 	feedlist_form = stfl_create(feedlist_str);
 	itemlist_form = stfl_create(itemlist_str);
 	itemview_form = stfl_create(itemview_str);
+	help_form = stfl_create(help_str);
 }
 
 view::~view() {
@@ -138,6 +140,9 @@ void view::run_feedlist() {
 			case OP_QUIT:
 				quit = true;
 				break;
+			case OP_HELP:
+				run_help();
+				break;
 			default:
 				break;
 		}
@@ -215,6 +220,9 @@ void view::run_itemlist(rss_feed& feed) {
 				break;
 			case OP_SAVE:
 				// TODO: save currently selected article
+				break;
+			case OP_HELP:
+				run_help();
 				break;
 			case OP_QUIT:
 				quit = true;
@@ -355,6 +363,9 @@ bool view::run_itemview(rss_item& item) {
 			case OP_QUIT:
 				quit = true;
 				break;
+			case OP_HELP:
+				run_help();
+				break;
 			default:
 				break;
 		}
@@ -376,6 +387,45 @@ void view::open_in_browser(const std::string& url) {
 	cmdline.append("'");
 	stfl_reset();
 	::system(cmdline.c_str());
+}
+
+void view::run_help() {
+	set_itemlist_keymap_hint();
+	
+	std::vector<std::pair<std::string,std::string> > descs;
+	keys->get_keymap_descriptions(descs);
+	
+	std::string code = "{list";
+	
+	for (std::vector<std::pair<std::string,std::string> >::iterator it=descs.begin();it!=descs.end();++it) {
+		std::string line = "{listitem text:";
+		std::string descline = it->first + std::string("\t") + it->second;
+		line.append(stfl_quote(descline.c_str()));
+		line.append("}");
+		
+		code.append(line);
+	}
+	
+	code.append("}");
+	
+	stfl_modify(help_form,"helptext","replace_inner",code.c_str());
+	
+	bool quit = false;
+	
+	do {
+		const char * event = stfl_run(help_form,0);
+		if (!event) continue;
+
+		operation op = keys->get_operation(event);
+
+		switch (op) {
+			case OP_QUIT:
+				quit = true;
+				break;
+			default:
+				break;
+		}
+	} while (!quit);
 }
 
 void view::set_feedlist(std::vector<rss_feed>& feeds) {
@@ -462,6 +512,7 @@ void view::set_itemview_keymap_hint() {
 		{ OP_SAVE, "Save" },
 		{ OP_NEXTUNREAD, "Next Unread" },
 		{ OP_MARKFEEDREAD, "Mark All Read" },
+		{ OP_HELP, "Help" },
 		{ OP_NIL, NULL }
 	};
 	std::string keymap_hint = prepare_keymaphint(hints);
@@ -476,6 +527,7 @@ void view::set_feedlist_keymap_hint() {
 		{ OP_RELOADALL, "Reload All" },
 		{ OP_MARKFEEDREAD, "Mark Read" },
 		{ OP_MARKALLFEEDSREAD, "Catchup All" },
+		{ OP_HELP, "Help" },
 		{ OP_NIL, NULL }
 	};
 	std::string keymap_hint = prepare_keymaphint(hints);
@@ -489,8 +541,18 @@ void view::set_itemlist_keymap_hint() {
 		{ OP_SAVE, "Save" },
 		{ OP_NEXTUNREAD, "Next Unread" },
 		{ OP_OPENINBROWSER, "Open in Browser" },
+		{ OP_HELP, "Help" },
 		{ OP_NIL, NULL }
 	};
 	std::string keymap_hint = prepare_keymaphint(hints);
 	stfl_set(itemlist_form,"help", keymap_hint.c_str());
+}
+
+void view::set_help_keymap_hint() {
+	keymap_hint_entry hints[] = {
+		{ OP_QUIT, "Quit" },
+		{ OP_NIL, NULL }
+	};
+	std::string keymap_hint = prepare_keymaphint(hints);
+	stfl_set(help_form,"help", keymap_hint.c_str());	
 }

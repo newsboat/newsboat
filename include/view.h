@@ -21,6 +21,7 @@ namespace noos {
 			void run_feedlist();
 			void run_itemlist(rss_feed& feed);
 			bool run_itemview(rss_item& item);
+			void run_help();
 			void set_feedlist(std::vector<rss_feed>& feeds);
 			void set_keymap(keymap * k);
 			void set_config_container(configcontainer * cfgcontainer);
@@ -38,6 +39,7 @@ namespace noos {
 			void set_itemview_keymap_hint();
 			void set_itemlist_keymap_hint();
 			void set_feedlist_keymap_hint();
+			void set_help_keymap_hint();
 			
 			struct keymap_hint_entry {
 				operation op; 
@@ -50,6 +52,7 @@ namespace noos {
 			stfl_form * feedlist_form;
 			stfl_form * itemlist_form;
 			stfl_form * itemview_form;
+			stfl_form * help_form;
 			configcontainer * cfg;
 			keymap * keys;
 	};
