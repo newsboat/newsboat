@@ -30,11 +30,8 @@ namespace noos {
 			inline const std::string& description() const { return description_; }
 			void set_description(const std::string& d);
 			
-			inline std::string pubDate() const {
-				char text[1024];
-				strftime(text,sizeof(text),"%c", gmtime(&pubDate_)); 
-				return std::string(text);
-			}
+			std::string pubDate() const;
+			
 			inline time_t pubDate_timestamp() const {
 				return pubDate_;
 			}

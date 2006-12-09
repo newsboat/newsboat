@@ -160,6 +160,7 @@ void view::run_itemlist(rss_feed& feed) {
 	stfl_set(itemlist_form,"itempos","0");
 	
 	set_itemlist_keymap_hint();
+	set_itemlist_head(feed.title());
 
 	do {
 		if (rebuild_list) {
@@ -173,7 +174,10 @@ void view::run_itemlist(rss_feed& feed) {
 				x << i;
 				line.append(x.str());
 				line.append("] text:");
-				std::string title = " ";
+				std::string title;
+				char buf[20];
+				snprintf(buf,sizeof(buf),"%4u ",i+1);
+				title.append(buf);
 				if (it->unread()) {
 					title.append("N ");
 				} else {
@@ -318,6 +322,8 @@ bool view::run_itemview(rss_item& item) {
 
 	code.append("{listitem text:\"\"}");
 	
+	set_itemview_head(item.title());
+	
 	stfl_run(itemview_form,-1); // XXX HACK: render once so that we get a proper widget width
 	const char * widthstr = stfl_get(itemview_form,"article:w");
 	unsigned int render_width = 80;
@@ -445,7 +451,8 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 	// std::cerr << "show-read-feeds" << (show_read_feeds?"true":"false") << std::endl;
 
 	unsigned int i = 0;
-	for (std::vector<rss_feed>::iterator it = feeds.begin(); it != feeds.end(); ++it, ++i) {
+	unsigned short feedlist_number = 1;
+	for (std::vector<rss_feed>::iterator it = feeds.begin(); it != feeds.end(); ++it, ++i, ++feedlist_number) {
 		rss_feed feed = *it;
 		std::string title = it->title();
 		if (title.length()==0) {
@@ -468,7 +475,7 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 
 		if (show_read_feeds || unread_count > 0) {
 			snprintf(buf,sizeof(buf),"(%u/%u) ",unread_count,static_cast<unsigned int>(it->items().size()));
-			snprintf(buf2,sizeof(buf2)," %c %11s",unread_count > 0 ? 'N' : ' ',buf);
+			snprintf(buf2,sizeof(buf2),"%4u %c %11s",feedlist_number, unread_count > 0 ? 'N' : ' ',buf);
 			std::string newtitle(buf2);
 			newtitle.append(title);
 			title = newtitle;
@@ -562,4 +569,18 @@ void view::set_help_keymap_hint() {
 	};
 	std::string keymap_hint = prepare_keymaphint(hints);
 	stfl_set(help_form,"help", keymap_hint.c_str());	
+}
+
+void view::set_itemlist_head(const std::string& s) {
+	std::string caption = "Articles in feed '";
+	caption.append(s);
+	caption.append("'");
+	stfl_set(itemlist_form,"head",caption.c_str());	
+}
+
+void view::set_itemview_head(const std::string& s) {
+	std::string caption = "Article '";
+	caption.append(s);
+	caption.append("'");
+	stfl_set(itemview_form,"head",caption.c_str());		
 }

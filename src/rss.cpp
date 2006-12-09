@@ -111,6 +111,12 @@ void rss_item::set_unread(bool u) {
 	if (ch) ch->update_rssitem_unread(*this, feedurl_); 
 }
 
+std::string rss_item::pubDate() const {
+	char text[1024];
+	strftime(text,sizeof(text),"%a, %d %b %Y %T", gmtime(&pubDate_)); 
+	return std::string(text);
+}
+
 time_t rss_parser::parse_date(const std::string& datestr) {
 	// TODO: refactor	
 	std::istringstream is(datestr);

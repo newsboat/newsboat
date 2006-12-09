@@ -41,6 +41,9 @@ namespace noos {
 			void set_feedlist_keymap_hint();
 			void set_help_keymap_hint();
 			
+			void set_itemlist_head(const std::string& s);
+			void set_itemview_head(const std::string& s);
+			
 			struct keymap_hint_entry {
 				operation op; 
 				char * text;
