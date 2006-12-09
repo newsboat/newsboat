@@ -19,32 +19,300 @@
             articles. It is designed to be used on text terminals on Unix or Unix-like
             systems such as Linux, BSD or Mac OS X.
         </para>
-        <para>
-            More blabla. ?
-        </para>
     </chapter>
     <chapter>
         <title>Installation</title>
         <para>
-            Description how to install noos, including all dependencies.
+            This chapter describes how to compile and install noos from source.
         </para>
+        <sect1>
+           <title>Downloading Noos</title>
+            <para>
+                Noos is available as source package. Simply go to <uri>http://synflood.at/noos.html</uri>
+                and download the latest source package, which is usually in the <filename>.tar.gz</filename>
+                file format. Alternatively, you can check out the latest development source tree from
+                the Noos SVN repository by running 
+                <command>svn co http://bereshit.synflood.at/svn/noos/trunk</command>
+                on the command line.
+            </para>
+        </sect1>
+        <sect1>
+            <title>Dependencies</title>
+            <para>
+                Noos depends on a number of libraries to function correctly. This table lists
+                these dependencies. Please be aware that the list libraries may themselves
+                depend on other libraries. <emphasis>These dependencies are not listed here</emphasis>.
+                Please also be aware that you need a recent C++ compiler. Currently, noos has
+                only been tested with GCC.
+                <table>
+                    <title>Dependencies of noos</title>
+                    <tgroup cols="2" colsep="1" rowsep="1">
+                        <thead>
+                            <row>
+                                <entry>Package</entry>
+                                <entry>Website</entry>
+                            </row>
+                        </thead>
+                        <tbody>
+                            <row>
+                                <entry>Libidn</entry>
+                                <entry><uri>http://www.gnu.org/software/libidn/</uri></entry>
+                            </row>
+                            <row>
+                                <entry>STFL</entry>
+                                <entry><uri>http://www.clifford.at/stfl/</uri></entry>
+                            </row>
+                            <row>
+                                <entry>SQLite 3</entry>
+                                <entry><uri>http://www.sqlite.org/</uri></entry>
+                            </row>
+                            <row>
+                                <entry>libmRss</entry>
+                                <entry><uri>http://www2.autistici.org/bakunin/libmrss/</uri></entry>
+                            </row>
+                            <row>
+                                <entry>libnXml</entry>
+                                <entry><uri>http://www2.autistici.org/bakunin/libnxml/</uri></entry>
+                            </row>
+                        </tbody>
+                    </tgroup>
+                </table>
+            </para>
+        </sect1>
+        <sect1>
+            <title>Compiling and Installing</title>
+            <para>
+                After you've downloaded and installed the dependencies mentioned above, you
+                can start compiling and installing noos. To compile noos, simply run
+                <command>make</command> in the source tree. After a short time, this should
+                complete successfully, and you can go on with installation by running
+                <command>make install</command>. By default, this will install the
+                <command>noos</command> binary to the <filename>/usr/local/bin</filename>
+                directory. You can provide an alternative installation path using the 
+                <command>prefix</command> parameter, e.g. running
+                <command>make install prefix=/opt/noos</command> will install the binary
+                to the directory <filename>/opt/noos/bin</filename>.
+            </para>
+        </sect1>
     </chapter>
     <chapter>
         <title>First Steps</title>
         <para>
-            Description of first steps.
+            After you've installed noos, you can run it for the first time by typing
+            <command>noos</command> on your command prompt. This will bring you the
+            following message:
+            <programlisting>
+<![CDATA[Error: no URLs configured. Please fill the file /Users/ak/.nos/urls with RSS feed URLs or import an OPML file.
+                
+noos 0.1
+usage: ./noos [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]
+    -e              export OPML feed to stdout
+    -i <file>       import OPML file
+    -u <urlfile>    read RSS feed URLs from <urlfile>
+    -c <cachefile>  use <cachefile> as cache file
+    -C <configfile> read configuration from <configfile>
+    -h              this help]]>
+            </programlisting>
+            This means that noos can't start without any configured feeds. To add feeds
+            to noos, you can either add URLs to the configuration file <filename>$HOME/.noos/urls</filename>
+            or you can import an OPML file by running <command>noos -i blogroll.opml</command>.
         </para>
+        <para>
+            Now you can run <command>noos</command> again, and it will present you with a 
+            navigatable list of the URLs that you configured previously. You can now 
+            start downloading
+            the feeds, either by pressing <keysym>R</keysym> to download all feeds, or by
+            pressing <keysym>r</keysym> to download the currently selected feed. When the
+            download is finished, you will see that the downloaded feeds contain articles.
+            By selecting the feed you want to read and pressing <keysym>Enter</keysym>,
+            you can go to the article list for this feed. You can now see the list of
+            available articles by their title. A <emphasis>N</emphasis> on the left
+            indicates that an article wasn't read yet. Pressing <keysym>Enter</keysym>
+            brings you to the content of the article. You can scroll through this
+            text, and also run a browser (default: <productname>lynx</productname>) to view
+            the complete article if the content is empty or just an abstract or a short
+            description. Pressing <keysym>q</keysym> brings you back to the article list,
+            and pressing <keysym>q</keysym> again brings you back to the feed list. Pressing
+            <keysym>q</keysym> a third time then closes noos.
+        </para>
+        <para>
+            Noos caches the article that it downloads. This means that when you start
+            noos again and reload a feed, the old articles can still be read even if they
+            aren't in the current RSS feeds anymore. Optionally you can configure how many
+            articles shall be preserved by feed so that the article backlog doesn't
+            grow endlessly (see below).
+        </para>
+    </chapter>
+    <chapter>
+        <title>Configuration</title>
+        <para>
+            Several aspects of noos' behaviour can be configured via a configuration
+            file, by default <filename>$HOME/.noos/config</filename>. This configuration
+            files contains lines in the form <code>&lt;config-command&gt; &lt;arg1&gt; ...</code>.
+            The following table lists all available configuration commands.
+            <table>
+                <title>Configuration Commands</title>
+                <tgroup cols="4" colsep="1" rowsep="1">
+                    <thead>
+                        <row>
+                            <entry>Configuration Command</entry>
+                            <entry>Arguments(s)</entry>
+                            <entry>Default</entry>
+                            <entry>Description</entry>
+                            <entry>Example</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>show-read-feeds</entry>
+                            <entry>[yes|no]</entry>
+                            <entry>yes</entry>
+                            <entry>
+                                If yes, then all feeds, including those without unread 
+                                articles, are listed. If no, then only feeds with
+                                one or more unread articles are listed.
+                            </entry>
+                            <entry><code>show-read-feeds no</code></entry>
+                        </row>
+                        <row>
+                            <entry>browser</entry>
+                            <entry>&lt;browser-command&gt;</entry>
+                            <entry>lynx</entry>
+                            <entry>
+                                Set the browser command to use when opening an article
+                                in the browser.
+                            </entry>
+                            <entry><code>browser w3m</code></entry>
+                        </row>
+                        <row>
+                            <entry>max-items</entry>
+                            <entry>&lt;number&gt;</entry>
+                            <entry>0</entry>
+                            <entry>
+                                Set the number of articles to maximally keep per feed. If the
+                                number is set to 0, then all articles are kept.
+                            </entry>
+                            <entry><code>max-items 100</code></entry>
+                        </row>
+                        <row>
+                            <entry>bind-key</entry>
+                            <entry>&lt;key&gt; &lt;operation&gt;</entry>
+                            <entry />
+                            <entry>
+                                Bind key &lt;key&gt; to &lt;operation&gt;. This means that
+                                whenever &lt;key&gt; is pressed, then &lt;operation&gt;
+                                is executed (if applicable in the current context). A list
+                                of available operation can be found below.
+                            </entry>
+                            <entry><code>bind-key ^r reload-all</code></entry>
+                        </row>
+                        <row>
+                            <entry>unbind-key</entry>
+                            <entry>&lt;key&gt;</entry>
+                            <entry />
+                            <entry>
+                                Unbind key &lt;key&gt;. This means that no operation is
+                                called when &lt;key&gt; is pressed.
+                            </entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>  
+            <table>
+                <title>Available operations</title>
+                <tgroup cols="3" colsep="1" rowsep="1">
+                    <thead>
+                        <row>
+                            <entry>Operation</entry>
+                            <entry>Default key</entry>
+                            <entry>Description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>quit</entry>
+                            <entry><keysym>q</keysym></entry>
+                            <entry>Quit the program or return to the previous dialog (depending on the context).</entry>
+                        </row>
+                        <row>
+                            <entry>reload</entry>
+                            <entry><keysym>r</keysym></entry>
+                            <entry>Reload the currently selected feed.</entry>
+                        </row>
+                        <row>
+                            <entry>reload-all</entry>
+                            <entry><keysym>R</keysym></entry>
+                            <entry>Reload all feeds.</entry>
+                        </row>
+                        <row>
+                            <entry>mark-feed-read</entry>
+                            <entry><keysym>A</keysym></entry>
+                            <entry>Mark all articles in the currently selected feed read.</entry>
+                        </row>
+                        <row>
+                            <entry>mark-all-feeds-read</entry>
+                            <entry><keysym>C</keysym></entry>
+                            <entry>Mark articles in all feeds read.</entry>
+                        </row>
+                        <row>
+                            <entry>open</entry>
+                            <entry><keysym>Enter</keysym></entry>
+                            <entry>Open the currently selected feed or article.</entry>
+                        </row>
+                        <row>
+                            <entry>save</entry>
+                            <entry><keysym>s</keysym></entry>
+                            <entry>Save the currently selected article to a file.</entry>
+                        </row>
+                        <row>
+                            <entry>next-unread</entry>
+                            <entry><keysym>n</keysym></entry>
+                            <entry>Jump to the next unread article.</entry>
+                        </row>
+                        <row>
+                            <entry>open-in-browser</entry>
+                            <entry><keysym>o</keysym></entry>
+                            <entry>Opens the URL associated with the current article.</entry>
+                        </row>
+                        <row>
+                            <entry>help</entry>
+                            <entry><keysym>?</keysym></entry>
+                            <entry>Runs the help screens.</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>          
+        </para>
+        <para>
+            Keys, as used in the <code>bind-key</code> configuration command, use a special
+            syntax. Lowercase keys, uppercase keys and special characters are written literally.
+            The <keysym>Enter</keysym> key is written as <code>enter</code>, while the <keysym>ESC</keysym>
+            key is written as <code>esc</code>. The function keys F1 to F12 are written as
+            <code>F1</code> to <code>F12</code>. Key combinations with the Ctrl key, such as 
+            <code>Ctrl-R</code>, are written as <code>^r</code>. Please be aware that <emphasis>all</emphasis>
+            Ctrl-related key combinations need to be written in lowercase. Using <code>^R</code> for
+            Ctrl-Shift-R does not work.
+        </para>
+        <sect1>
+            <title>Example Configuration</title>
+            <para>
+                <programlisting>
+<![CDATA[
+max-items        100
+browser          links
+show-read-feeds  no
+
+unbind-key       R
+bind-key         ^r    reload-all
+]]>
+                </programlisting>
+            </para>
+        </sect1>
     </chapter>
     <chapter>
         <title>Advanced Topics</title>
         <para>
-            Something about advanced topics such as scripting and the like.
-        </para>
-    </chapter>
-    <chapter>
-        <title>Reference</title>
-        <para>
-            Description of all available configuration items.
+            Something about advanced topics such as scripting and the like, as soon as it is available.
         </para>
     </chapter>
 </book>
