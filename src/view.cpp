@@ -154,6 +154,7 @@ void view::run_feedlist() {
 void view::run_itemlist(rss_feed& feed) {
 	bool quit = false;
 	bool rebuild_list = true;
+	bool show_no_unread_error = false;
 	std::vector<rss_item>& items = feed.items();
 
 	stfl_set(itemlist_form,"itempos","0");
@@ -190,6 +191,11 @@ void view::run_itemlist(rss_feed& feed) {
 
 			rebuild_list = false;
 		}
+		
+		if (show_no_unread_error) {
+			itemlist_error("No unread items.");
+			show_no_unread_error = false;
+		}
 
 		const char * event = stfl_run(itemlist_form,0);
 		if (!event) continue;
@@ -213,6 +219,7 @@ void view::run_itemlist(rss_feed& feed) {
 						if (open_next_item) {
 							if (!jump_to_next_unread_item(items)) {
 								open_next_item = false;
+								show_no_unread_error = true;
 							}
 						}
 					} while (open_next_item);
@@ -228,7 +235,8 @@ void view::run_itemlist(rss_feed& feed) {
 				quit = true;
 				break;
 			case OP_NEXTUNREAD:
-				jump_to_next_unread_item(items);
+				if (!jump_to_next_unread_item(items))
+					show_no_unread_error = true;
 				break;
 			case OP_MARKFEEDREAD:
 				mark_all_read(items);
@@ -266,9 +274,8 @@ bool view::jump_to_next_unread_item(std::vector<rss_item>& items) {
 				return true;
 			}
 		}
-		itemlist_error("No unread items.");
 	} else {
-		itemlist_error("Error: no item selected!");
+		itemlist_error("Error: no item selected!"); // shouldn't happen
 	}
 	return false;
 }
