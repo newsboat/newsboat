@@ -3,6 +3,7 @@
 #include <stringprep.h>
 #include <cache.h>
 #include <xmlpullparser.h>
+#include <utils.h>
 #include <sstream>
 #include <iostream>
 
@@ -165,7 +166,7 @@ time_t rss_parser::parse_date(const std::string& datestr) {
 	
 	is >> time;
 	
-	std::vector<std::string> tkns = xmlpullparser::tokenize(time,":");
+	std::vector<std::string> tkns = utils::tokenize(time,":");
 	std::istringstream hs(tkns[0]);
 	hs >> stm.tm_hour;
 	std::istringstream ms(tkns[1]);

@@ -1,6 +1,7 @@
 #include <configparser.h>
 #include <xmlpullparser.h>
 #include <exceptions.h>
+#include <utils.h>
 #include <fstream>
 #include <sstream>
 
@@ -15,7 +16,7 @@ void configparser::parse() {
 	std::string line;
 	getline(f,line);
 	while (f.is_open() && !f.eof()) {
-		std::vector<std::string> tokens = xmlpullparser::tokenize(line); // TODO: write other tokenizer
+		std::vector<std::string> tokens = utils::tokenize(line); // TODO: write other tokenizer
 		if (tokens.size() > 0) {
 			std::string cmd = tokens[0];
 			config_action_handler * handler = action_handlers[cmd];

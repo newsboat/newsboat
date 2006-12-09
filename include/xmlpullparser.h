@@ -25,8 +25,6 @@ public:
 	bool isWhitespace() const;
 	event next();
 	
-	static std::vector<std::string> tokenize(const std::string& str, std::string delimiters = " \r\n\t");
-	
 private:
 	typedef std::pair<std::string,std::string> attribute;
 	std::vector<attribute> attributes;

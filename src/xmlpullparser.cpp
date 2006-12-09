@@ -1,5 +1,6 @@
 #include <xmlpullparser.h>
 #include <exceptions.h>
+#include <utils.h>
 #include <stdexcept>
 #include <istream>
 #include <sstream>
@@ -117,7 +118,7 @@ xmlpullparser::event xmlpullparser::next() {
 						}
 					}
 					
-					std::vector<std::string> tokens = tokenize(s);
+					std::vector<std::string> tokens = utils::tokenize(s);
 					if (tokens.size() > 0) {
 						text = tokens[0];
 						if (tokens.size() > 1) {
@@ -146,7 +147,7 @@ xmlpullparser::event xmlpullparser::next() {
 				if (!inputstream->eof()) {
 					if (c == '<') {
 						std::string s = read_tag();
-						std::vector<std::string> tokens = tokenize(s);
+						std::vector<std::string> tokens = utils::tokenize(s);
 						if (tokens.size() > 0) {
 							text = tokens[0];
 							if (tokens.size() > 1) {
@@ -187,7 +188,7 @@ xmlpullparser::event xmlpullparser::next() {
 					current_event = END_DOCUMENT;
 					break;
 				}
-				std::vector<std::string> tokens = tokenize(s);
+				std::vector<std::string> tokens = utils::tokenize(s);
 				if (tokens.size() > 0) {
 					text = tokens[0];
 					if (tokens.size() > 1) {
@@ -222,19 +223,6 @@ int xmlpullparser::skip_whitespace() {
 			break;
 	}
 	return c;
-}
-
-std::vector<std::string> xmlpullparser::tokenize(const std::string& str, std::string delimiters) {
-    std::vector<std::string> tokens;
-    std::string::size_type last_pos = str.find_first_not_of(delimiters, 0);
-    std::string::size_type pos = str.find_first_of(delimiters, last_pos);
-
-    while (std::string::npos != pos || std::string::npos != last_pos) {
-            tokens.push_back(str.substr(last_pos, pos - last_pos));
-            last_pos = str.find_first_not_of(delimiters, pos);
-            pos = str.find_first_of(delimiters, last_pos);
-    }
-    return tokens;
 }
 
 void xmlpullparser::add_attribute(std::string s) {

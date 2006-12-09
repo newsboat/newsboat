@@ -1,5 +1,6 @@
 #include <htmlrenderer.h>
 #include <xmlpullparser.h>
+#include <utils.h>
 #include <sstream>
 #include <iostream>
 
@@ -135,7 +136,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines) 
 				break;
 			case xmlpullparser::TEXT:
 				{
-					std::vector<std::string> words = xmlpullparser::tokenize(xpp.getText());
+					std::vector<std::string> words = utils::tokenize(xpp.getText());
 					unsigned int i=0;
 					for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it,++i) {
 						if ((curline.length() + it->length()) >= w) {
