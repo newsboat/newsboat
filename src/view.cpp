@@ -300,10 +300,10 @@ void view::run_itemlist(rss_feed& feed) {
 std::string view::get_filename_suggestion(const std::string& s) {
 	std::string retval;
 	for (unsigned int i=0;i<s.length();++i) {
-		if (s[i] == '/' || s[i] == ' ' || s[i] == '\r' || s[i] == '\n') 
-			retval.append(1,'_');
-		else
+		if (isalnum(s[i]))
 			retval.append(1,s[i]);
+		else if (s[i] == '/' || s[i] == ' ' || s[i] == '\r' || s[i] == '\n') 
+			retval.append(1,'_');
 	}
 	if (retval.length() == 0)
 		retval = "article.txt";
