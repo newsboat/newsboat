@@ -55,6 +55,11 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines) 
 						lines.push_back(curline);
 					lines.push_back(std::string(""));
 					prepare_newline(curline, indent_level);	
+				} else if (xpp.getText() == "pre") {
+					if (curline.length() > 0)
+						lines.push_back(curline);
+					lines.push_back(std::string(""));
+					prepare_newline(curline, indent_level);
 				} else if (xpp.getText() == "p") {
 					if (curline.length() > 0)
 						lines.push_back(curline);
@@ -106,6 +111,11 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines) 
 					--indent_level;
 					if (indent_level < 0)
 						indent_level = 0;
+					if (curline.length() > 0)
+						lines.push_back(curline);
+					lines.push_back(std::string(""));
+					prepare_newline(curline, indent_level);
+				} else if (xpp.getText() == "pre") {
 					if (curline.length() > 0)
 						lines.push_back(curline);
 					lines.push_back(std::string(""));
