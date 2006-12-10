@@ -44,6 +44,17 @@ namespace noos {
 			void set_itemlist_head(const std::string& s, unsigned int unread, unsigned int total);
 			void set_itemview_head(const std::string& s);
 			
+			void write_item(const rss_item& item, const std::string& filename);
+			
+			enum filebrowser_type { FBT_OPEN, FBT_SAVE };
+			
+			std::string get_rwx(unsigned short val);
+			std::string add_file(std::string filename);
+			std::string fancy_quote(const std::string& s);
+			std::string fancy_unquote(const std::string& s);
+			std::string filebrowser(filebrowser_type type, const std::string& default_filename = "", std::string dir = "");
+			std::string get_filename_suggestion(const std::string& s);
+			
 			struct keymap_hint_entry {
 				operation op; 
 				char * text;
@@ -56,6 +67,8 @@ namespace noos {
 			stfl_form * itemlist_form;
 			stfl_form * itemview_form;
 			stfl_form * help_form;
+			stfl_form * filebrowser_form;
+			
 			configcontainer * cfg;
 			keymap * keys;
 	};

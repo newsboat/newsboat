@@ -2,8 +2,21 @@
 #include <itemlist.h>
 #include <itemview.h>
 #include <help.h>
+#include <filebrowser.h>
+
 #include <iostream>
+#include <iomanip>
+#include <fstream>
+
 #include <assert.h>
+#include <libgen.h>
+#include <sys/types.h>
+#include <dirent.h>
+#include <grp.h>
+#include <pwd.h>
+#include <unistd.h>
+#include <config.h>
+#include <sys/param.h>
 
 extern "C" {
 #include <stfl.h>
@@ -24,6 +37,7 @@ view::view(controller * c) : ctrl(c), cfg(0), keys(0) {
 	itemlist_form = stfl_create(itemlist_str);
 	itemview_form = stfl_create(itemview_str);
 	help_form = stfl_create(help_str);
+	filebrowser_form = stfl_create(filebrowser_str);
 }
 
 view::~view() {
@@ -160,8 +174,7 @@ void view::run_itemlist(rss_feed& feed) {
 	stfl_set(itemlist_form,"itempos","0");
 	
 	set_itemlist_keymap_hint();
-	set_itemlist_head(feed.title(),feed.unread_item_count(),feed.items().size());
-
+	
 	do {
 		if (rebuild_list) {
 
@@ -192,6 +205,8 @@ void view::run_itemlist(rss_feed& feed) {
 			code.append("}");
 
 			stfl_modify(itemlist_form,"items","replace_inner",code.c_str());
+			
+			set_itemlist_head(feed.title(),feed.unread_item_count(),feed.items().size());
 
 			rebuild_list = false;
 		}
@@ -229,8 +244,35 @@ void view::run_itemlist(rss_feed& feed) {
 					} while (open_next_item);
 				}
 				break;
-			case OP_SAVE:
-				// TODO: save currently selected article
+			case OP_SAVE: 
+				{
+					const char * itemposname = stfl_get(itemlist_form, "itempos");
+					if (itemposname) {
+						std::istringstream posname(itemposname);
+						unsigned int pos = 0;
+						posname >> pos;
+						
+						std::string filename = filebrowser(FBT_SAVE,get_filename_suggestion(items[pos].title()));
+						if (filename == "") {
+							itemlist_error("Aborted saving.");	
+						} else {
+							// TODO: render and save
+							try {
+								write_item(items[pos], filename);
+								std::ostringstream msg;
+								msg << "Saved article to " << filename;
+								itemlist_error(msg.str().c_str());
+							
+							} catch (...) {
+								std::ostringstream msg;
+								msg << "Error: couldn't save article to " << filename;
+								itemlist_error(msg.str().c_str());	
+							}
+						}
+					} else {
+						itemlist_error("Error: no item selected!");
+					}
+				}
 				break;
 			case OP_HELP:
 				run_help();
@@ -251,6 +293,286 @@ void view::run_itemlist(rss_feed& feed) {
 		}
 
 	} while (!quit);
+}
+
+std::string view::get_filename_suggestion(const std::string& s) {
+	std::string retval;
+	for (unsigned int i=0;i<s.length();++i) {
+		if (s[i] == '/' || s[i] == ' ')
+			retval.append(1,'_');
+		else
+			retval.append(1,s[i]);
+	}
+	if (retval.length() == 0)
+		retval = "article.txt";
+	else
+		retval.append(".txt");
+	return retval;	
+}
+
+void view::write_item(const rss_item& item, const std::string& filename) {
+	std::vector<std::string> lines;
+	
+	std::string title("Title: ");
+	title.append(item.title());
+	lines.push_back(title);
+	
+	std::string author("Author: ");
+	author.append(item.author());
+	lines.push_back(author);
+	
+	std::string date("Date: ");
+	date.append(item.pubDate());
+	lines.push_back(date);
+	
+	lines.push_back(std::string(""));
+	
+	htmlrenderer rnd(80);
+	rnd.render(item.description(), lines);
+
+	std::fstream f;
+	f.open(filename.c_str(),std::fstream::out);
+	if (!f.is_open())
+		throw 1; // TODO: add real exception with real error message and such
+		
+	for (std::vector<std::string>::iterator it=lines.begin();it!=lines.end();++it) {
+		f << *it << std::endl;	
+	}
+}
+
+std::string view::get_rwx(unsigned short val) {
+	std::string str;
+	for (int i=0;i<3;++i) {
+		unsigned char bits = val % 8;
+		val /= 8;
+		switch (bits) {
+			case 0:
+				str = std::string("---") + str;
+				break;
+			case 1:
+				str = std::string("--x") + str;
+				break;
+			case 2:
+				str = std::string("-w-") + str;
+				break;
+			case 3:
+				str = std::string("-wx") + str;
+				break;
+			case 4:
+				str = std::string("r--") + str;
+				break;
+			case 5:
+				str = std::string("r-x") + str;
+				break;
+			case 6:
+				str = std::string("rw-") + str;
+				break;
+			case 7:
+				str = std::string("rwx") + str;
+		}	
+	}
+	return str;
+}
+
+std::string view::fancy_quote(const std::string& s) {
+	std::string x;
+	for (unsigned int i=0;i<s.length();++i) {
+		if (s[i] != ' ') {
+			x.append(1,s[i]);
+		} else {
+			x.append(1,'/');
+		}	
+	}	
+	return x;
+}
+
+std::string view::fancy_unquote(const std::string& s) {
+	std::string x;
+	for (unsigned int i=0;i<s.length();++i) {
+		if (s[i] != '/') {
+			x.append(1,s[i]);
+		} else {
+			x.append(1,' ');
+		}	
+	}	
+	return x;	
+}
+
+std::string view::add_file(std::string filename) {
+	std::string retval;
+	struct stat sb;
+	if (::stat(filename.c_str(),&sb)==0) {
+		char type = '?';
+		if (sb.st_mode & S_IFREG)
+			type = '-';
+		else if (sb.st_mode & S_IFDIR)
+			type = 'd';
+		else if (sb.st_mode & S_IFBLK)
+			type = 'b';
+		else if (sb.st_mode & S_IFCHR)
+			type = 'c';
+		else if (sb.st_mode & S_IFIFO)
+			type = 'p';
+		else if (sb.st_mode & S_IFLNK)
+			type = 'l';
+			
+		std::string rwxbits = get_rwx(sb.st_mode & 0777);
+		std::string owner = "????????", group = "????????";
+		
+		struct passwd * spw = getpwuid(sb.st_uid);
+		if (spw) {
+			owner = spw->pw_name;
+			for (int i=owner.length();i<8;++i) {
+				owner.append(" ");	
+			}	
+		}
+		struct group * sgr = getgrgid(sb.st_gid);
+		if (sgr) {
+			group = sgr->gr_name;
+			for (int i=group.length();i<8;++i) {
+				group.append(" ");
+			}
+		}
+		
+		std::ostringstream os;
+		os << std::setw(12) << sb.st_size;
+		std::string sizestr = os.str();
+		
+		std::string line;
+		line.append(1,type);
+		line.append(rwxbits);
+		line.append(" ");
+		line.append(owner);
+		line.append(" ");
+		line.append(group);
+		line.append(" ");
+		line.append(sizestr);
+		line.append(" ");
+		line.append(filename);
+		
+		retval = "{listitem[";
+		retval.append(1,type);
+		retval.append(fancy_quote(filename));
+		retval.append("] text:");
+		retval.append(stfl_quote(line.c_str()));
+		retval.append("}");
+	}
+	return retval;
+}
+
+std::string view::filebrowser(filebrowser_type type, const std::string& default_filename, std::string dir) {
+	char cwdtmp[MAXPATHLEN];
+	::getcwd(cwdtmp,sizeof(cwdtmp));
+	std::string cwd = cwdtmp;
+	
+	bool update_list = true;
+	bool quit = false;
+	
+	if (dir == "") {
+		char * homedir = ::getenv("HOME");
+		if (homedir)
+			dir = homedir;
+		else
+			dir = ".";
+	}
+			
+	::chdir(dir.c_str());
+	
+	stfl_set(filebrowser_form, "filenametext", default_filename.c_str());
+	
+	if (type == FBT_OPEN)
+		stfl_set(filebrowser_form, "head", "Open File");
+	else
+		stfl_set(filebrowser_form, "head", "Save File");
+		
+	do {
+		
+		if (update_list) {
+			std::string code = "{list";
+			// TODO: read from current directory
+			char cwdtmp[MAXPATHLEN];
+			::getcwd(cwdtmp,sizeof(cwdtmp));
+			
+			DIR * dir = ::opendir(cwdtmp);
+			if (dir) {
+				struct dirent * de = ::readdir(dir);
+				while (de) {
+					if (strcmp(de->d_name,".")!=0)
+						code.append(add_file(de->d_name));
+					de = ::readdir(dir);
+				}
+				::closedir(dir);	
+			}
+			
+			code.append("}");
+			
+			std::cerr << "code: `" << code << "'" << std::endl;
+			
+			stfl_modify(filebrowser_form, "files", "replace_inner", code.c_str());
+			update_list = false;	
+		}
+		
+		const char * event = stfl_run(filebrowser_form, 0);
+		if (!event) continue;
+		
+		operation op = keys->get_operation(event);
+		
+		switch (op) {
+			case OP_OPEN: 
+				{
+					const char * focus = stfl_get_focus(filebrowser_form);
+					if (focus) {
+						if (strcmp(focus,"files")==0) {
+							std::string selection = fancy_unquote(stfl_get(filebrowser_form,"listposname"));
+							char filetype = selection[0];
+							selection.erase(0,1);
+							std::string filename(selection);
+							switch (filetype) {
+								case 'd':
+									// TODO: handle directory
+									::chdir(filename.c_str());
+									stfl_set(filebrowser_form,"listpos","0");
+									if (type == FBT_SAVE) {
+										char cwdtmp[MAXPATHLEN];
+										::getcwd(cwdtmp,sizeof(cwdtmp));
+										std::string fn(cwdtmp);
+										fn.append(NOOS_PATH_SEP);
+										fn.append(::basename(stfl_get(filebrowser_form,"filenametext")));
+										stfl_set(filebrowser_form,"filenametext",fn.c_str());											
+									}
+									update_list = true;
+									break;
+								case '-': 
+									{
+										char cwdtmp[MAXPATHLEN];
+										::getcwd(cwdtmp,sizeof(cwdtmp));
+										std::string fn(cwdtmp);
+										fn.append(NOOS_PATH_SEP);
+										fn.append(filename);
+										stfl_set(filebrowser_form,"filenametext",fn.c_str());
+										stfl_set_focus(filebrowser_form,"filename");
+									}
+									break;
+								default:
+									// TODO: show error message
+									break;
+							}
+						} else {
+							std::string retval(stfl_get(filebrowser_form,"filenametext"));
+							return retval;
+						}
+					}
+				}
+				break;
+			case OP_QUIT:
+				return std::string("");
+			default:
+				break;
+		}
+		
+		
+	} while (!quit);
+	return std::string(""); // never reached
 }
 
 bool view::jump_to_next_unread_item(std::vector<rss_item>& items) {
@@ -364,7 +686,23 @@ bool view::run_itemview(rss_item& item) {
 				// nothing
 				break;
 			case OP_SAVE:
-				// TODO: save currently selected article
+				{
+					std::string filename = filebrowser(FBT_SAVE,get_filename_suggestion(item.title()));
+					if (filename == "") {
+						itemview_error("Aborted saving.");	
+					} else {
+						try {
+							write_item(item, filename);
+							std::ostringstream msg;
+							msg << "Saved article to " << filename;
+							itemview_error(msg.str().c_str());
+						} catch (...) {
+							std::ostringstream msg;
+							msg << "Error: couldn't write article to file " << filename;
+							itemview_error(msg.str().c_str());
+						}
+					}
+				}
 				break;
 			case OP_OPENINBROWSER:
 				itemview_status("Starting browser...");
