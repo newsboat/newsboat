@@ -508,7 +508,7 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 			
 			code.append("}");
 			
-			std::cerr << "code: `" << code << "'" << std::endl;
+			// std::cerr << "code: `" << code << "'" << std::endl;
 			
 			stfl_modify(filebrowser_form, "files", "replace_inner", code.c_str());
 			update_list = false;	
