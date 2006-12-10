@@ -118,6 +118,15 @@ std::string rss_item::pubDate() const {
 	return std::string(text);
 }
 
+unsigned int rss_feed::unread_item_count() const {
+	unsigned int count = 0;
+	for (std::vector<rss_item>::const_iterator it=items_.begin();it!=items_.end();++it) {
+		if (it->unread())
+			++count;
+	}
+	return count;
+}
+
 time_t rss_parser::parse_date(const std::string& datestr) {
 	// TODO: refactor	
 	std::istringstream is(datestr);

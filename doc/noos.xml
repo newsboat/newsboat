@@ -15,8 +15,8 @@
         <title>Introduction</title>
         <para>
             Noos is an RSS feedreader. RSS is a number of widely-used XML formats
-            to transmit to publish and syndicate articles, for example news or blog
-            articles. It is designed to be used on text terminals on Unix or Unix-like
+            to transmit, publish and syndicate articles, for example news or blog
+            articles. Noos is designed to be used on text terminals on Unix or Unix-like
             systems such as Linux, BSD or Mac OS X.
         </para>
     </chapter>
@@ -214,6 +214,7 @@ usage: ./noos [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]
                                 Unbind key &lt;key&gt;. This means that no operation is
                                 called when &lt;key&gt; is pressed.
                             </entry>
+                            <entry><code>unbind-key R</code></entry>
                         </row>
                     </tbody>
                 </tgroup>

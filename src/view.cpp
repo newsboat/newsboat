@@ -160,7 +160,7 @@ void view::run_itemlist(rss_feed& feed) {
 	stfl_set(itemlist_form,"itempos","0");
 	
 	set_itemlist_keymap_hint();
-	set_itemlist_head(feed.title());
+	set_itemlist_head(feed.title(),feed.unread_item_count(),feed.items().size());
 
 	do {
 		if (rebuild_list) {
@@ -571,11 +571,11 @@ void view::set_help_keymap_hint() {
 	stfl_set(help_form,"help", keymap_hint.c_str());	
 }
 
-void view::set_itemlist_head(const std::string& s) {
-	std::string caption = "Articles in feed '";
-	caption.append(s);
-	caption.append("'");
-	stfl_set(itemlist_form,"head",caption.c_str());	
+void view::set_itemlist_head(const std::string& s, unsigned int unread, unsigned int total) {
+	std::ostringstream caption;
+	
+	caption << "Articles in feed '" << s << "' (" << unread << " unread, " << total << " total)";
+	stfl_set(itemlist_form,"head",caption.str().c_str());	
 }
 
 void view::set_itemview_head(const std::string& s) {

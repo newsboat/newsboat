@@ -80,6 +80,8 @@ namespace noos {
 			
 			inline const std::string& rssurl() const { return rssurl_; }
 			inline void set_rssurl(const std::string& u) { rssurl_ = u; }
+			
+			unsigned int unread_item_count() const;
 
 		private:
 			std::string title_;

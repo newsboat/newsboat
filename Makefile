@@ -5,6 +5,9 @@ LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn
 OUTPUT=noos
 SRC=$(wildcard *.cpp) $(wildcard src/*.cpp)
 OBJS=$(patsubst %.cpp,%.o,$(SRC))
+prefix=/usr/local
+MKDIR=mkdir -p
+INSTALL=install
 
 STFLHDRS=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
 
@@ -30,6 +33,10 @@ clean:
 
 distclean: clean
 	$(RM) Makefile.deps
+
+install:
+	$(MKDIR) $(prefix)/bin
+	$(INSTALL) $(OUTPUT) $(prefix)/bin
 
 Makefile.deps: $(SRC)
 	$(CXX) $(CXXFLAGS) -MM -MG $(SRC) > Makefile.deps
