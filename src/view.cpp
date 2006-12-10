@@ -17,6 +17,8 @@
 #include <unistd.h>
 #include <config.h>
 #include <sys/param.h>
+#include <string.h>
+
 
 extern "C" {
 #include <stfl.h>
@@ -298,7 +300,7 @@ void view::run_itemlist(rss_feed& feed) {
 std::string view::get_filename_suggestion(const std::string& s) {
 	std::string retval;
 	for (unsigned int i=0;i<s.length();++i) {
-		if (s[i] == '/' || s[i] == ' ')
+		if (s[i] == '/' || s[i] == ' ' || s[i] == '\r' || s[i] == '\n') 
 			retval.append(1,'_');
 		else
 			retval.append(1,s[i]);
@@ -537,8 +539,12 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 										::getcwd(cwdtmp,sizeof(cwdtmp));
 										std::string fn(cwdtmp);
 										fn.append(NOOS_PATH_SEP);
-										fn.append(::basename(stfl_get(filebrowser_form,"filenametext")));
-										stfl_set(filebrowser_form,"filenametext",fn.c_str());											
+										const char * fnstr = stfl_get(filebrowser_form,"filenametext");
+										const char * base = strrchr(fnstr,'/');
+										if (!base)
+											base = fnstr;
+										fn.append(base);
+										stfl_set(filebrowser_form,"filenametext",fn.c_str());
 									}
 									update_list = true;
 									break;
