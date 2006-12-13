@@ -3,6 +3,7 @@
 #include <utils.h>
 #include <sstream>
 #include <iostream>
+#include <stdexcept>
 
 using namespace noos;
 
@@ -28,7 +29,12 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines) 
 		switch (e) {
 			case xmlpullparser::START_TAG:
 				if (xpp.getText() == "a") {
-					std::string link = xpp.getAttributeValue("href");
+					std::string link;
+					try {
+						link = xpp.getAttributeValue("href");
+					} catch (const std::invalid_argument& ) {
+						link = "";
+					}
 					if (link.length() > 0) {
 						links.push_back(link);
 						std::ostringstream ref;
