@@ -70,7 +70,7 @@ static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** azCol
 
 
 
-cache::cache(const std::string& cachefile, configcontainer * c) : db(0),cfg(c) {
+cache::cache(const std::string& cachefile, configcontainer * c) : db(0),cfg(c), mtx(0) {
 	bool file_exists = false;
 	std::fstream f;
 	f.open(cachefile.c_str(), std::fstream::in | std::fstream::out);
@@ -87,10 +87,12 @@ cache::cache(const std::string& cachefile, configcontainer * c) : db(0),cfg(c) {
 	populate_tables();
 	set_pragmas();
 	// }
+	mtx = new mutex();
 }
 
 cache::~cache() {
 	sqlite3_close(db);
+	delete mtx;
 }
 
 void cache::set_pragmas() {
@@ -125,6 +127,7 @@ void cache::populate_tables() {
 
 
 void cache::externalize_rssfeed(rss_feed& feed) {
+	mtx->lock();
 	std::ostringstream query;
 	query << "SELECT count(*) FROM rss_feed WHERE rssurl = '" << feed.rssurl() << "';";
 	cb_handler count_cbh;
@@ -159,11 +162,11 @@ void cache::externalize_rssfeed(rss_feed& feed) {
 	for (std::vector<rss_item>::reverse_iterator it=feed.items().rbegin(); it != feed.items().rend(); ++it) {
 		update_rssitem(*it, feed.rssurl());
 	}
-	
-	
+	mtx->unlock();
 }
 
 void cache::internalize_rssfeed(rss_feed& feed) {
+	mtx->lock();
 	char * query = sqlite3_mprintf("SELECT count(*) FROM rss_feed WHERE rssurl = '%q';",feed.rssurl().c_str());
 	cb_handler count_cbh;
 	int rc = sqlite3_exec(db,query,count_callback,&count_cbh,NULL);
@@ -171,8 +174,10 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 	// std::cerr << "internalize: query = " << query << std::endl;
 	free(query);
 
-	if (count_cbh.count() == 0)
+	if (count_cbh.count() == 0) {
+		mtx->unlock();
 		return;
+	}
 
 	query = sqlite3_mprintf("SELECT title, url FROM rss_feed WHERE rssurl = '%q';",feed.rssurl().c_str());
 	rc = sqlite3_exec(db,query,rssfeed_callback,&feed,NULL);
@@ -205,18 +210,20 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 		}	
 		feed.items().erase(it, feed.items().end()); // delete old entries
 	}
-
-
+	mtx->unlock();
 }
 
 void cache::delete_item(const rss_item& item) {
+	mtx->lock();
 	char * query = sqlite3_mprintf("DELETE FROM rss_item WHERE guid = '%q';",item.guid().c_str());
 	int rc = sqlite3_exec(db,query,NULL,NULL,NULL);
 	assert(rc == SQLITE_OK);
 	free(query);
+	mtx->unlock();
 }
 
 void cache::cleanup_cache(std::vector<rss_feed>& feeds) {
+	mtx->lock();
 	std::string list = "(";
 	int rc;
 	unsigned int i = 0;
@@ -245,6 +252,7 @@ void cache::cleanup_cache(std::vector<rss_feed>& feeds) {
 
 	//rc = sqlite3_exec(db,"VACUUM;",NULL,NULL,NULL);
 	// assert(rc == SQLITE_OK);
+	mtx->unlock();
 }
 
 void cache::update_rssitem(rss_item& item, const std::string& feedurl) {
@@ -276,6 +284,7 @@ void cache::update_rssitem(rss_item& item, const std::string& feedurl) {
 }
 
 void cache::update_rssitem_unread(rss_item& item, const std::string& feedurl) {
+	mtx->lock();
 	char * query = sqlite3_mprintf("SELECT count(*) FROM rss_item WHERE guid = '%q';",item.guid().c_str());
 	cb_handler count_cbh;
 	int rc = sqlite3_exec(db,query,count_callback,&count_cbh,NULL);
@@ -300,4 +309,5 @@ void cache::update_rssitem_unread(rss_item& item, const std::string& feedurl) {
 		free(insert);
 		// std::cerr << "item insert" << std::endl;
 	}
+	mtx->unlock();
 }

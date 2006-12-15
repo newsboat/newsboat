@@ -4,9 +4,11 @@
 #include <controller.h>
 #include <configcontainer.h>
 #include <vector>
+#include <list>
 #include <string>
 #include <rss.h>
 #include <keymap.h>
+#include <mutex.h>
 
 extern "C" {
 #include <stfl.h>
@@ -25,12 +27,8 @@ namespace noos {
 			void set_feedlist(std::vector<rss_feed>& feeds);
 			void set_keymap(keymap * k);
 			void set_config_container(configcontainer * cfgcontainer);
-			void feedlist_error(const char * msg);
-			void itemlist_error(const char * msg);
-			void itemview_error(const char * msg);
-			void feedlist_status(const char * msg);
-			void itemlist_status(const char * msg);
-			void itemview_status(const char * msg);
+			void show_error(const char * msg);
+			void set_status(const char * msg);
 		private:
 			bool jump_to_next_unread_item(std::vector<rss_item>& items);
 			void mark_all_read(std::vector<rss_item>& items);
@@ -40,6 +38,7 @@ namespace noos {
 			void set_itemlist_keymap_hint();
 			void set_feedlist_keymap_hint();
 			void set_help_keymap_hint();
+			void set_filebrowser_keymap_hint();
 			
 			void set_itemlist_head(const std::string& s, unsigned int unread, unsigned int total);
 			void set_itemview_head(const std::string& s);
@@ -69,8 +68,11 @@ namespace noos {
 			stfl_form * help_form;
 			stfl_form * filebrowser_form;
 			
+			std::list<stfl_form *> view_stack;
+			
 			configcontainer * cfg;
 			keymap * keys;
+			mutex * mtx;
 	};
 
 }

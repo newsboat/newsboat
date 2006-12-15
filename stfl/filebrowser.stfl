@@ -20,7 +20,7 @@ vbox
       text[filenametext]:""
   label#info
     .expand:h .height:1
-    text:"q:Abort"
+    text[help]:"q:Abort"
   label
     .expand:h .height:1
     text[msg]:""

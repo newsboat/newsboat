@@ -4,6 +4,7 @@
 #include <sqlite3.h>
 #include <rss.h>
 #include <configcontainer.h>
+#include <mutex.h>
 
 namespace noos {
 
@@ -22,6 +23,7 @@ class cache {
 		void delete_item(const rss_item& item);
 		sqlite3 * db;
 		configcontainer * cfg;
+		mutex * mtx;
 };
 
 

@@ -3,6 +3,7 @@
 #include <configparser.h>
 #include <configcontainer.h>
 #include <exceptions.h>
+#include <downloadthread.h>
 #include <sstream>
 #include <cstdlib>
 #include <iostream>
@@ -42,11 +43,13 @@ controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cach
 	url_file = config_dir + std::string(NOOS_PATH_SEP) + url_file;
 	cache_file = config_dir + std::string(NOOS_PATH_SEP) + cache_file;
 	config_file = config_dir + std::string(NOOS_PATH_SEP) + config_file;
+	reload_mutex = new mutex();
 }
 
 controller::~controller() {
 	if (rsscache)
 		delete rsscache;
+	delete reload_mutex;
 }
 
 void controller::set_view(view * vv) {
@@ -201,21 +204,21 @@ void controller::mark_all_read(unsigned int pos) {
 
 void controller::open_feed(unsigned int pos) {
 	if (pos < feeds.size()) {
-		v->feedlist_status("Opening feed...");
+		v->set_status("Opening feed...");
 
 		rss_feed& feed = feeds[pos];
 
-		v->feedlist_status("");
+		v->set_status("");
 
 		if (feed.items().size() == 0) {
-			v->feedlist_error("Error: feed contains no items!");
+			v->show_error("Error: feed contains no items!");
 		} else {
 			v->run_itemlist(feed);
 			// rsscache->externalize_rssfeed(feed); // save possibly changed unread flags
 			v->set_feedlist(feeds);
 		}
 	} else {
-		v->feedlist_error("Error: invalid feed!");
+		v->show_error("Error: invalid feed!");
 	}
 }
 
@@ -237,7 +240,7 @@ void controller::reload(unsigned int pos, unsigned int max) {
 		msg.append("Loading ");
 		msg.append(feed.rssurl());
 		msg.append("...");
-		v->feedlist_status(msg.c_str());
+		v->set_status(msg.c_str());
 				
 		rss_parser parser(feed.rssurl().c_str(), rsscache);
 		feed = parser.parse();
@@ -261,16 +264,23 @@ void controller::reload(unsigned int pos, unsigned int max) {
 		rsscache->internalize_rssfeed(feed);
 		feeds[pos] = feed;
 		
-		v->feedlist_status("");
+		v->set_status("");
 		v->set_feedlist(feeds);
 	} else {
-		v->feedlist_error("Error: invalid feed!");
+		v->show_error("Error: invalid feed!");
 	}
 }
 
 void controller::reload_all() {
 	for (unsigned int i=0;i<feeds.size();++i) {
 		this->reload(i,feeds.size());
+	}
+}
+
+void controller::start_reload_all_thread() {
+	if (reload_mutex->trylock()) {
+		thread * dlt = new downloadthread(this);
+		dlt->start();
 	}
 }
 
