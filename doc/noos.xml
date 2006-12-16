@@ -122,10 +122,10 @@ usage: ./noos [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]
             navigatable list of the URLs that you configured previously. You can now 
             start downloading
             the feeds, either by pressing <keysym>R</keysym> to download all feeds, or by
-            pressing <keysym>r</keysym> to download the currently selected feed. When the
-            download is finished, you will see that the downloaded feeds contain articles.
-            By selecting the feed you want to read and pressing <keysym>Enter</keysym>,
-            you can go to the article list for this feed. You can now see the list of
+            pressing <keysym>r</keysym> to download the currently selected feed. You can then
+			select a feed you want to read, and by pressing <keysym>Enter</keysym>, you can go
+			to the article list for this feed. This works even while the downloading is still
+			in progress.  You can now see the list of
             available articles by their title. A <emphasis>N</emphasis> on the left
             indicates that an article wasn't read yet. Pressing <keysym>Enter</keysym>
             brings you to the content of the article. You can scroll through this
@@ -149,6 +149,8 @@ usage: ./noos [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]
             Several aspects of noos' behaviour can be configured via a configuration
             file, by default <filename>$HOME/.noos/config</filename>. This configuration
             files contains lines in the form <code>&lt;config-command&gt; &lt;arg1&gt; ...</code>.
+			The configuration file can also contain comments, which start with the '#' character
+			and go as far as the end of line.
             The following table lists all available configuration commands.
             <table>
                 <title>Configuration Commands</title>
@@ -276,6 +278,11 @@ usage: ./noos [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]
                             <entry>Opens the URL associated with the current article.</entry>
                         </row>
                         <row>
+                            <entry>toggle-source-view</entry>
+                            <entry><keysym>^u</keysym></entry>
+                            <entry>Toggles between the HTML view and the source view in the article view</entry>
+                        </row>
+                        <row>
                             <entry>help</entry>
                             <entry><keysym>?</keysym></entry>
                             <entry>Runs the help screens.</entry>
@@ -299,7 +306,8 @@ usage: ./noos [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]
             <para>
                 <programlisting>
 <![CDATA[
-max-items        100
+# a comment
+max-items        100 # such comments are possible, too
 browser          links
 show-read-feeds  no
 
