@@ -139,6 +139,9 @@ void view::run_feedlist() {
 					}
 				}
 				break;
+			case OP_NEXTUNREAD:
+				jump_to_next_unread_feed();
+				break;
 			case OP_MARKALLFEEDSREAD:
 				ctrl->catchup_all();
 				update = true;
@@ -606,6 +609,36 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 	return std::string(""); // never reached
 }
 
+void view::jump_to_next_unread_feed() {
+	const char * feedposname = stfl_get(feedlist_form, "feedposname");
+	unsigned int feedcount = ctrl->get_feedcount();
+
+	if (feedposname) {
+		std::istringstream posname(feedposname);
+		unsigned int pos = 0;
+		posname >> pos;
+		for (unsigned int i=pos;i<feedcount;++i) {
+			if (ctrl->get_feed(i).unread_item_count() > 0) {
+				std::ostringstream posname;
+				posname << i;
+				stfl_set(feedlist_form, "feedpos", posname.str().c_str());
+				return;
+			}
+		}
+		for (unsigned int i=0;i<pos;++i) {
+			if (ctrl->get_feed(i).unread_item_count() > 0) {
+				std::ostringstream posname;
+				posname << i;
+				stfl_set(feedlist_form, "feedpos", posname.str().c_str());
+				return;
+			}
+		}
+		show_error("No feeds with unread items.");
+	} else {
+		show_error("No feed selected!"); // shouldn't happen
+	}
+}
+
 bool view::jump_to_next_unread_item(std::vector<rss_item>& items) {
 	const char * itemposname = stfl_get(itemlist_form, "itemposname");
 
@@ -925,6 +958,7 @@ void view::set_feedlist_keymap_hint() {
 	keymap_hint_entry hints[] = {
 		{ OP_QUIT, "Quit" },
 		{ OP_OPEN, "Open" },
+		{ OP_NEXTUNREAD, "Next Unread" },
 		{ OP_RELOAD, "Reload" },
 		{ OP_RELOADALL, "Reload All" },
 		{ OP_MARKFEEDREAD, "Mark Read" },
