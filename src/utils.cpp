@@ -1,6 +1,17 @@
 #include <utils.h>
 
 namespace noos {
+
+std::vector<std::string> utils::tokenize_config(const std::string& str, std::string delimiters) {
+	std::vector<std::string> tokens = tokenize(str,delimiters);
+	for (std::vector<std::string>::iterator it=tokens.begin();it!=tokens.end();++it) {
+		if ((*it)[0] == '#') {
+			tokens.erase(it,tokens.end());
+			break;
+		}
+	}
+	return tokens;
+}
 	
 std::vector<std::string> utils::tokenize(const std::string& str, std::string delimiters) {
     std::vector<std::string> tokens;
