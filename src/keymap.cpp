@@ -20,6 +20,7 @@ op_desc opdescs[] = {
 	{ OP_NEXTUNREAD, "Go to next unread article" },
 	{ OP_OPENINBROWSER, "Open article in browser" },
 	{ OP_HELP, "Open help dialog" },
+	{ OP_TOGGLESOURCEVIEW, "Toggle source view" },
 	{ OP_NIL, NULL }
 };
 
@@ -34,6 +35,7 @@ keymap::keymap() {
 	keymap_["n"] = OP_NEXTUNREAD;
 	keymap_["o"] = OP_OPENINBROWSER;
 	keymap_["?"] = OP_HELP;
+	keymap_["^u"] = OP_TOGGLESOURCEVIEW,
 	keymap_["NIL"] = OP_NIL;
 }
 
@@ -73,6 +75,7 @@ operation keymap::get_opcode(const std::string& opstr) {
 		{ "next-unread", OP_NEXTUNREAD },
 		{ "open-in-browser", OP_OPENINBROWSER },
 		{ "help", OP_HELP },
+		{ "toggle-source-view", OP_TOGGLESOURCEVIEW },
 		{ NULL, OP_NIL }
 	};
 	for (int i=0;opcode_map[i].opstr;++i) {

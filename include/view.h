@@ -54,6 +54,7 @@ namespace noos {
 			std::string fancy_unquote(const std::string& s);
 			std::string filebrowser(filebrowser_type type, const std::string& default_filename = "", std::string dir = "");
 			std::string get_filename_suggestion(const std::string& s);
+			void render_source(std::vector<std::string>& lines, std::string desc, unsigned int width);
 			
 			struct keymap_hint_entry {
 				operation op; 

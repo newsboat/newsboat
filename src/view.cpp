@@ -672,6 +672,8 @@ bool view::jump_to_next_unread_item(std::vector<rss_item>& items) {
 
 bool view::run_itemview(rss_item& item) {
 	bool quit = false;
+	bool show_source = false;
+	bool redraw = true;
 	bool retval = false;
 	static bool render_hack = false;
 	
@@ -680,74 +682,77 @@ bool view::run_itemview(rss_item& item) {
 	set_itemview_keymap_hint();
 	stfl_set(itemview_form,"msg","");
 
-	std::string code = "{list";
-
-	code.append("{listitem text:");
-	std::ostringstream title;
-	title << "Title: ";
-	title << item.title();
-	code.append(stfl_quote(title.str().c_str()));
-	code.append("}");
-
-	code.append("{listitem text:");
-	std::ostringstream author;
-	author << "Author: ";
-	author << item.author();
-	code.append(stfl_quote(author.str().c_str()));
-	code.append("}");
-
-	code.append("{listitem text:");
-	std::ostringstream link;
-	link << "Link: ";
-	link << item.link();
-	code.append(stfl_quote(link.str().c_str()));
-	code.append("}");
-	
-	code.append("{listitem text:");
-	std::ostringstream date;
-	date << "Date: ";
-	date << item.pubDate();
-	code.append(stfl_quote(date.str().c_str()));
-	code.append("}");
-
-	code.append("{listitem text:\"\"}");
-	
-	set_itemview_head(item.title());
-	
-	if (!render_hack) {
-		stfl_run(itemview_form,-1); // XXX HACK: render once so that we get a proper widget width
-		render_hack = true;
-	}
-
-	const char * widthstr = stfl_get(itemview_form,"article:w");
-	unsigned int render_width = 80;
-	if (widthstr) {
-		std::istringstream is(widthstr);
-		is >> render_width;
-		if (render_width - 5 > 0)
-	  		render_width -= 5; 	
-	}
-
-	htmlrenderer rnd(render_width);
-
-	// const char * desc = item.description().c_str();
-	// std::cerr << desc << std::endl;
-	std::vector<std::string> lines;
-	// std::cerr << "`" << item.description() << "'" << std::endl;
-	rnd.render(item.description(), lines);
-
-	for (std::vector<std::string>::iterator it = lines.begin(); it != lines.end(); ++it) {
-		std::string line = std::string("{listitem text:") + std::string(stfl_quote(it->c_str())) + std::string("}");
-		code.append(line);
-	}
-
-	code.append("}");
-
-	stfl_modify(itemview_form,"article","replace_inner",code.c_str());
-
-	stfl_set(itemview_form,"articleoffset","0");
-
 	do {
+		if (redraw) {
+			std::string code = "{list";
+
+			code.append("{listitem text:");
+			std::ostringstream title;
+			title << "Title: ";
+			title << item.title();
+			code.append(stfl_quote(title.str().c_str()));
+			code.append("}");
+
+			code.append("{listitem text:");
+			std::ostringstream author;
+			author << "Author: ";
+			author << item.author();
+			code.append(stfl_quote(author.str().c_str()));
+			code.append("}");
+
+			code.append("{listitem text:");
+			std::ostringstream link;
+			link << "Link: ";
+			link << item.link();
+			code.append(stfl_quote(link.str().c_str()));
+			code.append("}");
+			
+			code.append("{listitem text:");
+			std::ostringstream date;
+			date << "Date: ";
+			date << item.pubDate();
+			code.append(stfl_quote(date.str().c_str()));
+			code.append("}");
+
+			code.append("{listitem text:\"\"}");
+			
+			set_itemview_head(item.title());
+
+			if (!render_hack) {
+				stfl_run(itemview_form,-1); // XXX HACK: render once so that we get a proper widget width
+				render_hack = true;
+			}
+
+			std::vector<std::string> lines;
+			const char * widthstr = stfl_get(itemview_form,"article:w");
+			unsigned int render_width = 80;
+			if (widthstr) {
+				std::istringstream is(widthstr);
+				is >> render_width;
+				if (render_width - 5 > 0)
+					render_width -= 5; 	
+			}
+
+			if (show_source) {
+				render_source(lines, item.description(), render_width);
+			} else {
+				htmlrenderer rnd(render_width);
+				rnd.render(item.description(), lines);
+			}
+
+			for (std::vector<std::string>::iterator it = lines.begin(); it != lines.end(); ++it) {
+				std::string line = std::string("{listitem text:") + std::string(stfl_quote(it->c_str())) + std::string("}");
+				code.append(line);
+			}
+
+			code.append("}");
+
+			stfl_modify(itemview_form,"article","replace_inner",code.c_str());
+			stfl_set(itemview_form,"articleoffset","0");
+
+			redraw = false;
+		}
+
 		const char * event = stfl_run(itemview_form,0);
 		if (!event) continue;
 
@@ -756,6 +761,10 @@ bool view::run_itemview(rss_item& item) {
 		switch (op) {
 			case OP_OPEN:
 				// nothing
+				break;
+			case OP_TOGGLESOURCEVIEW:
+				show_source = !show_source;
+				redraw = true;
 				break;
 			case OP_SAVE:
 				{
@@ -1015,4 +1024,32 @@ void view::set_itemview_head(const std::string& s) {
 	caption.append(s);
 	caption.append("'");
 	stfl_set(itemview_form,"head",caption.c_str());		
+}
+
+void view::render_source(std::vector<std::string>& lines, std::string desc, unsigned int width) {
+	std::string line;
+	do {
+		std::string::size_type pos = desc.find_first_of("\r\n");
+		line = desc.substr(0,pos);
+		if (pos == std::string::npos)
+			desc.erase();
+		else
+			desc.erase(0,pos+1);
+		while (line.length() > width) {
+			int i = width;
+			while (i > 0 && line[i] != ' ' && line[i] != '<')
+				--i;
+			if (0 == i) {
+				i = width;
+			}
+			std::string subline = line.substr(0, i);
+			line.erase(0, i);
+			pos = subline.find_first_not_of(" ");
+			subline.erase(0,pos);
+			lines.push_back(subline);
+		}
+		pos = line.find_first_not_of(" ");
+		line.erase(0,pos);
+		lines.push_back(line);
+	} while (desc.length() > 0);
 }
