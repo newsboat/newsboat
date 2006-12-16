@@ -213,7 +213,7 @@ void controller::open_feed(unsigned int pos) {
 		if (feed.items().size() == 0) {
 			v->show_error("Error: feed contains no items!");
 		} else {
-			v->run_itemlist(feed);
+			v->run_itemlist(pos);
 			// rsscache->externalize_rssfeed(feed); // save possibly changed unread flags
 			v->set_feedlist(feeds);
 		}
@@ -269,6 +269,13 @@ void controller::reload(unsigned int pos, unsigned int max) {
 	} else {
 		v->show_error("Error: invalid feed!");
 	}
+}
+
+rss_feed& controller::get_feed(unsigned int pos) {
+	if (pos >= feeds.size()) {
+		// TODO: throw exception
+	}
+	return feeds[pos];
 }
 
 void controller::reload_all() {

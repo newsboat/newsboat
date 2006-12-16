@@ -160,10 +160,11 @@ void view::run_feedlist() {
 	stfl_reset();
 }
 
-void view::run_itemlist(rss_feed& feed) {
+void view::run_itemlist(unsigned int pos) {
 	bool quit = false;
 	bool rebuild_list = true;
 	bool show_no_unread_error = false;
+	rss_feed& feed = ctrl->get_feed(pos);
 	std::vector<rss_item>& items = feed.items();
 	
 	view_stack.push_front(itemlist_form);
@@ -277,6 +278,11 @@ void view::run_itemlist(rss_feed& feed) {
 			case OP_HELP:
 				run_help();
 				set_status("");
+				break;
+			case OP_RELOAD:
+				ctrl->reload(pos);
+				feed = ctrl->get_feed(pos);
+				rebuild_list = true;
 				break;
 			case OP_QUIT:
 				quit = true;
@@ -900,18 +906,19 @@ std::string view::prepare_keymaphint(keymap_hint_entry * hints) {
 	return keymap_hint;	
 }
 
-void view::set_itemview_keymap_hint() {
+void view::set_itemlist_keymap_hint() {
 	keymap_hint_entry hints[] = {
 		{ OP_QUIT, "Quit" },
 		{ OP_OPEN, "Open" },
 		{ OP_SAVE, "Save" },
+		{ OP_RELOAD, "Reload" },
 		{ OP_NEXTUNREAD, "Next Unread" },
 		{ OP_MARKFEEDREAD, "Mark All Read" },
 		{ OP_HELP, "Help" },
 		{ OP_NIL, NULL }
 	};
 	std::string keymap_hint = prepare_keymaphint(hints);
-	stfl_set(itemview_form,"help", keymap_hint.c_str());
+	stfl_set(itemlist_form,"help", keymap_hint.c_str());
 }
 
 void view::set_feedlist_keymap_hint() {
@@ -939,7 +946,7 @@ void view::set_filebrowser_keymap_hint() {
 	stfl_set(filebrowser_form,"help", keymap_hint.c_str());
 }
 
-void view::set_itemlist_keymap_hint() {
+void view::set_itemview_keymap_hint() {
 	keymap_hint_entry hints[] = {
 		{ OP_QUIT, "Quit" },
 		{ OP_OPEN, "Open" },
@@ -950,7 +957,7 @@ void view::set_itemlist_keymap_hint() {
 		{ OP_NIL, NULL }
 	};
 	std::string keymap_hint = prepare_keymaphint(hints);
-	stfl_set(itemlist_form,"help", keymap_hint.c_str());
+	stfl_set(itemview_form,"help", keymap_hint.c_str());
 }
 
 void view::set_help_keymap_hint() {

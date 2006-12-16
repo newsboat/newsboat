@@ -21,7 +21,7 @@ namespace noos {
 			view(controller * );
 			~view();
 			void run_feedlist();
-			void run_itemlist(rss_feed& feed);
+			void run_itemlist(unsigned int pos);
 			bool run_itemview(rss_item& item);
 			void run_help();
 			void set_feedlist(std::vector<rss_feed>& feeds);

@@ -21,6 +21,7 @@ namespace noos {
 			void reload(unsigned int pos, unsigned int max = 0);
 			void reload_all();
 			void start_reload_all_thread();
+			rss_feed& get_feed(unsigned int pos);
 			inline void unlock_reload_mutex() { reload_mutex->unlock(); }
 			void update_feedlist();
 			void mark_all_read(unsigned int pos);
