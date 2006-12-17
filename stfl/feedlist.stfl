@@ -2,7 +2,7 @@ vbox
   @style_normal:bg=black,fg=white
   @info#style_normal:bg=blue,fg=yellow,attr=bold
   label#info
-    text:"Your feeds"
+    text[head]:"Your feeds"
     .expand:h
   !list[feeds]
     style_focus:fg=yellow,bg=blue,attr=bold
