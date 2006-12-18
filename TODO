@@ -1,0 +1,46 @@
+TODO:
+- mark entries as read only when they've been on the screen _totally_ (like google reader)
+- search function (?)
+- fix entity decoding, and utf-8 handling in general
+- write proper documentation
+- check whether date parsing uses the correct timezone
+- refactor XML pull parser (many redundancies)
+	ignore comments
+	join two subsequent text nodes separated by a comment
+
+longteam goals to reach:
+- support for atom (talk to mRss guy) - implement by yourself?
+- add scripting support
+- make script functions callable via key bindings
+
+DONE:
+- clean up items that have been added but whose URL has been removed from the config file.
+- key for directly jumping to next unread article.
+- OPML import/export
+- open link in browser
+- cache items in local database (sqlite?)
+	used location:
+		~/.noos/urls -- the list of feed URLs
+		~/.noos/cache.db -- the feed and item cache
+- optimize cache updates (every feed and every item needs something like a "dirty" flag)
+- improve HTML rendering (write/use XML/HTML pull parser)
+- configuration file
+- fix the "foobar"/ issue in the XML pull parser
+- fix display issues in test RSS file
+- implement custom keybindings
+- update status line to correct key mapping
+- preliminary fix for the sort-by-date problem
+- delete old entries _based_on_the_date_ (implement RFC 2822 parser!)
+- add online help screen
+- "next unread" error message must be shown differently
+- save function
+- use multithreading to download feeds so that simultaneous browsing/reading is possible.
+	- only one "reload-all" operation may run at once
+	- fix memleak (pthread_cleanup_push)
+- set current path in filebrowser head
+- set correct keymap hint in filebrowser
+- reload feed from the itemlist
+- "next unread" also for feedlist
+- improve configuration parser (!!comments!!)
+- implement "source view" in itemview.
+- made feedlist head fancier
