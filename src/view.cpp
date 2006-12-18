@@ -617,7 +617,7 @@ void view::jump_to_next_unread_feed() {
 		std::istringstream posname(feedposname);
 		unsigned int pos = 0;
 		posname >> pos;
-		for (unsigned int i=pos;i<feedcount;++i) {
+		for (unsigned int i=pos+1;i<feedcount;++i) {
 			if (ctrl->get_feed(i).unread_item_count() > 0) {
 				std::ostringstream posname;
 				posname << i;
@@ -625,7 +625,7 @@ void view::jump_to_next_unread_feed() {
 				return;
 			}
 		}
-		for (unsigned int i=0;i<pos;++i) {
+		for (unsigned int i=0;i<=pos;++i) {
 			if (ctrl->get_feed(i).unread_item_count() > 0) {
 				std::ostringstream posname;
 				posname << i;
