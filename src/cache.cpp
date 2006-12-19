@@ -189,7 +189,7 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 		feed.items().erase(feed.items().begin(),feed.items().end());
 	}
 
-	query = sqlite3_mprintf("SELECT guid,title,author,url,pubDate,content,unread FROM rss_item WHERE feedurl = '%q' ORDER BY pubDate DESC;",feed.rssurl().c_str());
+	query = sqlite3_mprintf("SELECT guid,title,author,url,pubDate,content,unread FROM rss_item WHERE feedurl = '%q' ORDER BY pubDate DESC, id DESC;",feed.rssurl().c_str());
 	rc = sqlite3_exec(db,query,rssitem_callback,&feed,NULL);
 	assert(rc == SQLITE_OK);
 	free(query);
