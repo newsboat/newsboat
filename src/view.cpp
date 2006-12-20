@@ -129,11 +129,13 @@ void view::run_feedlist() {
 			case OP_MARKFEEDREAD: {
 					const char * feedposname = stfl_get(feedlist_form, "feedposname");
 					if (feedposname) {
+						set_status("Marking feed read...");
 						std::istringstream posname(feedposname);
 						unsigned int pos = 0;
 						posname >> pos;
 						ctrl->mark_all_read(pos);
 						update = true;
+						set_status("");
 					} else {
 						show_error("Error: no feed selected!"); // should not happen
 					}
@@ -143,7 +145,9 @@ void view::run_feedlist() {
 				jump_to_next_unread_feed();
 				break;
 			case OP_MARKALLFEEDSREAD:
+				set_status("Marking all feeds read...");
 				ctrl->catchup_all();
+				set_status("");
 				update = true;
 				break;
 			case OP_QUIT:
@@ -295,7 +299,9 @@ void view::run_itemlist(unsigned int pos) {
 					show_no_unread_error = true;
 				break;
 			case OP_MARKFEEDREAD:
+				set_status("Marking feed read...");
 				mark_all_read(items);
+				set_status("");
 				rebuild_list = true;
 				break;
 			default:

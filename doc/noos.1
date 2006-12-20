@@ -1,0 +1,53 @@
+.\" (c) 2006 Andreas Krennmair <ak@synflood.at>
+.\" run groff -T ps -man noos.1 > manpage.ps to generate nice PostScript output
+.Dd Dec 20, 2006
+.Dt NOOS 1
+.Os "noos"
+.Sh NAME
+.Nm noos
+.Nd an RSS feed reader for text terminals
+.Sh SYNOPSIS
+.Nm noos
+.Op Fl e
+.Op Fl i Ar opmlfile
+.Op Fl u Ar urlfile
+.Op Fl c Ar cachefile
+.Op Fl C Ar configfile
+.Op Fl h
+.Sh DESCRIPTION
+.Nm
+is an RSS feed reader for text terminals. RSS is a number of widely-used XML formats
+to transmit, publish and syndicate articles, for example news or blog articles. Noos
+is designed to be used on text terminals on Unix or Unix-like systems such as Linux,
+BSD or Mac OS X.
+.Sh OPTIONS
+.Nm
+accepts the following commandline switches:
+.Bl -tag
+.It Fl h
+Display help
+.It Fl e
+Export feeds as OPML to stdout
+.It Fl i Ar opmlfile
+Import and OPML file
+.It Fl u Ar urlfile
+Use an alternative URL file
+.It Fl c Ar cachefile
+Use an alternative cache file
+.It Fl C Ar configfile
+Use an alternative configuration file
+.El
+.Sh FILES
+.Bl -item
+.It
+.Pa $HOME/.noos/config
+.It
+.Pa $HOME/.noos/urls
+.El
+.Sh SEE ALSO
+The documentation that comes with noos is a good source about the general use and
+configuration of noos.
+.Sh AUTHORS
+.Bd
+.An Andreas Krennmair <ak@synflood.at>
+.Ed

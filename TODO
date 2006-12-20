@@ -9,7 +9,8 @@ TODO:
 	join two subsequent text nodes separated by a comment
 
 longteam goals to reach:
-- support for atom (talk to mRss guy) - implement by yourself?
+- support for atom (talk to mRss guy?) - implement by yourself?
+- alternative: build own RSS/Atom parser based on own XML parser (build DOM parser from it first)
 - add scripting support
 - make script functions callable via key bindings
 
