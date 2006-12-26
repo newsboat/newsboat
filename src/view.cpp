@@ -35,21 +35,21 @@ extern "C" {
 using namespace noos;
 
 view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0) { 
-	feedlist_form = stfl_create(feedlist_str);
-	itemlist_form = stfl_create(itemlist_str);
-	itemview_form = stfl_create(itemview_str);
-	help_form = stfl_create(help_str);
-	filebrowser_form = stfl_create(filebrowser_str);
+	feedlist_form = new stfl::form(feedlist_str);
+	itemlist_form = new stfl::form(itemlist_str);
+	itemview_form = new stfl::form(itemview_str);
+	help_form = new stfl::form(help_str);
+	filebrowser_form = new stfl::form(filebrowser_str);
 	mtx = new mutex();
 }
 
 view::~view() {
-	stfl_reset();
-	stfl_free(feedlist_form);
-	stfl_free(itemlist_form);
-	stfl_free(itemview_form);
-	stfl_free(help_form);
-	stfl_free(filebrowser_form);
+	stfl::reset();
+	delete feedlist_form;
+	delete itemlist_form;
+	delete itemview_form;
+	delete help_form;
+	delete filebrowser_form;
 	delete mtx;
 }
 
@@ -63,10 +63,10 @@ void view::set_keymap(keymap * k) {
 
 void view::set_status(const char * msg) {
 	mtx->lock();
-	stfl_form * form = *(view_stack.begin());
+	stfl::form * form = *(view_stack.begin());
 	if (form) {
-		stfl_set(form,"msg",msg);
-		stfl_run(form,-1);
+		form->set("msg",msg);
+		form->run(-1);
 	}
 	mtx->unlock();
 }
@@ -92,15 +92,15 @@ void view::run_feedlist() {
 			ctrl->update_feedlist();
 		}
 
-		const char * event = stfl_run(feedlist_form,0);
+		const char * event = feedlist_form->run(0);
 		if (!event) continue;
 
 		operation op = keys->get_operation(event);
 
 		switch (op) {
 			case OP_OPEN: {
-					const char * feedposname = stfl_get(feedlist_form, "feedposname");
-					if (feedposname) {
+					std::string feedposname = feedlist_form->get("feedposname");
+					if (feedposname.length() > 0) {
 						std::istringstream posname(feedposname);
 						unsigned int pos = 0;
 						posname >> pos;
@@ -112,8 +112,8 @@ void view::run_feedlist() {
 				}
 				break;
 			case OP_RELOAD: {
-					const char * feedposname = stfl_get(feedlist_form, "feedposname");
-					if (feedposname) {
+					std::string feedposname = feedlist_form->get("feedposname");
+					if (feedposname.length() > 0) {
 						std::istringstream posname(feedposname);
 						unsigned int pos = 0;
 						posname >> pos;
@@ -127,8 +127,8 @@ void view::run_feedlist() {
 				ctrl->start_reload_all_thread();
 				break;
 			case OP_MARKFEEDREAD: {
-					const char * feedposname = stfl_get(feedlist_form, "feedposname");
-					if (feedposname) {
+					std::string feedposname = feedlist_form->get("feedposname");
+					if (feedposname.length() > 0) {
 						set_status("Marking feed read...");
 						std::istringstream posname(feedposname);
 						unsigned int pos = 0;
@@ -164,7 +164,7 @@ void view::run_feedlist() {
 	
 	view_stack.pop_front();
 
-	stfl_reset();
+	stfl::reset();
 }
 
 void view::run_itemlist(unsigned int pos) {
@@ -176,11 +176,11 @@ void view::run_itemlist(unsigned int pos) {
 	
 	view_stack.push_front(itemlist_form);
 
-	stfl_set(itemlist_form,"itempos","0");
+	itemlist_form->set("itempos","0");
 	
 	set_itemlist_keymap_hint();
 
-	stfl_set(itemlist_form,"msg","");
+	itemlist_form->set("msg","");
 	
 	do {
 		if (rebuild_list) {
@@ -204,14 +204,14 @@ void view::run_itemlist(unsigned int pos) {
 					title.append("  ");
 				}
 				title.append(it->title());
-				line.append(stfl_quote(title.c_str()));
+				line.append(stfl::quote(title));
 				line.append("}");
 				code.append(line);
 			}
 
 			code.append("}");
 
-			stfl_modify(itemlist_form,"items","replace_inner",code.c_str());
+			itemlist_form->modify("items","replace_inner",code);
 			
 			set_itemlist_head(feed.title(),feed.unread_item_count(),feed.items().size());
 
@@ -223,7 +223,7 @@ void view::run_itemlist(unsigned int pos) {
 			show_no_unread_error = false;
 		}
 
-		const char * event = stfl_run(itemlist_form,0);
+		const char * event = itemlist_form->run(0);
 		if (!event) continue;
 
 		operation op = keys->get_operation(event);
@@ -232,8 +232,8 @@ void view::run_itemlist(unsigned int pos) {
 			case OP_OPEN: {
 					bool open_next_item = false;
 					do {
-						const char * itemposname = stfl_get(itemlist_form, "itempos");
-						if (itemposname) {
+						std::string itemposname = itemlist_form->get("itempos");
+						if (itemposname.length() > 0) {
 							std::istringstream posname(itemposname);
 							unsigned int pos = 0;
 							posname >> pos;
@@ -254,8 +254,8 @@ void view::run_itemlist(unsigned int pos) {
 				break;
 			case OP_SAVE: 
 				{
-					const char * itemposname = stfl_get(itemlist_form, "itempos");
-					if (itemposname) {
+					std::string itemposname = itemlist_form->get("itempos");
+					if (itemposname.length() > 0) {
 						std::istringstream posname(itemposname);
 						unsigned int pos = 0;
 						posname >> pos;
@@ -472,7 +472,7 @@ std::string view::add_file(std::string filename) {
 		retval.append(1,type);
 		retval.append(fancy_quote(filename));
 		retval.append("] text:");
-		retval.append(stfl_quote(line.c_str()));
+		retval.append(stfl::quote(line));
 		retval.append("}");
 	}
 	return retval;
@@ -500,7 +500,7 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 			
 	::chdir(dir.c_str());
 	
-	stfl_set(filebrowser_form, "filenametext", default_filename.c_str());
+	filebrowser_form->set("filenametext", default_filename);
 	
 	std::string head_str;
 	if (type == FBT_OPEN) {
@@ -509,7 +509,7 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 		head_str = "Save File - ";
 	}
 	head_str.append(dir);
-	stfl_set(filebrowser_form, "head", head_str.c_str());
+	filebrowser_form->set("head", head_str);
 		
 	do {
 		
@@ -534,11 +534,11 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 			
 			// std::cerr << "code: `" << code << "'" << std::endl;
 			
-			stfl_modify(filebrowser_form, "files", "replace_inner", code.c_str());
-			update_list = false;	
+			filebrowser_form->modify("files", "replace_inner", code);
+			update_list = false;
 		}
 		
-		const char * event = stfl_run(filebrowser_form, 0);
+		const char * event = filebrowser_form->run(0);
 		if (!event) continue;
 		
 		operation op = keys->get_operation(event);
@@ -546,10 +546,10 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 		switch (op) {
 			case OP_OPEN: 
 				{
-					const char * focus = stfl_get_focus(filebrowser_form);
-					if (focus) {
-						if (strcmp(focus,"files")==0) {
-							std::string selection = fancy_unquote(stfl_get(filebrowser_form,"listposname"));
+					std::string focus = filebrowser_form->get_focus();
+					if (focus.length() > 0) {
+						if (focus == "files") {
+							std::string selection = fancy_unquote(filebrowser_form->get("listposname"));
 							char filetype = selection[0];
 							selection.erase(0,1);
 							std::string filename(selection);
@@ -562,20 +562,20 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 										head_str = "Save File - ";
 									}
 									head_str.append(filename);
-									stfl_set(filebrowser_form, "head", head_str.c_str());
+									filebrowser_form->set("head", head_str);
 									::chdir(filename.c_str());
-									stfl_set(filebrowser_form,"listpos","0");
+									filebrowser_form->set("listpos","0");
 									if (type == FBT_SAVE) {
 										char cwdtmp[MAXPATHLEN];
 										::getcwd(cwdtmp,sizeof(cwdtmp));
 										std::string fn(cwdtmp);
 										fn.append(NOOS_PATH_SEP);
-										const char * fnstr = stfl_get(filebrowser_form,"filenametext");
-										const char * base = strrchr(fnstr,'/');
+										std::string fnstr = filebrowser_form->get("filenametext");
+										const char * base = strrchr(fnstr.c_str(),'/');
 										if (!base)
-											base = fnstr;
+											base = fnstr.c_str();
 										fn.append(base);
-										stfl_set(filebrowser_form,"filenametext",fn.c_str());
+										filebrowser_form->set("filenametext",fn);
 									}
 									update_list = true;
 									break;
@@ -586,8 +586,8 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 										std::string fn(cwdtmp);
 										fn.append(NOOS_PATH_SEP);
 										fn.append(filename);
-										stfl_set(filebrowser_form,"filenametext",fn.c_str());
-										stfl_set_focus(filebrowser_form,"filename");
+										filebrowser_form->set("filenametext",fn);
+										filebrowser_form->set_focus("filename");
 									}
 									break;
 								default:
@@ -595,7 +595,7 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 									break;
 							}
 						} else {
-							std::string retval(stfl_get(filebrowser_form,"filenametext"));
+							std::string retval = filebrowser_form->get("filenametext");
 							view_stack.pop_front();
 							return retval;
 						}
@@ -616,10 +616,10 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 }
 
 void view::jump_to_next_unread_feed() {
-	const char * feedposname = stfl_get(feedlist_form, "feedposname");
+	std::string feedposname = feedlist_form->get("feedposname");
 	unsigned int feedcount = ctrl->get_feedcount();
 
-	if (feedposname) {
+	if (feedposname.length() > 0) {
 		std::istringstream posname(feedposname);
 		unsigned int pos = 0;
 		posname >> pos;
@@ -627,7 +627,7 @@ void view::jump_to_next_unread_feed() {
 			if (ctrl->get_feed(i).unread_item_count() > 0) {
 				std::ostringstream posname;
 				posname << i;
-				stfl_set(feedlist_form, "feedpos", posname.str().c_str());
+				feedlist_form->set("feedpos", posname.str());
 				return;
 			}
 		}
@@ -635,7 +635,7 @@ void view::jump_to_next_unread_feed() {
 			if (ctrl->get_feed(i).unread_item_count() > 0) {
 				std::ostringstream posname;
 				posname << i;
-				stfl_set(feedlist_form, "feedpos", posname.str().c_str());
+				feedlist_form->set("feedpos", posname.str());
 				return;
 			}
 		}
@@ -646,9 +646,9 @@ void view::jump_to_next_unread_feed() {
 }
 
 bool view::jump_to_next_unread_item(std::vector<rss_item>& items) {
-	const char * itemposname = stfl_get(itemlist_form, "itemposname");
+	std::string itemposname = itemlist_form->get("itemposname");
 
-	if (itemposname) {
+	if (itemposname.length() > 0) {
 		std::istringstream posname(itemposname);
 		unsigned int pos = 0;
 		posname >> pos;
@@ -656,8 +656,7 @@ bool view::jump_to_next_unread_item(std::vector<rss_item>& items) {
 			if (items[i].unread()) {
 				std::ostringstream posname;
 				posname << i;
-				stfl_set(itemlist_form,"itempos",posname.str().c_str());
-				// std::cerr << "setting itemposname to " << posname.str().c_str() << std::endl;
+				itemlist_form->set("itempos",posname.str());
 				return true;
 			}
 		}
@@ -665,8 +664,7 @@ bool view::jump_to_next_unread_item(std::vector<rss_item>& items) {
 			if (items[i].unread()) {
 				std::ostringstream posname;
 				posname << i;
-				stfl_set(itemlist_form,"itempos",posname.str().c_str());
-				// std::cerr << "setting itemposname to " << posname.str().c_str() << std::endl;
+				itemlist_form->set("itempos",posname.str());
 				return true;
 			}
 		}
@@ -686,7 +684,7 @@ bool view::run_itemview(rss_item& item) {
 	view_stack.push_front(itemview_form);
 	
 	set_itemview_keymap_hint();
-	stfl_set(itemview_form,"msg","");
+	itemview_form->set("msg","");
 
 	do {
 		if (redraw) {
@@ -696,28 +694,28 @@ bool view::run_itemview(rss_item& item) {
 			std::ostringstream title;
 			title << "Title: ";
 			title << item.title();
-			code.append(stfl_quote(title.str().c_str()));
+			code.append(stfl::quote(title.str()));
 			code.append("}");
 
 			code.append("{listitem text:");
 			std::ostringstream author;
 			author << "Author: ";
 			author << item.author();
-			code.append(stfl_quote(author.str().c_str()));
+			code.append(stfl::quote(author.str()));
 			code.append("}");
 
 			code.append("{listitem text:");
 			std::ostringstream link;
 			link << "Link: ";
 			link << item.link();
-			code.append(stfl_quote(link.str().c_str()));
+			code.append(stfl::quote(link.str()));
 			code.append("}");
 			
 			code.append("{listitem text:");
 			std::ostringstream date;
 			date << "Date: ";
 			date << item.pubDate();
-			code.append(stfl_quote(date.str().c_str()));
+			code.append(stfl::quote(date.str()));
 			code.append("}");
 
 			code.append("{listitem text:\"\"}");
@@ -725,14 +723,14 @@ bool view::run_itemview(rss_item& item) {
 			set_itemview_head(item.title());
 
 			if (!render_hack) {
-				stfl_run(itemview_form,-1); // XXX HACK: render once so that we get a proper widget width
+				itemview_form->run(-1); // XXX HACK: render once so that we get a proper widget width
 				render_hack = true;
 			}
 
 			std::vector<std::string> lines;
-			const char * widthstr = stfl_get(itemview_form,"article:w");
+			std::string widthstr = itemview_form->get("article:w");
 			unsigned int render_width = 80;
-			if (widthstr) {
+			if (widthstr.length() > 0) {
 				std::istringstream is(widthstr);
 				is >> render_width;
 				if (render_width - 5 > 0)
@@ -747,19 +745,19 @@ bool view::run_itemview(rss_item& item) {
 			}
 
 			for (std::vector<std::string>::iterator it = lines.begin(); it != lines.end(); ++it) {
-				std::string line = std::string("{listitem text:") + std::string(stfl_quote(it->c_str())) + std::string("}");
+				std::string line = std::string("{listitem text:") + stfl::quote(*it) + std::string("}");
 				code.append(line);
 			}
 
 			code.append("}");
 
-			stfl_modify(itemview_form,"article","replace_inner",code.c_str());
-			stfl_set(itemview_form,"articleoffset","0");
+			itemview_form->modify("article","replace_inner",code);
+			itemview_form->set("articleoffset","0");
 
 			redraw = false;
 		}
 
-		const char * event = stfl_run(itemview_form,0);
+		const char * event = itemview_form->run(0);
 		if (!event) continue;
 
 		operation op = keys->get_operation(event);
@@ -827,7 +825,7 @@ void view::open_in_browser(const std::string& url) {
 	cmdline.append(" '");
 	cmdline.append(url);
 	cmdline.append("'");
-	stfl_reset();
+	stfl::reset();
 	::system(cmdline.c_str());
 	view_stack.pop_front();
 }
@@ -846,7 +844,7 @@ void view::run_help() {
 	for (std::vector<std::pair<std::string,std::string> >::iterator it=descs.begin();it!=descs.end();++it) {
 		std::string line = "{listitem text:";
 		std::string descline = it->first + std::string("\t") + it->second;
-		line.append(stfl_quote(descline.c_str()));
+		line.append(stfl::quote(descline));
 		line.append("}");
 		
 		code.append(line);
@@ -854,12 +852,12 @@ void view::run_help() {
 	
 	code.append("}");
 	
-	stfl_modify(help_form,"helptext","replace_inner",code.c_str());
+	help_form->modify("helptext","replace_inner",code);
 	
 	bool quit = false;
 	
 	do {
-		const char * event = stfl_run(help_form,0);
+		const char * event = help_form->run(0);
 		if (!event) continue;
 
 		operation op = keys->get_operation(event);
@@ -923,7 +921,7 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 			num << i;
 			line.append(num.str());
 			line.append("] text:");
-			line.append(stfl_quote(title.c_str()));
+			line.append(stfl::quote(title));
 			line.append("}");
 
 			code.append(line);
@@ -932,13 +930,13 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 
 	code.append("}");
 
-	stfl_modify(feedlist_form,"feeds","replace_inner",code.c_str());
+	feedlist_form->modify("feeds","replace_inner",code);
 
 	std::ostringstream titleos;
 
 	titleos << "Your feeds (" << unread_feeds << " unread, " << i << " total)";
 
-	stfl_set(feedlist_form, "head", titleos.str().c_str());
+	feedlist_form->set("head", titleos.str());
 }
 
 void view::mark_all_read(std::vector<rss_item>& items) {
@@ -975,7 +973,7 @@ void view::set_itemlist_keymap_hint() {
 		{ OP_NIL, NULL }
 	};
 	std::string keymap_hint = prepare_keymaphint(hints);
-	stfl_set(itemlist_form,"help", keymap_hint.c_str());
+	itemlist_form->set("help", keymap_hint);
 }
 
 void view::set_feedlist_keymap_hint() {
@@ -991,7 +989,7 @@ void view::set_feedlist_keymap_hint() {
 		{ OP_NIL, NULL }
 	};
 	std::string keymap_hint = prepare_keymaphint(hints);
-	stfl_set(feedlist_form,"help", keymap_hint.c_str());
+	feedlist_form->set("help", keymap_hint);
 }
 
 void view::set_filebrowser_keymap_hint() {
@@ -1001,7 +999,7 @@ void view::set_filebrowser_keymap_hint() {
 		{ OP_NIL, NULL }
 	};
 	std::string keymap_hint = prepare_keymaphint(hints);
-	stfl_set(filebrowser_form,"help", keymap_hint.c_str());
+	filebrowser_form->set("help", keymap_hint);
 }
 
 void view::set_itemview_keymap_hint() {
@@ -1015,7 +1013,7 @@ void view::set_itemview_keymap_hint() {
 		{ OP_NIL, NULL }
 	};
 	std::string keymap_hint = prepare_keymaphint(hints);
-	stfl_set(itemview_form,"help", keymap_hint.c_str());
+	itemview_form->set("help", keymap_hint);
 }
 
 void view::set_help_keymap_hint() {
@@ -1024,21 +1022,21 @@ void view::set_help_keymap_hint() {
 		{ OP_NIL, NULL }
 	};
 	std::string keymap_hint = prepare_keymaphint(hints);
-	stfl_set(help_form,"help", keymap_hint.c_str());	
+	help_form->set("help", keymap_hint);
 }
 
 void view::set_itemlist_head(const std::string& s, unsigned int unread, unsigned int total) {
 	std::ostringstream caption;
 	
 	caption << "Articles in feed '" << s << "' (" << unread << " unread, " << total << " total)";
-	stfl_set(itemlist_form,"head",caption.str().c_str());	
+	itemlist_form->set("head",caption.str());
 }
 
 void view::set_itemview_head(const std::string& s) {
 	std::string caption = "Article '";
 	caption.append(s);
 	caption.append("'");
-	stfl_set(itemview_form,"head",caption.c_str());		
+	itemview_form->set("head",caption);
 }
 
 void view::render_source(std::vector<std::string>& lines, std::string desc, unsigned int width) {
