@@ -67,17 +67,17 @@ namespace noos {
 			std::string prepare_keymaphint(keymap_hint_entry * hints);
 
 			controller * ctrl;
-			stfl::form * feedlist_form;
-			stfl::form * itemlist_form;
-			stfl::form * itemview_form;
-			stfl::form * help_form;
-			stfl::form * filebrowser_form;
-			
-			std::list<stfl::form *> view_stack;
-			
 			configcontainer * cfg;
 			keymap * keys;
 			mutex * mtx;
+
+			stfl::form feedlist_form;
+			stfl::form itemlist_form;
+			stfl::form itemview_form;
+			stfl::form help_form;
+			stfl::form filebrowser_form;
+			
+			std::list<stfl::form *> view_stack;
 	};
 
 }
