@@ -20,7 +20,7 @@
 
 using namespace noos;
 
-controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config") {
+controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), refresh_on_start(false) {
 	std::ostringstream cfgfile;
 
 	if (getenv("HOME")) {
@@ -63,7 +63,7 @@ void controller::run(int argc, char * argv[]) {
 	std::string importfile;
 
 	do {
-		c = ::getopt(argc,argv,"i:ehu:c:C:");
+		c = ::getopt(argc,argv,"i:erhu:c:C:");
 		if (c < 0)
 			continue;
 		switch (c) {
@@ -76,6 +76,9 @@ void controller::run(int argc, char * argv[]) {
 					usage(argv[0]);
 				do_import = true;
 				importfile = optarg;
+				break;
+			case 'r':
+				refresh_on_start = true;
 				break;
 			case 'e':
 				if (do_import)
@@ -295,6 +298,7 @@ void controller::usage(char * argv0) {
 	std::cout << PROGRAM_NAME << " " << PROGRAM_VERSION << std::endl;
 	std::cout << "usage: " << argv0 << " [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]" << std::endl;
 	std::cout << "-e              export OPML feed to stdout" << std::endl;
+	std::cout << "-r              refresh feeds on start" << std::endl;
 	std::cout << "-i <file>       import OPML file" << std::endl;
 	std::cout << "-u <urlfile>    read RSS feed URLs from <urlfile>" << std::endl;
 	std::cout << "-c <cachefile>  use <cachefile> as cache file" << std::endl;

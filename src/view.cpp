@@ -84,6 +84,8 @@ void view::run_feedlist() {
 	view_stack.push_front(feedlist_form);
 	
 	set_feedlist_keymap_hint();
+	if(ctrl->get_refresh_on_start())
+		ctrl->start_reload_all_thread();
 
 	do {
 

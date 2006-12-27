@@ -176,14 +176,22 @@ time_t rss_parser::parse_date(const std::string& datestr) {
 	stm.tm_year = year - 1900;
 	
 	is >> time;
+
+    stm.tm_hour = stm.tm_min = stm.tm_sec = 0;
 	
 	std::vector<std::string> tkns = utils::tokenize(time,":");
-	std::istringstream hs(tkns[0]);
-	hs >> stm.tm_hour;
-	std::istringstream ms(tkns[1]);
-	ms >> stm.tm_min;
-	std::istringstream ss(tkns[2]);
-	ss >> stm.tm_sec;
+	if (tkns.size() > 0) {
+        std::istringstream hs(tkns[0]);
+        hs >> stm.tm_hour;
+        if (tkns.size() > 1) {
+            std::istringstream ms(tkns[1]);
+            ms >> stm.tm_min;
+            if (tkns.size() > 2) {
+                std::istringstream ss(tkns[2]);
+                ss >> stm.tm_sec;
+            }
+        }
+    }
 	
 	time_t value = mktime(&stm);
 	return value;

@@ -27,6 +27,7 @@ namespace noos {
 			void update_feedlist();
 			void mark_all_read(unsigned int pos);
 			void catchup_all();
+			inline bool get_refresh_on_start() { return refresh_on_start; }
 		private:
 			void usage(char * argv0);
 			void import_opml(const char * filename);
@@ -41,6 +42,7 @@ namespace noos {
 			std::string url_file;
 			std::string cache_file;
 			std::string config_file;
+			bool refresh_on_start;
 
 			mutex * reload_mutex;
 	};

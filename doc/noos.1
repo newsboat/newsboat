@@ -8,6 +8,7 @@
 .Nd an RSS feed reader for text terminals
 .Sh SYNOPSIS
 .Nm noos
+.Op Fl r
 .Op Fl e
 .Op Fl i Ar opmlfile
 .Op Fl u Ar urlfile
@@ -26,6 +27,8 @@ accepts the following commandline switches:
 .Bl -tag
 .It Fl h
 Display help
+.It Fl r
+Refresh feeds on start
 .It Fl e
 Export feeds as OPML to stdout
 .It Fl i Ar opmlfile

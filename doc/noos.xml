@@ -106,6 +106,7 @@
                 
 noos 0.1
 usage: ./noos [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]
+    -r              refresh feeds on start
     -e              export OPML feed to stdout
     -i <file>       import OPML file
     -u <urlfile>    read RSS feed URLs from <urlfile>
