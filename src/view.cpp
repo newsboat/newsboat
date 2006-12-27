@@ -102,26 +102,26 @@ void view::run_feedlist() {
 		switch (op) {
 			case OP_OPEN: {
 					const char * feedposname = stfl_get(feedlist_form, "feedposname");
-					if (feedposname) {
+					if (feeds_shown > 0 && feedposname) {
 						std::istringstream posname(feedposname);
 						unsigned int pos = 0;
 						posname >> pos;
 						ctrl->open_feed(pos);
 						set_status("");
 					} else {
-						show_error("Error: no feed selected!"); // should not happen
+						show_error("No feed selected!"); // should not happen
 					}
 				}
 				break;
 			case OP_RELOAD: {
 					const char * feedposname = stfl_get(feedlist_form, "feedposname");
-					if (feedposname) {
+					if (feeds_shown > 0 && feedposname) {
 						std::istringstream posname(feedposname);
 						unsigned int pos = 0;
 						posname >> pos;
 						ctrl->reload(pos);
 					} else {
-						show_error("Error: no feed selected!"); // should not happen
+						show_error("No feed selected!"); // should not happen
 					}
 				}
 				break;
@@ -130,7 +130,7 @@ void view::run_feedlist() {
 				break;
 			case OP_MARKFEEDREAD: {
 					const char * feedposname = stfl_get(feedlist_form, "feedposname");
-					if (feedposname) {
+					if (feeds_shown > 0 && feedposname) {
 						set_status("Marking feed read...");
 						std::istringstream posname(feedposname);
 						unsigned int pos = 0;
@@ -139,7 +139,7 @@ void view::run_feedlist() {
 						update = true;
 						set_status("");
 					} else {
-						show_error("Error: no feed selected!"); // should not happen
+						show_error("No feed selected!"); // should not happen
 					}
 				}
 				break;
@@ -250,7 +250,7 @@ void view::run_itemlist(unsigned int pos) {
 							open_next_item = ctrl->open_item(items[pos]);
 							rebuild_list = true;
 						} else {
-							show_error("Error: no item selected!"); // should not happen
+							show_error("No item selected!"); // should not happen
 						}
 						if (open_next_item) {
 							if (!jump_to_next_unread_item(items)) {
@@ -642,7 +642,7 @@ void view::jump_to_next_unread_feed() {
 	const char * feedposname = stfl_get(feedlist_form, "feedposname");
 	unsigned int feedcount = ctrl->get_feedcount();
 
-	if (feedposname) {
+	if (feeds_shown > 0 && feedposname) {
 		std::istringstream posname(feedposname);
 		unsigned int pos = 0;
 		posname >> pos;
@@ -908,6 +908,7 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 	
 	// std::cerr << "show-read-feeds" << (show_read_feeds?"true":"false") << std::endl;
 
+	feeds_shown = 0;
 	unsigned int i = 0;
 	unsigned short feedlist_number = 1;
 	unsigned int unread_feeds = 0;
@@ -950,6 +951,8 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 			line.append("}");
 
 			code.append(line);
+
+			++feeds_shown;
 		}
 	}
 

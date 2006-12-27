@@ -75,6 +75,7 @@ namespace noos {
 			configcontainer * cfg;
 			keymap * keys;
 			mutex * mtx;
+			unsigned int feeds_shown;
 	};
 
 }
