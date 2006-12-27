@@ -21,7 +21,7 @@ void urlreader::reload() {
 		std::string line;
 		do {
 			getline(f,line);
-			if (!f.eof())
+			if (!f.eof() && line.length() > 0 && line[0] != '#')
 				urls.push_back(line);
 		} while (!f.eof());
 	}
