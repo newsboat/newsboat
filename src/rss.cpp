@@ -41,7 +41,7 @@ rss_feed rss_parser::parse() {
 	for (mrss_item_t * item = mrss->item; item != NULL; item = item->next ) {
 		rss_item x(ch);
 		if (item->title) {
-			char * str = stringprep_convert(item->title,stringprep_locale_charset(),mrss->encoding);
+			char * str = stringprep_convert(item->title,stringprep_locale_charset(),mrss->encoding ? mrss->encoding : "utf-8"); // XXX hack
 			if (str) {
 				x.set_title(str);
 				free(str);
@@ -50,7 +50,7 @@ rss_feed rss_parser::parse() {
 		if (item->link) x.set_link(item->link);
 		if (item->author) x.set_author(item->author);
 		if (item->description) {
-			char * str = stringprep_convert(item->description,stringprep_locale_charset(),mrss->encoding);
+			char * str = stringprep_convert(item->description,stringprep_locale_charset(),mrss->encoding ? mrss->encoding : "utf-8"); // FIXME: hack
 			if (str) {
 				x.set_description(str);
 				free(str);
