@@ -7,6 +7,7 @@ TODO:
 - refactor XML pull parser (many redundancies)
 	ignore comments
 	join two subsequent text nodes separated by a comment
+- improve configuration parser: support quoting
 
 longteam goals to reach:
 - support for atom (talk to mRss guy?) - implement by yourself?
@@ -45,3 +46,4 @@ DONE:
 - improve configuration parser (!!comments!!)
 - implement "source view" in itemview.
 - made feedlist head fancier
+- added "toggle item read" function

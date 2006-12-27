@@ -14,7 +14,7 @@ namespace noos {
 
 	enum operation { OP_NIL = 0, OP_QUIT, OP_RELOAD, OP_RELOADALL, OP_MARKFEEDREAD, 
 					OP_MARKALLFEEDSREAD, OP_OPEN, OP_SAVE, OP_NEXTUNREAD, OP_OPENINBROWSER, 
-					OP_HELP, OP_TOGGLESOURCEVIEW };
+					OP_HELP, OP_TOGGLESOURCEVIEW, OP_TOGGLEITEMREAD };
 
 	class keymap : public config_action_handler {
 		public:

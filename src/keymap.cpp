@@ -21,6 +21,7 @@ op_desc opdescs[] = {
 	{ OP_OPENINBROWSER, "Open article in browser" },
 	{ OP_HELP, "Open help dialog" },
 	{ OP_TOGGLESOURCEVIEW, "Toggle source view" },
+	{ OP_TOGGLEITEMREAD, "Toggle read status for article" },
 	{ OP_NIL, NULL }
 };
 
@@ -33,6 +34,7 @@ keymap::keymap() {
 	keymap_["C"] = OP_MARKALLFEEDSREAD;
 	keymap_["s"] = OP_SAVE;
 	keymap_["n"] = OP_NEXTUNREAD;
+	keymap_["N"] = OP_TOGGLEITEMREAD;
 	keymap_["o"] = OP_OPENINBROWSER;
 	keymap_["?"] = OP_HELP;
 	keymap_["^u"] = OP_TOGGLESOURCEVIEW,
@@ -76,6 +78,7 @@ operation keymap::get_opcode(const std::string& opstr) {
 		{ "open-in-browser", OP_OPENINBROWSER },
 		{ "help", OP_HELP },
 		{ "toggle-source-view", OP_TOGGLESOURCEVIEW },
+		{ "toggle-article-read", OP_TOGGLEITEMREAD },
 		{ NULL, OP_NIL }
 	};
 	for (int i=0;opcode_map[i].opstr;++i) {

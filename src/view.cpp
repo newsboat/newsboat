@@ -304,6 +304,19 @@ void view::run_itemlist(unsigned int pos) {
 				set_status("");
 				rebuild_list = true;
 				break;
+			case OP_TOGGLEITEMREAD: {
+					const char * itemposname = stfl_get(itemlist_form, "itempos");
+					if (itemposname) {
+						std::istringstream posname(itemposname);
+						unsigned int pos = 0;
+						posname >> pos;
+						set_status("Toggling read flag for article...");
+						items[pos].set_unread(!items[pos].unread());
+						set_status("");
+						rebuild_list = true;
+					}
+				}
+				break;
 			default:
 				break;
 		}
@@ -652,7 +665,7 @@ bool view::jump_to_next_unread_item(std::vector<rss_item>& items) {
 		std::istringstream posname(itemposname);
 		unsigned int pos = 0;
 		posname >> pos;
-		for (unsigned int i=pos;i<items.size();++i) {
+		for (unsigned int i=pos+1;i<items.size();++i) {
 			if (items[i].unread()) {
 				std::ostringstream posname;
 				posname << i;
@@ -661,7 +674,7 @@ bool view::jump_to_next_unread_item(std::vector<rss_item>& items) {
 				return true;
 			}
 		}
-		for (unsigned int i=0;i<pos;++i) {
+		for (unsigned int i=0;i<=pos;++i) {
 			if (items[i].unread()) {
 				std::ostringstream posname;
 				posname << i;

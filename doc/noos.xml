@@ -282,6 +282,11 @@ usage: ./noos [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]
                             <entry><keysym>^u</keysym></entry>
                             <entry>Toggles between the HTML view and the source view in the article view</entry>
                         </row>
+						<row>
+                            <entry>toggle-article-read</entry>
+                            <entry><keysym>N</keysym></entry>
+                            <entry>Toggle the read flag for the currently selected article</entry>
+						</row>
                         <row>
                             <entry>help</entry>
                             <entry><keysym>?</keysym></entry>
