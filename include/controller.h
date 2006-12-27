@@ -34,6 +34,9 @@ namespace noos {
 			void export_opml();
 			void rec_find_rss_outlines(nxml_data_t * node);
 
+			bool try_fs_lock(pid_t & pid);
+			void remove_fs_lock();
+
 			view * v;
 			urlreader urlcfg;
 			cache * rsscache;
@@ -42,6 +45,7 @@ namespace noos {
 			std::string url_file;
 			std::string cache_file;
 			std::string config_file;
+			std::string lock_file;
 			bool refresh_on_start;
 
 			mutex * reload_mutex;

@@ -4,6 +4,7 @@
 #include <configcontainer.h>
 #include <exceptions.h>
 #include <downloadthread.h>
+#include <fstream>
 #include <sstream>
 #include <cstdlib>
 #include <iostream>
@@ -20,7 +21,7 @@
 
 using namespace noos;
 
-controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), refresh_on_start(false) {
+controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), lock_file("lock.pid"), refresh_on_start(false) {
 	std::ostringstream cfgfile;
 
 	if (getenv("HOME")) {
@@ -43,6 +44,7 @@ controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cach
 	url_file = config_dir + std::string(NOOS_PATH_SEP) + url_file;
 	cache_file = config_dir + std::string(NOOS_PATH_SEP) + cache_file;
 	config_file = config_dir + std::string(NOOS_PATH_SEP) + config_file;
+	lock_file = config_dir + std::string(NOOS_PATH_SEP) + lock_file;
 	reload_mutex = new mutex();
 }
 
@@ -118,6 +120,12 @@ void controller::run(int argc, char * argv[]) {
 
 	if (!do_export) {
 		std::cout << "Starting " << PROGRAM_NAME << " " << PROGRAM_VERSION << "..." << std::endl << std::endl;
+
+		pid_t pid;
+		if (!try_fs_lock(pid)) {
+			std::cout << "Error: an instance of " << PROGRAM_NAME << " is already running (PID: " << pid << ")" << std::endl;
+			return;
+		}
 	}
 	
 	if (!do_export)
@@ -135,6 +143,7 @@ void controller::run(int argc, char * argv[]) {
 		cfgparser.parse();
 	} catch (const configexception& ex) {
 		std::cout << ex.what() << std::endl;
+		remove_fs_lock();
 		return;	
 	}
 	
@@ -159,6 +168,7 @@ void controller::run(int argc, char * argv[]) {
 
 	if (do_export) {
 		export_opml();
+		remove_fs_lock();
 		return;
 	}
 
@@ -176,6 +186,8 @@ void controller::run(int argc, char * argv[]) {
 	}
 	*/
 	std::cout << "done." << std::endl;
+
+	remove_fs_lock();
 }
 
 void controller::update_feedlist() {
@@ -375,4 +387,20 @@ void controller::rec_find_rss_outlines(nxml_data_t * node) {
 
 		node = node->next;
 	}
+}
+
+void controller::remove_fs_lock() {
+	::unlink(lock_file.c_str());
+}
+
+bool controller::try_fs_lock(pid_t & pid) {
+	if (::access(lock_file.c_str(), F_OK)==0) {
+		std::fstream f(lock_file.c_str(), std::fstream::in);
+		f >> pid;
+		return false;
+	}
+	std::fstream f(lock_file.c_str(), std::fstream::out);
+	f << ::getpid();
+	f.close();
+	return true;
 }
