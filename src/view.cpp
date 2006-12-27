@@ -141,6 +141,14 @@ void view::run_feedlist() {
 					}
 				}
 				break;
+			case OP_TOGGLESHOWREAD:
+				if (cfg->get_configvalue_as_bool("show-read-feeds")) {
+					cfg->set_configvalue("show-read-feeds","no");
+				} else {
+					cfg->set_configvalue("show-read-feeds","yes");
+				}
+				update = true;
+				break;
 			case OP_NEXTUNREAD:
 				jump_to_next_unread_feed();
 				break;

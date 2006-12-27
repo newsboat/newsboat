@@ -16,6 +16,7 @@ public:
 	bool get_configvalue_as_bool(const std::string& key);
 	int get_configvalue_as_int(const std::string& key);
 	std::string get_configvalue(const std::string& key);
+	void set_configvalue(const std::string& key, const std::string& value);
 private:
 	std::map<std::string,std::string> config_data;
 	

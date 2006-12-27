@@ -287,6 +287,11 @@ usage: ./noos [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]
                             <entry><keysym>N</keysym></entry>
                             <entry>Toggle the read flag for the currently selected article</entry>
 						</row>
+						<row>
+                            <entry>toggle-show-read-feeds</entry>
+                            <entry><keysym>l</keysym></entry>
+                            <entry>Toggle whether read feeds should be shown in the feed list</entry>
+						</row>
                         <row>
                             <entry>help</entry>
                             <entry><keysym>?</keysym></entry>

@@ -77,4 +77,8 @@ bool configcontainer::get_configvalue_as_bool(const std::string& key) {
 	return false;	
 }
 
+void configcontainer::set_configvalue(const std::string& key, const std::string& value) {
+	config_data[key] = value;
+}
+
 }
