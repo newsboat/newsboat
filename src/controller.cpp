@@ -24,9 +24,7 @@ using namespace noos;
 controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), lock_file("lock.pid"), refresh_on_start(false) {
 	std::ostringstream cfgfile;
 
-	if (getenv("HOME")) {
-		config_dir = ::getenv("HOME");
-	} else {
+	if (!(config_dir = ::getenv("HOME"))) {
 		struct passwd * spw = ::getpwuid(::getuid());
 		if (spw) {
 			config_dir = spw->pw_dir;
@@ -36,6 +34,7 @@ controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cach
 			::exit(EXIT_FAILURE);
 		}
 	}
+
 
 	config_dir.append(NOOS_PATH_SEP);
 	config_dir.append(NOOS_CONFIG_SUBDIR);
@@ -65,8 +64,7 @@ void controller::run(int argc, char * argv[]) {
 	std::string importfile;
 
 	do {
-		c = ::getopt(argc,argv,"i:erhu:c:C:");
-		if (c < 0)
+		if((c = ::getopt(argc,argv,"i:erhu:c:C:"))<0);
 			continue;
 		switch (c) {
 			case ':': /* fall-through */
