@@ -24,16 +24,18 @@ using namespace noos;
 controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), lock_file("lock.pid"), refresh_on_start(false) {
 	std::ostringstream cfgfile;
 
-	if (!(config_dir = ::getenv("HOME"))) {
+	char * cfgdir;
+	if (!(cfgdir = ::getenv("HOME"))) {
 		struct passwd * spw = ::getpwuid(::getuid());
 		if (spw) {
-			config_dir = spw->pw_dir;
+			cfgdir = spw->pw_dir;
 		} else {
 			std::cout << "Fatal error: couldn't determine home directory!" << std::endl;
 			std::cout << "Please set the HOME environment variable or add a valid user for UID " << ::getuid() << "!" << std::endl;
 			::exit(EXIT_FAILURE);
 		}
 	}
+	config_dir = cfgdir;
 
 
 	config_dir.append(NOOS_PATH_SEP);
