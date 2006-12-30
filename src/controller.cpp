@@ -11,6 +11,7 @@
 
 #include <sys/time.h>
 #include <ctime>
+#include <signal.h>
 
 #include <nxml.h>
 
@@ -21,7 +22,15 @@
 
 using namespace noos;
 
-controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), lock_file("lock.pid"), refresh_on_start(false) {
+static std::string lock_file = "lock.pid";
+
+void ctrl_c_action(int /* unused */) {
+	stfl_reset();
+	::unlink(lock_file.c_str());
+	::exit(EXIT_FAILURE);
+}
+
+controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), refresh_on_start(false) {
 	std::ostringstream cfgfile;
 
 	char * cfgdir;
@@ -61,6 +70,9 @@ void controller::set_view(view * vv) {
 
 void controller::run(int argc, char * argv[]) {
 	int c;
+
+	::signal(SIGINT, ctrl_c_action);
+	::signal(SIGSEGV, ctrl_c_action);
 
 	bool do_import = false, do_export = false;
 	std::string importfile;

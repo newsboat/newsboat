@@ -45,7 +45,6 @@ namespace noos {
 			std::string url_file;
 			std::string cache_file;
 			std::string config_file;
-			std::string lock_file;
 			bool refresh_on_start;
 
 			mutex * reload_mutex;
