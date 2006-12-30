@@ -41,7 +41,7 @@ namespace noos {
 			void set_help_keymap_hint();
 			void set_filebrowser_keymap_hint();
 			
-			void set_itemlist_head(const std::string& s, unsigned int unread, unsigned int total);
+			void set_itemlist_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);
 			void set_itemview_head(const std::string& s);
 			
 			void write_item(const rss_item& item, const std::string& filename);

@@ -66,7 +66,7 @@ void controller::run(int argc, char * argv[]) {
 	std::string importfile;
 
 	do {
-		if((c = ::getopt(argc,argv,"i:erhu:c:C:"))<0);
+		if((c = ::getopt(argc,argv,"i:erhu:c:C:"))<0)
 			continue;
 		switch (c) {
 			case ':': /* fall-through */

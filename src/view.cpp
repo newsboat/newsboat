@@ -223,7 +223,7 @@ void view::run_itemlist(unsigned int pos) {
 
 			stfl_modify(itemlist_form,"items","replace_inner",code.c_str());
 			
-			set_itemlist_head(feed.title(),feed.unread_item_count(),feed.items().size());
+			set_itemlist_head(feed.title(),feed.unread_item_count(),feed.items().size(), feed.rssurl());
 
 			rebuild_list = false;
 		}
@@ -1053,10 +1053,10 @@ void view::set_help_keymap_hint() {
 	stfl_set(help_form,"help", keymap_hint.c_str());	
 }
 
-void view::set_itemlist_head(const std::string& s, unsigned int unread, unsigned int total) {
+void view::set_itemlist_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url) {
 	std::ostringstream caption;
 	
-	caption << "Articles in feed '" << s << "' (" << unread << " unread, " << total << " total)";
+	caption << "Articles in feed '" << s << "' (" << unread << " unread, " << total << " total) " << "- " << url;
 	stfl_set(itemlist_form,"head",caption.str().c_str());	
 }
 
