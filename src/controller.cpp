@@ -4,6 +4,7 @@
 #include <configcontainer.h>
 #include <exceptions.h>
 #include <downloadthread.h>
+#include <reloadthread.h>
 #include <fstream>
 #include <sstream>
 #include <cstdlib>
@@ -183,6 +184,12 @@ void controller::run(int argc, char * argv[]) {
 		remove_fs_lock();
 		return;
 	}
+
+	unsigned int reload_cycle = 60 * static_cast<unsigned int>(cfg.get_configvalue_as_int("reload-time"));
+	reloadthread rt(this, reload_cycle);
+
+	if (cfg.get_configvalue_as_int("auto-reload") == true)
+		rt.start();
 
 	v->set_config_container(&cfg);
 	v->set_keymap(&keys);
