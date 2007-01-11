@@ -198,26 +198,6 @@ usage: ./noos [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]
                             <entry><code>max-items 100</code></entry>
                         </row>
                         <row>
-                            <entry>auto-reload</entry>
-                            <entry>[yes|no]</entry>
-                            <entry>no</entry>
-                            <entry>
-								If set to yes, then the feeds will be reloaded automatically
-								after a certain period.
-                            </entry>
-                            <entry><code>auto-reload yes</code></entry>
-                        </row>
-                        <row>
-                            <entry>reload-time</entry>
-                            <entry>&lt;number&gt;</entry>
-                            <entry>30</entry>
-                            <entry>
-								This option sets the time (in minutes) to wait between the automatic feed reloads.
-								It only comes to effect when auto-reload is set to yes.
-                            </entry>
-                            <entry><code>reload-time 10</code></entry>
-                        </row>
-                        <row>
                             <entry>bind-key</entry>
                             <entry>&lt;key&gt; &lt;operation&gt;</entry>
                             <entry />
