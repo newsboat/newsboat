@@ -38,6 +38,9 @@ install:
 	$(MKDIR) $(prefix)/bin
 	$(INSTALL) $(OUTPUT) $(prefix)/bin
 
+uninstall:
+	$(RM) $(prefix)/bin/$(OUTPUT)
+
 Makefile.deps: $(SRC)
 	$(CXX) $(CXXFLAGS) -MM -MG $(SRC) > Makefile.deps
 
