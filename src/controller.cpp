@@ -365,7 +365,7 @@ void controller::import_opml(const char * filename) {
 void controller::export_opml() {
 	std::cout << "<?xml version=\"1.0\"?>" << std::endl;
 	std::cout << "<opml version=\"1.0\">" << std::endl;
-	std::cout << "\t<head>" << std::endl << "\t\t<title>noos - Exported Feeds</title>" << std::endl << "\t</head>" << std::endl;
+	std::cout << "\t<head>" << std::endl << "\t\t<title>" PROGRAM_NAME " - Exported Feeds</title>" << std::endl << "\t</head>" << std::endl;
 	std::cout << "\t<body>" << std::endl;
 	for (std::vector<rss_feed>::iterator it=feeds.begin(); it != feeds.end(); ++it) {
 		std::cout << "\t\t<outline type=\"rss\" xmlUrl=\"" << it->rssurl() << "\" title=\"" << it->title() << "\" />" << std::endl;
