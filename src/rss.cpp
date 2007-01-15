@@ -18,7 +18,7 @@ rss_feed rss_parser::parse() {
 
 	feed.set_rssurl(my_uri);
 
-	mrss_options_t * options = mrss_options_new(-1, NULL, NULL, NULL, NULL, 0, NULL, USER_AGENT);
+	mrss_options_t * options = mrss_options_new(-1, NULL, NULL, NULL, NULL, NULL, 0, NULL, USER_AGENT);
 	mrss_error_t err = mrss_parse_url_with_options(const_cast<char *>(my_uri.c_str()), &mrss, options);
 	mrss_options_free(options);
 
