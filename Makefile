@@ -38,6 +38,7 @@ distclean: clean
 install:
 	$(MKDIR) $(prefix)/bin
 	$(INSTALL) $(OUTPUT) $(prefix)/bin
+	$(MKDIR) $(prefix)/share/man/man1
 	$(INSTALL) doc/$(OUTPUT).1 $(prefix)/share/man/man1
 	$(GZIP) $(prefix)/share/man/man1/$(OUTPUT).1
 
