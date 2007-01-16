@@ -20,6 +20,7 @@ libnXml: http://www2.autistici.org/bakunin/libnxml/
 libmRss: http://www2.autistici.org/bakunin/libmrss/
 SQLite: http://www.sqlite.org/
 STFL: http://www.clifford.at/stfl/
+libidn: http://www.gnu.org/software/libidn/
 
 Debian unstable comes with ready-to-use packages for these dependencies.
 
@@ -32,4 +33,5 @@ make install
 Andreas Krennmair <ak@synflood.at>
 
 == License ==
-noos is licensed under the MIT/X Consortium License.
+noos is licensed under the MIT/X Consortium License. See the file
+LICENSE for further details.
