@@ -8,7 +8,7 @@
 #include <cassert>
 #include <rss.h>
 
-using namespace noos;
+using namespace newsbeuter;
 
 //-------------------------------------------
 

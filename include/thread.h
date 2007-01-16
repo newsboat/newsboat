@@ -3,7 +3,7 @@
 
 #include <pthread.h>
 
-namespace noos {
+namespace newsbeuter {
 
 	// TODO: implement an option to provide attributes
 

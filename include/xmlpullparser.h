@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 
-namespace noos
+namespace newsbeuter
 {
 
 class xmlpullparser

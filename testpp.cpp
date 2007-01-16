@@ -3,7 +3,7 @@
 #include <iostream>
 
 using namespace std;
-using namespace noos;
+using namespace newsbeuter;
 
 #ifdef _TESTPP
 int main(int argc, char * argv[]) {

@@ -7,7 +7,7 @@
 #include <sstream>
 #include <iostream>
 
-using namespace noos;
+using namespace newsbeuter;
 
 rss_parser::rss_parser(const char * uri, cache * c) : my_uri(uri), ch(c), mrss(0) { }
 

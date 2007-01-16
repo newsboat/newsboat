@@ -1,6 +1,6 @@
 #include <utils.h>
 
-namespace noos {
+namespace newsbeuter {
 
 std::vector<std::string> utils::tokenize_config(const std::string& str, std::string delimiters) {
 	std::vector<std::string> tokens = tokenize(str,delimiters);

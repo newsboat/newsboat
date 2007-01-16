@@ -1,11 +1,11 @@
-#ifndef NOOS_HTMLRENDERER__H
-#define NOOS_HTMLRENDERER__H
+#ifndef NEWSBEUTER_HTMLRENDERER__H
+#define NEWSBEUTER_HTMLRENDERER__H
 
 #include <vector>
 #include <string>
 #include <istream>
 
-namespace noos {
+namespace newsbeuter {
 
 	class htmlrenderer {
 		public:

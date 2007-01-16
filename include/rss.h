@@ -1,5 +1,5 @@
-#ifndef NOOS_RSS__H
-#define NOOS_RSS__H
+#ifndef NEWSBEUTER_RSS__H
+#define NEWSBEUTER_RSS__H
 
 #include <string>
 #include <vector>
@@ -9,7 +9,7 @@ extern "C" {
 #include <mrss.h>
 }
 
-namespace noos {
+namespace newsbeuter {
 	
 	class cache;
 

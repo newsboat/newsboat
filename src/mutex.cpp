@@ -3,7 +3,7 @@
 
 #include <cerrno>
 
-using namespace noos;
+using namespace newsbeuter;
 
 mutex::mutex() {
 	pthread_mutex_init(&mtx, NULL);

@@ -1,0 +1,186 @@
+The Newsbeuter RSS Feedreader
+=============================
+Andreas Krennmair <ak@synflood.at>
+
+Introduction
+------------
+Newsbeuter is an RSS feedreader. RSS is a number of widely-used XML formats to
+transmit, publish and syndicate articles, for example news or blog articles.
+Newsbeuter is designed to be used on text terminals on Unix or Unix-like
+systems such as Linux, BSD or Mac OS X.
+
+Why "Newsbeuter"?
+~~~~~~~~~~~~~~~~
+"Newsbeuter" is a pun on the German word "Wildbeuter", which means
+"hunter-gatherer". During the stone age, people hunted and gathered their food,
+and these days, they hunt and gather news and information. Credits for this
+idea goes to Clifford Wolf, who submitted it to a little competiton that was
+started when I got aware that the original name would violate French and
+European registered trademarks.
+
+Installation
+------------
+This chapter describes how to compile and install newsbeuter from source.
+
+Downloading Newsbeuter
+~~~~~~~~~~~~~~~~~~~~~~
+Newsbeuter is available as source package. Simply go to
+http://synflood.at/newsbeuter.html[] and download the latest source package,
+which is usually in the .tar.gz file format. Alternatively, you can check out
+the latest development source tree from the newsbeuter SVN repository by
+running the following command on the commandline:
+
+svn co http://bereshit.synflood.at/svn/noos/trunk
+
+Dependencies
+~~~~~~~~~~~~
+Newsbeuter depends on a number of libraries to function correctly. This table
+lists these dependencies. Please be aware that the list libraries may
+themselves depend on other libraries. These dependencies are not listed here.
+Please also be aware that you need a recent C++ compiler. Currently, newsbeuter
+has only been tested with GCC.
+
+- Libidn: http://www.gnu.org/software/libidn/[]
+- STFL: http://www.clifford.at/stfl/[]
+- SQLite 3: http://www.sqlite.org/[]
+- libmRss: http://www2.autistici.org/bakunin/libmrss/[]
+- libnXml: http://www2.autistici.org/bakunin/libnxml/[]
+
+Compiling and Installing
+~~~~~~~~~~~~~~~~~~~~~~~~
+After you've downloaded and installed the dependencies mentioned above, you can
+start compiling and installing newsbeuter. To compile newsbeuter, simply run
+"make" in the source tree. After a short time, this should complete
+successfully, and you can go on with installation by running "make install". By
+default, this will install the "newsbeuter" binary to the /usr/local/bin
+directory. You can provide an alternative installation path using the prefix
+parameter, e.g. running "make install prefix=/opt/newsbeuter" will install the
+binary to the directory /opt/newsbeuter/bin.
+
+First Steps
+-----------
+After you've installed newsbeuter, you can run it for the first time by typing
+"newsbeuter" on your command prompt. This will bring you the following message:
+
+	Error: no URLs configured. Please fill the file /Users/ak/.nos/urls with RSS feed URLs or import an OPML file.
+
+	newsbeuter 0.1
+	usage: ./newsbeuter [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]
+		-r              refresh feeds on start
+		-e              export OPML feed to stdout
+		-i <file>       import OPML file
+		-u <urlfile>    read RSS feed URLs from <urlfile>
+		-c <cachefile>  use <cachefile> as cache file
+		-C <configfile> read configuration from <configfile>
+		-h              this help
+
+
+This means that newsbeuter can't start without any configured feeds. To add
+feeds to newsbeuter, you can either add URLs to the configuration file
+$HOME/.newsbeuter/urls or you can import an OPML file by running "newsbeuter -i
+blogroll.opml".
+
+Now you can run newsbeuter again, and it will present you with a navigatable
+list of the URLs that you configured previously. You can now start downloading
+the feeds, either by pressing "R" to download all feeds, or by pressing "r" to
+download the currently selected feed. You can then select a feed you want to
+read, and by pressing "Enter", you can go to the article list for this feed.
+This works even while the downloading is still in progress.  You can now see
+the list of available articles by their title. A "N" on the left indicates that
+an article wasn't read yet. Pressing Enter brings you to the content of the
+article. You can scroll through this text, and also run a browser (default:
+lynx) to view the complete article if the content is empty or just an abstract
+or a short description. Pressing "q" brings you back to the article list, and
+pressing "q" again brings you back to the feed list. Pressing "q" a third time
+then closes newsbeuter.
+
+Newsbeuter caches the article that it downloads. This means that when you start
+newsbeuter again and reload a feed, the old articles can still be read even if
+they aren't in the current RSS feeds anymore. Optionally you can configure how
+many articles shall be preserved by feed so that the article backlog doesn't
+grow endlessly (see below).
+
+Several aspects of newsbeuter's behaviour can be configured via a configuration
+file, by default $HOME/.newsbeuter/config. This configuration files contains
+lines in the form "<config-command> <arg1> ...".  The configuration file can
+also contain comments, which start with the '#' character and go as far as the
+end of line.
+
+
+.Configuration Commands
+[frame="all", grid="all",format="dsv"]
+`10`15`15`40`20~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Configuration Command:Argument(s):Default:Description:Example
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+show-read-feeds:[yes|no]:yes:If yes, then all feeds, including those without unread articles, are listed. If no, then only feeds with one or more unread articles are list.:show-read-feeds no
+browser:<browser-command>:lynx:Set the browser command to use when opening an article in the browser.:browser w3m
+max-items:<number>:0:Set the number of articles to maximally keep per feed. If the number is set to 0, then all articles are kept.:max-items 100
+bind-key:<key> <operation>::Bind key <key> to <operation>. This means that whenever <key> is preseed, then <operation> is executed (if applicable in the current context). A list of available operations can be found below.:bind-key ^r reload-all
+unbind-key:<key>::Unbind key <key>. This means that no operation is called when <key> is pressed.:unbind-key R
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+.Available Operations
+[frame="all", grid="all", format="dsv"]
+`20`20`60~~~~~~~~~~~~~~~~~~~~~~~~
+Operation:Default key:Description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+quit:q:Quit the program or return to the previous dialog (depending on the context).
+reload:r:Reload the currently selected feed.
+reload-all:R:Reload all feeds.
+mark-feed-read:A:Mark all articles in the currently selected feed read.
+mark-all-feeds-read:C:Mark articles in all feeds read.
+open:Enter:Open the currently selected feed or article.
+save:s:Save the currently selected article to a file.
+next-unread:n:Jump to the next unread article.
+open-in-browser:o:Opens the URL associated with the current article.
+toggle-source-view:^u:Toggles between the HTML view and the source view in the article view.
+toggle-article-read:N:Toggle the read flag for the currently selected article.
+toggle-show-read-feeds:l:Toggle whether read feeds should be shown in the feed list.
+help:?:Runs the help screen.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Keys, as used in the bind-key configuration command, use a special syntax.
+Lowercase keys, uppercase keys and special characters are written literally.
+The Enter key is written as "enter", while the ESC key is written as "esc". The
+function keys F1 to F12 are written as "F1" to "F12". Key combinations with the
+Ctrl key, such as Ctrl-R, are written as ^r. Please be aware that all
+Ctrl-related key combinations need to be written in lowercase ^R for
+Ctrl-Shift-R does not work.
+
+
+Example Configuration
+~~~~~~~~~~~~~~~~~~~~~
+
+	# a comment
+	max-items        100 # such comments are possible, too
+	browser          links
+	show-read-feeds  no
+
+	unbind-key       R
+	bind-key         ^r    reload-all
+
+License
+-------
+MIT/X Consortium License
+
+(C)opyright 2006-2007 Andreas Krennmair <ak@synflood.at>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

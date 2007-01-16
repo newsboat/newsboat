@@ -1,12 +1,12 @@
-#ifndef NOOS_CONFIG__H
-#define NOOS_CONFIG__H
+#ifndef NEWSBEUTER_CONFIG__H
+#define NEWSBEUTER_CONFIG__H
 
-#define PROGRAM_NAME		"noos"
-#define PROGRAM_VERSION		"0.2"
-#define PROGRAM_URL			"http://synflood.at/noos.html"
+#define PROGRAM_NAME		"newsbeuter"
+#define PROGRAM_VERSION		"0.1"
+#define PROGRAM_URL			"http://synflood.at/newsbeuter.html"
 #define USER_AGENT			PROGRAM_NAME " rss feedreader " PROGRAM_VERSION " (" PROGRAM_URL ")"
 
-#define NOOS_PATH_SEP		"/"
-#define NOOS_CONFIG_SUBDIR	".noos"
+#define NEWSBEUTER_PATH_SEP			"/"
+#define NEWSBEUTER_CONFIG_SUBDIR	".newsbeuter"
 
 #endif

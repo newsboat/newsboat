@@ -20,7 +20,7 @@
 
 #include <config.h>
 
-using namespace noos;
+using namespace newsbeuter;
 
 static std::string lock_file = "lock.pid";
 
@@ -47,14 +47,14 @@ controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cach
 	config_dir = cfgdir;
 
 
-	config_dir.append(NOOS_PATH_SEP);
-	config_dir.append(NOOS_CONFIG_SUBDIR);
+	config_dir.append(NEWSBEUTER_PATH_SEP);
+	config_dir.append(NEWSBEUTER_CONFIG_SUBDIR);
 	mkdir(config_dir.c_str(),0700); // create configuration directory if it doesn't exist
 
-	url_file = config_dir + std::string(NOOS_PATH_SEP) + url_file;
-	cache_file = config_dir + std::string(NOOS_PATH_SEP) + cache_file;
-	config_file = config_dir + std::string(NOOS_PATH_SEP) + config_file;
-	lock_file = config_dir + std::string(NOOS_PATH_SEP) + lock_file;
+	url_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + url_file;
+	cache_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + cache_file;
+	config_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
+	lock_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + lock_file;
 	reload_mutex = new mutex();
 }
 

@@ -7,7 +7,7 @@
 #include <iostream>
 #include <cstdlib>
 
-namespace noos
+namespace newsbeuter
 {
 
 xmlpullparser::xmlpullparser() : inputstream(0), current_event(START_DOCUMENT)

@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-namespace noos {
+namespace newsbeuter {
 
 class utils {
 	public:

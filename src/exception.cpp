@@ -2,7 +2,7 @@
 #include <cerrno>
 #include <cstring>
 
-using namespace noos;
+using namespace newsbeuter;
 
 exception::exception(unsigned int error_code) : ecode(error_code) { }
 

@@ -3,7 +3,7 @@
 
 #include <pthread.h>
 
-namespace noos {
+namespace newsbeuter {
 
 class mutex {
 	public:

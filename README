@@ -1,20 +1,20 @@
-README for noos:
+README for newsbeuter:
 
 == Introduction ==
-noos is an RSS feed reader for the text console. It is designed to run
+Newsbeuter is an RSS feed reader for the text console. It is designed to run
 Unix-like operating systems such as Linux.
 
 == Downloading ==
-You can download the latest version of noos from the following website:
-http://synflood.at/noos.html
+You can download the latest version of newsbeuter from the following website:
+http://synflood.at/newsbeuter.html
 
-Alternatively, you can check out the latest version from the noos
+Alternatively, you can check out the latest version from the newsbeuter
 Subversion repository:
 http://bereshit.synflood.at/svn/noos/trunk/
 
 == Dependencies ==
-noos depends on a number of libraries, which need to be installed
-before noos can be compiled.
+Newsbeuter depends on a number of libraries, which need to be installed before
+newsbeuter can be compiled.
 
 libnXml: http://www2.autistici.org/bakunin/libnxml/
 libmRss: http://www2.autistici.org/bakunin/libmrss/
@@ -25,7 +25,7 @@ libidn: http://www.gnu.org/software/libidn/
 Debian unstable comes with ready-to-use packages for these dependencies.
 
 == Installation ==
-Compiling and installing noos is as simple as:
+Compiling and installing newsbeuter is as simple as:
 make
 make install
 
@@ -33,5 +33,5 @@ make install
 Andreas Krennmair <ak@synflood.at>
 
 == License ==
-noos is licensed under the MIT/X Consortium License. See the file
-LICENSE for further details.
+Newsbeuter is licensed under the MIT/X Consortium License. See the file LICENSE
+for further details.

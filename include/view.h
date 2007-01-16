@@ -1,5 +1,5 @@
-#ifndef NOOS_VIEW__H
-#define NOOS_VIEW__H
+#ifndef NEWSBEUTER_VIEW__H
+#define NEWSBEUTER_VIEW__H
 
 #include <controller.h>
 #include <configcontainer.h>
@@ -14,7 +14,7 @@ extern "C" {
 #include <stfl.h>
 }
 
-namespace noos {
+namespace newsbeuter {
 
 	class view {
 		public:

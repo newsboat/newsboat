@@ -1,5 +1,5 @@
-#ifndef NOOS_KEYMAP__H
-#define NOOS_KEYMAP__H
+#ifndef NEWSBEUTER_KEYMAP__H
+#define NEWSBEUTER_KEYMAP__H
 
 #include <string>
 #include <map>
@@ -10,7 +10,7 @@
 
 // in configuration: bind-key <key> <operation>
 
-namespace noos {
+namespace newsbeuter {
 
 	enum operation { OP_NIL = 0, OP_QUIT, OP_RELOAD, OP_RELOADALL, OP_MARKFEEDREAD, 
 					OP_MARKALLFEEDSREAD, OP_OPEN, OP_SAVE, OP_NEXTUNREAD, OP_OPENINBROWSER, 

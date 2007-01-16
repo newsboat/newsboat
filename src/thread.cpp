@@ -1,7 +1,7 @@
 #include <thread.h>
 #include <exception.h>
 
-using namespace noos;
+using namespace newsbeuter;
 
 thread::thread() {
 }

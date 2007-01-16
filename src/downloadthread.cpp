@@ -1,6 +1,6 @@
 #include <downloadthread.h>
 
-namespace noos
+namespace newsbeuter
 {
 
 downloadthread::downloadthread(controller * c) : ctrl(c) {

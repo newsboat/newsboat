@@ -5,7 +5,7 @@
 #include <iostream>
 #include <stdexcept>
 
-using namespace noos;
+using namespace newsbeuter;
 
 htmlrenderer::htmlrenderer(unsigned int width) : w(width) { }
 

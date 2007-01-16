@@ -6,7 +6,7 @@
 #include <cache.h>
 #include <locale.h>
 
-using namespace noos;
+using namespace newsbeuter;
 
 int main(int argc, char * argv[]) {
 	

@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace noos {
+namespace newsbeuter {
 
 class xmlexception : public std::exception {
 	public:

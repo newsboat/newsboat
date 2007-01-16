@@ -3,7 +3,7 @@
 
 #include <exception>
 
-namespace noos {
+namespace newsbeuter {
 
 	class exception : public std::exception {
 		public:

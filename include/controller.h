@@ -1,12 +1,12 @@
-#ifndef NOOS_CONTROLLER__H
-#define NOOS_CONTROLLER__H
+#ifndef NEWSBEUTER_CONTROLLER__H
+#define NEWSBEUTER_CONTROLLER__H
 
 #include <urlreader.h>
 #include <rss.h>
 #include <cache.h>
 #include <nxml.h>
 
-namespace noos {
+namespace newsbeuter {
 
 	class view;
 

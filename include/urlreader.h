@@ -1,10 +1,10 @@
-#ifndef NOOS_CONFIGREADER__H
-#define NOOS_CONFIGREADER__H
+#ifndef NEWSBEUTER_CONFIGREADER__H
+#define NEWSBEUTER_CONFIGREADER__H
 
 #include <vector>
 #include <string>
 
-namespace noos {
+namespace newsbeuter {
 
 	class urlreader {
 		public:

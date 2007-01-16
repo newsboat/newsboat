@@ -5,7 +5,7 @@
 #include <fstream>
 #include <sstream>
 
-namespace noos {
+namespace newsbeuter {
 
 configparser::configparser(const char * file) : filename(file) { }
 

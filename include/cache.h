@@ -1,12 +1,12 @@
-#ifndef NOOS_CACHE__H
-#define NOOS_CACHE__H
+#ifndef NEWSBEUTER_CACHE__H
+#define NEWSBEUTER_CACHE__H
 
 #include <sqlite3.h>
 #include <rss.h>
 #include <configcontainer.h>
 #include <mutex.h>
 
-namespace noos {
+namespace newsbeuter {
 
 class cache {
 	public:

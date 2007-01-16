@@ -3,7 +3,7 @@
 
 #include <configparser.h>
 
-namespace noos
+namespace newsbeuter
 {
 
 class configcontainer : public config_action_handler

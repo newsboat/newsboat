@@ -1,11 +1,11 @@
-#ifndef NOOS_CONFIGPARSER__H
-#define NOOS_CONFIGPARSER__H
+#ifndef NEWSBEUTER_CONFIGPARSER__H
+#define NEWSBEUTER_CONFIGPARSER__H
 
 #include <vector>
 #include <string>
 #include <map>
 
-namespace noos {
+namespace newsbeuter {
 
 	enum action_handler_status { AHS_OK = 0, AHS_INVALID_PARAMS, AHS_TOO_FEW_PARAMS, AHS_INVALID_COMMAND };
 

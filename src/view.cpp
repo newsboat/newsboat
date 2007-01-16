@@ -32,7 +32,7 @@ extern "C" {
 #include <iostream>
 #include <sstream>
 
-using namespace noos;
+using namespace newsbeuter;
 
 view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0) { 
 	feedlist_form = stfl_create(feedlist_str);
@@ -592,7 +592,7 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 										char cwdtmp[MAXPATHLEN];
 										::getcwd(cwdtmp,sizeof(cwdtmp));
 										std::string fn(cwdtmp);
-										fn.append(NOOS_PATH_SEP);
+										fn.append(NEWSBEUTER_PATH_SEP);
 										const char * fnstr = stfl_get(filebrowser_form,"filenametext");
 										const char * base = strrchr(fnstr,'/');
 										if (!base)
@@ -607,7 +607,7 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 										char cwdtmp[MAXPATHLEN];
 										::getcwd(cwdtmp,sizeof(cwdtmp));
 										std::string fn(cwdtmp);
-										fn.append(NOOS_PATH_SEP);
+										fn.append(NEWSBEUTER_PATH_SEP);
 										fn.append(filename);
 										stfl_set(filebrowser_form,"filenametext",fn.c_str());
 										stfl_set_focus(filebrowser_form,"filename");

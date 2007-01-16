@@ -4,7 +4,7 @@
 #include <thread.h>
 #include <controller.h>
 
-namespace noos
+namespace newsbeuter
 {
 	
 class controller;

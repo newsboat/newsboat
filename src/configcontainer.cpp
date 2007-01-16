@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iostream>
 
-namespace noos
+namespace newsbeuter
 {
 
 configcontainer::configcontainer()

@@ -2,7 +2,7 @@
 
 #include <urlreader.h>
 
-using namespace noos;
+using namespace newsbeuter;
 
 urlreader::urlreader(const std::string& file) : filename(file) {
 	reload();

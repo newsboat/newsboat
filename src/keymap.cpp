@@ -2,7 +2,7 @@
 #include <vector>
 #include <iostream>
 
-namespace noos {
+namespace newsbeuter {
 	
 struct op_desc {
 	operation op;
