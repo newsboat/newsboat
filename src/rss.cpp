@@ -30,8 +30,21 @@ rss_feed rss_parser::parse() {
 		return feed;
 	}
 
-	if (mrss->title) feed.set_title(mrss->title);
-	if (mrss->description) feed.set_description(mrss->description);
+	if (mrss->title) {
+		char * str = stringprep_convert(mrss->title, stringprep_locale_charset(), mrss->encoding ? mrss->encoding : "utf-8");
+		if (str) {
+			feed.set_title(str);
+			free(str);
+		}
+	}
+	if (mrss->description) {
+		char * str = stringprep_convert(mrss->description, stringprep_locale_charset(), mrss->encoding ? mrss->encoding : "utf-8");
+		if (str) {
+			feed.set_description(mrss->description);
+			free(str);
+		}
+	}
+
 	if (mrss->link) feed.set_link(mrss->link);
 	if (mrss->pubDate) 
 		feed.set_pubDate(parse_date(mrss->pubDate));
