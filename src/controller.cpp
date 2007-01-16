@@ -24,9 +24,12 @@ using namespace newsbeuter;
 
 static std::string lock_file = "lock.pid";
 
-void ctrl_c_action(int /* unused */) {
+void ctrl_c_action(int sig) {
 	stfl_reset();
 	::unlink(lock_file.c_str());
+	if (SIGSEGV == sig) {
+		fprintf(stderr,"Segmentation fault.\n");
+	}
 	::exit(EXIT_FAILURE);
 }
 

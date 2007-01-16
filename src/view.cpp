@@ -80,12 +80,15 @@ void view::show_error(const char * msg) {
 void view::run_feedlist() {
 	bool quit = false;
 	bool update = false;
-	
+
 	view_stack.push_front(feedlist_form);
 	
 	set_feedlist_keymap_hint();
-	if(ctrl->get_refresh_on_start())
+
+	if(ctrl->get_refresh_on_start()) {
+		stfl_run(feedlist_form, -1);
 		ctrl->start_reload_all_thread();
+	}
 
 	do {
 
