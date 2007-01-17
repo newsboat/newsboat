@@ -22,8 +22,8 @@ DONE:
 - open link in browser
 - cache items in local database (sqlite?)
 	used location:
-		~/.noos/urls -- the list of feed URLs
-		~/.noos/cache.db -- the feed and item cache
+		~/.newsbeuter/urls -- the list of feed URLs
+		~/.newsbeuter/cache.db -- the feed and item cache
 - optimize cache updates (every feed and every item needs something like a "dirty" flag)
 - improve HTML rendering (write/use XML/HTML pull parser)
 - configuration file
