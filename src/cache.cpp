@@ -148,6 +148,9 @@ void cache::externalize_rssfeed(rss_feed& feed) {
 		free(insertquery);
 		// std::cerr << "externalize: insert rc = " << rc << " query = " << insertquery << std::endl;
 	}
+
+
+	mtx->unlock();
 	
 	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
 	
@@ -162,7 +165,6 @@ void cache::externalize_rssfeed(rss_feed& feed) {
 	for (std::vector<rss_item>::reverse_iterator it=feed.items().rbegin(); it != feed.items().rend(); ++it) {
 		update_rssitem(*it, feed.rssurl());
 	}
-	mtx->unlock();
 }
 
 void cache::internalize_rssfeed(rss_feed& feed) {
@@ -214,12 +216,10 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 }
 
 void cache::delete_item(const rss_item& item) {
-	mtx->lock();
 	char * query = sqlite3_mprintf("DELETE FROM rss_item WHERE guid = '%q';",item.guid().c_str());
 	int rc = sqlite3_exec(db,query,NULL,NULL,NULL);
 	assert(rc == SQLITE_OK);
 	free(query);
-	mtx->unlock();
 }
 
 void cache::cleanup_cache(std::vector<rss_feed>& feeds) {
