@@ -209,8 +209,8 @@ void controller::update_feedlist() {
 	v->set_feedlist(feeds);
 }
 
-bool controller::open_item(const rss_feed& feed, rss_item& item) {
-	bool show_next_unread = v->run_itemview(feed, item);
+bool controller::open_item(rss_item& item) {
+	bool show_next_unread = v->run_itemview(item);
 	item.set_unread(false); // XXX: see TODO list
 	return show_next_unread;
 }
@@ -232,27 +232,24 @@ void controller::mark_all_read(unsigned int pos) {
 
 
 
-bool controller::open_feed(unsigned int pos, bool auto_open) {
-	bool retval = false;
+void controller::open_feed(unsigned int pos) {
 	if (pos < feeds.size()) {
-		if (!auto_open)
-			v->set_status("Opening feed...");
+		v->set_status("Opening feed...");
 
 		rss_feed& feed = feeds[pos];
 
-		if (!auto_open)
-			v->set_status("");
+		v->set_status("");
 
 		if (feed.items().size() == 0) {
 			v->show_error("Error: feed contains no items!");
 		} else {
-			retval = v->run_itemlist(pos, auto_open);
+			v->run_itemlist(pos);
+			// rsscache->externalize_rssfeed(feed); // save possibly changed unread flags
 			v->set_feedlist(feeds);
 		}
 	} else {
 		v->show_error("Error: invalid feed!");
 	}
-	return retval;
 }
 
 void controller::reload(unsigned int pos, unsigned int max) {
