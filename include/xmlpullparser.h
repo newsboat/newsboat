@@ -32,7 +32,7 @@ private:
 	std::istream * inputstream;
 	event current_event;
 	
-	int skip_whitespace();
+	int skip_whitespace(std::string& ws);
 	void add_attribute(std::string s);
 	std::string read_tag();
 	event determine_tag_type();

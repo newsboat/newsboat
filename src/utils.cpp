@@ -46,5 +46,26 @@ std::vector<std::string> utils::tokenize_spaced(const std::string& str, std::str
 	return tokens;
 }
 
+std::vector<std::string> utils::tokenize_nl(const std::string& str, std::string delimiters) {
+	std::vector<std::string> tokens;
+	std::string::size_type last_pos = str.find_first_not_of(delimiters, 0);
+	std::string::size_type pos = str.find_first_of(delimiters, last_pos);
+
+	if (last_pos != 0) {
+		tokens.push_back(std::string("\n"));
+	}
+
+	while (std::string::npos != pos || std::string::npos != last_pos) {
+		tokens.push_back(str.substr(last_pos, pos - last_pos));
+		last_pos = str.find_first_not_of(delimiters, pos);
+		if (last_pos > pos)
+			tokens.push_back(std::string("\n"));
+		pos = str.find_first_of(delimiters, last_pos);
+	}
+
+	return tokens;
+}
+
+
 
 }

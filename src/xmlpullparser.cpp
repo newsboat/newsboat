@@ -82,7 +82,8 @@ xmlpullparser::event xmlpullparser::next() {
 	switch (current_event) {
 		case START_DOCUMENT: 
 			{
-				char c = skip_whitespace();
+				std::string ws;
+				char c = skip_whitespace(ws);
 				if (inputstream->eof()) {
 					current_event = END_DOCUMENT;
 					break;
@@ -104,7 +105,7 @@ xmlpullparser::event xmlpullparser::next() {
 					}
 					
 					if (s.find("?xml",0) == 0) {
-						c = skip_whitespace();
+						c = skip_whitespace(ws);
 						if (inputstream->eof()) {
 							current_event = END_DOCUMENT;
 							break;
@@ -141,8 +142,10 @@ xmlpullparser::event xmlpullparser::next() {
 		case START_TAG:
 		case END_TAG:
 			{
+				
 				char c;
-				*inputstream >> c;
+				std::string ws;
+				c = skip_whitespace(ws);
 				if (!inputstream->eof()) {
 					if (c == '<') {
 						std::string s = read_tag();
@@ -165,6 +168,7 @@ xmlpullparser::event xmlpullparser::next() {
 						}
 						current_event = determine_tag_type();
 					} else {
+						text.append(ws);
 						text.append(1,c);
 						std::string tmp;
 						getline(*inputstream,tmp,'<');
@@ -213,12 +217,15 @@ xmlpullparser::event xmlpullparser::next() {
 	return getEventType();	
 }
 
-int xmlpullparser::skip_whitespace() {
+int xmlpullparser::skip_whitespace(std::string& ws) {
 	char c;
+	ws = "";
 	while (!inputstream->eof()) {
 		inputstream->read(&c,1);
 		if (!isspace(c))
 			break;
+		else
+			ws.append(1,c);
 	}
 	return c;
 }

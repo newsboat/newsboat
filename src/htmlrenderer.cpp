@@ -19,7 +19,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines) 
 	unsigned int link_count = 0;
 	std::string curline;
 	int indent_level = 0;
-	bool inside_list = false, inside_li = false, is_ol = false;
+	bool inside_list = false, inside_li = false, is_ol = false, inside_pre = false;
 	unsigned int ol_count = 1;
 	
 	xmlpullparser xpp;
@@ -43,6 +43,11 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines) 
 						curline.append(ref.str());
 					}
 				} else if (xpp.getText() == "br") {
+						if (curline.length() > 0)
+							lines.push_back(curline);
+						prepare_newline(curline, indent_level);	
+				} else if (xpp.getText() == "pre") {
+					inside_pre = true;
 					if (curline.length() > 0)
 						lines.push_back(curline);
 					prepare_newline(curline, indent_level);	
@@ -61,11 +66,6 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines) 
 						lines.push_back(curline);
 					lines.push_back(std::string(""));
 					prepare_newline(curline, indent_level);	
-				} else if (xpp.getText() == "pre") {
-					if (curline.length() > 0)
-						lines.push_back(curline);
-					lines.push_back(std::string(""));
-					prepare_newline(curline, indent_level);
 				} else if (xpp.getText() == "p") {
 					if (curline.length() > 0)
 						lines.push_back(curline);
@@ -121,11 +121,6 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines) 
 						lines.push_back(curline);
 					lines.push_back(std::string(""));
 					prepare_newline(curline, indent_level);
-				} else if (xpp.getText() == "pre") {
-					if (curline.length() > 0)
-						lines.push_back(curline);
-					lines.push_back(std::string(""));
-					prepare_newline(curline, indent_level);
 				} else if (xpp.getText() == "ol" || xpp.getText() == "ul") {
 					inside_list = false;
 					if (inside_li) {
@@ -148,26 +143,43 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines) 
 					if (curline.length() > 0)
 						lines.push_back(curline);
 					prepare_newline(curline, indent_level);
+				} else if (xpp.getText() == "pre") {
+					if (curline.length() > 0)
+						lines.push_back(curline);
+					prepare_newline(curline, indent_level);
+					inside_pre = false;
 				}
 				break;
 			case xmlpullparser::TEXT:
 				{
-					std::vector<std::string> words = utils::tokenize_spaced(xpp.getText());
-					unsigned int i=0;
-					bool new_line = false;
-					for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it,++i) {
-						if ((curline.length() + it->length()) >= w) {
-							if (curline.length() > 0)
+					if (inside_pre) {
+						std::vector<std::string> words = utils::tokenize_nl(xpp.getText());
+						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it) {
+							if (*it == "\n") {
 								lines.push_back(curline);
-							prepare_newline(curline, indent_level);
-							new_line = true;
-						}
-						if (new_line) {
-							if (*it != " ")
+								prepare_newline(curline, indent_level);
+							} else {
 								curline.append(*it);
-							new_line = false;
-						} else {
-							curline.append(*it);
+							}
+						}
+					} else {
+						std::vector<std::string> words = utils::tokenize_spaced(xpp.getText());
+						unsigned int i=0;
+						bool new_line = false;
+						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it,++i) {
+							if ((curline.length() + it->length()) >= w) {
+								if (curline.length() > 0)
+									lines.push_back(curline);
+								prepare_newline(curline, indent_level);
+								new_line = true;
+							}
+							if (new_line) {
+								if (*it != " ")
+									curline.append(*it);
+								new_line = false;
+							} else {
+								curline.append(*it);
+							}
 						}
 					}
 				}
