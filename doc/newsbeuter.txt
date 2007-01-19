@@ -144,10 +144,10 @@ help:?:Runs the help screen.
 Keys, as used in the bind-key configuration command, use a special syntax.
 Lowercase keys, uppercase keys and special characters are written literally.
 The Enter key is written as "enter", while the ESC key is written as "esc". The
-function keys F1 to F12 are written as "F1" to "F12". Key combinations with the
-Ctrl key, such as Ctrl-R, are written as ^r. Please be aware that all
-Ctrl-related key combinations need to be written in lowercase ^R for
-Ctrl-Shift-R does not work.
+function keys F1 to F12 are written as "F1" to "F12". The Space key is written
+as "space". Key combinations with the Ctrl key, such as Ctrl-R, are written as
+^r. Please be aware that all Ctrl-related key combinations need to be written
+in lowercase ^R for Ctrl-Shift-R does not work.
 
 
 Example Configuration

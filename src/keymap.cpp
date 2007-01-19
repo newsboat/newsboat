@@ -107,7 +107,9 @@ operation keymap::get_operation(const std::string& keycode) {
 			char c;
 			sscanf(keycode.c_str(),"CHAR(%d)",&x);
 			// std::cerr << x << std::endl;
-			if (x >= 32 && x <= 126) {
+			if (32 == x) {
+				key.append("space");
+			} else if (x > 32 && x <= 126) {
 				c = static_cast<char>(x);
 				key.append(1,c);
 			} else if (x >= 0 && x<=26) {

@@ -3,6 +3,7 @@ Changes for newsbeuter:
 0.2:
 	removed an unnecessary mutex lock/unlock that made newsbeuter lock up when the "max-items" config option was set
 	improved HTML rendering (occasional missing spaces, <pre> tags)
+	added possibility to use the space key for key bindings
 
 0.1.1 (2007-01-17):
 	fixed a crash when ISO-8859-1 encoded feeds with umlauts in the title were displayed on systems with UTF-8 locales enabled.
