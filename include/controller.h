@@ -16,8 +16,8 @@ namespace newsbeuter {
 			~controller();
 			void set_view(view * vv);
 			void run(int argc = 0, char * argv[] = NULL);
-			void open_feed(unsigned int pos);
-			bool open_item(rss_item& item);
+			bool open_feed(unsigned int pos, bool auto_open);
+			bool open_item(const rss_feed& feed, rss_item& item);
 			void reload(unsigned int pos, unsigned int max = 0);
 			void reload_all();
 			void start_reload_all_thread();

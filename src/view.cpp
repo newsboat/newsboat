@@ -104,16 +104,28 @@ void view::run_feedlist() {
 
 		switch (op) {
 			case OP_OPEN: {
-					const char * feedposname = stfl_get(feedlist_form, "feedposname");
-					if (feeds_shown > 0 && feedposname) {
-						std::istringstream posname(feedposname);
-						unsigned int pos = 0;
-						posname >> pos;
-						ctrl->open_feed(pos);
-						set_status("");
-					} else {
-						show_error("No feed selected!"); // should not happen
-					}
+					bool quit = false;
+					bool auto_open = false;
+					do {
+						const char * feedpos = stfl_get(feedlist_form, "feedpos");
+						fprintf(stderr,"run_feedlist: feedpos = %s\n",feedpos);
+						if (feeds_shown > 0 && feedpos) {
+							std::istringstream posname(feedpos);
+							unsigned int pos = 0;
+							posname >> pos;
+							fprintf(stderr,"run_feedlist: open feed %u\n",visible_feeds[pos].second);
+							if ((auto_open = ctrl->open_feed(visible_feeds[pos].second, auto_open))) {
+								if (!jump_to_next_unread_feed()) {
+									show_error("No feeds with unread items.");
+									quit = true;
+								}
+							} else {
+								quit = true;
+							}
+						} else {
+							show_error("No feed selected!"); // should not happen
+						}
+					} while (!quit);
 				}
 				break;
 			case OP_RELOAD: {
@@ -155,7 +167,9 @@ void view::run_feedlist() {
 				update = true;
 				break;
 			case OP_NEXTUNREAD:
-				jump_to_next_unread_feed();
+				if (!jump_to_next_unread_feed()) {
+					show_error("No feeds with unread items.");
+				}
 				break;
 			case OP_MARKALLFEEDSREAD:
 				set_status("Marking all feeds read...");
@@ -180,10 +194,11 @@ void view::run_feedlist() {
 	stfl_reset();
 }
 
-void view::run_itemlist(unsigned int pos) {
+bool view::run_itemlist(unsigned int pos, bool auto_open) {
 	bool quit = false;
 	bool rebuild_list = true;
 	bool show_no_unread_error = false;
+	bool retval = false;
 	rss_feed& feed = ctrl->get_feed(pos);
 	std::vector<rss_item>& items = feed.items();
 	
@@ -236,10 +251,19 @@ void view::run_itemlist(unsigned int pos) {
 			show_no_unread_error = false;
 		}
 
-		const char * event = stfl_run(itemlist_form,0);
-		if (!event) continue;
+		operation op;
+		const char * event;
+		
+		if (auto_open) {
+			auto_open = false;
+			jump_to_next_unread_item(items);
+			op = OP_OPEN;
+		} else {
+			event = stfl_run(itemlist_form,0);
+			if (!event) continue;
 
-		operation op = keys->get_operation(event);
+			op = keys->get_operation(event);
+		}
 
 		switch (op) {
 			case OP_OPEN: {
@@ -250,7 +274,7 @@ void view::run_itemlist(unsigned int pos) {
 							std::istringstream posname(itemposname);
 							unsigned int pos = 0;
 							posname >> pos;
-							open_next_item = ctrl->open_item(items[pos]);
+							open_next_item = ctrl->open_item(feed, items[pos]);
 							rebuild_list = true;
 						} else {
 							show_error("No item selected!"); // should not happen
@@ -258,11 +282,12 @@ void view::run_itemlist(unsigned int pos) {
 						if (open_next_item) {
 							if (!jump_to_next_unread_item(items)) {
 								open_next_item = false;
-								show_no_unread_error = true;
+								retval = true;
+								quit = true;
 							}
 						}
 					} while (open_next_item);
-					set_status("");
+					// set_status("");
 				}
 				break;
 			case OP_SAVE: 
@@ -337,6 +362,8 @@ void view::run_itemlist(unsigned int pos) {
 	} while (!quit);
 	
 	view_stack.pop_front();
+
+	return retval;
 }
 
 std::string view::get_filename_suggestion(const std::string& s) {
@@ -641,38 +668,40 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 	return std::string(""); // never reached
 }
 
-void view::jump_to_next_unread_feed() {
-	const char * feedposname = stfl_get(feedlist_form, "feedposname");
-	unsigned int feedcount = ctrl->get_feedcount();
+bool view::jump_to_next_unread_feed() {
+	const char * feedposname = stfl_get(feedlist_form, "feedpos");
+	unsigned int feedcount = visible_feeds.size();
 
-	if (feeds_shown > 0 && feedposname) {
+	if (feedcount > 0 && feedposname) {
 		std::istringstream posname(feedposname);
 		unsigned int pos = 0;
 		posname >> pos;
 		for (unsigned int i=pos+1;i<feedcount;++i) {
-			if (ctrl->get_feed(i).unread_item_count() > 0) {
+			fprintf(stderr,"jj title: %s count = %d\n",visible_feeds[i].first->title().c_str(), visible_feeds[i].first->unread_item_count());
+			if (visible_feeds[i].first->unread_item_count() > 0) {
 				std::ostringstream posname;
 				posname << i;
 				stfl_set(feedlist_form, "feedpos", posname.str().c_str());
-				return;
+				return true;
 			}
 		}
 		for (unsigned int i=0;i<=pos;++i) {
-			if (ctrl->get_feed(i).unread_item_count() > 0) {
+			fprintf(stderr,"jj title: %s count = %d\n",visible_feeds[i].first->title().c_str(), visible_feeds[i].first->unread_item_count());
+			if (visible_feeds[i].first->unread_item_count() > 0) {
 				std::ostringstream posname;
 				posname << i;
 				stfl_set(feedlist_form, "feedpos", posname.str().c_str());
-				return;
+				return true;
 			}
 		}
-		show_error("No feeds with unread items.");
 	} else {
 		show_error("No feed selected!"); // shouldn't happen
 	}
+	return false;
 }
 
 bool view::jump_to_next_unread_item(std::vector<rss_item>& items) {
-	const char * itemposname = stfl_get(itemlist_form, "itemposname");
+	const char * itemposname = stfl_get(itemlist_form, "itempos");
 
 	if (itemposname) {
 		std::istringstream posname(itemposname);
@@ -702,7 +731,7 @@ bool view::jump_to_next_unread_item(std::vector<rss_item>& items) {
 	return false;
 }
 
-bool view::run_itemview(rss_item& item) {
+bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 	bool quit = false;
 	bool show_source = false;
 	bool redraw = true;
@@ -717,6 +746,19 @@ bool view::run_itemview(rss_item& item) {
 	do {
 		if (redraw) {
 			std::string code = "{list";
+
+			code.append("{listitem text:");
+			std::ostringstream feedtitle;
+			feedtitle << "Feed: ";
+			if (feed.title().length() > 0) {
+				feedtitle << feed.title();
+			} else if (feed.link().length() > 0) {
+				feedtitle << feed.link();
+			} else if (feed.rssurl().length() > 0) {
+				feedtitle << feed.rssurl();
+			}
+			code.append(stfl_quote(feedtitle.str().c_str()));
+			code.append("}");
 
 			code.append("{listitem text:");
 			std::ostringstream title;
@@ -915,6 +957,10 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 	unsigned int i = 0;
 	unsigned short feedlist_number = 1;
 	unsigned int unread_feeds = 0;
+
+	if (visible_feeds.size() > 0)
+		visible_feeds.erase(visible_feeds.begin(), visible_feeds.end());
+
 	for (std::vector<rss_feed>::iterator it = feeds.begin(); it != feeds.end(); ++it, ++i, ++feedlist_number) {
 		rss_feed feed = *it;
 		std::string title = it->title();
@@ -939,6 +985,8 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 			++unread_feeds;
 
 		if (show_read_feeds || unread_count > 0) {
+			visible_feeds.push_back(std::pair<rss_feed *, unsigned int>(&(*it),i));
+
 			snprintf(buf,sizeof(buf),"(%u/%u) ",unread_count,static_cast<unsigned int>(it->items().size()));
 			snprintf(buf2,sizeof(buf2),"%4u %c %11s",feedlist_number, unread_count > 0 ? 'N' : ' ',buf);
 			std::string newtitle(buf2);
