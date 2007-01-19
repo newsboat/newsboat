@@ -21,8 +21,8 @@ namespace newsbeuter {
 			view(controller * );
 			~view();
 			void run_feedlist();
-			void run_itemlist(unsigned int pos);
-			bool run_itemview(rss_item& item);
+			bool run_itemlist(unsigned int pos, bool auto_open);
+			bool run_itemview(const rss_feed& feed, rss_item& item);
 			void run_help();
 			void set_feedlist(std::vector<rss_feed>& feeds);
 			void set_keymap(keymap * k);
@@ -31,7 +31,7 @@ namespace newsbeuter {
 			void set_status(const char * msg);
 		private:
 			bool jump_to_next_unread_item(std::vector<rss_item>& items);
-			void jump_to_next_unread_feed();
+			bool jump_to_next_unread_feed();
 			void mark_all_read(std::vector<rss_item>& items);
 			void open_in_browser(const std::string& url);
 			
