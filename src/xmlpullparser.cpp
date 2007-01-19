@@ -91,7 +91,6 @@ xmlpullparser::event xmlpullparser::next() {
 					text.append(1,c);
 					std::string tmp;
 					getline(*inputstream,tmp,'<');
-					remove_trailing_whitespace(tmp);
 					text.append(tmp);
 					text = decode_entities(text);
 					current_event = TEXT;
@@ -169,7 +168,6 @@ xmlpullparser::event xmlpullparser::next() {
 						text.append(1,c);
 						std::string tmp;
 						getline(*inputstream,tmp,'<');
-						remove_trailing_whitespace(tmp);
 						text.append(tmp);
 						text = decode_entities(text);
 						current_event = TEXT;

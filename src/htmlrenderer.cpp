@@ -152,17 +152,23 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines) 
 				break;
 			case xmlpullparser::TEXT:
 				{
-					std::vector<std::string> words = utils::tokenize(xpp.getText());
+					std::vector<std::string> words = utils::tokenize_spaced(xpp.getText());
 					unsigned int i=0;
+					bool new_line = false;
 					for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it,++i) {
 						if ((curline.length() + it->length()) >= w) {
 							if (curline.length() > 0)
 								lines.push_back(curline);
 							prepare_newline(curline, indent_level);
+							new_line = true;
 						}
-						curline.append(*it);
-						if (i < words.size()-1)
-							curline.append(" ");
+						if (new_line) {
+							if (*it != " ")
+								curline.append(*it);
+							new_line = false;
+						} else {
+							curline.append(*it);
+						}
 					}
 				}
 				break;
