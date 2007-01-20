@@ -256,6 +256,7 @@ void cache::cleanup_cache(std::vector<rss_feed>& feeds) {
 }
 
 void cache::update_rssitem(rss_item& item, const std::string& feedurl) {
+	mtx->lock();
 	char * query = sqlite3_mprintf("SELECT count(*) FROM rss_item WHERE guid = '%q';",item.guid().c_str());
 	cb_handler count_cbh;
 	int rc = sqlite3_exec(db,query,count_callback,&count_cbh,NULL);
@@ -281,6 +282,7 @@ void cache::update_rssitem(rss_item& item, const std::string& feedurl) {
 		free(insert);
 		// std::cerr << "item insert" << std::endl;
 	}
+	mtx->unlock();
 }
 
 void cache::update_rssitem_unread(rss_item& item, const std::string& feedurl) {
