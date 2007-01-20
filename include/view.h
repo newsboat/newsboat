@@ -10,9 +10,13 @@
 #include <keymap.h>
 #include <mutex.h>
 
+#include <stflpp.h>
+
+/*
 extern "C" {
 #include <stfl.h>
 }
+*/
 
 namespace newsbeuter {
 
@@ -64,18 +68,21 @@ namespace newsbeuter {
 			std::string prepare_keymaphint(keymap_hint_entry * hints);
 
 			controller * ctrl;
-			stfl_form * feedlist_form;
-			stfl_form * itemlist_form;
-			stfl_form * itemview_form;
-			stfl_form * help_form;
-			stfl_form * filebrowser_form;
-			
-			std::list<stfl_form *> view_stack;
-			std::vector<std::pair<rss_feed *, unsigned int> > visible_feeds;
-			
+
 			configcontainer * cfg;
 			keymap * keys;
 			mutex * mtx;
+
+			stfl::form feedlist_form;
+			stfl::form itemlist_form;
+			stfl::form itemview_form;
+			stfl::form help_form;
+			stfl::form filebrowser_form;
+			
+			std::list<stfl::form *> view_stack;
+			
+			std::vector<std::pair<rss_feed *, unsigned int> > visible_feeds;
+
 			unsigned int feeds_shown;
 	};
 
