@@ -1,5 +1,6 @@
 #include <configcontainer.h>
 #include <configparser.h>
+#include <logger.h>
 #include <sstream>
 #include <iostream>
 
@@ -25,6 +26,7 @@ void configcontainer::register_commands(configparser& cfgparser)
 }
 
 action_handler_status configcontainer::handle_action(const std::string& action, const std::vector<std::string>& params) {
+	GetLogger().log(LOG_DEBUG, "configcontainer::handle_action(%s,...) was called",action.c_str());
 	if (action == "show-read-feeds") {
 		if (params.size() < 1) {
 			return AHS_TOO_FEW_PARAMS;
@@ -78,6 +80,7 @@ bool configcontainer::get_configvalue_as_bool(const std::string& key) {
 }
 
 void configcontainer::set_configvalue(const std::string& key, const std::string& value) {
+	GetLogger().log(LOG_DEBUG,"configcontainer::set_configvalue(%s,%s) called", key.c_str(), value.c_str());
 	config_data[key] = value;
 }
 

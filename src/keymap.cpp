@@ -1,4 +1,5 @@
 #include <keymap.h>
+#include <logger.h>
 #include <vector>
 #include <iostream>
 
@@ -60,10 +61,12 @@ keymap::~keymap() { }
 
 
 void keymap::set_key(operation op, const std::string& key) {
+	GetLogger().log(LOG_DEBUG,"keymap::set_key(%d,%s) called", op, key.c_str());
 	keymap_[key] = op;
 }
 
 void keymap::unset_key(const std::string& key) {
+	GetLogger().log(LOG_DEBUG,"keymap::unset_key(%s) called", key.c_str());
 	keymap_[key] = OP_NIL;	
 }
 
@@ -126,6 +129,7 @@ operation keymap::get_operation(const std::string& keycode) {
 }
 
 action_handler_status keymap::handle_action(const std::string& action, const std::vector<std::string>& params) {
+	GetLogger().log(LOG_DEBUG,"keymap::handle_action(%s, ...) called",action.c_str());
 	if (action == "bind-key") {
 		if (params.size() < 2) {
 			return AHS_TOO_FEW_PARAMS;

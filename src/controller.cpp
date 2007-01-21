@@ -4,6 +4,7 @@
 #include <configcontainer.h>
 #include <exceptions.h>
 #include <downloadthread.h>
+#include <logger.h>
 #include <fstream>
 #include <sstream>
 #include <cstdlib>
@@ -25,6 +26,7 @@ using namespace newsbeuter;
 static std::string lock_file = "lock.pid";
 
 void ctrl_c_action(int sig) {
+	GetLogger().log(LOG_DEBUG,"caugh signal %d",sig);
 	stfl_reset();
 	::unlink(lock_file.c_str());
 	if (SIGSEGV == sig) {
@@ -81,7 +83,7 @@ void controller::run(int argc, char * argv[]) {
 	std::string importfile;
 
 	do {
-		if((c = ::getopt(argc,argv,"i:erhu:c:C:"))<0)
+		if((c = ::getopt(argc,argv,"i:erhu:c:C:d:l:"))<0)
 			continue;
 		switch (c) {
 			case ':': /* fall-through */
@@ -114,6 +116,16 @@ void controller::run(int argc, char * argv[]) {
 			case 'C':
 				config_file = optarg;
 				break;
+			case 'd': // this is an undocumented debug commandline option!
+				GetLogger().set_logfile(optarg);
+				break;
+			case 'l': // this is an undocumented debug commandline option!
+				{
+					loglevel level = static_cast<loglevel>(atoi(optarg));
+					if (level > LOG_NONE && level <= LOG_DEBUG)
+						GetLogger().set_loglevel(level);
+				}
+				break;
 			default:
 				std::cout << argv[0] << ": unknown option: -" << static_cast<char>(c) << std::endl;
 				usage(argv[0]);
@@ -124,11 +136,13 @@ void controller::run(int argc, char * argv[]) {
 	urlcfg.load_config(url_file);
 
 	if (do_import) {
+		GetLogger().log(LOG_INFO,"Importing OPML file from %s",importfile.c_str());
 		import_opml(importfile.c_str());
 		return;
 	}
 
 	if (urlcfg.get_urls().size() == 0) {
+		GetLogger().log(LOG_ERROR,"no URLs configured.");
 		std::cout << "Error: no URLs configured. Please fill the file " << url_file << " with RSS feed URLs or import an OPML file." << std::endl << std::endl;
 		usage(argv[0]);
 	}
@@ -138,6 +152,7 @@ void controller::run(int argc, char * argv[]) {
 
 		pid_t pid;
 		if (!try_fs_lock(pid)) {
+			GetLogger().log(LOG_ERROR,"an instance is alredy running: pid = %u",pid);
 			std::cout << "Error: an instance of " << PROGRAM_NAME << " is already running (PID: " << pid << ")" << std::endl;
 			return;
 		}
@@ -157,6 +172,7 @@ void controller::run(int argc, char * argv[]) {
 	try {
 		cfgparser.parse();
 	} catch (const configexception& ex) {
+		GetLogger().log(LOG_ERROR,"an exception occured while parsing the configuration file: %s",ex.what());
 		std::cout << ex.what() << std::endl;
 		remove_fs_lock();
 		return;	
@@ -177,7 +193,7 @@ void controller::run(int argc, char * argv[]) {
 		rsscache->internalize_rssfeed(feed);
 		feeds.push_back(feed);
 	}
-	// rsscache->cleanup_cache(feeds);
+
 	if (!do_export)
 		std::cout << "done." << std::endl;
 
@@ -319,8 +335,11 @@ void controller::reload_all() {
 
 void controller::start_reload_all_thread() {
 	if (reload_mutex->trylock()) {
+		GetLogger().log(LOG_INFO,"starting reload all thread");
 		thread * dlt = new downloadthread(this);
 		dlt->start();
+	} else {
+		GetLogger().log(LOG_INFO,"reload mutex is currently locked");
 	}
 }
 
@@ -387,6 +406,8 @@ void controller::rec_find_rss_outlines(nxml_data_t * node) {
 
 		if (node->type == NXML_TYPE_ELEMENT && strcmp(node->value,"outline")==0 && type && strcmp(type,"rss")==0 && url) {
 
+			GetLogger().log(LOG_DEBUG,"OPML import: found RSS outline with url = %s",url);
+
 			bool found = false;
 
 			for (std::vector<std::string>::iterator it = urlcfg.get_urls().begin(); it != urlcfg.get_urls().end(); ++it) {
@@ -396,7 +417,10 @@ void controller::rec_find_rss_outlines(nxml_data_t * node) {
 			}
 
 			if (!found) {
+				GetLogger().log(LOG_DEBUG,"OPML import: added url = %s",url);
 				urlcfg.get_urls().push_back(std::string(url));
+			} else {
+				GetLogger().log(LOG_DEBUG,"OPML import: url = %s is already in list",url);
 			}
 
 		}
@@ -415,10 +439,12 @@ bool controller::try_fs_lock(pid_t & pid) {
 	if (::access(lock_file.c_str(), F_OK)==0) {
 		std::fstream f(lock_file.c_str(), std::fstream::in);
 		f >> pid;
+		GetLogger().log(LOG_DEBUG,"found lock file");
 		return false;
 	}
 	std::fstream f(lock_file.c_str(), std::fstream::out);
 	f << ::getpid();
 	f.close();
+	GetLogger().log(LOG_DEBUG,"wrote lock file with pid = %u",::getpid());
 	return true;
 }

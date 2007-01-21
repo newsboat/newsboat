@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cassert>
 #include <rss.h>
+#include <logger.h>
 
 using namespace newsbeuter;
 
@@ -65,10 +66,6 @@ static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** azCol
 	return 0;
 }
 
-//-------------------------------------------
-
-
-
 
 cache::cache(const std::string& cachefile, configcontainer * c) : db(0),cfg(c), mtx(0) {
 	bool file_exists = false;
@@ -81,6 +78,7 @@ cache::cache(const std::string& cachefile, configcontainer * c) : db(0),cfg(c), 
 	if (error != SQLITE_OK) {
 		// TODO: error message
 		sqlite3_close(db);
+		GetLogger().log(LOG_ERROR,"couldn't sqlite3_open(%s): error = %d", cachefile.c_str(), error);
 		::exit(EXIT_FAILURE);
 	}
 	// if (!file_exists) {
@@ -100,6 +98,9 @@ void cache::set_pragmas() {
 	
 	rc = sqlite3_exec(db, "PRAGMA synchronous = OFF;", NULL, NULL, NULL);
 	
+	if (rc != SQLITE_OK) {
+		GetLogger().log(LOG_CRITICAL,"setting PRAGMA synchronous = OFF failed");
+	}
 	assert(rc == SQLITE_OK);
 	
 }
@@ -134,17 +135,20 @@ void cache::externalize_rssfeed(rss_feed& feed) {
 	int rc = sqlite3_exec(db,query.str().c_str(),count_callback,&count_cbh,NULL);
 	// std::cerr << "externalize: count rc = " << rc << std::endl;
 	int count = count_cbh.count();
+	GetLogger().log(LOG_DEBUG, "cache::externalize_rss_feed: rss_feeds with rssurl = '%s': found %d",feed.rssurl().c_str(), count);
 	// std::cerr << "externalize: count = " << count << std::endl;
 	if (count > 0) {
 		char * updatequery = sqlite3_mprintf("UPDATE rss_feed SET title = '%q', url = '%q' WHERE rssurl = '%q';",feed.title().c_str(),feed.link().c_str(), feed.rssurl().c_str());
 		// std::cerr << updatequery << std::endl;
 		rc = sqlite3_exec(db,updatequery,NULL,NULL,NULL);
+		GetLogger().log(LOG_DEBUG,"ran SQL statement: %s", updatequery);
 		free(updatequery);
 		// std::cerr << "externalize: update rc = " << rc << " query = " << updatequery << std::endl;
 	} else {
 		char * insertquery = sqlite3_mprintf("INSERT INTO rss_feed (rssurl, url, title) VALUES ( '%q', '%q', '%q' );", feed.rssurl().c_str(), feed.link().c_str(), feed.title().c_str());
 		// std::cerr << insertquery << std::endl;
 		rc = sqlite3_exec(db,insertquery,NULL,NULL,NULL);
+		GetLogger().log(LOG_DEBUG,"ran SQL statement: %s", insertquery);
 		free(insertquery);
 		// std::cerr << "externalize: insert rc = " << rc << " query = " << insertquery << std::endl;
 	}
@@ -171,7 +175,11 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 	mtx->lock();
 	char * query = sqlite3_mprintf("SELECT count(*) FROM rss_feed WHERE rssurl = '%q';",feed.rssurl().c_str());
 	cb_handler count_cbh;
+	GetLogger().log(LOG_DEBUG,"running query: %s",query);
 	int rc = sqlite3_exec(db,query,count_callback,&count_cbh,NULL);
+	if (rc != SQLITE_OK) {
+		GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", query, rc);
+	}
 	assert(rc == SQLITE_OK);
 	// std::cerr << "internalize: query = " << query << std::endl;
 	free(query);
@@ -182,7 +190,11 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 	}
 
 	query = sqlite3_mprintf("SELECT title, url FROM rss_feed WHERE rssurl = '%q';",feed.rssurl().c_str());
+	GetLogger().log(LOG_DEBUG,"running query: %s",query);
 	rc = sqlite3_exec(db,query,rssfeed_callback,&feed,NULL);
+	if (rc != SQLITE_OK) {
+		GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", query, rc);
+	}
 	assert(rc == SQLITE_OK);
 	// std::cerr << "internalize: query = " << query << std::endl;
 	free(query);
@@ -192,7 +204,11 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 	}
 
 	query = sqlite3_mprintf("SELECT guid,title,author,url,pubDate,content,unread FROM rss_item WHERE feedurl = '%q' ORDER BY pubDate DESC, id DESC;",feed.rssurl().c_str());
+	GetLogger().log(LOG_DEBUG,"running query: %s",query);
 	rc = sqlite3_exec(db,query,rssitem_callback,&feed,NULL);
+	if (rc != SQLITE_OK) {
+		GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", query, rc);
+	}
 	assert(rc == SQLITE_OK);
 	free(query);
 	for (std::vector<rss_item>::iterator it=feed.items().begin(); it != feed.items().end(); ++it) {
@@ -217,7 +233,11 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 
 void cache::delete_item(const rss_item& item) {
 	char * query = sqlite3_mprintf("DELETE FROM rss_item WHERE guid = '%q';",item.guid().c_str());
+	GetLogger().log(LOG_DEBUG,"running query: %s",query);
 	int rc = sqlite3_exec(db,query,NULL,NULL,NULL);
+	if (rc != SQLITE_OK) {
+		GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", query, rc);
+	}
 	assert(rc == SQLITE_OK);
 	free(query);
 }
@@ -244,13 +264,21 @@ void cache::cleanup_cache(std::vector<rss_feed>& feeds) {
 
 	// std::cerr << "statements: " << cleanup_rss_feeds_statement << " " << cleanup_rss_items_statement << std::endl;
 
+	GetLogger().log(LOG_DEBUG,"running query: %s", cleanup_rss_feeds_statement.c_str());
 	rc = sqlite3_exec(db,cleanup_rss_feeds_statement.c_str(),NULL,NULL,NULL);
+	if (rc != SQLITE_OK) {
+		GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", cleanup_rss_feeds_statement.c_str(), rc);
+	}
 	assert(rc == SQLITE_OK);
 
+	GetLogger().log(LOG_DEBUG,"running query: %s", cleanup_rss_items_statement.c_str());
 	rc = sqlite3_exec(db,cleanup_rss_items_statement.c_str(),NULL,NULL,NULL);
+	if (rc != SQLITE_OK) {
+		GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", cleanup_rss_items_statement.c_str(), rc);
+	}
 	assert(rc == SQLITE_OK);
 
-	//rc = sqlite3_exec(db,"VACUUM;",NULL,NULL,NULL);
+	// rc = sqlite3_exec(db,"VACUUM;",NULL,NULL,NULL);
 	// assert(rc == SQLITE_OK);
 	mtx->unlock();
 }
@@ -259,28 +287,36 @@ void cache::update_rssitem(rss_item& item, const std::string& feedurl) {
 	mtx->lock();
 	char * query = sqlite3_mprintf("SELECT count(*) FROM rss_item WHERE guid = '%q';",item.guid().c_str());
 	cb_handler count_cbh;
+	GetLogger().log(LOG_DEBUG,"running query: %s", query);
 	int rc = sqlite3_exec(db,query,count_callback,&count_cbh,NULL);
+	if (rc != SQLITE_OK) {
+		GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", query, rc);
+	}
 	assert(rc == SQLITE_OK);
 	free(query);
 	if (count_cbh.count() > 0) {
 		char * update = sqlite3_mprintf("UPDATE rss_item SET title = '%q', author = '%q', url = '%q', feedurl = '%q', content = '%q' WHERE guid = '%q'",
 			item.title().c_str(), item.author().c_str(), item.link().c_str(), 
 			feedurl.c_str(), item.description().c_str(), item.guid().c_str());
-		// std::cerr << update << std::endl;
+		GetLogger().log(LOG_DEBUG,"running query: %s", update);
 		rc = sqlite3_exec(db,update,NULL,NULL,NULL);
+		if (rc != SQLITE_OK) {
+			GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", update, rc);
+		}
 		assert(rc == SQLITE_OK);
-		// std::cerr << "item update query:" << update << " |" << std::endl;
 		free(update);
 	} else {
 		char * insert = sqlite3_mprintf("INSERT INTO rss_item (guid,title,author,url,feedurl,pubDate,content,unread) "
 										"VALUES ('%q','%q','%q','%q','%q','%u','%q',1)",
 										item.guid().c_str(), item.title().c_str(), item.author().c_str(), 
 										item.link().c_str(), feedurl.c_str(), item.pubDate_timestamp(), item.description().c_str());
-		// std::cerr << insert << std::endl;
+		GetLogger().log(LOG_DEBUG,"running query: %s", insert);
 		rc = sqlite3_exec(db,insert,NULL,NULL,NULL);
+		if (rc != SQLITE_OK) {
+			GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", insert, rc);
+		}
 		assert(rc == SQLITE_OK);
 		free(insert);
-		// std::cerr << "item insert" << std::endl;
 	}
 	mtx->unlock();
 }
@@ -289,14 +325,22 @@ void cache::update_rssitem_unread(rss_item& item, const std::string& feedurl) {
 	mtx->lock();
 	char * query = sqlite3_mprintf("SELECT count(*) FROM rss_item WHERE guid = '%q';",item.guid().c_str());
 	cb_handler count_cbh;
+	GetLogger().log(LOG_DEBUG,"running query: %s", query);
 	int rc = sqlite3_exec(db,query,count_callback,&count_cbh,NULL);
+	if (rc != SQLITE_OK) {
+		GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", query, rc);
+	}
 	assert(rc == SQLITE_OK);
 	free(query);
 	if (count_cbh.count() > 0) {
 		char * update = sqlite3_mprintf("UPDATE rss_item SET unread = '%d' WHERE guid = '%q'",
 			item.unread()?1:0, item.guid().c_str());
 		// std::cerr << update << std::endl;
+		GetLogger().log(LOG_DEBUG,"running query: %s", update);
 		rc = sqlite3_exec(db,update,NULL,NULL,NULL);
+		if (rc != SQLITE_OK) {
+			GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", update, rc);
+		}
 		assert(rc == SQLITE_OK);
 		// std::cerr << "item update query:" << update << " |" << std::endl;
 		free(update);
@@ -306,7 +350,11 @@ void cache::update_rssitem_unread(rss_item& item, const std::string& feedurl) {
 										item.guid().c_str(), item.title().c_str(), item.author().c_str(), 
 										item.link().c_str(), feedurl.c_str(), item.pubDate_timestamp(), item.description().c_str());
 		// std::cerr << insert << std::endl;
+		GetLogger().log(LOG_DEBUG,"running query: %s", insert);
 		rc = sqlite3_exec(db,insert,NULL,NULL,NULL);
+		if (rc != SQLITE_OK) {
+			GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", insert, rc);
+		}
 		assert(rc == SQLITE_OK);
 		free(insert);
 		// std::cerr << "item insert" << std::endl;

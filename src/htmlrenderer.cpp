@@ -4,6 +4,7 @@
 #include <sstream>
 #include <iostream>
 #include <stdexcept>
+#include <logger.h>
 
 using namespace newsbeuter;
 
@@ -28,11 +29,13 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines) 
 	for (xmlpullparser::event e = xpp.next(); e != xmlpullparser::END_DOCUMENT; e = xpp.next()) {	
 		switch (e) {
 			case xmlpullparser::START_TAG:
+				GetLogger().log(LOG_DEBUG,"htmlrenderer::render: found start tag %s",xpp.getText().c_str());
 				if (xpp.getText() == "a") {
 					std::string link;
 					try {
 						link = xpp.getAttributeValue("href");
 					} catch (const std::invalid_argument& ) {
+						GetLogger().log(LOG_WARN,"htmlrenderer::render: found a tag with no href attribute");
 						link = "";
 					}
 					if (link.length() > 0) {
@@ -52,14 +55,20 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines) 
 						lines.push_back(curline);
 					prepare_newline(curline, indent_level);	
 				} else if (xpp.getText() == "img") {
-					std::string imgurl = xpp.getAttributeValue("src");
+					std::string imgurl;
+					try {
+						imgurl = xpp.getAttributeValue("src");
+					} catch (const std::invalid_argument& ) {
+						GetLogger().log(LOG_WARN,"htmlrenderer::render: found img tag with no src attribute");
+						imgurl = "";
+					}
 					if (imgurl.length() > 0) {
 						links.push_back(imgurl);
 						std::ostringstream ref;
 						ref << "[" << link_count << "]";
 						link_count++;
 						curline.append(ref.str());
-					}					
+					}
 				} else if (xpp.getText() == "blockquote") {
 					++indent_level;
 					if (curline.length() > 0)
@@ -77,7 +86,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines) 
 					is_ol = true;
 					ol_count = 1;
 					if (curline.length() > 0)
-						lines.push_back(curline);	
+						lines.push_back(curline);
 					lines.push_back(std::string(""));
 					prepare_newline(curline, indent_level);	
 				} else if (xpp.getText() == "ul") {
@@ -86,7 +95,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines) 
 					if (curline.length() > 0)
 						lines.push_back(curline);
 					lines.push_back(std::string(""));
-					prepare_newline(curline, indent_level);						
+					prepare_newline(curline, indent_level);
 				} else if (xpp.getText() == "li") {
 					if (inside_li) {
 						indent_level-=2;
@@ -113,6 +122,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines) 
 				}
 				break;
 			case xmlpullparser::END_TAG:
+				GetLogger().log(LOG_DEBUG, "htmlrenderer::render: found end tag %s",xpp.getText().c_str());
 				if (xpp.getText() == "blockquote") {
 					--indent_level;
 					if (indent_level < 0)
@@ -152,6 +162,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines) 
 				break;
 			case xmlpullparser::TEXT:
 				{
+					GetLogger().log(LOG_DEBUG,"htmlrenderer::render: found text `%s'",xpp.getText().c_str());
 					if (inside_pre) {
 						std::vector<std::string> words = utils::tokenize_nl(xpp.getText());
 						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it) {

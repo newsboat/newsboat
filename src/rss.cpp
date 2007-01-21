@@ -4,6 +4,7 @@
 #include <cache.h>
 #include <xmlpullparser.h>
 #include <utils.h>
+#include <logger.h>
 #include <sstream>
 #include <iostream>
 
@@ -24,23 +25,26 @@ rss_feed rss_parser::parse() {
 
 	if (err != MRSS_OK) {
 		// TODO: throw exception
+		GetLogger().log(LOG_ERROR,"rss_parser::parse: mrss_parse_url_with_options failed: err = %d",err);
 		if (mrss) {
 			mrss_free(mrss);
 		}
 		return feed;
 	}
 
+	const char * encoding = mrss->encoding ? mrss->encoding : "utf-8";
+
 	if (mrss->title) {
-		char * str = stringprep_convert(mrss->title, stringprep_locale_charset(), mrss->encoding ? mrss->encoding : "utf-8");
+		char * str = stringprep_convert(mrss->title, stringprep_locale_charset(), encoding);
 		if (str) {
 			feed.set_title(str);
 			free(str);
 		}
 	}
 	if (mrss->description) {
-		char * str = stringprep_convert(mrss->description, stringprep_locale_charset(), mrss->encoding ? mrss->encoding : "utf-8");
+		char * str = stringprep_convert(mrss->description, stringprep_locale_charset(), encoding);
 		if (str) {
-			feed.set_description(mrss->description);
+			feed.set_description(str);
 			free(str);
 		}
 	}
@@ -51,10 +55,12 @@ rss_feed rss_parser::parse() {
 	else
 		feed.set_pubDate(::time(NULL));
 
+	GetLogger().log(LOG_DEBUG, "rss_parser::parse: feed title = `%s' link = `%s'", feed.title().c_str(), feed.link().c_str());
+
 	for (mrss_item_t * item = mrss->item; item != NULL; item = item->next ) {
 		rss_item x(ch);
 		if (item->title) {
-			char * str = stringprep_convert(item->title,stringprep_locale_charset(),mrss->encoding ? mrss->encoding : "utf-8"); // XXX hack
+			char * str = stringprep_convert(item->title,stringprep_locale_charset(), encoding);
 			if (str) {
 				x.set_title(str);
 				free(str);
@@ -63,7 +69,7 @@ rss_feed rss_parser::parse() {
 		if (item->link) x.set_link(item->link);
 		if (item->author) x.set_author(item->author);
 		if (item->description) {
-			char * str = stringprep_convert(item->description,stringprep_locale_charset(),mrss->encoding ? mrss->encoding : "utf-8"); // FIXME: hack
+			char * str = stringprep_convert(item->description,stringprep_locale_charset(), encoding);
 			if (str) {
 				x.set_description(str);
 				free(str);
@@ -79,6 +85,8 @@ rss_feed rss_parser::parse() {
 		else
 			x.set_guid(item->link); // XXX hash something to get a better alternative GUID
 		// x.set_dirty();
+		GetLogger().log(LOG_DEBUG, "rss_parser::parse: item title = `%s' link = `%s' pubDate = `%s' (%d)", 
+			x.title().c_str(), x.link().c_str(), x.pubDate().c_str(), x.pubDate_timestamp());
 		feed.items().push_back(x);
 	}
 
@@ -91,33 +99,27 @@ rss_feed rss_parser::parse() {
 
 void rss_item::set_title(const std::string& t) { 
 	title_ = t; 
-	// if (ch) ch->update_rssitem(*this, feedurl);
 }
 
 
 void rss_item::set_link(const std::string& l) { 
 	link_ = l; 
-	// if (ch) ch->update_rssitem(*this, feedurl);	
 }
 
 void rss_item::set_author(const std::string& a) { 
 	author_ = a; 
-	// if (ch) ch->update_rssitem(*this, feedurl);
 }
 
 void rss_item::set_description(const std::string& d) { 
 	description_ = d; 
-	// if (ch) ch->update_rssitem(*this, feedurl);
 }
 
 void rss_item::set_pubDate(time_t t) { 
 	pubDate_ = t; 
-	// if (ch) ch->update_rssitem(*this, feedurl);
 }
 
 void rss_item::set_guid(const std::string& g) { 
 	guid_ = g; 
-	// if (ch) ch->update_rssitem(*this, feedurl);
 }
 
 void rss_item::set_unread(bool u) { 

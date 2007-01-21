@@ -3,6 +3,7 @@
 #include <itemview.h>
 #include <help.h>
 #include <filebrowser.h>
+#include <logger.h>
 
 #include <iostream>
 #include <iomanip>
@@ -65,8 +66,6 @@ void view::set_status(const char * msg) {
 
 void view::show_error(const char * msg) {
 	set_status(msg);
-	//::sleep(2);
-	//set_status("");
 }
 
 void view::run_feedlist() {
@@ -94,12 +93,15 @@ void view::run_feedlist() {
 
 		operation op = keys->get_operation(event);
 
+		GetLogger().log(LOG_DEBUG,"view::run_feedlist: event = %s operation = %d", event, op);
+
 		switch (op) {
 			case OP_OPEN: {
 					bool quit = false;
 					bool auto_open = false;
 					do {
 						std::string feedpos = feedlist_form.get("feedpos");
+						GetLogger().log(LOG_INFO, "view::run_feedlist: opening feed at position `%s'",feedpos.c_str());
 						if (feeds_shown > 0 && feedpos.length() > 0) {
 							std::istringstream posname(feedpos);
 							unsigned int pos = 0;
@@ -120,6 +122,7 @@ void view::run_feedlist() {
 				break;
 			case OP_RELOAD: {
 					std::string feedposname = feedlist_form.get("feedposname");
+					GetLogger().log(LOG_INFO, "view::run_feedlist: reloading feed at position `%s'",feedposname.c_str());
 					if (feeds_shown > 0 && feedposname.length() > 0) {
 						std::istringstream posname(feedposname);
 						unsigned int pos = 0;
@@ -131,10 +134,12 @@ void view::run_feedlist() {
 				}
 				break;
 			case OP_RELOADALL:
+				GetLogger().log(LOG_INFO, "view::run_feedlist: reloading all feeds");
 				ctrl->start_reload_all_thread();
 				break;
 			case OP_MARKFEEDREAD: {
 					std::string feedposname = feedlist_form.get("feedposname");
+					GetLogger().log(LOG_INFO, "view::run_feedlist: marking feed read at position `%s'",feedposname.c_str());
 					if (feeds_shown > 0 && feedposname.length() > 0) {
 						set_status("Marking feed read...");
 						std::istringstream posname(feedposname);
@@ -149,6 +154,7 @@ void view::run_feedlist() {
 				}
 				break;
 			case OP_TOGGLESHOWREAD:
+				GetLogger().log(LOG_INFO, "view::run_feedlist: toggling show-read-feeds");
 				if (cfg->get_configvalue_as_bool("show-read-feeds")) {
 					cfg->set_configvalue("show-read-feeds","no");
 				} else {
@@ -157,17 +163,20 @@ void view::run_feedlist() {
 				update = true;
 				break;
 			case OP_NEXTUNREAD:
+				GetLogger().log(LOG_INFO, "view::run_feedlist: jumping to next unred feed");
 				if (!jump_to_next_unread_feed()) {
 					show_error("No feeds with unread items.");
 				}
 				break;
 			case OP_MARKALLFEEDSREAD:
+				GetLogger().log(LOG_INFO, "view::run_feedlist: marking all feeds read");
 				set_status("Marking all feeds read...");
 				ctrl->catchup_all();
 				set_status("");
 				update = true;
 				break;
 			case OP_QUIT:
+				GetLogger().log(LOG_INFO, "view::run_feedlist: quitting");
 				quit = true;
 				break;
 			case OP_HELP:
@@ -254,11 +263,14 @@ bool view::run_itemlist(unsigned int pos, bool auto_open) {
 			op = keys->get_operation(event);
 		}
 
+		GetLogger().log(LOG_DEBUG, "view::run_itemlist: event = %s operation = %d auto_open = %d", event, op, auto_open);
+
 		switch (op) {
 			case OP_OPEN: {
 					bool open_next_item = false;
 					do {
 						std::string itemposname = itemlist_form.get("itempos");
+						GetLogger().log(LOG_INFO, "view::run_itemlist: opening item at pos `%s' open_next_item = %d", itemposname.c_str(), open_next_item);
 						if (itemposname.length() > 0) {
 							std::istringstream posname(itemposname);
 							unsigned int pos = 0;
@@ -282,6 +294,7 @@ bool view::run_itemlist(unsigned int pos, bool auto_open) {
 			case OP_SAVE: 
 				{
 					std::string itemposname = itemlist_form.get("itempos");
+					GetLogger().log(LOG_INFO, "view::run_itemlist: saving item at pos `%s'", itemposname.c_str());
 					if (itemposname.length() > 0) {
 						std::istringstream posname(itemposname);
 						unsigned int pos = 0;
@@ -314,18 +327,22 @@ bool view::run_itemlist(unsigned int pos, bool auto_open) {
 				set_status("");
 				break;
 			case OP_RELOAD:
+				GetLogger().log(LOG_INFO, "view::run_itemlist: reloading current feed");
 				ctrl->reload(pos);
 				feed = ctrl->get_feed(pos);
 				rebuild_list = true;
 				break;
 			case OP_QUIT:
+				GetLogger().log(LOG_INFO, "view::run_itemlist: quitting");
 				quit = true;
 				break;
 			case OP_NEXTUNREAD:
+				GetLogger().log(LOG_INFO, "view::run_itemlist: jumping to next unread item");
 				if (!jump_to_next_unread_item(items))
 					show_no_unread_error = true;
 				break;
 			case OP_MARKFEEDREAD:
+				GetLogger().log(LOG_INFO, "view::run_itemlist: marking feed read");
 				set_status("Marking feed read...");
 				mark_all_read(items);
 				set_status("");
@@ -333,6 +350,7 @@ bool view::run_itemlist(unsigned int pos, bool auto_open) {
 				break;
 			case OP_TOGGLEITEMREAD: {
 					std::string itemposname = itemlist_form.get("itempos");
+					GetLogger().log(LOG_INFO, "view::run_itemlist: toggling item read at pos `%s'", itemposname.c_str());
 					if (itemposname.length() > 0) {
 						std::istringstream posname(itemposname);
 						unsigned int pos = 0;
@@ -367,6 +385,7 @@ std::string view::get_filename_suggestion(const std::string& s) {
 		retval = "article.txt";
 	else
 		retval.append(".txt");
+	GetLogger().log(LOG_DEBUG,"view::get_filename_suggestion: %s -> %s", s.c_str(), retval.c_str());
 	return retval;	
 }
 
@@ -584,10 +603,13 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 		if (!event) continue;
 		
 		operation op = keys->get_operation(event);
+
+		GetLogger().log(LOG_DEBUG,"view::filebrowser: event = %s operation = %d type = %d", event, op, type);
 		
 		switch (op) {
 			case OP_OPEN: 
 				{
+					GetLogger().log(LOG_DEBUG,"view::filebrowser: 'opening' item");
 					std::string focus = filebrowser_form.get_focus();
 					if (focus.length() > 0) {
 						if (focus == "files") {
@@ -645,6 +667,7 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 				}
 				break;
 			case OP_QUIT:
+				GetLogger().log(LOG_DEBUG,"view::filebrowser: quitting");
 				view_stack.pop_front();
 				return std::string("");
 			default:
@@ -670,6 +693,7 @@ bool view::jump_to_next_unread_feed() {
 				std::ostringstream posname;
 				posname << i;
 				feedlist_form.set("feedpos", posname.str());
+				GetLogger().log(LOG_DEBUG,"view::jump_to_next_unread_feed: jumped to pos %u", i);
 				return true;
 			}
 		}
@@ -678,12 +702,14 @@ bool view::jump_to_next_unread_feed() {
 				std::ostringstream posname;
 				posname << i;
 				feedlist_form.set("feedpos", posname.str());
+				GetLogger().log(LOG_DEBUG,"view::jump_to_next_unread_feed: jumped to pos %u (wraparound)", i);
 				return true;
 			}
 		}
 	} else {
 		show_error("No feed selected!"); // shouldn't happen
 	}
+	GetLogger().log(LOG_DEBUG,"view::jump_to_next_unread_feed: no unread feeds");
 	return false;
 }
 
@@ -699,6 +725,7 @@ bool view::jump_to_next_unread_item(std::vector<rss_item>& items) {
 				std::ostringstream posname;
 				posname << i;
 				itemlist_form.set("itempos",posname.str());
+				GetLogger().log(LOG_DEBUG,"view::jump_to_next_unread_item: jumped to pos %u", i);
 				return true;
 			}
 		}
@@ -707,6 +734,7 @@ bool view::jump_to_next_unread_item(std::vector<rss_item>& items) {
 				std::ostringstream posname;
 				posname << i;
 				itemlist_form.set("itempos",posname.str());
+				GetLogger().log(LOG_DEBUG,"view::jump_to_next_unread_item: jumped to pos %u (wraparound)", i);
 				return true;
 			}
 		}
@@ -817,16 +845,20 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 
 		operation op = keys->get_operation(event);
 
+		GetLogger().log(LOG_DEBUG, "view::run_itemview: event = %s operation = %d", event, op);
+
 		switch (op) {
 			case OP_OPEN:
 				// nothing
 				break;
 			case OP_TOGGLESOURCEVIEW:
+				GetLogger().log(LOG_INFO, "view::run_itemview: toggling source view");
 				show_source = !show_source;
 				redraw = true;
 				break;
 			case OP_SAVE:
 				{
+					GetLogger().log(LOG_INFO, "view::run_itemview: saving article");
 					std::string filename = filebrowser(FBT_SAVE,get_filename_suggestion(item.title()));
 					if (filename == "") {
 						show_error("Aborted saving.");	
@@ -845,13 +877,16 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 				}
 				break;
 			case OP_OPENINBROWSER:
+				GetLogger().log(LOG_INFO, "view::run_itemview: starting browser");
 				set_status("Starting browser...");
 				open_in_browser(item.link());
 				set_status("");
 				break;
 			case OP_NEXTUNREAD:
-				retval = true;
+				GetLogger().log(LOG_INFO, "view::run_itemview: jumping to next unread article");
+				retval = true; // fall-through is OK
 			case OP_QUIT:
+				GetLogger().log(LOG_INFO, "view::run_itemview: quitting");
 				quit = true;
 				break;
 			case OP_HELP:
@@ -881,6 +916,7 @@ void view::open_in_browser(const std::string& url) {
 	cmdline.append(url);
 	cmdline.append("'");
 	stfl::reset();
+	GetLogger().log(LOG_DEBUG, "view::open_in_browser: running `%s'", cmdline.c_str());
 	::system(cmdline.c_str());
 	view_stack.pop_front();
 }
