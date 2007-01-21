@@ -230,6 +230,11 @@ bool view::run_itemlist(unsigned int pos, bool auto_open) {
 				} else {
 					title.append("  ");
 				}
+				char datebuf[64];
+				time_t t = it->pubDate_timestamp();
+				struct tm * stm = localtime(&t);
+				strftime(datebuf,sizeof(datebuf), "%b %d   ", stm);
+				title.append(datebuf);
 				title.append(it->title());
 				line.append(stfl::quote(title));
 				line.append("}");
