@@ -7,6 +7,7 @@ TODO:
 - improve configuration parser: support quoting
 - add proxy configuration support
 - add color configuration support
+- add auto-reload feature
 
 longteam goals to reach:
 - support for atom (talk to mRss guy?) - implement by yourself?
