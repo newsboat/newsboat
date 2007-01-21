@@ -1,17 +1,15 @@
 TODO:
-- mark entries as read only when they've been on the screen _totally_ (like google reader)
 - search function (?)
-- fix entity decoding, and utf-8 handling in general
-- write proper documentation
 - check whether date parsing uses the correct timezone
 - refactor XML pull parser (many redundancies)
 	ignore comments
 	join two subsequent text nodes separated by a comment
 - improve configuration parser: support quoting
+- add proxy configuration support
+- add color configuration support
 
 longteam goals to reach:
 - support for atom (talk to mRss guy?) - implement by yourself?
-- alternative: build own RSS/Atom parser based on own XML parser (build DOM parser from it first)
 - add scripting support
 - make script functions callable via key bindings
 
