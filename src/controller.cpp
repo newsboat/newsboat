@@ -35,7 +35,7 @@ void ctrl_c_action(int sig) {
 	::exit(EXIT_FAILURE);
 }
 
-controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), refresh_on_start(false) {
+controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), refresh_on_start(false), cfg(0) {
 	std::ostringstream cfgfile;
 
 	char * cfgdir;
@@ -64,9 +64,9 @@ controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cach
 }
 
 controller::~controller() {
-	if (rsscache)
-		delete rsscache;
+	delete rsscache;
 	delete reload_mutex;
+	delete cfg;
 }
 
 void controller::set_view(view * vv) {
@@ -163,9 +163,9 @@ void controller::run(int argc, char * argv[]) {
 	std::cout.flush();
 	
 	configparser cfgparser(config_file.c_str());
-	configcontainer cfg;
+	cfg = new configcontainer();
 	keymap keys;
-	cfg.register_commands(cfgparser);
+	cfg->register_commands(cfgparser);
 	cfgparser.register_handler("bind-key",&keys);
 	cfgparser.register_handler("unbind-key",&keys);
 
@@ -185,7 +185,7 @@ void controller::run(int argc, char * argv[]) {
 		std::cout << "Loading articles from cache...";
 	std::cout.flush();
 
-	rsscache = new cache(cache_file,&cfg);
+	rsscache = new cache(cache_file,cfg);
 
 	for (std::vector<std::string>::const_iterator it=urlcfg.get_urls().begin(); it != urlcfg.get_urls().end(); ++it) {
 		rss_feed feed(rsscache);
@@ -203,7 +203,7 @@ void controller::run(int argc, char * argv[]) {
 		return;
 	}
 
-	v->set_config_container(&cfg);
+	v->set_config_container(cfg);
 	v->set_keymap(&keys);
 	v->set_feedlist(feeds);
 	v->run_feedlist();
@@ -291,7 +291,7 @@ void controller::reload(unsigned int pos, unsigned int max) {
 		msg.append("...");
 		v->set_status(msg.c_str());
 				
-		rss_parser parser(feed.rssurl().c_str(), rsscache);
+		rss_parser parser(feed.rssurl().c_str(), rsscache, cfg);
 		feed = parser.parse();
 		
 		/*

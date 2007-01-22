@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include <configcontainer.h>
+
 
 extern "C" {
 #include <mrss.h>
@@ -96,13 +98,14 @@ namespace newsbeuter {
 
 	class rss_parser {
 		public:
-			rss_parser(const char * uri, cache * c);
+			rss_parser(const char * uri, cache * c, configcontainer *);
 			~rss_parser();
 			rss_feed parse();
 			static time_t parse_date(const std::string& datestr);
 		private:
 			std::string my_uri;
 			cache * ch;
+			configcontainer *cfgcont;
 			mrss_t * mrss;
 	};
 

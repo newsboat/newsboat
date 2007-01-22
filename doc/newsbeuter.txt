@@ -108,15 +108,18 @@ end of line.
 
 
 .Configuration Commands
-[frame="all", grid="all",format="dsv"]
+[frame="all", grid="all",format="dsv",separator="|"]
 `10`15`15`40`20~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Configuration Command:Argument(s):Default:Description:Example
+Configuration Command|Argument(s)|Default|Description|Example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-show-read-feeds:[yes|no]:yes:If yes, then all feeds, including those without unread articles, are listed. If no, then only feeds with one or more unread articles are list.:show-read-feeds no
-browser:<browser-command>:lynx:Set the browser command to use when opening an article in the browser.:browser w3m
-max-items:<number>:0:Set the number of articles to maximally keep per feed. If the number is set to 0, then all articles are kept.:max-items 100
-bind-key:<key> <operation>::Bind key <key> to <operation>. This means that whenever <key> is preseed, then <operation> is executed (if applicable in the current context). A list of available operations can be found below.:bind-key ^r reload-all
-unbind-key:<key>::Unbind key <key>. This means that no operation is called when <key> is pressed.:unbind-key R
+show-read-feeds|[yes|no]|yes|If yes, then all feeds, including those without unread articles, are listed. If no, then only feeds with one or more unread articles are list.|show-read-feeds no
+browser|<browser-command>|lynx|Set the browser command to use when opening an article in the browser.|browser w3m
+max-items|<number>|0|Set the number of articles to maximally keep per feed. If the number is set to 0, then all articles are kept.|max-items 100
+bind-key|<key> <operation>||Bind key <key> to <operation>. This means that whenever <key> is preseed, then <operation> is executed (if applicable in the current context). A list of available operations can be found below.|bind-key ^r reload-all
+unbind-key|<key>||Unbind key <key>. This means that no operation is called when <key> is pressed.|unbind-key R
+use-proxy|[yes|no]|no|If yes, then the configured proxy will be used for downloading the RSS feeds.|use-proxy yes
+proxy|<server:port>||Set the proxy to use for downloading RSS feeds.|proxy localhost:3128
+proxy-auth|<auth>||Set the proxy authentication string.|proxy-auth user:password
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 

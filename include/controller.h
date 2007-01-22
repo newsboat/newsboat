@@ -5,6 +5,7 @@
 #include <rss.h>
 #include <cache.h>
 #include <nxml.h>
+#include <configcontainer.h>
 
 namespace newsbeuter {
 
@@ -46,6 +47,7 @@ namespace newsbeuter {
 			std::string cache_file;
 			std::string config_file;
 			bool refresh_on_start;
+			configcontainer * cfg;
 
 			mutex * reload_mutex;
 	};

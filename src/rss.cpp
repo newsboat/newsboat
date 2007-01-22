@@ -7,10 +7,11 @@
 #include <logger.h>
 #include <sstream>
 #include <iostream>
+#include <configcontainer.h>
 
 using namespace newsbeuter;
 
-rss_parser::rss_parser(const char * uri, cache * c) : my_uri(uri), ch(c), mrss(0) { }
+rss_parser::rss_parser(const char * uri, cache * c, configcontainer * cfg) : my_uri(uri), ch(c), cfgcont(cfg), mrss(0) { }
 
 rss_parser::~rss_parser() { }
 
@@ -19,7 +20,15 @@ rss_feed rss_parser::parse() {
 
 	feed.set_rssurl(my_uri);
 
-	mrss_options_t * options = mrss_options_new(30, NULL, NULL, NULL, NULL, NULL, 0, NULL, USER_AGENT);
+	char * proxy = NULL;
+	char * proxy_auth = NULL;
+
+	if (cfgcont->get_configvalue_as_bool("use-proxy") == true) {
+		proxy = const_cast<char *>(cfgcont->get_configvalue("proxy").c_str());
+		proxy_auth = const_cast<char *>(cfgcont->get_configvalue("proxy-auth").c_str());
+	}
+
+	mrss_options_t * options = mrss_options_new(30, proxy, proxy_auth, NULL, NULL, NULL, 0, NULL, USER_AGENT);
 	mrss_error_t err = mrss_parse_url_with_options(const_cast<char *>(my_uri.c_str()), &mrss, options);
 	mrss_options_free(options);
 
