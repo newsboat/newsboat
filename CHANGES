@@ -5,6 +5,7 @@ Changes for newsbeuter:
 	improved HTML rendering (occasional missing spaces, <pre> tags)
 	added possibility to use the space key for key bindings
 	made "next unread" function work across feeds when in item view
+	added the possibility to view all URLs within an article and open them in a browser
 
 0.1.1 (2007-01-17):
 	fixed a crash when ISO-8859-1 encoded feeds with umlauts in the title were displayed on systems with UTF-8 locales enabled.
