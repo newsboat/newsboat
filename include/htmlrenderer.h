@@ -15,6 +15,7 @@ namespace newsbeuter {
 		private:
 			unsigned int w;
 			void prepare_newline(std::string& line, int indent_level);
+			void add_link(std::vector<std::string>& links, const std::string& link);
 	};
 
 }

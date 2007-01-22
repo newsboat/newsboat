@@ -15,6 +15,16 @@ void htmlrenderer::render(const std::string& source, std::vector<std::string>& l
 	render(input, lines, links);
 }
 
+void htmlrenderer::add_link(std::vector<std::string>& links, const std::string& link) {
+	bool found = false;
+	for (std::vector<std::string>::iterator it=links.begin();it!=links.end();++it) {
+		if (*it == link)
+			found = true;
+	}
+	if (!found)
+		links.push_back(link);
+}
+
 void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, std::vector<std::string>& links) {
 	unsigned int link_count = 0;
 	std::string curline;
@@ -38,9 +48,9 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						link = "";
 					}
 					if (link.length() > 0) {
-						links.push_back(link);
+						add_link(links,link);
 						std::ostringstream ref;
-						ref << "[" << link_count << "]";
+						ref << "[" << links.size()-1 << "]";
 						link_count++;
 						curline.append(ref.str());
 					}
@@ -62,9 +72,9 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						imgurl = "";
 					}
 					if (imgurl.length() > 0) {
-						links.push_back(imgurl);
+						add_link(links,imgurl);
 						std::ostringstream ref;
-						ref << "[" << link_count << "]";
+						ref << "[" << links.size()-1 << "]";
 						link_count++;
 						curline.append(ref.str());
 					}

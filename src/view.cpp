@@ -831,8 +831,8 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 
 			if (links.size() > 0) {
 				links.erase(links.begin(), links.end());
-				links.push_back(item.link());
 			}
+			links.push_back(item.link());
 
 			if (show_source) {
 				render_source(lines, item.description(), render_width);
