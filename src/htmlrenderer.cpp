@@ -50,7 +50,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					if (link.length() > 0) {
 						add_link(links,link);
 						std::ostringstream ref;
-						ref << "[" << links.size()-1 << "]";
+						ref << "[" << link_count << "]";
 						link_count++;
 						curline.append(ref.str());
 					}
@@ -74,7 +74,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					if (imgurl.length() > 0) {
 						add_link(links,imgurl);
 						std::ostringstream ref;
-						ref << "[" << links.size()-1 << "]";
+						ref << "[" << link_count << "]";
 						link_count++;
 						curline.append(ref.str());
 					}
