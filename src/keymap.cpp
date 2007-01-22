@@ -24,6 +24,7 @@ op_desc opdescs[] = {
 	{ OP_TOGGLESOURCEVIEW, "Toggle source view" },
 	{ OP_TOGGLEITEMREAD, "Toggle read status for article" },
 	{ OP_TOGGLESHOWREAD, "Toggle show read feeds" },
+	{ OP_SHOWURLS, "Show URLs in current article" },
 	{ OP_NIL, NULL }
 };
 
@@ -41,6 +42,7 @@ keymap::keymap() {
 	keymap_["?"] = OP_HELP;
 	keymap_["^u"] = OP_TOGGLESOURCEVIEW,
 	keymap_["l"] = OP_TOGGLESHOWREAD;
+	keymap_["u"] = OP_SHOWURLS;
 	keymap_["NIL"] = OP_NIL;
 }
 
@@ -85,6 +87,7 @@ operation keymap::get_opcode(const std::string& opstr) {
 		{ "toggle-source-view", OP_TOGGLESOURCEVIEW },
 		{ "toggle-article-read", OP_TOGGLEITEMREAD },
 		{ "toggle-show-read-feeds", OP_TOGGLESHOWREAD },
+		{ "show-urls", OP_SHOWURLS },
 		{ NULL, OP_NIL }
 	};
 	for (int i=0;opcode_map[i].opstr;++i) {

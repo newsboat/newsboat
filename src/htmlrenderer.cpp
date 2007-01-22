@@ -10,13 +10,12 @@ using namespace newsbeuter;
 
 htmlrenderer::htmlrenderer(unsigned int width) : w(width) { }
 
-void htmlrenderer::render(const std::string& source, std::vector<std::string>& lines) {
+void htmlrenderer::render(const std::string& source, std::vector<std::string>& lines, std::vector<std::string>& links) {
 	std::istringstream input(source);
-	render(input, lines);
+	render(input, lines, links);
 }
 
-void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines) {
-	std::vector<std::string> links;
+void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, std::vector<std::string>& links) {
 	unsigned int link_count = 0;
 	std::string curline;
 	int indent_level = 0;

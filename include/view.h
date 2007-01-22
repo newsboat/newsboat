@@ -44,6 +44,7 @@ namespace newsbeuter {
 			void set_feedlist_keymap_hint();
 			void set_help_keymap_hint();
 			void set_filebrowser_keymap_hint();
+			void set_urlview_keymap_hint();
 			
 			void set_itemlist_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);
 			void set_itemview_head(const std::string& s);
@@ -59,6 +60,8 @@ namespace newsbeuter {
 			std::string filebrowser(filebrowser_type type, const std::string& default_filename = "", std::string dir = "");
 			std::string get_filename_suggestion(const std::string& s);
 			void render_source(std::vector<std::string>& lines, std::string desc, unsigned int width);
+
+			void run_urlview(std::vector<std::string>& links);
 			
 			struct keymap_hint_entry {
 				operation op; 
@@ -78,6 +81,7 @@ namespace newsbeuter {
 			stfl::form itemview_form;
 			stfl::form help_form;
 			stfl::form filebrowser_form;
+			stfl::form urlview_form;
 			
 			std::list<stfl::form *> view_stack;
 			

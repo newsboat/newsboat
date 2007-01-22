@@ -8,7 +8,6 @@ TODO:
 - add proxy configuration support
 - add color configuration support
 - add auto-reload feature
-- integrate urlview OR implement an urlview-like interface
 
 longteam goals to reach:
 - support for atom (talk to mRss guy?) - implement by yourself?
@@ -47,3 +46,4 @@ DONE:
 - implement "source view" in itemview.
 - made feedlist head fancier
 - added "toggle item read" function
+- implemented an urlview-like interface

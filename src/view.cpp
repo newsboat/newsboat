@@ -3,6 +3,8 @@
 #include <itemview.h>
 #include <help.h>
 #include <filebrowser.h>
+#include <urlview.h>
+
 #include <logger.h>
 
 #include <iostream>
@@ -37,7 +39,7 @@ using namespace newsbeuter;
 
 view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0),
 		feedlist_form(feedlist_str), itemlist_form(itemlist_str), itemview_form(itemview_str), 
-		help_form(help_str), filebrowser_form(filebrowser_str) { 
+		help_form(help_str), filebrowser_form(filebrowser_str), urlview_form(urlview_str) { 
 	mtx = new mutex();
 }
 
@@ -396,6 +398,7 @@ std::string view::get_filename_suggestion(const std::string& s) {
 
 void view::write_item(const rss_item& item, const std::string& filename) {
 	std::vector<std::string> lines;
+	std::vector<std::string> links; // not used
 	
 	std::string title("Title: ");
 	title.append(item.title());
@@ -412,7 +415,7 @@ void view::write_item(const rss_item& item, const std::string& filename) {
 	lines.push_back(std::string(""));
 	
 	htmlrenderer rnd(80);
-	rnd.render(item.description(), lines);
+	rnd.render(item.description(), lines, links);
 
 	std::fstream f;
 	f.open(filename.c_str(),std::fstream::out);
@@ -755,6 +758,7 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 	bool redraw = true;
 	bool retval = false;
 	static bool render_hack = false;
+	std::vector<std::string> links;
 	
 	view_stack.push_front(&itemview_form);
 	
@@ -825,11 +829,16 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 					render_width -= 5; 	
 			}
 
+			if (links.size() > 0) {
+				links.erase(links.begin(), links.end());
+				links.push_back(item.link());
+			}
+
 			if (show_source) {
 				render_source(lines, item.description(), render_width);
 			} else {
 				htmlrenderer rnd(render_width);
-				rnd.render(item.description(), lines);
+				rnd.render(item.description(), lines, links);
 			}
 
 			for (std::vector<std::string>::iterator it = lines.begin(); it != lines.end(); ++it) {
@@ -887,6 +896,10 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 				open_in_browser(item.link());
 				set_status("");
 				break;
+			case OP_SHOWURLS:
+				GetLogger().log(LOG_DEBUG, "view::run_itemview: showing URLs");
+				run_urlview(links);
+				break;
 			case OP_NEXTUNREAD:
 				GetLogger().log(LOG_INFO, "view::run_itemview: jumping to next unread article");
 				retval = true; // fall-through is OK
@@ -923,6 +936,60 @@ void view::open_in_browser(const std::string& url) {
 	stfl::reset();
 	GetLogger().log(LOG_DEBUG, "view::open_in_browser: running `%s'", cmdline.c_str());
 	::system(cmdline.c_str());
+	view_stack.pop_front();
+}
+
+void view::run_urlview(std::vector<std::string>& links) {
+	set_urlview_keymap_hint();
+
+	view_stack.push_front(&urlview_form);
+	set_status("");
+
+	std::string code = "{list";
+	unsigned int i=0;
+	for (std::vector<std::string>::iterator it = links.begin(); it != links.end(); ++it, ++i) {
+		std::ostringstream os;
+		char line[1024];
+		snprintf(line,sizeof(line),"%2u  %s",i+1,it->c_str());
+		os << "{listitem[" << i << "] text:" << stfl_quote(line) << "}";
+		code.append(os.str());
+	}
+	code.append("}");
+
+	urlview_form.modify("urls","replace_inner",code);
+
+	bool quit = false;
+
+	do {
+		const char * event = urlview_form.run(0);
+		if (!event) continue;
+
+		operation op = keys->get_operation(event);
+
+		switch (op) {
+			case OP_OPEN: 
+				{
+					std::string posstr = urlview_form.get("feedpos");
+					if (posstr.length() > 0) {
+						std::istringstream is(posstr);
+						unsigned int idx;
+						is >> idx;
+						set_status("Starting browser...");
+						open_in_browser(links[idx]);
+						set_status("");
+					} else {
+						show_error("No link selected!");
+					}
+				}
+				break;
+			case OP_QUIT:
+				quit = true;
+				break;
+			default: // nothing
+				break;
+		}
+	} while (!quit);
+
 	view_stack.pop_front();
 }
 
@@ -1075,6 +1142,16 @@ void view::set_itemlist_keymap_hint() {
 		{ OP_NEXTUNREAD, "Next Unread" },
 		{ OP_MARKFEEDREAD, "Mark All Read" },
 		{ OP_HELP, "Help" },
+		{ OP_NIL, NULL }
+	};
+	std::string keymap_hint = prepare_keymaphint(hints);
+	itemlist_form.set("help", keymap_hint);
+}
+
+void view::set_urlview_keymap_hint() {
+	keymap_hint_entry hints[] = {
+		{ OP_QUIT, "Quit" },
+		{ OP_OPEN, "Open in Browser" },
 		{ OP_NIL, NULL }
 	};
 	std::string keymap_hint = prepare_keymaphint(hints);
