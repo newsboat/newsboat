@@ -76,6 +76,8 @@ namespace newsbeuter {
 			keymap * keys;
 			mutex * mtx;
 
+			friend class colormanager;
+
 			stfl::form feedlist_form;
 			stfl::form itemlist_form;
 			stfl::form itemview_form;

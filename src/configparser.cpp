@@ -13,6 +13,7 @@ configparser::configparser(const char * file) : filename(file) { }
 configparser::~configparser() { }
 
 void configparser::parse() {
+	unsigned int linecounter = 1;
 	std::fstream f(filename.c_str());
 	std::string line;
 	getline(f,line);
@@ -27,7 +28,7 @@ void configparser::parse() {
 				action_handler_status status = handler->handle_action(cmd,tokens);
 				if (status != AHS_OK) {
 					std::ostringstream os;
-					os << "Error while processing command `" << cmd << "': ";
+					os << "Error while processing command `" << cmd << "' (" << filename << " line " << linecounter << "): ";
 					if (status == AHS_INVALID_PARAMS) {
 						os << "invalid parameters.";
 					} else if (status == AHS_TOO_FEW_PARAMS) {
@@ -46,6 +47,7 @@ void configparser::parse() {
 			}
 		}
 		getline(f,line);	
+		++linecounter;
 	}
 }
 

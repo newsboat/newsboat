@@ -4,6 +4,7 @@
 #include <configcontainer.h>
 #include <exceptions.h>
 #include <downloadthread.h>
+#include <colormanager.h>
 #include <logger.h>
 #include <fstream>
 #include <sstream>
@@ -164,8 +165,11 @@ void controller::run(int argc, char * argv[]) {
 	
 	configparser cfgparser(config_file.c_str());
 	cfg = new configcontainer();
-	keymap keys;
 	cfg->register_commands(cfgparser);
+	colormanager * colorman = new colormanager();
+	colorman->register_commands(cfgparser);
+
+	keymap keys;
 	cfgparser.register_handler("bind-key",&keys);
 	cfgparser.register_handler("unbind-key",&keys);
 
@@ -177,6 +181,10 @@ void controller::run(int argc, char * argv[]) {
 		remove_fs_lock();
 		return;	
 	}
+
+	if (colorman->colors_loaded())
+		colorman->set_colors(v);
+	delete colorman;
 	
 	if (!do_export)
 		std::cout << "done." << std::endl;

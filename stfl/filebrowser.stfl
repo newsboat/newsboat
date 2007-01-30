@@ -1,13 +1,14 @@
 vbox
-  @style_normal:bg=black,fg=white
-  @info#style_normal:bg=blue,fg=yellow,attr=bold
+  @style_normal[background]:bg=black,fg=white
+  @info#style_normal[info]:bg=blue,fg=yellow,attr=bold
   label#info
     text[head]:"File Browser"
     .expand:h
   list[files]
     * this height is only a hack to expand the list correctly (bug?)
     .expand:vh .height:65535
-    style_focus:fg=yellow,bg=blue,attr=bold
+    style_normal[listnormal]:bg=black,fg=white
+    style_focus[listfocus]:fg=yellow,bg=blue,attr=bold
     pos_name[listposname]:
     pos[listpos]:0
   table

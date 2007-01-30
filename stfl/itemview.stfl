@@ -1,11 +1,12 @@
 vbox
-  @style_normal:bg=black,fg=white
-  @info#style_normal:bg=blue,fg=yellow,attr=bold
+  @style_normal[background]:bg=black,fg=white
+  @info#style_normal[info]:bg=blue,fg=yellow,attr=bold
   label#info
     text[head]:"Article '#'"
     .expand:h
   textview[article]
-    style_end:fg=blue,attr=bold
+    style_normal[article]:bg=black,fg=white
+    style_end[styleend]:fg=blue,attr=bold
     .expand:vh
     offset[articleoffset]:0
   label#info

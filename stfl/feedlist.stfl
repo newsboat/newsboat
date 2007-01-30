@@ -1,11 +1,12 @@
 vbox
-  @style_normal:bg=black,fg=white
-  @info#style_normal:bg=blue,fg=yellow,attr=bold
+  @style_normal[background]:bg=black,fg=white
+  @info#style_normal[info]:bg=blue,fg=yellow,attr=bold
   label#info
     text[head]:"Your feeds"
     .expand:h
   !list[feeds]
-    style_focus:fg=yellow,bg=blue,attr=bold
+    style_normal[listnormal]:bg=black,fg=white
+    style_focus[listfocus]:fg=yellow,bg=blue,attr=bold
     .expand:vh
     pos_name[feedposname]:
     pos[feedpos]:0
