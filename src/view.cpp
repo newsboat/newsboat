@@ -258,7 +258,7 @@ bool view::run_itemlist(unsigned int pos, bool auto_open) {
 		}
 
 		operation op;
-		const char * event;
+		const char * event = NULL;
 		
 		if (auto_open) {
 			auto_open = false;

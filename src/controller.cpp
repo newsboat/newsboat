@@ -436,15 +436,22 @@ void controller::remove_fs_lock() {
 }
 
 bool controller::try_fs_lock(pid_t & pid) {
-	if (::access(lock_file.c_str(), F_OK)==0) {
-		std::fstream f(lock_file.c_str(), std::fstream::in);
-		f >> pid;
-		GetLogger().log(LOG_DEBUG,"found lock file");
+	int fd;
+	if ((fd = ::open(lock_file.c_str(), O_WRONLY | O_CREAT | O_EXCL, 0600)) >= 0) {
+		pid = ::getpid();
+		::write(fd,&pid,sizeof(pid));
+		::close(fd);
+		GetLogger().log(LOG_DEBUG,"wrote lock file with pid = %u",pid);
+		return true;
+	} else {
+		pid = 0;
+		if ((fd = ::open(lock_file.c_str(), O_RDONLY)) >=0) {
+			::read(fd,&pid,sizeof(pid));
+			::close(fd);
+			GetLogger().log(LOG_DEBUG,"found lock file");
+		} else {
+			GetLogger().log(LOG_DEBUG,"found lock file, but couldn't open it for reading from it");
+		}
 		return false;
 	}
-	std::fstream f(lock_file.c_str(), std::fstream::out);
-	f << ::getpid();
-	f.close();
-	GetLogger().log(LOG_DEBUG,"wrote lock file with pid = %u",::getpid());
-	return true;
 }
