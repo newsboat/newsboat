@@ -112,14 +112,15 @@ end of line.
 `10`15`15`40`20~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Configuration Command|Argument(s)|Default|Description|Example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-show-read-feeds|[yes|no]|yes|If yes, then all feeds, including those without unread articles, are listed. If no, then only feeds with one or more unread articles are list.|show-read-feeds no
+show-read-feeds|[yes/no]|yes|If yes, then all feeds, including those without unread articles, are listed. If no, then only feeds with one or more unread articles are list.|show-read-feeds no
 browser|<browser-command>|lynx|Set the browser command to use when opening an article in the browser.|browser w3m
 max-items|<number>|0|Set the number of articles to maximally keep per feed. If the number is set to 0, then all articles are kept.|max-items 100
 bind-key|<key> <operation>||Bind key <key> to <operation>. This means that whenever <key> is preseed, then <operation> is executed (if applicable in the current context). A list of available operations can be found below.|bind-key ^r reload-all
 unbind-key|<key>||Unbind key <key>. This means that no operation is called when <key> is pressed.|unbind-key R
-use-proxy|[yes|no]|no|If yes, then the configured proxy will be used for downloading the RSS feeds.|use-proxy yes
+use-proxy|[yes/no]|no|If yes, then the configured proxy will be used for downloading the RSS feeds.|use-proxy yes
 proxy|<server:port>||Set the proxy to use for downloading RSS feeds.|proxy localhost:3128
 proxy-auth|<auth>||Set the proxy authentication string.|proxy-auth user:password
+color|<element> <fgcolor> <bgcolor> [<attr> ...]||Set the foreground color, background color and optional attributes for a certain element|color background white black
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -153,7 +154,6 @@ as "space". Key combinations with the Ctrl key, such as Ctrl-R, are written as
 ^r. Please be aware that all Ctrl-related key combinations need to be written
 in lowercase ^R for Ctrl-Shift-R does not work.
 
-
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -164,6 +164,56 @@ Example Configuration
 
 	unbind-key       R
 	bind-key         ^r    reload-all
+
+Configuring Colors
+~~~~~~~~~~~~~~~~~~
+
+It is possible to configure custom color settings in newsbeuter. The basic configuration 
+syntax is:
+
+	color <element> <foreground color> <background color> [<attribute> ...]
+
+This means that if you configure colors for a certain element, you need to provide
+a foreground color and a background color as a minimum. The following colors are
+supported:
+
+- black
+- red
+- green
+- yellow
+- blue
+- magenta
+- cyan
+- white
+
+Optionally, you can also add one or more attributes. The following attributes are
+supported:
+
+- standout
+- underline
+- reverse
+- blink
+- dim
+- bold
+- protect
+- invis
+
+Currently, the following elements are supported:
+
+- *listnormal*: a normal list item
+- *listfocus*: the currently selected list item
+- *info*: the info bars on top and bottom
+- *background*: the application background
+- *article*: the article text
+
+The default color configuration of newsbeuter looks like this:
+
+	background   white   black
+	listnormal   white   black
+	listfocus    yellow  blue   bold
+	info         yellow  blue   bold
+	article      white   black
+
 
 License
 -------
