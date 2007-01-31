@@ -142,6 +142,8 @@ toggle-source-view:^u:Toggles between the HTML view and the source view in the a
 toggle-article-read:N:Toggle the read flag for the currently selected article.
 toggle-show-read-feeds:l:Toggle whether read feeds should be shown in the feed list.
 show-urls:u:Show all URLs in the article in a list (similar to urlview).
+set-tag:t:Set a new tag.
+clear-tag:^t:Clear current tag.
 help:?:Runs the help screen.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -214,6 +216,31 @@ The default color configuration of newsbeuter looks like this:
 	info         yellow  blue   bold
 	article      white   black
 
+Advanced Features
+-----------------
+
+Tagging
+~~~~~~~
+
+Newsbeuter comes with the possibility to categorize or "tag", as well call it,
+RSS feeds. Every RSS feed can be assigned 0 or more tags. Within newsbeuter, you
+can then select to only show RSS feeds that match a certain tag. That makes it
+easy to categorize your feeds in a flexible and powerful way.
+
+Usually, the ~/.newsbeuter/urls file contains one RSS feed URL per line. To assign
+a tag to an RSS feed, simply attach it as a single word, separated by blanks such
+as space or tab. The tag itself can't contain any spaces or tabs. An example
+~/.newsbeuter/urls file may look like this:
+
+	http://blog.fefe.de/rss.xml?html interesting conspiracy news
+	http://rss.orf.at/news.xml news orf
+	http://www.heise.de/newsticker/heise.rdf news interesting
+
+When you now start newsbeuter with this configuration, you can press "t" to select
+a tag. When you select the tag "news", you will see all three RSS feeds. Pressing
+"t" again and e.g. selecting the "conspiracy" tag, you will only see the
+http://blog.fefe.de/rss.xml?html RSS feed. Pressing "^t" clears the current tag,
+and again shows all RSS feeds, regardless of their assigned tags.
 
 License
 -------

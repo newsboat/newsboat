@@ -1,6 +1,7 @@
 #include <fstream>
 
 #include <urlreader.h>
+#include <utils.h>
 
 using namespace newsbeuter;
 
@@ -21,8 +22,20 @@ void urlreader::reload() {
 		std::string line;
 		do {
 			getline(f,line);
-			if (!f.eof() && line.length() > 0 && line[0] != '#')
-				urls.push_back(line);
+			if (!f.eof() && line.length() > 0 && line[0] != '#') {
+				std::vector<std::string> tokens = utils::tokenize(line);
+				if (tokens.size() > 0) {
+					std::string url = tokens[0];
+					urls.push_back(url);
+					tokens.erase(tokens.begin());
+					if (tokens.size() > 0) {
+						tags[url] = tokens;
+						for (std::vector<std::string>::iterator it=tokens.begin();it!=tokens.end();++it) {
+							alltags.insert(*it);
+						}
+					}
+				}
+			}
 		} while (!f.eof());
 	}
 }
@@ -40,4 +53,16 @@ void urlreader::write_config() {
 			f << *it << std::endl;
 		}
 	}
+}
+
+std::vector<std::string>& urlreader::get_tags(const std::string& url) {
+	return tags[url];
+}
+
+std::vector<std::string> urlreader::get_alltags() {
+	std::vector<std::string> tags;
+	for (std::set<std::string>::iterator it=alltags.begin();it!=alltags.end();++it) {
+		tags.push_back(*it);
+	}
+	return tags;
 }

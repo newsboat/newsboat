@@ -85,6 +85,9 @@ namespace newsbeuter {
 			
 			unsigned int unread_item_count() const;
 
+			inline void set_tags(const std::vector<std::string>& tags) { tags_ = tags; }
+			bool matches_tag(const std::string& tag);
+
 		private:
 			std::string title_;
 			std::string description_;
@@ -92,6 +95,7 @@ namespace newsbeuter {
 			time_t pubDate_;
 			std::string rssurl_;
 			std::vector<rss_item> items_;
+			std::vector<std::string> tags_;
 			
 			cache * ch;
 	};

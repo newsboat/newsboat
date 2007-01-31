@@ -25,6 +25,8 @@ op_desc opdescs[] = {
 	{ OP_TOGGLEITEMREAD, "Toggle read status for article" },
 	{ OP_TOGGLESHOWREAD, "Toggle show read feeds" },
 	{ OP_SHOWURLS, "Show URLs in current article" },
+	{ OP_CLEARTAG, "Clear current tag" },
+	{ OP_SETTAG, "Set a new tag" },
 	{ OP_NIL, NULL }
 };
 
@@ -40,9 +42,11 @@ keymap::keymap() {
 	keymap_["N"] = OP_TOGGLEITEMREAD;
 	keymap_["o"] = OP_OPENINBROWSER;
 	keymap_["?"] = OP_HELP;
-	keymap_["^u"] = OP_TOGGLESOURCEVIEW,
+	keymap_["^u"] = OP_TOGGLESOURCEVIEW;
 	keymap_["l"] = OP_TOGGLESHOWREAD;
 	keymap_["u"] = OP_SHOWURLS;
+	keymap_["t"] = OP_SETTAG;
+	keymap_["^t"] = OP_CLEARTAG;
 	keymap_["NIL"] = OP_NIL;
 }
 
@@ -88,6 +92,8 @@ operation keymap::get_opcode(const std::string& opstr) {
 		{ "toggle-article-read", OP_TOGGLEITEMREAD },
 		{ "toggle-show-read-feeds", OP_TOGGLESHOWREAD },
 		{ "show-urls", OP_SHOWURLS },
+		{ "clear-tag", OP_CLEARTAG },
+		{ "set-tag", OP_SETTAG },
 		{ NULL, OP_NIL }
 	};
 	for (int i=0;opcode_map[i].opstr;++i) {

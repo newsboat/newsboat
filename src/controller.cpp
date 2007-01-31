@@ -198,9 +198,12 @@ void controller::run(int argc, char * argv[]) {
 	for (std::vector<std::string>::const_iterator it=urlcfg.get_urls().begin(); it != urlcfg.get_urls().end(); ++it) {
 		rss_feed feed(rsscache);
 		feed.set_rssurl(*it);
+		feed.set_tags(urlcfg.get_tags(*it));
 		rsscache->internalize_rssfeed(feed);
 		feeds.push_back(feed);
 	}
+
+	std::vector<std::string> tags = urlcfg.get_alltags();
 
 	if (!do_export)
 		std::cout << "done." << std::endl;
@@ -214,7 +217,7 @@ void controller::run(int argc, char * argv[]) {
 	v->set_config_container(cfg);
 	v->set_keymap(&keys);
 	v->set_feedlist(feeds);
-	v->run_feedlist();
+	v->run_feedlist(tags);
 
 	std::cout << "Cleaning up cache...";
 	std::cout.flush();
@@ -229,8 +232,8 @@ void controller::run(int argc, char * argv[]) {
 	remove_fs_lock();
 }
 
-void controller::update_feedlist() {
-	v->set_feedlist(feeds);
+void controller::update_feedlist(std::string tag) {
+	v->set_feedlist(feeds, tag);
 }
 
 bool controller::open_item(const rss_feed& feed, rss_item& item) {
@@ -256,7 +259,7 @@ void controller::mark_all_read(unsigned int pos) {
 
 
 
-bool controller::open_feed(unsigned int pos, bool auto_open) {
+bool controller::open_feed(unsigned int pos, bool auto_open, std::string tag) {
 	bool retval = false;
 	if (pos < feeds.size()) {
 		if (!auto_open)
@@ -271,7 +274,7 @@ bool controller::open_feed(unsigned int pos, bool auto_open) {
 			v->show_error("Error: feed contains no items!");
 		} else {
 			retval = v->run_itemlist(pos, auto_open);
-			v->set_feedlist(feeds);
+			v->set_feedlist(feeds, tag);
 		}
 	} else {
 		v->show_error("Error: invalid feed!");

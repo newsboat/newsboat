@@ -221,3 +221,10 @@ time_t rss_parser::parse_date(const std::string& datestr) {
 	return value;
 }
 
+bool rss_feed::matches_tag(const std::string& tag) {
+	for (std::vector<std::string>::iterator it=tags_.begin();it!=tags_.end();++it) {
+		if (tag == *it)
+			return true;
+	}
+	return false;
+}

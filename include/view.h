@@ -24,11 +24,12 @@ namespace newsbeuter {
 		public:
 			view(controller * );
 			~view();
-			void run_feedlist();
+			void run_feedlist(const std::vector<std::string> & tags);
 			bool run_itemlist(unsigned int pos, bool auto_open);
 			bool run_itemview(const rss_feed& feed, rss_item& item);
 			void run_help();
-			void set_feedlist(std::vector<rss_feed>& feeds);
+			std::string select_tag(const std::vector<std::string>& tags);
+			void set_feedlist(std::vector<rss_feed>& feeds, std::string tag = "");
 			void set_keymap(keymap * k);
 			void set_config_container(configcontainer * cfgcontainer);
 			void show_error(const char * msg);
@@ -45,6 +46,7 @@ namespace newsbeuter {
 			void set_help_keymap_hint();
 			void set_filebrowser_keymap_hint();
 			void set_urlview_keymap_hint();
+			void set_selecttag_keymap_hint();
 			
 			void set_itemlist_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);
 			void set_itemview_head(const std::string& s);
@@ -84,6 +86,7 @@ namespace newsbeuter {
 			stfl::form help_form;
 			stfl::form filebrowser_form;
 			stfl::form urlview_form;
+			stfl::form selecttag_form;
 			
 			std::list<stfl::form *> view_stack;
 			

@@ -4,6 +4,7 @@
 #include <help.h>
 #include <filebrowser.h>
 #include <urlview.h>
+#include <selecttag.h>
 
 #include <logger.h>
 
@@ -39,7 +40,7 @@ using namespace newsbeuter;
 
 view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0),
 		feedlist_form(feedlist_str), itemlist_form(itemlist_str), itemview_form(itemview_str), 
-		help_form(help_str), filebrowser_form(filebrowser_str), urlview_form(urlview_str) { 
+		help_form(help_str), filebrowser_form(filebrowser_str), urlview_form(urlview_str), selecttag_form(selecttag_str) { 
 	mtx = new mutex();
 }
 
@@ -70,9 +71,10 @@ void view::show_error(const char * msg) {
 	set_status(msg);
 }
 
-void view::run_feedlist() {
+void view::run_feedlist(const std::vector<std::string>& tags) {
 	bool quit = false;
 	bool update = false;
+	std::string tag = "";
 
 	view_stack.push_front(&feedlist_form);
 	
@@ -87,7 +89,7 @@ void view::run_feedlist() {
 
 		if (update) {
 			update = false;
-			ctrl->update_feedlist();
+			ctrl->update_feedlist(tag);
 		}
 
 		const char * event = feedlist_form.run(0);
@@ -108,7 +110,7 @@ void view::run_feedlist() {
 							std::istringstream posname(feedpos);
 							unsigned int pos = 0;
 							posname >> pos;
-							if ((auto_open = ctrl->open_feed(visible_feeds[pos].second, auto_open))) {
+							if ((auto_open = ctrl->open_feed(visible_feeds[pos].second, auto_open, tag))) {
 								if (!jump_to_next_unread_feed()) {
 									show_error("No feeds with unread items.");
 									quit = true;
@@ -176,6 +178,21 @@ void view::run_feedlist() {
 				ctrl->catchup_all();
 				set_status("");
 				update = true;
+				break;
+			case OP_CLEARTAG:
+				tag = "";
+				update = true;
+				break;
+			case OP_SETTAG: 
+				if (tags.size() > 0) {
+					std::string newtag = select_tag(tags);
+					if (newtag != "") {
+						tag = newtag;
+						update = true;
+					}
+				} else {
+					show_error("No tags defined.");
+				}
 				break;
 			case OP_QUIT:
 				GetLogger().log(LOG_INFO, "view::run_feedlist: quitting");
@@ -988,6 +1005,64 @@ void view::run_urlview(std::vector<std::string>& links) {
 	view_stack.pop_front();
 }
 
+std::string view::select_tag(const std::vector<std::string>& tags) {
+	std::string tag = "";
+
+	set_selecttag_keymap_hint();
+
+	view_stack.push_front(&selecttag_form);
+	set_status("");
+
+	std::string code = "{list";
+	unsigned int i=0;
+	for (std::vector<std::string>::const_iterator it=tags.begin();it!=tags.end();++it,++i) {
+		std::ostringstream line;
+		char num[32];
+		snprintf(num,sizeof(num)," %4d. ", i+1);
+		std::string tagstr = num;
+		tagstr.append(it->c_str());
+		line << "{listitem[" << i << "] text:" << stfl_quote(tagstr.c_str()) << "}";
+		code.append(line.str());
+	}
+	code.append("}");
+
+	selecttag_form.modify("taglist", "replace_inner", code);
+
+	bool quit = false;
+	
+	do {
+		const char * event = selecttag_form.run(0);
+		if (!event) continue;
+
+		operation op = keys->get_operation(event);
+
+		switch (op) {
+			case OP_QUIT:
+				quit = true;
+				break;
+			case OP_OPEN: {
+					std::string tagposname = selecttag_form.get("tagposname");
+					if (tagposname.length() > 0) {
+						std::istringstream posname(tagposname);
+						unsigned int pos = 0;
+						posname >> pos;
+						if (pos < tags.size()) {
+							tag = tags[pos];
+							quit = true;
+						}
+					}
+				}
+				break;
+			default:
+				break;
+		}
+	} while (!quit);
+
+	view_stack.pop_front();
+
+	return tag;
+}
+
 void view::run_help() {
 	set_help_keymap_hint();
 
@@ -1032,7 +1107,7 @@ void view::run_help() {
 	view_stack.pop_front();
 }
 
-void view::set_feedlist(std::vector<rss_feed>& feeds) {
+void view::set_feedlist(std::vector<rss_feed>& feeds, std::string tag) {
 	std::string code = "{list";
 	
 	assert(cfg != NULL); // must not happen
@@ -1072,7 +1147,7 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 		if (unread_count > 0)
 			++unread_feeds;
 
-		if (show_read_feeds || unread_count > 0) {
+		if ((tag == "" || it->matches_tag(tag)) && (show_read_feeds || unread_count > 0)) {
 			visible_feeds.push_back(std::pair<rss_feed *, unsigned int>(&(*it),i));
 
 			snprintf(buf,sizeof(buf),"(%u/%u) ",unread_count,static_cast<unsigned int>(it->items().size()));
@@ -1202,6 +1277,17 @@ void view::set_help_keymap_hint() {
 	help_form.set("help", keymap_hint);
 }
 
+void view::set_selecttag_keymap_hint() {
+	keymap_hint_entry hints[] = {
+		{ OP_QUIT, "Cancel" },
+		{ OP_OPEN, "Select Tag" },
+		{ OP_NIL, NULL }
+	};
+
+	std::string keymap_hint = prepare_keymaphint(hints);
+	selecttag_form.set("help", keymap_hint);
+}
+
 void view::set_itemlist_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url) {
 	std::ostringstream caption;
 	
@@ -1243,3 +1329,4 @@ void view::render_source(std::vector<std::string>& lines, std::string desc, unsi
 		lines.push_back(line);
 	} while (desc.length() > 0);
 }
+
