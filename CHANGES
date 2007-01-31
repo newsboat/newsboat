@@ -7,6 +7,7 @@ Changes for newsbeuter:
 	made "next unread" function work across feeds when in item view
 	added the possibility to view all URLs within an article and open them in a browser
 	added proxy support
+	added color configuration support
 
 0.1.1 (2007-01-17):
 	fixed a crash when ISO-8859-1 encoded feeds with umlauts in the title were displayed on systems with UTF-8 locales enabled.
