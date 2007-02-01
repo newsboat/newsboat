@@ -1179,6 +1179,10 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 
 	titleos << "Your feeds (" << unread_feeds << " unread, " << i << " total)";
 
+	if (tag.length() > 0) {
+		titleos << " - tag `" << tag << "'";
+	}
+
 	feedlist_form.set("head", titleos.str());
 }
 
