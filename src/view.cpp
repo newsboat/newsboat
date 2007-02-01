@@ -74,7 +74,6 @@ void view::show_error(const char * msg) {
 void view::run_feedlist(const std::vector<std::string>& tags) {
 	bool quit = false;
 	bool update = false;
-	std::string tag = "";
 
 	view_stack.push_front(&feedlist_form);
 	
@@ -89,7 +88,7 @@ void view::run_feedlist(const std::vector<std::string>& tags) {
 
 		if (update) {
 			update = false;
-			ctrl->update_feedlist(tag);
+			ctrl->update_feedlist();
 		}
 
 		const char * event = feedlist_form.run(0);
@@ -110,7 +109,7 @@ void view::run_feedlist(const std::vector<std::string>& tags) {
 							std::istringstream posname(feedpos);
 							unsigned int pos = 0;
 							posname >> pos;
-							if ((auto_open = ctrl->open_feed(visible_feeds[pos].second, auto_open, tag))) {
+							if ((auto_open = ctrl->open_feed(visible_feeds[pos].second, auto_open))) {
 								if (!jump_to_next_unread_feed()) {
 									show_error("No feeds with unread items.");
 									quit = true;
@@ -182,6 +181,7 @@ void view::run_feedlist(const std::vector<std::string>& tags) {
 			case OP_CLEARTAG:
 				tag = "";
 				update = true;
+				feedlist_form.set("feedpos","0");
 				break;
 			case OP_SETTAG: 
 				if (tags.size() > 0) {
@@ -189,6 +189,7 @@ void view::run_feedlist(const std::vector<std::string>& tags) {
 					if (newtag != "") {
 						tag = newtag;
 						update = true;
+						feedlist_form.set("feedpos","0");
 					}
 				} else {
 					show_error("No tags defined.");
@@ -1107,7 +1108,7 @@ void view::run_help() {
 	view_stack.pop_front();
 }
 
-void view::set_feedlist(std::vector<rss_feed>& feeds, std::string tag) {
+void view::set_feedlist(std::vector<rss_feed>& feeds) {
 	std::string code = "{list";
 	
 	assert(cfg != NULL); // must not happen

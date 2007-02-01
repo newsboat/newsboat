@@ -29,7 +29,7 @@ namespace newsbeuter {
 			bool run_itemview(const rss_feed& feed, rss_item& item);
 			void run_help();
 			std::string select_tag(const std::vector<std::string>& tags);
-			void set_feedlist(std::vector<rss_feed>& feeds, std::string tag = "");
+			void set_feedlist(std::vector<rss_feed>& feeds);
 			void set_keymap(keymap * k);
 			void set_config_container(configcontainer * cfgcontainer);
 			void show_error(const char * msg);
@@ -91,6 +91,8 @@ namespace newsbeuter {
 			std::list<stfl::form *> view_stack;
 			
 			std::vector<std::pair<rss_feed *, unsigned int> > visible_feeds;
+
+			std::string tag;
 
 			unsigned int feeds_shown;
 	};

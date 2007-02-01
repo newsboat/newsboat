@@ -232,8 +232,8 @@ void controller::run(int argc, char * argv[]) {
 	remove_fs_lock();
 }
 
-void controller::update_feedlist(std::string tag) {
-	v->set_feedlist(feeds, tag);
+void controller::update_feedlist() {
+	v->set_feedlist(feeds);
 }
 
 bool controller::open_item(const rss_feed& feed, rss_item& item) {
@@ -259,7 +259,7 @@ void controller::mark_all_read(unsigned int pos) {
 
 
 
-bool controller::open_feed(unsigned int pos, bool auto_open, std::string tag) {
+bool controller::open_feed(unsigned int pos, bool auto_open) {
 	bool retval = false;
 	if (pos < feeds.size()) {
 		if (!auto_open)
@@ -274,7 +274,7 @@ bool controller::open_feed(unsigned int pos, bool auto_open, std::string tag) {
 			v->show_error("Error: feed contains no items!");
 		} else {
 			retval = v->run_itemlist(pos, auto_open);
-			v->set_feedlist(feeds, tag);
+			v->set_feedlist(feeds);
 		}
 	} else {
 		v->show_error("Error: invalid feed!");

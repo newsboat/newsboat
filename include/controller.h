@@ -17,7 +17,7 @@ namespace newsbeuter {
 			~controller();
 			void set_view(view * vv);
 			void run(int argc = 0, char * argv[] = NULL);
-			bool open_feed(unsigned int pos, bool auto_open, std::string tag = "");
+			bool open_feed(unsigned int pos, bool auto_open);
 			bool open_item(const rss_feed& feed, rss_item& item);
 			void reload(unsigned int pos, unsigned int max = 0);
 			void reload_all();
@@ -25,7 +25,7 @@ namespace newsbeuter {
 			rss_feed& get_feed(unsigned int pos);
 			inline unsigned int get_feedcount() { return feeds.size(); }
 			inline void unlock_reload_mutex() { reload_mutex->unlock(); }
-			void update_feedlist(std::string tag = "");
+			void update_feedlist();
 			void mark_all_read(unsigned int pos);
 			void catchup_all();
 			inline bool get_refresh_on_start() { return refresh_on_start; }
