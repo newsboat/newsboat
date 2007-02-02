@@ -322,6 +322,7 @@ void controller::reload(unsigned int pos, unsigned int max) {
 		*/
 		
 		rsscache->internalize_rssfeed(feed);
+		feed.set_tags(urlcfg.get_tags(feed.rssurl()));
 		feeds[pos] = feed;
 		
 		v->set_status("");

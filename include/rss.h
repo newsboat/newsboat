@@ -85,8 +85,9 @@ namespace newsbeuter {
 			
 			unsigned int unread_item_count() const;
 
-			inline void set_tags(const std::vector<std::string>& tags) { tags_ = tags; }
+			void set_tags(const std::vector<std::string>& tags);
 			bool matches_tag(const std::string& tag);
+			std::string get_tags();
 
 		private:
 			std::string title_;

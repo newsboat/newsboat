@@ -228,3 +228,20 @@ bool rss_feed::matches_tag(const std::string& tag) {
 	}
 	return false;
 }
+
+std::string rss_feed::get_tags() {
+	std::string tags;
+	for (std::vector<std::string>::iterator it=tags_.begin();it!=tags_.end();++it) {
+		tags.append(*it);
+		tags.append(" ");
+	}
+	return tags;
+}
+
+void rss_feed::set_tags(const std::vector<std::string>& tags) {
+	if (tags_.size() > 0)
+		tags_.erase(tags_.begin(), tags_.end());
+	for (std::vector<std::string>::const_iterator it=tags.begin();it!=tags.end();++it) {
+		tags_.push_back(*it);
+	}
+}
