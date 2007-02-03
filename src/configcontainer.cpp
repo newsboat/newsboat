@@ -13,6 +13,8 @@ configcontainer::configcontainer()
 	config_data["show-read-feeds"] = "yes";
 	config_data["browser"] = "lynx";
 	config_data["use-proxy"] = "no";
+	config_data["auto-reload"] = "no";
+	config_data["reload-time"] = "30";
 }
 
 configcontainer::~configcontainer()
@@ -27,11 +29,13 @@ void configcontainer::register_commands(configparser& cfgparser)
 	cfgparser.register_handler("use-proxy", this);
 	cfgparser.register_handler("proxy", this);
 	cfgparser.register_handler("proxy-auth", this);
+	cfgparser.register_handler("auto-reload", this);
+	cfgparser.register_handler("reload-time", this);
 }
 
 action_handler_status configcontainer::handle_action(const std::string& action, const std::vector<std::string>& params) {
 	GetLogger().log(LOG_DEBUG, "configcontainer::handle_action(%s,...) was called",action.c_str());
-	if (action == "show-read-feeds") {
+	if (action == "show-read-feeds" || action == "auto-reload") {
 		if (params.size() < 1) {
 			return AHS_TOO_FEW_PARAMS;
 		}
@@ -47,7 +51,7 @@ action_handler_status configcontainer::handle_action(const std::string& action, 
 		}
 		config_data[action] = params[0];
 		return AHS_OK;	
-	} else if (action == "max-items") {
+	} else if (action == "max-items" || action == "reload-time") {
 		if (params.size() < 1) {
 			return AHS_TOO_FEW_PARAMS;
 		}

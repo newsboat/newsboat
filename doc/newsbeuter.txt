@@ -121,6 +121,8 @@ use-proxy|[yes/no]|no|If yes, then the configured proxy will be used for downloa
 proxy|<server:port>||Set the proxy to use for downloading RSS feeds.|proxy localhost:3128
 proxy-auth|<auth>||Set the proxy authentication string.|proxy-auth user:password
 color|<element> <fgcolor> <bgcolor> [<attr> ...]||Set the foreground color, background color and optional attributes for a certain element|color background white black
+auto-reload|[yes/no]|no|If enabled, all feeds will be automatically reloaded at start up and then continuously after a certain time has passed (see reload-time).
+reload-time|<number>|30|The number of minutes between automatic reloads.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
