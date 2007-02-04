@@ -76,8 +76,6 @@ void view::run_feedlist(const std::vector<std::string>& tags) {
 	bool quit = false;
 	bool update = false;
 	bool zero_feedpos = false;
-	unsigned int reload_cycle = 60 * static_cast<unsigned int>(cfg->get_configvalue_as_int("reload-time"));
-	reloadthread rt(ctrl, reload_cycle);
 
 	view_stack.push_front(&feedlist_form);
 	
@@ -88,6 +86,8 @@ void view::run_feedlist(const std::vector<std::string>& tags) {
 		ctrl->start_reload_all_thread();
 	}
 
+	unsigned int reload_cycle = 60 * static_cast<unsigned int>(cfg->get_configvalue_as_int("reload-time"));
+	reloadthread rt(ctrl, reload_cycle);
 	if (cfg->get_configvalue_as_bool("auto-reload") == true)
 		rt.start();
 

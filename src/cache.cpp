@@ -280,7 +280,10 @@ void cache::cleanup_cache(std::vector<rss_feed>& feeds) {
 
 	// rc = sqlite3_exec(db,"VACUUM;",NULL,NULL,NULL);
 	// assert(rc == SQLITE_OK);
-	mtx->unlock();
+
+	// WARNING: THE MISSING UNLOCK OPERATION IS MISSING FOR A PURPOSE!
+	// It's missing so that no database operation can occur after the cache cleanup!
+	// mtx->unlock();
 }
 
 void cache::update_rssitem(rss_item& item, const std::string& feedurl) {
