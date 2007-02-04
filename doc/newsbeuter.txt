@@ -189,6 +189,9 @@ supported:
 - magenta
 - cyan
 - white
+- default
+
+The "default" color means that the terminal's default color will be used.
 
 Optionally, you can also add one or more attributes. The following attributes are
 supported:

@@ -46,9 +46,19 @@ void colormanager::set_colors(view * v) {
 	std::map<std::string,std::vector<std::string> >::iterator attit = attributes.begin();
 
 	for (;fgcit != fg_colors.end(); ++fgcit, ++bgcit, ++attit) {
-		std::string colorattr = std::string("fg=") + fgcit->second + std::string(",bg=") + bgcit->second;
+		std::string colorattr;
+		if (fgcit->second != "default") {
+			colorattr.append("bg=");
+			colorattr.append(fgcit->second);
+		}
+		if (bgcit->second != "default") {
+			colorattr.append("bg=");
+			colorattr.append(bgcit->second);
+		}
 		for (std::vector<std::string>::iterator it=attit->second.begin(); it!= attit->second.end(); ++it) {
-			colorattr.append(",attr=");
+			if (colorattr.length() > 0)
+				colorattr.append(",");
+			colorattr.append("attr=");
 			colorattr.append(*it);
 		} 
 
@@ -61,8 +71,12 @@ void colormanager::set_colors(view * v) {
 		v->selecttag_form.set(fgcit->first, colorattr);
 
 		if (fgcit->first == "article") {
-			std::string styleend_str("fg=blue,bg=");
-			styleend_str.append(bgcit->second);
+			std::string styleend_str("fg=blue");
+			
+			if (bgcit->second != "default") {
+				styleend_str.append(",bg=");
+				styleend_str.append(bgcit->second);
+			}
 			styleend_str.append(",attr=bold");
 
 			v->help_form.set("styleend", styleend_str.c_str());
