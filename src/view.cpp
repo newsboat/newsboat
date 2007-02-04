@@ -60,10 +60,12 @@ void view::set_keymap(keymap * k) {
 
 void view::set_status(const char * msg) {
 	mtx->lock();
-	stfl::form * form = *(view_stack.begin());
-	if (form) {
-		form->set("msg",msg);
-		form->run(-1);
+	if (view_stack.size() > 0) {
+		stfl::form * form = *(view_stack.begin());
+		if (form) {
+			form->set("msg",msg);
+			form->run(-1);
+		}
 	}
 	mtx->unlock();
 }
