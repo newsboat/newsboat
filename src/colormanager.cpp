@@ -48,7 +48,7 @@ void colormanager::set_colors(view * v) {
 	for (;fgcit != fg_colors.end(); ++fgcit, ++bgcit, ++attit) {
 		std::string colorattr;
 		if (fgcit->second != "default") {
-			colorattr.append("bg=");
+			colorattr.append("fg=");
 			colorattr.append(fgcit->second);
 		}
 		if (bgcit->second != "default") {
@@ -63,6 +63,8 @@ void colormanager::set_colors(view * v) {
 			colorattr.append("attr=");
 			colorattr.append(*it);
 		} 
+
+		GetLogger().log(LOG_DEBUG,"colormanager::set_colors: %s %s\n",fgcit->first.c_str(), colorattr.c_str());
 
 		v->feedlist_form.set(fgcit->first, colorattr);
 		v->itemlist_form.set(fgcit->first, colorattr);
