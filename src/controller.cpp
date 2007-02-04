@@ -78,7 +78,7 @@ void controller::run(int argc, char * argv[]) {
 	int c;
 
 	::signal(SIGINT, ctrl_c_action);
-	//::signal(SIGSEGV, ctrl_c_action);
+	::signal(SIGSEGV, ctrl_c_action);
 
 	bool do_import = false, do_export = false;
 	std::string importfile;
