@@ -1,7 +1,8 @@
 #include <thread.h>
 #include <exception.h>
 
-using namespace newsbeuter;
+namespace newsbeuter {
+
 
 thread::thread() {
 }
@@ -11,7 +12,7 @@ thread::~thread() {
 }
 
 void thread::start() {
-	int rc = pthread_create(&pt, 0, (void *(*)(void*))thread::run_thread, this);
+	int rc = pthread_create(&pt, 0, (void *(*)(void*))run_thread, this);
 	if (rc != 0) {
 		throw exception(rc);
 	}
@@ -31,7 +32,7 @@ void thread::detached_exit() {
 	this->exit();	
 }
 
-void * thread::run_thread(thread * p) {
+void * run_thread(thread * p) {
 	thread * t = p;
 	t->run();
 	return 0;
@@ -39,4 +40,6 @@ void * thread::run_thread(thread * p) {
 
 void thread::cleanup(thread * p) {
 	delete p;
+}
+
 }

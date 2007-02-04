@@ -3,7 +3,12 @@
 
 #include <pthread.h>
 
+
 namespace newsbeuter {
+
+	class thread;
+
+	void * run_thread(thread * p);
 
 	// TODO: implement an option to provide attributes
 
@@ -19,8 +24,9 @@ namespace newsbeuter {
 			void exit();
 			void detached_exit();
 
+			friend void * run_thread(thread * p);
+
 		private:
-			static void * run_thread(thread * p);
 			static void cleanup(thread * p);
 			pthread_t pt;
 	};
