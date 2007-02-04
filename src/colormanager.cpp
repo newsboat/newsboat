@@ -52,6 +52,8 @@ void colormanager::set_colors(view * v) {
 			colorattr.append(fgcit->second);
 		}
 		if (bgcit->second != "default") {
+			if (colorattr.length() > 0)
+				colorattr.append(",");
 			colorattr.append("bg=");
 			colorattr.append(bgcit->second);
 		}
@@ -71,13 +73,15 @@ void colormanager::set_colors(view * v) {
 		v->selecttag_form.set(fgcit->first, colorattr);
 
 		if (fgcit->first == "article") {
-			std::string styleend_str("fg=blue");
+			std::string styleend_str;
 			
 			if (bgcit->second != "default") {
-				styleend_str.append(",bg=");
+				styleend_str.append("bg=");
 				styleend_str.append(bgcit->second);
 			}
-			styleend_str.append(",attr=bold");
+			if (styleend_str.length() > 0)
+				styleend_str.append(",");
+			styleend_str.append("attr=bold");
 
 			v->help_form.set("styleend", styleend_str.c_str());
 			v->itemview_form.set("styleend", styleend_str.c_str());
