@@ -89,9 +89,10 @@ void view::run_feedlist(const std::vector<std::string>& tags) {
 	}
 
 	unsigned int reload_cycle = 60 * static_cast<unsigned int>(cfg->get_configvalue_as_int("reload-time"));
-	reloadthread * rt = new reloadthread(ctrl, reload_cycle);
-	if (cfg->get_configvalue_as_bool("auto-reload") == true)
+	if (cfg->get_configvalue_as_bool("auto-reload") == true) {
+		reloadthread  * rt = new reloadthread(ctrl, reload_cycle);
 		rt->start();
+	}
 
 	do {
 
@@ -223,7 +224,7 @@ void view::run_feedlist(const std::vector<std::string>& tags) {
 	
 	view_stack.pop_front();
 
-	delete rt; // is this allowed?
+	// delete rt; // is this allowed?
 
 	stfl::reset();
 }

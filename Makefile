@@ -1,7 +1,7 @@
 CXX=c++
-CXXFLAGS=-g -I./include -I./stfl -I. -I/usr/local/include -I/sw/include -Wall
+CXXFLAGS=-ggdb -I./include -I./stfl -I. -I/usr/local/include -I/sw/include -Wall
 LDFLAGS=-L/usr/local/lib -L/sw/lib
-LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn
+LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn -lpthread
 OUTPUT=newsbeuter
 SRC=$(wildcard *.cpp) $(wildcard src/*.cpp)
 OBJS=$(patsubst %.cpp,%.o,$(SRC))
