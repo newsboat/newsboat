@@ -47,3 +47,7 @@ DONE:
 - add color configuration support
 - support for atom (talk to mRss guy?) - implement by yourself?
 - implement search
+	- own dialog
+	- result list on top
+	- search input field on bottom
+	- set correct title in search dialog

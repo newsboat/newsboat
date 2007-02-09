@@ -10,6 +10,7 @@ Changes for newsbeuter:
 	added color configuration support
 	added tagging/categorization support
 	added auto-reload support
+	added search dialog
 
 0.1.1 (2007-01-17):
 	fixed a crash when ISO-8859-1 encoded feeds with umlauts in the title were displayed on systems with UTF-8 locales enabled.

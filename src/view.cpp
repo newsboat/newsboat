@@ -247,6 +247,8 @@ void view::run_search(const std::string& feedurl) {
 
 	search_form.set("msg","");
 
+	search_form.set("head","Search Articles");
+
 	search_form.modify("results","replace_inner","{list}");
 
 	search_form.set_focus("query");
@@ -311,7 +313,10 @@ void view::run_search(const std::string& feedurl) {
 						if (querytext.length() > 0) {
 							items = ctrl->search_for_items(querytext, feedurl);
 							if (items.size() > 0) {
+								std::ostringstream title;
 								search_form.set("listpos", "0");
+								title << "Search Articles - " << items.size() << " results";
+								search_form.set("head", title.str());
 								set_listfocus = true;
 								rebuild_list = true;
 							} else {
