@@ -102,7 +102,14 @@ void cache::set_pragmas() {
 		GetLogger().log(LOG_CRITICAL,"setting PRAGMA synchronous = OFF failed");
 	}
 	assert(rc == SQLITE_OK);
-	
+
+	rc = sqlite3_exec(db, "PRAGMA case_sensitive_like=OFF;", NULL, NULL, NULL);
+
+	if (rc != SQLITE_OK) {
+		GetLogger().log(LOG_CRITICAL,"setting PRAGMA case_sensitive_like = OFF failed");
+	}
+
+	assert(rc == SQLITE_OK);
 }
 
 void cache::populate_tables() {
