@@ -144,6 +144,7 @@ toggle-source-view:^u:Toggles between the HTML view and the source view in the a
 toggle-article-read:N:Toggle the read flag for the currently selected article.
 toggle-show-read-feeds:l:Toggle whether read feeds should be shown in the feed list.
 show-urls:u:Show all URLs in the article in a list (similar to urlview).
+open-search:/:Opens the search dialog. When a search is done in the article list, then the search operation only applies to the articles of the current feed, otherwise to all articles.
 set-tag:t:Set a new tag.
 clear-tag:^t:Clear current tag.
 help:?:Runs the help screen.
