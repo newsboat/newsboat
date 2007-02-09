@@ -1,8 +1,4 @@
 TODO:
-- implement search
-  - own dialog
-  - result list on top
-  - search input field on bottom
 - check whether date parsing uses the correct timezone
 - refactor XML pull parser (many redundancies)
 	ignore comments
@@ -50,3 +46,4 @@ DONE:
 - add auto-reload feature
 - add color configuration support
 - support for atom (talk to mRss guy?) - implement by yourself?
+- implement search

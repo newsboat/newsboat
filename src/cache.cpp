@@ -260,6 +260,24 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 	mtx->unlock();
 }
 
+rss_feed cache::get_feed_by_url(const std::string& feedurl) {
+	rss_feed feed(this);
+	char * query;
+	int rc;
+	
+	query = sqlite3_mprintf("SELECT title, url FROM rss_feed WHERE rssurl = '%q';",feed.rssurl().c_str());
+	GetLogger().log(LOG_DEBUG,"running query: %s",query);
+
+	rc = sqlite3_exec(db,query,rssfeed_callback,&feed,NULL);
+	if (rc != SQLITE_OK) {
+		GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", query, rc);
+	}
+	assert(rc == SQLITE_OK);
+	free(query);
+
+	return feed;
+}
+
 std::vector<rss_item> cache::search_for_items(const std::string& querystr, const std::string& feedurl) {
 	char * query = NULL;
 	std::vector<rss_item> items;

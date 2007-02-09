@@ -234,8 +234,7 @@ void view::run_feedlist(const std::vector<std::string>& tags) {
 	stfl::reset();
 }
 
-void view::run_search(const std::string& feed) {
-	// TODO: implement
+void view::run_search(const std::string& feedurl) {
 	bool quit = false;
 	bool rebuild_list = false;
 
@@ -246,6 +245,10 @@ void view::run_search(const std::string& feed) {
 	set_search_keymap_hint(); // TODO: implement
 
 	search_form.set("msg","");
+
+	search_form.modify("results","replace_inner","{list}");
+
+	search_form.set_focus("query");
 
 	do {
 
@@ -300,8 +303,9 @@ void view::run_search(const std::string& feed) {
 					std::string focus = search_form.get_focus();
 					if (focus == "query") {
 						if (querytext.length() > 0) {
-							items = ctrl->search_for_items(querytext, feed);
+							items = ctrl->search_for_items(querytext, feedurl);
 							if (items.size() > 0) {
+								search_form.set("listpos", "0");
 								rebuild_list = true;
 							} else {
 								show_error("No results.");
@@ -310,7 +314,17 @@ void view::run_search(const std::string& feed) {
 							quit = true;
 						}
 					} else {
-						// TODO: implement "open item"
+						std::string itemposname = search_form.get("listpos");
+						GetLogger().log(LOG_INFO, "view::run_search: opening item at pos `%s'", itemposname.c_str());
+						if (itemposname.length() > 0) {
+							std::istringstream posname(itemposname);
+							unsigned int pos = 0;
+							posname >> pos;
+							ctrl->open_item(ctrl->get_feed_by_url(items[pos].feedurl()), items[pos]);
+							rebuild_list = true;
+						} else {
+							show_error("No item selected!"); // should not happen
+						}
 					}
 				}
 				break;
