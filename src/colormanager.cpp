@@ -73,6 +73,7 @@ void colormanager::set_colors(view * v) {
 		v->filebrowser_form.set(fgcit->first, colorattr);
 		v->urlview_form.set(fgcit->first, colorattr);
 		v->selecttag_form.set(fgcit->first, colorattr);
+		v->search_form.set(fgcit->first, colorattr);
 
 		if (fgcit->first == "article") {
 			std::string styleend_str;

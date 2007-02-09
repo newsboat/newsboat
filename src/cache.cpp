@@ -41,13 +41,14 @@ static int rssfeed_callback(void * myfeed, int argc, char ** argv, char ** azCol
 	assert(argv[1] != NULL);
 	feed->set_title(argv[0]);
 	feed->set_link(argv[1]);
+	GetLogger().log(LOG_INFO, "rssfeed_callback: title = %s link = %s",argv[0],argv[1]);
 	// std::cerr << "callback: feed->title = " << feed->title() << std::endl;
 	return 0;
 }
 
 static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** azColName) {
 	rss_feed * feed = (rss_feed *)myfeed;
-	assert (argc == 7);
+	assert (argc == 8);
 	rss_item item(NULL);
 	item.set_guid(argv[0]);
 	item.set_title(argv[1]);
@@ -61,14 +62,16 @@ static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** azCol
 	
 	item.set_description(argv[5]);
 	item.set_unread((std::string("1") == argv[6]));
-	// item.wash();
+
+	item.set_feedurl(argv[7]);
+
 	feed->items().push_back(item);
 	return 0;
 }
 
 static int search_item_callback(void * myfeed, int argc, char ** argv, char ** azColName) {
 	std::vector<rss_item> * items = (std::vector<rss_item> *)myfeed;
-	assert (argc == 7);
+	assert (argc == 8);
 	rss_item item(NULL);
 	item.set_guid(argv[0]);
 	item.set_title(argv[1]);
@@ -82,7 +85,8 @@ static int search_item_callback(void * myfeed, int argc, char ** argv, char ** a
 	
 	item.set_description(argv[5]);
 	item.set_unread((std::string("1") == argv[6]));
-	// item.wash();
+	item.set_feedurl(argv[7]);
+
 	items->push_back(item);
 	return 0;
 }
@@ -232,7 +236,7 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 		feed.items().erase(feed.items().begin(),feed.items().end());
 	}
 
-	query = sqlite3_mprintf("SELECT guid,title,author,url,pubDate,content,unread FROM rss_item WHERE feedurl = '%q' ORDER BY pubDate DESC, id DESC;",feed.rssurl().c_str());
+	query = sqlite3_mprintf("SELECT guid,title,author,url,pubDate,content,unread,feedurl FROM rss_item WHERE feedurl = '%q' ORDER BY pubDate DESC, id DESC;",feed.rssurl().c_str());
 	GetLogger().log(LOG_DEBUG,"running query: %s",query);
 	rc = sqlite3_exec(db,query,rssitem_callback,&feed,NULL);
 	if (rc != SQLITE_OK) {
@@ -265,7 +269,7 @@ rss_feed cache::get_feed_by_url(const std::string& feedurl) {
 	char * query;
 	int rc;
 	
-	query = sqlite3_mprintf("SELECT title, url FROM rss_feed WHERE rssurl = '%q';",feed.rssurl().c_str());
+	query = sqlite3_mprintf("SELECT title, url FROM rss_feed WHERE rssurl = '%q';",feedurl.c_str());
 	GetLogger().log(LOG_DEBUG,"running query: %s",query);
 
 	rc = sqlite3_exec(db,query,rssfeed_callback,&feed,NULL);
@@ -284,9 +288,9 @@ std::vector<rss_item> cache::search_for_items(const std::string& querystr, const
 	int rc;
 
 	if (feedurl.length() > 0) {
-		query = sqlite3_mprintf("SELECT guid,title,author,url,pubDate,content,unread FROM rss_item WHERE (title LIKE '%%%q%%' OR content LIKE '%%%q%%') AND feedurl = '%q' ORDER BY pubDate DESC, id DESC;",querystr.c_str(), querystr.c_str(), feedurl.c_str());
+		query = sqlite3_mprintf("SELECT guid,title,author,url,pubDate,content,unread,feedurl FROM rss_item WHERE (title LIKE '%%%q%%' OR content LIKE '%%%q%%') AND feedurl = '%q' ORDER BY pubDate DESC, id DESC;",querystr.c_str(), querystr.c_str(), feedurl.c_str());
 	} else {
-		query = sqlite3_mprintf("SELECT guid,title,author,url,pubDate,content,unread FROM rss_item WHERE (title LIKE '%%%q%%' OR content LIKE '%%%q%%') ORDER BY pubDate DESC, id DESC;",querystr.c_str(), querystr.c_str());
+		query = sqlite3_mprintf("SELECT guid,title,author,url,pubDate,content,unread,feedurl FROM rss_item WHERE (title LIKE '%%%q%%' OR content LIKE '%%%q%%') ORDER BY pubDate DESC, id DESC;",querystr.c_str(), querystr.c_str());
 	}
 
 	GetLogger().log(LOG_DEBUG,"running query: %s",query);

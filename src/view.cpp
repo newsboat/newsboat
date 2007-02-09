@@ -237,6 +237,7 @@ void view::run_feedlist(const std::vector<std::string>& tags) {
 void view::run_search(const std::string& feedurl) {
 	bool quit = false;
 	bool rebuild_list = false;
+	bool set_listfocus = false;
 
 	std::vector<rss_item> items;
 
@@ -286,6 +287,11 @@ void view::run_search(const std::string& feedurl) {
 
 			search_form.modify("results","replace_inner",code);
 
+			if (set_listfocus) {
+				search_form.set_focus("results");
+				set_listfocus = false;
+			}
+
 			rebuild_list = false;
 		}
 
@@ -306,6 +312,7 @@ void view::run_search(const std::string& feedurl) {
 							items = ctrl->search_for_items(querytext, feedurl);
 							if (items.size() > 0) {
 								search_form.set("listpos", "0");
+								set_listfocus = true;
 								rebuild_list = true;
 							} else {
 								show_error("No results.");

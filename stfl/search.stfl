@@ -16,7 +16,7 @@ vbox
     label
       .expand:0
       text:"Search for: "
-    !input[query]
+    input[query]
       .expand:h
       text[querytext]:""
   label#info
