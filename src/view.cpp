@@ -42,7 +42,8 @@ using namespace newsbeuter;
 
 view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0),
 		feedlist_form(feedlist_str), itemlist_form(itemlist_str), itemview_form(itemview_str), 
-		help_form(help_str), filebrowser_form(filebrowser_str), urlview_form(urlview_str), selecttag_form(selecttag_str) { 
+		help_form(help_str), filebrowser_form(filebrowser_str), urlview_form(urlview_str), 
+		selecttag_form(selecttag_str), search_form(search_str) { 
 	mtx = new mutex();
 }
 
@@ -235,6 +236,97 @@ void view::run_feedlist(const std::vector<std::string>& tags) {
 
 void view::run_search(const std::string& feed) {
 	// TODO: implement
+	bool quit = false;
+	bool rebuild_list = false;
+
+	std::vector<rss_item> items;
+
+	view_stack.push_front(&search_form); // TODO: add search_form to view
+
+	set_search_keymap_hint(); // TODO: implement
+
+	search_form.set("msg","");
+
+	do {
+
+		if (rebuild_list) {
+			std::string code = "{list";
+
+			unsigned int i=0;
+			for (std::vector<rss_item>::iterator it = items.begin(); it != items.end(); ++it, ++i) {
+				std::string line = "{listitem[";
+				std::ostringstream x;
+				x << i;
+				line.append(x.str());
+				line.append("] text:");
+				std::string title;
+				char buf[20];
+				snprintf(buf,sizeof(buf),"%4u ",i+1);
+				title.append(buf);
+				if (it->unread()) {
+					title.append("N ");
+				} else {
+					title.append("  ");
+				}
+				char datebuf[64];
+				time_t t = it->pubDate_timestamp();
+				struct tm * stm = localtime(&t);
+				strftime(datebuf,sizeof(datebuf), "%b %d   ", stm);
+				title.append(datebuf);
+				title.append(it->title());
+				line.append(stfl::quote(title));
+				line.append("}");
+				code.append(line);
+			}
+
+			code.append("}");
+
+			search_form.modify("results","replace_inner",code);
+
+			rebuild_list = false;
+		}
+
+		operation op;
+		const char * event = search_form.run(0);
+		if (!event) continue;
+
+		op = keys->get_operation(event);
+
+		GetLogger().log(LOG_DEBUG, "view::run_search: event = %s operation = %d", event, op);
+
+		switch (op) {
+			case OP_OPEN: {
+					std::string querytext = search_form.get("querytext");
+					std::string focus = search_form.get_focus();
+					if (focus == "query") {
+						if (querytext.length() > 0) {
+							items = ctrl->search_for_items(querytext, feed);
+							if (items.size() > 0) {
+								rebuild_list = true;
+							} else {
+								show_error("No results.");
+							}
+						} else {
+							quit = true;
+						}
+					} else {
+						// TODO: implement "open item"
+					}
+				}
+				break;
+			case OP_QUIT:
+				quit = true;
+				break;
+			case OP_HELP:
+				run_help();
+				set_status("");
+				break;
+			default:
+				break;
+		}
+	} while (!quit);
+
+	view_stack.pop_front();
 }
 
 bool view::run_itemlist(unsigned int pos, bool auto_open) {
@@ -1321,6 +1413,18 @@ void view::set_selecttag_keymap_hint() {
 
 	std::string keymap_hint = prepare_keymaphint(hints);
 	selecttag_form.set("help", keymap_hint);
+}
+
+void view::set_search_keymap_hint() {
+	keymap_hint_entry hints[] = {
+		{ OP_QUIT, "Quit" },
+		{ OP_OPEN, "Search/Open" },
+		{ OP_HELP, "Help" },
+		{ OP_NIL, NULL }
+	};
+
+	std::string keymap_hint = prepare_keymaphint(hints);
+	search_form.set("help", keymap_hint);
 }
 
 void view::set_itemlist_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url) {

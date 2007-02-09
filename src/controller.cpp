@@ -467,3 +467,9 @@ bool controller::try_fs_lock(pid_t & pid) {
 		return false;
 	}
 }
+
+std::vector<rss_item> controller::search_for_items(const std::string& query, const std::string& feedurl) {
+	std::vector<rss_item> items;
+
+	return items;
+}

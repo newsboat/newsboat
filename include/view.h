@@ -48,6 +48,7 @@ namespace newsbeuter {
 			void set_filebrowser_keymap_hint();
 			void set_urlview_keymap_hint();
 			void set_selecttag_keymap_hint();
+			void set_search_keymap_hint();
 			
 			void set_itemlist_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);
 			void set_itemview_head(const std::string& s);
@@ -88,6 +89,7 @@ namespace newsbeuter {
 			stfl::form filebrowser_form;
 			stfl::form urlview_form;
 			stfl::form selecttag_form;
+			stfl::form search_form;
 			
 			std::list<stfl::form *> view_stack;
 			
