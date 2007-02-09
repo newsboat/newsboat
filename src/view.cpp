@@ -5,6 +5,7 @@
 #include <filebrowser.h>
 #include <urlview.h>
 #include <selecttag.h>
+#include <search.h>
 
 #include <logger.h>
 #include <reloadthread.h>
@@ -209,6 +210,9 @@ void view::run_feedlist(const std::vector<std::string>& tags) {
 					show_error("No tags defined.");
 				}
 				break;
+			case OP_SEARCH:
+				run_search();
+				break;
 			case OP_QUIT:
 				GetLogger().log(LOG_INFO, "view::run_feedlist: quitting");
 				quit = true;
@@ -227,6 +231,10 @@ void view::run_feedlist(const std::vector<std::string>& tags) {
 	// delete rt; // is this allowed?
 
 	stfl::reset();
+}
+
+void view::run_search(const std::string& feed) {
+	// TODO: implement
 }
 
 bool view::run_itemlist(unsigned int pos, bool auto_open) {
@@ -388,6 +396,9 @@ bool view::run_itemlist(unsigned int pos, bool auto_open) {
 				mark_all_read(items);
 				set_status("");
 				rebuild_list = true;
+				break;
+			case OP_SEARCH:
+				run_search(feed.rssurl());
 				break;
 			case OP_TOGGLEITEMREAD: {
 					std::string itemposname = itemlist_form.get("itempos");
@@ -1233,6 +1244,7 @@ void view::set_itemlist_keymap_hint() {
 		{ OP_RELOAD, "Reload" },
 		{ OP_NEXTUNREAD, "Next Unread" },
 		{ OP_MARKFEEDREAD, "Mark All Read" },
+		{ OP_SEARCH, "Search" },
 		{ OP_HELP, "Help" },
 		{ OP_NIL, NULL }
 	};
@@ -1259,6 +1271,7 @@ void view::set_feedlist_keymap_hint() {
 		{ OP_RELOADALL, "Reload All" },
 		{ OP_MARKFEEDREAD, "Mark Read" },
 		{ OP_MARKALLFEEDSREAD, "Catchup All" },
+		{ OP_SEARCH, "Search" },
 		{ OP_HELP, "Help" },
 		{ OP_NIL, NULL }
 	};

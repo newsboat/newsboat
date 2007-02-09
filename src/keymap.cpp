@@ -27,6 +27,7 @@ op_desc opdescs[] = {
 	{ OP_SHOWURLS, "Show URLs in current article" },
 	{ OP_CLEARTAG, "Clear current tag" },
 	{ OP_SETTAG, "Set a new tag" },
+	{ OP_SEARCH, "Open search dialog" },
 	{ OP_NIL, NULL }
 };
 
@@ -47,6 +48,7 @@ keymap::keymap() {
 	keymap_["u"] = OP_SHOWURLS;
 	keymap_["t"] = OP_SETTAG;
 	keymap_["^t"] = OP_CLEARTAG;
+	keymap_["/"] = OP_SEARCH;
 	keymap_["NIL"] = OP_NIL;
 }
 
@@ -94,6 +96,7 @@ operation keymap::get_opcode(const std::string& opstr) {
 		{ "show-urls", OP_SHOWURLS },
 		{ "clear-tag", OP_CLEARTAG },
 		{ "set-tag", OP_SETTAG },
+		{ "open-search", OP_SEARCH },
 		{ NULL, OP_NIL }
 	};
 	for (int i=0;opcode_map[i].opstr;++i) {

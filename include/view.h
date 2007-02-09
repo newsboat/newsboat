@@ -28,6 +28,7 @@ namespace newsbeuter {
 			bool run_itemlist(unsigned int pos, bool auto_open);
 			bool run_itemview(const rss_feed& feed, rss_item& item);
 			void run_help();
+			void run_search(const std::string& feed = "");
 			std::string select_tag(const std::vector<std::string>& tags);
 			void set_feedlist(std::vector<rss_feed>& feeds);
 			void set_keymap(keymap * k);
