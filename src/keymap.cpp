@@ -120,7 +120,7 @@ operation keymap::get_operation(const std::string& keycode) {
 		} else if (strncmp(keycode.c_str(),"CHAR(",5)==0) {
 			unsigned int x;
 			char c;
-			sscanf(keycode.c_str(),"CHAR(%d)",&x);
+			sscanf(keycode.c_str(),"CHAR(%u)",&x);
 			// std::cerr << x << std::endl;
 			if (32 == x) {
 				key.append("space");

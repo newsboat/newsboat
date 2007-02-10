@@ -306,7 +306,7 @@ std::string xmlpullparser::decode_entity(std::string s) {
 	} else if (s.length() > 1 && s[0] == '#') {
 		std::string result;
 		unsigned int wc;
-		char mbc[MB_CUR_MAX];
+		char * mbc = static_cast<char *>(alloca(MB_CUR_MAX));
 		if (s[1] == 'x') {
 			s.erase(0,2);
 			std::istringstream is(s);
