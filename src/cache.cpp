@@ -287,6 +287,8 @@ std::vector<rss_item> cache::search_for_items(const std::string& querystr, const
 	std::vector<rss_item> items;
 	int rc;
 
+	mtx->lock();
+
 	if (feedurl.length() > 0) {
 		query = sqlite3_mprintf("SELECT guid,title,author,url,pubDate,content,unread,feedurl FROM rss_item WHERE (title LIKE '%%%q%%' OR content LIKE '%%%q%%') AND feedurl = '%q' ORDER BY pubDate DESC, id DESC;",querystr.c_str(), querystr.c_str(), feedurl.c_str());
 	} else {
@@ -301,6 +303,8 @@ std::vector<rss_item> cache::search_for_items(const std::string& querystr, const
 	}
 	assert(rc == SQLITE_OK);
 	free(query);
+
+	mtx->unlock();
 
 	return items;
 }

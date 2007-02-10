@@ -1,4 +1,5 @@
 #include <stflpp.h>
+#include <logger.h>
 
 using namespace newsbeuter;
 
@@ -38,6 +39,7 @@ std::string stfl::form::get_focus() {
 
 void stfl::form::set_focus(const std::string& name) {
 	stfl_set_focus(f, name.c_str());
+	GetLogger().log(LOG_DEBUG,"stfl::form::set_focus: %s rc = %d", name.c_str());
 }
 
 std::string stfl::form::dump(const std::string& name, const std::string& prefix, int focus) {

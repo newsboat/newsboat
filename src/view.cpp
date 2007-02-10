@@ -291,6 +291,7 @@ void view::run_search(const std::string& feedurl) {
 
 			if (set_listfocus) {
 				search_form.set_focus("results");
+				GetLogger().log(LOG_DEBUG, "view::run_search: setting focus to results");
 				set_listfocus = false;
 			}
 
