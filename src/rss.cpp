@@ -50,6 +50,7 @@ rss_feed rss_parser::parse() {
 			free(str);
 		}
 	}
+	
 	if (mrss->description) {
 		char * str = stringprep_convert(mrss->description, stringprep_locale_charset(), encoding);
 		if (str) {
@@ -77,7 +78,32 @@ rss_feed rss_parser::parse() {
 		}
 		if (item->link) x.set_link(item->link);
 		if (item->author) x.set_author(item->author);
-		if (item->description) {
+
+		mrss_tag_t * content;
+
+		if (mrss_search_tag(item, "encoded", "http://purl.org/rss/1.0/modules/content/", &content) == MRSS_OK && content) {
+			/* RSS 2.0 content:encoded */
+			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found rss 2.0 content:encoded: %s\n", content->value);
+			if (content->value) {
+				char * str = stringprep_convert(content->value, stringprep_locale_charset(), encoding);
+				if (str) {
+					x.set_description(str);
+					free(str);
+				}
+			}
+		}
+		if (x.description().length() == 0 && mrss_search_tag(mrss, "content", NULL, &content) == MRSS_OK && content) {
+			/* Atom content */
+			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found atom content: %s\n", content->value);
+			if (content->value) {
+				char * str = stringprep_convert(content->value, stringprep_locale_charset(), encoding);
+				if (str) {
+					x.set_description(str);
+					free(str);
+				}
+			}
+		}
+		if (x.description().length() == 0 && item->description) {
 			char * str = stringprep_convert(item->description,stringprep_locale_charset(), encoding);
 			if (str) {
 				x.set_description(str);

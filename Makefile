@@ -9,6 +9,7 @@ prefix=/usr/local
 MKDIR=mkdir -p
 INSTALL=install
 GZIP=gzip -9
+A2X=a2x
 
 STFLHDRS=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
 
@@ -30,10 +31,15 @@ testpp: src/xmlpullparser.cpp testpp.cpp
 	$(CXX) -I./include -pg -g -D_TESTPP src/xmlpullparser.cpp testpp.cpp -o testpp
 
 clean:
-	$(RM) $(OUTPUT) $(OBJS) $(STFLHDRS) core *.core
+	$(RM) $(OUTPUT) $(OBJS) $(STFLHDRS) core *.core core.*
+	$(RM) -rf doc/xhtml doc/*.xml
 
 distclean: clean
 	$(RM) Makefile.deps
+
+doc:
+	$(MKDIR) doc/xhtml
+	$(A2X) -f xhtml -d doc/xhtml doc/newsbeuter.txt
 
 install:
 	$(MKDIR) $(prefix)/bin
@@ -48,5 +54,7 @@ uninstall:
 
 Makefile.deps: $(SRC)
 	$(CXX) $(CXXFLAGS) -MM -MG $(SRC) > Makefile.deps
+
+.PHONY: doc clean all
 
 include Makefile.deps
