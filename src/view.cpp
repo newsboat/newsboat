@@ -290,6 +290,7 @@ void view::run_search(const std::string& feedurl) {
 			search_form.modify("results","replace_inner",code);
 
 			if (set_listfocus) {
+				search_form.run(-1);
 				search_form.set_focus("results");
 				GetLogger().log(LOG_DEBUG, "view::run_search: setting focus to results");
 				set_listfocus = false;
