@@ -26,7 +26,7 @@ op_desc opdescs[] = {
 	{ OP_TOGGLESHOWREAD, "Toggle show read feeds" },
 	{ OP_SHOWURLS, "Show URLs in current article" },
 	{ OP_CLEARTAG, "Clear current tag" },
-	{ OP_SETTAG, "Set a new tag" },
+	{ OP_SETTAG, "Select tag" },
 	{ OP_SEARCH, "Open search dialog" },
 	{ OP_NIL, NULL }
 };
@@ -95,7 +95,7 @@ operation keymap::get_opcode(const std::string& opstr) {
 		{ "toggle-show-read-feeds", OP_TOGGLESHOWREAD },
 		{ "show-urls", OP_SHOWURLS },
 		{ "clear-tag", OP_CLEARTAG },
-		{ "set-tag", OP_SETTAG },
+		{ "select-tag", OP_SETTAG },
 		{ "open-search", OP_SEARCH },
 		{ NULL, OP_NIL }
 	};

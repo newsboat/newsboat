@@ -342,6 +342,9 @@ void view::run_search(const std::string& feedurl) {
 					}
 				}
 				break;
+			case OP_SEARCH:
+				search_form.set_focus("query");
+				break;
 			case OP_QUIT:
 				quit = true;
 				break;
@@ -1447,6 +1450,7 @@ void view::set_search_keymap_hint() {
 	keymap_hint_entry hints[] = {
 		{ OP_QUIT, "Quit" },
 		{ OP_OPEN, "Search/Open" },
+		{ OP_SEARCH, "New Search" },
 		{ OP_HELP, "Help" },
 		{ OP_NIL, NULL }
 	};
