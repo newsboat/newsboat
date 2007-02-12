@@ -325,8 +325,8 @@ void controller::reload(unsigned int pos, unsigned int max) {
 		feed.set_tags(urlcfg.get_tags(feed.rssurl()));
 		feeds[pos] = feed;
 		
-		v->set_status("");
 		v->set_feedlist(feeds);
+		v->set_status("");
 	} else {
 		v->show_error("Error: invalid feed!");
 	}
