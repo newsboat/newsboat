@@ -15,6 +15,7 @@ configcontainer::configcontainer()
 	config_data["use-proxy"] = "no";
 	config_data["auto-reload"] = "no";
 	config_data["reload-time"] = "30";
+	config_data["max-items"] = "0";
 }
 
 configcontainer::~configcontainer()

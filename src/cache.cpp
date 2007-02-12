@@ -190,6 +190,8 @@ void cache::externalize_rssfeed(rss_feed& feed) {
 	mtx->unlock();
 	
 	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
+
+	GetLogger().log(LOG_INFO, "cache::externalize_feed: max_items = %u feed.items().size() = %u", max_items, feed.items().size());
 	
 	if (max_items > 0 && feed.items().size() > max_items) {
 		std::vector<rss_item>::iterator it=feed.items().begin();
