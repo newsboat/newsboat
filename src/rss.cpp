@@ -89,6 +89,10 @@ rss_feed rss_parser::parse() {
 				if (str) {
 					x.set_description(str);
 					free(str);
+					GetLogger().log(LOG_DEBUG, "rss_parser::parse: conversion was successful: %s\n", x.description().c_str());
+				} else {
+					GetLogger().log(LOG_WARN, "rss_parser::parse: stringprep_convert() failed for %s, but trying anyway...", x.link().c_str());
+					x.set_description(content->value);
 				}
 			}
 		} else {
@@ -103,6 +107,8 @@ rss_feed rss_parser::parse() {
 				if (str) {
 					x.set_description(str);
 					free(str);
+				} else {
+					x.set_description(content->value);
 				}
 			}
 		} else {
@@ -127,8 +133,8 @@ rss_feed rss_parser::parse() {
 		else
 			x.set_guid(item->link); // XXX hash something to get a better alternative GUID
 		// x.set_dirty();
-		GetLogger().log(LOG_DEBUG, "rss_parser::parse: item title = `%s' link = `%s' pubDate = `%s' (%d)", 
-			x.title().c_str(), x.link().c_str(), x.pubDate().c_str(), x.pubDate_timestamp());
+		GetLogger().log(LOG_DEBUG, "rss_parser::parse: item title = `%s' link = `%s' pubDate = `%s' (%d) description = `%s'", 
+			x.title().c_str(), x.link().c_str(), x.pubDate().c_str(), x.pubDate_timestamp(), x.description().c_str());
 		feed.items().push_back(x);
 	}
 

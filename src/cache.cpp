@@ -195,9 +195,10 @@ void cache::externalize_rssfeed(rss_feed& feed) {
 	
 	if (max_items > 0 && feed.items().size() > max_items) {
 		std::vector<rss_item>::iterator it=feed.items().begin();
-		for (unsigned int i=0;i<max_items-1;++i)
+		for (unsigned int i=0;i<max_items;++i)
 			++it;	
-		feed.items().erase(it, feed.items().end()); // delete entries that are too much
+		if (it != feed.items().end())
+			feed.items().erase(it, feed.items().end()); // delete entries that are too much
 	}
 
 	// the reverse iterator is there for the sorting foo below (think about it)
