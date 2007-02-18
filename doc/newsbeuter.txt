@@ -57,6 +57,18 @@ directory. You can provide an alternative installation path using the prefix
 parameter, e.g. running "make install prefix=/opt/newsbeuter" will install the
 binary to the directory /opt/newsbeuter/bin.
 
+Feedback
+~~~~~~~~
+
+If you want to tell us something related to newsbeuter, don't hesitate to send
+an email: ak-newsbeuter@synflood.at
+
+Alternatively, you can reach the newsbeuter developers on IRC: channel
+#newsbeuter on irc.freenode.net.
+
+If you want to report newsbeuter bugs, please use this issue tracker:
+http://code.google.com/p/newsbeuter/issues/list
+
 First Steps
 -----------
 After you've installed newsbeuter, you can run it for the first time by typing
