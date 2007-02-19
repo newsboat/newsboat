@@ -19,7 +19,7 @@ void configparser::parse() {
 	getline(f,line);
 	while (f.is_open() && !f.eof()) {
 		GetLogger().log(LOG_DEBUG,"configparser::parse: tokenizing %s",line.c_str());
-		std::vector<std::string> tokens = utils::tokenize_config(line);
+		std::vector<std::string> tokens = utils::tokenize_quoted(line);
 		if (tokens.size() > 0) {
 			std::string cmd = tokens[0];
 			config_action_handler * handler = action_handlers[cmd];

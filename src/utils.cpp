@@ -3,23 +3,15 @@
 
 namespace newsbeuter {
 
-std::vector<std::string> utils::tokenize_config(const std::string& str, std::string delimiters) {
-	std::vector<std::string> tokens = tokenize_quoted(str,delimiters);
-	for (std::vector<std::string>::iterator it=tokens.begin();it!=tokens.end();++it) {
-		if ((*it)[0] == '#') {
-			tokens.erase(it,tokens.end());
-			break;
-		}
-	}
-	return tokens;
-}
-
 std::vector<std::string> utils::tokenize_quoted(const std::string& str, std::string delimiters) {
 	std::vector<std::string> tokens;
 	std::string::size_type last_pos = str.find_first_not_of(delimiters, 0);
 	std::string::size_type pos = last_pos;
 
 	while (pos != std::string::npos && last_pos != std::string::npos) {
+		if (str[last_pos] == '#') // stop as soon as we found a comment
+			break;
+
 		if (str[last_pos] == '"') {
 			++last_pos;
 			pos = last_pos;
@@ -28,9 +20,47 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str, std::str
 			/* TODO: \" needs to be taken care of properly! */
 			if (pos >= str.length()) {
 				pos = std::string::npos;
-				tokens.push_back(str.substr(last_pos, str.length() - last_pos));
+				std::string token;
+				while (last_pos < str.length()) {
+					if (str[last_pos] == '\\') {
+						if (str[last_pos-1] == '\\')
+							token.append("\\");
+					} else {
+						if (str[last_pos-1] == '\\') {
+							switch (str[last_pos]) {
+								case 'n': token.append("\n"); break;
+								case 'r': token.append("\r"); break;
+								case 't': token.append("\t"); break;
+								case '"': token.append("\""); break;
+							}
+						} else {
+							token.append(1, str[last_pos]);
+						}
+					}
+					++last_pos;
+				}
+				tokens.push_back(token);
 			} else {
-				tokens.push_back(str.substr(last_pos, pos - last_pos));
+				std::string token;
+				while (last_pos < pos) {
+					if (str[last_pos] == '\\') {
+						if (str[last_pos-1] == '\\')
+							token.append("\\");
+					} else {
+						if (str[last_pos-1] == '\\') {
+							switch (str[last_pos]) {
+								case 'n': token.append("\n"); break;
+								case 'r': token.append("\r"); break;
+								case 't': token.append("\t"); break;
+								case '"': token.append("\""); break;
+							}
+						} else {
+							token.append(1, str[last_pos]);
+						}
+					}
+					++last_pos;
+				}
+				tokens.push_back(token);
 				++pos;
 			}
 		} else {
