@@ -82,7 +82,7 @@ void view::run_feedlist(const std::vector<std::string>& tags) {
 	bool zero_feedpos = false;
 
 	view_stack.push_front(&feedlist_form);
-	
+
 	set_feedlist_keymap_hint();
 
 	if(ctrl->get_refresh_on_start()) {
@@ -92,6 +92,7 @@ void view::run_feedlist(const std::vector<std::string>& tags) {
 
 	unsigned int reload_cycle = 60 * static_cast<unsigned int>(cfg->get_configvalue_as_int("reload-time"));
 	if (cfg->get_configvalue_as_bool("auto-reload") == true) {
+		feedlist_form.run(-1);
 		reloadthread  * rt = new reloadthread(ctrl, reload_cycle);
 		rt->start();
 	}
