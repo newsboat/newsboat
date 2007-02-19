@@ -4,7 +4,6 @@ TODO:
 	ignore comments
 	join two subsequent text nodes separated by a comment
 - improve configuration parser: support quoting
-- add default save path configuration option
 
 longteam goals to reach:
 - add scripting support
@@ -52,3 +51,4 @@ DONE:
 	- result list on top
 	- search input field on bottom
 	- set correct title in search dialog
+- add default save path configuration option

@@ -728,14 +728,24 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 	bool quit = false;
 	
 	if (dir == "") {
-		char * homedir = ::getenv("HOME");
-		if (homedir)
-			dir = homedir;
-		else
-			dir = ".";
+		std::string save_path = cfg->get_configvalue("save-path");
+
+		if (save_path.substr(0,2) == "~/") {
+			char * homedir = ::getenv("HOME");
+			if (homedir) {
+				dir.append(homedir);
+				dir.append("/");
+				dir.append(save_path.substr(2,save_path.length()-2));
+			} else {
+				dir = ".";
+			}
+		} else {
+			dir = save_path;
+		}
 	}
 			
 	::chdir(dir.c_str());
+	::getcwd(cwdtmp,sizeof(cwdtmp));
 	
 	filebrowser_form.set("filenametext", default_filename);
 	
@@ -745,7 +755,7 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 	} else {
 		head_str = "Save File - ";
 	}
-	head_str.append(dir);
+	head_str.append(cwdtmp);
 	filebrowser_form.set("head", head_str);
 		
 	do {
@@ -753,7 +763,6 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 		if (update_list) {
 			std::string code = "{list";
 			// TODO: read from current directory
-			char cwdtmp[MAXPATHLEN];
 			::getcwd(cwdtmp,sizeof(cwdtmp));
 			
 			DIR * dir = ::opendir(cwdtmp);

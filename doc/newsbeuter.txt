@@ -135,6 +135,7 @@ proxy-auth|<auth>||Set the proxy authentication string.|proxy-auth user:password
 color|<element> <fgcolor> <bgcolor> [<attr> ...]||Set the foreground color, background color and optional attributes for a certain element|color background white black
 auto-reload|[yes/no]|no|If enabled, all feeds will be automatically reloaded at start up and then continuously after a certain time has passed (see reload-time).|auto-reload yes
 reload-time|<number>|30|The number of minutes between automatic reloads.|reload-time 60
+save-path|<path>|~/|The default path where articles shall be saved to. If an invalid path is specified, the current directory is used.|save-path ~/SavedArticles
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
