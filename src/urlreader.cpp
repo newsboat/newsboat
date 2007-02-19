@@ -23,7 +23,7 @@ void urlreader::reload() {
 		do {
 			getline(f,line);
 			if (!f.eof() && line.length() > 0 && line[0] != '#') {
-				std::vector<std::string> tokens = utils::tokenize(line);
+				std::vector<std::string> tokens = utils::tokenize_quoted(line);
 				if (tokens.size() > 0) {
 					std::string url = tokens[0];
 					urls.push_back(url);

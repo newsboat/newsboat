@@ -731,6 +731,8 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 	if (dir == "") {
 		std::string save_path = cfg->get_configvalue("save-path");
 
+		GetLogger().log(LOG_DEBUG,"view::filebrowser: save-path is '%s'",save_path.c_str());
+
 		if (save_path.substr(0,2) == "~/") {
 			char * homedir = ::getenv("HOME");
 			if (homedir) {
@@ -744,6 +746,8 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 			dir = save_path;
 		}
 	}
+
+	GetLogger().log(LOG_DEBUG, "view::filebrowser: chdir(%s)", dir.c_str());
 			
 	::chdir(dir.c_str());
 	::getcwd(cwdtmp,sizeof(cwdtmp));

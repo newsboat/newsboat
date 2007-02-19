@@ -12,6 +12,7 @@ class utils {
 		static std::vector<std::string> tokenize_spaced(const std::string& str, std::string delimiters = " \r\n\t");
 		static std::vector<std::string> tokenize_nl(const std::string& str, std::string delimiters = "\r\n");
 		static std::vector<std::string> tokenize_config(const std::string& str, std::string delimiters = " \r\n\t");
+		static std::vector<std::string> tokenize_quoted(const std::string& str, std::string delimiters = " \r\n\t");
 };
 
 }
