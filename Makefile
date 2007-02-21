@@ -6,6 +6,7 @@ OUTPUT=newsbeuter
 SRC=$(wildcard *.cpp) $(wildcard src/*.cpp)
 OBJS=$(patsubst %.cpp,%.o,$(SRC))
 prefix=/usr/local
+docdir=$(prefix)/share/doc/$(OUTPUT)
 MKDIR=mkdir -p
 INSTALL=install
 A2X=a2x
@@ -45,6 +46,8 @@ install:
 	$(INSTALL) $(OUTPUT) $(prefix)/bin
 	$(MKDIR) $(prefix)/share/man/man1
 	$(INSTALL) doc/$(OUTPUT).1 $(prefix)/share/man/man1
+	$(MKDIR) $(docdir)
+	$(INSTALL) -m 644 doc/xhtml/* $(docdir)
 
 uninstall:
 	$(RM) $(prefix)/bin/$(OUTPUT)
