@@ -31,6 +31,7 @@ testpp: src/xmlpullparser.cpp testpp.cpp
 
 clean:
 	$(RM) $(OUTPUT) $(OBJS) $(STFLHDRS) core *.core core.*
+	$(RM) -rf doc/xhtml doc/*.xml
 
 distclean: clean
 	$(RM) Makefile.deps
