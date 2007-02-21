@@ -16,7 +16,11 @@ CXXFLAGS=-ggdb -I./include -I./stfl -I. -I/usr/local/include -I/sw/include -Wall
 LDFLAGS=-L/usr/local/lib -L/sw/lib
 
 # libraries to link with
-LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn -lpthread -lintl
+LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn -lpthread
+
+ifneq ($(shell uname -s),Linux)
+LIBS+=-lintl
+endif
 
 SRC=$(wildcard *.cpp) $(wildcard src/*.cpp)
 OBJS=$(patsubst %.cpp,%.o,$(SRC))
