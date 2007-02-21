@@ -1,23 +1,27 @@
+# the package name
+PACKAGE=newsbeuter
+
 # important directories
 prefix=/usr/local
 datadir=$(prefix)/share
 localedir=$(datadir)/locale
+docdir=$(datadir)/doc/$(PACKAGE)
 
 # compiler
 CXX=c++
 
 # compiler and linker flags
-DEFINES=-D_ENABLE_NLS -DLOCALEDIR=\"$(localedir)\"
+DEFINES=-D_ENABLE_NLS -DLOCALEDIR=\"$(localedir)\" -DPACKAGE=\"$(PACKAGE)\"
 CXXFLAGS=-ggdb -I./include -I./stfl -I. -I/usr/local/include -I/sw/include -Wall -pedantic $(DEFINES)
 LDFLAGS=-L/usr/local/lib -L/sw/lib
 
 # libraries to link with
 LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn -lpthread
 
-OUTPUT=newsbeuter
-
 SRC=$(wildcard *.cpp) $(wildcard src/*.cpp)
 OBJS=$(patsubst %.cpp,%.o,$(SRC))
+
+OUTPUT=$(PACKAGE)
 
 # additional commands
 MKDIR=mkdir -p
@@ -28,7 +32,7 @@ MSGFMT=msgfmt
 STFLHDRS=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
 POFILES=$(wildcard po/*.po)
 MOFILES=$(patsubst %.po,%.mo,$(POFILES))
-POTFILE=po/$(OUTPUT).pot
+POTFILE=po/$(PACKAGE).pot
 
 STFLCONV=./stfl2h.pl
 RM=rm -f
@@ -49,7 +53,6 @@ testpp: src/xmlpullparser.cpp testpp.cpp
 
 clean:
 	$(RM) $(OUTPUT) $(OBJS) $(STFLHDRS) core *.core core.*
-	$(RM) -rf doc/xhtml doc/*.xml
 
 distclean: clean clean-mo
 	$(RM) Makefile.deps
@@ -62,11 +65,14 @@ install: install-mo
 	$(MKDIR) $(prefix)/bin
 	$(INSTALL) $(OUTPUT) $(prefix)/bin
 	$(MKDIR) $(prefix)/share/man/man1
-	$(INSTALL) doc/$(OUTPUT).1 $(prefix)/share/man/man1
+	$(INSTALL) doc/$(PACKAGE).1 $(prefix)/share/man/man1
+	$(MKDIR) $(docdir)
+	$(INSTALL) -m 644 doc/xhtml/* $(docdir)
 
 uninstall:
 	$(RM) $(prefix)/bin/$(OUTPUT)
 	$(RM) $(prefix)/share/man/man1/$(OUTPUT).1
+	$(RM) -r $(docdir)
 
 Makefile.deps: $(SRC)
 	$(CXX) $(CXXFLAGS) -MM -MG $(SRC) > Makefile.deps
@@ -95,8 +101,8 @@ install-mo:
 		lang=`echo $$mofile | sed 's/\.mo$$//'`; \
 		dir=$(localedir)/$$lang/LC_MESSAGES; \
 		$(MKDIR) $$dir ; \
-		$(INSTALL) -m 644 $$mof $$dir/$(OUTPUT).mo ; \
-		echo "Installing $$mofile as $$dir/$(OUTPUT).mo" ; \
+		$(INSTALL) -m 644 $$mof $$dir/$(PACKAGE).mo ; \
+		echo "Installing $$mofile as $$dir/$(PACKAGE).mo" ; \
 	done
 
 include Makefile.deps
