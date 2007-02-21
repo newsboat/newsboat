@@ -9,8 +9,15 @@
 #define NEWSBEUTER_PATH_SEP			"/"
 #define NEWSBEUTER_CONFIG_SUBDIR	".newsbeuter"
 
-#include <libintl.h>
-#include <locale.h>
-#define _(string) gettext(string)
+#define PACKAGE PROGRAM_NAME
+
+#ifdef _ENABLE_NLS
+#	include <libintl.h>
+#	include <locale.h>
+#	define _(string) gettext(string)
+#else
+#	define _(string) (string)
+#endif
+
 
 #endif

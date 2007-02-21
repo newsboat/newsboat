@@ -724,6 +724,8 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 	view_stack.push_front(&filebrowser_form);
 
 	set_filebrowser_keymap_hint();
+
+	filebrowser_form.set("fileprompt", _("File: "));
 	
 	bool update_list = true;
 	bool quit = false;
@@ -756,9 +758,9 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 	
 	std::string head_str;
 	if (type == FBT_OPEN) {
-		snprintf(buf, sizeof(buf), "Open File - %s", cwdtmp);
+		snprintf(buf, sizeof(buf), _("Open File - %s"), cwdtmp);
 	} else {
-		snprintf(buf, sizeof(buf), "Save File - %s", cwdtmp);
+		snprintf(buf, sizeof(buf), _("Save File - %s"), cwdtmp);
 	}
 	head_str = buf;
 	filebrowser_form.set("head", head_str);
@@ -811,9 +813,9 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 								case 'd':
 									// TODO: handle directory
 									if (type == FBT_OPEN) {
-										snprintf(buf, sizeof(buf), "Open File - %s", filename.c_str());
+										snprintf(buf, sizeof(buf), _("Open File - %s"), filename.c_str());
 									} else {
-										snprintf(buf, sizeof(buf), "Save File - %s", filename.c_str());
+										snprintf(buf, sizeof(buf), _("Save File - %s"), filename.c_str());
 									}
 									head_str = buf;
 									filebrowser_form.set("head", head_str);
