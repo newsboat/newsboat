@@ -67,7 +67,7 @@ install: install-mo
 	$(MKDIR) $(prefix)/share/man/man1
 	$(INSTALL) doc/$(PACKAGE).1 $(prefix)/share/man/man1
 	$(MKDIR) $(docdir)
-	$(INSTALL) -m 644 doc/xhtml/* $(docdir)
+	$(INSTALL) -m 644 doc/xhtml/* $(docdir) || true
 
 uninstall:
 	$(RM) $(prefix)/bin/$(OUTPUT)
