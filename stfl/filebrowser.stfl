@@ -15,7 +15,7 @@ vbox
     .expand:0 .height:1
     label
       .expand:0
-      text:"File: "
+      text[fileprompt]:"File: "
     !input[filename]
       .expand:h
       text[filenametext]:""

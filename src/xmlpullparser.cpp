@@ -7,6 +7,8 @@
 #include <iostream>
 #include <cstdlib>
 
+#include <config.h>
+
 namespace newsbeuter
 {
 
@@ -31,13 +33,13 @@ int xmlpullparser::getAttributeCount() const {
 
 std::string xmlpullparser::getAttributeName(unsigned int index) const {
 	if (index >= attributes.size())
-		throw std::out_of_range("invalid attribute index");
+		throw std::out_of_range(_("invalid attribute index"));
 	return attributes[index].first;
 }
 
 std::string xmlpullparser::getAttributeValue(unsigned int index) const {
 	if (index >= attributes.size())
-		throw std::out_of_range("invalid attribute index");
+		throw std::out_of_range(_("invalid attribute index"));
 	return attributes[index].second;	
 }
 
@@ -47,7 +49,7 @@ std::string xmlpullparser::getAttributeValue(const std::string& name) const {
 			return it->second;
 		}	
 	}	
-	throw std::invalid_argument("attribute not found");
+	throw std::invalid_argument(_("attribute not found"));
 }
 
 xmlpullparser::event xmlpullparser::getEventType() const {
@@ -133,7 +135,7 @@ xmlpullparser::event xmlpullparser::next() {
 								text.erase(text.length()-1, 1);
 						}
 					} else {
-						throw xmlexception("empty tag found");	
+						throw xmlexception(_("empty tag found"));
 					}
 					current_event = determine_tag_type();
 				}
@@ -164,7 +166,7 @@ xmlpullparser::event xmlpullparser::next() {
 									text.erase(text.length()-1, 1);
 							}
 						} else {
-							throw xmlexception("empty tag found");	
+							throw xmlexception(_("empty tag found"));
 						}
 						current_event = determine_tag_type();
 					} else {
@@ -205,7 +207,7 @@ xmlpullparser::event xmlpullparser::next() {
 							text.erase(text.length()-1, 1);
 					}
 				} else {
-					throw xmlexception("empty tag found");	
+					throw xmlexception(_("empty tag found"));
 				}
 				current_event = determine_tag_type();	
 			}
@@ -252,7 +254,7 @@ std::string xmlpullparser::read_tag() {
 	std::string s;
 	getline(*inputstream,s,'>');
 	if (inputstream->eof()) {
-		throw xmlexception("EOF found while reading XML tag");	// TODO: test whether this works reliably
+		throw xmlexception(_("EOF found while reading XML tag"));	// TODO: test whether this works reliably
 	}
 	return s;
 }

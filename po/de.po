@@ -1,0 +1,429 @@
+# German translation for newsbeuter.
+# Copyright (C) Andreas Krennmair
+# This file is distributed under the same license as the newsbeuter package.
+# Andreas Krennmair <ak@synflood.at>, 2007
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: newsbeuter 0.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-02-21 13:01+0100\n"
+"PO-Revision-Date: 2007-02-21 13:03+0100\n"
+"Last-Translator: Andreas Krennmair <ak@synflood.at>\n"
+"Language-Team: Andreas Krennmair <ak@synflood.at>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/configparser.cpp:34
+msgid "invalid parameters."
+msgstr "ungültige Parameter."
+
+#: src/configparser.cpp:36
+msgid "too few parameters."
+msgstr "zu wenige Parameter."
+
+#: src/configparser.cpp:38
+msgid "unknown command (bug)."
+msgstr "unbekanntes Kommando (Bug)."
+
+#: src/configparser.cpp:40
+msgid "unknown error (bug)."
+msgstr "unbekannter Fehler (Bug)."
+
+#: src/configparser.cpp:42
+#, c-format
+msgid "Error while processing command `%s' (%s line %u): %s"
+msgstr "Fehler beim Bearbeiten von Kommando `%s' (%s Zeile %u): %s"
+
+#: src/configparser.cpp:47
+#, c-format
+msgid "unknown command `%s'"
+msgstr "unbekanntes Kommando `%s'"
+
+#: src/controller.cpp:34
+msgid "Segmentation fault."
+msgstr "Speicherzugriffsfehler."
+
+#: src/controller.cpp:48
+msgid "Fatal error: couldn't determine home directory!"
+msgstr "Schwerer Fehler: konnte das Home-Verzeichnis nicht feststellen!"
+
+#: src/controller.cpp:50
+#, c-format
+msgid ""
+"Please set the HOME environment variable or add a valid user for UID %u!"
+msgstr ""
+"Bitte setzen sie die HOME Umgebungsvariable oder fügen sie einen gültigen "
+"Benutzer für UID %u hinzu!"
+
+#: src/controller.cpp:134
+#, c-format
+msgid "%s: unknown option - %c"
+msgstr "%s: unbekannte Option - %c"
+
+#: src/controller.cpp:151
+#, c-format
+msgid ""
+"Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
+"import an OPML file."
+msgstr ""
+"Fehler: keine URLs konfiguriert. Bitte füllen sie die Datei %s mit RSS-Feed-"
+"URLs oder importieren sie eine OPML-Datei."
+
+#: src/controller.cpp:157
+#, c-format
+msgid "Starting %s %s..."
+msgstr "Starte %s %s..."
+
+#: src/controller.cpp:163
+#, c-format
+msgid "Error: an instance of %s is already running (PID: %u)"
+msgstr "Fehler: eine Instanz von %s läuft bereits (PID: %u)"
+
+#: src/controller.cpp:170
+msgid "Loading configuration..."
+msgstr "Lade Konfiguration..."
+
+#: src/controller.cpp:197 src/controller.cpp:216 src/controller.cpp:237
+msgid "done."
+msgstr "fertig."
+
+#: src/controller.cpp:200
+msgid "Loading articles from cache..."
+msgstr "Lade Artikel aus dem Zwischenspeicher..."
+
+#: src/controller.cpp:229
+msgid "Cleaning up cache..."
+msgstr "Bereinige Zwischenspeicher..."
+
+#: src/controller.cpp:273
+msgid "Opening feed..."
+msgstr "Öffne Feed..."
+
+#: src/controller.cpp:281
+msgid "Error: feed contains no items!"
+msgstr "Fehler: Feed enthält keine Elemente!"
+
+#: src/controller.cpp:287 src/controller.cpp:337
+msgid "Error: invalid feed!"
+msgstr "Fehler: ungültiger Feed!"
+
+#: src/controller.cpp:308
+#, c-format
+msgid "%sLoading %s..."
+msgstr "%sLade %s..."
+
+# TODO: this still needs translation!
+#: src/controller.cpp:367
+#, c-format
+msgid ""
+"%s %s\n"
+"usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]\n"
+"-e              export OPML feed to stdout\n"
+"-r              refresh feeds on start\n"
+"-i <file>       import OPML file\n"
+"-u <urlfile>    read RSS feed URLs from <urlfile>\n"
+"-c <cachefile>  use <cachefile> as cache file\n"
+"-C <configfile> read configuration from <configfile>\n"
+"-h              this help\n"
+msgstr ""
+"%s %s\n"
+"Verwendung: %s [-i <datei>|-e] [-u <urldatei>] [-c <cachedatei>] [-h]\n"
+"-e               exportiere OPML-Feed auf die Standardausgabe\n"
+"-r               Feeds beim Start neu laden\n"
+"-i <datei>       OPML-Datei importieren\n"
+"-u <urldatei>    RSS-Feed URLs aus <urldatei> lesen\n"
+"-c <cachedatei>  <cachedatei> als Zwischenspeicherdatei verwenden\n"
+"-C <configdatei> Konfiguration aus <configdatei> lesen\n"
+"-h               diese Hilfe\n"
+
+#: src/controller.cpp:408
+#, c-format
+msgid "Import of %s finished."
+msgstr "Import von %s fertig."
+
+#: src/keymap.cpp:15
+msgid "Open feed/article"
+msgstr "Feed/Artikel öffnen"
+
+#: src/keymap.cpp:16
+msgid "Return to previous dialog/Quit"
+msgstr "Zum vorherigen Dialog zurückkehren/Beenden"
+
+#: src/keymap.cpp:17
+msgid "Reload currently selected feed"
+msgstr "Aktuell ausgewählten Feed neu laden"
+
+#: src/keymap.cpp:18
+msgid "Reload all feeds"
+msgstr "Alle Feeds neu laden"
+
+#: src/keymap.cpp:19
+msgid "Mark feed read"
+msgstr "Feed als gelesen markieren"
+
+#: src/keymap.cpp:20
+msgid "Mark all feeds read"
+msgstr "Alle Feeds als gelesen markieren"
+
+#: src/keymap.cpp:21
+msgid "Save article"
+msgstr "Artikel speichern"
+
+#: src/keymap.cpp:22
+msgid "Go to next unread article"
+msgstr "Zum nächsten ungelesenen Artikel gehen"
+
+#: src/keymap.cpp:23
+msgid "Open article in browser"
+msgstr "Artikel im Browser öffnen"
+
+#: src/keymap.cpp:24
+msgid "Open help dialog"
+msgstr "Hilfe-Dialog öffnen"
+
+#: src/keymap.cpp:25
+msgid "Toggle source view"
+msgstr "Quellansicht umschalten"
+
+#: src/keymap.cpp:26
+msgid "Toggle read status for article"
+msgstr "Gelesen-Status für Artikel umschalten"
+
+#: src/keymap.cpp:27
+msgid "Toggle show read feeds"
+msgstr "Ansicht der gelesenen Feeds umschalten"
+
+#: src/keymap.cpp:28
+msgid "Show URLs in current article"
+msgstr "URLs im aktuellen Artikel zeigen"
+
+#: src/keymap.cpp:29
+msgid "Clear current tag"
+msgstr "Aktuellen Tag löschen"
+
+#: src/keymap.cpp:30
+msgid "Select tag"
+msgstr "Tag auswählen"
+
+#: src/keymap.cpp:31
+msgid "Open search dialog"
+msgstr "Suchdialog öffnen"
+
+#: src/view.cpp:131 src/view.cpp:188
+msgid "No feeds with unread items."
+msgstr "Keine Feeds mit ungelesenen Elementen."
+
+#: src/view.cpp:138 src/view.cpp:152 src/view.cpp:172 src/view.cpp:904
+msgid "No feed selected!"
+msgstr "Kein Feed ausgewählt!"
+
+#: src/view.cpp:164 src/view.cpp:520
+msgid "Marking feed read..."
+msgstr "Markiere Feed als gelesen..."
+
+#: src/view.cpp:193
+msgid "Marking all feeds read..."
+msgstr "Markiere alle Feeds als gelesen..."
+
+#: src/view.cpp:212
+msgid "No tags defined."
+msgstr "Keine Tags definiert."
+
+#: src/view.cpp:251
+msgid "Search Articles"
+msgstr "Artikelsuche"
+
+#: src/view.cpp:253
+msgid "Search for: "
+msgstr "Suche nach: "
+
+#: src/view.cpp:323
+#, c-format
+msgid "Search Articles - %u results"
+msgstr "Artikelsuche - %u Ergebnisse"
+
+#: src/view.cpp:328
+msgid "No results."
+msgstr "Keine Ergebnisse."
+
+#: src/view.cpp:343 src/view.cpp:456
+msgid "No item selected!"
+msgstr "Kein Element ausgewählt!"
+
+#: src/view.cpp:424
+msgid "No unread items."
+msgstr "Keine ungelesenen Elemente."
+
+#: src/view.cpp:481 src/view.cpp:1060
+msgid "Aborted saving."
+msgstr "Speichern abgebrochen."
+
+#: src/view.cpp:485
+#, c-format
+msgid "Saved article to %s"
+msgstr "Artikel nach %s gespeichert"
+
+#: src/view.cpp:490
+#, c-format
+msgid "Error: couldn't save article to %s"
+msgstr "Fehler: konnte Artikel nicht nach %s speichern"
+
+#: src/view.cpp:495 src/view.cpp:936
+msgid "Error: no item selected!"
+msgstr "Fehler: kein Element ausgewählt!"
+
+#: src/view.cpp:535
+msgid "Toggling read flag for article..."
+msgstr "Schalte Gelesen-Flag für Artikel um..."
+
+#: src/view.cpp:573 src/view.cpp:973
+msgid "Title: "
+msgstr "Titel: "
+
+#: src/view.cpp:577 src/view.cpp:980
+msgid "Author: "
+msgstr "Autor: "
+
+#: src/view.cpp:581 src/view.cpp:994
+msgid "Date: "
+msgstr "Datum: "
+
+#: src/view.cpp:730
+msgid "File: "
+msgstr "Datei: "
+
+#: src/view.cpp:763 src/view.cpp:818
+#, c-format
+msgid "Open File - %s"
+msgstr "Datei öffnen - %s"
+
+#: src/view.cpp:765 src/view.cpp:820
+#, c-format
+msgid "Save File - %s"
+msgstr "Datei speichern - %s"
+
+#: src/view.cpp:960
+msgid "Feed: "
+msgstr "Feed: "
+
+#: src/view.cpp:987
+msgid "Link: "
+msgstr "Link: "
+
+#: src/view.cpp:1075 src/view.cpp:1159
+msgid "Starting browser..."
+msgstr "Starte Browser..."
+
+#: src/view.cpp:1128
+msgid "URLs"
+msgstr "URLs"
+
+#: src/view.cpp:1163
+msgid "No link selected!"
+msgstr "Kein Link ausgewählt!"
+
+#: src/view.cpp:1242 src/view.cpp:1391 src/view.cpp:1418 src/view.cpp:1442
+#: src/view.cpp:1474
+msgid "Help"
+msgstr "Hilfe"
+
+#: src/view.cpp:1352
+#, c-format
+msgid "Your feeds (%u unread, %u total) - tag `%s'"
+msgstr "Ihre Feeds (%u ungelesen, %u gesamt) - Tag `%s'"
+
+#: src/view.cpp:1354
+#, c-format
+msgid "Your feeds (%u unread, %u total)"
+msgstr "Ihre Feeds (%u ungelesen, %u gesamt)"
+
+#: src/view.cpp:1384 src/view.cpp:1400 src/view.cpp:1410 src/view.cpp:1437
+#: src/view.cpp:1451 src/view.cpp:1471
+msgid "Quit"
+msgstr "Beenden"
+
+#: src/view.cpp:1385 src/view.cpp:1411 src/view.cpp:1438
+msgid "Open"
+msgstr "Öffnen"
+
+#: src/view.cpp:1386 src/view.cpp:1428 src/view.cpp:1439
+msgid "Save"
+msgstr "Speichern"
+
+#: src/view.cpp:1387 src/view.cpp:1413
+msgid "Reload"
+msgstr "Neu laden"
+
+#: src/view.cpp:1388 src/view.cpp:1412 src/view.cpp:1440
+msgid "Next Unread"
+msgstr "Nächstes Ungelesenes"
+
+#: src/view.cpp:1389
+msgid "Mark All Read"
+msgstr "Alle Gelesen Markieren"
+
+#: src/view.cpp:1390 src/view.cpp:1417
+msgid "Search"
+msgstr "Suchen"
+
+#: src/view.cpp:1401 src/view.cpp:1441
+msgid "Open in Browser"
+msgstr "Im Browser öffnen"
+
+#: src/view.cpp:1414
+msgid "Reload All"
+msgstr "Alle Neu laden"
+
+#: src/view.cpp:1415
+msgid "Mark Read"
+msgstr "Gelesen Markieren"
+
+#: src/view.cpp:1416
+msgid "Catchup All"
+msgstr "Alle Aufholen"
+
+#: src/view.cpp:1427 src/view.cpp:1460
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: src/view.cpp:1461
+msgid "Select Tag"
+msgstr "Tag auswählen"
+
+#: src/view.cpp:1472
+msgid "Search/Open"
+msgstr "Suchen/Öffnen"
+
+#: src/view.cpp:1473
+msgid "New Search"
+msgstr "Neue Suche"
+
+#: src/view.cpp:1484
+#, c-format
+msgid "Articles in feed '%s' (%u unread, %u total) - %s"
+msgstr "Artikel im Feed '%s' (%u ungelesen, %u gesamt) - %s"
+
+#: src/view.cpp:1490
+#, c-format
+msgid "Article '%s'"
+msgstr "Artikel '%s'"
+
+#: src/xmlpullparser.cpp:36 src/xmlpullparser.cpp:42
+msgid "invalid attribute index"
+msgstr "ungültiger Attributindex"
+
+#: src/xmlpullparser.cpp:52
+msgid "attribute not found"
+msgstr "Attribut nicht gefunden"
+
+#: src/xmlpullparser.cpp:138 src/xmlpullparser.cpp:169
+#: src/xmlpullparser.cpp:210
+msgid "empty tag found"
+msgstr "leerer Tag gefunden"
+
+#: src/xmlpullparser.cpp:257
+msgid "EOF found while reading XML tag"
+msgstr "Ende der Datei gefunden beim Lesen eines XML-Tags"
