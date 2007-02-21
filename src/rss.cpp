@@ -99,20 +99,25 @@ rss_feed rss_parser::parse() {
 			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found no rss 2.0 content:encoded");
 		}
 
-		if ((mrss->version == MRSS_VERSION_ATOM_0_3 || mrss->version == MRSS_VERSION_ATOM_1_0) && mrss_search_tag(mrss, "content", NULL, &content) == MRSS_OK && content) {
-			/* Atom content */
-			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found atom content: %s\n", content->value);
-			if (content->value) {
-				char * str = stringprep_convert(content->value, stringprep_locale_charset(), encoding);
-				if (str) {
-					x.set_description(str);
-					free(str);
-				} else {
-					x.set_description(content->value);
+		if ((mrss->version == MRSS_VERSION_ATOM_0_3 || mrss->version == MRSS_VERSION_ATOM_1_0)) {
+			int rc;
+			if (((rc = mrss_search_tag(item, "content", "http://www.w3.org/2005/Atom", &content)) == MRSS_OK && content) ||
+			    ((rc = mrss_search_tag(item, "content", "http://purl.org/atom/ns#", &content)) == MRSS_OK && content)) {
+				GetLogger().log(LOG_DEBUG, "rss_parser::parse: found atom content: %s\n", content ? content->value : "(content = null)");
+				if (content && content->value) {
+					char * str = stringprep_convert(content->value, stringprep_locale_charset(), encoding);
+					if (str) {
+						x.set_description(str);
+						free(str);
+					} else {
+						x.set_description(content->value);
+					}
 				}
+			} else {
+				GetLogger().log(LOG_DEBUG, "rss_parser::parse: mrss_search_tag(content) failed with rc = %d content = %p", rc, content);
 			}
 		} else {
-			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found no atom content");
+			GetLogger().log(LOG_DEBUG, "rss_parser::parse: not an atom feed");
 		}
 
 		if (x.description().length() == 0 && item->description) {
