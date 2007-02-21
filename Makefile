@@ -29,6 +29,7 @@ MSGFMT=msgfmt
 STFLHDRS=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
 POFILES=$(wildcard po/*.po)
 MOFILES=$(patsubst %.po,%.mo,$(POFILES))
+POTFILE=po/$(OUTPUT).pot
 
 STFLCONV=./stfl2h.pl
 RM=rm -f
@@ -77,11 +78,11 @@ Makefile.deps: $(SRC)
 # the following targets are i18n/l10n-related:
 
 extract:
-	$(RM) $(OUTPUT).pot
-	xgettext -k_ -o $(OUTPUT).pot $(SRC)
+	$(RM) $(POTFILE)
+	xgettext -k_ -o $(POTFILE) $(SRC)
 
 msgmerge:
-	for f in $(POFILES) ; do msgmerge -U $$f $(OUTPUT).pot ; done
+	for f in $(POFILES) ; do msgmerge -U $$f $(POTFILE) ; done
 
 %.mo: %.po
 	$(MSGFMT) --statistics -o $@ $<
