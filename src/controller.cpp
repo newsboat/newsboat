@@ -31,7 +31,7 @@ void ctrl_c_action(int sig) {
 	stfl_reset();
 	::unlink(lock_file.c_str());
 	if (SIGSEGV == sig) {
-		fprintf(stderr,"Segmentation fault.\n");
+		fprintf(stderr,"%s\n", _("Segmentation fault."));
 	}
 	::exit(EXIT_FAILURE);
 }
@@ -45,8 +45,10 @@ controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cach
 		if (spw) {
 			cfgdir = spw->pw_dir;
 		} else {
-			std::cout << "Fatal error: couldn't determine home directory!" << std::endl;
-			std::cout << "Please set the HOME environment variable or add a valid user for UID " << ::getuid() << "!" << std::endl;
+			std::cout << _("Fatal error: couldn't determine home directory!") << std::endl;
+			char buf[1024];
+			snprintf(buf, sizeof(buf), _("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid());
+			std::cout << buf << std::endl;
 			::exit(EXIT_FAILURE);
 		}
 	}
@@ -76,6 +78,7 @@ void controller::set_view(view * vv) {
 
 void controller::run(int argc, char * argv[]) {
 	int c;
+	char msgbuf[1024];
 
 	::signal(SIGINT, ctrl_c_action);
 	::signal(SIGSEGV, ctrl_c_action);
@@ -128,7 +131,8 @@ void controller::run(int argc, char * argv[]) {
 				}
 				break;
 			default:
-				std::cout << argv[0] << ": unknown option: -" << static_cast<char>(c) << std::endl;
+				snprintf(msgbuf, sizeof(msgbuf), _("%s: unknown option - %c"), argv[0], static_cast<char>(c));
+				std::cout << msgbuf << std::endl;
 				usage(argv[0]);
 				break;
 		}
@@ -144,23 +148,26 @@ void controller::run(int argc, char * argv[]) {
 
 	if (urlcfg.get_urls().size() == 0) {
 		GetLogger().log(LOG_ERROR,"no URLs configured.");
-		std::cout << "Error: no URLs configured. Please fill the file " << url_file << " with RSS feed URLs or import an OPML file." << std::endl << std::endl;
+		snprintf(msgbuf, sizeof(msgbuf), _("Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."), url_file);
+		std::cout << msgbuf << std::endl << std::endl;
 		usage(argv[0]);
 	}
 
 	if (!do_export) {
-		std::cout << "Starting " << PROGRAM_NAME << " " << PROGRAM_VERSION << "..." << std::endl << std::endl;
+		snprintf(msgbuf, sizeof(msgbuf), _("Starting %s %s..."), PROGRAM_NAME, PROGRAM_VERSION);
+		std::cout << msgbuf << std::endl;
 
 		pid_t pid;
 		if (!try_fs_lock(pid)) {
 			GetLogger().log(LOG_ERROR,"an instance is alredy running: pid = %u",pid);
-			std::cout << "Error: an instance of " << PROGRAM_NAME << " is already running (PID: " << pid << ")" << std::endl;
+			snprintf(msgbuf, sizeof(msgbuf), _("Error: an instance of %s is already running (PID: %u)"), PROGRAM_NAME, pid);
+			std::cout << msgbuf << std::endl;
 			return;
 		}
 	}
 	
 	if (!do_export)
-		std::cout << "Loading configuration...";
+		std::cout << _("Loading configuration...");
 	std::cout.flush();
 	
 	configparser cfgparser(config_file.c_str());
@@ -187,10 +194,10 @@ void controller::run(int argc, char * argv[]) {
 	delete colorman;
 	
 	if (!do_export)
-		std::cout << "done." << std::endl;
+		std::cout << _("done.") << std::endl;
 
 	if (!do_export)
-		std::cout << "Loading articles from cache...";
+		std::cout << _("Loading articles from cache...");
 	std::cout.flush();
 
 	rsscache = new cache(cache_file,cfg);
@@ -206,7 +213,7 @@ void controller::run(int argc, char * argv[]) {
 	std::vector<std::string> tags = urlcfg.get_alltags();
 
 	if (!do_export)
-		std::cout << "done." << std::endl;
+		std::cout << _("done.") << std::endl;
 
 	if (do_export) {
 		export_opml();
@@ -219,7 +226,7 @@ void controller::run(int argc, char * argv[]) {
 	v->set_feedlist(feeds);
 	v->run_feedlist(tags);
 
-	std::cout << "Cleaning up cache...";
+	std::cout << _("Cleaning up cache...");
 	std::cout.flush();
 	rsscache->cleanup_cache(feeds);
 	/*
@@ -227,7 +234,7 @@ void controller::run(int argc, char * argv[]) {
 		// rsscache->externalize_rssfeed(*it);
 	}
 	*/
-	std::cout << "done." << std::endl;
+	std::cout << _("done.") << std::endl;
 
 	remove_fs_lock();
 }
@@ -263,7 +270,7 @@ bool controller::open_feed(unsigned int pos, bool auto_open) {
 	bool retval = false;
 	if (pos < feeds.size()) {
 		if (!auto_open)
-			v->set_status("Opening feed...");
+			v->set_status(_("Opening feed..."));
 
 		rss_feed& feed = feeds[pos];
 
@@ -271,21 +278,22 @@ bool controller::open_feed(unsigned int pos, bool auto_open) {
 			v->set_status("");
 
 		if (feed.items().size() == 0) {
-			v->show_error("Error: feed contains no items!");
+			v->show_error(_("Error: feed contains no items!"));
 		} else {
 			retval = v->run_itemlist(pos, auto_open);
 			v->set_feedlist(feeds);
 		}
 	} else {
-		v->show_error("Error: invalid feed!");
+		v->show_error(_("Error: invalid feed!"));
 	}
 	return retval;
 }
 
 void controller::reload(unsigned int pos, unsigned int max) {
+	char msgbuf[1024];
 	if (pos < feeds.size()) {
 		rss_feed feed = feeds[pos];
-		std::string msg;	
+		std::string msg;
 		if (max > 0) {
 			msg.append("(");
 			std::ostringstream posstr;
@@ -297,10 +305,8 @@ void controller::reload(unsigned int pos, unsigned int max) {
 			msg.append(maxstr.str());
 			msg.append(") ");
 		}
-		msg.append("Loading ");
-		msg.append(feed.rssurl());
-		msg.append("...");
-		v->set_status(msg.c_str());
+		snprintf(msgbuf, _("%sLoading %s..."), msg.c_str(), feed.rssurl().c_str());
+		v->set_status(msgbuf);
 				
 		rss_parser parser(feed.rssurl().c_str(), rsscache, cfg);
 		feed = parser.parse();
@@ -328,7 +334,7 @@ void controller::reload(unsigned int pos, unsigned int max) {
 		v->set_feedlist(feeds);
 		v->set_status("");
 	} else {
-		v->show_error("Error: invalid feed!");
+		v->show_error(_("Error: invalid feed!"));
 	}
 }
 
@@ -356,15 +362,16 @@ void controller::start_reload_all_thread() {
 }
 
 void controller::usage(char * argv0) {
-	std::cout << PROGRAM_NAME << " " << PROGRAM_VERSION << std::endl;
-	std::cout << "usage: " << argv0 << " [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]" << std::endl;
-	std::cout << "-e              export OPML feed to stdout" << std::endl;
-	std::cout << "-r              refresh feeds on start" << std::endl;
-	std::cout << "-i <file>       import OPML file" << std::endl;
-	std::cout << "-u <urlfile>    read RSS feed URLs from <urlfile>" << std::endl;
-	std::cout << "-c <cachefile>  use <cachefile> as cache file" << std::endl;
-	std::cout << "-C <configfile> read configuration from <configfile>" << std::endl;
-	std::cout << "-h              this help" << std::endl;
+	char buf[2048];
+	snprintf(buf, sizeof(buf), 
+				_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]\n"
+				"-e              export OPML feed to stdout\n"
+				"-r              refresh feeds on start\n"
+				"-i <file>       import OPML file\n"
+				"-u <urlfile>    read RSS feed URLs from <urlfile>\n"
+				"-c <cachefile>  use <cachefile> as cache file\n"
+				"-C <configfile> read configuration from <configfile>\n"
+				"-h              this help\n"), PROGRAM_NAME, PROGRAM_VERSION, argv0);
 	::exit(EXIT_FAILURE);
 }
 
@@ -396,7 +403,9 @@ void controller::import_opml(const char * filename) {
 	}
 
 	nxml_free(data);
-	std::cout << "Import of " << filename << " finished." << std::endl;
+	char buf[1024];
+	snprintf(buf, sizeof(buf), _("Import of %s finished."), filename);
+	std::cout << buf << std::endl;
 }
 
 void controller::export_opml() {

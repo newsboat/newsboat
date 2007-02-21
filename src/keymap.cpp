@@ -2,6 +2,7 @@
 #include <logger.h>
 #include <vector>
 #include <iostream>
+#include <config.h>
 
 namespace newsbeuter {
 	
@@ -11,23 +12,23 @@ struct op_desc {
 };
 
 op_desc opdescs[] = {
-	{ OP_OPEN, "Open feed/article" },
-	{ OP_QUIT, "Return to previous dialog/Quit" },
-	{ OP_RELOAD, "Reload currently selected feed" },
-	{ OP_RELOADALL, "Reload all feeds" },
-	{ OP_MARKFEEDREAD, "Mark feed read" },
-	{ OP_MARKALLFEEDSREAD, "Mark all feeds read" },
-	{ OP_SAVE, "Save article" },
-	{ OP_NEXTUNREAD, "Go to next unread article" },
-	{ OP_OPENINBROWSER, "Open article in browser" },
-	{ OP_HELP, "Open help dialog" },
-	{ OP_TOGGLESOURCEVIEW, "Toggle source view" },
-	{ OP_TOGGLEITEMREAD, "Toggle read status for article" },
-	{ OP_TOGGLESHOWREAD, "Toggle show read feeds" },
-	{ OP_SHOWURLS, "Show URLs in current article" },
-	{ OP_CLEARTAG, "Clear current tag" },
-	{ OP_SETTAG, "Select tag" },
-	{ OP_SEARCH, "Open search dialog" },
+	{ OP_OPEN, _("Open feed/article") },
+	{ OP_QUIT, _("Return to previous dialog/Quit") },
+	{ OP_RELOAD, _("Reload currently selected feed") },
+	{ OP_RELOADALL, _("Reload all feeds") },
+	{ OP_MARKFEEDREAD, _("Mark feed read") },
+	{ OP_MARKALLFEEDSREAD, _("Mark all feeds read") },
+	{ OP_SAVE, _("Save article") },
+	{ OP_NEXTUNREAD, _("Go to next unread article") },
+	{ OP_OPENINBROWSER, _("Open article in browser") },
+	{ OP_HELP, _("Open help dialog") },
+	{ OP_TOGGLESOURCEVIEW, _("Toggle source view") },
+	{ OP_TOGGLEITEMREAD, _("Toggle read status for article") },
+	{ OP_TOGGLESHOWREAD, _("Toggle show read feeds") },
+	{ OP_SHOWURLS, _("Show URLs in current article") },
+	{ OP_CLEARTAG, _("Clear current tag") },
+	{ OP_SETTAG, _("Select tag") },
+	{ OP_SEARCH, _("Open search dialog") },
 	{ OP_NIL, NULL }
 };
 

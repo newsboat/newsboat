@@ -1,4 +1,5 @@
 TODO:
+- i18n/l10n
 - check whether date parsing uses the correct timezone
 - refactor XML pull parser (many redundancies)
 	ignore comments

@@ -27,26 +27,27 @@ void configparser::parse() {
 				tokens.erase(tokens.begin()); // delete first element
 				action_handler_status status = handler->handle_action(cmd,tokens);
 				if (status != AHS_OK) {
-					std::ostringstream os;
-					os << "Error while processing command `" << cmd << "' (" << filename << " line " << linecounter << "): ";
+					char buf[1024];
+					char * errmsg = NULL;
 					if (status == AHS_INVALID_PARAMS) {
-						os << "invalid parameters.";
+						errmsg = _("invalid parameters.");
 					} else if (status == AHS_TOO_FEW_PARAMS) {
-						os << "too few parameters.";
+						errmsg = _("too few parameters.");
 					} else if (status == AHS_INVALID_COMMAND) {
-						os << "unknown command (bug).";
+						errmsg = _("unknown command (bug).");
 					} else {
-						os << "unknown error (bug).";
+						errmsg = _("unknown error (bug).");
 					}
-					throw configexception(os.str());
+					snprintf(buf, sizeof(buf), _("Error while processing command `%s' (%s line %u): %s"), cmd.c_str(), filename.c_str(), linecounter, errmsg);
+					throw configexception(buf);
 				}
 			} else {
-				std::ostringstream os;
-				os << "unknown command `" << cmd << "'";
-				throw configexception(os.str());
+				char buf[1024];
+				snprintf(buf, sizeof(buf), _("unknown command `%s'"), cmd.c_str());
+				throw configexception(buf);
 			}
 		}
-		getline(f,line);	
+		getline(f,line);
 		++linecounter;
 	}
 }
