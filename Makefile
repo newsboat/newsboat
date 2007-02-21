@@ -51,7 +51,7 @@ install:
 uninstall:
 	$(RM) $(prefix)/bin/$(OUTPUT)
 	$(RM) $(prefix)/share/man/man1/$(OUTPUT).1
-	$(RM) $(docdir)/*
+	$(RM) -r $(docdir)
 
 Makefile.deps: $(SRC)
 	$(CXX) $(CXXFLAGS) -MM -MG $(SRC) > Makefile.deps
