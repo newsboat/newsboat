@@ -8,7 +8,6 @@ OBJS=$(patsubst %.cpp,%.o,$(SRC))
 prefix=/usr/local
 MKDIR=mkdir -p
 INSTALL=install
-GZIP=gzip -9
 A2X=a2x
 
 STFLHDRS=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
@@ -46,11 +45,10 @@ install:
 	$(INSTALL) $(OUTPUT) $(prefix)/bin
 	$(MKDIR) $(prefix)/share/man/man1
 	$(INSTALL) doc/$(OUTPUT).1 $(prefix)/share/man/man1
-	$(GZIP) $(prefix)/share/man/man1/$(OUTPUT).1
 
 uninstall:
 	$(RM) $(prefix)/bin/$(OUTPUT)
-	$(RM) $(prefix)/share/man/man1/$(OUTPUT).1.gz
+	$(RM) $(prefix)/share/man/man1/$(OUTPUT).1
 
 Makefile.deps: $(SRC)
 	$(CXX) $(CXXFLAGS) -MM -MG $(SRC) > Makefile.deps
