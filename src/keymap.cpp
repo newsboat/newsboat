@@ -60,7 +60,7 @@ void keymap::get_keymap_descriptions(std::vector<std::pair<std::string,std::stri
 			std::string helptext;
 			for (int i=0;opdescs[i].help_text;++i)
 				if (opdescs[i].op == op)
-					helptext = opdescs[i].help_text;
+					helptext = gettext(opdescs[i].help_text);
 			descs.push_back(std::pair<std::string,std::string>(it->first, helptext));
 		}
 	}

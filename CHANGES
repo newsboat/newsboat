@@ -1,5 +1,8 @@
 Changes for newsbeuter:
 
+0.3:
+	Added gettext support.
+
 0.2:
 	removed an unnecessary mutex lock/unlock that made newsbeuter lock up when the "max-items" config option was set
 	improved HTML rendering (occasional missing spaces, <pre> tags)

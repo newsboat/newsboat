@@ -250,6 +250,8 @@ void view::run_search(const std::string& feedurl) {
 
 	search_form.set("head",_("Search Articles"));
 
+	search_form.set("searchprompt",_("Search for: "));
+
 	search_form.modify("results","replace_inner","{list}");
 
 	search_form.set_focus("query");
@@ -372,7 +374,7 @@ bool view::run_itemlist(unsigned int pos, bool auto_open) {
 	view_stack.push_front(&itemlist_form);
 
 	itemlist_form.set("itempos","0");
-	
+
 	set_itemlist_keymap_hint();
 
 	itemlist_form.set("msg","");
@@ -1123,6 +1125,8 @@ void view::run_urlview(std::vector<std::string>& links) {
 	view_stack.push_front(&urlview_form);
 	set_status("");
 
+	urlview_form.set("head",_("URLs"));
+
 	std::string code = "{list";
 	unsigned int i=0;
 	for (std::vector<std::string>::iterator it = links.begin(); it != links.end(); ++it, ++i) {
@@ -1234,6 +1238,8 @@ void view::run_help() {
 
 	view_stack.push_front(&help_form);
 	set_status("");
+
+	help_form.set("head",_("Help"));
 	
 	std::vector<std::pair<std::string,std::string> > descs;
 	keys->get_keymap_descriptions(descs);
@@ -1396,7 +1402,7 @@ void view::set_urlview_keymap_hint() {
 		{ OP_NIL, NULL }
 	};
 	std::string keymap_hint = prepare_keymaphint(hints);
-	itemlist_form.set("help", keymap_hint);
+	urlview_form.set("help", keymap_hint);
 }
 
 void view::set_feedlist_keymap_hint() {

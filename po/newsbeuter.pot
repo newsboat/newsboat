@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-21 10:50+0100\n"
+"POT-Creation-Date: 2007-02-21 13:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -125,7 +125,7 @@ msgid ""
 "-h              this help\n"
 msgstr ""
 
-#: src/controller.cpp:407
+#: src/controller.cpp:408
 #, c-format
 msgid "Import of %s finished."
 msgstr ""
@@ -202,11 +202,11 @@ msgstr ""
 msgid "No feeds with unread items."
 msgstr ""
 
-#: src/view.cpp:138 src/view.cpp:152 src/view.cpp:172 src/view.cpp:902
+#: src/view.cpp:138 src/view.cpp:152 src/view.cpp:172 src/view.cpp:904
 msgid "No feed selected!"
 msgstr ""
 
-#: src/view.cpp:164 src/view.cpp:518
+#: src/view.cpp:164 src/view.cpp:520
 msgid "Marking feed read..."
 msgstr ""
 
@@ -222,168 +222,177 @@ msgstr ""
 msgid "Search Articles"
 msgstr ""
 
-#: src/view.cpp:321
+#: src/view.cpp:253
+msgid "Search for: "
+msgstr ""
+
+#: src/view.cpp:323
 #, c-format
 msgid "Search Articles - %u results"
 msgstr ""
 
-#: src/view.cpp:326
+#: src/view.cpp:328
 msgid "No results."
 msgstr ""
 
-#: src/view.cpp:341 src/view.cpp:454
+#: src/view.cpp:343 src/view.cpp:456
 msgid "No item selected!"
 msgstr ""
 
-#: src/view.cpp:422
+#: src/view.cpp:424
 msgid "No unread items."
 msgstr ""
 
-#: src/view.cpp:479 src/view.cpp:1058
+#: src/view.cpp:481 src/view.cpp:1060
 msgid "Aborted saving."
 msgstr ""
 
-#: src/view.cpp:483
+#: src/view.cpp:485
 #, c-format
 msgid "Saved article to %s"
 msgstr ""
 
-#: src/view.cpp:488
+#: src/view.cpp:490
 #, c-format
 msgid "Error: couldn't save article to %s"
 msgstr ""
 
-#: src/view.cpp:493 src/view.cpp:934
+#: src/view.cpp:495 src/view.cpp:936
 msgid "Error: no item selected!"
 msgstr ""
 
-#: src/view.cpp:533
+#: src/view.cpp:535
 msgid "Toggling read flag for article..."
 msgstr ""
 
-#: src/view.cpp:571 src/view.cpp:971
+#: src/view.cpp:573 src/view.cpp:973
 msgid "Title: "
 msgstr ""
 
-#: src/view.cpp:575 src/view.cpp:978
+#: src/view.cpp:577 src/view.cpp:980
 msgid "Author: "
 msgstr ""
 
-#: src/view.cpp:579 src/view.cpp:992
+#: src/view.cpp:581 src/view.cpp:994
 msgid "Date: "
 msgstr ""
 
-#: src/view.cpp:728
+#: src/view.cpp:730
 msgid "File: "
-msgstr ""
-
-#: src/view.cpp:761 src/view.cpp:816
-#, c-format
-msgid "Open File - %s"
 msgstr ""
 
 #: src/view.cpp:763 src/view.cpp:818
 #, c-format
+msgid "Open File - %s"
+msgstr ""
+
+#: src/view.cpp:765 src/view.cpp:820
+#, c-format
 msgid "Save File - %s"
 msgstr ""
 
-#: src/view.cpp:958
+#: src/view.cpp:960
 msgid "Feed: "
 msgstr ""
 
-#: src/view.cpp:985
+#: src/view.cpp:987
 msgid "Link: "
 msgstr ""
 
-#: src/view.cpp:1073 src/view.cpp:1155
+#: src/view.cpp:1075 src/view.cpp:1159
 msgid "Starting browser..."
 msgstr ""
 
-#: src/view.cpp:1159
+#: src/view.cpp:1128
+msgid "URLs"
+msgstr ""
+
+#: src/view.cpp:1163
 msgid "No link selected!"
 msgstr ""
 
-#: src/view.cpp:1346
+#: src/view.cpp:1242 src/view.cpp:1391 src/view.cpp:1418 src/view.cpp:1442
+#: src/view.cpp:1474
+msgid "Help"
+msgstr ""
+
+#: src/view.cpp:1352
 #, c-format
 msgid "Your feeds (%u unread, %u total) - tag `%s'"
 msgstr ""
 
-#: src/view.cpp:1348
+#: src/view.cpp:1354
 #, c-format
 msgid "Your feeds (%u unread, %u total)"
 msgstr ""
 
-#: src/view.cpp:1378 src/view.cpp:1394 src/view.cpp:1404 src/view.cpp:1431
-#: src/view.cpp:1445 src/view.cpp:1465
+#: src/view.cpp:1384 src/view.cpp:1400 src/view.cpp:1410 src/view.cpp:1437
+#: src/view.cpp:1451 src/view.cpp:1471
 msgid "Quit"
 msgstr ""
 
-#: src/view.cpp:1379 src/view.cpp:1405 src/view.cpp:1432
+#: src/view.cpp:1385 src/view.cpp:1411 src/view.cpp:1438
 msgid "Open"
 msgstr ""
 
-#: src/view.cpp:1380 src/view.cpp:1422 src/view.cpp:1433
+#: src/view.cpp:1386 src/view.cpp:1428 src/view.cpp:1439
 msgid "Save"
 msgstr ""
 
-#: src/view.cpp:1381 src/view.cpp:1407
+#: src/view.cpp:1387 src/view.cpp:1413
 msgid "Reload"
 msgstr ""
 
-#: src/view.cpp:1382 src/view.cpp:1406 src/view.cpp:1434
+#: src/view.cpp:1388 src/view.cpp:1412 src/view.cpp:1440
 msgid "Next Unread"
 msgstr ""
 
-#: src/view.cpp:1383
+#: src/view.cpp:1389
 msgid "Mark All Read"
 msgstr ""
 
-#: src/view.cpp:1384 src/view.cpp:1411
+#: src/view.cpp:1390 src/view.cpp:1417
 msgid "Search"
 msgstr ""
 
-#: src/view.cpp:1385 src/view.cpp:1412 src/view.cpp:1436 src/view.cpp:1468
-msgid "Help"
-msgstr ""
-
-#: src/view.cpp:1395 src/view.cpp:1435
+#: src/view.cpp:1401 src/view.cpp:1441
 msgid "Open in Browser"
 msgstr ""
 
-#: src/view.cpp:1408
+#: src/view.cpp:1414
 msgid "Reload All"
 msgstr ""
 
-#: src/view.cpp:1409
+#: src/view.cpp:1415
 msgid "Mark Read"
 msgstr ""
 
-#: src/view.cpp:1410
+#: src/view.cpp:1416
 msgid "Catchup All"
 msgstr ""
 
-#: src/view.cpp:1421 src/view.cpp:1454
+#: src/view.cpp:1427 src/view.cpp:1460
 msgid "Cancel"
 msgstr ""
 
-#: src/view.cpp:1455
+#: src/view.cpp:1461
 msgid "Select Tag"
 msgstr ""
 
-#: src/view.cpp:1466
+#: src/view.cpp:1472
 msgid "Search/Open"
 msgstr ""
 
-#: src/view.cpp:1467
+#: src/view.cpp:1473
 msgid "New Search"
 msgstr ""
 
-#: src/view.cpp:1478
+#: src/view.cpp:1484
 #, c-format
 msgid "Articles in feed '%s' (%u unread, %u total) - %s"
 msgstr ""
 
-#: src/view.cpp:1484
+#: src/view.cpp:1490
 #, c-format
 msgid "Article '%s'"
 msgstr ""

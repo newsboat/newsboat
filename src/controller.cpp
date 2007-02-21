@@ -372,6 +372,7 @@ void controller::usage(char * argv0) {
 				"-c <cachefile>  use <cachefile> as cache file\n"
 				"-C <configfile> read configuration from <configfile>\n"
 				"-h              this help\n"), PROGRAM_NAME, PROGRAM_VERSION, argv0);
+	std::cout << buf;
 	::exit(EXIT_FAILURE);
 }
 

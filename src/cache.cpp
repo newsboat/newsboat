@@ -271,6 +271,8 @@ rss_feed cache::get_feed_by_url(const std::string& feedurl) {
 	rss_feed feed(this);
 	char * query;
 	int rc;
+
+	mtx->lock();
 	
 	query = sqlite3_mprintf("SELECT title, url FROM rss_feed WHERE rssurl = '%q';",feedurl.c_str());
 	GetLogger().log(LOG_DEBUG,"running query: %s",query);
@@ -281,6 +283,8 @@ rss_feed cache::get_feed_by_url(const std::string& feedurl) {
 	}
 	assert(rc == SQLITE_OK);
 	free(query);
+
+	mtx->unlock();
 
 	return feed;
 }
