@@ -148,7 +148,7 @@ void controller::run(int argc, char * argv[]) {
 
 	if (urlcfg.get_urls().size() == 0) {
 		GetLogger().log(LOG_ERROR,"no URLs configured.");
-		snprintf(msgbuf, sizeof(msgbuf), _("Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."), url_file);
+		snprintf(msgbuf, sizeof(msgbuf), _("Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."), url_file.c_str());
 		std::cout << msgbuf << std::endl << std::endl;
 		usage(argv[0]);
 	}
@@ -305,7 +305,7 @@ void controller::reload(unsigned int pos, unsigned int max) {
 			msg.append(maxstr.str());
 			msg.append(") ");
 		}
-		snprintf(msgbuf, _("%sLoading %s..."), msg.c_str(), feed.rssurl().c_str());
+		snprintf(msgbuf, sizeof(msgbuf), _("%sLoading %s..."), msg.c_str(), feed.rssurl().c_str());
 		v->set_status(msgbuf);
 				
 		rss_parser parser(feed.rssurl().c_str(), rsscache, cfg);

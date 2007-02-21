@@ -5,6 +5,7 @@
 #include <logger.h>
 #include <fstream>
 #include <sstream>
+#include <config.h>
 
 namespace newsbeuter {
 
