@@ -4,6 +4,9 @@ TODO:
 - refactor XML pull parser (many redundancies)
 	ignore comments
 	join two subsequent text nodes separated by a comment
+- implement podcast support
+	- when newsbeuter finds new entries with podcast enclosures in it, it puts it into a "queue" (text file in ~/.newsbeuter)
+	- the actual downloading and saving is done by "podbeuter", which is a more a download manager that dequeues entries and downloads them.
 
 longteam goals to reach:
 - add scripting support
