@@ -293,6 +293,21 @@ std::string xmlpullparser::decode_entities(const std::string& s) {
 	return result;
 }
 
+static struct {
+	char * entity;
+	unsigned int value;
+} entity_table[] = {
+	/* TODO: fill table */
+	/* a good starting point is this website: http://htmlhelp.com/reference/html40/entities/latin1.html */
+	{ "auml", 228 },
+	{ "ouml", 246 },
+	{ "uuml", 252 },
+	{ "Auml", 196 },
+	{ "Ouml", 214 },
+	{ "Uuml", 220 },
+	{ 0, 0 }
+};
+
 std::string xmlpullparser::decode_entity(std::string s) {
 	// TODO: improve entity decoder
 	if (s == "lt") {
@@ -325,6 +340,15 @@ std::string xmlpullparser::decode_entity(std::string s) {
 			result.append(mbc);
 		}
 		return result;
+	} else {
+		for (unsigned int i=0;entity_table[i].entity;++i) {
+			if (s == entity_table[i].entity) {
+				char * mbc = static_cast<char *>(alloca(MB_CUR_MAX));
+				int pos = wctomb(mbc, entity_table[i].value);
+				mbc[pos] = '\0';
+				return std::string(mbc);
+			}
+		}
 	}
 	return ""; 	
 }
