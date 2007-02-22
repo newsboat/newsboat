@@ -245,7 +245,7 @@ void controller::update_feedlist() {
 
 bool controller::open_item(const rss_feed& feed, rss_item& item) {
 	bool show_next_unread = v->run_itemview(feed, item);
-	item.set_unread(false); // XXX: see TODO list
+	item.set_unread(false);
 	return show_next_unread;
 }
 
@@ -309,30 +309,22 @@ void controller::reload(unsigned int pos, unsigned int max) {
 		v->set_status(msgbuf);
 				
 		rss_parser parser(feed.rssurl().c_str(), rsscache, cfg);
-		feed = parser.parse();
-		
-		/*
-		struct timeval tv1, tv2;
-		gettimeofday(&tv1, NULL);
-		*/
-		
-		rsscache->externalize_rssfeed(feed);
-		
-		/*
-		gettimeofday(&tv2, NULL);
-		
-		unsigned long long t1 = tv1.tv_sec*1000000 + tv1.tv_usec;
-		unsigned long long t2 = tv2.tv_sec*1000000 + tv2.tv_usec;
-		
-		std::cerr << "time for externalizing: " << (t2-t1)/1000 << " ms" << std::endl;
-		*/
-		
-		rsscache->internalize_rssfeed(feed);
-		feed.set_tags(urlcfg.get_tags(feed.rssurl()));
-		feeds[pos] = feed;
-		
-		v->set_feedlist(feeds);
-		v->set_status("");
+		try {
+			feed = parser.parse();
+			
+			rsscache->externalize_rssfeed(feed);
+			
+			rsscache->internalize_rssfeed(feed);
+			feed.set_tags(urlcfg.get_tags(feed.rssurl()));
+			feeds[pos] = feed;
+			
+			v->set_feedlist(feeds);
+			v->set_status("");
+		} catch (const std::string& errmsg) {
+			char buf[1024];
+			snprintf(buf, sizeof(buf), _("Error while retrieving %s: %s"), feed.rssurl().c_str(), errmsg.c_str());
+			v->set_status(buf);
+		}
 	} else {
 		v->show_error(_("Error: invalid feed!"));
 	}
@@ -340,7 +332,7 @@ void controller::reload(unsigned int pos, unsigned int max) {
 
 rss_feed& controller::get_feed(unsigned int pos) {
 	if (pos >= feeds.size()) {
-		// TODO: throw exception
+		throw std::out_of_range(_("invalid feed index (bug)"));
 	}
 	return feeds[pos];
 }
@@ -383,13 +375,13 @@ void controller::import_opml(const char * filename) {
 
 	ret = nxml_new (&data);
 	if (ret != NXML_OK) {
-		puts (nxml_strerror (ret)); // TODO
+		puts (nxml_strerror (ret));
 		return;
 	}
 
 	ret = nxml_parse_file (data, const_cast<char *>(filename));
 	if (ret != NXML_OK) {
-		puts (nxml_strerror (ret)); // TODO
+		puts (nxml_strerror (ret));
 		return;
 	}
 

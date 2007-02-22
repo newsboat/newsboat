@@ -17,7 +17,6 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str, std::str
 			pos = last_pos;
 			while (pos < str.length() && (str[pos] != '"' || str[pos-1] == '\\'))
 				++pos;
-			/* TODO: \" needs to be taken care of properly! */
 			if (pos >= str.length()) {
 				pos = std::string::npos;
 				std::string token;

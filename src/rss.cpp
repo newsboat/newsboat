@@ -33,12 +33,11 @@ rss_feed rss_parser::parse() {
 	mrss_options_free(options);
 
 	if (err != MRSS_OK) {
-		// TODO: throw exception
-		GetLogger().log(LOG_ERROR,"rss_parser::parse: mrss_parse_url_with_options failed: err = %d",err);
+		GetLogger().log(LOG_ERROR,"rss_parser::parse: mrss_parse_url_with_options failed: err = %s (%d)",mrss_strerror(err), err);
 		if (mrss) {
 			mrss_free(mrss);
 		}
-		return feed;
+		throw std::string(mrss_strerror(err));
 	}
 
 	const char * encoding = mrss->encoding ? mrss->encoding : "utf-8";

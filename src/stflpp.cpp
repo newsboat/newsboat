@@ -1,11 +1,15 @@
 #include <stflpp.h>
 #include <logger.h>
+#include <exception.h>
+#include <cerrno>
 
 using namespace newsbeuter;
 
 stfl::form::form(const std::string& text) : f(0) {
 	f = stfl_create(text.c_str());
-	// TODO: exception if f == NULL
+	if (!f) {
+		throw exception(errno);
+	}
 }
 
 stfl::form::~form() {
@@ -21,7 +25,6 @@ std::string stfl::form::get(const std::string& name) {
 	const char * text = stfl_get(f,name.c_str());
 	if (text)
 		return std::string(text);
-	// TODO: exception
 	return std::string("");
 }
 
@@ -33,7 +36,6 @@ std::string stfl::form::get_focus() {
 	const char * focus = stfl_get_focus(f);
 	if (focus)
 		return std::string(focus);
-	// TODO: exception
 	return std::string("");
 }
 
@@ -46,7 +48,6 @@ std::string stfl::form::dump(const std::string& name, const std::string& prefix,
 	const char * text = stfl_dump(f, name.c_str(), prefix.c_str(), focus);
 	if (text)
 		return std::string(text);
-	// TODO: exception
 	return std::string("");
 }
 
@@ -58,7 +59,6 @@ std::string stfl::form::lookup(const std::string& path, const std::string& newna
 	const char * text = stfl_lookup(f, path.c_str(), newname.c_str());
 	if (text)
 		return std::string(text);
-	// TODO: exception
 	return std::string("");
 }
 

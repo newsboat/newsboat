@@ -9,6 +9,7 @@
 
 #include <logger.h>
 #include <reloadthread.h>
+#include <exception.h>
 
 #include <iostream>
 #include <iomanip>
@@ -242,9 +243,9 @@ void view::run_search(const std::string& feedurl) {
 
 	std::vector<rss_item> items;
 
-	view_stack.push_front(&search_form); // TODO: add search_form to view
+	view_stack.push_front(&search_form);
 
-	set_search_keymap_hint(); // TODO: implement
+	set_search_keymap_hint();
 
 	search_form.set("msg","");
 
@@ -590,7 +591,7 @@ void view::write_item(const rss_item& item, const std::string& filename) {
 	std::fstream f;
 	f.open(filename.c_str(),std::fstream::out);
 	if (!f.is_open())
-		throw 1; // TODO: add real exception with real error message and such
+		throw exception(errno);
 		
 	for (std::vector<std::string>::iterator it=lines.begin();it!=lines.end();++it) {
 		f << *it << std::endl;	
@@ -771,7 +772,6 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 		
 		if (update_list) {
 			std::string code = "{list";
-			// TODO: read from current directory
 			::getcwd(cwdtmp,sizeof(cwdtmp));
 			
 			DIR * dir = ::opendir(cwdtmp);
@@ -813,7 +813,6 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 							std::string filename(selection);
 							switch (filetype) {
 								case 'd':
-									// TODO: handle directory
 									if (type == FBT_OPEN) {
 										snprintf(buf, sizeof(buf), _("Open File - %s"), filename.c_str());
 									} else {

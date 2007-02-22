@@ -1,5 +1,7 @@
 #include <logger.h>
 #include <stdarg.h>
+#include <exception.h>
+#include <cerrno>
 
 namespace newsbeuter {
 
@@ -11,7 +13,7 @@ void logger::set_logfile(const char * logfile) {
 		f.close();
 	f.open(logfile, std::fstream::out);
 	if (!f.is_open()) {
-		// TODO: throw exception
+		throw exception(errno); // the question is whether f.open() sets errno...
 	}
 	mtx.unlock();
 }

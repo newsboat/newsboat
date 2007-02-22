@@ -8,6 +8,7 @@
 #include <cassert>
 #include <rss.h>
 #include <logger.h>
+#include <config.h>
 
 using namespace newsbeuter;
 
@@ -102,9 +103,11 @@ cache::cache(const std::string& cachefile, configcontainer * c) : db(0),cfg(c), 
 	}
 	int error = sqlite3_open(cachefile.c_str(),&db);
 	if (error != SQLITE_OK) {
-		// TODO: error message
-		sqlite3_close(db);
 		GetLogger().log(LOG_ERROR,"couldn't sqlite3_open(%s): error = %d", cachefile.c_str(), error);
+		char buf[1024];
+		snprintf(buf, sizeof(buf), _("Error: opening the cache file `%s' failed: %s"), cachefile.c_str(), sqlite3_errmsg(db));
+		sqlite3_close(db);
+		std::cout << buf << std::endl;
 		::exit(EXIT_FAILURE);
 	}
 	// if (!file_exists) {
@@ -139,7 +142,6 @@ void cache::set_pragmas() {
 }
 
 void cache::populate_tables() {
-	// TODO: run create table statements
 	int rc;
 
 	rc = sqlite3_exec(db,"CREATE TABLE rss_feed ( "
