@@ -35,7 +35,7 @@ namespace newsbeuter {
 			void set_config_container(configcontainer * cfgcontainer);
 			void show_error(const char * msg);
 			void set_status(const char * msg);
-		private:
+		protected:
 			bool jump_to_next_unread_item(std::vector<rss_item>& items);
 			bool jump_to_next_unread_feed();
 			void mark_all_read(std::vector<rss_item>& items);
