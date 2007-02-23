@@ -16,16 +16,27 @@ CXXFLAGS=-ggdb -I./include -I./stfl -I. -I/usr/local/include -I/sw/include -Wall
 LDFLAGS=-L/usr/local/lib -L/sw/lib
 
 # libraries to link with
-LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn -lpthread
+# LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn -lpthread
+
+
+#SRC=$(wildcard *.cpp) $(wildcard src/*.cpp)
+#OBJS=$(patsubst %.cpp,%.o,$(SRC))
+
+NEWSBEUTER=$(PACKAGE)
+NEWSBEUTER_SOURCES=$(shell cat newsbeuter.deps)
+NEWSBEUTER_OBJS=$(patsubst %.cpp,%.o,$(NEWSBEUTER_SOURCES))
+NEWSBEUTER_LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn -lpthread
+
+
+PODBEUTER=podbeuter
+PODBEUTER_SOURCES=$(shell cat podbeuter.deps)
+PODBEUTER_OBJS=$(patsubst %.cpp,%.o,$(PODBEUTER_SOURCES))
+PODBEUTER_LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn -lpthread
 
 ifneq ($(shell uname -s),Linux)
-LIBS+=-lintl
+NEWSBEUTER_LIBS+=-lintl
+PODBEUTER_LIBS+=-lintl
 endif
-
-SRC=$(wildcard *.cpp) $(wildcard src/*.cpp)
-OBJS=$(patsubst %.cpp,%.o,$(SRC))
-
-OUTPUT=$(PACKAGE)
 
 # additional commands
 MKDIR=mkdir -p
@@ -41,10 +52,13 @@ POTFILE=po/$(PACKAGE).pot
 STFLCONV=./stfl2h.pl
 RM=rm -f
 
-all: $(OUTPUT)
+all: $(NEWSBEUTER) $(PODBEUTER)
 
-$(OUTPUT): $(MOFILES) $(STFLHDRS) $(OBJS)
-	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $(OUTPUT) $(OBJS) $(LIBS)
+$(NEWSBEUTER): $(MOFILES) $(STFLHDRS) $(NEWSBEUTER_OBJS)
+	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $(NEWSBEUTER) $(NEWSBEUTER_OBJS) $(NEWSBEUTER_LIBS)
+
+$(PODBEUTER): $(MOFILES) $(STFLHDRS) $(PODBEUTER_OBJS)
+	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $(PODBEUTER) $(PODBEUTER_OBJS) $(PODBEUTER_LIBS)
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
@@ -55,8 +69,14 @@ $(OUTPUT): $(MOFILES) $(STFLHDRS) $(OBJS)
 testpp: src/xmlpullparser.cpp testpp.cpp
 	$(CXX) -I./include -pg -g -D_TESTPP src/xmlpullparser.cpp testpp.cpp -o testpp
 
-clean:
-	$(RM) $(OUTPUT) $(OBJS) $(STFLHDRS) core *.core core.*
+clean-newsbeuter:
+	$(RM) $(NEWSBEUTER) $(NEWSBEUTER_OBJS)
+
+clean-podbeuter:
+	$(RM) $(PODBEUTER) $(PODBEUTER_OBJS)
+
+clean: clean-newsbeuter clean-podbeuter
+	$(RM) $(STFLHDRS) core *.core core.*
 
 distclean: clean clean-mo
 	$(RM) Makefile.deps
@@ -109,4 +129,4 @@ install-mo:
 		echo "Installing $$mofile as $$dir/$(PACKAGE).mo" ; \
 	done
 
-include Makefile.deps
+# include Makefile.deps
