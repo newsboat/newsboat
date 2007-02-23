@@ -21,12 +21,17 @@ namespace podbeuter {
 			inline void set_view_update_necessary(bool b) { view_update_ = b; }
 			std::vector<download>& downloads() { return downloads_; }
 
+			void usage(const char * argv0);
+
 		private:
 			pb_view * v;
 			std::string config_file;
+			std::string queue_file;
 			newsbeuter::configcontainer * cfg;
 			bool view_update_;
 			std::vector<download> downloads_;
+
+			std::string config_dir;
 	};
 
 }

@@ -24,20 +24,23 @@ void pb_view::run() {
 
 		if (ctrl->view_update_necessary()) {
 
-			std::string code = "{list";
-			
-			unsigned int i = 0;
-			for (std::vector<download>::iterator it=ctrl->downloads().begin();it!=ctrl->downloads().end();++it,++i) {
-				char buf[1024];
-				std::ostringstream os;
-				snprintf(buf, sizeof(buf), " %4u %3.1f %20s %s", i+1, it->percents_finished(), it->status_text(), it->filename());
-				os << "{item[" << i << "] text:" << stfl::quote(buf) << "}";
-				code.append(os.str());
+			if (ctrl->downloads().size() > 0) {
+
+				std::string code = "{list";
+				
+				unsigned int i = 0;
+				for (std::vector<download>::iterator it=ctrl->downloads().begin();it!=ctrl->downloads().end();++it,++i) {
+					char buf[1024];
+					std::ostringstream os;
+					snprintf(buf, sizeof(buf), " %4u %3.1f %20s %s", i+1, it->percents_finished(), it->status_text(), it->filename());
+					os << "{item[" << i << "] text:" << stfl::quote(buf) << "}";
+					code.append(os.str());
+				}
+
+				code.append("}");
+
+				dllist_form.modify("dls", "replace_inner", code);
 			}
-
-			code.append("}");
-
-			dllist_form.modify("dls", "replace_inner", code);
 
 			ctrl->set_view_update_necessary(false);
 		}
