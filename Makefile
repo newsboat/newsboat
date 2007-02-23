@@ -111,7 +111,7 @@ Makefile.deps: $(SRC)
 
 extract:
 	$(RM) $(POTFILE)
-	xgettext -k_ -o $(POTFILE) $(SRC)
+	xgettext -k_ -o $(POTFILE) *.cpp src/*.cpp
 
 msgmerge:
 	for f in $(POFILES) ; do msgmerge -U $$f $(POTFILE) ; done

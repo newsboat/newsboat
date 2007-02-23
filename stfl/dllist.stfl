@@ -4,7 +4,7 @@ vbox
   label#info
     text[head]:"Queue"
     .expand:h
-  !list[feeds]
+  !list[dls]
     style_normal[listnormal]:bg=black,fg=white
     style_focus[listfocus]:fg=yellow,bg=blue,attr=bold
     .expand:vh

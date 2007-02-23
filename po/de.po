@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-22 10:30+0100\n"
+"POT-Creation-Date: 2007-02-23 13:18+0100\n"
 "PO-Revision-Date: 2007-02-21 13:03+0100\n"
 "Last-Translator: Andreas Krennmair <ak@synflood.at>\n"
 "Language-Team: Andreas Krennmair <ak@synflood.at>\n"
@@ -77,7 +77,7 @@ msgstr ""
 "Fehler: keine URLs konfiguriert. Bitte füllen sie die Datei %s mit RSS-Feed-"
 "URLs oder importieren sie eine OPML-Datei."
 
-#: src/controller.cpp:157
+#: src/controller.cpp:157 src/pb_controller.cpp:26
 #, c-format
 msgid "Starting %s %s..."
 msgstr "Starte %s %s..."
@@ -87,11 +87,12 @@ msgstr "Starte %s %s..."
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "Fehler: eine Instanz von %s läuft bereits (PID: %u)"
 
-#: src/controller.cpp:170
+#: src/controller.cpp:170 src/pb_controller.cpp:29
 msgid "Loading configuration..."
 msgstr "Lade Konfiguration..."
 
 #: src/controller.cpp:197 src/controller.cpp:216 src/controller.cpp:237
+#: src/pb_controller.cpp:51 src/pb_controller.cpp:63
 msgid "done."
 msgstr "fertig."
 
@@ -225,6 +226,14 @@ msgstr "Tag auswählen"
 #: src/keymap.cpp:31
 msgid "Open search dialog"
 msgstr "Suchdialog öffnen"
+
+#: src/pb_controller.cpp:59
+msgid "Cleaning up queue..."
+msgstr "Bereinige Warteschlange..."
+
+#: src/pb_view.cpp:21
+msgid "Queue"
+msgstr "Warteschlange"
 
 #: src/view.cpp:132 src/view.cpp:189
 msgid "No feeds with unread items."

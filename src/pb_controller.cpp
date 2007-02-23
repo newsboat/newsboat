@@ -13,7 +13,7 @@ using namespace newsbeuter;
 
 namespace podbeuter {
 
-pb_controller::pb_controller() : v(0), cfg(0) { 
+pb_controller::pb_controller() : v(0), cfg(0), view_update_(true) { 
 }
 
 pb_controller::~pb_controller() { 

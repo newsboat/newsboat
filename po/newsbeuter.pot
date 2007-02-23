@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-22 10:30+0100\n"
+"POT-Creation-Date: 2007-02-23 13:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,7 +73,7 @@ msgid ""
 "import an OPML file."
 msgstr ""
 
-#: src/controller.cpp:157
+#: src/controller.cpp:157 src/pb_controller.cpp:26
 #, c-format
 msgid "Starting %s %s..."
 msgstr ""
@@ -83,11 +83,12 @@ msgstr ""
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr ""
 
-#: src/controller.cpp:170
+#: src/controller.cpp:170 src/pb_controller.cpp:29
 msgid "Loading configuration..."
 msgstr ""
 
 #: src/controller.cpp:197 src/controller.cpp:216 src/controller.cpp:237
+#: src/pb_controller.cpp:51 src/pb_controller.cpp:63
 msgid "done."
 msgstr ""
 
@@ -210,6 +211,14 @@ msgstr ""
 
 #: src/keymap.cpp:31
 msgid "Open search dialog"
+msgstr ""
+
+#: src/pb_controller.cpp:59
+msgid "Cleaning up queue..."
+msgstr ""
+
+#: src/pb_view.cpp:21
+msgid "Queue"
 msgstr ""
 
 #: src/view.cpp:132 src/view.cpp:189
