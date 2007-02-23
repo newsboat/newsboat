@@ -31,7 +31,7 @@ NEWSBEUTER_LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn -lpthread
 PODBEUTER=podbeuter
 PODBEUTER_SOURCES=$(shell cat podbeuter.deps)
 PODBEUTER_OBJS=$(patsubst %.cpp,%.o,$(PODBEUTER_SOURCES))
-PODBEUTER_LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn -lpthread
+PODBEUTER_LIBS=-lstfl -lncurses -lpthread
 
 ifneq ($(shell uname -s),Linux)
 NEWSBEUTER_LIBS+=-lintl
@@ -87,15 +87,19 @@ doc:
 
 install: install-mo
 	$(MKDIR) $(prefix)/bin
-	$(INSTALL) $(OUTPUT) $(prefix)/bin
+	$(INSTALL) $(NEWSBEUTER) $(prefix)/bin
+	$(INSTALL) $(PODBEUTER) $(prefix)/bin
 	$(MKDIR) $(prefix)/share/man/man1
-	$(INSTALL) doc/$(PACKAGE).1 $(prefix)/share/man/man1
+	$(INSTALL) doc/$(NEWSBEUTER).1 $(prefix)/share/man/man1
+	# $(INSTALL) doc/$(PODBEUTER).1 $(prefix)/share/man/man1 # TODO: create manpage for podbeuter
 	$(MKDIR) $(docdir)
 	$(INSTALL) -m 644 doc/xhtml/* $(docdir) || true
 
 uninstall:
-	$(RM) $(prefix)/bin/$(OUTPUT)
-	$(RM) $(prefix)/share/man/man1/$(OUTPUT).1
+	$(RM) $(prefix)/bin/$(NEWSBEUTER)
+	$(RM) $(prefix)/bin/$(PODBEUTER)
+	$(RM) $(prefix)/share/man/man1/$(NEWSBEUTER).1
+	# $(RM) $(prefix)/share/man/man1/$(PODBEUTER).1 # TODO
 	$(RM) -r $(docdir)
 
 Makefile.deps: $(SRC)
@@ -128,5 +132,3 @@ install-mo:
 		$(INSTALL) -m 644 $$mof $$dir/$(PACKAGE).mo ; \
 		echo "Installing $$mofile as $$dir/$(PACKAGE).mo" ; \
 	done
-
-# include Makefile.deps
