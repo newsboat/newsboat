@@ -7,14 +7,28 @@
 
 #include <sys/types.h>
 #include <pwd.h>
+#include <signal.h>
 
 #include <keymap.h>
 #include <configcontainer.h>
 #include <colormanager.h>
 #include <exceptions.h>
 #include <queueloader.h>
+#include <logger.h>
 
 using namespace newsbeuter;
+
+static std::string lock_file = "pb-lock.pid";
+
+void ctrl_c_action(int sig) {
+	GetLogger().log(LOG_DEBUG,"caugh signal %d",sig);
+	stfl_reset();
+	::unlink(lock_file.c_str());
+	if (SIGSEGV == sig) {
+		fprintf(stderr,"%s\n", _("Segmentation fault."));
+	}
+	::exit(EXIT_FAILURE);
+}
 
 namespace podbeuter {
 
@@ -43,6 +57,7 @@ pb_controller::pb_controller() : v(0), config_file("config"), queue_file("queue"
 
 	config_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
 	queue_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
+	lock_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + lock_file;
 }
 
 pb_controller::~pb_controller() { 
@@ -53,8 +68,11 @@ void pb_controller::run(int argc, char * argv[]) {
 	int c;
 	char msgbuf[1024];
 
+	::signal(SIGINT, ctrl_c_action);
+	::signal(SIGSEGV, ctrl_c_action);
+
 	do {
-		if ((c = ::getopt(argc, argv, "C:q:h")) < 0)
+		if ((c = ::getopt(argc, argv, "C:q:d:l:h")) < 0)
 			continue;
 
 		switch (c) {
@@ -67,6 +85,16 @@ void pb_controller::run(int argc, char * argv[]) {
 				break;
 			case 'q':
 				queue_file = optarg;
+				break;
+			case 'd': // this is an undocumented debug commandline option!
+				GetLogger().set_logfile(optarg);
+				break;
+			case 'l': // this is an undocumented debug commandline option!
+				{
+					loglevel level = static_cast<loglevel>(atoi(optarg));
+					if (level > LOG_NONE && level <= LOG_DEBUG)
+						GetLogger().set_loglevel(level);
+				}
 				break;
 			case 'h':
 				usage(argv[0]);
@@ -81,6 +109,13 @@ void pb_controller::run(int argc, char * argv[]) {
 
 	snprintf(msgbuf, sizeof(msgbuf), _("Starting %s %s..."), "podbeuter", PROGRAM_VERSION);
 	std::cout << msgbuf << std::endl;
+
+	pid_t pid;
+	if (!try_fs_lock(pid)) {
+		snprintf(msgbuf, sizeof(msgbuf), _("Error: an instance of %s is already running (PID: %u)"), "podbeuter", pid);
+		std::cout << msgbuf << std::endl;
+		return;
+	}
 
 	std::cout << _("Loading configuration...");
 	std::cout.flush();
@@ -116,6 +151,8 @@ void pb_controller::run(int argc, char * argv[]) {
 	// TODO: clean up queue, if this wasn't done before already
 	
 	std::cout << _("done.") << std::endl;
+
+	remove_fs_lock();
 }
 
 void pb_controller::usage(const char * argv0) {
@@ -125,6 +162,31 @@ void pb_controller::usage(const char * argv0) {
 
 std::string pb_controller::get_dlpath() {
 	return cfg->get_configvalue("download-path");
+}
+
+bool pb_controller::try_fs_lock(pid_t & pid) {
+	int fd;
+	if ((fd = ::open(lock_file.c_str(), O_WRONLY | O_CREAT | O_EXCL, 0600)) >= 0) {
+		pid = ::getpid();
+		::write(fd,&pid,sizeof(pid));
+		::close(fd);
+		GetLogger().log(LOG_DEBUG,"wrote lock file with pid = %u",pid);
+		return true;
+	} else {
+		pid = 0;
+		if ((fd = ::open(lock_file.c_str(), O_RDONLY)) >=0) {
+			::read(fd,&pid,sizeof(pid));
+			::close(fd);
+			GetLogger().log(LOG_DEBUG,"found lock file");
+		} else {
+			GetLogger().log(LOG_DEBUG,"found lock file, but couldn't open it for reading from it");
+		}
+		return false;
+	}
+}
+
+void pb_controller::remove_fs_lock() {
+	::unlink(lock_file.c_str());
 }
 
 }

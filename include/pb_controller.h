@@ -25,6 +25,9 @@ namespace podbeuter {
 
 			std::string get_dlpath();
 
+			bool try_fs_lock(pid_t & pid);
+			void remove_fs_lock();
+
 		private:
 			pb_view * v;
 			std::string config_file;
