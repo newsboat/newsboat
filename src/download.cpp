@@ -1,10 +1,11 @@
 #include <download.h>
+#include <pb_controller.h>
 #include <config.h>
 #include <string>
 
 namespace podbeuter {
 
-download::download() : dlstatus(DL_QUEUED), cursize(0), totalsize(0) {
+download::download(pb_controller * c) : dlstatus(DL_QUEUED), cursize(0), totalsize(0), ctrl(c) {
 }
 
 download::~download() {
@@ -45,6 +46,18 @@ const char * download::status_text() {
 
 void download::set_url(const std::string& url) {
 	this->url = url;
+}
+
+void download::set_progress(float cur, float max) {
+	cursize = cur;
+	totalsize = max;
+}
+
+void download::set_status(dlstatus_t dls) {
+	if (dlstatus != dls) {
+		ctrl->set_view_update_necessary(true);
+	}
+	dlstatus = dls;
 }
 
 }

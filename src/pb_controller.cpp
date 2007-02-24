@@ -106,7 +106,7 @@ void pb_controller::run(int argc, char * argv[]) {
 
 	std::cout << _("done.") << std::endl;
 
-	queueloader ql(queue_file);
+	queueloader ql(queue_file, this);
 	ql.load(downloads_);
 	
 	v->run();
