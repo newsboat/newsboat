@@ -119,6 +119,28 @@ rss_feed rss_parser::parse() {
 			GetLogger().log(LOG_DEBUG, "rss_parser::parse: not an atom feed");
 		}
 
+		/* last resort: search for itunes:summary tag (may be a podcast) */
+		if (x.description().length() == 0 && mrss_search_tag(item, "summary", "http://www.itunes.com/dtds/podcast-1.0.dtd", &content) == MRSS_OK && content) {
+			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found itunes:summary: %s\n", content->value);
+			if (content->value) {
+				char * str = stringprep_convert(content->value, stringprep_locale_charset(), encoding);
+				if (str) {
+					std::string desc = "<pre>";
+					desc.append(str);
+					desc.append("</pre>");
+					x.set_description(desc);
+					free(str);
+					GetLogger().log(LOG_DEBUG, "rss_parser::parse: conversion was successful: %s\n", x.description().c_str());
+				} else {
+					GetLogger().log(LOG_WARN, "rss_parser::parse: stringprep_convert() failed for %s, but trying anyway...", x.link().c_str());
+					x.set_description(content->value);
+				}
+			}
+			
+		} else {
+			GetLogger().log(LOG_DEBUG, "rss_parser::parse: no luck with itunes:summary");
+		}
+
 		if (x.description().length() == 0 && item->description) {
 			char * str = stringprep_convert(item->description,stringprep_locale_charset(), encoding);
 			if (str) {
