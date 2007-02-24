@@ -11,7 +11,7 @@ vbox
     pos_name[dlposname]:
     pos[dlpos]:0
   label#info
-    text[help]:"q:Quit d:Download ^d:Delete P:Purge Finished"
+    text[help]:"q:Quit d:Download c:Cancel D:Delete P:Purge Finished"
     .expand:h
   label
     text[msg]:""

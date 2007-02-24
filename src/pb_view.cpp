@@ -4,6 +4,8 @@
 #include <dllist.h>
 #include <download.h>
 #include <config.h>
+#include <logger.h>
+
 #include <sstream>
 #include <iostream>
 
@@ -20,11 +22,16 @@ pb_view::~pb_view() {
 void pb_view::run() {
 	bool quit = false;
 
-	dllist_form.set("head", _("Queue"));
-
 	do {
 
 		if (ctrl->view_update_necessary()) {
+
+			char buf[1024];
+			snprintf(buf, sizeof(buf), _("Queue (%u downloads in progress, %u total)"), ctrl->downloads_in_progress(), ctrl->downloads().size());
+
+			dllist_form.set("head", buf);
+
+			GetLogger().log(LOG_DEBUG, "pb_view::run: updating view... downloads().size() = %u", ctrl->downloads().size());
 
 			if (ctrl->downloads().size() > 0) {
 
@@ -52,9 +59,19 @@ void pb_view::run() {
 
 		operation op = keys->get_operation(event);
 
+		if (dllist_form.get("msg").length() > 0) {
+			dllist_form.set("msg", "");
+			ctrl->set_view_update_necessary(true);
+		}
+
 		switch (op) {
 			case OP_QUIT:
-				quit = true;
+				if (ctrl->downloads_in_progress() > 0) {
+					dllist_form.set("msg", _("Error: can't quit: download(s) in progress."));
+					ctrl->set_view_update_necessary(true);
+				} else {
+					quit = true;
+				}
 				break;
 			case OP_PB_DOWNLOAD: {
 					std::istringstream os(dllist_form.get("dlposname"));
@@ -91,7 +108,12 @@ void pb_view::run() {
 				}
 				break;
 			case OP_PB_PURGE:
-				// TODO: delete all cancelled and finished downloads
+				if (ctrl->downloads_in_progress() > 0) {
+					dllist_form.set("msg", _("Error: unable to perform operation: download(s) in progress."));
+				} else {
+					ctrl->reload_queue();
+				}
+				ctrl->set_view_update_necessary(true);
 				break;
 			default:
 				break;

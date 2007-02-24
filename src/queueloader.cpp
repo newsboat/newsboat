@@ -1,26 +1,78 @@
 #include <queueloader.h>
+#include <logger.h>
 #include <fstream>
+
+using namespace newsbeuter;
 
 namespace podbeuter {
 
 queueloader::queueloader(const std::string& file, pb_controller * c) : queuefile(file), ctrl(c) {
 }
 
-void queueloader::load(std::vector<download>& downloads) {
+void queueloader::reload(std::vector<download>& downloads) {
+	std::vector<download> dltemp;
 	std::fstream f;
+
+	if (downloads.size() > 0) {
+		for (std::vector<download>::iterator it=downloads.begin();it!=downloads.end();++it) {
+			if (it->status() == DL_DOWNLOADING) { // we are not allowed to reload if a download is in progress!
+				GetLogger().log(LOG_INFO, "queueloader::reload: aborting reload due to DL_DOWNLOADING status");
+				return;
+			}
+			if (it->status() == DL_QUEUED || it->status() == DL_CANCELLED) {
+				GetLogger().log(LOG_DEBUG, "queueloader::reload: storing %s to new vector", it->url());
+				dltemp.push_back(*it);
+			}
+		}
+	}
+
 	f.open(queuefile.c_str(), std::fstream::in);
 	if (f.is_open()) {
 		std::string line;
 		do {
 			getline(f, line);
 			if (!f.eof() && line.length() > 0) {
-				download d(ctrl);
-				d.set_filename(get_filename(line));
-				d.set_url(line);
-				downloads.push_back(d);
+				GetLogger().log(LOG_DEBUG, "queueloader::reload: loaded `%s' from queue file", line.c_str());
+				bool url_found = false;
+				if (dltemp.size() > 0) {
+					for (std::vector<download>::iterator it=dltemp.begin();it!=dltemp.end();++it) {
+						if (line == it->url()) {
+							GetLogger().log(LOG_INFO, "queueloader::reload: found `%s' in old vector", line.c_str());
+							url_found = true;
+							break;
+						}
+					}
+				}
+				if (downloads.size() > 0) {
+					for (std::vector<download>::iterator it=downloads.begin();it!=downloads.end();++it) {
+						if (line == it->url()) {
+							GetLogger().log(LOG_INFO, "queueloader::reload: found `%s' in new vector", line.c_str());
+							url_found = true;
+							break;
+						}
+					}
+				}
+				if (!url_found) {
+					GetLogger().log(LOG_INFO, "queueloader::reload: found `%s' nowhere -> storing to new vector", line.c_str());
+					download d(ctrl);
+					d.set_filename(get_filename(line));
+					d.set_url(line);
+					dltemp.push_back(d);
+				}
 			}
 		} while (!f.eof());
+		f.close();
 	}
+
+	f.open(queuefile.c_str(), std::fstream::out);
+	if (f.is_open()) {
+		for (std::vector<download>::iterator it=dltemp.begin();it!=dltemp.end();++it) {
+			f << it->url() << std::endl;
+		}
+		f.close();
+	}
+
+	downloads = dltemp;
 }
 
 std::string queueloader::get_filename(const std::string& str) {

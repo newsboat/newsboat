@@ -4,11 +4,14 @@
 #include <string>
 #include <configcontainer.h>
 #include <download.h>
+#include <queueloader.h>
 #include <vector>
 
 namespace podbeuter {
 
 	class pb_view;
+
+	class queueloader;
 
 	class pb_controller {
 		public:
@@ -28,6 +31,9 @@ namespace podbeuter {
 			bool try_fs_lock(pid_t & pid);
 			void remove_fs_lock();
 
+			unsigned int downloads_in_progress();
+			void reload_queue();
+
 		private:
 			pb_view * v;
 			std::string config_file;
@@ -37,6 +43,8 @@ namespace podbeuter {
 			std::vector<download> downloads_;
 
 			std::string config_dir;
+
+			queueloader * ql;
 	};
 
 }

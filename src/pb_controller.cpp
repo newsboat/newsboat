@@ -32,7 +32,7 @@ void ctrl_c_action(int sig) {
 
 namespace podbeuter {
 
-pb_controller::pb_controller() : v(0), config_file("config"), queue_file("queue"), cfg(0), view_update_(true) { 
+pb_controller::pb_controller() : v(0), config_file("config"), queue_file("queue"), cfg(0), view_update_(true), ql(0) { 
 	std::ostringstream cfgfile;
 
 	char * cfgdir;
@@ -141,14 +141,16 @@ void pb_controller::run(int argc, char * argv[]) {
 
 	std::cout << _("done.") << std::endl;
 
-	queueloader ql(queue_file, this);
-	ql.load(downloads_);
+	ql = new queueloader(queue_file, this);
+	ql->reload(downloads_);
 	
 	v->run();
 
 	std::cout <<  _("Cleaning up queue...");
 	std::cout.flush();
-	// TODO: clean up queue, if this wasn't done before already
+	
+	ql->reload(downloads_);
+	delete ql;
 	
 	std::cout << _("done.") << std::endl;
 
@@ -187,6 +189,23 @@ bool pb_controller::try_fs_lock(pid_t & pid) {
 
 void pb_controller::remove_fs_lock() {
 	::unlink(lock_file.c_str());
+}
+
+unsigned int pb_controller::downloads_in_progress() {
+	unsigned int count = 0;
+	if (downloads_.size() > 0) {
+		for (std::vector<download>::iterator it=downloads_.begin();it!=downloads_.end();++it) {
+			if (it->status() == DL_DOWNLOADING)
+				++count;
+		}
+	}
+	return count;
+}
+
+void pb_controller::reload_queue() {
+	if (ql) {
+		ql->reload(downloads_);
+	}
 }
 
 }
