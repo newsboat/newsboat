@@ -15,11 +15,15 @@ const char * download::filename() {
 	return fn.c_str();
 }
 
+const char * download::url() {
+	return url_.c_str();
+}
+
 void download::set_filename(const std::string& str) {
 	fn = str;
 }
 
-float download::percents_finished() {
+double download::percents_finished() {
 	if (totalsize < 1) {
 		return 0.0;
 	} else {
@@ -45,10 +49,10 @@ const char * download::status_text() {
 }
 
 void download::set_url(const std::string& url) {
-	this->url = url;
+	url_ = url;
 }
 
-void download::set_progress(float cur, float max) {
+void download::set_progress(double cur, double max) {
 	if (cur > cursize)
 		ctrl->set_view_update_necessary(true);
 	cursize = cur;

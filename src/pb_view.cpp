@@ -34,7 +34,7 @@ void pb_view::run() {
 				for (std::vector<download>::iterator it=ctrl->downloads().begin();it!=ctrl->downloads().end();++it,++i) {
 					char buf[1024];
 					std::ostringstream os;
-					snprintf(buf, sizeof(buf), " %4u [%5.1f %%] %-20s %s", i+1, it->percents_finished(), it->status_text(), it->filename());
+					snprintf(buf, sizeof(buf), " %4u [%5.1lf %%] %-20s %s", i+1, it->percents_finished(), it->status_text(), it->filename());
 					os << "{listitem[" << i << "] text:" << stfl::quote(buf) << "}";
 					code.append(os.str());
 				}

@@ -31,7 +31,7 @@ NEWSBEUTER_LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn -lpthread
 PODBEUTER=podbeuter
 PODBEUTER_SOURCES=$(shell cat podbeuter.deps)
 PODBEUTER_OBJS=$(patsubst %.cpp,%.o,$(PODBEUTER_SOURCES))
-PODBEUTER_LIBS=-lstfl -lncurses -lpthread
+PODBEUTER_LIBS=-lstfl -lncurses -lpthread -lcurl
 
 ifneq ($(shell uname -s),Linux)
 NEWSBEUTER_LIBS+=-lintl
