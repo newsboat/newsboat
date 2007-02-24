@@ -55,7 +55,7 @@ void pb_view::run() {
 			ctrl->set_view_update_necessary(false);
 		}
 
-		const char * event = dllist_form.run(1000);
+		const char * event = dllist_form.run(500);
 
 		if (auto_download) {
 			if (ctrl->get_maxdownloads() > ctrl->downloads_in_progress()) {
