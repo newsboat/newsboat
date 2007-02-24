@@ -24,7 +24,7 @@ void pb_view::run() {
 
 	do {
 
-		// if (ctrl->view_update_necessary()) {
+		if (ctrl->view_update_necessary()) {
 
 			if (ctrl->downloads().size() > 0) {
 
@@ -44,8 +44,8 @@ void pb_view::run() {
 				dllist_form.modify("dls", "replace_inner", code);
 			}
 
-		//	ctrl->set_view_update_necessary(false);
-		//}
+			ctrl->set_view_update_necessary(false);
+		}
 
 		const char * event = dllist_form.run(1000);
 		if (!event || strcmp(event,"TIMEOUT")==0) continue;
@@ -57,16 +57,38 @@ void pb_view::run() {
 				quit = true;
 				break;
 			case OP_PB_DOWNLOAD: {
-					// TODO: start downloading current selection
-					poddlthread * thread = new poddlthread(&ctrl->downloads()[0]);
-					thread->start();
+					std::istringstream os(dllist_form.get("dlposname"));
+					int idx = -1;
+					os >> idx;
+					if (idx != -1) {
+						if (ctrl->downloads()[idx].status() != DL_DOWNLOADING) {
+							poddlthread * thread = new poddlthread(&ctrl->downloads()[idx]);
+							thread->start();
+						}
+					}
 				}
 				break;
-			case OP_PB_CANCEL:
-				// TODO: cancel currently selected download
+			case OP_PB_CANCEL: {
+					std::istringstream os(dllist_form.get("dlposname"));
+					int idx = -1;
+					os >> idx;
+					if (idx != -1) {
+						if (ctrl->downloads()[idx].status() == DL_DOWNLOADING) {
+							ctrl->downloads()[idx].set_status(DL_CANCELLED);
+						}
+					}
+				}
 				break;
-			case OP_PB_DELETE:
-				// TODO: delete currently selected download
+			case OP_PB_DELETE: {
+					std::istringstream os(dllist_form.get("dlposname"));
+					int idx = -1;
+					os >> idx;
+					if (idx != -1) {
+						if (ctrl->downloads()[idx].status() == DL_CANCELLED) {
+							ctrl->downloads()[idx].set_status(DL_DELETED);
+						}
+					}
+				}
 				break;
 			case OP_PB_PURGE:
 				// TODO: delete all cancelled and finished downloads

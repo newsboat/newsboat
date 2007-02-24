@@ -49,6 +49,8 @@ void download::set_url(const std::string& url) {
 }
 
 void download::set_progress(float cur, float max) {
+	if (cur > cursize)
+		ctrl->set_view_update_necessary(true);
 	cursize = cur;
 	totalsize = max;
 }

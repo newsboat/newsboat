@@ -13,6 +13,8 @@ void poddlthread::run() {
 	for (int i=0;i<=100;i+=10) {
 		if (i > 0)
 			::sleep(1);
+		if (dl->status() == DL_CANCELLED)
+			return;
 		dl->set_progress(i, 100);
 	}
 	dl->set_status(DL_FINISHED);

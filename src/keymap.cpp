@@ -53,7 +53,7 @@ keymap::keymap() {
 
 	keymap_["d"] = OP_PB_DOWNLOAD;
 	keymap_["c"] = OP_PB_CANCEL;
-	keymap_["^d"] = OP_PB_DELETE;
+	keymap_["D"] = OP_PB_DELETE;
 	keymap_["P"] = OP_PB_PURGE;
 
 	keymap_["NIL"] = OP_NIL;

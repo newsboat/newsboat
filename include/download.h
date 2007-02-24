@@ -15,6 +15,7 @@ class download {
 		~download();
 		float percents_finished();
 		const char * status_text();
+		inline dlstatus_t status() { return dlstatus; }
 		const char * filename();
 		void set_filename(const std::string& str);
 		void set_url(const std::string& url);
