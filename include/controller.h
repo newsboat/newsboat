@@ -31,6 +31,7 @@ namespace newsbeuter {
 			void mark_all_read(unsigned int pos);
 			void catchup_all();
 			inline bool get_refresh_on_start() { return refresh_on_start; }
+			bool is_valid_podcast_type(const std::string& mimetype);
 		private:
 			void usage(char * argv0);
 			void import_opml(const char * filename);
@@ -40,6 +41,8 @@ namespace newsbeuter {
 			bool try_fs_lock(pid_t & pid);
 			void remove_fs_lock();
 
+			void enqueue_url(const std::string& url);
+
 			view * v;
 			urlreader urlcfg;
 			cache * rsscache;
@@ -48,6 +51,7 @@ namespace newsbeuter {
 			std::string url_file;
 			std::string cache_file;
 			std::string config_file;
+			std::string queue_file;
 			bool refresh_on_start;
 			configcontainer * cfg;
 

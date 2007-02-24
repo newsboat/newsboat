@@ -1,6 +1,7 @@
 #include <queueloader.h>
 #include <logger.h>
 #include <fstream>
+#include <config.h>
 
 using namespace newsbeuter;
 
@@ -55,9 +56,15 @@ void queueloader::reload(std::vector<download>& downloads) {
 				if (!url_found) {
 					GetLogger().log(LOG_INFO, "queueloader::reload: found `%s' nowhere -> storing to new vector", line.c_str());
 					download d(ctrl);
-					d.set_filename(get_filename(line));
-					d.set_url(line);
-					dltemp.push_back(d);
+					std::string fn = get_filename(line);
+					d.set_filename(fn);
+					if (access(fn.c_str(), F_OK)==0) {
+						GetLogger().log(LOG_INFO, "queueloader::reload: found `%s' on file system -> mark as already downloaded", fn.c_str());
+						d.set_status(DL_ALREADY_DOWNLOADED); // TODO: scrap DL_ALREADY_DOWNLOADED state
+					} else {
+						d.set_url(line);
+						dltemp.push_back(d);
+					}
 				}
 			}
 		} while (!f.eof());
@@ -82,7 +89,7 @@ std::string queueloader::get_filename(const std::string& str) {
 		char * homedir = ::getenv("HOME");
 		if (homedir) {
 			fn.append(homedir);
-			fn.append("/");
+			fn.append(NEWSBEUTER_PATH_SEP);
 			fn.append(dlpath.substr(2,dlpath.length()-2));
 		} else {
 			fn = ".";
@@ -90,7 +97,7 @@ std::string queueloader::get_filename(const std::string& str) {
 	} else {
 		fn = dlpath;
 	}
-	fn.append("/");
+	fn.append(NEWSBEUTER_PATH_SEP);
 	char * base = basename(str.c_str());
 	if (!base || strlen(base) == 0) {
 		char buf[128];

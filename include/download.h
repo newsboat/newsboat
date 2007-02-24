@@ -5,7 +5,7 @@
 
 namespace podbeuter {
 
-enum dlstatus_t { DL_QUEUED = 0, DL_DOWNLOADING, DL_CANCELLED, DL_DELETED, DL_FINISHED, DL_FAILED };
+enum dlstatus_t { DL_QUEUED = 0, DL_DOWNLOADING, DL_CANCELLED, DL_DELETED, DL_FINISHED, DL_FAILED, DL_ALREADY_DOWNLOADED };
 
 class pb_controller;
 

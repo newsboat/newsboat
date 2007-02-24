@@ -112,7 +112,7 @@ void pb_view::run() {
 					int idx = -1;
 					os >> idx;
 					if (idx != -1) {
-						if (ctrl->downloads()[idx].status() == DL_CANCELLED) {
+						if (ctrl->downloads()[idx].status() != DL_DOWNLOADING) {
 							ctrl->downloads()[idx].set_status(DL_DELETED);
 						}
 					}

@@ -136,7 +136,16 @@ rss_feed rss_parser::parse() {
 			x.set_guid(item->guid);
 		else
 			x.set_guid(item->link); // XXX hash something to get a better alternative GUID
-		// x.set_dirty();
+
+		if (item->enclosure_url) {
+			x.set_enclosure_url(item->enclosure_url);
+			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found enclosure_url: %s", item->enclosure_url);
+		}
+		if (item->enclosure_type) {
+			x.set_enclosure_type(item->enclosure_type);
+			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found enclosure_type: %s", item->enclosure_type);
+		}
+
 		GetLogger().log(LOG_DEBUG, "rss_parser::parse: item title = `%s' link = `%s' pubDate = `%s' (%d) description = `%s'", 
 			x.title().c_str(), x.link().c_str(), x.pubDate().c_str(), x.pubDate_timestamp(), x.description().c_str());
 		feed.items().push_back(x);
@@ -287,4 +296,12 @@ void rss_feed::set_tags(const std::vector<std::string>& tags) {
 	for (std::vector<std::string>::const_iterator it=tags.begin();it!=tags.end();++it) {
 		tags_.push_back(*it);
 	}
+}
+
+void rss_item::set_enclosure_url(const std::string& url) {
+	enclosure_url_ = url;
+}
+
+void rss_item::set_enclosure_type(const std::string& type) {
+	enclosure_type_ = type;
 }

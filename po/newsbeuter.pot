@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-23 13:18+0100\n"
+"POT-Creation-Date: 2007-02-24 12:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,21 +47,21 @@ msgstr ""
 msgid "unknown command `%s'"
 msgstr ""
 
-#: src/controller.cpp:34
+#: src/controller.cpp:34 src/pb_controller.cpp:29
 msgid "Segmentation fault."
 msgstr ""
 
-#: src/controller.cpp:48
+#: src/controller.cpp:48 src/pb_controller.cpp:45
 msgid "Fatal error: couldn't determine home directory!"
 msgstr ""
 
-#: src/controller.cpp:50
+#: src/controller.cpp:50 src/pb_controller.cpp:47
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
 
-#: src/controller.cpp:134
+#: src/controller.cpp:134 src/pb_controller.cpp:104
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr ""
@@ -73,22 +73,22 @@ msgid ""
 "import an OPML file."
 msgstr ""
 
-#: src/controller.cpp:157 src/pb_controller.cpp:26
+#: src/controller.cpp:157 src/pb_controller.cpp:111
 #, c-format
 msgid "Starting %s %s..."
 msgstr ""
 
-#: src/controller.cpp:163
+#: src/controller.cpp:163 src/pb_controller.cpp:116
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr ""
 
-#: src/controller.cpp:170 src/pb_controller.cpp:29
+#: src/controller.cpp:170 src/pb_controller.cpp:121
 msgid "Loading configuration..."
 msgstr ""
 
 #: src/controller.cpp:197 src/controller.cpp:216 src/controller.cpp:237
-#: src/pb_controller.cpp:51 src/pb_controller.cpp:63
+#: src/pb_controller.cpp:143 src/pb_controller.cpp:156
 msgid "done."
 msgstr ""
 
@@ -143,6 +143,34 @@ msgstr ""
 #: src/controller.cpp:400
 #, c-format
 msgid "Import of %s finished."
+msgstr ""
+
+#: src/download.cpp:37
+msgid "queued"
+msgstr ""
+
+#: src/download.cpp:39
+msgid "downloading"
+msgstr ""
+
+#: src/download.cpp:41
+msgid "cancelled"
+msgstr ""
+
+#: src/download.cpp:43
+msgid "deleted"
+msgstr ""
+
+#: src/download.cpp:45
+msgid "finished"
+msgstr ""
+
+#: src/download.cpp:47
+msgid "failed"
+msgstr ""
+
+#: src/download.cpp:49
+msgid "unknown (bug)."
 msgstr ""
 
 #: src/keymap.cpp:15
@@ -213,12 +241,21 @@ msgstr ""
 msgid "Open search dialog"
 msgstr ""
 
-#: src/pb_controller.cpp:59
+#: src/pb_controller.cpp:150
 msgid "Cleaning up queue..."
 msgstr ""
 
-#: src/pb_view.cpp:21
-msgid "Queue"
+#: src/pb_view.cpp:31
+#, c-format
+msgid "Queue (%u downloads in progress, %u total)"
+msgstr ""
+
+#: src/pb_view.cpp:81
+msgid "Error: can't quit: download(s) in progress."
+msgstr ""
+
+#: src/pb_view.cpp:123
+msgid "Error: unable to perform operation: download(s) in progress."
 msgstr ""
 
 #: src/view.cpp:132 src/view.cpp:189

@@ -742,7 +742,7 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 			char * homedir = ::getenv("HOME");
 			if (homedir) {
 				dir.append(homedir);
-				dir.append("/");
+				dir.append(NEWSBEUTER_PATH_SEP);
 				dir.append(save_path.substr(2,save_path.length()-2));
 			} else {
 				dir = ".";

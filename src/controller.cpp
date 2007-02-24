@@ -6,10 +6,10 @@
 #include <downloadthread.h>
 #include <colormanager.h>
 #include <logger.h>
-#include <fstream>
 #include <sstream>
 #include <cstdlib>
 #include <iostream>
+#include <fstream>
 
 #include <sys/time.h>
 #include <ctime>
@@ -36,7 +36,7 @@ void ctrl_c_action(int sig) {
 	::exit(EXIT_FAILURE);
 }
 
-controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), refresh_on_start(false), cfg(0) {
+controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false), cfg(0) {
 	std::ostringstream cfgfile;
 
 	char * cfgdir;
@@ -63,6 +63,7 @@ controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cach
 	cache_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + cache_file;
 	config_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
 	lock_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + lock_file;
+	queue_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
 	reload_mutex = new mutex();
 }
 
@@ -313,10 +314,22 @@ void controller::reload(unsigned int pos, unsigned int max) {
 			feed = parser.parse();
 			
 			rsscache->externalize_rssfeed(feed);
-			
+
+			for (std::vector<rss_item>::iterator it=feed.items().begin();it!=feed.items().end();++it) {
+				if (cfg->get_configvalue_as_bool("podcast-auto-enqueue") && it->unread() && it->enclosure_url().length() > 0) {
+					GetLogger().log(LOG_DEBUG, "controller::reload: enclosure_url = `%s' enclosure_type = `%s'", it->enclosure_url().c_str(), it->enclosure_type().c_str());
+					if (is_valid_podcast_type(it->enclosure_type())) {
+						GetLogger().log(LOG_INFO, "controller::reload: enqueuing `%s'", it->enclosure_url().c_str());
+						enqueue_url(it->enclosure_url());
+						// TODO: enqueue enclosure_url
+					}
+				}
+			}
+
 			rsscache->internalize_rssfeed(feed);
 			feed.set_tags(urlcfg.get_tags(feed.rssurl()));
 			feeds[pos] = feed;
+
 			
 			v->set_feedlist(feeds);
 			v->set_status("");
@@ -476,4 +489,32 @@ std::vector<rss_item> controller::search_for_items(const std::string& query, con
 
 rss_feed controller::get_feed_by_url(const std::string& feedurl) {
 	return rsscache->get_feed_by_url(feedurl);
+}
+
+bool controller::is_valid_podcast_type(const std::string& mimetype) {
+	return mimetype == "audio/mpeg" || mimetype == "video/x-m4v";
+}
+
+void controller::enqueue_url(const std::string& url) {
+	bool url_found = false;
+	std::fstream f;
+	f.open(queue_file.c_str(), std::fstream::in);
+	if (f.is_open()) {
+		do {
+			std::string line;
+			getline(f, line);
+			if (!f.eof() && line.length() > 0) {
+				if (line == url) {
+					url_found = true;
+					break;
+				}
+			}
+		} while (!f.eof());
+		f.close();
+	}
+	if (!url_found) {
+		f.open(queue_file.c_str(), std::fstream::app | std::fstream::out);
+		f << url << std::endl;
+		f.close();
+	}
 }

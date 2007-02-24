@@ -49,7 +49,13 @@ namespace newsbeuter {
 			inline void set_feedurl(const std::string& f) { feedurl_ = f; }
 			
 			inline const std::string& feedurl() const { return feedurl_; }
-			
+
+			inline const std::string& enclosure_url() { return enclosure_url_; }
+			inline const std::string& enclosure_type() { return enclosure_type_; }
+
+			void set_enclosure_url(const std::string& url);
+			void set_enclosure_type(const std::string& type);
+
 		private:
 			std::string title_;
 			std::string link_;
@@ -60,6 +66,8 @@ namespace newsbeuter {
 			std::string feedurl_;
 			bool unread_;
 			cache * ch;
+			std::string enclosure_url_;
+			std::string enclosure_type_;
 	};
 
 	class rss_feed {

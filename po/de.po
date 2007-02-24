@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-23 13:18+0100\n"
+"POT-Creation-Date: 2007-02-24 12:16+0100\n"
 "PO-Revision-Date: 2007-02-21 13:03+0100\n"
 "Last-Translator: Andreas Krennmair <ak@synflood.at>\n"
 "Language-Team: Andreas Krennmair <ak@synflood.at>\n"
@@ -47,15 +47,15 @@ msgstr "Fehler beim Bearbeiten von Kommando `%s' (%s Zeile %u): %s"
 msgid "unknown command `%s'"
 msgstr "unbekanntes Kommando `%s'"
 
-#: src/controller.cpp:34
+#: src/controller.cpp:34 src/pb_controller.cpp:29
 msgid "Segmentation fault."
 msgstr "Speicherzugriffsfehler."
 
-#: src/controller.cpp:48
+#: src/controller.cpp:48 src/pb_controller.cpp:45
 msgid "Fatal error: couldn't determine home directory!"
 msgstr "Schwerer Fehler: konnte das Home-Verzeichnis nicht feststellen!"
 
-#: src/controller.cpp:50
+#: src/controller.cpp:50 src/pb_controller.cpp:47
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
@@ -63,7 +63,7 @@ msgstr ""
 "Bitte setzen sie die HOME Umgebungsvariable oder fügen sie einen gültigen "
 "Benutzer für UID %u hinzu!"
 
-#: src/controller.cpp:134
+#: src/controller.cpp:134 src/pb_controller.cpp:104
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr "%s: unbekannte Option - %c"
@@ -77,22 +77,22 @@ msgstr ""
 "Fehler: keine URLs konfiguriert. Bitte füllen sie die Datei %s mit RSS-Feed-"
 "URLs oder importieren sie eine OPML-Datei."
 
-#: src/controller.cpp:157 src/pb_controller.cpp:26
+#: src/controller.cpp:157 src/pb_controller.cpp:111
 #, c-format
 msgid "Starting %s %s..."
 msgstr "Starte %s %s..."
 
-#: src/controller.cpp:163
+#: src/controller.cpp:163 src/pb_controller.cpp:116
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "Fehler: eine Instanz von %s läuft bereits (PID: %u)"
 
-#: src/controller.cpp:170 src/pb_controller.cpp:29
+#: src/controller.cpp:170 src/pb_controller.cpp:121
 msgid "Loading configuration..."
 msgstr "Lade Konfiguration..."
 
 #: src/controller.cpp:197 src/controller.cpp:216 src/controller.cpp:237
-#: src/pb_controller.cpp:51 src/pb_controller.cpp:63
+#: src/pb_controller.cpp:143 src/pb_controller.cpp:156
 msgid "done."
 msgstr "fertig."
 
@@ -158,6 +158,34 @@ msgstr ""
 #, c-format
 msgid "Import of %s finished."
 msgstr "Import von %s fertig."
+
+#: src/download.cpp:37
+msgid "queued"
+msgstr "in Warteschlange"
+
+#: src/download.cpp:39
+msgid "downloading"
+msgstr "wird herunterladen"
+
+#: src/download.cpp:41
+msgid "cancelled"
+msgstr "abgebrochen"
+
+#: src/download.cpp:43
+msgid "deleted"
+msgstr "gelöscht"
+
+#: src/download.cpp:45
+msgid "finished"
+msgstr "fertig"
+
+#: src/download.cpp:47
+msgid "failed"
+msgstr "fehlgeschlagen"
+
+#: src/download.cpp:49
+msgid "unknown (bug)."
+msgstr "unbekannt (Bug)."
 
 #: src/keymap.cpp:15
 msgid "Open feed/article"
@@ -227,13 +255,22 @@ msgstr "Tag auswählen"
 msgid "Open search dialog"
 msgstr "Suchdialog öffnen"
 
-#: src/pb_controller.cpp:59
+#: src/pb_controller.cpp:150
 msgid "Cleaning up queue..."
 msgstr "Bereinige Warteschlange..."
 
-#: src/pb_view.cpp:21
-msgid "Queue"
-msgstr "Warteschlange"
+#: src/pb_view.cpp:31
+#, c-format
+msgid "Queue (%u downloads in progress, %u total)"
+msgstr "Warteschlange (%u Download im Gange, %u insgesamt)"
+
+#: src/pb_view.cpp:81
+msgid "Error: can't quit: download(s) in progress."
+msgstr "Fehler: kann nicht beenden: Download(s) im Gange."
+
+#: src/pb_view.cpp:123
+msgid "Error: unable to perform operation: download(s) in progress."
+msgstr "Fehler: kann Vorgang nicht durchführen: Download(s) im Gange."
 
 #: src/view.cpp:132 src/view.cpp:189
 msgid "No feeds with unread items."
