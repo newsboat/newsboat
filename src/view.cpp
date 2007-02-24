@@ -995,6 +995,15 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 			code.append(stfl::quote(date.str()));
 			code.append("}");
 
+			if (item.enclosure_url().length() > 0) {
+				code.append("{listitem text:");
+				std::ostringstream enc_url;
+				enc_url << _("Podcast Download URL: ");
+				enc_url << item.enclosure_url() << " (" << _("type: ") << item.enclosure_type() << ")";
+				code.append(stfl::quote(enc_url.str()));
+				code.append("}");
+			}
+
 			code.append("{listitem text:\"\"}");
 			
 			set_itemview_head(item.title());
@@ -1050,6 +1059,13 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 				show_source = !show_source;
 				redraw = true;
 				break;
+			case OP_ENQUEUE: {
+					char buf[1024];
+					snprintf(buf, sizeof(buf), _("Added %s to download queue."), item.enclosure_url().c_str());
+					ctrl->enqueue_url(item.enclosure_url());
+					set_status(buf);
+				}
+				break;
 			case OP_SAVE:
 				{
 					char buf[1024];
@@ -1060,10 +1076,10 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 					} else {
 						try {
 							write_item(item, filename);
-							snprintf(buf, sizeof(buf), "Saved article to %s", filename.c_str());
+							snprintf(buf, sizeof(buf), _("Saved article to %s."), filename.c_str());
 							show_error(buf);
 						} catch (...) {
-							snprintf(buf, sizeof(buf), "Error: couldn't write article to file %s", filename.c_str());
+							snprintf(buf, sizeof(buf), _("Error: couldn't write article to file %s"), filename.c_str());
 							show_error(buf);
 						}
 					}
@@ -1433,6 +1449,7 @@ void view::set_itemview_keymap_hint() {
 		{ OP_SAVE, _("Save") },
 		{ OP_NEXTUNREAD, _("Next Unread") },
 		{ OP_OPENINBROWSER, _("Open in Browser") },
+		{ OP_ENQUEUE, _("Enqueue") },
 		{ OP_HELP, _("Help") },
 		{ OP_NIL, NULL }
 	};

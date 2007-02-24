@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-24 18:28+0100\n"
+"POT-Creation-Date: 2007-02-24 19:03+0100\n"
 "PO-Revision-Date: 2007-02-21 13:03+0100\n"
 "Last-Translator: Andreas Krennmair <ak@synflood.at>\n"
 "Language-Team: Andreas Krennmair <ak@synflood.at>\n"
@@ -260,22 +260,26 @@ msgid "Open search dialog"
 msgstr "Suchdialog öffnen"
 
 #: src/keymap.cpp:32
+msgid "Add download to queue"
+msgstr "Download zur Warteschlange hinzufügen"
+
+#: src/keymap.cpp:33
 msgid "Download file"
 msgstr "Datei herunterladen"
 
-#: src/keymap.cpp:33
+#: src/keymap.cpp:34
 msgid "Cancel download"
 msgstr "Download abbrechen"
 
-#: src/keymap.cpp:34
+#: src/keymap.cpp:35
 msgid "Mark download as deleted"
 msgstr "Download als gelöscht markieren"
 
-#: src/keymap.cpp:35
+#: src/keymap.cpp:36
 msgid "Purge finished and deleted downloads from queue"
 msgstr "Fertige und gelöschte Downloads aus Warteschlange aufräumen"
 
-#: src/keymap.cpp:36
+#: src/keymap.cpp:37
 msgid "Toggle automatic download on/off"
 msgstr "Automatischen Download ein/ausschalten"
 
@@ -284,10 +288,12 @@ msgid "Cleaning up queue..."
 msgstr "Bereinige Warteschlange..."
 
 #: src/pb_view.cpp:34
+#, c-format
 msgid " - %u parallel downloads"
 msgstr " - %u parallele Downloads"
 
 #: src/pb_view.cpp:38
+#, c-format
 msgid "Queue (%u downloads in progress, %u total)%s"
 msgstr "Warteschlange (%u Download im Gange, %u insgesamt)%s"
 
@@ -299,8 +305,8 @@ msgstr "Fehler: kann nicht beenden: Download(s) im Gange."
 msgid "Error: unable to perform operation: download(s) in progress."
 msgstr "Fehler: kann Vorgang nicht durchführen: Download(s) im Gange."
 
-#: src/pb_view.cpp:163 src/view.cpp:1378 src/view.cpp:1394 src/view.cpp:1404
-#: src/view.cpp:1431 src/view.cpp:1445 src/view.cpp:1465
+#: src/pb_view.cpp:163 src/view.cpp:1394 src/view.cpp:1410 src/view.cpp:1420
+#: src/view.cpp:1447 src/view.cpp:1462 src/view.cpp:1482
 msgid "Quit"
 msgstr "Beenden"
 
@@ -308,7 +314,7 @@ msgstr "Beenden"
 msgid "Download"
 msgstr "Download"
 
-#: src/pb_view.cpp:165 src/view.cpp:1421 src/view.cpp:1454
+#: src/pb_view.cpp:165 src/view.cpp:1437 src/view.cpp:1471
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -369,7 +375,7 @@ msgstr "Kein Element ausgewählt!"
 msgid "No unread items."
 msgstr "Keine ungelesenen Elemente."
 
-#: src/view.cpp:482 src/view.cpp:1059
+#: src/view.cpp:482 src/view.cpp:1075
 msgid "Aborted saving."
 msgstr "Speichern abgebrochen."
 
@@ -425,91 +431,116 @@ msgstr "Feed: "
 msgid "Link: "
 msgstr "Link: "
 
-#: src/view.cpp:1074 src/view.cpp:1158
+#: src/view.cpp:1001
+msgid "Podcast Download URL: "
+msgstr "Podcast Download URL: "
+
+#: src/view.cpp:1002
+msgid "type: "
+msgstr "Typ: "
+
+#: src/view.cpp:1064
+#, c-format
+msgid "Added %s to download queue."
+msgstr "%s zur Download-Warteschlange hinzugefügt."
+
+#: src/view.cpp:1079
+msgid "Saved article to %s."
+msgstr "Artikel nach %s gespeichert."
+
+#: src/view.cpp:1082
+msgid "Error: couldn't write article to file %s"
+msgstr "Fehler: konnte Artikel nicht nach %s speichern"
+
+#: src/view.cpp:1090 src/view.cpp:1174
 msgid "Starting browser..."
 msgstr "Starte Browser..."
 
-#: src/view.cpp:1127
+#: src/view.cpp:1143
 msgid "URLs"
 msgstr "URLs"
 
-#: src/view.cpp:1162
+#: src/view.cpp:1178
 msgid "No link selected!"
 msgstr "Kein Link ausgewählt!"
 
-#: src/view.cpp:1241 src/view.cpp:1385 src/view.cpp:1412 src/view.cpp:1436
-#: src/view.cpp:1468
+#: src/view.cpp:1257 src/view.cpp:1401 src/view.cpp:1428 src/view.cpp:1453
+#: src/view.cpp:1485
 msgid "Help"
 msgstr "Hilfe"
 
-#: src/view.cpp:1351
+#: src/view.cpp:1367
 #, c-format
 msgid "Your feeds (%u unread, %u total) - tag `%s'"
 msgstr "Ihre Feeds (%u ungelesen, %u gesamt) - Tag `%s'"
 
-#: src/view.cpp:1353
+#: src/view.cpp:1369
 #, c-format
 msgid "Your feeds (%u unread, %u total)"
 msgstr "Ihre Feeds (%u ungelesen, %u gesamt)"
 
-#: src/view.cpp:1379 src/view.cpp:1405 src/view.cpp:1432
+#: src/view.cpp:1395 src/view.cpp:1421 src/view.cpp:1448
 msgid "Open"
 msgstr "Öffnen"
 
-#: src/view.cpp:1380 src/view.cpp:1422 src/view.cpp:1433
+#: src/view.cpp:1396 src/view.cpp:1438 src/view.cpp:1449
 msgid "Save"
 msgstr "Speichern"
 
-#: src/view.cpp:1381 src/view.cpp:1407
+#: src/view.cpp:1397 src/view.cpp:1423
 msgid "Reload"
 msgstr "Neu laden"
 
-#: src/view.cpp:1382 src/view.cpp:1406 src/view.cpp:1434
+#: src/view.cpp:1398 src/view.cpp:1422 src/view.cpp:1450
 msgid "Next Unread"
 msgstr "Nächstes Ungelesenes"
 
-#: src/view.cpp:1383
+#: src/view.cpp:1399
 msgid "Mark All Read"
 msgstr "Alle Gelesen Markieren"
 
-#: src/view.cpp:1384 src/view.cpp:1411
+#: src/view.cpp:1400 src/view.cpp:1427
 msgid "Search"
 msgstr "Suchen"
 
-#: src/view.cpp:1395 src/view.cpp:1435
+#: src/view.cpp:1411 src/view.cpp:1451
 msgid "Open in Browser"
 msgstr "Im Browser öffnen"
 
-#: src/view.cpp:1408
+#: src/view.cpp:1424
 msgid "Reload All"
 msgstr "Alle Neu laden"
 
-#: src/view.cpp:1409
+#: src/view.cpp:1425
 msgid "Mark Read"
 msgstr "Gelesen Markieren"
 
-#: src/view.cpp:1410
+#: src/view.cpp:1426
 msgid "Catchup All"
 msgstr "Alle Aufholen"
 
-#: src/view.cpp:1455
+#: src/view.cpp:1452
+msgid "Enqueue"
+msgstr "In Warteschlange"
+
+#: src/view.cpp:1472
 msgid "Select Tag"
 msgstr "Tag auswählen"
 
-#: src/view.cpp:1466
+#: src/view.cpp:1483
 msgid "Search/Open"
 msgstr "Suchen/Öffnen"
 
-#: src/view.cpp:1467
+#: src/view.cpp:1484
 msgid "New Search"
 msgstr "Neue Suche"
 
-#: src/view.cpp:1478
+#: src/view.cpp:1495
 #, c-format
 msgid "Articles in feed '%s' (%u unread, %u total) - %s"
 msgstr "Artikel im Feed '%s' (%u ungelesen, %u gesamt) - %s"
 
-#: src/view.cpp:1484
+#: src/view.cpp:1501
 #, c-format
 msgid "Article '%s'"
 msgstr "Artikel '%s'"

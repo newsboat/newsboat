@@ -12,12 +12,39 @@
 
 namespace newsbeuter {
 
-	enum operation { OP_NIL = 0, OP_NB_MIN = 0, OP_QUIT, OP_RELOAD, OP_RELOADALL, OP_MARKFEEDREAD, 
-					OP_MARKALLFEEDSREAD, OP_OPEN, OP_SAVE, OP_NEXTUNREAD, OP_OPENINBROWSER, 
-					OP_HELP, OP_TOGGLESOURCEVIEW, OP_TOGGLEITEMREAD, OP_TOGGLESHOWREAD, OP_SHOWURLS,
-					OP_CLEARTAG, OP_SETTAG, OP_SEARCH, OP_NB_MAX,
-					OP_PB_MIN, OP_PB_DOWNLOAD, OP_PB_CANCEL, OP_PB_DELETE,
-					OP_PB_PURGE, OP_PB_TOGGLE_DLALL, OP_PB_MOREDL, OP_PB_LESSDL, OP_PB_MAX };
+	enum operation {	OP_NIL = 0, 
+						// general and newsbeuter-specific operations:
+						OP_NB_MIN,
+						OP_QUIT, 
+						OP_RELOAD, 
+						OP_RELOADALL, 
+						OP_MARKFEEDREAD, 
+						OP_MARKALLFEEDSREAD, 
+						OP_OPEN, 
+						OP_SAVE, 
+						OP_NEXTUNREAD, 
+						OP_OPENINBROWSER, 
+						OP_HELP, 
+						OP_TOGGLESOURCEVIEW, 
+						OP_TOGGLEITEMREAD, 
+						OP_TOGGLESHOWREAD, 
+						OP_SHOWURLS,
+						OP_CLEARTAG, 
+						OP_SETTAG, 
+						OP_SEARCH, 
+						OP_ENQUEUE,
+						OP_NB_MAX,
+
+						// podbeuter-specific operations:
+						OP_PB_MIN, 
+						OP_PB_DOWNLOAD, 
+						OP_PB_CANCEL, 
+						OP_PB_DELETE,
+						OP_PB_PURGE, 
+						OP_PB_TOGGLE_DLALL, 
+						OP_PB_MOREDL, 
+						OP_PB_LESSDL, 
+						OP_PB_MAX };
 
 	class keymap : public config_action_handler {
 		public:

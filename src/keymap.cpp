@@ -29,6 +29,7 @@ op_desc opdescs[] = {
 	{ OP_CLEARTAG, _("Clear current tag") },
 	{ OP_SETTAG, _("Select tag") },
 	{ OP_SEARCH, _("Open search dialog") },
+	{ OP_ENQUEUE, _("Add download to queue") },
 	{ OP_PB_DOWNLOAD, _("Download file") },
 	{ OP_PB_CANCEL, _("Cancel download") },
 	{ OP_PB_DELETE, _("Mark download as deleted") },
@@ -55,6 +56,7 @@ keymap::keymap() {
 	keymap_["t"] = OP_SETTAG;
 	keymap_["^t"] = OP_CLEARTAG;
 	keymap_["/"] = OP_SEARCH;
+	keymap_["e"] = OP_ENQUEUE;
 
 	keymap_["d"] = OP_PB_DOWNLOAD;
 	keymap_["c"] = OP_PB_CANCEL;
@@ -110,6 +112,7 @@ operation keymap::get_opcode(const std::string& opstr) {
 		{ "toggle-source-view", OP_TOGGLESOURCEVIEW },
 		{ "toggle-article-read", OP_TOGGLEITEMREAD },
 		{ "toggle-show-read-feeds", OP_TOGGLESHOWREAD },
+		{ "enqueue", OP_ENQUEUE },
 		{ "show-urls", OP_SHOWURLS },
 		{ "clear-tag", OP_CLEARTAG },
 		{ "select-tag", OP_SETTAG },
