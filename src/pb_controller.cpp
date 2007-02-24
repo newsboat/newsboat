@@ -1,5 +1,6 @@
 #include <pb_controller.h>
 #include <pb_view.h>
+#include <poddlthread.h>
 #include <config.h>
 #include <iostream>
 #include <sstream>
@@ -202,9 +203,24 @@ unsigned int pb_controller::downloads_in_progress() {
 	return count;
 }
 
+unsigned int pb_controller::get_maxdownloads() {
+	return cfg->get_configvalue_as_int("max-downloads");
+}
+
 void pb_controller::reload_queue() {
 	if (ql) {
 		ql->reload(downloads_);
+	}
+}
+
+void pb_controller::start_downloads() {
+	int dl2start = get_maxdownloads() - downloads_in_progress();
+	for (std::vector<download>::iterator it=downloads_.begin();dl2start > 0 && it!=downloads_.end();++it) {
+		if (it->status() == DL_QUEUED) {
+			poddlthread * thread = new poddlthread(&(*it));
+			thread->start();
+			--dl2start;
+		}
 	}
 }
 

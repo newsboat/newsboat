@@ -55,6 +55,7 @@ keymap::keymap() {
 	keymap_["c"] = OP_PB_CANCEL;
 	keymap_["D"] = OP_PB_DELETE;
 	keymap_["P"] = OP_PB_PURGE;
+	keymap_["a"] = OP_PB_TOGGLE_DLALL;
 
 	keymap_["NIL"] = OP_NIL;
 }

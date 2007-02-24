@@ -21,6 +21,7 @@ pb_view::~pb_view() {
 
 void pb_view::run() {
 	bool quit = false;
+	bool auto_download = false;
 
 	do {
 
@@ -55,6 +56,13 @@ void pb_view::run() {
 		}
 
 		const char * event = dllist_form.run(1000);
+
+		if (auto_download) {
+			if (ctrl->get_maxdownloads() > ctrl->downloads_in_progress()) {
+				ctrl->start_downloads();
+			}
+		}
+
 		if (!event || strcmp(event,"TIMEOUT")==0) continue;
 
 		operation op = keys->get_operation(event);
@@ -65,6 +73,9 @@ void pb_view::run() {
 		}
 
 		switch (op) {
+			case OP_PB_TOGGLE_DLALL:
+				auto_download = !auto_download;
+				break;
 			case OP_QUIT:
 				if (ctrl->downloads_in_progress() > 0) {
 					dllist_form.set("msg", _("Error: can't quit: download(s) in progress."));

@@ -19,7 +19,7 @@ void queueloader::reload(std::vector<download>& downloads) {
 				GetLogger().log(LOG_INFO, "queueloader::reload: aborting reload due to DL_DOWNLOADING status");
 				return;
 			}
-			if (it->status() == DL_QUEUED || it->status() == DL_CANCELLED) {
+			if (it->status() == DL_QUEUED || it->status() == DL_CANCELLED || it->status() == DL_FAILED) {
 				GetLogger().log(LOG_DEBUG, "queueloader::reload: storing %s to new vector", it->url());
 				dltemp.push_back(*it);
 			}
