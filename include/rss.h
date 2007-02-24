@@ -17,7 +17,7 @@ namespace newsbeuter {
 
 	class rss_item {
 		public:
-			rss_item(cache * c) : unread_(true), ch(c) { }
+			rss_item(cache * c) : unread_(true), ch(c), enqueued_(false) { }
 			~rss_item() { }
 			
 			inline const std::string& title() const { return title_; }
@@ -56,6 +56,9 @@ namespace newsbeuter {
 			void set_enclosure_url(const std::string& url);
 			void set_enclosure_type(const std::string& type);
 
+			inline bool enqueued() { return enqueued_; }
+			inline void set_enqueued(bool v) { enqueued_ = v; }
+
 		private:
 			std::string title_;
 			std::string link_;
@@ -68,6 +71,7 @@ namespace newsbeuter {
 			cache * ch;
 			std::string enclosure_url_;
 			std::string enclosure_type_;
+			bool enqueued_;
 	};
 
 	class rss_feed {

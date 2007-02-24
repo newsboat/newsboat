@@ -315,20 +315,21 @@ void controller::reload(unsigned int pos, unsigned int max) {
 			
 			rsscache->externalize_rssfeed(feed);
 
+			rsscache->internalize_rssfeed(feed);
+			feed.set_tags(urlcfg.get_tags(feed.rssurl()));
+			feeds[pos] = feed;
+
 			for (std::vector<rss_item>::iterator it=feed.items().begin();it!=feed.items().end();++it) {
-				if (cfg->get_configvalue_as_bool("podcast-auto-enqueue") && it->unread() && it->enclosure_url().length() > 0) {
+				if (cfg->get_configvalue_as_bool("podcast-auto-enqueue") && !it->enqueued() && it->enclosure_url().length() > 0) {
 					GetLogger().log(LOG_DEBUG, "controller::reload: enclosure_url = `%s' enclosure_type = `%s'", it->enclosure_url().c_str(), it->enclosure_type().c_str());
 					if (is_valid_podcast_type(it->enclosure_type())) {
 						GetLogger().log(LOG_INFO, "controller::reload: enqueuing `%s'", it->enclosure_url().c_str());
 						enqueue_url(it->enclosure_url());
-						// TODO: enqueue enclosure_url
+						it->set_enqueued(true);
+						rsscache->update_rssitem_unread_and_enqueued(*it, feed.rssurl());
 					}
 				}
 			}
-
-			rsscache->internalize_rssfeed(feed);
-			feed.set_tags(urlcfg.get_tags(feed.rssurl()));
-			feeds[pos] = feed;
 
 			
 			v->set_feedlist(feeds);
@@ -492,7 +493,7 @@ rss_feed controller::get_feed_by_url(const std::string& feedurl) {
 }
 
 bool controller::is_valid_podcast_type(const std::string& mimetype) {
-	return mimetype == "audio/mpeg" || mimetype == "video/x-m4v";
+	return mimetype == "audio/mpeg" || mimetype == "video/x-m4v" || mimetype == "audio/x-mpeg";
 }
 
 void controller::enqueue_url(const std::string& url) {

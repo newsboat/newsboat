@@ -2,6 +2,7 @@ Changes for newsbeuter:
 
 0.3:
 	Added gettext support.
+	Added podcast support.
 
 0.2 (2007-02-21):
 	removed an unnecessary mutex lock/unlock that made newsbeuter lock up when the "max-items" config option was set

@@ -186,7 +186,7 @@ void rss_item::set_guid(const std::string& g) {
 void rss_item::set_unread(bool u) { 
 	if (unread_ != u) {
 		unread_ = u;
-		if (ch) ch->update_rssitem_unread(*this, feedurl_); 
+		if (ch) ch->update_rssitem_unread_and_enqueued(*this, feedurl_); 
 	}
 }
 
