@@ -23,12 +23,19 @@ void pb_view::run() {
 	bool quit = false;
 	bool auto_download = false;
 
+	set_dllist_keymap_hint();
+
 	do {
 
 		if (ctrl->view_update_necessary()) {
 
+			char parbuf[128] = "";
+			if (ctrl->get_maxdownloads() > 1) {
+				snprintf(parbuf, sizeof(parbuf), _(" - %u parallel downloads"), ctrl->get_maxdownloads());
+			}
+
 			char buf[1024];
-			snprintf(buf, sizeof(buf), _("Queue (%u downloads in progress, %u total)"), ctrl->downloads_in_progress(), ctrl->downloads().size());
+			snprintf(buf, sizeof(buf), _("Queue (%u downloads in progress, %u total)%s"), ctrl->downloads_in_progress(), ctrl->downloads().size(), parbuf);
 
 			dllist_form.set("head", buf);
 
@@ -84,6 +91,12 @@ void pb_view::run() {
 					quit = true;
 				}
 				break;
+			case OP_PB_MOREDL:
+				ctrl->increase_parallel_downloads();
+				break;
+			case OP_PB_LESSDL:
+				ctrl->decrease_parallel_downloads();
+				break;
 			case OP_PB_DOWNLOAD: {
 					std::istringstream os(dllist_form.get("dlposname"));
 					int idx = -1;
@@ -131,4 +144,31 @@ void pb_view::run() {
 		}
 
 	} while (!quit);
+}
+
+
+std::string pb_view::prepare_keymaphint(keymap_hint_entry * hints) {
+	std::string keymap_hint;
+	for (int i=0;hints[i].op != OP_NIL; ++i) {
+		keymap_hint.append(keys->getkey(hints[i].op));
+		keymap_hint.append(":");
+		keymap_hint.append(hints[i].text);
+		keymap_hint.append(" ");
+	}
+	return keymap_hint;	
+}
+
+void pb_view::set_dllist_keymap_hint() {
+	keymap_hint_entry hints[] = {
+		{ OP_QUIT, _("Quit") },
+		{ OP_PB_DOWNLOAD, _("Download") },
+		{ OP_PB_CANCEL, _("Cancel") },
+		{ OP_PB_DELETE, _("Delete") },
+		{ OP_PB_PURGE, _("Purge Finished") },
+		{ OP_PB_TOGGLE_DLALL, _("Toggle Automatic Download") },
+		{ OP_NIL, NULL }
+	};
+
+	std::string keymap_hint = prepare_keymaphint(hints);
+	dllist_form.set("help", keymap_hint);
 }

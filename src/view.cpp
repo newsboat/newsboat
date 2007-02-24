@@ -1241,7 +1241,7 @@ void view::run_help() {
 	help_form.set("head",_("Help"));
 	
 	std::vector<std::pair<std::string,std::string> > descs;
-	keys->get_keymap_descriptions(descs);
+	keys->get_keymap_descriptions(descs, true);
 	
 	std::string code = "{list";
 	
@@ -1361,11 +1361,6 @@ void view::mark_all_read(std::vector<rss_item>& items) {
 		it->set_unread(false);
 	}
 }
-
-struct keymap_hint_entry {
-	operation op; 
-	char * text;
-};
 
 std::string view::prepare_keymaphint(keymap_hint_entry * hints) {
 	std::string keymap_hint;

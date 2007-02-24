@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-24 12:16+0100\n"
+"POT-Creation-Date: 2007-02-24 18:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/cache.cpp:108
+#: src/cache.cpp:116
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr ""
@@ -61,72 +61,72 @@ msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
 
-#: src/controller.cpp:134 src/pb_controller.cpp:104
+#: src/controller.cpp:135 src/pb_controller.cpp:104
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr ""
 
-#: src/controller.cpp:151
+#: src/controller.cpp:152
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
 "import an OPML file."
 msgstr ""
 
-#: src/controller.cpp:157 src/pb_controller.cpp:111
+#: src/controller.cpp:158 src/pb_controller.cpp:111
 #, c-format
 msgid "Starting %s %s..."
 msgstr ""
 
-#: src/controller.cpp:163 src/pb_controller.cpp:116
+#: src/controller.cpp:164 src/pb_controller.cpp:116
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr ""
 
-#: src/controller.cpp:170 src/pb_controller.cpp:121
+#: src/controller.cpp:171 src/pb_controller.cpp:121
 msgid "Loading configuration..."
 msgstr ""
 
-#: src/controller.cpp:197 src/controller.cpp:216 src/controller.cpp:237
-#: src/pb_controller.cpp:143 src/pb_controller.cpp:156
+#: src/controller.cpp:198 src/controller.cpp:217 src/controller.cpp:238
+#: src/pb_controller.cpp:145 src/pb_controller.cpp:158
 msgid "done."
 msgstr ""
 
-#: src/controller.cpp:200
+#: src/controller.cpp:201
 msgid "Loading articles from cache..."
 msgstr ""
 
-#: src/controller.cpp:229
+#: src/controller.cpp:230
 msgid "Cleaning up cache..."
 msgstr ""
 
-#: src/controller.cpp:273
+#: src/controller.cpp:274
 msgid "Opening feed..."
 msgstr ""
 
-#: src/controller.cpp:281
+#: src/controller.cpp:282
 msgid "Error: feed contains no items!"
 msgstr ""
 
-#: src/controller.cpp:287 src/controller.cpp:329
+#: src/controller.cpp:288 src/controller.cpp:343
 msgid "Error: invalid feed!"
 msgstr ""
 
-#: src/controller.cpp:308
+#: src/controller.cpp:309
 #, c-format
 msgid "%sLoading %s..."
 msgstr ""
 
-#: src/controller.cpp:325
+#: src/controller.cpp:339
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr ""
 
-#: src/controller.cpp:335
+#: src/controller.cpp:349
 msgid "invalid feed index (bug)"
 msgstr ""
 
-#: src/controller.cpp:359
+#: src/controller.cpp:373
 #, c-format
 msgid ""
 "%s %s\n"
@@ -140,7 +140,7 @@ msgid ""
 "-h              this help\n"
 msgstr ""
 
-#: src/controller.cpp:400
+#: src/controller.cpp:414
 #, c-format
 msgid "Import of %s finished."
 msgstr ""
@@ -170,6 +170,10 @@ msgid "failed"
 msgstr ""
 
 #: src/download.cpp:49
+msgid "already downloaded"
+msgstr ""
+
+#: src/download.cpp:51
 msgid "unknown (bug)."
 msgstr ""
 
@@ -241,21 +245,71 @@ msgstr ""
 msgid "Open search dialog"
 msgstr ""
 
-#: src/pb_controller.cpp:150
+#: src/keymap.cpp:32
+msgid "Download file"
+msgstr ""
+
+#: src/keymap.cpp:33
+msgid "Cancel download"
+msgstr ""
+
+#: src/keymap.cpp:34
+msgid "Mark download as deleted"
+msgstr ""
+
+#: src/keymap.cpp:35
+msgid "Purge finished and deleted downloads from queue"
+msgstr ""
+
+#: src/keymap.cpp:36
+msgid "Toggle automatic download on/off"
+msgstr ""
+
+#: src/pb_controller.cpp:152
 msgid "Cleaning up queue..."
 msgstr ""
 
-#: src/pb_view.cpp:31
+#: src/pb_view.cpp:34
 #, c-format
-msgid "Queue (%u downloads in progress, %u total)"
+msgid " - %u parallel downloads"
 msgstr ""
 
-#: src/pb_view.cpp:81
+#: src/pb_view.cpp:38
+#, c-format
+msgid "Queue (%u downloads in progress, %u total)%s"
+msgstr ""
+
+#: src/pb_view.cpp:88
 msgid "Error: can't quit: download(s) in progress."
 msgstr ""
 
-#: src/pb_view.cpp:123
+#: src/pb_view.cpp:136
 msgid "Error: unable to perform operation: download(s) in progress."
+msgstr ""
+
+#: src/pb_view.cpp:163 src/view.cpp:1378 src/view.cpp:1394 src/view.cpp:1404
+#: src/view.cpp:1431 src/view.cpp:1445 src/view.cpp:1465
+msgid "Quit"
+msgstr ""
+
+#: src/pb_view.cpp:164
+msgid "Download"
+msgstr ""
+
+#: src/pb_view.cpp:165 src/view.cpp:1421 src/view.cpp:1454
+msgid "Cancel"
+msgstr ""
+
+#: src/pb_view.cpp:166
+msgid "Delete"
+msgstr ""
+
+#: src/pb_view.cpp:167
+msgid "Purge Finished"
+msgstr ""
+
+#: src/pb_view.cpp:168
+msgid "Toggle Automatic Download"
 msgstr ""
 
 #: src/view.cpp:132 src/view.cpp:189
@@ -371,8 +425,8 @@ msgstr ""
 msgid "No link selected!"
 msgstr ""
 
-#: src/view.cpp:1241 src/view.cpp:1390 src/view.cpp:1417 src/view.cpp:1441
-#: src/view.cpp:1473
+#: src/view.cpp:1241 src/view.cpp:1385 src/view.cpp:1412 src/view.cpp:1436
+#: src/view.cpp:1468
 msgid "Help"
 msgstr ""
 
@@ -386,73 +440,64 @@ msgstr ""
 msgid "Your feeds (%u unread, %u total)"
 msgstr ""
 
-#: src/view.cpp:1383 src/view.cpp:1399 src/view.cpp:1409 src/view.cpp:1436
-#: src/view.cpp:1450 src/view.cpp:1470
-msgid "Quit"
-msgstr ""
-
-#: src/view.cpp:1384 src/view.cpp:1410 src/view.cpp:1437
+#: src/view.cpp:1379 src/view.cpp:1405 src/view.cpp:1432
 msgid "Open"
 msgstr ""
 
-#: src/view.cpp:1385 src/view.cpp:1427 src/view.cpp:1438
+#: src/view.cpp:1380 src/view.cpp:1422 src/view.cpp:1433
 msgid "Save"
 msgstr ""
 
-#: src/view.cpp:1386 src/view.cpp:1412
+#: src/view.cpp:1381 src/view.cpp:1407
 msgid "Reload"
 msgstr ""
 
-#: src/view.cpp:1387 src/view.cpp:1411 src/view.cpp:1439
+#: src/view.cpp:1382 src/view.cpp:1406 src/view.cpp:1434
 msgid "Next Unread"
 msgstr ""
 
-#: src/view.cpp:1388
+#: src/view.cpp:1383
 msgid "Mark All Read"
 msgstr ""
 
-#: src/view.cpp:1389 src/view.cpp:1416
+#: src/view.cpp:1384 src/view.cpp:1411
 msgid "Search"
 msgstr ""
 
-#: src/view.cpp:1400 src/view.cpp:1440
+#: src/view.cpp:1395 src/view.cpp:1435
 msgid "Open in Browser"
 msgstr ""
 
-#: src/view.cpp:1413
+#: src/view.cpp:1408
 msgid "Reload All"
 msgstr ""
 
-#: src/view.cpp:1414
+#: src/view.cpp:1409
 msgid "Mark Read"
 msgstr ""
 
-#: src/view.cpp:1415
+#: src/view.cpp:1410
 msgid "Catchup All"
 msgstr ""
 
-#: src/view.cpp:1426 src/view.cpp:1459
-msgid "Cancel"
-msgstr ""
-
-#: src/view.cpp:1460
+#: src/view.cpp:1455
 msgid "Select Tag"
 msgstr ""
 
-#: src/view.cpp:1471
+#: src/view.cpp:1466
 msgid "Search/Open"
 msgstr ""
 
-#: src/view.cpp:1472
+#: src/view.cpp:1467
 msgid "New Search"
 msgstr ""
 
-#: src/view.cpp:1483
+#: src/view.cpp:1478
 #, c-format
 msgid "Articles in feed '%s' (%u unread, %u total) - %s"
 msgstr ""
 
-#: src/view.cpp:1489
+#: src/view.cpp:1484
 #, c-format
 msgid "Article '%s'"
 msgstr ""

@@ -97,7 +97,8 @@ std::string queueloader::get_filename(const std::string& str) {
 	} else {
 		fn = dlpath;
 	}
-	fn.append(NEWSBEUTER_PATH_SEP);
+	if (fn[fn.length()-1] != NEWSBEUTER_PATH_SEP[0])
+		fn.append(NEWSBEUTER_PATH_SEP);
 	char * base = basename(str.c_str());
 	if (!base || strlen(base) == 0) {
 		char buf[128];

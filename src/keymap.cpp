@@ -29,6 +29,11 @@ op_desc opdescs[] = {
 	{ OP_CLEARTAG, _("Clear current tag") },
 	{ OP_SETTAG, _("Select tag") },
 	{ OP_SEARCH, _("Open search dialog") },
+	{ OP_PB_DOWNLOAD, _("Download file") },
+	{ OP_PB_CANCEL, _("Cancel download") },
+	{ OP_PB_DELETE, _("Mark download as deleted") },
+	{ OP_PB_PURGE, _("Purge finished and deleted downloads from queue") },
+	{ OP_PB_TOGGLE_DLALL, _("Toggle automatic download on/off") },
 	{ OP_NIL, NULL }
 };
 
@@ -56,19 +61,23 @@ keymap::keymap() {
 	keymap_["D"] = OP_PB_DELETE;
 	keymap_["P"] = OP_PB_PURGE;
 	keymap_["a"] = OP_PB_TOGGLE_DLALL;
+	keymap_["+"] = OP_PB_MOREDL;
+	keymap_["-"] = OP_PB_LESSDL;
 
 	keymap_["NIL"] = OP_NIL;
 }
 
-void keymap::get_keymap_descriptions(std::vector<std::pair<std::string,std::string> >& descs) {
+void keymap::get_keymap_descriptions(std::vector<std::pair<std::string,std::string> >& descs, bool is_newsbeuter) {
 	for (std::map<std::string,operation>::iterator it=keymap_.begin();it!=keymap_.end();++it) {
 		operation op = it->second;
 		if (op != OP_NIL) {
-			std::string helptext;
-			for (int i=0;opdescs[i].help_text;++i)
-				if (opdescs[i].op == op)
-					helptext = gettext(opdescs[i].help_text);
-			descs.push_back(std::pair<std::string,std::string>(it->first, helptext));
+			if ((is_newsbeuter && op >= OP_NB_MIN && op < OP_NB_MAX) || (!is_newsbeuter && op > OP_PB_MIN && op < OP_PB_MAX)) {
+				std::string helptext;
+				for (int i=0;opdescs[i].help_text;++i)
+					if (opdescs[i].op == op)
+						helptext = gettext(opdescs[i].help_text);
+				descs.push_back(std::pair<std::string,std::string>(it->first, helptext));
+			}
 		}
 	}
 }
@@ -105,6 +114,11 @@ operation keymap::get_opcode(const std::string& opstr) {
 		{ "clear-tag", OP_CLEARTAG },
 		{ "select-tag", OP_SETTAG },
 		{ "open-search", OP_SEARCH },
+		{ "pb-download", OP_PB_DOWNLOAD },
+		{ "pb-cancel", OP_PB_CANCEL },
+		{ "pb-delete", OP_PB_DELETE },
+		{ "pb-purge", OP_PB_PURGE },
+		{ "pb-toggle-download-all", OP_PB_TOGGLE_DLALL },
 		{ NULL, OP_NIL }
 	};
 	for (int i=0;opcode_map[i].opstr;++i) {

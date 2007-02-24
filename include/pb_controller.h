@@ -37,6 +37,9 @@ namespace podbeuter {
 			unsigned int get_maxdownloads();
 			void start_downloads();
 
+			void increase_parallel_downloads();
+			void decrease_parallel_downloads();
+
 		private:
 			pb_view * v;
 			std::string config_file;
@@ -46,6 +49,8 @@ namespace podbeuter {
 			std::vector<download> downloads_;
 
 			std::string config_dir;
+
+			unsigned int max_dls;
 
 			queueloader * ql;
 	};

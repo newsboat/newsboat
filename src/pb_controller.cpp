@@ -33,7 +33,7 @@ void ctrl_c_action(int sig) {
 
 namespace podbeuter {
 
-pb_controller::pb_controller() : v(0), config_file("config"), queue_file("queue"), cfg(0), view_update_(true), ql(0) { 
+pb_controller::pb_controller() : v(0), config_file("config"), queue_file("queue"), cfg(0), view_update_(true),  max_dls(1), ql(0) { 
 	std::ostringstream cfgfile;
 
 	char * cfgdir;
@@ -140,6 +140,8 @@ void pb_controller::run(int argc, char * argv[]) {
 		return;	
 	}
 
+	max_dls = cfg->get_configvalue_as_int("max-downloads");
+
 	std::cout << _("done.") << std::endl;
 
 	ql = new queueloader(queue_file, this);
@@ -204,7 +206,7 @@ unsigned int pb_controller::downloads_in_progress() {
 }
 
 unsigned int pb_controller::get_maxdownloads() {
-	return cfg->get_configvalue_as_int("max-downloads");
+	return max_dls;
 }
 
 void pb_controller::reload_queue() {
@@ -224,4 +226,14 @@ void pb_controller::start_downloads() {
 	}
 }
 
+void pb_controller::increase_parallel_downloads() {
+	++max_dls;
 }
+
+void pb_controller::decrease_parallel_downloads() {
+	if (max_dls > 1)
+		--max_dls;
+}
+
+
+} // namespace
