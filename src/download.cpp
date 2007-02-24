@@ -43,6 +43,8 @@ const char * download::status_text() {
 			return _("deleted");
 		case DL_FINISHED:
 			return _("finished");
+		case DL_FAILED:
+			return _("failed");
 		default:
 			return _("unknown (bug).");
 	}

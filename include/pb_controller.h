@@ -23,6 +23,8 @@ namespace podbeuter {
 
 			void usage(const char * argv0);
 
+			std::string get_dlpath();
+
 		private:
 			pb_view * v;
 			std::string config_file;

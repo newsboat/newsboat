@@ -12,6 +12,7 @@ namespace podbeuter {
 			queueloader(const std::string& file, pb_controller * c = 0);
 			void load(std::vector<download>& downloads);
 		private:
+			std::string get_filename(const std::string& str);
 			std::string queuefile;
 			pb_controller * ctrl;
 	};

@@ -25,32 +25,46 @@ void poddlthread::run() {
 	curl_easy_setopt(easyhandle, CURLOPT_PROGRESSFUNCTION, progress_callback);
 	curl_easy_setopt(easyhandle, CURLOPT_PROGRESSDATA, this);
 
-	dl->set_status(DL_DOWNLOADING);
+	f.open(dl->filename(), std::fstream::out);
 
-	CURLcode success = curl_easy_perform(easyhandle);
+	if (f.is_open()) {
 
-	if (0 == success)
-		dl->set_status(DL_FINISHED);
-	else if (dl->status() != DL_CANCELLED)
+		dl->set_status(DL_DOWNLOADING);
+
+		CURLcode success = curl_easy_perform(easyhandle);
+
+		f.close();
+
+		if (0 == success)
+			dl->set_status(DL_FINISHED);
+		else if (dl->status() != DL_CANCELLED) {
+			dl->set_status(DL_FAILED);
+			::unlink(dl->filename());
+		}
+	} else {
 		dl->set_status(DL_FAILED);
+	}
+
+	curl_easy_cleanup(easyhandle);
 }
 
 static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp) {
 	poddlthread * thread = (poddlthread *)userp;
-	std::cerr << "my_write_data(...," << size << "," << nmemb << ",...) called" << std::endl;
+	// std::cerr << "my_write_data(...," << size << "," << nmemb << ",...) called" << std::endl;
 	return thread->write_data(buffer, size, nmemb);
 }
 
 static int progress_callback(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow) {
 	poddlthread * thread = (poddlthread *)clientp;
-	std::cerr << "progress_callback(...," << dltotal << "," << dlnow << ",...) called" << std::endl;
+	// std::cerr << "progress_callback(...," << dltotal << "," << dlnow << ",...) called" << std::endl;
 	return thread->progress(dlnow, dltotal);
 }
 
 size_t poddlthread::write_data(void * buffer, size_t size, size_t nmemb) {
 	if (dl->status() == DL_CANCELLED)
 		return 0;
-	return size * nmemb;
+	f.write(static_cast<char *>(buffer), size * nmemb);
+	return f.bad() ? 0 : size * nmemb;
 }
 
 int poddlthread::progress(double dlnow, double dltotal) {

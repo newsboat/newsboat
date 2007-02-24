@@ -123,4 +123,8 @@ void pb_controller::usage(const char * argv0) {
 	::exit(EXIT_FAILURE);
 }
 
+std::string pb_controller::get_dlpath() {
+	return cfg->get_configvalue("download-path");
+}
+
 }

@@ -17,6 +17,7 @@ configcontainer::configcontainer()
 	config_data["reload-time"] = "30";
 	config_data["max-items"] = "0";
 	config_data["save-path"] = "~/";
+	config_data["download-path"] = "~/";
 }
 
 configcontainer::~configcontainer()
@@ -34,6 +35,7 @@ void configcontainer::register_commands(configparser& cfgparser)
 	cfgparser.register_handler("auto-reload", this);
 	cfgparser.register_handler("reload-time", this);
 	cfgparser.register_handler("save-path", this);
+	cfgparser.register_handler("download-path", this);
 }
 
 action_handler_status configcontainer::handle_action(const std::string& action, const std::vector<std::string>& params) {
@@ -82,6 +84,12 @@ action_handler_status configcontainer::handle_action(const std::string& action, 
 		config_data[action] = params[0];
 		return AHS_OK;
 	} else if (action == "save-path") {
+		if (params.size() < 1) {
+			return AHS_TOO_FEW_PARAMS;
+		}
+		config_data[action] = params[0];
+		return AHS_OK;
+	} else if (action == "download-path") {
 		if (params.size() < 1) {
 			return AHS_TOO_FEW_PARAMS;
 		}

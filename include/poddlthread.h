@@ -3,6 +3,7 @@
 
 #include <thread.h>
 #include <download.h>
+#include <fstream>
 
 namespace podbeuter {
 
@@ -16,6 +17,7 @@ class poddlthread : public newsbeuter::thread {
 		virtual void run();
 	private:
 		download * dl;
+		std::ofstream f;
 };
 
 }
