@@ -122,6 +122,8 @@ operation keymap::get_opcode(const std::string& opstr) {
 		{ "pb-delete", OP_PB_DELETE },
 		{ "pb-purge", OP_PB_PURGE },
 		{ "pb-toggle-download-all", OP_PB_TOGGLE_DLALL },
+		{ "pb-increase-max-dls", OP_PB_MOREDL },
+		{ "pb-decrease-max-dls", OP_PB_LESSDL },
 		{ NULL, OP_NIL }
 	};
 	for (int i=0;opcode_map[i].opstr;++i) {

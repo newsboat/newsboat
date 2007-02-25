@@ -5,6 +5,8 @@ TODO:
 	join two subsequent text nodes separated by a comment
 - implement podcast support
 	- write podbeuter.1 manpage
+	- write "advanced topics - podcasts" section in documentation
+	- test more thoroughly
 - fill table with html entities
 - do entitity decoding for titles (this may be controversial...)
 
