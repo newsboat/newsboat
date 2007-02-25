@@ -100,7 +100,9 @@ std::string queueloader::get_filename(const std::string& str) {
 	}
 	if (fn[fn.length()-1] != NEWSBEUTER_PATH_SEP[0])
 		fn.append(NEWSBEUTER_PATH_SEP);
-	char * base = basename(str.c_str());
+	char buf[1024];
+	snprintf(buf, sizeof(buf), "%s", str.c_str());
+	char * base = basename(buf);
 	if (!base || strlen(base) == 0) {
 		char buf[128];
 		time_t t = time(NULL);

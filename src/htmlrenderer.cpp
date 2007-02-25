@@ -30,6 +30,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 	std::string curline;
 	int indent_level = 0;
 	bool inside_list = false, inside_li = false, is_ol = false, inside_pre = false;
+	bool itunes_hack = false;
 	unsigned int ol_count = 1;
 	
 	xmlpullparser xpp;
@@ -63,6 +64,8 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					if (curline.length() > 0)
 						lines.push_back(curline);
 					prepare_newline(curline, indent_level);	
+				} else if (xpp.getText() == "ituneshack") {
+					itunes_hack = true;
 				} else if (xpp.getText() == "img") {
 					std::string imgurl;
 					try {
@@ -172,7 +175,34 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 			case xmlpullparser::TEXT:
 				{
 					GetLogger().log(LOG_DEBUG,"htmlrenderer::render: found text `%s'",xpp.getText().c_str());
-					if (inside_pre) {
+					if (itunes_hack) {
+						std::vector<std::string> words = utils::tokenize_nl(xpp.getText());
+						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it) {
+							if (*it == "\n") {
+								lines.push_back(curline);
+								prepare_newline(curline, indent_level);
+							} else {
+								std::vector<std::string> words = utils::tokenize_spaced(*it);
+								unsigned int i=0;
+								bool new_line = false;
+								for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it,++i) {
+									if ((curline.length() + it->length()) >= w) {
+										if (curline.length() > 0)
+											lines.push_back(curline);
+										prepare_newline(curline, indent_level);
+										new_line = true;
+									}
+									if (new_line) {
+										if (*it != " ")
+											curline.append(*it);
+										new_line = false;
+									} else {
+										curline.append(*it);
+									}
+								}
+							}
+						}
+					} else if (inside_pre) {
 						std::vector<std::string> words = utils::tokenize_nl(xpp.getText());
 						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it) {
 							if (*it == "\n") {

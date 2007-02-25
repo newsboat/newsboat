@@ -125,9 +125,9 @@ rss_feed rss_parser::parse() {
 			if (content->value) {
 				char * str = stringprep_convert(content->value, stringprep_locale_charset(), encoding);
 				if (str) {
-					std::string desc = "<pre>";
+					std::string desc = "<ituneshack>";
 					desc.append(str);
-					desc.append("</pre>");
+					desc.append("</ituneshack>");
 					x.set_description(desc);
 					free(str);
 					GetLogger().log(LOG_DEBUG, "rss_parser::parse: conversion was successful: %s\n", x.description().c_str());
