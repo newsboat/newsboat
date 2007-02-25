@@ -156,8 +156,11 @@ rss_feed rss_parser::parse() {
 			
 		if (item->guid)
 			x.set_guid(item->guid);
-		else
+		else if (item->link)
 			x.set_guid(item->link); // XXX hash something to get a better alternative GUID
+		else if (item->title)
+			x.set_guid(item->title);
+		// ...else?! that's too bad.
 
 		if (item->enclosure_url) {
 			x.set_enclosure_url(item->enclosure_url);
