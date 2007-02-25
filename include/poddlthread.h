@@ -5,6 +5,9 @@
 #include <download.h>
 #include <fstream>
 
+#include <sys/time.h>
+#include <time.h>
+
 namespace podbeuter {
 
 class poddlthread : public newsbeuter::thread {
@@ -15,9 +18,13 @@ class poddlthread : public newsbeuter::thread {
 		int progress(double dlnow, double dltotal);
 	protected:
 		virtual void run();
+		double compute_kbps();
 	private:
 		download * dl;
 		std::ofstream f;
+		timeval tv1;
+		timeval tv2;
+		size_t bytecount;
 };
 
 }

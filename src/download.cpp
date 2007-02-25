@@ -70,4 +70,12 @@ void download::set_status(dlstatus_t dls) {
 	dlstatus = dls;
 }
 
+void download::set_kbps(double kbps) {
+	curkbps = kbps;
+}
+
+double download::kbps() {
+	return curkbps;
+}
+
 }

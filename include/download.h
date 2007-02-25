@@ -22,7 +22,8 @@ class download {
 		void set_url(const std::string& url);
 		void set_progress(double cur, double max);
 		void set_status(dlstatus_t dls);
-
+		void set_kbps(double kbps);
+		double kbps();
 
 	private:
 		std::string fn;
@@ -30,6 +31,7 @@ class download {
 		dlstatus_t dlstatus;
 		float cursize;
 		float totalsize;
+		double curkbps;
 		pb_controller * ctrl;
 };
 

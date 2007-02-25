@@ -2,6 +2,7 @@
 #include <logger.h>
 #include <fstream>
 #include <config.h>
+#include <libgen.h>
 
 using namespace newsbeuter;
 

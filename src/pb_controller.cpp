@@ -215,6 +215,18 @@ void pb_controller::reload_queue() {
 	}
 }
 
+double pb_controller::get_total_kbps() {
+	double result = 0.0;
+	if (downloads_.size() > 0) {
+		for (std::vector<download>::iterator it=downloads_.begin();it!=downloads_.end();++it) {
+			if (it->status() == DL_DOWNLOADING) {
+				result += it->kbps();
+			}
+		}
+	}
+	return result;
+}
+
 void pb_controller::start_downloads() {
 	int dl2start = get_maxdownloads() - downloads_in_progress();
 	for (std::vector<download>::iterator it=downloads_.begin();dl2start > 0 && it!=downloads_.end();++it) {

@@ -40,6 +40,8 @@ namespace podbeuter {
 			void increase_parallel_downloads();
 			void decrease_parallel_downloads();
 
+			double get_total_kbps();
+
 		private:
 			pb_view * v;
 			std::string config_file;

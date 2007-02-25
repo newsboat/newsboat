@@ -14,6 +14,9 @@ poddlthread::~poddlthread() {
 }
 
 void poddlthread::run() {
+	gettimeofday(&tv1, NULL);
+	++bytecount;
+
 	CURL * easyhandle = curl_easy_init();
 	curl_easy_setopt(easyhandle, CURLOPT_URL, dl->url());
 	// set up write functions:
@@ -64,14 +67,34 @@ size_t poddlthread::write_data(void * buffer, size_t size, size_t nmemb) {
 	if (dl->status() == DL_CANCELLED)
 		return 0;
 	f.write(static_cast<char *>(buffer), size * nmemb);
+	bytecount += (size * nmemb);
 	return f.bad() ? 0 : size * nmemb;
 }
 
 int poddlthread::progress(double dlnow, double dltotal) {
 	if (dl->status() == DL_CANCELLED)
 		return -1;
+	gettimeofday(&tv2, NULL);
+	double kbps = compute_kbps();
+	if (kbps > 9999.99) {
+		kbps = 0.0;
+		gettimeofday(&tv1, NULL);
+		bytecount = 0;
+	}
+	dl->set_kbps(kbps);
 	dl->set_progress(dlnow, dltotal);
 	return 0;
+}
+
+double poddlthread::compute_kbps() {
+	double result = 0.0;
+
+	double t1 = tv1.tv_sec + (tv1.tv_usec/(double)1000000);
+	double t2 = tv2.tv_sec + (tv2.tv_usec/(double)1000000);
+
+	result = (bytecount / (t2 - t1))/1024;
+
+	return result;
 }
 
 }
