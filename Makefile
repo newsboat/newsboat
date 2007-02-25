@@ -91,7 +91,7 @@ install: install-mo
 	$(INSTALL) $(PODBEUTER) $(prefix)/bin
 	$(MKDIR) $(prefix)/share/man/man1
 	$(INSTALL) doc/$(NEWSBEUTER).1 $(prefix)/share/man/man1
-	# $(INSTALL) doc/$(PODBEUTER).1 $(prefix)/share/man/man1 # TODO: create manpage for podbeuter
+	 $(INSTALL) doc/$(PODBEUTER).1 $(prefix)/share/man/man1
 	$(MKDIR) $(docdir)
 	$(INSTALL) -m 644 doc/xhtml/* $(docdir) || true
 
@@ -99,7 +99,7 @@ uninstall:
 	$(RM) $(prefix)/bin/$(NEWSBEUTER)
 	$(RM) $(prefix)/bin/$(PODBEUTER)
 	$(RM) $(prefix)/share/man/man1/$(NEWSBEUTER).1
-	# $(RM) $(prefix)/share/man/man1/$(PODBEUTER).1 # TODO
+	$(RM) $(prefix)/share/man/man1/$(PODBEUTER).1
 	$(RM) -r $(docdir)
 
 Makefile.deps: $(SRC)
