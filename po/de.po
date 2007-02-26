@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-24 19:03+0100\n"
+"POT-Creation-Date: 2007-02-26 13:36+0100\n"
 "PO-Revision-Date: 2007-02-21 13:03+0100\n"
 "Last-Translator: Andreas Krennmair <ak@synflood.at>\n"
 "Language-Team: Andreas Krennmair <ak@synflood.at>\n"
@@ -184,8 +184,8 @@ msgid "failed"
 msgstr "fehlgeschlagen"
 
 #: src/download.cpp:49
-msgid "already downloaded"
-msgstr "bereits heruntergeladen"
+msgid "incomplete"
+msgstr "unvollständig"
 
 #: src/download.cpp:51
 msgid "unknown (bug)."
@@ -287,46 +287,60 @@ msgstr "Automatischen Download ein/ausschalten"
 msgid "Cleaning up queue..."
 msgstr "Bereinige Warteschlange..."
 
-#: src/pb_view.cpp:34
+#: src/pb_controller.cpp:166
+#, c-format
+msgid ""
+"%s %s\n"
+"usage %s [-C <file>] [-q <file>] [-h]\n"
+"-C <configfile> read configuration from <configfile>\n"
+"-q <queuefile>  use <queuefile> as queue file\n"
+"-h              this help\n"
+msgstr ""
+"%s %s\n"
+"Verwendung: %s [-C <datei>] [-q <datei>] [-h]\n"
+"-C <configfile> Konfiguration aus <configfile> lesen\n"
+"-q <queuefile>  <queuefile> als Warteschlangendatei verwenden\n"
+"-h              diese Hilfe\n"
+
+#: src/pb_view.cpp:36
 #, c-format
 msgid " - %u parallel downloads"
 msgstr " - %u parallele Downloads"
 
-#: src/pb_view.cpp:38
-#, c-format
-msgid "Queue (%u downloads in progress, %u total)%s"
-msgstr "Warteschlange (%u Download im Gange, %u insgesamt)%s"
+#: src/pb_view.cpp:40
+msgid "Queue (%u downloads in progress, %u total) - %.2f kb/s total%s"
+msgstr "Warteschlange (%u Download im Gange, %u insgesamt) - %.2f kb/s insgesamt%s"
 
-#: src/pb_view.cpp:88
+#: src/pb_view.cpp:91
 msgid "Error: can't quit: download(s) in progress."
 msgstr "Fehler: kann nicht beenden: Download(s) im Gange."
 
-#: src/pb_view.cpp:136
+#: src/pb_view.cpp:139
 msgid "Error: unable to perform operation: download(s) in progress."
 msgstr "Fehler: kann Vorgang nicht durchführen: Download(s) im Gange."
 
-#: src/pb_view.cpp:163 src/view.cpp:1394 src/view.cpp:1410 src/view.cpp:1420
+#: src/pb_view.cpp:166 src/view.cpp:1394 src/view.cpp:1410 src/view.cpp:1420
 #: src/view.cpp:1447 src/view.cpp:1462 src/view.cpp:1482
 msgid "Quit"
 msgstr "Beenden"
 
-#: src/pb_view.cpp:164
+#: src/pb_view.cpp:167
 msgid "Download"
 msgstr "Download"
 
-#: src/pb_view.cpp:165 src/view.cpp:1437 src/view.cpp:1471
+#: src/pb_view.cpp:168 src/view.cpp:1437 src/view.cpp:1471
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: src/pb_view.cpp:166
+#: src/pb_view.cpp:169
 msgid "Delete"
 msgstr "Löschen"
 
-#: src/pb_view.cpp:167
+#: src/pb_view.cpp:170
 msgid "Purge Finished"
 msgstr "Fertige aufräumen"
 
-#: src/pb_view.cpp:168
+#: src/pb_view.cpp:171
 msgid "Toggle Automatic Download"
 msgstr "Automatischen Download umschalten"
 
@@ -445,10 +459,12 @@ msgid "Added %s to download queue."
 msgstr "%s zur Download-Warteschlange hinzugefügt."
 
 #: src/view.cpp:1079
+#, c-format
 msgid "Saved article to %s."
 msgstr "Artikel nach %s gespeichert."
 
 #: src/view.cpp:1082
+#, c-format
 msgid "Error: couldn't write article to file %s"
 msgstr "Fehler: konnte Artikel nicht nach %s speichern"
 
@@ -561,3 +577,4 @@ msgstr "leerer Tag gefunden"
 #: src/xmlpullparser.cpp:257
 msgid "EOF found while reading XML tag"
 msgstr "Ende der Datei gefunden beim Lesen eines XML-Tags"
+

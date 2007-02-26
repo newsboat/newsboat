@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-24 19:03+0100\n"
+"POT-Creation-Date: 2007-02-26 13:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -170,7 +170,7 @@ msgid "failed"
 msgstr ""
 
 #: src/download.cpp:49
-msgid "already downloaded"
+msgid "incomplete"
 msgstr ""
 
 #: src/download.cpp:51
@@ -273,46 +273,56 @@ msgstr ""
 msgid "Cleaning up queue..."
 msgstr ""
 
-#: src/pb_view.cpp:34
+#: src/pb_controller.cpp:166
+#, c-format
+msgid ""
+"%s %s\n"
+"usage %s [-C <file>] [-q <file>] [-h]\n"
+"-C <configfile> read configuration from <configfile>\n"
+"-q <queuefile>  use <queuefile> as queue file\n"
+"-h              this help\n"
+msgstr ""
+
+#: src/pb_view.cpp:36
 #, c-format
 msgid " - %u parallel downloads"
 msgstr ""
 
-#: src/pb_view.cpp:38
+#: src/pb_view.cpp:40
 #, c-format
-msgid "Queue (%u downloads in progress, %u total)%s"
+msgid "Queue (%u downloads in progress, %u total) - %.2f kb/s total%s"
 msgstr ""
 
-#: src/pb_view.cpp:88
+#: src/pb_view.cpp:91
 msgid "Error: can't quit: download(s) in progress."
 msgstr ""
 
-#: src/pb_view.cpp:136
+#: src/pb_view.cpp:139
 msgid "Error: unable to perform operation: download(s) in progress."
 msgstr ""
 
-#: src/pb_view.cpp:163 src/view.cpp:1394 src/view.cpp:1410 src/view.cpp:1420
+#: src/pb_view.cpp:166 src/view.cpp:1394 src/view.cpp:1410 src/view.cpp:1420
 #: src/view.cpp:1447 src/view.cpp:1462 src/view.cpp:1482
 msgid "Quit"
 msgstr ""
 
-#: src/pb_view.cpp:164
+#: src/pb_view.cpp:167
 msgid "Download"
 msgstr ""
 
-#: src/pb_view.cpp:165 src/view.cpp:1437 src/view.cpp:1471
+#: src/pb_view.cpp:168 src/view.cpp:1437 src/view.cpp:1471
 msgid "Cancel"
 msgstr ""
 
-#: src/pb_view.cpp:166
+#: src/pb_view.cpp:169
 msgid "Delete"
 msgstr ""
 
-#: src/pb_view.cpp:167
+#: src/pb_view.cpp:170
 msgid "Purge Finished"
 msgstr ""
 
-#: src/pb_view.cpp:168
+#: src/pb_view.cpp:171
 msgid "Toggle Automatic Download"
 msgstr ""
 
