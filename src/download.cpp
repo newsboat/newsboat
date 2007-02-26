@@ -27,7 +27,7 @@ double download::percents_finished() {
 	if (totalsize < 1) {
 		return 0.0;
 	} else {
-		return (100*(offs + cursize))/totalsize;
+		return (100*(offs + cursize))/(offs + totalsize);
 	}
 }
 
