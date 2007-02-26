@@ -2,6 +2,7 @@
 #include <curl/curl.h>
 #include <iostream>
 #include <logger.h>
+#include <config.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -25,6 +26,12 @@ void poddlthread::run() {
 	++bytecount;
 
 	CURL * easyhandle = curl_easy_init();
+
+	char ua[128];
+	snprintf(ua, sizeof(ua), "podbeuter - %s", USER_AGENT);
+
+	curl_easy_setopt(easyhandle, CURLOPT_USERAGENT, ua);
+
 	curl_easy_setopt(easyhandle, CURLOPT_URL, dl->url());
 	// set up write functions:
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
