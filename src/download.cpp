@@ -27,7 +27,7 @@ double download::percents_finished() {
 	if (totalsize < 1) {
 		return 0.0;
 	} else {
-		return (100*cursize)/totalsize;
+		return (100*(offs + cursize))/totalsize;
 	}
 }
 
@@ -46,7 +46,7 @@ const char * download::status_text() {
 		case DL_FAILED:
 			return _("failed");
 		case DL_ALREADY_DOWNLOADED:
-			return _("already downloaded");
+			return _("incomplete");
 		default:
 			return _("unknown (bug).");
 	}
@@ -76,6 +76,10 @@ void download::set_kbps(double kbps) {
 
 double download::kbps() {
 	return curkbps;
+}
+
+void download::set_offset(unsigned long offset) {
+	offs = offset;
 }
 
 }

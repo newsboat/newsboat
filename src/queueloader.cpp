@@ -62,10 +62,9 @@ void queueloader::reload(std::vector<download>& downloads) {
 					if (access(fn.c_str(), F_OK)==0) {
 						GetLogger().log(LOG_INFO, "queueloader::reload: found `%s' on file system -> mark as already downloaded", fn.c_str());
 						d.set_status(DL_ALREADY_DOWNLOADED); // TODO: scrap DL_ALREADY_DOWNLOADED state
-					} else {
-						d.set_url(line);
-						dltemp.push_back(d);
 					}
+					d.set_url(line);
+					dltemp.push_back(d);
 				}
 			}
 		} while (!f.eof());

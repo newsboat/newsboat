@@ -24,6 +24,7 @@ class download {
 		void set_status(dlstatus_t dls);
 		void set_kbps(double kbps);
 		double kbps();
+		void set_offset(unsigned long offset);
 
 	private:
 		std::string fn;
@@ -32,6 +33,7 @@ class download {
 		float cursize;
 		float totalsize;
 		double curkbps;
+		unsigned long offs;
 		pb_controller * ctrl;
 };
 

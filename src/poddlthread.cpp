@@ -1,6 +1,13 @@
 #include <poddlthread.h>
 #include <curl/curl.h>
 #include <iostream>
+#include <logger.h>
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+using namespace newsbeuter;
 
 namespace podbeuter {
 
@@ -28,7 +35,18 @@ void poddlthread::run() {
 	curl_easy_setopt(easyhandle, CURLOPT_PROGRESSFUNCTION, progress_callback);
 	curl_easy_setopt(easyhandle, CURLOPT_PROGRESSDATA, this);
 
-	f.open(dl->filename(), std::fstream::out);
+	struct stat sb;
+
+	if (stat(dl->filename(), &sb) == -1) {
+		GetLogger().log(LOG_INFO, "poddlthread::run: stat failed: starting normal download");
+		f.open(dl->filename(), std::fstream::out);
+		dl->set_offset(0);
+	} else {
+		GetLogger().log(LOG_INFO, "poddlthread::run: stat ok: starting download from %u", sb.st_size);
+		curl_easy_setopt(easyhandle, CURLOPT_RESUME_FROM, sb.st_size);
+		dl->set_offset(sb.st_size);
+		f.open(dl->filename(), std::fstream::out | std::fstream::app);
+	}
 
 	if (f.is_open()) {
 
@@ -37,6 +55,8 @@ void poddlthread::run() {
 		CURLcode success = curl_easy_perform(easyhandle);
 
 		f.close();
+
+		GetLogger().log(LOG_INFO,"poddlthread::run: curl_easy_perform rc = %u", success);
 
 		if (0 == success)
 			dl->set_status(DL_FINISHED);
