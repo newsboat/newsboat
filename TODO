@@ -4,10 +4,8 @@ TODO:
 	ignore comments
 	join two subsequent text nodes separated by a comment
 - implement podcast support
-	- write podbeuter.1 manpage
 	- test more thoroughly
 	- implement "start player" function in podbeuter.
-	- implement "resume download" function
 - fill table with html entities
 - do entitity decoding for titles (this may be controversial...)
 
@@ -65,3 +63,5 @@ DONE:
 	- the actual downloading and saving is done by "podbeuter", which is a more a download manager that dequeues entries and downloads them.
 	- write "advanced topics - podcasts" section in documentation
 	- improved rendering of itunes:summary descriptions.
+	- implement "resume download" function
+	- write podbeuter.1 manpage
