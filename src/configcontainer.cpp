@@ -20,6 +20,7 @@ configcontainer::configcontainer()
 	config_data["download-path"] = "~/";
 	config_data["max-downloads"] = "1";
 	config_data["podcast-auto-enqueue"] = "no";
+	config_data["planet-limit"] = "50";
 }
 
 configcontainer::~configcontainer()
@@ -40,6 +41,7 @@ void configcontainer::register_commands(configparser& cfgparser)
 	cfgparser.register_handler("download-path", this);
 	cfgparser.register_handler("max-downloads", this);
 	cfgparser.register_handler("podcast-auto-enqueue", this);
+	cfgparser.register_handler("planet-limit", this);
 }
 
 action_handler_status configcontainer::handle_action(const std::string& action, const std::vector<std::string>& params) {
@@ -94,6 +96,12 @@ action_handler_status configcontainer::handle_action(const std::string& action, 
 		config_data[action] = params[0];
 		return AHS_OK;
 	} else if (action == "download-path") {
+		if (params.size() < 1) {
+			return AHS_TOO_FEW_PARAMS;
+		}
+		config_data[action] = params[0];
+		return AHS_OK;
+	} else if (action == "planet-limit") {
 		if (params.size() < 1) {
 			return AHS_TOO_FEW_PARAMS;
 		}

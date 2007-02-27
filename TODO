@@ -8,6 +8,12 @@ TODO:
 	- implement "start player" function in podbeuter.
 - fill table with html entities
 - do entitity decoding for titles (this may be controversial...)
+- implement planet support
+	- implement this as an additional tool "nb-planet"
+	- options:
+		- planet-output ~/public_html/planet.html (that's also the default)
+		- planet_title "My Planet"
+		- planet-limit 50 (display the 50 latest articles)
 
 longteam goals to reach:
 - add scripting support

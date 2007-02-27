@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 
+#include <rss.h>
+
 namespace newsbeuter {
 
 class utils {
@@ -12,6 +14,7 @@ class utils {
 		static std::vector<std::string> tokenize_spaced(const std::string& str, std::string delimiters = " \r\n\t");
 		static std::vector<std::string> tokenize_nl(const std::string& str, std::string delimiters = "\r\n");
 		static std::vector<std::string> tokenize_quoted(const std::string& str, std::string delimiters = " \r\n\t");
+		static void planet_generate_html(std::vector<rss_feed>& feeds, std::vector<rss_item>& items);
 };
 
 }

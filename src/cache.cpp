@@ -74,6 +74,34 @@ static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** azCol
 	return 0;
 }
 
+static int rssitemvector_callback(void * vector, int argc, char ** argv, char ** azColName) {
+	std::vector<rss_item> * items = (std::vector<rss_item> *)vector;
+
+	assert (argc == 11);
+	rss_item item(NULL);
+	item.set_guid(argv[0]);
+	item.set_title(argv[1]);
+	item.set_author(argv[2]);
+	item.set_link(argv[3]);
+	
+	std::istringstream is(argv[4]);
+	time_t t;
+	is >> t;
+	item.set_pubDate(t);
+	
+	item.set_description(argv[5]);
+	item.set_unread((std::string("1") == argv[6]));
+
+	item.set_feedurl(argv[7]);
+
+	item.set_enclosure_url(argv[8] ? argv[8] : "");
+	item.set_enclosure_type(argv[9] ? argv[9] : "");
+	item.set_enqueued((std::string("1") == (argv[10] ? argv[10] : "")));
+
+	items->push_back(item);
+	return 0;
+}
+
 static int search_item_callback(void * myfeed, int argc, char ** argv, char ** azColName) {
 	std::vector<rss_item> * items = (std::vector<rss_item> *)myfeed;
 	assert (argc == 11);
@@ -287,6 +315,21 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 		}	
 		feed.items().erase(it, feed.items().end()); // delete old entries
 	}
+	mtx->unlock();
+}
+
+void cache::get_latest_items(std::vector<rss_item>& items, unsigned int limit) {
+	mtx->lock();
+	char * query = sqlite3_mprintf("SELECT guid,title,author,url,pubDate,content,unread,feedurl,enclosure_url,enclosure_type,enqueued "
+									"FROM rss_item ORDER BY pubDate DESC, id DESC LIMIT %d;", limit);
+	GetLogger().log(LOG_DEBUG, "running query: %s", query);
+	int rc = sqlite3_exec(db, query, rssitemvector_callback, &items, NULL);
+	if (rc != SQLITE_OK) {
+		GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", query, rc);
+	}
+	assert(rc == SQLITE_OK);
+	free(query);
+
 	mtx->unlock();
 }
 
