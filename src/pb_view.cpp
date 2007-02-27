@@ -52,7 +52,7 @@ void pb_view::run() {
 				for (std::vector<download>::iterator it=ctrl->downloads().begin();it!=ctrl->downloads().end();++it,++i) {
 					char buf[1024];
 					std::ostringstream os;
-					snprintf(buf, sizeof(buf), " %4u [%5.1f %%] [%7.2f kb/s] %-20s %s -> %s", i+1, it->percents_finished(), it->kbps(), it->status_text(), it->url(), it->filename());
+					snprintf(buf, sizeof(buf), " %4u [%6.1fMB/%6.1fMB] [%5.1f %%] [%7.2f kb/s] %-20s %s -> %s", i+1, it->current_size()/(1024*1024), it->total_size()/(1024*1024), it->percents_finished(), it->kbps(), it->status_text(), it->url(), it->filename());
 					os << "{listitem[" << i << "] text:" << stfl::quote(buf) << "}";
 					code.append(os.str());
 				}

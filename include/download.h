@@ -26,6 +26,9 @@ class download {
 		double kbps();
 		void set_offset(unsigned long offset);
 
+		inline double current_size() { return cursize + offs; }
+		inline double total_size() { return totalsize + offs; }
+
 	private:
 		std::string fn;
 		std::string url_;

@@ -5,7 +5,7 @@
 
 namespace podbeuter {
 
-download::download(pb_controller * c) : dlstatus(DL_QUEUED), cursize(0), totalsize(0), ctrl(c) {
+download::download(pb_controller * c) : dlstatus(DL_QUEUED), cursize(0.0), totalsize(0.0), curkbps(0.0), offs(0), ctrl(c) {
 }
 
 download::~download() {
