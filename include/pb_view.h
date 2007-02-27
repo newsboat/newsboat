@@ -28,10 +28,13 @@ class pb_view {
 			char * text;
 		};
 
+		void run_help();
 		void set_dllist_keymap_hint();
+		void set_help_keymap_hint();
 		std::string prepare_keymaphint(keymap_hint_entry * hints);
 		pb_controller * ctrl;
 		newsbeuter::stfl::form dllist_form;
+		newsbeuter::stfl::form help_form;
 		newsbeuter::keymap * keys;
 };
 

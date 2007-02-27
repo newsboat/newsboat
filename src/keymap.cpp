@@ -9,32 +9,33 @@ namespace newsbeuter {
 struct op_desc {
 	operation op;
 	char * help_text;
+	unsigned short flags;
 };
 
 op_desc opdescs[] = {
-	{ OP_OPEN, _("Open feed/article") },
-	{ OP_QUIT, _("Return to previous dialog/Quit") },
-	{ OP_RELOAD, _("Reload currently selected feed") },
-	{ OP_RELOADALL, _("Reload all feeds") },
-	{ OP_MARKFEEDREAD, _("Mark feed read") },
-	{ OP_MARKALLFEEDSREAD, _("Mark all feeds read") },
-	{ OP_SAVE, _("Save article") },
-	{ OP_NEXTUNREAD, _("Go to next unread article") },
-	{ OP_OPENINBROWSER, _("Open article in browser") },
-	{ OP_HELP, _("Open help dialog") },
-	{ OP_TOGGLESOURCEVIEW, _("Toggle source view") },
-	{ OP_TOGGLEITEMREAD, _("Toggle read status for article") },
-	{ OP_TOGGLESHOWREAD, _("Toggle show read feeds") },
-	{ OP_SHOWURLS, _("Show URLs in current article") },
-	{ OP_CLEARTAG, _("Clear current tag") },
-	{ OP_SETTAG, _("Select tag") },
-	{ OP_SEARCH, _("Open search dialog") },
-	{ OP_ENQUEUE, _("Add download to queue") },
-	{ OP_PB_DOWNLOAD, _("Download file") },
-	{ OP_PB_CANCEL, _("Cancel download") },
-	{ OP_PB_DELETE, _("Mark download as deleted") },
-	{ OP_PB_PURGE, _("Purge finished and deleted downloads from queue") },
-	{ OP_PB_TOGGLE_DLALL, _("Toggle automatic download on/off") },
+	{ OP_OPEN, _("Open feed/article"), KM_NEWSBEUTER },
+	{ OP_QUIT, _("Return to previous dialog/Quit"), KM_BOTH },
+	{ OP_RELOAD, _("Reload currently selected feed"), KM_NEWSBEUTER },
+	{ OP_RELOADALL, _("Reload all feeds"), KM_NEWSBEUTER },
+	{ OP_MARKFEEDREAD, _("Mark feed read"), KM_NEWSBEUTER },
+	{ OP_MARKALLFEEDSREAD, _("Mark all feeds read"), KM_NEWSBEUTER },
+	{ OP_SAVE, _("Save article"), KM_NEWSBEUTER },
+	{ OP_NEXTUNREAD, _("Go to next unread article"), KM_NEWSBEUTER },
+	{ OP_OPENINBROWSER, _("Open article in browser"), KM_NEWSBEUTER },
+	{ OP_HELP, _("Open help dialog"), KM_BOTH },
+	{ OP_TOGGLESOURCEVIEW, _("Toggle source view"), KM_NEWSBEUTER },
+	{ OP_TOGGLEITEMREAD, _("Toggle read status for article"), KM_NEWSBEUTER },
+	{ OP_TOGGLESHOWREAD, _("Toggle show read feeds"), KM_NEWSBEUTER },
+	{ OP_SHOWURLS, _("Show URLs in current article"), KM_NEWSBEUTER },
+	{ OP_CLEARTAG, _("Clear current tag"), KM_NEWSBEUTER },
+	{ OP_SETTAG, _("Select tag"), KM_NEWSBEUTER },
+	{ OP_SEARCH, _("Open search dialog"), KM_NEWSBEUTER },
+	{ OP_ENQUEUE, _("Add download to queue"), KM_NEWSBEUTER },
+	{ OP_PB_DOWNLOAD, _("Download file"), KM_PODBEUTER },
+	{ OP_PB_CANCEL, _("Cancel download"), KM_PODBEUTER },
+	{ OP_PB_DELETE, _("Mark download as deleted"), KM_PODBEUTER },
+	{ OP_PB_PURGE, _("Purge finished and deleted downloads from queue"), KM_PODBEUTER },
+	{ OP_PB_TOGGLE_DLALL, _("Toggle automatic download on/off"), KM_PODBEUTER },
 	{ OP_NIL, NULL }
 };
 
@@ -69,15 +70,19 @@ keymap::keymap() {
 	keymap_["NIL"] = OP_NIL;
 }
 
-void keymap::get_keymap_descriptions(std::vector<std::pair<std::string,std::string> >& descs, bool is_newsbeuter) {
+void keymap::get_keymap_descriptions(std::vector<std::pair<std::string,std::string> >& descs, unsigned short flags) {
 	for (std::map<std::string,operation>::iterator it=keymap_.begin();it!=keymap_.end();++it) {
 		operation op = it->second;
 		if (op != OP_NIL) {
-			if ((is_newsbeuter && op >= OP_NB_MIN && op < OP_NB_MAX) || (!is_newsbeuter && op > OP_PB_MIN && op < OP_PB_MAX)) {
-				std::string helptext;
-				for (int i=0;opdescs[i].help_text;++i)
-					if (opdescs[i].op == op)
-						helptext = gettext(opdescs[i].help_text);
+			std::string helptext;
+			bool add = false;
+			for (int i=0;opdescs[i].help_text;++i) {
+				if (opdescs[i].op == op && opdescs[i].flags & flags) {
+					helptext = gettext(opdescs[i].help_text);
+					add = true;
+				}
+			}
+			if (add) {
 				descs.push_back(std::pair<std::string,std::string>(it->first, helptext));
 			}
 		}

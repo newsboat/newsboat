@@ -10,6 +10,10 @@
 
 // in configuration: bind-key <key> <operation>
 
+#define KM_NEWSBEUTER (1<<0)
+#define KM_PODBEUTER  (1<<1)
+#define KM_BOTH (KM_NEWSBEUTER | KM_PODBEUTER)
+
 namespace newsbeuter {
 
 	enum operation {	OP_NIL = 0, 
@@ -56,7 +60,7 @@ namespace newsbeuter {
 			operation get_operation(const std::string& keycode);
 			std::string getkey(operation );
 			virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
-			void get_keymap_descriptions(std::vector<std::pair<std::string,std::string> >& descs, bool is_newsbeuter);
+			void get_keymap_descriptions(std::vector<std::pair<std::string,std::string> >& descs, unsigned short flags);
 		private:
 			std::map<std::string,operation> keymap_;
 	};

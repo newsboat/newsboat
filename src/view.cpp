@@ -1257,7 +1257,7 @@ void view::run_help() {
 	help_form.set("head",_("Help"));
 	
 	std::vector<std::pair<std::string,std::string> > descs;
-	keys->get_keymap_descriptions(descs, true);
+	keys->get_keymap_descriptions(descs, KM_NEWSBEUTER);
 	
 	std::string code = "{list";
 	

@@ -1,10 +1,12 @@
 #include <pb_view.h>
 #include <pb_controller.h>
 #include <poddlthread.h>
-#include <dllist.h>
 #include <download.h>
 #include <config.h>
 #include <logger.h>
+
+#include <dllist.h>
+#include <help.h>
 
 #include <sstream>
 #include <iostream>
@@ -12,7 +14,7 @@
 using namespace podbeuter;
 using namespace newsbeuter;
 
-pb_view::pb_view(pb_controller * c) : ctrl(c), dllist_form(dllist_str), keys(0) { 
+pb_view::pb_view(pb_controller * c) : ctrl(c), dllist_form(dllist_str), help_form(help_str), keys(0) { 
 }
 
 pb_view::~pb_view() { 
@@ -142,6 +144,9 @@ void pb_view::run() {
 				}
 				ctrl->set_view_update_necessary(true);
 				break;
+			case OP_HELP:
+				run_help();
+				break;
 			default:
 				break;
 		}
@@ -149,6 +154,46 @@ void pb_view::run() {
 	} while (!quit);
 }
 
+void pb_view::run_help() {
+	set_help_keymap_hint();
+
+	help_form.set("head",_("Help"));
+	
+	std::vector<std::pair<std::string,std::string> > descs;
+	keys->get_keymap_descriptions(descs, KM_PODBEUTER);
+	
+	std::string code = "{list";
+	
+	for (std::vector<std::pair<std::string,std::string> >::iterator it=descs.begin();it!=descs.end();++it) {
+		std::string line = "{listitem text:";
+		std::string descline = it->first + std::string("\t") + it->second;
+		line.append(stfl::quote(descline));
+		line.append("}");
+		
+		code.append(line);
+	}
+	
+	code.append("}");
+	
+	help_form.modify("helptext","replace_inner",code);
+	
+	bool quit = false;
+	
+	do {
+		const char * event = help_form.run(0);
+		if (!event) continue;
+
+		operation op = keys->get_operation(event);
+
+		switch (op) {
+			case OP_QUIT:
+				quit = true;
+				break;
+			default:
+				break;
+		}
+	} while (!quit);
+}
 
 std::string pb_view::prepare_keymaphint(keymap_hint_entry * hints) {
 	std::string keymap_hint;
@@ -161,6 +206,15 @@ std::string pb_view::prepare_keymaphint(keymap_hint_entry * hints) {
 	return keymap_hint;	
 }
 
+void pb_view::set_help_keymap_hint() {
+	keymap_hint_entry hints[] = {
+		{ OP_QUIT, _("Quit") },
+		{ OP_NIL, NULL }
+	};
+	std::string keymap_hint = prepare_keymaphint(hints);
+	help_form.set("help", keymap_hint);
+}
+
 void pb_view::set_dllist_keymap_hint() {
 	keymap_hint_entry hints[] = {
 		{ OP_QUIT, _("Quit") },
@@ -169,6 +223,7 @@ void pb_view::set_dllist_keymap_hint() {
 		{ OP_PB_DELETE, _("Delete") },
 		{ OP_PB_PURGE, _("Purge Finished") },
 		{ OP_PB_TOGGLE_DLALL, _("Toggle Automatic Download") },
+		{ OP_HELP, _("Help") },
 		{ OP_NIL, NULL }
 	};
 
