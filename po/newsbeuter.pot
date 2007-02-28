@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-26 13:36+0100\n"
+"POT-Creation-Date: 2007-02-28 13:03+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/cache.cpp:116
+#: src/cache.cpp:144
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr ""
@@ -47,26 +47,28 @@ msgstr ""
 msgid "unknown command `%s'"
 msgstr ""
 
-#: src/controller.cpp:34 src/pb_controller.cpp:29
+#: src/controller.cpp:34 src/pb_controller.cpp:29 src/planet.cpp:29
 msgid "Segmentation fault."
 msgstr ""
 
-#: src/controller.cpp:48 src/pb_controller.cpp:45
+#: src/controller.cpp:48 src/pb_controller.cpp:45 src/planet.cpp:44
+#: src/planet.cpp:166
 msgid "Fatal error: couldn't determine home directory!"
 msgstr ""
 
-#: src/controller.cpp:50 src/pb_controller.cpp:47
+#: src/controller.cpp:50 src/pb_controller.cpp:47 src/planet.cpp:46
+#: src/planet.cpp:168
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
 
-#: src/controller.cpp:135 src/pb_controller.cpp:104
+#: src/controller.cpp:135 src/pb_controller.cpp:104 src/planet.cpp:113
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr ""
 
-#: src/controller.cpp:152
+#: src/controller.cpp:152 src/planet.cpp:124
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
@@ -78,7 +80,7 @@ msgstr ""
 msgid "Starting %s %s..."
 msgstr ""
 
-#: src/controller.cpp:164 src/pb_controller.cpp:116
+#: src/controller.cpp:164 src/pb_controller.cpp:116 src/planet.cpp:132
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr ""
@@ -117,7 +119,7 @@ msgstr ""
 msgid "%sLoading %s..."
 msgstr ""
 
-#: src/controller.cpp:339
+#: src/controller.cpp:339 src/planet.cpp:226
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr ""
@@ -177,95 +179,95 @@ msgstr ""
 msgid "unknown (bug)."
 msgstr ""
 
-#: src/keymap.cpp:15
+#: src/keymap.cpp:16
 msgid "Open feed/article"
 msgstr ""
 
-#: src/keymap.cpp:16
+#: src/keymap.cpp:17
 msgid "Return to previous dialog/Quit"
 msgstr ""
 
-#: src/keymap.cpp:17
+#: src/keymap.cpp:18
 msgid "Reload currently selected feed"
 msgstr ""
 
-#: src/keymap.cpp:18
+#: src/keymap.cpp:19
 msgid "Reload all feeds"
 msgstr ""
 
-#: src/keymap.cpp:19
+#: src/keymap.cpp:20
 msgid "Mark feed read"
 msgstr ""
 
-#: src/keymap.cpp:20
+#: src/keymap.cpp:21
 msgid "Mark all feeds read"
 msgstr ""
 
-#: src/keymap.cpp:21
+#: src/keymap.cpp:22
 msgid "Save article"
 msgstr ""
 
-#: src/keymap.cpp:22
+#: src/keymap.cpp:23
 msgid "Go to next unread article"
 msgstr ""
 
-#: src/keymap.cpp:23
+#: src/keymap.cpp:24
 msgid "Open article in browser"
 msgstr ""
 
-#: src/keymap.cpp:24
+#: src/keymap.cpp:25
 msgid "Open help dialog"
 msgstr ""
 
-#: src/keymap.cpp:25
+#: src/keymap.cpp:26
 msgid "Toggle source view"
 msgstr ""
 
-#: src/keymap.cpp:26
+#: src/keymap.cpp:27
 msgid "Toggle read status for article"
 msgstr ""
 
-#: src/keymap.cpp:27
+#: src/keymap.cpp:28
 msgid "Toggle show read feeds"
 msgstr ""
 
-#: src/keymap.cpp:28
+#: src/keymap.cpp:29
 msgid "Show URLs in current article"
 msgstr ""
 
-#: src/keymap.cpp:29
+#: src/keymap.cpp:30
 msgid "Clear current tag"
 msgstr ""
 
-#: src/keymap.cpp:30
+#: src/keymap.cpp:31
 msgid "Select tag"
 msgstr ""
 
-#: src/keymap.cpp:31
+#: src/keymap.cpp:32
 msgid "Open search dialog"
 msgstr ""
 
-#: src/keymap.cpp:32
+#: src/keymap.cpp:33
 msgid "Add download to queue"
 msgstr ""
 
-#: src/keymap.cpp:33
+#: src/keymap.cpp:34
 msgid "Download file"
 msgstr ""
 
-#: src/keymap.cpp:34
+#: src/keymap.cpp:35
 msgid "Cancel download"
 msgstr ""
 
-#: src/keymap.cpp:35
+#: src/keymap.cpp:36
 msgid "Mark download as deleted"
 msgstr ""
 
-#: src/keymap.cpp:36
+#: src/keymap.cpp:37
 msgid "Purge finished and deleted downloads from queue"
 msgstr ""
 
-#: src/keymap.cpp:37
+#: src/keymap.cpp:38
 msgid "Toggle automatic download on/off"
 msgstr ""
 
@@ -283,47 +285,71 @@ msgid ""
 "-h              this help\n"
 msgstr ""
 
-#: src/pb_view.cpp:36
+#: src/pb_view.cpp:38
 #, c-format
 msgid " - %u parallel downloads"
 msgstr ""
 
-#: src/pb_view.cpp:40
+#: src/pb_view.cpp:42
 #, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f kb/s total%s"
 msgstr ""
 
-#: src/pb_view.cpp:91
+#: src/pb_view.cpp:93
 msgid "Error: can't quit: download(s) in progress."
 msgstr ""
 
-#: src/pb_view.cpp:139
+#: src/pb_view.cpp:141
 msgid "Error: unable to perform operation: download(s) in progress."
 msgstr ""
 
-#: src/pb_view.cpp:166 src/view.cpp:1394 src/view.cpp:1410 src/view.cpp:1420
-#: src/view.cpp:1447 src/view.cpp:1462 src/view.cpp:1482
+#: src/pb_view.cpp:160 src/pb_view.cpp:226 src/view.cpp:1257 src/view.cpp:1401
+#: src/view.cpp:1428 src/view.cpp:1453 src/view.cpp:1485
+msgid "Help"
+msgstr ""
+
+#: src/pb_view.cpp:211 src/pb_view.cpp:220 src/view.cpp:1394 src/view.cpp:1410
+#: src/view.cpp:1420 src/view.cpp:1447 src/view.cpp:1462 src/view.cpp:1482
 msgid "Quit"
 msgstr ""
 
-#: src/pb_view.cpp:167
+#: src/pb_view.cpp:221
 msgid "Download"
 msgstr ""
 
-#: src/pb_view.cpp:168 src/view.cpp:1437 src/view.cpp:1471
+#: src/pb_view.cpp:222 src/view.cpp:1437 src/view.cpp:1471
 msgid "Cancel"
 msgstr ""
 
-#: src/pb_view.cpp:169
+#: src/pb_view.cpp:223
 msgid "Delete"
 msgstr ""
 
-#: src/pb_view.cpp:170
+#: src/pb_view.cpp:224
 msgid "Purge Finished"
 msgstr ""
 
-#: src/pb_view.cpp:171
+#: src/pb_view.cpp:225
 msgid "Toggle Automatic Download"
+msgstr ""
+
+#: src/planet.cpp:152
+#, c-format
+msgid ""
+"Error: your configuration is incomplete. Please set \"planet-output\" "
+"correctly to be able to generate output."
+msgstr ""
+
+#: src/planet.cpp:259
+#, c-format
+msgid ""
+"%s %s\n"
+"usage: %s [-u <urlfile>] [-c <cachefile>] [-C <configfile>] [-v] [-h]\n"
+"-u <urlfile>    read RSS feed URLs from <urlfile>\n"
+"-c <cachefile>  use <cachefile> as cache file\n"
+"-C <configfile> read configuration from <configfile>\n"
+"-v              make program output more verbose\n"
+"-h              this help\n"
 msgstr ""
 
 #: src/view.cpp:132 src/view.cpp:189
@@ -460,11 +486,6 @@ msgstr ""
 
 #: src/view.cpp:1178
 msgid "No link selected!"
-msgstr ""
-
-#: src/view.cpp:1257 src/view.cpp:1401 src/view.cpp:1428 src/view.cpp:1453
-#: src/view.cpp:1485
-msgid "Help"
 msgstr ""
 
 #: src/view.cpp:1367
