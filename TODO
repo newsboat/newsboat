@@ -6,7 +6,6 @@ TODO:
 - implement podcast support
 	- test more thoroughly
 	- implement "start player" function in podbeuter.
-	- set configured colors
 - fill table with html entities
 - do entitity decoding for titles (this may be controversial...)
 - implement planet support
@@ -68,6 +67,7 @@ DONE:
 	- improved rendering of itunes:summary descriptions.
 	- implement "resume download" function
 	- write podbeuter.1 manpage
+	- set configured colors
 - implement planet support
 	- implement this as an additional tool "nb-planet"
 	- options:

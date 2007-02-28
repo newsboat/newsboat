@@ -140,6 +140,10 @@ void pb_controller::run(int argc, char * argv[]) {
 		return;	
 	}
 
+	if (colorman->colors_loaded())
+		colorman->set_pb_colors(v);
+	delete colorman;
+
 	max_dls = cfg->get_configvalue_as_int("max-downloads");
 
 	std::cout << _("done.") << std::endl;

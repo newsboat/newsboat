@@ -6,10 +6,16 @@
 #include <vector>
 #include <map>
 
+namespace podbeuter {
+	class pb_view;
+}
+
 namespace newsbeuter
 {
 
+
 class colormanager : public config_action_handler {
+
 	public:
 		colormanager();
 		~colormanager();
@@ -17,6 +23,7 @@ class colormanager : public config_action_handler {
 		virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
 		inline bool colors_loaded() { return colors_loaded_; }
 		void set_colors(view * v);
+		void set_pb_colors(podbeuter::pb_view * v);
 	private:
 		bool colors_loaded_;
 		std::map<std::string,std::string> fg_colors;

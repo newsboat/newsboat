@@ -1,17 +1,17 @@
 #ifndef PODBEUTER_VIEW__H
 #define PODBEUTER_VIEW__H
 
-#include <view.h>
-#include <stflpp.h>
-
 #include <keymap.h>
 #include <stflpp.h>
+#include <colormanager.h>
 
 using namespace newsbeuter;
 
 namespace podbeuter {
 
 class pb_controller;
+
+class newsbeuter::colormanager;
 
 struct keymap_hint_entry;
 
@@ -22,6 +22,8 @@ class pb_view {
 		void run();
 		void set_keymap(newsbeuter::keymap * k) { keys = k; }
 	private:
+
+		friend class newsbeuter::colormanager;
 
 		struct keymap_hint_entry {
 			operation op; 
