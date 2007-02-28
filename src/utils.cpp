@@ -112,16 +112,21 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str, std::string 
 	std::vector<std::string> tokens;
 	std::string::size_type last_pos = str.find_first_not_of(delimiters, 0);
 	std::string::size_type pos = str.find_first_of(delimiters, last_pos);
+	unsigned int i;
 
-	if (last_pos != 0) {
+	GetLogger().log(LOG_DEBUG,"utils::tokenize_nl: last_pos = %u",last_pos);
+	for (i=0;i<last_pos;++i) {
 		tokens.push_back(std::string("\n"));
 	}
 
 	while (std::string::npos != pos || std::string::npos != last_pos) {
 		tokens.push_back(str.substr(last_pos, pos - last_pos));
+		GetLogger().log(LOG_DEBUG,"utils::tokenize_nl: substr = %s", str.substr(last_pos, pos - last_pos).c_str());
 		last_pos = str.find_first_not_of(delimiters, pos);
-		if (last_pos > pos)
+		GetLogger().log(LOG_DEBUG,"utils::tokenize_nl: pos - last_pos = %u", last_pos - pos);
+		for (i=0;last_pos != std::string::npos && pos != std::string::npos && i<(last_pos - pos);++i) {
 			tokens.push_back(std::string("\n"));
+		}
 		pos = str.find_first_of(delimiters, last_pos);
 	}
 
