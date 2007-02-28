@@ -71,6 +71,8 @@ void planet::run(int argc, char * argv[]) {
 	int c;
 	char msgbuf[1024];
 
+	std::string output_file;
+
 	::signal(SIGINT, ctrl_c_action);
 	::signal(SIGSEGV, ctrl_c_action);
 
@@ -145,6 +147,35 @@ void planet::run(int argc, char * argv[]) {
 		return;	
 	}
 
+	output_file = cfg->get_configvalue("planet-output");
+	if (output_file.length() == 0) {
+		snprintf(msgbuf, sizeof(msgbuf), _("Error: your configuration is incomplete. Please set \"planet-output\" correctly to be able to generate output."));
+		std::cout << msgbuf << std::endl;
+		remove_fs_lock();
+		return;
+	}
+
+	if (output_file.substr(0,2) == "~/") {
+		std::string suffix = output_file.substr(2,output_file.length()-2);
+		char * homedir;
+		if (!(homedir = ::getenv("HOME"))) {
+			struct passwd * spw = ::getpwuid(::getuid());
+			if (spw) {
+				homedir = spw->pw_dir;
+			} else {
+				std::cout << _("Fatal error: couldn't determine home directory!") << std::endl;
+				char buf[1024];
+				snprintf(buf, sizeof(buf), _("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid());
+				std::cout << buf << std::endl;
+				remove_fs_lock();
+				::exit(EXIT_FAILURE);
+			}
+		}
+		output_file = homedir;
+		output_file.append(NEWSBEUTER_PATH_SEP);
+		output_file.append(suffix);
+	}
+
 	rsscache = new cache(cache_file,cfg);
 
 	for (std::vector<std::string>::const_iterator it=urlcfg.get_urls().begin(); it != urlcfg.get_urls().end(); ++it) {
@@ -161,7 +192,7 @@ void planet::run(int argc, char * argv[]) {
 	unsigned int limit = cfg->get_configvalue_as_int("planet-limit");
 	rsscache->get_latest_items(rss_items, limit);
 
-	utils::planet_generate_html(feeds, rss_items);
+	utils::planet_generate_html(feeds, rss_items, output_file);
 
 	rsscache->cleanup_cache(feeds);
 
@@ -223,8 +254,15 @@ bool planet::try_fs_lock(pid_t & pid) {
 }
 
 void planet::usage(char * argv0) {
-	// TODO: print usage
-	remove_fs_lock();
+	char buf[2048];
+	snprintf(buf, sizeof(buf), 
+				_("%s %s\nusage: %s [-u <urlfile>] [-c <cachefile>] [-C <configfile>] [-v] [-h]\n"
+				"-u <urlfile>    read RSS feed URLs from <urlfile>\n"
+				"-c <cachefile>  use <cachefile> as cache file\n"
+				"-C <configfile> read configuration from <configfile>\n"
+				"-v              make program output more verbose\n"
+				"-h              this help\n"), "nb-planet", PROGRAM_VERSION, argv0);
+	std::cout << buf;
 	::exit(EXIT_FAILURE);
 }
 
