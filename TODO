@@ -10,6 +10,8 @@ TODO:
 - do entitity decoding for titles (this may be controversial...)
 - implement planet support
 	- implement template system
+	- make title user-settable via first tag
+	- write documentation
 
 longteam goals to reach:
 - add scripting support

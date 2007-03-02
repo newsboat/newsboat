@@ -1,6 +1,10 @@
 #include <utils.h>
 #include <logger.h>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 namespace newsbeuter {
 
 std::vector<std::string> utils::tokenize_quoted(const std::string& str, std::string delimiters) {
@@ -133,6 +137,31 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str, std::string 
 	return tokens;
 }
 
+void utils::remove_fs_lock(const std::string& lock_file) {
+	GetLogger().log(LOG_DEBUG, "removed lockfile %s", lock_file.c_str());
+	::unlink(lock_file.c_str());
+}
+
+bool utils::try_fs_lock(const std::string& lock_file, pid_t & pid) {
+	int fd;
+	if ((fd = ::open(lock_file.c_str(), O_WRONLY | O_CREAT | O_EXCL, 0600)) >= 0) {
+		pid = ::getpid();
+		::write(fd,&pid,sizeof(pid));
+		::close(fd);
+		GetLogger().log(LOG_DEBUG,"wrote lockfile %s with pid = %u",lock_file.c_str(), pid);
+		return true;
+	} else {
+		pid = 0;
+		if ((fd = ::open(lock_file.c_str(), O_RDONLY)) >=0) {
+			::read(fd,&pid,sizeof(pid));
+			::close(fd);
+			GetLogger().log(LOG_DEBUG,"found lockfile %s", lock_file.c_str());
+		} else {
+			GetLogger().log(LOG_DEBUG,"found lockfile %s, but couldn't open it for reading from it", lock_file.c_str());
+		}
+		return false;
+	}
+}
 
 
 }

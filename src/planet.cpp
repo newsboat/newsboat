@@ -127,7 +127,7 @@ void planet::run(int argc, char * argv[]) {
 	}
 
 	pid_t pid;
-	if (!try_fs_lock(pid)) {
+	if (!utils::try_fs_lock(lock_file, pid)) {
 		GetLogger().log(LOG_ERROR,"an instance is alredy running: pid = %u",pid);
 		snprintf(msgbuf, sizeof(msgbuf), _("Error: an instance of %s is already running (PID: %u)"), "podbeuter", pid);
 		std::cout << msgbuf << std::endl;
@@ -143,7 +143,7 @@ void planet::run(int argc, char * argv[]) {
 	} catch (const configexception& ex) {
 		GetLogger().log(LOG_ERROR,"an exception occured while parsing the configuration file: %s",ex.what());
 		std::cout << ex.what() << std::endl;
-		remove_fs_lock();
+		utils::remove_fs_lock(lock_file);
 		return;	
 	}
 
@@ -151,7 +151,7 @@ void planet::run(int argc, char * argv[]) {
 	if (output_file.length() == 0) {
 		snprintf(msgbuf, sizeof(msgbuf), _("Error: your configuration is incomplete. Please set \"planet-output\" correctly to be able to generate output."));
 		std::cout << msgbuf << std::endl;
-		remove_fs_lock();
+		utils::remove_fs_lock(lock_file);
 		return;
 	}
 
@@ -167,7 +167,7 @@ void planet::run(int argc, char * argv[]) {
 				char buf[1024];
 				snprintf(buf, sizeof(buf), _("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid());
 				std::cout << buf << std::endl;
-				remove_fs_lock();
+				utils::remove_fs_lock(lock_file);
 				::exit(EXIT_FAILURE);
 			}
 		}
@@ -196,7 +196,7 @@ void planet::run(int argc, char * argv[]) {
 
 	rsscache->cleanup_cache(feeds);
 
-	remove_fs_lock();
+	utils::remove_fs_lock(lock_file);
 }
 
 void planet::reload_all() {
@@ -228,30 +228,6 @@ void planet::reload(unsigned int pos) {
 	}
 }
 
-void planet::remove_fs_lock() {
-	::unlink(lock_file.c_str());
-}
-
-bool planet::try_fs_lock(pid_t & pid) {
-	int fd;
-	if ((fd = ::open(lock_file.c_str(), O_WRONLY | O_CREAT | O_EXCL, 0600)) >= 0) {
-		pid = ::getpid();
-		::write(fd,&pid,sizeof(pid));
-		::close(fd);
-		GetLogger().log(LOG_DEBUG,"wrote lock file with pid = %u",pid);
-		return true;
-	} else {
-		pid = 0;
-		if ((fd = ::open(lock_file.c_str(), O_RDONLY)) >=0) {
-			::read(fd,&pid,sizeof(pid));
-			::close(fd);
-			GetLogger().log(LOG_DEBUG,"found lock file");
-		} else {
-			GetLogger().log(LOG_DEBUG,"found lock file, but couldn't open it for reading from it");
-		}
-		return false;
-	}
-}
 
 void planet::usage(char * argv0) {
 	char buf[2048];

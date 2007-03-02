@@ -6,6 +6,7 @@
 #include <downloadthread.h>
 #include <colormanager.h>
 #include <logger.h>
+#include <utils.h>
 #include <sstream>
 #include <cstdlib>
 #include <iostream>
@@ -159,7 +160,7 @@ void controller::run(int argc, char * argv[]) {
 		std::cout << msgbuf << std::endl;
 
 		pid_t pid;
-		if (!try_fs_lock(pid)) {
+		if (!utils::try_fs_lock(lock_file, pid)) {
 			GetLogger().log(LOG_ERROR,"an instance is alredy running: pid = %u",pid);
 			snprintf(msgbuf, sizeof(msgbuf), _("Error: an instance of %s is already running (PID: %u)"), PROGRAM_NAME, pid);
 			std::cout << msgbuf << std::endl;
@@ -186,7 +187,7 @@ void controller::run(int argc, char * argv[]) {
 	} catch (const configexception& ex) {
 		GetLogger().log(LOG_ERROR,"an exception occured while parsing the configuration file: %s",ex.what());
 		std::cout << ex.what() << std::endl;
-		remove_fs_lock();
+		utils::remove_fs_lock(lock_file);
 		return;	
 	}
 
@@ -218,7 +219,7 @@ void controller::run(int argc, char * argv[]) {
 
 	if (do_export) {
 		export_opml();
-		remove_fs_lock();
+		utils::remove_fs_lock(lock_file);
 		return;
 	}
 
@@ -237,7 +238,7 @@ void controller::run(int argc, char * argv[]) {
 	*/
 	std::cout << _("done.") << std::endl;
 
-	remove_fs_lock();
+	utils::remove_fs_lock(lock_file);
 }
 
 void controller::update_feedlist() {
@@ -459,30 +460,7 @@ void controller::rec_find_rss_outlines(nxml_data_t * node) {
 	}
 }
 
-void controller::remove_fs_lock() {
-	::unlink(lock_file.c_str());
-}
 
-bool controller::try_fs_lock(pid_t & pid) {
-	int fd;
-	if ((fd = ::open(lock_file.c_str(), O_WRONLY | O_CREAT | O_EXCL, 0600)) >= 0) {
-		pid = ::getpid();
-		::write(fd,&pid,sizeof(pid));
-		::close(fd);
-		GetLogger().log(LOG_DEBUG,"wrote lock file with pid = %u",pid);
-		return true;
-	} else {
-		pid = 0;
-		if ((fd = ::open(lock_file.c_str(), O_RDONLY)) >=0) {
-			::read(fd,&pid,sizeof(pid));
-			::close(fd);
-			GetLogger().log(LOG_DEBUG,"found lock file");
-		} else {
-			GetLogger().log(LOG_DEBUG,"found lock file, but couldn't open it for reading from it");
-		}
-		return false;
-	}
-}
 
 std::vector<rss_item> controller::search_for_items(const std::string& query, const std::string& feedurl) {
 	return rsscache->search_for_items(query, feedurl);

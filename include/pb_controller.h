@@ -28,9 +28,6 @@ namespace podbeuter {
 
 			std::string get_dlpath();
 
-			bool try_fs_lock(pid_t & pid);
-			void remove_fs_lock();
-
 			unsigned int downloads_in_progress();
 			void reload_queue();
 

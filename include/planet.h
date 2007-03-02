@@ -16,8 +16,6 @@ class planet {
 		void run(int argc, char * argv[]);
 	private:
 		void usage(char * argv0);
-		void remove_fs_lock();
-		bool try_fs_lock(pid_t & pid);
 
 		void reload_all();
 		void reload(unsigned int pos);

@@ -2,6 +2,7 @@
 #include <pb_view.h>
 #include <poddlthread.h>
 #include <config.h>
+#include <utils.h>
 #include <iostream>
 #include <sstream>
 #include <cstdio>
@@ -24,7 +25,7 @@ static std::string lock_file = "pb-lock.pid";
 void ctrl_c_action(int sig) {
 	GetLogger().log(LOG_DEBUG,"caugh signal %d",sig);
 	stfl_reset();
-	::unlink(lock_file.c_str());
+	utils::remove_fs_lock(lock_file);
 	if (SIGSEGV == sig) {
 		fprintf(stderr,"%s\n", _("Segmentation fault."));
 	}
@@ -112,7 +113,7 @@ void pb_controller::run(int argc, char * argv[]) {
 	std::cout << msgbuf << std::endl;
 
 	pid_t pid;
-	if (!try_fs_lock(pid)) {
+	if (!utils::try_fs_lock(lock_file, pid)) {
 		snprintf(msgbuf, sizeof(msgbuf), _("Error: an instance of %s is already running (PID: %u)"), "podbeuter", pid);
 		std::cout << msgbuf << std::endl;
 		return;
@@ -161,7 +162,7 @@ void pb_controller::run(int argc, char * argv[]) {
 	
 	std::cout << _("done.") << std::endl;
 
-	remove_fs_lock();
+	utils::remove_fs_lock(lock_file);
 }
 
 void pb_controller::usage(const char * argv0) {
@@ -177,31 +178,6 @@ void pb_controller::usage(const char * argv0) {
 
 std::string pb_controller::get_dlpath() {
 	return cfg->get_configvalue("download-path");
-}
-
-bool pb_controller::try_fs_lock(pid_t & pid) {
-	int fd;
-	if ((fd = ::open(lock_file.c_str(), O_WRONLY | O_CREAT | O_EXCL, 0600)) >= 0) {
-		pid = ::getpid();
-		::write(fd,&pid,sizeof(pid));
-		::close(fd);
-		GetLogger().log(LOG_DEBUG,"wrote lock file with pid = %u",pid);
-		return true;
-	} else {
-		pid = 0;
-		if ((fd = ::open(lock_file.c_str(), O_RDONLY)) >=0) {
-			::read(fd,&pid,sizeof(pid));
-			::close(fd);
-			GetLogger().log(LOG_DEBUG,"found lock file");
-		} else {
-			GetLogger().log(LOG_DEBUG,"found lock file, but couldn't open it for reading from it");
-		}
-		return false;
-	}
-}
-
-void pb_controller::remove_fs_lock() {
-	::unlink(lock_file.c_str());
 }
 
 unsigned int pb_controller::downloads_in_progress() {

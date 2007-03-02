@@ -40,9 +40,6 @@ namespace newsbeuter {
 			void export_opml();
 			void rec_find_rss_outlines(nxml_data_t * node);
 
-			bool try_fs_lock(pid_t & pid);
-			void remove_fs_lock();
-
 			view * v;
 			urlreader urlcfg;
 			cache * rsscache;
