@@ -29,6 +29,7 @@ class planet {
 		std::string config_file;
 		std::string url_file;
 		std::string cache_file;
+		std::string template_file;
 
 		unsigned int verbose;
 };

@@ -155,6 +155,15 @@ void planet::run(int argc, char * argv[]) {
 		return;
 	}
 
+	template_file = cfg->get_configvalue("planet-template");
+	if (template_file.length() == 0) {
+		snprintf(msgbuf, sizeof(msgbuf), _("Error: your configuration is incomplete. Please set \"planet-template\" correctly to be able to generate output."));
+		std::cout << msgbuf << std::endl;
+		utils::remove_fs_lock(lock_file);
+		return;
+	}
+
+
 	if (output_file.substr(0,2) == "~/") {
 		std::string suffix = output_file.substr(2,output_file.length()-2);
 		char * homedir;
@@ -192,7 +201,7 @@ void planet::run(int argc, char * argv[]) {
 	unsigned int limit = cfg->get_configvalue_as_int("planet-limit");
 	rsscache->get_latest_items(rss_items, limit);
 
-	utils::planet_generate_html(feeds, rss_items, output_file);
+	utils::planet_generate_html(feeds, rss_items, template_file, output_file);
 
 	rsscache->cleanup_cache(feeds);
 
