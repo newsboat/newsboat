@@ -1,1 +1,1 @@
-nb-planet.cpp src/planet.cpp src/logger.cpp src/configparser.cpp src/configcontainer.cpp src/rss.cpp src/mutex.cpp src/utils.cpp src/urlreader.cpp src/exception.cpp src/cache.cpp src/genhtml.cpp
+nb-planet.cpp src/planet.cpp src/logger.cpp src/configparser.cpp src/configcontainer.cpp src/rss.cpp src/mutex.cpp src/utils.cpp src/urlreader.cpp src/exception.cpp src/cache.cpp src/genhtml.cpp src/htmltmpl.cpp

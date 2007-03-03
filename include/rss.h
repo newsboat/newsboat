@@ -50,8 +50,8 @@ namespace newsbeuter {
 			
 			inline const std::string& feedurl() const { return feedurl_; }
 
-			inline const std::string& enclosure_url() { return enclosure_url_; }
-			inline const std::string& enclosure_type() { return enclosure_type_; }
+			inline const std::string& enclosure_url() const { return enclosure_url_; }
+			inline const std::string& enclosure_type() const { return enclosure_type_; }
 
 			void set_enclosure_url(const std::string& url);
 			void set_enclosure_type(const std::string& type);
