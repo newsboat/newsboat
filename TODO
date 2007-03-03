@@ -9,7 +9,7 @@ TODO:
 - fill table with html entities
 - do entitity decoding for titles (this may be controversial...)
 - implement planet support
-	- implement template system
+	- create examples
 	- make title user-settable via first tag
 	- write documentation
 
@@ -76,3 +76,4 @@ DONE:
 		- planet-output ~/public_html/planet.html (that's also the default)
 		- planet_title "My Planet"
 		- planet-limit 50 (display the 50 latest articles)
+	- implement template system
