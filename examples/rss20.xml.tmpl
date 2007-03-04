@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+  <!-- this is an example template for nb-planet to generate an RSS 2.0 feed -->
+  <channel>
+    <title>Planet</title>
+    <generator>nb-planet - http://synflood.at/newsbeuter.html</generator>
+    #LOOP Items#
+    <item>
+        <title>#VAR item_title#</title>
+        <link>#VAR item_link#</link>
+        #IF item_author#<author>#VAR item_author#</author>#ENDIF#
+        #IF item_date#<pubDate>#VAR item_date#</pubDate>#ENDIF#
+        <description><![CDATA[#VAR item_body#]]></description>
+    </item>
+    #ENDLOOP#
+  </channel>
+</rss>

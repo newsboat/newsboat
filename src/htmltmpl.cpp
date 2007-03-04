@@ -22,7 +22,7 @@ namespace planet {
 			std::string curelem;
 			getline(is, curelem, '#');
 
-			if (!is.eof() && curelem.length() > 0) {
+			if (curelem.length() > 0) {
 				htmltmpl textnode;
 				textnode.type = NT_TEXT;
 				textnode.text = curelem;
