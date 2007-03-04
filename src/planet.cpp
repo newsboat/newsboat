@@ -201,7 +201,16 @@ void planet::run(int argc, char * argv[]) {
 	unsigned int limit = cfg->get_configvalue_as_int("planet-limit");
 	rsscache->get_latest_items(rss_items, limit);
 
+	if (verbose>=1) {
+		snprintf(msgbuf, sizeof(msgbuf), _("Generating %s..."), output_file.c_str());
+		std::cout << msgbuf;
+		std::cout.flush();
+	}
 	utils::planet_generate_html(feeds, rss_items, template_file, output_file);
+
+	if (verbose>=1) {
+		std::cout << _("done.") << std::endl;
+	}
 
 	rsscache->cleanup_cache(feeds);
 
@@ -218,8 +227,9 @@ void planet::reload(unsigned int pos) {
 	rss_feed& feed = feeds[pos];
 	char msg[1024];
 	if (verbose>=1) {
-		snprintf(msg, sizeof(msg), "Reloading %s...", feed.rssurl().c_str());
-		std::cout << msg << std::endl;
+		snprintf(msg, sizeof(msg), _("Reloading %s..."), feed.rssurl().c_str());
+		std::cout << msg;
+		std::cout.flush();
 	}
 	rss_parser parser(feed.rssurl().c_str(), rsscache, cfg);
 	try {
@@ -230,6 +240,10 @@ void planet::reload(unsigned int pos) {
 		rsscache->internalize_rssfeed(feed);
 		feed.set_tags(urlcfg.get_tags(feed.rssurl()));
 		feeds[pos] = feed;
+
+		if (verbose >= 1) {
+			std::cout << _("done.") << std::endl;
+		}
 
 	} catch (const std::string& errmsg) {
 		snprintf(msg, sizeof(msg), _("Error while retrieving %s: %s"), feed.rssurl().c_str(), errmsg.c_str());

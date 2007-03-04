@@ -26,6 +26,7 @@ namespace planet {
 				htmltmpl textnode;
 				textnode.type = NT_TEXT;
 				textnode.text = curelem;
+				GetLogger().log(LOG_DEBUG, "htmltmpl::parse_stream: NT_TEXT: %s", curelem.c_str());
 				node.children.push_back(textnode);
 			}
 
@@ -33,13 +34,17 @@ namespace planet {
 				getline(is, curelem, '#');
 
 				// if we found the optional end tag, then break
-				if (endtag.length() > 0 && curelem == endtag)
+				if (endtag.length() > 0 && curelem == endtag) {
+					GetLogger().log(LOG_DEBUG, "htmltmpl::parse_stream: found endtag: %s", curelem.c_str());
 					break;
+				}
 
 				if (curelem.substr(0,4) == "LOOP") {
 					std::vector<std::string> loopelem = utils::tokenize(curelem," ");
 					if (loopelem.size() == 2) {
+						GetLogger().log(LOG_DEBUG, "htmltmpl::parse_stream: before NT_LOOP: %s", loopelem[1].c_str());
 						htmltmpl loopnode = parse_stream(is, "ENDLOOP");
+						GetLogger().log(LOG_DEBUG, "htmltmpl::parse_stream: after NT_LOOP: %s", loopelem[1].c_str());
 						loopnode.type = NT_LOOP;
 						loopnode.text = loopelem[1];
 						node.children.push_back(loopnode);
@@ -47,8 +52,10 @@ namespace planet {
 				} else if (curelem.substr(0,2) == "IF") {
 					std::vector<std::string> ifelem = utils::tokenize(curelem," ");
 					if (ifelem.size() == 2) {
+						GetLogger().log(LOG_DEBUG, "htmltmpl::parse_stream: before NT_IF: %s", ifelem[1].c_str());
 						htmltmpl ifnode = parse_stream(is, "ENDIF");
-						ifnode.type = NT_LOOP;
+						GetLogger().log(LOG_DEBUG, "htmltmpl::parse_stream: after NT_IF: %s", ifelem[1].c_str());
+						ifnode.type = NT_IF;
 						ifnode.text = ifelem[1];
 						node.children.push_back(ifnode);
 					}
@@ -58,10 +65,11 @@ namespace planet {
 						htmltmpl varnode;
 						varnode.type = NT_VAR;
 						varnode.text = var[1];
+						GetLogger().log(LOG_DEBUG, "htmltmpl::parse_stream: NT_VAR: %s", var[1].c_str());
 						node.children.push_back(varnode);
 					}
 				} else {
-					// TODO: log warning
+					GetLogger().log(LOG_WARN, "htmltmpl::parse_stream: unknown command %s", curelem.c_str());
 				}
 			}
 		}
