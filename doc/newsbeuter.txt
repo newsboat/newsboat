@@ -303,6 +303,62 @@ newsbeuter, and after that, he/she uses podbeuter to view the current queue, and
 either selectively download certain files or automatically download them all
 together by pressing "a" within podbeuter.
 
+
+Generating Planets with nb-planet
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A "planet" is a website that aggregates a number of RSS feeds. The original
+software to implement such a planet is called
+http://www.planetplanet.org/["Planet"]. Prominent examples of planets are
+http://planet.debian.org/[Planet Debian], http://planet.gnome.org/[Planet
+GNOME], http://planetkde.org/[Planet KDE], and many others.
+
+Newsbeuter comes with a tool called "nb-planet" that uses the infrastructure and
+configuration of newsbeuter to implement the aggregation and generation of such
+a planet website.
+
+In order to use nb-planet, you need to do a few configuration steps. First of
+all, you need to define the template file and the output file. Newsbeuter comes
+with a number of example template files to make it easy to set up a planet.
+
+In the configuration file $HOME/.newsbeuter/config, you need to add the
+following two configuration options:
+
+  planet-output "/var/www/planet/index.html"
+  planet-template "~/planet/planet.tmpl"
+
+When you then run nb-planet, the tool will first reload all feed URLs it finds
+in $HOME/.newsbeuter/urls, and then use the defined template file to generate
+the defined output file.
+
+It is advised to use tools like cron to regularly redownload and regenerate
+your planet website. nb-planet will not do this for you.
+
+If you don't want to encumber your regular newsbeuter configuration with your
+planet-specific settings, you can also use nb-planet's commandline options to
+use a different URL file, cache database and configuration file:
+
+  user@host:~/planet $ nb-planet -u planet-urls -c planet-cache.db -C planet-config
+
+These are all the available commandline options of nb-planet:
+
+	nb-planet 0.3
+	usage: nb-planet [-u <urlfile>] [-c <cachefile>] [-C <configfile>] [-v] [-h]
+	-u <urlfile>    read RSS feed URLs from <urlfile>
+	-c <cachefile>  use <cachefile> as cache file
+	-C <configfile> read configuration from <configfile>
+	-v              make program output more verbose
+	-h              this help
+
+.nb-planet Configuration Commands
+[frame="all", grid="all",format="dsv",separator="|"]
+`10`15`15`40`20~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Configuration Command|Argument(s)|Default|Description|Example
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+planet-output|<path>||Specifies the output file where the result shall be written to.|planet-output "~/public_html/planet.html"
+planet-template|<path>||Specifies the template file that shall be used to generate the output file|planet-template "~/planet.tmpl"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Feedback
 --------
 
