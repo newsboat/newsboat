@@ -160,6 +160,7 @@ rss_feed rss_parser::parse() {
 				free(str);
 			} else {
 				GetLogger().log(LOG_WARN, "rss_parser::parse: conversion of %s to utf-8 failed", item->description);
+				x.set_description(item->description);
 			}
 		}
 

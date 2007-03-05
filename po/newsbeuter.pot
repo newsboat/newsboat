@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-28 13:03+0100\n"
+"POT-Creation-Date: 2007-03-05 16:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,88 +47,89 @@ msgstr ""
 msgid "unknown command `%s'"
 msgstr ""
 
-#: src/controller.cpp:34 src/pb_controller.cpp:29 src/planet.cpp:29
+#: src/controller.cpp:35 src/pb_controller.cpp:30 src/planet.cpp:29
 msgid "Segmentation fault."
 msgstr ""
 
-#: src/controller.cpp:48 src/pb_controller.cpp:45 src/planet.cpp:44
-#: src/planet.cpp:166
+#: src/controller.cpp:49 src/pb_controller.cpp:46 src/planet.cpp:44
+#: src/planet.cpp:175
 msgid "Fatal error: couldn't determine home directory!"
 msgstr ""
 
-#: src/controller.cpp:50 src/pb_controller.cpp:47 src/planet.cpp:46
-#: src/planet.cpp:168
+#: src/controller.cpp:51 src/pb_controller.cpp:48 src/planet.cpp:46
+#: src/planet.cpp:177
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
 
-#: src/controller.cpp:135 src/pb_controller.cpp:104 src/planet.cpp:113
+#: src/controller.cpp:136 src/pb_controller.cpp:105 src/planet.cpp:113
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr ""
 
-#: src/controller.cpp:152 src/planet.cpp:124
+#: src/controller.cpp:153 src/planet.cpp:124
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
 "import an OPML file."
 msgstr ""
 
-#: src/controller.cpp:158 src/pb_controller.cpp:111
+#: src/controller.cpp:159 src/pb_controller.cpp:112
 #, c-format
 msgid "Starting %s %s..."
 msgstr ""
 
-#: src/controller.cpp:164 src/pb_controller.cpp:116 src/planet.cpp:132
+#: src/controller.cpp:165 src/pb_controller.cpp:117 src/planet.cpp:132
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr ""
 
-#: src/controller.cpp:171 src/pb_controller.cpp:121
+#: src/controller.cpp:172 src/pb_controller.cpp:122
 msgid "Loading configuration..."
 msgstr ""
 
-#: src/controller.cpp:198 src/controller.cpp:217 src/controller.cpp:238
-#: src/pb_controller.cpp:145 src/pb_controller.cpp:158
+#: src/controller.cpp:199 src/controller.cpp:218 src/controller.cpp:239
+#: src/pb_controller.cpp:150 src/pb_controller.cpp:163 src/planet.cpp:212
+#: src/planet.cpp:245
 msgid "done."
 msgstr ""
 
-#: src/controller.cpp:201
+#: src/controller.cpp:202
 msgid "Loading articles from cache..."
 msgstr ""
 
-#: src/controller.cpp:230
+#: src/controller.cpp:231
 msgid "Cleaning up cache..."
 msgstr ""
 
-#: src/controller.cpp:274
+#: src/controller.cpp:275
 msgid "Opening feed..."
 msgstr ""
 
-#: src/controller.cpp:282
+#: src/controller.cpp:283
 msgid "Error: feed contains no items!"
 msgstr ""
 
-#: src/controller.cpp:288 src/controller.cpp:343
+#: src/controller.cpp:289 src/controller.cpp:344
 msgid "Error: invalid feed!"
 msgstr ""
 
-#: src/controller.cpp:309
+#: src/controller.cpp:310
 #, c-format
 msgid "%sLoading %s..."
 msgstr ""
 
-#: src/controller.cpp:339 src/planet.cpp:226
+#: src/controller.cpp:340 src/planet.cpp:249
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr ""
 
-#: src/controller.cpp:349
+#: src/controller.cpp:350
 msgid "invalid feed index (bug)"
 msgstr ""
 
-#: src/controller.cpp:373
+#: src/controller.cpp:374
 #, c-format
 msgid ""
 "%s %s\n"
@@ -142,7 +143,7 @@ msgid ""
 "-h              this help\n"
 msgstr ""
 
-#: src/controller.cpp:414
+#: src/controller.cpp:415
 #, c-format
 msgid "Import of %s finished."
 msgstr ""
@@ -271,11 +272,11 @@ msgstr ""
 msgid "Toggle automatic download on/off"
 msgstr ""
 
-#: src/pb_controller.cpp:152
+#: src/pb_controller.cpp:157
 msgid "Cleaning up queue..."
 msgstr ""
 
-#: src/pb_controller.cpp:166
+#: src/pb_controller.cpp:171
 #, c-format
 msgid ""
 "%s %s\n"
@@ -340,7 +341,24 @@ msgid ""
 "correctly to be able to generate output."
 msgstr ""
 
-#: src/planet.cpp:259
+#: src/planet.cpp:160
+#, c-format
+msgid ""
+"Error: your configuration is incomplete. Please set \"planet-template\" "
+"correctly to be able to generate output."
+msgstr ""
+
+#: src/planet.cpp:205
+#, c-format
+msgid "Generating %s..."
+msgstr ""
+
+#: src/planet.cpp:230
+#, c-format
+msgid "Reloading %s..."
+msgstr ""
+
+#: src/planet.cpp:258
 #, c-format
 msgid ""
 "%s %s\n"
