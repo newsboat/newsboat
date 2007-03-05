@@ -43,7 +43,7 @@ rss_feed rss_parser::parse() {
 	const char * encoding = mrss->encoding ? mrss->encoding : "utf-8";
 
 	if (mrss->title) {
-		char * str = stringprep_convert(mrss->title, stringprep_locale_charset(), encoding);
+		char * str = stringprep_convert(mrss->title, "utf-8", encoding);
 		if (str) {
 			feed.set_title(str);
 			free(str);
@@ -51,7 +51,7 @@ rss_feed rss_parser::parse() {
 	}
 	
 	if (mrss->description) {
-		char * str = stringprep_convert(mrss->description, stringprep_locale_charset(), encoding);
+		char * str = stringprep_convert(mrss->description, "utf-8", encoding);
 		if (str) {
 			feed.set_description(str);
 			free(str);
@@ -69,14 +69,26 @@ rss_feed rss_parser::parse() {
 	for (mrss_item_t * item = mrss->item; item != NULL; item = item->next ) {
 		rss_item x(ch);
 		if (item->title) {
-			char * str = stringprep_convert(item->title,stringprep_locale_charset(), encoding);
+			char * str = stringprep_convert(item->title,"utf-8", encoding);
+			GetLogger().log(LOG_DEBUG, "rss_parser::parse: converting title %s", item->title);
 			if (str) {
+				GetLogger().log(LOG_DEBUG, "rss_parser::parse: conversion of title success: %s", str);
 				x.set_title(str);
 				free(str);
+			} else {
+				GetLogger().log(LOG_WARN, "rss_parser::parse: conversion of %s to utf-8 failed", item->title);
 			}
 		}
 		if (item->link) x.set_link(item->link);
-		if (item->author) x.set_author(item->author);
+		if (item->author) {
+			char * str = stringprep_convert(item->author,"utf-8", encoding);
+			if (str) {
+				x.set_author(str);
+				free(str);
+			} else {
+				GetLogger().log(LOG_WARN, "rss_parser::parse: conversion of %s to utf-8 failed", item->author);
+			}
+		}
 
 		mrss_tag_t * content;
 
@@ -84,7 +96,7 @@ rss_feed rss_parser::parse() {
 			/* RSS 2.0 content:encoded */
 			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found rss 2.0 content:encoded: %s\n", content->value);
 			if (content->value) {
-				char * str = stringprep_convert(content->value, stringprep_locale_charset(), encoding);
+				char * str = stringprep_convert(content->value, "utf-8", encoding);
 				if (str) {
 					x.set_description(str);
 					free(str);
@@ -104,7 +116,7 @@ rss_feed rss_parser::parse() {
 			    ((rc = mrss_search_tag(item, "content", "http://purl.org/atom/ns#", &content)) == MRSS_OK && content)) {
 				GetLogger().log(LOG_DEBUG, "rss_parser::parse: found atom content: %s\n", content ? content->value : "(content = null)");
 				if (content && content->value) {
-					char * str = stringprep_convert(content->value, stringprep_locale_charset(), encoding);
+					char * str = stringprep_convert(content->value, "utf-8", encoding);
 					if (str) {
 						x.set_description(str);
 						free(str);
@@ -123,7 +135,7 @@ rss_feed rss_parser::parse() {
 		if (x.description().length() == 0 && mrss_search_tag(item, "summary", "http://www.itunes.com/dtds/podcast-1.0.dtd", &content) == MRSS_OK && content) {
 			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found itunes:summary: %s\n", content->value);
 			if (content->value) {
-				char * str = stringprep_convert(content->value, stringprep_locale_charset(), encoding);
+				char * str = stringprep_convert(content->value, "utf-8", encoding);
 				if (str) {
 					std::string desc = "<ituneshack>";
 					desc.append(str);
@@ -142,10 +154,12 @@ rss_feed rss_parser::parse() {
 		}
 
 		if (x.description().length() == 0 && item->description) {
-			char * str = stringprep_convert(item->description,stringprep_locale_charset(), encoding);
+			char * str = stringprep_convert(item->description, "utf-8", encoding);
 			if (str) {
 				x.set_description(str);
 				free(str);
+			} else {
+				GetLogger().log(LOG_WARN, "rss_parser::parse: conversion of %s to utf-8 failed", item->description);
 			}
 		}
 
@@ -329,4 +343,58 @@ void rss_item::set_enclosure_url(const std::string& url) {
 
 void rss_item::set_enclosure_type(const std::string& type) {
 	enclosure_type_ = type;
+}
+
+std::string rss_item::title() const {
+	GetLogger().log(LOG_DEBUG,"rss_item::title: title before conversion: %s", title_.c_str());
+	char * str = stringprep_convert(title_.c_str(), stringprep_locale_charset(), "utf-8");
+	std::string retval;
+	if (str) {
+		GetLogger().log(LOG_DEBUG,"rss_item::title: title after conversion: %s", str);
+		retval = str;
+		free(str);
+	} else {
+		GetLogger().log(LOG_DEBUG,"rss_item::title: conversion to %s failed: %s", stringprep_locale_charset(), title_.c_str());
+	}
+	return retval;
+}
+
+std::string rss_item::author() const {
+	char * str = stringprep_convert(author_.c_str(), stringprep_locale_charset(), "utf-8");
+	std::string retval;
+	if (str) {
+		retval = str;
+		free(str);
+	}
+	return retval;
+}
+
+std::string rss_item::description() const {
+	char * str = stringprep_convert(description_.c_str(), stringprep_locale_charset(), "utf-8");
+	std::string retval;
+	if (str) {
+		retval = str;
+		free(str);
+	}
+	return retval;
+}
+
+std::string rss_feed::title() const {
+	char * str = stringprep_convert(title_.c_str(), stringprep_locale_charset(), "utf-8");
+	std::string retval;
+	if (str) {
+		retval = str;
+		free(str);
+	}
+	return retval;
+}
+
+std::string rss_feed::description() const {
+	char * str = stringprep_convert(description_.c_str(), stringprep_locale_charset(), "utf-8");
+	std::string retval;
+	if (str) {
+		retval = str;
+		free(str);
+	}
+	return retval;
 }

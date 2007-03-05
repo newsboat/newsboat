@@ -11,7 +11,6 @@ TODO:
 - implement planet support
 	- create examples
 	- make title user-settable via first tag
-	- write documentation
 
 longteam goals to reach:
 - add scripting support
@@ -77,3 +76,4 @@ DONE:
 		- planet_title "My Planet"
 		- planet-limit 50 (display the 50 latest articles)
 	- implement template system
+	- write documentation

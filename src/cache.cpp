@@ -222,14 +222,14 @@ void cache::externalize_rssfeed(rss_feed& feed) {
 	GetLogger().log(LOG_DEBUG, "cache::externalize_rss_feed: rss_feeds with rssurl = '%s': found %d",feed.rssurl().c_str(), count);
 	// std::cerr << "externalize: count = " << count << std::endl;
 	if (count > 0) {
-		char * updatequery = sqlite3_mprintf("UPDATE rss_feed SET title = '%q', url = '%q' WHERE rssurl = '%q';",feed.title().c_str(),feed.link().c_str(), feed.rssurl().c_str());
+		char * updatequery = sqlite3_mprintf("UPDATE rss_feed SET title = '%q', url = '%q' WHERE rssurl = '%q';",feed.title_raw().c_str(),feed.link().c_str(), feed.rssurl().c_str());
 		// std::cerr << updatequery << std::endl;
 		rc = sqlite3_exec(db,updatequery,NULL,NULL,NULL);
 		GetLogger().log(LOG_DEBUG,"ran SQL statement: %s", updatequery);
 		free(updatequery);
 		// std::cerr << "externalize: update rc = " << rc << " query = " << updatequery << std::endl;
 	} else {
-		char * insertquery = sqlite3_mprintf("INSERT INTO rss_feed (rssurl, url, title) VALUES ( '%q', '%q', '%q' );", feed.rssurl().c_str(), feed.link().c_str(), feed.title().c_str());
+		char * insertquery = sqlite3_mprintf("INSERT INTO rss_feed (rssurl, url, title) VALUES ( '%q', '%q', '%q' );", feed.rssurl().c_str(), feed.link().c_str(), feed.title_raw().c_str());
 		// std::cerr << insertquery << std::endl;
 		rc = sqlite3_exec(db,insertquery,NULL,NULL,NULL);
 		GetLogger().log(LOG_DEBUG,"ran SQL statement: %s", insertquery);
@@ -450,8 +450,8 @@ void cache::update_rssitem(rss_item& item, const std::string& feedurl) {
 	free(query);
 	if (count_cbh.count() > 0) {
 		char * update = sqlite3_mprintf("UPDATE rss_item SET title = '%q', author = '%q', url = '%q', feedurl = '%q', content = '%q', enclosure_url = '%q', enclosure_type = '%q' WHERE guid = '%q'",
-			item.title().c_str(), item.author().c_str(), item.link().c_str(), 
-			feedurl.c_str(), item.description().c_str(), 
+			item.title_raw().c_str(), item.author_raw().c_str(), item.link().c_str(), 
+			feedurl.c_str(), item.description_raw().c_str(), 
 			item.enclosure_url().c_str(), item.enclosure_type().c_str(),
 			item.guid().c_str());
 		GetLogger().log(LOG_DEBUG,"running query: %s", update);
@@ -464,8 +464,8 @@ void cache::update_rssitem(rss_item& item, const std::string& feedurl) {
 	} else {
 		char * insert = sqlite3_mprintf("INSERT INTO rss_item (guid,title,author,url,feedurl,pubDate,content,unread,enclosure_url,enclosure_type,enqueued) "
 										"VALUES ('%q','%q','%q','%q','%q','%u','%q',1,'%q','%q',%d)",
-										item.guid().c_str(), item.title().c_str(), item.author().c_str(), 
-										item.link().c_str(), feedurl.c_str(), item.pubDate_timestamp(), item.description().c_str(),
+										item.guid().c_str(), item.title_raw().c_str(), item.author_raw().c_str(), 
+										item.link().c_str(), feedurl.c_str(), item.pubDate_timestamp(), item.description_raw().c_str(),
 										item.enclosure_url().c_str(), item.enclosure_type().c_str(), item.enqueued() ? 1 : 0);
 		GetLogger().log(LOG_DEBUG,"running query: %s", insert);
 		rc = sqlite3_exec(db,insert,NULL,NULL,NULL);
@@ -504,8 +504,8 @@ void cache::update_rssitem_unread_and_enqueued(rss_item& item, const std::string
 	} else {
 		char * insert = sqlite3_mprintf("INSERT INTO rss_item (guid,title,author,url,feedurl,pubDate,content,unread,enclosure_url,enclosure_type,enqueued) "
 										"VALUES ('%q','%q','%q','%q','%q','%u','%q',1,'%q','%q',%d)",
-										item.guid().c_str(), item.title().c_str(), item.author().c_str(), 
-										item.link().c_str(), feedurl.c_str(), item.pubDate_timestamp(), item.description().c_str(),
+										item.guid().c_str(), item.title_raw().c_str(), item.author_raw().c_str(), 
+										item.link().c_str(), feedurl.c_str(), item.pubDate_timestamp(), item.description_raw().c_str(),
 										item.enclosure_url().c_str(), item.enclosure_type().c_str(), item.enqueued() ? 1 : 0);
 		// std::cerr << insert << std::endl;
 		GetLogger().log(LOG_DEBUG,"running query: %s", insert);

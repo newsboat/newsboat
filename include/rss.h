@@ -20,16 +20,19 @@ namespace newsbeuter {
 			rss_item(cache * c) : unread_(true), ch(c), enqueued_(false) { }
 			~rss_item() { }
 			
-			inline const std::string& title() const { return title_; }
+			std::string title() const;
+			std::string title_raw() const { return title_; }
 			void set_title(const std::string& t);
 			
 			inline const std::string& link() const { return link_; }
 			void set_link(const std::string& l);
 			
-			inline const std::string& author() const { return author_; }
+			std::string author() const;
+			std::string author_raw() const { return author_; }
 			void set_author(const std::string& a);
-			
-			inline const std::string& description() const { return description_; }
+		 	
+			std::string description() const;
+			std::string description_raw() const { return description_; }
 			void set_description(const std::string& d);
 			
 			std::string pubDate() const;
@@ -78,10 +81,12 @@ namespace newsbeuter {
 		public:
 			rss_feed(cache * c) : ch(c) { }
 			~rss_feed() { }
-			inline const std::string& title() const { return title_; }
+			std::string title_raw() const { return title_; }
+			std::string title() const;
 			inline void set_title(const std::string& t) { title_ = t; }
 			
-			inline const std::string& description() const { return description_; }
+			std::string description_raw() const { return description_; }
+			std::string description() const;
 			inline void set_description(const std::string& d) { description_ = d; }
 			
 			inline const std::string& link() const { return link_; }
