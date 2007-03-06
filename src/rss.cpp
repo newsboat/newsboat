@@ -356,6 +356,7 @@ std::string rss_item::title() const {
 		free(str);
 	} else {
 		GetLogger().log(LOG_DEBUG,"rss_item::title: conversion to %s failed: %s", stringprep_locale_charset(), title_.c_str());
+		retval = title_;
 	}
 	return retval;
 }
@@ -366,6 +367,8 @@ std::string rss_item::author() const {
 	if (str) {
 		retval = str;
 		free(str);
+	} else {
+		retval = author_;
 	}
 	return retval;
 }
@@ -376,6 +379,8 @@ std::string rss_item::description() const {
 	if (str) {
 		retval = str;
 		free(str);
+	} else {
+		retval = description_;
 	}
 	return retval;
 }
@@ -386,6 +391,8 @@ std::string rss_feed::title() const {
 	if (str) {
 		retval = str;
 		free(str);
+	} else {
+		retval = title_;
 	}
 	return retval;
 }
@@ -396,6 +403,8 @@ std::string rss_feed::description() const {
 	if (str) {
 		retval = str;
 		free(str);
+	} else {
+		retval = description_;
 	}
 	return retval;
 }
