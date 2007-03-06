@@ -11,6 +11,11 @@ TODO:
 - implement planet support
 	- create examples
 	- make title user-settable via first tag
+	- document template language
+- write "newsbeuter hacker's guide"
+	- describe the overall architecture
+	- describe debugging tricks (i.e. logging)
+	- describe design decisions, e.g. why certain things are only configurable via the config files
 
 longteam goals to reach:
 - add scripting support

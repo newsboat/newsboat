@@ -586,7 +586,7 @@ void view::write_item(const rss_item& item, const std::string& filename) {
 	lines.push_back(std::string(""));
 	
 	htmlrenderer rnd(80);
-	rnd.render(item.description(), lines, links);
+	rnd.render(item.description(), lines, links, item.feedurl());
 
 	std::fstream f;
 	f.open(filename.c_str(),std::fstream::out);
@@ -1027,7 +1027,7 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 				render_source(lines, item.description(), render_width);
 			} else {
 				htmlrenderer rnd(render_width);
-				rnd.render(item.description(), lines, links);
+				rnd.render(item.description(), lines, links, item.feedurl());
 			}
 
 			for (std::vector<std::string>::iterator it = lines.begin(); it != lines.end(); ++it) {

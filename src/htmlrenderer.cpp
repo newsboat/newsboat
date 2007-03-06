@@ -5,14 +5,42 @@
 #include <iostream>
 #include <stdexcept>
 #include <logger.h>
+#include <libgen.h>
+#include <config.h>
 
 using namespace newsbeuter;
 
 htmlrenderer::htmlrenderer(unsigned int width) : w(width) { }
 
-void htmlrenderer::render(const std::string& source, std::vector<std::string>& lines, std::vector<std::string>& links) {
+void htmlrenderer::render(const std::string& source, std::vector<std::string>& lines, std::vector<std::string>& links, const std::string& url) {
 	std::istringstream input(source);
-	render(input, lines, links);
+	render(input, lines, links, url);
+}
+
+std::string htmlrenderer::absolute_url(const std::string& url, const std::string& link) {
+	if (link.substr(0,7)=="http://" || link.substr(0,8)=="https://" || link.substr(0,6)=="ftp://") {
+		return link;
+	}
+	char u[1024];
+	snprintf(u, sizeof(u), "%s", url.c_str());
+	if (link[0] == '/') {
+		// this is probably the worst code in the whole program
+		char * foo = strstr(u, "//");
+		if (foo) {
+			if (strlen(foo)>=2) {
+				foo += 2;
+				foo = strchr(foo,'/');
+				char u2[1024];
+				strcpy(u2, u);
+				snprintf(u2 + (foo - u), sizeof(u2) - (foo - u), "%s", link.c_str());
+				return std::string(u2);
+			}
+		}
+		return link;
+	} else {
+		char * base = dirname(u);
+		return std::string(base) + "/" + link;
+	}
 }
 
 void htmlrenderer::add_link(std::vector<std::string>& links, const std::string& link) {
@@ -25,13 +53,14 @@ void htmlrenderer::add_link(std::vector<std::string>& links, const std::string& 
 		links.push_back(link);
 }
 
-void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, std::vector<std::string>& links) {
+void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, std::vector<std::string>& links, const std::string& url) {
 	unsigned int link_count = 0;
 	std::string curline;
 	int indent_level = 0;
 	bool inside_list = false, inside_li = false, is_ol = false, inside_pre = false;
 	bool itunes_hack = false;
 	unsigned int ol_count = 1;
+	std::vector<std::string> imglinks;
 	
 	xmlpullparser xpp;
 	xpp.setInput(input);
@@ -49,7 +78,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						link = "";
 					}
 					if (link.length() > 0) {
-						add_link(links,link);
+						add_link(links,absolute_url(url,link));
 						std::ostringstream ref;
 						ref << "[" << link_count << "]";
 						link_count++;
@@ -75,9 +104,9 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						imgurl = "";
 					}
 					if (imgurl.length() > 0) {
-						add_link(links,imgurl);
+						add_link(imglinks,absolute_url(url,imgurl));
 						std::ostringstream ref;
-						ref << "[" << link_count << "]";
+						ref << "[" << _("image") << " " << link_count << "]";
 						link_count++;
 						curline.append(ref.str());
 					}
@@ -244,14 +273,22 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 	
 	if (links.size() > 0) {
 		lines.push_back(std::string(""));
-		lines.push_back(std::string("Links: "));
+		lines.push_back(std::string(_("Links: ")));
 		for (unsigned int i=0;i<links.size();++i) {
 			std::ostringstream line;
 			line << "[" << i << "]: " << links[i];
 			lines.push_back(line.str());
 		}
 	}
-
+	if (imglinks.size() > 0) {
+		lines.push_back(std::string(""));
+		lines.push_back(std::string(_("Images: ")));
+		for (unsigned int i=0;i<imglinks.size();++i) {
+			std::ostringstream line;
+			line << "[" << i << "]: " << imglinks[i];
+			lines.push_back(line.str());
+		}
+	}
 }
 
 void htmlrenderer::prepare_newline(std::string& line, int indent_level) {
