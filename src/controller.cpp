@@ -405,7 +405,7 @@ void controller::import_opml(const char * filename) {
 	if (root) {
 		body = nxmle_find_element(data, root, "body", NULL);
 		if (body) {
-			rec_find_rss_outlines(body);
+			rec_find_rss_outlines(body, "");
 			urlcfg.write_config();
 		}
 	}
@@ -428,33 +428,52 @@ void controller::export_opml() {
 	std::cout << "</opml>" << std::endl;
 }
 
-void controller::rec_find_rss_outlines(nxml_data_t * node) {
+void controller::rec_find_rss_outlines(nxml_data_t * node, std::string tag) {
 	while (node) {
 		char * url = nxmle_find_attribute(node, "xmlUrl", NULL);
 		char * type = nxmle_find_attribute(node, "type", NULL);
+		std::string newtag = tag;
 
-		if (node->type == NXML_TYPE_ELEMENT && strcmp(node->value,"outline")==0 && type && strcmp(type,"rss")==0 && url) {
-
-			GetLogger().log(LOG_DEBUG,"OPML import: found RSS outline with url = %s",url);
-
-			bool found = false;
-
-			for (std::vector<std::string>::iterator it = urlcfg.get_urls().begin(); it != urlcfg.get_urls().end(); ++it) {
-				if (*it == url) {
-					found = true;
-				}
-			}
-
-			if (!found) {
-				GetLogger().log(LOG_DEBUG,"OPML import: added url = %s",url);
-				urlcfg.get_urls().push_back(std::string(url));
-			} else {
-				GetLogger().log(LOG_DEBUG,"OPML import: url = %s is already in list",url);
-			}
-
+		if (!url) {
+			url = nxmle_find_attribute(node, "url", NULL);
 		}
 
-		rec_find_rss_outlines(node->children);
+		if (node->type == NXML_TYPE_ELEMENT && strcmp(node->value,"outline")==0) {
+			if (type && (strcmp(type,"rss")==0 || strcmp(type,"link")==0)) {
+				if (url) {
+
+					GetLogger().log(LOG_DEBUG,"OPML import: found RSS outline with url = %s",url);
+
+					bool found = false;
+
+					for (std::vector<std::string>::iterator it = urlcfg.get_urls().begin(); it != urlcfg.get_urls().end(); ++it) {
+						if (*it == url) {
+							found = true;
+						}
+					}
+
+					if (!found) {
+						GetLogger().log(LOG_DEBUG,"OPML import: added url = %s",url);
+						urlcfg.get_urls().push_back(std::string(url));
+						if (tag.length() > 0) {
+							GetLogger().log(LOG_DEBUG, "OPML import: appending tag %s to url %s", tag.c_str(), url);
+							urlcfg.get_tags(url).push_back(tag);
+						}
+					} else {
+						GetLogger().log(LOG_DEBUG,"OPML import: url = %s is already in list",url);
+					}
+				}
+			} else {
+				char * text = nxmle_find_attribute(node, "text", NULL);
+				if (text) {
+					if (newtag.length() > 0) {
+						newtag.append("/");
+					}
+					newtag.append(text);
+				}
+			}
+		}
+		rec_find_rss_outlines(node->children, newtag);
 
 		node = node->next;
 	}

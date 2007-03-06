@@ -38,7 +38,7 @@ namespace newsbeuter {
 			void usage(char * argv0);
 			void import_opml(const char * filename);
 			void export_opml();
-			void rec_find_rss_outlines(nxml_data_t * node);
+			void rec_find_rss_outlines(nxml_data_t * node, std::string tag);
 
 			view * v;
 			urlreader urlcfg;

@@ -50,7 +50,13 @@ void urlreader::write_config() {
 	f.open(filename.c_str(),std::fstream::out);
 	if (f.is_open()) {
 		for (std::vector<std::string>::iterator it=urls.begin(); it != urls.end(); ++it) {
-			f << *it << std::endl;
+			f << *it;
+			if (tags[*it].size() > 0) {
+				for (std::vector<std::string>::iterator jt=tags[*it].begin();jt!=tags[*it].end();++jt) {
+					f << " \"" << *jt << "\"";
+				}
+			}
+			f << std::endl;
 		}
 	}
 }
