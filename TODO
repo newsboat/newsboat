@@ -6,7 +6,6 @@ TODO:
 - implement podcast support
 	- test more thoroughly
 	- implement "start player" function in podbeuter.
-- fill table with html entities
 - do entitity decoding for titles (this may be controversial...)
 - implement planet support
 	- create examples
@@ -82,3 +81,4 @@ DONE:
 		- planet-limit 50 (display the 50 latest articles)
 	- implement template system
 	- write documentation
+- fill table with html entities

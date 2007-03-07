@@ -55,6 +55,7 @@ void htmlrenderer::add_link(std::vector<std::string>& links, const std::string& 
 
 void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, std::vector<std::string>& links, const std::string& url) {
 	unsigned int link_count = 0;
+	unsigned int image_count = 0;
 	std::string curline;
 	int indent_level = 0;
 	bool inside_list = false, inside_li = false, is_ol = false, inside_pre = false;
@@ -106,8 +107,8 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					if (imgurl.length() > 0) {
 						add_link(imglinks,absolute_url(url,imgurl));
 						std::ostringstream ref;
-						ref << "[" << _("image") << " " << link_count << "]";
-						link_count++;
+						ref << "[" << _("image") << " " << image_count << "]";
+						image_count++;
 						curline.append(ref.str());
 					}
 				} else if (xpp.getText() == "blockquote") {
