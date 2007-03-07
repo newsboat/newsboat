@@ -8,7 +8,6 @@ TODO:
 	- implement "start player" function in podbeuter.
 - do entitity decoding for titles (this may be controversial...)
 - implement planet support
-	- create examples
 	- make title user-settable via first tag
 	- document template language
 - write "newsbeuter hacker's guide"
@@ -81,4 +80,5 @@ DONE:
 		- planet-limit 50 (display the 50 latest articles)
 	- implement template system
 	- write documentation
+	- create examples
 - fill table with html entities

@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="application/html+xml; charset=UTF-8" />
+		<title>Planet</title>
+	</head>
+	<body>
+		<h1>Planet</h2>
+
+		<div style="float: right">
+		<h2>Subscriptions</h2>
+		<ul>
+#LOOP Feeds#
+		<li><a href="#VAR feed_link#">#VAR feed_title#</a> (<a href="#VAR feed_rssurl#">rss feed</a>)</li>
+#ENDLOOP#
+		</ul>
+		</div>
+
+#LOOP Items#
+		<h4>#VAR item_date#: <a href="#VAR item_link#">#VAR item_title#</a></h4>
+		<p>#VAR item_body#</p>
+		#IF item_author#<p><em>by #VAR item_author#</em></p>#ENDIF#
+		<hr />
+#ENDLOOP#
+
+	</body>
+</html>
