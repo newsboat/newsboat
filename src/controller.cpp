@@ -83,7 +83,9 @@ void controller::run(int argc, char * argv[]) {
 	char msgbuf[1024];
 
 	::signal(SIGINT, ctrl_c_action);
+#ifndef DEBUG
 	::signal(SIGSEGV, ctrl_c_action);
+#endif
 
 	bool do_import = false, do_export = false;
 	std::string importfile;
