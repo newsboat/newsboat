@@ -39,6 +39,7 @@ void poddlthread::run() {
 
 	// set up progress notification:
 	curl_easy_setopt(easyhandle, CURLOPT_NOPROGRESS, 0);
+	curl_easy_setopt(easyhandle, CURLOPT_FOLLOWLOCATION, 1);
 	curl_easy_setopt(easyhandle, CURLOPT_PROGRESSFUNCTION, progress_callback);
 	curl_easy_setopt(easyhandle, CURLOPT_PROGRESSDATA, this);
 
