@@ -114,6 +114,19 @@ void pb_view::run() {
 					}
 				}
 				break;
+			case OP_PB_PLAY: {
+					std::istringstream os(dllist_form.get("dlposname"));
+					int idx = -1;
+					os >> idx;
+					if (idx != -1) {
+						if (ctrl->downloads()[idx].status() == DL_FINISHED) {
+							ctrl->play_file(ctrl->downloads()[idx].filename());
+						} else {
+							dllist_form.set("msg", _("Error: download needs to be finished before the file can be played."));
+						}
+					}
+				}
+				break;
 			case OP_PB_CANCEL: {
 					std::istringstream os(dllist_form.get("dlposname"));
 					int idx = -1;
@@ -223,6 +236,7 @@ void pb_view::set_dllist_keymap_hint() {
 		{ OP_PB_DELETE, _("Delete") },
 		{ OP_PB_PURGE, _("Purge Finished") },
 		{ OP_PB_TOGGLE_DLALL, _("Toggle Automatic Download") },
+		{ OP_PB_PLAY, _("Play") },
 		{ OP_HELP, _("Help") },
 		{ OP_NIL, NULL }
 	};

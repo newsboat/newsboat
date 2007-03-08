@@ -48,6 +48,7 @@ namespace newsbeuter {
 						OP_PB_TOGGLE_DLALL, 
 						OP_PB_MOREDL, 
 						OP_PB_LESSDL, 
+						OP_PB_PLAY, 
 						OP_PB_MAX };
 
 	class keymap : public config_action_handler {

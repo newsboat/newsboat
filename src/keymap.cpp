@@ -36,6 +36,7 @@ op_desc opdescs[] = {
 	{ OP_PB_DELETE, _("Mark download as deleted"), KM_PODBEUTER },
 	{ OP_PB_PURGE, _("Purge finished and deleted downloads from queue"), KM_PODBEUTER },
 	{ OP_PB_TOGGLE_DLALL, _("Toggle automatic download on/off"), KM_PODBEUTER },
+	{ OP_PB_PLAY, _("Start player with currently selected download"), KM_PODBEUTER },
 	{ OP_NIL, NULL }
 };
 
@@ -66,6 +67,7 @@ keymap::keymap() {
 	keymap_["a"] = OP_PB_TOGGLE_DLALL;
 	keymap_["+"] = OP_PB_MOREDL;
 	keymap_["-"] = OP_PB_LESSDL;
+	keymap_["p"] = OP_PB_PLAY;
 
 	keymap_["NIL"] = OP_NIL;
 }
@@ -129,6 +131,7 @@ operation keymap::get_opcode(const std::string& opstr) {
 		{ "pb-toggle-download-all", OP_PB_TOGGLE_DLALL },
 		{ "pb-increase-max-dls", OP_PB_MOREDL },
 		{ "pb-decrease-max-dls", OP_PB_LESSDL },
+		{ "pb-play", OP_PB_PLAY },
 		{ NULL, OP_NIL }
 	};
 	for (int i=0;opcode_map[i].opstr;++i) {

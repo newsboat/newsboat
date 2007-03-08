@@ -5,7 +5,6 @@ TODO:
 	join two subsequent text nodes separated by a comment
 - implement podcast support
 	- test more thoroughly
-	- implement "start player" function in podbeuter.
 - do entitity decoding for titles (this may be controversial...)
 - implement planet support
 	- make title user-settable via first tag
@@ -72,6 +71,7 @@ DONE:
 	- implement "resume download" function
 	- write podbeuter.1 manpage
 	- set configured colors
+	- implement "start player" function in podbeuter.
 - implement planet support
 	- implement this as an additional tool "nb-planet"
 	- options:

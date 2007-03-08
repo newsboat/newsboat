@@ -233,5 +233,19 @@ void pb_controller::decrease_parallel_downloads() {
 		--max_dls;
 }
 
+void pb_controller::play_file(const std::string& str) {
+	std::string cmdline;
+	std::string player = cfg->get_configvalue("player");
+	if (player == "")
+		return;
+	cmdline.append(player);
+	cmdline.append(" '");
+	cmdline.append(str);
+	cmdline.append("'");
+	stfl::reset();
+	GetLogger().log(LOG_DEBUG, "pb_controller::play_file: running `%s'", cmdline.c_str());
+	::system(cmdline.c_str());
+}
+
 
 } // namespace

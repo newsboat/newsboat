@@ -39,6 +39,8 @@ namespace podbeuter {
 
 			double get_total_kbps();
 
+			void play_file(const std::string& str);
+
 		private:
 			pb_view * v;
 			std::string config_file;
