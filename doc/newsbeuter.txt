@@ -63,7 +63,7 @@ First Steps
 After you've installed newsbeuter, you can run it for the first time by typing
 "newsbeuter" on your command prompt. This will bring you the following message:
 
-	Error: no URLs configured. Please fill the file /Users/ak/.nos/urls with RSS feed URLs or import an OPML file.
+	Error: no URLs configured. Please fill the file /Users/ak/.newsbeuter/urls with RSS feed URLs or import an OPML file.
 
 	newsbeuter 0.1
 	usage: ./newsbeuter [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]
@@ -81,7 +81,7 @@ feeds to newsbeuter, you can either add URLs to the configuration file
 $HOME/.newsbeuter/urls or you can import an OPML file by running "newsbeuter -i
 blogroll.opml".
 
-Now you can run newsbeuter again, and it will present you with a navigatable
+Now you can run newsbeuter again, and it will present you with a controllable
 list of the URLs that you configured previously. You can now start downloading
 the feeds, either by pressing "R" to download all feeds, or by pressing "r" to
 download the currently selected feed. You can then select a feed you want to
@@ -294,7 +294,7 @@ pb-delete:D:Delete the currently selected URL from the queue.
 pb-purge:P:Remove all finished and deleted downloads from the queue and load URLs that were newly added to the queue.
 pb-toggle-download-all:a:Toggle the "automatic download" feature where all queued URLs are downloaded one after the other. The "max-downloads" configuration option controls how many downloads are done in parallel.
 pb-increase-max-dls:+:Increase the "max-downloads" option by 1.
-pb-decrease-max-dls:-:Decrease the "max-downloads" option by 1. If the option is already 1, it cannot be furthere decreased.
+pb-decrease-max-dls:-:Decrease the "max-downloads" option by 1. If the option is already 1, no further decrease is possible.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A usual "use case" is to configure newsbeuter to automatically enqueue newly
