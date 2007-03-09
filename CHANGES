@@ -5,6 +5,7 @@ Changes for newsbeuter:
 	added podcast support
 	added planet aggregator
 	changed handling of encoding - now, everything is stored as UTF-8 internally, and gets converted on-the-fly
+	removed dependency to libidn
 
 0.2 (2007-02-21):
 	removed an unnecessary mutex lock/unlock that made newsbeuter lock up when the "max-items" config option was set

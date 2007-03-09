@@ -10,10 +10,12 @@ TODO:
 - implement planet support
 	- make more variables available for Items loop
 	- document template language
+	- make "planet" branch, remove it from trunk and improve it later
 - write "newsbeuter hacker's guide"
 	- describe the overall architecture
 	- describe debugging tricks (i.e. logging)
 	- describe design decisions, e.g. why certain things are only configurable via the config files
+- make STFL and newsbeuter capable of correct handling of Unicode (currently, it crashes when entering cyrillic characters)
 
 longteam goals to reach:
 - add scripting support

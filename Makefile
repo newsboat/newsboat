@@ -1,4 +1,4 @@
-# the package name
+
 PACKAGE=newsbeuter
 
 # important directories
@@ -28,7 +28,7 @@ endif
 NEWSBEUTER=$(PACKAGE)
 NEWSBEUTER_SOURCES=$(shell cat newsbeuter.deps)
 NEWSBEUTER_OBJS=$(patsubst %.cpp,%.o,$(NEWSBEUTER_SOURCES))
-NEWSBEUTER_LIBS=-lstfl -lmrss -lnxml -lncursesw -lsqlite3 -lidn -lpthread
+NEWSBEUTER_LIBS=-lstfl -lmrss -lnxml -lncursesw -lsqlite3 -lpthread
 
 
 PODBEUTER=podbeuter
@@ -39,7 +39,7 @@ PODBEUTER_LIBS=-lstfl -lncursesw -lpthread -lcurl
 NBPLANET=nb-planet
 NBPLANET_SOURCES=$(shell cat nb-planet.deps)
 NBPLANET_OBJS=$(patsubst %.cpp,%.o,$(NBPLANET_SOURCES))
-NBPLANET_LIBS=-lmrss -lnxml -lidn -lpthread -lsqlite3
+NBPLANET_LIBS=-lmrss -lnxml -lpthread -lsqlite3
 
 
 ifneq ($(shell uname -s),Linux)

@@ -4,6 +4,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <iconv.h>
+#include <errno.h>
 
 namespace newsbeuter {
 
@@ -161,6 +163,61 @@ bool utils::try_fs_lock(const std::string& lock_file, pid_t & pid) {
 		}
 		return false;
 	}
+}
+
+
+std::string utils::convert_text(const std::string& text, const std::string& tocode, const std::string& fromcode) {
+	std::string result;
+
+	if (tocode == fromcode)
+		return text;
+
+	iconv_t cd = ::iconv_open(tocode.c_str(), fromcode.c_str());
+
+	if (cd == (iconv_t)-1)
+		return result;
+
+	size_t inbytesleft;
+	size_t outbytesleft;
+	char * inbufp;
+	char outbuf[16];
+	char * outbufp = outbuf;
+
+	outbytesleft = sizeof(outbuf);
+	inbufp = const_cast<char *>(text.c_str()); // evil, but spares us some trouble
+	inbytesleft = strlen(inbufp);
+
+	do {
+		char * old_outbufp = outbufp;
+		int rc = ::iconv(cd, &inbufp, &inbytesleft, &outbufp, &outbytesleft);
+		if (-1 == rc) {
+			switch (errno) {
+				case E2BIG:
+					result.append(old_outbufp, outbufp - old_outbufp);
+					outbufp = outbuf;
+					outbytesleft = sizeof(outbuf);
+					inbufp += strlen(inbufp) - inbytesleft;
+					inbytesleft = strlen(inbufp);
+					break;
+				case EILSEQ:
+				case EINVAL:
+					result.append(old_outbufp, outbufp - old_outbufp);
+					result.append("?");
+					GetLogger().log(LOG_DEBUG, "utils::convert_text: hit EILSEQ/EINVAL: result = `%s'", result.c_str());
+					inbufp += strlen(inbufp) - inbytesleft + 1;
+					GetLogger().log(LOG_DEBUG, "utils::convert_text: new inbufp: `%s'", inbufp);
+					inbytesleft = strlen(inbufp);
+					break;
+			}
+		} else {
+			result.append(old_outbufp, outbufp - old_outbufp);
+		}
+	} while (inbytesleft > 0);
+
+	GetLogger().log(LOG_DEBUG, "utils::convert_text: before: %s", text.c_str());
+	GetLogger().log(LOG_DEBUG, "utils::convert_text: after:  %s", result.c_str());
+
+	return result;
 }
 
 
