@@ -6,8 +6,9 @@ TODO:
 - implement podcast support
 	- test more thoroughly
 - do entitity decoding for titles (this may be controversial...)
+- research (and fix) libnxml decoding issues
 - implement planet support
-	- make title user-settable via first tag
+	- make more variables available for Items loop
 	- document template language
 - write "newsbeuter hacker's guide"
 	- describe the overall architecture

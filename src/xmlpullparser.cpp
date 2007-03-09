@@ -1,6 +1,7 @@
 #include <xmlpullparser.h>
 #include <exceptions.h>
 #include <utils.h>
+#include <logger.h>
 #include <stdexcept>
 #include <istream>
 #include <sstream>
@@ -398,6 +399,7 @@ static struct {
 };
 
 std::string xmlpullparser::decode_entity(std::string s) {
+	GetLogger().log(LOG_DEBUG, "xmlpullparser::decode_entity: decoding '%s'...", s.c_str());
 	// TODO: improve entity decoder
 	if (s == "lt") {
 		return "<";
@@ -413,6 +415,7 @@ std::string xmlpullparser::decode_entity(std::string s) {
 		std::string result;
 		unsigned int wc;
 		char * mbc = static_cast<char *>(alloca(MB_CUR_MAX));
+		mbc[0] = '\0';
 		if (s[1] == 'x') {
 			s.erase(0,2);
 			std::istringstream is(s);
@@ -428,6 +431,7 @@ std::string xmlpullparser::decode_entity(std::string s) {
 			mbc[pos] = '\0';
 			result.append(mbc);
 		}
+		GetLogger().log(LOG_DEBUG,"xmlpullparser::decode_entity: wc = %u pos = %d mbc = '%s'", wc, pos, mbc);
 		return result;
 	} else {
 		for (unsigned int i=0;entity_table[i].entity;++i) {

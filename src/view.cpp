@@ -407,6 +407,8 @@ bool view::run_itemlist(unsigned int pos, bool auto_open) {
 				strftime(datebuf,sizeof(datebuf), "%b %d   ", stm);
 				title.append(datebuf);
 				title.append(it->title());
+				GetLogger().log(LOG_DEBUG, "view::run_itemlist: XXXTITLE it->title = `%s' title = `%s' quoted title = `%s'", 
+					it->title().c_str(), title.c_str(), stfl::quote(title).c_str());
 				line.append(stfl::quote(title));
 				line.append("}");
 				code.append(line);

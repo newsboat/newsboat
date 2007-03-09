@@ -28,13 +28,13 @@ endif
 NEWSBEUTER=$(PACKAGE)
 NEWSBEUTER_SOURCES=$(shell cat newsbeuter.deps)
 NEWSBEUTER_OBJS=$(patsubst %.cpp,%.o,$(NEWSBEUTER_SOURCES))
-NEWSBEUTER_LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn -lpthread
+NEWSBEUTER_LIBS=-lstfl -lmrss -lnxml -lncursesw -lsqlite3 -lidn -lpthread
 
 
 PODBEUTER=podbeuter
 PODBEUTER_SOURCES=$(shell cat podbeuter.deps)
 PODBEUTER_OBJS=$(patsubst %.cpp,%.o,$(PODBEUTER_SOURCES))
-PODBEUTER_LIBS=-lstfl -lncurses -lpthread -lcurl
+PODBEUTER_LIBS=-lstfl -lncursesw -lpthread -lcurl
 
 NBPLANET=nb-planet
 NBPLANET_SOURCES=$(shell cat nb-planet.deps)
