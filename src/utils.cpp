@@ -217,6 +217,8 @@ std::string utils::convert_text(const std::string& text, const std::string& toco
 	GetLogger().log(LOG_DEBUG, "utils::convert_text: before: %s", text.c_str());
 	GetLogger().log(LOG_DEBUG, "utils::convert_text: after:  %s", result.c_str());
 
+	iconv_close(cd);
+
 	return result;
 }
 

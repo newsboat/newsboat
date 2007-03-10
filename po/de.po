@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-05 16:43+0100\n"
+"POT-Creation-Date: 2007-03-10 02:43+0100\n"
 "PO-Revision-Date: 2007-02-21 13:03+0100\n"
 "Last-Translator: Andreas Krennmair <ak@synflood.at>\n"
 "Language-Team: Andreas Krennmair <ak@synflood.at>\n"
@@ -65,12 +65,12 @@ msgstr ""
 "Bitte setzen sie die HOME Umgebungsvariable oder fügen sie einen gültigen "
 "Benutzer für UID %u hinzu!"
 
-#: src/controller.cpp:136 src/pb_controller.cpp:105 src/planet.cpp:113
+#: src/controller.cpp:138 src/pb_controller.cpp:105 src/planet.cpp:113
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr "%s: unbekannte Option - %c"
 
-#: src/controller.cpp:153 src/planet.cpp:124
+#: src/controller.cpp:155 src/planet.cpp:124
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
@@ -79,62 +79,62 @@ msgstr ""
 "Fehler: keine URLs konfiguriert. Bitte füllen sie die Datei %s mit RSS-Feed-"
 "URLs oder importieren sie eine OPML-Datei."
 
-#: src/controller.cpp:159 src/pb_controller.cpp:112
+#: src/controller.cpp:161 src/pb_controller.cpp:112
 #, c-format
 msgid "Starting %s %s..."
 msgstr "Starte %s %s..."
 
-#: src/controller.cpp:165 src/pb_controller.cpp:117 src/planet.cpp:132
+#: src/controller.cpp:167 src/pb_controller.cpp:117 src/planet.cpp:132
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "Fehler: eine Instanz von %s läuft bereits (PID: %u)"
 
-#: src/controller.cpp:172 src/pb_controller.cpp:122
+#: src/controller.cpp:174 src/pb_controller.cpp:122
 msgid "Loading configuration..."
 msgstr "Lade Konfiguration..."
 
-#: src/controller.cpp:199 src/controller.cpp:218 src/controller.cpp:239
+#: src/controller.cpp:201 src/controller.cpp:220 src/controller.cpp:241
 #: src/pb_controller.cpp:150 src/pb_controller.cpp:163 src/planet.cpp:212
 #: src/planet.cpp:245
 msgid "done."
 msgstr "fertig."
 
-#: src/controller.cpp:202
+#: src/controller.cpp:204
 msgid "Loading articles from cache..."
 msgstr "Lade Artikel aus dem Zwischenspeicher..."
 
-#: src/controller.cpp:231
+#: src/controller.cpp:233
 msgid "Cleaning up cache..."
 msgstr "Bereinige Zwischenspeicher..."
 
-#: src/controller.cpp:275
+#: src/controller.cpp:277
 msgid "Opening feed..."
 msgstr "Öffne Feed..."
 
-#: src/controller.cpp:283
+#: src/controller.cpp:285
 msgid "Error: feed contains no items!"
 msgstr "Fehler: Feed enthält keine Elemente!"
 
-#: src/controller.cpp:289 src/controller.cpp:344
+#: src/controller.cpp:291 src/controller.cpp:346
 msgid "Error: invalid feed!"
 msgstr "Fehler: ungültiger Feed!"
 
-#: src/controller.cpp:310
+#: src/controller.cpp:312
 #, c-format
 msgid "%sLoading %s..."
 msgstr "%sLade %s..."
 
-#: src/controller.cpp:340 src/planet.cpp:249
+#: src/controller.cpp:342 src/planet.cpp:249
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr "Fehler beim Abholen von %s: %s"
 
-#: src/controller.cpp:350
+#: src/controller.cpp:352
 msgid "invalid feed index (bug)"
 msgstr "ungültiger Feed-Index (Bug)"
 
 # TODO: this still needs translation!
-#: src/controller.cpp:374
+#: src/controller.cpp:376
 #, c-format
 msgid ""
 "%s %s\n"
@@ -157,7 +157,7 @@ msgstr ""
 "-C <configdatei> Konfiguration aus <configdatei> lesen\n"
 "-h               diese Hilfe\n"
 
-#: src/controller.cpp:415
+#: src/controller.cpp:417
 #, c-format
 msgid "Import of %s finished."
 msgstr "Import von %s fertig."
@@ -193,6 +193,18 @@ msgstr "unvollständig"
 #: src/download.cpp:51
 msgid "unknown (bug)."
 msgstr "unbekannt (Bug)."
+
+#: src/htmlrenderer.cpp:110
+msgid "image"
+msgstr "Bild"
+
+#: src/htmlrenderer.cpp:277
+msgid "Links: "
+msgstr "Links: "
+
+#: src/htmlrenderer.cpp:286
+msgid "Images: "
+msgstr "Bilder: "
 
 #: src/keymap.cpp:16
 msgid "Open feed/article"
@@ -286,6 +298,10 @@ msgstr "Fertige und gelöschte Downloads aus Warteschlange aufräumen"
 msgid "Toggle automatic download on/off"
 msgstr "Automatischen Download ein/ausschalten"
 
+#: src/keymap.cpp:39
+msgid "Start player with currently selected download"
+msgstr "Player mit aktuell ausgewähltem Download starten"
+
 #: src/pb_controller.cpp:157
 msgid "Cleaning up queue..."
 msgstr "Bereinige Warteschlange..."
@@ -320,39 +336,47 @@ msgstr ""
 msgid "Error: can't quit: download(s) in progress."
 msgstr "Fehler: kann nicht beenden: Download(s) im Gange."
 
-#: src/pb_view.cpp:141
+#: src/pb_view.cpp:125
+msgid "Error: download needs to be finished before the file can be played."
+msgstr "Fehler: Download muss abgeschlossen sein bevor die Datei abgespielt werden kann."
+
+#: src/pb_view.cpp:154
 msgid "Error: unable to perform operation: download(s) in progress."
 msgstr "Fehler: kann Vorgang nicht durchführen: Download(s) im Gange."
 
-#: src/pb_view.cpp:160 src/pb_view.cpp:226 src/view.cpp:1257 src/view.cpp:1401
-#: src/view.cpp:1428 src/view.cpp:1453 src/view.cpp:1485
+#: src/pb_view.cpp:173 src/pb_view.cpp:240 src/view.cpp:1259 src/view.cpp:1403
+#: src/view.cpp:1430 src/view.cpp:1455 src/view.cpp:1487
 msgid "Help"
 msgstr "Hilfe"
 
-#: src/pb_view.cpp:211 src/pb_view.cpp:220 src/view.cpp:1394 src/view.cpp:1410
-#: src/view.cpp:1420 src/view.cpp:1447 src/view.cpp:1462 src/view.cpp:1482
+#: src/pb_view.cpp:224 src/pb_view.cpp:233 src/view.cpp:1396 src/view.cpp:1412
+#: src/view.cpp:1422 src/view.cpp:1449 src/view.cpp:1464 src/view.cpp:1484
 msgid "Quit"
 msgstr "Beenden"
 
-#: src/pb_view.cpp:221
+#: src/pb_view.cpp:234
 msgid "Download"
 msgstr "Download"
 
-#: src/pb_view.cpp:222 src/view.cpp:1437 src/view.cpp:1471
+#: src/pb_view.cpp:235 src/view.cpp:1439 src/view.cpp:1473
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: src/pb_view.cpp:223
+#: src/pb_view.cpp:236
 msgid "Delete"
 msgstr "Löschen"
 
-#: src/pb_view.cpp:224
+#: src/pb_view.cpp:237
 msgid "Purge Finished"
 msgstr "Fertige aufräumen"
 
-#: src/pb_view.cpp:225
+#: src/pb_view.cpp:238
 msgid "Toggle Automatic Download"
 msgstr "Automatischen Download umschalten"
+
+#: src/pb_view.cpp:239
+msgid "Play"
+msgstr "Abspielen"
 
 #: src/planet.cpp:152
 #, c-format
@@ -364,19 +388,20 @@ msgstr ""
 "\" korrekt um eine Ausgabe generieren zu können."
 
 #: src/planet.cpp:160
+#, c-format
 msgid ""
 "Error: your configuration is incomplete. Please set \"planet-template\" "
 "correctly to be able to generate output."
 msgstr ""
-"Fehler: ihre Konfiguration is unvollständig. Bitte setzen sie \"planet-template"
-"\" korrekt um eine Ausgabe generieren zu können."
+"Fehler: ihre Konfiguration is unvollständig. Bitte setzen sie \"planet-"
+"template\" korrekt um eine Ausgabe generieren zu können."
 
 #: src/planet.cpp:205
+#, c-format
 msgid "Generating %s..."
 msgstr "Generiere %s..."
 
 #: src/planet.cpp:230
-#, fuzzy, c-format
 msgid "Reloading %s..."
 msgstr "Lade %s..."
 
@@ -404,11 +429,11 @@ msgstr ""
 msgid "No feeds with unread items."
 msgstr "Keine Feeds mit ungelesenen Elementen."
 
-#: src/view.cpp:139 src/view.cpp:153 src/view.cpp:173 src/view.cpp:903
+#: src/view.cpp:139 src/view.cpp:153 src/view.cpp:173 src/view.cpp:905
 msgid "No feed selected!"
 msgstr "Kein Feed ausgewählt!"
 
-#: src/view.cpp:165 src/view.cpp:521
+#: src/view.cpp:165 src/view.cpp:523
 msgid "Marking feed read..."
 msgstr "Markiere Feed als gelesen..."
 
@@ -437,194 +462,194 @@ msgstr "Artikelsuche - %u Ergebnisse"
 msgid "No results."
 msgstr "Keine Ergebnisse."
 
-#: src/view.cpp:344 src/view.cpp:457
+#: src/view.cpp:344 src/view.cpp:459
 msgid "No item selected!"
 msgstr "Kein Element ausgewählt!"
 
-#: src/view.cpp:425
+#: src/view.cpp:427
 msgid "No unread items."
 msgstr "Keine ungelesenen Elemente."
 
-#: src/view.cpp:482 src/view.cpp:1075
+#: src/view.cpp:484 src/view.cpp:1077
 msgid "Aborted saving."
 msgstr "Speichern abgebrochen."
 
-#: src/view.cpp:486
+#: src/view.cpp:488
 #, c-format
 msgid "Saved article to %s"
 msgstr "Artikel nach %s gespeichert"
 
-#: src/view.cpp:491
+#: src/view.cpp:493
 #, c-format
 msgid "Error: couldn't save article to %s"
 msgstr "Fehler: konnte Artikel nicht nach %s speichern"
 
-#: src/view.cpp:496 src/view.cpp:935
+#: src/view.cpp:498 src/view.cpp:937
 msgid "Error: no item selected!"
 msgstr "Fehler: kein Element ausgewählt!"
 
-#: src/view.cpp:536
+#: src/view.cpp:538
 msgid "Toggling read flag for article..."
 msgstr "Schalte Gelesen-Flag für Artikel um..."
 
-#: src/view.cpp:574 src/view.cpp:972
+#: src/view.cpp:576 src/view.cpp:974
 msgid "Title: "
 msgstr "Titel: "
 
-#: src/view.cpp:578 src/view.cpp:979
+#: src/view.cpp:580 src/view.cpp:981
 msgid "Author: "
 msgstr "Autor: "
 
-#: src/view.cpp:582 src/view.cpp:993
+#: src/view.cpp:584 src/view.cpp:995
 msgid "Date: "
 msgstr "Datum: "
 
-#: src/view.cpp:731
+#: src/view.cpp:733
 msgid "File: "
 msgstr "Datei: "
 
-#: src/view.cpp:764 src/view.cpp:817
+#: src/view.cpp:766 src/view.cpp:819
 #, c-format
 msgid "Open File - %s"
 msgstr "Datei öffnen - %s"
 
-#: src/view.cpp:766 src/view.cpp:819
+#: src/view.cpp:768 src/view.cpp:821
 #, c-format
 msgid "Save File - %s"
 msgstr "Datei speichern - %s"
 
-#: src/view.cpp:959
+#: src/view.cpp:961
 msgid "Feed: "
 msgstr "Feed: "
 
-#: src/view.cpp:986
+#: src/view.cpp:988
 msgid "Link: "
 msgstr "Link: "
 
-#: src/view.cpp:1001
+#: src/view.cpp:1003
 msgid "Podcast Download URL: "
 msgstr "Podcast Download URL: "
 
-#: src/view.cpp:1002
+#: src/view.cpp:1004
 msgid "type: "
 msgstr "Typ: "
 
-#: src/view.cpp:1064
+#: src/view.cpp:1066
 #, c-format
 msgid "Added %s to download queue."
 msgstr "%s zur Download-Warteschlange hinzugefügt."
 
-#: src/view.cpp:1079
+#: src/view.cpp:1081
 #, c-format
 msgid "Saved article to %s."
 msgstr "Artikel nach %s gespeichert."
 
-#: src/view.cpp:1082
+#: src/view.cpp:1084
 #, c-format
 msgid "Error: couldn't write article to file %s"
 msgstr "Fehler: konnte Artikel nicht nach %s speichern"
 
-#: src/view.cpp:1090 src/view.cpp:1174
+#: src/view.cpp:1092 src/view.cpp:1176
 msgid "Starting browser..."
 msgstr "Starte Browser..."
 
-#: src/view.cpp:1143
+#: src/view.cpp:1145
 msgid "URLs"
 msgstr "URLs"
 
-#: src/view.cpp:1178
+#: src/view.cpp:1180
 msgid "No link selected!"
 msgstr "Kein Link ausgewählt!"
 
-#: src/view.cpp:1367
+#: src/view.cpp:1369
 #, c-format
 msgid "Your feeds (%u unread, %u total) - tag `%s'"
 msgstr "Ihre Feeds (%u ungelesen, %u gesamt) - Tag `%s'"
 
-#: src/view.cpp:1369
+#: src/view.cpp:1371
 #, c-format
 msgid "Your feeds (%u unread, %u total)"
 msgstr "Ihre Feeds (%u ungelesen, %u gesamt)"
 
-#: src/view.cpp:1395 src/view.cpp:1421 src/view.cpp:1448
+#: src/view.cpp:1397 src/view.cpp:1423 src/view.cpp:1450
 msgid "Open"
 msgstr "Öffnen"
 
-#: src/view.cpp:1396 src/view.cpp:1438 src/view.cpp:1449
+#: src/view.cpp:1398 src/view.cpp:1440 src/view.cpp:1451
 msgid "Save"
 msgstr "Speichern"
 
-#: src/view.cpp:1397 src/view.cpp:1423
+#: src/view.cpp:1399 src/view.cpp:1425
 msgid "Reload"
 msgstr "Neu laden"
 
-#: src/view.cpp:1398 src/view.cpp:1422 src/view.cpp:1450
+#: src/view.cpp:1400 src/view.cpp:1424 src/view.cpp:1452
 msgid "Next Unread"
 msgstr "Nächstes Ungelesenes"
 
-#: src/view.cpp:1399
+#: src/view.cpp:1401
 msgid "Mark All Read"
 msgstr "Alle Gelesen Markieren"
 
-#: src/view.cpp:1400 src/view.cpp:1427
+#: src/view.cpp:1402 src/view.cpp:1429
 msgid "Search"
 msgstr "Suchen"
 
-#: src/view.cpp:1411 src/view.cpp:1451
+#: src/view.cpp:1413 src/view.cpp:1453
 msgid "Open in Browser"
 msgstr "Im Browser öffnen"
 
-#: src/view.cpp:1424
+#: src/view.cpp:1426
 msgid "Reload All"
 msgstr "Alle Neu laden"
 
-#: src/view.cpp:1425
+#: src/view.cpp:1427
 msgid "Mark Read"
 msgstr "Gelesen Markieren"
 
-#: src/view.cpp:1426
+#: src/view.cpp:1428
 msgid "Catchup All"
 msgstr "Alle Aufholen"
 
-#: src/view.cpp:1452
+#: src/view.cpp:1454
 msgid "Enqueue"
 msgstr "In Warteschlange"
 
-#: src/view.cpp:1472
+#: src/view.cpp:1474
 msgid "Select Tag"
 msgstr "Tag auswählen"
 
-#: src/view.cpp:1483
+#: src/view.cpp:1485
 msgid "Search/Open"
 msgstr "Suchen/Öffnen"
 
-#: src/view.cpp:1484
+#: src/view.cpp:1486
 msgid "New Search"
 msgstr "Neue Suche"
 
-#: src/view.cpp:1495
+#: src/view.cpp:1497
 #, c-format
 msgid "Articles in feed '%s' (%u unread, %u total) - %s"
 msgstr "Artikel im Feed '%s' (%u ungelesen, %u gesamt) - %s"
 
-#: src/view.cpp:1501
+#: src/view.cpp:1503
 #, c-format
 msgid "Article '%s'"
 msgstr "Artikel '%s'"
 
-#: src/xmlpullparser.cpp:36 src/xmlpullparser.cpp:42
+#: src/xmlpullparser.cpp:37 src/xmlpullparser.cpp:43
 msgid "invalid attribute index"
 msgstr "ungültiger Attributindex"
 
-#: src/xmlpullparser.cpp:52
+#: src/xmlpullparser.cpp:53
 msgid "attribute not found"
 msgstr "Attribut nicht gefunden"
 
-#: src/xmlpullparser.cpp:138 src/xmlpullparser.cpp:169
-#: src/xmlpullparser.cpp:210
+#: src/xmlpullparser.cpp:139 src/xmlpullparser.cpp:170
+#: src/xmlpullparser.cpp:211
 msgid "empty tag found"
 msgstr "leerer Tag gefunden"
 
-#: src/xmlpullparser.cpp:257
+#: src/xmlpullparser.cpp:258
 msgid "EOF found while reading XML tag"
 msgstr "Ende der Datei gefunden beim Lesen eines XML-Tags"
