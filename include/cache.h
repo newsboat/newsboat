@@ -24,6 +24,9 @@ class cache {
 		void populate_tables();
 		void set_pragmas();
 		void delete_item(const rss_item& item);
+
+		std::string prepare_query(const char * format, ...);
+			
 		sqlite3 * db;
 		configcontainer * cfg;
 		mutex * mtx;

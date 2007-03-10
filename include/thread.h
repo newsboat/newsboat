@@ -21,8 +21,7 @@ namespace newsbeuter {
 
 		protected:
 			virtual void run() = 0;
-			void exit();
-			void detached_exit();
+			void detach();
 
 			friend void * run_thread(thread * p);
 
