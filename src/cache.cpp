@@ -120,8 +120,8 @@ static int search_item_callback(void * myfeed, int argc, char ** argv, char ** a
 	item.set_unread((std::string("1") == argv[6]));
 	item.set_feedurl(argv[7]);
 
-	item.set_enclosure_url(argv[8]);
-	item.set_enclosure_type(argv[9]);
+	item.set_enclosure_url(argv[8] ? argv[8] : "");
+	item.set_enclosure_type(argv[9] ? argv[9] : "");
 	item.set_enqueued((std::string("1") == argv[10]));
 
 	items->push_back(item);
