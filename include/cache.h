@@ -20,6 +20,7 @@ class cache {
 		void get_latest_items(std::vector<rss_item>& items, unsigned int limit);
 		std::vector<rss_item> search_for_items(const std::string& querystr, const std::string& feedurl);
 		rss_feed get_feed_by_url(const std::string& feedurl);
+		void catchup_all(const std::string& feedurl = "");
 	private:
 		void populate_tables();
 		void set_pragmas();
