@@ -85,6 +85,30 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						link_count++;
 						curline.append(ref.str());
 					}
+				} else if (xpp.getText() == "embed") {
+					std::string type;
+					try {
+						type = xpp.getAttributeValue("type");
+					} catch (const std::invalid_argument& ) {
+						GetLogger().log(LOG_WARN, "htmlrenderer::render: found embed object without type attribute");
+						type = "";
+					}
+					if (type == "application/x-shockwave-flash") {
+						std::string link;
+						try {
+							link = xpp.getAttributeValue("src");
+						} catch (const std::invalid_argument& ) {
+							GetLogger().log(LOG_WARN, "htmlrenderer::render: found embed object without src attribute");
+							link = "";
+						}
+						if (link.length() > 0) {
+							add_link(links,absolute_url(url,link));
+							std::ostringstream ref;
+							ref << "[" << _("embedded flash:") << " " << link_count  << "]";
+							link_count++;
+							curline.append(ref.str());
+						}
+					}
 				} else if (xpp.getText() == "br") {
 						if (curline.length() > 0)
 							lines.push_back(curline);
