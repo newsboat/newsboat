@@ -177,6 +177,10 @@ void rss_item::set_guid(const std::string& g) {
 	guid_ = g; 
 }
 
+void rss_item::set_unread_nowrite(bool u) {
+	unread_ = u;
+}
+
 void rss_item::set_unread(bool u) { 
 	if (unread_ != u) {
 		unread_ = u;

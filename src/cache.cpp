@@ -457,6 +457,23 @@ void cache::update_rssitem(rss_item& item, const std::string& feedurl) {
 	mtx->unlock();
 }
 
+void cache::catchup_all(const std::string& feedurl) {
+	mtx->lock();
+	std::string query;
+	if (feedurl.length() > 0) {
+		query = prepare_query("UPDATE rss_item SET unread = '0' WHERE feedurl = '%q';", feedurl.c_str());
+	} else {
+		query = prepare_query("UPDATE rss_item SET unread = '0';");
+	}
+	GetLogger().log(LOG_DEBUG, "running query: %s", query.c_str());
+	int rc = sqlite3_exec(db, query.c_str(), NULL, NULL, NULL);
+	if (rc != SQLITE_OK) {
+		GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", query.c_str(), rc);
+	}
+	assert(rc == SQLITE_OK);
+	mtx->unlock();
+}
+
 void cache::update_rssitem_unread_and_enqueued(rss_item& item, const std::string& feedurl) {
 	mtx->lock();
 	std::string query = prepare_query("SELECT count(*) FROM rss_item WHERE guid = '%q';",item.guid().c_str());

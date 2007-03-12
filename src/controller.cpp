@@ -254,21 +254,27 @@ bool controller::open_item(const rss_feed& feed, rss_item& item) {
 }
 
 void controller::catchup_all() {
-	for (unsigned int i=0;i<feeds.size();++i) {
-		mark_all_read(i);
+	rsscache->catchup_all();
+	for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it) {
+		if (it->items().size() > 0) {
+			for (std::vector<rss_item>::iterator jt=it->items().begin();jt!=it->items().end();++jt) {
+				jt->set_unread_nowrite(false);
+			}
+		}
 	}
 }
 
 void controller::mark_all_read(unsigned int pos) {
 	if (pos < feeds.size()) {
 		rss_feed& feed = feeds[pos];
-		for (std::vector<rss_item>::iterator it = feed.items().begin(); it != feed.items().end(); ++it) {
-			it->set_unread(false);
+		rsscache->catchup_all(feed.rssurl());
+		if (feed.items().size() > 0) {
+			for (std::vector<rss_item>::iterator it=feed.items().begin();it!=feed.items().end();++it) {
+				it->set_unread_nowrite(false);
+			}
 		}
 	}
 }
-
-
 
 bool controller::open_feed(unsigned int pos, bool auto_open) {
 	bool retval = false;

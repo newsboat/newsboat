@@ -521,7 +521,7 @@ bool view::run_itemlist(unsigned int pos, bool auto_open) {
 			case OP_MARKFEEDREAD:
 				GetLogger().log(LOG_INFO, "view::run_itemlist: marking feed read");
 				set_status(_("Marking feed read..."));
-				mark_all_read(items);
+				ctrl->mark_all_read(pos);
 				set_status("");
 				rebuild_list = true;
 				break;
@@ -1372,12 +1372,6 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 	}
 
 	feedlist_form.set("head", buf);
-}
-
-void view::mark_all_read(std::vector<rss_item>& items) {
-	for (std::vector<rss_item>::iterator it = items.begin(); it != items.end(); ++it) {
-		it->set_unread(false);
-	}
 }
 
 std::string view::prepare_keymaphint(keymap_hint_entry * hints) {
