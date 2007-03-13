@@ -18,7 +18,7 @@ void htmlrenderer::render(const std::string& source, std::vector<std::string>& l
 }
 
 std::string htmlrenderer::absolute_url(const std::string& url, const std::string& link) {
-	if (link.substr(0,7)=="http://" || link.substr(0,8)=="https://" || link.substr(0,6)=="ftp://") {
+	if (link.substr(0,7)=="http://" || link.substr(0,8)=="https://" || link.substr(0,6)=="ftp://" || link.substr(0,7) == "mailto:"){
 		return link;
 	}
 	char u[1024];
