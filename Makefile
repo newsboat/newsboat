@@ -36,16 +36,9 @@ PODBEUTER_SOURCES=$(shell cat podbeuter.deps)
 PODBEUTER_OBJS=$(patsubst %.cpp,%.o,$(PODBEUTER_SOURCES))
 PODBEUTER_LIBS=-lstfl -lncursesw -lpthread -lcurl
 
-NBPLANET=nb-planet
-NBPLANET_SOURCES=$(shell cat nb-planet.deps)
-NBPLANET_OBJS=$(patsubst %.cpp,%.o,$(NBPLANET_SOURCES))
-NBPLANET_LIBS=-lmrss -lnxml -lpthread -lsqlite3
-
-
 ifneq ($(shell uname -s),Linux)
 NEWSBEUTER_LIBS+=-lintl
 PODBEUTER_LIBS+=-lintl
-NBPLANET_LIBS+=-lintl
 endif
 
 # additional commands
@@ -62,16 +55,13 @@ POTFILE=po/$(PACKAGE).pot
 STFLCONV=./stfl2h.pl
 RM=rm -f
 
-all: $(NEWSBEUTER) $(PODBEUTER) $(NBPLANET)
+all: $(NEWSBEUTER) $(PODBEUTER)
 
 $(NEWSBEUTER): $(MOFILES) $(STFLHDRS) $(NEWSBEUTER_OBJS)
 	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $(NEWSBEUTER) $(NEWSBEUTER_OBJS) $(NEWSBEUTER_LIBS)
 
 $(PODBEUTER): $(MOFILES) $(STFLHDRS) $(PODBEUTER_OBJS)
 	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $(PODBEUTER) $(PODBEUTER_OBJS) $(PODBEUTER_LIBS)
-
-$(NBPLANET): $(MOFILES) $(STFLHDRS) $(NBPLANET_OBJS)
-	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $(NBPLANET) $(NBPLANET_OBJS) $(NBPLANET_LIBS)
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
@@ -88,10 +78,7 @@ clean-newsbeuter:
 clean-podbeuter:
 	$(RM) $(PODBEUTER) $(PODBEUTER_OBJS)
 
-clean-nbplanet:
-	$(RM) $(NBPLANET) $(NBPLANET_OBJS)
-
-clean: clean-newsbeuter clean-podbeuter clean-nbplanet
+clean: clean-newsbeuter clean-podbeuter
 	$(RM) $(STFLHDRS) core *.core core.*
 
 distclean: clean clean-mo
@@ -105,21 +92,17 @@ install: install-mo
 	$(MKDIR) $(prefix)/bin
 	$(INSTALL) $(NEWSBEUTER) $(prefix)/bin
 	$(INSTALL) $(PODBEUTER) $(prefix)/bin
-	$(INSTALL) $(NBPLANET) $(prefix)/bin
 	$(MKDIR) $(prefix)/share/man/man1
 	$(INSTALL) doc/$(NEWSBEUTER).1 $(prefix)/share/man/man1
 	$(INSTALL) doc/$(PODBEUTER).1 $(prefix)/share/man/man1
-	# $(INSTALL) doc/$(NBPLANET).1 $(prefix)/share/man/man1 # TODO
 	$(MKDIR) $(docdir)
 	$(INSTALL) -m 644 doc/xhtml/* $(docdir) || true
 
 uninstall:
 	$(RM) $(prefix)/bin/$(NEWSBEUTER)
 	$(RM) $(prefix)/bin/$(PODBEUTER)
-	$(RM) $(prefix)/bin/$(NBPLANET)
 	$(RM) $(prefix)/share/man/man1/$(NEWSBEUTER).1
 	$(RM) $(prefix)/share/man/man1/$(PODBEUTER).1
-	# $(RM) $(prefix)/share/man/man1/$(NBPLANET).1
 	$(RM) -r $(docdir)
 
 .PHONY: doc clean all
