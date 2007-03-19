@@ -7,10 +7,6 @@ TODO:
 	- test more thoroughly
 - do entitity decoding for titles (this may be controversial...)
 - research (and fix) libnxml decoding issues
-- write "newsbeuter hacker's guide"
-	- describe the overall architecture
-	- describe debugging tricks (i.e. logging)
-	- describe design decisions, e.g. why certain things are only configurable via the config files
 - make STFL and newsbeuter capable of correct handling of Unicode (currently, it crashes when entering cyrillic characters)
 
 longteam goals to reach:
@@ -72,3 +68,7 @@ DONE:
 	- set configured colors
 	- implement "start player" function in podbeuter.
 - fill table with html entities
+- write "newsbeuter hacker's guide"
+	- describe the overall architecture
+	- describe debugging tricks (i.e. logging)
+	- describe design decisions, e.g. why certain things are only configurable via the config files
