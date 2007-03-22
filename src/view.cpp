@@ -571,7 +571,7 @@ std::string view::get_filename_suggestion(const std::string& s) {
 
 void view::write_item(const rss_item& item, const std::string& filename) {
 	std::vector<std::string> lines;
-	std::vector<std::string> links; // not used
+	std::vector<linkpair> links; // not used
 	
 	std::string title(_("Title: "));
 	title.append(item.title());
@@ -945,7 +945,7 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 	bool redraw = true;
 	bool retval = false;
 	static bool render_hack = false;
-	std::vector<std::string> links;
+	std::vector<linkpair> links;
 	
 	view_stack.push_front(&itemview_form);
 	
@@ -1136,7 +1136,7 @@ void view::open_in_browser(const std::string& url) {
 	view_stack.pop_front();
 }
 
-void view::run_urlview(std::vector<std::string>& links) {
+void view::run_urlview(std::vector<linkpair>& links) {
 	set_urlview_keymap_hint();
 
 	view_stack.push_front(&urlview_form);
@@ -1146,10 +1146,10 @@ void view::run_urlview(std::vector<std::string>& links) {
 
 	std::string code = "{list";
 	unsigned int i=0;
-	for (std::vector<std::string>::iterator it = links.begin(); it != links.end(); ++it, ++i) {
+	for (std::vector<linkpair>::iterator it = links.begin(); it != links.end(); ++it, ++i) {
 		std::ostringstream os;
 		char line[1024];
-		snprintf(line,sizeof(line),"%2u  %s",i+1,it->c_str());
+		snprintf(line,sizeof(line),"%2u  %s",i+1,it->first.c_str());
 		os << "{listitem[" << i << "] text:" << stfl_quote(line) << "}";
 		code.append(os.str());
 	}
@@ -1174,7 +1174,7 @@ void view::run_urlview(std::vector<std::string>& links) {
 						unsigned int idx;
 						is >> idx;
 						set_status(_("Starting browser..."));
-						open_in_browser(links[idx]);
+						open_in_browser(links[idx].first);
 						set_status("");
 					} else {
 						show_error(_("No link selected!"));

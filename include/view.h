@@ -9,6 +9,7 @@
 #include <rss.h>
 #include <keymap.h>
 #include <mutex.h>
+#include <htmlrenderer.h>
 
 #include <stflpp.h>
 
@@ -64,7 +65,7 @@ namespace newsbeuter {
 			std::string get_filename_suggestion(const std::string& s);
 			void render_source(std::vector<std::string>& lines, std::string desc, unsigned int width);
 
-			void run_urlview(std::vector<std::string>& links);
+			void run_urlview(std::vector<linkpair>& links);
 			
 			struct keymap_hint_entry {
 				operation op; 

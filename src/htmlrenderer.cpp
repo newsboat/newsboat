@@ -12,7 +12,7 @@ using namespace newsbeuter;
 
 htmlrenderer::htmlrenderer(unsigned int width) : w(width) { }
 
-void htmlrenderer::render(const std::string& source, std::vector<std::string>& lines, std::vector<std::string>& links, const std::string& url) {
+void htmlrenderer::render(const std::string& source, std::vector<std::string>& lines, std::vector<linkpair>& links, const std::string& url) {
 	std::istringstream input(source);
 	render(input, lines, links, url);
 }
@@ -43,25 +43,28 @@ std::string htmlrenderer::absolute_url(const std::string& url, const std::string
 	}
 }
 
-void htmlrenderer::add_link(std::vector<std::string>& links, const std::string& link) {
+unsigned int htmlrenderer::add_link(std::vector<linkpair>& links, const std::string& link, link_type type) {
 	bool found = false;
-	for (std::vector<std::string>::iterator it=links.begin();it!=links.end();++it) {
-		if (*it == link)
+	unsigned int i=0;
+	for (std::vector<linkpair>::iterator it=links.begin();it!=links.end();++it, ++i) {
+		if (it->first == link) {
 			found = true;
+			break;
+		}
 	}
 	if (!found)
-		links.push_back(link);
+		links.push_back(linkpair(link,type));
+
+	return i;
 }
 
-void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, std::vector<std::string>& links, const std::string& url) {
-	unsigned int link_count = 0;
+void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, std::vector<linkpair>& links, const std::string& url) {
 	unsigned int image_count = 0;
 	std::string curline;
 	int indent_level = 0;
 	bool inside_list = false, inside_li = false, is_ol = false, inside_pre = false;
 	bool itunes_hack = false;
 	unsigned int ol_count = 1;
-	std::vector<std::string> imglinks;
 	
 	xmlpullparser xpp;
 	xpp.setInput(input);
@@ -79,10 +82,9 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						link = "";
 					}
 					if (link.length() > 0) {
-						add_link(links,absolute_url(url,link));
+						unsigned int link_num = add_link(links,absolute_url(url,link), LINK_HREF);
 						std::ostringstream ref;
-						ref << "[" << link_count << "]";
-						link_count++;
+						ref << "[" << link_num << "]";
 						curline.append(ref.str());
 					}
 				} else if (xpp.getText() == "embed") {
@@ -102,10 +104,9 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 							link = "";
 						}
 						if (link.length() > 0) {
-							add_link(links,absolute_url(url,link));
+							unsigned int link_num = add_link(links,absolute_url(url,link), LINK_EMBED);
 							std::ostringstream ref;
-							ref << "[" << _("embedded flash:") << " " << link_count  << "]";
-							link_count++;
+							ref << "[" << _("embedded flash:") << " " << link_num  << "]";
 							curline.append(ref.str());
 						}
 					}
@@ -129,9 +130,9 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						imgurl = "";
 					}
 					if (imgurl.length() > 0) {
-						add_link(imglinks,absolute_url(url,imgurl));
+						unsigned int link_num = add_link(links,absolute_url(url,imgurl), LINK_IMG);
 						std::ostringstream ref;
-						ref << "[" << _("image") << " " << image_count << "]";
+						ref << "[" << _("image") << " " << link_num << "]";
 						image_count++;
 						curline.append(ref.str());
 					}
@@ -301,18 +302,18 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 		lines.push_back(std::string(_("Links: ")));
 		for (unsigned int i=0;i<links.size();++i) {
 			std::ostringstream line;
-			line << "[" << i << "]: " << links[i];
+			line << "[" << i << "]: " << links[i].first << " (" << type2str(links[i].second) << ")";
 			lines.push_back(line.str());
 		}
 	}
-	if (imglinks.size() > 0) {
-		lines.push_back(std::string(""));
-		lines.push_back(std::string(_("Images: ")));
-		for (unsigned int i=0;i<imglinks.size();++i) {
-			std::ostringstream line;
-			line << "[" << i << "]: " << imglinks[i];
-			lines.push_back(line.str());
-		}
+}
+
+std::string htmlrenderer::type2str(link_type type) {
+	switch (type) {
+		case LINK_HREF: return _("link");
+		case LINK_IMG: return _("image");
+		case LINK_EMBED: return _("embedded flash");
+		default: return _("unknown (bug)");
 	}
 }
 
