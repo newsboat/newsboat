@@ -7,6 +7,7 @@
 #include <colormanager.h>
 #include <logger.h>
 #include <utils.h>
+#include <stflpp.h>
 #include <sstream>
 #include <cstdlib>
 #include <iostream>
@@ -29,7 +30,7 @@ static std::string lock_file = "lock.pid";
 
 void ctrl_c_action(int sig) {
 	GetLogger().log(LOG_DEBUG,"caugh signal %d",sig);
-	stfl_reset();
+	stfl::reset();
 	::unlink(lock_file.c_str());
 	if (SIGSEGV == sig) {
 		fprintf(stderr,"%s\n", _("Segmentation fault."));
@@ -247,9 +248,9 @@ void controller::update_feedlist() {
 	v->set_feedlist(feeds);
 }
 
-bool controller::open_item(const rss_feed& feed, rss_item& item) {
-	bool show_next_unread = v->run_itemview(feed, item);
-	item.set_unread(false);
+bool controller::open_item(rss_feed& feed, std::string guid) {
+	bool show_next_unread = v->run_itemview(feed, guid);
+	feed.get_item_by_guid(guid).set_unread(false);
 	return show_next_unread;
 }
 

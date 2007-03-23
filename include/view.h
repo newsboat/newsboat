@@ -27,7 +27,7 @@ namespace newsbeuter {
 			~view();
 			void run_feedlist(const std::vector<std::string> & tags);
 			bool run_itemlist(unsigned int pos, bool auto_open);
-			bool run_itemview(const rss_feed& feed, rss_item& item);
+			bool run_itemview(rss_feed& feed, std::string guid);
 			void run_help();
 			void run_search(const std::string& feed = "");
 			std::string select_tag(const std::vector<std::string>& tags);

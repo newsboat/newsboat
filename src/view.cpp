@@ -338,7 +338,8 @@ void view::run_search(const std::string& feedurl) {
 							std::istringstream posname(itemposname);
 							unsigned int pos = 0;
 							posname >> pos;
-							ctrl->open_item(ctrl->get_feed_by_url(items[pos].feedurl()), items[pos]);
+							rss_feed tmpfeed = ctrl->get_feed_by_url(items[pos].feedurl());
+							ctrl->open_item(tmpfeed, items[pos].guid());
 							rebuild_list = true;
 						} else {
 							show_error(_("No item selected!")); // should not happen
@@ -453,7 +454,7 @@ bool view::run_itemlist(unsigned int pos, bool auto_open) {
 							std::istringstream posname(itemposname);
 							unsigned int pos = 0;
 							posname >> pos;
-							open_next_item = ctrl->open_item(feed, items[pos]);
+							open_next_item = ctrl->open_item(feed, items[pos].guid());
 							rebuild_list = true;
 						} else {
 							show_error(_("No item selected!")); // should not happen
@@ -939,7 +940,7 @@ bool view::jump_to_next_unread_item(std::vector<rss_item>& items) {
 	return false;
 }
 
-bool view::run_itemview(const rss_feed& feed, rss_item& item) {
+bool view::run_itemview(rss_feed& feed, std::string guid) {
 	bool quit = false;
 	bool show_source = false;
 	bool redraw = true;
@@ -954,6 +955,7 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 
 	do {
 		if (redraw) {
+			rss_item& item = feed.get_item_by_guid(guid);
 			std::string code = "{list";
 
 			code.append("{listitem text:");
@@ -966,7 +968,7 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 			} else if (feed.rssurl().length() > 0) {
 				feedtitle << feed.rssurl();
 			}
-			code.append(stfl_quote(feedtitle.str().c_str()));
+			code.append(stfl::quote(feedtitle.str().c_str()));
 			code.append("}");
 
 			code.append("{listitem text:");
@@ -1051,6 +1053,8 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 		operation op = keys->get_operation(event);
 
 		GetLogger().log(LOG_DEBUG, "view::run_itemview: event = %s operation = %d", event, op);
+
+		rss_item& item = feed.get_item_by_guid(guid);
 
 		switch (op) {
 			case OP_OPEN:
@@ -1150,7 +1154,7 @@ void view::run_urlview(std::vector<linkpair>& links) {
 		std::ostringstream os;
 		char line[1024];
 		snprintf(line,sizeof(line),"%2u  %s",i+1,it->first.c_str());
-		os << "{listitem[" << i << "] text:" << stfl_quote(line) << "}";
+		os << "{listitem[" << i << "] text:" << stfl::quote(line) << "}";
 		code.append(os.str());
 	}
 	code.append("}");
@@ -1208,7 +1212,7 @@ std::string view::select_tag(const std::vector<std::string>& tags) {
 		snprintf(num,sizeof(num)," %4d. ", i+1);
 		std::string tagstr = num;
 		tagstr.append(it->c_str());
-		line << "{listitem[" << i << "] text:" << stfl_quote(tagstr.c_str()) << "}";
+		line << "{listitem[" << i << "] text:" << stfl::quote(tagstr.c_str()) << "}";
 		code.append(line.str());
 	}
 	code.append("}");

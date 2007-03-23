@@ -24,7 +24,7 @@ static std::string lock_file = "pb-lock.pid";
 
 void ctrl_c_action(int sig) {
 	GetLogger().log(LOG_DEBUG,"caugh signal %d",sig);
-	stfl_reset();
+	stfl::reset();
 	utils::remove_fs_lock(lock_file);
 	if (SIGSEGV == sig) {
 		fprintf(stderr,"%s\n", _("Segmentation fault."));

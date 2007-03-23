@@ -326,3 +326,12 @@ std::string rss_feed::title() const {
 std::string rss_feed::description() const {
 	return utils::convert_text(description_, nl_langinfo(CODESET), "utf-8");
 }
+
+rss_item& rss_feed::get_item_by_guid(const std::string& guid) {
+	for (std::vector<rss_item>::iterator it=items_.begin();it!=items_.end();++it) {
+		if (it->guid() == guid)
+			return *it;
+	}
+	static rss_item dummy_item(0); // should never happen!
+	return dummy_item;
+}

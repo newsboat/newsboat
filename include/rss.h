@@ -97,6 +97,8 @@ namespace newsbeuter {
 			inline void set_pubDate(time_t t) { pubDate_ = t; }
 			
 			inline std::vector<rss_item>& items() { return items_; }
+
+			rss_item& get_item_by_guid(const std::string& guid);
 			
 			inline const std::string& rssurl() const { return rssurl_; }
 			inline void set_rssurl(const std::string& u) { rssurl_ = u; }
