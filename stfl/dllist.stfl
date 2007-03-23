@@ -1,0 +1,18 @@
+vbox
+  @style_normal[background]:bg=black,fg=white
+  @info#style_normal[info]:bg=blue,fg=yellow,attr=bold
+  label#info
+    text[head]:"Queue"
+    .expand:h
+  !list[dls]
+    style_normal[listnormal]:bg=black,fg=white
+    style_focus[listfocus]:fg=yellow,bg=blue,attr=bold
+    .expand:vh
+    pos_name[dlposname]:
+    pos[dlpos]:0
+  label#info
+    text[help]:"q:Quit d:Download c:Cancel D:Delete P:Purge Finished"
+    .expand:h
+  label
+    text[msg]:""
+    .expand:h

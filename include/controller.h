@@ -18,7 +18,7 @@ namespace newsbeuter {
 			void set_view(view * vv);
 			void run(int argc = 0, char * argv[] = NULL);
 			bool open_feed(unsigned int pos, bool auto_open);
-			bool open_item(const rss_feed& feed, rss_item& item);
+			bool open_item(rss_feed& feed, std::string guid);
 			void reload(unsigned int pos, unsigned int max = 0);
 			void reload_all();
 			void start_reload_all_thread();
@@ -31,14 +31,14 @@ namespace newsbeuter {
 			void mark_all_read(unsigned int pos);
 			void catchup_all();
 			inline bool get_refresh_on_start() { return refresh_on_start; }
+			bool is_valid_podcast_type(const std::string& mimetype);
+			void enqueue_url(const std::string& url);
+
 		private:
 			void usage(char * argv0);
 			void import_opml(const char * filename);
 			void export_opml();
-			void rec_find_rss_outlines(nxml_data_t * node);
-
-			bool try_fs_lock(pid_t & pid);
-			void remove_fs_lock();
+			void rec_find_rss_outlines(nxml_data_t * node, std::string tag);
 
 			view * v;
 			urlreader urlcfg;
@@ -48,6 +48,7 @@ namespace newsbeuter {
 			std::string url_file;
 			std::string cache_file;
 			std::string config_file;
+			std::string queue_file;
 			bool refresh_on_start;
 			configcontainer * cfg;
 

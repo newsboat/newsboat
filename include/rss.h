@@ -17,19 +17,22 @@ namespace newsbeuter {
 
 	class rss_item {
 		public:
-			rss_item(cache * c) : unread_(true), ch(c) { }
+			rss_item(cache * c) : unread_(true), ch(c), enqueued_(false) { }
 			~rss_item() { }
 			
-			inline const std::string& title() const { return title_; }
+			std::string title() const;
+			std::string title_raw() const { return title_; }
 			void set_title(const std::string& t);
 			
 			inline const std::string& link() const { return link_; }
 			void set_link(const std::string& l);
 			
-			inline const std::string& author() const { return author_; }
+			std::string author() const;
+			std::string author_raw() const { return author_; }
 			void set_author(const std::string& a);
-			
-			inline const std::string& description() const { return description_; }
+		 	
+			std::string description() const;
+			std::string description_raw() const { return description_; }
 			void set_description(const std::string& d);
 			
 			std::string pubDate() const;
@@ -44,12 +47,22 @@ namespace newsbeuter {
 			
 			inline bool unread() const { return unread_; }
 			void set_unread(bool u);
+			void set_unread_nowrite(bool u);
 			
 			inline void set_cache(cache * c) { ch = c; }
 			inline void set_feedurl(const std::string& f) { feedurl_ = f; }
 			
 			inline const std::string& feedurl() const { return feedurl_; }
-			
+
+			inline const std::string& enclosure_url() const { return enclosure_url_; }
+			inline const std::string& enclosure_type() const { return enclosure_type_; }
+
+			void set_enclosure_url(const std::string& url);
+			void set_enclosure_type(const std::string& type);
+
+			inline bool enqueued() { return enqueued_; }
+			inline void set_enqueued(bool v) { enqueued_ = v; }
+
 		private:
 			std::string title_;
 			std::string link_;
@@ -60,16 +73,21 @@ namespace newsbeuter {
 			std::string feedurl_;
 			bool unread_;
 			cache * ch;
+			std::string enclosure_url_;
+			std::string enclosure_type_;
+			bool enqueued_;
 	};
 
 	class rss_feed {
 		public:
 			rss_feed(cache * c) : ch(c) { }
 			~rss_feed() { }
-			inline const std::string& title() const { return title_; }
+			std::string title_raw() const { return title_; }
+			std::string title() const;
 			inline void set_title(const std::string& t) { title_ = t; }
 			
-			inline const std::string& description() const { return description_; }
+			std::string description_raw() const { return description_; }
+			std::string description() const;
 			inline void set_description(const std::string& d) { description_ = d; }
 			
 			inline const std::string& link() const { return link_; }
@@ -79,6 +97,8 @@ namespace newsbeuter {
 			inline void set_pubDate(time_t t) { pubDate_ = t; }
 			
 			inline std::vector<rss_item>& items() { return items_; }
+
+			rss_item& get_item_by_guid(const std::string& guid);
 			
 			inline const std::string& rssurl() const { return rssurl_; }
 			inline void set_rssurl(const std::string& u) { rssurl_ = u; }

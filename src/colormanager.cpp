@@ -1,5 +1,8 @@
 #include <logger.h>
 #include <colormanager.h>
+#include <pb_view.h>
+
+using namespace podbeuter;
 
 namespace newsbeuter {
 
@@ -38,6 +41,52 @@ action_handler_status colormanager::handle_action(const std::string& action, con
 
 	} else
 		return AHS_INVALID_COMMAND;
+}
+
+void colormanager::set_pb_colors(pb_view * v) {
+	std::map<std::string,std::string>::iterator fgcit = fg_colors.begin();
+	std::map<std::string,std::string>::iterator bgcit = bg_colors.begin();
+	std::map<std::string,std::vector<std::string> >::iterator attit = attributes.begin();
+
+	for (;fgcit != fg_colors.end(); ++fgcit, ++bgcit, ++attit) {
+		std::string colorattr;
+		if (fgcit->second != "default") {
+			colorattr.append("fg=");
+			colorattr.append(fgcit->second);
+		}
+		if (bgcit->second != "default") {
+			if (colorattr.length() > 0)
+				colorattr.append(",");
+			colorattr.append("bg=");
+			colorattr.append(bgcit->second);
+		}
+		for (std::vector<std::string>::iterator it=attit->second.begin(); it!= attit->second.end(); ++it) {
+			if (colorattr.length() > 0)
+				colorattr.append(",");
+			colorattr.append("attr=");
+			colorattr.append(*it);
+		} 
+
+		GetLogger().log(LOG_DEBUG,"colormanager::set_pb_colors: %s %s\n",fgcit->first.c_str(), colorattr.c_str());
+
+		v->dllist_form.set(fgcit->first, colorattr);
+		v->help_form.set(fgcit->first, colorattr);
+
+		if (fgcit->first == "article") {
+			std::string styleend_str;
+			
+			if (bgcit->second != "default") {
+				styleend_str.append("bg=");
+				styleend_str.append(bgcit->second);
+			}
+			if (styleend_str.length() > 0)
+				styleend_str.append(",");
+			styleend_str.append("attr=bold");
+
+			v->help_form.set("styleend", styleend_str.c_str());
+		}
+	}
+
 }
 
 void colormanager::set_colors(view * v) {

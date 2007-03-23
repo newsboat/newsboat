@@ -6,10 +6,12 @@
 #include <downloadthread.h>
 #include <colormanager.h>
 #include <logger.h>
-#include <fstream>
+#include <utils.h>
+#include <stflpp.h>
 #include <sstream>
 #include <cstdlib>
 #include <iostream>
+#include <fstream>
 
 #include <sys/time.h>
 #include <ctime>
@@ -28,7 +30,7 @@ static std::string lock_file = "lock.pid";
 
 void ctrl_c_action(int sig) {
 	GetLogger().log(LOG_DEBUG,"caugh signal %d",sig);
-	stfl_reset();
+	stfl::reset();
 	::unlink(lock_file.c_str());
 	if (SIGSEGV == sig) {
 		fprintf(stderr,"%s\n", _("Segmentation fault."));
@@ -36,7 +38,7 @@ void ctrl_c_action(int sig) {
 	::exit(EXIT_FAILURE);
 }
 
-controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), refresh_on_start(false), cfg(0) {
+controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false), cfg(0) {
 	std::ostringstream cfgfile;
 
 	char * cfgdir;
@@ -63,6 +65,7 @@ controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cach
 	cache_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + cache_file;
 	config_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
 	lock_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + lock_file;
+	queue_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
 	reload_mutex = new mutex();
 }
 
@@ -81,7 +84,9 @@ void controller::run(int argc, char * argv[]) {
 	char msgbuf[1024];
 
 	::signal(SIGINT, ctrl_c_action);
+#ifndef DEBUG
 	::signal(SIGSEGV, ctrl_c_action);
+#endif
 
 	bool do_import = false, do_export = false;
 	std::string importfile;
@@ -158,7 +163,7 @@ void controller::run(int argc, char * argv[]) {
 		std::cout << msgbuf << std::endl;
 
 		pid_t pid;
-		if (!try_fs_lock(pid)) {
+		if (!utils::try_fs_lock(lock_file, pid)) {
 			GetLogger().log(LOG_ERROR,"an instance is alredy running: pid = %u",pid);
 			snprintf(msgbuf, sizeof(msgbuf), _("Error: an instance of %s is already running (PID: %u)"), PROGRAM_NAME, pid);
 			std::cout << msgbuf << std::endl;
@@ -185,7 +190,7 @@ void controller::run(int argc, char * argv[]) {
 	} catch (const configexception& ex) {
 		GetLogger().log(LOG_ERROR,"an exception occured while parsing the configuration file: %s",ex.what());
 		std::cout << ex.what() << std::endl;
-		remove_fs_lock();
+		utils::remove_fs_lock(lock_file);
 		return;	
 	}
 
@@ -217,7 +222,7 @@ void controller::run(int argc, char * argv[]) {
 
 	if (do_export) {
 		export_opml();
-		remove_fs_lock();
+		utils::remove_fs_lock(lock_file);
 		return;
 	}
 
@@ -236,35 +241,41 @@ void controller::run(int argc, char * argv[]) {
 	*/
 	std::cout << _("done.") << std::endl;
 
-	remove_fs_lock();
+	utils::remove_fs_lock(lock_file);
 }
 
 void controller::update_feedlist() {
 	v->set_feedlist(feeds);
 }
 
-bool controller::open_item(const rss_feed& feed, rss_item& item) {
-	bool show_next_unread = v->run_itemview(feed, item);
-	item.set_unread(false); // XXX: see TODO list
+bool controller::open_item(rss_feed& feed, std::string guid) {
+	bool show_next_unread = v->run_itemview(feed, guid);
+	feed.get_item_by_guid(guid).set_unread(false);
 	return show_next_unread;
 }
 
 void controller::catchup_all() {
-	for (unsigned int i=0;i<feeds.size();++i) {
-		mark_all_read(i);
+	rsscache->catchup_all();
+	for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it) {
+		if (it->items().size() > 0) {
+			for (std::vector<rss_item>::iterator jt=it->items().begin();jt!=it->items().end();++jt) {
+				jt->set_unread_nowrite(false);
+			}
+		}
 	}
 }
 
 void controller::mark_all_read(unsigned int pos) {
 	if (pos < feeds.size()) {
 		rss_feed& feed = feeds[pos];
-		for (std::vector<rss_item>::iterator it = feed.items().begin(); it != feed.items().end(); ++it) {
-			it->set_unread(false);
+		rsscache->catchup_all(feed.rssurl());
+		if (feed.items().size() > 0) {
+			for (std::vector<rss_item>::iterator it=feed.items().begin();it!=feed.items().end();++it) {
+				it->set_unread_nowrite(false);
+			}
 		}
 	}
 }
-
-
 
 bool controller::open_feed(unsigned int pos, bool auto_open) {
 	bool retval = false;
@@ -309,30 +320,35 @@ void controller::reload(unsigned int pos, unsigned int max) {
 		v->set_status(msgbuf);
 				
 		rss_parser parser(feed.rssurl().c_str(), rsscache, cfg);
-		feed = parser.parse();
-		
-		/*
-		struct timeval tv1, tv2;
-		gettimeofday(&tv1, NULL);
-		*/
-		
-		rsscache->externalize_rssfeed(feed);
-		
-		/*
-		gettimeofday(&tv2, NULL);
-		
-		unsigned long long t1 = tv1.tv_sec*1000000 + tv1.tv_usec;
-		unsigned long long t2 = tv2.tv_sec*1000000 + tv2.tv_usec;
-		
-		std::cerr << "time for externalizing: " << (t2-t1)/1000 << " ms" << std::endl;
-		*/
-		
-		rsscache->internalize_rssfeed(feed);
-		feed.set_tags(urlcfg.get_tags(feed.rssurl()));
-		feeds[pos] = feed;
-		
-		v->set_feedlist(feeds);
-		v->set_status("");
+		try {
+			feed = parser.parse();
+			
+			rsscache->externalize_rssfeed(feed);
+
+			rsscache->internalize_rssfeed(feed);
+			feed.set_tags(urlcfg.get_tags(feed.rssurl()));
+			feeds[pos] = feed;
+
+			for (std::vector<rss_item>::iterator it=feed.items().begin();it!=feed.items().end();++it) {
+				if (cfg->get_configvalue_as_bool("podcast-auto-enqueue") && !it->enqueued() && it->enclosure_url().length() > 0) {
+					GetLogger().log(LOG_DEBUG, "controller::reload: enclosure_url = `%s' enclosure_type = `%s'", it->enclosure_url().c_str(), it->enclosure_type().c_str());
+					if (is_valid_podcast_type(it->enclosure_type())) {
+						GetLogger().log(LOG_INFO, "controller::reload: enqueuing `%s'", it->enclosure_url().c_str());
+						enqueue_url(it->enclosure_url());
+						it->set_enqueued(true);
+						rsscache->update_rssitem_unread_and_enqueued(*it, feed.rssurl());
+					}
+				}
+			}
+
+			
+			v->set_feedlist(feeds);
+			v->set_status("");
+		} catch (const std::string& errmsg) {
+			char buf[1024];
+			snprintf(buf, sizeof(buf), _("Error while retrieving %s: %s"), feed.rssurl().c_str(), errmsg.c_str());
+			v->set_status(buf);
+		}
 	} else {
 		v->show_error(_("Error: invalid feed!"));
 	}
@@ -340,7 +356,7 @@ void controller::reload(unsigned int pos, unsigned int max) {
 
 rss_feed& controller::get_feed(unsigned int pos) {
 	if (pos >= feeds.size()) {
-		// TODO: throw exception
+		throw std::out_of_range(_("invalid feed index (bug)"));
 	}
 	return feeds[pos];
 }
@@ -383,13 +399,13 @@ void controller::import_opml(const char * filename) {
 
 	ret = nxml_new (&data);
 	if (ret != NXML_OK) {
-		puts (nxml_strerror (ret)); // TODO
+		puts (nxml_strerror (ret));
 		return;
 	}
 
 	ret = nxml_parse_file (data, const_cast<char *>(filename));
 	if (ret != NXML_OK) {
-		puts (nxml_strerror (ret)); // TODO
+		puts (nxml_strerror (ret));
 		return;
 	}
 
@@ -398,7 +414,7 @@ void controller::import_opml(const char * filename) {
 	if (root) {
 		body = nxmle_find_element(data, root, "body", NULL);
 		if (body) {
-			rec_find_rss_outlines(body);
+			rec_find_rss_outlines(body, "");
 			urlcfg.write_config();
 		}
 	}
@@ -421,62 +437,58 @@ void controller::export_opml() {
 	std::cout << "</opml>" << std::endl;
 }
 
-void controller::rec_find_rss_outlines(nxml_data_t * node) {
+void controller::rec_find_rss_outlines(nxml_data_t * node, std::string tag) {
 	while (node) {
 		char * url = nxmle_find_attribute(node, "xmlUrl", NULL);
 		char * type = nxmle_find_attribute(node, "type", NULL);
+		std::string newtag = tag;
 
-		if (node->type == NXML_TYPE_ELEMENT && strcmp(node->value,"outline")==0 && type && strcmp(type,"rss")==0 && url) {
-
-			GetLogger().log(LOG_DEBUG,"OPML import: found RSS outline with url = %s",url);
-
-			bool found = false;
-
-			for (std::vector<std::string>::iterator it = urlcfg.get_urls().begin(); it != urlcfg.get_urls().end(); ++it) {
-				if (*it == url) {
-					found = true;
-				}
-			}
-
-			if (!found) {
-				GetLogger().log(LOG_DEBUG,"OPML import: added url = %s",url);
-				urlcfg.get_urls().push_back(std::string(url));
-			} else {
-				GetLogger().log(LOG_DEBUG,"OPML import: url = %s is already in list",url);
-			}
-
+		if (!url) {
+			url = nxmle_find_attribute(node, "url", NULL);
 		}
 
-		rec_find_rss_outlines(node->children);
+		if (node->type == NXML_TYPE_ELEMENT && strcmp(node->value,"outline")==0) {
+			if (type && (strcmp(type,"rss")==0 || strcmp(type,"link")==0)) {
+				if (url) {
+
+					GetLogger().log(LOG_DEBUG,"OPML import: found RSS outline with url = %s",url);
+
+					bool found = false;
+
+					for (std::vector<std::string>::iterator it = urlcfg.get_urls().begin(); it != urlcfg.get_urls().end(); ++it) {
+						if (*it == url) {
+							found = true;
+						}
+					}
+
+					if (!found) {
+						GetLogger().log(LOG_DEBUG,"OPML import: added url = %s",url);
+						urlcfg.get_urls().push_back(std::string(url));
+						if (tag.length() > 0) {
+							GetLogger().log(LOG_DEBUG, "OPML import: appending tag %s to url %s", tag.c_str(), url);
+							urlcfg.get_tags(url).push_back(tag);
+						}
+					} else {
+						GetLogger().log(LOG_DEBUG,"OPML import: url = %s is already in list",url);
+					}
+				}
+			} else {
+				char * text = nxmle_find_attribute(node, "text", NULL);
+				if (text) {
+					if (newtag.length() > 0) {
+						newtag.append("/");
+					}
+					newtag.append(text);
+				}
+			}
+		}
+		rec_find_rss_outlines(node->children, newtag);
 
 		node = node->next;
 	}
 }
 
-void controller::remove_fs_lock() {
-	::unlink(lock_file.c_str());
-}
 
-bool controller::try_fs_lock(pid_t & pid) {
-	int fd;
-	if ((fd = ::open(lock_file.c_str(), O_WRONLY | O_CREAT | O_EXCL, 0600)) >= 0) {
-		pid = ::getpid();
-		::write(fd,&pid,sizeof(pid));
-		::close(fd);
-		GetLogger().log(LOG_DEBUG,"wrote lock file with pid = %u",pid);
-		return true;
-	} else {
-		pid = 0;
-		if ((fd = ::open(lock_file.c_str(), O_RDONLY)) >=0) {
-			::read(fd,&pid,sizeof(pid));
-			::close(fd);
-			GetLogger().log(LOG_DEBUG,"found lock file");
-		} else {
-			GetLogger().log(LOG_DEBUG,"found lock file, but couldn't open it for reading from it");
-		}
-		return false;
-	}
-}
 
 std::vector<rss_item> controller::search_for_items(const std::string& query, const std::string& feedurl) {
 	return rsscache->search_for_items(query, feedurl);
@@ -484,4 +496,32 @@ std::vector<rss_item> controller::search_for_items(const std::string& query, con
 
 rss_feed controller::get_feed_by_url(const std::string& feedurl) {
 	return rsscache->get_feed_by_url(feedurl);
+}
+
+bool controller::is_valid_podcast_type(const std::string& mimetype) {
+	return mimetype == "audio/mpeg" || mimetype == "video/x-m4v" || mimetype == "audio/x-mpeg";
+}
+
+void controller::enqueue_url(const std::string& url) {
+	bool url_found = false;
+	std::fstream f;
+	f.open(queue_file.c_str(), std::fstream::in);
+	if (f.is_open()) {
+		do {
+			std::string line;
+			getline(f, line);
+			if (!f.eof() && line.length() > 0) {
+				if (line == url) {
+					url_found = true;
+					break;
+				}
+			}
+		} while (!f.eof());
+		f.close();
+	}
+	if (!url_found) {
+		f.open(queue_file.c_str(), std::fstream::app | std::fstream::out);
+		f << url << std::endl;
+		f.close();
+	}
 }

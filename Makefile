@@ -1,43 +1,67 @@
+
+PACKAGE=newsbeuter
+
 # important directories
 prefix=/usr/local
 datadir=$(prefix)/share
 localedir=$(datadir)/locale
+docdir=$(datadir)/doc/$(PACKAGE)
 
 # compiler
 CXX=c++
 
 # compiler and linker flags
-DEFINES=-D_ENABLE_NLS -DLOCALEDIR=\"$(localedir)\"
+DEFINES=-D_ENABLE_NLS -DLOCALEDIR=\"$(localedir)\" -DPACKAGE=\"$(PACKAGE)\"
 CXXFLAGS=-ggdb -I./include -I./stfl -I. -I/usr/local/include -I/sw/include -Wall -pedantic $(DEFINES)
 LDFLAGS=-L/usr/local/lib -L/sw/lib
 
 # libraries to link with
-LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn -lpthread
+# LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn -lpthread
 
-OUTPUT=newsbeuter
+ifeq ($(DEBUG),1)
+DEFINES+=-DDEBUG
+endif
 
-SRC=$(wildcard *.cpp) $(wildcard src/*.cpp)
-OBJS=$(patsubst %.cpp,%.o,$(SRC))
+#SRC=$(wildcard *.cpp) $(wildcard src/*.cpp)
+#OBJS=$(patsubst %.cpp,%.o,$(SRC))
+
+NEWSBEUTER=$(PACKAGE)
+NEWSBEUTER_SOURCES=$(shell cat newsbeuter.deps)
+NEWSBEUTER_OBJS=$(patsubst %.cpp,%.o,$(NEWSBEUTER_SOURCES))
+NEWSBEUTER_LIBS=-lstfl -lmrss -lnxml -lncursesw -lsqlite3 -lpthread
+
+
+PODBEUTER=podbeuter
+PODBEUTER_SOURCES=$(shell cat podbeuter.deps)
+PODBEUTER_OBJS=$(patsubst %.cpp,%.o,$(PODBEUTER_SOURCES))
+PODBEUTER_LIBS=-lstfl -lncursesw -lpthread -lcurl
+
+ifneq ($(shell uname -s),Linux)
+NEWSBEUTER_LIBS+=-lintl
+PODBEUTER_LIBS+=-lintl
+endif
 
 # additional commands
 MKDIR=mkdir -p
 INSTALL=install
-GZIP=gzip -9
 A2X=a2x
 MSGFMT=msgfmt
 
 STFLHDRS=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
 POFILES=$(wildcard po/*.po)
 MOFILES=$(patsubst %.po,%.mo,$(POFILES))
-POTFILE=po/$(OUTPUT).pot
+POTFILE=po/$(PACKAGE).pot
 
 STFLCONV=./stfl2h.pl
 RM=rm -f
 
-all: $(OUTPUT)
+all: $(NEWSBEUTER) $(PODBEUTER)
 
-$(OUTPUT): $(MOFILES) $(STFLHDRS) $(OBJS)
-	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $(OUTPUT) $(OBJS) $(LIBS)
+$(NEWSBEUTER): $(MOFILES) $(STFLHDRS) $(NEWSBEUTER_OBJS)
+	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $(NEWSBEUTER) $(NEWSBEUTER_OBJS) $(NEWSBEUTER_LIBS)
+
+$(PODBEUTER): $(MOFILES) $(STFLHDRS) $(PODBEUTER_OBJS)
+	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $(PODBEUTER) $(PODBEUTER_OBJS) $(PODBEUTER_LIBS)
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
@@ -48,9 +72,14 @@ $(OUTPUT): $(MOFILES) $(STFLHDRS) $(OBJS)
 testpp: src/xmlpullparser.cpp testpp.cpp
 	$(CXX) -I./include -pg -g -D_TESTPP src/xmlpullparser.cpp testpp.cpp -o testpp
 
-clean:
-	$(RM) $(OUTPUT) $(OBJS) $(STFLHDRS) core *.core core.*
-	$(RM) -rf doc/xhtml doc/*.xml
+clean-newsbeuter:
+	$(RM) $(NEWSBEUTER) $(NEWSBEUTER_OBJS)
+
+clean-podbeuter:
+	$(RM) $(PODBEUTER) $(PODBEUTER_OBJS)
+
+clean: clean-newsbeuter clean-podbeuter
+	$(RM) $(STFLHDRS) core *.core core.*
 
 distclean: clean clean-mo
 	$(RM) Makefile.deps
@@ -61,17 +90,20 @@ doc:
 
 install: install-mo
 	$(MKDIR) $(prefix)/bin
-	$(INSTALL) $(OUTPUT) $(prefix)/bin
+	$(INSTALL) $(NEWSBEUTER) $(prefix)/bin
+	$(INSTALL) $(PODBEUTER) $(prefix)/bin
 	$(MKDIR) $(prefix)/share/man/man1
-	$(INSTALL) doc/$(OUTPUT).1 $(prefix)/share/man/man1
-	$(GZIP) $(prefix)/share/man/man1/$(OUTPUT).1
+	$(INSTALL) doc/$(NEWSBEUTER).1 $(prefix)/share/man/man1
+	$(INSTALL) doc/$(PODBEUTER).1 $(prefix)/share/man/man1
+	$(MKDIR) $(docdir)
+	$(INSTALL) -m 644 doc/xhtml/* $(docdir) || true
 
 uninstall:
-	$(RM) $(prefix)/bin/$(OUTPUT)
-	$(RM) $(prefix)/share/man/man1/$(OUTPUT).1.gz
-
-Makefile.deps: $(SRC)
-	$(CXX) $(CXXFLAGS) -MM -MG $(SRC) > Makefile.deps
+	$(RM) $(prefix)/bin/$(NEWSBEUTER)
+	$(RM) $(prefix)/bin/$(PODBEUTER)
+	$(RM) $(prefix)/share/man/man1/$(NEWSBEUTER).1
+	$(RM) $(prefix)/share/man/man1/$(PODBEUTER).1
+	$(RM) -r $(docdir)
 
 .PHONY: doc clean all
 
@@ -79,7 +111,7 @@ Makefile.deps: $(SRC)
 
 extract:
 	$(RM) $(POTFILE)
-	xgettext -k_ -o $(POTFILE) $(SRC)
+	xgettext -k_ -o $(POTFILE) *.cpp src/*.cpp
 
 msgmerge:
 	for f in $(POFILES) ; do msgmerge -U $$f $(POTFILE) ; done
@@ -97,8 +129,6 @@ install-mo:
 		lang=`echo $$mofile | sed 's/\.mo$$//'`; \
 		dir=$(localedir)/$$lang/LC_MESSAGES; \
 		$(MKDIR) $$dir ; \
-		$(INSTALL) -m 644 $$mof $$dir/$(OUTPUT).mo ; \
-		echo "Installing $$mofile as $$dir/$(OUTPUT).mo" ; \
+		$(INSTALL) -m 644 $$mof $$dir/$(PACKAGE).mo ; \
+		echo "Installing $$mofile as $$dir/$(PACKAGE).mo" ; \
 	done
-
-include Makefile.deps

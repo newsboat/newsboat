@@ -9,6 +9,7 @@
 #include <rss.h>
 #include <keymap.h>
 #include <mutex.h>
+#include <htmlrenderer.h>
 
 #include <stflpp.h>
 
@@ -26,7 +27,7 @@ namespace newsbeuter {
 			~view();
 			void run_feedlist(const std::vector<std::string> & tags);
 			bool run_itemlist(unsigned int pos, bool auto_open);
-			bool run_itemview(const rss_feed& feed, rss_item& item);
+			bool run_itemview(rss_feed& feed, std::string guid);
 			void run_help();
 			void run_search(const std::string& feed = "");
 			std::string select_tag(const std::vector<std::string>& tags);
@@ -35,10 +36,9 @@ namespace newsbeuter {
 			void set_config_container(configcontainer * cfgcontainer);
 			void show_error(const char * msg);
 			void set_status(const char * msg);
-		private:
+		protected:
 			bool jump_to_next_unread_item(std::vector<rss_item>& items);
 			bool jump_to_next_unread_feed();
-			void mark_all_read(std::vector<rss_item>& items);
 			void open_in_browser(const std::string& url);
 			
 			void set_itemview_keymap_hint();
@@ -65,7 +65,7 @@ namespace newsbeuter {
 			std::string get_filename_suggestion(const std::string& s);
 			void render_source(std::vector<std::string>& lines, std::string desc, unsigned int width);
 
-			void run_urlview(std::vector<std::string>& links);
+			void run_urlview(std::vector<linkpair>& links);
 			
 			struct keymap_hint_entry {
 				operation op; 

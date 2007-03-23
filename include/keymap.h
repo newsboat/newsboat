@@ -10,12 +10,46 @@
 
 // in configuration: bind-key <key> <operation>
 
+#define KM_NEWSBEUTER (1<<0)
+#define KM_PODBEUTER  (1<<1)
+#define KM_BOTH (KM_NEWSBEUTER | KM_PODBEUTER)
+
 namespace newsbeuter {
 
-	enum operation { OP_NIL = 0, OP_QUIT, OP_RELOAD, OP_RELOADALL, OP_MARKFEEDREAD, 
-					OP_MARKALLFEEDSREAD, OP_OPEN, OP_SAVE, OP_NEXTUNREAD, OP_OPENINBROWSER, 
-					OP_HELP, OP_TOGGLESOURCEVIEW, OP_TOGGLEITEMREAD, OP_TOGGLESHOWREAD, OP_SHOWURLS,
-					OP_CLEARTAG, OP_SETTAG, OP_SEARCH };
+	enum operation {	OP_NIL = 0, 
+						// general and newsbeuter-specific operations:
+						OP_NB_MIN,
+						OP_QUIT, 
+						OP_RELOAD, 
+						OP_RELOADALL, 
+						OP_MARKFEEDREAD, 
+						OP_MARKALLFEEDSREAD, 
+						OP_OPEN, 
+						OP_SAVE, 
+						OP_NEXTUNREAD, 
+						OP_OPENINBROWSER, 
+						OP_HELP, 
+						OP_TOGGLESOURCEVIEW, 
+						OP_TOGGLEITEMREAD, 
+						OP_TOGGLESHOWREAD, 
+						OP_SHOWURLS,
+						OP_CLEARTAG, 
+						OP_SETTAG, 
+						OP_SEARCH, 
+						OP_ENQUEUE,
+						OP_NB_MAX,
+
+						// podbeuter-specific operations:
+						OP_PB_MIN, 
+						OP_PB_DOWNLOAD, 
+						OP_PB_CANCEL, 
+						OP_PB_DELETE,
+						OP_PB_PURGE, 
+						OP_PB_TOGGLE_DLALL, 
+						OP_PB_MOREDL, 
+						OP_PB_LESSDL, 
+						OP_PB_PLAY, 
+						OP_PB_MAX };
 
 	class keymap : public config_action_handler {
 		public:
@@ -27,7 +61,7 @@ namespace newsbeuter {
 			operation get_operation(const std::string& keycode);
 			std::string getkey(operation );
 			virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
-			void get_keymap_descriptions(std::vector<std::pair<std::string,std::string> >& descs);
+			void get_keymap_descriptions(std::vector<std::pair<std::string,std::string> >& descs, unsigned short flags);
 		private:
 			std::map<std::string,operation> keymap_;
 	};

@@ -22,19 +22,14 @@ void thread::join() {
 	pthread_join(pt, NULL);
 }
 
-void thread::exit() {
-	delete this;
-	pthread_exit(NULL);
-}
-
-void thread::detached_exit() {
+void thread::detach() {
 	pthread_detach(pt);
-	this->exit();	
 }
 
 void * run_thread(thread * p) {
 	thread * t = p;
 	t->run();
+	delete t;
 	return 0;
 }
 

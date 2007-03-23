@@ -9,6 +9,7 @@
 
 #include <logger.h>
 #include <reloadthread.h>
+#include <exception.h>
 
 #include <iostream>
 #include <iomanip>
@@ -242,9 +243,9 @@ void view::run_search(const std::string& feedurl) {
 
 	std::vector<rss_item> items;
 
-	view_stack.push_front(&search_form); // TODO: add search_form to view
+	view_stack.push_front(&search_form);
 
-	set_search_keymap_hint(); // TODO: implement
+	set_search_keymap_hint();
 
 	search_form.set("msg","");
 
@@ -337,7 +338,8 @@ void view::run_search(const std::string& feedurl) {
 							std::istringstream posname(itemposname);
 							unsigned int pos = 0;
 							posname >> pos;
-							ctrl->open_item(ctrl->get_feed_by_url(items[pos].feedurl()), items[pos]);
+							rss_feed tmpfeed = ctrl->get_feed_by_url(items[pos].feedurl());
+							ctrl->open_item(tmpfeed, items[pos].guid());
 							rebuild_list = true;
 						} else {
 							show_error(_("No item selected!")); // should not happen
@@ -406,6 +408,8 @@ bool view::run_itemlist(unsigned int pos, bool auto_open) {
 				strftime(datebuf,sizeof(datebuf), "%b %d   ", stm);
 				title.append(datebuf);
 				title.append(it->title());
+				GetLogger().log(LOG_DEBUG, "view::run_itemlist: XXXTITLE it->title = `%s' title = `%s' quoted title = `%s'", 
+					it->title().c_str(), title.c_str(), stfl::quote(title).c_str());
 				line.append(stfl::quote(title));
 				line.append("}");
 				code.append(line);
@@ -450,7 +454,7 @@ bool view::run_itemlist(unsigned int pos, bool auto_open) {
 							std::istringstream posname(itemposname);
 							unsigned int pos = 0;
 							posname >> pos;
-							open_next_item = ctrl->open_item(feed, items[pos]);
+							open_next_item = ctrl->open_item(feed, items[pos].guid());
 							rebuild_list = true;
 						} else {
 							show_error(_("No item selected!")); // should not happen
@@ -518,7 +522,7 @@ bool view::run_itemlist(unsigned int pos, bool auto_open) {
 			case OP_MARKFEEDREAD:
 				GetLogger().log(LOG_INFO, "view::run_itemlist: marking feed read");
 				set_status(_("Marking feed read..."));
-				mark_all_read(items);
+				ctrl->mark_all_read(pos);
 				set_status("");
 				rebuild_list = true;
 				break;
@@ -568,7 +572,7 @@ std::string view::get_filename_suggestion(const std::string& s) {
 
 void view::write_item(const rss_item& item, const std::string& filename) {
 	std::vector<std::string> lines;
-	std::vector<std::string> links; // not used
+	std::vector<linkpair> links; // not used
 	
 	std::string title(_("Title: "));
 	title.append(item.title());
@@ -585,12 +589,12 @@ void view::write_item(const rss_item& item, const std::string& filename) {
 	lines.push_back(std::string(""));
 	
 	htmlrenderer rnd(80);
-	rnd.render(item.description(), lines, links);
+	rnd.render(item.description(), lines, links, item.feedurl());
 
 	std::fstream f;
 	f.open(filename.c_str(),std::fstream::out);
 	if (!f.is_open())
-		throw 1; // TODO: add real exception with real error message and such
+		throw exception(errno);
 		
 	for (std::vector<std::string>::iterator it=lines.begin();it!=lines.end();++it) {
 		f << *it << std::endl;	
@@ -741,7 +745,7 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 			char * homedir = ::getenv("HOME");
 			if (homedir) {
 				dir.append(homedir);
-				dir.append("/");
+				dir.append(NEWSBEUTER_PATH_SEP);
 				dir.append(save_path.substr(2,save_path.length()-2));
 			} else {
 				dir = ".";
@@ -771,7 +775,6 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 		
 		if (update_list) {
 			std::string code = "{list";
-			// TODO: read from current directory
 			::getcwd(cwdtmp,sizeof(cwdtmp));
 			
 			DIR * dir = ::opendir(cwdtmp);
@@ -813,7 +816,6 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 							std::string filename(selection);
 							switch (filetype) {
 								case 'd':
-									// TODO: handle directory
 									if (type == FBT_OPEN) {
 										snprintf(buf, sizeof(buf), _("Open File - %s"), filename.c_str());
 									} else {
@@ -938,13 +940,13 @@ bool view::jump_to_next_unread_item(std::vector<rss_item>& items) {
 	return false;
 }
 
-bool view::run_itemview(const rss_feed& feed, rss_item& item) {
+bool view::run_itemview(rss_feed& feed, std::string guid) {
 	bool quit = false;
 	bool show_source = false;
 	bool redraw = true;
 	bool retval = false;
 	static bool render_hack = false;
-	std::vector<std::string> links;
+	std::vector<linkpair> links;
 	
 	view_stack.push_front(&itemview_form);
 	
@@ -953,6 +955,7 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 
 	do {
 		if (redraw) {
+			rss_item& item = feed.get_item_by_guid(guid);
 			std::string code = "{list";
 
 			code.append("{listitem text:");
@@ -965,7 +968,7 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 			} else if (feed.rssurl().length() > 0) {
 				feedtitle << feed.rssurl();
 			}
-			code.append(stfl_quote(feedtitle.str().c_str()));
+			code.append(stfl::quote(feedtitle.str().c_str()));
 			code.append("}");
 
 			code.append("{listitem text:");
@@ -996,6 +999,15 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 			code.append(stfl::quote(date.str()));
 			code.append("}");
 
+			if (item.enclosure_url().length() > 0) {
+				code.append("{listitem text:");
+				std::ostringstream enc_url;
+				enc_url << _("Podcast Download URL: ");
+				enc_url << item.enclosure_url() << " (" << _("type: ") << item.enclosure_type() << ")";
+				code.append(stfl::quote(enc_url.str()));
+				code.append("}");
+			}
+
 			code.append("{listitem text:\"\"}");
 			
 			set_itemview_head(item.title());
@@ -1019,7 +1031,7 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 				render_source(lines, item.description(), render_width);
 			} else {
 				htmlrenderer rnd(render_width);
-				rnd.render(item.description(), lines, links);
+				rnd.render(item.description(), lines, links, item.feedurl());
 			}
 
 			for (std::vector<std::string>::iterator it = lines.begin(); it != lines.end(); ++it) {
@@ -1042,6 +1054,8 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 
 		GetLogger().log(LOG_DEBUG, "view::run_itemview: event = %s operation = %d", event, op);
 
+		rss_item& item = feed.get_item_by_guid(guid);
+
 		switch (op) {
 			case OP_OPEN:
 				// nothing
@@ -1050,6 +1064,13 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 				GetLogger().log(LOG_INFO, "view::run_itemview: toggling source view");
 				show_source = !show_source;
 				redraw = true;
+				break;
+			case OP_ENQUEUE: {
+					char buf[1024];
+					snprintf(buf, sizeof(buf), _("Added %s to download queue."), item.enclosure_url().c_str());
+					ctrl->enqueue_url(item.enclosure_url());
+					set_status(buf);
+				}
 				break;
 			case OP_SAVE:
 				{
@@ -1061,10 +1082,10 @@ bool view::run_itemview(const rss_feed& feed, rss_item& item) {
 					} else {
 						try {
 							write_item(item, filename);
-							snprintf(buf, sizeof(buf), "Saved article to %s", filename.c_str());
+							snprintf(buf, sizeof(buf), _("Saved article to %s."), filename.c_str());
 							show_error(buf);
 						} catch (...) {
-							snprintf(buf, sizeof(buf), "Error: couldn't write article to file %s", filename.c_str());
+							snprintf(buf, sizeof(buf), _("Error: couldn't write article to file %s"), filename.c_str());
 							show_error(buf);
 						}
 					}
@@ -1119,7 +1140,7 @@ void view::open_in_browser(const std::string& url) {
 	view_stack.pop_front();
 }
 
-void view::run_urlview(std::vector<std::string>& links) {
+void view::run_urlview(std::vector<linkpair>& links) {
 	set_urlview_keymap_hint();
 
 	view_stack.push_front(&urlview_form);
@@ -1129,11 +1150,11 @@ void view::run_urlview(std::vector<std::string>& links) {
 
 	std::string code = "{list";
 	unsigned int i=0;
-	for (std::vector<std::string>::iterator it = links.begin(); it != links.end(); ++it, ++i) {
+	for (std::vector<linkpair>::iterator it = links.begin(); it != links.end(); ++it, ++i) {
 		std::ostringstream os;
 		char line[1024];
-		snprintf(line,sizeof(line),"%2u  %s",i+1,it->c_str());
-		os << "{listitem[" << i << "] text:" << stfl_quote(line) << "}";
+		snprintf(line,sizeof(line),"%2u  %s",i+1,it->first.c_str());
+		os << "{listitem[" << i << "] text:" << stfl::quote(line) << "}";
 		code.append(os.str());
 	}
 	code.append("}");
@@ -1157,7 +1178,7 @@ void view::run_urlview(std::vector<std::string>& links) {
 						unsigned int idx;
 						is >> idx;
 						set_status(_("Starting browser..."));
-						open_in_browser(links[idx]);
+						open_in_browser(links[idx].first);
 						set_status("");
 					} else {
 						show_error(_("No link selected!"));
@@ -1191,7 +1212,7 @@ std::string view::select_tag(const std::vector<std::string>& tags) {
 		snprintf(num,sizeof(num)," %4d. ", i+1);
 		std::string tagstr = num;
 		tagstr.append(it->c_str());
-		line << "{listitem[" << i << "] text:" << stfl_quote(tagstr.c_str()) << "}";
+		line << "{listitem[" << i << "] text:" << stfl::quote(tagstr.c_str()) << "}";
 		code.append(line.str());
 	}
 	code.append("}");
@@ -1242,7 +1263,7 @@ void view::run_help() {
 	help_form.set("head",_("Help"));
 	
 	std::vector<std::pair<std::string,std::string> > descs;
-	keys->get_keymap_descriptions(descs);
+	keys->get_keymap_descriptions(descs, KM_NEWSBEUTER);
 	
 	std::string code = "{list";
 	
@@ -1357,17 +1378,6 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 	feedlist_form.set("head", buf);
 }
 
-void view::mark_all_read(std::vector<rss_item>& items) {
-	for (std::vector<rss_item>::iterator it = items.begin(); it != items.end(); ++it) {
-		it->set_unread(false);
-	}
-}
-
-struct keymap_hint_entry {
-	operation op; 
-	char * text;
-};
-
 std::string view::prepare_keymaphint(keymap_hint_entry * hints) {
 	std::string keymap_hint;
 	for (int i=0;hints[i].op != OP_NIL; ++i) {
@@ -1439,6 +1449,7 @@ void view::set_itemview_keymap_hint() {
 		{ OP_SAVE, _("Save") },
 		{ OP_NEXTUNREAD, _("Next Unread") },
 		{ OP_OPENINBROWSER, _("Open in Browser") },
+		{ OP_ENQUEUE, _("Enqueue") },
 		{ OP_HELP, _("Help") },
 		{ OP_NIL, NULL }
 	};
