@@ -179,7 +179,11 @@ std::string utils::convert_text(const std::string& text, const std::string& toco
 
 	size_t inbytesleft;
 	size_t outbytesleft;
+#ifndef __linux
+	const char * inbufp;
+#else
 	char * inbufp;
+#endif
 	char outbuf[16];
 	char * outbufp = outbuf;
 
