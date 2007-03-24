@@ -128,7 +128,7 @@ void view::run_feedlist(const std::vector<std::string>& tags) {
 							unsigned int pos = 0;
 							posname >> pos;
 							if ((auto_open = ctrl->open_feed(visible_feeds[pos].second, auto_open))) {
-								if (!jump_to_next_unread_feed()) {
+								if (!jump_to_next_unread_feed(false)) {
 									show_error(_("No feeds with unread items."));
 									quit = true;
 								}
@@ -185,7 +185,7 @@ void view::run_feedlist(const std::vector<std::string>& tags) {
 				break;
 			case OP_NEXTUNREAD:
 				GetLogger().log(LOG_INFO, "view::run_feedlist: jumping to next unred feed");
-				if (!jump_to_next_unread_feed()) {
+				if (!jump_to_next_unread_feed(true)) {
 					show_error(_("No feeds with unread items."));
 				}
 				break;
@@ -434,7 +434,7 @@ bool view::run_itemlist(unsigned int pos, bool auto_open) {
 		
 		if (auto_open) {
 			auto_open = false;
-			jump_to_next_unread_item(items);
+			jump_to_next_unread_item(items, false);
 			op = OP_OPEN;
 		} else {
 			event = itemlist_form.run(0);
@@ -460,7 +460,7 @@ bool view::run_itemlist(unsigned int pos, bool auto_open) {
 							show_error(_("No item selected!")); // should not happen
 						}
 						if (open_next_item) {
-							if (!jump_to_next_unread_item(items)) {
+							if (!jump_to_next_unread_item(items, true)) {
 								open_next_item = false;
 								retval = true;
 								quit = true;
@@ -516,7 +516,7 @@ bool view::run_itemlist(unsigned int pos, bool auto_open) {
 				break;
 			case OP_NEXTUNREAD:
 				GetLogger().log(LOG_INFO, "view::run_itemlist: jumping to next unread item");
-				if (!jump_to_next_unread_item(items))
+				if (!jump_to_next_unread_item(items, true))
 					show_no_unread_error = true;
 				break;
 			case OP_MARKFEEDREAD:
@@ -876,7 +876,7 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 	return std::string(""); // never reached
 }
 
-bool view::jump_to_next_unread_feed() {
+bool view::jump_to_next_unread_feed(bool begin_with_next) {
 	std::string feedposname = feedlist_form.get("feedpos");
 	unsigned int feedcount = visible_feeds.size();
 
@@ -884,7 +884,7 @@ bool view::jump_to_next_unread_feed() {
 		std::istringstream posname(feedposname);
 		unsigned int pos = 0;
 		posname >> pos;
-		for (unsigned int i=pos+1;i<feedcount;++i) {
+		for (unsigned int i=(begin_with_next?(pos+1):pos);i<feedcount;++i) {
 			if (visible_feeds[i].first->unread_item_count() > 0) {
 				std::ostringstream posname;
 				posname << i;
@@ -909,14 +909,14 @@ bool view::jump_to_next_unread_feed() {
 	return false;
 }
 
-bool view::jump_to_next_unread_item(std::vector<rss_item>& items) {
+bool view::jump_to_next_unread_item(std::vector<rss_item>& items, bool begin_with_next) {
 	std::string itemposname = itemlist_form.get("itempos");
 
 	if (itemposname.length() > 0) {
 		std::istringstream posname(itemposname);
 		unsigned int pos = 0;
 		posname >> pos;
-		for (unsigned int i=pos+1;i<items.size();++i) {
+		for (unsigned int i=(begin_with_next?(pos+1):pos);i<items.size();++i) {
 			if (items[i].unread()) {
 				std::ostringstream posname;
 				posname << i;

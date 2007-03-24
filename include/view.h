@@ -37,8 +37,8 @@ namespace newsbeuter {
 			void show_error(const char * msg);
 			void set_status(const char * msg);
 		protected:
-			bool jump_to_next_unread_item(std::vector<rss_item>& items);
-			bool jump_to_next_unread_feed();
+			bool jump_to_next_unread_item(std::vector<rss_item>& items, bool begin_with_next);
+			bool jump_to_next_unread_feed(bool begin_with_next);
 			void open_in_browser(const std::string& url);
 			
 			void set_itemview_keymap_hint();
