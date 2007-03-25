@@ -339,6 +339,7 @@ void view::run_search(const std::string& feedurl) {
 							unsigned int pos = 0;
 							posname >> pos;
 							rss_feed tmpfeed = ctrl->get_feed_by_url(items[pos].feedurl());
+							tmpfeed.items().push_back(items[pos]);
 							ctrl->open_item(tmpfeed, items[pos].guid());
 							rebuild_list = true;
 						} else {
