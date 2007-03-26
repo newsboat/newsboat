@@ -1,6 +1,6 @@
 Changes for newsbeuter:
 
-0.3:
+0.3: (2007-03-26)
 	added gettext support
 	added podcast support
 	changed handling of encoding - now, everything is stored as UTF-8 internally, and gets converted on-the-fly

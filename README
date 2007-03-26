@@ -20,7 +20,6 @@ libnXml: http://www2.autistici.org/bakunin/libnxml/
 libmRss: http://www2.autistici.org/bakunin/libmrss/
 SQLite: http://www.sqlite.org/
 STFL: http://www.clifford.at/stfl/
-libidn: http://www.gnu.org/software/libidn/
 libcurl: http://curl.haxx.se/
 
 Debian unstable comes with ready-to-use packages for these dependencies.

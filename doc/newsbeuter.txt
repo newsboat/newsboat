@@ -40,7 +40,6 @@ themselves depend on other libraries. These dependencies are not listed here.
 Please also be aware that you need a recent C++ compiler. Currently, newsbeuter
 has only been tested with GCC.
 
-- Libidn: http://www.gnu.org/software/libidn/[]
 - STFL: http://www.clifford.at/stfl/[]
 - SQLite 3: http://www.sqlite.org/[]
 - libcurl: http://curl.haxx.se/[]
