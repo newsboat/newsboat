@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>The Newsbeuter RSS Feedreader</title><link rel="stylesheet" href="./docbook-xsl.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.68.1" /></head><body><div class="article" lang="en" xml:lang="en"><div class="titlepage"><div><div><h1 class="title"><a id="id2408942"></a>The Newsbeuter RSS Feedreader</h1></div><div><div class="author"><h3 class="author"><span class="firstname">Andreas</span> <span class="surname">Krennmair</span></h3><div class="affiliation"><div class="address"><p><code class="email">&lt;<a href="mailto:ak@synflood.at">ak@synflood.at</a>&gt;</code></p></div></div></div></div></div><hr /></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#id2458043">Introduction</a></span></dt><dd><dl><dt><span class="section"><a href="#id2458057">Why "Newsbeuter"?</a></span></dt></dl></dd><dt><span class="section"><a href="#id2458081">Installation</a></span></dt><dd><dl><dt><span class="section"><a href="#id2458091">Downloading Newsbeuter</a></span></dt><dt><span class="section"><a href="#id2494644">Dependencies</a></span></dt><dt><span class="section"><a href="#id2494733">Compiling and Installing</a></span></dt></dl></dd><dt><span class="section"><a href="#id2494744">First Steps</a></span></dt><dd><dl><dt><span class="section"><a href="#id2504233">Example Configuration</a></span></dt><dt><span class="section"><a href="#id2504259">Configuring Colors</a></span></dt></dl></dd><dt><span class="section"><a href="#id2504518">Advanced Features</a></span></dt><dd><dl><dt><span class="section"><a href="#id2504524">Tagging</a></span></dt><dt><span class="section"><a href="#id2504584">Podcast Support</a></span></dt></dl></dd><dt><span class="section"><a href="#id2504976">Feedback</a></span></dt><dt><span class="section"><a href="#id2505009">License</a></span></dt></dl></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2458043"></a>Introduction</h2></div></div></div><p>Newsbeuter is an RSS feedreader. RSS is a number of widely-used XML formats to
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>The Newsbeuter RSS Feedreader</title><link rel="stylesheet" href="./docbook-xsl.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.68.1" /></head><body><div class="article" lang="en" xml:lang="en"><div class="titlepage"><div><div><h1 class="title"><a id="id2408942"></a>The Newsbeuter RSS Feedreader</h1></div><div><div class="author"><h3 class="author"><span class="firstname">Andreas</span> <span class="surname">Krennmair</span></h3><div class="affiliation"><div class="address"><p><code class="email">&lt;<a href="mailto:ak@synflood.at">ak@synflood.at</a>&gt;</code></p></div></div></div></div></div><hr /></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#id2458043">Introduction</a></span></dt><dd><dl><dt><span class="section"><a href="#id2458057">Why "Newsbeuter"?</a></span></dt></dl></dd><dt><span class="section"><a href="#id2458081">Installation</a></span></dt><dd><dl><dt><span class="section"><a href="#id2458091">Downloading Newsbeuter</a></span></dt><dt><span class="section"><a href="#id2494644">Dependencies</a></span></dt><dt><span class="section"><a href="#id2494733">Compiling and Installing</a></span></dt></dl></dd><dt><span class="section"><a href="#id2494744">First Steps</a></span></dt><dd><dl><dt><span class="section"><a href="#id2504231">Example Configuration</a></span></dt><dt><span class="section"><a href="#id2504257">Configuring Colors</a></span></dt></dl></dd><dt><span class="section"><a href="#id2504516">Advanced Features</a></span></dt><dd><dl><dt><span class="section"><a href="#id2504522">Tagging</a></span></dt><dt><span class="section"><a href="#id2504582">Podcast Support</a></span></dt></dl></dd><dt><span class="section"><a href="#id2504973">Feedback</a></span></dt><dt><span class="section"><a href="#id2505006">License</a></span></dt></dl></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2458043"></a>Introduction</h2></div></div></div><p>Newsbeuter is an RSS feedreader. RSS is a number of widely-used XML formats to
 transmit, publish and syndicate articles, for example news or blog articles.
 Newsbeuter is designed to be used on text terminals on Unix or Unix-like
 systems such as Linux, BSD or Mac OS X.</p><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2458057"></a>Why "Newsbeuter"?</h3></div></div></div><p>"Newsbeuter" is a pun on the German word "Wildbeuter", which means
@@ -17,11 +17,11 @@ lists these dependencies. Please be aware that the list libraries may
 themselves depend on other libraries. These dependencies are not listed here.
 Please also be aware that you need a recent C++ compiler. Currently, newsbeuter
 has only been tested with GCC.</p><div class="itemizedlist"><ul type="disc"><li>
-Libidn: <a href="http://www.gnu.org/software/libidn/" target="_top">http://www.gnu.org/software/libidn/</a>
-</li><li>
 STFL: <a href="http://www.clifford.at/stfl/" target="_top">http://www.clifford.at/stfl/</a>
 </li><li>
 SQLite 3: <a href="http://www.sqlite.org/" target="_top">http://www.sqlite.org/</a>
+</li><li>
+libcurl: <a href="http://curl.haxx.se/" target="_top">http://curl.haxx.se/</a>
 </li><li>
 libmRss: <a href="http://www2.autistici.org/bakunin/libmrss/" target="_top">http://www2.autistici.org/bakunin/libmrss/</a>
 </li><li>
@@ -66,7 +66,7 @@ file, by default $HOME/.newsbeuter/config. This configuration files contains
 lines in the form "&lt;config-command&gt; &lt;arg1&gt; …".  The configuration file can
 also contain comments, which start with the <span class="emphasis"><em>#</em></span> character and go as far as the
 end of line. If you need to enter a configuration argument that contains
-spaces, use quotes (") around the whole argument.</p><div class="table"><a id="id2456331"></a><p class="title"><b>Table 1. Configuration Commands</b></p><table summary="Configuration Commands" cellpadding="4px" border="0" style="border-collapse: collapse;border-top: 2px solid #527bbd; border-bottom: 2px solid #527bbd; border-left: 2px solid #527bbd; border-right: 2px solid #527bbd; "><colgroup><col align="left" /><col align="left" /><col align="left" /><col align="left" /><col align="left" /></colgroup><thead><tr><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+spaces, use quotes (") around the whole argument.</p><div class="table"><a id="id2456330"></a><p class="title"><b>Table 1. Configuration Commands</b></p><table summary="Configuration Commands" cellpadding="4px" border="0" style="border-collapse: collapse;border-top: 2px solid #527bbd; border-bottom: 2px solid #527bbd; border-left: 2px solid #527bbd; border-right: 2px solid #527bbd; "><colgroup><col align="left" /><col align="left" /><col align="left" /><col align="left" /><col align="left" /></colgroup><thead><tr><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
     Configuration Command
     </th><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
     Argument(s)
@@ -206,7 +206,7 @@ spaces, use quotes (") around the whole argument.</p><div class="table"><a id="i
     If yes, then all podcast URLs that are found in articles are added to the podcast download queue. See below for more information on podcast support in newsbeuter.
     </td><td style="" align="left">
     podcast-auto-enqueue yes
-    </td></tr></tbody></table></div><div class="table"><a id="id2457128"></a><p class="title"><b>Table 2. Available Operations</b></p><table summary="Available Operations" cellpadding="4px" border="0" style="border-collapse: collapse;border-top: 2px solid #527bbd; border-bottom: 2px solid #527bbd; border-left: 2px solid #527bbd; border-right: 2px solid #527bbd; "><colgroup><col align="left" /><col align="left" /><col align="left" /></colgroup><thead><tr><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    </td></tr></tbody></table></div><div class="table"><a id="id2457126"></a><p class="title"><b>Table 2. Available Operations</b></p><table summary="Available Operations" cellpadding="4px" border="0" style="border-collapse: collapse;border-top: 2px solid #527bbd; border-bottom: 2px solid #527bbd; border-left: 2px solid #527bbd; border-right: 2px solid #527bbd; "><colgroup><col align="left" /><col align="left" /><col align="left" /></colgroup><thead><tr><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
     Operation
     </th><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
     Default key
@@ -326,11 +326,11 @@ The Enter key is written as "enter", while the ESC key is written as "esc". The
 function keys F1 to F12 are written as "F1" to "F12". The Space key is written
 as "space". Key combinations with the Ctrl key, such as Ctrl-R, are written as
 ^r. Please be aware that all Ctrl-related key combinations need to be written
-in lowercase ^R for Ctrl-Shift-R does not work.</p><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2504233"></a>Example Configuration</h3></div></div></div><pre class="literallayout"># a comment
+in lowercase ^R for Ctrl-Shift-R does not work.</p><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2504231"></a>Example Configuration</h3></div></div></div><pre class="literallayout"># a comment
 max-items        100 # such comments are possible, too
 browser          links
 show-read-feeds  no</pre><pre class="literallayout">unbind-key       R
-bind-key         ^r    reload-all</pre></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2504259"></a>Configuring Colors</h3></div></div></div><p>It is possible to configure custom color settings in newsbeuter. The basic configuration
+bind-key         ^r    reload-all</pre></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2504257"></a>Configuring Colors</h3></div></div></div><p>It is possible to configure custom color settings in newsbeuter. The basic configuration
 syntax is:</p><pre class="literallayout">color &lt;element&gt; &lt;foreground color&gt; &lt;background color&gt; [&lt;attribute&gt; ...]</pre><p>This means that if you configure colors for a certain element, you need to provide
 a foreground color and a background color as a minimum. The following colors are
 supported:</p><div class="itemizedlist"><ul type="disc"><li>
@@ -382,7 +382,7 @@ invis
 listnormal   white   black
 listfocus    yellow  blue   bold
 info         yellow  blue   bold
-article      white   black</pre></div></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2504518"></a>Advanced Features</h2></div></div></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2504524"></a>Tagging</h3></div></div></div><p>Newsbeuter comes with the possibility to categorize or "tag", as well call it,
+article      white   black</pre></div></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2504516"></a>Advanced Features</h2></div></div></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2504522"></a>Tagging</h3></div></div></div><p>Newsbeuter comes with the possibility to categorize or "tag", as well call it,
 RSS feeds. Every RSS feed can be assigned 0 or more tags. Within newsbeuter, you
 can then select to only show RSS feeds that match a certain tag. That makes it
 easy to categorize your feeds in a flexible and powerful way.</p><p>Usually, the ~/.newsbeuter/urls file contains one RSS feed URL per line. To
@@ -395,7 +395,7 @@ http://www.heise.de/newsticker/heise.rdf news interesting</pre><p>When you now s
 a tag. When you select the tag "news", you will see all three RSS feeds. Pressing
 "t" again and e.g. selecting the "conspiracy" tag, you will only see the
 http://blog.fefe.de/rss.xml?html RSS feed. Pressing "^t" clears the current tag,
-and again shows all RSS feeds, regardless of their assigned tags.</p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2504584"></a>Podcast Support</h3></div></div></div><p>A podcast is a media file distributed over the internet using syndication feeds
+and again shows all RSS feeds, regardless of their assigned tags.</p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2504582"></a>Podcast Support</h3></div></div></div><p>A podcast is a media file distributed over the internet using syndication feeds
 such as RSS, for later playback on portable players or computers.  Newsbeuter
 contains support for downloading and saving podcasts. This support differs a bit
 from other podcast aggregators or "podcatchers" in how it is done.</p><p>Podcast content is transported in RSS feeds via special tags called
@@ -406,7 +406,7 @@ newsbeuter can be configured to automatically do that. This queue is stored in
 the file $HOME/.newsbeuter/queue.</p><p>The user can then use the download manager "podbeuter" to download these files
 to a directory on the local filesystem. Podbeuter comes with the newsbeuter
 package, and features a look and feel very close to the one of newsbeuter. It
-also shares the same configuration file.</p><div class="table"><a id="id2504623"></a><p class="title"><b>Table 3. Podbeuter Configuration Commands</b></p><table summary="Podbeuter Configuration Commands" cellpadding="4px" border="0" style="border-collapse: collapse;border-top: 2px solid #527bbd; border-bottom: 2px solid #527bbd; border-left: 2px solid #527bbd; border-right: 2px solid #527bbd; "><colgroup><col align="left" /><col align="left" /><col align="left" /><col align="left" /><col align="left" /></colgroup><thead><tr><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+also shares the same configuration file.</p><div class="table"><a id="id2504621"></a><p class="title"><b>Table 3. Podbeuter Configuration Commands</b></p><table summary="Podbeuter Configuration Commands" cellpadding="4px" border="0" style="border-collapse: collapse;border-top: 2px solid #527bbd; border-bottom: 2px solid #527bbd; border-left: 2px solid #527bbd; border-right: 2px solid #527bbd; "><colgroup><col align="left" /><col align="left" /><col align="left" /><col align="left" /><col align="left" /></colgroup><thead><tr><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
     Configuration Command
     </th><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
     Argument(s)
@@ -436,7 +436,7 @@ also shares the same configuration file.</p><div class="table"><a id="id2504623"
     Specifies the maximum number of parallel downloads when automatic download is enabled.
     </td><td style="" align="left">
     max-downloads 3
-    </td></tr></tbody></table></div><div class="table"><a id="id2504758"></a><p class="title"><b>Table 4. Available Operations in Podbeuter</b></p><table summary="Available Operations in Podbeuter" cellpadding="4px" border="0" style="border-collapse: collapse;border-top: 2px solid #527bbd; border-bottom: 2px solid #527bbd; border-left: 2px solid #527bbd; border-right: 2px solid #527bbd; "><colgroup><col align="left" /><col align="left" /><col align="left" /></colgroup><thead><tr><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    </td></tr></tbody></table></div><div class="table"><a id="id2504755"></a><p class="title"><b>Table 4. Available Operations in Podbeuter</b></p><table summary="Available Operations in Podbeuter" cellpadding="4px" border="0" style="border-collapse: collapse;border-top: 2px solid #527bbd; border-bottom: 2px solid #527bbd; border-left: 2px solid #527bbd; border-right: 2px solid #527bbd; "><colgroup><col align="left" /><col align="left" /><col align="left" /></colgroup><thead><tr><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
     Operation
     </th><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
     Default key
@@ -494,10 +494,10 @@ also shares the same configuration file.</p><div class="table"><a id="id2504623"
 found podcast download URLs. Then, the user reloads the podcast RSS feeds in
 newsbeuter, and after that, he/she uses podbeuter to view the current queue, and
 either selectively download certain files or automatically download them all
-together by pressing "a" within podbeuter.</p></div></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2504976"></a>Feedback</h2></div></div></div><p>If you want to tell us something related to newsbeuter, don't hesitate to send
+together by pressing "a" within podbeuter.</p></div></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2504973"></a>Feedback</h2></div></div></div><p>If you want to tell us something related to newsbeuter, don't hesitate to send
 an email: ak-newsbeuter@synflood.at</p><p>Alternatively, you can reach the newsbeuter developers on IRC: channel
 #newsbeuter on irc.freenode.net.</p><p>If you want to report newsbeuter bugs, please use this issue tracker:
-<a href="http://code.google.com/p/newsbeuter/issues/list" target="_top">http://code.google.com/p/newsbeuter/issues/list</a></p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2505009"></a>License</h2></div></div></div><p>MIT/X Consortium License</p><p>©opyright 2006-2007 Andreas Krennmair &lt;ak@synflood.at&gt;</p><p>Permission is hereby granted, free of charge, to any person obtaining a copy of
+<a href="http://code.google.com/p/newsbeuter/issues/list" target="_top">http://code.google.com/p/newsbeuter/issues/list</a></p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2505006"></a>License</h2></div></div></div><p>MIT/X Consortium License</p><p>©opyright 2006-2007 Andreas Krennmair &lt;ak@synflood.at&gt;</p><p>Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
 the Software without restriction, including without limitation the rights to
 use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
