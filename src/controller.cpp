@@ -229,7 +229,9 @@ void controller::run(int argc, char * argv[]) {
 	v->set_config_container(cfg);
 	v->set_keymap(&keys);
 	v->set_feedlist(feeds);
-	v->run_feedlist(tags);
+	// v->run_feedlist(tags);
+	v->set_tags(tags);
+	v->run();
 
 	std::cout << _("Cleaning up cache...");
 	std::cout.flush();
@@ -248,11 +250,13 @@ void controller::update_feedlist() {
 	v->set_feedlist(feeds);
 }
 
+#if 0
 bool controller::open_item(rss_feed& feed, std::string guid) {
 	bool show_next_unread = v->run_itemview(feed, guid);
 	feed.get_item_by_guid(guid).set_unread(false);
 	return show_next_unread;
 }
+#endif
 
 void controller::catchup_all() {
 	rsscache->catchup_all();
@@ -277,6 +281,7 @@ void controller::mark_all_read(unsigned int pos) {
 	}
 }
 
+#if 0
 bool controller::open_feed(unsigned int pos, bool auto_open) {
 	bool retval = false;
 	if (pos < feeds.size()) {
@@ -299,6 +304,7 @@ bool controller::open_feed(unsigned int pos, bool auto_open) {
 	}
 	return retval;
 }
+#endif
 
 void controller::reload(unsigned int pos, unsigned int max) {
 	char msgbuf[1024];
@@ -354,11 +360,11 @@ void controller::reload(unsigned int pos, unsigned int max) {
 	}
 }
 
-rss_feed& controller::get_feed(unsigned int pos) {
+rss_feed * controller::get_feed(unsigned int pos) {
 	if (pos >= feeds.size()) {
 		throw std::out_of_range(_("invalid feed index (bug)"));
 	}
-	return feeds[pos];
+	return &(feeds[pos]);
 }
 
 void controller::reload_all() {
@@ -525,3 +531,4 @@ void controller::enqueue_url(const std::string& url) {
 		f.close();
 	}
 }
+

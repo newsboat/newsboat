@@ -1,5 +1,8 @@
 Changes for newsbeuter:
 
+0.4:
+	refactored view (work in progress)
+
 0.3: (2007-03-36)
 	added gettext support
 	added podcast support

@@ -115,14 +115,14 @@ void colormanager::set_colors(view * v) {
 
 		GetLogger().log(LOG_DEBUG,"colormanager::set_colors: %s %s\n",fgcit->first.c_str(), colorattr.c_str());
 
-		v->feedlist_form.set(fgcit->first, colorattr);
-		v->itemlist_form.set(fgcit->first, colorattr);
-		v->itemview_form.set(fgcit->first, colorattr);
-		v->help_form.set(fgcit->first, colorattr);
-		v->filebrowser_form.set(fgcit->first, colorattr);
-		v->urlview_form.set(fgcit->first, colorattr);
-		v->selecttag_form.set(fgcit->first, colorattr);
-		v->search_form.set(fgcit->first, colorattr);
+		// v->feedlist_form.set(fgcit->first, colorattr);
+		// v->itemlist_form.set(fgcit->first, colorattr);
+		// v->itemview_form.set(fgcit->first, colorattr);
+		// v->help_form.set(fgcit->first, colorattr);
+		// v->filebrowser_form.set(fgcit->first, colorattr);
+		// v->urlview_form.set(fgcit->first, colorattr);
+		// v->selecttag_form.set(fgcit->first, colorattr);
+		// v->search_form.set(fgcit->first, colorattr);
 
 		if (fgcit->first == "article") {
 			std::string styleend_str;
@@ -135,8 +135,8 @@ void colormanager::set_colors(view * v) {
 				styleend_str.append(",");
 			styleend_str.append("attr=bold");
 
-			v->help_form.set("styleend", styleend_str.c_str());
-			v->itemview_form.set("styleend", styleend_str.c_str());
+			// v->help_form.set("styleend", styleend_str.c_str());
+			// v->itemview_form.set("styleend", styleend_str.c_str());
 		}
 	}
 }

@@ -6,6 +6,9 @@
 #include <urlview.h>
 #include <selecttag.h>
 #include <search.h>
+#include <formaction.h>
+#include <feedlist_formaction.h>
+#include <itemlist_formaction.h>
 
 #include <logger.h>
 #include <reloadthread.h>
@@ -41,16 +44,25 @@ extern "C" {
 
 using namespace newsbeuter;
 
-view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0),
+view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0) /*,
 		feedlist_form(feedlist_str), itemlist_form(itemlist_str), itemview_form(itemview_str), 
 		help_form(help_str), filebrowser_form(filebrowser_str), urlview_form(urlview_str), 
-		selecttag_form(selecttag_str), search_form(search_str) { 
+		selecttag_form(selecttag_str), search_form(search_str) */ { 
 	mtx = new mutex();
+
+	feedlist = new feedlist_formaction(this, feedlist_str);
+	itemlist = new itemlist_formaction(this, itemlist_str);
+	// TODO: create all formaction objects
+
+	// push the dialog to start with onto the stack
+	formaction_stack.push_front(feedlist);
 }
 
 view::~view() {
 	stfl::reset();
 	delete mtx;
+	delete feedlist;
+	delete itemlist;
 }
 
 void view::set_config_container(configcontainer * cfgcontainer) {
@@ -63,12 +75,10 @@ void view::set_keymap(keymap * k) {
 
 void view::set_status(const char * msg) {
 	mtx->lock();
-	if (view_stack.size() > 0) {
-		stfl::form * form = *(view_stack.begin());
-		if (form) {
-			form->set("msg",msg);
-			form->run(-1);
-		}
+	if (formaction_stack.size() > 0) {
+		stfl::form& form = (*formaction_stack.begin())->get_form();
+		form.set("msg",msg);
+		form.run(-1);
 	}
 	mtx->unlock();
 }
@@ -77,165 +87,28 @@ void view::show_error(const char * msg) {
 	set_status(msg);
 }
 
-void view::run_feedlist(const std::vector<std::string>& tags) {
-	bool quit = false;
-	bool update = false;
-	bool zero_feedpos = false;
+void view::run() {
 
-	view_stack.push_front(&feedlist_form);
+	feedlist->init();
+	itemlist->init();
 
-	set_feedlist_keymap_hint();
+	while (formaction_stack.size() > 0) {
+		formaction * fa = *(formaction_stack.begin());
 
-	if(ctrl->get_refresh_on_start()) {
-		feedlist_form.run(-1);
-		ctrl->start_reload_all_thread();
-	}
+		fa->prepare();
 
-	unsigned int reload_cycle = 60 * static_cast<unsigned int>(cfg->get_configvalue_as_int("reload-time"));
-	if (cfg->get_configvalue_as_bool("auto-reload") == true) {
-		feedlist_form.run(-1);
-		reloadthread  * rt = new reloadthread(ctrl, reload_cycle);
-		rt->start();
-	}
-
-	do {
-
-		if (update) {
-			update = false;
-			ctrl->update_feedlist();
-			if (zero_feedpos) {
-				feedlist_form.set("feedpos","0");
-				zero_feedpos = false;
-			}
-		}
-
-		const char * event = feedlist_form.run(0);
+		const char * event = fa->get_form().run(0);
 		if (!event) continue;
 
 		operation op = keys->get_operation(event);
 
-		GetLogger().log(LOG_DEBUG,"view::run_feedlist: event = %s operation = %d", event, op);
-
-		switch (op) {
-			case OP_OPEN: {
-					bool quit = false;
-					bool auto_open = false;
-					do {
-						std::string feedpos = feedlist_form.get("feedpos");
-						GetLogger().log(LOG_INFO, "view::run_feedlist: opening feed at position `%s'",feedpos.c_str());
-						if (feeds_shown > 0 && feedpos.length() > 0) {
-							std::istringstream posname(feedpos);
-							unsigned int pos = 0;
-							posname >> pos;
-							if ((auto_open = ctrl->open_feed(visible_feeds[pos].second, auto_open))) {
-								if (!jump_to_next_unread_feed(false)) {
-									show_error(_("No feeds with unread items."));
-									quit = true;
-								}
-							} else {
-								quit = true;
-							}
-						} else {
-							show_error(_("No feed selected!")); // should not happen
-						}
-					} while (!quit);
-				}
-				break;
-			case OP_RELOAD: {
-					std::string feedposname = feedlist_form.get("feedposname");
-					GetLogger().log(LOG_INFO, "view::run_feedlist: reloading feed at position `%s'",feedposname.c_str());
-					if (feeds_shown > 0 && feedposname.length() > 0) {
-						std::istringstream posname(feedposname);
-						unsigned int pos = 0;
-						posname >> pos;
-						ctrl->reload(pos);
-					} else {
-						show_error(_("No feed selected!")); // should not happen
-					}
-				}
-				break;
-			case OP_RELOADALL:
-				GetLogger().log(LOG_INFO, "view::run_feedlist: reloading all feeds");
-				ctrl->start_reload_all_thread();
-				break;
-			case OP_MARKFEEDREAD: {
-					std::string feedposname = feedlist_form.get("feedposname");
-					GetLogger().log(LOG_INFO, "view::run_feedlist: marking feed read at position `%s'",feedposname.c_str());
-					if (feeds_shown > 0 && feedposname.length() > 0) {
-						set_status(_("Marking feed read..."));
-						std::istringstream posname(feedposname);
-						unsigned int pos = 0;
-						posname >> pos;
-						ctrl->mark_all_read(pos);
-						update = true;
-						set_status("");
-					} else {
-						show_error(_("No feed selected!")); // should not happen
-					}
-				}
-				break;
-			case OP_TOGGLESHOWREAD:
-				GetLogger().log(LOG_INFO, "view::run_feedlist: toggling show-read-feeds");
-				if (cfg->get_configvalue_as_bool("show-read-feeds")) {
-					cfg->set_configvalue("show-read-feeds","no");
-				} else {
-					cfg->set_configvalue("show-read-feeds","yes");
-				}
-				update = true;
-				break;
-			case OP_NEXTUNREAD:
-				GetLogger().log(LOG_INFO, "view::run_feedlist: jumping to next unred feed");
-				if (!jump_to_next_unread_feed(true)) {
-					show_error(_("No feeds with unread items."));
-				}
-				break;
-			case OP_MARKALLFEEDSREAD:
-				GetLogger().log(LOG_INFO, "view::run_feedlist: marking all feeds read");
-				set_status(_("Marking all feeds read..."));
-				ctrl->catchup_all();
-				set_status("");
-				update = true;
-				break;
-			case OP_CLEARTAG:
-				tag = "";
-				update = true;
-				zero_feedpos = true;
-				break;
-			case OP_SETTAG: 
-				if (tags.size() > 0) {
-					std::string newtag = select_tag(tags);
-					if (newtag != "") {
-						tag = newtag;
-						update = true;
-						zero_feedpos = true;
-					}
-				} else {
-					show_error(_("No tags defined."));
-				}
-				break;
-			case OP_SEARCH:
-				run_search();
-				break;
-			case OP_QUIT:
-				GetLogger().log(LOG_INFO, "view::run_feedlist: quitting");
-				quit = true;
-				break;
-			case OP_HELP:
-				run_help();
-				set_status("");
-				break;
-			default:
-				break;
-		}
-	} while (!quit);
-	
-	view_stack.pop_front();
-
-	// delete rt; // is this allowed?
+		fa->process_operation(op);
+	}
 
 	stfl::reset();
 }
 
+#if 0
 void view::run_search(const std::string& feedurl) {
 	bool quit = false;
 	bool rebuild_list = false;
@@ -365,195 +238,7 @@ void view::run_search(const std::string& feedurl) {
 
 	view_stack.pop_front();
 }
-
-bool view::run_itemlist(unsigned int pos, bool auto_open) {
-	bool quit = false;
-	bool rebuild_list = true;
-	bool show_no_unread_error = false;
-	bool retval = false;
-	rss_feed& feed = ctrl->get_feed(pos);
-	std::vector<rss_item>& items = feed.items();
-	
-	view_stack.push_front(&itemlist_form);
-
-	itemlist_form.set("itempos","0");
-
-	set_itemlist_keymap_hint();
-
-	itemlist_form.set("msg","");
-	
-	do {
-		if (rebuild_list) {
-
-			std::string code = "{list";
-
-			unsigned int i=0;
-			for (std::vector<rss_item>::iterator it = items.begin(); it != items.end(); ++it, ++i) {
-				std::string line = "{listitem[";
-				std::ostringstream x;
-				x << i;
-				line.append(x.str());
-				line.append("] text:");
-				std::string title;
-				char buf[20];
-				snprintf(buf,sizeof(buf),"%4u ",i+1);
-				title.append(buf);
-				if (it->unread()) {
-					title.append("N ");
-				} else {
-					title.append("  ");
-				}
-				char datebuf[64];
-				time_t t = it->pubDate_timestamp();
-				struct tm * stm = localtime(&t);
-				strftime(datebuf,sizeof(datebuf), "%b %d   ", stm);
-				title.append(datebuf);
-				title.append(it->title());
-				GetLogger().log(LOG_DEBUG, "view::run_itemlist: XXXTITLE it->title = `%s' title = `%s' quoted title = `%s'", 
-					it->title().c_str(), title.c_str(), stfl::quote(title).c_str());
-				line.append(stfl::quote(title));
-				line.append("}");
-				code.append(line);
-			}
-
-			code.append("}");
-
-			itemlist_form.modify("items","replace_inner",code);
-			
-			set_itemlist_head(feed.title(),feed.unread_item_count(),feed.items().size(), feed.rssurl());
-
-			rebuild_list = false;
-		}
-		
-		if (show_no_unread_error) {
-			show_error(_("No unread items."));
-			show_no_unread_error = false;
-		}
-
-		operation op;
-		const char * event = NULL;
-		
-		if (auto_open) {
-			auto_open = false;
-			jump_to_next_unread_item(items, false);
-			op = OP_OPEN;
-		} else {
-			event = itemlist_form.run(0);
-			if (!event) continue;
-			op = keys->get_operation(event);
-		}
-
-		GetLogger().log(LOG_DEBUG, "view::run_itemlist: event = %s operation = %d auto_open = %d", event, op, auto_open);
-
-		switch (op) {
-			case OP_OPEN: {
-					bool open_next_item = false;
-					do {
-						std::string itemposname = itemlist_form.get("itempos");
-						GetLogger().log(LOG_INFO, "view::run_itemlist: opening item at pos `%s' open_next_item = %d", itemposname.c_str(), open_next_item);
-						if (itemposname.length() > 0) {
-							std::istringstream posname(itemposname);
-							unsigned int pos = 0;
-							posname >> pos;
-							open_next_item = ctrl->open_item(feed, items[pos].guid());
-							rebuild_list = true;
-						} else {
-							show_error(_("No item selected!")); // should not happen
-						}
-						if (open_next_item) {
-							if (!jump_to_next_unread_item(items, true)) {
-								open_next_item = false;
-								retval = true;
-								quit = true;
-							}
-						}
-					} while (open_next_item);
-					// set_status("");
-				}
-				break;
-			case OP_SAVE: 
-				{
-					char buf[1024];
-					std::string itemposname = itemlist_form.get("itempos");
-					GetLogger().log(LOG_INFO, "view::run_itemlist: saving item at pos `%s'", itemposname.c_str());
-					if (itemposname.length() > 0) {
-						std::istringstream posname(itemposname);
-						unsigned int pos = 0;
-						posname >> pos;
-						
-						std::string filename = filebrowser(FBT_SAVE,get_filename_suggestion(items[pos].title()));
-						if (filename == "") {
-							show_error(_("Aborted saving."));
-						} else {
-							try {
-								write_item(items[pos], filename);
-								snprintf(buf, sizeof(buf), _("Saved article to %s"), filename.c_str());
-								show_error(buf);
-							
-							} catch (...) {
-								std::ostringstream msg;
-								snprintf(buf, sizeof(buf), _("Error: couldn't save article to %s"), filename.c_str());
-								show_error(buf);
-							}
-						}
-					} else {
-						show_error(_("Error: no item selected!"));
-					}
-				}
-				break;
-			case OP_HELP:
-				run_help();
-				set_status("");
-				break;
-			case OP_RELOAD:
-				GetLogger().log(LOG_INFO, "view::run_itemlist: reloading current feed");
-				ctrl->reload(pos);
-				feed = ctrl->get_feed(pos);
-				rebuild_list = true;
-				break;
-			case OP_QUIT:
-				GetLogger().log(LOG_INFO, "view::run_itemlist: quitting");
-				quit = true;
-				break;
-			case OP_NEXTUNREAD:
-				GetLogger().log(LOG_INFO, "view::run_itemlist: jumping to next unread item");
-				if (!jump_to_next_unread_item(items, true))
-					show_no_unread_error = true;
-				break;
-			case OP_MARKFEEDREAD:
-				GetLogger().log(LOG_INFO, "view::run_itemlist: marking feed read");
-				set_status(_("Marking feed read..."));
-				ctrl->mark_all_read(pos);
-				set_status("");
-				rebuild_list = true;
-				break;
-			case OP_SEARCH:
-				run_search(feed.rssurl());
-				break;
-			case OP_TOGGLEITEMREAD: {
-					std::string itemposname = itemlist_form.get("itempos");
-					GetLogger().log(LOG_INFO, "view::run_itemlist: toggling item read at pos `%s'", itemposname.c_str());
-					if (itemposname.length() > 0) {
-						std::istringstream posname(itemposname);
-						unsigned int pos = 0;
-						posname >> pos;
-						set_status(_("Toggling read flag for article..."));
-						items[pos].set_unread(!items[pos].unread());
-						set_status("");
-						rebuild_list = true;
-					}
-				}
-				break;
-			default:
-				break;
-		}
-
-	} while (!quit);
-	
-	view_stack.pop_front();
-
-	return retval;
-}
+#endif
 
 std::string view::get_filename_suggestion(const std::string& s) {
 	std::string retval;
@@ -722,6 +407,7 @@ std::string view::add_file(std::string filename) {
 	return retval;
 }
 
+#if 0
 std::string view::filebrowser(filebrowser_type type, const std::string& default_filename, std::string dir) {
 	char cwdtmp[MAXPATHLEN];
 	char buf[1024];
@@ -876,7 +562,9 @@ std::string view::filebrowser(filebrowser_type type, const std::string& default_
 	view_stack.pop_front();
 	return std::string(""); // never reached
 }
+#endif
 
+#if 0
 bool view::jump_to_next_unread_feed(bool begin_with_next) {
 	std::string feedposname = feedlist_form.get("feedpos");
 	unsigned int feedcount = visible_feeds.size();
@@ -940,7 +628,9 @@ bool view::jump_to_next_unread_item(std::vector<rss_item>& items, bool begin_wit
 	}
 	return false;
 }
+#endif
 
+#if 0
 bool view::run_itemview(rss_feed& feed, std::string guid) {
 	bool quit = false;
 	bool show_source = false;
@@ -1123,7 +813,9 @@ bool view::run_itemview(rss_feed& feed, std::string guid) {
 
 	return retval;
 }
+#endif
 
+#if 0
 void view::open_in_browser(const std::string& url) {
 	view_stack.push_front(NULL); // we don't want a thread to write over the browser
 	std::string cmdline;
@@ -1140,7 +832,9 @@ void view::open_in_browser(const std::string& url) {
 	::system(cmdline.c_str());
 	view_stack.pop_front();
 }
+#endif
 
+#if 0
 void view::run_urlview(std::vector<linkpair>& links) {
 	set_urlview_keymap_hint();
 
@@ -1196,7 +890,9 @@ void view::run_urlview(std::vector<linkpair>& links) {
 
 	view_stack.pop_front();
 }
+#endif
 
+#if 0
 std::string view::select_tag(const std::vector<std::string>& tags) {
 	std::string tag = "";
 
@@ -1254,7 +950,9 @@ std::string view::select_tag(const std::vector<std::string>& tags) {
 
 	return tag;
 }
+#endif
 
+#if 0
 void view::run_help() {
 	set_help_keymap_hint();
 
@@ -1300,85 +998,13 @@ void view::run_help() {
 	
 	view_stack.pop_front();
 }
+#endif
 
 void view::set_feedlist(std::vector<rss_feed>& feeds) {
-	std::string code = "{list";
-	char buf[1024];
-	
-	assert(cfg != NULL); // must not happen
-	
-	bool show_read_feeds = cfg->get_configvalue_as_bool("show-read-feeds");
-	
-	// std::cerr << "show-read-feeds" << (show_read_feeds?"true":"false") << std::endl;
-
-	feeds_shown = 0;
-	unsigned int i = 0;
-	unsigned short feedlist_number = 1;
-	unsigned int unread_feeds = 0;
-
-	if (visible_feeds.size() > 0)
-		visible_feeds.erase(visible_feeds.begin(), visible_feeds.end());
-
-	for (std::vector<rss_feed>::iterator it = feeds.begin(); it != feeds.end(); ++it, ++i, ++feedlist_number) {
-		rss_feed feed = *it;
-		std::string title = it->title();
-		if (title.length()==0) {
-			title = it->rssurl(); // rssurl must always be present.
-			if (title.length()==0) {
-				title = "<no title>"; // shouldn't happen
-			}
-		}
-
-		// TODO: refactor
-		char buf[20];
-		char buf2[20];
-		unsigned int unread_count = 0;
-		if (it->items().size() > 0) {
-			for (std::vector<rss_item>::iterator rit = it->items().begin(); rit != it->items().end(); ++rit) {
-				if (rit->unread())
-					++unread_count;
-			}
-		}
-		if (unread_count > 0)
-			++unread_feeds;
-
-
-		if ((tag == "" || it->matches_tag(tag)) && (show_read_feeds || unread_count > 0)) {
-			visible_feeds.push_back(std::pair<rss_feed *, unsigned int>(&(*it),i));
-
-			snprintf(buf,sizeof(buf),"(%u/%u) ",unread_count,static_cast<unsigned int>(it->items().size()));
-			snprintf(buf2,sizeof(buf2),"%4u %c %11s",feedlist_number, unread_count > 0 ? 'N' : ' ',buf);
-			std::string newtitle(buf2);
-			newtitle.append(title);
-			title = newtitle;
-
-			std::string line = "{listitem[";
-			std::ostringstream num;
-			num << i;
-			line.append(num.str());
-			line.append("] text:");
-			line.append(stfl::quote(title));
-			line.append("}");
-
-			code.append(line);
-
-			++feeds_shown;
-		}
-	}
-
-	code.append("}");
-
-	feedlist_form.modify("feeds","replace_inner",code);
-
-	if (tag.length() > 0) {
-		snprintf(buf, sizeof(buf), _("Your feeds (%u unread, %u total) - tag `%s'"), unread_feeds, i, tag.c_str());
-	} else {
-		snprintf(buf, sizeof(buf), _("Your feeds (%u unread, %u total)"), unread_feeds, i);
-	}
-
-	feedlist_form.set("head", buf);
+	feedlist->set_feedlist(feeds);
 }
 
+#if 0
 std::string view::prepare_keymaphint(keymap_hint_entry * hints) {
 	std::string keymap_hint;
 	for (int i=0;hints[i].op != OP_NIL; ++i) {
@@ -1491,17 +1117,13 @@ void view::set_search_keymap_hint() {
 	search_form.set("help", keymap_hint);
 }
 
-void view::set_itemlist_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url) {
-	char buf[1024];
-	snprintf(buf, sizeof(buf), _("Articles in feed '%s' (%u unread, %u total) - %s"), s.c_str(), unread, total, url.c_str());
-	itemlist_form.set("head",buf);
-}
 
 void view::set_itemview_head(const std::string& s) {
 	char buf[1024];
 	snprintf(buf, sizeof(buf), _("Article '%s'"), s.c_str());
 	itemview_form.set("head",buf);
 }
+#endif
 
 void view::render_source(std::vector<std::string>& lines, std::string desc, unsigned int width) {
 	std::string line;
@@ -1531,3 +1153,22 @@ void view::render_source(std::vector<std::string>& lines, std::string desc, unsi
 	} while (desc.length() > 0);
 }
 
+void view::set_tags(const std::vector<std::string>& t) {
+	feedlist->set_tags(t);
+}
+
+void view::push_itemlist(unsigned int pos) {
+	rss_feed * feed = ctrl->get_feed(pos);
+	GetLogger().log(LOG_DEBUG, "view::push_itemlist: retrieved feed at position %d (address = %p)", pos, feed);
+	itemlist->set_feed(feed);
+	itemlist->set_pos(pos);
+	itemlist->init();
+	formaction_stack.push_front(itemlist);
+}
+
+void view::pop_current_formaction() {
+	formaction_stack.pop_front();
+	if (formaction_stack.size() > 0) {
+		(*formaction_stack.begin())->set_redraw(true);
+	}
+}
