@@ -26,6 +26,7 @@ void itemlist_formaction::process_operation(operation op) {
 						unsigned int pos = 0;
 						posname >> pos;
 						open_next_item = false; // v->get_ctrl()->open_item(*feed, items[pos].guid());
+						v->push_itemview(feed, items[pos].guid());
 						do_redraw = true;
 					} else {
 						v->show_error(_("No item selected!")); // should not happen

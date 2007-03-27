@@ -9,6 +9,7 @@
 #include <formaction.h>
 #include <feedlist_formaction.h>
 #include <itemlist_formaction.h>
+#include <itemview_formaction.h>
 
 #include <logger.h>
 #include <reloadthread.h>
@@ -52,6 +53,7 @@ view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0) /*,
 
 	feedlist = new feedlist_formaction(this, feedlist_str);
 	itemlist = new itemlist_formaction(this, itemlist_str);
+	itemview = new itemview_formaction(this, itemview_str);
 	// TODO: create all formaction objects
 
 	// push the dialog to start with onto the stack
@@ -63,6 +65,7 @@ view::~view() {
 	delete mtx;
 	delete feedlist;
 	delete itemlist;
+	delete itemview;
 }
 
 void view::set_config_container(configcontainer * cfgcontainer) {
@@ -75,7 +78,7 @@ void view::set_keymap(keymap * k) {
 
 void view::set_status(const char * msg) {
 	mtx->lock();
-	if (formaction_stack.size() > 0) {
+	if (formaction_stack.size() > 0 && (*formaction_stack.begin()) != NULL) {
 		stfl::form& form = (*formaction_stack.begin())->get_form();
 		form.set("msg",msg);
 		form.run(-1);
@@ -630,194 +633,8 @@ bool view::jump_to_next_unread_item(std::vector<rss_item>& items, bool begin_wit
 }
 #endif
 
-#if 0
-bool view::run_itemview(rss_feed& feed, std::string guid) {
-	bool quit = false;
-	bool show_source = false;
-	bool redraw = true;
-	bool retval = false;
-	static bool render_hack = false;
-	std::vector<linkpair> links;
-	
-	view_stack.push_front(&itemview_form);
-	
-	set_itemview_keymap_hint();
-	itemview_form.set("msg","");
-
-	do {
-		if (redraw) {
-			rss_item& item = feed.get_item_by_guid(guid);
-			std::string code = "{list";
-
-			code.append("{listitem text:");
-			std::ostringstream feedtitle;
-			feedtitle << _("Feed: ");
-			if (feed.title().length() > 0) {
-				feedtitle << feed.title();
-			} else if (feed.link().length() > 0) {
-				feedtitle << feed.link();
-			} else if (feed.rssurl().length() > 0) {
-				feedtitle << feed.rssurl();
-			}
-			code.append(stfl::quote(feedtitle.str().c_str()));
-			code.append("}");
-
-			code.append("{listitem text:");
-			std::ostringstream title;
-			title << _("Title: ");
-			title << item.title();
-			code.append(stfl::quote(title.str()));
-			code.append("}");
-
-			code.append("{listitem text:");
-			std::ostringstream author;
-			author << _("Author: ");
-			author << item.author();
-			code.append(stfl::quote(author.str()));
-			code.append("}");
-
-			code.append("{listitem text:");
-			std::ostringstream link;
-			link << _("Link: ");
-			link << item.link();
-			code.append(stfl::quote(link.str()));
-			code.append("}");
-			
-			code.append("{listitem text:");
-			std::ostringstream date;
-			date << _("Date: ");
-			date << item.pubDate();
-			code.append(stfl::quote(date.str()));
-			code.append("}");
-
-			if (item.enclosure_url().length() > 0) {
-				code.append("{listitem text:");
-				std::ostringstream enc_url;
-				enc_url << _("Podcast Download URL: ");
-				enc_url << item.enclosure_url() << " (" << _("type: ") << item.enclosure_type() << ")";
-				code.append(stfl::quote(enc_url.str()));
-				code.append("}");
-			}
-
-			code.append("{listitem text:\"\"}");
-			
-			set_itemview_head(item.title());
-
-			if (!render_hack) {
-				itemview_form.run(-1); // XXX HACK: render once so that we get a proper widget width
-				render_hack = true;
-			}
-
-			std::vector<std::string> lines;
-			std::string widthstr = itemview_form.get("article:w");
-			unsigned int render_width = 80;
-			if (widthstr.length() > 0) {
-				std::istringstream is(widthstr);
-				is >> render_width;
-				if (render_width - 5 > 0)
-					render_width -= 5; 	
-			}
-
-			if (show_source) {
-				render_source(lines, item.description(), render_width);
-			} else {
-				htmlrenderer rnd(render_width);
-				rnd.render(item.description(), lines, links, item.feedurl());
-			}
-
-			for (std::vector<std::string>::iterator it = lines.begin(); it != lines.end(); ++it) {
-				std::string line = std::string("{listitem text:") + stfl::quote(*it) + std::string("}");
-				code.append(line);
-			}
-
-			code.append("}");
-
-			itemview_form.modify("article","replace_inner",code);
-			itemview_form.set("articleoffset","0");
-
-			redraw = false;
-		}
-
-		const char * event = itemview_form.run(0);
-		if (!event) continue;
-
-		operation op = keys->get_operation(event);
-
-		GetLogger().log(LOG_DEBUG, "view::run_itemview: event = %s operation = %d", event, op);
-
-		rss_item& item = feed.get_item_by_guid(guid);
-
-		switch (op) {
-			case OP_OPEN:
-				// nothing
-				break;
-			case OP_TOGGLESOURCEVIEW:
-				GetLogger().log(LOG_INFO, "view::run_itemview: toggling source view");
-				show_source = !show_source;
-				redraw = true;
-				break;
-			case OP_ENQUEUE: {
-					char buf[1024];
-					snprintf(buf, sizeof(buf), _("Added %s to download queue."), item.enclosure_url().c_str());
-					ctrl->enqueue_url(item.enclosure_url());
-					set_status(buf);
-				}
-				break;
-			case OP_SAVE:
-				{
-					char buf[1024];
-					GetLogger().log(LOG_INFO, "view::run_itemview: saving article");
-					std::string filename = filebrowser(FBT_SAVE,get_filename_suggestion(item.title()));
-					if (filename == "") {
-						show_error(_("Aborted saving."));	
-					} else {
-						try {
-							write_item(item, filename);
-							snprintf(buf, sizeof(buf), _("Saved article to %s."), filename.c_str());
-							show_error(buf);
-						} catch (...) {
-							snprintf(buf, sizeof(buf), _("Error: couldn't write article to file %s"), filename.c_str());
-							show_error(buf);
-						}
-					}
-				}
-				break;
-			case OP_OPENINBROWSER:
-				GetLogger().log(LOG_INFO, "view::run_itemview: starting browser");
-				set_status(_("Starting browser..."));
-				open_in_browser(item.link());
-				set_status("");
-				break;
-			case OP_SHOWURLS:
-				GetLogger().log(LOG_DEBUG, "view::run_itemview: showing URLs");
-				run_urlview(links);
-				break;
-			case OP_NEXTUNREAD:
-				GetLogger().log(LOG_INFO, "view::run_itemview: jumping to next unread article");
-				retval = true; // fall-through is OK
-			case OP_QUIT:
-				GetLogger().log(LOG_INFO, "view::run_itemview: quitting");
-				quit = true;
-				break;
-			case OP_HELP:
-				run_help();
-				set_status("");
-				break;
-			default:
-				break;
-		}
-
-	} while (!quit);
-	
-	view_stack.pop_front();
-
-	return retval;
-}
-#endif
-
-#if 0
 void view::open_in_browser(const std::string& url) {
-	view_stack.push_front(NULL); // we don't want a thread to write over the browser
+	formaction_stack.push_front(NULL); // we don't want a thread to write over the browser
 	std::string cmdline;
 	std::string browser = cfg->get_configvalue("browser");
 	if (browser != "")
@@ -830,9 +647,8 @@ void view::open_in_browser(const std::string& url) {
 	stfl::reset();
 	GetLogger().log(LOG_DEBUG, "view::open_in_browser: running `%s'", cmdline.c_str());
 	::system(cmdline.c_str());
-	view_stack.pop_front();
+	formaction_stack.pop_front();
 }
-#endif
 
 #if 0
 void view::run_urlview(std::vector<linkpair>& links) {
@@ -1164,6 +980,13 @@ void view::push_itemlist(unsigned int pos) {
 	itemlist->set_pos(pos);
 	itemlist->init();
 	formaction_stack.push_front(itemlist);
+}
+
+void view::push_itemview(rss_feed * f, const std::string& guid) {
+	itemview->set_feed(f);
+	itemview->set_guid(guid);
+	itemview->init();
+	formaction_stack.push_front(itemview);
 }
 
 void view::pop_current_formaction() {

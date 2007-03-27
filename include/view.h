@@ -12,7 +12,6 @@
 #include <htmlrenderer.h>
 
 #include <stflpp.h>
-#include <feedlist_formaction.h>
 
 /*
 extern "C" {
@@ -25,6 +24,7 @@ namespace newsbeuter {
 	class formaction;
 	class feedlist_formaction;
 	class itemlist_formaction;
+	class itemview_formaction;
 
 	class view {
 		public:
@@ -55,11 +55,14 @@ namespace newsbeuter {
 			void write_item(const rss_item& item, const std::string& filename);
 
 			void push_itemlist(unsigned int pos);
+			void push_itemview(rss_feed * f, const std::string& guid);
+
+			void render_source(std::vector<std::string>& lines, std::string desc, unsigned int width);
+			void open_in_browser(const std::string& url);
 
 		protected:
 			bool jump_to_next_unread_item(std::vector<rss_item>& items, bool begin_with_next);
 			bool jump_to_next_unread_feed(bool begin_with_next);
-			void open_in_browser(const std::string& url);
 			
 			void set_itemview_keymap_hint();
 			void set_itemlist_keymap_hint();
@@ -78,7 +81,6 @@ namespace newsbeuter {
 			std::string fancy_unquote(const std::string& s);
 			std::string filebrowser(filebrowser_type type, const std::string& default_filename = "", std::string dir = "");
 			std::string get_filename_suggestion(const std::string& s);
-			void render_source(std::vector<std::string>& lines, std::string desc, unsigned int width);
 
 			void run_urlview(std::vector<linkpair>& links);
 			
@@ -109,6 +111,7 @@ namespace newsbeuter {
 			*/
 			feedlist_formaction * feedlist;
 			itemlist_formaction * itemlist;
+			itemview_formaction * itemview;
 			
 			std::list<formaction *> formaction_stack;
 			
