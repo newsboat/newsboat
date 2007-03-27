@@ -73,8 +73,7 @@ void itemlist_formaction::process_operation(operation op) {
 			}
 			break;
 		case OP_HELP:
-			// run_help();
-			v->set_status("");
+			v->push_help();
 			break;
 		case OP_RELOAD:
 			GetLogger().log(LOG_INFO, "itemlist_formaction: reloading current feed");

@@ -10,6 +10,7 @@
 #include <feedlist_formaction.h>
 #include <itemlist_formaction.h>
 #include <itemview_formaction.h>
+#include <help_formaction.h>
 
 #include <logger.h>
 #include <reloadthread.h>
@@ -54,6 +55,7 @@ view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0) /*,
 	feedlist = new feedlist_formaction(this, feedlist_str);
 	itemlist = new itemlist_formaction(this, itemlist_str);
 	itemview = new itemview_formaction(this, itemview_str);
+	helpview = new help_formaction(this, help_str);
 	// TODO: create all formaction objects
 
 	// push the dialog to start with onto the stack
@@ -66,6 +68,7 @@ view::~view() {
 	delete feedlist;
 	delete itemlist;
 	delete itemview;
+	delete helpview;
 }
 
 void view::set_config_container(configcontainer * cfgcontainer) {
@@ -768,54 +771,6 @@ std::string view::select_tag(const std::vector<std::string>& tags) {
 }
 #endif
 
-#if 0
-void view::run_help() {
-	set_help_keymap_hint();
-
-	view_stack.push_front(&help_form);
-	set_status("");
-
-	help_form.set("head",_("Help"));
-	
-	std::vector<std::pair<std::string,std::string> > descs;
-	keys->get_keymap_descriptions(descs, KM_NEWSBEUTER);
-	
-	std::string code = "{list";
-	
-	for (std::vector<std::pair<std::string,std::string> >::iterator it=descs.begin();it!=descs.end();++it) {
-		std::string line = "{listitem text:";
-		std::string descline = it->first + std::string("\t") + it->second;
-		line.append(stfl::quote(descline));
-		line.append("}");
-		
-		code.append(line);
-	}
-	
-	code.append("}");
-	
-	help_form.modify("helptext","replace_inner",code);
-	
-	bool quit = false;
-	
-	do {
-		const char * event = help_form.run(0);
-		if (!event) continue;
-
-		operation op = keys->get_operation(event);
-
-		switch (op) {
-			case OP_QUIT:
-				quit = true;
-				break;
-			default:
-				break;
-		}
-	} while (!quit);
-	
-	view_stack.pop_front();
-}
-#endif
-
 void view::set_feedlist(std::vector<rss_feed>& feeds) {
 	feedlist->set_feedlist(feeds);
 }
@@ -987,6 +942,10 @@ void view::push_itemview(rss_feed * f, const std::string& guid) {
 	itemview->set_guid(guid);
 	itemview->init();
 	formaction_stack.push_front(itemview);
+}
+
+void view::push_help() {
+	formaction_stack.push_front(helpview);
 }
 
 void view::pop_current_formaction() {

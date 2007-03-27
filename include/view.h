@@ -25,6 +25,7 @@ namespace newsbeuter {
 	class feedlist_formaction;
 	class itemlist_formaction;
 	class itemview_formaction;
+	class help_formaction;
 
 	class view {
 		public:
@@ -47,6 +48,7 @@ namespace newsbeuter {
 			void set_status(const char * msg);
 			inline controller * get_ctrl() { return ctrl; }
 			inline configcontainer * get_cfg() { return cfg; }
+			inline keymap * get_keys() { return keys; }
 			void set_tags(const std::vector<std::string>& t);
 			void pop_current_formaction();
 
@@ -56,6 +58,7 @@ namespace newsbeuter {
 
 			void push_itemlist(unsigned int pos);
 			void push_itemview(rss_feed * f, const std::string& guid);
+			void push_help();
 
 			void render_source(std::vector<std::string>& lines, std::string desc, unsigned int width);
 			void open_in_browser(const std::string& url);
@@ -112,6 +115,7 @@ namespace newsbeuter {
 			feedlist_formaction * feedlist;
 			itemlist_formaction * itemlist;
 			itemview_formaction * itemview;
+			help_formaction * helpview;
 			
 			std::list<formaction *> formaction_stack;
 			

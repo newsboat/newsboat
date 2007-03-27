@@ -175,8 +175,7 @@ void itemview_formaction::process_operation(operation op) {
 			quit = true;
 			break;
 		case OP_HELP:
-			// run_help();
-			v->set_status("");
+			v->push_help();
 			break;
 		default:
 			break;
