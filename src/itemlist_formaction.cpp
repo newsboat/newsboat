@@ -75,7 +75,7 @@ void itemlist_formaction::process_operation(operation op) {
 			break;
 		case OP_NEXTUNREAD:
 			GetLogger().log(LOG_INFO, "itemlist_formaction: jumping to next unread item");
-			if (!jump_to_next_unread_item()) {
+			if (!jump_to_next_unread_item(false)) {
 				v->show_error(_("No unread items."));
 			}
 			break;
@@ -169,12 +169,12 @@ void itemlist_formaction::set_head(const std::string& s, unsigned int unread, un
 	f->set("head", buf);
 }
 
-bool itemlist_formaction::jump_to_next_unread_item() {
+bool itemlist_formaction::jump_to_next_unread_item(bool start_with_first) {
 	std::vector<rss_item>& items = feed->items();
 	unsigned int pos;
 	std::istringstream is(f->get("itempos"));
 	is >> pos;
-	for (unsigned int i=pos+1;i<items.size();++i) {
+	for (unsigned int i=(start_with_first?pos:(pos+1));i<items.size();++i) {
 		if (items[i].unread()) {
 			std::ostringstream os;
 			os << i;

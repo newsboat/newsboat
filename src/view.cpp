@@ -50,10 +50,7 @@ extern "C" {
 
 using namespace newsbeuter;
 
-view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0) /*,
-		feedlist_form(feedlist_str), itemlist_form(itemlist_str), itemview_form(itemview_str), 
-		help_form(help_str), filebrowser_form(filebrowser_str), urlview_form(urlview_str), 
-		selecttag_form(selecttag_str), search_form(search_str) */ { 
+view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0) {
 	mtx = new mutex();
 
 	feedlist = new feedlist_formaction(this, feedlist_str);
@@ -197,72 +194,6 @@ void view::write_item(const rss_item& item, const std::string& filename) {
 	}
 }
 
-#if 0
-bool view::jump_to_next_unread_feed(bool begin_with_next) {
-	std::string feedposname = feedlist_form.get("feedpos");
-	unsigned int feedcount = visible_feeds.size();
-
-	if (feedcount > 0 && feedposname.length() > 0) {
-		std::istringstream posname(feedposname);
-		unsigned int pos = 0;
-		posname >> pos;
-		for (unsigned int i=(begin_with_next?(pos+1):pos);i<feedcount;++i) {
-			if (visible_feeds[i].first->unread_item_count() > 0) {
-				std::ostringstream posname;
-				posname << i;
-				feedlist_form.set("feedpos", posname.str());
-				GetLogger().log(LOG_DEBUG,"view::jump_to_next_unread_feed: jumped to pos %u", i);
-				return true;
-			}
-		}
-		for (unsigned int i=0;i<=pos;++i) {
-			if (visible_feeds[i].first->unread_item_count() > 0) {
-				std::ostringstream posname;
-				posname << i;
-				feedlist_form.set("feedpos", posname.str());
-				GetLogger().log(LOG_DEBUG,"view::jump_to_next_unread_feed: jumped to pos %u (wraparound)", i);
-				return true;
-			}
-		}
-	} else {
-		show_error(_("No feed selected!")); // shouldn't happen
-	}
-	GetLogger().log(LOG_DEBUG,"view::jump_to_next_unread_feed: no unread feeds");
-	return false;
-}
-
-bool view::jump_to_next_unread_item(std::vector<rss_item>& items, bool begin_with_next) {
-	std::string itemposname = itemlist_form.get("itempos");
-
-	if (itemposname.length() > 0) {
-		std::istringstream posname(itemposname);
-		unsigned int pos = 0;
-		posname >> pos;
-		for (unsigned int i=(begin_with_next?(pos+1):pos);i<items.size();++i) {
-			if (items[i].unread()) {
-				std::ostringstream posname;
-				posname << i;
-				itemlist_form.set("itempos",posname.str());
-				GetLogger().log(LOG_DEBUG,"view::jump_to_next_unread_item: jumped to pos %u", i);
-				return true;
-			}
-		}
-		for (unsigned int i=0;i<=pos;++i) {
-			if (items[i].unread()) {
-				std::ostringstream posname;
-				posname << i;
-				itemlist_form.set("itempos",posname.str());
-				GetLogger().log(LOG_DEBUG,"view::jump_to_next_unread_item: jumped to pos %u (wraparound)", i);
-				return true;
-			}
-		}
-	} else {
-		show_error(_("Error: no item selected!")); // shouldn't happen
-	}
-	return false;
-}
-#endif
-
 void view::open_in_browser(const std::string& url) {
 	formaction_stack.push_front(NULL); // we don't want a thread to write over the browser
 	std::string cmdline;
@@ -334,7 +265,7 @@ void view::run_search(const std::string& feedurl) {
 }
 
 bool view::get_next_unread() {
-	if (itemlist->jump_to_next_unread_item()) {
+	if (itemlist->jump_to_next_unread_item(false)) {
 		itemview->init();
 		itemview->set_feed(itemlist->get_feed());
 		itemview->set_guid(itemlist->get_guid());
@@ -342,7 +273,7 @@ bool view::get_next_unread() {
 	} else if (feedlist->jump_to_next_unread_feed()) {
 		itemlist->set_feed(feedlist->get_feed());
 		itemlist->init();
-		if (itemlist->jump_to_next_unread_item()) {
+		if (itemlist->jump_to_next_unread_item(true)) {
 			itemview->init();
 			itemview->set_feed(itemlist->get_feed());
 			itemview->set_guid(itemlist->get_guid());

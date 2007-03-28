@@ -18,7 +18,7 @@ class itemlist_formaction : public formaction {
 		std::string get_guid();
 		virtual keymap_hint_entry * get_keymap_hint();
 
-		bool jump_to_next_unread_item();
+		bool jump_to_next_unread_item(bool start_with_first);
 
 	private:
 		void set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);

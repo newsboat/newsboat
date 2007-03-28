@@ -236,11 +236,6 @@ void controller::run(int argc, char * argv[]) {
 	std::cout << _("Cleaning up cache...");
 	std::cout.flush();
 	rsscache->cleanup_cache(feeds);
-	/*
-	for (std::vector<rss_feed>::iterator it=feeds.begin(); it != feeds.end(); ++it) {
-		// rsscache->externalize_rssfeed(*it);
-	}
-	*/
 	std::cout << _("done.") << std::endl;
 
 	utils::remove_fs_lock(lock_file);
