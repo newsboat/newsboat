@@ -335,9 +335,19 @@ void view::run_search(const std::string& feedurl) {
 
 bool view::get_next_unread() {
 	if (itemlist->jump_to_next_unread_item()) {
+		itemview->init();
 		itemview->set_feed(itemlist->get_feed());
 		itemview->set_guid(itemlist->get_guid());
 		return true;
+	} else if (feedlist->jump_to_next_unread_feed()) {
+		itemlist->set_feed(feedlist->get_feed());
+		itemlist->init();
+		if (itemlist->jump_to_next_unread_item()) {
+			itemview->init();
+			itemview->set_feed(itemlist->get_feed());
+			itemview->set_guid(itemlist->get_guid());
+			return true;
+		}
 	}
 	return false;
 }

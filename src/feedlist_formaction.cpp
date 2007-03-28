@@ -270,4 +270,11 @@ bool feedlist_formaction::jump_to_next_unread_feed() {
 	return false;
 }
 
+rss_feed * feedlist_formaction::get_feed() {
+	unsigned int curpos;
+	std::istringstream is(f->get("feedpos"));
+	is >> curpos;
+	return visible_feeds[curpos].first;
+}
+
 }
