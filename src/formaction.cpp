@@ -30,4 +30,8 @@ std::string formaction::prepare_keymap_hint(keymap_hint_entry * hints) {
 	return keymap_hint;	
 }
 
+std::string formaction::get_value(const std::string& value) {
+	return f->get(value);
+}
+
 }

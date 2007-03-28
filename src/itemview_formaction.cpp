@@ -143,7 +143,7 @@ void itemview_formaction::process_operation(operation op) {
 			{
 				char buf[1024];
 				GetLogger().log(LOG_INFO, "view::run_itemview: saving article");
-				std::string filename; // = filebrowser(FBT_SAVE,get_filename_suggestion(item.title()));
+				std::string filename = v->run_filebrowser(FBT_SAVE,v->get_filename_suggestion(item.title()));
 				if (filename == "") {
 					v->show_error(_("Aborted saving."));
 				} else {

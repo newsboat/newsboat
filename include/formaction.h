@@ -29,6 +29,8 @@ class formaction {
 
 		virtual keymap_hint_entry * get_keymap_hint() = 0;
 
+		virtual std::string get_value(const std::string& value);
+
 	protected:
 		virtual void set_keymap_hints();
 

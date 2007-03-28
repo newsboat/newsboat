@@ -56,6 +56,7 @@ view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0) /*,
 	itemlist = new itemlist_formaction(this, itemlist_str);
 	itemview = new itemview_formaction(this, itemview_str);
 	helpview = new help_formaction(this, help_str);
+	filebrowser = new filebrowser_formaction(this, filebrowser_str);
 	// TODO: create all formaction objects
 
 	// push the dialog to start with onto the stack
@@ -69,6 +70,7 @@ view::~view() {
 	delete itemlist;
 	delete itemview;
 	delete helpview;
+	delete filebrowser;
 }
 
 void view::set_config_container(configcontainer * cfgcontainer) {
@@ -112,6 +114,28 @@ void view::run() {
 	}
 
 	stfl::reset();
+}
+
+std::string view::run_modal(formaction * f, const std::string& value) {
+	f->init();
+	unsigned int stacksize = formaction_stack.size();
+
+	formaction_stack.push_front(f);
+
+	while (formaction_stack.size() > stacksize) {
+		formaction * fa = *(formaction_stack.begin());
+
+		fa->prepare();
+
+		const char * event = fa->get_form().run(0);
+		if (!event) continue;
+
+		operation op = keys->get_operation(event);
+
+		fa->process_operation(op);
+	}
+
+	return f->get_value(value);
 }
 
 #if 0
@@ -881,9 +905,17 @@ void view::push_help() {
 	formaction_stack.push_front(helpview);
 }
 
+std::string view::run_filebrowser(filebrowser_type type, const std::string& default_filename, const std::string& dir) {
+	filebrowser->set_dir(dir);
+	filebrowser->set_default_filename(default_filename);
+	filebrowser->set_type(type);
+	return run_modal(filebrowser, "filenametext");
+}
+
 void view::pop_current_formaction() {
 	formaction_stack.pop_front();
 	if (formaction_stack.size() > 0) {
 		(*formaction_stack.begin())->set_redraw(true);
 	}
 }
+

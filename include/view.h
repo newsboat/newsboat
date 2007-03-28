@@ -12,6 +12,7 @@
 #include <htmlrenderer.h>
 
 #include <stflpp.h>
+#include <filebrowser_formaction.h>
 
 /*
 extern "C" {
@@ -32,6 +33,7 @@ namespace newsbeuter {
 			view(controller * );
 			~view();
 			void run();
+			std::string run_modal(formaction * f, const std::string& value);
 
 			/*
 			void run_feedlist(const std::vector<std::string> & tags);
@@ -52,7 +54,6 @@ namespace newsbeuter {
 			void set_tags(const std::vector<std::string>& t);
 			void pop_current_formaction();
 
-			enum filebrowser_type { FBT_OPEN, FBT_SAVE };
 
 			void write_item(const rss_item& item, const std::string& filename);
 
@@ -60,8 +61,15 @@ namespace newsbeuter {
 			void push_itemview(rss_feed * f, const std::string& guid);
 			void push_help();
 
+			std::string run_filebrowser(filebrowser_type type, const std::string& default_filename = "", const std::string& dir = "");
+
 			void render_source(std::vector<std::string>& lines, std::string desc, unsigned int width);
 			void open_in_browser(const std::string& url);
+
+			std::string fancy_quote(const std::string& s);
+			std::string fancy_unquote(const std::string& s);
+			std::string add_file(std::string filename);
+			std::string get_filename_suggestion(const std::string& s);
 
 		protected:
 			bool jump_to_next_unread_item(std::vector<rss_item>& items, bool begin_with_next);
@@ -79,11 +87,7 @@ namespace newsbeuter {
 			void set_itemview_head(const std::string& s);
 			
 			std::string get_rwx(unsigned short val);
-			std::string add_file(std::string filename);
-			std::string fancy_quote(const std::string& s);
-			std::string fancy_unquote(const std::string& s);
-			std::string filebrowser(filebrowser_type type, const std::string& default_filename = "", std::string dir = "");
-			std::string get_filename_suggestion(const std::string& s);
+			// std::string filebrowser(filebrowser_type type, const std::string& default_filename = "", std::string dir = "");
 
 			void run_urlview(std::vector<linkpair>& links);
 			
@@ -116,6 +120,7 @@ namespace newsbeuter {
 			itemlist_formaction * itemlist;
 			itemview_formaction * itemview;
 			help_formaction * helpview;
+			filebrowser_formaction * filebrowser;
 			
 			std::list<formaction *> formaction_stack;
 			

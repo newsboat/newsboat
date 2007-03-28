@@ -53,7 +53,7 @@ void itemlist_formaction::process_operation(operation op) {
 					unsigned int pos = 0;
 					posname >> pos;
 					
-					std::string filename; // = filebrowser(view::FBT_SAVE,get_filename_suggestion(items[pos].title()));
+					std::string filename = v->run_filebrowser(FBT_SAVE,v->get_filename_suggestion(items[pos].title()));
 					if (filename == "") {
 						v->show_error(_("Aborted saving."));
 					} else {
@@ -63,7 +63,6 @@ void itemlist_formaction::process_operation(operation op) {
 							v->show_error(buf);
 						
 						} catch (...) {
-							std::ostringstream msg;
 							snprintf(buf, sizeof(buf), _("Error: couldn't save article to %s"), filename.c_str());
 							v->show_error(buf);
 						}
