@@ -250,14 +250,6 @@ void controller::update_feedlist() {
 	v->set_feedlist(feeds);
 }
 
-#if 0
-bool controller::open_item(rss_feed& feed, std::string guid) {
-	bool show_next_unread = v->run_itemview(feed, guid);
-	feed.get_item_by_guid(guid).set_unread(false);
-	return show_next_unread;
-}
-#endif
-
 void controller::catchup_all() {
 	rsscache->catchup_all();
 	for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it) {
@@ -280,31 +272,6 @@ void controller::mark_all_read(unsigned int pos) {
 		}
 	}
 }
-
-#if 0
-bool controller::open_feed(unsigned int pos, bool auto_open) {
-	bool retval = false;
-	if (pos < feeds.size()) {
-		if (!auto_open)
-			v->set_status(_("Opening feed..."));
-
-		rss_feed& feed = feeds[pos];
-
-		if (!auto_open)
-			v->set_status("");
-
-		if (feed.items().size() == 0) {
-			v->show_error(_("Error: feed contains no items!"));
-		} else {
-			retval = v->run_itemlist(pos, auto_open);
-			v->set_feedlist(feeds);
-		}
-	} else {
-		v->show_error(_("Error: invalid feed!"));
-	}
-	return retval;
-}
-#endif
 
 void controller::reload(unsigned int pos, unsigned int max) {
 	char msgbuf[1024];
