@@ -500,8 +500,12 @@ std::vector<rss_item> controller::search_for_items(const std::string& query, con
 	return rsscache->search_for_items(query, feedurl);
 }
 
-rss_feed controller::get_feed_by_url(const std::string& feedurl) {
-	return rsscache->get_feed_by_url(feedurl);
+rss_feed * controller::get_feed_by_url(const std::string& feedurl) {
+	for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it) {
+		if (feedurl == it->rssurl())
+			return &(*it);
+	}
+	return NULL; // shouldn't happen
 }
 
 bool controller::is_valid_podcast_type(const std::string& mimetype) {

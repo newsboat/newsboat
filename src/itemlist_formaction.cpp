@@ -98,7 +98,7 @@ void itemlist_formaction::process_operation(operation op) {
 			do_redraw = true;
 			break;
 		case OP_SEARCH:
-			// run_search(feed->rssurl());
+			v->run_search(feed->rssurl());
 			break;
 		case OP_TOGGLEITEMREAD: {
 				std::string itemposname = f->get("itempos");

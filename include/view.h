@@ -14,12 +14,6 @@
 #include <stflpp.h>
 #include <filebrowser_formaction.h>
 
-/*
-extern "C" {
-#include <stfl.h>
-}
-*/
-
 namespace newsbeuter {
 
 	class formaction;
@@ -29,6 +23,7 @@ namespace newsbeuter {
 	class help_formaction;
 	class urlview_formaction;
 	class selecttag_formaction;
+	class search_formaction;
 
 	class view {
 		public:
@@ -37,13 +32,6 @@ namespace newsbeuter {
 			void run();
 			std::string run_modal(formaction * f, const std::string& value = "");
 
-			/*
-			void run_feedlist(const std::vector<std::string> & tags);
-			bool run_itemlist(unsigned int pos, bool auto_open);
-			bool run_itemview(rss_feed& feed, std::string guid);
-			void run_help();
-			void run_search(const std::string& feed = "");
-			*/
 			void set_feedlist(std::vector<rss_feed>& feeds);
 			void set_keymap(keymap * k);
 			void set_config_container(configcontainer * cfgcontainer);
@@ -61,7 +49,8 @@ namespace newsbeuter {
 			void push_itemlist(unsigned int pos);
 			void push_itemview(rss_feed * f, const std::string& guid);
 			void push_help();
-			void view::push_urlview(const std::vector<linkpair>& links);
+			void push_urlview(const std::vector<linkpair>& links);
+			void run_search(const std::string& feedurl = "");
 
 			std::string run_filebrowser(filebrowser_type type, const std::string& default_filename = "", const std::string& dir = "");
 			std::string select_tag(const std::vector<std::string>& tags);
@@ -78,19 +67,9 @@ namespace newsbeuter {
 			bool jump_to_next_unread_item(std::vector<rss_item>& items, bool begin_with_next);
 			bool jump_to_next_unread_feed(bool begin_with_next);
 			
-			void set_itemview_keymap_hint();
-			void set_itemlist_keymap_hint();
-			void set_feedlist_keymap_hint();
-			void set_help_keymap_hint();
-			void set_filebrowser_keymap_hint();
-			void set_urlview_keymap_hint();
-			void set_selecttag_keymap_hint();
-			void set_search_keymap_hint();
-			
 			void set_itemview_head(const std::string& s);
 			
 			std::string get_rwx(unsigned short val);
-			// std::string filebrowser(filebrowser_type type, const std::string& default_filename = "", std::string dir = "");
 
 			
 			struct keymap_hint_entry {
@@ -108,16 +87,6 @@ namespace newsbeuter {
 
 			friend class colormanager;
 
-			/*
-			stfl::form feedlist_form;
-			stfl::form itemlist_form;
-			stfl::form itemview_form;
-			stfl::form help_form;
-			stfl::form filebrowser_form;
-			stfl::form urlview_form;
-			stfl::form selecttag_form;
-			stfl::form search_form;
-			*/
 			feedlist_formaction * feedlist;
 			itemlist_formaction * itemlist;
 			itemview_formaction * itemview;
@@ -125,6 +94,7 @@ namespace newsbeuter {
 			filebrowser_formaction * filebrowser;
 			urlview_formaction * urlview;
 			selecttag_formaction * selecttag;
+			search_formaction * search;
 			
 			std::list<formaction *> formaction_stack;
 			

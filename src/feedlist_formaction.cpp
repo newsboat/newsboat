@@ -133,8 +133,7 @@ void feedlist_formaction::process_operation(operation op) {
 			}
 			break;
 		case OP_SEARCH:
-			// run_search();
-			// TODO: push search formaction
+			v->run_search();
 			break;
 		case OP_QUIT:
 			GetLogger().log(LOG_INFO, "feedlist_formaction: quitting");

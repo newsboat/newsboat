@@ -6,6 +6,7 @@
 #include <urlview.h>
 #include <selecttag.h>
 #include <search.h>
+
 #include <formaction.h>
 #include <feedlist_formaction.h>
 #include <itemlist_formaction.h>
@@ -13,6 +14,7 @@
 #include <help_formaction.h>
 #include <urlview_formaction.h>
 #include <selecttag_formaction.h>
+#include <search_formaction.h>
 
 #include <logger.h>
 #include <reloadthread.h>
@@ -61,7 +63,7 @@ view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0) /*,
 	filebrowser = new filebrowser_formaction(this, filebrowser_str);
 	urlview = new urlview_formaction(this, urlview_str);
 	selecttag = new selecttag_formaction(this, selecttag_str);
-	// TODO: create all formaction objects
+	search = new search_formaction(this, search_str);
 
 	// push the dialog to start with onto the stack
 	formaction_stack.push_front(feedlist);
@@ -77,6 +79,7 @@ view::~view() {
 	delete filebrowser;
 	delete urlview;
 	delete selecttag;
+	delete search;
 }
 
 void view::set_config_container(configcontainer * cfgcontainer) {
@@ -146,138 +149,6 @@ std::string view::run_modal(formaction * f, const std::string& value) {
 	else
 		return f->get_value(value);
 }
-
-#if 0
-void view::run_search(const std::string& feedurl) {
-	bool quit = false;
-	bool rebuild_list = false;
-	bool set_listfocus = false;
-
-	std::vector<rss_item> items;
-
-	view_stack.push_front(&search_form);
-
-	set_search_keymap_hint();
-
-	search_form.set("msg","");
-
-	search_form.set("head",_("Search Articles"));
-
-	search_form.set("searchprompt",_("Search for: "));
-
-	search_form.modify("results","replace_inner","{list}");
-
-	search_form.set_focus("query");
-
-	do {
-
-		if (rebuild_list) {
-			std::string code = "{list";
-
-			unsigned int i=0;
-			for (std::vector<rss_item>::iterator it = items.begin(); it != items.end(); ++it, ++i) {
-				std::string line = "{listitem[";
-				std::ostringstream x;
-				x << i;
-				line.append(x.str());
-				line.append("] text:");
-				std::string title;
-				char buf[20];
-				snprintf(buf,sizeof(buf),"%4u ",i+1);
-				title.append(buf);
-				if (it->unread()) {
-					title.append("N ");
-				} else {
-					title.append("  ");
-				}
-				char datebuf[64];
-				time_t t = it->pubDate_timestamp();
-				struct tm * stm = localtime(&t);
-				strftime(datebuf,sizeof(datebuf), "%b %d   ", stm);
-				title.append(datebuf);
-				title.append(it->title());
-				line.append(stfl::quote(title));
-				line.append("}");
-				code.append(line);
-			}
-
-			code.append("}");
-
-			search_form.modify("results","replace_inner",code);
-
-			if (set_listfocus) {
-				search_form.run(-1);
-				search_form.set_focus("results");
-				GetLogger().log(LOG_DEBUG, "view::run_search: setting focus to results");
-				set_listfocus = false;
-			}
-
-			rebuild_list = false;
-		}
-
-		operation op;
-		const char * event = search_form.run(0);
-		if (!event) continue;
-
-		op = keys->get_operation(event);
-
-		GetLogger().log(LOG_DEBUG, "view::run_search: event = %s operation = %d", event, op);
-
-		switch (op) {
-			case OP_OPEN: {
-					std::string querytext = search_form.get("querytext");
-					std::string focus = search_form.get_focus();
-					if (focus == "query") {
-						if (querytext.length() > 0) {
-							items = ctrl->search_for_items(querytext, feedurl);
-							if (items.size() > 0) {
-								char buf[1024];
-								search_form.set("listpos", "0");
-								snprintf(buf, sizeof(buf), _("Search Articles - %u results"), items.size());
-								search_form.set("head", buf);
-								set_listfocus = true;
-								rebuild_list = true;
-							} else {
-								show_error(_("No results."));
-							}
-						} else {
-							quit = true;
-						}
-					} else {
-						std::string itemposname = search_form.get("listpos");
-						GetLogger().log(LOG_INFO, "view::run_search: opening item at pos `%s'", itemposname.c_str());
-						if (itemposname.length() > 0) {
-							std::istringstream posname(itemposname);
-							unsigned int pos = 0;
-							posname >> pos;
-							rss_feed tmpfeed = ctrl->get_feed_by_url(items[pos].feedurl());
-							tmpfeed.items().push_back(items[pos]);
-							ctrl->open_item(tmpfeed, items[pos].guid());
-							rebuild_list = true;
-						} else {
-							show_error(_("No item selected!")); // should not happen
-						}
-					}
-				}
-				break;
-			case OP_SEARCH:
-				search_form.set_focus("query");
-				break;
-			case OP_QUIT:
-				quit = true;
-				break;
-			case OP_HELP:
-				run_help();
-				set_status("");
-				break;
-			default:
-				break;
-		}
-	} while (!quit);
-
-	view_stack.pop_front();
-}
-#endif
 
 std::string view::get_filename_suggestion(const std::string& s) {
 	std::string retval;
@@ -533,24 +404,6 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 	feedlist->set_feedlist(feeds);
 }
 
-#if 0
-
-void view::set_search_keymap_hint() {
-	keymap_hint_entry hints[] = {
-		{ OP_QUIT, _("Quit") },
-		{ OP_OPEN, _("Search/Open") },
-		{ OP_SEARCH, _("New Search") },
-		{ OP_HELP, _("Help") },
-		{ OP_NIL, NULL }
-	};
-
-	std::string keymap_hint = prepare_keymaphint(hints);
-	search_form.set("help", keymap_hint);
-}
-
-
-#endif
-
 void view::render_source(std::vector<std::string>& lines, std::string desc, unsigned int width) {
 	std::string line;
 	do {
@@ -619,6 +472,11 @@ std::string view::select_tag(const std::vector<std::string>& tags) {
 	selecttag->set_tags(tags);
 	run_modal(selecttag, "");
 	return selecttag->get_tag();
+}
+
+void view::run_search(const std::string& feedurl) {
+	search->set_feedurl(feedurl);
+	formaction_stack.push_front(search);
 }
 
 void view::pop_current_formaction() {
