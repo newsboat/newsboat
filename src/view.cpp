@@ -11,6 +11,7 @@
 #include <itemlist_formaction.h>
 #include <itemview_formaction.h>
 #include <help_formaction.h>
+#include <urlview_formaction.h>
 
 #include <logger.h>
 #include <reloadthread.h>
@@ -57,6 +58,7 @@ view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0) /*,
 	itemview = new itemview_formaction(this, itemview_str);
 	helpview = new help_formaction(this, help_str);
 	filebrowser = new filebrowser_formaction(this, filebrowser_str);
+	urlview = new urlview_formaction(this, urlview_str);
 	// TODO: create all formaction objects
 
 	// push the dialog to start with onto the stack
@@ -71,6 +73,7 @@ view::~view() {
 	delete itemview;
 	delete helpview;
 	delete filebrowser;
+	delete urlview;
 }
 
 void view::set_config_container(configcontainer * cfgcontainer) {
@@ -438,163 +441,6 @@ std::string view::add_file(std::string filename) {
 }
 
 #if 0
-std::string view::filebrowser(filebrowser_type type, const std::string& default_filename, std::string dir) {
-	char cwdtmp[MAXPATHLEN];
-	char buf[1024];
-	::getcwd(cwdtmp,sizeof(cwdtmp));
-	std::string cwd = cwdtmp;
-	
-	view_stack.push_front(&filebrowser_form);
-
-	set_filebrowser_keymap_hint();
-
-	filebrowser_form.set("fileprompt", _("File: "));
-	
-	bool update_list = true;
-	bool quit = false;
-	
-	if (dir == "") {
-		std::string save_path = cfg->get_configvalue("save-path");
-
-		GetLogger().log(LOG_DEBUG,"view::filebrowser: save-path is '%s'",save_path.c_str());
-
-		if (save_path.substr(0,2) == "~/") {
-			char * homedir = ::getenv("HOME");
-			if (homedir) {
-				dir.append(homedir);
-				dir.append(NEWSBEUTER_PATH_SEP);
-				dir.append(save_path.substr(2,save_path.length()-2));
-			} else {
-				dir = ".";
-			}
-		} else {
-			dir = save_path;
-		}
-	}
-
-	GetLogger().log(LOG_DEBUG, "view::filebrowser: chdir(%s)", dir.c_str());
-			
-	::chdir(dir.c_str());
-	::getcwd(cwdtmp,sizeof(cwdtmp));
-	
-	filebrowser_form.set("filenametext", default_filename);
-	
-	std::string head_str;
-	if (type == FBT_OPEN) {
-		snprintf(buf, sizeof(buf), _("Open File - %s"), cwdtmp);
-	} else {
-		snprintf(buf, sizeof(buf), _("Save File - %s"), cwdtmp);
-	}
-	head_str = buf;
-	filebrowser_form.set("head", head_str);
-		
-	do {
-		
-		if (update_list) {
-			std::string code = "{list";
-			::getcwd(cwdtmp,sizeof(cwdtmp));
-			
-			DIR * dir = ::opendir(cwdtmp);
-			if (dir) {
-				struct dirent * de = ::readdir(dir);
-				while (de) {
-					if (strcmp(de->d_name,".")!=0)
-						code.append(add_file(de->d_name));
-					de = ::readdir(dir);
-				}
-				::closedir(dir);	
-			}
-			
-			code.append("}");
-			
-			// std::cerr << "code: `" << code << "'" << std::endl;
-			
-			filebrowser_form.modify("files", "replace_inner", code);
-			update_list = false;
-		}
-		
-		const char * event = filebrowser_form.run(0);
-		if (!event) continue;
-		
-		operation op = keys->get_operation(event);
-
-		GetLogger().log(LOG_DEBUG,"view::filebrowser: event = %s operation = %d type = %d", event, op, type);
-		
-		switch (op) {
-			case OP_OPEN: 
-				{
-					GetLogger().log(LOG_DEBUG,"view::filebrowser: 'opening' item");
-					std::string focus = filebrowser_form.get_focus();
-					if (focus.length() > 0) {
-						if (focus == "files") {
-							std::string selection = fancy_unquote(filebrowser_form.get("listposname"));
-							char filetype = selection[0];
-							selection.erase(0,1);
-							std::string filename(selection);
-							switch (filetype) {
-								case 'd':
-									if (type == FBT_OPEN) {
-										snprintf(buf, sizeof(buf), _("Open File - %s"), filename.c_str());
-									} else {
-										snprintf(buf, sizeof(buf), _("Save File - %s"), filename.c_str());
-									}
-									head_str = buf;
-									filebrowser_form.set("head", head_str);
-									::chdir(filename.c_str());
-									filebrowser_form.set("listpos","0");
-									if (type == FBT_SAVE) {
-										char cwdtmp[MAXPATHLEN];
-										::getcwd(cwdtmp,sizeof(cwdtmp));
-										std::string fn(cwdtmp);
-										fn.append(NEWSBEUTER_PATH_SEP);
-										std::string fnstr = filebrowser_form.get("filenametext");
-										const char * base = strrchr(fnstr.c_str(),'/');
-										if (!base)
-											base = fnstr.c_str();
-										fn.append(base);
-										filebrowser_form.set("filenametext",fn);
-									}
-									update_list = true;
-									break;
-								case '-': 
-									{
-										char cwdtmp[MAXPATHLEN];
-										::getcwd(cwdtmp,sizeof(cwdtmp));
-										std::string fn(cwdtmp);
-										fn.append(NEWSBEUTER_PATH_SEP);
-										fn.append(filename);
-										filebrowser_form.set("filenametext",fn);
-										filebrowser_form.set_focus("filename");
-									}
-									break;
-								default:
-									// TODO: show error message
-									break;
-							}
-						} else {
-							std::string retval = filebrowser_form.get("filenametext");
-							view_stack.pop_front();
-							return retval;
-						}
-					}
-				}
-				break;
-			case OP_QUIT:
-				GetLogger().log(LOG_DEBUG,"view::filebrowser: quitting");
-				view_stack.pop_front();
-				return std::string("");
-			default:
-				break;
-		}
-		
-		
-	} while (!quit);
-	view_stack.pop_front();
-	return std::string(""); // never reached
-}
-#endif
-
-#if 0
 bool view::jump_to_next_unread_feed(bool begin_with_next) {
 	std::string feedposname = feedlist_form.get("feedpos");
 	unsigned int feedcount = visible_feeds.size();
@@ -678,64 +524,6 @@ void view::open_in_browser(const std::string& url) {
 }
 
 #if 0
-void view::run_urlview(std::vector<linkpair>& links) {
-	set_urlview_keymap_hint();
-
-	view_stack.push_front(&urlview_form);
-	set_status("");
-
-	urlview_form.set("head",_("URLs"));
-
-	std::string code = "{list";
-	unsigned int i=0;
-	for (std::vector<linkpair>::iterator it = links.begin(); it != links.end(); ++it, ++i) {
-		std::ostringstream os;
-		char line[1024];
-		snprintf(line,sizeof(line),"%2u  %s",i+1,it->first.c_str());
-		os << "{listitem[" << i << "] text:" << stfl::quote(line) << "}";
-		code.append(os.str());
-	}
-	code.append("}");
-
-	urlview_form.modify("urls","replace_inner",code);
-
-	bool quit = false;
-
-	do {
-		const char * event = urlview_form.run(0);
-		if (!event) continue;
-
-		operation op = keys->get_operation(event);
-
-		switch (op) {
-			case OP_OPEN: 
-				{
-					std::string posstr = urlview_form.get("feedpos");
-					if (posstr.length() > 0) {
-						std::istringstream is(posstr);
-						unsigned int idx;
-						is >> idx;
-						set_status(_("Starting browser..."));
-						open_in_browser(links[idx].first);
-						set_status("");
-					} else {
-						show_error(_("No link selected!"));
-					}
-				}
-				break;
-			case OP_QUIT:
-				quit = true;
-				break;
-			default: // nothing
-				break;
-		}
-	} while (!quit);
-
-	view_stack.pop_front();
-}
-#endif
-
-#if 0
 std::string view::select_tag(const std::vector<std::string>& tags) {
 	std::string tag = "";
 
@@ -801,26 +589,6 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 
 #if 0
 
-void view::set_urlview_keymap_hint() {
-	keymap_hint_entry hints[] = {
-		{ OP_QUIT, _("Quit") },
-		{ OP_OPEN, _("Open in Browser") },
-		{ OP_NIL, NULL }
-	};
-	std::string keymap_hint = prepare_keymaphint(hints);
-	urlview_form.set("help", keymap_hint);
-}
-
-void view::set_filebrowser_keymap_hint() {
-	keymap_hint_entry hints[] = {
-		{ OP_QUIT, _("Cancel") },
-		{ OP_OPEN, _("Save") },
-		{ OP_NIL, NULL }
-	};
-	std::string keymap_hint = prepare_keymaphint(hints);
-	filebrowser_form.set("help", keymap_hint);
-}
-
 void view::set_selecttag_keymap_hint() {
 	keymap_hint_entry hints[] = {
 		{ OP_QUIT, _("Cancel") },
@@ -846,11 +614,6 @@ void view::set_search_keymap_hint() {
 }
 
 
-void view::set_itemview_head(const std::string& s) {
-	char buf[1024];
-	snprintf(buf, sizeof(buf), _("Article '%s'"), s.c_str());
-	itemview_form.set("head",buf);
-}
 #endif
 
 void view::render_source(std::vector<std::string>& lines, std::string desc, unsigned int width) {
@@ -903,6 +666,11 @@ void view::push_itemview(rss_feed * f, const std::string& guid) {
 
 void view::push_help() {
 	formaction_stack.push_front(helpview);
+}
+
+void view::push_urlview(const std::vector<linkpair>& links) {
+	urlview->set_links(links);
+	formaction_stack.push_front(urlview);
 }
 
 std::string view::run_filebrowser(filebrowser_type type, const std::string& default_filename, const std::string& dir) {

@@ -166,7 +166,7 @@ void itemview_formaction::process_operation(operation op) {
 			break;
 		case OP_SHOWURLS:
 			GetLogger().log(LOG_DEBUG, "view::run_itemview: showing URLs");
-			// run_urlview(links);
+			v->push_urlview(links);
 			break;
 		case OP_NEXTUNREAD:
 			GetLogger().log(LOG_INFO, "view::run_itemview: jumping to next unread article");
