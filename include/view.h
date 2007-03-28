@@ -58,6 +58,8 @@ namespace newsbeuter {
 
 			std::string get_filename_suggestion(const std::string& s);
 
+			bool get_next_unread();
+
 		protected:
 			bool jump_to_next_unread_item(std::vector<rss_item>& items, bool begin_with_next);
 			bool jump_to_next_unread_feed(bool begin_with_next);

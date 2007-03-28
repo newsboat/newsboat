@@ -13,12 +13,15 @@ class itemlist_formaction : public formaction {
 		virtual void prepare();
 		virtual void init();
 		inline void set_feed(rss_feed * f) { feed = f; }
+		inline rss_feed * get_feed() { return feed; }
 		inline void set_pos(unsigned int p) { pos = p; }
+		std::string get_guid();
 		virtual keymap_hint_entry * get_keymap_hint();
-	private:
-		void set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);
 
 		bool jump_to_next_unread_item();
+
+	private:
+		void set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);
 
 		rss_feed * feed;
 		unsigned int pos;

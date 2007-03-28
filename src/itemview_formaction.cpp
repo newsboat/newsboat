@@ -122,6 +122,7 @@ void itemview_formaction::prepare() {
 
 void itemview_formaction::process_operation(operation op) {
 	rss_item& item = feed->get_item_by_guid(guid);
+	item.set_unread(false);
 
 	switch (op) {
 		case OP_OPEN:
@@ -170,11 +171,15 @@ void itemview_formaction::process_operation(operation op) {
 			break;
 		case OP_NEXTUNREAD:
 			GetLogger().log(LOG_INFO, "view::run_itemview: jumping to next unread article");
-			// retval = true; // fall-through is OK
+			if (v->get_next_unread()) {
+				do_redraw = true;
+			} else {
+				v->pop_current_formaction();
+				v->show_error(_("No unread items."));
+			}
 			break;
 		case OP_QUIT:
 			GetLogger().log(LOG_INFO, "view::run_itemview: quitting");
-			item.set_unread(false);
 			quit = true;
 			break;
 		case OP_HELP:

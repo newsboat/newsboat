@@ -193,6 +193,14 @@ bool itemlist_formaction::jump_to_next_unread_item() {
 	return false;
 }
 
+std::string itemlist_formaction::get_guid() {
+	std::vector<rss_item>& items = feed->items();
+	unsigned int pos;
+	std::istringstream is(f->get("itempos"));
+	is >> pos;
+	return items[pos].guid();
+}
+
 keymap_hint_entry * itemlist_formaction::get_keymap_hint() {
 	static keymap_hint_entry hints[] = {
 		{ OP_QUIT, _("Quit") },

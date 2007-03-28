@@ -333,6 +333,15 @@ void view::run_search(const std::string& feedurl) {
 	formaction_stack.push_front(search);
 }
 
+bool view::get_next_unread() {
+	if (itemlist->jump_to_next_unread_item()) {
+		itemview->set_feed(itemlist->get_feed());
+		itemview->set_guid(itemlist->get_guid());
+		return true;
+	}
+	return false;
+}
+
 void view::pop_current_formaction() {
 	formaction_stack.pop_front();
 	if (formaction_stack.size() > 0) {
