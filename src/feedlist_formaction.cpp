@@ -102,11 +102,9 @@ void feedlist_formaction::process_operation(operation op) {
 			break;
 		case OP_NEXTUNREAD:
 			GetLogger().log(LOG_INFO, "feedlist_formaction: jumping to next unred feed");
-			/*
-			if (!v->jump_to_next_unread_feed(true)) {
+			if (!jump_to_next_unread_feed()) {
 				v->show_error(_("No feeds with unread items."));
 			}
-			*/
 			break;
 		case OP_MARKALLFEEDSREAD:
 			GetLogger().log(LOG_INFO, "feedlist_formaction: marking all feeds read");
@@ -246,6 +244,30 @@ keymap_hint_entry * feedlist_formaction::get_keymap_hint() {
 		{ OP_NIL, NULL }
 	};
 	return hints;
+}
+
+bool feedlist_formaction::jump_to_next_unread_feed() {
+	unsigned int curpos;
+	std::istringstream is(f->get("feedpos"));
+	is >> curpos;
+
+	for (unsigned int i=curpos+1;i<visible_feeds.size();++i) {
+		if (visible_feeds[i].first->unread_item_count() > 0) {
+			std::ostringstream os;
+			os << i;
+			f->set("feedpos", os.str());
+			return true;
+		}
+	}
+	for (unsigned int i=0;i<=curpos;++i) {
+		if (visible_feeds[i].first->unread_item_count() > 0) {
+			std::ostringstream os;
+			os << i;
+			f->set("feedpos", os.str());
+			return true;
+		}
+	}
+	return false;
 }
 
 }

@@ -16,6 +16,8 @@ class feedlist_formaction : public formaction {
 		void set_tags(const std::vector<std::string>& t);
 		virtual keymap_hint_entry * get_keymap_hint();
 	private:
+		bool jump_to_next_unread_feed();
+
 		bool zero_feedpos;
 		unsigned int feeds_shown;
 		bool auto_open;
