@@ -122,7 +122,7 @@ void feedlist_formaction::process_operation(operation op) {
 			break;
 		case OP_SETTAG: 
 			if (tags.size() > 0) {
-				std::string newtag; // = v->select_tag(tags);
+				std::string newtag = v->select_tag(tags);
 				if (newtag != "") {
 					tag = newtag;
 					do_redraw = true;

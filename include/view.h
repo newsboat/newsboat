@@ -28,13 +28,14 @@ namespace newsbeuter {
 	class itemview_formaction;
 	class help_formaction;
 	class urlview_formaction;
+	class selecttag_formaction;
 
 	class view {
 		public:
 			view(controller * );
 			~view();
 			void run();
-			std::string run_modal(formaction * f, const std::string& value);
+			std::string run_modal(formaction * f, const std::string& value = "");
 
 			/*
 			void run_feedlist(const std::vector<std::string> & tags);
@@ -42,7 +43,6 @@ namespace newsbeuter {
 			bool run_itemview(rss_feed& feed, std::string guid);
 			void run_help();
 			void run_search(const std::string& feed = "");
-			std::string select_tag(const std::vector<std::string>& tags);
 			*/
 			void set_feedlist(std::vector<rss_feed>& feeds);
 			void set_keymap(keymap * k);
@@ -64,6 +64,7 @@ namespace newsbeuter {
 			void view::push_urlview(const std::vector<linkpair>& links);
 
 			std::string run_filebrowser(filebrowser_type type, const std::string& default_filename = "", const std::string& dir = "");
+			std::string select_tag(const std::vector<std::string>& tags);
 
 			void render_source(std::vector<std::string>& lines, std::string desc, unsigned int width);
 			void open_in_browser(const std::string& url);
@@ -123,6 +124,7 @@ namespace newsbeuter {
 			help_formaction * helpview;
 			filebrowser_formaction * filebrowser;
 			urlview_formaction * urlview;
+			selecttag_formaction * selecttag;
 			
 			std::list<formaction *> formaction_stack;
 			

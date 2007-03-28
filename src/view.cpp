@@ -12,6 +12,7 @@
 #include <itemview_formaction.h>
 #include <help_formaction.h>
 #include <urlview_formaction.h>
+#include <selecttag_formaction.h>
 
 #include <logger.h>
 #include <reloadthread.h>
@@ -59,6 +60,7 @@ view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0) /*,
 	helpview = new help_formaction(this, help_str);
 	filebrowser = new filebrowser_formaction(this, filebrowser_str);
 	urlview = new urlview_formaction(this, urlview_str);
+	selecttag = new selecttag_formaction(this, selecttag_str);
 	// TODO: create all formaction objects
 
 	// push the dialog to start with onto the stack
@@ -74,6 +76,7 @@ view::~view() {
 	delete helpview;
 	delete filebrowser;
 	delete urlview;
+	delete selecttag;
 }
 
 void view::set_config_container(configcontainer * cfgcontainer) {
@@ -138,7 +141,10 @@ std::string view::run_modal(formaction * f, const std::string& value) {
 		fa->process_operation(op);
 	}
 
-	return f->get_value(value);
+	if (value == "")
+		return "";
+	else
+		return f->get_value(value);
 }
 
 #if 0
@@ -523,82 +529,11 @@ void view::open_in_browser(const std::string& url) {
 	formaction_stack.pop_front();
 }
 
-#if 0
-std::string view::select_tag(const std::vector<std::string>& tags) {
-	std::string tag = "";
-
-	set_selecttag_keymap_hint();
-
-	view_stack.push_front(&selecttag_form);
-	set_status("");
-
-	std::string code = "{list";
-	unsigned int i=0;
-	for (std::vector<std::string>::const_iterator it=tags.begin();it!=tags.end();++it,++i) {
-		std::ostringstream line;
-		char num[32];
-		snprintf(num,sizeof(num)," %4d. ", i+1);
-		std::string tagstr = num;
-		tagstr.append(it->c_str());
-		line << "{listitem[" << i << "] text:" << stfl::quote(tagstr.c_str()) << "}";
-		code.append(line.str());
-	}
-	code.append("}");
-
-	selecttag_form.modify("taglist", "replace_inner", code);
-
-	bool quit = false;
-	
-	do {
-		const char * event = selecttag_form.run(0);
-		if (!event) continue;
-
-		operation op = keys->get_operation(event);
-
-		switch (op) {
-			case OP_QUIT:
-				quit = true;
-				break;
-			case OP_OPEN: {
-					std::string tagposname = selecttag_form.get("tagposname");
-					if (tagposname.length() > 0) {
-						std::istringstream posname(tagposname);
-						unsigned int pos = 0;
-						posname >> pos;
-						if (pos < tags.size()) {
-							tag = tags[pos];
-							quit = true;
-						}
-					}
-				}
-				break;
-			default:
-				break;
-		}
-	} while (!quit);
-
-	view_stack.pop_front();
-
-	return tag;
-}
-#endif
-
 void view::set_feedlist(std::vector<rss_feed>& feeds) {
 	feedlist->set_feedlist(feeds);
 }
 
 #if 0
-
-void view::set_selecttag_keymap_hint() {
-	keymap_hint_entry hints[] = {
-		{ OP_QUIT, _("Cancel") },
-		{ OP_OPEN, _("Select Tag") },
-		{ OP_NIL, NULL }
-	};
-
-	std::string keymap_hint = prepare_keymaphint(hints);
-	selecttag_form.set("help", keymap_hint);
-}
 
 void view::set_search_keymap_hint() {
 	keymap_hint_entry hints[] = {
@@ -678,6 +613,12 @@ std::string view::run_filebrowser(filebrowser_type type, const std::string& defa
 	filebrowser->set_default_filename(default_filename);
 	filebrowser->set_type(type);
 	return run_modal(filebrowser, "filenametext");
+}
+
+std::string view::select_tag(const std::vector<std::string>& tags) {
+	selecttag->set_tags(tags);
+	run_modal(selecttag, "");
+	return selecttag->get_tag();
 }
 
 void view::pop_current_formaction() {
