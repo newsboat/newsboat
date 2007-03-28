@@ -776,32 +776,6 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 }
 
 #if 0
-std::string view::prepare_keymaphint(keymap_hint_entry * hints) {
-	std::string keymap_hint;
-	for (int i=0;hints[i].op != OP_NIL; ++i) {
-		keymap_hint.append(keys->getkey(hints[i].op));
-		keymap_hint.append(":");
-		keymap_hint.append(hints[i].text);
-		keymap_hint.append(" ");
-	}
-	return keymap_hint;	
-}
-
-void view::set_itemlist_keymap_hint() {
-	keymap_hint_entry hints[] = {
-		{ OP_QUIT, _("Quit") },
-		{ OP_OPEN, _("Open") },
-		{ OP_SAVE, _("Save") },
-		{ OP_RELOAD, _("Reload") },
-		{ OP_NEXTUNREAD, _("Next Unread") },
-		{ OP_MARKFEEDREAD, _("Mark All Read") },
-		{ OP_SEARCH, _("Search") },
-		{ OP_HELP, _("Help") },
-		{ OP_NIL, NULL }
-	};
-	std::string keymap_hint = prepare_keymaphint(hints);
-	itemlist_form.set("help", keymap_hint);
-}
 
 void view::set_urlview_keymap_hint() {
 	keymap_hint_entry hints[] = {
@@ -813,23 +787,6 @@ void view::set_urlview_keymap_hint() {
 	urlview_form.set("help", keymap_hint);
 }
 
-void view::set_feedlist_keymap_hint() {
-	keymap_hint_entry hints[] = {
-		{ OP_QUIT, _("Quit") },
-		{ OP_OPEN, _("Open") },
-		{ OP_NEXTUNREAD, _("Next Unread") },
-		{ OP_RELOAD, _("Reload") },
-		{ OP_RELOADALL, _("Reload All") },
-		{ OP_MARKFEEDREAD, _("Mark Read") },
-		{ OP_MARKALLFEEDSREAD, _("Catchup All") },
-		{ OP_SEARCH, _("Search") },
-		{ OP_HELP, _("Help") },
-		{ OP_NIL, NULL }
-	};
-	std::string keymap_hint = prepare_keymaphint(hints);
-	feedlist_form.set("help", keymap_hint);
-}
-
 void view::set_filebrowser_keymap_hint() {
 	keymap_hint_entry hints[] = {
 		{ OP_QUIT, _("Cancel") },
@@ -838,30 +795,6 @@ void view::set_filebrowser_keymap_hint() {
 	};
 	std::string keymap_hint = prepare_keymaphint(hints);
 	filebrowser_form.set("help", keymap_hint);
-}
-
-void view::set_itemview_keymap_hint() {
-	keymap_hint_entry hints[] = {
-		{ OP_QUIT, _("Quit") },
-		{ OP_OPEN, _("Open") },
-		{ OP_SAVE, _("Save") },
-		{ OP_NEXTUNREAD, _("Next Unread") },
-		{ OP_OPENINBROWSER, _("Open in Browser") },
-		{ OP_ENQUEUE, _("Enqueue") },
-		{ OP_HELP, _("Help") },
-		{ OP_NIL, NULL }
-	};
-	std::string keymap_hint = prepare_keymaphint(hints);
-	itemview_form.set("help", keymap_hint);
-}
-
-void view::set_help_keymap_hint() {
-	keymap_hint_entry hints[] = {
-		{ OP_QUIT, _("Quit") },
-		{ OP_NIL, NULL }
-	};
-	std::string keymap_hint = prepare_keymaphint(hints);
-	help_form.set("help", keymap_hint);
 }
 
 void view::set_selecttag_keymap_hint() {

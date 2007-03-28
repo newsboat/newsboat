@@ -5,7 +5,8 @@
 namespace newsbeuter {
 
 help_formaction::help_formaction(view * vv, std::string formstr)
-	: formaction(vv, formstr), quit(false) { }
+	: formaction(vv, formstr), quit(false) { 
+}
 
 help_formaction::~help_formaction() { }
 
@@ -51,6 +52,15 @@ void help_formaction::prepare() {
 }
 
 void help_formaction::init() {
+	set_keymap_hints();
+}
+
+keymap_hint_entry * help_formaction::get_keymap_hint() {
+	static keymap_hint_entry hints[] = {
+		{ OP_QUIT, _("Quit") },
+		{ OP_NIL, NULL }
+	};
+	return hints;
 }
 
 }

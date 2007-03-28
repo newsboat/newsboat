@@ -12,8 +12,9 @@ class itemlist_formaction : public formaction {
 		virtual void process_operation(operation op);
 		virtual void prepare();
 		virtual void init();
-		inline virtual void set_feed(rss_feed * f) { feed = f; }
-		inline virtual void set_pos(unsigned int p) { pos = p; }
+		inline void set_feed(rss_feed * f) { feed = f; }
+		inline void set_pos(unsigned int p) { pos = p; }
+		virtual keymap_hint_entry * get_keymap_hint();
 	private:
 		void set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);
 

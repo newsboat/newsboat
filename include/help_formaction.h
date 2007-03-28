@@ -12,6 +12,7 @@ class help_formaction : public formaction {
 		virtual void process_operation(operation op);
 		virtual void prepare();
 		virtual void init();
+		keymap_hint_entry * get_keymap_hint();
 	private:
 		bool quit;
 };

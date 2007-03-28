@@ -10,9 +10,12 @@ namespace newsbeuter {
 
 feedlist_formaction::feedlist_formaction(view * vv, std::string formstr) 
 	: formaction(vv,formstr), zero_feedpos(false), feeds_shown(0),
-		auto_open(false), quit(false) { }
+		auto_open(false), quit(false) { 
+}
 
 void feedlist_formaction::init() {
+	set_keymap_hints();
+
 	// XXX: does this even work with no element on the formaction_stack ?
 	if(v->get_ctrl()->get_refresh_on_start()) {
 		f->run(-1);
@@ -228,6 +231,22 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 
 void feedlist_formaction::set_tags(const std::vector<std::string>& t) {
 	tags = t;
+}
+
+keymap_hint_entry * feedlist_formaction::get_keymap_hint() {
+	static keymap_hint_entry hints[] = {
+		{ OP_QUIT, _("Quit") },
+		{ OP_OPEN, _("Open") },
+		{ OP_NEXTUNREAD, _("Next Unread") },
+		{ OP_RELOAD, _("Reload") },
+		{ OP_RELOADALL, _("Reload All") },
+		{ OP_MARKFEEDREAD, _("Mark Read") },
+		{ OP_MARKALLFEEDSREAD, _("Catchup All") },
+		{ OP_SEARCH, _("Search") },
+		{ OP_HELP, _("Help") },
+		{ OP_NIL, NULL }
+	};
+	return hints;
 }
 
 }

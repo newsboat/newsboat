@@ -12,6 +12,11 @@ namespace newsbeuter {
 
 class view;
 
+struct keymap_hint_entry {
+	operation op; 
+	char * text;
+};
+
 class formaction {
 	public:
 		formaction(view *, std::string formstr);
@@ -22,10 +27,17 @@ class formaction {
 		stfl::form& get_form();
 		inline void set_redraw(bool b) { do_redraw = b; }
 
+		virtual keymap_hint_entry * get_keymap_hint() = 0;
+
 	protected:
+		virtual void set_keymap_hints();
+
 		view * v;
 		stfl::form * f;
 		bool do_redraw;
+
+	private:
+		std::string prepare_keymap_hint(keymap_hint_entry * hints);
 };
 
 

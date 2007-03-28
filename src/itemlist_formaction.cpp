@@ -8,7 +8,8 @@
 namespace newsbeuter {
 
 itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
-	: formaction(vv,formstr), feed(0), show_no_unread_error(false) { }
+	: formaction(vv,formstr), feed(0), show_no_unread_error(false) { 
+}
 
 itemlist_formaction::~itemlist_formaction() { }
 
@@ -176,12 +177,28 @@ void itemlist_formaction::init() {
 	f->set("itempos","0");
 	f->set("msg","");
 	do_redraw = true;
+	set_keymap_hints();
 }
 
 void itemlist_formaction::set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url) {
 	char buf[1024];
 	snprintf(buf, sizeof(buf), _("Articles in feed '%s' (%u unread, %u total) - %s"), s.c_str(), unread, total, url.c_str());
 	f->set("head", buf);
+}
+
+keymap_hint_entry * itemlist_formaction::get_keymap_hint() {
+	static keymap_hint_entry hints[] = {
+		{ OP_QUIT, _("Quit") },
+		{ OP_OPEN, _("Open") },
+		{ OP_SAVE, _("Save") },
+		{ OP_RELOAD, _("Reload") },
+		{ OP_NEXTUNREAD, _("Next Unread") },
+		{ OP_MARKFEEDREAD, _("Mark All Read") },
+		{ OP_SEARCH, _("Search") },
+		{ OP_HELP, _("Help") },
+		{ OP_NIL, NULL }
+	};
+	return hints;
 }
 
 

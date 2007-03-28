@@ -8,7 +8,8 @@
 namespace newsbeuter {
 
 itemview_formaction::itemview_formaction(view * vv, std::string formstr)
-	: formaction(vv,formstr), feed(0), show_source(false), quit(false) { }
+	: formaction(vv,formstr), feed(0), show_source(false), quit(false) { 
+}
 
 itemview_formaction::~itemview_formaction() { }
 
@@ -18,6 +19,7 @@ void itemview_formaction::init() {
 	do_redraw = true;
 	quit = false;
 	links.erase(links.begin(), links.end());
+	set_keymap_hints();
 }
 
 void itemview_formaction::prepare() {
@@ -79,7 +81,7 @@ void itemview_formaction::prepare() {
 
 		code.append("{listitem text:\"\"}");
 		
-		// set_itemview_head(item.title());
+		set_head(item.title());
 
 		if (!render_hack) {
 			f->run(-1); // XXX HACK: render once so that we get a proper widget width
@@ -172,6 +174,7 @@ void itemview_formaction::process_operation(operation op) {
 			break;
 		case OP_QUIT:
 			GetLogger().log(LOG_INFO, "view::run_itemview: quitting");
+			item.set_unread(false);
 			quit = true;
 			break;
 		case OP_HELP:
@@ -185,6 +188,26 @@ void itemview_formaction::process_operation(operation op) {
 		v->pop_current_formaction();
 	}
 
+}
+
+keymap_hint_entry * itemview_formaction::get_keymap_hint() {
+	static keymap_hint_entry hints[] = {
+		{ OP_QUIT, _("Quit") },
+		{ OP_OPEN, _("Open") },
+		{ OP_SAVE, _("Save") },
+		{ OP_NEXTUNREAD, _("Next Unread") },
+		{ OP_OPENINBROWSER, _("Open in Browser") },
+		{ OP_ENQUEUE, _("Enqueue") },
+		{ OP_HELP, _("Help") },
+		{ OP_NIL, NULL }
+	};
+	return hints;
+}
+
+void itemview_formaction::set_head(const std::string& s) {
+	char buf[1024];
+	snprintf(buf, sizeof(buf), _("Article '%s'"), s.c_str());
+	f->set("head",buf);
 }
 
 

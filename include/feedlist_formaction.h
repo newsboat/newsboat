@@ -14,6 +14,7 @@ class feedlist_formaction : public formaction {
 		virtual void init();
 		void set_feedlist(std::vector<rss_feed>& feeds);
 		void set_tags(const std::vector<std::string>& t);
+		virtual keymap_hint_entry * get_keymap_hint();
 	private:
 		bool zero_feedpos;
 		unsigned int feeds_shown;
