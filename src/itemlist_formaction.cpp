@@ -8,7 +8,7 @@
 namespace newsbeuter {
 
 itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
-	: formaction(vv,formstr), feed(0), show_no_unread_error(false) { 
+	: formaction(vv,formstr), feed(0) { 
 }
 
 itemlist_formaction::~itemlist_formaction() { }
@@ -18,29 +18,17 @@ void itemlist_formaction::process_operation(operation op) {
 	std::vector<rss_item>& items = feed->items();
 	switch (op) {
 		case OP_OPEN: {
-				bool open_next_item = false;
-				do {
-					std::string itemposname = f->get("itempos");
-					GetLogger().log(LOG_INFO, "itemlist_formaction: opening item at pos `%s' open_next_item = %d", itemposname.c_str(), open_next_item);
-					if (itemposname.length() > 0) {
-						std::istringstream posname(itemposname);
-						unsigned int pos = 0;
-						posname >> pos;
-						open_next_item = false; // v->get_ctrl()->open_item(*feed, items[pos].guid());
-						v->push_itemview(feed, items[pos].guid());
-						do_redraw = true;
-					} else {
-						v->show_error(_("No item selected!")); // should not happen
-					}
-					if (open_next_item) {
-						/*
-						if (!jump_to_next_unread_item(items, true)) {
-							open_next_item = false;
-							quit = true;
-						}
-						*/
-					}
-				} while (open_next_item);
+				std::string itemposname = f->get("itempos");
+				GetLogger().log(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
+				if (itemposname.length() > 0) {
+					std::istringstream posname(itemposname);
+					unsigned int pos = 0;
+					posname >> pos;
+					v->push_itemview(feed, items[pos].guid());
+					do_redraw = true;
+				} else {
+					v->show_error(_("No item selected!")); // should not happen
+				}
 			}
 			break;
 		case OP_SAVE: 
@@ -87,8 +75,9 @@ void itemlist_formaction::process_operation(operation op) {
 			break;
 		case OP_NEXTUNREAD:
 			GetLogger().log(LOG_INFO, "itemlist_formaction: jumping to next unread item");
-			//if (!jump_to_next_unread_item(items, true))
-			//	show_no_unread_error = true;
+			if (!jump_to_next_unread_item()) {
+				v->show_error(_("No unread items."));
+			}
 			break;
 		case OP_MARKFEEDREAD:
 			GetLogger().log(LOG_INFO, "itemlist_formaction: marking feed read");
@@ -164,11 +153,6 @@ void itemlist_formaction::prepare() {
 		set_head(feed->title(),feed->unread_item_count(),feed->items().size(), feed->rssurl());
 
 		do_redraw = false;
-
-		if (show_no_unread_error) {
-			v->show_error(_("No unread items."));
-			show_no_unread_error = false;
-		}
 	}
 }
 
@@ -183,6 +167,30 @@ void itemlist_formaction::set_head(const std::string& s, unsigned int unread, un
 	char buf[1024];
 	snprintf(buf, sizeof(buf), _("Articles in feed '%s' (%u unread, %u total) - %s"), s.c_str(), unread, total, url.c_str());
 	f->set("head", buf);
+}
+
+bool itemlist_formaction::jump_to_next_unread_item() {
+	std::vector<rss_item>& items = feed->items();
+	unsigned int pos;
+	std::istringstream is(f->get("itempos"));
+	is >> pos;
+	for (unsigned int i=pos+1;i<items.size();++i) {
+		if (items[i].unread()) {
+			std::ostringstream os;
+			os << i;
+			f->set("itempos", os.str());
+			return true;
+		}
+	}
+	for (unsigned int i=0;i<=pos;++i) {
+		if (items[i].unread()) {
+			std::ostringstream os;
+			os << i;
+			f->set("itempos", os.str());
+			return true;
+		}
+	}
+	return false;
 }
 
 keymap_hint_entry * itemlist_formaction::get_keymap_hint() {

@@ -18,10 +18,11 @@ class itemlist_formaction : public formaction {
 	private:
 		void set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);
 
+		bool jump_to_next_unread_item();
+
 		rss_feed * feed;
 		unsigned int pos;
 		bool rebuild_list;
-		bool show_no_unread_error;
 };
 
 }
