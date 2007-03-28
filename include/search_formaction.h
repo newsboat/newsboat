@@ -15,7 +15,6 @@ class search_formaction : public formaction {
 		virtual keymap_hint_entry * get_keymap_hint();
 		inline void set_feedurl(const std::string& f) { feedurl = f; }
 	private:
-		bool quit;
 		bool set_listfocus;
 		std::string feedurl;
 		std::vector<rss_item> items;

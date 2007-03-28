@@ -43,7 +43,6 @@ namespace newsbeuter {
 			void set_tags(const std::vector<std::string>& t);
 			void pop_current_formaction();
 
-
 			void write_item(const rss_item& item, const std::string& filename);
 
 			void push_itemlist(unsigned int pos);
@@ -55,29 +54,13 @@ namespace newsbeuter {
 			std::string run_filebrowser(filebrowser_type type, const std::string& default_filename = "", const std::string& dir = "");
 			std::string select_tag(const std::vector<std::string>& tags);
 
-			void render_source(std::vector<std::string>& lines, std::string desc, unsigned int width);
 			void open_in_browser(const std::string& url);
 
-			std::string fancy_quote(const std::string& s);
-			std::string fancy_unquote(const std::string& s);
-			std::string add_file(std::string filename);
 			std::string get_filename_suggestion(const std::string& s);
 
 		protected:
 			bool jump_to_next_unread_item(std::vector<rss_item>& items, bool begin_with_next);
 			bool jump_to_next_unread_feed(bool begin_with_next);
-			
-			void set_itemview_head(const std::string& s);
-			
-			std::string get_rwx(unsigned short val);
-
-			
-			struct keymap_hint_entry {
-				operation op; 
-				char * text;
-			};
-
-			std::string prepare_keymaphint(keymap_hint_entry * hints);
 
 			controller * ctrl;
 
@@ -95,9 +78,9 @@ namespace newsbeuter {
 			urlview_formaction * urlview;
 			selecttag_formaction * selecttag;
 			search_formaction * search;
-			
+
 			std::list<formaction *> formaction_stack;
-			
+
 			unsigned int feeds_shown;
 	};
 

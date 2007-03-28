@@ -21,6 +21,13 @@ class filebrowser_formaction : public formaction {
 		inline void set_type(filebrowser_type t) { type = t; }
 
 	private:
+
+		std::string fancy_quote(const std::string& s);
+		std::string fancy_unquote(const std::string& s);
+		std::string add_file(std::string filename);
+		std::string get_filename_suggestion(const std::string& s);
+		std::string get_rwx(unsigned short val);
+
 		bool quit;
 		std::string cwd;
 		std::string dir;

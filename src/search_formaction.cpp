@@ -8,11 +8,12 @@
 namespace newsbeuter {
 
 search_formaction::search_formaction(view * vv, std::string formstr)
-	: formaction(vv, formstr), quit(false), set_listfocus(false) { }
+	: formaction(vv, formstr), set_listfocus(false) { }
 
 search_formaction::~search_formaction() { }
 
 void search_formaction::process_operation(operation op) {
+	bool quit = false;
 	switch (op) {
 		case OP_OPEN: {
 				std::string querytext = f->get("querytext");
@@ -124,7 +125,6 @@ void search_formaction::init() {
 	f->modify("results","replace_inner","{list}");
 	f->set_focus("query");
 	do_redraw = true;
-	quit = false;
 	items.erase(items.begin(), items.end());
 }
 

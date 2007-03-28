@@ -197,126 +197,6 @@ void view::write_item(const rss_item& item, const std::string& filename) {
 	}
 }
 
-std::string view::get_rwx(unsigned short val) {
-	std::string str;
-	for (int i=0;i<3;++i) {
-		unsigned char bits = val % 8;
-		val /= 8;
-		switch (bits) {
-			case 0:
-				str = std::string("---") + str;
-				break;
-			case 1:
-				str = std::string("--x") + str;
-				break;
-			case 2:
-				str = std::string("-w-") + str;
-				break;
-			case 3:
-				str = std::string("-wx") + str;
-				break;
-			case 4:
-				str = std::string("r--") + str;
-				break;
-			case 5:
-				str = std::string("r-x") + str;
-				break;
-			case 6:
-				str = std::string("rw-") + str;
-				break;
-			case 7:
-				str = std::string("rwx") + str;
-		}	
-	}
-	return str;
-}
-
-std::string view::fancy_quote(const std::string& s) {
-	std::string x;
-	for (unsigned int i=0;i<s.length();++i) {
-		if (s[i] != ' ') {
-			x.append(1,s[i]);
-		} else {
-			x.append(1,'/');
-		}	
-	}	
-	return x;
-}
-
-std::string view::fancy_unquote(const std::string& s) {
-	std::string x;
-	for (unsigned int i=0;i<s.length();++i) {
-		if (s[i] != '/') {
-			x.append(1,s[i]);
-		} else {
-			x.append(1,' ');
-		}	
-	}	
-	return x;	
-}
-
-std::string view::add_file(std::string filename) {
-	std::string retval;
-	struct stat sb;
-	if (::stat(filename.c_str(),&sb)==0) {
-		char type = '?';
-		if (sb.st_mode & S_IFREG)
-			type = '-';
-		else if (sb.st_mode & S_IFDIR)
-			type = 'd';
-		else if (sb.st_mode & S_IFBLK)
-			type = 'b';
-		else if (sb.st_mode & S_IFCHR)
-			type = 'c';
-		else if (sb.st_mode & S_IFIFO)
-			type = 'p';
-		else if (sb.st_mode & S_IFLNK)
-			type = 'l';
-			
-		std::string rwxbits = get_rwx(sb.st_mode & 0777);
-		std::string owner = "????????", group = "????????";
-		
-		struct passwd * spw = getpwuid(sb.st_uid);
-		if (spw) {
-			owner = spw->pw_name;
-			for (int i=owner.length();i<8;++i) {
-				owner.append(" ");	
-			}	
-		}
-		struct group * sgr = getgrgid(sb.st_gid);
-		if (sgr) {
-			group = sgr->gr_name;
-			for (int i=group.length();i<8;++i) {
-				group.append(" ");
-			}
-		}
-		
-		std::ostringstream os;
-		os << std::setw(12) << sb.st_size;
-		std::string sizestr = os.str();
-		
-		std::string line;
-		line.append(1,type);
-		line.append(rwxbits);
-		line.append(" ");
-		line.append(owner);
-		line.append(" ");
-		line.append(group);
-		line.append(" ");
-		line.append(sizestr);
-		line.append(" ");
-		line.append(filename);
-		
-		retval = "{listitem[";
-		retval.append(1,type);
-		retval.append(fancy_quote(filename));
-		retval.append("] text:");
-		retval.append(stfl::quote(line));
-		retval.append("}");
-	}
-	return retval;
-}
-
 #if 0
 bool view::jump_to_next_unread_feed(bool begin_with_next) {
 	std::string feedposname = feedlist_form.get("feedpos");
@@ -404,33 +284,6 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 	feedlist->set_feedlist(feeds);
 }
 
-void view::render_source(std::vector<std::string>& lines, std::string desc, unsigned int width) {
-	std::string line;
-	do {
-		std::string::size_type pos = desc.find_first_of("\r\n");
-		line = desc.substr(0,pos);
-		if (pos == std::string::npos)
-			desc.erase();
-		else
-			desc.erase(0,pos+1);
-		while (line.length() > width) {
-			int i = width;
-			while (i > 0 && line[i] != ' ' && line[i] != '<')
-				--i;
-			if (0 == i) {
-				i = width;
-			}
-			std::string subline = line.substr(0, i);
-			line.erase(0, i);
-			pos = subline.find_first_not_of(" ");
-			subline.erase(0,pos);
-			lines.push_back(subline);
-		}
-		pos = line.find_first_not_of(" ");
-		line.erase(0,pos);
-		lines.push_back(line);
-	} while (desc.length() > 0);
-}
 
 void view::set_tags(const std::vector<std::string>& t) {
 	feedlist->set_tags(t);
@@ -476,6 +329,7 @@ std::string view::select_tag(const std::vector<std::string>& tags) {
 
 void view::run_search(const std::string& feedurl) {
 	search->set_feedurl(feedurl);
+	search->init();
 	formaction_stack.push_front(search);
 }
 

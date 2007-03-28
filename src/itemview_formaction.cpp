@@ -99,7 +99,7 @@ void itemview_formaction::prepare() {
 		}
 
 		if (show_source) {
-			v->render_source(lines, item.description(), render_width);
+			render_source(lines, item.description(), render_width);
 		} else {
 			htmlrenderer rnd(render_width);
 			rnd.render(item.description(), lines, links, item.feedurl());
@@ -208,6 +208,34 @@ void itemview_formaction::set_head(const std::string& s) {
 	char buf[1024];
 	snprintf(buf, sizeof(buf), _("Article '%s'"), s.c_str());
 	f->set("head",buf);
+}
+
+void itemview_formaction::render_source(std::vector<std::string>& lines, std::string desc, unsigned int width) {
+	std::string line;
+	do {
+		std::string::size_type pos = desc.find_first_of("\r\n");
+		line = desc.substr(0,pos);
+		if (pos == std::string::npos)
+			desc.erase();
+		else
+			desc.erase(0,pos+1);
+		while (line.length() > width) {
+			int i = width;
+			while (i > 0 && line[i] != ' ' && line[i] != '<')
+				--i;
+			if (0 == i) {
+				i = width;
+			}
+			std::string subline = line.substr(0, i);
+			line.erase(0, i);
+			pos = subline.find_first_not_of(" ");
+			subline.erase(0,pos);
+			lines.push_back(subline);
+		}
+		pos = line.find_first_not_of(" ");
+		line.erase(0,pos);
+		lines.push_back(line);
+	} while (desc.length() > 0);
 }
 
 

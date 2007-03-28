@@ -20,6 +20,8 @@ class itemview_formaction : public formaction {
 	private:
 		void set_head(const std::string& s);
 
+		void render_source(std::vector<std::string>& lines, std::string desc, unsigned int width);
+
 		std::string guid;
 		rss_feed * feed;
 		bool show_source;
