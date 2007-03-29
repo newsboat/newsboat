@@ -172,7 +172,7 @@ std::string utils::convert_text(const std::string& text, const std::string& toco
 	if (tocode == fromcode)
 		return text;
 
-	iconv_t cd = ::iconv_open(tocode.c_str(), fromcode.c_str());
+	iconv_t cd = ::iconv_open((tocode + "//TRANSLIT").c_str(), fromcode.c_str());
 
 	if (cd == (iconv_t)-1)
 		return result;
