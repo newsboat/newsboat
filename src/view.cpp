@@ -89,10 +89,14 @@ void view::set_keymap(keymap * k) {
 
 void view::set_status(const char * msg) {
 	mtx->lock();
+	GetLogger().log(LOG_DEBUG, "view::set_status: after mtx->lock; formaction_stack.size = %u", formaction_stack.size());
 	if (formaction_stack.size() > 0 && (*formaction_stack.begin()) != NULL) {
-		stfl::form& form = (*formaction_stack.begin())->get_form();
-		form.set("msg",msg);
-		form.run(-1);
+		stfl::form * form = (*formaction_stack.begin())->get_form();
+		GetLogger().log(LOG_DEBUG, "view::set_status: form = %p", form);
+		form->set("msg",msg);
+		GetLogger().log(LOG_DEBUG, "view::set_status: after form.set");
+		form->run(-1);
+		GetLogger().log(LOG_DEBUG, "view::set_status: after form.run");
 	}
 	mtx->unlock();
 }
@@ -111,8 +115,8 @@ void view::run() {
 
 		fa->prepare();
 
-		const char * event = fa->get_form().run(0);
-		if (!event) continue;
+		const char * event = fa->get_form()->run(1000);
+		if (!event || strcmp(event,"TIMEOUT")==0) continue;
 
 		operation op = keys->get_operation(event);
 
@@ -133,8 +137,8 @@ std::string view::run_modal(formaction * f, const std::string& value) {
 
 		fa->prepare();
 
-		const char * event = fa->get_form().run(0);
-		if (!event) continue;
+		const char * event = fa->get_form()->run(1000);
+		if (!event || strcmp(event,"TIMEOUT")==0) continue;
 
 		operation op = keys->get_operation(event);
 
@@ -212,7 +216,9 @@ void view::open_in_browser(const std::string& url) {
 }
 
 void view::set_feedlist(std::vector<rss_feed>& feeds) {
+	mtx->lock();
 	feedlist->set_feedlist(feeds);
+	mtx->unlock();
 }
 
 

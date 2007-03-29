@@ -269,6 +269,7 @@ void controller::mark_all_read(unsigned int pos) {
 }
 
 void controller::reload(unsigned int pos, unsigned int max) {
+	GetLogger().log(LOG_DEBUG, "controller::reload: pos = %u max = %u", pos, max);
 	char msgbuf[1024];
 	if (pos < feeds.size()) {
 		rss_feed feed = feeds[pos];
@@ -285,15 +286,21 @@ void controller::reload(unsigned int pos, unsigned int max) {
 			msg.append(") ");
 		}
 		snprintf(msgbuf, sizeof(msgbuf), _("%sLoading %s..."), msg.c_str(), feed.rssurl().c_str());
+		GetLogger().log(LOG_DEBUG, "controller::reload: before setting status");
 		v->set_status(msgbuf);
+		GetLogger().log(LOG_DEBUG, "controller::reload: after setting status");
 				
 		rss_parser parser(feed.rssurl().c_str(), rsscache, cfg);
+		GetLogger().log(LOG_DEBUG, "controller::reload: created parser");
 		try {
 			feed = parser.parse();
+			GetLogger().log(LOG_DEBUG, "controller::reload: after parser.parse");
 			
 			rsscache->externalize_rssfeed(feed);
+			GetLogger().log(LOG_DEBUG, "controller::reload: after externalize_rssfeed");
 
 			rsscache->internalize_rssfeed(feed);
+			GetLogger().log(LOG_DEBUG, "controller::reload: after internalize_rssfeed");
 			feed.set_tags(urlcfg.get_tags(feed.rssurl()));
 			feeds[pos] = feed;
 
@@ -311,6 +318,7 @@ void controller::reload(unsigned int pos, unsigned int max) {
 
 			
 			v->set_feedlist(feeds);
+			GetLogger().log(LOG_DEBUG, "controller::reload: after set_feedlist");
 			v->set_status("");
 		} catch (const std::string& errmsg) {
 			char buf[1024];
@@ -330,7 +338,9 @@ rss_feed * controller::get_feed(unsigned int pos) {
 }
 
 void controller::reload_all() {
+	GetLogger().log(LOG_DEBUG,"controller::reload_all: starting with reload all...");
 	for (unsigned int i=0;i<feeds.size();++i) {
+		GetLogger().log(LOG_DEBUG, "controller::reload_all: reloading feed #%u", i);
 		this->reload(i,feeds.size());
 	}
 }
@@ -471,7 +481,8 @@ rss_feed * controller::get_feed_by_url(const std::string& feedurl) {
 }
 
 bool controller::is_valid_podcast_type(const std::string& mimetype) {
-	return mimetype == "audio/mpeg" || mimetype == "video/x-m4v" || mimetype == "audio/x-mpeg";
+	return true;
+	// return mimetype == "audio/mpeg" || mimetype == "video/x-m4v" || mimetype == "audio/x-mpeg";
 }
 
 void controller::enqueue_url(const std::string& url) {

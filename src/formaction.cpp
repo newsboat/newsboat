@@ -15,8 +15,8 @@ formaction::~formaction() {
 	delete f;
 }
 
-stfl::form& formaction::get_form() {
-	return *f;
+stfl::form * formaction::get_form() {
+	return f;
 }
 
 std::string formaction::prepare_keymap_hint(keymap_hint_entry * hints) {
