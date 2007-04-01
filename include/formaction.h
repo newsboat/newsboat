@@ -24,7 +24,7 @@ class formaction {
 		virtual void process_operation(operation op) = 0;
 		virtual void prepare() = 0;
 		virtual void init() = 0;
-		stfl::form& get_form();
+		stfl::form * get_form();
 		inline void set_redraw(bool b) { do_redraw = b; }
 
 		virtual keymap_hint_entry * get_keymap_hint() = 0;
