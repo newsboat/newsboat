@@ -1,7 +1,7 @@
 #include <feedlist_formaction.h>
 #include <view.h>
 #include <config.h>
-#include <assert.h>
+#include <cassert>
 #include <logger.h>
 #include <reloadthread.h>
 
