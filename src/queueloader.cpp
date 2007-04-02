@@ -1,4 +1,5 @@
 #include <queueloader.h>
+#include <cstdlib>
 #include <logger.h>
 #include <fstream>
 #include <config.h>

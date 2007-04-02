@@ -1,5 +1,6 @@
 #include <cache.h>
 #include <sqlite3.h>
+#include <cstdlib>
 #include <configcontainer.h>
 
 #include <sstream>
