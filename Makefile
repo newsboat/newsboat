@@ -28,7 +28,7 @@ endif
 NEWSBEUTER=$(PACKAGE)
 NEWSBEUTER_SOURCES=$(shell cat newsbeuter.deps)
 NEWSBEUTER_OBJS=$(patsubst %.cpp,%.o,$(NEWSBEUTER_SOURCES))
-NEWSBEUTER_LIBS=-lstfl -lmrss -lnxml -lncursesw -lsqlite3 -lpthread
+NEWSBEUTER_LIBS=-lstfl -lmrss -lnxml -lncursesw -lsqlite3 -lpthread -lcurl
 
 
 PODBEUTER=podbeuter
@@ -37,8 +37,8 @@ PODBEUTER_OBJS=$(patsubst %.cpp,%.o,$(PODBEUTER_SOURCES))
 PODBEUTER_LIBS=-lstfl -lncursesw -lpthread -lcurl
 
 ifneq ($(shell uname -s),Linux)
-NEWSBEUTER_LIBS+=-lintl
-PODBEUTER_LIBS+=-lintl
+NEWSBEUTER_LIBS+=-liconv -lintl
+PODBEUTER_LIBS+=-liconv -lintl
 endif
 
 # additional commands
