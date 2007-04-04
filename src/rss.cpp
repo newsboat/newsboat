@@ -7,6 +7,8 @@
 #include <sstream>
 #include <iostream>
 #include <configcontainer.h>
+#include <curl/curl.h>
+#include <sys/utsname.h>
 
 #include <langinfo.h>
 
@@ -29,7 +31,12 @@ rss_feed rss_parser::parse() {
 		proxy_auth = const_cast<char *>(cfgcont->get_configvalue("proxy-auth").c_str());
 	}
 
-	mrss_options_t * options = mrss_options_new(30, proxy, proxy_auth, NULL, NULL, NULL, 0, NULL, USER_AGENT);
+	char user_agent[1024];
+	struct utsname buf;
+	uname(&buf);
+	snprintf(user_agent, sizeof(user_agent), "%s/%s (%s %s; %s; %s) %s", PROGRAM_NAME, PROGRAM_VERSION, buf.sysname, buf.release, buf.machine, PROGRAM_URL, curl_version());
+
+	mrss_options_t * options = mrss_options_new(30, proxy, proxy_auth, NULL, NULL, NULL, 0, NULL, user_agent);
 	mrss_error_t err = mrss_parse_url_with_options(const_cast<char *>(my_uri.c_str()), &mrss, options);
 	mrss_options_free(options);
 

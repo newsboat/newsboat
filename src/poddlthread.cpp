@@ -6,6 +6,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/utsname.h>
 #include <unistd.h>
 
 using namespace newsbeuter;
@@ -27,10 +28,12 @@ void poddlthread::run() {
 
 	CURL * easyhandle = curl_easy_init();
 
-	char ua[128];
-	snprintf(ua, sizeof(ua), "podbeuter - %s", USER_AGENT);
+	char user_agent[1024];
+	struct utsname buf;
+	uname(&buf);
+	snprintf(user_agent, sizeof(user_agent), "podbeuter/%s (%s %s; %s; %s) %s", PROGRAM_VERSION, buf.sysname, buf.release, buf.machine, PROGRAM_URL, curl_version());
 
-	curl_easy_setopt(easyhandle, CURLOPT_USERAGENT, ua);
+	curl_easy_setopt(easyhandle, CURLOPT_USERAGENT, user_agent);
 
 	curl_easy_setopt(easyhandle, CURLOPT_URL, dl->url());
 	// set up write functions:
