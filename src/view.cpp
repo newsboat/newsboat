@@ -292,7 +292,11 @@ bool view::get_next_unread() {
 void view::pop_current_formaction() {
 	formaction_stack.pop_front();
 	if (formaction_stack.size() > 0) {
-		(*formaction_stack.begin())->set_redraw(true);
+		formaction * f = (*formaction_stack.begin());
+		if (f) {
+			f->set_redraw(true);
+			f->get_form()->set("msg","");
+		}
 	}
 }
 
