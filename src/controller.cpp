@@ -38,6 +38,10 @@ void ctrl_c_action(int sig) {
 	::exit(EXIT_FAILURE);
 }
 
+void ignore_signal(int sig) {
+	GetLogger().log(LOG_WARN, "caught signal %d but ignored it", sig);
+}
+
 controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false), cfg(0) {
 	std::ostringstream cfgfile;
 
@@ -87,6 +91,7 @@ void controller::run(int argc, char * argv[]) {
 #ifndef DEBUG
 	::signal(SIGSEGV, ctrl_c_action);
 #endif
+	::signal(SIGPIPE, ignore_signal);
 
 	bool do_import = false, do_export = false;
 	std::string importfile;
