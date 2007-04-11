@@ -32,9 +32,14 @@ rss_feed rss_parser::parse() {
 	}
 
 	char user_agent[1024];
-	struct utsname buf;
-	uname(&buf);
-	snprintf(user_agent, sizeof(user_agent), "%s/%s (%s %s; %s; %s) %s", PROGRAM_NAME, PROGRAM_VERSION, buf.sysname, buf.release, buf.machine, PROGRAM_URL, curl_version());
+	std::string ua_pref = cfgcont->get_configvalue("user-agent");
+	if (ua_pref.length() == 0) {
+		struct utsname buf;
+		uname(&buf);
+		snprintf(user_agent, sizeof(user_agent), "%s/%s (%s %s; %s; %s) %s", PROGRAM_NAME, PROGRAM_VERSION, buf.sysname, buf.release, buf.machine, PROGRAM_URL, curl_version());
+	} else {
+		snprintf(user_agent, sizeof(user_agent), "%s", ua_pref.c_str());
+	}
 
 	mrss_options_t * options = mrss_options_new(30, proxy, proxy_auth, NULL, NULL, NULL, 0, NULL, user_agent);
 	mrss_error_t err = mrss_parse_url_with_options(const_cast<char *>(my_uri.c_str()), &mrss, options);

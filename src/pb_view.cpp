@@ -108,7 +108,7 @@ void pb_view::run() {
 					os >> idx;
 					if (idx != -1) {
 						if (ctrl->downloads()[idx].status() != DL_DOWNLOADING) {
-							poddlthread * thread = new poddlthread(&ctrl->downloads()[idx]);
+							poddlthread * thread = new poddlthread(&ctrl->downloads()[idx], ctrl->get_cfgcont());
 							thread->start();
 						}
 					}

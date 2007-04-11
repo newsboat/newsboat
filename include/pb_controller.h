@@ -41,6 +41,8 @@ namespace podbeuter {
 
 			void play_file(const std::string& str);
 
+			inline newsbeuter::configcontainer * get_cfgcont() { return cfg; }
+
 		private:
 			pb_view * v;
 			std::string config_file;

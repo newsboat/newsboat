@@ -217,7 +217,7 @@ void pb_controller::start_downloads() {
 	int dl2start = get_maxdownloads() - downloads_in_progress();
 	for (std::vector<download>::iterator it=downloads_.begin();dl2start > 0 && it!=downloads_.end();++it) {
 		if (it->status() == DL_QUEUED) {
-			poddlthread * thread = new poddlthread(&(*it));
+			poddlthread * thread = new poddlthread(&(*it), cfg);
 			thread->start();
 			--dl2start;
 		}

@@ -2,7 +2,8 @@ Changes for newsbeuter:
 
 0.4:
 	refactored view
-	introducted configuration option to disable cache cleanup (user request)
+	introduced configuration option to disable cache cleanup (user request)
+	introduced configuration option to set the HTTP user-agent header to a custom value
 
 0.3: (2007-03-36)
 	added gettext support

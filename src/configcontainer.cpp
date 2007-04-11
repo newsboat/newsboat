@@ -22,6 +22,7 @@ configcontainer::configcontainer()
 	config_data["podcast-auto-enqueue"] = "no";
 	config_data["player"] = "";
 	config_data["cleanup-on-quit"] = "yes";
+	config_data["user-agent"] = "";
 }
 
 configcontainer::~configcontainer()
@@ -44,6 +45,7 @@ void configcontainer::register_commands(configparser& cfgparser)
 	cfgparser.register_handler("podcast-auto-enqueue", this);
 	cfgparser.register_handler("player", this);
 	cfgparser.register_handler("cleanup-on-quit", this);
+	cfgparser.register_handler("user-agent", this);
 }
 
 action_handler_status configcontainer::handle_action(const std::string& action, const std::vector<std::string>& params) {
@@ -104,6 +106,12 @@ action_handler_status configcontainer::handle_action(const std::string& action, 
 		config_data[action] = params[0];
 		return AHS_OK;
 	} else if (action == "player") {
+		if (params.size() < 1) {
+			return AHS_TOO_FEW_PARAMS;
+		}
+		config_data[action] = params[0];
+		return AHS_OK;
+	} else if (action == "user-agent") {
 		if (params.size() < 1) {
 			return AHS_TOO_FEW_PARAMS;
 		}

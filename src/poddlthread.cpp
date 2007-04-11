@@ -16,7 +16,7 @@ namespace podbeuter {
 static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp);
 static int progress_callback(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow);
 
-poddlthread::poddlthread(download * dl_) : dl(dl_) {
+poddlthread::poddlthread(download * dl_, newsbeuter::configcontainer * c) : dl(dl_), cfg(c) {
 }
 
 poddlthread::~poddlthread() {
@@ -29,9 +29,14 @@ void poddlthread::run() {
 	CURL * easyhandle = curl_easy_init();
 
 	char user_agent[1024];
-	struct utsname buf;
-	uname(&buf);
-	snprintf(user_agent, sizeof(user_agent), "podbeuter/%s (%s %s; %s; %s) %s", PROGRAM_VERSION, buf.sysname, buf.release, buf.machine, PROGRAM_URL, curl_version());
+	std::string ua_pref = cfg->get_configvalue("user-agent");
+	if (ua_pref.length() == 0) {
+		struct utsname buf;
+		uname(&buf);
+		snprintf(user_agent, sizeof(user_agent), "podbeuter/%s (%s %s; %s; %s) %s", PROGRAM_VERSION, buf.sysname, buf.release, buf.machine, PROGRAM_URL, curl_version());
+	} else {
+		snprintf(user_agent, sizeof(user_agent), "%s", ua_pref.c_str());
+	}
 
 	curl_easy_setopt(easyhandle, CURLOPT_USERAGENT, user_agent);
 

@@ -9,7 +9,6 @@ TODO:
 - research (and fix) libnxml decoding issues
 - make STFL and newsbeuter capable of correct handling of Unicode (currently, it crashes when entering cyrillic characters)
 - improve string handling (no more std::string() + std::string())
-- add configuration option to set a custom user-agent string
 
 longteam goals to reach:
 - add scripting support
@@ -78,3 +77,4 @@ DONE:
 - refactor view
 	- provide a function to "modally" run certain screens and return a certain value. we need this for select tag, search and file browser.
 - add configuration option to disable cleanup
+- add configuration option to set a custom user-agent string
