@@ -21,6 +21,7 @@ configcontainer::configcontainer()
 	config_data["max-downloads"] = "1";
 	config_data["podcast-auto-enqueue"] = "no";
 	config_data["player"] = "";
+	config_data["cleanup-on-quit"] = "yes";
 }
 
 configcontainer::~configcontainer()
@@ -42,11 +43,12 @@ void configcontainer::register_commands(configparser& cfgparser)
 	cfgparser.register_handler("max-downloads", this);
 	cfgparser.register_handler("podcast-auto-enqueue", this);
 	cfgparser.register_handler("player", this);
+	cfgparser.register_handler("cleanup-on-quit", this);
 }
 
 action_handler_status configcontainer::handle_action(const std::string& action, const std::vector<std::string>& params) {
 	GetLogger().log(LOG_DEBUG, "configcontainer::handle_action(%s,...) was called",action.c_str());
-	if (action == "show-read-feeds" || action == "auto-reload" || action == "podcast-auto-enqueue") {
+	if (action == "show-read-feeds" || action == "auto-reload" || action == "podcast-auto-enqueue" || action == "cleanup-on-quit") {
 		if (params.size() < 1) {
 			return AHS_TOO_FEW_PARAMS;
 		}

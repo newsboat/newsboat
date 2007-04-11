@@ -379,45 +379,51 @@ void cache::delete_item(const rss_item& item) {
 
 void cache::cleanup_cache(std::vector<rss_feed>& feeds) {
 	mtx->lock();
-	std::string list = "(";
-	int rc;
-	unsigned int i = 0;
-	unsigned int feed_size = feeds.size();
 
-	for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it,++i) {
-		std::string name = prepare_query("'%q'",it->rssurl().c_str());
-		list.append(name);
-		if (i < feed_size-1) {
-			list.append(", ");
+	if (cfg->get_configvalue_as_bool("cleanup-on-quit")==true) {
+		GetLogger().log(LOG_DEBUG,"cache::cleanup_cache: cleaning up cache...");
+		std::string list = "(";
+		int rc;
+		unsigned int i = 0;
+		unsigned int feed_size = feeds.size();
+
+		for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it,++i) {
+			std::string name = prepare_query("'%q'",it->rssurl().c_str());
+			list.append(name);
+			if (i < feed_size-1) {
+				list.append(", ");
+			}
 		}
+		list.append(")");
+
+		std::string cleanup_rss_feeds_statement = std::string("DELETE FROM rss_feed WHERE rssurl NOT IN ") + list + ";";
+		std::string cleanup_rss_items_statement = std::string("DELETE FROM rss_item WHERE feedurl NOT IN ") + list + ";";
+
+		// std::cerr << "statements: " << cleanup_rss_feeds_statement << " " << cleanup_rss_items_statement << std::endl;
+
+		GetLogger().log(LOG_DEBUG,"running query: %s", cleanup_rss_feeds_statement.c_str());
+		rc = sqlite3_exec(db,cleanup_rss_feeds_statement.c_str(),NULL,NULL,NULL);
+		if (rc != SQLITE_OK) {
+			GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", cleanup_rss_feeds_statement.c_str(), rc);
+		}
+		assert(rc == SQLITE_OK);
+
+		GetLogger().log(LOG_DEBUG,"running query: %s", cleanup_rss_items_statement.c_str());
+		rc = sqlite3_exec(db,cleanup_rss_items_statement.c_str(),NULL,NULL,NULL);
+		if (rc != SQLITE_OK) {
+			GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", cleanup_rss_items_statement.c_str(), rc);
+		}
+		assert(rc == SQLITE_OK);
+
+		// rc = sqlite3_exec(db,"VACUUM;",NULL,NULL,NULL);
+		// assert(rc == SQLITE_OK);
+
+		// WARNING: THE MISSING UNLOCK OPERATION IS MISSING FOR A PURPOSE!
+		// It's missing so that no database operation can occur after the cache cleanup!
+		// mtx->unlock();
+	} else {
+		GetLogger().log(LOG_DEBUG,"cache::cleanup_cache: NOT cleaning up cache...");
 	}
-	list.append(")");
-
-	std::string cleanup_rss_feeds_statement = std::string("DELETE FROM rss_feed WHERE rssurl NOT IN ") + list + ";";
-	std::string cleanup_rss_items_statement = std::string("DELETE FROM rss_item WHERE feedurl NOT IN ") + list + ";";
-
-	// std::cerr << "statements: " << cleanup_rss_feeds_statement << " " << cleanup_rss_items_statement << std::endl;
-
-	GetLogger().log(LOG_DEBUG,"running query: %s", cleanup_rss_feeds_statement.c_str());
-	rc = sqlite3_exec(db,cleanup_rss_feeds_statement.c_str(),NULL,NULL,NULL);
-	if (rc != SQLITE_OK) {
-		GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", cleanup_rss_feeds_statement.c_str(), rc);
-	}
-	assert(rc == SQLITE_OK);
-
-	GetLogger().log(LOG_DEBUG,"running query: %s", cleanup_rss_items_statement.c_str());
-	rc = sqlite3_exec(db,cleanup_rss_items_statement.c_str(),NULL,NULL,NULL);
-	if (rc != SQLITE_OK) {
-		GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", cleanup_rss_items_statement.c_str(), rc);
-	}
-	assert(rc == SQLITE_OK);
-
-	// rc = sqlite3_exec(db,"VACUUM;",NULL,NULL,NULL);
-	// assert(rc == SQLITE_OK);
-
-	// WARNING: THE MISSING UNLOCK OPERATION IS MISSING FOR A PURPOSE!
-	// It's missing so that no database operation can occur after the cache cleanup!
-	// mtx->unlock();
 }
 
 void cache::update_rssitem(rss_item& item, const std::string& feedurl) {

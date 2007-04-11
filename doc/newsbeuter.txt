@@ -126,6 +126,7 @@ auto-reload|[yes/no]|no|If enabled, all feeds will be automatically reloaded at 
 reload-time|<number>|30|The number of minutes between automatic reloads.|reload-time 60
 save-path|<path>|~/|The default path where articles shall be saved to. If an invalid path is specified, the current directory is used.|save-path "~/Saved Articles"
 podcast-auto-enqueue|[yes/no]|no|If yes, then all podcast URLs that are found in articles are added to the podcast download queue. See below for more information on podcast support in newsbeuter.|podcast-auto-enqueue yes
+cleanup-on-quit|[yes/no]|yes|If yes, then the cache gets locked and superfluous feeds and items are removed, such as feeds that can't be found in the urls configuration file anymore.|cleanup-on-quit no
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .Available Operations

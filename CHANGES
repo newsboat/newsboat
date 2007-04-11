@@ -1,7 +1,8 @@
 Changes for newsbeuter:
 
 0.4:
-	refactored view (work in progress)
+	refactored view
+	introducted configuration option to disable cache cleanup (user request)
 
 0.3: (2007-03-36)
 	added gettext support
