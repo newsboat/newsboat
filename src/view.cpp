@@ -229,10 +229,14 @@ void view::set_tags(const std::vector<std::string>& t) {
 void view::push_itemlist(unsigned int pos) {
 	rss_feed * feed = ctrl->get_feed(pos);
 	GetLogger().log(LOG_DEBUG, "view::push_itemlist: retrieved feed at position %d (address = %p)", pos, feed);
-	itemlist->set_feed(feed);
-	itemlist->set_pos(pos);
-	itemlist->init();
-	formaction_stack.push_front(itemlist);
+	if (feed->items().size() > 0) {
+		itemlist->set_feed(feed);
+		itemlist->set_pos(pos);
+		itemlist->init();
+		formaction_stack.push_front(itemlist);
+	} else {
+		show_error(_("Error: feed contains no items!"));
+	}
 }
 
 void view::push_itemview(rss_feed * f, const std::string& guid) {
