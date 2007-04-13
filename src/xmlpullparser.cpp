@@ -136,7 +136,7 @@ xmlpullparser::event xmlpullparser::next() {
 								text.erase(text.length()-1, 1);
 						}
 					} else {
-						throw xmlexception(_("empty tag found"));
+						// throw xmlexception(_("empty tag found"));
 					}
 					current_event = determine_tag_type();
 				}
@@ -167,7 +167,7 @@ xmlpullparser::event xmlpullparser::next() {
 									text.erase(text.length()-1, 1);
 							}
 						} else {
-							throw xmlexception(_("empty tag found"));
+							// throw xmlexception(_("empty tag found"));
 						}
 						current_event = determine_tag_type();
 					} else {
@@ -208,9 +208,9 @@ xmlpullparser::event xmlpullparser::next() {
 							text.erase(text.length()-1, 1);
 					}
 				} else {
-					throw xmlexception(_("empty tag found"));
+					// throw xmlexception(_("empty tag found"));
 				}
-				current_event = determine_tag_type();	
+				current_event = determine_tag_type();
 			}
 			break;
 		case END_DOCUMENT:	
