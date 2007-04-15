@@ -211,10 +211,18 @@ void cache::populate_tables() {
 	GetLogger().log(LOG_DEBUG, "cache::populate_tables: ALTER TABLE rss_item (3) rc = %d", rc);
 
 	rc = sqlite3_exec(db, "CREATE INDEX IF NOT EXISTS idx_rssurl ON rss_feed(rssurl);", NULL, NULL, NULL);
-	GetLogger().log(LOG_DEBUG, "cache::populate_tables: CREATE INDEX ON rss_feed (4) rc = %d", rc);
+	GetLogger().log(LOG_DEBUG, "cache::populate_tables: CREATE INDEX ON rss_feed(rssurl) (4) rc = %d", rc);
 
 	rc = sqlite3_exec(db, "CREATE INDEX IF NOT EXISTS idx_guid ON rss_item(guid);", NULL, NULL, NULL);
-	GetLogger().log(LOG_DEBUG, "cache::populate_tables: CREATE INDEX ON rss_item (4) rc = %d", rc);
+	GetLogger().log(LOG_DEBUG, "cache::populate_tables: CREATE INDEX ON rss_item(guid) (5) rc = %d", rc);
+
+	rc = sqlite3_exec(db, "CREATE INDEX IF NOT EXISTS idx_feedurl ON rss_item(feedurl);", NULL, NULL, NULL);
+	GetLogger().log(LOG_DEBUG, "cache::populate_tables: CREATE INDEX ON rss_item(feedurl) (5) rc = %d", rc);
+	if(rc == SQLITE_OK){
+		/* we analyse the indices for better statistics */
+		rc = sqlite3_exec(db, "ANALYZE;", NULL, NULL, NULL);
+		GetLogger().log(LOG_DEBUG, "cache::populate_tables: ANALYZE indices (6) rc = %d", rc);
+	}
 }
 
 
