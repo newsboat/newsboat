@@ -233,8 +233,8 @@ void controller::run(int argc, char * argv[]) {
 
 	// if the user wants to refresh on startup via configuration file, then do so,
 	// but only if -r hasn't been supplied.
-	if (!refresh_on_startup && cfg->get_configvalue_as_bool("refresh-on-startup")) {
-		refresh_on_startup = true;
+	if (!refresh_on_start && cfg->get_configvalue_as_bool("refresh-on-startup")) {
+		refresh_on_start = true;
 	}
 
 	v->set_config_container(cfg);

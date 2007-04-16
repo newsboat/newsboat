@@ -129,6 +129,7 @@ podcast-auto-enqueue|[yes/no]|no|If yes, then all podcast URLs that are found in
 cleanup-on-quit|[yes/no]|yes|If yes, then the cache gets locked and superfluous feeds and items are removed, such as feeds that can't be found in the urls configuration file anymore.|cleanup-on-quit no
 user-agent|<user agent string>|""|If set to a non-zero-length string, this value will be used as HTTP User-Agent header for all HTTP requests.|user-agent "Lynx/2.8.5rel.1 libwww-FM/2.14"
 refresh-on-startup|[yes/no]|no|If yes, then all feeds will be reloaded when newsbeuter starts up. This is equivalent to the -r commandline option.|refresh-on-startup yes
+suppress-first-reload|[yes/no]|no|If yes, then the first automatic reload will be suppressed if auto-reload is set to yes.|suppress-first-reload yes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .Available Operations

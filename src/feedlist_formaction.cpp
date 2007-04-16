@@ -26,7 +26,7 @@ void feedlist_formaction::init() {
 	unsigned int reload_cycle = 60 * static_cast<unsigned int>(v->get_cfg()->get_configvalue_as_int("reload-time"));
 	if (v->get_cfg()->get_configvalue_as_bool("auto-reload") == true) {
 		f->run(-1);
-		reloadthread  * rt = new reloadthread(v->get_ctrl(), reload_cycle);
+		reloadthread  * rt = new reloadthread(v->get_ctrl(), reload_cycle, v->get_cfg());
 		rt->start();
 	}
 }

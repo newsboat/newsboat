@@ -26,6 +26,7 @@ configcontainer::configcontainer()
 	config_data["cleanup-on-quit"] = "yes";
 	config_data["user-agent"] = "";
 	config_data["refresh-on-startup"] = "no";
+	config_data["suppress-first-reload"] = "no";
 }
 
 configcontainer::~configcontainer()
@@ -51,13 +52,14 @@ void configcontainer::register_commands(configparser& cfgparser)
 	cfgparser.register_handler("cleanup-on-quit", this);
 	cfgparser.register_handler("user-agent", this);
 	cfgparser.register_handler("refresh-on-startup", this);
+	cfgparser.register_handler("suppress-first-reload", this);
 }
 
 action_handler_status configcontainer::handle_action(const std::string& action, const std::vector<std::string>& params) {
 	// handle the action when a configuration command has been encountered
 	// TODO: refactor this
 	GetLogger().log(LOG_DEBUG, "configcontainer::handle_action(%s,...) was called",action.c_str());
-	if (action == "show-read-feeds" || action == "auto-reload" || action == "podcast-auto-enqueue" || action == "cleanup-on-quit" || action == "refresh-on-startup") {
+	if (action == "show-read-feeds" || action == "auto-reload" || action == "podcast-auto-enqueue" || action == "cleanup-on-quit" || action == "refresh-on-startup" || action == "suppress-first-reload") {
 		if (params.size() < 1) {
 			return AHS_TOO_FEW_PARAMS;
 		}
