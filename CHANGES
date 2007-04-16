@@ -4,9 +4,9 @@ Changes for newsbeuter:
 	refactored view
 	introduced configuration option to disable cache cleanup (user request)
 	introduced configuration option to set the HTTP user-agent header to a custom value
-	significant speed improvement for reload (by Jürgen Jung)
+	significant speed improvement for reload and cache cleanup (by Jürgen Jung)
 
-0.3: (2007-03-36)
+0.3 (2007-03-26):
 	added gettext support
 	added podcast support
 	changed handling of encoding - now, everything is stored as UTF-8 internally, and gets converted on-the-fly
