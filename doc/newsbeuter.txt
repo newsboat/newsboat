@@ -128,6 +128,7 @@ save-path|<path>|~/|The default path where articles shall be saved to. If an inv
 podcast-auto-enqueue|[yes/no]|no|If yes, then all podcast URLs that are found in articles are added to the podcast download queue. See below for more information on podcast support in newsbeuter.|podcast-auto-enqueue yes
 cleanup-on-quit|[yes/no]|yes|If yes, then the cache gets locked and superfluous feeds and items are removed, such as feeds that can't be found in the urls configuration file anymore.|cleanup-on-quit no
 user-agent|<user agent string>|""|If set to a non-zero-length string, this value will be used as HTTP User-Agent header for all HTTP requests.|user-agent "Lynx/2.8.5rel.1 libwww-FM/2.14"
+refresh-on-startup|[yes/no]|no|If yes, then all feeds will be reloaded when newsbeuter starts up. This is equivalent to the -r commandline option.|refresh-on-startup yes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .Available Operations

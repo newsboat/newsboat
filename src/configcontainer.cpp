@@ -7,6 +7,8 @@
 namespace newsbeuter
 {
 
+// TODO: refactor this. having the configuration command literals scattered around the place several times is unacceptable
+
 configcontainer::configcontainer()
 {
 	// configure default values
@@ -23,6 +25,7 @@ configcontainer::configcontainer()
 	config_data["player"] = "";
 	config_data["cleanup-on-quit"] = "yes";
 	config_data["user-agent"] = "";
+	config_data["refresh-on-startup"] = "no";
 }
 
 configcontainer::~configcontainer()
@@ -31,6 +34,7 @@ configcontainer::~configcontainer()
 
 void configcontainer::register_commands(configparser& cfgparser)
 {
+	// register this as handler for the supported configuration commands
 	cfgparser.register_handler("show-read-feeds", this);
 	cfgparser.register_handler("browser", this);
 	cfgparser.register_handler("max-items", this);
@@ -46,11 +50,14 @@ void configcontainer::register_commands(configparser& cfgparser)
 	cfgparser.register_handler("player", this);
 	cfgparser.register_handler("cleanup-on-quit", this);
 	cfgparser.register_handler("user-agent", this);
+	cfgparser.register_handler("refresh-on-startup", this);
 }
 
 action_handler_status configcontainer::handle_action(const std::string& action, const std::vector<std::string>& params) {
+	// handle the action when a configuration command has been encountered
+	// TODO: refactor this
 	GetLogger().log(LOG_DEBUG, "configcontainer::handle_action(%s,...) was called",action.c_str());
-	if (action == "show-read-feeds" || action == "auto-reload" || action == "podcast-auto-enqueue" || action == "cleanup-on-quit") {
+	if (action == "show-read-feeds" || action == "auto-reload" || action == "podcast-auto-enqueue" || action == "cleanup-on-quit" || action == "refresh-on-startup") {
 		if (params.size() < 1) {
 			return AHS_TOO_FEW_PARAMS;
 		}

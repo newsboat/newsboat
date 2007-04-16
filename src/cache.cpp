@@ -38,6 +38,7 @@ static int count_callback(void * handler, int argc, char ** argv, char ** azColN
 
 static int rssfeed_callback(void * myfeed, int argc, char ** argv, char ** azColName) {
 	rss_feed * feed = (rss_feed *)myfeed;
+	// normaly, this shouldn't happen, but we keep the assert()s here nevertheless
 	assert(argc == 2);
 	assert(argv[0] != NULL);
 	assert(argv[1] != NULL);
@@ -139,6 +140,7 @@ cache::cache(const std::string& cachefile, configcontainer * c) : db(0),cfg(c), 
 		file_exists = true;
 	}
 	int error = sqlite3_open(cachefile.c_str(),&db);
+	// TODO: this should be refactored into an exception
 	if (error != SQLITE_OK) {
 		GetLogger().log(LOG_ERROR,"couldn't sqlite3_open(%s): error = %d", cachefile.c_str(), error);
 		char buf[1024];
@@ -147,10 +149,11 @@ cache::cache(const std::string& cachefile, configcontainer * c) : db(0),cfg(c), 
 		std::cout << buf << std::endl;
 		::exit(EXIT_FAILURE);
 	}
-	// if (!file_exists) {
+
 	populate_tables();
 	set_pragmas();
-	// }
+
+	// we need to manually lock all DB operations because SQLite has no explicit support for multithreading.
 	mtx = new mutex();
 }
 
@@ -162,6 +165,7 @@ cache::~cache() {
 void cache::set_pragmas() {
 	int rc;
 	
+	// first, we need to swithc off synchronous writing as it's slow as hell
 	rc = sqlite3_exec(db, "PRAGMA synchronous = OFF;", NULL, NULL, NULL);
 	
 	if (rc != SQLITE_OK) {
@@ -169,6 +173,7 @@ void cache::set_pragmas() {
 	}
 	assert(rc == SQLITE_OK);
 
+	// then we disable case-sensitive matching for the LIKE operator in SQLite, for search operations
 	rc = sqlite3_exec(db, "PRAGMA case_sensitive_like=OFF;", NULL, NULL, NULL);
 
 	if (rc != SQLITE_OK) {
@@ -210,6 +215,7 @@ void cache::populate_tables() {
 	rc = sqlite3_exec(db, "ALTER TABLE rss_item ADD enqueued INTEGER(1) NOT NULL DEFAULT 0;", NULL, NULL, NULL);
 	GetLogger().log(LOG_DEBUG, "cache::populate_tables: ALTER TABLE rss_item (3) rc = %d", rc);
 
+	/* create indexes to speed up certain queries */
 	rc = sqlite3_exec(db, "CREATE INDEX IF NOT EXISTS idx_rssurl ON rss_feed(rssurl);", NULL, NULL, NULL);
 	GetLogger().log(LOG_DEBUG, "cache::populate_tables: CREATE INDEX ON rss_feed(rssurl) (4) rc = %d", rc);
 
@@ -226,6 +232,7 @@ void cache::populate_tables() {
 }
 
 
+// this function writes an rss_feed including all rss_items to the database
 void cache::externalize_rssfeed(rss_feed& feed) {
 	mtx->lock();
 	std::ostringstream query;
@@ -265,8 +272,12 @@ void cache::externalize_rssfeed(rss_feed& feed) {
 	}
 }
 
+// this function reads an rss_feed including all of its rss_items.
+// the feed parameter needs to have the rssurl member set.
 void cache::internalize_rssfeed(rss_feed& feed) {
 	mtx->lock();
+
+	/* first, we check whether the feed is there at all */
 	std::string query = prepare_query("SELECT count(*) FROM rss_feed WHERE rssurl = '%q';",feed.rssurl().c_str());
 	cb_handler count_cbh;
 	GetLogger().log(LOG_DEBUG,"running query: %s",query.c_str());
@@ -281,6 +292,7 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 		return;
 	}
 
+	/* then we first read the feed from the database */
 	query = prepare_query("SELECT title, url FROM rss_feed WHERE rssurl = '%q';",feed.rssurl().c_str());
 	GetLogger().log(LOG_DEBUG,"running query: %s",query.c_str());
 	rc = sqlite3_exec(db,query.c_str(),rssfeed_callback,&feed,NULL);
@@ -293,6 +305,7 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 		feed.items().erase(feed.items().begin(),feed.items().end());
 	}
 
+	/* ...and then the associated items */
 	query = prepare_query("SELECT guid,title,author,url,pubDate,content,unread,feedurl,enclosure_url,enclosure_type,enqueued FROM rss_item WHERE feedurl = '%q' ORDER BY pubDate DESC, id DESC;",feed.rssurl().c_str());
 	GetLogger().log(LOG_DEBUG,"running query: %s",query.c_str());
 	rc = sqlite3_exec(db,query.c_str(),rssitem_callback,&feed,NULL);
@@ -394,6 +407,15 @@ void cache::delete_item(const rss_item& item) {
 void cache::cleanup_cache(std::vector<rss_feed>& feeds) {
 	mtx->lock();
 
+	/*
+	 * cache cleanup means that all entries in both the rss_feed and rss_item tables that are associated with
+	 * an RSS feed URL that is not contained in the current configuration are deleted.
+	 * Such entries are the result when a user deletes one or more lines in the urls configuration file. We
+	 * then assume that the user isn't interested anymore in reading this feed, and delete all associated entries
+	 * because they would be non-accessible.
+	 *
+	 * The behaviour whether the cleanup is done or not is configurable via the configuration file.
+	 */
 	if (cfg->get_configvalue_as_bool("cleanup-on-quit")==true) {
 		GetLogger().log(LOG_DEBUG,"cache::cleanup_cache: cleaning up cache...");
 		std::string list = "(";
@@ -440,6 +462,7 @@ void cache::cleanup_cache(std::vector<rss_feed>& feeds) {
 	}
 }
 
+/* this function writes an rss_item to the database, also checking whether this item already exists in the database */
 void cache::update_rssitem(rss_item& item, const std::string& feedurl) {
 	mtx->lock();
 	std::string query = prepare_query("SELECT count(*) FROM rss_item WHERE guid = '%q';",item.guid().c_str());
@@ -478,6 +501,7 @@ void cache::update_rssitem(rss_item& item, const std::string& feedurl) {
 	mtx->unlock();
 }
 
+/* this function marks all rss_items (optionally of a certain feed url) as read */
 void cache::catchup_all(const std::string& feedurl) {
 	mtx->lock();
 	std::string query;
@@ -495,6 +519,7 @@ void cache::catchup_all(const std::string& feedurl) {
 	mtx->unlock();
 }
 
+/* this function updates the unread and enqueued flags */
 void cache::update_rssitem_unread_and_enqueued(rss_item& item, const std::string& feedurl) {
 	mtx->lock();
 	std::string query = prepare_query("SELECT count(*) FROM rss_item WHERE guid = '%q';",item.guid().c_str());
@@ -531,6 +556,7 @@ void cache::update_rssitem_unread_and_enqueued(rss_item& item, const std::string
 	mtx->unlock();
 }
 
+/* helper function to wrap std::string around the sqlite3_*mprintf function */
 std::string cache::prepare_query(const char * format, ...) {
 	std::string result;
 	va_list ap;
