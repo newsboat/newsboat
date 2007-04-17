@@ -11,27 +11,27 @@
 namespace newsbeuter
 {
 
-// TODO: refactor this. having the configuration command literals scattered around the place several times is unacceptable
-
 configcontainer::configcontainer()
 {
-	// configure default values
-	config_data["show-read-feeds"] = "yes";
-	config_data["browser"] = "lynx";
-	config_data["use-proxy"] = "no";
-	config_data["auto-reload"] = "no";
-	config_data["reload-time"] = "30";
-	config_data["max-items"] = "0";
-	config_data["save-path"] = "~/";
-	config_data["download-path"] = "~/";
-	config_data["max-downloads"] = "1";
-	config_data["podcast-auto-enqueue"] = "no";
-	config_data["player"] = "";
-	config_data["cleanup-on-quit"] = "yes";
-	config_data["user-agent"] = "";
-	config_data["refresh-on-startup"] = "no";
-	config_data["suppress-first-reload"] = "no";
-	config_data["cache-file"] = "";
+	// create the config options and set their resp. default value and type
+	config_data["show-read-feeds"] = configdata("yes", configdata::BOOL);
+	config_data["browser"]         = configdata("lynx", configdata::PATH);
+	config_data["use-proxy"]       = configdata("no", configdata::BOOL);
+	config_data["auto-reload"]     = configdata("no", configdata::BOOL);
+	config_data["reload-time"]     = configdata("30", configdata::INT);
+	config_data["max-items"]       = configdata("0", configdata::INT);
+	config_data["save-path"]       = configdata("~/", configdata::PATH);
+	config_data["download-path"]   = configdata("~/", configdata::PATH);
+	config_data["max-downloads"]   = configdata("1", configdata::INT);
+	config_data["podcast-auto-enqueue"] = configdata("no", configdata::BOOL);
+	config_data["player"]          = configdata("", configdata::PATH);
+	config_data["cleanup-on-quit"] = configdata("yes", configdata::BOOL);
+	config_data["user-agent"]      = configdata("", configdata::STR);
+	config_data["refresh-on-startup"] = configdata("no", configdata::BOOL);
+	config_data["suppress-first-reload"] = configdata("no", configdata::BOOL);
+	config_data["cache-file"]      = configdata("", configdata::PATH);
+	config_data["proxy"]           = configdata("", configdata::STR);
+	config_data["proxy-auth"]      = configdata("", configdata::STR);
 }
 
 configcontainer::~configcontainer()
@@ -40,95 +40,89 @@ configcontainer::~configcontainer()
 
 void configcontainer::register_commands(configparser& cfgparser)
 {
-	// register this as handler for the supported configuration commands
-	cfgparser.register_handler("show-read-feeds", this);
-	cfgparser.register_handler("browser", this);
-	cfgparser.register_handler("max-items", this);
-	cfgparser.register_handler("use-proxy", this);
-	cfgparser.register_handler("proxy", this);
-	cfgparser.register_handler("proxy-auth", this);
-	cfgparser.register_handler("auto-reload", this);
-	cfgparser.register_handler("reload-time", this);
-	cfgparser.register_handler("save-path", this);
-	cfgparser.register_handler("download-path", this);
-	cfgparser.register_handler("max-downloads", this);
-	cfgparser.register_handler("podcast-auto-enqueue", this);
-	cfgparser.register_handler("player", this);
-	cfgparser.register_handler("cleanup-on-quit", this);
-	cfgparser.register_handler("user-agent", this);
-	cfgparser.register_handler("refresh-on-startup", this);
-	cfgparser.register_handler("suppress-first-reload", this);
-	cfgparser.register_handler("cache-file", this);
+	// this registers the config options defined above in the configuration parser
+	// -> if the resp. config option is encountered, it is passed to the configcontainer
+	for (std::map<std::string,configdata>::iterator it=config_data.begin();it!=config_data.end();++it) {
+		cfgparser.register_handler(it->first, this);
+	}
 }
 
 action_handler_status configcontainer::handle_action(const std::string& action, const std::vector<std::string>& params) {
-	// handle the action when a configuration command has been encountered
-	GetLogger().log(LOG_DEBUG, "configcontainer::handle_action(%s,...) was called",action.c_str());
+	configdata& cfgdata = config_data[action];
 
-	// the bool configuration values
-	if (action == "show-read-feeds" || action == "auto-reload" || action == "podcast-auto-enqueue" || action == "cleanup-on-quit" || action == "refresh-on-startup" || action == "suppress-first-reload" || action == "use-proxy") {
-		if (params.size() < 1) {
-			return AHS_TOO_FEW_PARAMS;
-		}
-		if (!is_bool(params[0])) {
-			return AHS_INVALID_PARAMS;
-		}
-		config_data[action] = params[0];
-		// std::cerr << "setting " << action << " to `" << params[0] << "'" << std::endl;
-		return AHS_OK; 
-	// the integer configuration values
-	} else if (action == "max-items" || action == "reload-time" || action == "max-downloads") {
-		if (params.size() < 1) {
-			return AHS_TOO_FEW_PARAMS;
-		}
-
-		if (!is_int(params[0])) {
-			return AHS_INVALID_PARAMS;
-		}
-
-		config_data[action] = params[0];
-		return AHS_OK;	
-
-	// the regular string values
-	} else if (action == "proxy" || action == "proxy-auth" || action == "user-agent") {
-		if (params.size() < 1) {
-			return AHS_TOO_FEW_PARAMS;
-		}
-		config_data[action] = params[0];
-		return AHS_OK;
-
-	// the path string values where ~/ substitution has to happen before
-	} else if (action == "cache-file" || action == "save-path" || action == "download-path" || action == "player" || action == "browser") {
-		if (params.size() < 1) {
-			return AHS_TOO_FEW_PARAMS;
-		}
-
-		char * homedir;
-		std::string filepath;
-
-		if (!(homedir = ::getenv("HOME"))) {
-			struct passwd * spw = ::getpwuid(::getuid());
-			if (spw) {
-					homedir = spw->pw_dir;
-			} else {
-					homedir = "";
-			}
-		}
-
-		if (strcmp(homedir,"")!=0 && params[0].substr(0,2) == "~/") {
-			filepath.append(homedir);
-			filepath.append(1,'/');
-			filepath.append(params[0].substr(2,params[0].length()-2));
-		} else {
-			filepath.append(params[0]);
-		}
-
-		config_data[action] = filepath;
-
-		GetLogger().log(LOG_DEBUG, "configcontainer::handle_action: %s = %s", action.c_str(), filepath.c_str());
-
-		return AHS_OK;
+	// configdata::INVALID indicates that the action didn't exist, and that the returned object was created ad-hoc.
+	if (cfgdata.type == configdata::INVALID) {
+		GetLogger().log(LOG_WARN, "configcontainer::handler_action: unknown action %s", action.c_str());
+		return AHS_INVALID_COMMAND;	
 	}
+
+	GetLogger().log(LOG_DEBUG, "configcontainer::handle_action: action = %s, type = %u", action.c_str(), cfgdata.type);
+
+	switch (cfgdata.type) {
+		case configdata::BOOL:
+			if (params.size() < 1) {
+				return AHS_TOO_FEW_PARAMS;
+			}
+			if (!is_bool(params[0])) {
+				return AHS_INVALID_PARAMS;
+			}
+			cfgdata.value = params[0];
+			return AHS_OK; 
+
+		case configdata::INT:
+			if (params.size() < 1) {
+				return AHS_TOO_FEW_PARAMS;
+			}
+			if (!is_int(params[0])) {
+				return AHS_INVALID_PARAMS;
+			}
+			cfgdata.value = params[0];
+			return AHS_OK;	
+
+		case configdata::STR:
+			if (params.size() < 1) {
+				return AHS_TOO_FEW_PARAMS;
+			}
+			cfgdata.value = params[0];
+			return AHS_OK;	
+
+		case configdata::PATH: {
+			if (params.size() < 1) {
+				return AHS_TOO_FEW_PARAMS;
+			}
+
+			// a path config option is a bit more difficult to handle, because we need to replace 
+			// a possible "~/" at the beginning of the string with the user's home directory.
+
+			char * homedir;
+			std::string filepath;
+
+			if (!(homedir = ::getenv("HOME"))) {
+				struct passwd * spw = ::getpwuid(::getuid());
+				if (spw) {
+						homedir = spw->pw_dir;
+				} else {
+						homedir = "";
+				}
+			}
+
+			if (strcmp(homedir,"")!=0 && params[0].substr(0,2) == "~/") {
+				filepath.append(homedir);
+				filepath.append(1,'/');
+				filepath.append(params[0].substr(2,params[0].length()-2));
+			} else {
+				filepath.append(params[0]);
+			}
+
+			cfgdata.value = filepath;
+			return AHS_OK;
+		}
+		default:
+			// should not happen
+			return AHS_INVALID_COMMAND;	
+	}
+
+	// should not happen
 	return AHS_INVALID_COMMAND;	
 }
 
@@ -151,25 +145,25 @@ bool configcontainer::is_int(const std::string& s) {
 }
 
 std::string configcontainer::get_configvalue(const std::string& key) {
-	return config_data[key];
+	return config_data[key].value;
 }
 
 int configcontainer::get_configvalue_as_int(const std::string& key) {
-	std::istringstream is(config_data[key]);
+	std::istringstream is(config_data[key].value);
 	int i;
 	is >> i;
-	return i;	
+	return i;
 }
 
 bool configcontainer::get_configvalue_as_bool(const std::string& key) {
-	if (config_data[key] == "true" || config_data[key] == "yes")
+	if (config_data[key].value == "true" || config_data[key].value == "yes")
 		return true;
-	return false;	
+	return false;
 }
 
 void configcontainer::set_configvalue(const std::string& key, const std::string& value) {
 	GetLogger().log(LOG_DEBUG,"configcontainer::set_configvalue(%s,%s) called", key.c_str(), value.c_str());
-	config_data[key] = value;
+	config_data[key].value = value;
 }
 
 }

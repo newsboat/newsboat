@@ -6,6 +6,15 @@
 namespace newsbeuter
 {
 
+
+struct configdata
+{
+	enum configdata_type { INVALID, BOOL, INT, STR, PATH };
+	configdata(const std::string& v = "", configdata_type t = INVALID) : value(v), type(t) { }
+	std::string value;
+	configdata_type type;
+};
+
 class configcontainer : public config_action_handler
 {
 public:
@@ -18,7 +27,7 @@ public:
 	std::string get_configvalue(const std::string& key);
 	void set_configvalue(const std::string& key, const std::string& value);
 private:
-	std::map<std::string,std::string> config_data;
+	std::map<std::string,configdata> config_data;
 	
 	bool is_bool(const std::string& s);
 	bool is_int(const std::string& s);
