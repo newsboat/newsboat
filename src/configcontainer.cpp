@@ -4,6 +4,10 @@
 #include <sstream>
 #include <iostream>
 
+#include <sys/types.h>
+#include <pwd.h>
+
+
 namespace newsbeuter
 {
 
@@ -27,6 +31,7 @@ configcontainer::configcontainer()
 	config_data["user-agent"] = "";
 	config_data["refresh-on-startup"] = "no";
 	config_data["suppress-first-reload"] = "no";
+	config_data["cache-file"] = "";
 }
 
 configcontainer::~configcontainer()
@@ -53,6 +58,7 @@ void configcontainer::register_commands(configparser& cfgparser)
 	cfgparser.register_handler("user-agent", this);
 	cfgparser.register_handler("refresh-on-startup", this);
 	cfgparser.register_handler("suppress-first-reload", this);
+	cfgparser.register_handler("cache-file", this);
 }
 
 action_handler_status configcontainer::handle_action(const std::string& action, const std::vector<std::string>& params) {
@@ -125,6 +131,36 @@ action_handler_status configcontainer::handle_action(const std::string& action, 
 			return AHS_TOO_FEW_PARAMS;
 		}
 		config_data[action] = params[0];
+		return AHS_OK;
+	} else if (action == "cache-file") {
+		if (params.size() < 1) {
+			return AHS_TOO_FEW_PARAMS;
+		}
+
+		char * homedir;
+		std::string cachefilepath;
+
+		if (!(homedir = ::getenv("HOME"))) {
+			struct passwd * spw = ::getpwuid(::getuid());
+			if (spw) {
+					homedir = spw->pw_dir;
+			} else {
+					homedir = "";
+			}
+		}
+
+		if (strcmp(homedir,"")!=0 && params[0].substr(0,2) == "~/") {
+			cachefilepath.append(homedir);
+			cachefilepath.append(1,'/');
+			cachefilepath.append(params[0].substr(2,params[0].length()-2));
+		} else {
+			cachefilepath.append(params[0]);
+		}
+
+		config_data[action] = cachefilepath;
+
+		GetLogger().log(LOG_DEBUG, "configcontainer::handle_action: cache-file = %s", cachefilepath.c_str());
+
 		return AHS_OK;
 	}
 	return AHS_INVALID_COMMAND;	

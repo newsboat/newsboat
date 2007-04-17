@@ -93,7 +93,7 @@ void controller::run(int argc, char * argv[]) {
 #endif
 	::signal(SIGPIPE, ignore_signal);
 
-	bool do_import = false, do_export = false;
+	bool do_import = false, do_export = false, cachefile_given_on_cmdline = false;
 	std::string importfile;
 
 	do {
@@ -126,6 +126,7 @@ void controller::run(int argc, char * argv[]) {
 				break;
 			case 'c':
 				cache_file = optarg;
+				cachefile_given_on_cmdline = true;
 				break;
 			case 'C':
 				config_file = optarg;
@@ -210,6 +211,11 @@ void controller::run(int argc, char * argv[]) {
 		std::cout << _("Loading articles from cache...");
 	std::cout.flush();
 
+	std::string cachefilepath = cfg->get_configvalue("cache-file");
+	if (cachefilepath.length() > 0 && !cachefile_given_on_cmdline) {
+		cache_file = cachefilepath.c_str();
+	}
+
 	rsscache = new cache(cache_file,cfg);
 
 	for (std::vector<std::string>::const_iterator it=urlcfg.get_urls().begin(); it != urlcfg.get_urls().end(); ++it) {
@@ -237,11 +243,13 @@ void controller::run(int argc, char * argv[]) {
 		refresh_on_start = true;
 	}
 
+	// hand over the important objects to the view
 	v->set_config_container(cfg);
 	v->set_keymap(&keys);
 	v->set_feedlist(feeds);
-	// v->run_feedlist(tags);
 	v->set_tags(tags);
+
+	// run the view
 	v->run();
 
 	std::cout << _("Cleaning up cache...");
