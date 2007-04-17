@@ -128,18 +128,7 @@ void filebrowser_formaction::init() {
 
 		GetLogger().log(LOG_DEBUG,"view::filebrowser: save-path is '%s'",save_path.c_str());
 
-		if (save_path.substr(0,2) == "~/") {
-			char * homedir = ::getenv("HOME");
-			if (homedir) {
-				dir.append(homedir);
-				dir.append(NEWSBEUTER_PATH_SEP);
-				dir.append(save_path.substr(2,save_path.length()-2));
-			} else {
-				dir = ".";
-			}
-		} else {
-			dir = save_path;
-		}
+		dir = save_path;
 	}
 
 	GetLogger().log(LOG_DEBUG, "view::filebrowser: chdir(%s)", dir.c_str());

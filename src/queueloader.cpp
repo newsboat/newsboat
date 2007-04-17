@@ -84,20 +84,8 @@ void queueloader::reload(std::vector<download>& downloads) {
 }
 
 std::string queueloader::get_filename(const std::string& str) {
-	std::string fn;
-	std::string dlpath = ctrl->get_dlpath();
-	if (dlpath.substr(0,2) == "~/") {
-		char * homedir = ::getenv("HOME");
-		if (homedir) {
-			fn.append(homedir);
-			fn.append(NEWSBEUTER_PATH_SEP);
-			fn.append(dlpath.substr(2,dlpath.length()-2));
-		} else {
-			fn = ".";
-		}
-	} else {
-		fn = dlpath;
-	}
+	std::string fn = ctrl->get_dlpath();
+
 	if (fn[fn.length()-1] != NEWSBEUTER_PATH_SEP[0])
 		fn.append(NEWSBEUTER_PATH_SEP);
 	char buf[1024];

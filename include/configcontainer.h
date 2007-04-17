@@ -21,6 +21,7 @@ private:
 	std::map<std::string,std::string> config_data;
 	
 	bool is_bool(const std::string& s);
+	bool is_int(const std::string& s);
 };
 
 }

@@ -63,9 +63,10 @@ void configcontainer::register_commands(configparser& cfgparser)
 
 action_handler_status configcontainer::handle_action(const std::string& action, const std::vector<std::string>& params) {
 	// handle the action when a configuration command has been encountered
-	// TODO: refactor this
 	GetLogger().log(LOG_DEBUG, "configcontainer::handle_action(%s,...) was called",action.c_str());
-	if (action == "show-read-feeds" || action == "auto-reload" || action == "podcast-auto-enqueue" || action == "cleanup-on-quit" || action == "refresh-on-startup" || action == "suppress-first-reload") {
+
+	// the bool configuration values
+	if (action == "show-read-feeds" || action == "auto-reload" || action == "podcast-auto-enqueue" || action == "cleanup-on-quit" || action == "refresh-on-startup" || action == "suppress-first-reload" || action == "use-proxy") {
 		if (params.size() < 1) {
 			return AHS_TOO_FEW_PARAMS;
 		}
@@ -75,70 +76,35 @@ action_handler_status configcontainer::handle_action(const std::string& action, 
 		config_data[action] = params[0];
 		// std::cerr << "setting " << action << " to `" << params[0] << "'" << std::endl;
 		return AHS_OK; 
-	} else if (action == "browser") {
-		if (params.size() < 1) {
-			return AHS_TOO_FEW_PARAMS;
-		}
-		config_data[action] = params[0];
-		return AHS_OK;	
+	// the integer configuration values
 	} else if (action == "max-items" || action == "reload-time" || action == "max-downloads") {
 		if (params.size() < 1) {
 			return AHS_TOO_FEW_PARAMS;
 		}
-		config_data[action] = params[0];
-		return AHS_OK;	
-	} else if (action == "use-proxy") {
-		if (params.size() < 1) {
-			return AHS_TOO_FEW_PARAMS;
-		}
-		if (!is_bool(params[0])) {
+
+		if (!is_int(params[0])) {
 			return AHS_INVALID_PARAMS;
 		}
+
 		config_data[action] = params[0];
-		return AHS_OK;
-	} else if (action == "proxy") {
+		return AHS_OK;	
+
+	// the regular string values
+	} else if (action == "proxy" || action == "proxy-auth" || action == "user-agent") {
 		if (params.size() < 1) {
 			return AHS_TOO_FEW_PARAMS;
 		}
 		config_data[action] = params[0];
 		return AHS_OK;
-	} else if (action == "proxy-auth") {
-		if (params.size() < 1) {
-			return AHS_TOO_FEW_PARAMS;
-		}
-		config_data[action] = params[0];
-		return AHS_OK;
-	} else if (action == "save-path") {
-		if (params.size() < 1) {
-			return AHS_TOO_FEW_PARAMS;
-		}
-		config_data[action] = params[0];
-		return AHS_OK;
-	} else if (action == "download-path") {
-		if (params.size() < 1) {
-			return AHS_TOO_FEW_PARAMS;
-		}
-		config_data[action] = params[0];
-		return AHS_OK;
-	} else if (action == "player") {
-		if (params.size() < 1) {
-			return AHS_TOO_FEW_PARAMS;
-		}
-		config_data[action] = params[0];
-		return AHS_OK;
-	} else if (action == "user-agent") {
-		if (params.size() < 1) {
-			return AHS_TOO_FEW_PARAMS;
-		}
-		config_data[action] = params[0];
-		return AHS_OK;
-	} else if (action == "cache-file") {
+
+	// the path string values where ~/ substitution has to happen before
+	} else if (action == "cache-file" || action == "save-path" || action == "download-path" || action == "player" || action == "browser") {
 		if (params.size() < 1) {
 			return AHS_TOO_FEW_PARAMS;
 		}
 
 		char * homedir;
-		std::string cachefilepath;
+		std::string filepath;
 
 		if (!(homedir = ::getenv("HOME"))) {
 			struct passwd * spw = ::getpwuid(::getuid());
@@ -150,16 +116,16 @@ action_handler_status configcontainer::handle_action(const std::string& action, 
 		}
 
 		if (strcmp(homedir,"")!=0 && params[0].substr(0,2) == "~/") {
-			cachefilepath.append(homedir);
-			cachefilepath.append(1,'/');
-			cachefilepath.append(params[0].substr(2,params[0].length()-2));
+			filepath.append(homedir);
+			filepath.append(1,'/');
+			filepath.append(params[0].substr(2,params[0].length()-2));
 		} else {
-			cachefilepath.append(params[0]);
+			filepath.append(params[0]);
 		}
 
-		config_data[action] = cachefilepath;
+		config_data[action] = filepath;
 
-		GetLogger().log(LOG_DEBUG, "configcontainer::handle_action: cache-file = %s", cachefilepath.c_str());
+		GetLogger().log(LOG_DEBUG, "configcontainer::handle_action: %s = %s", action.c_str(), filepath.c_str());
 
 		return AHS_OK;
 	}
@@ -173,6 +139,15 @@ bool configcontainer::is_bool(const std::string& s) {
 			return true;
 	}
 	return false;
+}
+
+bool configcontainer::is_int(const std::string& s) {
+	const char * s1 = s.c_str();
+	for (;*s1;s1++) {
+		if (!isdigit(*s1))
+			return false;
+	}
+	return true;
 }
 
 std::string configcontainer::get_configvalue(const std::string& key) {
