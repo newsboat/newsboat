@@ -93,11 +93,11 @@ void controller::run(int argc, char * argv[]) {
 #endif
 	::signal(SIGPIPE, ignore_signal);
 
-	bool do_import = false, do_export = false, cachefile_given_on_cmdline = false;
+	bool do_import = false, do_export = false, cachefile_given_on_cmdline = false, do_vacuum = false;
 	std::string importfile;
 
 	do {
-		if((c = ::getopt(argc,argv,"i:erhu:c:C:d:l:"))<0)
+		if((c = ::getopt(argc,argv,"i:erhu:c:C:d:l:v"))<0)
 			continue;
 		switch (c) {
 			case ':': /* fall-through */
@@ -130,6 +130,9 @@ void controller::run(int argc, char * argv[]) {
 				break;
 			case 'C':
 				config_file = optarg;
+				break;
+			case 'v':
+				do_vacuum = true;
 				break;
 			case 'd': // this is an undocumented debug commandline option!
 				GetLogger().set_logfile(optarg);
@@ -207,8 +210,10 @@ void controller::run(int argc, char * argv[]) {
 	if (!do_export)
 		std::cout << _("done.") << std::endl;
 
-	if (!do_export)
+	if (!do_export && !do_vacuum)
 		std::cout << _("Loading articles from cache...");
+	if (do_vacuum)
+		std::cout << _("Opening cache...");
 	std::cout.flush();
 
 	std::string cachefilepath = cfg->get_configvalue("cache-file");
@@ -217,6 +222,16 @@ void controller::run(int argc, char * argv[]) {
 	}
 
 	rsscache = new cache(cache_file,cfg);
+
+	if (do_vacuum) {
+		std::cout << _("done.") << std::endl;
+		std::cout << _("Cleaning up cache thoroughly...");
+		std::cout.flush();
+		rsscache->do_vacuum();
+		std::cout << _("done.") << std::endl;
+		utils::remove_fs_lock(lock_file);
+		return;
+	}
 
 	for (std::vector<std::string>::const_iterator it=urlcfg.get_urls().begin(); it != urlcfg.get_urls().end(); ++it) {
 		rss_feed feed(rsscache);
@@ -384,6 +399,7 @@ void controller::usage(char * argv0) {
 				"-u <urlfile>    read RSS feed URLs from <urlfile>\n"
 				"-c <cachefile>  use <cachefile> as cache file\n"
 				"-C <configfile> read configuration from <configfile>\n"
+				"-v              clean up cache thoroughly\n"
 				"-h              this help\n"), PROGRAM_NAME, PROGRAM_VERSION, argv0);
 	std::cout << buf;
 	::exit(EXIT_FAILURE);

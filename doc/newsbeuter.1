@@ -14,6 +14,7 @@
 .Op Fl u Ar urlfile
 .Op Fl c Ar cachefile
 .Op Fl C Ar configfile
+.Op Fl v
 .Op Fl h
 .Sh DESCRIPTION
 .Nm
@@ -31,6 +32,8 @@ Display help
 Refresh feeds on start
 .It Fl e
 Export feeds as OPML to stdout
+.It Fl v
+Clean up cache thoroughly (i.e. reduce it in size if possible)
 .It Fl i Ar opmlfile
 Import and OPML file
 .It Fl u Ar urlfile

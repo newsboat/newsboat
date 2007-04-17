@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-16 09:51+0200\n"
+"POT-Creation-Date: 2007-04-17 10:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/cache.cpp:145
+#: src/cache.cpp:147
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr ""
@@ -61,64 +61,73 @@ msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
 
-#: src/controller.cpp:144 src/pb_controller.cpp:105
+#: src/controller.cpp:148 src/pb_controller.cpp:105
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr ""
 
-#: src/controller.cpp:161
+#: src/controller.cpp:165
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
 "import an OPML file."
 msgstr ""
 
-#: src/controller.cpp:167 src/pb_controller.cpp:112
+#: src/controller.cpp:171 src/pb_controller.cpp:112
 #, c-format
 msgid "Starting %s %s..."
 msgstr ""
 
-#: src/controller.cpp:173 src/pb_controller.cpp:117
+#: src/controller.cpp:177 src/pb_controller.cpp:117
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr ""
 
-#: src/controller.cpp:180 src/pb_controller.cpp:122
+#: src/controller.cpp:184 src/pb_controller.cpp:122
 msgid "Loading configuration..."
 msgstr ""
 
-#: src/controller.cpp:207 src/controller.cpp:226 src/controller.cpp:244
-#: src/pb_controller.cpp:150 src/pb_controller.cpp:163
+#: src/controller.cpp:211 src/controller.cpp:227 src/controller.cpp:231
+#: src/controller.cpp:247 src/controller.cpp:273 src/pb_controller.cpp:150
+#: src/pb_controller.cpp:163
 msgid "done."
 msgstr ""
 
-#: src/controller.cpp:210
+#: src/controller.cpp:214
 msgid "Loading articles from cache..."
 msgstr ""
 
-#: src/controller.cpp:241
+#: src/controller.cpp:216
+msgid "Opening cache..."
+msgstr ""
+
+#: src/controller.cpp:228
+msgid "Cleaning up cache thoroughly..."
+msgstr ""
+
+#: src/controller.cpp:270
 msgid "Cleaning up cache..."
 msgstr ""
 
-#: src/controller.cpp:293
+#: src/controller.cpp:322
 #, c-format
 msgid "%sLoading %s..."
 msgstr ""
 
-#: src/controller.cpp:330
+#: src/controller.cpp:359
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr ""
 
-#: src/controller.cpp:334
+#: src/controller.cpp:363
 msgid "Error: invalid feed!"
 msgstr ""
 
-#: src/controller.cpp:340
+#: src/controller.cpp:369
 msgid "invalid feed index (bug)"
 msgstr ""
 
-#: src/controller.cpp:366
+#: src/controller.cpp:395
 #, c-format
 msgid ""
 "%s %s\n"
@@ -129,10 +138,11 @@ msgid ""
 "-u <urlfile>    read RSS feed URLs from <urlfile>\n"
 "-c <cachefile>  use <cachefile> as cache file\n"
 "-C <configfile> read configuration from <configfile>\n"
+"-v              clean up cache thoroughly\n"
 "-h              this help\n"
 msgstr ""
 
-#: src/controller.cpp:407
+#: src/controller.cpp:437
 #, c-format
 msgid "Import of %s finished."
 msgstr ""
@@ -243,12 +253,12 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: src/filebrowser_formaction.cpp:42 src/filebrowser_formaction.cpp:154
+#: src/filebrowser_formaction.cpp:42 src/filebrowser_formaction.cpp:143
 #, c-format
 msgid "Open File - %s"
 msgstr ""
 
-#: src/filebrowser_formaction.cpp:44 src/filebrowser_formaction.cpp:156
+#: src/filebrowser_formaction.cpp:44 src/filebrowser_formaction.cpp:145
 #, c-format
 msgid "Save File - %s"
 msgstr ""
@@ -257,12 +267,12 @@ msgstr ""
 msgid "File: "
 msgstr ""
 
-#: src/filebrowser_formaction.cpp:163 src/pb_view.cpp:235
+#: src/filebrowser_formaction.cpp:152 src/pb_view.cpp:235
 #: src/selecttag_formaction.cpp:70
 msgid "Cancel"
 msgstr ""
 
-#: src/filebrowser_formaction.cpp:164 src/itemlist_formaction.cpp:208
+#: src/filebrowser_formaction.cpp:153 src/itemlist_formaction.cpp:208
 #: src/itemview_formaction.cpp:202
 msgid "Save"
 msgstr ""

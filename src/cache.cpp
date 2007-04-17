@@ -404,6 +404,16 @@ void cache::delete_item(const rss_item& item) {
 	assert(rc == SQLITE_OK);
 }
 
+void cache::do_vacuum() {
+	mtx->lock();
+	char * vacuum_query = "VACUUM;";
+	int rc = sqlite3_exec(db,vacuum_query,NULL,NULL,NULL);
+	if (rc != SQLITE_OK) {
+		GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", vacuum_query, rc);
+	}
+	mtx->unlock();
+}
+
 void cache::cleanup_cache(std::vector<rss_feed>& feeds) {
 	mtx->lock();
 

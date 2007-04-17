@@ -72,6 +72,7 @@ After you've installed newsbeuter, you can run it for the first time by typing
 		-u <urlfile>    read RSS feed URLs from <urlfile>
 		-c <cachefile>  use <cachefile> as cache file
 		-C <configfile> read configuration from <configfile>
+		-v              clean up cache thoroughly
 		-h              this help
 
 
