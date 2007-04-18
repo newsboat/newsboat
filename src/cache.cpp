@@ -442,8 +442,13 @@ void cache::cleanup_cache(std::vector<rss_feed>& feeds) {
 		}
 		list.append(")");
 
-		std::string cleanup_rss_feeds_statement = std::string("DELETE FROM rss_feed WHERE rssurl NOT IN ") + list + ";";
-		std::string cleanup_rss_items_statement = std::string("DELETE FROM rss_item WHERE feedurl NOT IN ") + list + ";";
+		std::string cleanup_rss_feeds_statement("DELETE FROM rss_feed WHERE rssurl NOT IN ");
+		cleanup_rss_feeds_statement.append(list);
+		cleanup_rss_feeds_statement.append(1,';');
+
+		std::string cleanup_rss_items_statement("DELETE FROM rss_item WHERE feedurl NOT IN ");
+		cleanup_rss_items_statement.append(list);
+		cleanup_rss_items_statement.append(1,';');
 
 		// std::cerr << "statements: " << cleanup_rss_feeds_statement << " " << cleanup_rss_items_statement << std::endl;
 

@@ -8,68 +8,46 @@ namespace newsbeuter {
 	
 struct op_desc {
 	operation op;
+	char * opstr;
+	char * default_key;
 	char * help_text;
 	unsigned short flags;
 };
 
-op_desc opdescs[] = {
-	{ OP_OPEN, _("Open feed/article"), KM_NEWSBEUTER },
-	{ OP_QUIT, _("Return to previous dialog/Quit"), KM_BOTH },
-	{ OP_RELOAD, _("Reload currently selected feed"), KM_NEWSBEUTER },
-	{ OP_RELOADALL, _("Reload all feeds"), KM_NEWSBEUTER },
-	{ OP_MARKFEEDREAD, _("Mark feed read"), KM_NEWSBEUTER },
-	{ OP_MARKALLFEEDSREAD, _("Mark all feeds read"), KM_NEWSBEUTER },
-	{ OP_SAVE, _("Save article"), KM_NEWSBEUTER },
-	{ OP_NEXTUNREAD, _("Go to next unread article"), KM_NEWSBEUTER },
-	{ OP_OPENINBROWSER, _("Open article in browser"), KM_NEWSBEUTER },
-	{ OP_HELP, _("Open help dialog"), KM_BOTH },
-	{ OP_TOGGLESOURCEVIEW, _("Toggle source view"), KM_NEWSBEUTER },
-	{ OP_TOGGLEITEMREAD, _("Toggle read status for article"), KM_NEWSBEUTER },
-	{ OP_TOGGLESHOWREAD, _("Toggle show read feeds"), KM_NEWSBEUTER },
-	{ OP_SHOWURLS, _("Show URLs in current article"), KM_NEWSBEUTER },
-	{ OP_CLEARTAG, _("Clear current tag"), KM_NEWSBEUTER },
-	{ OP_SETTAG, _("Select tag"), KM_NEWSBEUTER },
-	{ OP_SEARCH, _("Open search dialog"), KM_NEWSBEUTER },
-	{ OP_ENQUEUE, _("Add download to queue"), KM_NEWSBEUTER },
-	{ OP_PB_DOWNLOAD, _("Download file"), KM_PODBEUTER },
-	{ OP_PB_CANCEL, _("Cancel download"), KM_PODBEUTER },
-	{ OP_PB_DELETE, _("Mark download as deleted"), KM_PODBEUTER },
-	{ OP_PB_PURGE, _("Purge finished and deleted downloads from queue"), KM_PODBEUTER },
-	{ OP_PB_TOGGLE_DLALL, _("Toggle automatic download on/off"), KM_PODBEUTER },
-	{ OP_PB_PLAY, _("Start player with currently selected download"), KM_PODBEUTER },
-	{ OP_NIL, NULL }
+static op_desc opdescs[] = {
+	{ OP_OPEN, "open", "enter", _("Open feed/article"), KM_NEWSBEUTER },
+	{ OP_QUIT, "quit", "q", _("Return to previous dialog/Quit"), KM_BOTH },
+	{ OP_RELOAD, "reload", "r", _("Reload currently selected feed"), KM_NEWSBEUTER },
+	{ OP_RELOADALL, "reload-all", "R", _("Reload all feeds"), KM_NEWSBEUTER },
+	{ OP_MARKFEEDREAD, "mark-feed-read", "A", _("Mark feed read"), KM_NEWSBEUTER },
+	{ OP_MARKALLFEEDSREAD, "mark-all-feeds-read", "C", _("Mark all feeds read"), KM_NEWSBEUTER },
+	{ OP_SAVE, "save", "s", _("Save article"), KM_NEWSBEUTER },
+	{ OP_NEXTUNREAD, "next-unread", "n", _("Go to next unread article"), KM_NEWSBEUTER },
+	{ OP_OPENINBROWSER, "open-in-browser", "o", _("Open article in browser"), KM_NEWSBEUTER },
+	{ OP_HELP, "help", "h", _("Open help dialog"), KM_BOTH },
+	{ OP_TOGGLESOURCEVIEW, "toggle-source-view", "^u", _("Toggle source view"), KM_NEWSBEUTER },
+	{ OP_TOGGLEITEMREAD, "toggle-article-read", "N", _("Toggle read status for article"), KM_NEWSBEUTER },
+	{ OP_TOGGLESHOWREAD, "toggle-show-read-feeds", "l", _("Toggle show read feeds"), KM_NEWSBEUTER },
+	{ OP_SHOWURLS, "show-urls", "u", _("Show URLs in current article"), KM_NEWSBEUTER },
+	{ OP_CLEARTAG, "clear-tag", "^t", _("Clear current tag"), KM_NEWSBEUTER },
+	{ OP_SETTAG, "set-tag", "t", _("Select tag"), KM_NEWSBEUTER },
+	{ OP_SEARCH, "open-search", "/", _("Open search dialog"), KM_NEWSBEUTER },
+	{ OP_ENQUEUE, "enqueue", "e", _("Add download to queue"), KM_NEWSBEUTER },
+	{ OP_PB_DOWNLOAD, "pb-download", "d", _("Download file"), KM_PODBEUTER },
+	{ OP_PB_CANCEL, "pb-cancel", "c", _("Cancel download"), KM_PODBEUTER },
+	{ OP_PB_DELETE, "pb-delete", "D", _("Mark download as deleted"), KM_PODBEUTER },
+	{ OP_PB_PURGE, "pb-purge", "P", _("Purge finished and deleted downloads from queue"), KM_PODBEUTER },
+	{ OP_PB_TOGGLE_DLALL, "pb-toggle-download-all", "a", _("Toggle automatic download on/off"), KM_PODBEUTER },
+	{ OP_PB_PLAY, "pb-play", "p", _("Start player with currently selected download"), KM_PODBEUTER },
+	{ OP_PB_MOREDL, "pb-increase-max-dls", "+", _("Increase the number of concurrent downloads"), KM_PODBEUTER },
+	{ OP_PB_LESSDL, "pb-decreate-max-dls", "-", _("Decrease the number of concurrent downloads"), KM_PODBEUTER },
+	{ OP_NIL, NULL, NULL, NULL, 0 }
 };
 
 keymap::keymap() { 
-	keymap_["enter"] = OP_OPEN;
-	keymap_["q"] = OP_QUIT;
-	keymap_["r"] = OP_RELOAD;
-	keymap_["R"] = OP_RELOADALL;
-	keymap_["A"] = OP_MARKFEEDREAD;
-	keymap_["C"] = OP_MARKALLFEEDSREAD;
-	keymap_["s"] = OP_SAVE;
-	keymap_["n"] = OP_NEXTUNREAD;
-	keymap_["N"] = OP_TOGGLEITEMREAD;
-	keymap_["o"] = OP_OPENINBROWSER;
-	keymap_["?"] = OP_HELP;
-	keymap_["^u"] = OP_TOGGLESOURCEVIEW;
-	keymap_["l"] = OP_TOGGLESHOWREAD;
-	keymap_["u"] = OP_SHOWURLS;
-	keymap_["t"] = OP_SETTAG;
-	keymap_["^t"] = OP_CLEARTAG;
-	keymap_["/"] = OP_SEARCH;
-	keymap_["e"] = OP_ENQUEUE;
-
-	keymap_["d"] = OP_PB_DOWNLOAD;
-	keymap_["c"] = OP_PB_CANCEL;
-	keymap_["D"] = OP_PB_DELETE;
-	keymap_["P"] = OP_PB_PURGE;
-	keymap_["a"] = OP_PB_TOGGLE_DLALL;
-	keymap_["+"] = OP_PB_MOREDL;
-	keymap_["-"] = OP_PB_LESSDL;
-	keymap_["p"] = OP_PB_PLAY;
-
-	keymap_["NIL"] = OP_NIL;
+	for (int i=0;opdescs[i].help_text;++i) {
+		keymap_[opdescs[i].default_key] = opdescs[i].op;
+	}
 }
 
 void keymap::get_keymap_descriptions(std::vector<std::pair<std::string,std::string> >& descs, unsigned short flags) {
@@ -105,38 +83,9 @@ void keymap::unset_key(const std::string& key) {
 }
 
 operation keymap::get_opcode(const std::string& opstr) {
-	struct { char * opstr; operation opcode; } opcode_map[] = {
-		{ "quit", OP_QUIT },
-		{ "reload", OP_RELOAD },
-		{ "reload-all", OP_RELOADALL },
-		{ "mark-feed-read", OP_MARKFEEDREAD },
-		{ "mark-all-feeds-read", OP_MARKALLFEEDSREAD },
-		{ "open", OP_OPEN },
-		{ "save", OP_SAVE },
-		{ "next-unread", OP_NEXTUNREAD },
-		{ "open-in-browser", OP_OPENINBROWSER },
-		{ "help", OP_HELP },
-		{ "toggle-source-view", OP_TOGGLESOURCEVIEW },
-		{ "toggle-article-read", OP_TOGGLEITEMREAD },
-		{ "toggle-show-read-feeds", OP_TOGGLESHOWREAD },
-		{ "enqueue", OP_ENQUEUE },
-		{ "show-urls", OP_SHOWURLS },
-		{ "clear-tag", OP_CLEARTAG },
-		{ "select-tag", OP_SETTAG },
-		{ "open-search", OP_SEARCH },
-		{ "pb-download", OP_PB_DOWNLOAD },
-		{ "pb-cancel", OP_PB_CANCEL },
-		{ "pb-delete", OP_PB_DELETE },
-		{ "pb-purge", OP_PB_PURGE },
-		{ "pb-toggle-download-all", OP_PB_TOGGLE_DLALL },
-		{ "pb-increase-max-dls", OP_PB_MOREDL },
-		{ "pb-decrease-max-dls", OP_PB_LESSDL },
-		{ "pb-play", OP_PB_PLAY },
-		{ NULL, OP_NIL }
-	};
-	for (int i=0;opcode_map[i].opstr;++i) {
-		if (opstr == opcode_map[i].opstr) {
-			return opcode_map[i].opcode;
+	for (int i=0;opdescs[i].opstr;++i) {
+		if (opstr == opdescs[i].opstr) {
+			return opdescs[i].op;
 		}
 	}
 	return OP_NIL;

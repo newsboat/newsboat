@@ -35,7 +35,12 @@ void help_formaction::prepare() {
 		
 		for (std::vector<std::pair<std::string,std::string> >::iterator it=descs.begin();it!=descs.end();++it) {
 			std::string line = "{listitem text:";
-			std::string descline = std::string("\t") + it->first + std::string("\t") + it->second;
+
+			std::string descline("\t");
+			descline.append(it->first);
+			descline.append(1,'\t');
+			descline.append(it->second);
+
 			line.append(stfl::quote(descline));
 			line.append("}");
 			

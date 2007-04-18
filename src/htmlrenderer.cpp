@@ -33,13 +33,16 @@ std::string htmlrenderer::absolute_url(const std::string& url, const std::string
 				char u2[1024];
 				strcpy(u2, u);
 				snprintf(u2 + (foo - u), sizeof(u2) - (foo - u), "%s", link.c_str());
-				return std::string(u2);
+				return u2;
 			}
 		}
 		return link;
 	} else {
 		char * base = dirname(u);
-		return std::string(base) + "/" + link;
+		std::string retval(base);
+		retval.append(1,'/');
+		retval.append(link);
+		return retval;
 	}
 }
 
@@ -140,13 +143,13 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					++indent_level;
 					if (curline.length() > 0)
 						lines.push_back(curline);
-					lines.push_back(std::string(""));
+					lines.push_back("");
 					prepare_newline(curline, indent_level);	
 				} else if (xpp.getText() == "p") {
 					if (curline.length() > 0)
 						lines.push_back(curline);
 					if (lines.size() > 0 && lines[lines.size()-1].length() > static_cast<unsigned int>(indent_level*2))
-						lines.push_back(std::string(""));
+						lines.push_back("");
 					prepare_newline(curline, indent_level);	
 				} else if (xpp.getText() == "ol") {
 					inside_list = true;
@@ -154,14 +157,14 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					ol_count = 1;
 					if (curline.length() > 0)
 						lines.push_back(curline);
-					lines.push_back(std::string(""));
+					lines.push_back("");
 					prepare_newline(curline, indent_level);	
 				} else if (xpp.getText() == "ul") {
 					inside_list = true;
 					is_ol = false;
 					if (curline.length() > 0)
 						lines.push_back(curline);
-					lines.push_back(std::string(""));
+					lines.push_back("");
 					prepare_newline(curline, indent_level);
 				} else if (xpp.getText() == "li") {
 					if (inside_li) {
@@ -196,7 +199,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						indent_level = 0;
 					if (curline.length() > 0)
 						lines.push_back(curline);
-					lines.push_back(std::string(""));
+					lines.push_back("");
 					prepare_newline(curline, indent_level);
 				} else if (xpp.getText() == "ol" || xpp.getText() == "ul") {
 					inside_list = false;
@@ -208,7 +211,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					}
 					if (curline.length() > 0)
 						lines.push_back(curline);
-					lines.push_back(std::string(""));
+					lines.push_back("");
 					prepare_newline(curline, indent_level);	
 				} else if (xpp.getText() == "li") {
 					indent_level-=2;
@@ -298,8 +301,8 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 		lines.push_back(curline);
 	
 	if (links.size() > 0) {
-		lines.push_back(std::string(""));
-		lines.push_back(std::string(_("Links: ")));
+		lines.push_back("");
+		lines.push_back(_("Links: "));
 		for (unsigned int i=0;i<links.size();++i) {
 			std::ostringstream line;
 			line << "[" << i << "]: " << links[i].first << " (" << type2str(links[i].second) << ")";
