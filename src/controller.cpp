@@ -92,6 +92,7 @@ void controller::run(int argc, char * argv[]) {
 	::signal(SIGSEGV, ctrl_c_action);
 #endif
 	::signal(SIGPIPE, ignore_signal);
+	::signal(SIGHUP, ctrl_c_action);
 
 	bool do_import = false, do_export = false, cachefile_given_on_cmdline = false, do_vacuum = false;
 	std::string importfile;
