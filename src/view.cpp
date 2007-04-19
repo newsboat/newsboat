@@ -120,6 +120,11 @@ void view::run() {
 
 		operation op = keys->get_operation(event);
 
+		if (OP_REDRAW == op) {
+			stfl::reset();
+			continue;
+		}
+
 		fa->process_operation(op);
 	}
 
@@ -141,6 +146,11 @@ std::string view::run_modal(formaction * f, const std::string& value) {
 		if (!event || strcmp(event,"TIMEOUT")==0) continue;
 
 		operation op = keys->get_operation(event);
+
+		if (OP_REDRAW == op) {
+			stfl::reset();
+			continue;
+		}
 
 		fa->process_operation(op);
 	}

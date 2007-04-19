@@ -156,6 +156,7 @@ open-search:/:Opens the search dialog. When a search is done in the article list
 select-tag:t:Select tag.
 clear-tag:^t:Clear current tag.
 enqueue:e:Add the podcast download URL of the current article (if any is found) to the podcast download queue (see below for more information on podcast support).
+redraw:^l:Redraw the screen.
 help:?:Runs the help screen.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

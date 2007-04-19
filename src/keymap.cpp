@@ -41,6 +41,7 @@ static op_desc opdescs[] = {
 	{ OP_PB_PLAY, "pb-play", "p", _("Start player with currently selected download"), KM_PODBEUTER },
 	{ OP_PB_MOREDL, "pb-increase-max-dls", "+", _("Increase the number of concurrent downloads"), KM_PODBEUTER },
 	{ OP_PB_LESSDL, "pb-decreate-max-dls", "-", _("Decrease the number of concurrent downloads"), KM_PODBEUTER },
+	{ OP_REDRAW, "redraw", "^l", _("Redraw screen"), KM_BOTH },
 	{ OP_NIL, NULL, NULL, NULL, 0 }
 };
 

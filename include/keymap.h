@@ -37,6 +37,7 @@ namespace newsbeuter {
 						OP_SETTAG, 
 						OP_SEARCH, 
 						OP_ENQUEUE,
+						OP_REDRAW,
 						OP_NB_MAX,
 
 						// podbeuter-specific operations:
