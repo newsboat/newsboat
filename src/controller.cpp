@@ -516,7 +516,7 @@ rss_feed * controller::get_feed_by_url(const std::string& feedurl) {
 	return NULL; // shouldn't happen
 }
 
-bool controller::is_valid_podcast_type(const std::string& mimetype) {
+bool controller::is_valid_podcast_type(const std::string& /* mimetype */) {
 	return true;
 	// return mimetype == "audio/mpeg" || mimetype == "video/x-m4v" || mimetype == "audio/x-mpeg";
 }

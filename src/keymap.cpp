@@ -111,7 +111,7 @@ operation keymap::get_operation(const std::string& keycode) {
 			} else if (x > 32 && x <= 126) {
 				c = static_cast<char>(x);
 				key.append(1,c);
-			} else if (x >= 0 && x<=26) {
+			} else if (x<=26) {
 				key.append("^");
 				key.append(1,static_cast<char>(0x60 + x));
 			} else {

@@ -23,7 +23,7 @@ struct cb_handler {
 		int c;
 };
 
-static int count_callback(void * handler, int argc, char ** argv, char ** azColName) {
+static int count_callback(void * handler, int argc, char ** argv, char ** /* azColName */) {
 	cb_handler * cbh = (cb_handler *)handler;
 	// std::cerr << "inside count_callback" << std::endl;
 	if (argc>0) {
@@ -36,7 +36,7 @@ static int count_callback(void * handler, int argc, char ** argv, char ** azColN
 	return 0;
 }
 
-static int rssfeed_callback(void * myfeed, int argc, char ** argv, char ** azColName) {
+static int rssfeed_callback(void * myfeed, int argc, char ** argv, char ** /* azColName */) {
 	rss_feed * feed = (rss_feed *)myfeed;
 	// normaly, this shouldn't happen, but we keep the assert()s here nevertheless
 	assert(argc == 2);
@@ -49,7 +49,7 @@ static int rssfeed_callback(void * myfeed, int argc, char ** argv, char ** azCol
 	return 0;
 }
 
-static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** azColName) {
+static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** /* azColName */) {
 	rss_feed * feed = (rss_feed *)myfeed;
 	assert (argc == 11);
 	rss_item item(NULL);
@@ -76,7 +76,7 @@ static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** azCol
 	return 0;
 }
 
-static int rssitemvector_callback(void * vector, int argc, char ** argv, char ** azColName) {
+static int rssitemvector_callback(void * vector, int argc, char ** argv, char ** /* azColName */) {
 	std::vector<rss_item> * items = (std::vector<rss_item> *)vector;
 
 	assert (argc == 11);
@@ -104,7 +104,7 @@ static int rssitemvector_callback(void * vector, int argc, char ** argv, char **
 	return 0;
 }
 
-static int search_item_callback(void * myfeed, int argc, char ** argv, char ** azColName) {
+static int search_item_callback(void * myfeed, int argc, char ** argv, char ** /* azColName */) {
 	std::vector<rss_item> * items = (std::vector<rss_item> *)myfeed;
 	assert (argc == 11);
 	rss_item item(NULL);
