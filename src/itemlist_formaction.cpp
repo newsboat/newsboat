@@ -31,6 +31,22 @@ void itemlist_formaction::process_operation(operation op) {
 				}
 			}
 			break;
+		case OP_OPENINBROWSER: {
+				std::string itemposname = f->get("itempos");
+				GetLogger().log(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
+				if (itemposname.length() > 0) {
+					std::istringstream posname(itemposname);
+					unsigned int pos = 0;
+					posname >> pos;
+					if (pos < feed->items().size()) {
+						v->open_in_browser(feed->items()[pos].link());
+						do_redraw = true;
+					}
+				} else {
+					v->show_error(_("No item selected!")); // should not happen
+				}
+			}
+			break;
 		case OP_SAVE: 
 			{
 				char buf[1024];
