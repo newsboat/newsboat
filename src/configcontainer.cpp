@@ -32,6 +32,7 @@ configcontainer::configcontainer()
 	config_data["cache-file"]      = configdata("", configdata::PATH);
 	config_data["proxy"]           = configdata("", configdata::STR);
 	config_data["proxy-auth"]      = configdata("", configdata::STR);
+	config_data["confirm-exit"]    = configdata("no", configdata::BOOL);
 }
 
 configcontainer::~configcontainer()

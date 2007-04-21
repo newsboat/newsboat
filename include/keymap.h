@@ -60,6 +60,7 @@ namespace newsbeuter {
 			void unset_key(const std::string& key);
 			operation get_opcode(const std::string& opstr);
 			operation get_operation(const std::string& keycode);
+			char get_key(const std::string& keycode);
 			std::string getkey(operation );
 			virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
 			void get_keymap_descriptions(std::vector<std::pair<std::string,std::string> >& descs, unsigned short flags);

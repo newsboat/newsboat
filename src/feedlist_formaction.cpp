@@ -136,7 +136,9 @@ void feedlist_formaction::process_operation(operation op) {
 			break;
 		case OP_QUIT:
 			GetLogger().log(LOG_INFO, "feedlist_formaction: quitting");
-			quit = true;
+			if (!v->get_cfg()->get_configvalue_as_bool("confirm-exit") || v->confirm(_("Do you really want to quit (y:Yes n:No)? "), "yn") == 'y') {
+				quit = true;
+			}
 			break;
 		case OP_HELP:
 			v->push_help();

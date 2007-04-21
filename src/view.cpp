@@ -284,6 +284,27 @@ void view::run_search(const std::string& feedurl) {
 	formaction_stack.push_front(search);
 }
 
+char view::confirm(const std::string& prompt, const std::string& charset) {
+	formaction * f = *formaction_stack.begin();
+	formaction_stack.push_front(NULL);
+	f->get_form()->set("msg", prompt);
+
+	char result = 0;
+
+	do {
+		const char * event = f->get_form()->run(0);
+		if (!event) continue;
+		result = keys->get_key(event);
+	} while (result && strchr(charset.c_str(), result)==NULL);
+
+	f->get_form()->set("msg", "");
+	f->get_form()->run(-1);
+
+	formaction_stack.pop_front(); // remove the NULL pointer from the formaction stack
+
+	return result;
+}
+
 bool view::get_next_unread() {
 	if (itemlist->jump_to_next_unread_item(false)) {
 		itemview->init();

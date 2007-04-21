@@ -92,6 +92,19 @@ operation keymap::get_opcode(const std::string& opstr) {
 	return OP_NIL;
 }
 
+char keymap::get_key(const std::string& keycode) {
+	if (strncmp(keycode.c_str(),"CHAR(",5)==0) {
+		unsigned int x;
+		char c;
+		sscanf(keycode.c_str(),"CHAR(%u)",&x);
+		if (x > 32 && x <= 126) {
+			c = static_cast<char>(x);
+			return c;
+		}
+	}
+	return 0;
+}
+
 operation keymap::get_operation(const std::string& keycode) {
 	std::string key;
 	if (keycode.length() > 0) {
