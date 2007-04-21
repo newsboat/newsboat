@@ -120,7 +120,7 @@ uninstall:
 	$(RM) $(prefix)/share/man/man1/$(PODBEUTER).1
 	$(RM) -r $(docdir)
 
-.PHONY: doc clean all
+.PHONY: doc clean all test
 
 # the following targets are i18n/l10n-related:
 
@@ -147,3 +147,11 @@ install-mo:
 		$(INSTALL) -m 644 $$mof $$dir/$(PACKAGE).mo ; \
 		echo "Installing $$mofile as $$dir/$(PACKAGE).mo" ; \
 	done
+
+TEST_OBJS=$(patsubst test/%.cpp,test/%.o,$(wildcard test/*.cpp))
+
+test: $(LIB_OUTPUT) $(NEWSBEUTER_OBJS) $(TEST_OBJS)
+	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o test/test src/rss.o src/cache.o $(TEST_OBJS) $(NEWSBEUTER_LIBS) -lboost_unit_test_framework
+
+test-clean:
+	$(RM) test/test test/test.o

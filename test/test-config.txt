@@ -1,0 +1,10 @@
+# a comment
+
+
+show-read-feeds no
+browser "firefox"
+max-items 100 # another comment
+
+cache-file "~/foo" # yet another comment
+
+# and here's one more comment
