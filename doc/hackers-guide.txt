@@ -86,10 +86,22 @@ of tags.
 *class utils*: contains several static utility functions, such as a tokenizer,
 the lock file code and a text converter that builds upon iconv.
 
-*class view*: the class that draws the user interface. It also reads the user's
-input and runs the accordings actions.
+*class view*: the class that draws the user interface. It manages a stack of
+so-called "form actions", each of which represents one dialog. The view class
+delegates all received user input events to the correct form action.
 
-*class xmlpullparser*: although called xmlpullparser, it parses virtually
+*class formaction*: the abstract base class for all form actions. Currently, the
+following formaction-derived classes exist:
+- feedlist_formaction
+- itemlist_formaction
+- itemview_formaction
+- search_formaction
+- urlview_formaction
+- filebrowser_formaction
+- help_formaction
+- selecttag_formaction
+
+class xmlpullparser*: although called xmlpullparser, it parses virtually
 everything that vaguely looks like XML/HTML tags, even when totally invalid, and
 provides the parsing result as a continuous stream of tokens (tags and text). It
 is solely used by the htmlrenderer class.

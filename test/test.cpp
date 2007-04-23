@@ -10,6 +10,7 @@
 #include <configcontainer.h>
 #include <keymap.h>
 #include <xmlpullparser.h>
+#include <urlreader.h>
 
 #include <stdlib.h>
 
@@ -149,4 +150,21 @@ BOOST_AUTO_TEST_CASE(TestXmlPullParser) {
 	BOOST_CHECK_EQUAL(e, xmlpullparser::END_DOCUMENT);
 	e = xpp.next();
 	BOOST_CHECK_EQUAL(e, xmlpullparser::END_DOCUMENT);
+}
+
+BOOST_AUTO_TEST_CASE(TestUrlReader) {
+	urlreader u;
+	u.load_config("test-urls.txt");
+	BOOST_CHECK_EQUAL(u.get_urls().size(), 3u);
+	BOOST_CHECK_EQUAL(u.get_urls()[0], "http://test1.url.cc/feed.xml");
+	BOOST_CHECK_EQUAL(u.get_urls()[1], "http://anotherfeed.com/");
+	BOOST_CHECK_EQUAL(u.get_urls()[2], "http://onemorefeed.at/feed/");
+
+	BOOST_CHECK_EQUAL(u.get_tags("http://test1.url.cc/feed.xml").size(), 2u);
+	BOOST_CHECK_EQUAL(u.get_tags("http://test1.url.cc/feed.xml")[0], "tag1");
+	BOOST_CHECK_EQUAL(u.get_tags("http://test1.url.cc/feed.xml")[1], "tag2");
+	BOOST_CHECK_EQUAL(u.get_tags("http://anotherfeed.com/").size(), 0u);
+	BOOST_CHECK_EQUAL(u.get_tags("http://onemorefeed.at/feed/").size(), 2u);
+
+	BOOST_CHECK_EQUAL(u.get_alltags().size(), 3u);
 }
