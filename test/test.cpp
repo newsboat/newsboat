@@ -8,6 +8,7 @@
 #include <cache.h>
 #include <rss.h>
 #include <configcontainer.h>
+#include <keymap.h>
 
 #include <stdlib.h>
 
@@ -76,4 +77,28 @@ BOOST_AUTO_TEST_CASE(TestConfigParserAndContainer) {
 	BOOST_CHECK(cfg->get_configvalue("cache-file") == cachefilecomp);
 
 	delete cfg;
+}
+
+BOOST_AUTO_TEST_CASE(TestKeymap) {
+	keymap k;
+	BOOST_CHECK_EQUAL(k.get_operation("ENTER"), OP_OPEN);
+	BOOST_CHECK_EQUAL(k.get_operation("CHAR(117)"), OP_SHOWURLS);
+	BOOST_CHECK_EQUAL(k.get_operation("CHAR(88)"), OP_NIL);
+
+	k.unset_key("enter");
+	BOOST_CHECK_EQUAL(k.get_operation("ENTER"), OP_NIL);
+	k.set_key(OP_OPEN, "enter");
+	BOOST_CHECK_EQUAL(k.get_operation("ENTER"), OP_OPEN);
+
+	BOOST_CHECK_EQUAL(k.get_opcode("open"), OP_OPEN);
+	BOOST_CHECK_EQUAL(k.get_opcode("some-noexistent-operation"), OP_NIL);
+
+	BOOST_CHECK_EQUAL(k.getkey(OP_OPEN), "enter");
+	BOOST_CHECK_EQUAL(k.getkey(OP_TOGGLEITEMREAD), "N");
+	BOOST_CHECK_EQUAL(k.getkey(static_cast<operation>(30000)), "<none>");
+
+	BOOST_CHECK_EQUAL(k.get_key("CHAR(32)"), ' ');
+	BOOST_CHECK_EQUAL(k.get_key("CHAR(85)"), 'U');
+	BOOST_CHECK_EQUAL(k.get_key("CHAR(126)"), '~');
+	BOOST_CHECK_EQUAL(k.get_key("INVALID"), 0);
 }

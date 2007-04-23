@@ -97,7 +97,7 @@ char keymap::get_key(const std::string& keycode) {
 		unsigned int x;
 		char c;
 		sscanf(keycode.c_str(),"CHAR(%u)",&x);
-		if (x > 32 && x <= 126) {
+		if (x >= 32 && x <= 126) {
 			c = static_cast<char>(x);
 			return c;
 		}
