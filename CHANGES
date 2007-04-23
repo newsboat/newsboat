@@ -6,6 +6,7 @@ Changes for newsbeuter:
 	introduced configuration option to set the HTTP user-agent header to a custom value
 	significant speed improvement for reload and cache cleanup (by Jürgen Jung)
 	added Italian translation (by Andrea Marchesini)
+	added unit tests
 
 0.3 (2007-03-26):
 	added gettext support

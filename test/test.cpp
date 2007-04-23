@@ -9,6 +9,7 @@
 #include <rss.h>
 #include <configcontainer.h>
 #include <keymap.h>
+#include <xmlpullparser.h>
 
 #include <stdlib.h>
 
@@ -101,4 +102,51 @@ BOOST_AUTO_TEST_CASE(TestKeymap) {
 	BOOST_CHECK_EQUAL(k.get_key("CHAR(85)"), 'U');
 	BOOST_CHECK_EQUAL(k.get_key("CHAR(126)"), '~');
 	BOOST_CHECK_EQUAL(k.get_key("INVALID"), 0);
+}
+
+BOOST_AUTO_TEST_CASE(TestXmlPullParser) {
+	std::istringstream is("<test><foo quux='asdf' bar=\"qqq\">text</foo>more text<more>&quot;&#33;&#x40;</more></test>");
+	xmlpullparser xpp;
+	xmlpullparser::event e;
+	xpp.setInput(is);
+
+	e = xpp.getEventType();
+	BOOST_CHECK_EQUAL(e, xmlpullparser::START_DOCUMENT);
+	e = xpp.next();
+	BOOST_CHECK_EQUAL(e, xmlpullparser::START_TAG);
+	BOOST_CHECK_EQUAL(xpp.getText(), "test");
+	BOOST_CHECK_EQUAL(xpp.getAttributeCount(), 0);
+	e = xpp.next();
+	BOOST_CHECK_EQUAL(e, xmlpullparser::START_TAG);
+	BOOST_CHECK_EQUAL(xpp.getText(), "foo");
+	BOOST_CHECK_EQUAL(xpp.getAttributeCount(), 2);
+	BOOST_CHECK_EQUAL(xpp.getAttributeValue("quux"), "asdf");
+	BOOST_CHECK_EQUAL(xpp.getAttributeValue("bar"), "qqq");
+	e = xpp.next();
+	BOOST_CHECK_EQUAL(e, xmlpullparser::TEXT);
+	BOOST_CHECK_EQUAL(xpp.getText(), "text");
+	BOOST_CHECK_EQUAL(xpp.getAttributeCount(), -1);
+	e = xpp.next();
+	BOOST_CHECK_EQUAL(e, xmlpullparser::END_TAG);
+	BOOST_CHECK_EQUAL(xpp.getText(), "foo");
+	BOOST_CHECK_EQUAL(xpp.getAttributeCount(), -1);
+	e = xpp.next();
+	BOOST_CHECK_EQUAL(e, xmlpullparser::TEXT);
+	BOOST_CHECK_EQUAL(xpp.getText(), "more text");
+	e = xpp.next();
+	BOOST_CHECK_EQUAL(e, xmlpullparser::START_TAG);
+	BOOST_CHECK_EQUAL(xpp.getText(), "more");
+	e = xpp.next();
+	BOOST_CHECK_EQUAL(e, xmlpullparser::TEXT);
+	BOOST_CHECK_EQUAL(xpp.getText(), "\"!@");
+	e = xpp.next();
+	BOOST_CHECK_EQUAL(e, xmlpullparser::END_TAG);
+	BOOST_CHECK_EQUAL(xpp.getText(), "more");
+	e = xpp.next();
+	BOOST_CHECK_EQUAL(e, xmlpullparser::END_TAG);
+	BOOST_CHECK_EQUAL(xpp.getText(), "test");
+	e = xpp.next();
+	BOOST_CHECK_EQUAL(e, xmlpullparser::END_DOCUMENT);
+	e = xpp.next();
+	BOOST_CHECK_EQUAL(e, xmlpullparser::END_DOCUMENT);
 }

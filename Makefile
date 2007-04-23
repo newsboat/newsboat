@@ -151,7 +151,7 @@ install-mo:
 TEST_OBJS=$(patsubst test/%.cpp,test/%.o,$(wildcard test/*.cpp))
 
 test: $(LIB_OUTPUT) $(NEWSBEUTER_OBJS) $(TEST_OBJS)
-	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o test/test src/rss.o src/cache.o $(TEST_OBJS) $(NEWSBEUTER_LIBS) -lboost_unit_test_framework
+	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o test/test src/rss.o src/cache.o src/xmlpullparser.o $(TEST_OBJS) $(NEWSBEUTER_LIBS) -lboost_unit_test_framework
 
 test-clean:
 	$(RM) test/test test/test.o
