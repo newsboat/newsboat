@@ -11,6 +11,7 @@
 #include <keymap.h>
 #include <xmlpullparser.h>
 #include <urlreader.h>
+#include <utils.h>
 
 #include <stdlib.h>
 
@@ -167,4 +168,56 @@ BOOST_AUTO_TEST_CASE(TestUrlReader) {
 	BOOST_CHECK_EQUAL(u.get_tags("http://onemorefeed.at/feed/").size(), 2u);
 
 	BOOST_CHECK_EQUAL(u.get_alltags().size(), 3u);
+}
+
+BOOST_AUTO_TEST_CASE(TestTokenizers) {
+	std::vector<std::string> tokens;
+
+	tokens = utils::tokenize("as df qqq");
+	BOOST_CHECK_EQUAL(tokens.size(), 3u);
+	BOOST_CHECK(tokens[0] == "as" && tokens[1] == "df" && tokens[2] == "qqq");
+
+	tokens = utils::tokenize(" aa ");
+	BOOST_CHECK_EQUAL(tokens.size(), 1u);
+	BOOST_CHECK_EQUAL(tokens[0], "aa");
+
+	tokens = utils::tokenize("	");
+	BOOST_CHECK_EQUAL(tokens.size(), 0u);
+	
+	tokens = utils::tokenize("");
+	BOOST_CHECK_EQUAL(tokens.size(), 0u);
+
+	tokens = utils::tokenize_spaced("a b");
+	BOOST_CHECK_EQUAL(tokens.size(), 3u);
+	BOOST_CHECK_EQUAL(tokens[1], " ");
+
+	tokens = utils::tokenize_spaced(" a\t b ");
+	BOOST_CHECK_EQUAL(tokens.size(), 5u);
+	BOOST_CHECK_EQUAL(tokens[0], " ");
+	BOOST_CHECK_EQUAL(tokens[1], "a");
+	BOOST_CHECK_EQUAL(tokens[2], " ");
+
+	tokens = utils::tokenize_quoted("asdf \"foobar bla\" \"foo\\r\\n\\tbar\"");
+	BOOST_CHECK_EQUAL(tokens.size(), 3u);
+	BOOST_CHECK_EQUAL(tokens[0], "asdf");
+	BOOST_CHECK_EQUAL(tokens[1], "foobar bla");
+	BOOST_CHECK_EQUAL(tokens[2], "foo\r\n\tbar");
+
+	tokens = utils::tokenize_quoted("  \"foo \\\\xxx\"\t\r \" \"");
+	BOOST_CHECK_EQUAL(tokens.size(), 2u);
+	BOOST_CHECK_EQUAL(tokens[0], "foo \\xxx");
+	BOOST_CHECK_EQUAL(tokens[1], " ");
+
+	tokens = utils::tokenize_quoted("\"\\\\");
+	BOOST_CHECK_EQUAL(tokens.size(), 1u);
+	BOOST_CHECK_EQUAL(tokens[0], "\\");
+
+	// the following test cases specifically demonstrate a problem of the tokenize_quoted with several \\ sequences directly appended
+	tokens = utils::tokenize_quoted("\"\\\\\\\\");
+	BOOST_CHECK_EQUAL(tokens.size(), 1);
+	BOOST_CHECK_EQUAL(tokens[0], "\\\\");
+
+	tokens = utils::tokenize_quoted("\"\\\\\\\\\\\\");
+	BOOST_CHECK_EQUAL(tokens.size(), 1);
+	BOOST_CHECK_EQUAL(tokens[0], "\\\\\\");
 }

@@ -37,6 +37,8 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str, std::str
 								case 'r': token.append("\r"); break;
 								case 't': token.append("\t"); break;
 								case '"': token.append("\""); break;
+								case '\\': break;
+								default: token.append(1, str[last_pos]); break;
 							}
 						} else {
 							token.append(1, str[last_pos]);
@@ -58,6 +60,8 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str, std::str
 								case 'r': token.append("\r"); break;
 								case 't': token.append("\t"); break;
 								case '"': token.append("\""); break;
+								case '\\': break;
+								default: token.append(1, str[last_pos]); break;
 							}
 						} else {
 							token.append(1, str[last_pos]);
