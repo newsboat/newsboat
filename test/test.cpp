@@ -214,10 +214,10 @@ BOOST_AUTO_TEST_CASE(TestTokenizers) {
 
 	// the following test cases specifically demonstrate a problem of the tokenize_quoted with several \\ sequences directly appended
 	tokens = utils::tokenize_quoted("\"\\\\\\\\");
-	BOOST_CHECK_EQUAL(tokens.size(), 1);
+	BOOST_CHECK_EQUAL(tokens.size(), 1u);
 	BOOST_CHECK_EQUAL(tokens[0], "\\\\");
 
 	tokens = utils::tokenize_quoted("\"\\\\\\\\\\\\");
-	BOOST_CHECK_EQUAL(tokens.size(), 1);
+	BOOST_CHECK_EQUAL(tokens.size(), 1u);
 	BOOST_CHECK_EQUAL(tokens[0], "\\\\\\");
 }
