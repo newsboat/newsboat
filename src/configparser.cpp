@@ -7,13 +7,60 @@
 #include <sstream>
 #include <config.h>
 
+#include <sys/types.h>
+#include <pwd.h>
+
+
 namespace newsbeuter {
 
-configparser::configparser(const char * file) : filename(file) { }
+configparser::configparser(const char * file) : filename(file) { 
+	register_handler("include", this);
+}
 
 configparser::~configparser() { }
 
 void configparser::parse() {
+	parse(filename);
+}
+
+action_handler_status configparser::handle_action(const std::string& action, const std::vector<std::string>& params) {
+	if (action == "include") {
+		if (params.size() < 1) {
+			return AHS_TOO_FEW_PARAMS;
+		}
+
+		char * homedir;
+		std::string filepath;
+
+		if (!(homedir = ::getenv("HOME"))) {
+			struct passwd * spw = ::getpwuid(::getuid());
+			if (spw) {
+					homedir = spw->pw_dir;
+			} else {
+					homedir = "";
+			}
+		}
+
+		if (strcmp(homedir,"")!=0 && params[0].substr(0,2) == "~/") {
+			filepath.append(homedir);
+			filepath.append(1,'/');
+			filepath.append(params[0].substr(2,params[0].length()-2));
+		} else {
+			filepath.append(params[0]);
+		}
+		this->parse(filepath);
+		return AHS_OK;
+	}
+	return AHS_INVALID_COMMAND;
+}
+
+void configparser::parse(const std::string& filename) {
+	if (included_files.find(filename) != included_files.end()) {
+		GetLogger().log(LOG_WARN, "configparser::parse: file %s has already been included", filename.c_str());
+		return;
+	}
+	included_files.insert(included_files.begin(), filename);
+
 	unsigned int linecounter = 1;
 	std::fstream f(filename.c_str());
 	std::string line;

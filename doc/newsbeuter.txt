@@ -133,6 +133,7 @@ refresh-on-startup|[yes/no]|no|If yes, then all feeds will be reloaded when news
 suppress-first-reload|[yes/no]|no|If yes, then the first automatic reload will be suppressed if auto-reload is set to yes.|suppress-first-reload yes
 cache-file|<path>|"~/.newsbeuter/cache.db"|This configuration option sets the cache file. This is especially useful if the filesystem of your home directory doesn't support proper locking (e.g. NFS).|cache-file "/tmp/testcache.db"
 confirm-exit|[yes/no]|no|If set to yes, then newsbeuter will ask for confirmation whether the user really wants to quit newsbeuter.|confirm-exit yes
+include|<path>|With this command, you can include other files to be interpreted as configuration files. This is especially useful to separate your configuration into several files, e.g. key configuration, color configuration, ...|include "~/.newsbeuter/colors"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .Available Operations
