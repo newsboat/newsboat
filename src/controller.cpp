@@ -380,14 +380,19 @@ void controller::reload_all() {
 	}
 }
 
-void controller::start_reload_all_thread() {
+bool controller::trylock_reload_mutex() {
 	if (reload_mutex->trylock()) {
-		GetLogger().log(LOG_INFO,"starting reload all thread");
-		thread * dlt = new downloadthread(this);
-		dlt->start();
-	} else {
-		GetLogger().log(LOG_INFO,"reload mutex is currently locked");
+		GetLogger().log(LOG_DEBUG, "controller::trylock_reload_mutex succeeded");
+		return true;
 	}
+	GetLogger().log(LOG_DEBUG, "controller::trylock_reload_mutex failed");
+	return false;
+}
+
+void controller::start_reload_all_thread() {
+	GetLogger().log(LOG_INFO,"starting reload all thread");
+	thread * dlt = new downloadthread(this);
+	dlt->start();
 }
 
 void controller::usage(char * argv0) {

@@ -6,11 +6,14 @@
 using namespace newsbeuter;
 
 mutex::mutex() {
-	pthread_mutex_init(&mtx, NULL);
+	pthread_mutexattr_init(&attr);
+	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_NORMAL);
+	pthread_mutex_init(&mtx, &attr);
 }
 
 mutex::~mutex() {
 	pthread_mutex_destroy(&mtx);
+	pthread_mutexattr_destroy(&attr);
 }
 
 void mutex::lock() {

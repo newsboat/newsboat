@@ -15,6 +15,7 @@ class mutex {
 
 	private:
 		pthread_mutex_t mtx;
+		pthread_mutexattr_t attr;
 
 	friend class condition;
 };

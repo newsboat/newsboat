@@ -28,6 +28,7 @@ namespace newsbeuter {
 			inline unsigned int get_feedcount() { return feeds.size(); }
 
 			inline void unlock_reload_mutex() { reload_mutex->unlock(); }
+			bool trylock_reload_mutex();
 
 			void update_feedlist();
 			void mark_all_read(unsigned int pos);
