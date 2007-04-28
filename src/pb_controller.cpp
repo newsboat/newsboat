@@ -122,7 +122,7 @@ void pb_controller::run(int argc, char * argv[]) {
 	std::cout << _("Loading configuration...");
 	std::cout.flush();
 
-	configparser cfgparser(config_file.c_str());
+	configparser cfgparser;
 	cfg = new configcontainer();
 	cfg->register_commands(cfgparser);
 	colormanager * colorman = new colormanager();
@@ -135,7 +135,8 @@ void pb_controller::run(int argc, char * argv[]) {
 	v->set_keymap(&keys);
 
 	try {
-		cfgparser.parse();
+		cfgparser.parse("/etc/newsbeuter/config");
+		cfgparser.parse(config_file);
 	} catch (const configexception& ex) {
 		std::cout << ex.what() << std::endl;
 		return;	

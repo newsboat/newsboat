@@ -13,15 +13,11 @@
 
 namespace newsbeuter {
 
-configparser::configparser(const char * file) : filename(file) { 
+configparser::configparser() {
 	register_handler("include", this);
 }
 
 configparser::~configparser() { }
-
-void configparser::parse() {
-	parse(filename);
-}
 
 action_handler_status configparser::handle_action(const std::string& action, const std::vector<std::string>& params) {
 	if (action == "include") {
@@ -62,9 +58,12 @@ void configparser::parse(const std::string& filename) {
 	included_files.insert(included_files.begin(), filename);
 
 	unsigned int linecounter = 1;
-	std::fstream f(filename.c_str());
+	std::ifstream f(filename.c_str());
 	std::string line;
 	getline(f,line);
+	if (!f.is_open()) {
+		GetLogger().log(LOG_WARN, "configparser::parse: file %s couldn't be opened", filename.c_str());
+	}
 	while (f.is_open() && !f.eof()) {
 		GetLogger().log(LOG_DEBUG,"configparser::parse: tokenizing %s",line.c_str());
 		std::vector<std::string> tokens = utils::tokenize_quoted(line);

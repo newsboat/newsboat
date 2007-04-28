@@ -185,7 +185,7 @@ void controller::run(int argc, char * argv[]) {
 		std::cout << _("Loading configuration...");
 	std::cout.flush();
 	
-	configparser cfgparser(config_file.c_str());
+	configparser cfgparser;
 	cfg = new configcontainer();
 	cfg->register_commands(cfgparser);
 	colormanager * colorman = new colormanager();
@@ -196,7 +196,8 @@ void controller::run(int argc, char * argv[]) {
 	cfgparser.register_handler("unbind-key",&keys);
 
 	try {
-		cfgparser.parse();
+		cfgparser.parse("/etc/" PROGRAM_NAME "/config");
+		cfgparser.parse(config_file);
 	} catch (const configexception& ex) {
 		GetLogger().log(LOG_ERROR,"an exception occured while parsing the configuration file: %s",ex.what());
 		std::cout << ex.what() << std::endl;

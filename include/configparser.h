@@ -17,15 +17,13 @@ namespace newsbeuter {
 
 	class configparser : public config_action_handler {
 		public:
-			configparser(const char * file);
+			configparser();
 			virtual ~configparser();
-			void parse();
 			void register_handler(const std::string& cmd, config_action_handler * handler);
 			void unregister_handler(const std::string& cmd);
 			virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
-		private:
 			void parse(const std::string& filename);
-			std::string filename;
+		private:
 			std::vector<std::vector<std::string> > parsed_content;
 			std::map<std::string,config_action_handler *> action_handlers;
 			std::set<std::string> included_files;
