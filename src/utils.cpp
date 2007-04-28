@@ -183,6 +183,11 @@ std::string utils::convert_text(const std::string& text, const std::string& toco
 
 	size_t inbytesleft;
 	size_t outbytesleft;
+
+/*
+ * of all the Unix-like systems around there, only Linux/glibc seems to 
+ * come with a SuSv3-conforming iconv implementation.
+ */
 #ifndef __linux
 	const char * inbufp;
 #else
