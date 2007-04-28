@@ -3,8 +3,6 @@ TODO:
 - refactor XML pull parser (many redundancies)
 	ignore comments
 	join two subsequent text nodes separated by a comment
-- implement podcast support
-	- test more thoroughly
 - do entitity decoding for titles (this may be controversial...)
 - research (and fix) libnxml decoding issues
 - make STFL and newsbeuter capable of correct handling of Unicode (currently, it crashes when entering cyrillic characters)
@@ -68,6 +66,7 @@ DONE:
 	- write podbeuter.1 manpage
 	- set configured colors
 	- implement "start player" function in podbeuter.
+	- test more thoroughly
 - fill table with html entities
 - write "newsbeuter hacker's guide"
 	- describe the overall architecture

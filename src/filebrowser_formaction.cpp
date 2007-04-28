@@ -76,7 +76,20 @@ void filebrowser_formaction::process_operation(operation op) {
 								break;
 						}
 					} else {
-						v->pop_current_formaction();
+						bool do_pop = true;
+						std::string fn = f->get("filenametext");
+						struct stat sbuf;
+						if (::stat(fn.c_str(), &sbuf)!=-1 && type == FBT_SAVE) {
+							char buf[2048];
+							snprintf(buf,sizeof(buf), _("Do you really want to overwrite `%s' (y:Yes n:No)? "), fn.c_str());
+							f->set_focus("files");
+							if (v->confirm(buf, "yn") == 'n') {
+								do_pop = false;
+							}
+							f->set_focus("filenametext");
+						}
+						if (do_pop)
+							v->pop_current_formaction();
 					}
 				}
 			}
