@@ -9,6 +9,7 @@ Changes for newsbeuter:
 	added unit tests
 	added an "include" configuration command to make it possible to separate the configuration into several files
 	introduced global configuration file /etc/newsbeuter/config
+	added support for Snownews/Liferea extension scripts
 
 0.3 (2007-03-26):
 	added gettext support

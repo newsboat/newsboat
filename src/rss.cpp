@@ -41,9 +41,28 @@ rss_feed rss_parser::parse() {
 		snprintf(user_agent, sizeof(user_agent), "%s", ua_pref.c_str());
 	}
 
-	mrss_options_t * options = mrss_options_new(30, proxy, proxy_auth, NULL, NULL, NULL, 0, NULL, user_agent);
-	mrss_error_t err = mrss_parse_url_with_options(const_cast<char *>(my_uri.c_str()), &mrss, options);
-	mrss_options_free(options);
+	mrss_error_t err;
+	if (my_uri.substr(0,5) == "http:" || my_uri.substr(0,6) == "https:") {
+		mrss_options_t * options = mrss_options_new(30, proxy, proxy_auth, NULL, NULL, NULL, 0, NULL, user_agent);
+		err = mrss_parse_url_with_options(const_cast<char *>(my_uri.c_str()), &mrss, options);
+		mrss_options_free(options);
+	} else if (my_uri.substr(0,5) == "exec:") {
+		std::string file = my_uri.substr(8,my_uri.length()-8);
+		std::string buf = utils::get_command_output(file);
+		GetLogger().log(LOG_DEBUG, "rss_parser::parse: output of `%s' is: %s", file.c_str(), buf.c_str());
+		err = mrss_parse_buffer(const_cast<char *>(buf.c_str()), buf.length(), &mrss);
+	} else if (my_uri.substr(0,7) == "filter:") {
+		std::string filter, url;
+		utils::extract_filter(my_uri, filter, url);
+		std::string buf = utils::retrieve_url(url, user_agent);
+		std::string result = utils::run_filter(filter, buf);
+		GetLogger().log(LOG_DEBUG, "rss_parser::parse: output of `%s' is: %s", filter.c_str(), result.c_str());
+		err = mrss_parse_buffer(const_cast<char *>(result.c_str()), result.length(), &mrss);
+	} else {
+		char buf[1024];
+		snprintf(buf, sizeof(buf), _("Error: unsupported URL: %s"), my_uri.c_str());
+		throw std::string(buf);
+	}
 
 	if (err != MRSS_OK) {
 		GetLogger().log(LOG_ERROR,"rss_parser::parse: mrss_parse_url_with_options failed: err = %s (%d)",mrss_strerror(err), err);
@@ -85,16 +104,16 @@ rss_feed rss_parser::parse() {
 
 		mrss_tag_t * content;
 
-		if (mrss->version == MRSS_VERSION_2_0 && mrss_search_tag(item, "encoded", "http://purl.org/rss/1.0/modules/content/", &content) == MRSS_OK && content) {
+		if (mrss_search_tag(item, "encoded", "http://purl.org/rss/1.0/modules/content/", &content) == MRSS_OK && content) {
 			/* RSS 2.0 content:encoded */
-			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found rss 2.0 content:encoded: %s\n", content->value);
+			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found content:encoded: %s\n", content->value);
 			if (content->value) {
 				std::string desc = utils::convert_text(content->value, "utf-8", encoding);
 				GetLogger().log(LOG_DEBUG, "rss_parser::parse: converted description `%s' to `%s'", content->value, desc.c_str());
 				x.set_description(desc);
 			}
 		} else {
-			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found no rss 2.0 content:encoded");
+			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found no content:encoded");
 		}
 
 		if ((mrss->version == MRSS_VERSION_ATOM_0_3 || mrss->version == MRSS_VERSION_ATOM_1_0)) {

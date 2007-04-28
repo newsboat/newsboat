@@ -7,6 +7,8 @@
 #include <iconv.h>
 #include <errno.h>
 
+#include <curl/curl.h>
+
 namespace newsbeuter {
 
 std::vector<std::string> utils::tokenize_quoted(const std::string& str, std::string delimiters) {
@@ -233,6 +235,88 @@ std::string utils::convert_text(const std::string& text, const std::string& toco
 	iconv_close(cd);
 
 	return result;
+}
+
+std::string utils::get_command_output(const std::string& cmd) {
+	FILE * f = popen(cmd.c_str(), "r");
+	std::string buf;
+	char cbuf[1024];
+	size_t s;
+	if (f) {
+		while ((s = fread(cbuf, 1, sizeof(cbuf), f)) > 0) {
+			buf.append(cbuf, s);
+		}
+		pclose(f);
+	}
+	return buf;
+}
+
+void utils::extract_filter(const std::string& line, std::string& filter, std::string& url) {
+	std::string::size_type pos = line.find_first_of(":", 0);
+	std::string::size_type pos1 = line.find_first_of(":", pos + 1);
+	filter = line.substr(pos+1, pos1 - pos - 1);
+	pos = pos1;
+	url = line.substr(pos+1, line.length() - pos);
+	GetLogger().log(LOG_DEBUG, "utils::extract_filter: %s -> filter: %s url: %s", line.c_str(), filter.c_str(), url.c_str());
+}
+
+static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp) {
+	std::string * pbuf = (std::string *)userp;
+	pbuf->append((const char *)buffer, size * nmemb);
+	return size * nmemb;
+}
+
+std::string utils::retrieve_url(const std::string& url, const char * user_agent) {
+	std::string buf;
+
+	CURL * easyhandle = curl_easy_init();
+	if (user_agent) {
+		curl_easy_setopt(easyhandle, CURLOPT_USERAGENT, user_agent);
+	}
+	curl_easy_setopt(easyhandle, CURLOPT_URL, url.c_str());
+	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
+	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, &buf);
+	curl_easy_perform(easyhandle);
+
+	GetLogger().log(LOG_DEBUG, "utils::retrieve_url(%s): %s", url.c_str(), buf.c_str());
+
+	return buf;
+}
+
+std::string utils::run_filter(const std::string& cmd, const std::string& input) {
+	std::string buf;
+	int ipipe[2];
+	int opipe[2];
+	pipe(ipipe);
+	pipe(opipe);
+
+	int rc = fork();
+	switch (rc) {
+		case -1: break;
+		case 0: { // child:
+				close(ipipe[1]);
+				close(opipe[0]);
+				dup2(ipipe[0], 0);
+				dup2(opipe[1], 1);
+				execl("/bin/sh", "/bin/sh", "-c", cmd.c_str(), NULL);
+				exit(1);
+			}
+			break;
+		default: {
+				close(ipipe[0]);
+				close(opipe[1]);
+				write(ipipe[1], input.c_str(), input.length());
+				close(ipipe[1]);
+				char cbuf[1024];
+				int rc;
+				while ((rc = read(opipe[0], cbuf, sizeof(cbuf))) > 0) {
+					buf.append(cbuf, rc);
+				}
+				close(opipe[0]);
+			}
+			break;
+	}
+	return buf;
 }
 
 

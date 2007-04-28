@@ -19,6 +19,11 @@ class utils {
 		static void remove_fs_lock(const std::string& lock_file);
 
 		static std::string convert_text(const std::string& text, const std::string& tocode, const std::string& fromcode);
+
+		static std::string get_command_output(const std::string& cmd);
+		static void extract_filter(const std::string& line, std::string& filter, std::string& url);
+		static std::string retrieve_url(const std::string& url, const char * user_agent = 0);
+		static std::string run_filter(const std::string& cmd, const std::string& input);
 };
 
 }

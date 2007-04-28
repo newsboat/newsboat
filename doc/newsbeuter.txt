@@ -133,7 +133,7 @@ refresh-on-startup|[yes/no]|no|If yes, then all feeds will be reloaded when news
 suppress-first-reload|[yes/no]|no|If yes, then the first automatic reload will be suppressed if auto-reload is set to yes.|suppress-first-reload yes
 cache-file|<path>|"~/.newsbeuter/cache.db"|This configuration option sets the cache file. This is especially useful if the filesystem of your home directory doesn't support proper locking (e.g. NFS).|cache-file "/tmp/testcache.db"
 confirm-exit|[yes/no]|no|If set to yes, then newsbeuter will ask for confirmation whether the user really wants to quit newsbeuter.|confirm-exit yes
-include|<path>|With this command, you can include other files to be interpreted as configuration files. This is especially useful to separate your configuration into several files, e.g. key configuration, color configuration, ...|include "~/.newsbeuter/colors"
+include|<path>|n/a|With this command, you can include other files to be interpreted as configuration files. This is especially useful to separate your configuration into several files, e.g. key configuration, color configuration, ...|include "~/.newsbeuter/colors"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .Available Operations
@@ -260,6 +260,49 @@ a tag. When you select the tag "news", you will see all three RSS feeds. Pressin
 "t" again and e.g. selecting the "conspiracy" tag, you will only see the
 http://blog.fefe.de/rss.xml?html RSS feed. Pressing "^t" clears the current tag,
 and again shows all RSS feeds, regardless of their assigned tags.
+
+Scripts and Filters (Snownews Extensions)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+From version 0.4 on, newsbeuter contains support for Snownews extensions. The
+RSS feed readers Snownews and Liferea share a common way of extending the
+readers with custom scripts. Two mechanisms, namely "execurl" and "filter" type
+scripts, are available and supported by newsbeuter.
+
+An "execurl" script can be any program that gets executed and whose output is
+interpreted as RSS feed, while "filter" scripts are fed with the content of a
+configured URL and whose output is interpreted as RSS feed.
+
+The configuration is simple and straight-forward. Just add to your
+~/.newsbeuter/urls file configuration lines like the following ones:
+
+	exec:~/bin/execurl-script
+	filter:~/bin/filter-script:http://some.test/url
+
+The first line shows how to add an execurl script to your configuration: start
+the line with "exec:" and then immediately append the path of the script that
+shall be executed.  If this script requires additional parameters, simply use
+quotes:
+
+	"exec:~/bin/execurl-script param1 param2"
+
+The second line shows how to add a filter script to your configuration: start
+the line with "filter:", then immediately append the path of the script, then
+append a colon (":"), and then append the URL of the file that shall be fed to
+the script. Again, if the script requires any parameters, simply quote:
+
+	"filter:~/bin/filter-script param1 param2:http://url/foobar"
+
+In both cases, the tagging feature as described above is still available:
+
+	exec:~/bin/execurl-script tag1 tag2 "quoted tag"
+	filter:~/bin/filter-script:http://some.test/url tag3 tag4 tag5
+
+A collection of such extension scripts can be found on this website:
+http://kiza.kcore.de/software/snownews/snowscripts/extensions[]
+
+If you want to write your own extensions, refer to this website for further
+instructions: http://kiza.kcore.de/software/snownews/snowscripts/writing[]
 
 Podcast Support
 ~~~~~~~~~~~~~~~
