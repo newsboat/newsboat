@@ -47,7 +47,7 @@ rss_feed rss_parser::parse() {
 		err = mrss_parse_url_with_options(const_cast<char *>(my_uri.c_str()), &mrss, options);
 		mrss_options_free(options);
 	} else if (my_uri.substr(0,5) == "exec:") {
-		std::string file = my_uri.substr(8,my_uri.length()-8);
+		std::string file = my_uri.substr(5,my_uri.length()-5);
 		std::string buf = utils::get_command_output(file);
 		GetLogger().log(LOG_DEBUG, "rss_parser::parse: output of `%s' is: %s", file.c_str(), buf.c_str());
 		err = mrss_parse_buffer(const_cast<char *>(buf.c_str()), buf.length(), &mrss);
