@@ -137,9 +137,11 @@ void itemview_formaction::process_operation(operation op) {
 			break;
 		case OP_ENQUEUE: {
 				char buf[1024];
-				snprintf(buf, sizeof(buf), _("Added %s to download queue."), item.enclosure_url().c_str());
-				v->get_ctrl()->enqueue_url(item.enclosure_url());
-				v->set_status(buf);
+				if (item.enclosure_url().length() > 0) {
+					snprintf(buf, sizeof(buf), _("Added %s to download queue."), item.enclosure_url().c_str());
+					v->get_ctrl()->enqueue_url(item.enclosure_url());
+					v->set_status(buf);
+				}
 			}
 			break;
 		case OP_SAVE:

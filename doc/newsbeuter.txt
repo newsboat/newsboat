@@ -79,7 +79,19 @@ After you've installed newsbeuter, you can run it for the first time by typing
 This means that newsbeuter can't start without any configured feeds. To add
 feeds to newsbeuter, you can either add URLs to the configuration file
 $HOME/.newsbeuter/urls or you can import an OPML file by running "newsbeuter -i
-blogroll.opml".
+blogroll.opml". To manually add URLs, open the file with your favorite text
+editor and add the URLs, one per line:
+
+	http://rss.cnn.com/rss/cnn_topstories.rss
+	http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml
+
+If you need to add URLs that have restricted access via username/password, simply
+provide the username/password in the following way:
+
+	http://username:password@hostname.domain.tld/feed.rss
+
+In order to protect username and password, make sure that
+$HOME/.newsbeuter/urls has the appropriate permissions.
 
 Now you can run newsbeuter again, and it will present you with a controllable
 list of the URLs that you configured previously. You can now start downloading
