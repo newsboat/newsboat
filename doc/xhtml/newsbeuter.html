@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>The Newsbeuter RSS Feedreader</title><link rel="stylesheet" href="./docbook-xsl.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.68.1" /></head><body><div class="article" lang="en" xml:lang="en"><div class="titlepage"><div><div><h1 class="title"><a id="id2408942"></a>The Newsbeuter RSS Feedreader</h1></div><div><div class="author"><h3 class="author"><span class="firstname">Andreas</span> <span class="surname">Krennmair</span></h3><div class="affiliation"><div class="address"><p><code class="email">&lt;<a href="mailto:ak@synflood.at">ak@synflood.at</a>&gt;</code></p></div></div></div></div></div><hr /></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#id2458043">Introduction</a></span></dt><dd><dl><dt><span class="section"><a href="#id2458057">Why "Newsbeuter"?</a></span></dt></dl></dd><dt><span class="section"><a href="#id2458081">Installation</a></span></dt><dd><dl><dt><span class="section"><a href="#id2458091">Downloading Newsbeuter</a></span></dt><dt><span class="section"><a href="#id2494644">Dependencies</a></span></dt><dt><span class="section"><a href="#id2494720">Compiling and Installing</a></span></dt></dl></dd><dt><span class="section"><a href="#id2494744">First Steps</a></span></dt><dd><dl><dt><span class="section"><a href="#id2504474">Example Configuration</a></span></dt><dt><span class="section"><a href="#id2504501">Configuring Colors</a></span></dt></dl></dd><dt><span class="section"><a href="#id2504760">Advanced Features</a></span></dt><dd><dl><dt><span class="section"><a href="#id2504766">Tagging</a></span></dt><dt><span class="section"><a href="#id2504826">Scripts and Filters (Snownews Extensions)</a></span></dt><dt><span class="section"><a href="#id2504946">Podcast Support</a></span></dt></dl></dd><dt><span class="section"><a href="#id2505363">Feedback</a></span></dt><dt><span class="section"><a href="#id2505396">License</a></span></dt></dl></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2458043"></a>Introduction</h2></div></div></div><p>Newsbeuter is an RSS feedreader. RSS is a number of widely-used XML formats to
+transmit, publish and syndicate articles, for example news or blog articles.
+Newsbeuter is designed to be used on text terminals on Unix or Unix-like
+systems such as Linux, BSD or Mac OS X.</p><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2458057"></a>Why "Newsbeuter"?</h3></div></div></div><p>"Newsbeuter" is a pun on the German word "Wildbeuter", which means
+"hunter-gatherer". During the stone age, people hunted and gathered their food,
+and these days, they hunt and gather news and information. Credits for this
+idea goes to Clifford Wolf, who submitted it to a little competiton that was
+started when I got aware that the original name would violate French and
+European registered trademarks.</p></div></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2458081"></a>Installation</h2></div></div></div><p>This chapter describes how to compile and install newsbeuter from source.</p><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2458091"></a>Downloading Newsbeuter</h3></div></div></div><p>Newsbeuter is available as source package. Simply go to
+<a href="http://synflood.at/newsbeuter.html" target="_top">http://synflood.at/newsbeuter.html</a> and download the latest source package,
+which is usually in the .tar.gz file format. Alternatively, you can check out
+the latest development source tree from the newsbeuter SVN repository by
+running the following command on the commandline:</p><p>svn co http://bereshit.synflood.at/svn/noos/trunk</p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2494644"></a>Dependencies</h3></div></div></div><p>Newsbeuter depends on a number of libraries to function correctly. This table
+lists these dependencies. Please be aware that the list libraries may
+themselves depend on other libraries. These dependencies are not listed here.
+Please also be aware that you need a recent C++ compiler. Currently, newsbeuter
+has only been tested with GCC.</p><div class="itemizedlist"><ul type="disc"><li>
+STFL: <a href="http://www.clifford.at/stfl/" target="_top">http://www.clifford.at/stfl/</a>
+</li><li>
+SQLite 3: <a href="http://www.sqlite.org/" target="_top">http://www.sqlite.org/</a>
+</li><li>
+libmRss: <a href="http://www2.autistici.org/bakunin/libmrss/" target="_top">http://www2.autistici.org/bakunin/libmrss/</a>
+</li><li>
+libnXml: <a href="http://www2.autistici.org/bakunin/libnxml/" target="_top">http://www2.autistici.org/bakunin/libnxml/</a>
+</li></ul></div></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2494720"></a>Compiling and Installing</h3></div></div></div><p>After you've downloaded and installed the dependencies mentioned above, you can
+start compiling and installing newsbeuter. To compile newsbeuter, simply run
+"make" in the source tree. After a short time, this should complete
+successfully, and you can go on with installation by running "make install". By
+default, this will install the "newsbeuter" binary to the /usr/local/bin
+directory. You can provide an alternative installation path using the prefix
+parameter, e.g. running "make install prefix=/opt/newsbeuter" will install the
+binary to the directory /opt/newsbeuter/bin.</p></div></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2494744"></a>First Steps</h2></div></div></div><p>After you've installed newsbeuter, you can run it for the first time by typing
+"newsbeuter" on your command prompt. This will bring you the following message:</p><pre class="literallayout">Error: no URLs configured. Please fill the file /Users/ak/.newsbeuter/urls with RSS feed URLs or import an OPML file.</pre><pre class="literallayout">newsbeuter 0.4
+usage: ./newsbeuter [-i &lt;file&gt;|-e] [-u &lt;urlfile&gt;] [-c &lt;cachefile&gt;] [-h]
+        -r              refresh feeds on start
+        -e              export OPML feed to stdout
+        -i &lt;file&gt;       import OPML file
+        -u &lt;urlfile&gt;    read RSS feed URLs from &lt;urlfile&gt;
+        -c &lt;cachefile&gt;  use &lt;cachefile&gt; as cache file
+        -C &lt;configfile&gt; read configuration from &lt;configfile&gt;
+        -v              clean up cache thoroughly
+        -h              this help</pre><p>This means that newsbeuter can't start without any configured feeds. To add
+feeds to newsbeuter, you can either add URLs to the configuration file
+$HOME/.newsbeuter/urls or you can import an OPML file by running "newsbeuter -i
+blogroll.opml". To manually add URLs, open the file with your favorite text
+editor and add the URLs, one per line:</p><pre class="literallayout">http://rss.cnn.com/rss/cnn_topstories.rss
+http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml</pre><p>If you need to add URLs that have restricted access via username/password, simply
+provide the username/password in the following way:</p><pre class="literallayout">http://username:password@hostname.domain.tld/feed.rss</pre><p>In order to protect username and password, make sure that
+$HOME/.newsbeuter/urls has the appropriate permissions.</p><p>Now you can run newsbeuter again, and it will present you with a controllable
+list of the URLs that you configured previously. You can now start downloading
+the feeds, either by pressing "R" to download all feeds, or by pressing "r" to
+download the currently selected feed. You can then select a feed you want to
+read, and by pressing "Enter", you can go to the article list for this feed.
+This works even while the downloading is still in progress.  You can now see
+the list of available articles by their title. A "N" on the left indicates that
+an article wasn't read yet. Pressing Enter brings you to the content of the
+article. You can scroll through this text, and also run a browser (default:
+lynx) to view the complete article if the content is empty or just an abstract
+or a short description. Pressing "q" brings you back to the article list, and
+pressing "q" again brings you back to the feed list. Pressing "q" a third time
+then closes newsbeuter.</p><p>Newsbeuter caches the article that it downloads. This means that when you start
+newsbeuter again and reload a feed, the old articles can still be read even if
+they aren't in the current RSS feeds anymore. Optionally you can configure how
+many articles shall be preserved by feed so that the article backlog doesn't
+grow endlessly (see below).</p><p>Several aspects of newsbeuter's behaviour can be configured via a configuration
+file, by default $HOME/.newsbeuter/config. This configuration files contains
+lines in the form "&lt;config-command&gt; &lt;arg1&gt; …".  The configuration file can
+also contain comments, which start with the <span class="emphasis"><em>#</em></span> character and go as far as the
+end of line. If you need to enter a configuration argument that contains
+spaces, use quotes (") around the whole argument.</p><div class="table"><a id="id2456361"></a><p class="title"><b>Table 1. Configuration Commands</b></p><table summary="Configuration Commands" cellpadding="4px" border="0" style="border-collapse: collapse;border-top: 2px solid #527bbd; border-bottom: 2px solid #527bbd; border-left: 2px solid #527bbd; border-right: 2px solid #527bbd; "><colgroup><col align="left" /><col align="left" /><col align="left" /><col align="left" /><col align="left" /></colgroup><thead><tr><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Configuration Command
+    </th><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Argument(s)
+    </th><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Default
+    </th><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Description
+    </th><th style="border-bottom: 1px solid ; " align="left">
+    Example
+    </th></tr></thead><tbody><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    show-read-feeds
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    [yes/no]
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    yes
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    If yes, then all feeds, including those without unread articles, are listed. If no, then only feeds with one or more unread articles are list.
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    show-read-feeds no
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    browser
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    &lt;browser-command&gt;
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    lynx
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Set the browser command to use when opening an article in the browser.
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    browser w3m
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    max-items
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    &lt;number&gt;
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    0
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Set the number of articles to maximally keep per feed. If the number is set to 0, then all articles are kept.
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    max-items 100
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    bind-key
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    &lt;key&gt; &lt;operation&gt;
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Bind key &lt;key&gt; to &lt;operation&gt;. This means that whenever &lt;key&gt; is preseed, then &lt;operation&gt; is executed (if applicable in the current context). A list of available operations can be found below.
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    bind-key ^r reload-all
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    unbind-key
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    &lt;key&gt;
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Unbind key &lt;key&gt;. This means that no operation is called when &lt;key&gt; is pressed.
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    unbind-key R
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    use-proxy
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    [yes/no]
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    no
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    If yes, then the configured proxy will be used for downloading the RSS feeds.
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    use-proxy yes
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    proxy
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    &lt;server:port&gt;
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Set the proxy to use for downloading RSS feeds.
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    proxy localhost:3128
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    proxy-auth
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    &lt;auth&gt;
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Set the proxy authentication string.
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    proxy-auth user:password
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    color
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    &lt;element&gt; &lt;fgcolor&gt; &lt;bgcolor&gt; [&lt;attr&gt; …]
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Set the foreground color, background color and optional attributes for a certain element
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    color background white black
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    auto-reload
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    [yes/no]
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    no
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    If enabled, all feeds will be automatically reloaded at start up and then continuously after a certain time has passed (see reload-time).
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    auto-reload yes
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    reload-time
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    &lt;number&gt;
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    30
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    The number of minutes between automatic reloads.
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    reload-time 60
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    save-path
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    &lt;path&gt;
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    ~/
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    The default path where articles shall be saved to. If an invalid path is specified, the current directory is used.
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    save-path "~/Saved Articles"
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    podcast-auto-enqueue
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    [yes/no]
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    no
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    If yes, then all podcast URLs that are found in articles are added to the podcast download queue. See below for more information on podcast support in newsbeuter.
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    podcast-auto-enqueue yes
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    cleanup-on-quit
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    [yes/no]
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    yes
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    If yes, then the cache gets locked and superfluous feeds and items are removed, such as feeds that can't be found in the urls configuration file anymore.
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    cleanup-on-quit no
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    user-agent
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    &lt;user agent string&gt;
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    ""
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    If set to a non-zero-length string, this value will be used as HTTP User-Agent header for all HTTP requests.
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    user-agent "Lynx/2.8.5rel.1 libwww-FM/2.14"
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    refresh-on-startup
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    [yes/no]
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    no
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    If yes, then all feeds will be reloaded when newsbeuter starts up. This is equivalent to the -r commandline option.
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    refresh-on-startup yes
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    suppress-first-reload
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    [yes/no]
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    no
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    If yes, then the first automatic reload will be suppressed if auto-reload is set to yes.
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    suppress-first-reload yes
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    cache-file
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    &lt;path&gt;
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    "~/.newsbeuter/cache.db"
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    This configuration option sets the cache file. This is especially useful if the filesystem of your home directory doesn't support proper locking (e.g. NFS).
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    cache-file "/tmp/testcache.db"
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    confirm-exit
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    [yes/no]
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    no
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    If set to yes, then newsbeuter will ask for confirmation whether the user really wants to quit newsbeuter.
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    confirm-exit yes
+    </td></tr><tr><td style="border-right: 1px solid ; " align="left">
+    include
+    </td><td style="border-right: 1px solid ; " align="left">
+    &lt;path&gt;
+    </td><td style="border-right: 1px solid ; " align="left">
+    n/a
+    </td><td style="border-right: 1px solid ; " align="left">
+    With this command, you can include other files to be interpreted as configuration files. This is especially useful to separate your configuration into several files, e.g. key configuration, color configuration, …
+    </td><td style="" align="left">
+    include "~/.newsbeuter/colors"
+    </td></tr></tbody></table></div><div class="table"><a id="id2457353"></a><p class="title"><b>Table 2. Available Operations</b></p><table summary="Available Operations" cellpadding="4px" border="0" style="border-collapse: collapse;border-top: 2px solid #527bbd; border-bottom: 2px solid #527bbd; border-left: 2px solid #527bbd; border-right: 2px solid #527bbd; "><colgroup><col align="left" /><col align="left" /><col align="left" /></colgroup><thead><tr><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Operation
+    </th><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Default key
+    </th><th style="border-bottom: 1px solid ; " align="left">
+    Description
+    </th></tr></thead><tbody><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    quit
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    q
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Quit the program or return to the previous dialog (depending on the context).
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    reload
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    r
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Reload the currently selected feed.
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    reload-all
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    R
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Reload all feeds.
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    mark-feed-read
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    A
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Mark all articles in the currently selected feed read.
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    mark-all-feeds-read
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    C
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Mark articles in all feeds read.
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    open
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Enter
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Open the currently selected feed or article.
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    save
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    s
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Save the currently selected article to a file.
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    next-unread
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    n
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Jump to the next unread article.
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    open-in-browser
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    o
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Opens the URL associated with the current article.
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    toggle-source-view
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    ^u
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Toggles between the HTML view and the source view in the article view.
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    toggle-article-read
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    N
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Toggle the read flag for the currently selected article.
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    toggle-show-read-feeds
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    l
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Toggle whether read feeds should be shown in the feed list.
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    show-urls
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    u
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Show all URLs in the article in a list (similar to urlview).
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    open-search
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    /
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Opens the search dialog. When a search is done in the article list, then the search operation only applies to the articles of the current feed, otherwise to all articles.
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    select-tag
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    t
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Select tag.
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    clear-tag
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    ^t
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Clear current tag.
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    enqueue
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    e
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Add the podcast download URL of the current article (if any is found) to the podcast download queue (see below for more information on podcast support).
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    redraw
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    ^l
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Redraw the screen.
+    </td></tr><tr><td style="border-right: 1px solid ; " align="left">
+    help
+    </td><td style="border-right: 1px solid ; " align="left">
+    ?
+    </td><td style="" align="left">
+    Runs the help screen.
+    </td></tr></tbody></table></div><p>Keys, as used in the bind-key configuration command, use a special syntax.
+Lowercase keys, uppercase keys and special characters are written literally.
+The Enter key is written as "enter", while the ESC key is written as "esc". The
+function keys F1 to F12 are written as "F1" to "F12". The Space key is written
+as "space". Key combinations with the Ctrl key, such as Ctrl-R, are written as
+^r. Please be aware that all Ctrl-related key combinations need to be written
+in lowercase ^R for Ctrl-Shift-R does not work.</p><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2504474"></a>Example Configuration</h3></div></div></div><pre class="literallayout"># a comment
+max-items        100 # such comments are possible, too
+browser          links
+show-read-feeds  no</pre><pre class="literallayout">unbind-key       R
+bind-key         ^r    reload-all</pre></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2504501"></a>Configuring Colors</h3></div></div></div><p>It is possible to configure custom color settings in newsbeuter. The basic configuration
+syntax is:</p><pre class="literallayout">color &lt;element&gt; &lt;foreground color&gt; &lt;background color&gt; [&lt;attribute&gt; ...]</pre><p>This means that if you configure colors for a certain element, you need to provide
+a foreground color and a background color as a minimum. The following colors are
+supported:</p><div class="itemizedlist"><ul type="disc"><li>
+black
+</li><li>
+red
+</li><li>
+green
+</li><li>
+yellow
+</li><li>
+blue
+</li><li>
+magenta
+</li><li>
+cyan
+</li><li>
+white
+</li><li>
+default
+</li></ul></div><p>The "default" color means that the terminal's default color will be used.</p><p>Optionally, you can also add one or more attributes. The following attributes are
+supported:</p><div class="itemizedlist"><ul type="disc"><li>
+standout
+</li><li>
+underline
+</li><li>
+reverse
+</li><li>
+blink
+</li><li>
+dim
+</li><li>
+bold
+</li><li>
+protect
+</li><li>
+invis
+</li></ul></div><p>Currently, the following elements are supported:</p><div class="itemizedlist"><ul type="disc"><li>
+<span class="strong"><strong>listnormal</strong></span>: a normal list item
+</li><li>
+<span class="strong"><strong>listfocus</strong></span>: the currently selected list item
+</li><li>
+<span class="strong"><strong>info</strong></span>: the info bars on top and bottom
+</li><li>
+<span class="strong"><strong>background</strong></span>: the application background
+</li><li>
+<span class="strong"><strong>article</strong></span>: the article text
+</li></ul></div><p>The default color configuration of newsbeuter looks like this:</p><pre class="literallayout">background   white   black
+listnormal   white   black
+listfocus    yellow  blue   bold
+info         yellow  blue   bold
+article      white   black</pre></div></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2504760"></a>Advanced Features</h2></div></div></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2504766"></a>Tagging</h3></div></div></div><p>Newsbeuter comes with the possibility to categorize or "tag", as well call it,
+RSS feeds. Every RSS feed can be assigned 0 or more tags. Within newsbeuter, you
+can then select to only show RSS feeds that match a certain tag. That makes it
+easy to categorize your feeds in a flexible and powerful way.</p><p>Usually, the ~/.newsbeuter/urls file contains one RSS feed URL per line. To
+assign a tag to an RSS feed, simply attach it as a single word, separated by
+blanks such as space or tab. If the tag needs to contain spaces, you must use
+quotes (") around the tag (see example below). An example ~/.newsbeuter/urls
+file may look like this:</p><pre class="literallayout">http://blog.fefe.de/rss.xml?html interesting conspiracy news "cool stuff"
+http://rss.orf.at/news.xml news orf
+http://www.heise.de/newsticker/heise.rdf news interesting</pre><p>When you now start newsbeuter with this configuration, you can press "t" to select
+a tag. When you select the tag "news", you will see all three RSS feeds. Pressing
+"t" again and e.g. selecting the "conspiracy" tag, you will only see the
+http://blog.fefe.de/rss.xml?html RSS feed. Pressing "^t" clears the current tag,
+and again shows all RSS feeds, regardless of their assigned tags.</p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2504826"></a>Scripts and Filters (Snownews Extensions)</h3></div></div></div><p>From version 0.4 on, newsbeuter contains support for Snownews extensions. The
+RSS feed readers Snownews and Liferea share a common way of extending the
+readers with custom scripts. Two mechanisms, namely "execurl" and "filter" type
+scripts, are available and supported by newsbeuter.</p><p>An "execurl" script can be any program that gets executed and whose output is
+interpreted as RSS feed, while "filter" scripts are fed with the content of a
+configured URL and whose output is interpreted as RSS feed.</p><p>The configuration is simple and straight-forward. Just add to your
+~/.newsbeuter/urls file configuration lines like the following ones:</p><pre class="literallayout">exec:~/bin/execurl-script
+filter:~/bin/filter-script:http://some.test/url</pre><p>The first line shows how to add an execurl script to your configuration: start
+the line with "exec:" and then immediately append the path of the script that
+shall be executed.  If this script requires additional parameters, simply use
+quotes:</p><pre class="literallayout">"exec:~/bin/execurl-script param1 param2"</pre><p>The second line shows how to add a filter script to your configuration: start
+the line with "filter:", then immediately append the path of the script, then
+append a colon (":"), and then append the URL of the file that shall be fed to
+the script. Again, if the script requires any parameters, simply quote:</p><pre class="literallayout">"filter:~/bin/filter-script param1 param2:http://url/foobar"</pre><p>In both cases, the tagging feature as described above is still available:</p><pre class="literallayout">exec:~/bin/execurl-script tag1 tag2 "quoted tag"
+filter:~/bin/filter-script:http://some.test/url tag3 tag4 tag5</pre><p>A collection of such extension scripts can be found on this website:
+<a href="http://kiza.kcore.de/software/snownews/snowscripts/extensions" target="_top">http://kiza.kcore.de/software/snownews/snowscripts/extensions</a></p><p>If you want to write your own extensions, refer to this website for further
+instructions: <a href="http://kiza.kcore.de/software/snownews/snowscripts/writing" target="_top">http://kiza.kcore.de/software/snownews/snowscripts/writing</a></p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2504946"></a>Podcast Support</h3></div></div></div><p>A podcast is a media file distributed over the internet using syndication feeds
+such as RSS, for later playback on portable players or computers.  Newsbeuter
+contains support for downloading and saving podcasts. This support differs a bit
+from other podcast aggregators or "podcatchers" in how it is done.</p><p>Podcast content is transported in RSS feeds via special tags called
+"enclosures". Newsbeuter recognizes these enclosures and stores the relevant
+information for every podcast item it finds in an RSS feed. What the user then
+can do is to add the podcast download URL to a download queue. Alternatively,
+newsbeuter can be configured to automatically do that. This queue is stored in
+the file $HOME/.newsbeuter/queue.</p><p>The user can then use the download manager "podbeuter" to download these files
+to a directory on the local filesystem. Podbeuter comes with the newsbeuter
+package, and features a look and feel very close to the one of newsbeuter. It
+also shares the same configuration file.</p><div class="table"><a id="id2504985"></a><p class="title"><b>Table 3. Podbeuter Configuration Commands</b></p><table summary="Podbeuter Configuration Commands" cellpadding="4px" border="0" style="border-collapse: collapse;border-top: 2px solid #527bbd; border-bottom: 2px solid #527bbd; border-left: 2px solid #527bbd; border-right: 2px solid #527bbd; "><colgroup><col align="left" /><col align="left" /><col align="left" /><col align="left" /><col align="left" /></colgroup><thead><tr><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Configuration Command
+    </th><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Argument(s)
+    </th><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Default
+    </th><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Description
+    </th><th style="border-bottom: 1px solid ; " align="left">
+    Example
+    </th></tr></thead><tbody><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    download-path
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    &lt;path&gt;
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    ~/
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Specifies the directory where podbeuter shall download the files to.
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    download-path "~/Downloads"
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    max-downloads
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    &lt;number&gt;
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    1
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Specifies the maximum number of parallel downloads when automatic download is enabled.
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    max-downloads 3
+    </td></tr><tr><td style="border-right: 1px solid ; " align="left">
+    player
+    </td><td style="border-right: 1px solid ; " align="left">
+    &lt;player command&gt;
+    </td><td style="border-right: 1px solid ; " align="left">
+    ""
+    </td><td style="border-right: 1px solid ; " align="left">
+    Specifies the player that shall be used for playback of downloaded files.
+    </td><td style="" align="left">
+    player "mp3blaster"
+    </td></tr></tbody></table></div><div class="table"><a id="id2505145"></a><p class="title"><b>Table 4. Available Operations in Podbeuter</b></p><table summary="Available Operations in Podbeuter" cellpadding="4px" border="0" style="border-collapse: collapse;border-top: 2px solid #527bbd; border-bottom: 2px solid #527bbd; border-left: 2px solid #527bbd; border-right: 2px solid #527bbd; "><colgroup><col align="left" /><col align="left" /><col align="left" /></colgroup><thead><tr><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Operation
+    </th><th style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    Default key
+    </th><th style="border-bottom: 1px solid ; " align="left">
+    Description
+    </th></tr></thead><tbody><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    quit
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    q
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Quit the program.
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    pb-download
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    d
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Download the currently selected URL.
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    pb-cancel
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    c
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Cancel the currently selected download.
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    pb-delete
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    D
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Delete the currently selected URL from the queue.
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    pb-purge
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    P
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Remove all finished and deleted downloads from the queue and load URLs that were newly added to the queue.
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    pb-toggle-download-all
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    a
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Toggle the "automatic download" feature where all queued URLs are downloaded one after the other. The "max-downloads" configuration option controls how many downloads are done in parallel.
+    </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    pb-increase-max-dls
+    </td><td style="border-right: 1px solid ; border-bottom: 1px solid ; " align="left">
+    +
+    </td><td style="border-bottom: 1px solid ; " align="left">
+    Increase the "max-downloads" option by 1.
+    </td></tr><tr><td style="border-right: 1px solid ; " align="left">
+    pb-decrease-max-dls
+    </td><td style="border-right: 1px solid ; " align="left">
+    -
+    </td><td style="" align="left">
+    Decrease the "max-downloads" option by 1. If the option is already 1, no further decrease is possible.
+    </td></tr></tbody></table></div><p>A usual "use case" is to configure newsbeuter to automatically enqueue newly
+found podcast download URLs. Then, the user reloads the podcast RSS feeds in
+newsbeuter, and after that, he/she uses podbeuter to view the current queue, and
+either selectively download certain files or automatically download them all
+together by pressing "a" within podbeuter.</p></div></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2505363"></a>Feedback</h2></div></div></div><p>If you want to tell us something related to newsbeuter, don't hesitate to send
+an email: ak-newsbeuter@synflood.at</p><p>Alternatively, you can reach the newsbeuter developers on IRC: channel
+#newsbeuter on irc.freenode.net.</p><p>If you want to report newsbeuter bugs, please use this issue tracker:
+<a href="http://code.google.com/p/newsbeuter/issues/list" target="_top">http://code.google.com/p/newsbeuter/issues/list</a></p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2505396"></a>License</h2></div></div></div><p>MIT/X Consortium License</p><p>©opyright 2006-2007 Andreas Krennmair &lt;ak@synflood.at&gt;</p><p>Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:</p><p>The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</p><p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</p></div></div></body></html>
