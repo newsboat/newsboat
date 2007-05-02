@@ -151,7 +151,13 @@ xmlpullparser::event xmlpullparser::next() {
 				c = skip_whitespace(ws);
 				if (!inputstream->eof()) {
 					if (c == '<') {
-						std::string s = read_tag();
+						std::string s;
+						try {
+							s = read_tag();
+						} catch (const xmlexception &) {
+							current_event = END_DOCUMENT;
+							break;
+						}
 						std::vector<std::string> tokens = utils::tokenize(s);
 						if (tokens.size() > 0) {
 							text = tokens[0];
