@@ -24,7 +24,7 @@ static op_desc opdescs[] = {
 	{ OP_SAVE, "save", "s", _("Save article"), KM_NEWSBEUTER },
 	{ OP_NEXTUNREAD, "next-unread", "n", _("Go to next unread article"), KM_NEWSBEUTER },
 	{ OP_OPENINBROWSER, "open-in-browser", "o", _("Open article in browser"), KM_NEWSBEUTER },
-	{ OP_HELP, "help", "h", _("Open help dialog"), KM_BOTH },
+	{ OP_HELP, "help", "?", _("Open help dialog"), KM_BOTH },
 	{ OP_TOGGLESOURCEVIEW, "toggle-source-view", "^u", _("Toggle source view"), KM_NEWSBEUTER },
 	{ OP_TOGGLEITEMREAD, "toggle-article-read", "N", _("Toggle read status for article"), KM_NEWSBEUTER },
 	{ OP_TOGGLESHOWREAD, "toggle-show-read-feeds", "l", _("Toggle show read feeds"), KM_NEWSBEUTER },
