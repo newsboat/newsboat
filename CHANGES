@@ -1,6 +1,6 @@
 Changes for newsbeuter:
 
-0.4:
+0.4 (2007-05-08):
 	refactored view
 	introduced configuration option to disable cache cleanup (user request)
 	introduced configuration option to set the HTTP user-agent header to a custom value
