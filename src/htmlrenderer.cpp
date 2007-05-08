@@ -114,12 +114,13 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						}
 					}
 				} else if (xpp.getText() == "br") {
-						if (curline.length() > 0)
-							lines.push_back(curline);
+						//if (line_is_nonempty(curline))
+						GetLogger().log(LOG_DEBUG, "htmlrenderer::render: pushing back `%s'", curline.c_str());
+						lines.push_back(curline);
 						prepare_newline(curline, indent_level);	
 				} else if (xpp.getText() == "pre") {
 					inside_pre = true;
-					if (curline.length() > 0)
+					if (line_is_nonempty(curline))
 						lines.push_back(curline);
 					prepare_newline(curline, indent_level);	
 				} else if (xpp.getText() == "ituneshack") {
@@ -141,12 +142,12 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					}
 				} else if (xpp.getText() == "blockquote") {
 					++indent_level;
-					if (curline.length() > 0)
+					if (line_is_nonempty(curline))
 						lines.push_back(curline);
 					lines.push_back("");
 					prepare_newline(curline, indent_level);	
 				} else if (xpp.getText() == "p") {
-					if (curline.length() > 0)
+					if (line_is_nonempty(curline))
 						lines.push_back(curline);
 					if (lines.size() > 0 && lines[lines.size()-1].length() > static_cast<unsigned int>(indent_level*2))
 						lines.push_back("");
@@ -155,26 +156,26 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					inside_list = true;
 					is_ol = true;
 					ol_count = 1;
-					if (curline.length() > 0)
+					if (line_is_nonempty(curline))
 						lines.push_back(curline);
 					lines.push_back("");
 					prepare_newline(curline, indent_level);	
 				} else if (xpp.getText() == "ul") {
 					inside_list = true;
 					is_ol = false;
-					if (curline.length() > 0)
+					if (line_is_nonempty(curline))
 						lines.push_back(curline);
 					lines.push_back("");
 					prepare_newline(curline, indent_level);
 				} else if (xpp.getText() == "li") {
 					if (inside_li) {
 						indent_level-=2;
-						if (curline.length() > 0)
+						if (line_is_nonempty(curline))
 							lines.push_back(curline);
 						prepare_newline(curline, indent_level);	
 					}
 					inside_li = true;
-					if (curline.length() > 0)
+					if (line_is_nonempty(curline))
 						lines.push_back(curline);
 					prepare_newline(curline, indent_level);
 					indent_level+=2;
@@ -197,7 +198,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					--indent_level;
 					if (indent_level < 0)
 						indent_level = 0;
-					if (curline.length() > 0)
+					if (line_is_nonempty(curline))
 						lines.push_back(curline);
 					lines.push_back("");
 					prepare_newline(curline, indent_level);
@@ -205,26 +206,26 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					inside_list = false;
 					if (inside_li) {
 						indent_level-=2;
-						if (curline.length() > 0)
+						if (line_is_nonempty(curline))
 							lines.push_back(curline);
 						prepare_newline(curline, indent_level);
 					}
-					if (curline.length() > 0)
+					if (line_is_nonempty(curline))
 						lines.push_back(curline);
 					lines.push_back("");
 					prepare_newline(curline, indent_level);	
 				} else if (xpp.getText() == "li") {
 					indent_level-=2;
 					inside_li = false;
-					if (curline.length() > 0)
+					if (line_is_nonempty(curline))
 						lines.push_back(curline);
 					prepare_newline(curline, indent_level);
 				} else if (xpp.getText() == "p") {
-					if (curline.length() > 0)
+					if (line_is_nonempty(curline))
 						lines.push_back(curline);
 					prepare_newline(curline, indent_level);
 				} else if (xpp.getText() == "pre") {
-					if (curline.length() > 0)
+					if (line_is_nonempty(curline))
 						lines.push_back(curline);
 					prepare_newline(curline, indent_level);
 					inside_pre = false;
@@ -240,12 +241,14 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 								lines.push_back(curline);
 								prepare_newline(curline, indent_level);
 							} else {
+								GetLogger().log(LOG_DEBUG, "htmlrenderer::render: tokenizing `%s'", it->c_str());
 								std::vector<std::string> words = utils::tokenize_spaced(*it);
 								unsigned int i=0;
 								bool new_line = false;
 								for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it,++i) {
+									GetLogger().log(LOG_DEBUG, "htmlrenderer::render: token[%u] = `%s'", i, it->c_str());
 									if ((curline.length() + it->length()) >= w) {
-										if (curline.length() > 0)
+										if (line_is_nonempty(curline))
 											lines.push_back(curline);
 										prepare_newline(curline, indent_level);
 										new_line = true;
@@ -271,12 +274,19 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 							}
 						}
 					} else {
-						std::vector<std::string> words = utils::tokenize_spaced(xpp.getText());
+						std::string s = xpp.getText();
+						while (s.length() > 0 && s[0] == '\n')
+							s.erase(0, 1);
+						std::vector<std::string> words = utils::tokenize_spaced(s);
+						//if (!line_is_nonempty(words[0]))
+						//	words.erase(words.begin());
 						unsigned int i=0;
 						bool new_line = false;
+						GetLogger().log(LOG_DEBUG, "htmlrenderer::render: tokenized `%s'", xpp.getText().c_str());
 						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it,++i) {
+							GetLogger().log(LOG_DEBUG, "htmlrenderer::render: token[%u] = `%s'", i, it->c_str());
 							if ((curline.length() + it->length()) >= w) {
-								if (curline.length() > 0)
+								if (line_is_nonempty(curline))
 									lines.push_back(curline);
 								prepare_newline(curline, indent_level);
 								new_line = true;
@@ -297,7 +307,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				break;
 		}
 	}
-	if (curline.length() > 0)
+	if (line_is_nonempty(curline))
 		lines.push_back(curline);
 	
 	if (links.size() > 0) {
@@ -325,4 +335,12 @@ void htmlrenderer::prepare_newline(std::string& line, int indent_level) {
 	for (int i=0;i<indent_level;++i) {
 		line.append("  ");	
 	}
+}
+
+bool htmlrenderer::line_is_nonempty(const std::string& line) {
+	for (unsigned int i=0;i<line.length();++i) {
+		if (!isblank(line[i]) && line[i] != '\n' && line[i] && '\r')
+			return true;
+	}
+	return false;
 }

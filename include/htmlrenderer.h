@@ -19,6 +19,7 @@ namespace newsbeuter {
 		private:
 			unsigned int w;
 			void prepare_newline(std::string& line, int indent_level);
+			bool line_is_nonempty(const std::string& line);
 			unsigned int add_link(std::vector<linkpair>& links, const std::string& link, link_type type);
 			std::string absolute_url(const std::string& url, const std::string& link);
 			std::string type2str(link_type type);
