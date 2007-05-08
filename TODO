@@ -7,6 +7,7 @@ TODO:
 - research (and fix) libnxml decoding issues
 - make STFL and newsbeuter capable of correct handling of Unicode (currently, it crashes when entering cyrillic characters)
 - improve string handling (no more std::string() + std::string())
+- replace lockfile with fcntl()-based locking
 
 longteam goals to reach:
 - add scripting support
