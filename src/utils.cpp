@@ -167,7 +167,6 @@ bool utils::try_fs_lock(const std::string& lock_file, pid_t & pid) {
 		// locking successful -> truncate file and write own PID into it
 		ftruncate(fd, 0);
 		write(fd, buf, strlen(buf));
-		close(fd);
 		return true;
 	}
 
