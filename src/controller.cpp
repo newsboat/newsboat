@@ -12,6 +12,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
+#include <cerrno>
 
 #include <sys/time.h>
 #include <ctime>
@@ -174,7 +175,11 @@ void controller::run(int argc, char * argv[]) {
 
 		pid_t pid;
 		if (!utils::try_fs_lock(lock_file, pid)) {
-			GetLogger().log(LOG_ERROR,"an instance is alredy running: pid = %u",pid);
+			if (pid > 0) {
+				GetLogger().log(LOG_ERROR,"an instance is already running: pid = %u",pid);
+			} else {
+				GetLogger().log(LOG_ERROR,"something went wrong with the lock: %s", strerror(errno));
+			}
 			snprintf(msgbuf, sizeof(msgbuf), _("Error: an instance of %s is already running (PID: %u)"), PROGRAM_NAME, pid);
 			std::cout << msgbuf << std::endl;
 			return;

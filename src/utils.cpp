@@ -152,23 +152,35 @@ void utils::remove_fs_lock(const std::string& lock_file) {
 
 bool utils::try_fs_lock(const std::string& lock_file, pid_t & pid) {
 	int fd;
-	if ((fd = ::open(lock_file.c_str(), O_WRONLY | O_CREAT | O_EXCL, 0600)) >= 0) {
-		pid = ::getpid();
-		::write(fd,&pid,sizeof(pid));
-		::close(fd);
-		GetLogger().log(LOG_DEBUG,"wrote lockfile %s with pid = %u",lock_file.c_str(), pid);
-		return true;
-	} else {
-		pid = 0;
-		if ((fd = ::open(lock_file.c_str(), O_RDONLY)) >=0) {
-			::read(fd,&pid,sizeof(pid));
-			::close(fd);
-			GetLogger().log(LOG_DEBUG,"found lockfile %s", lock_file.c_str());
-		} else {
-			GetLogger().log(LOG_DEBUG,"found lockfile %s, but couldn't open it for reading from it", lock_file.c_str());
-		}
+	// pid == 0 indicates that something went majorly wrong during locking
+	pid = 0;
+
+	// first, we open (and possibly create) the lock file
+	fd = ::open(lock_file.c_str(), O_RDWR | O_CREAT, 0600);
+	if (fd < 0)
 		return false;
+
+	// then we lock it (T_LOCK returns immediately if locking is not possible)
+	if (lockf(fd, F_TLOCK, 0) == 0) {
+		char buf[32];
+		snprintf(buf, sizeof(buf), "%u", getpid());
+		// locking successful -> truncate file and write own PID into it
+		ftruncate(fd, 0);
+		write(fd, buf, strlen(buf));
+		close(fd);
+		return true;
 	}
+
+	// locking was not successful -> read PID of locking process from it
+	fd = ::open(lock_file.c_str(), O_RDONLY);
+	if (fd >= 0) {
+		char buf[32];
+		int len = read(fd, buf, sizeof(buf)-1);
+		buf[len] = '\0';
+		sscanf(buf, "%u", &pid);
+		close(fd);
+	}
+	return false;
 }
 
 
