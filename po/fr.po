@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-14 15:53+0200\n"
-"PO-Revision-Date: 2007-05-14 14:40+0200\n"
+"POT-Creation-Date: 2007-05-14 16:18+0200\n"
+"PO-Revision-Date: 2007-05-14 18:38+0200\n"
 "Last-Translator: Nicolas Martyanoff <khaelin@gmail.com>\n"
 "Language-Team: Nicolas Martyanoff <khaelin@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -254,7 +254,7 @@ msgstr "Notez Lu"
 
 #: src/feedlist_formaction.cpp:244
 msgid "Catchup All"
-msgstr "Catchup All"
+msgstr "Notez tous les messages comme lus"
 
 #: src/feedlist_formaction.cpp:245 src/itemlist_formaction.cpp:228
 msgid "Search"
