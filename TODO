@@ -6,8 +6,11 @@ TODO:
 - do entitity decoding for titles (this may be controversial...)
 - research (and fix) libnxml decoding issues
 - make STFL and newsbeuter capable of correct handling of Unicode (currently, it crashes when entering cyrillic characters)
+- implement free configurability of key bindings for widgets (STFL issue)
 - improve string handling (no more std::string() + std::string())
-- replace lockfile with fcntl()-based locking
+- implement command line (STFL issue?)
+	- make it possible to directly jump to the n-th entry by entering ":n" in the command line
+- implement "meta-feeds"
 
 longteam goals to reach:
 - add scripting support
@@ -78,3 +81,4 @@ DONE:
 	- provide a function to "modally" run certain screens and return a certain value. we need this for select tag, search and file browser.
 - add configuration option to disable cleanup
 - add configuration option to set a custom user-agent string
+- replace lockfile with fcntl()-based locking
