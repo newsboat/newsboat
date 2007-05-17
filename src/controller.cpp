@@ -213,7 +213,11 @@ void controller::run(int argc, char * argv[]) {
 	if (colorman->colors_loaded())
 		colorman->set_colors(v);
 	delete colorman;
-	
+
+	if (cfg->get_configvalue("error-log").length() > 0) {
+		GetLogger().set_errorlogfile(cfg->get_configvalue("error-log").c_str());
+	}
+
 	if (!do_export)
 		std::cout << _("done.") << std::endl;
 

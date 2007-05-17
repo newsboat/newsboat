@@ -66,6 +66,7 @@ rss_feed rss_parser::parse() {
 
 	if (err != MRSS_OK) {
 		GetLogger().log(LOG_ERROR,"rss_parser::parse: mrss_parse_url_with_options failed: err = %s (%d)",mrss_strerror(err), err);
+		GetLogger().log(LOG_USERERROR, "RSS feed `%s' couldn't be parsed: %s (error %d)", my_uri.c_str(), mrss_strerror(err), err);
 		if (mrss) {
 			mrss_free(mrss);
 		}
