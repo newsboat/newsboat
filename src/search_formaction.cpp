@@ -24,7 +24,7 @@ void search_formaction::process_operation(operation op) {
 						if (items.size() > 0) {
 							char buf[1024];
 							f->set("listpos", "0");
-							snprintf(buf, sizeof(buf), _("Search Articles - %u results"), items.size());
+							snprintf(buf, sizeof(buf), _("%s %s - Search Articles - %u results"), PROGRAM_NAME, PROGRAM_VERSION, items.size());
 							f->set("head", buf);
 							set_listfocus = true;
 							do_redraw = true;
@@ -119,8 +119,10 @@ void search_formaction::prepare() {
 }
 
 void search_formaction::init() {
+	char buf[1024];
 	f->set("msg","");
-	f->set("head",_("Search Articles"));
+	snprintf(buf,sizeof(buf),_("%s %s - Search Articles"), PROGRAM_NAME, PROGRAM_VERSION);
+	f->set("head",buf);
 	f->set("searchprompt",_("Search for: "));
 	f->modify("results","replace_inner","{list}");
 	f->set_focus("query");

@@ -39,9 +39,9 @@ void filebrowser_formaction::process_operation(operation op) {
 						switch (filetype) {
 							case 'd':
 								if (type == FBT_OPEN) {
-									snprintf(buf, sizeof(buf), _("Open File - %s"), filename.c_str());
+									snprintf(buf, sizeof(buf), _("%s %s - Open File - %s"), PROGRAM_NAME, PROGRAM_VERSION, filename.c_str());
 								} else {
-									snprintf(buf, sizeof(buf), _("Save File - %s"), filename.c_str());
+									snprintf(buf, sizeof(buf), _("%s %s - Save File - %s"), PROGRAM_NAME, PROGRAM_VERSION, filename.c_str());
 								}
 								f->set("head", buf);
 								::chdir(filename.c_str());
@@ -153,9 +153,9 @@ void filebrowser_formaction::init() {
 	
 	char buf[1024];
 	if (type == FBT_OPEN) {
-		snprintf(buf, sizeof(buf), _("Open File - %s"), cwdtmp);
+		snprintf(buf, sizeof(buf), _("%s %s - Open File - %s"), PROGRAM_NAME, PROGRAM_VERSION, cwdtmp);
 	} else {
-		snprintf(buf, sizeof(buf), _("Save File - %s"), cwdtmp);
+		snprintf(buf, sizeof(buf), _("%s %s - Save File - %s"), PROGRAM_NAME, PROGRAM_VERSION, cwdtmp);
 	}
 	f->set("head", buf);
 }

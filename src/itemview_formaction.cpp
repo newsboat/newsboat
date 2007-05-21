@@ -215,7 +215,7 @@ keymap_hint_entry * itemview_formaction::get_keymap_hint() {
 
 void itemview_formaction::set_head(const std::string& s) {
 	char buf[1024];
-	snprintf(buf, sizeof(buf), _("Article '%s'"), s.c_str());
+	snprintf(buf, sizeof(buf), _("%s %s - Article '%s'"), PROGRAM_NAME, PROGRAM_VERSION, s.c_str());
 	f->set("head",buf);
 }
 

@@ -261,6 +261,7 @@ void view::push_help() {
 }
 
 void view::push_urlview(const std::vector<linkpair>& links) {
+	urlview->init();
 	urlview->set_links(links);
 	formaction_stack.push_front(urlview);
 }

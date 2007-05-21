@@ -59,7 +59,9 @@ void urlview_formaction::prepare() {
 
 void urlview_formaction::init() {
 	v->set_status("");
-	f->set("head",_("URLs"));
+	char buf[1024];
+	snprintf(buf,sizeof(buf),_("%s %s - URLs"), PROGRAM_NAME, PROGRAM_VERSION);
+	f->set("head", buf);
 	do_redraw = true;
 	quit = false;
 }

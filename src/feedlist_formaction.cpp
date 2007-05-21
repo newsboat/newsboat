@@ -221,9 +221,9 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 	f->modify("feeds","replace_inner",code);
 
 	if (tag.length() > 0) {
-		snprintf(buf, sizeof(buf), _("Your feeds (%u unread, %u total) - tag `%s'"), unread_feeds, i, tag.c_str());
+		snprintf(buf, sizeof(buf), _("%s %s - Your feeds (%u unread, %u total) - tag `%s'"), PROGRAM_NAME, PROGRAM_VERSION, unread_feeds, i, tag.c_str());
 	} else {
-		snprintf(buf, sizeof(buf), _("Your feeds (%u unread, %u total)"), unread_feeds, i);
+		snprintf(buf, sizeof(buf), _("%s %s - Your feeds (%u unread, %u total)"), PROGRAM_NAME, PROGRAM_VERSION, unread_feeds, i);
 	}
 
 	f->set("head", buf);

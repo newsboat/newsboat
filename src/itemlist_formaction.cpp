@@ -181,7 +181,7 @@ void itemlist_formaction::init() {
 
 void itemlist_formaction::set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url) {
 	char buf[1024];
-	snprintf(buf, sizeof(buf), _("Articles in feed '%s' (%u unread, %u total) - %s"), s.c_str(), unread, total, url.c_str());
+	snprintf(buf, sizeof(buf), _("%s %s - Articles in feed '%s' (%u unread, %u total) - %s"), PROGRAM_NAME, PROGRAM_VERSION, s.c_str(), unread, total, url.c_str());
 	f->set("head", buf);
 }
 

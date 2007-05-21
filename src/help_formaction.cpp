@@ -26,7 +26,9 @@ void help_formaction::process_operation(operation op) {
 void help_formaction::prepare() {
 	if (do_redraw) {
 
-		f->set("head",_("Help"));
+		char buf[1024];
+		snprintf(buf,sizeof(buf),_("%s %s - Help"), PROGRAM_NAME, PROGRAM_VERSION);
+		f->set("head",buf);
 		
 		std::vector<std::pair<std::string,std::string> > descs;
 		v->get_keys()->get_keymap_descriptions(descs, KM_NEWSBEUTER);
