@@ -96,9 +96,9 @@ operation keymap::get_opcode(const std::string& opstr) {
 char keymap::get_key(const std::string& keycode) {
 	if (strncmp(keycode.c_str(),"CHAR(",5)==0) {
 		unsigned int x;
-		char c;
+		unsigned char c;
 		sscanf(keycode.c_str(),"CHAR(%u)",&x);
-		if (x >= 0 && x <= 126) {
+		if (x <= 126) {
 			c = static_cast<char>(x);
 			return c;
 		}

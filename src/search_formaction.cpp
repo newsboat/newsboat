@@ -24,7 +24,7 @@ void search_formaction::process_operation(operation op, int /*raw_char*/) {
 						if (items.size() > 0) {
 							char buf[1024];
 							f->set("listpos", "0");
-							snprintf(buf, sizeof(buf), _("%s %s - Search Articles - %u results"), PROGRAM_NAME, PROGRAM_VERSION, items.size());
+							snprintf(buf, sizeof(buf), _("%s %s - Search Articles - %u results"), PROGRAM_NAME, PROGRAM_VERSION, static_cast<unsigned int>(items.size()));
 							f->set("head", buf);
 							set_listfocus = true;
 							do_redraw = true;
