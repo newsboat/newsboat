@@ -34,4 +34,8 @@ std::string formaction::get_value(const std::string& value) {
 	return f->get(value);
 }
 
+void formaction::handle_cmdline(const std::string& /*cmd*/) {
+	// TODO: handle generic variable get/set operations
+}
+
 }

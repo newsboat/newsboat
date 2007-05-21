@@ -47,8 +47,10 @@ void feedlist_formaction::prepare() {
 void feedlist_formaction::process_operation(operation op, int raw_char) {
 	if ((raw_char == '\n' || raw_char == '\r') && f->get_focus() == "cmdline") {
 		f->set_focus("feeds");
-		GetLogger().log(LOG_DEBUG,"feedlist_formaction: commandline = `%s'", f->get("cmdtext").c_str());
+		std::string cmdline = f->get("cmdtext");
+		GetLogger().log(LOG_DEBUG,"feedlist_formaction: commandline = `%s'", cmdline.c_str());
 		f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
+		this->handle_cmdline(cmdline);
 		return;
 	}
 	switch (op) {
@@ -290,6 +292,35 @@ rss_feed * feedlist_formaction::get_feed() {
 	std::istringstream is(f->get("feedpos"));
 	is >> curpos;
 	return visible_feeds[curpos].first;
+}
+
+int feedlist_formaction::get_pos(unsigned int realidx) {
+	for (unsigned int i=0;i<visible_feeds.size();++i) {
+		if (visible_feeds[i].second == realidx)
+			return i;
+	}
+	return -1;
+}
+
+void feedlist_formaction::handle_cmdline(const std::string& cmd) {
+	unsigned int idx = 0;
+	if (1==sscanf(cmd.c_str(),"%u",&idx)) {
+		if (idx > 0 && idx <= (visible_feeds[visible_feeds.size()-1].second + 1)) {
+			int i = get_pos(idx - 1);
+			if (i == -1) {
+				v->show_error(_("Position not visible!"));
+			} else {
+				std::ostringstream idxstr;
+				idxstr << i;
+				f->set("feedpos", idxstr.str());
+			}
+		} else {
+			v->show_error(_("Invalid position!"));
+		}
+	} else {
+		// hand over all other commands to formaction
+		formaction::handle_cmdline(cmd);
+	}
 }
 
 }

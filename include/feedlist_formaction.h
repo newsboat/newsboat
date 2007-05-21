@@ -19,7 +19,11 @@ class feedlist_formaction : public formaction {
 
 		bool jump_to_next_unread_feed();
 
+		virtual void handle_cmdline(const std::string& cmd);
+
 	private:
+
+		int get_pos(unsigned int realidx);
 
 		bool zero_feedpos;
 		unsigned int feeds_shown;

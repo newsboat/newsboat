@@ -31,6 +31,8 @@ class formaction {
 
 		virtual std::string get_value(const std::string& value);
 
+		virtual void handle_cmdline(const std::string& cmd);
+
 	protected:
 		virtual void set_keymap_hints();
 
