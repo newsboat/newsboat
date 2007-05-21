@@ -49,6 +49,7 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 				v->show_error(_("usage: set <variable>[=<value>]"));
 			} else if (tokens.size()==1) {
 				snprintf(buf,sizeof(buf), "  %s=%s", tokens[0].c_str(), cfg->get_configvalue(tokens[0]).c_str());
+				v->set_status(buf);
 			} else if (tokens.size()==2) {
 				cfg->set_configvalue(tokens[0], tokens[1]);
 			} else {
