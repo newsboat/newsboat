@@ -12,7 +12,7 @@ urlview_formaction::urlview_formaction(view * vv, std::string formstr)
 urlview_formaction::~urlview_formaction() {
 }
 
-void urlview_formaction::process_operation(operation op) {
+void urlview_formaction::process_operation(operation op, int /*raw_char*/) {
 	switch (op) {
 		case OP_OPEN: 
 			{

@@ -10,7 +10,7 @@ class urlview_formaction : public formaction {
 	public:
 		urlview_formaction(view *, std::string formstr);
 		virtual ~urlview_formaction();
-		virtual void process_operation(operation op);
+		virtual void process_operation(operation op, int raw_char);
 		virtual void prepare();
 		virtual void init();
 		virtual keymap_hint_entry * get_keymap_hint();

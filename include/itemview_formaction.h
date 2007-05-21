@@ -11,7 +11,7 @@ class itemview_formaction : public formaction {
 	public:
 		itemview_formaction(view *, std::string formstr);
 		virtual ~itemview_formaction();
-		virtual void process_operation(operation op);
+		virtual void process_operation(operation op, int raw_char);
 		virtual void prepare();
 		virtual void init();
 		inline void set_guid(const std::string& guid_) { guid = guid_; }

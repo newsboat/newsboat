@@ -44,18 +44,26 @@ void feedlist_formaction::prepare() {
 	}
 }
 
-void feedlist_formaction::process_operation(operation op) {
+void feedlist_formaction::process_operation(operation op, int raw_char) {
+	if ((raw_char == '\n' || raw_char == '\r') && f->get_focus() == "cmdline") {
+		f->set_focus("feeds");
+		GetLogger().log(LOG_DEBUG,"feedlist_formaction: commandline = `%s'", f->get("cmdtext").c_str());
+		f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
+		return;
+	}
 	switch (op) {
 		case OP_OPEN: {
-				std::string feedpos = f->get("feedposname");
-				GetLogger().log(LOG_INFO, "feedlist_formaction: opening feed at position `%s'",feedpos.c_str());
-				if (feeds_shown > 0 && feedpos.length() > 0) {
-					std::istringstream posname(feedpos);
-					unsigned int pos = 0;
-					posname >> pos;
-					v->push_itemlist(pos);
-				} else {
-					v->show_error(_("No feed selected!")); // should not happen
+				if (f->get_focus() == "feeds") {
+					std::string feedpos = f->get("feedposname");
+					GetLogger().log(LOG_INFO, "feedlist_formaction: opening feed at position `%s'",feedpos.c_str());
+					if (feeds_shown > 0 && feedpos.length() > 0) {
+						std::istringstream posname(feedpos);
+						unsigned int pos = 0;
+						posname >> pos;
+						v->push_itemlist(pos);
+					} else {
+						v->show_error(_("No feed selected!")); // should not happen
+					}
 				}
 			}
 			break;
@@ -142,6 +150,10 @@ void feedlist_formaction::process_operation(operation op) {
 			break;
 		case OP_HELP:
 			v->push_help();
+			break;
+		case OP_CMDLINE:
+			f->modify("lastline","replace", "{hbox[lastline] .expand:0 {label .expand:0 text:\":\"}{input[cmdline] modal:1 .expand:h text[cmdtext]:\"\"}}");
+			f->set_focus("cmdline");
 			break;
 		default:
 			break;

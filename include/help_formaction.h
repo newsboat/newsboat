@@ -9,7 +9,7 @@ class help_formaction : public formaction {
 	public:
 		help_formaction(view *, std::string formstr);
 		virtual ~help_formaction();
-		virtual void process_operation(operation op);
+		virtual void process_operation(operation op, int raw_char);
 		virtual void prepare();
 		virtual void init();
 		keymap_hint_entry * get_keymap_hint();

@@ -13,7 +13,7 @@ itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
 
 itemlist_formaction::~itemlist_formaction() { }
 
-void itemlist_formaction::process_operation(operation op) {
+void itemlist_formaction::process_operation(operation op, int /*raw_char*/) {
 	bool quit = false;
 	std::vector<rss_item>& items = feed->items();
 	switch (op) {

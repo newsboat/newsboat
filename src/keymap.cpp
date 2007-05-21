@@ -42,6 +42,7 @@ static op_desc opdescs[] = {
 	{ OP_PB_MOREDL, "pb-increase-max-dls", "+", _("Increase the number of concurrent downloads"), KM_PODBEUTER },
 	{ OP_PB_LESSDL, "pb-decreate-max-dls", "-", _("Decrease the number of concurrent downloads"), KM_PODBEUTER },
 	{ OP_REDRAW, "redraw", "^l", _("Redraw screen"), KM_BOTH },
+	{ OP_CMDLINE, "cmdline", ":", _("Open the commandline"), KM_NEWSBEUTER },
 	{ OP_NIL, NULL, NULL, NULL, 0 }
 };
 
@@ -97,10 +98,14 @@ char keymap::get_key(const std::string& keycode) {
 		unsigned int x;
 		char c;
 		sscanf(keycode.c_str(),"CHAR(%u)",&x);
-		if (x >= 32 && x <= 126) {
+		if (x >= 0 && x <= 126) {
 			c = static_cast<char>(x);
 			return c;
 		}
+	} else if (keycode == "ENTER") {
+		return '\n';
+	} else if (keycode == "ESC") {
+		return 27;
 	}
 	return 0;
 }

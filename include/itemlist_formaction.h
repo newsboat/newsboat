@@ -9,7 +9,7 @@ class itemlist_formaction : public formaction {
 	public:
 		itemlist_formaction(view *, std::string formstr);
 		virtual ~itemlist_formaction();
-		virtual void process_operation(operation op);
+		virtual void process_operation(operation op, int raw_char);
 		virtual void prepare();
 		virtual void init();
 		inline void set_feed(rss_feed * f) { feed = f; }
