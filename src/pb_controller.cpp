@@ -7,6 +7,7 @@
 #include <sstream>
 #include <cstdio>
 
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <pwd.h>
 #include <signal.h>
@@ -55,7 +56,7 @@ pb_controller::pb_controller() : v(0), config_file("config"), queue_file("queue"
 
 	config_dir.append(NEWSBEUTER_PATH_SEP);
 	config_dir.append(NEWSBEUTER_CONFIG_SUBDIR);
-	mkdir(config_dir.c_str(),0700); // create configuration directory if it doesn't exist
+	::mkdir(config_dir.c_str(),0700); // create configuration directory if it doesn't exist
 
 	config_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
 	queue_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;

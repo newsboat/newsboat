@@ -2,6 +2,7 @@
 #include <view.h>
 #include <utils.h>
 #include <config.h>
+#include <cassert>
 
 namespace newsbeuter {
 

@@ -210,8 +210,9 @@ void controller::run(int argc, char * argv[]) {
 		return;	
 	}
 
-	if (colorman->colors_loaded())
-		colorman->set_colors(v);
+	if (colorman->colors_loaded()) {
+		v->set_colors(*colorman);
+	}
 	delete colorman;
 
 	if (cfg->get_configvalue("error-log").length() > 0) {

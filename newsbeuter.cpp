@@ -18,7 +18,7 @@ int main(int argc, char * argv[]) {
 	textdomain (PACKAGE);
 	
 	controller c;
-	view v(&c);
+	newsbeuter::view v(&c);
 	c.set_view(&v);
 
 	c.run(argc,argv);

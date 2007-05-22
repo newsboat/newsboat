@@ -48,7 +48,7 @@ extern "C" {
 #include <iostream>
 #include <sstream>
 
-using namespace newsbeuter;
+namespace newsbeuter {
 
 view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0) {
 	mtx = new mutex();
@@ -340,3 +340,58 @@ void view::pop_current_formaction() {
 	}
 }
 
+
+void view::set_colors(const colormanager& colorman) {
+	std::map<std::string,std::string>::const_iterator fgcit = colorman.fg_colors.begin();
+	std::map<std::string,std::string>::const_iterator bgcit = colorman.bg_colors.begin();
+	std::map<std::string,std::vector<std::string> >::const_iterator attit = colorman.attributes.begin();
+
+	for (;fgcit != colorman.fg_colors.end(); ++fgcit, ++bgcit, ++attit) {
+		std::string colorattr;
+		if (fgcit->second != "default") {
+			colorattr.append("fg=");
+			colorattr.append(fgcit->second);
+		}
+		if (bgcit->second != "default") {
+			if (colorattr.length() > 0)
+				colorattr.append(",");
+			colorattr.append("bg=");
+			colorattr.append(bgcit->second);
+		}
+		for (std::vector<std::string>::const_iterator it=attit->second.begin(); it!= attit->second.end(); ++it) {
+			if (colorattr.length() > 0)
+				colorattr.append(",");
+			colorattr.append("attr=");
+			colorattr.append(*it);
+		} 
+
+		GetLogger().log(LOG_DEBUG,"view::set_colors: %s %s\n",fgcit->first.c_str(), colorattr.c_str());
+
+		feedlist->get_form()->set(fgcit->first, colorattr);
+		itemlist->get_form()->set(fgcit->first, colorattr);
+		itemview->get_form()->set(fgcit->first, colorattr);
+		helpview->get_form()->set(fgcit->first, colorattr);
+		filebrowser->get_form()->set(fgcit->first, colorattr);
+		urlview->get_form()->set(fgcit->first, colorattr);
+		selecttag->get_form()->set(fgcit->first, colorattr);
+		search->get_form()->set(fgcit->first, colorattr);
+
+		if (fgcit->first == "article") {
+			std::string styleend_str;
+			
+			if (bgcit->second != "default") {
+				styleend_str.append("bg=");
+				styleend_str.append(bgcit->second);
+			}
+			if (styleend_str.length() > 0)
+				styleend_str.append(",");
+			styleend_str.append("attr=bold");
+
+			helpview->get_form()->set("styleend", styleend_str.c_str());
+			itemview->get_form()->set("styleend", styleend_str.c_str());
+		}
+	}
+}
+
+
+}

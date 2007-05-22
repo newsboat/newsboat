@@ -12,6 +12,8 @@
 
 #include <langinfo.h>
 
+#include <cerrno>
+
 using namespace newsbeuter;
 
 rss_parser::rss_parser(const char * uri, cache * c, configcontainer * cfg) : my_uri(uri), ch(c), cfgcont(cfg), mrss(0) { }
@@ -65,6 +67,9 @@ rss_feed rss_parser::parse() {
 	}
 
 	if (err != MRSS_OK) {
+		if (err == MRSS_ERR_POSIX) {
+			GetLogger().log(LOG_ERROR,"rss_parser::parse: mrss_parse_url_with_options failed with POSIX error: error = %s",strerror(errno));
+		}
 		GetLogger().log(LOG_ERROR,"rss_parser::parse: mrss_parse_url_with_options failed: err = %s (%d)",mrss_strerror(err), err);
 		GetLogger().log(LOG_USERERROR, "RSS feed `%s' couldn't be parsed: %s (error %d)", my_uri.c_str(), mrss_strerror(err), err);
 		if (mrss) {

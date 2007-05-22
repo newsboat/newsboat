@@ -10,6 +10,7 @@
 #include <keymap.h>
 #include <mutex.h>
 #include <htmlrenderer.h>
+#include <colormanager.h>
 
 #include <stflpp.h>
 #include <filebrowser_formaction.h>
@@ -60,6 +61,8 @@ namespace newsbeuter {
 			std::string get_filename_suggestion(const std::string& s);
 
 			bool get_next_unread();
+
+			void set_colors(const colormanager& colorman);
 
 		protected:
 			bool jump_to_next_unread_item(std::vector<rss_item>& items, bool begin_with_next);
