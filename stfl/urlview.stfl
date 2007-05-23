@@ -13,6 +13,8 @@ vbox
   label#info
     text[help]:"q:Quit ENTER:Open Feed"
     .expand:h
-  label
-    text[msg]:""
-    .expand:h
+  hbox[lastline]
+    .expand:0
+    label[msglabel]
+      text[msg]:""
+      .expand:h

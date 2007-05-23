@@ -22,6 +22,8 @@ vbox
   label#info
     .expand:h .height:1
     text[help]:"q:Quit"
-  label
-    .expand:h .height:1
-    text[msg]:""
+  hbox[lastline]
+    .expand:0
+    label[msglabel]
+      text[msg]:""
+      .expand:h

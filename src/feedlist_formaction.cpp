@@ -45,14 +45,6 @@ void feedlist_formaction::prepare() {
 }
 
 void feedlist_formaction::process_operation(operation op, int raw_char) {
-	if ((raw_char == '\n' || raw_char == '\r') && f->get_focus() == "cmdline") {
-		f->set_focus("feeds");
-		std::string cmdline = f->get("cmdtext");
-		GetLogger().log(LOG_DEBUG,"feedlist_formaction: commandline = `%s'", cmdline.c_str());
-		f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
-		this->handle_cmdline(cmdline);
-		return;
-	}
 	switch (op) {
 		case OP_OPEN: {
 				if (f->get_focus() == "feeds") {
@@ -152,10 +144,6 @@ void feedlist_formaction::process_operation(operation op, int raw_char) {
 			break;
 		case OP_HELP:
 			v->push_help();
-			break;
-		case OP_CMDLINE:
-			f->modify("lastline","replace", "{hbox[lastline] .expand:0 {label .expand:0 text:\":\"}{input[cmdline] modal:1 .expand:h text[cmdtext]:\"\"}}");
-			f->set_focus("cmdline");
 			break;
 		default:
 			break;

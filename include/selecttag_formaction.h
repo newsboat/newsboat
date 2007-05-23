@@ -9,13 +9,13 @@ class selecttag_formaction : public formaction {
 	public:
 		selecttag_formaction(view *, std::string formstr);
 		virtual ~selecttag_formaction();
-		virtual void process_operation(operation op, int raw_char);
 		virtual void prepare();
 		virtual void init();
 		virtual keymap_hint_entry * get_keymap_hint();
 		inline std::string get_tag() { return tag; }
 		inline void set_tags(const std::vector<std::string>& t) { tags = t; }
 	private:
+		virtual void process_operation(operation op, int raw_char);
 		bool quit;
 		std::string tag;
 		std::vector<std::string> tags;

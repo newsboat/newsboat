@@ -9,7 +9,6 @@ class itemlist_formaction : public formaction {
 	public:
 		itemlist_formaction(view *, std::string formstr);
 		virtual ~itemlist_formaction();
-		virtual void process_operation(operation op, int raw_char);
 		virtual void prepare();
 		virtual void init();
 		inline void set_feed(rss_feed * f) { feed = f; }
@@ -21,6 +20,7 @@ class itemlist_formaction : public formaction {
 		bool jump_to_next_unread_item(bool start_with_first);
 
 	private:
+		virtual void process_operation(operation op, int raw_char);
 		void set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);
 
 		rss_feed * feed;

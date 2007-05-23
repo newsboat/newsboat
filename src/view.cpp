@@ -125,7 +125,7 @@ void view::run() {
 			continue;
 		}
 
-		fa->process_operation(op, keys->get_key(event));
+		fa->process_op(op, keys->get_key(event));
 	}
 
 	stfl::reset();
@@ -152,7 +152,7 @@ std::string view::run_modal(formaction * f, const std::string& value) {
 			continue;
 		}
 
-		fa->process_operation(op, keys->get_key(event));
+		fa->process_op(op, keys->get_key(event));
 	}
 
 	if (value == "")

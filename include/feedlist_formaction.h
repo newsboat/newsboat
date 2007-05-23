@@ -9,7 +9,6 @@ class feedlist_formaction : public formaction {
 	public:
 		feedlist_formaction(view *, std::string formstr);
 		virtual ~feedlist_formaction();
-		virtual void process_operation(operation op, int raw_char);
 		virtual void prepare();
 		virtual void init();
 		void set_feedlist(std::vector<rss_feed>& feeds);
@@ -24,6 +23,7 @@ class feedlist_formaction : public formaction {
 	private:
 
 		int get_pos(unsigned int realidx);
+		virtual void process_operation(operation op, int raw_char);
 
 		bool zero_feedpos;
 		unsigned int feeds_shown;

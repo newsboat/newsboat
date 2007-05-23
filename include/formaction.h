@@ -21,7 +21,6 @@ class formaction {
 	public:
 		formaction(view *, std::string formstr);
 		virtual ~formaction();
-		virtual void process_operation(operation op, int raw_char) = 0;
 		virtual void prepare() = 0;
 		virtual void init() = 0;
 		stfl::form * get_form();
@@ -33,7 +32,10 @@ class formaction {
 
 		virtual void handle_cmdline(const std::string& cmd);
 
+		void process_op(operation op, int raw_char);
+
 	protected:
+		virtual void process_operation(operation op, int raw_char) = 0;
 		virtual void set_keymap_hints();
 
 		view * v;
