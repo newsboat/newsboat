@@ -101,7 +101,7 @@ distclean: clean clean-mo
 
 doc:
 	$(MKDIR) doc/xhtml
-	$(A2X) -f xhtml -d doc/xhtml doc/newsbeuter.txt
+	$(A2X) -f xhtml -D doc/xhtml doc/newsbeuter.txt
 
 install: install-mo
 	$(MKDIR) $(prefix)/bin

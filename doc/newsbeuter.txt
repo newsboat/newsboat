@@ -317,6 +317,28 @@ http://kiza.kcore.de/software/snownews/snowscripts/extensions[]
 If you want to write your own extensions, refer to this website for further
 instructions: http://kiza.kcore.de/software/snownews/snowscripts/writing[]
 
+Command Line
+~~~~~~~~~~~~
+
+Like other text-oriented software, newsbeuter contains an internal commandline to
+modify configuration variables ad hoc and to run own commands. It provides a flexible
+flexible to the functionality of newsbeuter which is especially useful for
+advanced users.
+
+To start the commandline, type ":". You will see a ":" prompt at the bottom of the
+screen, similar to tools like vi(m) or mutt. You can now enter commands. Pressing
+the return key executes the command (possibly giving feedback to the user) and closes
+the commandline. Currently, the following commands are available:
+
+.Available Commandline Commands
+[frame="all", grid="all", format="dsv"]
+`20`20`40`20~~~~~~~~~~~~~~~~~~~
+Command:Syntax:Description:Example
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+set:set <variable>[=<value>]:Set configuration variable <variable> to <value>. If no value is specified, the current value is printed out:set reload-time=15
+n/a:<number>:Jump to the entry with the index <number> (usually seen at the left side of the list). This currently works for the feed list:30
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Podcast Support
 ~~~~~~~~~~~~~~~
 

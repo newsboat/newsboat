@@ -63,6 +63,9 @@ void selecttag_formaction::init() {
 	do_redraw = true;
 	quit = false;
 	tag = "";
+	char buf[1024];
+	snprintf(buf, sizeof(buf), _("%s %s - Select Tag"), PROGRAM_NAME, PROGRAM_VERSION);
+	f->set("head", buf);
 }
 
 keymap_hint_entry * selecttag_formaction::get_keymap_hint() {
