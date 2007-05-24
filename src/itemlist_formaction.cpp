@@ -232,5 +232,21 @@ keymap_hint_entry * itemlist_formaction::get_keymap_hint() {
 	return hints;
 }
 
+void itemlist_formaction::handle_cmdline(const std::string& cmd) {
+	unsigned int idx = 0;
+	if (1==sscanf(cmd.c_str(),"%u",&idx)) {
+		if (idx > 0 && idx <= feed->items().size()) {
+			std::ostringstream idxstr;
+			idxstr << (idx - 1);
+			f->set("itempos", idxstr.str());
+		} else {
+			v->show_error(_("Invalid position!"));
+		}
+	} else {
+		// hand over all other commands to formaction
+		formaction::handle_cmdline(cmd);
+	}
+}
+
 
 }

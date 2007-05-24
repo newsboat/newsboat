@@ -336,7 +336,7 @@ the commandline. Currently, the following commands are available:
 Command:Syntax:Description:Example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 set:set <variable>[=<value>]:Set configuration variable <variable> to <value>. If no value is specified, the current value is printed out:set reload-time=15
-n/a:<number>:Jump to the entry with the index <number> (usually seen at the left side of the list). This currently works for the feed list:30
+n/a:<number>:Jump to the entry with the index <number> (usually seen at the left side of the list). This currently works for the feed list and the article list.:30
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Podcast Support
