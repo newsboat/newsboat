@@ -31,6 +31,7 @@ class stfl {
 
 			private:
 				stfl_form * f;
+				stfl_ipool * ipool;
 		};
 
 		static std::string error();

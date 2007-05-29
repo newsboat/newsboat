@@ -5,7 +5,6 @@ TODO:
 	join two subsequent text nodes separated by a comment
 - do entitity decoding for titles (this may be controversial...)
 - research (and fix) libnxml decoding issues
-- make STFL and newsbeuter capable of correct handling of Unicode (currently, it crashes when entering cyrillic characters)
 - implement free configurability of key bindings for widgets (STFL issue)
 - improve string handling (no more std::string() + std::string())
 - implement command line (STFL issue?)
@@ -82,3 +81,4 @@ DONE:
 - add configuration option to disable cleanup
 - add configuration option to set a custom user-agent string
 - replace lockfile with fcntl()-based locking
+- make STFL and newsbeuter capable of correct handling of Unicode
