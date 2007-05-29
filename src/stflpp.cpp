@@ -29,43 +29,54 @@ const char * stfl::form::run(int timeout) {
 
 std::string stfl::form::get(const std::string& name) {
 	const char * text = stfl_ipool_fromwc(ipool,stfl_get(f,stfl_ipool_towc(ipool,name.c_str())));
+	std::string retval;
 	if (text)
-		return std::string(text);
-	return std::string("");
+		retval = text;
+	stfl_ipool_flush(ipool);
+	return retval;
 }
 
 void stfl::form::set(const std::string& name, const std::string& value) {
 	stfl_set(f, stfl_ipool_towc(ipool,name.c_str()), stfl_ipool_towc(ipool,value.c_str()));
+	stfl_ipool_flush(ipool);
 }
 
 std::string stfl::form::get_focus() {
 	const char * focus = stfl_ipool_fromwc(ipool,stfl_get_focus(f));
+	std::string retval;
 	if (focus)
-		return std::string(focus);
-	return std::string("");
+		retval = focus;
+	stfl_ipool_flush(ipool);
+	return retval;
 }
 
 void stfl::form::set_focus(const std::string& name) {
 	stfl_set_focus(f, stfl_ipool_towc(ipool,name.c_str()));
 	GetLogger().log(LOG_DEBUG,"stfl::form::set_focus: %s rc = %d", name.c_str());
+	stfl_ipool_flush(ipool);
 }
 
 std::string stfl::form::dump(const std::string& name, const std::string& prefix, int focus) {
 	const char * text = stfl_ipool_fromwc(ipool,stfl_dump(f, stfl_ipool_towc(ipool,name.c_str()), stfl_ipool_towc(ipool,prefix.c_str()), focus));
+	std::string retval;
 	if (text)
-		return std::string(text);
-	return std::string("");
+		retval = text;
+	stfl_ipool_flush(ipool);
+	return retval;
 }
 
 void stfl::form::modify(const std::string& name, const std::string& mode, const std::string& text) {
 	stfl_modify(f, stfl_ipool_towc(ipool,name.c_str()), stfl_ipool_towc(ipool,mode.c_str()), stfl_ipool_towc(ipool,text.c_str()));
+	stfl_ipool_flush(ipool);
 }
 
 std::string stfl::form::lookup(const std::string& path, const std::string& newname) {
 	const char * text = stfl_ipool_fromwc(ipool, stfl_lookup(f, stfl_ipool_towc(ipool,path.c_str()), stfl_ipool_towc(ipool,newname.c_str())));
+	std::string retval;
 	if (text)
-		return std::string(text);
-	return std::string("");
+		return retval = text;
+	stfl_ipool_flush(ipool);
+	return retval;
 }
 
 std::string stfl::error() {
