@@ -294,6 +294,24 @@ std::string utils::retrieve_url(const std::string& url, const char * user_agent)
 	return buf;
 }
 
+void utils::run_command(const std::string& cmd, const std::string& input) {
+	int rc = fork();
+	switch (rc) {
+		case -1: break;
+		case 0: { // child:
+			int fd = ::open("/dev/null", O_RDWR);
+			close(0);
+			close(1);
+			close(2);
+			dup2(fd, 0);
+			dup2(fd, 1);
+			dup2(fd, 2);
+			execlp(cmd.c_str(), cmd.c_str(), input.c_str(), NULL);
+			exit(1);
+		}
+	}
+}
+
 std::string utils::run_filter(const std::string& cmd, const std::string& input) {
 	std::string buf;
 	int ipipe[2];
@@ -329,6 +347,5 @@ std::string utils::run_filter(const std::string& cmd, const std::string& input) 
 	}
 	return buf;
 }
-
 
 }

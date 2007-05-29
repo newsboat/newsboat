@@ -24,6 +24,7 @@ class utils {
 		static void extract_filter(const std::string& line, std::string& filter, std::string& url);
 		static std::string retrieve_url(const std::string& url, const char * user_agent = 0);
 		static std::string run_filter(const std::string& cmd, const std::string& input);
+		static void run_command(const std::string& cmd, const std::string& param); // used for notifications only
 };
 
 }

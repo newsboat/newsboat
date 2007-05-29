@@ -37,12 +37,14 @@ namespace newsbeuter {
 			bool is_valid_podcast_type(const std::string& mimetype);
 			void enqueue_url(const std::string& url);
 			void set_itemlist_feed(unsigned int pos);
+			void notify(const std::string& msg);
 
 		private:
 			void usage(char * argv0);
 			void import_opml(const char * filename);
 			void export_opml();
 			void rec_find_rss_outlines(nxml_data_t * node, std::string tag);
+			void compute_unread_numbers(unsigned int&, unsigned int& );
 
 			view * v;
 			urlreader urlcfg;

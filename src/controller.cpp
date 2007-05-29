@@ -21,6 +21,7 @@
 #include <nxml.h>
 
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <pwd.h>
 
 #include <config.h>
@@ -41,6 +42,12 @@ void ctrl_c_action(int sig) {
 
 void ignore_signal(int sig) {
 	GetLogger().log(LOG_WARN, "caught signal %d but ignored it", sig);
+}
+
+void omg_a_child_died(int sig) {
+	pid_t pid;
+	int stat;
+	while ((pid = waitpid(-1,&stat,WNOHANG)) > 0);
 }
 
 controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false), cfg(0) {
@@ -94,6 +101,7 @@ void controller::run(int argc, char * argv[]) {
 #endif
 	::signal(SIGPIPE, ignore_signal);
 	::signal(SIGHUP, ctrl_c_action);
+	::signal(SIGCHLD, omg_a_child_died);
 
 	bool do_import = false, do_export = false, cachefile_given_on_cmdline = false, do_vacuum = false;
 	std::string importfile;
@@ -385,9 +393,48 @@ rss_feed * controller::get_feed(unsigned int pos) {
 
 void controller::reload_all() {
 	GetLogger().log(LOG_DEBUG,"controller::reload_all: starting with reload all...");
+	unsigned int unread_feeds, unread_articles;
+	compute_unread_numbers(unread_feeds, unread_articles);
 	for (unsigned int i=0;i<feeds.size();++i) {
 		GetLogger().log(LOG_DEBUG, "controller::reload_all: reloading feed #%u", i);
 		this->reload(i,feeds.size());
+	}
+	unsigned int unread_feeds2, unread_articles2;
+	compute_unread_numbers(unread_feeds2, unread_articles2);
+	if (unread_feeds2 != unread_feeds || unread_articles2 != unread_articles) {
+		char buf[2048];
+		snprintf(buf,sizeof(buf),_("newsbeuter: finished reload, %u unread feeds (%u unread articles total)"), unread_feeds2, unread_articles2);
+		this->notify(buf);
+	}
+}
+
+void controller::notify(const std::string& msg) {
+	if (cfg->get_configvalue_as_bool("notify-screen")) {
+		GetLogger().log(LOG_DEBUG, "controller:notify: notifying screen");
+		std::cout << "\033^" << msg << "\033\\";
+		std::cout.flush();
+	}
+	if (cfg->get_configvalue_as_bool("notify-xterm")) {
+		GetLogger().log(LOG_DEBUG, "controller:notify: notifying xterm");
+		std::cout << "\033]2;" << msg << "\033\\";
+		std::cout.flush();
+	}
+	if (cfg->get_configvalue("notify-program").length() > 0) {
+		std::string prog = cfg->get_configvalue("notify-program");
+		GetLogger().log(LOG_DEBUG, "controller:notify: notifying external program `%s'", prog.c_str());
+		utils::run_command(prog, msg);
+	}
+}
+
+void controller::compute_unread_numbers(unsigned int& unread_feeds, unsigned int& unread_articles) {
+	unread_feeds = 0;
+	unread_articles = 0;
+	for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it) {
+		unsigned int items = it->unread_item_count();
+		if (items > 0) {
+			++unread_feeds;
+			unread_articles += items;
+		}
 	}
 }
 
