@@ -52,20 +52,26 @@ keymap::keymap() {
 	}
 }
 
-void keymap::get_keymap_descriptions(std::vector<std::pair<std::string,std::string> >& descs, unsigned short flags) {
+void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned short flags) {
 	for (std::map<std::string,operation>::iterator it=keymap_.begin();it!=keymap_.end();++it) {
 		operation op = it->second;
 		if (op != OP_NIL) {
 			std::string helptext;
+			std::string opname;
 			bool add = false;
 			for (int i=0;opdescs[i].help_text;++i) {
 				if (opdescs[i].op == op && opdescs[i].flags & flags) {
 					helptext = gettext(opdescs[i].help_text);
+					opname = opdescs[i].opstr;
 					add = true;
 				}
 			}
 			if (add) {
-				descs.push_back(std::pair<std::string,std::string>(it->first, helptext));
+				keymap_desc desc;
+				desc.key = it->first;
+				desc.cmd = opname;
+				desc.desc = helptext;
+				descs.push_back(desc);
 			}
 		}
 	}

@@ -53,6 +53,12 @@ namespace newsbeuter {
 						OP_PB_PLAY, 
 						OP_PB_MAX };
 
+	struct keymap_desc {
+		std::string key;
+		std::string cmd;
+		std::string desc;
+	};
+
 	class keymap : public config_action_handler {
 		public:
 			keymap();
@@ -64,7 +70,7 @@ namespace newsbeuter {
 			char get_key(const std::string& keycode);
 			std::string getkey(operation );
 			virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
-			void get_keymap_descriptions(std::vector<std::pair<std::string,std::string> >& descs, unsigned short flags);
+			void get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned short flags);
 		private:
 			std::map<std::string,operation> keymap_;
 	};

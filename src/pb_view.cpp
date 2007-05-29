@@ -172,14 +172,21 @@ void pb_view::run_help() {
 
 	help_form.set("head",_("Help"));
 	
-	std::vector<std::pair<std::string,std::string> > descs;
+	std::vector<keymap_desc> descs;
 	keys->get_keymap_descriptions(descs, KM_PODBEUTER);
 	
 	std::string code = "{list";
 	
-	for (std::vector<std::pair<std::string,std::string> >::iterator it=descs.begin();it!=descs.end();++it) {
+	for (std::vector<keymap_desc>::iterator it=descs.begin();it!=descs.end();++it) {
 		std::string line = "{listitem text:";
-		std::string descline = it->first + std::string("\t") + it->second;
+
+		std::string descline;
+		descline.append(it->key);
+		descline.append(1,'\t');
+		descline.append(it->cmd);
+		unsigned int how_often = 3 - (it->cmd.length() / 8);
+		descline.append(how_often,'\t');
+		descline.append(it->desc);
 		line.append(stfl::quote(descline));
 		line.append("}");
 		
