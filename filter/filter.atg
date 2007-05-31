@@ -1,0 +1,64 @@
+/*
+ * parser for newsbeuter filter language
+ */
+
+#include "CodeGenerator.h"
+
+COMPILER Filter
+
+	CodeGenerator * gen;
+
+	enum { LOGOP_AND = 1, LOGOP_OR };
+	enum { MATCHOP_EQ = 1, MATCHOP_NE, MATCHOP_RXEQ, MATCHOP_RXNE };
+
+CHARACTERS
+	letter = "abcdefghijklmnopqrstuvwxyz".
+	nonquote = ANY - '"'.
+
+TOKENS
+	openblock = '('.
+	closeblock = ')'.
+	ident = letter { letter }.
+	stringliteral = '"' { nonquote } '"'.
+
+PRODUCTIONS
+
+	stringlit<wchar_t* &lit>
+               = stringliteral					(. lit = coco_string_create(t->val); .)
+			   .
+
+	matchattrib<wchar_t* &name>
+				= ident							(. name = coco_string_create(t->val); .)
+				.
+
+	matchop<int &op>
+				= "=="								(. op = MATCHOP_EQ; .)
+				| "!="								(. op = MATCHOP_NE; .)
+				| "=~"								(. op = MATCHOP_RXEQ; .)
+				| "!~"								(. op = MATCHOP_RXNE; .)
+				.
+
+	logop<int &lop>
+				= "and"								(. lop = LOGOP_AND; .)
+				| "or"								(. lop = LOGOP_OR; .)
+				.
+
+	matchexpr 										(. wchar_t * name, * lit; int op; .)
+				= matchattrib<name>
+				  matchop<op>
+				  stringlit<lit>					(. gen->add_matchexpr(name, op, lit); .)
+				.
+
+
+	expr 											(. int lop; .)
+			= matchexpr { 
+			  logop<lop> 							(. gen->add_logop(lop); .)
+			  expr }
+			| openblock								(. gen->open_block(); .)
+			  expr
+			  closeblock							(. gen->close_block(); .)
+			.
+
+	Filter = expr.
+
+END Filter.

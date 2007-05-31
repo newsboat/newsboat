@@ -4,6 +4,7 @@ Changes for newsbeuter:
 	improved HTML rendering
 	improved lock file handling
 	added Unicode compatibility
+	added support for notifications
 
 0.4 (2007-05-08):
 	refactored view
