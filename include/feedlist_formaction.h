@@ -2,6 +2,7 @@
 #define NEWSBEUTER_FEEDLIST_FORMACTION__H
 
 #include <formaction.h>
+#include <matcher.h>
 
 namespace newsbeuter {
 
@@ -32,6 +33,8 @@ class feedlist_formaction : public formaction {
 		std::vector<std::pair<rss_feed *, unsigned int> > visible_feeds;
 		std::string tag;
 		std::vector<std::string> tags;
+
+		matcher m;
 };
 
 }

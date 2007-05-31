@@ -5,6 +5,7 @@
 #include <vector>
 
 #include <configcontainer.h>
+#include <matcher.h>
 
 
 extern "C" {
@@ -15,7 +16,7 @@ namespace newsbeuter {
 	
 	class cache;
 
-	class rss_item {
+	class rss_item : public matchable {
 		public:
 			rss_item(cache * c) : unread_(true), ch(c), enqueued_(false) { }
 			~rss_item() { }
@@ -63,6 +64,9 @@ namespace newsbeuter {
 			inline bool enqueued() { return enqueued_; }
 			inline void set_enqueued(bool v) { enqueued_ = v; }
 
+			virtual bool has_attribute(const std::string& attribname);
+			virtual std::string get_attribute(const std::string& attribname);
+
 		private:
 			std::string title_;
 			std::string link_;
@@ -78,7 +82,7 @@ namespace newsbeuter {
 			bool enqueued_;
 	};
 
-	class rss_feed {
+	class rss_feed : public matchable {
 		public:
 			rss_feed(cache * c) : ch(c) { }
 			~rss_feed() { }
@@ -108,6 +112,9 @@ namespace newsbeuter {
 			void set_tags(const std::vector<std::string>& tags);
 			bool matches_tag(const std::string& tag);
 			std::string get_tags();
+
+			virtual bool has_attribute(const std::string& attribname);
+			virtual std::string get_attribute(const std::string& attribname);
 
 		private:
 			std::string title_;

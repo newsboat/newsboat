@@ -37,6 +37,8 @@ class FilterParser {
 
 		void print_tree();
 
+		inline expression * get_root() { return root; }
+
 	private:
 		void print_tree_r(expression * e, unsigned int depth);
 		void cleanup_r(expression * e);

@@ -6,12 +6,15 @@
 #include <reloadthread.h>
 
 #include <sstream>
+#include <cassert>
+#include <string>
 
 namespace newsbeuter {
 
 feedlist_formaction::feedlist_formaction(view * vv, std::string formstr) 
 	: formaction(vv,formstr), zero_feedpos(false), feeds_shown(0),
-		auto_open(false), quit(false) { 
+		auto_open(false), quit(false) {
+	assert(true==m.parse("unread_count != \"0\""));
 }
 
 void feedlist_formaction::init() {
@@ -186,16 +189,13 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 		char buf2[20];
 		unsigned int unread_count = 0;
 		if (it->items().size() > 0) {
-			for (std::vector<rss_item>::iterator rit = it->items().begin(); rit != it->items().end(); ++rit) {
-				if (rit->unread())
-					++unread_count;
-			}
+			unread_count = it->unread_item_count();
 		}
 		if (unread_count > 0)
 			++unread_feeds;
 
 
-		if ((tag == "" || it->matches_tag(tag)) && (show_read_feeds || unread_count > 0)) {
+		if ((tag == "" || it->matches_tag(tag)) && (show_read_feeds || m.matches(&(*it)))) {
 			visible_feeds.push_back(std::pair<rss_feed *, unsigned int>(&(*it),i));
 
 			snprintf(buf,sizeof(buf),"(%u/%u) ",unread_count,static_cast<unsigned int>(it->items().size()));

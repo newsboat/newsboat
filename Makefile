@@ -12,7 +12,7 @@ CXX=c++
 
 # compiler and linker flags
 DEFINES=-D_ENABLE_NLS -DLOCALEDIR=\"$(localedir)\" -DPACKAGE=\"$(PACKAGE)\"
-CXXFLAGS=-ggdb -I./include -I./stfl -I. -I/usr/local/include -I/sw/include -Wall $(DEFINES)
+CXXFLAGS=-ggdb -I./include -I./stfl -I./filter -I. -I/usr/local/include -I/sw/include -Wall $(DEFINES)
 LDFLAGS=-L. -L/usr/local/lib -L/sw/lib
 
 # libraries to link with
@@ -29,10 +29,14 @@ LIB_SOURCES=$(shell cat libbeuter.deps)
 LIB_OBJS=$(patsubst %.cpp,%.o,$(LIB_SOURCES))
 LIB_OUTPUT=libbeuter.a
 
+FILTERLIB_SOURCES=filter/Scanner.cpp filter/Parser.cpp filter/FilterParser.cpp
+FILTERLIB_OBJS=$(patsubst %.cpp,%.o,$(FILTERLIB_SOURCES))
+FILTERLIB_OUTPUT=libfilter.a
+
 NEWSBEUTER=$(PACKAGE)
 NEWSBEUTER_SOURCES=$(shell cat newsbeuter.deps)
 NEWSBEUTER_OBJS=$(patsubst %.cpp,%.o,$(NEWSBEUTER_SOURCES))
-NEWSBEUTER_LIBS=-lbeuter -lstfl -lmrss -lnxml -lncursesw -lsqlite3 -lpthread -lcurl
+NEWSBEUTER_LIBS=-lbeuter -lfilter -lstfl -lmrss -lnxml -lncursesw -lsqlite3 -lpthread -lcurl
 
 
 PODBEUTER=podbeuter
@@ -63,7 +67,7 @@ RM=rm -f
 
 all: $(NEWSBEUTER) $(PODBEUTER)
 
-$(NEWSBEUTER): $(MOFILES) $(STFLHDRS) $(LIB_OUTPUT) $(NEWSBEUTER_OBJS)
+$(NEWSBEUTER): $(MOFILES) $(STFLHDRS) $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBEUTER_OBJS)
 	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $(NEWSBEUTER) $(NEWSBEUTER_OBJS) $(NEWSBEUTER_LIBS)
 
 $(PODBEUTER): $(MOFILES) $(STFLHDRS) $(LIB_OUTPUT) $(PODBEUTER_OBJS)
@@ -73,6 +77,15 @@ $(LIB_OUTPUT): $(LIB_OBJS)
 	$(RM) $@
 	$(AR) qc $@ $^
 	$(RANLIB) $@
+
+$(FILTERLIB_OUTPUT): $(FILTERLIB_OBJS)
+	$(RM) $@
+	$(AR) qc $@ $^
+	$(RANLIB) $@
+
+filter/Scanner.cpp filter/Parser.cpp: filter/filter.atg filter/Scanner.frame filter/Parser.frame
+	$(RM) filter/Scanner.cpp filter/Parser.cpp filter/Scanner.h filter/Parser.h
+	cococpp -frames filter $<
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
@@ -93,7 +106,10 @@ clean-podbeuter:
 clean-libbeuter:
 	$(RM) $(LIB_OUTPUT) $(LIB_OBJS)
 
-clean: clean-newsbeuter clean-podbeuter clean-libbeuter
+clean-libfilter:
+	$(RM) $(FILTERLIB_OUTPUT) $(FILTERLIB_OBJS) filter/Scanner.cpp filter/Scanner.h filter/Parser.cpp filter/Parser.h
+
+clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter
 	$(RM) $(STFLHDRS)
 
 distclean: clean clean-mo

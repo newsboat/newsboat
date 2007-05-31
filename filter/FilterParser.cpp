@@ -4,7 +4,9 @@
 
 FilterParser::FilterParser() : root(0), curpos(0), next_must_descend_right(false) { }
 
-FilterParser::~FilterParser() { }
+FilterParser::~FilterParser() { 
+	cleanup();
+}
 
 void FilterParser::add_logop(int op) { 
 	//fprintf(stderr,"add_logop: op = %d\n", op);

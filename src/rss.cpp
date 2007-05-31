@@ -372,3 +372,72 @@ rss_item& rss_feed::get_item_by_guid(const std::string& guid) {
 	static rss_item dummy_item(0); // should never happen!
 	return dummy_item;
 }
+
+bool rss_item::has_attribute(const std::string& attribname) {
+	if (attribname == "title" || 
+		attribname == "link" || 
+		attribname == "author" || 
+		attribname == "content" || 
+		attribname == "date"  ||
+		attribname == "guid" ||
+		attribname == "unread" ||
+		attribname == "enclosure_url" ||
+		attribname == "enclosure_type") // TODO: attach to rss-feed to which we belong if possible
+			return true;
+	return false;
+}
+
+std::string rss_item::get_attribute(const std::string& attribname) {
+	if (attribname == "title")
+		return title();
+	else if (attribname == "link")
+		return link();
+	else if (attribname == "author")
+		return author();
+	else if (attribname == "content")
+		return description();
+	else if (attribname == "date")
+		return pubDate();
+	else if (attribname == "guid")
+		return guid();
+	else if (attribname == "unread")
+		return unread_ ? "yes" : "no";
+	else if (attribname == "enclosure_url")
+		return enclosure_url();
+	else if (attribname == "enclosure_type")
+		return enclosure_type();
+	return "";
+}
+
+bool rss_feed::has_attribute(const std::string& attribname) {
+	if (attribname == "feedtitle" ||
+		attribname == "description" ||
+		attribname == "feedlink" ||
+		attribname == "feeddate" ||
+		attribname == "rssurl" ||
+		attribname == "unread_count" ||
+		attribname == "tags")
+			return true;
+	return false;
+}
+
+std::string rss_feed::get_attribute(const std::string& attribname) {
+	if (attribname == "feedtitle")
+		return title();
+	else if (attribname == "description")
+		return description();
+	else if (attribname == "feedlink")
+		return title();
+	else if (attribname == "feeddate")
+		return pubDate();
+	else if (attribname == "rssurl")
+		return rssurl();
+	else if (attribname == "unread_count") {
+		std::ostringstream os;
+		os << unread_item_count();
+		return os.str();
+	} else if (attribname == "tags") {
+		return get_tags();
+	}
+	return "";
+}
