@@ -2,18 +2,23 @@
 #define FILTER_PARSER__H
 
 #include <string>
+#include <sys/types.h>
+#include <regex.h>
 
-enum { LOGOP_AND = 1, LOGOP_OR, MATCHOP_EQ, MATCHOP_NE, MATCHOP_RXEQ, MATCHOP_RXNE, MATCHOP_LT, MATCHOP_GT };
+
+enum { LOGOP_AND = 1, LOGOP_OR, MATCHOP_EQ, MATCHOP_NE, MATCHOP_RXEQ, MATCHOP_RXNE, MATCHOP_LT, MATCHOP_GT, MATCHOP_LE, MATCHOP_GE };
 
 struct expression {
 	expression(const std::string& n, const std::string& lit, int o);
 	expression(int o);
+	~expression();
 
 	std::string name;
 	std::string literal;
 	int op;
 	expression * l, * r;
 	expression * parent;
+	regex_t * regex;
 };
 
 class FilterParser {

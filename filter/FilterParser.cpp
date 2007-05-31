@@ -108,11 +108,16 @@ void FilterParser::print_tree_r(expression * e, unsigned int depth) {
 	}
 }
 
-expression::expression(const std::string& n, const std::string& lit, int o) : name(n), literal(lit), op(o), l(NULL), r(NULL), parent(NULL) {
+expression::expression(const std::string& n, const std::string& lit, int o) : name(n), literal(lit), op(o), l(NULL), r(NULL), parent(NULL), regex(NULL) {
 	if (literal[0] == '"' && literal[literal.length()-1] == '"') {
 		literal = literal.substr(1,literal.length()-2);
 	}
 }
 
-expression::expression(int o) : op(o), l(NULL), r(NULL), parent(NULL) { }
+expression::expression(int o) : op(o), l(NULL), r(NULL), parent(NULL), regex(NULL) { 
+}
+
+expression::~expression() {
+	delete regex;
+}
 

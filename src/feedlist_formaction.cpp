@@ -55,12 +55,14 @@ void feedlist_formaction::process_operation(operation op, int raw_char) {
 	if ((raw_char == '\n' || raw_char == '\r') && f->get_focus() == "filter") {
 		std::string filtertext = f->get("filtertext");
 		f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
-		if (!m.parse(filtertext)) {
-			v->show_error(_("Error: couldn't parse filter command!"));
-			m.parse(FILTER_UNREAD_FEEDS);
-		} else {
-			apply_filter = true;
-			do_redraw = true;
+		if (filtertext.length() > 0) {
+			if (!m.parse(filtertext)) {
+				v->show_error(_("Error: couldn't parse filter command!"));
+				m.parse(FILTER_UNREAD_FEEDS);
+			} else {
+				apply_filter = true;
+				do_redraw = true;
+			}
 		}
 		return;
 	}

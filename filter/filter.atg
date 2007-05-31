@@ -10,6 +10,7 @@ COMPILER Filter
 
 CHARACTERS
 	identchar = "abcdefghijklmnopqrstuvwxyz_-.".
+	digit = "0123456789".
 	nonquote = ANY - '"'.
 
 TOKENS
@@ -17,15 +18,16 @@ TOKENS
 	closeblock = ')'.
 	ident = identchar { identchar }.
 	stringliteral = '"' { nonquote } '"'.
+	numliteral = ['-'] digit { digit }.
 
 PRODUCTIONS
 
 	stringlit<char* &lit>
-               = stringliteral					(. lit = coco_string_create_char(t->val); .)
+               = ( stringliteral | numliteral )		(. lit = coco_string_create_char(t->val); .)
 			   .
 
 	matchattrib<char* &name>
-				= ident							(. name = coco_string_create_char(t->val); .)
+				= ident								(. name = coco_string_create_char(t->val); .)
 				.
 
 	matchop<int &op>
@@ -34,8 +36,10 @@ PRODUCTIONS
 				| "!="								(. op = MATCHOP_NE; .)
 				| "=~"								(. op = MATCHOP_RXEQ; .)
 				| "!~"								(. op = MATCHOP_RXNE; .)
-				| "<"                               (. op = MATCHOP_LT; .)
-				| ">"                               (. op = MATCHOP_GT; .)
+				| "<"								(. op = MATCHOP_LT; .)
+				| ">"								(. op = MATCHOP_GT; .)
+				| "<="								(. op = MATCHOP_LE; .)
+				| ">="								(. op = MATCHOP_GE; .)
 				.
 
 	logop<int &lop>
@@ -50,9 +54,9 @@ PRODUCTIONS
 				.
 
 	blockexpr 
-				= openblock 							(. gen->open_block(); .)
+				= openblock 						(. gen->open_block(); .)
 				  expr
-				  closeblock							(. gen->close_block(); .)
+				  closeblock						(. gen->close_block(); .)
 				.
 
 	expr 											(. int lop; .)

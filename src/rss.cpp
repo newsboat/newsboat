@@ -416,6 +416,7 @@ bool rss_feed::has_attribute(const std::string& attribname) {
 		attribname == "feeddate" ||
 		attribname == "rssurl" ||
 		attribname == "unread_count" ||
+		attribname == "total_count" ||
 		attribname == "tags")
 			return true;
 	return false;
@@ -435,6 +436,10 @@ std::string rss_feed::get_attribute(const std::string& attribname) {
 	else if (attribname == "unread_count") {
 		std::ostringstream os;
 		os << unread_item_count();
+		return os.str();
+	} else if (attribname == "total_count") {
+		std::ostringstream os;
+		os << items_.size();
 		return os.str();
 	} else if (attribname == "tags") {
 		return get_tags();

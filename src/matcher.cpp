@@ -83,11 +83,45 @@ bool matcher::matches_r(expression * e, matchable * item) {
 					return iatt > ilit;
 				}
 				break;
-			case MATCHOP_RXEQ:
-				retval = false; // TODO: implement
+			case MATCHOP_LE: {
+					std::istringstream islit(e->literal);
+					std::istringstream isatt(item->get_attribute(e->name));
+					int ilit, iatt;
+					islit >> ilit;
+					isatt >> iatt;
+					return iatt <= ilit;
+				}
 				break;
-			case MATCHOP_RXNE:
-				retval = false;
+			case MATCHOP_GE: {
+					std::istringstream islit(e->literal);
+					std::istringstream isatt(item->get_attribute(e->name));
+					int ilit, iatt;
+					islit >> ilit;
+					isatt >> iatt;
+					return iatt >= ilit;
+				}
+				break;
+			case MATCHOP_RXEQ: {
+					if (!e->regex) {
+						e->regex = new regex_t;
+						regcomp(e->regex, e->literal.c_str(), REG_EXTENDED | REG_ICASE | REG_NOSUB); // TODO: see below
+					}
+					if (regexec(e->regex, item->get_attribute(e->name).c_str(), 0, NULL, 0)==0)
+						retval = true;
+					else
+						retval = false;
+				}
+				break;
+			case MATCHOP_RXNE: {
+					if (!e->regex) {
+						e->regex = new regex_t;
+						regcomp(e->regex, e->literal.c_str(), REG_EXTENDED | REG_ICASE | REG_NOSUB); // TODO: throw error when compilation fails
+					}
+					if (regexec(e->regex, item->get_attribute(e->name).c_str(), 0, NULL, 0)==0)
+						retval = false;
+					else
+						retval = true;
+				}
 				break;
 			default:
 				GetLogger().log(LOG_ERROR, "matcher::matches_r: invalid operator %d", e->op);
