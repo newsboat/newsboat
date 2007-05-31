@@ -1,12 +1,17 @@
 CXX=c++
 CXXFLAGS=-I. -ggdb -fPIC
 LIBFILTER=libfilter.a
-FILTER_SOURCES=Scanner.cpp Parser.cpp CodeGenerator.cpp # TODO: switch to automatic find
+FILTER_SOURCES=Scanner.cpp Parser.cpp CodeGenerator.cpp
 FILTER_OBJS=$(patsubst %.cpp,%.o,$(FILTER_SOURCES))
 
 AR=ar
 RANLIB=ranlib
 COCOCPP=cococpp # from the coco-cpp package
+
+all: test-parser
+
+test-parser: $(LIBFILTER) main.o
+	$(CXX) $(CXXFLAGS) -o test-parser -L. $^ -lfilter
 
 $(LIBFILTER): $(FILTER_OBJS)
 	$(RM) $@
@@ -21,6 +26,6 @@ Scanner.cpp Parser.cpp: filter.atg Scanner.frame Parser.frame
 	cococpp -frames . $<
 
 clean:
-	$(RM) $(LIBFILTER) Scanner.cpp Scanner.h Parser.cpp Parser.h $(FILTER_OBJS)
+	$(RM) $(LIBFILTER) Scanner.cpp Scanner.h Parser.cpp Parser.h $(FILTER_OBJS) main.o test-parser
 
 .PHONY: clean
