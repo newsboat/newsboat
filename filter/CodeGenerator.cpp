@@ -63,12 +63,32 @@ void FilterParser::close_block() {
 	}
 }
 
-void FilterParser::parse_string(const std::string& str) {
+bool FilterParser::parse_string(const std::string& str) {
+	cleanup();
+
 	std::istringstream is(str);
 	Scanner s(is);
 	Parser p(&s);
 	p.gen = this;
 	p.Parse();
+	if (0 == p.errors->count) {
+		return true;
+	}
+	cleanup();
+	return false;
+}
+
+void FilterParser::cleanup() {
+	cleanup_r(root);
+	root = curpos = NULL;
+}
+
+void FilterParser::cleanup_r(expression * e) {
+	if (e) {
+		cleanup_r(e->l);
+		cleanup_r(e->r);
+		delete e;
+	}
 }
 
 void FilterParser::print_tree() {

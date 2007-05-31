@@ -32,11 +32,14 @@ class FilterParser {
 		void open_block();
 		void close_block();
 
-		void parse_string(const std::string& str);
+		bool parse_string(const std::string& str);
+		void cleanup();
 
 		void print_tree();
+
 	private:
 		void print_tree_r(expression * e, unsigned int depth);
+		void cleanup_r(expression * e);
 
 		expression * root;
 		expression * curpos;

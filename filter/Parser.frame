@@ -226,27 +226,26 @@ void Errors::SynErr(int line, int col, int n) {
 		}
 		break;
 	}
-	wprintf(L"-- line %d col %d: %ls\n", line, col, s);
+	/* wprintf(L"-- line %d col %d: %ls\n", line, col, s); */
 	coco_string_delete(s);
 	count++;
 }
 
 void Errors::Error(int line, int col, wchar_t *s) {
-	wprintf(L"-- line %d col %d: %ls\n", line, col, s);
+	/* wprintf(L"-- line %d col %d: %ls\n", line, col, s); */
 	count++;
 }
 
 void Errors::Warning(int line, int col, wchar_t *s) {
-	wprintf(L"-- line %d col %d: %ls\n", line, col, s);
+	/* wprintf(L"-- line %d col %d: %ls\n", line, col, s); */
 }
 
 void Errors::Warning(wchar_t *s) {
-	wprintf(L"%ls\n", s);
+	/* wprintf(L"%ls\n", s); */
 }
 
 void Errors::Exception(wchar_t* s) {
-	wprintf(L"%ls", s); 
-	exit(1);
+	/* wprintf(L"%ls", s); */
 }
 
 -->namespace_close

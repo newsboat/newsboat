@@ -22,7 +22,7 @@ $(LIBFILTER): $(FILTER_OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 Scanner.cpp Parser.cpp: filter.atg Scanner.frame Parser.frame
-	$(RM) Scanner.cpp Parser.cpp
+	$(RM) Scanner.cpp Parser.cpp Scanner.h Parser.h
 	cococpp -frames . $<
 
 clean:
