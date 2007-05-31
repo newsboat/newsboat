@@ -14,7 +14,7 @@ struct expression {
 		}
 		*/
 	}
-	expression(int o) : op(o) { }
+	expression(int o) : op(o), l(NULL), r(NULL), parent(NULL) { }
 
 	std::string name;
 	std::string literal;
@@ -40,6 +40,7 @@ class FilterParser {
 
 		expression * root;
 		expression * curpos;
+		bool next_must_descend_right;
 };
 
 

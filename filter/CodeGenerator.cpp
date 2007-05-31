@@ -2,27 +2,49 @@
 #include "Parser.h"
 #include <sstream>
 
-FilterParser::FilterParser() : root(0) { }
+FilterParser::FilterParser() : root(0), curpos(0), next_must_descend_right(false) { }
 
 FilterParser::~FilterParser() { }
 
 void FilterParser::add_logop(int op) { 
+	//fprintf(stderr,"add_logop: op = %d\n", op);
 	expression * expr = new expression(op);
 	if (!root) {
-			// ERROR: there can't be a logical expression w/o temporary (left) expression
+		printf("error: there can't be a logical expression w/o a prior expression!");
+		// TODO: add proper error handling
 	} else {
-		expr->l = root;
-		root = expr;
+		if (curpos != root) {
+			expr->l = curpos;
+			curpos->parent->r = expr;
+			expr->parent = curpos->parent;
+			curpos = expr;
+		} else {
+			expr->l = root;
+			curpos = root = expr;
+		}
 	}
 	// printf("logop: %d\n", op); 
 }
 
 void FilterParser::add_matchexpr(char * name, int op, char * lit) { 
+	//fprintf(stderr,"add_matchexpr: name = %s op = %d lit = %s\n", name, op, lit);
 	expression * expr = new expression(name, lit, op);
-	if (!root) {
-		root = expr;
+	if (next_must_descend_right) {
+		next_must_descend_right = false;
+		if (!curpos) {
+			curpos = root = expr;
+		} else {
+			expr->parent = curpos;
+			curpos->r = expr;
+			curpos = expr;
+		}
 	} else {
-		root->r = expr;
+		if (!curpos) {
+			curpos = root = expr;
+		} else {
+			expr->parent = curpos;
+			curpos->r = expr;
+		}
 	}
 	coco_string_delete(name);
 	coco_string_delete(lit);
@@ -30,13 +52,15 @@ void FilterParser::add_matchexpr(char * name, int op, char * lit) {
 }
 
 void FilterParser::open_block() { 
-	//printf("openblock\n"); 
-	// TODO
+	//fprintf(stderr,"open_block\n");
+	next_must_descend_right = true;
 }
 
 void FilterParser::close_block() { 
-	//printf("closeblock\n"); 
-	// TODO
+	//fprintf(stderr,"close_block\n");
+	if (curpos != root) {
+		curpos = curpos->parent;
+	}
 }
 
 void FilterParser::parse_string(const std::string& str) {

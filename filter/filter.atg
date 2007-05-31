@@ -47,14 +47,16 @@ PRODUCTIONS
 				  stringlit<lit>					(. gen->add_matchexpr(name, op, lit); .)
 				.
 
+	blockexpr 
+				= openblock 							(. gen->open_block(); .)
+				  expr
+				  closeblock							(. gen->close_block(); .)
+				.
 
 	expr 											(. int lop; .)
-			= matchexpr { 
-			  logop<lop> 							(. gen->add_logop(lop); .)
-			  expr }
-			| openblock								(. gen->open_block(); .)
-			  expr
-			  closeblock							(. gen->close_block(); .)
+			= ( matchexpr | blockexpr )
+			  { logop<lop> 							(. gen->add_logop(lop); .)
+			  ( matchexpr | blockexpr ) }
 			.
 
 	Filter = expr.
