@@ -3,7 +3,7 @@
 
 #include <string>
 
-enum { LOGOP_AND = 1, LOGOP_OR, MATCHOP_EQ, MATCHOP_NE, MATCHOP_RXEQ, MATCHOP_RXNE };
+enum { LOGOP_AND = 1, LOGOP_OR, MATCHOP_EQ, MATCHOP_NE, MATCHOP_RXEQ, MATCHOP_RXNE, MATCHOP_LT, MATCHOP_GT };
 
 struct expression {
 	expression(const std::string& n, const std::string& lit, int o);

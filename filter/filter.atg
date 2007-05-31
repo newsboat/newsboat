@@ -34,6 +34,8 @@ PRODUCTIONS
 				| "!="								(. op = MATCHOP_NE; .)
 				| "=~"								(. op = MATCHOP_RXEQ; .)
 				| "!~"								(. op = MATCHOP_RXNE; .)
+				| "<"                               (. op = MATCHOP_LT; .)
+				| ">"                               (. op = MATCHOP_GT; .)
 				.
 
 	logop<int &lop>

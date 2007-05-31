@@ -4,6 +4,7 @@
 
 #include <sys/time.h>
 #include <ctime>
+#include <sstream>
 
 namespace newsbeuter {
 
@@ -63,6 +64,24 @@ bool matcher::matches_r(expression * e, matchable * item) {
 					retval = (item->get_attribute(e->name)!=e->literal);
 				else
 					retval = false;
+				break;
+			case MATCHOP_LT: {
+					std::istringstream islit(e->literal);
+					std::istringstream isatt(item->get_attribute(e->name));
+					int ilit, iatt;
+					islit >> ilit;
+					isatt >> iatt;
+					return iatt < ilit;
+				}
+				break;
+			case MATCHOP_GT: {
+					std::istringstream islit(e->literal);
+					std::istringstream isatt(item->get_attribute(e->name));
+					int ilit, iatt;
+					islit >> ilit;
+					isatt >> iatt;
+					return iatt > ilit;
+				}
 				break;
 			case MATCHOP_RXEQ:
 				retval = false; // TODO: implement
