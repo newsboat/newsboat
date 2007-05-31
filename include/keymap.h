@@ -39,6 +39,8 @@ namespace newsbeuter {
 						OP_ENQUEUE,
 						OP_REDRAW,
 						OP_CMDLINE,
+						OP_SETFILTER,
+						OP_CLEARFILTER,
 						OP_NB_MAX,
 
 						// podbeuter-specific operations:

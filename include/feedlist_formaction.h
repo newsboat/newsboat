@@ -35,6 +35,7 @@ class feedlist_formaction : public formaction {
 		std::vector<std::string> tags;
 
 		matcher m;
+		bool apply_filter;
 };
 
 }

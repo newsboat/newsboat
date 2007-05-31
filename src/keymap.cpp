@@ -43,6 +43,8 @@ static op_desc opdescs[] = {
 	{ OP_PB_LESSDL, "pb-decreate-max-dls", "-", _("Decrease the number of concurrent downloads"), KM_PODBEUTER },
 	{ OP_REDRAW, "redraw", "^l", _("Redraw screen"), KM_BOTH },
 	{ OP_CMDLINE, "cmdline", ":", _("Open the commandline"), KM_NEWSBEUTER },
+	{ OP_SETFILTER, "set-filter", "F", _("Set a filter"), KM_NEWSBEUTER },
+	{ OP_CLEARFILTER, "clear-filter", "^f", _("Clear currently set filter"), KM_NEWSBEUTER },
 	{ OP_NIL, NULL, NULL, NULL, 0 }
 };
 

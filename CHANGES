@@ -5,6 +5,7 @@ Changes for newsbeuter:
 	improved lock file handling
 	added Unicode compatibility
 	added support for notifications
+	implemented filter language
 
 0.4 (2007-05-08):
 	refactored view

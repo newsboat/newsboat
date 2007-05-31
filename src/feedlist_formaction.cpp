@@ -9,12 +9,14 @@
 #include <cassert>
 #include <string>
 
+#define FILTER_UNREAD_FEEDS "unread_count != \"0\""
+
 namespace newsbeuter {
 
 feedlist_formaction::feedlist_formaction(view * vv, std::string formstr) 
 	: formaction(vv,formstr), zero_feedpos(false), feeds_shown(0),
-		auto_open(false), quit(false) {
-	assert(true==m.parse("unread_count != \"0\""));
+		auto_open(false), quit(false), apply_filter(false) {
+	assert(true==m.parse(FILTER_UNREAD_FEEDS));
 }
 
 void feedlist_formaction::init() {
@@ -32,6 +34,8 @@ void feedlist_formaction::init() {
 		reloadthread  * rt = new reloadthread(v->get_ctrl(), reload_cycle, v->get_cfg());
 		rt->start();
 	}
+
+	apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-feeds"));
 }
 
 feedlist_formaction::~feedlist_formaction() { }
@@ -48,6 +52,18 @@ void feedlist_formaction::prepare() {
 }
 
 void feedlist_formaction::process_operation(operation op, int raw_char) {
+	if ((raw_char == '\n' || raw_char == '\r') && f->get_focus() == "filter") {
+		std::string filtertext = f->get("filtertext");
+		f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
+		if (!m.parse(filtertext)) {
+			v->show_error(_("Error: couldn't parse filter command!"));
+			m.parse(FILTER_UNREAD_FEEDS);
+		} else {
+			apply_filter = true;
+			do_redraw = true;
+		}
+		return;
+	}
 	switch (op) {
 		case OP_OPEN: {
 				if (f->get_focus() == "feeds") {
@@ -98,11 +114,14 @@ void feedlist_formaction::process_operation(operation op, int raw_char) {
 			}
 			break;
 		case OP_TOGGLESHOWREAD:
+			m.parse(FILTER_UNREAD_FEEDS);
 			GetLogger().log(LOG_INFO, "feedlist_formaction: toggling show-read-feeds");
 			if (v->get_cfg()->get_configvalue_as_bool("show-read-feeds")) {
 				v->get_cfg()->set_configvalue("show-read-feeds","no");
+				apply_filter = true;
 			} else {
 				v->get_cfg()->set_configvalue("show-read-feeds","yes");
+				apply_filter = false;
 			}
 			do_redraw = true;
 			break;
@@ -139,6 +158,18 @@ void feedlist_formaction::process_operation(operation op, int raw_char) {
 		case OP_SEARCH:
 			v->run_search();
 			break;
+		case OP_CLEARFILTER:
+			apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-feeds"));
+			m.parse(FILTER_UNREAD_FEEDS);
+			do_redraw = true;
+			break;
+		case OP_SETFILTER: {
+				char buf[256];
+				snprintf(buf,sizeof(buf), "{hbox[lastline] .expand:0 {label .expand:0 text:\"%s\"}{input[filter] modal:1 .expand:h text[filtertext]:\"\"}}", _("Filter: "));
+				f->modify("lastline", "replace", buf);
+				f->set_focus("filter");
+			}
+			break;
 		case OP_QUIT:
 			GetLogger().log(LOG_INFO, "feedlist_formaction: quitting");
 			if (!v->get_cfg()->get_configvalue_as_bool("confirm-exit") || v->confirm(_("Do you really want to quit (y:Yes n:No)? "), "yn") == 'y') {
@@ -162,10 +193,6 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 	
 	assert(v->get_cfg() != NULL); // must not happen
 	
-	bool show_read_feeds = v->get_cfg()->get_configvalue_as_bool("show-read-feeds");
-	
-	// std::cerr << "show-read-feeds" << (show_read_feeds?"true":"false") << std::endl;
-
 	feeds_shown = 0;
 	unsigned int i = 0;
 	unsigned short feedlist_number = 1;
@@ -195,7 +222,7 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 			++unread_feeds;
 
 
-		if ((tag == "" || it->matches_tag(tag)) && (show_read_feeds || m.matches(&(*it)))) {
+		if ((tag == "" || it->matches_tag(tag)) && (!apply_filter || m.matches(&(*it)))) {
 			visible_feeds.push_back(std::pair<rss_feed *, unsigned int>(&(*it),i));
 
 			snprintf(buf,sizeof(buf),"(%u/%u) ",unread_count,static_cast<unsigned int>(it->items().size()));
