@@ -342,6 +342,76 @@ set:set <variable>[=<value>]:Set configuration variable <variable> to <value>. I
 n/a:<number>:Jump to the entry with the index <number> (usually seen at the left side of the list). This currently works for the feed list and the article list.:30
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
+Filter Language
+~~~~~~~~~~~~~~~
+
+Newsbeuter provides a powerful filter language that enables the user to
+filter the content of many dialogs, such as the feed list or the article
+list. The basic concept is that every feed and every article has a
+number of attributes which can then be compared with user-supplied
+values, and these comparisons and be logically AND'ed, OR'ed and
+grouped.
+
+Examples for simple filter expressions are:
+
+	unread_count > 0
+	feedurl =~ "^https:"
+
+Logically connecting and grouping such expressions looks like in the
+following examples:
+
+	( unread_count > 0 and unread_count < 10 ) or total_count > 100
+	( author =~ "Frank" or author =~ "John" ) and ( title =~ "Linux" or title =~ "FreeBSD" )
+
+The possibilities for combining such queries is endless, sky (actually:
+the available memory) is the limit.
+
+To filter your feeds, press "F" in the feed list, enter your filter expression,
+and press enter.  To clear the filter, press Ctrl-F.
+
+.Available Comparison Operators
+[frame="all", grid="all", format="dsv"]
+`30`70~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Operator:Meaning
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=:test for equality ("==" works, too)
+!=:test for inequality; logical negation of = operator
+=~:test whether regular expression matches
+!~:logical negation of the =~ operator
+<:less than
+>:greater than
+<=:less than or equal
+>=:greater than or equal
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.Available Attributes
+[frame="all", grid="all", format="dsv"]
+`30`30`40~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Attribute:Context:Meaning
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+title:article:article title
+link:article:article link
+author:article:article author
+content:article:article body
+date:article:publication date of the article
+guid:article:a unique identifier of the article
+unread:article:indicates whether the article has been read
+enclosure_url:article:the URL of a possible enclosure (e.g. podcast file)
+enclosure_type:article:the MIME type of the enclosure URL
+feedtitle:feed:title of the feed
+description:feed:feed description
+feedlink:feed:link to the feed
+feeddate:feed:publication date of the feed
+rssurl:feed:RSS URL of the feed
+unread_count:feed:number of unread articles in the feed
+total_count:feed:total number of articles in the feed
+tags:feed:all tags that are associated with the feed
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
 Podcast Support
 ~~~~~~~~~~~~~~~
 
