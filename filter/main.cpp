@@ -27,5 +27,7 @@ int main(void) {
 	assert(codegen.parse_string("(a=\"a\")and(b!=\"b\")or(c=~\"x\"))")==false);
 	assert(codegen.parse_string("()()()()a=b()c=d()()()")==false);
 
+	assert(codegen.parse_string("unread_count != \"0\"")==true);
+
 	printf("\n\ntests finished.\n");
 }

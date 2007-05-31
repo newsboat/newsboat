@@ -9,13 +9,13 @@ COMPILER Filter
 	FilterParser * gen;
 
 CHARACTERS
-	letter = "abcdefghijklmnopqrstuvwxyz".
+	identchar = "abcdefghijklmnopqrstuvwxyz_-.".
 	nonquote = ANY - '"'.
 
 TOKENS
 	openblock = '('.
 	closeblock = ')'.
-	ident = letter { letter }.
+	ident = identchar { identchar }.
 	stringliteral = '"' { nonquote } '"'.
 
 PRODUCTIONS

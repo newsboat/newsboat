@@ -6,15 +6,8 @@
 enum { LOGOP_AND = 1, LOGOP_OR, MATCHOP_EQ, MATCHOP_NE, MATCHOP_RXEQ, MATCHOP_RXNE };
 
 struct expression {
-	expression(const std::string& n, const std::string& lit, int o) : name(n), literal(lit), op(o), l(NULL), r(NULL), parent(NULL) { 
-		/*
-		if (literal.length() >= 2) { // remove quotes
-			literal.erase(0);
-			literal.erase(literal.length()-2);
-		}
-		*/
-	}
-	expression(int o) : op(o), l(NULL), r(NULL), parent(NULL) { }
+	expression(const std::string& n, const std::string& lit, int o);
+	expression(int o);
 
 	std::string name;
 	std::string literal;
