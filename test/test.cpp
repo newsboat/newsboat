@@ -12,6 +12,7 @@
 #include <xmlpullparser.h>
 #include <urlreader.h>
 #include <utils.h>
+#include <matcher.h>
 
 #include <stdlib.h>
 
@@ -54,11 +55,11 @@ BOOST_AUTO_TEST_CASE(TestNewsbeuterReload) {
 
 BOOST_AUTO_TEST_CASE(TestConfigParserAndContainer) {
 	configcontainer * cfg = new configcontainer();
-	configparser cfgparser("test-config.txt");
+	configparser cfgparser;
 	cfg->register_commands(cfgparser);
 
 	try {
-		cfgparser.parse();
+		cfgparser.parse("test-config.txt");
 	} catch (...) {
 		BOOST_CHECK(false);
 	}
@@ -220,4 +221,56 @@ BOOST_AUTO_TEST_CASE(TestTokenizers) {
 	tokens = utils::tokenize_quoted("\"\\\\\\\\\\\\");
 	BOOST_CHECK_EQUAL(tokens.size(), 1u);
 	BOOST_CHECK_EQUAL(tokens[0], "\\\\\\");
+}
+
+struct testmatchable : public matchable {
+	virtual bool has_attribute(const std::string& attribname) {
+		if (attribname == "abcd" || attribname == "AAAA")
+			return true;
+		return false;
+	}
+
+	virtual std::string get_attribute(const std::string& attribname) {
+		if (attribname == "abcd")
+			return "xyz";
+		if (attribname == "AAAA")
+			return "12345";
+		return "";
+	}
+};
+
+BOOST_AUTO_TEST_CASE(TestFilterLanguage) {
+	FilterParser fp;
+
+	// test parser
+	BOOST_CHECK_EQUAL(fp.parse_string("a = \"b\""), true);
+	BOOST_CHECK_EQUAL(fp.parse_string("a = \"b"), false);
+	BOOST_CHECK_EQUAL(fp.parse_string("a = b"), false);
+	BOOST_CHECK_EQUAL(fp.parse_string("(a=\"b\")"), true);
+	BOOST_CHECK_EQUAL(fp.parse_string("((a=\"b\"))"), true);
+	BOOST_CHECK_EQUAL(fp.parse_string("((a=\"b\")))"), false);
+
+	// test operators
+	BOOST_CHECK_EQUAL(fp.parse_string("a != \"b\""), true);
+	BOOST_CHECK_EQUAL(fp.parse_string("a =~ \"b\""), true);
+	BOOST_CHECK_EQUAL(fp.parse_string("a !~ \"b\""), true);
+	BOOST_CHECK_EQUAL(fp.parse_string("a !! \"b\""), false);
+
+	// complex query
+	BOOST_CHECK_EQUAL(fp.parse_string("( a = \"b\") and ( b = \"c\" ) or ( ( c != \"d\" ) and ( c !~ \"asdf\" )) or c != \"xx\""), true);
+
+	testmatchable tm;
+	matcher m;
+
+	m.parse("abcd = \"xyz\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), true);
+	m.parse("abcd = \"uiop\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), false);
+	m.parse("abcd != \"uiop\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), true);
+	m.parse("abcd != \"xyz\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), false);
+
+	// TODO: use "AAAA" attribute to test regex matching as soon as it gets implemented
+
 }
