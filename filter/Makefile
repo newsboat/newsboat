@@ -1,7 +1,7 @@
 CXX=c++
 CXXFLAGS=-I. -ggdb -fPIC
 LIBFILTER=libfilter.a
-FILTER_SOURCES=Scanner.cpp Parser.cpp CodeGenerator.cpp
+FILTER_SOURCES=Scanner.cpp Parser.cpp FilterParser.cpp
 FILTER_OBJS=$(patsubst %.cpp,%.o,$(FILTER_SOURCES))
 
 AR=ar

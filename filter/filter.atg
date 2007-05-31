@@ -2,7 +2,7 @@
  * parser for newsbeuter filter language
  */
 
-#include "CodeGenerator.h"
+#include "FilterParser.h"
 
 COMPILER Filter
 

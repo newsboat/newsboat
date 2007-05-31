@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cassert>
-#include "CodeGenerator.h"
+#include "FilterParser.h"
 
 int main(void) {
 	FilterParser codegen;
