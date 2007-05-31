@@ -46,6 +46,9 @@ Coco/R itself) does not fall under the GNU General Public License.
 #error unknown compiler!
 #endif 
 
+#include <iostream>
+#include <fstream>
+
 #define COCO_WCHAR_MAX 65535
 #define MAX_BUFFER_LENGTH (64*1024)
 #define HEAP_BLOCK_SIZE (64*1024)
@@ -97,13 +100,13 @@ private:
 	int bufLen;         // length of buffer
 	int fileLen;        // length of input stream
 	int pos;            // current position in buffer
-	FILE* stream;      // input stream (seekable)
+	std::istream* stream;      // input stream (seekable)
 	bool isUserStream;  // was the stream opened by the user?
 	
 public:
 	static const int EoF = COCO_WCHAR_MAX + 1;
 
-	Buffer(FILE* s, bool isUserStream);
+	Buffer(std::istream* s, bool isUserStream);
 	Buffer(Buffer *b);
 	virtual ~Buffer();
 	
@@ -249,7 +252,7 @@ public:
 	Buffer *buffer;   // scanner buffer
 	
 	Scanner(const wchar_t* fileName);
-	Scanner(FILE* s);
+	Scanner(std::istream& s);
 	~Scanner();
 	Token* Scan();
 	Token* Peek();
@@ -480,11 +483,11 @@ Token::~Token() {
 }
 
 
-Buffer::Buffer(FILE* s, bool isUserStream) {
+Buffer::Buffer(std::istream* s, bool isUserStream) {
 	stream = s; this->isUserStream = isUserStream;
-	fseek(s, 0, SEEK_END);
-	fileLen = bufLen = ftell(s);
-	fseek(s, 0, SEEK_SET);
+	s->seekg(0, std::ios_base::end);
+	fileLen = bufLen = s->tellg();
+	s->seekg(0, std::ios_base::beg);
 	buf = new char[MAX_BUFFER_LENGTH];
 	bufStart = INT_MAX; // nothing in the buffer so far
 	SetPos(0);          // setup  buffer to position 0 (start)
@@ -513,7 +516,11 @@ Buffer::~Buffer() {
 
 void Buffer::Close() {
 	if (!isUserStream && stream != NULL) {
-		fclose(stream);
+		std::ifstream * ifs = dynamic_cast<std::ifstream*>(stream);
+		if (ifs) {
+			ifs->close();
+			delete ifs;
+		}
 		stream = NULL;
 	}
 }
@@ -556,8 +563,9 @@ void Buffer::SetPos(int value) {
 	if (value >= bufStart && value < bufStart + bufLen) { // already in buffer
 		pos = value - bufStart;
 	} else if (stream != NULL) { // must be swapped in
-		fseek(stream, value, SEEK_SET);
-		bufLen = fread(buf, sizeof(char), MAX_BUFFER_LENGTH, stream);
+		stream->seekg(0, std::ios_base::beg);
+		stream->get(buf, MAX_BUFFER_LENGTH);
+		bufLen = stream->gcount();
 		bufStart = value; pos = 0;
 	} else {
 		pos = fileLen - bufStart; // make Pos return fileLen
@@ -596,19 +604,19 @@ int UTF8Buffer::Read() {
 }
 
 Scanner::Scanner(const wchar_t* fileName) {
-	FILE* stream;
 	char *chFileName = coco_string_create_char(fileName);
-	if ((stream = fopen(chFileName, "rb")) == NULL) {
+	std::ifstream* ifs = new std::ifstream(chFileName);
+	if (!ifs || !ifs->is_open()) {
 		wprintf(L"--- Cannot open file %ls\n", fileName);
 		exit(1);
 	}
 	coco_string_delete(chFileName);
-	buffer = new Buffer(stream, false);
+	buffer = new Buffer(ifs, false);
 	Init();
 }
 	
-Scanner::Scanner(FILE* s) {
-	buffer = new Buffer(s, true);
+Scanner::Scanner(std::istream& s) {
+	buffer = new Buffer(&s, true);
 	Init();
 }
 
