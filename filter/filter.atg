@@ -6,10 +6,7 @@
 
 COMPILER Filter
 
-	CodeGenerator * gen;
-
-	enum { LOGOP_AND = 1, LOGOP_OR };
-	enum { MATCHOP_EQ = 1, MATCHOP_NE, MATCHOP_RXEQ, MATCHOP_RXNE };
+	FilterParser * gen;
 
 CHARACTERS
 	letter = "abcdefghijklmnopqrstuvwxyz".
@@ -23,16 +20,17 @@ TOKENS
 
 PRODUCTIONS
 
-	stringlit<wchar_t* &lit>
-               = stringliteral					(. lit = coco_string_create(t->val); .)
+	stringlit<char* &lit>
+               = stringliteral					(. lit = coco_string_create_char(t->val); .)
 			   .
 
-	matchattrib<wchar_t* &name>
-				= ident							(. name = coco_string_create(t->val); .)
+	matchattrib<char* &name>
+				= ident							(. name = coco_string_create_char(t->val); .)
 				.
 
 	matchop<int &op>
-				= "=="								(. op = MATCHOP_EQ; .)
+				= "==" 								(. op = MATCHOP_EQ; .)
+				| "="								(. op = MATCHOP_EQ; .)
 				| "!="								(. op = MATCHOP_NE; .)
 				| "=~"								(. op = MATCHOP_RXEQ; .)
 				| "!~"								(. op = MATCHOP_RXNE; .)
@@ -43,7 +41,7 @@ PRODUCTIONS
 				| "or"								(. lop = LOGOP_OR; .)
 				.
 
-	matchexpr 										(. wchar_t * name, * lit; int op; .)
+	matchexpr 										(. char * name, * lit; int op; .)
 				= matchattrib<name>
 				  matchop<op>
 				  stringlit<lit>					(. gen->add_matchexpr(name, op, lit); .)

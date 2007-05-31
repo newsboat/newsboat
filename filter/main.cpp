@@ -2,7 +2,8 @@
 #include "CodeGenerator.h"
 
 int main(void) {
-	CodeGenerator codegen;
+	FilterParser codegen;
 
 	codegen.parse_string("foo == \"bar\" and ( x == \"y\" or y != \"x\" )");
+	codegen.print_tree();
 }
