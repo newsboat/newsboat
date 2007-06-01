@@ -57,6 +57,7 @@ namespace newsbeuter {
 			std::string queue_file;
 			bool refresh_on_start;
 			configcontainer * cfg;
+			rss_ignores ign;
 
 			mutex * reload_mutex;
 	};

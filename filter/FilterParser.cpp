@@ -5,7 +5,7 @@
 FilterParser::FilterParser() : root(0), curpos(0), next_must_descend_right(false) { }
 
 FilterParser::~FilterParser() { 
-	cleanup();
+	// cleanup();
 }
 
 void FilterParser::add_logop(int op) { 
@@ -120,4 +120,3 @@ expression::expression(int o) : op(o), l(NULL), r(NULL), parent(NULL), regex(NUL
 expression::~expression() {
 	delete regex;
 }
-

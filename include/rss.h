@@ -128,9 +128,11 @@ namespace newsbeuter {
 			cache * ch;
 	};
 
+	class rss_ignores;
+
 	class rss_parser {
 		public:
-			rss_parser(const char * uri, cache * c, configcontainer *);
+			rss_parser(const char * uri, cache * c, configcontainer *, rss_ignores * ii);
 			~rss_parser();
 			rss_feed parse();
 			static time_t parse_date(const std::string& datestr);
@@ -139,6 +141,15 @@ namespace newsbeuter {
 			cache * ch;
 			configcontainer *cfgcont;
 			mrss_t * mrss;
+			rss_ignores * ign;
+	};
+
+	class rss_ignores : public config_action_handler {
+		public:
+			virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
+			bool matches(rss_item* item);
+		private:
+			std::vector<std::pair<std::string, matcher> > ignores;
 	};
 
 }

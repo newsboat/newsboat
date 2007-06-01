@@ -8,7 +8,7 @@
 namespace newsbeuter {
 
 itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
-	: formaction(vv,formstr), feed(0), apply_filter(false), update_visible_items(false) { 
+	: formaction(vv,formstr), feed(0), apply_filter(false), update_visible_items(true) { 
 }
 
 itemlist_formaction::~itemlist_formaction() { }

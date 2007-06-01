@@ -16,7 +16,8 @@
 
 using namespace newsbeuter;
 
-rss_parser::rss_parser(const char * uri, cache * c, configcontainer * cfg) : my_uri(uri), ch(c), cfgcont(cfg), mrss(0) { }
+rss_parser::rss_parser(const char * uri, cache * c, configcontainer * cfg, rss_ignores * ii) 
+	: my_uri(uri), ch(c), cfgcont(cfg), mrss(0), ign(ii) { }
 
 rss_parser::~rss_parser() { }
 
@@ -108,6 +109,8 @@ rss_feed rss_parser::parse() {
 			x.set_author(utils::convert_text(item->author, "utf-8", encoding));
 		}
 
+		x.set_feedurl(feed.rssurl());
+
 		mrss_tag_t * content;
 
 		if (mrss_search_tag(item, "encoded", "http://purl.org/rss/1.0/modules/content/", &content) == MRSS_OK && content) {
@@ -179,13 +182,21 @@ rss_feed rss_parser::parse() {
 
 		GetLogger().log(LOG_DEBUG, "rss_parser::parse: item title = `%s' link = `%s' pubDate = `%s' (%d) description = `%s'", 
 			x.title().c_str(), x.link().c_str(), x.pubDate().c_str(), x.pubDate_timestamp(), x.description().c_str());
-		feed.items().push_back(x);
+
+		// only add item to feed if it isn't on the ignore list or if there is no ignore list
+		if (!ign || !ign->matches(&x)) {
+			feed.items().push_back(x);
+			GetLogger().log(LOG_INFO, "rss_parser::parse: added article title = `%s' link = `%s' ign = %p", x.title().c_str(), x.link().c_str(), ign);
+		} else {
+			GetLogger().log(LOG_INFO, "rss_parser::parse: ignored article title = `%s' link = `%s'", x.title().c_str(), x.link().c_str());
+		}
 	}
 
 	mrss_free(mrss);
 
 	return feed;
 }
+
 
 // rss_item setters
 
@@ -445,4 +456,36 @@ std::string rss_feed::get_attribute(const std::string& attribname) {
 		return get_tags();
 	}
 	return "";
+}
+
+action_handler_status rss_ignores::handle_action(const std::string& action, const std::vector<std::string>& params) {
+	if (action == "ignore-article") {
+		if (params.size() >= 2) {
+			std::string ignore_rssurl = params[0];
+			std::string ignore_expr = params[1];
+			matcher m;
+			if (m.parse(ignore_expr)) {
+				ignores.push_back(std::pair<std::string,matcher>(ignore_rssurl, matcher(ignore_expr)));
+				return AHS_OK;
+			} else {
+				return AHS_INVALID_PARAMS;
+			}
+		} else {
+			return AHS_TOO_FEW_PARAMS;
+		}
+	}
+	return AHS_INVALID_COMMAND;
+}
+
+bool rss_ignores::matches(rss_item* item) {
+	for (std::vector<std::pair<std::string, matcher> >::iterator it=ignores.begin();it!=ignores.end();++it) {
+		GetLogger().log(LOG_DEBUG, "rss_ignores::matches: it->first = `%s' item->feedurl = `%s'", it->first.c_str(), item->feedurl().c_str());
+		if (it->first == "*" || item->feedurl() == it->first) {
+			if (it->second.matches(item)) {
+				GetLogger().log(LOG_DEBUG, "rss_ignores::matches: found match");
+				return true;
+			}
+		}
+	}
+	return false;
 }

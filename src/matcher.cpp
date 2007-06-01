@@ -15,6 +15,10 @@ matchable::~matchable() { }
 
 matcher::matcher() { }
 
+matcher::matcher(const std::string& expr) {
+	parse(expr);
+}
+
 bool matcher::parse(const std::string& expr) {
 	struct timeval tv1, tv2;
 	gettimeofday(&tv1, NULL);

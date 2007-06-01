@@ -16,6 +16,7 @@ namespace newsbeuter {
 	class matcher {
 		public:
 			matcher();
+			matcher(const std::string& expr);
 			bool parse(const std::string& expr);
 			bool matches(matchable* item);
 		private:

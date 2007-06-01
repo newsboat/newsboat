@@ -368,7 +368,12 @@ The possibilities for combining such queries is endless, sky (actually:
 the available memory) is the limit.
 
 To filter your feeds, press "F" in the feed list, enter your filter expression,
-and press enter.  To clear the filter, press Ctrl-F.
+and press enter.  To clear the filter, press Ctrl-F. To filter the articles in the article list,
+press "F", enter your expression, and press enter. Clearing the filter works the same as before.
+Be aware that only certain attributes work in both dialogs. The table below lists all available
+attributes and their context, i.e. an attribute that belongs to a feed can only be matched
+in the feed list, while an attribute that belongs to an article can only be matched in the 
+article list.
 
 .Available Comparison Operators
 [frame="all", grid="all", format="dsv"]

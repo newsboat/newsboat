@@ -6,11 +6,11 @@
 #include <regex.h>
 
 
-enum { LOGOP_AND = 1, LOGOP_OR, MATCHOP_EQ, MATCHOP_NE, MATCHOP_RXEQ, MATCHOP_RXNE, MATCHOP_LT, MATCHOP_GT, MATCHOP_LE, MATCHOP_GE, MATCHOP_CONTAINS, MATCHOP_CONTAINSNOT };
+enum { LOGOP_INVALID = 0, LOGOP_AND = 1, LOGOP_OR, MATCHOP_EQ, MATCHOP_NE, MATCHOP_RXEQ, MATCHOP_RXNE, MATCHOP_LT, MATCHOP_GT, MATCHOP_LE, MATCHOP_GE, MATCHOP_CONTAINS, MATCHOP_CONTAINSNOT };
 
 struct expression {
 	expression(const std::string& n, const std::string& lit, int o);
-	expression(int o);
+	expression(int o = LOGOP_INVALID);
 	~expression();
 
 	std::string name;

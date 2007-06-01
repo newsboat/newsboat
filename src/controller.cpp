@@ -208,6 +208,8 @@ void controller::run(int argc, char * argv[]) {
 	cfgparser.register_handler("bind-key",&keys);
 	cfgparser.register_handler("unbind-key",&keys);
 
+	cfgparser.register_handler("ignore-article",&ign);
+
 	try {
 		cfgparser.parse("/etc/" PROGRAM_NAME "/config");
 		cfgparser.parse(config_file);
@@ -344,7 +346,7 @@ void controller::reload(unsigned int pos, unsigned int max) {
 		v->set_status(msgbuf);
 		GetLogger().log(LOG_DEBUG, "controller::reload: after setting status");
 				
-		rss_parser parser(feed.rssurl().c_str(), rsscache, cfg);
+		rss_parser parser(feed.rssurl().c_str(), rsscache, cfg, &ign);
 		GetLogger().log(LOG_DEBUG, "controller::reload: created parser");
 		try {
 			feed = parser.parse();
