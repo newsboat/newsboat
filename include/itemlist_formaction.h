@@ -24,10 +24,15 @@ class itemlist_formaction : public formaction {
 	private:
 		virtual void process_operation(operation op, int raw_char);
 		void set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);
+		int get_pos(unsigned int idx);
 
 		rss_feed * feed;
 		unsigned int pos;
 		bool rebuild_list;
+		bool apply_filter;
+		matcher m;
+		std::vector<std::pair<rss_item *, unsigned int> > visible_items;
+		bool update_visible_items;
 };
 
 }

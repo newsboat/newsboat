@@ -1,10 +1,12 @@
 #include <matcher.h>
 #include <logger.h>
-#include <cassert>
+#include <utils.h>
 
 #include <sys/time.h>
 #include <ctime>
+#include <cassert>
 #include <sstream>
+#include <vector>
 
 namespace newsbeuter {
 
@@ -121,6 +123,30 @@ bool matcher::matches_r(expression * e, matchable * item) {
 						retval = false;
 					else
 						retval = true;
+				}
+				break;
+			case MATCHOP_CONTAINS: {
+					std::vector<std::string> elements = utils::tokenize(item->get_attribute(e->name), " ");
+					std::string literal = e->literal;
+					retval = false;
+					for (std::vector<std::string>::iterator it=elements.begin();it!=elements.end();++it) {
+						if (literal == *it) {
+							retval = true;
+							break;
+						}
+					}
+				}
+				break;
+			case MATCHOP_CONTAINSNOT: {
+					std::vector<std::string> elements = utils::tokenize(item->get_attribute(e->name), " ");
+					std::string literal = e->literal;
+					retval = true;
+					for (std::vector<std::string>::iterator it=elements.begin();it!=elements.end();++it) {
+						if (literal == *it) {
+							retval = false;
+							break;
+						}
+					}
 				}
 				break;
 			default:

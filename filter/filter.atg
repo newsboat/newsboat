@@ -40,6 +40,8 @@ PRODUCTIONS
 				| ">"								(. op = MATCHOP_GT; .)
 				| "<="								(. op = MATCHOP_LE; .)
 				| ">="								(. op = MATCHOP_GE; .)
+				| "#"								(. op = MATCHOP_CONTAINS; .)
+				| "!#"								(. op = MATCHOP_CONTAINSNOT; .)
 				.
 
 	logop<int &lop>

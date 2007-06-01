@@ -8,14 +8,28 @@
 namespace newsbeuter {
 
 itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
-	: formaction(vv,formstr), feed(0) { 
+	: formaction(vv,formstr), feed(0), apply_filter(false), update_visible_items(false) { 
 }
 
 itemlist_formaction::~itemlist_formaction() { }
 
-void itemlist_formaction::process_operation(operation op, int /*raw_char*/) {
+void itemlist_formaction::process_operation(operation op, int raw_char) {
+	if ((raw_char == '\n' || raw_char == '\r') && f->get_focus() == "filter") {
+		std::string filtertext = f->get("filtertext");
+		f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
+		if (filtertext.length() > 0) {
+			if (!m.parse(filtertext)) {
+				v->show_error(_("Error: couldn't parse filter command!"));
+			} else {
+				apply_filter = true;
+				update_visible_items = true;
+				do_redraw = true;
+			}
+		}
+		return;
+	}
+
 	bool quit = false;
-	std::vector<rss_item>& items = feed->items();
 	switch (op) {
 		case OP_OPEN: {
 				std::string itemposname = f->get("itempos");
@@ -24,7 +38,7 @@ void itemlist_formaction::process_operation(operation op, int /*raw_char*/) {
 					std::istringstream posname(itemposname);
 					unsigned int pos = 0;
 					posname >> pos;
-					v->push_itemview(feed, items[pos].guid());
+					v->push_itemview(feed, visible_items[pos].first->guid());
 					do_redraw = true;
 				} else {
 					v->show_error(_("No item selected!")); // should not happen
@@ -38,8 +52,8 @@ void itemlist_formaction::process_operation(operation op, int /*raw_char*/) {
 					std::istringstream posname(itemposname);
 					unsigned int pos = 0;
 					posname >> pos;
-					if (pos < feed->items().size()) {
-						v->open_in_browser(feed->items()[pos].link());
+					if (pos < visible_items.size()) {
+						v->open_in_browser(visible_items[pos].first->link());
 						do_redraw = true;
 					}
 				} else {
@@ -57,12 +71,12 @@ void itemlist_formaction::process_operation(operation op, int /*raw_char*/) {
 					unsigned int pos = 0;
 					posname >> pos;
 					
-					std::string filename = v->run_filebrowser(FBT_SAVE,v->get_filename_suggestion(items[pos].title()));
+					std::string filename = v->run_filebrowser(FBT_SAVE,v->get_filename_suggestion(visible_items[pos].first->title()));
 					if (filename == "") {
 						v->show_error(_("Aborted saving."));
 					} else {
 						try {
-							v->write_item(items[pos], filename);
+							v->write_item(*visible_items[pos].first, filename);
 							snprintf(buf, sizeof(buf), _("Saved article to %s"), filename.c_str());
 							v->show_error(buf);
 						
@@ -113,11 +127,22 @@ void itemlist_formaction::process_operation(operation op, int /*raw_char*/) {
 					unsigned int pos = 0;
 					posname >> pos;
 					v->set_status(_("Toggling read flag for article..."));
-					items[pos].set_unread(!items[pos].unread());
+					visible_items[pos].first->set_unread(!visible_items[pos].first->unread());
 					v->set_status("");
 					do_redraw = true;
 				}
 			}
+			break;
+		case OP_SETFILTER: {
+				char buf[256];
+				snprintf(buf,sizeof(buf), "{hbox[lastline] .expand:0 {label .expand:0 text:\"%s\"}{input[filter] modal:1 .expand:h text[filtertext]:\"\"}}", _("Filter: "));
+				f->modify("lastline", "replace", buf);
+				f->set_focus("filter");
+			}
+			break;
+		case OP_CLEARFILTER:
+			apply_filter = false;
+			do_redraw = true;
 			break;
 		default:
 			break;
@@ -128,35 +153,48 @@ void itemlist_formaction::process_operation(operation op, int /*raw_char*/) {
 }
 
 void itemlist_formaction::prepare() {
-	if (do_redraw) {
+	if (update_visible_items) {
 		std::vector<rss_item>& items = feed->items();
 
-		std::string code = "{list";
+		if (visible_items.size() > 0)
+			visible_items.erase(visible_items.begin(), visible_items.end());
 
 		unsigned int i=0;
 		for (std::vector<rss_item>::iterator it = items.begin(); it != items.end(); ++it, ++i) {
+			if (!apply_filter || m.matches(&(*it))) {
+				visible_items.push_back(std::pair<rss_item *, unsigned int>(&(*it), i));
+			}
+		}
+
+		update_visible_items = false;
+	}
+
+	if (do_redraw) {
+		std::string code = "{list";
+
+		for (std::vector<std::pair<rss_item *, unsigned int> >::iterator it = visible_items.begin(); it != visible_items.end(); ++it) {
 			std::string line = "{listitem[";
 			std::ostringstream x;
-			x << i;
+			x << it->second;
 			line.append(x.str());
 			line.append("] text:");
 			std::string title;
 			char buf[20];
-			snprintf(buf,sizeof(buf),"%4u ",i+1);
+			snprintf(buf,sizeof(buf),"%4u ",it->second + 1);
 			title.append(buf);
-			if (it->unread()) {
+			if (it->first->unread()) {
 				title.append("N ");
 			} else {
 				title.append("  ");
 			}
 			char datebuf[64];
-			time_t t = it->pubDate_timestamp();
+			time_t t = it->first->pubDate_timestamp();
 			struct tm * stm = localtime(&t);
 			strftime(datebuf,sizeof(datebuf), "%b %d   ", stm);
 			title.append(datebuf);
-			title.append(it->title());
-			GetLogger().log(LOG_DEBUG, "itemlist_formaction: XXXTITLE it->title = `%s' title = `%s' quoted title = `%s'", 
-				it->title().c_str(), title.c_str(), stfl::quote(title).c_str());
+			title.append(it->first->title());
+			GetLogger().log(LOG_DEBUG, "itemlist_formaction: XXXTITLE it->first->title = `%s' title = `%s' quoted title = `%s'", 
+				it->first->title().c_str(), title.c_str(), stfl::quote(title).c_str());
 			line.append(stfl::quote(title));
 			line.append("}");
 			code.append(line);
@@ -186,12 +224,11 @@ void itemlist_formaction::set_head(const std::string& s, unsigned int unread, un
 }
 
 bool itemlist_formaction::jump_to_next_unread_item(bool start_with_first) {
-	std::vector<rss_item>& items = feed->items();
 	unsigned int pos;
 	std::istringstream is(f->get("itempos"));
 	is >> pos;
-	for (unsigned int i=(start_with_first?pos:(pos+1));i<items.size();++i) {
-		if (items[i].unread()) {
+	for (unsigned int i=(start_with_first?pos:(pos+1));i<visible_items.size();++i) {
+		if (visible_items[i].first->unread()) {
 			std::ostringstream os;
 			os << i;
 			f->set("itempos", os.str());
@@ -199,7 +236,7 @@ bool itemlist_formaction::jump_to_next_unread_item(bool start_with_first) {
 		}
 	}
 	for (unsigned int i=0;i<=pos;++i) {
-		if (items[i].unread()) {
+		if (visible_items[i].first->unread()) {
 			std::ostringstream os;
 			os << i;
 			f->set("itempos", os.str());
@@ -210,11 +247,10 @@ bool itemlist_formaction::jump_to_next_unread_item(bool start_with_first) {
 }
 
 std::string itemlist_formaction::get_guid() {
-	std::vector<rss_item>& items = feed->items();
 	unsigned int pos;
 	std::istringstream is(f->get("itempos"));
 	is >> pos;
-	return items[pos].guid();
+	return visible_items[pos].first->guid();
 }
 
 keymap_hint_entry * itemlist_formaction::get_keymap_hint() {
@@ -235,10 +271,15 @@ keymap_hint_entry * itemlist_formaction::get_keymap_hint() {
 void itemlist_formaction::handle_cmdline(const std::string& cmd) {
 	unsigned int idx = 0;
 	if (1==sscanf(cmd.c_str(),"%u",&idx)) {
-		if (idx > 0 && idx <= feed->items().size()) {
-			std::ostringstream idxstr;
-			idxstr << (idx - 1);
-			f->set("itempos", idxstr.str());
+		if (idx > 0 && idx <= visible_items[visible_items.size()-1].second + 1) {
+			int i = get_pos(idx - 1);
+			if (i == -1) {
+				v->show_error(_("Position not visible!"));
+			} else {
+				std::ostringstream idxstr;
+				idxstr << i;
+				f->set("itempos", idxstr.str());
+			}
 		} else {
 			v->show_error(_("Invalid position!"));
 		}
@@ -246,6 +287,14 @@ void itemlist_formaction::handle_cmdline(const std::string& cmd) {
 		// hand over all other commands to formaction
 		formaction::handle_cmdline(cmd);
 	}
+}
+
+int itemlist_formaction::get_pos(unsigned int realidx) {
+	for (unsigned int i=0;i<visible_items.size();++i) {
+		if (visible_items[i].second == realidx)
+			return i;
+	}
+	return -1;
 }
 
 
