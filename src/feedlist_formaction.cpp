@@ -284,9 +284,12 @@ bool feedlist_formaction::jump_to_next_unread_feed() {
 	unsigned int curpos;
 	std::istringstream is(f->get("feedpos"));
 	is >> curpos;
+	GetLogger().log(LOG_DEBUG, "feedlist_formaction::jump_to_next_unread_feed: searching for unread feed");
 
 	for (unsigned int i=curpos+1;i<visible_feeds.size();++i) {
+		GetLogger().log(LOG_DEBUG, "feedlist_formaction::jump_to_next_unread_feed: visible_feeds[%u] unread items: %u", i, visible_feeds[i].first->unread_item_count());
 		if (visible_feeds[i].first->unread_item_count() > 0) {
+			GetLogger().log(LOG_DEBUG, "feedlist_formaction::jump_to_next_unread_feed: hit");
 			std::ostringstream os;
 			os << i;
 			f->set("feedpos", os.str());
@@ -294,7 +297,9 @@ bool feedlist_formaction::jump_to_next_unread_feed() {
 		}
 	}
 	for (unsigned int i=0;i<=curpos;++i) {
+		GetLogger().log(LOG_DEBUG, "feedlist_formaction::jump_to_next_unread_feed: visible_feeds[%u] unread items: %u", i, visible_feeds[i].first->unread_item_count());
 		if (visible_feeds[i].first->unread_item_count() > 0) {
+			GetLogger().log(LOG_DEBUG, "feedlist_formaction::jump_to_next_unread_feed: hit");
 			std::ostringstream os;
 			os << i;
 			f->set("feedpos", os.str());

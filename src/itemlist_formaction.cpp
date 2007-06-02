@@ -152,20 +152,23 @@ void itemlist_formaction::process_operation(operation op, int raw_char) {
 	}
 }
 
+void itemlist_formaction::do_update_visible_items() {
+	std::vector<rss_item>& items = feed->items();
+
+	if (visible_items.size() > 0)
+		visible_items.erase(visible_items.begin(), visible_items.end());
+
+	unsigned int i=0;
+	for (std::vector<rss_item>::iterator it = items.begin(); it != items.end(); ++it, ++i) {
+		if (!apply_filter || m.matches(&(*it))) {
+			visible_items.push_back(std::pair<rss_item *, unsigned int>(&(*it), i));
+		}
+	}
+}
+
 void itemlist_formaction::prepare() {
 	if (update_visible_items) {
-		std::vector<rss_item>& items = feed->items();
-
-		if (visible_items.size() > 0)
-			visible_items.erase(visible_items.begin(), visible_items.end());
-
-		unsigned int i=0;
-		for (std::vector<rss_item>::iterator it = items.begin(); it != items.end(); ++it, ++i) {
-			if (!apply_filter || m.matches(&(*it))) {
-				visible_items.push_back(std::pair<rss_item *, unsigned int>(&(*it), i));
-			}
-		}
-
+		do_update_visible_items();
 		update_visible_items = false;
 	}
 
@@ -228,6 +231,7 @@ bool itemlist_formaction::jump_to_next_unread_item(bool start_with_first) {
 	std::istringstream is(f->get("itempos"));
 	is >> pos;
 	for (unsigned int i=(start_with_first?pos:(pos+1));i<visible_items.size();++i) {
+		GetLogger().log(LOG_DEBUG, "itemlist_formaction::jump_to_next_unread_item: visible_items[%u] unread = %s", i, visible_items[i].first->unread() ? "true" : "false");
 		if (visible_items[i].first->unread()) {
 			std::ostringstream os;
 			os << i;

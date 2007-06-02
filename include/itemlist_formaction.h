@@ -15,6 +15,7 @@ class itemlist_formaction : public formaction {
 		inline void set_feed(rss_feed * f) { 
 			feed = f; 
 			update_visible_items = true; 
+			do_update_visible_items();
 			apply_filter = false;
 		}
 
@@ -31,6 +32,7 @@ class itemlist_formaction : public formaction {
 		virtual void process_operation(operation op, int raw_char);
 		void set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);
 		int get_pos(unsigned int idx);
+		void do_update_visible_items();
 
 		rss_feed * feed;
 		unsigned int pos;
