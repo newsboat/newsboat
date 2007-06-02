@@ -180,6 +180,8 @@ rss_feed rss_parser::parse() {
 			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found enclosure_type: %s", item->enclosure_type);
 		}
 
+		x.set_feedptr(&feed);
+
 		GetLogger().log(LOG_DEBUG, "rss_parser::parse: item title = `%s' link = `%s' pubDate = `%s' (%d) description = `%s'", 
 			x.title().c_str(), x.link().c_str(), x.pubDate().c_str(), x.pubDate_timestamp(), x.description().c_str());
 
@@ -377,8 +379,10 @@ std::string rss_feed::description() const {
 
 rss_item& rss_feed::get_item_by_guid(const std::string& guid) {
 	for (std::vector<rss_item>::iterator it=items_.begin();it!=items_.end();++it) {
-		if (it->guid() == guid)
+		if (it->guid() == guid) {
+			it->set_feedptr(this);
 			return *it;
+		}
 	}
 	static rss_item dummy_item(0); // should never happen!
 	return dummy_item;
@@ -393,8 +397,13 @@ bool rss_item::has_attribute(const std::string& attribname) {
 		attribname == "guid" ||
 		attribname == "unread" ||
 		attribname == "enclosure_url" ||
-		attribname == "enclosure_type") // TODO: attach to rss-feed to which we belong if possible
+		attribname == "enclosure_type")
 			return true;
+
+	// if we have a feed, then forward the request
+	if (feedptr)
+		return feedptr->has_attribute(attribname);
+
 	return false;
 }
 
@@ -417,6 +426,11 @@ std::string rss_item::get_attribute(const std::string& attribname) {
 		return enclosure_url();
 	else if (attribname == "enclosure_type")
 		return enclosure_type();
+
+	// if we have a feed, then forward the request
+	if (feedptr)
+		return feedptr->get_attribute(attribname);
+
 	return "";
 }
 

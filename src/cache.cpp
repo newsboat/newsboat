@@ -316,6 +316,7 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 
 	for (std::vector<rss_item>::iterator it=feed.items().begin(); it != feed.items().end(); ++it) {
 		it->set_cache(this);
+		it->set_feedptr(&feed);
 		it->set_feedurl(feed.rssurl());
 	}
 	

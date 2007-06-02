@@ -3,6 +3,8 @@
 #include <exception.h>
 #include <cerrno>
 
+#include <langinfo.h>
+
 using namespace newsbeuter;
 
 stfl::form::form(const std::string& text) : f(0) {

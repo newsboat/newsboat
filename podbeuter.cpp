@@ -17,7 +17,7 @@ int main(int argc, char * argv[]) {
 	textdomain (PACKAGE);
 
 	pb_controller c;
-	pb_view v(&c);
+	podbeuter::pb_view v(&c);
 	c.set_view(&v);
 
 	c.run(argc, argv);

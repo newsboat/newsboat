@@ -15,10 +15,11 @@ extern "C" {
 namespace newsbeuter {
 	
 	class cache;
+	class rss_feed;
 
 	class rss_item : public matchable {
 		public:
-			rss_item(cache * c) : unread_(true), ch(c), enqueued_(false) { }
+			rss_item(cache * c) : unread_(true), ch(c), enqueued_(false), feedptr(NULL) { }
 			~rss_item() { }
 			
 			std::string title() const;
@@ -67,6 +68,9 @@ namespace newsbeuter {
 			virtual bool has_attribute(const std::string& attribname);
 			virtual std::string get_attribute(const std::string& attribname);
 
+			inline void set_feedptr(rss_feed * ptr) { feedptr = ptr; }
+			inline rss_feed * get_feedptr() { return feedptr; }
+
 		private:
 			std::string title_;
 			std::string link_;
@@ -80,6 +84,7 @@ namespace newsbeuter {
 			std::string enclosure_url_;
 			std::string enclosure_type_;
 			bool enqueued_;
+			rss_feed * feedptr;
 	};
 
 	class rss_feed : public matchable {

@@ -11,8 +11,9 @@
 #include <sstream>
 #include <iostream>
 
-using namespace podbeuter;
 using namespace newsbeuter;
+
+namespace podbeuter {
 
 pb_view::pb_view(pb_controller * c) : ctrl(c), dllist_form(dllist_str), help_form(help_str), keys(0) { 
 }
@@ -40,7 +41,8 @@ void pb_view::run() {
 
 			char buf[1024];
 			snprintf(buf, sizeof(buf), _("Queue (%u downloads in progress, %u total) - %.2f kb/s total%s"), 
-				ctrl->downloads_in_progress(), ctrl->downloads().size(), total_kbps, parbuf);
+				static_cast<unsigned int>(ctrl->downloads_in_progress()), 
+				static_cast<unsigned int>(ctrl->downloads().size()), total_kbps, parbuf);
 
 			dllist_form.set("head", buf);
 
@@ -250,4 +252,6 @@ void pb_view::set_dllist_keymap_hint() {
 
 	std::string keymap_hint = prepare_keymaphint(hints);
 	dllist_form.set("help", keymap_hint);
+}
+
 }

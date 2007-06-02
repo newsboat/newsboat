@@ -61,7 +61,7 @@ action_handler_status colormanager::handle_action(const std::string& action, con
  * this is podbeuter-specific color management
  * TODO: refactor this
  */
-void colormanager::set_pb_colors(pb_view * v) {
+void colormanager::set_pb_colors(podbeuter::pb_view * v) {
 	std::map<std::string,std::string>::iterator fgcit = fg_colors.begin();
 	std::map<std::string,std::string>::iterator bgcit = bg_colors.begin();
 	std::map<std::string,std::vector<std::string> >::iterator attit = attributes.begin();
