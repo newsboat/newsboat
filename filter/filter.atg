@@ -9,7 +9,7 @@ COMPILER Filter
 	FilterParser * gen;
 
 CHARACTERS
-	identchar = "abcdefghijklmnopqrstuvwxyz_-.".
+	identchar = 'A'..'Z' + 'a'..'z' + "_-.".
 	digit = "0123456789".
 	nonquote = ANY - '"'.
 

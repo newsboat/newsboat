@@ -123,10 +123,14 @@ bool matcher::matches_r(expression * e, matchable * item) {
 						e->regex = new regex_t;
 						regcomp(e->regex, e->literal.c_str(), REG_EXTENDED | REG_ICASE | REG_NOSUB); // TODO: throw error when compilation fails
 					}
-					if (regexec(e->regex, item->get_attribute(e->name).c_str(), 0, NULL, 0)==0)
+					GetLogger().log(LOG_DEBUG, "matchop_rxne: %s !~ %s ?", item->get_attribute(e->name).c_str(), e->literal.c_str());
+					if (regexec(e->regex, item->get_attribute(e->name).c_str(), 0, NULL, 0)==0) {
+						GetLogger().log(LOG_DEBUG, "matchop_rxne: yes");
 						retval = false;
-					else
+					} else {
+						GetLogger().log(LOG_DEBUG, "matchop_rxne: no");
 						retval = true;
+					}
 				}
 				break;
 			case MATCHOP_CONTAINS: {

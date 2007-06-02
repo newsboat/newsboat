@@ -5,6 +5,7 @@
 
 #include <unistd.h>
 
+#include <logger.h>
 #include <cache.h>
 #include <rss.h>
 #include <configcontainer.h>
@@ -22,7 +23,7 @@ BOOST_AUTO_TEST_CASE(TestNewsbeuterReload) {
 	configcontainer * cfg = new configcontainer();
 	cache * rsscache = new cache("test-cache.db", cfg);
 
-	rss_parser parser("http://bereshit.synflood.at/~ak/rss.xml", rsscache, cfg);
+	rss_parser parser("http://bereshit.synflood.at/~ak/rss.xml", rsscache, cfg, NULL);
 	rss_feed feed = parser.parse();
 	BOOST_CHECK_EQUAL(feed.items().size(), 8u);
 
@@ -225,7 +226,7 @@ BOOST_AUTO_TEST_CASE(TestTokenizers) {
 
 struct testmatchable : public matchable {
 	virtual bool has_attribute(const std::string& attribname) {
-		if (attribname == "abcd" || attribname == "AAAA")
+		if (attribname == "abcd" || attribname == "AAAA" || attribname == "tags")
 			return true;
 		return false;
 	}
@@ -235,11 +236,16 @@ struct testmatchable : public matchable {
 			return "xyz";
 		if (attribname == "AAAA")
 			return "12345";
+		if (attribname == "tags")
+			return "foo bar baz quux";
 		return "";
 	}
 };
 
 BOOST_AUTO_TEST_CASE(TestFilterLanguage) {
+	GetLogger().set_logfile("testlog.txt");
+	GetLogger().set_loglevel(LOG_DEBUG);
+
 	FilterParser fp;
 
 	// test parser
@@ -271,6 +277,46 @@ BOOST_AUTO_TEST_CASE(TestFilterLanguage) {
 	m.parse("abcd != \"xyz\"");
 	BOOST_CHECK_EQUAL(m.matches(&tm), false);
 
-	// TODO: use "AAAA" attribute to test regex matching as soon as it gets implemented
+	// testing regex matching
+	m.parse("AAAA =~ \".\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), true);
+	m.parse("AAAA =~ \"123\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), true);
+	m.parse("AAAA =~ \"234\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), true);
+	m.parse("AAAA =~ \"45\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), true);
+	m.parse("AAAA =~ \"^12345$\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), true);
+	m.parse("AAAA =~ \"^123456$\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), false);
 
+	m.parse("AAAA !~ \".\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), false);
+	m.parse("AAAA !~ \"123\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), false);
+	m.parse("AAAA !~ \"234\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), false);
+	m.parse("AAAA !~ \"45\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), false);
+	m.parse("AAAA !~ \"^12345$\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), false);
+
+	// testing the "contains" operator
+	m.parse("tags # \"foo\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), true);
+	m.parse("tags # \"baz\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), true);
+	m.parse("tags # \"quux\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), true);
+	m.parse("tags # \"xyz\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), false);
+	m.parse("tags # \"foo bar\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), false);
+	m.parse("tags # \"foo\" and tags # \"bar\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), true);
+	m.parse("tags # \"foo\" and tags # \"xyz\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), false);
+	m.parse("tags # \"foo\" or tags # \"xyz\"");
+	BOOST_CHECK_EQUAL(m.matches(&tm), true);
 }
