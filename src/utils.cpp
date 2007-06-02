@@ -12,6 +12,7 @@
 namespace newsbeuter {
 
 std::vector<std::string> utils::tokenize_quoted(const std::string& str, std::string delimiters) {
+	bool attach_backslash = true;
 	std::vector<std::string> tokens;
 	std::string::size_type last_pos = str.find_first_not_of(delimiters, 0);
 	std::string::size_type pos = last_pos;
@@ -23,15 +24,26 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str, std::str
 		if (str[last_pos] == '"') {
 			++last_pos;
 			pos = last_pos;
-			while (pos < str.length() && (str[pos] != '"' || str[pos-1] == '\\'))
+			int backslash_count = 0;
+			while (pos < str.length() && (str[pos] != '"' || (backslash_count%2))) {
+				if (str[pos] == '\\') {
+					++backslash_count;
+				} else {
+					backslash_count = 0;
+				}
 				++pos;
+			}
 			if (pos >= str.length()) {
 				pos = std::string::npos;
 				std::string token;
 				while (last_pos < str.length()) {
 					if (str[last_pos] == '\\') {
-						if (str[last_pos-1] == '\\')
-							token.append("\\");
+						if (str[last_pos-1] == '\\') {
+							if (attach_backslash) {
+								token.append("\\");
+							}
+							attach_backslash = !attach_backslash;
+						}
 					} else {
 						if (str[last_pos-1] == '\\') {
 							switch (str[last_pos]) {
@@ -53,8 +65,12 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str, std::str
 				std::string token;
 				while (last_pos < pos) {
 					if (str[last_pos] == '\\') {
-						if (str[last_pos-1] == '\\')
-							token.append("\\");
+						if (str[last_pos-1] == '\\') {
+							if (attach_backslash) {
+								token.append("\\");
+							}
+							attach_backslash = !attach_backslash;
+						}
 					} else {
 						if (str[last_pos-1] == '\\') {
 							switch (str[last_pos]) {

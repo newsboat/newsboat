@@ -222,6 +222,14 @@ BOOST_AUTO_TEST_CASE(TestTokenizers) {
 	tokens = utils::tokenize_quoted("\"\\\\\\\\\\\\");
 	BOOST_CHECK_EQUAL(tokens.size(), 1u);
 	BOOST_CHECK_EQUAL(tokens[0], "\\\\\\");
+
+	tokens = utils::tokenize_quoted("\"\\\\\\\\\"");
+	BOOST_CHECK_EQUAL(tokens.size(), 1u);
+	BOOST_CHECK_EQUAL(tokens[0], "\\\\");
+
+	tokens = utils::tokenize_quoted("\"\\\\\\\\\\\\\"");
+	BOOST_CHECK_EQUAL(tokens.size(), 1u);
+	BOOST_CHECK_EQUAL(tokens[0], "\\\\\\");
 }
 
 struct testmatchable : public matchable {
