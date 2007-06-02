@@ -11,7 +11,13 @@ class itemlist_formaction : public formaction {
 		virtual ~itemlist_formaction();
 		virtual void prepare();
 		virtual void init();
-		inline void set_feed(rss_feed * f) { feed = f; }
+
+		inline void set_feed(rss_feed * f) { 
+			feed = f; 
+			update_visible_items = true; 
+			apply_filter = false;
+		}
+
 		inline rss_feed * get_feed() { return feed; }
 		inline void set_pos(unsigned int p) { pos = p; }
 		std::string get_guid();
