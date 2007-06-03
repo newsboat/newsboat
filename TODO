@@ -10,6 +10,9 @@ TODO:
 - implement command line (STFL issue?)
 	- make it possible to directly jump to the n-th entry by entering ":n" in the command line
 - implement "meta-feeds"
+- add automatic download mode to podbeuter
+- add configurable pager
+
 
 longteam goals to reach:
 - add scripting support

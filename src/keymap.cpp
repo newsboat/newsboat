@@ -102,18 +102,15 @@ operation keymap::get_opcode(const std::string& opstr) {
 }
 
 char keymap::get_key(const std::string& keycode) {
-	if (strncmp(keycode.c_str(),"CHAR(",5)==0) {
-		unsigned int x;
-		unsigned char c;
-		sscanf(keycode.c_str(),"CHAR(%u)",&x);
-		if (x <= 126) {
-			c = static_cast<char>(x);
-			return c;
-		}
-	} else if (keycode == "ENTER") {
+	if (keycode == "ENTER") {
 		return '\n';
 	} else if (keycode == "ESC") {
 		return 27;
+	} else if (keycode[0] == '^') {
+		char chr = keycode[1];
+		return chr - '@';
+	} else { // TODO: implement more keys
+		return keycode[0];
 	}
 	return 0;
 }
@@ -128,22 +125,11 @@ operation keymap::get_operation(const std::string& keycode) {
 		} else if (keycode[0] == 'F') {
 			key = keycode;
 			key[0] = 'f';
-		} else if (strncmp(keycode.c_str(),"CHAR(",5)==0) {
-			unsigned int x;
-			char c;
-			sscanf(keycode.c_str(),"CHAR(%u)",&x);
-			// std::cerr << x << std::endl;
-			if (32 == x) {
-				key.append("space");
-			} else if (x > 32 && x <= 126) {
-				c = static_cast<char>(x);
-				key.append(1,c);
-			} else if (x<=26) {
-				key.append("^");
-				key.append(1,static_cast<char>(0x60 + x));
-			} else {
-				// TODO: handle special keys
-			}
+		} else if (keycode[0] == '^') {
+			key = keycode;
+			key[1] = tolower(key[1]);
+		} else {
+			key = keycode;
 		}
 	} else {
 		key = "NIL";
