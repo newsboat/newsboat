@@ -19,6 +19,7 @@
 #include <logger.h>
 #include <reloadthread.h>
 #include <exception.h>
+#include <keymap.h>
 
 #include <iostream>
 #include <iomanip>
@@ -85,6 +86,26 @@ void view::set_config_container(configcontainer * cfgcontainer) {
 
 void view::set_keymap(keymap * k) {
 	keys = k;
+	set_bindings();
+}
+
+
+
+void view::set_bindings() {
+	formaction * fas2bind[] = { feedlist, itemlist, itemview, helpview, filebrowser, urlview, selecttag, search, NULL };
+	if (keys) {
+		std::string upkey("**,"); upkey.append(keys->getkey(OP_SK_UP));
+		std::string downkey("**,"); downkey.append(keys->getkey(OP_SK_DOWN));
+		std::string pgupkey("**,"); pgupkey.append(keys->getkey(OP_SK_PGUP));
+		std::string pgdownkey("**,"); pgdownkey.append(keys->getkey(OP_SK_PGDOWN));
+
+		for (unsigned int i=0;fas2bind[i];++i) {
+			fas2bind[i]->get_form()->set("bind_up", upkey);
+			fas2bind[i]->get_form()->set("bind_down", downkey);
+			fas2bind[i]->get_form()->set("bind_page_up", pgupkey);
+			fas2bind[i]->get_form()->set("bind_page_down", pgdownkey);
+		}
+	}
 }
 
 void view::set_status(const char * msg) {
@@ -120,12 +141,14 @@ void view::run() {
 
 		operation op = keys->get_operation(event);
 
+		GetLogger().log(LOG_DEBUG, "view::run: event = %s op = %u", event, op);
+
 		if (OP_REDRAW == op) {
 			stfl::reset();
 			continue;
 		}
 
-		fa->process_op(op, keys->get_key(event));
+		fa->process_op(op);
 	}
 
 	stfl::reset();
@@ -143,6 +166,7 @@ std::string view::run_modal(formaction * f, const std::string& value) {
 		fa->prepare();
 
 		const char * event = fa->get_form()->run(1000);
+		GetLogger().log(LOG_DEBUG, "view::run: event = %s", event);
 		if (!event || strcmp(event,"TIMEOUT")==0) continue;
 
 		operation op = keys->get_operation(event);
@@ -152,7 +176,7 @@ std::string view::run_modal(formaction * f, const std::string& value) {
 			continue;
 		}
 
-		fa->process_op(op, keys->get_key(event));
+		fa->process_op(op);
 	}
 
 	if (value == "")

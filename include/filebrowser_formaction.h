@@ -20,7 +20,7 @@ class filebrowser_formaction : public formaction {
 		inline void set_type(filebrowser_type t) { type = t; }
 
 	private:
-		virtual void process_operation(operation op, int raw_char);
+		virtual void process_operation(operation op);
 
 		std::string fancy_quote(const std::string& s);
 		std::string fancy_unquote(const std::string& s);

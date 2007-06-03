@@ -32,10 +32,10 @@ class formaction {
 
 		virtual void handle_cmdline(const std::string& cmd);
 
-		void process_op(operation op, int raw_char);
+		void process_op(operation op);
 
 	protected:
-		virtual void process_operation(operation op, int raw_char) = 0;
+		virtual void process_operation(operation op) = 0;
 		virtual void set_keymap_hints();
 
 		view * v;

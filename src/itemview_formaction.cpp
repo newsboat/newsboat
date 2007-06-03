@@ -122,7 +122,7 @@ void itemview_formaction::prepare() {
 
 }
 
-void itemview_formaction::process_operation(operation op, int /*raw_char*/) {
+void itemview_formaction::process_operation(operation op) {
 	rss_item& item = feed->get_item_by_guid(guid);
 	item.set_unread(false);
 

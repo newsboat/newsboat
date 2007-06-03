@@ -15,7 +15,7 @@ struct op_desc {
 };
 
 static op_desc opdescs[] = {
-	{ OP_OPEN, "open", "enter", _("Open feed/article"), KM_NEWSBEUTER },
+	{ OP_OPEN, "open", "ENTER", _("Open feed/article"), KM_NEWSBEUTER },
 	{ OP_QUIT, "quit", "q", _("Return to previous dialog/Quit"), KM_BOTH },
 	{ OP_RELOAD, "reload", "r", _("Reload currently selected feed"), KM_NEWSBEUTER },
 	{ OP_RELOADALL, "reload-all", "R", _("Reload all feeds"), KM_NEWSBEUTER },
@@ -25,11 +25,11 @@ static op_desc opdescs[] = {
 	{ OP_NEXTUNREAD, "next-unread", "n", _("Go to next unread article"), KM_NEWSBEUTER },
 	{ OP_OPENINBROWSER, "open-in-browser", "o", _("Open article in browser"), KM_NEWSBEUTER },
 	{ OP_HELP, "help", "?", _("Open help dialog"), KM_BOTH },
-	{ OP_TOGGLESOURCEVIEW, "toggle-source-view", "^u", _("Toggle source view"), KM_NEWSBEUTER },
+	{ OP_TOGGLESOURCEVIEW, "toggle-source-view", "^U", _("Toggle source view"), KM_NEWSBEUTER },
 	{ OP_TOGGLEITEMREAD, "toggle-article-read", "N", _("Toggle read status for article"), KM_NEWSBEUTER },
 	{ OP_TOGGLESHOWREAD, "toggle-show-read-feeds", "l", _("Toggle show read feeds"), KM_NEWSBEUTER },
 	{ OP_SHOWURLS, "show-urls", "u", _("Show URLs in current article"), KM_NEWSBEUTER },
-	{ OP_CLEARTAG, "clear-tag", "^t", _("Clear current tag"), KM_NEWSBEUTER },
+	{ OP_CLEARTAG, "clear-tag", "^T", _("Clear current tag"), KM_NEWSBEUTER },
 	{ OP_SETTAG, "set-tag", "t", _("Select tag"), KM_NEWSBEUTER },
 	{ OP_SEARCH, "open-search", "/", _("Open search dialog"), KM_NEWSBEUTER },
 	{ OP_ENQUEUE, "enqueue", "e", _("Add download to queue"), KM_NEWSBEUTER },
@@ -41,15 +41,24 @@ static op_desc opdescs[] = {
 	{ OP_PB_PLAY, "pb-play", "p", _("Start player with currently selected download"), KM_PODBEUTER },
 	{ OP_PB_MOREDL, "pb-increase-max-dls", "+", _("Increase the number of concurrent downloads"), KM_PODBEUTER },
 	{ OP_PB_LESSDL, "pb-decreate-max-dls", "-", _("Decrease the number of concurrent downloads"), KM_PODBEUTER },
-	{ OP_REDRAW, "redraw", "^l", _("Redraw screen"), KM_BOTH },
+	{ OP_REDRAW, "redraw", "^L", _("Redraw screen"), KM_BOTH },
 	{ OP_CMDLINE, "cmdline", ":", _("Open the commandline"), KM_NEWSBEUTER },
 	{ OP_SETFILTER, "set-filter", "F", _("Set a filter"), KM_NEWSBEUTER },
-	{ OP_CLEARFILTER, "clear-filter", "^f", _("Clear currently set filter"), KM_NEWSBEUTER },
+	{ OP_CLEARFILTER, "clear-filter", "^F", _("Clear currently set filter"), KM_NEWSBEUTER },
+	{ OP_SK_UP, "up", "UP", NULL, KM_SYSKEYS },
+	{ OP_SK_DOWN, "down", "DOWN", NULL, KM_SYSKEYS },
+	{ OP_SK_PGUP, "pageup", "PAGEUP", NULL, KM_SYSKEYS },
+	{ OP_SK_PGDOWN, "pagedown", "PAGEDOWN", NULL, KM_SYSKEYS },
+
+	// internal messages with no actual keypresses behind them
+	{ OP_INT_END_CMDLINE, "XXXNOKEY-end-cmdline", "end-cmdline", NULL, KM_INTERNAL },
+	{ OP_INT_END_SETFILTER, "XXXNOKEY-end-cmdline", "end-setfilter", NULL, KM_INTERNAL },
+
 	{ OP_NIL, NULL, NULL, NULL, 0 }
 };
 
 keymap::keymap() { 
-	for (int i=0;opdescs[i].help_text;++i) {
+	for (int i=0;opdescs[i].op != OP_NIL;++i) {
 		keymap_[opdescs[i].default_key] = opdescs[i].op;
 	}
 }
@@ -118,19 +127,7 @@ char keymap::get_key(const std::string& keycode) {
 operation keymap::get_operation(const std::string& keycode) {
 	std::string key;
 	if (keycode.length() > 0) {
-		if (keycode == "ENTER") {
-			key = "enter";
-		} else if (keycode == "ESC") {
-			key = "esc";
-		} else if (keycode[0] == 'F') {
-			key = keycode;
-			key[0] = 'f';
-		} else if (keycode[0] == '^') {
-			key = keycode;
-			key[1] = tolower(key[1]);
-		} else {
-			key = keycode;
-		}
+		key = keycode;
 	} else {
 		key = "NIL";
 	}
@@ -143,6 +140,9 @@ action_handler_status keymap::handle_action(const std::string& action, const std
 		if (params.size() < 2) {
 			return AHS_TOO_FEW_PARAMS;
 		} else {
+			operation op = get_opcode(params[1]);
+			if (op > OP_SK_MIN && op < OP_SK_MAX)
+				unset_key(getkey(get_opcode(params[1])));
 			set_key(get_opcode(params[1]), params[0]);
 			// keymap_[params[0]] = get_opcode(params[1]);
 			return AHS_OK;
@@ -161,7 +161,7 @@ action_handler_status keymap::handle_action(const std::string& action, const std
 std::string keymap::getkey(operation op) {
 	for (std::map<std::string,operation>::iterator it=keymap_.begin(); it!=keymap_.end(); ++it) {
 		if (it->second == op)
-			return it->first;	
+			return it->first;
 	}	
 	return "<none>";
 }

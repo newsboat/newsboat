@@ -6,6 +6,7 @@ Changes for newsbeuter:
 	added Unicode compatibility
 	added support for notifications
 	implemented filter language
+	it is now possible to freely configure e.g. the up/down-keys
 
 0.4 (2007-05-08):
 	refactored view

@@ -67,6 +67,7 @@ namespace newsbeuter {
 		protected:
 			bool jump_to_next_unread_item(std::vector<rss_item>& items, bool begin_with_next);
 			bool jump_to_next_unread_feed(bool begin_with_next);
+			void set_bindings();
 
 			controller * ctrl;
 

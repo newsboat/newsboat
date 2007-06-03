@@ -1,6 +1,10 @@
 vbox
   @style_normal[background]:bg=black,fg=white
   @info#style_normal[info]:bg=blue,fg=yellow,attr=bold
+  @bind_up[bind_up]:**
+  @bind_down[bind_down]:**
+  @bind_page_up[bind_page_up]:**
+  @bind_page_down[bind_page_down]:**
   label#info
     text[head]:"Search Articles"
     .expand:h

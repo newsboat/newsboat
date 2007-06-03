@@ -29,7 +29,7 @@ class itemlist_formaction : public formaction {
 		virtual void handle_cmdline(const std::string& cmd);
 
 	private:
-		virtual void process_operation(operation op, int raw_char);
+		virtual void process_operation(operation op);
 		void set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);
 		int get_pos(unsigned int idx);
 		void do_update_visible_items();

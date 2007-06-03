@@ -12,7 +12,7 @@ search_formaction::search_formaction(view * vv, std::string formstr)
 
 search_formaction::~search_formaction() { }
 
-void search_formaction::process_operation(operation op, int /*raw_char*/) {
+void search_formaction::process_operation(operation op) {
 	bool quit = false;
 	switch (op) {
 		case OP_OPEN: {

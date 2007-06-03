@@ -356,7 +356,9 @@ void rss_item::set_enclosure_type(const std::string& type) {
 
 std::string rss_item::title() const {
 	GetLogger().log(LOG_DEBUG,"rss_item::title: title before conversion: %s", title_.c_str());
-	std::string retval = utils::convert_text(title_, nl_langinfo(CODESET), "utf-8");
+	std::string retval;
+	if (title_.length()>0)
+		retval = utils::convert_text(title_, nl_langinfo(CODESET), "utf-8");
 	GetLogger().log(LOG_DEBUG,"rss_item::title: title after conversion: %s", retval.c_str());
 	return retval;
 }

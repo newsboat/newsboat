@@ -5,13 +5,14 @@ TODO:
 	join two subsequent text nodes separated by a comment
 - do entitity decoding for titles (this may be controversial...)
 - research (and fix) libnxml decoding issues
-- implement free configurability of key bindings for widgets (STFL issue)
 - improve string handling (no more std::string() + std::string())
-- implement command line (STFL issue?)
-	- make it possible to directly jump to the n-th entry by entering ":n" in the command line
 - implement "meta-feeds"
-- add automatic download mode to podbeuter
+- add automatic download mode to podbeuter (commandline switch)
 - add configurable pager
+- fix memory leak
+- set keybindings in podbeuter, too
+- update example config
+- properly document changes in key binding stuff
 
 
 longteam goals to reach:
@@ -85,3 +86,6 @@ DONE:
 - add configuration option to set a custom user-agent string
 - replace lockfile with fcntl()-based locking
 - make STFL and newsbeuter capable of correct handling of Unicode
+- implement command line (STFL issue?)
+	- make it possible to directly jump to the n-th entry by entering ":n" in the command line
+- implement free configurability of key bindings for widgets (STFL issue)

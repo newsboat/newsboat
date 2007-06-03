@@ -163,7 +163,7 @@ reload:r:Reload the currently selected feed.
 reload-all:R:Reload all feeds.
 mark-feed-read:A:Mark all articles in the currently selected feed read.
 mark-all-feeds-read:C:Mark articles in all feeds read.
-open:Enter:Open the currently selected feed or article.
+open:ENTER:Open the currently selected feed or article.
 save:s:Save the currently selected article to a file.
 next-unread:n:Jump to the next unread article.
 open-in-browser:o:Opens the URL associated with the current article.
@@ -179,14 +179,16 @@ redraw:^l:Redraw the screen.
 help:?:Runs the help screen.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+TODO: document "up", "down", "pageup" etc. keys.
+
 
 Keys, as used in the bind-key configuration command, use a special syntax.
 Lowercase keys, uppercase keys and special characters are written literally.
-The Enter key is written as "enter", while the ESC key is written as "esc". The
+The Enter key is written as "ENTER", while the Esc key is written as "ESC". The
 function keys F1 to F12 are written as "F1" to "F12". The Space key is written
-as "space". Key combinations with the Ctrl key, such as Ctrl-R, are written as
-^r. Please be aware that all Ctrl-related key combinations need to be written
-in lowercase ^R for Ctrl-Shift-R does not work.
+as "SPACE". Key combinations with the Ctrl key, such as Ctrl-R, are written as
+^R. Please be aware that all Ctrl-related key combinations need to be written
+in uppercase.
 
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
@@ -197,7 +199,7 @@ Example Configuration
 	show-read-feeds  no
 
 	unbind-key       R
-	bind-key         ^r    reload-all
+	bind-key         ^R    reload-all
 
 Configuring Colors
 ~~~~~~~~~~~~~~~~~~

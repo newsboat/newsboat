@@ -23,7 +23,7 @@ filebrowser_formaction::filebrowser_formaction(view * vv, std::string formstr)
 
 filebrowser_formaction::~filebrowser_formaction() { }
 
-void filebrowser_formaction::process_operation(operation op, int /*rawchar*/) {
+void filebrowser_formaction::process_operation(operation op) {
 	char buf[1024];
 	switch (op) {
 		case OP_OPEN: 

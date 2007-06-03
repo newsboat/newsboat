@@ -17,7 +17,7 @@ class itemview_formaction : public formaction {
 		inline void set_feed(rss_feed * f) { feed = f; }
 		keymap_hint_entry * get_keymap_hint();
 	private:
-		virtual void process_operation(operation op, int raw_char);
+		virtual void process_operation(operation op);
 		void set_head(const std::string& s);
 
 		void render_source(std::vector<std::string>& lines, std::string desc, unsigned int width);

@@ -13,24 +13,23 @@ itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
 
 itemlist_formaction::~itemlist_formaction() { }
 
-void itemlist_formaction::process_operation(operation op, int raw_char) {
-	if ((raw_char == '\n' || raw_char == '\r') && f->get_focus() == "filter") {
-		std::string filtertext = f->get("filtertext");
-		f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
-		if (filtertext.length() > 0) {
-			if (!m.parse(filtertext)) {
-				v->show_error(_("Error: couldn't parse filter command!"));
-			} else {
-				apply_filter = true;
-				update_visible_items = true;
-				do_redraw = true;
-			}
-		}
-		return;
-	}
-
+void itemlist_formaction::process_operation(operation op) {
 	bool quit = false;
 	switch (op) {
+		case OP_INT_END_SETFILTER: {
+				std::string filtertext = f->get("filtertext");
+				f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
+				if (filtertext.length() > 0) {
+					if (!m.parse(filtertext)) {
+						v->show_error(_("Error: couldn't parse filter command!"));
+					} else {
+						apply_filter = true;
+						update_visible_items = true;
+						do_redraw = true;
+					}
+				}
+			}
+			break;
 		case OP_OPEN: {
 				std::string itemposname = f->get("itempos");
 				GetLogger().log(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());

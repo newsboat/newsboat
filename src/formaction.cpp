@@ -38,19 +38,22 @@ std::string formaction::get_value(const std::string& value) {
 	return f->get(value);
 }
 
-void formaction::process_op(operation op, int raw_char) {
-	if ((raw_char == '\n' || raw_char == '\r') && f->get_focus() == "cmdline") {
-		f->set_focus("feeds");
-		std::string cmdline = f->get("cmdtext");
-		GetLogger().log(LOG_DEBUG,"formaction: commandline = `%s'", cmdline.c_str());
-		f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
-		this->handle_cmdline(cmdline);
-		return;
-	} else if (OP_CMDLINE == op) {
-			f->modify("lastline","replace", "{hbox[lastline] .expand:0 {label .expand:0 text:\":\"}{input[cmdline] modal:1 .expand:h text[cmdtext]:\"\"}}");
+void formaction::process_op(operation op) {
+	switch (op) {
+		case OP_INT_END_CMDLINE: {
+				f->set_focus("feeds");
+				std::string cmdline = f->get("cmdtext");
+				GetLogger().log(LOG_DEBUG,"formaction: commandline = `%s'", cmdline.c_str());
+				f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
+				this->handle_cmdline(cmdline);
+			}
+			break;
+		case OP_CMDLINE:
+			f->modify("lastline","replace", "{hbox[lastline] .expand:0 {label .expand:0 text:\":\"}{input[cmdline] on_ENTER:end-cmdline modal:1 .expand:h text[cmdtext]:\"\"}}");
 			f->set_focus("cmdline");
-	} else {
-		this->process_operation(op, raw_char);
+			break;
+		default:
+			this->process_operation(op);
 	}
 }
 

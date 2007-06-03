@@ -51,22 +51,22 @@ void feedlist_formaction::prepare() {
 	}
 }
 
-void feedlist_formaction::process_operation(operation op, int raw_char) {
-	if ((raw_char == '\n' || raw_char == '\r') && f->get_focus() == "filter") {
-		std::string filtertext = f->get("filtertext");
-		f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
-		if (filtertext.length() > 0) {
-			if (!m.parse(filtertext)) {
-				v->show_error(_("Error: couldn't parse filter command!"));
-				m.parse(FILTER_UNREAD_FEEDS);
-			} else {
-				apply_filter = true;
-				do_redraw = true;
-			}
-		}
-		return;
-	}
+void feedlist_formaction::process_operation(operation op) {
 	switch (op) {
+		case OP_INT_END_SETFILTER: {
+				std::string filtertext = f->get("filtertext");
+				f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
+				if (filtertext.length() > 0) {
+					if (!m.parse(filtertext)) {
+						v->show_error(_("Error: couldn't parse filter command!"));
+						m.parse(FILTER_UNREAD_FEEDS);
+					} else {
+						apply_filter = true;
+						do_redraw = true;
+					}
+				}
+			}
+			break;
 		case OP_OPEN: {
 				if (f->get_focus() == "feeds") {
 					std::string feedpos = f->get("feedposname");
@@ -167,7 +167,7 @@ void feedlist_formaction::process_operation(operation op, int raw_char) {
 			break;
 		case OP_SETFILTER: {
 				char buf[256];
-				snprintf(buf,sizeof(buf), "{hbox[lastline] .expand:0 {label .expand:0 text:\"%s\"}{input[filter] modal:1 .expand:h text[filtertext]:\"\"}}", _("Filter: "));
+				snprintf(buf,sizeof(buf), "{hbox[lastline] .expand:0 {label .expand:0 text:\"%s\"}{input[filter] modal:1 on_ENTER:end-setfilter .expand:h text[filtertext]:\"\"}}", _("Filter: "));
 				f->modify("lastline", "replace", buf);
 				f->set_focus("filter");
 			}

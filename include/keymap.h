@@ -12,6 +12,8 @@
 
 #define KM_NEWSBEUTER (1<<0)
 #define KM_PODBEUTER  (1<<1)
+#define KM_SYSKEYS    (1<<2)
+#define KM_INTERNAL   (1<<3)
 #define KM_BOTH (KM_NEWSBEUTER | KM_PODBEUTER)
 
 namespace newsbeuter {
@@ -53,7 +55,21 @@ namespace newsbeuter {
 						OP_PB_MOREDL, 
 						OP_PB_LESSDL, 
 						OP_PB_PLAY, 
-						OP_PB_MAX };
+						OP_PB_MAX,
+						
+						OP_SK_MIN,
+						OP_SK_UP,
+						OP_SK_DOWN,
+						OP_SK_PGUP,
+						OP_SK_PGDOWN,
+						/* TODO: add more user-defined keys here */
+						OP_SK_MAX,
+
+						OP_INT_MIN,
+						OP_INT_END_CMDLINE,
+						OP_INT_END_SETFILTER,
+						OP_INT_MAX
+						};
 
 	struct keymap_desc {
 		std::string key;

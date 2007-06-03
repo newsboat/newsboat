@@ -11,7 +11,7 @@ selecttag_formaction::selecttag_formaction(view * vv, std::string formstr)
 
 selecttag_formaction::~selecttag_formaction() { }
 
-void selecttag_formaction::process_operation(operation op, int /*raw_char*/) {
+void selecttag_formaction::process_operation(operation op) {
 	switch (op) {
 		case OP_QUIT:
 			tag = "";
