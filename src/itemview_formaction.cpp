@@ -171,7 +171,11 @@ void itemview_formaction::process_operation(operation op) {
 			break;
 		case OP_SHOWURLS:
 			GetLogger().log(LOG_DEBUG, "view::run_itemview: showing URLs");
-			v->push_urlview(links);
+			if (links.size() > 0) {
+				v->push_urlview(links);
+			} else {
+				v->show_error(_("URL list empty."));
+			}
 			break;
 		case OP_NEXTUNREAD:
 			GetLogger().log(LOG_INFO, "view::run_itemview: jumping to next unread article");
