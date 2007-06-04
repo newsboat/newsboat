@@ -9,8 +9,6 @@ TODO:
 - implement "meta-feeds"
 - add automatic download mode to podbeuter (commandline switch)
 - add configurable pager
-- fix memory leak
-- set keybindings in podbeuter, too
 - update example config
 - properly document changes in key binding stuff
 
@@ -89,3 +87,5 @@ DONE:
 - implement command line (STFL issue?)
 	- make it possible to directly jump to the n-th entry by entering ":n" in the command line
 - implement free configurability of key bindings for widgets (STFL issue)
+- fix memory leak
+- set keybindings in podbeuter, too

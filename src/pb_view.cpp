@@ -169,6 +169,31 @@ void pb_view::run() {
 	} while (!quit);
 }
 
+
+
+void pb_view::set_bindings() {
+	if (keys) {
+		std::string upkey("** "); upkey.append(keys->getkey(OP_SK_UP));
+		std::string downkey("** "); downkey.append(keys->getkey(OP_SK_DOWN));
+		std::string pgupkey("** "); pgupkey.append(keys->getkey(OP_SK_PGUP));
+		std::string pgdownkey("** "); pgdownkey.append(keys->getkey(OP_SK_PGDOWN));
+
+		dllist_form.set("bind_up", upkey);
+		dllist_form.set("bind_down", downkey);
+		dllist_form.set("bind_page_up", pgupkey);
+		dllist_form.set("bind_page_down", pgdownkey);
+
+		help_form.set("bind_up", upkey);
+		help_form.set("bind_down", downkey);
+		help_form.set("bind_page_up", pgupkey);
+		help_form.set("bind_page_down", pgdownkey);
+
+	}
+}
+
+
+
+
 void pb_view::run_help() {
 	set_help_keymap_hint();
 

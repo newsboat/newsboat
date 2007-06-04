@@ -133,8 +133,6 @@ void pb_controller::run(int argc, char * argv[]) {
 	cfgparser.register_handler("bind-key", &keys);
 	cfgparser.register_handler("unbind-key", &keys);
 
-	v->set_keymap(&keys);
-
 	try {
 		cfgparser.parse("/etc/newsbeuter/config");
 		cfgparser.parse(config_file);
@@ -153,8 +151,12 @@ void pb_controller::run(int argc, char * argv[]) {
 
 	ql = new queueloader(queue_file, this);
 	ql->reload(downloads_);
+
+	v->set_keymap(&keys);
 	
 	v->run();
+
+	stfl::reset();
 
 	std::cout <<  _("Cleaning up queue...");
 	std::cout.flush();
