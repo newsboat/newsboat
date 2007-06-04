@@ -24,6 +24,7 @@ struct expression {
 class FilterParser {
 	public:
 		FilterParser();
+		FilterParser(const FilterParser& p);
 		~FilterParser();
 		void add_logop(int op);
 		void add_matchexpr(char * name, int op, char * lit);
@@ -36,6 +37,7 @@ class FilterParser {
 		void print_tree();
 
 		inline expression * get_root() { return root; }
+		FilterParser& operator=(FilterParser& p);
 
 	private:
 		void print_tree_r(expression * e, unsigned int depth);
@@ -44,6 +46,7 @@ class FilterParser {
 		expression * root;
 		expression * curpos;
 		bool next_must_descend_right;
+		std::string strexpr;
 };
 
 

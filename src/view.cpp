@@ -94,18 +94,28 @@ void view::set_keymap(keymap * k) {
 void view::set_bindings() {
 	formaction * fas2bind[] = { feedlist, itemlist, itemview, helpview, filebrowser, urlview, selecttag, search, NULL };
 	if (keys) {
-		std::string upkey("**,"); upkey.append(keys->getkey(OP_SK_UP));
-		std::string downkey("**,"); downkey.append(keys->getkey(OP_SK_DOWN));
-		std::string pgupkey("**,"); pgupkey.append(keys->getkey(OP_SK_PGUP));
-		std::string pgdownkey("**,"); pgdownkey.append(keys->getkey(OP_SK_PGDOWN));
+		std::string upkey("** "); upkey.append(keys->getkey(OP_SK_UP));
+		std::string downkey("** "); downkey.append(keys->getkey(OP_SK_DOWN));
+		std::string pgupkey("** "); pgupkey.append(keys->getkey(OP_SK_PGUP));
+		std::string pgdownkey("** "); pgdownkey.append(keys->getkey(OP_SK_PGDOWN));
+
+		std::string pgupkey_itemview("** b "); pgupkey_itemview.append(keys->getkey(OP_SK_PGUP));
+		std::string pgdownkey_itemview("** SPACE "); pgdownkey_itemview.append(keys->getkey(OP_SK_PGDOWN));
 
 		for (unsigned int i=0;fas2bind[i];++i) {
 			fas2bind[i]->get_form()->set("bind_up", upkey);
 			fas2bind[i]->get_form()->set("bind_down", downkey);
-			fas2bind[i]->get_form()->set("bind_page_up", pgupkey);
-			fas2bind[i]->get_form()->set("bind_page_down", pgdownkey);
+			if (fas2bind[i] == itemview || fas2bind[i] == helpview) { // the forms that contain textviews
+				fas2bind[i]->get_form()->set("bind_page_up", pgupkey_itemview);
+				fas2bind[i]->get_form()->set("bind_page_down", pgdownkey_itemview);
+			} else {
+				fas2bind[i]->get_form()->set("bind_page_up", pgupkey);
+				fas2bind[i]->get_form()->set("bind_page_down", pgdownkey);
+			}
 		}
 	}
+
+	GetLogger().log(LOG_DEBUG, "view::set_bindings: itemview bind_page_up = %s bind_page_down = %s", itemview->get_form()->get("bind_page_up").c_str(), itemview->get_form()->get("bind_page_down").c_str());
 }
 
 void view::set_status(const char * msg) {

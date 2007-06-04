@@ -1,11 +1,28 @@
+#include "logger.h"
 #include "FilterParser.h"
 #include "Parser.h"
 #include <sstream>
 
+using namespace newsbeuter;
+
 FilterParser::FilterParser() : root(0), curpos(0), next_must_descend_right(false) { }
 
 FilterParser::~FilterParser() { 
-	// cleanup();
+	cleanup();
+}
+
+FilterParser::FilterParser(const FilterParser& p) {
+	GetLogger().log(LOG_DEBUG,"FilterParser: copy constructor called!");
+	parse_string(p.strexpr);
+}
+
+FilterParser& FilterParser::operator=(FilterParser& p) {
+	GetLogger().log(LOG_DEBUG,"FilterParser: operator= called!");
+	if (this != &p) {
+		cleanup();
+		parse_string(p.strexpr);
+	}
+	return *this;
 }
 
 void FilterParser::add_logop(int op) { 
@@ -67,6 +84,7 @@ void FilterParser::close_block() {
 
 bool FilterParser::parse_string(const std::string& str) {
 	cleanup();
+	strexpr = str;
 
 	std::istringstream is(str);
 	Scanner s(is);
@@ -87,6 +105,7 @@ void FilterParser::cleanup() {
 
 void FilterParser::cleanup_r(expression * e) {
 	if (e) {
+		GetLogger().log(LOG_DEBUG,"cleanup_r: e = %p", e);
 		cleanup_r(e->l);
 		cleanup_r(e->r);
 		delete e;
@@ -118,5 +137,7 @@ expression::expression(int o) : op(o), l(NULL), r(NULL), parent(NULL), regex(NUL
 }
 
 expression::~expression() {
+	if (regex)
+		regfree(regex);
 	delete regex;
 }

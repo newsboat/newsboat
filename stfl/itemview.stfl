@@ -3,8 +3,8 @@ vbox
   @info#style_normal[info]:bg=blue,fg=yellow,attr=bold
   @bind_up[bind_up]:**
   @bind_down[bind_down]:**
-  @bind_page_up[bind_page_up]:**
-  @bind_page_down[bind_page_down]:**
+  @bind_page_up[bind_page_up]:"** b"
+  @bind_page_down[bind_page_down]:"** SPACE"
   label#info
     text[head]:"Article '#'"
     .expand:h
