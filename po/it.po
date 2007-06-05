@@ -227,15 +227,15 @@ msgstr "Filtri:"
 
 #: src/feedlist_formaction.cpp:178
 msgid "Do you really want to quit (y:Yes n:No)? "
-msgstr "Vuoi veramente uscire (y:Yes n:No)?"
+msgstr "Vuoi veramente uscire (s:Si n:No)?"
 
 #: src/feedlist_formaction.cpp:178 src/filebrowser_formaction.cpp:86
 msgid "yn"
-msgstr ""
+msgstr "sn"
 
 #: src/feedlist_formaction.cpp:178
 msgid "y"
-msgstr ""
+msgstr "s"
 
 #: src/feedlist_formaction.cpp:256
 #, c-format
@@ -315,7 +315,7 @@ msgstr "Veramente vuoi sovrascrivere `%s' (y:Yes n:No)? "
 
 #: src/filebrowser_formaction.cpp:86
 msgid "n"
-msgstr ""
+msgstr "n"
 
 #: src/filebrowser_formaction.cpp:137
 msgid "File: "
