@@ -8,9 +8,9 @@ namespace newsbeuter {
 	
 struct op_desc {
 	operation op;
-	char * opstr;
-	char * default_key;
-	char * help_text;
+	const char * opstr;
+	const char * default_key;
+	const char * help_text;
 	unsigned short flags;
 };
 

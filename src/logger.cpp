@@ -40,7 +40,7 @@ void logger::set_loglevel(loglevel level) {
 	mtx.unlock();
 }
 
-char * loglevel_str[] = { "NONE", "USERERROR", "CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG" };
+const char * loglevel_str[] = { "NONE", "USERERROR", "CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG" };
 
 void logger::log(loglevel level, const char * format, ...) {
 	mtx.lock();
