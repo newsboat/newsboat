@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-05 10:19+0200\n"
-"PO-Revision-Date: 2007-04-21 11:43+0100\n"
+"POT-Creation-Date: 2007-06-05 13:44+0200\n"
+"PO-Revision-Date: 2007-06-05 12:31+0100\n"
 "Last-Translator: Andrea Marchesini <andrea.marchesini@somasuite.org>\n"
 "Language-Team: Andrea Marchesini <baku@autistici.org>\n"
 "MIME-Version: 1.0\n"
@@ -98,14 +98,12 @@ msgid "Loading articles from cache..."
 msgstr "Caricamento articoli dalla cache..."
 
 #: src/controller.cpp:238
-#, fuzzy
 msgid "Opening cache..."
-msgstr "Svuotamento cache..."
+msgstr "Apertura cache..."
 
 #: src/controller.cpp:250
-#, fuzzy
 msgid "Cleaning up cache thoroughly..."
-msgstr "Svuotamento cache..."
+msgstr "Svuotamento totale della cache..."
 
 #: src/controller.cpp:292
 msgid "Cleaning up cache..."
@@ -133,9 +131,11 @@ msgstr "indice del feed invalido (bug)"
 #, c-format
 msgid "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
 msgstr ""
+"newsbeuter: caricamento finito, %u feed non letti (%u totale articoli non "
+"letti)"
 
 #: src/controller.cpp:461
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]\n"
@@ -156,6 +156,7 @@ msgstr ""
 "-u <urlfile>    lettura di un feed RSS dall'URL <urlfile>\n"
 "-c <cachefile>  usa <cachefile> come file di cache\n"
 "-C <configfile> lettura della configurazione dal file <configfile>\n"
+"-v              svuotamento totale della cache\n"
 "-h              questo menu di aiuto\n"
 
 #: src/controller.cpp:503
@@ -195,101 +196,107 @@ msgstr "incompatibile"
 msgid "unknown (bug)."
 msgstr "sconosciuto (bug)."
 
-#: src/feedlist_formaction.cpp:61 src/itemlist_formaction.cpp:24
-#, fuzzy
+#: src/feedlist_formaction.cpp:62 src/itemlist_formaction.cpp:24
 msgid "Error: couldn't parse filter command!"
-msgstr "Errore: impossibile salvare l'articolo in %s"
+msgstr "Errore: non posso parsare il comando di filtro!"
 
-#: src/feedlist_formaction.cpp:80 src/feedlist_formaction.cpp:94
-#: src/feedlist_formaction.cpp:114
+#: src/feedlist_formaction.cpp:81 src/feedlist_formaction.cpp:95
+#: src/feedlist_formaction.cpp:115
 msgid "No feed selected!"
 msgstr "Nessun feed selezionato!"
 
-#: src/feedlist_formaction.cpp:106 src/itemlist_formaction.cpp:114
+#: src/feedlist_formaction.cpp:107 src/itemlist_formaction.cpp:114
 msgid "Marking feed read..."
 msgstr "Marcamento del feed come letto..."
 
-#: src/feedlist_formaction.cpp:133
+#: src/feedlist_formaction.cpp:134
 msgid "No feeds with unread items."
 msgstr "Nessun feed con elementi non letti"
 
-#: src/feedlist_formaction.cpp:138
+#: src/feedlist_formaction.cpp:139
 msgid "Marking all feeds read..."
 msgstr "Marcamento di tutti i feed come letti..."
 
-#: src/feedlist_formaction.cpp:157
+#: src/feedlist_formaction.cpp:158
 msgid "No tags defined."
 msgstr "Nessun tag definito."
 
-#: src/feedlist_formaction.cpp:170 src/itemlist_formaction.cpp:138
-#, fuzzy
+#: src/feedlist_formaction.cpp:171 src/itemlist_formaction.cpp:138
 msgid "Filter: "
-msgstr "File: "
+msgstr "Filtri:"
 
-#: src/feedlist_formaction.cpp:177
+#: src/feedlist_formaction.cpp:178
 msgid "Do you really want to quit (y:Yes n:No)? "
+msgstr "Vuoi veramente uscire (y:Yes n:No)?"
+
+#: src/feedlist_formaction.cpp:178 src/filebrowser_formaction.cpp:86
+msgid "yn"
 msgstr ""
 
-#: src/feedlist_formaction.cpp:255
+#: src/feedlist_formaction.cpp:178
+msgid "y"
+msgstr ""
+
+#: src/feedlist_formaction.cpp:256
 #, c-format
 msgid "%s %s - Your feeds (%u unread, %u total) - tag `%s'"
 msgstr "%s %s - Tuoi feed (%u non letti, %u totale) - tag `%s'"
 
-#: src/feedlist_formaction.cpp:257
+#: src/feedlist_formaction.cpp:258
 #, c-format
 msgid "%s %s - Your feeds (%u unread, %u total)"
 msgstr "%s %s - Tuoi feed (%u non letti, %u totale) "
 
-#: src/feedlist_formaction.cpp:269 src/help_formaction.cpp:70
+#: src/feedlist_formaction.cpp:270 src/help_formaction.cpp:70
 #: src/itemlist_formaction.cpp:262 src/itemview_formaction.cpp:208
 #: src/pb_view.cpp:258 src/pb_view.cpp:267 src/search_formaction.cpp:135
 #: src/urlview_formaction.cpp:71
 msgid "Quit"
 msgstr "Esci"
 
-#: src/feedlist_formaction.cpp:270 src/itemlist_formaction.cpp:263
+#: src/feedlist_formaction.cpp:271 src/itemlist_formaction.cpp:263
 #: src/itemview_formaction.cpp:209
 msgid "Open"
 msgstr "Apri"
 
-#: src/feedlist_formaction.cpp:271 src/itemlist_formaction.cpp:266
+#: src/feedlist_formaction.cpp:272 src/itemlist_formaction.cpp:266
 #: src/itemview_formaction.cpp:211
 msgid "Next Unread"
 msgstr "Prossimo Non letto"
 
-#: src/feedlist_formaction.cpp:272 src/itemlist_formaction.cpp:265
+#: src/feedlist_formaction.cpp:273 src/itemlist_formaction.cpp:265
 msgid "Reload"
 msgstr "Ricarica"
 
-#: src/feedlist_formaction.cpp:273
+#: src/feedlist_formaction.cpp:274
 msgid "Reload All"
 msgstr "Ricarica tutti"
 
-#: src/feedlist_formaction.cpp:274
+#: src/feedlist_formaction.cpp:275
 msgid "Mark Read"
 msgstr "Marca come Letto"
 
-#: src/feedlist_formaction.cpp:275
+#: src/feedlist_formaction.cpp:276
 msgid "Catchup All"
 msgstr "Tiro su"
 
-#: src/feedlist_formaction.cpp:276 src/itemlist_formaction.cpp:268
+#: src/feedlist_formaction.cpp:277 src/itemlist_formaction.cpp:268
 msgid "Search"
 msgstr "Cerca"
 
-#: src/feedlist_formaction.cpp:277 src/itemlist_formaction.cpp:269
+#: src/feedlist_formaction.cpp:278 src/itemlist_formaction.cpp:269
 #: src/itemview_formaction.cpp:214 src/pb_view.cpp:200 src/pb_view.cpp:274
 #: src/search_formaction.cpp:138
 msgid "Help"
 msgstr "Aiuto"
 
-#: src/feedlist_formaction.cpp:333 src/itemlist_formaction.cpp:281
+#: src/feedlist_formaction.cpp:335 src/itemlist_formaction.cpp:281
 msgid "Position not visible!"
-msgstr ""
+msgstr "Posizione non visibile!"
 
-#: src/feedlist_formaction.cpp:340 src/itemlist_formaction.cpp:288
+#: src/feedlist_formaction.cpp:342 src/itemlist_formaction.cpp:288
 msgid "Invalid position!"
-msgstr ""
+msgstr "Posizione invalida!"
 
 #: src/filebrowser_formaction.cpp:42 src/filebrowser_formaction.cpp:156
 #, c-format
@@ -304,6 +311,10 @@ msgstr "%s %s - Salva File - %s"
 #: src/filebrowser_formaction.cpp:84
 #, c-format
 msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
+msgstr "Veramente vuoi sovrascrivere `%s' (y:Yes n:No)? "
+
+#: src/filebrowser_formaction.cpp:86
+msgid "n"
 msgstr ""
 
 #: src/filebrowser_formaction.cpp:137
@@ -322,12 +333,12 @@ msgstr "Salva"
 
 #: src/formaction.cpp:70 src/formaction.cpp:77
 msgid "usage: set <variable>[=<value>]"
-msgstr ""
+msgstr "usi: imposta <variabile>[=<valore>]"
 
 #: src/help_formaction.cpp:30
 #, c-format
 msgid "%s %s - Help"
-msgstr ""
+msgstr "%s %s - Aiuto"
 
 #: src/htmlrenderer.cpp:112
 msgid "embedded flash:"
@@ -442,7 +453,7 @@ msgstr "Avvio browser..."
 
 #: src/itemview_formaction.cpp:177
 msgid "URL list empty."
-msgstr ""
+msgstr "Lista di URL vuota."
 
 #: src/itemview_formaction.cpp:212 src/urlview_formaction.cpp:72
 msgid "Open in Browser"
@@ -555,28 +566,27 @@ msgstr "Avvia player con lo scaricamento selezionato"
 
 #: src/keymap.cpp:42
 msgid "Increase the number of concurrent downloads"
-msgstr ""
+msgstr "Incrementa il numero di download concorrenti"
 
 #: src/keymap.cpp:43
 msgid "Decrease the number of concurrent downloads"
-msgstr ""
+msgstr "Diminuisci il numero di download concorrenti"
 
 #: src/keymap.cpp:44
 msgid "Redraw screen"
-msgstr ""
+msgstr "Ridisegna lo schermo"
 
 #: src/keymap.cpp:45
 msgid "Open the commandline"
-msgstr ""
+msgstr "Apri la linea di comando"
 
 #: src/keymap.cpp:46
 msgid "Set a filter"
-msgstr ""
+msgstr "Imposta un filtro"
 
 #: src/keymap.cpp:47
-#, fuzzy
 msgid "Clear currently set filter"
-msgstr "Pulisci il tag corrente"
+msgstr "Pulisci il filtro corrente"
 
 #: src/pb_controller.cpp:161
 msgid "Cleaning up queue..."
@@ -644,7 +654,7 @@ msgstr "Avvia"
 #: src/rss.cpp:66
 #, c-format
 msgid "Error: unsupported URL: %s"
-msgstr ""
+msgstr "Errore: URL non supportato: %s"
 
 #: src/search_formaction.cpp:27
 #, c-format
@@ -659,6 +669,8 @@ msgstr "Nessun risultato."
 msgid ""
 "Weird. I just found an item that belongs to a nonexistent feed. That's a bug."
 msgstr ""
+"Strano. Ho appena trovato un elemento che non e' legato a nessun feed. "
+"Questo e' un bug."
 
 #: src/search_formaction.cpp:124
 #, c-format
@@ -678,7 +690,7 @@ msgid "New Search"
 msgstr "Nuova Ricerca"
 
 #: src/selecttag_formaction.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s - Select Tag"
 msgstr "%s %s - Seleziona Tag"
 
@@ -693,7 +705,7 @@ msgstr "Nessun collegamento selezionato!"
 #: src/urlview_formaction.cpp:63
 #, c-format
 msgid "%s %s - URLs"
-msgstr ""
+msgstr "%s %s - URL"
 
 #: src/view.cpp:282
 msgid "Error: feed contains no items!"

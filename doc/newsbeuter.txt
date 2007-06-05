@@ -177,10 +177,11 @@ clear-tag:^t:Clear current tag.
 enqueue:e:Add the podcast download URL of the current article (if any is found) to the podcast download queue (see below for more information on podcast support).
 redraw:^l:Redraw the screen.
 help:?:Runs the help screen.
+up:UP:Goes up one item in the list.
+down:DOWN:Goes down one item in the list.
+pageup:PPAGE:Goes up one page in the list.
+pagedown:NPAGE:Goes down one page in the list.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-TODO: document "up", "down", "pageup" etc. keys.
-
 
 Keys, as used in the bind-key configuration command, use a special syntax.
 Lowercase keys, uppercase keys and special characters are written literally.
@@ -188,7 +189,18 @@ The Enter key is written as "ENTER", while the Esc key is written as "ESC". The
 function keys F1 to F12 are written as "F1" to "F12". The Space key is written
 as "SPACE". Key combinations with the Ctrl key, such as Ctrl-R, are written as
 ^R. Please be aware that all Ctrl-related key combinations need to be written
-in uppercase.
+in uppercase. The following identifiers for keys are supported:
+
+- ENTER (Enter key)
+- BACKSPACE (backspace key)
+- LEFT (left cursor)
+- RIGHT (right cursor)
+- UP (up cursor)
+- PPAGE (page up cursor)
+- NPAGE (page down cursor)
+- DOWN (down cursor)
+- ESC (Esc key)
+
 
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~

@@ -83,7 +83,7 @@ void filebrowser_formaction::process_operation(operation op) {
 							char buf[2048];
 							snprintf(buf,sizeof(buf), _("Do you really want to overwrite `%s' (y:Yes n:No)? "), fn.c_str());
 							f->set_focus("files");
-							if (v->confirm(buf, "yn") == 'n') {
+							if (v->confirm(buf, _("yn")) == *_("n")) {
 								do_pop = false;
 							}
 							f->set_focus("filenametext");

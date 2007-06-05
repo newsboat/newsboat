@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-05 10:19+0200\n"
+"POT-Creation-Date: 2007-06-05 13:44+0200\n"
 "PO-Revision-Date: 2007-05-14 18:38+0200\n"
 "Last-Translator: Nicolas Martyanoff <khaelin@gmail.com>\n"
 "Language-Team: Nicolas Martyanoff <khaelin@gmail.com>\n"
@@ -193,99 +193,107 @@ msgstr "incomplet"
 msgid "unknown (bug)."
 msgstr "inconnu (bug)."
 
-#: src/feedlist_formaction.cpp:61 src/itemlist_formaction.cpp:24
+#: src/feedlist_formaction.cpp:62 src/itemlist_formaction.cpp:24
 #, fuzzy
 msgid "Error: couldn't parse filter command!"
 msgstr "Erreur: impossible d'enregistrer l'article dans %s"
 
-#: src/feedlist_formaction.cpp:80 src/feedlist_formaction.cpp:94
-#: src/feedlist_formaction.cpp:114
+#: src/feedlist_formaction.cpp:81 src/feedlist_formaction.cpp:95
+#: src/feedlist_formaction.cpp:115
 msgid "No feed selected!"
 msgstr "Aucun flux sélectionné !"
 
-#: src/feedlist_formaction.cpp:106 src/itemlist_formaction.cpp:114
+#: src/feedlist_formaction.cpp:107 src/itemlist_formaction.cpp:114
 msgid "Marking feed read..."
 msgstr "Noter le flux lu..."
 
-#: src/feedlist_formaction.cpp:133
+#: src/feedlist_formaction.cpp:134
 msgid "No feeds with unread items."
 msgstr "Aucun flux avec des éléments non lus"
 
-#: src/feedlist_formaction.cpp:138
+#: src/feedlist_formaction.cpp:139
 msgid "Marking all feeds read..."
 msgstr "Noter tous les flux lus..."
 
-#: src/feedlist_formaction.cpp:157
+#: src/feedlist_formaction.cpp:158
 msgid "No tags defined."
 msgstr "Aucun tag définis."
 
-#: src/feedlist_formaction.cpp:170 src/itemlist_formaction.cpp:138
+#: src/feedlist_formaction.cpp:171 src/itemlist_formaction.cpp:138
 #, fuzzy
 msgid "Filter: "
 msgstr "Fichier: "
 
-#: src/feedlist_formaction.cpp:177
+#: src/feedlist_formaction.cpp:178
 msgid "Do you really want to quit (y:Yes n:No)? "
 msgstr ""
 
-#: src/feedlist_formaction.cpp:255
+#: src/feedlist_formaction.cpp:178 src/filebrowser_formaction.cpp:86
+msgid "yn"
+msgstr ""
+
+#: src/feedlist_formaction.cpp:178
+msgid "y"
+msgstr ""
+
+#: src/feedlist_formaction.cpp:256
 #, c-format
 msgid "%s %s - Your feeds (%u unread, %u total) - tag `%s'"
 msgstr "%s %s - Vos flux (%u non lus, %u total) - tag `%s'"
 
-#: src/feedlist_formaction.cpp:257
+#: src/feedlist_formaction.cpp:258
 #, c-format
 msgid "%s %s - Your feeds (%u unread, %u total)"
 msgstr "%s %s - Vos flux (%u non lus, %u total) "
 
-#: src/feedlist_formaction.cpp:269 src/help_formaction.cpp:70
+#: src/feedlist_formaction.cpp:270 src/help_formaction.cpp:70
 #: src/itemlist_formaction.cpp:262 src/itemview_formaction.cpp:208
 #: src/pb_view.cpp:258 src/pb_view.cpp:267 src/search_formaction.cpp:135
 #: src/urlview_formaction.cpp:71
 msgid "Quit"
 msgstr "Quitter"
 
-#: src/feedlist_formaction.cpp:270 src/itemlist_formaction.cpp:263
+#: src/feedlist_formaction.cpp:271 src/itemlist_formaction.cpp:263
 #: src/itemview_formaction.cpp:209
 msgid "Open"
 msgstr "Ouvrir"
 
-#: src/feedlist_formaction.cpp:271 src/itemlist_formaction.cpp:266
+#: src/feedlist_formaction.cpp:272 src/itemlist_formaction.cpp:266
 #: src/itemview_formaction.cpp:211
 msgid "Next Unread"
 msgstr "Prochain non-lu"
 
-#: src/feedlist_formaction.cpp:272 src/itemlist_formaction.cpp:265
+#: src/feedlist_formaction.cpp:273 src/itemlist_formaction.cpp:265
 msgid "Reload"
 msgstr "Recharger"
 
-#: src/feedlist_formaction.cpp:273
+#: src/feedlist_formaction.cpp:274
 msgid "Reload All"
 msgstr "Recharger Tous"
 
-#: src/feedlist_formaction.cpp:274
+#: src/feedlist_formaction.cpp:275
 msgid "Mark Read"
 msgstr "Notez Lu"
 
-#: src/feedlist_formaction.cpp:275
+#: src/feedlist_formaction.cpp:276
 msgid "Catchup All"
 msgstr "Notez tous les messages comme lus"
 
-#: src/feedlist_formaction.cpp:276 src/itemlist_formaction.cpp:268
+#: src/feedlist_formaction.cpp:277 src/itemlist_formaction.cpp:268
 msgid "Search"
 msgstr "Rechercher"
 
-#: src/feedlist_formaction.cpp:277 src/itemlist_formaction.cpp:269
+#: src/feedlist_formaction.cpp:278 src/itemlist_formaction.cpp:269
 #: src/itemview_formaction.cpp:214 src/pb_view.cpp:200 src/pb_view.cpp:274
 #: src/search_formaction.cpp:138
 msgid "Help"
 msgstr "Aide"
 
-#: src/feedlist_formaction.cpp:333 src/itemlist_formaction.cpp:281
+#: src/feedlist_formaction.cpp:335 src/itemlist_formaction.cpp:281
 msgid "Position not visible!"
 msgstr ""
 
-#: src/feedlist_formaction.cpp:340 src/itemlist_formaction.cpp:288
+#: src/feedlist_formaction.cpp:342 src/itemlist_formaction.cpp:288
 msgid "Invalid position!"
 msgstr ""
 
@@ -302,6 +310,10 @@ msgstr "%s %s - Enregistrer Fichier - %s"
 #: src/filebrowser_formaction.cpp:84
 #, c-format
 msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
+msgstr ""
+
+#: src/filebrowser_formaction.cpp:86
+msgid "n"
 msgstr ""
 
 #: src/filebrowser_formaction.cpp:137
