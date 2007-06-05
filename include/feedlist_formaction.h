@@ -17,7 +17,7 @@ class feedlist_formaction : public formaction {
 		virtual keymap_hint_entry * get_keymap_hint();
 		rss_feed * get_feed();
 
-		bool jump_to_next_unread_feed();
+		bool jump_to_next_unread_feed(unsigned int& feedpos);
 
 		virtual void handle_cmdline(const std::string& cmd);
 
