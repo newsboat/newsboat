@@ -151,10 +151,11 @@ namespace newsbeuter {
 
 	class rss_ignores : public config_action_handler {
 		public:
+			virtual ~rss_ignores();
 			virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
 			bool matches(rss_item* item);
 		private:
-			std::vector<std::pair<std::string, matcher> > ignores;
+			std::vector<std::pair<std::string, matcher *> > ignores;
 	};
 
 }

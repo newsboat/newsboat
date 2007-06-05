@@ -481,7 +481,7 @@ action_handler_status rss_ignores::handle_action(const std::string& action, cons
 			std::string ignore_expr = params[1];
 			matcher m;
 			if (m.parse(ignore_expr)) {
-				ignores.push_back(std::pair<std::string,matcher>(ignore_rssurl, matcher(ignore_expr)));
+				ignores.push_back(std::pair<std::string,matcher *>(ignore_rssurl, new matcher(ignore_expr)));
 				return AHS_OK;
 			} else {
 				return AHS_INVALID_PARAMS;
@@ -493,11 +493,17 @@ action_handler_status rss_ignores::handle_action(const std::string& action, cons
 	return AHS_INVALID_COMMAND;
 }
 
+rss_ignores::~rss_ignores() {
+	for (std::vector<std::pair<std::string, matcher *> >::iterator it=ignores.begin();it!=ignores.end();++it) {
+		delete it->second;
+	}
+}
+
 bool rss_ignores::matches(rss_item* item) {
-	for (std::vector<std::pair<std::string, matcher> >::iterator it=ignores.begin();it!=ignores.end();++it) {
+	for (std::vector<std::pair<std::string, matcher *> >::iterator it=ignores.begin();it!=ignores.end();++it) {
 		GetLogger().log(LOG_DEBUG, "rss_ignores::matches: it->first = `%s' item->feedurl = `%s'", it->first.c_str(), item->feedurl().c_str());
 		if (it->first == "*" || item->feedurl() == it->first) {
-			if (it->second.matches(item)) {
+			if (it->second->matches(item)) {
 				GetLogger().log(LOG_DEBUG, "rss_ignores::matches: found match");
 				return true;
 			}
