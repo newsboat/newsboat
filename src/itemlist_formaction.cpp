@@ -35,9 +35,9 @@ void itemlist_formaction::process_operation(operation op) {
 				GetLogger().log(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0) {
 					std::istringstream posname(itemposname);
-					unsigned int pos = 0;
-					posname >> pos;
-					v->push_itemview(feed, visible_items[pos].first->guid());
+					unsigned int itempos = 0;
+					posname >> itempos;
+					v->push_itemview(feed, visible_items[itempos].first->guid());
 					do_redraw = true;
 				} else {
 					v->show_error(_("No item selected!")); // should not happen
@@ -49,10 +49,10 @@ void itemlist_formaction::process_operation(operation op) {
 				GetLogger().log(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0) {
 					std::istringstream posname(itemposname);
-					unsigned int pos = 0;
-					posname >> pos;
-					if (pos < visible_items.size()) {
-						v->open_in_browser(visible_items[pos].first->link());
+					unsigned int itempos = 0;
+					posname >> itempos;
+					if (itempos < visible_items.size()) {
+						v->open_in_browser(visible_items[itempos].first->link());
 						do_redraw = true;
 					}
 				} else {
@@ -67,15 +67,15 @@ void itemlist_formaction::process_operation(operation op) {
 				GetLogger().log(LOG_INFO, "itemlist_formaction: saving item at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0) {
 					std::istringstream posname(itemposname);
-					unsigned int pos = 0;
-					posname >> pos;
+					unsigned int itempos = 0;
+					posname >> itempos;
 					
-					std::string filename = v->run_filebrowser(FBT_SAVE,v->get_filename_suggestion(visible_items[pos].first->title()));
+					std::string filename = v->run_filebrowser(FBT_SAVE,v->get_filename_suggestion(visible_items[itempos].first->title()));
 					if (filename == "") {
 						v->show_error(_("Aborted saving."));
 					} else {
 						try {
-							v->write_item(*visible_items[pos].first, filename);
+							v->write_item(*visible_items[itempos].first, filename);
 							snprintf(buf, sizeof(buf), _("Saved article to %s"), filename.c_str());
 							v->show_error(buf);
 						
@@ -124,10 +124,10 @@ void itemlist_formaction::process_operation(operation op) {
 				GetLogger().log(LOG_INFO, "itemlist_formaction: toggling item read at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0) {
 					std::istringstream posname(itemposname);
-					unsigned int pos = 0;
-					posname >> pos;
+					unsigned int itempos = 0;
+					posname >> itempos;
 					v->set_status(_("Toggling read flag for article..."));
-					visible_items[pos].first->set_unread(!visible_items[pos].first->unread());
+					visible_items[itempos].first->set_unread(!visible_items[itempos].first->unread());
 					v->set_status("");
 					do_redraw = true;
 				}
@@ -227,10 +227,10 @@ void itemlist_formaction::set_head(const std::string& s, unsigned int unread, un
 }
 
 bool itemlist_formaction::jump_to_next_unread_item(bool start_with_first) {
-	unsigned int pos;
+	unsigned int itempos;
 	std::istringstream is(f->get("itempos"));
-	is >> pos;
-	for (unsigned int i=(start_with_first?pos:(pos+1));i<visible_items.size();++i) {
+	is >> itempos;
+	for (unsigned int i=(start_with_first?itempos:(itempos+1));i<visible_items.size();++i) {
 		GetLogger().log(LOG_DEBUG, "itemlist_formaction::jump_to_next_unread_item: visible_items[%u] unread = %s", i, visible_items[i].first->unread() ? "true" : "false");
 		if (visible_items[i].first->unread()) {
 			std::ostringstream os;
@@ -239,7 +239,7 @@ bool itemlist_formaction::jump_to_next_unread_item(bool start_with_first) {
 			return true;
 		}
 	}
-	for (unsigned int i=0;i<=pos;++i) {
+	for (unsigned int i=0;i<=itempos;++i) {
 		if (visible_items[i].first->unread()) {
 			std::ostringstream os;
 			os << i;
@@ -251,10 +251,10 @@ bool itemlist_formaction::jump_to_next_unread_item(bool start_with_first) {
 }
 
 std::string itemlist_formaction::get_guid() {
-	unsigned int pos;
+	unsigned int itempos;
 	std::istringstream is(f->get("itempos"));
-	is >> pos;
-	return visible_items[pos].first->guid();
+	is >> itempos;
+	return visible_items[itempos].first->guid();
 }
 
 keymap_hint_entry * itemlist_formaction::get_keymap_hint() {
