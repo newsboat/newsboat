@@ -12,8 +12,8 @@ class itemlist_formaction : public formaction {
 		virtual void prepare();
 		virtual void init();
 
-		inline void set_feed(rss_feed * f) { 
-			feed = f; 
+		inline void set_feed(rss_feed * fd) { 
+			feed = fd; 
 			update_visible_items = true; 
 			do_update_visible_items();
 			apply_filter = false;

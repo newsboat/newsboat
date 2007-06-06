@@ -66,9 +66,9 @@ std::vector<std::string>& urlreader::get_tags(const std::string& url) {
 }
 
 std::vector<std::string> urlreader::get_alltags() {
-	std::vector<std::string> tags;
+	std::vector<std::string> tmptags;
 	for (std::set<std::string>::iterator it=alltags.begin();it!=alltags.end();++it) {
-		tags.push_back(*it);
+		tmptags.push_back(*it);
 	}
-	return tags;
+	return tmptags;
 }

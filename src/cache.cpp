@@ -407,7 +407,7 @@ void cache::delete_item(const rss_item& item) {
 
 void cache::do_vacuum() {
 	mtx->lock();
-	char * vacuum_query = "VACUUM;";
+	const char * vacuum_query = "VACUUM;";
 	int rc = sqlite3_exec(db,vacuum_query,NULL,NULL,NULL);
 	if (rc != SQLITE_OK) {
 		GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", vacuum_query, rc);

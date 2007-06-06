@@ -92,10 +92,10 @@ std::string queueloader::get_filename(const std::string& str) {
 	snprintf(buf, sizeof(buf), "%s", str.c_str());
 	char * base = basename(buf);
 	if (!base || strlen(base) == 0) {
-		char buf[128];
+		char lbuf[128];
 		time_t t = time(NULL);
-		strftime(buf, sizeof(buf), "%Y-%b-%d-%H%M%S.unknown", localtime(&t));
-		fn.append(buf);
+		strftime(lbuf, sizeof(lbuf), "%Y-%b-%d-%H%M%S.unknown", localtime(&t));
+		fn.append(lbuf);
 	} else {
 		fn.append(base);
 	}

@@ -301,7 +301,7 @@ std::string xmlpullparser::decode_entities(const std::string& s) {
 }
 
 static struct {
-	char * entity;
+	const char * entity;
 	unsigned int value;
 } entity_table[] = {
 	// this table was created with some vim regex magic from the this list: http://www.ramsch.org/martin/uni/fmi-hp/iso8859-1.html

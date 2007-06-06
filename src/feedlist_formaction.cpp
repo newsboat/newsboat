@@ -52,7 +52,6 @@ void feedlist_formaction::prepare() {
 }
 
 void feedlist_formaction::process_operation(operation op) {
-	unsigned int feedpos;
 	switch (op) {
 		case OP_INT_END_SETFILTER: {
 				std::string filtertext = f->get("filtertext");
@@ -128,10 +127,12 @@ void feedlist_formaction::process_operation(operation op) {
 			}
 			do_redraw = true;
 			break;
-		case OP_NEXTUNREAD:
-			GetLogger().log(LOG_INFO, "feedlist_formaction: jumping to next unred feed");
-			if (!jump_to_next_unread_feed(feedpos)) {
-				v->show_error(_("No feeds with unread items."));
+		case OP_NEXTUNREAD: {
+				unsigned int feedpos;
+				GetLogger().log(LOG_INFO, "feedlist_formaction: jumping to next unred feed");
+				if (!jump_to_next_unread_feed(feedpos)) {
+					v->show_error(_("No feeds with unread items."));
+				}
 			}
 			break;
 		case OP_MARKALLFEEDSREAD:
@@ -215,8 +216,8 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 		}
 
 		// TODO: refactor
-		char buf[20];
-		char buf2[20];
+		char sbuf[20];
+		char sbuf2[20];
 		unsigned int unread_count = 0;
 		if (it->items().size() > 0) {
 			unread_count = it->unread_item_count();
@@ -228,9 +229,9 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 		if ((tag == "" || it->matches_tag(tag)) && (!apply_filter || m.matches(&(*it)))) {
 			visible_feeds.push_back(std::pair<rss_feed *, unsigned int>(&(*it),i));
 
-			snprintf(buf,sizeof(buf),"(%u/%u) ",unread_count,static_cast<unsigned int>(it->items().size()));
-			snprintf(buf2,sizeof(buf2),"%4u %c %11s",feedlist_number, unread_count > 0 ? 'N' : ' ',buf);
-			std::string newtitle(buf2);
+			snprintf(sbuf,sizeof(buf),"(%u/%u) ",unread_count,static_cast<unsigned int>(it->items().size()));
+			snprintf(sbuf2,sizeof(sbuf2),"%4u %c %11s",feedlist_number, unread_count > 0 ? 'N' : ' ',sbuf);
+			std::string newtitle(sbuf2);
 			newtitle.append(title);
 			title = newtitle;
 

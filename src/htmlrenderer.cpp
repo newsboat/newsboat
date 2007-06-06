@@ -242,23 +242,23 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 								prepare_newline(curline, indent_level);
 							} else {
 								GetLogger().log(LOG_DEBUG, "htmlrenderer::render: tokenizing `%s'", it->c_str());
-								std::vector<std::string> words = utils::tokenize_spaced(*it);
+								std::vector<std::string> words2 = utils::tokenize_spaced(*it);
 								unsigned int i=0;
 								bool new_line = false;
-								for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it,++i) {
-									GetLogger().log(LOG_DEBUG, "htmlrenderer::render: token[%u] = `%s'", i, it->c_str());
-									if ((curline.length() + it->length()) >= w) {
+								for (std::vector<std::string>::iterator it2=words2.begin();it2!=words2.end();++it2,++i) {
+									GetLogger().log(LOG_DEBUG, "htmlrenderer::render: token[%u] = `%s'", i, it2->c_str());
+									if ((curline.length() + it2->length()) >= w) {
 										if (line_is_nonempty(curline))
 											lines.push_back(curline);
 										prepare_newline(curline, indent_level);
 										new_line = true;
 									}
 									if (new_line) {
-										if (*it != " ")
-											curline.append(*it);
+										if (*it2 != " ")
+											curline.append(*it2);
 										new_line = false;
 									} else {
-										curline.append(*it);
+										curline.append(*it2);
 									}
 								}
 							}

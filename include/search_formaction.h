@@ -12,7 +12,7 @@ class search_formaction : public formaction {
 		virtual void prepare();
 		virtual void init();
 		virtual keymap_hint_entry * get_keymap_hint();
-		inline void set_feedurl(const std::string& f) { feedurl = f; }
+		inline void set_feedurl(const std::string& fu) { feedurl = fu; }
 	private:
 		virtual void process_operation(operation op);
 

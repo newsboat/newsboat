@@ -25,7 +25,7 @@ action_handler_status configparser::handle_action(const std::string& action, con
 			return AHS_TOO_FEW_PARAMS;
 		}
 
-		char * homedir;
+		const char * homedir;
 		std::string filepath;
 
 		if (!(homedir = ::getenv("HOME"))) {

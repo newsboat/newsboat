@@ -353,9 +353,9 @@ std::string utils::run_filter(const std::string& cmd, const std::string& input) 
 				write(ipipe[1], input.c_str(), input.length());
 				close(ipipe[1]);
 				char cbuf[1024];
-				int rc;
-				while ((rc = read(opipe[0], cbuf, sizeof(cbuf))) > 0) {
-					buf.append(cbuf, rc);
+				int rc2;
+				while ((rc2 = read(opipe[0], cbuf, sizeof(cbuf))) > 0) {
+					buf.append(cbuf, rc2);
 				}
 				close(opipe[0]);
 			}

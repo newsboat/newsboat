@@ -99,7 +99,7 @@ action_handler_status configcontainer::handle_action(const std::string& action, 
 			// a path config option is a bit more difficult to handle, because we need to replace 
 			// a possible "~/" at the beginning of the string with the user's home directory.
 
-			char * homedir;
+			const char * homedir;
 			std::string filepath;
 
 			if (!(homedir = ::getenv("HOME"))) {
@@ -132,7 +132,7 @@ action_handler_status configcontainer::handle_action(const std::string& action, 
 }
 
 bool configcontainer::is_bool(const std::string& s) {
-	char * bool_values[] = { "yes", "no", "true", "false", 0 };
+	const char * bool_values[] = { "yes", "no", "true", "false", 0 };
 	for (int i=0; bool_values[i] ; ++i) {
 		if (s == bool_values[i])
 			return true;

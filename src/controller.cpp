@@ -44,7 +44,7 @@ void ignore_signal(int sig) {
 	GetLogger().log(LOG_WARN, "caught signal %d but ignored it", sig);
 }
 
-void omg_a_child_died(int sig) {
+void omg_a_child_died(int /* sig */) {
 	pid_t pid;
 	int stat;
 	while ((pid = waitpid(-1,&stat,WNOHANG)) > 0);

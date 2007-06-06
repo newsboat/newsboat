@@ -80,10 +80,10 @@ void filebrowser_formaction::process_operation(operation op) {
 						std::string fn = f->get("filenametext");
 						struct stat sbuf;
 						if (::stat(fn.c_str(), &sbuf)!=-1 && type == FBT_SAVE) {
-							char buf[2048];
-							snprintf(buf,sizeof(buf), _("Do you really want to overwrite `%s' (y:Yes n:No)? "), fn.c_str());
+							char lbuf[2048];
+							snprintf(lbuf,sizeof(lbuf), _("Do you really want to overwrite `%s' (y:Yes n:No)? "), fn.c_str());
 							f->set_focus("files");
-							if (v->confirm(buf, _("yn")) == *_("n")) {
+							if (v->confirm(lbuf, _("yn")) == *_("n")) {
 								do_pop = false;
 							}
 							f->set_focus("filenametext");
@@ -109,15 +109,15 @@ void filebrowser_formaction::prepare() {
 		std::string code = "{list";
 		::getcwd(cwdtmp,sizeof(cwdtmp));
 		
-		DIR * dir = ::opendir(cwdtmp);
-		if (dir) {
-			struct dirent * de = ::readdir(dir);
+		DIR * dirp = ::opendir(cwdtmp);
+		if (dirp) {
+			struct dirent * de = ::readdir(dirp);
 			while (de) {
 				if (strcmp(de->d_name,".")!=0)
 					code.append(add_file(de->d_name));
-				de = ::readdir(dir);
+				de = ::readdir(dirp);
 			}
-			::closedir(dir);
+			::closedir(dirp);
 		}
 		
 		code.append("}");
@@ -132,7 +132,6 @@ void filebrowser_formaction::prepare() {
 void filebrowser_formaction::init() {
 	char cwdtmp[MAXPATHLEN];
 	::getcwd(cwdtmp,sizeof(cwdtmp));
-	std::string cwd = cwdtmp;
 
 	f->set("fileprompt", _("File: "));
 
@@ -185,19 +184,19 @@ std::string filebrowser_formaction::add_file(std::string filename) {
 	std::string retval;
 	struct stat sb;
 	if (::stat(filename.c_str(),&sb)==0) {
-		char type = '?';
+		char ftype = '?';
 		if (sb.st_mode & S_IFREG)
-			type = '-';
+			ftype = '-';
 		else if (sb.st_mode & S_IFDIR)
-			type = 'd';
+			ftype = 'd';
 		else if (sb.st_mode & S_IFBLK)
-			type = 'b';
+			ftype = 'b';
 		else if (sb.st_mode & S_IFCHR)
-			type = 'c';
+			ftype = 'c';
 		else if (sb.st_mode & S_IFIFO)
-			type = 'p';
+			ftype = 'p';
 		else if (sb.st_mode & S_IFLNK)
-			type = 'l';
+			ftype = 'l';
 			
 		std::string rwxbits = get_rwx(sb.st_mode & 0777);
 		std::string owner = "????????", group = "????????";
@@ -222,7 +221,7 @@ std::string filebrowser_formaction::add_file(std::string filename) {
 		std::string sizestr = os.str();
 		
 		std::string line;
-		line.append(1,type);
+		line.append(1,ftype);
 		line.append(rwxbits);
 		line.append(" ");
 		line.append(owner);
@@ -234,7 +233,7 @@ std::string filebrowser_formaction::add_file(std::string filename) {
 		line.append(filename);
 		
 		retval = "{listitem[";
-		retval.append(1,type);
+		retval.append(1,ftype);
 		retval.append(fancy_quote(filename));
 		retval.append("] text:");
 		retval.append(stfl::quote(line));

@@ -52,8 +52,8 @@ const char * download::status_text() {
 	}
 }
 
-void download::set_url(const std::string& url) {
-	url_ = url;
+void download::set_url(const std::string& u) {
+	url_ = u;
 }
 
 void download::set_progress(double cur, double max) {
@@ -70,8 +70,8 @@ void download::set_status(dlstatus_t dls) {
 	dlstatus = dls;
 }
 
-void download::set_kbps(double kbps) {
-	curkbps = kbps;
+void download::set_kbps(double k) {
+	curkbps = k;
 }
 
 double download::kbps() {
