@@ -2,6 +2,7 @@
 #include <view.h>
 #include <config.h>
 #include <logger.h>
+#include <exceptions.h>
 
 #include <sstream>
 
@@ -112,9 +113,15 @@ void itemlist_formaction::process_operation(operation op) {
 		case OP_MARKFEEDREAD:
 			GetLogger().log(LOG_INFO, "itemlist_formaction: marking feed read");
 			v->set_status(_("Marking feed read..."));
-			v->get_ctrl()->mark_all_read(pos);
-			v->set_status("");
-			do_redraw = true;
+			try {
+				v->get_ctrl()->mark_all_read(pos);
+				do_redraw = true;
+				v->set_status("");
+			} catch (const dbexception& e) {
+				char buf[1024];
+				snprintf(buf, sizeof(buf), _("Error: couldn't mark feed read: %s"), e.what());
+				v->show_error(buf);
+			}
 			break;
 		case OP_SEARCH:
 			v->run_search(feed->rssurl());
@@ -127,8 +134,14 @@ void itemlist_formaction::process_operation(operation op) {
 					unsigned int itempos = 0;
 					posname >> itempos;
 					v->set_status(_("Toggling read flag for article..."));
-					visible_items[itempos].first->set_unread(!visible_items[itempos].first->unread());
-					v->set_status("");
+					try {
+						visible_items[itempos].first->set_unread(!visible_items[itempos].first->unread());
+						v->set_status("");
+					} catch (const dbexception& e) {
+						char buf[1024];
+						snprintf(buf, sizeof(buf), _("Error while toggling read flag: %s"), e.what());
+						v->set_status(buf);
+					}
 					do_redraw = true;
 				}
 			}

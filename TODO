@@ -11,6 +11,7 @@ TODO:
 - add configurable pager
 - update example config
 - properly document changes in key binding stuff
+- make cursor in feedlist and itemlist stable when a filter is applied
 
 
 longteam goals to reach:

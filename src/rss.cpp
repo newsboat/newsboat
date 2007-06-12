@@ -4,6 +4,7 @@
 #include <xmlpullparser.h>
 #include <utils.h>
 #include <logger.h>
+#include <exceptions.h>
 #include <sstream>
 #include <iostream>
 #include <configcontainer.h>
@@ -233,8 +234,15 @@ void rss_item::set_unread_nowrite(bool u) {
 
 void rss_item::set_unread(bool u) { 
 	if (unread_ != u) {
+		bool old_u = unread_;
 		unread_ = u;
-		if (ch) ch->update_rssitem_unread_and_enqueued(*this, feedurl_); 
+		try {
+			if (ch) ch->update_rssitem_unread_and_enqueued(*this, feedurl_); 
+		} catch (const dbexception& e) {
+			// if the update failed, restore the old unread flag and rethrow the exception
+			unread_ = old_u; 
+			throw e;
+		}
 	}
 }
 

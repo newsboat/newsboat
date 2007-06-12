@@ -4,6 +4,7 @@
 #include <cassert>
 #include <logger.h>
 #include <reloadthread.h>
+#include <exceptions.h>
 
 #include <sstream>
 #include <cassert>
@@ -107,9 +108,15 @@ void feedlist_formaction::process_operation(operation op) {
 					std::istringstream posname(feedposname);
 					unsigned int pos = 0;
 					posname >> pos;
-					v->get_ctrl()->mark_all_read(pos);
-					do_redraw = true;
-					v->set_status("");
+					try {
+						v->get_ctrl()->mark_all_read(pos);
+						do_redraw = true;
+						v->set_status("");
+					} catch (const dbexception& e) {
+						char buf[1024];
+						snprintf(buf, sizeof(buf), _("Error: couldn't mark feed read: %s"), e.what());
+						v->show_error(buf);
+					}
 				} else {
 					v->show_error(_("No feed selected!")); // should not happen
 				}

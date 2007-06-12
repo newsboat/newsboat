@@ -2,6 +2,7 @@
 #include <view.h>
 #include <config.h>
 #include <logger.h>
+#include <exceptions.h>
 
 #include <sstream>
 
@@ -124,7 +125,13 @@ void itemview_formaction::prepare() {
 
 void itemview_formaction::process_operation(operation op) {
 	rss_item& item = feed->get_item_by_guid(guid);
-	item.set_unread(false);
+	try {
+		item.set_unread(false);
+	} catch (const dbexception& e) {
+		char buf[1024];
+		snprintf(buf, sizeof(buf), _("Error while marking article as read: %s"), e.what());
+		v->show_error(buf);
+	}
 
 	switch (op) {
 		case OP_OPEN:

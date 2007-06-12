@@ -259,7 +259,13 @@ void controller::run(int argc, char * argv[]) {
 		rss_feed feed(rsscache);
 		feed.set_rssurl(*it);
 		feed.set_tags(urlcfg.get_tags(*it));
-		rsscache->internalize_rssfeed(feed);
+		try {
+			rsscache->internalize_rssfeed(feed);
+		} catch(const dbexception& e) {
+			std::cout << _("Error while loading feeds from database: ") << e.what() << std::endl;
+			utils::remove_fs_lock(lock_file);
+			return;
+		}
 		feeds.push_back(feed);
 	}
 
@@ -291,8 +297,12 @@ void controller::run(int argc, char * argv[]) {
 
 	std::cout << _("Cleaning up cache...");
 	std::cout.flush();
-	rsscache->cleanup_cache(feeds);
-	std::cout << _("done.") << std::endl;
+	try {
+		rsscache->cleanup_cache(feeds);
+		std::cout << _("done.") << std::endl;
+	} catch (const dbexception& e) {
+		std::cout << _("failed: ") << e.what() << std::endl;
+	}
 
 	utils::remove_fs_lock(lock_file);
 }
@@ -302,7 +312,14 @@ void controller::update_feedlist() {
 }
 
 void controller::catchup_all() {
-	rsscache->catchup_all();
+	try {
+		rsscache->catchup_all();
+	} catch (const dbexception& e) {
+		char buf[1024];
+		snprintf(buf, sizeof(buf), _("Error: couldn't mark all feeds read: %s"), e.what());
+		v->show_error(buf);
+		return;
+	}
 	for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it) {
 		if (it->items().size() > 0) {
 			for (std::vector<rss_item>::iterator jt=it->items().begin();jt!=it->items().end();++jt) {
@@ -376,6 +393,10 @@ void controller::reload(unsigned int pos, unsigned int max) {
 			v->set_feedlist(feeds);
 			GetLogger().log(LOG_DEBUG, "controller::reload: after set_feedlist");
 			v->set_status("");
+		} catch (const dbexception& e) {
+			char buf[1024];
+			snprintf(buf, sizeof(buf), _("Error while retrieving %s: %s"), feed.rssurl().c_str(), e.what());
+			v->set_status(buf);
 		} catch (const std::string& errmsg) {
 			char buf[1024];
 			snprintf(buf, sizeof(buf), _("Error while retrieving %s: %s"), feed.rssurl().c_str(), errmsg.c_str());
@@ -478,13 +499,13 @@ void controller::import_opml(const char * filename) {
 
 	ret = nxml_new (&data);
 	if (ret != NXML_OK) {
-		puts (nxml_strerror (ret));
+		puts (nxml_strerror (data, ret));
 		return;
 	}
 
 	ret = nxml_parse_file (data, const_cast<char *>(filename));
 	if (ret != NXML_OK) {
-		puts (nxml_strerror (ret));
+		puts (nxml_strerror (data, ret));
 		return;
 	}
 

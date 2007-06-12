@@ -2,6 +2,7 @@
 #include <view.h>
 #include <config.h>
 #include <logger.h>
+#include <exceptions.h>
 
 #include <sstream>
 
@@ -20,7 +21,14 @@ void search_formaction::process_operation(operation op) {
 				std::string focus = f->get_focus();
 				if (focus == "query") {
 					if (querytext.length() > 0) {
-						items = v->get_ctrl()->search_for_items(querytext, feedurl);
+						try {
+							items = v->get_ctrl()->search_for_items(querytext, feedurl);
+						} catch (const dbexception& e) {
+							char buf[1024];
+							snprintf(buf, sizeof(buf), _("Error while searching for `%s': %s"), querytext.c_str(), e.what());
+							v->show_error(buf);
+							return;
+						}
 						if (items.size() > 0) {
 							char buf[1024];
 							f->set("listpos", "0");
