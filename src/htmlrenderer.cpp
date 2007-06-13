@@ -190,6 +190,17 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					} else {
 						curline.append("  * ");
 					}
+				} else if (xpp.getText() == "dt") {
+					if (line_is_nonempty(curline))
+						lines.push_back(curline);
+					prepare_newline(curline, indent_level);
+				} else if (xpp.getText() == "dd") {
+					indent_level+=4;
+					if (line_is_nonempty(curline))
+						lines.push_back(curline);
+					prepare_newline(curline, indent_level);
+				} else if (xpp.getText() == "dl") {
+					// ignore tag
 				}
 				break;
 			case xmlpullparser::END_TAG:
@@ -214,6 +225,19 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						lines.push_back(curline);
 					lines.push_back("");
 					prepare_newline(curline, indent_level);	
+				} else if (xpp.getText() == "dt") {
+					if (line_is_nonempty(curline))
+						lines.push_back(curline);
+					lines.push_back("");
+					prepare_newline(curline, indent_level);	
+				} else if (xpp.getText() == "dd") {
+					indent_level-=4;
+					if (line_is_nonempty(curline))
+						lines.push_back(curline);
+					lines.push_back("");
+					prepare_newline(curline, indent_level);	
+				} else if (xpp.getText() == "dl") {
+					// ignore tag
 				} else if (xpp.getText() == "li") {
 					indent_level-=2;
 					inside_li = false;
