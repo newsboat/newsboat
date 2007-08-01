@@ -108,7 +108,7 @@ clean-libbeuter:
 	$(RM) $(LIB_OUTPUT) $(LIB_OBJS)
 
 clean-libfilter:
-	$(RM) $(FILTERLIB_OUTPUT) $(FILTERLIB_OBJS) filter/Scanner.cpp filter/Scanner.h filter/Parser.cpp filter/Parser.h
+	$(RM) $(FILTERLIB_OUTPUT) $(FILTERLIB_OBJS) # filter/Scanner.cpp filter/Scanner.h filter/Parser.cpp filter/Parser.h
 
 clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter
 	$(RM) $(STFLHDRS)
