@@ -40,10 +40,16 @@ themselves depend on other libraries. These dependencies are not listed here.
 Please also be aware that you need a recent C++ compiler. Currently, newsbeuter
 has only been tested with GCC.
 
-- STFL: http://www.clifford.at/stfl/[]
+- STFL (version 0.14 or newer): http://www.clifford.at/stfl/[]
 - SQLite 3: http://www.sqlite.org/[]
-- libmRss: http://www2.autistici.org/bakunin/libmrss/[]
-- libnXml: http://www2.autistici.org/bakunin/libnxml/[]
+- libmRss (version 0.18.0 or newer): http://www2.autistici.org/bakunin/libmrss/[]
+- libnXml (version 0.18.0 or newer): http://www2.autistici.org/bakunin/libnxml/[]
+
+If you intend to modify the filter language parser, you will also need Coco/R for C++,
+which you can download from http://www.ssw.uni-linz.ac.at/coco/[]. The Coco/R binary
+must be installed as "coco-cpp" in your PATH. Debian users only need to install
+the package "coco-cpp".
+
 
 Compiling and Installing
 ~~~~~~~~~~~~~~~~~~~~~~~~
