@@ -419,13 +419,13 @@ void controller::import_opml(const char * filename) {
 
 	ret = nxml_new (&data);
 	if (ret != NXML_OK) {
-		puts (nxml_strerror (ret));
+		puts (nxml_strerror (data, ret));
 		return;
 	}
 
 	ret = nxml_parse_file (data, const_cast<char *>(filename));
 	if (ret != NXML_OK) {
-		puts (nxml_strerror (ret));
+		puts (nxml_strerror (data, ret));
 		return;
 	}
 
