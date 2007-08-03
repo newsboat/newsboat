@@ -111,10 +111,14 @@ action_handler_status configcontainer::handle_action(const std::string& action, 
 				}
 			}
 
-			if (strcmp(homedir,"")!=0 && params[0].substr(0,2) == "~/") {
-				filepath.append(homedir);
-				filepath.append(1,'/');
-				filepath.append(params[0].substr(2,params[0].length()-2));
+			if (strcmp(homedir,"")!=0) {
+				if (params[0] == "~") {
+					filepath.append(homedir);
+				} else if (params[0].substr(0,2) == "~/") {
+					filepath.append(homedir);
+					filepath.append(1,'/');
+					filepath.append(params[0].substr(2,params[0].length()-2));
+				}
 			} else {
 				filepath.append(params[0]);
 			}
