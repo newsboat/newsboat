@@ -4,8 +4,6 @@
 #include <stdexcept>
 #include <string>
 
-#include <sqlite3.h>
-
 namespace newsbeuter {
 
 class xmlexception : public std::exception {
@@ -23,18 +21,9 @@ class configexception : public std::exception {
 		virtual ~configexception() throw() { }
 		virtual const char * what() const throw() { return msg.c_str(); }
 	private:
-		std::string msg;
+		std::string msg;	
 };
-
-class dbexception : public std::exception {
-	public:
-		dbexception(sqlite3 * h) : msg(sqlite3_errmsg(h)) { }
-		virtual ~dbexception() throw() { }
-		virtual const char * what() const throw() { return msg.c_str(); }
-	private:
-		std::string msg;
-};
-
+	
 }
 
 #endif /*EXCEPTIONS_H_*/

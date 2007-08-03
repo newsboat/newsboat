@@ -10,7 +10,6 @@
 #include <rss.h>
 #include <logger.h>
 #include <config.h>
-#include <exceptions.h>
 
 using namespace newsbeuter;
 
@@ -171,9 +170,8 @@ void cache::set_pragmas() {
 	
 	if (rc != SQLITE_OK) {
 		GetLogger().log(LOG_CRITICAL,"setting PRAGMA synchronous = OFF failed");
-		throw dbexception(db);
 	}
-	// assert(rc == SQLITE_OK);
+	assert(rc == SQLITE_OK);
 
 	// then we disable case-sensitive matching for the LIKE operator in SQLite, for search operations
 	rc = sqlite3_exec(db, "PRAGMA case_sensitive_like=OFF;", NULL, NULL, NULL);
