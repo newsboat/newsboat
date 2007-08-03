@@ -377,7 +377,7 @@ grouped.
 Examples for simple filter expressions are:
 
 	unread_count > 0
-	feedurl =~ "^https:"
+	rssurl =~ "^https:"
 
 Logically connecting and grouping such expressions looks like in the
 following examples:

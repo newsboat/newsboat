@@ -19,6 +19,7 @@
 #include <logger.h>
 #include <reloadthread.h>
 #include <exception.h>
+#include <exceptions.h>
 #include <keymap.h>
 
 #include <iostream>
@@ -118,9 +119,7 @@ void view::set_bindings() {
 	GetLogger().log(LOG_DEBUG, "view::set_bindings: itemview bind_page_up = %s bind_page_down = %s", itemview->get_form()->get("bind_page_up").c_str(), itemview->get_form()->get("bind_page_down").c_str());
 }
 
-void view::set_status(const char * msg) {
-	mtx->lock();
-	GetLogger().log(LOG_DEBUG, "view::set_status: after mtx->lock; formaction_stack.size = %u", formaction_stack.size());
+void view::set_status_unlocked(const char * msg) {
 	if (formaction_stack.size() > 0 && (*formaction_stack.begin()) != NULL) {
 		stfl::form * form = (*formaction_stack.begin())->get_form();
 		GetLogger().log(LOG_DEBUG, "view::set_status: form = %p", form);
@@ -129,6 +128,12 @@ void view::set_status(const char * msg) {
 		form->run(-1);
 		GetLogger().log(LOG_DEBUG, "view::set_status: after form.run");
 	}
+}
+
+void view::set_status(const char * msg) {
+	mtx->lock();
+	GetLogger().log(LOG_DEBUG, "view::set_status: after mtx->lock; formaction_stack.size = %u", formaction_stack.size());
+	set_status_unlocked(msg);
 	mtx->unlock();
 }
 
@@ -261,7 +266,14 @@ void view::open_in_browser(const std::string& url) {
 
 void view::set_feedlist(std::vector<rss_feed>& feeds) {
 	mtx->lock();
-	feedlist->set_feedlist(feeds);
+	try {
+		feedlist->set_feedlist(feeds);
+	} catch (matcherexception e) {
+		char buf[1024];
+		snprintf(buf,sizeof(buf), _("Error: applying the filter failed: %s"), e.what());
+		set_status_unlocked(buf);
+		GetLogger().log(LOG_DEBUG, "view::set_feedlist: inside catch: %s", buf);
+	}
 	mtx->unlock();
 }
 

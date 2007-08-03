@@ -38,6 +38,7 @@ namespace newsbeuter {
 			void set_config_container(configcontainer * cfgcontainer);
 			void show_error(const char * msg);
 			void set_status(const char * msg);
+			void set_status_unlocked(const char * msg);
 			inline controller * get_ctrl() { return ctrl; }
 			inline configcontainer * get_cfg() { return cfg; }
 			inline keymap * get_keys() { return keys; }

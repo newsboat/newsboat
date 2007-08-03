@@ -1,6 +1,7 @@
 #include <matcher.h>
 #include <logger.h>
 #include <utils.h>
+#include <exceptions.h>
 
 #include <sys/time.h>
 #include <ctime>
@@ -62,16 +63,22 @@ bool matcher::matches_r(expression * e, matchable * item) {
 			case MATCHOP_EQ:
 				if (item->has_attribute(e->name))
 					retval = (item->get_attribute(e->name)==e->literal);
-				else
-					retval = false;
+				else {
+					GetLogger().log(LOG_WARN, "matcher::matches_r: attribute %s not available", e->name.c_str());
+					throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
+				}
 				break;
 			case MATCHOP_NE:
 				if (item->has_attribute(e->name))
 					retval = (item->get_attribute(e->name)!=e->literal);
-				else
-					retval = false;
+				else {
+					GetLogger().log(LOG_WARN, "matcher::matches_r: attribute %s not available", e->name.c_str());
+					throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
+				}
 				break;
 			case MATCHOP_LT: {
+					if (!item->has_attribute(e->name))
+						throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
 					std::istringstream islit(e->literal);
 					std::istringstream isatt(item->get_attribute(e->name));
 					int ilit, iatt;
@@ -81,6 +88,8 @@ bool matcher::matches_r(expression * e, matchable * item) {
 				}
 				break;
 			case MATCHOP_GT: {
+					if (!item->has_attribute(e->name))
+						throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
 					std::istringstream islit(e->literal);
 					std::istringstream isatt(item->get_attribute(e->name));
 					int ilit, iatt;
@@ -90,6 +99,8 @@ bool matcher::matches_r(expression * e, matchable * item) {
 				}
 				break;
 			case MATCHOP_LE: {
+					if (!item->has_attribute(e->name))
+						throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
 					std::istringstream islit(e->literal);
 					std::istringstream isatt(item->get_attribute(e->name));
 					int ilit, iatt;
@@ -99,6 +110,8 @@ bool matcher::matches_r(expression * e, matchable * item) {
 				}
 				break;
 			case MATCHOP_GE: {
+					if (!item->has_attribute(e->name))
+						throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
 					std::istringstream islit(e->literal);
 					std::istringstream isatt(item->get_attribute(e->name));
 					int ilit, iatt;
@@ -108,6 +121,8 @@ bool matcher::matches_r(expression * e, matchable * item) {
 				}
 				break;
 			case MATCHOP_RXEQ: {
+					if (!item->has_attribute(e->name))
+						throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
 					if (!e->regex) {
 						e->regex = new regex_t;
 						regcomp(e->regex, e->literal.c_str(), REG_EXTENDED | REG_ICASE | REG_NOSUB); // TODO: see below
@@ -119,6 +134,8 @@ bool matcher::matches_r(expression * e, matchable * item) {
 				}
 				break;
 			case MATCHOP_RXNE: {
+					if (!item->has_attribute(e->name))
+						throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
 					if (!e->regex) {
 						e->regex = new regex_t;
 						regcomp(e->regex, e->literal.c_str(), REG_EXTENDED | REG_ICASE | REG_NOSUB); // TODO: throw error when compilation fails
@@ -134,6 +151,8 @@ bool matcher::matches_r(expression * e, matchable * item) {
 				}
 				break;
 			case MATCHOP_CONTAINS: {
+					if (!item->has_attribute(e->name))
+						throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
 					std::vector<std::string> elements = utils::tokenize(item->get_attribute(e->name), " ");
 					std::string literal = e->literal;
 					retval = false;
@@ -146,6 +165,8 @@ bool matcher::matches_r(expression * e, matchable * item) {
 				}
 				break;
 			case MATCHOP_CONTAINSNOT: {
+					if (!item->has_attribute(e->name))
+						throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
 					std::vector<std::string> elements = utils::tokenize(item->get_attribute(e->name), " ");
 					std::string literal = e->literal;
 					retval = true;

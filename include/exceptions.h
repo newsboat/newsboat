@@ -35,6 +35,17 @@ class dbexception : public std::exception {
 		std::string msg;
 };
 
+class matcherexception : public std::exception {
+	public:
+		enum errortype_t { ATTRIB_UNAVAIL };
+		matcherexception(errortype_t et, const std::string& info) : type(et), addinfo(info) { }
+		virtual ~matcherexception() throw() { }
+		virtual const char * what() const throw();
+	private:
+		errortype_t type;
+		std::string addinfo;
+};
+
 }
 
 #endif /*EXCEPTIONS_H_*/

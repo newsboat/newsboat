@@ -232,8 +232,9 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 		if (unread_count > 0)
 			++unread_feeds;
 
-
+		GetLogger().log(LOG_DEBUG, "feedlist_formaction::set_feedlist: before big if statement");
 		if ((tag == "" || it->matches_tag(tag)) && (!apply_filter || m.matches(&(*it)))) {
+			GetLogger().log(LOG_DEBUG, "feedlist_formaction::set_feedlist: inside big if statement");
 			visible_feeds.push_back(std::pair<rss_feed *, unsigned int>(&(*it),i));
 
 			snprintf(sbuf,sizeof(buf),"(%u/%u) ",unread_count,static_cast<unsigned int>(it->items().size()));
@@ -254,6 +255,7 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 
 			++feeds_shown;
 		}
+		GetLogger().log(LOG_DEBUG, "feedlist_formaction::set_feedlist: outside big if statement");
 	}
 
 	code.append("}");
