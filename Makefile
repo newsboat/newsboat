@@ -129,6 +129,8 @@ install: install-mo
 	$(INSTALL) doc/$(PODBEUTER).1 $(prefix)/share/man/man1
 	$(MKDIR) $(docdir)
 	$(INSTALL) -m 644 doc/xhtml/* $(docdir) || true
+	$(MKDIR) $(docdir)/examples
+	$(INSTALL) -m 644 doc/example-config $(docdir)/examples/config || true
 
 uninstall:
 	$(RM) $(prefix)/bin/$(NEWSBEUTER)

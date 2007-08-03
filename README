@@ -16,10 +16,10 @@ http://bereshit.synflood.at/svn/noos/trunk/
 Newsbeuter depends on a number of libraries, which need to be installed before
 newsbeuter can be compiled.
 
-libnXml: http://www2.autistici.org/bakunin/libnxml/
-libmRss: http://www2.autistici.org/bakunin/libmrss/
-SQLite: http://www.sqlite.org/
-STFL: http://www.clifford.at/stfl/
+STFL (version 0.14 or newer): http://www.clifford.at/stfl/
+SQLite 3: http://www.sqlite.org/
+libmRss (version 0.18.0 or newer): http://www2.autistici.org/bakunin/libmrss/
+libnXml (version 0.18.0 or newer): http://www2.autistici.org/bakunin/libnxml/
 
 Debian unstable comes with ready-to-use packages for these dependencies.
 

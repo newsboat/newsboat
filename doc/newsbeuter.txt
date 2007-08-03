@@ -40,10 +40,16 @@ themselves depend on other libraries. These dependencies are not listed here.
 Please also be aware that you need a recent C++ compiler. Currently, newsbeuter
 has only been tested with GCC.
 
-- STFL: http://www.clifford.at/stfl/[]
+- STFL (version 0.14 or newer): http://www.clifford.at/stfl/[]
 - SQLite 3: http://www.sqlite.org/[]
-- libmRss: http://www2.autistici.org/bakunin/libmrss/[]
-- libnXml: http://www2.autistici.org/bakunin/libnxml/[]
+- libmRss (version 0.18.0 or newer): http://www2.autistici.org/bakunin/libmrss/[]
+- libnXml (version 0.18.0 or newer): http://www2.autistici.org/bakunin/libnxml/[]
+
+If you intend to modify the filter language parser, you will also need Coco/R for C++,
+which you can download from http://www.ssw.uni-linz.ac.at/coco/[]. The Coco/R binary
+must be installed as "coco-cpp" in your PATH. Debian users only need to install
+the package "coco-cpp".
+
 
 Compiling and Installing
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -134,7 +140,7 @@ cleanup-on-quit|[yes/no]|yes|If yes, then the cache gets locked and superfluous 
 color|<element> <fgcolor> <bgcolor> [<attr> ...]||Set the foreground color, background color and optional attributes for a certain element|color background white black
 confirm-exit|[yes/no]|no|If set to yes, then newsbeuter will ask for confirmation whether the user really wants to quit newsbeuter.|confirm-exit yes
 error-log|<path>|""|If set, then user errors (e.g. errors regarding defunct RSS feeds) will be logged to this file.|error-log "~/.newsbeuter/error.log"
-ignore-article|<feed> <filterexpr>|If a downloaded article from <feed> matches <filterexpr>, then it is ignored and not presented to the user. This command is further explained in the "kill file" section below.|ignore-article "*" "title =~ \"Windows\""
+ignore-article|<feed> <filterexpr>|n/a|If a downloaded article from <feed> matches <filterexpr>, then it is ignored and not presented to the user. This command is further explained in the "kill file" section below.|ignore-article "*" "title =~ \\"Windows\\""
 include|<path>|n/a|With this command, you can include other files to be interpreted as configuration files. This is especially useful to separate your configuration into several files, e.g. key configuration, color configuration, ...|include "~/.newsbeuter/colors"
 max-items|<number>|0|Set the number of articles to maximally keep per feed. If the number is set to 0, then all articles are kept.|max-items 100
 notify-program|<path>|""|If set, then the configured program will be executed if new articles arrived (through a reload). The first parameter of the called program contains the notification message.|notify-program "~/bin/my-notifier"
