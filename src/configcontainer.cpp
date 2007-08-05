@@ -141,6 +141,8 @@ std::string configcontainer::get_configvalue(const std::string& key) {
 				filepath.append(homedir);
 				filepath.append(1,'/');
 				filepath.append(retval.substr(2,retval.length()-2));
+			} else {
+				filepath.append(retval);
 			}
 		} else {
 			filepath.append(retval);
