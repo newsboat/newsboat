@@ -130,7 +130,7 @@ msgstr "Index de flux invalide (bug)"
 #: src/controller.cpp:408
 #, c-format
 msgid "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
-msgstr ""
+msgstr "newsbeuter: rechargement terminé, %u flux non-lus (%u articles non-lus au total)"
 
 #: src/controller.cpp:461
 #, fuzzy, c-format
@@ -154,6 +154,7 @@ msgstr ""
 "-u <urlfile>    lire les URLs de flux RSS depuis <urlfile>\n"
 "-c <cachefile>  utiliser <cachefile> comme un fichier cache\n"
 "-C <configfile> lire la configuration depuis <configfile>\n"
+"-v              vider le cache\n"
 "-h              affiche cette aide\n"
 
 #: src/controller.cpp:503
@@ -226,15 +227,15 @@ msgstr "Fichier: "
 
 #: src/feedlist_formaction.cpp:178
 msgid "Do you really want to quit (y:Yes n:No)? "
-msgstr ""
+msgstr "Voulez vous vraiment quitter (y: Oui n: Non) ?"
 
 #: src/feedlist_formaction.cpp:178 src/filebrowser_formaction.cpp:86
 msgid "yn"
-msgstr ""
+msgstr "on"
 
 #: src/feedlist_formaction.cpp:178
 msgid "y"
-msgstr ""
+msgstr "o"
 
 #: src/feedlist_formaction.cpp:256
 #, c-format
@@ -291,11 +292,11 @@ msgstr "Aide"
 
 #: src/feedlist_formaction.cpp:335 src/itemlist_formaction.cpp:281
 msgid "Position not visible!"
-msgstr ""
+msgstr "Position non visible!"
 
 #: src/feedlist_formaction.cpp:342 src/itemlist_formaction.cpp:288
 msgid "Invalid position!"
-msgstr ""
+msgstr "Position invalide!"
 
 #: src/filebrowser_formaction.cpp:42 src/filebrowser_formaction.cpp:156
 #, c-format
@@ -310,11 +311,11 @@ msgstr "%s %s - Enregistrer Fichier - %s"
 #: src/filebrowser_formaction.cpp:84
 #, c-format
 msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
-msgstr ""
+msgstr "Voulez-vous vraiment écraser `%s' (y:Oui n:No)? "
 
 #: src/filebrowser_formaction.cpp:86
 msgid "n"
-msgstr ""
+msgstr "n"
 
 #: src/filebrowser_formaction.cpp:137
 msgid "File: "
@@ -332,12 +333,12 @@ msgstr "Enregistrer"
 
 #: src/formaction.cpp:70 src/formaction.cpp:77
 msgid "usage: set <variable>[=<value>]"
-msgstr ""
+msgstr "Mode d'emploi: set <variable>[=<value>]"
 
 #: src/help_formaction.cpp:30
 #, c-format
 msgid "%s %s - Help"
-msgstr ""
+msgstr "%s %s - Aide"
 
 #: src/htmlrenderer.cpp:112
 msgid "embedded flash:"
@@ -452,7 +453,7 @@ msgstr "Lancement du navigateur..."
 
 #: src/itemview_formaction.cpp:177
 msgid "URL list empty."
-msgstr ""
+msgstr "List d'URL vide"
 
 #: src/itemview_formaction.cpp:212 src/urlview_formaction.cpp:72
 msgid "Open in Browser"
@@ -565,23 +566,23 @@ msgstr "Démarrer le lecteur avec le fichier téléchargé sélectionné"
 
 #: src/keymap.cpp:42
 msgid "Increase the number of concurrent downloads"
-msgstr ""
+msgstr "Augmenter le nombre de téléchargements en parallèle"
 
 #: src/keymap.cpp:43
 msgid "Decrease the number of concurrent downloads"
-msgstr ""
+msgstr "Diminuer le nombre de téléchargements en parallèle"
 
 #: src/keymap.cpp:44
 msgid "Redraw screen"
-msgstr ""
+msgstr "Rafraîchier l'écran"
 
 #: src/keymap.cpp:45
 msgid "Open the commandline"
-msgstr ""
+msgstr "Ouvrir la ligne de commande"
 
 #: src/keymap.cpp:46
 msgid "Set a filter"
-msgstr ""
+msgstr "Appliquer un filtre"
 
 #: src/keymap.cpp:47
 #, fuzzy
@@ -703,7 +704,7 @@ msgstr "Aucun lien sélectionné !"
 #: src/urlview_formaction.cpp:63
 #, c-format
 msgid "%s %s - URLs"
-msgstr ""
+msgstr "%s %s - URLs"
 
 #: src/view.cpp:282
 msgid "Error: feed contains no items!"
