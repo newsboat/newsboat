@@ -167,6 +167,7 @@ Operation:Default key:Description
 quit:q:Quit the program or return to the previous dialog (depending on the context).
 reload:r:Reload the currently selected feed.
 reload-all:R:Reload all feeds.
+reload-urls:^R:Reload the URLs configuration file.
 mark-feed-read:A:Mark all articles in the currently selected feed read.
 mark-all-feeds-read:C:Mark articles in all feeds read.
 open:ENTER:Open the currently selected feed or article.
