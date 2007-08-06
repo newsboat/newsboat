@@ -16,6 +16,18 @@ std::vector<std::string>& urlreader::get_urls() {
 }
 
 void urlreader::reload() {
+	if (urls.size() > 0) {
+		urls.erase(urls.begin(), urls.end());
+	}
+
+	if (tags.size() > 0) {
+		tags.erase(tags.begin(), tags.end());
+	}
+
+	if (alltags.size() > 0) {
+		alltags.erase(alltags.begin(), alltags.end());
+	}
+
 	std::fstream f;
 	f.open(filename.c_str(),std::fstream::in);
 	if (f.is_open()) {

@@ -33,6 +33,7 @@ static op_desc opdescs[] = {
 	{ OP_SETTAG, "set-tag", "t", _("Select tag"), KM_NEWSBEUTER },
 	{ OP_SEARCH, "open-search", "/", _("Open search dialog"), KM_NEWSBEUTER },
 	{ OP_ENQUEUE, "enqueue", "e", _("Add download to queue"), KM_NEWSBEUTER },
+	{ OP_RELOADURLS, "reload-urls", "^R", _("Reload the list of URLs from the configuration"), KM_NEWSBEUTER },
 	{ OP_PB_DOWNLOAD, "pb-download", "d", _("Download file"), KM_PODBEUTER },
 	{ OP_PB_CANCEL, "pb-cancel", "c", _("Cancel download"), KM_PODBEUTER },
 	{ OP_PB_DELETE, "pb-delete", "D", _("Mark download as deleted"), KM_PODBEUTER },

@@ -1,6 +1,7 @@
 Changes for newsbeuter:
 
 0.6:
+	implemented support for reloading the urls file
 
 0.5 (2007-08-02):
 	improved HTML rendering

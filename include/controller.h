@@ -39,6 +39,8 @@ namespace newsbeuter {
 			void set_itemlist_feed(unsigned int pos);
 			void notify(const std::string& msg);
 
+			void reload_urls_file();
+
 		private:
 			void usage(char * argv0);
 			void import_opml(const char * filename);

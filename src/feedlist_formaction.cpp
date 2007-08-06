@@ -96,6 +96,9 @@ void feedlist_formaction::process_operation(operation op) {
 				}
 			}
 			break;
+		case OP_RELOADURLS:
+			v->get_ctrl()->reload_urls_file();
+			break;
 		case OP_RELOADALL:
 			GetLogger().log(LOG_INFO, "feedlist_formaction: reloading all feeds");
 			v->get_ctrl()->start_reload_all_thread();

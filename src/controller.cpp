@@ -631,3 +631,37 @@ void controller::enqueue_url(const std::string& url) {
 	}
 }
 
+void controller::reload_urls_file() {
+	urlcfg.reload();
+	std::vector<rss_feed> new_feeds;
+
+	for (std::vector<std::string>::const_iterator it=urlcfg.get_urls().begin();it!=urlcfg.get_urls().end();++it) {
+		bool found = false;
+		for (std::vector<rss_feed>::iterator jt=feeds.begin();jt!=feeds.end();++jt) {
+			if (*it == jt->rssurl()) {
+				found = true;
+				new_feeds.push_back(*jt);
+				break;
+			}
+		}
+		if (!found) {
+			rss_feed new_feed(rsscache);
+			new_feed.set_rssurl(*it);
+			new_feed.set_tags(urlcfg.get_tags(*it));
+			try {
+				rsscache->internalize_rssfeed(new_feed);
+			} catch(const dbexception& e) {
+				throw e; // TODO ?
+			}
+			new_feeds.push_back(new_feed);
+		}
+	}
+
+	feeds = new_feeds;
+
+	update_feedlist();
+}
+
+
+
+

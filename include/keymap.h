@@ -43,6 +43,7 @@ namespace newsbeuter {
 						OP_CMDLINE,
 						OP_SETFILTER,
 						OP_CLEARFILTER,
+						OP_RELOADURLS,
 						OP_NB_MAX,
 
 						// podbeuter-specific operations:
