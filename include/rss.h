@@ -43,6 +43,8 @@ namespace newsbeuter {
 				return pubDate_;
 			}
 			void set_pubDate(time_t t);
+
+			bool operator<(const rss_item& item) const { return item.pubDate_ < this->pubDate_; } // new items come first
 			
 			inline const std::string& guid() const { return guid_; }
 			void set_guid(const std::string& g);
@@ -50,6 +52,7 @@ namespace newsbeuter {
 			inline bool unread() const { return unread_; }
 			void set_unread(bool u);
 			void set_unread_nowrite(bool u);
+			void set_unread_nowrite_notify(bool u);
 			
 			inline void set_cache(cache * c) { ch = c; }
 			inline void set_feedurl(const std::string& f) { feedurl_ = f; }
@@ -110,7 +113,7 @@ namespace newsbeuter {
 			rss_item& get_item_by_guid(const std::string& guid);
 			
 			inline const std::string& rssurl() const { return rssurl_; }
-			inline void set_rssurl(const std::string& u) { rssurl_ = u; }
+			void set_rssurl(const std::string& u);
 			
 			unsigned int unread_item_count() const;
 
@@ -121,6 +124,10 @@ namespace newsbeuter {
 			virtual bool has_attribute(const std::string& attribname);
 			virtual std::string get_attribute(const std::string& attribname);
 
+			void update_items(std::vector<rss_feed>& feeds);
+
+			inline void set_query(const std::string& s) { query = s; }
+
 		private:
 			std::string title_;
 			std::string description_;
@@ -129,6 +136,7 @@ namespace newsbeuter {
 			std::string rssurl_;
 			std::vector<rss_item> items_;
 			std::vector<std::string> tags_;
+			std::string query;
 			
 			cache * ch;
 	};

@@ -30,15 +30,17 @@ void itemview_formaction::prepare() {
 		rss_item& item = feed->get_item_by_guid(guid);
 		std::string code = "{list";
 
+		rss_feed * feedptr = item.get_feedptr();
+
 		code.append("{listitem text:");
 		std::ostringstream feedtitle;
 		feedtitle << _("Feed: ");
-		if (feed->title().length() > 0) {
-			feedtitle << feed->title();
-		} else if (feed->link().length() > 0) {
-			feedtitle << feed->link();
-		} else if (feed->rssurl().length() > 0) {
-			feedtitle << feed->rssurl();
+		if (feedptr->title().length() > 0) {
+			feedtitle << feedptr->title();
+		} else if (feedptr->link().length() > 0) {
+			feedtitle << feedptr->link();
+		} else if (feedptr->rssurl().length() > 0) {
+			feedtitle << feedptr->rssurl();
 		}
 		code.append(stfl::quote(feedtitle.str().c_str()));
 		code.append("}");

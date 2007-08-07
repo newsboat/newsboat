@@ -235,6 +235,9 @@ void cache::populate_tables() {
 
 // this function writes an rss_feed including all rss_items to the database
 void cache::externalize_rssfeed(rss_feed& feed) {
+	if (feed.rssurl().substr(0,6) == "query:")
+		return;
+
 	mtx->lock();
 	std::ostringstream query;
 	query << "SELECT count(*) FROM rss_feed WHERE rssurl = '" << feed.rssurl() << "';";

@@ -24,6 +24,7 @@ rss_parser::~rss_parser() { }
 
 rss_feed rss_parser::parse() {
 	rss_feed feed(ch);
+	bool skip_parsing = false;
 
 	feed.set_rssurl(my_uri);
 
@@ -62,140 +63,148 @@ rss_feed rss_parser::parse() {
 		std::string result = utils::run_filter(filter, buf);
 		GetLogger().log(LOG_DEBUG, "rss_parser::parse: output of `%s' is: %s", filter.c_str(), result.c_str());
 		err = mrss_parse_buffer(const_cast<char *>(result.c_str()), result.length(), &mrss);
+	} else if (my_uri.substr(0,6) == "query:") {
+
+		skip_parsing = true;
+
 	} else {
 		char buf[1024];
 		snprintf(buf, sizeof(buf), _("Error: unsupported URL: %s"), my_uri.c_str());
 		throw std::string(buf);
 	}
 
-	if (err != MRSS_OK) {
-		if (err == MRSS_ERR_POSIX) {
-			GetLogger().log(LOG_ERROR,"rss_parser::parse: mrss_parse_url_with_options failed with POSIX error: error = %s",strerror(errno));
-		}
-		GetLogger().log(LOG_ERROR,"rss_parser::parse: mrss_parse_url_with_options failed: err = %s (%d)",mrss_strerror(err), err);
-		GetLogger().log(LOG_USERERROR, "RSS feed `%s' couldn't be parsed: %s (error %d)", my_uri.c_str(), mrss_strerror(err), err);
-		if (mrss) {
-			mrss_free(mrss);
-		}
-		throw std::string(mrss_strerror(err));
-	}
+	if (!skip_parsing) {
 
-	const char * encoding = mrss->encoding ? mrss->encoding : "utf-8";
-
-	if (mrss->title) {
-		feed.set_title(utils::convert_text(mrss->title, "utf-8", encoding));
-	}
-	
-	if (mrss->description) {
-		feed.set_description(utils::convert_text(mrss->description, "utf-8", encoding));
-	}
-
-	if (mrss->link) feed.set_link(mrss->link);
-	if (mrss->pubDate) 
-		feed.set_pubDate(parse_date(mrss->pubDate));
-	else
-		feed.set_pubDate(::time(NULL));
-
-	GetLogger().log(LOG_DEBUG, "rss_parser::parse: feed title = `%s' link = `%s'", feed.title().c_str(), feed.link().c_str());
-
-	for (mrss_item_t * item = mrss->item; item != NULL; item = item->next ) {
-		rss_item x(ch);
-		if (item->title) {
-			std::string title = utils::convert_text(item->title, "utf-8", encoding);
-			x.set_title(title);
-			GetLogger().log(LOG_DEBUG, "rss_parser::parse: converted title `%s' to `%s'", item->title, title.c_str());
-		}
-		if (item->link) x.set_link(item->link);
-		if (item->author) {
-			x.set_author(utils::convert_text(item->author, "utf-8", encoding));
-		}
-
-		x.set_feedurl(feed.rssurl());
-
-		mrss_tag_t * content;
-
-		if (mrss_search_tag(item, "encoded", "http://purl.org/rss/1.0/modules/content/", &content) == MRSS_OK && content) {
-			/* RSS 2.0 content:encoded */
-			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found content:encoded: %s\n", content->value);
-			if (content->value) {
-				std::string desc = utils::convert_text(content->value, "utf-8", encoding);
-				GetLogger().log(LOG_DEBUG, "rss_parser::parse: converted description `%s' to `%s'", content->value, desc.c_str());
-				x.set_description(desc);
+		if (err != MRSS_OK) {
+			if (err == MRSS_ERR_POSIX) {
+				GetLogger().log(LOG_ERROR,"rss_parser::parse: mrss_parse_url_with_options failed with POSIX error: error = %s",strerror(errno));
 			}
-		} else {
-			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found no content:encoded");
+			GetLogger().log(LOG_ERROR,"rss_parser::parse: mrss_parse_url_with_options failed: err = %s (%d)",mrss_strerror(err), err);
+			GetLogger().log(LOG_USERERROR, "RSS feed `%s' couldn't be parsed: %s (error %d)", my_uri.c_str(), mrss_strerror(err), err);
+			if (mrss) {
+				mrss_free(mrss);
+			}
+			throw std::string(mrss_strerror(err));
 		}
 
-		if ((mrss->version == MRSS_VERSION_ATOM_0_3 || mrss->version == MRSS_VERSION_ATOM_1_0)) {
-			int rc;
-			if (((rc = mrss_search_tag(item, "content", "http://www.w3.org/2005/Atom", &content)) == MRSS_OK && content) ||
-			    ((rc = mrss_search_tag(item, "content", "http://purl.org/atom/ns#", &content)) == MRSS_OK && content)) {
-				GetLogger().log(LOG_DEBUG, "rss_parser::parse: found atom content: %s\n", content ? content->value : "(content = null)");
-				if (content && content->value) {
-					x.set_description(utils::convert_text(content->value, "utf-8", encoding));
+		const char * encoding = mrss->encoding ? mrss->encoding : "utf-8";
+
+		if (mrss->title) {
+			feed.set_title(utils::convert_text(mrss->title, "utf-8", encoding));
+		}
+		
+		if (mrss->description) {
+			feed.set_description(utils::convert_text(mrss->description, "utf-8", encoding));
+		}
+
+		if (mrss->link) feed.set_link(mrss->link);
+		if (mrss->pubDate) 
+			feed.set_pubDate(parse_date(mrss->pubDate));
+		else
+			feed.set_pubDate(::time(NULL));
+
+		GetLogger().log(LOG_DEBUG, "rss_parser::parse: feed title = `%s' link = `%s'", feed.title().c_str(), feed.link().c_str());
+
+		for (mrss_item_t * item = mrss->item; item != NULL; item = item->next ) {
+			rss_item x(ch);
+			if (item->title) {
+				std::string title = utils::convert_text(item->title, "utf-8", encoding);
+				x.set_title(title);
+				GetLogger().log(LOG_DEBUG, "rss_parser::parse: converted title `%s' to `%s'", item->title, title.c_str());
+			}
+			if (item->link) x.set_link(item->link);
+			if (item->author) {
+				x.set_author(utils::convert_text(item->author, "utf-8", encoding));
+			}
+
+			x.set_feedurl(feed.rssurl());
+
+			mrss_tag_t * content;
+
+			if (mrss_search_tag(item, "encoded", "http://purl.org/rss/1.0/modules/content/", &content) == MRSS_OK && content) {
+				/* RSS 2.0 content:encoded */
+				GetLogger().log(LOG_DEBUG, "rss_parser::parse: found content:encoded: %s\n", content->value);
+				if (content->value) {
+					std::string desc = utils::convert_text(content->value, "utf-8", encoding);
+					GetLogger().log(LOG_DEBUG, "rss_parser::parse: converted description `%s' to `%s'", content->value, desc.c_str());
+					x.set_description(desc);
 				}
 			} else {
-				GetLogger().log(LOG_DEBUG, "rss_parser::parse: mrss_search_tag(content) failed with rc = %d content = %p", rc, content);
+				GetLogger().log(LOG_DEBUG, "rss_parser::parse: found no content:encoded");
 			}
-		} else {
-			GetLogger().log(LOG_DEBUG, "rss_parser::parse: not an atom feed");
-		}
 
-		/* last resort: search for itunes:summary tag (may be a podcast) */
-		if (x.description().length() == 0 && mrss_search_tag(item, "summary", "http://www.itunes.com/dtds/podcast-1.0.dtd", &content) == MRSS_OK && content) {
-			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found itunes:summary: %s\n", content->value);
-			if (content->value) {
-				std::string desc = "<ituneshack>";
-				desc.append(utils::convert_text(content->value, "utf-8", encoding));
-				desc.append("</ituneshack>");
-				x.set_description(desc);
+			if ((mrss->version == MRSS_VERSION_ATOM_0_3 || mrss->version == MRSS_VERSION_ATOM_1_0)) {
+				int rc;
+				if (((rc = mrss_search_tag(item, "content", "http://www.w3.org/2005/Atom", &content)) == MRSS_OK && content) ||
+					((rc = mrss_search_tag(item, "content", "http://purl.org/atom/ns#", &content)) == MRSS_OK && content)) {
+					GetLogger().log(LOG_DEBUG, "rss_parser::parse: found atom content: %s\n", content ? content->value : "(content = null)");
+					if (content && content->value) {
+						x.set_description(utils::convert_text(content->value, "utf-8", encoding));
+					}
+				} else {
+					GetLogger().log(LOG_DEBUG, "rss_parser::parse: mrss_search_tag(content) failed with rc = %d content = %p", rc, content);
+				}
+			} else {
+				GetLogger().log(LOG_DEBUG, "rss_parser::parse: not an atom feed");
 			}
-			
-		} else {
-			GetLogger().log(LOG_DEBUG, "rss_parser::parse: no luck with itunes:summary");
+
+			/* last resort: search for itunes:summary tag (may be a podcast) */
+			if (x.description().length() == 0 && mrss_search_tag(item, "summary", "http://www.itunes.com/dtds/podcast-1.0.dtd", &content) == MRSS_OK && content) {
+				GetLogger().log(LOG_DEBUG, "rss_parser::parse: found itunes:summary: %s\n", content->value);
+				if (content->value) {
+					std::string desc = "<ituneshack>";
+					desc.append(utils::convert_text(content->value, "utf-8", encoding));
+					desc.append("</ituneshack>");
+					x.set_description(desc);
+				}
+				
+			} else {
+				GetLogger().log(LOG_DEBUG, "rss_parser::parse: no luck with itunes:summary");
+			}
+
+			if (x.description().length() == 0 && item->description) {
+				x.set_description(utils::convert_text(item->description, "utf-8", encoding));
+			}
+
+			if (item->pubDate) 
+				x.set_pubDate(parse_date(item->pubDate));
+			else
+				x.set_pubDate(::time(NULL));
+				
+			if (item->guid)
+				x.set_guid(item->guid);
+			else if (item->link)
+				x.set_guid(item->link); // XXX hash something to get a better alternative GUID
+			else if (item->title)
+				x.set_guid(item->title);
+			// ...else?! that's too bad.
+
+			if (item->enclosure_url) {
+				x.set_enclosure_url(item->enclosure_url);
+				GetLogger().log(LOG_DEBUG, "rss_parser::parse: found enclosure_url: %s", item->enclosure_url);
+			}
+			if (item->enclosure_type) {
+				x.set_enclosure_type(item->enclosure_type);
+				GetLogger().log(LOG_DEBUG, "rss_parser::parse: found enclosure_type: %s", item->enclosure_type);
+			}
+
+			x.set_feedptr(&feed);
+
+			GetLogger().log(LOG_DEBUG, "rss_parser::parse: item title = `%s' link = `%s' pubDate = `%s' (%d) description = `%s'", 
+				x.title().c_str(), x.link().c_str(), x.pubDate().c_str(), x.pubDate_timestamp(), x.description().c_str());
+
+			// only add item to feed if it isn't on the ignore list or if there is no ignore list
+			if (!ign || !ign->matches(&x)) {
+				feed.items().push_back(x);
+				GetLogger().log(LOG_INFO, "rss_parser::parse: added article title = `%s' link = `%s' ign = %p", x.title().c_str(), x.link().c_str(), ign);
+			} else {
+				GetLogger().log(LOG_INFO, "rss_parser::parse: ignored article title = `%s' link = `%s'", x.title().c_str(), x.link().c_str());
+			}
 		}
 
-		if (x.description().length() == 0 && item->description) {
-			x.set_description(utils::convert_text(item->description, "utf-8", encoding));
-		}
+		mrss_free(mrss);
 
-		if (item->pubDate) 
-			x.set_pubDate(parse_date(item->pubDate));
-		else
-			x.set_pubDate(::time(NULL));
-			
-		if (item->guid)
-			x.set_guid(item->guid);
-		else if (item->link)
-			x.set_guid(item->link); // XXX hash something to get a better alternative GUID
-		else if (item->title)
-			x.set_guid(item->title);
-		// ...else?! that's too bad.
-
-		if (item->enclosure_url) {
-			x.set_enclosure_url(item->enclosure_url);
-			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found enclosure_url: %s", item->enclosure_url);
-		}
-		if (item->enclosure_type) {
-			x.set_enclosure_type(item->enclosure_type);
-			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found enclosure_type: %s", item->enclosure_type);
-		}
-
-		x.set_feedptr(&feed);
-
-		GetLogger().log(LOG_DEBUG, "rss_parser::parse: item title = `%s' link = `%s' pubDate = `%s' (%d) description = `%s'", 
-			x.title().c_str(), x.link().c_str(), x.pubDate().c_str(), x.pubDate_timestamp(), x.description().c_str());
-
-		// only add item to feed if it isn't on the ignore list or if there is no ignore list
-		if (!ign || !ign->matches(&x)) {
-			feed.items().push_back(x);
-			GetLogger().log(LOG_INFO, "rss_parser::parse: added article title = `%s' link = `%s' ign = %p", x.title().c_str(), x.link().c_str(), ign);
-		} else {
-			GetLogger().log(LOG_INFO, "rss_parser::parse: ignored article title = `%s' link = `%s'", x.title().c_str(), x.link().c_str());
-		}
 	}
-
-	mrss_free(mrss);
 
 	return feed;
 }
@@ -232,10 +241,18 @@ void rss_item::set_unread_nowrite(bool u) {
 	unread_ = u;
 }
 
+void rss_item::set_unread_nowrite_notify(bool u) {
+	unread_ = u;
+	if (feedptr)
+		feedptr->get_item_by_guid(guid_).set_unread_nowrite(unread_); // notify parent feed
+}
+
 void rss_item::set_unread(bool u) { 
 	if (unread_ != u) {
 		bool old_u = unread_;
 		unread_ = u;
+		if (feedptr)
+			feedptr->get_item_by_guid(guid_).set_unread_nowrite(unread_); // notify parent feed
 		try {
 			if (ch) ch->update_rssitem_unread_and_enqueued(*this, feedurl_); 
 		} catch (const dbexception& e) {
@@ -390,7 +407,8 @@ std::string rss_feed::description() const {
 rss_item& rss_feed::get_item_by_guid(const std::string& guid) {
 	for (std::vector<rss_item>::iterator it=items_.begin();it!=items_.end();++it) {
 		if (it->guid() == guid) {
-			it->set_feedptr(this);
+			if (rssurl_.substr(0,6) != "query:")
+				it->set_feedptr(this);
 			return *it;
 		}
 	}
@@ -518,4 +536,41 @@ bool rss_ignores::matches(rss_item* item) {
 		}
 	}
 	return false;
+}
+
+void rss_feed::update_items(std::vector<rss_feed>& feeds) {
+	if (query.length() == 0)
+		return;
+
+	GetLogger().log(LOG_DEBUG, "rss_feed::update_items: query = `%s'", query.c_str());
+
+	matcher m(query);
+
+	if (items_.size() > 0) {
+		items_.erase(items_.begin(), items_.end());
+	}
+
+	for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it) {
+		if (it->rssurl().substr(0,6) != "query:") { // don't fetch items from other query feeds!
+			for (std::vector<rss_item>::iterator jt=it->items().begin();jt!=it->items().end();++jt) {
+				if (m.matches(&(*jt))) {
+					GetLogger().log(LOG_DEBUG, "rss_feed::update_items: matcher matches!");
+					jt->set_feedptr(&(*it));
+					items_.push_back(*jt);
+				}
+			}
+		}
+	}
+
+	sort(items_.begin(), items_.end());
+}
+
+void rss_feed::set_rssurl(const std::string& u) {
+	rssurl_ = u;
+	if (rssurl_.substr(0,6) == "query:") {
+		std::vector<std::string> tokens = utils::tokenize_quoted(u, ":");
+		GetLogger().log(LOG_DEBUG, "rss_feed::set_rssurl: query name = `%s' expr = `%s'", tokens[1].c_str(), tokens[2].c_str());
+		set_title(tokens[1]);
+		set_query(tokens[2]);
+	}
 }

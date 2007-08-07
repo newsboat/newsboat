@@ -285,6 +285,7 @@ void view::set_tags(const std::vector<std::string>& t) {
 void view::push_itemlist(unsigned int pos) {
 	rss_feed * feed = ctrl->get_feed(pos);
 	GetLogger().log(LOG_DEBUG, "view::push_itemlist: retrieved feed at position %d (address = %p)", pos, feed);
+	feed->update_items(ctrl->get_all_feeds());
 	if (feed->items().size() > 0) {
 		itemlist->set_feed(feed);
 		itemlist->set_pos(pos);

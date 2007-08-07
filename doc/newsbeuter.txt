@@ -463,6 +463,37 @@ presented to the user. The configuration itself can contain as many
 ignore-article commands as desired.
 
 
+Query Feeds
+~~~~~~~~~~~
+
+Query feeds are a mechanism of newsbeuter to define custom "meta feeds" by using 
+newsbeuter's built-in filter language. A query feed is a feed that is aggregated
+from all currently downloaded articles of all feeds. To narrow down the set of
+articles, the user has to specify a filter. Only articles that match this filter
+are added to the query feed. A query feed is updated whenever it is entered in
+the feed list. When you change the unread flag of an article, this is reflected
+in the feed where the article was originally fetched.
+
+To define a query feed, the user has to add a line to the file
+~/.newsbeuter/urls in the following format:
+
+	query:<name of feed>:<filter expression> [<tag> ...]
+
+The "query:" in the beginning tells newsbeuter that it's a query feed, "<name of
+feed>" specifies the name under which the query feed shall be displayed in the
+feed list, and "<filter expression>" is the filter expression that shall be
+used. Like every other feed, a query feed can be tagged to organize it like
+a regular feed.
+
+A good example for the user of this feature is a query feed that contains all
+unread articles:
+
+	"query:Unread Articles:unread = \"yes\""
+
+Note the quotes that are necessary around the complete query "URL" and the
+backslashes that are necessary the escape the quotes in the filter expression.
+
+
 Podcast Support
 ~~~~~~~~~~~~~~~
 

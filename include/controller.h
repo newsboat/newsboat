@@ -41,6 +41,8 @@ namespace newsbeuter {
 
 			void reload_urls_file();
 
+			inline std::vector<rss_feed>& get_all_feeds() { return feeds; }
+
 		private:
 			void usage(char * argv0);
 			void import_opml(const char * filename);
