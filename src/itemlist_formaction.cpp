@@ -148,13 +148,14 @@ void itemlist_formaction::process_operation(operation op) {
 			break;
 		case OP_SETFILTER: {
 				char buf[256];
-				snprintf(buf,sizeof(buf), "{hbox[lastline] .expand:0 {label .expand:0 text:\"%s\"}{input[filter] modal:1 .expand:h text[filtertext]:\"\"}}", _("Filter: "));
+				snprintf(buf,sizeof(buf), "{hbox[lastline] .expand:0 {label .expand:0 text:\"%s\"}{input[filter] modal:1 on_ENTER:end-setfilter .expand:h text[filtertext]:\"\"}}", _("Filter: "));
 				f->modify("lastline", "replace", buf);
 				f->set_focus("filter");
 			}
 			break;
 		case OP_CLEARFILTER:
 			apply_filter = false;
+			update_visible_items = true;
 			do_redraw = true;
 			break;
 		default:
