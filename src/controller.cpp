@@ -666,6 +666,10 @@ void controller::reload_urls_file() {
 	update_feedlist();
 }
 
-
+void controller::set_feedptrs(rss_feed& feed) {
+	for (std::vector<rss_item>::iterator it=feed.items().begin();it!=feed.items().end();++it) {
+		it->set_feedptr(&feed);
+	}
+}
 
 

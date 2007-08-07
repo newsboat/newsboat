@@ -279,6 +279,9 @@ void cache::externalize_rssfeed(rss_feed& feed) {
 // this function reads an rss_feed including all of its rss_items.
 // the feed parameter needs to have the rssurl member set.
 void cache::internalize_rssfeed(rss_feed& feed) {
+	if (feed.rssurl().substr(0,6) == "query:")
+		return;
+
 	mtx->lock();
 
 	/* first, we check whether the feed is there at all */

@@ -188,7 +188,7 @@ rss_feed rss_parser::parse() {
 				GetLogger().log(LOG_DEBUG, "rss_parser::parse: found enclosure_type: %s", item->enclosure_type);
 			}
 
-			x.set_feedptr(&feed);
+			// x.set_feedptr(&feed);
 
 			GetLogger().log(LOG_DEBUG, "rss_parser::parse: item title = `%s' link = `%s' pubDate = `%s' (%d) description = `%s'", 
 				x.title().c_str(), x.link().c_str(), x.pubDate().c_str(), x.pubDate_timestamp(), x.description().c_str());
@@ -412,11 +412,14 @@ rss_item& rss_feed::get_item_by_guid(const std::string& guid) {
 			return *it;
 		}
 	}
+	GetLogger().log(LOG_DEBUG, "rss_feed::get_item_by_guid: hit dummy item!");
+	abort();
 	static rss_item dummy_item(0); // should never happen!
 	return dummy_item;
 }
 
 bool rss_item::has_attribute(const std::string& attribname) {
+	// GetLogger().log(LOG_DEBUG, "rss_item::has_attribute(%s) called", attribname.c_str());
 	if (attribname == "title" || 
 		attribname == "link" || 
 		attribname == "author" || 
@@ -430,12 +433,13 @@ bool rss_item::has_attribute(const std::string& attribname) {
 
 	// if we have a feed, then forward the request
 	if (feedptr)
-		return feedptr->has_attribute(attribname);
+		return feedptr->rss_feed::has_attribute(attribname);
 
 	return false;
 }
 
 std::string rss_item::get_attribute(const std::string& attribname) {
+	// GetLogger().log(LOG_DEBUG, "rss_item::get_attribute(%s) called", attribname.c_str());
 	if (attribname == "title")
 		return title();
 	else if (attribname == "link")
@@ -457,12 +461,13 @@ std::string rss_item::get_attribute(const std::string& attribname) {
 
 	// if we have a feed, then forward the request
 	if (feedptr)
-		return feedptr->get_attribute(attribname);
+		return feedptr->rss_feed::get_attribute(attribname);
 
 	return "";
 }
 
 bool rss_feed::has_attribute(const std::string& attribname) {
+	// GetLogger().log(LOG_DEBUG, "rss_feed::has_attribute(%s) called", attribname.c_str());
 	if (attribname == "feedtitle" ||
 		attribname == "description" ||
 		attribname == "feedlink" ||
@@ -476,6 +481,7 @@ bool rss_feed::has_attribute(const std::string& attribname) {
 }
 
 std::string rss_feed::get_attribute(const std::string& attribname) {
+	// GetLogger().log(LOG_DEBUG, "rss_feed::get_attribute(%s) called", attribname.c_str());
 	if (attribname == "feedtitle")
 		return title();
 	else if (attribname == "description")
@@ -495,6 +501,7 @@ std::string rss_feed::get_attribute(const std::string& attribname) {
 		os << items_.size();
 		return os.str();
 	} else if (attribname == "tags") {
+		// abort();
 		return get_tags();
 	}
 	return "";

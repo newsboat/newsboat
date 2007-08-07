@@ -266,6 +266,13 @@ void view::open_in_browser(const std::string& url) {
 
 void view::set_feedlist(std::vector<rss_feed>& feeds) {
 	mtx->lock();
+
+	for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it) {
+		if (it->rssurl().substr(0,6) != "query:") {
+			ctrl->set_feedptrs(*it);
+		}
+	}
+
 	try {
 		feedlist->set_feedlist(feeds);
 	} catch (matcherexception e) {
@@ -284,8 +291,17 @@ void view::set_tags(const std::vector<std::string>& t) {
 
 void view::push_itemlist(unsigned int pos) {
 	rss_feed * feed = ctrl->get_feed(pos);
+
+	assert(feed != NULL);
+
 	GetLogger().log(LOG_DEBUG, "view::push_itemlist: retrieved feed at position %d (address = %p)", pos, feed);
-	feed->update_items(ctrl->get_all_feeds());
+
+	if (feed->rssurl().substr(0,6) == "query:") {
+		set_status(_("Updating query feed..."));
+		feed->update_items(ctrl->get_all_feeds());
+		set_status("");
+	}
+
 	if (feed->items().size() > 0) {
 		itemlist->set_feed(feed);
 		itemlist->set_pos(pos);
