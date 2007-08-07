@@ -3,6 +3,8 @@ Changes for newsbeuter:
 0.6:
 	implemented support for reloading the urls file
 	implemented query feeds
+	implemented history for the most important input fields
+	fixed a major bug with filtering in the item list
 
 0.5 (2007-08-02):
 	improved HTML rendering
