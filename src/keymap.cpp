@@ -58,6 +58,9 @@ static op_desc opdescs[] = {
 	{ OP_INT_PREV_FILTERHISTORY, "XXXNOKEY-prev-filterhistory", "prev-filterhistory", NULL, KM_INTERNAL },
 	{ OP_INT_NEXT_FILTERHISTORY, "XXXNOKEY-next-filterhistory", "next-filterhistory", NULL, KM_INTERNAL },
 
+	{ OP_INT_PREV_CMDLINEHISTORY, "XXXNOKEY-prev-cmdlinehistory", "prev-cmdline-history", NULL, KM_INTERNAL },
+	{ OP_INT_NEXT_CMDLINEHISTORY, "XXXNOKEY-next-cmdlinehistory", "next-cmdline-history", NULL, KM_INTERNAL },
+
 	{ OP_NIL, NULL, NULL, NULL, 0 }
 };
 

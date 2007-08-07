@@ -2,6 +2,7 @@
 #define NEWSBEUTER_ITEMLIST_FORMACTION__H
 
 #include <formaction.h>
+#include <history.h>
 
 namespace newsbeuter {
 
@@ -41,6 +42,8 @@ class itemlist_formaction : public formaction {
 		matcher m;
 		std::vector<std::pair<rss_item *, unsigned int> > visible_items;
 		bool update_visible_items;
+
+		history filterhistory;
 };
 
 }

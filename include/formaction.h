@@ -4,6 +4,7 @@
 #include <stflpp.h>
 #include <keymap.h>
 #include <rss.h>
+#include <history.h>
 
 #include <vector>
 #include <string>
@@ -44,6 +45,8 @@ class formaction {
 
 	private:
 		std::string prepare_keymap_hint(keymap_hint_entry * hints);
+
+		history cmdlinehistory;
 };
 
 
