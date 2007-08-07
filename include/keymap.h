@@ -69,6 +69,8 @@ namespace newsbeuter {
 						OP_INT_MIN,
 						OP_INT_END_CMDLINE,
 						OP_INT_END_SETFILTER,
+						OP_INT_PREV_FILTERHISTORY,
+						OP_INT_NEXT_FILTERHISTORY,
 						OP_INT_MAX
 						};
 

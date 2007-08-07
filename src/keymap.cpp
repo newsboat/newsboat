@@ -55,6 +55,9 @@ static op_desc opdescs[] = {
 	{ OP_INT_END_CMDLINE, "XXXNOKEY-end-cmdline", "end-cmdline", NULL, KM_INTERNAL },
 	{ OP_INT_END_SETFILTER, "XXXNOKEY-end-cmdline", "end-setfilter", NULL, KM_INTERNAL },
 
+	{ OP_INT_PREV_FILTERHISTORY, "XXXNOKEY-prev-filterhistory", "prev-filterhistory", NULL, KM_INTERNAL },
+	{ OP_INT_NEXT_FILTERHISTORY, "XXXNOKEY-next-filterhistory", "next-filterhistory", NULL, KM_INTERNAL },
+
 	{ OP_NIL, NULL, NULL, NULL, 0 }
 };
 

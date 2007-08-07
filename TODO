@@ -6,7 +6,6 @@ TODO:
 - do entitity decoding for titles (this may be controversial...)
 - research (and fix) libnxml decoding issues
 - improve string handling (no more std::string() + std::string())
-- implement "meta-feeds"
 - add automatic download mode to podbeuter (commandline switch)
 - add configurable pager
 - update example config
@@ -90,3 +89,4 @@ DONE:
 - implement free configurability of key bindings for widgets (STFL issue)
 - fix memory leak
 - set keybindings in podbeuter, too
+- implement "meta-feeds"

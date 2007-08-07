@@ -3,6 +3,7 @@
 
 #include <formaction.h>
 #include <matcher.h>
+#include <history.h>
 
 namespace newsbeuter {
 
@@ -36,6 +37,8 @@ class feedlist_formaction : public formaction {
 
 		matcher m;
 		bool apply_filter;
+
+		history filterhistory;
 };
 
 }
