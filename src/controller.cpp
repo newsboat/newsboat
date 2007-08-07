@@ -332,7 +332,11 @@ void controller::catchup_all() {
 void controller::mark_all_read(unsigned int pos) {
 	if (pos < feeds.size()) {
 		rss_feed& feed = feeds[pos];
-		rsscache->catchup_all(feed.rssurl());
+		if (feed.rssurl().substr(0,6) == "query:") {
+			rsscache->catchup_all(feed);
+		} else {
+			rsscache->catchup_all(feed.rssurl());
+		}
 		if (feed.items().size() > 0) {
 			for (std::vector<rss_item>::iterator it=feed.items().begin();it!=feed.items().end();++it) {
 				it->set_unread_nowrite_notify(false);

@@ -532,6 +532,26 @@ void cache::update_rssitem(rss_item& item, const std::string& feedurl) {
 	mtx->unlock();
 }
 
+void cache::catchup_all(rss_feed& feed) {
+	mtx->lock();
+	std::string query = "UPDATE rss_item SET unread = '0' WHERE unread != '0' AND guid IN (";
+
+	for (std::vector<rss_item>::iterator it=feed.items().begin();it!=feed.items().end();++it) {
+		query.append(prepare_query("'%q',", it->guid().c_str()));
+	}
+	query.append("'');");
+
+	GetLogger().log(LOG_DEBUG, "running query: %s", query.c_str());
+	int rc = sqlite3_exec(db, query.c_str(), NULL, NULL, NULL);
+	if (rc != SQLITE_OK) {
+		GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", query.c_str(), rc);
+		mtx->unlock();
+		throw dbexception(db);
+	}
+
+	mtx->unlock();
+}
+
 /* this function marks all rss_items (optionally of a certain feed url) as read */
 void cache::catchup_all(const std::string& feedurl) {
 	mtx->lock();
