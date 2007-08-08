@@ -518,6 +518,7 @@ void controller::import_opml(const char * filename) {
 	if (root) {
 		body = nxmle_find_element(data, root, "body", NULL);
 		if (body) {
+			GetLogger().log(LOG_DEBUG, "import_opml: found body");
 			rec_find_rss_outlines(body, "");
 			urlcfg.write_config();
 		}
@@ -535,7 +536,7 @@ void controller::export_opml() {
 	std::cout << "\t<head>" << std::endl << "\t\t<title>" PROGRAM_NAME " - Exported Feeds</title>" << std::endl << "\t</head>" << std::endl;
 	std::cout << "\t<body>" << std::endl;
 	for (std::vector<rss_feed>::iterator it=feeds.begin(); it != feeds.end(); ++it) {
-		std::cout << "\t\t<outline type=\"rss\" xmlUrl=\"" << it->rssurl() << "\" title=\"" << it->title() << "\" />" << std::endl;
+		std::cout << "\t\t<outline type=\"rss\" xmlUrl=\"" << it->rssurl() << "\" htmlUrl=\"" << it->link() << "\" title=\"" << it->title() << "\" />" << std::endl;
 	}
 	std::cout << "\t</body>" << std::endl;
 	std::cout << "</opml>" << std::endl;
@@ -544,7 +545,6 @@ void controller::export_opml() {
 void controller::rec_find_rss_outlines(nxml_data_t * node, std::string tag) {
 	while (node) {
 		char * url = nxmle_find_attribute(node, "xmlUrl", NULL);
-		char * type = nxmle_find_attribute(node, "type", NULL);
 		std::string newtag = tag;
 
 		if (!url) {
@@ -552,32 +552,32 @@ void controller::rec_find_rss_outlines(nxml_data_t * node, std::string tag) {
 		}
 
 		if (node->type == NXML_TYPE_ELEMENT && strcmp(node->value,"outline")==0) {
-			if (type && (strcmp(type,"rss")==0 || strcmp(type,"link")==0)) {
-				if (url) {
+			if (url) {
 
-					GetLogger().log(LOG_DEBUG,"OPML import: found RSS outline with url = %s",url);
+				GetLogger().log(LOG_DEBUG,"OPML import: found RSS outline with url = %s",url);
 
-					bool found = false;
+				bool found = false;
 
-					for (std::vector<std::string>::iterator it = urlcfg.get_urls().begin(); it != urlcfg.get_urls().end(); ++it) {
-						if (*it == url) {
-							found = true;
-						}
+				for (std::vector<std::string>::iterator it = urlcfg.get_urls().begin(); it != urlcfg.get_urls().end(); ++it) {
+					if (*it == url) {
+						found = true;
 					}
+				}
 
-					if (!found) {
-						GetLogger().log(LOG_DEBUG,"OPML import: added url = %s",url);
-						urlcfg.get_urls().push_back(std::string(url));
-						if (tag.length() > 0) {
-							GetLogger().log(LOG_DEBUG, "OPML import: appending tag %s to url %s", tag.c_str(), url);
-							urlcfg.get_tags(url).push_back(tag);
-						}
-					} else {
-						GetLogger().log(LOG_DEBUG,"OPML import: url = %s is already in list",url);
+				if (!found) {
+					GetLogger().log(LOG_DEBUG,"OPML import: added url = %s",url);
+					urlcfg.get_urls().push_back(std::string(url));
+					if (tag.length() > 0) {
+						GetLogger().log(LOG_DEBUG, "OPML import: appending tag %s to url %s", tag.c_str(), url);
+						urlcfg.get_tags(url).push_back(tag);
 					}
+				} else {
+					GetLogger().log(LOG_DEBUG,"OPML import: url = %s is already in list",url);
 				}
 			} else {
 				char * text = nxmle_find_attribute(node, "text", NULL);
+				if (!text)
+					text = nxmle_find_attribute(node, "title", NULL);
 				if (text) {
 					if (newtag.length() > 0) {
 						newtag.append("/");

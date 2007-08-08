@@ -5,6 +5,7 @@ Changes for newsbeuter:
 	implemented query feeds
 	implemented history for the most important input fields
 	fixed a major bug with filtering in the item list
+	bugfix in the OPML import functionality
 
 0.5 (2007-08-02):
 	improved HTML rendering
