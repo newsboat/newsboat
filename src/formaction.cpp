@@ -46,6 +46,9 @@ void formaction::process_op(operation op) {
 		case OP_INT_NEXT_CMDLINEHISTORY:
 			f->set("cmdtext", cmdlinehistory.next());
 			break;
+		case OP_INT_CANCEL_CMDLINE:
+			f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
+			break;
 		case OP_INT_END_CMDLINE: {
 				f->set_focus("feeds");
 				std::string cmdline = f->get("cmdtext");
@@ -56,7 +59,7 @@ void formaction::process_op(operation op) {
 			}
 			break;
 		case OP_CMDLINE:
-			f->modify("lastline","replace", "{hbox[lastline] .expand:0 {label .expand:0 text:\":\"}{input[cmdline] on_ENTER:end-cmdline on_UP:prev-cmdline-history on_DOWN:next-cmdline-history modal:1 .expand:h text[cmdtext]:\"\"}}");
+			f->modify("lastline","replace", "{hbox[lastline] .expand:0 {label .expand:0 text:\":\"}{input[cmdline] on_ESC:cancel-cmdline on_ENTER:end-cmdline on_UP:prev-cmdline-history on_DOWN:next-cmdline-history modal:1 .expand:h text[cmdtext]:\"\"}}");
 			f->set_focus("cmdline");
 			break;
 		default:

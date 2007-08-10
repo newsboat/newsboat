@@ -23,6 +23,9 @@ void itemlist_formaction::process_operation(operation op) {
 		case OP_INT_NEXT_FILTERHISTORY:
 			f->set("filtertext", filterhistory.next());
 			break;
+		case OP_INT_CANCEL_SETFILTER:
+			f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
+			break;
 		case OP_INT_END_SETFILTER: {
 				std::string filtertext = f->get("filtertext");
 				f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
@@ -155,7 +158,7 @@ void itemlist_formaction::process_operation(operation op) {
 			break;
 		case OP_SETFILTER: {
 				char buf[256];
-				snprintf(buf,sizeof(buf), "{hbox[lastline] .expand:0 {label .expand:0 text:\"%s\"}{input[filter] modal:1 on_ENTER:end-setfilter on_UP:prev-filterhistory on_DOWN:next-filterhistory .expand:h text[filtertext]:\"\"}}", _("Filter: "));
+				snprintf(buf,sizeof(buf), "{hbox[lastline] .expand:0 {label .expand:0 text:\"%s\"}{input[filter] modal:1 on_ESC:cancel-setfilter on_ENTER:end-setfilter on_UP:prev-filterhistory on_DOWN:next-filterhistory .expand:h text[filtertext]:\"\"}}", _("Filter: "));
 				f->modify("lastline", "replace", buf);
 				f->set_focus("filter");
 			}
