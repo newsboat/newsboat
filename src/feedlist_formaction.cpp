@@ -5,6 +5,7 @@
 #include <logger.h>
 #include <reloadthread.h>
 #include <exceptions.h>
+#include <utils.h>
 
 #include <sstream>
 #include <cassert>
@@ -366,7 +367,20 @@ void feedlist_formaction::handle_cmdline(const std::string& cmd) {
 		}
 	} else {
 		// hand over all other commands to formaction
-		formaction::handle_cmdline(cmd);
+		std::vector<std::string> tokens = utils::tokenize_quoted(cmd, " \t");
+		if (tokens.size() > 0) {
+			if (tokens[0] == "quit") {
+				v->pop_current_formaction();
+			} else if (tokens[0] == "tag") {
+				if (tokens.size() >= 2 && tokens[1] != "") {
+					tag = tokens[1];
+					do_redraw = true;
+					zero_feedpos = true;
+				}
+			} else {
+				formaction::handle_cmdline(cmd);
+			}
+		}
 	}
 }
 
