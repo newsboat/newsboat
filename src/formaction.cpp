@@ -80,6 +80,7 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 				v->set_status(buf);
 			} else if (tokens.size()==2) {
 				cfg->set_configvalue(tokens[0], tokens[1]);
+				set_redraw(true); // because some configuration value might have changed something UI-related
 			} else {
 				v->show_error(_("usage: set <variable>[=<value>]"));
 			}

@@ -37,6 +37,7 @@ configcontainer::configcontainer()
 	config_data["notify-screen"]   = configdata("no", configdata::BOOL);
 	config_data["notify-xterm"]    = configdata("no", configdata::BOOL);
 	config_data["notify-program"]  = configdata("", configdata::PATH);
+	config_data["datetime-format"] = configdata("%b %d", configdata::STR);
 }
 
 configcontainer::~configcontainer()

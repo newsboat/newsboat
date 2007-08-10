@@ -196,6 +196,10 @@ void itemlist_formaction::prepare() {
 	if (do_redraw) {
 		std::string code = "{list";
 
+		std::string datetimeformat = v->get_cfg()->get_configvalue("datetime-format");
+		if (datetimeformat.length() == 0)
+			datetimeformat = "%b %d";
+
 		for (std::vector<std::pair<rss_item *, unsigned int> >::iterator it = visible_items.begin(); it != visible_items.end(); ++it) {
 			std::string line = "{listitem[";
 			std::ostringstream x;
@@ -214,8 +218,9 @@ void itemlist_formaction::prepare() {
 			char datebuf[64];
 			time_t t = it->first->pubDate_timestamp();
 			struct tm * stm = localtime(&t);
-			strftime(datebuf,sizeof(datebuf), "%b %d   ", stm);
+			strftime(datebuf,sizeof(datebuf), datetimeformat.c_str(), stm);
 			title.append(datebuf);
+			title.append("   ");
 			title.append(it->first->title());
 			GetLogger().log(LOG_DEBUG, "itemlist_formaction: XXXTITLE it->first->title = `%s' title = `%s' quoted title = `%s'", 
 				it->first->title().c_str(), title.c_str(), stfl::quote(title).c_str());
