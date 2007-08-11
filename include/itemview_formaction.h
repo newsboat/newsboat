@@ -16,6 +16,7 @@ class itemview_formaction : public formaction {
 		inline void set_guid(const std::string& guid_) { guid = guid_; }
 		inline void set_feed(rss_feed * fd) { feed = fd; }
 		keymap_hint_entry * get_keymap_hint();
+		virtual void handle_cmdline(const std::string& cmd);
 	private:
 		virtual void process_operation(operation op);
 		void set_head(const std::string& s);

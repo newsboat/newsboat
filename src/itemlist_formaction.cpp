@@ -3,6 +3,7 @@
 #include <config.h>
 #include <logger.h>
 #include <exceptions.h>
+#include <utils.h>
 
 #include <sstream>
 
@@ -317,8 +318,38 @@ void itemlist_formaction::handle_cmdline(const std::string& cmd) {
 			v->show_error(_("Invalid position!"));
 		}
 	} else {
-		// hand over all other commands to formaction
-		formaction::handle_cmdline(cmd);
+		std::vector<std::string> tokens = utils::tokenize_quoted(cmd);
+		if (tokens.size() > 0) {
+			if (tokens[0] == "save" && tokens.size() >= 2) {
+				std::string filename = utils::resolve_tilde(tokens[1]);
+				char buf[1024];
+
+				std::string itemposname = f->get("itempos");
+				GetLogger().log(LOG_INFO, "itemlist_formaction::handle_cmdline: saving item at pos `%s' to `%s'", itemposname.c_str(), filename.c_str());
+				if (itemposname.length() > 0) {
+					std::istringstream posname(itemposname);
+					unsigned int itempos = 0;
+					posname >> itempos;
+
+					if (filename == "") {
+						v->show_error(_("Aborted saving."));
+					} else {
+						try {
+							v->write_item(*visible_items[itempos].first, filename);
+							snprintf(buf, sizeof(buf), _("Saved article to %s"), filename.c_str());
+							v->show_error(buf);
+						} catch (...) {
+							snprintf(buf, sizeof(buf), _("Error: couldn't save article to %s"), filename.c_str());
+							v->show_error(buf);
+						}
+					}
+				} else {
+					v->show_error(_("Error: no item selected!"));
+				}
+			} else {
+				formaction::handle_cmdline(cmd);
+			}
+		}
 	}
 }
 

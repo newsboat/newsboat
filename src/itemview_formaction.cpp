@@ -3,6 +3,7 @@
 #include <config.h>
 #include <logger.h>
 #include <exceptions.h>
+#include <utils.h>
 
 #include <sstream>
 
@@ -258,6 +259,33 @@ void itemview_formaction::render_source(std::vector<std::string>& lines, std::st
 		line.erase(0,pos);
 		lines.push_back(line);
 	} while (desc.length() > 0);
+}
+
+void itemview_formaction::handle_cmdline(const std::string& cmd) {
+	std::vector<std::string> tokens = utils::tokenize_quoted(cmd);
+	if (tokens.size() > 0) {
+		if (tokens[0] == "save" && tokens.size() >= 2) {
+			std::string filename = utils::resolve_tilde(tokens[1]);
+			rss_item& item = feed->get_item_by_guid(guid);
+			char buf[1024];
+
+			if (filename == "") {
+				v->show_error(_("Aborted saving."));
+			} else {
+				try {
+					v->write_item(item, filename);
+					snprintf(buf, sizeof(buf), _("Saved article to %s"), filename.c_str());
+					v->show_error(buf);
+				} catch (...) {
+					snprintf(buf, sizeof(buf), _("Error: couldn't save article to %s"), filename.c_str());
+					v->show_error(buf);
+				}
+			}
+
+		} else {
+			formaction::handle_cmdline(cmd);
+		}
+	}
 }
 
 

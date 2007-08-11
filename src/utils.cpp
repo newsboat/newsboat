@@ -6,6 +6,9 @@
 #include <fcntl.h>
 #include <iconv.h>
 #include <errno.h>
+#include <sys/types.h>
+#include <pwd.h>
+
 
 #include <curl/curl.h>
 
@@ -362,6 +365,36 @@ std::string utils::run_filter(const std::string& cmd, const std::string& input) 
 			break;
 	}
 	return buf;
+}
+
+std::string utils::resolve_tilde(const std::string& str) {
+	const char * homedir;
+	std::string filepath;
+
+	if (!(homedir = ::getenv("HOME"))) {
+		struct passwd * spw = ::getpwuid(::getuid());
+		if (spw) {
+				homedir = spw->pw_dir;
+		} else {
+				homedir = "";
+		}
+	}
+
+	if (strcmp(homedir,"")!=0) {
+		if (str == "~") {
+			filepath.append(homedir);
+		} else if (str.substr(0,2) == "~/") {
+			filepath.append(homedir);
+			filepath.append(1,'/');
+			filepath.append(str.substr(2,str.length()-2));
+		} else {
+			filepath.append(str);
+		}
+	} else {
+		filepath.append(str);
+	}
+
+	return filepath;
 }
 
 }

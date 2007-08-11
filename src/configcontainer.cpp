@@ -3,6 +3,7 @@
 #include <logger.h>
 #include <sstream>
 #include <iostream>
+#include <utils.h>
 
 #include <sys/types.h>
 #include <pwd.h>
@@ -123,32 +124,7 @@ bool configcontainer::is_int(const std::string& s) {
 std::string configcontainer::get_configvalue(const std::string& key) {
 	std::string retval = config_data[key].value;
 	if (config_data[key].type == configdata::PATH) {
-		const char * homedir;
-		std::string filepath;
-
-		if (!(homedir = ::getenv("HOME"))) {
-			struct passwd * spw = ::getpwuid(::getuid());
-			if (spw) {
-					homedir = spw->pw_dir;
-			} else {
-					homedir = "";
-			}
-		}
-
-		if (strcmp(homedir,"")!=0) {
-			if (retval == "~") {
-				filepath.append(homedir);
-			} else if (retval.substr(0,2) == "~/") {
-				filepath.append(homedir);
-				filepath.append(1,'/');
-				filepath.append(retval.substr(2,retval.length()-2));
-			} else {
-				filepath.append(retval);
-			}
-		} else {
-			filepath.append(retval);
-		}
-		retval = filepath;
+		retval = utils::resolve_tilde(retval);
 	}
 
 	return retval;
