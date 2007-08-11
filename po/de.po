@@ -111,21 +111,20 @@ msgstr "Bereinige Zwischenspeicher gründlich..."
 
 #: src/controller.cpp:265
 msgid "Error while loading feeds from database: "
-msgstr ""
+msgstr "Fehler beim Laden der Feeds aus der Datenbank: "
 
 #: src/controller.cpp:298
 msgid "Cleaning up cache..."
 msgstr "Bereinige Zwischenspeicher..."
 
 #: src/controller.cpp:304
-#, fuzzy
 msgid "failed: "
-msgstr "fehlgeschlagen"
+msgstr "fehlgeschlagen: "
 
 #: src/controller.cpp:319
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't mark all feeds read: %s"
-msgstr "Fehler: konnte Artikel nicht nach %s speichern"
+msgstr "Fehler: konnte nicht alle Feeds gelesen markieren: %s"
 
 #: src/controller.cpp:365
 #, c-format
@@ -217,7 +216,7 @@ msgstr "unbekannt (Bug)."
 #: src/exception.cpp:22
 #, c-format
 msgid "attribute `%s' is not available."
-msgstr ""
+msgstr "Attribut `%s' is not verfügbar."
 
 #: src/feedlist_formaction.cpp:73 src/itemlist_formaction.cpp:36
 msgid "Error: couldn't parse filter command!"
@@ -233,9 +232,9 @@ msgid "Marking feed read..."
 msgstr "Markiere Feed als gelesen..."
 
 #: src/feedlist_formaction.cpp:131 src/itemlist_formaction.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't mark feed read: %s"
-msgstr "Fehler: konnte Artikel nicht nach %s speichern"
+msgstr "Fehler: konnte Feed nicht gelesen markieren: %s"
 
 #: src/feedlist_formaction.cpp:155
 msgid "No feeds with unread items."
@@ -427,9 +426,9 @@ msgid "Toggling read flag for article..."
 msgstr "Schalte Gelesen-Flag für Artikel um..."
 
 #: src/itemlist_formaction.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid "Error while toggling read flag: %s"
-msgstr "Fehler beim Abholen von %s: %s"
+msgstr "Fehler beim Umschalten des Gelesen-Flag: %s"
 
 #: src/itemlist_formaction.cpp:255
 #, c-format
@@ -469,9 +468,9 @@ msgid "type: "
 msgstr "Typ: "
 
 #: src/itemview_formaction.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid "Error while marking article as read: %s"
-msgstr "Fehler beim Abholen von %s: %s"
+msgstr "Fehler beim als gelesen markieren des Artikels: %s"
 
 #: src/itemview_formaction.cpp:151
 #, c-format
@@ -583,7 +582,7 @@ msgstr "Download zur Warteschlange hinzufügen"
 
 #: src/keymap.cpp:36
 msgid "Reload the list of URLs from the configuration"
-msgstr ""
+msgstr "Liste der URLs aus der Konfiguration neuladen"
 
 #: src/keymap.cpp:37
 msgid "Download file"
@@ -703,9 +702,9 @@ msgid "Error: unsupported URL: %s"
 msgstr "Fehler: nicht unterstützte URL: %s"
 
 #: src/search_formaction.cpp:28
-#, fuzzy, c-format
+#, c-format
 msgid "Error while searching for `%s': %s"
-msgstr "Fehler beim Abholen von %s: %s"
+msgstr "Fehler beim Suchen nach `%s': %s"
 
 #: src/search_formaction.cpp:35
 #, c-format
@@ -759,13 +758,13 @@ msgid "%s %s - URLs"
 msgstr "%s %s - URLs"
 
 #: src/view.cpp:280
-#, fuzzy, c-format
+#, c-format
 msgid "Error: applying the filter failed: %s"
-msgstr "Fehler: das Öffnen der Zwischenspeicherdatei `%s' schlug fehl: %s"
+msgstr "Fehler: Anwenden des Filters fehlgeschlagen: %s"
 
 #: src/view.cpp:300
 msgid "Updating query feed..."
-msgstr ""
+msgstr "Update Query-Feed..."
 
 #: src/view.cpp:311
 msgid "Error: feed contains no items!"
