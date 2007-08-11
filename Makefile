@@ -119,6 +119,7 @@ distclean: clean clean-mo
 doc:
 	$(MKDIR) doc/xhtml
 	$(A2X) -f xhtml -D doc/xhtml doc/newsbeuter.txt
+	doc/generate.pl doc/configcommands.dsv > doc/newsbeuter-cfgcmds.txt
 	$(A2X) -f manpage -D doc doc/manpage-newsbeuter.txt
 	$(A2X) -f manpage -D doc doc/manpage-podbeuter.txt
 

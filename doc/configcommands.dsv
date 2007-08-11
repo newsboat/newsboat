@@ -1,9 +1,9 @@
 auto-reload|[yes/no]|no|If enabled, all feeds will be automatically reloaded at start up and then continuously after a certain time has passed (see reload-time).|auto-reload yes
-bind-key|<key> <operation>||Bind key <key> to <operation>. This means that whenever <key> is pressed, then <operation> is executed (if applicable in the current context). A list of available operations can be found below.|bind-key ^R reload-all
+bind-key|<key> <operation>|n/a|Bind key <key> to <operation>. This means that whenever <key> is pressed, then <operation> is executed (if applicable in the current context). A list of available operations can be found below.|bind-key ^R reload-all
 browser|<browser-command>|lynx|Set the browser command to use when opening an article in the browser.|browser w3m
 cache-file|<path>|"~/.newsbeuter/cache.db"|This configuration option sets the cache file. This is especially useful if the filesystem of your home directory doesn't support proper locking (e.g. NFS).|cache-file "/tmp/testcache.db"
 cleanup-on-quit|[yes/no]|yes|If yes, then the cache gets locked and superfluous feeds and items are removed, such as feeds that can't be found in the urls configuration file anymore.|cleanup-on-quit no
-color|<element> <fgcolor> <bgcolor> [<attr> ...]||Set the foreground color, background color and optional attributes for a certain element|color background white black
+color|<element> <fgcolor> <bgcolor> [<attr> ...]|n/a|Set the foreground color, background color and optional attributes for a certain element|color background white black
 confirm-exit|[yes/no]|no|If set to yes, then newsbeuter will ask for confirmation whether the user really wants to quit newsbeuter.|confirm-exit yes
 datetime-format|<date/time format>|%b %d|This format specifies the date/time format in the article list. For a detailed documentation on the allowed formats, consult the manpage of strftime(3).|datetime-format "%D, %R"
 error-log|<path>|""|If set, then user errors (e.g. errors regarding defunct RSS feeds) will be logged to this file.|error-log "~/.newsbeuter/error.log"
@@ -14,13 +14,13 @@ notify-program|<path>|""|If set, then the configured program will be executed if
 notify-screen|[yes/no]|no|If yes, then a "privacy message" will be sent to the terminal, containing a notification message about new articles. This is especially useful if you use terminal emulations such as GNU screen which implement privacy messages.|notify-screen yes
 notify-xterm|[yes/no]|no|If yes, then the xterm window title will be set to a notification message about new articles.|notify-xterm yes
 podcast-auto-enqueue|[yes/no]|no|If yes, then all podcast URLs that are found in articles are added to the podcast download queue. See below for more information on podcast support in newsbeuter.|podcast-auto-enqueue yes
-proxy|<server:port>||Set the proxy to use for downloading RSS feeds.|proxy localhost:3128
-proxy-auth|<auth>||Set the proxy authentication string.|proxy-auth user:password
+proxy|<server:port>|n/a|Set the proxy to use for downloading RSS feeds.|proxy localhost:3128
+proxy-auth|<auth>|n/a|Set the proxy authentication string.|proxy-auth user:password
 refresh-on-startup|[yes/no]|no|If yes, then all feeds will be reloaded when newsbeuter starts up. This is equivalent to the -r commandline option.|refresh-on-startup yes
 reload-time|<number>|30|The number of minutes between automatic reloads.|reload-time 60
 save-path|<path>|~/|The default path where articles shall be saved to. If an invalid path is specified, the current directory is used.|save-path "~/Saved Articles"
 show-read-feeds|[yes/no]|yes|If yes, then all feeds, including those without unread articles, are listed. If no, then only feeds with one or more unread articles are list.|show-read-feeds no
 suppress-first-reload|[yes/no]|no|If yes, then the first automatic reload will be suppressed if auto-reload is set to yes.|suppress-first-reload yes
-unbind-key|<key>||Unbind key <key>. This means that no operation is called when <key> is pressed.|unbind-key R
+unbind-key|<key>|n/a|Unbind key <key>. This means that no operation is called when <key> is pressed.|unbind-key R
 use-proxy|[yes/no]|no|If yes, then the configured proxy will be used for downloading the RSS feeds.|use-proxy yes
 user-agent|<user agent string>|""|If set to a non-zero-length string, this value will be used as HTTP User-Agent header for all HTTP requests.|user-agent "Lynx/2.8.5rel.1 libwww-FM/2.14"

@@ -52,6 +52,11 @@ FIRST STEPS
 
 include::chapter-firststeps.txt[]
 
+CONFIGURATION COMMANDS
+----------------------
+
+include::newsbeuter-cfgcmds.txt[]
+
 
 FILES
 -----
