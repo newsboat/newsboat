@@ -2,32 +2,37 @@
 
 namespace newsbeuter {
 
-history::history() : idx(0) { }
+history::history() : it(lines.begin()) { }
 
 history::~history() { }
 
 void history::add_line(const std::string& line) {
 	if (line.length() > 0) {
-		lines.insert(lines.begin(), line);
+		lines.push_front(line);
 	}
-	idx = 0;
 }
 
 std::string history::prev() {
-	if (idx < lines.size()) {
-		return lines[idx++];
-	}
 	if (lines.size() == 0) {
 		return "";
 	}
-	return lines[idx-1];
+	std::string retval;
+	if (it == lines.end()) {
+		it--;
+	}
+	retval = *it;
+	it++;
+	return retval;
 }
 
 std::string history::next() {
-	if (idx > 0) {
-		return lines[--idx];
+	if (lines.size() == 0 || it == lines.begin()) {
+		return "";
 	}
-	return "";
+	std::string retval;
+	it--;
+	retval = *it;
+	return retval;
 }
 
 

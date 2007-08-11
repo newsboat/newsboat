@@ -14,6 +14,7 @@
 #include <urlreader.h>
 #include <utils.h>
 #include <matcher.h>
+#include <history.h>
 
 #include <stdlib.h>
 
@@ -334,4 +335,32 @@ BOOST_AUTO_TEST_CASE(TestFilterLanguageMemMgmt) {
 	m1 = m2;
 	m2.parse("tags # \"foo\"");
 	m1 = m2;
+}
+
+BOOST_AUTO_TEST_CASE(TestHistory) {
+	history h;
+
+	BOOST_CHECK_EQUAL(h.prev(), "");
+	BOOST_CHECK_EQUAL(h.prev(), "");
+	BOOST_CHECK_EQUAL(h.next(), "");
+	BOOST_CHECK_EQUAL(h.next(), "");
+
+	h.add_line("testline");
+	BOOST_CHECK_EQUAL(h.prev(), "testline");
+	BOOST_CHECK_EQUAL(h.prev(), "testline");
+	BOOST_CHECK_EQUAL(h.next(), "");
+	BOOST_CHECK_EQUAL(h.next(), "");
+
+	h.add_line("foobar");
+	BOOST_CHECK_EQUAL(h.prev(), "foobar");
+	BOOST_CHECK_EQUAL(h.prev(), "testline");
+	BOOST_CHECK_EQUAL(h.next(), "foobar");
+	BOOST_CHECK_EQUAL(h.prev(), "testline");
+	BOOST_CHECK_EQUAL(h.prev(), "testline");
+	BOOST_CHECK_EQUAL(h.prev(), "testline");
+	BOOST_CHECK_EQUAL(h.next(), "foobar");
+	BOOST_CHECK_EQUAL(h.prev(), "testline");
+	BOOST_CHECK_EQUAL(h.next(), "foobar");
+	BOOST_CHECK_EQUAL(h.next(), "");
+	BOOST_CHECK_EQUAL(h.next(), "");
 }

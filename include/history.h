@@ -1,7 +1,7 @@
 #ifndef NEWSBEUTER_HISTORY__H
 #define NEWSBEUTER_HISTORY__H
 
-#include <vector>
+#include <list>
 #include <string>
 
 namespace newsbeuter {
@@ -14,8 +14,8 @@ namespace newsbeuter {
 			std::string prev();
 			std::string next();
 		private:
-			std::vector<std::string> lines;
-			unsigned int idx;
+			std::list<std::string> lines;
+			std::list<std::string>::const_iterator it;
 	};
 
 }
