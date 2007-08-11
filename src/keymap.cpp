@@ -68,9 +68,11 @@ static op_desc opdescs[] = {
 	{ OP_NIL, NULL, NULL, NULL, 0 }
 };
 
-keymap::keymap() { 
+keymap::keymap(unsigned flags) { 
 	for (int i=0;opdescs[i].op != OP_NIL;++i) {
-		keymap_[opdescs[i].default_key] = opdescs[i].op;
+		if (opdescs[i].flags & (flags | KM_INTERNAL | KM_SYSKEYS)) {
+			keymap_[opdescs[i].default_key] = opdescs[i].op;
+		}
 	}
 }
 

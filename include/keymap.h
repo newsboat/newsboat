@@ -87,7 +87,7 @@ namespace newsbeuter {
 
 	class keymap : public config_action_handler {
 		public:
-			keymap();
+			keymap(unsigned int flags);
 			~keymap();
 			void set_key(operation op, const std::string& key);
 			void unset_key(const std::string& key);

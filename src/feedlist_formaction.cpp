@@ -330,7 +330,7 @@ bool feedlist_formaction::jump_to_previous_unread_feed(unsigned int& feedpos) {
 			return true;
 		}
 	}
-	for (unsigned int i=visible-feeds.size()-1;i>=curpos;--i) {
+	for (unsigned int i=visible_feeds.size()-1;i>=curpos;--i) {
 		GetLogger().log(LOG_DEBUG, "feedlist_formaction::jump_to_previous_unread_feed: visible_feeds[%u] unread items: %u", i, visible_feeds[i].first->unread_item_count());
 		if (visible_feeds[i].first->unread_item_count() > 0) {
 			GetLogger().log(LOG_DEBUG, "feedlist_formaction::jump_to_previous_unread_feed: hit");

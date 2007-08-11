@@ -204,7 +204,7 @@ void controller::run(int argc, char * argv[]) {
 	colormanager * colorman = new colormanager();
 	colorman->register_commands(cfgparser);
 
-	keymap keys;
+	keymap keys(KM_NEWSBEUTER);
 	cfgparser.register_handler("bind-key",&keys);
 	cfgparser.register_handler("unbind-key",&keys);
 
