@@ -19,6 +19,7 @@ class feedlist_formaction : public formaction {
 		rss_feed * get_feed();
 
 		bool jump_to_next_unread_feed(unsigned int& feedpos);
+		bool jump_to_previous_unread_feed(unsigned int& feedpos);
 
 		virtual void handle_cmdline(const std::string& cmd);
 

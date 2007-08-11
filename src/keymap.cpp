@@ -23,6 +23,7 @@ static op_desc opdescs[] = {
 	{ OP_MARKALLFEEDSREAD, "mark-all-feeds-read", "C", _("Mark all feeds read"), KM_NEWSBEUTER },
 	{ OP_SAVE, "save", "s", _("Save article"), KM_NEWSBEUTER },
 	{ OP_NEXTUNREAD, "next-unread", "n", _("Go to next unread article"), KM_NEWSBEUTER },
+	{ OP_PREVUNREAD, "prev-unread", "p", _("Go to previous unread article"), KM_NEWSBEUTER },
 	{ OP_OPENINBROWSER, "open-in-browser", "o", _("Open article in browser"), KM_NEWSBEUTER },
 	{ OP_HELP, "help", "?", _("Open help dialog"), KM_BOTH },
 	{ OP_TOGGLESOURCEVIEW, "toggle-source-view", "^U", _("Toggle source view"), KM_NEWSBEUTER },

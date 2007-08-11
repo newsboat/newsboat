@@ -29,6 +29,7 @@ namespace newsbeuter {
 						OP_OPEN, 
 						OP_SAVE, 
 						OP_NEXTUNREAD, 
+						OP_PREVUNREAD,
 						OP_OPENINBROWSER, 
 						OP_HELP, 
 						OP_TOGGLESOURCEVIEW, 
