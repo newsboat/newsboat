@@ -62,12 +62,18 @@ namespace newsbeuter {
 			std::string get_filename_suggestion(const std::string& s);
 
 			bool get_next_unread();
+			bool get_previous_unread();
 
 			void set_colors(const colormanager& colorman);
 
 		protected:
+			/*
 			bool jump_to_next_unread_item(std::vector<rss_item>& items, bool begin_with_next);
 			bool jump_to_next_unread_feed(bool begin_with_next);
+			bool jump_to_previous_unread_item(std::vector<rss_item>& items, bool begin_with_prev);
+			bool jump_to_previous_unread_feed(bool begin_with_prev);
+			*/
+
 			void set_bindings();
 
 			controller * ctrl;

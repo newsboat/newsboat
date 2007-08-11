@@ -373,6 +373,30 @@ char view::confirm(const std::string& prompt, const std::string& charset) {
 	return result;
 }
 
+bool view::get_previous_unread() {
+	unsigned int feedpos;
+	GetLogger().log(LOG_DEBUG, "view::get_previous_unread: trying to find previous unread");
+	if (itemlist->jump_to_previous_unread_item(false)) {
+		GetLogger().log(LOG_DEBUG, "view::get_previous_unread: found unread article in same feed");
+		itemview->init();
+		itemview->set_feed(itemlist->get_feed());
+		itemview->set_guid(itemlist->get_guid());
+		return true;
+	} else if (feedlist->jump_to_previous_unread_feed(feedpos)) {
+		GetLogger().log(LOG_DEBUG, "view::get_previous_unread: found feed with unread articles");
+		itemlist->set_feed(feedlist->get_feed());
+		itemlist->set_pos(feedpos);
+		itemlist->init();
+		if (itemlist->jump_to_previous_unread_item(true)) {
+			itemview->init();
+			itemview->set_feed(itemlist->get_feed());
+			itemview->set_guid(itemlist->get_guid());
+			return true;
+		}
+	}
+	return false;
+}
+
 bool view::get_next_unread() {
 	unsigned int feedpos;
 	GetLogger().log(LOG_DEBUG, "view::get_next_unread: trying to find next unread");

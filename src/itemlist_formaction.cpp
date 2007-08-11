@@ -121,6 +121,12 @@ void itemlist_formaction::process_operation(operation op) {
 				v->show_error(_("No unread items."));
 			}
 			break;
+		case OP_PREVUNREAD:
+			GetLogger().log(LOG_INFO, "itemlist_formaction: jumping to previous unread item");
+			if (!jump_to_previous_unread_item(false)) {
+				v->show_error(_("No unread items."));
+			}
+			break;
 		case OP_MARKFEEDREAD:
 			GetLogger().log(LOG_INFO, "itemlist_formaction: marking feed read");
 			v->set_status(_("Marking feed read..."));
@@ -254,6 +260,31 @@ void itemlist_formaction::set_head(const std::string& s, unsigned int unread, un
 	char buf[1024];
 	snprintf(buf, sizeof(buf), _("%s %s - Articles in feed '%s' (%u unread, %u total) - %s"), PROGRAM_NAME, PROGRAM_VERSION, s.c_str(), unread, total, url.c_str());
 	f->set("head", buf);
+}
+
+bool itemlist_formaction::jump_to_previous_unread_item(bool start_with_last) {
+	unsigned int itempos;
+	std::istringstream is(f->get("itempos"));
+	is >> itempos;
+	for (int i=(start_with_last?itempos:(itempos-1));i>=0;--i) {
+		GetLogger().log(LOG_DEBUG, "itemlist_formaction::jump_to_previous_unread_item: visible_items[%u] unread = %s", i, visible_items[i].first->unread() ? "true" : "false");
+		if (visible_items[i].first->unread()) {
+			std::ostringstream os;
+			os << i;
+			f->set("itempos", os.str());
+			return true;
+		}
+	}
+	for (unsigned int i=visible_items.size()-1;i>=itempos;--i) {
+		if (visible_items[i].first->unread()) {
+			std::ostringstream os;
+			os << i;
+			f->set("itempos", os.str());
+			return true;
+		}
+	}
+	return false;
+
 }
 
 bool itemlist_formaction::jump_to_next_unread_item(bool start_with_first) {

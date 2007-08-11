@@ -196,6 +196,15 @@ void itemview_formaction::process_operation(operation op) {
 				v->show_error(_("No unread items."));
 			}
 			break;
+		case OP_PREVUNREAD:
+			GetLogger().log(LOG_INFO, "view::run_itemview: jumping to previous unread article");
+			if (v->get_previous_unread()) {
+				do_redraw = true;
+			} else {
+				v->pop_current_formaction();
+				v->show_error(_("No unread items."));
+			}
+			break;
 		case OP_QUIT:
 			GetLogger().log(LOG_INFO, "view::run_itemview: quitting");
 			quit = true;

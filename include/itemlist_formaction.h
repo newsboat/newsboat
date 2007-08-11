@@ -26,6 +26,7 @@ class itemlist_formaction : public formaction {
 		virtual keymap_hint_entry * get_keymap_hint();
 
 		bool jump_to_next_unread_item(bool start_with_first);
+		bool jump_to_previous_unread_item(bool start_with_last);
 
 		virtual void handle_cmdline(const std::string& cmd);
 
