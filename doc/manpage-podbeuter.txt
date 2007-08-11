@@ -37,6 +37,12 @@ PODCAST SUPPORT
 include::chapter-podcasts.txt[]
 
 
+CONFIGURATION COMMANDS
+----------------------
+
+include::podbeuter-cfgcmds.txt[]
+
+
 FILES
 -----
 

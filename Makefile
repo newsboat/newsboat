@@ -110,7 +110,11 @@ clean-libbeuter:
 clean-libfilter:
 	$(RM) $(FILTERLIB_OUTPUT) $(FILTERLIB_OBJS) filter/Scanner.cpp filter/Scanner.h filter/Parser.cpp filter/Parser.h
 
-clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter
+clean-doc:
+	$(RM) -r doc/xhtml 
+	$(RM) doc/*.xml doc/*.1 doc/newsbeuter-cfgcmds.txt doc/podbeuter-cfgcmds.txt
+
+clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-doc
 	$(RM) $(STFLHDRS)
 
 distclean: clean clean-mo
@@ -121,6 +125,7 @@ doc:
 	$(A2X) -f xhtml -D doc/xhtml doc/newsbeuter.txt
 	doc/generate.pl doc/configcommands.dsv > doc/newsbeuter-cfgcmds.txt
 	$(A2X) -f manpage -D doc doc/manpage-newsbeuter.txt
+	doc/generate.pl doc/podbeuter-cmds.dsv > doc/podbeuter-cfgcmds.txt
 	$(A2X) -f manpage -D doc doc/manpage-podbeuter.txt
 
 install: install-mo
