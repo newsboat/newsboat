@@ -1,0 +1,16 @@
+A podcast is a media file distributed over the internet using syndication feeds
+such as RSS, for later playback on portable players or computers.  Newsbeuter
+contains support for downloading and saving podcasts. This support differs a bit
+from other podcast aggregators or "podcatchers" in how it is done.
+
+Podcast content is transported in RSS feeds via special tags called
+"enclosures". Newsbeuter recognizes these enclosures and stores the relevant
+information for every podcast item it finds in an RSS feed. What the user then
+can do is to add the podcast download URL to a download queue. Alternatively,
+newsbeuter can be configured to automatically do that. This queue is stored in
+the file $HOME/.newsbeuter/queue.
+
+The user can then use the download manager "podbeuter" to download these files
+to a directory on the local filesystem. Podbeuter comes with the newsbeuter
+package, and features a look and feel very close to the one of newsbeuter. It
+also shares the same configuration file.

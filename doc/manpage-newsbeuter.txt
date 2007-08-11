@@ -47,6 +47,11 @@ OPTIONS
 -C configfile::
        Use an alternative configuration file
 
+FIRST STEPS
+-----------
+
+include::chapter-firststeps.txt[]
+
 
 FILES
 -----

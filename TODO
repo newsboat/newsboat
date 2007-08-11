@@ -12,6 +12,12 @@ TODO:
 - properly document changes in key binding stuff
 - make cursor in feedlist and itemlist stable when a filter is applied
 
+- predefine filters and select them from a view
+- refine the search function (make it like the command line)
+- implement commandline commands quit [done], add, save [done], tag (select tag) [done], goto (by matching title of feed)
+- the manpage shall be generated with asciidoc
+- document recent changes
+
 
 longteam goals to reach:
 - add scripting support
@@ -90,3 +96,5 @@ DONE:
 - fix memory leak
 - set keybindings in podbeuter, too
 - implement "meta-feeds"
+- make date/time format customizable in the article list
+- make <esc> cancel the commandline

@@ -31,6 +31,11 @@ OPTIONS
 -q queuefile::
        Use an alternative queue file
 
+PODCAST SUPPORT
+---------------
+
+include::chapter-podcasts.txt[]
+
 
 FILES
 -----

@@ -65,66 +65,9 @@ binary to the directory /opt/newsbeuter/bin.
 
 First Steps
 -----------
-After you've installed newsbeuter, you can run it for the first time by typing
-"newsbeuter" on your command prompt. This will bring you the following message:
 
-	Error: no URLs configured. Please fill the file /Users/ak/.newsbeuter/urls with RSS feed URLs or import an OPML file.
+include::chapter-firststeps.txt[]
 
-	newsbeuter 0.4
-	usage: ./newsbeuter [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]
-		-r              refresh feeds on start
-		-e              export OPML feed to stdout
-		-i <file>       import OPML file
-		-u <urlfile>    read RSS feed URLs from <urlfile>
-		-c <cachefile>  use <cachefile> as cache file
-		-C <configfile> read configuration from <configfile>
-		-v              clean up cache thoroughly
-		-h              this help
-
-
-This means that newsbeuter can't start without any configured feeds. To add
-feeds to newsbeuter, you can either add URLs to the configuration file
-$HOME/.newsbeuter/urls or you can import an OPML file by running "newsbeuter -i
-blogroll.opml". To manually add URLs, open the file with your favorite text
-editor and add the URLs, one per line:
-
-	http://rss.cnn.com/rss/cnn_topstories.rss
-	http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml
-
-If you need to add URLs that have restricted access via username/password, simply
-provide the username/password in the following way:
-
-	http://username:password@hostname.domain.tld/feed.rss
-
-In order to protect username and password, make sure that
-$HOME/.newsbeuter/urls has the appropriate permissions.
-
-Now you can run newsbeuter again, and it will present you with a controllable
-list of the URLs that you configured previously. You can now start downloading
-the feeds, either by pressing "R" to download all feeds, or by pressing "r" to
-download the currently selected feed. You can then select a feed you want to
-read, and by pressing "Enter", you can go to the article list for this feed.
-This works even while the downloading is still in progress.  You can now see
-the list of available articles by their title. A "N" on the left indicates that
-an article wasn't read yet. Pressing Enter brings you to the content of the
-article. You can scroll through this text, and also run a browser (default:
-lynx) to view the complete article if the content is empty or just an abstract
-or a short description. Pressing "q" brings you back to the article list, and
-pressing "q" again brings you back to the feed list. Pressing "q" a third time
-then closes newsbeuter.
-
-Newsbeuter caches the article that it downloads. This means that when you start
-newsbeuter again and reload a feed, the old articles can still be read even if
-they aren't in the current RSS feeds anymore. Optionally you can configure how
-many articles shall be preserved by feed so that the article backlog doesn't
-grow endlessly (see below).
-
-Several aspects of newsbeuter's behaviour can be configured via a configuration
-file, by default $HOME/.newsbeuter/config. This configuration files contains
-lines in the form "<config-command> <arg1> ...".  The configuration file can
-also contain comments, which start with the '#' character and go as far as the
-end of line. If you need to enter a configuration argument that contains
-spaces, use quotes (") around the whole argument.
 
 
 .Configuration Commands
@@ -132,32 +75,7 @@ spaces, use quotes (") around the whole argument.
 `10`15`15`40`20~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Configuration Command|Argument(s)|Default|Description|Example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-auto-reload|[yes/no]|no|If enabled, all feeds will be automatically reloaded at start up and then continuously after a certain time has passed (see reload-time).|auto-reload yes
-bind-key|<key> <operation>||Bind key <key> to <operation>. This means that whenever <key> is pressed, then <operation> is executed (if applicable in the current context). A list of available operations can be found below.|bind-key ^R reload-all
-browser|<browser-command>|lynx|Set the browser command to use when opening an article in the browser.|browser w3m
-cache-file|<path>|"~/.newsbeuter/cache.db"|This configuration option sets the cache file. This is especially useful if the filesystem of your home directory doesn't support proper locking (e.g. NFS).|cache-file "/tmp/testcache.db"
-cleanup-on-quit|[yes/no]|yes|If yes, then the cache gets locked and superfluous feeds and items are removed, such as feeds that can't be found in the urls configuration file anymore.|cleanup-on-quit no
-color|<element> <fgcolor> <bgcolor> [<attr> ...]||Set the foreground color, background color and optional attributes for a certain element|color background white black
-confirm-exit|[yes/no]|no|If set to yes, then newsbeuter will ask for confirmation whether the user really wants to quit newsbeuter.|confirm-exit yes
-datetime-format|<date/time format>|%b %d|This format specifies the date/time format in the article list. For a detailed documentation on the allowed formats, consult the manpage of strftime(3).|datetime-format "%D, %R"
-error-log|<path>|""|If set, then user errors (e.g. errors regarding defunct RSS feeds) will be logged to this file.|error-log "~/.newsbeuter/error.log"
-ignore-article|<feed> <filterexpr>|n/a|If a downloaded article from <feed> matches <filterexpr>, then it is ignored and not presented to the user. This command is further explained in the "kill file" section below.|ignore-article "*" "title =~ \\"Windows\\""
-include|<path>|n/a|With this command, you can include other files to be interpreted as configuration files. This is especially useful to separate your configuration into several files, e.g. key configuration, color configuration, ...|include "~/.newsbeuter/colors"
-max-items|<number>|0|Set the number of articles to maximally keep per feed. If the number is set to 0, then all articles are kept.|max-items 100
-notify-program|<path>|""|If set, then the configured program will be executed if new articles arrived (through a reload). The first parameter of the called program contains the notification message.|notify-program "~/bin/my-notifier"
-notify-screen|[yes/no]|no|If yes, then a "privacy message" will be sent to the terminal, containing a notification message about new articles. This is especially useful if you use terminal emulations such as GNU screen which implement privacy messages.|notify-screen yes
-notify-xterm|[yes/no]|no|If yes, then the xterm window title will be set to a notification message about new articles.|notify-xterm yes
-podcast-auto-enqueue|[yes/no]|no|If yes, then all podcast URLs that are found in articles are added to the podcast download queue. See below for more information on podcast support in newsbeuter.|podcast-auto-enqueue yes
-proxy|<server:port>||Set the proxy to use for downloading RSS feeds.|proxy localhost:3128
-proxy-auth|<auth>||Set the proxy authentication string.|proxy-auth user:password
-refresh-on-startup|[yes/no]|no|If yes, then all feeds will be reloaded when newsbeuter starts up. This is equivalent to the -r commandline option.|refresh-on-startup yes
-reload-time|<number>|30|The number of minutes between automatic reloads.|reload-time 60
-save-path|<path>|~/|The default path where articles shall be saved to. If an invalid path is specified, the current directory is used.|save-path "~/Saved Articles"
-show-read-feeds|[yes/no]|yes|If yes, then all feeds, including those without unread articles, are listed. If no, then only feeds with one or more unread articles are list.|show-read-feeds no
-suppress-first-reload|[yes/no]|no|If yes, then the first automatic reload will be suppressed if auto-reload is set to yes.|suppress-first-reload yes
-unbind-key|<key>||Unbind key <key>. This means that no operation is called when <key> is pressed.|unbind-key R
-use-proxy|[yes/no]|no|If yes, then the configured proxy will be used for downloading the RSS feeds.|use-proxy yes
-user-agent|<user agent string>|""|If set to a non-zero-length string, this value will be used as HTTP User-Agent header for all HTTP requests.|user-agent "Lynx/2.8.5rel.1 libwww-FM/2.14"
+include::configcommands.dsv[]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .Available Operations
@@ -524,22 +442,7 @@ and by your creativity.
 Podcast Support
 ~~~~~~~~~~~~~~~
 
-A podcast is a media file distributed over the internet using syndication feeds
-such as RSS, for later playback on portable players or computers.  Newsbeuter
-contains support for downloading and saving podcasts. This support differs a bit
-from other podcast aggregators or "podcatchers" in how it is done.
-
-Podcast content is transported in RSS feeds via special tags called
-"enclosures". Newsbeuter recognizes these enclosures and stores the relevant
-information for every podcast item it finds in an RSS feed. What the user then
-can do is to add the podcast download URL to a download queue. Alternatively,
-newsbeuter can be configured to automatically do that. This queue is stored in
-the file $HOME/.newsbeuter/queue.
-
-The user can then use the download manager "podbeuter" to download these files
-to a directory on the local filesystem. Podbeuter comes with the newsbeuter
-package, and features a look and feel very close to the one of newsbeuter. It
-also shares the same configuration file.
+include::chapter-podcasts.txt[]
 
 .Podbeuter Configuration Commands
 [frame="all", grid="all",format="dsv",separator="|"]
