@@ -119,6 +119,8 @@ distclean: clean clean-mo
 doc:
 	$(MKDIR) doc/xhtml
 	$(A2X) -f xhtml -D doc/xhtml doc/newsbeuter.txt
+	$(A2X) -f manpage -D doc doc/manpage-newsbeuter.txt
+	$(A2X) -f manpage -D doc doc/manpage-podbeuter.txt
 
 install: install-mo
 	$(MKDIR) $(prefix)/bin
