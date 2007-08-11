@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-11 18:26+0200\n"
+"POT-Creation-Date: 2007-08-11 19:10+0200\n"
 "PO-Revision-Date: 2007-05-14 18:38+0200\n"
 "Last-Translator: Nicolas Martyanoff <khaelin@gmail.com>\n"
 "Language-Team: Nicolas Martyanoff <khaelin@gmail.com>\n"
@@ -225,102 +225,102 @@ msgstr "Erreur: impossible d'enregistrer l'article dans %s"
 msgid "No feed selected!"
 msgstr "Aucun flux sélectionné !"
 
-#: src/feedlist_formaction.cpp:121 src/itemlist_formaction.cpp:126
+#: src/feedlist_formaction.cpp:121 src/itemlist_formaction.cpp:132
 msgid "Marking feed read..."
 msgstr "Noter le flux lu..."
 
-#: src/feedlist_formaction.cpp:131 src/itemlist_formaction.cpp:133
+#: src/feedlist_formaction.cpp:131 src/itemlist_formaction.cpp:139
 #, fuzzy, c-format
 msgid "Error: couldn't mark feed read: %s"
 msgstr "Erreur: impossible d'enregistrer l'article dans %s"
 
-#: src/feedlist_formaction.cpp:155
+#: src/feedlist_formaction.cpp:155 src/feedlist_formaction.cpp:163
 msgid "No feeds with unread items."
 msgstr "Aucun flux avec des éléments non lus"
 
-#: src/feedlist_formaction.cpp:161
+#: src/feedlist_formaction.cpp:169
 msgid "Marking all feeds read..."
 msgstr "Noter tous les flux lus..."
 
-#: src/feedlist_formaction.cpp:180
+#: src/feedlist_formaction.cpp:188
 msgid "No tags defined."
 msgstr "Aucun tag définis."
 
-#: src/feedlist_formaction.cpp:193 src/itemlist_formaction.cpp:162
+#: src/feedlist_formaction.cpp:201 src/itemlist_formaction.cpp:168
 #, fuzzy
 msgid "Filter: "
 msgstr "Fichier: "
 
-#: src/feedlist_formaction.cpp:200
+#: src/feedlist_formaction.cpp:208
 msgid "Do you really want to quit (y:Yes n:No)? "
 msgstr "Voulez vous vraiment quitter (y: Oui n: Non) ?"
 
-#: src/feedlist_formaction.cpp:200 src/filebrowser_formaction.cpp:86
+#: src/feedlist_formaction.cpp:208 src/filebrowser_formaction.cpp:86
 msgid "yn"
 msgstr "on"
 
-#: src/feedlist_formaction.cpp:200
+#: src/feedlist_formaction.cpp:208
 msgid "y"
 msgstr "o"
 
-#: src/feedlist_formaction.cpp:280
+#: src/feedlist_formaction.cpp:288
 #, c-format
 msgid "%s %s - Your feeds (%u unread, %u total) - tag `%s'"
 msgstr "%s %s - Vos flux (%u non lus, %u total) - tag `%s'"
 
-#: src/feedlist_formaction.cpp:282
+#: src/feedlist_formaction.cpp:290
 #, c-format
 msgid "%s %s - Your feeds (%u unread, %u total)"
 msgstr "%s %s - Vos flux (%u non lus, %u total) "
 
-#: src/feedlist_formaction.cpp:294 src/help_formaction.cpp:70
-#: src/itemlist_formaction.cpp:292 src/itemview_formaction.cpp:218
+#: src/feedlist_formaction.cpp:302 src/help_formaction.cpp:70
+#: src/itemlist_formaction.cpp:323 src/itemview_formaction.cpp:227
 #: src/pb_view.cpp:258 src/pb_view.cpp:267 src/search_formaction.cpp:143
 #: src/urlview_formaction.cpp:71
 msgid "Quit"
 msgstr "Quitter"
 
-#: src/feedlist_formaction.cpp:295 src/itemlist_formaction.cpp:293
-#: src/itemview_formaction.cpp:219
+#: src/feedlist_formaction.cpp:303 src/itemlist_formaction.cpp:324
+#: src/itemview_formaction.cpp:228
 msgid "Open"
 msgstr "Ouvrir"
 
-#: src/feedlist_formaction.cpp:296 src/itemlist_formaction.cpp:296
-#: src/itemview_formaction.cpp:221
+#: src/feedlist_formaction.cpp:304 src/itemlist_formaction.cpp:327
+#: src/itemview_formaction.cpp:230
 msgid "Next Unread"
 msgstr "Prochain non-lu"
 
-#: src/feedlist_formaction.cpp:297 src/itemlist_formaction.cpp:295
+#: src/feedlist_formaction.cpp:305 src/itemlist_formaction.cpp:326
 msgid "Reload"
 msgstr "Recharger"
 
-#: src/feedlist_formaction.cpp:298
+#: src/feedlist_formaction.cpp:306
 msgid "Reload All"
 msgstr "Recharger Tous"
 
-#: src/feedlist_formaction.cpp:299
+#: src/feedlist_formaction.cpp:307
 msgid "Mark Read"
 msgstr "Notez Lu"
 
-#: src/feedlist_formaction.cpp:300
+#: src/feedlist_formaction.cpp:308
 msgid "Catchup All"
 msgstr "Notez tous les messages comme lus"
 
-#: src/feedlist_formaction.cpp:301 src/itemlist_formaction.cpp:298
+#: src/feedlist_formaction.cpp:309 src/itemlist_formaction.cpp:329
 msgid "Search"
 msgstr "Rechercher"
 
-#: src/feedlist_formaction.cpp:302 src/itemlist_formaction.cpp:299
-#: src/itemview_formaction.cpp:224 src/pb_view.cpp:200 src/pb_view.cpp:274
+#: src/feedlist_formaction.cpp:310 src/itemlist_formaction.cpp:330
+#: src/itemview_formaction.cpp:233 src/pb_view.cpp:200 src/pb_view.cpp:274
 #: src/search_formaction.cpp:146
 msgid "Help"
 msgstr "Aide"
 
-#: src/feedlist_formaction.cpp:359 src/itemlist_formaction.cpp:311
+#: src/feedlist_formaction.cpp:397 src/itemlist_formaction.cpp:342
 msgid "Position not visible!"
 msgstr "Position non visible!"
 
-#: src/feedlist_formaction.cpp:366 src/itemlist_formaction.cpp:318
+#: src/feedlist_formaction.cpp:404 src/itemlist_formaction.cpp:349
 msgid "Invalid position!"
 msgstr "Position invalide!"
 
@@ -352,8 +352,8 @@ msgstr "Fichier: "
 msgid "Cancel"
 msgstr "Annuler"
 
-#: src/filebrowser_formaction.cpp:165 src/itemlist_formaction.cpp:294
-#: src/itemview_formaction.cpp:220
+#: src/filebrowser_formaction.cpp:165 src/itemlist_formaction.cpp:325
+#: src/itemview_formaction.cpp:229
 msgid "Save"
 msgstr "Enregistrer"
 
@@ -395,46 +395,47 @@ msgstr "inconnu (bug)"
 msgid "No item selected!"
 msgstr "Aucun élément sélectionné"
 
-#: src/itemlist_formaction.cpp:87 src/itemlist_formaction.cpp:335
-#: src/itemview_formaction.cpp:163 src/itemview_formaction.cpp:273
+#: src/itemlist_formaction.cpp:87 src/itemlist_formaction.cpp:366
+#: src/itemview_formaction.cpp:163 src/itemview_formaction.cpp:282
 msgid "Aborted saving."
 msgstr "Enregistrement avorté."
 
-#: src/itemlist_formaction.cpp:91 src/itemlist_formaction.cpp:339
-#: src/itemview_formaction.cpp:277
+#: src/itemlist_formaction.cpp:91 src/itemlist_formaction.cpp:370
+#: src/itemview_formaction.cpp:286
 #, c-format
 msgid "Saved article to %s"
 msgstr "Article enregistré dans %s"
 
-#: src/itemlist_formaction.cpp:95 src/itemlist_formaction.cpp:342
-#: src/itemview_formaction.cpp:280
+#: src/itemlist_formaction.cpp:95 src/itemlist_formaction.cpp:373
+#: src/itemview_formaction.cpp:289
 #, c-format
 msgid "Error: couldn't save article to %s"
 msgstr "Erreur: impossible d'enregistrer l'article dans %s"
 
-#: src/itemlist_formaction.cpp:100 src/itemlist_formaction.cpp:347
+#: src/itemlist_formaction.cpp:100 src/itemlist_formaction.cpp:378
 msgid "Error: no item selected!"
 msgstr "Erreur: aucun élément sélectionné"
 
-#: src/itemlist_formaction.cpp:121 src/itemview_formaction.cpp:196
+#: src/itemlist_formaction.cpp:121 src/itemlist_formaction.cpp:127
+#: src/itemview_formaction.cpp:196 src/itemview_formaction.cpp:205
 msgid "No unread items."
 msgstr "Aucun élément non-lu."
 
-#: src/itemlist_formaction.cpp:147
+#: src/itemlist_formaction.cpp:153
 msgid "Toggling read flag for article..."
 msgstr "Basculer le drapeau de lecture pour cet article..."
 
-#: src/itemlist_formaction.cpp:153
+#: src/itemlist_formaction.cpp:159
 #, fuzzy, c-format
 msgid "Error while toggling read flag: %s"
 msgstr "Erreur lors de la récupération de %s: %s"
 
-#: src/itemlist_formaction.cpp:255
+#: src/itemlist_formaction.cpp:261
 #, c-format
 msgid "%s %s - Articles in feed '%s' (%u unread, %u total) - %s"
 msgstr "%s %s - Articles dans le flux '%s' (%u non-lus, %u total) - %s"
 
-#: src/itemlist_formaction.cpp:297
+#: src/itemlist_formaction.cpp:328
 msgid "Mark All Read"
 msgstr "Notez Tous Non-Lus"
 
@@ -494,15 +495,15 @@ msgstr "Lancement du navigateur..."
 msgid "URL list empty."
 msgstr "List d'URL vide"
 
-#: src/itemview_formaction.cpp:222 src/urlview_formaction.cpp:72
+#: src/itemview_formaction.cpp:231 src/urlview_formaction.cpp:72
 msgid "Open in Browser"
 msgstr "Ouvrir dans le navigateur"
 
-#: src/itemview_formaction.cpp:223
+#: src/itemview_formaction.cpp:232
 msgid "Enqueue"
 msgstr "Mettre à la Queue"
 
-#: src/itemview_formaction.cpp:232
+#: src/itemview_formaction.cpp:241
 #, c-format
 msgid "%s %s - Article '%s'"
 msgstr "%s %s - Article '%s'"
@@ -540,94 +541,99 @@ msgid "Go to next unread article"
 msgstr "Aller au prochain article non lu"
 
 #: src/keymap.cpp:26
+#, fuzzy
+msgid "Go to previous unread article"
+msgstr "Aller au prochain article non lu"
+
+#: src/keymap.cpp:27
 msgid "Open article in browser"
 msgstr "Ouvrir l'article dans le navigateur"
 
-#: src/keymap.cpp:27
+#: src/keymap.cpp:28
 msgid "Open help dialog"
 msgstr "Ouvrir la page d'aide"
 
-#: src/keymap.cpp:28
+#: src/keymap.cpp:29
 msgid "Toggle source view"
 msgstr "Basculer l'affichage de la source"
 
-#: src/keymap.cpp:29
+#: src/keymap.cpp:30
 msgid "Toggle read status for article"
 msgstr "Basculer le status de lecture pour cet article"
 
-#: src/keymap.cpp:30
+#: src/keymap.cpp:31
 msgid "Toggle show read feeds"
 msgstr "Basculer l'affichage des flux lus"
 
-#: src/keymap.cpp:31
+#: src/keymap.cpp:32
 msgid "Show URLs in current article"
 msgstr "Afficher les URLs dans l'article en cours"
 
-#: src/keymap.cpp:32
+#: src/keymap.cpp:33
 msgid "Clear current tag"
 msgstr "Supprimer les tag en cours"
 
-#: src/keymap.cpp:33
+#: src/keymap.cpp:34
 msgid "Select tag"
 msgstr "Sélectionner tag"
 
-#: src/keymap.cpp:34
+#: src/keymap.cpp:35
 msgid "Open search dialog"
 msgstr "Ouvrir la page de recherche"
 
-#: src/keymap.cpp:35
+#: src/keymap.cpp:36
 msgid "Add download to queue"
 msgstr "Ajouter un téléchargement à la queue"
 
-#: src/keymap.cpp:36
+#: src/keymap.cpp:37
 msgid "Reload the list of URLs from the configuration"
 msgstr ""
 
-#: src/keymap.cpp:37
+#: src/keymap.cpp:38
 msgid "Download file"
 msgstr "Télécharger fichier"
 
-#: src/keymap.cpp:38
+#: src/keymap.cpp:39
 msgid "Cancel download"
 msgstr "Annuler téléchargement"
 
-#: src/keymap.cpp:39
+#: src/keymap.cpp:40
 msgid "Mark download as deleted"
 msgstr "Noter un téléchargement comme supprimé"
 
-#: src/keymap.cpp:40
+#: src/keymap.cpp:41
 msgid "Purge finished and deleted downloads from queue"
 msgstr "Vider les téléchargements finis et supprimés de la queue"
 
-#: src/keymap.cpp:41
+#: src/keymap.cpp:42
 msgid "Toggle automatic download on/off"
 msgstr "Basculer le téléchargement automatique"
 
-#: src/keymap.cpp:42
+#: src/keymap.cpp:43
 msgid "Start player with currently selected download"
 msgstr "Démarrer le lecteur avec le fichier téléchargé sélectionné"
 
-#: src/keymap.cpp:43
+#: src/keymap.cpp:44
 msgid "Increase the number of concurrent downloads"
 msgstr "Augmenter le nombre de téléchargements en parallèle"
 
-#: src/keymap.cpp:44
+#: src/keymap.cpp:45
 msgid "Decrease the number of concurrent downloads"
 msgstr "Diminuer le nombre de téléchargements en parallèle"
 
-#: src/keymap.cpp:45
+#: src/keymap.cpp:46
 msgid "Redraw screen"
 msgstr "Rafraîchier l'écran"
 
-#: src/keymap.cpp:46
+#: src/keymap.cpp:47
 msgid "Open the commandline"
 msgstr "Ouvrir la ligne de commande"
 
-#: src/keymap.cpp:47
+#: src/keymap.cpp:48
 msgid "Set a filter"
 msgstr "Appliquer un filtre"
 
-#: src/keymap.cpp:48
+#: src/keymap.cpp:49
 #, fuzzy
 msgid "Clear currently set filter"
 msgstr "Supprimer les tag en cours"
