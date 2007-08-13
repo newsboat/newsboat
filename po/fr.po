@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: newsbeuter\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-08-11 19:10+0200\n"
-"PO-Revision-Date: 2007-08-13 10:49+0200\n"
+"PO-Revision-Date: 2007-08-13 11:27+0200\n"
 "Last-Translator: Nicolas Martyanoff <khaelin@gmail.com>\n"
 "Language-Team: Nicolas Martyanoff <khaelin@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -97,7 +97,7 @@ msgstr "Vidage du cache..."
 
 #: src/controller.cpp:265
 msgid "Error while loading feeds from database: "
-msgstr ""
+msgstr "Erreur lors du chargement des flux depuis la database"
 
 #: src/controller.cpp:298
 msgid "Cleaning up cache..."
@@ -550,7 +550,7 @@ msgstr "Ajouter un téléchargement à la queue"
 
 #: src/keymap.cpp:37
 msgid "Reload the list of URLs from the configuration"
-msgstr ""
+msgstr "Recharger la liste des URLs depuis la configuration"
 
 #: src/keymap.cpp:38
 msgid "Download file"
@@ -679,7 +679,7 @@ msgstr "Aucun résultat."
 #: src/search_formaction.cpp:56
 msgid ""
 "Weird. I just found an item that belongs to a nonexistent feed. That's a bug."
-msgstr ""
+msgstr "Etrange. Je viens juste de trouver un élément appartenant à un flux qui n'existe pas. C'est un bug."
 
 #: src/search_formaction.cpp:132
 msgid "%s %s - Search Articles"
