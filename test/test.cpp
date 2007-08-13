@@ -86,7 +86,7 @@ BOOST_AUTO_TEST_CASE(TestConfigParserAndContainer) {
 }
 
 BOOST_AUTO_TEST_CASE(TestKeymap) {
-	keymap k;
+	keymap k(KM_NEWSBEUTER);
 	BOOST_CHECK_EQUAL(k.get_operation("ENTER"), OP_OPEN);
 	BOOST_CHECK_EQUAL(k.get_operation("u"), OP_SHOWURLS);
 	BOOST_CHECK_EQUAL(k.get_operation("X"), OP_NIL);
