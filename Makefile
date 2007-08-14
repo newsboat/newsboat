@@ -12,7 +12,7 @@ CXX=c++
 
 # compiler and linker flags
 DEFINES=-D_ENABLE_NLS -DLOCALEDIR=\"$(localedir)\" -DPACKAGE=\"$(PACKAGE)\"
-WARNFLAGS=-Wall
+WARNFLAGS=-Wall -W
 CXXFLAGS=-ggdb -I./include -I./stfl -I./filter -I. -I/usr/local/include -I/sw/include $(WARNFLAGS) $(DEFINES)
 LDFLAGS=-L. -L/usr/local/lib -L/sw/lib
 

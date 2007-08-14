@@ -1,5 +1,0 @@
-http://test1.url.cc/feed.xml tag1 tag2
-http://anotherfeed.com/
-# a comment
-http://onemorefeed.at/feed/	tag1	tag3
-# comment

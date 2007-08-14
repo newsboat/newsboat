@@ -15,7 +15,6 @@ TODO:
 - predefine filters and select them from a view
 - refine the search function (make it like the command line)
 - implement commandline commands quit [done], add, save [done], tag (select tag) [done], goto (by matching title of feed)
-- implement "previous unread article" key
 
 
 longteam goals to reach:
@@ -98,3 +97,4 @@ DONE:
 - make date/time format customizable in the article list
 - make <esc> cancel the commandline
 - the manpage shall be generated with asciidoc
+- implement "previous unread article" key
