@@ -1,0 +1,185 @@
+The Newsbeuter Hacker's Guide
+=============================
+Andreas Krennmair <ak@synflood.at>
+
+Introduction
+------------
+This is the "hacker's guide" to newsbeuter. It describes the overall architecture
+of newsbeuter, the most important design decisions and some other noteworthy things
+that don't belong anywhere else.
+
+This guide assumes that you know about Unix programming with C++,
+multithreading, and some more stuff. This is not for end users, so if you don't
+have C++ programming experience, then this is not for you.
+
+Architecture
+------------
+
+Classes
+~~~~~~~
+This section describes the different classes and their purpose.
+
+*class cache*: the persistence backend of newsbeuter. It takes rss_item and
+rss_feed objects and writes them to the cache.db using the SQLite library,
+respectively reads the content of cache.db and creates rss_item and rss_feed
+objects.
+
+*class colormanager*: manages the color configuration. It hooks into the
+configuration parser, stores the color configuration information and sets
+them in the view. This is currently a bit ugly, because colormanager knows about
+the internals of view resp. pb_view. This should be changed in a way that
+colormanager knows nothing about who gets the configuration, and that the views
+retrieve this configuration from colormanager. It is derived from
+config_action_handler, a helper class for the configuration parser.
+
+*class configcontainer*: manages the normal program configuration. It hooks into
+the configuration parser and the stores the configuration information. Other
+components can then query the configcontainer for configuration values. It is
+derived from config_action_handler.
+
+*class configparser*: parses the configuration file and hands over the results
+to all hooked config_action_handler objects.
+
+*class controller*: the controller does a lot of the work within newsbeuter. It
+is the connector between view and cache. It parses the command line option,
+controls the configuration parser and hands over data to the view. It also
+contains code to control the reloading of feeds.
+
+*class downloadthread*: a thread that does nothing but start a reload operation
+for all feeds. Derived from thread.
+
+*class htmlrenderer*: takes a string and renders the HTML it contains into a
+textual representation. It also extracts URLs from a and img tag for later use.
+
+*class keymap*: hooks into the configuration parser and manages all the
+keymapping. Additionally, it generates the keymapping information with hint
+texts for the view.
+
+*class logger*: helper class that manages the optional logging to a text file.
+Logging can be enabled by developers (see below).
+
+*class mutex*: a C++ wrapper around the pthread mutex.
+
+*class reloadhtread*: similar to downloadthread, but starts a reload every n
+minutes (configurable).
+
+*class rss_feed*: represents an RSS feed, including RSS url, page link, title,
+author, description and RSS items (articles). Uses the cache to persist itself.
+Internally, all text data (especially the title and the author) are stored as
+UTF-8 strings, but the getters return data that matches the current locale
+charset setting.
+
+*class rss_item*: represents an RSS item (article), including link to the
+article, title, author, publication date and description. Internally, all text
+data (especially the title, the author and the description) are stored as UTF-8
+strings, but the getters return data that matches the current locale charset
+setting.
+
+*class stflpp*: a C++ wrapper around STFL. STFL is the ncurses widget library
+that newsbeuter heavily relies upon.
+
+*class thread*: a wrapper around Unix pthreads.
+
+*class urlreader*: manages reading and writing the urls file, including handling
+of tags.
+
+*class utils*: contains several static utility functions, such as a tokenizer,
+the lock file code and a text converter that builds upon iconv.
+
+*class view*: the class that draws the user interface. It manages a stack of
+so-called "form actions", each of which represents one dialog. The view class
+delegates all received user input events to the correct form action.
+
+*class formaction*: the abstract base class for all form actions. Currently, the
+following formaction-derived classes exist:
+- feedlist_formaction
+- itemlist_formaction
+- itemview_formaction
+- search_formaction
+- urlview_formaction
+- filebrowser_formaction
+- help_formaction
+- selecttag_formaction
+
+class xmlpullparser*: although called xmlpullparser, it parses virtually
+everything that vaguely looks like XML/HTML tags, even when totally invalid, and
+provides the parsing result as a continuous stream of tokens (tags and text). It
+is solely used by the htmlrenderer class.
+
+Interaction
+~~~~~~~~~~~
+TODO: describe interaction between classes.
+
+
+Design Decisions
+----------------
+
+Use text file as configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The "classical" text tools, like vim, slrn and mutt, are all configurable
+solely via text files. Newsbeuter follows the same spirit, especially since the
+other prominent RSS feed readers for the text console primarily encourage
+configuration via an often crude user interface within the application itself.
+The consequence for newsbeuter is: no configuration via the user interface, but
+solely via configuration files. Text editors are easier to handle than some
+crude menus that are somehow hard to use.
+
+Keep a good balance of customizability
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The problem with user wishes is that too many people demand a possibility to
+customize this bell or that whistle within newsbeuter. Often, these
+possibilities only have a very limited purpose, and their value is in no
+relation to the added complexity of the code. Every customization needs to be
+tested, and means a lot more testing whenever some related code changes.
+
+The code shouldn't get too bloated, it should be kept straight-forward and easy
+to read. With too much customizability, this goal would be in danger.
+
+Why C++ and not C, [insert your favorite language], ...?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C++ has many advantages compared to other programming languages.
+
+- C++ is backwards-compatible to C. That means we can theoretically use all the C libraries.
+- C++ makes it easier to structure your program in an object-oriented way, and helps maintain inheritance hierarchies without a lot of fuzz.
+- C++ compiles to fast, native code.
+- C++ comes with an extensive standard library (see next section).
+- C++ is widespread.
+- C++ on Linux/Unix systems does not require any exotic compilers to be installed in order to compile newsbeuter. g++ (part of GCC) is enough.
+
+These were the reasons why C++ was initially chosen, and it proved to be a useable language during the development process.
+
+
+Use the full potential of modern C++
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The C++ standard library comes with an extensive set of algorithms and data
+structures. Developers are encouraged to use especially the data structures,
+because the available container classes are standardized, their behaviour and
+usage is well-documented, and makes it possible to keeep the the overall logic
+is a pretty high level. More complex things that can only be done in C (like
+special system calls) /should/ be encapsulated by a wrapper class in order to
+avoid potential mis-use of low-level functions and data structures. Good
+examples for wrapping low-level stuff are *class rss_feed*, *class rss_item*
+and *class stflpp*.
+
+Tips and Tricks
+---------------
+
+Getting a detailed debug log
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If you want to get a detailed debug log from newsbeuter, you only need to run
+newsbeuter with special parameters:
+
+  newsbeuter -d log.txt -l 5
+
+Some of this output doesn't make sense very much unless you know the source
+code, so it's only helpful for developers.
+
+Use (and extend) the unit tests
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In the test subdirectory resides a simple unit test to check the most important
+functionality of the newsbeuter internals. These test build upon Boost.Test which
+you can grab from http://www.boost.org/ (Debian users only need to install
+libboost-test-dev). Run "make test" to build the tests, the result is a binary
+called "test" within the test subdirectory. Run it and see whether everything
+still works as expected. Run "make clean-test" to clean up after the tests.

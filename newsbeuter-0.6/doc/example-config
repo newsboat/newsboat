@@ -1,0 +1,87 @@
+# this is an example configuration for newsbeuter
+
+############################
+# newsbeuter configuration #
+############################
+
+# If yes, then all feeds, including those without unread articles, are listed.
+# If no, then only feeds with one or more unread articles are list.
+#show-read-feeds yes
+
+# Set the browser command to use when opening an article in the browser.
+#browser lynx
+
+# Set the number of articles to maximally keep per feed. If the number is set 
+# to 0, then all articles are kept.
+#max-items 0
+
+# If yes, then the configured proxy will be used for downloading the RSS feeds.
+#use-proxy no
+
+# Set the proxy to use for downloading RSS feeds.
+# proxy server:port
+
+# Set the proxy authentication string.
+# proxy-auth user:password
+
+# If enabled, all feeds will be automatically reloaded at start up and then 
+# continuously after a certain time has passed (see reload-time).
+#auto-reload no
+
+# The number of minutes between automatic reloads.
+#reload-time 30
+
+# The default path where articles shall be saved to. If an invalid path is 
+# specified, the current directory is used.
+#save-path "~/"
+
+# If yes, then all podcast URLs that are found in articles are added to the 
+# podcast download queue. See below for more information on podcast support 
+# in newsbeuter.
+#podcast-auto-enqueue no
+
+# If yes, then the cache gets locked and superfluous feeds and items are 
+# removed, such as feeds that can't be found in the urls configuration file 
+# anymore.
+#cleanup-on-quit yes
+
+# If set to a non-zero-length string, this value will be used as HTTP 
+# User-Agent header for all HTTP requests.
+#user-agent ""
+
+# If yes, then all feeds will be reloaded when newsbeuter starts up. This 
+# is equivalent to the -r commandline option.
+#refresh-on-startup no
+
+# If yes, then the first automatic reload will be suppressed if auto-reload 
+# is set to yes.
+#suppress-first-reload no
+
+# This configuration option sets the cache file. This is especially useful 
+# if the filesystem of your home directory doesn't support proper locking 
+# (e.g. NFS).
+#cache-file "~/.newsbeuter/cache.db"
+
+# If set to yes, then newsbeuter will ask for confirmation whether the user really wants to quit newsbeuter.
+#confirm-exit no
+
+# This format specifies the date/time format in the article list. For a detailed documentation on the allowed formats, consult the manpage of strftime(3).# datetime-format "%b %d"
+
+# If set, then user errors (e.g. errors regarding defunct RSS feeds) will be logged to this file.
+# error-log ""
+
+
+
+###########################
+# podbeuter configuration #
+###########################
+
+# Specifies the directory where podbeuter shall download the files to.
+#download-path "~/"
+
+# Specifies the maximum number of parallel downloads when automatic download is enabled.
+#max-downloads 1
+
+# Specifies the player that shall be used for playback of downloaded files.
+#player ""
+

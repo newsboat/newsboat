@@ -1,0 +1,3 @@
+download-path|<path>|~/|Specifies the directory where podbeuter shall download the files to.|download-path "~/Downloads"
+max-downloads|<number>|1|Specifies the maximum number of parallel downloads when automatic download is enabled.|max-downloads 3
+player|<player command>|""|Specifies the player that shall be used for playback of downloaded files.|player "mp3blaster"

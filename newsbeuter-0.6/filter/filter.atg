@@ -1,0 +1,72 @@
+/*
+ * parser for newsbeuter filter language
+ */
+
+#include "FilterParser.h"
+
+COMPILER Filter
+
+	FilterParser * gen;
+
+CHARACTERS
+	identchar = 'A'..'Z' + 'a'..'z' + "_-.".
+	digit = "0123456789".
+	nonquote = ANY - '"'.
+
+TOKENS
+	openblock = '('.
+	closeblock = ')'.
+	ident = identchar { identchar }.
+	stringliteral = '"' { nonquote } '"'.
+	numliteral = ['-'] digit { digit }.
+
+PRODUCTIONS
+
+	stringlit<char* &lit>
+               = ( stringliteral | numliteral )		(. lit = coco_string_create_char(t->val); .)
+			   .
+
+	matchattrib<char* &name>
+				= ident								(. name = coco_string_create_char(t->val); .)
+				.
+
+	matchop<int &op>
+				= "==" 								(. op = MATCHOP_EQ; .)
+				| "="								(. op = MATCHOP_EQ; .)
+				| "!="								(. op = MATCHOP_NE; .)
+				| "=~"								(. op = MATCHOP_RXEQ; .)
+				| "!~"								(. op = MATCHOP_RXNE; .)
+				| "<"								(. op = MATCHOP_LT; .)
+				| ">"								(. op = MATCHOP_GT; .)
+				| "<="								(. op = MATCHOP_LE; .)
+				| ">="								(. op = MATCHOP_GE; .)
+				| "#"								(. op = MATCHOP_CONTAINS; .)
+				| "!#"								(. op = MATCHOP_CONTAINSNOT; .)
+				.
+
+	logop<int &lop>
+				= "and"								(. lop = LOGOP_AND; .)
+				| "or"								(. lop = LOGOP_OR; .)
+				.
+
+	matchexpr 										(. char * name, * lit; int op; .)
+				= matchattrib<name>
+				  matchop<op>
+				  stringlit<lit>					(. gen->add_matchexpr(name, op, lit); .)
+				.
+
+	blockexpr 
+				= openblock 						(. gen->open_block(); .)
+				  expr
+				  closeblock						(. gen->close_block(); .)
+				.
+
+	expr 											(. int lop; .)
+			= ( matchexpr | blockexpr )
+			  { logop<lop> 							(. gen->add_logop(lop); .)
+			  ( matchexpr | blockexpr ) }
+			.
+
+	Filter = expr.
+
+END Filter.

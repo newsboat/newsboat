@@ -1,0 +1,60 @@
+After you've installed newsbeuter, you can run it for the first time by typing
+"newsbeuter" on your command prompt. This will bring you the following message:
+
+	Error: no URLs configured. Please fill the file /Users/ak/.newsbeuter/urls with RSS feed URLs or import an OPML file.
+
+	newsbeuter 0.6
+	usage: ./newsbeuter [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]
+		-r              refresh feeds on start
+		-e              export OPML feed to stdout
+		-i <file>       import OPML file
+		-u <urlfile>    read RSS feed URLs from <urlfile>
+		-c <cachefile>  use <cachefile> as cache file
+		-C <configfile> read configuration from <configfile>
+		-v              clean up cache thoroughly
+		-h              this help
+
+
+This means that newsbeuter can't start without any configured feeds. To add
+feeds to newsbeuter, you can either add URLs to the configuration file
+$HOME/.newsbeuter/urls or you can import an OPML file by running "newsbeuter -i
+blogroll.opml". To manually add URLs, open the file with your favorite text
+editor and add the URLs, one per line:
+
+	http://rss.cnn.com/rss/cnn_topstories.rss
+	http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml
+
+If you need to add URLs that have restricted access via username/password, simply
+provide the username/password in the following way:
+
+	http://username:password@hostname.domain.tld/feed.rss
+
+In order to protect username and password, make sure that
+$HOME/.newsbeuter/urls has the appropriate permissions.
+
+Now you can run newsbeuter again, and it will present you with a controllable
+list of the URLs that you configured previously. You can now start downloading
+the feeds, either by pressing "R" to download all feeds, or by pressing "r" to
+download the currently selected feed. You can then select a feed you want to
+read, and by pressing "Enter", you can go to the article list for this feed.
+This works even while the downloading is still in progress.  You can now see
+the list of available articles by their title. A "N" on the left indicates that
+an article wasn't read yet. Pressing Enter brings you to the content of the
+article. You can scroll through this text, and also run a browser (default:
+lynx) to view the complete article if the content is empty or just an abstract
+or a short description. Pressing "q" brings you back to the article list, and
+pressing "q" again brings you back to the feed list. Pressing "q" a third time
+then closes newsbeuter.
+
+Newsbeuter caches the article that it downloads. This means that when you start
+newsbeuter again and reload a feed, the old articles can still be read even if
+they aren't in the current RSS feeds anymore. Optionally you can configure how
+many articles shall be preserved by feed so that the article backlog doesn't
+grow endlessly (see below).
+
+Several aspects of newsbeuter's behaviour can be configured via a configuration
+file, by default $HOME/.newsbeuter/config. This configuration files contains
+lines in the form "<config-command> <arg1> ...".  The configuration file can
+also contain comments, which start with the '#' character and go as far as the
+end of line. If you need to enter a configuration argument that contains
+spaces, use quotes (") around the whole argument.

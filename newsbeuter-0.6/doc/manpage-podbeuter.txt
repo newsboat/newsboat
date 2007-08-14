@@ -1,0 +1,65 @@
+PODBEUTER(1)
+===========
+Andreas Krennmair <ak@synflood.at>
+
+
+NAME
+----
+podbeuter - a podcast download manage for text terminals
+
+
+SYNOPSIS
+--------
+'podbeuter' [-C configfile] [-q queuefile] [-h|
+
+
+DESCRIPTION
+-----------
+'podbeuter' is a podcast manager for text terminals. It is a helper program to
+'newsbeuter' which queues podcast downloads into a file. These queued downloads
+can then be download with 'newsbeuter'.
+
+
+OPTIONS
+-------
+-h::
+        Display help
+
+-C configfile::
+       Use an alternative configuration file
+
+-q queuefile::
+       Use an alternative queue file
+
+PODCAST SUPPORT
+---------------
+
+include::chapter-podcasts.txt[]
+
+
+CONFIGURATION COMMANDS
+----------------------
+
+include::podbeuter-cfgcmds.txt[]
+
+
+FILES
+-----
+
+'$HOME/.newsbeuter/config'
+
+'$HOME/.newsbeuter/queue'
+
+
+SEE ALSO
+--------
+newsbeuter(1). The documentation that comes with newsbeuter is a good
+source about the general use and configuration of newsbeuter's podcast
+support.
+
+
+AUTHORS
+-------
+Andreas Krennmair <ak@synflood.at>, for contributors see AUTHORS file.
+
+

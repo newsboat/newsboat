@@ -1,0 +1,79 @@
+NEWSBEUTER(1)
+===========
+Andreas Krennmair <ak@synflood.at>
+
+
+NAME
+----
+newsbeuter - an RSS feed reader for text terminals
+
+
+SYNOPSIS
+--------
+'newsbeuter' [-r] [-e] [-i opmlfile] [-u urlfile] [-c cachefile] [-C configfile] [-v] [-h]
+
+
+DESCRIPTION
+-----------
+'newsbeuter' is an RSS feed reader for text terminals. RSS is a number of
+widely-used XML formats to transmit, publish and syndicate articles, for
+example news or blog articles.  Newsbeuter is designed to be used on text
+terminals on Unix or Unix-like systems such as Linux, BSD or Mac OS X.
+
+
+OPTIONS
+-------
+-h::
+        Display help
+
+-r::
+        Refresh feeds on start
+
+-e::
+        Export feeds as OPML to stdout
+
+-v::
+        Clean up cache thoroughly (i.e. reduce it in size if possible)
+
+-i opmlfile::
+       Import an OPML file
+
+-u urlfile::
+       Use an alternative URL file
+
+-c cachefile::
+       Use an alternative cache file
+
+-C configfile::
+       Use an alternative configuration file
+
+FIRST STEPS
+-----------
+
+include::chapter-firststeps.txt[]
+
+CONFIGURATION COMMANDS
+----------------------
+
+include::newsbeuter-cfgcmds.txt[]
+
+
+FILES
+-----
+
+'$HOME/.newsbeuter/config'
+
+'$HOME/.newsbeuter/urls'
+
+
+SEE ALSO
+--------
+podbeuter(1). The documentation that comes with newsbeuter is a good
+source about the general use and configuration of newsbeuter.
+
+
+AUTHORS
+-------
+Andreas Krennmair <ak@synflood.at>, for contributors see AUTHORS file.
+
+
