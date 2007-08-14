@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: newsbeuter\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-08-11 19:10+0200\n"
-"PO-Revision-Date: 2007-07-16 14:06+0400\n"
+"PO-Revision-Date: 2007-08-14 04:06+0400\n"
 "Last-Translator: Sergey Dryabzhinsky <killy.netsphere@gmail.com>\n"
 "Language-Team: Sergey Dryabzhinsky <killy.netsphere@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -51,15 +51,15 @@ msgstr "Ошибка сегментирования."
 
 #: src/controller.cpp:62 src/pb_controller.cpp:47
 msgid "Fatal error: couldn't determine home directory!"
-msgstr "Фатальная ошибка: невозможно определить домашнюю директорию!"
+msgstr "Фатальная ошибка: невозможно определить домашний каталог!"
 
 #: src/controller.cpp:64 src/pb_controller.cpp:49
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
-"Пожалуйста, задайте значение переменной HOME окружения пользователя "
-"илидобавьте подходящего пользователя для UID %u!"
+"Пожалуйста, задайте значение переменной HOME окружения пользователя или"
+"добавьте подходящего пользователя для UID %u!"
 
 #: src/controller.cpp:158 src/pb_controller.cpp:106
 #, c-format
@@ -72,8 +72,8 @@ msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
 "import an OPML file."
 msgstr ""
-"Ошибка: не найдено ни одной ссылки. Пожалуйста, занесите в файл %s ссылкина "
-"RSS ленты или импортируйте файл OPML."
+"Ошибка: не найдено ни одной ссылки. Пожалуйста, занесите в файл %s ссылки"
+"на RSS ленты или импортируйте файл OPML."
 
 #: src/controller.cpp:181 src/pb_controller.cpp:113
 #, c-format
@@ -109,21 +109,20 @@ msgstr "Тщательно очищаю кэш..."
 
 #: src/controller.cpp:265
 msgid "Error while loading feeds from database: "
-msgstr ""
+msgstr "Ошибка во время загрузки лент новостей из базы: "
 
 #: src/controller.cpp:298
 msgid "Cleaning up cache..."
 msgstr "Очищаю кэш..."
 
 #: src/controller.cpp:304
-#, fuzzy
 msgid "failed: "
-msgstr "неудачно"
+msgstr "Провал: "
 
 #: src/controller.cpp:319
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't mark all feeds read: %s"
-msgstr "Ошибка: невозможно сохранить заметку в %s"
+msgstr "Ошибка: невозможно отметить все ленты как прочитанные: %s"
 
 #: src/controller.cpp:365
 #, c-format
@@ -146,9 +145,7 @@ msgstr "неверный индекс ленты (сбой)"
 #: src/controller.cpp:433
 #, c-format
 msgid "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
-msgstr ""
-"newsbeuter: обновление завершено, %u не прочитанных лент(всего %u заметок не "
-"прочитано)"
+msgstr "newsbeuter: обновление завершено, %u не прочитанных лент (всего %u заметок не прочитано)"
 
 #: src/controller.cpp:486
 #, c-format
@@ -165,15 +162,14 @@ msgid ""
 "-h              this help\n"
 msgstr ""
 "%s %s\n"
-"Использование: %s [-i <файл>|-e] [-u <файл с сылками>] [-c <файл кэша>] [-"
-"h]\n"
+"Использование: %s [-i <файл>|-e] [-u <файл с сылками>] [-c <файл кэша>] [-h]\n"
 "-e                  экспорт ленты OPML на стандартный вывод\n"
 "-r                  обновить ленты при запуске\n"
 "-i <файл>           импорт файла OPML\n"
 "-u <файл с сылками> читать ссылки на ленты RSS из <файла с сылками>\n"
 "-c <файл кэша>      использовать <файл кэша> как файл кэша\n"
-"-C <файл настроек>  читать настройки из <файла настроек>-v                  "
-"тщательно очищать кэш\n"
+"-C <файл настроек>  читать настройки из <файла настроек>\n"
+"-v                  тщательно очищать кэш\n"
 "-h                  показать эту справку\n"
 
 #: src/controller.cpp:529
@@ -207,7 +203,7 @@ msgstr "неудачно"
 
 #: src/download.cpp:49
 msgid "incomplete"
-msgstr "не завершено"
+msgstr "неполностью"
 
 #: src/download.cpp:51
 msgid "unknown (bug)."
@@ -216,7 +212,7 @@ msgstr "неизвестно (сбой)."
 #: src/exception.cpp:22
 #, c-format
 msgid "attribute `%s' is not available."
-msgstr ""
+msgstr "критерий `%s' недоступен."
 
 #: src/feedlist_formaction.cpp:73 src/itemlist_formaction.cpp:36
 msgid "Error: couldn't parse filter command!"
@@ -232,9 +228,9 @@ msgid "Marking feed read..."
 msgstr "Отмечаю ленту как прочитанную..."
 
 #: src/feedlist_formaction.cpp:131 src/itemlist_formaction.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't mark feed read: %s"
-msgstr "Ошибка: невозможно сохранить заметку в %s"
+msgstr "Ошибка: невозможно отметить ленту как прочитанную: %s"
 
 #: src/feedlist_formaction.cpp:155 src/feedlist_formaction.cpp:163
 msgid "No feeds with unread items."
@@ -254,15 +250,15 @@ msgstr "Фильтр: "
 
 #: src/feedlist_formaction.cpp:208
 msgid "Do you really want to quit (y:Yes n:No)? "
-msgstr "Вы правда хотите выйти (д:Да н:Нет)? "
+msgstr "Вы правда хотите выйти (y:Да n:Нет)? "
 
 #: src/feedlist_formaction.cpp:208 src/filebrowser_formaction.cpp:86
 msgid "yn"
-msgstr "дн"
+msgstr "yn"
 
 #: src/feedlist_formaction.cpp:208
 msgid "y"
-msgstr "д"
+msgstr "y"
 
 #: src/feedlist_formaction.cpp:288
 #, c-format
@@ -338,11 +334,11 @@ msgstr "%s %s - сохранить файл - %s"
 #: src/filebrowser_formaction.cpp:84
 #, c-format
 msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
-msgstr "Вы правда хотите перезаписать `%s' (д:Да н:Нет)? "
+msgstr "Вы правда хотите перезаписать `%s' (y:Да n:Нет)? "
 
 #: src/filebrowser_formaction.cpp:86
 msgid "n"
-msgstr "н"
+msgstr "n"
 
 #: src/filebrowser_formaction.cpp:136
 msgid "File: "
@@ -399,7 +395,7 @@ msgstr "Не выделено ни одного элемента!"
 #: src/itemlist_formaction.cpp:87 src/itemlist_formaction.cpp:366
 #: src/itemview_formaction.cpp:163 src/itemview_formaction.cpp:282
 msgid "Aborted saving."
-msgstr "прерванное сохранение."
+msgstr "Прерванное сохранение."
 
 #: src/itemlist_formaction.cpp:91 src/itemlist_formaction.cpp:370
 #: src/itemview_formaction.cpp:286
@@ -427,9 +423,9 @@ msgid "Toggling read flag for article..."
 msgstr "Переключение флага прочтения у заметки..."
 
 #: src/itemlist_formaction.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid "Error while toggling read flag: %s"
-msgstr "Ошибка во время получения %s: %s"
+msgstr "Ошибка во время переключения флага прочтения: %s"
 
 #: src/itemlist_formaction.cpp:261
 #, c-format
@@ -462,21 +458,21 @@ msgstr "Дата: "
 
 #: src/itemview_formaction.cpp:80
 msgid "Podcast Download URL: "
-msgstr "Ссылка закачки подкаста: "
+msgstr "Ссылка загрузки подкаста: "
 
 #: src/itemview_formaction.cpp:81
 msgid "type: "
 msgstr "тип: "
 
 #: src/itemview_formaction.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid "Error while marking article as read: %s"
-msgstr "Ошибка во время получения %s: %s"
+msgstr "Ошибка во время потметки заметки как прочитанной: %s"
 
 #: src/itemview_formaction.cpp:151
 #, c-format
 msgid "Added %s to download queue."
-msgstr "Добавлено %s в очередь закачки."
+msgstr "%s добавлено в очередь закачки."
 
 #: src/itemview_formaction.cpp:167
 #, c-format
@@ -542,9 +538,8 @@ msgid "Go to next unread article"
 msgstr "Перейти к следующей непрочитанной заметке"
 
 #: src/keymap.cpp:26
-#, fuzzy
 msgid "Go to previous unread article"
-msgstr "Перейти к следующей непрочитанной заметке"
+msgstr "Перейти к предыдущей непрочитанной заметке"
 
 #: src/keymap.cpp:27
 msgid "Open article in browser"
@@ -588,7 +583,7 @@ msgstr "Добавить загрузку в очередь"
 
 #: src/keymap.cpp:37
 msgid "Reload the list of URLs from the configuration"
-msgstr ""
+msgstr "Обновить список ссылок согласно настройкам"
 
 #: src/keymap.cpp:38
 msgid "Download file"
@@ -673,8 +668,7 @@ msgstr "Ошибка: не могу выйти: загрузка(и) актив�
 
 #: src/pb_view.cpp:127
 msgid "Error: download needs to be finished before the file can be played."
-msgstr ""
-"Ошибка: загрузка должна закончиться прежде чем файл может быть проигран."
+msgstr "Ошибка: загрузка должна закончиться прежде чем файл может быть проигран."
 
 #: src/pb_view.cpp:156
 msgid "Error: unable to perform operation: download(s) in progress."
@@ -690,7 +684,7 @@ msgstr "Удалить"
 
 #: src/pb_view.cpp:271
 msgid "Purge Finished"
-msgstr "Очистить от законченных"
+msgstr "Очистить от завершённых"
 
 #: src/pb_view.cpp:272
 msgid "Toggle Automatic Download"
@@ -706,9 +700,9 @@ msgid "Error: unsupported URL: %s"
 msgstr "Ошибка: ссылка не поддерживается: %s"
 
 #: src/search_formaction.cpp:28
-#, fuzzy, c-format
+#, c-format
 msgid "Error while searching for `%s': %s"
-msgstr "Ошибка во время получения %s: %s"
+msgstr "Ошибка во время поиска `%s': %s"
 
 #: src/search_formaction.cpp:35
 #, c-format
@@ -723,8 +717,7 @@ msgstr "Результатов нет."
 msgid ""
 "Weird. I just found an item that belongs to a nonexistent feed. That's a bug."
 msgstr ""
-"Ужасти. Я только что нашёл элемент, который принадлежит несуществующей "
-"ленте. Это сбой."
+"Ужасти. Я только что нашёл элемент, который принадлежит несуществующей ленте. Это сбой."
 
 #: src/search_formaction.cpp:132
 #, c-format
@@ -750,11 +743,11 @@ msgstr "%s %s - Выбрать маркер"
 
 #: src/selecttag_formaction.cpp:74
 msgid "Select Tag"
-msgstr "выбрать маркер"
+msgstr "Выбрать маркер"
 
 #: src/urlview_formaction.cpp:28
 msgid "No link selected!"
-msgstr "не выбрано ни одной ссылки!"
+msgstr "Не выбрано ни одной ссылки!"
 
 #: src/urlview_formaction.cpp:63
 #, c-format
@@ -762,13 +755,13 @@ msgid "%s %s - URLs"
 msgstr "%s %s - Ссылки"
 
 #: src/view.cpp:280
-#, fuzzy, c-format
+#, c-format
 msgid "Error: applying the filter failed: %s"
-msgstr "Ошибка: попытка отрыть файл кэша `%s' завершилась неудачей: %s"
+msgstr "Ошибка: применение фильтра завершилось неудачей: %s"
 
 #: src/view.cpp:300
 msgid "Updating query feed..."
-msgstr ""
+msgstr "Обновляю ленту очереди..."
 
 #: src/view.cpp:311
 msgid "Error: feed contains no items!"
