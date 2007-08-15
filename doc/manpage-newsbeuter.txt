@@ -35,6 +35,9 @@ OPTIONS
 -v::
         Clean up cache thoroughly (i.e. reduce it in size if possible)
 
+-V::
+        Get version information about newsbeuter and the libraries it uses
+
 -i opmlfile::
        Import an OPML file
 

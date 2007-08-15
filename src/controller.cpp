@@ -17,12 +17,15 @@
 #include <sys/time.h>
 #include <ctime>
 #include <signal.h>
+#include <sys/utsname.h>
 
 #include <nxml.h>
 
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <pwd.h>
+
+#include <ncursesw/ncurses.h>
 
 #include <config.h>
 
@@ -107,7 +110,7 @@ void controller::run(int argc, char * argv[]) {
 	std::string importfile;
 
 	do {
-		if((c = ::getopt(argc,argv,"i:erhu:c:C:d:l:v"))<0)
+		if((c = ::getopt(argc,argv,"i:erhu:c:C:d:l:vV"))<0)
 			continue;
 		switch (c) {
 			case ':': /* fall-through */
@@ -143,6 +146,9 @@ void controller::run(int argc, char * argv[]) {
 				break;
 			case 'v':
 				do_vacuum = true;
+				break;
+			case 'V':
+				version_information();
 				break;
 			case 'd': // this is an undocumented debug commandline option!
 				GetLogger().set_logfile(optarg);
@@ -480,6 +486,24 @@ void controller::start_reload_all_thread() {
 	dlt->start();
 }
 
+void controller::version_information() {
+	std::cout << PROGRAM_NAME << " " << PROGRAM_VERSION << " - " << PROGRAM_URL << std::endl;
+	std::cout << "Copyright (C) 2006-2007 Andreas Krennmair" << std::endl << std::endl;
+
+	struct utsname xuts;
+	uname(&xuts);
+
+	std::cout << "System: " << xuts.sysname << " " << xuts.release << " (" << xuts.machine << ")" << std::endl;
+#if defined(__GNUC__) && defined(__VERSION__)
+	std::cout << "Compiler: g++ " << __VERSION__ << std::endl;
+#endif
+	std::cout << "ncurses: " << curses_version() << " (compiled with " << NCURSES_VERSION << ")" << std::endl;
+	std::cout << "libcurl: " << curl_version()  << " (compiled with " << LIBCURL_VERSION << ")" << std::endl;
+	std::cout << "SQLite: " << sqlite3_libversion() << " (compiled with " << SQLITE_VERSION << ")" << std::endl;
+
+	::exit(EXIT_SUCCESS);
+}
+
 void controller::usage(char * argv0) {
 	char buf[2048];
 	snprintf(buf, sizeof(buf), 
@@ -491,6 +515,7 @@ void controller::usage(char * argv0) {
 				"-c <cachefile>  use <cachefile> as cache file\n"
 				"-C <configfile> read configuration from <configfile>\n"
 				"-v              clean up cache thoroughly\n"
+				"-V              get version information\n"
 				"-h              this help\n"), PROGRAM_NAME, PROGRAM_VERSION, argv0);
 	std::cout << buf;
 	::exit(EXIT_FAILURE);

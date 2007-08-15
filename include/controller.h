@@ -48,6 +48,7 @@ namespace newsbeuter {
 
 		private:
 			void usage(char * argv0);
+			void version_information();
 			void import_opml(const char * filename);
 			void export_opml();
 			void rec_find_rss_outlines(nxml_data_t * node, std::string tag);
