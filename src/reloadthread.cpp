@@ -23,6 +23,13 @@ void reloadthread::run() {
 			}
 		}
 
-		::sleep((oldtime + waittime_sec) - time(NULL));
+		int err = 0;
+		do {
+			time_t curtime = time(NULL);
+			if ((oldtime + waittime_sec) > curtime) {
+				if (::sleep((oldtime + waittime_sec) - curtime)>0 && errno == EINTR)
+					err = 1;
+			}
+		} while (err);
 	}
 }
