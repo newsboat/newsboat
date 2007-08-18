@@ -216,6 +216,8 @@ void controller::run(int argc, char * argv[]) {
 
 	cfgparser.register_handler("ignore-article",&ign);
 
+	cfgparser.register_handler("define-filter",&filters);
+
 	try {
 		cfgparser.parse("/etc/" PROGRAM_NAME "/config");
 		cfgparser.parse(config_file);

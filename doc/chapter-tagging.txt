@@ -1,0 +1,20 @@
+Newsbeuter comes with the possibility to categorize or "tag", as well call it,
+RSS feeds. Every RSS feed can be assigned 0 or more tags. Within newsbeuter, you
+can then select to only show RSS feeds that match a certain tag. That makes it
+easy to categorize your feeds in a flexible and powerful way.
+
+Usually, the ~/.newsbeuter/urls file contains one RSS feed URL per line. To
+assign a tag to an RSS feed, simply attach it as a single word, separated by
+blanks such as space or tab. If the tag needs to contain spaces, you must use
+quotes (") around the tag (see example below). An example ~/.newsbeuter/urls
+file may look like this:
+
+	http://blog.fefe.de/rss.xml?html interesting conspiracy news "cool stuff"
+	http://rss.orf.at/news.xml news orf
+	http://www.heise.de/newsticker/heise.rdf news interesting
+
+When you now start newsbeuter with this configuration, you can press "t" to select
+a tag. When you select the tag "news", you will see all three RSS feeds. Pressing
+"t" again and e.g. selecting the "conspiracy" tag, you will only see the
+http://blog.fefe.de/rss.xml?html RSS feed. Pressing "^T" clears the current tag,
+and again shows all RSS feeds, regardless of their assigned tags.

@@ -188,6 +188,25 @@ void feedlist_formaction::process_operation(operation op) {
 				v->show_error(_("No tags defined."));
 			}
 			break;
+		case OP_SELECTFILTER:
+			if (v->get_ctrl()->get_filters().size() > 0) {
+				std::string newfilter = v->select_filter(v->get_ctrl()->get_filters().get_filters());
+				if (newfilter != "") {
+					filterhistory.add_line(newfilter);
+					if (newfilter.length() > 0) {
+						if (!m.parse(newfilter)) {
+							v->show_error(_("Error: couldn't parse filter command!"));
+							m.parse(FILTER_UNREAD_FEEDS);
+						} else {
+							apply_filter = true;
+							do_redraw = true;
+						}
+					}
+				}
+			} else {
+				v->show_error(_("No filters defined."));
+			}
+			break;
 		case OP_SEARCH:
 			v->run_search();
 			break;

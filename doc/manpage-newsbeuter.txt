@@ -61,6 +61,39 @@ CONFIGURATION COMMANDS
 include::newsbeuter-cfgcmds.txt[]
 
 
+TAGGING
+-------
+
+include::chapter-tagging.txt[]
+
+
+SCRIPTS AND FILTERS
+-------------------
+
+include::chapter-snownews.txt[]
+
+
+COMMAND LINE
+------------
+
+include::chapter-cmdline.txt[]
+
+'quit'::
+        Quit newsbeuter
+
+'save' <filename>::
+        Save current article to <filename>
+
+'set' <variable>[=<value>]::
+        Set (or get) configuration variable value
+
+'tag' <tagname>::
+        Select a certain tag
+
+'<number>'::
+        Jump to the <number>th entry in the current dialog
+
+
 FILES
 -----
 

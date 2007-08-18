@@ -163,6 +163,26 @@ void itemlist_formaction::process_operation(operation op) {
 				}
 			}
 			break;
+		case OP_SELECTFILTER:
+			if (v->get_ctrl()->get_filters().size() > 0) {
+				std::string newfilter = v->select_filter(v->get_ctrl()->get_filters().get_filters());
+				if (newfilter != "") {
+					filterhistory.add_line(newfilter);
+					if (newfilter.length() > 0) {
+						if (!m.parse(newfilter)) {
+							v->show_error(_("Error: couldn't parse filter command!"));
+						} else {
+							apply_filter = true;
+							update_visible_items = true;
+							do_redraw = true;
+						}
+					}
+				}
+			} else {
+				v->show_error(_("No filters defined."));
+			}
+
+			break;
 		case OP_SETFILTER: {
 				char buf[256];
 				snprintf(buf,sizeof(buf), "{hbox[lastline] .expand:0 {label .expand:0 text:\"%s\"}{input[filter] modal:1 on_ESC:cancel-setfilter on_ENTER:end-setfilter on_UP:prev-filterhistory on_DOWN:next-filterhistory .expand:h text[filtertext]:\"\"}}", _("Filter: "));

@@ -1,0 +1,39 @@
+From version 0.4 on, newsbeuter contains support for Snownews extensions. The
+RSS feed readers Snownews and Liferea share a common way of extending the
+readers with custom scripts. Two mechanisms, namely "execurl" and "filter" type
+scripts, are available and supported by newsbeuter.
+
+An "execurl" script can be any program that gets executed and whose output is
+interpreted as RSS feed, while "filter" scripts are fed with the content of a
+configured URL and whose output is interpreted as RSS feed.
+
+The configuration is simple and straight-forward. Just add to your
+~/.newsbeuter/urls file configuration lines like the following ones:
+
+	exec:~/bin/execurl-script
+	filter:~/bin/filter-script:http://some.test/url
+
+The first line shows how to add an execurl script to your configuration: start
+the line with "exec:" and then immediately append the path of the script that
+shall be executed.  If this script requires additional parameters, simply use
+quotes:
+
+	"exec:~/bin/execurl-script param1 param2"
+
+The second line shows how to add a filter script to your configuration: start
+the line with "filter:", then immediately append the path of the script, then
+append a colon (":"), and then append the URL of the file that shall be fed to
+the script. Again, if the script requires any parameters, simply quote:
+
+	"filter:~/bin/filter-script param1 param2:http://url/foobar"
+
+In both cases, the tagging feature as described above is still available:
+
+	exec:~/bin/execurl-script tag1 tag2 "quoted tag"
+	filter:~/bin/filter-script:http://some.test/url tag3 tag4 tag5
+
+A collection of such extension scripts can be found on this website:
+http://kiza.kcore.de/software/snownews/snowscripts/extensions[]
+
+If you want to write your own extensions, refer to this website for further
+instructions: http://kiza.kcore.de/software/snownews/snowscripts/writing[]

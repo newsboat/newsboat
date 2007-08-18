@@ -46,6 +46,7 @@ static op_desc opdescs[] = {
 	{ OP_REDRAW, "redraw", "^L", _("Redraw screen"), KM_BOTH },
 	{ OP_CMDLINE, "cmdline", ":", _("Open the commandline"), KM_NEWSBEUTER },
 	{ OP_SETFILTER, "set-filter", "F", _("Set a filter"), KM_NEWSBEUTER },
+	{ OP_SELECTFILTER, "select-filter", "f", _("Select a predefined filter"), KM_NEWSBEUTER },
 	{ OP_CLEARFILTER, "clear-filter", "^F", _("Clear currently set filter"), KM_NEWSBEUTER },
 	{ OP_SK_UP, "up", "UP", NULL, KM_SYSKEYS },
 	{ OP_SK_DOWN, "down", "DOWN", NULL, KM_SYSKEYS },

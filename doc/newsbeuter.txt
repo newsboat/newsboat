@@ -79,35 +79,39 @@ include::configcommands.dsv[]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .Available Operations
-[frame="all", grid="all", format="dsv"]
+[frame="all", grid="all", format="dsv",separator="|"]
 `20`20`60~~~~~~~~~~~~~~~~~~~~~~~~
 Operation:Default key:Description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-quit:q:Quit the program or return to the previous dialog (depending on the context).
-reload:r:Reload the currently selected feed.
-reload-all:R:Reload all feeds.
-reload-urls:^R:Reload the URLs configuration file.
-mark-feed-read:A:Mark all articles in the currently selected feed read.
-mark-all-feeds-read:C:Mark articles in all feeds read.
-open:ENTER:Open the currently selected feed or article.
-save:s:Save the currently selected article to a file.
-next-unread:n:Jump to the next unread article.
-prev-unread:p:Jump to the previous unread article.
-open-in-browser:o:Opens the URL associated with the current article.
-toggle-source-view:^U:Toggles between the HTML view and the source view in the article view.
-toggle-article-read:N:Toggle the read flag for the currently selected article.
-toggle-show-read-feeds:l:Toggle whether read feeds should be shown in the feed list.
-show-urls:u:Show all URLs in the article in a list (similar to urlview).
-open-search:/:Opens the search dialog. When a search is done in the article list, then the search operation only applies to the articles of the current feed, otherwise to all articles.
-select-tag:t:Select tag.
-clear-tag:^T:Clear current tag.
-enqueue:e:Add the podcast download URL of the current article (if any is found) to the podcast download queue (see below for more information on podcast support).
-redraw:^L:Redraw the screen.
-help:?:Runs the help screen.
-up:UP:Goes up one item in the list.
-down:DOWN:Goes down one item in the list.
-pageup:PPAGE:Goes up one page in the list.
-pagedown:NPAGE:Goes down one page in the list.
+open|ENTER|Open the currently selected feed or article.
+quit|q|Quit the program or return to the previous dialog (depending on the context).
+reload|r|Reload the currently selected feed.
+reload-all|R|Reload all feeds.
+mark-feed-read|A|Mark all articles in the currently selected feed read.
+mark-all-feeds-read|C|Mark articles in all feeds read.
+save|s|Save the currently selected article to a file.
+next-unread|n|Jump to the next unread article.
+prev-unread|p|Jump to the previous unread article.
+open-in-browser|o|Opens the URL associated with the current article.
+help|?|Runs the help screen.
+toggle-source-view|^U|Toggles between the HTML view and the source view in the article view.
+toggle-article-read|N|Toggle the read flag for the currently selected article.
+toggle-show-read-feeds|l|Toggle whether read feeds should be shown in the feed list.
+show-urls|u|Show all URLs in the article in a list (similar to urlview).
+clear-tag|^T|Clear current tag.
+select-tag|t|Select tag.
+open-search|/|Opens the search dialog. When a search is done in the article list, then the search operation only applies to the articles of the current feed, otherwise to all articles.
+enqueue|e|Add the podcast download URL of the current article (if any is found) to the podcast download queue (see below for more information on podcast support).
+reload-urls|^R|Reload the URLs configuration file.
+redraw|^L|Redraw the screen.
+cmdline|:|Open the command line.
+set-filter|F|Set a filter.
+select-filter|f|Select a predefined filter.
+clear-filter|^F|Clear currently set filter.
+up|UP|Goes up one item in the list.
+down|DOWN|Goes down one item in the list.
+pageup|PPAGE|Goes up one page in the list.
+pagedown|NPAGE|Goes down one page in the list.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Keys, as used in the bind-key configuration command, use a special syntax.
@@ -198,83 +202,18 @@ Advanced Features
 Tagging
 ~~~~~~~
 
-Newsbeuter comes with the possibility to categorize or "tag", as well call it,
-RSS feeds. Every RSS feed can be assigned 0 or more tags. Within newsbeuter, you
-can then select to only show RSS feeds that match a certain tag. That makes it
-easy to categorize your feeds in a flexible and powerful way.
+include::chapter-tagging.txt[]
 
-Usually, the ~/.newsbeuter/urls file contains one RSS feed URL per line. To
-assign a tag to an RSS feed, simply attach it as a single word, separated by
-blanks such as space or tab. If the tag needs to contain spaces, you must use
-quotes (") around the tag (see example below). An example ~/.newsbeuter/urls
-file may look like this:
-
-	http://blog.fefe.de/rss.xml?html interesting conspiracy news "cool stuff"
-	http://rss.orf.at/news.xml news orf
-	http://www.heise.de/newsticker/heise.rdf news interesting
-
-When you now start newsbeuter with this configuration, you can press "t" to select
-a tag. When you select the tag "news", you will see all three RSS feeds. Pressing
-"t" again and e.g. selecting the "conspiracy" tag, you will only see the
-http://blog.fefe.de/rss.xml?html RSS feed. Pressing "^T" clears the current tag,
-and again shows all RSS feeds, regardless of their assigned tags.
 
 Scripts and Filters (Snownews Extensions)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-From version 0.4 on, newsbeuter contains support for Snownews extensions. The
-RSS feed readers Snownews and Liferea share a common way of extending the
-readers with custom scripts. Two mechanisms, namely "execurl" and "filter" type
-scripts, are available and supported by newsbeuter.
-
-An "execurl" script can be any program that gets executed and whose output is
-interpreted as RSS feed, while "filter" scripts are fed with the content of a
-configured URL and whose output is interpreted as RSS feed.
-
-The configuration is simple and straight-forward. Just add to your
-~/.newsbeuter/urls file configuration lines like the following ones:
-
-	exec:~/bin/execurl-script
-	filter:~/bin/filter-script:http://some.test/url
-
-The first line shows how to add an execurl script to your configuration: start
-the line with "exec:" and then immediately append the path of the script that
-shall be executed.  If this script requires additional parameters, simply use
-quotes:
-
-	"exec:~/bin/execurl-script param1 param2"
-
-The second line shows how to add a filter script to your configuration: start
-the line with "filter:", then immediately append the path of the script, then
-append a colon (":"), and then append the URL of the file that shall be fed to
-the script. Again, if the script requires any parameters, simply quote:
-
-	"filter:~/bin/filter-script param1 param2:http://url/foobar"
-
-In both cases, the tagging feature as described above is still available:
-
-	exec:~/bin/execurl-script tag1 tag2 "quoted tag"
-	filter:~/bin/filter-script:http://some.test/url tag3 tag4 tag5
-
-A collection of such extension scripts can be found on this website:
-http://kiza.kcore.de/software/snownews/snowscripts/extensions[]
-
-If you want to write your own extensions, refer to this website for further
-instructions: http://kiza.kcore.de/software/snownews/snowscripts/writing[]
+include::chapter-snownews.txt[]
 
 Command Line
 ~~~~~~~~~~~~
 
-Like other text-oriented software, newsbeuter contains an internal commandline to
-modify configuration variables ad hoc and to run own commands. It provides a flexible
-access to the functionality of newsbeuter which is especially useful for
-advanced users.
-
-To start the commandline, type ":". You will see a ":" prompt at the bottom of
-the screen, similar to tools like vi(m) or mutt. You can now enter commands.
-Pressing the return key executes the command (possibly giving feedback to the
-user) and closes the commandline. You can cancel entering commands by pressing
-the ESC key. Currently, the following commands are available:
+include::chapter-cmdline.txt[]
 
 .Available Commandline Commands
 [frame="all", grid="all", format="dsv"]

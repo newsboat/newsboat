@@ -1,0 +1,11 @@
+Like other text-oriented software, newsbeuter contains an internal commandline to
+modify configuration variables ad hoc and to run own commands. It provides a flexible
+access to the functionality of newsbeuter which is especially useful for
+advanced users.
+
+To start the commandline, type ":". You will see a ":" prompt at the bottom of
+the screen, similar to tools like vi(m) or mutt. You can now enter commands.
+Pressing the return key executes the command (possibly giving feedback to the
+user) and closes the commandline. You can cancel entering commands by pressing
+the ESC key. Currently, the following commands are available:
+

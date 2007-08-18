@@ -337,9 +337,17 @@ std::string view::run_filebrowser(filebrowser_type type, const std::string& defa
 }
 
 std::string view::select_tag(const std::vector<std::string>& tags) {
+	selecttag->set_type(selecttag_formaction::SELECTTAG);
 	selecttag->set_tags(tags);
 	run_modal(selecttag, "");
-	return selecttag->get_tag();
+	return selecttag->get_value();
+}
+
+std::string view::select_filter(const std::vector<std::pair<std::string, std::string> >& filters) {
+	selecttag->set_type(selecttag_formaction::SELECTFILTER);
+	selecttag->set_filters(filters);
+	run_modal(selecttag, "");
+	return selecttag->get_value();
 }
 
 void view::run_search(const std::string& feedurl) {

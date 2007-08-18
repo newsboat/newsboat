@@ -3,6 +3,7 @@
 #include <config.h>
 
 #include <sstream>
+#include <cassert>
 
 namespace newsbeuter {
 
@@ -11,21 +12,51 @@ selecttag_formaction::selecttag_formaction(view * vv, std::string formstr)
 
 selecttag_formaction::~selecttag_formaction() { }
 
+void selecttag_formaction::handle_cmdline(const std::string& cmd) {
+	unsigned int idx = 0;
+	if (1==sscanf(cmd.c_str(),"%u",&idx)) {
+		if (idx > 0 && idx <= ((type == SELECTTAG) ? tags.size() : filters.size())) {
+			std::ostringstream idxstr;
+			idxstr << idx - 1;
+			f->set("tagpos", idxstr.str());
+		}
+	} else {
+		formaction::handle_cmdline(cmd);
+	}
+}
+
 void selecttag_formaction::process_operation(operation op) {
 	switch (op) {
 		case OP_QUIT:
-			tag = "";
+			value = "";
 			quit = true;
 			break;
 		case OP_OPEN: {
 				std::string tagposname = f->get("tagposname");
 				if (tagposname.length() > 0) {
-					std::istringstream posname(tagposname);
-					unsigned int pos = 0;
-					posname >> pos;
-					if (pos < tags.size()) {
-						tag = tags[pos];
-						quit = true;
+					switch (type) {
+					case SELECTTAG: {
+							std::istringstream posname(tagposname);
+							unsigned int pos = 0;
+							posname >> pos;
+							if (pos < tags.size()) {
+								value = tags[pos];
+								quit = true;
+							}
+						}
+						break;
+					case SELECTFILTER: {
+							std::istringstream posname(tagposname);
+							unsigned int pos = 0;
+							posname >> pos;
+							if (pos < filters.size()) {
+								value = filters[pos].second;
+								quit = true;
+							}
+						}
+						break;
+					default:
+						assert(0); // should never happen
 					}
 				}
 			}
@@ -43,14 +74,31 @@ void selecttag_formaction::prepare() {
 	if (do_redraw) {
 		std::string code = "{list";
 		unsigned int i=0;
-		for (std::vector<std::string>::const_iterator it=tags.begin();it!=tags.end();++it,++i) {
-			std::ostringstream line;
-			char num[32];
-			snprintf(num,sizeof(num)," %4d. ", i+1);
-			std::string tagstr = num;
-			tagstr.append(it->c_str());
-			line << "{listitem[" << i << "] text:" << stfl::quote(tagstr.c_str()) << "}";
-			code.append(line.str());
+		switch (type) {
+		case SELECTTAG:
+			for (std::vector<std::string>::const_iterator it=tags.begin();it!=tags.end();++it,++i) {
+				std::ostringstream line;
+				char num[32];
+				snprintf(num,sizeof(num),"%4d  ", i+1);
+				std::string tagstr = num;
+				tagstr.append(it->c_str());
+				line << "{listitem[" << i << "] text:" << stfl::quote(tagstr.c_str()) << "}";
+				code.append(line.str());
+			}
+			break;
+		case SELECTFILTER:
+			for (std::vector<std::pair<std::string,std::string> >::const_iterator it=filters.begin();it!=filters.end();++it,++i) {
+				std::ostringstream line;
+				char num[32];
+				snprintf(num,sizeof(num),"%4d  ", i+1);
+				std::string tagstr = num;
+				tagstr.append(it->first.c_str());
+				line << "{listitem[" << i << "] text:" << stfl::quote(tagstr.c_str()) << "}";
+				code.append(line.str());
+			}
+			break;
+		default:
+			assert(0);
 		}
 		code.append("}");
 		f->modify("taglist", "replace_inner", code);
@@ -62,19 +110,42 @@ void selecttag_formaction::prepare() {
 void selecttag_formaction::init() {
 	do_redraw = true;
 	quit = false;
-	tag = "";
+	value = "";
 	char buf[1024];
-	snprintf(buf, sizeof(buf), _("%s %s - Select Tag"), PROGRAM_NAME, PROGRAM_VERSION);
+
+	set_keymap_hints();
+
+	switch (type) {
+	case SELECTTAG:
+		snprintf(buf, sizeof(buf), _("%s %s - Select Tag"), PROGRAM_NAME, PROGRAM_VERSION);
+		break;
+	case SELECTFILTER:
+		snprintf(buf, sizeof(buf), _("%s %s - Select Filter"), PROGRAM_NAME, PROGRAM_VERSION);
+		break;
+	default:
+		assert(0); // should never happen
+	}
 	f->set("head", buf);
 }
 
 keymap_hint_entry * selecttag_formaction::get_keymap_hint() {
-	static keymap_hint_entry hints[] = {
+	static keymap_hint_entry hints_tag[] = {
 		{ OP_QUIT, _("Cancel") },
 		{ OP_OPEN, _("Select Tag") },
 		{ OP_NIL, NULL }
 	};
-	return hints;
+	static keymap_hint_entry hints_filter[] = {
+		{ OP_QUIT, _("Cancel") },
+		{ OP_OPEN, _("Select Filter") },
+		{ OP_NIL, NULL }
+	};
+	switch (type) {
+	case SELECTTAG:
+		return hints_tag;
+	case SELECTFILTER:
+		return hints_filter;
+	}
+	return NULL;
 }
 
 

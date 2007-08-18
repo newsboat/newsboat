@@ -6,6 +6,7 @@
 #include <cache.h>
 #include <nxml.h>
 #include <configcontainer.h>
+#include <filtercontainer.h>
 
 namespace newsbeuter {
 
@@ -46,6 +47,8 @@ namespace newsbeuter {
 			// TODO: move somewhere else...
 			void set_feedptrs(rss_feed& feed);
 
+			inline filtercontainer& get_filters() { return filters; }
+
 		private:
 			void usage(char * argv0);
 			void version_information();
@@ -66,6 +69,7 @@ namespace newsbeuter {
 			bool refresh_on_start;
 			configcontainer * cfg;
 			rss_ignores ign;
+			filtercontainer filters;
 
 			mutex * reload_mutex;
 	};
