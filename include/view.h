@@ -23,7 +23,7 @@ namespace newsbeuter {
 	class itemview_formaction;
 	class help_formaction;
 	class urlview_formaction;
-	class selecttag_formaction;
+	class select_formaction;
 	class search_formaction;
 
 	class view {
@@ -92,7 +92,7 @@ namespace newsbeuter {
 			help_formaction * helpview;
 			filebrowser_formaction * filebrowser;
 			urlview_formaction * urlview;
-			selecttag_formaction * selecttag;
+			select_formaction * selecttag;
 			search_formaction * search;
 
 			std::list<formaction *> formaction_stack;

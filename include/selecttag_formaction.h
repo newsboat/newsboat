@@ -1,16 +1,16 @@
-#ifndef NEWSBEUTER_SELECTTAG_FORMACTION__H
-#define NEWSBEUTER_SELECTTAG_FORMACTION__H
+#ifndef NEWSBEUTER_select_formaction__H
+#define NEWSBEUTER_select_formaction__H
 
 #include <formaction.h>
 
 namespace newsbeuter {
 
-class selecttag_formaction : public formaction {
+class select_formaction : public formaction {
 	public:
 		enum { SELECTTAG, SELECTFILTER };
 
-		selecttag_formaction(view *, std::string formstr);
-		virtual ~selecttag_formaction();
+		select_formaction(view *, std::string formstr);
+		virtual ~select_formaction();
 		virtual void prepare();
 		virtual void init();
 		virtual keymap_hint_entry * get_keymap_hint();

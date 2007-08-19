@@ -13,7 +13,7 @@
 #include <itemview_formaction.h>
 #include <help_formaction.h>
 #include <urlview_formaction.h>
-#include <selecttag_formaction.h>
+#include <select_formaction.h>
 #include <search_formaction.h>
 
 #include <logger.h>
@@ -61,7 +61,7 @@ view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0) {
 	helpview = new help_formaction(this, help_str);
 	filebrowser = new filebrowser_formaction(this, filebrowser_str);
 	urlview = new urlview_formaction(this, urlview_str);
-	selecttag = new selecttag_formaction(this, selecttag_str);
+	selecttag = new select_formaction(this, selecttag_str);
 	search = new search_formaction(this, search_str);
 
 	// push the dialog to start with onto the stack
@@ -337,14 +337,14 @@ std::string view::run_filebrowser(filebrowser_type type, const std::string& defa
 }
 
 std::string view::select_tag(const std::vector<std::string>& tags) {
-	selecttag->set_type(selecttag_formaction::SELECTTAG);
+	selecttag->set_type(select_formaction::SELECTTAG);
 	selecttag->set_tags(tags);
 	run_modal(selecttag, "");
 	return selecttag->get_value();
 }
 
 std::string view::select_filter(const std::vector<std::pair<std::string, std::string> >& filters) {
-	selecttag->set_type(selecttag_formaction::SELECTFILTER);
+	selecttag->set_type(select_formaction::SELECTFILTER);
 	selecttag->set_filters(filters);
 	run_modal(selecttag, "");
 	return selecttag->get_value();

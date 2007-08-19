@@ -220,7 +220,7 @@ include::chapter-cmdline.txt[]
 `20`20`40`20~~~~~~~~~~~~~~~~~~~
 Command:Syntax:Description:Example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-quit:quit:Quit newsbeuter. This only works in the feed list.:quit
+quit:quit:Quit newsbeuter.:quit
 save:save <filename>:Save the currently select article to disk. This works in the article list and in the article view.:save ~/important.txt
 set:set <variable>[=<value>]:Set configuration variable <variable> to <value>. If no value is specified, the current value is printed out:set reload-time=15
 tag:tag <tagname>:Only display feeds with the tag <tagname>.:tag news

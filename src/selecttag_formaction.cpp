@@ -1,4 +1,4 @@
-#include <selecttag_formaction.h>
+#include <select_formaction.h>
 #include <view.h>
 #include <config.h>
 
@@ -7,12 +7,12 @@
 
 namespace newsbeuter {
 
-selecttag_formaction::selecttag_formaction(view * vv, std::string formstr)
+select_formaction::select_formaction(view * vv, std::string formstr)
 	: formaction(vv, formstr) { }
 
-selecttag_formaction::~selecttag_formaction() { }
+select_formaction::~select_formaction() { }
 
-void selecttag_formaction::handle_cmdline(const std::string& cmd) {
+void select_formaction::handle_cmdline(const std::string& cmd) {
 	unsigned int idx = 0;
 	if (1==sscanf(cmd.c_str(),"%u",&idx)) {
 		if (idx > 0 && idx <= ((type == SELECTTAG) ? tags.size() : filters.size())) {
@@ -25,7 +25,7 @@ void selecttag_formaction::handle_cmdline(const std::string& cmd) {
 	}
 }
 
-void selecttag_formaction::process_operation(operation op) {
+void select_formaction::process_operation(operation op) {
 	switch (op) {
 		case OP_QUIT:
 			value = "";
@@ -70,7 +70,7 @@ void selecttag_formaction::process_operation(operation op) {
 	}
 }
 
-void selecttag_formaction::prepare() {
+void select_formaction::prepare() {
 	if (do_redraw) {
 		std::string code = "{list";
 		unsigned int i=0;
@@ -107,7 +107,7 @@ void selecttag_formaction::prepare() {
 	}
 }
 
-void selecttag_formaction::init() {
+void select_formaction::init() {
 	do_redraw = true;
 	quit = false;
 	value = "";
@@ -128,7 +128,7 @@ void selecttag_formaction::init() {
 	f->set("head", buf);
 }
 
-keymap_hint_entry * selecttag_formaction::get_keymap_hint() {
+keymap_hint_entry * select_formaction::get_keymap_hint() {
 	static keymap_hint_entry hints_tag[] = {
 		{ OP_QUIT, _("Cancel") },
 		{ OP_OPEN, _("Select Tag") },
