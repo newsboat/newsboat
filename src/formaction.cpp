@@ -87,6 +87,10 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 			} else {
 				v->show_error(_("usage: set <variable>[=<value>]"));
 			}
+		} else if (cmd == "quit") {
+			while (v->formaction_stack_size() > 0) {
+				v->pop_current_formaction();
+			}
 		}
 	}
 }

@@ -426,9 +426,7 @@ void feedlist_formaction::handle_cmdline(const std::string& cmd) {
 		// hand over all other commands to formaction
 		std::vector<std::string> tokens = utils::tokenize_quoted(cmd, " \t");
 		if (tokens.size() > 0) {
-			if (tokens[0] == "quit") {
-				v->pop_current_formaction();
-			} else if (tokens[0] == "tag") {
+			if (tokens[0] == "tag") {
 				if (tokens.size() >= 2 && tokens[1] != "") {
 					tag = tokens[1];
 					do_redraw = true;
