@@ -1,6 +1,7 @@
 Changes for newsbeuter:
 
 0.7:
+	implemented the possibility to predefine filters
 
 0.6 (2007-08-14):
 	implemented support for reloading the urls file

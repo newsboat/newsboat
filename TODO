@@ -98,3 +98,4 @@ DONE:
 - implement "previous unread article" key
 - implement -V commandline option to see version number
 - predefine filters and select them from a view
+- implement detection when an item is outside of its regular feed (when item->feed->rssurl != feed->rssurl) for itemlist

@@ -251,6 +251,12 @@ void itemlist_formaction::prepare() {
 			strftime(datebuf,sizeof(datebuf), datetimeformat.c_str(), stm);
 			title.append(datebuf);
 			title.append("   ");
+			if (feed->rssurl() != it->first->feedurl()) {
+				char buf[20];
+				snprintf(buf,sizeof(buf),"|%-17s|",it->first->get_feedptr()->title().substr(0,17).c_str());
+				title.append(buf);
+				title.append("  ");
+			}
 			title.append(it->first->title());
 			GetLogger().log(LOG_DEBUG, "itemlist_formaction: XXXTITLE it->first->title = `%s' title = `%s' quoted title = `%s'", 
 				it->first->title().c_str(), title.c_str(), stfl::quote(title).c_str());
