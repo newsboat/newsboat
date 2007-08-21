@@ -8,7 +8,7 @@
 
 namespace newsbeuter {
 
-urlreader::urlreader() { }
+urlreader::urlreader() : offline(false) { }
 urlreader::~urlreader() { }
 
 std::vector<std::string>& urlreader::get_urls() {

@@ -247,44 +247,50 @@ void controller::run(int argc, char * argv[]) {
 	rsscache = new cache(cache_file,cfg);
 
 
-	if (!do_export) {
-		std::string type = cfg->get_configvalue("urls-source");
-		if (type == "local") {
-			urlcfg = new file_urlreader(url_file);
-		} else if (type == "bloglines") {
-			urlcfg = new bloglines_urlreader(cfg);
-			real_offline_mode = offline_mode;
-		} else {
-			GetLogger().log(LOG_ERROR,"unknown urls-source `%s'", urlcfg->get_source().c_str());
-		}
+	std::string type = cfg->get_configvalue("urls-source");
+	if (type == "local") {
+		urlcfg = new file_urlreader(url_file);
+	} else if (type == "bloglines") {
+		urlcfg = new bloglines_urlreader(cfg);
+		real_offline_mode = offline_mode;
+	} else {
+		GetLogger().log(LOG_ERROR,"unknown urls-source `%s'", urlcfg->get_source().c_str());
+	}
 
-		if (real_offline_mode) {
+	if (real_offline_mode) {
+		if (!do_export) {
 			snprintf(msgbuf,sizeof(msgbuf), _("Loading URLs from local cache..."));
 			std::cout << msgbuf;
 			std::cout.flush();
-			urlcfg->set_offline(true);
-			urlcfg->get_urls() = rsscache->get_feed_urls();
+		}
+		urlcfg->set_offline(true);
+		urlcfg->get_urls() = rsscache->get_feed_urls();
+		if (!do_export) {
 			std::cout << _("done.") << std::endl;
-		} else {
+		}
+	} else {
+		if (!do_export) {
 			snprintf(msgbuf,sizeof(msgbuf), _("Loading URLs from %s..."), urlcfg->get_source().c_str());
 			std::cout << msgbuf;
 			std::cout.flush();
-			urlcfg->reload();
+		}
+		urlcfg->reload();
+		if (!do_export) {
 			std::cout << _("done.") << std::endl;
 		}
+	}
 
-		if (urlcfg->get_urls().size() == 0) {
-			GetLogger().log(LOG_ERROR,"no URLs configured.");
-			if (type == "local") {
-				snprintf(msgbuf, sizeof(msgbuf), _("Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."), url_file.c_str());
-			} else if (type == "bloglines") {
-				snprintf(msgbuf, sizeof(msgbuf), _("It looks like you haven't configured any feeds in your bloglines account. Please do so, and try again."));
-			} else {
-				assert(0); // shouldn't happen
-			}
-			std::cout << msgbuf << std::endl << std::endl;
-			usage(argv[0]);
+	if (urlcfg->get_urls().size() == 0) {
+		GetLogger().log(LOG_ERROR,"no URLs configured.");
+		if (type == "local") {
+			snprintf(msgbuf, sizeof(msgbuf), _("Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."), url_file.c_str());
+		} else if (type == "bloglines") {
+			snprintf(msgbuf, sizeof(msgbuf), _("It looks like you haven't configured any feeds in your bloglines account. Please do so, and try again."));
+		} else {
+			assert(0); // shouldn't happen
 		}
+		std::cout << msgbuf << std::endl << std::endl;
+		usage(argv[0]);
 	}
 
 	if (!do_export && !do_vacuum)
