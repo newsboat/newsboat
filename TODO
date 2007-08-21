@@ -13,6 +13,7 @@ TODO:
 - make cursor in feedlist and itemlist stable when a filter is applied
 - refine the search function (make it like the command line)
 - implement commandline commands quit [done], add, save [done], tag (select tag) [done], goto (by matching title of feed)
+- implement reloading of configuration (:source)
 
 
 longteam goals to reach:

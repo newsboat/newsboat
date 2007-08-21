@@ -168,7 +168,6 @@ void controller::run(int argc, char * argv[]) {
 		}
 	} while (c != -1);
 
-	urlcfg.load_config(url_file);
 
 	if (do_import) {
 		GetLogger().log(LOG_INFO,"Importing OPML file from %s",importfile.c_str());
@@ -176,12 +175,6 @@ void controller::run(int argc, char * argv[]) {
 		return;
 	}
 
-	if (urlcfg.get_urls().size() == 0) {
-		GetLogger().log(LOG_ERROR,"no URLs configured.");
-		snprintf(msgbuf, sizeof(msgbuf), _("Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."), url_file.c_str());
-		std::cout << msgbuf << std::endl << std::endl;
-		usage(argv[0]);
-	}
 
 	if (!do_export) {
 		snprintf(msgbuf, sizeof(msgbuf), _("Starting %s %s..."), PROGRAM_NAME, PROGRAM_VERSION);
@@ -240,6 +233,32 @@ void controller::run(int argc, char * argv[]) {
 	if (!do_export)
 		std::cout << _("done.") << std::endl;
 
+	if (!do_export) {
+		std::string type = cfg->get_configvalue("urls-source");
+		if (type == "local") {
+			urlcfg = new file_urlreader(url_file);
+		} else if (type == "bloglines") {
+			urlcfg = new bloglines_urlreader(cfg);
+		} else {
+			GetLogger().log(LOG_ERROR,"unknown urls-source `%s'", urlcfg->get_source().c_str());
+		}
+
+		snprintf(msgbuf,sizeof(msgbuf), _("Loading URLs from %s..."), urlcfg->get_source().c_str());
+		std::cout << msgbuf;
+		std::cout.flush();
+
+		urlcfg->reload();
+		std::cout << _("done.") << std::endl;
+
+		if (urlcfg->get_urls().size() == 0) {
+			GetLogger().log(LOG_ERROR,"no URLs configured.");
+			// TODO: adapt error message to different urlreader types
+			snprintf(msgbuf, sizeof(msgbuf), _("Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."), url_file.c_str());
+			std::cout << msgbuf << std::endl << std::endl;
+			usage(argv[0]);
+		}
+	}
+
 	if (!do_export && !do_vacuum)
 		std::cout << _("Loading articles from cache...");
 	if (do_vacuum)
@@ -263,10 +282,10 @@ void controller::run(int argc, char * argv[]) {
 		return;
 	}
 
-	for (std::vector<std::string>::const_iterator it=urlcfg.get_urls().begin(); it != urlcfg.get_urls().end(); ++it) {
+	for (std::vector<std::string>::const_iterator it=urlcfg->get_urls().begin(); it != urlcfg->get_urls().end(); ++it) {
 		rss_feed feed(rsscache);
 		feed.set_rssurl(*it);
-		feed.set_tags(urlcfg.get_tags(*it));
+		feed.set_tags(urlcfg->get_tags(*it));
 		try {
 			rsscache->internalize_rssfeed(feed);
 		} catch(const dbexception& e) {
@@ -277,7 +296,7 @@ void controller::run(int argc, char * argv[]) {
 		feeds.push_back(feed);
 	}
 
-	std::vector<std::string> tags = urlcfg.get_alltags();
+	std::vector<std::string> tags = urlcfg->get_alltags();
 
 	if (!do_export)
 		std::cout << _("done.") << std::endl;
@@ -380,14 +399,18 @@ void controller::reload(unsigned int pos, unsigned int max) {
 		try {
 			feed = parser.parse();
 			GetLogger().log(LOG_DEBUG, "controller::reload: after parser.parse");
-			
-			rsscache->externalize_rssfeed(feed);
-			GetLogger().log(LOG_DEBUG, "controller::reload: after externalize_rssfeed");
+			if (!feed.is_empty()) {
+				GetLogger().log(LOG_DEBUG, "controller::reload: feed is nonempty, saving");
+				rsscache->externalize_rssfeed(feed);
+				GetLogger().log(LOG_DEBUG, "controller::reload: after externalize_rssfeed");
 
-			rsscache->internalize_rssfeed(feed);
-			GetLogger().log(LOG_DEBUG, "controller::reload: after internalize_rssfeed");
-			feed.set_tags(urlcfg.get_tags(feed.rssurl()));
-			feeds[pos] = feed;
+				rsscache->internalize_rssfeed(feed);
+				GetLogger().log(LOG_DEBUG, "controller::reload: after internalize_rssfeed");
+				feed.set_tags(urlcfg->get_tags(feed.rssurl()));
+				feeds[pos] = feed;
+			} else {
+				GetLogger().log(LOG_DEBUG, "controller::reload: feed is empty, not saving");
+			}
 
 			for (std::vector<rss_item>::iterator it=feed.items().begin();it!=feed.items().end();++it) {
 				if (cfg->get_configvalue_as_bool("podcast-auto-enqueue") && !it->enqueued() && it->enclosure_url().length() > 0) {
@@ -547,7 +570,7 @@ void controller::import_opml(const char * filename) {
 		if (body) {
 			GetLogger().log(LOG_DEBUG, "import_opml: found body");
 			rec_find_rss_outlines(body, "");
-			urlcfg.write_config();
+			urlcfg->write_config();
 		}
 	}
 
@@ -585,7 +608,7 @@ void controller::rec_find_rss_outlines(nxml_data_t * node, std::string tag) {
 
 				bool found = false;
 
-				for (std::vector<std::string>::iterator it = urlcfg.get_urls().begin(); it != urlcfg.get_urls().end(); ++it) {
+				for (std::vector<std::string>::iterator it = urlcfg->get_urls().begin(); it != urlcfg->get_urls().end(); ++it) {
 					if (*it == url) {
 						found = true;
 					}
@@ -593,10 +616,10 @@ void controller::rec_find_rss_outlines(nxml_data_t * node, std::string tag) {
 
 				if (!found) {
 					GetLogger().log(LOG_DEBUG,"OPML import: added url = %s",url);
-					urlcfg.get_urls().push_back(std::string(url));
+					urlcfg->get_urls().push_back(std::string(url));
 					if (tag.length() > 0) {
 						GetLogger().log(LOG_DEBUG, "OPML import: appending tag %s to url %s", tag.c_str(), url);
-						urlcfg.get_tags(url).push_back(tag);
+						urlcfg->get_tags(url).push_back(tag);
 					}
 				} else {
 					GetLogger().log(LOG_DEBUG,"OPML import: url = %s is already in list",url);
@@ -663,10 +686,10 @@ void controller::enqueue_url(const std::string& url) {
 }
 
 void controller::reload_urls_file() {
-	urlcfg.reload();
+	urlcfg->reload();
 	std::vector<rss_feed> new_feeds;
 
-	for (std::vector<std::string>::const_iterator it=urlcfg.get_urls().begin();it!=urlcfg.get_urls().end();++it) {
+	for (std::vector<std::string>::const_iterator it=urlcfg->get_urls().begin();it!=urlcfg->get_urls().end();++it) {
 		bool found = false;
 		for (std::vector<rss_feed>::iterator jt=feeds.begin();jt!=feeds.end();++jt) {
 			if (*it == jt->rssurl()) {
@@ -678,7 +701,7 @@ void controller::reload_urls_file() {
 		if (!found) {
 			rss_feed new_feed(rsscache);
 			new_feed.set_rssurl(*it);
-			new_feed.set_tags(urlcfg.get_tags(*it));
+			new_feed.set_tags(urlcfg->get_tags(*it));
 			try {
 				rsscache->internalize_rssfeed(new_feed);
 			} catch(const dbexception& e) {

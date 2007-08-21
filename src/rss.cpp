@@ -47,15 +47,20 @@ rss_feed rss_parser::parse() {
 	}
 
 	mrss_error_t err;
+	int my_errno = 0;
+	CURLcode ccode = CURLE_OK;
 	if (my_uri.substr(0,5) == "http:" || my_uri.substr(0,6) == "https:") {
 		mrss_options_t * options = mrss_options_new(30, proxy, proxy_auth, NULL, NULL, NULL, 0, NULL, user_agent);
-		err = mrss_parse_url_with_options(const_cast<char *>(my_uri.c_str()), &mrss, options);
+		err = mrss_parse_url_with_options_and_error(const_cast<char *>(my_uri.c_str()), &mrss, options, &ccode);
+		my_errno = errno;
+		GetLogger().log(LOG_DEBUG, "rss_parser::parse: http URL, err = %u errno = %u (%s)", err, my_errno, strerror(my_errno));
 		mrss_options_free(options);
 	} else if (my_uri.substr(0,5) == "exec:") {
 		std::string file = my_uri.substr(5,my_uri.length()-5);
 		std::string buf = utils::get_command_output(file);
 		GetLogger().log(LOG_DEBUG, "rss_parser::parse: output of `%s' is: %s", file.c_str(), buf.c_str());
 		err = mrss_parse_buffer(const_cast<char *>(buf.c_str()), buf.length(), &mrss);
+		my_errno = errno;
 	} else if (my_uri.substr(0,7) == "filter:") {
 		std::string filter, url;
 		utils::extract_filter(my_uri, filter, url);
@@ -63,10 +68,10 @@ rss_feed rss_parser::parse() {
 		std::string result = utils::run_filter(filter, buf);
 		GetLogger().log(LOG_DEBUG, "rss_parser::parse: output of `%s' is: %s", filter.c_str(), result.c_str());
 		err = mrss_parse_buffer(const_cast<char *>(result.c_str()), result.length(), &mrss);
+		my_errno = errno;
 	} else if (my_uri.substr(0,6) == "query:") {
-
 		skip_parsing = true;
-
+		err = MRSS_OK;
 	} else {
 		char buf[1024];
 		snprintf(buf, sizeof(buf), _("Error: unsupported URL: %s"), my_uri.c_str());
@@ -75,12 +80,17 @@ rss_feed rss_parser::parse() {
 
 	if (!skip_parsing) {
 
-		if (err != MRSS_OK) {
+		if (!mrss)
+			return feed;
+
+		if (err > MRSS_OK && err <= MRSS_ERR_DATA) {
 			if (err == MRSS_ERR_POSIX) {
-				GetLogger().log(LOG_ERROR,"rss_parser::parse: mrss_parse_url_with_options failed with POSIX error: error = %s",strerror(errno));
+				GetLogger().log(LOG_ERROR,"rss_parser::parse: mrss_parse_* failed with POSIX error: error = %s",strerror(my_errno));
 			}
-			GetLogger().log(LOG_ERROR,"rss_parser::parse: mrss_parse_url_with_options failed: err = %s (%d)",mrss_strerror(err), err);
-			GetLogger().log(LOG_USERERROR, "RSS feed `%s' couldn't be parsed: %s (error %d)", my_uri.c_str(), mrss_strerror(err), err);
+			GetLogger().log(LOG_ERROR,"rss_parser::parse: mrss_parse_* failed: err = %s (%u %x)",mrss_strerror(err), err, err);
+			GetLogger().log(LOG_ERROR,"rss_parser::parse: CURLcode = %u (%s)", ccode, curl_easy_strerror(ccode));
+			GetLogger().log(LOG_DEBUG,"rss_parser::parse: saved errno = %d (%s)", my_errno, strerror(my_errno));
+			GetLogger().log(LOG_USERERROR, "RSS feed `%s' couldn't be parsed: %s (error %u)", my_uri.c_str(), mrss_strerror(err), err);
 			if (mrss) {
 				mrss_free(mrss);
 			}
@@ -205,6 +215,8 @@ rss_feed rss_parser::parse() {
 		mrss_free(mrss);
 
 	}
+
+	feed.set_empty(false);
 
 	return feed;
 }

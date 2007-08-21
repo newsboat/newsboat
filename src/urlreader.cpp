@@ -2,20 +2,38 @@
 
 #include <urlreader.h>
 #include <utils.h>
+#include <logger.h>
 
-using namespace newsbeuter;
+namespace newsbeuter {
 
-urlreader::urlreader(const std::string& file) : filename(file) {
-	reload();
-}
-
+urlreader::urlreader() { }
 urlreader::~urlreader() { }
 
 std::vector<std::string>& urlreader::get_urls() {
 	return urls;
 }
 
-void urlreader::reload() {
+std::vector<std::string>& urlreader::get_tags(const std::string& url) {
+	return tags[url];
+}
+
+std::vector<std::string> urlreader::get_alltags() {
+	std::vector<std::string> tmptags;
+	for (std::set<std::string>::iterator it=alltags.begin();it!=alltags.end();++it) {
+		tmptags.push_back(*it);
+	}
+	return tmptags;
+}
+
+
+file_urlreader::file_urlreader(const std::string& file) : filename(file) { }
+file_urlreader::~file_urlreader() { }
+
+const std::string& file_urlreader::get_source() {
+	return filename;
+}
+
+void file_urlreader::reload() {
 	if (urls.size() > 0) {
 		urls.erase(urls.begin(), urls.end());
 	}
@@ -52,12 +70,12 @@ void urlreader::reload() {
 	}
 }
 
-void urlreader::load_config(const std::string& file) {
+void file_urlreader::load_config(const std::string& file) {
 	filename = file;
 	reload();
 }
 
-void urlreader::write_config() {
+void file_urlreader::write_config() {
 	std::fstream f;
 	f.open(filename.c_str(),std::fstream::out);
 	if (f.is_open()) {
@@ -73,14 +91,124 @@ void urlreader::write_config() {
 	}
 }
 
-std::vector<std::string>& urlreader::get_tags(const std::string& url) {
-	return tags[url];
+
+bloglines_urlreader::bloglines_urlreader(configcontainer * c) : cfg(c) { 
+	listsubs_url = "http://rpc.bloglines.com/listsubs";
+	getitems_url = "http://rpc.bloglines.com/getitems";
 }
 
-std::vector<std::string> urlreader::get_alltags() {
-	std::vector<std::string> tmptags;
-	for (std::set<std::string>::iterator it=alltags.begin();it!=alltags.end();++it) {
-		tmptags.push_back(*it);
+bloglines_urlreader::~bloglines_urlreader() { }
+
+void bloglines_urlreader::write_config() {
+	// do nothing.
+}
+
+
+void bloglines_urlreader::reload() {
+	if (urls.size() > 0) {
+		urls.erase(urls.begin(), urls.end());
 	}
-	return tmptags;
+
+	if (tags.size() > 0) {
+		tags.erase(tags.begin(), tags.end());
+	}
+
+	if (alltags.size() > 0) {
+		alltags.erase(alltags.begin(), alltags.end());
+	}
+
+	// TODO: set user-agent (2nd parameter)
+	std::string urlcontent = utils::retrieve_url(listsubs_url, NULL, cfg->get_configvalue("bloglines-auth").c_str());
+	GetLogger().log(LOG_DEBUG, "bloglines_urlreader::reload: return OPML content is `%s'", urlcontent.c_str());
+
+	nxml_t *data;
+	nxml_data_t * root, * body;
+	nxml_error_t ret;
+
+	ret = nxml_new (&data);
+	if (ret != NXML_OK) {
+		// TODO: error message
+		return;
+	}
+
+	ret = nxml_parse_buffer(data, const_cast<char *>(urlcontent.c_str()), urlcontent.length());
+	if (ret != NXML_OK) {
+		// puts (nxml_strerror (data, ret));
+		GetLogger().log(LOG_ERROR, "bloglines_urlreader::reload: parsing XML file failed: %s", nxml_strerror(data, ret));
+		return;
+	}
+
+	nxml_root_element (data, &root);
+
+	if (root) {
+		body = nxmle_find_element(data, root, "body", NULL);
+		if (body) {
+			GetLogger().log(LOG_DEBUG, "bloglines_urlreader::reload: found body");
+			rec_find_rss_outlines(body, "");
+		}
+	}
+
+	nxml_free(data);
+
+}
+
+void bloglines_urlreader::rec_find_rss_outlines(nxml_data_t * node, std::string tag) {
+	while (node) {
+		char * type = nxmle_find_attribute(node, "type", NULL);
+		char * sub_id = nxmle_find_attribute(node, "BloglinesSubId", NULL);
+
+		std::string newtag = tag;
+
+		GetLogger().log(LOG_DEBUG, "bloglines_urlreader::rec_find_rss_outlines: type = %s, sub_id = %s", type, sub_id);
+
+		if (node->type == NXML_TYPE_ELEMENT && strcmp(node->value,"outline")==0) {
+			if (type && strcmp(type,"rss")==0 && sub_id) {
+				std::string theurl = getitems_url;
+				theurl.append("?s=");
+				theurl.append(sub_id);
+
+				if (cfg->get_configvalue_as_bool("bloglines-mark-read")) {
+					theurl.append("&n=1");
+				}
+
+				std::string auth = cfg->get_configvalue("bloglines-auth");
+				GetLogger().log(LOG_DEBUG, "bloglines_urlreader::rec_find_rss_outlines: auth = %s", auth.c_str());
+				auth = utils::replace_all(auth,"@","%40");
+
+				if (theurl.substr(0,7) == "http://") {
+					theurl.insert(7, auth + "@");
+				} else if (theurl.substr(0,8) == "https://") {
+					theurl.insert(8, auth + "@");
+				}
+
+				urls.push_back(theurl);
+				if (tag.length() > 0) {
+					std::vector<std::string> tmptags;
+					tmptags.push_back(tag);
+					tags[theurl] = tmptags;
+					alltags.insert(tag);
+				}
+			} else {
+				char * text = nxmle_find_attribute(node, "title", NULL);
+				if (text) {
+					if (newtag.length() > 0) {
+						newtag.append("/");
+					}
+					newtag.append(text);
+				}
+			}
+		}
+		rec_find_rss_outlines(node->children, newtag);
+
+		node = node->next;
+	}
+
+}
+
+const std::string& bloglines_urlreader::get_source() {
+	return listsubs_url;
+}
+
+
+
 }

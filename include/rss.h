@@ -92,7 +92,7 @@ namespace newsbeuter {
 
 	class rss_feed : public matchable {
 		public:
-			rss_feed(cache * c) : ch(c) { }
+			rss_feed(cache * c) : ch(c), empty(true) { }
 			~rss_feed() { }
 			std::string title_raw() const { return title_; }
 			std::string title() const;
@@ -128,6 +128,9 @@ namespace newsbeuter {
 
 			inline void set_query(const std::string& s) { query = s; }
 
+			bool is_empty() { return empty; }
+			void set_empty(bool t) { empty = t; }
+
 		private:
 			std::string title_;
 			std::string description_;
@@ -139,6 +142,8 @@ namespace newsbeuter {
 			std::string query;
 			
 			cache * ch;
+
+			bool empty;
 	};
 
 	class rss_ignores;

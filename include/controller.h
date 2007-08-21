@@ -58,7 +58,7 @@ namespace newsbeuter {
 			void compute_unread_numbers(unsigned int&, unsigned int& );
 
 			view * v;
-			urlreader urlcfg;
+			urlreader * urlcfg;
 			cache * rsscache;
 			std::vector<rss_feed> feeds;
 			std::string config_dir;

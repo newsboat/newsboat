@@ -296,7 +296,7 @@ static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp
 	return size * nmemb;
 }
 
-std::string utils::retrieve_url(const std::string& url, const char * user_agent) {
+std::string utils::retrieve_url(const std::string& url, const char * user_agent, const char * auth) {
 	std::string buf;
 
 	CURL * easyhandle = curl_easy_init();
@@ -306,6 +306,12 @@ std::string utils::retrieve_url(const std::string& url, const char * user_agent)
 	curl_easy_setopt(easyhandle, CURLOPT_URL, url.c_str());
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, &buf);
+
+	if (auth) {
+		curl_easy_setopt(easyhandle, CURLOPT_USERPWD, auth);
+		curl_easy_setopt(easyhandle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+	}
+
 	curl_easy_perform(easyhandle);
 
 	GetLogger().log(LOG_DEBUG, "utils::retrieve_url(%s): %s", url.c_str(), buf.c_str());
@@ -395,6 +401,17 @@ std::string utils::resolve_tilde(const std::string& str) {
 	}
 
 	return filepath;
+}
+
+std::string utils::replace_all(std::string str, const std::string& from, const std::string& to) {
+	GetLogger().log(LOG_DEBUG,"utils::replace_all: before str = %s", str.c_str());
+	std::string::size_type s = str.find(from);
+	while (s != std::string::npos) {
+		str.replace(s,from.length(), to);
+		s = str.find(from);
+	}
+	GetLogger().log(LOG_DEBUG,"utils::replace_all: after str = %s", str.c_str());
+	return str;
 }
 
 }
