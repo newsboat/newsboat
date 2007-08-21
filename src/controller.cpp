@@ -108,10 +108,11 @@ void controller::run(int argc, char * argv[]) {
 	::signal(SIGCHLD, omg_a_child_died);
 
 	bool do_import = false, do_export = false, cachefile_given_on_cmdline = false, do_vacuum = false;
+	bool offline_mode = false, real_offline_mode = false;
 	std::string importfile;
 
 	do {
-		if((c = ::getopt(argc,argv,"i:erhu:c:C:d:l:vV"))<0)
+		if((c = ::getopt(argc,argv,"i:erhu:c:C:d:l:vVo"))<0)
 			continue;
 		switch (c) {
 			case ':': /* fall-through */
@@ -150,6 +151,9 @@ void controller::run(int argc, char * argv[]) {
 				break;
 			case 'V':
 				version_information();
+				break;
+			case 'o':
+				offline_mode = true;
 				break;
 			case 'd': // this is an undocumented debug commandline option!
 				GetLogger().set_logfile(optarg);
@@ -234,22 +238,40 @@ void controller::run(int argc, char * argv[]) {
 	if (!do_export)
 		std::cout << _("done.") << std::endl;
 
+	// create cache object
+	std::string cachefilepath = cfg->get_configvalue("cache-file");
+	if (cachefilepath.length() > 0 && !cachefile_given_on_cmdline) {
+		cache_file = cachefilepath.c_str();
+	}
+
+	rsscache = new cache(cache_file,cfg);
+
+
 	if (!do_export) {
 		std::string type = cfg->get_configvalue("urls-source");
 		if (type == "local") {
 			urlcfg = new file_urlreader(url_file);
 		} else if (type == "bloglines") {
 			urlcfg = new bloglines_urlreader(cfg);
+			real_offline_mode = offline_mode;
 		} else {
 			GetLogger().log(LOG_ERROR,"unknown urls-source `%s'", urlcfg->get_source().c_str());
 		}
 
-		snprintf(msgbuf,sizeof(msgbuf), _("Loading URLs from %s..."), urlcfg->get_source().c_str());
-		std::cout << msgbuf;
-		std::cout.flush();
-
-		urlcfg->reload();
-		std::cout << _("done.") << std::endl;
+		if (real_offline_mode) {
+			snprintf(msgbuf,sizeof(msgbuf), _("Loading URLs from local cache..."));
+			std::cout << msgbuf;
+			std::cout.flush();
+			urlcfg->set_offline(true);
+			urlcfg->get_urls() = rsscache->get_feed_urls();
+			std::cout << _("done.") << std::endl;
+		} else {
+			snprintf(msgbuf,sizeof(msgbuf), _("Loading URLs from %s..."), urlcfg->get_source().c_str());
+			std::cout << msgbuf;
+			std::cout.flush();
+			urlcfg->reload();
+			std::cout << _("done.") << std::endl;
+		}
 
 		if (urlcfg->get_urls().size() == 0) {
 			GetLogger().log(LOG_ERROR,"no URLs configured.");
@@ -271,12 +293,6 @@ void controller::run(int argc, char * argv[]) {
 		std::cout << _("Opening cache...");
 	std::cout.flush();
 
-	std::string cachefilepath = cfg->get_configvalue("cache-file");
-	if (cachefilepath.length() > 0 && !cachefile_given_on_cmdline) {
-		cache_file = cachefilepath.c_str();
-	}
-
-	rsscache = new cache(cache_file,cfg);
 
 	if (do_vacuum) {
 		std::cout << _("done.") << std::endl;
@@ -546,6 +562,7 @@ void controller::usage(char * argv0) {
 				"-c <cachefile>  use <cachefile> as cache file\n"
 				"-C <configfile> read configuration from <configfile>\n"
 				"-v              clean up cache thoroughly\n"
+				"-o              activate offline mode (only applies to bloglines synchronization mode)\n"
 				"-V              get version information\n"
 				"-h              this help\n"), PROGRAM_NAME, PROGRAM_VERSION, argv0);
 	std::cout << buf;

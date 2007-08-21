@@ -23,6 +23,7 @@ class cache {
 		rss_feed get_feed_by_url(const std::string& feedurl);
 		void catchup_all(const std::string& feedurl = "");
 		void catchup_all(rss_feed& feed);
+		std::vector<std::string> get_feed_urls();
 	private:
 		void populate_tables();
 		void set_pragmas();

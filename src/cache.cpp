@@ -50,6 +50,15 @@ static int rssfeed_callback(void * myfeed, int argc, char ** argv, char ** /* az
 	return 0;
 }
 
+static int vectorofstring_callback(void * vp, int argc, char ** argv, char ** /* azColName */) {
+	std::vector<std::string> * vectorptr = (std::vector<std::string> *)vp;
+	assert(argc == 1);
+	assert(argv[0] != NULL);
+	vectorptr->push_back(std::string(argv[0]));
+	GetLogger().log(LOG_INFO, "vectorofstring_callback: element = %s", argv[0]);
+	return 0;
+}
+
 static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** /* azColName */) {
 	rss_feed * feed = (rss_feed *)myfeed;
 	assert (argc == 11);
@@ -230,6 +239,22 @@ void cache::populate_tables() {
 		rc = sqlite3_exec(db, "ANALYZE;", NULL, NULL, NULL);
 		GetLogger().log(LOG_DEBUG, "cache::populate_tables: ANALYZE indices (6) rc = %d", rc);
 	}
+}
+
+
+
+std::vector<std::string> cache::get_feed_urls() {
+	mtx->lock();
+	std::string query = "SELECT rssurl FROM rss_feed;";
+
+	std::vector<std::string> urls;
+
+	int rc = sqlite3_exec(db, query.c_str(), vectorofstring_callback,&urls, NULL);
+	assert(rc == SQLITE_OK);
+
+	mtx->unlock();
+
+	return urls;
 }
 
 

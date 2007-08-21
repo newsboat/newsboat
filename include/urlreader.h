@@ -21,10 +21,12 @@ namespace newsbeuter {
 			std::vector<std::string>& get_urls();
 			std::vector<std::string>& get_tags(const std::string& url);
 			std::vector<std::string> get_alltags();
+			inline void set_offline(bool off) { offline = off; }
 		protected:
 			std::vector<std::string> urls;
 			std::map<std::string, std::vector<std::string> > tags;
 			std::set<std::string> alltags;
+			bool offline;
 	};
 
 	class file_urlreader : public urlreader {

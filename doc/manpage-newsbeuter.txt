@@ -50,6 +50,12 @@ OPTIONS
 -C configfile::
        Use an alternative configuration file
 
+-o::
+       Active offline reading mode. When bloglines synchronization mode is configured,
+       then the list of feeds will not be loaded from bloglines.com, but instead from
+       the local cache. This makes it possible to read locally cached articles even
+       without internet connection to connect to the bloglines server.
+
 FIRST STEPS
 -----------
 

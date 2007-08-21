@@ -36,6 +36,9 @@ const std::string& file_urlreader::get_source() {
 }
 
 void file_urlreader::reload() {
+	if (offline)
+		return;
+
 	if (urls.size() > 0) {
 		urls.erase(urls.begin(), urls.end());
 	}
@@ -107,6 +110,9 @@ void bloglines_urlreader::write_config() {
 
 
 void bloglines_urlreader::reload() {
+	if (offline)
+		return;
+
 	if (urls.size() > 0) {
 		urls.erase(urls.begin(), urls.end());
 	}

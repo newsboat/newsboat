@@ -14,6 +14,7 @@ TODO:
 - refine the search function (make it like the command line)
 - implement commandline commands quit [done], add, save [done], tag (select tag) [done], goto (by matching title of feed)
 - implement reloading of configuration (:source)
+- test import/export
 
 
 longteam goals to reach:
@@ -100,3 +101,4 @@ DONE:
 - implement -V commandline option to see version number
 - predefine filters and select them from a view
 - implement detection when an item is outside of its regular feed (when item->feed->rssurl != feed->rssurl) for itemlist
+- implement bloglines support (including offline mode)
