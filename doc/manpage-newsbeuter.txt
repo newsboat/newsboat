@@ -10,7 +10,7 @@ newsbeuter - an RSS feed reader for text terminals
 
 SYNOPSIS
 --------
-'newsbeuter' [-r] [-e] [-i opmlfile] [-u urlfile] [-c cachefile] [-C configfile] [-v] [-h]
+'newsbeuter' [-r] [-e] [-i opmlfile] [-u urlfile] [-c cachefile] [-C configfile] [-v] [-o] [-h]
 
 
 DESCRIPTION

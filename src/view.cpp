@@ -231,6 +231,10 @@ void view::write_item(const rss_item& item, const std::string& filename) {
 	std::string date(_("Date: "));
 	date.append(item.pubDate());
 	lines.push_back(date);
+
+	std::string link(_("Link: "));
+	link.append(item.link());
+	lines.push_back(link);
 	
 	lines.push_back(std::string(""));
 	
