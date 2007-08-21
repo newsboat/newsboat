@@ -8,7 +8,7 @@
 
 namespace newsbeuter {
 
-	enum action_handler_status { AHS_OK = 0, AHS_INVALID_PARAMS, AHS_TOO_FEW_PARAMS, AHS_INVALID_COMMAND };
+	enum action_handler_status { AHS_OK = 0, AHS_INVALID_PARAMS, AHS_TOO_FEW_PARAMS, AHS_INVALID_COMMAND, AHS_FILENOTFOUND };
 
 	struct config_action_handler {
 		virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params) = 0;
@@ -22,7 +22,7 @@ namespace newsbeuter {
 			void register_handler(const std::string& cmd, config_action_handler * handler);
 			void unregister_handler(const std::string& cmd);
 			virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
-			void parse(const std::string& filename);
+			bool parse(const std::string& filename);
 		private:
 			std::vector<std::vector<std::string> > parsed_content;
 			std::map<std::string,config_action_handler *> action_handlers;

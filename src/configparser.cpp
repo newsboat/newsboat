@@ -44,16 +44,20 @@ action_handler_status configparser::handle_action(const std::string& action, con
 		} else {
 			filepath.append(params[0]);
 		}
-		this->parse(filepath);
-		return AHS_OK;
+		if (this->parse(filepath)) {
+			return AHS_OK;
+		} else {
+			return AHS_FILENOTFOUND;
+		}
 	}
 	return AHS_INVALID_COMMAND;
 }
 
-void configparser::parse(const std::string& filename) {
+bool configparser::parse(const std::string& filename) {
+	char buf[1024];
 	if (included_files.find(filename) != included_files.end()) {
 		GetLogger().log(LOG_WARN, "configparser::parse: file %s has already been included", filename.c_str());
-		return;
+		return true;
 	}
 	included_files.insert(included_files.begin(), filename);
 
@@ -63,6 +67,7 @@ void configparser::parse(const std::string& filename) {
 	getline(f,line);
 	if (!f.is_open()) {
 		GetLogger().log(LOG_WARN, "configparser::parse: file %s couldn't be opened", filename.c_str());
+		return false;
 	}
 	while (f.is_open() && !f.eof()) {
 		GetLogger().log(LOG_DEBUG,"configparser::parse: tokenizing %s",line.c_str());
@@ -74,18 +79,24 @@ void configparser::parse(const std::string& filename) {
 				tokens.erase(tokens.begin()); // delete first element
 				action_handler_status status = handler->handle_action(cmd,tokens);
 				if (status != AHS_OK) {
-					char buf[1024];
 					char * errmsg = NULL;
-					if (status == AHS_INVALID_PARAMS) {
-						errmsg = _("invalid parameters.");
-					} else if (status == AHS_TOO_FEW_PARAMS) {
-						errmsg = _("too few parameters.");
-					} else if (status == AHS_INVALID_COMMAND) {
-						errmsg = _("unknown command (bug).");
-					} else {
-						errmsg = _("unknown error (bug).");
+					switch (status) {
+						case AHS_INVALID_PARAMS:
+							errmsg = _("invalid parameters.");
+							break;
+						case AHS_TOO_FEW_PARAMS:
+							errmsg = _("too few parameters.");
+							break;
+						case AHS_INVALID_COMMAND:
+							errmsg = _("unknown command (bug).");
+							break;
+						case AHS_FILENOTFOUND:
+							errmsg = _("file couldn't be opened.");
+							break;
+						default:
+							errmsg = _("unknown error (bug).");
 					}
-					snprintf(buf, sizeof(buf), _("Error while processing command `%s' (%s line %u): %s"), cmd.c_str(), filename.c_str(), linecounter, errmsg);
+					snprintf(buf, sizeof(buf), _("Error while processing command `%s' (%s line %u): %s"), line.c_str(), filename.c_str(), linecounter, errmsg);
 					throw configexception(buf);
 				}
 			} else {
@@ -97,6 +108,7 @@ void configparser::parse(const std::string& filename) {
 		getline(f,line);
 		++linecounter;
 	}
+	return true;
 }
 
 void configparser::register_handler(const std::string& cmd, config_action_handler * handler) {
