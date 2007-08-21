@@ -3,6 +3,8 @@
 #include <urlreader.h>
 #include <utils.h>
 #include <logger.h>
+#include <sys/utsname.h>
+#include <config.h>
 
 namespace newsbeuter {
 
@@ -117,9 +119,18 @@ void bloglines_urlreader::reload() {
 		alltags.erase(alltags.begin(), alltags.end());
 	}
 
-	// TODO: set user-agent (2nd parameter)
-	std::string urlcontent = utils::retrieve_url(listsubs_url, NULL, cfg->get_configvalue("bloglines-auth").c_str());
-	GetLogger().log(LOG_DEBUG, "bloglines_urlreader::reload: return OPML content is `%s'", urlcontent.c_str());
+	char user_agent[1024];
+	std::string ua_pref = cfg->get_configvalue("user-agent");
+	if (ua_pref.length() == 0) {
+		struct utsname buf;
+		uname(&buf);
+		snprintf(user_agent, sizeof(user_agent), "%s/%s (%s %s; %s; %s) %s", PROGRAM_NAME, PROGRAM_VERSION, buf.sysname, buf.release, buf.machine, PROGRAM_URL, curl_version());
+	} else {
+		snprintf(user_agent, sizeof(user_agent), "%s", ua_pref.c_str());
+	}
+
+	std::string urlcontent = utils::retrieve_url(listsubs_url, user_agent, cfg->get_configvalue("bloglines-auth").c_str());
+	// GetLogger().log(LOG_DEBUG, "bloglines_urlreader::reload: return OPML content is `%s'", urlcontent.c_str());
 
 	nxml_t *data;
 	nxml_data_t * root, * body;

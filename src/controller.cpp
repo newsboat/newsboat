@@ -16,6 +16,7 @@
 
 #include <sys/time.h>
 #include <ctime>
+#include <cassert>
 #include <signal.h>
 #include <sys/utsname.h>
 
@@ -252,8 +253,13 @@ void controller::run(int argc, char * argv[]) {
 
 		if (urlcfg->get_urls().size() == 0) {
 			GetLogger().log(LOG_ERROR,"no URLs configured.");
-			// TODO: adapt error message to different urlreader types
-			snprintf(msgbuf, sizeof(msgbuf), _("Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."), url_file.c_str());
+			if (type == "local") {
+				snprintf(msgbuf, sizeof(msgbuf), _("Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."), url_file.c_str());
+			} else if (type == "bloglines") {
+				snprintf(msgbuf, sizeof(msgbuf), _("It looks like you haven't configured any feeds in your bloglines account. Please do so, and try again."));
+			} else {
+				assert(0); // shouldn't happen
+			}
 			std::cout << msgbuf << std::endl << std::endl;
 			usage(argv[0]);
 		}
