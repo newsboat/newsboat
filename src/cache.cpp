@@ -341,39 +341,43 @@ void cache::internalize_rssfeed(refcnt_ptr<rss_feed>& feed) {
 		throw dbexception(db);
 	}
 
-	*feed = tmpfeed;
+	std::string rssurl = feed->rssurl();
+	tmpfeed.set_rssurl(rssurl);
 
-	if (feed->items().size() > 0) {
-		feed->items().erase(feed->items().begin(),feed->items().end());
+	if (tmpfeed.items().size() > 0) {
+		tmpfeed.items().erase(tmpfeed.items().begin(),tmpfeed.items().end());
 	}
 
 	/* ...and then the associated items */
-	query = prepare_query("SELECT guid,title,author,url,pubDate,content,unread,feedurl,enclosure_url,enclosure_type,enqueued FROM rss_item WHERE feedurl = '%q' ORDER BY pubDate DESC, id DESC;",feed->rssurl().c_str());
+	query = prepare_query("SELECT guid,title,author,url,pubDate,content,unread,feedurl,enclosure_url,enclosure_type,enqueued FROM rss_item WHERE feedurl = '%q' ORDER BY pubDate DESC, id DESC;",tmpfeed.rssurl().c_str());
 	GetLogger().log(LOG_DEBUG,"running query: %s",query.c_str());
-	rc = sqlite3_exec(db,query.c_str(),rssitem_callback,&feed,NULL);
+	rc = sqlite3_exec(db,query.c_str(),rssitem_callback,&tmpfeed,NULL);
 	if (rc != SQLITE_OK) {
 		GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", query.c_str(), rc);
 		mtx->unlock();
 		throw dbexception(db);
 	}
 
-	for (std::vector<refcnt_ptr<rss_item> >::iterator it=feed->items().begin(); it != feed->items().end(); ++it) {
+	for (std::vector<refcnt_ptr<rss_item> >::iterator it=tmpfeed.items().begin(); it != tmpfeed.items().end(); ++it) {
 		(*it)->set_cache(this);
-		(*it)->set_feedptr(feed); // TODO!
+		(*it)->set_feedptr(feed);
 		(*it)->set_feedurl(feed->rssurl());
 	}
 	
 	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
 	
-	if (max_items > 0 && feed->items().size() > max_items) {
-		std::vector<refcnt_ptr<rss_item> >::iterator it=feed->items().begin();
+	if (max_items > 0 && tmpfeed.items().size() > max_items) {
+		std::vector<refcnt_ptr<rss_item> >::iterator it=tmpfeed.items().begin();
 		for (unsigned int i=0;i<max_items;++i)
 			++it;
-		for (unsigned int i=max_items;i<feed->items().size();++i) {
-			delete_item(feed->items()[i]);	
+		for (unsigned int i=max_items;i<tmpfeed.items().size();++i) {
+			delete_item(tmpfeed.items()[i]);
 		}	
-		feed->items().erase(it, feed->items().end()); // delete old entries
+		tmpfeed.items().erase(it, tmpfeed.items().end()); // delete old entries
 	}
+
+	*feed = tmpfeed;
+
 	mtx->unlock();
 }
 
