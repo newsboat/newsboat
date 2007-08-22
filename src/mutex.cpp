@@ -2,6 +2,8 @@
 #include <exception.h>
 
 #include <cerrno>
+#include <cstdio>
+#include <cstring>
 
 using namespace newsbeuter;
 
@@ -19,6 +21,7 @@ mutex::~mutex() {
 void mutex::lock() {
 	int rc = pthread_mutex_lock(&mtx);
 	if (rc != 0) {
+		fprintf(stderr,"mutex::lock: rc = %d errno = %d (%s)\n", rc, errno, strerror(errno));
 		throw exception(rc);
 	}
 }

@@ -13,6 +13,7 @@ void logger::set_logfile(const char * logfile) {
 		f.close();
 	f.open(logfile, std::fstream::out);
 	if (!f.is_open()) {
+		mtx.unlock();
 		throw exception(errno); // the question is whether f.open() sets errno...
 	}
 	mtx.unlock();
@@ -24,6 +25,7 @@ void logger::set_errorlogfile(const char * logfile) {
 		ef.close();
 	ef.open(logfile, std::fstream::out);
 	if (!ef.is_open()) {
+		mtx.unlock();
 		throw exception(errno);
 	}
 	if (LOG_NONE == curlevel) {

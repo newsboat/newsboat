@@ -41,6 +41,7 @@ static int count_callback(void * handler, int argc, char ** argv, char ** /* azC
 
 static int rssfeed_callback(void * myfeed, int argc, char ** argv, char ** /* azColName */) {
 	rss_feed * feed = (rss_feed *)myfeed;
+
 	// normaly, this shouldn't happen, but we keep the assert()s here nevertheless
 	assert(argc == 2);
 	assert(argv[0] != NULL);
@@ -330,7 +331,7 @@ void cache::internalize_rssfeed(refcnt_ptr<rss_feed>& feed) {
 	/* then we first read the feed from the database */
 	query = prepare_query("SELECT title, url FROM rss_feed WHERE rssurl = '%q';",feed->rssurl().c_str());
 	GetLogger().log(LOG_DEBUG,"running query: %s",query.c_str());
-	rc = sqlite3_exec(db,query.c_str(),rssfeed_callback,&feed,NULL);
+	rc = sqlite3_exec(db,query.c_str(),rssfeed_callback,&(*feed),NULL);
 	if (rc != SQLITE_OK) {
 		GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", query.c_str(), rc);
 		mtx->unlock();
