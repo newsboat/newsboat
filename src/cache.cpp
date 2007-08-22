@@ -331,12 +331,17 @@ void cache::internalize_rssfeed(refcnt_ptr<rss_feed>& feed) {
 	/* then we first read the feed from the database */
 	query = prepare_query("SELECT title, url FROM rss_feed WHERE rssurl = '%q';",feed->rssurl().c_str());
 	GetLogger().log(LOG_DEBUG,"running query: %s",query.c_str());
-	rc = sqlite3_exec(db,query.c_str(),rssfeed_callback,&(*feed),NULL);
+
+	rss_feed tmpfeed(this);
+
+	rc = sqlite3_exec(db,query.c_str(),rssfeed_callback,&tmpfeed,NULL);
 	if (rc != SQLITE_OK) {
 		GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", query.c_str(), rc);
 		mtx->unlock();
 		throw dbexception(db);
 	}
+
+	*feed = tmpfeed;
 
 	if (feed->items().size() > 0) {
 		feed->items().erase(feed->items().begin(),feed->items().end());
