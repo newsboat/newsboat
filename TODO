@@ -15,6 +15,7 @@ TODO:
 - implement commandline commands quit [done], add, save [done], tag (select tag) [done], goto (by matching title of feed)
 - implement reloading of configuration (:source)
 - test import/export
+- too many damn crash bugs: switch management of feeds and items to smart pointers.
 
 
 longteam goals to reach:

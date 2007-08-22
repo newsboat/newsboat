@@ -45,7 +45,7 @@ const char * loglevel_str[] = { "NONE", "USERERROR", "CRITICAL", "ERROR", "WARNI
 void logger::log(loglevel level, const char * format, ...) {
 	mtx.lock();
 	if (level <= curlevel && curlevel > LOG_NONE && (f.is_open() || ef.is_open())) {
-		char buf[2048], logmsgbuf[2048];
+		char * buf, * logmsgbuf;
 		char date[128];
 		time_t t = time(NULL);
 		struct tm * stm = localtime(&t);
@@ -55,15 +55,21 @@ void logger::log(loglevel level, const char * format, ...) {
 
 		va_list ap;
 		va_start(ap, format);
-		vsnprintf(logmsgbuf,sizeof(logmsgbuf),format,ap);
-		snprintf(buf,sizeof(buf),"[%s] %s: %s",date, loglevel_str[level], logmsgbuf);
+
+		unsigned int len = vsnprintf(NULL,0,format,ap);
+		logmsgbuf = (char *)alloca(len + 1);
+		vsnprintf(logmsgbuf, len + 1, format, ap);
+
+		len = snprintf(NULL, 0, "[%s] %s: %s",date, loglevel_str[level], logmsgbuf);
+		buf = (char *)alloca(len + 1);
+		snprintf(buf,len + 1,"[%s] %s: %s",date, loglevel_str[level], logmsgbuf);
 
 		if (f.is_open()) {
 			f << buf << std::endl;
 		}
 
 		if (LOG_USERERROR == level && ef.is_open()) {
-			snprintf(buf, sizeof(buf), "[%s] %s", date, logmsgbuf);
+			snprintf(buf, len + 1, "[%s] %s", date, logmsgbuf);
 			ef << buf << std::endl;
 			ef.flush();
 		}

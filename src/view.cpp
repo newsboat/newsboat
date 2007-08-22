@@ -216,30 +216,30 @@ std::string view::get_filename_suggestion(const std::string& s) {
 	return retval;	
 }
 
-void view::write_item(const rss_item& item, const std::string& filename) {
+void view::write_item(refcnt_ptr<rss_item> item, const std::string& filename) {
 	std::vector<std::string> lines;
 	std::vector<linkpair> links; // not used
 	
 	std::string title(_("Title: "));
-	title.append(item.title());
+	title.append(item->title());
 	lines.push_back(title);
 	
 	std::string author(_("Author: "));
-	author.append(item.author());
+	author.append(item->author());
 	lines.push_back(author);
 	
 	std::string date(_("Date: "));
-	date.append(item.pubDate());
+	date.append(item->pubDate());
 	lines.push_back(date);
 
 	std::string link(_("Link: "));
-	link.append(item.link());
+	link.append(item->link());
 	lines.push_back(link);
 	
 	lines.push_back(std::string(""));
 	
 	htmlrenderer rnd(80);
-	rnd.render(item.description(), lines, links, item.feedurl());
+	rnd.render(item->description(), lines, links, item->feedurl());
 
 	std::fstream f;
 	f.open(filename.c_str(),std::fstream::out);
@@ -268,11 +268,11 @@ void view::open_in_browser(const std::string& url) {
 	formaction_stack.pop_front();
 }
 
-void view::set_feedlist(std::vector<rss_feed>& feeds) {
+void view::set_feedlist(std::vector<refcnt_ptr<rss_feed> >& feeds) {
 	mtx->lock();
 
-	for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it) {
-		if (it->rssurl().substr(0,6) != "query:") {
+	for (std::vector<refcnt_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it) {
+		if ((*it)->rssurl().substr(0,6) != "query:") {
 			ctrl->set_feedptrs(*it);
 		}
 	}
@@ -294,11 +294,11 @@ void view::set_tags(const std::vector<std::string>& t) {
 }
 
 void view::push_itemlist(unsigned int pos) {
-	rss_feed * feed = ctrl->get_feed(pos);
+	refcnt_ptr<rss_feed> feed(ctrl->get_feed(pos));
 
 	assert(feed != NULL);
 
-	GetLogger().log(LOG_DEBUG, "view::push_itemlist: retrieved feed at position %d (address = %p)", pos, feed);
+	GetLogger().log(LOG_DEBUG, "view::push_itemlist: retrieved feed at position %d", pos);
 
 	if (feed->rssurl().substr(0,6) == "query:") {
 		set_status(_("Updating query feed..."));
@@ -307,8 +307,8 @@ void view::push_itemlist(unsigned int pos) {
 	}
 
 	if (feed->items().size() > 0) {
-		itemlist->set_feed(feed);
 		itemlist->set_pos(pos);
+		itemlist->set_feed(feed);
 		itemlist->init();
 		formaction_stack.push_front(itemlist);
 	} else {
@@ -316,7 +316,7 @@ void view::push_itemlist(unsigned int pos) {
 	}
 }
 
-void view::push_itemview(rss_feed * f, const std::string& guid) {
+void view::push_itemview(refcnt_ptr<rss_feed> f, const std::string& guid) {
 	itemview->set_feed(f);
 	itemview->set_guid(guid);
 	itemview->init();

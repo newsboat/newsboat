@@ -12,6 +12,8 @@
 #include <config.h>
 #include <exceptions.h>
 
+#include <refcnt_ptr.h>
+
 using namespace newsbeuter;
 
 //-------------------------------------------
@@ -62,79 +64,79 @@ static int vectorofstring_callback(void * vp, int argc, char ** argv, char ** /*
 static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** /* azColName */) {
 	rss_feed * feed = (rss_feed *)myfeed;
 	assert (argc == 11);
-	rss_item item(NULL);
-	item.set_guid(argv[0]);
-	item.set_title(argv[1]);
-	item.set_author(argv[2]);
-	item.set_link(argv[3]);
+	refcnt_ptr<rss_item> item(new rss_item(NULL));
+	item->set_guid(argv[0]);
+	item->set_title(argv[1]);
+	item->set_author(argv[2]);
+	item->set_link(argv[3]);
 	
 	std::istringstream is(argv[4]);
 	time_t t;
 	is >> t;
-	item.set_pubDate(t);
+	item->set_pubDate(t);
 	
-	item.set_description(argv[5]);
-	item.set_unread((std::string("1") == argv[6]));
+	item->set_description(argv[5]);
+	item->set_unread((std::string("1") == argv[6]));
 
-	item.set_feedurl(argv[7]);
+	item->set_feedurl(argv[7]);
 
-	item.set_enclosure_url(argv[8] ? argv[8] : "");
-	item.set_enclosure_type(argv[9] ? argv[9] : "");
-	item.set_enqueued((std::string("1") == (argv[10] ? argv[10] : "")));
+	item->set_enclosure_url(argv[8] ? argv[8] : "");
+	item->set_enclosure_type(argv[9] ? argv[9] : "");
+	item->set_enqueued((std::string("1") == (argv[10] ? argv[10] : "")));
 
 	feed->items().push_back(item);
 	return 0;
 }
 
 static int rssitemvector_callback(void * vector, int argc, char ** argv, char ** /* azColName */) {
-	std::vector<rss_item> * items = (std::vector<rss_item> *)vector;
+	std::vector<refcnt_ptr<rss_item> >* items = (std::vector<refcnt_ptr<rss_item> > *)vector;
 
 	assert (argc == 11);
-	rss_item item(NULL);
-	item.set_guid(argv[0]);
-	item.set_title(argv[1]);
-	item.set_author(argv[2]);
-	item.set_link(argv[3]);
+	refcnt_ptr<rss_item> item(new rss_item(NULL));
+	item->set_guid(argv[0]);
+	item->set_title(argv[1]);
+	item->set_author(argv[2]);
+	item->set_link(argv[3]);
 	
 	std::istringstream is(argv[4]);
 	time_t t;
 	is >> t;
-	item.set_pubDate(t);
+	item->set_pubDate(t);
 	
-	item.set_description(argv[5]);
-	item.set_unread((std::string("1") == argv[6]));
+	item->set_description(argv[5]);
+	item->set_unread((std::string("1") == argv[6]));
 
-	item.set_feedurl(argv[7]);
+	item->set_feedurl(argv[7]);
 
-	item.set_enclosure_url(argv[8] ? argv[8] : "");
-	item.set_enclosure_type(argv[9] ? argv[9] : "");
-	item.set_enqueued((std::string("1") == (argv[10] ? argv[10] : "")));
+	item->set_enclosure_url(argv[8] ? argv[8] : "");
+	item->set_enclosure_type(argv[9] ? argv[9] : "");
+	item->set_enqueued((std::string("1") == (argv[10] ? argv[10] : "")));
 
 	items->push_back(item);
 	return 0;
 }
 
 static int search_item_callback(void * myfeed, int argc, char ** argv, char ** /* azColName */) {
-	std::vector<rss_item> * items = (std::vector<rss_item> *)myfeed;
+	std::vector<refcnt_ptr<rss_item> > * items = (std::vector<refcnt_ptr<rss_item> > *)myfeed;
 	assert (argc == 11);
-	rss_item item(NULL);
-	item.set_guid(argv[0]);
-	item.set_title(argv[1]);
-	item.set_author(argv[2]);
-	item.set_link(argv[3]);
+	refcnt_ptr<rss_item> item(new rss_item(NULL));
+	item->set_guid(argv[0]);
+	item->set_title(argv[1]);
+	item->set_author(argv[2]);
+	item->set_link(argv[3]);
 	
 	std::istringstream is(argv[4]);
 	time_t t;
 	is >> t;
-	item.set_pubDate(t);
+	item->set_pubDate(t);
 	
-	item.set_description(argv[5]);
-	item.set_unread((std::string("1") == argv[6]));
-	item.set_feedurl(argv[7]);
+	item->set_description(argv[5]);
+	item->set_unread((std::string("1") == argv[6]));
+	item->set_feedurl(argv[7]);
 
-	item.set_enclosure_url(argv[8] ? argv[8] : "");
-	item.set_enclosure_type(argv[9] ? argv[9] : "");
-	item.set_enqueued((std::string("1") == argv[10]));
+	item->set_enclosure_url(argv[8] ? argv[8] : "");
+	item->set_enclosure_type(argv[9] ? argv[9] : "");
+	item->set_enqueued((std::string("1") == argv[10]));
 
 	items->push_back(item);
 	return 0;
@@ -259,23 +261,23 @@ std::vector<std::string> cache::get_feed_urls() {
 
 
 // this function writes an rss_feed including all rss_items to the database
-void cache::externalize_rssfeed(rss_feed& feed) {
-	if (feed.rssurl().substr(0,6) == "query:")
+void cache::externalize_rssfeed(refcnt_ptr<rss_feed>& feed) {
+	if (feed->rssurl().substr(0,6) == "query:")
 		return;
 
 	mtx->lock();
 	std::ostringstream query;
-	query << "SELECT count(*) FROM rss_feed WHERE rssurl = '" << feed.rssurl() << "';";
+	query << "SELECT count(*) FROM rss_feed WHERE rssurl = '" << feed->rssurl() << "';";
 	cb_handler count_cbh;
 	int rc = sqlite3_exec(db,query.str().c_str(),count_callback,&count_cbh,NULL);
 	int count = count_cbh.count();
-	GetLogger().log(LOG_DEBUG, "cache::externalize_rss_feed: rss_feeds with rssurl = '%s': found %d",feed.rssurl().c_str(), count);
+	GetLogger().log(LOG_DEBUG, "cache::externalize_rss_feed: rss_feeds with rssurl = '%s': found %d",feed->rssurl().c_str(), count);
 	if (count > 0) {
-		std::string updatequery = prepare_query("UPDATE rss_feed SET title = '%q', url = '%q' WHERE rssurl = '%q';",feed.title_raw().c_str(),feed.link().c_str(), feed.rssurl().c_str());
+		std::string updatequery = prepare_query("UPDATE rss_feed SET title = '%q', url = '%q' WHERE rssurl = '%q';",feed->title_raw().c_str(),feed->link().c_str(), feed->rssurl().c_str());
 		rc = sqlite3_exec(db,updatequery.c_str(),NULL,NULL,NULL);
 		GetLogger().log(LOG_DEBUG,"ran SQL statement: %s", updatequery.c_str());
 	} else {
-		std::string insertquery = prepare_query("INSERT INTO rss_feed (rssurl, url, title) VALUES ( '%q', '%q', '%q' );", feed.rssurl().c_str(), feed.link().c_str(), feed.title_raw().c_str());
+		std::string insertquery = prepare_query("INSERT INTO rss_feed (rssurl, url, title) VALUES ( '%q', '%q', '%q' );", feed->rssurl().c_str(), feed->link().c_str(), feed->title_raw().c_str());
 		rc = sqlite3_exec(db,insertquery.c_str(),NULL,NULL,NULL);
 		GetLogger().log(LOG_DEBUG,"ran SQL statement: %s", insertquery.c_str());
 	}
@@ -285,32 +287,32 @@ void cache::externalize_rssfeed(rss_feed& feed) {
 	
 	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
 
-	GetLogger().log(LOG_INFO, "cache::externalize_feed: max_items = %u feed.items().size() = %u", max_items, feed.items().size());
+	GetLogger().log(LOG_INFO, "cache::externalize_feed: max_items = %u feed.items().size() = %u", max_items, feed->items().size());
 	
-	if (max_items > 0 && feed.items().size() > max_items) {
-		std::vector<rss_item>::iterator it=feed.items().begin();
+	if (max_items > 0 && feed->items().size() > max_items) {
+		std::vector<refcnt_ptr<rss_item> >::iterator it=feed->items().begin();
 		for (unsigned int i=0;i<max_items;++i)
 			++it;	
-		if (it != feed.items().end())
-			feed.items().erase(it, feed.items().end()); // delete entries that are too much
+		if (it != feed->items().end())
+			feed->items().erase(it, feed->items().end()); // delete entries that are too much
 	}
 
 	// the reverse iterator is there for the sorting foo below (think about it)
-	for (std::vector<rss_item>::reverse_iterator it=feed.items().rbegin(); it != feed.items().rend(); ++it) {
-		update_rssitem(*it, feed.rssurl());
+	for (std::vector<refcnt_ptr<rss_item> >::reverse_iterator it=feed->items().rbegin(); it != feed->items().rend(); ++it) {
+		update_rssitem(*(*it), feed->rssurl());
 	}
 }
 
 // this function reads an rss_feed including all of its rss_items.
 // the feed parameter needs to have the rssurl member set.
-void cache::internalize_rssfeed(rss_feed& feed) {
-	if (feed.rssurl().substr(0,6) == "query:")
+void cache::internalize_rssfeed(refcnt_ptr<rss_feed>& feed) {
+	if (feed->rssurl().substr(0,6) == "query:")
 		return;
 
 	mtx->lock();
 
 	/* first, we check whether the feed is there at all */
-	std::string query = prepare_query("SELECT count(*) FROM rss_feed WHERE rssurl = '%q';",feed.rssurl().c_str());
+	std::string query = prepare_query("SELECT count(*) FROM rss_feed WHERE rssurl = '%q';",feed->rssurl().c_str());
 	cb_handler count_cbh;
 	GetLogger().log(LOG_DEBUG,"running query: %s",query.c_str());
 	int rc = sqlite3_exec(db,query.c_str(),count_callback,&count_cbh,NULL);
@@ -326,7 +328,7 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 	}
 
 	/* then we first read the feed from the database */
-	query = prepare_query("SELECT title, url FROM rss_feed WHERE rssurl = '%q';",feed.rssurl().c_str());
+	query = prepare_query("SELECT title, url FROM rss_feed WHERE rssurl = '%q';",feed->rssurl().c_str());
 	GetLogger().log(LOG_DEBUG,"running query: %s",query.c_str());
 	rc = sqlite3_exec(db,query.c_str(),rssfeed_callback,&feed,NULL);
 	if (rc != SQLITE_OK) {
@@ -335,12 +337,12 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 		throw dbexception(db);
 	}
 
-	if (feed.items().size() > 0) {
-		feed.items().erase(feed.items().begin(),feed.items().end());
+	if (feed->items().size() > 0) {
+		feed->items().erase(feed->items().begin(),feed->items().end());
 	}
 
 	/* ...and then the associated items */
-	query = prepare_query("SELECT guid,title,author,url,pubDate,content,unread,feedurl,enclosure_url,enclosure_type,enqueued FROM rss_item WHERE feedurl = '%q' ORDER BY pubDate DESC, id DESC;",feed.rssurl().c_str());
+	query = prepare_query("SELECT guid,title,author,url,pubDate,content,unread,feedurl,enclosure_url,enclosure_type,enqueued FROM rss_item WHERE feedurl = '%q' ORDER BY pubDate DESC, id DESC;",feed->rssurl().c_str());
 	GetLogger().log(LOG_DEBUG,"running query: %s",query.c_str());
 	rc = sqlite3_exec(db,query.c_str(),rssitem_callback,&feed,NULL);
 	if (rc != SQLITE_OK) {
@@ -349,27 +351,27 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 		throw dbexception(db);
 	}
 
-	for (std::vector<rss_item>::iterator it=feed.items().begin(); it != feed.items().end(); ++it) {
-		it->set_cache(this);
-		it->set_feedptr(&feed);
-		it->set_feedurl(feed.rssurl());
+	for (std::vector<refcnt_ptr<rss_item> >::iterator it=feed->items().begin(); it != feed->items().end(); ++it) {
+		(*it)->set_cache(this);
+		(*it)->set_feedptr(feed); // TODO!
+		(*it)->set_feedurl(feed->rssurl());
 	}
 	
 	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
 	
-	if (max_items > 0 && feed.items().size() > max_items) {
-		std::vector<rss_item>::iterator it=feed.items().begin();
+	if (max_items > 0 && feed->items().size() > max_items) {
+		std::vector<refcnt_ptr<rss_item> >::iterator it=feed->items().begin();
 		for (unsigned int i=0;i<max_items;++i)
 			++it;
-		for (unsigned int i=max_items;i<feed.items().size();++i) {
-			delete_item(feed.items()[i]);	
+		for (unsigned int i=max_items;i<feed->items().size();++i) {
+			delete_item(feed->items()[i]);	
 		}	
-		feed.items().erase(it, feed.items().end()); // delete old entries
+		feed->items().erase(it, feed->items().end()); // delete old entries
 	}
 	mtx->unlock();
 }
 
-void cache::get_latest_items(std::vector<rss_item>& items, unsigned int limit) {
+void cache::get_latest_items(std::vector<refcnt_ptr<rss_item> >& items, unsigned int limit) {
 	mtx->lock();
 	std::string query = prepare_query("SELECT guid,title,author,url,pubDate,content,unread,feedurl,enclosure_url,enclosure_type,enqueued "
 									"FROM rss_item ORDER BY pubDate DESC, id DESC LIMIT %d;", limit);
@@ -384,8 +386,8 @@ void cache::get_latest_items(std::vector<rss_item>& items, unsigned int limit) {
 	mtx->unlock();
 }
 
-rss_feed cache::get_feed_by_url(const std::string& feedurl) {
-	rss_feed feed(this);
+refcnt_ptr<rss_feed> cache::get_feed_by_url(const std::string& feedurl) {
+	refcnt_ptr<rss_feed> feed(new rss_feed(this));
 	std::string query;
 	int rc;
 
@@ -406,9 +408,9 @@ rss_feed cache::get_feed_by_url(const std::string& feedurl) {
 	return feed;
 }
 
-std::vector<rss_item> cache::search_for_items(const std::string& querystr, const std::string& feedurl) {
+std::vector<refcnt_ptr<rss_item> > cache::search_for_items(const std::string& querystr, const std::string& feedurl) {
 	std::string query;
-	std::vector<rss_item> items;
+	std::vector<refcnt_ptr<rss_item> > items;
 	int rc;
 
 	mtx->lock();
@@ -433,8 +435,8 @@ std::vector<rss_item> cache::search_for_items(const std::string& querystr, const
 	return items;
 }
 
-void cache::delete_item(const rss_item& item) {
-	std::string query = prepare_query("DELETE FROM rss_item WHERE guid = '%q';",item.guid().c_str());
+void cache::delete_item(refcnt_ptr<rss_item>& item) {
+	std::string query = prepare_query("DELETE FROM rss_item WHERE guid = '%q';",item->guid().c_str());
 	GetLogger().log(LOG_DEBUG,"running query: %s",query.c_str());
 	int rc = sqlite3_exec(db,query.c_str(),NULL,NULL,NULL);
 	if (rc != SQLITE_OK) {
@@ -453,7 +455,7 @@ void cache::do_vacuum() {
 	mtx->unlock();
 }
 
-void cache::cleanup_cache(std::vector<rss_feed>& feeds) {
+void cache::cleanup_cache(std::vector<refcnt_ptr<rss_feed> >& feeds) {
 	mtx->lock();
 
 	/*
@@ -472,8 +474,8 @@ void cache::cleanup_cache(std::vector<rss_feed>& feeds) {
 		unsigned int i = 0;
 		unsigned int feed_size = feeds.size();
 
-		for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it,++i) {
-			std::string name = prepare_query("'%q'",it->rssurl().c_str());
+		for (std::vector<refcnt_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it,++i) {
+			std::string name = prepare_query("'%q'",(*it)->rssurl().c_str());
 			list.append(name);
 			if (i < feed_size-1) {
 				list.append(", ");
@@ -560,12 +562,12 @@ void cache::update_rssitem(rss_item& item, const std::string& feedurl) {
 	mtx->unlock();
 }
 
-void cache::catchup_all(rss_feed& feed) {
+void cache::catchup_all(refcnt_ptr<rss_feed>& feed) {
 	mtx->lock();
 	std::string query = "UPDATE rss_item SET unread = '0' WHERE unread != '0' AND guid IN (";
 
-	for (std::vector<rss_item>::iterator it=feed.items().begin();it!=feed.items().end();++it) {
-		query.append(prepare_query("'%q',", it->guid().c_str()));
+	for (std::vector<refcnt_ptr<rss_item> >::iterator it=feed->items().begin();it!=feed->items().end();++it) {
+		query.append(prepare_query("'%q',", (*it)->guid().c_str()));
 	}
 	query.append("'');");
 
@@ -602,7 +604,7 @@ void cache::catchup_all(const std::string& feedurl) {
 /* this function updates the unread and enqueued flags */
 void cache::update_rssitem_unread_and_enqueued(rss_item& item, const std::string& feedurl) {
 	mtx->lock();
-	std::string query = prepare_query("SELECT count(*) FROM rss_item WHERE guid = '%q';",item.guid().c_str());
+	std::string query = prepare_query("SELECT count(*) FROM rss_item.WHERE guid = '%q';",item.guid().c_str());
 	cb_handler count_cbh;
 	GetLogger().log(LOG_DEBUG,"running query: %s", query.c_str());
 	int rc = sqlite3_exec(db,query.c_str(),count_callback,&count_cbh,NULL);
@@ -613,7 +615,7 @@ void cache::update_rssitem_unread_and_enqueued(rss_item& item, const std::string
 	}
 
 	if (count_cbh.count() > 0) {
-		std::string update = prepare_query("UPDATE rss_item SET unread = '%d', enqueued = '%d' WHERE guid = '%q'",
+		std::string update = prepare_query("UPDATE rss_item.SET unread = '%d', enqueued = '%d' WHERE guid = '%q'",
 			item.unread()?1:0, item.enqueued()?1:0, item.guid().c_str());
 		GetLogger().log(LOG_DEBUG,"running query: %s", update.c_str());
 		rc = sqlite3_exec(db,update.c_str(),NULL,NULL,NULL);
@@ -623,7 +625,7 @@ void cache::update_rssitem_unread_and_enqueued(rss_item& item, const std::string
 			throw dbexception(db);
 		}
 	} else {
-		std::string insert = prepare_query("INSERT INTO rss_item (guid,title,author,url,feedurl,pubDate,content,unread,enclosure_url,enclosure_type,enqueued) "
+		std::string insert = prepare_query("INSERT INTO rss_item.(guid,title,author,url,feedurl,pubDate,content,unread,enclosure_url,enclosure_type,enqueued) "
 										"VALUES ('%q','%q','%q','%q','%q','%u','%q',1,'%q','%q',%d)",
 										item.guid().c_str(), item.title_raw().c_str(), item.author_raw().c_str(), 
 										item.link().c_str(), feedurl.c_str(), item.pubDate_timestamp(), item.description_raw().c_str(),

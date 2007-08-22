@@ -23,9 +23,9 @@ namespace newsbeuter {
 			void reload_all();
 			void start_reload_all_thread();
 
-			rss_feed * get_feed(unsigned int pos);
-			rss_feed * get_feed_by_url(const std::string& feedurl);
-			std::vector<rss_item> search_for_items(const std::string& query, const std::string& feedurl);
+			refcnt_ptr<rss_feed> get_feed(unsigned int pos);
+			refcnt_ptr<rss_feed> get_feed_by_url(const std::string& feedurl);
+			std::vector<refcnt_ptr<rss_item> > search_for_items(const std::string& query, const std::string& feedurl);
 			inline unsigned int get_feedcount() { return feeds.size(); }
 
 			inline void unlock_reload_mutex() { reload_mutex->unlock(); }
@@ -42,10 +42,10 @@ namespace newsbeuter {
 
 			void reload_urls_file();
 
-			inline std::vector<rss_feed>& get_all_feeds() { return feeds; }
+			inline std::vector<refcnt_ptr<rss_feed> >& get_all_feeds() { return feeds; }
 
 			// TODO: move somewhere else...
-			void set_feedptrs(rss_feed& feed);
+			void set_feedptrs(refcnt_ptr<rss_feed> feed);
 
 			inline filtercontainer& get_filters() { return filters; }
 
@@ -60,7 +60,7 @@ namespace newsbeuter {
 			view * v;
 			urlreader * urlcfg;
 			cache * rsscache;
-			std::vector<rss_feed> feeds;
+			std::vector<refcnt_ptr<rss_feed> > feeds;
 			std::string config_dir;
 			std::string url_file;
 			std::string cache_file;

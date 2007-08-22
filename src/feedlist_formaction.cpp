@@ -239,7 +239,7 @@ void feedlist_formaction::process_operation(operation op) {
 	}
 }
 
-void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
+void feedlist_formaction::set_feedlist(std::vector<refcnt_ptr<rss_feed> >& feeds) {
 	std::string code = "{list";
 	char buf[1024];
 	
@@ -253,11 +253,11 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 	if (visible_feeds.size() > 0)
 		visible_feeds.erase(visible_feeds.begin(), visible_feeds.end());
 
-	for (std::vector<rss_feed>::iterator it = feeds.begin(); it != feeds.end(); ++it, ++i, ++feedlist_number) {
-		rss_feed feed = *it;
-		std::string title = it->title();
+	for (std::vector<refcnt_ptr<rss_feed> >::iterator it = feeds.begin(); it != feeds.end(); ++it, ++i, ++feedlist_number) {
+		refcnt_ptr<rss_feed> feed(*it);
+		std::string title = (*it)->title();
 		if (title.length()==0) {
-			title = it->rssurl(); // rssurl must always be present.
+			title = (*it)->rssurl(); // rssurl must always be present.
 			if (title.length()==0) {
 				title = "<no title>"; // shouldn't happen
 			}
@@ -267,18 +267,18 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 		char sbuf[20];
 		char sbuf2[20];
 		unsigned int unread_count = 0;
-		if (it->items().size() > 0) {
-			unread_count = it->unread_item_count();
+		if ((*it)->items().size() > 0) {
+			unread_count = (*it)->unread_item_count();
 		}
 		if (unread_count > 0)
 			++unread_feeds;
 
 		GetLogger().log(LOG_DEBUG, "feedlist_formaction::set_feedlist: before big if statement");
-		if ((tag == "" || it->matches_tag(tag)) && (!apply_filter || m.matches(&(*it)))) {
+		if ((tag == "" || (*it)->matches_tag(tag)) && (!apply_filter || m.matches(&**it))) {
 			GetLogger().log(LOG_DEBUG, "feedlist_formaction::set_feedlist: inside big if statement");
-			visible_feeds.push_back(std::pair<rss_feed *, unsigned int>(&(*it),i));
+			visible_feeds.push_back(std::pair<refcnt_ptr<rss_feed>, unsigned int>(*it,i));
 
-			snprintf(sbuf,sizeof(buf),"(%u/%u) ",unread_count,static_cast<unsigned int>(it->items().size()));
+			snprintf(sbuf,sizeof(buf),"(%u/%u) ",unread_count,static_cast<unsigned int>((*it)->items().size()));
 			snprintf(sbuf2,sizeof(sbuf2),"%4u %c %11s",feedlist_number, unread_count > 0 ? 'N' : ' ',sbuf);
 			std::string newtitle(sbuf2);
 			newtitle.append(title);
@@ -392,7 +392,7 @@ bool feedlist_formaction::jump_to_next_unread_feed(unsigned int& feedpos) {
 	return false;
 }
 
-rss_feed * feedlist_formaction::get_feed() {
+refcnt_ptr<rss_feed> feedlist_formaction::get_feed() {
 	unsigned int curpos;
 	std::istringstream is(f->get("feedpos"));
 	is >> curpos;
