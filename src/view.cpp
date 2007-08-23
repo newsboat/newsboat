@@ -386,8 +386,10 @@ char view::confirm(const std::string& prompt, const std::string& charset) {
 }
 
 void view::notify_itemlist_change(rss_feed& feed) {
-	if (itemlist->get_feed()->rssurl() == feed.rssurl()) {
+	rss_feed * f = itemlist->get_feed();
+	if (f != NULL && f->rssurl() == feed.rssurl()) {
 		itemlist->do_update_visible_items();
+		itemlist->set_redraw(true);
 	}
 }
 
