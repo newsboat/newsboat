@@ -30,6 +30,8 @@ class itemlist_formaction : public formaction {
 
 		virtual void handle_cmdline(const std::string& cmd);
 
+		inline void set_update_visible_items(bool b) { update_visible_items = b; }
+
 	private:
 		virtual void process_operation(operation op);
 		void set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);
