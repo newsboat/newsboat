@@ -28,10 +28,10 @@ void itemview_formaction::prepare() {
 	static bool render_hack;
 
 	if (do_redraw) {
-		refcnt_ptr<rss_item> item = feed->get_item_by_guid(guid);
+		rss_item& item = feed->get_item_by_guid(guid);
 		std::string code = "{list";
 
-		refcnt_ptr<rss_feed> feedptr = item->get_feedptr();
+		rss_feed * feedptr = item.get_feedptr();
 
 		code.append("{listitem text:");
 		std::ostringstream feedtitle;
@@ -49,43 +49,43 @@ void itemview_formaction::prepare() {
 		code.append("{listitem text:");
 		std::ostringstream title;
 		title << _("Title: ");
-		title << item->title();
+		title << item.title();
 		code.append(stfl::quote(title.str()));
 		code.append("}");
 
 		code.append("{listitem text:");
 		std::ostringstream author;
 		author << _("Author: ");
-		author << item->author();
+		author << item.author();
 		code.append(stfl::quote(author.str()));
 		code.append("}");
 
 		code.append("{listitem text:");
 		std::ostringstream link;
 		link << _("Link: ");
-		link << item->link();
+		link << item.link();
 		code.append(stfl::quote(link.str()));
 		code.append("}");
 		
 		code.append("{listitem text:");
 		std::ostringstream date;
 		date << _("Date: ");
-		date << item->pubDate();
+		date << item.pubDate();
 		code.append(stfl::quote(date.str()));
 		code.append("}");
 
-		if (item->enclosure_url().length() > 0) {
+		if (item.enclosure_url().length() > 0) {
 			code.append("{listitem text:");
 			std::ostringstream enc_url;
 			enc_url << _("Podcast Download URL: ");
-			enc_url << item->enclosure_url() << " (" << _("type: ") << item->enclosure_type() << ")";
+			enc_url << item.enclosure_url() << " (" << _("type: ") << item.enclosure_type() << ")";
 			code.append(stfl::quote(enc_url.str()));
 			code.append("}");
 		}
 
 		code.append("{listitem text:\"\"}");
 		
-		set_head(item->title());
+		set_head(item.title());
 
 		if (!render_hack) {
 			f->run(-1); // XXX HACK: render once so that we get a proper widget width
@@ -103,10 +103,10 @@ void itemview_formaction::prepare() {
 		}
 
 		if (show_source) {
-			render_source(lines, item->description(), render_width);
+			render_source(lines, item.description(), render_width);
 		} else {
 			htmlrenderer rnd(render_width);
-			rnd.render(item->description(), lines, links, item->feedurl());
+			rnd.render(item.description(), lines, links, item.feedurl());
 		}
 
 		for (std::vector<std::string>::iterator it = lines.begin(); it != lines.end(); ++it) {
@@ -127,9 +127,9 @@ void itemview_formaction::prepare() {
 }
 
 void itemview_formaction::process_operation(operation op) {
-	refcnt_ptr<rss_item> item = feed->get_item_by_guid(guid);
+	rss_item& item = feed->get_item_by_guid(guid);
 	try {
-		item->set_unread(false);
+		item.set_unread(false);
 	} catch (const dbexception& e) {
 		char buf[1024];
 		snprintf(buf, sizeof(buf), _("Error while marking article as read: %s"), e.what());
@@ -147,9 +147,9 @@ void itemview_formaction::process_operation(operation op) {
 			break;
 		case OP_ENQUEUE: {
 				char buf[1024];
-				if (item->enclosure_url().length() > 0) {
-					snprintf(buf, sizeof(buf), _("Added %s to download queue."), item->enclosure_url().c_str());
-					v->get_ctrl()->enqueue_url(item->enclosure_url());
+				if (item.enclosure_url().length() > 0) {
+					snprintf(buf, sizeof(buf), _("Added %s to download queue."), item.enclosure_url().c_str());
+					v->get_ctrl()->enqueue_url(item.enclosure_url());
 					v->set_status(buf);
 				}
 			}
@@ -158,7 +158,7 @@ void itemview_formaction::process_operation(operation op) {
 			{
 				char buf[1024];
 				GetLogger().log(LOG_INFO, "view::run_itemview: saving article");
-				std::string filename = v->run_filebrowser(FBT_SAVE,v->get_filename_suggestion(item->title()));
+				std::string filename = v->run_filebrowser(FBT_SAVE,v->get_filename_suggestion(item.title()));
 				if (filename == "") {
 					v->show_error(_("Aborted saving."));
 				} else {
@@ -176,7 +176,7 @@ void itemview_formaction::process_operation(operation op) {
 		case OP_OPENINBROWSER:
 			GetLogger().log(LOG_INFO, "view::run_itemview: starting browser");
 			v->set_status(_("Starting browser..."));
-			v->open_in_browser(item->link());
+			v->open_in_browser(item.link());
 			v->set_status("");
 			break;
 		case OP_SHOWURLS:
@@ -275,7 +275,7 @@ void itemview_formaction::handle_cmdline(const std::string& cmd) {
 	if (tokens.size() > 0) {
 		if (tokens[0] == "save" && tokens.size() >= 2) {
 			std::string filename = utils::resolve_tilde(tokens[1]);
-			refcnt_ptr<rss_item> item = feed->get_item_by_guid(guid);
+			rss_item& item = feed->get_item_by_guid(guid);
 			char buf[1024];
 
 			if (filename == "") {

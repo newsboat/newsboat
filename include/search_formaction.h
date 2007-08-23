@@ -18,7 +18,7 @@ class search_formaction : public formaction {
 
 		bool set_listfocus;
 		std::string feedurl;
-		std::vector<refcnt_ptr<rss_item> > items;
+		std::vector<rss_item> items;
 
 };
 

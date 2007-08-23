@@ -33,7 +33,7 @@ namespace newsbeuter {
 			void run();
 			std::string run_modal(formaction * f, const std::string& value = "");
 
-			void set_feedlist(std::vector<refcnt_ptr<rss_feed> >& feeds);
+			void set_feedlist(std::vector<rss_feed>& feeds);
 			void set_keymap(keymap * k);
 			void set_config_container(configcontainer * cfgcontainer);
 			void show_error(const char * msg);
@@ -47,10 +47,10 @@ namespace newsbeuter {
 			inline unsigned int formaction_stack_size() { return formaction_stack.size(); }
 			char confirm(const std::string& prompt, const std::string& charset);
 
-			void write_item(refcnt_ptr<rss_item> item, const std::string& filename);
+			void write_item(const rss_item& item, const std::string& filename);
 
 			void push_itemlist(unsigned int pos);
-			void push_itemview(refcnt_ptr<rss_feed> f, const std::string& guid);
+			void push_itemview(rss_feed * f, const std::string& guid);
 			void push_help();
 			void push_urlview(const std::vector<linkpair>& links);
 			void run_search(const std::string& feedurl = "");
@@ -69,6 +69,12 @@ namespace newsbeuter {
 			void set_colors(const colormanager& colorman);
 
 		protected:
+			/*
+			bool jump_to_next_unread_item(std::vector<rss_item>& items, bool begin_with_next);
+			bool jump_to_next_unread_feed(bool begin_with_next);
+			bool jump_to_previous_unread_item(std::vector<rss_item>& items, bool begin_with_prev);
+			bool jump_to_previous_unread_feed(bool begin_with_prev);
+			*/
 
 			void set_bindings();
 

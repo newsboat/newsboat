@@ -10,7 +10,7 @@
 namespace newsbeuter {
 
 itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
-	: formaction(vv,formstr), apply_filter(false), update_visible_items(true) { 
+	: formaction(vv,formstr), feed(0), apply_filter(false), update_visible_items(true) { 
 }
 
 itemlist_formaction::~itemlist_formaction() { }
@@ -49,9 +49,7 @@ void itemlist_formaction::process_operation(operation op) {
 					std::istringstream posname(itemposname);
 					unsigned int itempos = 0;
 					posname >> itempos;
-					vimtx.lock();
 					v->push_itemview(feed, visible_items[itempos].first->guid());
-					vimtx.unlock();
 					do_redraw = true;
 				} else {
 					v->show_error(_("No item selected!")); // should not happen
@@ -65,12 +63,10 @@ void itemlist_formaction::process_operation(operation op) {
 					std::istringstream posname(itemposname);
 					unsigned int itempos = 0;
 					posname >> itempos;
-					vimtx.lock();
 					if (itempos < visible_items.size()) {
 						v->open_in_browser(visible_items[itempos].first->link());
 						do_redraw = true;
 					}
-					vimtx.unlock();
 				} else {
 					v->show_error(_("No item selected!")); // should not happen
 				}
@@ -86,13 +82,12 @@ void itemlist_formaction::process_operation(operation op) {
 					unsigned int itempos = 0;
 					posname >> itempos;
 					
-					vimtx.lock();
 					std::string filename = v->run_filebrowser(FBT_SAVE,v->get_filename_suggestion(visible_items[itempos].first->title()));
 					if (filename == "") {
 						v->show_error(_("Aborted saving."));
 					} else {
 						try {
-							v->write_item(visible_items[itempos].first, filename);
+							v->write_item(*visible_items[itempos].first, filename);
 							snprintf(buf, sizeof(buf), _("Saved article to %s"), filename.c_str());
 							v->show_error(buf);
 						
@@ -101,7 +96,6 @@ void itemlist_formaction::process_operation(operation op) {
 							v->show_error(buf);
 						}
 					}
-					vimtx.unlock();
 				} else {
 					v->show_error(_("Error: no item selected!"));
 				}
@@ -157,7 +151,6 @@ void itemlist_formaction::process_operation(operation op) {
 					unsigned int itempos = 0;
 					posname >> itempos;
 					v->set_status(_("Toggling read flag for article..."));
-					vimtx.lock();
 					try {
 						visible_items[itempos].first->set_unread(!visible_items[itempos].first->unread());
 						v->set_status("");
@@ -166,7 +159,6 @@ void itemlist_formaction::process_operation(operation op) {
 						snprintf(buf, sizeof(buf), _("Error while toggling read flag: %s"), e.what());
 						v->set_status(buf);
 					}
-					vimtx.unlock();
 					do_redraw = true;
 				}
 			}
@@ -212,21 +204,17 @@ void itemlist_formaction::process_operation(operation op) {
 }
 
 void itemlist_formaction::do_update_visible_items() {
-	GetLogger().log(LOG_DEBUG, "itemlist_formaction::do_update_visible_items: starting with update");
-	feed = v->get_ctrl()->get_feed(pos);
-	std::vector<refcnt_ptr<rss_item> >& items = feed->items();
-	vimtx.lock();
+	std::vector<rss_item>& items = feed->items();
 
 	if (visible_items.size() > 0)
 		visible_items.erase(visible_items.begin(), visible_items.end());
 
 	unsigned int i=0;
-	for (std::vector<refcnt_ptr<rss_item> >::iterator it = items.begin(); it != items.end(); ++it, ++i) {
-		if (!apply_filter || m.matches(&**it)) { // XXX
-			visible_items.push_back(std::pair<refcnt_ptr<rss_item>, unsigned int>(*it, i));
+	for (std::vector<rss_item>::iterator it = items.begin(); it != items.end(); ++it, ++i) {
+		if (!apply_filter || m.matches(&(*it))) {
+			visible_items.push_back(std::pair<rss_item *, unsigned int>(&(*it), i));
 		}
 	}
-	vimtx.unlock();
 }
 
 void itemlist_formaction::prepare() {
@@ -242,8 +230,7 @@ void itemlist_formaction::prepare() {
 		if (datetimeformat.length() == 0)
 			datetimeformat = "%b %d";
 
-		vimtx.lock();
-		for (std::vector<std::pair<refcnt_ptr<rss_item>, unsigned int> >::iterator it = visible_items.begin(); it != visible_items.end(); ++it) {
+		for (std::vector<std::pair<rss_item *, unsigned int> >::iterator it = visible_items.begin(); it != visible_items.end(); ++it) {
 			std::string line = "{listitem[";
 			std::ostringstream x;
 			x << it->second;
@@ -264,9 +251,7 @@ void itemlist_formaction::prepare() {
 			strftime(datebuf,sizeof(datebuf), datetimeformat.c_str(), stm);
 			title.append(datebuf);
 			title.append("   ");
-			std::string x1 = feed->rssurl();
-			std::string x2 = it->first->feedurl();
-			if (x1 != x2) {
+			if (feed->rssurl() != it->first->feedurl()) {
 				char buf[20];
 				snprintf(buf,sizeof(buf),"|%-17s|",it->first->get_feedptr()->title().substr(0,17).c_str());
 				title.append(buf);
@@ -279,7 +264,6 @@ void itemlist_formaction::prepare() {
 			line.append("}");
 			code.append(line);
 		}
-		vimtx.unlock();
 
 		code.append("}");
 
@@ -308,14 +292,12 @@ bool itemlist_formaction::jump_to_previous_unread_item(bool start_with_last) {
 	unsigned int itempos;
 	std::istringstream is(f->get("itempos"));
 	is >> itempos;
-	vimtx.lock();
 	for (int i=(start_with_last?itempos:(itempos-1));i>=0;--i) {
 		GetLogger().log(LOG_DEBUG, "itemlist_formaction::jump_to_previous_unread_item: visible_items[%u] unread = %s", i, visible_items[i].first->unread() ? "true" : "false");
 		if (visible_items[i].first->unread()) {
 			std::ostringstream os;
 			os << i;
 			f->set("itempos", os.str());
-			vimtx.unlock();
 			return true;
 		}
 	}
@@ -324,11 +306,9 @@ bool itemlist_formaction::jump_to_previous_unread_item(bool start_with_last) {
 			std::ostringstream os;
 			os << i;
 			f->set("itempos", os.str());
-			vimtx.unlock();
 			return true;
 		}
 	}
-	vimtx.unlock();
 	return false;
 
 }
@@ -337,14 +317,12 @@ bool itemlist_formaction::jump_to_next_unread_item(bool start_with_first) {
 	unsigned int itempos;
 	std::istringstream is(f->get("itempos"));
 	is >> itempos;
-	vimtx.lock();
 	for (unsigned int i=(start_with_first?itempos:(itempos+1));i<visible_items.size();++i) {
 		GetLogger().log(LOG_DEBUG, "itemlist_formaction::jump_to_next_unread_item: visible_items[%u] unread = %s", i, visible_items[i].first->unread() ? "true" : "false");
 		if (visible_items[i].first->unread()) {
 			std::ostringstream os;
 			os << i;
 			f->set("itempos", os.str());
-			vimtx.unlock();
 			return true;
 		}
 	}
@@ -353,11 +331,9 @@ bool itemlist_formaction::jump_to_next_unread_item(bool start_with_first) {
 			std::ostringstream os;
 			os << i;
 			f->set("itempos", os.str());
-			vimtx.unlock();
 			return true;
 		}
 	}
-	vimtx.unlock();
 	return false;
 }
 
@@ -365,10 +341,7 @@ std::string itemlist_formaction::get_guid() {
 	unsigned int itempos;
 	std::istringstream is(f->get("itempos"));
 	is >> itempos;
-	vimtx.lock();
-	std::string guid = visible_items[itempos].first->guid();
-	vimtx.unlock();
-	return guid;
+	return visible_items[itempos].first->guid();
 }
 
 keymap_hint_entry * itemlist_formaction::get_keymap_hint() {
@@ -389,10 +362,7 @@ keymap_hint_entry * itemlist_formaction::get_keymap_hint() {
 void itemlist_formaction::handle_cmdline(const std::string& cmd) {
 	unsigned int idx = 0;
 	if (1==sscanf(cmd.c_str(),"%u",&idx)) {
-		vimtx.lock();
-		int foo = visible_items[visible_items.size()-1].second + 1;
-		vimtx.unlock();
-		if (idx > 0 && idx <= foo) {
+		if (idx > 0 && idx <= visible_items[visible_items.size()-1].second + 1) {
 			int i = get_pos(idx - 1);
 			if (i == -1) {
 				v->show_error(_("Position not visible!"));
@@ -422,9 +392,7 @@ void itemlist_formaction::handle_cmdline(const std::string& cmd) {
 						v->show_error(_("Aborted saving."));
 					} else {
 						try {
-							vimtx.lock();
-							v->write_item(visible_items[itempos].first, filename);
-							vimtx.unlock();
+							v->write_item(*visible_items[itempos].first, filename);
 							snprintf(buf, sizeof(buf), _("Saved article to %s"), filename.c_str());
 							v->show_error(buf);
 						} catch (...) {
@@ -443,14 +411,10 @@ void itemlist_formaction::handle_cmdline(const std::string& cmd) {
 }
 
 int itemlist_formaction::get_pos(unsigned int realidx) {
-	vimtx.lock();
 	for (unsigned int i=0;i<visible_items.size();++i) {
-		if (visible_items[i].second == realidx) {
-			vimtx.unlock();
+		if (visible_items[i].second == realidx)
 			return i;
-		}
 	}
-	vimtx.unlock();
 	return -1;
 }
 

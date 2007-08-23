@@ -13,10 +13,10 @@ class feedlist_formaction : public formaction {
 		virtual ~feedlist_formaction();
 		virtual void prepare();
 		virtual void init();
-		void set_feedlist(std::vector<refcnt_ptr<rss_feed> >& feeds);
+		void set_feedlist(std::vector<rss_feed>& feeds);
 		void set_tags(const std::vector<std::string>& t);
 		virtual keymap_hint_entry * get_keymap_hint();
-		refcnt_ptr<rss_feed> get_feed();
+		rss_feed * get_feed();
 
 		bool jump_to_next_unread_feed(unsigned int& feedpos);
 		bool jump_to_previous_unread_feed(unsigned int& feedpos);
@@ -32,7 +32,7 @@ class feedlist_formaction : public formaction {
 		unsigned int feeds_shown;
 		bool auto_open;
 		bool quit;
-		std::vector<std::pair<refcnt_ptr<rss_feed>, unsigned int> > visible_feeds;
+		std::vector<std::pair<rss_feed *, unsigned int> > visible_feeds;
 		std::string tag;
 		std::vector<std::string> tags;
 

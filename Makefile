@@ -19,7 +19,6 @@ LDFLAGS=-L. -L/usr/local/lib -L/sw/lib
 # libraries to link with
 # LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn -lpthread
 
-DEBUG=1
 ifeq ($(DEBUG),1)
 DEFINES+=-DDEBUG
 endif

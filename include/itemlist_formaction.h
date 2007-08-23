@@ -3,8 +3,6 @@
 
 #include <formaction.h>
 #include <history.h>
-#include <mutex.h>
-#include <logger.h>
 
 namespace newsbeuter {
 
@@ -15,18 +13,15 @@ class itemlist_formaction : public formaction {
 		virtual void prepare();
 		virtual void init();
 
-		inline void set_feed(refcnt_ptr<rss_feed> fd) { 
+		inline void set_feed(rss_feed * fd) { 
 			feed = fd; 
 			update_visible_items = true; 
 			do_update_visible_items();
 			apply_filter = false;
 		}
 
-		inline refcnt_ptr<rss_feed> get_feed() { return feed; }
-		inline void set_pos(unsigned int p) { 
-			pos = p; 
-			GetLogger().log(LOG_DEBUG, "itemlist_formaction::set_pos = p = %u", p);
-		}
+		inline rss_feed * get_feed() { return feed; }
+		inline void set_pos(unsigned int p) { pos = p; }
 		std::string get_guid();
 		virtual keymap_hint_entry * get_keymap_hint();
 
@@ -41,17 +36,15 @@ class itemlist_formaction : public formaction {
 		int get_pos(unsigned int idx);
 		void do_update_visible_items();
 
-		refcnt_ptr<rss_feed> feed;
+		rss_feed * feed;
 		unsigned int pos;
 		bool rebuild_list;
 		bool apply_filter;
 		matcher m;
-		std::vector<std::pair<refcnt_ptr<rss_item>, unsigned int> > visible_items;
+		std::vector<std::pair<rss_item *, unsigned int> > visible_items;
 		bool update_visible_items;
 
 		history filterhistory;
-
-		mutex vimtx;
 };
 
 }

@@ -49,9 +49,9 @@ void search_formaction::process_operation(operation op) {
 						std::istringstream posname(itemposname);
 						unsigned int pos = 0;
 						posname >> pos;
-						refcnt_ptr<rss_feed> tmpfeed = v->get_ctrl()->get_feed_by_url(items[pos]->feedurl());
-						if (tmpfeed != NULL) {
-							v->push_itemview(tmpfeed, items[pos]->guid());
+						rss_feed * tmpfeed = v->get_ctrl()->get_feed_by_url(items[pos].feedurl());
+						if (tmpfeed) {
+							v->push_itemview(tmpfeed, items[pos].guid());
 						} else {
 							v->show_error(_("Weird. I just found an item that belongs to a nonexistent feed. That's a bug."));
 						}
@@ -85,7 +85,7 @@ void search_formaction::prepare() {
 		std::string code = "{list";
 
 		unsigned int i=0;
-		for (std::vector<refcnt_ptr<rss_item> >::iterator it = items.begin(); it != items.end(); ++it, ++i) {
+		for (std::vector<rss_item>::iterator it = items.begin(); it != items.end(); ++it, ++i) {
 			std::string line = "{listitem[";
 			std::ostringstream x;
 			x << i;
@@ -95,17 +95,17 @@ void search_formaction::prepare() {
 			char buf[20];
 			snprintf(buf,sizeof(buf),"%4u ",i+1);
 			title.append(buf);
-			if ((*it)->unread()) {
+			if (it->unread()) {
 				title.append("N ");
 			} else {
 				title.append("  ");
 			}
 			char datebuf[64];
-			time_t t = (*it)->pubDate_timestamp();
+			time_t t = it->pubDate_timestamp();
 			struct tm * stm = localtime(&t);
 			strftime(datebuf,sizeof(datebuf), "%b %d   ", stm);
 			title.append(datebuf);
-			title.append((*it)->title());
+			title.append(it->title());
 			line.append(stfl::quote(title));
 			line.append("}");
 			code.append(line);

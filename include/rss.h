@@ -6,7 +6,6 @@
 
 #include <configcontainer.h>
 #include <matcher.h>
-#include <refcnt_ptr.h>
 
 
 extern "C" {
@@ -72,8 +71,8 @@ namespace newsbeuter {
 			virtual bool has_attribute(const std::string& attribname);
 			virtual std::string get_attribute(const std::string& attribname);
 
-			inline void set_feedptr(refcnt_ptr<rss_feed> ptr) { feedptr = ptr; }
-			inline refcnt_ptr<rss_feed> get_feedptr() { return feedptr; }
+			inline void set_feedptr(rss_feed * ptr) { feedptr = ptr; }
+			inline rss_feed * get_feedptr() { return feedptr; }
 
 		private:
 			std::string title_;
@@ -88,7 +87,7 @@ namespace newsbeuter {
 			std::string enclosure_url_;
 			std::string enclosure_type_;
 			bool enqueued_;
-			refcnt_ptr<rss_feed> feedptr;
+			rss_feed * feedptr;
 	};
 
 	class rss_feed : public matchable {
@@ -109,14 +108,14 @@ namespace newsbeuter {
 			inline std::string pubDate() const { return "TODO"; }
 			inline void set_pubDate(time_t t) { pubDate_ = t; }
 			
-			inline std::vector<refcnt_ptr<rss_item> >& items() { return items_; }
+			inline std::vector<rss_item>& items() { return items_; }
 
-			refcnt_ptr<rss_item> get_item_by_guid(const std::string& guid);
+			rss_item& get_item_by_guid(const std::string& guid);
 			
 			inline const std::string& rssurl() const { return rssurl_; }
 			void set_rssurl(const std::string& u);
 			
-			unsigned int unread_item_count();
+			unsigned int unread_item_count() const;
 
 			void set_tags(const std::vector<std::string>& tags);
 			bool matches_tag(const std::string& tag);
@@ -125,7 +124,7 @@ namespace newsbeuter {
 			virtual bool has_attribute(const std::string& attribname);
 			virtual std::string get_attribute(const std::string& attribname);
 
-			void update_items(std::vector<refcnt_ptr<rss_feed> >& feeds);
+			void update_items(std::vector<rss_feed>& feeds);
 
 			inline void set_query(const std::string& s) { query = s; }
 
@@ -138,7 +137,7 @@ namespace newsbeuter {
 			std::string link_;
 			time_t pubDate_;
 			std::string rssurl_;
-			std::vector<refcnt_ptr<rss_item> > items_;
+			std::vector<rss_item> items_;
 			std::vector<std::string> tags_;
 			std::string query;
 			
@@ -153,7 +152,7 @@ namespace newsbeuter {
 		public:
 			rss_parser(const char * uri, cache * c, configcontainer *, rss_ignores * ii);
 			~rss_parser();
-			refcnt_ptr<rss_feed> parse();
+			rss_feed parse();
 			static time_t parse_date(const std::string& datestr);
 		private:
 			std::string my_uri;

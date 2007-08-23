@@ -22,11 +22,11 @@ rss_parser::rss_parser(const char * uri, cache * c, configcontainer * cfg, rss_i
 
 rss_parser::~rss_parser() { }
 
-refcnt_ptr<rss_feed> rss_parser::parse() {
-	refcnt_ptr<rss_feed> feed(new rss_feed(ch));
+rss_feed rss_parser::parse() {
+	rss_feed feed(ch);
 	bool skip_parsing = false;
 
-	feed->set_rssurl(my_uri);
+	feed.set_rssurl(my_uri);
 
 	char * proxy = NULL;
 	char * proxy_auth = NULL;
@@ -100,34 +100,34 @@ refcnt_ptr<rss_feed> rss_parser::parse() {
 		const char * encoding = mrss->encoding ? mrss->encoding : "utf-8";
 
 		if (mrss->title) {
-			feed->set_title(utils::convert_text(mrss->title, "utf-8", encoding));
+			feed.set_title(utils::convert_text(mrss->title, "utf-8", encoding));
 		}
 		
 		if (mrss->description) {
-			feed->set_description(utils::convert_text(mrss->description, "utf-8", encoding));
+			feed.set_description(utils::convert_text(mrss->description, "utf-8", encoding));
 		}
 
-		if (mrss->link) feed->set_link(mrss->link);
+		if (mrss->link) feed.set_link(mrss->link);
 		if (mrss->pubDate) 
-			feed->set_pubDate(parse_date(mrss->pubDate));
+			feed.set_pubDate(parse_date(mrss->pubDate));
 		else
-			feed->set_pubDate(::time(NULL));
+			feed.set_pubDate(::time(NULL));
 
-		GetLogger().log(LOG_DEBUG, "rss_parser::parse: feed title = `%s' link = `%s'", feed->title().c_str(), feed->link().c_str());
+		GetLogger().log(LOG_DEBUG, "rss_parser::parse: feed title = `%s' link = `%s'", feed.title().c_str(), feed.link().c_str());
 
 		for (mrss_item_t * item = mrss->item; item != NULL; item = item->next ) {
-			refcnt_ptr<rss_item> x(new rss_item(ch));
+			rss_item x(ch);
 			if (item->title) {
 				std::string title = utils::convert_text(item->title, "utf-8", encoding);
-				x->set_title(title);
+				x.set_title(title);
 				GetLogger().log(LOG_DEBUG, "rss_parser::parse: converted title `%s' to `%s'", item->title, title.c_str());
 			}
-			if (item->link) x->set_link(item->link);
+			if (item->link) x.set_link(item->link);
 			if (item->author) {
-				x->set_author(utils::convert_text(item->author, "utf-8", encoding));
+				x.set_author(utils::convert_text(item->author, "utf-8", encoding));
 			}
 
-			x->set_feedurl(feed->rssurl());
+			x.set_feedurl(feed.rssurl());
 
 			mrss_tag_t * content;
 
@@ -137,7 +137,7 @@ refcnt_ptr<rss_feed> rss_parser::parse() {
 				if (content->value) {
 					std::string desc = utils::convert_text(content->value, "utf-8", encoding);
 					GetLogger().log(LOG_DEBUG, "rss_parser::parse: converted description `%s' to `%s'", content->value, desc.c_str());
-					x->set_description(desc);
+					x.set_description(desc);
 				}
 			} else {
 				GetLogger().log(LOG_DEBUG, "rss_parser::parse: found no content:encoded");
@@ -149,7 +149,7 @@ refcnt_ptr<rss_feed> rss_parser::parse() {
 					((rc = mrss_search_tag(item, "content", "http://purl.org/atom/ns#", &content)) == MRSS_OK && content)) {
 					GetLogger().log(LOG_DEBUG, "rss_parser::parse: found atom content: %s\n", content ? content->value : "(content = null)");
 					if (content && content->value) {
-						x->set_description(utils::convert_text(content->value, "utf-8", encoding));
+						x.set_description(utils::convert_text(content->value, "utf-8", encoding));
 					}
 				} else {
 					GetLogger().log(LOG_DEBUG, "rss_parser::parse: mrss_search_tag(content) failed with rc = %d content = %p", rc, content);
@@ -159,56 +159,56 @@ refcnt_ptr<rss_feed> rss_parser::parse() {
 			}
 
 			/* last resort: search for itunes:summary tag (may be a podcast) */
-			if (x->description().length() == 0 && mrss_search_tag(item, "summary", "http://www.itunes.com/dtds/podcast-1.0.dtd", &content) == MRSS_OK && content) {
+			if (x.description().length() == 0 && mrss_search_tag(item, "summary", "http://www.itunes.com/dtds/podcast-1.0.dtd", &content) == MRSS_OK && content) {
 				GetLogger().log(LOG_DEBUG, "rss_parser::parse: found itunes:summary: %s\n", content->value);
 				if (content->value) {
 					std::string desc = "<ituneshack>";
 					desc.append(utils::convert_text(content->value, "utf-8", encoding));
 					desc.append("</ituneshack>");
-					x->set_description(desc);
+					x.set_description(desc);
 				}
 				
 			} else {
 				GetLogger().log(LOG_DEBUG, "rss_parser::parse: no luck with itunes:summary");
 			}
 
-			if (x->description().length() == 0 && item->description) {
-				x->set_description(utils::convert_text(item->description, "utf-8", encoding));
+			if (x.description().length() == 0 && item->description) {
+				x.set_description(utils::convert_text(item->description, "utf-8", encoding));
 			}
 
 			if (item->pubDate) 
-				x->set_pubDate(parse_date(item->pubDate));
+				x.set_pubDate(parse_date(item->pubDate));
 			else
-				x->set_pubDate(::time(NULL));
+				x.set_pubDate(::time(NULL));
 				
 			if (item->guid)
-				x->set_guid(item->guid);
+				x.set_guid(item->guid);
 			else if (item->link)
-				x->set_guid(item->link); // XXX hash something to get a better alternative GUID
+				x.set_guid(item->link); // XXX hash something to get a better alternative GUID
 			else if (item->title)
-				x->set_guid(item->title);
+				x.set_guid(item->title);
 			// ...else?! that's too bad.
 
 			if (item->enclosure_url) {
-				x->set_enclosure_url(item->enclosure_url);
+				x.set_enclosure_url(item->enclosure_url);
 				GetLogger().log(LOG_DEBUG, "rss_parser::parse: found enclosure_url: %s", item->enclosure_url);
 			}
 			if (item->enclosure_type) {
-				x->set_enclosure_type(item->enclosure_type);
+				x.set_enclosure_type(item->enclosure_type);
 				GetLogger().log(LOG_DEBUG, "rss_parser::parse: found enclosure_type: %s", item->enclosure_type);
 			}
 
 			// x.set_feedptr(&feed);
 
 			GetLogger().log(LOG_DEBUG, "rss_parser::parse: item title = `%s' link = `%s' pubDate = `%s' (%d) description = `%s'", 
-				x->title().c_str(), x->link().c_str(), x->pubDate().c_str(), x->pubDate_timestamp(), x->description().c_str());
+				x.title().c_str(), x.link().c_str(), x.pubDate().c_str(), x.pubDate_timestamp(), x.description().c_str());
 
 			// only add item to feed if it isn't on the ignore list or if there is no ignore list
-			if (!ign || !ign->matches(&(*x))) { // XXX
-				feed->items().push_back(x);
-				GetLogger().log(LOG_INFO, "rss_parser::parse: added article title = `%s' link = `%s' ign = %p", x->title().c_str(), x->link().c_str(), ign);
+			if (!ign || !ign->matches(&x)) {
+				feed.items().push_back(x);
+				GetLogger().log(LOG_INFO, "rss_parser::parse: added article title = `%s' link = `%s' ign = %p", x.title().c_str(), x.link().c_str(), ign);
 			} else {
-				GetLogger().log(LOG_INFO, "rss_parser::parse: ignored article title = `%s' link = `%s'", x->title().c_str(), x->link().c_str());
+				GetLogger().log(LOG_INFO, "rss_parser::parse: ignored article title = `%s' link = `%s'", x.title().c_str(), x.link().c_str());
 			}
 		}
 
@@ -216,7 +216,7 @@ refcnt_ptr<rss_feed> rss_parser::parse() {
 
 	}
 
-	feed->set_empty(false);
+	feed.set_empty(false);
 
 	return feed;
 }
@@ -255,16 +255,16 @@ void rss_item::set_unread_nowrite(bool u) {
 
 void rss_item::set_unread_nowrite_notify(bool u) {
 	unread_ = u;
-	if (feedptr != NULL)
-		feedptr->get_item_by_guid(guid_)->set_unread_nowrite(unread_); // notify parent feed
+	if (feedptr)
+		feedptr->get_item_by_guid(guid_).set_unread_nowrite(unread_); // notify parent feed
 }
 
 void rss_item::set_unread(bool u) { 
 	if (unread_ != u) {
 		bool old_u = unread_;
 		unread_ = u;
-		if (feedptr != NULL)
-			feedptr->get_item_by_guid(guid_)->set_unread_nowrite(unread_); // notify parent feed
+		if (feedptr)
+			feedptr->get_item_by_guid(guid_).set_unread_nowrite(unread_); // notify parent feed
 		try {
 			if (ch) ch->update_rssitem_unread_and_enqueued(*this, feedurl_); 
 		} catch (const dbexception& e) {
@@ -281,10 +281,10 @@ std::string rss_item::pubDate() const {
 	return std::string(text);
 }
 
-unsigned int rss_feed::unread_item_count() {
+unsigned int rss_feed::unread_item_count() const {
 	unsigned int count = 0;
-	for (std::vector<refcnt_ptr<rss_item> >::iterator it=items_.begin();it!=items_.end();++it) {
-		if ((*it)->unread())
+	for (std::vector<rss_item>::const_iterator it=items_.begin();it!=items_.end();++it) {
+		if (it->unread())
 			++count;
 	}
 	return count;
@@ -416,18 +416,17 @@ std::string rss_feed::description() const {
 	return utils::convert_text(description_, nl_langinfo(CODESET), "utf-8");
 }
 
-refcnt_ptr<rss_item> rss_feed::get_item_by_guid(const std::string& guid) {
-	for (std::vector<refcnt_ptr<rss_item> >::iterator it=items_.begin();it!=items_.end();++it) {
-		if ((*it)->guid() == guid) {
+rss_item& rss_feed::get_item_by_guid(const std::string& guid) {
+	for (std::vector<rss_item>::iterator it=items_.begin();it!=items_.end();++it) {
+		if (it->guid() == guid) {
 			if (rssurl_.substr(0,6) != "query:")
-				(*it)->set_feedptr(refcnt_ptr<rss_feed>(this)); // XXX this is soooo bad
+				it->set_feedptr(this);
 			return *it;
 		}
 	}
 	GetLogger().log(LOG_DEBUG, "rss_feed::get_item_by_guid: hit dummy item!");
 	abort();
-	// never happens:
-	static refcnt_ptr<rss_item> dummy_item(new rss_item(0));
+	static rss_item dummy_item(0); // should never happen!
 	return dummy_item;
 }
 
@@ -445,7 +444,7 @@ bool rss_item::has_attribute(const std::string& attribname) {
 			return true;
 
 	// if we have a feed, then forward the request
-	if (feedptr != NULL)
+	if (feedptr)
 		return feedptr->rss_feed::has_attribute(attribname);
 
 	return false;
@@ -473,7 +472,7 @@ std::string rss_item::get_attribute(const std::string& attribname) {
 		return enclosure_type();
 
 	// if we have a feed, then forward the request
-	if (feedptr != NULL)
+	if (feedptr)
 		return feedptr->rss_feed::get_attribute(attribname);
 
 	return "";
@@ -558,14 +557,7 @@ bool rss_ignores::matches(rss_item* item) {
 	return false;
 }
 
-struct RssItemComparator {
-	bool operator()(const refcnt_ptr<rss_item>& x, const refcnt_ptr<rss_item>& y) {
-		return *x < *y;
-	}
-};
-
-
-void rss_feed::update_items(std::vector<refcnt_ptr<rss_feed> >& feeds) {
+void rss_feed::update_items(std::vector<rss_feed>& feeds) {
 	if (query.length() == 0)
 		return;
 
@@ -577,20 +569,19 @@ void rss_feed::update_items(std::vector<refcnt_ptr<rss_feed> >& feeds) {
 		items_.erase(items_.begin(), items_.end());
 	}
 
-	for (std::vector<refcnt_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it) {
-		if ((*it)->rssurl().substr(0,6) != "query:") { // don't fetch items from other query feeds!
-			for (std::vector<refcnt_ptr<rss_item> >::iterator jt=(*it)->items().begin();jt!=(*it)->items().end();++jt) {
-				if (m.matches(&(*(*jt)))) {
+	for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it) {
+		if (it->rssurl().substr(0,6) != "query:") { // don't fetch items from other query feeds!
+			for (std::vector<rss_item>::iterator jt=it->items().begin();jt!=it->items().end();++jt) {
+				if (m.matches(&(*jt))) {
 					GetLogger().log(LOG_DEBUG, "rss_feed::update_items: matcher matches!");
-					(*jt)->set_feedptr(*it);
+					jt->set_feedptr(&(*it));
 					items_.push_back(*jt);
 				}
 			}
 		}
 	}
 
-	RssItemComparator cmp;
-	sort(items_.begin(), items_.end(), cmp);
+	sort(items_.begin(), items_.end());
 }
 
 void rss_feed::set_rssurl(const std::string& u) {
