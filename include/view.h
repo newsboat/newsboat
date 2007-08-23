@@ -68,6 +68,8 @@ namespace newsbeuter {
 
 			void set_colors(const colormanager& colorman);
 
+			void notify_itemlist_change(rss_feed& feed);
+
 		protected:
 			/*
 			bool jump_to_next_unread_item(std::vector<rss_item>& items, bool begin_with_next);

@@ -385,6 +385,12 @@ char view::confirm(const std::string& prompt, const std::string& charset) {
 	return result;
 }
 
+void view::notify_itemlist_change(rss_feed& feed) {
+	if (itemlist->get_feed()->rssurl() == feed.rssurl()) {
+		itemlist->do_update_visible_items();
+	}
+}
+
 bool view::get_previous_unread() {
 	unsigned int feedpos;
 	GetLogger().log(LOG_DEBUG, "view::get_previous_unread: trying to find previous unread");
