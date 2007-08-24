@@ -1,5 +1,5 @@
 vbox
-  @style_normal[background]:bg=black,fg=white
+  @style_normal[background]:
   @info#style_normal[info]:bg=blue,fg=yellow,attr=bold
   @bind_up[bind_up]:**
   @bind_down[bind_down]:**
@@ -9,7 +9,7 @@ vbox
     text[head]:"Help"
     .expand:h
   textview[helptext]
-    style_normal[article]:bg=black,fg=white
+    style_normal[article]:
     style_end[styleend]:fg=blue,attr=bold
     .expand:vh
     offset[helpoffset]:0

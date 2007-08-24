@@ -1,5 +1,5 @@
 vbox
-  @style_normal[background]:bg=black,fg=white
+  @style_normal[background]:
   @info#style_normal[info]:bg=blue,fg=yellow,attr=bold
   @bind_up[bind_up]:**
   @bind_down[bind_down]:**
@@ -9,7 +9,7 @@ vbox
     text[head]:"Queue"
     .expand:h
   !list[dls]
-    style_normal[listnormal]:bg=black,fg=white
+    style_normal[listnormal]:
     style_focus[listfocus]:fg=yellow,bg=blue,attr=bold
     .expand:vh
     pos_name[dlposname]:
