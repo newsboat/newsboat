@@ -767,16 +767,20 @@ void controller::set_feedptrs(rss_feed& feed) {
 
 std::string controller::bookmark(const std::string& url, const std::string& title, const std::string& description) {
 	std::string bookmark_cmd = cfg->get_configvalue("bookmark-cmd");
-	char * my_argv[4];
-	my_argv[0] = "/bin/sh";
-	my_argv[1] = "-c";
+	if (bookmark_cmd.length() > 0) {
+		char * my_argv[4];
+		my_argv[0] = "/bin/sh";
+		my_argv[1] = "-c";
 
-	// wow. what an abuse.
-	std::string cmdline = bookmark_cmd + " " + stfl::quote(url) + " " + stfl::quote(title) + " " + stfl::quote(description);
+		// wow. what an abuse.
+		std::string cmdline = bookmark_cmd + " " + stfl::quote(url) + " " + stfl::quote(title) + " " + stfl::quote(description);
 
-	my_argv[2] = const_cast<char *>(cmdline.c_str());
-	my_argv[3] = NULL;
+		my_argv[2] = const_cast<char *>(cmdline.c_str());
+		my_argv[3] = NULL;
 
-	return utils::run_program(my_argv, "");
+		return utils::run_program(my_argv, "");
+	} else {
+		return _("bookmarking support is not configured. Please set the configuration variable `bookmark-cmd' accordingly.");
+	}
 }
 

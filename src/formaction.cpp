@@ -92,7 +92,7 @@ void formaction::process_op(operation op) {
 				if (retval.length() == 0) {
 					v->set_status(_("Saved bookmark."));
 				} else {
-					v->set_status((std::string(_("Error while saving bookmarking: ")) + retval).c_str());
+					v->set_status((std::string(_("Error while saving bookmark: ")) + retval).c_str());
 				}
 			}
 			break;
