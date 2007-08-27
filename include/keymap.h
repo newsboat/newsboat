@@ -46,6 +46,7 @@ namespace newsbeuter {
 						OP_CLEARFILTER,
 						OP_SELECTFILTER,
 						OP_RELOADURLS,
+						OP_BOOKMARK,
 						OP_NB_MAX,
 
 						// podbeuter-specific operations:
@@ -77,6 +78,12 @@ namespace newsbeuter {
 						OP_INT_NEXT_FILTERHISTORY,
 						OP_INT_PREV_CMDLINEHISTORY,
 						OP_INT_NEXT_CMDLINEHISTORY,
+
+						OP_INT_BM_END_URL,
+						OP_INT_BM_END_TITLE,
+						OP_INT_BM_END_DESC,
+						OP_INT_BM_CANCEL,
+
 						OP_INT_MAX
 						};
 

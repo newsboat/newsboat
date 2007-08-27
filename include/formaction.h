@@ -43,6 +43,10 @@ class formaction {
 		stfl::form * f;
 		bool do_redraw;
 
+		std::string bookmark_url;
+		std::string bookmark_title;
+		std::string bookmark_desc;
+
 	private:
 		std::string prepare_keymap_hint(keymap_hint_entry * hints);
 

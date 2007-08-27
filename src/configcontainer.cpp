@@ -42,6 +42,7 @@ configcontainer::configcontainer()
 	config_data["urls-source"]     = configdata("local", configdata::STR);
 	config_data["bloglines-auth"]  = configdata("", configdata::STR);
 	config_data["bloglines-mark-read"] = configdata("no", configdata::BOOL);
+	config_data["bookmark-cmd"]    = configdata("", configdata::STR);
 }
 
 configcontainer::~configcontainer()

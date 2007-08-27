@@ -62,6 +62,44 @@ void formaction::process_op(operation op) {
 			f->modify("lastline","replace", "{hbox[lastline] .expand:0 {label .expand:0 text:\":\"}{input[cmdline] on_ESC:cancel-cmdline on_ENTER:end-cmdline on_UP:prev-cmdline-history on_DOWN:next-cmdline-history modal:1 .expand:h text[cmdtext]:\"\"}}");
 			f->set_focus("cmdline");
 			break;
+		case OP_INT_BM_END_URL: {
+				bookmark_url = f->get("bmurl");
+				std::string replacestr("{hbox[lastline] .expand:0 {label .expand:0 text:\"");
+				replacestr.append(_("Title: "));
+				replacestr.append("\"}{input[bminput] on_ESC:bm-cancel on_ENTER:bm-end-title modal:1 .expand:h text[bmtext]:");
+				replacestr.append(stfl::quote(bookmark_title));
+				replacestr.append("}}");
+				f->modify("lastline", "replace", replacestr);
+				f->set_focus("bminput");
+			}
+			break;
+		case OP_INT_BM_END_TITLE: {
+				bookmark_title = f->get("bmtext");
+				std::string replacestr("{hbox[lastline] .expand:0 {label .expand:0 text:\"");
+				replacestr.append(_("Description: "));
+				replacestr.append("\"}{input[bminput] on_ESC:bm-cancel on_ENTER:bm-end-desc modal:1 .expand:h text[bmdesc]:");
+				replacestr.append(stfl::quote(bookmark_desc));
+				replacestr.append("}}");
+				f->modify("lastline", "replace", replacestr);
+				f->set_focus("bminput");
+			}
+			break;
+		case OP_INT_BM_END_DESC: {
+				bookmark_desc = f->get("bmdesc");
+				f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
+				GetLogger().log(LOG_DEBUG, "formaction::process_op: bookmarking url = `%s' title = `%s' description = `%s'", bookmark_url.c_str(), bookmark_title.c_str(), bookmark_desc.c_str());
+				std::string retval = v->get_ctrl()->bookmark(bookmark_url, bookmark_title, bookmark_desc);
+				if (retval.length() == 0) {
+					v->set_status(_("Saved bookmark."));
+				} else {
+					v->set_status((std::string(_("Error while saving bookmarking: ")) + retval).c_str());
+				}
+			}
+			break;
+		case OP_INT_BM_CANCEL: {
+				f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
+			}
+			break;
 		default:
 			this->process_operation(op);
 	}

@@ -49,6 +49,8 @@ namespace newsbeuter {
 
 			inline filtercontainer& get_filters() { return filters; }
 
+			std::string bookmark(const std::string& url, const std::string& title, const std::string& description);
+
 		private:
 			void usage(char * argv0);
 			void version_information();

@@ -373,6 +373,49 @@ std::string utils::run_filter(const std::string& cmd, const std::string& input) 
 	return buf;
 }
 
+std::string utils::run_program(char * argv[], const std::string& input) {
+	std::string buf;
+	int ipipe[2];
+	int opipe[2];
+	pipe(ipipe);
+	pipe(opipe);
+
+	int errfd = ::open("/dev/null", O_WRONLY);
+
+
+	int rc = fork();
+	switch (rc) {
+		case -1: break;
+		case 0: { // child:
+				close(ipipe[1]);
+				close(opipe[0]);
+				dup2(ipipe[0], 0);
+				dup2(opipe[1], 1);
+
+				close(2);
+				if (errfd != -1) dup2(errfd, 2);
+
+				execvp(argv[0], argv);
+				exit(1);
+			}
+			break;
+		default: {
+				close(ipipe[0]);
+				close(opipe[1]);
+				write(ipipe[1], input.c_str(), input.length());
+				close(ipipe[1]);
+				char cbuf[1024];
+				int rc2;
+				while ((rc2 = read(opipe[0], cbuf, sizeof(cbuf))) > 0) {
+					buf.append(cbuf, rc2);
+				}
+				close(opipe[0]);
+			}
+			break;
+	}
+	return buf;
+}
+
 std::string utils::resolve_tilde(const std::string& str) {
 	const char * homedir;
 	std::string filepath;

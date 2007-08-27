@@ -48,6 +48,7 @@ static op_desc opdescs[] = {
 	{ OP_SETFILTER, "set-filter", "F", _("Set a filter"), KM_NEWSBEUTER },
 	{ OP_SELECTFILTER, "select-filter", "f", _("Select a predefined filter"), KM_NEWSBEUTER },
 	{ OP_CLEARFILTER, "clear-filter", "^F", _("Clear currently set filter"), KM_NEWSBEUTER },
+	{ OP_BOOKMARK, "bookmark", "^B", _("Bookmark current link/article"), KM_NEWSBEUTER },
 	{ OP_SK_UP, "up", "UP", NULL, KM_SYSKEYS },
 	{ OP_SK_DOWN, "down", "DOWN", NULL, KM_SYSKEYS },
 	{ OP_SK_PGUP, "pageup", "PAGEUP", NULL, KM_SYSKEYS },
@@ -65,6 +66,11 @@ static op_desc opdescs[] = {
 
 	{ OP_INT_CANCEL_SETFILTER, "XXXNOKEY-cancel-setfilter", "cancel-setfilter", NULL, KM_INTERNAL },
 	{ OP_INT_CANCEL_CMDLINE, "XXXNOKEY-cancel-cmdline", "cancel-cmdline", NULL, KM_INTERNAL },
+
+	{ OP_INT_BM_END_URL, "XXXNOKEY-end-url", "bm-end-url", NULL, KM_INTERNAL },
+	{ OP_INT_BM_END_TITLE, "XXXNOKEY-end-title", "bm-end-title", NULL, KM_INTERNAL },
+	{ OP_INT_BM_END_DESC, "XXXNOKEY-end-desc", "bm-end-desc", NULL, KM_INTERNAL },
+	{ OP_INT_BM_CANCEL, "XXXNOKEY-bm-cancel", "bm-cancel", NULL, KM_INTERNAL },
 
 	{ OP_NIL, NULL, NULL, NULL, 0 }
 };

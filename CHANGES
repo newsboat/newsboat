@@ -3,6 +3,7 @@ Changes for newsbeuter:
 0.7:
 	implemented the possibility to predefine filters
 	implemented bloglines synchronization support
+	implemented plugin-based bookmarking support
 
 0.6 (2007-08-14):
 	implemented support for reloading the urls file

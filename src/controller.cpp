@@ -511,6 +511,19 @@ void controller::notify(const std::string& msg) {
 		GetLogger().log(LOG_DEBUG, "controller:notify: notifying external program `%s'", prog.c_str());
 		utils::run_command(prog, msg);
 	}
+	/* // TODO: implement Growl support
+	if (cfg->get_configvalue_as_bool("notify-growl")) {
+		std::vector<std::string> tokens = utils::tokenize(cfg->get_configvalue("growl-config"), ":");
+		if (tokens.size() >= 1) {
+			std::string hostname = tokens[0];
+			std::string password;
+			if (tokens.size() >= 2) {
+				password = tokens[1];
+			}
+			growlnotifier->send_notify(hostname, password, "newsbeuter", msg);
+		}
+	}
+	*/
 }
 
 void controller::compute_unread_numbers(unsigned int& unread_feeds, unsigned int& unread_articles) {
@@ -752,4 +765,18 @@ void controller::set_feedptrs(rss_feed& feed) {
 	}
 }
 
+std::string controller::bookmark(const std::string& url, const std::string& title, const std::string& description) {
+	std::string bookmark_cmd = cfg->get_configvalue("bookmark-cmd");
+	char * my_argv[4];
+	my_argv[0] = "/bin/sh";
+	my_argv[1] = "-c";
+
+	// wow. what an abuse.
+	std::string cmdline = bookmark_cmd + " " + stfl::quote(url) + " " + stfl::quote(title) + " " + stfl::quote(description);
+
+	my_argv[2] = const_cast<char *>(cmdline.c_str());
+	my_argv[3] = NULL;
+
+	return utils::run_program(my_argv, "");
+}
 
