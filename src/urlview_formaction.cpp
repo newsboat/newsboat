@@ -29,6 +29,30 @@ void urlview_formaction::process_operation(operation op) {
 				}
 			}
 			break;
+		case OP_BOOKMARK:
+			{
+				std::string posstr = f->get("feedpos");
+				if (posstr.length() > 0) {
+					std::istringstream is(posstr);
+					unsigned int idx;
+					is >> idx;
+
+					std::string replacestr("{hbox[lastline] .expand:0 {label .expand:0 text:\"");
+					replacestr.append(_("URL: "));
+					replacestr.append("\"}{input[bminput] on_ESC:bm-cancel on_ENTER:bm-end-url modal:1 .expand:h text[bmurl]:");
+					replacestr.append(stfl::quote(links[idx].first));
+					replacestr.append("}}");
+
+					bookmark_title = "";
+					bookmark_desc = "";
+
+					f->modify("lastline", "replace", replacestr);
+					f->set_focus("bminput");
+				} else {
+					v->show_error(_("No link selected!"));
+				}
+			}
+			break;
 		case OP_QUIT:
 			quit = true;
 			break;
@@ -64,12 +88,14 @@ void urlview_formaction::init() {
 	f->set("head", buf);
 	do_redraw = true;
 	quit = false;
+	set_keymap_hints();
 }
 
 keymap_hint_entry * urlview_formaction::get_keymap_hint() {
 	static keymap_hint_entry hints[] = {
 		{ OP_QUIT, _("Quit") },
 		{ OP_OPEN, _("Open in Browser") },
+		{ OP_BOOKMARK, _("Save Bookmark") },
 		{ OP_NIL, NULL }
 	};
 	return hints;

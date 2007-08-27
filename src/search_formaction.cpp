@@ -136,6 +136,7 @@ void search_formaction::init() {
 	f->set_focus("query");
 	do_redraw = true;
 	items.erase(items.begin(), items.end());
+	set_keymap_hints();
 }
 
 keymap_hint_entry * search_formaction::get_keymap_hint() {

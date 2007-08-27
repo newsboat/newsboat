@@ -72,6 +72,31 @@ void itemlist_formaction::process_operation(operation op) {
 				}
 			}
 			break;
+		case OP_BOOKMARK: {
+				std::string itemposname = f->get("itempos");
+				GetLogger().log(LOG_INFO, "itemlist_formaction: bookmarking item at pos `%s'", itemposname.c_str());
+				if (itemposname.length() > 0) {
+					std::istringstream posname(itemposname);
+					unsigned int itempos = 0;
+					posname >> itempos;
+					if (itempos < visible_items.size()) {
+						std::string replacestr("{hbox[lastline] .expand:0 {label .expand:0 text:\"");
+						replacestr.append(_("URL: "));
+						replacestr.append("\"}{input[bminput] on_ESC:bm-cancel on_ENTER:bm-end-url modal:1 .expand:h text[bmurl]:");
+						replacestr.append(stfl::quote(visible_items[itempos].first->link()));
+						replacestr.append("}}");
+
+						bookmark_title = visible_items[itempos].first->title();
+						bookmark_desc = "";
+
+						f->modify("lastline", "replace", replacestr);
+						f->set_focus("bminput");
+					}
+				} else {
+					v->show_error(_("No item selected!")); // should not happen
+				}
+			}
+			break;
 		case OP_SAVE: 
 			{
 				char buf[1024];

@@ -133,6 +133,8 @@ void filebrowser_formaction::init() {
 	char cwdtmp[MAXPATHLEN];
 	::getcwd(cwdtmp,sizeof(cwdtmp));
 
+	set_keymap_hints();
+
 	f->set("fileprompt", _("File: "));
 
 	if (dir == "") {
