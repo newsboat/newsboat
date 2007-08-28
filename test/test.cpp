@@ -157,7 +157,7 @@ BOOST_AUTO_TEST_CASE(TestXmlPullParser) {
 }
 
 BOOST_AUTO_TEST_CASE(TestUrlReader) {
-	urlreader u;
+	file_urlreader u;
 	u.load_config("test-urls.txt");
 	BOOST_CHECK_EQUAL(u.get_urls().size(), 3u);
 	BOOST_CHECK_EQUAL(u.get_urls()[0], "http://test1.url.cc/feed.xml");

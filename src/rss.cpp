@@ -563,6 +563,10 @@ void rss_feed::update_items(std::vector<rss_feed>& feeds) {
 
 	GetLogger().log(LOG_DEBUG, "rss_feed::update_items: query = `%s'", query.c_str());
 
+
+	struct timeval tv1, tv2, tvx;
+	gettimeofday(&tv1, NULL);
+
 	matcher m(query);
 
 	if (items_.size() > 0) {
@@ -581,7 +585,15 @@ void rss_feed::update_items(std::vector<rss_feed>& feeds) {
 		}
 	}
 
+	gettimeofday(&tvx, NULL);
+
 	sort(items_.begin(), items_.end());
+
+	gettimeofday(&tv2, NULL);
+	unsigned long diff = (((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) - tv1.tv_usec;
+	unsigned long diffx = (((tv2.tv_sec - tvx.tv_sec) * 1000000) + tv2.tv_usec) - tvx.tv_usec;
+	GetLogger().log(LOG_DEBUG, "rss_feed::update_items matching took %lu.%06lu s", diff / 1000000, diff % 1000000);
+	GetLogger().log(LOG_DEBUG, "rss_feed::update_items sorting took %lu.%06lu s", diffx / 1000000, diffx % 1000000);
 }
 
 void rss_feed::set_rssurl(const std::string& u) {

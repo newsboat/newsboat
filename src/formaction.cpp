@@ -87,6 +87,7 @@ void formaction::process_op(operation op) {
 		case OP_INT_BM_END_DESC: {
 				bookmark_desc = f->get("bmdesc");
 				f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
+				v->set_status(_("Saving bookmark..."));
 				GetLogger().log(LOG_DEBUG, "formaction::process_op: bookmarking url = `%s' title = `%s' description = `%s'", bookmark_url.c_str(), bookmark_title.c_str(), bookmark_desc.c_str());
 				std::string retval = v->get_ctrl()->bookmark(bookmark_url, bookmark_title, bookmark_desc);
 				if (retval.length() == 0) {
