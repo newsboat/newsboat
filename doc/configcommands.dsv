@@ -1,5 +1,6 @@
 auto-reload|[yes/no]|no|If enabled, all feeds will be automatically reloaded at start up and then continuously after a certain time has passed (see reload-time).|auto-reload yes
 bind-key|<key> <operation>|n/a|Bind key <key> to <operation>. This means that whenever <key> is pressed, then <operation> is executed (if applicable in the current context). A list of available operations can be found below.|bind-key ^R reload-all
+bookmark-cmd|<command>|""|If set, the configured command will be used as bookmark plugin. Please refer to the documentation for further information on bookmark plugins.|bookmark-cmd "~/bin/my-bookmark-plugin.sh"
 bloglines-auth|<login>:<password>|""|Set the Bloglines username and password. This is necessary for the Bloglines synchronization mode.|bloglines-auth "username@emailaddress.com:mypassword"
 bloglines-mark-read|[yes/no]|no|If set to yes, it will mark all articles that are downloaded from Bloglines as read.|bloglines-mark-read yes
 bookmark-cmd|<bookmark-command>|""|If set, then <bookmark-command> will be used as bookmarking plugin. See the documentation on bookmarking for further information.|bookmark-cmd "~/bin/delicious-bookmark.sh"

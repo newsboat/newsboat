@@ -210,6 +210,23 @@ Scripts and Filters (Snownews Extensions)
 
 include::chapter-snownews.txt[]
 
+Bookmarking
+~~~~~~~~~~~
+
+Since version 0.7, newsbeuter contains a plugin-based bookmarking system. When a user bookmarks a link (possible
+in the article list, in the article view, and in the URL view), he is asked for the URL to bookmark (already
+preset with the URL of the current selection), the bookmark title (in most cases preset with the 
+title of the current selection) and the bookmark description. After the question for the description, an
+external program, configured via the configuration command "bookmark-cmd", is executed with 3 commandline
+parameters. The plugin itself implements the actual bookmark saving (e.g. writing the bookmark to an
+external file, or storing it to a del.icio.us account). When everything went OK, the plugin simply exits.
+In case something goes wrong while saving the bookmark, it writes out an error message as a single line.
+This error message is then presented to the user from within newsbeuter.
+
+Newsbeuter comes with an example plugin, which implements a simple tab-separated bookmark file. This
+example can be found in the "doc" subdirectory.
+
+
 Command Line
 ~~~~~~~~~~~~
 
