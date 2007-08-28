@@ -379,6 +379,52 @@ limited by what can be queried from articles and feeds with the filter language
 and by your creativity.
 
 
+Bloglines Synchronization
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+http://www.bloglines.com[Bloglines] is a web-based RSS feed reader. Newsbeuter
+provides a synchronization feature that makes it possible to download unread
+articles from Bloglines (which can then be optionally be marked as read). This
+is useful in cases where you want to use the web frontend e.g. at work, and use
+newsbeuter e.g. when you're at home. It is also possible to use newsbeuter as
+an offline reader for Bloglines.
+
+To enable Bloglines support, you first need to set the following configuration
+variable:
+
+	urls-source "bloglines"
+
+By default, this is set to "local", which means that the list of configured
+URLs is retrieved from ~/.newsbeuter/urls. By setting it to "bloglines",
+newsbeuter will retrieve the list of retrieved URLs directly from Bloglines.
+This means that you can only either use the locally configured URLs or the URLs
+from Bloglines. Combination of both is not possible.
+
+After setting the URLs source, you also need to set the Bloglines authentication configuration:
+
+	bloglines-auth "username@emailaddress.com:yourpassword"
+
+In the configuration variable "bloglines-auth", you provide your Bloglines
+login (i.e. your email address) and your password, separated by a colon (":"). Optionally, you can configure that all messages that are downloaded are marked as read in the Bloglines web frontend:
+
+	bloglines-mark-read "yes"
+
+After you've configured newsbeuter for Bloglines, you can start it up. Newsbeuter
+will then download the RSS feed URLs subscribed in Bloglines, which you can then
+reload.
+
+In this configuration, you need the possibility to connect to Bloglines. In
+case you don't have access to Bloglines (e.g. a temporary network outage, or
+you sit in a location without connectivity, e.g. a train), you can start
+newsbeuter in offline mode:
+
+	newsbeuter -o
+
+With this commandline switch, you can read the articles that you have already
+downloaded without any network connectivity. This functionality makes
+newsbeuter a true offline client for Bloglines.
+
+
 Podcast Support
 ~~~~~~~~~~~~~~~
 
