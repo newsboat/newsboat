@@ -68,6 +68,7 @@ std::string stfl::form::dump(const std::string& name, const std::string& prefix,
 }
 
 void stfl::form::modify(const std::string& name, const std::string& mode, const std::string& text) {
+	GetLogger().log(LOG_DEBUG, "stfl::form::modify: name = `%s' mode = `%s' text = `%s'", name.c_str(), mode.c_str(), text.c_str());
 	stfl_modify(f, stfl_ipool_towc(ipool,name.c_str()), stfl_ipool_towc(ipool,mode.c_str()), stfl_ipool_towc(ipool,text.c_str()));
 	stfl_ipool_flush(ipool);
 }
@@ -100,6 +101,7 @@ void stfl::reset() {
 
 std::string stfl::quote(const std::string& text) {
 	stfl_ipool * ipool = stfl_ipool_create(nl_langinfo(CODESET));
+	GetLogger().log(LOG_DEBUG, "stfl::quote: in: `%s' out: `%ls'", text.c_str(), stfl_quote(stfl_ipool_towc(ipool,text.c_str())));
 	std::string retval = stfl_ipool_fromwc(ipool,stfl_quote(stfl_ipool_towc(ipool,text.c_str())));
 	stfl_ipool_destroy(ipool);
 	return retval;
