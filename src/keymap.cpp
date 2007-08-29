@@ -67,10 +67,10 @@ static op_desc opdescs[] = {
 	{ OP_INT_CANCEL_SETFILTER, "XXXNOKEY-cancel-setfilter", "cancel-setfilter", NULL, KM_INTERNAL },
 	{ OP_INT_CANCEL_CMDLINE, "XXXNOKEY-cancel-cmdline", "cancel-cmdline", NULL, KM_INTERNAL },
 
-	{ OP_INT_BM_END_URL, "XXXNOKEY-end-url", "bm-end-url", NULL, KM_INTERNAL },
-	{ OP_INT_BM_END_TITLE, "XXXNOKEY-end-title", "bm-end-title", NULL, KM_INTERNAL },
-	{ OP_INT_BM_END_DESC, "XXXNOKEY-end-desc", "bm-end-desc", NULL, KM_INTERNAL },
-	{ OP_INT_BM_CANCEL, "XXXNOKEY-bm-cancel", "bm-cancel", NULL, KM_INTERNAL },
+	{ OP_INT_BM_END, "XXXNOKEY-bm-end", "bm-end", NULL, KM_INTERNAL },
+	{ OP_INT_END_QUESTION, "XXXNOKEY-end-question", "end-question", NULL, KM_INTERNAL },
+	{ OP_INT_CANCEL_QNA, "XXXNOKEY-cancel-qna", "cancel-qna", NULL, KM_INTERNAL },
+
 
 	{ OP_NIL, NULL, NULL, NULL, 0 }
 };

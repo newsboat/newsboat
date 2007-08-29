@@ -80,17 +80,7 @@ void itemlist_formaction::process_operation(operation op) {
 					unsigned int itempos = 0;
 					posname >> itempos;
 					if (itempos < visible_items.size()) {
-						std::string replacestr("{hbox[lastline] .expand:0 {label .expand:0 text:\"");
-						replacestr.append(_("URL: "));
-						replacestr.append("\"}{input[bminput] on_ESC:bm-cancel on_ENTER:bm-end-url modal:1 .expand:h text[bmurl]:");
-						replacestr.append(stfl::quote(visible_items[itempos].first->link()));
-						replacestr.append("}}");
-
-						bookmark_title = visible_items[itempos].first->title();
-						bookmark_desc = "";
-
-						f->modify("lastline", "replace", replacestr);
-						f->set_focus("bminput");
+						this->start_bookmark_qna(visible_items[itempos].first->title(), visible_items[itempos].first->link(), "");
 					}
 				} else {
 					v->show_error(_("No item selected!")); // should not happen

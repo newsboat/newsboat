@@ -62,44 +62,13 @@ void formaction::process_op(operation op) {
 			f->modify("lastline","replace", "{hbox[lastline] .expand:0 {label .expand:0 text:\":\"}{input[cmdline] on_ESC:cancel-cmdline on_ENTER:end-cmdline on_UP:prev-cmdline-history on_DOWN:next-cmdline-history modal:1 .expand:h text[cmdtext]:\"\"}}");
 			f->set_focus("cmdline");
 			break;
-		case OP_INT_BM_END_URL: {
-				bookmark_url = f->get("bmurl");
-				std::string replacestr("{hbox[lastline] .expand:0 {label .expand:0 text:\"");
-				replacestr.append(_("Title: "));
-				replacestr.append("\"}{input[bminput] on_ESC:bm-cancel on_ENTER:bm-end-title modal:1 .expand:h text[bmtext]:");
-				replacestr.append(stfl::quote(bookmark_title));
-				replacestr.append("}}");
-				f->modify("lastline", "replace", replacestr);
-				f->set_focus("bminput");
-			}
+		case OP_INT_CANCEL_QNA:
+			f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
 			break;
-		case OP_INT_BM_END_TITLE: {
-				bookmark_title = f->get("bmtext");
-				std::string replacestr("{hbox[lastline] .expand:0 {label .expand:0 text:\"");
-				replacestr.append(_("Description: "));
-				replacestr.append("\"}{input[bminput] on_ESC:bm-cancel on_ENTER:bm-end-desc modal:1 .expand:h text[bmdesc]:");
-				replacestr.append(stfl::quote(bookmark_desc));
-				replacestr.append("}}");
-				f->modify("lastline", "replace", replacestr);
-				f->set_focus("bminput");
-			}
-			break;
-		case OP_INT_BM_END_DESC: {
-				bookmark_desc = f->get("bmdesc");
-				f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
-				v->set_status(_("Saving bookmark..."));
-				GetLogger().log(LOG_DEBUG, "formaction::process_op: bookmarking url = `%s' title = `%s' description = `%s'", bookmark_url.c_str(), bookmark_title.c_str(), bookmark_desc.c_str());
-				std::string retval = v->get_ctrl()->bookmark(bookmark_url, bookmark_title, bookmark_desc);
-				if (retval.length() == 0) {
-					v->set_status(_("Saved bookmark."));
-				} else {
-					v->set_status((std::string(_("Error while saving bookmark: ")) + retval).c_str());
-				}
-			}
-			break;
-		case OP_INT_BM_CANCEL: {
-				f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
-			}
+		case OP_INT_END_QUESTION:
+			qna_responses.push_back(f->get("qna_value"));
+			start_next_question();
+
 			break;
 		default:
 			this->process_operation(op);
@@ -133,5 +102,60 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 		}
 	}
 }
+
+void formaction::start_qna(const std::vector<std::pair<std::string, std::string> >& prompts, operation finish_op) {
+	qna_prompts = prompts;
+	if (qna_responses.size() > 0) {
+		qna_responses.erase(qna_responses.begin(), qna_responses.end());
+	}
+	finish_operation = finish_op;
+	start_next_question();
+}
+
+void formaction::finished_qna(operation op) {
+	switch (op) {
+		case OP_INT_BM_END: {
+				assert(qna_responses.size() == 3 && qna_prompts.size() == 0); // everything must be answered
+				v->set_status(_("Saving bookmark..."));
+				std::string retval = v->get_ctrl()->bookmark(qna_responses[0], qna_responses[1], qna_responses[2]);
+				if (retval.length() == 0) {
+					v->set_status(_("Saved bookmark."));
+				} else {
+					v->set_status((std::string(_("Error while saving bookmark: ")) + retval).c_str());
+				}
+			}
+			break;
+		default:
+			break;
+	}
+}
+
+
+void formaction::start_bookmark_qna(const std::string& default_title, const std::string& default_url, const std::string& default_desc) {
+	GetLogger().log(LOG_DEBUG, "formaction::start_bookmark_qna: OK, starting bookmark Q&A...");
+	std::vector<std::pair<std::string,std::string> > prompts;
+
+	prompts.push_back(std::pair<std::string,std::string>(_("URL: "), default_url));
+	prompts.push_back(std::pair<std::string,std::string>(_("Title: "), default_title));
+	prompts.push_back(std::pair<std::string,std::string>(_("Description: "), default_desc));
+
+	start_qna(prompts, OP_INT_BM_END);
+}
+void formaction::start_next_question() {
+	if (qna_prompts.size() > 0) {
+		std::string replacestr("{hbox[lastline] .expand:0 {label .expand:0 text:");
+		replacestr.append(stfl::quote(qna_prompts[0].first));
+		replacestr.append("}{input[qnainput] on_ESC:cancel-qna on_ENTER:end-question modal:1 .expand:h text[qna_value]:");
+		replacestr.append(stfl::quote(qna_prompts[0].second));
+		replacestr.append("}}");
+		qna_prompts.erase(qna_prompts.begin());
+		f->modify("lastline", "replace", replacestr);
+		f->set_focus("qnainput");
+	} else {
+		f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
+		this->finished_qna(finish_operation);
+	}
+}
+
 
 }

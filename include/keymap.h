@@ -79,10 +79,10 @@ namespace newsbeuter {
 						OP_INT_PREV_CMDLINEHISTORY,
 						OP_INT_NEXT_CMDLINEHISTORY,
 
-						OP_INT_BM_END_URL,
-						OP_INT_BM_END_TITLE,
-						OP_INT_BM_END_DESC,
-						OP_INT_BM_CANCEL,
+						OP_INT_BM_END,
+
+						OP_INT_END_QUESTION,
+						OP_INT_CANCEL_QNA,
 
 						OP_INT_MAX
 						};

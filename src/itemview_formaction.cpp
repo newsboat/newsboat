@@ -179,20 +179,8 @@ void itemview_formaction::process_operation(operation op) {
 			v->open_in_browser(item.link());
 			v->set_status("");
 			break;
-		case OP_BOOKMARK: {
-				GetLogger().log(LOG_INFO, "view::run_itemview: bookmarking `%s'", item.link().c_str());
-				std::string replacestr("{hbox[lastline] .expand:0 {label .expand:0 text:\"");
-				replacestr.append(_("URL: "));
-				replacestr.append("\"}{input[bminput] on_ESC:bm-cancel on_ENTER:bm-end-url modal:1 .expand:h text[bmurl]:");
-				replacestr.append(stfl::quote(item.link()));
-				replacestr.append("}}");
-
-				bookmark_title = item.title();
-				bookmark_desc = "";
-
-				f->modify("lastline", "replace", replacestr);
-				f->set_focus("bminput");
-			}
+		case OP_BOOKMARK:
+			this->start_bookmark_qna(item.title(), item.link(), "");
 			break;
 		case OP_SHOWURLS:
 			GetLogger().log(LOG_DEBUG, "view::run_itemview: showing URLs");
