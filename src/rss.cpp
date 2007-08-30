@@ -440,7 +440,8 @@ bool rss_item::has_attribute(const std::string& attribname) {
 		attribname == "guid" ||
 		attribname == "unread" ||
 		attribname == "enclosure_url" ||
-		attribname == "enclosure_type")
+		attribname == "enclosure_type" ||
+		attribname == "flags")
 			return true;
 
 	// if we have a feed, then forward the request
@@ -470,12 +471,40 @@ std::string rss_item::get_attribute(const std::string& attribname) {
 		return enclosure_url();
 	else if (attribname == "enclosure_type")
 		return enclosure_type();
+	else if (attribname == "flags")
+		return flags();
 
 	// if we have a feed, then forward the request
 	if (feedptr)
 		return feedptr->rss_feed::get_attribute(attribname);
 
 	return "";
+}
+
+void rss_item::update_flags() {
+	if (ch) {
+		ch->update_rssitem_flags(*this);
+	}
+}
+
+void rss_item::sort_flags() {
+	std::sort(flags_.begin(), flags_.end());
+
+	for (std::string::iterator it=flags_.begin();flags_.size() > 0 && it!=flags_.end();++it) {
+		if (!isalpha(*it)) {
+			flags_.erase(it);
+			it = flags_.begin();
+		}
+	}
+
+	for (unsigned int i=0;i<flags_.size();++i) {
+		if (i < (flags_.size()-1)) {
+			if (flags_[i] == flags_[i+1]) {
+				flags_.erase(i+1,i+1);
+				--i;
+			}
+		}
+	}
 }
 
 bool rss_feed::has_attribute(const std::string& attribname) {

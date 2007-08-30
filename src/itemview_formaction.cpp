@@ -74,6 +74,15 @@ void itemview_formaction::prepare() {
 		code.append(stfl::quote(date.str()));
 		code.append("}");
 
+		if (item.flags().length() > 0) {
+			code.append("{listitem text:");
+			std::ostringstream flags;
+			flags << _("Flags: ");
+			flags << item.flags();
+			code.append(stfl::quote(flags.str()));
+			code.append("}");
+		}
+
 		if (item.enclosure_url().length() > 0) {
 			code.append("{listitem text:");
 			std::ostringstream enc_url;
@@ -181,6 +190,12 @@ void itemview_formaction::process_operation(operation op) {
 			break;
 		case OP_BOOKMARK:
 			this->start_bookmark_qna(item.title(), item.link(), "");
+			break;
+		case OP_EDITFLAGS: {
+				std::vector<std::pair<std::string, std::string> > qna;
+				qna.push_back(std::pair<std::string,std::string>(_("Flags: "), item.flags()));
+				this->start_qna(qna, OP_INT_EDITFLAGS_END);
+			}
 			break;
 		case OP_SHOWURLS:
 			GetLogger().log(LOG_DEBUG, "view::run_itemview: showing URLs");
@@ -297,6 +312,23 @@ void itemview_formaction::handle_cmdline(const std::string& cmd) {
 		} else {
 			formaction::handle_cmdline(cmd);
 		}
+	}
+}
+
+void itemview_formaction::finished_qna(operation op) {
+	formaction::finished_qna(op); // important!
+
+	rss_item& item = feed->get_item_by_guid(guid);
+
+	switch (op) {
+		case OP_INT_EDITFLAGS_END:
+			item.set_flags(qna_responses[0]);
+			item.update_flags();
+			v->set_status(_("Flags updated."));
+			do_redraw = true;
+			break;
+		default:
+			break;
 	}
 }
 

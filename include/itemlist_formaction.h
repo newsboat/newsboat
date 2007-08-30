@@ -33,6 +33,9 @@ class itemlist_formaction : public formaction {
 		inline void set_update_visible_items(bool b) { update_visible_items = b; }
 
 		void do_update_visible_items();
+
+		virtual void finished_qna(operation op);
+
 	private:
 		virtual void process_operation(operation op);
 		void set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);

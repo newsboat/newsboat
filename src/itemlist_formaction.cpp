@@ -87,6 +87,22 @@ void itemlist_formaction::process_operation(operation op) {
 				}
 			}
 			break;
+		case OP_EDITFLAGS: {
+				std::string itemposname = f->get("itempos");
+				if (itemposname.length() > 0) {
+					std::istringstream posname(itemposname);
+					unsigned int itempos = 0;
+					posname >> itempos;
+					if (itempos < visible_items.size()) {
+						std::vector<std::pair<std::string, std::string> > qna;
+						qna.push_back(std::pair<std::string,std::string>(_("Flags: "), visible_items[itempos].first->flags()));
+						this->start_qna(qna, OP_INT_EDITFLAGS_END);
+					}
+				} else {
+					v->show_error(_("No item selected!")); // should not happen
+				}
+			}
+			break;
 		case OP_SAVE: 
 			{
 				char buf[1024];
@@ -215,6 +231,31 @@ void itemlist_formaction::process_operation(operation op) {
 	}
 	if (quit) {
 		v->pop_current_formaction();
+	}
+}
+
+void itemlist_formaction::finished_qna(operation op) {
+	formaction::finished_qna(op); // important!
+
+	switch (op) {
+		case OP_INT_EDITFLAGS_END: {
+				std::string itemposname = f->get("itempos");
+				if (itemposname.length() > 0) {
+					std::istringstream posname(itemposname);
+					unsigned int itempos = 0;
+					posname >> itempos;
+					if (itempos < visible_items.size()) {
+						visible_items[itempos].first->set_flags(qna_responses[0]);
+						visible_items[itempos].first->update_flags();
+						v->set_status(_("Flags updated."));
+					}
+				} else {
+					v->show_error(_("No item selected!")); // should not happen
+				}
+			}
+			break;
+		default:
+			break;
 	}
 }
 

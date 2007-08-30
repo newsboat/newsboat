@@ -50,6 +50,8 @@ class formaction {
 		stfl::form * f;
 		bool do_redraw;
 
+		std::vector<std::string> qna_responses;
+
 	private:
 		std::string prepare_keymap_hint(keymap_hint_entry * hints);
 		void start_next_question();
@@ -57,7 +59,6 @@ class formaction {
 		history cmdlinehistory;
 
 		std::vector<std::pair<std::string, std::string> > qna_prompts;
-		std::vector<std::string> qna_responses;
 		operation finish_operation;
 };
 

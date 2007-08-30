@@ -68,6 +68,11 @@ namespace newsbeuter {
 			inline bool enqueued() { return enqueued_; }
 			inline void set_enqueued(bool v) { enqueued_ = v; }
 
+			inline const std::string& flags() { sort_flags(); return flags_; }
+			void set_flags(const std::string& flags) { flags_ = flags; sort_flags(); }
+			void update_flags();
+			void sort_flags();
+
 			virtual bool has_attribute(const std::string& attribname);
 			virtual std::string get_attribute(const std::string& attribname);
 
@@ -87,6 +92,7 @@ namespace newsbeuter {
 			std::string enclosure_url_;
 			std::string enclosure_type_;
 			bool enqueued_;
+			std::string flags_;
 			rss_feed * feedptr;
 	};
 
