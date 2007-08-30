@@ -101,7 +101,7 @@ void controller::run(int argc, char * argv[]) {
 
 	::signal(SIGINT, ctrl_c_action);
 #ifndef DEBUG
-	::signal(SIGSEGV, ctrl_c_action);
+	// ::signal(SIGSEGV, ctrl_c_action);
 #endif
 	::signal(SIGPIPE, ignore_signal);
 	::signal(SIGHUP, ctrl_c_action);

@@ -4,6 +4,7 @@
 #include <logger.h>
 #include <exceptions.h>
 #include <utils.h>
+#include <cassert>
 
 #include <sstream>
 
@@ -322,14 +323,21 @@ void itemlist_formaction::prepare() {
 				title.append("  ");
 			}
 			title.append(it->first->title());
+			std::string quoted_title = stfl::quote(title);
 			GetLogger().log(LOG_DEBUG, "itemlist_formaction: XXXTITLE it->first->title = `%s' title = `%s' quoted title = `%s'", 
-				it->first->title().c_str(), title.c_str(), stfl::quote(title).c_str());
-			line.append(stfl::quote(title));
+				it->first->title().c_str(), title.c_str(), quoted_title.c_str());
+			// assert(quoted_title.substr(1,1) != "??");
+			line.append(quoted_title);
 			line.append("}");
+			GetLogger().log(LOG_INFO, "prepare: title  = %s", title.c_str());
+			GetLogger().log(LOG_INFO, "prepare: qtitle = %s", quoted_title.c_str());
+			GetLogger().log(LOG_INFO, "prepare: line = %s", line.c_str());
 			code.append(line);
 		}
 
 		code.append("}");
+
+		GetLogger().log(LOG_INFO, "prepare: code = `%s'", code.c_str());
 
 		f->modify("items","replace_inner",code);
 		
