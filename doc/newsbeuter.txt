@@ -108,6 +108,8 @@ cmdline|:|Open the command line.
 set-filter|F|Set a filter.
 select-filter|f|Select a predefined filter.
 clear-filter|^F|Clear currently set filter.
+bookmark|^B|Bookmark currently selected article or URL.
+edit-flags|^E|Edit the flags of the currently selected article.
 up|UP|Goes up one item in the list.
 down|DOWN|Goes down one item in the list.
 pageup|PPAGE|Goes up one page in the list.
@@ -308,6 +310,7 @@ guid:article:a unique identifier of the article
 unread:article:indicates whether the article has been read
 enclosure_url:article:the URL of a possible enclosure (e.g. podcast file)
 enclosure_type:article:the MIME type of the enclosure URL
+flags:article:The set of flags of the article
 feedtitle:feed, article:title of the feed
 description:feed, article:feed description
 feedlink:feed, article:link to the feed
@@ -441,6 +444,25 @@ With this commandline switch, you can read the articles that you have already
 downloaded without any network connectivity. This functionality makes
 newsbeuter a true offline client for Bloglines.
 
+
+Flagging Articles
+~~~~~~~~~~~~~~~~~
+
+To support custom categorization of articles by the user, it is possible to
+flag an article. A valid flag is any character from 'A' to 'Z' and from 'a' to
+'z'. Every article can be flagged with up to 52 different flags, i.e. every
+letter from the Roman alphabet in upper and lower case. Flagging is easy: just
+select an article in the article list, or enter the article view, and press ^B.
+This will start the flag editor. By pressing enter, the new flags are saved.
+You can cancel by pressing the ESC key.
+
+The flags of an article can be used in every filter expression. The flags of an
+article are always ordered, and when new flags are added, ordering is
+immediately restored. This behaviour can also be relied upon when querying
+articles via the filter language.
+
+If an article contains one or more flags, it is marked with an "!" in the
+article list. In the article view, all flags (if available) are listed.
 
 Podcast Support
 ~~~~~~~~~~~~~~~

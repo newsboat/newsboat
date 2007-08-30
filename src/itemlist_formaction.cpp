@@ -248,6 +248,8 @@ void itemlist_formaction::finished_qna(operation op) {
 						visible_items[itempos].first->set_flags(qna_responses[0]);
 						visible_items[itempos].first->update_flags();
 						v->set_status(_("Flags updated."));
+						GetLogger().log(LOG_DEBUG, "itemlist_formaction::finished_qna: updated flags");
+						do_redraw = true;
 					}
 				} else {
 					v->show_error(_("No item selected!")); // should not happen
@@ -280,6 +282,7 @@ void itemlist_formaction::prepare() {
 	}
 
 	if (do_redraw) {
+		GetLogger().log(LOG_DEBUG, "itemlist_formaction::prepare: redrawing");
 		std::string code = "{list";
 
 		std::string datetimeformat = v->get_cfg()->get_configvalue("datetime-format");
@@ -297,7 +300,12 @@ void itemlist_formaction::prepare() {
 			snprintf(buf,sizeof(buf),"%4u ",it->second + 1);
 			title.append(buf);
 			if (it->first->unread()) {
-				title.append("N ");
+				title.append("N");
+			} else {
+				title.append(" ");
+			}
+			if (it->first->flags().length() > 0) {
+				title.append("! ");
 			} else {
 				title.append("  ");
 			}
