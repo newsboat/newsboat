@@ -76,7 +76,7 @@ namespace newsbeuter {
 			virtual bool has_attribute(const std::string& attribname);
 			virtual std::string get_attribute(const std::string& attribname);
 
-			inline void set_feedptr(rss_feed * ptr) { feedptr = ptr; }
+			void set_feedptr(rss_feed * ptr);
 			inline rss_feed * get_feedptr() { return feedptr; }
 
 		private:

@@ -23,6 +23,8 @@ class feedlist_formaction : public formaction {
 
 		virtual void handle_cmdline(const std::string& cmd);
 
+		virtual void finished_qna(operation op);
+
 	private:
 
 		int get_pos(unsigned int realidx);
@@ -40,6 +42,8 @@ class feedlist_formaction : public formaction {
 		bool apply_filter;
 
 		history filterhistory;
+
+		rss_feed search_dummy_feed;
 };
 
 }

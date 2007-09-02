@@ -11,7 +11,7 @@
 namespace newsbeuter {
 
 itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
-	: formaction(vv,formstr), feed(0), apply_filter(false), update_visible_items(true) { 
+	: formaction(vv,formstr), feed(0), apply_filter(false), update_visible_items(true), search_dummy_feed(v->get_ctrl()->get_cache()) { 
 }
 
 itemlist_formaction::~itemlist_formaction() { }
@@ -137,11 +137,15 @@ void itemlist_formaction::process_operation(operation op) {
 			v->push_help();
 			break;
 		case OP_RELOAD:
-			GetLogger().log(LOG_INFO, "itemlist_formaction: reloading current feed");
-			v->get_ctrl()->reload(pos);
-			// feed = v->get_ctrl()->get_feed(pos);
-			update_visible_items = true;
-			do_redraw = true;
+			if (!show_searchresult) {
+				GetLogger().log(LOG_INFO, "itemlist_formaction: reloading current feed");
+				v->get_ctrl()->reload(pos);
+				// feed = v->get_ctrl()->get_feed(pos);
+				update_visible_items = true;
+				do_redraw = true;
+			} else {
+				v->show_error(_("Error: you can't reload search results."));
+			}
 			break;
 		case OP_QUIT:
 			GetLogger().log(LOG_INFO, "itemlist_formaction: quitting");
@@ -172,8 +176,11 @@ void itemlist_formaction::process_operation(operation op) {
 				v->show_error(buf);
 			}
 			break;
-		case OP_SEARCH:
-			v->run_search(feed->rssurl());
+		case OP_SEARCH: {
+				std::vector<std::pair<std::string, std::string> > qna;
+				qna.push_back(std::pair<std::string, std::string>(_("Search for: "), ""));
+				this->start_qna(qna, OP_INT_START_SEARCH);
+			}
 			break;
 		case OP_TOGGLEITEMREAD: {
 				std::string itemposname = f->get("itempos");
@@ -257,6 +264,35 @@ void itemlist_formaction::finished_qna(operation op) {
 				}
 			}
 			break;
+		case OP_INT_START_SEARCH: {
+				v->set_status(_("Searching..."));
+				std::string searchphrase = qna_responses[0];
+				if (searchphrase.length() > 0) {
+					std::vector<rss_item> items;
+					try {
+						if (show_searchresult) {
+							items = v->get_ctrl()->search_for_items(searchphrase, "");
+						} else {
+							items = v->get_ctrl()->search_for_items(searchphrase, feed->rssurl());
+						}
+					} catch (const dbexception& e) {
+						char buf[1024];
+						snprintf(buf, sizeof(buf), _("Error while searching for `%s': %s"), searchphrase.c_str(), e.what());
+						v->show_error(buf);
+						return;
+					}
+					if (items.size() > 0) {
+						search_dummy_feed.items() = items;
+						if (show_searchresult) {
+							v->pop_current_formaction();
+						}
+						v->push_searchresult(&search_dummy_feed);
+					} else {
+						v->show_error(_("No results."));
+					}
+				}
+			}
+			break;
 		default:
 			break;
 	}
@@ -318,7 +354,8 @@ void itemlist_formaction::prepare() {
 			title.append("   ");
 			if (feed->rssurl() != it->first->feedurl()) {
 				char buf[20];
-				snprintf(buf,sizeof(buf),"|%-17s|",it->first->get_feedptr()->title().substr(0,17).c_str());
+				std::string feedtitle = it->first->get_feedptr()->title();
+				snprintf(buf,sizeof(buf),"|%-17s|",feedtitle.substr(0,17).c_str());
 				title.append(buf);
 				title.append("  ");
 			}
@@ -356,7 +393,11 @@ void itemlist_formaction::init() {
 
 void itemlist_formaction::set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url) {
 	char buf[1024];
-	snprintf(buf, sizeof(buf), _("%s %s - Articles in feed '%s' (%u unread, %u total) - %s"), PROGRAM_NAME, PROGRAM_VERSION, s.c_str(), unread, total, url.c_str());
+	if (!show_searchresult) {
+		snprintf(buf, sizeof(buf), _("%s %s - Articles in feed '%s' (%u unread, %u total) - %s"), PROGRAM_NAME, PROGRAM_VERSION, s.c_str(), unread, total, url.c_str());
+	} else {
+		snprintf(buf, sizeof(buf), _("%s %s - Search results (%u unread, %u total)"), PROGRAM_NAME, PROGRAM_VERSION, unread, total);
+	}
 	f->set("head", buf);
 }
 

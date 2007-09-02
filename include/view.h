@@ -24,7 +24,6 @@ namespace newsbeuter {
 	class help_formaction;
 	class urlview_formaction;
 	class select_formaction;
-	class search_formaction;
 
 	class view {
 		public:
@@ -50,10 +49,11 @@ namespace newsbeuter {
 			void write_item(const rss_item& item, const std::string& filename);
 
 			void push_itemlist(unsigned int pos);
+			void push_itemlist(rss_feed * feed);
 			void push_itemview(rss_feed * f, const std::string& guid);
 			void push_help();
 			void push_urlview(const std::vector<linkpair>& links);
-			void run_search(const std::string& feedurl = "");
+			void push_searchresult(rss_feed * feed);
 
 			std::string run_filebrowser(filebrowser_type type, const std::string& default_filename = "", const std::string& dir = "");
 			std::string select_tag(const std::vector<std::string>& tags);
@@ -95,7 +95,7 @@ namespace newsbeuter {
 			filebrowser_formaction * filebrowser;
 			urlview_formaction * urlview;
 			select_formaction * selecttag;
-			search_formaction * search;
+			itemlist_formaction * searchresult;
 
 			std::list<formaction *> formaction_stack;
 

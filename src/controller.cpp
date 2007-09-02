@@ -176,6 +176,7 @@ void controller::run(int argc, char * argv[]) {
 
 	if (do_import) {
 		GetLogger().log(LOG_INFO,"Importing OPML file from %s",importfile.c_str());
+		urlcfg = new file_urlreader(url_file);
 		import_opml(importfile.c_str());
 		return;
 	}
@@ -651,9 +652,12 @@ void controller::rec_find_rss_outlines(nxml_data_t * node, std::string tag) {
 
 				bool found = false;
 
-				for (std::vector<std::string>::iterator it = urlcfg->get_urls().begin(); it != urlcfg->get_urls().end(); ++it) {
-					if (*it == url) {
-						found = true;
+				GetLogger().log(LOG_DEBUG, "OPML import: size = %u", urlcfg->get_urls().size());
+				if (urlcfg->get_urls().size() > 0) {
+					for (std::vector<std::string>::iterator it = urlcfg->get_urls().begin(); it != urlcfg->get_urls().end(); ++it) {
+						if (*it == url) {
+							found = true;
+						}
 					}
 				}
 
@@ -688,7 +692,12 @@ void controller::rec_find_rss_outlines(nxml_data_t * node, std::string tag) {
 
 
 std::vector<rss_item> controller::search_for_items(const std::string& query, const std::string& feedurl) {
-	return rsscache->search_for_items(query, feedurl);
+	std::vector<rss_item> items = rsscache->search_for_items(query, feedurl);
+	GetLogger().log(LOG_DEBUG, "controller::search_for_items: setting feed pointers");
+	for (std::vector<rss_item>::iterator it=items.begin();it!=items.end();++it) {
+		it->set_feedptr(get_feed_by_url(it->feedurl()));
+	}
+	return items;
 }
 
 rss_feed * controller::get_feed_by_url(const std::string& feedurl) {

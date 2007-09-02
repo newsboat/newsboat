@@ -17,7 +17,7 @@ namespace newsbeuter {
 
 feedlist_formaction::feedlist_formaction(view * vv, std::string formstr) 
 	: formaction(vv,formstr), zero_feedpos(false), feeds_shown(0),
-		auto_open(false), quit(false), apply_filter(false) {
+		auto_open(false), quit(false), apply_filter(false), search_dummy_feed(v->get_ctrl()->get_cache()) {
 	assert(true==m.parse(FILTER_UNREAD_FEEDS));
 }
 
@@ -207,8 +207,11 @@ void feedlist_formaction::process_operation(operation op) {
 				v->show_error(_("No filters defined."));
 			}
 			break;
-		case OP_SEARCH:
-			v->run_search();
+		case OP_SEARCH: {
+				std::vector<std::pair<std::string, std::string> > qna;
+				qna.push_back(std::pair<std::string, std::string>(_("Search for: "), ""));
+				this->start_qna(qna, OP_INT_START_SEARCH);
+			}
 			break;
 		case OP_CLEARFILTER:
 			apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-feeds"));
@@ -436,6 +439,37 @@ void feedlist_formaction::handle_cmdline(const std::string& cmd) {
 				formaction::handle_cmdline(cmd);
 			}
 		}
+	}
+}
+
+void feedlist_formaction::finished_qna(operation op) {
+	formaction::finished_qna(op); // important!
+
+	switch (op) {
+		case OP_INT_START_SEARCH: {
+				v->set_status(_("Searching..."));
+				std::string searchphrase = qna_responses[0];
+				if (searchphrase.length() > 0) {
+					std::vector<rss_item> items;
+					try {
+						items = v->get_ctrl()->search_for_items(searchphrase, "");
+					} catch (const dbexception& e) {
+						char buf[1024];
+						snprintf(buf, sizeof(buf), _("Error while searching for `%s': %s"), searchphrase.c_str(), e.what());
+						v->show_error(buf);
+						return;
+					}
+					if (items.size() > 0) {
+						search_dummy_feed.items() = items;
+						v->push_searchresult(&search_dummy_feed);
+					} else {
+						v->show_error(_("No results."));
+					}
+				}
+			}
+			break;
+		default:
+			break;
 	}
 }
 

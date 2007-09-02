@@ -82,9 +82,11 @@ namespace newsbeuter {
 
 						OP_INT_BM_END,
 						OP_INT_EDITFLAGS_END,
+						OP_INT_START_SEARCH,
 
 						OP_INT_END_QUESTION,
 						OP_INT_CANCEL_QNA,
+
 
 						OP_INT_MAX
 						};

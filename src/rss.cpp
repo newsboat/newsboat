@@ -419,8 +419,6 @@ std::string rss_feed::description() const {
 rss_item& rss_feed::get_item_by_guid(const std::string& guid) {
 	for (std::vector<rss_item>::iterator it=items_.begin();it!=items_.end();++it) {
 		if (it->guid() == guid) {
-			if (rssurl_.substr(0,6) != "query:")
-				it->set_feedptr(this);
 			return *it;
 		}
 	}
@@ -634,3 +632,9 @@ void rss_feed::set_rssurl(const std::string& u) {
 		set_query(tokens[2]);
 	}
 }
+
+void rss_item::set_feedptr(rss_feed * ptr) {
+	GetLogger().log(LOG_DEBUG, "rss_item::set_feedptr: setting feed pointer from %p to %p", feedptr, ptr);
+	feedptr = ptr;
+}
+

@@ -14,7 +14,6 @@
 #include <help_formaction.h>
 #include <urlview_formaction.h>
 #include <select_formaction.h>
-#include <search_formaction.h>
 
 #include <logger.h>
 #include <reloadthread.h>
@@ -62,7 +61,7 @@ view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0) {
 	filebrowser = new filebrowser_formaction(this, filebrowser_str);
 	urlview = new urlview_formaction(this, urlview_str);
 	selecttag = new select_formaction(this, selecttag_str);
-	search = new search_formaction(this, search_str);
+	searchresult = new itemlist_formaction(this, itemlist_str);
 
 	// push the dialog to start with onto the stack
 	formaction_stack.push_front(feedlist);
@@ -78,7 +77,7 @@ view::~view() {
 	delete filebrowser;
 	delete urlview;
 	delete selecttag;
-	delete search;
+	delete searchresult;
 }
 
 void view::set_config_container(configcontainer * cfgcontainer) {
@@ -93,7 +92,7 @@ void view::set_keymap(keymap * k) {
 
 
 void view::set_bindings() {
-	formaction * fas2bind[] = { feedlist, itemlist, itemview, helpview, filebrowser, urlview, selecttag, search, NULL };
+	formaction * fas2bind[] = { feedlist, itemlist, itemview, helpview, filebrowser, urlview, selecttag, NULL };
 	if (keys) {
 		std::string upkey("** "); upkey.append(keys->getkey(OP_SK_UP));
 		std::string downkey("** "); downkey.append(keys->getkey(OP_SK_DOWN));
@@ -293,12 +292,22 @@ void view::set_tags(const std::vector<std::string>& t) {
 	feedlist->set_tags(t);
 }
 
-void view::push_itemlist(unsigned int pos) {
-	rss_feed * feed = ctrl->get_feed(pos);
-
+void view::push_searchresult(rss_feed * feed) {
 	assert(feed != NULL);
 
-	GetLogger().log(LOG_DEBUG, "view::push_itemlist: retrieved feed at position %d (address = %p)", pos, feed);
+	if (feed->items().size() > 0) {
+		searchresult->set_feed(feed);
+		searchresult->set_show_searchresult(true);
+		searchresult->init();
+		formaction_stack.push_front(searchresult);
+	} else {
+		show_error(_("Error: feed contains no items!"));
+	}
+
+}
+
+void view::push_itemlist(rss_feed * feed) {
+	assert(feed != NULL);
 
 	if (feed->rssurl().substr(0,6) == "query:") {
 		set_status(_("Updating query feed..."));
@@ -308,12 +317,19 @@ void view::push_itemlist(unsigned int pos) {
 
 	if (feed->items().size() > 0) {
 		itemlist->set_feed(feed);
-		itemlist->set_pos(pos);
+		itemlist->set_show_searchresult(false);
 		itemlist->init();
 		formaction_stack.push_front(itemlist);
 	} else {
 		show_error(_("Error: feed contains no items!"));
 	}
+}
+
+void view::push_itemlist(unsigned int pos) {
+	rss_feed * feed = ctrl->get_feed(pos);
+	GetLogger().log(LOG_DEBUG, "view::push_itemlist: retrieved feed at position %d (address = %p)", pos, feed);
+	itemlist->set_pos(pos);
+	push_itemlist(feed);
 }
 
 void view::push_itemview(rss_feed * f, const std::string& guid) {
@@ -352,12 +368,6 @@ std::string view::select_filter(const std::vector<std::pair<std::string, std::st
 	selecttag->set_filters(filters);
 	run_modal(selecttag, "");
 	return selecttag->get_value();
-}
-
-void view::run_search(const std::string& feedurl) {
-	search->set_feedurl(feedurl);
-	search->init();
-	formaction_stack.push_front(search);
 }
 
 char view::confirm(const std::string& prompt, const std::string& charset) {
@@ -489,7 +499,6 @@ void view::set_colors(const colormanager& colorman) {
 		filebrowser->get_form()->set(fgcit->first, colorattr);
 		urlview->get_form()->set(fgcit->first, colorattr);
 		selecttag->get_form()->set(fgcit->first, colorattr);
-		search->get_form()->set(fgcit->first, colorattr);
 
 		if (fgcit->first == "article") {
 			std::string styleend_str;

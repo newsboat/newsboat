@@ -9,7 +9,6 @@
 #include <filebrowser_formaction.h>
 #include <urlview_formaction.h>
 #include <select_formaction.h>
-#include <search_formaction.h>
 
 using namespace podbeuter;
 

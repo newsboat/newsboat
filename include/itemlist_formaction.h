@@ -36,20 +36,25 @@ class itemlist_formaction : public formaction {
 
 		virtual void finished_qna(operation op);
 
+		inline void set_show_searchresult(bool b) { show_searchresult = b; }
+
 	private:
 		virtual void process_operation(operation op);
 		void set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);
 		int get_pos(unsigned int idx);
 
-		rss_feed * feed;
 		unsigned int pos;
+		rss_feed * feed;
 		bool rebuild_list;
 		bool apply_filter;
 		matcher m;
 		std::vector<std::pair<rss_item *, unsigned int> > visible_items;
 		bool update_visible_items;
+		bool show_searchresult;
 
 		history filterhistory;
+
+		rss_feed search_dummy_feed;
 };
 
 }

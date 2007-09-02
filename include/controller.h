@@ -51,6 +51,8 @@ namespace newsbeuter {
 
 			std::string bookmark(const std::string& url, const std::string& title, const std::string& description);
 
+			inline cache * get_cache() { return rsscache; }
+
 		private:
 			void usage(char * argv0);
 			void version_information();
