@@ -91,7 +91,7 @@ void view::set_keymap(keymap * k) {
 
 
 void view::set_bindings() {
-	formaction * fas2bind[] = { feedlist, itemlist, itemview, helpview, filebrowser, urlview, selecttag, NULL };
+	formaction * fas2bind[] = { feedlist, itemlist, itemview, helpview, filebrowser, urlview, selecttag, searchresult, NULL };
 	if (keys) {
 		std::string upkey("** "); upkey.append(keys->getkey(OP_SK_UP));
 		std::string downkey("** "); downkey.append(keys->getkey(OP_SK_DOWN));
