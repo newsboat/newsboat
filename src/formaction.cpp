@@ -65,6 +65,16 @@ void formaction::process_op(operation op) {
 		case OP_INT_CANCEL_QNA:
 			f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
 			break;
+		case OP_INT_QNA_NEXTHIST:
+			if (qna_history) {
+				f->set("qna_value", qna_history->next());
+			}
+			break;
+		case OP_INT_QNA_PREVHIST:
+			if (qna_history) {
+				f->set("qna_value", qna_history->prev());
+			}
+			break;
 		case OP_INT_END_QUESTION:
 			qna_responses.push_back(f->get("qna_value"));
 			start_next_question();
@@ -103,12 +113,13 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 	}
 }
 
-void formaction::start_qna(const std::vector<std::pair<std::string, std::string> >& prompts, operation finish_op) {
+void formaction::start_qna(const std::vector<std::pair<std::string, std::string> >& prompts, operation finish_op, history * h) {
 	qna_prompts = prompts;
 	if (qna_responses.size() > 0) {
 		qna_responses.erase(qna_responses.begin(), qna_responses.end());
 	}
 	finish_operation = finish_op;
+	qna_history = h;
 	start_next_question();
 }
 
@@ -145,7 +156,7 @@ void formaction::start_next_question() {
 	if (qna_prompts.size() > 0) {
 		std::string replacestr("{hbox[lastline] .expand:0 {label .expand:0 text:");
 		replacestr.append(stfl::quote(qna_prompts[0].first));
-		replacestr.append("}{input[qnainput] on_ESC:cancel-qna on_ENTER:end-question modal:1 .expand:h text[qna_value]:");
+		replacestr.append("}{input[qnainput] on_ESC:cancel-qna on_UP:qna-prev-history on_DOWN:qna-next-history on_ENTER:end-question modal:1 .expand:h text[qna_value]:");
 		replacestr.append(stfl::quote(qna_prompts[0].second));
 		replacestr.append("}}");
 		qna_prompts.erase(qna_prompts.begin());

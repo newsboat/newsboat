@@ -86,7 +86,8 @@ namespace newsbeuter {
 
 						OP_INT_END_QUESTION,
 						OP_INT_CANCEL_QNA,
-
+						OP_INT_QNA_NEXTHIST,
+						OP_INT_QNA_PREVHIST,
 
 						OP_INT_MAX
 						};

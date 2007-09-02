@@ -179,7 +179,7 @@ void itemlist_formaction::process_operation(operation op) {
 		case OP_SEARCH: {
 				std::vector<std::pair<std::string, std::string> > qna;
 				qna.push_back(std::pair<std::string, std::string>(_("Search for: "), ""));
-				this->start_qna(qna, OP_INT_START_SEARCH);
+				this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
 			}
 			break;
 		case OP_TOGGLEITEMREAD: {
@@ -268,6 +268,7 @@ void itemlist_formaction::finished_qna(operation op) {
 				v->set_status(_("Searching..."));
 				std::string searchphrase = qna_responses[0];
 				if (searchphrase.length() > 0) {
+					searchhistory.add_line(searchphrase);
 					std::vector<rss_item> items;
 					try {
 						if (show_searchresult) {

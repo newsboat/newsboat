@@ -42,7 +42,7 @@ class formaction {
 		virtual void process_operation(operation op) = 0;
 		virtual void set_keymap_hints();
 
-		void start_qna(const std::vector<std::pair<std::string, std::string> >& prompts, operation finish_op);
+		void start_qna(const std::vector<std::pair<std::string, std::string> >& prompts, operation finish_op, history * h = NULL);
 
 		void start_bookmark_qna(const std::string& default_title, const std::string& default_url, const std::string& default_desc);
 
@@ -51,6 +51,7 @@ class formaction {
 		bool do_redraw;
 
 		std::vector<std::string> qna_responses;
+		history searchhistory;
 
 	private:
 		std::string prepare_keymap_hint(keymap_hint_entry * hints);
@@ -60,6 +61,7 @@ class formaction {
 
 		std::vector<std::pair<std::string, std::string> > qna_prompts;
 		operation finish_operation;
+		history * qna_history;
 };
 
 
