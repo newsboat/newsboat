@@ -5,7 +5,6 @@
 #include <filebrowser.h>
 #include <urlview.h>
 #include <selecttag.h>
-#include <search.h>
 
 #include <formaction.h>
 #include <feedlist_formaction.h>
