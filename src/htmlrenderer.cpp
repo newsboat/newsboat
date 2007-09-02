@@ -48,7 +48,7 @@ std::string htmlrenderer::absolute_url(const std::string& url, const std::string
 
 unsigned int htmlrenderer::add_link(std::vector<linkpair>& links, const std::string& link, link_type type) {
 	bool found = false;
-	unsigned int i=0;
+	unsigned int i=1;
 	for (std::vector<linkpair>::iterator it=links.begin();it!=links.end();++it, ++i) {
 		if (it->first == link) {
 			found = true;
@@ -339,7 +339,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 		lines.push_back(_("Links: "));
 		for (unsigned int i=0;i<links.size();++i) {
 			std::ostringstream line;
-			line << "[" << i << "]: " << links[i].first << " (" << type2str(links[i].second) << ")";
+			line << "[" << (i+1) << "]: " << links[i].first << " (" << type2str(links[i].second) << ")";
 			lines.push_back(line.str());
 		}
 	}

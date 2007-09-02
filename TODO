@@ -15,6 +15,8 @@ TODO:
 - implement commandline commands quit [done], add, save [done], tag (select tag) [done], goto (by matching title of feed)
 - implement reloading of configuration (:source)
 - test import/export
+- don't delete flagged articles
+- implement new urls-source "opml" to subscribe to opml files that are available online
 
 
 longteam goals to reach:
