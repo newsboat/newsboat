@@ -95,7 +95,6 @@ following formaction-derived classes exist:
 - feedlist_formaction
 - itemlist_formaction
 - itemview_formaction
-- search_formaction
 - urlview_formaction
 - filebrowser_formaction
 - help_formaction
@@ -170,7 +169,7 @@ Getting a detailed debug log
 If you want to get a detailed debug log from newsbeuter, you only need to run
 newsbeuter with special parameters:
 
-  newsbeuter -d log.txt -l 5
+  newsbeuter -d log.txt -l 6
 
 Some of this output doesn't make sense very much unless you know the source
 code, so it's only helpful for developers.

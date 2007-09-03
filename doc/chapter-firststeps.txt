@@ -58,3 +58,9 @@ lines in the form "<config-command> <arg1> ...".  The configuration file can
 also contain comments, which start with the '#' character and go as far as the
 end of line. If you need to enter a configuration argument that contains
 spaces, use quotes (") around the whole argument.
+
+Searching for articles is possible in newsbeuter, too. Just press the "/" key,
+enter your search phrase, and the title and content of all articles are
+searched for it. When you do a search from the list of feeds, all articles of
+all feeds will be searched. When you do a search from the article list of a
+feed, only the articles of the currently viewed feed are searched.
