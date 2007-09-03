@@ -37,6 +37,8 @@ class formaction {
 
 		virtual void finished_qna(operation op);
 
+		void start_cmdline();
+
 
 	protected:
 		virtual void process_operation(operation op) = 0;
@@ -51,13 +53,13 @@ class formaction {
 		bool do_redraw;
 
 		std::vector<std::string> qna_responses;
-		history searchhistory;
+
+		static history searchhistory;
+		static history cmdlinehistory;
 
 	private:
 		std::string prepare_keymap_hint(keymap_hint_entry * hints);
 		void start_next_question();
-
-		history cmdlinehistory;
 
 		std::vector<std::pair<std::string, std::string> > qna_prompts;
 		operation finish_operation;

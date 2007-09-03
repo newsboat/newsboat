@@ -7,6 +7,9 @@
 
 namespace newsbeuter {
 
+history formaction::searchhistory;
+history formaction::cmdlinehistory;
+
 formaction::formaction(view * vv, std::string formstr) : v(vv), f(0), do_redraw(true) { 
 	f = new stfl::form(formstr);
 }
@@ -44,29 +47,18 @@ std::string formaction::get_value(const std::string& value) {
 	return f->get(value);
 }
 
+
+void formaction::start_cmdline() {
+	std::vector<std::pair<std::string, std::string> > qna;
+	qna.push_back(std::pair<std::string,std::string>(":", ""));
+	this->start_qna(qna, OP_INT_END_CMDLINE, &formaction::cmdlinehistory);
+}
+
+
 void formaction::process_op(operation op) {
 	switch (op) {
-		case OP_INT_PREV_CMDLINEHISTORY:
-			f->set("cmdtext", cmdlinehistory.prev());
-			break;
-		case OP_INT_NEXT_CMDLINEHISTORY:
-			f->set("cmdtext", cmdlinehistory.next());
-			break;
-		case OP_INT_CANCEL_CMDLINE:
-			f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
-			break;
-		case OP_INT_END_CMDLINE: {
-				f->set_focus("feeds");
-				std::string cmdline = f->get("cmdtext");
-				cmdlinehistory.add_line(cmdline);
-				GetLogger().log(LOG_DEBUG,"formaction: commandline = `%s'", cmdline.c_str());
-				f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
-				this->handle_cmdline(cmdline);
-			}
-			break;
-		case OP_CMDLINE:
-			f->modify("lastline","replace", "{hbox[lastline] .expand:0 {label .expand:0 text:\":\"}{input[cmdline] on_ESC:cancel-cmdline on_ENTER:end-cmdline on_UP:prev-cmdline-history on_DOWN:next-cmdline-history modal:1 .expand:h text[cmdtext]:\"\"}}");
-			f->set_focus("cmdline");
+		case OP_CMDLINE: 
+			start_cmdline();
 			break;
 		case OP_INT_CANCEL_QNA:
 			f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
@@ -170,6 +162,14 @@ void formaction::finished_qna(operation op) {
 				} else {
 					v->set_status((std::string(_("Error while saving bookmark: ")) + retval).c_str());
 				}
+			}
+			break;
+		case OP_INT_END_CMDLINE: {
+				f->set_focus("feeds");
+				std::string cmdline = qna_responses[0];
+				formaction::cmdlinehistory.add_line(cmdline);
+				GetLogger().log(LOG_DEBUG,"formaction: commandline = `%s'", cmdline.c_str());
+				this->handle_cmdline(cmdline);
 			}
 			break;
 		default:

@@ -58,16 +58,12 @@ static op_desc opdescs[] = {
 
 	// internal messages with no actual keypresses behind them
 	{ OP_INT_END_CMDLINE, "XXXNOKEY-end-cmdline", "end-cmdline", NULL, KM_INTERNAL },
-	{ OP_INT_END_SETFILTER, "XXXNOKEY-end-cmdline", "end-setfilter", NULL, KM_INTERNAL },
+	{ OP_INT_END_SETFILTER, "XXXNOKEY-end-setfilter", "end-setfilter", NULL, KM_INTERNAL },
 
 	{ OP_INT_PREV_FILTERHISTORY, "XXXNOKEY-prev-filterhistory", "prev-filterhistory", NULL, KM_INTERNAL },
 	{ OP_INT_NEXT_FILTERHISTORY, "XXXNOKEY-next-filterhistory", "next-filterhistory", NULL, KM_INTERNAL },
 
-	{ OP_INT_PREV_CMDLINEHISTORY, "XXXNOKEY-prev-cmdlinehistory", "prev-cmdline-history", NULL, KM_INTERNAL },
-	{ OP_INT_NEXT_CMDLINEHISTORY, "XXXNOKEY-next-cmdlinehistory", "next-cmdline-history", NULL, KM_INTERNAL },
-
 	{ OP_INT_CANCEL_SETFILTER, "XXXNOKEY-cancel-setfilter", "cancel-setfilter", NULL, KM_INTERNAL },
-	{ OP_INT_CANCEL_CMDLINE, "XXXNOKEY-cancel-cmdline", "cancel-cmdline", NULL, KM_INTERNAL },
 
 	{ OP_INT_BM_END, "XXXNOKEY-bm-end", "bm-end", NULL, KM_INTERNAL },
 
