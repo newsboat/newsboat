@@ -245,7 +245,14 @@ void controller::run(int argc, char * argv[]) {
 		cache_file = cachefilepath.c_str();
 	}
 
+	if (!do_export) {
+		std::cout << _("Opening cache...");
+		std::cout.flush();
+	}
 	rsscache = new cache(cache_file,cfg);
+	if (!do_export) {
+		std::cout << _("done.") << std::endl;
+	}
 
 
 	std::string type = cfg->get_configvalue("urls-source");
