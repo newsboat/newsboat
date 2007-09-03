@@ -24,6 +24,12 @@ stfl::form * formaction::get_form() {
 }
 
 std::string formaction::prepare_keymap_hint(keymap_hint_entry * hints) {
+	/*
+	 * This function generates the "keymap hint" line by putting
+	 * together the elements of a structure, and looking up the
+	 * currently set keybinding so that the "keymap hint" line always
+	 * reflects the current configuration.
+	 */
 	std::string keymap_hint;
 	for (int i=0;hints[i].op != OP_NIL; ++i) {
 		keymap_hint.append(v->get_keys()->getkey(hints[i].op));
@@ -76,9 +82,11 @@ void formaction::process_op(operation op) {
 			}
 			break;
 		case OP_INT_END_QUESTION:
+			/*
+			 * An answer has been entered, we save the value, and ask the next question.
+			 */
 			qna_responses.push_back(f->get("qna_value"));
 			start_next_question();
-
 			break;
 		default:
 			this->process_operation(op);
@@ -86,6 +94,15 @@ void formaction::process_op(operation op) {
 }
 
 void formaction::handle_cmdline(const std::string& cmdline) {
+	/*
+	 * this is the command line handling that is available on all dialogs.
+	 * It is only called when the handle_cmdline() methods of the derived classes
+	 * are unable to handle to command line or when the derived class doesn't
+	 * implement the handle_cmdline() method by itself.
+	 *
+	 * It works the same way basically everywhere: first the command line
+	 * is tokenized, and then the tokens are looked at.
+	 */
 	std::vector<std::string> tokens = utils::tokenize_quoted(cmdline, " \t=");
 	char buf[1024];
 	configcontainer * cfg = v->get_cfg();
@@ -114,6 +131,16 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 }
 
 void formaction::start_qna(const std::vector<std::pair<std::string, std::string> >& prompts, operation finish_op, history * h) {
+	/*
+	 * the formaction base class contains a "Q&A" mechanism that makes it possible for all formaction-derived classes to
+	 * query the user for 1 or more values, optionally with a history.
+	 *
+	 * Every question is a prompt (such as "Search for: "), with an default value. These need to be provided as a vector
+	 * of (string, string) tuples. What also needs to be provided is the operation that will to be signaled to the 
+	 * finished_qna() method when reading all answers is finished, and optionally, a pointer to a history object to support
+	 * browsing of the input history. When reading is done, the responses can be found in the qna_responses vector. In this
+	 * vector, the first fields corresponds with the first prompt, the second field with the second prompt, etc.
+	 */
 	qna_prompts = prompts;
 	if (qna_responses.size() > 0) {
 		qna_responses.erase(qna_responses.begin(), qna_responses.end());
@@ -125,6 +152,15 @@ void formaction::start_qna(const std::vector<std::pair<std::string, std::string>
 
 void formaction::finished_qna(operation op) {
 	switch (op) {
+		/*
+		 * since bookmarking is available in several formactions, I decided to put this into
+		 * the base class so that all derived classes can take advantage of it. We also see
+		 * here how the signaling of a finished "Q&A" is handled:
+		 * 	- check for the right operation
+		 * 	- take the responses
+		 * 	- run operation (in this case, save the bookmark)
+		 * 	- signal success (or failure) to the user
+		 */
 		case OP_INT_BM_END: {
 				assert(qna_responses.size() == 3 && qna_prompts.size() == 0); // everything must be answered
 				v->set_status(_("Saving bookmark..."));
@@ -152,7 +188,11 @@ void formaction::start_bookmark_qna(const std::string& default_title, const std:
 
 	start_qna(prompts, OP_INT_BM_END);
 }
+
 void formaction::start_next_question() {
+	/*
+	 * If there is one more prompt to be presented to the user, set it up.
+	 */
 	if (qna_prompts.size() > 0) {
 		std::string replacestr("{hbox[lastline] .expand:0 {label .expand:0 text:");
 		replacestr.append(stfl::quote(qna_prompts[0].first));
@@ -163,6 +203,9 @@ void formaction::start_next_question() {
 		f->modify("lastline", "replace", replacestr);
 		f->set_focus("qnainput");
 	} else {
+	/* 
+	 * If there are no more prompts, restore the last line with the usual label, and signal the end of the "Q&A" to the finished_qna() method.
+	 */
 		f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
 		this->finished_qna(finish_operation);
 	}
