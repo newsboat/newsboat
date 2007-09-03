@@ -57,15 +57,11 @@ static op_desc opdescs[] = {
 	{ OP_SK_PGDOWN, "pagedown", "PAGEDOWN", NULL, KM_SYSKEYS },
 
 	// internal messages with no actual keypresses behind them
+	/*
 	{ OP_INT_END_CMDLINE, "XXXNOKEY-end-cmdline", "end-cmdline", NULL, KM_INTERNAL },
 	{ OP_INT_END_SETFILTER, "XXXNOKEY-end-setfilter", "end-setfilter", NULL, KM_INTERNAL },
-
-	{ OP_INT_PREV_FILTERHISTORY, "XXXNOKEY-prev-filterhistory", "prev-filterhistory", NULL, KM_INTERNAL },
-	{ OP_INT_NEXT_FILTERHISTORY, "XXXNOKEY-next-filterhistory", "next-filterhistory", NULL, KM_INTERNAL },
-
-	{ OP_INT_CANCEL_SETFILTER, "XXXNOKEY-cancel-setfilter", "cancel-setfilter", NULL, KM_INTERNAL },
-
 	{ OP_INT_BM_END, "XXXNOKEY-bm-end", "bm-end", NULL, KM_INTERNAL },
+	*/
 
 	{ OP_INT_END_QUESTION, "XXXNOKEY-end-question", "end-question", NULL, KM_INTERNAL },
 	{ OP_INT_CANCEL_QNA, "XXXNOKEY-cancel-qna", "cancel-qna", NULL, KM_INTERNAL },

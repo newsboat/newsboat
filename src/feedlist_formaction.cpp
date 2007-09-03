@@ -55,30 +55,6 @@ void feedlist_formaction::prepare() {
 
 void feedlist_formaction::process_operation(operation op) {
 	switch (op) {
-		case OP_INT_PREV_FILTERHISTORY:
-			f->set("filtertext", filterhistory.prev());
-			break;
-		case OP_INT_NEXT_FILTERHISTORY:
-			f->set("filtertext", filterhistory.next());
-			break;
-		case OP_INT_CANCEL_SETFILTER:
-			f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
-			break;
-		case OP_INT_END_SETFILTER: {
-				std::string filtertext = f->get("filtertext");
-				f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
-				filterhistory.add_line(filtertext);
-				if (filtertext.length() > 0) {
-					if (!m.parse(filtertext)) {
-						v->show_error(_("Error: couldn't parse filter command!"));
-						m.parse(FILTER_UNREAD_FEEDS);
-					} else {
-						apply_filter = true;
-						do_redraw = true;
-					}
-				}
-			}
-			break;
 		case OP_OPEN: {
 				if (f->get_focus() == "feeds") {
 					std::string feedpos = f->get("feedposname");
@@ -219,10 +195,9 @@ void feedlist_formaction::process_operation(operation op) {
 			do_redraw = true;
 			break;
 		case OP_SETFILTER: {
-				char buf[256];
-				snprintf(buf,sizeof(buf), "{hbox[lastline] .expand:0 {label .expand:0 text:\"%s\"}{input[filter] modal:1 on_ESC:cancel-setfilter on_ENTER:end-setfilter on_UP:prev-filterhistory on_DOWN:next-filterhistory .expand:h text[filtertext]:\"\"}}", _("Filter: "));
-				f->modify("lastline", "replace", buf);
-				f->set_focus("filter");
+				std::vector<std::pair<std::string, std::string> > qna;
+				qna.push_back(std::pair<std::string,std::string>(_("Filter: "), ""));
+				this->start_qna(qna, OP_INT_END_SETFILTER, &filterhistory);
 			}
 			break;
 		case OP_QUIT:
@@ -446,6 +421,20 @@ void feedlist_formaction::finished_qna(operation op) {
 	formaction::finished_qna(op); // important!
 
 	switch (op) {
+		case OP_INT_END_SETFILTER: {
+				std::string filtertext = qna_responses[0];
+				filterhistory.add_line(filtertext);
+				if (filtertext.length() > 0) {
+					if (!m.parse(filtertext)) {
+						v->show_error(_("Error: couldn't parse filter command!"));
+						m.parse(FILTER_UNREAD_FEEDS);
+					} else {
+						apply_filter = true;
+						do_redraw = true;
+					}
+				}
+			}
+			break;
 		case OP_INT_START_SEARCH: {
 				v->set_status(_("Searching..."));
 				std::string searchphrase = qna_responses[0];

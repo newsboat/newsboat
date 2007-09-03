@@ -19,30 +19,6 @@ itemlist_formaction::~itemlist_formaction() { }
 void itemlist_formaction::process_operation(operation op) {
 	bool quit = false;
 	switch (op) {
-		case OP_INT_PREV_FILTERHISTORY:
-			f->set("filtertext", filterhistory.prev());
-			break;
-		case OP_INT_NEXT_FILTERHISTORY:
-			f->set("filtertext", filterhistory.next());
-			break;
-		case OP_INT_CANCEL_SETFILTER:
-			f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
-			break;
-		case OP_INT_END_SETFILTER: {
-				std::string filtertext = f->get("filtertext");
-				f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
-				filterhistory.add_line(filtertext);
-				if (filtertext.length() > 0) {
-					if (!m.parse(filtertext)) {
-						v->show_error(_("Error: couldn't parse filter command!"));
-					} else {
-						apply_filter = true;
-						update_visible_items = true;
-						do_redraw = true;
-					}
-				}
-			}
-			break;
 		case OP_OPEN: {
 				std::string itemposname = f->get("itempos");
 				GetLogger().log(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
@@ -223,10 +199,9 @@ void itemlist_formaction::process_operation(operation op) {
 
 			break;
 		case OP_SETFILTER: {
-				char buf[256];
-				snprintf(buf,sizeof(buf), "{hbox[lastline] .expand:0 {label .expand:0 text:\"%s\"}{input[filter] modal:1 on_ESC:cancel-setfilter on_ENTER:end-setfilter on_UP:prev-filterhistory on_DOWN:next-filterhistory .expand:h text[filtertext]:\"\"}}", _("Filter: "));
-				f->modify("lastline", "replace", buf);
-				f->set_focus("filter");
+				std::vector<std::pair<std::string, std::string> > qna;
+				qna.push_back(std::pair<std::string,std::string>(_("Filter: "), ""));
+				this->start_qna(qna, OP_INT_END_SETFILTER, &filterhistory);
 			}
 			break;
 		case OP_CLEARFILTER:
@@ -246,6 +221,20 @@ void itemlist_formaction::finished_qna(operation op) {
 	formaction::finished_qna(op); // important!
 
 	switch (op) {
+		case OP_INT_END_SETFILTER: {
+				std::string filtertext = qna_responses[0];
+				filterhistory.add_line(filtertext);
+				if (filtertext.length() > 0) {
+					if (!m.parse(filtertext)) {
+						v->show_error(_("Error: couldn't parse filter command!"));
+					} else {
+						apply_filter = true;
+						update_visible_items = true;
+						do_redraw = true;
+					}
+				}
+			}
+			break;
 		case OP_INT_EDITFLAGS_END: {
 				std::string itemposname = f->get("itempos");
 				if (itemposname.length() > 0) {
