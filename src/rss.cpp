@@ -423,7 +423,7 @@ rss_item& rss_feed::get_item_by_guid(const std::string& guid) {
 		}
 	}
 	GetLogger().log(LOG_DEBUG, "rss_feed::get_item_by_guid: hit dummy item!");
-	abort();
+	// abort();
 	static rss_item dummy_item(0); // should never happen!
 	return dummy_item;
 }
