@@ -328,6 +328,13 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						prepare_newline(curline, indent_level);
 						inside_pre = false;
 						break;
+					case TAG_A:
+					case TAG_EMBED:
+					case TAG_BR:
+					case TAG_ITUNESHACK:
+					case TAG_IMG:
+						// ignore closing tags
+						break;
 				}
 				break;
 
