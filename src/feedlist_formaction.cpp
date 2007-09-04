@@ -54,15 +54,15 @@ void feedlist_formaction::prepare() {
 }
 
 void feedlist_formaction::process_operation(operation op) {
+	std::string feedpos = f->get("feedposname");
+	std::istringstream posname(feedpos);
+	unsigned int pos = 0;
+	posname >> pos;
 	switch (op) {
 		case OP_OPEN: {
 				if (f->get_focus() == "feeds") {
-					std::string feedpos = f->get("feedposname");
 					GetLogger().log(LOG_INFO, "feedlist_formaction: opening feed at position `%s'",feedpos.c_str());
 					if (feeds_shown > 0 && feedpos.length() > 0) {
-						std::istringstream posname(feedpos);
-						unsigned int pos = 0;
-						posname >> pos;
 						v->push_itemlist(pos);
 					} else {
 						v->show_error(_("No feed selected!")); // should not happen
@@ -71,12 +71,8 @@ void feedlist_formaction::process_operation(operation op) {
 			}
 			break;
 		case OP_RELOAD: {
-				std::string feedposname = f->get("feedposname");
 				GetLogger().log(LOG_INFO, "feedlist_formaction: reloading feed at position `%s'",feedposname.c_str());
 				if (feeds_shown > 0 && feedposname.length() > 0) {
-					std::istringstream posname(feedposname);
-					unsigned int pos = 0;
-					posname >> pos;
 					v->get_ctrl()->reload(pos);
 				} else {
 					v->show_error(_("No feed selected!")); // should not happen
@@ -91,13 +87,9 @@ void feedlist_formaction::process_operation(operation op) {
 			v->get_ctrl()->start_reload_all_thread();
 			break;
 		case OP_MARKFEEDREAD: {
-				std::string feedposname = f->get("feedposname");
 				GetLogger().log(LOG_INFO, "feedlist_formaction: marking feed read at position `%s'",feedposname.c_str());
 				if (feeds_shown > 0 && feedposname.length() > 0) {
 					v->set_status(_("Marking feed read..."));
-					std::istringstream posname(feedposname);
-					unsigned int pos = 0;
-					posname >> pos;
 					try {
 						v->get_ctrl()->mark_all_read(pos);
 						do_redraw = true;

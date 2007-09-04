@@ -18,14 +18,16 @@ itemlist_formaction::~itemlist_formaction() { }
 
 void itemlist_formaction::process_operation(operation op) {
 	bool quit = false;
+
+	std::string itemposname = f->get("itempos");
+	std::istringstream posname(itemposname);
+	unsigned int itempos;
+	posname >> itempos;
+
 	switch (op) {
 		case OP_OPEN: {
-				std::string itemposname = f->get("itempos");
 				GetLogger().log(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0) {
-					std::istringstream posname(itemposname);
-					unsigned int itempos = 0;
-					posname >> itempos;
 					v->push_itemview(feed, visible_items[itempos].first->guid());
 					do_redraw = true;
 				} else {
@@ -34,12 +36,8 @@ void itemlist_formaction::process_operation(operation op) {
 			}
 			break;
 		case OP_OPENINBROWSER: {
-				std::string itemposname = f->get("itempos");
 				GetLogger().log(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0) {
-					std::istringstream posname(itemposname);
-					unsigned int itempos = 0;
-					posname >> itempos;
 					if (itempos < visible_items.size()) {
 						v->open_in_browser(visible_items[itempos].first->link());
 						do_redraw = true;
@@ -50,12 +48,8 @@ void itemlist_formaction::process_operation(operation op) {
 			}
 			break;
 		case OP_BOOKMARK: {
-				std::string itemposname = f->get("itempos");
 				GetLogger().log(LOG_INFO, "itemlist_formaction: bookmarking item at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0) {
-					std::istringstream posname(itemposname);
-					unsigned int itempos = 0;
-					posname >> itempos;
 					if (itempos < visible_items.size()) {
 						this->start_bookmark_qna(visible_items[itempos].first->title(), visible_items[itempos].first->link(), "");
 					}
@@ -65,11 +59,7 @@ void itemlist_formaction::process_operation(operation op) {
 			}
 			break;
 		case OP_EDITFLAGS: {
-				std::string itemposname = f->get("itempos");
 				if (itemposname.length() > 0) {
-					std::istringstream posname(itemposname);
-					unsigned int itempos = 0;
-					posname >> itempos;
 					if (itempos < visible_items.size()) {
 						std::vector<std::pair<std::string, std::string> > qna;
 						qna.push_back(std::pair<std::string,std::string>(_("Flags: "), visible_items[itempos].first->flags()));
@@ -83,13 +73,8 @@ void itemlist_formaction::process_operation(operation op) {
 		case OP_SAVE: 
 			{
 				char buf[1024];
-				std::string itemposname = f->get("itempos");
 				GetLogger().log(LOG_INFO, "itemlist_formaction: saving item at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0) {
-					std::istringstream posname(itemposname);
-					unsigned int itempos = 0;
-					posname >> itempos;
-					
 					std::string filename = v->run_filebrowser(FBT_SAVE,v->get_filename_suggestion(visible_items[itempos].first->title()));
 					if (filename == "") {
 						v->show_error(_("Aborted saving."));
@@ -159,12 +144,8 @@ void itemlist_formaction::process_operation(operation op) {
 			}
 			break;
 		case OP_TOGGLEITEMREAD: {
-				std::string itemposname = f->get("itempos");
 				GetLogger().log(LOG_INFO, "itemlist_formaction: toggling item read at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0) {
-					std::istringstream posname(itemposname);
-					unsigned int itempos = 0;
-					posname >> itempos;
 					v->set_status(_("Toggling read flag for article..."));
 					try {
 						visible_items[itempos].first->set_unread(!visible_items[itempos].first->unread());
