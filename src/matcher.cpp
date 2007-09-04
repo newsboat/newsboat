@@ -34,10 +34,22 @@ bool matcher::parse(const std::string& expr) {
 }
 
 bool matcher::matches(matchable* item) {
-	bool retval = false;
-	if (item) {
-		struct timeval tv1, tv2;
-		gettimeofday(&tv1, NULL);
+	/*
+	 * with this method, every class that is derived from matchable can be
+	 * matched against a filter expression that was previously passed to the
+	 * class with the parse() method.
+	 *
+	 * This makes it easy to use the matcher virtually everywhere, since C++
+	 * allows multiple inheritance (i.e. deriving from matchable can even be
+	 * used in class hierarchies), and deriving from matchable means that you
+	 * only have to implement two methods has_attribute() and get_attribute().
+	 *
+	 * The whole matching code is speed-critical, as the matching happens on a
+	 * lot of different occassions, and slow matching can be easily measured
+	 * (and felt by the user) on slow computers with a lot of items to match.
+	 */
+	bool retval = false; if (item) { struct timeval tv1, tv2;
+	gettimeofday(&tv1, NULL);
 
 		retval = matches_r(p.get_root(), item);
 
@@ -52,14 +64,18 @@ bool matcher::matches_r(expression * e, matchable * item) {
 	if (e) {
 		bool retval;
 		switch (e->op) {
+			/* the operator "and" and "or" simply connect two different subexpressions */
 			case LOGOP_AND:
 				retval = matches_r(e->l, item);
 				retval = retval && matches_r(e->r, item); // short-circuit evaulation in C -> short circuit evaluation in the filter language
 				break;
+
 			case LOGOP_OR:
 				retval = matches_r(e->l, item);
 				retval = retval || matches_r(e->r, item); // same here
 				break;
+
+			/* while the other operator connect an attribute with a value */
 			case MATCHOP_EQ:
 				if (item->has_attribute(e->name))
 					retval = (item->get_attribute(e->name)==e->literal);
@@ -68,6 +84,7 @@ bool matcher::matches_r(expression * e, matchable * item) {
 					throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
 				}
 				break;
+
 			case MATCHOP_NE:
 				if (item->has_attribute(e->name))
 					retval = (item->get_attribute(e->name)!=e->literal);
@@ -76,6 +93,7 @@ bool matcher::matches_r(expression * e, matchable * item) {
 					throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
 				}
 				break;
+
 			case MATCHOP_LT: {
 					if (!item->has_attribute(e->name))
 						throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
@@ -87,6 +105,7 @@ bool matcher::matches_r(expression * e, matchable * item) {
 					return iatt < ilit;
 				}
 				break;
+
 			case MATCHOP_GT: {
 					if (!item->has_attribute(e->name))
 						throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
@@ -98,6 +117,7 @@ bool matcher::matches_r(expression * e, matchable * item) {
 					return iatt > ilit;
 				}
 				break;
+
 			case MATCHOP_LE: {
 					if (!item->has_attribute(e->name))
 						throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
@@ -109,6 +129,7 @@ bool matcher::matches_r(expression * e, matchable * item) {
 					return iatt <= ilit;
 				}
 				break;
+
 			case MATCHOP_GE: {
 					if (!item->has_attribute(e->name))
 						throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
@@ -120,6 +141,7 @@ bool matcher::matches_r(expression * e, matchable * item) {
 					return iatt >= ilit;
 				}
 				break;
+
 			case MATCHOP_RXEQ: {
 					if (!item->has_attribute(e->name))
 						throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
@@ -133,6 +155,7 @@ bool matcher::matches_r(expression * e, matchable * item) {
 						retval = false;
 				}
 				break;
+
 			case MATCHOP_RXNE: {
 					if (!item->has_attribute(e->name))
 						throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
@@ -150,6 +173,7 @@ bool matcher::matches_r(expression * e, matchable * item) {
 					}
 				}
 				break;
+
 			case MATCHOP_CONTAINS: {
 					if (!item->has_attribute(e->name))
 						throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
@@ -164,6 +188,7 @@ bool matcher::matches_r(expression * e, matchable * item) {
 					}
 				}
 				break;
+
 			case MATCHOP_CONTAINSNOT: {
 					if (!item->has_attribute(e->name))
 						throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
@@ -178,6 +203,7 @@ bool matcher::matches_r(expression * e, matchable * item) {
 					}
 				}
 				break;
+
 			default:
 				GetLogger().log(LOG_ERROR, "matcher::matches_r: invalid operator %d", e->op);
 				assert(false); // that's an error condition

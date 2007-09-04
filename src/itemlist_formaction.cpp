@@ -19,6 +19,11 @@ itemlist_formaction::~itemlist_formaction() { }
 void itemlist_formaction::process_operation(operation op) {
 	bool quit = false;
 
+	/*
+	 * most of the operations go like this:
+	 *   - extract the current position
+	 *   - if an item was selected, then fetch it and do something with it
+	 */
 	std::string itemposname = f->get("itempos");
 	std::istringstream posname(itemposname);
 	unsigned int itempos;
@@ -275,6 +280,12 @@ void itemlist_formaction::do_update_visible_items() {
 	if (visible_items.size() > 0)
 		visible_items.erase(visible_items.begin(), visible_items.end());
 
+	/*
+	 * this method doesn't redraw, all it does is to go through all
+	 * items of a feed, and fill the visible_items vector by checking
+	 * (if applicable) whether an items matches the currently active filter.
+	 */
+
 	unsigned int i=0;
 	for (std::vector<rss_item>::iterator it = items.begin(); it != items.end(); ++it, ++i) {
 		if (!apply_filter || m.matches(&(*it))) {
@@ -364,6 +375,9 @@ void itemlist_formaction::init() {
 
 void itemlist_formaction::set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url) {
 	char buf[1024];
+	/*
+	 * Since the itemlist_formaction is also used to display search results, we always need to set the right title
+	 */
 	if (!show_searchresult) {
 		snprintf(buf, sizeof(buf), _("%s %s - Articles in feed '%s' (%u unread, %u total) - %s"), PROGRAM_NAME, PROGRAM_VERSION, s.c_str(), unread, total, url.c_str());
 	} else {

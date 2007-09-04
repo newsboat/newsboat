@@ -120,11 +120,11 @@ void view::set_bindings() {
 void view::set_status_unlocked(const char * msg) {
 	if (formaction_stack.size() > 0 && (*formaction_stack.begin()) != NULL) {
 		stfl::form * form = (*formaction_stack.begin())->get_form();
-		GetLogger().log(LOG_DEBUG, "view::set_status: form = %p", form);
+		// GetLogger().log(LOG_DEBUG, "view::set_status: form = %p", form);
 		form->set("msg",msg);
-		GetLogger().log(LOG_DEBUG, "view::set_status: after form.set");
+		// GetLogger().log(LOG_DEBUG, "view::set_status: after form.set");
 		form->run(-1);
-		GetLogger().log(LOG_DEBUG, "view::set_status: after form.run");
+		// GetLogger().log(LOG_DEBUG, "view::set_status: after form.run");
 	}
 }
 
@@ -140,27 +140,41 @@ void view::show_error(const char * msg) {
 }
 
 void view::run() {
+	/*
+	 * This is the main "event" loop of newsbeuter.
+	 */
 
 	feedlist->init();
 	itemlist->init();
 
 	while (formaction_stack.size() > 0) {
+		// first, we take the current formaction.
 		formaction * fa = *(formaction_stack.begin());
 
+		// we signal "oh, you will receive an operation soon"
 		fa->prepare();
 
+		// we then receive the event and ignore timeouts.
 		const char * event = fa->get_form()->run(1000);
 		if (!event || strcmp(event,"TIMEOUT")==0) continue;
 
+		// retrieve operation code through the keymap
 		operation op = keys->get_operation(event);
 
 		GetLogger().log(LOG_DEBUG, "view::run: event = %s op = %u", event, op);
 
+		// the redraw keybinding is handled globally so
+		// that it doesn't need to be handled by all
+		// formactions. We simply reset the screen, the
+		// next time stfl_run() is called, it will be
+		// reinitialized, anyway, and thus we can secure
+		// that everything is redrawn.
 		if (OP_REDRAW == op) {
 			stfl::reset();
 			continue;
 		}
 
+		// now we handle the operation to the formaction.
 		fa->process_op(op);
 	}
 
@@ -199,6 +213,10 @@ std::string view::run_modal(formaction * f, const std::string& value) {
 }
 
 std::string view::get_filename_suggestion(const std::string& s) {
+	/*
+	 * With this function, we generate normalized filenames for saving
+	 * articles to files.
+	 */
 	std::string retval;
 	for (unsigned int i=0;i<s.length();++i) {
 		if (isalnum(s[i]))
@@ -215,6 +233,7 @@ std::string view::get_filename_suggestion(const std::string& s) {
 }
 
 void view::write_item(const rss_item& item, const std::string& filename) {
+	// TODO: move this to the controller.
 	std::vector<std::string> lines;
 	std::vector<linkpair> links; // not used
 	
@@ -498,6 +517,7 @@ void view::set_colors(const colormanager& colorman) {
 		filebrowser->get_form()->set(fgcit->first, colorattr);
 		urlview->get_form()->set(fgcit->first, colorattr);
 		selecttag->get_form()->set(fgcit->first, colorattr);
+		searchresult->get_form()->set(fgcit->first, colorattr);
 
 		if (fgcit->first == "article") {
 			std::string styleend_str;

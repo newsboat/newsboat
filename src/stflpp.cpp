@@ -7,6 +7,14 @@
 
 using namespace newsbeuter;
 
+/*
+ * This is a wrapper around the low-level C functions of STFL.
+ * In order to make working with std::string easier, this wrapper
+ * was created. This is also useful for logging all stfl-related
+ * operations if necessary, and for working around bugs in STFL,
+ * especially related to stuff like multithreading fuckups.
+ */
+
 stfl::form::form(const std::string& text) : f(0) {
 	ipool = stfl_ipool_create(nl_langinfo(CODESET));
 	if (!ipool) {

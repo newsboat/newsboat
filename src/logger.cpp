@@ -8,6 +8,9 @@ namespace newsbeuter {
 logger::logger() : curlevel(LOG_NONE) { }
 
 void logger::set_logfile(const char * logfile) {
+	/*
+	 * This sets the filename of the debug logfile
+	 */
 	mtx.lock();
 	if (f.is_open())
 		f.close();
@@ -20,6 +23,9 @@ void logger::set_logfile(const char * logfile) {
 }
 
 void logger::set_errorlogfile(const char * logfile) {
+	/*
+	 * This sets the filename of the error logfile, i.e. the one that can be configured to be generated.
+	 */
 	mtx.lock();
 	if (ef.is_open())
 		ef.close();
@@ -45,6 +51,10 @@ void logger::set_loglevel(loglevel level) {
 const char * loglevel_str[] = { "NONE", "USERERROR", "CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG" };
 
 void logger::log(loglevel level, const char * format, ...) {
+	/*
+	 * This function checks the loglevel, creates the error message, and then
+	 * writes it to the debug logfile and to the error logfile (if applicable).
+	 */
 	mtx.lock();
 	if (level <= curlevel && curlevel > LOG_NONE && (f.is_open() || ef.is_open())) {
 		char * buf, * logmsgbuf;
@@ -81,6 +91,9 @@ void logger::log(loglevel level, const char * format, ...) {
 }
 
 logger& GetLogger() {
+	/*
+	 * This is the global logger that everyone uses
+	 */
 	static logger theLogger;
 	return theLogger;
 }

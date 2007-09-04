@@ -14,6 +14,9 @@ struct op_desc {
 	unsigned short flags;
 };
 
+/*
+ * This is the list of operations, defining operation, operation name (for keybindings), default key, description, and where it's valid
+ */
 static op_desc opdescs[] = {
 	{ OP_OPEN, "open", "ENTER", _("Open feed/article"), KM_NEWSBEUTER },
 	{ OP_QUIT, "quit", "q", _("Return to previous dialog/Quit"), KM_BOTH },
@@ -56,13 +59,6 @@ static op_desc opdescs[] = {
 	{ OP_SK_PGUP, "pageup", "PAGEUP", NULL, KM_SYSKEYS },
 	{ OP_SK_PGDOWN, "pagedown", "PAGEDOWN", NULL, KM_SYSKEYS },
 
-	// internal messages with no actual keypresses behind them
-	/*
-	{ OP_INT_END_CMDLINE, "XXXNOKEY-end-cmdline", "end-cmdline", NULL, KM_INTERNAL },
-	{ OP_INT_END_SETFILTER, "XXXNOKEY-end-setfilter", "end-setfilter", NULL, KM_INTERNAL },
-	{ OP_INT_BM_END, "XXXNOKEY-bm-end", "bm-end", NULL, KM_INTERNAL },
-	*/
-
 	{ OP_INT_END_QUESTION, "XXXNOKEY-end-question", "end-question", NULL, KM_INTERNAL },
 	{ OP_INT_CANCEL_QNA, "XXXNOKEY-cancel-qna", "cancel-qna", NULL, KM_INTERNAL },
 	{ OP_INT_QNA_NEXTHIST, "XXXNOKEY-qna-next-history", "qna-next-history", NULL, KM_INTERNAL },
@@ -72,6 +68,9 @@ static op_desc opdescs[] = {
 };
 
 keymap::keymap(unsigned flags) { 
+	/*
+	 * At startup, initialize the keymap with the default settings from the list above.
+	 */
 	for (int i=0;opdescs[i].op != OP_NIL;++i) {
 		if (opdescs[i].flags & (flags | KM_INTERNAL | KM_SYSKEYS)) {
 			keymap_[opdescs[i].default_key] = opdescs[i].op;
@@ -80,6 +79,10 @@ keymap::keymap(unsigned flags) {
 }
 
 void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned short flags) {
+	/*
+	 * Here we return the keymap descriptions for the specified application (handed to us via flags)
+	 * This is used for the help screen.
+	 */
 	for (std::map<std::string,operation>::iterator it=keymap_.begin();it!=keymap_.end();++it) {
 		operation op = it->second;
 		if (op != OP_NIL) {
@@ -151,6 +154,10 @@ operation keymap::get_operation(const std::string& keycode) {
 }
 
 action_handler_status keymap::handle_action(const std::string& action, const std::vector<std::string>& params) {
+	/*
+	 * The keymap acts as config_action_handler so that all the key-related configuration is immediately
+	 * handed to it.
+	 */
 	GetLogger().log(LOG_DEBUG,"keymap::handle_action(%s, ...) called",action.c_str());
 	if (action == "bind-key") {
 		if (params.size() < 2) {

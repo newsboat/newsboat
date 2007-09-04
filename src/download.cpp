@@ -5,6 +5,11 @@
 
 namespace podbeuter {
 
+/*
+ * the download class represents a single download entry in podbeuter.
+ * It manages the filename, the URL, the current state, the progress, etc.
+ */
+
 download::download(pb_controller * c) : dlstatus(DL_QUEUED), cursize(0.0), totalsize(0.0), curkbps(0.0), offs(0), ctrl(c) {
 }
 

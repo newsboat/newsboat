@@ -28,6 +28,11 @@ void filebrowser_formaction::process_operation(operation op) {
 	switch (op) {
 		case OP_OPEN: 
 			{
+				/*
+				 * whenever "ENTER" is hit, we need to distinguish two different cases:
+				 *   - the focus is in the list of files, then we need to set the filename field to the currently selected entry
+				 *   - the focus is in the filename field, then the filename needs to be returned.
+				 */
 				GetLogger().log(LOG_DEBUG,"filebrowser_formaction: 'opening' item");
 				std::string focus = f->get_focus();
 				if (focus.length() > 0) {
@@ -79,6 +84,10 @@ void filebrowser_formaction::process_operation(operation op) {
 						bool do_pop = true;
 						std::string fn = f->get("filenametext");
 						struct stat sbuf;
+						/*
+						 * this check is very important, as people will kill us if they accidentaly overwrote their files
+						 * with no further warning...
+						 */
 						if (::stat(fn.c_str(), &sbuf)!=-1 && type == FBT_SAVE) {
 							char lbuf[2048];
 							snprintf(lbuf,sizeof(lbuf), _("Do you really want to overwrite `%s' (y:Yes n:No)? "), fn.c_str());
@@ -104,6 +113,11 @@ void filebrowser_formaction::process_operation(operation op) {
 }
 
 void filebrowser_formaction::prepare() {
+	/* 
+	 * prepare is always called before an operation is processed,
+	 * and if a redraw is necessary, it updates the list of files
+	 * in the current directory.
+	 */
 	if (do_redraw) {
 		char cwdtmp[MAXPATHLEN];
 		std::string code = "{list";
@@ -236,7 +250,7 @@ std::string filebrowser_formaction::add_file(std::string filename) {
 		
 		retval = "{listitem[";
 		retval.append(1,ftype);
-		retval.append(fancy_quote(filename));
+		retval.append(fancy_quote(filename)); // TODO: replace fancy_quote() with stfl::quote()
 		retval.append("] text:");
 		retval.append(stfl::quote(line));
 		retval.append("}");
@@ -258,34 +272,11 @@ std::string filebrowser_formaction::fancy_unquote(const std::string& s) {
 
 std::string filebrowser_formaction::get_rwx(unsigned short val) {
 	std::string str;
+	const char * bitstrs[] = { "---", "--x", "-w-", "-wx", "r--", "r-x", "rw-", "rwx" };
 	for (int i=0;i<3;++i) {
 		unsigned char bits = val % 8;
 		val /= 8;
-		switch (bits) {
-			case 0:
-				str = std::string("---") + str;
-				break;
-			case 1:
-				str = std::string("--x") + str;
-				break;
-			case 2:
-				str = std::string("-w-") + str;
-				break;
-			case 3:
-				str = std::string("-wx") + str;
-				break;
-			case 4:
-				str = std::string("r--") + str;
-				break;
-			case 5:
-				str = std::string("r-x") + str;
-				break;
-			case 6:
-				str = std::string("rw-") + str;
-				break;
-			case 7:
-				str = std::string("rwx") + str;
-		}	
+		str.insert(0, bitstrs[bits]);
 	}
 	return str;
 }

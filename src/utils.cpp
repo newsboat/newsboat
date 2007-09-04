@@ -15,6 +15,27 @@
 namespace newsbeuter {
 
 std::vector<std::string> utils::tokenize_quoted(const std::string& str, std::string delimiters) {
+	/*
+	 * This function tokenizes strings, obeying quotes and throwing away comments that start
+	 * with a '#'.
+	 *
+	 * e.g. line: foo bar "foo bar" "a test"
+	 * is parsed to 4 elements:
+	 * 	[0]: foo
+	 * 	[1]: bar
+	 * 	[2]: foo bar
+	 * 	[3]: a test
+	 *
+	 * e.g. line: yes great "x\ny" # comment
+	 * is parsed to 3 elements:
+	 * 	[0]: yes
+	 * 	[1]: great
+	 * 	[2]: x
+	 * 	y
+	 *
+	 * 	\", \r, \n, \t and \v are replaced with the literals that you know from C/C++ strings.
+	 *
+	 */
 	bool attach_backslash = true;
 	std::vector<std::string> tokens;
 	std::string::size_type last_pos = str.find_first_not_of(delimiters, 0);
@@ -107,6 +128,9 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str, std::str
 
 	
 std::vector<std::string> utils::tokenize(const std::string& str, std::string delimiters) {
+	/*
+	 * This function tokenizes a string by the delimiters. Plain and simple.
+	 */
 	std::vector<std::string> tokens;
 	std::string::size_type last_pos = str.find_first_not_of(delimiters, 0);
 	std::string::size_type pos = str.find_first_of(delimiters, last_pos);

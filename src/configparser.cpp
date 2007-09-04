@@ -20,6 +20,9 @@ configparser::configparser() {
 configparser::~configparser() { }
 
 action_handler_status configparser::handle_action(const std::string& action, const std::vector<std::string>& params) {
+	/*
+	 * configparser also acts as config_action_handler to implement to recursive "include" command.
+	 */
 	if (action == "include") {
 		if (params.size() < 1) {
 			return AHS_TOO_FEW_PARAMS;
@@ -54,6 +57,18 @@ action_handler_status configparser::handle_action(const std::string& action, con
 }
 
 bool configparser::parse(const std::string& filename) {
+	/*
+	 * this function parses a config file.
+	 *
+	 * First, it checks whether this file has already been included, and if not,
+	 * it does the following:
+	 *   - open the file
+	 *   - read if line by line
+	 *   - tokenize every line
+	 *   - if there is at least one token, look up a registered config_action_handler to handle to command (which is specified in the first token)
+	 *   - hand over the tokenize results to the config_action_handler
+	 *   - if an error happens, react accordingly.
+	 */
 	char buf[1024];
 	if (included_files.find(filename) != included_files.end()) {
 		GetLogger().log(LOG_WARN, "configparser::parse: file %s has already been included", filename.c_str());

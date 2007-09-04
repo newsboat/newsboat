@@ -6,6 +6,12 @@
 
 namespace newsbeuter {
 
+/*
+ * The urlview_formaction is probably the simplest dialog of all. It
+ * displays a list of URLs, and makes it possible to open the URLs
+ * in a browser or to bookmark them.
+ */
+
 urlview_formaction::urlview_formaction(view * vv, std::string formstr)
 	: formaction(vv, formstr), quit(false) { }
 

@@ -24,12 +24,16 @@ feedlist_formaction::feedlist_formaction(view * vv, std::string formstr)
 void feedlist_formaction::init() {
 	set_keymap_hints();
 
-	// XXX: does this even work with no element on the formaction_stack ?
 	if(v->get_ctrl()->get_refresh_on_start()) {
 		f->run(-1);
 		v->get_ctrl()->start_reload_all_thread();
 	}
 
+	/*
+	 * This is kind of a hack.
+	 * The feedlist_formaction is responsible for starting up the reloadthread, which is responsible
+	 * for regularly spawning downloadthreads.
+	 */
 	unsigned int reload_cycle = 60 * static_cast<unsigned int>(v->get_cfg()->get_configvalue_as_int("reload-time"));
 	if (v->get_cfg()->get_configvalue_as_bool("auto-reload") == true) {
 		f->run(-1);
@@ -71,8 +75,8 @@ void feedlist_formaction::process_operation(operation op) {
 			}
 			break;
 		case OP_RELOAD: {
-				GetLogger().log(LOG_INFO, "feedlist_formaction: reloading feed at position `%s'",feedposname.c_str());
-				if (feeds_shown > 0 && feedposname.length() > 0) {
+				GetLogger().log(LOG_INFO, "feedlist_formaction: reloading feed at position `%s'",feedpos.c_str());
+				if (feeds_shown > 0 && feedpos.length() > 0) {
 					v->get_ctrl()->reload(pos);
 				} else {
 					v->show_error(_("No feed selected!")); // should not happen
@@ -87,8 +91,8 @@ void feedlist_formaction::process_operation(operation op) {
 			v->get_ctrl()->start_reload_all_thread();
 			break;
 		case OP_MARKFEEDREAD: {
-				GetLogger().log(LOG_INFO, "feedlist_formaction: marking feed read at position `%s'",feedposname.c_str());
-				if (feeds_shown > 0 && feedposname.length() > 0) {
+				GetLogger().log(LOG_INFO, "feedlist_formaction: marking feed read at position `%s'",feedpos.c_str());
+				if (feeds_shown > 0 && feedpos.length() > 0) {
 					v->set_status(_("Marking feed read..."));
 					try {
 						v->get_ctrl()->mark_all_read(pos);
@@ -243,9 +247,12 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 		if (unread_count > 0)
 			++unread_feeds;
 
-		GetLogger().log(LOG_DEBUG, "feedlist_formaction::set_feedlist: before big if statement");
+		/*
+		 * we only display an entry in the feedlist if:
+		 *   - no tag is active, or the entry matches the currently selected tag
+		 *   - no filter shall be applied, or the entry matches the currently set filter
+		 */
 		if ((tag == "" || it->matches_tag(tag)) && (!apply_filter || m.matches(&(*it)))) {
-			GetLogger().log(LOG_DEBUG, "feedlist_formaction::set_feedlist: inside big if statement");
 			visible_feeds.push_back(std::pair<rss_feed *, unsigned int>(&(*it),i));
 
 			snprintf(sbuf,sizeof(buf),"(%u/%u) ",unread_count,static_cast<unsigned int>(it->items().size()));
@@ -266,7 +273,6 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 
 			++feeds_shown;
 		}
-		GetLogger().log(LOG_DEBUG, "feedlist_formaction::set_feedlist: outside big if statement");
 	}
 
 	code.append("}");
@@ -379,6 +385,13 @@ int feedlist_formaction::get_pos(unsigned int realidx) {
 
 void feedlist_formaction::handle_cmdline(const std::string& cmd) {
 	unsigned int idx = 0;
+	/*
+	 * this handle_cmdline is a bit different than the other ones.
+	 * Since we want to use ":30" to jump to the 30th entry, we first
+	 * need to check whether the command parses as unsigned integer,
+	 * and if so, jump to the entered entry. Otherwise, we try to
+	 * handle it as a normal command.
+	 */
 	if (1==sscanf(cmd.c_str(),"%u",&idx)) {
 		if (idx > 0 && idx <= (visible_feeds[visible_feeds.size()-1].second + 1)) {
 			int i = get_pos(idx - 1);

@@ -27,6 +27,12 @@ void itemview_formaction::init() {
 void itemview_formaction::prepare() {
 	static bool render_hack;
 
+	/*
+	 * whenever necessary, the item view is regenerated. This is done
+	 * by putting together the feed name, title, link, author, optional
+	 * flags and podcast download URL (enclosures) and then render the
+	 * HTML. The links extracted by the renderer are then appended, too.
+	 */
 	if (do_redraw) {
 		rss_item& item = feed->get_item_by_guid(guid);
 		std::string code = "{list";
@@ -137,6 +143,14 @@ void itemview_formaction::prepare() {
 
 void itemview_formaction::process_operation(operation op) {
 	rss_item& item = feed->get_item_by_guid(guid);
+
+	/*
+	 * whenever we process an operation, we mark the item
+	 * as read. Don't worry: when an item is already marked as
+	 * read, and then marked as read again, no database update
+	 * is done, since only _changes_ to the unread flag are
+	 * recorded in the database.
+	 */
 	try {
 		item.set_unread(false);
 	} catch (const dbexception& e) {
@@ -261,6 +275,11 @@ void itemview_formaction::set_head(const std::string& s) {
 }
 
 void itemview_formaction::render_source(std::vector<std::string>& lines, std::string desc, unsigned int width) {
+	/*
+	 * this function is called instead of htmlrenderer::render() when the
+	 * user requests to have the source displayed instead of seeing the
+	 * rendered HTML.
+	 */
 	std::string line;
 	do {
 		std::string::size_type pos = desc.find_first_of("\r\n");

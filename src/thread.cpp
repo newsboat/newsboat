@@ -4,6 +4,15 @@
 
 namespace newsbeuter {
 
+/*
+ * The thread class is a wrapper around the pthread functions found on virtually
+ * all modern Unix systems.
+ *
+ * To run a thread, you need to derive your own class from thread and implement the
+ * run() method. Then you create an instance of your derived class with the new
+ * operator (very important!), and run the start() method of the object. 
+ */
+
 
 thread::thread() {
 }

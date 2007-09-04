@@ -7,6 +7,13 @@
 
 namespace newsbeuter {
 
+/*
+ * The select_formaction is used both for the "select tag" dialog
+ * and the "select filter", as they do practically the same. That's
+ * why there is the decision between SELECTTAG and SELECTFILTER on
+ * a few places.
+ */
+
 select_formaction::select_formaction(view * vv, std::string formstr)
 	: formaction(vv, formstr) { }
 
@@ -33,12 +40,12 @@ void select_formaction::process_operation(operation op) {
 			break;
 		case OP_OPEN: {
 				std::string tagposname = f->get("tagposname");
+				std::istringstream posname(tagposname);
+				unsigned int pos = 0;
+				posname >> pos;
 				if (tagposname.length() > 0) {
 					switch (type) {
 					case SELECTTAG: {
-							std::istringstream posname(tagposname);
-							unsigned int pos = 0;
-							posname >> pos;
 							if (pos < tags.size()) {
 								value = tags[pos];
 								quit = true;
@@ -46,9 +53,6 @@ void select_formaction::process_operation(operation op) {
 						}
 						break;
 					case SELECTFILTER: {
-							std::istringstream posname(tagposname);
-							unsigned int pos = 0;
-							posname >> pos;
 							if (pos < filters.size()) {
 								value = filters[pos].second;
 								quit = true;

@@ -36,6 +36,9 @@ rss_feed rss_parser::parse() {
 		proxy_auth = const_cast<char *>(cfgcont->get_configvalue("proxy-auth").c_str());
 	}
 
+	/*
+	 * First we construct a fancy User-Agent header (which can be overridden by the user, BTW)
+	 */
 	char user_agent[1024];
 	std::string ua_pref = cfgcont->get_configvalue("user-agent");
 	if (ua_pref.length() == 0) {
@@ -46,6 +49,13 @@ rss_feed rss_parser::parse() {
 		snprintf(user_agent, sizeof(user_agent), "%s", ua_pref.c_str());
 	}
 
+	/*
+	 * This is a bit messy.
+	 *	- http:// and https:// URLs are downloaded and parsed regularly
+	 *	- exec: URLs are executed and their output is parsed
+	 *	- filter: URLs are downloaded, executed, and their output is parsed
+	 *	- query: URLs are ignored
+	 */
 	mrss_error_t err;
 	int my_errno = 0;
 	CURLcode ccode = CURLE_OK;
@@ -97,6 +107,15 @@ rss_feed rss_parser::parse() {
 			throw std::string(mrss_strerror(err));
 		}
 
+		/*
+		 * After parsing is done, we fill our feed object with title,
+		 * description, etc.  It's important to note that all data that comes
+		 * from mrss must be converted to UTF-8 before, because all data is
+		 * internally stored as UTF-8, and converted on-the-fly in case some
+		 * other encoding is required. This is because UTF-8 can hold all
+		 * available Unicode characters, unlike other non-Unicode encodings.
+		 */
+
 		const char * encoding = mrss->encoding ? mrss->encoding : "utf-8";
 
 		if (mrss->title) {
@@ -115,6 +134,10 @@ rss_feed rss_parser::parse() {
 
 		GetLogger().log(LOG_DEBUG, "rss_parser::parse: feed title = `%s' link = `%s'", feed.title().c_str(), feed.link().c_str());
 
+		/*
+		 * Then we iterate over all items. Each item is filled with title, description,
+		 * etc. and is then appended to the feed.
+		 */
 		for (mrss_item_t * item = mrss->item; item != NULL; item = item->next ) {
 			rss_item x(ch);
 			if (item->title) {
@@ -131,6 +154,14 @@ rss_feed rss_parser::parse() {
 
 			mrss_tag_t * content;
 
+			/*
+			 * There are so many different ways in use to transport the "content" or "description".
+			 * Why try a number of them to find the content, if possible:
+			 * 	- "content:encoded"
+			 * 	- Atom's "content"
+			 * 	- Apple's "itunes:summary" that can be found in iTunes-compatible podcasts
+			 * 	- last but not least, we try the standard description.
+			 */
 			if (mrss_search_tag(item, "encoded", "http://purl.org/rss/1.0/modules/content/", &content) == MRSS_OK && content) {
 				/* RSS 2.0 content:encoded */
 				GetLogger().log(LOG_DEBUG, "rss_parser::parse: found content:encoded: %s\n", content->value);
@@ -162,6 +193,11 @@ rss_feed rss_parser::parse() {
 			if (x.description().length() == 0 && mrss_search_tag(item, "summary", "http://www.itunes.com/dtds/podcast-1.0.dtd", &content) == MRSS_OK && content) {
 				GetLogger().log(LOG_DEBUG, "rss_parser::parse: found itunes:summary: %s\n", content->value);
 				if (content->value) {
+					/*
+					 * We put the <ituneshack> tags around the tags so that the HTML renderer
+					 * knows that it must not ignore the newlines. It is a really braindead
+					 * use of XML to depend on the exact interpretation of whitespaces.
+					 */
 					std::string desc = "<ituneshack>";
 					desc.append(utils::convert_text(content->value, "utf-8", encoding));
 					desc.append("</ituneshack>");
@@ -181,6 +217,13 @@ rss_feed rss_parser::parse() {
 			else
 				x.set_pubDate(::time(NULL));
 				
+			/*
+			 * We try to find a GUID (some unique identifier) for an item. If the regular
+			 * GUID is not available (oh, well, there are a few broken feeds around, after
+			 * all), we try out the link and the title, instead. This is suboptimal, of course,
+			 * because it makes it impossible to recognize duplicates when the title or the
+			 * link changes.
+			 */
 			if (item->guid)
 				x.set_guid(item->guid);
 			else if (item->link)

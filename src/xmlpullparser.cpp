@@ -13,6 +13,12 @@
 namespace newsbeuter
 {
 
+/*
+ * This method implements an "XML" pull parser. In reality, it's more liberal
+ * than any XML pull parser, as it basically accepts everything that even only
+ * remotely looks like XML. We use this parser for the HTML renderer.
+ */
+
 xmlpullparser::xmlpullparser() : inputstream(0), current_event(START_DOCUMENT)
 {
 }
@@ -72,6 +78,13 @@ bool xmlpullparser::isWhitespace() const {
 
 xmlpullparser::event xmlpullparser::next() {
 	// TODO: refactor this
+	/*
+	 * the next() method returns the next event by parsing the
+	 * next element of the XML stream, depending on the current
+	 * event. This is pretty messy, and contains quite a few
+	 * code duplications, so always watch out when modifying
+	 * anything here.
+	 */
 	if (attributes.size() > 0) {
 		attributes.erase(attributes.begin(), attributes.end());	
 	}

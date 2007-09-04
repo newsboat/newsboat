@@ -10,7 +10,22 @@
 
 using namespace newsbeuter;
 
-htmlrenderer::htmlrenderer(unsigned int width) : w(width) { }
+htmlrenderer::htmlrenderer(unsigned int width) : w(width) { 
+	tags["a"] = TAG_A;
+	tags["embed"] = TAG_EMBED;
+	tags["br"] = TAG_BR;
+	tags["pre"] = TAG_PRE;
+	tags["ituneshack"] = TAG_ITUNESHACK;
+	tags["img"] = TAG_IMG;
+	tags["blockquote"] = TAG_BLOCKQUOTE;
+	tags["p"] = TAG_P;
+	tags["ol"] = TAG_OL;
+	tags["ul"] = TAG_UL;
+	tags["li"] = TAG_LI;
+	tags["dt"] = TAG_DT;
+	tags["dd"] = TAG_DD;
+	tags["dl"] = TAG_DL;
+}
 
 void htmlrenderer::render(const std::string& source, std::vector<std::string>& lines, std::vector<linkpair>& links, const std::string& url) {
 	std::istringstream input(source);
@@ -68,193 +83,254 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 	bool inside_list = false, inside_li = false, is_ol = false, inside_pre = false;
 	bool itunes_hack = false;
 	unsigned int ol_count = 1;
+	htmltag current_tag;
 	
+	/*
+	 * to render the HTML, we use a self-developed "XML" pull parser.
+	 *
+	 * A pull parser works like this:
+	 *   - we feed it with an XML stream
+	 *   - we then gather an iterator
+	 *   - we then can iterate over all continuous elements, such as start tag, close tag, text element, ...
+	 */
 	xmlpullparser xpp;
 	xpp.setInput(input);
 	
 	for (xmlpullparser::event e = xpp.next(); e != xmlpullparser::END_DOCUMENT; e = xpp.next()) {	
 		switch (e) {
 			case xmlpullparser::START_TAG:
-				GetLogger().log(LOG_DEBUG,"htmlrenderer::render: found start tag %s",xpp.getText().c_str());
-				if (xpp.getText() == "a") {
-					std::string link;
-					try {
-						link = xpp.getAttributeValue("href");
-					} catch (const std::invalid_argument& ) {
-						GetLogger().log(LOG_WARN,"htmlrenderer::render: found a tag with no href attribute");
-						link = "";
-					}
-					if (link.length() > 0) {
-						unsigned int link_num = add_link(links,absolute_url(url,link), LINK_HREF);
-						std::ostringstream ref;
-						ref << "[" << link_num << "]";
-						curline.append(ref.str());
-					}
-				} else if (xpp.getText() == "embed") {
-					std::string type;
-					try {
-						type = xpp.getAttributeValue("type");
-					} catch (const std::invalid_argument& ) {
-						GetLogger().log(LOG_WARN, "htmlrenderer::render: found embed object without type attribute");
-						type = "";
-					}
-					if (type == "application/x-shockwave-flash") {
-						std::string link;
-						try {
-							link = xpp.getAttributeValue("src");
-						} catch (const std::invalid_argument& ) {
-							GetLogger().log(LOG_WARN, "htmlrenderer::render: found embed object without src attribute");
-							link = "";
+				current_tag = tags[xpp.getText()];
+				GetLogger().log(LOG_DEBUG,"htmlrenderer::render: found start tag %s (id = %u)",xpp.getText().c_str(), current_tag);
+				switch (current_tag) {
+					case TAG_A: {
+							std::string link;
+							try {
+								link = xpp.getAttributeValue("href");
+							} catch (const std::invalid_argument& ) {
+								GetLogger().log(LOG_WARN,"htmlrenderer::render: found a tag with no href attribute");
+								link = "";
+							}
+							if (link.length() > 0) {
+								unsigned int link_num = add_link(links,absolute_url(url,link), LINK_HREF);
+								std::ostringstream ref;
+								ref << "[" << link_num << "]";
+								curline.append(ref.str());
+							}
 						}
-						if (link.length() > 0) {
-							unsigned int link_num = add_link(links,absolute_url(url,link), LINK_EMBED);
-							std::ostringstream ref;
-							ref << "[" << _("embedded flash:") << " " << link_num  << "]";
-							curline.append(ref.str());
+						break;
+
+					case TAG_EMBED: {
+							std::string type;
+							try {
+								type = xpp.getAttributeValue("type");
+							} catch (const std::invalid_argument& ) {
+								GetLogger().log(LOG_WARN, "htmlrenderer::render: found embed object without type attribute");
+								type = "";
+							}
+							if (type == "application/x-shockwave-flash") {
+								std::string link;
+								try {
+									link = xpp.getAttributeValue("src");
+								} catch (const std::invalid_argument& ) {
+									GetLogger().log(LOG_WARN, "htmlrenderer::render: found embed object without src attribute");
+									link = "";
+								}
+								if (link.length() > 0) {
+									unsigned int link_num = add_link(links,absolute_url(url,link), LINK_EMBED);
+									std::ostringstream ref;
+									ref << "[" << _("embedded flash:") << " " << link_num  << "]";
+									curline.append(ref.str());
+								}
+							}
 						}
-					}
-				} else if (xpp.getText() == "br") {
-						//if (line_is_nonempty(curline))
+						break;
+
+					case TAG_BR:
 						GetLogger().log(LOG_DEBUG, "htmlrenderer::render: pushing back `%s'", curline.c_str());
 						lines.push_back(curline);
 						prepare_newline(curline, indent_level);	
-				} else if (xpp.getText() == "pre") {
-					inside_pre = true;
-					if (line_is_nonempty(curline))
-						lines.push_back(curline);
-					prepare_newline(curline, indent_level);	
-				} else if (xpp.getText() == "ituneshack") {
-					itunes_hack = true;
-				} else if (xpp.getText() == "img") {
-					std::string imgurl;
-					try {
-						imgurl = xpp.getAttributeValue("src");
-					} catch (const std::invalid_argument& ) {
-						GetLogger().log(LOG_WARN,"htmlrenderer::render: found img tag with no src attribute");
-						imgurl = "";
-					}
-					if (imgurl.length() > 0) {
-						unsigned int link_num = add_link(links,absolute_url(url,imgurl), LINK_IMG);
-						std::ostringstream ref;
-						ref << "[" << _("image") << " " << link_num << "]";
-						image_count++;
-						curline.append(ref.str());
-					}
-				} else if (xpp.getText() == "blockquote") {
-					++indent_level;
-					if (line_is_nonempty(curline))
-						lines.push_back(curline);
-					lines.push_back("");
-					prepare_newline(curline, indent_level);	
-				} else if (xpp.getText() == "p") {
-					if (line_is_nonempty(curline))
-						lines.push_back(curline);
-					if (lines.size() > 0 && lines[lines.size()-1].length() > static_cast<unsigned int>(indent_level*2))
-						lines.push_back("");
-					prepare_newline(curline, indent_level);	
-				} else if (xpp.getText() == "ol") {
-					inside_list = true;
-					is_ol = true;
-					ol_count = 1;
-					if (line_is_nonempty(curline))
-						lines.push_back(curline);
-					lines.push_back("");
-					prepare_newline(curline, indent_level);	
-				} else if (xpp.getText() == "ul") {
-					inside_list = true;
-					is_ol = false;
-					if (line_is_nonempty(curline))
-						lines.push_back(curline);
-					lines.push_back("");
-					prepare_newline(curline, indent_level);
-				} else if (xpp.getText() == "li") {
-					if (inside_li) {
-						indent_level-=2;
+						break;
+
+					case TAG_PRE:
+						inside_pre = true;
 						if (line_is_nonempty(curline))
 							lines.push_back(curline);
 						prepare_newline(curline, indent_level);	
-					}
-					inside_li = true;
-					if (line_is_nonempty(curline))
-						lines.push_back(curline);
-					prepare_newline(curline, indent_level);
-					indent_level+=2;
-					if (is_ol) {
-						std::ostringstream num;
-						num << ol_count;
-						if (ol_count < 10)
-							curline.append(" ");
-						curline.append(num.str());
-						curline.append(". ");
-						++ol_count;
-					} else {
-						curline.append("  * ");
-					}
-				} else if (xpp.getText() == "dt") {
-					if (line_is_nonempty(curline))
-						lines.push_back(curline);
-					prepare_newline(curline, indent_level);
-				} else if (xpp.getText() == "dd") {
-					indent_level+=4;
-					if (line_is_nonempty(curline))
-						lines.push_back(curline);
-					prepare_newline(curline, indent_level);
-				} else if (xpp.getText() == "dl") {
-					// ignore tag
-				}
-				break;
-			case xmlpullparser::END_TAG:
-				GetLogger().log(LOG_DEBUG, "htmlrenderer::render: found end tag %s",xpp.getText().c_str());
-				if (xpp.getText() == "blockquote") {
-					--indent_level;
-					if (indent_level < 0)
-						indent_level = 0;
-					if (line_is_nonempty(curline))
-						lines.push_back(curline);
-					lines.push_back("");
-					prepare_newline(curline, indent_level);
-				} else if (xpp.getText() == "ol" || xpp.getText() == "ul") {
-					inside_list = false;
-					if (inside_li) {
-						indent_level-=2;
+						break;
+
+					case TAG_ITUNESHACK:
+						itunes_hack = true;
+						break;
+
+					case TAG_IMG: {
+							std::string imgurl;
+							try {
+								imgurl = xpp.getAttributeValue("src");
+							} catch (const std::invalid_argument& ) {
+								GetLogger().log(LOG_WARN,"htmlrenderer::render: found img tag with no src attribute");
+								imgurl = "";
+							}
+							if (imgurl.length() > 0) {
+								unsigned int link_num = add_link(links,absolute_url(url,imgurl), LINK_IMG);
+								std::ostringstream ref;
+								ref << "[" << _("image") << " " << link_num << "]";
+								image_count++;
+								curline.append(ref.str());
+							}
+						}
+						break;
+
+					case TAG_BLOCKQUOTE:
+						++indent_level;
+						if (line_is_nonempty(curline))
+							lines.push_back(curline);
+						lines.push_back("");
+						prepare_newline(curline, indent_level);	
+						break;
+
+					case TAG_P:
+						if (line_is_nonempty(curline))
+							lines.push_back(curline);
+						if (lines.size() > 0 && lines[lines.size()-1].length() > static_cast<unsigned int>(indent_level*2))
+							lines.push_back("");
+						prepare_newline(curline, indent_level);	
+						break;
+
+					case TAG_OL:
+						inside_list = true;
+						is_ol = true;
+						ol_count = 1;
+						if (line_is_nonempty(curline))
+							lines.push_back(curline);
+						lines.push_back("");
+						prepare_newline(curline, indent_level);	
+						break;
+
+					case TAG_UL:
+						inside_list = true;
+						is_ol = false;
+						if (line_is_nonempty(curline))
+							lines.push_back(curline);
+						lines.push_back("");
+						prepare_newline(curline, indent_level);
+						break;
+
+					case TAG_LI:
+						if (inside_li) {
+							indent_level-=2;
+							if (line_is_nonempty(curline))
+								lines.push_back(curline);
+							prepare_newline(curline, indent_level);	
+						}
+						inside_li = true;
 						if (line_is_nonempty(curline))
 							lines.push_back(curline);
 						prepare_newline(curline, indent_level);
-					}
-					if (line_is_nonempty(curline))
-						lines.push_back(curline);
-					lines.push_back("");
-					prepare_newline(curline, indent_level);	
-				} else if (xpp.getText() == "dt") {
-					if (line_is_nonempty(curline))
-						lines.push_back(curline);
-					lines.push_back("");
-					prepare_newline(curline, indent_level);	
-				} else if (xpp.getText() == "dd") {
-					indent_level-=4;
-					if (line_is_nonempty(curline))
-						lines.push_back(curline);
-					lines.push_back("");
-					prepare_newline(curline, indent_level);	
-				} else if (xpp.getText() == "dl") {
-					// ignore tag
-				} else if (xpp.getText() == "li") {
-					indent_level-=2;
-					inside_li = false;
-					if (line_is_nonempty(curline))
-						lines.push_back(curline);
-					prepare_newline(curline, indent_level);
-				} else if (xpp.getText() == "p") {
-					if (line_is_nonempty(curline))
-						lines.push_back(curline);
-					prepare_newline(curline, indent_level);
-				} else if (xpp.getText() == "pre") {
-					if (line_is_nonempty(curline))
-						lines.push_back(curline);
-					prepare_newline(curline, indent_level);
-					inside_pre = false;
+						indent_level+=2;
+						if (is_ol) {
+							std::ostringstream num;
+							num << ol_count;
+							if (ol_count < 10)
+								curline.append(" ");
+							curline.append(num.str());
+							curline.append(". ");
+							++ol_count;
+						} else {
+							curline.append("  * ");
+						}
+						break;
+
+					case TAG_DT:
+						if (line_is_nonempty(curline))
+							lines.push_back(curline);
+						prepare_newline(curline, indent_level);
+						break;
+
+					case TAG_DD:
+						indent_level+=4;
+						if (line_is_nonempty(curline))
+							lines.push_back(curline);
+						prepare_newline(curline, indent_level);
+						break;
+
+					case TAG_DL:
+						// ignore tag
+						break;
 				}
 				break;
+
+			case xmlpullparser::END_TAG:
+				current_tag = tags[xpp.getText()];
+				GetLogger().log(LOG_DEBUG, "htmlrenderer::render: found end tag %s (id = %u)",xpp.getText().c_str(), current_tag);
+
+				switch (current_tag) {
+					case TAG_BLOCKQUOTE:
+						--indent_level;
+						if (indent_level < 0)
+							indent_level = 0;
+						if (line_is_nonempty(curline))
+							lines.push_back(curline);
+						lines.push_back("");
+						prepare_newline(curline, indent_level);
+						break;
+
+					case TAG_OL:
+					case TAG_UL:
+						inside_list = false;
+						if (inside_li) {
+							indent_level-=2;
+							if (line_is_nonempty(curline))
+								lines.push_back(curline);
+							prepare_newline(curline, indent_level);
+						}
+						if (line_is_nonempty(curline))
+							lines.push_back(curline);
+						lines.push_back("");
+						prepare_newline(curline, indent_level);	
+						break;
+
+					case TAG_DT:
+						if (line_is_nonempty(curline))
+							lines.push_back(curline);
+						lines.push_back("");
+						prepare_newline(curline, indent_level);	
+						break;
+
+					case TAG_DD:
+						indent_level-=4;
+						if (line_is_nonempty(curline))
+							lines.push_back(curline);
+						lines.push_back("");
+						prepare_newline(curline, indent_level);	
+						break;
+
+					case TAG_DL:
+						// ignore tag
+						break;
+
+					case TAG_LI:
+						indent_level-=2;
+						inside_li = false;
+						if (line_is_nonempty(curline))
+							lines.push_back(curline);
+						prepare_newline(curline, indent_level);
+						break;
+
+					case TAG_P:
+						if (line_is_nonempty(curline))
+							lines.push_back(curline);
+						prepare_newline(curline, indent_level);
+						break;
+
+					case TAG_PRE:
+						if (line_is_nonempty(curline))
+							lines.push_back(curline);
+						prepare_newline(curline, indent_level);
+						inside_pre = false;
+						break;
+				}
+				break;
+
 			case xmlpullparser::TEXT:
 				{
 					GetLogger().log(LOG_DEBUG,"htmlrenderer::render: found text `%s'",xpp.getText().c_str());
