@@ -451,7 +451,7 @@ std::string utils::replace_all(std::string str, const std::string& from, const s
 	std::string::size_type s = str.find(from);
 	while (s != std::string::npos) {
 		str.replace(s,from.length(), to);
-		s = str.find(from);
+		s = str.find(from, s + to.length());
 	}
 	GetLogger().log(LOG_DEBUG,"utils::replace_all: after str = %s", str.c_str());
 	return str;

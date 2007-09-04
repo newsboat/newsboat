@@ -637,7 +637,16 @@ void controller::export_opml() {
 	std::cout << "\t<head>" << std::endl << "\t\t<title>" PROGRAM_NAME " - Exported Feeds</title>" << std::endl << "\t</head>" << std::endl;
 	std::cout << "\t<body>" << std::endl;
 	for (std::vector<rss_feed>::iterator it=feeds.begin(); it != feeds.end(); ++it) {
-		std::cout << "\t\t<outline type=\"rss\" xmlUrl=\"" << it->rssurl() << "\" htmlUrl=\"" << it->link() << "\" title=\"" << it->title() << "\" />" << std::endl;
+		if (it->rssurl().substr(0,6) != "query:" && it->rssurl().substr(0,7) != "filter:") {
+			std::string rssurl = utils::replace_all(it->rssurl(),"&","&amp;");
+			std::string link = utils::replace_all(it->link(),"&", "&amp;");
+			std::string title = utils::replace_all(it->title(),"&", "&amp;");
+
+			rssurl = utils::replace_all(rssurl, "\"", "&quot;");
+			link = utils::replace_all(link, "\"", "&quot;");
+			title = utils::replace_all(title, "\"", "&quot;");
+			std::cout << "\t\t<outline type=\"rss\" xmlUrl=\"" << rssurl << "\" htmlUrl=\"" << link << "\" title=\"" << title << "\" />" << std::endl;
+		}
 	}
 	std::cout << "\t</body>" << std::endl;
 	std::cout << "</opml>" << std::endl;
