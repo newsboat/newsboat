@@ -355,7 +355,9 @@ void utils::run_command(const std::string& cmd, const std::string& input) {
 			dup2(fd, 0);
 			dup2(fd, 1);
 			dup2(fd, 2);
+			GetLogger().log(LOG_DEBUG, "utils::run_command: %s '%s'", cmd.c_str(), input.c_str());
 			execlp(cmd.c_str(), cmd.c_str(), input.c_str(), NULL);
+			GetLogger().log(LOG_DEBUG, "utils::run_command: execlp of %s failed: %s", cmd.c_str(), strerror(errno));
 			exit(1);
 		}
 	}
