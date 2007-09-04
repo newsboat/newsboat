@@ -37,7 +37,7 @@ void filebrowser_formaction::process_operation(operation op) {
 				std::string focus = f->get_focus();
 				if (focus.length() > 0) {
 					if (focus == "files") {
-						std::string selection = fancy_unquote(f->get("listposname"));
+						std::string selection = f->get("listposname");
 						char filetype = selection[0];
 						selection.erase(0,1);
 						std::string filename(selection);
@@ -184,18 +184,6 @@ keymap_hint_entry * filebrowser_formaction::get_keymap_hint() {
 	return hints;
 }
 
-std::string filebrowser_formaction::fancy_quote(const std::string& s) {
-	std::string x;
-	for (unsigned int i=0;i<s.length();++i) {
-		if (s[i] != ' ') {
-			x.append(1,s[i]);
-		} else {
-			x.append(1,'/');
-		}	
-	}	
-	return x;
-}
-
 std::string filebrowser_formaction::add_file(std::string filename) {
 	std::string retval;
 	struct stat sb;
@@ -250,24 +238,12 @@ std::string filebrowser_formaction::add_file(std::string filename) {
 		
 		retval = "{listitem[";
 		retval.append(1,ftype);
-		retval.append(fancy_quote(filename)); // TODO: replace fancy_quote() with stfl::quote()
+		retval.append(stfl::quote(filename));
 		retval.append("] text:");
 		retval.append(stfl::quote(line));
 		retval.append("}");
 	}
 	return retval;
-}
-
-std::string filebrowser_formaction::fancy_unquote(const std::string& s) {
-	std::string x;
-	for (unsigned int i=0;i<s.length();++i) {
-		if (s[i] != '/') {
-			x.append(1,s[i]);
-		} else {
-			x.append(1,' ');
-		}	
-	}	
-	return x;	
 }
 
 std::string filebrowser_formaction::get_rwx(unsigned short val) {

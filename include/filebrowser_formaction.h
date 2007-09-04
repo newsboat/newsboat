@@ -22,8 +22,6 @@ class filebrowser_formaction : public formaction {
 	private:
 		virtual void process_operation(operation op);
 
-		std::string fancy_quote(const std::string& s);
-		std::string fancy_unquote(const std::string& s);
 		std::string add_file(std::string filename);
 		std::string get_filename_suggestion(const std::string& s);
 		std::string get_rwx(unsigned short val);
