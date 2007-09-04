@@ -198,6 +198,72 @@ The default color configuration of newsbeuter looks like this:
 	info         yellow  blue   bold
 	article      white   black
 
+
+Migrating from other RSS Feed Readers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It is very likely that you have used other RSS feed readers before. In this
+case, it is practical to migrate the previous configuration to newsbeuter. The
+vast amount of RSS feed readers allows the export of subscriptions via OPML
+files. OPML is an XML file format that was designed to save outlines, and has
+found its primary use in the import and export of feed subscriptions between
+different RSS feed readers.
+
+The best thing to start with is to export your subscriptions from the old
+reader.  Usually, RSS feed readers have appropriate menu itmes available to do
+so.
+
+Snownews provides a script to convert your current subscription file into an
+OPML file:
+
+	snow2opml > ~/blogroll.opml
+
+This command creates from your Snownews configuration a file blogroll.opml in
+your home directory. To export the subscription list from raggle, the
+following command is necessary:
+
+	raggle --export-opml ~/blogroll.opml
+
+When you have exported the subscriptions from your old RSS feed reader, you can
+import them into newsbeuter:
+
+	newsbeuter -i ~/blogroll.opml
+
+Don't worry, newsbeuter won't destroy your existing configuration, or add
+subscriptions more than once: every URL that is added to the subscription list
+is checked before whether it is already in the list, and is only added if not.
+This makes it possible to merge several OPML files into your subscription list.
+
+If your old RSS feed reader was able to structure your subscriptions in 
+hierarchies, and reflected this structure in the exported OPML file, newsbeuter
+doesn't throw away this information (although it doesn't support hierarchies), but
+generates tags from it. Tags are newsbeuter's way of organizing subscriptions
+in a non-hierarchical way. More information on the use of tags can be found below.
+
+Imagine the following folder hierarchy:
+
+	|- News
+	| |- Europe
+	| `- International
+	|- IT
+	| |- Linux
+	| |- Windows
+	| `- Programming
+	|   |- C++
+	|   |- Ruby
+	|   `- Erlang
+	`- Private
+
+Subscriptions found in the folder "Private" will be tagged with "Private",
+subscriptions in the folder "International" will be tagged with "News" and
+"News/International", subscriptions in the folder "Erlang" will be tagged ith
+"IT", "IT/Programming" and "IT/Programming/Erlang", and so on. This means that
+when you select the tag "Programming" in newsbeuter, you will see all
+subscriptions that were in the "Programming" folder or one of its subfolders
+before. This means that you will lose virtually nothing of your previously
+configured structure.
+
+
 Advanced Features
 -----------------
 
