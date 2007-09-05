@@ -510,6 +510,23 @@ With this commandline switch, you can read the articles that you have already
 downloaded without any network connectivity. This functionality makes
 newsbeuter a true offline client for Bloglines.
 
+OPML Online Subscription Mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The OPML online subscription mode works similar to the Bloglines
+synchronization mode, except that no information about read articles in
+synchronized back. When enabled, all feeds that are listed in the feed list
+will be taken from an OPML that is downloaded from a freely configurable URL.
+
+To enable this mode, the following configuration needs to be done:
+
+	urls-source "opml"
+	opml-url "<opml url>"
+
+"opml" must be specified as source for the feed URLs, and the URL of the OPML
+file needs to be specified, too. As with Bloglines synchronization mode, the offline
+mode via "newsbeuter -o" also works with OPML online subscription mode.
+
 
 Flagging Articles
 ~~~~~~~~~~~~~~~~~
