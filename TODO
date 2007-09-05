@@ -14,9 +14,7 @@ TODO:
 - refine the search function (make it like the command line)
 - implement commandline commands quit [done], add, save [done], tag (select tag) [done], goto (by matching title of feed)
 - implement reloading of configuration (:source)
-- test import/export
 - don't delete flagged articles
-- implement new urls-source "opml" to subscribe to opml files that are available online
 
 
 longteam goals to reach:
@@ -104,3 +102,5 @@ DONE:
 - predefine filters and select them from a view
 - implement detection when an item is outside of its regular feed (when item->feed->rssurl != feed->rssurl) for itemlist
 - implement bloglines support (including offline mode)
+- implement new urls-source "opml" to subscribe to opml files that are available online
+- test import/export
