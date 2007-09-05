@@ -261,6 +261,9 @@ void controller::run(int argc, char * argv[]) {
 	} else if (type == "bloglines") {
 		urlcfg = new bloglines_urlreader(cfg);
 		real_offline_mode = offline_mode;
+	} else if (type == "opml") {
+		urlcfg = new opml_urlreader(cfg);
+		real_offline_mode = offline_mode;
 	} else {
 		GetLogger().log(LOG_ERROR,"unknown urls-source `%s'", urlcfg->get_source().c_str());
 	}
@@ -294,6 +297,8 @@ void controller::run(int argc, char * argv[]) {
 			snprintf(msgbuf, sizeof(msgbuf), _("Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."), url_file.c_str());
 		} else if (type == "bloglines") {
 			snprintf(msgbuf, sizeof(msgbuf), _("It looks like you haven't configured any feeds in your bloglines account. Please do so, and try again."));
+		} else if (type == "opml") {
+			snprintf(msgbuf, sizeof(msgbuf), _("It looks like the OPML feed you subscribed contains no feeds. Please fill it with feeds, and try again."));
 		} else {
 			assert(0); // shouldn't happen
 		}

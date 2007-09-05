@@ -17,7 +17,7 @@ namespace newsbeuter {
 			virtual ~urlreader();
 			virtual void write_config() = 0;
 			virtual void reload() = 0;
-			virtual const std::string& get_source() = 0;
+			virtual std::string get_source() = 0;
 			std::vector<std::string>& get_urls();
 			std::vector<std::string>& get_tags(const std::string& url);
 			std::vector<std::string> get_alltags();
@@ -36,21 +36,35 @@ namespace newsbeuter {
 			virtual void write_config();
 			virtual void reload();
 			void load_config(const std::string& file);
-			virtual const std::string& get_source();
+			virtual std::string get_source();
 		private:
 			std::string filename;
 	};
 
-	class bloglines_urlreader : public urlreader {
+	class opml_urlreader : public urlreader {
+		public:
+			opml_urlreader(configcontainer * c);
+			virtual ~opml_urlreader();
+			virtual void write_config();
+			virtual void reload();
+			virtual std::string get_source();
+		protected:
+			virtual void handle_node(nxml_data_t * node, const std::string& tag);
+			virtual const char * get_auth();
+			configcontainer * cfg;
+		private:
+			void rec_find_rss_outlines(nxml_data_t * node, std::string tag);
+	};
+
+	class bloglines_urlreader : public opml_urlreader {
 		public:
 			bloglines_urlreader(configcontainer * c);
 			virtual ~bloglines_urlreader();
-			virtual void write_config();
-			virtual void reload();
-			virtual const std::string& get_source();
+			virtual std::string get_source();
+		protected:
+			virtual void handle_node(nxml_data_t * node, const std::string& tag);
+			virtual const char * get_auth();
 		private:
-			void rec_find_rss_outlines(nxml_data_t * node, std::string tag);
-			configcontainer * cfg;
 			std::string listsubs_url;
 			std::string getitems_url;
 	};

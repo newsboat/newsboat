@@ -31,7 +31,7 @@ std::vector<std::string> urlreader::get_alltags() {
 file_urlreader::file_urlreader(const std::string& file) : filename(file) { }
 file_urlreader::~file_urlreader() { }
 
-const std::string& file_urlreader::get_source() {
+std::string file_urlreader::get_source() {
 	return filename;
 }
 
@@ -97,19 +97,23 @@ void file_urlreader::write_config() {
 }
 
 
-bloglines_urlreader::bloglines_urlreader(configcontainer * c) : cfg(c) { 
+opml_urlreader::opml_urlreader(configcontainer * c) : cfg(c) { }
+opml_urlreader::~opml_urlreader() { }
+
+
+bloglines_urlreader::bloglines_urlreader(configcontainer * c) : opml_urlreader(c) { 
 	listsubs_url = "http://rpc.bloglines.com/listsubs";
 	getitems_url = "http://rpc.bloglines.com/getitems";
 }
 
 bloglines_urlreader::~bloglines_urlreader() { }
 
-void bloglines_urlreader::write_config() {
+void opml_urlreader::write_config() {
 	// do nothing.
 }
 
 
-void bloglines_urlreader::reload() {
+void opml_urlreader::reload() {
 	if (offline)
 		return;
 
@@ -135,7 +139,7 @@ void bloglines_urlreader::reload() {
 		snprintf(user_agent, sizeof(user_agent), "%s", ua_pref.c_str());
 	}
 
-	std::string urlcontent = utils::retrieve_url(listsubs_url, user_agent, cfg->get_configvalue("bloglines-auth").c_str());
+	std::string urlcontent = utils::retrieve_url(this->get_source(), user_agent, this->get_auth());
 	// GetLogger().log(LOG_DEBUG, "bloglines_urlreader::reload: return OPML content is `%s'", urlcontent.c_str());
 
 	nxml_t *data;
@@ -151,7 +155,7 @@ void bloglines_urlreader::reload() {
 	ret = nxml_parse_buffer(data, const_cast<char *>(urlcontent.c_str()), urlcontent.length());
 	if (ret != NXML_OK) {
 		// puts (nxml_strerror (data, ret));
-		GetLogger().log(LOG_ERROR, "bloglines_urlreader::reload: parsing XML file failed: %s", nxml_strerror(data, ret));
+		GetLogger().log(LOG_ERROR, "opml_urlreader::reload: parsing XML file failed: %s", nxml_strerror(data, ret));
 		return;
 	}
 
@@ -160,7 +164,7 @@ void bloglines_urlreader::reload() {
 	if (root) {
 		body = nxmle_find_element(data, root, "body", NULL);
 		if (body) {
-			GetLogger().log(LOG_DEBUG, "bloglines_urlreader::reload: found body");
+			GetLogger().log(LOG_DEBUG, "opml_urlreader::reload: found body");
 			rec_find_rss_outlines(body, "");
 		}
 	}
@@ -169,42 +173,64 @@ void bloglines_urlreader::reload() {
 
 }
 
-void bloglines_urlreader::rec_find_rss_outlines(nxml_data_t * node, std::string tag) {
+void opml_urlreader::handle_node(nxml_data_t * node, const std::string& tag) {
+	if (node) {
+		char * rssurl = nxmle_find_attribute(node, "xmlUrl", NULL);
+		if (rssurl && strlen(rssurl) > 0) {
+			std::string theurl(rssurl);
+			urls.push_back(theurl);
+			if (tag.length() > 0) {
+				std::vector<std::string> tmptags;
+				tmptags.push_back(tag);
+				tags[theurl] = tmptags;
+				alltags.insert(tag);
+			}
+		}
+	}
+}
+
+void bloglines_urlreader::handle_node(nxml_data_t * node, const std::string& tag) {
+	if (node) {
+		char * sub_id = nxmle_find_attribute(node, "BloglinesSubId", NULL);
+		if (sub_id) {
+			std::string theurl = getitems_url;
+			theurl.append("?s=");
+			theurl.append(sub_id);
+
+			if (cfg->get_configvalue_as_bool("bloglines-mark-read")) {
+				theurl.append("&n=1");
+			}
+
+			std::string auth = cfg->get_configvalue("bloglines-auth");
+			GetLogger().log(LOG_DEBUG, "bloglines_urlreader::rec_find_rss_outlines: auth = %s", auth.c_str());
+			auth = utils::replace_all(auth,"@","%40");
+
+			if (theurl.substr(0,7) == "http://") {
+				theurl.insert(7, auth + "@");
+			} else if (theurl.substr(0,8) == "https://") {
+				theurl.insert(8, auth + "@");
+			}
+
+			urls.push_back(theurl);
+			if (tag.length() > 0) {
+				std::vector<std::string> tmptags;
+				tmptags.push_back(tag);
+				tags[theurl] = tmptags;
+				alltags.insert(tag);
+			}
+		}
+	}
+}
+
+void opml_urlreader::rec_find_rss_outlines(nxml_data_t * node, std::string tag) {
 	while (node) {
 		char * type = nxmle_find_attribute(node, "type", NULL);
-		char * sub_id = nxmle_find_attribute(node, "BloglinesSubId", NULL);
 
 		std::string newtag = tag;
 
-		GetLogger().log(LOG_DEBUG, "bloglines_urlreader::rec_find_rss_outlines: type = %s, sub_id = %s", type, sub_id);
-
 		if (node->type == NXML_TYPE_ELEMENT && strcmp(node->value,"outline")==0) {
-			if (type && strcmp(type,"rss")==0 && sub_id) {
-				std::string theurl = getitems_url;
-				theurl.append("?s=");
-				theurl.append(sub_id);
-
-				if (cfg->get_configvalue_as_bool("bloglines-mark-read")) {
-					theurl.append("&n=1");
-				}
-
-				std::string auth = cfg->get_configvalue("bloglines-auth");
-				GetLogger().log(LOG_DEBUG, "bloglines_urlreader::rec_find_rss_outlines: auth = %s", auth.c_str());
-				auth = utils::replace_all(auth,"@","%40");
-
-				if (theurl.substr(0,7) == "http://") {
-					theurl.insert(7, auth + "@");
-				} else if (theurl.substr(0,8) == "https://") {
-					theurl.insert(8, auth + "@");
-				}
-
-				urls.push_back(theurl);
-				if (tag.length() > 0) {
-					std::vector<std::string> tmptags;
-					tmptags.push_back(tag);
-					tags[theurl] = tmptags;
-					alltags.insert(tag);
-				}
+			if (type && strcmp(type,"rss")==0) {
+				handle_node(node, tag);
 			} else {
 				char * text = nxmle_find_attribute(node, "title", NULL);
 				if (text) {
@@ -222,8 +248,20 @@ void bloglines_urlreader::rec_find_rss_outlines(nxml_data_t * node, std::string 
 
 }
 
-const std::string& bloglines_urlreader::get_source() {
+std::string bloglines_urlreader::get_source() {
 	return listsubs_url;
+}
+
+std::string opml_urlreader::get_source() {
+	return cfg->get_configvalue("opml-url");
+}
+
+const char * opml_urlreader::get_auth() {
+	return NULL;
+}
+
+const char * bloglines_urlreader::get_auth() {
+	return cfg->get_configvalue("bloglines-auth").c_str();
 }
 
 
