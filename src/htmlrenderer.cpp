@@ -25,6 +25,8 @@ htmlrenderer::htmlrenderer(unsigned int width) : w(width) {
 	tags["dt"] = TAG_DT;
 	tags["dd"] = TAG_DD;
 	tags["dl"] = TAG_DL;
+	tags["sup"] = TAG_SUP;
+	tags["sub"] = TAG_SUB;
 }
 
 void htmlrenderer::render(const std::string& source, std::vector<std::string>& lines, std::vector<linkpair>& links, const std::string& url) {
@@ -256,6 +258,15 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					case TAG_DL:
 						// ignore tag
 						break;
+
+					case TAG_SUP:
+						curline.append("^");
+						break;
+
+					case TAG_SUB:
+						curline.append("[");
+						break;
+
 				}
 				break;
 
@@ -328,6 +339,15 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						prepare_newline(curline, indent_level);
 						inside_pre = false;
 						break;
+
+					case TAG_SUB:
+						curline.append("]");
+						break;
+					
+					case TAG_SUP:
+						// has closing tag, but we render nothing.
+						break;
+
 					case TAG_A:
 					case TAG_EMBED:
 					case TAG_BR:
