@@ -27,6 +27,7 @@ htmlrenderer::htmlrenderer(unsigned int width) : w(width) {
 	tags["dl"] = TAG_DL;
 	tags["sup"] = TAG_SUP;
 	tags["sub"] = TAG_SUB;
+	tags["hr"] = TAG_HR;
 }
 
 void htmlrenderer::render(const std::string& source, std::vector<std::string>& lines, std::vector<linkpair>& links, const std::string& url) {
@@ -267,6 +268,14 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						curline.append("[");
 						break;
 
+					case TAG_HR:
+						if (line_is_nonempty(curline))
+							lines.push_back(curline);
+						prepare_newline(curline, indent_level);
+						lines.push_back(std::string(" ") + std::string(w - 2, '-') + std::string(" "));
+						prepare_newline(curline, indent_level);
+						break;
+
 				}
 				break;
 
@@ -353,6 +362,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					case TAG_BR:
 					case TAG_ITUNESHACK:
 					case TAG_IMG:
+					case TAG_HR:
 						// ignore closing tags
 						break;
 				}

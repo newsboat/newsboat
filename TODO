@@ -15,6 +15,7 @@ TODO:
 - implement commandline commands quit [done], add, save [done], tag (select tag) [done], goto (by matching title of feed)
 - implement reloading of configuration (:source)
 - don't delete flagged articles
+- implement keys to jump to the next unread feed from the article list
 
 
 longteam goals to reach:
