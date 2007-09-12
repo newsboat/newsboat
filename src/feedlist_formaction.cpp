@@ -441,9 +441,9 @@ void feedlist_formaction::finished_qna(operation op) {
 			}
 			break;
 		case OP_INT_START_SEARCH: {
-				v->set_status(_("Searching..."));
 				std::string searchphrase = qna_responses[0];
 				if (searchphrase.length() > 0) {
+					v->set_status(_("Searching..."));
 					searchhistory.add_line(searchphrase);
 					std::vector<rss_item> items;
 					try {
