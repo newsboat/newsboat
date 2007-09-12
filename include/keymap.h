@@ -48,6 +48,8 @@ namespace newsbeuter {
 						OP_RELOADURLS,
 						OP_BOOKMARK,
 						OP_EDITFLAGS,
+						OP_NEXTFEED,
+						OP_PREVFEED,
 						OP_NB_MAX,
 
 						// podbeuter-specific operations:

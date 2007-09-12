@@ -129,6 +129,16 @@ void itemlist_formaction::process_operation(operation op) {
 				v->show_error(_("No unread items."));
 			}
 			break;
+		case OP_NEXTFEED:
+			if (!v->get_next_unread_feed()) {
+				v->show_error(_("No unread feeds."));
+			}
+			break;
+		case OP_PREVFEED:
+			if (!v->get_prev_unread_feed()) {
+				v->show_error(_("No unread feeds."));
+			}
+			break;
 		case OP_MARKFEEDREAD:
 			GetLogger().log(LOG_INFO, "itemlist_formaction: marking feed read");
 			v->set_status(_("Marking feed read..."));

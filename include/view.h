@@ -66,6 +66,9 @@ namespace newsbeuter {
 			bool get_next_unread();
 			bool get_previous_unread();
 
+			bool get_next_unread_feed();
+			bool get_prev_unread_feed();
+
 			void set_colors(const colormanager& colorman);
 
 			void notify_itemlist_change(rss_feed& feed);

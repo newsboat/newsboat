@@ -445,6 +445,28 @@ bool view::get_previous_unread() {
 	return false;
 }
 
+bool view::get_next_unread_feed() {
+	unsigned int feedpos;
+	if (feedlist->jump_to_next_unread_feed(feedpos)) {
+		itemlist->set_feed(feedlist->get_feed());
+		itemlist->set_pos(feedpos);
+		itemlist->init();
+		return true;
+	}
+	return false;
+}
+
+bool view::get_prev_unread_feed() {
+	unsigned int feedpos;
+	if (feedlist->jump_to_previous_unread_feed(feedpos)) {
+		itemlist->set_feed(feedlist->get_feed());
+		itemlist->set_pos(feedpos);
+		itemlist->init();
+		return true;
+	}
+	return false;
+}
+
 bool view::get_next_unread() {
 	unsigned int feedpos;
 	GetLogger().log(LOG_DEBUG, "view::get_next_unread: trying to find next unread");
