@@ -68,6 +68,7 @@ RM=rm -f
 
 all: $(NEWSBEUTER) $(PODBEUTER)
 
+
 $(NEWSBEUTER): $(MOFILES) $(STFLHDRS) $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBEUTER_OBJS)
 	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $(NEWSBEUTER) $(NEWSBEUTER_OBJS) $(NEWSBEUTER_LIBS)
 
@@ -182,3 +183,5 @@ test: $(LIB_OUTPUT) $(NEWSBEUTER_OBJS) $(TEST_OBJS)
 
 test-clean:
 	$(RM) test/test test/test.o
+
+include mk.deps

@@ -1,0 +1,92 @@
+src/cache.o: include/cache.h include/configcontainer.h
+
+src/colormanager.o: include/logger.h include/colormanager.h include/pb_view.h \
+	include/feedlist_formaction.h include/itemlist_formaction.h include/itemview_formaction.h \
+	include/help_formaction.h include/filebrowser_formaction.h include/urlview_formaction.h \
+	include/select_formaction.h
+
+src/configcontainer.o: include/configcontainer.h include/configparser.h include/logger.h \
+	include/utils.h
+
+src/configparser.o: include/configparser.h include/xmlpullparser.h include/exceptions.h \
+	include/utils.h include/logger.h config.h
+
+src/controller.o: include/view.h include/controller.h include/configparser.h \
+	include/configcontainer.h include/exceptions.h include/downloadthread.h \
+	include/colormanager.h include/logger.h include/utils.h include/stflpp.h \
+	config.h
+
+src/download.o: include/download.h include/pb_controller.h config.h
+
+src/downloadthread.o: include/downloadthread.h include/logger.h
+
+src/exception.o: include/exception.h include/exceptions.h
+
+src/feedlist_formaction.o: include/feedlist_formaction.h include/view.h include/logger.h \
+	include/reloadthread.h include/exceptions.h include/utils.h
+
+src/filebrowser_formaction.o: include/filebrowser_formaction.h include/logger.h config.h \
+	include/view.h
+
+src/filtercontainer.o: include/filtercontainer.h
+
+src/formaction.o: include/formaction.h include/view.h include/utils.h config.h \
+	include/logger.h
+
+src/help_formaction.o: config.h include/help_formaction.h include/view.h
+
+src/history.o: include/history.h
+
+src/htmlrenderer.o: include/htmlrenderer.h include/xmlpullparser.h include/utils.h \
+	include/logger.h config.h
+
+src/itemlist_formaction.o: include/itemlist_formaction.h include/view.h config.h \
+	include/exceptions.h include/utils.h
+
+src/itemview_formaction.o: include/itemview_formaction.h include/view.h config.h \
+	include/logger.h include/exceptions.h include/utils.h
+
+src/keymap.o: include/keymap.h include/logger.h config.h
+
+src/logger.o: include/logger.h include/exception.h
+
+src/matcher.o: include/matcher.h include/logger.h include/utils.h include/exceptions.h
+
+src/mutex.o: include/mutex.h
+
+src/pb_controller.o: include/pb_controller.h include/pb_view.h include/poddlthread.h \
+	include/utils.h config.h include/keymap.h include/configcontainer.h include/colormanager.h \
+	include/exceptions.h include/queueloader.h include/logger.h
+
+src/pb_view.o: include/pb_view.h include/pb_controller.h include/poddlthread.h include/download.h \
+	config.h include/logger.h stfl/dllist.h stfl/help.h
+
+src/poddlthread.o: include/poddlthread.h include/logger.h config.h
+
+src/queueloader.o: include/queueloader.h include/logger.h config.h
+
+src/reloadthread.o: include/reloadthread.h include/logger.h
+
+src/rss.o: include/rss.h config.h include/cache.h include/xmlpullparser.h include/utils.h \
+	include/logger.h include/exceptions.h include/configcontainer.h
+
+src/select_formaction.o: include/select_formaction.h include/view.h config.h
+
+src/stflpp.o: include/stflpp.h include/logger.h include/exception.h
+
+src/thread.o: include/thread.h include/exception.h include/logger.h
+
+src/urlreader.o: include/urlreader.h include/utils.h include/logger.h config.h
+
+src/urlview_formaction.o: include/urlview_formaction.h include/view.h config.h
+
+src/utils.o: include/utils.h include/logger.h
+
+src/view.o: stfl/feedlist.h stfl/itemlist.h stfl/itemview.h stfl/help.h stfl/filebrowser.h stfl/urlview.h stfl/selecttag.h \
+	include/formaction.h include/feedlist_formaction.h include/itemlist_formaction.h \
+	include/itemview_formaction.h include/help_formaction.h include/urlview_formaction.h \
+	include/select_formaction.h include/logger.h include/reloadthread.h \
+	include/exception.h include/exceptions.h include/keymap.h
+
+src/xmlpullparser.o: include/xmlpullparser.h include/exceptions.h include/utils.h \
+	include/logger.h config.h
