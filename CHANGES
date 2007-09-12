@@ -7,6 +7,7 @@ Changes for newsbeuter:
 	implemented plugin-based bookmarking support
 	implemented custom flagging of articles
 	redesigned search function
+	implemented more key commands to ease navigation even more
 
 0.6 (2007-08-14):
 	implemented support for reloading the urls file
