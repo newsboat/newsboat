@@ -126,13 +126,13 @@ msgstr ""
 "konfigurieren. Bitte tun sie das, und probieren sie es erneut."
 
 #: src/controller.cpp:301
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
 msgstr ""
-"Es sieht so aus als hätten sie keine Feeds in ihrem Bloglines-Account "
-"konfigurieren. Bitte tun sie das, und probieren sie es erneut."
+"Es sieht so aus als würde die konfigurierte OPML-Datei keine Feeds enthalten. "
+"Bitte füllen sie diese mit Feeds, und probieren sie es erneut."
 
 #: src/controller.cpp:310
 msgid "Loading articles from cache..."
@@ -524,9 +524,8 @@ msgid "No unread items."
 msgstr "Keine ungelesenen Elemente."
 
 #: src/itemlist_formaction.cpp:138 src/itemlist_formaction.cpp:143
-#, fuzzy
 msgid "No unread feeds."
-msgstr "Keine ungelesenen Elemente."
+msgstr "Keine ungelesenen Feeds."
 
 #: src/itemlist_formaction.cpp:168
 msgid "Toggling read flag for article..."
