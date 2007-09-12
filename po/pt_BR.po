@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-09-12 21:35+0200\n"
-"PO-Revision-Date: 2007-08-30 18:04-0300\n"
+"PO-Revision-Date: 2007-09-12 17:23-0300\n"
 "Last-Translator: Adiel Mittmann <adiel@inf.ufsc.br>\n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -34,7 +34,7 @@ msgstr "comando desconhecido (erro de software)."
 
 #: src/configparser.cpp:109
 msgid "file couldn't be opened."
-msgstr ""
+msgstr "arquivo não pôde ser aberto."
 
 #: src/configparser.cpp:112
 msgid "unknown error (bug)."
@@ -60,8 +60,7 @@ msgstr "Erro fatal: não foi possível determinar o diretório do usuário."
 
 #: src/controller.cpp:68 src/pb_controller.cpp:49
 #, c-format
-msgid ""
-"Please set the HOME environment variable or add a valid user for UID %u!"
+msgid "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
 "Por favor defina a variável de ambiente HOME ou adicione um usuário válido "
 "para o UID %u!"
@@ -97,14 +96,14 @@ msgid "Opening cache..."
 msgstr "Abrindo o cache..."
 
 #: src/controller.cpp:273
-#, fuzzy, c-format
+#, c-format
 msgid "Loading URLs from local cache..."
-msgstr "Carregando artigos do cache..."
+msgstr "Carregando URLs do cache local..."
 
 #: src/controller.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid "Loading URLs from %s..."
-msgstr "%sCarregando %s..."
+msgstr "Carregando URLS a partir de %s..."
 
 #: src/controller.cpp:297
 #, c-format
@@ -120,14 +119,14 @@ msgstr ""
 msgid ""
 "It looks like you haven't configured any feeds in your bloglines account. "
 "Please do so, and try again."
-msgstr ""
+msgstr "Parece que você não configurou nenhuma fonte não sua conta bloglines. Faça isso, e tente novamente."
 
 #: src/controller.cpp:301
 #, c-format
 msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
-msgstr ""
+msgstr "Parece que a fonte OPML especificada não tem fontes RSS. Por favor, preencha-a com fontes RSS e tente novamente."
 
 #: src/controller.cpp:310
 msgid "Loading articles from cache..."
@@ -180,7 +179,7 @@ msgstr ""
 "lidos no total)"
 
 #: src/controller.cpp:590
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]\n"
@@ -205,6 +204,8 @@ msgstr ""
 "-c <arquivocache>  usar o <arquivocache> como arquivo de cache\n"
 "-C <arquivoconfig> ler configuração do <arquivoconfig>\n"
 "-v                 limpar cache completamente\n"
+"-o                 ativar modo sem conexão (só se aplica ao modo de sincronização do bloglines)\n"
+"-V                 obter informação de versão\n"
 "-h                 esta ajuda\n"
 
 #: src/controller.cpp:635
@@ -216,7 +217,7 @@ msgstr "Importação de %s concluída."
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
-msgstr ""
+msgstr "suporte a marcadores não está configurado. Por favor defina a variável de configuração 'bookmark-cmd' conforme necessário."
 
 #: src/download.cpp:42
 msgid "queued"
@@ -287,9 +288,8 @@ msgid "Error: couldn't parse filter command!"
 msgstr "Erro: não foi possível fazer analisar o comando de filtro!"
 
 #: src/feedlist_formaction.cpp:179 src/itemlist_formaction.cpp:197
-#, fuzzy
 msgid "No filters defined."
-msgstr "Nenhuma etiqueta definida."
+msgstr "Nenhum filtro definido."
 
 #: src/feedlist_formaction.cpp:184 src/itemlist_formaction.cpp:161
 msgid "Search for: "
@@ -371,9 +371,8 @@ msgid "Invalid position!"
 msgstr "Posição inválida!"
 
 #: src/feedlist_formaction.cpp:446 src/itemlist_formaction.cpp:259
-#, fuzzy
 msgid "Searching..."
-msgstr "Procurar"
+msgstr "Procurando..."
 
 #: src/feedlist_formaction.cpp:453 src/itemlist_formaction.cpp:270
 #, c-format
@@ -422,22 +421,20 @@ msgid "usage: set <variable>[=<value>]"
 msgstr "uso: set <variável>[=<valor>]"
 
 #: src/formaction.cpp:158
-#, fuzzy
 msgid "Saving bookmark..."
-msgstr "Iniciando navegador..."
+msgstr "Salvando marcador..."
 
 #: src/formaction.cpp:161
 msgid "Saved bookmark."
-msgstr ""
+msgstr "Marcador salvo."
 
 #: src/formaction.cpp:163
-#, fuzzy
 msgid "Error while saving bookmark: "
-msgstr "Erro procurando por '%s': %s"
+msgstr "Erro ao salvar marcador: "
 
 #: src/formaction.cpp:185
 msgid "URL: "
-msgstr ""
+msgstr "URL: "
 
 #: src/formaction.cpp:186 src/itemview_formaction.cpp:57 src/view.cpp:240
 msgid "Title: "
@@ -445,7 +442,7 @@ msgstr "Título: "
 
 #: src/formaction.cpp:187
 msgid "Description: "
-msgstr ""
+msgstr "Descrição: "
 
 #: src/help_formaction.cpp:30
 #, c-format
@@ -484,9 +481,8 @@ msgstr "Nenhum artigo selecionado!"
 
 #: src/itemlist_formaction.cpp:70 src/itemview_formaction.cpp:86
 #: src/itemview_formaction.cpp:210
-#, fuzzy
 msgid "Flags: "
-msgstr "Arquivo: "
+msgstr "Sinalizações: "
 
 #: src/itemlist_formaction.cpp:85 src/itemlist_formaction.cpp:504
 #: src/itemview_formaction.cpp:186 src/itemview_formaction.cpp:319
@@ -511,7 +507,7 @@ msgstr "Erro: nenhum artigo selecionado!"
 
 #: src/itemlist_formaction.cpp:113
 msgid "Error: you can't reload search results."
-msgstr ""
+msgstr "Erro: você não pode recarregar os resultados da busca."
 
 #: src/itemlist_formaction.cpp:124 src/itemlist_formaction.cpp:132
 #: src/itemview_formaction.cpp:228 src/itemview_formaction.cpp:237
@@ -519,9 +515,8 @@ msgid "No unread items."
 msgstr "Nenhum artigo não lido."
 
 #: src/itemlist_formaction.cpp:138 src/itemlist_formaction.cpp:143
-#, fuzzy
 msgid "No unread feeds."
-msgstr "Nenhum artigo não lido."
+msgstr "Nenhuma fonte RSS não lida."
 
 #: src/itemlist_formaction.cpp:168
 msgid "Toggling read flag for article..."
@@ -534,7 +529,7 @@ msgstr "Erro ao alternar estado lido/não lido do artigo: %s"
 
 #: src/itemlist_formaction.cpp:247 src/itemview_formaction.cpp:346
 msgid "Flags updated."
-msgstr ""
+msgstr "Sinalizações atualizadas."
 
 #: src/itemlist_formaction.cpp:396
 #, c-format
@@ -542,9 +537,9 @@ msgid "%s %s - Articles in feed '%s' (%u unread, %u total) - %s"
 msgstr "%s %s - Artigos na fonte RSS '%s' (%u não lidos, %u no total) - %s"
 
 #: src/itemlist_formaction.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s - Search results (%u unread, %u total)"
-msgstr "%s %s - Suas fontes RSS (%u não lidas, %u no total)"
+msgstr "%s %s - Resultado da busca (%u não lidas, %u no total)"
 
 #: src/itemlist_formaction.cpp:466
 msgid "Mark All Read"
@@ -740,9 +735,8 @@ msgid "Set a filter"
 msgstr "Definir um filtro"
 
 #: src/keymap.cpp:52
-#, fuzzy
 msgid "Select a predefined filter"
-msgstr "Definir um filtro"
+msgstr "Selecionar um filtro pré-definido"
 
 #: src/keymap.cpp:53
 msgid "Clear currently set filter"
@@ -750,11 +744,11 @@ msgstr "Limpar o filtro atual"
 
 #: src/keymap.cpp:54
 msgid "Bookmark current link/article"
-msgstr ""
+msgstr "Marcar o link ou artigo atual"
 
 #: src/keymap.cpp:55
 msgid "Edit flags"
-msgstr ""
+msgstr "Editar sinalizações"
 
 #: src/pb_controller.cpp:161
 msgid "Cleaning up queue..."
@@ -791,13 +785,11 @@ msgstr "Erro: não é possível sair: transferência(s) em progresso"
 
 #: src/pb_view.cpp:127
 msgid "Error: download needs to be finished before the file can be played."
-msgstr ""
-"Erro: a transferência precisa ser concluída antes de o arquivo ser tocado."
+msgstr "Erro: a transferência precisa ser concluída antes de o arquivo ser tocado."
 
 #: src/pb_view.cpp:156
 msgid "Error: unable to perform operation: download(s) in progress."
-msgstr ""
-"Erro: não foi foi possível realizar a operação: transferência(s) em progresso"
+msgstr "Erro: não foi foi possível realizar a operação: transferência(s) em progresso"
 
 #: src/pb_view.cpp:268
 msgid "Download"
@@ -827,21 +819,20 @@ msgstr "Erro: URL não suportada: %s"
 #: src/select_formaction.cpp:124
 #, c-format
 msgid "%s %s - Select Tag"
-msgstr "%s %s - Selecione etiqueta"
+msgstr "%s %s - Selecione a etiqueta"
 
 #: src/select_formaction.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s - Select Filter"
-msgstr "%s %s - Selecione etiqueta"
+msgstr "%s %s - Selecione o filtro"
 
 #: src/select_formaction.cpp:138
 msgid "Select Tag"
 msgstr "Selecione Etiqueta"
 
 #: src/select_formaction.cpp:143
-#, fuzzy
 msgid "Select Filter"
-msgstr "Definir um filtro"
+msgstr "Selecionar Filtro"
 
 #: src/urlview_formaction.cpp:34 src/urlview_formaction.cpp:48
 msgid "No link selected!"
@@ -854,7 +845,7 @@ msgstr "%s %s - URLs"
 
 #: src/urlview_formaction.cpp:94
 msgid "Save Bookmark"
-msgstr ""
+msgstr "Salvar Marcador"
 
 #: src/view.cpp:301
 #, c-format
@@ -881,21 +872,3 @@ msgstr "atributo não encontrado"
 msgid "EOF found while reading XML tag"
 msgstr "Fim de arquivo encontrado ao ler etiqueta XML"
 
-#~ msgid "%s %s - Search Articles - %u results"
-#~ msgstr "%s %s - Busca por Artigos - %u resultados"
-
-#~ msgid ""
-#~ "Weird. I just found an item that belongs to a nonexistent feed. That's a "
-#~ "bug."
-#~ msgstr ""
-#~ "Esquisito. Eu acabo de encontrar um artigo que pertence a uma fonte RSS "
-#~ "que não existe. Trata-se de um erro de software."
-
-#~ msgid "%s %s - Search Articles"
-#~ msgstr "%s %s - Procurar Artigos"
-
-#~ msgid "Search/Open"
-#~ msgstr "Procurar/Abrir"
-
-#~ msgid "New Search"
-#~ msgstr "Nova Busca"
