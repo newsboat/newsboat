@@ -29,7 +29,7 @@ msgstr "commande inconnue (bug)."
 
 #: src/configparser.cpp:109
 msgid "file couldn't be opened."
-msgstr ""
+msgstr "le fichier n'a pu être ouvert"
 
 #: src/configparser.cpp:112
 msgid "unknown error (bug)."
@@ -92,14 +92,14 @@ msgid "Opening cache..."
 msgstr "Vidage du cache..."
 
 #: src/controller.cpp:273
-#, fuzzy, c-format
+#, c-format
 msgid "Loading URLs from local cache..."
-msgstr "Chargement des articles depuis le cache..."
+msgstr "Chargement des URLs depuis le cache local..."
 
 #: src/controller.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid "Loading URLs from %s..."
-msgstr "%sChargement %s..."
+msgstr "Chargement des URLs depuis %s..."
 
 #: src/controller.cpp:297
 #, c-format
@@ -116,6 +116,8 @@ msgid ""
 "It looks like you haven't configured any feeds in your bloglines account. "
 "Please do so, and try again."
 msgstr ""
+"Il semble que vous n'avez configuré aucun flux dans votre aggrégateur."
+"S'il vous plait, faites le, et essayez encore."
 
 #: src/controller.cpp:301
 #, c-format
@@ -123,6 +125,8 @@ msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
 msgstr ""
+"Il semble que le flux OPML auquel vous vous être inscris ne contient aucun flux."
+"S'il vous plaît, faites le, et essayez encore."
 
 #: src/controller.cpp:310
 msgid "Loading articles from cache..."
@@ -175,7 +179,7 @@ msgstr ""
 "total)"
 
 #: src/controller.cpp:590
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]\n"
@@ -200,6 +204,9 @@ msgstr ""
 "-c <cachefile>  utiliser <cachefile> comme un fichier cache\n"
 "-C <configfile> lire la configuration depuis <configfile>\n"
 "-v              vider le cache\n"
+"-o              activer le mode hors-ligne (s'applique uniquement "
+"au mode de synchronisation de l'aggrégateur)\n"
+"-V              afficher des informations sur la version du logiciel\n"
 "-h              affiche cette aide\n"
 
 #: src/controller.cpp:635
@@ -212,6 +219,8 @@ msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
 msgstr ""
+"Le support des marque-pages n'est pas configuré. S'il vous plait, "
+"éditez la variable de configuration 'bookmark-cmd'"
 
 #: src/download.cpp:42
 msgid "queued"
@@ -282,9 +291,8 @@ msgid "Error: couldn't parse filter command!"
 msgstr "Erreur: impossible d'analyser la commande de filtre %s !"
 
 #: src/feedlist_formaction.cpp:179 src/itemlist_formaction.cpp:197
-#, fuzzy
 msgid "No filters defined."
-msgstr "Aucun tag définis."
+msgstr "Aucun filtre définis."
 
 #: src/feedlist_formaction.cpp:184 src/itemlist_formaction.cpp:161
 msgid "Search for: "
@@ -366,9 +374,8 @@ msgid "Invalid position!"
 msgstr "Position invalide!"
 
 #: src/feedlist_formaction.cpp:446 src/itemlist_formaction.cpp:259
-#, fuzzy
 msgid "Searching..."
-msgstr "Rechercher"
+msgstr "Recherche en cours..."
 
 #: src/feedlist_formaction.cpp:453 src/itemlist_formaction.cpp:270
 #, c-format
@@ -417,23 +424,20 @@ msgid "usage: set <variable>[=<value>]"
 msgstr "Mode d'emploi: set <variable>[=<value>]"
 
 #: src/formaction.cpp:158
-#, fuzzy
 msgid "Saving bookmark..."
-msgstr "Lancement du navigateur..."
+msgstr "Enregistrement du marque-page..."
 
 #: src/formaction.cpp:161
 msgid "Saved bookmark."
-msgstr ""
+msgstr "Marque page sauvegardé."
 
 #: src/formaction.cpp:163
-#, fuzzy
 msgid "Error while saving bookmark: "
-msgstr "Erreur lors de la recherche pour '%s': %s"
+msgstr "Erreur lors de l'enregistrement du marque-page: "
 
 #: src/formaction.cpp:185
-#, fuzzy
 msgid "URL: "
-msgstr "URLs"
+msgstr "URL: "
 
 #: src/formaction.cpp:186 src/itemview_formaction.cpp:57 src/view.cpp:240
 msgid "Title: "
@@ -441,7 +445,7 @@ msgstr "Titre: "
 
 #: src/formaction.cpp:187
 msgid "Description: "
-msgstr ""
+msgstr "Description: "
 
 #: src/help_formaction.cpp:30
 #, c-format
@@ -480,9 +484,8 @@ msgstr "Aucun élément sélectionné"
 
 #: src/itemlist_formaction.cpp:70 src/itemview_formaction.cpp:86
 #: src/itemview_formaction.cpp:210
-#, fuzzy
 msgid "Flags: "
-msgstr "Fichier: "
+msgstr "Drapeaux: "
 
 #: src/itemlist_formaction.cpp:85 src/itemlist_formaction.cpp:504
 #: src/itemview_formaction.cpp:186 src/itemview_formaction.cpp:319
@@ -507,7 +510,7 @@ msgstr "Erreur: aucun élément sélectionné"
 
 #: src/itemlist_formaction.cpp:113
 msgid "Error: you can't reload search results."
-msgstr ""
+msgstr "Erreur: vous ne pouvez recharger les résultats de recherche."
 
 #: src/itemlist_formaction.cpp:124 src/itemlist_formaction.cpp:132
 #: src/itemview_formaction.cpp:228 src/itemview_formaction.cpp:237
@@ -515,9 +518,8 @@ msgid "No unread items."
 msgstr "Aucun élément non-lu."
 
 #: src/itemlist_formaction.cpp:138 src/itemlist_formaction.cpp:143
-#, fuzzy
 msgid "No unread feeds."
-msgstr "Aucun élément non-lu."
+msgstr "Aucun flux non-lu."
 
 #: src/itemlist_formaction.cpp:168
 msgid "Toggling read flag for article..."
@@ -530,7 +532,7 @@ msgstr "Erreur lors de la bascule du drapeau de lecture: %s"
 
 #: src/itemlist_formaction.cpp:247 src/itemview_formaction.cpp:346
 msgid "Flags updated."
-msgstr ""
+msgstr "Drapeaux mis-à-jour"
 
 #: src/itemlist_formaction.cpp:396
 #, c-format
@@ -538,9 +540,9 @@ msgid "%s %s - Articles in feed '%s' (%u unread, %u total) - %s"
 msgstr "%s %s - Articles dans le flux '%s' (%u non-lus, %u total) - %s"
 
 #: src/itemlist_formaction.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s - Search results (%u unread, %u total)"
-msgstr "%s %s - Vos flux (%u non lus, %u total) "
+msgstr "%s %s - Résultats de recherche (%u non lus, %u total) "
 
 #: src/itemlist_formaction.cpp:466
 msgid "Mark All Read"
@@ -736,9 +738,8 @@ msgid "Set a filter"
 msgstr "Appliquer un filtre"
 
 #: src/keymap.cpp:52
-#, fuzzy
 msgid "Select a predefined filter"
-msgstr "Appliquer un filtre"
+msgstr "Sélectionnez un filtre prédéfinit"
 
 #: src/keymap.cpp:53
 msgid "Clear currently set filter"
@@ -746,11 +747,11 @@ msgstr "Supprimer les filtres en cours"
 
 #: src/keymap.cpp:54
 msgid "Bookmark current link/article"
-msgstr ""
+msgstr "Mettre un marque-page sur le lien/article courant"
 
 #: src/keymap.cpp:55
 msgid "Edit flags"
-msgstr ""
+msgstr "Editer drapeaux"
 
 #: src/pb_controller.cpp:161
 msgid "Cleaning up queue..."
@@ -826,18 +827,17 @@ msgid "%s %s - Select Tag"
 msgstr "%s %s - Sélectionner Tag"
 
 #: src/select_formaction.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s - Select Filter"
-msgstr "%s %s - Sélectionner Tag"
+msgstr "%s %s - Sélectionner Filtre"
 
 #: src/select_formaction.cpp:138
 msgid "Select Tag"
 msgstr "Sélectionner Tag"
 
 #: src/select_formaction.cpp:143
-#, fuzzy
 msgid "Select Filter"
-msgstr "Appliquer un filtre"
+msgstr "Sélectionner Filtre"
 
 #: src/urlview_formaction.cpp:34 src/urlview_formaction.cpp:48
 msgid "No link selected!"
@@ -850,7 +850,7 @@ msgstr "%s %s - URLs"
 
 #: src/urlview_formaction.cpp:94
 msgid "Save Bookmark"
-msgstr ""
+msgstr "Enregistrez marque-page"
 
 #: src/view.cpp:301
 #, c-format
