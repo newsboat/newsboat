@@ -401,7 +401,7 @@ void itemlist_formaction::set_head(const std::string& s, unsigned int unread, un
 }
 
 bool itemlist_formaction::jump_to_previous_unread_item(bool start_with_last) {
-	unsigned int itempos;
+	int itempos;
 	std::istringstream is(f->get("itempos"));
 	is >> itempos;
 	for (int i=(start_with_last?itempos:(itempos-1));i>=0;--i) {
@@ -413,7 +413,7 @@ bool itemlist_formaction::jump_to_previous_unread_item(bool start_with_last) {
 			return true;
 		}
 	}
-	for (unsigned int i=visible_items.size()-1;i>=itempos;--i) {
+	for (int i=visible_items.size()-1;i>=itempos;--i) {
 		if (visible_items[i].first->unread()) {
 			std::ostringstream os;
 			os << i;
