@@ -65,6 +65,7 @@ static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** /* az
 	rss_item item(NULL);
 	item.set_guid(argv[0]);
 	item.set_title(argv[1]);
+	GetLogger().log(LOG_DEBUG, "rssitem_callback: title = %s", argv[1]);
 	item.set_author(argv[2]);
 	item.set_link(argv[3]);
 	
@@ -538,12 +539,12 @@ void cache::update_rssitem(rss_item& item, const std::string& feedurl) {
 		throw dbexception(db);
 	}
 	if (count_cbh.count() > 0) {
-		std::string update = prepare_query("UPDATE rss_item SET title = '%q', author = '%q', url = '%q', feedurl = '%q', content = '%q', enclosure_url = '%q', enclosure_type = '%q', flags = '%q' WHERE guid = '%q' AND pubDate != '%u'",
+		std::string update = prepare_query("UPDATE rss_item SET title = '%q', author = '%q', url = '%q', feedurl = '%q', content = '%q', enclosure_url = '%q', enclosure_type = '%q', flags = '%q' WHERE guid = '%q'",
 			item.title_raw().c_str(), item.author_raw().c_str(), item.link().c_str(), 
 			feedurl.c_str(), item.description_raw().c_str(), 
 			item.enclosure_url().c_str(), item.enclosure_type().c_str(),
 			item.flags().c_str(),
-			item.guid().c_str(), item.pubDate_timestamp());
+			item.guid().c_str());
 		GetLogger().log(LOG_DEBUG,"running query: %s", update.c_str());
 		rc = sqlite3_exec(db,update.c_str(),NULL,NULL,NULL);
 		if (rc != SQLITE_OK) {

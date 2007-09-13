@@ -677,7 +677,7 @@ void rss_feed::set_rssurl(const std::string& u) {
 }
 
 void rss_item::set_feedptr(rss_feed * ptr) {
-	GetLogger().log(LOG_DEBUG, "rss_item::set_feedptr: setting feed pointer from %p to %p", feedptr, ptr);
+	// GetLogger().log(LOG_DEBUG, "rss_item::set_feedptr: setting feed pointer from %p to %p", feedptr, ptr);
 	feedptr = ptr;
 }
 

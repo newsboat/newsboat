@@ -495,10 +495,16 @@ void controller::reload_all() {
 	GetLogger().log(LOG_DEBUG,"controller::reload_all: starting with reload all...");
 	unsigned int unread_feeds, unread_articles;
 	compute_unread_numbers(unread_feeds, unread_articles);
+	time_t t1, t2, dt;
+	t1 = time(NULL);
 	for (unsigned int i=0;i<feeds.size();++i) {
 		GetLogger().log(LOG_DEBUG, "controller::reload_all: reloading feed #%u", i);
 		this->reload(i,feeds.size());
 	}
+	t2 = time(NULL);
+	dt = t2 - t1;
+	GetLogger().log(LOG_INFO, "controller::reload_all: reload took %d seconds", dt);
+
 	unsigned int unread_feeds2, unread_articles2;
 	compute_unread_numbers(unread_feeds2, unread_articles2);
 	if (unread_feeds2 != unread_feeds || unread_articles2 != unread_articles) {
