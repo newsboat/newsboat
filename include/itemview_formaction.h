@@ -20,6 +20,8 @@ class itemview_formaction : public formaction {
 
 		virtual void finished_qna(operation op);
 
+		std::vector<std::string> render_html(const std::string& source, std::vector<linkpair>& links, const std::string& feedurl, unsigned int render_width);
+
 	private:
 		virtual void process_operation(operation op);
 		void set_head(const std::string& s);

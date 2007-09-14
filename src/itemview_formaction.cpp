@@ -120,8 +120,7 @@ void itemview_formaction::prepare() {
 		if (show_source) {
 			render_source(lines, item.description(), render_width);
 		} else {
-			htmlrenderer rnd(render_width);
-			rnd.render(item.description(), lines, links, item.feedurl());
+			lines = render_html(item.description(), links, item.feedurl(), render_width);
 		}
 
 		for (std::vector<std::string>::iterator it = lines.begin(); it != lines.end(); ++it) {
@@ -351,5 +350,23 @@ void itemview_formaction::finished_qna(operation op) {
 	}
 }
 
+std::vector<std::string> itemview_formaction::render_html(const std::string& source, std::vector<linkpair>& links, const std::string& feedurl, unsigned int render_width) {
+	std::vector<std::string> lines;
+	std::string renderer = v->get_cfg()->get_configvalue("html-renderer");
+	if (renderer == "internal") {
+		htmlrenderer rnd(render_width);
+		rnd.render(source, lines, links, feedurl);
+	} else {
+		std::string output = utils::run_filter(renderer, source);
+		std::istringstream is(output);
+		std::string line;
+		getline(is, line);
+		while (!is.eof()) {
+			lines.push_back(line);
+			getline(is, line);
+		}
+	}
+	return lines;
+}
 
 }

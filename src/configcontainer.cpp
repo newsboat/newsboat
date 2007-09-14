@@ -44,6 +44,7 @@ configcontainer::configcontainer()
 	config_data["bloglines-mark-read"] = configdata("no", configdata::BOOL);
 	config_data["bookmark-cmd"]    = configdata("", configdata::STR);
 	config_data["opml-url"]        = configdata("", configdata::STR);
+	config_data["html-renderer"]   = configdata("internal", configdata::PATH);
 }
 
 configcontainer::~configcontainer()
