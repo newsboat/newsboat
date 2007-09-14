@@ -1,14 +1,14 @@
 # Dutch translation for newsbeuter
 # Copyright (C) 2007 
 # This file is distributed under the same license as the newsbeuter package
-# BArt Van Loon <bart@inGen.be>, 2007
+# Bart Van Loon <bart@inGen.be>, 2007
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 0.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-09-12 21:35+0200\n"
-"PO-Revision-Date: 2007-09-01 09:39+0100\n"
+"PO-Revision-Date: 2007-09-14 22:51+0100\n"
 "Last-Translator: Bart Van Loon <bart@inGen.be>\n"
 "Language-Team: Dutch <bart@inGen.be>\n"
 "MIME-Version: 1.0\n"
@@ -34,7 +34,7 @@ msgstr "onbekende opdrachtregel (bug)"
 
 #: src/configparser.cpp:109
 msgid "file couldn't be opened."
-msgstr ""
+msgstr "bestand kon niet geopend worden"
 
 #: src/configparser.cpp:112
 msgid "unknown error (bug)."
@@ -96,14 +96,12 @@ msgid "Opening cache..."
 msgstr "Bezig met openen van de cache..."
 
 #: src/controller.cpp:273
-#, fuzzy, c-format
 msgid "Loading URLs from local cache..."
-msgstr "Bezig met laden van artikels uit de cache..."
+msgstr "Bezig met laden van artikels uit de lokale cache..."
 
 #: src/controller.cpp:284
-#, fuzzy, c-format
 msgid "Loading URLs from %s..."
-msgstr "%sBezig met laden van %s..."
+msgstr "Bezig met URLs te laden laden van %s..."
 
 #: src/controller.cpp:297
 #, c-format
@@ -119,7 +117,8 @@ msgstr ""
 msgid ""
 "It looks like you haven't configured any feeds in your bloglines account. "
 "Please do so, and try again."
-msgstr ""
+msgstr "Blijkbaar hebt u nog geen feeds geconfigureerd in uw bloglines account"
+"Doe dit even aub, en probeer dan opnieuw."
 
 #: src/controller.cpp:301
 #, c-format
@@ -127,6 +126,8 @@ msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
 msgstr ""
+"Blijkbaar bevat de OPML feed waar uw zich op ingeschreven heeft geen feeds. Vul hem"
+"met feeds aub, en probeer dan opnieuw."
 
 #: src/controller.cpp:310
 msgid "Loading articles from cache..."
@@ -175,11 +176,10 @@ msgstr "ongeldige feed index (bug)"
 #, c-format
 msgid "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
 msgstr ""
-"newsbeuter: klaar met herladen, %u ongelezen feeds (%u ongelezen artikels in "
-"totaal)"
+"newsbeuter: klaar met herladen, %u ongelezen feeds (%u ongelezen artikels in totaal)"
 
 #: src/controller.cpp:590
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]\n"
@@ -197,13 +197,16 @@ msgid ""
 msgstr ""
 "%s %s\n"
 "gebruik: %s [-i <bestand>|-e] [-u <urlbestand>] [-c <cachebestand>] [-h]\n"
-"-e                 exporteer OPML naar stdout\n"
-"-r                 ververs feeds na het opstarten\n"
-"-i <bestamnd>      importeer OPMLbestand\n"
+"-e                 exporteer OPML feed naar stdout\n"
+"-r                 ververs feeds bij het opstarten\n"
+"-i <bestand>       importeer OPMLbestand\n"
 "-u <urlbestamd>    lees RSS feed URLs van <urlbestand>\n"
 "-c <cachebestand>  gebruik <cachebestand> as cachebestand\n"
 "-C <configbestand> lees configuratie in <configbestand>\n"
 "-v                 maak cache grondig schoon\n"
+"-o                 activeer offline mode (geldt alleen voor bloglines "
+"synchronisatiemode)\n"
+"-V                 versie-informatie\n"
 "-h                 deze hulptekst\n"
 
 #: src/controller.cpp:635
@@ -216,6 +219,8 @@ msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
 msgstr ""
+"bladwijzerondersteuning is niet geconfigureerd. Corrigeer de waarde van de configuratievariabele"
+"`bookmark-cmd' aub."
 
 #: src/download.cpp:42
 msgid "queued"
@@ -286,9 +291,8 @@ msgid "Error: couldn't parse filter command!"
 msgstr "Fout: kon filteropdracht niet begrijpen"
 
 #: src/feedlist_formaction.cpp:179 src/itemlist_formaction.cpp:197
-#, fuzzy
 msgid "No filters defined."
-msgstr "Geen tags gedefinieerd"
+msgstr "Geen filters gedefinieerd"
 
 #: src/feedlist_formaction.cpp:184 src/itemlist_formaction.cpp:161
 msgid "Search for: "
@@ -370,9 +374,8 @@ msgid "Invalid position!"
 msgstr "Ongeldige positie!"
 
 #: src/feedlist_formaction.cpp:446 src/itemlist_formaction.cpp:259
-#, fuzzy
 msgid "Searching..."
-msgstr "Zoeken"
+msgstr "Bezig met zoeken..."
 
 #: src/feedlist_formaction.cpp:453 src/itemlist_formaction.cpp:270
 #, c-format
@@ -421,22 +424,20 @@ msgid "usage: set <variable>[=<value>]"
 msgstr "gebruik: set <variabele>[=<waarde>]"
 
 #: src/formaction.cpp:158
-#, fuzzy
 msgid "Saving bookmark..."
-msgstr "Bezig met starten van bladerprogramma..."
+msgstr "Bezig met opslaan van bladwijzer..."
 
 #: src/formaction.cpp:161
 msgid "Saved bookmark."
-msgstr ""
+msgstr "Opgeslagen bladwijzer."
 
 #: src/formaction.cpp:163
-#, fuzzy
 msgid "Error while saving bookmark: "
-msgstr "Fout tijdens het zoeken naar `%s': %s"
+msgstr "Fout tijdens het opslaan van bladwijzer: "
 
 #: src/formaction.cpp:185
 msgid "URL: "
-msgstr ""
+msgstr "URL:"
 
 #: src/formaction.cpp:186 src/itemview_formaction.cpp:57 src/view.cpp:240
 msgid "Title: "
@@ -444,7 +445,7 @@ msgstr "Titel: "
 
 #: src/formaction.cpp:187
 msgid "Description: "
-msgstr ""
+msgstr "Omschrijving: "
 
 #: src/help_formaction.cpp:30
 #, c-format
@@ -483,9 +484,8 @@ msgstr "Geen item geselecteerd!"
 
 #: src/itemlist_formaction.cpp:70 src/itemview_formaction.cpp:86
 #: src/itemview_formaction.cpp:210
-#, fuzzy
 msgid "Flags: "
-msgstr "Bestand: "
+msgstr "Vlaggen: "
 
 #: src/itemlist_formaction.cpp:85 src/itemlist_formaction.cpp:504
 #: src/itemview_formaction.cpp:186 src/itemview_formaction.cpp:319
@@ -510,7 +510,7 @@ msgstr "Fout: geen item geselecteerd!"
 
 #: src/itemlist_formaction.cpp:113
 msgid "Error: you can't reload search results."
-msgstr ""
+msgstr "Fout: u kan zoekresultaten niet herladen."
 
 #: src/itemlist_formaction.cpp:124 src/itemlist_formaction.cpp:132
 #: src/itemview_formaction.cpp:228 src/itemview_formaction.cpp:237
@@ -518,9 +518,8 @@ msgid "No unread items."
 msgstr "Geen ongelezen items"
 
 #: src/itemlist_formaction.cpp:138 src/itemlist_formaction.cpp:143
-#, fuzzy
 msgid "No unread feeds."
-msgstr "Geen ongelezen items"
+msgstr "Geen ongelezen feeds"
 
 #: src/itemlist_formaction.cpp:168
 msgid "Toggling read flag for article..."
@@ -533,7 +532,7 @@ msgstr "Fout bij het schakelen van de gelezen vlag: %s"
 
 #: src/itemlist_formaction.cpp:247 src/itemview_formaction.cpp:346
 msgid "Flags updated."
-msgstr ""
+msgstr "Vlaggen zijn geupdate."
 
 #: src/itemlist_formaction.cpp:396
 #, c-format
@@ -541,9 +540,9 @@ msgid "%s %s - Articles in feed '%s' (%u unread, %u total) - %s"
 msgstr "%s %s - Artikels in feed '%s' (%u ongelezen, %u totaal) - %s"
 
 #: src/itemlist_formaction.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s - Search results (%u unread, %u total)"
-msgstr "%s %s - Uw feeds (%u ongelezen, %u totaal)"
+msgstr "%s %s - Zoekresultaten (%u ongelezen, %u totaal)"
 
 #: src/itemlist_formaction.cpp:466
 msgid "Mark All Read"
@@ -739,9 +738,8 @@ msgid "Set a filter"
 msgstr "Een filter plaatsen"
 
 #: src/keymap.cpp:52
-#, fuzzy
 msgid "Select a predefined filter"
-msgstr "Een filter plaatsen"
+msgstr "Selecteed een voorgedefinieerde filter"
 
 #: src/keymap.cpp:53
 msgid "Clear currently set filter"
@@ -749,11 +747,11 @@ msgstr "Huidige geselecteerde filter leegmaken"
 
 #: src/keymap.cpp:54
 msgid "Bookmark current link/article"
-msgstr ""
+msgstr "Zet een bladwijzer op huidig(e) link/artikel"
 
 #: src/keymap.cpp:55
 msgid "Edit flags"
-msgstr ""
+msgstr "Wijzig vlaggen"
 
 #: src/pb_controller.cpp:161
 msgid "Cleaning up queue..."
@@ -827,18 +825,17 @@ msgid "%s %s - Select Tag"
 msgstr "%s %s - Tag Selecteren"
 
 #: src/select_formaction.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s - Select Filter"
-msgstr "%s %s - Tag Selecteren"
+msgstr "%s %s - Filter Selecteren"
 
 #: src/select_formaction.cpp:138
 msgid "Select Tag"
 msgstr "Tag Selecteren"
 
 #: src/select_formaction.cpp:143
-#, fuzzy
 msgid "Select Filter"
-msgstr "Een filter plaatsen"
+msgstr "Een filter selecteren"
 
 #: src/urlview_formaction.cpp:34 src/urlview_formaction.cpp:48
 msgid "No link selected!"
@@ -851,7 +848,7 @@ msgstr "%s %s - URLs"
 
 #: src/urlview_formaction.cpp:94
 msgid "Save Bookmark"
-msgstr ""
+msgstr "Sla Bladwijzer Op"
 
 #: src/view.cpp:301
 #, c-format
