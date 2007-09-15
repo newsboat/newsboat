@@ -65,11 +65,41 @@
 # If set to yes, then newsbeuter will ask for confirmation whether the user really wants to quit newsbeuter.
 #confirm-exit no
 
-# This format specifies the date/time format in the article list. For a detailed documentation on the allowed formats, consult the manpage of strftime(3).# datetime-format "%b %d"
+# This format specifies the date/time format in the article list. For a detailed documentation on the allowed formats, consult the manpage of strftime(3).
+# datetime-format "%b %d"
 
 # If set, then user errors (e.g. errors regarding defunct RSS feeds) will be logged to this file.
 # error-log ""
 
+# This configuration command sets the source where URLs shall be retrieved
+# from. By default, this is ~/.newsbeuter/urls. Alternatively, you can set it
+# to "bloglines", which enables newsbeuter's Bloglines synchronization mode, or
+# to "opml", which enables newsbeuter's OPML online subscription mode.
+
+# urls-source "local"
+
+# Set the Bloglines username and password. This is necessary for the Bloglines synchronization mode.
+# bloglines-auth "<user>:<password>"
+
+# If set to yes, it will mark all articles that are downloaded from Bloglines as read.
+# bloglines-mark-read no
+
+# If set, the configured command will be used as bookmark plugin. Please refer
+# to the documentation for further information on bookmark plugins.
+# bookmark-cmd ""
+
+# If the OPML online subscription mode is enabled, then the list of feeds will
+# be taken from the OPML file found on this location.
+# opml-url ""
+
+# If set to "internal", then the internal HTML renderer will be used.
+# Otherwise, the specified command will be executed, the HTML to be rendered
+# will be written to the command's stdin, and the program's output will be
+# displayed. This makes it possible to use other, external programs, such as
+# w3m, links or lynx, to render HTML.
+# ex. html-renderer "w3m -dump -T text/html"
+
+# html-renderer "internal"
 
 
 ###########################

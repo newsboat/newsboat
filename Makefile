@@ -140,6 +140,8 @@ install: install-mo
 	$(INSTALL) -m 644 doc/xhtml/* $(docdir) || true
 	$(MKDIR) $(docdir)/examples
 	$(INSTALL) -m 644 doc/example-config $(docdir)/examples/config || true
+	$(MKDIR) $(docdir)/contrib
+	$(INSTALL) -m 644 contrib/bookmark-delicious.sh $(docdir)/contrib/bookmark-delicious.sh || true
 
 uninstall:
 	$(RM) $(prefix)/bin/$(NEWSBEUTER)
