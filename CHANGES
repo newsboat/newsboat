@@ -1,6 +1,6 @@
 Changes for newsbeuter:
 
-0.7:
+0.7 (2007-09-17):
 	implemented the possibility to predefine filters
 	implemented bloglines synchronization support
 	implemented OPML online subscription support
