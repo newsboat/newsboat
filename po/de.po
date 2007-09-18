@@ -123,7 +123,7 @@ msgid ""
 "Please do so, and try again."
 msgstr ""
 "Es sieht so aus als hätten sie keine Feeds in ihrem Bloglines-Account "
-"konfigurieren. Bitte tun sie das, und probieren sie es erneut."
+"konfiguriert. Bitte tun sie das, und probieren sie es erneut."
 
 #: src/controller.cpp:301
 #, c-format
@@ -225,7 +225,7 @@ msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
 msgstr ""
-"Die Lesezeichen-Unterstützung ist nicht konfigurieren. Bitte setzen sie die "
+"Die Lesezeichen-Unterstützung ist nicht konfiguriert. Bitte setzen sie die "
 "Konfigurationsvariable `bookmark-cmd' entsprechend."
 
 #: src/download.cpp:42
