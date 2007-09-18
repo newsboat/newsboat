@@ -45,6 +45,8 @@ configcontainer::configcontainer()
 	config_data["bookmark-cmd"]    = configdata("", configdata::STR);
 	config_data["opml-url"]        = configdata("", configdata::STR);
 	config_data["html-renderer"]   = configdata("internal", configdata::PATH);
+	config_data["feedlist-format"] = configdata("%4i %n %11u %t", configdata::STR);
+	config_data["articlelist-format"] = configdata("%4i %f %D   %t", configdata::STR);
 }
 
 configcontainer::~configcontainer()

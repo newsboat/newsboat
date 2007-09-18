@@ -6,6 +6,7 @@
 #include <reloadthread.h>
 #include <exceptions.h>
 #include <utils.h>
+#include <formatstring.h>
 
 #include <sstream>
 #include <cassert>
@@ -227,6 +228,8 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 	if (visible_feeds.size() > 0)
 		visible_feeds.erase(visible_feeds.begin(), visible_feeds.end());
 
+	std::string feedlist_format = v->get_cfg()->get_configvalue("feedlist-format");
+
 	for (std::vector<rss_feed>::iterator it = feeds.begin(); it != feeds.end(); ++it, ++i, ++feedlist_number) {
 		rss_feed feed = *it;
 		std::string title = it->title();
@@ -239,7 +242,7 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 
 		// TODO: refactor
 		char sbuf[20];
-		char sbuf2[20];
+		char idxbuf[5];
 		unsigned int unread_count = 0;
 		if (it->items().size() > 0) {
 			unread_count = it->unread_item_count();
@@ -255,18 +258,25 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 		if ((tag == "" || it->matches_tag(tag)) && (!apply_filter || m.matches(&(*it)))) {
 			visible_feeds.push_back(std::pair<rss_feed *, unsigned int>(&(*it),i));
 
-			snprintf(sbuf,sizeof(buf),"(%u/%u) ",unread_count,static_cast<unsigned int>(it->items().size()));
-			snprintf(sbuf2,sizeof(sbuf2),"%4u %c %11s",feedlist_number, unread_count > 0 ? 'N' : ' ',sbuf);
-			std::string newtitle(sbuf2);
-			newtitle.append(title);
-			title = newtitle;
+			fmtstr_formatter fmt;
+
+			snprintf(idxbuf, sizeof(idxbuf),"%u", feedlist_number);
+			snprintf(sbuf,sizeof(sbuf),"(%u/%u)",unread_count,static_cast<unsigned int>(it->items().size()));
+
+			fmt.register_fmt('i', idxbuf);
+			fmt.register_fmt('u', sbuf);
+			fmt.register_fmt('n', unread_count > 0 ? "N" : " ");
+			fmt.register_fmt('t', title);
+			fmt.register_fmt('l', it->link());
+			fmt.register_fmt('L', it->rssurl());
+			fmt.register_fmt('d', it->description());
 
 			std::string line = "{listitem[";
 			std::ostringstream num;
 			num << i;
 			line.append(num.str());
 			line.append("] text:");
-			line.append(stfl::quote(title));
+			line.append(stfl::quote(fmt.do_format(feedlist_format)));
 			line.append("}");
 
 			code.append(line);

@@ -3,15 +3,12 @@ TODO:
 - refactor XML pull parser (many redundancies)
 	ignore comments
 	join two subsequent text nodes separated by a comment
-- do entitity decoding for titles (this may be controversial...)
 - research (and fix) libnxml decoding issues
 - improve string handling (no more std::string() + std::string())
 - add automatic download mode to podbeuter (commandline switch)
 - add configurable pager
 - update example config
-- properly document changes in key binding stuff
 - make cursor in feedlist and itemlist stable when a filter is applied
-- refine the search function (make it like the command line)
 - implement commandline commands quit [done], add, save [done], tag (select tag) [done], goto (by matching title of feed)
 - implement reloading of configuration (:source)
 - don't delete flagged articles
@@ -105,3 +102,6 @@ DONE:
 - implement new urls-source "opml" to subscribe to opml files that are available online
 - test import/export
 - implement keys to jump to the next and previous unread feed from the article list
+- properly document changes in key binding stuff
+- do entitity decoding for titles (won't be fixed, as we fully comply with the RSS recommendations)
+- refine the search function (make it like the command line)

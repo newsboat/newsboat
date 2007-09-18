@@ -23,7 +23,7 @@ src/downloadthread.o: include/downloadthread.h include/logger.h
 src/exception.o: include/exception.h include/exceptions.h
 
 src/feedlist_formaction.o: include/feedlist_formaction.h include/view.h include/logger.h \
-	include/reloadthread.h include/exceptions.h include/utils.h
+	include/reloadthread.h include/exceptions.h include/utils.h include/formatstring.h
 
 src/filebrowser_formaction.o: include/filebrowser_formaction.h include/logger.h config.h \
 	include/view.h
@@ -41,7 +41,7 @@ src/htmlrenderer.o: include/htmlrenderer.h include/xmlpullparser.h include/utils
 	include/logger.h config.h
 
 src/itemlist_formaction.o: include/itemlist_formaction.h include/view.h config.h \
-	include/exceptions.h include/utils.h
+	include/exceptions.h include/utils.h include/formatstring.h
 
 src/itemview_formaction.o: include/itemview_formaction.h include/view.h config.h \
 	include/logger.h include/exceptions.h include/utils.h
@@ -90,3 +90,5 @@ src/view.o: stfl/feedlist.h stfl/itemlist.h stfl/itemview.h stfl/help.h stfl/fil
 
 src/xmlpullparser.o: include/xmlpullparser.h include/exceptions.h include/utils.h \
 	include/logger.h config.h
+
+src/formatstring.o: include/formatstring.h

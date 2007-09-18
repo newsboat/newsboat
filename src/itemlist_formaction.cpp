@@ -4,8 +4,9 @@
 #include <logger.h>
 #include <exceptions.h>
 #include <utils.h>
-#include <cassert>
+#include <formatstring.h>
 
+#include <cassert>
 #include <sstream>
 
 namespace newsbeuter {
@@ -322,48 +323,59 @@ void itemlist_formaction::prepare() {
 		if (datetimeformat.length() == 0)
 			datetimeformat = "%b %d";
 
+		std::string itemlist_format = v->get_cfg()->get_configvalue("articlelist-format");
+
 		for (std::vector<std::pair<rss_item *, unsigned int> >::iterator it = visible_items.begin(); it != visible_items.end(); ++it) {
+			fmtstr_formatter fmt;
+
 			std::string line = "{listitem[";
 			std::ostringstream x;
 			x << it->second;
 			line.append(x.str());
 			line.append("] text:");
 			std::string title;
-			char buf[20];
-			snprintf(buf,sizeof(buf),"%4u ",it->second + 1);
-			title.append(buf);
+
+			char buf[5];
+			snprintf(buf,sizeof(buf),"%u",it->second + 1);
+
+			fmt.register_fmt('i', buf);
+
+			std::string flags;
+
 			if (it->first->unread()) {
-				title.append("N");
+				flags.append("N");
 			} else {
-				title.append(" ");
+				flags.append(" ");
 			}
 			if (it->first->flags().length() > 0) {
-				title.append("! ");
+				flags.append("!");
 			} else {
-				title.append("  ");
+				flags.append(" ");
 			}
+
+			fmt.register_fmt('f', flags);
+
 			char datebuf[64];
 			time_t t = it->first->pubDate_timestamp();
 			struct tm * stm = localtime(&t);
 			strftime(datebuf,sizeof(datebuf), datetimeformat.c_str(), stm);
-			title.append(datebuf);
-			title.append("   ");
+
+			fmt.register_fmt('D', datebuf);
+
+			std::string itemtitle;
 			if (feed->rssurl() != it->first->feedurl()) {
 				char buf[20];
 				std::string feedtitle = it->first->get_feedptr()->title();
 				snprintf(buf,sizeof(buf),"|%-17s|",feedtitle.substr(0,17).c_str());
-				title.append(buf);
-				title.append("  ");
+				itemtitle.append(buf);
+				itemtitle.append("  ");
 			}
-			title.append(it->first->title());
-			std::string quoted_title = stfl::quote(title);
-			GetLogger().log(LOG_DEBUG, "itemlist_formaction: XXXTITLE it->first->title = `%s' title = `%s' quoted title = `%s'", 
-				it->first->title().c_str(), title.c_str(), quoted_title.c_str());
-			// assert(quoted_title.substr(1,1) != "??");
+			itemtitle.append(it->first->title());
+			fmt.register_fmt('t', itemtitle);
+
+			std::string quoted_title = stfl::quote(fmt.do_format(itemlist_format));
 			line.append(quoted_title);
 			line.append("}");
-			GetLogger().log(LOG_INFO, "prepare: title  = %s", title.c_str());
-			GetLogger().log(LOG_INFO, "prepare: qtitle = %s", quoted_title.c_str());
 			GetLogger().log(LOG_INFO, "prepare: line = %s", line.c_str());
 			code.append(line);
 		}

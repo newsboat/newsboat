@@ -1,6 +1,7 @@
 /* test driver for newsbeuter */
 
 #define BOOST_AUTO_TEST_MAIN
+#define BOOST_TEST_DYN_LINK
 #include <boost/test/auto_unit_test.hpp>
 
 #include <unistd.h>
@@ -15,6 +16,7 @@
 #include <utils.h>
 #include <matcher.h>
 #include <history.h>
+#include <formatstring.h>
 
 #include <stdlib.h>
 
@@ -363,4 +365,24 @@ BOOST_AUTO_TEST_CASE(TestHistory) {
 	BOOST_CHECK_EQUAL(h.next(), "foobar");
 	BOOST_CHECK_EQUAL(h.next(), "");
 	BOOST_CHECK_EQUAL(h.next(), "");
+}
+
+BOOST_AUTO_TEST_CASE(TestFmtStrFormatter) {
+	fmtstr_formatter fmt;
+	fmt.register_fmt('a', "AAA");
+	fmt.register_fmt('b', "BBB");
+	fmt.register_fmt('c', "CCC");
+	BOOST_CHECK_EQUAL(fmt.do_format(""), "");
+	BOOST_CHECK_EQUAL(fmt.do_format("%"), "");
+	BOOST_CHECK_EQUAL(fmt.do_format("%%"), "%");
+	BOOST_CHECK_EQUAL(fmt.do_format("%a%b%c"), "AAABBBCCC");
+	BOOST_CHECK_EQUAL(fmt.do_format("%%%a%%%b%%%c%%"), "%AAA%BBB%CCC%");
+
+	BOOST_CHECK_EQUAL(fmt.do_format("%4a")," AAA");
+	BOOST_CHECK_EQUAL(fmt.do_format("%-4a"), "AAA ");
+
+	BOOST_CHECK_EQUAL(fmt.do_format("%2a"), "AA");
+	BOOST_CHECK_EQUAL(fmt.do_format("%-2a"), "AA");
+
+	BOOST_CHECK_EQUAL(fmt.do_format("<%a> <%5b> | %-5c%%"), "<AAA> <  BBB> | CCC  %");
 }

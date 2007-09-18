@@ -100,10 +100,14 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 	xpp.setInput(input);
 	
 	for (xmlpullparser::event e = xpp.next(); e != xmlpullparser::END_DOCUMENT; e = xpp.next()) {	
+		std::string tagname;
 		switch (e) {
 			case xmlpullparser::START_TAG:
-				current_tag = tags[xpp.getText()];
-				GetLogger().log(LOG_DEBUG,"htmlrenderer::render: found start tag %s (id = %u)",xpp.getText().c_str(), current_tag);
+				tagname = xpp.getText();
+				std::transform(tagname.begin(), tagname.end(), tagname.begin(), ::tolower);
+				current_tag = tags[tagname];
+
+				GetLogger().log(LOG_DEBUG,"htmlrenderer::render: found start tag %s (id = %u)",tagname.c_str(), current_tag);
 				switch (current_tag) {
 					case TAG_A: {
 							std::string link;
@@ -280,8 +284,11 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				break;
 
 			case xmlpullparser::END_TAG:
-				current_tag = tags[xpp.getText()];
-				GetLogger().log(LOG_DEBUG, "htmlrenderer::render: found end tag %s (id = %u)",xpp.getText().c_str(), current_tag);
+				tagname = xpp.getText();
+				std::transform(tagname.begin(), tagname.end(), tagname.begin(), ::tolower);
+				current_tag = tags[tagname];
+
+				GetLogger().log(LOG_DEBUG, "htmlrenderer::render: found end tag %s (id = %u)",tagname.c_str(), current_tag);
 
 				switch (current_tag) {
 					case TAG_BLOCKQUOTE:
