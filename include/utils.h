@@ -29,6 +29,8 @@ class utils {
 
 		static std::string resolve_tilde(const std::string& );
 		static std::string replace_all(std::string str, const std::string& from, const std::string& to);
+
+		static unsigned int get_screen_width();
 };
 
 }

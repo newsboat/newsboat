@@ -2,10 +2,11 @@
 PACKAGE=newsbeuter
 
 # important directories
-prefix=/usr/local
-datadir=$(prefix)/share
-localedir=$(datadir)/locale
-docdir=$(datadir)/doc/$(PACKAGE)
+prefix?=/usr/local
+mandir?=$(prefix)/share/man
+datadir?=$(prefix)/share
+localedir?=$(datadir)/locale
+docdir=?$(datadir)/doc/$(PACKAGE)
 
 # compiler
 CXX=c++
@@ -13,8 +14,8 @@ CXX=c++
 # compiler and linker flags
 DEFINES=-D_ENABLE_NLS -DLOCALEDIR=\"$(localedir)\" -DPACKAGE=\"$(PACKAGE)\"
 WARNFLAGS=-Wall -W
-CXXFLAGS=-ggdb -I./include -I./stfl -I./filter -I. -I/usr/local/include -I/sw/include $(WARNFLAGS) $(DEFINES)
-LDFLAGS=-L. -L/usr/local/lib -L/sw/lib
+CXXFLAGS+=-ggdb -I./include -I./stfl -I./filter -I. -I/usr/local/include -I/sw/include $(WARNFLAGS) $(DEFINES)
+LDFLAGS+=-L. -L/usr/local/lib -L/sw/lib
 
 # libraries to link with
 # LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn -lpthread
@@ -134,8 +135,8 @@ install: install-mo
 	$(INSTALL) $(NEWSBEUTER) $(prefix)/bin
 	$(INSTALL) $(PODBEUTER) $(prefix)/bin
 	$(MKDIR) $(prefix)/share/man/man1
-	$(INSTALL) doc/$(NEWSBEUTER).1 $(prefix)/share/man/man1
-	$(INSTALL) doc/$(PODBEUTER).1 $(prefix)/share/man/man1
+	$(INSTALL) doc/$(NEWSBEUTER).1 $(mandir)/man1
+	$(INSTALL) doc/$(PODBEUTER).1 $(mandir)/man1
 	$(MKDIR) $(docdir)
 	$(INSTALL) -m 644 doc/xhtml/* $(docdir) || true
 	$(MKDIR) $(docdir)/examples
@@ -144,8 +145,8 @@ install: install-mo
 uninstall:
 	$(RM) $(prefix)/bin/$(NEWSBEUTER)
 	$(RM) $(prefix)/bin/$(PODBEUTER)
-	$(RM) $(prefix)/share/man/man1/$(NEWSBEUTER).1
-	$(RM) $(prefix)/share/man/man1/$(PODBEUTER).1
+	$(RM) $(mandir)/man1/$(NEWSBEUTER).1
+	$(RM) $(mandir)/man1/$(PODBEUTER).1
 	$(RM) -r $(docdir)
 
 .PHONY: doc clean all test

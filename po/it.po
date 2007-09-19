@@ -547,7 +547,7 @@ msgstr "Errore: nessun elemento selezionato!"
 
 #: src/itemlist_formaction.cpp:113
 msgid "Error: you can't reload search results."
-msgstr "Errore: Non è possibile aggiornare i risultati della ricerca."
+msgstr "Errore: Non Ã¨ possibile aggiornare i risultati della ricerca."
 
 #: src/itemlist_formaction.cpp:124
 #: src/itemlist_formaction.cpp:132

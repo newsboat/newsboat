@@ -320,10 +320,7 @@ void itemlist_formaction::prepare() {
 
 	static unsigned int old_width = 0;
 
-	std::string listwidth = f->get("items:w");
-	std::istringstream is(listwidth);
-	unsigned int width;
-	is >> width;
+	unsigned int width = utils::get_screen_width();
 	if (old_width != width) {
 		do_redraw = true;
 		old_width = width;
@@ -406,7 +403,7 @@ void itemlist_formaction::init() {
 	f->set("msg","");
 	do_redraw = true;
 	set_keymap_hints();
-	f->run(-1); // FRUN
+	// f->run(-1); // FRUN
 }
 
 void itemlist_formaction::set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url) {

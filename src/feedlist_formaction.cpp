@@ -25,8 +25,11 @@ feedlist_formaction::feedlist_formaction(view * vv, std::string formstr)
 void feedlist_formaction::init() {
 	set_keymap_hints();
 
-	f->run(-1); // FRUN
+	stfl::form foo("{vbox}");
+	foo.run(-1);
+
 	if(v->get_ctrl()->get_refresh_on_start()) {
+		f->run(-1); // FRUN
 		v->get_ctrl()->start_reload_all_thread();
 	}
 	v->get_ctrl()->update_feedlist();
@@ -38,7 +41,7 @@ void feedlist_formaction::init() {
 	 */
 	unsigned int reload_cycle = 60 * static_cast<unsigned int>(v->get_cfg()->get_configvalue_as_int("reload-time"));
 	if (v->get_cfg()->get_configvalue_as_bool("auto-reload") == true) {
-		// f->run(-1); // FRUN
+		f->run(-1); // FRUN
 		reloadthread  * rt = new reloadthread(v->get_ctrl(), reload_cycle, v->get_cfg());
 		rt->start();
 	}
@@ -51,10 +54,7 @@ feedlist_formaction::~feedlist_formaction() { }
 void feedlist_formaction::prepare() {
 	static unsigned int old_width = 0;
 
-	std::string listwidth = f->get("feeds:w");
-	std::istringstream is(listwidth);
-	unsigned int width;
-	is >> width;
+	unsigned int width = utils::get_screen_width();
 	if (old_width != width || old_width == 0) {
 		do_redraw = true;
 		old_width = width;
@@ -235,10 +235,7 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 	
 	assert(v->get_cfg() != NULL); // must not happen
 
-	std::string listwidth = f->get("feeds:w");
-	std::istringstream is(listwidth);
-	unsigned int width;
-	is >> width;
+	unsigned int width = utils::get_screen_width();
 	
 	feeds_shown = 0;
 	unsigned int i = 0;
