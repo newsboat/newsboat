@@ -25,10 +25,11 @@ feedlist_formaction::feedlist_formaction(view * vv, std::string formstr)
 void feedlist_formaction::init() {
 	set_keymap_hints();
 
+	f->run(-1); // FRUN
 	if(v->get_ctrl()->get_refresh_on_start()) {
-		f->run(-1);
 		v->get_ctrl()->start_reload_all_thread();
 	}
+	v->get_ctrl()->update_feedlist();
 
 	/*
 	 * This is kind of a hack.
@@ -37,7 +38,7 @@ void feedlist_formaction::init() {
 	 */
 	unsigned int reload_cycle = 60 * static_cast<unsigned int>(v->get_cfg()->get_configvalue_as_int("reload-time"));
 	if (v->get_cfg()->get_configvalue_as_bool("auto-reload") == true) {
-		f->run(-1);
+		// f->run(-1); // FRUN
 		reloadthread  * rt = new reloadthread(v->get_ctrl(), reload_cycle, v->get_cfg());
 		rt->start();
 	}
@@ -48,6 +49,17 @@ void feedlist_formaction::init() {
 feedlist_formaction::~feedlist_formaction() { }
 
 void feedlist_formaction::prepare() {
+	static unsigned int old_width = 0;
+
+	std::string listwidth = f->get("feeds:w");
+	std::istringstream is(listwidth);
+	unsigned int width;
+	is >> width;
+	if (old_width != width || old_width == 0) {
+		do_redraw = true;
+		old_width = width;
+	}
+
 	if (do_redraw) {
 		do_redraw = false;
 		v->get_ctrl()->update_feedlist();
@@ -83,6 +95,9 @@ void feedlist_formaction::process_operation(operation op) {
 					v->show_error(_("No feed selected!")); // should not happen
 				}
 			}
+			break;
+		case OP_INT_RESIZE:
+			do_redraw = true;
 			break;
 		case OP_RELOADURLS:
 			v->get_ctrl()->reload_urls_file();
@@ -219,6 +234,11 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 	char buf[1024];
 	
 	assert(v->get_cfg() != NULL); // must not happen
+
+	std::string listwidth = f->get("feeds:w");
+	std::istringstream is(listwidth);
+	unsigned int width;
+	is >> width;
 	
 	feeds_shown = 0;
 	unsigned int i = 0;
@@ -276,7 +296,7 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 			num << i;
 			line.append(num.str());
 			line.append("] text:");
-			line.append(stfl::quote(fmt.do_format(feedlist_format)));
+			line.append(stfl::quote(fmt.do_format(feedlist_format, width)));
 			line.append("}");
 
 			code.append(line);

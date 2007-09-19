@@ -9,7 +9,7 @@ namespace newsbeuter {
 class fmtstr_formatter {
 	public:
 		void register_fmt(char f, const std::string& value);
-		std::string do_format(const std::string& fmt);
+		std::string do_format(const std::string& fmt, unsigned int width = 0);
 	private:
 		std::map<char, std::string> fmts;
 };

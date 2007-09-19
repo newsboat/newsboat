@@ -399,4 +399,8 @@ BOOST_AUTO_TEST_CASE(TestFmtStrFormatter) {
 	BOOST_CHECK_EQUAL(fmt2.do_format("asdf | %a | %?c?%a%b&%b%a? | qwert"), "asdf | AAA | AAABBB | qwert");
 	BOOST_CHECK_EQUAL(fmt2.do_format("%?c?asdf?"), "asdf");
 
+	BOOST_CHECK_EQUAL(fmt.do_format("%>X", 3), "XXX");
+	BOOST_CHECK_EQUAL(fmt.do_format("%a%> %b", 10), "AAA    BBB");
+	BOOST_CHECK_EQUAL(fmt.do_format("%a%> %b", 0), "AAA BBB");
+
 }

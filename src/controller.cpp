@@ -357,7 +357,7 @@ void controller::run(int argc, char * argv[]) {
 	// hand over the important objects to the view
 	v->set_config_container(cfg);
 	v->set_keymap(&keys);
-	v->set_feedlist(feeds);
+	// v->set_feedlist(feeds);
 	v->set_tags(tags);
 
 	// run the view

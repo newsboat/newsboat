@@ -66,6 +66,8 @@ static op_desc opdescs[] = {
 	{ OP_INT_QNA_NEXTHIST, "XXXNOKEY-qna-next-history", "qna-next-history", NULL, KM_INTERNAL },
 	{ OP_INT_QNA_PREVHIST, "XXXNOKEY-qna-prev-history", "qna-prev-history", NULL, KM_INTERNAL },
 
+	{ OP_INT_RESIZE, "RESIZE", "internal-resize", NULL, KM_INTERNAL },
+
 	{ OP_NIL, NULL, NULL, NULL, 0 }
 };
 

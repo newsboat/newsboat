@@ -145,7 +145,6 @@ void view::run() {
 	 */
 
 	feedlist->init();
-	itemlist->init();
 
 	while (formaction_stack.size() > 0) {
 		// first, we take the current formaction.
@@ -155,7 +154,7 @@ void view::run() {
 		fa->prepare();
 
 		// we then receive the event and ignore timeouts.
-		const char * event = fa->get_form()->run(1000);
+		const char * event = fa->get_form()->run(0);
 		if (!event || strcmp(event,"TIMEOUT")==0) continue;
 
 		// retrieve operation code through the keymap

@@ -11,7 +11,7 @@ void fmtstr_formatter::register_fmt(char f, const std::string& value) {
 	fmts[f] = value;
 }
 
-std::string fmtstr_formatter::do_format(const std::string& fmt) {
+std::string fmtstr_formatter::do_format(const std::string& fmt, unsigned int width) {
 	std::string result;
 	unsigned int i;
 	unsigned int fmtlen = fmt.length();
@@ -42,6 +42,21 @@ std::string fmtstr_formatter::do_format(const std::string& fmt) {
 				} else if (fmt[i+1] == '%') {
 					result.append(1, '%');
 					++i;
+				} else if (fmt[i+1] == '>') {
+					if (fmt[i+2]) {
+						if (width == 0) {
+							result.append(1, fmt[i+2]);
+							i += 2;
+						} else {
+							std::string rightside = do_format(&fmt[i+3], 0);
+							int diff = width - result.length() - rightside.length();
+							if (diff > 0) {
+								result.append(diff, fmt[i+2]);
+							}
+							result.append(rightside);
+							i = fmtlen;
+						}
+					}
 				} else if (fmt[i+1] == '?') {
 					unsigned int j = i+2;
 					while (fmt[j] && fmt[j] != '?')
@@ -58,9 +73,9 @@ std::string fmtstr_formatter::do_format(const std::string& fmt) {
 								pair.push_back("");
 
 							if (fmts[cond[0]].length() > 0) {
-								result.append(do_format(pair[0]));
+								result.append(do_format(pair[0], width));
 							} else {
-								result.append(do_format(pair[1]));
+								result.append(do_format(pair[1], width));
 							}
 
 							i = k;

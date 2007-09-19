@@ -117,7 +117,7 @@ msgstr "Caricamento URL da %s..."
 #: src/controller.cpp:297
 #, c-format
 msgid "Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."
-msgstr "Errore: Nessun URL configurato. Per piacere, aggiungere al file %s qualche feed RSS o impare un file OPML."
+msgstr "Errore: Nessun URL configurato. Per piacere, aggiungere al file %s qualche feed RSS o importare un file OPML."
 
 #: src/controller.cpp:299
 #, c-format

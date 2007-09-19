@@ -210,6 +210,9 @@ void itemlist_formaction::process_operation(operation op) {
 			update_visible_items = true;
 			do_redraw = true;
 			break;
+		case OP_INT_RESIZE:
+			do_redraw = true;
+			break;
 		default:
 			break;
 	}
@@ -315,7 +318,19 @@ void itemlist_formaction::prepare() {
 		update_visible_items = false;
 	}
 
+	static unsigned int old_width = 0;
+
+	std::string listwidth = f->get("items:w");
+	std::istringstream is(listwidth);
+	unsigned int width;
+	is >> width;
+	if (old_width != width) {
+		do_redraw = true;
+		old_width = width;
+	}
+
 	if (do_redraw) {
+
 		GetLogger().log(LOG_DEBUG, "itemlist_formaction::prepare: redrawing");
 		std::string code = "{list";
 
@@ -367,7 +382,7 @@ void itemlist_formaction::prepare() {
 			}
 			fmt.register_fmt('t', it->first->title());
 
-			std::string quoted_title = stfl::quote(fmt.do_format(itemlist_format));
+			std::string quoted_title = stfl::quote(fmt.do_format(itemlist_format, width));
 			line.append(quoted_title);
 			line.append("}");
 			GetLogger().log(LOG_INFO, "prepare: line = %s", line.c_str());
@@ -391,6 +406,7 @@ void itemlist_formaction::init() {
 	f->set("msg","");
 	do_redraw = true;
 	set_keymap_hints();
+	f->run(-1); // FRUN
 }
 
 void itemlist_formaction::set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url) {
