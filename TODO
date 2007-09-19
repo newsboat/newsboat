@@ -3,7 +3,6 @@ TODO:
 - refactor XML pull parser (many redundancies)
 	ignore comments
 	join two subsequent text nodes separated by a comment
-- research (and fix) libnxml decoding issues
 - improve string handling (no more std::string() + std::string())
 - add automatic download mode to podbeuter (commandline switch)
 - add configurable pager
@@ -12,6 +11,7 @@ TODO:
 - implement commandline commands quit [done], add, save [done], tag (select tag) [done], goto (by matching title of feed)
 - implement reloading of configuration (:source)
 - don't delete flagged articles
+- maybe move the "newsbeuter 0.7 on the right side of the first line
 
 
 longteam goals to reach:
@@ -105,3 +105,4 @@ DONE:
 - properly document changes in key binding stuff
 - do entitity decoding for titles (won't be fixed, as we fully comply with the RSS recommendations)
 - refine the search function (make it like the command line)
+- research (and fix) libnxml decoding issues

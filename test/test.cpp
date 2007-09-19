@@ -385,4 +385,18 @@ BOOST_AUTO_TEST_CASE(TestFmtStrFormatter) {
 	BOOST_CHECK_EQUAL(fmt.do_format("%-2a"), "AA");
 
 	BOOST_CHECK_EQUAL(fmt.do_format("<%a> <%5b> | %-5c%%"), "<AAA> <  BBB> | CCC  %");
+
+	fmtstr_formatter fmt2;
+	fmt2.register_fmt('a',"AAA");
+	BOOST_CHECK_EQUAL(fmt2.do_format("%?a?%a&no?"), "AAA");
+	BOOST_CHECK_EQUAL(fmt2.do_format("%?b?%b&no?"), "no");
+	BOOST_CHECK_EQUAL(fmt2.do_format("%?a?[%-4a]&no?"), "[AAA ]");
+
+	fmt2.register_fmt('b',"BBB");
+	BOOST_CHECK_EQUAL(fmt2.do_format("asdf | %a | %?c?%a%b&%b%a? | qwert"), "asdf | AAA | BBBAAA | qwert");
+	BOOST_CHECK_EQUAL(fmt2.do_format("%?c?asdf?"), "");
+	fmt2.register_fmt('c',"CCC");
+	BOOST_CHECK_EQUAL(fmt2.do_format("asdf | %a | %?c?%a%b&%b%a? | qwert"), "asdf | AAA | AAABBB | qwert");
+	BOOST_CHECK_EQUAL(fmt2.do_format("%?c?asdf?"), "asdf");
+
 }

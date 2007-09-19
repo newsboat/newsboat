@@ -1,6 +1,8 @@
 #include <formatstring.h>
+#include <utils.h>
 
 #include <sstream>
+#include <vector>
 
 
 namespace newsbeuter {
@@ -40,6 +42,34 @@ std::string fmtstr_formatter::do_format(const std::string& fmt) {
 				} else if (fmt[i+1] == '%') {
 					result.append(1, '%');
 					++i;
+				} else if (fmt[i+1] == '?') {
+					unsigned int j = i+2;
+					while (fmt[j] && fmt[j] != '?')
+						j++;
+					if (fmt[j]) {
+						std::string cond = fmt.substr(i+2, j - i - 1);
+						unsigned int k = j + 1;
+						while (fmt[k] && fmt[k] != '?')
+							k++;
+						if (fmt[k]) {
+							std::string values = fmt.substr(j+1, k - j - 1);
+							std::vector<std::string> pair = utils::tokenize(values,"&");
+							while (pair.size() < 2)
+								pair.push_back("");
+
+							if (fmts[cond[0]].length() > 0) {
+								result.append(do_format(pair[0]));
+							} else {
+								result.append(do_format(pair[1]));
+							}
+
+							i = k;
+						} else {
+							i = k - 1;
+						}
+					} else {
+						i = j - 1;
+					}
 				} else {
 					result.append(fmts[fmt[i+1]]);
 					++i;

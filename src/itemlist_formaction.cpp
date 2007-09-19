@@ -362,16 +362,10 @@ void itemlist_formaction::prepare() {
 
 			fmt.register_fmt('D', datebuf);
 
-			std::string itemtitle;
 			if (feed->rssurl() != it->first->feedurl()) {
-				char buf[20];
-				std::string feedtitle = it->first->get_feedptr()->title();
-				snprintf(buf,sizeof(buf),"|%-17s|",feedtitle.substr(0,17).c_str());
-				itemtitle.append(buf);
-				itemtitle.append("  ");
+				fmt.register_fmt('T', it->first->get_feedptr()->title());
 			}
-			itemtitle.append(it->first->title());
-			fmt.register_fmt('t', itemtitle);
+			fmt.register_fmt('t', it->first->title());
 
 			std::string quoted_title = stfl::quote(fmt.do_format(itemlist_format));
 			line.append(quoted_title);
