@@ -1,6 +1,5 @@
 #include <utils.h>
 #include <logger.h>
-#include <ncursesw/ncurses.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -482,12 +481,6 @@ std::string utils::replace_all(std::string str, const std::string& from, const s
 	}
 	GetLogger().log(LOG_DEBUG,"utils::replace_all: after str = %s", str.c_str());
 	return str;
-}
-
-unsigned int utils::get_screen_width() {
-	int y, x;
-	getmaxyx(stdscr, y, x);
-	return static_cast<unsigned int>(x);
 }
 
 }

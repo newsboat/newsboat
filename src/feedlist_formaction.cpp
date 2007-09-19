@@ -25,8 +25,7 @@ feedlist_formaction::feedlist_formaction(view * vv, std::string formstr)
 void feedlist_formaction::init() {
 	set_keymap_hints();
 
-	stfl::form foo("{vbox}");
-	foo.run(-1);
+	f->run(-3); // compute all widget dimensions
 
 	if(v->get_ctrl()->get_refresh_on_start()) {
 		f->run(-1); // FRUN
@@ -54,13 +53,19 @@ feedlist_formaction::~feedlist_formaction() { }
 void feedlist_formaction::prepare() {
 	static unsigned int old_width = 0;
 
-	unsigned int width = utils::get_screen_width();
-	if (old_width != width || old_width == 0) {
+	std::string listwidth = f->get("items:w");
+	std::istringstream is(listwidth);
+	unsigned int width;
+	is >> width;
+
+	if (old_width != width) {
 		do_redraw = true;
 		old_width = width;
+		GetLogger().log(LOG_DEBUG, "feedlist_formaction::prepare: apparent resize");
 	}
 
 	if (do_redraw) {
+		GetLogger().log(LOG_DEBUG, "feedlist_formaction::prepare: doing redraw");
 		do_redraw = false;
 		v->get_ctrl()->update_feedlist();
 		if (zero_feedpos) {
@@ -235,8 +240,11 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 	
 	assert(v->get_cfg() != NULL); // must not happen
 
-	unsigned int width = utils::get_screen_width();
-	
+	std::string listwidth = f->get("feeds:w");
+	std::istringstream is(listwidth);
+	unsigned int width;
+	is >> width;
+
 	feeds_shown = 0;
 	unsigned int i = 0;
 	unsigned short feedlist_number = 1;
