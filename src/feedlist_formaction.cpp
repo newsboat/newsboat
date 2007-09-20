@@ -201,8 +201,8 @@ void feedlist_formaction::process_operation(operation op) {
 			}
 			break;
 		case OP_SEARCH: {
-				std::vector<std::pair<std::string, std::string> > qna;
-				qna.push_back(std::pair<std::string, std::string>(_("Search for: "), ""));
+				std::vector<qna_pair> qna;
+				qna.push_back(qna_pair(_("Search for: "), ""));
 				this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
 			}
 			break;
@@ -212,8 +212,8 @@ void feedlist_formaction::process_operation(operation op) {
 			do_redraw = true;
 			break;
 		case OP_SETFILTER: {
-				std::vector<std::pair<std::string, std::string> > qna;
-				qna.push_back(std::pair<std::string,std::string>(_("Filter: "), ""));
+				std::vector<qna_pair> qna;
+				qna.push_back(qna_pair(_("Filter: "), ""));
 				this->start_qna(qna, OP_INT_END_SETFILTER, &filterhistory);
 			}
 			break;
@@ -281,7 +281,7 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 		 *   - no filter shall be applied, or the entry matches the currently set filter
 		 */
 		if ((tag == "" || it->matches_tag(tag)) && (!apply_filter || m.matches(&(*it)))) {
-			visible_feeds.push_back(std::pair<rss_feed *, unsigned int>(&(*it),i));
+			visible_feeds.push_back(feedptr_pos_pair(&(*it),i));
 
 			fmtstr_formatter fmt;
 

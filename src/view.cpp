@@ -380,7 +380,7 @@ std::string view::select_tag(const std::vector<std::string>& tags) {
 	return selecttag->get_value();
 }
 
-std::string view::select_filter(const std::vector<std::pair<std::string, std::string> >& filters) {
+std::string view::select_filter(const std::vector<filter_name_expr_pair>& filters) {
 	selecttag->set_type(select_formaction::SELECTFILTER);
 	selecttag->set_filters(filters);
 	run_modal(selecttag, "");

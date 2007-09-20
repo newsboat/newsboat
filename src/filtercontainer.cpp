@@ -12,7 +12,7 @@ action_handler_status filtercontainer::handle_action(const std::string& action, 
 	 */
 	if (action == "define-filter") {
 		if (params.size() >= 2) {
-			filters.push_back(std::pair<std::string,std::string>(params[0],params[1]));
+			filters.push_back(filter_name_expr_pair(params[0],params[1]));
 			return AHS_OK;
 		} else {
 			return AHS_TOO_FEW_PARAMS;

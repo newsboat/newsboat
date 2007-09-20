@@ -49,8 +49,8 @@ std::string formaction::get_value(const std::string& value) {
 
 
 void formaction::start_cmdline() {
-	std::vector<std::pair<std::string, std::string> > qna;
-	qna.push_back(std::pair<std::string,std::string>(":", ""));
+	std::vector<qna_pair> qna;
+	qna.push_back(qna_pair(":", ""));
 	this->start_qna(qna, OP_INT_END_CMDLINE, &formaction::cmdlinehistory);
 }
 
@@ -122,7 +122,7 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 	}
 }
 
-void formaction::start_qna(const std::vector<std::pair<std::string, std::string> >& prompts, operation finish_op, history * h) {
+void formaction::start_qna(const std::vector<qna_pair>& prompts, operation finish_op, history * h) {
 	/*
 	 * the formaction base class contains a "Q&A" mechanism that makes it possible for all formaction-derived classes to
 	 * query the user for 1 or more values, optionally with a history.
@@ -180,11 +180,11 @@ void formaction::finished_qna(operation op) {
 
 void formaction::start_bookmark_qna(const std::string& default_title, const std::string& default_url, const std::string& default_desc) {
 	GetLogger().log(LOG_DEBUG, "formaction::start_bookmark_qna: OK, starting bookmark Q&A...");
-	std::vector<std::pair<std::string,std::string> > prompts;
+	std::vector<qna_pair> prompts;
 
-	prompts.push_back(std::pair<std::string,std::string>(_("URL: "), default_url));
-	prompts.push_back(std::pair<std::string,std::string>(_("Title: "), default_title));
-	prompts.push_back(std::pair<std::string,std::string>(_("Description: "), default_desc));
+	prompts.push_back(qna_pair(_("URL: "), default_url));
+	prompts.push_back(qna_pair(_("Title: "), default_title));
+	prompts.push_back(qna_pair(_("Description: "), default_desc));
 
 	start_qna(prompts, OP_INT_BM_END);
 }

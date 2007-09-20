@@ -91,7 +91,7 @@ void select_formaction::prepare() {
 			}
 			break;
 		case SELECTFILTER:
-			for (std::vector<std::pair<std::string,std::string> >::const_iterator it=filters.begin();it!=filters.end();++it,++i) {
+			for (std::vector<filter_name_expr_pair>::const_iterator it=filters.begin();it!=filters.end();++it,++i) {
 				std::ostringstream line;
 				char num[32];
 				snprintf(num,sizeof(num),"%4d  ", i+1);

@@ -57,7 +57,7 @@ namespace newsbeuter {
 
 			std::string run_filebrowser(filebrowser_type type, const std::string& default_filename = "", const std::string& dir = "");
 			std::string select_tag(const std::vector<std::string>& tags);
-			std::string select_filter(const std::vector<std::pair<std::string, std::string> >& tags);
+			std::string select_filter(const std::vector<filter_name_expr_pair>& filters);
 
 			void open_in_browser(const std::string& url);
 

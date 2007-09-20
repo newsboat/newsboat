@@ -67,8 +67,8 @@ void itemlist_formaction::process_operation(operation op) {
 		case OP_EDITFLAGS: {
 				if (itemposname.length() > 0) {
 					if (itempos < visible_items.size()) {
-						std::vector<std::pair<std::string, std::string> > qna;
-						qna.push_back(std::pair<std::string,std::string>(_("Flags: "), visible_items[itempos].first->flags()));
+						std::vector<qna_pair> qna;
+						qna.push_back(qna_pair(_("Flags: "), visible_items[itempos].first->flags()));
 						this->start_qna(qna, OP_INT_EDITFLAGS_END);
 					}
 				} else {
@@ -158,8 +158,8 @@ void itemlist_formaction::process_operation(operation op) {
 			}
 			break;
 		case OP_SEARCH: {
-				std::vector<std::pair<std::string, std::string> > qna;
-				qna.push_back(std::pair<std::string, std::string>(_("Search for: "), ""));
+				std::vector<qna_pair> qna;
+				qna.push_back(qna_pair(_("Search for: "), ""));
 				this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
 			}
 			break;
@@ -200,8 +200,8 @@ void itemlist_formaction::process_operation(operation op) {
 
 			break;
 		case OP_SETFILTER: {
-				std::vector<std::pair<std::string, std::string> > qna;
-				qna.push_back(std::pair<std::string,std::string>(_("Filter: "), ""));
+				std::vector<qna_pair> qna;
+				qna.push_back(qna_pair(_("Filter: "), ""));
 				this->start_qna(qna, OP_INT_END_SETFILTER, &filterhistory);
 			}
 			break;
@@ -307,7 +307,7 @@ void itemlist_formaction::do_update_visible_items() {
 	unsigned int i=0;
 	for (std::vector<rss_item>::iterator it = items.begin(); it != items.end(); ++it, ++i) {
 		if (!apply_filter || m.matches(&(*it))) {
-			visible_items.push_back(std::pair<rss_item *, unsigned int>(&(*it), i));
+			visible_items.push_back(itemptr_pos_pair(&(*it), i));
 		}
 	}
 }
@@ -341,7 +341,7 @@ void itemlist_formaction::prepare() {
 
 		std::string itemlist_format = v->get_cfg()->get_configvalue("articlelist-format");
 
-		for (std::vector<std::pair<rss_item *, unsigned int> >::iterator it = visible_items.begin(); it != visible_items.end(); ++it) {
+		for (std::vector<itemptr_pos_pair>::iterator it = visible_items.begin(); it != visible_items.end(); ++it) {
 			fmtstr_formatter fmt;
 
 			std::string line = "{listitem[";

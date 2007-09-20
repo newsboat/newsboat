@@ -205,8 +205,8 @@ void itemview_formaction::process_operation(operation op) {
 			this->start_bookmark_qna(item.title(), item.link(), "");
 			break;
 		case OP_EDITFLAGS: {
-				std::vector<std::pair<std::string, std::string> > qna;
-				qna.push_back(std::pair<std::string,std::string>(_("Flags: "), item.flags()));
+				std::vector<qna_pair> qna;
+				qna.push_back(qna_pair(_("Flags: "), item.flags()));
 				this->start_qna(qna, OP_INT_EDITFLAGS_END);
 			}
 			break;

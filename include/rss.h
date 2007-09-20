@@ -13,6 +13,8 @@ extern "C" {
 }
 
 namespace newsbeuter {
+
+	typedef std::pair<std::string, matcher *> feedurl_expr_pair;
 	
 	class cache;
 	class rss_feed;
@@ -174,7 +176,7 @@ namespace newsbeuter {
 			virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
 			bool matches(rss_item* item);
 		private:
-			std::vector<std::pair<std::string, matcher *> > ignores;
+			std::vector<feedurl_expr_pair> ignores;
 	};
 
 }

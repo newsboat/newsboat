@@ -18,6 +18,8 @@ struct keymap_hint_entry {
 	char * text;
 };
 
+typedef std::pair<std::string,std::string> qna_pair;
+
 class formaction {
 	public:
 		formaction(view *, std::string formstr);
@@ -44,7 +46,7 @@ class formaction {
 		virtual void process_operation(operation op) = 0;
 		virtual void set_keymap_hints();
 
-		void start_qna(const std::vector<std::pair<std::string, std::string> >& prompts, operation finish_op, history * h = NULL);
+		void start_qna(const std::vector<qna_pair>& prompts, operation finish_op, history * h = NULL);
 
 		void start_bookmark_qna(const std::string& default_title, const std::string& default_url, const std::string& default_desc);
 
@@ -61,7 +63,7 @@ class formaction {
 		std::string prepare_keymap_hint(keymap_hint_entry * hints);
 		void start_next_question();
 
-		std::vector<std::pair<std::string, std::string> > qna_prompts;
+		std::vector<qna_pair> qna_prompts;
 		operation finish_operation;
 		history * qna_history;
 };

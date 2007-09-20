@@ -6,6 +6,8 @@
 
 namespace newsbeuter {
 
+typedef std::pair<rss_item *, unsigned int> itemptr_pos_pair;
+
 class itemlist_formaction : public formaction {
 	public:
 		itemlist_formaction(view *, std::string formstr);
@@ -48,7 +50,7 @@ class itemlist_formaction : public formaction {
 		bool rebuild_list;
 		bool apply_filter;
 		matcher m;
-		std::vector<std::pair<rss_item *, unsigned int> > visible_items;
+		std::vector<itemptr_pos_pair> visible_items;
 		bool update_visible_items;
 		bool show_searchresult;
 

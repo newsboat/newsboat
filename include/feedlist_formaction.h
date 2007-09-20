@@ -7,6 +7,8 @@
 
 namespace newsbeuter {
 
+typedef std::pair<rss_feed *, unsigned int> feedptr_pos_pair;
+
 class feedlist_formaction : public formaction {
 	public:
 		feedlist_formaction(view *, std::string formstr);
@@ -34,7 +36,7 @@ class feedlist_formaction : public formaction {
 		unsigned int feeds_shown;
 		bool auto_open;
 		bool quit;
-		std::vector<std::pair<rss_feed *, unsigned int> > visible_feeds;
+		std::vector<feedptr_pos_pair> visible_feeds;
 		std::string tag;
 		std::vector<std::string> tags;
 
