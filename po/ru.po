@@ -17,93 +17,93 @@ msgstr ""
 #: src/cache.cpp:160
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
-msgstr "п·я┬п╦п╠п╨п╟: п©п╬п©я▀я┌п╨п╟ п╬я┌я─я▀я┌я▄ я└п╟п╧п╩ п╨я█я┬п╟ `%s' п╥п╟п╡п╣я─я┬п╦п╩п╟я│я▄ п╫п╣я┐п╢п╟я┤п╣п╧: %s"
+msgstr "Ошибка: попытка отрыть файл кэша `%s' завершилась неудачей: %s"
 
 #: src/configparser.cpp:100
 msgid "invalid parameters."
-msgstr "п╫п╣п©я─п╟п╡п╦п╩я▄п╫я▀п╣ п©п╟я─п╟п╪п╣я┌я─я▀."
+msgstr "неправильные параметры."
 
 #: src/configparser.cpp:103
 msgid "too few parameters."
-msgstr "я│п╩п╦я┬п╨п╬п╪ п╪п╟п╩п╬ п©п╟я─п╟п╪п╣я┌я─п╬п╡."
+msgstr "слишком мало параметров."
 
 #: src/configparser.cpp:106
 msgid "unknown command (bug)."
-msgstr "п╫п╣п╦п╥п╡п╣я│я┌п╫п╟я▐ п╨п╬п╪п╟п╫п╢п╟ (я│п╠п╬п╧)."
+msgstr "неизвестная команда (сбой)."
 
 #: src/configparser.cpp:109
 msgid "file couldn't be opened."
-msgstr "я└п╟п╧п╩ п╫п╣ п╪п╬п╤п╣я┌ п╠я▀я┌я▄ п╬я┌п╨я─я▀я┌я▀п╪."
+msgstr "файл не может быть открытым."
 
 #: src/configparser.cpp:112
 msgid "unknown error (bug)."
-msgstr "п╫п╣п╦п╥п╡п╣я│я┌п╫п╟я▐ п╬я┬п╦п╠п╨п╟ (я│п╠п╬п╧)."
+msgstr "неизвестная ошибка (сбой)."
 
 #: src/configparser.cpp:114
 #, c-format
 msgid "Error while processing command `%s' (%s line %u): %s"
-msgstr "п·я┬п╦п╠п╨п╟ п╡п╬ п╡я─п╣п╪я▐ п╡я▀п©п╬п╩п╫п╣п╫п╦я▐ п╨п╬п╪п╟п╫п╢я▀ `%s' (%s я│я┌я─п╬п╨п╟ %u): %s"
+msgstr "Ошибка во время выполнения команды `%s' (%s строка %u): %s"
 
 #: src/configparser.cpp:119
 #, c-format
 msgid "unknown command `%s'"
-msgstr "п╫п╣п╦п╥п╡п╣я│я┌п╫п╟я▐ п╨п╬п╪п╟п╫п╢п╟ `%s'"
+msgstr "неизвестная команда `%s'"
 
 #: src/controller.cpp:42 src/pb_controller.cpp:31
 msgid "Segmentation fault."
-msgstr "п·я┬п╦п╠п╨п╟ я│п╣пЁп╪п╣п╫я┌п╦я─п╬п╡п╟п╫п╦я▐."
+msgstr "Ошибка сегментирования."
 
 #: src/controller.cpp:66 src/pb_controller.cpp:47
 msgid "Fatal error: couldn't determine home directory!"
-msgstr "п╓п╟я┌п╟п╩я▄п╫п╟я▐ п╬я┬п╦п╠п╨п╟: п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬п©я─п╣п╢п╣п╩п╦я┌я▄ п╢п╬п╪п╟я┬п╫п╦п╧ п╨п╟я┌п╟п╩п╬пЁ!"
+msgstr "Фатальная ошибка: невозможно определить домашний каталог!"
 
 #: src/controller.cpp:68 src/pb_controller.cpp:49
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
-"п÷п╬п╤п╟п╩я┐п╧я│я┌п╟, п╥п╟п╢п╟п╧я┌п╣ п╥п╫п╟я┤п╣п╫п╦п╣ п©п╣я─п╣п╪п╣п╫п╫п╬п╧ HOME п╬п╨я─я┐п╤п╣п╫п╦я▐ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▐ п╦п╩п╦"
-"п╢п╬п╠п╟п╡я▄я┌п╣ п©п╬п╢я┘п╬п╢я▐я┴п╣пЁп╬ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▐ п╢п╩я▐ UID %u!"
+"Пожалуйста, задайте значение переменной HOME окружения пользователя или"
+"добавьте подходящего пользователя для UID %u!"
 
 #: src/controller.cpp:169 src/pb_controller.cpp:106
 #, c-format
 msgid "%s: unknown option - %c"
-msgstr "%s: п╫п╣п╦п╥п╡п╣я│я┌п╫я▀п╧ п©п╟я─п╟п╪п╣я┌я─ - %c"
+msgstr "%s: неизвестный параметр - %c"
 
 #: src/controller.cpp:186 src/pb_controller.cpp:113
 #, c-format
 msgid "Starting %s %s..."
-msgstr "п≈п╟п©я┐я│п╨п╟я▌ %s %s..."
+msgstr "Запускаю %s %s..."
 
 #: src/controller.cpp:196 src/pb_controller.cpp:118
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
-msgstr "п·я┬п╦п╠п╨п╟: я┐п╤п╣ п╥п╟п©я┐я┴п╣п╫п╟ п╨п╬п©п╦я▐ %s (PID: %u)"
+msgstr "Ошибка: уже запущена копия %s (PID: %u)"
 
 #: src/controller.cpp:203 src/pb_controller.cpp:123
 msgid "Loading configuration..."
-msgstr "п≈п╟пЁя─я┐п╤п╟я▌ п╫п╟я│я┌я─п╬п╧п╨п╦..."
+msgstr "Загружаю настройки..."
 
 #: src/controller.cpp:240 src/controller.cpp:254 src/controller.cpp:280
 #: src/controller.cpp:290 src/controller.cpp:317 src/controller.cpp:321
 #: src/controller.cpp:343 src/controller.cpp:370 src/pb_controller.cpp:150
 #: src/pb_controller.cpp:167
 msgid "done."
-msgstr "я│п╢п╣п╩п╟п╫п╬."
+msgstr "сделано."
 
 #: src/controller.cpp:249 src/controller.cpp:312
 msgid "Opening cache..."
-msgstr "п·я┌п╨я─я▀п╡п╟я▌ п╨я█я┬..."
+msgstr "Открываю кэш..."
 
 #: src/controller.cpp:273
 #, c-format
 msgid "Loading URLs from local cache..."
-msgstr "п≈п╟пЁя─я┐п╤п╟я▌ я│я│я▀п╩п╨п╦ п╦п╥ п╩п╬п╨п╟п╩я▄п╫п╬пЁп╬ п╨я█я┬п╟..."
+msgstr "Загружаю ссылки из локального кэша..."
 
 #: src/controller.cpp:284
 #, c-format
 msgid "Loading URLs from %s..."
-msgstr "п≈п╟пЁя─я┐п╤п╟я▌ я│я│я▀п╩п╨п╦ п╦п╥ %s..."
+msgstr "Загружаю ссылки из %s..."
 
 #: src/controller.cpp:297
 #, c-format
@@ -111,8 +111,8 @@ msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
 "import an OPML file."
 msgstr ""
-"п·я┬п╦п╠п╨п╟: п╫п╣ п╫п╟п╧п╢п╣п╫п╬ п╫п╦ п╬п╢п╫п╬п╧ я│я│я▀п╩п╨п╦. п÷п╬п╤п╟п╩я┐п╧я│я┌п╟, п╥п╟п╫п╣я│п╦я┌п╣ п╡ я└п╟п╧п╩ %s я│я│я▀п╩п╨п╦"
-"п╫п╟ RSS п╩п╣п╫я┌я▀ п╦п╩п╦ п╦п╪п©п╬я─я┌п╦я─я┐п╧я┌п╣ я└п╟п╧п╩ OPML."
+"Ошибка: не найдено ни одной ссылки. Пожалуйста, занесите в файл %s ссылки"
+"на RSS ленты или импортируйте файл OPML."
 
 #: src/controller.cpp:299
 #, c-format
@@ -120,8 +120,8 @@ msgid ""
 "It looks like you haven't configured any feeds in your bloglines account. "
 "Please do so, and try again."
 msgstr ""
-"п÷п╬я┘п╬п╤п╣ я┤я┌п╬ п╡я▀ п╫п╣ п╫п╟я│я┌я─п╬п╦п╩п╦ п╫п╦ п╬п╢п╫п╬п╧ п╩п╣п╫я┌я▀ п╫п╬п╡п╬я│я┌п╣п╧ п╡ я│п╡п╬п╣п╧ я┐я┤я▒я┌п╫п╬п╧ п╥п╟п©п╦я│п╦ "
-"п╡ п╠п╩п╬пЁпЁп╣я─п╣. п║п╢п╣п╩п╟п╧я┌п╣ я█я┌п╬ п╦ п©п╬п©я─п╬п╠я┐п╧я┌п╣ п╣я┴п╣ я─п╟п╥."
+"Похоже что вы не настроили ни одной ленты новостей в своей учётной записи "
+"в блоггере. Сделайте это и попробуйте еще раз."
 
 #: src/controller.cpp:301
 #, c-format
@@ -129,56 +129,56 @@ msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
 msgstr ""
-"п÷п╬я┘п╬п╤п╣ я┤я┌п╬ п╩п╣п╫я┌п╟ OPML, п╫п╟ п╨п╬я┌п╬я─я┐я▌ п╡я▀ п©п╬п╢п©п╦я│п╟п╩п╦я│я▄ п╫п╣ я│п╬п╢п╣я─п╤п╦я┌ п╩п╣п╫я┌ п╫п╬п╡п╬я│я┌п╣п╧."
-"п÷п╬п╤п╟п╩я┐п╧я│я┌п╟ п╥п╟п©п╬п╩п╫п╦я┌п╣ п╣я▒ п╩п╣п╫я┌п╟п╪п╦ п╦ п©п╬п©я─п╬п╠я┐п╧я┌п╣ п╣я┴п╣ я─п╟п╥."
+"Похоже что лента OPML, на которую вы подписались не содержит лент новостей."
+"Пожалуйста заполните её лентами и попробуйте еще раз."
 
 #: src/controller.cpp:310
 msgid "Loading articles from cache..."
-msgstr "п≈п╟пЁя─я┐п╤п╟я▌ п╥п╟п╪п╣я┌п╨п╦ п╦п╥ п╨я█я┬п╟..."
+msgstr "Загружаю заметки из кэша..."
 
 #: src/controller.cpp:318
 msgid "Cleaning up cache thoroughly..."
-msgstr "п╒я┴п╟я┌п╣п╩я▄п╫п╬ п╬я┤п╦я┴п╟я▌ п╨я█я┬..."
+msgstr "Тщательно очищаю кэш..."
 
 #: src/controller.cpp:333
 msgid "Error while loading feeds from database: "
-msgstr "п·я┬п╦п╠п╨п╟ п╡п╬ п╡я─п╣п╪я▐ п╥п╟пЁя─я┐п╥п╨п╦ п╩п╣п╫я┌ п╫п╬п╡п╬я│я┌п╣п╧ п╦п╥ п╠п╟п╥я▀: "
+msgstr "Ошибка во время загрузки лент новостей из базы: "
 
 #: src/controller.cpp:366
 msgid "Cleaning up cache..."
-msgstr "п·я┤п╦я┴п╟я▌ п╨я█я┬..."
+msgstr "Очищаю кэш..."
 
 #: src/controller.cpp:372
 msgid "failed: "
-msgstr "п╫п╣ п©п╬п╩я┐я┤п╦п╩п╬я│я▄: "
+msgstr "не получилось: "
 
 #: src/controller.cpp:387
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
-msgstr "п·я┬п╦п╠п╨п╟: п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╪п╣я┌п╦я┌я▄ п╡я│п╣ п╩п╣п╫я┌я▀ п╨п╟п╨ п©я─п╬я┤п╦я┌п╟п╫п╫я▀п╣: %s"
+msgstr "Ошибка: невозможно отметить все ленты как прочитанные: %s"
 
 #: src/controller.cpp:433
 #, c-format
 msgid "%sLoading %s..."
-msgstr "%sп≈п╟пЁя─я┐п╤п╟п╣я┌я│я▐ %s..."
+msgstr "%sЗагружается %s..."
 
 #: src/controller.cpp:475 src/controller.cpp:479
 #, c-format
 msgid "Error while retrieving %s: %s"
-msgstr "п·я┬п╦п╠п╨п╟ п╡п╬ п╡я─п╣п╪я▐ п©п╬п╩я┐я┤п╣п╫п╦я▐ %s: %s"
+msgstr "Ошибка во время получения %s: %s"
 
 #: src/controller.cpp:483
 msgid "Error: invalid feed!"
-msgstr "п·я┬п╦п╠п╨п╟: п╫п╣п©я─п╟п╡п╦п╩я▄п╫п╟я▐ п╩п╣п╫я┌п╟!"
+msgstr "Ошибка: неправильная лента!"
 
 #: src/controller.cpp:489
 msgid "invalid feed index (bug)"
-msgstr "п╫п╣п╡п╣я─п╫я▀п╧ п╦п╫п╢п╣п╨я│ п╩п╣п╫я┌я▀ (я│п╠п╬п╧)"
+msgstr "неверный индекс ленты (сбой)"
 
 #: src/controller.cpp:506
 #, c-format
 msgid "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
-msgstr "newsbeuter: п╬п╠п╫п╬п╡п╩п╣п╫п╦п╣ п╥п╟п╡п╣я─я┬п╣п╫п╬, %u п╫п╣ п©я─п╬я┤п╦я┌п╟п╫п╫я▀я┘ п╩п╣п╫я┌ (п╡я│п╣пЁп╬ %u п╥п╟п╪п╣я┌п╬п╨ п╫п╣ п©я─п╬я┤п╦я┌п╟п╫п╬)"
+msgstr "newsbeuter: обновление завершено, %u не прочитанных лент (всего %u заметок не прочитано)"
 
 #: src/controller.cpp:590
 #, c-format
@@ -197,115 +197,115 @@ msgid ""
 "-V              get version information\n"
 "-h              this help\n"
 msgstr ""
-"п≤я│п©п╬п╩я▄п╥п╬п╡п╟п╫п╦п╣: %s [-i <я└п╟п╧п╩>|-e] [-u <я└п╟п╧п╩ я│ я│я▀п╩п╨п╟п╪п╦>] [-c <я└п╟п╧п╩ п╨я█я┬п╟>] [-h]\n"
-"-e                  я█п╨я│п©п╬я─я┌ п╩п╣п╫я┌я▀ OPML п╫п╟ я│я┌п╟п╫п╢п╟я─я┌п╫я▀п╧ п╡я▀п╡п╬п╢\n"
-"-r                  п╬п╠п╫п╬п╡п╦я┌я▄ п╩п╣п╫я┌я▀ п©я─п╦ п╥п╟п©я┐я│п╨п╣\n"
-"-i <я└п╟п╧п╩>           п╦п╪п©п╬я─я┌ я└п╟п╧п╩п╟ OPML\n"
-"-u <я└п╟п╧п╩ я│ я│я▀п╩п╨п╟п╪п╦> я┤п╦я┌п╟я┌я▄ я│я│я▀п╩п╨п╦ п╫п╟ п╩п╣п╫я┌я▀ RSS п╦п╥ <я└п╟п╧п╩п╟ я│ я│я▀п╩п╨п╟п╪п╦>\n"
-"-c <я└п╟п╧п╩ п╨я█я┬п╟>      п╦я│п©п╬п╩я▄п╥п╬п╡п╟я┌я▄ <я└п╟п╧п╩ п╨я█я┬п╟> п╨п╟п╨ я└п╟п╧п╩ п╨я█я┬п╟\n"
-"-C <я└п╟п╧п╩ п╫п╟я│я┌я─п╬п╣п╨>  я┤п╦я┌п╟я┌я▄ п╫п╟я│я┌я─п╬п╧п╨п╦ п╦п╥ <я└п╟п╧п╩п╟ п╫п╟я│я┌я─п╬п╣п╨>\n"
-"-v                  я┌я┴п╟я┌п╣п╩я▄п╫п╬ п╬я┤п╦я┴п╟я┌я▄ п╨я█я┬\n"
-"-o                  п╡п╨п╩я▌я┤п╦я┌я▄ п╟п╡я┌п╬п╫п╬п╪п╫я▀п╧ я─п╣п╤п╦п╪ (п©я─п╦п╪п╣п╫п╦п╪п╬ я┌п╬п╩я▄п╨п╬ п╢п╩я▐"
-"я─п╣п╤п╦п╪п╟ я│п╦п╫я┘я─п╬п╫п╦п╥п╟я├п╦п╦ я│ п╠п╩п╬пЁпЁп╣я─п╬п╪\n"
-"-V                  п©п╬п╩я┐я┤п╦я┌я▄ п╦п╫я└п╬я─п╪п╟я├п╦я▌ п╬ п╡п╣я─я│п╦п╦ п©я─п╬пЁя─п╟п╪п╪я▀\n"
-"-h                  п©п╬п╨п╟п╥п╟я┌я▄ я█я┌я┐ я│п©я─п╟п╡п╨я┐\n"
+"Использование: %s [-i <файл>|-e] [-u <файл с сылками>] [-c <файл кэша>] [-h]\n"
+"-e                  экспорт ленты OPML на стандартный вывод\n"
+"-r                  обновить ленты при запуске\n"
+"-i <файл>           импорт файла OPML\n"
+"-u <файл с сылками> читать ссылки на ленты RSS из <файла с сылками>\n"
+"-c <файл кэша>      использовать <файл кэша> как файл кэша\n"
+"-C <файл настроек>  читать настройки из <файла настроек>\n"
+"-v                  тщательно очищать кэш\n"
+"-o                  включить автономный режим (применимо только для"
+"режима синхронизации с блоггером\n"
+"-V                  получить информацию о версии программы\n"
+"-h                  показать эту справку\n"
 
 #: src/controller.cpp:635
 #, c-format
 msgid "Import of %s finished."
-msgstr "п≤п╪п©п╬я─я┌ %s п╥п╟п╡п╣я─я┬я▒п╫."
+msgstr "Импорт %s завершён."
 
 #: src/controller.cpp:813
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
 msgstr ""
-"п©п╬п╢п╢п╣я─п╤п╨п╟ п╥п╟п╨п╩п╟п╢п╬п╨ п╫п╣ п╫п╟я│я┌я─п╬п╣п╫п╟. п÷п╬п╤п╟п╩я┐п╧я│я┌п╟ я┐я│я┌п╟п╫п╬п╡п╦я┌п╣ п╡ п╫п╟я│я┌я─п╬п╧п╨п╟я┘ п╡п╣я─п╫п╬п╣"
-"п╥п╫п╟я┤п╣п╫п╦п╣ п©п╣я─п╣п╪п╣п╫п╫п╬п╧ `bookmark-cmd'."
+"поддержка закладок не настроена. Пожалуйста установите в настройках верное"
+"значение переменной `bookmark-cmd'."
 
 #: src/download.cpp:42
 msgid "queued"
-msgstr "п╡ п╬я┤п╣я─п╣п╢п╦"
+msgstr "в очереди"
 
 #: src/download.cpp:44
 msgid "downloading"
-msgstr "п╥п╟пЁя─я┐п╤п╟п╣я┌я│я▐"
+msgstr "загружается"
 
 #: src/download.cpp:46
 msgid "cancelled"
-msgstr "п╬я┌п╪п╣п╫п╣п╫п╬"
+msgstr "отменено"
 
 #: src/download.cpp:48
 msgid "deleted"
-msgstr "я┐п╢п╟п╩п╣п╫п╬"
+msgstr "удалено"
 
 #: src/download.cpp:50
 msgid "finished"
-msgstr "п╥п╟п╨п╬п╫я┤п╣п╫п╬"
+msgstr "закончено"
 
 #: src/download.cpp:52
 msgid "failed"
-msgstr "п╫п╣я┐п╢п╟я┤п╫п╬"
+msgstr "неудачно"
 
 #: src/download.cpp:54
 msgid "incomplete"
-msgstr "п╫п╣п©п╬п╩п╫п╬я│я┌я▄я▌"
+msgstr "неполностью"
 
 #: src/download.cpp:56
 msgid "unknown (bug)."
-msgstr "п╫п╣п╦п╥п╡п╣я│я┌п╫п╬ (я│п╠п╬п╧)."
+msgstr "неизвестно (сбой)."
 
 #: src/exception.cpp:22
 #, c-format
 msgid "attribute `%s' is not available."
-msgstr "п╨я─п╦я┌п╣я─п╦п╧ `%s' п╫п╣п╢п╬я│я┌я┐п©п╣п╫."
+msgstr "критерий `%s' недоступен."
 
 #: src/feedlist_formaction.cpp:72 src/feedlist_formaction.cpp:82
 #: src/feedlist_formaction.cpp:107
 msgid "No feed selected!"
-msgstr "п²п╣ п╡я▀п╠я─п╟п╫п╫п╬ п╫п╦ п╬п╢п╫п╬п╧ п╩п╣п╫я┌я▀!"
+msgstr "Не выбранно ни одной ленты!"
 
 #: src/feedlist_formaction.cpp:96 src/itemlist_formaction.cpp:148
 msgid "Marking feed read..."
-msgstr "п·я┌п╪п╣я┤п╟я▌ п╩п╣п╫я┌я┐ п╨п╟п╨ п©я─п╬я┤п╦я┌п╟п╫п╫я┐я▌..."
+msgstr "Отмечаю ленту как прочитанную..."
 
 #: src/feedlist_formaction.cpp:103 src/itemlist_formaction.cpp:155
 #, c-format
 msgid "Error: couldn't mark feed read: %s"
-msgstr "п·я┬п╦п╠п╨п╟: п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╪п╣я┌п╦я┌я▄ п╩п╣п╫я┌я┐ п╨п╟п╨ п©я─п╬я┤п╦я┌п╟п╫п╫я┐я▌: %s"
+msgstr "Ошибка: невозможно отметить ленту как прочитанную: %s"
 
 #: src/feedlist_formaction.cpp:127 src/feedlist_formaction.cpp:135
 msgid "No feeds with unread items."
-msgstr "п²п╣я┌ п╩п╣п╫я┌ я│ п╫п╣п©я─п╬я┤п╦я┌п╟п╫п╫я▀п╪п╦ я█п╩п╣п╪п╣п╫я┌п╟п╪п╦."
+msgstr "Нет лент с непрочитанными элементами."
 
 #: src/feedlist_formaction.cpp:141
 msgid "Marking all feeds read..."
-msgstr "п·я┌п╪п╣я┤п╟я▌ п╡я│п╣ п╩п╣п╫я┌я▀ п╨п╟п╨ п©я─п╬я┤п╦я┌п╟п╫п╫я▀п╣..."
+msgstr "Отмечаю все ленты как прочитанные..."
 
 #: src/feedlist_formaction.cpp:160
 msgid "No tags defined."
-msgstr "п²п╣ п╬п©я─п╣п╢п╣п╩п╣п╫п╬ п╫п╦ п╬п╢п╫п╬пЁп╬ п╪п╟я─п╨п╣я─п╟."
+msgstr "Не определено ни одного маркера."
 
 #: src/feedlist_formaction.cpp:170 src/feedlist_formaction.cpp:434
 #: src/itemlist_formaction.cpp:188 src/itemlist_formaction.cpp:229
 msgid "Error: couldn't parse filter command!"
-msgstr "п·я┬п╦п╠п╨п╟: п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ я─п╟п╥п╬п╠я─п╟я┌я▄ п╨п╬п╪п╟п╫п╢я┐ я└п╦п╩я▄я┌я─п╟я├п╦п╦!"
+msgstr "Ошибка: невозможно разобрать команду фильтрации!"
 
 #: src/feedlist_formaction.cpp:179 src/itemlist_formaction.cpp:197
 msgid "No filters defined."
-msgstr "п²п╣ п╬п©я─п╣п╢п╣п╩п╣п╫п╬ п╫п╦ п╬п╢п╫п╬пЁп╬ я└п╦п╩я▄я┌я─п╟."
+msgstr "Не определено ни одного фильтра."
 
 #: src/feedlist_formaction.cpp:184 src/itemlist_formaction.cpp:161
 msgid "Search for: "
-msgstr "п≤я│п╨п╟я┌я▄: "
+msgstr "Искать: "
 
 #: src/feedlist_formaction.cpp:195 src/itemlist_formaction.cpp:203
 msgid "Filter: "
-msgstr "п╓п╦п╩я▄я┌я─: "
+msgstr "Фильтр: "
 
 #: src/feedlist_formaction.cpp:201
 msgid "Do you really want to quit (y:Yes n:No)? "
-msgstr "п▓я▀ п©я─п╟п╡п╢п╟ я┘п╬я┌п╦я┌п╣ п╡я▀п╧я┌п╦ (y:п■п╟ n:п²п╣я┌)? "
+msgstr "Вы правда хотите выйти (y:Да n:Нет)? "
 
 #: src/feedlist_formaction.cpp:201 src/filebrowser_formaction.cpp:95
 msgid "yn"
@@ -318,89 +318,89 @@ msgstr "y"
 #: src/feedlist_formaction.cpp:283
 #, c-format
 msgid "%s %s - Your feeds (%u unread, %u total) - tag `%s'"
-msgstr "%s %s - п▓п╟я┬п╦ п╩п╣п╫я┌я▀ (%u п╫п╣ п©я─п╬я┤п╦я┌п╟п╫п╬, п╡я│п╣пЁп╬ %u) - п╪п╟я─п╨п╣я─ `%s'"
+msgstr "%s %s - Ваши ленты (%u не прочитано, всего %u) - маркер `%s'"
 
 #: src/feedlist_formaction.cpp:285
 #, c-format
 msgid "%s %s - Your feeds (%u unread, %u total)"
-msgstr "%s %s - п▓п╟я┬п╦ п╩п╣п╫я┌я▀ (%u п╫п╣ п©я─п╬я┤п╦я┌п╟п╫п╬, п╡я│п╣пЁп╬ %u)"
+msgstr "%s %s - Ваши ленты (%u не прочитано, всего %u)"
 
 #: src/feedlist_formaction.cpp:297 src/help_formaction.cpp:70
 #: src/itemlist_formaction.cpp:461 src/itemview_formaction.cpp:259
 #: src/pb_view.cpp:258 src/pb_view.cpp:267 src/urlview_formaction.cpp:92
 msgid "Quit"
-msgstr "п▓я▀я┘п╬п╢"
+msgstr "Выход"
 
 #: src/feedlist_formaction.cpp:298 src/itemlist_formaction.cpp:462
 #: src/itemview_formaction.cpp:260
 msgid "Open"
-msgstr "п·я┌п╨я─я▀я┌я▄"
+msgstr "Открыть"
 
 #: src/feedlist_formaction.cpp:299 src/itemlist_formaction.cpp:465
 #: src/itemview_formaction.cpp:262
 msgid "Next Unread"
-msgstr "п║п╩п╣п╢я┐я▌я┴п╟я▐ п╫п╣п©я─п╬я┤п╦я┌п╟п╫п╫п╟я▐"
+msgstr "Следующая непрочитанная"
 
 #: src/feedlist_formaction.cpp:300 src/itemlist_formaction.cpp:464
 msgid "Reload"
-msgstr "п·п╠п╫п╬п╡п╦я┌я▄"
+msgstr "Обновить"
 
 #: src/feedlist_formaction.cpp:301
 msgid "Reload All"
-msgstr "п·п╠п╫п╬п╡п╦я┌я▄ п╡я│п╣"
+msgstr "Обновить все"
 
 #: src/feedlist_formaction.cpp:302
 msgid "Mark Read"
-msgstr "п·я┌п╪п╣я┌п╦я┌я▄ п╨п╟п╨ п©я─п╬я┤п╦я┌п╟п╫п╫я┐я▌"
+msgstr "Отметить как прочитанную"
 
 #: src/feedlist_formaction.cpp:303
 msgid "Catchup All"
-msgstr "п÷п╬п╢я┘п╡п╟я┌п╦я┌я▄ п╡я│п╣"
+msgstr "Подхватить все"
 
 #: src/feedlist_formaction.cpp:304 src/itemlist_formaction.cpp:467
 msgid "Search"
-msgstr "п≤я│п╨п╟я┌я▄"
+msgstr "Искать"
 
 #: src/feedlist_formaction.cpp:305 src/itemlist_formaction.cpp:468
 #: src/itemview_formaction.cpp:265 src/pb_view.cpp:200 src/pb_view.cpp:274
 msgid "Help"
-msgstr "п÷п╬п╪п╬я┴я▄"
+msgstr "Помощь"
 
 #: src/feedlist_formaction.cpp:399 src/itemlist_formaction.cpp:480
 msgid "Position not visible!"
-msgstr "п÷п╬п╥п╦я├п╦я▌ п╫п╣ п╡п╦п╢п╫п╬!"
+msgstr "Позицию не видно!"
 
 #: src/feedlist_formaction.cpp:406 src/itemlist_formaction.cpp:487
 msgid "Invalid position!"
-msgstr "п²п╣п╡п╣я─п╫п╟я▐ п©п╬п╥п╦я├п╦я▐!"
+msgstr "Неверная позиция!"
 
 #: src/feedlist_formaction.cpp:446 src/itemlist_formaction.cpp:259
 msgid "Searching..."
-msgstr "п≤я┴я┐..."
+msgstr "Ищу..."
 
 #: src/feedlist_formaction.cpp:453 src/itemlist_formaction.cpp:270
 #, c-format
 msgid "Error while searching for `%s': %s"
-msgstr "п·я┬п╦п╠п╨п╟ п╡п╬ п╡я─п╣п╪я▐ п©п╬п╦я│п╨п╟ `%s': %s"
+msgstr "Ошибка во время поиска `%s': %s"
 
 #: src/feedlist_formaction.cpp:461 src/itemlist_formaction.cpp:281
 msgid "No results."
-msgstr "п²п╣я┌ я─п╣п╥я┐п╩я▄я┌п╟я┌п╬п╡."
+msgstr "Нет результатов."
 
 #: src/filebrowser_formaction.cpp:47 src/filebrowser_formaction.cpp:171
 #, c-format
 msgid "%s %s - Open File - %s"
-msgstr "%s %s - п·я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ - %s"
+msgstr "%s %s - Открыть файл - %s"
 
 #: src/filebrowser_formaction.cpp:49 src/filebrowser_formaction.cpp:173
 #, c-format
 msgid "%s %s - Save File - %s"
-msgstr "%s %s - п║п╬я┘я─п╟п╫п╦я┌я▄ я└п╟п╧п╩ - %s"
+msgstr "%s %s - Сохранить файл - %s"
 
 #: src/filebrowser_formaction.cpp:93
 #, c-format
 msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
-msgstr "п▓я▀ п©я─п╟п╡п╢п╟ я┘п╬я┌п╦я┌п╣ п©п╣я─п╣п╥п╟п©п╦я│п╟я┌я▄ `%s' (y:п■п╟ n:п²п╣я┌)? "
+msgstr "Вы правда хотите перезаписать `%s' (y:Да n:Нет)? "
 
 #: src/filebrowser_formaction.cpp:95
 msgid "n"
@@ -408,355 +408,355 @@ msgstr "n"
 
 #: src/filebrowser_formaction.cpp:152
 msgid "File: "
-msgstr "п╓п╟п╧п╩: "
+msgstr "Файл: "
 
 #: src/filebrowser_formaction.cpp:180 src/pb_view.cpp:269
 #: src/select_formaction.cpp:137 src/select_formaction.cpp:142
 msgid "Cancel"
-msgstr "п·я┌п╪п╣п╫п╟"
+msgstr "Отмена"
 
 #: src/filebrowser_formaction.cpp:181 src/itemlist_formaction.cpp:463
 #: src/itemview_formaction.cpp:261
 msgid "Save"
-msgstr "п║п╬я┘я─п╟п╫п╦я┌я▄"
+msgstr "Сохранить"
 
 #: src/formaction.cpp:107 src/formaction.cpp:115
 msgid "usage: set <variable>[=<value>]"
-msgstr "п╦я│п©п╬п╩я▄п╥п╬п╡п╟п╫п╦п╣: set <п©п╣я─п╣п╪п╣п╫п╫п╟я▐>[=<п╥п╫п╟я┤п╣п╫п╦п╣>]"
+msgstr "использование: set <переменная>[=<значение>]"
 
 #: src/formaction.cpp:158
 msgid "Saving bookmark..."
-msgstr "п║п╬я┘я─п╟п╫я▐я▌ п╥п╟п╨п╩п╟п╢п╨я┐..."
+msgstr "Сохраняю закладку..."
 
 #: src/formaction.cpp:161
 msgid "Saved bookmark."
-msgstr "п║п╬я┘я─п╟п╫я▒п╫п╫п╟я▐ п╥п╟п╨п╩п╟п╢п╨п╟."
+msgstr "Сохранённая закладка."
 
 #: src/formaction.cpp:163
 msgid "Error while saving bookmark: "
-msgstr "п·я┬п╦п╠п╨п╟ п╡п╬ п╡я─п╣п╪я▐ я│п╬я┘я─п╟п╫п╣п╫п╦я▐ п╥п╟п╨п╩п╟п╢п╨п╦: "
+msgstr "Ошибка во время сохранения закладки: "
 
 #: src/formaction.cpp:185
 msgid "URL: "
-msgstr "п≤я│я┌п╬я┤п╫п╦п╨: "
+msgstr "Источник: "
 
 #: src/formaction.cpp:186 src/itemview_formaction.cpp:57 src/view.cpp:240
 msgid "Title: "
-msgstr "п≈п╟пЁп╬п╩п╬п╡п╬п╨: "
+msgstr "Заголовок: "
 
 #: src/formaction.cpp:187
 msgid "Description: "
-msgstr "п·п©п╦я│п╟п╫п╦п╣: "
+msgstr "Описание: "
 
 #: src/help_formaction.cpp:30
 #, c-format
 msgid "%s %s - Help"
-msgstr "%s %s - п÷п╬п╪п╬я┴я▄"
+msgstr "%s %s - Помощь"
 
 #: src/htmlrenderer.cpp:144
 msgid "embedded flash:"
-msgstr "п╡я│я┌я─п╬п╣п╫п╫я▀п╧ flash:"
+msgstr "встроенный flash:"
 
 #: src/htmlrenderer.cpp:179 src/htmlrenderer.cpp:464
 msgid "image"
-msgstr "п╦п╥п╬п╠я─п╟п╤п╣п╫п╦п╣"
+msgstr "изображение"
 
 #: src/htmlrenderer.cpp:452
 msgid "Links: "
-msgstr "п║я│я▀п╩п╨п╦: "
+msgstr "Ссылки: "
 
 #: src/htmlrenderer.cpp:463
 msgid "link"
-msgstr "я│я│я▀п╩п╨п╟"
+msgstr "ссылка"
 
 #: src/htmlrenderer.cpp:465
 msgid "embedded flash"
-msgstr "п╡я│я┌я─п╬п╣п╫п╫я▀п╧ flash"
+msgstr "встроенный flash"
 
 #: src/htmlrenderer.cpp:466
 msgid "unknown (bug)"
-msgstr "п╫п╣п╦п╥п╡п╣я│я┌п╫п╬ (я│п╠п╬п╧)"
+msgstr "неизвестно (сбой)"
 
 #: src/itemlist_formaction.cpp:39 src/itemlist_formaction.cpp:51
 #: src/itemlist_formaction.cpp:62 src/itemlist_formaction.cpp:74
 #: src/itemlist_formaction.cpp:252
 msgid "No item selected!"
-msgstr "п²п╣ п╡я▀п╠я─п╟п╫п╫п╬ п╫п╦ п╬п╢п╫п╬пЁп╬ я█п╩п╣п╪п╣п╫я┌п╟!"
+msgstr "Не выбранно ни одного элемента!"
 
 #: src/itemlist_formaction.cpp:70 src/itemview_formaction.cpp:86
 #: src/itemview_formaction.cpp:210
 msgid "Flags: "
-msgstr "п╓п╩п╟пЁп╦: "
+msgstr "Флаги: "
 
 #: src/itemlist_formaction.cpp:85 src/itemlist_formaction.cpp:504
 #: src/itemview_formaction.cpp:186 src/itemview_formaction.cpp:319
 msgid "Aborted saving."
-msgstr "п÷я─п╣я─п╡п╟п╫п╫п╬п╣ я│п╬я┘я─п╟п╫п╣п╫п╦п╣."
+msgstr "Прерванное сохранение."
 
 #: src/itemlist_formaction.cpp:89 src/itemlist_formaction.cpp:508
 #: src/itemview_formaction.cpp:323
 #, c-format
 msgid "Saved article to %s"
-msgstr "п≈п╟п╪п╣я┌п╨п╟ я│п╬я┘я─п╟п╫п╣п╫п╟ п╡ %s"
+msgstr "Заметка сохранена в %s"
 
 #: src/itemlist_formaction.cpp:93 src/itemlist_formaction.cpp:511
 #: src/itemview_formaction.cpp:326
 #, c-format
 msgid "Error: couldn't save article to %s"
-msgstr "п·я┬п╦п╠п╨п╟: п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ я│п╬я┘я─п╟п╫п╦я┌я▄ п╥п╟п╪п╣я┌п╨я┐ п╡ %s"
+msgstr "Ошибка: невозможно сохранить заметку в %s"
 
 #: src/itemlist_formaction.cpp:98 src/itemlist_formaction.cpp:516
 msgid "Error: no item selected!"
-msgstr "п·я┬п╦п╠п╨п╟: п╫п╣ п╡я▀п╠я─п╟п╫п╫п╬ п╫п╦ п╬п╢п╫п╬пЁп╬ я█п╩п╣п╪п╣п╫я┌п╟!"
+msgstr "Ошибка: не выбранно ни одного элемента!"
 
 #: src/itemlist_formaction.cpp:113
 msgid "Error: you can't reload search results."
-msgstr "п·я┬п╦п╠п╨п╟: п╡я▀ п╫п╣ п╪п╬п╤п╣я┌п╣ п╬п╠п╫п╬п╡п╦я┌я▄ я─п╣п╥я┐п╩я▄я┌п╟я┌я▀ п©п╬п╦я│п╨п╟."
+msgstr "Ошибка: вы не можете обновить результаты поиска."
 
 #: src/itemlist_formaction.cpp:124 src/itemlist_formaction.cpp:132
 #: src/itemview_formaction.cpp:228 src/itemview_formaction.cpp:237
 msgid "No unread items."
-msgstr "п²п╣п©я─п╬я┤п╦я┌п╟п╫п╫я▀я┘ я█п╩п╣п╪п╣п╫я┌п╬п╡ п╫п╣я┌."
+msgstr "Непрочитанных элементов нет."
 
 #: src/itemlist_formaction.cpp:138 src/itemlist_formaction.cpp:143
 msgid "No unread feeds."
-msgstr "п²п╣п©я─п╬я┤п╦я┌п╟п╫п╫я▀я┘ п╩п╣п╫я┌ п╫п╣я┌."
+msgstr "Непрочитанных лент нет."
 
 #: src/itemlist_formaction.cpp:168
 msgid "Toggling read flag for article..."
-msgstr "п÷п╣я─п╣п╨п╩я▌я┤п╣п╫п╦п╣ я└п╩п╟пЁп╟ п©я─п╬я┤я┌п╣п╫п╦я▐ я┐ п╥п╟п╪п╣я┌п╨п╦..."
+msgstr "Переключение флага прочтения у заметки..."
 
 #: src/itemlist_formaction.cpp:174
 #, c-format
 msgid "Error while toggling read flag: %s"
-msgstr "п·я┬п╦п╠п╨п╟ п╡п╬ п╡я─п╣п╪я▐ п©п╣я─п╣п╨п╩я▌я┤п╣п╫п╦я▐ я└п╩п╟пЁп╟ п©я─п╬я┤я┌п╣п╫п╦я▐: %s"
+msgstr "Ошибка во время переключения флага прочтения: %s"
 
 #: src/itemlist_formaction.cpp:247 src/itemview_formaction.cpp:346
 msgid "Flags updated."
-msgstr "п╓п╩п╟пЁп╦ п╬п╠п╫п╬п╡п╩п╣п╫я▀."
+msgstr "Флаги обновлены."
 
 #: src/itemlist_formaction.cpp:396
 #, c-format
 msgid "%s %s - Articles in feed '%s' (%u unread, %u total) - %s"
-msgstr "%s %s - п≈п╟п╪п╣я┌п╬п╨ п╡ п╩п╣п╫я┌п╣ '%s' (%u п╫п╣п©я─п╬я┤п╦я┌п╟п╫п╫я▀я┘, п╡я│п╣пЁп╬ %u) - %s"
+msgstr "%s %s - Заметок в ленте '%s' (%u непрочитанных, всего %u) - %s"
 
 #: src/itemlist_formaction.cpp:398
 #, c-format
 msgid "%s %s - Search results (%u unread, %u total)"
-msgstr "%s %s - п═п╣п╥я┐п╩я▄я┌п╟я┌я▀ п©п╬п╦я│п╨п╟ (%u п╫п╣п©я─п╬я┤п╦я┌п╟п╫п╫я▀я┘, п╡я│п╣пЁп╬ %u)"
+msgstr "%s %s - Результаты поиска (%u непрочитанных, всего %u)"
 
 #: src/itemlist_formaction.cpp:466
 msgid "Mark All Read"
-msgstr "п·я┌п╪п╣я┌п╦я┌я▄ п╡я│п╣ п╨п╟п╨ п©я─п╬я┤п╦я┌п╟п╫п╫я▀п╣"
+msgstr "Отметить все как прочитанные"
 
 #: src/itemview_formaction.cpp:44
 msgid "Feed: "
-msgstr "п⌡п╣п╫я┌п╟: "
+msgstr "Лента: "
 
 #: src/itemview_formaction.cpp:64 src/view.cpp:244
 msgid "Author: "
-msgstr "п░п╡я┌п╬я─: "
+msgstr "Автор: "
 
 #: src/itemview_formaction.cpp:71 src/view.cpp:252
 msgid "Link: "
-msgstr "п║я│я▀п╩п╨п╟: "
+msgstr "Ссылка: "
 
 #: src/itemview_formaction.cpp:78 src/view.cpp:248
 msgid "Date: "
-msgstr "п■п╟я┌п╟: "
+msgstr "Дата: "
 
 #: src/itemview_formaction.cpp:95
 msgid "Podcast Download URL: "
-msgstr "п║я│я▀п╩п╨п╟ п╥п╟пЁя─я┐п╥п╨п╦ п©п╬п╢п╨п╟я│я┌п╟: "
+msgstr "Ссылка загрузки подкаста: "
 
 #: src/itemview_formaction.cpp:96
 msgid "type: "
-msgstr "я┌п╦п©: "
+msgstr "тип: "
 
 #: src/itemview_formaction.cpp:158
 #, c-format
 msgid "Error while marking article as read: %s"
-msgstr "п·я┬п╦п╠п╨п╟ п╡п╬ п╡я─п╣п╪я▐ п©п╬я┌п╪п╣я┌п╨п╦ п╥п╟п╪п╣я┌п╨п╦ п╨п╟п╨ п©я─п╬я┤п╦я┌п╟п╫п╫п╬п╧: %s"
+msgstr "Ошибка во время потметки заметки как прочитанной: %s"
 
 #: src/itemview_formaction.cpp:174
 #, c-format
 msgid "Added %s to download queue."
-msgstr "%s п╢п╬п╠п╟п╡п╩п╣п╫п╬ п╡ п╬я┤п╣я─п╣п╢я▄ п╥п╟пЁя─я┐п╥п╨п╦."
+msgstr "%s добавлено в очередь загрузки."
 
 #: src/itemview_formaction.cpp:190
 #, c-format
 msgid "Saved article to %s."
-msgstr "п≈п╟п╪п╣я┌п╨п╟ я│п╬я┘я─п╟п╫п╣п╫п╟ п╡ %s."
+msgstr "Заметка сохранена в %s."
 
 #: src/itemview_formaction.cpp:193
 #, c-format
 msgid "Error: couldn't write article to file %s"
-msgstr "п·я┬п╦п╠п╨п╟: п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╥п╟п©п╦я│п╟я┌я▄ п╥п╟п╪п╣я┌п╨я┐ п╡ я└п╟п╧п╩ %s"
+msgstr "Ошибка: невозможно записать заметку в файл %s"
 
 #: src/itemview_formaction.cpp:201 src/urlview_formaction.cpp:30
 msgid "Starting browser..."
-msgstr "п≈п╟п©я┐я│п╨п╟я▌ п╫п╟п╡п╦пЁп╟я┌п╬я─..."
+msgstr "Запускаю навигатор..."
 
 #: src/itemview_formaction.cpp:219
 msgid "URL list empty."
-msgstr "п║п©п╦я│п╬п╨ я│я│я▀п╩п╬п╨ п©я┐я│я┌."
+msgstr "Список ссылок пуст."
 
 #: src/itemview_formaction.cpp:263 src/urlview_formaction.cpp:93
 msgid "Open in Browser"
-msgstr "п·я┌п╨я─я▀я┌я▄ п╡ п╫п╟п╡п╦пЁп╟я┌п╬я─п╣"
+msgstr "Открыть в навигаторе"
 
 #: src/itemview_formaction.cpp:264
 msgid "Enqueue"
-msgstr "п÷п╬я│я┌п╟п╡п╦я┌я▄ п╡ п╬я┤п╣я─п╣п╢я▄"
+msgstr "Поставить в очередь"
 
 #: src/itemview_formaction.cpp:273
 #, c-format
 msgid "%s %s - Article '%s'"
-msgstr "%s %s - п≈п╟п╪п╣я┌п╨п╟ '%s'"
+msgstr "%s %s - Заметка '%s'"
 
 #: src/keymap.cpp:21
 msgid "Open feed/article"
-msgstr "п·я┌п╨я─я▀я┌я▄ п╩п╣п╫я┌я┐/п╥п╟п╪п╣я┌п╨я┐"
+msgstr "Открыть ленту/заметку"
 
 #: src/keymap.cpp:22
 msgid "Return to previous dialog/Quit"
-msgstr "п▓п╣я─п╫я┐я┌я▄я│я▐ п╡ п©я─п╣п╢я▀п╢я┐я┴п╦п╧ п╢п╦п╟п╩п╬пЁ/п▓я▀п╧я┌п╦"
+msgstr "Вернуться в предыдущий диалог/Выйти"
 
 #: src/keymap.cpp:23
 msgid "Reload currently selected feed"
-msgstr "п·п╠п╫п╬п╡п╦я┌я▄ п╡я▀п╠я─п╟п╫п╫я┐я▌ п╩п╣п╫я┌я┐"
+msgstr "Обновить выбранную ленту"
 
 #: src/keymap.cpp:24
 msgid "Reload all feeds"
-msgstr "п·п╠п╫п╬п╡п╦я┌я▄ п╡я│п╣ п╩п╣п╫я┌я▀"
+msgstr "Обновить все ленты"
 
 #: src/keymap.cpp:25
 msgid "Mark feed read"
-msgstr "п·я┌п╪п╣я┌п╦я┌я▄ п╩п╣п╫я┌я┐ п╨п╟п╨ п©я─п╬я┤п╦я┌п╟п╫п╫я┐я▌"
+msgstr "Отметить ленту как прочитанную"
 
 #: src/keymap.cpp:26
 msgid "Mark all feeds read"
-msgstr "п·я┌п╪п╣я┌п╦я┌я▄ п╡я│п╣ п╩п╣п╫я┌я▀ п╨п╟п╨ п©я─п╬я┤п╦я┌п╟п╫п╫я▀п╣"
+msgstr "Отметить все ленты как прочитанные"
 
 #: src/keymap.cpp:27
 msgid "Save article"
-msgstr "п║п╬я┘я─п╟п╫п╦я┌я▄ п╥п╟п╪п╣я┌п╨я┐"
+msgstr "Сохранить заметку"
 
 #: src/keymap.cpp:28
 msgid "Go to next unread article"
-msgstr "п÷п╣я─п╣п╧я┌п╦ п╨ я│п╩п╣п╢я┐я▌я┴п╣п╧ п╫п╣п©я─п╬я┤п╦я┌п╟п╫п╫п╬п╧ п╥п╟п╪п╣я┌п╨п╣"
+msgstr "Перейти к следующей непрочитанной заметке"
 
 #: src/keymap.cpp:29
 msgid "Go to previous unread article"
-msgstr "п÷п╣я─п╣п╧я┌п╦ п╨ п©я─п╣п╢я▀п╢я┐я┴п╣п╧ п╫п╣п©я─п╬я┤п╦я┌п╟п╫п╫п╬п╧ п╥п╟п╪п╣я┌п╨п╣"
+msgstr "Перейти к предыдущей непрочитанной заметке"
 
 #: src/keymap.cpp:30
 msgid "Open article in browser"
-msgstr "п·я┌п╨я─я▀я┌я▄ п╥п╟п╪п╣я┌п╨я┐ п╡ п╫п╟п╡п╦пЁп╟я┌п╬я─п╣"
+msgstr "Открыть заметку в навигаторе"
 
 #: src/keymap.cpp:31
 msgid "Open help dialog"
-msgstr "п·я┌п╨я─я▀я┌я▄ п╢п╦п╟п╩п╬пЁ п©п╬п╪п╬я┴п╦"
+msgstr "Открыть диалог помощи"
 
 #: src/keymap.cpp:32
 msgid "Toggle source view"
-msgstr "п÷п╣я─п╣п╨п╩я▌я┤п╦я┌я▄я│я▐ п╫п╟ п©я─п╬я│п╪п╬я┌я─ п╦я│я┌п╬я┤п╫п╦п╨п╟"
+msgstr "Переключиться на просмотр источника"
 
 #: src/keymap.cpp:33
 msgid "Toggle read status for article"
-msgstr "п÷п╣я─п╣п╨п╩я▌я┤п╦я┌я▄ я│я┌п╟я┌я┐я│ п©я─п╬я┤я┌п╣п╫п╦я▐ п╥п╟п╪п╣я┌п╨п╦"
+msgstr "Переключить статус прочтения заметки"
 
 #: src/keymap.cpp:34
 msgid "Toggle show read feeds"
-msgstr "п÷п╣я─п╣п╨п╩я▌я┤п╦я┌я▄ п©п╬п╨п╟п╥ п©я─п╬я┤п╦я┌п╟п╫п╫я▀я┘ п╩п╣п╫я┌"
+msgstr "Переключить показ прочитанных лент"
 
 #: src/keymap.cpp:35
 msgid "Show URLs in current article"
-msgstr "п÷п╬п╨п╟п╥я▀п╡п╟я┌я▄ я│я│я▀п╩п╨п╦ п╡ я┌п╣п╨я┐я┴п╣п╧ п╥п╟п╪п╣я┌п╨п╣"
+msgstr "Показывать ссылки в текущей заметке"
 
 #: src/keymap.cpp:36
 msgid "Clear current tag"
-msgstr "п·я┤п╦я│я┌п╦я┌я▄ я┌п╣п╨я┐я┴п╦п╧ п╪п╟я─п╨п╣я─"
+msgstr "Очистить текущий маркер"
 
 #: src/keymap.cpp:37
 msgid "Select tag"
-msgstr "п▓я▀п╠я─п╟я┌я▄ п╪п╟я─п╨п╣я─"
+msgstr "Выбрать маркер"
 
 #: src/keymap.cpp:38
 msgid "Open search dialog"
-msgstr "п·я┌п╨я─я▀я┌я▄ п╢п╦п╟п╩п╬пЁ п©п╬п╦я│п╨п╟"
+msgstr "Открыть диалог поиска"
 
 #: src/keymap.cpp:39
 msgid "Add download to queue"
-msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п╥п╟пЁя─я┐п╥п╨я┐ п╡ п╬я┤п╣я─п╣п╢я▄"
+msgstr "Добавить загрузку в очередь"
 
 #: src/keymap.cpp:40
 msgid "Reload the list of URLs from the configuration"
-msgstr "п·п╠п╫п╬п╡п╦я┌я▄ я│п©п╦я│п╬п╨ я│я│я▀п╩п╬п╨ я│п╬пЁп╩п╟я│п╫п╬ п╫п╟я│я┌я─п╬п╧п╨п╟п╪"
+msgstr "Обновить список ссылок согласно настройкам"
 
 #: src/keymap.cpp:41
 msgid "Download file"
-msgstr "п≈п╟пЁя─я┐п╥п╦я┌я▄ я└п╟п╧п╩"
+msgstr "Загрузить файл"
 
 #: src/keymap.cpp:42
 msgid "Cancel download"
-msgstr "п·я┌п╪п╣п╫п╦я┌я▄ п╥п╟пЁя─я┐п╥п╨я┐"
+msgstr "Отменить загрузку"
 
 #: src/keymap.cpp:43
 msgid "Mark download as deleted"
-msgstr "п·я┌п╪п╣я┌п╦я┌я▄ п╥п╟пЁя─я┐п╥п╨я┐ п╨п╟п╨ я┐п╢п╟п╩п╣п╫п╫я┐я▌"
+msgstr "Отметить загрузку как удаленную"
 
 #: src/keymap.cpp:44
 msgid "Purge finished and deleted downloads from queue"
-msgstr "п·я┤п╦я│я┌п╦я┌я▄ п╬я┤п╣я─п╣п╢я▄ п╬я┌ п╥п╟п╨п╬п╫я┤п╣п╫п╫я▀я┘ п╦ я┐п╢п╟п╩я▒п╫п╫я▀я┘ п╥п╟пЁя─я┐п╥п╬п╨"
+msgstr "Очистить очередь от законченных и удалённых загрузок"
 
 #: src/keymap.cpp:45
 msgid "Toggle automatic download on/off"
-msgstr "п÷п╣я─п╣п╨п╩я▌я┤п╦я┌я▄ п╟п╡я┌п╬п╪п╟я┌п╦я┤п╣я│п╨я┐я▌ п╥п╟пЁя─я┐п╥п╨я┐ п╡п╨п╩/п╡я▀п╨п╩"
+msgstr "Переключить автоматическую загрузку вкл/выкл"
 
 #: src/keymap.cpp:46
 msgid "Start player with currently selected download"
-msgstr "п≈п╟п©я┐я│я┌п╦я┌я▄ п©я─п╬п╦пЁя─я▀п╡п╟я┌п╣п╩я▄ я│ я┌п╣п╨я┐я┴п╣п╧ п╡я▀п╠я─п╟п╫п╫п╬п╧ п╥п╟п╨п╟я┤п╨п╬п╧"
+msgstr "Запустить проигрыватель с текущей выбранной закачкой"
 
 #: src/keymap.cpp:47
 msgid "Increase the number of concurrent downloads"
-msgstr "пёп╡п╣п╩п╦я┤п╦я┌я▄ п╨п╬п╩п╦я┤п╣я│я┌п╡п╬ п╬п╢п╫п╬п╡я─п╣п╪п╣п╫п╫я▀я┘ п╥п╟пЁя─я┐п╥п╬п╨"
+msgstr "Увеличить количество одновременных загрузок"
 
 #: src/keymap.cpp:48
 msgid "Decrease the number of concurrent downloads"
-msgstr "пёп╪п╣п╫я▄я┬п╦я┌я▄ п╨п╬п╩п╦я┤п╣я│я┌п╡п╬ п╬п╢п╫п╬п╡я─п╣п╪п╣п╫п╫я▀я┘ п╥п╟пЁя─я┐п╥п╬п╨"
+msgstr "Уменьшить количество одновременных загрузок"
 
 #: src/keymap.cpp:49
 msgid "Redraw screen"
-msgstr "п·п╠п╫п╬п╡п╦я┌я▄ я█п╨я─п╟п╫"
+msgstr "Обновить экран"
 
 #: src/keymap.cpp:50
 msgid "Open the commandline"
-msgstr "п·я┌п╨я─я▀я┌я▄ п╨п╬п╪п╟п╫п╢п╫я┐я▌ я│я┌я─п╬п╨я┐"
+msgstr "Открыть командную строку"
 
 #: src/keymap.cpp:51
 msgid "Set a filter"
-msgstr "пёя│я┌п╟п╫п╬п╡п╦я┌я▄ я└п╦п╩я▄я┌я─"
+msgstr "Установить фильтр"
 
 #: src/keymap.cpp:52
 msgid "Select a predefined filter"
-msgstr "п▓я▀п╠я─п╟я┌я▄ п©я─п╣п╢п╬п©я─п╣п╢п╣п╩я▒п╫п╫я▀п╧ я└п╦п╩я▄я┌я─"
+msgstr "Выбрать предопределённый фильтр"
 
 #: src/keymap.cpp:53
 msgid "Clear currently set filter"
-msgstr "п·я┤п╦я│я┌п╦я┌я▄ я┌п╣п╨я┐я┴п╦п╧ я└п╦п╩я▄я┌я─"
+msgstr "Очистить текущий фильтр"
 
 #: src/keymap.cpp:54
 msgid "Bookmark current link/article"
-msgstr "п≈п╟п╫п╣я│я┌п╦ п╡ п╥п╟п╨п╩п╟п╢п╨п╦ я┌п╣п╨я┐я┴я┐я▌ я│я│я▀п╩п╨я┐/п╥п╟п╪п╣я┌п╨я┐"
+msgstr "Занести в закладки текущую ссылку/заметку"
 
 #: src/keymap.cpp:55
 msgid "Edit flags"
-msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟я┌я▄ я└п╩п╟пЁп╦"
+msgstr "Редактировать флаги"
 
 #: src/pb_controller.cpp:161
 msgid "Cleaning up queue..."
-msgstr "п·я┤п╦я│я┌п╦я┴п╟я▌ п╬я┤п╣я─п╣п╢я▄..."
+msgstr "Очистищаю очередь..."
 
 #: src/pb_controller.cpp:175
 #, c-format
@@ -768,110 +768,110 @@ msgid ""
 "-h              this help\n"
 msgstr ""
 "%s %s\n"
-"п≤я│п©п╬п╩я▄п╥п╬п╡п╟п╫п╦п╣: %s [-C <я└п╟п╧п╩>] [-q <я└п╟п╧п╩>] [-h]\n"
-"-C <я└п╟п╧п╩ п╫п╟я│я┌я─п╬п╣п╨> я┤п╦я┌п╟я┌я▄ п╫п╟я│я┌я─п╬п╧п╨п╦ п╦п╥ <я└п╟п╧п╩п╟ п╫п╟я│я┌я─п╬п╣п╨>\n"
-"-q <я└п╟п╧п╩ п╬я┤п╣я─п╣п╢п╦>  п╦я│п©п╬п╩я▄п╥п╬п╡п╟я┌я▄ <я└п╟п╧п╩ п╬я┤п╣я─п╣п╢п╦> п╨п╟п╨ я└п╟п╧п╩ п╬я┤п╣я─п╣п╢п╦\n"
-"-h                 п©п╬п╨п╟п╥п╟я┌я▄ я█я┌я┐ я│п©я─п╟п╡п╨я┐\n"
+"Использование: %s [-C <файл>] [-q <файл>] [-h]\n"
+"-C <файл настроек> читать настройки из <файла настроек>\n"
+"-q <файл очереди>  использовать <файл очереди> как файл очереди\n"
+"-h                 показать эту справку\n"
 
 #: src/pb_view.cpp:39
 #, c-format
 msgid " - %u parallel downloads"
-msgstr " - %u п©п╟я─п╟п╩п╩п╣п╩я▄п╫я▀я┘ п╥п╟пЁя─я┐п╥п╬п╨"
+msgstr " - %u параллельных загрузок"
 
 #: src/pb_view.cpp:43
 #, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f kb/s total%s"
-msgstr "п·я┤п╣я─п╣п╢я▄ (%u п╟п╨я┌п╦п╡п╫я▀я┘ п╥п╟пЁя─я┐п╥п╬п╨, п╡я│п╣пЁп╬ %u) - %.2f п╨п╠/я│п╣п╨ п╡я│п╣пЁп╬%s"
+msgstr "Очередь (%u активных загрузок, всего %u) - %.2f кб/сек всего%s"
 
 #: src/pb_view.cpp:95
 msgid "Error: can't quit: download(s) in progress."
-msgstr "п·я┬п╦п╠п╨п╟: п╫п╣ п╪п╬пЁя┐ п╡я▀п╧я┌п╦: п╥п╟пЁя─я┐п╥п╨п╟(п╦) п╟п╨я┌п╦п╡п╫п╟(я▀)."
+msgstr "Ошибка: не могу выйти: загрузка(и) активна(ы)."
 
 #: src/pb_view.cpp:127
 msgid "Error: download needs to be finished before the file can be played."
-msgstr "п·я┬п╦п╠п╨п╟: п╥п╟пЁя─я┐п╥п╨п╟ п╢п╬п╩п╤п╫п╟ п╥п╟п╨п╬п╫я┤п╦я┌я▄я│я▐ п©я─п╣п╤п╢п╣ я┤п╣п╪ я└п╟п╧п╩ п╪п╬п╤п╣я┌ п╠я▀я┌я▄ п©я─п╬п╦пЁя─п╟п╫."
+msgstr "Ошибка: загрузка должна закончиться прежде чем файл может быть проигран."
 
 #: src/pb_view.cpp:156
 msgid "Error: unable to perform operation: download(s) in progress."
-msgstr "п·я┬п╦п╠п╨п╟: п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╡я▀п©п╬п╩п╫п╦я┌я▄ п╢п╣п╧я│я┌п╡п╦п╣: п╥п╟пЁя─я┐п╥п╨п╟(п╦) п╟п╨я┌п╦п╡п╫п╟(я▀)."
+msgstr "Ошибка: невозможно выполнить действие: загрузка(и) активна(ы)."
 
 #: src/pb_view.cpp:268
 msgid "Download"
-msgstr "п≈п╟пЁя─я┐п╥п╦я┌я▄"
+msgstr "Загрузить"
 
 #: src/pb_view.cpp:270
 msgid "Delete"
-msgstr "пёп╢п╟п╩п╦я┌я▄"
+msgstr "Удалить"
 
 #: src/pb_view.cpp:271
 msgid "Purge Finished"
-msgstr "п·я┤п╦я│я┌п╦я┌я▄ п╬я┌ п╥п╟п╡п╣я─я┬я▒п╫п╫я▀я┘"
+msgstr "Очистить от завершённых"
 
 #: src/pb_view.cpp:272
 msgid "Toggle Automatic Download"
-msgstr "п÷п╣я─п╣п╨п╩я▌я┤п╦я┌я▄ п╟п╡я┌п╬п╪п╟я┌п╦я┤п╣я│п╨я┐я▌ п╥п╟пЁя─я┐п╥п╨я┐"
+msgstr "Переключить автоматическую загрузку"
 
 #: src/pb_view.cpp:273
 msgid "Play"
-msgstr "п÷я─п╬п╦пЁя─п╟я┌я▄"
+msgstr "Проиграть"
 
 #: src/rss.cpp:87
 #, c-format
 msgid "Error: unsupported URL: %s"
-msgstr "п·я┬п╦п╠п╨п╟: я│я│я▀п╩п╨п╟ п╫п╣ п©п╬п╢п╢п╣я─п╤п╦п╡п╟п╣я┌я│я▐: %s"
+msgstr "Ошибка: ссылка не поддерживается: %s"
 
 #: src/select_formaction.cpp:124
 #, c-format
 msgid "%s %s - Select Tag"
-msgstr "%s %s - п▓я▀п╠я─п╟я┌я▄ п╪п╟я─п╨п╣я─"
+msgstr "%s %s - Выбрать маркер"
 
 #: src/select_formaction.cpp:127
 #, c-format
 msgid "%s %s - Select Filter"
-msgstr "%s %s - п▓я▀п╠я─п╟я┌я▄ я└п╦п╩я▄я┌я─"
+msgstr "%s %s - Выбрать фильтр"
 
 #: src/select_formaction.cpp:138
 msgid "Select Tag"
-msgstr "п▓я▀п╠я─п╟я┌я▄ п╪п╟я─п╨п╣я─"
+msgstr "Выбрать маркер"
 
 #: src/select_formaction.cpp:143
 msgid "Select Filter"
-msgstr "п▓я▀п╠я─п╟я┌я▄ я└п╦п╩я▄я┌я─"
+msgstr "Выбрать фильтр"
 
 #: src/urlview_formaction.cpp:34 src/urlview_formaction.cpp:48
 msgid "No link selected!"
-msgstr "п²п╣ п╡я▀п╠я─п╟п╫п╬ п╫п╦ п╬п╢п╫п╬п╧ я│я│я▀п╩п╨п╦!"
+msgstr "Не выбрано ни одной ссылки!"
 
 #: src/urlview_formaction.cpp:83
 #, c-format
 msgid "%s %s - URLs"
-msgstr "%s %s - п║я│я▀п╩п╨п╦"
+msgstr "%s %s - Ссылки"
 
 #: src/urlview_formaction.cpp:94
 msgid "Save Bookmark"
-msgstr "п║п╬я┘я─п╟п╫п╦я┌я▄ п╥п╟п╨п╩п╟п╢п╨я┐"
+msgstr "Сохранить закладку"
 
 #: src/view.cpp:301
 #, c-format
 msgid "Error: applying the filter failed: %s"
-msgstr "п·я┬п╦п╠п╨п╟: п©я─п╦п╪п╣п╫п╣п╫п╦п╣ я└п╦п╩я▄я┌я─п╟ п╥п╟п╡п╣я─я┬п╦п╩п╬я│я▄ п╫п╣я┐п╢п╟я┤п╣п╧: %s"
+msgstr "Ошибка: применение фильтра завершилось неудачей: %s"
 
 #: src/view.cpp:322 src/view.cpp:342
 msgid "Error: feed contains no items!"
-msgstr "п·я┬п╦п╠п╨п╟: п╩п╣п╫я┌п╟ п╫п╣ я│п╬п╢п╣я─п╤п╦я┌ п╫п╦ п╬п╢п╫п╬пЁп╬ я█п╩п╣п╪п╣п╫я┌п╟!"
+msgstr "Ошибка: лента не содержит ни одного элемента!"
 
 #: src/view.cpp:331
 msgid "Updating query feed..."
-msgstr "п·п╠п╫п╬п╡п╩я▐я▌ п╩п╣п╫я┌я┐ п╬я┤п╣я─п╣п╢п╦..."
+msgstr "Обновляю ленту очереди..."
 
 #: src/xmlpullparser.cpp:43 src/xmlpullparser.cpp:49
 msgid "invalid attribute index"
-msgstr "п╫п╣п╡п╣я─п╫я▀п╧ п╦п╫п╢п╣п╨я│ п╨я─п╦я┌п╣я─п╦я▐"
+msgstr "неверный индекс критерия"
 
 #: src/xmlpullparser.cpp:59
 msgid "attribute not found"
-msgstr "п╨я─п╦я┌п╣я─п╦п╧ п╫п╣ п╫п╟п╧п╢п╣п╫"
+msgstr "критерий не найден"
 
 #: src/xmlpullparser.cpp:277
 msgid "EOF found while reading XML tag"
-msgstr "п▓п╬ п╡я─п╣п╪я▐ я┤я┌п╣п╫п╦я▐ я┌п╣пЁп╟ XML п╬п╠п╫п╟я─я┐п╤п╣п╫ п╨п╬п╫п╣я├ я└п╟п╧п╩п╟"
+msgstr "Во время чтения тега XML обнаружен конец файла"
