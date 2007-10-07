@@ -22,6 +22,11 @@
 
 using namespace newsbeuter;
 
+BOOST_AUTO_TEST_CASE(InitTests) {
+	setlocale(LC_CTYPE, "");
+	setlocale(LC_MESSAGES, "");
+}
+
 BOOST_AUTO_TEST_CASE(TestNewsbeuterReload) {
 	configcontainer * cfg = new configcontainer();
 	cache * rsscache = new cache("test-cache.db", cfg);
@@ -365,6 +370,14 @@ BOOST_AUTO_TEST_CASE(TestHistory) {
 	BOOST_CHECK_EQUAL(h.next(), "foobar");
 	BOOST_CHECK_EQUAL(h.next(), "");
 	BOOST_CHECK_EQUAL(h.next(), "");
+}
+
+BOOST_AUTO_TEST_CASE(TestStringConversion) {
+	std::string s1 = utils::wstr2str(L"This is a simple string. Let's have a look at the outcome...");
+	BOOST_CHECK_EQUAL(s1, "This is a simple string. Let's have a look at the outcome...");
+
+	std::wstring w1 = utils::str2wstr("And that's another simple string.");
+	BOOST_CHECK_EQUAL(w1 == L"And that's another simple string.", true);
 }
 
 BOOST_AUTO_TEST_CASE(TestFmtStrFormatter) {

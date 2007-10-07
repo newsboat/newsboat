@@ -9,6 +9,8 @@
 #include <sys/types.h>
 #include <pwd.h>
 
+#include <locale>
+#include <cwchar>
 
 #include <curl/curl.h>
 
@@ -481,6 +483,42 @@ std::string utils::replace_all(std::string str, const std::string& from, const s
 	}
 	GetLogger().log(LOG_DEBUG,"utils::replace_all: after str = %s", str.c_str());
 	return str;
+}
+
+std::wstring utils::str2wstr(const std::string& str) {
+	const char* pszExt = str.c_str();
+	wchar_t pwszInt [str.length()+1];
+
+	memset(&pwszInt[0], 0, sizeof(pwszInt));
+	const char* pszNext;
+	wchar_t* pwszNext;
+	mbstate_t state = {0};
+	std::locale loc(setlocale(LC_MESSAGES, NULL));
+	int res = std::use_facet<std::codecvt<wchar_t, char, mbstate_t> > ( loc ).in( state, pszExt, &pszExt[strlen(pszExt)], pszNext, pwszInt, &pwszInt[strlen(pszExt)], pwszNext );
+	if (res == std::codecvt_base::error) {
+		GetLogger().log(LOG_ERROR, "utils::str2wstr: conversion of `%s' failed (locale = %s).", str.c_str(), setlocale(LC_MESSAGES, NULL));
+		throw "utils::str2wstr: conversion failed";
+	}
+	// pwszInt[strlen(pszExt)] = 0;
+	return std::wstring(pwszInt);
+}
+
+std::string utils::wstr2str(const std::wstring& wstr) {
+	char pszExt[4*wstr.length()+1];
+	const wchar_t *pwszInt = wstr.c_str();
+	memset(pszExt, 0, sizeof(pszExt));
+	char* pszNext;
+	const wchar_t* pwszNext;
+	mbstate_t state = {0};
+	GetLogger().log(LOG_DEBUG, "utils::wstr2str: locale = %s input = `%ls'", setlocale(LC_MESSAGES, NULL), wstr.c_str());
+	std::locale loc(setlocale(LC_MESSAGES, NULL)); // TODO
+	int res = std::use_facet<std::codecvt<wchar_t, char, mbstate_t> > (loc).out(state, pwszInt, &pwszInt[wcslen(pwszInt)], pwszNext, pszExt, pszExt + sizeof(pszExt), pszNext);
+	if (res == std::codecvt_base::error) {
+		GetLogger().log(LOG_ERROR, "utils::wstr2str: conversion of `%ls' failed.", wstr.c_str());
+		throw "utils::wstr2str: conversion failed";
+	}
+	// pszExt[wcslen(pwszInt)] = 0;
+	return std::string(pszExt);
 }
 
 }
