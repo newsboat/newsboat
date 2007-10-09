@@ -106,3 +106,4 @@ DONE:
 - do entitity decoding for titles (won't be fixed, as we fully comply with the RSS recommendations)
 - refine the search function (make it like the command line)
 - research (and fix) libnxml decoding issues
+- strip \r from title

@@ -142,6 +142,9 @@ rss_feed rss_parser::parse() {
 			rss_item x(ch);
 			if (item->title) {
 				std::string title = utils::convert_text(item->title, "utf-8", encoding);
+				GetLogger().log(LOG_DEBUG, "rss_parser::parse: before replace_newline_characters: `%s'", title.c_str());
+				replace_newline_characters(title);
+				GetLogger().log(LOG_DEBUG, "rss_parser::parse: after replace_newline_characters: `%s'", title.c_str());
 				x.set_title(title);
 				GetLogger().log(LOG_DEBUG, "rss_parser::parse: converted title `%s' to `%s'", item->title, title.c_str());
 			}
@@ -681,3 +684,7 @@ void rss_item::set_feedptr(rss_feed * ptr) {
 	feedptr = ptr;
 }
 
+void rss_parser::replace_newline_characters(std::string& str) {
+	str = utils::replace_all(str, "\r", " ");
+	str = utils::replace_all(str, "\n", " ");
+}

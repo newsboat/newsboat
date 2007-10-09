@@ -489,7 +489,7 @@ std::wstring utils::str2wstr(const std::string& str) {
 	const char* pszExt = str.c_str();
 	wchar_t pwszInt [str.length()+1];
 
-	memset(&pwszInt[0], 0, sizeof(pwszInt));
+	memset(&pwszInt[0], 0, sizeof(wchar_t)*(str.length() + 1));
 	const char* pszNext;
 	wchar_t* pwszNext;
 	mbstate_t state = {0};
@@ -506,7 +506,7 @@ std::wstring utils::str2wstr(const std::string& str) {
 std::string utils::wstr2str(const std::wstring& wstr) {
 	char pszExt[4*wstr.length()+1];
 	const wchar_t *pwszInt = wstr.c_str();
-	memset(pszExt, 0, sizeof(pszExt));
+	memset(pszExt, 0, 4*wstr.length()+1);
 	char* pszNext;
 	const wchar_t* pwszNext;
 	mbstate_t state = {0};
