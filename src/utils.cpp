@@ -11,6 +11,7 @@
 
 #include <locale>
 #include <cwchar>
+#include <sstream>
 
 #include <curl/curl.h>
 
@@ -519,6 +520,12 @@ std::string utils::wstr2str(const std::wstring& wstr) {
 	}
 	// pszExt[wcslen(pwszInt)] = 0;
 	return std::string(pszExt);
+}
+
+std::string utils::to_s(unsigned int u) {
+	std::ostringstream os;
+	os << u;
+	return os.str();
 }
 
 }

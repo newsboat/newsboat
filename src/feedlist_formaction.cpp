@@ -236,7 +236,6 @@ void feedlist_formaction::process_operation(operation op) {
 
 void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 	std::string code = "{list";
-	char buf[1024];
 	
 	assert(v->get_cfg() != NULL); // must not happen
 
@@ -314,13 +313,16 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 
 	f->modify("feeds","replace_inner",code);
 
-	if (tag.length() > 0) {
-		snprintf(buf, sizeof(buf), _("%s %s - Your feeds (%u unread, %u total) - tag `%s'"), PROGRAM_NAME, PROGRAM_VERSION, unread_feeds, i, tag.c_str());
-	} else {
-		snprintf(buf, sizeof(buf), _("%s %s - Your feeds (%u unread, %u total)"), PROGRAM_NAME, PROGRAM_VERSION, unread_feeds, i);
-	}
+	std::string title_format = v->get_cfg()->get_configvalue("feedlist-title-format");
 
-	f->set("head", buf);
+	fmtstr_formatter fmt;
+	fmt.register_fmt('T', tag);
+	fmt.register_fmt('N', PROGRAM_NAME);
+	fmt.register_fmt('V', PROGRAM_VERSION);
+	fmt.register_fmt('u', utils::to_s(unread_feeds));
+	fmt.register_fmt('t', utils::to_s(i));
+
+	f->set("head", fmt.do_format(title_format, width));
 }
 
 void feedlist_formaction::set_tags(const std::vector<std::string>& t) {
