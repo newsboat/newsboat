@@ -232,6 +232,7 @@ void itemlist_formaction::finished_qna(operation op) {
 					if (!m.parse(filtertext)) {
 						v->show_error(_("Error: couldn't parse filter command!"));
 					} else {
+						f->set("itempos", "0");
 						apply_filter = true;
 						update_visible_items = true;
 						do_redraw = true;

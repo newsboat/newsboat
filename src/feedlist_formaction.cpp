@@ -135,6 +135,7 @@ void feedlist_formaction::process_operation(operation op) {
 			if (v->get_cfg()->get_configvalue_as_bool("show-read-feeds")) {
 				v->get_cfg()->set_configvalue("show-read-feeds","no");
 				apply_filter = true;
+				f->set("feedpos", "0");
 			} else {
 				v->get_cfg()->set_configvalue("show-read-feeds","yes");
 				apply_filter = false;
@@ -471,6 +472,7 @@ void feedlist_formaction::finished_qna(operation op) {
 						v->show_error(_("Error: couldn't parse filter command!"));
 						m.parse(FILTER_UNREAD_FEEDS);
 					} else {
+						f->set("feedpos", "0");
 						apply_filter = true;
 						do_redraw = true;
 					}
