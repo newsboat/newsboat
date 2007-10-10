@@ -656,7 +656,7 @@ std::string cache::prepare_query(const char * format, ...) {
 	char * query = sqlite3_vmprintf(format, ap);
 	if (query) {
 		result = query;
-		free(query);
+		sqlite3_free(query);
 	}
 	return result;
 }
