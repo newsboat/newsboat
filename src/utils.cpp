@@ -173,8 +173,10 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str, std::string 
 	unsigned int i;
 
 	GetLogger().log(LOG_DEBUG,"utils::tokenize_nl: last_pos = %u",last_pos);
-	for (i=0;i<last_pos;++i) {
-		tokens.push_back(std::string("\n"));
+	if (last_pos != std::string::npos) {
+		for (i=0;i<last_pos;++i) {
+			tokens.push_back(std::string("\n"));
+		}
 	}
 
 	while (std::string::npos != pos || std::string::npos != last_pos) {
