@@ -138,10 +138,10 @@ char keymap::get_key(const std::string& keycode) {
 		return '\n';
 	} else if (keycode == "ESC") {
 		return 27;
-	} else if (keycode[0] == '^') {
+	} else if (keycode.length() == 2 && keycode[0] == '^') {
 		char chr = keycode[1];
 		return chr - '@';
-	} else { // TODO: implement more keys
+	} else if (keycode.length() == 1) { // TODO: implement more keys
 		return keycode[0];
 	}
 	return 0;

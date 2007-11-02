@@ -113,7 +113,9 @@ BOOST_AUTO_TEST_CASE(TestKeymap) {
 	BOOST_CHECK_EQUAL(k.get_key(" "), ' ');
 	BOOST_CHECK_EQUAL(k.get_key("U"), 'U');
 	BOOST_CHECK_EQUAL(k.get_key("~"), '~');
-	/* BOOST_CHECK_EQUAL(k.get_key("INVALID"), 0); */
+	BOOST_CHECK_EQUAL(k.get_key("INVALID"), 0);
+	BOOST_CHECK_EQUAL(k.get_key("ENTER"), '\n');
+	BOOST_CHECK_EQUAL(k.get_key("^A"), '\001');
 }
 
 BOOST_AUTO_TEST_CASE(TestXmlPullParser) {
