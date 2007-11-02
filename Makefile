@@ -119,7 +119,7 @@ clean-doc:
 clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-doc
 	$(RM) $(STFLHDRS)
 
-distclean: clean clean-mo
+distclean: clean clean-mo test-clean
 	$(RM) core *.core core.*
 
 doc:
