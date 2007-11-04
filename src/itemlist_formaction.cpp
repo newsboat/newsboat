@@ -383,6 +383,7 @@ void itemlist_formaction::prepare() {
 				fmt.register_fmt('T', it->first->get_feedptr()->title());
 			}
 			fmt.register_fmt('t', it->first->title());
+			fmt.register_fmt('a', it->first->author());
 
 			std::string quoted_title = stfl::quote(fmt.do_format(itemlist_format, width));
 			line.append(quoted_title);
