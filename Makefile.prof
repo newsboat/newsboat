@@ -1,0 +1,14 @@
+CXXFLAGS+=-fprofile-arcs -ftest-coverage
+LCOV_FILE=newsbeuter.info
+
+
+include Makefile
+
+lcov-init:
+	$(RM) $(LCOV_FILE)
+
+lcov-add:
+	lcov -b . -d . -c --output-file $(LCOV_FILE)
+
+lcov-html:
+	genhtml $(LCOV_FILE)
