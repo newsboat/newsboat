@@ -497,9 +497,7 @@ void view::pop_current_formaction() {
 		if (f) {
 			f->set_redraw(true);
 			f->get_form()->set("msg","");
-			if (f == itemlist) { // TODO: improve this
-				itemlist->set_update_visible_items(true);
-			}
+			f->recalculate_form();
 		}
 	}
 }

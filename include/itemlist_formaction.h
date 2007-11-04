@@ -40,6 +40,8 @@ class itemlist_formaction : public formaction {
 
 		inline void set_show_searchresult(bool b) { show_searchresult = b; }
 
+		virtual void recalculate_form();
+
 	private:
 		virtual void process_operation(operation op);
 		void set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);

@@ -41,6 +41,7 @@ class formaction {
 
 		void start_cmdline();
 
+		virtual void recalculate_form();
 
 	protected:
 		virtual void process_operation(operation op) = 0;

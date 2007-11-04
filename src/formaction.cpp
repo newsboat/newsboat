@@ -18,6 +18,10 @@ void formaction::set_keymap_hints() {
 	f->set("help", prepare_keymap_hint(this->get_keymap_hint()));
 }
 
+void formaction::recalculate_form() {
+	f->run(-3);
+}
+
 formaction::~formaction() { 
 	delete f;
 }

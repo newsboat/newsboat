@@ -575,5 +575,10 @@ int itemlist_formaction::get_pos(unsigned int realidx) {
 	return -1;
 }
 
+void itemlist_formaction::recalculate_form() {
+	formaction::recalculate_form();
+	set_update_visible_items(true);
+}
+
 
 }
