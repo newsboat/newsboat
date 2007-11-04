@@ -1,4 +1,5 @@
 #include <urlview_formaction.h>
+#include <formatstring.h>
 #include <view.h>
 #include <config.h>
 
@@ -79,9 +80,17 @@ void urlview_formaction::prepare() {
 
 void urlview_formaction::init() {
 	v->set_status("");
-	char buf[1024];
-	snprintf(buf,sizeof(buf),_("%s %s - URLs"), PROGRAM_NAME, PROGRAM_VERSION);
-	f->set("head", buf);
+
+	std::string viewwidth = f->get("urls:w");
+	std::istringstream is(viewwidth);
+	unsigned int width;
+	is >> width;
+
+	fmtstr_formatter fmt;
+	fmt.register_fmt('N', PROGRAM_NAME);
+	fmt.register_fmt('V', PROGRAM_VERSION);
+
+	f->set("head", fmt.do_format(v->get_cfg()->get_configvalue("urlview-title-format"), width));
 	do_redraw = true;
 	quit = false;
 	set_keymap_hints();

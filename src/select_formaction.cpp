@@ -1,4 +1,5 @@
 #include <select_formaction.h>
+#include <formatstring.h>
 #include <view.h>
 #include <config.h>
 
@@ -112,24 +113,33 @@ void select_formaction::prepare() {
 }
 
 void select_formaction::init() {
+	std::string title;
 	do_redraw = true;
 	quit = false;
 	value = "";
-	char buf[1024];
+
+	std::string viewwidth = f->get("taglist:w");
+	std::istringstream is(viewwidth);
+	unsigned int width;
+	is >> width;
 
 	set_keymap_hints();
 
+	fmtstr_formatter fmt;
+	fmt.register_fmt('N', PROGRAM_NAME);
+	fmt.register_fmt('V', PROGRAM_VERSION);
+
 	switch (type) {
 	case SELECTTAG:
-		snprintf(buf, sizeof(buf), _("%s %s - Select Tag"), PROGRAM_NAME, PROGRAM_VERSION);
+		title = fmt.do_format(v->get_cfg()->get_configvalue("selecttag-title-format"), width);
 		break;
 	case SELECTFILTER:
-		snprintf(buf, sizeof(buf), _("%s %s - Select Filter"), PROGRAM_NAME, PROGRAM_VERSION);
+		title = fmt.do_format(v->get_cfg()->get_configvalue("selectfilter-title-format"), width);
 		break;
 	default:
 		assert(0); // should never happen
 	}
-	f->set("head", buf);
+	f->set("head", title);
 }
 
 keymap_hint_entry * select_formaction::get_keymap_hint() {

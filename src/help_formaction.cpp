@@ -1,5 +1,7 @@
+#include <sstream>
 #include <config.h>
 #include <help_formaction.h>
+#include <formatstring.h>
 #include <view.h>
 
 namespace newsbeuter {
@@ -25,10 +27,15 @@ void help_formaction::process_operation(operation op) {
 
 void help_formaction::prepare() {
 	if (do_redraw) {
+		std::string listwidth = f->get("helptext:w");
+		std::istringstream is(listwidth);
+		unsigned int width;
+		is >> width;
 
-		char buf[1024];
-		snprintf(buf,sizeof(buf),_("%s %s - Help"), PROGRAM_NAME, PROGRAM_VERSION);
-		f->set("head",buf);
+		fmtstr_formatter fmt;
+		fmt.register_fmt('N', PROGRAM_NAME);
+		fmt.register_fmt('V', PROGRAM_VERSION);
+		f->set("head",fmt.do_format(v->get_cfg()->get_configvalue("help-title-format"), width));
 		
 		std::vector<keymap_desc> descs;
 		v->get_keys()->get_keymap_descriptions(descs, KM_NEWSBEUTER);

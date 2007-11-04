@@ -412,16 +412,36 @@ void itemlist_formaction::init() {
 }
 
 void itemlist_formaction::set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url) {
-	char buf[1024];
 	/*
 	 * Since the itemlist_formaction is also used to display search results, we always need to set the right title
 	 */
+	std::string title;
+	fmtstr_formatter fmt;
+	std::ostringstream unreadstr;
+	std::ostringstream totalstr;
+
+	std::string listwidth = f->get("items:w");
+	std::istringstream is(listwidth);
+	unsigned int width;
+	is >> width;
+
+	fmt.register_fmt('N', PROGRAM_NAME);
+	fmt.register_fmt('V', PROGRAM_VERSION);
+
+	unreadstr << unread;
+	totalstr << total;
+	fmt.register_fmt('u', unreadstr.str());
+	fmt.register_fmt('t', totalstr.str());
+
+	fmt.register_fmt('T', s);
+	fmt.register_fmt('U', url);
+
 	if (!show_searchresult) {
-		snprintf(buf, sizeof(buf), _("%s %s - Articles in feed '%s' (%u unread, %u total) - %s"), PROGRAM_NAME, PROGRAM_VERSION, s.c_str(), unread, total, url.c_str());
+		title = fmt.do_format(v->get_cfg()->get_configvalue("articlelist-title-format"));
 	} else {
-		snprintf(buf, sizeof(buf), _("%s %s - Search results (%u unread, %u total)"), PROGRAM_NAME, PROGRAM_VERSION, unread, total);
+		title = fmt.do_format(v->get_cfg()->get_configvalue("searchresult-title-format"));
 	}
-	f->set("head", buf);
+	f->set("head", title);
 }
 
 bool itemlist_formaction::jump_to_previous_unread_item(bool start_with_last) {

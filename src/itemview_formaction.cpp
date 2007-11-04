@@ -4,6 +4,7 @@
 #include <logger.h>
 #include <exceptions.h>
 #include <utils.h>
+#include <formatstring.h>
 
 #include <sstream>
 
@@ -268,9 +269,17 @@ keymap_hint_entry * itemview_formaction::get_keymap_hint() {
 }
 
 void itemview_formaction::set_head(const std::string& s) {
-	char buf[1024];
-	snprintf(buf, sizeof(buf), _("%s %s - Article '%s'"), PROGRAM_NAME, PROGRAM_VERSION, s.c_str());
-	f->set("head",buf);
+	fmtstr_formatter fmt;
+	fmt.register_fmt('N', PROGRAM_NAME);
+	fmt.register_fmt('V', PROGRAM_VERSION);
+	fmt.register_fmt('T', s);
+
+	std::string listwidth = f->get("article:w");
+	std::istringstream is(listwidth);
+	unsigned int width;
+	is >> width;
+
+	f->set("head",fmt.do_format(v->get_cfg()->get_configvalue("itemview-title-format"), width));
 }
 
 void itemview_formaction::render_source(std::vector<std::string>& lines, std::string desc, unsigned int width) {

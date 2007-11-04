@@ -38,7 +38,7 @@ void feedlist_formaction::init() {
 	 * The feedlist_formaction is responsible for starting up the reloadthread, which is responsible
 	 * for regularly spawning downloadthreads.
 	 */
-	unsigned int reload_cycle = 60 * static_cast<unsigned int>(v->get_cfg()->get_configvalue_as_int("reload-time"));
+	time_t reload_cycle = 60 * v->get_cfg()->get_configvalue_as_int("reload-time");
 	if (v->get_cfg()->get_configvalue_as_bool("auto-reload") == true) {
 		f->run(-1); // FRUN
 		reloadthread  * rt = new reloadthread(v->get_ctrl(), reload_cycle, v->get_cfg());

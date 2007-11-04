@@ -1,4 +1,5 @@
 #include <filebrowser_formaction.h>
+#include <formatstring.h>
 #include <logger.h>
 #include <config.h>
 #include <view.h>
@@ -24,7 +25,6 @@ filebrowser_formaction::filebrowser_formaction(view * vv, std::string formstr)
 filebrowser_formaction::~filebrowser_formaction() { }
 
 void filebrowser_formaction::process_operation(operation op) {
-	char buf[1024];
 	switch (op) {
 		case OP_OPEN: 
 			{
@@ -42,13 +42,20 @@ void filebrowser_formaction::process_operation(operation op) {
 						selection.erase(0,1);
 						std::string filename(selection);
 						switch (filetype) {
-							case 'd':
-								if (type == FBT_OPEN) {
-									snprintf(buf, sizeof(buf), _("%s %s - Open File - %s"), PROGRAM_NAME, PROGRAM_VERSION, filename.c_str());
-								} else {
-									snprintf(buf, sizeof(buf), _("%s %s - Save File - %s"), PROGRAM_NAME, PROGRAM_VERSION, filename.c_str());
+							case 'd': {
+									std::string fileswidth = f->get("files:w");
+									std::istringstream is(fileswidth);
+									unsigned int width;
+									is >> width;
+
+									fmtstr_formatter fmt;
+									fmt.register_fmt('N', PROGRAM_NAME);
+									fmt.register_fmt('V', PROGRAM_VERSION);
+									// we use O only to distinguish between "open file" and "save file" for the %? format:
+									fmt.register_fmt('O', (type == FBT_OPEN) ? "dummy" : ""); 
+									fmt.register_fmt('f', filename);
+									f->set("head", fmt.do_format(v->get_cfg()->get_configvalue("filebrowser-title-format"), width));
 								}
-								f->set("head", buf);
 								::chdir(filename.c_str());
 								f->set("listpos","0");
 								if (type == FBT_SAVE) {

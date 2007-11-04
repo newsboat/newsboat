@@ -48,7 +48,17 @@ configcontainer::configcontainer()
 	config_data["html-renderer"]   = configdata("internal", configdata::PATH);
 	config_data["feedlist-format"] = configdata("%4i %n %11u %t", configdata::STR);
 	config_data["articlelist-format"] = configdata("%4i %f %D   %?T?|%-17T|  ?%t", configdata::STR);
+
 	config_data["feedlist-title-format"] = configdata(_("%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"), configdata::STR);
+	config_data["urlview-title-format"] = configdata(_("%N %V - URLs"), configdata::STR);
+	config_data["articlelist-title-format"] = configdata(_("%N %V - Articles in feed '%T' (%u unread, %t total) - %U"), configdata::STR);
+	config_data["searchresult-title-format"] = configdata(_("%N %V - Search result (%u unread, %t total)"), configdata::STR);
+	config_data["filebrowser-title-format"] = configdata(_("%N %V - %?O?Open File&Save File? - %f"), configdata::STR);
+	config_data["help-title-format"] = configdata(_("%N %V - Help"), configdata::STR);
+	config_data["selecttag-title-format"] = configdata(_("%N %V - Select Tag"), configdata::STR);
+	config_data["selectfilter-title-format"] = configdata(_("%N %V - Select Filter"), configdata::STR);
+	config_data["itemview-title-format"] = configdata(_("%N %V - Article '%T'"), configdata::STR);
+	config_data["urlview-title-format"] = configdata(_("%N %V - URLs"), configdata::STR);
 }
 
 configcontainer::~configcontainer()
