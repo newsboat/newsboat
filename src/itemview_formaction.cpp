@@ -118,6 +118,11 @@ void itemview_formaction::prepare() {
 				render_width -= 5; 	
 		}
 
+		unsigned int textwidth = v->get_cfg()->get_configvalue_as_int("text-width");
+		if (textwidth > 0) {
+			render_width = textwidth;
+		}
+
 		if (show_source) {
 			render_source(lines, item.description(), render_width);
 		} else {

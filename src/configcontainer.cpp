@@ -48,7 +48,9 @@ configcontainer::configcontainer()
 	config_data["html-renderer"]   = configdata("internal", configdata::PATH);
 	config_data["feedlist-format"] = configdata("%4i %n %11u %t", configdata::STR);
 	config_data["articlelist-format"] = configdata("%4i %f %D   %?T?|%-17T|  ?%t", configdata::STR);
+	config_data["text-width"]      = configdata("0", configdata::INT);
 
+	/* undocumented: */
 	config_data["feedlist-title-format"] = configdata(_("%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"), configdata::STR);
 	config_data["urlview-title-format"] = configdata(_("%N %V - URLs"), configdata::STR);
 	config_data["articlelist-title-format"] = configdata(_("%N %V - Articles in feed '%T' (%u unread, %t total) - %U"), configdata::STR);

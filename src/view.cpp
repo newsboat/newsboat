@@ -254,7 +254,10 @@ void view::write_item(const rss_item& item, const std::string& filename) {
 	
 	lines.push_back(std::string(""));
 	
-	htmlrenderer rnd(80);
+	unsigned int width = cfg->get_configvalue_as_int("text-width");
+	if (width == 0)
+		width = 80;
+	htmlrenderer rnd(width);
 	rnd.render(item.description(), lines, links, item.feedurl());
 
 	std::fstream f;
