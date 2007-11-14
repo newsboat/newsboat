@@ -267,6 +267,52 @@ rss_feed rss_parser::parse() {
 	return feed;
 }
 
+bool rss_parser::check_and_update_lastmodified() {
+	time_t oldlm = ch->get_lastmodified(my_uri);
+	time_t newlm = 0;
+	mrss_error_t err;
+
+	char * proxy = NULL;
+	char * proxy_auth = NULL;
+
+	if (cfgcont->get_configvalue_as_bool("use-proxy") == true) {
+		proxy = const_cast<char *>(cfgcont->get_configvalue("proxy").c_str());
+		proxy_auth = const_cast<char *>(cfgcont->get_configvalue("proxy-auth").c_str());
+	}
+
+	char user_agent[1024];
+	std::string ua_pref = cfgcont->get_configvalue("user-agent");
+	if (ua_pref.length() == 0) {
+		struct utsname buf;
+		uname(&buf);
+		snprintf(user_agent, sizeof(user_agent), "%s/%s (%s %s; %s; %s) %s", PROGRAM_NAME, PROGRAM_VERSION, buf.sysname, buf.release, buf.machine, PROGRAM_URL, curl_version());
+	} else {
+		snprintf(user_agent, sizeof(user_agent), "%s", ua_pref.c_str());
+	}
+
+	mrss_options_t * options = mrss_options_new(30, proxy, proxy_auth, NULL, NULL, NULL, 0, NULL, user_agent);
+
+	err = mrss_get_last_modified_with_options(const_cast<char *>(my_uri.c_str()), &newlm, options);
+
+	mrss_options_free(options);
+
+	GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: err = %u oldlm = %d newlm = %d", err, oldlm, newlm);
+
+	if (err != MRSS_OK || newlm == 0) {
+		GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: yes, download");
+		return true; // error with check or no Last-Modified header -> better try download
+	}
+
+	if (newlm > oldlm) {
+		ch->set_lastmodified(my_uri, newlm);
+		GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: yes, download");
+		return true;
+	}
+
+	GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: no, don't download");
+	return false;
+}
+
 
 // rss_item setters
 

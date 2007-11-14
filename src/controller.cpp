@@ -438,37 +438,39 @@ void controller::reload(unsigned int pos, unsigned int max) {
 		rss_parser parser(feed.rssurl().c_str(), rsscache, cfg, &ign);
 		GetLogger().log(LOG_DEBUG, "controller::reload: created parser");
 		try {
-			feed = parser.parse();
-			GetLogger().log(LOG_DEBUG, "controller::reload: after parser.parse");
-			if (!feed.is_empty()) {
-				GetLogger().log(LOG_DEBUG, "controller::reload: feed is nonempty, saving");
-				rsscache->externalize_rssfeed(feed);
-				GetLogger().log(LOG_DEBUG, "controller::reload: after externalize_rssfeed");
+			if (parser.check_and_update_lastmodified()) {
+				feed = parser.parse();
+				GetLogger().log(LOG_DEBUG, "controller::reload: after parser.parse");
+				if (!feed.is_empty()) {
+					GetLogger().log(LOG_DEBUG, "controller::reload: feed is nonempty, saving");
+					rsscache->externalize_rssfeed(feed);
+					GetLogger().log(LOG_DEBUG, "controller::reload: after externalize_rssfeed");
 
-				rsscache->internalize_rssfeed(feed);
-				GetLogger().log(LOG_DEBUG, "controller::reload: after internalize_rssfeed");
-				feed.set_tags(urlcfg->get_tags(feed.rssurl()));
-				feeds[pos] = feed;
-				v->notify_itemlist_change(feed);
-			} else {
-				GetLogger().log(LOG_DEBUG, "controller::reload: feed is empty, not saving");
-			}
+					rsscache->internalize_rssfeed(feed);
+					GetLogger().log(LOG_DEBUG, "controller::reload: after internalize_rssfeed");
+					feed.set_tags(urlcfg->get_tags(feed.rssurl()));
+					feeds[pos] = feed;
+					v->notify_itemlist_change(feed);
+				} else {
+					GetLogger().log(LOG_DEBUG, "controller::reload: feed is empty, not saving");
+				}
 
-			for (std::vector<rss_item>::iterator it=feed.items().begin();it!=feed.items().end();++it) {
-				if (cfg->get_configvalue_as_bool("podcast-auto-enqueue") && !it->enqueued() && it->enclosure_url().length() > 0) {
-					GetLogger().log(LOG_DEBUG, "controller::reload: enclosure_url = `%s' enclosure_type = `%s'", it->enclosure_url().c_str(), it->enclosure_type().c_str());
-					if (is_valid_podcast_type(it->enclosure_type())) {
-						GetLogger().log(LOG_INFO, "controller::reload: enqueuing `%s'", it->enclosure_url().c_str());
-						enqueue_url(it->enclosure_url());
-						it->set_enqueued(true);
-						rsscache->update_rssitem_unread_and_enqueued(*it, feed.rssurl());
+				for (std::vector<rss_item>::iterator it=feed.items().begin();it!=feed.items().end();++it) {
+					if (cfg->get_configvalue_as_bool("podcast-auto-enqueue") && !it->enqueued() && it->enclosure_url().length() > 0) {
+						GetLogger().log(LOG_DEBUG, "controller::reload: enclosure_url = `%s' enclosure_type = `%s'", it->enclosure_url().c_str(), it->enclosure_type().c_str());
+						if (is_valid_podcast_type(it->enclosure_type())) {
+							GetLogger().log(LOG_INFO, "controller::reload: enqueuing `%s'", it->enclosure_url().c_str());
+							enqueue_url(it->enclosure_url());
+							it->set_enqueued(true);
+							rsscache->update_rssitem_unread_and_enqueued(*it, feed.rssurl());
+						}
 					}
 				}
-			}
 
-			
-			v->set_feedlist(feeds);
-			GetLogger().log(LOG_DEBUG, "controller::reload: after set_feedlist");
+				
+				v->set_feedlist(feeds);
+				GetLogger().log(LOG_DEBUG, "controller::reload: after set_feedlist");
+			}
 			v->set_status("");
 		} catch (const dbexception& e) {
 			char buf[1024];

@@ -162,6 +162,7 @@ namespace newsbeuter {
 			~rss_parser();
 			rss_feed parse();
 			static time_t parse_date(const std::string& datestr);
+			bool check_and_update_lastmodified();
 		private:
 			void replace_newline_characters(std::string& str);
 			std::string my_uri;

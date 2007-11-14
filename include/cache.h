@@ -25,6 +25,8 @@ class cache {
 		void catchup_all(rss_feed& feed);
 		void update_rssitem_flags(rss_item& item);
 		std::vector<std::string> get_feed_urls();
+		time_t get_lastmodified(const std::string& feedurl);
+		void set_lastmodified(const std::string& feedurl, time_t lastmod);
 	private:
 		void populate_tables();
 		void set_pragmas();

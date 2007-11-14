@@ -37,6 +37,17 @@ static int count_callback(void * handler, int argc, char ** argv, char ** /* azC
 	return 0;
 }
 
+static int single_int_callback(void * handler, int argc, char ** argv, char ** /* azColName */) {
+	int * value = (int *)handler;
+	if (argc>0 && argv[0]) {
+		std::istringstream is(argv[0]);
+		int x;
+		is >> x;
+		*value = x;
+	}
+	return 0;
+}
+
 static int rssfeed_callback(void * myfeed, int argc, char ** argv, char ** /* azColName */) {
 	rss_feed * feed = (rss_feed *)myfeed;
 	// normaly, this shouldn't happen, but we keep the assert()s here nevertheless
@@ -247,8 +258,38 @@ void cache::populate_tables() {
 		GetLogger().log(LOG_DEBUG, "cache::populate_tables: ANALYZE indices (6) rc = %d", rc);
 	}
 
+	rc = sqlite3_exec(db, "ALTER TABLE rss_feed ADD lastmodified INTEGER(11);", NULL, NULL, NULL);
+	GetLogger().log(LOG_DEBUG, "cache::populate_tables: ALTER TABLE rss_feed ADD lastmodified: rc = %d", rc);
+
+	rc = sqlite3_exec(db, "CREATE INDEX IF NOT EXISTS idx_lastmodified ON rss_feed(lastmodified);", NULL, NULL, NULL);
+	GetLogger().log(LOG_DEBUG, "cache::populate_tables: CREATE INDEX ON rss_feed(lastmodified) rc = %d", rc);
+
 }
 
+time_t cache::get_lastmodified(const std::string& feedurl) {
+	mtx->lock();
+	time_t result = 0;
+	std::string query = prepare_query("SELECT lastmodified FROM rss_feed WHERE rssurl = '%q';", feedurl.c_str());
+	GetLogger().log(LOG_DEBUG, "running: query: %s", query.c_str());
+	int rc = sqlite3_exec(db, query.c_str(), single_int_callback, &result, NULL);
+	if (rc != SQLITE_OK) {
+		GetLogger().log(LOG_CRITICAL, "query \"%s\" failed: error = %d", query.c_str(), rc);
+		mtx->unlock();
+		throw dbexception(db);
+	}
+
+	mtx->unlock();
+
+	return result;
+}
+
+void cache::set_lastmodified(const std::string& feedurl, time_t lastmod) {
+	if (lastmod > 0) {
+		std::string query = prepare_query("UPDATE rss_feed SET lastmodified = '%d' WHERE rssurl = '%q';", lastmod, feedurl.c_str());
+		int rc = sqlite3_exec(db, query.c_str(), NULL, NULL, NULL);
+		GetLogger().log(LOG_DEBUG, "ran SQL statement: %s result = %d", query.c_str(), rc);
+	}
+}
 
 
 std::vector<std::string> cache::get_feed_urls() {

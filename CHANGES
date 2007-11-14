@@ -2,6 +2,7 @@ Changes for newsbeuter:
 
 0.8:
 	implemented custom configurability of feed list and article list format
+	improved reload speed by checking the Last-Modified header
 
 0.7 (2007-09-18):
 	implemented the possibility to predefine filters
