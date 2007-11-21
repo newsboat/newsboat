@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-06 19:58+0100\n"
+"POT-Creation-Date: 2007-11-21 10:59+0100\n"
 "PO-Revision-Date: 2007-09-12 17:23-0300\n"
 "Last-Translator: Adiel Mittmann <adiel@inf.ufsc.br>\n"
 "Language-Team:  <en@li.org>\n"
@@ -15,14 +15,15 @@ msgstr ""
 "X-Poedit-Country: BRAZIL\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: src/cache.cpp:161
+#: src/cache.cpp:172
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Erro: falha ao abrir o arquivo de cache '%s': %s"
 
 #: src/configcontainer.cpp:54
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
-msgstr "%N %V - Suas fontes RSS (%u não lidas, %t no total)%?T? - etiqueta '%T'&?"
+msgstr ""
+"%N %V - Suas fontes RSS (%u não lidas, %t no total)%?T? - etiqueta '%T'&?"
 
 #: src/configcontainer.cpp:55 src/configcontainer.cpp:63
 msgid "%N %V - URLs"
@@ -199,27 +200,27 @@ msgstr "Erro: não foi possível marcar todos artigos como lidos: %s"
 msgid "%sLoading %s..."
 msgstr "%sCarregando %s..."
 
-#: src/controller.cpp:475 src/controller.cpp:479
+#: src/controller.cpp:477 src/controller.cpp:481
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr "Erro ao tentar obter %s: %s"
 
-#: src/controller.cpp:483
+#: src/controller.cpp:485
 msgid "Error: invalid feed!"
 msgstr "Erro: fonte RSS inválida!"
 
-#: src/controller.cpp:489
+#: src/controller.cpp:491
 msgid "invalid feed index (bug)"
 msgstr "índice de fonte RSS inválido (erro de software)"
 
-#: src/controller.cpp:512
+#: src/controller.cpp:514
 #, c-format
 msgid "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
 msgstr ""
 "newsbeuter: recarregamento terminado, %u artigos não lidos (%u artigos não "
 "lidos no total)"
 
-#: src/controller.cpp:596
+#: src/controller.cpp:598
 #, c-format
 msgid ""
 "%s %s\n"
@@ -250,12 +251,12 @@ msgstr ""
 "-V                 obter informação de versão\n"
 "-h                 esta ajuda\n"
 
-#: src/controller.cpp:641
+#: src/controller.cpp:643
 #, c-format
 msgid "Import of %s finished."
 msgstr "Importação de %s concluída."
 
-#: src/controller.cpp:819
+#: src/controller.cpp:821
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -763,6 +764,16 @@ msgstr "Marcar o link ou artigo atual"
 #: src/keymap.cpp:55
 msgid "Edit flags"
 msgstr "Editar sinalizações"
+
+#: src/keymap.cpp:56
+#, fuzzy
+msgid "Go to next unread feed"
+msgstr "Ir para o próximo artigo não lido"
+
+#: src/keymap.cpp:57
+#, fuzzy
+msgid "Go to previous unread feed"
+msgstr "Ir para o artigo não lido anterior"
 
 #: src/pb_controller.cpp:161
 msgid "Cleaning up queue..."

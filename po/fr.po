@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-06 19:58+0100\n"
+"POT-Creation-Date: 2007-11-21 10:59+0100\n"
 "PO-Revision-Date: 2007-08-13 11:27+0200\n"
 "Last-Translator: Nicolas Martyanoff <khaelin@gmail.com>\n"
 "Language-Team: Nicolas Martyanoff <khaelin@gmail.com>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/cache.cpp:161
+#: src/cache.cpp:172
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Erreur, impossible d'ouvrir le fichier cache`%s': %s"
@@ -194,27 +194,27 @@ msgstr "Erreur: impossible de marquer tous les flux comme lus: %s"
 msgid "%sLoading %s..."
 msgstr "%sChargement %s..."
 
-#: src/controller.cpp:475 src/controller.cpp:479
+#: src/controller.cpp:477 src/controller.cpp:481
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr "Erreur lors de la récupération de %s: %s"
 
-#: src/controller.cpp:483
+#: src/controller.cpp:485
 msgid "Error: invalid feed!"
 msgstr "Erreur: flux invalide !"
 
-#: src/controller.cpp:489
+#: src/controller.cpp:491
 msgid "invalid feed index (bug)"
 msgstr "Index de flux invalide (bug)"
 
-#: src/controller.cpp:512
+#: src/controller.cpp:514
 #, c-format
 msgid "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
 msgstr ""
 "newsbeuter: rechargement terminé, %u flux non-lus (%u articles non-lus au "
 "total)"
 
-#: src/controller.cpp:596
+#: src/controller.cpp:598
 #, c-format
 msgid ""
 "%s %s\n"
@@ -245,12 +245,12 @@ msgstr ""
 "-V              afficher des informations sur la version du logiciel\n"
 "-h              affiche cette aide\n"
 
-#: src/controller.cpp:641
+#: src/controller.cpp:643
 #, c-format
 msgid "Import of %s finished."
 msgstr "Import de %s terminé."
 
-#: src/controller.cpp:819
+#: src/controller.cpp:821
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -758,6 +758,16 @@ msgstr "Mettre un marque-page sur le lien/article courant"
 #: src/keymap.cpp:55
 msgid "Edit flags"
 msgstr "Editer drapeaux"
+
+#: src/keymap.cpp:56
+#, fuzzy
+msgid "Go to next unread feed"
+msgstr "Aller au prochain article non lu"
+
+#: src/keymap.cpp:57
+#, fuzzy
+msgid "Go to previous unread feed"
+msgstr "Aller au précédent article non lu"
 
 #: src/pb_controller.cpp:161
 msgid "Cleaning up queue..."

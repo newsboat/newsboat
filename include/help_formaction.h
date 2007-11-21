@@ -11,7 +11,7 @@ class help_formaction : public formaction {
 		virtual ~help_formaction();
 		virtual void prepare();
 		virtual void init();
-		keymap_hint_entry * get_keymap_hint();
+		virtual keymap_hint_entry * get_keymap_hint();
 	private:
 		virtual void process_operation(operation op);
 		bool quit;

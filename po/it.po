@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-06 19:58+0100\n"
+"POT-Creation-Date: 2007-11-21 10:59+0100\n"
 "PO-Revision-Date: 2007-09-13 09:31+0100\n"
 "Last-Translator: Andrea Marchesini <andrea.marchesini@somasuite.org>\n"
 "Language-Team: Andrea Marchesini <baku@autistici.org>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "X-Poedit-Language: Italian\n"
 "X-Poedit-Country: ITALY\n"
 
-#: src/cache.cpp:161
+#: src/cache.cpp:172
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Errore: fallita l'apertura del file di cache `%s': %s"
@@ -195,26 +195,26 @@ msgstr "Errore: impossibile segnare tutti i feed come letti: %s"
 msgid "%sLoading %s..."
 msgstr "%sCaricamento %s..."
 
-#: src/controller.cpp:475 src/controller.cpp:479
+#: src/controller.cpp:477 src/controller.cpp:481
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr "Errore scaricando %s: %s"
 
-#: src/controller.cpp:483
+#: src/controller.cpp:485
 msgid "Error: invalid feed!"
 msgstr "Errore: feed non valido!"
 
-#: src/controller.cpp:489
+#: src/controller.cpp:491
 msgid "invalid feed index (bug)"
 msgstr "indice del feed non valido (bug)"
 
-#: src/controller.cpp:512
+#: src/controller.cpp:514
 #, c-format
 msgid "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
 msgstr ""
 "newsbeuter: download finito, %u feed non letti (%u totale articoli non letti)"
 
-#: src/controller.cpp:596
+#: src/controller.cpp:598
 #, c-format
 msgid ""
 "%s %s\n"
@@ -245,12 +245,12 @@ msgstr ""
 "-V              mostra informazioni sulla versione\n"
 "-h              mostra questo menu' di aiuto\n"
 
-#: src/controller.cpp:641
+#: src/controller.cpp:643
 #, c-format
 msgid "Import of %s finished."
 msgstr "Importazione di %s finita."
 
-#: src/controller.cpp:819
+#: src/controller.cpp:821
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -758,6 +758,16 @@ msgstr "Aggiungi ai segnalibri il corrente link/articolo"
 #: src/keymap.cpp:55
 msgid "Edit flags"
 msgstr "Edita i flag"
+
+#: src/keymap.cpp:56
+#, fuzzy
+msgid "Go to next unread feed"
+msgstr "Vai al prossimo articolo non letto"
+
+#: src/keymap.cpp:57
+#, fuzzy
+msgid "Go to previous unread feed"
+msgstr "Vai al prossimo articolo non letto"
 
 #: src/pb_controller.cpp:161
 msgid "Cleaning up queue..."

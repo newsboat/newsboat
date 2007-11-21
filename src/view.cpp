@@ -361,6 +361,7 @@ void view::push_itemview(rss_feed * f, const std::string& guid) {
 
 void view::push_help() {
 	formaction_stack.push_front(helpview);
+	helpview->init();
 }
 
 void view::push_urlview(const std::vector<linkpair>& links) {
