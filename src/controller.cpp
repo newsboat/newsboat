@@ -775,6 +775,7 @@ void controller::reload_urls_file() {
 		for (std::vector<rss_feed>::iterator jt=feeds.begin();jt!=feeds.end();++jt) {
 			if (*it == jt->rssurl()) {
 				found = true;
+				jt->set_tags(urlcfg->get_tags(*it));
 				new_feeds.push_back(*jt);
 				break;
 			}

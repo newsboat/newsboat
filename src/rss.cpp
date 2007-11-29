@@ -461,8 +461,10 @@ bool rss_feed::matches_tag(const std::string& tag) {
 std::string rss_feed::get_tags() {
 	std::string tags;
 	for (std::vector<std::string>::iterator it=tags_.begin();it!=tags_.end();++it) {
-		tags.append(*it);
-		tags.append(" ");
+		if (it->substr(0,1) == "~") {
+			tags.append(*it);
+			tags.append(" ");
+		}
 	}
 	return tags;
 }
@@ -501,7 +503,16 @@ std::string rss_item::description() const {
 }
 
 std::string rss_feed::title() const {
-	return utils::convert_text(title_, nl_langinfo(CODESET), "utf-8");
+	bool found_title = false;
+	std::string alt_title;
+	for (std::vector<std::string>::const_iterator it=tags_.begin();it!=tags_.end();it++) {
+		if (it->substr(0,1) == "~") {
+			found_title = true;
+			alt_title = it->substr(1, it->length()-1);
+			break;
+		}
+	}
+	return found_title ? alt_title : utils::convert_text(title_, nl_langinfo(CODESET), "utf-8");
 }
 
 std::string rss_feed::description() const {

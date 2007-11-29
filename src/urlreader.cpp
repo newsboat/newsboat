@@ -22,7 +22,8 @@ std::vector<std::string>& urlreader::get_tags(const std::string& url) {
 std::vector<std::string> urlreader::get_alltags() {
 	std::vector<std::string> tmptags;
 	for (std::set<std::string>::iterator it=alltags.begin();it!=alltags.end();++it) {
-		tmptags.push_back(*it);
+		if (it->substr(0,1) != "~")
+			tmptags.push_back(*it);
 	}
 	return tmptags;
 }
