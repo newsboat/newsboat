@@ -420,3 +420,24 @@ BOOST_AUTO_TEST_CASE(TestFmtStrFormatter) {
 	BOOST_CHECK_EQUAL(fmt.do_format("%a%> %b", 0), "AAA BBB");
 
 }
+
+BOOST_AUTO_TEST_CASE(TestMiscUtilsFunctions) {
+	/* this test assumes some command line utilities to be installed */
+
+	BOOST_CHECK_EQUAL(utils::get_command_output("ls /dev/null"), "/dev/null\n");
+
+	BOOST_CHECK_EQUAL(utils::run_filter("cat", "this is a multine-line\ntest string"), "this is a multine-line\ntest string");
+	BOOST_CHECK_EQUAL(utils::run_filter("wc -c", "0123456789"), "10\n");
+
+	BOOST_CHECK_EQUAL(utils::replace_all("aaa", "a", "b"), "bbb");
+	BOOST_CHECK_EQUAL(utils::replace_all("aaa", "aa", "ba"), "baa");
+	BOOST_CHECK_EQUAL(utils::replace_all("aaaaaa", "aa", "ba"), "bababa");
+	BOOST_CHECK_EQUAL(utils::replace_all("", "a", "b"), "");
+	BOOST_CHECK_EQUAL(utils::replace_all("aaaa", "b", "c"), "aaaa");
+	BOOST_CHECK_EQUAL(utils::replace_all("this is a normal test text", " t", " T"), "this is a normal Test Text");
+
+	BOOST_CHECK_EQUAL(utils::to_s(0), "0");
+	BOOST_CHECK_EQUAL(utils::to_s(100), "100");
+	BOOST_CHECK_EQUAL(utils::to_s(65536), "65536");
+	BOOST_CHECK_EQUAL(utils::to_s(65537), "65537");
+}
