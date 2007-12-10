@@ -12,7 +12,7 @@ help_formaction::help_formaction(view * vv, std::string formstr)
 
 help_formaction::~help_formaction() { }
 
-void help_formaction::process_operation(operation op) {
+void help_formaction::process_operation(operation op, bool /* automatic */, std::vector<std::string> * /* args */) {
 	switch (op) {
 		case OP_QUIT:
 			quit = true;

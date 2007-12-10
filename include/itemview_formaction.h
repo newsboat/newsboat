@@ -23,7 +23,7 @@ class itemview_formaction : public formaction {
 		std::vector<std::string> render_html(const std::string& source, std::vector<linkpair>& links, const std::string& feedurl, unsigned int render_width);
 
 	private:
-		virtual void process_operation(operation op);
+		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
 		void set_head(const std::string& s);
 
 		void render_source(std::vector<std::string>& lines, std::string desc, unsigned int width);

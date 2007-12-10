@@ -59,7 +59,7 @@ void formaction::start_cmdline() {
 }
 
 
-void formaction::process_op(operation op) {
+void formaction::process_op(operation op, bool automatic, std::vector<std::string> * args) {
 	switch (op) {
 		case OP_CMDLINE: 
 			start_cmdline();
@@ -85,7 +85,7 @@ void formaction::process_op(operation op) {
 			start_next_question();
 			break;
 		default:
-			this->process_operation(op);
+			this->process_operation(op, automatic, args);
 	}
 }
 

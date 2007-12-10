@@ -30,7 +30,7 @@ class feedlist_formaction : public formaction {
 	private:
 
 		int get_pos(unsigned int realidx);
-		virtual void process_operation(operation op);
+		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
 
 		bool zero_feedpos;
 		unsigned int feeds_shown;

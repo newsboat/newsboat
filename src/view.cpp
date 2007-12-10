@@ -140,6 +140,8 @@ void view::show_error(const char * msg) {
 }
 
 void view::run() {
+	bool have_macroprefix = false;
+	std::vector<macrocmd> macrocmds;
 	/*
 	 * This is the main "event" loop of newsbeuter.
 	 */
@@ -153,28 +155,55 @@ void view::run() {
 		// we signal "oh, you will receive an operation soon"
 		fa->prepare();
 
-		// we then receive the event and ignore timeouts.
-		const char * event = fa->get_form()->run(0);
-		if (!event || strcmp(event,"TIMEOUT")==0) continue;
+		if (macrocmds.size() > 0) {
+			// if there is any macro command left to process, we do so
 
-		// retrieve operation code through the keymap
-		operation op = keys->get_operation(event);
+			fa->get_form()->run(-1);
+			fa->process_op(macrocmds[0].op, true, &macrocmds[0].args);
 
-		GetLogger().log(LOG_DEBUG, "view::run: event = %s op = %u", event, op);
+			macrocmds.erase(macrocmds.begin()); // remove first macro command, since it has already been processed
 
-		// the redraw keybinding is handled globally so
-		// that it doesn't need to be handled by all
-		// formactions. We simply reset the screen, the
-		// next time stfl_run() is called, it will be
-		// reinitialized, anyway, and thus we can secure
-		// that everything is redrawn.
-		if (OP_REDRAW == op) {
-			stfl::reset();
-			continue;
+		} else {
+
+			// we then receive the event and ignore timeouts.
+			const char * event = fa->get_form()->run(0);
+			if (!event || strcmp(event,"TIMEOUT")==0) continue;
+
+			GetLogger().log(LOG_DEBUG, "view::run: event = %s", event);
+
+			// retrieve operation code through the keymap
+			operation op;
+			
+			if (have_macroprefix) {
+				have_macroprefix = false;
+				GetLogger().log(LOG_DEBUG, "view::run: running macro `%s'", event);
+				macrocmds = keys->get_macro(event);
+				set_status("");
+			} else {
+				op = keys->get_operation(event);
+
+				GetLogger().log(LOG_DEBUG, "view::run: event = %s op = %u", event, op);
+
+				// the redraw keybinding is handled globally so
+				// that it doesn't need to be handled by all
+				// formactions. We simply reset the screen, the
+				// next time stfl_run() is called, it will be
+				// reinitialized, anyway, and thus we can secure
+				// that everything is redrawn.
+				if (OP_REDRAW == op) {
+					stfl::reset();
+					continue;
+				}
+
+				if (OP_MACROPREFIX == op) {
+					have_macroprefix = true;
+					set_status("macro-");
+				}
+
+				// now we handle the operation to the formaction.
+				fa->process_op(op);
+			}
 		}
-
-		// now we handle the operation to the formaction.
-		fa->process_op(op);
 	}
 
 	stfl::reset();

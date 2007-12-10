@@ -17,7 +17,7 @@ itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
 
 itemlist_formaction::~itemlist_formaction() { }
 
-void itemlist_formaction::process_operation(operation op) {
+void itemlist_formaction::process_operation(operation op, bool automatic, std::vector<std::string> * args) {
 	bool quit = false;
 
 	/*
@@ -57,7 +57,15 @@ void itemlist_formaction::process_operation(operation op) {
 				GetLogger().log(LOG_INFO, "itemlist_formaction: bookmarking item at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0) {
 					if (itempos < visible_items.size()) {
-						this->start_bookmark_qna(visible_items[itempos].first->title(), visible_items[itempos].first->link(), "");
+						if (automatic) {
+							qna_responses.erase(qna_responses.begin(), qna_responses.end());
+							qna_responses.push_back(visible_items[itempos].first->title());
+							qna_responses.push_back(visible_items[itempos].first->link());
+							qna_responses.push_back(args->size() > 0 ? (*args)[0] : "");
+							this->finished_qna(OP_INT_BM_END);
+						} else {
+							this->start_bookmark_qna(visible_items[itempos].first->title(), visible_items[itempos].first->link(), "");
+						}
 					}
 				} else {
 					v->show_error(_("No item selected!")); // should not happen
@@ -67,9 +75,17 @@ void itemlist_formaction::process_operation(operation op) {
 		case OP_EDITFLAGS: {
 				if (itemposname.length() > 0) {
 					if (itempos < visible_items.size()) {
-						std::vector<qna_pair> qna;
-						qna.push_back(qna_pair(_("Flags: "), visible_items[itempos].first->flags()));
-						this->start_qna(qna, OP_INT_EDITFLAGS_END);
+						if (automatic) {
+							if (args->size() > 0) {
+								qna_responses.erase(qna_responses.begin(), qna_responses.end());
+								qna_responses.push_back((*args)[0]);
+								finished_qna(OP_INT_EDITFLAGS_END);
+							}
+						} else {
+							std::vector<qna_pair> qna;
+							qna.push_back(qna_pair(_("Flags: "), visible_items[itempos].first->flags()));
+							this->start_qna(qna, OP_INT_EDITFLAGS_END);
+						}
 					}
 				} else {
 					v->show_error(_("No item selected!")); // should not happen
@@ -81,7 +97,14 @@ void itemlist_formaction::process_operation(operation op) {
 				char buf[1024];
 				GetLogger().log(LOG_INFO, "itemlist_formaction: saving item at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0) {
-					std::string filename = v->run_filebrowser(FBT_SAVE,v->get_filename_suggestion(visible_items[itempos].first->title()));
+					std::string filename ;
+					if (automatic) {
+						if (args->size() > 0) {
+							filename = (*args)[0];
+						}
+					} else {
+						filename = v->run_filebrowser(FBT_SAVE,v->get_filename_suggestion(visible_items[itempos].first->title()));
+					}
 					if (filename == "") {
 						v->show_error(_("Aborted saving."));
 					} else {
@@ -159,8 +182,16 @@ void itemlist_formaction::process_operation(operation op) {
 			break;
 		case OP_SEARCH: {
 				std::vector<qna_pair> qna;
-				qna.push_back(qna_pair(_("Search for: "), ""));
-				this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
+				if (automatic) {
+					if (args->size() > 0) {
+						qna_responses.erase(qna_responses.begin(), qna_responses.end());
+						qna_responses.push_back((*args)[0]);
+						finished_qna(OP_INT_START_SEARCH);
+					}
+				} else {
+					qna.push_back(qna_pair(_("Search for: "), ""));
+					this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
+				}
 			}
 			break;
 		case OP_TOGGLEITEMREAD: {
@@ -181,7 +212,13 @@ void itemlist_formaction::process_operation(operation op) {
 			break;
 		case OP_SELECTFILTER:
 			if (v->get_ctrl()->get_filters().size() > 0) {
-				std::string newfilter = v->select_filter(v->get_ctrl()->get_filters().get_filters());
+				std::string newfilter;
+				if (automatic) {
+					if (args->size() > 0)
+						newfilter = (*args)[0];
+				} else {
+					newfilter = v->select_filter(v->get_ctrl()->get_filters().get_filters());
+				}
 				if (newfilter != "") {
 					filterhistory.add_line(newfilter);
 					if (newfilter.length() > 0) {
@@ -199,7 +236,14 @@ void itemlist_formaction::process_operation(operation op) {
 			}
 
 			break;
-		case OP_SETFILTER: {
+		case OP_SETFILTER: 
+			if (automatic) {
+				if (args->size() > 0) {
+					qna_responses.erase(qna_responses.begin(), qna_responses.end());
+					qna_responses.push_back((*args)[0]);
+					this->finished_qna(OP_INT_END_SETFILTER);
+				}
+			} else {
 				std::vector<qna_pair> qna;
 				qna.push_back(qna_pair(_("Filter: "), ""));
 				this->start_qna(qna, OP_INT_END_SETFILTER, &filterhistory);

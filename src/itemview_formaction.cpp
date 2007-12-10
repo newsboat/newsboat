@@ -146,7 +146,7 @@ void itemview_formaction::prepare() {
 
 }
 
-void itemview_formaction::process_operation(operation op) {
+void itemview_formaction::process_operation(operation op, bool automatic, std::vector<std::string> * args) {
 	rss_item& item = feed->get_item_by_guid(guid);
 
 	/*
@@ -186,7 +186,13 @@ void itemview_formaction::process_operation(operation op) {
 			{
 				char buf[1024];
 				GetLogger().log(LOG_INFO, "view::run_itemview: saving article");
-				std::string filename = v->run_filebrowser(FBT_SAVE,v->get_filename_suggestion(item.title()));
+				std::string filename;
+				if (automatic) {
+					if (args->size() > 0)
+						filename = (*args)[0];
+				} else {
+					filename = v->run_filebrowser(FBT_SAVE,v->get_filename_suggestion(item.title()));
+				}
 				if (filename == "") {
 					v->show_error(_("Aborted saving."));
 				} else {
@@ -208,9 +214,23 @@ void itemview_formaction::process_operation(operation op) {
 			v->set_status("");
 			break;
 		case OP_BOOKMARK:
-			this->start_bookmark_qna(item.title(), item.link(), "");
+			if (automatic) {
+				qna_responses.erase(qna_responses.begin(), qna_responses.end());
+				qna_responses.push_back(item.title());
+				qna_responses.push_back(item.link());
+				qna_responses.push_back(args->size() > 0 ? (*args)[0] : "");
+			} else {
+				this->start_bookmark_qna(item.title(), item.link(), "");
+			}
 			break;
-		case OP_EDITFLAGS: {
+		case OP_EDITFLAGS: 
+			if (automatic) {
+				qna_responses.erase(qna_responses.begin(), qna_responses.end());
+				if (args->size() > 0) {
+					qna_responses.push_back((*args)[0]);
+					this->finished_qna(OP_INT_EDITFLAGS_END);
+				}
+			} else {
 				std::vector<qna_pair> qna;
 				qna.push_back(qna_pair(_("Flags: "), item.flags()));
 				this->start_qna(qna, OP_INT_EDITFLAGS_END);

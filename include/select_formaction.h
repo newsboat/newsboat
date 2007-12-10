@@ -21,7 +21,7 @@ class select_formaction : public formaction {
 		void set_type(int t) { type = t; }
 		virtual void handle_cmdline(const std::string& cmd);
 	private:
-		virtual void process_operation(operation op);
+		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
 		bool quit;
 		int type;
 		std::string value;

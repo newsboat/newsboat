@@ -17,6 +17,7 @@
 #include <matcher.h>
 #include <history.h>
 #include <formatstring.h>
+#include <exceptions.h>
 
 #include <stdlib.h>
 
@@ -25,6 +26,8 @@ using namespace newsbeuter;
 BOOST_AUTO_TEST_CASE(InitTests) {
 	setlocale(LC_CTYPE, "");
 	setlocale(LC_MESSAGES, "");
+	GetLogger().set_logfile("testlog.txt");
+	GetLogger().set_loglevel(LOG_DEBUG);
 }
 
 BOOST_AUTO_TEST_CASE(TestNewsbeuterReload) {
@@ -62,13 +65,18 @@ BOOST_AUTO_TEST_CASE(TestNewsbeuterReload) {
 	::unlink("test-cache.db");
 }
 
-BOOST_AUTO_TEST_CASE(TestConfigParserAndContainer) {
+BOOST_AUTO_TEST_CASE(TestConfigParserContainerAndKeymap) {
 	configcontainer * cfg = new configcontainer();
 	configparser cfgparser;
 	cfg->register_commands(cfgparser);
+	keymap k(KM_NEWSBEUTER);
+	cfgparser.register_handler("macro", &k);
 
 	try {
 		cfgparser.parse("test-config.txt");
+	}  catch (const configexception& ex) {
+		GetLogger().log(LOG_ERROR,"an exception occured while parsing the configuration file: %s", ex.what());
+		BOOST_CHECK(false);
 	} catch (...) {
 		BOOST_CHECK(false);
 	}
@@ -90,10 +98,7 @@ BOOST_AUTO_TEST_CASE(TestConfigParserAndContainer) {
 	BOOST_CHECK(cfg->get_configvalue("cache-file") == cachefilecomp);
 
 	delete cfg;
-}
 
-BOOST_AUTO_TEST_CASE(TestKeymap) {
-	keymap k(KM_NEWSBEUTER);
 	BOOST_CHECK_EQUAL(k.get_operation("ENTER"), OP_OPEN);
 	BOOST_CHECK_EQUAL(k.get_operation("u"), OP_SHOWURLS);
 	BOOST_CHECK_EQUAL(k.get_operation("X"), OP_NIL);
@@ -261,8 +266,6 @@ struct testmatchable : public matchable {
 };
 
 BOOST_AUTO_TEST_CASE(TestFilterLanguage) {
-	GetLogger().set_logfile("testlog.txt");
-	GetLogger().set_loglevel(LOG_DEBUG);
 
 	FilterParser fp;
 
@@ -440,4 +443,8 @@ BOOST_AUTO_TEST_CASE(TestMiscUtilsFunctions) {
 	BOOST_CHECK_EQUAL(utils::to_s(100), "100");
 	BOOST_CHECK_EQUAL(utils::to_s(65536), "65536");
 	BOOST_CHECK_EQUAL(utils::to_s(65537), "65537");
+
+	std::vector<std::string> foobar;
+	foobar.erase(foobar.begin(), foobar.end());
+
 }

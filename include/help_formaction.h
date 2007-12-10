@@ -13,7 +13,7 @@ class help_formaction : public formaction {
 		virtual void init();
 		virtual keymap_hint_entry * get_keymap_hint();
 	private:
-		virtual void process_operation(operation op);
+		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
 		bool quit;
 };
 

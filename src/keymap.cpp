@@ -55,6 +55,7 @@ static op_desc opdescs[] = {
 	{ OP_EDITFLAGS, "edit-flags", "^E", _("Edit flags"), KM_NEWSBEUTER },
 	{ OP_NEXTFEED, "next-unread-feed", "^N", _("Go to next unread feed"), KM_NEWSBEUTER },
 	{ OP_PREVFEED, "prev-unread-feed", "^P", _("Go to previous unread feed"), KM_NEWSBEUTER },
+	{ OP_MACROPREFIX, "macro-prefix", ",", _("Call a macro"), KM_NEWSBEUTER },
 
 	{ OP_SK_UP, "up", "UP", NULL, KM_SYSKEYS },
 	{ OP_SK_DOWN, "down", "DOWN", NULL, KM_SYSKEYS },
@@ -67,6 +68,7 @@ static op_desc opdescs[] = {
 	{ OP_INT_QNA_PREVHIST, "XXXNOKEY-qna-prev-history", "qna-prev-history", NULL, KM_INTERNAL },
 
 	{ OP_INT_RESIZE, "RESIZE", "internal-resize", NULL, KM_INTERNAL },
+
 
 	{ OP_NIL, NULL, NULL, NULL, 0 }
 };
@@ -181,6 +183,44 @@ action_handler_status keymap::handle_action(const std::string& action, const std
 			unset_key(params[0]);
 			return AHS_OK;	
 		}
+	} else if (action == "macro") {
+		if (params.size() < 1) {
+			return AHS_TOO_FEW_PARAMS;
+		}
+		std::vector<std::string>::const_iterator it = params.begin();
+		std::string macrokey = *it;
+		std::vector<macrocmd> cmds;
+		macrocmd tmpcmd;
+		tmpcmd.op = OP_NIL;
+		bool first = true;
+		it++;
+
+		while (it != params.end()) {
+			if (first && *it != ";") {
+				tmpcmd.op = get_opcode(*it);
+				GetLogger().log(LOG_DEBUG, "keymap::handle_action: new operation `%s' (op = %u)", it->c_str(), tmpcmd.op);
+				if (tmpcmd.op == OP_NIL)
+					return AHS_INVALID_PARAMS;
+				first = false;
+			} else {
+				if (*it == ";") {
+					if (tmpcmd.op != OP_NIL)
+						cmds.push_back(tmpcmd);
+					tmpcmd.op = OP_NIL;
+					tmpcmd.args.erase(tmpcmd.args.begin(), tmpcmd.args.end());
+					first = true;
+				} else {
+					GetLogger().log(LOG_DEBUG, "keymap::handle_action: new parameter `%s' (op = %u)", it->c_str());
+					tmpcmd.args.push_back(*it);
+				}
+			}
+			++it;
+		}
+		if (tmpcmd.op != OP_NIL)
+			cmds.push_back(tmpcmd);
+
+		macros_[macrokey] = cmds;
+		return AHS_OK;
 	} else
 		return AHS_INVALID_PARAMS;
 }
@@ -191,6 +231,16 @@ std::string keymap::getkey(operation op) {
 			return it->first;
 	}	
 	return "<none>";
+}
+
+std::vector<macrocmd> keymap::get_macro(const std::string& key) {
+	for (std::map<std::string,std::vector<macrocmd> >::iterator it=macros_.begin(); it!=macros_.end(); ++it) {
+		if (it->first == key) {
+			return it->second;
+		}
+	}
+	std::vector<macrocmd> dummyvector;
+	return dummyvector;
 }
 
 

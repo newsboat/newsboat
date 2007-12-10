@@ -212,6 +212,7 @@ void controller::run(int argc, char * argv[]) {
 	keymap keys(KM_NEWSBEUTER);
 	cfgparser.register_handler("bind-key",&keys);
 	cfgparser.register_handler("unbind-key",&keys);
+	cfgparser.register_handler("macro", &keys);
 
 	cfgparser.register_handler("ignore-article",&ign);
 

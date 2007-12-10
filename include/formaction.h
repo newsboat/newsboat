@@ -35,7 +35,7 @@ class formaction {
 
 		virtual void handle_cmdline(const std::string& cmd);
 
-		void process_op(operation op);
+		void process_op(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
 
 		virtual void finished_qna(operation op);
 
@@ -44,7 +44,7 @@ class formaction {
 		virtual void recalculate_form();
 
 	protected:
-		virtual void process_operation(operation op) = 0;
+		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL) = 0;
 		virtual void set_keymap_hints();
 
 		void start_qna(const std::vector<qna_pair>& prompts, operation finish_op, history * h = NULL);

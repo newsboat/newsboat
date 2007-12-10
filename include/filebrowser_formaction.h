@@ -20,7 +20,7 @@ class filebrowser_formaction : public formaction {
 		inline void set_type(filebrowser_type t) { type = t; }
 
 	private:
-		virtual void process_operation(operation op);
+		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
 
 		std::string add_file(std::string filename);
 		std::string get_filename_suggestion(const std::string& s);

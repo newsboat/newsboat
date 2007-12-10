@@ -75,7 +75,7 @@ void feedlist_formaction::prepare() {
 	}
 }
 
-void feedlist_formaction::process_operation(operation op) {
+void feedlist_formaction::process_operation(operation op, bool automatic, std::vector<std::string> * args) {
 	std::string feedpos = f->get("feedposname");
 	std::istringstream posname(feedpos);
 	unsigned int pos = 0;
@@ -83,6 +83,10 @@ void feedlist_formaction::process_operation(operation op) {
 	switch (op) {
 		case OP_OPEN: {
 				if (f->get_focus() == "feeds") {
+					if (automatic && args->size() > 0) {
+						std::istringstream x((*args)[0]);
+						x >> pos;
+					}
 					GetLogger().log(LOG_INFO, "feedlist_formaction: opening feed at position `%s'",feedpos.c_str());
 					if (feeds_shown > 0 && feedpos.length() > 0) {
 						v->push_itemlist(pos);
@@ -172,7 +176,12 @@ void feedlist_formaction::process_operation(operation op) {
 			break;
 		case OP_SETTAG: 
 			if (tags.size() > 0) {
-				std::string newtag = v->select_tag(tags);
+				std::string newtag;
+				if (automatic && args->size() > 0) {
+					newtag = (*args)[0];
+				} else {
+					newtag = v->select_tag(tags);
+				}
 				if (newtag != "") {
 					tag = newtag;
 					do_redraw = true;
@@ -184,7 +193,12 @@ void feedlist_formaction::process_operation(operation op) {
 			break;
 		case OP_SELECTFILTER:
 			if (v->get_ctrl()->get_filters().size() > 0) {
-				std::string newfilter = v->select_filter(v->get_ctrl()->get_filters().get_filters());
+				std::string newfilter;
+				if (automatic && args->size() > 0) {
+					newfilter = (*args)[0];
+				} else {
+					newfilter = v->select_filter(v->get_ctrl()->get_filters().get_filters());
+				}
 				if (newfilter != "") {
 					filterhistory.add_line(newfilter);
 					if (newfilter.length() > 0) {
@@ -201,7 +215,15 @@ void feedlist_formaction::process_operation(operation op) {
 				v->show_error(_("No filters defined."));
 			}
 			break;
-		case OP_SEARCH: {
+		case OP_SEARCH:
+			if (automatic && args->size() > 0) {
+				qna_responses.erase(qna_responses.begin(), qna_responses.end());
+				// when in automatic mode, we manually fill the qna_responses vector from the arguments
+				// and then run the finished_qna() by ourselves to simulate a "Q&A" session that is
+				// in fact macro-driven.
+				qna_responses.push_back((*args)[0]);
+				finished_qna(OP_INT_START_SEARCH);
+			} else {
 				std::vector<qna_pair> qna;
 				qna.push_back(qna_pair(_("Search for: "), ""));
 				this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
@@ -212,7 +234,12 @@ void feedlist_formaction::process_operation(operation op) {
 			m.parse(FILTER_UNREAD_FEEDS);
 			do_redraw = true;
 			break;
-		case OP_SETFILTER: {
+		case OP_SETFILTER:
+			if (automatic && args->size() > 0) {
+				qna_responses.erase(qna_responses.begin(), qna_responses.end());
+				qna_responses.push_back((*args)[0]);
+				finished_qna(OP_INT_END_SETFILTER);
+			} else {
 				std::vector<qna_pair> qna;
 				qna.push_back(qna_pair(_("Filter: "), ""));
 				this->start_qna(qna, OP_INT_END_SETFILTER, &filterhistory);
@@ -220,7 +247,7 @@ void feedlist_formaction::process_operation(operation op) {
 			break;
 		case OP_QUIT:
 			GetLogger().log(LOG_INFO, "feedlist_formaction: quitting");
-			if (!v->get_cfg()->get_configvalue_as_bool("confirm-exit") || v->confirm(_("Do you really want to quit (y:Yes n:No)? "), _("yn")) == *_("y")) {
+			if (automatic || !v->get_cfg()->get_configvalue_as_bool("confirm-exit") || v->confirm(_("Do you really want to quit (y:Yes n:No)? "), _("yn")) == *_("y")) {
 				quit = true;
 			}
 			break;

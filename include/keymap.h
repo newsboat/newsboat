@@ -50,6 +50,7 @@ namespace newsbeuter {
 						OP_EDITFLAGS,
 						OP_NEXTFEED,
 						OP_PREVFEED,
+						OP_MACROPREFIX,
 						OP_NB_MAX,
 
 						// podbeuter-specific operations:
@@ -96,6 +97,11 @@ namespace newsbeuter {
 		std::string desc;
 	};
 
+	struct macrocmd {
+		operation op;
+		std::vector<std::string> args;
+	};
+
 	class keymap : public config_action_handler {
 		public:
 			keymap(unsigned int flags);
@@ -104,12 +110,14 @@ namespace newsbeuter {
 			void unset_key(const std::string& key);
 			operation get_opcode(const std::string& opstr);
 			operation get_operation(const std::string& keycode);
+			std::vector<macrocmd> get_macro(const std::string& key);
 			char get_key(const std::string& keycode);
 			std::string getkey(operation );
 			virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
 			void get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned short flags);
 		private:
 			std::map<std::string,operation> keymap_;
+			std::map<std::string,std::vector<macrocmd> > macros_;
 	};
 
 }
