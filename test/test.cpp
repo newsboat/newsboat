@@ -449,10 +449,3 @@ BOOST_AUTO_TEST_CASE(TestMiscUtilsFunctions) {
 	foobar.erase(foobar.begin(), foobar.end());
 
 }
-
-BOOST_AUTO_TEST_CASE(TestEmbeddedLuaInterpreter) {
-	GetInterpreter()->load_script("minimal.lua");
-	GetLogger().log(LOG_DEBUG, "before dolog");
-	GetInterpreter()->run_function("dolog");
-	GetLogger().log(LOG_DEBUG, "after dolog");
-}
