@@ -10,6 +10,7 @@
 #include <stflpp.h>
 #include <sstream>
 #include <cstdlib>
+#include <cstring>
 #include <iostream>
 #include <fstream>
 #include <cerrno>

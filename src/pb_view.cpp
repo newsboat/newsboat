@@ -10,6 +10,7 @@
 
 #include <sstream>
 #include <iostream>
+#include <cstring>
 
 using namespace newsbeuter;
 

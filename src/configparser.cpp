@@ -10,6 +10,9 @@
 #include <sys/types.h>
 #include <pwd.h>
 
+#include <cstring>
+#include <cstdlib>
+
 
 namespace newsbeuter {
 

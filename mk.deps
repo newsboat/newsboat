@@ -92,3 +92,5 @@ src/xmlpullparser.o: include/xmlpullparser.h include/exceptions.h include/utils.
 	include/logger.h config.h
 
 src/formatstring.o: include/formatstring.h
+
+src/interpreter.o: include/interpreter.h

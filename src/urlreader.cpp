@@ -1,4 +1,5 @@
 #include <fstream>
+#include <cstring>
 
 #include <urlreader.h>
 #include <utils.h>

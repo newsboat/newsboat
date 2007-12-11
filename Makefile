@@ -12,10 +12,10 @@ docdir=?$(datadir)/doc/$(PACKAGE)
 CXX=c++
 
 # compiler and linker flags
-DEFINES=-D_ENABLE_NLS -DLOCALEDIR=\"$(localedir)\" -DPACKAGE=\"$(PACKAGE)\"
+DEFINES=-D_ENABLE_NLS -DLOCALEDIR=\"$(localedir)\" -DPACKAGE=\"$(PACKAGE)\" -DEMBED_LUA=1 `pkg-config --cflags lua5.1`
 WARNFLAGS=-Wall -W
 CXXFLAGS+=-ggdb -I./include -I./stfl -I./filter -I. -I/usr/local/include -I/sw/include $(WARNFLAGS) $(DEFINES)
-LDFLAGS+=-L. -L/usr/local/lib -L/sw/lib
+LDFLAGS+=-L. -L/usr/local/lib -L/sw/lib `pkg-config --libs lua5.1`
 
 # libraries to link with
 # LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn -lpthread
@@ -180,7 +180,7 @@ install-mo:
 TEST_OBJS=$(patsubst test/%.cpp,test/%.o,$(wildcard test/*.cpp))
 
 test: $(LIB_OUTPUT) $(NEWSBEUTER_OBJS) $(TEST_OBJS)
-	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o test/test src/history.o src/rss.o src/cache.o src/xmlpullparser.o src/urlreader.o $(TEST_OBJS) $(NEWSBEUTER_LIBS) -lboost_unit_test_framework
+	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o test/test src/history.o src/rss.o src/cache.o src/xmlpullparser.o src/urlreader.o src/interpreter.o $(TEST_OBJS) $(NEWSBEUTER_LIBS) -lboost_unit_test_framework
 
 test-clean:
 	$(RM) test/test test/test.o

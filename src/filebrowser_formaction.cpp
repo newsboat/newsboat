@@ -7,6 +7,7 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <cstring>
 
 #include <unistd.h>
 #include <sys/types.h>
