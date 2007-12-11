@@ -8,6 +8,7 @@
 #include <logger.h>
 #include <utils.h>
 #include <stflpp.h>
+#include <interpreter.h>
 #include <sstream>
 #include <cstdlib>
 #include <cstring>
@@ -199,6 +200,9 @@ void controller::run(int argc, char * argv[]) {
 			return;
 		}
 	}
+
+	GetInterpreter()->set_view(v);
+	GetInterpreter()->set_controller(this);
 	
 	if (!do_export)
 		std::cout << _("Loading configuration...");
@@ -219,6 +223,8 @@ void controller::run(int argc, char * argv[]) {
 
 	cfgparser.register_handler("define-filter",&filters);
 
+	cfgparser.register_handler("load", GetInterpreter());
+
 	try {
 		cfgparser.parse("/etc/" PROGRAM_NAME "/config");
 		cfgparser.parse(config_file);
@@ -228,6 +234,7 @@ void controller::run(int argc, char * argv[]) {
 		utils::remove_fs_lock(lock_file);
 		return;	
 	}
+
 
 	if (colorman->colors_loaded()) {
 		v->set_colors(*colorman);

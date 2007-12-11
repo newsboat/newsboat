@@ -588,5 +588,12 @@ void view::set_colors(const colormanager& colorman) {
 	}
 }
 
+std::string view::id() const {
+	if (formaction_stack.size() > 0) {
+		return (*formaction_stack.begin())->id();
+	}
+	return "";
+}
+
 
 }

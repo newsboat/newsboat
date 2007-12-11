@@ -56,6 +56,7 @@ static op_desc opdescs[] = {
 	{ OP_NEXTFEED, "next-unread-feed", "^N", _("Go to next unread feed"), KM_NEWSBEUTER },
 	{ OP_PREVFEED, "prev-unread-feed", "^P", _("Go to previous unread feed"), KM_NEWSBEUTER },
 	{ OP_MACROPREFIX, "macro-prefix", ",", _("Call a macro"), KM_NEWSBEUTER },
+	{ OP_RUNFUNCTION, "run-function", "XXXNOKEY-run-function", NULL, KM_SYSKEYS },
 
 	{ OP_SK_UP, "up", "UP", NULL, KM_SYSKEYS },
 	{ OP_SK_DOWN, "down", "DOWN", NULL, KM_SYSKEYS },

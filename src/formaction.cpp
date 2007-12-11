@@ -1,4 +1,5 @@
 #include <formaction.h>
+#include <interpreter.h>
 #include <view.h>
 #include <utils.h>
 #include <config.h>
@@ -75,6 +76,13 @@ void formaction::process_op(operation op, bool automatic, std::vector<std::strin
 		case OP_INT_QNA_PREVHIST:
 			if (qna_history) {
 				f->set("qna_value", qna_history->prev());
+			}
+			break;
+		case OP_RUNFUNCTION:
+			if (automatic && args->size() > 0) {
+				GetLogger().log(LOG_DEBUG, "formaction::process_op: before run_function");
+				GetInterpreter()->run_function((*args)[0]);
+				GetLogger().log(LOG_DEBUG, "formaction::process_op: after run_function");
 			}
 			break;
 		case OP_INT_END_QUESTION:

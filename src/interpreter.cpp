@@ -1,5 +1,6 @@
 #include <interpreter.h>
 #include <logger.h>
+#include <utils.h>
 
 #if EMBED_LUA
 
@@ -11,6 +12,14 @@ extern "C" {
 namespace newsbeuter {
 
 static int lua_nb_log(lua_State * L);
+static int view_cur_form(lua_State * L);
+static int view_msg(lua_State * L);
+
+static const struct luaL_reg view_f[] = {
+	{ "cur_form", view_cur_form },
+	{ "msg", view_msg },
+	{ NULL, NULL }
+};
 
 script_interpreter::script_interpreter() : L(0), v(0), c(0) {
 	L = lua_open();
@@ -20,6 +29,16 @@ script_interpreter::script_interpreter() : L(0), v(0), c(0) {
 
 	lua_pushcfunction(L, lua_nb_log);
 	lua_setglobal(L, "nb_log");
+
+	// register view
+	
+	luaL_newmetatable(L, "NewsBeuter.view");
+	lua_pushstring(L, "__index");
+	lua_pushvalue(L, -2);
+	lua_settable(L, -3);
+
+	luaL_openlib(L, "view", view_f, 0);
+
 }
 
 script_interpreter::~script_interpreter() {
@@ -40,6 +59,22 @@ void script_interpreter::run_function(const std::string& name) {
 	}
 }
 
+action_handler_status script_interpreter::handle_action(const std::string& action, const std::vector<std::string>& params) {
+	if (action == "load") {
+		if (params.size() < 1)
+			return AHS_TOO_FEW_PARAMS;
+
+		for (std::vector<std::string>::const_iterator it=params.begin();it!=params.end();it++) {
+			std::string filename = utils::resolve_tilde(*it);
+			GetLogger().log(LOG_DEBUG, "script_interpreter::handle_action: loading file %s...", filename.c_str());
+			this->load_script(filename);
+		}
+
+		return AHS_OK;
+	}
+	return AHS_INVALID_COMMAND;
+}
+
 static script_interpreter interp;
 
 script_interpreter * GetInterpreter() {
@@ -50,6 +85,19 @@ static int lua_nb_log(lua_State * L) {
 	const char * str = luaL_checkstring(L, 1);
 	if (str) {
 		GetLogger().log(LOG_INFO, "USER-LOG-MSG: %s", str);
+	}
+	return 0;
+}
+
+static int view_cur_form(lua_State * L) {
+	lua_pushstring(L, GetInterpreter()->get_view()->id().c_str());
+	return 1;
+}
+
+static int view_msg(lua_State * L) {
+	const char * str = luaL_checkstring(L, 1);
+	if (str) {
+		GetInterpreter()->get_view()->set_status(str);
 	}
 	return 0;
 }

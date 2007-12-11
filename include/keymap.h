@@ -51,6 +51,7 @@ namespace newsbeuter {
 						OP_NEXTFEED,
 						OP_PREVFEED,
 						OP_MACROPREFIX,
+						OP_RUNFUNCTION,
 						OP_NB_MAX,
 
 						// podbeuter-specific operations:

@@ -22,6 +22,8 @@ class itemlist_formaction : public formaction {
 			apply_filter = false;
 		}
 
+		virtual std::string id() const { return "articlelist"; }
+
 		inline rss_feed * get_feed() { return feed; }
 		inline void set_pos(unsigned int p) { pos = p; }
 		std::string get_guid();

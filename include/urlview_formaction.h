@@ -14,6 +14,7 @@ class urlview_formaction : public formaction {
 		virtual void init();
 		virtual keymap_hint_entry * get_keymap_hint();
 		inline void set_links(const std::vector<linkpair>& l) { links = l; }
+		virtual std::string id() const { return "urlview"; }
 	private:
 		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
 		std::vector<linkpair> links;

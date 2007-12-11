@@ -20,6 +20,7 @@ class select_formaction : public formaction {
 		inline void set_filters(const std::vector<filter_name_expr_pair>& f) { filters = f; }
 		void set_type(int t) { type = t; }
 		virtual void handle_cmdline(const std::string& cmd);
+		virtual std::string id() const { return (type == SELECTTAG) ? "tagselection" : "filterselection"; }
 	private:
 		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
 		bool quit;

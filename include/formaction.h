@@ -31,6 +31,8 @@ class formaction {
 
 		virtual keymap_hint_entry * get_keymap_hint() = 0;
 
+		virtual std::string id() const = 0;
+
 		virtual std::string get_value(const std::string& value);
 
 		virtual void handle_cmdline(const std::string& cmd);

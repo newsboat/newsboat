@@ -32,6 +32,8 @@ namespace newsbeuter {
 			void run();
 			std::string run_modal(formaction * f, const std::string& value = "");
 
+			std::string id() const;
+
 			void set_feedlist(std::vector<rss_feed>& feeds);
 			void set_keymap(keymap * k);
 			void set_config_container(configcontainer * cfgcontainer);
