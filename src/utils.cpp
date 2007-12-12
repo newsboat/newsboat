@@ -6,7 +6,6 @@
 #include <fcntl.h>
 #include <iconv.h>
 #include <errno.h>
-#include <sys/types.h>
 #include <pwd.h>
 
 #include <locale>

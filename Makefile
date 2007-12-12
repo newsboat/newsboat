@@ -1,4 +1,3 @@
-
 PACKAGE=newsbeuter
 
 # important directories
@@ -12,20 +11,16 @@ docdir=?$(datadir)/doc/$(PACKAGE)
 CXX=c++
 
 # compiler and linker flags
-DEFINES=-D_ENABLE_NLS -DLOCALEDIR=\"$(localedir)\" -DPACKAGE=\"$(PACKAGE)\" -DEMBED_LUA=1 `pkg-config --cflags lua5.1`
+DEFINES=-D_ENABLE_NLS -DLOCALEDIR=\"$(localedir)\" -DPACKAGE=\"$(PACKAGE)\"
 WARNFLAGS=-Wall -W
-CXXFLAGS+=-ggdb -I./include -I./stfl -I./filter -I. -I/usr/local/include -I/sw/include $(WARNFLAGS) $(DEFINES)
-LDFLAGS+=-L. -L/usr/local/lib -L/sw/lib `pkg-config --libs lua5.1`
+CXXFLAGS+=-ggdb -I./include -I./stfl -I./filter -I. $(WARNFLAGS) $(DEFINES)
+LDFLAGS+=-L.
 
-# libraries to link with
-# LIBS=-lstfl -lmrss -lnxml -lncurses -lsqlite3 -lidn -lpthread
+include config.mk
 
 ifeq ($(DEBUG),1)
 DEFINES+=-DDEBUG
 endif
-
-#SRC=$(wildcard *.cpp) $(wildcard src/*.cpp)
-#OBJS=$(patsubst %.cpp,%.o,$(SRC))
 
 LIB_SOURCES=$(shell cat libbeuter.deps)
 LIB_OBJS=$(patsubst %.cpp,%.o,$(LIB_SOURCES))
@@ -38,13 +33,13 @@ FILTERLIB_OUTPUT=libfilter.a
 NEWSBEUTER=$(PACKAGE)
 NEWSBEUTER_SOURCES=$(shell cat newsbeuter.deps)
 NEWSBEUTER_OBJS=$(patsubst %.cpp,%.o,$(NEWSBEUTER_SOURCES))
-NEWSBEUTER_LIBS=-lbeuter -lfilter -lstfl -lmrss -lnxml -lncursesw -lsqlite3 -lpthread -lcurl
+NEWSBEUTER_LIBS=-lbeuter -lfilter -lstfl -lncursesw -lpthread
 
 
 PODBEUTER=podbeuter
 PODBEUTER_SOURCES=$(shell cat podbeuter.deps)
 PODBEUTER_OBJS=$(patsubst %.cpp,%.o,$(PODBEUTER_SOURCES))
-PODBEUTER_LIBS=-lbeuter -lstfl -lncursesw -lpthread -lcurl
+PODBEUTER_LIBS=-lbeuter -lstfl -lncursesw -lpthread
 
 ifneq ($(shell uname -s),Linux)
 NEWSBEUTER_LIBS+=-liconv -lintl
@@ -120,7 +115,7 @@ clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-do
 	$(RM) $(STFLHDRS)
 
 distclean: clean clean-mo test-clean
-	$(RM) core *.core core.*
+	$(RM) core *.core core.* config.mk
 
 doc:
 	$(MKDIR) doc/xhtml
@@ -184,5 +179,10 @@ test: $(LIB_OUTPUT) $(NEWSBEUTER_OBJS) $(TEST_OBJS)
 
 test-clean:
 	$(RM) test/test test/test.o
+
+config: config.mk
+
+config.mk:
+	@./config.sh
 
 include mk.deps

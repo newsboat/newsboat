@@ -45,7 +45,6 @@ extern "C" {
 #include <htmlrenderer.h>
 #include <cstring>
 #include <cstdio>
-#include <iostream>
 #include <sstream>
 
 namespace newsbeuter {
