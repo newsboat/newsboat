@@ -4,6 +4,7 @@
 
 #include <sstream>
 #include <vector>
+#include <cstdlib>
 
 
 namespace newsbeuter {

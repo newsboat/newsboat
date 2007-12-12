@@ -6,6 +6,8 @@
 #include <fstream>
 #include <sstream>
 #include <config.h>
+#include <cstdlib>
+#include <cstring>
 
 #include <sys/types.h>
 #include <pwd.h>

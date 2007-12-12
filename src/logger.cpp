@@ -2,6 +2,7 @@
 #include <stdarg.h>
 #include <exception.h>
 #include <cerrno>
+#include <alloca.h>
 
 namespace newsbeuter {
 
