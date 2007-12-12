@@ -38,6 +38,7 @@ optional_pkg() {
 		echo "" >> config.mk
 		return 0
 	else
+		echo "not found"
 		return 1
 	fi
 }
