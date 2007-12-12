@@ -53,6 +53,8 @@ namespace newsbeuter {
 
 			inline cache * get_cache() { return rsscache; }
 
+			inline configcontainer * get_cfg() const { return cfg; }
+
 		private:
 			void usage(char * argv0);
 			void version_information();

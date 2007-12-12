@@ -11,13 +11,26 @@ extern "C" {
 
 namespace newsbeuter {
 
+
 static int lua_nb_log(lua_State * L);
+
+// view class functions
 static int view_cur_form(lua_State * L);
 static int view_msg(lua_State * L);
 
 static const struct luaL_reg view_f[] = {
 	{ "cur_form", view_cur_form },
 	{ "msg", view_msg },
+	{ NULL, NULL }
+};
+
+// conf class functions
+static int conf_setvar(lua_State * L);
+static int conf_getvar(lua_State * L);
+
+static const struct luaL_reg conf_f[] = {
+	{ "set", conf_setvar },
+	{ "get", conf_getvar },
 	{ NULL, NULL }
 };
 
@@ -32,12 +45,19 @@ script_interpreter::script_interpreter() : L(0), v(0), c(0) {
 
 	// register view
 	
-	luaL_newmetatable(L, "NewsBeuter.view");
+	luaL_newmetatable(L, "Newsbeuter.view");
 	lua_pushstring(L, "__index");
 	lua_pushvalue(L, -2);
 	lua_settable(L, -3);
-
 	luaL_openlib(L, "view", view_f, 0);
+
+	// register conf
+	luaL_newmetatable(L, "Newsbeuter.conf");
+	lua_pushstring(L, "__index");
+	lua_pushvalue(L, -2);
+	lua_settable(L, -3);
+	luaL_openlib(L, "conf", conf_f, 0);
+
 
 }
 
@@ -100,6 +120,25 @@ static int view_msg(lua_State * L) {
 		GetInterpreter()->get_view()->set_status(str);
 	}
 	return 0;
+}
+
+static int conf_setvar(lua_State * L) {
+	const char * key = luaL_checkstring(L, 1);
+	const char * value = luaL_checkstring(L, 2);
+	if (key && value) {
+		GetInterpreter()->get_controller()->get_cfg()->set_configvalue(key, value);
+	}
+	return 0;
+}
+
+static int conf_getvar(lua_State * L) {
+	const char * key = luaL_checkstring(L, 1);
+	if (key) {
+		lua_pushstring(L, GetInterpreter()->get_controller()->get_cfg()->get_configvalue(key).c_str());
+	} else {
+		lua_pushstring(L, "");
+	}
+	return 1;
 }
 
 
