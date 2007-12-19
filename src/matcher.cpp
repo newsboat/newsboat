@@ -4,6 +4,7 @@
 #include <exceptions.h>
 
 #include <sys/time.h>
+#include <regex.h>
 #include <ctime>
 #include <cassert>
 #include <sstream>

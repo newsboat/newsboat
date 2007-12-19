@@ -107,6 +107,19 @@ filter/Scanner.cpp filter/Parser.cpp: filter/filter.atg filter/Scanner.frame fil
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
+
+# we need extra rules so that we don't have a clash between the libc's regex.h and Ruby's regex.h
+src/interpreter.o: src/interpreter.cpp
+	$(CXX) $(CXXFLAGS) $(RUBYCXXFLAGS) -o $@ -c $<
+
+src/controller.o: src/controller.cpp
+	$(CXX) $(CXXFLAGS) $(RUBYCXXFLAGS) -o $@ -c $<
+
+src/formaction.o: src/formaction.cpp
+	$(CXX) $(CXXFLAGS) $(RUBYCXXFLAGS) -o $@ -c $<
+
+
+
 swig/%.o: swig/%.cxx
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 

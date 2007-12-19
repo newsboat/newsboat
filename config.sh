@@ -47,7 +47,7 @@ find_rubyflags() {
 		archdir=`ruby -e 'require "mkmf" ; print Config::CONFIG["archdir"]'`
 		if [ "$?" -eq "0" ] ; then
 			echo "# ruby configuration" >> config.mk
-			echo "CXXFLAGS+=-I${archdir}" >> config.mk
+			echo "RUBYCXXFLAGS+=-I${archdir}" >> config.mk
 			echo "" >> config.mk
 			echo "found"
 			return 0
