@@ -17,6 +17,7 @@ namespace newsbeuter {
 			controller();
 			~controller();
 			void set_view(view * vv);
+			view * get_view() { return v; }
 			void run(int argc = 0, char * argv[] = NULL);
 
 			void reload(unsigned int pos, unsigned int max = 0);
@@ -37,7 +38,6 @@ namespace newsbeuter {
 			inline bool get_refresh_on_start() { return refresh_on_start; }
 			bool is_valid_podcast_type(const std::string& mimetype);
 			void enqueue_url(const std::string& url);
-			void set_itemlist_feed(unsigned int pos);
 			void notify(const std::string& msg);
 
 			void reload_urls_file();

@@ -80,13 +80,9 @@ void formaction::process_op(operation op, bool automatic, std::vector<std::strin
 			break;
 		case OP_RUNFUNCTION:
 			if (automatic && args->size() > 0) {
-#if EMBED_LUA
 				GetLogger().log(LOG_DEBUG, "formaction::process_op: before run_function");
 				GetInterpreter()->run_function((*args)[0]);
 				GetLogger().log(LOG_DEBUG, "formaction::process_op: after run_function");
-#else
-				GetLogger().log(LOG_DEBUG, "formaction::process_op: Lua support has been disabled");
-#endif
 			}
 			break;
 		case OP_INT_END_QUESTION:

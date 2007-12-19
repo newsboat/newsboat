@@ -101,6 +101,7 @@ namespace newsbeuter {
 	class rss_feed : public matchable {
 		public:
 			rss_feed(cache * c) : ch(c), empty(true) { }
+			rss_feed() : ch(NULL), empty(true) { }
 			~rss_feed() { }
 			std::string title_raw() const { return title_; }
 			std::string title() const;

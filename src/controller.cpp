@@ -201,11 +201,9 @@ void controller::run(int argc, char * argv[]) {
 		}
 	}
 
-#if EMBED_LUA
-	GetInterpreter()->set_view(v);
 	GetInterpreter()->set_controller(this);
-#endif
-	
+	GetInterpreter()->set_view(v);
+
 	if (!do_export)
 		std::cout << _("Loading configuration...");
 	std::cout.flush();
@@ -225,9 +223,7 @@ void controller::run(int argc, char * argv[]) {
 
 	cfgparser.register_handler("define-filter",&filters);
 
-#if EMBED_LUA
 	cfgparser.register_handler("load", GetInterpreter());
-#endif
 
 	try {
 		cfgparser.parse("/etc/" PROGRAM_NAME "/config");

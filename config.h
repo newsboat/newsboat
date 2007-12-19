@@ -12,6 +12,11 @@
 #ifdef _ENABLE_NLS
 #	include <libintl.h>
 #	include <locale.h>
+
+#	ifdef _
+#		undef _
+#	endif
+
 #	define _(string) gettext(string)
 #else
 #	define _(string) (string)

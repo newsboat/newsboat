@@ -10,6 +10,9 @@ docdir=?$(datadir)/doc/$(PACKAGE)
 # compiler
 CXX=c++
 
+SWIG=swig
+RUBY=ruby
+
 # compiler and linker flags
 DEFINES=-D_ENABLE_NLS -DLOCALEDIR=\"$(localedir)\" -DPACKAGE=\"$(PACKAGE)\"
 WARNFLAGS=-Wall -W
@@ -17,6 +20,8 @@ CXXFLAGS+=-ggdb -I./include -I./stfl -I./filter -I. $(WARNFLAGS) $(DEFINES)
 LDFLAGS+=-L.
 
 include config.mk
+
+SWIGFLAGS=-c++ -ruby
 
 ifeq ($(DEBUG),1)
 DEFINES+=-DDEBUG
@@ -33,7 +38,12 @@ FILTERLIB_OUTPUT=libfilter.a
 NEWSBEUTER=$(PACKAGE)
 NEWSBEUTER_SOURCES=$(shell cat newsbeuter.deps)
 NEWSBEUTER_OBJS=$(patsubst %.cpp,%.o,$(NEWSBEUTER_SOURCES))
-NEWSBEUTER_LIBS=-lbeuter -lfilter -lstfl -lncursesw -lpthread
+NEWSBEUTER_LIBS=-lbeuter -lfilter -lext -lstfl -lncursesw -lpthread -lruby1.8
+
+EXTLIB_IFILES=$(wildcard swig/*.i)
+EXTLIB_SOURCES=$(patsubst swig/%.i,swig/%_wrap.cxx,$(EXTLIB_IFILES))
+EXTLIB_OBJS=$(patsubst swig/%.cxx,swig/%.o,$(EXTLIB_SOURCES))
+EXTLIB_OUTPUT=libext.a
 
 
 PODBEUTER=podbeuter
@@ -65,7 +75,7 @@ RM=rm -f
 all: $(NEWSBEUTER) $(PODBEUTER)
 
 
-$(NEWSBEUTER): $(MOFILES) $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBEUTER_OBJS)
+$(NEWSBEUTER): $(MOFILES) $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(EXTLIB_OUTPUT) $(NEWSBEUTER_OBJS)
 	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $(NEWSBEUTER) $(NEWSBEUTER_OBJS) $(NEWSBEUTER_LIBS)
 
 $(PODBEUTER): $(MOFILES) $(LIB_OUTPUT) $(PODBEUTER_OBJS)
@@ -75,6 +85,15 @@ $(LIB_OUTPUT): $(LIB_OBJS)
 	$(RM) $@
 	$(AR) qc $@ $^
 	$(RANLIB) $@
+
+$(EXTLIB_OUTPUT): $(EXTLIB_SOURCES) prepare_extlib
+	$(MAKE) -C swig CFLAGS+="-I../include -I../filter" $(patsubst swig/%,%,$(EXTLIB_OBJS))
+	$(RM) $@
+	$(AR) qc $@ $(EXTLIB_OBJS)
+	$(RANLIB) $@
+
+prepare_extlib:
+	cd swig && $(RUBY) extconf.rb
 
 $(FILTERLIB_OUTPUT): $(FILTERLIB_OBJS)
 	$(RM) $@
@@ -87,6 +106,12 @@ filter/Scanner.cpp filter/Parser.cpp: filter/filter.atg filter/Scanner.frame fil
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
+
+swig/%.o: swig/%.cxx
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
+
+swig/%_wrap.cxx: swig/%.i
+	$(SWIG) $(SWIGFLAGS) $<
 
 %.h: %.stfl
 	$(STFLCONV) $< > $@
@@ -104,6 +129,9 @@ clean-podbeuter:
 clean-libbeuter:
 	$(RM) $(LIB_OUTPUT) $(LIB_OBJS)
 
+clean-libext:
+	$(RM) $(EXTLIB_OUTPUT) $(EXTLIB_OBJS) $(wildcard swig/*.cxx) swig/Makefile
+
 clean-libfilter:
 	$(RM) $(FILTERLIB_OUTPUT) $(FILTERLIB_OBJS) filter/Scanner.cpp filter/Scanner.h filter/Parser.cpp filter/Parser.h
 
@@ -111,7 +139,7 @@ clean-doc:
 	$(RM) -r doc/xhtml 
 	$(RM) doc/*.xml doc/*.1 doc/newsbeuter-cfgcmds.txt doc/podbeuter-cfgcmds.txt
 
-clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-doc
+clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-libext clean-doc
 	$(RM) $(STFLHDRS)
 
 distclean: clean clean-mo test-clean

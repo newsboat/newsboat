@@ -2,80 +2,48 @@
 #include <logger.h>
 #include <utils.h>
 
-#if EMBED_LUA
+#include <ruby.h>
 
-extern "C" {
-#include <lauxlib.h>
-#include <lualib.h>
-}
+#include <config.h>
+
+extern "C" void Init_Newsbeuter(); // from libext
 
 namespace newsbeuter {
 
+script_interpreter::script_interpreter() : v(0) {
+	GetLogger().log(LOG_DEBUG, "script_interpreter::script_interpreter: initializing Ruby interpreter");
+	ruby_init();
+	ruby_init_loadpath();
 
-static int lua_nb_log(lua_State * L);
-
-// view class functions
-static int view_cur_form(lua_State * L);
-static int view_msg(lua_State * L);
-
-static const struct luaL_reg view_f[] = {
-	{ "cur_form", view_cur_form },
-	{ "msg", view_msg },
-	{ NULL, NULL }
-};
-
-// conf class functions
-static int conf_setvar(lua_State * L);
-static int conf_getvar(lua_State * L);
-
-static const struct luaL_reg conf_f[] = {
-	{ "set", conf_setvar },
-	{ "get", conf_getvar },
-	{ NULL, NULL }
-};
-
-script_interpreter::script_interpreter() : L(0), v(0), c(0) {
-	L = lua_open();
-	GetLogger().log(LOG_DEBUG, "script_interpreter::script_interpreter: L = %p", L);
-
-	luaL_openlibs(L);
-
-	lua_pushcfunction(L, lua_nb_log);
-	lua_setglobal(L, "nb_log");
-
-	// register view
-	
-	luaL_newmetatable(L, "Newsbeuter.view");
-	lua_pushstring(L, "__index");
-	lua_pushvalue(L, -2);
-	lua_settable(L, -3);
-	luaL_openlib(L, "view", view_f, 0);
-
-	// register conf
-	luaL_newmetatable(L, "Newsbeuter.conf");
-	lua_pushstring(L, "__index");
-	lua_pushvalue(L, -2);
-	lua_settable(L, -3);
-	luaL_openlib(L, "conf", conf_f, 0);
-
-
+	Init_Newsbeuter();
 }
 
 script_interpreter::~script_interpreter() {
-	lua_close(L);
-	GetLogger().log(LOG_DEBUG, "script_interpreter::~script_interpreter: closed lua_State handle");
+	ruby_finalize();
 }
 
 void script_interpreter::load_script(const std::string& path) {
-	GetLogger().log(LOG_DEBUG, "script_interpreter::load_script: running file `%s'", path.c_str());
-	luaL_dofile(L, path.c_str());
+	GetLogger().log(LOG_DEBUG, "script_interpreter::load_script: loading file `%s'", path.c_str());
+	// VALUE v = rb_require(path.c_str());
+	int state;
+	rb_load_protect(rb_str_new2(path.c_str()), 0, &state);
+	if (state) {
+		VALUE c = rb_funcall(rb_gv_get("$!"), rb_intern("to_s"), 0);
+		GetLogger().log(LOG_ERROR, "script_interpreter::load_script: %s", RSTRING(c)->ptr);
+	}
+	// ruby_run();
+	// GetLogger().log(LOG_DEBUG, "script_interpreter::load_script: rb_require return value: %s", v == Qtrue ? "Qtrue" : "Qfalse");
 }
 
 void script_interpreter::run_function(const std::string& name) {
-	lua_getglobal(L, name.c_str());
-	if (lua_pcall(L, 0, 0, 0) != 0) {
-		GetLogger().log(LOG_DEBUG, "script_interpreter::run_function: error: %s", lua_tostring(L, -1));
-		// TODO: throw exception with error from lua_tostring(L, -1)
+	int state;
+	rb_eval_string_protect(name.c_str(), &state);
+	if (state) {
+		VALUE c = rb_funcall(rb_gv_get("$!"), rb_intern("to_s"), 0);
+		GetLogger().log(LOG_ERROR, "script_interpreter::load_script: %s", RSTRING(c)->ptr);
+		char buf[1024];
+		snprintf(buf, sizeof(buf), "Error while calling `%s': %s", name.c_str(), RSTRING(c)->ptr);
+		v->show_error(buf);
 	}
 }
 
@@ -95,53 +63,40 @@ action_handler_status script_interpreter::handle_action(const std::string& actio
 	return AHS_INVALID_COMMAND;
 }
 
+void script_interpreter::set_view(view * vv) {
+	int state;
+
+	v = vv;
+	rv = rb_eval_string_protect("Newsbeuter::View.new($ctrl)", &state);
+	if (state == 0 && rv != Qnil) {
+		DATA_PTR(rv) = v;
+		RDATA(rv)->dfree = NULL; // since we didn't allocate the pointer, we don't want to have it freed
+		rb_define_variable("view", &rv);
+	} else {
+		VALUE c = rb_funcall(rb_gv_get("$!"), rb_intern("to_s"), 0);
+		GetLogger().log(LOG_ERROR, "script_interpreter::set_view: %s", RSTRING(c)->ptr);
+	}
+}
+
+void script_interpreter::set_controller(controller * cc) {
+	int state;
+
+	c = cc;
+	rc = rb_eval_string_protect("Newsbeuter::Controller.new", &state);
+	if (state == 0 && rc != Qnil) {
+		DATA_PTR(rc) = c;
+		RDATA(rc)->dfree = NULL; // see above
+		rb_define_variable("ctrl", &rc);
+	} else {
+		VALUE c = rb_funcall(rb_gv_get("$!"), rb_intern("to_s"), 0);
+		GetLogger().log(LOG_ERROR, "script_interpreter::set_controller: %s", RSTRING(c)->ptr);
+	}
+}
+
 static script_interpreter interp;
 
 script_interpreter * GetInterpreter() {
 	return &interp;
 }
 
-static int lua_nb_log(lua_State * L) {
-	const char * str = luaL_checkstring(L, 1);
-	if (str) {
-		GetLogger().log(LOG_INFO, "USER-LOG-MSG: %s", str);
-	}
-	return 0;
 }
-
-static int view_cur_form(lua_State * L) {
-	lua_pushstring(L, GetInterpreter()->get_view()->id().c_str());
-	return 1;
-}
-
-static int view_msg(lua_State * L) {
-	const char * str = luaL_checkstring(L, 1);
-	if (str) {
-		GetInterpreter()->get_view()->set_status(str);
-	}
-	return 0;
-}
-
-static int conf_setvar(lua_State * L) {
-	const char * key = luaL_checkstring(L, 1);
-	const char * value = luaL_checkstring(L, 2);
-	if (key && value) {
-		GetInterpreter()->get_controller()->get_cfg()->set_configvalue(key, value);
-	}
-	return 0;
-}
-
-static int conf_getvar(lua_State * L) {
-	const char * key = luaL_checkstring(L, 1);
-	if (key) {
-		lua_pushstring(L, GetInterpreter()->get_controller()->get_cfg()->get_configvalue(key).c_str());
-	} else {
-		lua_pushstring(L, "");
-	}
-	return 1;
-}
-
-
-}
-
-#endif /* EMBED_LUA */

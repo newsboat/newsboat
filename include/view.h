@@ -27,7 +27,7 @@ namespace newsbeuter {
 
 	class view {
 		public:
-			view(controller * );
+			view(controller *);
 			~view();
 			void run();
 			std::string run_modal(formaction * f, const std::string& value = "");
