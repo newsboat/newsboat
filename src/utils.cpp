@@ -7,6 +7,7 @@
 #include <iconv.h>
 #include <errno.h>
 #include <pwd.h>
+#include <libgen.h>
 
 #include <locale>
 #include <cwchar>
@@ -538,6 +539,35 @@ std::string utils::to_s(unsigned int u) {
 	std::ostringstream os;
 	os << u;
 	return os.str();
+}
+
+std::string utils::absolute_url(const std::string& url, const std::string& link) {
+	if (link.substr(0,7)=="http://" || link.substr(0,8)=="https://" || link.substr(0,6)=="ftp://" || link.substr(0,7) == "mailto:"){
+		return link;
+	}
+	char u[1024];
+	snprintf(u, sizeof(u), "%s", url.c_str());
+	if (link[0] == '/') {
+		// this is probably the worst code in the whole program
+		char * foo = strstr(u, "//");
+		if (foo) {
+			if (strlen(foo)>=2) {
+				foo += 2;
+				foo = strchr(foo,'/');
+				char u2[1024];
+				strcpy(u2, u);
+				snprintf(u2 + (foo - u), sizeof(u2) - (foo - u), "%s", link.c_str());
+				return u2;
+			}
+		}
+		return link;
+	} else {
+		char * base = dirname(u);
+		std::string retval(base);
+		retval.append(1,'/');
+		retval.append(link);
+		return retval;
+	}
 }
 
 }

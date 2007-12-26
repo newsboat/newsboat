@@ -35,34 +35,6 @@ void htmlrenderer::render(const std::string& source, std::vector<std::string>& l
 	render(input, lines, links, url);
 }
 
-std::string htmlrenderer::absolute_url(const std::string& url, const std::string& link) {
-	if (link.substr(0,7)=="http://" || link.substr(0,8)=="https://" || link.substr(0,6)=="ftp://" || link.substr(0,7) == "mailto:"){
-		return link;
-	}
-	char u[1024];
-	snprintf(u, sizeof(u), "%s", url.c_str());
-	if (link[0] == '/') {
-		// this is probably the worst code in the whole program
-		char * foo = strstr(u, "//");
-		if (foo) {
-			if (strlen(foo)>=2) {
-				foo += 2;
-				foo = strchr(foo,'/');
-				char u2[1024];
-				strcpy(u2, u);
-				snprintf(u2 + (foo - u), sizeof(u2) - (foo - u), "%s", link.c_str());
-				return u2;
-			}
-		}
-		return link;
-	} else {
-		char * base = dirname(u);
-		std::string retval(base);
-		retval.append(1,'/');
-		retval.append(link);
-		return retval;
-	}
-}
 
 unsigned int htmlrenderer::add_link(std::vector<linkpair>& links, const std::string& link, link_type type) {
 	bool found = false;
@@ -118,7 +90,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 								link = "";
 							}
 							if (link.length() > 0) {
-								unsigned int link_num = add_link(links,absolute_url(url,link), LINK_HREF);
+								unsigned int link_num = add_link(links,utils::absolute_url(url,link), LINK_HREF);
 								std::ostringstream ref;
 								ref << "[" << link_num << "]";
 								curline.append(ref.str());
@@ -143,7 +115,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 									link = "";
 								}
 								if (link.length() > 0) {
-									unsigned int link_num = add_link(links,absolute_url(url,link), LINK_EMBED);
+									unsigned int link_num = add_link(links,utils::absolute_url(url,link), LINK_EMBED);
 									std::ostringstream ref;
 									ref << "[" << _("embedded flash:") << " " << link_num  << "]";
 									curline.append(ref.str());
@@ -178,7 +150,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 								imgurl = "";
 							}
 							if (imgurl.length() > 0) {
-								unsigned int link_num = add_link(links,absolute_url(url,imgurl), LINK_IMG);
+								unsigned int link_num = add_link(links,utils::absolute_url(url,imgurl), LINK_IMG);
 								std::ostringstream ref;
 								ref << "[" << _("image") << " " << link_num << "]";
 								image_count++;

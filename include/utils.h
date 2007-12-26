@@ -34,6 +34,8 @@ class utils {
 		static std::string wstr2str(const std::wstring& wstr);
 
 		static std::string to_s(unsigned int u);
+
+		static std::string absolute_url(const std::string& url, const std::string& link);
 };
 
 }

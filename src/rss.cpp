@@ -126,7 +126,10 @@ rss_feed rss_parser::parse() {
 			feed.set_description(utils::convert_text(mrss->description, "utf-8", encoding));
 		}
 
-		if (mrss->link) feed.set_link(mrss->link);
+		if (mrss->link) {
+			feed.set_link(utils::absolute_url(my_uri, mrss->link));
+		}
+
 		if (mrss->pubDate) 
 			feed.set_pubDate(parse_date(mrss->pubDate));
 		else
@@ -148,7 +151,9 @@ rss_feed rss_parser::parse() {
 				x.set_title(title);
 				GetLogger().log(LOG_DEBUG, "rss_parser::parse: converted title `%s' to `%s'", item->title, title.c_str());
 			}
-			if (item->link) x.set_link(item->link);
+			if (item->link) {
+				x.set_link(utils::absolute_url(my_uri, item->link));
+			}
 			if (item->author) {
 				x.set_author(utils::convert_text(item->author, "utf-8", encoding));
 			}
