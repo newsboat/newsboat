@@ -154,7 +154,18 @@ rss_feed rss_parser::parse() {
 			if (item->link) {
 				x.set_link(utils::absolute_url(my_uri, item->link));
 			}
-			if (item->author) {
+			if (!item->author || strcmp(item->author,"")==0) {
+				if (mrss->managingeditor)
+					x.set_author(utils::convert_text(mrss->managingeditor, "utf-8", encoding));
+				else {
+					mrss_tag_t * creator;
+					if (mrss_search_tag(item, "creator", "http://purl.org/dc/elements/1.1/", &creator) == MRSS_OK && creator) {
+						if (creator->value) {
+							x.set_author(utils::convert_text(creator->value, "utf-8", encoding));
+						}
+					}
+				}
+			} else {
 				x.set_author(utils::convert_text(item->author, "utf-8", encoding));
 			}
 

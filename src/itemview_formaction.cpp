@@ -40,7 +40,6 @@ void itemview_formaction::prepare() {
 
 		rss_feed * feedptr = item.get_feedptr();
 
-		code.append("{listitem text:");
 		std::ostringstream feedtitle;
 		feedtitle << _("Feed: ");
 		if (feedptr->title().length() > 0) {
@@ -50,29 +49,38 @@ void itemview_formaction::prepare() {
 		} else if (feedptr->rssurl().length() > 0) {
 			feedtitle << feedptr->rssurl();
 		}
-		code.append(stfl::quote(feedtitle.str().c_str()));
-		code.append("}");
+		if (feedtitle.str().length() > 0) {
+			code.append("{listitem text:");
+			code.append(stfl::quote(feedtitle.str().c_str()));
+			code.append("}");
+		}
 
-		code.append("{listitem text:");
-		std::ostringstream title;
-		title << _("Title: ");
-		title << item.title();
-		code.append(stfl::quote(title.str()));
-		code.append("}");
+		if (item.title().length() > 0) {
+			code.append("{listitem text:");
+			std::ostringstream title;
+			title << _("Title: ");
+			title << item.title();
+			code.append(stfl::quote(title.str()));
+			code.append("}");
+		}
 
-		code.append("{listitem text:");
-		std::ostringstream author;
-		author << _("Author: ");
-		author << item.author();
-		code.append(stfl::quote(author.str()));
-		code.append("}");
+		if (item.author().length() > 0) {
+			code.append("{listitem text:");
+			std::ostringstream author;
+			author << _("Author: ");
+			author << item.author();
+			code.append(stfl::quote(author.str()));
+			code.append("}");
+		}
 
-		code.append("{listitem text:");
-		std::ostringstream link;
-		link << _("Link: ");
-		link << item.link();
-		code.append(stfl::quote(link.str()));
-		code.append("}");
+		if (item.link().length() > 0) {
+			code.append("{listitem text:");
+			std::ostringstream link;
+			link << _("Link: ");
+			link << item.link();
+			code.append(stfl::quote(link.str()));
+			code.append("}");
+		}
 		
 		code.append("{listitem text:");
 		std::ostringstream date;
