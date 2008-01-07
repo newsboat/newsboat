@@ -20,6 +20,13 @@ class mutex {
 	friend class condition;
 };
 
+class scope_mutex {
+	public:
+		scope_mutex(mutex * m);
+		~scope_mutex();
+	private:
+		mutex * mtx;
+};
 
 }
 

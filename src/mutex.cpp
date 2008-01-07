@@ -42,3 +42,15 @@ bool mutex::trylock() {
 		return true;
 	}
 }
+
+scope_mutex::scope_mutex(mutex * m) : mtx(m) {
+	if (mtx) {
+		mtx->lock();
+	}
+}
+
+scope_mutex::~scope_mutex() {
+	if (mtx) {
+		mtx->unlock();
+	}
+}

@@ -128,10 +128,8 @@ void view::set_status_unlocked(const char * msg) {
 }
 
 void view::set_status(const char * msg) {
-	mtx->lock();
-	GetLogger().log(LOG_DEBUG, "view::set_status: after mtx->lock; formaction_stack.size = %u", formaction_stack.size());
+	scope_mutex lock(mtx);
 	set_status_unlocked(msg);
-	mtx->unlock();
 }
 
 void view::show_error(const char * msg) {
@@ -316,7 +314,7 @@ void view::open_in_browser(const std::string& url) {
 }
 
 void view::set_feedlist(std::vector<rss_feed>& feeds) {
-	mtx->lock();
+	scope_mutex lock(mtx);
 
 	for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it) {
 		if (it->rssurl().substr(0,6) != "query:") {
@@ -332,7 +330,6 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 		set_status_unlocked(buf);
 		GetLogger().log(LOG_DEBUG, "view::set_feedlist: inside catch: %s", buf);
 	}
-	mtx->unlock();
 }
 
 

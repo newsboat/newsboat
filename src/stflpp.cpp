@@ -112,16 +112,13 @@ void stfl::reset() {
 	stfl_reset();
 }
 
+static mutex quote_mtx;
+
 std::string stfl::quote(const std::string& text) {
-	static mutex * mtx;
-	if (!mtx) {
-		mtx = new mutex();
-	}
-	mtx->lock();
+	scope_mutex lock(&quote_mtx);
 	stfl_ipool * ipool = stfl_ipool_create(nl_langinfo(CODESET));
 	GetLogger().log(LOG_DEBUG, "stfl::quote: in: `%s' out: `%ls'", text.c_str(), stfl_quote(stfl_ipool_towc(ipool,text.c_str())));
 	std::string retval = stfl_ipool_fromwc(ipool,stfl_quote(stfl_ipool_towc(ipool,text.c_str())));
 	stfl_ipool_destroy(ipool);
-	mtx->unlock();
 	return retval;
 }

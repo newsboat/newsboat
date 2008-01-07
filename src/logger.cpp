@@ -12,41 +12,36 @@ void logger::set_logfile(const char * logfile) {
 	/*
 	 * This sets the filename of the debug logfile
 	 */
-	mtx.lock();
+	scope_mutex lock(&mtx);
 	if (f.is_open())
 		f.close();
 	f.open(logfile, std::fstream::out);
 	if (!f.is_open()) {
-		mtx.unlock();
 		throw exception(errno); // the question is whether f.open() sets errno...
 	}
-	mtx.unlock();
 }
 
 void logger::set_errorlogfile(const char * logfile) {
 	/*
 	 * This sets the filename of the error logfile, i.e. the one that can be configured to be generated.
 	 */
-	mtx.lock();
+	scope_mutex lock(&mtx);
 	if (ef.is_open())
 		ef.close();
 	ef.open(logfile, std::fstream::out);
 	if (!ef.is_open()) {
-		mtx.unlock();
 		throw exception(errno);
 	}
 	if (LOG_NONE == curlevel) {
 		curlevel = LOG_USERERROR;
 	}
-	mtx.unlock();
 }
 
 void logger::set_loglevel(loglevel level) {
-	mtx.lock();
+	scope_mutex lock(&mtx);
 	curlevel = level;
 	if (curlevel == LOG_NONE)
 		f.close();
-	mtx.unlock();
 }
 
 const char * loglevel_str[] = { "NONE", "USERERROR", "CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG" };
@@ -56,7 +51,7 @@ void logger::log(loglevel level, const char * format, ...) {
 	 * This function checks the loglevel, creates the error message, and then
 	 * writes it to the debug logfile and to the error logfile (if applicable).
 	 */
-	mtx.lock();
+	scope_mutex lock(&mtx);
 	if (level <= curlevel && curlevel > LOG_NONE && (f.is_open() || ef.is_open())) {
 		char * buf, * logmsgbuf;
 		char date[128];
@@ -88,7 +83,6 @@ void logger::log(loglevel level, const char * format, ...) {
 		}
 
 	}
-	mtx.unlock();
 }
 
 logger& GetLogger() {
