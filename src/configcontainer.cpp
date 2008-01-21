@@ -20,7 +20,7 @@ configcontainer::configcontainer()
 	config_data["browser"]         = configdata("lynx", configdata::PATH);
 	config_data["use-proxy"]       = configdata("no", configdata::BOOL);
 	config_data["auto-reload"]     = configdata("no", configdata::BOOL);
-	config_data["reload-time"]     = configdata("30", configdata::INT);
+	config_data["reload-time"]     = configdata("60", configdata::INT);
 	config_data["max-items"]       = configdata("0", configdata::INT);
 	config_data["save-path"]       = configdata("~/", configdata::PATH);
 	config_data["download-path"]   = configdata("~/", configdata::PATH);

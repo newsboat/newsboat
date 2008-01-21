@@ -26,7 +26,7 @@ opml-url|<url>|""|If the OPML online subscription mode is enabled, then the list
 proxy|<server:port>|n/a|Set the proxy to use for downloading RSS feeds.|proxy localhost:3128
 proxy-auth|<auth>|n/a|Set the proxy authentication string.|proxy-auth user:password
 refresh-on-startup|[yes/no]|no|If yes, then all feeds will be reloaded when newsbeuter starts up. This is equivalent to the -r commandline option.|refresh-on-startup yes
-reload-time|<number>|30|The number of minutes between automatic reloads.|reload-time 60
+reload-time|<number>|60|The number of minutes between automatic reloads.|reload-time 120
 save-path|<path>|~/|The default path where articles shall be saved to. If an invalid path is specified, the current directory is used.|save-path "~/Saved Articles"
 show-read-feeds|[yes/no]|yes|If yes, then all feeds, including those without unread articles, are listed. If no, then only feeds with one or more unread articles are list.|show-read-feeds no
 text-width|<number>|0|If set to a number greater than 0, then all HTML will be rendered to this maximum line length. If set to 0, the terminal width will be used.|text-width 72
