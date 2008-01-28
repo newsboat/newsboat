@@ -1,3 +1,4 @@
+always-display-description|[true/false]|false|If true, then the description will always displayed even if e.g. a content:encoded tag has been found.|always-display-description true
 articlelist-format|<format>|"%4i %f %D   %?T?\\x7C%-17T\\x7C  ?%t"|This variable defines the format of entries in the article list. See below for more information on format strings.|articlelist-format "%4i %f %D   %?T?\x7C%-17T\x7C  ?%t"
 auto-reload|[yes/no]|no|If enabled, all feeds will be automatically reloaded at start up and then continuously after a certain time has passed (see reload-time).|auto-reload yes
 bind-key|<key> <operation>|n/a|Bind key <key> to <operation>. This means that whenever <key> is pressed, then <operation> is executed (if applicable in the current context). A list of available operations can be found below.|bind-key ^R reload-all
