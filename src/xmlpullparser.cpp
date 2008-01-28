@@ -414,6 +414,8 @@ static struct {
 	{ "yacute", 253 },
 	{ "thorn", 254 },
 	{ "yuml", 255 },
+	/* more entities */
+	{ "ndash", 8211 },
 	{ 0, 0 }
 };
 

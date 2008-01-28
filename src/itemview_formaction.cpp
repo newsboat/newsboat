@@ -112,7 +112,7 @@ void itemview_formaction::prepare() {
 		set_head(item.title());
 
 		if (!render_hack) {
-			f->run(-1); // XXX HACK: render once so that we get a proper widget width
+			f->run(-3); // XXX HACK: render once so that we get a proper widget width
 			render_hack = true;
 		}
 

@@ -227,8 +227,12 @@ rss_feed rss_parser::parse() {
 				GetLogger().log(LOG_DEBUG, "rss_parser::parse: no luck with itunes:summary");
 			}
 
-			if (x.description().length() == 0 && item->description) {
-				x.set_description(utils::convert_text(item->description, "utf-8", encoding));
+			if (item->description) {
+				if (x.description().length() > 0) {
+					x.set_description(utils::convert_text(item->description, "utf-8", encoding) + "<hr>" + x.description());
+				} else {
+					x.set_description(utils::convert_text(item->description, "utf-8", encoding));
+				}
 			}
 
 			if (item->pubDate) 

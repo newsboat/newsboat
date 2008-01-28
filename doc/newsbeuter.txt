@@ -44,6 +44,7 @@ has only been tested with GCC.
 - SQLite 3: http://www.sqlite.org/[]
 - libmRss (version 0.18.0 or newer): http://www2.autistici.org/bakunin/libmrss/[]
 - libnXml (version 0.18.0 or newer): http://www2.autistici.org/bakunin/libnxml/[]
+- GNU gettext (on systems that don't provide gettext in the libc): ftp://ftp.gnu.org/gnu/gettext/[]
 
 If you intend to modify the filter language parser, you will also need Coco/R for C++,
 which you can download from http://www.ssw.uni-linz.ac.at/coco/[]. The Coco/R binary
