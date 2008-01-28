@@ -44,7 +44,7 @@ check_custom() {
 find_rubyflags() {
 	echo -n "Checking for ruby... "
 	if ruby --version > /dev/null 2>&1 ; then
-		archdir=`ruby -e 'require "mkmf" ; print Config::CONFIG["archdir"]' > /dev/null 2>&1`
+		archdir=`ruby -e 'require "mkmf" ; print Config::CONFIG["archdir"]' 2> /dev/null`
 		if [ "$?" -eq "0" ] ; then
 			echo "# ruby configuration" >> config.mk
 			echo "RUBYCXXFLAGS+=-I${archdir}" >> config.mk

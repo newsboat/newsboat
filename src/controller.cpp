@@ -201,7 +201,7 @@ void controller::run(int argc, char * argv[]) {
 		}
 	}
 
-#if RUBY
+#if HAVE_RUBY
 	GetInterpreter()->set_controller(this);
 	GetInterpreter()->set_view(v);
 #endif
@@ -225,7 +225,7 @@ void controller::run(int argc, char * argv[]) {
 
 	cfgparser.register_handler("define-filter",&filters);
 
-#if RUBY
+#if HAVE_RUBY
 	cfgparser.register_handler("load", GetInterpreter());
 #endif
 

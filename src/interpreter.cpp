@@ -2,7 +2,7 @@
 #include <logger.h>
 #include <utils.h>
 
-#if RUBY
+#if HAVE_RUBY
 
 #include <ruby.h>
 

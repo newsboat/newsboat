@@ -42,7 +42,7 @@ NEWSBEUTER_LIBS=-lbeuter -lfilter -lstfl -lncursesw -lpthread
 
 ifeq ($(FOUND_RUBY),1)
 NEWSBEUTER_LIBS+=-lext -lruby1.8
-CXXFLAGS+=-DRUBY=1
+CXXFLAGS+=-DHAVE_RUBY=1
 endif
 
 EXTLIB_IFILES=$(wildcard swig/*.i)
