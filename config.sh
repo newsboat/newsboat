@@ -44,7 +44,7 @@ check_custom() {
 find_rubyflags() {
 	echo -n "Checking for ruby... "
 	if ruby --version > /dev/null 2>&1 ; then
-		archdir=`ruby -e 'require "mkmf" ; print Config::CONFIG["archdir"]'`
+		archdir=`ruby -e 'require "mkmf" ; print Config::CONFIG["archdir"]' > /dev/null 2>&1`
 		if [ "$?" -eq "0" ] ; then
 			echo "# ruby configuration" >> config.mk
 			echo "RUBYCXXFLAGS+=-I${archdir}" >> config.mk
@@ -72,7 +72,7 @@ fail() {
 fail_custom() {
 	err=$1
 	echo ""
-	echo "${pkgname}"
+	echo "ERROR: ${err}"
 	exit 1
 }
 
@@ -82,5 +82,9 @@ check_pkg "nxml" || fail "nxml"
 check_pkg "mrss" || fail "mrss"
 check_pkg "sqlite3" || fail "sqlite3"
 check_pkg "libcurl" || check_custom "libcurl" "curl-config" || fail "libcurl"
-find_rubyflags || fail_custom "Ruby couldn't be found."
-#check_pkg "lua5.1" "-DEMBED_LUA=1" || check_pkg "lua" "-DEMBED_LUA=1" || echo "Warning: newsbeuter will be compiled without Lua support."
+if find_rubyflags ; then
+	echo "FOUND_RUBY=1" >> config.mk
+else
+	echo "Warning: newsbeuter will be built without Ruby support."
+	echo "FOUND_RUBY=0" >> config.mk
+fi

@@ -38,7 +38,12 @@ FILTERLIB_OUTPUT=libfilter.a
 NEWSBEUTER=$(PACKAGE)
 NEWSBEUTER_SOURCES=$(shell cat newsbeuter.deps)
 NEWSBEUTER_OBJS=$(patsubst %.cpp,%.o,$(NEWSBEUTER_SOURCES))
-NEWSBEUTER_LIBS=-lbeuter -lfilter -lext -lstfl -lncursesw -lpthread -lruby1.8
+NEWSBEUTER_LIBS=-lbeuter -lfilter -lstfl -lncursesw -lpthread
+
+ifeq ($(FOUND_RUBY),1)
+NEWSBEUTER_LIBS+=-lext -lruby1.8
+CXXFLAGS+=-DRUBY=1
+endif
 
 EXTLIB_IFILES=$(wildcard swig/*.i)
 EXTLIB_SOURCES=$(patsubst swig/%.i,swig/%_wrap.cxx,$(EXTLIB_IFILES))
@@ -74,8 +79,14 @@ RM=rm -f
 
 all: $(NEWSBEUTER) $(PODBEUTER)
 
+NB_DEPS=$(MOFILES) $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBEUTER_OBJS)
 
-$(NEWSBEUTER): $(MOFILES) $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(EXTLIB_OUTPUT) $(NEWSBEUTER_OBJS)
+ifeq ($(FOUND_RUBY),1)
+NB_DEPS+=$(EXTLIB_OUTPUT)
+endif
+
+
+$(NEWSBEUTER): $(NB_DEPS)
 	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $(NEWSBEUTER) $(NEWSBEUTER_OBJS) $(NEWSBEUTER_LIBS)
 
 $(PODBEUTER): $(MOFILES) $(LIB_OUTPUT) $(PODBEUTER_OBJS)

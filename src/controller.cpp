@@ -201,8 +201,10 @@ void controller::run(int argc, char * argv[]) {
 		}
 	}
 
+#if RUBY
 	GetInterpreter()->set_controller(this);
 	GetInterpreter()->set_view(v);
+#endif
 
 	if (!do_export)
 		std::cout << _("Loading configuration...");
@@ -223,7 +225,9 @@ void controller::run(int argc, char * argv[]) {
 
 	cfgparser.register_handler("define-filter",&filters);
 
+#if RUBY
 	cfgparser.register_handler("load", GetInterpreter());
+#endif
 
 	try {
 		cfgparser.parse("/etc/" PROGRAM_NAME "/config");

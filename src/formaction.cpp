@@ -81,7 +81,11 @@ void formaction::process_op(operation op, bool automatic, std::vector<std::strin
 		case OP_RUNFUNCTION:
 			if (automatic && args->size() > 0) {
 				GetLogger().log(LOG_DEBUG, "formaction::process_op: before run_function");
+#if RUBY
 				GetInterpreter()->run_function((*args)[0]);
+#else
+				v->show_error(_("Error: newsbeuter is compiled without Ruby support. Please recompile with Ruby support in order to run Ruby functions."));
+#endif
 				GetLogger().log(LOG_DEBUG, "formaction::process_op: after run_function");
 			}
 			break;

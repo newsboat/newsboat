@@ -5,7 +5,9 @@
 #include <view.h>
 #include <controller.h>
 #include <configparser.h>
-#include <ruby.h>
+#if RUBY
+#	include <ruby.h>
+#endif
 
 namespace newsbeuter {
 
@@ -26,11 +28,15 @@ namespace newsbeuter {
 		private:
 			view * v;
 			controller * c;
+#if RUBY
 			VALUE rv;
 			VALUE rc;
+#endif
 	};
 
+#if RUBY
 script_interpreter * GetInterpreter();
+#endif
 
 }
 

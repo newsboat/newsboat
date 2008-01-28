@@ -2,6 +2,8 @@
 #include <logger.h>
 #include <utils.h>
 
+#if RUBY
+
 #include <ruby.h>
 
 #include <config.h>
@@ -100,3 +102,7 @@ script_interpreter * GetInterpreter() {
 }
 
 }
+
+#else
+#warning "newsbeuter is compiled without Ruby support."
+#endif
