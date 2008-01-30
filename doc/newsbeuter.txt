@@ -525,7 +525,7 @@ OPML Online Subscription Mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The OPML online subscription mode works similar to the Bloglines
-synchronization mode, except that no information about read articles in
+synchronization mode, except that no information about read articles is
 synchronized back. When enabled, all feeds that are listed in the feed list
 will be taken from an OPML that is downloaded from a freely configurable URL.
 
@@ -546,7 +546,7 @@ To support custom categorization of articles by the user, it is possible to
 flag an article. A valid flag is any character from 'A' to 'Z' and from 'a' to
 'z'. Every article can be flagged with up to 52 different flags, i.e. every
 letter from the Roman alphabet in upper and lower case. Flagging is easy: just
-select an article in the article list, or enter the article view, and press ^B.
+select an article in the article list, or enter the article view, and press ^E.
 This will start the flag editor. By pressing enter, the new flags are saved.
 You can cancel by pressing the ESC key.
 
