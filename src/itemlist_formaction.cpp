@@ -355,9 +355,12 @@ void itemlist_formaction::do_update_visible_items() {
 			visible_items.push_back(itemptr_pos_pair(&(*it), i));
 		}
 	}
+
+	do_redraw = true;
 }
 
 void itemlist_formaction::prepare() {
+	scope_mutex mtx(&redraw_mtx);
 	if (update_visible_items) {
 		do_update_visible_items();
 		update_visible_items = false;

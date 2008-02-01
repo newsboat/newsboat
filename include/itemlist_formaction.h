@@ -3,6 +3,7 @@
 
 #include <formaction.h>
 #include <history.h>
+#include <mutex.h>
 
 namespace newsbeuter {
 
@@ -61,6 +62,8 @@ class itemlist_formaction : public formaction {
 		history filterhistory;
 
 		rss_feed search_dummy_feed;
+
+		mutex redraw_mtx;
 };
 
 }
