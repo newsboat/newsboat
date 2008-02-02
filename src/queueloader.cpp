@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <logger.h>
 #include <fstream>
+#include <cstring>
 #include <config.h>
 #include <libgen.h>
 

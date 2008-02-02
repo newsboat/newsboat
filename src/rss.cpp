@@ -8,6 +8,8 @@
 #include <sstream>
 #include <iostream>
 #include <configcontainer.h>
+#include <cstring>
+#include <algorithm>
 #include <curl/curl.h>
 #include <sys/utsname.h>
 
