@@ -6,6 +6,7 @@ Changes for newsbeuter:
 	added special tags to rename feeds
 	added macro support
 	added Ruby scripting support
+	directly integrated nxml/mrss code since API and ABI are a moving target
 
 0.7 (2007-09-18):
 	implemented the possibility to predefine filters
