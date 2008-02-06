@@ -1038,6 +1038,9 @@ __nxml_parse_get_tag (nxml_t * doc, char **buffer, size_t * size,
   while (!(err = __nxml_parse_get_attribute (doc, buffer, size, &attr))
 	 && attr)
     {
+      if (!*size)
+	    return NXML_ERR_PARSER;
+
       if (__nxml_parse_unique_attribute (tag->attributes, attr->name))
 	{
 	  if (doc->priv.func)
