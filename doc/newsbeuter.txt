@@ -42,8 +42,7 @@ has only been tested with GCC.
 
 - STFL (version 0.14 or newer): http://www.clifford.at/stfl/[]
 - SQLite 3: http://www.sqlite.org/[]
-- libmRss (version 0.18.0 or newer): http://www2.autistici.org/bakunin/libmrss/[]
-- libnXml (version 0.18.0 or newer): http://www2.autistici.org/bakunin/libnxml/[]
+- libcurl: http://curlm.haxx.se/download.html[]
 - GNU gettext (on systems that don't provide gettext in the libc): ftp://ftp.gnu.org/gnu/gettext/[]
 - pkg-config: http://pkg-config.freedesktop.org/wiki/[]
 - Ruby 1.8 (optional): http://www.ruby-lang.org/[]

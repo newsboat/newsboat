@@ -78,8 +78,6 @@ fail_custom() {
 
 echo -n "" > config.mk
 
-#check_pkg "nxml" || fail "nxml"
-#check_pkg "mrss" || fail "mrss"
 check_pkg "sqlite3" || fail "sqlite3"
 check_pkg "libcurl" || check_custom "libcurl" "curl-config" || fail "libcurl"
 if find_rubyflags ; then
