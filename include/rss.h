@@ -9,7 +9,7 @@
 
 
 extern "C" {
-#include <mrss.h>
+#include <_mrss.h>
 }
 
 namespace newsbeuter {

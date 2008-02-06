@@ -22,7 +22,7 @@
 #include <signal.h>
 #include <sys/utsname.h>
 
-#include <nxml.h>
+#include <_nxml.h>
 
 #include <sys/types.h>
 #include <sys/wait.h>
