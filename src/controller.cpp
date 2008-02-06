@@ -1,3 +1,4 @@
+#include <config.h>
 #include <view.h>
 #include <controller.h>
 #include <configparser.h>
@@ -29,8 +30,6 @@
 #include <pwd.h>
 
 #include <ncursesw/ncurses.h>
-
-#include <config.h>
 
 using namespace newsbeuter;
 
