@@ -7,7 +7,7 @@
 #include <string>
 
 #include <configcontainer.h>
-#include <nxml.h>
+#include <_nxml.h>
 
 namespace newsbeuter {
 

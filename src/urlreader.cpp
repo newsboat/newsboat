@@ -177,7 +177,7 @@ void opml_urlreader::reload() {
 
 void opml_urlreader::handle_node(nxml_data_t * node, const std::string& tag) {
 	if (node) {
-		char * rssurl = nxmle_find_attribute(node, "xmlUrl", NULL);
+		const char * rssurl = nxmle_find_attribute(node, "xmlUrl", NULL);
 		if (rssurl && strlen(rssurl) > 0) {
 			std::string theurl(rssurl);
 			urls.push_back(theurl);
@@ -193,7 +193,7 @@ void opml_urlreader::handle_node(nxml_data_t * node, const std::string& tag) {
 
 void bloglines_urlreader::handle_node(nxml_data_t * node, const std::string& tag) {
 	if (node) {
-		char * sub_id = nxmle_find_attribute(node, "BloglinesSubId", NULL);
+		const char * sub_id = nxmle_find_attribute(node, "BloglinesSubId", NULL);
 		if (sub_id) {
 			std::string theurl = getitems_url;
 			theurl.append("?s=");
@@ -226,7 +226,7 @@ void bloglines_urlreader::handle_node(nxml_data_t * node, const std::string& tag
 
 void opml_urlreader::rec_find_rss_outlines(nxml_data_t * node, std::string tag) {
 	while (node) {
-		char * type = nxmle_find_attribute(node, "type", NULL);
+		const char * type = nxmle_find_attribute(node, "type", NULL);
 
 		std::string newtag = tag;
 
@@ -234,7 +234,7 @@ void opml_urlreader::rec_find_rss_outlines(nxml_data_t * node, std::string tag) 
 			if (type && strcmp(type,"rss")==0) {
 				handle_node(node, tag);
 			} else {
-				char * text = nxmle_find_attribute(node, "title", NULL);
+				const char * text = nxmle_find_attribute(node, "title", NULL);
 				if (text) {
 					if (newtag.length() > 0) {
 						newtag.append("/");

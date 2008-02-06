@@ -4,7 +4,7 @@
 #include <urlreader.h>
 #include <rss.h>
 #include <cache.h>
-#include <nxml.h>
+#include <_nxml.h>
 #include <configcontainer.h>
 #include <filtercontainer.h>
 

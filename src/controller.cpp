@@ -680,7 +680,7 @@ void controller::export_opml() {
 
 void controller::rec_find_rss_outlines(nxml_data_t * node, std::string tag) {
 	while (node) {
-		char * url = nxmle_find_attribute(node, "xmlUrl", NULL);
+		const char * url = nxmle_find_attribute(node, "xmlUrl", NULL);
 		std::string newtag = tag;
 
 		if (!url) {
@@ -714,7 +714,7 @@ void controller::rec_find_rss_outlines(nxml_data_t * node, std::string tag) {
 					GetLogger().log(LOG_DEBUG,"OPML import: url = %s is already in list",url);
 				}
 			} else {
-				char * text = nxmle_find_attribute(node, "text", NULL);
+				const char * text = nxmle_find_attribute(node, "text", NULL);
 				if (!text)
 					text = nxmle_find_attribute(node, "title", NULL);
 				if (text) {
