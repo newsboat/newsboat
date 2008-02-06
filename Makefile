@@ -108,7 +108,7 @@ $(XMLRSSLIB_OUTPUT): $(XMLRSSLIB_OBJS)
 	$(RANLIB) $@
 
 $(EXTLIB_OUTPUT): $(EXTLIB_SOURCES) prepare_extlib
-	$(MAKE) -C swig CFLAGS+="-I../include -I../filter" $(patsubst swig/%,%,$(EXTLIB_OBJS))
+	$(MAKE) -C swig CFLAGS+="-I../include -I../filter -I../xmlrss" $(patsubst swig/%,%,$(EXTLIB_OBJS))
 	$(RM) $@
 	$(AR) qc $@ $(EXTLIB_OBJS)
 	$(RANLIB) $@
