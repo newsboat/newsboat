@@ -162,7 +162,7 @@ __nxml_utf16to8 (int le, unsigned char *buffer, size_t size,
 	  /* 11bits:    110xxxxx 10xxxxxx */
 	  char a[2];
 	  a[0] = (ch >> 6) | 0xc0;
-	  a[1] = (ch & 0x2f) | 0x80;
+	  a[1] = (ch & 0x3f) | 0x80;
 	  __NXML_XTO8 ((void *) a, 2);
 	}
 
@@ -175,8 +175,8 @@ __nxml_utf16to8 (int le, unsigned char *buffer, size_t size,
 	  /* 16bits:  1110xxxx 10xxxxxx 10xxxxxx */
 	  char a[3];
 	  a[0] = (ch >> 12) | 0xe0;
-	  a[1] = ((ch >> 6) & 0x2f) | 0x80;
-	  a[2] = (ch & 0x2f) | 0x80;
+	  a[1] = ((ch >> 6) & 0x3f) | 0x80;
+	  a[2] = (ch & 0x3f) | 0x80;
 	  __NXML_XTO8 ((void *) a, 3);
 	}
 
@@ -189,9 +189,9 @@ __nxml_utf16to8 (int le, unsigned char *buffer, size_t size,
 	  /* 21bits:  11110xxx 10xxxxxx 10xxxxxx 10xxxxxx */
 	  char a[4];
 	  a[0] = (ch >> 18) | 0xf0;
-	  a[1] = ((ch >> 12) & 0x2f);
-	  a[2] = ((ch >> 6) & 0x2f);
-	  a[3] = (ch & 0x2f);
+	  a[1] = ((ch >> 12) & 0x3f);
+	  a[2] = ((ch >> 6) & 0x3f);
+	  a[3] = (ch & 0x3f);
 	  __NXML_XTO8 ((void *) a, 4);
 	}
 
@@ -204,10 +204,10 @@ __nxml_utf16to8 (int le, unsigned char *buffer, size_t size,
 	  /* 21bits:  111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx */
 	  char a[5];
 	  a[0] = (ch >> 24) | 0xf8;
-	  a[1] = ((ch >> 18) & 0x2f);
-	  a[2] = ((ch >> 12) & 0x2f);
-	  a[3] = ((ch >> 6) & 0x2f);
-	  a[4] = (ch & 0x2f);
+	  a[1] = ((ch >> 18) & 0x3f);
+	  a[2] = ((ch >> 12) & 0x3f);
+	  a[3] = ((ch >> 6) & 0x3f);
+	  a[4] = (ch & 0x3f);
 	  __NXML_XTO8 ((void *) a, 5);
 	}
     }
@@ -278,7 +278,7 @@ __nxml_ucs4to8 (int type, unsigned char *buffer, size_t size,
 	  /* 11bits:    110xxxxx 10xxxxxx */
 	  char a[2];
 	  a[0] = (ch >> 6) | 0xc0;
-	  a[1] = (ch & 0x2f) | 0x80;
+	  a[1] = (ch & 0x3f) | 0x80;
 	  __NXML_XTO8 ((void *) a, 2);
 	}
 
@@ -291,8 +291,8 @@ __nxml_ucs4to8 (int type, unsigned char *buffer, size_t size,
 	  /* 16bits:  1110xxxx 10xxxxxx 10xxxxxx */
 	  char a[3];
 	  a[0] = (ch >> 12) | 0xe0;
-	  a[1] = ((ch >> 6) & 0x2f) | 0x80;
-	  a[2] = (ch & 0x2f) | 0x80;
+	  a[1] = ((ch >> 6) & 0x3f) | 0x80;
+	  a[2] = (ch & 0x3f) | 0x80;
 	  __NXML_XTO8 ((void *) a, 3);
 	}
 
@@ -305,9 +305,9 @@ __nxml_ucs4to8 (int type, unsigned char *buffer, size_t size,
 	  /* 21bits:  11110xxx 10xxxxxx 10xxxxxx 10xxxxxx */
 	  char a[4];
 	  a[0] = (ch >> 18) | 0xf0;
-	  a[1] = ((ch >> 12) & 0x2f);
-	  a[2] = ((ch >> 6) & 0x2f);
-	  a[3] = (ch & 0x2f);
+	  a[1] = ((ch >> 12) & 0x3f);
+	  a[2] = ((ch >> 6) & 0x3f);
+	  a[3] = (ch & 0x3f);
 	  __NXML_XTO8 ((void *) a, 4);
 	}
 
@@ -320,10 +320,10 @@ __nxml_ucs4to8 (int type, unsigned char *buffer, size_t size,
 	  /* 21bits:  111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx */
 	  char a[5];
 	  a[0] = (ch >> 24) | 0xf8;
-	  a[1] = ((ch >> 18) & 0x2f);
-	  a[2] = ((ch >> 12) & 0x2f);
-	  a[3] = ((ch >> 6) & 0x2f);
-	  a[4] = (ch & 0x2f);
+	  a[1] = ((ch >> 18) & 0x3f);
+	  a[2] = ((ch >> 12) & 0x3f);
+	  a[3] = ((ch >> 6) & 0x3f);
+	  a[4] = (ch & 0x3f);
 	  __NXML_XTO8 ((void *) a, 5);
 	}
     }
@@ -452,7 +452,7 @@ __nxml_int_charset (int ch, unsigned char *str, char *charset)
     {
       /* 11bits:    110xxxxx 10xxxxxx */
       str[0] = (ch >> 6) | 0xc0;
-      str[1] = (ch & 0x2f) | 0x80;
+      str[1] = (ch & 0x3f) | 0x80;
       return 2;
     }
 
