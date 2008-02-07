@@ -240,7 +240,7 @@ install-mo:
 TEST_OBJS=$(patsubst test/%.cpp,test/%.o,$(wildcard test/*.cpp))
 
 test: $(LIB_OUTPUT) $(NEWSBEUTER_OBJS) $(TEST_OBJS)
-	$(CXX) $(LDFLAGS) $(CXXFLAGS) $(RUBYCXXFLAGS) -o test/test src/history.o src/rss.o src/cache.o src/xmlpullparser.o src/urlreader.o $(TEST_OBJS) $(NEWSBEUTER_LIBS) -lboost_unit_test_framework
+	$(CXX) $(LDFLAGS) $(CXXFLAGS) $(RUBYCXXFLAGS) -o test/test src/history.o src/rss.o src/htmlrenderer.o src/cache.o src/xmlpullparser.o src/urlreader.o $(TEST_OBJS) $(NEWSBEUTER_LIBS) -lboost_unit_test_framework
 
 test/test.o: test/test.cpp
 	$(CXX) $(CXXFLAGS) $(RUBYCXXFLAGS) -o $@ -c $<
