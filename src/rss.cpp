@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <curl/curl.h>
 #include <sys/utsname.h>
+#include <htmlrenderer.h>
 
 #include <langinfo.h>
 
@@ -146,12 +147,23 @@ rss_feed rss_parser::parse() {
 		for (mrss_item_t * item = mrss->item; item != NULL; item = item->next ) {
 			rss_item x(ch);
 			if (item->title) {
-				std::string title = utils::convert_text(item->title, "utf-8", encoding);
-				GetLogger().log(LOG_DEBUG, "rss_parser::parse: before replace_newline_characters: `%s'", title.c_str());
-				replace_newline_characters(title);
-				GetLogger().log(LOG_DEBUG, "rss_parser::parse: after replace_newline_characters: `%s'", title.c_str());
-				x.set_title(title);
-				GetLogger().log(LOG_DEBUG, "rss_parser::parse: converted title `%s' to `%s'", item->title, title.c_str());
+				if (item->title_type && (strcmp(item->title_type,"xhtml")==0 || strcmp(item->title_type,"html")==0)) {
+					std::string xhtmltitle = utils::convert_text(item->title, "utf-8", encoding);
+					htmlrenderer rnd(1 << 16); // a huge number
+					std::vector<std::string> lines;
+					std::vector<linkpair> links; // not needed
+					rnd.render(xhtmltitle, lines, links, feed.link());
+					if (lines.size() > 0) {
+						x.set_title(lines[0]);
+					}
+				} else {
+					std::string title = utils::convert_text(item->title, "utf-8", encoding);
+					GetLogger().log(LOG_DEBUG, "rss_parser::parse: before replace_newline_characters: `%s'", title.c_str());
+					replace_newline_characters(title);
+					GetLogger().log(LOG_DEBUG, "rss_parser::parse: after replace_newline_characters: `%s'", title.c_str());
+					x.set_title(title);
+					GetLogger().log(LOG_DEBUG, "rss_parser::parse: converted title `%s' to `%s'", item->title, title.c_str());
+				}
 			}
 			if (item->link) {
 				x.set_link(utils::absolute_url(my_uri, item->link));
