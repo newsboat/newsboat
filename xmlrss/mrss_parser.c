@@ -143,12 +143,21 @@ __mrss_parser_atom_string (nxml_t * doc, nxml_data_t * cur, char **what,
     {
       nxml_data_t *ncur;
       char *total;
+      const char *c1;
       nxml_t *new;
       int size;
 
       total = NULL;
       size = 0;
 
+      c1 = nxmle_get_string(cur, NULL);
+
+      if (c1 && strlen(c1) > 0)
+	{
+	  total = strdup(c1);
+	  size = strlen(total);
+	}
+      else
       while ((ncur = cur->children))
 	{
 	  char *buffer = NULL, *p;
