@@ -1,147 +1,147 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Polish translation of newsbeuter.
+# Copyright (C) 2008 Maciej Delmanowski
+# This file is distributed under the same license as the newsbeuter package.
+# Maciej Delmanowski <harnir@tty0.pl>, 2008.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.7\n"
+"Project-Id-Version: newsbeuter 0.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-03-02 12:22+0100\n"
-"PO-Revision-Date: 2008-01-28 10:00+GMT+1\n"
-"Last-Translator: Zsolt Udvari <udvzsolt@gmail.com>\n"
-"Language-Team: Hungarian <LL@li.org>\n"
+"PO-Revision-Date: 2008-02-20 17:50+0100\n"
+"Last-Translator: Maciej Delmanowski <harnir@tty0.pl>\n"
+"Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: src/cache.cpp:172
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
-msgstr "Hiba `%s' cache-file megnyitása közben: %s"
+msgstr "BÅ‚Ä…d: otwieranie pliku pamiÄ™ci podrÄ™cznej '%s' nieudane: %s"
 
 #: src/configcontainer.cpp:55
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
-msgstr "%N %V - Hírek (%u olvasatlan, %t összesen)%?T? - cimke `%T'&?"
+msgstr "%N %V - Twoje kanaÅ‚y (%u nowe, %t wszystkie)%?T? - tag '%T'&?"
 
 #: src/configcontainer.cpp:56 src/configcontainer.cpp:64
 msgid "%N %V - URLs"
-msgstr "%N %V - URL"
+msgstr "%N %V - OdnoÅ›niki"
 
 #: src/configcontainer.cpp:57
 msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
-msgstr "%N %V - Cikkek '%T'-ben (%u olvasatlan, %t összesen) - %U"
+msgstr "%N %V - ArtykuÅ‚y w kanale '%T' (%u nowe, %t wszystkie) - %U"
 
 #: src/configcontainer.cpp:58
 msgid "%N %V - Search result (%u unread, %t total)"
-msgstr "%N %V - Keresési eredmény (%u olvasatlan, %t összesen)"
+msgstr "%N %V - Wynik wyszukiwania (%u nowe, %t wszystkie)"
 
 #: src/configcontainer.cpp:59
 msgid "%N %V - %?O?Open File&Save File? - %f"
-msgstr "%N %V - %?O?File megnyitása&Menti a fájlt? - %f"
+msgstr "%N %V - %?O?OtwÃ³rz plik&Zapisz plik? - %f"
 
 #: src/configcontainer.cpp:60
 msgid "%N %V - Help"
-msgstr "%N %V - Súgó"
+msgstr "%N %V - Pomoc"
 
 #: src/configcontainer.cpp:61
 msgid "%N %V - Select Tag"
-msgstr "%N %V - Cimke kiválasztása"
+msgstr "%N %V - Wybierz tag"
 
 #: src/configcontainer.cpp:62
 msgid "%N %V - Select Filter"
-msgstr "%N %V - Szûrõ kiválasztása"
+msgstr "%N %V - Wybierz filtr"
 
 #: src/configcontainer.cpp:63
 msgid "%N %V - Article '%T'"
-msgstr "%N %V - Cikk '%T'"
+msgstr "%N %V - ArtykuÅ‚ '%T'"
 
 #: src/configparser.cpp:105
 msgid "invalid parameters."
-msgstr "érvénytelen paraméter."
+msgstr "NieprawidÅ‚owe parametry."
 
 #: src/configparser.cpp:108
 msgid "too few parameters."
-msgstr "túl kevés paraméter."
+msgstr "zbyt maÅ‚o parametrÃ³w."
 
 #: src/configparser.cpp:111
 msgid "unknown command (bug)."
-msgstr "ismeretlen parancs (bug)."
+msgstr "nieznana komenda (bug)."
 
 #: src/configparser.cpp:114
 msgid "file couldn't be opened."
-msgstr "a file-t nem tudtam megnyitni."
+msgstr "Plik niemoÅ¼liwy do otwarcia."
 
 #: src/configparser.cpp:117
 msgid "unknown error (bug)."
-msgstr "ismeretlen hiba (bug)."
+msgstr "nieznany bÅ‚Ä…d (bug)."
 
 #: src/configparser.cpp:119
 #, c-format
 msgid "Error while processing command `%s' (%s line %u): %s"
-msgstr "Hiba a `%s' (%s line %u) parancs végrehajtása közben: %s"
+msgstr "BÅ‚Ä…d podczas przetwarzania komendy '%s' (%s linia %u): %s"
 
 #: src/configparser.cpp:124
 #, c-format
 msgid "unknown command `%s'"
-msgstr "ismeretlen parancs: `%s'"
+msgstr "nieznana komenda '%s'"
 
 #: src/controller.cpp:43 src/pb_controller.cpp:33
 msgid "Segmentation fault."
-msgstr "Szegmens hiba."
+msgstr "Naruszenie ochrony pamiÄ™ci."
 
 #: src/controller.cpp:67 src/pb_controller.cpp:49
 msgid "Fatal error: couldn't determine home directory!"
-msgstr "Végzetes hiba: nem tudtam meghatározni a home-könyvtárat!"
+msgstr "BÅ‚Ä…d krytyczy: nie mogÄ™ znaleÅºÄ‡ katalogu domowego!"
 
 #: src/controller.cpp:69 src/pb_controller.cpp:51
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
-"Kérlek, állítsd be a HOME változót vagy adj valódi felhasználót a(z) %u UID-"
-"hoz!"
+"ProszÄ™ ustawiÄ‡ prawidÅ‚owÄ… zmiennÄ… HOME lub dodaÄ‡ prawidÅ‚owego uÅ¼ytkownika "
+"dla UID %u!"
 
 #: src/controller.cpp:170 src/pb_controller.cpp:108
 #, c-format
 msgid "%s: unknown option - %c"
-msgstr "%s: ismeretlen opció - %c"
+msgstr "%s: nieznana opcja - %c"
 
 #: src/controller.cpp:187 src/pb_controller.cpp:115
 #, c-format
 msgid "Starting %s %s..."
-msgstr "%s %s indítása..."
+msgstr "Uruchamianie %s %s..."
 
 #: src/controller.cpp:197 src/pb_controller.cpp:120
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
-msgstr "Hiba: egy példány már fut %s-bõl (PID: %u)"
+msgstr "BÅ‚Ä…d: inny proces %s jest juÅ¼ uruchomiony (PID: %u)"
 
 #: src/controller.cpp:209 src/pb_controller.cpp:125
 msgid "Loading configuration..."
-msgstr "Konfiguráció betöltése..."
+msgstr "Czytanie konfiguracji..."
 
 #: src/controller.cpp:252 src/controller.cpp:266 src/controller.cpp:292
 #: src/controller.cpp:302 src/controller.cpp:329 src/controller.cpp:333
 #: src/controller.cpp:355 src/controller.cpp:382 src/pb_controller.cpp:152
 #: src/pb_controller.cpp:169
 msgid "done."
-msgstr "kész."
+msgstr "gotowe."
 
 #: src/controller.cpp:261 src/controller.cpp:324
 msgid "Opening cache..."
-msgstr "Cache megnyitása..."
+msgstr "Otwieram pamiÄ™Ä‡ podrÄ™cznÄ…..."
 
 #: src/controller.cpp:285
 #, c-format
 msgid "Loading URLs from local cache..."
-msgstr "URL-ek betöltése a helyi cache-bõl..."
+msgstr "Czytanie odnoÅ›nikÃ³w z lokalnej pamiÄ™ci podrÄ™cznej..."
 
 #: src/controller.cpp:296
 #, c-format
 msgid "Loading URLs from %s..."
-msgstr "URL-ek betöltése %s-bõl..."
+msgstr "Czytanie odnoÅ›nikÃ³w z %s..."
 
 #: src/controller.cpp:309
 #, c-format
@@ -149,8 +149,8 @@ msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
 "import an OPML file."
 msgstr ""
-"Hiba: nincs URL. Kérlek töltsd fel a(z) %s file-t RSS URL-ekkel vagy "
-"importálj egy OPML file-ból."
+"BÅ‚Ä…d: brak skonfigurowanych odnoÅ›nikÃ³w. Dodaj do pliku %s kilka odnoÅ›nikÃ³w "
+"do kanaÅ‚Ã³w RSS lub zaimportuj plik OPML."
 
 #: src/controller.cpp:311
 #, c-format
@@ -158,8 +158,8 @@ msgid ""
 "It looks like you haven't configured any feeds in your bloglines account. "
 "Please do so, and try again."
 msgstr ""
-"Úgy tûnik, még nem konfiguráltál semmilyen forrást a bloglines fiókodban. "
-"Tedd meg, és próbáld újra!"
+"WyglÄ…da na to, Å¼e nie skonfigurowaÅ‚eÅ› Å¼adnych kanaÅ‚Ã³w na swoim koncie "
+"Bloglines.Wykonaj to proszÄ™ i sprÃ³buj ponownie."
 
 #: src/controller.cpp:313
 #, c-format
@@ -167,58 +167,58 @@ msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
 msgstr ""
-"Úgy tûnik, az OPML, amit betöltöttél, nem tartalmaz hírforrásokat. Töltsd "
-"fel forrásokkal és próbáld újra!"
+"WyglÄ…da na to, Å¼e kanaÅ‚ OPML ktÃ³ry subskrybujesz nie posiada Å¼adnych kanaÅ‚Ã³w."
+"WypeÅ‚nij go ÅºrÃ³dÅ‚ami RSS i sprÃ³buj ponownie."
 
 #: src/controller.cpp:322
 msgid "Loading articles from cache..."
-msgstr "Cikkek töltése a cache-bõl..."
+msgstr "WczytujÄ™ artykuÅ‚y z pamiÄ™ci podrÄ™cznej..."
 
 #: src/controller.cpp:330
 msgid "Cleaning up cache thoroughly..."
-msgstr "A cache teljes ürítése..."
+msgstr "DokÅ‚adne czyszczenie pamiÄ™ci podrÄ™cznej..."
 
 #: src/controller.cpp:345
 msgid "Error while loading feeds from database: "
-msgstr "Nem sikerült betölteni a forrásokat az adatbázisból: "
+msgstr "BÅ‚Ä…d poczas wczytywania kanaÅ‚Ã³w z bazy danych: "
 
 #: src/controller.cpp:378
 msgid "Cleaning up cache..."
-msgstr "A cache takarítása..."
+msgstr "Czyszczenie pamiÄ™ci podrÄ™cznej..."
 
 #: src/controller.cpp:384
 msgid "failed: "
-msgstr "nem sikerült: "
+msgstr "nieudane: "
 
 #: src/controller.cpp:399
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
-msgstr "Hiba: nem tudtam olvasottnak megjelölni: %s"
+msgstr "BÅ‚Ä…d: nie moÅ¼na zaznaczyÄ‡ wszystkich kanaÅ‚Ã³w jako przeczytanych: %s"
 
 #: src/controller.cpp:445
 #, c-format
 msgid "%sLoading %s..."
-msgstr "%sTöltés %s..."
+msgstr "%sWczytywanie %s..."
 
 #: src/controller.cpp:489 src/controller.cpp:493
 #, c-format
 msgid "Error while retrieving %s: %s"
-msgstr "Hiba letöltés közben: %s: %s"
+msgstr "BÅ‚Ä…d poczas pobierania %s: %s"
 
 #: src/controller.cpp:497
 msgid "Error: invalid feed!"
-msgstr "Hiba: érvénytelen hírforrás!"
+msgstr "BÅ‚Ä…d: nieprawidÅ‚owy kanaÅ‚!"
 
 #: src/controller.cpp:503
 msgid "invalid feed index (bug)"
-msgstr "érvénytelen hírforrás index (bug)"
+msgstr "NieprawidÅ‚owy indeks kanaÅ‚u (bug)"
 
 #: src/controller.cpp:526
 #, c-format
 msgid "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
 msgstr ""
-"newsbeuter: újratöltés befejezve, %u olvasatlan üzenet (%u olvasatlan "
-"összesen)"
+"newsbeuter: ponowne uruchomienie zakoÅ„czone, %u nieprzeczytanych kanaÅ‚Ã³w (%u "
+"nowych artykuÅ‚Ã³w)"
 
 #: src/controller.cpp:610
 #, c-format
@@ -238,114 +238,115 @@ msgid ""
 "-h              this help\n"
 msgstr ""
 "%s %s\n"
-"használat: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]\n"
-"-e              exportálás OPML-be a stdout-ra\n"
-"-r              hírforrások frissítése indításkor\n"
-"-i <file>       OPML file importálása\n"
-"-u <urlfile>    RSS források URL-jeink olvasása <urlfile>-ból\n"
-"-c <cachefile>  <cachefile> használata cache file-ként\n"
-"-C <configfile> beállítások olvasása <configfile>-ból\n"
-"-v              cache teljes tisztítása\n"
-"-o              offline mód (bloglines szinkronizáció mód)\n"
-"-V              verzió információ\n"
-"-h              ez a súgó\n"
+"UÅ¼ycie: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]\n"
+"-e              eksport OPML na standardowe wyjÅ›cie\n"
+"-r              odÅ›wieÅ¼ kanaÅ‚y po starcie\n"
+"-i <file>       import pliku OPML\n"
+"-u <urlfile>    wczytaj adresy kanaÅ‚Ã³w RSS z <urlfile>\n"
+"-c <cachefile>  uÅ¼yj plik <cachefile> jako pamiÄ™Ä‡ podrÄ™cznÄ…\n"
+"-C <configfile> wczytaj konfiguracjÄ™ z <configfile>\n"
+"-v              dokÅ‚adnie wyczyÅ›Ä‡ pamiÄ™Ä‡ podrÄ™cznÄ…\n"
+"-o              wÅ‚Ä…cz tryb offline (dotyczy tylko synchronizacji z "
+"bloglines)\n"
+"-V              wyÅ›wietl informacjÄ™ o wersji\n"
+"-h              wyÅ›wietl tÄ… pomoc\n"
 
 #: src/controller.cpp:655
 #, c-format
 msgid "Import of %s finished."
-msgstr "%s importálása befejezõdött."
+msgstr "Import z %s zakoÅ„czony."
 
 #: src/controller.cpp:834
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
 msgstr ""
-"könyvjelzõ lehetõség nem konfigurált. Kérlek állítsd be a `bookmark-cmd' "
-"változót megfelelõen."
+"obsÅ‚uga zakÅ‚adek nie jest skonfigurowana. ProszÄ™ odpowiednio ustawiÄ‡ zmiennÄ… "
+"'bookmark-cmd' w pliku konfiguracyjnym."
 
 #: src/download.cpp:42
 msgid "queued"
-msgstr ""
+msgstr "zakolejkowany"
 
 #: src/download.cpp:44
 msgid "downloading"
-msgstr "letöltés"
+msgstr "pobieranie"
 
 #: src/download.cpp:46
 msgid "cancelled"
-msgstr "megszakítva"
+msgstr "anulowany"
 
 #: src/download.cpp:48
 msgid "deleted"
-msgstr "törölve"
+msgstr "usuniÄ™ty"
 
 #: src/download.cpp:50
 msgid "finished"
-msgstr "befejezve"
+msgstr "zakoÅ„czony"
 
 #: src/download.cpp:52
 msgid "failed"
-msgstr "hibás"
+msgstr "nieudany"
 
 #: src/download.cpp:54
 msgid "incomplete"
-msgstr "befejezetlen"
+msgstr "niepeÅ‚ny"
 
 #: src/download.cpp:56
 msgid "unknown (bug)."
-msgstr "ismeretlen (bug)."
+msgstr "nieznany (bug)."
 
 #: src/exception.cpp:22
 #, c-format
 msgid "attribute `%s' is not available."
-msgstr "%s argumentum nem elérhetõ."
+msgstr "atrybut '%s' nie jest dostÄ™pny."
 
 #: src/feedlist_formaction.cpp:93 src/feedlist_formaction.cpp:103
 #: src/feedlist_formaction.cpp:131
 msgid "No feed selected!"
-msgstr "Nincs forrás kijelölve"
+msgstr "Nie wybrano Å¼adnego kanaÅ‚u!"
 
 #: src/feedlist_formaction.cpp:120 src/itemlist_formaction.cpp:172
 msgid "Marking feed read..."
-msgstr "Forrás olvasottá tétele..."
+msgstr "Oznaczam kanaÅ‚ jako przeczytany..."
 
 #: src/feedlist_formaction.cpp:127 src/itemlist_formaction.cpp:179
 #, c-format
 msgid "Error: couldn't mark feed read: %s"
-msgstr "Hiba: nem tudtam olvasottnak megjelölni: %s"
+msgstr "BÅ‚Ä…d: nie moÅ¼na oznaczyÄ‡ kanaÅ‚u jako przeczytanego: %s"
 
 #: src/feedlist_formaction.cpp:152 src/feedlist_formaction.cpp:160
 msgid "No feeds with unread items."
-msgstr "Nincs forrás olvasatlan elemekkel."
+msgstr "Brak kanaÅ‚Ã³w z nowymi artykuÅ‚ami."
 
 #: src/feedlist_formaction.cpp:166
 msgid "Marking all feeds read..."
-msgstr "Az összes forrás olvasottként jelölése..."
+msgstr "Oznaczam wszystkie kanaÅ‚y jako przeczytane..."
 
 #: src/feedlist_formaction.cpp:190
 msgid "No tags defined."
-msgstr "Nincs cimke definiálva."
+msgstr "Brak zdefiniowanych tagÃ³w"
 
 #: src/feedlist_formaction.cpp:205 src/feedlist_formaction.cpp:498
 #: src/itemlist_formaction.cpp:226 src/itemlist_formaction.cpp:277
 msgid "Error: couldn't parse filter command!"
-msgstr "Hiba: nem tudtam feldolgozni a filter parancsot!"
+msgstr "BÅ‚Ä…d skÅ‚adniowy komendy filtra!"
 
 #: src/feedlist_formaction.cpp:214 src/itemlist_formaction.cpp:235
 msgid "No filters defined."
-msgstr "Nincs szûrõ (filter) definiálva."
+msgstr "Brak zdefiniowanych filtrÃ³w."
 
 #: src/feedlist_formaction.cpp:227 src/itemlist_formaction.cpp:192
 msgid "Search for: "
-msgstr "Keresés: "
+msgstr "Wyszukiwanie: "
 
 #: src/feedlist_formaction.cpp:243 src/itemlist_formaction.cpp:248
 msgid "Filter: "
-msgstr "Filter: "
+msgstr "Filtr: "
 
 #: src/feedlist_formaction.cpp:249
 msgid "Do you really want to quit (y:Yes n:No)? "
-msgstr "Biztos kilépsz (y:Yes n:NO)? "
+msgstr "Czy na pewno chcesz wyjÅ›Ä‡ (y:Tak n:Nie)? "
 
 #: src/feedlist_formaction.cpp:249 src/filebrowser_formaction.cpp:102
 msgid "yn"
@@ -359,96 +360,96 @@ msgstr "y"
 #: src/itemlist_formaction.cpp:553 src/itemview_formaction.cpp:292
 #: src/pb_view.cpp:259 src/pb_view.cpp:268 src/urlview_formaction.cpp:101
 msgid "Quit"
-msgstr "Kilép"
+msgstr "WyjÅ›cie"
 
 #: src/feedlist_formaction.cpp:362 src/itemlist_formaction.cpp:554
 #: src/itemview_formaction.cpp:293
 msgid "Open"
-msgstr "Megnyit"
+msgstr "OtwÃ³rz"
 
 #: src/feedlist_formaction.cpp:363 src/itemlist_formaction.cpp:557
 #: src/itemview_formaction.cpp:295
 msgid "Next Unread"
-msgstr "Köv. olvasatlan"
+msgstr "NastÄ™pny nieprzeczytany"
 
 #: src/feedlist_formaction.cpp:364 src/itemlist_formaction.cpp:556
 msgid "Reload"
-msgstr "Újratölt"
+msgstr "OdÅ›wieÅ¼"
 
 #: src/feedlist_formaction.cpp:365
 msgid "Reload All"
-msgstr "Mind újratölt"
+msgstr "OdÅ›wieÅ¼ wszystkie"
 
 #: src/feedlist_formaction.cpp:366
 msgid "Mark Read"
-msgstr "Olvasottnak megjelöl"
+msgstr "Oznacz jako przeczytane"
 
 #: src/feedlist_formaction.cpp:367
 msgid "Catchup All"
-msgstr "Mind elkapása"
+msgstr "Wyzeruj wszystkie"
 
 #: src/feedlist_formaction.cpp:368 src/itemlist_formaction.cpp:559
 msgid "Search"
-msgstr "Keres"
+msgstr "Szukaj"
 
 #: src/feedlist_formaction.cpp:369 src/itemlist_formaction.cpp:560
 #: src/itemview_formaction.cpp:298 src/pb_view.cpp:201 src/pb_view.cpp:275
 msgid "Help"
-msgstr "Súgó"
+msgstr "Pomoc"
 
 #: src/feedlist_formaction.cpp:463 src/itemlist_formaction.cpp:572
 msgid "Position not visible!"
-msgstr "A pozíció nem látható!"
+msgstr "Pozycja niewidoczna!"
 
 #: src/feedlist_formaction.cpp:470 src/itemlist_formaction.cpp:579
 msgid "Invalid position!"
-msgstr "Érvénytelen pozíció!"
+msgstr "BÅ‚Ä™dna pozycja!"
 
 #: src/feedlist_formaction.cpp:511 src/itemlist_formaction.cpp:308
 msgid "Searching..."
-msgstr "Keresés..."
+msgstr "Wyszukiwanie..."
 
 #: src/feedlist_formaction.cpp:518 src/itemlist_formaction.cpp:319
 #, c-format
 msgid "Error while searching for `%s': %s"
-msgstr "Hiba `%s' keresése közben: %s"
+msgstr "BÅ‚Ä…d podczas wyszukiwania '%s': %s"
 
 #: src/feedlist_formaction.cpp:526 src/itemlist_formaction.cpp:330
 msgid "No results."
-msgstr "Nincs találat."
+msgstr "Brak wynikÃ³w."
 
 #: src/filebrowser_formaction.cpp:100
 #, c-format
 msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
-msgstr "Biztos felülírod `%s'-t (y:Yes n:No)? "
+msgstr "Czy na pewno chcesz nadpisaÄ‡ '%s' (y:Tak n:Nie)? "
 
 #: src/filebrowser_formaction.cpp:102
 msgid "n"
-msgstr "m"
+msgstr "n"
 
 #: src/filebrowser_formaction.cpp:159
 msgid "File: "
-msgstr "File: "
+msgstr "Plik: "
 
 #: src/filebrowser_formaction.cpp:178
 #, c-format
 msgid "%s %s - Open File - %s"
-msgstr "%s %s - File megnyitása - %s"
+msgstr "%s %s - OtwÃ³rz plik - %s"
 
 #: src/filebrowser_formaction.cpp:180
 #, c-format
 msgid "%s %s - Save File - %s"
-msgstr "%s %s - File mentése - %s"
+msgstr "%s %s - Zapisz plik - %s"
 
 #: src/filebrowser_formaction.cpp:187 src/pb_view.cpp:270
 #: src/select_formaction.cpp:147 src/select_formaction.cpp:152
 msgid "Cancel"
-msgstr "Mégsem"
+msgstr "Anuluj"
 
 #: src/filebrowser_formaction.cpp:188 src/itemlist_formaction.cpp:555
 #: src/itemview_formaction.cpp:294
 msgid "Save"
-msgstr "Mentés"
+msgstr "Zapisz"
 
 #: src/formaction.cpp:87
 msgid ""
@@ -458,333 +459,333 @@ msgstr ""
 
 #: src/formaction.cpp:123 src/formaction.cpp:131
 msgid "usage: set <variable>[=<value>]"
-msgstr "használat: set <változó>[=<érték>]"
+msgstr "uÅ¼ycie: set <zmienna>[=<wartoÅ›Ä‡>]"
 
 #: src/formaction.cpp:174
 msgid "Saving bookmark..."
-msgstr "Könyvjelzõ mentése..."
+msgstr "Zapisywanie zakÅ‚adki..."
 
 #: src/formaction.cpp:177
 msgid "Saved bookmark."
-msgstr "Könyvjelzõ elmentve."
+msgstr "ZakÅ‚adka zapisana."
 
 #: src/formaction.cpp:179
 msgid "Error while saving bookmark: "
-msgstr "Hiba a könyvjelzõ mentése közben: "
+msgstr "BÅ‚Ä…d podczas zapisywania zakÅ‚adki: "
 
 #: src/formaction.cpp:201
 msgid "URL: "
-msgstr "URL: "
+msgstr "Adres: "
 
 #: src/formaction.cpp:202 src/itemview_formaction.cpp:61 src/view.cpp:265
 msgid "Title: "
-msgstr "Cím: "
+msgstr "TytuÅ‚: "
 
 #: src/formaction.cpp:203
 msgid "Description: "
-msgstr "Leírás: "
+msgstr "Opis: "
 
 #: src/htmlrenderer.cpp:120
 msgid "embedded flash:"
-msgstr "beágyazott flash: "
+msgstr "zagnieÅ¼dÅ¼ony flash:"
 
 #: src/htmlrenderer.cpp:155 src/htmlrenderer.cpp:443
 msgid "image"
-msgstr "kép"
+msgstr "obraz"
 
 #: src/htmlrenderer.cpp:431
 msgid "Links: "
-msgstr "Linkek: "
+msgstr "OdsyÅ‚acze: "
 
 #: src/htmlrenderer.cpp:442
 msgid "link"
-msgstr "link"
+msgstr "odsyÅ‚acz"
 
 #: src/htmlrenderer.cpp:444
 msgid "embedded flash"
-msgstr "beágyazott flash"
+msgstr "zagnieÅ¼dÅ¼ony flash"
 
 #: src/htmlrenderer.cpp:445
 msgid "unknown (bug)"
-msgstr "ismeretlen (bug)"
+msgstr "nieznany (bug)"
 
 #: src/itemlist_formaction.cpp:40 src/itemlist_formaction.cpp:52
 #: src/itemlist_formaction.cpp:71 src/itemlist_formaction.cpp:91
 #: src/itemlist_formaction.cpp:301
 msgid "No item selected!"
-msgstr "Nincs elem kijelölve!"
+msgstr "Brak wybranej pozycji!"
 
 #: src/itemlist_formaction.cpp:86 src/itemview_formaction.cpp:95
 #: src/itemview_formaction.cpp:243
 msgid "Flags: "
-msgstr "Jelzõk: "
+msgstr "Flagi: "
 
 #: src/itemlist_formaction.cpp:109 src/itemlist_formaction.cpp:596
 #: src/itemview_formaction.cpp:205 src/itemview_formaction.cpp:360
 msgid "Aborted saving."
-msgstr "Mentés megszakítva."
+msgstr "Przerwano zapisywanie."
 
 #: src/itemlist_formaction.cpp:113 src/itemlist_formaction.cpp:600
 #: src/itemview_formaction.cpp:364
 #, c-format
 msgid "Saved article to %s"
-msgstr "Cikk mentése %s-be"
+msgstr "Zapisano artykuÅ‚ do %s"
 
 #: src/itemlist_formaction.cpp:117 src/itemlist_formaction.cpp:603
 #: src/itemview_formaction.cpp:367
 #, c-format
 msgid "Error: couldn't save article to %s"
-msgstr "Hiba: nem tudtam a cikket %s-be menteni"
+msgstr "BÅ‚Ä…d: nie moÅ¼na zapisaÄ‡ artykuÅ‚u do %s"
 
 #: src/itemlist_formaction.cpp:122 src/itemlist_formaction.cpp:608
 msgid "Error: no item selected!"
-msgstr "Hiba: nincs elem kijelölve!"
+msgstr "BÅ‚Ä…d: nie wybrano Å¼adnej pozycji!"
 
 #: src/itemlist_formaction.cpp:137
 msgid "Error: you can't reload search results."
-msgstr "Hiba: nem töltheted újra a keresési eredményt."
+msgstr "BÅ‚Ä…d: nie moÅ¼esz odÅ›wieÅ¼yÄ‡ wynikÃ³w wyszukiwania."
 
 #: src/itemlist_formaction.cpp:148 src/itemlist_formaction.cpp:156
 #: src/itemview_formaction.cpp:261 src/itemview_formaction.cpp:270
 msgid "No unread items."
-msgstr "Nincs olvasatlan elem."
+msgstr "Brak nieprzeczytanych pozycji."
 
 #: src/itemlist_formaction.cpp:162 src/itemlist_formaction.cpp:167
 msgid "No unread feeds."
-msgstr "Nincs olvasatlan forrás."
+msgstr "Brak nieprzeczytanych kanaÅ‚Ã³w."
 
 #: src/itemlist_formaction.cpp:200
 msgid "Toggling read flag for article..."
-msgstr "Az olvasott jelzõ állítása a cikkre..."
+msgstr "PrzeÅ‚Ä…czam znacznik przeczytania dla artykuÅ‚u..."
 
 #: src/itemlist_formaction.cpp:206
 #, c-format
 msgid "Error while toggling read flag: %s"
-msgstr "Hiba az olvasott jelzõ állítása közben: %s"
+msgstr "BÅ‚Ä…d podczas przeÅ‚Ä…czania znacznika przeczytania: %s"
 
 #: src/itemlist_formaction.cpp:296 src/itemview_formaction.cpp:387
 msgid "Flags updated."
-msgstr "Jelzõk frissítve."
+msgstr "Znaczniki uaktualnione."
 
 #: src/itemlist_formaction.cpp:558
 msgid "Mark All Read"
-msgstr "Mindet olvasottnak"
+msgstr "Oznacz wszystkie jako przeczytane"
 
 #: src/itemview_formaction.cpp:44
 msgid "Feed: "
-msgstr "Forrás: "
+msgstr "KanaÅ‚: "
 
 #: src/itemview_formaction.cpp:70 src/view.cpp:269
 msgid "Author: "
-msgstr "Szerzõ: "
+msgstr "Autor: "
 
 #: src/itemview_formaction.cpp:79 src/view.cpp:277
 msgid "Link: "
-msgstr "Link: "
+msgstr "OdsyÅ‚acz: "
 
 #: src/itemview_formaction.cpp:87 src/view.cpp:273
 msgid "Date: "
-msgstr "Dátum: "
+msgstr "Data: "
 
 #: src/itemview_formaction.cpp:104
 msgid "Podcast Download URL: "
-msgstr "Podcast letöltés URL: "
+msgstr "Adres podcastu: "
 
 #: src/itemview_formaction.cpp:105
 msgid "type: "
-msgstr "típus: "
+msgstr "typ: "
 
 #: src/itemview_formaction.cpp:171
 #, c-format
 msgid "Error while marking article as read: %s"
-msgstr "Hiba a cikk olvasottá tétele közben: %s "
+msgstr "BÅ‚Ä…d podczas oznaczania artykuÅ‚u jako przeczytanego: %s"
 
 #: src/itemview_formaction.cpp:187
 #, c-format
 msgid "Added %s to download queue."
-msgstr "%s hozzáadása a letöltési listához."
+msgstr "Dodano %s do kolejki pobierania."
 
 #: src/itemview_formaction.cpp:209
 #, c-format
 msgid "Saved article to %s."
-msgstr "Cikk mentve %s-be."
+msgstr "Zapisano artykuÅ‚ do %s."
 
 #: src/itemview_formaction.cpp:212
 #, c-format
 msgid "Error: couldn't write article to file %s"
-msgstr "Hiba: nem tudtam a cikket a(z) %s file-ba menteni"
+msgstr "BÅ‚Ä…d: nie moÅ¼na zapisaÄ‡ artykuÅ‚u do pliku %s"
 
 #: src/itemview_formaction.cpp:220 src/urlview_formaction.cpp:31
 msgid "Starting browser..."
-msgstr "Böngészõ indítása..."
+msgstr "Uruchamiam przeglÄ…darkÄ™..."
 
 #: src/itemview_formaction.cpp:252
 msgid "URL list empty."
-msgstr "URL lista üres."
+msgstr "Lista adresÃ³w jest pusta."
 
 #: src/itemview_formaction.cpp:296 src/urlview_formaction.cpp:102
 msgid "Open in Browser"
-msgstr "Megnyitni böngészõben"
+msgstr "OtwÃ³rz w przeglÄ…darce"
 
 #: src/itemview_formaction.cpp:297
 msgid "Enqueue"
-msgstr ""
+msgstr "Zakolejkuj"
 
 #: src/keymap.cpp:21
 msgid "Open feed/article"
-msgstr "Forrás/cikk megnyitása"
+msgstr "OtwÃ³rz kanaÅ‚/artykuÅ‚"
 
 #: src/keymap.cpp:22
 msgid "Return to previous dialog/Quit"
-msgstr "Vissza az elõzõhöz/Kilépés"
+msgstr "PowrÃ³t do poprzedniego okna/WyjÅ›cie"
 
 #: src/keymap.cpp:23
 msgid "Reload currently selected feed"
-msgstr "Az aktuális forrás újratöltése"
+msgstr "OdÅ›wieÅ¼ aktualny kanaÅ‚"
 
 #: src/keymap.cpp:24
 msgid "Reload all feeds"
-msgstr "Összes forrás újratöltése"
+msgstr "OdÅ›wieÅ¼ wszystkie kanaÅ‚y"
 
 #: src/keymap.cpp:25
 msgid "Mark feed read"
-msgstr "Forrás olvasottá"
+msgstr "Oznacz kanaÅ‚ jako przeczytany"
 
 #: src/keymap.cpp:26
 msgid "Mark all feeds read"
-msgstr "Összes forrás olvasottá"
+msgstr "Oznacz wszystkie kanaÅ‚y jako przeczytane"
 
 #: src/keymap.cpp:27
 msgid "Save article"
-msgstr "Cikk mentése"
+msgstr "Zapisz artykuÅ‚"
 
 #: src/keymap.cpp:28
 msgid "Go to next unread article"
-msgstr "Következõ olvasatlan cikk"
+msgstr "PrzejdÅº do nastÄ™pnego nieprzeczytanego artykuÅ‚u"
 
 #: src/keymap.cpp:29
 msgid "Go to previous unread article"
-msgstr "Elõzõ olvasatlan cikk"
+msgstr "PrzejdÅº do poprzedniego nieprzeczytanego artykuÅ‚u"
 
 #: src/keymap.cpp:30
 msgid "Open article in browser"
-msgstr "Cikk megnyitása böngészõben"
+msgstr "OtwÃ³rz artykuÅ‚ w przeglÄ…darce"
 
 #: src/keymap.cpp:31
 msgid "Open help dialog"
-msgstr "Súgó megnyitása"
+msgstr "OtwÃ³rz okno pomocy"
 
 #: src/keymap.cpp:32
 msgid "Toggle source view"
-msgstr "Forrás nézet"
+msgstr "PrzeÅ‚Ä…cz widok ÅºrÃ³dÅ‚a"
 
 #: src/keymap.cpp:33
 msgid "Toggle read status for article"
-msgstr "Olvasott státusz a cikkre"
+msgstr "PrzeÅ‚Ä…cz status przeczytania artykuÅ‚u"
 
 #: src/keymap.cpp:34
 msgid "Toggle show read feeds"
-msgstr "Olvasott források mutatása"
+msgstr "PrzeÅ‚Ä…cz pokazywanie przeczytanych kanaÅ‚Ã³w"
 
 #: src/keymap.cpp:35
 msgid "Show URLs in current article"
-msgstr "URL-ek az aktuális cikkben"
+msgstr "PokaÅ¼ odnoÅ›niki w aktualnym artykule"
 
 #: src/keymap.cpp:36
 msgid "Clear current tag"
-msgstr "Aktuális cimke törlése"
+msgstr "WyczyÅ›Ä‡ aktualny tag"
 
 #: src/keymap.cpp:37
 msgid "Select tag"
-msgstr "Cimke kijelölése"
+msgstr "Wybierz tag"
 
 #: src/keymap.cpp:38
 msgid "Open search dialog"
-msgstr "Keresés megnyitása"
+msgstr "OtwÃ³rz dialog wyszukiwania"
 
 #: src/keymap.cpp:39
 msgid "Add download to queue"
-msgstr "Letöltési listához hozzáad"
+msgstr "Dodaj pobieranie do kolejki"
 
 #: src/keymap.cpp:40
 msgid "Reload the list of URLs from the configuration"
-msgstr "Az URL-ek listájának újratöltése"
+msgstr "OdÅ›wieÅ¼ listÄ™ adresÃ³w kanaÅ‚Ã³w z pliku konfiguracyjnego"
 
 #: src/keymap.cpp:41
 msgid "Download file"
-msgstr "File letöltése"
+msgstr "Pobierz plik"
 
 #: src/keymap.cpp:42
 msgid "Cancel download"
-msgstr "Letöltés megszakítása"
+msgstr "Anuluj pobieranie"
 
 #: src/keymap.cpp:43
 msgid "Mark download as deleted"
-msgstr "Letöltés töröltnek nyilvánítása"
+msgstr "Oznacz pobieranie jako usuniÄ™te"
 
 #: src/keymap.cpp:44
 msgid "Purge finished and deleted downloads from queue"
-msgstr "Befejezett és törölt letöltések ürítése a listából"
+msgstr "UsuÅ„ zakoÅ„czone i usuniÄ™te pobierania z kolejki"
 
 #: src/keymap.cpp:45
 msgid "Toggle automatic download on/off"
-msgstr "Automatikus letöltés be/ki"
+msgstr "PrzeÅ‚Ä…cz automatyczne pobieranie"
 
 #: src/keymap.cpp:46
 msgid "Start player with currently selected download"
-msgstr "Lejátszó indítása a kijelölt letöltéssel"
+msgstr "Uruchom odtwarzacz z wybranym pobieraniem"
 
 #: src/keymap.cpp:47
 msgid "Increase the number of concurrent downloads"
-msgstr "Párhuzamos letöltések számának növelése"
+msgstr "ZwiÄ™ksz iloÅ›Ä‡ rÃ³wnoczesnych pobieraÅ„"
 
 #: src/keymap.cpp:48
 msgid "Decrease the number of concurrent downloads"
-msgstr "Párhuzamos letöltések számának csökkentése"
+msgstr "Zmniejsz iloÅ›Ä‡ rÃ³wnoczesnych pobieraÅ„"
 
 #: src/keymap.cpp:49
 msgid "Redraw screen"
-msgstr "Képernyõ újrarajzolása"
+msgstr "OdÅ›wieÅ¼ ekran"
 
 #: src/keymap.cpp:50
 msgid "Open the commandline"
-msgstr "Parancssor nyitása"
+msgstr "OtwÃ³rz liniÄ™ poleceÅ„"
 
 #: src/keymap.cpp:51
 msgid "Set a filter"
-msgstr "Szûrõ állítása"
+msgstr "Ustaw filtr"
 
 #: src/keymap.cpp:52
 msgid "Select a predefined filter"
-msgstr "Elõredefiniált szûrõ kiválasztása"
+msgstr "Wybierz przygotowany filtr"
 
 #: src/keymap.cpp:53
 msgid "Clear currently set filter"
-msgstr "Aktuális szûrõ törlése"
+msgstr "Wyzeruj aktualny filtr"
 
 #: src/keymap.cpp:54
 msgid "Bookmark current link/article"
-msgstr "Aktuális link/cikk könyvjelzõbe"
+msgstr "Dodaj aktualny odsyÅ‚acz/artykuÅ‚ do zakÅ‚adek"
 
 #: src/keymap.cpp:55
 msgid "Edit flags"
-msgstr "Jelzõk szerkesztése"
+msgstr "Edytuj znaczniki"
 
 #: src/keymap.cpp:56
 msgid "Go to next unread feed"
-msgstr "Következõ olvasatlan forrás"
+msgstr "IdÅº do nastÄ™pnego nieprzeczytanego kanaÅ‚u"
 
 #: src/keymap.cpp:57
 msgid "Go to previous unread feed"
-msgstr "Elõzõ olvasatlan forrás"
+msgstr "IdÅº do poprzedniego nieprzeczytanego kanaÅ‚u"
 
 #: src/keymap.cpp:58
 msgid "Call a macro"
-msgstr ""
+msgstr "WywoÅ‚aj makro"
 
 #: src/pb_controller.cpp:163
 msgid "Cleaning up queue..."
-msgstr "Teendõk törlése..."
+msgstr "Czyszczenie kolejki..."
 
 #: src/pb_controller.cpp:177
 #, c-format
@@ -796,95 +797,96 @@ msgid ""
 "-h              this help\n"
 msgstr ""
 "%s %s\n"
-"használat %s [-C <file] -q <file>] [-h]\n"
-"-C <configfile> beállítások <configfile>-ból\n"
-"-q <queuefile>  <queuefile> használata listaként\n"
-"-h              ez a súgó\n"
+"uÅ¼ycie %s [-C <file>] [-q <file>] [-h]\n"
+"-C <configfile> uÅ¼yj konfiguracji z pliku <configfile>\n"
+"-q <queuefile>  uÅ¼yj <queuefile> jako pliku kolejki\n"
+"-h              ta pomoc\n"
 
 #: src/pb_view.cpp:40
 #, c-format
 msgid " - %u parallel downloads"
-msgstr " - %u párhuzamos letöltés"
+msgstr " - %u rÃ³wnolegÅ‚ych pobraÅ„"
 
 #: src/pb_view.cpp:44
 #, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f kb/s total%s"
-msgstr "Lista (%u letöltés folyamatban, %u összesen) - %.2f kb/s összesen%s"
+msgstr "Kolejka (%u pobieranych plikÃ³w, %u wszystkich) - %.2f KB/s caÅ‚oÅ›Ä‡"
 
 #: src/pb_view.cpp:96
 msgid "Error: can't quit: download(s) in progress."
-msgstr "Hiba: nem léphetsz ki: letöltés(ek) folyamatban."
+msgstr "BÅ‚Ä…d: nie moÅ¼na wyjÅ›Ä‡, pobieranie w toku."
 
 #: src/pb_view.cpp:128
 msgid "Error: download needs to be finished before the file can be played."
-msgstr "Hiba: a letöltésnek be kell fejezõdnie, mielõtt lejátszhatnád."
+msgstr ""
+"BÅ‚Ä…d: pobieranie musi byÄ‡ zakoÅ„czone zanim plik bÄ™dzie mÃ³gÅ‚ byÄ‡ odtworzony."
 
 #: src/pb_view.cpp:157
 msgid "Error: unable to perform operation: download(s) in progress."
-msgstr "Hiba: nem hajthatom végre: letöltés(ek) folyamatban."
+msgstr "BÅ‚Ä…d: nie moÅ¼na wykonaÄ‡ operacji: pobieranie w toku."
 
 #: src/pb_view.cpp:269
 msgid "Download"
-msgstr "Letöltés"
+msgstr "Pobierz"
 
 #: src/pb_view.cpp:271
 msgid "Delete"
-msgstr "Törlés"
+msgstr "UsuÅ„"
 
 #: src/pb_view.cpp:272
 msgid "Purge Finished"
-msgstr "Takarítás befejezve"
+msgstr "WyczyÅ›Ä‡ zakoÅ„czone"
 
 #: src/pb_view.cpp:273
 msgid "Toggle Automatic Download"
-msgstr "Automatikus letöltés"
+msgstr "PrzeÅ‚Ä…cz automatyczne pobieranie"
 
 #: src/pb_view.cpp:274
 msgid "Play"
-msgstr "Lejátszás"
+msgstr "OdtwÃ³rz"
 
 #: src/rss.cpp:90
 #, c-format
 msgid "Error: unsupported URL: %s"
-msgstr "Hiba: nem támogatott URL: %s"
+msgstr "BÅ‚Ä…d: nieobsÅ‚ugiwany adres: %s"
 
 #: src/select_formaction.cpp:148
 msgid "Select Tag"
-msgstr "Cimke kijelölése"
+msgstr "Wybierz tag"
 
 #: src/select_formaction.cpp:153
 msgid "Select Filter"
-msgstr "Szûrõ kijelölése"
+msgstr "Wybierz filtr"
 
 #: src/urlview_formaction.cpp:35 src/urlview_formaction.cpp:49
 msgid "No link selected!"
-msgstr "Nincs link kijelölve!"
+msgstr "Brak wybranego odnoÅ›nika!"
 
 #: src/urlview_formaction.cpp:103
 msgid "Save Bookmark"
-msgstr "Könyvjelzõ mentése"
+msgstr "Zapisz zakÅ‚adkÄ™"
 
 #: src/view.cpp:329
 #, c-format
 msgid "Error: applying the filter failed: %s"
-msgstr "Hiba: szûrõ alkalmazása nem sikerült: %s"
+msgstr "BÅ‚Ä…d: uÅ¼ycie filtra nie powiodÅ‚o siÄ™: %s"
 
 #: src/view.cpp:349 src/view.cpp:369
 msgid "Error: feed contains no items!"
-msgstr "Hiba: a forrás nem tartalmaz elemeket!"
+msgstr "BÅ‚Ä…d: kanaÅ‚ jest pusty!"
 
 #: src/view.cpp:358
 msgid "Updating query feed..."
-msgstr "Források lekérdezése..."
+msgstr "OdÅ›wieÅ¼am kanaÅ‚ kolejki..."
 
 #: src/xmlpullparser.cpp:43 src/xmlpullparser.cpp:49
 msgid "invalid attribute index"
-msgstr "érvénytelen index"
+msgstr "zÅ‚y indeks atrybutÃ³w"
 
 #: src/xmlpullparser.cpp:59
 msgid "attribute not found"
-msgstr "argumentumot nem találom"
+msgstr "atrybut nie znaleziony"
 
 #: src/xmlpullparser.cpp:277
 msgid "EOF found while reading XML tag"
-msgstr "EOF-t találtam XML cimke olvasása közben"
+msgstr "trafiono na koniec pliku podczas odczytu tagu XML"

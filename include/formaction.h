@@ -45,11 +45,13 @@ class formaction {
 
 		virtual void recalculate_form();
 
+		inline std::string get_qna_response(unsigned int i) { return (qna_responses.size() >= (i + 1)) ? qna_responses[i] : ""; }
+		void start_qna(const std::vector<qna_pair>& prompts, operation finish_op, history * h = NULL);
+
 	protected:
 		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL) = 0;
 		virtual void set_keymap_hints();
 
-		void start_qna(const std::vector<qna_pair>& prompts, operation finish_op, history * h = NULL);
 
 		void start_bookmark_qna(const std::string& default_title, const std::string& default_url, const std::string& default_desc);
 

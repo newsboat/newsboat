@@ -75,6 +75,8 @@ namespace newsbeuter {
 
 			void notify_itemlist_change(rss_feed& feed);
 
+			std::string ask_user(const std::string& prompt);
+
 		protected:
 			/*
 			bool jump_to_next_unread_item(std::vector<rss_item>& items, bool begin_with_next);

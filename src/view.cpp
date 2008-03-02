@@ -591,5 +591,12 @@ std::string view::id() const {
 	return "";
 }
 
+std::string view::ask_user(const std::string& prompt) {
+	std::vector<qna_pair> qna;
+	qna.push_back(qna_pair(prompt, ""));
+	(*formaction_stack.begin())->start_qna(qna, OP_NIL);
+	return (*formaction_stack.begin())->get_qna_response(0);
+}
+
 
 }
