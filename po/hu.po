@@ -100,8 +100,7 @@ msgstr "Végzetes hiba: nem tudtam meghatározni a home-könyvtárat!"
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
-"Kérlek, állítsd be a HOME változót vagy adj valódi felhasználót a(z) %u UID-"
-"hoz!"
+"Kérlek, állítsd be a HOME változót vagy adj valódi felhasználót a(z) %u UID-hoz"
 
 #: src/controller.cpp:170 src/pb_controller.cpp:108
 #, c-format
@@ -149,7 +148,7 @@ msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
 "import an OPML file."
 msgstr ""
-"Hiba: nincs URL. Kérlek töltsd fel a(z) %s file-t RSS URL-ekkel vagy "
+"Hiba: nincs URL beállítva. Kérlek töltsd fel a(z) %s file-t RSS URL-ekkel vagy "
 "importálj egy OPML file-ból."
 
 #: src/controller.cpp:311
@@ -217,8 +216,7 @@ msgstr "érvénytelen hírforrás index (bug)"
 #, c-format
 msgid "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
 msgstr ""
-"newsbeuter: újratöltés befejezve, %u olvasatlan üzenet (%u olvasatlan "
-"összesen)"
+"newsbeuter: újratöltés befejezve, %u olvasatlan üzenet (%u olvasatlan összesen)"
 
 #: src/controller.cpp:610
 #, c-format
@@ -345,15 +343,15 @@ msgstr "Filter: "
 
 #: src/feedlist_formaction.cpp:249
 msgid "Do you really want to quit (y:Yes n:No)? "
-msgstr "Biztos kilépsz (y:Yes n:NO)? "
+msgstr "Biztos kilépsz (i:Igen n:Nem)? "
 
 #: src/feedlist_formaction.cpp:249 src/filebrowser_formaction.cpp:102
 msgid "yn"
-msgstr "yn"
+msgstr "in"
 
 #: src/feedlist_formaction.cpp:249
 msgid "y"
-msgstr "y"
+msgstr "i"
 
 #: src/feedlist_formaction.cpp:361 src/help_formaction.cpp:77
 #: src/itemlist_formaction.cpp:553 src/itemview_formaction.cpp:292
@@ -424,7 +422,7 @@ msgstr "Biztos felülírod `%s'-t (y:Yes n:No)? "
 
 #: src/filebrowser_formaction.cpp:102
 msgid "n"
-msgstr "m"
+msgstr "n"
 
 #: src/filebrowser_formaction.cpp:159
 msgid "File: "
@@ -455,10 +453,12 @@ msgid ""
 "Error: newsbeuter is compiled without Ruby support. Please recompile with "
 "Ruby support in order to run Ruby functions."
 msgstr ""
+"Hiba: a newsbeuter Ruby-támogatás nélkül lett lefordítva. Kérlek, fordítsd újra "
+"Ruby-támogatással, hogy futtathass Ruby-függvényeket."
 
 #: src/formaction.cpp:123 src/formaction.cpp:131
 msgid "usage: set <variable>[=<value>]"
-msgstr "használat: set <változó>[=<érték>]"
+msgstr "Használat: set <változó>[=<érték>]"
 
 #: src/formaction.cpp:174
 msgid "Saving bookmark..."
@@ -534,7 +534,7 @@ msgstr "Cikk mentése %s-be"
 #: src/itemview_formaction.cpp:367
 #, c-format
 msgid "Error: couldn't save article to %s"
-msgstr "Hiba: nem tudtam a cikket %s-be menteni"
+msgstr "Hiba: nem tudtam a cikket %s fájlba menteni"
 
 #: src/itemlist_formaction.cpp:122 src/itemlist_formaction.cpp:608
 msgid "Error: no item selected!"
@@ -780,7 +780,7 @@ msgstr "Elõzõ olvasatlan forrás"
 
 #: src/keymap.cpp:58
 msgid "Call a macro"
-msgstr ""
+msgstr "Makró hívása"
 
 #: src/pb_controller.cpp:163
 msgid "Cleaning up queue..."
