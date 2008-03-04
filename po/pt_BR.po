@@ -1,13 +1,14 @@
+# translation of new.po to
+# Adiel Mittmann <adiel@inf.ufsc.br>, 2007, 2008.
 # translation of pt_BR.po to
-# Adiel Mittmann <adiel@inf.ufsc.br>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: pt_BR\n"
+"Project-Id-Version: new\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-03-02 12:22+0100\n"
-"PO-Revision-Date: 2007-09-12 17:23-0300\n"
+"PO-Revision-Date: 2008-03-03 20:27-0300\n"
 "Last-Translator: Adiel Mittmann <adiel@inf.ufsc.br>\n"
-"Language-Team:  <en@li.org>\n"
+"Language-Team:  <el@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -22,8 +23,7 @@ msgstr "Erro: falha ao abrir o arquivo de cache '%s': %s"
 
 #: src/configcontainer.cpp:55
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
-msgstr ""
-"%N %V - Suas fontes RSS (%u não lidas, %t no total)%?T? - etiqueta '%T'&?"
+msgstr "%N %V - Suas fontes RSS (%u não lidas, %t no total)%?T? - etiqueta '%T'&?"
 
 #: src/configcontainer.cpp:56 src/configcontainer.cpp:64
 msgid "%N %V - URLs"
@@ -97,8 +97,7 @@ msgstr "Erro fatal: não foi possível determinar o diretório do usuário."
 
 #: src/controller.cpp:69 src/pb_controller.cpp:51
 #, c-format
-msgid ""
-"Please set the HOME environment variable or add a valid user for UID %u!"
+msgid "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
 "Por favor defina a variável de ambiente HOME ou adicione um usuário válido "
 "para o UID %u!"
@@ -772,14 +771,12 @@ msgid "Edit flags"
 msgstr "Editar sinalizações"
 
 #: src/keymap.cpp:56
-#, fuzzy
 msgid "Go to next unread feed"
-msgstr "Ir para o próximo artigo não lido"
+msgstr "Ir para a próxima fonte RSS não lida"
 
 #: src/keymap.cpp:57
-#, fuzzy
 msgid "Go to previous unread feed"
-msgstr "Ir para o artigo não lido anterior"
+msgstr "Ir para a fonte RSS não lida anterior"
 
 #: src/keymap.cpp:58
 msgid "Call a macro"
@@ -820,13 +817,11 @@ msgstr "Erro: não é possível sair: transferência(s) em progresso"
 
 #: src/pb_view.cpp:128
 msgid "Error: download needs to be finished before the file can be played."
-msgstr ""
-"Erro: a transferência precisa ser concluída antes de o arquivo ser tocado."
+msgstr "Erro: a transferência precisa ser concluída antes de o arquivo ser tocado."
 
 #: src/pb_view.cpp:157
 msgid "Error: unable to perform operation: download(s) in progress."
-msgstr ""
-"Erro: não foi foi possível realizar a operação: transferência(s) em progresso"
+msgstr "Erro: não foi foi possível realizar a operação: transferência(s) em progresso"
 
 #: src/pb_view.cpp:269
 msgid "Download"
@@ -893,3 +888,4 @@ msgstr "atributo não encontrado"
 #: src/xmlpullparser.cpp:277
 msgid "EOF found while reading XML tag"
 msgstr "Fim de arquivo encontrado ao ler etiqueta XML"
+
