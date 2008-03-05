@@ -199,8 +199,17 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				if (itemposname.length() > 0) {
 					v->set_status(_("Toggling read flag for article..."));
 					try {
-						visible_items[itempos].first->set_unread(!visible_items[itempos].first->unread());
-						v->set_status("");
+						if (automatic && args->size() > 0) {
+							if ((*args)[0] == "read") {
+								visible_items[itempos].first->set_unread(false);
+							} else if ((*args)[0] == "unread") {
+								visible_items[itempos].first->set_unread(true);
+							}
+							v->set_status("");
+						} else {
+							visible_items[itempos].first->set_unread(!visible_items[itempos].first->unread());
+							v->set_status("");
+						}
 					} catch (const dbexception& e) {
 						char buf[1024];
 						snprintf(buf, sizeof(buf), _("Error while toggling read flag: %s"), e.what());
