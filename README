@@ -16,8 +16,8 @@ http://bereshit.synflood.at/svn/noos/trunk/
 Newsbeuter depends on a number of libraries, which need to be installed before
 newsbeuter can be compiled.
 
-STFL (version 0.14 or newer): http://www.clifford.at/stfl/
-SQLite 3: http://www.sqlite.org/
+STFL (version 0.18 or newer): http://www.clifford.at/stfl/
+SQLite 3 (version 3.4 or newer): http://www.sqlite.org/
 libcurl: http://curlm.haxx.se/download.html
 GNU gettext (on systems that don't provide gettext in the libc): ftp://ftp.gnu.org/gnu/gettext/
 pkg-config: http://pkg-config.freedesktop.org/wiki/

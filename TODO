@@ -12,6 +12,7 @@ TODO:
 - implement reloading of configuration (:source)
 - don't delete flagged articles
 - bug: when a user is in an itemlist that contains unread items, and returns to the feedlist that has show-unread disabled, the selected feed is not the same as previously shown in the itemlist. expected behaviour: when returning from the itemlist to the feedlist, the feed that was shown previously shall be selected.
+- implement the feedburner namespace, especially the feedburner:origLink
 
 
 longteam goals to reach:

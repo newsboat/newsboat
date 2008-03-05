@@ -40,8 +40,8 @@ themselves depend on other libraries. These dependencies are not listed here.
 Please also be aware that you need a recent C++ compiler. Currently, newsbeuter
 has only been tested with GCC.
 
-- STFL (version 0.14 or newer): http://www.clifford.at/stfl/[]
-- SQLite 3: http://www.sqlite.org/[]
+- STFL (version 0.18 or newer): http://www.clifford.at/stfl/[]
+- SQLite 3 (version 3.4 or newer): http://www.sqlite.org/[]
 - libcurl: http://curlm.haxx.se/download.html[]
 - GNU gettext (on systems that don't provide gettext in the libc): ftp://ftp.gnu.org/gnu/gettext/[]
 - pkg-config: http://pkg-config.freedesktop.org/wiki/[]
@@ -692,6 +692,62 @@ newsbeuter, and after that, he/she uses podbeuter to view the current queue, and
 either selectively download certain files or automatically download them all
 together by pressing "a" within podbeuter.
 
+Using SQLite Triggers with newsbeuter
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This section was kindly provided by mailto:elrond+newsbeuter(at)samba-tng.org[Elrond].
+
+SQLite, the db used by newsbeuter, supports triggers. These are small
+snippets of SQL that get executed inside the database by the database
+engine. They're stored inside the db and the normal user (including
+newsbeuter itself) doesn't see them. Just the db seems to do some magic:
+Like changing some values when you change another value.
+
+So what is this good for when looking at newsbeuter? Well first of it's a
+hack. The real answer should be to use application logic (do it inside
+newsbeuter, not in the db). So: Don't use this, unless you know, what you're
+doing, and unless you have some sort of backup.
+
+Example
+^^^^^^^
+
+So after the "don't use it" you still want to know, what one can do? So here's an example.
+
+Suppose you have a strange feed where the articles become "new" by just
+changing their subject, and nothing else changes. The body is just empty, and
+the URL keeps the same. This feed really exists. It's the "updated software rss
+feed" of some major company and the title just contains the name of the driver
+and version number. And the URL points to the download page. newsbeuter
+considers articles only as new, when they have a new UniqueID (this is good).
+So those articles are never marked as new (unread) ever again.
+
+So what can we do? We do some magic: We let the db test if newsbeuter
+changes the subject and then let itself mark the article again as unread.
+
+1. You need the sqlite3 command line tool (available via apt-get install sqlite3 on Debian) or some other tool to do direct sql on the sqlite database.
+
+2. Start sqlite3 with the newsbeuter db:
+
+	 Rivendell:~/.newsbeuter% sqlite3 cache.db
+	 SQLite version 3.4.2
+	 Enter ".help" for instructions
+	 sqlite>
+
+3. Create the trigger:
+
+	 sqlite> create trigger update_item_title update of title on rss_item
+		   > for each row when old.title != new.title
+		   > begin
+		   >   update rss_item set unread = 1 where rowid == new.rowid;
+		   > end;
+
+4. Leave sqlite3 with <Ctrl-D> or .quit.
+
+That's it. newsbeuter (well, its db) now marks articles as unread when their
+title changes. And nicely enough this works all inside newsbeuter, no need to
+restart it so that it rereads the cache, that magically modifies itself. It
+just works.
+
 Feedback
 --------
 
@@ -708,7 +764,7 @@ License
 -------
 MIT/X Consortium License
 
-(C)opyright 2006-2007 Andreas Krennmair <ak@synflood.at>
+(C)opyright 2006-2008 Andreas Krennmair <ak@synflood.at>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
