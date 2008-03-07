@@ -5,7 +5,7 @@ prefix?=/usr/local
 mandir?=$(prefix)/share/man
 datadir?=$(prefix)/share
 localedir?=$(datadir)/locale
-docdir=?$(datadir)/doc/$(PACKAGE)
+docdir?=$(datadir)/doc/$(PACKAGE)
 
 # compiler
 CXX=c++
