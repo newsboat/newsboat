@@ -2,7 +2,9 @@
 #include <xmlpullparser.h>
 #include <utils.h>
 #include <sstream>
+#include <cstdio>
 #include <iostream>
+#include <cstring>
 #include <stdexcept>
 #include <logger.h>
 #include <libgen.h>
