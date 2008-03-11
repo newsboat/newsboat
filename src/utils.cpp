@@ -507,15 +507,15 @@ std::wstring utils::str2wstr(const std::string& str) {
 	const char* pszNext;
 	wchar_t* pwszNext;
 	mbstate_t state = {0};
-	GetLogger().log(LOG_DEBUG, "utils::str2wstr: current locale: %s", setlocale(LC_MESSAGES, NULL));
+	GetLogger().log(LOG_DEBUG, "utils::str2wstr: current locale: %s", setlocale(LC_CTYPE, NULL));
 #ifdef __APPLE__
 	std::locale loc;
 #else
-	std::locale loc(setlocale(LC_MESSAGES, NULL));
+	std::locale loc(setlocale(LC_CTYPE, NULL));
 #endif
 	int res = std::use_facet<std::codecvt<wchar_t, char, mbstate_t> > ( loc ).in( state, pszExt, &pszExt[strlen(pszExt)], pszNext, pwszInt, &pwszInt[strlen(pszExt)], pwszNext );
 	if (res == std::codecvt_base::error) {
-		GetLogger().log(LOG_ERROR, "utils::str2wstr: conversion of `%s' failed (locale = %s).", str.c_str(), setlocale(LC_MESSAGES, NULL));
+		GetLogger().log(LOG_ERROR, "utils::str2wstr: conversion of `%s' failed (locale = %s).", str.c_str(), setlocale(LC_CTYPE, NULL));
 		throw "utils::str2wstr: conversion failed";
 	}
 	// pwszInt[strlen(pszExt)] = 0;
@@ -529,11 +529,11 @@ std::string utils::wstr2str(const std::wstring& wstr) {
 	char* pszNext;
 	const wchar_t* pwszNext;
 	mbstate_t state = {0};
-	GetLogger().log(LOG_DEBUG, "utils::wstr2str: locale = %s input = `%ls'", setlocale(LC_MESSAGES, NULL), wstr.c_str());
+	GetLogger().log(LOG_DEBUG, "utils::wstr2str: locale = %s input = `%ls'", setlocale(LC_CTYPE, NULL), wstr.c_str());
 #ifdef __APPLE__
 	std::locale loc;
 #else
-	std::locale loc(setlocale(LC_MESSAGES, NULL));
+	std::locale loc(setlocale(LC_CTYPE, NULL));
 #endif
 	int res = std::use_facet<std::codecvt<wchar_t, char, mbstate_t> > (loc).out(state, pwszInt, &pwszInt[wcslen(pwszInt)], pwszNext, pszExt, pszExt + sizeof(pszExt), pszNext);
 	if (res == std::codecvt_base::error) {
