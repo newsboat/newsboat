@@ -11,7 +11,7 @@ namespace newsbeuter {
 
 void fmtstr_formatter::register_fmt(char f, const std::string& value) {
 	GetLogger().log(LOG_DEBUG, "fmtstr_formatter::register_fmt: char = %c value = %s", f, value.c_str());
-	fmts[f] = utils::str2wstr(value);
+	fmts[f] = utils::utf8str2wstr(value);
 	GetLogger().log(LOG_DEBUG, "fmtstr_formatter::register_fmt: char = %c done", f);
 }
 
