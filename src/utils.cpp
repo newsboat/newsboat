@@ -17,6 +17,8 @@
 
 #include <curl/curl.h>
 
+#include <stfl.h>
+
 namespace newsbeuter {
 
 std::vector<std::string> utils::tokenize_quoted(const std::string& str, std::string delimiters) {
@@ -488,6 +490,13 @@ std::string utils::replace_all(std::string str, const std::string& from, const s
 	}
 	GetLogger().log(LOG_DEBUG,"utils::replace_all: after str = %s", str.c_str());
 	return str;
+}
+
+std::wstring utils::utf8str2wstr(const std::string& utf8str) {
+	stfl_ipool * pool = stfl_ipool_create("utf-8");
+	std::wstring wstr(stfl_ipool_towc(pool, utf8str.c_str()));
+	stfl_ipool_destroy(pool);
+	return wstr;
 }
 
 std::wstring utils::str2wstr(const std::string& str) {
