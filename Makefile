@@ -194,7 +194,7 @@ install: install-mo
 	$(MKDIR) $(prefix)/bin
 	$(INSTALL) $(NEWSBEUTER) $(prefix)/bin
 	$(INSTALL) $(PODBEUTER) $(prefix)/bin
-	$(MKDIR) $(prefix)/share/man/man1
+	$(MKDIR) $(mandir)/man1
 	$(INSTALL) doc/$(NEWSBEUTER).1 $(mandir)/man1
 	$(INSTALL) doc/$(PODBEUTER).1 $(mandir)/man1
 	$(MKDIR) $(docdir)

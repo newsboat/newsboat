@@ -1,6 +1,8 @@
 Changes for newsbeuter:
 
-0.8.1:
+0.9:
+
+0.8.1 (2008-03-12):
 	fixed crash (related to string conversion of format string support)
 
 0.8 (2008-03-07):

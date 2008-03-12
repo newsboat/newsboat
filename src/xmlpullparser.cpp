@@ -435,7 +435,7 @@ std::string xmlpullparser::decode_entity(std::string s) {
 	} else if (s.length() > 1 && s[0] == '#') {
 		std::string result;
 		unsigned int wc;
-		char * mbc = static_cast<char *>(alloca(MB_CUR_MAX));
+		char mbc[MB_CUR_MAX];
 		mbc[0] = '\0';
 		if (s[1] == 'x') {
 			s.erase(0,2);
@@ -457,7 +457,7 @@ std::string xmlpullparser::decode_entity(std::string s) {
 	} else {
 		for (unsigned int i=0;entity_table[i].entity;++i) {
 			if (s == entity_table[i].entity) {
-				char * mbc = static_cast<char *>(alloca(MB_CUR_MAX));
+				char mbc[MB_CUR_MAX];
 				int pos = wctomb(mbc, entity_table[i].value);
 				mbc[pos] = '\0';
 				return std::string(mbc);

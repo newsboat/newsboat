@@ -3,10 +3,10 @@
 # translation of pt_BR.po to
 msgid ""
 msgstr ""
-"Project-Id-Version: new\n"
+"Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-03-02 12:22+0100\n"
-"PO-Revision-Date: 2008-03-03 20:27-0300\n"
+"PO-Revision-Date: 2008-03-12 11:07-0300\n"
 "Last-Translator: Adiel Mittmann <adiel@inf.ufsc.br>\n"
 "Language-Team:  <el@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -454,7 +454,7 @@ msgstr "Salvar"
 msgid ""
 "Error: newsbeuter is compiled without Ruby support. Please recompile with "
 "Ruby support in order to run Ruby functions."
-msgstr ""
+msgstr "Erro: o newsbeuter foi compilado sem suporte a Ruby. Por favor, recompile-o com suporte a Ruby para executar funções Ruby."
 
 #: src/formaction.cpp:123 src/formaction.cpp:131
 msgid "usage: set <variable>[=<value>]"
@@ -780,7 +780,7 @@ msgstr "Ir para a fonte RSS não lida anterior"
 
 #: src/keymap.cpp:58
 msgid "Call a macro"
-msgstr ""
+msgstr "Chamar uma macro"
 
 #: src/pb_controller.cpp:163
 msgid "Cleaning up queue..."

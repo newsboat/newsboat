@@ -2,7 +2,6 @@
 #include <stdarg.h>
 #include <exception.h>
 #include <cerrno>
-#include <alloca.h>
 
 namespace newsbeuter {
 
@@ -65,11 +64,11 @@ void logger::log(loglevel level, const char * format, ...) {
 		va_start(ap, format);
 
 		unsigned int len = vsnprintf(NULL,0,format,ap);
-		logmsgbuf = (char *)alloca(len + 1);
+		logmsgbuf = new char[len + 1];
 		vsnprintf(logmsgbuf, len + 1, format, ap);
 
 		len = snprintf(NULL, 0, "[%s] %s: %s",date, loglevel_str[level], logmsgbuf);
-		buf = (char *)alloca(len + 1);
+		buf = new char[len + 1];
 		snprintf(buf,len + 1,"[%s] %s: %s",date, loglevel_str[level], logmsgbuf);
 
 		if (f.is_open()) {
@@ -81,6 +80,9 @@ void logger::log(loglevel level, const char * format, ...) {
 			ef << buf << std::endl;
 			ef.flush();
 		}
+
+		delete[] buf;
+		delete[] logmsgbuf;
 
 	}
 }
