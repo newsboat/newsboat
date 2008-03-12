@@ -52,7 +52,7 @@ void ignore_signal(int sig) {
 void omg_a_child_died(int /* sig */) {
 	pid_t pid;
 	int stat;
-	while ((pid = waitpid(-1,&stat,WNOHANG)) > 0);
+	while ((pid = waitpid(-1,&stat,WNOHANG)) > 0) { }
 }
 
 controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false), cfg(0) {

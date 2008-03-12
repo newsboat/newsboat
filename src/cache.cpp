@@ -570,7 +570,7 @@ void cache::update_rssitem(rss_item& item, const std::string& feedurl) {
 		}
 	} else {
 		std::string insert = prepare_query("INSERT INTO rss_item (guid,title,author,url,feedurl,pubDate,content,unread,enclosure_url,enclosure_type,enqueued) "
-								"VALUES ('%q','%q','%q','%q','%q','%u','%q',1,'%q','%q',%d, '%q')",
+								"VALUES ('%q','%q','%q','%q','%q','%u','%q',1,'%q','%q',%d)",
 								item.guid().c_str(), item.title_raw().c_str(), item.author_raw().c_str(), 
 								item.link().c_str(), feedurl.c_str(), item.pubDate_timestamp(), item.description_raw().c_str(),
 								item.enclosure_url().c_str(), item.enclosure_type().c_str(), item.enqueued() ? 1 : 0);
@@ -642,10 +642,10 @@ void cache::update_rssitem_unread_and_enqueued(rss_item& item, const std::string
 		}
 	} else {
 		std::string insert = prepare_query("INSERT INTO rss_item (guid,title,author,url,feedurl,pubDate,content,unread,enclosure_url,enclosure_type,enqueued,flags) "
-										"VALUES ('%q','%q','%q','%q','%q','%u','%q',1,'%q','%q',%d, '%q')",
+										"VALUES ('%q','%q','%q','%q','%q','%u','%q',1,'%q','%q',%d)",
 										item.guid().c_str(), item.title_raw().c_str(), item.author_raw().c_str(), 
 										item.link().c_str(), feedurl.c_str(), item.pubDate_timestamp(), item.description_raw().c_str(),
-										item.enclosure_url().c_str(), item.enclosure_type().c_str(), item.enqueued() ? 1 : 0, item.flags().c_str());
+										item.enclosure_url().c_str(), item.enclosure_type().c_str(), item.enqueued() ? 1 : 0);
 		GetLogger().log(LOG_DEBUG,"running query: %s", insert.c_str());
 		rc = sqlite3_exec(db,insert.c_str(),NULL,NULL,NULL);
 		if (rc != SQLITE_OK) {
