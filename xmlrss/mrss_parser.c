@@ -245,6 +245,8 @@ __mrss_atom_prepare_date (mrss_t * data, const char *datestr)
 {
   struct tm stm;
 
+  data = data;
+
   if (!datestr)
     return NULL;
 
@@ -450,6 +452,8 @@ __mrss_parser_rss_image (nxml_t * doc, nxml_data_t * cur, mrss_t * data)
 {
   const char *c;
 
+  doc = doc;
+
   for (cur = cur->children; cur; cur = cur->next)
     {
       if (cur->type == NXML_TYPE_ELEMENT)
@@ -499,6 +503,8 @@ __mrss_parser_rss_textinput (nxml_t * doc, nxml_data_t * cur, mrss_t * data)
 {
   const char *c;
 
+  doc = doc;
+
   for (cur = cur->children; cur; cur = cur->next)
     {
       if (cur->type == NXML_TYPE_ELEMENT)
@@ -531,6 +537,8 @@ static void
 __mrss_parser_rss_skipHours (nxml_t * doc, nxml_data_t * cur, mrss_t * data)
 {
   const char *c;
+
+  doc = doc;
 
   for (cur = cur->children; cur; cur = cur->next)
     {
@@ -572,6 +580,8 @@ static void
 __mrss_parser_rss_skipDays (nxml_t * doc, nxml_data_t * cur, mrss_t * data)
 {
   const char *c;
+  
+  doc = doc;
 
   for (cur = cur->children; cur; cur = cur->next)
     {

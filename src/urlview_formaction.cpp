@@ -19,7 +19,7 @@ urlview_formaction::urlview_formaction(view * vv, std::string formstr)
 urlview_formaction::~urlview_formaction() {
 }
 
-void urlview_formaction::process_operation(operation op, bool automatic, std::vector<std::string> * args) {
+void urlview_formaction::process_operation(operation op, bool /* automatic */, std::vector<std::string> * /* args */) {
 	switch (op) {
 		case OP_OPEN: 
 			{

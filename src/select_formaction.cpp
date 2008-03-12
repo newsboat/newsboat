@@ -33,7 +33,7 @@ void select_formaction::handle_cmdline(const std::string& cmd) {
 	}
 }
 
-void select_formaction::process_operation(operation op, bool automatic, std::vector<std::string> * args) {
+void select_formaction::process_operation(operation op, bool /* automatic */, std::vector<std::string> * /* args */) {
 	switch (op) {
 		case OP_QUIT:
 			value = "";

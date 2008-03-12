@@ -42,11 +42,10 @@ public:
 	int count;			// number of errors detected
 
 	Errors();
-	void SynErr(int line, int col, int n);
-	void Error(int line, int col, wchar_t *s);
-	void Warning(int line, int col, wchar_t *s);
-	void Warning(wchar_t *s);
-	void Exception(wchar_t *s);
+	void SynErr(int n);
+	void Error();
+	void Warning();
+	void Exception();
 
 }; // Errors
 
@@ -124,12 +123,13 @@ Coco/R itself) does not fall under the GNU General Public License.
 -->namespace_open
 
 void Parser::SynErr(int n) {
-	if (errDist >= minErrDist) errors->SynErr(la->line, la->col, n);
+	if (errDist >= minErrDist) errors->SynErr(n);
 	errDist = 0;
 }
 
 void Parser::SemErr(wchar_t* msg) {
-	if (errDist >= minErrDist) errors->Error(t->line, t->col, msg);
+	msg = msg;
+	if (errDist >= minErrDist) errors->Error();
 	errDist = 0;
 }
 
@@ -214,7 +214,7 @@ Errors::Errors() {
 	count = 0;
 }
 
-void Errors::SynErr(int line, int col, int n) {
+void Errors::SynErr(int n) {
 	wchar_t* s;
 	switch (n) {
 -->errors
@@ -226,26 +226,18 @@ void Errors::SynErr(int line, int col, int n) {
 		}
 		break;
 	}
-	/* wprintf(L"-- line %d col %d: %ls\n", line, col, s); */
 	coco_string_delete(s);
 	count++;
 }
 
-void Errors::Error(int line, int col, wchar_t *s) {
-	/* wprintf(L"-- line %d col %d: %ls\n", line, col, s); */
+void Errors::Error() {
 	count++;
 }
 
-void Errors::Warning(int line, int col, wchar_t *s) {
-	/* wprintf(L"-- line %d col %d: %ls\n", line, col, s); */
+void Errors::Warning() {
 }
 
-void Errors::Warning(wchar_t *s) {
-	/* wprintf(L"%ls\n", s); */
-}
-
-void Errors::Exception(wchar_t* s) {
-	/* wprintf(L"%ls", s); */
+void Errors::Exception() {
 }
 
 -->namespace_close
