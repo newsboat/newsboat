@@ -820,8 +820,8 @@ std::string controller::bookmark(const std::string& url, const std::string& titl
 	std::string bookmark_cmd = cfg->get_configvalue("bookmark-cmd");
 	if (bookmark_cmd.length() > 0) {
 		char * my_argv[4];
-		my_argv[0] = "/bin/sh";
-		my_argv[1] = "-c";
+		my_argv[0] = const_cast<char *>("/bin/sh");
+		my_argv[1] = const_cast<char *>("-c");
 
 		// wow. what an abuse.
 		std::string cmdline = bookmark_cmd + " " + stfl::quote(url) + " " + stfl::quote(title) + " " + stfl::quote(description);

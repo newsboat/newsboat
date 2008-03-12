@@ -45,7 +45,7 @@ std::wstring fmtstr_formatter::do_wformat(const std::wstring& wfmt, unsigned int
 						std::istringstream is(number);
 						int align;
 						is >> align;
-						if (abs(align) > fmts[c].length()) {
+						if (static_cast<unsigned int>(abs(align)) > fmts[c].length()) {
 							wchar_t buf[256];
 							swprintf(buf,sizeof(buf)/sizeof(*buf),L"%*ls", align, fmts[c].c_str());
 							GetLogger().log(LOG_DEBUG, "fmtstr_formatter::do_format: swprintf result = %ls", buf);

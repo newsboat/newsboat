@@ -506,7 +506,8 @@ std::wstring utils::str2wstr(const std::string& str) {
 	memset(&pwszInt[0], 0, sizeof(wchar_t)*(str.length() + 1));
 	const char* pszNext;
 	wchar_t* pwszNext;
-	mbstate_t state = {0};
+	mbstate_t state;
+	memset(&state, '\0', sizeof(state));
 	GetLogger().log(LOG_DEBUG, "utils::str2wstr: current locale: %s", setlocale(LC_CTYPE, NULL));
 #ifdef __APPLE__
 	std::locale loc;
@@ -528,7 +529,8 @@ std::string utils::wstr2str(const std::wstring& wstr) {
 	memset(pszExt, 0, 4*wstr.length()+1);
 	char* pszNext;
 	const wchar_t* pwszNext;
-	mbstate_t state = {0};
+	mbstate_t state;
+	memset(&state, '\0', sizeof(state));
 	GetLogger().log(LOG_DEBUG, "utils::wstr2str: locale = %s input = `%ls'", setlocale(LC_CTYPE, NULL), wstr.c_str());
 #ifdef __APPLE__
 	std::locale loc;
