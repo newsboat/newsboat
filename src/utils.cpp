@@ -363,6 +363,7 @@ std::string utils::retrieve_url(const std::string& url, const char * user_agent,
 	}
 
 	curl_easy_perform(easyhandle);
+	curl_easy_cleanup(easyhandle);
 
 	GetLogger().log(LOG_DEBUG, "utils::retrieve_url(%s): %s", url.c_str(), buf.c_str());
 
@@ -404,6 +405,7 @@ std::string utils::run_filter(const std::string& cmd, const std::string& input) 
 				close(opipe[0]);
 				dup2(ipipe[0], 0);
 				dup2(opipe[1], 1);
+				GetLogger().log(LOG_DEBUG, "utils::run_filter: ipipe[0] = %d ipipe[1] = %d opipe[0] = %d opipe[1] = %d", ipipe[0], ipipe[1], opipe[0], opipe[1]);
 				execl("/bin/sh", "/bin/sh", "-c", cmd.c_str(), NULL);
 				exit(1);
 			}
