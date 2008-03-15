@@ -17,6 +17,7 @@
 
 #include <curl/curl.h>
 
+#include <langinfo.h>
 #include <stfl.h>
 
 namespace newsbeuter {
