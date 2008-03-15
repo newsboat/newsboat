@@ -101,7 +101,7 @@ std::wstring fmtstr_formatter::do_wformat(const std::wstring& wfmt, unsigned int
 									subresult = do_wformat(pair[0], width);
 							} else {
 								if (pair[1].length() > 0)
-									subresult = do_wformat(pair[0], width);
+									subresult = do_wformat(pair[1], width);
 							}
 							GetLogger().log(LOG_DEBUG, "YYY result = `%ls'", subresult.c_str());
 							result.append(subresult);
