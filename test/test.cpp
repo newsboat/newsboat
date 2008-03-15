@@ -385,6 +385,13 @@ BOOST_AUTO_TEST_CASE(TestStringConversion) {
 
 	std::wstring w1 = utils::str2wstr("And that's another simple string.");
 	BOOST_CHECK_EQUAL(w1 == L"And that's another simple string.", true);
+
+	std::wstring w2 = utils::str2wstr("");
+	BOOST_CHECK_EQUAL(w2 == L"", true);
+
+	std::string s2 = utils::wstr2str(L"");
+	BOOST_CHECK_EQUAL(s2, "");
+	
 }
 
 BOOST_AUTO_TEST_CASE(TestFmtStrFormatter) {

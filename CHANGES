@@ -1,6 +1,7 @@
 Changes for newsbeuter:
 
 0.9:
+	fixed broken string conversion.
 
 0.8.1 (2008-03-12):
 	fixed crash (related to string conversion of format string support)

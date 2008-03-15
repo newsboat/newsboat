@@ -133,7 +133,7 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str, std::str
 	return tokens;
 }
 
-	
+
 std::vector<std::string> utils::tokenize(const std::string& str, std::string delimiters) {
 	/*
 	 * This function tokenizes a string by the delimiters. Plain and simple.
@@ -141,6 +141,22 @@ std::vector<std::string> utils::tokenize(const std::string& str, std::string del
 	std::vector<std::string> tokens;
 	std::string::size_type last_pos = str.find_first_not_of(delimiters, 0);
 	std::string::size_type pos = str.find_first_of(delimiters, last_pos);
+
+	while (std::string::npos != pos || std::string::npos != last_pos) {
+		tokens.push_back(str.substr(last_pos, pos - last_pos));
+		last_pos = str.find_first_not_of(delimiters, pos);
+		pos = str.find_first_of(delimiters, last_pos);
+	}
+	return tokens;
+}
+
+std::vector<std::wstring> utils::wtokenize(const std::wstring& str, std::wstring delimiters) {
+	/*
+	 * This function tokenizes a string by the delimiters. Plain and simple.
+	 */
+	std::vector<std::wstring> tokens;
+	std::wstring::size_type last_pos = str.find_first_not_of(delimiters, 0);
+	std::wstring::size_type pos = str.find_first_of(delimiters, last_pos);
 
 	while (std::string::npos != pos || std::string::npos != last_pos) {
 		tokens.push_back(str.substr(last_pos, pos - last_pos));
@@ -500,50 +516,19 @@ std::wstring utils::utf8str2wstr(const std::string& utf8str) {
 }
 
 std::wstring utils::str2wstr(const std::string& str) {
-	const char* pszExt = str.c_str();
-	wchar_t pwszInt [str.length()+1];
-
-	memset(&pwszInt[0], 0, sizeof(wchar_t)*(str.length() + 1));
-	const char* pszNext;
-	wchar_t* pwszNext;
-	mbstate_t state;
-	memset(&state, '\0', sizeof(state));
-	GetLogger().log(LOG_DEBUG, "utils::str2wstr: current locale: %s", setlocale(LC_CTYPE, NULL));
-#ifdef __APPLE__
-	std::locale loc;
-#else
-	std::locale loc(setlocale(LC_CTYPE, NULL));
-#endif
-	int res = std::use_facet<std::codecvt<wchar_t, char, mbstate_t> > ( loc ).in( state, pszExt, &pszExt[strlen(pszExt)], pszNext, pwszInt, &pwszInt[strlen(pszExt)], pwszNext );
-	if (res == std::codecvt_base::error) {
-		GetLogger().log(LOG_ERROR, "utils::str2wstr: conversion of `%s' failed (locale = %s).", str.c_str(), setlocale(LC_CTYPE, NULL));
-		throw "utils::str2wstr: conversion failed";
-	}
-	// pwszInt[strlen(pszExt)] = 0;
-	return std::wstring(pwszInt);
+	const char * codeset = nl_langinfo(CODESET);
+	struct stfl_ipool * ipool = stfl_ipool_create(codeset);
+	std::wstring result = stfl_ipool_towc(ipool, str.c_str());
+	stfl_ipool_destroy(ipool);
+	return result;
 }
 
 std::string utils::wstr2str(const std::wstring& wstr) {
-	char pszExt[4*wstr.length()+1];
-	const wchar_t *pwszInt = wstr.c_str();
-	memset(pszExt, 0, 4*wstr.length()+1);
-	char* pszNext;
-	const wchar_t* pwszNext;
-	mbstate_t state;
-	memset(&state, '\0', sizeof(state));
-	GetLogger().log(LOG_DEBUG, "utils::wstr2str: locale = %s input = `%ls'", setlocale(LC_CTYPE, NULL), wstr.c_str());
-#ifdef __APPLE__
-	std::locale loc;
-#else
-	std::locale loc(setlocale(LC_CTYPE, NULL));
-#endif
-	int res = std::use_facet<std::codecvt<wchar_t, char, mbstate_t> > (loc).out(state, pwszInt, &pwszInt[wcslen(pwszInt)], pwszNext, pszExt, pszExt + sizeof(pszExt), pszNext);
-	if (res == std::codecvt_base::error) {
-		GetLogger().log(LOG_ERROR, "utils::wstr2str: conversion of `%ls' failed.", wstr.c_str());
-		throw "utils::wstr2str: conversion failed";
-	}
-	// pszExt[wcslen(pwszInt)] = 0;
-	return std::string(pszExt);
+	const char * codeset = nl_langinfo(CODESET);
+	struct stfl_ipool * ipool = stfl_ipool_create(codeset);
+	std::string result = stfl_ipool_fromwc(ipool, wstr.c_str());
+	stfl_ipool_destroy(ipool);
+	return result;
 }
 
 std::string utils::to_s(unsigned int u) {
