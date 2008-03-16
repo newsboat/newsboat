@@ -1,6 +1,9 @@
 Changes for newsbeuter:
 
 0.9:
+	...
+
+0.8.2 (2008-03-16):
 	fixed broken string conversion.
 
 0.8.1 (2008-03-12):
