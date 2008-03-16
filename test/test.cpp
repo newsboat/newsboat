@@ -60,6 +60,22 @@ BOOST_AUTO_TEST_CASE(TestNewsbeuterReload) {
 	BOOST_CHECK_EQUAL(feed2.items()[0].title(), "Another Title");
 	BOOST_CHECK_EQUAL(feed2.items()[7].title(), "Handy als IR-Detektor");
 
+	rsscache->set_lastmodified("http://bereshit.synflood.at/~ak/rss.xml", 1000);
+	BOOST_CHECK_EQUAL(rsscache->get_lastmodified("http://bereshit.synflood.at/~ak/rss.xml"), 1000);
+	rsscache->set_lastmodified("http://bereshit.synflood.at/~ak/rss.xml", 0);
+	BOOST_CHECK_EQUAL(rsscache->get_lastmodified("http://bereshit.synflood.at/~ak/rss.xml"), 1000);
+
+	std::vector<std::string> feedurls = rsscache->get_feed_urls();
+	BOOST_CHECK_EQUAL(feedurls.size(), 1u);
+	BOOST_CHECK_EQUAL(feedurls[0], "http://bereshit.synflood.at/~ak/rss.xml");
+
+	std::vector<rss_feed> feedv;
+	feedv.push_back(feed);
+
+	cfg->set_configvalue("cleanup-on-quit", "true");
+	rsscache->cleanup_cache(feedv);
+
+
 	delete rsscache;
 	delete cfg;
 
@@ -103,6 +119,7 @@ BOOST_AUTO_TEST_CASE(TestConfigParserContainerAndKeymap) {
 	BOOST_CHECK_EQUAL(k.get_operation("ENTER"), OP_OPEN);
 	BOOST_CHECK_EQUAL(k.get_operation("u"), OP_SHOWURLS);
 	BOOST_CHECK_EQUAL(k.get_operation("X"), OP_NIL);
+	BOOST_CHECK_EQUAL(k.get_operation(""), OP_NIL);
 
 	k.unset_key("ENTER");
 	BOOST_CHECK_EQUAL(k.get_operation("ENTER"), OP_NIL);
@@ -121,7 +138,19 @@ BOOST_AUTO_TEST_CASE(TestConfigParserContainerAndKeymap) {
 	BOOST_CHECK_EQUAL(k.get_key("~"), '~');
 	BOOST_CHECK_EQUAL(k.get_key("INVALID"), 0);
 	BOOST_CHECK_EQUAL(k.get_key("ENTER"), '\n');
+	BOOST_CHECK_EQUAL(k.get_key("ESC"), '\033');
 	BOOST_CHECK_EQUAL(k.get_key("^A"), '\001');
+
+	std::vector<std::string> params;
+	BOOST_CHECK_EQUAL(k.handle_action("bind-key", params), AHS_TOO_FEW_PARAMS);
+	BOOST_CHECK_EQUAL(k.handle_action("unbind-key", params), AHS_TOO_FEW_PARAMS);
+	BOOST_CHECK_EQUAL(k.handle_action("macro", params), AHS_TOO_FEW_PARAMS);
+	params.push_back("r");
+	BOOST_CHECK_EQUAL(k.handle_action("bind-key", params), AHS_TOO_FEW_PARAMS);
+	BOOST_CHECK_EQUAL(k.handle_action("unbind-key", params), AHS_OK);
+	params.push_back("open");
+	BOOST_CHECK_EQUAL(k.handle_action("bind-key", params), AHS_OK);
+	BOOST_CHECK_EQUAL(k.handle_action("an-invalid-action", params), AHS_INVALID_PARAMS);
 }
 
 BOOST_AUTO_TEST_CASE(TestXmlPullParser) {
@@ -438,7 +467,7 @@ BOOST_AUTO_TEST_CASE(TestMiscUtilsFunctions) {
 	BOOST_CHECK_EQUAL(utils::get_command_output("ls /dev/null"), "/dev/null\n");
 
 	BOOST_CHECK_EQUAL(utils::run_filter("cat", "this is a multine-line\ntest string"), "this is a multine-line\ntest string");
-	BOOST_CHECK_EQUAL(utils::run_filter("wc -c", "0123456789"), "10\n");
+	BOOST_CHECK_EQUAL(utils::run_filter("echo -n 'hello world'", ""), "hello world");
 
 	BOOST_CHECK_EQUAL(utils::replace_all("aaa", "a", "b"), "bbb");
 	BOOST_CHECK_EQUAL(utils::replace_all("aaa", "aa", "ba"), "baa");
