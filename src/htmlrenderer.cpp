@@ -6,6 +6,7 @@
 #include <iostream>
 #include <cstring>
 #include <stdexcept>
+#include <algorithm>
 #include <logger.h>
 #include <libgen.h>
 #include <config.h>

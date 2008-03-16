@@ -52,7 +52,7 @@ void ignore_signal(int sig) {
 void omg_a_child_died(int /* sig */) {
 	pid_t pid;
 	int stat;
-	while ((pid = waitpid(-1,&stat,WNOHANG)) > 0);
+	while ((pid = waitpid(-1,&stat,WNOHANG)) > 0) { }
 }
 
 controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false), cfg(0) {
@@ -820,8 +820,8 @@ std::string controller::bookmark(const std::string& url, const std::string& titl
 	std::string bookmark_cmd = cfg->get_configvalue("bookmark-cmd");
 	if (bookmark_cmd.length() > 0) {
 		char * my_argv[4];
-		my_argv[0] = "/bin/sh";
-		my_argv[1] = "-c";
+		my_argv[0] = const_cast<char *>("/bin/sh");
+		my_argv[1] = const_cast<char *>("-c");
 
 		// wow. what an abuse.
 		std::string cmdline = bookmark_cmd + " " + stfl::quote(url) + " " + stfl::quote(title) + " " + stfl::quote(description);

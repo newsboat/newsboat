@@ -11,8 +11,6 @@ namespace podbeuter {
 
 class pb_controller;
 
-class newsbeuter::colormanager;
-
 struct keymap_hint_entry;
 
 class pb_view {

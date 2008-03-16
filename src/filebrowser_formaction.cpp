@@ -24,7 +24,7 @@ filebrowser_formaction::filebrowser_formaction(view * vv, std::string formstr)
 
 filebrowser_formaction::~filebrowser_formaction() { }
 
-void filebrowser_formaction::process_operation(operation op, bool automatic, std::vector<std::string> * args) {
+void filebrowser_formaction::process_operation(operation op, bool /* automatic */, std::vector<std::string> * /* args */) {
 	switch (op) {
 		case OP_OPEN: 
 			{
