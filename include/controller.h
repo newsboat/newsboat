@@ -35,6 +35,7 @@ namespace newsbeuter {
 			void update_feedlist();
 			void mark_all_read(unsigned int pos);
 			void catchup_all();
+			inline void catchup_all(rss_feed& feed) { rsscache->catchup_all(feed); }
 			inline bool get_refresh_on_start() { return refresh_on_start; }
 			bool is_valid_podcast_type(const std::string& mimetype);
 			void enqueue_url(const std::string& url);

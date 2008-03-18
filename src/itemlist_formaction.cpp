@@ -171,7 +171,15 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			GetLogger().log(LOG_INFO, "itemlist_formaction: marking feed read");
 			v->set_status(_("Marking feed read..."));
 			try {
-				v->get_ctrl()->mark_all_read(pos);
+				if (feed->rssurl() != "") {
+					v->get_ctrl()->mark_all_read(pos);
+				} else {
+					GetLogger().log(LOG_DEBUG, "itemlist_formaction: oh, it looks like I'm in a pseudo-feed (search result, query feed)");
+					for (std::vector<rss_item>::iterator it=feed->items().begin();it!=feed->items().end();++it) {
+						it->set_unread_nowrite_notify(false);
+					}
+					v->get_ctrl()->catchup_all(*feed);
+				}
 				do_redraw = true;
 				v->set_status("");
 			} catch (const dbexception& e) {
