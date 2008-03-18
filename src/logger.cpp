@@ -84,6 +84,8 @@ void logger::log(loglevel level, const char * format, ...) {
 		delete[] buf;
 		delete[] logmsgbuf;
 
+		va_end(ap);
+
 	}
 }
 
