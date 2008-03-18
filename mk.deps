@@ -8,7 +8,7 @@ src/colormanager.o: include/logger.h include/colormanager.h include/pb_view.h \
 src/configcontainer.o: include/configcontainer.h include/configparser.h include/logger.h \
 	include/utils.h
 
-src/configparser.o: include/configparser.h include/xmlpullparser.h include/exceptions.h \
+src/configparser.o: include/configparser.h include/tagsouppullparser.h include/exceptions.h \
 	include/utils.h include/logger.h config.h
 
 src/controller.o: include/view.h include/controller.h include/configparser.h \
@@ -37,7 +37,7 @@ src/help_formaction.o: config.h include/help_formaction.h include/view.h
 
 src/history.o: include/history.h
 
-src/htmlrenderer.o: include/htmlrenderer.h include/xmlpullparser.h include/utils.h \
+src/htmlrenderer.o: include/htmlrenderer.h include/tagsouppullparser.h include/utils.h \
 	include/logger.h config.h
 
 src/itemlist_formaction.o: include/itemlist_formaction.h include/view.h config.h \
@@ -67,7 +67,7 @@ src/queueloader.o: include/queueloader.h include/logger.h config.h
 
 src/reloadthread.o: include/reloadthread.h include/logger.h
 
-src/rss.o: include/rss.h config.h include/cache.h include/xmlpullparser.h include/utils.h \
+src/rss.o: include/rss.h config.h include/cache.h include/tagsouppullparser.h include/utils.h \
 	include/logger.h include/exceptions.h include/configcontainer.h
 
 src/select_formaction.o: include/select_formaction.h include/view.h config.h
@@ -88,7 +88,7 @@ src/view.o: stfl/feedlist.h stfl/itemlist.h stfl/itemview.h stfl/help.h stfl/fil
 	include/select_formaction.h include/logger.h include/reloadthread.h \
 	include/exception.h include/exceptions.h include/keymap.h
 
-src/xmlpullparser.o: include/xmlpullparser.h include/exceptions.h include/utils.h \
+src/tagsouppullparser.o: include/tagsouppullparser.h include/exceptions.h include/utils.h \
 	include/logger.h config.h
 
 src/formatstring.o: include/formatstring.h

@@ -1,7 +1,7 @@
 #include <rss.h>
 #include <config.h>
 #include <cache.h>
-#include <xmlpullparser.h>
+#include <tagsouppullparser.h>
 #include <utils.h>
 #include <logger.h>
 #include <exceptions.h>

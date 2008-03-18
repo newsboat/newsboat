@@ -1,4 +1,4 @@
-#include <xmlpullparser.h>
+#include <tagsouppullparser.h>
 #include <exceptions.h>
 #include <utils.h>
 #include <logger.h>
@@ -19,38 +19,38 @@ namespace newsbeuter
  * remotely looks like XML. We use this parser for the HTML renderer.
  */
 
-xmlpullparser::xmlpullparser() : inputstream(0), current_event(START_DOCUMENT)
+tagsouppullparser::tagsouppullparser() : inputstream(0), current_event(START_DOCUMENT)
 {
 }
 
-xmlpullparser::~xmlpullparser()
+tagsouppullparser::~tagsouppullparser()
 {
 }
 
-void xmlpullparser::setInput(std::istream& is) {
+void tagsouppullparser::setInput(std::istream& is) {
 	inputstream = &is;	
 	current_event = START_DOCUMENT;
 }
 
-int xmlpullparser::getAttributeCount() const {
+int tagsouppullparser::getAttributeCount() const {
 	if (START_TAG != current_event)
 		return -1;
 	return attributes.size();
 }
 
-std::string xmlpullparser::getAttributeName(unsigned int index) const {
+std::string tagsouppullparser::getAttributeName(unsigned int index) const {
 	if (index >= attributes.size())
 		throw std::out_of_range(_("invalid attribute index"));
 	return attributes[index].first;
 }
 
-std::string xmlpullparser::getAttributeValue(unsigned int index) const {
+std::string tagsouppullparser::getAttributeValue(unsigned int index) const {
 	if (index >= attributes.size())
 		throw std::out_of_range(_("invalid attribute index"));
 	return attributes[index].second;	
 }
 
-std::string xmlpullparser::getAttributeValue(const std::string& name) const {
+std::string tagsouppullparser::getAttributeValue(const std::string& name) const {
 	for (std::vector<attribute>::const_iterator it=attributes.begin();it!=attributes.end();++it) {
 		if (it->first == name) {
 			return it->second;
@@ -59,15 +59,15 @@ std::string xmlpullparser::getAttributeValue(const std::string& name) const {
 	throw std::invalid_argument(_("attribute not found"));
 }
 
-xmlpullparser::event xmlpullparser::getEventType() const {
+tagsouppullparser::event tagsouppullparser::getEventType() const {
 	return current_event;	
 }
 
-std::string xmlpullparser::getText() const {
+std::string tagsouppullparser::getText() const {
 	return text;	
 }
 
-bool xmlpullparser::isWhitespace() const {
+bool tagsouppullparser::isWhitespace() const {
 	bool found_nonws = false;
 	for (unsigned int i=0;i<text.length();++i) {
 		if (!isspace(text[i]))
@@ -76,7 +76,7 @@ bool xmlpullparser::isWhitespace() const {
 	return !found_nonws;
 }
 
-xmlpullparser::event xmlpullparser::next() {
+tagsouppullparser::event tagsouppullparser::next() {
 	// TODO: refactor this
 	/*
 	 * the next() method returns the next event by parsing the
@@ -239,7 +239,7 @@ xmlpullparser::event xmlpullparser::next() {
 	return getEventType();	
 }
 
-int xmlpullparser::skip_whitespace(std::string& ws) {
+int tagsouppullparser::skip_whitespace(std::string& ws) {
 	char c;
 	ws = "";
 	while (!inputstream->eof()) {
@@ -252,7 +252,7 @@ int xmlpullparser::skip_whitespace(std::string& ws) {
 	return c;
 }
 
-void xmlpullparser::add_attribute(std::string s) {
+void tagsouppullparser::add_attribute(std::string s) {
 	if (s.length() > 0 && s[s.length()-1] == '/')
 		s.erase(s.length()-1,1);
 	if (s.length() == 0)
@@ -270,7 +270,7 @@ void xmlpullparser::add_attribute(std::string s) {
 	attributes.push_back(attribute(attribname,attribvalue));
 }
 
-std::string xmlpullparser::read_tag() {
+std::string tagsouppullparser::read_tag() {
 	std::string s;
 	getline(*inputstream,s,'>');
 	if (inputstream->eof()) {
@@ -279,7 +279,7 @@ std::string xmlpullparser::read_tag() {
 	return s;
 }
 
-xmlpullparser::event xmlpullparser::determine_tag_type() {
+tagsouppullparser::event tagsouppullparser::determine_tag_type() {
 	if (text.length() > 0 && text[0] == '/') {
 		text.erase(0,1);
 		return END_TAG;
@@ -287,7 +287,7 @@ xmlpullparser::event xmlpullparser::determine_tag_type() {
 	return START_TAG;	
 }
 
-std::string xmlpullparser::decode_attribute(const std::string& s) {
+std::string tagsouppullparser::decode_attribute(const std::string& s) {
 	std::string s1 = s;
 	if ((s1[0] == '"' && s1[s1.length()-1] == '"') || (s1[0] == '\'' && s1[s1.length()-1] == '\'')) {
 		if (s1.length() > 0)
@@ -298,7 +298,7 @@ std::string xmlpullparser::decode_attribute(const std::string& s) {
 	return decode_entities(s1);
 }
 
-std::string xmlpullparser::decode_entities(const std::string& s) {
+std::string tagsouppullparser::decode_entities(const std::string& s) {
 	std::string result, current_entity;
 	std::istringstream sbuf(s);
 	std::string tmp;
@@ -419,8 +419,8 @@ static struct {
 	{ 0, 0 }
 };
 
-std::string xmlpullparser::decode_entity(std::string s) {
-	GetLogger().log(LOG_DEBUG, "xmlpullparser::decode_entity: decoding '%s'...", s.c_str());
+std::string tagsouppullparser::decode_entity(std::string s) {
+	GetLogger().log(LOG_DEBUG, "tagsouppullparser::decode_entity: decoding '%s'...", s.c_str());
 	// TODO: improve entity decoder
 	if (s == "lt") {
 		return "<";
@@ -452,7 +452,7 @@ std::string xmlpullparser::decode_entity(std::string s) {
 			mbc[pos] = '\0';
 			result.append(mbc);
 		}
-		GetLogger().log(LOG_DEBUG,"xmlpullparser::decode_entity: wc = %u pos = %d mbc = '%s'", wc, pos, mbc);
+		GetLogger().log(LOG_DEBUG,"tagsouppullparser::decode_entity: wc = %u pos = %d mbc = '%s'", wc, pos, mbc);
 		return result;
 	} else {
 		for (unsigned int i=0;entity_table[i].entity;++i) {
@@ -467,7 +467,7 @@ std::string xmlpullparser::decode_entity(std::string s) {
 	return ""; 	
 }
 
-void xmlpullparser::remove_trailing_whitespace(std::string& s) {
+void tagsouppullparser::remove_trailing_whitespace(std::string& s) {
 	while (s.length() > 0 && isspace(s[s.length()-1])) {
 		s.erase(s.length()-1,1);
 	}

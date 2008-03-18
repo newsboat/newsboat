@@ -1,5 +1,5 @@
 #include <configparser.h>
-#include <xmlpullparser.h>
+#include <tagsouppullparser.h>
 #include <exceptions.h>
 #include <utils.h>
 #include <logger.h>

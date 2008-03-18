@@ -11,7 +11,7 @@
 #include <rss.h>
 #include <configcontainer.h>
 #include <keymap.h>
-#include <xmlpullparser.h>
+#include <tagsouppullparser.h>
 #include <urlreader.h>
 #include <utils.h>
 #include <matcher.h>
@@ -153,51 +153,51 @@ BOOST_AUTO_TEST_CASE(TestConfigParserContainerAndKeymap) {
 	BOOST_CHECK_EQUAL(k.handle_action("an-invalid-action", params), AHS_INVALID_PARAMS);
 }
 
-BOOST_AUTO_TEST_CASE(TestXmlPullParser) {
+BOOST_AUTO_TEST_CASE(TestTagSoupPullParser) {
 	std::istringstream is("<test><foo quux='asdf' bar=\"qqq\">text</foo>more text<more>&quot;&#33;&#x40;</more></test>");
-	xmlpullparser xpp;
-	xmlpullparser::event e;
+	tagsouppullparser xpp;
+	tagsouppullparser::event e;
 	xpp.setInput(is);
 
 	e = xpp.getEventType();
-	BOOST_CHECK_EQUAL(e, xmlpullparser::START_DOCUMENT);
+	BOOST_CHECK_EQUAL(e, tagsouppullparser::START_DOCUMENT);
 	e = xpp.next();
-	BOOST_CHECK_EQUAL(e, xmlpullparser::START_TAG);
+	BOOST_CHECK_EQUAL(e, tagsouppullparser::START_TAG);
 	BOOST_CHECK_EQUAL(xpp.getText(), "test");
 	BOOST_CHECK_EQUAL(xpp.getAttributeCount(), 0);
 	e = xpp.next();
-	BOOST_CHECK_EQUAL(e, xmlpullparser::START_TAG);
+	BOOST_CHECK_EQUAL(e, tagsouppullparser::START_TAG);
 	BOOST_CHECK_EQUAL(xpp.getText(), "foo");
 	BOOST_CHECK_EQUAL(xpp.getAttributeCount(), 2);
 	BOOST_CHECK_EQUAL(xpp.getAttributeValue("quux"), "asdf");
 	BOOST_CHECK_EQUAL(xpp.getAttributeValue("bar"), "qqq");
 	e = xpp.next();
-	BOOST_CHECK_EQUAL(e, xmlpullparser::TEXT);
+	BOOST_CHECK_EQUAL(e, tagsouppullparser::TEXT);
 	BOOST_CHECK_EQUAL(xpp.getText(), "text");
 	BOOST_CHECK_EQUAL(xpp.getAttributeCount(), -1);
 	e = xpp.next();
-	BOOST_CHECK_EQUAL(e, xmlpullparser::END_TAG);
+	BOOST_CHECK_EQUAL(e, tagsouppullparser::END_TAG);
 	BOOST_CHECK_EQUAL(xpp.getText(), "foo");
 	BOOST_CHECK_EQUAL(xpp.getAttributeCount(), -1);
 	e = xpp.next();
-	BOOST_CHECK_EQUAL(e, xmlpullparser::TEXT);
+	BOOST_CHECK_EQUAL(e, tagsouppullparser::TEXT);
 	BOOST_CHECK_EQUAL(xpp.getText(), "more text");
 	e = xpp.next();
-	BOOST_CHECK_EQUAL(e, xmlpullparser::START_TAG);
+	BOOST_CHECK_EQUAL(e, tagsouppullparser::START_TAG);
 	BOOST_CHECK_EQUAL(xpp.getText(), "more");
 	e = xpp.next();
-	BOOST_CHECK_EQUAL(e, xmlpullparser::TEXT);
+	BOOST_CHECK_EQUAL(e, tagsouppullparser::TEXT);
 	BOOST_CHECK_EQUAL(xpp.getText(), "\"!@");
 	e = xpp.next();
-	BOOST_CHECK_EQUAL(e, xmlpullparser::END_TAG);
+	BOOST_CHECK_EQUAL(e, tagsouppullparser::END_TAG);
 	BOOST_CHECK_EQUAL(xpp.getText(), "more");
 	e = xpp.next();
-	BOOST_CHECK_EQUAL(e, xmlpullparser::END_TAG);
+	BOOST_CHECK_EQUAL(e, tagsouppullparser::END_TAG);
 	BOOST_CHECK_EQUAL(xpp.getText(), "test");
 	e = xpp.next();
-	BOOST_CHECK_EQUAL(e, xmlpullparser::END_DOCUMENT);
+	BOOST_CHECK_EQUAL(e, tagsouppullparser::END_DOCUMENT);
 	e = xpp.next();
-	BOOST_CHECK_EQUAL(e, xmlpullparser::END_DOCUMENT);
+	BOOST_CHECK_EQUAL(e, tagsouppullparser::END_DOCUMENT);
 }
 
 BOOST_AUTO_TEST_CASE(TestUrlReader) {

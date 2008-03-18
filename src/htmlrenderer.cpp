@@ -1,5 +1,5 @@
 #include <htmlrenderer.h>
-#include <xmlpullparser.h>
+#include <tagsouppullparser.h>
 #include <utils.h>
 #include <sstream>
 #include <cstdio>
@@ -71,13 +71,13 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 	 *   - we then gather an iterator
 	 *   - we then can iterate over all continuous elements, such as start tag, close tag, text element, ...
 	 */
-	xmlpullparser xpp;
+	tagsouppullparser xpp;
 	xpp.setInput(input);
 	
-	for (xmlpullparser::event e = xpp.next(); e != xmlpullparser::END_DOCUMENT; e = xpp.next()) {	
+	for (tagsouppullparser::event e = xpp.next(); e != tagsouppullparser::END_DOCUMENT; e = xpp.next()) {	
 		std::string tagname;
 		switch (e) {
-			case xmlpullparser::START_TAG:
+			case tagsouppullparser::START_TAG:
 				tagname = xpp.getText();
 				std::transform(tagname.begin(), tagname.end(), tagname.begin(), ::tolower);
 				current_tag = tags[tagname];
@@ -258,7 +258,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				}
 				break;
 
-			case xmlpullparser::END_TAG:
+			case tagsouppullparser::END_TAG:
 				tagname = xpp.getText();
 				std::transform(tagname.begin(), tagname.end(), tagname.begin(), ::tolower);
 				current_tag = tags[tagname];
@@ -350,7 +350,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				}
 				break;
 
-			case xmlpullparser::TEXT:
+			case tagsouppullparser::TEXT:
 				{
 					GetLogger().log(LOG_DEBUG,"htmlrenderer::render: found text `%s'",xpp.getText().c_str());
 					if (itunes_hack) {

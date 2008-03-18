@@ -1,5 +1,5 @@
-#ifndef XMLPULLPARSER_H_
-#define XMLPULLPARSER_H_
+#ifndef tagsouppullparser_H_
+#define tagsouppullparser_H_
 
 #include <string>
 #include <utility>
@@ -8,13 +8,13 @@
 namespace newsbeuter
 {
 
-class xmlpullparser
+class tagsouppullparser
 {
 public:
 	enum event { START_DOCUMENT, END_DOCUMENT, START_TAG, END_TAG, TEXT };
 	
-	xmlpullparser();
-	virtual ~xmlpullparser();
+	tagsouppullparser();
+	virtual ~tagsouppullparser();
 	void setInput(std::istream& is);
 	int getAttributeCount() const;
 	std::string getAttributeName(unsigned int index) const;
@@ -45,4 +45,4 @@ private:
 
 }
 
-#endif /*XMLPULLPARSER_H_*/
+#endif /*tagsouppullparser_H_*/
