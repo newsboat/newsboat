@@ -182,6 +182,7 @@ void controller::run(int argc, char * argv[]) {
 		return;
 	}
 
+	GetLogger().log(LOG_INFO, "nl_langinfo(CODESET): %s", nl_langinfo(CODESET));
 
 	if (!do_export) {
 		snprintf(msgbuf, sizeof(msgbuf), _("Starting %s %s..."), PROGRAM_NAME, PROGRAM_VERSION);

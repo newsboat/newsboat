@@ -356,6 +356,7 @@ std::string utils::retrieve_url(const std::string& url, const char * user_agent,
 	curl_easy_setopt(easyhandle, CURLOPT_URL, url.c_str());
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, &buf);
+	curl_easy_setopt(easyhandle, CURLOPT_NOSIGNAL, 1);
 
 	if (auth) {
 		curl_easy_setopt(easyhandle, CURLOPT_USERPWD, auth);
@@ -513,7 +514,7 @@ std::string utils::replace_all(std::string str, const std::string& from, const s
 
 std::wstring utils::utf8str2wstr(const std::string& utf8str) {
 	stfl_ipool * pool = stfl_ipool_create("utf-8");
-	std::wstring wstr(stfl_ipool_towc(pool, utf8str.c_str()));
+	std::wstring wstr = stfl_ipool_towc(pool, utf8str.c_str());
 	stfl_ipool_destroy(pool);
 	return wstr;
 }

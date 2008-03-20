@@ -10,9 +10,8 @@
 namespace newsbeuter {
 
 void fmtstr_formatter::register_fmt(char f, const std::string& value) {
-	// GetLogger().log(LOG_DEBUG, "fmtstr_formatter::register_fmt: char = %c value = %s", f, value.c_str());
-	fmts[f] = utils::utf8str2wstr(value);
-	// GetLogger().log(LOG_DEBUG, "fmtstr_formatter::register_fmt: char = %c done", f);
+	GetLogger().log(LOG_INFO, "fmtstr_formatter::register_fmt: char = %c value = %s", f, value.c_str());
+	fmts[f] = utils::str2wstr(value);
 }
 
 std::string fmtstr_formatter::do_format(const std::string& fmt, unsigned int width) {
@@ -22,6 +21,7 @@ std::string fmtstr_formatter::do_format(const std::string& fmt, unsigned int wid
 		std::wstring w = do_wformat(wfmt, width);
 		result = utils::wstr2str(w);
 	}
+	GetLogger().log(LOG_INFO, "fmtstr_formatter::do_format: result = %s", result.c_str());
 	return result;
 }
 

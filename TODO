@@ -16,8 +16,7 @@ TODO:
 
 
 longteam goals to reach:
-- add scripting support
-- make script functions callable via key bindings
+- make scripting support useful
 
 DONE:
 - clean up items that have been added but whose URL has been removed from the config file.
@@ -110,3 +109,5 @@ DONE:
 - strip \r from title
 - maybe move the "newsbeuter 0.7" on the right side of the first line (implemented use of format string stuff for info line on feedlist etc.)
 - make mark-all-read also work in search results
+- add scripting support
+- make script functions callable via key bindings
