@@ -77,6 +77,7 @@ nxml_download_file (nxml_t * nxml, const char *fl, char **buffer, size_t * size)
   curl_easy_setopt (curl, CURLOPT_WRITEFUNCTION, __nxml_memorize_file);
   curl_easy_setopt (curl, CURLOPT_FOLLOWLOCATION, 1);
   curl_easy_setopt (curl, CURLOPT_FILE, (void *) chunk);
+  curl_easy_setopt (curl, CURLOPT_ENCODING, "gzip, deflate");
 
   if (nxml->priv.timeout)
     curl_easy_setopt (curl, CURLOPT_TIMEOUT, nxml->priv.timeout);
