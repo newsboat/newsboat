@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 
+#include <logger.h>
 #include <rss.h>
 
 namespace newsbeuter {
@@ -40,6 +41,17 @@ class utils {
 		static std::string to_s(unsigned int u);
 
 		static std::string absolute_url(const std::string& url, const std::string& link);
+};
+
+class scope_measure {
+	public:
+		scope_measure(const std::string& func, loglevel ll = LOG_DEBUG);
+		~scope_measure();
+		void stopover(const std::string& son = "");
+	private:
+		struct timeval tv1, tv2;
+		std::string funcname;
+		loglevel lvl;
 };
 
 }

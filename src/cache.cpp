@@ -11,6 +11,7 @@
 #include <logger.h>
 #include <config.h>
 #include <exceptions.h>
+#include <utils.h>
 
 using namespace newsbeuter;
 
@@ -303,8 +304,11 @@ std::vector<std::string> cache::get_feed_urls() {
 
 // this function writes an rss_feed including all rss_items to the database
 void cache::externalize_rssfeed(rss_feed& feed) {
+	scope_measure m1("cache::externalize_feed");
 	if (feed.rssurl().substr(0,6) == "query:")
 		return;
+
+	sqlite3_exec(db, "BEGIN;", NULL, NULL, NULL);
 
 	{
 		scope_mutex lock(mtx);
@@ -342,11 +346,13 @@ void cache::externalize_rssfeed(rss_feed& feed) {
 	for (std::vector<rss_item>::reverse_iterator it=feed.items().rbegin(); it != feed.items().rend(); ++it) {
 		update_rssitem(*it, feed.rssurl());
 	}
+	sqlite3_exec(db, "END;", NULL, NULL, NULL);
 }
 
 // this function reads an rss_feed including all of its rss_items.
 // the feed parameter needs to have the rssurl member set.
 void cache::internalize_rssfeed(rss_feed& feed) {
+	scope_measure m1("cache::internalize_rssfeed");
 	if (feed.rssurl().substr(0,6) == "query:")
 		return;
 

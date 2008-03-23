@@ -1,4 +1,4 @@
-src/cache.o: include/cache.h include/configcontainer.h
+src/cache.o: include/cache.h include/configcontainer.h include/utils.h
 
 src/colormanager.o: include/logger.h include/colormanager.h include/pb_view.h \
 	include/feedlist_formaction.h include/itemlist_formaction.h include/itemview_formaction.h \

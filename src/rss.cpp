@@ -64,7 +64,10 @@ rss_feed rss_parser::parse() {
 	CURLcode ccode = CURLE_OK;
 	if (my_uri.substr(0,5) == "http:" || my_uri.substr(0,6) == "https:") {
 		mrss_options_t * options = mrss_options_new(30, proxy, proxy_auth, NULL, NULL, NULL, 0, NULL, user_agent);
-		err = mrss_parse_url_with_options_and_error(const_cast<char *>(my_uri.c_str()), &mrss, options, &ccode);
+		{
+			scope_measure m1("mrss_parse_url_with_options_and_error");
+			err = mrss_parse_url_with_options_and_error(const_cast<char *>(my_uri.c_str()), &mrss, options, &ccode);
+		}
 		my_errno = errno;
 		GetLogger().log(LOG_DEBUG, "rss_parser::parse: http URL, err = %u errno = %u (%s)", err, my_errno, strerror(my_errno));
 		mrss_options_free(options);
