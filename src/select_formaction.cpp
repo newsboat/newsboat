@@ -81,14 +81,14 @@ void select_formaction::prepare() {
 		switch (type) {
 		case SELECTTAG:
 			for (std::vector<std::string>::const_iterator it=tags.begin();it!=tags.end();++it,++i) {
-				std::string tagstr = utils::strprintf("%4d  %s", i+1, it->c_str());
-				code.append(utils::strprintf("{listitem[%u] text:%s}", i, stfl::quote(tagstr)));
+				std::string tagstr = utils::strprintf("%4u  %s", i+1, it->c_str());
+				code.append(utils::strprintf("{listitem[%u] text:%s}", i, stfl::quote(tagstr).c_str()));
 			}
 			break;
 		case SELECTFILTER:
 			for (std::vector<filter_name_expr_pair>::const_iterator it=filters.begin();it!=filters.end();++it,++i) {
 				std::string tagstr = utils::strprintf("%4d  %s", i+1, it->first.c_str());
-				code.append(utils::strprintf("{listitem[%u] text:%s}", i, stfl::quote(tagstr)));
+				code.append(utils::strprintf("{listitem[%u] text:%s}", i, stfl::quote(tagstr).c_str()));
 			}
 			break;
 		default:
