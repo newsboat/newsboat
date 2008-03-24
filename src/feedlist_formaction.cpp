@@ -315,7 +315,10 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 			fmt.register_fmt('L', it->rssurl());
 			fmt.register_fmt('d', it->description());
 
-			code.append(utils::strprintf("{listitem[%u] text:%s}", stfl::quote(fmt.do_format(feedlist_format, width)).c_str()));
+			std::string format = fmt.do_format(feedlist_format, width);
+			GetLogger().log(LOG_DEBUG, "feedlist_formaction::set_feedlist: format result = %s", format.c_str());
+
+			code.append(utils::strprintf("{listitem[%u] text:%s}", i, stfl::quote(format).c_str()));
 
 			++feeds_shown;
 		}
