@@ -10,7 +10,6 @@
 #include <utils.h>
 #include <stflpp.h>
 #include <interpreter.h>
-#include <sstream>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
@@ -57,8 +56,6 @@ void omg_a_child_died(int /* sig */) {
 }
 
 controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false), cfg(0) {
-	std::ostringstream cfgfile;
-
 	char * cfgdir;
 	if (!(cfgdir = ::getenv("HOME"))) {
 		struct passwd * spw = ::getpwuid(::getuid());
@@ -424,15 +421,7 @@ void controller::reload(unsigned int pos, unsigned int max) {
 		rss_feed feed = feeds[pos];
 		std::string msg;
 		if (max > 0) {
-			msg.append("(");
-			std::ostringstream posstr;
-			posstr << (pos+1);
-			msg.append(posstr.str());
-			msg.append("/");
-			std::ostringstream maxstr;
-			maxstr << max;
-			msg.append(maxstr.str());
-			msg.append(") ");
+			msg = utils::strprintf("(%u/%u) ", pos+1, max);
 		}
 		GetLogger().log(LOG_DEBUG, "controller::reload: before setting status");
 		v->set_status(utils::strprintf(_("%sLoading %s..."), msg.c_str(), feed.rssurl().c_str()));

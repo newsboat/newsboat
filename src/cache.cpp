@@ -311,10 +311,9 @@ void cache::externalize_rssfeed(rss_feed& feed) {
 	{
 		scope_mutex lock(mtx);
 
-		std::ostringstream query;
-		query << "SELECT count(*) FROM rss_feed WHERE rssurl = '" << feed.rssurl() << "';";
+		std::string countquery = prepare_query("SELECT count(*) FROM rss_feed WHERE rssurl = '%q';", feed.rssurl().c_str());
 		cb_handler count_cbh;
-		int rc = sqlite3_exec(db,query.str().c_str(),count_callback,&count_cbh,NULL);
+		int rc = sqlite3_exec(db,countquery.c_str(),count_callback,&count_cbh,NULL);
 		int count = count_cbh.count();
 		GetLogger().log(LOG_DEBUG, "cache::externalize_rss_feed: rss_feeds with rssurl = '%s': found %d",feed.rssurl().c_str(), count);
 		if (count > 0) {

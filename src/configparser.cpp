@@ -4,7 +4,6 @@
 #include <utils.h>
 #include <logger.h>
 #include <fstream>
-#include <sstream>
 #include <config.h>
 #include <cstdlib>
 #include <cstring>

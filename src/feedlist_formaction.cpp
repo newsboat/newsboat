@@ -315,15 +315,7 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 			fmt.register_fmt('L', it->rssurl());
 			fmt.register_fmt('d', it->description());
 
-			std::string line = "{listitem[";
-			std::ostringstream num;
-			num << i;
-			line.append(num.str());
-			line.append("] text:");
-			line.append(stfl::quote(fmt.do_format(feedlist_format, width)));
-			line.append("}");
-
-			code.append(line);
+			code.append(utils::strprintf("{listitem[%u] text:%s}", stfl::quote(fmt.do_format(feedlist_format, width)).c_str()));
 
 			++feeds_shown;
 		}
@@ -375,9 +367,7 @@ bool feedlist_formaction::jump_to_previous_unread_feed(unsigned int& feedpos) {
 		GetLogger().log(LOG_DEBUG, "feedlist_formaction::jump_to_previous_unread_feed: visible_feeds[%u] unread items: %u", i, visible_feeds[i].first->unread_item_count());
 		if (visible_feeds[i].first->unread_item_count() > 0) {
 			GetLogger().log(LOG_DEBUG, "feedlist_formaction::jump_to_previous_unread_feed: hit");
-			std::ostringstream os;
-			os << i;
-			f->set("feedpos", os.str());
+			f->set("feedpos", utils::to_s(i));
 			feedpos = visible_feeds[i].second;
 			return true;
 		}
@@ -386,9 +376,7 @@ bool feedlist_formaction::jump_to_previous_unread_feed(unsigned int& feedpos) {
 		GetLogger().log(LOG_DEBUG, "feedlist_formaction::jump_to_previous_unread_feed: visible_feeds[%u] unread items: %u", i, visible_feeds[i].first->unread_item_count());
 		if (visible_feeds[i].first->unread_item_count() > 0) {
 			GetLogger().log(LOG_DEBUG, "feedlist_formaction::jump_to_previous_unread_feed: hit");
-			std::ostringstream os;
-			os << i;
-			f->set("feedpos", os.str());
+			f->set("feedpos", utils::to_s(i));
 			return true;
 		}
 	}
@@ -405,9 +393,7 @@ bool feedlist_formaction::jump_to_next_unread_feed(unsigned int& feedpos) {
 		GetLogger().log(LOG_DEBUG, "feedlist_formaction::jump_to_next_unread_feed: visible_feeds[%u] unread items: %u", i, visible_feeds[i].first->unread_item_count());
 		if (visible_feeds[i].first->unread_item_count() > 0) {
 			GetLogger().log(LOG_DEBUG, "feedlist_formaction::jump_to_next_unread_feed: hit");
-			std::ostringstream os;
-			os << i;
-			f->set("feedpos", os.str());
+			f->set("feedpos", utils::to_s(i));
 			feedpos = visible_feeds[i].second;
 			return true;
 		}
@@ -416,9 +402,7 @@ bool feedlist_formaction::jump_to_next_unread_feed(unsigned int& feedpos) {
 		GetLogger().log(LOG_DEBUG, "feedlist_formaction::jump_to_next_unread_feed: visible_feeds[%u] unread items: %u", i, visible_feeds[i].first->unread_item_count());
 		if (visible_feeds[i].first->unread_item_count() > 0) {
 			GetLogger().log(LOG_DEBUG, "feedlist_formaction::jump_to_next_unread_feed: hit");
-			std::ostringstream os;
-			os << i;
-			f->set("feedpos", os.str());
+			f->set("feedpos", utils::to_s(i));
 			return true;
 		}
 	}
@@ -455,9 +439,7 @@ void feedlist_formaction::handle_cmdline(const std::string& cmd) {
 			if (i == -1) {
 				v->show_error(_("Position not visible!"));
 			} else {
-				std::ostringstream idxstr;
-				idxstr << i;
-				f->set("feedpos", idxstr.str());
+				f->set("feedpos", utils::to_s(i));
 			}
 		} else {
 			v->show_error(_("Invalid position!"));

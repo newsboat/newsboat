@@ -390,17 +390,9 @@ void itemlist_formaction::prepare() {
 		for (std::vector<itemptr_pos_pair>::iterator it = visible_items.begin(); it != visible_items.end(); ++it) {
 			fmtstr_formatter fmt;
 
-			std::string line = "{listitem[";
-			std::ostringstream x;
-			x << it->second;
-			line.append(x.str());
-			line.append("] text:");
-			std::string title;
-
 			fmt.register_fmt('i', utils::strprintf("%u",it->second + 1));
 
 			std::string flags;
-
 			if (it->first->unread()) {
 				flags.append("N");
 			} else {
@@ -428,10 +420,7 @@ void itemlist_formaction::prepare() {
 			fmt.register_fmt('a', it->first->author());
 
 			std::string quoted_title = stfl::quote(fmt.do_format(itemlist_format, width));
-			line.append(quoted_title);
-			line.append("}");
-			GetLogger().log(LOG_INFO, "prepare: line = %s", line.c_str());
-			code.append(line);
+			code.append(utils::strprintf("{listitem[%u] text:%s}", it->second, quoted_title.c_str()));
 		}
 
 		code.append("}");
@@ -460,8 +449,6 @@ void itemlist_formaction::set_head(const std::string& s, unsigned int unread, un
 	 */
 	std::string title;
 	fmtstr_formatter fmt;
-	std::ostringstream unreadstr;
-	std::ostringstream totalstr;
 
 	std::string listwidth = f->get("items:w");
 	std::istringstream is(listwidth);
@@ -471,10 +458,8 @@ void itemlist_formaction::set_head(const std::string& s, unsigned int unread, un
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', PROGRAM_VERSION);
 
-	unreadstr << unread;
-	totalstr << total;
-	fmt.register_fmt('u', unreadstr.str());
-	fmt.register_fmt('t', totalstr.str());
+	fmt.register_fmt('u', utils::to_s(unread));
+	fmt.register_fmt('t', utils::to_s(total));
 
 	fmt.register_fmt('T', s);
 	fmt.register_fmt('U', url);
@@ -494,17 +479,13 @@ bool itemlist_formaction::jump_to_previous_unread_item(bool start_with_last) {
 	for (int i=(start_with_last?itempos:(itempos-1));i>=0;--i) {
 		GetLogger().log(LOG_DEBUG, "itemlist_formaction::jump_to_previous_unread_item: visible_items[%u] unread = %s", i, visible_items[i].first->unread() ? "true" : "false");
 		if (visible_items[i].first->unread()) {
-			std::ostringstream os;
-			os << i;
-			f->set("itempos", os.str());
+			f->set("itempos", utils::to_s(i));
 			return true;
 		}
 	}
 	for (int i=visible_items.size()-1;i>=itempos;--i) {
 		if (visible_items[i].first->unread()) {
-			std::ostringstream os;
-			os << i;
-			f->set("itempos", os.str());
+			f->set("itempos", utils::to_s(i));
 			return true;
 		}
 	}
@@ -519,17 +500,13 @@ bool itemlist_formaction::jump_to_next_unread_item(bool start_with_first) {
 	for (unsigned int i=(start_with_first?itempos:(itempos+1));i<visible_items.size();++i) {
 		GetLogger().log(LOG_DEBUG, "itemlist_formaction::jump_to_next_unread_item: visible_items[%u] unread = %s", i, visible_items[i].first->unread() ? "true" : "false");
 		if (visible_items[i].first->unread()) {
-			std::ostringstream os;
-			os << i;
-			f->set("itempos", os.str());
+			f->set("itempos", utils::to_s(i));
 			return true;
 		}
 	}
 	for (unsigned int i=0;i<=itempos;++i) {
 		if (visible_items[i].first->unread()) {
-			std::ostringstream os;
-			os << i;
-			f->set("itempos", os.str());
+			f->set("itempos", utils::to_s(i));
 			return true;
 		}
 	}
@@ -566,9 +543,7 @@ void itemlist_formaction::handle_cmdline(const std::string& cmd) {
 			if (i == -1) {
 				v->show_error(_("Position not visible!"));
 			} else {
-				std::ostringstream idxstr;
-				idxstr << i;
-				f->set("itempos", idxstr.str());
+				f->set("itempos", utils::to_s(i));
 			}
 		} else {
 			v->show_error(_("Invalid position!"));

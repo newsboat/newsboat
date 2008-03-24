@@ -648,13 +648,9 @@ std::string rss_feed::get_attribute(const std::string& attribname) {
 	else if (attribname == "rssurl")
 		return rssurl();
 	else if (attribname == "unread_count") {
-		std::ostringstream os;
-		os << unread_item_count();
-		return os.str();
+		return utils::to_s(unread_item_count());
 	} else if (attribname == "total_count") {
-		std::ostringstream os;
-		os << items_.size();
-		return os.str();
+		return utils::to_s(items_.size());
 	} else if (attribname == "tags") {
 		// abort();
 		return get_tags();

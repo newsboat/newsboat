@@ -40,71 +40,43 @@ void itemview_formaction::prepare() {
 
 		rss_feed * feedptr = item.get_feedptr();
 
-		std::ostringstream feedtitle;
-		feedtitle << _("Feed: ");
+		std::string title, feedtitle;
 		if (feedptr->title().length() > 0) {
-			feedtitle << feedptr->title();
+			title = feedptr->title();
 		} else if (feedptr->link().length() > 0) {
-			feedtitle << feedptr->link();
+			title = feedptr->link();
 		} else if (feedptr->rssurl().length() > 0) {
-			feedtitle << feedptr->rssurl();
+			title = feedptr->rssurl();
 		}
-		if (feedtitle.str().length() > 0) {
-			code.append("{listitem text:");
-			code.append(stfl::quote(feedtitle.str().c_str()));
-			code.append("}");
-		}
+		feedtitle = utils::strprintf("%s%s", _("Feed: "), title.c_str());
+		code.append(utils::strprintf("{listitem text:%s}", stfl::quote(feedtitle).c_str()));
 
 		if (item.title().length() > 0) {
-			code.append("{listitem text:");
-			std::ostringstream title;
-			title << _("Title: ");
-			title << item.title();
-			code.append(stfl::quote(title.str()));
-			code.append("}");
+			title = utils::strprintf("%s%s", _("Title: "), item.title().c_str());
+			code.append(utils::strprintf("{listitem text:%s}", stfl::quote(title).c_str()));
 		}
 
 		if (item.author().length() > 0) {
-			code.append("{listitem text:");
-			std::ostringstream author;
-			author << _("Author: ");
-			author << item.author();
-			code.append(stfl::quote(author.str()));
-			code.append("}");
+			std::string author = utils::strprintf("%s%s", _("Author: "), item.author().c_str());
+			code.append(utils::strprintf("{listitem text:%s}", stfl::quote(author).c_str()));
 		}
 
 		if (item.link().length() > 0) {
-			code.append("{listitem text:");
-			std::ostringstream link;
-			link << _("Link: ");
-			link << item.link();
-			code.append(stfl::quote(link.str()));
-			code.append("}");
+			std::string link = utils::strprintf("%s%s", _("Link: "), item.link().c_str());
+			code.append(utils::strprintf("{listitem text:%s}", stfl::quote(link).c_str()));
 		}
-		
-		code.append("{listitem text:");
-		std::ostringstream date;
-		date << _("Date: ");
-		date << item.pubDate();
-		code.append(stfl::quote(date.str()));
-		code.append("}");
+
+		std::string date = utils::strprintf("%s%s", _("Date: "), item.pubDate().c_str());
+		code.append(utils::strprintf("{listitem text:%s}", stfl::quote(date).c_str()));
 
 		if (item.flags().length() > 0) {
-			code.append("{listitem text:");
-			std::ostringstream flags;
-			flags << _("Flags: ");
-			flags << item.flags();
-			code.append(stfl::quote(flags.str()));
-			code.append("}");
+			std::string flags = utils::strprintf("%s%s", _("Flags: "), item.flags().c_str());
+			code.append(utils::strprintf("{listitem text:%s}", stfl::quote(flags).c_str()));
 		}
 
 		if (item.enclosure_url().length() > 0) {
-			code.append("{listitem text:");
-			std::ostringstream enc_url;
-			enc_url << _("Podcast Download URL: ");
-			enc_url << item.enclosure_url() << " (" << _("type: ") << item.enclosure_type() << ")";
-			code.append(stfl::quote(enc_url.str()));
-			code.append("}");
+			std::string enc_url = utils::strprintf("%s%s (%s%s)", _("Podcast Download URL: "), item.enclosure_url().c_str(), _("type: "), item.enclosure_type().c_str());
+			code.append(utils::strprintf("{listitem text:%s}", stfl::quote(enc_url).c_str()));
 		}
 
 		code.append("{listitem text:\"\"}");

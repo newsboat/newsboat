@@ -2,6 +2,7 @@
 #include <formatstring.h>
 #include <view.h>
 #include <config.h>
+#include <utils.h>
 
 #include <sstream>
 
@@ -66,11 +67,9 @@ void urlview_formaction::prepare() {
 		std::string code = "{list";
 		unsigned int i=0;
 		for (std::vector<linkpair>::iterator it = links.begin(); it != links.end(); ++it, ++i) {
-			std::ostringstream os;
 			char line[1024];
 			snprintf(line,sizeof(line),"%2u  %s",i+1,it->first.c_str());
-			os << "{listitem[" << i << "] text:" << stfl::quote(line) << "}";
-			code.append(os.str());
+			code.append(utils::strprintf("{listitem[%u] text:%s}", i, stfl::quote(line).c_str()));
 		}
 		code.append("}");
 

@@ -7,6 +7,7 @@
 
 #include <dllist.h>
 #include <help.h>
+#include <utils.h>
 
 #include <sstream>
 #include <iostream>
@@ -56,10 +57,8 @@ void pb_view::run() {
 				unsigned int i = 0;
 				for (std::vector<download>::iterator it=ctrl->downloads().begin();it!=ctrl->downloads().end();++it,++i) {
 					char lbuf[1024];
-					std::ostringstream os;
 					snprintf(lbuf, sizeof(lbuf), " %4u [%6.1fMB/%6.1fMB] [%5.1f %%] [%7.2f kb/s] %-20s %s -> %s", i+1, it->current_size()/(1024*1024), it->total_size()/(1024*1024), it->percents_finished(), it->kbps(), it->status_text(), it->url(), it->filename());
-					os << "{listitem[" << i << "] text:" << stfl::quote(lbuf) << "}";
-					code.append(os.str());
+					code.append(utils::strprintf("{listitem[%u] text:%s}", i, stfl::quote(lbuf).c_str()));
 				}
 
 				code.append("}");

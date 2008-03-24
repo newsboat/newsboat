@@ -94,9 +94,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 							}
 							if (link.length() > 0) {
 								unsigned int link_num = add_link(links,utils::absolute_url(url,link), LINK_HREF);
-								std::ostringstream ref;
-								ref << "[" << link_num << "]";
-								curline.append(ref.str());
+								curline.append(utils::strprintf("[%u]", link_num));
 							}
 						}
 						break;
@@ -119,9 +117,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 								}
 								if (link.length() > 0) {
 									unsigned int link_num = add_link(links,utils::absolute_url(url,link), LINK_EMBED);
-									std::ostringstream ref;
-									ref << "[" << _("embedded flash:") << " " << link_num  << "]";
-									curline.append(ref.str());
+									curline.append(utils::strprintf("[%s %u]", _("embedded flash:"), link_num));
 								}
 							}
 						}
@@ -154,10 +150,8 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 							}
 							if (imgurl.length() > 0) {
 								unsigned int link_num = add_link(links,utils::absolute_url(url,imgurl), LINK_IMG);
-								std::ostringstream ref;
-								ref << "[" << _("image") << " " << link_num << "]";
+								curline.append(utils::strprintf("[%s %u]", _("image"), link_num));
 								image_count++;
-								curline.append(ref.str());
 							}
 						}
 						break;
@@ -210,12 +204,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						prepare_newline(curline, indent_level);
 						indent_level+=2;
 						if (is_ol) {
-							std::ostringstream num;
-							num << ol_count;
-							if (ol_count < 10)
-								curline.append(" ");
-							curline.append(num.str());
-							curline.append(". ");
+							curline.append(utils::strprintf("%2u.", ol_count));
 							++ol_count;
 						} else {
 							curline.append("  * ");
@@ -433,9 +422,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 		lines.push_back("");
 		lines.push_back(_("Links: "));
 		for (unsigned int i=0;i<links.size();++i) {
-			std::ostringstream line;
-			line << "[" << (i+1) << "]: " << links[i].first << " (" << type2str(links[i].second) << ")";
-			lines.push_back(line.str());
+			lines.push_back(utils::strprintf("[%u]: %s (%s)", i+1, links[i].first.c_str(), type2str(links[i].second).c_str()));
 		}
 	}
 }

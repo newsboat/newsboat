@@ -4,7 +4,6 @@
 #include <config.h>
 #include <utils.h>
 #include <iostream>
-#include <sstream>
 #include <cstdio>
 #include <cstdlib>
 
@@ -38,8 +37,6 @@ void ctrl_c_action(int sig) {
 namespace podbeuter {
 
 pb_controller::pb_controller() : v(0), config_file("config"), queue_file("queue"), cfg(0), view_update_(true),  max_dls(1), ql(0) { 
-	std::ostringstream cfgfile;
-
 	char * cfgdir;
 	if (!(cfgdir = ::getenv("HOME"))) {
 		struct passwd * spw = ::getpwuid(::getuid());
@@ -69,7 +66,6 @@ pb_controller::~pb_controller() {
 
 void pb_controller::run(int argc, char * argv[]) {
 	int c;
-	char msgbuf[1024];
 
 	::signal(SIGINT, ctrl_c_action);
 	::signal(SIGSEGV, ctrl_c_action);

@@ -226,9 +226,7 @@ std::string filebrowser_formaction::add_file(std::string filename) {
 			}
 		}
 		
-		std::ostringstream os;
-		os << std::setw(12) << sb.st_size;
-		std::string sizestr = os.str();
+		std::string sizestr = utils::strprintf("%12u", sb.st_size);
 		
 		std::string line;
 		line.append(1,ftype);
