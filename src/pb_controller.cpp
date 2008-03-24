@@ -47,9 +47,7 @@ pb_controller::pb_controller() : v(0), config_file("config"), queue_file("queue"
 			cfgdir = spw->pw_dir;
 		} else {
 			std::cout << _("Fatal error: couldn't determine home directory!") << std::endl;
-			char buf[1024];
-			snprintf(buf, sizeof(buf), _("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid());
-			std::cout << buf << std::endl;
+			std::cout << utils::strprintf(_("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid()) << std::endl;
 			::exit(EXIT_FAILURE);
 		}
 	}
@@ -105,20 +103,17 @@ void pb_controller::run(int argc, char * argv[]) {
 				usage(argv[0]);
 				break;
 			default:
-				snprintf(msgbuf, sizeof(msgbuf), _("%s: unknown option - %c"), argv[0], static_cast<char>(c));
-				std::cout << msgbuf << std::endl;
+				std::cout << utils::strprintf(_("%s: unknown option - %c"), argv[0], static_cast<char>(c)) << std::endl;
 				usage(argv[0]);
 				break;
 		}
 	} while (c != -1);
 
-	snprintf(msgbuf, sizeof(msgbuf), _("Starting %s %s..."), "podbeuter", PROGRAM_VERSION);
-	std::cout << msgbuf << std::endl;
+	std::cout << utils::strprintf(_("Starting %s %s..."), "podbeuter", PROGRAM_VERSION) << std::endl;
 
 	pid_t pid;
 	if (!utils::try_fs_lock(lock_file, pid)) {
-		snprintf(msgbuf, sizeof(msgbuf), _("Error: an instance of %s is already running (PID: %u)"), "podbeuter", pid);
-		std::cout << msgbuf << std::endl;
+		std::cout << utils::strprintf(_("Error: an instance of %s is already running (PID: %u)"), "podbeuter", pid) << std::endl;
 		return;
 	}
 
@@ -173,8 +168,7 @@ void pb_controller::run(int argc, char * argv[]) {
 
 void pb_controller::usage(const char * argv0) {
 	char buf[2048];
-	snprintf(buf, sizeof(buf),
-				_("%s %s\nusage %s [-C <file>] [-q <file>] [-h]\n"
+	std::cout << utils::strprintf(_("%s %s\nusage %s [-C <file>] [-q <file>] [-h]\n"
 				"-C <configfile> read configuration from <configfile>\n"
 				"-q <queuefile>  use <queuefile> as queue file\n"
 				"-h              this help\n"), "podbeuter", PROGRAM_VERSION, argv0);

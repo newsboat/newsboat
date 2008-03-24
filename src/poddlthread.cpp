@@ -3,6 +3,7 @@
 #include <iostream>
 #include <logger.h>
 #include <config.h>
+#include <utils.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -28,17 +29,9 @@ void poddlthread::run() {
 
 	CURL * easyhandle = curl_easy_init();
 
-	char user_agent[1024];
-	std::string ua_pref = cfg->get_configvalue("user-agent");
-	if (ua_pref.length() == 0) {
-		struct utsname buf;
-		uname(&buf);
-		snprintf(user_agent, sizeof(user_agent), "podbeuter/%s (%s %s; %s; %s) %s", PROGRAM_VERSION, buf.sysname, buf.release, buf.machine, PROGRAM_URL, curl_version());
-	} else {
-		snprintf(user_agent, sizeof(user_agent), "%s", ua_pref.c_str());
-	}
+	std::string user_agent = utils::get_useragent(cfg);
 
-	curl_easy_setopt(easyhandle, CURLOPT_USERAGENT, user_agent);
+	curl_easy_setopt(easyhandle, CURLOPT_USERAGENT, user_agent.c_str());
 
 	curl_easy_setopt(easyhandle, CURLOPT_URL, dl->url());
 	// set up write functions:

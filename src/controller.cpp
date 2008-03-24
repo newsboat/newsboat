@@ -22,6 +22,7 @@
 #include <cassert>
 #include <signal.h>
 #include <sys/utsname.h>
+#include <langinfo.h>
 
 #include <_nxml.h>
 
@@ -65,9 +66,7 @@ controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cach
 			cfgdir = spw->pw_dir;
 		} else {
 			std::cout << _("Fatal error: couldn't determine home directory!") << std::endl;
-			char buf[1024];
-			snprintf(buf, sizeof(buf), _("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid());
-			std::cout << buf << std::endl;
+			std::cout << utils::strprintf(_("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid()) << std::endl;
 			::exit(EXIT_FAILURE);
 		}
 	}
@@ -98,7 +97,6 @@ void controller::set_view(view * vv) {
 
 void controller::run(int argc, char * argv[]) {
 	int c;
-	char msgbuf[1024];
 
 	::signal(SIGINT, ctrl_c_action);
 #ifndef DEBUG
@@ -167,8 +165,7 @@ void controller::run(int argc, char * argv[]) {
 				}
 				break;
 			default:
-				snprintf(msgbuf, sizeof(msgbuf), _("%s: unknown option - %c"), argv[0], static_cast<char>(c));
-				std::cout << msgbuf << std::endl;
+				std::cout << utils::strprintf(_("%s: unknown option - %c"), argv[0], static_cast<char>(c)) << std::endl;
 				usage(argv[0]);
 				break;
 		}
@@ -185,8 +182,7 @@ void controller::run(int argc, char * argv[]) {
 	GetLogger().log(LOG_INFO, "nl_langinfo(CODESET): %s", nl_langinfo(CODESET));
 
 	if (!do_export) {
-		snprintf(msgbuf, sizeof(msgbuf), _("Starting %s %s..."), PROGRAM_NAME, PROGRAM_VERSION);
-		std::cout << msgbuf << std::endl;
+		std::cout << utils::strprintf(_("Starting %s %s..."), PROGRAM_NAME, PROGRAM_VERSION) << std::endl;
 
 		pid_t pid;
 		if (!utils::try_fs_lock(lock_file, pid)) {
@@ -195,8 +191,7 @@ void controller::run(int argc, char * argv[]) {
 			} else {
 				GetLogger().log(LOG_ERROR,"something went wrong with the lock: %s", strerror(errno));
 			}
-			snprintf(msgbuf, sizeof(msgbuf), _("Error: an instance of %s is already running (PID: %u)"), PROGRAM_NAME, pid);
-			std::cout << msgbuf << std::endl;
+			std::cout << utils::strprintf(_("Error: an instance of %s is already running (PID: %u)"), PROGRAM_NAME, pid) << std::endl;
 			return;
 		}
 	}
@@ -283,8 +278,7 @@ void controller::run(int argc, char * argv[]) {
 
 	if (real_offline_mode) {
 		if (!do_export) {
-			snprintf(msgbuf,sizeof(msgbuf), _("Loading URLs from local cache..."));
-			std::cout << msgbuf;
+			std::cout << _("Loading URLs from local cache...");
 			std::cout.flush();
 		}
 		urlcfg->set_offline(true);
@@ -294,8 +288,7 @@ void controller::run(int argc, char * argv[]) {
 		}
 	} else {
 		if (!do_export) {
-			snprintf(msgbuf,sizeof(msgbuf), _("Loading URLs from %s..."), urlcfg->get_source().c_str());
-			std::cout << msgbuf;
+			std::cout << utils::strprintf(_("Loading URLs from %s..."), urlcfg->get_source().c_str());
 			std::cout.flush();
 		}
 		urlcfg->reload();
@@ -306,16 +299,17 @@ void controller::run(int argc, char * argv[]) {
 
 	if (urlcfg->get_urls().size() == 0) {
 		GetLogger().log(LOG_ERROR,"no URLs configured.");
+		std::string msg;
 		if (type == "local") {
-			snprintf(msgbuf, sizeof(msgbuf), _("Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."), url_file.c_str());
+			msg = utils::strprintf(_("Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."), url_file.c_str());
 		} else if (type == "bloglines") {
-			snprintf(msgbuf, sizeof(msgbuf), _("It looks like you haven't configured any feeds in your bloglines account. Please do so, and try again."));
+			msg = utils::strprintf(_("It looks like you haven't configured any feeds in your bloglines account. Please do so, and try again."));
 		} else if (type == "opml") {
-			snprintf(msgbuf, sizeof(msgbuf), _("It looks like the OPML feed you subscribed contains no feeds. Please fill it with feeds, and try again."));
+			msg = utils::strprintf(_("It looks like the OPML feed you subscribed contains no feeds. Please fill it with feeds, and try again."));
 		} else {
 			assert(0); // shouldn't happen
 		}
-		std::cout << msgbuf << std::endl << std::endl;
+		std::cout << msg << std::endl << std::endl;
 		usage(argv[0]);
 	}
 
@@ -396,9 +390,7 @@ void controller::catchup_all() {
 	try {
 		rsscache->catchup_all();
 	} catch (const dbexception& e) {
-		char buf[1024];
-		snprintf(buf, sizeof(buf), _("Error: couldn't mark all feeds read: %s"), e.what());
-		v->show_error(buf);
+		v->show_error(utils::strprintf(_("Error: couldn't mark all feeds read: %s"), e.what()));
 		return;
 	}
 	for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it) {
@@ -428,7 +420,6 @@ void controller::mark_all_read(unsigned int pos) {
 
 void controller::reload(unsigned int pos, unsigned int max) {
 	GetLogger().log(LOG_DEBUG, "controller::reload: pos = %u max = %u", pos, max);
-	char msgbuf[1024];
 	if (pos < feeds.size()) {
 		rss_feed feed = feeds[pos];
 		std::string msg;
@@ -443,9 +434,8 @@ void controller::reload(unsigned int pos, unsigned int max) {
 			msg.append(maxstr.str());
 			msg.append(") ");
 		}
-		snprintf(msgbuf, sizeof(msgbuf), _("%sLoading %s..."), msg.c_str(), feed.rssurl().c_str());
 		GetLogger().log(LOG_DEBUG, "controller::reload: before setting status");
-		v->set_status(msgbuf);
+		v->set_status(utils::strprintf(_("%sLoading %s..."), msg.c_str(), feed.rssurl().c_str()));
 		GetLogger().log(LOG_DEBUG, "controller::reload: after setting status");
 				
 		rss_parser parser(feed.rssurl().c_str(), rsscache, cfg, &ign);
@@ -486,13 +476,9 @@ void controller::reload(unsigned int pos, unsigned int max) {
 			}
 			v->set_status("");
 		} catch (const dbexception& e) {
-			char buf[1024];
-			snprintf(buf, sizeof(buf), _("Error while retrieving %s: %s"), feed.rssurl().c_str(), e.what());
-			v->set_status(buf);
+			v->set_status(utils::strprintf(_("Error while retrieving %s: %s"), feed.rssurl().c_str(), e.what()));
 		} catch (const std::string& errmsg) {
-			char buf[1024];
-			snprintf(buf, sizeof(buf), _("Error while retrieving %s: %s"), feed.rssurl().c_str(), errmsg.c_str());
-			v->set_status(buf);
+			v->set_status(utils::strprintf(_("Error while retrieving %s: %s"), feed.rssurl().c_str(), errmsg.c_str()));
 		}
 	} else {
 		v->show_error(_("Error: invalid feed!"));
@@ -523,9 +509,7 @@ void controller::reload_all() {
 	unsigned int unread_feeds2, unread_articles2;
 	compute_unread_numbers(unread_feeds2, unread_articles2);
 	if (unread_feeds2 != unread_feeds || unread_articles2 != unread_articles) {
-		char buf[2048];
-		snprintf(buf,sizeof(buf),_("newsbeuter: finished reload, %u unread feeds (%u unread articles total)"), unread_feeds2, unread_articles2);
-		this->notify(buf);
+		this->notify(utils::strprintf(_("newsbeuter: finished reload, %u unread feeds (%u unread articles total)"), unread_feeds2, unread_articles2));
 	}
 }
 
@@ -545,19 +529,6 @@ void controller::notify(const std::string& msg) {
 		GetLogger().log(LOG_DEBUG, "controller:notify: notifying external program `%s'", prog.c_str());
 		utils::run_command(prog, msg);
 	}
-	/* // TODO: implement Growl support
-	if (cfg->get_configvalue_as_bool("notify-growl")) {
-		std::vector<std::string> tokens = utils::tokenize(cfg->get_configvalue("growl-config"), ":");
-		if (tokens.size() >= 1) {
-			std::string hostname = tokens[0];
-			std::string password;
-			if (tokens.size() >= 2) {
-				password = tokens[1];
-			}
-			growlnotifier->send_notify(hostname, password, "newsbeuter", msg);
-		}
-	}
-	*/
 }
 
 void controller::compute_unread_numbers(unsigned int& unread_feeds, unsigned int& unread_articles) {
@@ -606,9 +577,7 @@ void controller::version_information() {
 }
 
 void controller::usage(char * argv0) {
-	char buf[2048];
-	snprintf(buf, sizeof(buf), 
-				_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]\n"
+	std::cout << utils::strprintf(_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]\n"
 				"-e              export OPML feed to stdout\n"
 				"-r              refresh feeds on start\n"
 				"-i <file>       import OPML file\n"
@@ -619,7 +588,6 @@ void controller::usage(char * argv0) {
 				"-o              activate offline mode (only applies to bloglines synchronization mode)\n"
 				"-V              get version information\n"
 				"-h              this help\n"), PROGRAM_NAME, PROGRAM_VERSION, argv0);
-	std::cout << buf;
 	::exit(EXIT_FAILURE);
 }
 
@@ -652,9 +620,7 @@ void controller::import_opml(const char * filename) {
 	}
 
 	nxml_free(data);
-	char buf[1024];
-	snprintf(buf, sizeof(buf), _("Import of %s finished."), filename);
-	std::cout << buf << std::endl;
+	std::cout << utils::strprintf(_("Import of %s finished."), filename) << std::endl;
 }
 
 void controller::export_opml() {

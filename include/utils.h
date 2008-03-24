@@ -41,6 +41,10 @@ class utils {
 		static std::string to_s(unsigned int u);
 
 		static std::string absolute_url(const std::string& url, const std::string& link);
+
+		static std::string strprintf(const char * format, ...);
+
+		static std::string get_useragent(configcontainer * cfgcont);
 };
 
 class scope_measure {

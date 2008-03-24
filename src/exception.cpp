@@ -2,7 +2,7 @@
 #include <exceptions.h>
 #include <config.h>
 #include <cerrno>
-#include <cstring>
+#include <utils.h>
 
 using namespace newsbeuter;
 
@@ -16,13 +16,13 @@ const char * exception::what() const throw() {
 
 
 const char * matcherexception::what() const throw() {
-	static char errmsgbuf[2048];
+	static std::string errmsg;
 	switch (type) {
 		case ATTRIB_UNAVAIL:
-			snprintf(errmsgbuf, sizeof(errmsgbuf), _("attribute `%s' is not available."), addinfo.c_str());
+			errmsg = utils::strprintf(_("attribute `%s' is not available."), addinfo.c_str());
 			break;
 		default:
-			strcpy(errmsgbuf,"");
+			errmsg = "";
 	}
-	return errmsgbuf;
+	return errmsg.c_str();
 }

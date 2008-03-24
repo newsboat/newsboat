@@ -43,9 +43,7 @@ void script_interpreter::run_function(const std::string& name) {
 	if (state) {
 		VALUE c = rb_funcall(rb_gv_get("$!"), rb_intern("to_s"), 0);
 		GetLogger().log(LOG_ERROR, "script_interpreter::load_script: %s", RSTRING(c)->ptr);
-		char buf[1024];
-		snprintf(buf, sizeof(buf), "Error while calling `%s': %s", name.c_str(), RSTRING(c)->ptr);
-		v->show_error(buf);
+		v->show_error(utils::strprintf(_("Error while calling `%s': %s"), name.c_str(), RSTRING(c)->ptr));
 	}
 }
 

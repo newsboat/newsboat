@@ -49,14 +49,10 @@ bool matcher::matches(matchable* item) {
 	 * lot of different occassions, and slow matching can be easily measured
 	 * (and felt by the user) on slow computers with a lot of items to match.
 	 */
-	bool retval = false; if (item) { struct timeval tv1, tv2;
-	gettimeofday(&tv1, NULL);
-
+	bool retval = false; 
+	if (item) { 
+		scope_measure m1("matcher::matches");
 		retval = matches_r(p.get_root(), item);
-
-		gettimeofday(&tv2, NULL);
-		unsigned long diff = (((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) - tv1.tv_usec;
-		GetLogger().log(LOG_DEBUG, "matcher::matches matching took %lu µs", diff);
 	}
 	return retval;
 }

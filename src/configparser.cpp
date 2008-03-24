@@ -74,7 +74,6 @@ bool configparser::parse(const std::string& filename) {
 	 *   - hand over the tokenize results to the config_action_handler
 	 *   - if an error happens, react accordingly.
 	 */
-	char buf[1024];
 	if (included_files.find(filename) != included_files.end()) {
 		GetLogger().log(LOG_WARN, "configparser::parse: file %s has already been included", filename.c_str());
 		return true;
@@ -116,13 +115,10 @@ bool configparser::parse(const std::string& filename) {
 						default:
 							errmsg = _("unknown error (bug).");
 					}
-					snprintf(buf, sizeof(buf), _("Error while processing command `%s' (%s line %u): %s"), line.c_str(), filename.c_str(), linecounter, errmsg);
-					throw configexception(buf);
+					throw configexception(utils::strprintf(_("Error while processing command `%s' (%s line %u): %s"), line.c_str(), filename.c_str(), linecounter, errmsg));
 				}
 			} else {
-				char buf[1024];
-				snprintf(buf, sizeof(buf), _("unknown command `%s'"), cmd.c_str());
-				throw configexception(buf);
+				throw configexception(utils::strprintf(_("unknown command `%s'"), cmd.c_str()));
 			}
 		}
 		getline(f,line);

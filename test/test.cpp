@@ -483,5 +483,14 @@ BOOST_AUTO_TEST_CASE(TestMiscUtilsFunctions) {
 
 	std::vector<std::string> foobar;
 	foobar.erase(foobar.begin(), foobar.end());
-
 }
+
+BOOST_AUTO_TEST_CASE(TestUtilsStrPrintf) {
+	BOOST_CHECK_EQUAL(utils::strprintf(NULL), "");
+	BOOST_CHECK_EQUAL(utils::strprintf("%s", ""), "");
+	BOOST_CHECK_EQUAL(utils::strprintf("%u", 0), "0");
+	BOOST_CHECK_EQUAL(utils::strprintf("%s", NULL), "(null)");
+	BOOST_CHECK_EQUAL(utils::strprintf("%u-%s-%c", 23, "hello world", 'X'), "23-hello world-X");
+}
+
+

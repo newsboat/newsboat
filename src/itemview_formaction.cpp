@@ -167,9 +167,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 	try {
 		item.set_unread(false);
 	} catch (const dbexception& e) {
-		char buf[1024];
-		snprintf(buf, sizeof(buf), _("Error while marking article as read: %s"), e.what());
-		v->show_error(buf);
+		v->show_error(utils::strprintf(_("Error while marking article as read: %s"), e.what()));
 	}
 
 	switch (op) {
@@ -182,17 +180,14 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 			do_redraw = true;
 			break;
 		case OP_ENQUEUE: {
-				char buf[1024];
 				if (item.enclosure_url().length() > 0) {
-					snprintf(buf, sizeof(buf), _("Added %s to download queue."), item.enclosure_url().c_str());
 					v->get_ctrl()->enqueue_url(item.enclosure_url());
-					v->set_status(buf);
+					v->set_status(utils::strprintf(_("Added %s to download queue."), item.enclosure_url().c_str()));
 				}
 			}
 			break;
 		case OP_SAVE:
 			{
-				char buf[1024];
 				GetLogger().log(LOG_INFO, "view::run_itemview: saving article");
 				std::string filename;
 				if (automatic) {
@@ -206,11 +201,9 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 				} else {
 					try {
 						v->write_item(item, filename);
-						snprintf(buf, sizeof(buf), _("Saved article to %s."), filename.c_str());
-						v->show_error(buf);
+						v->show_error(utils::strprintf(_("Saved article to %s."), filename.c_str()));
 					} catch (...) {
-						snprintf(buf, sizeof(buf), _("Error: couldn't write article to file %s"), filename.c_str());
-						v->show_error(buf);
+						v->show_error(utils::strprintf(_("Error: couldn't write article to file %s"), filename.c_str()));
 					}
 				}
 			}
@@ -354,18 +347,15 @@ void itemview_formaction::handle_cmdline(const std::string& cmd) {
 		if (tokens[0] == "save" && tokens.size() >= 2) {
 			std::string filename = utils::resolve_tilde(tokens[1]);
 			rss_item& item = feed->get_item_by_guid(guid);
-			char buf[1024];
 
 			if (filename == "") {
 				v->show_error(_("Aborted saving."));
 			} else {
 				try {
 					v->write_item(item, filename);
-					snprintf(buf, sizeof(buf), _("Saved article to %s"), filename.c_str());
-					v->show_error(buf);
+					v->show_error(utils::strprintf(_("Saved article to %s"), filename.c_str()));
 				} catch (...) {
-					snprintf(buf, sizeof(buf), _("Error: couldn't save article to %s"), filename.c_str());
-					v->show_error(buf);
+					v->show_error(utils::strprintf(_("Error: couldn't save article to %s"), filename.c_str()));
 				}
 			}
 

@@ -39,18 +39,7 @@ rss_feed rss_parser::parse() {
 		proxy_auth = const_cast<char *>(cfgcont->get_configvalue("proxy-auth").c_str());
 	}
 
-	/*
-	 * First we construct a fancy User-Agent header (which can be overridden by the user, BTW)
-	 */
-	char user_agent[1024];
-	std::string ua_pref = cfgcont->get_configvalue("user-agent");
-	if (ua_pref.length() == 0) {
-		struct utsname buf;
-		uname(&buf);
-		snprintf(user_agent, sizeof(user_agent), "%s/%s (%s %s; %s; %s) %s", PROGRAM_NAME, PROGRAM_VERSION, buf.sysname, buf.release, buf.machine, PROGRAM_URL, curl_version());
-	} else {
-		snprintf(user_agent, sizeof(user_agent), "%s", ua_pref.c_str());
-	}
+	std::string user_agent = utils::get_useragent(cfgcont);
 
 	/*
 	 * This is a bit messy.
@@ -63,7 +52,7 @@ rss_feed rss_parser::parse() {
 	int my_errno = 0;
 	CURLcode ccode = CURLE_OK;
 	if (my_uri.substr(0,5) == "http:" || my_uri.substr(0,6) == "https:") {
-		mrss_options_t * options = mrss_options_new(30, proxy, proxy_auth, NULL, NULL, NULL, 0, NULL, user_agent);
+		mrss_options_t * options = mrss_options_new(30, proxy, proxy_auth, NULL, NULL, NULL, 0, NULL, user_agent.c_str());
 		{
 			scope_measure m1("mrss_parse_url_with_options_and_error");
 			err = mrss_parse_url_with_options_and_error(const_cast<char *>(my_uri.c_str()), &mrss, options, &ccode);
@@ -80,7 +69,7 @@ rss_feed rss_parser::parse() {
 	} else if (my_uri.substr(0,7) == "filter:") {
 		std::string filter, url;
 		utils::extract_filter(my_uri, filter, url);
-		std::string buf = utils::retrieve_url(url, user_agent);
+		std::string buf = utils::retrieve_url(url, user_agent.c_str());
 		std::string result = utils::run_filter(filter, buf);
 		GetLogger().log(LOG_DEBUG, "rss_parser::parse: output of `%s' is: %s", filter.c_str(), result.c_str());
 		err = mrss_parse_buffer(const_cast<char *>(result.c_str()), result.length(), &mrss);
@@ -89,9 +78,7 @@ rss_feed rss_parser::parse() {
 		skip_parsing = true;
 		err = MRSS_OK;
 	} else {
-		char buf[1024];
-		snprintf(buf, sizeof(buf), _("Error: unsupported URL: %s"), my_uri.c_str());
-		throw std::string(buf);
+		throw utils::strprintf(_("Error: unsupported URL: %s"), my_uri.c_str());
 	}
 
 	if (!skip_parsing) {
@@ -317,17 +304,7 @@ bool rss_parser::check_and_update_lastmodified() {
 		proxy_auth = const_cast<char *>(cfgcont->get_configvalue("proxy-auth").c_str());
 	}
 
-	char user_agent[1024];
-	std::string ua_pref = cfgcont->get_configvalue("user-agent");
-	if (ua_pref.length() == 0) {
-		struct utsname buf;
-		uname(&buf);
-		snprintf(user_agent, sizeof(user_agent), "%s/%s (%s %s; %s; %s) %s", PROGRAM_NAME, PROGRAM_VERSION, buf.sysname, buf.release, buf.machine, PROGRAM_URL, curl_version());
-	} else {
-		snprintf(user_agent, sizeof(user_agent), "%s", ua_pref.c_str());
-	}
-
-	mrss_options_t * options = mrss_options_new(30, proxy, proxy_auth, NULL, NULL, NULL, 0, NULL, user_agent);
+	mrss_options_t * options = mrss_options_new(30, proxy, proxy_auth, NULL, NULL, NULL, 0, NULL, utils::get_useragent(cfgcont).c_str());
 
 	err = mrss_get_last_modified_with_options(const_cast<char *>(my_uri.c_str()), &newlm, options);
 
@@ -420,7 +397,6 @@ unsigned int rss_feed::unread_item_count() const {
 }
 
 time_t rss_parser::parse_date(const std::string& datestr) {
-	// TODO: refactor	
 	std::istringstream is(datestr);
 	std::string monthstr, time, tmp;
 	struct tm stm;

@@ -131,17 +131,9 @@ void opml_urlreader::reload() {
 		alltags.erase(alltags.begin(), alltags.end());
 	}
 
-	char user_agent[1024];
-	std::string ua_pref = cfg->get_configvalue("user-agent");
-	if (ua_pref.length() == 0) {
-		struct utsname buf;
-		uname(&buf);
-		snprintf(user_agent, sizeof(user_agent), "%s/%s (%s %s; %s; %s) %s", PROGRAM_NAME, PROGRAM_VERSION, buf.sysname, buf.release, buf.machine, PROGRAM_URL, curl_version());
-	} else {
-		snprintf(user_agent, sizeof(user_agent), "%s", ua_pref.c_str());
-	}
+	std::string user_agent = utils::get_useragent(cfg);
 
-	std::string urlcontent = utils::retrieve_url(this->get_source(), user_agent, this->get_auth());
+	std::string urlcontent = utils::retrieve_url(this->get_source(), user_agent.c_str(), this->get_auth());
 	// GetLogger().log(LOG_DEBUG, "bloglines_urlreader::reload: return OPML content is `%s'", urlcontent.c_str());
 
 	nxml_t *data;

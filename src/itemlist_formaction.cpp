@@ -94,7 +94,6 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			break;
 		case OP_SAVE: 
 			{
-				char buf[1024];
 				GetLogger().log(LOG_INFO, "itemlist_formaction: saving item at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0) {
 					std::string filename ;
@@ -105,19 +104,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					} else {
 						filename = v->run_filebrowser(FBT_SAVE,v->get_filename_suggestion(visible_items[itempos].first->title()));
 					}
-					if (filename == "") {
-						v->show_error(_("Aborted saving."));
-					} else {
-						try {
-							v->write_item(*visible_items[itempos].first, filename);
-							snprintf(buf, sizeof(buf), _("Saved article to %s"), filename.c_str());
-							v->show_error(buf);
-						
-						} catch (...) {
-							snprintf(buf, sizeof(buf), _("Error: couldn't save article to %s"), filename.c_str());
-							v->show_error(buf);
-						}
-					}
+					save_article(filename, *visible_items[itempos].first);
 				} else {
 					v->show_error(_("Error: no item selected!"));
 				}
@@ -183,9 +170,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				do_redraw = true;
 				v->set_status("");
 			} catch (const dbexception& e) {
-				char buf[1024];
-				snprintf(buf, sizeof(buf), _("Error: couldn't mark feed read: %s"), e.what());
-				v->show_error(buf);
+				v->show_error(utils::strprintf(_("Error: couldn't mark feed read: %s"), e.what()));
 			}
 			break;
 		case OP_SEARCH: {
@@ -219,9 +204,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 							v->set_status("");
 						}
 					} catch (const dbexception& e) {
-						char buf[1024];
-						snprintf(buf, sizeof(buf), _("Error while toggling read flag: %s"), e.what());
-						v->set_status(buf);
+						v->set_status(utils::strprintf(_("Error while toggling read flag: %s"), e.what()));
 					}
 					do_redraw = true;
 				}
@@ -332,9 +315,7 @@ void itemlist_formaction::finished_qna(operation op) {
 							items = v->get_ctrl()->search_for_items(searchphrase, feed->rssurl());
 						}
 					} catch (const dbexception& e) {
-						char buf[1024];
-						snprintf(buf, sizeof(buf), _("Error while searching for `%s': %s"), searchphrase.c_str(), e.what());
-						v->show_error(buf);
+						v->show_error(utils::strprintf(_("Error while searching for `%s': %s"), searchphrase.c_str(), e.what()));
 						return;
 					}
 					if (items.size() > 0) {
@@ -416,10 +397,7 @@ void itemlist_formaction::prepare() {
 			line.append("] text:");
 			std::string title;
 
-			char buf[5];
-			snprintf(buf,sizeof(buf),"%u",it->second + 1);
-
-			fmt.register_fmt('i', buf);
+			fmt.register_fmt('i', utils::strprintf("%u",it->second + 1));
 
 			std::string flags;
 
@@ -600,8 +578,6 @@ void itemlist_formaction::handle_cmdline(const std::string& cmd) {
 		if (tokens.size() > 0) {
 			if (tokens[0] == "save" && tokens.size() >= 2) {
 				std::string filename = utils::resolve_tilde(tokens[1]);
-				char buf[1024];
-
 				std::string itemposname = f->get("itempos");
 				GetLogger().log(LOG_INFO, "itemlist_formaction::handle_cmdline: saving item at pos `%s' to `%s'", itemposname.c_str(), filename.c_str());
 				if (itemposname.length() > 0) {
@@ -609,18 +585,7 @@ void itemlist_formaction::handle_cmdline(const std::string& cmd) {
 					unsigned int itempos = 0;
 					posname >> itempos;
 
-					if (filename == "") {
-						v->show_error(_("Aborted saving."));
-					} else {
-						try {
-							v->write_item(*visible_items[itempos].first, filename);
-							snprintf(buf, sizeof(buf), _("Saved article to %s"), filename.c_str());
-							v->show_error(buf);
-						} catch (...) {
-							snprintf(buf, sizeof(buf), _("Error: couldn't save article to %s"), filename.c_str());
-							v->show_error(buf);
-						}
-					}
+					save_article(filename, *visible_items[itempos].first);
 				} else {
 					v->show_error(_("Error: no item selected!"));
 				}
@@ -642,6 +607,19 @@ int itemlist_formaction::get_pos(unsigned int realidx) {
 void itemlist_formaction::recalculate_form() {
 	formaction::recalculate_form();
 	set_update_visible_items(true);
+}
+
+void itemlist_formaction::save_article(const std::string& filename, const rss_item& item) {
+	if (filename == "") {
+		v->show_error(_("Aborted saving."));
+	} else {
+		try {
+			v->write_item(item, filename);
+			v->show_error(utils::strprintf(_("Saved article to %s"), filename.c_str()));
+		} catch (...) {
+			v->show_error(utils::strprintf(_("Error: couldn't save article to %s"), filename.c_str()));
+		}
+	}
 }
 
 

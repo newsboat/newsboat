@@ -112,7 +112,6 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 	 * is tokenized, and then the tokens are looked at.
 	 */
 	std::vector<std::string> tokens = utils::tokenize_quoted(cmdline, " \t=");
-	char buf[1024];
 	configcontainer * cfg = v->get_cfg();
 	assert(cfg != NULL);
 	if (tokens.size() > 0) {
@@ -122,8 +121,7 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 			if (tokens.size()==0) {
 				v->show_error(_("usage: set <variable>[=<value>]"));
 			} else if (tokens.size()==1) {
-				snprintf(buf,sizeof(buf), "  %s=%s", tokens[0].c_str(), cfg->get_configvalue(tokens[0]).c_str());
-				v->set_status(buf);
+				v->set_status(utils::strprintf("  %s=%s", tokens[0].c_str(), cfg->get_configvalue(tokens[0]).c_str()));
 			} else if (tokens.size()==2) {
 				cfg->set_configvalue(tokens[0], tokens[1]);
 				set_redraw(true); // because some configuration value might have changed something UI-related

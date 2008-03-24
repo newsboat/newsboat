@@ -1,5 +1,6 @@
 #include <utils.h>
 #include <logger.h>
+#include <config.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -8,6 +9,7 @@
 #include <errno.h>
 #include <pwd.h>
 #include <libgen.h>
+#include <sys/utsname.h>
 
 #include <locale>
 #include <cwchar>
@@ -570,6 +572,34 @@ std::string utils::absolute_url(const std::string& url, const std::string& link)
 		return retval;
 	}
 }
+
+
+std::string utils::strprintf(const char * format, ...) {
+	if (!format)
+		return std::string("");
+
+	va_list ap;
+	va_start(ap, format);
+
+	unsigned int len = vsnprintf(NULL, 0, format, ap);
+	char buf[len + 1];
+	vsnprintf(buf, len + 1, format, ap);
+
+	va_end(ap);
+
+	return std::string(buf);
+}
+
+std::string utils::get_useragent(configcontainer * cfgcont) {
+	std::string ua_pref = cfgcont->get_configvalue("user-agent");
+	if (ua_pref.length() == 0) {
+		struct utsname buf;
+		uname(&buf);
+		return utils::strprintf("%s/%s (%s %s; %s; %s) %s", PROGRAM_NAME, PROGRAM_VERSION, buf.sysname, buf.release, buf.machine, PROGRAM_URL, curl_version());
+	}
+	return ua_pref;
+}
+
 
 scope_measure::scope_measure(const std::string& func, loglevel ll) : lvl(ll) {
 	funcname = func;

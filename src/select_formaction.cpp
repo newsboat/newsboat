@@ -2,6 +2,7 @@
 #include <formatstring.h>
 #include <view.h>
 #include <config.h>
+#include <utils.h>
 
 #include <sstream>
 #include <cassert>
@@ -82,24 +83,14 @@ void select_formaction::prepare() {
 		switch (type) {
 		case SELECTTAG:
 			for (std::vector<std::string>::const_iterator it=tags.begin();it!=tags.end();++it,++i) {
-				std::ostringstream line;
-				char num[32];
-				snprintf(num,sizeof(num),"%4d  ", i+1);
-				std::string tagstr = num;
-				tagstr.append(it->c_str());
-				line << "{listitem[" << i << "] text:" << stfl::quote(tagstr.c_str()) << "}";
-				code.append(line.str());
+				std::string tagstr = utils::strprintf("%4d  %s", i+1, it->c_str());
+				code.append(utils::strprintf("{listitem[%u] text:%s}", i, stfl::quote(tagstr)));
 			}
 			break;
 		case SELECTFILTER:
 			for (std::vector<filter_name_expr_pair>::const_iterator it=filters.begin();it!=filters.end();++it,++i) {
-				std::ostringstream line;
-				char num[32];
-				snprintf(num,sizeof(num),"%4d  ", i+1);
-				std::string tagstr = num;
-				tagstr.append(it->first.c_str());
-				line << "{listitem[" << i << "] text:" << stfl::quote(tagstr.c_str()) << "}";
-				code.append(line.str());
+				std::string tagstr = utils::strprintf("%4d  %s", i+1, it->first.c_str());
+				code.append(utils::strprintf("{listitem[%u] text:%s}", i, stfl::quote(tagstr)));
 			}
 			break;
 		default:

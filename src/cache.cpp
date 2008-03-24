@@ -169,10 +169,8 @@ cache::cache(const std::string& cachefile, configcontainer * c) : db(0),cfg(c), 
 	// TODO: this should be refactored into an exception
 	if (error != SQLITE_OK) {
 		GetLogger().log(LOG_ERROR,"couldn't sqlite3_open(%s): error = %d", cachefile.c_str(), error);
-		char buf[1024];
-		snprintf(buf, sizeof(buf), _("Error: opening the cache file `%s' failed: %s"), cachefile.c_str(), sqlite3_errmsg(db));
+		std::cout << utils::strprintf(_("Error: opening the cache file `%s' failed: %s"), cachefile.c_str(), sqlite3_errmsg(db)) << std::endl;
 		sqlite3_close(db);
-		std::cout << buf << std::endl;
 		::exit(EXIT_FAILURE);
 	}
 

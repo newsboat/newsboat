@@ -19,6 +19,7 @@
 #include <exception.h>
 #include <exceptions.h>
 #include <keymap.h>
+#include <utils.h>
 
 #include <iostream>
 #include <iomanip>
@@ -116,7 +117,7 @@ void view::set_bindings() {
 	GetLogger().log(LOG_DEBUG, "view::set_bindings: itemview bind_page_up = %s bind_page_down = %s", itemview->get_form()->get("bind_page_up").c_str(), itemview->get_form()->get("bind_page_down").c_str());
 }
 
-void view::set_status_unlocked(const char * msg) {
+void view::set_status_unlocked(const std::string& msg) {
 	if (formaction_stack.size() > 0 && (*formaction_stack.begin()) != NULL) {
 		stfl::form * form = (*formaction_stack.begin())->get_form();
 		// GetLogger().log(LOG_DEBUG, "view::set_status: form = %p", form);
@@ -127,12 +128,12 @@ void view::set_status_unlocked(const char * msg) {
 	}
 }
 
-void view::set_status(const char * msg) {
+void view::set_status(const std::string& msg) {
 	scope_mutex lock(mtx);
 	set_status_unlocked(msg);
 }
 
-void view::show_error(const char * msg) {
+void view::show_error(const std::string& msg) {
 	set_status(msg);
 }
 
@@ -325,10 +326,8 @@ void view::set_feedlist(std::vector<rss_feed>& feeds) {
 	try {
 		feedlist->set_feedlist(feeds);
 	} catch (matcherexception e) {
-		char buf[1024];
-		snprintf(buf,sizeof(buf), _("Error: applying the filter failed: %s"), e.what());
-		set_status_unlocked(buf);
-		GetLogger().log(LOG_DEBUG, "view::set_feedlist: inside catch: %s", buf);
+		set_status_unlocked(utils::strprintf(_("Error: applying the filter failed: %s"), e.what()));
+		GetLogger().log(LOG_DEBUG, "view::set_feedlist: inside catch: %s", e.what());
 	}
 }
 

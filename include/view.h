@@ -37,9 +37,9 @@ namespace newsbeuter {
 			void set_feedlist(std::vector<rss_feed>& feeds);
 			void set_keymap(keymap * k);
 			void set_config_container(configcontainer * cfgcontainer);
-			void show_error(const char * msg);
-			void set_status(const char * msg);
-			void set_status_unlocked(const char * msg);
+			void show_error(const std::string& msg);
+			void set_status(const std::string& msg);
+			void set_status_unlocked(const std::string& msg);
 			inline controller * get_ctrl() { return ctrl; }
 			inline configcontainer * get_cfg() { return cfg; }
 			inline keymap * get_keys() { return keys; }

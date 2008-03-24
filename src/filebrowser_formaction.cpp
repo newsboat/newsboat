@@ -3,6 +3,7 @@
 #include <logger.h>
 #include <config.h>
 #include <view.h>
+#include <utils.h>
 
 #include <iostream>
 #include <iomanip>
@@ -96,10 +97,8 @@ void filebrowser_formaction::process_operation(operation op, bool /* automatic *
 						 * with no further warning...
 						 */
 						if (::stat(fn.c_str(), &sbuf)!=-1 && type == FBT_SAVE) {
-							char lbuf[2048];
-							snprintf(lbuf,sizeof(lbuf), _("Do you really want to overwrite `%s' (y:Yes n:No)? "), fn.c_str());
 							f->set_focus("files");
-							if (v->confirm(lbuf, _("yn")) == *_("n")) {
+							if (v->confirm(utils::strprintf(_("Do you really want to overwrite `%s' (y:Yes n:No)? "), fn.c_str()), _("yn")) == *_("n")) {
 								do_pop = false;
 							}
 							f->set_focus("filenametext");
@@ -173,11 +172,11 @@ void filebrowser_formaction::init() {
 	
 	f->set("filenametext", default_filename);
 	
-	char buf[1024];
+	std::string buf;
 	if (type == FBT_OPEN) {
-		snprintf(buf, sizeof(buf), _("%s %s - Open File - %s"), PROGRAM_NAME, PROGRAM_VERSION, cwdtmp);
+		buf = utils::strprintf(_("%s %s - Open File - %s"), PROGRAM_NAME, PROGRAM_VERSION, cwdtmp);
 	} else {
-		snprintf(buf, sizeof(buf), _("%s %s - Save File - %s"), PROGRAM_NAME, PROGRAM_VERSION, cwdtmp);
+		buf = utils::strprintf(_("%s %s - Save File - %s"), PROGRAM_NAME, PROGRAM_VERSION, cwdtmp);
 	}
 	f->set("head", buf);
 }

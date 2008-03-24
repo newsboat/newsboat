@@ -123,9 +123,7 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 						do_redraw = true;
 						v->set_status("");
 					} catch (const dbexception& e) {
-						char buf[1024];
-						snprintf(buf, sizeof(buf), _("Error: couldn't mark feed read: %s"), e.what());
-						v->show_error(buf);
+						v->show_error(utils::strprintf(_("Error: couldn't mark feed read: %s"), e.what()));
 					}
 				} else {
 					v->show_error(_("No feed selected!")); // should not happen
@@ -292,8 +290,6 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 		}
 
 		// TODO: refactor
-		char sbuf[20];
-		char idxbuf[5];
 		unsigned int unread_count = 0;
 		if (it->items().size() > 0) {
 			unread_count = it->unread_item_count();
@@ -311,11 +307,8 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 
 			fmtstr_formatter fmt;
 
-			snprintf(idxbuf, sizeof(idxbuf),"%u", feedlist_number);
-			snprintf(sbuf,sizeof(sbuf),"(%u/%u)",unread_count,static_cast<unsigned int>(it->items().size()));
-
-			fmt.register_fmt('i', idxbuf);
-			fmt.register_fmt('u', sbuf);
+			fmt.register_fmt('i', utils::strprintf("%u", feedlist_number));
+			fmt.register_fmt('u', utils::strprintf("(%u/%u)",unread_count,static_cast<unsigned int>(it->items().size())));
 			fmt.register_fmt('n', unread_count > 0 ? "N" : " ");
 			fmt.register_fmt('t', title);
 			fmt.register_fmt('l', it->link());
@@ -514,9 +507,7 @@ void feedlist_formaction::finished_qna(operation op) {
 					try {
 						items = v->get_ctrl()->search_for_items(searchphrase, "");
 					} catch (const dbexception& e) {
-						char buf[1024];
-						snprintf(buf, sizeof(buf), _("Error while searching for `%s': %s"), searchphrase.c_str(), e.what());
-						v->show_error(buf);
+						v->show_error(utils::strprintf(_("Error while searching for `%s': %s"), searchphrase.c_str(), e.what()));
 						return;
 					}
 					if (items.size() > 0) {

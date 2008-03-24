@@ -42,7 +42,7 @@ NEWSBEUTER_OBJS=$(patsubst %.cpp,%.o,$(NEWSBEUTER_SOURCES))
 NEWSBEUTER_LIBS=-lbeuter -lfilter -lstfl -lncursesw -lpthread -lxmlrss
 
 ifeq ($(FOUND_RUBY),1)
-NEWSBEUTER_LIBS+=-lext -lruby1.8
+NEWSBEUTER_LIBS+=-lext -lruby
 CXXFLAGS+=-DHAVE_RUBY=1
 endif
 
