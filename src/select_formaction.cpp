@@ -87,7 +87,7 @@ void select_formaction::prepare() {
 			break;
 		case SELECTFILTER:
 			for (std::vector<filter_name_expr_pair>::const_iterator it=filters.begin();it!=filters.end();++it,++i) {
-				std::string tagstr = utils::strprintf("%4d  %s", i+1, it->first.c_str());
+				std::string tagstr = utils::strprintf("%4u  %s", i+1, it->first.c_str());
 				code.append(utils::strprintf("{listitem[%u] text:%s}", i, stfl::quote(tagstr).c_str()));
 			}
 			break;
