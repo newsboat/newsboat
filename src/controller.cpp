@@ -33,7 +33,9 @@
 
 using namespace newsbeuter;
 
-static std::string lock_file = "lock.pid";
+#define LOCK_SUFFIX ".lock"
+
+static std::string lock_file;
 
 void ctrl_c_action(int sig) {
 	GetLogger().log(LOG_DEBUG,"caugh signal %d",sig);
@@ -69,16 +71,10 @@ controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cach
 	}
 	config_dir = cfgdir;
 
-
 	config_dir.append(NEWSBEUTER_PATH_SEP);
 	config_dir.append(NEWSBEUTER_CONFIG_SUBDIR);
 	mkdir(config_dir.c_str(),0700); // create configuration directory if it doesn't exist
 
-	url_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + url_file;
-	cache_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + cache_file;
-	config_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
-	lock_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + lock_file;
-	queue_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
 	reload_mutex = new mutex();
 }
 
@@ -94,6 +90,12 @@ void controller::set_view(view * vv) {
 
 void controller::run(int argc, char * argv[]) {
 	int c;
+
+	url_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + url_file;
+	cache_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + cache_file;
+	lock_file = cache_file + LOCK_SUFFIX;
+	config_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
+	queue_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
 
 	::signal(SIGINT, ctrl_c_action);
 #ifndef DEBUG
@@ -137,6 +139,7 @@ void controller::run(int argc, char * argv[]) {
 				break;
 			case 'c':
 				cache_file = optarg;
+				lock_file = std::string(cache_file) + LOCK_SUFFIX;
 				cachefile_given_on_cmdline = true;
 				break;
 			case 'C':
@@ -248,6 +251,23 @@ void controller::run(int argc, char * argv[]) {
 	std::string cachefilepath = cfg->get_configvalue("cache-file");
 	if (cachefilepath.length() > 0 && !cachefile_given_on_cmdline) {
 		cache_file = cachefilepath.c_str();
+
+		// ok, we got another cache file path via the configuration
+		// that means we need to remove the old lock file, assemble
+		// the new lock file's name, and then try to lock it.
+		utils::remove_fs_lock(lock_file);
+		lock_file = std::string(cache_file) + LOCK_SUFFIX;
+
+		pid_t pid;
+		if (!utils::try_fs_lock(lock_file, pid)) {
+			if (pid > 0) {
+				GetLogger().log(LOG_ERROR,"an instance is already running: pid = %u",pid);
+			} else {
+				GetLogger().log(LOG_ERROR,"something went wrong with the lock: %s", strerror(errno));
+			}
+			std::cout << utils::strprintf(_("Error: an instance of %s is already running (PID: %u)"), PROGRAM_NAME, pid) << std::endl;
+			return;
+		}
 	}
 
 	if (!do_export) {

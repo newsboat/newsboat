@@ -218,7 +218,7 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str, std::string 
 }
 
 void utils::remove_fs_lock(const std::string& lock_file) {
-	GetLogger().log(LOG_DEBUG, "removed lockfile %s", lock_file.c_str());
+	GetLogger().log(LOG_DEBUG, "utils::remove_fs_lock: removed lockfile %s", lock_file.c_str());
 	::unlink(lock_file.c_str());
 }
 
@@ -226,6 +226,8 @@ bool utils::try_fs_lock(const std::string& lock_file, pid_t & pid) {
 	int fd;
 	// pid == 0 indicates that something went majorly wrong during locking
 	pid = 0;
+
+	GetLogger().log(LOG_DEBUG, "utils::try_fs_lock: trying to lock %s", lock_file.c_str());
 
 	// first, we open (and possibly create) the lock file
 	fd = ::open(lock_file.c_str(), O_RDWR | O_CREAT, 0600);
