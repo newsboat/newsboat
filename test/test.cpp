@@ -2,6 +2,7 @@
 
 #define BOOST_AUTO_TEST_MAIN
 #define BOOST_TEST_DYN_LINK
+#include <climits>
 #include <boost/test/auto_unit_test.hpp>
 
 #include <unistd.h>
