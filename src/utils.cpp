@@ -585,6 +585,7 @@ std::string utils::strprintf(const char * format, ...) {
 	va_start(ap, format);
 
 	unsigned int len = vsnprintf(NULL, 0, format, ap);
+
 	char * buf = new char[len + 1];
 	vsnprintf(buf, len + 1, format, ap);
 
