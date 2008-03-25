@@ -16,6 +16,7 @@
 #include <cwchar>
 #include <cstring>
 #include <cstdlib>
+#include <cstdarg>
 
 #include <curl/curl.h>
 

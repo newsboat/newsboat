@@ -2,6 +2,7 @@
 #include <exceptions.h>
 #include <config.h>
 #include <cerrno>
+#include <cstring>
 #include <utils.h>
 
 using namespace newsbeuter;
@@ -11,7 +12,7 @@ exception::exception(unsigned int error_code) : ecode(error_code) { }
 exception::~exception() throw() { }
 
 const char * exception::what() const throw() {
-	return std::strerror(ecode);
+	return ::strerror(ecode);
 }
 
 
