@@ -183,13 +183,7 @@ void controller::run(int argc, char * argv[]) {
 
 	if (!do_export) {
 
-		const char * format = _("Starting %s %s...");
-		const char * progname = PROGRAM_NAME;
-		const char * progver = PROGRAM_VERSION;
-
-		GetLogger().log(LOG_DEBUG, "controller::run: format = `%s' progname = %s progver = %s", format, progname, progver);
-
-		std::cout << utils::strprintf(format, progname, progver) << std::endl;
+		std::cout << utils::strprintf(_("Starting %s %s..."), PROGRAM_NAME, PROGRAM_VERSION) << std::endl;
 
 		pid_t pid;
 		if (!utils::try_fs_lock(lock_file, pid)) {

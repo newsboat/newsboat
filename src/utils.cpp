@@ -586,15 +586,15 @@ std::string utils::strprintf(const char * format, ...) {
 
 	unsigned int len = vsnprintf(NULL, 0, format, ap);
 
-	char * buf = new char[len + 1];
+	va_end(ap);
+	va_start(ap, format);
+
+	char buf[len + 1];
 	vsnprintf(buf, len + 1, format, ap);
 
 	va_end(ap);
 
-	std::string ret(buf);
-	delete[] buf;
-
-	return ret;
+	return buf;
 }
 
 std::string utils::get_useragent(configcontainer * cfgcont) {

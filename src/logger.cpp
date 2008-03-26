@@ -62,10 +62,13 @@ void logger::log(loglevel level, const char * format, ...) {
 
 		va_list ap;
 		va_start(ap, format);
-
 		unsigned int len = vsnprintf(NULL,0,format,ap);
+		va_end(ap);
+
+		va_start(ap, format);
 		logmsgbuf = new char[len + 1];
 		vsnprintf(logmsgbuf, len + 1, format, ap);
+		va_end(ap);
 
 		len = snprintf(NULL, 0, "[%s] %s: %s",date, loglevel_str[level], logmsgbuf);
 		buf = new char[len + 1];
@@ -83,9 +86,6 @@ void logger::log(loglevel level, const char * format, ...) {
 
 		delete[] buf;
 		delete[] logmsgbuf;
-
-		va_end(ap);
-
 	}
 }
 
