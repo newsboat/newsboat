@@ -107,13 +107,13 @@ $(XMLRSSLIB_OUTPUT): $(XMLRSSLIB_OBJS)
 	$(AR) qc $@ $^
 	$(RANLIB) $@
 
-$(EXTLIB_OUTPUT): $(EXTLIB_SOURCES) prepare_extlib
+$(EXTLIB_OUTPUT): prepare_extlib
 	$(MAKE) -C swig CFLAGS+="-I../include -I../filter -I../xmlrss" $(patsubst swig/%,%,$(EXTLIB_OBJS))
 	$(RM) $@
 	$(AR) qc $@ $(EXTLIB_OBJS)
 	$(RANLIB) $@
 
-prepare_extlib:
+prepare_extlib: $(EXTLIB_SOURCES)
 	cd swig && $(RUBY) extconf.rb
 
 $(FILTERLIB_OUTPUT): $(FILTERLIB_OBJS)
@@ -209,7 +209,7 @@ uninstall:
 	$(RM) $(mandir)/man1/$(PODBEUTER).1
 	$(RM) -r $(docdir)
 
-.PHONY: doc clean all test
+.PHONY: doc clean all test prepare_extlib
 
 # the following targets are i18n/l10n-related:
 
