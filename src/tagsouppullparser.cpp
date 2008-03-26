@@ -240,15 +240,17 @@ tagsouppullparser::event tagsouppullparser::next() {
 }
 
 int tagsouppullparser::skip_whitespace(std::string& ws) {
-	char c;
+	char c = '\0';
 	ws = "";
-	while (!inputstream->eof()) {
+	do {
 		inputstream->read(&c,1);
-		if (!isspace(c))
-			break;
-		else
-			ws.append(1,c);
-	}
+		if (!inputstream->eof()) {
+			if (!isspace(c))
+				break;
+			else
+				ws.append(1,c);
+		}
+	} while (!inputstream->eof());
 	return c;
 }
 

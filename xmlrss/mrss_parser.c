@@ -134,8 +134,12 @@ __mrss_parser_atom_string (nxml_t * doc, nxml_data_t * cur, char **what,
 
   if (!(c = nxmle_find_attribute (cur, "type", NULL)) || !strcmp (c, "text"))
     {
-      *what = (char *)nxmle_get_string (cur, NULL);
-      *type = (char *)c;
+      if (what)
+      	*what = (char *)nxmle_get_string (cur, NULL);
+      if (type)
+	*type = (char *)c;
+      else
+	free((char *)c);      	
       return;
     }
 
@@ -154,7 +158,7 @@ __mrss_parser_atom_string (nxml_t * doc, nxml_data_t * cur, char **what,
 
       if (c1 && strlen(c1) > 0)
 	{
-	  total = strdup(c1);
+	  total = (char *)c1;
 	  size = strlen(total);
 	}
       else
@@ -231,13 +235,22 @@ __mrss_parser_atom_string (nxml_t * doc, nxml_data_t * cur, char **what,
 	  free (buffer);
 	}
 
-      *what = (char *)total;
-      *type = (char *)c;
+      if (what)
+      	*what = (char *)total;
+      else
+        free(total);
+
+      if (type)
+	*type = (char *)c;
+      else
+      	free((char *)c);
+
       return;
     }
 
   free ((char *)c);
-  *what = (char *)nxmle_get_string (cur, NULL);
+  if (what)
+  	*what = (char *)nxmle_get_string (cur, NULL);
 }
 
 static char *
@@ -370,13 +383,11 @@ __mrss_parser_atom_entry (nxml_t * doc, nxml_data_t * cur, mrss_t * data)
 
 	  /* summary -> description */
 	  else if (!item->description && !strcmp (cur->value, "summary"))
-	    __mrss_parser_atom_string (doc, cur, &item->description,
-				       &item->description_type);
+	    __mrss_parser_atom_string (doc, cur, &item->description, NULL);
 
 	  /* right -> copyright */
 	  else if (!item->copyright && !strcmp (cur->value, "rights"))
-	    __mrss_parser_atom_string (doc, cur, &item->description,
-				       &item->description_type);
+	    __mrss_parser_atom_string (doc, cur, &item->copyright, NULL);
 
 	  /* author structure -> author elements */
 	  else if (!strcmp (cur->value, "author"))
@@ -665,7 +676,7 @@ __mrss_parser_rss_item (nxml_t * doc, nxml_data_t * cur, mrss_t * data)
 	    {
 	      item->enclosure = (char *)nxmle_get_string (cur, NULL);
 
-	      if ((attr = nxmle_find_attribute (cur, "url", NULL)))
+	      if (!item->enclosure_url && (attr = nxmle_find_attribute (cur, "url", NULL)))
 		item->enclosure_url = (char *)attr;
 
 	      if ((attr = nxmle_find_attribute (cur, "length", NULL)))
@@ -674,7 +685,7 @@ __mrss_parser_rss_item (nxml_t * doc, nxml_data_t * cur, mrss_t * data)
 		  free ((char *)attr);
 		}
 
-	      if ((attr = nxmle_find_attribute (cur, "type", NULL)))
+	      if (!item->enclosure_type && (attr = nxmle_find_attribute (cur, "type", NULL)))
 		item->enclosure_type = (char *)attr;
 	    }
 

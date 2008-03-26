@@ -57,7 +57,7 @@ void omg_a_child_died(int /* sig */) {
 	while ((pid = waitpid(-1,&stat,WNOHANG)) > 0) { }
 }
 
-controller::controller() : v(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false), cfg(0) {
+controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false), cfg(0) {
 	char * cfgdir;
 	if (!(cfgdir = ::getenv("HOME"))) {
 		struct passwd * spw = ::getpwuid(::getuid());
@@ -82,6 +82,7 @@ controller::~controller() {
 	delete rsscache;
 	delete reload_mutex;
 	delete cfg;
+	delete urlcfg;
 }
 
 void controller::set_view(view * vv) {

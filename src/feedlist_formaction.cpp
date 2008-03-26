@@ -54,7 +54,7 @@ void feedlist_formaction::prepare() {
 
 	std::string listwidth = f->get("items:w");
 	std::istringstream is(listwidth);
-	unsigned int width;
+	unsigned int width = 0;
 	is >> width;
 
 	if (old_width != width) {

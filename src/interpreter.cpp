@@ -84,6 +84,8 @@ void script_interpreter::set_controller(controller * cc) {
 	c = cc;
 	rc = rb_eval_string_protect("Newsbeuter::Controller.new", &state);
 	if (state == 0 && rc != Qnil) {
+		controller * tmp = (controller *)DATA_PTR(rc);
+		delete tmp;
 		DATA_PTR(rc) = c;
 		RDATA(rc)->dfree = NULL; // see above
 		rb_define_variable("ctrl", &rc);
