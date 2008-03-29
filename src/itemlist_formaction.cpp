@@ -5,6 +5,7 @@
 #include <exceptions.h>
 #include <utils.h>
 #include <formatstring.h>
+#include <listformatter.h>
 
 #include <cassert>
 #include <sstream>
@@ -379,7 +380,7 @@ void itemlist_formaction::prepare() {
 	if (do_redraw) {
 
 		GetLogger().log(LOG_DEBUG, "itemlist_formaction::prepare: redrawing");
-		std::string code = "{list";
+		listformatter listfmt;
 
 		std::string datetimeformat = v->get_cfg()->get_configvalue("datetime-format");
 		if (datetimeformat.length() == 0)
@@ -419,15 +420,10 @@ void itemlist_formaction::prepare() {
 			fmt.register_fmt('t', it->first->title());
 			fmt.register_fmt('a', it->first->author());
 
-			std::string quoted_title = stfl::quote(fmt.do_format(itemlist_format, width));
-			code.append(utils::strprintf("{listitem[%u] text:%s}", it->second, quoted_title.c_str()));
+			listfmt.add_line(fmt.do_format(itemlist_format, width), it->second);
 		}
 
-		code.append("}");
-
-		GetLogger().log(LOG_INFO, "prepare: code = `%s'", code.c_str());
-
-		f->modify("items","replace_inner",code);
+		f->modify("items","replace_inner", listfmt.format_list());
 		
 		set_head(feed->title(),feed->unread_item_count(),feed->items().size(), feed->rssurl());
 

@@ -3,6 +3,8 @@
 #include <help_formaction.h>
 #include <formatstring.h>
 #include <view.h>
+#include <listformatter.h>
+#include <utils.h>
 
 namespace newsbeuter {
 
@@ -39,29 +41,15 @@ void help_formaction::prepare() {
 		
 		std::vector<keymap_desc> descs;
 		v->get_keys()->get_keymap_descriptions(descs, KM_NEWSBEUTER);
-		
-		std::string code = "{list";
+
+		listformatter listfmt;
 		
 		for (std::vector<keymap_desc>::iterator it=descs.begin();it!=descs.end();++it) {
-			std::string line = "{listitem text:";
-
-			std::string descline;
-			descline.append(it->key);
-			descline.append(1,'\t');
-			descline.append(it->cmd);
 			unsigned int how_often = 3 - (it->cmd.length() / 8);
-			descline.append(how_often,'\t');
-			descline.append(it->desc);
-
-			line.append(stfl::quote(descline));
-			line.append("}");
-			
-			code.append(line);
+			listfmt.add_line(utils::strprintf("%s\t%s%*c%s", it->key.c_str(), it->cmd.c_str(), how_often, '\t', it->desc.c_str()));
 		}
-		
-		code.append("}");
-		
-		f->modify("helptext","replace_inner",code);
+
+		f->modify("helptext","replace_inner", listfmt.format_list());
 
 		do_redraw = false;
 	}

@@ -5,6 +5,7 @@
 #include <exceptions.h>
 #include <utils.h>
 #include <formatstring.h>
+#include <listformatter.h>
 
 #include <sstream>
 
@@ -36,7 +37,7 @@ void itemview_formaction::prepare() {
 	 */
 	if (do_redraw) {
 		rss_item& item = feed->get_item_by_guid(guid);
-		std::string code = "{list";
+		listformatter listfmt;
 
 		rss_feed * feedptr = item.get_feedptr();
 
@@ -49,38 +50,38 @@ void itemview_formaction::prepare() {
 			title = feedptr->rssurl();
 		}
 		feedtitle = utils::strprintf("%s%s", _("Feed: "), title.c_str());
-		code.append(utils::strprintf("{listitem text:%s}", stfl::quote(feedtitle).c_str()));
+		listfmt.add_line(feedtitle);
 
 		if (item.title().length() > 0) {
 			title = utils::strprintf("%s%s", _("Title: "), item.title().c_str());
-			code.append(utils::strprintf("{listitem text:%s}", stfl::quote(title).c_str()));
+			listfmt.add_line(title);
 		}
 
 		if (item.author().length() > 0) {
 			std::string author = utils::strprintf("%s%s", _("Author: "), item.author().c_str());
-			code.append(utils::strprintf("{listitem text:%s}", stfl::quote(author).c_str()));
+			listfmt.add_line(author);
 		}
 
 		if (item.link().length() > 0) {
 			std::string link = utils::strprintf("%s%s", _("Link: "), item.link().c_str());
-			code.append(utils::strprintf("{listitem text:%s}", stfl::quote(link).c_str()));
+			listfmt.add_line(link);
 		}
 
 		std::string date = utils::strprintf("%s%s", _("Date: "), item.pubDate().c_str());
-		code.append(utils::strprintf("{listitem text:%s}", stfl::quote(date).c_str()));
+		listfmt.add_line(date);
 
 		if (item.flags().length() > 0) {
 			std::string flags = utils::strprintf("%s%s", _("Flags: "), item.flags().c_str());
-			code.append(utils::strprintf("{listitem text:%s}", stfl::quote(flags).c_str()));
+			listfmt.add_line(flags);
 		}
 
 		if (item.enclosure_url().length() > 0) {
 			std::string enc_url = utils::strprintf("%s%s (%s%s)", _("Podcast Download URL: "), item.enclosure_url().c_str(), _("type: "), item.enclosure_type().c_str());
-			code.append(utils::strprintf("{listitem text:%s}", stfl::quote(enc_url).c_str()));
+			listfmt.add_line(enc_url);
 		}
 
-		code.append("{listitem text:\"\"}");
-		
+		listfmt.add_line("");
+
 		set_head(item.title());
 
 		if (!render_hack) {
@@ -109,16 +110,9 @@ void itemview_formaction::prepare() {
 			lines = render_html(item.description(), links, item.feedurl(), render_width);
 		}
 
-		for (std::vector<std::string>::iterator it = lines.begin(); it != lines.end(); ++it) {
-			std::string line("{listitem text:");
-			line.append(stfl::quote(*it));
-			line.append(1,'}');
-			code.append(line);
-		}
+		listfmt.add_lines(lines);
 
-		code.append("}");
-
-		f->modify("article","replace_inner",code);
+		f->modify("article","replace_inner",listfmt.format_list());
 		f->set("articleoffset","0");
 
 		do_redraw = false;

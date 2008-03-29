@@ -3,6 +3,7 @@
 #include <view.h>
 #include <config.h>
 #include <utils.h>
+#include <listformatter.h>
 
 #include <sstream>
 
@@ -64,16 +65,12 @@ void urlview_formaction::process_operation(operation op, bool /* automatic */, s
 
 void urlview_formaction::prepare() {
 	if (do_redraw) {
-		std::string code = "{list";
+		listformatter listfmt;
 		unsigned int i=0;
 		for (std::vector<linkpair>::iterator it = links.begin(); it != links.end(); ++it, ++i) {
-			char line[1024];
-			snprintf(line,sizeof(line),"%2u  %s",i+1,it->first.c_str());
-			code.append(utils::strprintf("{listitem[%u] text:%s}", i, stfl::quote(line).c_str()));
+			listfmt.add_line(utils::strprintf("%2u  %s",i+1,it->first.c_str()), i);
 		}
-		code.append("}");
-
-		f->modify("urls","replace_inner",code);
+		f->modify("urls","replace_inner", listfmt.format_list());
 	}
 }
 

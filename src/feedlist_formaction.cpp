@@ -8,6 +8,8 @@
 #include <utils.h>
 #include <formatstring.h>
 
+#include <listformatter.h>
+
 #include <sstream>
 #include <string>
 
@@ -260,8 +262,6 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 }
 
 void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
-	std::string code = "{list";
-	
 	assert(v->get_cfg() != NULL); // must not happen
 
 	std::string listwidth = f->get("feeds:w");
@@ -279,6 +279,8 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 
 	std::string feedlist_format = v->get_cfg()->get_configvalue("feedlist-format");
 
+	listformatter listfmt;
+
 	for (std::vector<rss_feed>::iterator it = feeds.begin(); it != feeds.end(); ++it, ++i, ++feedlist_number) {
 		rss_feed feed = *it;
 		std::string title = it->title();
@@ -289,7 +291,6 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 			}
 		}
 
-		// TODO: refactor
 		unsigned int unread_count = 0;
 		if (it->items().size() > 0) {
 			unread_count = it->unread_item_count();
@@ -318,15 +319,13 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 			std::string format = fmt.do_format(feedlist_format, width);
 			GetLogger().log(LOG_DEBUG, "feedlist_formaction::set_feedlist: format result = %s", format.c_str());
 
-			code.append(utils::strprintf("{listitem[%u] text:%s}", i, stfl::quote(format).c_str()));
+			listfmt.add_line(format, i);
 
 			++feeds_shown;
 		}
 	}
 
-	code.append("}");
-
-	f->modify("feeds","replace_inner",code);
+	f->modify("feeds","replace_inner",listfmt.format_list());
 
 	std::string title_format = v->get_cfg()->get_configvalue("feedlist-title-format");
 
