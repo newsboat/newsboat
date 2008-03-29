@@ -20,7 +20,7 @@ void listformatter::add_lines(const std::vector<std::string>& lines) {
 }
 
 std::string listformatter::format_list() {
-	format_cache = "{";
+	format_cache = "{list";
 	for (std::vector<line_id_pair>::iterator it=lines.begin();it!=lines.end();++it) {
 		if (it->second == UINT_MAX) {
 			format_cache.append(utils::strprintf("{listitem text:%s}", stfl::quote(it->first).c_str()));
