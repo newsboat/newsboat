@@ -683,3 +683,14 @@ void cache::update_rssitem_flags(rss_item& item) {
 		throw dbexception(db);
 	}
 }
+
+unsigned int cache::get_unread_count() {
+	scope_mutex lock(mtx);
+
+	std::string countquery = "SELECT count(id) FROM rss_item WHERE unread = 1;";
+	cb_handler count_cbh;
+	int rc = sqlite3_exec(db,countquery.c_str(),count_callback,&count_cbh,NULL);
+	unsigned int count = static_cast<unsigned int>(count_cbh.count());
+	GetLogger().log(LOG_DEBUG, "cache::get_unread_count: rc = %d count = %u", rc, count);
+	return count;
+}

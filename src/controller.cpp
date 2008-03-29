@@ -110,8 +110,11 @@ void controller::run(int argc, char * argv[]) {
 	bool offline_mode = false, real_offline_mode = false;
 	std::string importfile;
 
+	bool silent = false;
+	bool execute_cmds = false;
+
 	do {
-		if((c = ::getopt(argc,argv,"i:erhu:c:C:d:l:vVo"))<0)
+		if((c = ::getopt(argc,argv,"i:erhu:c:C:d:l:vVox"))<0)
 			continue;
 		switch (c) {
 			case ':': /* fall-through */
@@ -122,6 +125,7 @@ void controller::run(int argc, char * argv[]) {
 				if (do_export)
 					usage(argv[0]);
 				do_import = true;
+				silent = true;
 				importfile = optarg;
 				break;
 			case 'r':
@@ -131,6 +135,7 @@ void controller::run(int argc, char * argv[]) {
 				if (do_import)
 					usage(argv[0]);
 				do_export = true;
+				silent = true;
 				break;
 			case 'h':
 				usage(argv[0]);
@@ -154,6 +159,10 @@ void controller::run(int argc, char * argv[]) {
 				break;
 			case 'o':
 				offline_mode = true;
+				break;
+			case 'x':
+				execute_cmds = true;
+				silent = true;
 				break;
 			case 'd': // this is an undocumented debug commandline option!
 				GetLogger().set_logfile(optarg);
@@ -184,7 +193,8 @@ void controller::run(int argc, char * argv[]) {
 
 	if (!do_export) {
 
-		std::cout << utils::strprintf(_("Starting %s %s..."), PROGRAM_NAME, PROGRAM_VERSION) << std::endl;
+		if (!silent)
+			std::cout << utils::strprintf(_("Starting %s %s..."), PROGRAM_NAME, PROGRAM_VERSION) << std::endl;
 
 		pid_t pid;
 		if (!utils::try_fs_lock(lock_file, pid)) {
@@ -203,7 +213,7 @@ void controller::run(int argc, char * argv[]) {
 	GetInterpreter()->set_view(v);
 #endif
 
-	if (!do_export)
+	if (!silent)
 		std::cout << _("Loading configuration...");
 	std::cout.flush();
 	
@@ -246,7 +256,7 @@ void controller::run(int argc, char * argv[]) {
 		GetLogger().set_errorlogfile(cfg->get_configvalue("error-log").c_str());
 	}
 
-	if (!do_export)
+	if (!silent)
 		std::cout << _("done.") << std::endl;
 
 	// create cache object
@@ -272,14 +282,15 @@ void controller::run(int argc, char * argv[]) {
 		}
 	}
 
-	if (!do_export) {
+	if (!silent) {
 		std::cout << _("Opening cache...");
 		std::cout.flush();
 	}
 	rsscache = new cache(cache_file,cfg);
-	if (!do_export) {
+	if (!silent) {
 		std::cout << _("done.") << std::endl;
 	}
+
 
 
 	std::string type = cfg->get_configvalue("urls-source");
@@ -306,12 +317,12 @@ void controller::run(int argc, char * argv[]) {
 			std::cout << _("done.") << std::endl;
 		}
 	} else {
-		if (!do_export) {
+		if (!do_export && !silent) {
 			std::cout << utils::strprintf(_("Loading URLs from %s..."), urlcfg->get_source().c_str());
 			std::cout.flush();
 		}
 		urlcfg->reload();
-		if (!do_export) {
+		if (!do_export && !silent) {
 			std::cout << _("done.") << std::endl;
 		}
 	}
@@ -332,7 +343,7 @@ void controller::run(int argc, char * argv[]) {
 		usage(argv[0]);
 	}
 
-	if (!do_export && !do_vacuum)
+	if (!do_export && !do_vacuum && !silent)
 		std::cout << _("Loading articles from cache...");
 	if (do_vacuum)
 		std::cout << _("Opening cache...");
@@ -365,13 +376,19 @@ void controller::run(int argc, char * argv[]) {
 
 	std::vector<std::string> tags = urlcfg->get_alltags();
 
-	if (!do_export)
+	if (!do_export && !silent)
 		std::cout << _("done.") << std::endl;
 
 	if (do_export) {
 		export_opml();
 		utils::remove_fs_lock(lock_file);
 		return;
+	}
+
+	if (execute_cmds) {
+		execute_commands(argv, optind);
+		utils::remove_fs_lock(lock_file);
+		return;	
 	}
 
 	// if the user wants to refresh on startup via configuration file, then do so,
@@ -437,7 +454,7 @@ void controller::mark_all_read(unsigned int pos) {
 	}
 }
 
-void controller::reload(unsigned int pos, unsigned int max) {
+void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
 	GetLogger().log(LOG_DEBUG, "controller::reload: pos = %u max = %u", pos, max);
 	if (pos < feeds.size()) {
 		rss_feed feed = feeds[pos];
@@ -446,7 +463,8 @@ void controller::reload(unsigned int pos, unsigned int max) {
 			msg = utils::strprintf("(%u/%u) ", pos+1, max);
 		}
 		GetLogger().log(LOG_DEBUG, "controller::reload: before setting status");
-		v->set_status(utils::strprintf(_("%sLoading %s..."), msg.c_str(), feed.rssurl().c_str()));
+		if (!unattended)
+			v->set_status(utils::strprintf(_("%sLoading %s..."), msg.c_str(), feed.rssurl().c_str()));
 		GetLogger().log(LOG_DEBUG, "controller::reload: after setting status");
 				
 		rss_parser parser(feed.rssurl().c_str(), rsscache, cfg, &ign);
@@ -482,8 +500,10 @@ void controller::reload(unsigned int pos, unsigned int max) {
 				}
 
 				
-				v->set_feedlist(feeds);
-				GetLogger().log(LOG_DEBUG, "controller::reload: after set_feedlist");
+				if (!unattended) {
+					v->set_feedlist(feeds);
+					GetLogger().log(LOG_DEBUG, "controller::reload: after set_feedlist");
+				}
 			}
 			v->set_status("");
 		} catch (const dbexception& e) {
@@ -503,7 +523,7 @@ rss_feed * controller::get_feed(unsigned int pos) {
 	return &(feeds[pos]);
 }
 
-void controller::reload_all() {
+void controller::reload_all(bool unattended) {
 	GetLogger().log(LOG_DEBUG,"controller::reload_all: starting with reload all...");
 	unsigned int unread_feeds, unread_articles;
 	compute_unread_numbers(unread_feeds, unread_articles);
@@ -511,7 +531,7 @@ void controller::reload_all() {
 	t1 = time(NULL);
 	for (unsigned int i=0;i<feeds.size();++i) {
 		GetLogger().log(LOG_DEBUG, "controller::reload_all: reloading feed #%u", i);
-		this->reload(i,feeds.size());
+		this->reload(i,feeds.size(), unattended);
 	}
 	t2 = time(NULL);
 	dt = t2 - t1;
@@ -588,7 +608,7 @@ void controller::version_information() {
 }
 
 void controller::usage(char * argv0) {
-	std::cout << utils::strprintf(_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]\n"
+	std::cout << utils::strprintf(_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-h]\n"
 				"-e              export OPML feed to stdout\n"
 				"-r              refresh feeds on start\n"
 				"-i <file>       import OPML file\n"
@@ -596,6 +616,7 @@ void controller::usage(char * argv0) {
 				"-c <cachefile>  use <cachefile> as cache file\n"
 				"-C <configfile> read configuration from <configfile>\n"
 				"-v              clean up cache thoroughly\n"
+				"-x <command>... execute list of commands\n"
 				"-o              activate offline mode (only applies to bloglines synchronization mode)\n"
 				"-V              get version information\n"
 				"-h              this help\n"), PROGRAM_NAME, PROGRAM_VERSION, argv0);
@@ -810,6 +831,19 @@ std::string controller::bookmark(const std::string& url, const std::string& titl
 		return utils::run_program(my_argv, "");
 	} else {
 		return _("bookmarking support is not configured. Please set the configuration variable `bookmark-cmd' accordingly.");
+	}
+}
+
+void controller::execute_commands(char ** argv, unsigned int i) {
+	v->pop_current_formaction();
+	for (;argv[i];++i) {
+		GetLogger().log(LOG_DEBUG, "controller::execute_commands: executing `%s'", argv[i]);
+		std::string cmd(argv[i]);
+		if (cmd == "reload") {
+			reload_all(true);
+		} else if (cmd == "print-unread") {
+			std::cout << utils::strprintf(_("%u unread articles"), rsscache->get_unread_count()) << std::endl;
+		}
 	}
 }
 

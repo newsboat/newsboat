@@ -27,6 +27,7 @@ class cache {
 		std::vector<std::string> get_feed_urls();
 		time_t get_lastmodified(const std::string& feedurl);
 		void set_lastmodified(const std::string& feedurl, time_t lastmod);
+		unsigned int get_unread_count();
 	private:
 		void populate_tables();
 		void set_pragmas();

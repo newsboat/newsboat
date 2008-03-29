@@ -20,8 +20,8 @@ namespace newsbeuter {
 			view * get_view() { return v; }
 			void run(int argc = 0, char * argv[] = NULL);
 
-			void reload(unsigned int pos, unsigned int max = 0);
-			void reload_all();
+			void reload(unsigned int pos, unsigned int max = 0, bool unattended = false);
+			void reload_all(bool unattended = false);
 			void start_reload_all_thread();
 
 			rss_feed * get_feed(unsigned int pos);
@@ -63,6 +63,7 @@ namespace newsbeuter {
 			void export_opml();
 			void rec_find_rss_outlines(nxml_data_t * node, std::string tag);
 			void compute_unread_numbers(unsigned int&, unsigned int& );
+			void execute_commands(char ** argv, unsigned int i);
 
 			view * v;
 			urlreader * urlcfg;
