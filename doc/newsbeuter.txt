@@ -7,7 +7,8 @@ Introduction
 Newsbeuter is an RSS feedreader. RSS is a number of widely-used XML formats to
 transmit, publish and syndicate articles, for example news or blog articles.
 Newsbeuter is designed to be used on text terminals on Unix or Unix-like
-systems such as Linux, BSD or Mac OS X.
+systems such as Linux, FreeBSD or Mac OS X. NetBSD is currently not supported,
+due to technical limitations in the iconv() implementation.
 
 Why "Newsbeuter"?
 ~~~~~~~~~~~~~~~~

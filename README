@@ -2,7 +2,8 @@ README for newsbeuter:
 
 == Introduction ==
 Newsbeuter is an RSS feed reader for the text console. It is designed to run
-Unix-like operating systems such as Linux.
+Unix-like operating systems such as Linux. NetBSD is currently not supported,
+due to technical limitations.
 
 == Downloading ==
 You can download the latest version of newsbeuter from the following website:
