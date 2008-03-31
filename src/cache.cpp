@@ -400,13 +400,21 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
 	
 	if (max_items > 0 && feed.items().size() > max_items) {
+		std::vector<rss_item> flagged_items;
 		std::vector<rss_item>::iterator it=feed.items().begin();
 		for (unsigned int i=0;i<max_items;++i)
 			++it;
 		for (unsigned int i=max_items;i<feed.items().size();++i) {
-			delete_item(feed.items()[i]);	
+			if (feed.items()[i].flags().length() == 0) {
+				delete_item(feed.items()[i]);
+			} else {
+				flagged_items.push_back(feed.items()[i]);
+			}
 		}	
 		feed.items().erase(it, feed.items().end()); // delete old entries
+		if (flagged_items.size() > 0) {
+			feed.items().insert(feed.items().end(), flagged_items.begin(), flagged_items.end()); // if some flagged articles were saved, append them
+		}
 	}
 }
 

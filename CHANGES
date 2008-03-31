@@ -2,6 +2,7 @@ Changes for newsbeuter:
 
 0.9:
 	Improved locking to allow multiple newsbeuter instances (one instance per cache file)
+	Flagged articles don't get deleted anymore.
 
 0.8.2 (2008-03-16):
 	fixed broken string conversion.
