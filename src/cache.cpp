@@ -26,7 +26,7 @@ struct cb_handler {
 };
 
 static int count_callback(void * handler, int argc, char ** argv, char ** /* azColName */) {
-	cb_handler * cbh = (cb_handler *)handler;
+	cb_handler * cbh = static_cast<cb_handler *>(handler);
 	// std::cerr << "inside count_callback" << std::endl;
 	if (argc>0) {
 		std::istringstream is(argv[0]);
@@ -39,7 +39,7 @@ static int count_callback(void * handler, int argc, char ** argv, char ** /* azC
 }
 
 static int single_int_callback(void * handler, int argc, char ** argv, char ** /* azColName */) {
-	int * value = (int *)handler;
+	int * value = static_cast<int *>(handler);
 	if (argc>0 && argv[0]) {
 		std::istringstream is(argv[0]);
 		int x;
@@ -50,7 +50,7 @@ static int single_int_callback(void * handler, int argc, char ** argv, char ** /
 }
 
 static int rssfeed_callback(void * myfeed, int argc, char ** argv, char ** /* azColName */) {
-	rss_feed * feed = (rss_feed *)myfeed;
+	rss_feed * feed = static_cast<rss_feed *>(myfeed);
 	// normaly, this shouldn't happen, but we keep the assert()s here nevertheless
 	assert(argc == 2);
 	assert(argv[0] != NULL);
@@ -63,7 +63,7 @@ static int rssfeed_callback(void * myfeed, int argc, char ** argv, char ** /* az
 }
 
 static int vectorofstring_callback(void * vp, int argc, char ** argv, char ** /* azColName */) {
-	std::vector<std::string> * vectorptr = (std::vector<std::string> *)vp;
+	std::vector<std::string> * vectorptr = static_cast<std::vector<std::string> *>(vp);
 	assert(argc == 1);
 	assert(argv[0] != NULL);
 	vectorptr->push_back(std::string(argv[0]));
@@ -72,7 +72,7 @@ static int vectorofstring_callback(void * vp, int argc, char ** argv, char ** /*
 }
 
 static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** /* azColName */) {
-	rss_feed * feed = (rss_feed *)myfeed;
+	rss_feed * feed = static_cast<rss_feed *>(myfeed);
 	assert (argc == 12);
 	rss_item item(NULL);
 	item.set_guid(argv[0]);
@@ -101,7 +101,7 @@ static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** /* az
 }
 
 static int rssitemvector_callback(void * vector, int argc, char ** argv, char ** /* azColName */) {
-	std::vector<rss_item> * items = (std::vector<rss_item> *)vector;
+	std::vector<rss_item> * items = static_cast<std::vector<rss_item> *>(vector);
 
 	assert (argc == 12);
 	rss_item item(NULL);
@@ -130,7 +130,7 @@ static int rssitemvector_callback(void * vector, int argc, char ** argv, char **
 }
 
 static int search_item_callback(void * myfeed, int argc, char ** argv, char ** /* azColName */) {
-	std::vector<rss_item> * items = (std::vector<rss_item> *)myfeed;
+	std::vector<rss_item> * items = static_cast<std::vector<rss_item> *>(myfeed);
 	assert (argc == 12);
 	rss_item item(NULL);
 	item.set_guid(argv[0]);

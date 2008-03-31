@@ -265,7 +265,7 @@ std::string utils::convert_text(const std::string& text, const std::string& toco
 
 	iconv_t cd = ::iconv_open((tocode + "//TRANSLIT").c_str(), fromcode.c_str());
 
-	if (cd == (iconv_t)-1)
+	if (cd == reinterpret_cast<iconv_t>(-1))
 		return result;
 
 	size_t inbytesleft;
@@ -346,8 +346,8 @@ void utils::extract_filter(const std::string& line, std::string& filter, std::st
 }
 
 static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp) {
-	std::string * pbuf = (std::string *)userp;
-	pbuf->append((const char *)buffer, size * nmemb);
+	std::string * pbuf = static_cast<std::string *>(userp);
+	pbuf->append(static_cast<const char *>(buffer), size * nmemb);
 	return size * nmemb;
 }
 

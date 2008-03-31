@@ -15,7 +15,7 @@ class select_formaction : public formaction {
 		virtual void prepare();
 		virtual void init();
 		virtual keymap_hint_entry * get_keymap_hint();
-		inline std::string get_value() { return value; }
+		inline std::string get_selected_value() { return value; }
 		inline void set_tags(const std::vector<std::string>& t) { tags = t; }
 		inline void set_filters(const std::vector<filter_name_expr_pair>& f) { filters = f; }
 		void set_type(int t) { type = t; }
