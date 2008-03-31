@@ -21,8 +21,10 @@ namespace newsbeuter {
 			void run(int argc = 0, char * argv[] = NULL);
 
 			void reload(unsigned int pos, unsigned int max = 0, bool unattended = false);
+
 			void reload_all(bool unattended = false);
-			void start_reload_all_thread();
+			void reload_indexes(const std::vector<int>& indexes, bool unattended = false);
+			void start_reload_all_thread(std::vector<int> * indexes = 0);
 
 			rss_feed * get_feed(unsigned int pos);
 			rss_feed * get_feed_by_url(const std::string& feedurl);

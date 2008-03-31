@@ -523,6 +523,24 @@ rss_feed * controller::get_feed(unsigned int pos) {
 	return &(feeds[pos]);
 }
 
+void controller::reload_indexes(const std::vector<int>& indexes, bool unattended) {
+	scope_measure m1("controller::reload_indexes");
+	unsigned int unread_feeds, unread_articles;
+	compute_unread_numbers(unread_feeds, unread_articles);
+
+	for (std::vector<int>::const_iterator it=indexes.begin();it!=indexes.end();++it) {
+		this->reload(*it,feeds.size(), unattended);
+	}
+
+	unsigned int unread_feeds2, unread_articles2;
+	compute_unread_numbers(unread_feeds2, unread_articles2);
+	if (unread_feeds2 != unread_feeds || unread_articles2 != unread_articles) {
+		this->notify(utils::strprintf(_("newsbeuter: finished reload, %u unread feeds (%u unread articles total)"), unread_feeds2, unread_articles2));
+	}
+	if (!unattended)
+		v->set_status("");
+}
+
 void controller::reload_all(bool unattended) {
 	GetLogger().log(LOG_DEBUG,"controller::reload_all: starting with reload all...");
 	unsigned int unread_feeds, unread_articles;
@@ -583,9 +601,9 @@ bool controller::trylock_reload_mutex() {
 	return false;
 }
 
-void controller::start_reload_all_thread() {
+void controller::start_reload_all_thread(std::vector<int> * indexes) {
 	GetLogger().log(LOG_INFO,"starting reload all thread");
-	thread * dlt = new downloadthread(this);
+	thread * dlt = new downloadthread(this, indexes);
 	dlt->start();
 }
 

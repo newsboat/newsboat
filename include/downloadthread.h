@@ -12,12 +12,13 @@ class controller;
 class downloadthread : public thread
 {
 public:
-	downloadthread(controller * c);
+	downloadthread(controller * c, std::vector<int> * idxs = 0);
 	virtual ~downloadthread();
 protected:
 	virtual void run();
 private:
 	controller * ctrl;
+	std::vector<int> indexes;
 };
 
 }

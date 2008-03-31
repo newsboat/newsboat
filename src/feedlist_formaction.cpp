@@ -114,7 +114,14 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 			break;
 		case OP_RELOADALL:
 			GetLogger().log(LOG_INFO, "feedlist_formaction: reloading all feeds");
-			v->get_ctrl()->start_reload_all_thread();
+			{
+				bool reload_only_visible_feeds = v->get_cfg()->get_configvalue_as_bool("reload-only-visible-feeds");
+				std::vector<int> idxs;
+				for (std::vector<feedptr_pos_pair>::iterator it=visible_feeds.begin();it!=visible_feeds.end();++it) {
+					idxs.push_back(it->second);
+				}
+				v->get_ctrl()->start_reload_all_thread(reload_only_visible_feeds ? &idxs : NULL);
+			}
 			break;
 		case OP_MARKFEEDREAD: {
 				GetLogger().log(LOG_INFO, "feedlist_formaction: marking feed read at position `%s'",feedpos.c_str());

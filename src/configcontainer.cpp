@@ -50,6 +50,7 @@ configcontainer::configcontainer()
 	config_data["articlelist-format"] = configdata("%4i %f %D   %?T?|%-17T|  &?%t", configdata::STR);
 	config_data["text-width"]      = configdata("0", configdata::INT);
 	config_data["always-display-description"] = configdata("false", configdata::BOOL);
+	config_data["reload-only-visible-feeds"] = configdata("false", configdata::BOOL);
 
 	/* undocumented: */
 	config_data["feedlist-title-format"] = configdata(_("%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"), configdata::STR);

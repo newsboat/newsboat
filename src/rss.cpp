@@ -312,9 +312,14 @@ bool rss_parser::check_and_update_lastmodified() {
 
 	GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: err = %u oldlm = %d newlm = %d", err, oldlm, newlm);
 
-	if (err != MRSS_OK || newlm == 0) {
-		GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: yes, download");
-		return true; // error with check or no Last-Modified header -> better try download
+	if (err != MRSS_OK) {
+		GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: no, don't download, due to error");
+		return false;
+	}
+
+	if (newlm == 0) {
+		GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: yes, download (no Last-Modified header)");
+		return true;
 	}
 
 	if (newlm > oldlm) {
