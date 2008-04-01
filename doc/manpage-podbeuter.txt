@@ -10,7 +10,7 @@ podbeuter - a podcast download manage for text terminals
 
 SYNOPSIS
 --------
-'podbeuter' [-C configfile] [-q queuefile] [-h|
+'podbeuter' [-C configfile] [-q queuefile] [-a] [-h]
 
 
 DESCRIPTION
@@ -30,6 +30,9 @@ OPTIONS
 
 -q queuefile::
        Use an alternative queue file
+
+-a::
+       Start automatic download of all queued files on startup
 
 PODCAST SUPPORT
 ---------------

@@ -10,7 +10,7 @@ newsbeuter - an RSS feed reader for text terminals
 
 SYNOPSIS
 --------
-'newsbeuter' [-r] [-e] [-i opmlfile] [-u urlfile] [-c cachefile] [-C configfile] [-v] [-o] [-h]
+'newsbeuter' [-r] [-e] [-i opmlfile] [-u urlfile] [-c cachefile] [-C configfile] [-v] [-o] [-x <command> ...] [-h]
 
 
 DESCRIPTION
@@ -49,6 +49,10 @@ OPTIONS
 
 -C configfile::
        Use an alternative configuration file
+
+-x command ...::
+       Execute one or more commands to run newsbeuter unattended. Currently available
+       commands are "reload" and "print-unread".
 
 -o::
        Active offline reading mode. When bloglines synchronization mode is configured,
