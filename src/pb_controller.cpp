@@ -126,6 +126,14 @@ void pb_controller::run(int argc, char * argv[]) {
 	cfgparser.register_handler("bind-key", &keys);
 	cfgparser.register_handler("unbind-key", &keys);
 
+	null_config_action_handler null_cah;
+	cfgparser.register_handler("macro", &null_cah);
+	cfgparser.register_handler("ignore-article", &null_cah);
+	cfgparser.register_handler("define-filter", &null_cah);
+#if HAVE_RUBY
+	cfgparser.register_handler("load", &null_cah);
+#endif
+
 	try {
 		cfgparser.parse("/etc/newsbeuter/config");
 		cfgparser.parse(config_file);

@@ -29,6 +29,15 @@ namespace newsbeuter {
 			std::set<std::string> included_files;
 	};
 
+	class null_config_action_handler : public config_action_handler {
+		public:
+			null_config_action_handler() { }
+			virtual ~null_config_action_handler() { }
+			virtual action_handler_status handle_action(const std::string& , const std::vector<std::string>& ) { 
+				return AHS_OK;
+			}
+	};
+
 }
 
 #endif
