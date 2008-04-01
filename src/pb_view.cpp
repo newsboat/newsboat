@@ -24,9 +24,8 @@ pb_view::~pb_view() {
 	stfl::reset();
 }
 
-void pb_view::run() {
+void pb_view::run(bool auto_download) {
 	bool quit = false;
-	bool auto_download = false;
 
 	set_dllist_keymap_hint();
 

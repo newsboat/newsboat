@@ -17,7 +17,7 @@ class pb_view {
 	public:
 		pb_view(pb_controller * c = 0);
 		~pb_view();
-		void run();
+		void run(bool auto_download);
 		void set_keymap(newsbeuter::keymap * k) { 
 			keys = k; 
 			set_bindings();

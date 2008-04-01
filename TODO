@@ -1,10 +1,7 @@
 TODO:
-- check whether date parsing uses the correct timezone
 - refactor XML pull parser (many redundancies)
 	ignore comments
 	join two subsequent text nodes separated by a comment
-- improve string handling (no more std::string() + std::string())
-- add automatic download mode to podbeuter (commandline switch)
 - add configurable pager
 - update example config
 - make cursor in feedlist and itemlist stable when a filter is applied
@@ -111,3 +108,6 @@ DONE:
 - add scripting support
 - make script functions callable via key bindings
 - don't delete flagged articles
+- check whether date parsing uses the correct timezone (long-term testing shows that this seems to work flawlessly)
+- improve string handling (no more std::string() + std::string()) (got much better)
+- add automatic download mode to podbeuter (commandline switch)

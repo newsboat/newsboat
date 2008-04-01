@@ -66,12 +66,13 @@ pb_controller::~pb_controller() {
 
 void pb_controller::run(int argc, char * argv[]) {
 	int c;
+	bool automatic_dl = false;
 
 	::signal(SIGINT, ctrl_c_action);
 	::signal(SIGSEGV, ctrl_c_action);
 
 	do {
-		if ((c = ::getopt(argc, argv, "C:q:d:l:h")) < 0)
+		if ((c = ::getopt(argc, argv, "C:q:d:l:ha")) < 0)
 			continue;
 
 		switch (c) {
@@ -84,6 +85,9 @@ void pb_controller::run(int argc, char * argv[]) {
 				break;
 			case 'q':
 				queue_file = optarg;
+				break;
+			case 'a':
+				automatic_dl = true;
 				break;
 			case 'd': // this is an undocumented debug commandline option!
 				GetLogger().set_logfile(optarg);
@@ -155,7 +159,7 @@ void pb_controller::run(int argc, char * argv[]) {
 
 	v->set_keymap(&keys);
 	
-	v->run();
+	v->run(automatic_dl);
 
 	stfl::reset();
 
@@ -175,6 +179,7 @@ void pb_controller::usage(const char * argv0) {
 	std::cout << utils::strprintf(_("%s %s\nusage %s [-C <file>] [-q <file>] [-h]\n"
 				"-C <configfile> read configuration from <configfile>\n"
 				"-q <queuefile>  use <queuefile> as queue file\n"
+				"-a              start download on startup\n"
 				"-h              this help\n"), "podbeuter", PROGRAM_VERSION, argv0);
 	std::cout << buf;
 	::exit(EXIT_FAILURE);
