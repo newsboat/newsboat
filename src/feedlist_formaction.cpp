@@ -392,6 +392,25 @@ bool feedlist_formaction::jump_to_previous_unread_feed(unsigned int& feedpos) {
 	return false;
 }
 
+void feedlist_formaction::goto_feed(const std::string& str) {
+	unsigned int curpos;
+	std::istringstream is(f->get("feedpos"));
+	is >> curpos;
+	GetLogger().log(LOG_DEBUG, "feedlist_formaction::goto_feed: curpos = %u str = `%s'", curpos, str.c_str());
+	for (unsigned int i=curpos+1;i<visible_feeds.size();++i) {
+		if (strcasestr(visible_feeds[i].first->title().c_str(), str.c_str()) != NULL) {
+			f->set("feedpos", utils::to_s(i));
+			return;
+		}
+	}
+	for (unsigned int i=0;i<=curpos;++i) {
+		if (strcasestr(visible_feeds[i].first->title().c_str(), str.c_str()) != NULL) {
+			f->set("feedpos", utils::to_s(i));
+			return;
+		}
+	}
+}
+
 bool feedlist_formaction::jump_to_next_unread_feed(unsigned int& feedpos) {
 	unsigned int curpos;
 	std::istringstream is(f->get("feedpos"));
@@ -462,6 +481,10 @@ void feedlist_formaction::handle_cmdline(const std::string& cmd) {
 					tag = tokens[1];
 					do_redraw = true;
 					zero_feedpos = true;
+				}
+			} else if (tokens[0] == "goto") {
+				if (tokens.size() >= 2 && tokens[1] != "") {
+					goto_feed(tokens[1]);
 				}
 			} else {
 				formaction::handle_cmdline(cmd);

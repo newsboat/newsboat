@@ -34,6 +34,8 @@ class feedlist_formaction : public formaction {
 		int get_pos(unsigned int realidx);
 		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
 
+		void goto_feed(const std::string& str);
+
 		bool zero_feedpos;
 		unsigned int feeds_shown;
 		bool auto_open;

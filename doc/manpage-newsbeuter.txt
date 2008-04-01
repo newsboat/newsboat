@@ -100,6 +100,9 @@ include::chapter-cmdline.txt[]
 'tag' <tagname>::
         Select a certain tag
 
+'goto' <case-insensitive substring>::
+        Go to the next feed whose name contains the case-insensitive substring.
+
 '<number>'::
         Jump to the <number>th entry in the current dialog
 

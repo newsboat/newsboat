@@ -320,6 +320,7 @@ quit:quit:Quit newsbeuter.:quit
 save:save <filename>:Save the currently select article to disk. This works in the article list and in the article view.:save ~/important.txt
 set:set <variable>[=<value>]:Set configuration variable <variable> to <value>. If no value is specified, the current value is printed out:set reload-time=15
 tag:tag <tagname>:Only display feeds with the tag <tagname>.:tag news
+goto:goto <case-insensitive substring>:Go to the next feed whose name contains the case-insensitive substring.:goto foo
 n/a:<number>:Jump to the entry with the index <number> (usually seen at the left side of the list). This currently works for the feed list and the article list.:30
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

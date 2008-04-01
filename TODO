@@ -5,11 +5,8 @@ TODO:
 - add configurable pager
 - update example config
 - make cursor in feedlist and itemlist stable when a filter is applied
-- implement commandline commands quit [done], add, save [done], tag (select tag) [done], goto (by matching title of feed)
 - implement reloading of configuration (:source)
 - bug: when a user is in an itemlist that contains unread items, and returns to the feedlist that has show-unread disabled, the selected feed is not the same as previously shown in the itemlist. expected behaviour: when returning from the itemlist to the feedlist, the feed that was shown previously shall be selected.
-- implement the feedburner namespace, especially the feedburner:origLink
-
 
 longteam goals to reach:
 - make scripting support useful
@@ -111,3 +108,4 @@ DONE:
 - check whether date parsing uses the correct timezone (long-term testing shows that this seems to work flawlessly)
 - improve string handling (no more std::string() + std::string()) (got much better)
 - add automatic download mode to podbeuter (commandline switch)
+- implement commandline commands quit [done], add, save [done], tag (select tag) [done], goto (by matching title of feed) [done]
