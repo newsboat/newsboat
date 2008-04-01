@@ -357,7 +357,7 @@ __mrss_write_real_category (mrss_t * mrss, mrss_category_t * category,
 
 static void
 __mrss_write_real_tag (mrss_tag_t * tag, void (*func) (void *, char *, ...),
-		       void *obj, int index)
+		       void *obj, int idx)
 {
   mrss_attribute_t *attribute;
 
@@ -401,7 +401,7 @@ __mrss_write_real_tag (mrss_tag_t * tag, void (*func) (void *, char *, ...),
 	}
 
 
-      for (i = 0; i < index; i++)
+      for (i = 0; i < idx; i++)
 	func (obj, "  ");
 
       if (tag->ns)
@@ -443,13 +443,13 @@ __mrss_write_real_tag (mrss_tag_t * tag, void (*func) (void *, char *, ...),
 	    func (obj, ">\n");
 
 	  func (obj, "\n");
-	  __mrss_write_real_tag (tag->children, func, obj, index + 1);
+	  __mrss_write_real_tag (tag->children, func, obj, idx + 1);
 	}
 
       if (tag->children || tag->value)
 	{
 	  if (tag->children)
-	    for (i = 0; i < index; i++)
+	    for (i = 0; i < idx; i++)
 	      func (obj, "  ");
 
 	  if (tag->ns)

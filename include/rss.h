@@ -71,7 +71,7 @@ namespace newsbeuter {
 			inline void set_enqueued(bool v) { enqueued_ = v; }
 
 			inline const std::string& flags() { sort_flags(); return flags_; }
-			void set_flags(const std::string& flags) { flags_ = flags; sort_flags(); }
+			void set_flags(const std::string& ff) { flags_ = ff; sort_flags(); }
 			void update_flags();
 			void sort_flags();
 

@@ -15,7 +15,7 @@ RUBY=ruby
 
 # compiler and linker flags
 DEFINES=-D_ENABLE_NLS -DLOCALEDIR=\"$(localedir)\" -DPACKAGE=\"$(PACKAGE)\"
-WARNFLAGS=-Wall -W
+WARNFLAGS=-Wall -Wextra
 CXXFLAGS+=-ggdb -I./include -I./stfl -I./filter -I. -I./xmlrss $(WARNFLAGS) $(DEFINES)
 CFLAGS+=-ggdb $(WARNFLAGS) $(DEFINES)
 LDFLAGS+=-L.

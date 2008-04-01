@@ -623,13 +623,13 @@ __nxml_parse_doctype (nxml_t * doc, char **buffer, size_t * size,
 
   if (value && *value == '[')
     {
-      unsigned int size;
+      unsigned int s;
 
       value++;
-      size = strlen (value);
+      s = strlen (value);
 
-      while (size > 0 && value && *value)
-	__nxml_parse_entity (doc, &value, (size_t *)&size);
+      while (s > 0 && value && *value)
+	__nxml_parse_entity (doc, &value, (size_t *)&s);
     }
 
   return NXML_OK;

@@ -249,8 +249,10 @@ bool utils::try_fs_lock(const std::string& lock_file, pid_t & pid) {
 	if (fd >= 0) {
 		char buf[32];
 		int len = read(fd, buf, sizeof(buf)-1);
+		unsigned int upid;
 		buf[len] = '\0';
-		sscanf(buf, "%u", &pid);
+		sscanf(buf, "%u", &upid);
+		pid = upid;
 		close(fd);
 	}
 	return false;
@@ -394,6 +396,8 @@ void utils::run_command(const std::string& cmd, const std::string& input) {
 			GetLogger().log(LOG_DEBUG, "utils::run_command: execlp of %s failed: %s", cmd.c_str(), strerror(errno));
 			exit(1);
 		}
+		default:
+			break;
 	}
 }
 
@@ -589,12 +593,14 @@ std::string utils::strprintf(const char * format, ...) {
 	va_end(ap);
 	va_start(ap, format);
 
-	char buf[len + 1];
+	char * buf = new char[len + 1];
 	vsnprintf(buf, len + 1, format, ap);
-
 	va_end(ap);
 
-	return buf;
+	std::string ret(buf);
+	delete[] buf;
+
+	return ret;
 }
 
 std::string utils::get_useragent(configcontainer * cfgcont) {
