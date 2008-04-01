@@ -610,7 +610,7 @@ void controller::start_reload_all_thread(std::vector<int> * indexes) {
 
 void controller::version_information() {
 	std::cout << PROGRAM_NAME << " " << PROGRAM_VERSION << " - " << PROGRAM_URL << std::endl;
-	std::cout << "Copyright (C) 2006-2007 Andreas Krennmair" << std::endl << std::endl;
+	std::cout << "Copyright (C) 2006-2008 Andreas Krennmair" << std::endl << std::endl;
 
 	struct utsname xuts;
 	uname(&xuts);
