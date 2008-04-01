@@ -58,6 +58,8 @@ namespace newsbeuter {
 
 			inline configcontainer * get_cfg() const { return cfg; }
 
+			void write_item(const rss_item& item, const std::string& filename);
+
 		private:
 			void usage(char * argv0);
 			void version_information();

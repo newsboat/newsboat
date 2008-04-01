@@ -48,8 +48,6 @@ namespace newsbeuter {
 			inline unsigned int formaction_stack_size() { return formaction_stack.size(); }
 			char confirm(const std::string& prompt, const std::string& charset);
 
-			void write_item(const rss_item& item, const std::string& filename);
-
 			void push_itemlist(unsigned int pos);
 			void push_itemlist(rss_feed * feed);
 			void push_itemview(rss_feed * f, const std::string& guid);

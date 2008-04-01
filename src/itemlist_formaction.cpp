@@ -585,7 +585,7 @@ void itemlist_formaction::save_article(const std::string& filename, const rss_it
 		v->show_error(_("Aborted saving."));
 	} else {
 		try {
-			v->write_item(item, filename);
+			v->get_ctrl()->write_item(item, filename);
 			v->show_error(utils::strprintf(_("Saved article to %s"), filename.c_str()));
 		} catch (...) {
 			v->show_error(utils::strprintf(_("Error: couldn't save article to %s"), filename.c_str()));

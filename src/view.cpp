@@ -257,44 +257,6 @@ std::string view::get_filename_suggestion(const std::string& s) {
 	return retval;	
 }
 
-void view::write_item(const rss_item& item, const std::string& filename) {
-	// TODO: move this to the controller.
-	std::vector<std::string> lines;
-	std::vector<linkpair> links; // not used
-	
-	std::string title(_("Title: "));
-	title.append(item.title());
-	lines.push_back(title);
-	
-	std::string author(_("Author: "));
-	author.append(item.author());
-	lines.push_back(author);
-	
-	std::string date(_("Date: "));
-	date.append(item.pubDate());
-	lines.push_back(date);
-
-	std::string link(_("Link: "));
-	link.append(item.link());
-	lines.push_back(link);
-	
-	lines.push_back(std::string(""));
-	
-	unsigned int width = cfg->get_configvalue_as_int("text-width");
-	if (width == 0)
-		width = 80;
-	htmlrenderer rnd(width);
-	rnd.render(item.description(), lines, links, item.feedurl());
-
-	std::fstream f;
-	f.open(filename.c_str(),std::fstream::out);
-	if (!f.is_open())
-		throw exception(errno);
-		
-	for (std::vector<std::string>::iterator it=lines.begin();it!=lines.end();++it) {
-		f << *it << std::endl;	
-	}
-}
 
 void view::open_in_browser(const std::string& url) {
 	formaction_stack.push_front(NULL); // we don't want a thread to write over the browser

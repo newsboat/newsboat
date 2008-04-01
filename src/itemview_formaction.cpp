@@ -166,7 +166,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 					v->show_error(_("Aborted saving."));
 				} else {
 					try {
-						v->write_item(item, filename);
+						v->get_ctrl()->write_item(item, filename);
 						v->show_error(utils::strprintf(_("Saved article to %s."), filename.c_str()));
 					} catch (...) {
 						v->show_error(utils::strprintf(_("Error: couldn't write article to file %s"), filename.c_str()));
@@ -318,7 +318,7 @@ void itemview_formaction::handle_cmdline(const std::string& cmd) {
 				v->show_error(_("Aborted saving."));
 			} else {
 				try {
-					v->write_item(item, filename);
+					v->get_ctrl()->write_item(item, filename);
 					v->show_error(utils::strprintf(_("Saved article to %s"), filename.c_str()));
 				} catch (...) {
 					v->show_error(utils::strprintf(_("Error: couldn't save article to %s"), filename.c_str()));
