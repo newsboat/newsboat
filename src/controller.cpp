@@ -10,6 +10,7 @@
 #include <utils.h>
 #include <stflpp.h>
 #include <interpreter.h>
+#include <exception.h>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
