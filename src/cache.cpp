@@ -416,6 +416,7 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 			feed.items().insert(feed.items().end(), flagged_items.begin(), flagged_items.end()); // if some flagged articles were saved, append them
 		}
 	}
+	feed.sort(cfg->get_configvalue("article-sort-order"));
 }
 
 void cache::get_latest_items(std::vector<rss_item>& items, unsigned int limit) {

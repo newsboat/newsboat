@@ -18,6 +18,8 @@
 
 #include <cerrno>
 
+#include <functional>
+
 using namespace newsbeuter;
 
 rss_parser::rss_parser(const char * uri, cache * c, configcontainer * cfg, rss_ignores * ii) 
@@ -731,7 +733,7 @@ void rss_feed::update_items(std::vector<rss_feed>& feeds) {
 
 	gettimeofday(&tvx, NULL);
 
-	sort(items_.begin(), items_.end());
+	std::sort(items_.begin(), items_.end());
 
 	gettimeofday(&tv2, NULL);
 	unsigned long diff = (((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) - tv1.tv_usec;
@@ -747,6 +749,69 @@ void rss_feed::set_rssurl(const std::string& u) {
 		GetLogger().log(LOG_DEBUG, "rss_feed::set_rssurl: query name = `%s' expr = `%s'", tokens[1].c_str(), tokens[2].c_str());
 		set_title(tokens[1]);
 		set_query(tokens[2]);
+	}
+}
+
+struct sort_item_by_title : public std::binary_function<const rss_item&, const rss_item&, bool> {
+	bool operator()(const rss_item& a, const rss_item& b) {
+		return strcasecmp(a.title().c_str(), b.title().c_str()) < 0;
+	}
+};
+
+struct sort_item_by_flags : public std::binary_function<const rss_item&, const rss_item&, bool> {
+	bool operator()(const rss_item& a, const rss_item& b) {
+		return strcmp(a.flags().c_str(), b.flags().c_str()) < 0;
+	}
+};
+
+struct sort_item_by_author : public std::binary_function<const rss_item&, const rss_item&, bool> {
+	bool operator()(const rss_item& a, const rss_item& b) {
+		return strcmp(a.author().c_str(), b.author().c_str()) < 0;
+	}
+};
+
+struct sort_item_by_link : public std::binary_function<const rss_item&, const rss_item&, bool> {
+	bool operator()(const rss_item& a, const rss_item& b) {
+		return strcmp(a.link().c_str(), b.link().c_str()) < 0;
+	}
+};
+
+struct sort_item_by_guid : public std::binary_function<const rss_item&, const rss_item&, bool> {
+	bool operator()(const rss_item& a, const rss_item& b) {
+		return strcmp(a.guid().c_str(), b.guid().c_str()) < 0;
+	}
+};
+
+void rss_feed::sort(const std::string& method) {
+	std::vector<std::string> methods = utils::tokenize(method,"-");
+	bool reverse = false;
+
+	if (methods.size() > 0 && methods[0] == "date") { // date is descending by default
+		if (methods.size() > 1 && methods[1] == "asc") {
+			reverse = true;
+		}
+	} else { // all other sort methods are ascending by default
+		if (methods.size() > 1 && methods[1] == "desc") {
+			reverse = true;
+		}
+	}
+
+	if (methods.size() > 0 && methods[0] != "date") {
+		if (methods[0] == "title") {
+			std::stable_sort(items_.begin(), items_.end(), sort_item_by_title());
+		} else if (methods[0] == "flags") {
+			std::stable_sort(items_.begin(), items_.end(), sort_item_by_flags());
+		} else if (methods[0] == "author") {
+			std::stable_sort(items_.begin(), items_.end(), sort_item_by_author());
+		} else if (methods[0] == "link") {
+			std::stable_sort(items_.begin(), items_.end(), sort_item_by_link());
+		} else if (methods[0] == "guid") {
+			std::stable_sort(items_.begin(), items_.end(), sort_item_by_guid());
+		} // add new sorting methods here
+	}
+
+	if (reverse) {
+		std::reverse(items_.begin(), items_.end());
 	}
 }
 

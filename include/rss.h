@@ -70,7 +70,7 @@ namespace newsbeuter {
 			inline bool enqueued() { return enqueued_; }
 			inline void set_enqueued(bool v) { enqueued_ = v; }
 
-			inline const std::string& flags() { sort_flags(); return flags_; }
+			inline const std::string& flags() const { return flags_; }
 			void set_flags(const std::string& ff) { flags_ = ff; sort_flags(); }
 			void update_flags();
 			void sort_flags();
@@ -139,6 +139,8 @@ namespace newsbeuter {
 
 			bool is_empty() { return empty; }
 			void set_empty(bool t) { empty = t; }
+
+			void sort(const std::string& method);
 
 		private:
 			std::string title_;
