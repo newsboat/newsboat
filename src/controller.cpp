@@ -903,3 +903,7 @@ void controller::write_item(const rss_item& item, const std::string& filename) {
 		f << *it << std::endl;	
 	}
 }
+
+void controller::mark_deleted(const std::string& guid, bool b) {
+	rsscache->mark_item_deleted(guid, b);
+}

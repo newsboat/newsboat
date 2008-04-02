@@ -42,6 +42,24 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				}
 			}
 			break;
+		case OP_DELETE: {
+				scope_measure m1("OP_DELETE");
+				if (itemposname.length() > 0) {
+					visible_items[itempos].first->set_deleted(!visible_items[itempos].first->deleted());
+					v->get_ctrl()->mark_deleted(visible_items[itempos].first->guid(), visible_items[itempos].first->deleted());
+					do_redraw = true;
+				} else {
+					v->show_error(_("No item selected!")); // should not happen
+				}
+			}
+			break;
+		case OP_PURGE_DELETED: {
+				scope_measure m1("OP_PURGE_DELETED");
+				feed->purge_deleted_items();
+				update_visible_items = true;
+				do_redraw = true;
+			}
+			break;
 		case OP_OPENINBROWSER: {
 				GetLogger().log(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0) {
@@ -127,6 +145,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			break;
 		case OP_QUIT:
 			GetLogger().log(LOG_INFO, "itemlist_formaction: quitting");
+			feed->purge_deleted_items();
 			quit = true;
 			break;
 		case OP_NEXTUNREAD:
@@ -394,7 +413,9 @@ void itemlist_formaction::prepare() {
 			fmt.register_fmt('i', utils::strprintf("%u",it->second + 1));
 
 			std::string flags;
-			if (it->first->unread()) {
+			if (it->first->deleted()) {
+				flags.append("D");
+			} else if (it->first->unread()) {
 				flags.append("N");
 			} else {
 				flags.append(" ");

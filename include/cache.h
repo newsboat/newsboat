@@ -28,6 +28,8 @@ class cache {
 		time_t get_lastmodified(const std::string& feedurl);
 		void set_lastmodified(const std::string& feedurl, time_t lastmod);
 		unsigned int get_unread_count();
+		void mark_item_deleted(const std::string& guid, bool b);
+		void remove_old_deleted_items(const std::string& rssurl, const std::vector<std::string>& guids);
 	private:
 		void populate_tables();
 		void set_pragmas();

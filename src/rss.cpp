@@ -284,6 +284,8 @@ rss_feed rss_parser::parse() {
 			}
 		}
 
+		feed.remove_old_deleted_items();
+
 		mrss_free(mrss);
 
 	}
@@ -812,6 +814,27 @@ void rss_feed::sort(const std::string& method) {
 
 	if (reverse) {
 		std::reverse(items_.begin(), items_.end());
+	}
+}
+
+void rss_feed::remove_old_deleted_items() {
+	std::vector<std::string> guids;
+	for (std::vector<rss_item>::iterator it=items_.begin();it!=items_.end();++it) {
+		guids.push_back(it->guid());
+	}
+	ch->remove_old_deleted_items(rssurl_, guids);
+}
+
+void rss_feed::purge_deleted_items() {
+	scope_measure m1("rss_feed::purge_deleted_items");
+	std::vector<rss_item>::iterator it=items_.begin();
+	while (it!=items_.end()) {
+		if (it->deleted()) {
+			items_.erase(it);
+			it = items_.begin(); // items_ modified -> iterator invalidated
+		} else {
+			++it;
+		}
 	}
 }
 

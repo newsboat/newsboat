@@ -21,7 +21,7 @@ namespace newsbeuter {
 
 	class rss_item : public matchable {
 		public:
-			rss_item(cache * c) : unread_(true), ch(c), enqueued_(false), feedptr(NULL) { }
+			rss_item(cache * c) : unread_(true), ch(c), enqueued_(false), feedptr(NULL), deleted_(0) { }
 			~rss_item() { }
 			
 			std::string title() const;
@@ -81,6 +81,9 @@ namespace newsbeuter {
 			void set_feedptr(rss_feed * ptr);
 			inline rss_feed * get_feedptr() { return feedptr; }
 
+			inline bool deleted() const { return deleted_; }
+			inline void set_deleted(bool b) { deleted_ = b; }
+
 		private:
 			std::string title_;
 			std::string link_;
@@ -96,6 +99,7 @@ namespace newsbeuter {
 			bool enqueued_;
 			std::string flags_;
 			rss_feed * feedptr;
+			bool deleted_;
 	};
 
 	class rss_feed : public matchable {
@@ -141,6 +145,10 @@ namespace newsbeuter {
 			void set_empty(bool t) { empty = t; }
 
 			void sort(const std::string& method);
+
+			void remove_old_deleted_items();
+
+			void purge_deleted_items();
 
 		private:
 			std::string title_;

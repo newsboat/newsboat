@@ -60,6 +60,8 @@ namespace newsbeuter {
 
 			void write_item(const rss_item& item, const std::string& filename);
 
+			void mark_deleted(const std::string& guid, bool b);
+
 		private:
 			void usage(char * argv0);
 			void version_information();
