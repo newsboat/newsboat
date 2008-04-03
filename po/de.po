@@ -23,7 +23,7 @@ msgstr "Fehler: das Öffnen der Zwischenspeicherdatei `%s' schlug fehl: %s"
 
 #: src/configcontainer.cpp:56
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
-msgstr "%N %V - Ihre Feeds (%u ungelesen, %t gesamt)&?T? - Tag `%T'&?"
+msgstr "%N %V - Ihre Feeds (%u ungelesen, %t gesamt)%?T? - Tag `%T'&?"
 
 #: src/configcontainer.cpp:57 src/configcontainer.cpp:65
 msgid "%N %V - URLs"
