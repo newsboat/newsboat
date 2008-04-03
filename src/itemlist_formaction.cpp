@@ -47,6 +47,8 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				if (itemposname.length() > 0) {
 					visible_items[itempos].first->set_deleted(!visible_items[itempos].first->deleted());
 					v->get_ctrl()->mark_deleted(visible_items[itempos].first->guid(), visible_items[itempos].first->deleted());
+					if (itempos < visible_items.size()-1)
+						f->set("itempos", utils::strprintf("%u", itempos + 1));
 					do_redraw = true;
 				} else {
 					v->show_error(_("No item selected!")); // should not happen
@@ -226,6 +228,8 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					} catch (const dbexception& e) {
 						v->set_status(utils::strprintf(_("Error while toggling read flag: %s"), e.what()));
 					}
+					if (itempos < visible_items.size()-1)
+						f->set("itempos", utils::strprintf("%u", itempos + 1));
 					do_redraw = true;
 				}
 			}
