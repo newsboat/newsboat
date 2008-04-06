@@ -333,10 +333,11 @@ void itemlist_formaction::finished_qna(operation op) {
 					searchhistory.add_line(searchphrase);
 					std::vector<rss_item> items;
 					try {
+						std::string utf8searchphrase = utils::convert_text(searchphrase, "utf-8", nl_langinfo(CODESET));
 						if (show_searchresult) {
-							items = v->get_ctrl()->search_for_items(searchphrase, "");
+							items = v->get_ctrl()->search_for_items(utf8searchphrase, "");
 						} else {
-							items = v->get_ctrl()->search_for_items(searchphrase, feed->rssurl());
+							items = v->get_ctrl()->search_for_items(utf8searchphrase, feed->rssurl());
 						}
 					} catch (const dbexception& e) {
 						v->show_error(utils::strprintf(_("Error while searching for `%s': %s"), searchphrase.c_str(), e.what()));
