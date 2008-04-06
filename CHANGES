@@ -4,8 +4,8 @@ Changes for newsbeuter:
 	Improved locking to allow multiple newsbeuter instances (one instance per cache file)
 	Flagged articles don't get deleted anymore.
 	Added commandline option to podbeuter to automatically start download.
-	Added "article-sort-order" configuration option to freely configure the sort order of article lists (TODO: doc)
-	Added possibility to delete articles (TODO: doc)
+	Added "article-sort-order" configuration option to freely configure the sort order of article lists
+	Added possibility to delete articles
 
 0.8.2 (2008-03-16):
 	fixed broken string conversion.
