@@ -13,6 +13,8 @@
 #include <sstream>
 #include <string>
 
+#include <langinfo.h>
+
 #define FILTER_UNREAD_FEEDS "unread_count != \"0\""
 
 namespace newsbeuter {

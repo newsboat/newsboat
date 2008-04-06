@@ -10,6 +10,8 @@
 #include <cassert>
 #include <sstream>
 
+#include <langinfo.h>
+
 namespace newsbeuter {
 
 itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)

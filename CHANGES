@@ -6,6 +6,7 @@ Changes for newsbeuter:
 	Added commandline option to podbeuter to automatically start download.
 	Added "article-sort-order" configuration option to freely configure the sort order of article lists
 	Added possibility to delete articles
+	Lots of bug fixes
 
 0.8.2 (2008-03-16):
 	fixed broken string conversion.
