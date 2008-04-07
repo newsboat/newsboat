@@ -140,7 +140,6 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			if (!show_searchresult) {
 				GetLogger().log(LOG_INFO, "itemlist_formaction: reloading current feed");
 				v->get_ctrl()->reload(pos);
-				// feed = v->get_ctrl()->get_feed(pos);
 				update_visible_items = true;
 				do_redraw = true;
 			} else {

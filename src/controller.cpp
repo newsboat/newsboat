@@ -401,7 +401,6 @@ void controller::run(int argc, char * argv[]) {
 	// hand over the important objects to the view
 	v->set_config_container(cfg);
 	v->set_keymap(&keys);
-	// v->set_feedlist(feeds);
 	v->set_tags(tags);
 
 	// run the view
@@ -773,7 +772,6 @@ rss_feed * controller::get_feed_by_url(const std::string& feedurl) {
 
 bool controller::is_valid_podcast_type(const std::string& /* mimetype */) {
 	return true;
-	// return mimetype == "audio/mpeg" || mimetype == "video/x-m4v" || mimetype == "audio/x-mpeg";
 }
 
 void controller::enqueue_url(const std::string& url) {

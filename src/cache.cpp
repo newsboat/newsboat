@@ -27,14 +27,14 @@ struct cb_handler {
 
 static int count_callback(void * handler, int argc, char ** argv, char ** /* azColName */) {
 	cb_handler * cbh = static_cast<cb_handler *>(handler);
-	// std::cerr << "inside count_callback" << std::endl;
+
 	if (argc>0) {
 		std::istringstream is(argv[0]);
 		int x;
 		is >> x;
 		cbh->set_count(x);
 	}
-	// std::cerr << "count_callback: count = " << cbh->count() << std::endl;
+
 	return 0;
 }
 
@@ -58,7 +58,6 @@ static int rssfeed_callback(void * myfeed, int argc, char ** argv, char ** /* az
 	feed->set_title(argv[0]);
 	feed->set_link(argv[1]);
 	GetLogger().log(LOG_INFO, "rssfeed_callback: title = %s link = %s",argv[0],argv[1]);
-	// std::cerr << "callback: feed->title = " << feed->title() << std::endl;
 	return 0;
 }
 
@@ -557,9 +556,6 @@ void cache::cleanup_cache(std::vector<rss_feed>& feeds) {
 			mtx->unlock(); // see above
 			throw dbexception(db);
 		}
-
-		// rc = sqlite3_exec(db,"VACUUM;",NULL,NULL,NULL);
-		// assert(rc == SQLITE_OK);
 
 		// WARNING: THE MISSING UNLOCK OPERATION IS MISSING FOR A PURPOSE!
 		// It's missing so that no database operation can occur after the cache cleanup!

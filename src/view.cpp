@@ -119,11 +119,8 @@ void view::set_bindings() {
 void view::set_status_unlocked(const std::string& msg) {
 	if (formaction_stack.size() > 0 && (*formaction_stack.begin()) != NULL) {
 		stfl::form * form = (*formaction_stack.begin())->get_form();
-		// GetLogger().log(LOG_DEBUG, "view::set_status: form = %p", form);
 		form->set("msg",msg);
-		// GetLogger().log(LOG_DEBUG, "view::set_status: after form.set");
 		form->run(-1);
-		// GetLogger().log(LOG_DEBUG, "view::set_status: after form.run");
 	}
 }
 

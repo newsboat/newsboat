@@ -575,7 +575,6 @@ bool rss_item::has_attribute(const std::string& attribname) {
 }
 
 std::string rss_item::get_attribute(const std::string& attribname) {
-	// GetLogger().log(LOG_DEBUG, "rss_item::get_attribute(%s) called", attribname.c_str());
 	if (attribname == "title")
 		return title();
 	else if (attribname == "link")
@@ -631,7 +630,6 @@ void rss_item::sort_flags() {
 }
 
 bool rss_feed::has_attribute(const std::string& attribname) {
-	// GetLogger().log(LOG_DEBUG, "rss_feed::has_attribute(%s) called", attribname.c_str());
 	if (attribname == "feedtitle" ||
 		attribname == "description" ||
 		attribname == "feedlink" ||
@@ -645,7 +643,6 @@ bool rss_feed::has_attribute(const std::string& attribname) {
 }
 
 std::string rss_feed::get_attribute(const std::string& attribname) {
-	// GetLogger().log(LOG_DEBUG, "rss_feed::get_attribute(%s) called", attribname.c_str());
 	if (attribname == "feedtitle")
 		return title();
 	else if (attribname == "description")
@@ -661,7 +658,6 @@ std::string rss_feed::get_attribute(const std::string& attribname) {
 	} else if (attribname == "total_count") {
 		return utils::to_s(items_.size());
 	} else if (attribname == "tags") {
-		// abort();
 		return get_tags();
 	}
 	return "";
@@ -839,7 +835,6 @@ void rss_feed::purge_deleted_items() {
 }
 
 void rss_item::set_feedptr(rss_feed * ptr) {
-	// GetLogger().log(LOG_DEBUG, "rss_item::set_feedptr: setting feed pointer from %p to %p", feedptr, ptr);
 	feedptr = ptr;
 }
 

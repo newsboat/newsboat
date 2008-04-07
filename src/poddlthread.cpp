@@ -82,13 +82,11 @@ void poddlthread::run() {
 
 static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp) {
 	poddlthread * thread = (poddlthread *)userp;
-	// std::cerr << "my_write_data(...," << size << "," << nmemb << ",...) called" << std::endl;
 	return thread->write_data(buffer, size, nmemb);
 }
 
 static int progress_callback(void *clientp, double dltotal, double dlnow, double /* ultotal */, double /*ulnow*/) {
 	poddlthread * thread = (poddlthread *)clientp;
-	// std::cerr << "progress_callback(...," << dltotal << "," << dlnow << ",...) called" << std::endl;
 	return thread->progress(dlnow, dltotal);
 }
 

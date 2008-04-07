@@ -142,7 +142,6 @@ void filebrowser_formaction::prepare() {
 		
 		code.append("}");
 		
-		// GetLogger().log(LOG_DEBUG, "filebrowser: code = %s", code.c_str());
 		f->modify("files", "replace_inner", code);
 		do_redraw = false;
 	}

@@ -386,8 +386,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						while (s.length() > 0 && s[0] == '\n')
 							s.erase(0, 1);
 						std::vector<std::string> words = utils::tokenize_spaced(s);
-						//if (!line_is_nonempty(words[0]))
-						//	words.erase(words.begin());
+
 						unsigned int i=0;
 						bool new_line = false;
 						GetLogger().log(LOG_DEBUG, "htmlrenderer::render: tokenized `%s'", xpp.getText().c_str());

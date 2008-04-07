@@ -26,15 +26,12 @@ script_interpreter::~script_interpreter() {
 
 void script_interpreter::load_script(const std::string& path) {
 	GetLogger().log(LOG_DEBUG, "script_interpreter::load_script: loading file `%s'", path.c_str());
-	// VALUE v = rb_require(path.c_str());
 	int state;
 	rb_load_protect(rb_str_new2(path.c_str()), 0, &state);
 	if (state) {
 		VALUE c = rb_funcall(rb_gv_get("$!"), rb_intern("to_s"), 0);
 		GetLogger().log(LOG_ERROR, "script_interpreter::load_script: %s", RSTRING(c)->ptr);
 	}
-	// ruby_run();
-	// GetLogger().log(LOG_DEBUG, "script_interpreter::load_script: rb_require return value: %s", v == Qtrue ? "Qtrue" : "Qfalse");
 }
 
 void script_interpreter::run_function(const std::string& name) {

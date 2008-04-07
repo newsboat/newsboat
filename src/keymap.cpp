@@ -177,7 +177,6 @@ action_handler_status keymap::handle_action(const std::string& action, const std
 			if (op > OP_SK_MIN && op < OP_SK_MAX)
 				unset_key(getkey(get_opcode(params[1])));
 			set_key(get_opcode(params[1]), params[0]);
-			// keymap_[params[0]] = get_opcode(params[1]);
 			return AHS_OK;
 		}
 	} else if (action == "unbind-key") {

@@ -305,9 +305,7 @@ std::string utils::convert_text(const std::string& text, const std::string& toco
 				case EINVAL:
 					result.append(old_outbufp, outbufp - old_outbufp);
 					result.append("?");
-					// GetLogger().log(LOG_DEBUG, "utils::convert_text: hit EILSEQ/EINVAL: result = `%s'", result.c_str());
 					inbufp += strlen(inbufp) - inbytesleft + 1;
-					// GetLogger().log(LOG_DEBUG, "utils::convert_text: new inbufp: `%s'", inbufp);
 					inbytesleft = strlen(inbufp);
 					break;
 			}
@@ -315,9 +313,6 @@ std::string utils::convert_text(const std::string& text, const std::string& toco
 			result.append(old_outbufp, outbufp - old_outbufp);
 		}
 	} while (inbytesleft > 0);
-
-	// GetLogger().log(LOG_DEBUG, "utils::convert_text: before: %s", text.c_str());
-	// GetLogger().log(LOG_DEBUG, "utils::convert_text: after:  %s", result.c_str());
 
 	iconv_close(cd);
 
