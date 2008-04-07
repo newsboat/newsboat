@@ -391,6 +391,7 @@ bool feedlist_formaction::jump_to_previous_unread_feed(unsigned int& feedpos) {
 		if (visible_feeds[i].first->unread_item_count() > 0) {
 			GetLogger().log(LOG_DEBUG, "feedlist_formaction::jump_to_previous_unread_feed: hit");
 			f->set("feedpos", utils::to_s(i));
+			feedpos = visible_feeds[i].second;
 			return true;
 		}
 	}
@@ -436,6 +437,7 @@ bool feedlist_formaction::jump_to_next_unread_feed(unsigned int& feedpos) {
 		if (visible_feeds[i].first->unread_item_count() > 0) {
 			GetLogger().log(LOG_DEBUG, "feedlist_formaction::jump_to_next_unread_feed: hit");
 			f->set("feedpos", utils::to_s(i));
+			feedpos = visible_feeds[i].second;
 			return true;
 		}
 	}
