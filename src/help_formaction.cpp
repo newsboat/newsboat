@@ -46,7 +46,9 @@ void help_formaction::prepare() {
 		
 		for (std::vector<keymap_desc>::iterator it=descs.begin();it!=descs.end();++it) {
 			unsigned int how_often = 3 - (it->cmd.length() / 8);
-			listfmt.add_line(utils::strprintf("%s\t%s%*c%s", it->key.c_str(), it->cmd.c_str(), how_often, '\t', it->desc.c_str()));
+			char tabs[] = "\t\t\t";
+			tabs[how_often] = '\0';
+			listfmt.add_line(utils::strprintf("%s\t%s%s%s", it->key.c_str(), it->cmd.c_str(), tabs, it->desc.c_str()));
 		}
 
 		f->modify("helptext","replace_inner", listfmt.format_list());
