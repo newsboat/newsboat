@@ -21,7 +21,8 @@ namespace newsbeuter {
 
 feedlist_formaction::feedlist_formaction(view * vv, std::string formstr) 
 	: formaction(vv,formstr), zero_feedpos(false), feeds_shown(0),
-		auto_open(false), quit(false), apply_filter(false), search_dummy_feed(v->get_ctrl()->get_cache()) {
+		auto_open(false), quit(false), apply_filter(false), search_dummy_feed(v->get_ctrl()->get_cache()),
+		filterpos(0), set_filterpos(false) {
 	assert(true==m.parse(FILTER_UNREAD_FEEDS));
 }
 
@@ -71,7 +72,17 @@ void feedlist_formaction::prepare() {
 		GetLogger().log(LOG_DEBUG, "feedlist_formaction::prepare: doing redraw");
 		do_redraw = false;
 		v->get_ctrl()->update_feedlist();
-		if (zero_feedpos) {
+		if (set_filterpos) {
+			set_filterpos = false;
+			unsigned int i = 0;
+			for (std::vector<feedptr_pos_pair>::iterator it=visible_feeds.begin();it!=visible_feeds.end();++it, ++i) {
+				if (it->second == filterpos) {
+					f->set("feedpos", utils::to_s(i));
+					return;
+				}
+			}
+			f->set("feedpos", "0");
+		} else if (zero_feedpos) {
 			f->set("feedpos","0");
 			zero_feedpos = false;
 		}
@@ -147,11 +158,11 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 			if (v->get_cfg()->get_configvalue_as_bool("show-read-feeds")) {
 				v->get_cfg()->set_configvalue("show-read-feeds","no");
 				apply_filter = true;
-				f->set("feedpos", "0");
 			} else {
 				v->get_cfg()->set_configvalue("show-read-feeds","yes");
 				apply_filter = false;
 			}
+			save_filterpos();
 			do_redraw = true;
 			break;
 		case OP_NEXTUNREAD: {
@@ -214,6 +225,7 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 							v->show_error(_("Error: couldn't parse filter command!"));
 							m.parse(FILTER_UNREAD_FEEDS);
 						} else {
+							save_filterpos();
 							apply_filter = true;
 							do_redraw = true;
 						}
@@ -241,6 +253,7 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 			apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-feeds"));
 			m.parse(FILTER_UNREAD_FEEDS);
 			do_redraw = true;
+			save_filterpos();
 			break;
 		case OP_SETFILTER:
 			if (automatic && args->size() > 0) {
@@ -323,7 +336,7 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 
 		fmtstr_formatter fmt;
 
-		fmt.register_fmt('i', utils::strprintf("%u", it->second));
+		fmt.register_fmt('i', utils::strprintf("%u", it->second + 1));
 		fmt.register_fmt('u', utils::strprintf("(%u/%u)",unread_count,static_cast<unsigned int>(it->first->items().size())));
 		fmt.register_fmt('n', unread_count > 0 ? "N" : " ");
 		fmt.register_fmt('t', title);
@@ -512,7 +525,7 @@ void feedlist_formaction::finished_qna(operation op) {
 						v->show_error(_("Error: couldn't parse filter command!"));
 						m.parse(FILTER_UNREAD_FEEDS);
 					} else {
-						f->set("feedpos", "0");
+						save_filterpos();
 						apply_filter = true;
 						do_redraw = true;
 					}
@@ -556,6 +569,16 @@ void feedlist_formaction::mark_pos_if_visible(unsigned int pos) {
 			f->set("feedpos", utils::to_s(vpos));
 			break;
 		}
+	}
+}
+
+void feedlist_formaction::save_filterpos() {
+	std::istringstream is(f->get("feedpos"));
+	unsigned int i;
+	is >> i;
+	if (i<visible_feeds.size()) {
+		filterpos = visible_feeds[i].second;
+		set_filterpos = true;
 	}
 }
 

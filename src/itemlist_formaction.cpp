@@ -15,7 +15,8 @@
 namespace newsbeuter {
 
 itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
-	: formaction(vv,formstr), feed(0), apply_filter(false), update_visible_items(true), search_dummy_feed(v->get_ctrl()->get_cache()) { 
+	: formaction(vv,formstr), feed(0), apply_filter(false), update_visible_items(true), search_dummy_feed(v->get_ctrl()->get_cache()),
+		set_filterpos(false), filterpos(0) {
 }
 
 itemlist_formaction::~itemlist_formaction() { }
@@ -254,6 +255,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 							apply_filter = true;
 							update_visible_items = true;
 							do_redraw = true;
+							save_filterpos();
 						}
 					}
 				}
@@ -279,6 +281,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			apply_filter = false;
 			update_visible_items = true;
 			do_redraw = true;
+			save_filterpos();
 			break;
 		case OP_INT_RESIZE:
 			do_redraw = true;
@@ -302,10 +305,10 @@ void itemlist_formaction::finished_qna(operation op) {
 					if (!m.parse(filtertext)) {
 						v->show_error(_("Error: couldn't parse filter command!"));
 					} else {
-						f->set("itempos", "0");
 						apply_filter = true;
 						update_visible_items = true;
 						do_redraw = true;
+						save_filterpos();
 					}
 				}
 			}
@@ -404,6 +407,7 @@ void itemlist_formaction::prepare() {
 	}
 
 	if (do_redraw) {
+		do_redraw = false;
 
 		GetLogger().log(LOG_DEBUG, "itemlist_formaction::prepare: redrawing");
 		listformatter listfmt;
@@ -455,7 +459,18 @@ void itemlist_formaction::prepare() {
 		
 		set_head(feed->title(),feed->unread_item_count(),feed->items().size(), feed->rssurl());
 
-		do_redraw = false;
+		if (set_filterpos) {
+			set_filterpos = false;
+			unsigned int i=0;
+			for (std::vector<itemptr_pos_pair>::iterator it=visible_items.begin();it!=visible_items.end();++it, ++i) {
+				if (it->second == filterpos) {
+					f->set("itempos", utils::to_s(i));
+					return;
+				}
+			}
+			f->set("itempos", "0");
+		}
+
 	}
 }
 
@@ -618,6 +633,16 @@ void itemlist_formaction::save_article(const std::string& filename, const rss_it
 		} catch (...) {
 			v->show_error(utils::strprintf(_("Error: couldn't save article to %s"), filename.c_str()));
 		}
+	}
+}
+
+void itemlist_formaction::save_filterpos() {
+	std::istringstream is(f->get("itempos"));
+	unsigned int i;
+	is >> i;
+	if (i<visible_items.size()) {
+		filterpos = visible_items[i].second;
+		set_filterpos = true;
 	}
 }
 

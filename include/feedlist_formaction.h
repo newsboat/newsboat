@@ -40,6 +40,8 @@ class feedlist_formaction : public formaction {
 
 		void goto_feed(const std::string& str);
 
+		void save_filterpos();
+
 		bool zero_feedpos;
 		unsigned int feeds_shown;
 		bool auto_open;
@@ -54,6 +56,9 @@ class feedlist_formaction : public formaction {
 		history filterhistory;
 
 		rss_feed search_dummy_feed;
+
+		unsigned int filterpos;
+		bool set_filterpos;
 };
 
 }

@@ -4,7 +4,6 @@ TODO:
 	join two subsequent text nodes separated by a comment
 - add configurable pager
 - update example config
-- make cursor in feedlist and itemlist stable when a filter is applied
 - implement reloading of configuration (:source)
 
 longteam goals to reach:
@@ -113,3 +112,4 @@ DONE:
 	- after a successful reload, remove all those articles who bear a deleted flag and are not in the list of GUIDs from the reload
 - convert search strings to utf-8 prior to searching.
 - bug: when a user is in an itemlist that contains unread items, and returns to the feedlist that has show-unread disabled, the selected feed is not the same as previously shown in the itemlist. expected behaviour: when returning from the itemlist to the feedlist, the feed that was shown previously shall be selected.
+- make cursor in feedlist and itemlist stable when a filter is applied

@@ -52,6 +52,8 @@ class itemlist_formaction : public formaction {
 
 		void save_article(const std::string& filename, const rss_item& item);
 
+		void save_filterpos();
+
 		unsigned int pos;
 		rss_feed * feed;
 		bool rebuild_list;
@@ -66,6 +68,9 @@ class itemlist_formaction : public formaction {
 		rss_feed search_dummy_feed;
 
 		mutex redraw_mtx;
+
+		bool set_filterpos;
+		unsigned int filterpos;
 };
 
 }
