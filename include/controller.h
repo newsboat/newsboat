@@ -35,6 +35,7 @@ namespace newsbeuter {
 			bool trylock_reload_mutex();
 
 			void update_feedlist();
+			void update_visible_feeds();
 			void mark_all_read(unsigned int pos);
 			void catchup_all();
 			inline void catchup_all(rss_feed& feed) { rsscache->catchup_all(feed); }

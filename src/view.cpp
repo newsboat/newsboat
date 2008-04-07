@@ -275,6 +275,16 @@ void view::open_in_browser(const std::string& url) {
 	formaction_stack.pop_front();
 }
 
+void view::update_visible_feeds(std::vector<rss_feed>& feeds) {
+	scope_mutex lock(mtx);
+	try {
+		feedlist->update_visible_feeds(feeds);
+	} catch (matcherexception e) {
+		set_status_unlocked(utils::strprintf(_("Error: applying the filter failed: %s"), e.what()));
+		GetLogger().log(LOG_DEBUG, "view::update_visible_feeds: inside catch: %s", e.what());
+	}
+}
+
 void view::set_feedlist(std::vector<rss_feed>& feeds) {
 	scope_mutex lock(mtx);
 
@@ -556,6 +566,10 @@ std::string view::ask_user(const std::string& prompt) {
 	qna.push_back(qna_pair(prompt, ""));
 	(*formaction_stack.begin())->start_qna(qna, OP_NIL);
 	return (*formaction_stack.begin())->get_qna_response(0);
+}
+
+void view::feedlist_mark_pos_if_visible(unsigned int pos) {
+	feedlist->mark_pos_if_visible(pos);
 }
 
 

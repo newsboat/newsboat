@@ -16,6 +16,7 @@ class feedlist_formaction : public formaction {
 		virtual void prepare();
 		virtual void init();
 		void set_feedlist(std::vector<rss_feed>& feeds);
+		void update_visible_feeds(std::vector<rss_feed>& feeds);
 		void set_tags(const std::vector<std::string>& t);
 		virtual keymap_hint_entry * get_keymap_hint();
 		rss_feed * get_feed();
@@ -28,6 +29,9 @@ class feedlist_formaction : public formaction {
 		virtual void handle_cmdline(const std::string& cmd);
 
 		virtual void finished_qna(operation op);
+
+		void mark_pos_if_visible(unsigned int pos);
+
 
 	private:
 

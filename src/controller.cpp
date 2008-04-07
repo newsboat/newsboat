@@ -423,6 +423,10 @@ void controller::update_feedlist() {
 	v->set_feedlist(feeds);
 }
 
+void controller::update_visible_feeds() {
+	v->update_visible_feeds(feeds);
+}
+
 void controller::catchup_all() {
 	try {
 		rsscache->catchup_all();

@@ -149,6 +149,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			break;
 		case OP_QUIT:
 			GetLogger().log(LOG_INFO, "itemlist_formaction: quitting");
+			v->feedlist_mark_pos_if_visible(pos);
 			feed->purge_deleted_items();
 			quit = true;
 			break;

@@ -35,6 +35,7 @@ namespace newsbeuter {
 			std::string id() const;
 
 			void set_feedlist(std::vector<rss_feed>& feeds);
+			void update_visible_feeds(std::vector<rss_feed>& feeds);
 			void set_keymap(keymap * k);
 			void set_config_container(configcontainer * cfgcontainer);
 			void show_error(const std::string& msg);
@@ -74,6 +75,8 @@ namespace newsbeuter {
 			void notify_itemlist_change(rss_feed& feed);
 
 			std::string ask_user(const std::string& prompt);
+
+			void feedlist_mark_pos_if_visible(unsigned int pos);
 
 		protected:
 			/*

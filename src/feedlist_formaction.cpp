@@ -270,6 +270,23 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 	}
 }
 
+void feedlist_formaction::update_visible_feeds(std::vector<rss_feed>& feeds) {
+	assert(v->get_cfg() != NULL); // must not happen
+
+	if (visible_feeds.size() > 0)
+		visible_feeds.erase(visible_feeds.begin(), visible_feeds.end());
+
+	unsigned int i = 0;
+
+	for (std::vector<rss_feed>::iterator it = feeds.begin(); it != feeds.end(); ++it, ++i) {
+		if ((tag == "" || it->matches_tag(tag)) && (!apply_filter || m.matches(&(*it)))) {
+			visible_feeds.push_back(feedptr_pos_pair(&(*it),i));
+		}
+	}
+
+	feeds_shown = visible_feeds.size();
+}
+
 void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 	assert(v->get_cfg() != NULL); // must not happen
 
@@ -278,60 +295,46 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 	unsigned int width;
 	is >> width;
 
-	feeds_shown = 0;
 	unsigned int i = 0;
 	unsigned short feedlist_number = 1;
 	unsigned int unread_feeds = 0;
-
-	if (visible_feeds.size() > 0)
-		visible_feeds.erase(visible_feeds.begin(), visible_feeds.end());
 
 	std::string feedlist_format = v->get_cfg()->get_configvalue("feedlist-format");
 
 	listformatter listfmt;
 
-	for (std::vector<rss_feed>::iterator it = feeds.begin(); it != feeds.end(); ++it, ++i, ++feedlist_number) {
-		rss_feed feed = *it;
-		std::string title = it->title();
+	update_visible_feeds(feeds);
+
+	for (std::vector<feedptr_pos_pair>::iterator it = visible_feeds.begin(); it != visible_feeds.end(); ++it, ++i, ++feedlist_number) {
+		std::string title = it->first->title();
 		if (title.length()==0) {
-			title = it->rssurl(); // rssurl must always be present.
+			title = it->first->rssurl(); // rssurl must always be present.
 			if (title.length()==0) {
 				title = "<no title>"; // shouldn't happen
 			}
 		}
 
 		unsigned int unread_count = 0;
-		if (it->items().size() > 0) {
-			unread_count = it->unread_item_count();
+		if (it->first->items().size() > 0) {
+			unread_count = it->first->unread_item_count();
 		}
 		if (unread_count > 0)
 			++unread_feeds;
 
-		/*
-		 * we only display an entry in the feedlist if:
-		 *   - no tag is active, or the entry matches the currently selected tag
-		 *   - no filter shall be applied, or the entry matches the currently set filter
-		 */
-		if ((tag == "" || it->matches_tag(tag)) && (!apply_filter || m.matches(&(*it)))) {
-			visible_feeds.push_back(feedptr_pos_pair(&(*it),i));
+		fmtstr_formatter fmt;
 
-			fmtstr_formatter fmt;
+		fmt.register_fmt('i', utils::strprintf("%u", it->second));
+		fmt.register_fmt('u', utils::strprintf("(%u/%u)",unread_count,static_cast<unsigned int>(it->first->items().size())));
+		fmt.register_fmt('n', unread_count > 0 ? "N" : " ");
+		fmt.register_fmt('t', title);
+		fmt.register_fmt('l', it->first->link());
+		fmt.register_fmt('L', it->first->rssurl());
+		fmt.register_fmt('d', it->first->description());
 
-			fmt.register_fmt('i', utils::strprintf("%u", feedlist_number));
-			fmt.register_fmt('u', utils::strprintf("(%u/%u)",unread_count,static_cast<unsigned int>(it->items().size())));
-			fmt.register_fmt('n', unread_count > 0 ? "N" : " ");
-			fmt.register_fmt('t', title);
-			fmt.register_fmt('l', it->link());
-			fmt.register_fmt('L', it->rssurl());
-			fmt.register_fmt('d', it->description());
+		std::string format = fmt.do_format(feedlist_format, width);
+		GetLogger().log(LOG_DEBUG, "feedlist_formaction::set_feedlist: format result = %s", format.c_str());
 
-			std::string format = fmt.do_format(feedlist_format, width);
-			GetLogger().log(LOG_DEBUG, "feedlist_formaction::set_feedlist: format result = %s", format.c_str());
-
-			listfmt.add_line(format, i);
-
-			++feeds_shown;
-		}
+		listfmt.add_line(format, it->second);
 	}
 
 	f->modify("feeds","replace_inner",listfmt.format_list());
@@ -538,6 +541,19 @@ void feedlist_formaction::finished_qna(operation op) {
 			break;
 		default:
 			break;
+	}
+}
+
+void feedlist_formaction::mark_pos_if_visible(unsigned int pos) {
+	scope_measure m1("feedlist_formaction::mark_pos_if_visible");
+	unsigned int vpos = 0;
+	v->get_ctrl()->update_visible_feeds();
+	for (std::vector<feedptr_pos_pair>::iterator it=visible_feeds.begin();it!=visible_feeds.end();++it, ++vpos) {
+		if (it->second == pos) {
+			GetLogger().log(LOG_DEBUG, "feedlist_formaction::mark_pos_if_visible: match, setting position to %u", vpos);
+			f->set("feedpos", utils::to_s(vpos));
+			break;
+		}
 	}
 }
 
