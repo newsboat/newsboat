@@ -104,8 +104,8 @@ namespace newsbeuter {
 
 	class rss_feed : public matchable {
 		public:
-			rss_feed(cache * c) : ch(c), empty(true) { }
-			rss_feed() : ch(NULL), empty(true) { }
+			rss_feed(cache * c) : ch(c), empty(true), is_rtl_(false) { }
+			rss_feed() : ch(NULL), empty(true), is_rtl_(false) { }
 			~rss_feed() { }
 			std::string title_raw() const { return title_; }
 			std::string title() const;
@@ -150,6 +150,9 @@ namespace newsbeuter {
 
 			void purge_deleted_items();
 
+			inline void set_rtl(bool b) { is_rtl_ = b; }
+			inline bool is_rtl() { return is_rtl_; }
+
 		private:
 			std::string title_;
 			std::string description_;
@@ -163,6 +166,7 @@ namespace newsbeuter {
 			cache * ch;
 
 			bool empty;
+			bool is_rtl_;
 	};
 
 	class rss_ignores;

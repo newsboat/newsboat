@@ -1,6 +1,7 @@
 #include <cache.h>
 #include <sqlite3.h>
 #include <cstdlib>
+#include <cstring>
 #include <configcontainer.h>
 
 #include <sstream>
@@ -52,12 +53,14 @@ static int single_int_callback(void * handler, int argc, char ** argv, char ** /
 static int rssfeed_callback(void * myfeed, int argc, char ** argv, char ** /* azColName */) {
 	rss_feed * feed = static_cast<rss_feed *>(myfeed);
 	// normaly, this shouldn't happen, but we keep the assert()s here nevertheless
-	assert(argc == 2);
+	assert(argc == 3);
 	assert(argv[0] != NULL);
 	assert(argv[1] != NULL);
+	assert(argv[2] != NULL);
 	feed->set_title(argv[0]);
 	feed->set_link(argv[1]);
-	GetLogger().log(LOG_INFO, "rssfeed_callback: title = %s link = %s",argv[0],argv[1]);
+	feed->set_rtl(strcmp(argv[2],"1")==0);
+	GetLogger().log(LOG_INFO, "rssfeed_callback: title = %s link = %s is_rtl = %s",argv[0],argv[1], argv[2]);
 	return 0;
 }
 
@@ -268,6 +271,9 @@ void cache::populate_tables() {
 	rc = sqlite3_exec(db, "CREATE INDEX IF NOT EXISTS idx_deleted ON rss_item(deleted);", NULL, NULL, NULL);
 	GetLogger().log(LOG_DEBUG, "cache::populate_tables: CREATE INDEX ON rss_item(deleted) rc = %d", rc);
 
+	rc = sqlite3_exec(db, "ALTER TABLE rss_feed ADD is_rtl INTEGER(1) NOT NULL DEFAULT 0;", NULL, NULL, NULL);
+	GetLogger().log(LOG_DEBUG, "cache::populate_tables: ALTER TABLE rss_feed (8) rc = %d", rc);
+
 }
 
 time_t cache::get_lastmodified(const std::string& feedurl) {
@@ -328,11 +334,11 @@ void cache::externalize_rssfeed(rss_feed& feed) {
 		int count = count_cbh.count();
 		GetLogger().log(LOG_DEBUG, "cache::externalize_rss_feed: rss_feeds with rssurl = '%s': found %d",feed.rssurl().c_str(), count);
 		if (count > 0) {
-			std::string updatequery = prepare_query("UPDATE rss_feed SET title = '%q', url = '%q' WHERE rssurl = '%q';",feed.title_raw().c_str(),feed.link().c_str(), feed.rssurl().c_str());
+			std::string updatequery = prepare_query("UPDATE rss_feed SET title = '%q', url = '%q', is_rtl = %u WHERE rssurl = '%q';",feed.title_raw().c_str(),feed.link().c_str(), feed.rssurl().c_str(), feed.is_rtl() ? 1 : 0);
 			rc = sqlite3_exec(db,updatequery.c_str(),NULL,NULL,NULL);
 			GetLogger().log(LOG_DEBUG,"ran SQL statement: %s", updatequery.c_str());
 		} else {
-			std::string insertquery = prepare_query("INSERT INTO rss_feed (rssurl, url, title) VALUES ( '%q', '%q', '%q' );", feed.rssurl().c_str(), feed.link().c_str(), feed.title_raw().c_str());
+			std::string insertquery = prepare_query("INSERT INTO rss_feed (rssurl, url, title, is_rtl) VALUES ( '%q', '%q', '%q', %u );", feed.rssurl().c_str(), feed.link().c_str(), feed.title_raw().c_str(), feed.is_rtl() ? 1 : 0);
 			rc = sqlite3_exec(db,insertquery.c_str(),NULL,NULL,NULL);
 			GetLogger().log(LOG_DEBUG,"ran SQL statement: %s", insertquery.c_str());
 		}
@@ -381,7 +387,7 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 	}
 
 	/* then we first read the feed from the database */
-	query = prepare_query("SELECT title, url FROM rss_feed WHERE rssurl = '%q';",feed.rssurl().c_str());
+	query = prepare_query("SELECT title, url, is_rtl FROM rss_feed WHERE rssurl = '%q';",feed.rssurl().c_str());
 	GetLogger().log(LOG_DEBUG,"running query: %s",query.c_str());
 	rc = sqlite3_exec(db,query.c_str(),rssfeed_callback,&feed,NULL);
 	if (rc != SQLITE_OK) {
@@ -449,7 +455,7 @@ rss_feed cache::get_feed_by_url(const std::string& feedurl) {
 
 	scope_mutex lock(mtx);
 
-	query = prepare_query("SELECT title, url FROM rss_feed WHERE rssurl = '%q';",feedurl.c_str());
+	query = prepare_query("SELECT title, url, is_rtl FROM rss_feed WHERE rssurl = '%q';",feedurl.c_str());
 	GetLogger().log(LOG_DEBUG,"running query: %s",query.c_str());
 
 	rc = sqlite3_exec(db,query.c_str(),rssfeed_callback,&feed,NULL);

@@ -130,6 +130,28 @@ rss_feed rss_parser::parse() {
 		else
 			feed.set_pubDate(::time(NULL));
 
+		// we implement right-to-left support for the languages listed in
+		// http://blogs.msdn.com/rssteam/archive/2007/05/17/reading-feeds-in-right-to-left-order.aspx
+		if (mrss->language) {
+			static const char * rtl_langprefix[] = { 
+				"ar",  // Arabic
+				"fa",  // Farsi
+				"ur",  // Urdu
+				"ps",  // Pashtu
+				"syr", // Syriac
+				"dv",  // Divehi
+				"he",  // Hebrew
+				"yi",  // Yiddish
+				NULL };
+			for (unsigned int i=0;rtl_langprefix[i]!=NULL;++i) {
+				if (strncmp(mrss->language,rtl_langprefix[i],strlen(rtl_langprefix[i]))==0) {
+					GetLogger().log(LOG_DEBUG, "rss_parser::parse: detected right-to-left order, language code = %s", rtl_langprefix[i]);
+					feed.set_rtl(true);
+					break;
+				}
+			}
+		}
+
 		GetLogger().log(LOG_DEBUG, "rss_parser::parse: feed title = `%s' link = `%s'", feed.title().c_str(), feed.link().c_str());
 
 		/*

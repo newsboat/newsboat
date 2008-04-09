@@ -79,12 +79,6 @@ namespace newsbeuter {
 			void feedlist_mark_pos_if_visible(unsigned int pos);
 
 		protected:
-			/*
-			bool jump_to_next_unread_item(std::vector<rss_item>& items, bool begin_with_next);
-			bool jump_to_next_unread_feed(bool begin_with_next);
-			bool jump_to_previous_unread_item(std::vector<rss_item>& items, bool begin_with_prev);
-			bool jump_to_previous_unread_feed(bool begin_with_prev);
-			*/
 
 			void set_bindings();
 
