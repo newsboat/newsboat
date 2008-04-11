@@ -334,7 +334,7 @@ void cache::externalize_rssfeed(rss_feed& feed) {
 		int count = count_cbh.count();
 		GetLogger().log(LOG_DEBUG, "cache::externalize_rss_feed: rss_feeds with rssurl = '%s': found %d",feed.rssurl().c_str(), count);
 		if (count > 0) {
-			std::string updatequery = prepare_query("UPDATE rss_feed SET title = '%q', url = '%q', is_rtl = %u WHERE rssurl = '%q';",feed.title_raw().c_str(),feed.link().c_str(), feed.rssurl().c_str(), feed.is_rtl() ? 1 : 0);
+			std::string updatequery = prepare_query("UPDATE rss_feed SET title = '%q', url = '%q', is_rtl = %u WHERE rssurl = '%q';",feed.title_raw().c_str(),feed.link().c_str(), feed.is_rtl() ? 1 : 0, feed.rssurl().c_str());
 			rc = sqlite3_exec(db,updatequery.c_str(),NULL,NULL,NULL);
 			GetLogger().log(LOG_DEBUG,"ran SQL statement: %s", updatequery.c_str());
 		} else {
