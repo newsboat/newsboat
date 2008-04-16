@@ -796,14 +796,12 @@ msgid "Call a macro"
 msgstr "Makro aufrufen"
 
 #: src/keymap.cpp:59
-#, fuzzy
 msgid "Delete article"
-msgstr "Artikel speichern"
+msgstr "Artikel löschen"
 
 #: src/keymap.cpp:60
-#, fuzzy
 msgid "Purge deleted articles"
-msgstr "%u ungelesene Artikel"
+msgstr "Gelöschte Artikel entfernen"
 
 #: src/pb_controller.cpp:166
 msgid "Cleaning up queue..."
