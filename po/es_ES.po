@@ -1,20 +1,20 @@
-# SOME DESCRIPTIVE TITLE.
+# translation of es_ES.po to
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: es_ES\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-16 22:45+0200\n"
-"PO-Revision-Date: 2008-03-27 15:54+0100\n"
-"Last-Translator: Tito <epsilon.root@gmail.com>\n"
-"Language-Team: Tito <epsilon.root@gmail.com>\n"
+"PO-Revision-Date: 2008-04-16 23:40+0200\n"
+"Last-Translator: Nadie\n"
+"Language-Team:  <es@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: src/cache.cpp:174
 #, c-format
@@ -97,8 +97,7 @@ msgstr "Error fatal: no se pudo encontrar el directorio home!"
 
 #: src/controller.cpp:69 src/pb_controller.cpp:47
 #, c-format
-msgid ""
-"Please set the HOME environment variable or add a valid user for UID %u!"
+msgid "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
 "Por favor declara la variable de entorno HOME o añade un usuario valido "
 "para UID %u!"
@@ -177,8 +176,7 @@ msgstr "Limpiando el cache totalmente..."
 
 #: src/controller.cpp:371
 msgid "Error while loading feeds from database: "
-msgstr ""
-"Se produjo un error mientras se cargaban los feeds desde la base de datos:"
+msgstr "Se produjo un error mientras se cargaban los feeds desde la base de datos:"
 
 #: src/controller.cpp:409
 msgid "Cleaning up cache..."
@@ -219,7 +217,7 @@ msgstr ""
 "no leidos)"
 
 #: src/controller.cpp:633
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] "
@@ -241,12 +239,13 @@ msgstr ""
 "Uso: %s [-i <fichero>|-e] [-u <fichero_de_url>] [-c <fichero_de_cache>] [-"
 "h]\n"
 "-e                       exportar feed OPML a la salida estandar\n"
-"-r                       actualizar fees al iniciar\n"
+"-r                       actualizar feeds al iniciar\n"
 "-i <fichero>             importar fichero OPML\n"
 "-u <fichero_de_URL>      leer URLs de feeds RSS desde <fichero_de_URL>\n"
 "-c <fichero_de_cache>    usar <fichero_de_cache> como fichero de cache\n"
 "-C <fichero_de_config>   leer configuracion de <fichero_de_config>\n"
 "-v                       limpiar cache totalmente\n"
+"-x<comando>   ejecutar lista de comandos\n"
 "-o                       activar modo desconectado (solo para el modo de "
 "sincronizacion de bloglines)\n"
 "-V                       informacion de version\n"
@@ -266,9 +265,9 @@ msgstr ""
 "lavariable `bookmark-cmd' correctamente."
 
 #: src/controller.cpp:866
-#, fuzzy, c-format
+#, c-format
 msgid "%u unread articles"
-msgstr "Ir al proximo articulo no leido"
+msgstr "%u  articulos no leidos"
 
 #: src/controller.cpp:875 src/formaction.cpp:200
 #: src/itemview_formaction.cpp:56
@@ -531,9 +530,9 @@ msgid "unknown (bug)"
 msgstr "desconodico (fallo)"
 
 #: src/interpreter.cpp:43
-#, fuzzy, c-format
+#, c-format
 msgid "Error while calling `%s': %s"
-msgstr "Error buscando `%s': %s"
+msgstr "Error llamando `%s': %s"
 
 #: src/itemlist_formaction.cpp:44 src/itemlist_formaction.cpp:57
 #: src/itemlist_formaction.cpp:76 src/itemlist_formaction.cpp:95
@@ -796,21 +795,19 @@ msgid "Call a macro"
 msgstr "Llamar a un macro"
 
 #: src/keymap.cpp:59
-#, fuzzy
 msgid "Delete article"
-msgstr "Salvar articulo"
+msgstr "Borrar articulo"
 
 #: src/keymap.cpp:60
-#, fuzzy
 msgid "Purge deleted articles"
-msgstr "Ir al proximo articulo no leido"
+msgstr "Eliminar definitivamente articulos borrados "
 
 #: src/pb_controller.cpp:166
 msgid "Cleaning up queue..."
 msgstr "Limpiando cola..."
 
 #: src/pb_controller.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage %s [-C <file>] [-q <file>] [-h]\n"
@@ -823,6 +820,7 @@ msgstr ""
 "uso %s [-C <fichero>] [-q <fichero>] [-h]\n"
 "-C <fichero_de_config>  leer configuracion desde <fichero_de_config>\n"
 "-q <fichero_de_cola>    usa <fichero_de_cola> como fichero de cola\n"
+"-a                      comenzar a descargar al iniciar\n"
 "-h                      esta ayuda\n"
 
 #: src/pb_view.cpp:40
@@ -912,3 +910,4 @@ msgstr "Error: el feed no contiene elementos!"
 #: src/view.cpp:325
 msgid "Updating query feed..."
 msgstr "Actualizando consulta de feed..."
+
