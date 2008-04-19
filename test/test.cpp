@@ -19,7 +19,6 @@
 #include <history.h>
 #include <formatstring.h>
 #include <exceptions.h>
-#include <interpreter.h>
 
 #include <stdlib.h>
 
