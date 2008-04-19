@@ -46,17 +46,11 @@ has only been tested with GCC.
 - libcurl: http://curlm.haxx.se/download.html[]
 - GNU gettext (on systems that don't provide gettext in the libc): ftp://ftp.gnu.org/gnu/gettext/[]
 - pkg-config: http://pkg-config.freedesktop.org/wiki/[]
-- Ruby 1.8 (optional): http://www.ruby-lang.org/[]
-- Swig (optional; required for Ruby support): http://www.swig.org/[]
 
 If you intend to modify the filter language parser, you will also need Coco/R for C++,
 which you can download from http://www.ssw.uni-linz.ac.at/coco/[]. The Coco/R binary
 must be installed as "coco-cpp" in your PATH. Debian users only need to install
 the package "coco-cpp".
-
-If you have Ruby 1.8 development libraries installed, the newsbeuter build
-system will attempt to find the appropriate parameters to compile and link
-newsbeuter with Ruby support.
 
 
 Compiling and Installing
@@ -112,7 +106,6 @@ open-search|/|Opens the search dialog. When a search is done in the article list
 enqueue|e|Add the podcast download URL of the current article (if any is found) to the podcast download queue (see below for more information on podcast support).
 reload-urls|^R|Reload the URLs configuration file.
 redraw|^L|Redraw the screen.
-run|n/a|Run a Ruby function (only available from within macros, see below).
 cmdline|:|Open the command line.
 set-filter|F|Set a filter.
 select-filter|f|Select a predefined filter.
@@ -575,32 +568,6 @@ example:
 
 When the user presses the macro prefix ("," by default) and then the "k" key,
 the three operations "open", "reload" and "quit" will be executed subsequently.
-
-Ruby Support
-~~~~~~~~~~~
-
-In order to run Ruby functions from within newsbeuter, you first need to load
-a Ruby file into the embedded Ruby interpreter via the configuration file:
-
-	load "test.rb"
-
-In our example, the file test.rb looks like this:
-
-	def dotest
-		$ctrl.get_view.set_status("hello world!")
-	end
-
-To make a Ruby function callable, you need to define a macro:
-
-	macro x run "dotest"
-
-When the macro "x" is run by pressing "," and "x" (see above), the
-(parameter-less) Ruby function "dotest" will be executed, which will display
-"hello world!" in the status line at the bottom of the screen.
-
-Currently, the available interfaces are (mostly) untested and completely
-undocumented.
-
 
 Format Strings
 ~~~~~~~~~~~~~~
