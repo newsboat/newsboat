@@ -9,6 +9,7 @@ docdir?=$(datadir)/doc/$(PACKAGE)
 
 # compiler
 CXX=c++
+CC=cc
 
 SWIG=swig
 RUBY=ruby
@@ -17,7 +18,7 @@ RUBY=ruby
 DEFINES=-D_ENABLE_NLS -DLOCALEDIR=\"$(localedir)\" -DPACKAGE=\"$(PACKAGE)\"
 WARNFLAGS=-Wall -Wextra
 CXXFLAGS+=-ggdb -I./include -I./stfl -I./filter -I. -I./xmlrss $(WARNFLAGS) $(DEFINES)
-CFLAGS+=-ggdb $(WARNFLAGS) $(DEFINES)
+CFLAGS+=-ggdb -I./xmlrss $(WARNFLAGS) $(DEFINES)
 LDFLAGS+=-L.
 
 include config.mk
@@ -28,37 +29,27 @@ ifeq ($(DEBUG),1)
 DEFINES+=-DDEBUG
 endif
 
-LIB_SOURCES=$(shell cat libbeuter.deps)
-LIB_OBJS=$(patsubst %.cpp,%.o,$(LIB_SOURCES))
+LIB_SOURCES:=$(shell cat libbeuter.deps)
+LIB_OBJS:=$(patsubst %.cpp,%.o,$(LIB_SOURCES))
 LIB_OUTPUT=libbeuter.a
 
 FILTERLIB_SOURCES=filter/Scanner.cpp filter/Parser.cpp filter/FilterParser.cpp
-FILTERLIB_OBJS=$(patsubst %.cpp,%.o,$(FILTERLIB_SOURCES))
+FILTERLIB_OBJS:=$(patsubst %.cpp,%.o,$(FILTERLIB_SOURCES))
 FILTERLIB_OUTPUT=libfilter.a
 
 NEWSBEUTER=$(PACKAGE)
-NEWSBEUTER_SOURCES=$(shell cat newsbeuter.deps)
-NEWSBEUTER_OBJS=$(patsubst %.cpp,%.o,$(NEWSBEUTER_SOURCES))
+NEWSBEUTER_SOURCES:=$(shell cat newsbeuter.deps)
+NEWSBEUTER_OBJS:=$(patsubst %.cpp,%.o,$(NEWSBEUTER_SOURCES))
 NEWSBEUTER_LIBS=-lbeuter -lfilter -lstfl -lncursesw -lpthread -lxmlrss
 
-ifeq ($(FOUND_RUBY),1)
-NEWSBEUTER_LIBS+=-lext -lruby1.8
-CXXFLAGS+=-DHAVE_RUBY=1
-endif
-
-EXTLIB_IFILES=$(wildcard swig/*.i)
-EXTLIB_SOURCES=$(patsubst swig/%.i,swig/%_wrap.cxx,$(EXTLIB_IFILES))
-EXTLIB_OBJS=$(patsubst swig/%.cxx,swig/%.o,$(EXTLIB_SOURCES))
-EXTLIB_OUTPUT=libext.a
-
-XMLRSSLIB_SOURCES=$(wildcard xmlrss/*.c)
-XMLRSSLIB_OBJS=$(patsubst xmlrss/%.c,xmlrss/%.o,$(XMLRSSLIB_SOURCES))
+XMLRSSLIB_SOURCES:=$(wildcard xmlrss/*.c)
+XMLRSSLIB_OBJS:=$(patsubst xmlrss/%.c,xmlrss/%.o,$(XMLRSSLIB_SOURCES))
 XMLRSSLIB_OUTPUT=libxmlrss.a
 
 
 PODBEUTER=podbeuter
-PODBEUTER_SOURCES=$(shell cat podbeuter.deps)
-PODBEUTER_OBJS=$(patsubst %.cpp,%.o,$(PODBEUTER_SOURCES))
+PODBEUTER_SOURCES:=$(shell cat podbeuter.deps)
+PODBEUTER_OBJS:=$(patsubst %.cpp,%.o,$(PODBEUTER_SOURCES))
 PODBEUTER_LIBS=-lbeuter -lstfl -lncursesw -lpthread
 
 ifneq ($(shell uname -s),Linux)
@@ -74,9 +65,9 @@ MSGFMT=msgfmt
 RANLIB=ranlib
 AR=ar
 
-STFLHDRS=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
-POFILES=$(wildcard po/*.po)
-MOFILES=$(patsubst %.po,%.mo,$(POFILES))
+STFLHDRS:=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
+POFILES:=$(wildcard po/*.po)
+MOFILES:=$(patsubst %.po,%.mo,$(POFILES))
 POTFILE=po/$(PACKAGE).pot
 
 STFLCONV=./stfl2h.pl
@@ -85,11 +76,6 @@ RM=rm -f
 all: $(NEWSBEUTER) $(PODBEUTER)
 
 NB_DEPS=$(MOFILES) $(XMLRSSLIB_OUTPUT) $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBEUTER_OBJS)
-
-ifeq ($(FOUND_RUBY),1)
-NB_DEPS+=$(EXTLIB_OUTPUT)
-endif
-
 
 $(NEWSBEUTER): $(NB_DEPS)
 	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $(NEWSBEUTER) $(NEWSBEUTER_OBJS) $(NEWSBEUTER_LIBS)
@@ -107,15 +93,6 @@ $(XMLRSSLIB_OUTPUT): $(XMLRSSLIB_OBJS)
 	$(AR) qc $@ $^
 	$(RANLIB) $@
 
-$(EXTLIB_OUTPUT): prepare_extlib
-	$(MAKE) -C swig CFLAGS+="-I../include -I../filter -I../xmlrss" $(patsubst swig/%,%,$(EXTLIB_OBJS))
-	$(RM) $@
-	$(AR) qc $@ $(EXTLIB_OBJS)
-	$(RANLIB) $@
-
-prepare_extlib: $(EXTLIB_SOURCES)
-	cd swig && $(RUBY) extconf.rb
-
 $(FILTERLIB_OUTPUT): $(FILTERLIB_OBJS)
 	$(RM) $@
 	$(AR) qc $@ $^
@@ -128,24 +105,8 @@ filter/Scanner.cpp filter/Parser.cpp: filter/filter.atg filter/Scanner.frame fil
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
-
-# we need extra rules so that we don't have a clash between the libc's regex.h and Ruby's regex.h
-src/interpreter.o: src/interpreter.cpp
-	$(CXX) $(CXXFLAGS) $(RUBYCXXFLAGS) -o $@ -c $<
-
-src/controller.o: src/controller.cpp
-	$(CXX) $(CXXFLAGS) $(RUBYCXXFLAGS) -o $@ -c $<
-
-src/formaction.o: src/formaction.cpp
-	$(CXX) $(CXXFLAGS) $(RUBYCXXFLAGS) -o $@ -c $<
-
-
-
-swig/%.o: swig/%.cxx
-	$(CXX) $(CXXFLAGS) -o $@ -c $<
-
-swig/%_wrap.cxx: swig/%.i
-	$(SWIG) $(SWIGFLAGS) $<
+%.o: %.c
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 %.h: %.stfl
 	$(STFLCONV) $< > $@
@@ -163,9 +124,6 @@ clean-podbeuter:
 clean-libbeuter:
 	$(RM) $(LIB_OUTPUT) $(LIB_OBJS)
 
-clean-libext:
-	$(RM) $(EXTLIB_OUTPUT) $(EXTLIB_OBJS) $(wildcard swig/*.cxx) swig/Makefile
-
 clean-libxmlrss:
 	$(RM) $(XMLRSSLIB_OUTPUT) $(XMLRSSLIB_OBJS)
 
@@ -176,7 +134,7 @@ clean-doc:
 	$(RM) -r doc/xhtml 
 	$(RM) doc/*.xml doc/*.1 doc/newsbeuter-cfgcmds.txt doc/podbeuter-cfgcmds.txt
 
-clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-libext clean-doc clean-libxmlrss
+clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-doc clean-libxmlrss
 	$(RM) $(STFLHDRS)
 
 distclean: clean clean-mo test-clean
@@ -209,7 +167,7 @@ uninstall:
 	$(RM) $(mandir)/man1/$(PODBEUTER).1
 	$(RM) -r $(docdir)
 
-.PHONY: doc clean all test prepare_extlib
+.PHONY: doc clean all test install uninstall
 
 # the following targets are i18n/l10n-related:
 

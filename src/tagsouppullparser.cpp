@@ -120,20 +120,6 @@ tagsouppullparser::event tagsouppullparser::next() {
 						break;
 					}
 					
-					if (s.find("?xml",0) == 0) {
-						c = skip_whitespace(ws);
-						if (inputstream->eof()) {
-							current_event = END_DOCUMENT;
-							break;
-						}
-						try {
-							s = read_tag();
-						} catch (const xmlexception &) {
-							current_event = END_DOCUMENT;
-							break;
-						}
-					}
-					
 					std::vector<std::string> tokens = utils::tokenize(s);
 					if (tokens.size() > 0) {
 						text = tokens[0];

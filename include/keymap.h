@@ -51,7 +51,6 @@ namespace newsbeuter {
 						OP_NEXTFEED,
 						OP_PREVFEED,
 						OP_MACROPREFIX,
-						OP_RUNFUNCTION,
 						OP_DELETE,
 						OP_PURGE_DELETED,
 						OP_NB_MAX,

@@ -41,26 +41,6 @@ check_custom() {
 	return 0
 }
 
-find_rubyflags() {
-	echo -n "Checking for ruby... "
-	if ruby --version > /dev/null 2>&1 ; then
-		archdir=`ruby -e 'require "mkmf" ; print Config::CONFIG["archdir"]' 2> /dev/null`
-		if [ "$?" -eq "0" ] ; then
-			echo "# ruby configuration" >> config.mk
-			echo "RUBYCXXFLAGS+=-I${archdir}" >> config.mk
-			echo "" >> config.mk
-			echo "found"
-			return 0
-		else
-			echo "found, but calling mkmf failed"
-			return 1
-		fi
-	else
-		echo "not found"
-		return 1
-	fi
-}
-
 fail() {
     pkgname=$1
 		echo ""
@@ -80,9 +60,3 @@ echo -n "" > config.mk
 
 check_pkg "sqlite3" || fail "sqlite3"
 check_pkg "libcurl" || check_custom "libcurl" "curl-config" || fail "libcurl"
-if find_rubyflags ; then
-	echo "FOUND_RUBY=1" >> config.mk
-else
-	echo "Warning: newsbeuter will be built without Ruby support."
-	echo "FOUND_RUBY=0" >> config.mk
-fi

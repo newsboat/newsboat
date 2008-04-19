@@ -40,6 +40,7 @@ private:
 	std::string decode_entities(const std::string& s);
 	std::string decode_entity(std::string s);
 	void remove_trailing_whitespace(std::string& s);
+
 	
 };
 

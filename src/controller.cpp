@@ -9,7 +9,6 @@
 #include <logger.h>
 #include <utils.h>
 #include <stflpp.h>
-#include <interpreter.h>
 #include <exception.h>
 #include <cstdlib>
 #include <cstring>
@@ -209,11 +208,6 @@ void controller::run(int argc, char * argv[]) {
 		}
 	}
 
-#if HAVE_RUBY
-	GetInterpreter()->set_controller(this);
-	GetInterpreter()->set_view(v);
-#endif
-
 	if (!silent)
 		std::cout << _("Loading configuration...");
 	std::cout.flush();
@@ -232,10 +226,6 @@ void controller::run(int argc, char * argv[]) {
 	cfgparser.register_handler("ignore-article",&ign);
 
 	cfgparser.register_handler("define-filter",&filters);
-
-#if HAVE_RUBY
-	cfgparser.register_handler("load", GetInterpreter());
-#endif
 
 	try {
 		cfgparser.parse("/etc/" PROGRAM_NAME "/config");
