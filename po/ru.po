@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-16 22:45+0200\n"
+"POT-Creation-Date: 2008-04-21 08:21+0200\n"
 "PO-Revision-Date: 2008-03-03 21:30+0300\n"
 "Last-Translator: Sergey Dryabzhinsky <sergey.dryabzhinsky@gmail.com>\n"
 "Language-Team: ru <sergey.dryabzhinsky@gmail.com>\n"
@@ -19,39 +19,46 @@ msgstr ""
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Ошибка: попытка отрыть файл кэша `%s' завершилась неудачей: %s"
 
-#: src/configcontainer.cpp:57
+#: src/configcontainer.cpp:42
+#, c-format
+msgid "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
+msgstr ""
+"newsbeuter: обновление завершено, %f не прочитанных лент (всего %n заметок "
+"непрочитано)"
+
+#: src/configcontainer.cpp:58
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
 msgstr "%N %V - Ваши ленты (непрочитанно %u, всего %t)%?T? - метка `%T'&?"
 
-#: src/configcontainer.cpp:58 src/configcontainer.cpp:66
+#: src/configcontainer.cpp:59 src/configcontainer.cpp:67
 msgid "%N %V - URLs"
 msgstr "%N %V - Ссылки"
 
-#: src/configcontainer.cpp:59
+#: src/configcontainer.cpp:60
 msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
 msgstr "%N %V - Заметок в ленте '%T' (непрочитанно %u, всего %t) - %U"
 
-#: src/configcontainer.cpp:60
+#: src/configcontainer.cpp:61
 msgid "%N %V - Search result (%u unread, %t total)"
 msgstr "%N %V - Результаты поиска (непрчитанно %u, всего %t)"
 
-#: src/configcontainer.cpp:61
+#: src/configcontainer.cpp:62
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Открыть файл&Сохранить файл? - %f"
 
-#: src/configcontainer.cpp:62
+#: src/configcontainer.cpp:63
 msgid "%N %V - Help"
 msgstr "%N %V - Помощь"
 
-#: src/configcontainer.cpp:63
+#: src/configcontainer.cpp:64
 msgid "%N %V - Select Tag"
 msgstr "%N %V - Выбрать Метку"
 
-#: src/configcontainer.cpp:64
+#: src/configcontainer.cpp:65
 msgid "%N %V - Select Filter"
 msgstr "%N %V - Выбрать Фильтр"
 
-#: src/configcontainer.cpp:65
+#: src/configcontainer.cpp:66
 msgid "%N %V - Article '%T'"
 msgstr "%N %V - Заметка '%T'"
 
@@ -85,15 +92,15 @@ msgstr "Ошибка во время выполнения команды `%s' (%
 msgid "unknown command `%s'"
 msgstr "неизвестная команда `%s'"
 
-#: src/controller.cpp:46 src/pb_controller.cpp:32
+#: src/controller.cpp:47 src/pb_controller.cpp:32
 msgid "Segmentation fault."
 msgstr "Ошибка сегментирования."
 
-#: src/controller.cpp:68 src/pb_controller.cpp:46
+#: src/controller.cpp:69 src/pb_controller.cpp:46
 msgid "Fatal error: couldn't determine home directory!"
 msgstr "Фатальная ошибка: невозможно определить домашний каталог!"
 
-#: src/controller.cpp:69 src/pb_controller.cpp:47
+#: src/controller.cpp:70 src/pb_controller.cpp:47
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
@@ -101,46 +108,46 @@ msgstr ""
 "Пожалуйста, задайте значение переменной HOME окружения пользователя "
 "илидобавьте подходящего пользователя для UID %u!"
 
-#: src/controller.cpp:179 src/pb_controller.cpp:106
+#: src/controller.cpp:180 src/pb_controller.cpp:106
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr "%s: неизвестный параметр - %c"
 
-#: src/controller.cpp:198 src/pb_controller.cpp:112
+#: src/controller.cpp:199 src/pb_controller.cpp:112
 #, c-format
 msgid "Starting %s %s..."
 msgstr "Запускаю %s %s..."
 
-#: src/controller.cpp:207 src/controller.cpp:281 src/pb_controller.cpp:116
+#: src/controller.cpp:208 src/controller.cpp:282 src/pb_controller.cpp:116
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "Ошибка: уже запущена копия %s (PID: %u)"
 
-#: src/controller.cpp:218 src/pb_controller.cpp:120
+#: src/controller.cpp:219 src/pb_controller.cpp:120
 msgid "Loading configuration..."
 msgstr "Загружаю настройки..."
 
-#: src/controller.cpp:261 src/controller.cpp:292 src/controller.cpp:318
-#: src/controller.cpp:327 src/controller.cpp:355 src/controller.cpp:359
-#: src/controller.cpp:381 src/controller.cpp:413 src/pb_controller.cpp:155
+#: src/controller.cpp:262 src/controller.cpp:293 src/controller.cpp:319
+#: src/controller.cpp:328 src/controller.cpp:356 src/controller.cpp:360
+#: src/controller.cpp:382 src/controller.cpp:414 src/pb_controller.cpp:155
 #: src/pb_controller.cpp:172
 msgid "done."
 msgstr "сделано."
 
-#: src/controller.cpp:287 src/controller.cpp:350
+#: src/controller.cpp:288 src/controller.cpp:351
 msgid "Opening cache..."
 msgstr "Открываю кеш..."
 
-#: src/controller.cpp:312
+#: src/controller.cpp:313
 msgid "Loading URLs from local cache..."
 msgstr "Загружаю ссылки из локального кеша..."
 
-#: src/controller.cpp:322
+#: src/controller.cpp:323
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "Загружаю ссылки из %s..."
 
-#: src/controller.cpp:335
+#: src/controller.cpp:336
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
@@ -149,7 +156,7 @@ msgstr ""
 "Ошибка: не найдено ни одной ссылки. Пожалуйста, занесите в файл %s ссылкина "
 "RSS ленты или импортируйте файл OPML."
 
-#: src/controller.cpp:337
+#: src/controller.cpp:338
 msgid ""
 "It looks like you haven't configured any feeds in your bloglines account. "
 "Please do so, and try again."
@@ -157,7 +164,7 @@ msgstr ""
 "Похоже что вы не настроили ни одной ленты новостей в своей учётной записи в "
 "блоггере. Сделайте это и попробуйте еще раз."
 
-#: src/controller.cpp:339
+#: src/controller.cpp:340
 msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
@@ -165,57 +172,57 @@ msgstr ""
 "Похоже что лента OPML, на которую вы подписались не содержит лент новостей."
 "Пожалуйста заполните её лентами и попробуйте еще раз."
 
-#: src/controller.cpp:348
+#: src/controller.cpp:349
 msgid "Loading articles from cache..."
 msgstr "Загружаю заметки из кеша..."
 
-#: src/controller.cpp:356
+#: src/controller.cpp:357
 msgid "Cleaning up cache thoroughly..."
 msgstr "Тщательно очищаю кеш..."
 
-#: src/controller.cpp:371
+#: src/controller.cpp:372
 msgid "Error while loading feeds from database: "
 msgstr "Ошибка во время загрузки лент новостей из базы: "
 
-#: src/controller.cpp:409
+#: src/controller.cpp:410
 msgid "Cleaning up cache..."
 msgstr "Очищаю кеш..."
 
-#: src/controller.cpp:415
+#: src/controller.cpp:416
 msgid "failed: "
 msgstr "не получилось: "
 
-#: src/controller.cpp:433
+#: src/controller.cpp:434
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "Ошибка: невозможно отметить все ленты как прочитанные: %s"
 
-#: src/controller.cpp:471
+#: src/controller.cpp:472
 #, c-format
 msgid "%sLoading %s..."
 msgstr "%sЗагружается %s..."
 
-#: src/controller.cpp:514 src/controller.cpp:516
+#: src/controller.cpp:515 src/controller.cpp:517
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr ""
 
-#: src/controller.cpp:519
+#: src/controller.cpp:520
 msgid "Error: invalid feed!"
 msgstr "Ошибка во время получения %s: %s"
 
-#: src/controller.cpp:525
+#: src/controller.cpp:526
 msgid "invalid feed index (bug)"
 msgstr "неверный индекс ленты (сбой)"
 
-#: src/controller.cpp:542 src/controller.cpp:565
+#: src/controller.cpp:569
 #, c-format
 msgid "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
 msgstr ""
 "newsbeuter: обновление завершено, %u не прочитанных лент (всего %u заметок "
 "непрочитано)"
 
-#: src/controller.cpp:633
+#: src/controller.cpp:637
 #, fuzzy, c-format
 msgid ""
 "%s %s\n"
@@ -248,12 +255,12 @@ msgstr ""
 "-V                  получить информацию о версии программы\n"
 "-h                  показать эту справку\n"
 
-#: src/controller.cpp:677
+#: src/controller.cpp:681
 #, c-format
 msgid "Import of %s finished."
 msgstr "Импорт %s завершён."
 
-#: src/controller.cpp:854
+#: src/controller.cpp:858
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -261,25 +268,25 @@ msgstr ""
 "поддержка закладок не настроена. Пожалуйста установите в настройках "
 "верноезначение переменной `bookmark-cmd'."
 
-#: src/controller.cpp:866
+#: src/controller.cpp:870
 #, fuzzy, c-format
 msgid "%u unread articles"
 msgstr "Перейти к следующей непрочитанной заметке"
 
-#: src/controller.cpp:875 src/formaction.cpp:200
+#: src/controller.cpp:879 src/formaction.cpp:200
 #: src/itemview_formaction.cpp:56
 msgid "Title: "
 msgstr "Заголовок: "
 
-#: src/controller.cpp:879 src/itemview_formaction.cpp:61
+#: src/controller.cpp:883 src/itemview_formaction.cpp:61
 msgid "Author: "
 msgstr "Автор: "
 
-#: src/controller.cpp:883 src/itemview_formaction.cpp:70
+#: src/controller.cpp:887 src/itemview_formaction.cpp:70
 msgid "Date: "
 msgstr "Дата: "
 
-#: src/controller.cpp:887 src/itemview_formaction.cpp:66
+#: src/controller.cpp:891 src/itemview_formaction.cpp:66
 msgid "Link: "
 msgstr "Ссылка: "
 

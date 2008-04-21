@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-16 22:45+0200\n"
+"POT-Creation-Date: 2008-04-21 08:21+0200\n"
 "PO-Revision-Date: 2008-01-28 10:00+GMT+1\n"
 "Last-Translator: Zsolt Udvari <udvzsolt@gmail.com>\n"
 "Language-Team: Hungarian <LL@li.org>\n"
@@ -20,39 +20,46 @@ msgstr ""
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Hiba `%s' cache-file megnyitása közben: %s"
 
-#: src/configcontainer.cpp:57
+#: src/configcontainer.cpp:42
+#, c-format
+msgid "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
+msgstr ""
+"newsbeuter: újratöltés befejezve, %f olvasatlan üzenet (%n olvasatlan "
+"összesen)"
+
+#: src/configcontainer.cpp:58
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
 msgstr "%N %V - Hírek (%u olvasatlan, %t összesen)%?T? - cimke `%T'&?"
 
-#: src/configcontainer.cpp:58 src/configcontainer.cpp:66
+#: src/configcontainer.cpp:59 src/configcontainer.cpp:67
 msgid "%N %V - URLs"
 msgstr "%N %V - URL"
 
-#: src/configcontainer.cpp:59
+#: src/configcontainer.cpp:60
 msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
 msgstr "%N %V - Cikkek '%T'-ben (%u olvasatlan, %t összesen) - %U"
 
-#: src/configcontainer.cpp:60
+#: src/configcontainer.cpp:61
 msgid "%N %V - Search result (%u unread, %t total)"
 msgstr "%N %V - Keresési eredmény (%u olvasatlan, %t összesen)"
 
-#: src/configcontainer.cpp:61
+#: src/configcontainer.cpp:62
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?File megnyitása&Menti a fájlt? - %f"
 
-#: src/configcontainer.cpp:62
+#: src/configcontainer.cpp:63
 msgid "%N %V - Help"
 msgstr "%N %V - Súgó"
 
-#: src/configcontainer.cpp:63
+#: src/configcontainer.cpp:64
 msgid "%N %V - Select Tag"
 msgstr "%N %V - Cimke kiválasztása"
 
-#: src/configcontainer.cpp:64
+#: src/configcontainer.cpp:65
 msgid "%N %V - Select Filter"
 msgstr "%N %V - Szûrõ kiválasztása"
 
-#: src/configcontainer.cpp:65
+#: src/configcontainer.cpp:66
 msgid "%N %V - Article '%T'"
 msgstr "%N %V - Cikk '%T'"
 
@@ -86,61 +93,62 @@ msgstr "Hiba a `%s' (%s line %u) parancs végrehajtása közben: %s"
 msgid "unknown command `%s'"
 msgstr "ismeretlen parancs: `%s'"
 
-#: src/controller.cpp:46 src/pb_controller.cpp:32
+#: src/controller.cpp:47 src/pb_controller.cpp:32
 msgid "Segmentation fault."
 msgstr "Szegmens hiba."
 
-#: src/controller.cpp:68 src/pb_controller.cpp:46
+#: src/controller.cpp:69 src/pb_controller.cpp:46
 msgid "Fatal error: couldn't determine home directory!"
 msgstr "Végzetes hiba: nem tudtam meghatározni a home-könyvtárat!"
 
-#: src/controller.cpp:69 src/pb_controller.cpp:47
+#: src/controller.cpp:70 src/pb_controller.cpp:47
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
-"Kérlek, állítsd be a HOME változót vagy adj valódi felhasználót a(z) %u UID-hoz!"
+"Kérlek, állítsd be a HOME változót vagy adj valódi felhasználót a(z) %u UID-"
+"hoz!"
 
-#: src/controller.cpp:179 src/pb_controller.cpp:106
+#: src/controller.cpp:180 src/pb_controller.cpp:106
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr "%s: ismeretlen opció - %c"
 
-#: src/controller.cpp:198 src/pb_controller.cpp:112
+#: src/controller.cpp:199 src/pb_controller.cpp:112
 #, c-format
 msgid "Starting %s %s..."
 msgstr "%s %s indítása..."
 
-#: src/controller.cpp:207 src/controller.cpp:281 src/pb_controller.cpp:116
+#: src/controller.cpp:208 src/controller.cpp:282 src/pb_controller.cpp:116
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "Hiba: egy példány már fut %s-bõl (PID: %u)"
 
-#: src/controller.cpp:218 src/pb_controller.cpp:120
+#: src/controller.cpp:219 src/pb_controller.cpp:120
 msgid "Loading configuration..."
 msgstr "Konfiguráció betöltése..."
 
-#: src/controller.cpp:261 src/controller.cpp:292 src/controller.cpp:318
-#: src/controller.cpp:327 src/controller.cpp:355 src/controller.cpp:359
-#: src/controller.cpp:381 src/controller.cpp:413 src/pb_controller.cpp:155
+#: src/controller.cpp:262 src/controller.cpp:293 src/controller.cpp:319
+#: src/controller.cpp:328 src/controller.cpp:356 src/controller.cpp:360
+#: src/controller.cpp:382 src/controller.cpp:414 src/pb_controller.cpp:155
 #: src/pb_controller.cpp:172
 msgid "done."
 msgstr "kész."
 
-#: src/controller.cpp:287 src/controller.cpp:350
+#: src/controller.cpp:288 src/controller.cpp:351
 msgid "Opening cache..."
 msgstr "Cache megnyitása..."
 
-#: src/controller.cpp:312
+#: src/controller.cpp:313
 msgid "Loading URLs from local cache..."
 msgstr "URL-ek betöltése a helyi cache-bõl..."
 
-#: src/controller.cpp:322
+#: src/controller.cpp:323
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "URL-ek betöltése %s-bõl..."
 
-#: src/controller.cpp:335
+#: src/controller.cpp:336
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
@@ -149,7 +157,7 @@ msgstr ""
 "Hiba: nincs URL beállítva. Kérlek töltsd fel a(z) %s file-t RSS URL-ekkel "
 "vagy importálj egy OPML file-ból."
 
-#: src/controller.cpp:337
+#: src/controller.cpp:338
 msgid ""
 "It looks like you haven't configured any feeds in your bloglines account. "
 "Please do so, and try again."
@@ -157,7 +165,7 @@ msgstr ""
 "Úgy tûnik, még nem konfiguráltál semmilyen forrást a bloglines fiókodban. "
 "Tedd meg, és próbáld újra!"
 
-#: src/controller.cpp:339
+#: src/controller.cpp:340
 msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
@@ -165,56 +173,57 @@ msgstr ""
 "Úgy tûnik, az OPML, amit betöltöttél, nem tartalmaz hírforrásokat. Töltsd "
 "fel forrásokkal és próbáld újra!"
 
-#: src/controller.cpp:348
+#: src/controller.cpp:349
 msgid "Loading articles from cache..."
 msgstr "Cikkek töltése a cache-bõl..."
 
-#: src/controller.cpp:356
+#: src/controller.cpp:357
 msgid "Cleaning up cache thoroughly..."
 msgstr "A cache teljes ürítése..."
 
-#: src/controller.cpp:371
+#: src/controller.cpp:372
 msgid "Error while loading feeds from database: "
 msgstr "Nem sikerült betölteni a forrásokat az adatbázisból: "
 
-#: src/controller.cpp:409
+#: src/controller.cpp:410
 msgid "Cleaning up cache..."
 msgstr "A cache takarítása..."
 
-#: src/controller.cpp:415
+#: src/controller.cpp:416
 msgid "failed: "
 msgstr "nem sikerült: "
 
-#: src/controller.cpp:433
+#: src/controller.cpp:434
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "Hiba: nem tudtam olvasottnak megjelölni: %s"
 
-#: src/controller.cpp:471
+#: src/controller.cpp:472
 #, c-format
 msgid "%sLoading %s..."
 msgstr "%sTöltés %s..."
 
-#: src/controller.cpp:514 src/controller.cpp:516
+#: src/controller.cpp:515 src/controller.cpp:517
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr "Hiba letöltés közben: %s: %s"
 
-#: src/controller.cpp:519
+#: src/controller.cpp:520
 msgid "Error: invalid feed!"
 msgstr "Hiba: érvénytelen hírforrás!"
 
-#: src/controller.cpp:525
+#: src/controller.cpp:526
 msgid "invalid feed index (bug)"
 msgstr "érvénytelen hírforrás index (bug)"
 
-#: src/controller.cpp:542 src/controller.cpp:565
+#: src/controller.cpp:569
 #, c-format
 msgid "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
 msgstr ""
-"newsbeuter: újratöltés befejezve, %u olvasatlan üzenet (%u olvasatlan összesen)"
+"newsbeuter: újratöltés befejezve, %u olvasatlan üzenet (%u olvasatlan "
+"összesen)"
 
-#: src/controller.cpp:633
+#: src/controller.cpp:637
 #, c-format
 msgid ""
 "%s %s\n"
@@ -246,12 +255,12 @@ msgstr ""
 "-V              verzió információ\n"
 "-h              ez a súgó\n"
 
-#: src/controller.cpp:677
+#: src/controller.cpp:681
 #, c-format
 msgid "Import of %s finished."
 msgstr "%s importálása befejezõdött."
 
-#: src/controller.cpp:854
+#: src/controller.cpp:858
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -259,25 +268,25 @@ msgstr ""
 "könyvjelzõ lehetõség nem konfigurált. Kérlek állítsd be a `bookmark-cmd' "
 "változót megfelelõen."
 
-#: src/controller.cpp:866
+#: src/controller.cpp:870
 #, c-format
 msgid "%u unread articles"
 msgstr "%u olvasatlan hír"
 
-#: src/controller.cpp:875 src/formaction.cpp:200
+#: src/controller.cpp:879 src/formaction.cpp:200
 #: src/itemview_formaction.cpp:56
 msgid "Title: "
 msgstr "Cím: "
 
-#: src/controller.cpp:879 src/itemview_formaction.cpp:61
+#: src/controller.cpp:883 src/itemview_formaction.cpp:61
 msgid "Author: "
 msgstr "Szerzõ: "
 
-#: src/controller.cpp:883 src/itemview_formaction.cpp:70
+#: src/controller.cpp:887 src/itemview_formaction.cpp:70
 msgid "Date: "
 msgstr "Dátum: "
 
-#: src/controller.cpp:887 src/itemview_formaction.cpp:66
+#: src/controller.cpp:891 src/itemview_formaction.cpp:66
 msgid "Link: "
 msgstr "Link: "
 
@@ -815,7 +824,7 @@ msgstr ""
 "használat %s [-C <file] -q <file>] [-h]\n"
 "-C <configfile> beállítások <configfile>-ból\n"
 "-q <queuefile>  <queuefile> használata listaként\n"
-"-a		 letöltés megkezdése induláskor\n"
+"-a\t\t letöltés megkezdése induláskor\n"
 "-h              ez a súgó\n"
 
 #: src/pb_view.cpp:40

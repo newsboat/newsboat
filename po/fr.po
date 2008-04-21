@@ -3,52 +3,59 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-16 22:45+0200\n"
+"POT-Creation-Date: 2008-04-21 08:21+0200\n"
 "PO-Revision-Date: 2008-04-18 12:08+0200\n"
 "Last-Translator: Nicolas Martyanoff <khaelin@gmail.com>\n"
 "Language-Team: Nicolas Martyanoff <khaelin@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: src/cache.cpp:174
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Erreur, impossible d'ouvrir le fichier cache`%s': %s"
 
-#: src/configcontainer.cpp:57
+#: src/configcontainer.cpp:42
+#, c-format
+msgid "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
+msgstr ""
+"newsbeuter: rechargement terminé, %f fils non-lus (%n articles non-lus au "
+"total)"
+
+#: src/configcontainer.cpp:58
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
 msgstr "%N %V - Vos fils (%u non lus, %t total)%?T? - tag `%T'&?"
 
-#: src/configcontainer.cpp:58 src/configcontainer.cpp:66
+#: src/configcontainer.cpp:59 src/configcontainer.cpp:67
 msgid "%N %V - URLs"
 msgstr "%N %V - URLs"
 
-#: src/configcontainer.cpp:59
+#: src/configcontainer.cpp:60
 msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
 msgstr "%N %V - Articles dans le fils '%T' (%u non-lus, %t total) - %U"
 
-#: src/configcontainer.cpp:60
+#: src/configcontainer.cpp:61
 msgid "%N %V - Search result (%u unread, %t total)"
 msgstr "%N %V - Résultats de recherche (%u non lus, %t total) "
 
-#: src/configcontainer.cpp:61
+#: src/configcontainer.cpp:62
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Ouvrir Fichier&Enregistrer Fichier? - %f"
 
-#: src/configcontainer.cpp:62
+#: src/configcontainer.cpp:63
 msgid "%N %V - Help"
 msgstr "%N %V - Aide"
 
-#: src/configcontainer.cpp:63
+#: src/configcontainer.cpp:64
 msgid "%N %V - Select Tag"
 msgstr "%N %V - Sélectionner Tag"
 
-#: src/configcontainer.cpp:64
+#: src/configcontainer.cpp:65
 msgid "%N %V - Select Filter"
 msgstr "%N %V - Sélectionner Filtre"
 
-#: src/configcontainer.cpp:65
+#: src/configcontainer.cpp:66
 msgid "%N %V - Article '%T'"
 msgstr "%N %V - Article '%T'"
 
@@ -82,15 +89,15 @@ msgstr "Erreur durant le déroulement de la commande `%s' (%s ligne %u): %s"
 msgid "unknown command `%s'"
 msgstr "commande inconnue `%s'"
 
-#: src/controller.cpp:46 src/pb_controller.cpp:32
+#: src/controller.cpp:47 src/pb_controller.cpp:32
 msgid "Segmentation fault."
 msgstr "Erreur de segmentation."
 
-#: src/controller.cpp:68 src/pb_controller.cpp:46
+#: src/controller.cpp:69 src/pb_controller.cpp:46
 msgid "Fatal error: couldn't determine home directory!"
 msgstr "Erreur fatale, impossible de localiser le répertoire personnel !"
 
-#: src/controller.cpp:69 src/pb_controller.cpp:47
+#: src/controller.cpp:70 src/pb_controller.cpp:47
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
@@ -98,46 +105,46 @@ msgstr ""
 "S'il-vous-plaît, définissez la variable d'environnement HOME ou ajoutez un "
 "utilisateur valide pour l'UID %u !"
 
-#: src/controller.cpp:179 src/pb_controller.cpp:106
+#: src/controller.cpp:180 src/pb_controller.cpp:106
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr "%s: option inconnue - %c"
 
-#: src/controller.cpp:198 src/pb_controller.cpp:112
+#: src/controller.cpp:199 src/pb_controller.cpp:112
 #, c-format
 msgid "Starting %s %s..."
 msgstr "Démarrage %s %s..."
 
-#: src/controller.cpp:207 src/controller.cpp:281 src/pb_controller.cpp:116
+#: src/controller.cpp:208 src/controller.cpp:282 src/pb_controller.cpp:116
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "Erreur: une instance de %s est déjà lancée (PID: %u)"
 
-#: src/controller.cpp:218 src/pb_controller.cpp:120
+#: src/controller.cpp:219 src/pb_controller.cpp:120
 msgid "Loading configuration..."
 msgstr "Chargement de la configuration..."
 
-#: src/controller.cpp:261 src/controller.cpp:292 src/controller.cpp:318
-#: src/controller.cpp:327 src/controller.cpp:355 src/controller.cpp:359
-#: src/controller.cpp:381 src/controller.cpp:413 src/pb_controller.cpp:155
+#: src/controller.cpp:262 src/controller.cpp:293 src/controller.cpp:319
+#: src/controller.cpp:328 src/controller.cpp:356 src/controller.cpp:360
+#: src/controller.cpp:382 src/controller.cpp:414 src/pb_controller.cpp:155
 #: src/pb_controller.cpp:172
 msgid "done."
 msgstr "fait."
 
-#: src/controller.cpp:287 src/controller.cpp:350
+#: src/controller.cpp:288 src/controller.cpp:351
 msgid "Opening cache..."
 msgstr "Vidage du cache..."
 
-#: src/controller.cpp:312
+#: src/controller.cpp:313
 msgid "Loading URLs from local cache..."
 msgstr "Chargement des URLs depuis le cache local..."
 
-#: src/controller.cpp:322
+#: src/controller.cpp:323
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "Chargement des URLs depuis %s..."
 
-#: src/controller.cpp:335
+#: src/controller.cpp:336
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
@@ -146,7 +153,7 @@ msgstr ""
 "Erreur: aucune URL configurée. S'il-vous-plaît, remplissez le fichier %s "
 "avec des URLs de fils RSS, ou importez un fichier OPML."
 
-#: src/controller.cpp:337
+#: src/controller.cpp:338
 msgid ""
 "It looks like you haven't configured any feeds in your bloglines account. "
 "Please do so, and try again."
@@ -154,7 +161,7 @@ msgstr ""
 "Il semble que vous n'avez configuré aucun fil dans votre aggrégateur.S'il "
 "vous plait, faites le, et essayez encore."
 
-#: src/controller.cpp:339
+#: src/controller.cpp:340
 msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
@@ -162,57 +169,57 @@ msgstr ""
 "Il semble que le fil OPML auquel vous vous être inscris ne contient aucun "
 "fil.S'il vous plaît, faites le, et essayez encore."
 
-#: src/controller.cpp:348
+#: src/controller.cpp:349
 msgid "Loading articles from cache..."
 msgstr "Chargement des articles depuis le cache..."
 
-#: src/controller.cpp:356
+#: src/controller.cpp:357
 msgid "Cleaning up cache thoroughly..."
 msgstr "Vidage du cache..."
 
-#: src/controller.cpp:371
+#: src/controller.cpp:372
 msgid "Error while loading feeds from database: "
 msgstr "Erreur lors du chargement des fils depuis la database"
 
-#: src/controller.cpp:409
+#: src/controller.cpp:410
 msgid "Cleaning up cache..."
 msgstr "Vidage du cache..."
 
-#: src/controller.cpp:415
+#: src/controller.cpp:416
 msgid "failed: "
 msgstr "echoué: "
 
-#: src/controller.cpp:433
+#: src/controller.cpp:434
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "Erreur: impossible de marquer tous les fils comme lus: %s"
 
-#: src/controller.cpp:471
+#: src/controller.cpp:472
 #, c-format
 msgid "%sLoading %s..."
 msgstr "%sChargement %s..."
 
-#: src/controller.cpp:514 src/controller.cpp:516
+#: src/controller.cpp:515 src/controller.cpp:517
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr "Erreur lors de la récupération de %s: %s"
 
-#: src/controller.cpp:519
+#: src/controller.cpp:520
 msgid "Error: invalid feed!"
 msgstr "Erreur: fil invalide !"
 
-#: src/controller.cpp:525
+#: src/controller.cpp:526
 msgid "invalid feed index (bug)"
 msgstr "Index de fil invalide (bug)"
 
-#: src/controller.cpp:542 src/controller.cpp:565
+#: src/controller.cpp:569
 #, c-format
 msgid "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
 msgstr ""
 "newsbeuter: rechargement terminé, %u fils non-lus (%u articles non-lus au "
 "total)"
 
-#: src/controller.cpp:633
+#: src/controller.cpp:637
 #, c-format
 msgid ""
 "%s %s\n"
@@ -232,7 +239,8 @@ msgid ""
 "-h              this help\n"
 msgstr ""
 "%s %s\n"
-"utilisation: %s [-i <fichier>|-e] [-u <fichier_url>] [-c <fichier_cache>] [-x <commande>] [-h]\n"
+"utilisation: %s [-i <fichier>|-e] [-u <fichier_url>] [-c <fichier_cache>] [-"
+"x <commande>] [-h]\n"
 "-e              exporte un fil OPML vers la sortie standard\n"
 "-r              met à jour les fils au démarrage\n"
 "-i <fichier>    importe un fichier OPML\n"
@@ -241,16 +249,17 @@ msgstr ""
 "-C <fichier>    lire la configuration depuis <fichier>\n"
 "-v              vider le cache\n"
 "-x·<commande>.·exécute une liste de commandes\n"
-"-o              activer le mode hors-ligne (s'applique uniquement en mode Bloglines)\n"
+"-o              activer le mode hors-ligne (s'applique uniquement en mode "
+"Bloglines)\n"
 "-V              afficher des informations sur la version du logiciel\n"
 "-h              affiche cette aide\n"
 
-#: src/controller.cpp:677
+#: src/controller.cpp:681
 #, c-format
 msgid "Import of %s finished."
 msgstr "Import de %s terminé."
 
-#: src/controller.cpp:854
+#: src/controller.cpp:858
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -258,25 +267,25 @@ msgstr ""
 "Le support des marque-pages n'est pas configuré. S'il vous plait, éditez la "
 "variable de configuration 'bookmark-cmd'"
 
-#: src/controller.cpp:866
+#: src/controller.cpp:870
 #, c-format
 msgid "%u unread articles"
 msgstr "%u articles non-lus"
 
-#: src/controller.cpp:875 src/formaction.cpp:200
+#: src/controller.cpp:879 src/formaction.cpp:200
 #: src/itemview_formaction.cpp:56
 msgid "Title: "
 msgstr "Titre: "
 
-#: src/controller.cpp:879 src/itemview_formaction.cpp:61
+#: src/controller.cpp:883 src/itemview_formaction.cpp:61
 msgid "Author: "
 msgstr "Auteur: "
 
-#: src/controller.cpp:883 src/itemview_formaction.cpp:70
+#: src/controller.cpp:887 src/itemview_formaction.cpp:70
 msgid "Date: "
 msgstr "Date: "
 
-#: src/controller.cpp:887 src/itemview_formaction.cpp:66
+#: src/controller.cpp:891 src/itemview_formaction.cpp:66
 msgid "Link: "
 msgstr "Lien: "
 
@@ -906,4 +915,3 @@ msgstr "Erreur: le fil ne contient aucun élément !"
 #: src/view.cpp:325
 msgid "Updating query feed..."
 msgstr "Mise à jour du fil.."
-

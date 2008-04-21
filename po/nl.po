@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 0.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-16 22:45+0200\n"
+"POT-Creation-Date: 2008-04-21 08:21+0200\n"
 "PO-Revision-Date: 2007-09-14 22:51+0100\n"
 "Last-Translator: Bart Van Loon <bart@inGen.be>\n"
 "Language-Team: Dutch <bart@inGen.be>\n"
@@ -20,39 +20,46 @@ msgstr ""
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Fout: openen van het cachebestand `%s' is mislukt: %s"
 
-#: src/configcontainer.cpp:57
+#: src/configcontainer.cpp:42
+#, c-format
+msgid "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
+msgstr ""
+"newsbeuter: klaar met herladen, %f ongelezen feeds (%n ongelezen artikels in "
+"totaal)"
+
+#: src/configcontainer.cpp:58
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
 msgstr "%N %V - Uw feeds (%u ongelezen, %t totaal)%?T? - tag `%T'&?"
 
-#: src/configcontainer.cpp:58 src/configcontainer.cpp:66
+#: src/configcontainer.cpp:59 src/configcontainer.cpp:67
 msgid "%N %V - URLs"
 msgstr "%N %V - URLs"
 
-#: src/configcontainer.cpp:59
+#: src/configcontainer.cpp:60
 msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
 msgstr "%N %V - Artikels in feed '%T' (%u ongelezen, %t totaal) - %U"
 
-#: src/configcontainer.cpp:60
+#: src/configcontainer.cpp:61
 msgid "%N %V - Search result (%u unread, %t total)"
 msgstr "%N %V - Zoekresultaten (%u ongelezen, %t totaal)"
 
-#: src/configcontainer.cpp:61
+#: src/configcontainer.cpp:62
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Open Bestand&Bestand Opslagen? - %f"
 
-#: src/configcontainer.cpp:62
+#: src/configcontainer.cpp:63
 msgid "%N %V - Help"
 msgstr "%N %V - Hulp"
 
-#: src/configcontainer.cpp:63
+#: src/configcontainer.cpp:64
 msgid "%N %V - Select Tag"
 msgstr "%N %V - Tag Selecteren"
 
-#: src/configcontainer.cpp:64
+#: src/configcontainer.cpp:65
 msgid "%N %V - Select Filter"
 msgstr "%N %V - Filter Selecteren"
 
-#: src/configcontainer.cpp:65
+#: src/configcontainer.cpp:66
 msgid "%N %V - Article '%T'"
 msgstr "%N %V - Artikel '%T'"
 
@@ -86,61 +93,61 @@ msgstr "Fout bij het behadelen van opdrachtregel `%s' (%s regel %u): %s"
 msgid "unknown command `%s'"
 msgstr "onbekende opdrachtregel `%s'"
 
-#: src/controller.cpp:46 src/pb_controller.cpp:32
+#: src/controller.cpp:47 src/pb_controller.cpp:32
 msgid "Segmentation fault."
 msgstr "Segmentatiefout"
 
-#: src/controller.cpp:68 src/pb_controller.cpp:46
+#: src/controller.cpp:69 src/pb_controller.cpp:46
 msgid "Fatal error: couldn't determine home directory!"
 msgstr "Fatale fout: can de home directory niet bepalen!"
 
-#: src/controller.cpp:69 src/pb_controller.cpp:47
+#: src/controller.cpp:70 src/pb_controller.cpp:47
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
 "Zet de HOME omgevingsvariabele of voeg een geldige gebruiker toe voor UID %u!"
 
-#: src/controller.cpp:179 src/pb_controller.cpp:106
+#: src/controller.cpp:180 src/pb_controller.cpp:106
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr "%s: onbekende optie - %c"
 
-#: src/controller.cpp:198 src/pb_controller.cpp:112
+#: src/controller.cpp:199 src/pb_controller.cpp:112
 #, c-format
 msgid "Starting %s %s..."
 msgstr "Bezig met starten van %s %s..."
 
-#: src/controller.cpp:207 src/controller.cpp:281 src/pb_controller.cpp:116
+#: src/controller.cpp:208 src/controller.cpp:282 src/pb_controller.cpp:116
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "Fout: er draait al een instantie van %s (PID: %u)"
 
-#: src/controller.cpp:218 src/pb_controller.cpp:120
+#: src/controller.cpp:219 src/pb_controller.cpp:120
 msgid "Loading configuration..."
 msgstr "Bezig met laden van de configuratie..."
 
-#: src/controller.cpp:261 src/controller.cpp:292 src/controller.cpp:318
-#: src/controller.cpp:327 src/controller.cpp:355 src/controller.cpp:359
-#: src/controller.cpp:381 src/controller.cpp:413 src/pb_controller.cpp:155
+#: src/controller.cpp:262 src/controller.cpp:293 src/controller.cpp:319
+#: src/controller.cpp:328 src/controller.cpp:356 src/controller.cpp:360
+#: src/controller.cpp:382 src/controller.cpp:414 src/pb_controller.cpp:155
 #: src/pb_controller.cpp:172
 msgid "done."
 msgstr "klaar."
 
-#: src/controller.cpp:287 src/controller.cpp:350
+#: src/controller.cpp:288 src/controller.cpp:351
 msgid "Opening cache..."
 msgstr "Bezig met openen van de cache..."
 
-#: src/controller.cpp:312
+#: src/controller.cpp:313
 msgid "Loading URLs from local cache..."
 msgstr "Bezig met laden van artikels uit de lokale cache..."
 
-#: src/controller.cpp:322
+#: src/controller.cpp:323
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "Bezig met URLs te laden laden van %s..."
 
-#: src/controller.cpp:335
+#: src/controller.cpp:336
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
@@ -149,7 +156,7 @@ msgstr ""
 "Fout: geen URLs geconfigureerd. Plaats RSS feed URLs in het bestand %s of "
 "importeer een OPML bestand."
 
-#: src/controller.cpp:337
+#: src/controller.cpp:338
 msgid ""
 "It looks like you haven't configured any feeds in your bloglines account. "
 "Please do so, and try again."
@@ -157,7 +164,7 @@ msgstr ""
 "Blijkbaar hebt u nog geen feeds geconfigureerd in uw bloglines accountDoe "
 "dit even aub, en probeer dan opnieuw."
 
-#: src/controller.cpp:339
+#: src/controller.cpp:340
 msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
@@ -165,57 +172,57 @@ msgstr ""
 "Blijkbaar bevat de OPML feed waar uw zich op ingeschreven heeft geen feeds. "
 "Vul hemmet feeds aub, en probeer dan opnieuw."
 
-#: src/controller.cpp:348
+#: src/controller.cpp:349
 msgid "Loading articles from cache..."
 msgstr "Bezig met laden van artikels uit de cache..."
 
-#: src/controller.cpp:356
+#: src/controller.cpp:357
 msgid "Cleaning up cache thoroughly..."
 msgstr "Bezig met grondig kuisen van de cache..."
 
-#: src/controller.cpp:371
+#: src/controller.cpp:372
 msgid "Error while loading feeds from database: "
 msgstr "Fout bij het laden van de feeds van de database: "
 
-#: src/controller.cpp:409
+#: src/controller.cpp:410
 msgid "Cleaning up cache..."
 msgstr "Bezig met kuisen van de cache..."
 
-#: src/controller.cpp:415
+#: src/controller.cpp:416
 msgid "failed: "
 msgstr "mislukt: "
 
-#: src/controller.cpp:433
+#: src/controller.cpp:434
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "Fout: kon niet alle feeds als gelezen markeren: %s"
 
-#: src/controller.cpp:471
+#: src/controller.cpp:472
 #, c-format
 msgid "%sLoading %s..."
 msgstr "%sBezig met laden van %s..."
 
-#: src/controller.cpp:514 src/controller.cpp:516
+#: src/controller.cpp:515 src/controller.cpp:517
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr "Fout bij het ophalen van %s: %s"
 
-#: src/controller.cpp:519
+#: src/controller.cpp:520
 msgid "Error: invalid feed!"
 msgstr "Fout: ongeldige feed!"
 
-#: src/controller.cpp:525
+#: src/controller.cpp:526
 msgid "invalid feed index (bug)"
 msgstr "ongeldige feed index (bug)"
 
-#: src/controller.cpp:542 src/controller.cpp:565
+#: src/controller.cpp:569
 #, c-format
 msgid "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
 msgstr ""
 "newsbeuter: klaar met herladen, %u ongelezen feeds (%u ongelezen artikels in "
 "totaal)"
 
-#: src/controller.cpp:633
+#: src/controller.cpp:637
 #, fuzzy, c-format
 msgid ""
 "%s %s\n"
@@ -248,12 +255,12 @@ msgstr ""
 "-V                 versie-informatie\n"
 "-h                 deze hulptekst\n"
 
-#: src/controller.cpp:677
+#: src/controller.cpp:681
 #, c-format
 msgid "Import of %s finished."
 msgstr "Klaar met importeren van %s"
 
-#: src/controller.cpp:854
+#: src/controller.cpp:858
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -261,25 +268,25 @@ msgstr ""
 "bladwijzerondersteuning is niet geconfigureerd. Corrigeer de waarde van de "
 "configuratievariabele`bookmark-cmd' aub."
 
-#: src/controller.cpp:866
+#: src/controller.cpp:870
 #, fuzzy, c-format
 msgid "%u unread articles"
 msgstr "Naar volgend ongelezen artikel gaan"
 
-#: src/controller.cpp:875 src/formaction.cpp:200
+#: src/controller.cpp:879 src/formaction.cpp:200
 #: src/itemview_formaction.cpp:56
 msgid "Title: "
 msgstr "Titel: "
 
-#: src/controller.cpp:879 src/itemview_formaction.cpp:61
+#: src/controller.cpp:883 src/itemview_formaction.cpp:61
 msgid "Author: "
 msgstr "Auteur: "
 
-#: src/controller.cpp:883 src/itemview_formaction.cpp:70
+#: src/controller.cpp:887 src/itemview_formaction.cpp:70
 msgid "Date: "
 msgstr "Datum: "
 
-#: src/controller.cpp:887 src/itemview_formaction.cpp:66
+#: src/controller.cpp:891 src/itemview_formaction.cpp:66
 msgid "Link: "
 msgstr "Koppeling: "
 

@@ -10,6 +10,7 @@
 #include <utils.h>
 #include <stflpp.h>
 #include <exception.h>
+#include <formatstring.h>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
@@ -529,7 +530,12 @@ void controller::reload_indexes(const std::vector<int>& indexes, bool unattended
 	unsigned int unread_feeds2, unread_articles2;
 	compute_unread_numbers(unread_feeds2, unread_articles2);
 	if (unread_feeds2 != unread_feeds || unread_articles2 != unread_articles) {
-		this->notify(utils::strprintf(_("newsbeuter: finished reload, %u unread feeds (%u unread articles total)"), unread_feeds2, unread_articles2));
+		fmtstr_formatter fmt;
+		fmt.register_fmt('f', utils::to_s(unread_feeds2));
+		fmt.register_fmt('n', utils::to_s(unread_articles2));
+		fmt.register_fmt('d', utils::to_s(unread_articles2 - unread_articles));
+		fmt.register_fmt('D', utils::to_s(unread_feeds2 - unread_feeds));
+		this->notify(fmt.do_format(cfg->get_configvalue("notify-format")));
 	}
 	if (!unattended)
 		v->set_status("");
@@ -552,7 +558,12 @@ void controller::reload_all(bool unattended) {
 	unsigned int unread_feeds2, unread_articles2;
 	compute_unread_numbers(unread_feeds2, unread_articles2);
 	if (unread_feeds2 != unread_feeds || unread_articles2 != unread_articles) {
-		this->notify(utils::strprintf(_("newsbeuter: finished reload, %u unread feeds (%u unread articles total)"), unread_feeds2, unread_articles2));
+		fmtstr_formatter fmt;
+		fmt.register_fmt('f', utils::to_s(unread_feeds2));
+		fmt.register_fmt('n', utils::to_s(unread_articles2));
+		fmt.register_fmt('d', utils::to_s(unread_articles2 - unread_articles));
+		fmt.register_fmt('D', utils::to_s(unread_feeds2 - unread_feeds));
+		this->notify(fmt.do_format(cfg->get_configvalue("notify-format")));
 	}
 }
 

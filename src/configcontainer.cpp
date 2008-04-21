@@ -39,6 +39,7 @@ configcontainer::configcontainer()
 	config_data["notify-screen"]   = configdata("no", configdata::BOOL);
 	config_data["notify-xterm"]    = configdata("no", configdata::BOOL);
 	config_data["notify-program"]  = configdata("", configdata::PATH);
+	config_data["notify-format"]   = configdata(_("newsbeuter: finished reload, %f unread feeds (%n unread articles total)"), configdata::STR);
 	config_data["datetime-format"] = configdata("%b %d", configdata::STR);
 	config_data["urls-source"]     = configdata("local", configdata::STR);
 	config_data["bloglines-auth"]  = configdata("", configdata::STR);

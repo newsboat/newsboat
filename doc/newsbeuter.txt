@@ -624,10 +624,21 @@ t:Article title
 T:If the article list displays articles from different feeds, then this identifier contains the title of the feed to which the article belongs.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.Available Identifiers for notify-format
+[frame="all", grid="all", format="dsv"]
+`30`60~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Identifier:Meaning
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n:Number of unread articles
+f:Number of unread feeds
+d:Number of new unread articles (i.e. that were added through the last reload)
+D:Number of new unread feeds (i.e. that were added through the last reload)
+
 Examples:
 
 	feedlist-format     "%4i %n %11u %t"
 	articlelist-format  "%4i %f %D   %?T?|%-17T|  ?%t"
+	notify-format       "%d new articles (%n unread articles, %f unread feeds)"
 
 Podcast Support
 ~~~~~~~~~~~~~~~
