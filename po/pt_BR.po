@@ -1,14 +1,15 @@
-# translation of new.po to
+# translation of pt_BR.po to Português do Brasil
 # Adiel Mittmann <adiel@inf.ufsc.br>, 2007, 2008.
+# translation of new.po to
 # translation of pt_BR.po to
 msgid ""
 msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-21 08:21+0200\n"
-"PO-Revision-Date: 2008-03-12 11:07-0300\n"
+"PO-Revision-Date: 2008-04-22 13:04-0300\n"
 "Last-Translator: Adiel Mittmann <adiel@inf.ufsc.br>\n"
-"Language-Team:  <el@li.org>\n"
+"Language-Team: Português do Brasil\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,8 +31,7 @@ msgstr ""
 
 #: src/configcontainer.cpp:58
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
-msgstr ""
-"%N %V - Suas fontes RSS (%u não lidas, %t no total)%?T? - etiqueta '%T'&?"
+msgstr "%N %V - Suas fontes RSS (%u não lidas, %t no total)%?T? - etiqueta '%T'&?"
 
 #: src/configcontainer.cpp:59 src/configcontainer.cpp:67
 msgid "%N %V - URLs"
@@ -105,8 +105,7 @@ msgstr "Erro fatal: não foi possível determinar o diretório do usuário."
 
 #: src/controller.cpp:70 src/pb_controller.cpp:47
 #, c-format
-msgid ""
-"Please set the HOME environment variable or add a valid user for UID %u!"
+msgid "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
 "Por favor defina a variável de ambiente HOME ou adicione um usuário válido "
 "para o UID %u!"
@@ -226,7 +225,7 @@ msgstr ""
 "lidos no total)"
 
 #: src/controller.cpp:637
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] "
@@ -245,7 +244,8 @@ msgid ""
 "-h              this help\n"
 msgstr ""
 "%s %s\n"
-"uso: %s [-i <arquivo>|-e] [-u <arquivourl>] [-c <arquivocache>] [-h]\n"
+"uso: %s [-i <arquivo>|-e] [-u <arquivourl>] [-c <arquivocache>] [-x <comando> ...] "
+"[-h]\n"
 "-e                 exportar fontes RSS em formato OPML para saída padrão\n"
 "-r                 atualizar fontes RSS ao iniciar\n"
 "-i <arquivo>       importar arquivo OPML\n"
@@ -272,9 +272,9 @@ msgstr ""
 "configuração 'bookmark-cmd' conforme necessário."
 
 #: src/controller.cpp:870
-#, fuzzy, c-format
+#, c-format
 msgid "%u unread articles"
-msgstr "Ir para o próximo artigo não lido"
+msgstr "%u artigos não lidos"
 
 #: src/controller.cpp:879 src/formaction.cpp:200
 #: src/itemview_formaction.cpp:56
@@ -537,9 +537,9 @@ msgid "unknown (bug)"
 msgstr "desconhecido (erro de software)"
 
 #: src/interpreter.cpp:43
-#, fuzzy, c-format
+#, c-format
 msgid "Error while calling `%s': %s"
-msgstr "Erro procurando por '%s': %s"
+msgstr "Erro ao chamar '%s': %s"
 
 #: src/itemlist_formaction.cpp:44 src/itemlist_formaction.cpp:57
 #: src/itemlist_formaction.cpp:76 src/itemlist_formaction.cpp:95
@@ -802,21 +802,19 @@ msgid "Call a macro"
 msgstr "Chamar uma macro"
 
 #: src/keymap.cpp:59
-#, fuzzy
 msgid "Delete article"
-msgstr "Salvar artigo"
+msgstr "Excluir artigo"
 
 #: src/keymap.cpp:60
-#, fuzzy
 msgid "Purge deleted articles"
-msgstr "Ir para o próximo artigo não lido"
+msgstr "Eliminar artigos excluídos"
 
 #: src/pb_controller.cpp:166
 msgid "Cleaning up queue..."
 msgstr "Limpando fila..."
 
 #: src/pb_controller.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage %s [-C <file>] [-q <file>] [-h]\n"
@@ -829,6 +827,7 @@ msgstr ""
 "uso %s [-C <arquivo>] [-q <arquivo>] [-h]\n"
 "-C <arquivoconfig> ler configuração do <arquivoconfig>\n"
 "-q <arquivofila>   usar o <arquivofila> como arquivo da fila\n"
+"-a                 começar a baixar já no início"
 "-h                 esta ajuda\n"
 
 #: src/pb_view.cpp:40
@@ -847,13 +846,11 @@ msgstr "Erro: não é possível sair: transferência(s) em progresso"
 
 #: src/pb_view.cpp:126
 msgid "Error: download needs to be finished before the file can be played."
-msgstr ""
-"Erro: a transferência precisa ser concluída antes de o arquivo ser tocado."
+msgstr "Erro: a transferência precisa ser concluída antes de o arquivo ser tocado."
 
 #: src/pb_view.cpp:155
 msgid "Error: unable to perform operation: download(s) in progress."
-msgstr ""
-"Erro: não foi foi possível realizar a operação: transferência(s) em progresso"
+msgstr "Erro: não foi foi possível realizar a operação: transferência(s) em progresso"
 
 #: src/pb_view.cpp:267
 msgid "Download"
@@ -920,3 +917,4 @@ msgstr "Erro: fonte RSS não possui nenhum artigo!"
 #: src/view.cpp:325
 msgid "Updating query feed..."
 msgstr "Atualizando fonte RSS de consulta..."
+
