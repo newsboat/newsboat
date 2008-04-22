@@ -1,16 +1,17 @@
+# translation of es_ES.po to es-ES
 # translation of es_ES.po to
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+# ROOT <epsilon.root@gmail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: es_ES\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-21 08:21+0200\n"
-"PO-Revision-Date: 2008-04-16 23:40+0200\n"
-"Last-Translator: Nadie\n"
-"Language-Team:  <es@li.org>\n"
+"PO-Revision-Date: 2008-04-22 22:15+0200\n"
+"Last-Translator: ROOT <epsilon.root@gmail.com>\n"
+"Language-Team: es-ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -104,8 +105,7 @@ msgstr "Error fatal: no se pudo encontrar el directorio home!"
 
 #: src/controller.cpp:70 src/pb_controller.cpp:47
 #, c-format
-msgid ""
-"Please set the HOME environment variable or add a valid user for UID %u!"
+msgid "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
 "Por favor declara la variable de entorno HOME o añade un usuario valido "
 "para UID %u!"
@@ -184,8 +184,7 @@ msgstr "Limpiando el cache totalmente..."
 
 #: src/controller.cpp:372
 msgid "Error while loading feeds from database: "
-msgstr ""
-"Se produjo un error mientras se cargaban los feeds desde la base de datos:"
+msgstr "Se produjo un error mientras se cargaban los feeds desde la base de datos:"
 
 #: src/controller.cpp:410
 msgid "Cleaning up cache..."
@@ -919,3 +918,4 @@ msgstr "Error: el feed no contiene elementos!"
 #: src/view.cpp:325
 msgid "Updating query feed..."
 msgstr "Actualizando consulta de feed..."
+
