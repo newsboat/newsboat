@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 0.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-01 22:42+0200\n"
+"POT-Creation-Date: 2008-04-21 08:21+0200\n"
 "PO-Revision-Date: 2007-09-14 22:51+0100\n"
 "Last-Translator: Bart Van Loon <bart@inGen.be>\n"
 "Language-Team: Dutch <bart@inGen.be>\n"
@@ -15,44 +15,51 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/cache.cpp:172
+#: src/cache.cpp:174
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Fout: openen van het cachebestand `%s' is mislukt: %s"
 
-#: src/configcontainer.cpp:56
+#: src/configcontainer.cpp:42
+#, c-format
+msgid "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
+msgstr ""
+"newsbeuter: klaar met herladen, %f ongelezen feeds (%n ongelezen artikels in "
+"totaal)"
+
+#: src/configcontainer.cpp:58
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
 msgstr "%N %V - Uw feeds (%u ongelezen, %t totaal)%?T? - tag `%T'&?"
 
-#: src/configcontainer.cpp:57 src/configcontainer.cpp:65
+#: src/configcontainer.cpp:59 src/configcontainer.cpp:67
 msgid "%N %V - URLs"
 msgstr "%N %V - URLs"
 
-#: src/configcontainer.cpp:58
+#: src/configcontainer.cpp:60
 msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
 msgstr "%N %V - Artikels in feed '%T' (%u ongelezen, %t totaal) - %U"
 
-#: src/configcontainer.cpp:59
+#: src/configcontainer.cpp:61
 msgid "%N %V - Search result (%u unread, %t total)"
 msgstr "%N %V - Zoekresultaten (%u ongelezen, %t totaal)"
 
-#: src/configcontainer.cpp:60
+#: src/configcontainer.cpp:62
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Open Bestand&Bestand Opslagen? - %f"
 
-#: src/configcontainer.cpp:61
+#: src/configcontainer.cpp:63
 msgid "%N %V - Help"
 msgstr "%N %V - Hulp"
 
-#: src/configcontainer.cpp:62
+#: src/configcontainer.cpp:64
 msgid "%N %V - Select Tag"
 msgstr "%N %V - Tag Selecteren"
 
-#: src/configcontainer.cpp:63
+#: src/configcontainer.cpp:65
 msgid "%N %V - Select Filter"
 msgstr "%N %V - Filter Selecteren"
 
-#: src/configcontainer.cpp:64
+#: src/configcontainer.cpp:66
 msgid "%N %V - Article '%T'"
 msgstr "%N %V - Artikel '%T'"
 
@@ -86,61 +93,61 @@ msgstr "Fout bij het behadelen van opdrachtregel `%s' (%s regel %u): %s"
 msgid "unknown command `%s'"
 msgstr "onbekende opdrachtregel `%s'"
 
-#: src/controller.cpp:46 src/pb_controller.cpp:32
+#: src/controller.cpp:47 src/pb_controller.cpp:32
 msgid "Segmentation fault."
 msgstr "Segmentatiefout"
 
-#: src/controller.cpp:68 src/pb_controller.cpp:46
+#: src/controller.cpp:69 src/pb_controller.cpp:46
 msgid "Fatal error: couldn't determine home directory!"
 msgstr "Fatale fout: can de home directory niet bepalen!"
 
-#: src/controller.cpp:69 src/pb_controller.cpp:47
+#: src/controller.cpp:70 src/pb_controller.cpp:47
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
 "Zet de HOME omgevingsvariabele of voeg een geldige gebruiker toe voor UID %u!"
 
-#: src/controller.cpp:179 src/pb_controller.cpp:106
+#: src/controller.cpp:180 src/pb_controller.cpp:106
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr "%s: onbekende optie - %c"
 
-#: src/controller.cpp:198 src/pb_controller.cpp:112
+#: src/controller.cpp:199 src/pb_controller.cpp:112
 #, c-format
 msgid "Starting %s %s..."
 msgstr "Bezig met starten van %s %s..."
 
-#: src/controller.cpp:207 src/controller.cpp:281 src/pb_controller.cpp:116
+#: src/controller.cpp:208 src/controller.cpp:282 src/pb_controller.cpp:116
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "Fout: er draait al een instantie van %s (PID: %u)"
 
-#: src/controller.cpp:218 src/pb_controller.cpp:120
+#: src/controller.cpp:219 src/pb_controller.cpp:120
 msgid "Loading configuration..."
 msgstr "Bezig met laden van de configuratie..."
 
-#: src/controller.cpp:261 src/controller.cpp:292 src/controller.cpp:318
-#: src/controller.cpp:327 src/controller.cpp:355 src/controller.cpp:359
-#: src/controller.cpp:381 src/controller.cpp:414 src/pb_controller.cpp:155
+#: src/controller.cpp:262 src/controller.cpp:293 src/controller.cpp:319
+#: src/controller.cpp:328 src/controller.cpp:356 src/controller.cpp:360
+#: src/controller.cpp:382 src/controller.cpp:414 src/pb_controller.cpp:155
 #: src/pb_controller.cpp:172
 msgid "done."
 msgstr "klaar."
 
-#: src/controller.cpp:287 src/controller.cpp:350
+#: src/controller.cpp:288 src/controller.cpp:351
 msgid "Opening cache..."
 msgstr "Bezig met openen van de cache..."
 
-#: src/controller.cpp:312
+#: src/controller.cpp:313
 msgid "Loading URLs from local cache..."
 msgstr "Bezig met laden van artikels uit de lokale cache..."
 
-#: src/controller.cpp:322
+#: src/controller.cpp:323
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "Bezig met URLs te laden laden van %s..."
 
-#: src/controller.cpp:335
+#: src/controller.cpp:336
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
@@ -149,7 +156,7 @@ msgstr ""
 "Fout: geen URLs geconfigureerd. Plaats RSS feed URLs in het bestand %s of "
 "importeer een OPML bestand."
 
-#: src/controller.cpp:337
+#: src/controller.cpp:338
 msgid ""
 "It looks like you haven't configured any feeds in your bloglines account. "
 "Please do so, and try again."
@@ -157,7 +164,7 @@ msgstr ""
 "Blijkbaar hebt u nog geen feeds geconfigureerd in uw bloglines accountDoe "
 "dit even aub, en probeer dan opnieuw."
 
-#: src/controller.cpp:339
+#: src/controller.cpp:340
 msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
@@ -165,15 +172,15 @@ msgstr ""
 "Blijkbaar bevat de OPML feed waar uw zich op ingeschreven heeft geen feeds. "
 "Vul hemmet feeds aub, en probeer dan opnieuw."
 
-#: src/controller.cpp:348
+#: src/controller.cpp:349
 msgid "Loading articles from cache..."
 msgstr "Bezig met laden van artikels uit de cache..."
 
-#: src/controller.cpp:356
+#: src/controller.cpp:357
 msgid "Cleaning up cache thoroughly..."
 msgstr "Bezig met grondig kuisen van de cache..."
 
-#: src/controller.cpp:371
+#: src/controller.cpp:372
 msgid "Error while loading feeds from database: "
 msgstr "Fout bij het laden van de feeds van de database: "
 
@@ -185,37 +192,37 @@ msgstr "Bezig met kuisen van de cache..."
 msgid "failed: "
 msgstr "mislukt: "
 
-#: src/controller.cpp:430
+#: src/controller.cpp:434
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "Fout: kon niet alle feeds als gelezen markeren: %s"
 
-#: src/controller.cpp:468
+#: src/controller.cpp:472
 #, c-format
 msgid "%sLoading %s..."
 msgstr "%sBezig met laden van %s..."
 
-#: src/controller.cpp:511 src/controller.cpp:513
+#: src/controller.cpp:515 src/controller.cpp:517
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr "Fout bij het ophalen van %s: %s"
 
-#: src/controller.cpp:516
+#: src/controller.cpp:520
 msgid "Error: invalid feed!"
 msgstr "Fout: ongeldige feed!"
 
-#: src/controller.cpp:522
+#: src/controller.cpp:526
 msgid "invalid feed index (bug)"
 msgstr "ongeldige feed index (bug)"
 
-#: src/controller.cpp:539 src/controller.cpp:562
+#: src/controller.cpp:569
 #, c-format
 msgid "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
 msgstr ""
 "newsbeuter: klaar met herladen, %u ongelezen feeds (%u ongelezen artikels in "
 "totaal)"
 
-#: src/controller.cpp:630
+#: src/controller.cpp:637
 #, fuzzy, c-format
 msgid ""
 "%s %s\n"
@@ -248,12 +255,12 @@ msgstr ""
 "-V                 versie-informatie\n"
 "-h                 deze hulptekst\n"
 
-#: src/controller.cpp:674
+#: src/controller.cpp:681
 #, c-format
 msgid "Import of %s finished."
 msgstr "Klaar met importeren van %s"
 
-#: src/controller.cpp:852
+#: src/controller.cpp:858
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -261,25 +268,25 @@ msgstr ""
 "bladwijzerondersteuning is niet geconfigureerd. Corrigeer de waarde van de "
 "configuratievariabele`bookmark-cmd' aub."
 
-#: src/controller.cpp:864
+#: src/controller.cpp:870
 #, fuzzy, c-format
 msgid "%u unread articles"
 msgstr "Naar volgend ongelezen artikel gaan"
 
-#: src/controller.cpp:873 src/formaction.cpp:200
+#: src/controller.cpp:879 src/formaction.cpp:200
 #: src/itemview_formaction.cpp:56
 msgid "Title: "
 msgstr "Titel: "
 
-#: src/controller.cpp:877 src/itemview_formaction.cpp:61
+#: src/controller.cpp:883 src/itemview_formaction.cpp:61
 msgid "Author: "
 msgstr "Auteur: "
 
-#: src/controller.cpp:881 src/itemview_formaction.cpp:70
+#: src/controller.cpp:887 src/itemview_formaction.cpp:70
 msgid "Date: "
 msgstr "Datum: "
 
-#: src/controller.cpp:885 src/itemview_formaction.cpp:66
+#: src/controller.cpp:891 src/itemview_formaction.cpp:66
 msgid "Link: "
 msgstr "Koppeling: "
 
@@ -320,120 +327,120 @@ msgstr "onbekend (bug)"
 msgid "attribute `%s' is not available."
 msgstr "attribuut `%s' is niet beschikbaar."
 
-#: src/feedlist_formaction.cpp:95 src/feedlist_formaction.cpp:105
-#: src/feedlist_formaction.cpp:138
+#: src/feedlist_formaction.cpp:108 src/feedlist_formaction.cpp:118
+#: src/feedlist_formaction.cpp:151
 msgid "No feed selected!"
 msgstr "Geen feeds geselecteerd!"
 
-#: src/feedlist_formaction.cpp:129 src/itemlist_formaction.cpp:160
+#: src/feedlist_formaction.cpp:142 src/itemlist_formaction.cpp:184
 msgid "Marking feed read..."
 msgstr "Bezig met feed als gelezen aan te duiden..."
 
-#: src/feedlist_formaction.cpp:135 src/itemlist_formaction.cpp:174
+#: src/feedlist_formaction.cpp:148 src/itemlist_formaction.cpp:198
 #, c-format
 msgid "Error: couldn't mark feed read: %s"
 msgstr "Fout: kon feed niet als gelezen aanduiden: %s"
 
-#: src/feedlist_formaction.cpp:159 src/feedlist_formaction.cpp:167
+#: src/feedlist_formaction.cpp:172 src/feedlist_formaction.cpp:180
 msgid "No feeds with unread items."
 msgstr "Geen feeds met ongelezen items"
 
-#: src/feedlist_formaction.cpp:173
+#: src/feedlist_formaction.cpp:186
 msgid "Marking all feeds read..."
 msgstr "Beizg met alle feeds als gelezen aan te duiden..."
 
-#: src/feedlist_formaction.cpp:197
+#: src/feedlist_formaction.cpp:210
 msgid "No tags defined."
 msgstr "Geen tags gedefinieerd"
 
-#: src/feedlist_formaction.cpp:212 src/feedlist_formaction.cpp:505
-#: src/itemlist_formaction.cpp:227 src/itemlist_formaction.cpp:278
+#: src/feedlist_formaction.cpp:225 src/feedlist_formaction.cpp:525
+#: src/itemlist_formaction.cpp:253 src/itemlist_formaction.cpp:306
 msgid "Error: couldn't parse filter command!"
 msgstr "Fout: kon filteropdracht niet begrijpen"
 
-#: src/feedlist_formaction.cpp:221 src/itemlist_formaction.cpp:236
+#: src/feedlist_formaction.cpp:235 src/itemlist_formaction.cpp:263
 msgid "No filters defined."
 msgstr "Geen filters gedefinieerd"
 
-#: src/feedlist_formaction.cpp:234 src/itemlist_formaction.cpp:186
+#: src/feedlist_formaction.cpp:248 src/itemlist_formaction.cpp:210
 msgid "Search for: "
 msgstr "Zoeken naar: "
 
-#: src/feedlist_formaction.cpp:250 src/itemlist_formaction.cpp:249
+#: src/feedlist_formaction.cpp:265 src/itemlist_formaction.cpp:276
 msgid "Filter: "
 msgstr "Filter:"
 
-#: src/feedlist_formaction.cpp:256
+#: src/feedlist_formaction.cpp:271
 msgid "Do you really want to quit (y:Yes n:No)? "
 msgstr "Zeker dat u wilt afsluiten (j:Ja n:No)? "
 
-#: src/feedlist_formaction.cpp:256 src/filebrowser_formaction.cpp:101
+#: src/feedlist_formaction.cpp:271 src/filebrowser_formaction.cpp:101
 msgid "yn"
 msgstr "jn"
 
-#: src/feedlist_formaction.cpp:256
+#: src/feedlist_formaction.cpp:271
 msgid "y"
 msgstr "j"
 
-#: src/feedlist_formaction.cpp:355 src/help_formaction.cpp:65
-#: src/itemlist_formaction.cpp:521 src/itemview_formaction.cpp:251
+#: src/feedlist_formaction.cpp:373 src/help_formaction.cpp:67
+#: src/itemlist_formaction.cpp:564 src/itemview_formaction.cpp:251
 #: src/pb_view.cpp:257 src/pb_view.cpp:266 src/urlview_formaction.cpp:97
 msgid "Quit"
 msgstr "Afsluiten"
 
-#: src/feedlist_formaction.cpp:356 src/itemlist_formaction.cpp:522
+#: src/feedlist_formaction.cpp:374 src/itemlist_formaction.cpp:565
 #: src/itemview_formaction.cpp:252
 msgid "Open"
 msgstr "Openen"
 
-#: src/feedlist_formaction.cpp:357 src/itemlist_formaction.cpp:525
+#: src/feedlist_formaction.cpp:375 src/itemlist_formaction.cpp:568
 #: src/itemview_formaction.cpp:254
 msgid "Next Unread"
 msgstr "Volgende Ongelezen"
 
-#: src/feedlist_formaction.cpp:358 src/itemlist_formaction.cpp:524
+#: src/feedlist_formaction.cpp:376 src/itemlist_formaction.cpp:567
 msgid "Reload"
 msgstr "Herladen"
 
-#: src/feedlist_formaction.cpp:359
+#: src/feedlist_formaction.cpp:377
 msgid "Reload All"
 msgstr "Alles Herladen"
 
-#: src/feedlist_formaction.cpp:360
+#: src/feedlist_formaction.cpp:378
 msgid "Mark Read"
 msgstr "Aanduiden als gelezen"
 
-#: src/feedlist_formaction.cpp:361
+#: src/feedlist_formaction.cpp:379
 msgid "Catchup All"
 msgstr "Alles Bijhalen"
 
-#: src/feedlist_formaction.cpp:362 src/itemlist_formaction.cpp:527
+#: src/feedlist_formaction.cpp:380 src/itemlist_formaction.cpp:570
 msgid "Search"
 msgstr "Zoeken"
 
-#: src/feedlist_formaction.cpp:363 src/itemlist_formaction.cpp:528
+#: src/feedlist_formaction.cpp:381 src/itemlist_formaction.cpp:571
 #: src/itemview_formaction.cpp:257 src/pb_view.cpp:199 src/pb_view.cpp:273
 msgid "Help"
 msgstr "Hulp"
 
-#: src/feedlist_formaction.cpp:468 src/itemlist_formaction.cpp:540
+#: src/feedlist_formaction.cpp:488 src/itemlist_formaction.cpp:583
 msgid "Position not visible!"
 msgstr "Positie niet zichtbaar!"
 
-#: src/feedlist_formaction.cpp:473 src/itemlist_formaction.cpp:545
+#: src/feedlist_formaction.cpp:493 src/itemlist_formaction.cpp:588
 msgid "Invalid position!"
 msgstr "Ongeldige positie!"
 
-#: src/feedlist_formaction.cpp:518 src/itemlist_formaction.cpp:309
+#: src/feedlist_formaction.cpp:538 src/itemlist_formaction.cpp:337
 msgid "Searching..."
 msgstr "Bezig met zoeken..."
 
-#: src/feedlist_formaction.cpp:524 src/itemlist_formaction.cpp:319
+#: src/feedlist_formaction.cpp:545 src/itemlist_formaction.cpp:348
 #, c-format
 msgid "Error while searching for `%s': %s"
 msgstr "Fout tijdens het zoeken naar `%s': %s"
 
-#: src/feedlist_formaction.cpp:531 src/itemlist_formaction.cpp:329
+#: src/feedlist_formaction.cpp:552 src/itemlist_formaction.cpp:358
 msgid "No results."
 msgstr "Geen resultaten."
 
@@ -446,26 +453,26 @@ msgstr "Bent u zeker dat u `%s' wilt overschrijven (j:Ja n:Nee)? "
 msgid "n"
 msgstr "n"
 
-#: src/filebrowser_formaction.cpp:158
+#: src/filebrowser_formaction.cpp:157
 msgid "File: "
 msgstr "Bestand: "
 
-#: src/filebrowser_formaction.cpp:177
+#: src/filebrowser_formaction.cpp:176
 #, c-format
 msgid "%s %s - Open File - %s"
 msgstr "%s %s - Open Bestand - %s"
 
-#: src/filebrowser_formaction.cpp:179
+#: src/filebrowser_formaction.cpp:178
 #, c-format
 msgid "%s %s - Save File - %s"
 msgstr "%s %s - Bestand Opslagen - %s"
 
-#: src/filebrowser_formaction.cpp:186 src/pb_view.cpp:268
+#: src/filebrowser_formaction.cpp:185 src/pb_view.cpp:268
 #: src/select_formaction.cpp:136 src/select_formaction.cpp:141
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: src/filebrowser_formaction.cpp:187 src/itemlist_formaction.cpp:523
+#: src/filebrowser_formaction.cpp:186 src/itemlist_formaction.cpp:566
 #: src/itemview_formaction.cpp:253
 msgid "Save"
 msgstr "Opslagen"
@@ -504,87 +511,87 @@ msgstr "Omschrijving: "
 msgid "embedded flash:"
 msgstr "ingebedde flash"
 
-#: src/htmlrenderer.cpp:153 src/htmlrenderer.cpp:433
+#: src/htmlrenderer.cpp:153 src/htmlrenderer.cpp:432
 msgid "image"
 msgstr "prent"
 
-#: src/htmlrenderer.cpp:423
+#: src/htmlrenderer.cpp:422
 msgid "Links: "
 msgstr "Koppelingen: "
 
-#: src/htmlrenderer.cpp:432
+#: src/htmlrenderer.cpp:431
 msgid "link"
 msgstr "koppeling"
 
-#: src/htmlrenderer.cpp:434
+#: src/htmlrenderer.cpp:433
 msgid "embedded flash"
 msgstr "ingebedde flash"
 
-#: src/htmlrenderer.cpp:435
+#: src/htmlrenderer.cpp:434
 msgid "unknown (bug)"
 msgstr "onbekend (bug)"
 
-#: src/interpreter.cpp:46
+#: src/interpreter.cpp:43
 #, fuzzy, c-format
 msgid "Error while calling `%s': %s"
 msgstr "Fout tijdens het zoeken naar `%s': %s"
 
-#: src/itemlist_formaction.cpp:41 src/itemlist_formaction.cpp:53
-#: src/itemlist_formaction.cpp:72 src/itemlist_formaction.cpp:92
-#: src/itemlist_formaction.cpp:302
+#: src/itemlist_formaction.cpp:44 src/itemlist_formaction.cpp:57
+#: src/itemlist_formaction.cpp:76 src/itemlist_formaction.cpp:95
+#: src/itemlist_formaction.cpp:115 src/itemlist_formaction.cpp:330
 msgid "No item selected!"
 msgstr "Geen item geselecteerd!"
 
-#: src/itemlist_formaction.cpp:87 src/itemview_formaction.cpp:74
+#: src/itemlist_formaction.cpp:110 src/itemview_formaction.cpp:74
 #: src/itemview_formaction.cpp:202
 msgid "Flags: "
 msgstr "Vlaggen: "
 
-#: src/itemlist_formaction.cpp:110 src/itemlist_formaction.cpp:561
+#: src/itemlist_formaction.cpp:133 src/itemlist_formaction.cpp:604
 msgid "Error: no item selected!"
 msgstr "Fout: geen item geselecteerd!"
 
-#: src/itemlist_formaction.cpp:125
+#: src/itemlist_formaction.cpp:147
 msgid "Error: you can't reload search results."
 msgstr "Fout: u kan zoekresultaten niet herladen."
 
-#: src/itemlist_formaction.cpp:136 src/itemlist_formaction.cpp:144
+#: src/itemlist_formaction.cpp:160 src/itemlist_formaction.cpp:168
 #: src/itemview_formaction.cpp:220 src/itemview_formaction.cpp:229
 msgid "No unread items."
 msgstr "Geen ongelezen items"
 
-#: src/itemlist_formaction.cpp:150 src/itemlist_formaction.cpp:155
+#: src/itemlist_formaction.cpp:174 src/itemlist_formaction.cpp:179
 msgid "No unread feeds."
 msgstr "Geen ongelezen feeds"
 
-#: src/itemlist_formaction.cpp:194
+#: src/itemlist_formaction.cpp:218
 msgid "Toggling read flag for article..."
 msgstr "Bezig met schakelen van gelezen vlag van artikel..."
 
-#: src/itemlist_formaction.cpp:208
+#: src/itemlist_formaction.cpp:232
 #, c-format
 msgid "Error while toggling read flag: %s"
 msgstr "Fout bij het schakelen van de gelezen vlag: %s"
 
-#: src/itemlist_formaction.cpp:297 src/itemview_formaction.cpp:343
+#: src/itemlist_formaction.cpp:325 src/itemview_formaction.cpp:343
 msgid "Flags updated."
 msgstr "Vlaggen zijn geupdate."
 
-#: src/itemlist_formaction.cpp:526
+#: src/itemlist_formaction.cpp:569
 msgid "Mark All Read"
 msgstr "Markeer Alles als Gelezen"
 
-#: src/itemlist_formaction.cpp:585 src/itemview_formaction.cpp:166
+#: src/itemlist_formaction.cpp:628 src/itemview_formaction.cpp:166
 #: src/itemview_formaction.cpp:318
 msgid "Aborted saving."
 msgstr "Opslagen afgebroken"
 
-#: src/itemlist_formaction.cpp:589 src/itemview_formaction.cpp:322
+#: src/itemlist_formaction.cpp:632 src/itemview_formaction.cpp:322
 #, c-format
 msgid "Saved article to %s"
 msgstr "Artikel opgeslagen naar %s"
 
-#: src/itemlist_formaction.cpp:591 src/itemview_formaction.cpp:324
+#: src/itemlist_formaction.cpp:634 src/itemview_formaction.cpp:324
 #, c-format
 msgid "Error: couldn't save article to %s"
 msgstr "Fout: kon artikel niet opslagen naar %s"
@@ -791,6 +798,16 @@ msgstr "Naar vorig ongelezen artikel gaan"
 msgid "Call a macro"
 msgstr ""
 
+#: src/keymap.cpp:59
+#, fuzzy
+msgid "Delete article"
+msgstr "Artikel opslagen"
+
+#: src/keymap.cpp:60
+#, fuzzy
+msgid "Purge deleted articles"
+msgstr "Naar volgend ongelezen artikel gaan"
+
 #: src/pb_controller.cpp:166
 msgid "Cleaning up queue..."
 msgstr "Bezig met wachtrij op te kuisen..."
@@ -853,7 +870,7 @@ msgstr "Automatisch Downloaden Schakelen"
 msgid "Play"
 msgstr "Afspelen"
 
-#: src/rss.cpp:81
+#: src/rss.cpp:83
 #, c-format
 msgid "Error: unsupported URL: %s"
 msgstr "Fout: niet ondersteunde URL: %s"
@@ -886,15 +903,15 @@ msgstr "Geen link geselecteerd!"
 msgid "Save Bookmark"
 msgstr "Sla Bladwijzer Op"
 
-#: src/view.cpp:290
+#: src/view.cpp:280 src/view.cpp:297
 #, c-format
 msgid "Error: applying the filter failed: %s"
 msgstr "Fout: toepassen van filter mislukt: %s"
 
-#: src/view.cpp:309 src/view.cpp:329
+#: src/view.cpp:316 src/view.cpp:336
 msgid "Error: feed contains no items!"
 msgstr "Fout: feed bevat geen items!"
 
-#: src/view.cpp:318
+#: src/view.cpp:325
 msgid "Updating query feed..."
 msgstr "Bezig met feedvraag te updaten..."

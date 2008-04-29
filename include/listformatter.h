@@ -8,7 +8,11 @@
 
 namespace newsbeuter {
 
+
 class listformatter {
+
+	typedef std::pair<std::string, unsigned int> line_id_pair;
+
 	public:
 		listformatter();
 		~listformatter();
@@ -16,7 +20,6 @@ class listformatter {
 		void add_lines(const std::vector<std::string>& lines);
 		std::string format_list();
 	private:
-		typedef std::pair<std::string, unsigned int> line_id_pair;
 		std::vector<line_id_pair> lines;
 		std::string format_cache;
 		bool refresh_cache;

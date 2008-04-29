@@ -45,6 +45,8 @@ class utils {
 		static std::string strprintf(const char * format, ...);
 
 		static std::string get_useragent(configcontainer * cfgcont);
+
+		static size_t strwidth(const std::string& s);
 };
 
 class scope_measure {

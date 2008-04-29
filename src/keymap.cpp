@@ -59,8 +59,6 @@ static op_desc opdescs[] = {
 	{ OP_DELETE, "delete-article", "D", _("Delete article"), KM_NEWSBEUTER },
 	{ OP_PURGE_DELETED, "purge-deleted", "$", _("Purge deleted articles"), KM_NEWSBEUTER },
 
-	{ OP_RUNFUNCTION, "run-function", "XXXNOKEY-run-function", NULL, KM_SYSKEYS },
-
 	{ OP_SK_UP, "up", "UP", NULL, KM_SYSKEYS },
 	{ OP_SK_DOWN, "down", "DOWN", NULL, KM_SYSKEYS },
 	{ OP_SK_PGUP, "pageup", "PAGEUP", NULL, KM_SYSKEYS },
