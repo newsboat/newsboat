@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: newsbeuter 0.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-21 08:21+0200\n"
-"PO-Revision-Date: 2007-09-14 22:51+0100\n"
+"PO-Revision-Date: 2008-04-30 18:06+0100\n"
 "Last-Translator: Bart Van Loon <bart@inGen.be>\n"
 "Language-Team: Dutch <bart@inGen.be>\n"
 "MIME-Version: 1.0\n"
@@ -223,7 +223,7 @@ msgstr ""
 "totaal)"
 
 #: src/controller.cpp:637
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] "
@@ -250,6 +250,7 @@ msgstr ""
 "-c <cachebestand>  gebruik <cachebestand> as cachebestand\n"
 "-C <configbestand> lees configuratie in <configbestand>\n"
 "-v                 maak cache grondig schoon\n"
+"-x <commando>...   voer een lijst van commando's uit\n"
 "-o                 activeer offline mode (geldt alleen voor bloglines "
 "synchronisatiemode)\n"
 "-V                 versie-informatie\n"
@@ -269,9 +270,9 @@ msgstr ""
 "configuratievariabele`bookmark-cmd' aub."
 
 #: src/controller.cpp:870
-#, fuzzy, c-format
+#, c-format
 msgid "%u unread articles"
-msgstr "Naar volgend ongelezen artikel gaan"
+msgstr "%u ongelezen artikels"
 
 #: src/controller.cpp:879 src/formaction.cpp:200
 #: src/itemview_formaction.cpp:56
@@ -482,6 +483,8 @@ msgid ""
 "Error: newsbeuter is compiled without Ruby support. Please recompile with "
 "Ruby support in order to run Ruby functions."
 msgstr ""
+"Fout: newsbeuter is gecompileerd zonder Ruby ondersteuning. Hercompileer met"
+"Ruby ondersteuning om Ruby functies uit te voeren."
 
 #: src/formaction.cpp:122 src/formaction.cpp:129
 msgid "usage: set <variable>[=<value>]"
@@ -532,9 +535,9 @@ msgid "unknown (bug)"
 msgstr "onbekend (bug)"
 
 #: src/interpreter.cpp:43
-#, fuzzy, c-format
+#, c-format
 msgid "Error while calling `%s': %s"
-msgstr "Fout tijdens het zoeken naar `%s': %s"
+msgstr "Fout tijdens het oproepen van `%s': %s"
 
 #: src/itemlist_formaction.cpp:44 src/itemlist_formaction.cpp:57
 #: src/itemlist_formaction.cpp:76 src/itemlist_formaction.cpp:95
@@ -785,35 +788,31 @@ msgid "Edit flags"
 msgstr "Wijzig vlaggen"
 
 #: src/keymap.cpp:56
-#, fuzzy
 msgid "Go to next unread feed"
-msgstr "Naar volgend ongelezen artikel gaan"
+msgstr "Ga naar volgend ongelezen artikel"
 
 #: src/keymap.cpp:57
-#, fuzzy
 msgid "Go to previous unread feed"
-msgstr "Naar vorig ongelezen artikel gaan"
+msgstr "Ga naar vorig ongelezen artikel"
 
 #: src/keymap.cpp:58
 msgid "Call a macro"
-msgstr ""
+msgstr "Roep een macro op"
 
 #: src/keymap.cpp:59
-#, fuzzy
 msgid "Delete article"
-msgstr "Artikel opslagen"
+msgstr "Verwijder artikel"
 
 #: src/keymap.cpp:60
-#, fuzzy
 msgid "Purge deleted articles"
-msgstr "Naar volgend ongelezen artikel gaan"
+msgstr "Verwijder verwijderde artikelen definitief"
 
 #: src/pb_controller.cpp:166
 msgid "Cleaning up queue..."
 msgstr "Bezig met wachtrij op te kuisen..."
 
 #: src/pb_controller.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage %s [-C <file>] [-q <file>] [-h]\n"
@@ -826,6 +825,7 @@ msgstr ""
 "gebruik %s [-C <bestand>] [-q <bestand>] [-h]\n"
 "-C <configuratiebestand> haal configuratie ui >configuratiebestand>\n"
 "-q <wachtrijbestand>     gebruik <wachtrijbestand> als wachtrijbestand\n"
+"-a                       start download bij opstarten\n"
 "-h                       deze hulptekst\n"
 
 #: src/pb_view.cpp:40
