@@ -11,6 +11,7 @@
 #include <stflpp.h>
 #include <exception.h>
 #include <formatstring.h>
+#include <regexmanager.h>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
@@ -228,6 +229,10 @@ void controller::run(int argc, char * argv[]) {
 
 	cfgparser.register_handler("define-filter",&filters);
 
+	regexmanager rxman;
+
+	cfgparser.register_handler("highlight-pattern", &rxman);
+
 	try {
 		cfgparser.parse("/etc/" PROGRAM_NAME "/config");
 		cfgparser.parse(config_file);
@@ -393,6 +398,8 @@ void controller::run(int argc, char * argv[]) {
 	v->set_config_container(cfg);
 	v->set_keymap(&keys);
 	v->set_tags(tags);
+
+	v->set_regexmanager(&rxman);
 
 	// run the view
 	v->run();

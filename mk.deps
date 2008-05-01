@@ -23,7 +23,8 @@ src/downloadthread.o: include/downloadthread.h include/logger.h
 src/exception.o: include/exception.h include/exceptions.h
 
 src/feedlist_formaction.o: include/feedlist_formaction.h include/view.h include/logger.h \
-	include/reloadthread.h include/exceptions.h include/utils.h include/formatstring.h
+	include/reloadthread.h include/exceptions.h include/utils.h include/formatstring.h \
+	include/listformatter.h
 
 src/filebrowser_formaction.o: include/filebrowser_formaction.h include/logger.h config.h \
 	include/view.h
@@ -33,7 +34,7 @@ src/filtercontainer.o: include/filtercontainer.h
 src/formaction.o: include/formaction.h include/view.h include/utils.h config.h \
 	include/logger.h
 
-src/help_formaction.o: config.h include/help_formaction.h include/view.h
+src/help_formaction.o: config.h include/help_formaction.h include/view.h include/listformatter.h
 
 src/history.o: include/history.h
 
@@ -41,7 +42,7 @@ src/htmlrenderer.o: include/htmlrenderer.h include/tagsouppullparser.h include/u
 	include/logger.h config.h
 
 src/itemlist_formaction.o: include/itemlist_formaction.h include/view.h config.h \
-	include/exceptions.h include/utils.h include/formatstring.h
+	include/exceptions.h include/utils.h include/formatstring.h include/listformatter.h
 
 src/itemview_formaction.o: include/itemview_formaction.h include/view.h config.h \
 	include/logger.h include/exceptions.h include/utils.h
@@ -70,7 +71,7 @@ src/reloadthread.o: include/reloadthread.h include/logger.h
 src/rss.o: include/rss.h config.h include/cache.h include/tagsouppullparser.h include/utils.h \
 	include/logger.h include/exceptions.h include/configcontainer.h
 
-src/select_formaction.o: include/select_formaction.h include/view.h config.h
+src/select_formaction.o: include/select_formaction.h include/view.h config.h include/listformatter.h
 
 src/stflpp.o: include/stflpp.h include/logger.h include/exception.h
 
@@ -78,7 +79,7 @@ src/thread.o: include/thread.h include/exception.h include/logger.h
 
 src/urlreader.o: include/urlreader.h include/utils.h include/logger.h config.h
 
-src/urlview_formaction.o: include/urlview_formaction.h include/view.h config.h
+src/urlview_formaction.o: include/urlview_formaction.h include/view.h config.h include/listformatter.h
 
 src/utils.o: include/utils.h include/logger.h
 

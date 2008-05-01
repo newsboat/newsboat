@@ -12,7 +12,7 @@
 namespace newsbeuter {
 
 itemview_formaction::itemview_formaction(view * vv, std::string formstr)
-	: formaction(vv,formstr), feed(0), show_source(false), quit(false) { 
+	: formaction(vv,formstr), feed(0), show_source(false), quit(false), rxman(0) { 
 }
 
 itemview_formaction::~itemview_formaction() { }
@@ -112,7 +112,7 @@ void itemview_formaction::prepare() {
 
 		listfmt.add_lines(lines);
 
-		f->modify("article","replace_inner",listfmt.format_list());
+		f->modify("article","replace_inner",listfmt.format_list(rxman));
 		f->set("articleoffset","0");
 
 		do_redraw = false;
@@ -365,6 +365,18 @@ std::vector<std::string> itemview_formaction::render_html(const std::string& sou
 		}
 	}
 	return lines;
+}
+
+void itemview_formaction::set_regexmanager(regexmanager * r) {
+	rxman = r;
+	std::vector<std::string>& attrs = r->get_attrs();
+	unsigned int i=0;
+	std::string attrstr;
+	for (std::vector<std::string>::iterator it=attrs.begin();it!=attrs.end();++it,++i) {
+		attrstr.append(utils::strprintf("@style_%u_normal:%s ", i, it->c_str()));
+	}
+	std::string textview = utils::strprintf("{textview[article] style_normal[article]: style_end[styleend]:fg=blue,attr=bold %s .expand:vh offset[articleoffset]:0 richtext:1}", attrstr.c_str());
+	f->modify("article", "replace", textview);
 }
 
 }

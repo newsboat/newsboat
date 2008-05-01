@@ -20,6 +20,7 @@
 #include <exceptions.h>
 #include <keymap.h>
 #include <utils.h>
+#include <regexmanager.h>
 
 #include <iostream>
 #include <iomanip>
@@ -567,6 +568,10 @@ std::string view::ask_user(const std::string& prompt) {
 
 void view::feedlist_mark_pos_if_visible(unsigned int pos) {
 	feedlist->mark_pos_if_visible(pos);
+}
+
+void view::set_regexmanager(regexmanager * r) {
+	itemview->set_regexmanager(r);
 }
 
 

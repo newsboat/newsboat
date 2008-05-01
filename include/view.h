@@ -11,6 +11,7 @@
 #include <mutex.h>
 #include <htmlrenderer.h>
 #include <colormanager.h>
+#include <regexmanager.h>
 
 #include <stflpp.h>
 #include <filebrowser_formaction.h>
@@ -77,6 +78,8 @@ namespace newsbeuter {
 			std::string ask_user(const std::string& prompt);
 
 			void feedlist_mark_pos_if_visible(unsigned int pos);
+
+			void set_regexmanager(regexmanager * r);
 
 		protected:
 
