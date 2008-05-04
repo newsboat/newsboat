@@ -318,6 +318,9 @@ rss_feed rss_parser::parse() {
 }
 
 bool rss_parser::check_and_update_lastmodified() {
+	if (my_uri.substr(0,5) != "http:" && my_uri.substr(0,6) != "https:")
+		return true;
+
 	time_t oldlm = ch->get_lastmodified(my_uri);
 	time_t newlm = 0;
 	mrss_error_t err;
