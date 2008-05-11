@@ -125,6 +125,13 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 		case OP_RELOADURLS:
 			v->get_ctrl()->reload_urls_file();
 			break;
+		case OP_OPENINBROWSER: {
+				rss_feed * feed = v->get_ctrl()->get_feed(pos);
+				if (feed) {
+					v->open_in_browser(feed->link());
+				}
+			}
+			break;
 		case OP_RELOADALL:
 			GetLogger().log(LOG_INFO, "feedlist_formaction: reloading all feeds");
 			{
