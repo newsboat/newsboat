@@ -19,7 +19,7 @@ class listformatter {
 		~listformatter();
 		void add_line(const std::string& text, unsigned int id = UINT_MAX);
 		void add_lines(const std::vector<std::string>& lines);
-		std::string format_list(regexmanager * r = NULL);
+		std::string format_list(regexmanager * r = NULL, const std::string& location = "");
 	private:
 		std::vector<line_id_pair> lines;
 		std::string format_cache;

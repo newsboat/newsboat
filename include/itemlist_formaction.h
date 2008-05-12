@@ -4,6 +4,7 @@
 #include <formaction.h>
 #include <history.h>
 #include <mutex.h>
+#include <regexmanager.h>
 
 namespace newsbeuter {
 
@@ -45,6 +46,8 @@ class itemlist_formaction : public formaction {
 
 		virtual void recalculate_form();
 
+		void set_regexmanager(regexmanager * r);
+
 	private:
 		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
 		void set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);
@@ -71,6 +74,8 @@ class itemlist_formaction : public formaction {
 
 		bool set_filterpos;
 		unsigned int filterpos;
+
+		regexmanager * rxman;
 };
 
 }

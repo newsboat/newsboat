@@ -112,7 +112,7 @@ void itemview_formaction::prepare() {
 
 		listfmt.add_lines(lines);
 
-		f->modify("article","replace_inner",listfmt.format_list(rxman));
+		f->modify("article","replace_inner",listfmt.format_list(rxman, "article"));
 		f->set("articleoffset","0");
 
 		do_redraw = false;
@@ -369,7 +369,7 @@ std::vector<std::string> itemview_formaction::render_html(const std::string& sou
 
 void itemview_formaction::set_regexmanager(regexmanager * r) {
 	rxman = r;
-	std::vector<std::string>& attrs = r->get_attrs();
+	std::vector<std::string>& attrs = r->get_attrs("article");
 	unsigned int i=0;
 	std::string attrstr;
 	for (std::vector<std::string>::iterator it=attrs.begin();it!=attrs.end();++it,++i) {

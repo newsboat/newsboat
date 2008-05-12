@@ -572,6 +572,7 @@ void view::feedlist_mark_pos_if_visible(unsigned int pos) {
 
 void view::set_regexmanager(regexmanager * r) {
 	itemview->set_regexmanager(r);
+	itemlist->set_regexmanager(r);
 }
 
 

@@ -6,37 +6,47 @@
 namespace newsbeuter {
 
 regexmanager::regexmanager() {
-
+	// this creates the entries in the map. we need them there to have the "all" location work.
+	locations["article"];
+	locations["articlelist"];
 }
 
 regexmanager::~regexmanager() {
-	for (std::vector<regex_t *>::iterator it=regexes.begin();it!=regexes.end();++it) {
-		delete *it;
+	for (std::map<std::string, rc_pair>::iterator jt=locations.begin();jt!=locations.end();jt++) {
+		std::vector<regex_t *>& regexes(jt->second.first);
+		for (std::vector<regex_t *>::iterator it=regexes.begin();it!=regexes.end();++it) {
+			delete *it;
+		}
 	}
 }
 
 action_handler_status regexmanager::handle_action(const std::string& action, const std::vector<std::string>& params) {
 	if (action == "highlight") {
-		if (params.size() < 2)
+		if (params.size() < 3)
 			return AHS_TOO_FEW_PARAMS;
+
+		std::string location = params[0];
+		if (location != "all" && location != "article" && location != "articlelist")
+			return AHS_INVALID_PARAMS;
+
 		regex_t * rx = new regex_t;
-		if (regcomp(rx, params[0].c_str(), REG_EXTENDED | REG_ICASE) != 0) {
+		if (regcomp(rx, params[1].c_str(), REG_EXTENDED | REG_ICASE) != 0) {
 			delete rx;
 			return AHS_INVALID_PARAMS;
 		}
 		std::string colorstr;
-		if (params[1] != "default") {
+		if (params[2] != "default") {
 			colorstr.append("fg=");
-			colorstr.append(params[1]);
+			colorstr.append(params[2]);
 		}
 		if (params.size() > 2) {
-			if (params[2] != "default") {
+			if (params[3] != "default") {
 				if (colorstr.length() > 0)
 					colorstr.append(",");
 				colorstr.append("bg=");
-				colorstr.append(params[2]);
+				colorstr.append(params[3]);
 			}
-			for (unsigned int i=3;i<params.size();++i) {
+			for (unsigned int i=4;i<params.size();++i) {
 				if (params[i] != "default") {
 					if (colorstr.length() > 0)
 						colorstr.append(",");
@@ -45,15 +55,27 @@ action_handler_status regexmanager::handle_action(const std::string& action, con
 				}
 			}
 		}
-		GetLogger().log(LOG_DEBUG, "regexmanager::handle_action: adding rx = %s colorstr = %s", params[0].c_str(), colorstr.c_str());
-		regexes.push_back(rx);
-		colors.push_back(colorstr);
+		if (location != "all") {
+			GetLogger().log(LOG_DEBUG, "regexmanager::handle_action: adding rx = %s colorstr = %s to location %s",
+				params[1].c_str(), colorstr.c_str(), location.c_str());
+			locations[location].first.push_back(rx);
+			locations[location].second.push_back(colorstr);
+		} else {
+			for (std::map<std::string, rc_pair>::iterator it=locations.begin();it!=locations.end();it++) {
+				GetLogger().log(LOG_DEBUG, "regexmanager::handle_action: adding rx = %s colorstr = %s to location %s",
+					params[1].c_str(), colorstr.c_str(), it->first.c_str());
+				it->second.first.push_back(rx);
+				it->second.second.push_back(colorstr);
+			}
+		}
 		return AHS_OK;
 	} else
 		return AHS_INVALID_COMMAND;
 }
 
-void regexmanager::quote_and_highlight(std::string& str) {
+void regexmanager::quote_and_highlight(std::string& str, const std::string& location) {
+	std::vector<regex_t *>& regexes = locations[location].first;
+
 	unsigned int len = str.length();
 	for (unsigned int i=0;i<len;++i) {
 		if (str[i] == '<') {

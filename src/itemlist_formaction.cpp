@@ -16,7 +16,7 @@ namespace newsbeuter {
 
 itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
 	: formaction(vv,formstr), feed(0), apply_filter(false), update_visible_items(true), search_dummy_feed(v->get_ctrl()->get_cache()),
-		set_filterpos(false), filterpos(0) {
+		set_filterpos(false), filterpos(0), rxman(0) {
 }
 
 itemlist_formaction::~itemlist_formaction() { }
@@ -455,7 +455,7 @@ void itemlist_formaction::prepare() {
 			listfmt.add_line(fmt.do_format(itemlist_format, width), it->second);
 		}
 
-		f->modify("items","replace_inner", listfmt.format_list());
+		f->modify("items","replace_inner", listfmt.format_list(rxman, "articlelist"));
 		
 		set_head(feed->title(),feed->unread_item_count(),feed->items().size(), feed->rssurl());
 
@@ -644,6 +644,19 @@ void itemlist_formaction::save_filterpos() {
 		filterpos = visible_items[i].second;
 		set_filterpos = true;
 	}
+}
+
+void itemlist_formaction::set_regexmanager(regexmanager * r) {
+	rxman = r;
+	std::vector<std::string>& attrs = r->get_attrs("articlelist");
+	unsigned int i=0;
+	std::string attrstr;
+	for (std::vector<std::string>::iterator it=attrs.begin();it!=attrs.end();++it,++i) {
+		attrstr.append(utils::strprintf("@style_%u_normal:%s ", i, it->c_str()));
+		attrstr.append(utils::strprintf("@style_%u_focus:%s ", i, it->c_str()));
+	}
+	std::string textview = utils::strprintf("{list[items] .expand:vh style_normal[listnormal]: style_focus[listfocus]:fg=yellow,bg=blue,attr=bold pos_name[itemposname]: pos[itempos]:0 %s richtext:1}", attrstr.c_str());
+	f->modify("items", "replace", textview);
 }
 
 

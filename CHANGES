@@ -1,7 +1,7 @@
 Changes for newsbeuter:
 
 1.0:
-	...
+	Added highlighting of regular expressions support
 
 0.9 (2008-05-01):
 	Improved locking to allow multiple newsbeuter instances (one instance per cache file)
