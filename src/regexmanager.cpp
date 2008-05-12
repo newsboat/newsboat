@@ -16,7 +16,7 @@ regexmanager::~regexmanager() {
 }
 
 action_handler_status regexmanager::handle_action(const std::string& action, const std::vector<std::string>& params) {
-	if (action == "highlight-pattern") {
+	if (action == "highlight") {
 		if (params.size() < 2)
 			return AHS_TOO_FEW_PARAMS;
 		regex_t * rx = new regex_t;

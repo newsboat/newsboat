@@ -231,7 +231,7 @@ void controller::run(int argc, char * argv[]) {
 
 	regexmanager rxman;
 
-	cfgparser.register_handler("highlight-pattern", &rxman);
+	cfgparser.register_handler("highlight", &rxman);
 
 	try {
 		cfgparser.parse("/etc/" PROGRAM_NAME "/config");
