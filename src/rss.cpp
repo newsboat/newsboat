@@ -473,6 +473,8 @@ time_t rss_parser::parse_date(const std::string& datestr) {
 	
 	int year;
 	is >> year;
+	if (year < 100)
+		year += 2000;
 	stm.tm_year = year - 1900;
 	
 	is >> time;
