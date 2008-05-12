@@ -1,8 +1,9 @@
 Changes for newsbeuter:
 
-0.9.1:
+0.9.1 (2008-05-12):
 	Fixed issue with filter feeds.
 	Added possibility to open a feed's link by pressing the open-in-browser key in feed list.
+	Fixed issue with RFC-822 date parsing where the year only had 2 digits.
 
 0.9 (2008-05-01):
 	Improved locking to allow multiple newsbeuter instances (one instance per cache file)
