@@ -9,6 +9,7 @@ regexmanager::regexmanager() {
 	// this creates the entries in the map. we need them there to have the "all" location work.
 	locations["article"];
 	locations["articlelist"];
+	locations["feedlist"];
 }
 
 regexmanager::~regexmanager() {
@@ -28,7 +29,7 @@ action_handler_status regexmanager::handle_action(const std::string& action, con
 			return AHS_TOO_FEW_PARAMS;
 
 		std::string location = params[0];
-		if (location != "all" && location != "article" && location != "articlelist")
+		if (location != "all" && location != "article" && location != "articlelist" && location != "feedlist")
 			return AHS_INVALID_PARAMS;
 
 		regex_t * rx = new regex_t;

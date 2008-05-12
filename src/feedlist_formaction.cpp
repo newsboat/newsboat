@@ -22,7 +22,7 @@ namespace newsbeuter {
 feedlist_formaction::feedlist_formaction(view * vv, std::string formstr) 
 	: formaction(vv,formstr), zero_feedpos(false), feeds_shown(0),
 		auto_open(false), quit(false), apply_filter(false), search_dummy_feed(v->get_ctrl()->get_cache()),
-		filterpos(0), set_filterpos(false) {
+		filterpos(0), set_filterpos(false), rxman(0) {
 	assert(true==m.parse(FILTER_UNREAD_FEEDS));
 }
 
@@ -357,7 +357,7 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 		listfmt.add_line(format, it->second);
 	}
 
-	f->modify("feeds","replace_inner",listfmt.format_list());
+	f->modify("feeds","replace_inner",listfmt.format_list(rxman, "feedlist"));
 
 	std::string title_format = v->get_cfg()->get_configvalue("feedlist-title-format");
 
@@ -588,5 +588,20 @@ void feedlist_formaction::save_filterpos() {
 		set_filterpos = true;
 	}
 }
+
+void feedlist_formaction::set_regexmanager(regexmanager * r) {
+	rxman = r;
+	std::vector<std::string>& attrs = r->get_attrs("feedlist");
+	unsigned int i=0;
+	std::string attrstr;
+	for (std::vector<std::string>::iterator it=attrs.begin();it!=attrs.end();++it,++i) {
+		attrstr.append(utils::strprintf("@style_%u_normal:%s ", i, it->c_str()));
+		attrstr.append(utils::strprintf("@style_%u_focus:%s ", i, it->c_str()));
+	}
+	std::string textview = utils::strprintf("{!list[feeds] .expand:vh style_normal[listnormal]: style_focus[listfocus]:fg=yellow,bg=blue,attr=bold pos_name[feedposname]: pos[feedpos]:0 %s richtext:1}", attrstr.c_str());
+	f->modify("feeds", "replace", textview);
+}
+
+
 
 }

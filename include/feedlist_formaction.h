@@ -4,6 +4,7 @@
 #include <formaction.h>
 #include <matcher.h>
 #include <history.h>
+#include <regexmanager.h>
 
 namespace newsbeuter {
 
@@ -32,6 +33,7 @@ class feedlist_formaction : public formaction {
 
 		void mark_pos_if_visible(unsigned int pos);
 
+		void set_regexmanager(regexmanager * r);
 
 	private:
 
@@ -59,6 +61,8 @@ class feedlist_formaction : public formaction {
 
 		unsigned int filterpos;
 		bool set_filterpos;
+
+		regexmanager * rxman;
 };
 
 }
