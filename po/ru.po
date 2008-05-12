@@ -1,13 +1,13 @@
 # Russian translation for newsbeuter.
-# Sergey Dryabzhinsky <sergey.dryabzhinsky@gmail.com>, 2007.
+# Sergey Dryabzhinsky <sergey.dryabzhinsky@gmail.com>, 2008.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: newsbeuter 0.8\n"
+"Project-Id-Version: newsbeuter 0.9\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-21 08:21+0200\n"
-"PO-Revision-Date: 2008-03-03 21:30+0300\n"
+"PO-Revision-Date: 2008-05-01 18:30+0400\n"
 "Last-Translator: Sergey Dryabzhinsky <sergey.dryabzhinsky@gmail.com>\n"
 "Language-Team: ru <sergey.dryabzhinsky@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -20,10 +20,10 @@ msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Ошибка: попытка отрыть файл кэша `%s' завершилась неудачей: %s"
 
 #: src/configcontainer.cpp:42
-#, c-format
+#, fuzzy, c-format
 msgid "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
-"newsbeuter: обновление завершено, %f не прочитанных лент (всего %n заметок "
+"newsbeuter: обновление завершено, %u не прочитанных лент (всего %u заметок "
 "непрочитано)"
 
 #: src/configcontainer.cpp:58
@@ -205,11 +205,11 @@ msgstr "%sЗагружается %s..."
 #: src/controller.cpp:515 src/controller.cpp:517
 #, c-format
 msgid "Error while retrieving %s: %s"
-msgstr ""
+msgstr "Ошибка во время получения %s: %s"
 
 #: src/controller.cpp:520
 msgid "Error: invalid feed!"
-msgstr "Ошибка во время получения %s: %s"
+msgstr "Ошибка: неправильная лента!"
 
 #: src/controller.cpp:526
 msgid "invalid feed index (bug)"
@@ -376,11 +376,11 @@ msgstr "Вы правда хотите выйти (y:Да n:Нет)? "
 
 #: src/feedlist_formaction.cpp:271 src/filebrowser_formaction.cpp:101
 msgid "yn"
-msgstr ""
+msgstr "yn"
 
 #: src/feedlist_formaction.cpp:271
 msgid "y"
-msgstr ""
+msgstr "y"
 
 #: src/feedlist_formaction.cpp:373 src/help_formaction.cpp:67
 #: src/itemlist_formaction.cpp:564 src/itemview_formaction.cpp:251
@@ -451,7 +451,7 @@ msgstr "Вы правда хотите перезаписать `%s' (y:Да n:�
 
 #: src/filebrowser_formaction.cpp:101
 msgid "n"
-msgstr ""
+msgstr "n"
 
 #: src/filebrowser_formaction.cpp:157
 msgid "File: "
@@ -806,7 +806,7 @@ msgstr "Сохранить заметку"
 #: src/keymap.cpp:60
 #, fuzzy
 msgid "Purge deleted articles"
-msgstr "Перейти к следующей непрочитанной заметке"
+msgstr "Открыть ленту/заметку"
 
 #: src/pb_controller.cpp:166
 msgid "Cleaning up queue..."
