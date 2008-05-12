@@ -14,8 +14,10 @@ regexmanager::regexmanager() {
 regexmanager::~regexmanager() {
 	for (std::map<std::string, rc_pair>::iterator jt=locations.begin();jt!=locations.end();jt++) {
 		std::vector<regex_t *>& regexes(jt->second.first);
-		for (std::vector<regex_t *>::iterator it=regexes.begin();it!=regexes.end();++it) {
-			delete *it;
+		if (regexes.size() > 0) {
+			for (std::vector<regex_t *>::iterator it=regexes.begin();it!=regexes.end();++it) {
+				delete *it;
+			}
 		}
 	}
 }
@@ -61,9 +63,13 @@ action_handler_status regexmanager::handle_action(const std::string& action, con
 			locations[location].first.push_back(rx);
 			locations[location].second.push_back(colorstr);
 		} else {
+			delete rx;
 			for (std::map<std::string, rc_pair>::iterator it=locations.begin();it!=locations.end();it++) {
 				GetLogger().log(LOG_DEBUG, "regexmanager::handle_action: adding rx = %s colorstr = %s to location %s",
 					params[1].c_str(), colorstr.c_str(), it->first.c_str());
+				rx = new regex_t;
+ 				// we need to create a new one for each push_back, otherwise we'd have double frees.
+				regcomp(rx, params[1].c_str(), REG_EXTENDED | REG_ICASE);
 				it->second.first.push_back(rx);
 				it->second.second.push_back(colorstr);
 			}
