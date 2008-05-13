@@ -243,6 +243,7 @@ void controller::run(int argc, char * argv[]) {
 		return;	
 	}
 
+	v->set_regexmanager(&rxman);
 
 	if (colorman->colors_loaded()) {
 		v->set_colors(*colorman);
@@ -398,8 +399,6 @@ void controller::run(int argc, char * argv[]) {
 	v->set_config_container(cfg);
 	v->set_keymap(&keys);
 	v->set_tags(tags);
-
-	v->set_regexmanager(&rxman);
 
 	// run the view
 	v->run();
