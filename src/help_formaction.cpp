@@ -9,7 +9,7 @@
 namespace newsbeuter {
 
 help_formaction::help_formaction(view * vv, std::string formstr)
-	: formaction(vv, formstr), quit(false) { 
+	: formaction(vv, formstr), quit(false), apply_search(false) { 
 }
 
 help_formaction::~help_formaction() { }
@@ -18,6 +18,16 @@ void help_formaction::process_operation(operation op, bool /* automatic */, std:
 	switch (op) {
 		case OP_QUIT:
 			quit = true;
+			break;
+		case OP_SEARCH: {
+				std::vector<qna_pair> qna;
+				qna.push_back(qna_pair(_("Search for: "), ""));
+				this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
+			}
+			break;
+		case OP_CLEARFILTER:
+			apply_search = false;
+			do_redraw = true;
 			break;
 		default:
 			break;
@@ -45,10 +55,14 @@ void help_formaction::prepare() {
 		listformatter listfmt;
 		
 		for (std::vector<keymap_desc>::iterator it=descs.begin();it!=descs.end();++it) {
-			unsigned int how_often = 3 - (it->cmd.length() / 8);
-			char tabs[] = "\t\t\t";
-			tabs[how_often] = '\0';
-			listfmt.add_line(utils::strprintf("%s\t%s%s%s", it->key.c_str(), it->cmd.c_str(), tabs, it->desc.c_str()));
+			if (!apply_search || strcasestr(it->key.c_str(), searchphrase.c_str())!=NULL || 
+					strcasestr(it->cmd.c_str(), searchphrase.c_str())!=NULL ||
+					strcasestr(it->desc.c_str(), searchphrase.c_str())!=NULL) {
+				unsigned int how_often = 3 - (it->cmd.length() / 8);
+				char tabs[] = "\t\t\t";
+				tabs[how_often] = '\0';
+				listfmt.add_line(utils::strprintf("%s\t%s%s%s", it->key.c_str(), it->cmd.c_str(), tabs, it->desc.c_str()));
+			}
 		}
 
 		f->modify("helptext","replace_inner", listfmt.format_list());
@@ -65,9 +79,17 @@ void help_formaction::init() {
 keymap_hint_entry * help_formaction::get_keymap_hint() {
 	static keymap_hint_entry hints[] = {
 		{ OP_QUIT, _("Quit") },
+		{ OP_SEARCH, _("Search") },
+		{ OP_CLEARFILTER, _("Clear") },
 		{ OP_NIL, NULL }
 	};
 	return hints;
+}
+
+void help_formaction::finished_qna(operation op) {
+	searchphrase = qna_responses[0];
+	apply_search = true;
+	do_redraw = true;
 }
 
 }
