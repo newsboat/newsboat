@@ -640,6 +640,30 @@ Examples:
 	articlelist-format  "%4i %f %D   %?T?|%-17T|  ?%t"
 	notify-format       "%d new articles (%n unread articles, %f unread feeds)"
 
+Highlighting Text
+~~~~~~~~~~~~~~~~
+
+Since version 1.0, newsbeuter supports the highlighting of text in the feed
+list, the article list and the article view, using regular expressions to
+describe patterns to be highlighted. The command syntax goes like this:
+
+	highlight <target> <regex> <fgcolor> [<bgcolor> [<attribute> ...]]
+
+Valid values for <target> are "feedlist", "articlelist", "article" and "all".
+When specifying "all", the matching will be done in all three views. The
+<regex> must be regular expression, which will be matched case-insensitive
+against the text. <fgcolor> and <bgcolor> specify the foreground color resp.
+the background color of the matches. You can also specify 0 or more attributes.
+You can find a list of valid colors and attributes in the "Configuring Colors"
+section.
+
+Examples for possible highlighting configurations are:
+
+	highlight all "newsbeuter" red
+	highlight article "^(Feed|Title|Author|Link|Date):" default default underline
+	highlight feedlist "http?s://[^ ]+" yellow red bold
+
+
 Podcast Support
 ~~~~~~~~~~~~~~~
 

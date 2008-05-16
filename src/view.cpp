@@ -426,6 +426,9 @@ bool view::get_previous_unread() {
 		itemview->set_feed(itemlist->get_feed());
 		itemview->set_guid(itemlist->get_guid());
 		return true;
+	} else if (cfg->get_configvalue_as_bool("goto-next-feed")==false) {
+		GetLogger().log(LOG_DEBUG, "view::get_previous_unread: goto-next-feed = false");
+		show_error(_("No unread items."));
 	} else if (feedlist->jump_to_previous_unread_feed(feedpos)) {
 		GetLogger().log(LOG_DEBUG, "view::get_previous_unread: found feed with unread articles");
 		itemlist->set_feed(feedlist->get_feed());
@@ -472,6 +475,9 @@ bool view::get_next_unread() {
 		itemview->set_feed(itemlist->get_feed());
 		itemview->set_guid(itemlist->get_guid());
 		return true;
+	} else if (cfg->get_configvalue_as_bool("goto-next-feed")==false) {
+		GetLogger().log(LOG_DEBUG, "view::get_next_unread: goto-next-feed = false");
+		show_error(_("No unread items."));
 	} else if (feedlist->jump_to_next_unread_feed(feedpos)) {
 		GetLogger().log(LOG_DEBUG, "view::get_next_unread: found feed with unread articles");
 		itemlist->set_feed(feedlist->get_feed());

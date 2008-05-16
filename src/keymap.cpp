@@ -31,7 +31,7 @@ static op_desc opdescs[] = {
 	{ OP_HELP, "help", "?", _("Open help dialog"), KM_BOTH },
 	{ OP_TOGGLESOURCEVIEW, "toggle-source-view", "^U", _("Toggle source view"), KM_NEWSBEUTER },
 	{ OP_TOGGLEITEMREAD, "toggle-article-read", "N", _("Toggle read status for article"), KM_NEWSBEUTER },
-	{ OP_TOGGLESHOWREAD, "toggle-show-read-feeds", "l", _("Toggle show read feeds"), KM_NEWSBEUTER },
+	{ OP_TOGGLESHOWREAD, "toggle-show-read-feeds", "l", _("Toggle show read feeds/articles"), KM_NEWSBEUTER },
 	{ OP_SHOWURLS, "show-urls", "u", _("Show URLs in current article"), KM_NEWSBEUTER },
 	{ OP_CLEARTAG, "clear-tag", "^T", _("Clear current tag"), KM_NEWSBEUTER },
 	{ OP_SETTAG, "set-tag", "t", _("Select tag"), KM_NEWSBEUTER },

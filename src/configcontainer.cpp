@@ -53,6 +53,9 @@ configcontainer::configcontainer()
 	config_data["always-display-description"] = configdata("false", configdata::BOOL);
 	config_data["reload-only-visible-feeds"] = configdata("false", configdata::BOOL);
 	config_data["article-sort-order"] = configdata("date", configdata::STR);
+	config_data["show-read-articles"] = configdata("yes", configdata::BOOL);
+	config_data["goto-next-feed"] = configdata("yes", configdata::BOOL);
+
 
 	/* undocumented: */
 	config_data["feedlist-title-format"] = configdata(_("%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"), configdata::STR);

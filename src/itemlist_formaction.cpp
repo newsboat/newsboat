@@ -12,11 +12,14 @@
 
 #include <langinfo.h>
 
+#define FILTER_UNREAD_ITEMS "unread != \"no\""
+
 namespace newsbeuter {
 
 itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
 	: formaction(vv,formstr), feed(0), apply_filter(false), update_visible_items(true), search_dummy_feed(v->get_ctrl()->get_cache()),
 		set_filterpos(false), filterpos(0), rxman(0) {
+	assert(true==m.parse(FILTER_UNREAD_ITEMS));
 }
 
 itemlist_formaction::~itemlist_formaction() { }
@@ -197,6 +200,20 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			} catch (const dbexception& e) {
 				v->show_error(utils::strprintf(_("Error: couldn't mark feed read: %s"), e.what()));
 			}
+			break;
+		case OP_TOGGLESHOWREAD:
+			m.parse(FILTER_UNREAD_ITEMS);
+			GetLogger().log(LOG_DEBUG, "itemlist_formaction: toggling show-read-articles");
+			if (v->get_cfg()->get_configvalue_as_bool("show-read-articles")) {
+				v->get_cfg()->set_configvalue("show-read-articles", "no");
+				apply_filter = true;
+			} else {
+				v->get_cfg()->set_configvalue("show-read-articles", "yes");
+				apply_filter = false;
+			}
+			save_filterpos();
+			update_visible_items = true;
+			do_redraw = true;
 			break;
 		case OP_SEARCH: {
 				std::vector<qna_pair> qna;
@@ -479,6 +496,8 @@ void itemlist_formaction::init() {
 	f->set("msg","");
 	do_redraw = true;
 	set_keymap_hints();
+	apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-articles"));
+	update_visible_items = true;
 	f->run(-3); // FRUN - compute all widget dimensions
 }
 
