@@ -192,8 +192,10 @@ namespace newsbeuter {
 			virtual ~rss_ignores();
 			virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
 			bool matches(rss_item* item);
+			bool matches_lastmodified(const std::string& url);
 		private:
 			std::vector<feedurl_expr_pair> ignores;
+			std::vector<std::string> ignores_lastmodified;
 	};
 
 }

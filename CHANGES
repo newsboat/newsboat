@@ -1,7 +1,11 @@
 Changes for newsbeuter:
 
 1.0:
-	Added support for highlighting of regular expressions
+	Implemented support for highlighting of regular expressions
+	Implemented search function in help dialog
+	Implemented "show-read-articles" configuration option to toggle displaying of read articles
+	Implemented "always-download" configuration option to configure a list of feed URLs for which newsbeuter ignores the Last-Modified timestamp
+	Added read progress display in article view
 
 0.9.1 (2008-05-12):
 	Fixed issue with filter feeds.

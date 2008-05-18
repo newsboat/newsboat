@@ -162,7 +162,11 @@ void view::run() {
 
 			// we then receive the event and ignore timeouts.
 			const char * event = fa->get_form()->run(0);
-			if (!event || strcmp(event,"TIMEOUT")==0) continue;
+			if (!event || strcmp(event,"TIMEOUT")==0) {
+				if (fa->id() == "articleview")
+					itemview->update_percent();
+				continue;
+			}
 
 			GetLogger().log(LOG_DEBUG, "view::run: event = %s", event);
 

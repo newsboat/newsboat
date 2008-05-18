@@ -321,6 +321,11 @@ bool rss_parser::check_and_update_lastmodified() {
 	if (my_uri.substr(0,5) != "http:" && my_uri.substr(0,6) != "https:")
 		return true;
 
+	if (ign && ign->matches_lastmodified(my_uri)) {
+		GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: found %s on list of URLs that are always downloaded", my_uri.c_str());
+		return true;
+	}
+
 	time_t oldlm = ch->get_lastmodified(my_uri);
 	time_t newlm = 0;
 	mrss_error_t err;
@@ -705,6 +710,11 @@ action_handler_status rss_ignores::handle_action(const std::string& action, cons
 		} else {
 			return AHS_TOO_FEW_PARAMS;
 		}
+	} else if (action == "always-download") {
+		for (std::vector<std::string>::const_iterator it=params.begin();it!=params.end();++it) {
+			ignores_lastmodified.push_back(*it);
+		}
+		return AHS_OK;
 	}
 	return AHS_INVALID_COMMAND;
 }
@@ -724,6 +734,14 @@ bool rss_ignores::matches(rss_item* item) {
 				return true;
 			}
 		}
+	}
+	return false;
+}
+
+bool rss_ignores::matches_lastmodified(const std::string& url) {
+	for (std::vector<std::string>::iterator it=ignores_lastmodified.begin();it!=ignores_lastmodified.end();++it) {
+		if (url == *it)
+			return true;
 	}
 	return false;
 }

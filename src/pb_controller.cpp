@@ -133,6 +133,7 @@ void pb_controller::run(int argc, char * argv[]) {
 	null_config_action_handler null_cah;
 	cfgparser.register_handler("macro", &null_cah);
 	cfgparser.register_handler("ignore-article", &null_cah);
+	cfgparser.register_handler("always-download", &null_cah);
 	cfgparser.register_handler("define-filter", &null_cah);
 #if HAVE_RUBY
 	cfgparser.register_handler("load", &null_cah);

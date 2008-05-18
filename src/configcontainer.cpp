@@ -55,6 +55,7 @@ configcontainer::configcontainer()
 	config_data["article-sort-order"] = configdata("date", configdata::STR);
 	config_data["show-read-articles"] = configdata("yes", configdata::BOOL);
 	config_data["goto-next-feed"] = configdata("yes", configdata::BOOL);
+	config_data["display-article-progress"] = configdata("yes", configdata::BOOL);
 
 
 	/* undocumented: */

@@ -226,6 +226,7 @@ void controller::run(int argc, char * argv[]) {
 	cfgparser.register_handler("macro", &keys);
 
 	cfgparser.register_handler("ignore-article",&ign);
+	cfgparser.register_handler("always-download",&ign);
 
 	cfgparser.register_handler("define-filter",&filters);
 

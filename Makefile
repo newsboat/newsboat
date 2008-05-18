@@ -112,9 +112,6 @@ filter/Scanner.cpp filter/Parser.cpp: filter/filter.atg filter/Scanner.frame fil
 	$(STFLCONV) $< > $@
 
 
-testpp: src/xmlpullparser.cpp testpp.cpp
-	$(CXX) -I./include -pg -g -D_TESTPP src/xmlpullparser.cpp testpp.cpp -o testpp
-
 clean-newsbeuter:
 	$(RM) $(NEWSBEUTER) $(NEWSBEUTER_OBJS)
 

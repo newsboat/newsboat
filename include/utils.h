@@ -47,6 +47,8 @@ class utils {
 		static std::string get_useragent(configcontainer * cfgcont);
 
 		static size_t strwidth(const std::string& s);
+
+		static inline unsigned int max(unsigned int a, unsigned int b) { return (a > b) ? a : b; }
 };
 
 class scope_measure {

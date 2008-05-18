@@ -100,10 +100,10 @@ following formaction-derived classes exist:
 - help_formaction
 - selecttag_formaction
 
-class xmlpullparser*: although called xmlpullparser, it parses virtually
-everything that vaguely looks like XML/HTML tags, even when totally invalid, and
-provides the parsing result as a continuous stream of tokens (tags and text). It
-is solely used by the htmlrenderer class.
+*class tagsouppullparser*: Parses virtually everything that vaguely looks like
+XML/HTML tags, even when totally invalid, and provides the parsing result as a
+continuous stream of tokens (tags and text). It is solely used by the
+htmlrenderer class.
 
 Interaction
 ~~~~~~~~~~~

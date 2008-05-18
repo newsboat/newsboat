@@ -12,7 +12,7 @@
 namespace newsbeuter {
 
 itemview_formaction::itemview_formaction(view * vv, std::string formstr)
-	: formaction(vv,formstr), feed(0), show_source(false), quit(false), rxman(0) { 
+	: formaction(vv,formstr), feed(0), show_source(false), quit(false), rxman(0), num_lines(0) { 
 }
 
 itemview_formaction::~itemview_formaction() { }
@@ -23,6 +23,13 @@ void itemview_formaction::init() {
 	do_redraw = true;
 	quit = false;
 	links.erase(links.begin(), links.end());
+	num_lines = 0;
+	if (!v->get_cfg()->get_configvalue_as_bool("display-article-progress")) {
+		f->set("percentwidth", "0");
+	} else {
+		f->set("percentwidth", utils::to_s(utils::max(6, utils::max(strlen(_("Top")), strlen(_("Bottom"))))));
+		update_percent();
+	}
 	set_keymap_hints();
 }
 
@@ -111,6 +118,8 @@ void itemview_formaction::prepare() {
 		}
 
 		listfmt.add_lines(lines);
+
+		num_lines = listfmt.get_lines_count();
 
 		f->modify("article","replace_inner",listfmt.format_list(rxman, "article"));
 		f->set("articleoffset","0");
@@ -377,6 +386,30 @@ void itemview_formaction::set_regexmanager(regexmanager * r) {
 	}
 	std::string textview = utils::strprintf("{textview[article] style_normal[article]: style_end[styleend]:fg=blue,attr=bold %s .expand:vh offset[articleoffset]:0 richtext:1}", attrstr.c_str());
 	f->modify("article", "replace", textview);
+}
+
+void itemview_formaction::update_percent() {
+	if (v->get_cfg()->get_configvalue_as_bool("display-article-progress")) {
+		std::istringstream is(f->get("articleoffset"));
+		unsigned int offset = 0;
+		unsigned int percent = 0;
+		is >> offset;
+
+		if (num_lines > 0)
+			percent = (100 * (offset + 1)) / num_lines;
+		else
+			percent = 0;
+
+		GetLogger().log(LOG_DEBUG, "itemview_formaction::update_percent: offset = %u num_lines = %u percent = %u", offset, num_lines, percent);
+
+		if (offset == 0 || percent == 0) {
+			f->set("percent", _("Top"));
+		} else if (offset == (num_lines - 1)) {
+			f->set("percent", _("Bottom"));
+		} else {
+			f->set("percent", utils::strprintf("%3u %% ", percent));
+		}
+	}
 }
 
 }

@@ -27,6 +27,8 @@ class itemview_formaction : public formaction {
 
 		void set_regexmanager(regexmanager * r);
 
+		void update_percent();
+
 	private:
 		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
 		void set_head(const std::string& s);
@@ -39,6 +41,7 @@ class itemview_formaction : public formaction {
 		std::vector<linkpair> links;
 		bool quit;
 		regexmanager * rxman;
+		unsigned int num_lines;
 };
 
 }
