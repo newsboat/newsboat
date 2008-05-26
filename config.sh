@@ -43,6 +43,7 @@ check_custom() {
 
 fail() {
     pkgname=$1
+		rm -f config.mk
 		echo ""
 		echo "You need package ${pkgname} in order to compile this program."
 		echo "Please make sure it is installed."
