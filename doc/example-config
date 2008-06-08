@@ -43,7 +43,7 @@
 # bookmark-cmd ""
 
 ## configuration option: browser
-## description: Set the browser command to use when opening an article in the browser.
+## description: Set the browser command to use when opening an article in the browser. If <browser-command> contains %u, it will be used as complete commandline and %u will be replaced with the URL that shall be opened.
 ## parameter syntax: <browser-command>
 # browser lynx
 
@@ -146,6 +146,11 @@
 ## description: The default path where articles shall be saved to. If an invalid path is specified, the current directory is used.
 ## parameter syntax: <path>
 # save-path ~/
+
+## configuration option: show-keymap-hint
+## description: If no, then the keymap hints on the bottom of screen will not be displayed.
+## parameter syntax: [yes/no]
+# show-keymap-hint yes
 
 ## configuration option: show-read-feeds
 ## description: If yes, then all feeds, including those without unread articles, are listed. If no, then only feeds with one or more unread articles are list.
