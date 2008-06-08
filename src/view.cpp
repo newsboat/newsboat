@@ -5,6 +5,7 @@
 #include <filebrowser.h>
 #include <urlview.h>
 #include <selecttag.h>
+#include <formatstring.h>
 
 #include <formaction.h>
 #include <feedlist_formaction.h>
@@ -264,13 +265,23 @@ void view::open_in_browser(const std::string& url) {
 	formaction_stack.push_front(NULL); // we don't want a thread to write over the browser
 	std::string cmdline;
 	std::string browser = cfg->get_configvalue("browser");
-	if (browser != "")
-		cmdline.append(browser);
-	else
-		cmdline.append("lynx");
-	cmdline.append(" '");
-	cmdline.append(url);
-	cmdline.append("'");
+	if (browser.find("%u") != std::string::npos) {
+		fmtstr_formatter fmt;
+		std::string newurl;
+		newurl = utils::replace_all(url, "'", "\\'");
+		newurl.insert(0, "'");
+		newurl.append("'");
+		fmt.register_fmt('u', newurl);
+		cmdline = fmt.do_format(browser, 0);
+	} else {
+		if (browser != "")
+			cmdline.append(browser);
+		else
+			cmdline.append("lynx");
+		cmdline.append(" '");
+		cmdline.append(url);
+		cmdline.append("'");
+	}
 	stfl::reset();
 	GetLogger().log(LOG_DEBUG, "view::open_in_browser: running `%s'", cmdline.c_str());
 	::system(cmdline.c_str());
