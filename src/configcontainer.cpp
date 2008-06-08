@@ -56,6 +56,7 @@ configcontainer::configcontainer()
 	config_data["show-read-articles"] = configdata("yes", configdata::BOOL);
 	config_data["goto-next-feed"] = configdata("yes", configdata::BOOL);
 	config_data["display-article-progress"] = configdata("yes", configdata::BOOL);
+	config_data["show-keymap-hint"] = configdata("yes", configdata::BOOL);
 
 
 	/* undocumented: */

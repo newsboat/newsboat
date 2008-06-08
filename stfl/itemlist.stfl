@@ -14,9 +14,12 @@ vbox
     style_focus[listfocus]:fg=yellow,bg=blue,attr=bold
     pos_name[itemposname]:
     pos[itempos]:0
-  label#info
-    text[help]:"q:Quit ENTER:Open s:Save n:Next Unread A:Mark All Read"
-    .expand:h
+  vbox
+    .expand:0
+    .display[showhint]:1
+    label#info
+      text[help]:"q:Quit ENTER:Open s:Save n:Next Unread A:Mark All Read"
+      .expand:h
   hbox[lastline]
     .expand:0
     label[msglabel]

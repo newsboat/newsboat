@@ -14,9 +14,12 @@ vbox
     .expand:vh
     pos_name[feedposname]:
     pos[feedpos]:0
-  label#info
-    text[help]:"q:Quit ENTER:Open Feed"
-    .expand:h
+  vbox
+    .expand:0
+    .display[showhint]:1
+    label#info
+      text[help]:"q:Quit ENTER:Open Feed"
+      .expand:h
   hbox[lastline]
     .expand:0
     label[msglabel]

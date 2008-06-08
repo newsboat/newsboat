@@ -14,9 +14,12 @@ vbox
     .expand:vh
     pos_name[dlposname]:
     pos[dlpos]:0
-  label#info
-    text[help]:"q:Quit d:Download c:Cancel D:Delete P:Purge Finished"
-    .expand:h
+  vbox
+    .expand:0
+    .display[showhint]:1
+    label#info
+      text[help]:"q:Quit d:Download c:Cancel D:Delete P:Purge Finished"
+      .expand:h
   label
     text[msg]:""
     .expand:h

@@ -14,15 +14,18 @@ vbox
     .expand:vh
     offset[articleoffset]:0
     richtext:1
-  hbox
+  vbox
     .expand:0
-    label#info
-      text[help]:"q:Quit s:Save o:Open in Browser n:Next Unread"
-      .expand:h
-    label#info
-      text[percent]:""
+    .display[showhint]:1
+    hbox
       .expand:0
-      .width[percentwidth]:6
+      label#info
+        text[help]:"q:Quit s:Save o:Open in Browser n:Next Unread"
+        .expand:h
+      label#info
+        text[percent]:""
+        .expand:0
+        .width[percentwidth]:6
   hbox[lastline]
     .expand:0
     label[msglabel]

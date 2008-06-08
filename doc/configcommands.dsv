@@ -37,6 +37,7 @@ refresh-on-startup|[yes/no]|no|If yes, then all feeds will be reloaded when news
 reload-only-visible-feeds|[yes/no]|no|If yes, then manually reloading all feeds will only reload the currently visible feeds, e.g. if a filter or a tag is set.|reload-only-visible-feeds yes
 reload-time|<number>|60|The number of minutes between automatic reloads.|reload-time 120
 save-path|<path>|~/|The default path where articles shall be saved to. If an invalid path is specified, the current directory is used.|save-path "~/Saved Articles"
+show-keymap-hint|[yes/no]|yes|If no, then the keymap hints on the bottom of screen will not be displayed.|show-keymap-hint no
 show-read-feeds|[yes/no]|yes|If yes, then all feeds, including those without unread articles, are listed. If no, then only feeds with one or more unread articles are list.|show-read-feeds no
 show-read-articles|[yes/no]|yes|If yes, then all articles of a feed are listed in the article list. If no, then only unread articles are listed.|show-read-articles no
 suppress-first-reload|[yes/no]|no|If yes, then the first automatic reload will be suppressed if auto-reload is set to yes.|suppress-first-reload yes

@@ -82,6 +82,18 @@ view::~view() {
 
 void view::set_config_container(configcontainer * cfgcontainer) {
 	cfg = cfgcontainer;	
+	if (cfg) {
+		if (cfg->get_configvalue_as_bool("show-keymap-hint") == false) {
+			feedlist->get_form()->set("showhint", "0");
+			itemlist->get_form()->set("showhint", "0");
+			itemview->get_form()->set("showhint", "0");
+			helpview->get_form()->set("showhint", "0");
+			filebrowser->get_form()->set("showhint", "0");
+			urlview->get_form()->set("showhint", "0");
+			selecttag->get_form()->set("showhint", "0");
+			searchresult->get_form()->set("showhint", "0");
+		}
+	}
 }
 
 void view::set_keymap(keymap * k) {
