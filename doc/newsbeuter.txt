@@ -633,6 +633,7 @@ n:Number of unread articles
 f:Number of unread feeds
 d:Number of new unread articles (i.e. that were added through the last reload)
 D:Number of new unread feeds (i.e. that were added through the last reload)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Examples:
 
@@ -641,7 +642,7 @@ Examples:
 	notify-format       "%d new articles (%n unread articles, %f unread feeds)"
 
 Highlighting Text
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 
 Since version 1.0, newsbeuter supports the highlighting of text in the feed
 list, the article list and the article view, using regular expressions to
