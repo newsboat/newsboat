@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_CASE(TestNewsbeuterReload) {
 	rss_feed feed = parser.parse();
 	BOOST_CHECK_EQUAL(feed.items().size(), 8u);
 
-	rsscache->externalize_rssfeed(feed);
+	rsscache->externalize_rssfeed(feed, false);
 	rsscache->internalize_rssfeed(feed);
 	BOOST_CHECK_EQUAL(feed.items().size(), 8u);
 
@@ -50,7 +50,7 @@ BOOST_AUTO_TEST_CASE(TestNewsbeuterReload) {
 	feed.items()[0].set_pubDate(time(NULL));
 	BOOST_CHECK_EQUAL(feed.items()[0].title(), "Another Title");
 
-	rsscache->externalize_rssfeed(feed);
+	rsscache->externalize_rssfeed(feed, false);
 
 	rss_feed feed2(rsscache);
 	feed2.set_rssurl("http://bereshit.synflood.at/~ak/rss.xml");
