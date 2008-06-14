@@ -227,6 +227,7 @@ void controller::run(int argc, char * argv[]) {
 
 	cfgparser.register_handler("ignore-article",&ign);
 	cfgparser.register_handler("always-download",&ign);
+	cfgparser.register_handler("reset-unread-on-update",&ign);
 
 	cfgparser.register_handler("define-filter",&filters);
 
@@ -477,7 +478,7 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
 				GetLogger().log(LOG_DEBUG, "controller::reload: after parser.parse");
 				if (!feed.is_empty()) {
 					GetLogger().log(LOG_DEBUG, "controller::reload: feed is nonempty, saving");
-					rsscache->externalize_rssfeed(feed);
+					rsscache->externalize_rssfeed(feed, ign.matches_resetunread(feed.rssurl()));
 					GetLogger().log(LOG_DEBUG, "controller::reload: after externalize_rssfeed");
 
 					rsscache->internalize_rssfeed(feed);

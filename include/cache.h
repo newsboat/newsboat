@@ -12,9 +12,9 @@ class cache {
 	public:
 		cache(const std::string& cachefile, configcontainer * c);
 		~cache();
-		void externalize_rssfeed(rss_feed& feed);
+		void externalize_rssfeed(rss_feed& feed, bool reset_unread);
 		void internalize_rssfeed(rss_feed& feed);
-		void update_rssitem(rss_item& item, const std::string& feedurl);
+		void update_rssitem(rss_item& item, const std::string& feedurl, bool reset_unread);
 		void update_rssitem_unread_and_enqueued(rss_item& item, const std::string& feedurl);
 		void cleanup_cache(std::vector<rss_feed>& feeds);
 		void do_vacuum();

@@ -50,6 +50,14 @@ static int single_int_callback(void * handler, int argc, char ** argv, char ** /
 	return 0;
 }
 
+static int single_string_callback(void * handler, int argc, char ** argv, char ** /* azColName */) {
+	std::string * value = reinterpret_cast<std::string *>(handler);
+	if (argc>0 && argv[0]) {
+		*value = argv[0];
+	}
+	return 0;
+}
+
 static int rssfeed_callback(void * myfeed, int argc, char ** argv, char ** /* azColName */) {
 	rss_feed * feed = static_cast<rss_feed *>(myfeed);
 	// normaly, this shouldn't happen, but we keep the assert()s here nevertheless
@@ -318,7 +326,7 @@ std::vector<std::string> cache::get_feed_urls() {
 
 
 // this function writes an rss_feed including all rss_items to the database
-void cache::externalize_rssfeed(rss_feed& feed) {
+void cache::externalize_rssfeed(rss_feed& feed, bool reset_unread) {
 	scope_measure m1("cache::externalize_feed");
 	if (feed.rssurl().substr(0,6) == "query:")
 		return;
@@ -358,7 +366,7 @@ void cache::externalize_rssfeed(rss_feed& feed) {
 
 	// the reverse iterator is there for the sorting foo below (think about it)
 	for (std::vector<rss_item>::reverse_iterator it=feed.items().rbegin(); it != feed.items().rend(); ++it) {
-		update_rssitem(*it, feed.rssurl());
+		update_rssitem(*it, feed.rssurl(), reset_unread);
 	}
 	sqlite3_exec(db, "END;", NULL, NULL, NULL);
 }
@@ -572,7 +580,7 @@ void cache::cleanup_cache(std::vector<rss_feed>& feeds) {
 }
 
 /* this function writes an rss_item to the database, also checking whether this item already exists in the database */
-void cache::update_rssitem(rss_item& item, const std::string& feedurl) {
+void cache::update_rssitem(rss_item& item, const std::string& feedurl, bool reset_unread) {
 	scope_mutex lock(mtx);
 	std::string query = prepare_query("SELECT count(*) FROM rss_item WHERE guid = '%q';",item.guid().c_str());
 	cb_handler count_cbh;
@@ -583,6 +591,23 @@ void cache::update_rssitem(rss_item& item, const std::string& feedurl) {
 		throw dbexception(db);
 	}
 	if (count_cbh.count() > 0) {
+		if (reset_unread) {
+			std::string content;
+			query = prepare_query("SELECT content FROM rss_item WHERE guid = '%q';", item.guid().c_str());
+			rc = sqlite3_exec(db, query.c_str(), single_string_callback, &content, NULL);
+			if (rc != SQLITE_OK) {
+				GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", query.c_str(), rc);
+				throw dbexception(db);
+			}
+			if (content != item.description_raw()) {
+				query = prepare_query("UPDATE rss_item SET unread = 1 WHERE guid = '%q';", item.guid().c_str());
+				rc = sqlite3_exec(db, query.c_str(), NULL, NULL, NULL);
+				if (rc != SQLITE_OK) {
+					GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", query.c_str(), rc);
+					throw dbexception(db);
+				}
+			}
+		}
 		std::string update = prepare_query("UPDATE rss_item SET title = '%q', author = '%q', url = '%q', feedurl = '%q', content = '%q', enclosure_url = '%q', enclosure_type = '%q' WHERE guid = '%q'",
 			item.title_raw().c_str(), item.author_raw().c_str(), item.link().c_str(), 
 			feedurl.c_str(), item.description_raw().c_str(), 

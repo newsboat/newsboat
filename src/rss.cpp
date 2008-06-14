@@ -715,6 +715,11 @@ action_handler_status rss_ignores::handle_action(const std::string& action, cons
 			ignores_lastmodified.push_back(*it);
 		}
 		return AHS_OK;
+	} else if (action == "reset-unread-on-update") {
+		for (std::vector<std::string>::const_iterator it=params.begin();it!=params.end();++it) {
+			resetflag.push_back(*it);
+		}
+		return AHS_OK;
 	}
 	return AHS_INVALID_COMMAND;
 }
@@ -740,6 +745,14 @@ bool rss_ignores::matches(rss_item* item) {
 
 bool rss_ignores::matches_lastmodified(const std::string& url) {
 	for (std::vector<std::string>::iterator it=ignores_lastmodified.begin();it!=ignores_lastmodified.end();++it) {
+		if (url == *it)
+			return true;
+	}
+	return false;
+}
+
+bool rss_ignores::matches_resetunread(const std::string& url) {
+	for (std::vector<std::string>::iterator it=resetflag.begin();it!=resetflag.end();++it) {
 		if (url == *it)
 			return true;
 	}

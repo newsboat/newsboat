@@ -7,6 +7,7 @@ Changes for newsbeuter:
 	Implemented "always-download" configuration option to configure a list of feed URLs for which newsbeuter ignores the Last-Modified timestamp
 	Added read progress display in article view
 	Added optional format string support for "browser" configuration option
+	Added "reset-unread-on-update" configuration command
 
 0.9.1 (2008-05-12):
 	Fixed issue with filter feeds.
