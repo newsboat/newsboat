@@ -78,10 +78,10 @@ all: $(NEWSBEUTER) $(PODBEUTER)
 NB_DEPS=$(MOFILES) $(XMLRSSLIB_OUTPUT) $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBEUTER_OBJS)
 
 $(NEWSBEUTER): $(NB_DEPS)
-	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $(NEWSBEUTER) $(NEWSBEUTER_OBJS) $(NEWSBEUTER_LIBS)
+	$(CXX) $(CXXFLAGS) -o $(NEWSBEUTER) $(NEWSBEUTER_OBJS) $(NEWSBEUTER_LIBS) $(LDFLAGS)
 
 $(PODBEUTER): $(MOFILES) $(LIB_OUTPUT) $(PODBEUTER_OBJS)
-	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $(PODBEUTER) $(PODBEUTER_OBJS) $(PODBEUTER_LIBS)
+	$(CXX) $(CXXFLAGS) -o $(PODBEUTER) $(PODBEUTER_OBJS) $(PODBEUTER_LIBS) $(LDFLAGS)
 
 $(LIB_OUTPUT): $(LIB_OBJS)
 	$(RM) $@
@@ -195,7 +195,7 @@ install-mo:
 TEST_OBJS=$(patsubst test/%.cpp,test/%.o,$(wildcard test/*.cpp))
 
 test: $(LIB_OUTPUT) $(NEWSBEUTER_OBJS) $(TEST_OBJS)
-	$(CXX) $(LDFLAGS) $(CXXFLAGS) $(RUBYCXXFLAGS) -o test/test src/history.o src/rss.o src/htmlrenderer.o src/cache.o src/tagsouppullparser.o src/urlreader.o $(TEST_OBJS) $(NEWSBEUTER_LIBS) -lboost_unit_test_framework
+	$(CXX) $(CXXFLAGS) $(RUBYCXXFLAGS) -o test/test src/history.o src/rss.o src/htmlrenderer.o src/cache.o src/tagsouppullparser.o src/urlreader.o $(TEST_OBJS) $(NEWSBEUTER_LIBS) -lboost_unit_test_framework $(LDFLAGS)
 
 test/test.o: test/test.cpp
 	$(CXX) $(CXXFLAGS) $(RUBYCXXFLAGS) -o $@ -c $<
