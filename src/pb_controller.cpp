@@ -135,9 +135,7 @@ void pb_controller::run(int argc, char * argv[]) {
 	cfgparser.register_handler("ignore-article", &null_cah);
 	cfgparser.register_handler("always-download", &null_cah);
 	cfgparser.register_handler("define-filter", &null_cah);
-#if HAVE_RUBY
-	cfgparser.register_handler("load", &null_cah);
-#endif
+	cfgparser.register_handler("highlight", &null_cah);
 
 	try {
 		cfgparser.parse("/etc/newsbeuter/config");
