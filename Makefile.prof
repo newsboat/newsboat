@@ -1,6 +1,7 @@
 CXXFLAGS+=-fprofile-arcs -ftest-coverage
 CFLAGS+=-fprofile-arcs -ftest-coverage
 LCOV_FILE=newsbeuter.info
+OUTDIR?=.
 
 
 include Makefile
@@ -12,4 +13,4 @@ lcov-add:
 	lcov -b . -d . -c --output-file $(LCOV_FILE)
 
 lcov-html:
-	genhtml $(LCOV_FILE)
+	genhtml -o $(OUTDIR) $(LCOV_FILE)

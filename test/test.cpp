@@ -3,6 +3,8 @@
 #define BOOST_AUTO_TEST_MAIN
 #define BOOST_TEST_DYN_LINK
 #include <climits>
+#include <vector>
+#include <string>
 #include <boost/test/auto_unit_test.hpp>
 
 #include <unistd.h>
@@ -19,6 +21,8 @@
 #include <history.h>
 #include <formatstring.h>
 #include <exceptions.h>
+#include <regexmanager.h>
+#include <htmlrenderer.h>
 
 #include <stdlib.h>
 
@@ -493,4 +497,90 @@ BOOST_AUTO_TEST_CASE(TestUtilsStrPrintf) {
 	BOOST_CHECK_EQUAL(utils::strprintf("%u-%s-%c", 23, "hello world", 'X'), "23-hello world-X");
 }
 
+BOOST_AUTO_TEST_CASE(TestRegexManager) {
 
+	regexmanager rxman;
+
+	std::vector<std::string> params;
+	BOOST_CHECK_EQUAL(rxman.handle_action("highlight", params), AHS_TOO_FEW_PARAMS);
+	params.push_back("articlelist");
+	params.push_back("foo");
+	params.push_back("blue");
+	params.push_back("red");
+
+	BOOST_CHECK_EQUAL(rxman.handle_action("highlight", params), AHS_OK);
+
+	std::string str = "xfoox";
+	rxman.quote_and_highlight(str, "articlelist");
+	BOOST_CHECK_EQUAL(str, "x<0>foo</>x");
+
+	str = "xfoox";
+	rxman.quote_and_highlight(str, "feedlist");
+	BOOST_CHECK_EQUAL(str, "xfoox");
+
+	params[0] = "feedlist";
+	BOOST_CHECK_EQUAL(rxman.handle_action("highlight", params), AHS_OK);
+
+	str = "yfooy";
+	rxman.quote_and_highlight(str, "feedlist");
+	BOOST_CHECK_EQUAL(str, "y<0>foo</>y");
+
+	params[0] = "invalidloc";
+	BOOST_CHECK_EQUAL(rxman.handle_action("highlight", params), AHS_INVALID_PARAMS);
+
+	params[0] = "feedlist";
+	params[1] = "*";
+	BOOST_CHECK_EQUAL(rxman.handle_action("highlight", params), AHS_INVALID_PARAMS);
+
+	params[1] = "foo";
+	params.push_back("bold");
+	params.push_back("underline");
+	BOOST_CHECK_EQUAL(rxman.handle_action("highlight", params), AHS_OK);
+
+	params[0] = "all";
+	BOOST_CHECK_EQUAL(rxman.handle_action("highlight", params), AHS_OK);
+
+	BOOST_CHECK_EQUAL(rxman.handle_action("invalidcommand", params), AHS_INVALID_COMMAND);
+
+	str = "<";
+	rxman.quote_and_highlight(str, "feedlist");
+	BOOST_CHECK_EQUAL(str, "<>");
+
+	str = "a<b>";
+	rxman.quote_and_highlight(str, "feedlist");
+	BOOST_CHECK_EQUAL(str, "a<>b>");
+}
+BOOST_AUTO_TEST_CASE(TestHtmlRenderer) {
+	htmlrenderer rnd(100);
+
+	std::vector<std::string> lines;
+	std::vector<linkpair> links;
+
+	rnd.render("<a href=\"http://slashdot.org/\">slashdot</a>", lines, links, "");
+	BOOST_CHECK(lines.size() >= 1);
+	BOOST_CHECK_EQUAL(lines[0], "[1]slashdot");
+	BOOST_CHECK_EQUAL(links[0].first, "http://slashdot.org/");
+	BOOST_CHECK_EQUAL(links[0].second, LINK_HREF);
+
+	lines.erase(lines.begin(), lines.end());
+	links.erase(links.begin(), links.end());
+
+	rnd.render("hello<br />world!", lines, links, "");
+	BOOST_CHECK(lines.size() >= 2);
+	BOOST_CHECK_EQUAL(lines[0], "hello");
+	BOOST_CHECK_EQUAL(lines[1], "world!");
+
+	lines.erase(lines.begin(), lines.end());
+	links.erase(links.begin(), links.end());
+
+	rnd.render("3<sup>10</sup>", lines, links, "");
+	BOOST_CHECK(lines.size() >= 1);
+	BOOST_CHECK_EQUAL(lines[0], "3^10");
+
+	lines.erase(lines.begin(), lines.end());
+	links.erase(links.begin(), links.end());
+
+	rnd.render("A<sub>i</sub>", lines, links, "");
+	BOOST_CHECK(lines.size() >= 1);
+	BOOST_CHECK_EQUAL(lines[0], "A[i]");
+}
