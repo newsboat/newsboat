@@ -114,7 +114,18 @@ rss_feed rss_parser::parse() {
 		const char * encoding = mrss->encoding ? mrss->encoding : "utf-8";
 
 		if (mrss->title) {
-			feed.set_title(utils::convert_text(mrss->title, "utf-8", encoding));
+			if (mrss->title_type && (strcmp(mrss->title_type,"xhtml")==0 || strcmp(mrss->title_type,"html")==0)) {
+				std::string xhtmltitle = utils::convert_text(mrss->title, "utf-8", encoding);
+				htmlrenderer rnd(1 << 16); // a huge number
+				std::vector<std::string> lines;
+				std::vector<linkpair> links; // not needed
+				rnd.render(xhtmltitle, lines, links, feed.link());
+				if (lines.size() > 0) {
+					feed.set_title(lines[0]);
+				}
+			} else {
+				feed.set_title(utils::convert_text(mrss->title, "utf-8", encoding));
+			}
 		}
 		
 		if (mrss->description) {
