@@ -60,6 +60,14 @@ OPTIONS
        the local cache. This makes it possible to read locally cached articles even
        without internet connection to connect to the bloglines server.
 
+-l loglevel::
+       Generate a loglevel with a certain loglevel. Valid loglevels are 1 to 6. An
+       actual logfile will only be written when you provide a logfile name.
+
+-d logfile::
+       Use this logfile as output when logging debug messages. Please note that this
+       only works when providing a loglevel.
+
 FIRST STEPS
 -----------
 

@@ -650,6 +650,8 @@ void controller::usage(char * argv0) {
 				"-x <command>... execute list of commands\n"
 				"-o              activate offline mode (only applies to bloglines synchronization mode)\n"
 				"-V              get version information\n"
+				"-l <loglevel>   write a log with a certain loglevel (valid values: 1 to 6)\n"
+				"-d <logfile>    use <logfile> as output log file\n"
 				"-h              this help\n"), PROGRAM_NAME, PROGRAM_VERSION, argv0);
 	::exit(EXIT_FAILURE);
 }
