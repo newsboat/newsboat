@@ -34,8 +34,6 @@ void itemview_formaction::init() {
 }
 
 void itemview_formaction::prepare() {
-	static bool render_hack;
-
 	/*
 	 * whenever necessary, the item view is regenerated. This is done
 	 * by putting together the feed name, title, link, author, optional
@@ -91,9 +89,9 @@ void itemview_formaction::prepare() {
 
 		set_head(item.title());
 
-		if (!render_hack) {
-			f->run(-3); // XXX HACK: render once so that we get a proper widget width
-			render_hack = true;
+		{
+		scope_measure("itemview::prepare: rendering");
+		f->run(-3); // XXX HACK: render once so that we get a proper widget width
 		}
 
 		std::vector<std::string> lines;
