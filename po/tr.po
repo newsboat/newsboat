@@ -1,0 +1,904 @@
+# translation of tr.po to Türkçe
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# H.Gökhan SARI <hsa2@difuzyon.net>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: tr\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-05-18 18:15+0200\n"
+"PO-Revision-Date: 2008-07-24 02:24+0300\n"
+"Last-Translator: H.Gökhan SARI <hsa2@difuzyon.net>\n"
+"Language-Team: Türkçe <en@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: src/cache.cpp:174
+#, c-format
+msgid "Error: opening the cache file `%s' failed: %s"
+msgstr "Hata: `%s' önbellek dosyası açılamadı: %s"
+
+#: src/configcontainer.cpp:42
+#, c-format
+msgid "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
+msgstr "newsbeuter: yeniden yükleme tamamlandı, %f okunmamış besleme (%n okunmamış toplam yazı)"
+
+#: src/configcontainer.cpp:62
+msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
+msgstr "%N %V - Beslemeler (%u okunmamış, %t toplam)%?T? - tag `%T'&?"
+
+#: src/configcontainer.cpp:63 src/configcontainer.cpp:71
+msgid "%N %V - URLs"
+msgstr "%N %V - Adres"
+
+#: src/configcontainer.cpp:64
+msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
+msgstr "%N %V - '%T' yazı (%u okunmamış, %t toplam) - %U"
+
+#: src/configcontainer.cpp:65
+msgid "%N %V - Search result (%u unread, %t total)"
+msgstr "%N %V - Arama sonucu (%u okunmamış, %t toplam)"
+
+#: src/configcontainer.cpp:66
+msgid "%N %V - %?O?Open File&Save File? - %f"
+msgstr "%N %V - %?O?Aç&Kaydet? - %f"
+
+#: src/configcontainer.cpp:67
+msgid "%N %V - Help"
+msgstr "%N %V - Yardım"
+
+#: src/configcontainer.cpp:68
+msgid "%N %V - Select Tag"
+msgstr "%N %V - Etiket Seç"
+
+#: src/configcontainer.cpp:69
+msgid "%N %V - Select Filter"
+msgstr "%N %V - Filtre Seç"
+
+#: src/configcontainer.cpp:70
+msgid "%N %V - Article '%T'"
+msgstr "%N %V - Yazı '%T'"
+
+#: src/configparser.cpp:103
+msgid "invalid parameters."
+msgstr "Geçersiz parametre."
+
+#: src/configparser.cpp:106
+msgid "too few parameters."
+msgstr "yetersiz parametre"
+
+#: src/configparser.cpp:109
+msgid "unknown command (bug)."
+msgstr "bilinmeyen komut (bug)."
+
+#: src/configparser.cpp:112
+msgid "file couldn't be opened."
+msgstr "dosya açılamadı."
+
+#: src/configparser.cpp:115
+msgid "unknown error (bug)."
+msgstr "bilinmeyen hata (bug)."
+
+#: src/configparser.cpp:117
+#, c-format
+msgid "Error while processing command `%s' (%s line %u): %s"
+msgstr "`%s' komutu çalıştırılırken hata (%s %u. satır): %s"
+
+#: src/configparser.cpp:120
+#, c-format
+msgid "unknown command `%s'"
+msgstr "bilinmeyen komut `%s'"
+
+#: src/controller.cpp:47 src/pb_controller.cpp:32
+msgid "Segmentation fault."
+msgstr "Parçalama arızası."
+
+#: src/controller.cpp:69 src/pb_controller.cpp:46
+msgid "Fatal error: couldn't determine home directory!"
+msgstr "Ölümcül hata: ev dizini tanımlanamadı!"
+
+#: src/controller.cpp:70 src/pb_controller.cpp:47
+#, c-format
+msgid "Please set the HOME environment variable or add a valid user for UID %u!"
+msgstr "Ev dizini değişkenini ayarlayın ya da %u UID'i için geçerli bir kullanıcı ekleyin!"
+
+#: src/controller.cpp:180 src/pb_controller.cpp:106
+#, c-format
+msgid "%s: unknown option - %c"
+msgstr "%s: bilinmeyen seçenek - %c"
+
+#: src/controller.cpp:199 src/pb_controller.cpp:112
+#, c-format
+msgid "Starting %s %s..."
+msgstr "%s %s başlatılıyor..."
+
+#: src/controller.cpp:208 src/controller.cpp:279 src/pb_controller.cpp:116
+#, c-format
+msgid "Error: an instance of %s is already running (PID: %u)"
+msgstr "Hata: %s zaten çalışıyor (PID: %u)"
+
+#: src/controller.cpp:214 src/pb_controller.cpp:120
+msgid "Loading configuration..."
+msgstr "Ayarlar yükleniyor..."
+
+#: src/controller.cpp:259 src/controller.cpp:290 src/controller.cpp:316
+#: src/controller.cpp:325 src/controller.cpp:353 src/controller.cpp:357
+#: src/controller.cpp:379 src/controller.cpp:411 src/pb_controller.cpp:156
+#: src/pb_controller.cpp:173
+msgid "done."
+msgstr "tamamlandı."
+
+#: src/controller.cpp:285 src/controller.cpp:348
+msgid "Opening cache..."
+msgstr "Önbellek açılıyor..."
+
+#: src/controller.cpp:310
+msgid "Loading URLs from local cache..."
+msgstr "Yerel önbellekten adresler yükleniyor..."
+
+#: src/controller.cpp:320
+#, c-format
+msgid "Loading URLs from %s..."
+msgstr "%s kaynağından adresler yükleniyor..."
+
+#: src/controller.cpp:333
+#, c-format
+msgid ""
+"Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
+"import an OPML file."
+msgstr "Hata: hiçbir adres ayarlanmamış. Lütfen %s içine RSS besleme kaynakları ekleyin ya da bir OPML dosyasını içeri aktarın."
+
+#: src/controller.cpp:335
+msgid ""
+"It looks like you haven't configured any feeds in your bloglines account. "
+"Please do so, and try again."
+msgstr ""
+"Bloglines hesabınızda herhangi bir besleme ayarlamamışsınız. "
+"Lütfen gerekli ayarlamayı yaptıktan sonra tekrar deneyin."
+
+#: src/controller.cpp:337
+msgid ""
+"It looks like the OPML feed you subscribed contains no feeds. Please fill it "
+"with feeds, and try again."
+msgstr "Belirttiğiniz OPML dosyası herhangi bir kaynak içermiyor. Lütfen besleme kaynaklarını doğru biçimde bu dosyaya ekleyin ve tekrar deneyin."
+
+#: src/controller.cpp:346
+msgid "Loading articles from cache..."
+msgstr "Yazılar önbellekten yükleniyor..."
+
+#: src/controller.cpp:354
+msgid "Cleaning up cache thoroughly..."
+msgstr "Önbellek boşaltılıyor..."
+
+#: src/controller.cpp:369
+msgid "Error while loading feeds from database: "
+msgstr "Veritabanından beslemeler alınırken hata oluştu: "
+
+#: src/controller.cpp:407
+msgid "Cleaning up cache..."
+msgstr "Önbellek temizleniyor..."
+
+#: src/controller.cpp:413
+msgid "failed: "
+msgstr "başarız: "
+
+#: src/controller.cpp:431
+#, c-format
+msgid "Error: couldn't mark all feeds read: %s"
+msgstr "Hata: tüm beslemeler okundu olarak işaretlenemedi: %s"
+
+#: src/controller.cpp:469
+#, c-format
+msgid "%sLoading %s..."
+msgstr "%sYükleniyor %s..."
+
+#: src/controller.cpp:512 src/controller.cpp:514
+#, c-format
+msgid "Error while retrieving %s: %s"
+msgstr "%s alınırken hata oluştu: %s"
+
+#: src/controller.cpp:517
+msgid "Error: invalid feed!"
+msgstr "Hata: geçersiz besleme!"
+
+#: src/controller.cpp:523
+msgid "invalid feed index (bug)"
+msgstr "geçersiz besleme indeksi (bug)"
+
+#: src/controller.cpp:641
+#, c-format
+msgid ""
+"%s %s\n"
+"usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] "
+"[-h]\n"
+"-e              export OPML feed to stdout\n"
+"-r              refresh feeds on start\n"
+"-i <file>       import OPML file\n"
+"-u <urlfile>    read RSS feed URLs from <urlfile>\n"
+"-c <cachefile>  use <cachefile> as cache file\n"
+"-C <configfile> read configuration from <configfile>\n"
+"-v              clean up cache thoroughly\n"
+"-x <command>... execute list of commands\n"
+"-o              activate offline mode (only applies to bloglines "
+"synchronization mode)\n"
+"-V              get version information\n"
+"-h              this help\n"
+msgstr ""
+"%s %s\n"
+"usage: %s [-i <file>|-e] [-u <dosya>] [-c <önbellekdosyası>] [-x <komut> ...] "
+"[-h]\n"
+"-e                     export OPML feed to stdout\n"
+"-r                     açılışta beslemeleri yenile\n"
+"-i <dosya>             bir OPML dosyasını içe aktar\n"
+"-u <adresdosyası>      <adresdosyası>'ndan besleme adreslerini oku\n"
+"-c <önbellekdosyası>   <önbellekdosyası>'nı önbellek dosyası olarak kullan\n"
+"-C <ayardosyası>       <ayardosyası>'ndan ayarları oku\n"
+"-v                     önbelleği boşalt\n"
+"-x <komut>...          komutların listesi çalıştır\n"
+"-o                     çevrimdışı moda geç\n"
+"-V                     version bilgisini göster\n"
+"-h                     bu yardım metnini göster\n"
+
+#: src/controller.cpp:685
+#, c-format
+msgid "Import of %s finished."
+msgstr "%s'in içeri aktarımı tamamlandı."
+
+#: src/controller.cpp:862
+msgid ""
+"bookmarking support is not configured. Please set the configuration variable "
+"`bookmark-cmd' accordingly."
+msgstr "yer imleme desteği ayarlanmadı. Ayar değişkenini `bookmark-cmd'ye göre ayarlayın."
+
+#: src/controller.cpp:874
+#, c-format
+msgid "%u unread articles"
+msgstr "%u okunmamış yazı"
+
+#: src/controller.cpp:883 src/formaction.cpp:188
+#: src/itemview_formaction.cpp:65
+msgid "Title: "
+msgstr "Başlık: "
+
+#: src/controller.cpp:887 src/itemview_formaction.cpp:70
+msgid "Author: "
+msgstr "Yazar: "
+
+#: src/controller.cpp:891 src/itemview_formaction.cpp:79
+msgid "Date: "
+msgstr "Tarih: "
+
+#: src/controller.cpp:895 src/itemview_formaction.cpp:75
+msgid "Link: "
+msgstr "Bağlantı: "
+
+#: src/download.cpp:42
+msgid "queued"
+msgstr "kuyruğa eklendi"
+
+#: src/download.cpp:44
+msgid "downloading"
+msgstr "indiriliyor"
+
+#: src/download.cpp:46
+msgid "cancelled"
+msgstr "iptal edildi"
+
+#: src/download.cpp:48
+msgid "deleted"
+msgstr "silinci"
+
+#: src/download.cpp:50
+msgid "finished"
+msgstr "tamamlandı"
+
+#: src/download.cpp:52
+msgid "failed"
+msgstr "tamamlanamadı"
+
+#: src/download.cpp:54
+msgid "incomplete"
+msgstr "eksik"
+
+#: src/download.cpp:56
+msgid "unknown (bug)."
+msgstr "bilinmiyor /bug) "
+
+#: src/exception.cpp:23
+#, c-format
+msgid "attribute `%s' is not available."
+msgstr "`%s' özelliği mevcut değil."
+
+#: src/feedlist_formaction.cpp:108 src/feedlist_formaction.cpp:118
+#: src/feedlist_formaction.cpp:158
+msgid "No feed selected!"
+msgstr "Hiçbir besleme seçilmedi!"
+
+#: src/feedlist_formaction.cpp:149 src/itemlist_formaction.cpp:187
+msgid "Marking feed read..."
+msgstr "Besleme okundu olarak işaretleniyor..."
+
+#: src/feedlist_formaction.cpp:155 src/itemlist_formaction.cpp:201
+#, c-format
+msgid "Error: couldn't mark feed read: %s"
+msgstr "Hata: besleme okundu olarak işaretlenemedi: %s"
+
+#: src/feedlist_formaction.cpp:179 src/feedlist_formaction.cpp:187
+msgid "No feeds with unread items."
+msgstr "Okunmamış besleme yok."
+
+#: src/feedlist_formaction.cpp:193
+msgid "Marking all feeds read..."
+msgstr "Tüm beslemeler okundu olarak işaretleniyor..."
+
+#: src/feedlist_formaction.cpp:217
+msgid "No tags defined."
+msgstr "Hiçbir etiket tanımlanmadı."
+
+#: src/feedlist_formaction.cpp:232 src/feedlist_formaction.cpp:532
+#: src/itemlist_formaction.cpp:270 src/itemlist_formaction.cpp:323
+msgid "Error: couldn't parse filter command!"
+msgstr "Hata: filtre komutu ayrıştırılamadı!"
+
+#: src/feedlist_formaction.cpp:242 src/itemlist_formaction.cpp:280
+msgid "No filters defined."
+msgstr "Hiçbir filtre tanımlanmadı."
+
+#: src/feedlist_formaction.cpp:255 src/help_formaction.cpp:24
+#: src/itemlist_formaction.cpp:227
+msgid "Search for: "
+msgstr "Ara: "
+
+#: src/feedlist_formaction.cpp:272 src/itemlist_formaction.cpp:293
+msgid "Filter: "
+msgstr "Filtre: "
+
+#: src/feedlist_formaction.cpp:278
+msgid "Do you really want to quit (y:Yes n:No)? "
+msgstr "Çıkmak istediğinize emin misiniz (e:Evet h:Hayır)? "
+
+#: src/feedlist_formaction.cpp:278 src/filebrowser_formaction.cpp:101
+msgid "yn"
+msgstr "eh"
+
+#: src/feedlist_formaction.cpp:278
+msgid "y"
+msgstr "e"
+
+#: src/feedlist_formaction.cpp:380 src/help_formaction.cpp:81
+#: src/itemlist_formaction.cpp:583 src/itemview_formaction.cpp:262
+#: src/pb_view.cpp:257 src/pb_view.cpp:266 src/urlview_formaction.cpp:97
+msgid "Quit"
+msgstr "Çık"
+
+#: src/feedlist_formaction.cpp:381 src/itemlist_formaction.cpp:584
+#: src/itemview_formaction.cpp:263
+msgid "Open"
+msgstr "Aç"
+
+#: src/feedlist_formaction.cpp:382 src/itemlist_formaction.cpp:587
+#: src/itemview_formaction.cpp:265
+msgid "Next Unread"
+msgstr "Sonraki Okunmamış"
+
+#: src/feedlist_formaction.cpp:383 src/itemlist_formaction.cpp:586
+msgid "Reload"
+msgstr "Yeniden Yükle"
+
+#: src/feedlist_formaction.cpp:384
+msgid "Reload All"
+msgstr "Tümünü Yeniden Yükle"
+
+#: src/feedlist_formaction.cpp:385
+msgid "Mark Read"
+msgstr "Okundu olarak işaretle"
+
+#: src/feedlist_formaction.cpp:386
+msgid "Catchup All"
+msgstr "Tümünü Eşitle"
+
+#: src/feedlist_formaction.cpp:387 src/help_formaction.cpp:82
+#: src/itemlist_formaction.cpp:589
+msgid "Search"
+msgstr "Ara"
+
+#: src/feedlist_formaction.cpp:388 src/itemlist_formaction.cpp:590
+#: src/itemview_formaction.cpp:268 src/pb_view.cpp:199 src/pb_view.cpp:273
+msgid "Help"
+msgstr "Yardım"
+
+#: src/feedlist_formaction.cpp:495 src/itemlist_formaction.cpp:602
+msgid "Position not visible!"
+msgstr "Konum görünür değil!"
+
+#: src/feedlist_formaction.cpp:500 src/itemlist_formaction.cpp:607
+msgid "Invalid position!"
+msgstr "Geçersiz konum!"
+
+#: src/feedlist_formaction.cpp:545 src/itemlist_formaction.cpp:354
+msgid "Searching..."
+msgstr "Aranıyor..."
+
+#: src/feedlist_formaction.cpp:552 src/itemlist_formaction.cpp:365
+#, c-format
+msgid "Error while searching for `%s': %s"
+msgstr "`%s' aranırken hata: %s"
+
+#: src/feedlist_formaction.cpp:559 src/itemlist_formaction.cpp:375
+msgid "No results."
+msgstr "Sonuç yok."
+
+#: src/filebrowser_formaction.cpp:101
+#, c-format
+msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
+msgstr "`%s'in üzerine yazmak istediğinize emin misiniz (e:Evet h:Hayır)? "
+
+#: src/filebrowser_formaction.cpp:101
+msgid "n"
+msgstr "h"
+
+#: src/filebrowser_formaction.cpp:157
+msgid "File: "
+msgstr "Dosya: "
+
+#: src/filebrowser_formaction.cpp:176
+#, c-format
+msgid "%s %s - Open File - %s"
+msgstr "%s %s - Dosya Aç - %s"
+
+#: src/filebrowser_formaction.cpp:178
+#, c-format
+msgid "%s %s - Save File - %s"
+msgstr "%s %s - Dosya Kaydet - %s"
+
+#: src/filebrowser_formaction.cpp:185 src/pb_view.cpp:268
+#: src/select_formaction.cpp:136 src/select_formaction.cpp:141
+msgid "Cancel"
+msgstr "İptal"
+
+#: src/filebrowser_formaction.cpp:186 src/itemlist_formaction.cpp:585
+#: src/itemview_formaction.cpp:264
+msgid "Save"
+msgstr "Kaydet"
+
+#: src/formaction.cpp:110 src/formaction.cpp:117
+msgid "usage: set <variable>[=<value>]"
+msgstr "kullanım: set <variable>[=<value>]"
+
+#: src/formaction.cpp:160
+msgid "Saving bookmark..."
+msgstr "Yerimi kaydediliyor..."
+
+#: src/formaction.cpp:163
+msgid "Saved bookmark."
+msgstr "Yerimi kaydedildi."
+
+#: src/formaction.cpp:165
+msgid "Error while saving bookmark: "
+msgstr "Yerimi kaydedilirken hata oluştu: "
+
+#: src/formaction.cpp:187
+msgid "URL: "
+msgstr "Adres: "
+
+#: src/formaction.cpp:189
+msgid "Description: "
+msgstr "Açıklama: "
+
+#: src/help_formaction.cpp:83
+msgid "Clear"
+msgstr "Temizle"
+
+#: src/htmlrenderer.cpp:120
+msgid "embedded flash:"
+msgstr "gömülmüş flash:"
+
+#: src/htmlrenderer.cpp:153 src/htmlrenderer.cpp:432
+msgid "image"
+msgstr "resim"
+
+#: src/htmlrenderer.cpp:422
+msgid "Links: "
+msgstr "Bağlantılar: "
+
+#: src/htmlrenderer.cpp:431
+msgid "link"
+msgstr "bağlantı"
+
+#: src/htmlrenderer.cpp:433
+msgid "embedded flash"
+msgstr "gömülmüş flash"
+
+#: src/htmlrenderer.cpp:434
+msgid "unknown (bug)"
+msgstr "bilinmiyor (bug)"
+
+#: src/itemlist_formaction.cpp:47 src/itemlist_formaction.cpp:60
+#: src/itemlist_formaction.cpp:79 src/itemlist_formaction.cpp:98
+#: src/itemlist_formaction.cpp:118 src/itemlist_formaction.cpp:347
+msgid "No item selected!"
+msgstr "Hiçbiri seçilmedi!"
+
+#: src/itemlist_formaction.cpp:113 src/itemview_formaction.cpp:83
+#: src/itemview_formaction.cpp:213
+msgid "Flags: "
+msgstr "Bayraklar: "
+
+#: src/itemlist_formaction.cpp:136 src/itemlist_formaction.cpp:623
+msgid "Error: no item selected!"
+msgstr "Hata: hiçbiri seçilmedi!"
+
+#: src/itemlist_formaction.cpp:150
+msgid "Error: you can't reload search results."
+msgstr "Hata: arama sonuçlarını yeniden yükleyemezsiniz."
+
+#: src/itemlist_formaction.cpp:163 src/itemlist_formaction.cpp:171
+#: src/itemview_formaction.cpp:231 src/itemview_formaction.cpp:240
+#: src/view.cpp:435 src/view.cpp:484
+msgid "No unread items."
+msgstr "Okunmamış yok."
+
+#: src/itemlist_formaction.cpp:177 src/itemlist_formaction.cpp:182
+msgid "No unread feeds."
+msgstr "Okunmamış besleme yok."
+
+#: src/itemlist_formaction.cpp:235
+msgid "Toggling read flag for article..."
+msgstr "Bayrak okuma açılıyor/kapatılıyor..."
+
+#: src/itemlist_formaction.cpp:249
+#, c-format
+msgid "Error while toggling read flag: %s"
+msgstr "Hata: %s"
+
+#: src/itemlist_formaction.cpp:342 src/itemview_formaction.cpp:354
+msgid "Flags updated."
+msgstr "Bayraklar güncellendi."
+
+#: src/itemlist_formaction.cpp:588
+msgid "Mark All Read"
+msgstr "Tümünü Okundu Olarak İşaretle"
+
+#: src/itemlist_formaction.cpp:647 src/itemview_formaction.cpp:177
+#: src/itemview_formaction.cpp:329
+msgid "Aborted saving."
+msgstr "Kayıt işlemi iptal edildi."
+
+#: src/itemlist_formaction.cpp:651 src/itemview_formaction.cpp:333
+#, c-format
+msgid "Saved article to %s"
+msgstr "Yazı %s'e kaydedildi"
+
+#: src/itemlist_formaction.cpp:653 src/itemview_formaction.cpp:335
+#, c-format
+msgid "Error: couldn't save article to %s"
+msgstr "Hata: yazı %s'e kaydedilemedi"
+
+#: src/itemview_formaction.cpp:32 src/itemview_formaction.cpp:408
+msgid "Top"
+msgstr "Yukarı"
+
+#: src/itemview_formaction.cpp:32 src/itemview_formaction.cpp:410
+msgid "Bottom"
+msgstr "Aşağı"
+
+#: src/itemview_formaction.cpp:61
+msgid "Feed: "
+msgstr "Besleme: "
+
+#: src/itemview_formaction.cpp:88
+msgid "Podcast Download URL: "
+msgstr "Podcast İndirme Adresi: "
+
+#: src/itemview_formaction.cpp:88
+msgid "type: "
+msgstr "biçim: "
+
+#: src/itemview_formaction.cpp:147
+#, c-format
+msgid "Error while marking article as read: %s"
+msgstr "Yazı okundu olarak işaretlenirken hata oluştu: %s"
+
+#: src/itemview_formaction.cpp:162
+#, c-format
+msgid "Added %s to download queue."
+msgstr "%s indirme kuyruğuna eklendi."
+
+#: src/itemview_formaction.cpp:181
+#, c-format
+msgid "Saved article to %s."
+msgstr "Yazı %s'e kaydedildi."
+
+#: src/itemview_formaction.cpp:183
+#, c-format
+msgid "Error: couldn't write article to file %s"
+msgstr "Hata: yazı %s'e kaydedilemedi"
+
+#: src/itemview_formaction.cpp:190 src/urlview_formaction.cpp:33
+msgid "Starting browser..."
+msgstr "Tarayıcı başlatılıyor..."
+
+#: src/itemview_formaction.cpp:222
+msgid "URL list empty."
+msgstr "Adres listesi boş."
+
+#: src/itemview_formaction.cpp:266 src/urlview_formaction.cpp:98
+msgid "Open in Browser"
+msgstr "Tarayıcıda Görüntüle"
+
+#: src/itemview_formaction.cpp:267
+msgid "Enqueue"
+msgstr "Kuyruktan Çıkar"
+
+#: src/keymap.cpp:21
+msgid "Open feed/article"
+msgstr "Beslemeyi/Yazıyı aç"
+
+#: src/keymap.cpp:22
+msgid "Return to previous dialog/Quit"
+msgstr "Önceki diyaloğa dön/Çık"
+
+#: src/keymap.cpp:23
+msgid "Reload currently selected feed"
+msgstr "Seçilen beslemeyi yeniden yükle"
+
+#: src/keymap.cpp:24
+msgid "Reload all feeds"
+msgstr "Tüm beslemeleri yeniden yükle"
+
+#: src/keymap.cpp:25
+msgid "Mark feed read"
+msgstr "Beslemeyi okundu olarak işaretle"
+
+#: src/keymap.cpp:26
+msgid "Mark all feeds read"
+msgstr "Tüm beslemeleri okundu olarak işaretle"
+
+#: src/keymap.cpp:27
+msgid "Save article"
+msgstr "Yazıyı kaydet"
+
+#: src/keymap.cpp:28
+msgid "Go to next unread article"
+msgstr "Sonraki okunmamış yazıya git"
+
+#: src/keymap.cpp:29
+msgid "Go to previous unread article"
+msgstr "Önceki okunmamış yazıya git"
+
+#: src/keymap.cpp:30
+msgid "Open article in browser"
+msgstr "Yazıyı tarayıcıda aç"
+
+#: src/keymap.cpp:31
+msgid "Open help dialog"
+msgstr "Yardım diyaloğunu aç"
+
+#: src/keymap.cpp:32
+msgid "Toggle source view"
+msgstr "Kaynak gösterimini aç/kapat"
+
+#: src/keymap.cpp:33
+msgid "Toggle read status for article"
+msgstr "Durum okuma özelliğini aç/kapat"
+
+#: src/keymap.cpp:34
+msgid "Toggle show read feeds/articles"
+msgstr "Yazı okumayı aç/kapat"
+
+#: src/keymap.cpp:35
+msgid "Show URLs in current article"
+msgstr "Adresleri mevcut yazı içinde göster"
+
+#: src/keymap.cpp:36
+msgid "Clear current tag"
+msgstr "Mevcut etiketi temizle"
+
+#: src/keymap.cpp:37
+msgid "Select tag"
+msgstr "Etiket seç"
+
+#: src/keymap.cpp:38
+msgid "Open search dialog"
+msgstr "Arama diyaloğunu aç"
+
+#: src/keymap.cpp:39
+msgid "Add download to queue"
+msgstr "İndirmeyi kuyruğa ekle"
+
+#: src/keymap.cpp:40
+msgid "Reload the list of URLs from the configuration"
+msgstr "Ayar dosyasında adreslerin listesini yeniden yükle"
+
+#: src/keymap.cpp:41
+msgid "Download file"
+msgstr "Dosyayı indir"
+
+#: src/keymap.cpp:42
+msgid "Cancel download"
+msgstr "İndirmeyi iptal et"
+
+#: src/keymap.cpp:43
+msgid "Mark download as deleted"
+msgstr "İndirmeyi silindi olarak işaretle"
+
+#: src/keymap.cpp:44
+msgid "Purge finished and deleted downloads from queue"
+msgstr "Tamamlanan ve silinen indirmeleri kuyruktan temizle"
+
+#: src/keymap.cpp:45
+msgid "Toggle automatic download on/off"
+msgstr "Otomatik indirmeyi aç/kapat"
+
+#: src/keymap.cpp:46
+msgid "Start player with currently selected download"
+msgstr "Oynatıcı seçilen indirme ile başlat"
+
+#: src/keymap.cpp:47
+msgid "Increase the number of concurrent downloads"
+msgstr "Eşzamanlı indirmelerin sayısını artır"
+
+#: src/keymap.cpp:48
+msgid "Decrease the number of concurrent downloads"
+msgstr "Eşzamanlı indirmelerin sayısını azalt"
+
+#: src/keymap.cpp:49
+msgid "Redraw screen"
+msgstr "Ekranı yeniden çiz"
+
+#: src/keymap.cpp:50
+msgid "Open the commandline"
+msgstr "Komut satırını aç"
+
+#: src/keymap.cpp:51
+msgid "Set a filter"
+msgstr "Filtre ayarla"
+
+#: src/keymap.cpp:52
+msgid "Select a predefined filter"
+msgstr "Önceden tanımlanmış bir filtre seç"
+
+#: src/keymap.cpp:53
+msgid "Clear currently set filter"
+msgstr "Mevcut filtreyi temizle"
+
+#: src/keymap.cpp:54
+msgid "Bookmark current link/article"
+msgstr "Mevcut yazıyı yerimlerine ekle"
+
+#: src/keymap.cpp:55
+msgid "Edit flags"
+msgstr "Bayrakları düzenle"
+
+#: src/keymap.cpp:56
+msgid "Go to next unread feed"
+msgstr "Sonraki okunmamış beslemeye git"
+
+#: src/keymap.cpp:57
+msgid "Go to previous unread feed"
+msgstr "Önceki okunmamış beslemeye git"
+
+#: src/keymap.cpp:58
+msgid "Call a macro"
+msgstr "Makro çağır"
+
+#: src/keymap.cpp:59
+msgid "Delete article"
+msgstr "Yazıyı sil"
+
+#: src/keymap.cpp:60
+msgid "Purge deleted articles"
+msgstr "Silinen yazıları temizle"
+
+#: src/pb_controller.cpp:167
+msgid "Cleaning up queue..."
+msgstr "Kuyruk temizleniyor..."
+
+#: src/pb_controller.cpp:180
+#, c-format
+msgid ""
+"%s %s\n"
+"usage %s [-C <file>] [-q <file>] [-h]\n"
+"-C <configfile> read configuration from <configfile>\n"
+"-q <queuefile>  use <queuefile> as queue file\n"
+"-a              start download on startup\n"
+"-h              this help\n"
+msgstr ""
+"%s %s\n"
+"kullanım %s [-C <dosya>] [-q <dosya>] [-h]\n"
+"-C <ayardosyası>       ayarları <ayardosyası>'ndan oku\n"
+"-q <kuyrukdosyası>     <kuyrukdosyası>nı kuyruk olarak kullan\n"
+"-a                     başlangıçta indirmeyi başlat\n"
+"-h                     bu yardım metnini göster\n"
+
+#: src/pb_view.cpp:40
+#, c-format
+msgid " - %u parallel downloads"
+msgstr " - %u paralel indirme"
+
+#: src/pb_view.cpp:44
+#, c-format
+msgid "Queue (%u downloads in progress, %u total) - %.2f kb/s total%s"
+msgstr "Kuyruk (%u indirme sürüyor, %u toplam) - %.2f kb/s toplam%s"
+
+#: src/pb_view.cpp:94
+msgid "Error: can't quit: download(s) in progress."
+msgstr "Hata: çıkılamadı: devam eden indirme(ler) var."
+
+#: src/pb_view.cpp:126
+msgid "Error: download needs to be finished before the file can be played."
+msgstr "Hata: dosya oynatılmadan önce indirme işleminin tamamlanması gerekiyor."
+
+#: src/pb_view.cpp:155
+msgid "Error: unable to perform operation: download(s) in progress."
+msgstr "Hata: işlem gerçekleştirilemedi: devam eden indirme(ler) var."
+
+#: src/pb_view.cpp:267
+msgid "Download"
+msgstr "İndir"
+
+#: src/pb_view.cpp:269
+msgid "Delete"
+msgstr "Sil"
+
+#: src/pb_view.cpp:270
+msgid "Purge Finished"
+msgstr "Tamamlananları Temizle"
+
+#: src/pb_view.cpp:271
+msgid "Toggle Automatic Download"
+msgstr "Otomatik İndirmeyi Aç/Kapat"
+
+#: src/pb_view.cpp:272
+msgid "Play"
+msgstr "Oynat"
+
+#: src/rss.cpp:83
+#, c-format
+msgid "Error: unsupported URL: %s"
+msgstr "Hata: desteklenmeyen adres: %s"
+
+#: src/select_formaction.cpp:137
+msgid "Select Tag"
+msgstr "Etiket Seç"
+
+#: src/select_formaction.cpp:142
+msgid "Select Filter"
+msgstr "Filtre Seç"
+
+#: src/tagsouppullparser.cpp:43 src/tagsouppullparser.cpp:49
+msgid "invalid attribute index"
+msgstr "geçersiz özellik indeksi"
+
+#: src/tagsouppullparser.cpp:59
+msgid "attribute not found"
+msgstr "özellik bulunamadı"
+
+#: src/tagsouppullparser.cpp:265
+msgid "EOF found while reading XML tag"
+msgstr "XML etiketi okunurken EOF (dosya sonu) bulundu"
+
+#: src/urlview_formaction.cpp:37 src/urlview_formaction.cpp:51
+msgid "No link selected!"
+msgstr "Hiçbir bağlantı seçilmedi!"
+
+#: src/urlview_formaction.cpp:99
+msgid "Save Bookmark"
+msgstr "Yerimlerine Ekle"
+
+#: src/view.cpp:285 src/view.cpp:302
+#, c-format
+msgid "Error: applying the filter failed: %s"
+msgstr "Hata: filtre uygulanırken hata oluştu: %s"
+
+#: src/view.cpp:321 src/view.cpp:341
+msgid "Error: feed contains no items!"
+msgstr "Hata: besleme boş!"
+
+#: src/view.cpp:330
+msgid "Updating query feed..."
+msgstr "Sorgu beslemesi güncelleniyor..."
+
