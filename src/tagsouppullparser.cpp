@@ -28,26 +28,8 @@ tagsouppullparser::~tagsouppullparser()
 }
 
 void tagsouppullparser::setInput(std::istream& is) {
-	inputstream = &is;	
+	inputstream = &is;
 	current_event = START_DOCUMENT;
-}
-
-int tagsouppullparser::getAttributeCount() const {
-	if (START_TAG != current_event)
-		return -1;
-	return attributes.size();
-}
-
-std::string tagsouppullparser::getAttributeName(unsigned int index) const {
-	if (index >= attributes.size())
-		throw std::out_of_range(_("invalid attribute index"));
-	return attributes[index].first;
-}
-
-std::string tagsouppullparser::getAttributeValue(unsigned int index) const {
-	if (index >= attributes.size())
-		throw std::out_of_range(_("invalid attribute index"));
-	return attributes[index].second;	
 }
 
 std::string tagsouppullparser::getAttributeValue(const std::string& name) const {
@@ -60,173 +42,53 @@ std::string tagsouppullparser::getAttributeValue(const std::string& name) const 
 }
 
 tagsouppullparser::event tagsouppullparser::getEventType() const {
-	return current_event;	
+	return current_event;
 }
 
 std::string tagsouppullparser::getText() const {
-	return text;	
-}
-
-bool tagsouppullparser::isWhitespace() const {
-	bool found_nonws = false;
-	for (unsigned int i=0;i<text.length();++i) {
-		if (!isspace(text[i]))
-			found_nonws = true;
-	}
-	return !found_nonws;
+	return text;
 }
 
 tagsouppullparser::event tagsouppullparser::next() {
-	// TODO: refactor this
 	/*
 	 * the next() method returns the next event by parsing the
 	 * next element of the XML stream, depending on the current
-	 * event. This is pretty messy, and contains quite a few
-	 * code duplications, so always watch out when modifying
-	 * anything here.
+	 * event.
 	 */
-	if (attributes.size() > 0) {
-		attributes.erase(attributes.begin(), attributes.end());	
-	}
+	attributes.clear();
 	text = "";
 	
 	if (inputstream->eof()) {
 		current_event = END_DOCUMENT;
-		return current_event;	
 	}
+
 	
 	switch (current_event) {
 		case START_DOCUMENT: 
-			{
-				std::string ws;
-				char c = skip_whitespace(ws);
-				if (inputstream->eof()) {
-					current_event = END_DOCUMENT;
-					break;
-				}
-				if (c != '<') {
-					text.append(1,c);
-					std::string tmp;
-					getline(*inputstream,tmp,'<');
-					text.append(tmp);
-					text = decode_entities(text);
-					current_event = TEXT;
-				} else {
-					std::string s;
-					try {
-						s = read_tag();
-					} catch (const xmlexception &) {
-						current_event = END_DOCUMENT;
-						break;
-					}
-					
-					std::vector<std::string> tokens = utils::tokenize(s);
-					if (tokens.size() > 0) {
-						text = tokens[0];
-						if (tokens.size() > 1) {
-							std::vector<std::string>::iterator it = tokens.begin();
-							++it;
-							while (it != tokens.end()) {
-								add_attribute(*it);
-								++it;	
-							}
-						} else {
-							if (text.length() > 0 && text[text.length()-1] == '/')
-								text.erase(text.length()-1, 1);
-						}
-					} else {
-						// throw xmlexception(_("empty tag found"));
-					}
-					current_event = determine_tag_type();
-				}
-			}	
-			break;
 		case START_TAG:
 		case END_TAG:
-			{
-				
-				char c;
-				std::string ws;
-				c = skip_whitespace(ws);
-				if (!inputstream->eof()) {
-					if (c == '<') {
-						std::string s;
-						try {
-							s = read_tag();
-						} catch (const xmlexception &) {
-							current_event = END_DOCUMENT;
-							break;
-						}
-						std::vector<std::string> tokens = utils::tokenize(s);
-						if (tokens.size() > 0) {
-							text = tokens[0];
-							if (tokens.size() > 1) {
-								std::vector<std::string>::iterator it = tokens.begin();
-								++it;
-								while (it != tokens.end()) {
-									add_attribute(*it);
-									++it;	
-								}
-							} else {
-								if (text.length() > 0 && text[text.length()-1] == '/')
-									text.erase(text.length()-1, 1);
-							}
-						} else {
-							// throw xmlexception(_("empty tag found"));
-						}
-						current_event = determine_tag_type();
-					} else {
-						text.append(ws);
-						text.append(1,c);
-						std::string tmp;
-						getline(*inputstream,tmp,'<');
-						text.append(tmp);
-						text = decode_entities(text);
-						current_event = TEXT;
-					}
-				} else {
-					current_event = END_DOCUMENT;
-				}
+			skip_whitespace();
+			if (inputstream->eof()) {
+				current_event = END_DOCUMENT;
+				break;
+			}
+			if (c != '<') {
+				handle_text();
+			} else {
+				handle_tag();
 			}
 			break;
 		case TEXT:
-			{
-				std::string s;
-				try {
-					s = read_tag();
-				} catch (const xmlexception &) {
-					current_event = END_DOCUMENT;
-					break;
-				}
-				std::vector<std::string> tokens = utils::tokenize(s);
-				if (tokens.size() > 0) {
-					text = tokens[0];
-					if (tokens.size() > 1) {
-						std::vector<std::string>::iterator it = tokens.begin();
-						++it;
-						while (it != tokens.end()) {
-							add_attribute(*it);
-							++it;	
-						}
-					} else {
-						if (text.length() > 0 && text[text.length()-1] == '/')
-							text.erase(text.length()-1, 1);
-					}
-				} else {
-					// throw xmlexception(_("empty tag found"));
-				}
-				current_event = determine_tag_type();
-			}
+			handle_tag();
 			break;
-		case END_DOCUMENT:	
-			// nothing
+		case END_DOCUMENT:
 			break;
 	}
 	return getEventType();	
 }
 
-int tagsouppullparser::skip_whitespace(std::string& ws) {
-	char c = '\0';
+void tagsouppullparser::skip_whitespace() {
+	c = '\0';
 	ws = "";
 	do {
 		inputstream->read(&c,1);
@@ -237,7 +99,6 @@ int tagsouppullparser::skip_whitespace(std::string& ws) {
 				ws.append(1,c);
 		}
 	} while (!inputstream->eof());
-	return c;
 }
 
 void tagsouppullparser::add_attribute(std::string s) {
@@ -459,6 +320,47 @@ void tagsouppullparser::remove_trailing_whitespace(std::string& s) {
 	while (s.length() > 0 && isspace(s[s.length()-1])) {
 		s.erase(s.length()-1,1);
 	}
+}
+
+void tagsouppullparser::parse_tag(const std::string& tagstr) {
+	std::vector<std::string> tokens = utils::tokenize(tagstr);
+	if (tokens.size() > 0) {
+		text = tokens[0];
+		if (tokens.size() > 1) {
+			std::vector<std::string>::iterator it = tokens.begin();
+			++it;
+			while (it != tokens.end()) {
+				add_attribute(*it);
+				++it;	
+			}
+		} else {
+			if (text.length() > 0 && text[text.length()-1] == '/')
+				text.erase(text.length()-1, 1);
+		}
+	}
+}
+
+void tagsouppullparser::handle_tag() {
+	std::string s;
+	try {
+		s = read_tag();
+	} catch (const xmlexception &) {
+		current_event = END_DOCUMENT;
+		return;
+	}
+	parse_tag(s);
+	current_event = determine_tag_type();
+}
+
+void tagsouppullparser::handle_text() {
+	if (current_event != START_DOCUMENT) 
+		text.append(ws);
+	text.append(1,c);
+	std::string tmp;
+	getline(*inputstream,tmp,'<');
+	text.append(tmp);
+	text = decode_entities(text);
+	current_event = TEXT;
 }
 
 }

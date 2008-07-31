@@ -72,7 +72,11 @@ rss_feed rss_parser::parse() {
 		std::string filter, url;
 		utils::extract_filter(my_uri, filter, url);
 		std::string buf = utils::retrieve_url(url, user_agent.c_str());
-		std::string result = utils::run_filter(filter, buf);
+
+		char * argv[2];
+		argv[0] = const_cast<char *>(filter.c_str());
+		argv[1] = NULL;
+		std::string result = utils::run_program(argv, buf);
 		GetLogger().log(LOG_DEBUG, "rss_parser::parse: output of `%s' is: %s", filter.c_str(), result.c_str());
 		err = mrss_parse_buffer(const_cast<char *>(result.c_str()), result.length(), &mrss);
 		my_errno = errno;

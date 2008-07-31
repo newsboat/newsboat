@@ -168,21 +168,17 @@ BOOST_AUTO_TEST_CASE(TestTagSoupPullParser) {
 	e = xpp.next();
 	BOOST_CHECK_EQUAL(e, tagsouppullparser::START_TAG);
 	BOOST_CHECK_EQUAL(xpp.getText(), "test");
-	BOOST_CHECK_EQUAL(xpp.getAttributeCount(), 0);
 	e = xpp.next();
 	BOOST_CHECK_EQUAL(e, tagsouppullparser::START_TAG);
 	BOOST_CHECK_EQUAL(xpp.getText(), "foo");
-	BOOST_CHECK_EQUAL(xpp.getAttributeCount(), 2);
 	BOOST_CHECK_EQUAL(xpp.getAttributeValue("quux"), "asdf");
 	BOOST_CHECK_EQUAL(xpp.getAttributeValue("bar"), "qqq");
 	e = xpp.next();
 	BOOST_CHECK_EQUAL(e, tagsouppullparser::TEXT);
 	BOOST_CHECK_EQUAL(xpp.getText(), "text");
-	BOOST_CHECK_EQUAL(xpp.getAttributeCount(), -1);
 	e = xpp.next();
 	BOOST_CHECK_EQUAL(e, tagsouppullparser::END_TAG);
 	BOOST_CHECK_EQUAL(xpp.getText(), "foo");
-	BOOST_CHECK_EQUAL(xpp.getAttributeCount(), -1);
 	e = xpp.next();
 	BOOST_CHECK_EQUAL(e, tagsouppullparser::TEXT);
 	BOOST_CHECK_EQUAL(xpp.getText(), "more text");
@@ -481,8 +477,15 @@ BOOST_AUTO_TEST_CASE(TestMiscUtilsFunctions) {
 
 	BOOST_CHECK_EQUAL(utils::get_command_output("ls /dev/null"), "/dev/null\n");
 
-	BOOST_CHECK_EQUAL(utils::run_filter("cat", "this is a multine-line\ntest string"), "this is a multine-line\ntest string");
-	BOOST_CHECK_EQUAL(utils::run_filter("echo -n 'hello world'", ""), "hello world");
+	char * argv[4];
+	argv[0] = "cat";
+	argv[1] = NULL;
+	BOOST_CHECK_EQUAL(utils::run_program(argv, "this is a multine-line\ntest string"), "this is a multine-line\ntest string");
+	argv[0] = "echo";
+	argv[1] = "-n";
+	argv[2] = "hello world";
+	argv[3] = NULL;
+	BOOST_CHECK_EQUAL(utils::run_program(argv, ""), "hello world");
 
 	BOOST_CHECK_EQUAL(utils::replace_all("aaa", "a", "b"), "bbb");
 	BOOST_CHECK_EQUAL(utils::replace_all("aaa", "aa", "ba"), "baa");

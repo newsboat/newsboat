@@ -16,13 +16,9 @@ public:
 	tagsouppullparser();
 	virtual ~tagsouppullparser();
 	void setInput(std::istream& is);
-	int getAttributeCount() const;
-	std::string getAttributeName(unsigned int index) const;
-	std::string getAttributeValue(unsigned int index) const;
 	std::string getAttributeValue(const std::string& name) const;
 	event getEventType() const;
 	std::string getText() const;
-	bool isWhitespace() const;
 	event next();
 	
 private:
@@ -32,7 +28,7 @@ private:
 	std::istream * inputstream;
 	event current_event;
 	
-	int skip_whitespace(std::string& ws);
+	void skip_whitespace();
 	void add_attribute(std::string s);
 	std::string read_tag();
 	event determine_tag_type();
@@ -40,8 +36,12 @@ private:
 	std::string decode_entities(const std::string& s);
 	std::string decode_entity(std::string s);
 	void remove_trailing_whitespace(std::string& s);
+	void parse_tag(const std::string& tagstr);
+	void handle_tag();
+	void handle_text();
 
-	
+	std::string ws;
+	char c;
 };
 
 }

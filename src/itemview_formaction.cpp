@@ -362,7 +362,10 @@ std::vector<std::string> itemview_formaction::render_html(const std::string& sou
 		htmlrenderer rnd(render_width);
 		rnd.render(source, lines, links, feedurl);
 	} else {
-		std::string output = utils::run_filter(renderer, source);
+		char * argv[2];
+		argv[0] = const_cast<char *>(renderer.c_str());
+		argv[1] = NULL;
+		std::string output = utils::run_program(argv, source);
 		std::istringstream is(output);
 		std::string line;
 		getline(is, line);

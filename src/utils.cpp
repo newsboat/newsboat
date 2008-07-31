@@ -81,14 +81,7 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str, std::str
 						}
 					} else {
 						if (str[last_pos-1] == '\\') {
-							switch (str[last_pos]) {
-								case 'n': token.append("\n"); break;
-								case 'r': token.append("\r"); break;
-								case 't': token.append("\t"); break;
-								case '"': token.append("\""); break;
-								case '\\': break;
-								default: token.append(1, str[last_pos]); break;
-							}
+							append_escapes(token, str[last_pos]);
 						} else {
 							token.append(1, str[last_pos]);
 						}
@@ -108,14 +101,7 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str, std::str
 						}
 					} else {
 						if (str[last_pos-1] == '\\') {
-							switch (str[last_pos]) {
-								case 'n': token.append("\n"); break;
-								case 'r': token.append("\r"); break;
-								case 't': token.append("\t"); break;
-								case '"': token.append("\""); break;
-								case '\\': break;
-								default: token.append(1, str[last_pos]); break;
-							}
+							append_escapes(token, str[last_pos]);
 						} else {
 							token.append(1, str[last_pos]);
 						}
@@ -396,62 +382,19 @@ void utils::run_command(const std::string& cmd, const std::string& input) {
 	}
 }
 
-std::string utils::run_filter(const std::string& cmd, const std::string& input) {
-	std::string buf;
-	int ipipe[2];
-	int opipe[2];
-	pipe(ipipe);
-	pipe(opipe);
-
-	int rc = fork();
-	switch (rc) {
-		case -1: break;
-		case 0: { // child:
-				close(ipipe[1]);
-				close(opipe[0]);
-				dup2(ipipe[0], 0);
-				dup2(opipe[1], 1);
-				GetLogger().log(LOG_DEBUG, "utils::run_filter: ipipe[0] = %d ipipe[1] = %d opipe[0] = %d opipe[1] = %d", ipipe[0], ipipe[1], opipe[0], opipe[1]);
-				execl("/bin/sh", "/bin/sh", "-c", cmd.c_str(), NULL);
-				exit(1);
-			}
-			break;
-		default: {
-				close(ipipe[0]);
-				close(opipe[1]);
-				write(ipipe[1], input.c_str(), input.length());
-				close(ipipe[1]);
-				char cbuf[1024];
-				int rc2;
-				while ((rc2 = read(opipe[0], cbuf, sizeof(cbuf))) > 0) {
-					buf.append(cbuf, rc2);
-				}
-				close(opipe[0]);
-			}
-			break;
-	}
-	return buf;
-}
-
 std::string utils::run_program(char * argv[], const std::string& input) {
 	std::string buf;
-	int ipipe[2];
-	int opipe[2];
-	pipe(ipipe);
-	pipe(opipe);
+	int ipipe[2]; int opipe[2];
+	pipe(ipipe);  pipe(opipe);
 
 	int errfd = ::open("/dev/null", O_WRONLY);
 
-
 	int rc = fork();
 	switch (rc) {
 		case -1: break;
 		case 0: { // child:
-				close(ipipe[1]);
-				close(opipe[0]);
-				dup2(ipipe[0], 0);
-				dup2(opipe[1], 1);
-
+				close(ipipe[1]);   close(opipe[0]);
+				dup2(ipipe[0], 0); dup2(opipe[1], 1);
 				close(2);
 				if (errfd != -1) dup2(errfd, 2);
 
@@ -460,8 +403,7 @@ std::string utils::run_program(char * argv[], const std::string& input) {
 			}
 			break;
 		default: {
-				close(ipipe[0]);
-				close(opipe[1]);
+				close(ipipe[0]); close(opipe[1]);
 				write(ipipe[1], input.c_str(), input.length());
 				close(ipipe[1]);
 				char cbuf[1024];
@@ -630,6 +572,17 @@ scope_measure::~scope_measure() {
 	gettimeofday(&tv2, NULL);
 	unsigned long diff = (((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) - tv1.tv_usec;
 	GetLogger().log(LOG_INFO, "scope_measure: function `%s' took %lu.%06lu s", funcname.c_str(), diff / 1000000, diff % 1000000);
+}
+
+void utils::append_escapes(std::string& str, char c) {
+	switch (c) {
+		case 'n': str.append("\n"); break;
+		case 'r': str.append("\r"); break;
+		case 't': str.append("\t"); break;
+		case '"': str.append("\""); break;
+		case '\\': break;
+		default: str.append(1, c); break;
+	}
 }
 
 }

@@ -1,7 +1,4 @@
 TODO:
-- refactor XML pull parser (many redundancies)
-	ignore comments
-	join two subsequent text nodes separated by a comment
 - add configurable pager
 - implement reloading of configuration (:source)
 - check for stfl in config.sh script
@@ -113,3 +110,4 @@ DONE:
 - make cursor in feedlist and itemlist stable when a filter is applied
 - update example config (added script to automatize task)
 - add -d and -l to about and manpage
+- refactored XML pull parser (many redundancies)
