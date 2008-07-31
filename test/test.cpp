@@ -374,6 +374,17 @@ BOOST_AUTO_TEST_CASE(TestFilterLanguage) {
 	BOOST_CHECK_EQUAL(m.matches(&tm), false);
 	m.parse("tags # \"foo\" or tags # \"xyz\"");
 	BOOST_CHECK_EQUAL(m.matches(&tm), true);
+
+	m.parse("AAAA > 12344");
+	BOOST_CHECK_EQUAL(m.matches(&tm), true);
+	m.parse("AAAA > 12345");
+	BOOST_CHECK_EQUAL(m.matches(&tm), false);
+	m.parse("AAAA >= 12345");
+	BOOST_CHECK_EQUAL(m.matches(&tm), true);
+	m.parse("AAAA < 12345");
+	BOOST_CHECK_EQUAL(m.matches(&tm), false);
+	m.parse("AAAA <= 12345");
+	BOOST_CHECK_EQUAL(m.matches(&tm), true);
 }
 
 BOOST_AUTO_TEST_CASE(TestFilterLanguageMemMgmt) {

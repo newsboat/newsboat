@@ -22,6 +22,12 @@ namespace newsbeuter {
 		private:
 			bool matches_r(expression * e, matchable * item);
 
+			bool matchop_lt(expression * e, matchable * item);
+			bool matchop_gt(expression * e, matchable * item);
+			bool matchop_rxeq(expression * e, matchable * item);
+			bool matchop_cont(expression * e, matchable * item);
+			bool matchop_eq(expression * e, matchable * item);
+
 			FilterParser p;
 			bool success;
 	};
