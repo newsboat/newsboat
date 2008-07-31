@@ -57,6 +57,17 @@ class itemlist_formaction : public formaction {
 
 		void save_filterpos();
 
+		void qna_end_setfilter();
+		void qna_end_editflags();
+		void qna_start_search();
+
+		void handle_cmdline_num(unsigned int idx);
+
+		std::string gen_flags(rss_item * item);
+		std::string gen_datestr(time_t t, const char * datetimeformat);
+
+		void prepare_set_filterpos();
+
 		unsigned int pos;
 		rss_feed * feed;
 		bool rebuild_list;
@@ -76,6 +87,8 @@ class itemlist_formaction : public formaction {
 		unsigned int filterpos;
 
 		regexmanager * rxman;
+
+		unsigned int old_width;
 };
 
 }

@@ -49,6 +49,8 @@ class utils {
 		static size_t strwidth(const std::string& s);
 
 		static inline unsigned int max(unsigned int a, unsigned int b) { return (a > b) ? a : b; }
+
+		static unsigned int to_u(const std::string& str);
 };
 
 class scope_measure {

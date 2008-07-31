@@ -18,7 +18,7 @@ namespace newsbeuter {
 
 itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
 	: formaction(vv,formstr), feed(0), apply_filter(false), update_visible_items(true), search_dummy_feed(v->get_ctrl()->get_cache()),
-		set_filterpos(false), filterpos(0), rxman(0) {
+		set_filterpos(false), filterpos(0), rxman(0), old_width(0) {
 	assert(true==m.parse(FILTER_UNREAD_ITEMS));
 }
 
@@ -32,10 +32,9 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 	 *   - extract the current position
 	 *   - if an item was selected, then fetch it and do something with it
 	 */
+
 	std::string itemposname = f->get("itempos");
-	std::istringstream posname(itemposname);
-	unsigned int itempos;
-	posname >> itempos;
+	unsigned int itempos = utils::to_u(itemposname);
 
 	switch (op) {
 		case OP_OPEN: {
@@ -315,74 +314,98 @@ void itemlist_formaction::finished_qna(operation op) {
 	formaction::finished_qna(op); // important!
 
 	switch (op) {
-		case OP_INT_END_SETFILTER: {
-				std::string filtertext = qna_responses[0];
-				filterhistory.add_line(filtertext);
-				if (filtertext.length() > 0) {
-					if (!m.parse(filtertext)) {
-						v->show_error(_("Error: couldn't parse filter command!"));
-					} else {
-						apply_filter = true;
-						update_visible_items = true;
-						do_redraw = true;
-						save_filterpos();
-					}
-				}
-			}
+		case OP_INT_END_SETFILTER:
+			qna_end_setfilter();
 			break;
-		case OP_INT_EDITFLAGS_END: {
-				std::string itemposname = f->get("itempos");
-				if (itemposname.length() > 0) {
-					std::istringstream posname(itemposname);
-					unsigned int itempos = 0;
-					posname >> itempos;
-					if (itempos < visible_items.size()) {
-						visible_items[itempos].first->set_flags(qna_responses[0]);
-						visible_items[itempos].first->update_flags();
-						v->set_status(_("Flags updated."));
-						GetLogger().log(LOG_DEBUG, "itemlist_formaction::finished_qna: updated flags");
-						do_redraw = true;
-					}
-				} else {
-					v->show_error(_("No item selected!")); // should not happen
-				}
-			}
+
+		case OP_INT_EDITFLAGS_END:
+			qna_end_editflags();
 			break;
-		case OP_INT_START_SEARCH: {
-				std::string searchphrase = qna_responses[0];
-				if (searchphrase.length() > 0) {
-					v->set_status(_("Searching..."));
-					searchhistory.add_line(searchphrase);
-					std::vector<rss_item> items;
-					try {
-						std::string utf8searchphrase = utils::convert_text(searchphrase, "utf-8", nl_langinfo(CODESET));
-						if (show_searchresult) {
-							items = v->get_ctrl()->search_for_items(utf8searchphrase, "");
-						} else {
-							items = v->get_ctrl()->search_for_items(utf8searchphrase, feed->rssurl());
-						}
-					} catch (const dbexception& e) {
-						v->show_error(utils::strprintf(_("Error while searching for `%s': %s"), searchphrase.c_str(), e.what()));
-						return;
-					}
-					if (items.size() > 0) {
-						search_dummy_feed.items() = items;
-						if (show_searchresult) {
-							v->pop_current_formaction();
-						}
-						v->push_searchresult(&search_dummy_feed);
-					} else {
-						v->show_error(_("No results."));
-					}
-				}
-			}
+
+		case OP_INT_START_SEARCH:
+			qna_start_search();
 			break;
+
 		default:
 			break;
 	}
 }
 
+void itemlist_formaction::qna_end_setfilter() {
+	std::string filtertext = qna_responses[0];
+	filterhistory.add_line(filtertext);
+
+	if (filtertext.length() > 0) {
+
+		if (!m.parse(filtertext)) {
+			v->show_error(_("Error: couldn't parse filter command!"));
+			return;
+		}
+
+		apply_filter = true;
+		update_visible_items = true;
+		do_redraw = true;
+		save_filterpos();
+	}
+}
+
+void itemlist_formaction::qna_end_editflags() {
+	std::string itemposname = f->get("itempos");
+	if (itemposname.length() == 0) {
+		v->show_error(_("No item selected!")); // should not happen
+		return;
+	}
+
+	std::istringstream posname(itemposname);
+	unsigned int itempos = 0;
+	posname >> itempos;
+	if (itempos < visible_items.size()) {
+		visible_items[itempos].first->set_flags(qna_responses[0]);
+		visible_items[itempos].first->update_flags();
+		v->set_status(_("Flags updated."));
+		GetLogger().log(LOG_DEBUG, "itemlist_formaction::finished_qna: updated flags");
+		do_redraw = true;
+	}
+}
+
+void itemlist_formaction::qna_start_search() {
+	std::string searchphrase = qna_responses[0];
+	if (searchphrase.length() == 0)
+		return;
+
+	v->set_status(_("Searching..."));
+	searchhistory.add_line(searchphrase);
+	std::vector<rss_item> items;
+	try {
+		std::string utf8searchphrase = utils::convert_text(searchphrase, "utf-8", nl_langinfo(CODESET));
+		if (show_searchresult) {
+			items = v->get_ctrl()->search_for_items(utf8searchphrase, "");
+		} else {
+			items = v->get_ctrl()->search_for_items(utf8searchphrase, feed->rssurl());
+		}
+	} catch (const dbexception& e) {
+		v->show_error(utils::strprintf(_("Error while searching for `%s': %s"), searchphrase.c_str(), e.what()));
+		return;
+	}
+
+	if (items.size() == 0) {
+		v->show_error(_("No results."));
+		return;
+	}
+
+	search_dummy_feed.items() = items;
+	if (show_searchresult) {
+		v->pop_current_formaction();
+	}
+	v->push_searchresult(&search_dummy_feed);
+}
+
 void itemlist_formaction::do_update_visible_items() {
+	if (!update_visible_items)
+		return;
+
+	update_visible_items = false;
+
 	std::vector<rss_item>& items = feed->items();
 
 	if (visible_items.size() > 0)
@@ -406,89 +429,42 @@ void itemlist_formaction::do_update_visible_items() {
 
 void itemlist_formaction::prepare() {
 	scope_mutex mtx(&redraw_mtx);
-	if (update_visible_items) {
-		do_update_visible_items();
-		update_visible_items = false;
-	}
+	do_update_visible_items();
 
-	static unsigned int old_width = 0;
+	unsigned int width = utils::to_u(f->get("items:w"));
 
-	std::string listwidth = f->get("items:w");
-	std::istringstream is(listwidth);
-	unsigned int width;
-	is >> width;
+	do_redraw = (old_width != width);
+	old_width = width;
 
-	if (old_width != width) {
-		do_redraw = true;
-		old_width = width;
-	}
+	if (!do_redraw)
+		return;
+	do_redraw = false;
 
-	if (do_redraw) {
-		do_redraw = false;
+	listformatter listfmt;
 
-		GetLogger().log(LOG_DEBUG, "itemlist_formaction::prepare: redrawing");
-		listformatter listfmt;
+	std::string datetimeformat = v->get_cfg()->get_configvalue("datetime-format");
+	std::string itemlist_format = v->get_cfg()->get_configvalue("articlelist-format");
 
-		std::string datetimeformat = v->get_cfg()->get_configvalue("datetime-format");
-		if (datetimeformat.length() == 0)
-			datetimeformat = "%b %d";
+	for (std::vector<itemptr_pos_pair>::iterator it = visible_items.begin(); it != visible_items.end(); ++it) {
+		fmtstr_formatter fmt;
 
-		std::string itemlist_format = v->get_cfg()->get_configvalue("articlelist-format");
-
-		for (std::vector<itemptr_pos_pair>::iterator it = visible_items.begin(); it != visible_items.end(); ++it) {
-			fmtstr_formatter fmt;
-
-			fmt.register_fmt('i', utils::strprintf("%u",it->second + 1));
-
-			std::string flags;
-			if (it->first->deleted()) {
-				flags.append("D");
-			} else if (it->first->unread()) {
-				flags.append("N");
-			} else {
-				flags.append(" ");
-			}
-			if (it->first->flags().length() > 0) {
-				flags.append("!");
-			} else {
-				flags.append(" ");
-			}
-
-			fmt.register_fmt('f', flags);
-
-			char datebuf[64];
-			time_t t = it->first->pubDate_timestamp();
-			struct tm * stm = localtime(&t);
-			strftime(datebuf,sizeof(datebuf), datetimeformat.c_str(), stm);
-
-			fmt.register_fmt('D', datebuf);
-
-			if (feed->rssurl() != it->first->feedurl()) {
-				fmt.register_fmt('T', it->first->get_feedptr()->title());
-			}
-			fmt.register_fmt('t', it->first->title());
-			fmt.register_fmt('a', it->first->author());
-
-			listfmt.add_line(fmt.do_format(itemlist_format, width), it->second);
+		fmt.register_fmt('i', utils::strprintf("%u",it->second + 1));
+		fmt.register_fmt('f', gen_flags(it->first));
+		fmt.register_fmt('D', gen_datestr(it->first->pubDate_timestamp(), datetimeformat.c_str()));
+		if (feed->rssurl() != it->first->feedurl()) {
+			fmt.register_fmt('T', it->first->get_feedptr()->title());
 		}
+		fmt.register_fmt('t', it->first->title());
+		fmt.register_fmt('a', it->first->author());
 
-		f->modify("items","replace_inner", listfmt.format_list(rxman, "articlelist"));
-		
-		set_head(feed->title(),feed->unread_item_count(),feed->items().size(), feed->rssurl());
-
-		if (set_filterpos) {
-			set_filterpos = false;
-			unsigned int i=0;
-			for (std::vector<itemptr_pos_pair>::iterator it=visible_items.begin();it!=visible_items.end();++it, ++i) {
-				if (it->second == filterpos) {
-					f->set("itempos", utils::to_s(i));
-					return;
-				}
-			}
-			f->set("itempos", "0");
-		}
-
+		listfmt.add_line(fmt.do_format(itemlist_format, width), it->second);
 	}
+
+	f->modify("items","replace_inner", listfmt.format_list(rxman, "articlelist"));
+	
+	set_head(feed->title(),feed->unread_item_count(),feed->items().size(), feed->rssurl());
+
+	prepare_set_filterpos();
 }
 
 void itemlist_formaction::init() {
@@ -593,38 +569,42 @@ keymap_hint_entry * itemlist_formaction::get_keymap_hint() {
 	return hints;
 }
 
+void itemlist_formaction::handle_cmdline_num(unsigned int idx) {
+	if (idx > 0 && idx <= visible_items[visible_items.size()-1].second + 1) {
+		int i = get_pos(idx - 1);
+		if (i == -1) {
+			v->show_error(_("Position not visible!"));
+		} else {
+			f->set("itempos", utils::to_s(i));
+		}
+	} else {
+		v->show_error(_("Invalid position!"));
+	}
+}
+
 void itemlist_formaction::handle_cmdline(const std::string& cmd) {
 	unsigned int idx = 0;
 	if (1==sscanf(cmd.c_str(),"%u",&idx)) {
-		if (idx > 0 && idx <= visible_items[visible_items.size()-1].second + 1) {
-			int i = get_pos(idx - 1);
-			if (i == -1) {
-				v->show_error(_("Position not visible!"));
-			} else {
-				f->set("itempos", utils::to_s(i));
-			}
-		} else {
-			v->show_error(_("Invalid position!"));
-		}
+		handle_cmdline_num(idx);
 	} else {
 		std::vector<std::string> tokens = utils::tokenize_quoted(cmd);
-		if (tokens.size() > 0) {
-			if (tokens[0] == "save" && tokens.size() >= 2) {
-				std::string filename = utils::resolve_tilde(tokens[1]);
-				std::string itemposname = f->get("itempos");
-				GetLogger().log(LOG_INFO, "itemlist_formaction::handle_cmdline: saving item at pos `%s' to `%s'", itemposname.c_str(), filename.c_str());
-				if (itemposname.length() > 0) {
-					std::istringstream posname(itemposname);
-					unsigned int itempos = 0;
-					posname >> itempos;
+		if (tokens.size() == 0)
+			return;
+		if (tokens[0] == "save" && tokens.size() >= 2) {
+			std::string filename = utils::resolve_tilde(tokens[1]);
+			std::string itemposname = f->get("itempos");
+			GetLogger().log(LOG_INFO, "itemlist_formaction::handle_cmdline: saving item at pos `%s' to `%s'", itemposname.c_str(), filename.c_str());
+			if (itemposname.length() > 0) {
+				std::istringstream posname(itemposname);
+				unsigned int itempos = 0;
+				posname >> itempos;
 
-					save_article(filename, *visible_items[itempos].first);
-				} else {
-					v->show_error(_("Error: no item selected!"));
-				}
+				save_article(filename, *visible_items[itempos].first);
 			} else {
-				formaction::handle_cmdline(cmd);
+				v->show_error(_("Error: no item selected!"));
 			}
+		} else {
+			formaction::handle_cmdline(cmd);
 		}
 	}
 }
@@ -678,5 +658,42 @@ void itemlist_formaction::set_regexmanager(regexmanager * r) {
 	f->modify("items", "replace", textview);
 }
 
+std::string itemlist_formaction::gen_flags(rss_item * item) {
+	std::string flags;
+	if (item->deleted()) {
+		flags.append("D");
+	} else if (item->unread()) {
+		flags.append("N");
+	} else {
+		flags.append(" ");
+	}
+	if (item->flags().length() > 0) {
+		flags.append("!");
+	} else {
+		flags.append(" ");
+	}
+	return flags;
+}
+
+std::string itemlist_formaction::gen_datestr(time_t t, const char * datetimeformat) {
+	char datebuf[64];
+	struct tm * stm = localtime(&t);
+	strftime(datebuf,sizeof(datebuf), datetimeformat, stm);
+	return datebuf;
+}
+
+void itemlist_formaction::prepare_set_filterpos() {
+	if (set_filterpos) {
+		set_filterpos = false;
+		unsigned int i=0;
+		for (std::vector<itemptr_pos_pair>::iterator it=visible_items.begin();it!=visible_items.end();++it, ++i) {
+			if (it->second == filterpos) {
+				f->set("itempos", utils::to_s(i));
+				return;
+			}
+		}
+		f->set("itempos", "0");
+	}
+}
 
 }

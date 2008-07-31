@@ -608,6 +608,12 @@ std::string utils::get_useragent(configcontainer * cfgcont) {
 	return ua_pref;
 }
 
+unsigned int utils::to_u(const std::string& str) {
+	std::istringstream is(str);
+	unsigned int u;
+	is >> u;
+	return u;
+}
 
 scope_measure::scope_measure(const std::string& func, loglevel ll) : lvl(ll) {
 	funcname = func;
