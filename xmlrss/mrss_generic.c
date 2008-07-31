@@ -119,6 +119,9 @@ mrss_get_last_modified_with_options (const char *urlstring, time_t * lastmodifie
       if (options->cacert)
 	curl_easy_setopt (curl, CURLOPT_CAINFO, options->cacert);
 
+      if (options->user_agent)
+	curl_easy_setopt (curl, CURLOPT_USERAGENT, options->user_agent);
+
       if (options->proxy)
 	{
 	  curl_easy_setopt (curl, CURLOPT_PROXY, options->proxy);
