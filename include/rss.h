@@ -176,10 +176,14 @@ namespace newsbeuter {
 			rss_parser(const char * uri, cache * c, configcontainer *, rss_ignores * ii);
 			~rss_parser();
 			rss_feed parse();
-			static time_t parse_date(const std::string& datestr);
 			bool check_and_update_lastmodified();
 		private:
 			void replace_newline_characters(std::string& str);
+			mrss_options_t * create_mrss_options();
+			std::string render_xhtml_title(const std::string& title, const std::string& link);
+			time_t parse_date(const std::string& datestr);
+			unsigned int monthname_to_number(const std::string& mon);
+
 			std::string my_uri;
 			cache * ch;
 			configcontainer *cfgcont;

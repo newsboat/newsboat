@@ -33,16 +33,6 @@ rss_feed rss_parser::parse() {
 
 	feed.set_rssurl(my_uri);
 
-	char * proxy = NULL;
-	char * proxy_auth = NULL;
-
-	if (cfgcont->get_configvalue_as_bool("use-proxy") == true) {
-		proxy = const_cast<char *>(cfgcont->get_configvalue("proxy").c_str());
-		proxy_auth = const_cast<char *>(cfgcont->get_configvalue("proxy-auth").c_str());
-	}
-
-	std::string user_agent = utils::get_useragent(cfgcont);
-
 	/*
 	 * This is a bit messy.
 	 *	- http:// and https:// URLs are downloaded and parsed regularly
@@ -54,7 +44,7 @@ rss_feed rss_parser::parse() {
 	int my_errno = 0;
 	CURLcode ccode = CURLE_OK;
 	if (my_uri.substr(0,5) == "http:" || my_uri.substr(0,6) == "https:") {
-		mrss_options_t * options = mrss_options_new(30, proxy, proxy_auth, NULL, NULL, NULL, 0, NULL, user_agent.c_str());
+		mrss_options_t * options = create_mrss_options();
 		{
 			scope_measure m1("mrss_parse_url_with_options_and_error");
 			err = mrss_parse_url_with_options_and_error(const_cast<char *>(my_uri.c_str()), &mrss, options, &ccode);
@@ -71,7 +61,7 @@ rss_feed rss_parser::parse() {
 	} else if (my_uri.substr(0,7) == "filter:") {
 		std::string filter, url;
 		utils::extract_filter(my_uri, filter, url);
-		std::string buf = utils::retrieve_url(url, user_agent.c_str());
+		std::string buf = utils::retrieve_url(url, utils::get_useragent(cfgcont).c_str());
 
 		char * argv[2];
 		argv[0] = const_cast<char *>(filter.c_str());
@@ -120,13 +110,7 @@ rss_feed rss_parser::parse() {
 		if (mrss->title) {
 			if (mrss->title_type && (strcmp(mrss->title_type,"xhtml")==0 || strcmp(mrss->title_type,"html")==0)) {
 				std::string xhtmltitle = utils::convert_text(mrss->title, "utf-8", encoding);
-				htmlrenderer rnd(1 << 16); // a huge number
-				std::vector<std::string> lines;
-				std::vector<linkpair> links; // not needed
-				rnd.render(xhtmltitle, lines, links, feed.link());
-				if (lines.size() > 0) {
-					feed.set_title(lines[0]);
-				}
+				feed.set_title(render_xhtml_title(xhtmltitle, feed.link()));
 			} else {
 				feed.set_title(utils::convert_text(mrss->title, "utf-8", encoding));
 			}
@@ -178,20 +162,11 @@ rss_feed rss_parser::parse() {
 			if (item->title) {
 				if (item->title_type && (strcmp(item->title_type,"xhtml")==0 || strcmp(item->title_type,"html")==0)) {
 					std::string xhtmltitle = utils::convert_text(item->title, "utf-8", encoding);
-					htmlrenderer rnd(1 << 16); // a huge number
-					std::vector<std::string> lines;
-					std::vector<linkpair> links; // not needed
-					rnd.render(xhtmltitle, lines, links, feed.link());
-					if (lines.size() > 0) {
-						x.set_title(lines[0]);
-					}
+					x.set_title(render_xhtml_title(xhtmltitle, feed.link()));
 				} else {
 					std::string title = utils::convert_text(item->title, "utf-8", encoding);
-					GetLogger().log(LOG_DEBUG, "rss_parser::parse: before replace_newline_characters: `%s'", title.c_str());
 					replace_newline_characters(title);
-					GetLogger().log(LOG_DEBUG, "rss_parser::parse: after replace_newline_characters: `%s'", title.c_str());
 					x.set_title(title);
-					GetLogger().log(LOG_DEBUG, "rss_parser::parse: converted title `%s' to `%s'", item->title, title.c_str());
 				}
 			}
 			if (item->link) {
@@ -345,18 +320,8 @@ bool rss_parser::check_and_update_lastmodified() {
 	time_t newlm = 0;
 	mrss_error_t err;
 
-	char * proxy = NULL;
-	char * proxy_auth = NULL;
-
-	if (cfgcont->get_configvalue_as_bool("use-proxy") == true) {
-		proxy = const_cast<char *>(cfgcont->get_configvalue("proxy").c_str());
-		proxy_auth = const_cast<char *>(cfgcont->get_configvalue("proxy-auth").c_str());
-	}
-
-	mrss_options_t * options = mrss_options_new(30, proxy, proxy_auth, NULL, NULL, NULL, 0, NULL, utils::get_useragent(cfgcont).c_str());
-
+	mrss_options_t * options = create_mrss_options();
 	err = mrss_get_last_modified_with_options(const_cast<char *>(my_uri.c_str()), &newlm, options);
-
 	mrss_options_free(options);
 
 	GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: err = %u oldlm = %d newlm = %d", err, oldlm, newlm);
@@ -466,30 +431,7 @@ time_t rss_parser::parse_date(const std::string& datestr) {
 	
 	is >> monthstr;
 	
-	if (monthstr == "Jan")
-		stm.tm_mon = 0;
-	else if (monthstr == "Feb")
-		stm.tm_mon = 1;
-	else if (monthstr == "Mar")
-		stm.tm_mon = 2;
-	else if (monthstr == "Apr")
-		stm.tm_mon = 3;
-	else if (monthstr == "May")
-		stm.tm_mon = 4;
-	else if (monthstr == "Jun")
-		stm.tm_mon = 5;
-	else if (monthstr == "Jul")
-		stm.tm_mon = 6;
-	else if (monthstr == "Aug")
-		stm.tm_mon = 7;
-	else if (monthstr == "Sep")
-		stm.tm_mon = 8;
-	else if (monthstr == "Oct")
-		stm.tm_mon = 9;
-	else if (monthstr == "Nov")
-		stm.tm_mon = 10;
-	else if (monthstr == "Dec")
-		stm.tm_mon = 11;
+	stm.tm_mon = monthname_to_number(monthstr);
 	
 	int year;
 	is >> year;
@@ -914,4 +856,35 @@ void rss_item::set_feedptr(rss_feed * ptr) {
 void rss_parser::replace_newline_characters(std::string& str) {
 	str = utils::replace_all(str, "\r", " ");
 	str = utils::replace_all(str, "\n", " ");
+}
+
+mrss_options_t * rss_parser::create_mrss_options() {
+	char * proxy = NULL;
+	char * proxy_auth = NULL;
+
+	if (cfgcont->get_configvalue_as_bool("use-proxy") == true) {
+		proxy = const_cast<char *>(cfgcont->get_configvalue("proxy").c_str());
+		proxy_auth = const_cast<char *>(cfgcont->get_configvalue("proxy-auth").c_str());
+	}
+
+	return mrss_options_new(30, proxy, proxy_auth, NULL, NULL, NULL, 0, NULL, utils::get_useragent(cfgcont).c_str());
+}
+
+std::string rss_parser::render_xhtml_title(const std::string& title, const std::string& link) {
+	htmlrenderer rnd(1 << 16); // a huge number
+	std::vector<std::string> lines;
+	std::vector<linkpair> links; // not needed
+	rnd.render(title, lines, links, link);
+	if (lines.size() > 0)
+		return lines[0];
+	return "";
+}
+
+unsigned int rss_parser::monthname_to_number(const std::string& monthstr) {
+	static const char * monthtable[] = { "Jan", "Feb", "Mar", "Apr","May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", NULL };
+	for (unsigned int i=0;monthtable[i]!=NULL;i++) {
+		if (monthstr == monthtable[i])
+			return i;
+	}
+	return 0;
 }
