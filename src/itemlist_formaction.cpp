@@ -429,12 +429,15 @@ void itemlist_formaction::do_update_visible_items() {
 
 void itemlist_formaction::prepare() {
 	scope_mutex mtx(&redraw_mtx);
+
 	do_update_visible_items();
 
 	unsigned int width = utils::to_u(f->get("items:w"));
 
-	do_redraw = (old_width != width);
-	old_width = width;
+	if (old_width != width) {
+		do_redraw = true;
+		old_width = width;
+	}
 
 	if (!do_redraw)
 		return;
