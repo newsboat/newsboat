@@ -102,6 +102,7 @@ mrss_get_last_modified_with_options (const char *urlstring, time_t * lastmodifie
   curl_easy_setopt (curl, CURLOPT_HEADERDATA, lastmodified);
   curl_easy_setopt (curl, CURLOPT_NOBODY, 1);
   curl_easy_setopt (curl, CURLOPT_FOLLOWLOCATION, 1);
+  curl_easy_setopt (curl, CURLOPT_NOSIGNAL, 1);
 
   if (options)
     {
