@@ -111,17 +111,9 @@ void opml_urlreader::reload() {
 	if (offline)
 		return;
 
-	if (urls.size() > 0) {
-		urls.erase(urls.begin(), urls.end());
-	}
-
-	if (tags.size() > 0) {
-		tags.erase(tags.begin(), tags.end());
-	}
-
-	if (alltags.size() > 0) {
-		alltags.erase(alltags.begin(), alltags.end());
-	}
+	urls.clear();
+	tags.clear();
+	alltags.clear();
 
 	std::string user_agent = utils::get_useragent(cfg);
 

@@ -12,6 +12,7 @@ namespace newsbeuter {
 
 	struct config_action_handler {
 		virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params) = 0;
+		config_action_handler() { }
 		virtual ~config_action_handler() { }
 	};
 

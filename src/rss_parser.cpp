@@ -64,7 +64,6 @@ bool rss_parser::check_and_update_lastmodified() {
 
 	time_t oldlm = ch->get_lastmodified(my_uri);
 	time_t newlm = 0;
-	mrss_error_t err;
 
 	mrss_options_t * options = create_mrss_options();
 	err = mrss_get_last_modified_with_options(const_cast<char *>(my_uri.c_str()), &newlm, options);

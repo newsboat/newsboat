@@ -136,9 +136,7 @@ void formaction::start_qna(const std::vector<qna_pair>& prompts, operation finis
 	 * vector, the first fields corresponds with the first prompt, the second field with the second prompt, etc.
 	 */
 	qna_prompts = prompts;
-	if (qna_responses.size() > 0) {
-		qna_responses.erase(qna_responses.begin(), qna_responses.end());
-	}
+	qna_responses.clear();
 	finish_operation = finish_op;
 	qna_history = h;
 	start_next_question();

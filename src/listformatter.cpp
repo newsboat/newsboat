@@ -13,8 +13,8 @@ void listformatter::add_line(const std::string& text, unsigned int id) {
 	refresh_cache = true;
 }
 
-void listformatter::add_lines(const std::vector<std::string>& lines) {
-	for (std::vector<std::string>::const_iterator it=lines.begin();it!=lines.end();++it) {
+void listformatter::add_lines(const std::vector<std::string>& thelines) {
+	for (std::vector<std::string>::const_iterator it=thelines.begin();it!=thelines.end();++it) {
 		add_line(*it);
 	}
 }

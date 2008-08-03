@@ -208,7 +208,7 @@ action_handler_status keymap::handle_action(const std::string& action, const std
 					if (tmpcmd.op != OP_NIL)
 						cmds.push_back(tmpcmd);
 					tmpcmd.op = OP_NIL;
-					tmpcmd.args.erase(tmpcmd.args.begin(), tmpcmd.args.end());
+					tmpcmd.args.clear();
 					first = true;
 				} else {
 					GetLogger().log(LOG_DEBUG, "keymap::handle_action: new parameter `%s' (op = %u)", it->c_str());

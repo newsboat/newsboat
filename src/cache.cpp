@@ -403,9 +403,7 @@ void cache::internalize_rssfeed(rss_feed& feed) {
 		throw dbexception(db);
 	}
 
-	if (feed.items().size() > 0) {
-		feed.items().erase(feed.items().begin(),feed.items().end());
-	}
+	feed.items().clear();
 
 	/* ...and then the associated items */
 	query = prepare_query("SELECT guid,title,author,url,pubDate,content,unread,feedurl,enclosure_url,enclosure_type,enqueued,flags FROM rss_item WHERE feedurl = '%q' AND deleted = 0 ORDER BY pubDate DESC, id DESC;",feed.rssurl().c_str());

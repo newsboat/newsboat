@@ -22,7 +22,7 @@ void itemview_formaction::init() {
 	f->set("msg","");
 	do_redraw = true;
 	quit = false;
-	links.erase(links.begin(), links.end());
+	links.clear();
 	num_lines = 0;
 	if (!v->get_cfg()->get_configvalue_as_bool("display-article-progress")) {
 		f->set("percentwidth", "0");
@@ -189,7 +189,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 			break;
 		case OP_BOOKMARK:
 			if (automatic) {
-				qna_responses.erase(qna_responses.begin(), qna_responses.end());
+				qna_responses.clear();
 				qna_responses.push_back(item.title());
 				qna_responses.push_back(item.link());
 				qna_responses.push_back(args->size() > 0 ? (*args)[0] : "");
@@ -199,7 +199,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 			break;
 		case OP_EDITFLAGS: 
 			if (automatic) {
-				qna_responses.erase(qna_responses.begin(), qna_responses.end());
+				qna_responses.clear();
 				if (args->size() > 0) {
 					qna_responses.push_back((*args)[0]);
 					this->finished_qna(OP_INT_EDITFLAGS_END);
@@ -355,12 +355,12 @@ void itemview_formaction::finished_qna(operation op) {
 	}
 }
 
-std::vector<std::string> itemview_formaction::render_html(const std::string& source, std::vector<linkpair>& links, const std::string& feedurl, unsigned int render_width) {
+std::vector<std::string> itemview_formaction::render_html(const std::string& source, std::vector<linkpair>& thelinks, const std::string& feedurl, unsigned int render_width) {
 	std::vector<std::string> lines;
 	std::string renderer = v->get_cfg()->get_configvalue("html-renderer");
 	if (renderer == "internal") {
 		htmlrenderer rnd(render_width);
-		rnd.render(source, lines, links, feedurl);
+		rnd.render(source, lines, thelinks, feedurl);
 	} else {
 		char * argv[2];
 		argv[0] = const_cast<char *>(renderer.c_str());

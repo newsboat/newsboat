@@ -84,7 +84,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				if (itemposname.length() > 0) {
 					if (itempos < visible_items.size()) {
 						if (automatic) {
-							qna_responses.erase(qna_responses.begin(), qna_responses.end());
+							qna_responses.clear();
 							qna_responses.push_back(visible_items[itempos].first->title());
 							qna_responses.push_back(visible_items[itempos].first->link());
 							qna_responses.push_back(args->size() > 0 ? (*args)[0] : "");
@@ -103,7 +103,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					if (itempos < visible_items.size()) {
 						if (automatic) {
 							if (args->size() > 0) {
-								qna_responses.erase(qna_responses.begin(), qna_responses.end());
+								qna_responses.clear();
 								qna_responses.push_back((*args)[0]);
 								finished_qna(OP_INT_EDITFLAGS_END);
 							}
@@ -218,7 +218,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				std::vector<qna_pair> qna;
 				if (automatic) {
 					if (args->size() > 0) {
-						qna_responses.erase(qna_responses.begin(), qna_responses.end());
+						qna_responses.clear();
 						qna_responses.push_back((*args)[0]);
 						finished_qna(OP_INT_START_SEARCH);
 					}
@@ -283,7 +283,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		case OP_SETFILTER: 
 			if (automatic) {
 				if (args->size() > 0) {
-					qna_responses.erase(qna_responses.begin(), qna_responses.end());
+					qna_responses.clear();
 					qna_responses.push_back((*args)[0]);
 					this->finished_qna(OP_INT_END_SETFILTER);
 				}
@@ -408,8 +408,7 @@ void itemlist_formaction::do_update_visible_items() {
 
 	std::vector<rss_item>& items = feed->items();
 
-	if (visible_items.size() > 0)
-		visible_items.erase(visible_items.begin(), visible_items.end());
+	visible_items.clear();
 
 	/*
 	 * this method doesn't redraw, all it does is to go through all

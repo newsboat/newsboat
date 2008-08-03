@@ -111,8 +111,7 @@ std::string rss_feed::get_tags() {
 }
 
 void rss_feed::set_tags(const std::vector<std::string>& tags) {
-	if (tags_.size() > 0)
-		tags_.erase(tags_.begin(), tags_.end());
+	tags_.clear();
 	for (std::vector<std::string>::const_iterator it=tags.begin();it!=tags.end();++it) {
 		tags_.push_back(*it);
 	}
@@ -358,9 +357,7 @@ void rss_feed::update_items(std::vector<rss_feed>& feeds) {
 
 	matcher m(query);
 
-	if (items_.size() > 0) {
-		items_.erase(items_.begin(), items_.end());
-	}
+	items_.clear();
 
 	for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it) {
 		if (it->rssurl().substr(0,6) != "query:") { // don't fetch items from other query feeds!
@@ -396,30 +393,35 @@ void rss_feed::set_rssurl(const std::string& u) {
 }
 
 struct sort_item_by_title : public std::binary_function<const rss_item&, const rss_item&, bool> {
+	sort_item_by_title() { }
 	bool operator()(const rss_item& a, const rss_item& b) {
 		return strcasecmp(a.title().c_str(), b.title().c_str()) < 0;
 	}
 };
 
 struct sort_item_by_flags : public std::binary_function<const rss_item&, const rss_item&, bool> {
+	sort_item_by_flags() { }
 	bool operator()(const rss_item& a, const rss_item& b) {
 		return strcmp(a.flags().c_str(), b.flags().c_str()) < 0;
 	}
 };
 
 struct sort_item_by_author : public std::binary_function<const rss_item&, const rss_item&, bool> {
+	sort_item_by_author() { }
 	bool operator()(const rss_item& a, const rss_item& b) {
 		return strcmp(a.author().c_str(), b.author().c_str()) < 0;
 	}
 };
 
 struct sort_item_by_link : public std::binary_function<const rss_item&, const rss_item&, bool> {
+	sort_item_by_link() { }
 	bool operator()(const rss_item& a, const rss_item& b) {
 		return strcmp(a.link().c_str(), b.link().c_str()) < 0;
 	}
 };
 
 struct sort_item_by_guid : public std::binary_function<const rss_item&, const rss_item&, bool> {
+	sort_item_by_guid() { }
 	bool operator()(const rss_item& a, const rss_item& b) {
 		return strcmp(a.guid().c_str(), b.guid().c_str()) < 0;
 	}

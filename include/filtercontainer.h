@@ -9,6 +9,7 @@ typedef std::pair<std::string, std::string> filter_name_expr_pair;
 
 class filtercontainer : public config_action_handler {
 	public:
+		filtercontainer() { }
 		virtual ~filtercontainer();
 		virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
 		inline std::vector<filter_name_expr_pair>& get_filters() { return filters; }

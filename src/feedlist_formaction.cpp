@@ -155,17 +155,17 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 			do_redraw = true;
 			break;
 		case OP_NEXTUNREAD: {
-				unsigned int feedpos;
+				unsigned int local_tmp;
 				GetLogger().log(LOG_INFO, "feedlist_formaction: jumping to next unred feed");
-				if (!jump_to_next_unread_feed(feedpos)) {
+				if (!jump_to_next_unread_feed(local_tmp)) {
 					v->show_error(_("No feeds with unread items."));
 				}
 			}
 			break;
 		case OP_PREVUNREAD: {
-				unsigned int feedpos;
+				unsigned int local_tmp;
 				GetLogger().log(LOG_INFO, "feedlist_formaction: jumping to previous unred feed");
-				if (!jump_to_previous_unread_feed(feedpos)) {
+				if (!jump_to_previous_unread_feed(local_tmp)) {
 					v->show_error(_("No feeds with unread items."));
 				}
 			}
@@ -226,7 +226,7 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 			break;
 		case OP_SEARCH:
 			if (automatic && args->size() > 0) {
-				qna_responses.erase(qna_responses.begin(), qna_responses.end());
+				qna_responses.clear();
 				// when in automatic mode, we manually fill the qna_responses vector from the arguments
 				// and then run the finished_qna() by ourselves to simulate a "Q&A" session that is
 				// in fact macro-driven.
@@ -246,7 +246,7 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 			break;
 		case OP_SETFILTER:
 			if (automatic && args->size() > 0) {
-				qna_responses.erase(qna_responses.begin(), qna_responses.end());
+				qna_responses.clear();
 				qna_responses.push_back((*args)[0]);
 				finished_qna(OP_INT_END_SETFILTER);
 			} else {
@@ -275,8 +275,7 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 void feedlist_formaction::update_visible_feeds(std::vector<rss_feed>& feeds) {
 	assert(v->get_cfg() != NULL); // must not happen
 
-	if (visible_feeds.size() > 0)
-		visible_feeds.erase(visible_feeds.begin(), visible_feeds.end());
+	visible_feeds.clear();
 
 	unsigned int i = 0;
 
