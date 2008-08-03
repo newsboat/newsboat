@@ -57,12 +57,11 @@ tagsouppullparser::event tagsouppullparser::next() {
 	 */
 	attributes.clear();
 	text = "";
-	
+
 	if (inputstream->eof()) {
 		current_event = END_DOCUMENT;
 	}
 
-	
 	switch (current_event) {
 		case START_DOCUMENT: 
 		case START_TAG:
@@ -74,10 +73,8 @@ tagsouppullparser::event tagsouppullparser::next() {
 			}
 			if (c != '<') {
 				handle_text();
-			} else {
-				handle_tag();
+				break;
 			}
-			break;
 		case TEXT:
 			handle_tag();
 			break;
