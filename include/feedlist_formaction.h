@@ -44,6 +44,17 @@ class feedlist_formaction : public formaction {
 
 		void save_filterpos();
 
+		void op_end_setfilter();
+		void op_start_search();
+
+		void handle_cmdline_num(unsigned int idx);
+
+		void set_pos();
+
+		std::string get_title(rss_feed * feed);
+
+		std::string format_line(const std::string& feedlist_format, rss_feed * feed, unsigned int pos, unsigned int width);
+
 		bool zero_feedpos;
 		unsigned int feeds_shown;
 		bool auto_open;
@@ -63,6 +74,8 @@ class feedlist_formaction : public formaction {
 		bool set_filterpos;
 
 		regexmanager * rxman;
+
+		unsigned int old_width;
 };
 
 }

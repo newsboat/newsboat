@@ -193,58 +193,15 @@ std::string filebrowser_formaction::add_file(std::string filename) {
 	std::string retval;
 	struct stat sb;
 	if (::stat(filename.c_str(),&sb)==0) {
-		char ftype = '?';
-		if (sb.st_mode & S_IFREG)
-			ftype = '-';
-		else if (sb.st_mode & S_IFDIR)
-			ftype = 'd';
-		else if (sb.st_mode & S_IFBLK)
-			ftype = 'b';
-		else if (sb.st_mode & S_IFCHR)
-			ftype = 'c';
-		else if (sb.st_mode & S_IFIFO)
-			ftype = 'p';
-		else if (sb.st_mode & S_IFLNK)
-			ftype = 'l';
-			
+		char ftype = get_filetype(sb.st_mode);
+
 		std::string rwxbits = get_rwx(sb.st_mode & 0777);
-		std::string owner = "????????", group = "????????";
-		
-		struct passwd * spw = getpwuid(sb.st_uid);
-		if (spw) {
-			owner = spw->pw_name;
-			for (int i=owner.length();i<8;++i) {
-				owner.append(" ");	
-			}	
-		}
-		struct group * sgr = getgrgid(sb.st_gid);
-		if (sgr) {
-			group = sgr->gr_name;
-			for (int i=group.length();i<8;++i) {
-				group.append(" ");
-			}
-		}
-		
+		std::string owner = get_owner(sb.st_uid);
+		std::string group = get_group(sb.st_gid);
+
 		std::string sizestr = utils::strprintf("%12u", sb.st_size);
-		
-		std::string line;
-		line.append(1,ftype);
-		line.append(rwxbits);
-		line.append(" ");
-		line.append(owner);
-		line.append(" ");
-		line.append(group);
-		line.append(" ");
-		line.append(sizestr);
-		line.append(" ");
-		line.append(filename);
-		
-		retval = "{listitem[";
-		retval.append(1,ftype);
-		retval.append(stfl::quote(filename));
-		retval.append("] text:");
-		retval.append(stfl::quote(line));
-		retval.append("}");
+		std::string line = utils::strprintf("%c%s %s %s %s %s", ftype, rwxbits.c_str(), owner.c_str(), group.c_str(), sizestr.c_str(), filename.c_str());
+		retval = utils::strprintf("{listitem[%c%s] text:%s}", ftype, stfl::quote(filename).c_str(), stfl::quote(line).c_str());
 	}
 	return retval;
 }
@@ -258,6 +215,44 @@ std::string filebrowser_formaction::get_rwx(unsigned short val) {
 		str.insert(0, bitstrs[bits]);
 	}
 	return str;
+}
+
+char filebrowser_formaction::get_filetype(mode_t mode) {
+	static struct flag_char {
+		mode_t flag; char ftype;
+	} flags[] = {
+		{ S_IFREG, '-' }, { S_IFDIR, 'd' }, { S_IFBLK, 'b' }, { S_IFCHR, 'c' },
+		{ S_IFIFO, 'p' }, { S_IFLNK, 'l' }, { 0      ,  0  }
+	};
+	for (unsigned int i=0;flags[i].flag != 0;i++) {
+		if (mode & flags[i].flag)
+			return flags[i].ftype;
+	}
+	return '?';
+}
+
+std::string filebrowser_formaction::get_owner(uid_t uid) {
+	struct passwd * spw = getpwuid(uid);
+	if (spw) {
+		std::string owner = spw->pw_name;
+		for (int i=owner.length();i<8;++i) {
+			owner.append(" ");
+		}
+		return owner;
+	}
+	return "????????";
+}
+
+std::string filebrowser_formaction::get_group(gid_t gid) {
+	struct group * sgr = getgrgid(gid);
+	if (sgr) {
+		std::string group = sgr->gr_name;
+		for (int i=group.length();i<8;++i) {
+			group.append(" ");
+		}
+		return group;
+	}
+	return "????????";
 }
 
 }

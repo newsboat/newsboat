@@ -48,7 +48,6 @@ namespace newsbeuter {
 
 			inline std::vector<rss_feed>& get_all_feeds() { return feeds; }
 
-			// TODO: move somewhere else...
 			void set_feedptrs(rss_feed& feed);
 
 			inline filtercontainer& get_filters() { return filters; }

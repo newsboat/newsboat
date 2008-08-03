@@ -22,7 +22,7 @@ namespace newsbeuter {
 feedlist_formaction::feedlist_formaction(view * vv, std::string formstr) 
 	: formaction(vv,formstr), zero_feedpos(false), feeds_shown(0),
 		auto_open(false), quit(false), apply_filter(false), search_dummy_feed(v->get_ctrl()->get_cache()),
-		filterpos(0), set_filterpos(false), rxman(0) {
+		filterpos(0), set_filterpos(false), rxman(0), old_width(0) {
 	assert(true==m.parse(FILTER_UNREAD_FEEDS));
 }
 
@@ -55,12 +55,7 @@ void feedlist_formaction::init() {
 feedlist_formaction::~feedlist_formaction() { }
 
 void feedlist_formaction::prepare() {
-	static unsigned int old_width = 0;
-
-	std::string listwidth = f->get("items:w");
-	std::istringstream is(listwidth);
-	unsigned int width = 0;
-	is >> width;
+	unsigned int width = utils::to_u(f->get("items:w"));
 
 	if (old_width != width) {
 		do_redraw = true;
@@ -72,20 +67,7 @@ void feedlist_formaction::prepare() {
 		GetLogger().log(LOG_DEBUG, "feedlist_formaction::prepare: doing redraw");
 		do_redraw = false;
 		v->get_ctrl()->update_feedlist();
-		if (set_filterpos) {
-			set_filterpos = false;
-			unsigned int i = 0;
-			for (std::vector<feedptr_pos_pair>::iterator it=visible_feeds.begin();it!=visible_feeds.end();++it, ++i) {
-				if (it->second == filterpos) {
-					f->set("feedpos", utils::to_s(i));
-					return;
-				}
-			}
-			f->set("feedpos", "0");
-		} else if (zero_feedpos) {
-			f->set("feedpos","0");
-			zero_feedpos = false;
-		}
+		set_pos();
 	}
 }
 
@@ -310,13 +292,9 @@ void feedlist_formaction::update_visible_feeds(std::vector<rss_feed>& feeds) {
 void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 	assert(v->get_cfg() != NULL); // must not happen
 
-	std::string listwidth = f->get("feeds:w");
-	std::istringstream is(listwidth);
-	unsigned int width;
-	is >> width;
+	unsigned int width = utils::to_u(f->get("feeds:w"));
 
 	unsigned int i = 0;
-	unsigned short feedlist_number = 1;
 	unsigned int unread_feeds = 0;
 
 	std::string feedlist_format = v->get_cfg()->get_configvalue("feedlist-format");
@@ -325,36 +303,13 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 
 	update_visible_feeds(feeds);
 
-	for (std::vector<feedptr_pos_pair>::iterator it = visible_feeds.begin(); it != visible_feeds.end(); ++it, ++i, ++feedlist_number) {
-		std::string title = it->first->title();
-		if (title.length()==0) {
-			title = it->first->rssurl(); // rssurl must always be present.
-			if (title.length()==0) {
-				title = "<no title>"; // shouldn't happen
-			}
-		}
+	for (std::vector<feedptr_pos_pair>::iterator it = visible_feeds.begin(); it != visible_feeds.end(); ++it, ++i) {
+		std::string title = get_title(it->first);
 
-		unsigned int unread_count = 0;
-		if (it->first->items().size() > 0) {
-			unread_count = it->first->unread_item_count();
-		}
-		if (unread_count > 0)
+		if (it->first->unread_item_count() > 0)
 			++unread_feeds;
 
-		fmtstr_formatter fmt;
-
-		fmt.register_fmt('i', utils::strprintf("%u", it->second + 1));
-		fmt.register_fmt('u', utils::strprintf("(%u/%u)",unread_count,static_cast<unsigned int>(it->first->items().size())));
-		fmt.register_fmt('n', unread_count > 0 ? "N" : " ");
-		fmt.register_fmt('t', title);
-		fmt.register_fmt('l', it->first->link());
-		fmt.register_fmt('L', it->first->rssurl());
-		fmt.register_fmt('d', it->first->description());
-
-		std::string format = fmt.do_format(feedlist_format, width);
-		GetLogger().log(LOG_DEBUG, "feedlist_formaction::set_feedlist: format result = %s", format.c_str());
-
-		listfmt.add_line(format, it->second);
+		listfmt.add_line(format_line(feedlist_format, it->first, i, width), it->second);
 	}
 
 	f->modify("feeds","replace_inner",listfmt.format_list(rxman, "feedlist"));
@@ -489,16 +444,7 @@ void feedlist_formaction::handle_cmdline(const std::string& cmd) {
 	 * handle it as a normal command.
 	 */
 	if (1==sscanf(cmd.c_str(),"%u",&idx)) {
-		if (idx > 0 && idx <= (visible_feeds[visible_feeds.size()-1].second + 1)) {
-			int i = get_pos(idx - 1);
-			if (i == -1) {
-				v->show_error(_("Position not visible!"));
-			} else {
-				f->set("feedpos", utils::to_s(i));
-			}
-		} else {
-			v->show_error(_("Invalid position!"));
-		}
+		handle_cmdline_num(idx);
 	} else {
 		// hand over all other commands to formaction
 		std::vector<std::string> tokens = utils::tokenize_quoted(cmd, " \t");
@@ -524,42 +470,11 @@ void feedlist_formaction::finished_qna(operation op) {
 	formaction::finished_qna(op); // important!
 
 	switch (op) {
-		case OP_INT_END_SETFILTER: {
-				std::string filtertext = qna_responses[0];
-				filterhistory.add_line(filtertext);
-				if (filtertext.length() > 0) {
-					if (!m.parse(filtertext)) {
-						v->show_error(_("Error: couldn't parse filter command!"));
-						m.parse(FILTER_UNREAD_FEEDS);
-					} else {
-						save_filterpos();
-						apply_filter = true;
-						do_redraw = true;
-					}
-				}
-			}
+		case OP_INT_END_SETFILTER:
+			op_end_setfilter();
 			break;
-		case OP_INT_START_SEARCH: {
-				std::string searchphrase = qna_responses[0];
-				if (searchphrase.length() > 0) {
-					v->set_status(_("Searching..."));
-					searchhistory.add_line(searchphrase);
-					std::vector<rss_item> items;
-					try {
-						std::string utf8searchphrase = utils::convert_text(searchphrase, "utf-8", nl_langinfo(CODESET));
-						items = v->get_ctrl()->search_for_items(utf8searchphrase, "");
-					} catch (const dbexception& e) {
-						v->show_error(utils::strprintf(_("Error while searching for `%s': %s"), searchphrase.c_str(), e.what()));
-						return;
-					}
-					if (items.size() > 0) {
-						search_dummy_feed.items() = items;
-						v->push_searchresult(&search_dummy_feed);
-					} else {
-						v->show_error(_("No results."));
-					}
-				}
-			}
+		case OP_INT_START_SEARCH:
+			op_start_search();
 			break;
 		default:
 			break;
@@ -603,5 +518,99 @@ void feedlist_formaction::set_regexmanager(regexmanager * r) {
 }
 
 
+void feedlist_formaction::op_end_setfilter() {
+	std::string filtertext = qna_responses[0];
+	filterhistory.add_line(filtertext);
+	if (filtertext.length() > 0) {
+		if (!m.parse(filtertext)) {
+			v->show_error(_("Error: couldn't parse filter command!"));
+			m.parse(FILTER_UNREAD_FEEDS);
+		} else {
+			save_filterpos();
+			apply_filter = true;
+			do_redraw = true;
+		}
+	}
+}
+
+
+void feedlist_formaction::op_start_search() {
+	std::string searchphrase = qna_responses[0];
+	if (searchphrase.length() > 0) {
+		v->set_status(_("Searching..."));
+		searchhistory.add_line(searchphrase);
+		std::vector<rss_item> items;
+		try {
+			std::string utf8searchphrase = utils::convert_text(searchphrase, "utf-8", nl_langinfo(CODESET));
+			items = v->get_ctrl()->search_for_items(utf8searchphrase, "");
+		} catch (const dbexception& e) {
+			v->show_error(utils::strprintf(_("Error while searching for `%s': %s"), searchphrase.c_str(), e.what()));
+			return;
+		}
+		if (items.size() > 0) {
+			search_dummy_feed.items() = items;
+			v->push_searchresult(&search_dummy_feed);
+		} else {
+			v->show_error(_("No results."));
+		}
+	}
+}
+
+void feedlist_formaction::handle_cmdline_num(unsigned int idx) {
+	if (idx > 0 && idx <= (visible_feeds[visible_feeds.size()-1].second + 1)) {
+		int i = get_pos(idx - 1);
+		if (i == -1) {
+			v->show_error(_("Position not visible!"));
+		} else {
+			f->set("feedpos", utils::to_s(i));
+		}
+	} else {
+		v->show_error(_("Invalid position!"));
+	}
+}
+
+void feedlist_formaction::set_pos() {
+	if (set_filterpos) {
+		set_filterpos = false;
+		unsigned int i = 0;
+		for (std::vector<feedptr_pos_pair>::iterator it=visible_feeds.begin();it!=visible_feeds.end();++it, ++i) {
+			if (it->second == filterpos) {
+				f->set("feedpos", utils::to_s(i));
+				return;
+			}
+		}
+		f->set("feedpos", "0");
+	} else if (zero_feedpos) {
+		f->set("feedpos","0");
+		zero_feedpos = false;
+	}
+}
+
+std::string feedlist_formaction::get_title(rss_feed * feed) {
+	std::string title = feed->title();
+	if (title.length()==0)
+		title = feed->rssurl();
+	if (title.length()==0)
+		title = "<no title>";
+	return title;
+}
+
+std::string feedlist_formaction::format_line(const std::string& feedlist_format, rss_feed * feed, unsigned int pos, unsigned int width) {
+	fmtstr_formatter fmt;
+	unsigned int unread_count = feed->unread_item_count();
+
+	fmt.register_fmt('i', utils::strprintf("%u", pos + 1));
+	fmt.register_fmt('u', utils::strprintf("(%u/%u)",unread_count,static_cast<unsigned int>(feed->items().size())));
+	fmt.register_fmt('n', unread_count > 0 ? "N" : " ");
+	fmt.register_fmt('t', get_title(feed));
+	fmt.register_fmt('l', feed->link());
+	fmt.register_fmt('L', feed->rssurl());
+	fmt.register_fmt('d', feed->description());
+
+	std::string format = fmt.do_format(feedlist_format, width);
+	GetLogger().log(LOG_DEBUG, "feedlist_formaction::set_feedlist: format result = %s", format.c_str());
+
+	return format;
+}
 
 }

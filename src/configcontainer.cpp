@@ -96,32 +96,25 @@ action_handler_status configcontainer::handle_action(const std::string& action, 
 
 	GetLogger().log(LOG_DEBUG, "configcontainer::handle_action: action = %s, type = %u", action.c_str(), cfgdata.type);
 
+	if (params.size() < 1) {
+		return AHS_TOO_FEW_PARAMS;
+	}
+
 	switch (cfgdata.type) {
 		case configdata::BOOL:
-			if (params.size() < 1) {
-				return AHS_TOO_FEW_PARAMS;
-			}
-			if (!is_bool(params[0])) {
+			if (!is_bool(params[0]))
 				return AHS_INVALID_PARAMS;
-			}
 			cfgdata.value = params[0];
 			return AHS_OK; 
 
 		case configdata::INT:
-			if (params.size() < 1) {
-				return AHS_TOO_FEW_PARAMS;
-			}
-			if (!is_int(params[0])) {
+			if (!is_int(params[0]))
 				return AHS_INVALID_PARAMS;
-			}
 			cfgdata.value = params[0];
 			return AHS_OK;	
 
 		case configdata::STR:
 		case configdata::PATH:
-			if (params.size() < 1) {
-				return AHS_TOO_FEW_PARAMS;
-			}
 			cfgdata.value = params[0];
 			return AHS_OK;	
 

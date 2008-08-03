@@ -28,6 +28,10 @@ class filebrowser_formaction : public formaction {
 		std::string get_filename_suggestion(const std::string& s);
 		std::string get_rwx(unsigned short val);
 
+		char get_filetype(mode_t mode);
+		std::string get_owner(uid_t uid);
+		std::string get_group(gid_t gid);
+
 		bool quit;
 		std::string cwd;
 		std::string dir;

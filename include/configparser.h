@@ -27,6 +27,7 @@ namespace newsbeuter {
 			std::vector<std::vector<std::string> > parsed_content;
 			std::map<std::string,config_action_handler *> action_handlers;
 			std::set<std::string> included_files;
+			const char * get_errmsg(action_handler_status status);
 	};
 
 	class null_config_action_handler : public config_action_handler {

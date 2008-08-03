@@ -32,30 +32,10 @@ action_handler_status configparser::handle_action(const std::string& action, con
 			return AHS_TOO_FEW_PARAMS;
 		}
 
-		const char * homedir;
-		std::string filepath;
-
-		if (!(homedir = ::getenv("HOME"))) {
-			struct passwd * spw = ::getpwuid(::getuid());
-			if (spw) {
-					homedir = spw->pw_dir;
-			} else {
-					homedir = "";
-			}
-		}
-
-		if (strcmp(homedir,"")!=0 && params[0].substr(0,2) == "~/") {
-			filepath.append(homedir);
-			filepath.append(1,'/');
-			filepath.append(params[0].substr(2,params[0].length()-2));
-		} else {
-			filepath.append(params[0]);
-		}
-		if (this->parse(filepath)) {
+		if (this->parse(utils::resolve_tilde(params[0])))
 			return AHS_OK;
-		} else {
+		else
 			return AHS_FILENOTFOUND;
-		}
 	}
 	return AHS_INVALID_COMMAND;
 }
@@ -97,23 +77,7 @@ bool configparser::parse(const std::string& filename) {
 				tokens.erase(tokens.begin()); // delete first element
 				action_handler_status status = handler->handle_action(cmd,tokens);
 				if (status != AHS_OK) {
-					char * errmsg = NULL;
-					switch (status) {
-						case AHS_INVALID_PARAMS:
-							errmsg = _("invalid parameters.");
-							break;
-						case AHS_TOO_FEW_PARAMS:
-							errmsg = _("too few parameters.");
-							break;
-						case AHS_INVALID_COMMAND:
-							errmsg = _("unknown command (bug).");
-							break;
-						case AHS_FILENOTFOUND:
-							errmsg = _("file couldn't be opened.");
-							break;
-						default:
-							errmsg = _("unknown error (bug).");
-					}
+					const char * errmsg = get_errmsg(status);
 					throw configexception(utils::strprintf(_("Error while processing command `%s' (%s line %u): %s"), line.c_str(), filename.c_str(), linecounter, errmsg));
 				}
 			} else {
@@ -134,6 +98,21 @@ void configparser::register_handler(const std::string& cmd, config_action_handle
 void configparser::unregister_handler(const std::string& cmd) {
 	GetLogger().log(LOG_DEBUG,"configparser::unregister_handler: cmd = %s", cmd.c_str());
 	action_handlers[cmd] = 0;
+}
+
+const char * configparser::get_errmsg(action_handler_status status) {
+	switch (status) {
+		case AHS_INVALID_PARAMS:
+			return _("invalid parameters.");
+		case AHS_TOO_FEW_PARAMS:
+			return _("too few parameters.");
+		case AHS_INVALID_COMMAND:
+			return _("unknown command (bug).");
+		case AHS_FILENOTFOUND:
+			return _("file couldn't be opened.");
+		default:
+			return _("unknown error (bug).");
+	}
 }
 
 }
