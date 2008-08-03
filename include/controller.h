@@ -72,6 +72,10 @@ namespace newsbeuter {
 			void compute_unread_numbers(unsigned int&, unsigned int& );
 			void execute_commands(char ** argv, unsigned int i);
 
+			std::string prepare_message(unsigned int pos, unsigned int max);
+			void save_feed(rss_feed& feed, unsigned int pos);
+			void enqueue_items(rss_feed& feed);
+
 			view * v;
 			urlreader * urlcfg;
 			cache * rsscache;
