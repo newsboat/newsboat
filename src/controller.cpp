@@ -12,6 +12,8 @@
 #include <exception.h>
 #include <formatstring.h>
 #include <regexmanager.h>
+#include <rss_parser.h>
+
 #include <cstdlib>
 #include <cstring>
 #include <iostream>

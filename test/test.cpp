@@ -12,6 +12,7 @@
 #include <logger.h>
 #include <cache.h>
 #include <rss.h>
+#include <rss_parser.h>
 #include <configcontainer.h>
 #include <keymap.h>
 #include <tagsouppullparser.h>
