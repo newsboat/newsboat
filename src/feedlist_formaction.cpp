@@ -308,7 +308,7 @@ void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
 		if (it->first->unread_item_count() > 0)
 			++unread_feeds;
 
-		listfmt.add_line(format_line(feedlist_format, it->first, i, width), it->second);
+		listfmt.add_line(format_line(feedlist_format, it->first, it->second, width), it->second);
 	}
 
 	f->modify("feeds","replace_inner",listfmt.format_list(rxman, "feedlist"));

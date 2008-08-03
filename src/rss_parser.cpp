@@ -25,7 +25,7 @@ rss_feed rss_parser::parse() {
 
 	retrieve_uri(my_uri);
 
-	if (!skip_parsing || !mrss) {
+	if (!skip_parsing && mrss) {
 
 		/*
 		 * After parsing is done, we fill our feed object with title,
