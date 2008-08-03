@@ -533,12 +533,12 @@ void view::pop_current_formaction() {
 }
 
 
-void view::set_colors(const colormanager& colorman) {
-	std::map<std::string,std::string>::const_iterator fgcit = colorman.fg_colors.begin();
-	std::map<std::string,std::string>::const_iterator bgcit = colorman.bg_colors.begin();
-	std::map<std::string,std::vector<std::string> >::const_iterator attit = colorman.attributes.begin();
+void view::set_colors(std::map<std::string,std::string>& fg_colors, std::map<std::string,std::string>& bg_colors, std::map<std::string,std::vector<std::string> >& attributes) {
+	std::map<std::string,std::string>::const_iterator fgcit = fg_colors.begin();
+	std::map<std::string,std::string>::const_iterator bgcit = bg_colors.begin();
+	std::map<std::string,std::vector<std::string> >::const_iterator attit = attributes.begin();
 
-	for (;fgcit != colorman.fg_colors.end(); ++fgcit, ++bgcit, ++attit) {
+	for (;fgcit != fg_colors.end(); ++fgcit, ++bgcit, ++attit) {
 		std::string colorattr;
 		if (fgcit->second != "default") {
 			colorattr.append("fg=");

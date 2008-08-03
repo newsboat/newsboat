@@ -71,7 +71,7 @@ namespace newsbeuter {
 			bool get_next_unread_feed();
 			bool get_prev_unread_feed();
 
-			void set_colors(const colormanager& colorman);
+			void set_colors(std::map<std::string,std::string>& fg_colors, std::map<std::string,std::string>& bg_colors, std::map<std::string,std::vector<std::string> >& attributes);
 
 			void notify_itemlist_change(rss_feed& feed);
 

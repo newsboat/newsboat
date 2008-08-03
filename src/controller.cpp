@@ -250,7 +250,7 @@ void controller::run(int argc, char * argv[]) {
 	v->set_regexmanager(&rxman);
 
 	if (colorman->colors_loaded()) {
-		v->set_colors(*colorman);
+		v->set_colors(colorman->get_fgcolors(), colorman->get_bgcolors(), colorman->get_attributes());
 	}
 	delete colorman;
 

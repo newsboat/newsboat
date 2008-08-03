@@ -16,7 +16,6 @@ namespace newsbeuter
 
 
 class colormanager : public config_action_handler {
-
 	public:
 		colormanager();
 		~colormanager();
@@ -24,9 +23,10 @@ class colormanager : public config_action_handler {
 		virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
 		inline bool colors_loaded() { return colors_loaded_; }
 		void set_pb_colors(podbeuter::pb_view * v);
+		inline std::map<std::string,std::string>& get_fgcolors() { return fg_colors; }
+		inline std::map<std::string,std::string>& get_bgcolors() { return bg_colors; }
+		inline std::map<std::string,std::vector<std::string> >& get_attributes() { return attributes; }
 	private:
-		friend class view;
-		friend class pb_view;
 
 		bool colors_loaded_;
 		std::map<std::string,std::string> fg_colors;
