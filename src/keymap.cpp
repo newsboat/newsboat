@@ -91,25 +91,21 @@ void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned s
 	 * Here we return the keymap descriptions for the specified application (handed to us via flags)
 	 * This is used for the help screen.
 	 */
-	for (std::map<std::string,operation>::iterator it=keymap_.begin();it!=keymap_.end();++it) {
-		operation op = it->second;
-		if (op != OP_NIL) {
-			std::string helptext;
-			std::string opname;
-			bool add = false;
-			for (int i=0;opdescs[i].help_text;++i) {
+	for (int i=0;opdescs[i].help_text;++i) {
+		bool already_added = false;
+		for (std::map<std::string,operation>::iterator it=keymap_.begin();it!=keymap_.end();++it) {
+			operation op = it->second;
+			if (op != OP_NIL) {
 				if (opdescs[i].op == op && opdescs[i].flags & flags) {
-					helptext = gettext(opdescs[i].help_text);
-					opname = opdescs[i].opstr;
-					add = true;
+					keymap_desc desc;
+					desc.key = it->first;
+					if (!already_added) {
+						desc.cmd = opdescs[i].opstr;
+						desc.desc = gettext(opdescs[i].help_text);
+						already_added = true;
+					}
+					descs.push_back(desc);
 				}
-			}
-			if (add) {
-				keymap_desc desc;
-				desc.key = it->first;
-				desc.cmd = opname;
-				desc.desc = helptext;
-				descs.push_back(desc);
 			}
 		}
 	}
