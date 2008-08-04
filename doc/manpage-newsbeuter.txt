@@ -79,6 +79,12 @@ CONFIGURATION COMMANDS
 include::newsbeuter-cfgcmds.txt[]
 
 
+AVAILABLE OPERATIONS
+----------------------
+
+include::newsbeuter-keycmds.txt[]
+
+
 TAGGING
 -------
 
