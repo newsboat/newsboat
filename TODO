@@ -4,6 +4,7 @@ TODO:
 - check for stfl in config.sh script
 - add an auto-flag configuration command to automatically flag articles that match a certain query
 
+
 DONE:
 - clean up items that have been added but whose URL has been removed from the config file.
 - key for directly jumping to next unread article.
