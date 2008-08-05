@@ -445,15 +445,26 @@ void controller::catchup_all() {
 
 void controller::mark_all_read(unsigned int pos) {
 	if (pos < feeds.size()) {
+		scope_measure m("controller::mark_all_read");
 		rss_feed& feed = feeds[pos];
 		if (feed.rssurl().substr(0,6) == "query:") {
 			rsscache->catchup_all(feed);
 		} else {
 			rsscache->catchup_all(feed.rssurl());
 		}
-		if (feed.items().size() > 0) {
-			for (std::vector<rss_item>::iterator it=feed.items().begin();it!=feed.items().end();++it) {
-				it->set_unread_nowrite_notify(false);
+		m.stopover("after rsscache->catchup_all, before iteration over items");
+		std::vector<rss_item>& items = feed.items();
+		std::vector<rss_item>::iterator begin = items.begin(), end = items.end();
+		if (items.size() > 0) {
+			// for items with few items (the common case), the iterator version performs
+			// better, but for feeds with many items, the internalize_rssfeed() method
+			// performs much better.
+			if (items.size() < 2000) {
+				for (std::vector<rss_item>::iterator it=begin;it!=end;++it) {
+					it->set_unread_nowrite_notify(false);
+				}
+			} else {
+				rsscache->internalize_rssfeed(feed);
 			}
 		}
 	}
