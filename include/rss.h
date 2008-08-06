@@ -54,7 +54,7 @@ namespace newsbeuter {
 			inline bool unread() const { return unread_; }
 			void set_unread(bool u);
 			void set_unread_nowrite(bool u);
-			void set_unread_nowrite_notify(bool u);
+			void set_unread_nowrite_notify(bool u, bool notify);
 			
 			inline void set_cache(cache * c) { ch = c; }
 			inline void set_feedurl(const std::string& f) { feedurl_ = f; }

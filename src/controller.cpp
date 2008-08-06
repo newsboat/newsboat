@@ -456,15 +456,10 @@ void controller::mark_all_read(unsigned int pos) {
 		std::vector<rss_item>& items = feed.items();
 		std::vector<rss_item>::iterator begin = items.begin(), end = items.end();
 		if (items.size() > 0) {
-			// for items with few items (the common case), the iterator version performs
-			// better, but for feeds with many items, the internalize_rssfeed() method
-			// performs much better.
-			if (items.size() < 2000) {
-				for (std::vector<rss_item>::iterator it=begin;it!=end;++it) {
-					it->set_unread_nowrite_notify(false);
-				}
-			} else {
-				rsscache->internalize_rssfeed(feed);
+			bool notify = items[0].feedurl() != feed.rssurl();
+			GetLogger().log(LOG_DEBUG, "controller::mark_all_read: notify = %s", notify ? "yes" : "no");
+			for (std::vector<rss_item>::iterator it=begin;it!=end;++it) {
+				it->set_unread_nowrite_notify(false, notify);
 			}
 		}
 	}

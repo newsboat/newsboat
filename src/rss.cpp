@@ -53,10 +53,11 @@ void rss_item::set_unread_nowrite(bool u) {
 	unread_ = u;
 }
 
-void rss_item::set_unread_nowrite_notify(bool u) {
+void rss_item::set_unread_nowrite_notify(bool u, bool notify) {
 	unread_ = u;
-	if (feedptr)
+	if (feedptr && notify) {
 		feedptr->get_item_by_guid(guid_).set_unread_nowrite(unread_); // notify parent feed
+	}
 }
 
 void rss_item::set_unread(bool u) { 

@@ -190,7 +190,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				} else {
 					GetLogger().log(LOG_DEBUG, "itemlist_formaction: oh, it looks like I'm in a pseudo-feed (search result, query feed)");
 					for (std::vector<rss_item>::iterator it=feed->items().begin();it!=feed->items().end();++it) {
-						it->set_unread_nowrite_notify(false);
+						it->set_unread_nowrite_notify(false, true);
 					}
 					v->get_ctrl()->catchup_all(*feed);
 				}
