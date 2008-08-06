@@ -1325,6 +1325,9 @@ __nxml_parse_buffer (nxml_t * nxml, const char *r_buffer, size_t r_size)
       size -= 2;
     }
 
+  if (!nxml->encoding)
+    nxml->encoding = strdup("utf-8");
+
   root = last = NULL;
   while (!(err = __nxml_parse_get_tag (nxml, &buffer, &size, &tag, &doctype))
 	 && (doctype || tag))

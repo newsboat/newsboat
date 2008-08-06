@@ -3,7 +3,7 @@ TODO:
 - implement reloading of configuration (:source)
 - check for stfl in config.sh script
 - add an auto-flag configuration command to automatically flag articles that match a certain query
-
+- when reload is finished, the focus shall be in the current form's list
 
 DONE:
 - clean up items that have been added but whose URL has been removed from the config file.
@@ -112,3 +112,5 @@ DONE:
 - update example config (added script to automatize task)
 - add -d and -l to about and manpage
 - refactored XML pull parser (many redundancies)
+- check issues with missing words from articles
+	- zed shaw blog has such issues (entity decode fuckup when no encoding was provided)
