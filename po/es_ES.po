@@ -1,4 +1,4 @@
-# translation of es_ES.po to es-ES
+# translation of es_ES.po to español
 # translation of es_ES.po to
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
@@ -9,9 +9,9 @@ msgstr ""
 "Project-Id-Version: es_ES\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-11 18:42+0200\n"
-"PO-Revision-Date: 2008-04-22 22:15+0200\n"
+"PO-Revision-Date: 2008-08-11 20:23+0200\n"
 "Last-Translator: ROOT <epsilon.root@gmail.com>\n"
-"Language-Team: es-ES\n"
+"Language-Team: español\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -105,8 +105,7 @@ msgstr "Error fatal: no se pudo encontrar el directorio home!"
 
 #: src/controller.cpp:72 src/pb_controller.cpp:47
 #, c-format
-msgid ""
-"Please set the HOME environment variable or add a valid user for UID %u!"
+msgid "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
 "Por favor declara la variable de entorno HOME o aÃ±ade un usuario valido "
 "para UID %u!"
@@ -185,8 +184,7 @@ msgstr "Limpiando el cache totalmente..."
 
 #: src/controller.cpp:372
 msgid "Error while loading feeds from database: "
-msgstr ""
-"Se produjo un error mientras se cargaban los feeds desde la base de datos:"
+msgstr "Se produjo un error mientras se cargaban los feeds desde la base de datos:"
 
 #: src/controller.cpp:410
 msgid "Cleaning up cache..."
@@ -220,7 +218,7 @@ msgid "invalid feed index (bug)"
 msgstr "Indice de feeds invalido (fallo)"
 
 #: src/controller.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] "
@@ -250,7 +248,7 @@ msgstr ""
 "-c <fichero_de_cache>    usar <fichero_de_cache> como fichero de cache\n"
 "-C <fichero_de_config>   leer configuracion de <fichero_de_config>\n"
 "-v                       limpiar cache totalmente\n"
-"-x<comando>   ejecutar lista de comandos\n"
+"-x<comando>              ejecutar lista de comandos\n"
 "-o                       activar modo desconectado (solo para el modo de "
 "sincronizacion de bloglines)\n"
 "-V                       informacion de version\n"
@@ -506,7 +504,7 @@ msgstr "Descripcion: "
 
 #: src/help_formaction.cpp:83
 msgid "Clear"
-msgstr ""
+msgstr "Limpiar"
 
 #: src/htmlrenderer.cpp:120
 msgid "embedded flash:"
@@ -595,11 +593,11 @@ msgstr "Error: No se pudo salvar el articulo como %s"
 
 #: src/itemview_formaction.cpp:30 src/itemview_formaction.cpp:407
 msgid "Top"
-msgstr ""
+msgstr "Arriba"
 
 #: src/itemview_formaction.cpp:30 src/itemview_formaction.cpp:409
 msgid "Bottom"
-msgstr ""
+msgstr "Abajo"
 
 #: src/itemview_formaction.cpp:57
 msgid "Feed: "
@@ -702,7 +700,6 @@ msgid "Toggle read status for article"
 msgstr "Cambiar modo de lectura del articulo"
 
 #: src/keymap.cpp:34
-#, fuzzy
 msgid "Toggle show read feeds/articles"
 msgstr "Cambiar mostrar feeds leidos"
 
@@ -915,21 +912,3 @@ msgstr "Error: el feed no contiene elementos!"
 msgid "Updating query feed..."
 msgstr "Actualizando consulta de feed..."
 
-#~ msgid "invalid attribute index"
-#~ msgstr "Indice de atributos invalido"
-
-#~ msgid ""
-#~ "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
-#~ msgstr ""
-#~ "newsbeauter: recarga finalizada, %u feeds no leidos (%u total de "
-#~ "articulos no leidos)"
-
-#~ msgid ""
-#~ "Error: newsbeuter is compiled without Ruby support. Please recompile with "
-#~ "Ruby support in order to run Ruby functions."
-#~ msgstr ""
-#~ "Error: newsbeuter esta compilado sin soporte para Ruby. Por favor "
-#~ "recompile con soporte para Ruby para ejecutar funciones de Ruby."
-
-#~ msgid "Error while calling `%s': %s"
-#~ msgstr "Error llamando `%s': %s"
