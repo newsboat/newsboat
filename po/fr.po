@@ -4,12 +4,12 @@ msgstr ""
 "Project-Id-Version: newsbeuter\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-11 18:42+0200\n"
-"PO-Revision-Date: 2008-04-18 12:08+0200\n"
+"PO-Revision-Date: 2008-08-11 19:13+0200\n"
 "Last-Translator: Nicolas Martyanoff <khaelin@gmail.com>\n"
 "Language-Team: Nicolas Martyanoff <khaelin@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: src/cache.cpp:182
 #, c-format
@@ -213,7 +213,7 @@ msgid "invalid feed index (bug)"
 msgstr "Index de fil invalide (bug)"
 
 #: src/controller.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] "
@@ -236,18 +236,20 @@ msgstr ""
 "%s %s\n"
 "utilisation: %s [-i <fichier>|-e] [-u <fichier_url>] [-c <fichier_cache>] [-"
 "x <commande>] [-h]\n"
-"-e              exporte un fil OPML vers la sortie standard\n"
-"-r              met à jour les fils au démarrage\n"
-"-i <fichier>    importe un fichier OPML\n"
-"-u <fichier>    lire les URLs de fils RSS depuis <fichier>\n"
-"-c <fichier>    utiliser <fichier_cache> comme un fichier cache\n"
-"-C <fichier>    lire la configuration depuis <fichier>\n"
-"-v              vider le cache\n"
-"-x·<commande>.·exécute une liste de commandes\n"
-"-o              activer le mode hors-ligne (s'applique uniquement en mode "
+"-e               exporte un fil OPML vers la sortie standard\n"
+"-r               met à jour les fils au démarrage\n"
+"-i <fichier>     importe un fichier OPML\n"
+"-u <fichier>     lire les URLs de fils RSS depuis <fichier>\n"
+"-c <fichier>     utiliser <fichier_cache> comme un fichier cache\n"
+"-C <fichier>     lire la configuration depuis <fichier>\n"
+"-v               vider le cache\n"
+"-x <commande>    exécute une liste de commandes\n"
+"-o               activer le mode hors-ligne (s'applique uniquement en mode "
 "Bloglines)\n"
-"-V              afficher des informations sur la version du logiciel\n"
-"-h              affiche cette aide\n"
+"-V               afficher des informations sur la version du logiciel\n"
+"-l <niveau_log>  écrire un fichier de log avec un certain niveau (valeurs valides: 1 à 6)\n"
+"-d <fichier_log> utiliser <fichier_log> comme fichier de log en sortie\n"
+"-h               affiche cette aide\n"
 
 #: src/controller.cpp:662
 #, c-format
@@ -499,7 +501,7 @@ msgstr "Description: "
 
 #: src/help_formaction.cpp:83
 msgid "Clear"
-msgstr ""
+msgstr "Effacer"
 
 #: src/htmlrenderer.cpp:120
 msgid "embedded flash:"
@@ -588,11 +590,11 @@ msgstr "Erreur: impossible d'enregistrer l'article dans %s"
 
 #: src/itemview_formaction.cpp:30 src/itemview_formaction.cpp:407
 msgid "Top"
-msgstr ""
+msgstr "Haut"
 
 #: src/itemview_formaction.cpp:30 src/itemview_formaction.cpp:409
 msgid "Bottom"
-msgstr ""
+msgstr "Bas"
 
 #: src/itemview_formaction.cpp:57
 msgid "Feed: "
@@ -695,9 +697,8 @@ msgid "Toggle read status for article"
 msgstr "Basculer le status de lecture pour cet article"
 
 #: src/keymap.cpp:34
-#, fuzzy
 msgid "Toggle show read feeds/articles"
-msgstr "Basculer l'affichage des fils lus"
+msgstr "Basculer l'affichage des fils lus / articles"
 
 #: src/keymap.cpp:35
 msgid "Show URLs in current article"
@@ -819,8 +820,8 @@ msgid ""
 msgstr ""
 "%s %s\n"
 "utilisation %s [-C <fichier>] [-q <fichier>] [-h]\n"
-"-C <config> lire le fichier de configuration depuis <config>\n"
-"-q <queue>  utiliser <queue> comme fichier de queue\n"
+"-C <config>     lire le fichier de configuration depuis <config>\n"
+"-q <queue>      utiliser <queue> comme fichier de queue\n"
 "-a              débuter le téléchargement au démarrage\n"
 "-h              afficher cette aide\n"
 
@@ -909,22 +910,3 @@ msgstr "Erreur: le fil ne contient aucun élément !"
 #: src/view.cpp:353
 msgid "Updating query feed..."
 msgstr "Mise à jour du fil.."
-
-#~ msgid "invalid attribute index"
-#~ msgstr "Index d'attribut invalide"
-
-#~ msgid ""
-#~ "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
-#~ msgstr ""
-#~ "newsbeuter: rechargement terminé, %u fils non-lus (%u articles non-lus au "
-#~ "total)"
-
-#~ msgid ""
-#~ "Error: newsbeuter is compiled without Ruby support. Please recompile with "
-#~ "Ruby support in order to run Ruby functions."
-#~ msgstr ""
-#~ "Erreur: newsbeuter est compilé sans le support Ruby. S'il-vous-plaît, "
-#~ "recompilez avec le support Ruby pour pouvoir lancer les fonctions Ruby."
-
-#~ msgid "Error while calling `%s': %s"
-#~ msgstr "Erreur lors de l'appel de '%s': %s"
