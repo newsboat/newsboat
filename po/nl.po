@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 0.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-04 22:37+0200\n"
+"POT-Creation-Date: 2008-08-11 18:42+0200\n"
 "PO-Revision-Date: 2008-04-30 18:06+0100\n"
 "Last-Translator: Bart Van Loon <bart@inGen.be>\n"
 "Language-Team: Dutch <bart@inGen.be>\n"
@@ -197,25 +197,25 @@ msgstr "mislukt: "
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "Fout: kon niet alle feeds als gelezen markeren: %s"
 
-#: src/controller.cpp:467
+#: src/controller.cpp:473
 #, c-format
 msgid "%sLoading %s..."
 msgstr "%sBezig met laden van %s..."
 
-#: src/controller.cpp:481 src/controller.cpp:483
+#: src/controller.cpp:487 src/controller.cpp:489
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr "Fout bij het ophalen van %s: %s"
 
-#: src/controller.cpp:486
+#: src/controller.cpp:492
 msgid "Error: invalid feed!"
 msgstr "Fout: ongeldige feed!"
 
-#: src/controller.cpp:492
+#: src/controller.cpp:498
 msgid "invalid feed index (bug)"
 msgstr "ongeldige feed index (bug)"
 
-#: src/controller.cpp:610
+#: src/controller.cpp:616
 #, fuzzy, c-format
 msgid ""
 "%s %s\n"
@@ -251,12 +251,12 @@ msgstr ""
 "-V                 versie-informatie\n"
 "-h                 deze hulptekst\n"
 
-#: src/controller.cpp:656
+#: src/controller.cpp:662
 #, c-format
 msgid "Import of %s finished."
 msgstr "Klaar met importeren van %s"
 
-#: src/controller.cpp:833
+#: src/controller.cpp:839
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -264,25 +264,25 @@ msgstr ""
 "bladwijzerondersteuning is niet geconfigureerd. Corrigeer de waarde van de "
 "configuratievariabele`bookmark-cmd' aub."
 
-#: src/controller.cpp:845
+#: src/controller.cpp:851
 #, c-format
 msgid "%u unread articles"
 msgstr "%u ongelezen artikels"
 
-#: src/controller.cpp:854 src/formaction.cpp:186
+#: src/controller.cpp:860 src/formaction.cpp:186
 #: src/itemview_formaction.cpp:61
 msgid "Title: "
 msgstr "Titel: "
 
-#: src/controller.cpp:858 src/itemview_formaction.cpp:66
+#: src/controller.cpp:864 src/itemview_formaction.cpp:66
 msgid "Author: "
 msgstr "Auteur: "
 
-#: src/controller.cpp:862 src/itemview_formaction.cpp:75
+#: src/controller.cpp:868 src/itemview_formaction.cpp:75
 msgid "Date: "
 msgstr "Datum: "
 
-#: src/controller.cpp:866 src/itemview_formaction.cpp:71
+#: src/controller.cpp:872 src/itemview_formaction.cpp:71
 msgid "Link: "
 msgstr "Koppeling: "
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-04 22:37+0200\n"
+"POT-Creation-Date: 2008-08-11 18:42+0200\n"
 "PO-Revision-Date: 2008-05-01 18:30+0400\n"
 "Last-Translator: Sergey Dryabzhinsky <sergey.dryabzhinsky@gmail.com>\n"
 "Language-Team: ru <sergey.dryabzhinsky@gmail.com>\n"
@@ -197,25 +197,25 @@ msgstr "не получилось: "
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "Ошибка: невозможно отметить все ленты как прочитанные: %s"
 
-#: src/controller.cpp:467
+#: src/controller.cpp:473
 #, c-format
 msgid "%sLoading %s..."
 msgstr "%sЗагружается %s..."
 
-#: src/controller.cpp:481 src/controller.cpp:483
+#: src/controller.cpp:487 src/controller.cpp:489
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr "Ошибка во время получения %s: %s"
 
-#: src/controller.cpp:486
+#: src/controller.cpp:492
 msgid "Error: invalid feed!"
 msgstr "Ошибка: неправильная лента!"
 
-#: src/controller.cpp:492
+#: src/controller.cpp:498
 msgid "invalid feed index (bug)"
 msgstr "неверный индекс ленты (сбой)"
 
-#: src/controller.cpp:610
+#: src/controller.cpp:616
 #, fuzzy, c-format
 msgid ""
 "%s %s\n"
@@ -250,12 +250,12 @@ msgstr ""
 "-V                  получить информацию о версии программы\n"
 "-h                  показать эту справку\n"
 
-#: src/controller.cpp:656
+#: src/controller.cpp:662
 #, c-format
 msgid "Import of %s finished."
 msgstr "Импорт %s завершён."
 
-#: src/controller.cpp:833
+#: src/controller.cpp:839
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -263,25 +263,25 @@ msgstr ""
 "поддержка закладок не настроена. Пожалуйста установите в настройках "
 "верноезначение переменной `bookmark-cmd'."
 
-#: src/controller.cpp:845
+#: src/controller.cpp:851
 #, fuzzy, c-format
 msgid "%u unread articles"
 msgstr "Перейти к следующей непрочитанной заметке"
 
-#: src/controller.cpp:854 src/formaction.cpp:186
+#: src/controller.cpp:860 src/formaction.cpp:186
 #: src/itemview_formaction.cpp:61
 msgid "Title: "
 msgstr "Заголовок: "
 
-#: src/controller.cpp:858 src/itemview_formaction.cpp:66
+#: src/controller.cpp:864 src/itemview_formaction.cpp:66
 msgid "Author: "
 msgstr "Автор: "
 
-#: src/controller.cpp:862 src/itemview_formaction.cpp:75
+#: src/controller.cpp:868 src/itemview_formaction.cpp:75
 msgid "Date: "
 msgstr "Дата: "
 
-#: src/controller.cpp:866 src/itemview_formaction.cpp:71
+#: src/controller.cpp:872 src/itemview_formaction.cpp:71
 msgid "Link: "
 msgstr "Ссылка: "
 

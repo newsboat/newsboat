@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-04 22:37+0200\n"
+"POT-Creation-Date: 2008-08-11 18:42+0200\n"
 "PO-Revision-Date: 2008-07-24 02:24+0300\n"
 "Last-Translator: H.Gökhan SARI <hsa2@difuzyon.net>\n"
 "Language-Team: Türkçe <en@li.org>\n"
@@ -199,25 +199,25 @@ msgstr "başarız: "
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "Hata: tüm beslemeler okundu olarak işaretlenemedi: %s"
 
-#: src/controller.cpp:467
+#: src/controller.cpp:473
 #, c-format
 msgid "%sLoading %s..."
 msgstr "%sYükleniyor %s..."
 
-#: src/controller.cpp:481 src/controller.cpp:483
+#: src/controller.cpp:487 src/controller.cpp:489
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr "%s alınırken hata oluştu: %s"
 
-#: src/controller.cpp:486
+#: src/controller.cpp:492
 msgid "Error: invalid feed!"
 msgstr "Hata: geçersiz besleme!"
 
-#: src/controller.cpp:492
+#: src/controller.cpp:498
 msgid "invalid feed index (bug)"
 msgstr "geçersiz besleme indeksi (bug)"
 
-#: src/controller.cpp:610
+#: src/controller.cpp:616
 #, fuzzy, c-format
 msgid ""
 "%s %s\n"
@@ -253,12 +253,12 @@ msgstr ""
 "-V                     version bilgisini göster\n"
 "-h                     bu yardım metnini göster\n"
 
-#: src/controller.cpp:656
+#: src/controller.cpp:662
 #, c-format
 msgid "Import of %s finished."
 msgstr "%s'in içeri aktarımı tamamlandı."
 
-#: src/controller.cpp:833
+#: src/controller.cpp:839
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -266,25 +266,25 @@ msgstr ""
 "yer imleme desteği ayarlanmadı. Ayar değişkenini `bookmark-cmd'ye göre "
 "ayarlayın."
 
-#: src/controller.cpp:845
+#: src/controller.cpp:851
 #, c-format
 msgid "%u unread articles"
 msgstr "%u okunmamış yazı"
 
-#: src/controller.cpp:854 src/formaction.cpp:186
+#: src/controller.cpp:860 src/formaction.cpp:186
 #: src/itemview_formaction.cpp:61
 msgid "Title: "
 msgstr "Başlık: "
 
-#: src/controller.cpp:858 src/itemview_formaction.cpp:66
+#: src/controller.cpp:864 src/itemview_formaction.cpp:66
 msgid "Author: "
 msgstr "Yazar: "
 
-#: src/controller.cpp:862 src/itemview_formaction.cpp:75
+#: src/controller.cpp:868 src/itemview_formaction.cpp:75
 msgid "Date: "
 msgstr "Tarih: "
 
-#: src/controller.cpp:866 src/itemview_formaction.cpp:71
+#: src/controller.cpp:872 src/itemview_formaction.cpp:71
 msgid "Link: "
 msgstr "Bağlantı: "
 

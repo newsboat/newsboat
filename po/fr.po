@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-04 22:37+0200\n"
+"POT-Creation-Date: 2008-08-11 18:42+0200\n"
 "PO-Revision-Date: 2008-04-18 12:08+0200\n"
 "Last-Translator: Nicolas Martyanoff <khaelin@gmail.com>\n"
 "Language-Team: Nicolas Martyanoff <khaelin@gmail.com>\n"
@@ -194,25 +194,25 @@ msgstr "echoué: "
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "Erreur: impossible de marquer tous les fils comme lus: %s"
 
-#: src/controller.cpp:467
+#: src/controller.cpp:473
 #, c-format
 msgid "%sLoading %s..."
 msgstr "%sChargement %s..."
 
-#: src/controller.cpp:481 src/controller.cpp:483
+#: src/controller.cpp:487 src/controller.cpp:489
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr "Erreur lors de la récupération de %s: %s"
 
-#: src/controller.cpp:486
+#: src/controller.cpp:492
 msgid "Error: invalid feed!"
 msgstr "Erreur: fil invalide !"
 
-#: src/controller.cpp:492
+#: src/controller.cpp:498
 msgid "invalid feed index (bug)"
 msgstr "Index de fil invalide (bug)"
 
-#: src/controller.cpp:610
+#: src/controller.cpp:616
 #, fuzzy, c-format
 msgid ""
 "%s %s\n"
@@ -249,12 +249,12 @@ msgstr ""
 "-V              afficher des informations sur la version du logiciel\n"
 "-h              affiche cette aide\n"
 
-#: src/controller.cpp:656
+#: src/controller.cpp:662
 #, c-format
 msgid "Import of %s finished."
 msgstr "Import de %s terminé."
 
-#: src/controller.cpp:833
+#: src/controller.cpp:839
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -262,25 +262,25 @@ msgstr ""
 "Le support des marque-pages n'est pas configuré. S'il vous plait, éditez la "
 "variable de configuration 'bookmark-cmd'"
 
-#: src/controller.cpp:845
+#: src/controller.cpp:851
 #, c-format
 msgid "%u unread articles"
 msgstr "%u articles non-lus"
 
-#: src/controller.cpp:854 src/formaction.cpp:186
+#: src/controller.cpp:860 src/formaction.cpp:186
 #: src/itemview_formaction.cpp:61
 msgid "Title: "
 msgstr "Titre: "
 
-#: src/controller.cpp:858 src/itemview_formaction.cpp:66
+#: src/controller.cpp:864 src/itemview_formaction.cpp:66
 msgid "Author: "
 msgstr "Auteur: "
 
-#: src/controller.cpp:862 src/itemview_formaction.cpp:75
+#: src/controller.cpp:868 src/itemview_formaction.cpp:75
 msgid "Date: "
 msgstr "Date: "
 
-#: src/controller.cpp:866 src/itemview_formaction.cpp:71
+#: src/controller.cpp:872 src/itemview_formaction.cpp:71
 msgid "Link: "
 msgstr "Lien: "
 
