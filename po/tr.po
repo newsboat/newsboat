@@ -1,5 +1,5 @@
 # translation of tr.po to Türkçe
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Copyright (C) 2008 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 # H.Gökhan SARI <hsa2@difuzyon.net>, 2008.
@@ -8,13 +8,12 @@ msgstr ""
 "Project-Id-Version: tr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-11 18:42+0200\n"
-"PO-Revision-Date: 2008-07-24 02:24+0300\n"
+"PO-Revision-Date: 2008-08-12 06:52+0300\n"
 "Last-Translator: H.Gökhan SARI <hsa2@difuzyon.net>\n"
 "Language-Team: Türkçe <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: src/cache.cpp:182
 #, c-format
@@ -218,7 +217,7 @@ msgid "invalid feed index (bug)"
 msgstr "geçersiz besleme indeksi (bug)"
 
 #: src/controller.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] "
@@ -241,7 +240,7 @@ msgstr ""
 "%s %s\n"
 "usage: %s [-i <file>|-e] [-u <dosya>] [-c <önbellekdosyası>] [-x "
 "<komut> ...] [-h]\n"
-"-e                     export OPML feed to stdout\n"
+"-e                     OPML dosya içeriğini görüntüle\n"
 "-r                     açılışta beslemeleri yenile\n"
 "-i <dosya>             bir OPML dosyasını içe aktar\n"
 "-u <adresdosyası>      <adresdosyası>'ndan besleme adreslerini oku\n"
