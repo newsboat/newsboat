@@ -1,6 +1,6 @@
 NEWSBEUTER(1)
 ===========
-Andreas Krennmair <ak@synflood.at>
+Andreas Krennmair <ak@newsbeuter.org>
 
 
 NAME
@@ -137,6 +137,6 @@ source about the general use and configuration of newsbeuter.
 
 AUTHORS
 -------
-Andreas Krennmair <ak@synflood.at>, for contributors see AUTHORS file.
+Andreas Krennmair <ak@newsbeuter.org>, for contributors see AUTHORS file.
 
 

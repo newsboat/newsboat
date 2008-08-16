@@ -1,6 +1,6 @@
 The Newsbeuter Hacker's Guide
 =============================
-Andreas Krennmair <ak@synflood.at>
+Andreas Krennmair <ak@newsbeuter.org>
 
 Introduction
 ------------

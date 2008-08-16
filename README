@@ -7,7 +7,7 @@ due to technical limitations.
 
 == Downloading ==
 You can download the latest version of newsbeuter from the following website:
-http://synflood.at/newsbeuter.html
+http://www.newsbeuter.org/
 
 Alternatively, you can check out the latest version from the newsbeuter
 Subversion repository:
@@ -18,7 +18,7 @@ Newsbeuter depends on a number of libraries, which need to be installed before
 newsbeuter can be compiled.
 
 STFL (version 0.19 or newer): http://www.clifford.at/stfl/
-SQLite 3 (version 3.4 or newer): http://www.sqlite.org/
+SQLite 3 (version 3.5 or newer): http://www.sqlite.org/
 libcurl: http://curlm.haxx.se/download.html
 GNU gettext (on systems that don't provide gettext in the libc): ftp://ftp.gnu.org/gnu/gettext/
 pkg-config: http://pkg-config.freedesktop.org/wiki/
@@ -31,7 +31,7 @@ make
 make install
 
 == Contact ==
-Andreas Krennmair <ak@synflood.at>
+Andreas Krennmair <ak@newsbeuter.org>
 
 == License ==
 Newsbeuter is licensed under the MIT/X Consortium License. See the file LICENSE
