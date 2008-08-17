@@ -1,6 +1,6 @@
 Changes for newsbeuter:
 
-1.0 (2008-08-17):
+1.0 (2008-08-19):
 	Implemented support for highlighting of regular expressions
 	Implemented search function in help dialog
 	Implemented "show-read-articles" configuration option to toggle displaying of read articles
