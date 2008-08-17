@@ -3,7 +3,7 @@
 
 #define PROGRAM_NAME		PACKAGE
 #define PROGRAM_VERSION		"1.0"
-#define PROGRAM_URL			"http://synflood.at/newsbeuter.html"
+#define PROGRAM_URL			"http://www.newsbeuter.org/"
 #define USER_AGENT			PROGRAM_NAME " rss feedreader " PROGRAM_VERSION " (" PROGRAM_URL ")"
 
 #define NEWSBEUTER_PATH_SEP			"/"

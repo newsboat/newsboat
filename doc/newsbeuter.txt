@@ -1,6 +1,6 @@
 The Newsbeuter RSS Feedreader
 =============================
-Andreas Krennmair <ak@synflood.at>
+Andreas Krennmair <ak@newsbeuter.org>
 
 Introduction
 ------------
@@ -26,7 +26,7 @@ This chapter describes how to compile and install newsbeuter from source.
 Downloading Newsbeuter
 ~~~~~~~~~~~~~~~~~~~~~~
 Newsbeuter is available as source package. Simply go to
-http://synflood.at/newsbeuter.html[] and download the latest source package,
+http://www.newsbeuter.org/[] and download the latest source package,
 which is usually in the .tar.gz file format. Alternatively, you can check out
 the latest development source tree from the newsbeuter SVN repository by
 running the following command on the commandline:
@@ -725,7 +725,7 @@ Feedback
 --------
 
 If you want to tell us something related to newsbeuter, don't hesitate to send
-an email: ak-newsbeuter@synflood.at
+an email: ak@newsbeuter.org
 
 Alternatively, you can reach the newsbeuter developers on IRC: channel
 #newsbeuter on irc.freenode.net.
@@ -737,7 +737,7 @@ License
 -------
 MIT/X Consortium License
 
-(C)opyright 2006-2008 Andreas Krennmair <ak@synflood.at>
+(C)opyright 2006-2008 Andreas Krennmair <ak@newsbeuter.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in

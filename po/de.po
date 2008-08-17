@@ -1,7 +1,7 @@
 # German translation for newsbeuter.
 # Copyright (C) Andreas Krennmair
 # This file is distributed under the same license as the newsbeuter package.
-# Andreas Krennmair <ak@synflood.at>, 2007
+# Andreas Krennmair <ak@newsbeuter.org>, 2007-2008
 #
 #, fuzzy
 msgid ""
@@ -10,8 +10,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-11 18:42+0200\n"
 "PO-Revision-Date: 2007-02-21 13:03+0100\n"
-"Last-Translator: Andreas Krennmair <ak@synflood.at>\n"
-"Language-Team: Andreas Krennmair <ak@synflood.at>\n"
+"Last-Translator: Andreas Krennmair <ak@newsbeuter.org>\n"
+"Language-Team: Andreas Krennmair <ak@newsbeuter.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
