@@ -41,6 +41,22 @@ void itemview_formaction::prepare() {
 	 * HTML. The links extracted by the renderer are then appended, too.
 	 */
 	if (do_redraw) {
+
+		{
+		scope_measure("itemview::prepare: rendering");
+		f->run(-3); // XXX HACK: render once so that we get a proper widget width
+		}
+
+		std::vector<std::string> lines;
+		std::string widthstr = f->get("article:w");
+		unsigned int render_width = 80;
+		unsigned int view_width;
+		if (widthstr.length() > 0) {
+			view_width = render_width = utils::to_u(widthstr);
+			if (render_width - 5 > 0)
+				render_width -= 5; 	
+		}
+
 		rss_item& item = feed->get_item_by_guid(guid);
 		listformatter listfmt;
 
@@ -55,54 +71,39 @@ void itemview_formaction::prepare() {
 			title = feedptr->rssurl();
 		}
 		feedtitle = utils::strprintf("%s%s", _("Feed: "), title.c_str());
-		listfmt.add_line(feedtitle);
+		listfmt.add_line(feedtitle, UINT_MAX, view_width);
 
 		if (item.title().length() > 0) {
 			title = utils::strprintf("%s%s", _("Title: "), item.title().c_str());
-			listfmt.add_line(title);
+			listfmt.add_line(title, UINT_MAX, view_width);
 		}
 
 		if (item.author().length() > 0) {
 			std::string author = utils::strprintf("%s%s", _("Author: "), item.author().c_str());
-			listfmt.add_line(author);
+			listfmt.add_line(author, UINT_MAX, view_width);
 		}
 
 		if (item.link().length() > 0) {
 			std::string link = utils::strprintf("%s%s", _("Link: "), item.link().c_str());
-			listfmt.add_line(link);
+			listfmt.add_line(link, UINT_MAX, view_width);
 		}
 
 		std::string date = utils::strprintf("%s%s", _("Date: "), item.pubDate().c_str());
-		listfmt.add_line(date);
+		listfmt.add_line(date, UINT_MAX, view_width);
 
 		if (item.flags().length() > 0) {
 			std::string flags = utils::strprintf("%s%s", _("Flags: "), item.flags().c_str());
-			listfmt.add_line(flags);
+			listfmt.add_line(flags, UINT_MAX, view_width);
 		}
 
 		if (item.enclosure_url().length() > 0) {
 			std::string enc_url = utils::strprintf("%s%s (%s%s)", _("Podcast Download URL: "), item.enclosure_url().c_str(), _("type: "), item.enclosure_type().c_str());
-			listfmt.add_line(enc_url);
+			listfmt.add_line(enc_url, UINT_MAX, view_width);
 		}
 
 		listfmt.add_line("");
 
 		set_head(item.title());
-
-		{
-		scope_measure("itemview::prepare: rendering");
-		f->run(-3); // XXX HACK: render once so that we get a proper widget width
-		}
-
-		std::vector<std::string> lines;
-		std::string widthstr = f->get("article:w");
-		unsigned int render_width = 80;
-		if (widthstr.length() > 0) {
-			std::istringstream is(widthstr);
-			is >> render_width;
-			if (render_width - 5 > 0)
-				render_width -= 5; 	
-		}
 
 		unsigned int textwidth = v->get_cfg()->get_configvalue_as_int("text-width");
 		if (textwidth > 0) {
@@ -115,7 +116,7 @@ void itemview_formaction::prepare() {
 			lines = render_html(item.description(), links, item.feedurl(), render_width);
 		}
 
-		listfmt.add_lines(lines);
+		listfmt.add_lines(lines, view_width);
 
 		num_lines = listfmt.get_lines_count();
 

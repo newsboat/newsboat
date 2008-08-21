@@ -6,7 +6,6 @@ TODO:
 - when reload is finished, the focus shall be in the current form's list
 - per-feed refresh settings
 - add a second "downloaded, but unlistened" queue to podbeuter
-- wrap long headers in article view (Debian issue #491122)
 - implement "newsrc" style file format to exchange information about unread feeds.
 
 DONE:
@@ -118,3 +117,4 @@ DONE:
 - refactored XML pull parser (many redundancies)
 - check issues with missing words from articles
 	- zed shaw blog has such issues (entity decode fuckup when no encoding was provided)
+- wrap long headers in article view (Debian issue #491122)

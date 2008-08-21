@@ -8,14 +8,23 @@ listformatter::listformatter() : refresh_cache(true) { }
 
 listformatter::~listformatter() { }
 
-void listformatter::add_line(const std::string& text, unsigned int id) {
-	lines.push_back(line_id_pair(text, id));
+void listformatter::add_line(const std::string& text, unsigned int id, unsigned int width) {
+	if (width > 0) {
+		std::string mytext = text;
+		while (mytext.length() > width) {
+			lines.push_back(line_id_pair(mytext.substr(0, width), id));
+			mytext.erase(0, width);
+		}
+		lines.push_back(line_id_pair(mytext, id));
+	} else {
+		lines.push_back(line_id_pair(text, id));
+	}
 	refresh_cache = true;
 }
 
-void listformatter::add_lines(const std::vector<std::string>& thelines) {
+void listformatter::add_lines(const std::vector<std::string>& thelines, unsigned int width) {
 	for (std::vector<std::string>::const_iterator it=thelines.begin();it!=thelines.end();++it) {
-		add_line(*it);
+		add_line(*it, UINT_MAX, width);
 	}
 }
 
