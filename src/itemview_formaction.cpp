@@ -363,9 +363,11 @@ std::vector<std::string> itemview_formaction::render_html(const std::string& sou
 		htmlrenderer rnd(render_width);
 		rnd.render(source, lines, thelinks, feedurl);
 	} else {
-		char * argv[2];
-		argv[0] = const_cast<char *>(renderer.c_str());
-		argv[1] = NULL;
+		char * argv[4];
+		argv[0] = const_cast<char *>("/bin/sh");
+		argv[1] = const_cast<char *>("-c");
+		argv[2] = const_cast<char *>(renderer.c_str());
+		argv[3] = NULL;
 		std::string output = utils::run_program(argv, source);
 		std::istringstream is(output);
 		std::string line;

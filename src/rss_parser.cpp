@@ -234,7 +234,7 @@ void rss_parser::get_execplugin(const std::string& plugin) {
 void rss_parser::download_filterplugin(const std::string& filter, const std::string& uri) {
 	std::string buf = utils::retrieve_url(uri, utils::get_useragent(cfgcont).c_str());
 
-	char * argv[2] = { const_cast<char *>(filter.c_str()), NULL };
+	char * argv[4] = { const_cast<char *>("/bin/sh"), const_cast<char *>("-c"), const_cast<char *>(filter.c_str()), NULL };
 	std::string result = utils::run_program(argv, buf);
 	GetLogger().log(LOG_DEBUG, "rss_parser::parse: output of `%s' is: %s", filter.c_str(), result.c_str());
 	err = mrss_parse_buffer(const_cast<char *>(result.c_str()), result.length(), &mrss);
