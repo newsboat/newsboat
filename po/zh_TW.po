@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: newsbeuter 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-11 18:42+0200\n"
-"PO-Revision-Date: 2008-08-27 23:51+0800\n"
+"PO-Revision-Date: 2008-08-28 13:58+0800\n"
 "Last-Translator: Aeglos <aeglos.lin@gmail.com>\n"
 "Language-Team: Traditional Chinese <aeglos.lin@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -68,7 +68,7 @@ msgstr "%N %V - 文章 '%T'"
 #: src/configparser.cpp:81
 #, c-format
 msgid "Error while processing command `%s' (%s line %u): %s"
-msgstr "當處理命令`%s'(%s 第 %u 行)時發生錯誤: %s"
+msgstr "在處理命令`%s'(%s 第 %u 行)時發生錯誤: %s"
 
 #: src/configparser.cpp:84
 #, c-format
@@ -103,7 +103,7 @@ msgstr "區段錯誤"
 #: src/controller.cpp:71
 #: src/pb_controller.cpp:46
 msgid "Fatal error: couldn't determine home directory!"
-msgstr "致命錯誤:無法確定主目錄！"
+msgstr "嚴重錯誤:無法確認主目錄!"
 
 #: src/controller.cpp:72
 #: src/pb_controller.cpp:47
@@ -128,7 +128,7 @@ msgstr "啟動 %s %s..."
 #: src/pb_controller.cpp:116
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
-msgstr "錯誤：已有一個%s的程序在執行中（PID: %u)"
+msgstr "錯誤：已有一個%s程序在執行中（PID: %u)"
 
 #: src/controller.cpp:216
 #: src/pb_controller.cpp:120
@@ -165,15 +165,15 @@ msgstr "從 %s 中載入鏈結..."
 #: src/controller.cpp:336
 #, c-format
 msgid "Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."
-msgstr "錯誤：沒有配置鏈結。請用RSS種子的鏈結替換 %s 或者匯入一個OPML檔案."
+msgstr "錯誤：沒有設置鏈結。請用RSS種子的鏈結替換 %s 或者匯入一個OPML檔案"
 
 #: src/controller.cpp:338
 msgid "It looks like you haven't configured any feeds in your bloglines account. Please do so, and try again."
-msgstr "看起來你還沒有在bloglines帳號裡配置任何種子 請先配置種子，然後再試一下。"
+msgstr "看來你還沒有在bloglines帳號裡配置任何種子。請先配置種子，然後再試一下"
 
 #: src/controller.cpp:340
 msgid "It looks like the OPML feed you subscribed contains no feeds. Please fill it with feeds, and try again."
-msgstr "看起來你訂閱的OPML種子沒有包含任何種子請在加入種子之後再試一下。"
+msgstr "看起來你訂閱的OPML種子沒有包含任何種子。請先在加入種子，然後再試一下"
 
 #: src/controller.cpp:349
 msgid "Loading articles from cache..."
@@ -185,7 +185,7 @@ msgstr "徹底清除快取"
 
 #: src/controller.cpp:372
 msgid "Error while loading feeds from database: "
-msgstr "當從資料庫中載入種子的時發生錯誤:"
+msgstr "從資料庫中載入種子的時發生錯誤:"
 
 #: src/controller.cpp:410
 msgid "Cleaning up cache..."
@@ -209,7 +209,7 @@ msgstr "%s載入中 %s..."
 #: src/controller.cpp:489
 #, c-format
 msgid "Error while retrieving %s: %s"
-msgstr "當抓取%s的時候出錯: %s"
+msgstr "在抓取%s的時候發生錯誤: %s"
 
 #: src/controller.cpp:492
 msgid "Error: invalid feed!"
@@ -240,21 +240,24 @@ msgid ""
 msgstr ""
 "%s %s\n"
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]\n"
-"-e              匯出OPML種子，並將之寫至標準輸入設備(stdout)\n"
+"-e              匯出OPML種子到標準輸出\n"
 "-r              啟動時更新種子列表\n"
-"-i <file>       匯入OPML文件\n"
+"-i <file>       從<file>匯入OPML檔案\n"
 "-u <urlfile>    從<urlfile>讀取RSS種子列表\n"
 "-c <cachefile>  使用<cachefile>作為快取檔案\n"
 "-C <configfile> 從<configfile>讀取設定\n"
 "-v              徹底清空快取\n"
+"-x <command>... 執行<command>\n"
 "-o              啟動離線模式（只對bloglines同步模式有效）\n"
 "-V              顯示版本資訊\n"
-"-h              顯示這個說明\n"
+"-l <loglevel>   以<loglevel>(有效數值: 1 to 6)記錄日誌\n"
+"-d <logfile>    以<logfile>做為輸出的日誌檔\n"
+"-h              顯示說明\n"
 
 #: src/controller.cpp:662
 #, c-format
 msgid "Import of %s finished."
-msgstr "%s 導入完畢"
+msgstr "%s 匯入完畢"
 
 #: src/controller.cpp:839
 msgid "bookmarking support is not configured. Please set the configuration variable `bookmark-cmd' accordingly."
@@ -378,7 +381,7 @@ msgstr "過濾器: "
 
 #: src/feedlist_formaction.cpp:260
 msgid "Do you really want to quit (y:Yes n:No)? "
-msgstr "你真的想離開麼（y:是的 n:不是)?"
+msgstr "你確定要離開嗎（y:是的 n:不是)?"
 
 #: src/feedlist_formaction.cpp:260
 #: src/filebrowser_formaction.cpp:101
@@ -445,13 +448,13 @@ msgstr "說明"
 #: src/feedlist_formaction.cpp:539
 #: src/itemlist_formaction.cpp:376
 msgid "Searching..."
-msgstr "查找..."
+msgstr "搜尋中..."
 
 #: src/feedlist_formaction.cpp:546
 #: src/itemlist_formaction.cpp:387
 #, c-format
 msgid "Error while searching for `%s': %s"
-msgstr "當搜尋 `%s'的時候出錯: %s"
+msgstr "在搜尋 `%s'的時候出錯: %s"
 
 #: src/feedlist_formaction.cpp:553
 #: src/itemlist_formaction.cpp:392
@@ -471,7 +474,7 @@ msgstr "無效位置！"
 #: src/filebrowser_formaction.cpp:101
 #, c-format
 msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
-msgstr "你真的想覆蓋 `%s'麼(y:是的  n:不是)?"
+msgstr "你確定要覆蓋 `%s'嗎(y:是的  n:不是)?"
 
 #: src/filebrowser_formaction.cpp:101
 msgid "n"
@@ -519,7 +522,7 @@ msgstr "已儲存的書籤."
 
 #: src/formaction.cpp:163
 msgid "Error while saving bookmark: "
-msgstr "當儲存書籤時發生錯誤:"
+msgstr "在儲存書籤時發生錯誤:"
 
 #: src/formaction.cpp:185
 msgid "URL: "
@@ -552,7 +555,7 @@ msgstr "鏈結"
 
 #: src/htmlrenderer.cpp:433
 msgid "embedded flash"
-msgstr "內嵌flash"
+msgstr "內嵌的flash"
 
 #: src/htmlrenderer.cpp:434
 msgid "unknown (bug)"
@@ -612,7 +615,7 @@ msgstr "標記已更新"
 
 #: src/itemlist_formaction.cpp:566
 msgid "Mark All Read"
-msgstr "將所有都標記為已讀"
+msgstr "標記全部為已讀"
 
 #: src/itemlist_formaction.cpp:629
 #: src/itemview_formaction.cpp:173
@@ -681,7 +684,7 @@ msgstr "啟動瀏覽器..."
 
 #: src/itemview_formaction.cpp:218
 msgid "URL list empty."
-msgstr "空空如也的鏈結列表"
+msgstr "空白的鏈結列表"
 
 #: src/itemview_formaction.cpp:262
 #: src/urlview_formaction.cpp:98
@@ -702,11 +705,11 @@ msgstr "返回到前一個對話框/退出"
 
 #: src/keymap.cpp:23
 msgid "Reload currently selected feed"
-msgstr "重新重載當前選擇的種子"
+msgstr "重新載入當前選擇的種子"
 
 #: src/keymap.cpp:24
 msgid "Reload all feeds"
-msgstr "重新重載所有種子"
+msgstr "重新載入所有種子"
 
 #: src/keymap.cpp:25
 msgid "Mark feed read"
@@ -770,7 +773,7 @@ msgstr "將該下載項目加入隊列"
 
 #: src/keymap.cpp:40
 msgid "Reload the list of URLs from the configuration"
-msgstr "重新重載配置文件裡的鏈結列表"
+msgstr "重新載入配置文件裡的鏈結列表"
 
 #: src/keymap.cpp:41
 msgid "Download file"
@@ -798,19 +801,19 @@ msgstr "播放當前所選的下載項目"
 
 #: src/keymap.cpp:47
 msgid "Increase the number of concurrent downloads"
-msgstr "增加同步下載的進程數目"
+msgstr "增加同時下載的數目"
 
 #: src/keymap.cpp:48
 msgid "Decrease the number of concurrent downloads"
-msgstr "減少同步下載的進程數目"
+msgstr "減少同時下載的數目"
 
 #: src/keymap.cpp:49
 msgid "Redraw screen"
-msgstr "更新螢幕"
+msgstr "更新畫面"
 
 #: src/keymap.cpp:50
 msgid "Open the commandline"
-msgstr "打開命令行"
+msgstr "打開命令列"
 
 #: src/keymap.cpp:51
 msgid "Set a filter"
@@ -826,7 +829,7 @@ msgstr "清除目前的過濾器"
 
 #: src/keymap.cpp:54
 msgid "Bookmark current link/article"
-msgstr "將當前文章/鏈結加入書籤"
+msgstr "將目前的文章/鏈結加入書籤"
 
 #: src/keymap.cpp:55
 msgid "Edit flags"
@@ -881,11 +884,11 @@ msgstr " - %u 個平行下載"
 #: src/pb_view.cpp:44
 #, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f kb/s total%s"
-msgstr "隊列 (%u 個下載項目在進行中，共有 %u 個下載項目) - 總共 %.2f kb/s %s"
+msgstr "隊列 (%u 個下載在進行中，共有 %u 個下載項目) - 總共 %.2f kb/s %s"
 
 #: src/pb_view.cpp:94
 msgid "Error: can't quit: download(s) in progress."
-msgstr "錯誤: 無法取消: 還有項目在下載"
+msgstr "錯誤: 無法取消: 還有下載在進行中"
 
 #: src/pb_view.cpp:126
 msgid "Error: download needs to be finished before the file can be played."
@@ -893,7 +896,7 @@ msgstr "錯誤：必須下載完畢才可以播放"
 
 #: src/pb_view.cpp:155
 msgid "Error: unable to perform operation: download(s) in progress."
-msgstr "錯誤：無法執行操作：有項目在下載中"
+msgstr "錯誤：無法執行操作：還有下載在進行中"
 
 #: src/pb_view.cpp:267
 msgid "Download"
@@ -949,12 +952,12 @@ msgstr "儲存書籤"
 #: src/view.cpp:325
 #, c-format
 msgid "Error: applying the filter failed: %s"
-msgstr "錯誤: 應用過濾器失敗: %s"
+msgstr "錯誤: 套用過濾器失敗: %s"
 
 #: src/view.cpp:344
 #: src/view.cpp:364
 msgid "Error: feed contains no items!"
-msgstr "錯誤: 種子裡沒有包含任何項目!"
+msgstr "錯誤: 種子裡沒有任何項目!"
 
 #: src/view.cpp:353
 msgid "Updating query feed..."
