@@ -19,6 +19,14 @@ Tuitest.wait_until_idle
 verifier.expect(0, 29, "1")
 verifier.expect(1, 5, "N       (3/3) RSS 2.0 testbed feed                   ")
 
+Tuitest.keypress(":"[0])
+Tuitest.keypress("3"[0])
+Tuitest.keypress(10)
+Tuitest.keypress("r"[0])
+
+Tuitest.wait_until_idle
+verifier.expect(3, 5, "N       (2/2) newsbeuter testbed")
+
 Tuitest.keypress("q"[0])
 Tuitest.wait_until_idle
 
