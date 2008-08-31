@@ -291,7 +291,7 @@ void view::open_in_browser(const std::string& url) {
 		else
 			cmdline.append("lynx");
 		cmdline.append(" '");
-		cmdline.append(url);
+		cmdline.append(utils::replace_all(url,"'", "\\'"));
 		cmdline.append("'");
 	}
 	stfl::reset();
