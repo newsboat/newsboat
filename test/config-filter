@@ -1,0 +1,1 @@
+define-filter "unread articles only" "unread = \"yes\""
