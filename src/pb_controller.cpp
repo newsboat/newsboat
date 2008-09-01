@@ -136,6 +136,7 @@ void pb_controller::run(int argc, char * argv[]) {
 	cfgparser.register_handler("always-download", &null_cah);
 	cfgparser.register_handler("define-filter", &null_cah);
 	cfgparser.register_handler("highlight", &null_cah);
+	cfgparser.register_handler("reset-unread-on-update", &null_cah);
 
 	try {
 		cfgparser.parse("/etc/newsbeuter/config");
