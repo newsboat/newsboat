@@ -389,6 +389,11 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 
 						unsigned int i=0;
 						bool new_line = false;
+
+						if (!line_is_nonempty(curline) && words.size() > 0 && words[0] == " ") {
+							words.erase(words.begin());
+						}
+
 						GetLogger().log(LOG_DEBUG, "htmlrenderer::render: tokenized `%s'", xpp.getText().c_str());
 						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it,++i) {
 							GetLogger().log(LOG_DEBUG, "htmlrenderer::render: token[%u] = `%s'", i, it->c_str());
