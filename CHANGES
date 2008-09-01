@@ -3,6 +3,7 @@ Changes for newsbeuter:
 1.2:
 	Fixed crash in case of invalid color/attribute names in the configuration
 	Implemented "download-timeout" and "download-retries" config options to make newsbeuter more reliable over unreliable connection (fixes #88).
+	Improved whitespace handling in XML parser (fixes Debian issue #496765).
 
 1.1 (2008-09-01):
 	Added a line wrap for the article view's headers and the link list on the bottom (fixes Debian issue #491122)
