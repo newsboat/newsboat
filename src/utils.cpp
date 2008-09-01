@@ -587,7 +587,7 @@ void utils::append_escapes(std::string& str, char c) {
 }
 
 bool utils::is_valid_color(const std::string& color) {
-	const char * colors[] = { "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white", NULL };
+	const char * colors[] = { "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white", "default", NULL };
 	for (unsigned int i=0;colors[i];i++) {
 		if (color == colors[i])
 			return true;
@@ -596,7 +596,7 @@ bool utils::is_valid_color(const std::string& color) {
 }
 
 bool utils::is_valid_attribute(const std::string& attrib) {
-	const char * attribs[] = { "standout", "underline", "reverse", "blink", "dim", "bold", "protect", "invis", NULL };
+	const char * attribs[] = { "standout", "underline", "reverse", "blink", "dim", "bold", "protect", "invis", "default", NULL };
 	for (unsigned int i=0;attribs[i];i++) {
 		if (attrib == attribs[i])
 			return true;
