@@ -1,5 +1,6 @@
 #include <logger.h>
 #include <colormanager.h>
+#include <utils.h>
 #include <pb_view.h>
 
 #include <feedlist_formaction.h>
@@ -37,8 +38,13 @@ action_handler_status colormanager::handle_action(const std::string& action, con
 		std::string fgcolor = params[1];
 		std::string bgcolor = params[2];
 
+		if (!utils::is_valid_color(fgcolor) || !utils::is_valid_color(bgcolor))
+			return AHS_INVALID_PARAMS;
+
 		std::vector<std::string> attribs;
 		for (unsigned int i=3;i<params.size();++i) {
+			if (!utils::is_valid_attribute(params[i]))
+				return AHS_INVALID_PARAMS;
 			attribs.push_back(params[i]);
 		}
 
@@ -105,5 +111,6 @@ void colormanager::set_pb_colors(podbeuter::pb_view * v) {
 	}
 
 }
+
 
 }

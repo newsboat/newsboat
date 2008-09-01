@@ -8,7 +8,6 @@ TODO:
 - add a second "downloaded, but unlistened" queue to podbeuter
 - implement "newsrc" style file format to exchange information about unread feeds.
 - bug: don't squeeze whitespaces when inside a <blockquote><pre> environment.
-- add filtering for correct color names
 
 DONE:
 - clean up items that have been added but whose URL has been removed from the config file.
@@ -120,3 +119,4 @@ DONE:
 - check issues with missing words from articles
 	- zed shaw blog has such issues (entity decode fuckup when no encoding was provided)
 - wrap long headers in article view (Debian issue #491122)
+- add filtering for correct color names

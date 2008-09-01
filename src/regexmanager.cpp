@@ -40,6 +40,8 @@ action_handler_status regexmanager::handle_action(const std::string& action, con
 		std::string colorstr;
 		if (params[2] != "default") {
 			colorstr.append("fg=");
+			if (!utils::is_valid_color(params[2]))
+				return AHS_INVALID_PARAMS;
 			colorstr.append(params[2]);
 		}
 		if (params.size() > 2) {
@@ -47,6 +49,8 @@ action_handler_status regexmanager::handle_action(const std::string& action, con
 				if (colorstr.length() > 0)
 					colorstr.append(",");
 				colorstr.append("bg=");
+				if (!utils::is_valid_color(params[3]))
+					return AHS_INVALID_PARAMS;
 				colorstr.append(params[3]);
 			}
 			for (unsigned int i=4;i<params.size();++i) {
@@ -54,6 +58,8 @@ action_handler_status regexmanager::handle_action(const std::string& action, con
 					if (colorstr.length() > 0)
 						colorstr.append(",");
 					colorstr.append("attr=");
+					if (!utils::is_valid_attribute(params[i]))
+						return AHS_INVALID_PARAMS;
 					colorstr.append(params[i]);
 				}
 			}
