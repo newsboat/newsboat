@@ -1,0 +1,2 @@
+download-retries 10
+download-timeout 60

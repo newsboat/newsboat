@@ -65,14 +65,23 @@ bool rss_parser::check_and_update_lastmodified() {
 	time_t oldlm = ch->get_lastmodified(my_uri);
 	time_t newlm = 0;
 
-	mrss_options_t * options = create_mrss_options();
-	err = mrss_get_last_modified_with_options(const_cast<char *>(my_uri.c_str()), &newlm, options);
-	mrss_options_free(options);
+	unsigned int retry_count = cfgcont->get_configvalue_as_int("download-retries");
 
-	// GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: err = %u oldlm = %d newlm = %d", err, oldlm, newlm);
+	unsigned int i;
+	for (i=0;i<retry_count;i++) {
 
-	if (err != MRSS_OK) {
-		// GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: no, don't download, due to error");
+		mrss_options_t * options = create_mrss_options();
+		err = mrss_get_last_modified_with_options(const_cast<char *>(my_uri.c_str()), &newlm, options);
+		mrss_options_free(options);
+
+		// GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: err = %u oldlm = %d newlm = %d", err, oldlm, newlm);
+
+		if (err != MRSS_OK) {
+			// GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: no, don't download, due to error");
+			return false;
+		}
+	}
+	if (i==retry_count && err != MRSS_OK) {
 		return false;
 	}
 
@@ -144,7 +153,7 @@ mrss_options_t * rss_parser::create_mrss_options() {
 		proxy_auth = const_cast<char *>(cfgcont->get_configvalue("proxy-auth").c_str());
 	}
 
-	return mrss_options_new(30, proxy, proxy_auth, NULL, NULL, NULL, 0, NULL, utils::get_useragent(cfgcont).c_str());
+	return mrss_options_new(cfgcont->get_configvalue_as_int("download-timeout"), proxy, proxy_auth, NULL, NULL, NULL, 0, NULL, utils::get_useragent(cfgcont).c_str());
 }
 
 std::string rss_parser::render_xhtml_title(const std::string& title, const std::string& link) {
@@ -217,7 +226,9 @@ void rss_parser::retrieve_uri(const std::string& uri) {
 
 void rss_parser::download_http(const std::string& uri) {
 	mrss_options_t * options = create_mrss_options();
-	{
+	unsigned int retrycount = cfgcont->get_configvalue_as_int("download-retries");
+	err = MRSS_ERR_POSIX; // have any value other than MRSS_OK set so that the for-loop doesn't break immediately
+	for (unsigned int i=0;i<retrycount && err != MRSS_OK;i++) {
 		scope_measure m1("mrss_parse_url_with_options_and_error");
 		err = mrss_parse_url_with_options_and_error(const_cast<char *>(uri.c_str()), &mrss, options, &ccode);
 	}
@@ -232,7 +243,7 @@ void rss_parser::get_execplugin(const std::string& plugin) {
 }
 
 void rss_parser::download_filterplugin(const std::string& filter, const std::string& uri) {
-	std::string buf = utils::retrieve_url(uri, utils::get_useragent(cfgcont).c_str());
+	std::string buf = utils::retrieve_url(uri, utils::get_useragent(cfgcont).c_str(), NULL, cfgcont->get_configvalue_as_int("download-timeout"));
 
 	char * argv[4] = { const_cast<char *>("/bin/sh"), const_cast<char *>("-c"), const_cast<char *>(filter.c_str()), NULL };
 	std::string result = utils::run_program(argv, buf);

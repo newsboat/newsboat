@@ -117,7 +117,7 @@ void opml_urlreader::reload() {
 
 	std::string user_agent = utils::get_useragent(cfg);
 
-	std::string urlcontent = utils::retrieve_url(this->get_source(), user_agent.c_str(), this->get_auth());
+	std::string urlcontent = utils::retrieve_url(this->get_source(), user_agent.c_str(), this->get_auth(), cfg->get_configvalue_as_int("download-timeout"));
 	// GetLogger().log(LOG_DEBUG, "bloglines_urlreader::reload: return OPML content is `%s'", urlcontent.c_str());
 
 	nxml_t *data;

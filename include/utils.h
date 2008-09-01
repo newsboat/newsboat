@@ -25,7 +25,7 @@ class utils {
 
 		static std::string get_command_output(const std::string& cmd);
 		static void extract_filter(const std::string& line, std::string& filter, std::string& url);
-		static std::string retrieve_url(const std::string& url, const char * user_agent = 0, const char * auth = 0);
+		static std::string retrieve_url(const std::string& url, const char * user_agent = 0, const char * auth = 0, int download_timeout = 30);
 		static void run_command(const std::string& cmd, const std::string& param); // used for notifications only
 		static std::string run_program(char * argv[], const std::string& input);
 
