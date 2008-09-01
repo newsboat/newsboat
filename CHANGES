@@ -1,9 +1,9 @@
 Changes for newsbeuter:
 
-1.1:
+1.1 (2008-09-01):
 	Added a line wrap for the article view's headers and the link list on the bottom (fixes Debian issue #491122)
 	Added test suite for functional tests of the user interface
-	Fixed potential security issue when opening article URLs with the configured browser
+	Fixed potential security issue when opening article URLs with the configured browser (thanks to J.H.M. Dassen (Ray) for pointing out)
 
 1.0 (2008-08-20):
 	Implemented support for highlighting of regular expressions
