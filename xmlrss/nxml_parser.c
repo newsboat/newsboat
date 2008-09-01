@@ -52,6 +52,7 @@ __nxml_parse_string (nxml_t * doc, char *buffer, size_t size)
       if (*(buffer + i) == 0xd)
 	continue;
 
+	/*
       if (*(buffer + i) == 0xa || *(buffer + i) == 0x9
 	  || *(buffer + i) == 0x20)
 	{
@@ -64,7 +65,7 @@ __nxml_parse_string (nxml_t * doc, char *buffer, size_t size)
 	    }
 	}
 
-      else if (*(buffer + i) == '&')
+      else */ if (*(buffer + i) == '&')
 	{
 	  if (!strncmp (buffer + i, "&lt;", 4))
 	    {
