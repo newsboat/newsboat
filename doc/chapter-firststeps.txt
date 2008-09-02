@@ -3,17 +3,21 @@ After you've installed newsbeuter, you can run it for the first time by typing
 
 	Error: no URLs configured. Please fill the file /home/ak/.newsbeuter/urls with RSS feed URLs or import an OPML file.
 
-	newsbeuter 0.8
-	usage: ./newsbeuter [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]
-		-r              refresh feeds on start
-		-e              export OPML feed to stdout
-		-i <file>       import OPML file
-		-u <urlfile>    read RSS feed URLs from <urlfile>
-		-c <cachefile>  use <cachefile> as cache file
-		-C <configfile> read configuration from <configfile>
-		-v              clean up cache thoroughly
-		-h              this help
-
+	newsbeuter 1.2
+	usage: ../newsbeuter [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-h]
+	-e              export OPML feed to stdout
+	-r              refresh feeds on start
+	-i <file>       import OPML file
+	-u <urlfile>    read RSS feed URLs from <urlfile>
+	-c <cachefile>  use <cachefile> as cache file
+	-C <configfile> read configuration from <configfile>
+	-v              clean up cache thoroughly
+	-x <command>... execute list of commands
+	-o              activate offline mode (only applies to bloglines synchronization mode)
+	-V              get version information
+	-l <loglevel>   write a log with a certain loglevel (valid values: 1 to 6)
+	-d <logfile>    use <logfile> as output log file
+	-h              this help
 
 This means that newsbeuter can't start without any configured feeds. To add
 feeds to newsbeuter, you can either add URLs to the configuration file
