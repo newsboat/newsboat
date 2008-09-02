@@ -280,7 +280,7 @@ void view::open_in_browser(const std::string& url) {
 	if (browser.find("%u") != std::string::npos) {
 		fmtstr_formatter fmt;
 		std::string newurl;
-		newurl = utils::replace_all(url, "'", "\\'");
+		newurl = utils::replace_all(url, "'", "%39");
 		newurl.insert(0, "'");
 		newurl.append("'");
 		fmt.register_fmt('u', newurl);
@@ -291,7 +291,7 @@ void view::open_in_browser(const std::string& url) {
 		else
 			cmdline.append("lynx");
 		cmdline.append(" '");
-		cmdline.append(utils::replace_all(url,"'", "\\'"));
+		cmdline.append(utils::replace_all(url,"'", "%39"));
 		cmdline.append("'");
 	}
 	stfl::reset();
