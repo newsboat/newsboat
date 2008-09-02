@@ -40,7 +40,7 @@ Tuitest.wait_until_idle
 verifier.expect(7, 0, "This is some example content.")
 verifier.expect(8, 0, "                                     ")
 verifier.expect(9, 0, "Here's a line break.         ")
-verifier.expect(10, 0, " Second line. And now we try an unordered list.")
+verifier.expect(10, 0, "Second line. And now we try an unordered list.")
 verifier.expect(11, 0, "    ")
 verifier.expect(12, 0, "  * first entry     ")
 verifier.expect(13, 0, "  * second entry     ")
