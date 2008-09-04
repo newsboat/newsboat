@@ -7,6 +7,7 @@
 #include <configcontainer.h>
 #include <matcher.h>
 
+#include <tr1/memory>
 
 extern "C" {
 #include <_mrss.h>
@@ -21,7 +22,7 @@ namespace newsbeuter {
 
 	class rss_item : public matchable {
 		public:
-			rss_item(cache * c) : unread_(true), ch(c), enqueued_(false), feedptr(NULL), deleted_(0) { }
+			rss_item(cache * c) : unread_(true), ch(c), enqueued_(false), deleted_(0) { }
 			~rss_item() { }
 			
 			std::string title() const;
@@ -78,8 +79,8 @@ namespace newsbeuter {
 			virtual bool has_attribute(const std::string& attribname);
 			virtual std::string get_attribute(const std::string& attribname);
 
-			void set_feedptr(rss_feed * ptr);
-			inline rss_feed * get_feedptr() { return feedptr; }
+			void set_feedptr(std::tr1::shared_ptr<rss_feed> ptr);
+			inline std::tr1::shared_ptr<rss_feed> get_feedptr() { return feedptr; }
 
 			inline bool deleted() const { return deleted_; }
 			inline void set_deleted(bool b) { deleted_ = b; }
@@ -98,7 +99,7 @@ namespace newsbeuter {
 			std::string enclosure_type_;
 			bool enqueued_;
 			std::string flags_;
-			rss_feed * feedptr;
+			std::tr1::shared_ptr<rss_feed> feedptr;
 			bool deleted_;
 	};
 
@@ -121,7 +122,7 @@ namespace newsbeuter {
 			inline std::string pubDate() const { return "TODO"; }
 			inline void set_pubDate(time_t t) { pubDate_ = t; }
 			
-			inline std::vector<rss_item>& items() { return items_; }
+			inline std::vector<std::tr1::shared_ptr<rss_item> >& items() { return items_; }
 
 			rss_item& get_item_by_guid(const std::string& guid);
 			
@@ -137,7 +138,7 @@ namespace newsbeuter {
 			virtual bool has_attribute(const std::string& attribname);
 			virtual std::string get_attribute(const std::string& attribname);
 
-			void update_items(std::vector<rss_feed>& feeds);
+			void update_items(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds);
 
 			inline void set_query(const std::string& s) { query = s; }
 
@@ -159,7 +160,7 @@ namespace newsbeuter {
 			std::string link_;
 			time_t pubDate_;
 			std::string rssurl_;
-			std::vector<rss_item> items_;
+			std::vector<std::tr1::shared_ptr<rss_item> > items_;
 			std::vector<std::string> tags_;
 			std::string query;
 			
@@ -174,7 +175,7 @@ namespace newsbeuter {
 			rss_ignores() { }
 			virtual ~rss_ignores();
 			virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
-			bool matches(rss_item* item);
+			bool matches(rss_item * item);
 			bool matches_lastmodified(const std::string& url);
 			bool matches_resetunread(const std::string& url);
 		private:

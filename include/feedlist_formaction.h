@@ -8,7 +8,7 @@
 
 namespace newsbeuter {
 
-typedef std::pair<rss_feed *, unsigned int> feedptr_pos_pair;
+typedef std::pair<std::tr1::shared_ptr<rss_feed>, unsigned int> feedptr_pos_pair;
 
 class feedlist_formaction : public formaction {
 	public:
@@ -16,11 +16,11 @@ class feedlist_formaction : public formaction {
 		virtual ~feedlist_formaction();
 		virtual void prepare();
 		virtual void init();
-		void set_feedlist(std::vector<rss_feed>& feeds);
-		void update_visible_feeds(std::vector<rss_feed>& feeds);
+		void set_feedlist(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds);
+		void update_visible_feeds(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds);
 		void set_tags(const std::vector<std::string>& t);
 		virtual keymap_hint_entry * get_keymap_hint();
-		rss_feed * get_feed();
+		std::tr1::shared_ptr<rss_feed> get_feed();
 
 		virtual std::string id() const { return "feedlist"; }
 
@@ -51,9 +51,9 @@ class feedlist_formaction : public formaction {
 
 		void set_pos();
 
-		std::string get_title(rss_feed * feed);
+		std::string get_title(std::tr1::shared_ptr<rss_feed> feed);
 
-		std::string format_line(const std::string& feedlist_format, rss_feed * feed, unsigned int pos, unsigned int width);
+		std::string format_line(const std::string& feedlist_format, std::tr1::shared_ptr<rss_feed> feed, unsigned int pos, unsigned int width);
 
 		bool zero_feedpos;
 		unsigned int feeds_shown;
@@ -68,7 +68,7 @@ class feedlist_formaction : public formaction {
 
 		history filterhistory;
 
-		rss_feed search_dummy_feed;
+		std::tr1::shared_ptr<rss_feed> search_dummy_feed;
 
 		unsigned int filterpos;
 		bool set_filterpos;

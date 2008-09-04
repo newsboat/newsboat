@@ -18,10 +18,10 @@ rss_parser::rss_parser(const char * uri, cache * c, configcontainer * cfg, rss_i
 
 rss_parser::~rss_parser() { }
 
-rss_feed rss_parser::parse() {
-	rss_feed feed(ch);
+std::tr1::shared_ptr<rss_feed> rss_parser::parse() {
+	std::tr1::shared_ptr<rss_feed> feed(new rss_feed(ch));
 
-	feed.set_rssurl(my_uri);
+	feed->set_rssurl(my_uri);
 
 	retrieve_uri(my_uri);
 
@@ -41,14 +41,14 @@ rss_feed rss_parser::parse() {
 		fill_feed_fields(feed, encoding);
 		fill_feed_items(feed, encoding);
 
-		feed.remove_old_deleted_items();
+		feed->remove_old_deleted_items();
 
 		mrss_free(mrss);
 		mrss = NULL;
 
 	}
 
-	feed.set_empty(false);
+	feed->set_empty(false);
 
 	return feed;
 }
@@ -175,7 +175,7 @@ unsigned int rss_parser::monthname_to_number(const std::string& monthstr) {
 	return 0;
 }
 
-void rss_parser::set_rtl(rss_feed& feed, const char * lang) {
+void rss_parser::set_rtl(std::tr1::shared_ptr<rss_feed>& feed, const char * lang) {
 	// we implement right-to-left support for the languages listed in
 	// http://blogs.msdn.com/rssteam/archive/2007/05/17/reading-feeds-in-right-to-left-order.aspx
 	static const char * rtl_langprefix[] = { 
@@ -191,7 +191,7 @@ void rss_parser::set_rtl(rss_feed& feed, const char * lang) {
 	for (unsigned int i=0;rtl_langprefix[i]!=NULL;++i) {
 		if (strncmp(lang,rtl_langprefix[i],strlen(rtl_langprefix[i]))==0) {
 			GetLogger().log(LOG_DEBUG, "rss_parser::parse: detected right-to-left order, language code = %s", rtl_langprefix[i]);
-			feed.set_rtl(true);
+			feed->set_rtl(true);
 			break;
 		}
 	}
@@ -266,104 +266,105 @@ void rss_parser::check_and_log_error() {
 	}
 }
 
-void rss_parser::fill_feed_fields(rss_feed& feed, const char * encoding) {
+void rss_parser::fill_feed_fields(std::tr1::shared_ptr<rss_feed>& feed, const char * encoding) {
 	/*
 	 * we fill all the feed members with the appropriate values from the mrss data structure
 	 */
 	if (mrss->title) {
 		if (mrss->title_type && (strcmp(mrss->title_type,"xhtml")==0 || strcmp(mrss->title_type,"html")==0)) {
 			std::string xhtmltitle = utils::convert_text(mrss->title, "utf-8", encoding);
-			feed.set_title(render_xhtml_title(xhtmltitle, feed.link()));
+			feed->set_title(render_xhtml_title(xhtmltitle, feed->link()));
 		} else
-			feed.set_title(utils::convert_text(mrss->title, "utf-8", encoding));
+			feed->set_title(utils::convert_text(mrss->title, "utf-8", encoding));
 	}
 
 	if (mrss->description)
-		feed.set_description(utils::convert_text(mrss->description, "utf-8", encoding));
+		feed->set_description(utils::convert_text(mrss->description, "utf-8", encoding));
 
 	if (mrss->link)
-		feed.set_link(utils::absolute_url(my_uri, mrss->link));
+		feed->set_link(utils::absolute_url(my_uri, mrss->link));
 
 	if (mrss->pubDate) 
-		feed.set_pubDate(parse_date(mrss->pubDate));
+		feed->set_pubDate(parse_date(mrss->pubDate));
 	else
-		feed.set_pubDate(::time(NULL));
+		feed->set_pubDate(::time(NULL));
 
 	if (mrss->language)
 		set_rtl(feed, mrss->language);
 
-	GetLogger().log(LOG_DEBUG, "rss_parser::parse: feed title = `%s' link = `%s'", feed.title().c_str(), feed.link().c_str());
+	GetLogger().log(LOG_DEBUG, "rss_parser::parse: feed title = `%s' link = `%s'", feed->title().c_str(), feed->link().c_str());
 }
 
-void rss_parser::fill_feed_items(rss_feed& feed, const char * encoding) {
+void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed>& feed, const char * encoding) {
 	/*
 	 * we iterate over all items of a feed, create an rss_item object for
 	 * each item, and fill it with the appropriate values from the data structure.
 	 */
 	for (mrss_item_t * item = mrss->item; item != NULL; item = item->next ) {
-		rss_item x(ch);
+		std::tr1::shared_ptr<rss_item> x(new rss_item(ch));
 
 		set_item_title(feed, x, item, encoding);
 
 		if (item->link) {
-			x.set_link(utils::absolute_url(my_uri, item->link));
+			x->set_link(utils::absolute_url(my_uri, item->link));
 		}
 
 		set_item_author(x, item, encoding);
 
-		x.set_feedurl(feed.rssurl());
+		x->set_feedurl(feed->rssurl());
 
 		set_item_content(x, item, encoding);
 
 		if (item->pubDate) 
-			x.set_pubDate(parse_date(item->pubDate));
+			x->set_pubDate(parse_date(item->pubDate));
 		else
-			x.set_pubDate(::time(NULL));
+			x->set_pubDate(::time(NULL));
 			
-		x.set_guid(get_guid(item));
+		x->set_guid(get_guid(item));
 
 		set_item_enclosure(x, item);
 
-		GetLogger().log(LOG_DEBUG, "rss_parser::parse: item title = `%s' link = `%s' pubDate = `%s' (%d) description = `%s'", x.title().c_str(), x.link().c_str(), x.pubDate().c_str(), x.pubDate_timestamp(), x.description().c_str());
+		GetLogger().log(LOG_DEBUG, "rss_parser::parse: item title = `%s' link = `%s' pubDate = `%s' (%d) description = `%s'", x->title().c_str(), 
+			x->link().c_str(), x->pubDate().c_str(), x->pubDate_timestamp(), x->description().c_str());
 
 		add_item_to_feed(feed, x);
 	}
 }
 
-void rss_parser::set_item_title(rss_feed& feed, rss_item& x, mrss_item_t * item, const char * encoding) {
+void rss_parser::set_item_title(std::tr1::shared_ptr<rss_feed>& feed, std::tr1::shared_ptr<rss_item>& x, mrss_item_t * item, const char * encoding) {
 	if (!item->title)
 		return;
 
 	if (item->title_type && (strcmp(item->title_type,"xhtml")==0 || strcmp(item->title_type,"html")==0)) {
 		std::string xhtmltitle = utils::convert_text(item->title, "utf-8", encoding);
-		x.set_title(render_xhtml_title(xhtmltitle, feed.link()));
+		x->set_title(render_xhtml_title(xhtmltitle, feed->link()));
 	} else {
 		std::string title = utils::convert_text(item->title, "utf-8", encoding);
 		replace_newline_characters(title);
-		x.set_title(title);
+		x->set_title(title);
 	}
 }
 
-void rss_parser::set_item_author(rss_item& x, mrss_item_t * item, const char * encoding) {
+void rss_parser::set_item_author(std::tr1::shared_ptr<rss_item>& x, mrss_item_t * item, const char * encoding) {
 	/* 
 	 * some feeds only have a feed-wide managingEditor, which we use as an item's
 	 * author if there is no item-specific one available.
 	 */
 	if (!item->author || strcmp(item->author,"")==0) {
 		if (mrss->managingeditor)
-			x.set_author(utils::convert_text(mrss->managingeditor, "utf-8", encoding));
+			x->set_author(utils::convert_text(mrss->managingeditor, "utf-8", encoding));
 		else {
 			mrss_tag_t * creator;
 			if (mrss_search_tag(item, "creator", "http://purl.org/dc/elements/1.1/", &creator) == MRSS_OK && creator) {
 				if (creator->value)
-					x.set_author(utils::convert_text(creator->value, "utf-8", encoding));
+					x->set_author(utils::convert_text(creator->value, "utf-8", encoding));
 			}
 		}
 	} else
-		x.set_author(utils::convert_text(item->author, "utf-8", encoding));
+		x->set_author(utils::convert_text(item->author, "utf-8", encoding));
 }
 
-void rss_parser::set_item_content(rss_item& x, mrss_item_t * item, const char * encoding) {
+void rss_parser::set_item_content(std::tr1::shared_ptr<rss_item>& x, mrss_item_t * item, const char * encoding) {
 
 	handle_content_encoded(x, item, encoding);
 
@@ -371,12 +372,12 @@ void rss_parser::set_item_content(rss_item& x, mrss_item_t * item, const char * 
 
 	handle_itunes_summary(x, item, encoding);
 
-	if (x.description().length() == 0) {
+	if (x->description().length() == 0) {
 		if (item->description)
-			x.set_description(utils::convert_text(item->description, "utf-8", encoding));
+			x->set_description(utils::convert_text(item->description, "utf-8", encoding));
 	} else {
 		if (cfgcont->get_configvalue_as_bool("always-display-description") && item->description)
-			x.set_description(x.description() + "<hr>" + utils::convert_text(item->description, "utf-8", encoding));
+			x->set_description(x->description() + "<hr>" + utils::convert_text(item->description, "utf-8", encoding));
 	}
 }
 
@@ -399,28 +400,28 @@ std::string rss_parser::get_guid(mrss_item_t * item) {
 		return "";	// too bad.
 }
 
-void rss_parser::set_item_enclosure(rss_item& x, mrss_item_t * item) {
+void rss_parser::set_item_enclosure(std::tr1::shared_ptr<rss_item>& x, mrss_item_t * item) {
 	if (item->enclosure_url) {
-		x.set_enclosure_url(item->enclosure_url);
+		x->set_enclosure_url(item->enclosure_url);
 		GetLogger().log(LOG_DEBUG, "rss_parser::parse: found enclosure_url: %s", item->enclosure_url);
 	}
 	if (item->enclosure_type) {
-		x.set_enclosure_type(item->enclosure_type);
+		x->set_enclosure_type(item->enclosure_type);
 		GetLogger().log(LOG_DEBUG, "rss_parser::parse: found enclosure_type: %s", item->enclosure_type);
 	}
 }
 
-void rss_parser::add_item_to_feed(rss_feed& feed, rss_item& item) {
+void rss_parser::add_item_to_feed(std::tr1::shared_ptr<rss_feed>& feed, std::tr1::shared_ptr<rss_item>& item) {
 	// only add item to feed if it isn't on the ignore list or if there is no ignore list
-	if (!ign || !ign->matches(&item)) {
-		feed.items().push_back(item);
-		GetLogger().log(LOG_INFO, "rss_parser::parse: added article title = `%s' link = `%s' ign = %p", item.title().c_str(), item.link().c_str(), ign);
+	if (!ign || !ign->matches(item.get())) {
+		feed->items().push_back(item);
+		GetLogger().log(LOG_INFO, "rss_parser::parse: added article title = `%s' link = `%s' ign = %p", item->title().c_str(), item->link().c_str(), ign);
 	} else {
-		GetLogger().log(LOG_INFO, "rss_parser::parse: ignored article title = `%s' link = `%s'", item.title().c_str(), item.link().c_str());
+		GetLogger().log(LOG_INFO, "rss_parser::parse: ignored article title = `%s' link = `%s'", item->title().c_str(), item->link().c_str());
 	}
 }
 
-void rss_parser::handle_content_encoded(rss_item& x, mrss_item_t * item, const char * encoding) {
+void rss_parser::handle_content_encoded(std::tr1::shared_ptr<rss_item>& x, mrss_item_t * item, const char * encoding) {
 	/* here we handle content:encoded tags that are an extension but very widespread */
 	mrss_tag_t * content;
 	if (mrss_search_tag(item, "encoded", "http://purl.org/rss/1.0/modules/content/", &content) == MRSS_OK && content) {
@@ -428,14 +429,14 @@ void rss_parser::handle_content_encoded(rss_item& x, mrss_item_t * item, const c
 		if (content->value) {
 			std::string desc = utils::convert_text(content->value, "utf-8", encoding);
 			GetLogger().log(LOG_DEBUG, "rss_parser::parse: converted description `%s' to `%s'", content->value, desc.c_str());
-			x.set_description(desc);
+			x->set_description(desc);
 		}
 	} else {
 		GetLogger().log(LOG_DEBUG, "rss_parser::parse: found no content:encoded");
 	}
 }
 
-void rss_parser::handle_atom_content(rss_item& x, mrss_item_t * item, const char * encoding) {
+void rss_parser::handle_atom_content(std::tr1::shared_ptr<rss_item>& x, mrss_item_t * item, const char * encoding) {
 	/* Atom features two fields, description and content. We prefer the content. */
 	mrss_tag_t * content;
 	if ((mrss->version == MRSS_VERSION_ATOM_0_3 || mrss->version == MRSS_VERSION_ATOM_1_0)) {
@@ -444,7 +445,7 @@ void rss_parser::handle_atom_content(rss_item& x, mrss_item_t * item, const char
 			((rc = mrss_search_tag(item, "content", "http://purl.org/atom/ns#", &content)) == MRSS_OK && content)) {
 			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found atom content: %s\n", content ? content->value : "(content = null)");
 			if (content && content->value) {
-				x.set_description(utils::convert_text(content->value, "utf-8", encoding));
+				x->set_description(utils::convert_text(content->value, "utf-8", encoding));
 			}
 		} else {
 			GetLogger().log(LOG_DEBUG, "rss_parser::parse: mrss_search_tag(content) failed with rc = %d content = %p", rc, content);
@@ -454,10 +455,10 @@ void rss_parser::handle_atom_content(rss_item& x, mrss_item_t * item, const char
 	}
 }
 
-void rss_parser::handle_itunes_summary(rss_item& x, mrss_item_t * item, const char * encoding) {
+void rss_parser::handle_itunes_summary(std::tr1::shared_ptr<rss_item>& x, mrss_item_t * item, const char * encoding) {
 	/* a feed may be a podcast, and so we search for itunes:summary tags */
 	mrss_tag_t * content;
-	if (x.description().length() == 0 && mrss_search_tag(item, "summary", "http://www.itunes.com/dtds/podcast-1.0.dtd", &content) == MRSS_OK && content) {
+	if (x->description().length() == 0 && mrss_search_tag(item, "summary", "http://www.itunes.com/dtds/podcast-1.0.dtd", &content) == MRSS_OK && content) {
 		GetLogger().log(LOG_DEBUG, "rss_parser::parse: found itunes:summary: %s\n", content->value);
 		if (content->value) {
 			/*
@@ -468,7 +469,7 @@ void rss_parser::handle_itunes_summary(rss_item& x, mrss_item_t * item, const ch
 			std::string desc = "<ituneshack>";
 			desc.append(utils::convert_text(content->value, "utf-8", encoding));
 			desc.append("</ituneshack>");
-			x.set_description(desc);
+			x->set_description(desc);
 		}
 		
 	} else {

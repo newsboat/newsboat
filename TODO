@@ -7,6 +7,8 @@ TODO:
 - per-feed refresh settings
 - add a second "downloaded, but unlistened" queue to podbeuter
 - implement "newsrc" style file format to exchange information about unread feeds.
+- replace std::vector<rss_item> with std::vector<std::tr1::shared_ptr<rss_item> > as a possible fix against these weird crashes.
+  beta tester: mhellwig@in-ulm.de (regular crashes on sparc Linux)
 
 DONE:
 - clean up items that have been added but whose URL has been removed from the config file.

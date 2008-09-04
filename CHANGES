@@ -1,7 +1,7 @@
 Changes for newsbeuter:
 
 1.3:
-	...
+	Changed some internal data structures to smart pointers (stability improvement).
 
 1.2 (2008-09-02):
 	Fixed crash in case of invalid color/attribute names in the configuration

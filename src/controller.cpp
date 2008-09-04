@@ -363,9 +363,9 @@ void controller::run(int argc, char * argv[]) {
 	}
 
 	for (std::vector<std::string>::const_iterator it=urlcfg->get_urls().begin(); it != urlcfg->get_urls().end(); ++it) {
-		rss_feed feed(rsscache);
-		feed.set_rssurl(*it);
-		feed.set_tags(urlcfg->get_tags(*it));
+		std::tr1::shared_ptr<rss_feed> feed(new rss_feed(rsscache));
+		feed->set_rssurl(*it);
+		feed->set_tags(urlcfg->get_tags(*it));
 		try {
 			rsscache->internalize_rssfeed(feed);
 		} catch(const dbexception& e) {
@@ -434,10 +434,10 @@ void controller::catchup_all() {
 		v->show_error(utils::strprintf(_("Error: couldn't mark all feeds read: %s"), e.what()));
 		return;
 	}
-	for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it) {
-		if (it->items().size() > 0) {
-			for (std::vector<rss_item>::iterator jt=it->items().begin();jt!=it->items().end();++jt) {
-				jt->set_unread_nowrite(false);
+	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it) {
+		if ((*it)->items().size() > 0) {
+			for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator jt=(*it)->items().begin();jt!=(*it)->items().end();++jt) {
+				(*jt)->set_unread_nowrite(false);
 			}
 		}
 	}
@@ -446,20 +446,20 @@ void controller::catchup_all() {
 void controller::mark_all_read(unsigned int pos) {
 	if (pos < feeds.size()) {
 		scope_measure m("controller::mark_all_read");
-		rss_feed& feed = feeds[pos];
-		if (feed.rssurl().substr(0,6) == "query:") {
+		std::tr1::shared_ptr<rss_feed> feed = feeds[pos];
+		if (feed->rssurl().substr(0,6) == "query:") {
 			rsscache->catchup_all(feed);
 		} else {
-			rsscache->catchup_all(feed.rssurl());
+			rsscache->catchup_all(feed->rssurl());
 		}
 		m.stopover("after rsscache->catchup_all, before iteration over items");
-		std::vector<rss_item>& items = feed.items();
-		std::vector<rss_item>::iterator begin = items.begin(), end = items.end();
+		std::vector<std::tr1::shared_ptr<rss_item> >& items = feed->items();
+		std::vector<std::tr1::shared_ptr<rss_item> >::iterator begin = items.begin(), end = items.end();
 		if (items.size() > 0) {
-			bool notify = items[0].feedurl() != feed.rssurl();
+			bool notify = items[0]->feedurl() != feed->rssurl();
 			GetLogger().log(LOG_DEBUG, "controller::mark_all_read: notify = %s", notify ? "yes" : "no");
-			for (std::vector<rss_item>::iterator it=begin;it!=end;++it) {
-				it->set_unread_nowrite_notify(false, notify);
+			for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=begin;it!=end;++it) {
+				(*it)->set_unread_nowrite_notify(false, notify);
 			}
 		}
 	}
@@ -468,11 +468,11 @@ void controller::mark_all_read(unsigned int pos) {
 void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
 	GetLogger().log(LOG_DEBUG, "controller::reload: pos = %u max = %u", pos, max);
 	if (pos < feeds.size()) {
-		rss_feed feed = feeds[pos];
+		std::tr1::shared_ptr<rss_feed> feed = feeds[pos];
 		if (!unattended)
-			v->set_status(utils::strprintf(_("%sLoading %s..."), prepare_message(pos+1, max).c_str(), feed.rssurl().c_str()));
+			v->set_status(utils::strprintf(_("%sLoading %s..."), prepare_message(pos+1, max).c_str(), feed->rssurl().c_str()));
 
-		rss_parser parser(feed.rssurl().c_str(), rsscache, cfg, &ign);
+		rss_parser parser(feed->rssurl().c_str(), rsscache, cfg, &ign);
 		GetLogger().log(LOG_DEBUG, "controller::reload: created parser");
 		try {
 			if (parser.check_and_update_lastmodified()) {
@@ -484,20 +484,20 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
 			}
 			v->set_status("");
 		} catch (const dbexception& e) {
-			v->set_status(utils::strprintf(_("Error while retrieving %s: %s"), feed.rssurl().c_str(), e.what()));
+			v->set_status(utils::strprintf(_("Error while retrieving %s: %s"), feed->rssurl().c_str(), e.what()));
 		} catch (const std::string& errmsg) {
-			v->set_status(utils::strprintf(_("Error while retrieving %s: %s"), feed.rssurl().c_str(), errmsg.c_str()));
+			v->set_status(utils::strprintf(_("Error while retrieving %s: %s"), feed->rssurl().c_str(), errmsg.c_str()));
 		}
 	} else {
 		v->show_error(_("Error: invalid feed!"));
 	}
 }
 
-rss_feed * controller::get_feed(unsigned int pos) {
+std::tr1::shared_ptr<rss_feed> controller::get_feed(unsigned int pos) {
 	if (pos >= feeds.size()) {
 		throw std::out_of_range(_("invalid feed index (bug)"));
 	}
-	return &(feeds[pos]);
+	return feeds[pos];
 }
 
 void controller::reload_indexes(const std::vector<int>& indexes, bool unattended) {
@@ -570,8 +570,8 @@ void controller::notify(const std::string& msg) {
 void controller::compute_unread_numbers(unsigned int& unread_feeds, unsigned int& unread_articles) {
 	unread_feeds = 0;
 	unread_articles = 0;
-	for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it) {
-		unsigned int items = it->unread_item_count();
+	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it) {
+		unsigned int items = (*it)->unread_item_count();
 		if (items > 0) {
 			++unread_feeds;
 			unread_articles += items;
@@ -667,11 +667,11 @@ void controller::export_opml() {
 	std::cout << "<opml version=\"1.0\">" << std::endl;
 	std::cout << "\t<head>" << std::endl << "\t\t<title>" PROGRAM_NAME " - Exported Feeds</title>" << std::endl << "\t</head>" << std::endl;
 	std::cout << "\t<body>" << std::endl;
-	for (std::vector<rss_feed>::iterator it=feeds.begin(); it != feeds.end(); ++it) {
-		if (it->rssurl().substr(0,6) != "query:" && it->rssurl().substr(0,7) != "filter:") {
-			std::string rssurl = utils::replace_all(it->rssurl(),"&","&amp;");
-			std::string link = utils::replace_all(it->link(),"&", "&amp;");
-			std::string title = utils::replace_all(it->title(),"&", "&amp;");
+	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin(); it != feeds.end(); ++it) {
+		if ((*it)->rssurl().substr(0,6) != "query:" && (*it)->rssurl().substr(0,7) != "filter:") {
+			std::string rssurl = utils::replace_all((*it)->rssurl(),"&","&amp;");
+			std::string link = utils::replace_all((*it)->link(),"&", "&amp;");
+			std::string title = utils::replace_all((*it)->title(),"&", "&amp;");
 
 			rssurl = utils::replace_all(rssurl, "\"", "&quot;");
 			link = utils::replace_all(link, "\"", "&quot;");
@@ -738,21 +738,21 @@ void controller::rec_find_rss_outlines(nxml_data_t * node, std::string tag) {
 
 
 
-std::vector<rss_item> controller::search_for_items(const std::string& query, const std::string& feedurl) {
-	std::vector<rss_item> items = rsscache->search_for_items(query, feedurl);
+std::vector<std::tr1::shared_ptr<rss_item> > controller::search_for_items(const std::string& query, const std::string& feedurl) {
+	std::vector<std::tr1::shared_ptr<rss_item> > items = rsscache->search_for_items(query, feedurl);
 	GetLogger().log(LOG_DEBUG, "controller::search_for_items: setting feed pointers");
-	for (std::vector<rss_item>::iterator it=items.begin();it!=items.end();++it) {
-		it->set_feedptr(get_feed_by_url(it->feedurl()));
+	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items.begin();it!=items.end();++it) {
+		(*it)->set_feedptr(get_feed_by_url((*it)->feedurl()));
 	}
 	return items;
 }
 
-rss_feed * controller::get_feed_by_url(const std::string& feedurl) {
-	for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it) {
-		if (feedurl == it->rssurl())
-			return &(*it);
+std::tr1::shared_ptr<rss_feed> controller::get_feed_by_url(const std::string& feedurl) {
+	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it) {
+		if (feedurl == (*it)->rssurl())
+			return *it;
 	}
-	return NULL; // shouldn't happen
+	return std::tr1::shared_ptr<rss_feed>();
 }
 
 bool controller::is_valid_podcast_type(const std::string& /* mimetype */) {
@@ -785,22 +785,22 @@ void controller::enqueue_url(const std::string& url) {
 
 void controller::reload_urls_file() {
 	urlcfg->reload();
-	std::vector<rss_feed> new_feeds;
+	std::vector<std::tr1::shared_ptr<rss_feed> > new_feeds;
 
 	for (std::vector<std::string>::const_iterator it=urlcfg->get_urls().begin();it!=urlcfg->get_urls().end();++it) {
 		bool found = false;
-		for (std::vector<rss_feed>::iterator jt=feeds.begin();jt!=feeds.end();++jt) {
-			if (*it == jt->rssurl()) {
+		for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator jt=feeds.begin();jt!=feeds.end();++jt) {
+			if (*it == (*jt)->rssurl()) {
 				found = true;
-				jt->set_tags(urlcfg->get_tags(*it));
+				(*jt)->set_tags(urlcfg->get_tags(*it));
 				new_feeds.push_back(*jt);
 				break;
 			}
 		}
 		if (!found) {
-			rss_feed new_feed(rsscache);
-			new_feed.set_rssurl(*it);
-			new_feed.set_tags(urlcfg->get_tags(*it));
+			std::tr1::shared_ptr<rss_feed> new_feed(new rss_feed(rsscache));
+			new_feed->set_rssurl(*it);
+			new_feed->set_tags(urlcfg->get_tags(*it));
 			try {
 				rsscache->internalize_rssfeed(new_feed);
 			} catch(const dbexception& e) {
@@ -815,9 +815,9 @@ void controller::reload_urls_file() {
 	update_feedlist();
 }
 
-void controller::set_feedptrs(rss_feed& feed) {
-	for (std::vector<rss_item>::iterator it=feed.items().begin();it!=feed.items().end();++it) {
-		it->set_feedptr(&feed);
+void controller::set_feedptrs(std::tr1::shared_ptr<rss_feed> feed) {
+	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin();it!=feed->items().end();++it) {
+		(*it)->set_feedptr(feed);
 	}
 }
 
@@ -902,15 +902,15 @@ std::string controller::prepare_message(unsigned int pos, unsigned int max) {
 	return "";
 }
 
-void controller::save_feed(rss_feed& feed, unsigned int pos) {
-	if (!feed.is_empty()) {
+void controller::save_feed(std::tr1::shared_ptr<rss_feed> feed, unsigned int pos) {
+	if (!feed->is_empty()) {
 		GetLogger().log(LOG_DEBUG, "controller::reload: feed is nonempty, saving");
-		rsscache->externalize_rssfeed(feed, ign.matches_resetunread(feed.rssurl()));
+		rsscache->externalize_rssfeed(feed, ign.matches_resetunread(feed->rssurl()));
 		GetLogger().log(LOG_DEBUG, "controller::reload: after externalize_rssfeed");
 
 		rsscache->internalize_rssfeed(feed);
 		GetLogger().log(LOG_DEBUG, "controller::reload: after internalize_rssfeed");
-		feed.set_tags(urlcfg->get_tags(feed.rssurl()));
+		feed->set_tags(urlcfg->get_tags(feed->rssurl()));
 		feeds[pos] = feed;
 		v->notify_itemlist_change(feed);
 	} else {
@@ -918,17 +918,17 @@ void controller::save_feed(rss_feed& feed, unsigned int pos) {
 	}
 }
 
-void controller::enqueue_items(rss_feed& feed) {
+void controller::enqueue_items(std::tr1::shared_ptr<rss_feed> feed) {
 	if (!cfg->get_configvalue_as_bool("podcast-auto-enqueue"))
 		return;
-	for (std::vector<rss_item>::iterator it=feed.items().begin();it!=feed.items().end();++it) {
-		if (!it->enqueued() && it->enclosure_url().length() > 0) {
-			GetLogger().log(LOG_DEBUG, "controller::reload: enclosure_url = `%s' enclosure_type = `%s'", it->enclosure_url().c_str(), it->enclosure_type().c_str());
-			if (is_valid_podcast_type(it->enclosure_type())) {
-				GetLogger().log(LOG_INFO, "controller::reload: enqueuing `%s'", it->enclosure_url().c_str());
-				enqueue_url(it->enclosure_url());
-				it->set_enqueued(true);
-				rsscache->update_rssitem_unread_and_enqueued(*it, feed.rssurl());
+	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin();it!=feed->items().end();++it) {
+		if (!(*it)->enqueued() && (*it)->enclosure_url().length() > 0) {
+			GetLogger().log(LOG_DEBUG, "controller::reload: enclosure_url = `%s' enclosure_type = `%s'", (*it)->enclosure_url().c_str(), (*it)->enclosure_type().c_str());
+			if (is_valid_podcast_type((*it)->enclosure_type())) {
+				GetLogger().log(LOG_INFO, "controller::reload: enqueuing `%s'", (*it)->enclosure_url().c_str());
+				enqueue_url((*it)->enclosure_url());
+				(*it)->set_enqueued(true);
+				rsscache->update_rssitem_unread_and_enqueued(*it, feed->rssurl());
 			}
 		}
 	}

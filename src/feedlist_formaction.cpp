@@ -21,7 +21,7 @@ namespace newsbeuter {
 
 feedlist_formaction::feedlist_formaction(view * vv, std::string formstr) 
 	: formaction(vv,formstr), zero_feedpos(false), feeds_shown(0),
-		auto_open(false), quit(false), apply_filter(false), search_dummy_feed(v->get_ctrl()->get_cache()),
+		auto_open(false), quit(false), apply_filter(false), search_dummy_feed(new rss_feed(v->get_ctrl()->get_cache())),
 		filterpos(0), set_filterpos(false), rxman(0), old_width(0) {
 	assert(true==m.parse(FILTER_UNREAD_FEEDS));
 }
@@ -108,7 +108,7 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 			v->get_ctrl()->reload_urls_file();
 			break;
 		case OP_OPENINBROWSER: {
-				rss_feed * feed = v->get_ctrl()->get_feed(pos);
+				std::tr1::shared_ptr<rss_feed> feed = v->get_ctrl()->get_feed(pos);
 				if (feed) {
 					v->open_in_browser(feed->link());
 				}
@@ -272,23 +272,23 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 	}
 }
 
-void feedlist_formaction::update_visible_feeds(std::vector<rss_feed>& feeds) {
+void feedlist_formaction::update_visible_feeds(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
 	assert(v->get_cfg() != NULL); // must not happen
 
 	visible_feeds.clear();
 
 	unsigned int i = 0;
 
-	for (std::vector<rss_feed>::iterator it = feeds.begin(); it != feeds.end(); ++it, ++i) {
-		if ((tag == "" || it->matches_tag(tag)) && (!apply_filter || m.matches(&(*it)))) {
-			visible_feeds.push_back(feedptr_pos_pair(&(*it),i));
+	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it = feeds.begin(); it != feeds.end(); ++it, ++i) {
+		if ((tag == "" || (*it)->matches_tag(tag)) && (!apply_filter || m.matches(it->get()))) {
+			visible_feeds.push_back(feedptr_pos_pair(*it,i));
 		}
 	}
 
 	feeds_shown = visible_feeds.size();
 }
 
-void feedlist_formaction::set_feedlist(std::vector<rss_feed>& feeds) {
+void feedlist_formaction::set_feedlist(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
 	assert(v->get_cfg() != NULL); // must not happen
 
 	unsigned int width = utils::to_u(f->get("feeds:w"));
@@ -418,7 +418,7 @@ bool feedlist_formaction::jump_to_next_unread_feed(unsigned int& feedpos) {
 	return false;
 }
 
-rss_feed * feedlist_formaction::get_feed() {
+std::tr1::shared_ptr<rss_feed> feedlist_formaction::get_feed() {
 	unsigned int curpos;
 	std::istringstream is(f->get("feedpos"));
 	is >> curpos;
@@ -538,7 +538,7 @@ void feedlist_formaction::op_start_search() {
 	if (searchphrase.length() > 0) {
 		v->set_status(_("Searching..."));
 		searchhistory.add_line(searchphrase);
-		std::vector<rss_item> items;
+		std::vector<std::tr1::shared_ptr<rss_item> > items;
 		try {
 			std::string utf8searchphrase = utils::convert_text(searchphrase, "utf-8", nl_langinfo(CODESET));
 			items = v->get_ctrl()->search_for_items(utf8searchphrase, "");
@@ -547,8 +547,8 @@ void feedlist_formaction::op_start_search() {
 			return;
 		}
 		if (items.size() > 0) {
-			search_dummy_feed.items() = items;
-			v->push_searchresult(&search_dummy_feed);
+			search_dummy_feed->items() = items;
+			v->push_searchresult(search_dummy_feed);
 		} else {
 			v->show_error(_("No results."));
 		}
@@ -585,7 +585,7 @@ void feedlist_formaction::set_pos() {
 	}
 }
 
-std::string feedlist_formaction::get_title(rss_feed * feed) {
+std::string feedlist_formaction::get_title(std::tr1::shared_ptr<rss_feed> feed) {
 	std::string title = feed->title();
 	if (title.length()==0)
 		title = feed->rssurl();
@@ -594,7 +594,7 @@ std::string feedlist_formaction::get_title(rss_feed * feed) {
 	return title;
 }
 
-std::string feedlist_formaction::format_line(const std::string& feedlist_format, rss_feed * feed, unsigned int pos, unsigned int width) {
+std::string feedlist_formaction::format_line(const std::string& feedlist_format, std::tr1::shared_ptr<rss_feed> feed, unsigned int pos, unsigned int width) {
 	fmtstr_formatter fmt;
 	unsigned int unread_count = feed->unread_item_count();
 

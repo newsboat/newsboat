@@ -12,7 +12,7 @@
 namespace newsbeuter {
 
 itemview_formaction::itemview_formaction(view * vv, std::string formstr)
-	: formaction(vv,formstr), feed(0), show_source(false), quit(false), rxman(0), num_lines(0) { 
+	: formaction(vv,formstr), show_source(false), quit(false), rxman(0), num_lines(0) { 
 }
 
 itemview_formaction::~itemview_formaction() { }
@@ -60,7 +60,7 @@ void itemview_formaction::prepare() {
 		rss_item& item = feed->get_item_by_guid(guid);
 		listformatter listfmt;
 
-		rss_feed * feedptr = item.get_feedptr();
+		std::tr1::shared_ptr<rss_feed> feedptr = item.get_feedptr();
 
 		std::string title, feedtitle;
 		if (feedptr->title().length() > 0) {

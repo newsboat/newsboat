@@ -300,7 +300,7 @@ void view::open_in_browser(const std::string& url) {
 	formaction_stack.pop_front();
 }
 
-void view::update_visible_feeds(std::vector<rss_feed>& feeds) {
+void view::update_visible_feeds(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
 	scope_mutex lock(mtx);
 	try {
 		feedlist->update_visible_feeds(feeds);
@@ -310,11 +310,11 @@ void view::update_visible_feeds(std::vector<rss_feed>& feeds) {
 	}
 }
 
-void view::set_feedlist(std::vector<rss_feed>& feeds) {
+void view::set_feedlist(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
 	scope_mutex lock(mtx);
 
-	for (std::vector<rss_feed>::iterator it=feeds.begin();it!=feeds.end();++it) {
-		if (it->rssurl().substr(0,6) != "query:") {
+	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it) {
+		if ((*it)->rssurl().substr(0,6) != "query:") {
 			ctrl->set_feedptrs(*it);
 		}
 	}
@@ -332,7 +332,7 @@ void view::set_tags(const std::vector<std::string>& t) {
 	feedlist->set_tags(t);
 }
 
-void view::push_searchresult(rss_feed * feed) {
+void view::push_searchresult(std::tr1::shared_ptr<rss_feed> feed) {
 	assert(feed != NULL);
 
 	if (feed->items().size() > 0) {
@@ -346,7 +346,7 @@ void view::push_searchresult(rss_feed * feed) {
 
 }
 
-void view::push_itemlist(rss_feed * feed) {
+void view::push_itemlist(std::tr1::shared_ptr<rss_feed> feed) {
 	assert(feed != NULL);
 
 	if (feed->rssurl().substr(0,6) == "query:") {
@@ -366,13 +366,13 @@ void view::push_itemlist(rss_feed * feed) {
 }
 
 void view::push_itemlist(unsigned int pos) {
-	rss_feed * feed = ctrl->get_feed(pos);
-	GetLogger().log(LOG_DEBUG, "view::push_itemlist: retrieved feed at position %d (address = %p)", pos, feed);
+	std::tr1::shared_ptr<rss_feed> feed = ctrl->get_feed(pos);
+	GetLogger().log(LOG_DEBUG, "view::push_itemlist: retrieved feed at position %d", pos);
 	itemlist->set_pos(pos);
 	push_itemlist(feed);
 }
 
-void view::push_itemview(rss_feed * f, const std::string& guid) {
+void view::push_itemview(std::tr1::shared_ptr<rss_feed> f, const std::string& guid) {
 	itemview->set_feed(f);
 	itemview->set_guid(guid);
 	itemview->init();
@@ -436,9 +436,9 @@ char view::confirm(const std::string& prompt, const std::string& charset) {
 	return result;
 }
 
-void view::notify_itemlist_change(rss_feed& feed) {
-	rss_feed * f = itemlist->get_feed();
-	if (f != NULL && f->rssurl() == feed.rssurl()) {
+void view::notify_itemlist_change(std::tr1::shared_ptr<rss_feed>& feed) {
+	std::tr1::shared_ptr<rss_feed> f = itemlist->get_feed();
+	if (f != NULL && f->rssurl() == feed->rssurl()) {
 		itemlist->do_update_visible_items();
 		itemlist->set_redraw(true);
 	}

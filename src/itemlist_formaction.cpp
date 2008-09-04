@@ -1,3 +1,4 @@
+#include <controller.h>
 #include <itemlist_formaction.h>
 #include <view.h>
 #include <config.h>
@@ -17,7 +18,7 @@
 namespace newsbeuter {
 
 itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
-	: formaction(vv,formstr), feed(0), apply_filter(false), update_visible_items(true), search_dummy_feed(v->get_ctrl()->get_cache()),
+	: formaction(vv,formstr), apply_filter(false), update_visible_items(true), search_dummy_feed(new rss_feed(v->get_ctrl()->get_cache())),
 		set_filterpos(false), filterpos(0), rxman(0), old_width(0) {
 	assert(true==m.parse(FILTER_UNREAD_ITEMS));
 }
@@ -40,6 +41,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		case OP_OPEN: {
 				GetLogger().log(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0) {
+					visible_items[itempos].first->set_unread(false); // set article as read
 					v->push_itemview(feed, visible_items[itempos].first->guid());
 					do_redraw = true;
 				} else {
@@ -189,10 +191,10 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					v->get_ctrl()->mark_all_read(pos);
 				} else {
 					GetLogger().log(LOG_DEBUG, "itemlist_formaction: oh, it looks like I'm in a pseudo-feed (search result, query feed)");
-					for (std::vector<rss_item>::iterator it=feed->items().begin();it!=feed->items().end();++it) {
-						it->set_unread_nowrite_notify(false, true);
+					for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin();it!=feed->items().end();++it) {
+						(*it)->set_unread_nowrite_notify(false, true);
 					}
-					v->get_ctrl()->catchup_all(*feed);
+					v->get_ctrl()->catchup_all(feed);
 				}
 				do_redraw = true;
 				v->set_status("");
@@ -375,7 +377,7 @@ void itemlist_formaction::qna_start_search() {
 
 	v->set_status(_("Searching..."));
 	searchhistory.add_line(searchphrase);
-	std::vector<rss_item> items;
+	std::vector<std::tr1::shared_ptr<rss_item> > items;
 	try {
 		std::string utf8searchphrase = utils::convert_text(searchphrase, "utf-8", nl_langinfo(CODESET));
 		if (show_searchresult) {
@@ -393,11 +395,11 @@ void itemlist_formaction::qna_start_search() {
 		return;
 	}
 
-	search_dummy_feed.items() = items;
+	search_dummy_feed->items() = items;
 	if (show_searchresult) {
 		v->pop_current_formaction();
 	}
-	v->push_searchresult(&search_dummy_feed);
+	v->push_searchresult(search_dummy_feed);
 }
 
 void itemlist_formaction::do_update_visible_items() {
@@ -406,7 +408,7 @@ void itemlist_formaction::do_update_visible_items() {
 
 	update_visible_items = false;
 
-	std::vector<rss_item>& items = feed->items();
+	std::vector<std::tr1::shared_ptr<rss_item> >& items = feed->items();
 
 	visible_items.clear();
 
@@ -417,9 +419,9 @@ void itemlist_formaction::do_update_visible_items() {
 	 */
 
 	unsigned int i=0;
-	for (std::vector<rss_item>::iterator it = items.begin(); it != items.end(); ++it, ++i) {
-		if (!apply_filter || m.matches(&(*it))) {
-			visible_items.push_back(itemptr_pos_pair(&(*it), i));
+	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it = items.begin(); it != items.end(); ++it, ++i) {
+		if (!apply_filter || m.matches(it->get())) {
+			visible_items.push_back(itemptr_pos_pair(*it, i));
 		}
 	}
 
@@ -660,7 +662,7 @@ void itemlist_formaction::set_regexmanager(regexmanager * r) {
 	f->modify("items", "replace", textview);
 }
 
-std::string itemlist_formaction::gen_flags(rss_item * item) {
+std::string itemlist_formaction::gen_flags(std::tr1::shared_ptr<rss_item> item) {
 	std::string flags;
 	if (item->deleted()) {
 		flags.append("D");

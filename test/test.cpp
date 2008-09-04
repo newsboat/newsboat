@@ -41,29 +41,29 @@ BOOST_AUTO_TEST_CASE(TestNewsbeuterReload) {
 	cache * rsscache = new cache("test-cache.db", cfg);
 
 	rss_parser parser("http://bereshit.synflood.at/~ak/rss.xml", rsscache, cfg, NULL);
-	rss_feed feed = parser.parse();
-	BOOST_CHECK_EQUAL(feed.items().size(), 8u);
+	std::tr1::shared_ptr<rss_feed> feed = parser.parse();
+	BOOST_CHECK_EQUAL(feed->items().size(), 8u);
 
 	rsscache->externalize_rssfeed(feed, false);
 	rsscache->internalize_rssfeed(feed);
-	BOOST_CHECK_EQUAL(feed.items().size(), 8u);
+	BOOST_CHECK_EQUAL(feed->items().size(), 8u);
 
-	BOOST_CHECK_EQUAL(feed.items()[0].title(), "Teh Saxxi");
-	BOOST_CHECK_EQUAL(feed.items()[7].title(), "Handy als IR-Detektor");
+	BOOST_CHECK_EQUAL(feed->items()[0]->title(), "Teh Saxxi");
+	BOOST_CHECK_EQUAL(feed->items()[7]->title(), "Handy als IR-Detektor");
 
-	feed.items()[0].set_title("Another Title");
-	feed.items()[0].set_pubDate(time(NULL));
-	BOOST_CHECK_EQUAL(feed.items()[0].title(), "Another Title");
+	feed->items()[0]->set_title("Another Title");
+	feed->items()[0]->set_pubDate(time(NULL));
+	BOOST_CHECK_EQUAL(feed->items()[0]->title(), "Another Title");
 
 	rsscache->externalize_rssfeed(feed, false);
 
-	rss_feed feed2(rsscache);
-	feed2.set_rssurl("http://bereshit.synflood.at/~ak/rss.xml");
+	std::tr1::shared_ptr<rss_feed> feed2(new rss_feed(rsscache));
+	feed2->set_rssurl("http://bereshit.synflood.at/~ak/rss.xml");
 	rsscache->internalize_rssfeed(feed2);
 
-	BOOST_CHECK_EQUAL(feed2.items().size(), 8u);
-	BOOST_CHECK_EQUAL(feed2.items()[0].title(), "Another Title");
-	BOOST_CHECK_EQUAL(feed2.items()[7].title(), "Handy als IR-Detektor");
+	BOOST_CHECK_EQUAL(feed2->items().size(), 8u);
+	BOOST_CHECK_EQUAL(feed2->items()[0]->title(), "Another Title");
+	BOOST_CHECK_EQUAL(feed2->items()[7]->title(), "Handy als IR-Detektor");
 
 	rsscache->set_lastmodified("http://bereshit.synflood.at/~ak/rss.xml", 1000);
 	BOOST_CHECK_EQUAL(rsscache->get_lastmodified("http://bereshit.synflood.at/~ak/rss.xml"), 1000);
@@ -74,12 +74,11 @@ BOOST_AUTO_TEST_CASE(TestNewsbeuterReload) {
 	BOOST_CHECK_EQUAL(feedurls.size(), 1u);
 	BOOST_CHECK_EQUAL(feedurls[0], "http://bereshit.synflood.at/~ak/rss.xml");
 
-	std::vector<rss_feed> feedv;
+	std::vector<std::tr1::shared_ptr<rss_feed> > feedv;
 	feedv.push_back(feed);
 
 	cfg->set_configvalue("cleanup-on-quit", "true");
 	rsscache->cleanup_cache(feedv);
-
 
 	delete rsscache;
 	delete cfg;

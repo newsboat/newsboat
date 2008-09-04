@@ -15,7 +15,7 @@ class itemview_formaction : public formaction {
 		virtual void prepare();
 		virtual void init();
 		inline void set_guid(const std::string& guid_) { guid = guid_; }
-		inline void set_feed(rss_feed * fd) { feed = fd; }
+		inline void set_feed(std::tr1::shared_ptr<rss_feed> fd) { feed = fd; }
 		keymap_hint_entry * get_keymap_hint();
 		virtual void handle_cmdline(const std::string& cmd);
 
@@ -36,7 +36,7 @@ class itemview_formaction : public formaction {
 		void render_source(std::vector<std::string>& lines, std::string desc, unsigned int width);
 
 		std::string guid;
-		rss_feed * feed;
+		std::tr1::shared_ptr<rss_feed> feed;
 		bool show_source;
 		std::vector<linkpair> links;
 		bool quit;
