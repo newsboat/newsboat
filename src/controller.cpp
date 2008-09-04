@@ -858,24 +858,24 @@ void controller::execute_commands(char ** argv, unsigned int i) {
 	}
 }
 
-void controller::write_item(const rss_item& item, const std::string& filename) {
+void controller::write_item(std::tr1::shared_ptr<rss_item> item, const std::string& filename) {
 	std::vector<std::string> lines;
 	std::vector<linkpair> links; // not used
 	
 	std::string title(_("Title: "));
-	title.append(item.title());
+	title.append(item->title());
 	lines.push_back(title);
 	
 	std::string author(_("Author: "));
-	author.append(item.author());
+	author.append(item->author());
 	lines.push_back(author);
 	
 	std::string date(_("Date: "));
-	date.append(item.pubDate());
+	date.append(item->pubDate());
 	lines.push_back(date);
 
 	std::string link(_("Link: "));
-	link.append(item.link());
+	link.append(item->link());
 	lines.push_back(link);
 	
 	lines.push_back(std::string(""));
@@ -884,7 +884,7 @@ void controller::write_item(const rss_item& item, const std::string& filename) {
 	if (width == 0)
 		width = 80;
 	htmlrenderer rnd(width);
-	rnd.render(item.description(), lines, links, item.feedurl());
+	rnd.render(item->description(), lines, links, item->feedurl());
 
 	std::fstream f;
 	f.open(filename.c_str(),std::fstream::out);

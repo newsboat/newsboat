@@ -53,7 +53,7 @@ class itemlist_formaction : public formaction {
 		void set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);
 		int get_pos(unsigned int idx);
 
-		void save_article(const std::string& filename, const rss_item& item);
+		void save_article(const std::string& filename, std::tr1::shared_ptr<rss_item> item);
 
 		void save_filterpos();
 

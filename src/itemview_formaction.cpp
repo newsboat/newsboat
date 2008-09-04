@@ -57,10 +57,10 @@ void itemview_formaction::prepare() {
 				render_width -= 5; 	
 		}
 
-		rss_item& item = feed->get_item_by_guid(guid);
+		std::tr1::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
 		listformatter listfmt;
 
-		std::tr1::shared_ptr<rss_feed> feedptr = item.get_feedptr();
+		std::tr1::shared_ptr<rss_feed> feedptr = item->get_feedptr();
 
 		std::string title, feedtitle;
 		if (feedptr->title().length() > 0) {
@@ -73,37 +73,37 @@ void itemview_formaction::prepare() {
 		feedtitle = utils::strprintf("%s%s", _("Feed: "), title.c_str());
 		listfmt.add_line(feedtitle, UINT_MAX, view_width);
 
-		if (item.title().length() > 0) {
-			title = utils::strprintf("%s%s", _("Title: "), item.title().c_str());
+		if (item->title().length() > 0) {
+			title = utils::strprintf("%s%s", _("Title: "), item->title().c_str());
 			listfmt.add_line(title, UINT_MAX, view_width);
 		}
 
-		if (item.author().length() > 0) {
-			std::string author = utils::strprintf("%s%s", _("Author: "), item.author().c_str());
+		if (item->author().length() > 0) {
+			std::string author = utils::strprintf("%s%s", _("Author: "), item->author().c_str());
 			listfmt.add_line(author, UINT_MAX, view_width);
 		}
 
-		if (item.link().length() > 0) {
-			std::string link = utils::strprintf("%s%s", _("Link: "), item.link().c_str());
+		if (item->link().length() > 0) {
+			std::string link = utils::strprintf("%s%s", _("Link: "), item->link().c_str());
 			listfmt.add_line(link, UINT_MAX, view_width);
 		}
 
-		std::string date = utils::strprintf("%s%s", _("Date: "), item.pubDate().c_str());
+		std::string date = utils::strprintf("%s%s", _("Date: "), item->pubDate().c_str());
 		listfmt.add_line(date, UINT_MAX, view_width);
 
-		if (item.flags().length() > 0) {
-			std::string flags = utils::strprintf("%s%s", _("Flags: "), item.flags().c_str());
+		if (item->flags().length() > 0) {
+			std::string flags = utils::strprintf("%s%s", _("Flags: "), item->flags().c_str());
 			listfmt.add_line(flags, UINT_MAX, view_width);
 		}
 
-		if (item.enclosure_url().length() > 0) {
-			std::string enc_url = utils::strprintf("%s%s (%s%s)", _("Podcast Download URL: "), item.enclosure_url().c_str(), _("type: "), item.enclosure_type().c_str());
+		if (item->enclosure_url().length() > 0) {
+			std::string enc_url = utils::strprintf("%s%s (%s%s)", _("Podcast Download URL: "), item->enclosure_url().c_str(), _("type: "), item->enclosure_type().c_str());
 			listfmt.add_line(enc_url, UINT_MAX, view_width);
 		}
 
 		listfmt.add_line("");
 
-		set_head(item.title());
+		set_head(item->title());
 
 		unsigned int textwidth = v->get_cfg()->get_configvalue_as_int("text-width");
 		if (textwidth > 0) {
@@ -111,9 +111,9 @@ void itemview_formaction::prepare() {
 		}
 
 		if (show_source) {
-			render_source(lines, item.description(), render_width);
+			render_source(lines, item->description(), render_width);
 		} else {
-			lines = render_html(item.description(), links, item.feedurl(), render_width);
+			lines = render_html(item->description(), links, item->feedurl(), render_width);
 		}
 
 		listfmt.add_lines(lines, view_width);
@@ -129,7 +129,7 @@ void itemview_formaction::prepare() {
 }
 
 void itemview_formaction::process_operation(operation op, bool automatic, std::vector<std::string> * args) {
-	rss_item& item = feed->get_item_by_guid(guid);
+	std::tr1::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
 
 	/*
 	 * whenever we process an operation, we mark the item
@@ -139,7 +139,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 	 * recorded in the database.
 	 */
 	try {
-		item.set_unread(false);
+		item->set_unread(false);
 	} catch (const dbexception& e) {
 		v->show_error(utils::strprintf(_("Error while marking article as read: %s"), e.what()));
 	}
@@ -154,9 +154,9 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 			do_redraw = true;
 			break;
 		case OP_ENQUEUE: {
-				if (item.enclosure_url().length() > 0) {
-					v->get_ctrl()->enqueue_url(item.enclosure_url());
-					v->set_status(utils::strprintf(_("Added %s to download queue."), item.enclosure_url().c_str()));
+				if (item->enclosure_url().length() > 0) {
+					v->get_ctrl()->enqueue_url(item->enclosure_url());
+					v->set_status(utils::strprintf(_("Added %s to download queue."), item->enclosure_url().c_str()));
 				}
 			}
 			break;
@@ -168,7 +168,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 					if (args->size() > 0)
 						filename = (*args)[0];
 				} else {
-					filename = v->run_filebrowser(FBT_SAVE,v->get_filename_suggestion(item.title()));
+					filename = v->run_filebrowser(FBT_SAVE,v->get_filename_suggestion(item->title()));
 				}
 				if (filename == "") {
 					v->show_error(_("Aborted saving."));
@@ -185,17 +185,17 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 		case OP_OPENINBROWSER:
 			GetLogger().log(LOG_INFO, "view::run_itemview: starting browser");
 			v->set_status(_("Starting browser..."));
-			v->open_in_browser(item.link());
+			v->open_in_browser(item->link());
 			v->set_status("");
 			break;
 		case OP_BOOKMARK:
 			if (automatic) {
 				qna_responses.clear();
-				qna_responses.push_back(item.title());
-				qna_responses.push_back(item.link());
+				qna_responses.push_back(item->title());
+				qna_responses.push_back(item->link());
 				qna_responses.push_back(args->size() > 0 ? (*args)[0] : "");
 			} else {
-				this->start_bookmark_qna(item.title(), item.link(), "");
+				this->start_bookmark_qna(item->title(), item->link(), "");
 			}
 			break;
 		case OP_EDITFLAGS: 
@@ -207,7 +207,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 				}
 			} else {
 				std::vector<qna_pair> qna;
-				qna.push_back(qna_pair(_("Flags: "), item.flags()));
+				qna.push_back(qna_pair(_("Flags: "), item->flags()));
 				this->start_qna(qna, OP_INT_EDITFLAGS_END);
 			}
 			break;
@@ -320,7 +320,7 @@ void itemview_formaction::handle_cmdline(const std::string& cmd) {
 	if (tokens.size() > 0) {
 		if (tokens[0] == "save" && tokens.size() >= 2) {
 			std::string filename = utils::resolve_tilde(tokens[1]);
-			rss_item& item = feed->get_item_by_guid(guid);
+			std::tr1::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
 
 			if (filename == "") {
 				v->show_error(_("Aborted saving."));
@@ -342,12 +342,12 @@ void itemview_formaction::handle_cmdline(const std::string& cmd) {
 void itemview_formaction::finished_qna(operation op) {
 	formaction::finished_qna(op); // important!
 
-	rss_item& item = feed->get_item_by_guid(guid);
+	std::tr1::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
 
 	switch (op) {
 		case OP_INT_EDITFLAGS_END:
-			item.set_flags(qna_responses[0]);
-			item.update_flags();
+			item->set_flags(qna_responses[0]);
+			item->update_flags();
 			v->set_status(_("Flags updated."));
 			do_redraw = true;
 			break;

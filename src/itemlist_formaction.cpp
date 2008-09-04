@@ -132,7 +132,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					} else {
 						filename = v->run_filebrowser(FBT_SAVE,v->get_filename_suggestion(visible_items[itempos].first->title()));
 					}
-					save_article(filename, *visible_items[itempos].first);
+					save_article(filename, visible_items[itempos].first);
 				} else {
 					v->show_error(_("Error: no item selected!"));
 				}
@@ -603,7 +603,7 @@ void itemlist_formaction::handle_cmdline(const std::string& cmd) {
 				unsigned int itempos = 0;
 				posname >> itempos;
 
-				save_article(filename, *visible_items[itempos].first);
+				save_article(filename, visible_items[itempos].first);
 			} else {
 				v->show_error(_("Error: no item selected!"));
 			}
@@ -626,7 +626,7 @@ void itemlist_formaction::recalculate_form() {
 	set_update_visible_items(true);
 }
 
-void itemlist_formaction::save_article(const std::string& filename, const rss_item& item) {
+void itemlist_formaction::save_article(const std::string& filename, std::tr1::shared_ptr<rss_item> item) {
 	if (filename == "") {
 		v->show_error(_("Aborted saving."));
 	} else {
