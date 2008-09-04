@@ -22,8 +22,8 @@ namespace newsbeuter {
 
 	class rss_item : public matchable {
 		public:
-			rss_item(cache * c) : unread_(true), ch(c), enqueued_(false), deleted_(0) { }
-			~rss_item() { }
+			rss_item(cache * c);
+			~rss_item();
 			
 			std::string title() const;
 			std::string title_raw() const { return title_; }
@@ -105,9 +105,9 @@ namespace newsbeuter {
 
 	class rss_feed : public matchable {
 		public:
-			rss_feed(cache * c) : ch(c), empty(true), is_rtl_(false) { }
-			rss_feed() : ch(NULL), empty(true), is_rtl_(false) { }
-			~rss_feed() { }
+			rss_feed(cache * c);
+			rss_feed();
+			~rss_feed();
 			std::string title_raw() const { return title_; }
 			std::string title() const;
 			inline void set_title(const std::string& t) { title_ = t; }
@@ -124,7 +124,7 @@ namespace newsbeuter {
 			
 			inline std::vector<std::tr1::shared_ptr<rss_item> >& items() { return items_; }
 
-			rss_item& get_item_by_guid(const std::string& guid);
+			std::tr1::shared_ptr<rss_item> get_item_by_guid(const std::string& guid);
 			
 			inline const std::string& rssurl() const { return rssurl_; }
 			void set_rssurl(const std::string& u);

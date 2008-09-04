@@ -22,6 +22,26 @@
 
 using namespace newsbeuter;
 
+rss_item::rss_item(cache * c) : unread_(true), ch(c), enqueued_(false), deleted_(0) {
+	// GetLogger().log(LOG_CRITICAL, "new rss_item");
+}
+
+rss_item::~rss_item() {
+	// GetLogger().log(LOG_CRITICAL, "delete rss_item");
+}
+
+rss_feed::rss_feed(cache * c) : ch(c), empty(true), is_rtl_(false) {
+	// GetLogger().log(LOG_CRITICAL, "new rss_feed");
+}
+
+rss_feed::rss_feed() : ch(NULL), empty(true), is_rtl_(false) { 
+	// GetLogger().log(LOG_CRITICAL, "new rss_feed");
+}
+
+rss_feed::~rss_feed() {
+	// GetLogger().log(LOG_CRITICAL, "delete rss_feed");
+}
+
 // rss_item setters
 
 void rss_item::set_title(const std::string& t) { 
@@ -56,7 +76,7 @@ void rss_item::set_unread_nowrite(bool u) {
 void rss_item::set_unread_nowrite_notify(bool u, bool notify) {
 	unread_ = u;
 	if (feedptr && notify) {
-		feedptr->get_item_by_guid(guid_).set_unread_nowrite(unread_); // notify parent feed
+		feedptr->get_item_by_guid(guid_)->set_unread_nowrite(unread_); // notify parent feed
 	}
 }
 
@@ -65,7 +85,7 @@ void rss_item::set_unread(bool u) {
 		bool old_u = unread_;
 		unread_ = u;
 		if (feedptr)
-			feedptr->get_item_by_guid(guid_).set_unread_nowrite(unread_); // notify parent feed
+			feedptr->get_item_by_guid(guid_)->set_unread_nowrite(unread_); // notify parent feed
 		try {
 			if (ch) ch->update_rssitem_unread_and_enqueued(this, feedurl_); 
 		} catch (const dbexception& e) {
@@ -160,16 +180,15 @@ std::string rss_feed::description() const {
 	return utils::convert_text(description_, nl_langinfo(CODESET), "utf-8");
 }
 
-rss_item& rss_feed::get_item_by_guid(const std::string& guid) {
+std::tr1::shared_ptr<rss_item> rss_feed::get_item_by_guid(const std::string& guid) {
 	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items_.begin();it!=items_.end();++it) {
 		if ((*it)->guid() == guid) {
-			return **it;
+			return *it;
 		}
 	}
 	GetLogger().log(LOG_DEBUG, "rss_feed::get_item_by_guid: hit dummy item!");
 	// abort();
-	static rss_item dummy_item(0); // should never happen!
-	return dummy_item;
+	return std::tr1::shared_ptr<rss_item>(new rss_item(ch)); // should never happen!
 }
 
 bool rss_item::has_attribute(const std::string& attribname) {

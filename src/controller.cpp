@@ -87,6 +87,11 @@ controller::~controller() {
 	delete reload_mutex;
 	delete cfg;
 	delete urlcfg;
+
+	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();it++) {
+		(*it)->items().clear();
+	}
+	feeds.clear();
 }
 
 void controller::set_view(view * vv) {
@@ -911,6 +916,7 @@ void controller::save_feed(std::tr1::shared_ptr<rss_feed> feed, unsigned int pos
 		rsscache->internalize_rssfeed(feed);
 		GetLogger().log(LOG_DEBUG, "controller::reload: after internalize_rssfeed");
 		feed->set_tags(urlcfg->get_tags(feed->rssurl()));
+		feeds[pos]->items().clear();
 		feeds[pos] = feed;
 		v->notify_itemlist_change(feeds[pos]);
 	} else {
