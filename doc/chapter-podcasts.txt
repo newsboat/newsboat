@@ -14,3 +14,9 @@ The user can then use the download manager "podbeuter" to download these files
 to a directory on the local filesystem. Podbeuter comes with the newsbeuter
 package, and features a look and feel very close to the one of newsbeuter. It
 also shares the same configuration file.
+
+Podcasts that have been downloaded but haven't been played yet remain in the
+queue but are marked as downloaded. You can remove them by purging them from
+the queue with the 'P' key. After you've played a file and close podbeuter, it
+will be removed from the queue. The downloaded file remains on the
+filesystem.
