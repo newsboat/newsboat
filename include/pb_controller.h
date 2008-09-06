@@ -29,7 +29,7 @@ namespace podbeuter {
 			std::string get_dlpath();
 
 			unsigned int downloads_in_progress();
-			void reload_queue();
+			void reload_queue(bool remove_unplayed = false);
 
 			unsigned int get_maxdownloads();
 			void start_downloads();

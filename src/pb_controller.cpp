@@ -204,9 +204,9 @@ unsigned int pb_controller::get_maxdownloads() {
 	return max_dls;
 }
 
-void pb_controller::reload_queue() {
+void pb_controller::reload_queue(bool remove_unplayed) {
 	if (ql) {
-		ql->reload(downloads_);
+		ql->reload(downloads_, remove_unplayed);
 	}
 }
 

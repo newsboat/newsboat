@@ -75,6 +75,8 @@ namespace newsbeuter {
 			void save_feed(std::tr1::shared_ptr<rss_feed> feed, unsigned int pos);
 			void enqueue_items(std::tr1::shared_ptr<rss_feed> feed);
 
+			std::string generate_enqueue_filename(const std::string& url);
+
 			view * v;
 			urlreader * urlcfg;
 			cache * rsscache;

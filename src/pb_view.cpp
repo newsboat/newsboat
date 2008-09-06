@@ -122,6 +122,7 @@ void pb_view::run(bool auto_download) {
 					if (idx != -1) {
 						if (ctrl->downloads()[idx].status() == DL_FINISHED) {
 							ctrl->play_file(ctrl->downloads()[idx].filename());
+							ctrl->downloads()[idx].set_status(DL_PLAYED);
 						} else {
 							dllist_form.set("msg", _("Error: download needs to be finished before the file can be played."));
 						}
@@ -154,7 +155,7 @@ void pb_view::run(bool auto_download) {
 				if (ctrl->downloads_in_progress() > 0) {
 					dllist_form.set("msg", _("Error: unable to perform operation: download(s) in progress."));
 				} else {
-					ctrl->reload_queue();
+					ctrl->reload_queue(true);
 				}
 				ctrl->set_view_update_necessary(true);
 				break;

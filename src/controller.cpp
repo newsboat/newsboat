@@ -773,7 +773,8 @@ void controller::enqueue_url(const std::string& url) {
 			std::string line;
 			getline(f, line);
 			if (!f.eof() && line.length() > 0) {
-				if (line == url) {
+				std::vector<std::string> fields = utils::tokenize_quoted(line);
+				if (fields.size() > 0 && fields[0] == url) {
 					url_found = true;
 					break;
 				}
@@ -783,7 +784,8 @@ void controller::enqueue_url(const std::string& url) {
 	}
 	if (!url_found) {
 		f.open(queue_file.c_str(), std::fstream::app | std::fstream::out);
-		f << url << std::endl;
+		std::string filename = generate_enqueue_filename(url);
+		f << url << " " << stfl::quote(filename) << std::endl;
 		f.close();
 	}
 }
@@ -938,6 +940,25 @@ void controller::enqueue_items(std::tr1::shared_ptr<rss_feed> feed) {
 			}
 		}
 	}
+}
+
+std::string controller::generate_enqueue_filename(const std::string& url) {
+	std::string dlpath = cfg->get_configvalue("download-path");
+	if (dlpath[dlpath.length()-1] != NEWSBEUTER_PATH_SEP[0])
+		dlpath.append(NEWSBEUTER_PATH_SEP);
+
+	char buf[1024];
+	snprintf(buf, sizeof(buf), "%s", url.c_str());
+	char * base = basename(buf);
+	if (!base || strlen(base) == 0) {
+		char lbuf[128];
+		time_t t = time(NULL);
+		strftime(lbuf, sizeof(lbuf), "%Y-%b-%d-%H%M%S.unknown", localtime(&t));
+		dlpath.append(lbuf);
+	} else {
+		dlpath.append(base);
+	}
+	return dlpath;
 }
 
 }
