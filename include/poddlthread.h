@@ -22,6 +22,7 @@ class poddlthread : public newsbeuter::thread {
 		virtual void run();
 		double compute_kbps();
 	private:
+		void mkdir_p(const char * file);
 		download * dl;
 		std::ofstream f;
 		timeval tv1;

@@ -41,7 +41,7 @@ namespace newsbeuter {
 			inline void catchup_all(std::tr1::shared_ptr<rss_feed> feed) { rsscache->catchup_all(feed); }
 			inline bool get_refresh_on_start() { return refresh_on_start; }
 			bool is_valid_podcast_type(const std::string& mimetype);
-			void enqueue_url(const std::string& url);
+			void enqueue_url(const std::string& url, std::tr1::shared_ptr<rss_feed> feed);
 			void notify(const std::string& msg);
 
 			void reload_urls_file();
@@ -75,7 +75,8 @@ namespace newsbeuter {
 			void save_feed(std::tr1::shared_ptr<rss_feed> feed, unsigned int pos);
 			void enqueue_items(std::tr1::shared_ptr<rss_feed> feed);
 
-			std::string generate_enqueue_filename(const std::string& url);
+			std::string generate_enqueue_filename(const std::string& url, std::tr1::shared_ptr<rss_feed> feed);
+			std::string get_hostname_from_url(const std::string& url);
 
 			view * v;
 			urlreader * urlcfg;

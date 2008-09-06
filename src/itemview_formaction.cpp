@@ -155,7 +155,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 			break;
 		case OP_ENQUEUE: {
 				if (item->enclosure_url().length() > 0) {
-					v->get_ctrl()->enqueue_url(item->enclosure_url());
+					v->get_ctrl()->enqueue_url(item->enclosure_url(), feed);
 					v->set_status(utils::strprintf(_("Added %s to download queue."), item->enclosure_url().c_str()));
 				}
 			}

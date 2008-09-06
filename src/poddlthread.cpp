@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 #include <sys/utsname.h>
 #include <unistd.h>
+#include <libgen.h>
 
 using namespace newsbeuter;
 
@@ -48,6 +49,7 @@ void poddlthread::run() {
 
 	if (stat(dl->filename(), &sb) == -1) {
 		GetLogger().log(LOG_INFO, "poddlthread::run: stat failed: starting normal download");
+		mkdir_p(dl->filename());
 		f.open(dl->filename(), std::fstream::out);
 		dl->set_offset(0);
 	} else {
@@ -122,6 +124,18 @@ double poddlthread::compute_kbps() {
 	result = (bytecount / (t2 - t1))/1024;
 
 	return result;
+}
+
+void poddlthread::mkdir_p(const char * file) {
+	char path[2048];
+	snprintf(path, sizeof(path), "%s", file);
+	for (char * x = path;*x != '\0';x++) {
+		if (*x == '/') {
+			*x = '\0';
+			mkdir(path, 0755);
+			*x = '/';
+		}
+	}
 }
 
 }

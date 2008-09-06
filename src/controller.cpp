@@ -764,7 +764,7 @@ bool controller::is_valid_podcast_type(const std::string& /* mimetype */) {
 	return true;
 }
 
-void controller::enqueue_url(const std::string& url) {
+void controller::enqueue_url(const std::string& url, std::tr1::shared_ptr<rss_feed> feed) {
 	bool url_found = false;
 	std::fstream f;
 	f.open(queue_file.c_str(), std::fstream::in);
@@ -784,7 +784,7 @@ void controller::enqueue_url(const std::string& url) {
 	}
 	if (!url_found) {
 		f.open(queue_file.c_str(), std::fstream::app | std::fstream::out);
-		std::string filename = generate_enqueue_filename(url);
+		std::string filename = generate_enqueue_filename(url, feed);
 		f << url << " " << stfl::quote(filename) << std::endl;
 		f.close();
 	}
@@ -934,7 +934,7 @@ void controller::enqueue_items(std::tr1::shared_ptr<rss_feed> feed) {
 			GetLogger().log(LOG_DEBUG, "controller::reload: enclosure_url = `%s' enclosure_type = `%s'", (*it)->enclosure_url().c_str(), (*it)->enclosure_type().c_str());
 			if (is_valid_podcast_type((*it)->enclosure_type())) {
 				GetLogger().log(LOG_INFO, "controller::reload: enqueuing `%s'", (*it)->enclosure_url().c_str());
-				enqueue_url((*it)->enclosure_url());
+				enqueue_url((*it)->enclosure_url(), feed);
 				(*it)->set_enqueued(true);
 				rsscache->update_rssitem_unread_and_enqueued(*it, feed->rssurl());
 			}
@@ -942,10 +942,16 @@ void controller::enqueue_items(std::tr1::shared_ptr<rss_feed> feed) {
 	}
 }
 
-std::string controller::generate_enqueue_filename(const std::string& url) {
-	std::string dlpath = cfg->get_configvalue("download-path");
-	if (dlpath[dlpath.length()-1] != NEWSBEUTER_PATH_SEP[0])
-		dlpath.append(NEWSBEUTER_PATH_SEP);
+std::string controller::generate_enqueue_filename(const std::string& url, std::tr1::shared_ptr<rss_feed> feed) {
+	std::string dlformat = cfg->get_configvalue("download-path");
+	if (dlformat[dlformat.length()-1] != NEWSBEUTER_PATH_SEP[0])
+		dlformat.append(NEWSBEUTER_PATH_SEP);
+
+	fmtstr_formatter fmt;
+	fmt.register_fmt('n', feed->title());
+	fmt.register_fmt('h', get_hostname_from_url(url));
+
+	std::string dlpath = fmt.do_format(dlformat);
 
 	char buf[1024];
 	snprintf(buf, sizeof(buf), "%s", url.c_str());
@@ -959,6 +965,23 @@ std::string controller::generate_enqueue_filename(const std::string& url) {
 		dlpath.append(base);
 	}
 	return dlpath;
+}
+
+std::string controller::get_hostname_from_url(const std::string& url) {
+	std::string hostname;
+	const char * begin = url.c_str();
+	if (url.substr(0,7) == "http://") {
+		begin = url.c_str() + 7;
+	} else if (url.substr(0,8) == "https://") {
+		begin = url.c_str() + 8;
+	}
+	const char * slash = strchr(begin, '/');
+	if (!slash)
+		hostname = std::string(begin);
+	else
+		hostname = std::string(begin, slash-begin);
+
+	return hostname;
 }
 
 }
