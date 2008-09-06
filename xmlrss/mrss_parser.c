@@ -1249,7 +1249,10 @@ mrss_parse_url_with_options_and_error (const char *url, mrss_t ** ret,
     }
 
   if (!(buffer = __mrss_download_file (doc, url, &size, &err, code)))
-    return err;
+    {
+      nxml_free (doc);
+      return err;
+    }
 
   if (nxml_parse_buffer (doc, buffer, size) != NXML_OK)
     {
