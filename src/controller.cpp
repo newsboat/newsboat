@@ -26,6 +26,7 @@
 #include <signal.h>
 #include <sys/utsname.h>
 #include <langinfo.h>
+#include <libgen.h>
 
 #include <_nxml.h>
 
