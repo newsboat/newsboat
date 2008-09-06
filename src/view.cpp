@@ -272,6 +272,9 @@ std::string view::get_filename_suggestion(const std::string& s) {
 	return retval;	
 }
 
+void view::push_empty_formaction() {
+	formaction_stack.push_front(NULL);
+}
 
 void view::open_in_browser(const std::string& url) {
 	formaction_stack.push_front(NULL); // we don't want a thread to write over the browser

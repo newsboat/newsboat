@@ -255,6 +255,9 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 				this->start_qna(qna, OP_INT_END_SETFILTER, &filterhistory);
 			}
 			break;
+		case OP_EDIT_URLS:
+			v->get_ctrl()->edit_urls_file();
+			break;
 		case OP_QUIT:
 			GetLogger().log(LOG_INFO, "feedlist_formaction: quitting");
 			if (automatic || !v->get_cfg()->get_configvalue_as_bool("confirm-exit") || v->confirm(_("Do you really want to quit (y:Yes n:No)? "), _("yn")) == *_("y")) {

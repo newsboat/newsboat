@@ -46,6 +46,7 @@ namespace newsbeuter {
 			inline configcontainer * get_cfg() { return cfg; }
 			inline keymap * get_keys() { return keys; }
 			void set_tags(const std::vector<std::string>& t);
+			void push_empty_formaction();
 			void pop_current_formaction();
 			inline unsigned int formaction_stack_size() { return formaction_stack.size(); }
 			char confirm(const std::string& prompt, const std::string& charset);

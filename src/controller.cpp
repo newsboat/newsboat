@@ -823,6 +823,24 @@ void controller::reload_urls_file() {
 	update_feedlist();
 }
 
+void controller::edit_urls_file() {
+	const char * editor = getenv("EDITOR");
+	if (!editor)
+		editor = "vi";
+
+	std::string cmdline = utils::strprintf("%s \"%s\"", editor, utils::replace_all(url_file,"\"","\\\"").c_str());
+
+	v->push_empty_formaction();
+	stfl::reset();
+
+	GetLogger().log(LOG_DEBUG, "controller::edit_urls_file: running `%s'", cmdline.c_str());
+	::system(cmdline.c_str());
+
+	v->pop_current_formaction();
+
+	reload_urls_file();
+}
+
 void controller::set_feedptrs(std::tr1::shared_ptr<rss_feed> feed) {
 	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin();it!=feed->items().end();++it) {
 		(*it)->set_feedptr(feed);

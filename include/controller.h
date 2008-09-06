@@ -45,6 +45,7 @@ namespace newsbeuter {
 			void notify(const std::string& msg);
 
 			void reload_urls_file();
+			void edit_urls_file();
 
 			inline std::vector<std::tr1::shared_ptr<rss_feed> >& get_all_feeds() { return feeds; }
 

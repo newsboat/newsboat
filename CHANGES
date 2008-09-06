@@ -4,6 +4,7 @@ Changes for newsbeuter:
 	Changed some internal data structures to smart pointers (stability improvement).
 	Extended podbeuter to keep finished downloads in the queue until they've been played.
 	Implemented placeholders for download-path (fixes #46).
+	Added the ability to edit the list of subscribed URLs from newsbeuter through a text editor.
 
 1.2 (2008-09-02):
 	Fixed crash in case of invalid color/attribute names in the configuration

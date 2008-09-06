@@ -58,6 +58,7 @@ static op_desc opdescs[] = {
 	{ OP_MACROPREFIX, "macro-prefix", ",", _("Call a macro"), KM_NEWSBEUTER },
 	{ OP_DELETE, "delete-article", "D", _("Delete article"), KM_NEWSBEUTER },
 	{ OP_PURGE_DELETED, "purge-deleted", "$", _("Purge deleted articles"), KM_NEWSBEUTER },
+	{ OP_EDIT_URLS, "edit-urls", "E", _("Edit subscribed URLs"), KM_NEWSBEUTER },
 
 	{ OP_SK_UP, "up", "UP", NULL, KM_SYSKEYS },
 	{ OP_SK_DOWN, "down", "DOWN", NULL, KM_SYSKEYS },

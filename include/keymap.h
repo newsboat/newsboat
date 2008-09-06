@@ -53,6 +53,7 @@ namespace newsbeuter {
 						OP_MACROPREFIX,
 						OP_DELETE,
 						OP_PURGE_DELETED,
+						OP_EDIT_URLS,
 						OP_NB_MAX,
 
 						// podbeuter-specific operations:
