@@ -412,6 +412,8 @@ void itemlist_formaction::do_update_visible_items() {
 
 	visible_items.clear();
 
+	apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-articles"));
+
 	/*
 	 * this method doesn't redraw, all it does is to go through all
 	 * items of a feed, and fill the visible_items vector by checking
