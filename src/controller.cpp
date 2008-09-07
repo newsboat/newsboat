@@ -119,12 +119,14 @@ void controller::run(int argc, char * argv[]) {
 	bool do_import = false, do_export = false, cachefile_given_on_cmdline = false, do_vacuum = false;
 	bool offline_mode = false, real_offline_mode = false;
 	std::string importfile;
+	bool do_read_import = false, do_read_export = false;
+	std::string readinfofile;
 
 	bool silent = false;
 	bool execute_cmds = false;
 
 	do {
-		if((c = ::getopt(argc,argv,"i:erhu:c:C:d:l:vVox"))<0)
+		if((c = ::getopt(argc,argv,"i:erhu:c:C:d:l:vVoxI:E:"))<0)
 			continue;
 		switch (c) {
 			case ':': /* fall-through */
@@ -184,6 +186,20 @@ void controller::run(int argc, char * argv[]) {
 						GetLogger().set_loglevel(level);
 				}
 				break;
+			case 'I':
+				if (do_read_export)
+					usage(argv[0]);
+				silent = true;
+				do_read_import = true;
+				readinfofile = optarg;
+				break;
+			case 'E':
+				if (do_read_import)
+					usage(argv[0]);
+				silent = true;
+				do_read_export = true;
+				readinfofile = optarg;
+				break;
 			default:
 				std::cout << utils::strprintf(_("%s: unknown option - %c"), argv[0], static_cast<char>(c)) << std::endl;
 				usage(argv[0]);
@@ -198,6 +214,7 @@ void controller::run(int argc, char * argv[]) {
 		import_opml(importfile.c_str());
 		return;
 	}
+
 
 	GetLogger().log(LOG_INFO, "nl_langinfo(CODESET): %s", nl_langinfo(CODESET));
 
@@ -390,6 +407,24 @@ void controller::run(int argc, char * argv[]) {
 	if (do_export) {
 		export_opml();
 		utils::remove_fs_lock(lock_file);
+		return;
+	}
+
+	if (do_read_import) {
+		GetLogger().log(LOG_INFO,"Importing read information file from %s",readinfofile.c_str());
+		std::cout << _("Importing list of read articles...");
+		std::cout.flush();
+		import_read_information(readinfofile);
+		std::cout << _("done.") << std::endl;
+		return;
+	}
+
+	if (do_read_export) {
+		GetLogger().log(LOG_INFO,"Exporting read information file to %s",readinfofile.c_str());
+		std::cout << _("Exporting list of read articles...");
+		std::cout.flush();
+		export_read_information(readinfofile);
+		std::cout << _("done.") << std::endl;
 		return;
 	}
 
@@ -632,6 +667,8 @@ void controller::usage(char * argv0) {
 				"-V              get version information\n"
 				"-l <loglevel>   write a log with a certain loglevel (valid values: 1 to 6)\n"
 				"-d <logfile>    use <logfile> as output log file\n"
+				"-E <file>       export list of read articles to <file>\n"
+				"-I <file>       import list of read articles from <file>\n"
 				"-h              this help\n"), PROGRAM_NAME, PROGRAM_VERSION, argv0);
 	::exit(EXIT_FAILURE);
 }
@@ -1001,6 +1038,34 @@ std::string controller::get_hostname_from_url(const std::string& url) {
 		hostname = std::string(begin, slash-begin);
 
 	return hostname;
+}
+
+void controller::import_read_information(const std::string& readinfofile) {
+	std::vector<std::string> guids;
+
+	std::ifstream f(readinfofile.c_str());
+	std::string line;
+	getline(f,line);
+	if (!f.is_open()) {
+		return;
+	}
+	while (f.is_open() && !f.eof()) {
+		guids.push_back(line);
+		getline(f, line);
+	}
+	rsscache->mark_items_read_by_guid(guids);
+}
+
+void controller::export_read_information(const std::string& readinfofile) {
+	std::vector<std::string> guids = rsscache->get_read_item_guids();
+
+	std::fstream f;
+	f.open(readinfofile.c_str(), std::fstream::out);
+	if (f.is_open()) {
+		for (std::vector<std::string>::iterator it=guids.begin();it!=guids.end();it++) {
+			f << *it << std::endl;
+		}
+	}
 }
 
 }

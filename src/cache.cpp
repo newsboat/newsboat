@@ -807,3 +807,36 @@ unsigned int cache::get_unread_count() {
 	GetLogger().log(LOG_DEBUG, "cache::get_unread_count: rc = %d count = %u", rc, count);
 	return count;
 }
+
+void cache::mark_items_read_by_guid(const std::vector<std::string> guids) {
+	scope_measure m1("cache::mark_items_read_by_guid");
+	std::string guidset("(");
+	for (std::vector<std::string>::const_iterator it=guids.begin();it!=guids.end();it++) {
+		guidset.append(prepare_query("'%q', ", it->c_str()));
+	}
+	guidset.append("'')");
+
+	std::string updatequery = utils::strprintf("UPDATE rss_item SET unread = 0 WHERE unread = 1 AND guid IN %s;", guidset.c_str());
+	int rc = sqlite3_exec(db, updatequery.c_str(), NULL, NULL, NULL);
+
+	if (rc != SQLITE_OK) {
+		GetLogger().log(LOG_CRITICAL, "query \"%s\" failed: error = %d", updatequery.c_str(), rc);
+		throw dbexception(db);
+	} else {
+		GetLogger().log(LOG_DEBUG, "cache::mark_items_read_by_guid: executed query successfully: %s", updatequery.c_str());
+	}
+}
+
+std::vector<std::string> cache::get_read_item_guids() {
+	std::vector<std::string> guids;
+	std::string query = "SELECT guid FROM rss_item WHERE unread = 0;";
+
+	int rc = sqlite3_exec(db, query.c_str(), vectorofstring_callback, &guids, NULL);
+	if (rc != SQLITE_OK) {
+		GetLogger().log(LOG_CRITICAL, "query \"%s\" failed: error = %d", query.c_str(), rc);
+		throw dbexception(db);
+	} else {
+		GetLogger().log(LOG_DEBUG, "cache::get_read_item_guids: executed query successfully: %s", query.c_str());
+	}
+	return guids;
+}
