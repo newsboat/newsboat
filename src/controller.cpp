@@ -189,14 +189,12 @@ void controller::run(int argc, char * argv[]) {
 			case 'I':
 				if (do_read_export)
 					usage(argv[0]);
-				silent = true;
 				do_read_import = true;
 				readinfofile = optarg;
 				break;
 			case 'E':
 				if (do_read_import)
 					usage(argv[0]);
-				silent = true;
 				do_read_export = true;
 				readinfofile = optarg;
 				break;
