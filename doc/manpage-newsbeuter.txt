@@ -68,6 +68,14 @@ OPTIONS
        Use this logfile as output when logging debug messages. Please note that this
        only works when providing a loglevel.
 
+-E file::
+       Export a list of read articles (resp. their GUIDs). This can be used to
+       transfer information about read articles between different computers.
+
+-I file::
+      Import a list of read articles and mark them as read if they are held in the
+      cache. This is to be used in conjunction with the -E commandline parameter.
+
 FIRST STEPS
 -----------
 

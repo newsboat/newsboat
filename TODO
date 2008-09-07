@@ -5,7 +5,6 @@ TODO:
 - add an auto-flag configuration command to automatically flag articles that match a certain query
 - when reload is finished, the focus shall be in the current form's list
 - per-feed refresh settings
-- implement "newsrc" style file format to exchange information about unread feeds.
 - replace std::vector<rss_item> with std::vector<std::tr1::shared_ptr<rss_item> > as a possible fix against these weird crashes.
   beta tester: mhellwig@in-ulm.de (regular crashes on sparc Linux)
 
@@ -122,3 +121,4 @@ DONE:
 - add filtering for correct color names
 - bug: don't squeeze whitespaces when inside a <blockquote><pre> environment.
 - add a second "downloaded, but unlistened" queue to podbeuter (solved by marking downloaded but unplayed files in the queue file)
+- implement "newsrc" style file format to exchange information about read articles.
