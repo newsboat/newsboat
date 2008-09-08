@@ -102,4 +102,17 @@ keymap_hint_entry * urlview_formaction::get_keymap_hint() {
 	return hints;
 }
 
+void urlview_formaction::handle_cmdline(const std::string& cmd) {
+	unsigned int idx = 0;
+	if (1==sscanf(cmd.c_str(),"%u",&idx)) {
+		if (idx < 1 || idx > links.size()) {
+			v->show_error(_("Invalid position!"));
+		} else {
+			f->set("feedpos", utils::to_s(idx-1));
+		}
+	} else {
+		formaction::handle_cmdline(cmd);
+	}
+}
+
 }

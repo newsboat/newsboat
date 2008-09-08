@@ -122,3 +122,4 @@ DONE:
 - bug: don't squeeze whitespaces when inside a <blockquote><pre> environment.
 - add a second "downloaded, but unlistened" queue to podbeuter (solved by marking downloaded but unplayed files in the queue file)
 - implement "newsrc" style file format to exchange information about read articles.
+- make ":<number>" work on urlview dialog
