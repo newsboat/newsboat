@@ -19,7 +19,7 @@ class itemview_formaction : public formaction {
 		keymap_hint_entry * get_keymap_hint();
 		virtual void handle_cmdline(const std::string& cmd);
 
-		virtual std::string id() const { return "articleview"; }
+		virtual std::string id() const { return "article"; }
 
 		virtual void finished_qna(operation op);
 

@@ -106,15 +106,15 @@ void view::set_keymap(keymap * k) {
 void view::set_bindings() {
 	formaction * fas2bind[] = { feedlist, itemlist, itemview, helpview, filebrowser, urlview, selecttag, searchresult, NULL };
 	if (keys) {
-		std::string upkey("** "); upkey.append(keys->getkey(OP_SK_UP));
-		std::string downkey("** "); downkey.append(keys->getkey(OP_SK_DOWN));
-		std::string pgupkey("** "); pgupkey.append(keys->getkey(OP_SK_PGUP));
-		std::string pgdownkey("** "); pgdownkey.append(keys->getkey(OP_SK_PGDOWN));
-
-		std::string pgupkey_itemview("** b "); pgupkey_itemview.append(keys->getkey(OP_SK_PGUP));
-		std::string pgdownkey_itemview("** SPACE "); pgdownkey_itemview.append(keys->getkey(OP_SK_PGDOWN));
-
 		for (unsigned int i=0;fas2bind[i];++i) {
+			std::string upkey("** "); upkey.append(keys->getkey(OP_SK_UP, fas2bind[i]->id()));
+			std::string downkey("** "); downkey.append(keys->getkey(OP_SK_DOWN, fas2bind[i]->id()));
+			std::string pgupkey("** "); pgupkey.append(keys->getkey(OP_SK_PGUP, fas2bind[i]->id()));
+			std::string pgdownkey("** "); pgdownkey.append(keys->getkey(OP_SK_PGDOWN, fas2bind[i]->id()));
+
+			std::string pgupkey_itemview("** b "); pgupkey_itemview.append(keys->getkey(OP_SK_PGUP, fas2bind[i]->id()));
+			std::string pgdownkey_itemview("** SPACE "); pgdownkey_itemview.append(keys->getkey(OP_SK_PGDOWN, fas2bind[i]->id()));
+
 			fas2bind[i]->get_form()->set("bind_up", upkey);
 			fas2bind[i]->get_form()->set("bind_down", downkey);
 			if (fas2bind[i] == itemview || fas2bind[i] == helpview) { // the forms that contain textviews
@@ -176,7 +176,7 @@ void view::run() {
 			// we then receive the event and ignore timeouts.
 			const char * event = fa->get_form()->run(0);
 			if (!event || strcmp(event,"TIMEOUT")==0) {
-				if (fa->id() == "articleview")
+				if (fa->id() == "article")
 					itemview->update_percent();
 				continue;
 			}
@@ -192,7 +192,7 @@ void view::run() {
 				macrocmds = keys->get_macro(event);
 				set_status("");
 			} else {
-				op = keys->get_operation(event);
+				op = keys->get_operation(event, fa->id());
 
 				GetLogger().log(LOG_DEBUG, "view::run: event = %s op = %u", event, op);
 
@@ -236,7 +236,7 @@ std::string view::run_modal(formaction * f, const std::string& value) {
 		GetLogger().log(LOG_DEBUG, "view::run: event = %s", event);
 		if (!event || strcmp(event,"TIMEOUT")==0) continue;
 
-		operation op = keys->get_operation(event);
+		operation op = keys->get_operation(event, fa->id());
 
 		if (OP_REDRAW == op) {
 			stfl::reset();
@@ -383,6 +383,7 @@ void view::push_itemview(std::tr1::shared_ptr<rss_feed> f, const std::string& gu
 }
 
 void view::push_help() {
+	helpview->set_context((*formaction_stack.begin())->id());
 	formaction_stack.push_front(helpview);
 	helpview->init();
 }

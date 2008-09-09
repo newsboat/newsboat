@@ -50,11 +50,13 @@ void help_formaction::prepare() {
 		f->set("head",fmt.do_format(v->get_cfg()->get_configvalue("help-title-format"), width));
 		
 		std::vector<keymap_desc> descs;
-		v->get_keys()->get_keymap_descriptions(descs, KM_NEWSBEUTER);
+		v->get_keys()->get_keymap_descriptions(descs, v->get_keys()->get_flag_from_context(context));
 
 		listformatter listfmt;
 		
 		for (std::vector<keymap_desc>::iterator it=descs.begin();it!=descs.end();++it) {
+			if (context.length() > 0 && it->ctx != context)
+				continue;
 			if (!apply_search || strcasestr(it->key.c_str(), searchphrase.c_str())!=NULL || 
 					strcasestr(it->cmd.c_str(), searchphrase.c_str())!=NULL ||
 					strcasestr(it->desc.c_str(), searchphrase.c_str())!=NULL) {
@@ -90,6 +92,13 @@ void help_formaction::finished_qna(operation op) {
 	searchphrase = qna_responses[0];
 	apply_search = true;
 	do_redraw = true;
+}
+
+void help_formaction::set_context(const std::string& ctx) {
+	if (context != ctx) {
+		do_redraw = true;
+		context = ctx;
+	}
 }
 
 }

@@ -10,11 +10,22 @@
 
 // in configuration: bind-key <key> <operation>
 
-#define KM_NEWSBEUTER (1<<0)
-#define KM_PODBEUTER  (1<<1)
-#define KM_SYSKEYS    (1<<2)
-#define KM_INTERNAL   (1<<3)
-#define KM_BOTH (KM_NEWSBEUTER | KM_PODBEUTER)
+
+enum { 
+	KM_FEEDLIST		= 1<<0,
+	KM_FILEBROWSER	= 1<<1,
+	KM_HELP			= 1<<2,
+	KM_ARTICLELIST	= 1<<3,
+	KM_ARTICLE		= 1<<4,
+	KM_TAGSELECT	= 1<<5,
+	KM_FILTERSELECT	= 1<<6,
+	KM_URLVIEW		= 1<<7,
+	KM_PODBEUTER	= 1<<8,
+	KM_NEWSBEUTER = KM_FEEDLIST | KM_FILEBROWSER | KM_HELP | KM_ARTICLELIST | KM_ARTICLE | KM_TAGSELECT | KM_FILTERSELECT | KM_URLVIEW,
+	KM_SYSKEYS		= 1<<9,
+	KM_INTERNAL		= 1<<10,
+	KM_BOTH			= KM_NEWSBEUTER | KM_PODBEUTER
+};
 
 namespace newsbeuter {
 
@@ -98,6 +109,7 @@ namespace newsbeuter {
 		std::string key;
 		std::string cmd;
 		std::string desc;
+		std::string ctx;
 	};
 
 	struct macrocmd {
@@ -109,17 +121,19 @@ namespace newsbeuter {
 		public:
 			keymap(unsigned int flags);
 			~keymap();
-			void set_key(operation op, const std::string& key);
-			void unset_key(const std::string& key);
+			void set_key(operation op, const std::string& key, const std::string& context);
+			void unset_key(const std::string& key, const std::string& context);
 			operation get_opcode(const std::string& opstr);
-			operation get_operation(const std::string& keycode);
+			operation get_operation(const std::string& keycode, const std::string& context);
 			std::vector<macrocmd> get_macro(const std::string& key);
 			char get_key(const std::string& keycode);
-			std::string getkey(operation );
+			std::string getkey(operation op, const std::string& context);
 			virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
 			void get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned short flags);
+			unsigned short get_flag_from_context(const std::string& context);
 		private:
-			std::map<std::string,operation> keymap_;
+			bool is_valid_context(const std::string& context);
+			std::map<std::string, std::map<std::string, operation> > keymap_;
 			std::map<std::string,std::vector<macrocmd> > macros_;
 	};
 

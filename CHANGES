@@ -6,6 +6,7 @@ Changes for newsbeuter:
 	Implemented placeholders for download-path (fixes #46).
 	Added the ability to edit the list of subscribed URLs from newsbeuter through a text editor.
 	Implemented a file format to exchange information about read articles between different newsbeuter instances.
+	Extended keymap to allow dialog-specific configuration.
 
 1.2 (2008-09-02):
 	Fixed crash in case of invalid color/attribute names in the configuration

@@ -39,7 +39,7 @@ std::string formaction::prepare_keymap_hint(keymap_hint_entry * hints) {
 	 */
 	std::string keymap_hint;
 	for (int i=0;hints[i].op != OP_NIL; ++i) {
-		keymap_hint.append(v->get_keys()->getkey(hints[i].op));
+		keymap_hint.append(v->get_keys()->getkey(hints[i].op, this->id()));
 		keymap_hint.append(":");
 		keymap_hint.append(hints[i].text);
 		keymap_hint.append(" ");

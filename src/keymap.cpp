@@ -18,47 +18,47 @@ struct op_desc {
  * This is the list of operations, defining operation, operation name (for keybindings), default key, description, and where it's valid
  */
 static op_desc opdescs[] = {
-	{ OP_OPEN, "open", "ENTER", _("Open feed/article"), KM_NEWSBEUTER },
-	{ OP_QUIT, "quit", "q", _("Return to previous dialog/Quit"), KM_BOTH },
-	{ OP_RELOAD, "reload", "r", _("Reload currently selected feed"), KM_NEWSBEUTER },
-	{ OP_RELOADALL, "reload-all", "R", _("Reload all feeds"), KM_NEWSBEUTER },
-	{ OP_MARKFEEDREAD, "mark-feed-read", "A", _("Mark feed read"), KM_NEWSBEUTER },
-	{ OP_MARKALLFEEDSREAD, "mark-all-feeds-read", "C", _("Mark all feeds read"), KM_NEWSBEUTER },
-	{ OP_SAVE, "save", "s", _("Save article"), KM_NEWSBEUTER },
-	{ OP_NEXTUNREAD, "next-unread", "n", _("Go to next unread article"), KM_NEWSBEUTER },
-	{ OP_PREVUNREAD, "prev-unread", "p", _("Go to previous unread article"), KM_NEWSBEUTER },
-	{ OP_OPENINBROWSER, "open-in-browser", "o", _("Open article in browser"), KM_NEWSBEUTER },
-	{ OP_HELP, "help", "?", _("Open help dialog"), KM_BOTH },
-	{ OP_TOGGLESOURCEVIEW, "toggle-source-view", "^U", _("Toggle source view"), KM_NEWSBEUTER },
-	{ OP_TOGGLEITEMREAD, "toggle-article-read", "N", _("Toggle read status for article"), KM_NEWSBEUTER },
-	{ OP_TOGGLESHOWREAD, "toggle-show-read-feeds", "l", _("Toggle show read feeds/articles"), KM_NEWSBEUTER },
-	{ OP_SHOWURLS, "show-urls", "u", _("Show URLs in current article"), KM_NEWSBEUTER },
-	{ OP_CLEARTAG, "clear-tag", "^T", _("Clear current tag"), KM_NEWSBEUTER },
-	{ OP_SETTAG, "set-tag", "t", _("Select tag"), KM_NEWSBEUTER },
-	{ OP_SEARCH, "open-search", "/", _("Open search dialog"), KM_NEWSBEUTER },
-	{ OP_ENQUEUE, "enqueue", "e", _("Add download to queue"), KM_NEWSBEUTER },
-	{ OP_RELOADURLS, "reload-urls", "^R", _("Reload the list of URLs from the configuration"), KM_NEWSBEUTER },
-	{ OP_PB_DOWNLOAD, "pb-download", "d", _("Download file"), KM_PODBEUTER },
-	{ OP_PB_CANCEL, "pb-cancel", "c", _("Cancel download"), KM_PODBEUTER },
-	{ OP_PB_DELETE, "pb-delete", "D", _("Mark download as deleted"), KM_PODBEUTER },
-	{ OP_PB_PURGE, "pb-purge", "P", _("Purge finished and deleted downloads from queue"), KM_PODBEUTER },
-	{ OP_PB_TOGGLE_DLALL, "pb-toggle-download-all", "a", _("Toggle automatic download on/off"), KM_PODBEUTER },
-	{ OP_PB_PLAY, "pb-play", "p", _("Start player with currently selected download"), KM_PODBEUTER },
-	{ OP_PB_MOREDL, "pb-increase-max-dls", "+", _("Increase the number of concurrent downloads"), KM_PODBEUTER },
-	{ OP_PB_LESSDL, "pb-decreate-max-dls", "-", _("Decrease the number of concurrent downloads"), KM_PODBEUTER },
-	{ OP_REDRAW, "redraw", "^L", _("Redraw screen"), KM_BOTH },
-	{ OP_CMDLINE, "cmdline", ":", _("Open the commandline"), KM_NEWSBEUTER },
-	{ OP_SETFILTER, "set-filter", "F", _("Set a filter"), KM_NEWSBEUTER },
-	{ OP_SELECTFILTER, "select-filter", "f", _("Select a predefined filter"), KM_NEWSBEUTER },
-	{ OP_CLEARFILTER, "clear-filter", "^F", _("Clear currently set filter"), KM_NEWSBEUTER },
-	{ OP_BOOKMARK, "bookmark", "^B", _("Bookmark current link/article"), KM_NEWSBEUTER },
-	{ OP_EDITFLAGS, "edit-flags", "^E", _("Edit flags"), KM_NEWSBEUTER },
-	{ OP_NEXTFEED, "next-unread-feed", "^N", _("Go to next unread feed"), KM_NEWSBEUTER },
-	{ OP_PREVFEED, "prev-unread-feed", "^P", _("Go to previous unread feed"), KM_NEWSBEUTER },
-	{ OP_MACROPREFIX, "macro-prefix", ",", _("Call a macro"), KM_NEWSBEUTER },
-	{ OP_DELETE, "delete-article", "D", _("Delete article"), KM_NEWSBEUTER },
-	{ OP_PURGE_DELETED, "purge-deleted", "$", _("Purge deleted articles"), KM_NEWSBEUTER },
-	{ OP_EDIT_URLS, "edit-urls", "E", _("Edit subscribed URLs"), KM_NEWSBEUTER },
+	{ OP_OPEN,				"open",						"ENTER",_("Open feed/article"),					KM_FEEDLIST | KM_FILEBROWSER | KM_HELP | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT | KM_URLVIEW | KM_PODBEUTER },
+	{ OP_QUIT,				"quit",						"q",	_("Return to previous dialog/Quit"),	KM_FEEDLIST | KM_FILEBROWSER | KM_ARTICLELIST | KM_ARTICLE | KM_TAGSELECT | KM_FILTERSELECT | KM_URLVIEW },
+	{ OP_RELOAD,			"reload",					"r",	_("Reload currently selected feed"),	KM_FEEDLIST }, 
+	{ OP_RELOADALL,			"reload-all",				"R",	_("Reload all feeds"),					KM_FEEDLIST },
+	{ OP_MARKFEEDREAD,		"mark-feed-read",			"A",	_("Mark feed read"),					KM_FEEDLIST | KM_ARTICLELIST },
+	{ OP_MARKALLFEEDSREAD,	"mark-all-feeds-read",		"C",	_("Mark all feeds read"),				KM_FEEDLIST },
+	{ OP_SAVE,				"save",						"s",	_("Save article"),						KM_ARTICLELIST | KM_ARTICLE },
+	{ OP_NEXTUNREAD,		"next-unread",				"n",	_("Go to next unread article"),			KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE },
+	{ OP_PREVUNREAD,		"prev-unread",				"p",	_("Go to previous unread article"),		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE },
+	{ OP_OPENINBROWSER,		"open-in-browser",			"o",	_("Open article in browser"),			KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE },
+	{ OP_HELP,				"help",						"?",	_("Open help dialog"),					KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE | KM_PODBEUTER },
+	{ OP_TOGGLESOURCEVIEW,	"toggle-source-view",		"^U",	_("Toggle source view"),				KM_ARTICLE },
+	{ OP_TOGGLEITEMREAD,	"toggle-article-read",		"N",	_("Toggle read status for article"),	KM_ARTICLELIST },
+	{ OP_TOGGLESHOWREAD,	"toggle-show-read-feeds",	"l",	_("Toggle show read feeds/articles"),	KM_FEEDLIST | KM_ARTICLELIST },
+	{ OP_SHOWURLS,			"show-urls",				"u",	_("Show URLs in current article"),		KM_ARTICLE },
+	{ OP_CLEARTAG,			"clear-tag",				"^T",	_("Clear current tag"),					KM_FEEDLIST },
+	{ OP_SETTAG,			"set-tag",					"t",	_("Select tag"),						KM_FEEDLIST },
+	{ OP_SEARCH,			"open-search",				"/",	_("Open search dialog"),				KM_FEEDLIST | KM_HELP | KM_ARTICLELIST },
+	{ OP_ENQUEUE,			"enqueue",					"e",	_("Add download to queue"),				KM_ARTICLE },
+	{ OP_RELOADURLS,		"reload-urls",				"^R",	_("Reload the list of URLs from the configuration"),	KM_ARTICLELIST },
+	{ OP_PB_DOWNLOAD,		"pb-download",				"d",	_("Download file"),						KM_PODBEUTER },
+	{ OP_PB_CANCEL,			"pb-cancel",				"c",	_("Cancel download"),					KM_PODBEUTER },
+	{ OP_PB_DELETE,			"pb-delete",				"D",	_("Mark download as deleted"),			KM_PODBEUTER },
+	{ OP_PB_PURGE,			"pb-purge",					"P",	_("Purge finished and deleted downloads from queue"),	KM_PODBEUTER },
+	{ OP_PB_TOGGLE_DLALL,	"pb-toggle-download-all",	"a",	_("Toggle automatic download on/off"),	KM_PODBEUTER },
+	{ OP_PB_PLAY,			"pb-play",					"p",	_("Start player with currently selected download"),		KM_PODBEUTER },
+	{ OP_PB_MOREDL,			"pb-increase-max-dls",		"+",	_("Increase the number of concurrent downloads"),		KM_PODBEUTER },
+	{ OP_PB_LESSDL,			"pb-decreate-max-dls",		"-",	_("Decrease the number of concurrent downloads"),		KM_PODBEUTER },
+	{ OP_REDRAW,			"redraw",					"^L",	_("Redraw screen"),						KM_BOTH },
+	{ OP_CMDLINE,			"cmdline",					":",	_("Open the commandline"),				KM_NEWSBEUTER },
+	{ OP_SETFILTER,			"set-filter",				"F",	_("Set a filter"),						KM_FEEDLIST | KM_ARTICLELIST },
+	{ OP_SELECTFILTER,		"select-filter",			"f",	_("Select a predefined filter"),		KM_FEEDLIST | KM_ARTICLELIST },
+	{ OP_CLEARFILTER,		"clear-filter",				"^F",	_("Clear currently set filter"),		KM_FEEDLIST | KM_HELP | KM_ARTICLELIST },
+	{ OP_BOOKMARK,			"bookmark",					"^B",	_("Bookmark current link/article"),		KM_ARTICLELIST | KM_ARTICLE | KM_URLVIEW },
+	{ OP_EDITFLAGS,			"edit-flags",				"^E",	_("Edit flags"),						KM_ARTICLELIST | KM_ARTICLE },
+	{ OP_NEXTFEED,			"next-unread-feed",			"^N",	_("Go to next unread feed"),			KM_ARTICLELIST },
+	{ OP_PREVFEED,			"prev-unread-feed",			"^P",	_("Go to previous unread feed"),		KM_ARTICLELIST },
+	{ OP_MACROPREFIX,		"macro-prefix",				",",	_("Call a macro"),						KM_NEWSBEUTER  },
+	{ OP_DELETE,			"delete-article",			"D",	_("Delete article"),					KM_ARTICLELIST },
+	{ OP_PURGE_DELETED,		"purge-deleted",			"$",	_("Purge deleted articles"),			KM_ARTICLELIST },
+	{ OP_EDIT_URLS,			"edit-urls",				"E",	_("Edit subscribed URLs"),				KM_FEEDLIST },
 
 	{ OP_SK_UP, "up", "UP", NULL, KM_SYSKEYS },
 	{ OP_SK_DOWN, "down", "DOWN", NULL, KM_SYSKEYS },
@@ -76,13 +76,19 @@ static op_desc opdescs[] = {
 	{ OP_NIL, NULL, NULL, NULL, 0 }
 };
 
+// "all" must be first, the following positions must be the same as the KM_* flag definitions (get_flag_from_context() relies on this).
+static const char * contexts[] = { "all", "feedlist", "filebrowser", "help", "articlelist", "article", "tagselection", "filterselection", "urlview", "podbeuter", NULL };
+
 keymap::keymap(unsigned flags) { 
 	/*
 	 * At startup, initialize the keymap with the default settings from the list above.
 	 */
-	for (int i=0;opdescs[i].op != OP_NIL;++i) {
-		if (opdescs[i].flags & (flags | KM_INTERNAL | KM_SYSKEYS)) {
-			keymap_[opdescs[i].default_key] = opdescs[i].op;
+	for (unsigned int j=1;contexts[j]!=NULL;j++) {
+		std::string ctx(contexts[j]);
+		for (int i=0;opdescs[i].op != OP_NIL;++i) {
+			if (opdescs[i].flags & (flags | KM_INTERNAL | KM_SYSKEYS)) {
+				keymap_[ctx][opdescs[i].default_key] = opdescs[i].op;
+			}
 		}
 	}
 }
@@ -92,20 +98,31 @@ void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned s
 	 * Here we return the keymap descriptions for the specified application (handed to us via flags)
 	 * This is used for the help screen.
 	 */
-	for (int i=0;opdescs[i].help_text;++i) {
-		bool already_added = false;
-		for (std::map<std::string,operation>::iterator it=keymap_.begin();it!=keymap_.end();++it) {
-			operation op = it->second;
-			if (op != OP_NIL) {
-				if (opdescs[i].op == op && opdescs[i].flags & flags) {
-					keymap_desc desc;
-					desc.key = it->first;
-					if (!already_added) {
-						desc.cmd = opdescs[i].opstr;
-						desc.desc = gettext(opdescs[i].help_text);
-						already_added = true;
+	for (unsigned int i=1;contexts[i]!=NULL;i++) {
+		std::string ctx(contexts[i]);
+
+		if (flags & KM_PODBEUTER && ctx != "podbeuter" && ctx != "help") {
+			continue;
+		} else if (flags & KM_NEWSBEUTER && ctx == "podbeuter") {
+			continue;
+		}
+
+		for (int i=0;opdescs[i].help_text;++i) {
+			bool already_added = false;
+			for (std::map<std::string,operation>::iterator it=keymap_[ctx].begin();it!=keymap_[ctx].end();++it) {
+				operation op = it->second;
+				if (op != OP_NIL) {
+					if (opdescs[i].op == op && opdescs[i].flags & flags) {
+						keymap_desc desc;
+						desc.key = it->first;
+						desc.ctx = ctx;
+						if (!already_added) {
+							desc.cmd = opdescs[i].opstr;
+							desc.desc = gettext(opdescs[i].help_text);
+							already_added = true;
+						}
+						descs.push_back(desc);
 					}
-					descs.push_back(desc);
 				}
 			}
 		}
@@ -115,14 +132,26 @@ void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned s
 keymap::~keymap() { }
 
 
-void keymap::set_key(operation op, const std::string& key) {
+void keymap::set_key(operation op, const std::string& key, const std::string& context) {
 	GetLogger().log(LOG_DEBUG,"keymap::set_key(%d,%s) called", op, key.c_str());
-	keymap_[key] = op;
+	if (context == "all") {
+		for (unsigned int i=0;contexts[i]!=NULL;i++) {
+			keymap_[contexts[i]][key] = op;
+		}
+	} else {
+		keymap_[context][key] = op;
+	}
 }
 
-void keymap::unset_key(const std::string& key) {
+void keymap::unset_key(const std::string& key, const std::string& context) {
 	GetLogger().log(LOG_DEBUG,"keymap::unset_key(%s) called", key.c_str());
-	keymap_[key] = OP_NIL;	
+	if (context == "all") {
+		for (unsigned int i=0;contexts[i]!=NULL;i++) {
+			keymap_[contexts[i]][key] = OP_NIL;
+		}
+	} else {
+		keymap_[context][key] = OP_NIL;	
+	}
 }
 
 operation keymap::get_opcode(const std::string& opstr) {
@@ -148,14 +177,14 @@ char keymap::get_key(const std::string& keycode) {
 	return 0;
 }
 
-operation keymap::get_operation(const std::string& keycode) {
+operation keymap::get_operation(const std::string& keycode, const std::string& context) {
 	std::string key;
 	if (keycode.length() > 0) {
 		key = keycode;
 	} else {
 		key = "NIL";
 	}
-	return keymap_[key];
+	return keymap_[context][key];
 }
 
 action_handler_status keymap::handle_action(const std::string& action, const std::vector<std::string>& params) {
@@ -168,17 +197,25 @@ action_handler_status keymap::handle_action(const std::string& action, const std
 		if (params.size() < 2) {
 			return AHS_TOO_FEW_PARAMS;
 		} else {
+			std::string context = "all";
+			if (params.size() >= 3)
+				context = params[2];
+			if (!is_valid_context(context))
+				return AHS_INVALID_PARAMS;
 			operation op = get_opcode(params[1]);
 			if (op > OP_SK_MIN && op < OP_SK_MAX)
-				unset_key(getkey(get_opcode(params[1])));
-			set_key(get_opcode(params[1]), params[0]);
+				unset_key(getkey(op, context), context);
+			set_key(op, params[0], context);
 			return AHS_OK;
 		}
 	} else if (action == "unbind-key") {
 		if (params.size() < 1) {
 			return AHS_TOO_FEW_PARAMS;
 		} else {
-			unset_key(params[0]);
+			std::string context = "all";
+			if (params.size() >= 2)
+				context = params[1];
+			unset_key(params[0], context);
 			return AHS_OK;	
 		}
 	} else if (action == "macro") {
@@ -223,11 +260,21 @@ action_handler_status keymap::handle_action(const std::string& action, const std
 		return AHS_INVALID_PARAMS;
 }
 
-std::string keymap::getkey(operation op) {
-	for (std::map<std::string,operation>::iterator it=keymap_.begin(); it!=keymap_.end(); ++it) {
-		if (it->second == op)
-			return it->first;
-	}	
+std::string keymap::getkey(operation op, const std::string& context) {
+	if (context == "all") {
+		for (unsigned int i=0;contexts[i]!=NULL;i++) {
+			std::string ctx(contexts[i]);
+			for (std::map<std::string,operation>::iterator it=keymap_[ctx].begin(); it!=keymap_[ctx].end(); ++it) {
+				if (it->second == op)
+					return it->first;
+			}
+		}
+	} else {
+		for (std::map<std::string,operation>::iterator it=keymap_[context].begin(); it!=keymap_[context].end(); ++it) {
+			if (it->second == op)
+				return it->first;
+		}	
+	}
 	return "<none>";
 }
 
@@ -241,5 +288,20 @@ std::vector<macrocmd> keymap::get_macro(const std::string& key) {
 	return dummyvector;
 }
 
+bool keymap::is_valid_context(const std::string& context) {
+	for (unsigned int i=0;contexts[i]!=NULL;i++) {
+		if (context == contexts[i])
+			return true;
+	}
+	return false;
+}
+
+unsigned short keymap::get_flag_from_context(const std::string& context) {
+	for (unsigned int i=1;contexts[i]!=NULL;i++) {
+		if (context == contexts[i])
+			return 1<<(i-1);
+	}
+	return 0; // shouldn't happen
+}
 
 }

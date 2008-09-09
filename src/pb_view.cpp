@@ -78,7 +78,7 @@ void pb_view::run(bool auto_download) {
 
 		if (!event || strcmp(event,"TIMEOUT")==0) continue;
 
-		operation op = keys->get_operation(event);
+		operation op = keys->get_operation(event, "podbeuter");
 
 		if (dllist_form.get("msg").length() > 0) {
 			dllist_form.set("msg", "");
@@ -173,10 +173,10 @@ void pb_view::run(bool auto_download) {
 
 void pb_view::set_bindings() {
 	if (keys) {
-		std::string upkey("** "); upkey.append(keys->getkey(OP_SK_UP));
-		std::string downkey("** "); downkey.append(keys->getkey(OP_SK_DOWN));
-		std::string pgupkey("** "); pgupkey.append(keys->getkey(OP_SK_PGUP));
-		std::string pgdownkey("** "); pgdownkey.append(keys->getkey(OP_SK_PGDOWN));
+		std::string upkey("** "); upkey.append(keys->getkey(OP_SK_UP, "podbeuter"));
+		std::string downkey("** "); downkey.append(keys->getkey(OP_SK_DOWN, "podbeuter"));
+		std::string pgupkey("** "); pgupkey.append(keys->getkey(OP_SK_PGUP, "podbeuter"));
+		std::string pgdownkey("** "); pgdownkey.append(keys->getkey(OP_SK_PGDOWN, "podbeuter"));
 
 		dllist_form.set("bind_up", upkey);
 		dllist_form.set("bind_down", downkey);
@@ -230,7 +230,7 @@ void pb_view::run_help() {
 		const char * event = help_form.run(0);
 		if (!event) continue;
 
-		operation op = keys->get_operation(event);
+		operation op = keys->get_operation(event, "help");
 
 		switch (op) {
 			case OP_QUIT:
@@ -245,7 +245,7 @@ void pb_view::run_help() {
 std::string pb_view::prepare_keymaphint(keymap_hint_entry * hints) {
 	std::string keymap_hint;
 	for (int i=0;hints[i].op != OP_NIL; ++i) {
-		keymap_hint.append(keys->getkey(hints[i].op));
+		keymap_hint.append(keys->getkey(hints[i].op, "podbeuter"));
 		keymap_hint.append(":");
 		keymap_hint.append(hints[i].text);
 		keymap_hint.append(" ");
