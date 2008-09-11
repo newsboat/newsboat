@@ -120,10 +120,10 @@ BOOST_AUTO_TEST_CASE(TestConfigParserContainerAndKeymap) {
 
 	delete cfg;
 
-	BOOST_CHECK_EQUAL(k.get_operation("ENTER", "all"), OP_OPEN);
-	BOOST_CHECK_EQUAL(k.get_operation("u", "all"), OP_SHOWURLS);
-	BOOST_CHECK_EQUAL(k.get_operation("X", "all"), OP_NIL);
-	BOOST_CHECK_EQUAL(k.get_operation("", "all"), OP_NIL);
+	BOOST_CHECK_EQUAL(k.get_operation("ENTER", "feedlist"), OP_OPEN);
+	BOOST_CHECK_EQUAL(k.get_operation("u", "article"), OP_SHOWURLS);
+	BOOST_CHECK_EQUAL(k.get_operation("X", "feedlist"), OP_NIL);
+	BOOST_CHECK_EQUAL(k.get_operation("", "feedlist"), OP_NIL);
 
 	k.unset_key("ENTER", "all");
 	BOOST_CHECK_EQUAL(k.get_operation("ENTER", "all"), OP_NIL);
