@@ -74,7 +74,7 @@ bool rss_parser::check_and_update_lastmodified() {
 		err = mrss_get_last_modified_with_options(const_cast<char *>(my_uri.c_str()), &newlm, options);
 		mrss_options_free(options);
 
-		// GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: err = %u oldlm = %d newlm = %d", err, oldlm, newlm);
+		GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: err = %u oldlm = %d newlm = %d", err, oldlm, newlm);
 
 		if (err != MRSS_OK) {
 			// GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: no, don't download, due to error");
@@ -85,8 +85,8 @@ bool rss_parser::check_and_update_lastmodified() {
 		return false;
 	}
 
-	if (newlm == 0) {
-		// GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: yes, download (no Last-Modified header)");
+	if (newlm <= 0) {
+		GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: yes, download (no or invalid Last-Modified header: newlm = %d", newlm);
 		return true;
 	}
 
