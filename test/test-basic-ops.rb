@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 # basic operations test:
 # - reload
 # - mark feed read
@@ -52,7 +51,7 @@ Tuitest.wait_until_idle
 verifier.expect(0, 39, "2")
 verifier.expect(2, 20, "2")
 verifier.expect(4, 40, "2")
-verifier.expect(5, 6, "Fri, 29 Aug 2008 07:41:3")
+verifier.expect(5, 6, "Fri, 29 Aug 2008 09:41:3")
 verifier.expect(7, 9, "econd item, this time only with a <description> tag.")
 verifier.expect(8, 0, "~")
 verifier.expect(9, 0, "~                   ")
@@ -69,7 +68,7 @@ Tuitest.wait_until_idle
 verifier.expect(0, 39, "3")
 verifier.expect(2, 20, "3")
 verifier.expect(4, 40, "3")
-verifier.expect(5, 6, "Thu, 28 Aug 2008 17:27:5")
+verifier.expect(5, 6, "Thu, 28 Aug 2008 19:27:5")
 verifier.expect(7, 0, "And finally a third item, also description, but with some HTML...")
 verifier.expect(8, 0, "Yes, there was a line break. And here is a [1]link to slashdot.")
 verifier.expect(9, 0, " ")

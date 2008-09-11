@@ -83,11 +83,13 @@ keymap::keymap(unsigned flags) {
 	/*
 	 * At startup, initialize the keymap with the default settings from the list above.
 	 */
+	GetLogger().log(LOG_DEBUG, "keymap::keymap: flags = %x", flags);
 	for (unsigned int j=1;contexts[j]!=NULL;j++) {
 		std::string ctx(contexts[j]);
 		for (int i=0;opdescs[i].op != OP_NIL;++i) {
 			if (opdescs[i].flags & (flags | KM_INTERNAL | KM_SYSKEYS)) {
 				keymap_[ctx][opdescs[i].default_key] = opdescs[i].op;
+				GetLogger().log(LOG_DEBUG, "keymap::keymap: keymap_[%s][%s] = %u (%s)", ctx.c_str(), opdescs[i].default_key, opdescs[i].op, opdescs[i].opstr);
 			}
 		}
 	}
@@ -179,6 +181,7 @@ char keymap::get_key(const std::string& keycode) {
 
 operation keymap::get_operation(const std::string& keycode, const std::string& context) {
 	std::string key;
+	GetLogger().log(LOG_DEBUG, "keymap::get_operation: keycode = %s context = %s", keycode.c_str(), context.c_str());
 	if (keycode.length() > 0) {
 		key = keycode;
 	} else {

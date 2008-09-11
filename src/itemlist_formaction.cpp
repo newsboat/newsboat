@@ -263,6 +263,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 						newfilter = (*args)[0];
 				} else {
 					newfilter = v->select_filter(v->get_ctrl()->get_filters().get_filters());
+					GetLogger().log(LOG_DEBUG,"itemlist_formaction::run: newfilters = %s", newfilter.c_str());
 				}
 				if (newfilter != "") {
 					filterhistory.add_line(newfilter);
@@ -411,8 +412,6 @@ void itemlist_formaction::do_update_visible_items() {
 	std::vector<std::tr1::shared_ptr<rss_item> >& items = feed->items();
 
 	visible_items.clear();
-
-	apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-articles"));
 
 	/*
 	 * this method doesn't redraw, all it does is to go through all
