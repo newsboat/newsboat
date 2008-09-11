@@ -120,22 +120,22 @@ BOOST_AUTO_TEST_CASE(TestConfigParserContainerAndKeymap) {
 
 	delete cfg;
 
-	BOOST_CHECK_EQUAL(k.get_operation("ENTER"), OP_OPEN);
-	BOOST_CHECK_EQUAL(k.get_operation("u"), OP_SHOWURLS);
-	BOOST_CHECK_EQUAL(k.get_operation("X"), OP_NIL);
-	BOOST_CHECK_EQUAL(k.get_operation(""), OP_NIL);
+	BOOST_CHECK_EQUAL(k.get_operation("ENTER", "all"), OP_OPEN);
+	BOOST_CHECK_EQUAL(k.get_operation("u", "all"), OP_SHOWURLS);
+	BOOST_CHECK_EQUAL(k.get_operation("X", "all"), OP_NIL);
+	BOOST_CHECK_EQUAL(k.get_operation("", "all"), OP_NIL);
 
-	k.unset_key("ENTER");
-	BOOST_CHECK_EQUAL(k.get_operation("ENTER"), OP_NIL);
-	k.set_key(OP_OPEN, "ENTER");
-	BOOST_CHECK_EQUAL(k.get_operation("ENTER"), OP_OPEN);
+	k.unset_key("ENTER", "all");
+	BOOST_CHECK_EQUAL(k.get_operation("ENTER", "all"), OP_NIL);
+	k.set_key(OP_OPEN, "ENTER", "all");
+	BOOST_CHECK_EQUAL(k.get_operation("ENTER", "all"), OP_OPEN);
 
 	BOOST_CHECK_EQUAL(k.get_opcode("open"), OP_OPEN);
 	BOOST_CHECK_EQUAL(k.get_opcode("some-noexistent-operation"), OP_NIL);
 
-	BOOST_CHECK_EQUAL(k.getkey(OP_OPEN), "ENTER");
-	BOOST_CHECK_EQUAL(k.getkey(OP_TOGGLEITEMREAD), "N");
-	BOOST_CHECK_EQUAL(k.getkey(static_cast<operation>(30000)), "<none>");
+	BOOST_CHECK_EQUAL(k.getkey(OP_OPEN, "all"), "ENTER");
+	BOOST_CHECK_EQUAL(k.getkey(OP_TOGGLEITEMREAD, "all"), "N");
+	BOOST_CHECK_EQUAL(k.getkey(static_cast<operation>(30000), "all"), "<none>");
 
 	BOOST_CHECK_EQUAL(k.get_key(" "), ' ');
 	BOOST_CHECK_EQUAL(k.get_key("U"), 'U');

@@ -1,10 +1,10 @@
+#include <config.h>
 #include <configcontainer.h>
 #include <configparser.h>
 #include <logger.h>
 #include <sstream>
 #include <iostream>
 #include <utils.h>
-#include <config.h>
 
 #include <sys/types.h>
 #include <pwd.h>
