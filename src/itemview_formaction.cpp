@@ -63,12 +63,14 @@ void itemview_formaction::prepare() {
 		std::tr1::shared_ptr<rss_feed> feedptr = item->get_feedptr();
 
 		std::string title, feedtitle;
-		if (feedptr->title().length() > 0) {
-			title = feedptr->title();
-		} else if (feedptr->link().length() > 0) {
-			title = feedptr->link();
-		} else if (feedptr->rssurl().length() > 0) {
-			title = feedptr->rssurl();
+		if (feedptr.get() != NULL) {
+			if (feedptr->title().length() > 0) {
+				title = feedptr->title();
+			} else if (feedptr->link().length() > 0) {
+				title = feedptr->link();
+			} else if (feedptr->rssurl().length() > 0) {
+				title = feedptr->rssurl();
+			}
 		}
 		feedtitle = utils::strprintf("%s%s", _("Feed: "), title.c_str());
 		listfmt.add_line(feedtitle, UINT_MAX, view_width);
