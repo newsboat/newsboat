@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-11 12:42+0200\n"
+"POT-Creation-Date: 2008-09-17 23:32+0200\n"
 "PO-Revision-Date: 2008-08-02 15:32+0400\n"
 "Last-Translator: sevenfourk <sevenfourk@gmail.com>\n"
 "Language-Team: Uk <sevenfourk@gmail.com>\n"
@@ -285,20 +285,20 @@ msgstr ""
 msgid "%u unread articles"
 msgstr "%u непрочитаних статей"
 
-#: src/controller.cpp:921 src/formaction.cpp:186
-#: src/itemview_formaction.cpp:77
+#: src/controller.cpp:921 src/formaction.cpp:200
+#: src/itemview_formaction.cpp:79
 msgid "Title: "
 msgstr "Назва: "
 
-#: src/controller.cpp:925 src/itemview_formaction.cpp:82
+#: src/controller.cpp:925 src/itemview_formaction.cpp:84
 msgid "Author: "
 msgstr "Автор: "
 
-#: src/controller.cpp:929 src/itemview_formaction.cpp:91
+#: src/controller.cpp:929 src/itemview_formaction.cpp:93
 msgid "Date: "
 msgstr "Дата: "
 
-#: src/controller.cpp:933 src/itemview_formaction.cpp:87
+#: src/controller.cpp:933 src/itemview_formaction.cpp:89
 msgid "Link: "
 msgstr "Посилання: "
 
@@ -401,18 +401,18 @@ msgid "y"
 msgstr "y"
 
 #: src/feedlist_formaction.cpp:337 src/help_formaction.cpp:83
-#: src/itemlist_formaction.cpp:564 src/itemview_formaction.cpp:259
+#: src/itemlist_formaction.cpp:564 src/itemview_formaction.cpp:261
 #: src/pb_view.cpp:258 src/pb_view.cpp:267 src/urlview_formaction.cpp:97
 msgid "Quit"
 msgstr "Вихід"
 
 #: src/feedlist_formaction.cpp:338 src/itemlist_formaction.cpp:565
-#: src/itemview_formaction.cpp:260
+#: src/itemview_formaction.cpp:262
 msgid "Open"
 msgstr "Відкрити"
 
 #: src/feedlist_formaction.cpp:339 src/itemlist_formaction.cpp:568
-#: src/itemview_formaction.cpp:262
+#: src/itemview_formaction.cpp:264
 msgid "Next Unread"
 msgstr "Наступна непрочитана"
 
@@ -438,7 +438,7 @@ msgid "Search"
 msgstr "Пошук"
 
 #: src/feedlist_formaction.cpp:345 src/itemlist_formaction.cpp:571
-#: src/itemview_formaction.cpp:265 src/pb_view.cpp:200 src/pb_view.cpp:274
+#: src/itemview_formaction.cpp:267 src/pb_view.cpp:200 src/pb_view.cpp:274
 msgid "Help"
 msgstr "Довідка"
 
@@ -493,31 +493,31 @@ msgid "Cancel"
 msgstr "Відміна"
 
 #: src/filebrowser_formaction.cpp:186 src/itemlist_formaction.cpp:566
-#: src/itemview_formaction.cpp:261
+#: src/itemview_formaction.cpp:263
 msgid "Save"
 msgstr "Зберегти"
 
-#: src/formaction.cpp:110 src/formaction.cpp:117
+#: src/formaction.cpp:124 src/formaction.cpp:131
 msgid "usage: set <variable>[=<value>]"
 msgstr "використання: set <змінна>[=<значення>]"
 
-#: src/formaction.cpp:158
+#: src/formaction.cpp:172
 msgid "Saving bookmark..."
 msgstr "Зберігаю закладки..."
 
-#: src/formaction.cpp:161
+#: src/formaction.cpp:175
 msgid "Saved bookmark."
 msgstr "Збережені закладки."
 
-#: src/formaction.cpp:163
+#: src/formaction.cpp:177
 msgid "Error while saving bookmark: "
 msgstr "Помилка при зберіганні закладок: "
 
-#: src/formaction.cpp:185
+#: src/formaction.cpp:199
 msgid "URL: "
 msgstr "URL: "
 
-#: src/formaction.cpp:187
+#: src/formaction.cpp:201
 msgid "Description: "
 msgstr "Опис: "
 
@@ -555,8 +555,8 @@ msgstr "невідомо (помилка)"
 msgid "No item selected!"
 msgstr "Не вибрано нічого!"
 
-#: src/itemlist_formaction.cpp:114 src/itemview_formaction.cpp:95
-#: src/itemview_formaction.cpp:210
+#: src/itemlist_formaction.cpp:114 src/itemview_formaction.cpp:97
+#: src/itemview_formaction.cpp:212
 msgid "Flags: "
 msgstr "Флаги: "
 
@@ -569,7 +569,7 @@ msgid "Error: you can't reload search results."
 msgstr "Помилка: ви не можете перезавантажувати результати пошуку"
 
 #: src/itemlist_formaction.cpp:164 src/itemlist_formaction.cpp:172
-#: src/itemview_formaction.cpp:228 src/itemview_formaction.cpp:237
+#: src/itemview_formaction.cpp:230 src/itemview_formaction.cpp:239
 #: src/view.cpp:462 src/view.cpp:511
 msgid "No unread items."
 msgstr "Немає непрочитаних статей."
@@ -587,7 +587,7 @@ msgstr "Переключення флагу прочитано для стате
 msgid "Error while toggling read flag: %s"
 msgstr "Помилка при переключенні флагу прочитано: %s"
 
-#: src/itemlist_formaction.cpp:368 src/itemview_formaction.cpp:351
+#: src/itemlist_formaction.cpp:368 src/itemview_formaction.cpp:353
 msgid "Flags updated."
 msgstr "Флаги поновлено."
 
@@ -595,74 +595,74 @@ msgstr "Флаги поновлено."
 msgid "Mark All Read"
 msgstr "Позначити всі як прочитані"
 
-#: src/itemlist_formaction.cpp:632 src/itemview_formaction.cpp:174
-#: src/itemview_formaction.cpp:326
+#: src/itemlist_formaction.cpp:632 src/itemview_formaction.cpp:176
+#: src/itemview_formaction.cpp:328
 msgid "Aborted saving."
 msgstr "Збереження перервано."
 
-#: src/itemlist_formaction.cpp:636 src/itemview_formaction.cpp:330
+#: src/itemlist_formaction.cpp:636 src/itemview_formaction.cpp:332
 #, c-format
 msgid "Saved article to %s"
 msgstr "Стаття збережена у %s"
 
-#: src/itemlist_formaction.cpp:638 src/itemview_formaction.cpp:332
+#: src/itemlist_formaction.cpp:638 src/itemview_formaction.cpp:334
 #, c-format
 msgid "Error: couldn't save article to %s"
 msgstr "Помилка: не можу зберегти у %s"
 
-#: src/itemview_formaction.cpp:30 src/itemview_formaction.cpp:410
+#: src/itemview_formaction.cpp:30 src/itemview_formaction.cpp:412
 msgid "Top"
 msgstr "Вершина"
 
-#: src/itemview_formaction.cpp:30 src/itemview_formaction.cpp:412
+#: src/itemview_formaction.cpp:30 src/itemview_formaction.cpp:414
 msgid "Bottom"
 msgstr "Низ"
 
-#: src/itemview_formaction.cpp:73
+#: src/itemview_formaction.cpp:75
 msgid "Feed: "
 msgstr "Тема: "
 
-#: src/itemview_formaction.cpp:100
+#: src/itemview_formaction.cpp:102
 msgid "Podcast Download URL: "
 msgstr "Посилання на завантаження Podcast: "
 
-#: src/itemview_formaction.cpp:100
+#: src/itemview_formaction.cpp:102
 msgid "type: "
 msgstr "тип: "
 
-#: src/itemview_formaction.cpp:144
+#: src/itemview_formaction.cpp:146
 #, c-format
 msgid "Error while marking article as read: %s"
 msgstr "Помилка при позначенні статті як прочитано: %s"
 
-#: src/itemview_formaction.cpp:159
+#: src/itemview_formaction.cpp:161
 #, c-format
 msgid "Added %s to download queue."
 msgstr "Додано %s до черги завантаження."
 
-#: src/itemview_formaction.cpp:178
+#: src/itemview_formaction.cpp:180
 #, c-format
 msgid "Saved article to %s."
 msgstr "Збережено статтю у %s."
 
-#: src/itemview_formaction.cpp:180
+#: src/itemview_formaction.cpp:182
 #, c-format
 msgid "Error: couldn't write article to file %s"
 msgstr "Помилка: не можу записати статтю у файл %s"
 
-#: src/itemview_formaction.cpp:187 src/urlview_formaction.cpp:33
+#: src/itemview_formaction.cpp:189 src/urlview_formaction.cpp:33
 msgid "Starting browser..."
 msgstr "Запускаю браузер..."
 
-#: src/itemview_formaction.cpp:219
+#: src/itemview_formaction.cpp:221
 msgid "URL list empty."
 msgstr "Список URL пустий."
 
-#: src/itemview_formaction.cpp:263 src/urlview_formaction.cpp:98
+#: src/itemview_formaction.cpp:265 src/urlview_formaction.cpp:98
 msgid "Open in Browser"
 msgstr "Відкрити у браузері"
 
-#: src/itemview_formaction.cpp:264
+#: src/itemview_formaction.cpp:266
 msgid "Enqueue"
 msgstr "Поставити у чергу"
 

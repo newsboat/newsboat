@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-11 12:42+0200\n"
+"POT-Creation-Date: 2008-09-17 23:32+0200\n"
 "PO-Revision-Date: 2008-08-28 13:58+0800\n"
 "Last-Translator: Aeglos <aeglos.lin@gmail.com>\n"
 "Language-Team: Traditional Chinese <aeglos.lin@gmail.com>\n"
@@ -272,20 +272,20 @@ msgstr "書籤功能還未設定，請在設定檔中設定變數 `bookmark-cmd'
 msgid "%u unread articles"
 msgstr "%u篇未讀文章"
 
-#: src/controller.cpp:921 src/formaction.cpp:186
-#: src/itemview_formaction.cpp:77
+#: src/controller.cpp:921 src/formaction.cpp:200
+#: src/itemview_formaction.cpp:79
 msgid "Title: "
 msgstr "標題: "
 
-#: src/controller.cpp:925 src/itemview_formaction.cpp:82
+#: src/controller.cpp:925 src/itemview_formaction.cpp:84
 msgid "Author: "
 msgstr "作者: "
 
-#: src/controller.cpp:929 src/itemview_formaction.cpp:91
+#: src/controller.cpp:929 src/itemview_formaction.cpp:93
 msgid "Date: "
 msgstr "日期: "
 
-#: src/controller.cpp:933 src/itemview_formaction.cpp:87
+#: src/controller.cpp:933 src/itemview_formaction.cpp:89
 msgid "Link: "
 msgstr "鏈結: "
 
@@ -388,18 +388,18 @@ msgid "y"
 msgstr "y"
 
 #: src/feedlist_formaction.cpp:337 src/help_formaction.cpp:83
-#: src/itemlist_formaction.cpp:564 src/itemview_formaction.cpp:259
+#: src/itemlist_formaction.cpp:564 src/itemview_formaction.cpp:261
 #: src/pb_view.cpp:258 src/pb_view.cpp:267 src/urlview_formaction.cpp:97
 msgid "Quit"
 msgstr "放棄"
 
 #: src/feedlist_formaction.cpp:338 src/itemlist_formaction.cpp:565
-#: src/itemview_formaction.cpp:260
+#: src/itemview_formaction.cpp:262
 msgid "Open"
 msgstr "打開"
 
 #: src/feedlist_formaction.cpp:339 src/itemlist_formaction.cpp:568
-#: src/itemview_formaction.cpp:262
+#: src/itemview_formaction.cpp:264
 msgid "Next Unread"
 msgstr "下一篇未讀"
 
@@ -425,7 +425,7 @@ msgid "Search"
 msgstr "搜尋"
 
 #: src/feedlist_formaction.cpp:345 src/itemlist_formaction.cpp:571
-#: src/itemview_formaction.cpp:265 src/pb_view.cpp:200 src/pb_view.cpp:274
+#: src/itemview_formaction.cpp:267 src/pb_view.cpp:200 src/pb_view.cpp:274
 msgid "Help"
 msgstr "說明"
 
@@ -480,31 +480,31 @@ msgid "Cancel"
 msgstr "取消"
 
 #: src/filebrowser_formaction.cpp:186 src/itemlist_formaction.cpp:566
-#: src/itemview_formaction.cpp:261
+#: src/itemview_formaction.cpp:263
 msgid "Save"
 msgstr "儲存"
 
-#: src/formaction.cpp:110 src/formaction.cpp:117
+#: src/formaction.cpp:124 src/formaction.cpp:131
 msgid "usage: set <variable>[=<value>]"
 msgstr "用法: set <變數>[=<值>]"
 
-#: src/formaction.cpp:158
+#: src/formaction.cpp:172
 msgid "Saving bookmark..."
 msgstr "儲存書籤..."
 
-#: src/formaction.cpp:161
+#: src/formaction.cpp:175
 msgid "Saved bookmark."
 msgstr "已儲存的書籤."
 
-#: src/formaction.cpp:163
+#: src/formaction.cpp:177
 msgid "Error while saving bookmark: "
 msgstr "在儲存書籤時發生錯誤:"
 
-#: src/formaction.cpp:185
+#: src/formaction.cpp:199
 msgid "URL: "
 msgstr "鏈結: "
 
-#: src/formaction.cpp:187
+#: src/formaction.cpp:201
 msgid "Description: "
 msgstr "描述: "
 
@@ -542,8 +542,8 @@ msgstr "未知（bug）"
 msgid "No item selected!"
 msgstr "沒有選擇任何項目"
 
-#: src/itemlist_formaction.cpp:114 src/itemview_formaction.cpp:95
-#: src/itemview_formaction.cpp:210
+#: src/itemlist_formaction.cpp:114 src/itemview_formaction.cpp:97
+#: src/itemview_formaction.cpp:212
 msgid "Flags: "
 msgstr "標記: "
 
@@ -556,7 +556,7 @@ msgid "Error: you can't reload search results."
 msgstr "錯誤：你不能重新載入所選項目"
 
 #: src/itemlist_formaction.cpp:164 src/itemlist_formaction.cpp:172
-#: src/itemview_formaction.cpp:228 src/itemview_formaction.cpp:237
+#: src/itemview_formaction.cpp:230 src/itemview_formaction.cpp:239
 #: src/view.cpp:462 src/view.cpp:511
 msgid "No unread items."
 msgstr "沒有未讀的文章"
@@ -574,7 +574,7 @@ msgstr "切換文章閱讀標記（已讀/未讀）"
 msgid "Error while toggling read flag: %s"
 msgstr "當切換閱讀標記（已讀/未讀）時出錯: %s"
 
-#: src/itemlist_formaction.cpp:368 src/itemview_formaction.cpp:351
+#: src/itemlist_formaction.cpp:368 src/itemview_formaction.cpp:353
 msgid "Flags updated."
 msgstr "標記已更新"
 
@@ -582,74 +582,74 @@ msgstr "標記已更新"
 msgid "Mark All Read"
 msgstr "標記全部為已讀"
 
-#: src/itemlist_formaction.cpp:632 src/itemview_formaction.cpp:174
-#: src/itemview_formaction.cpp:326
+#: src/itemlist_formaction.cpp:632 src/itemview_formaction.cpp:176
+#: src/itemview_formaction.cpp:328
 msgid "Aborted saving."
 msgstr "放棄儲存"
 
-#: src/itemlist_formaction.cpp:636 src/itemview_formaction.cpp:330
+#: src/itemlist_formaction.cpp:636 src/itemview_formaction.cpp:332
 #, c-format
 msgid "Saved article to %s"
 msgstr "把文章儲存到 %s"
 
-#: src/itemlist_formaction.cpp:638 src/itemview_formaction.cpp:332
+#: src/itemlist_formaction.cpp:638 src/itemview_formaction.cpp:334
 #, c-format
 msgid "Error: couldn't save article to %s"
 msgstr "錯誤：無法儲存文章到 %s"
 
-#: src/itemview_formaction.cpp:30 src/itemview_formaction.cpp:410
+#: src/itemview_formaction.cpp:30 src/itemview_formaction.cpp:412
 msgid "Top"
 msgstr "頂端"
 
-#: src/itemview_formaction.cpp:30 src/itemview_formaction.cpp:412
+#: src/itemview_formaction.cpp:30 src/itemview_formaction.cpp:414
 msgid "Bottom"
 msgstr "底端"
 
-#: src/itemview_formaction.cpp:73
+#: src/itemview_formaction.cpp:75
 msgid "Feed: "
 msgstr "種子: "
 
-#: src/itemview_formaction.cpp:100
+#: src/itemview_formaction.cpp:102
 msgid "Podcast Download URL: "
 msgstr "播客下載的地址: "
 
-#: src/itemview_formaction.cpp:100
+#: src/itemview_formaction.cpp:102
 msgid "type: "
 msgstr "類型: "
 
-#: src/itemview_formaction.cpp:144
+#: src/itemview_formaction.cpp:146
 #, c-format
 msgid "Error while marking article as read: %s"
 msgstr "當標記文章為已讀的時候發生錯誤: %s"
 
-#: src/itemview_formaction.cpp:159
+#: src/itemview_formaction.cpp:161
 #, c-format
 msgid "Added %s to download queue."
 msgstr "將 %s 加入下載隊列"
 
-#: src/itemview_formaction.cpp:178
+#: src/itemview_formaction.cpp:180
 #, c-format
 msgid "Saved article to %s."
 msgstr "將文章保存至 %s "
 
-#: src/itemview_formaction.cpp:180
+#: src/itemview_formaction.cpp:182
 #, c-format
 msgid "Error: couldn't write article to file %s"
 msgstr "錯誤：無法將文章寫至 %s"
 
-#: src/itemview_formaction.cpp:187 src/urlview_formaction.cpp:33
+#: src/itemview_formaction.cpp:189 src/urlview_formaction.cpp:33
 msgid "Starting browser..."
 msgstr "啟動瀏覽器..."
 
-#: src/itemview_formaction.cpp:219
+#: src/itemview_formaction.cpp:221
 msgid "URL list empty."
 msgstr "空白的鏈結列表"
 
-#: src/itemview_formaction.cpp:263 src/urlview_formaction.cpp:98
+#: src/itemview_formaction.cpp:265 src/urlview_formaction.cpp:98
 msgid "Open in Browser"
 msgstr "在瀏覽器裡打開"
 
-#: src/itemview_formaction.cpp:264
+#: src/itemview_formaction.cpp:266
 msgid "Enqueue"
 msgstr "加入隊列"
 

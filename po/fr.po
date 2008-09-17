@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-11 12:42+0200\n"
+"POT-Creation-Date: 2008-09-17 23:32+0200\n"
 "PO-Revision-Date: 2008-08-11 19:13+0200\n"
 "Last-Translator: Nicolas Martyanoff <khaelin@gmail.com>\n"
 "Language-Team: Nicolas Martyanoff <khaelin@gmail.com>\n"
@@ -280,20 +280,20 @@ msgstr ""
 msgid "%u unread articles"
 msgstr "%u articles non-lus"
 
-#: src/controller.cpp:921 src/formaction.cpp:186
-#: src/itemview_formaction.cpp:77
+#: src/controller.cpp:921 src/formaction.cpp:200
+#: src/itemview_formaction.cpp:79
 msgid "Title: "
 msgstr "Titre: "
 
-#: src/controller.cpp:925 src/itemview_formaction.cpp:82
+#: src/controller.cpp:925 src/itemview_formaction.cpp:84
 msgid "Author: "
 msgstr "Auteur: "
 
-#: src/controller.cpp:929 src/itemview_formaction.cpp:91
+#: src/controller.cpp:929 src/itemview_formaction.cpp:93
 msgid "Date: "
 msgstr "Date: "
 
-#: src/controller.cpp:933 src/itemview_formaction.cpp:87
+#: src/controller.cpp:933 src/itemview_formaction.cpp:89
 msgid "Link: "
 msgstr "Lien: "
 
@@ -396,18 +396,18 @@ msgid "y"
 msgstr "o"
 
 #: src/feedlist_formaction.cpp:337 src/help_formaction.cpp:83
-#: src/itemlist_formaction.cpp:564 src/itemview_formaction.cpp:259
+#: src/itemlist_formaction.cpp:564 src/itemview_formaction.cpp:261
 #: src/pb_view.cpp:258 src/pb_view.cpp:267 src/urlview_formaction.cpp:97
 msgid "Quit"
 msgstr "Quitter"
 
 #: src/feedlist_formaction.cpp:338 src/itemlist_formaction.cpp:565
-#: src/itemview_formaction.cpp:260
+#: src/itemview_formaction.cpp:262
 msgid "Open"
 msgstr "Ouvrir"
 
 #: src/feedlist_formaction.cpp:339 src/itemlist_formaction.cpp:568
-#: src/itemview_formaction.cpp:262
+#: src/itemview_formaction.cpp:264
 msgid "Next Unread"
 msgstr "Prochain non-lu"
 
@@ -433,7 +433,7 @@ msgid "Search"
 msgstr "Rechercher"
 
 #: src/feedlist_formaction.cpp:345 src/itemlist_formaction.cpp:571
-#: src/itemview_formaction.cpp:265 src/pb_view.cpp:200 src/pb_view.cpp:274
+#: src/itemview_formaction.cpp:267 src/pb_view.cpp:200 src/pb_view.cpp:274
 msgid "Help"
 msgstr "Aide"
 
@@ -488,31 +488,31 @@ msgid "Cancel"
 msgstr "Annuler"
 
 #: src/filebrowser_formaction.cpp:186 src/itemlist_formaction.cpp:566
-#: src/itemview_formaction.cpp:261
+#: src/itemview_formaction.cpp:263
 msgid "Save"
 msgstr "Enregistrer"
 
-#: src/formaction.cpp:110 src/formaction.cpp:117
+#: src/formaction.cpp:124 src/formaction.cpp:131
 msgid "usage: set <variable>[=<value>]"
 msgstr "Mode d'emploi: set <variable>[=<value>]"
 
-#: src/formaction.cpp:158
+#: src/formaction.cpp:172
 msgid "Saving bookmark..."
 msgstr "Enregistrement du marque-page..."
 
-#: src/formaction.cpp:161
+#: src/formaction.cpp:175
 msgid "Saved bookmark."
 msgstr "Marque page sauvegardé."
 
-#: src/formaction.cpp:163
+#: src/formaction.cpp:177
 msgid "Error while saving bookmark: "
 msgstr "Erreur lors de l'enregistrement du marque-page: "
 
-#: src/formaction.cpp:185
+#: src/formaction.cpp:199
 msgid "URL: "
 msgstr "URL: "
 
-#: src/formaction.cpp:187
+#: src/formaction.cpp:201
 msgid "Description: "
 msgstr "Description: "
 
@@ -550,8 +550,8 @@ msgstr "inconnu (bug)"
 msgid "No item selected!"
 msgstr "Aucun élément sélectionné"
 
-#: src/itemlist_formaction.cpp:114 src/itemview_formaction.cpp:95
-#: src/itemview_formaction.cpp:210
+#: src/itemlist_formaction.cpp:114 src/itemview_formaction.cpp:97
+#: src/itemview_formaction.cpp:212
 msgid "Flags: "
 msgstr "Drapeaux: "
 
@@ -564,7 +564,7 @@ msgid "Error: you can't reload search results."
 msgstr "Erreur: vous ne pouvez recharger les résultats de recherche."
 
 #: src/itemlist_formaction.cpp:164 src/itemlist_formaction.cpp:172
-#: src/itemview_formaction.cpp:228 src/itemview_formaction.cpp:237
+#: src/itemview_formaction.cpp:230 src/itemview_formaction.cpp:239
 #: src/view.cpp:462 src/view.cpp:511
 msgid "No unread items."
 msgstr "Aucun élément non-lu."
@@ -582,7 +582,7 @@ msgstr "Basculer le drapeau de lecture pour cet article..."
 msgid "Error while toggling read flag: %s"
 msgstr "Erreur lors de la bascule du drapeau de lecture: %s"
 
-#: src/itemlist_formaction.cpp:368 src/itemview_formaction.cpp:351
+#: src/itemlist_formaction.cpp:368 src/itemview_formaction.cpp:353
 msgid "Flags updated."
 msgstr "Drapeaux mis-à-jour"
 
@@ -590,74 +590,74 @@ msgstr "Drapeaux mis-à-jour"
 msgid "Mark All Read"
 msgstr "Notez Tous Non-Lus"
 
-#: src/itemlist_formaction.cpp:632 src/itemview_formaction.cpp:174
-#: src/itemview_formaction.cpp:326
+#: src/itemlist_formaction.cpp:632 src/itemview_formaction.cpp:176
+#: src/itemview_formaction.cpp:328
 msgid "Aborted saving."
 msgstr "Enregistrement avorté."
 
-#: src/itemlist_formaction.cpp:636 src/itemview_formaction.cpp:330
+#: src/itemlist_formaction.cpp:636 src/itemview_formaction.cpp:332
 #, c-format
 msgid "Saved article to %s"
 msgstr "Article enregistré dans %s"
 
-#: src/itemlist_formaction.cpp:638 src/itemview_formaction.cpp:332
+#: src/itemlist_formaction.cpp:638 src/itemview_formaction.cpp:334
 #, c-format
 msgid "Error: couldn't save article to %s"
 msgstr "Erreur: impossible d'enregistrer l'article dans %s"
 
-#: src/itemview_formaction.cpp:30 src/itemview_formaction.cpp:410
+#: src/itemview_formaction.cpp:30 src/itemview_formaction.cpp:412
 msgid "Top"
 msgstr "Haut"
 
-#: src/itemview_formaction.cpp:30 src/itemview_formaction.cpp:412
+#: src/itemview_formaction.cpp:30 src/itemview_formaction.cpp:414
 msgid "Bottom"
 msgstr "Bas"
 
-#: src/itemview_formaction.cpp:73
+#: src/itemview_formaction.cpp:75
 msgid "Feed: "
 msgstr "Fil: "
 
-#: src/itemview_formaction.cpp:100
+#: src/itemview_formaction.cpp:102
 msgid "Podcast Download URL: "
 msgstr "URL de téléchargement de Podcast: "
 
-#: src/itemview_formaction.cpp:100
+#: src/itemview_formaction.cpp:102
 msgid "type: "
 msgstr "type: "
 
-#: src/itemview_formaction.cpp:144
+#: src/itemview_formaction.cpp:146
 #, c-format
 msgid "Error while marking article as read: %s"
 msgstr "Erreur en notant un article comme lu: %s"
 
-#: src/itemview_formaction.cpp:159
+#: src/itemview_formaction.cpp:161
 #, c-format
 msgid "Added %s to download queue."
 msgstr "Ajout de %s à la queue de téléchargement."
 
-#: src/itemview_formaction.cpp:178
+#: src/itemview_formaction.cpp:180
 #, c-format
 msgid "Saved article to %s."
 msgstr "Article enregistré dans %s."
 
-#: src/itemview_formaction.cpp:180
+#: src/itemview_formaction.cpp:182
 #, c-format
 msgid "Error: couldn't write article to file %s"
 msgstr "Erreur, impossible d'écrire l'article dans %s"
 
-#: src/itemview_formaction.cpp:187 src/urlview_formaction.cpp:33
+#: src/itemview_formaction.cpp:189 src/urlview_formaction.cpp:33
 msgid "Starting browser..."
 msgstr "Lancement du navigateur..."
 
-#: src/itemview_formaction.cpp:219
+#: src/itemview_formaction.cpp:221
 msgid "URL list empty."
 msgstr "List d'URL vide"
 
-#: src/itemview_formaction.cpp:263 src/urlview_formaction.cpp:98
+#: src/itemview_formaction.cpp:265 src/urlview_formaction.cpp:98
 msgid "Open in Browser"
 msgstr "Ouvrir dans le navigateur"
 
-#: src/itemview_formaction.cpp:264
+#: src/itemview_formaction.cpp:266
 msgid "Enqueue"
 msgstr "Mettre à la Queue"
 
