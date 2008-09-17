@@ -7,6 +7,7 @@ Changes for newsbeuter:
 	Added the ability to edit the list of subscribed URLs from newsbeuter through a text editor.
 	Implemented a file format to exchange information about read articles between different newsbeuter instances.
 	Extended keymap to allow dialog-specific configuration.
+	Extended macros to enable modification of configuration variables.
 
 1.2 (2008-09-02):
 	Fixed crash in case of invalid color/attribute names in the configuration

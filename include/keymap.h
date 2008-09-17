@@ -101,6 +101,7 @@ namespace newsbeuter {
 						OP_INT_QNA_PREVHIST,
 
 						OP_INT_RESIZE,
+						OP_INT_SET,
 
 						OP_INT_MAX
 						};

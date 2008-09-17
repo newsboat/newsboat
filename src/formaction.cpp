@@ -64,6 +64,20 @@ void formaction::process_op(operation op, bool automatic, std::vector<std::strin
 		case OP_CMDLINE: 
 			start_cmdline();
 			break;
+		case OP_INT_SET:
+			if (automatic) {
+				std::string cmdline = "set ";
+				if (args) {
+					for (std::vector<std::string>::iterator it=args->begin();it!=args->end();it++) {
+						cmdline.append(utils::strprintf("%s ", stfl::quote(*it).c_str()));
+					}
+				}
+				GetLogger().log(LOG_DEBUG, "formaction::process_op: running commandline `%s'", cmdline.c_str());
+				this->handle_cmdline(cmdline);
+			} else {
+				GetLogger().log(LOG_WARN, "formaction::process_op: got OP_INT_SET, but not automatic");
+			}
+			break;
 		case OP_INT_CANCEL_QNA:
 			f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
 			break;
