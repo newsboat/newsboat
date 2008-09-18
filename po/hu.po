@@ -187,11 +187,11 @@ msgstr "Nem sikerült betölteni a forrásokat az adatbázisból: "
 
 #: src/controller.cpp:413
 msgid "Importing list of read articles..."
-msgstr ""
+msgstr "Olvasott cikkek listájának importálása..."
 
 #: src/controller.cpp:422
 msgid "Exporting list of read articles..."
-msgstr ""
+msgstr "Olvasott cikkek listájának exportálása..."
 
 #: src/controller.cpp:449
 msgid "Cleaning up cache..."
@@ -225,7 +225,7 @@ msgid "invalid feed index (bug)"
 msgstr "érvénytelen hírforrás index (bug)"
 
 #: src/controller.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] "
@@ -248,7 +248,8 @@ msgid ""
 "-h              this help\n"
 msgstr ""
 "%s %s\n"
-"használat: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-h]\n"
+"használat: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ] "
+" [-h]\n"
 "-e              exportálás OPML-be a stdout-ra\n"
 "-r              hírforrások frissítése indításkor\n"
 "-i <file>       OPML file importálása\n"
@@ -262,6 +263,8 @@ msgstr ""
 "-l <loglevel>   log-olási szint beállítása (értékei lehetnek: 1-től 6-"
 "ig)\n"
 "-d <logfile>    <logfile> használata a log-ok tárolására\n"
+"-E <file>       olvasott cikkek exportálása <file>-ba\n"
+"-I <file>       olvasott cikkek importálása <file>-ból\n"
 "-h              ez a súgó\n"
 
 #: src/controller.cpp:703
@@ -328,9 +331,8 @@ msgid "incomplete"
 msgstr "befejezetlen"
 
 #: src/download.cpp:56
-#, fuzzy
 msgid "played"
-msgstr "Lejátszás"
+msgstr "lejátszott"
 
 #: src/download.cpp:58
 msgid "unknown (bug)."
@@ -825,7 +827,7 @@ msgstr "Végleges törlés"
 
 #: src/keymap.cpp:61
 msgid "Edit subscribed URLs"
-msgstr ""
+msgstr "Feliratkozott URL-ek szerkesztése"
 
 #: src/pb_controller.cpp:166
 msgid "Cleaning up queue..."

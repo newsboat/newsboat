@@ -226,7 +226,7 @@ msgid "invalid feed index (bug)"
 msgstr "непрацездатний індекс теми (помилка)"
 
 #: src/controller.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] "
@@ -265,6 +265,8 @@ msgstr ""
 "-l <рівень логу>       записувати лог з відповідним рівнем (правильні "
 "значення: від 1 до 6)\n"
 "-d <файл логу>         записувати <файл логу> у файл\n"
+"-E <файл>              експортувати спикок прочитаних статей у <файл>\n"
+"-I <файл>              імпортувати спикок прочитаних статей у <файл>\n"
 "-h                     ця довідка\n"
 
 #: src/controller.cpp:703
@@ -331,9 +333,8 @@ msgid "incomplete"
 msgstr "незавершено"
 
 #: src/download.cpp:56
-#, fuzzy
 msgid "played"
-msgstr "Програти"
+msgstr "програно"
 
 #: src/download.cpp:58
 msgid "unknown (bug)."
@@ -935,6 +936,3 @@ msgstr "Помилка: теми не містять елементів!"
 #: src/view.cpp:356
 msgid "Updating query feed..."
 msgstr "Поновлюю дану тему..."
-
-#~ msgid "invalid attribute index"
-#~ msgstr "невірний атрибут індекса"
