@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: tr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-17 23:32+0200\n"
-"PO-Revision-Date: 2008-08-12 06:52+0300\n"
+"PO-Revision-Date: 2008-09-18 15:41+0300\n"
 "Last-Translator: H.Gökhan SARI <hsa2@difuzyon.net>\n"
 "Language-Team: Türkçe <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: src/cache.cpp:182
 #, c-format
@@ -187,11 +187,11 @@ msgstr "Veritabanından beslemeler alınırken hata oluştu: "
 
 #: src/controller.cpp:413
 msgid "Importing list of read articles..."
-msgstr ""
+msgstr "Okunmuş yazıların listesi içe aktarılıyor..."
 
 #: src/controller.cpp:422
 msgid "Exporting list of read articles..."
-msgstr ""
+msgstr "Okunmuş yazıların listesi dışa aktarılıyor..."
 
 #: src/controller.cpp:449
 msgid "Cleaning up cache..."
@@ -225,7 +225,7 @@ msgid "invalid feed index (bug)"
 msgstr "geçersiz besleme indeksi (bug)"
 
 #: src/controller.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] "
@@ -250,17 +250,17 @@ msgstr ""
 "%s %s\n"
 "usage: %s [-i <file>|-e] [-u <dosya>] [-c <önbellekdosyası>] [-x "
 "<komut> ...] [-h]\n"
-"-e                     OPML dosya içeriğini görüntüle\n"
-"-r                     açılışta beslemeleri yenile\n"
-"-i <dosya>             bir OPML dosyasını içe aktar\n"
-"-u <adresdosyası>      <adresdosyası>'ndan besleme adreslerini oku\n"
-"-c <önbellekdosyası>   <önbellekdosyası>'nı önbellek dosyası olarak kullan\n"
-"-C <ayardosyası>       <ayardosyası>'ndan ayarları oku\n"
-"-v                     önbelleği boşalt\n"
-"-x <komut>...          komutların listesi çalıştır\n"
-"-o                     çevrimdışı moda geç\n"
-"-V                     version bilgisini göster\n"
-"-h                     bu yardım metnini göster\n"
+"-e                    OPML dosya içeriğini görüntüle\n"
+"-r                    açılışta beslemeleri yenile\n"
+"-i <dosya>            bir OPML dosyasını içe aktar\n"
+"-u <adresdosyası>     <adresdosyası>'ndan besleme adreslerini oku\n"
+"-c <önbellekdosyası>  <önbellekdosyası>'nı önbellek dosyası olarak kullan\n"
+"-C <ayardosyası>      <ayardosyası>'ndan ayarları oku\n"
+"-v                    önbelleği boşalt\n"
+"-x <komut>...         komutların listesi çalıştır\n"
+"-o                    çevrimdışı moda geç\n"
+"-V                    version bilgisini göster\n"
+"-h                    bu yardım metnini göster\n"
 
 #: src/controller.cpp:703
 #, c-format
@@ -326,9 +326,8 @@ msgid "incomplete"
 msgstr "eksik"
 
 #: src/download.cpp:56
-#, fuzzy
 msgid "played"
-msgstr "Oynat"
+msgstr "oynatıldı"
 
 #: src/download.cpp:58
 msgid "unknown (bug)."
@@ -823,7 +822,7 @@ msgstr "Silinen yazıları temizle"
 
 #: src/keymap.cpp:61
 msgid "Edit subscribed URLs"
-msgstr ""
+msgstr "Abone olunan adresleri düzenle"
 
 #: src/pb_controller.cpp:166
 msgid "Cleaning up queue..."
