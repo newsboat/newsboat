@@ -11,12 +11,12 @@ verifier = Tuitest::Verifier.new("test-html.rb.log")
 Tuitest.run("../newsbeuter -c cache -C /dev/null -u urls-html")
 
 
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(0, 0, "newsbeuter ", 5000)
 Tuitest.keypress("r"[0])
 Tuitest.keypress(10)
 Tuitest.keypress(10)
 
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(0, 24, " 'HTML Item 1'                                          ", 5000)
 # begin auto-generated verification #1 
 verifier.expect(0, 24, " 'HTML Item 1'                                          ")
 verifier.expect(1, 0, "Feed: HTML rendering testbed feed")
@@ -42,7 +42,7 @@ verifier.expect(23, 25, "n:Next Unread o:Open in Browser e:Enqueue ?:Help Top  "
 
 Tuitest.keypress("n"[0])
 
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(0, 36, "2", 5000)
 # begin auto-generated verification #2 
 verifier.expect(0, 36, "2")
 verifier.expect(2, 17, "2")
@@ -68,7 +68,7 @@ verifier.expect(22, 0, "~                                                       
 
 Tuitest.keypress("n"[0])
 
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(0, 36, "3", 5000)
 # begin auto-generated verification #3 
 verifier.expect(0, 36, "3")
 verifier.expect(2, 17, "3")

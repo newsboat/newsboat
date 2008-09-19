@@ -11,7 +11,7 @@ verifier = Tuitest::Verifier.new("test-itemview.rb.log")
 Tuitest.run("../newsbeuter -c cache -C /dev/null -u urls-tuitest1")
 
 
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(0, 0, "newsbeuter ")
 Tuitest.keypress("r"[0])
 Tuitest.keypress(10)
 Tuitest.keypress(10)
@@ -20,6 +20,7 @@ Tuitest.keypress("b"[0])
 Tuitest.keypress(21)
 
 Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(7, 0, "                             ", 5000)
 # begin auto-generated verification #1 
 verifier.expect(7, 0, "                             ")
 verifier.expect(8, 0, "<p>This is some example content. </p>")
@@ -35,7 +36,7 @@ verifier.expect(16, 0, " ")
 
 Tuitest.keypress(21)
 
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(7, 0, "This is some example content.", 5000)
 # begin auto-generated verification #2 
 verifier.expect(7, 0, "This is some example content.")
 verifier.expect(8, 0, "                                     ")
@@ -57,7 +58,7 @@ Tuitest.keypress(10)
 Tuitest.keypress(10)
 Tuitest.keypress(10)
 
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(24, 0, "Error while saving bookmark: bookmarking support is not configured. Please set t", 5000)
 # begin auto-generated verification #3 
 verifier.expect(24, 0, "Error while saving bookmark: bookmarking support is not configured. Please set t")
 # end auto-generated verification #3 

@@ -23,7 +23,7 @@ Tuitest.keypress("r"[0])
 Tuitest.keypress(10)
 Tuitest.keypress("A"[0])
 
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(0, 58, "0", 5000)
 verifier.expect(0, 58, "0")
 verifier.expect(1, 5, " ")
 verifier.expect(2, 5, " ")
@@ -35,7 +35,7 @@ Tuitest.keypress("N"[0])
 Tuitest.keypress("N"[0])
 Tuitest.keypress("N"[0])
 
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(0, 58, "3", 5000)
 verifier.expect(0, 58, "3")
 verifier.expect(1, 5, "N")
 verifier.expect(2, 5, "N")
@@ -48,6 +48,7 @@ Tuitest.keypress(12)
 Tuitest.keypress("n"[0])
 
 Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(0, 39, "2", 5000)
 verifier.expect(0, 39, "2")
 verifier.expect(2, 20, "2")
 verifier.expect(4, 40, "2")
@@ -64,7 +65,7 @@ verifier.expect(15, 0, "~")
 
 Tuitest.keypress("n"[0])
 
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(0, 39, "3", 5000)
 verifier.expect(0, 39, "3")
 verifier.expect(2, 20, "3")
 verifier.expect(4, 40, "3")
@@ -77,7 +78,7 @@ verifier.expect(11, 0, "[1]: http://slashdot.org/ (link)")
 
 Tuitest.keypress("n"[0])
 
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(0, 24, "s in feed 'RSS 2.0 testbed feed' (0 unread, 3 total) - h")
 verifier.expect(0, 24, "s in feed 'RSS 2.0 testbed feed' (0 unread, 3 total) - h")
 verifier.expect(1, 0, "   1    Aug 30   RSS 2.0 Item 1")
 verifier.expect(2, 0, "   2    Aug 29   RSS 2.0 Item 2")
@@ -110,43 +111,43 @@ Tuitest.keypress("d"[0])
 Tuitest.keypress("D"[0])
 Tuitest.keypress("$"[0])
 
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(0, 68, "2", 5000)
 verifier.expect(0, 68, "2")
 verifier.expect(3, 3, "                            ")
 
 Tuitest.keypress("/"[0])
 
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(24, 0, "Search for:", 5000)
 verifier.expect(24, 0, "Search for:")
 
 Tuitest.keypress(10)
 
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(24, 0, "           ", 5000)
 verifier.expect(24, 0, "           ")
 
 Tuitest.keypress("f"[0])
 
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(24, 0, "No filters defined.", 5000)
 verifier.expect(24, 0, "No filters defined.")
 
 Tuitest.keypress(2)
 
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(24, 0, "URL: http://testbed.newsbeuter.org/item2.html", 5000)
 verifier.expect(24, 0, "URL: http://testbed.newsbeuter.org/item2.html")
 
 Tuitest.keypress(10)
 
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(24, 0, "Title: RSS 2.0 Item 2", 5000)
 verifier.expect(24, 0, "Title: RSS 2.0 Item 2                        ")
 
 Tuitest.keypress(10)
 
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(24, 0, "Description:", 5000)
 verifier.expect(24, 0, "Description:         ")
 
 Tuitest.keypress(10)
 
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(24, 0, "Error while saving bookmark: bookmarking support is not configured. Please set t", 5000)
 verifier.expect(24, 0, "Error while saving bookmark: bookmarking support is not configured. Please set t")
 
 Tuitest.keypress(259)

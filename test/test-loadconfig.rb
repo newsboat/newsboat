@@ -11,9 +11,7 @@ verifier = Tuitest::Verifier.new("test-loadconfig.rb.log")
 Tuitest.run("../newsbeuter -c cache -C config-example -u urls-tuitest1")
 
 
-Tuitest.wait_until_idle
-
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(0, 17, "Your feeds (0 unread, 1 total)", 5000)
 # begin auto-generated verification #1 
 verifier.expect(0, 17, "Your feeds (0 unread, 1 total)")
 verifier.expect(1, 3, "1         (0/0) http://testbed.newsbeuter.org/rss20.xml")

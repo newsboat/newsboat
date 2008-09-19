@@ -9,11 +9,11 @@ verifier = Tuitest::Verifier.new("test-reloadall.rb.log")
 
 
 Tuitest.run("../newsbeuter -c cache -C /dev/null -u urls-tuitest1")
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(0, 0, "newsbeuter ", 5000)
 
 Tuitest.keypress("R"[0])
 
-Tuitest.wait_until_idle
+Tuitest.wait_until_expected_text(0, 29, "1", 5000)
 verifier.expect(0, 29, "1")
 verifier.expect(1, 5, "N       (3/3) RSS 2.0 testbed feed                   ")
 
