@@ -11,7 +11,7 @@
 require 'tuitest'
 
 Tuitest.init
-verifier = Tuitest::Verifier.new("test-basic-ops.rb.log")
+verifier = Tuitest::Verifier.new("test-basic-ops.rb.log", "RESULT-test-basic-ops.rb.xml")
 
 Kernel.system("rm -f cache")
 

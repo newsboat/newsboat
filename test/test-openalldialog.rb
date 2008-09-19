@@ -5,7 +5,7 @@ require 'tuitest'
 Kernel.system("rm -f cache")
 
 Tuitest.init
-verifier = Tuitest::Verifier.new("test-openalldialog.rb.log")
+verifier = Tuitest::Verifier.new("test-openalldialog.rb.log", "RESULT-test-openalldialog.rb.xml")
 
 
 Tuitest.run("../newsbeuter -c cache -C /dev/null -u urls-tuitest1")

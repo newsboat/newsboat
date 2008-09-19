@@ -5,7 +5,7 @@ require 'tuitest'
 Kernel.system("rm -f cache")
 
 Tuitest.init
-verifier = Tuitest::Verifier.new("test-reloadthread.rb.log")
+verifier = Tuitest::Verifier.new("test-reloadthread.rb.log", "RESULT-test-reloadthread.rb.xml")
 
 
 Tuitest.run("../newsbeuter -c cache -C config-reloadthread -u urls-tuitest1")
