@@ -8,7 +8,7 @@ Changes for newsbeuter:
 	Implemented a file format to exchange information about read articles between different newsbeuter instances.
 	Extended keymap to allow dialog-specific configuration.
 	Extended macros to enable modification of configuration variables.
-	Implemented configuration option "feed-sortorder" to sort the feed list by the first tag.
+	Implemented configuration option "feed-sort-order" to sort the feed list by the first tag.
 
 1.2 (2008-09-02):
 	Fixed crash in case of invalid color/attribute names in the configuration

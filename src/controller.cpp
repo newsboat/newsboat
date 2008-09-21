@@ -1084,7 +1084,7 @@ struct sort_feeds_by_firsttag : public std::binary_function<const std::tr1::shar
 
 
 void controller::sort_feeds() {
-	std::string sortmethod = cfg->get_configvalue("feed-sortorder");
+	std::string sortmethod = cfg->get_configvalue("feed-sort-order");
 	if (sortmethod == "none") {
 		// that's the default, do nothing
 	} else if (sortmethod == "firsttag") {

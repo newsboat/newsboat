@@ -587,6 +587,7 @@ l:Feed link
 L:Feed RSS URL
 n:"unread" flag field
 t:Feed title
+T:First tag of a feed in the URLs file
 u:"unread/total" field
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
