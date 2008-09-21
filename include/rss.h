@@ -134,6 +134,7 @@ namespace newsbeuter {
 			void set_tags(const std::vector<std::string>& tags);
 			bool matches_tag(const std::string& tag);
 			std::string get_tags();
+			std::string get_firsttag();
 
 			virtual bool has_attribute(const std::string& attribname);
 			virtual std::string get_attribute(const std::string& attribname);

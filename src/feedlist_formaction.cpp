@@ -605,6 +605,7 @@ std::string feedlist_formaction::format_line(const std::string& feedlist_format,
 	fmt.register_fmt('u', utils::strprintf("(%u/%u)",unread_count,static_cast<unsigned int>(feed->items().size())));
 	fmt.register_fmt('n', unread_count > 0 ? "N" : " ");
 	fmt.register_fmt('t', get_title(feed));
+	fmt.register_fmt('T', feed->get_firsttag());
 	fmt.register_fmt('l', feed->link());
 	fmt.register_fmt('L', feed->rssurl());
 	fmt.register_fmt('d', feed->description());

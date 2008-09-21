@@ -120,6 +120,12 @@ bool rss_feed::matches_tag(const std::string& tag) {
 	return false;
 }
 
+std::string rss_feed::get_firsttag() {
+	if (tags_.size() == 0)
+		return "";
+	return tags_[0];
+}
+
 std::string rss_feed::get_tags() {
 	std::string tags;
 	for (std::vector<std::string>::iterator it=tags_.begin();it!=tags_.end();++it) {

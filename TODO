@@ -5,8 +5,7 @@ TODO:
 - add an auto-flag configuration command to automatically flag articles that match a certain query
 - when reload is finished, the focus shall be in the current form's list
 - per-feed refresh settings
-- replace std::vector<rss_item> with std::vector<std::tr1::shared_ptr<rss_item> > as a possible fix against these weird crashes.
-  beta tester: mhellwig@in-ulm.de (regular crashes on sparc Linux)
+- write documentation on feed-sortorder and related changes
 
 DONE:
 - clean up items that have been added but whose URL has been removed from the config file.
@@ -123,3 +122,5 @@ DONE:
 - add a second "downloaded, but unlistened" queue to podbeuter (solved by marking downloaded but unplayed files in the queue file)
 - implement "newsrc" style file format to exchange information about read articles.
 - make ":<number>" work on urlview dialog
+- replace std::vector<rss_item> with std::vector<std::tr1::shared_ptr<rss_item> > as a possible fix against these weird crashes.
+  beta tester: mhellwig@in-ulm.de (regular crashes on sparc Linux)

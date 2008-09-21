@@ -19,6 +19,8 @@
 #include <iostream>
 #include <fstream>
 #include <cerrno>
+#include <algorithm>
+#include <functional>
 
 #include <sys/time.h>
 #include <ctime>
@@ -396,6 +398,8 @@ void controller::run(int argc, char * argv[]) {
 		}
 		feeds.push_back(feed);
 	}
+
+	sort_feeds();
 
 	std::vector<std::string> tags = urlcfg->get_alltags();
 
@@ -855,6 +859,8 @@ void controller::reload_urls_file() {
 
 	feeds = new_feeds;
 
+	sort_feeds();
+
 	update_feedlist();
 }
 
@@ -1063,6 +1069,26 @@ void controller::export_read_information(const std::string& readinfofile) {
 		for (std::vector<std::string>::iterator it=guids.begin();it!=guids.end();it++) {
 			f << *it << std::endl;
 		}
+	}
+}
+
+struct sort_feeds_by_firsttag : public std::binary_function<const std::tr1::shared_ptr<rss_feed>&, const std::tr1::shared_ptr<rss_feed>&, bool> {
+	sort_feeds_by_firsttag() { }
+	bool operator()(const std::tr1::shared_ptr<rss_feed>& a, const std::tr1::shared_ptr<rss_feed>& b) {
+		if (a->get_firsttag().length() == 0 || b->get_firsttag().length() == 0) {
+			return a->get_firsttag().length() > b->get_firsttag().length();
+		}
+		return strcasecmp(a->get_firsttag().c_str(), b->get_firsttag().c_str()) < 0;
+	}
+};
+
+
+void controller::sort_feeds() {
+	std::string sortmethod = cfg->get_configvalue("feed-sortorder");
+	if (sortmethod == "none") {
+		// that's the default, do nothing
+	} else if (sortmethod == "firsttag") {
+		std::stable_sort(feeds.begin(), feeds.end(), sort_feeds_by_firsttag());
 	}
 }
 

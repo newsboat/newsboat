@@ -82,6 +82,8 @@ namespace newsbeuter {
 			void import_read_information(const std::string& readinfofile);
 			void export_read_information(const std::string& readinfofile);
 
+			void sort_feeds();
+
 			view * v;
 			urlreader * urlcfg;
 			cache * rsscache;
