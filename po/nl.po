@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: newsbeuter 0.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-17 23:32+0200\n"
-"PO-Revision-Date: 2008-08-13 12:19+0200\n"
+"PO-Revision-Date: 2008-09-23 22:03+0200\n"
 "Last-Translator: Bart Van Loon <bart@zeropoint.it>\n"
 "Language-Team: Dutch <bart@zeropoint.it>\n"
 "MIME-Version: 1.0\n"
@@ -186,11 +186,11 @@ msgstr "Fout bij het laden van de feeds van de database: "
 
 #: src/controller.cpp:413
 msgid "Importing list of read articles..."
-msgstr ""
+msgstr "Bezig met importeren van lijst van gelezen artikels..."
 
 #: src/controller.cpp:422
 msgid "Exporting list of read articles..."
-msgstr ""
+msgstr "Bezig met exporteren van lijst van gelezen artikels..."
 
 #: src/controller.cpp:449
 msgid "Cleaning up cache..."
@@ -224,7 +224,7 @@ msgid "invalid feed index (bug)"
 msgstr "ongeldige feed index (bug)"
 
 #: src/controller.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] "
@@ -262,6 +262,8 @@ msgstr ""
 "-l <logniveau>     schrijf een log met een zeker logniveau (geldige waarden: "
 "1 tot 6)\n"
 "-d <logbestand>    gebruik <logbestand> als output logbestand\n"
+"-E <bestand>       exporteer lijst van gelezen artikels naar <bestand>\n"
+"-I <bestand>       importeer lijst van gelezen artikels van <bestand>\n"
 "-h                 deze hulptekst\n"
 
 #: src/controller.cpp:703
@@ -328,9 +330,8 @@ msgid "incomplete"
 msgstr "onvolledig"
 
 #: src/download.cpp:56
-#, fuzzy
 msgid "played"
-msgstr "Afspelen"
+msgstr "Afgespeeld"
 
 #: src/download.cpp:58
 msgid "unknown (bug)."
@@ -825,7 +826,7 @@ msgstr "Verwijder verwijderde artikelen definitief"
 
 #: src/keymap.cpp:61
 msgid "Edit subscribed URLs"
-msgstr ""
+msgstr "Wijzig geabonneerde URLs"
 
 #: src/pb_controller.cpp:166
 msgid "Cleaning up queue..."
