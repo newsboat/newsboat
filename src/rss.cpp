@@ -129,7 +129,7 @@ std::string rss_feed::get_firsttag() {
 std::string rss_feed::get_tags() {
 	std::string tags;
 	for (std::vector<std::string>::iterator it=tags_.begin();it!=tags_.end();++it) {
-		if (it->substr(0,1) == "~") {
+		if (it->substr(0,1) != "~") {
 			tags.append(*it);
 			tags.append(" ");
 		}

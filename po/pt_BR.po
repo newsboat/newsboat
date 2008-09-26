@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-17 23:32+0200\n"
-"PO-Revision-Date: 2008-08-14 17:21-0300\n"
+"PO-Revision-Date: 2008-09-25 14:15-0300\n"
 "Last-Translator: Adiel Mittmann <adiel@inf.ufsc.br>\n"
 "Language-Team: Português do Brasil\n"
 "MIME-Version: 1.0\n"
@@ -31,8 +31,7 @@ msgstr ""
 
 #: src/configcontainer.cpp:65
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
-msgstr ""
-"%N %V - Suas fontes RSS (%u não lidas, %t no total)%?T? - etiqueta '%T'&?"
+msgstr "%N %V - Suas fontes RSS (%u não lidas, %t no total)%?T? - etiqueta '%T'&?"
 
 #: src/configcontainer.cpp:66 src/configcontainer.cpp:74
 msgid "%N %V - URLs"
@@ -106,8 +105,7 @@ msgstr "Erro fatal: não foi possível determinar o diretório do usuário."
 
 #: src/controller.cpp:73 src/pb_controller.cpp:47
 #, c-format
-msgid ""
-"Please set the HOME environment variable or add a valid user for UID %u!"
+msgid "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
 "Por favor defina a variável de ambiente HOME ou adicione um usuário válido "
 "para o UID %u!"
@@ -190,11 +188,11 @@ msgstr "Erro carregando os artigos do banco de dados: "
 
 #: src/controller.cpp:413
 msgid "Importing list of read articles..."
-msgstr ""
+msgstr "Importando lista de artigos lidos..."
 
 #: src/controller.cpp:422
 msgid "Exporting list of read articles..."
-msgstr ""
+msgstr "Exportando lista de artigos lidos..."
 
 #: src/controller.cpp:449
 msgid "Cleaning up cache..."
@@ -228,7 +226,7 @@ msgid "invalid feed index (bug)"
 msgstr "índice de fonte RSS inválido (erro de software)"
 
 #: src/controller.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] "
@@ -260,12 +258,15 @@ msgstr ""
 "-c <arquivocache>  usar o <arquivocache> como arquivo de cache\n"
 "-C <arquivoconfig> ler configuração do <arquivoconfig>\n"
 "-v                 limpar cache completamente\n"
+"-x                 executar lista de comandos"
 "-o                 ativar modo sem conexão (só se aplica ao modo de "
 "sincronização do bloglines)\n"
 "-V                 obter informação de versão\n"
 "-l <nívellog>      escrever um arquivo de log com um certo nível de log "
 "(valores válidos de 1 a 6)\n"
 "-d <arquivolog>    usar o <arquivolog> como arquivo de log de saída\n"
+"-E <arquivo>       exportar lista de artigos lidos para o <arquivo>\n"
+"-I <arquivo>       importar lista de artigos lidos do <arquivo>\n"
 "-h                 esta ajuda\n"
 
 #: src/controller.cpp:703
@@ -332,9 +333,8 @@ msgid "incomplete"
 msgstr "incompleto"
 
 #: src/download.cpp:56
-#, fuzzy
 msgid "played"
-msgstr "Tocar"
+msgstr "tocado"
 
 #: src/download.cpp:58
 msgid "unknown (bug)."
@@ -829,7 +829,7 @@ msgstr "Eliminar artigos excluídos"
 
 #: src/keymap.cpp:61
 msgid "Edit subscribed URLs"
-msgstr ""
+msgstr "Editar lista de URLs às quais você está inscrito"
 
 #: src/pb_controller.cpp:166
 msgid "Cleaning up queue..."
@@ -868,13 +868,11 @@ msgstr "Erro: não é possível sair: transferência(s) em progresso"
 
 #: src/pb_view.cpp:127
 msgid "Error: download needs to be finished before the file can be played."
-msgstr ""
-"Erro: a transferência precisa ser concluída antes de o arquivo ser tocado."
+msgstr "Erro: a transferência precisa ser concluída antes de o arquivo ser tocado."
 
 #: src/pb_view.cpp:156
 msgid "Error: unable to perform operation: download(s) in progress."
-msgstr ""
-"Erro: não foi foi possível realizar a operação: transferência(s) em progresso"
+msgstr "Erro: não foi foi possível realizar a operação: transferência(s) em progresso"
 
 #: src/pb_view.cpp:268
 msgid "Download"
@@ -937,3 +935,4 @@ msgstr "Erro: fonte RSS não possui nenhum artigo!"
 #: src/view.cpp:356
 msgid "Updating query feed..."
 msgstr "Atualizando fonte RSS de consulta..."
+
