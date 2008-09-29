@@ -785,9 +785,11 @@ void controller::rec_find_rss_outlines(nxml_data_t * node, std::string tag) {
 
 std::vector<std::tr1::shared_ptr<rss_item> > controller::search_for_items(const std::string& query, const std::string& feedurl) {
 	std::vector<std::tr1::shared_ptr<rss_item> > items = rsscache->search_for_items(query, feedurl);
-	GetLogger().log(LOG_DEBUG, "controller::search_for_items: setting feed pointers");
-	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items.begin();it!=items.end();++it) {
-		(*it)->set_feedptr(get_feed_by_url((*it)->feedurl()));
+	if (feedurl != "") {
+		GetLogger().log(LOG_DEBUG, "controller::search_for_items: setting feed pointers");
+		for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items.begin();it!=items.end();++it) {
+			(*it)->set_feedptr(get_feed_by_url((*it)->feedurl()));
+		}
 	}
 	return items;
 }

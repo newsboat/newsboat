@@ -101,7 +101,6 @@ namespace newsbeuter {
 			filebrowser_formaction * filebrowser;
 			urlview_formaction * urlview;
 			select_formaction * selecttag;
-			itemlist_formaction * searchresult;
 
 			std::list<formaction *> formaction_stack;
 

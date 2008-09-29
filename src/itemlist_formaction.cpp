@@ -426,6 +426,8 @@ void itemlist_formaction::do_update_visible_items() {
 		}
 	}
 
+	GetLogger().log(LOG_DEBUG, "itemlist_formaction::do_update_visible_items: size = %u", visible_items.size());
+
 	do_redraw = true;
 }
 
@@ -536,14 +538,16 @@ bool itemlist_formaction::jump_to_next_unread_item(bool start_with_first) {
 	unsigned int itempos;
 	std::istringstream is(f->get("itempos"));
 	is >> itempos;
+	GetLogger().log(LOG_DEBUG, "itemlist_formaction::jump_to_next_unread_item: itempos = %u visible_items.size = %u", itempos, visible_items.size());
 	for (unsigned int i=(start_with_first?itempos:(itempos+1));i<visible_items.size();++i) {
-		GetLogger().log(LOG_DEBUG, "itemlist_formaction::jump_to_next_unread_item: visible_items[%u] unread = %s", i, visible_items[i].first->unread() ? "true" : "false");
+		GetLogger().log(LOG_DEBUG, "itemlist_formaction::jump_to_next_unread_item: i = %u", i);
 		if (visible_items[i].first->unread()) {
 			f->set("itempos", utils::to_s(i));
 			return true;
 		}
 	}
 	for (unsigned int i=0;i<=itempos;++i) {
+		GetLogger().log(LOG_DEBUG, "itemlist_formaction::jump_to_next_unread_item: i = %u", i);
 		if (visible_items[i].first->unread()) {
 			f->set("itempos", utils::to_s(i));
 			return true;
@@ -699,6 +703,14 @@ void itemlist_formaction::prepare_set_filterpos() {
 		}
 		f->set("itempos", "0");
 	}
+}
+
+void itemlist_formaction::set_feed(std::tr1::shared_ptr<rss_feed> fd) {
+	GetLogger().log(LOG_DEBUG, "itemlist_formaction::set_feed: fd pointer = %p title = `%s'", fd.get(), fd->title().c_str());
+	feed = fd; 
+	update_visible_items = true; 
+	apply_filter = false;
+	do_update_visible_items();
 }
 
 }

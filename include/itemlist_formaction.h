@@ -17,12 +17,7 @@ class itemlist_formaction : public formaction {
 		virtual void prepare();
 		virtual void init();
 
-		inline void set_feed(std::tr1::shared_ptr<rss_feed> fd) { 
-			feed = fd; 
-			update_visible_items = true; 
-			do_update_visible_items();
-			apply_filter = false;
-		}
+		void set_feed(std::tr1::shared_ptr<rss_feed> fd);
 
 		virtual std::string id() const { return "articlelist"; }
 

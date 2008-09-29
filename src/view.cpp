@@ -61,7 +61,6 @@ view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0) {
 	filebrowser = new filebrowser_formaction(this, filebrowser_str);
 	urlview = new urlview_formaction(this, urlview_str);
 	selecttag = new select_formaction(this, selecttag_str);
-	searchresult = new itemlist_formaction(this, itemlist_str);
 
 	// push the dialog to start with onto the stack
 	formaction_stack.push_front(feedlist);
@@ -77,7 +76,6 @@ view::~view() {
 	delete filebrowser;
 	delete urlview;
 	delete selecttag;
-	delete searchresult;
 }
 
 void view::set_config_container(configcontainer * cfgcontainer) {
@@ -91,7 +89,6 @@ void view::set_config_container(configcontainer * cfgcontainer) {
 			filebrowser->get_form()->set("showhint", "0");
 			urlview->get_form()->set("showhint", "0");
 			selecttag->get_form()->set("showhint", "0");
-			searchresult->get_form()->set("showhint", "0");
 		}
 	}
 }
@@ -104,7 +101,7 @@ void view::set_keymap(keymap * k) {
 
 
 void view::set_bindings() {
-	formaction * fas2bind[] = { feedlist, itemlist, itemview, helpview, filebrowser, urlview, selecttag, searchresult, NULL };
+	formaction * fas2bind[] = { feedlist, itemlist, itemview, helpview, filebrowser, urlview, selecttag, NULL };
 	if (keys) {
 		for (unsigned int i=0;fas2bind[i];++i) {
 			std::string upkey("** "); upkey.append(keys->getkey(OP_SK_UP, fas2bind[i]->id()));
@@ -337,12 +334,13 @@ void view::set_tags(const std::vector<std::string>& t) {
 
 void view::push_searchresult(std::tr1::shared_ptr<rss_feed> feed) {
 	assert(feed != NULL);
+	GetLogger().log(LOG_DEBUG, "view::push_searchresult: pushing search result");
 
 	if (feed->items().size() > 0) {
-		searchresult->set_feed(feed);
-		searchresult->set_show_searchresult(true);
-		searchresult->init();
-		formaction_stack.push_front(searchresult);
+		itemlist->set_feed(feed);
+		itemlist->set_show_searchresult(true);
+		itemlist->init();
+		formaction_stack.push_front(itemlist);
 	} else {
 		show_error(_("Error: feed contains no items!"));
 	}
@@ -570,7 +568,6 @@ void view::set_colors(std::map<std::string,std::string>& fg_colors, std::map<std
 		filebrowser->get_form()->set(fgcit->first, colorattr);
 		urlview->get_form()->set(fgcit->first, colorattr);
 		selecttag->get_form()->set(fgcit->first, colorattr);
-		searchresult->get_form()->set(fgcit->first, colorattr);
 
 		if (fgcit->first == "article") {
 			std::string styleend_str;

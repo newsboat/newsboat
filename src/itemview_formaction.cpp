@@ -72,8 +72,10 @@ void itemview_formaction::prepare() {
 				title = feedptr->rssurl();
 			}
 		}
-		feedtitle = utils::strprintf("%s%s", _("Feed: "), title.c_str());
-		listfmt.add_line(feedtitle, UINT_MAX, view_width);
+		if (title.length() > 0) {
+			feedtitle = utils::strprintf("%s%s", _("Feed: "), title.c_str());
+			listfmt.add_line(feedtitle, UINT_MAX, view_width);
+		}
 
 		if (item->title().length() > 0) {
 			title = utils::strprintf("%s%s", _("Title: "), item->title().c_str());
