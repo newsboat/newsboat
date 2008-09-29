@@ -52,6 +52,25 @@ void urlview_formaction::process_operation(operation op, bool /* automatic */, s
 				}
 			}
 			break;
+		case OP_1:
+		case OP_2:
+		case OP_3:
+		case OP_4:
+		case OP_5:
+		case OP_6:
+		case OP_7:
+		case OP_8:
+		case OP_9:
+		case OP_0: {
+				unsigned int idx = op - OP_1;
+
+				if(idx < links.size()) {
+					v->set_status(_("Starting browser..."));
+					v->open_in_browser(links[idx].first);
+					v->set_status("");
+				}
+			}
+			break;
 		case OP_QUIT:
 			quit = true;
 			break;

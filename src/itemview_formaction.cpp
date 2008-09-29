@@ -246,6 +246,25 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 		case OP_HELP:
 			v->push_help();
 			break;
+		case OP_1:
+		case OP_2:
+		case OP_3:
+		case OP_4:
+		case OP_5:
+		case OP_6:
+		case OP_7:
+		case OP_8:
+		case OP_9:
+		case OP_0: {
+				unsigned int idx = op - OP_1;
+				GetLogger().log(LOG_DEBUG, "itemview::run: OP_1 = %d op = %d idx = %u", OP_1, op, idx);
+				if(idx < links.size()) {
+					v->set_status(_("Starting browser..."));
+					v->open_in_browser(links[idx].first);
+					v->set_status("");
+				}
+			}
+			break;
 		default:
 			break;
 	}

@@ -103,7 +103,17 @@ namespace newsbeuter {
 						OP_INT_RESIZE,
 						OP_INT_SET,
 
-						OP_INT_MAX
+						OP_INT_MAX,
+						OP_1,
+						OP_2,
+						OP_3,
+						OP_4,
+						OP_5,
+						OP_6,
+						OP_7,
+						OP_8,
+						OP_9,
+						OP_0
 						};
 
 	struct keymap_desc {
