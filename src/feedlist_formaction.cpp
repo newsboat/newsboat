@@ -551,9 +551,6 @@ void feedlist_formaction::op_start_search() {
 			return;
 		}
 		if (items.size() > 0) {
-			for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items.begin();it!=items.end();++it) {
-				(*it)->set_feedptr(search_dummy_feed);
-			}
 			search_dummy_feed->items() = items;
 			v->push_searchresult(search_dummy_feed);
 		} else {

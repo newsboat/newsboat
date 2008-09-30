@@ -18,7 +18,8 @@
 namespace newsbeuter {
 
 itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
-	: formaction(vv,formstr), apply_filter(false), update_visible_items(true), search_dummy_feed(new rss_feed(v->get_ctrl()->get_cache())),
+	: formaction(vv,formstr), apply_filter(false), update_visible_items(true), show_searchresult(false),
+		search_dummy_feed(new rss_feed(v->get_ctrl()->get_cache())),
 		set_filterpos(false), filterpos(0), rxman(0), old_width(0) {
 	assert(true==m.parse(FILTER_UNREAD_ITEMS));
 }
