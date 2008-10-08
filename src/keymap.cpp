@@ -60,6 +60,17 @@ static op_desc opdescs[] = {
 	{ OP_PURGE_DELETED,		"purge-deleted",			"$",	_("Purge deleted articles"),			KM_ARTICLELIST },
 	{ OP_EDIT_URLS,			"edit-urls",				"E",	_("Edit subscribed URLs"),				KM_FEEDLIST },
 
+	{ OP_0,		"zero",	"0",	_("Open URL 10"), KM_URLVIEW | KM_ARTICLE },
+	{ OP_1,		"one",	"1",	_("Open URL 1"), KM_URLVIEW | KM_ARTICLE},
+	{ OP_2,		"two",	"2",	_("Open URL 2"), KM_URLVIEW | KM_ARTICLE},
+	{ OP_3,		"three","3",	_("Open URL 3"), KM_URLVIEW | KM_ARTICLE},
+	{ OP_4,		"four",	"4",	_("Open URL 4"), KM_URLVIEW | KM_ARTICLE},
+	{ OP_5,		"five",	"5",	_("Open URL 5"), KM_URLVIEW | KM_ARTICLE},
+	{ OP_6,		"six",	"6",	_("Open URL 6"), KM_URLVIEW | KM_ARTICLE},
+	{ OP_7,		"seven","7",	_("Open URL 7"), KM_URLVIEW | KM_ARTICLE},
+	{ OP_8,		"eight","8",	_("Open URL 8"), KM_URLVIEW | KM_ARTICLE},
+	{ OP_9,		"nine",	"9",	_("Open URL 9"), KM_URLVIEW | KM_ARTICLE},
+
 	{ OP_SK_UP, "up", "UP", NULL, KM_SYSKEYS },
 	{ OP_SK_DOWN, "down", "DOWN", NULL, KM_SYSKEYS },
 	{ OP_SK_PGUP, "pageup", "PAGEUP", NULL, KM_SYSKEYS },
@@ -72,16 +83,6 @@ static op_desc opdescs[] = {
 
 	{ OP_INT_RESIZE, "RESIZE", "internal-resize", NULL, KM_INTERNAL },
 	{ OP_INT_SET,    "set",    "internal-set",    NULL, KM_INTERNAL },
-	{ OP_0,		"zero",	"0",	_("Open URL 10"), KM_URLVIEW | KM_ARTICLE },
-	{ OP_1,		"one",	"1",	_("Open URL 1"), KM_URLVIEW | KM_ARTICLE},
-	{ OP_2,		"two",	"2",	_("Open URL 2"), KM_URLVIEW | KM_ARTICLE},
-	{ OP_3,		"three","3",	_("Open URL 3"), KM_URLVIEW | KM_ARTICLE},
-	{ OP_4,		"four",	"4",	_("Open URL 4"), KM_URLVIEW | KM_ARTICLE},
-	{ OP_5,		"five",	"5",	_("Open URL 5"), KM_URLVIEW | KM_ARTICLE},
-	{ OP_6,		"six",	"6",	_("Open URL 6"), KM_URLVIEW | KM_ARTICLE},
-	{ OP_7,		"seven","7",	_("Open URL 7"), KM_URLVIEW | KM_ARTICLE},
-	{ OP_8,		"eight","8",	_("Open URL 8"), KM_URLVIEW | KM_ARTICLE},
-	{ OP_9,		"nine",	"9",	_("Open URL 9"), KM_URLVIEW | KM_ARTICLE},
 
 	{ OP_NIL, NULL, NULL, NULL, 0 }
 };
