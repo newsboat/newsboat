@@ -54,7 +54,7 @@ Newsbeuter caches the article that it downloads. This means that when you start
 newsbeuter again and reload a feed, the old articles can still be read even if
 they aren't in the current RSS feeds anymore. Optionally you can configure how
 many articles shall be preserved by feed so that the article backlog doesn't
-grow endlessly (see below).
+grow endlessly (see "max-items" below).
 
 Several aspects of newsbeuter's behaviour can be configured via a configuration
 file, by default $HOME/.newsbeuter/config. This configuration files contains
