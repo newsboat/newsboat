@@ -241,6 +241,17 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 				v->show_error(_("No unread items."));
 			}
 			break;
+		case OP_TOGGLEITEMREAD:
+			GetLogger().log(LOG_INFO, "view::run_itemview: setting unread and quitting");
+			v->set_status(_("Toggling read flag for article..."));
+			try {
+				item->set_unread(true);
+			} catch (const dbexception& e) {
+				v->show_error(utils::strprintf(_("Error while marking article as unread: %s"), e.what()));
+			}
+			v->set_status("");
+			quit = true;
+			break;
 		case OP_QUIT:
 			GetLogger().log(LOG_INFO, "view::run_itemview: quitting");
 			quit = true;
