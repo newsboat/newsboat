@@ -572,7 +572,7 @@ BOOST_AUTO_TEST_CASE(TestHtmlRenderer) {
 
 	rnd.render("<a href=\"http://slashdot.org/\">slashdot</a>", lines, links, "");
 	BOOST_CHECK(lines.size() >= 1);
-	BOOST_CHECK_EQUAL(lines[0], "[1]slashdot");
+	BOOST_CHECK_EQUAL(lines[0], "[slashdot][1]");
 	BOOST_CHECK_EQUAL(links[0].first, "http://slashdot.org/");
 	BOOST_CHECK_EQUAL(links[0].second, LINK_HREF);
 

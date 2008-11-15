@@ -62,6 +62,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 	bool itunes_hack = false;
 	unsigned int ol_count = 1;
 	htmltag current_tag;
+	int link_num = -1;
 	
 	/*
 	 * to render the HTML, we use a self-developed "XML" pull parser.
@@ -93,8 +94,8 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 								link = "";
 							}
 							if (link.length() > 0) {
-								unsigned int link_num = add_link(links,utils::absolute_url(url,link), LINK_HREF);
-								curline.append(utils::strprintf("[%u]", link_num));
+								link_num = add_link(links,utils::absolute_url(url,link), LINK_HREF);
+								curline.append("[");
 							}
 						}
 						break;
@@ -329,6 +330,12 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						break;
 
 					case TAG_A:
+						if (link_num != -1) {
+							curline.append(utils::strprintf("][%d]", link_num));
+							link_num = -1;
+						}
+						break;
+
 					case TAG_EMBED:
 					case TAG_BR:
 					case TAG_ITUNESHACK:
