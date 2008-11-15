@@ -598,3 +598,38 @@ BOOST_AUTO_TEST_CASE(TestHtmlRenderer) {
 	BOOST_CHECK(lines.size() >= 1);
 	BOOST_CHECK_EQUAL(lines[0], "A[i]");
 }
+
+BOOST_AUTO_TEST_CASE(TestIndexPartitioning) {
+	std::vector<std::pair<unsigned int, unsigned int> > partitions = utils::partition_indexes(0, 9, 2);
+	BOOST_CHECK_EQUAL(partitions.size(), 2u);
+	BOOST_CHECK_EQUAL(partitions[0].first, 0u);
+	BOOST_CHECK_EQUAL(partitions[0].second, 4u);
+	BOOST_CHECK_EQUAL(partitions[1].first, 5u);
+	BOOST_CHECK_EQUAL(partitions[1].second, 9u);
+
+	partitions = utils::partition_indexes(0, 10, 3);
+	BOOST_CHECK_EQUAL(partitions.size(), 3u);
+	BOOST_CHECK_EQUAL(partitions[0].first, 0u);
+	BOOST_CHECK_EQUAL(partitions[0].second, 2u);
+	BOOST_CHECK_EQUAL(partitions[1].first, 3u);
+	BOOST_CHECK_EQUAL(partitions[1].second, 5u);
+	BOOST_CHECK_EQUAL(partitions[2].first, 6u);
+	BOOST_CHECK_EQUAL(partitions[2].second, 10u);
+
+	partitions = utils::partition_indexes(0, 11, 3);
+	BOOST_CHECK_EQUAL(partitions.size(), 3u);
+	BOOST_CHECK_EQUAL(partitions[0].first, 0u);
+	BOOST_CHECK_EQUAL(partitions[0].second, 3u);
+	BOOST_CHECK_EQUAL(partitions[1].first, 4u);
+	BOOST_CHECK_EQUAL(partitions[1].second, 7u);
+	BOOST_CHECK_EQUAL(partitions[2].first, 8u);
+	BOOST_CHECK_EQUAL(partitions[2].second, 11u);
+
+	partitions = utils::partition_indexes(0, 199, 200);
+	BOOST_CHECK_EQUAL(partitions.size(), 200u);
+
+	partitions = utils::partition_indexes(0, 103, 1);
+	BOOST_CHECK_EQUAL(partitions.size(), 1u);
+	BOOST_CHECK_EQUAL(partitions[0].first, 0u);
+	BOOST_CHECK_EQUAL(partitions[0].second, 103u);
+}

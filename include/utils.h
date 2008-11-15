@@ -54,6 +54,8 @@ class utils {
 		static bool is_valid_color(const std::string& color);
 		static bool is_valid_attribute(const std::string& attrib);
 
+		static std::vector<std::pair<unsigned int, unsigned int> > partition_indexes(unsigned int start, unsigned int end, unsigned int parts);
+
 	private:
 		static void append_escapes(std::string& str, char c);
 

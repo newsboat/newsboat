@@ -604,4 +604,18 @@ bool utils::is_valid_attribute(const std::string& attrib) {
 	return false;
 }
 
+std::vector<std::pair<unsigned int, unsigned int> > utils::partition_indexes(unsigned int start, unsigned int end, unsigned int parts) {
+	std::vector<std::pair<unsigned int, unsigned int> > partitions;
+	unsigned int count = end - start + 1;
+	unsigned int size = count / parts;
+
+	for (unsigned int i=0;i<parts-1;i++) {
+		partitions.push_back(std::pair<unsigned int, unsigned int>(start, start + size - 1));
+		start += size;
+	}
+
+	partitions.push_back(std::pair<unsigned int, unsigned int>(start, end));
+	return partitions;
+}
+
 }
