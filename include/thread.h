@@ -16,7 +16,7 @@ namespace newsbeuter {
 		public:
 			thread();
 			virtual ~thread();
-			void start();
+			pthread_t start();
 			void join();
 
 		protected:

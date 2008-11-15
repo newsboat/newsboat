@@ -21,6 +21,18 @@ private:
 	std::vector<int> indexes;
 };
 
+class reloadrangethread : public thread
+{
+public:
+	reloadrangethread(controller * c, unsigned int start, unsigned int end, unsigned int size, bool unattended);
+protected:
+	virtual void run();
+private:
+	controller * ctrl;
+	unsigned int s, e, ss;
+	bool u;
+};
+
 }
 
 #endif /*DOWNLOADTHREAD_H_*/

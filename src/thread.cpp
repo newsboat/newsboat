@@ -21,12 +21,13 @@ thread::~thread() {
 
 }
 
-void thread::start() {
+pthread_t thread::start() {
 	int rc = pthread_create(&pt, 0, (void *(*)(void*))run_thread, this);
 	GetLogger().log(LOG_DEBUG, "thread::start: created new thread %d rc = %d", pt, rc);
 	if (rc != 0) {
 		throw exception(rc);
 	}
+	return pt;
 }
 
 void thread::join() {

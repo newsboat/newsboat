@@ -38,6 +38,7 @@ proxy-auth|<auth>|n/a|Set the proxy authentication string.|proxy-auth user:passw
 refresh-on-startup|[yes/no]|no|If yes, then all feeds will be reloaded when newsbeuter starts up. This is equivalent to the -r commandline option.|refresh-on-startup yes
 reload-only-visible-feeds|[yes/no]|no|If yes, then manually reloading all feeds will only reload the currently visible feeds, e.g. if a filter or a tag is set.|reload-only-visible-feeds yes
 reload-time|<number>|60|The number of minutes between automatic reloads.|reload-time 120
+reload-threads|<number>|1|The number of parallel reload threads that shall be started when all feeds are reloaded.|reload-threads 3
 reset-unread-on-update|<url> ...|n/a|With this configuration command, you can provide a list of RSS feed URLs for whose articles the unread flag will be reset if an article has been updated, i.e. its content has been changed. This is especially useful for RSS feeds where single articles are updated after publication, and you want to be notified of the updates.|reset-unread-on-update "http://blog.fefe.de/rss.xml?html"
 save-path|<path>|~/|The default path where articles shall be saved to. If an invalid path is specified, the current directory is used.|save-path "~/Saved Articles"
 show-keymap-hint|[yes/no]|yes|If no, then the keymap hints on the bottom of screen will not be displayed.|show-keymap-hint no

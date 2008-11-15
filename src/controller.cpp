@@ -566,16 +566,40 @@ void controller::reload_indexes(const std::vector<int>& indexes, bool unattended
 		v->set_status("");
 }
 
+void controller::reload_range(unsigned int start, unsigned int end, unsigned int size, bool unattended) {
+	for (unsigned int i=start;i<=end;i++) {
+		GetLogger().log(LOG_DEBUG, "controller::reload_range: reloading feed #%u", i);
+		this->reload(i, size, unattended);
+	}
+}
+
 void controller::reload_all(bool unattended) {
-	GetLogger().log(LOG_DEBUG,"controller::reload_all: starting with reload all...");
 	unsigned int unread_feeds, unread_articles;
 	compute_unread_numbers(unread_feeds, unread_articles);
+	unsigned int num_threads = cfg->get_configvalue_as_int("reload-threads");
 	time_t t1, t2, dt;
+
 	t1 = time(NULL);
-	for (unsigned int i=0;i<feeds.size();++i) {
-		GetLogger().log(LOG_DEBUG, "controller::reload_all: reloading feed #%u", i);
-		this->reload(i,feeds.size(), unattended);
+
+	GetLogger().log(LOG_DEBUG,"controller::reload_all: starting with reload all...");
+	if (num_threads <= 1) {
+		this->reload_range(0, feeds.size()-1, feeds.size(), unattended);
+	} else {
+		std::vector<std::pair<unsigned int, unsigned int> > partitions = utils::partition_indexes(0, feeds.size()-1, num_threads);
+		std::vector<pthread_t> threads;
+		GetLogger().log(LOG_DEBUG, "controller::reload_all: starting reload threads...");
+		for (unsigned int i=0;i<num_threads-1;i++) {
+			reloadrangethread* t = new reloadrangethread(this, partitions[i].first, partitions[i].second, feeds.size(), unattended);
+			threads.push_back(t->start());
+		}
+		GetLogger().log(LOG_DEBUG, "controller::reload_all: starting my own reload...");
+		this->reload_range(partitions[num_threads-1].first, partitions[num_threads-1].second, feeds.size(), unattended);
+		GetLogger().log(LOG_DEBUG, "controller::reload_all: joining other threads...");
+		for (std::vector<pthread_t>::iterator it=threads.begin();it!=threads.end();it++) {
+			::pthread_join(*it, NULL);
+		}
 	}
+
 	t2 = time(NULL);
 	dt = t2 - t1;
 	GetLogger().log(LOG_INFO, "controller::reload_all: reload took %d seconds", dt);

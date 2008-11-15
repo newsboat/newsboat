@@ -10,6 +10,7 @@ Changes for newsbeuter:
 	Extended macros to enable modification of configuration variables.
 	Implemented configuration option "feed-sort-order" to sort the feed list by the first tag.
 	Added ability to toggle read flag from article view (thanks to Isaac Good).
+	Added ability to configure the number of parallel reload threads (fixes #101).
 
 1.2 (2008-09-02):
 	Fixed crash in case of invalid color/attribute names in the configuration

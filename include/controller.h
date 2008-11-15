@@ -24,6 +24,7 @@ namespace newsbeuter {
 
 			void reload_all(bool unattended = false);
 			void reload_indexes(const std::vector<int>& indexes, bool unattended = false);
+			void reload_range(unsigned int start, unsigned int end, unsigned int size, bool unattended = false);
 			void start_reload_all_thread(std::vector<int> * indexes = 0);
 
 			std::tr1::shared_ptr<rss_feed> get_feed(unsigned int pos);

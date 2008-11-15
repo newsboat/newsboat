@@ -30,4 +30,12 @@ void downloadthread::run() {
 	this->detach();
 }
 
+reloadrangethread::reloadrangethread(controller * c, unsigned int start, unsigned int end, unsigned int size, bool unattended) : ctrl(c), s(start), e(end), ss(size), u(unattended)
+{
+}
+
+void reloadrangethread::run() {
+	ctrl->reload_range(s, e, ss, u);
+}
+
 }
