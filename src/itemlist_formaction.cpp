@@ -82,6 +82,23 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				}
 			}
 			break;
+		case OP_SHOWURLS:
+			if (itemposname.length() > 0) {
+				if (itempos < visible_items.size()) {
+					std::vector<linkpair> links;
+					std::vector<std::string> lines;
+					htmlrenderer rnd(80);
+					rnd.render(visible_items[itempos].first->description(), lines, links, visible_items[itempos].first->link());
+					if (links.size() > 0) {
+						v->push_urlview(links);
+					} else {
+						v->show_error(_("URL list empty."));
+					}
+				}
+			} else {
+				v->show_error(_("No item selected!")); // should not happen
+			}
+			break;
 		case OP_BOOKMARK: {
 				GetLogger().log(LOG_INFO, "itemlist_formaction: bookmarking item at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0) {
