@@ -618,4 +618,9 @@ std::vector<std::pair<unsigned int, unsigned int> > utils::partition_indexes(uns
 	return partitions;
 }
 
+size_t utils::strwidth(const std::string& str) {
+	std::wstring wstr = str2wstr(str);
+	return wcswidth(wstr.c_str(), wstr.length());
+}
+
 }

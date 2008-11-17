@@ -679,23 +679,48 @@ void controller::version_information() {
 	::exit(EXIT_SUCCESS);
 }
 
+static unsigned int gentabs(const std::string& str) {
+	int tabcount = 2 - ((3 + utils::strwidth(str)) / 8);
+	if (tabcount <= 0) {
+		tabcount = 1;
+	}
+	return tabcount;
+}
+
 void controller::usage(char * argv0) {
-	std::cout << utils::strprintf(_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-h]\n"
-				"-e              export OPML feed to stdout\n"
-				"-r              refresh feeds on start\n"
-				"-i <file>       import OPML file\n"
-				"-u <urlfile>    read RSS feed URLs from <urlfile>\n"
-				"-c <cachefile>  use <cachefile> as cache file\n"
-				"-C <configfile> read configuration from <configfile>\n"
-				"-v              clean up cache thoroughly\n"
-				"-x <command>... execute list of commands\n"
-				"-o              activate offline mode (only applies to bloglines synchronization mode)\n"
-				"-V              get version information\n"
-				"-l <loglevel>   write a log with a certain loglevel (valid values: 1 to 6)\n"
-				"-d <logfile>    use <logfile> as output log file\n"
-				"-E <file>       export list of read articles to <file>\n"
-				"-I <file>       import list of read articles from <file>\n"
-				"-h              this help\n"), PROGRAM_NAME, PROGRAM_VERSION, argv0);
+	std::cout << utils::strprintf(_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-h]\n"), 
+					PROGRAM_NAME, PROGRAM_VERSION, argv0);
+	struct {
+		char arg;
+		const char * params;
+		const char * desc;
+	} args[] = {
+		{ 'e', "", _("export OPML feed to stdout") },
+		{ 'r', "", _("refresh feeds on start") },
+		{ 'i', _("<file>"), _("import OPML file") },
+		{ 'u', _("<urlfile>"), _("read RSS feed URLs from <urlfile>") },
+		{ 'c', _("<cachefile>"), _("use <cachefile> as cache file") },
+		{ 'C', _("<configfile>"), _("read configuration from <configfile>") },
+		{ 'v', "", _("clean up cache thoroughly") },
+		{ 'x', _("<command>..."), _("execute list of commands") },
+		{ 'o', "", _("activate offline mode (only applies to bloglines synchronization mode)") },
+		{ 'V', "", _("get version information") },
+		{ 'l', _("<loglevel>"), _("write a log with a certain loglevel (valid values: 1 to 6)") },
+		{ 'd', _("<logfile>"), _("use <logfile> as output log file") },
+		{ 'E', _("<file>"), _("export list of read articles to <file>") },
+		{ 'I', _("<file>"), _("import list of read articles from <file>") },
+		{ 'h', "", _("this help") },
+		{ '\0', NULL, NULL }
+	};
+
+	for (unsigned int i=0;args[i].arg != '\0';i++) {
+		unsigned int tabs = gentabs(args[i].params);
+		std::cout << "\t-" << args[i].arg << " " << args[i].params;
+		for (unsigned int j=0;j<tabs;j++) { 
+			std::cout << "\t";
+		}
+		std::cout << args[i].desc << std::endl;
+	}
 	::exit(EXIT_FAILURE);
 }
 

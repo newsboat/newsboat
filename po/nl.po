@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 0.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-08 10:36+0200\n"
+"POT-Creation-Date: 2008-11-17 12:54+0100\n"
 "PO-Revision-Date: 2008-09-23 22:03+0200\n"
 "Last-Translator: Bart Van Loon <bart@zeropoint.it>\n"
 "Language-Team: Dutch <bart@zeropoint.it>\n"
@@ -27,39 +27,39 @@ msgstr ""
 "newsbeuter: klaar met herladen, %f ongelezen feeds (%n ongelezen artikels in "
 "totaal)"
 
-#: src/configcontainer.cpp:66
+#: src/configcontainer.cpp:67
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
 msgstr "%N %V - Uw feeds (%u ongelezen, %t totaal)%?T? - tag `%T'&?"
 
-#: src/configcontainer.cpp:67 src/configcontainer.cpp:75
+#: src/configcontainer.cpp:68 src/configcontainer.cpp:76
 msgid "%N %V - URLs"
 msgstr "%N %V - URLs"
 
-#: src/configcontainer.cpp:68
+#: src/configcontainer.cpp:69
 msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
 msgstr "%N %V - Artikels in feed '%T' (%u ongelezen, %t totaal) - %U"
 
-#: src/configcontainer.cpp:69
+#: src/configcontainer.cpp:70
 msgid "%N %V - Search result (%u unread, %t total)"
 msgstr "%N %V - Zoekresultaten (%u ongelezen, %t totaal)"
 
-#: src/configcontainer.cpp:70
+#: src/configcontainer.cpp:71
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Open Bestand&Bestand Opslagen? - %f"
 
-#: src/configcontainer.cpp:71
+#: src/configcontainer.cpp:72
 msgid "%N %V - Help"
 msgstr "%N %V - Hulp"
 
-#: src/configcontainer.cpp:72
+#: src/configcontainer.cpp:73
 msgid "%N %V - Select Tag"
 msgstr "%N %V - Tag Selecteren"
 
-#: src/configcontainer.cpp:73
+#: src/configcontainer.cpp:74
 msgid "%N %V - Select Filter"
 msgstr "%N %V - Filter Selecteren"
 
-#: src/configcontainer.cpp:74
+#: src/configcontainer.cpp:75
 msgid "%N %V - Article '%T'"
 msgstr "%N %V - Artikel '%T'"
 
@@ -223,55 +223,113 @@ msgstr "Fout: ongeldige feed!"
 msgid "invalid feed index (bug)"
 msgstr "ongeldige feed index (bug)"
 
-#: src/controller.cpp:659
+#: src/controller.cpp:691
 #, c-format
 msgid ""
 "%s %s\n"
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] "
 "[-h]\n"
-"-e              export OPML feed to stdout\n"
-"-r              refresh feeds on start\n"
-"-i <file>       import OPML file\n"
-"-u <urlfile>    read RSS feed URLs from <urlfile>\n"
-"-c <cachefile>  use <cachefile> as cache file\n"
-"-C <configfile> read configuration from <configfile>\n"
-"-v              clean up cache thoroughly\n"
-"-x <command>... execute list of commands\n"
-"-o              activate offline mode (only applies to bloglines "
-"synchronization mode)\n"
-"-V              get version information\n"
-"-l <loglevel>   write a log with a certain loglevel (valid values: 1 to 6)\n"
-"-d <logfile>    use <logfile> as output log file\n"
-"-E <file>       export list of read articles to <file>\n"
-"-I <file>       import list of read articles from <file>\n"
-"-h              this help\n"
 msgstr ""
-"%s %s\n"
-"gebruik: %s [-i <bestand>|-e] [-u <urlbestand>] [-c <cachebestand>] [-h]\n"
-"-e                 exporteer OPML feed naar stdout\n"
-"-r                 ververs feeds bij het opstarten\n"
-"-i <bestand>       importeer OPMLbestand\n"
-"-u <urlbestamd>    lees RSS feed URLs van <urlbestand>\n"
-"-c <cachebestand>  gebruik <cachebestand> as cachebestand\n"
-"-C <configbestand> lees configuratie in <configbestand>\n"
-"-v                 maak cache grondig schoon\n"
-"-x <commando>...   voer een lijst van commando's uit\n"
-"-o                 activeer offline mode (geldt alleen voor bloglines "
-"synchronisatiemode)\n"
-"-V                 versie-informatie\n"
-"-l <logniveau>     schrijf een log met een zeker logniveau (geldige waarden: "
-"1 tot 6)\n"
-"-d <logbestand>    gebruik <logbestand> als output logbestand\n"
-"-E <bestand>       exporteer lijst van gelezen artikels naar <bestand>\n"
-"-I <bestand>       importeer lijst van gelezen artikels van <bestand>\n"
-"-h                 deze hulptekst\n"
+
+#: src/controller.cpp:698
+msgid "export OPML feed to stdout"
+msgstr ""
+
+#: src/controller.cpp:699
+msgid "refresh feeds on start"
+msgstr ""
+
+#: src/controller.cpp:700 src/controller.cpp:710 src/controller.cpp:711
+#, fuzzy
+msgid "<file>"
+msgstr "mislukt"
+
+#: src/controller.cpp:700
+msgid "import OPML file"
+msgstr ""
+
+#: src/controller.cpp:701
+msgid "<urlfile>"
+msgstr ""
+
+#: src/controller.cpp:701
+msgid "read RSS feed URLs from <urlfile>"
+msgstr ""
+
+#: src/controller.cpp:702
+#, fuzzy
+msgid "<cachefile>"
+msgstr "geannuleerd"
+
+#: src/controller.cpp:702
+msgid "use <cachefile> as cache file"
+msgstr ""
+
+#: src/controller.cpp:703
+msgid "<configfile>"
+msgstr ""
+
+#: src/controller.cpp:703
+msgid "read configuration from <configfile>"
+msgstr ""
+
+#: src/controller.cpp:704
+#, fuzzy
+msgid "clean up cache thoroughly"
+msgstr "Bezig met grondig kuisen van de cache..."
+
+#: src/controller.cpp:705
+msgid "<command>..."
+msgstr ""
+
+#: src/controller.cpp:705
+msgid "execute list of commands"
+msgstr ""
+
+#: src/controller.cpp:706
+msgid "activate offline mode (only applies to bloglines synchronization mode)"
+msgstr ""
 
 #: src/controller.cpp:707
+msgid "get version information"
+msgstr ""
+
+#: src/controller.cpp:708
+msgid "<loglevel>"
+msgstr ""
+
+#: src/controller.cpp:708
+msgid "write a log with a certain loglevel (valid values: 1 to 6)"
+msgstr ""
+
+#: src/controller.cpp:709
+msgid "<logfile>"
+msgstr ""
+
+#: src/controller.cpp:709
+msgid "use <logfile> as output log file"
+msgstr ""
+
+#: src/controller.cpp:710
+#, fuzzy
+msgid "export list of read articles to <file>"
+msgstr "Bezig met exporteren van lijst van gelezen artikels..."
+
+#: src/controller.cpp:711
+#, fuzzy
+msgid "import list of read articles from <file>"
+msgstr "Bezig met importeren van lijst van gelezen artikels..."
+
+#: src/controller.cpp:712
+msgid "this help"
+msgstr ""
+
+#: src/controller.cpp:756
 #, c-format
 msgid "Import of %s finished."
 msgstr "Klaar met importeren van %s"
 
-#: src/controller.cpp:906
+#: src/controller.cpp:955
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -279,25 +337,25 @@ msgstr ""
 "bladwijzerondersteuning is niet geconfigureerd. Corrigeer de waarde van de "
 "configuratievariabele`bookmark-cmd' aub."
 
-#: src/controller.cpp:918
+#: src/controller.cpp:967
 #, c-format
 msgid "%u unread articles"
 msgstr "%u ongelezen artikels"
 
-#: src/controller.cpp:927 src/formaction.cpp:200
+#: src/controller.cpp:976 src/formaction.cpp:200
 #: src/itemview_formaction.cpp:81
 msgid "Title: "
 msgstr "Titel: "
 
-#: src/controller.cpp:931 src/itemview_formaction.cpp:86
+#: src/controller.cpp:980 src/itemview_formaction.cpp:86
 msgid "Author: "
 msgstr "Auteur: "
 
-#: src/controller.cpp:935 src/itemview_formaction.cpp:95
+#: src/controller.cpp:984 src/itemview_formaction.cpp:95
 msgid "Date: "
 msgstr "Datum: "
 
-#: src/controller.cpp:939 src/itemview_formaction.cpp:91
+#: src/controller.cpp:988 src/itemview_formaction.cpp:91
 msgid "Link: "
 msgstr "Koppeling: "
 
@@ -399,18 +457,18 @@ msgid "y"
 msgstr "j"
 
 #: src/feedlist_formaction.cpp:337 src/help_formaction.cpp:83
-#: src/itemlist_formaction.cpp:569 src/itemview_formaction.cpp:282
+#: src/itemlist_formaction.cpp:569 src/itemview_formaction.cpp:293
 #: src/pb_view.cpp:258 src/pb_view.cpp:267 src/urlview_formaction.cpp:116
 msgid "Quit"
 msgstr "Afsluiten"
 
 #: src/feedlist_formaction.cpp:338 src/itemlist_formaction.cpp:570
-#: src/itemview_formaction.cpp:283
+#: src/itemview_formaction.cpp:294
 msgid "Open"
 msgstr "Openen"
 
 #: src/feedlist_formaction.cpp:339 src/itemlist_formaction.cpp:573
-#: src/itemview_formaction.cpp:285
+#: src/itemview_formaction.cpp:296
 msgid "Next Unread"
 msgstr "Volgende Ongelezen"
 
@@ -436,7 +494,7 @@ msgid "Search"
 msgstr "Zoeken"
 
 #: src/feedlist_formaction.cpp:345 src/itemlist_formaction.cpp:576
-#: src/itemview_formaction.cpp:288 src/pb_view.cpp:200 src/pb_view.cpp:274
+#: src/itemview_formaction.cpp:299 src/pb_view.cpp:200 src/pb_view.cpp:274
 msgid "Help"
 msgstr "Hulp"
 
@@ -491,7 +549,7 @@ msgid "Cancel"
 msgstr "Annuleren"
 
 #: src/filebrowser_formaction.cpp:186 src/itemlist_formaction.cpp:571
-#: src/itemview_formaction.cpp:284
+#: src/itemview_formaction.cpp:295
 msgid "Save"
 msgstr "Opslagen"
 
@@ -523,27 +581,27 @@ msgstr "Omschrijving: "
 msgid "Clear"
 msgstr "Schoon Op"
 
-#: src/htmlrenderer.cpp:120
+#: src/htmlrenderer.cpp:121
 msgid "embedded flash:"
 msgstr "ingebedde flash"
 
-#: src/htmlrenderer.cpp:153 src/htmlrenderer.cpp:437
+#: src/htmlrenderer.cpp:154 src/htmlrenderer.cpp:444
 msgid "image"
 msgstr "prent"
 
-#: src/htmlrenderer.cpp:427
+#: src/htmlrenderer.cpp:434
 msgid "Links: "
 msgstr "Koppelingen: "
 
-#: src/htmlrenderer.cpp:436
+#: src/htmlrenderer.cpp:443
 msgid "link"
 msgstr "koppeling"
 
-#: src/htmlrenderer.cpp:438
+#: src/htmlrenderer.cpp:445
 msgid "embedded flash"
 msgstr "ingebedde flash"
 
-#: src/htmlrenderer.cpp:439
+#: src/htmlrenderer.cpp:446
 msgid "unknown (bug)"
 msgstr "onbekend (bug)"
 
@@ -576,7 +634,7 @@ msgstr "Geen ongelezen items"
 msgid "No unread feeds."
 msgstr "Geen ongelezen feeds"
 
-#: src/itemlist_formaction.cpp:237
+#: src/itemlist_formaction.cpp:237 src/itemview_formaction.cpp:246
 msgid "Toggling read flag for article..."
 msgstr "Bezig met schakelen van gelezen vlag van artikel..."
 
@@ -585,7 +643,7 @@ msgstr "Bezig met schakelen van gelezen vlag van artikel..."
 msgid "Error while toggling read flag: %s"
 msgstr "Fout bij het schakelen van de gelezen vlag: %s"
 
-#: src/itemlist_formaction.cpp:369 src/itemview_formaction.cpp:374
+#: src/itemlist_formaction.cpp:369 src/itemview_formaction.cpp:385
 msgid "Flags updated."
 msgstr "Vlaggen zijn geupdate."
 
@@ -594,25 +652,25 @@ msgid "Mark All Read"
 msgstr "Markeer Alles als Gelezen"
 
 #: src/itemlist_formaction.cpp:637 src/itemview_formaction.cpp:178
-#: src/itemview_formaction.cpp:349
+#: src/itemview_formaction.cpp:360
 msgid "Aborted saving."
 msgstr "Opslagen afgebroken"
 
-#: src/itemlist_formaction.cpp:641 src/itemview_formaction.cpp:353
+#: src/itemlist_formaction.cpp:641 src/itemview_formaction.cpp:364
 #, c-format
 msgid "Saved article to %s"
 msgstr "Artikel opgeslagen naar %s"
 
-#: src/itemlist_formaction.cpp:643 src/itemview_formaction.cpp:355
+#: src/itemlist_formaction.cpp:643 src/itemview_formaction.cpp:366
 #, c-format
 msgid "Error: couldn't save article to %s"
 msgstr "Fout: kon artikel niet opslagen naar %s"
 
-#: src/itemview_formaction.cpp:30 src/itemview_formaction.cpp:433
+#: src/itemview_formaction.cpp:30 src/itemview_formaction.cpp:444
 msgid "Top"
 msgstr "Boven"
 
-#: src/itemview_formaction.cpp:30 src/itemview_formaction.cpp:435
+#: src/itemview_formaction.cpp:30 src/itemview_formaction.cpp:446
 msgid "Bottom"
 msgstr "Onder"
 
@@ -648,7 +706,7 @@ msgstr "Artikel opgeslagen naar %s."
 msgid "Error: couldn't write article to file %s"
 msgstr "Fout: kon artikel niet opslagen naar bestand %s"
 
-#: src/itemview_formaction.cpp:191 src/itemview_formaction.cpp:264
+#: src/itemview_formaction.cpp:191 src/itemview_formaction.cpp:275
 #: src/urlview_formaction.cpp:33 src/urlview_formaction.cpp:68
 msgid "Starting browser..."
 msgstr "Bezig met starten van bladerprogramma..."
@@ -657,11 +715,16 @@ msgstr "Bezig met starten van bladerprogramma..."
 msgid "URL list empty."
 msgstr "URL lijst leeg."
 
-#: src/itemview_formaction.cpp:286 src/urlview_formaction.cpp:117
+#: src/itemview_formaction.cpp:250
+#, fuzzy, c-format
+msgid "Error while marking article as unread: %s"
+msgstr "Fout bij het als gelezen markeren van de artikels: %s"
+
+#: src/itemview_formaction.cpp:297 src/urlview_formaction.cpp:117
 msgid "Open in Browser"
 msgstr "Openen in Bladerprogramma"
 
-#: src/itemview_formaction.cpp:287
+#: src/itemview_formaction.cpp:298
 msgid "Enqueue"
 msgstr "Toevoegen aan wachtrij"
 
@@ -973,6 +1036,48 @@ msgstr "Fout: feed bevat geen items!"
 #: src/view.cpp:354
 msgid "Updating query feed..."
 msgstr "Bezig met feedvraag te updaten..."
+
+#~ msgid ""
+#~ "%s %s\n"
+#~ "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x "
+#~ "<command> ...] [-h]\n"
+#~ "-e              export OPML feed to stdout\n"
+#~ "-r              refresh feeds on start\n"
+#~ "-i <file>       import OPML file\n"
+#~ "-u <urlfile>    read RSS feed URLs from <urlfile>\n"
+#~ "-c <cachefile>  use <cachefile> as cache file\n"
+#~ "-C <configfile> read configuration from <configfile>\n"
+#~ "-v              clean up cache thoroughly\n"
+#~ "-x <command>... execute list of commands\n"
+#~ "-o              activate offline mode (only applies to bloglines "
+#~ "synchronization mode)\n"
+#~ "-V              get version information\n"
+#~ "-l <loglevel>   write a log with a certain loglevel (valid values: 1 to "
+#~ "6)\n"
+#~ "-d <logfile>    use <logfile> as output log file\n"
+#~ "-E <file>       export list of read articles to <file>\n"
+#~ "-I <file>       import list of read articles from <file>\n"
+#~ "-h              this help\n"
+#~ msgstr ""
+#~ "%s %s\n"
+#~ "gebruik: %s [-i <bestand>|-e] [-u <urlbestand>] [-c <cachebestand>] [-h]\n"
+#~ "-e                 exporteer OPML feed naar stdout\n"
+#~ "-r                 ververs feeds bij het opstarten\n"
+#~ "-i <bestand>       importeer OPMLbestand\n"
+#~ "-u <urlbestamd>    lees RSS feed URLs van <urlbestand>\n"
+#~ "-c <cachebestand>  gebruik <cachebestand> as cachebestand\n"
+#~ "-C <configbestand> lees configuratie in <configbestand>\n"
+#~ "-v                 maak cache grondig schoon\n"
+#~ "-x <commando>...   voer een lijst van commando's uit\n"
+#~ "-o                 activeer offline mode (geldt alleen voor bloglines "
+#~ "synchronisatiemode)\n"
+#~ "-V                 versie-informatie\n"
+#~ "-l <logniveau>     schrijf een log met een zeker logniveau (geldige "
+#~ "waarden: 1 tot 6)\n"
+#~ "-d <logbestand>    gebruik <logbestand> als output logbestand\n"
+#~ "-E <bestand>       exporteer lijst van gelezen artikels naar <bestand>\n"
+#~ "-I <bestand>       importeer lijst van gelezen artikels van <bestand>\n"
+#~ "-h                 deze hulptekst\n"
 
 #~ msgid "invalid attribute index"
 #~ msgstr "ongeldige attribuutindex"
