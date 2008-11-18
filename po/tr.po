@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: tr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-11-17 12:54+0100\n"
-"PO-Revision-Date: 2008-09-18 15:41+0300\n"
+"PO-Revision-Date: 2008-11-18 14:41+0200\n"
 "Last-Translator: H.Gökhan SARI <hsa2@difuzyon.net>\n"
 "Language-Team: Türkçe <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: src/cache.cpp:182
 #, c-format
@@ -231,99 +231,97 @@ msgid ""
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] "
 "[-h]\n"
 msgstr ""
+"%s %s\n"
+"kullanım: %s [-i <dosya>|-e] [-u <url_dosyası>] [-c <önbellek_dosyası>] [-x <komut> ...] "
+"[-h]\n"
 
 #: src/controller.cpp:698
 msgid "export OPML feed to stdout"
-msgstr ""
+msgstr "beslemeleri OPML olarak çıktıla"
 
 #: src/controller.cpp:699
 msgid "refresh feeds on start"
-msgstr ""
+msgstr "beslemeleri başlangıçta yenile"
 
 #: src/controller.cpp:700 src/controller.cpp:710 src/controller.cpp:711
-#, fuzzy
 msgid "<file>"
-msgstr "tamamlanamadı"
+msgstr "<dosya>"
 
 #: src/controller.cpp:700
 msgid "import OPML file"
-msgstr ""
+msgstr "OPML dosyasını içe aktar"
 
 #: src/controller.cpp:701
 msgid "<urlfile>"
-msgstr ""
+msgstr "<url_dosyası>"
 
 #: src/controller.cpp:701
 msgid "read RSS feed URLs from <urlfile>"
-msgstr ""
+msgstr "RSS beslemeleri adreslerini <url_dosyası>ndan oku"
 
 #: src/controller.cpp:702
-#, fuzzy
 msgid "<cachefile>"
-msgstr "iptal edildi"
+msgstr "<önbellek_dosyası>"
 
 #: src/controller.cpp:702
 msgid "use <cachefile> as cache file"
-msgstr ""
+msgstr "<önbellek_dosyası>nı önbellek dosyası olarak kullan"
 
 #: src/controller.cpp:703
 msgid "<configfile>"
-msgstr ""
+msgstr "<ayar_dosyası>"
 
 #: src/controller.cpp:703
 msgid "read configuration from <configfile>"
-msgstr ""
+msgstr "ayarları <ayar_dosyası>ndan oku"
 
 #: src/controller.cpp:704
-#, fuzzy
 msgid "clean up cache thoroughly"
-msgstr "Önbellek boşaltılıyor..."
+msgstr "önbelleği bütünüyle temizle"
 
 #: src/controller.cpp:705
 msgid "<command>..."
-msgstr ""
+msgstr "<komut>..."
 
 #: src/controller.cpp:705
 msgid "execute list of commands"
-msgstr ""
+msgstr "bir dizi komut çalıştır"
 
 #: src/controller.cpp:706
 msgid "activate offline mode (only applies to bloglines synchronization mode)"
-msgstr ""
+msgstr "çevrimdışı modunu aktifleştir (sadece bloglines eşleştirme modunu etkiler)"
 
 #: src/controller.cpp:707
 msgid "get version information"
-msgstr ""
+msgstr "sürüm bilgisini al"
 
 #: src/controller.cpp:708
 msgid "<loglevel>"
-msgstr ""
+msgstr "<kayıt_seviyesi>"
 
 #: src/controller.cpp:708
 msgid "write a log with a certain loglevel (valid values: 1 to 6)"
-msgstr ""
+msgstr "kayıt tutarken seviye belirle (geçerli seviyeler: 1 - 6)"
 
 #: src/controller.cpp:709
 msgid "<logfile>"
-msgstr ""
+msgstr "<kayıt_dosyası>"
 
 #: src/controller.cpp:709
 msgid "use <logfile> as output log file"
-msgstr ""
+msgstr "<kayıt_dosyası>nı çıktı kaydı için kullan"
 
 #: src/controller.cpp:710
-#, fuzzy
 msgid "export list of read articles to <file>"
-msgstr "Okunmuş yazıların listesi dışa aktarılıyor..."
+msgstr "okunmuş yazıların listesini <dosya>ya aktar"
 
 #: src/controller.cpp:711
-#, fuzzy
 msgid "import list of read articles from <file>"
-msgstr "Okunmuş yazıların listesi içe aktarılıyor..."
+msgstr "okunmuş yazıları <dosya>dan aktar"
 
 #: src/controller.cpp:712
 msgid "this help"
-msgstr ""
+msgstr "bu yardım"
 
 #: src/controller.cpp:756
 #, c-format
@@ -374,7 +372,7 @@ msgstr "iptal edildi"
 
 #: src/download.cpp:48
 msgid "deleted"
-msgstr "silinci"
+msgstr "silindi"
 
 #: src/download.cpp:50
 msgid "finished"
@@ -394,7 +392,7 @@ msgstr "oynatıldı"
 
 #: src/download.cpp:58
 msgid "unknown (bug)."
-msgstr "bilinmiyor /bug) "
+msgstr "bilinmiyor (bug) "
 
 #: src/exception.cpp:23
 #, c-format
@@ -717,9 +715,9 @@ msgid "URL list empty."
 msgstr "Adres listesi boş."
 
 #: src/itemview_formaction.cpp:250
-#, fuzzy, c-format
+#, c-format
 msgid "Error while marking article as unread: %s"
-msgstr "Yazı okundu olarak işaretlenirken hata oluştu: %s"
+msgstr "Yazı yeni olarak işaretlenirken hata oluştu: %s"
 
 #: src/itemview_formaction.cpp:297 src/urlview_formaction.cpp:117
 msgid "Open in Browser"
@@ -895,43 +893,43 @@ msgstr "Abone olunan adresleri düzenle"
 
 #: src/keymap.cpp:63
 msgid "Open URL 10"
-msgstr ""
+msgstr "URL 10'u aç"
 
 #: src/keymap.cpp:64
 msgid "Open URL 1"
-msgstr ""
+msgstr "URL 1'i aç"
 
 #: src/keymap.cpp:65
 msgid "Open URL 2"
-msgstr ""
+msgstr "URL 2'yi aç"
 
 #: src/keymap.cpp:66
 msgid "Open URL 3"
-msgstr ""
+msgstr "URL 3'ü aç"
 
 #: src/keymap.cpp:67
 msgid "Open URL 4"
-msgstr ""
+msgstr "URL 4'ü aç"
 
 #: src/keymap.cpp:68
 msgid "Open URL 5"
-msgstr ""
+msgstr "URL 5'i aç"
 
 #: src/keymap.cpp:69
 msgid "Open URL 6"
-msgstr ""
+msgstr "URL 6'yı aç"
 
 #: src/keymap.cpp:70
 msgid "Open URL 7"
-msgstr ""
+msgstr "URL 7'yi aç"
 
 #: src/keymap.cpp:71
 msgid "Open URL 8"
-msgstr ""
+msgstr "URL 8'i aç"
 
 #: src/keymap.cpp:72
 msgid "Open URL 9"
-msgstr ""
+msgstr "URL 9'u aç"
 
 #: src/pb_controller.cpp:166
 msgid "Cleaning up queue..."
@@ -949,10 +947,10 @@ msgid ""
 msgstr ""
 "%s %s\n"
 "kullanım %s [-C <dosya>] [-q <dosya>] [-h]\n"
-"-C <ayardosyası>       ayarları <ayardosyası>'ndan oku\n"
-"-q <kuyrukdosyası>     <kuyrukdosyası>nı kuyruk olarak kullan\n"
-"-a                     başlangıçta indirmeyi başlat\n"
-"-h                     bu yardım metnini göster\n"
+"-C <ayar_dosyası>       ayarları <ayar_dosyası>'ndan oku\n"
+"-q <kuyruk_dosyası>     <kuyruk_dosyası>nı kuyruk olarak kullan\n"
+"-a                      başlangıçta indirmeyi başlat\n"
+"-h                      bu yardım metnini göster\n"
 
 #: src/pb_view.cpp:40
 #, c-format
