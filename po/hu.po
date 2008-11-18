@@ -12,7 +12,7 @@ msgstr ""
 "Last-Translator: Zsolt Udvari <udvzsolt@gmail.com>\n"
 "Language-Team: Hungarian <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: src/cache.cpp:182
@@ -57,7 +57,7 @@ msgstr "%N %V - Cimke kiválasztása"
 
 #: src/configcontainer.cpp:74
 msgid "%N %V - Select Filter"
-msgstr "%N %V - Szûrõ kiválasztása"
+msgstr "%N %V - Szűrő kiválasztása"
 
 #: src/configcontainer.cpp:75
 msgid "%N %V - Article '%T'"
@@ -122,7 +122,7 @@ msgstr "%s %s indítása..."
 #: src/controller.cpp:233 src/controller.cpp:305 src/pb_controller.cpp:116
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
-msgstr "Hiba: egy példány már fut %s-bõl (PID: %u)"
+msgstr "Hiba: egy példány már fut %s-ből (PID: %u)"
 
 #: src/controller.cpp:239 src/pb_controller.cpp:120
 msgid "Loading configuration..."
@@ -146,7 +146,7 @@ msgstr "URL-ek betöltése a helyi cache-bõl..."
 #: src/controller.cpp:346
 #, c-format
 msgid "Loading URLs from %s..."
-msgstr "URL-ek betöltése %s-bõl..."
+msgstr "URL-ek betöltése %s-ből..."
 
 #: src/controller.cpp:359
 #, c-format
@@ -162,7 +162,7 @@ msgid ""
 "It looks like you haven't configured any feeds in your bloglines account. "
 "Please do so, and try again."
 msgstr ""
-"Úgy tûnik, még nem konfiguráltál semmilyen forrást a bloglines "
+"Úgy tűnik, még nem konfiguráltál semmilyen forrást a bloglines "
 "fiókodban. Tedd meg, és próbáld újra!"
 
 #: src/controller.cpp:363
@@ -170,7 +170,7 @@ msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
 msgstr ""
-"Úgy tûnik, az OPML, amit betöltöttél, nem tartalmaz hírforrásokat. "
+"Úgy tűnik, az OPML, amit betöltöttél, nem tartalmaz hírforrásokat. "
 "Töltsd fel forrásokkal és próbáld újra!"
 
 #: src/controller.cpp:372
@@ -231,112 +231,110 @@ msgid ""
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] "
 "[-h]\n"
 msgstr ""
+"%s %s\n"
+"használat: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] "
+"[-h]\n"
 
 #: src/controller.cpp:698
 msgid "export OPML feed to stdout"
-msgstr ""
+msgstr "OPML exportálása az stdout-ra"
 
 #: src/controller.cpp:699
 msgid "refresh feeds on start"
-msgstr ""
+msgstr "források frissítése induláskor"
 
 #: src/controller.cpp:700 src/controller.cpp:710 src/controller.cpp:711
-#, fuzzy
 msgid "<file>"
-msgstr "hibás"
+msgstr "<file>"
 
 #: src/controller.cpp:700
 msgid "import OPML file"
-msgstr ""
+msgstr "OPML fájl importálása"
 
 #: src/controller.cpp:701
 msgid "<urlfile>"
-msgstr ""
+msgstr "<urlfile>"
 
 #: src/controller.cpp:701
 msgid "read RSS feed URLs from <urlfile>"
-msgstr ""
+msgstr "RSS források URL-jeinek olvasása <urlfile>-ból"
 
 #: src/controller.cpp:702
-#, fuzzy
 msgid "<cachefile>"
-msgstr "megszakítva"
+msgstr "<cachefile>"
 
 #: src/controller.cpp:702
 msgid "use <cachefile> as cache file"
-msgstr ""
+msgstr "<cachefile> használata cache fájlként"
 
 #: src/controller.cpp:703
 msgid "<configfile>"
-msgstr ""
+msgstr "<configfile>"
 
 #: src/controller.cpp:703
 msgid "read configuration from <configfile>"
-msgstr ""
+msgstr "beállítások olvasása <configfile>-ból"
 
 #: src/controller.cpp:704
-#, fuzzy
 msgid "clean up cache thoroughly"
 msgstr "A cache teljes ürítése..."
 
 #: src/controller.cpp:705
 msgid "<command>..."
-msgstr ""
+msgstr "<command>..."
 
 #: src/controller.cpp:705
 msgid "execute list of commands"
-msgstr ""
+msgstr "parancsok listájának futtatása"
 
 #: src/controller.cpp:706
 msgid "activate offline mode (only applies to bloglines synchronization mode)"
-msgstr ""
+msgstr "offline mód aktiválása (csak a blogline szinkronizációra érvényes)"
 
 #: src/controller.cpp:707
 msgid "get version information"
-msgstr ""
+msgstr "verzió információ"
 
 #: src/controller.cpp:708
 msgid "<loglevel>"
-msgstr ""
+msgstr "<loglevel>"
 
 #: src/controller.cpp:708
 msgid "write a log with a certain loglevel (valid values: 1 to 6)"
-msgstr ""
+msgstr "log írása az adott szinten (érvényes értékek: 1-től 6-ig)"
 
 #: src/controller.cpp:709
 msgid "<logfile>"
-msgstr ""
+msgstr "<logfile>"
 
 #: src/controller.cpp:709
 msgid "use <logfile> as output log file"
-msgstr ""
+msgstr "<logfile> használata naplófájlként"
 
 #: src/controller.cpp:710
-#, fuzzy
 msgid "export list of read articles to <file>"
-msgstr "Olvasott cikkek listájának exportálása..."
+msgstr "olvasott cikkek listájának exportálása <file>-ba"
 
 #: src/controller.cpp:711
-#, fuzzy
 msgid "import list of read articles from <file>"
-msgstr "Olvasott cikkek listájának importálása..."
+msgstr "olvasott cikkek listájának importálása <file>-ból"
 
 #: src/controller.cpp:712
 msgid "this help"
-msgstr ""
+msgstr "ez a súgó"
 
 #: src/controller.cpp:756
 #, c-format
 msgid "Import of %s finished."
-msgstr "%s importálása befejezõdött."
+msgstr "%s importálása befejeződött."
 
 #: src/controller.cpp:955
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
 msgstr ""
-"könyvjelzõ lehetõség nem konfigurált. Kérlek állítsd be a `bookmark-"
-"cmd' változót megfelelõen."
+"könyvjelző lehetőség nem konfigurált. Kérlek állítsd be a `bookmark-"
+"cmd' változót megfelelően."
 
 #: src/controller.cpp:967
 #, c-format
@@ -399,7 +397,7 @@ msgstr "ismeretlen (bug)."
 #: src/exception.cpp:23
 #, c-format
 msgid "attribute `%s' is not available."
-msgstr "%s argumentum nem elérhetõ."
+msgstr "%s argumentum nem elérhető."
 
 #: src/feedlist_formaction.cpp:90 src/feedlist_formaction.cpp:100
 #: src/feedlist_formaction.cpp:140
@@ -434,7 +432,7 @@ msgstr "Hiba: nem tudtam feldolgozni a filter parancsot!"
 
 #: src/feedlist_formaction.cpp:224 src/itemlist_formaction.cpp:283
 msgid "No filters defined."
-msgstr "Nincs szûrõ (filter) definiálva."
+msgstr "Nincs szűrő (filter) definiálva."
 
 #: src/feedlist_formaction.cpp:237 src/help_formaction.cpp:24
 #: src/itemlist_formaction.cpp:229
@@ -556,19 +554,19 @@ msgstr "Mentés"
 
 #: src/formaction.cpp:124 src/formaction.cpp:131
 msgid "usage: set <variable>[=<value>]"
-msgstr "Használat: set <változó>[=<érték>]"
+msgstr "használat: set <változó>[=<érték>]"
 
 #: src/formaction.cpp:172
 msgid "Saving bookmark..."
-msgstr "Könyvjelzõ mentése..."
+msgstr "Könyvjelző mentése..."
 
 #: src/formaction.cpp:175
 msgid "Saved bookmark."
-msgstr "Könyvjelzõ elmentve."
+msgstr "Könyvjelző elmentve."
 
 #: src/formaction.cpp:177
 msgid "Error while saving bookmark: "
-msgstr "Hiba a könyvjelzõ mentése közben: "
+msgstr "Hiba a könyvjelző mentése közben: "
 
 #: src/formaction.cpp:199
 msgid "URL: "
@@ -637,16 +635,16 @@ msgstr "Nincs olvasatlan forrás."
 
 #: src/itemlist_formaction.cpp:237 src/itemview_formaction.cpp:246
 msgid "Toggling read flag for article..."
-msgstr "Az olvasott jelzõ állítása a cikkre..."
+msgstr "Az olvasott jelző állítása a cikkre..."
 
 #: src/itemlist_formaction.cpp:251
 #, c-format
 msgid "Error while toggling read flag: %s"
-msgstr "Hiba az olvasott jelzõ állítása közben: %s"
+msgstr "Hiba az olvasott jelző állítása közben: %s"
 
 #: src/itemlist_formaction.cpp:369 src/itemview_formaction.cpp:385
 msgid "Flags updated."
-msgstr "Jelzõk frissítve."
+msgstr "Jelzők frissítve."
 
 #: src/itemlist_formaction.cpp:574
 msgid "Mark All Read"
@@ -710,20 +708,20 @@ msgstr "Hiba: nem tudtam a cikket a(z) %s file-ba menteni"
 #: src/itemview_formaction.cpp:191 src/itemview_formaction.cpp:275
 #: src/urlview_formaction.cpp:33 src/urlview_formaction.cpp:68
 msgid "Starting browser..."
-msgstr "Böngészõ indítása..."
+msgstr "Böngésző indítása..."
 
 #: src/itemview_formaction.cpp:223
 msgid "URL list empty."
 msgstr "URL lista üres."
 
 #: src/itemview_formaction.cpp:250
-#, fuzzy, c-format
+#, c-format
 msgid "Error while marking article as unread: %s"
-msgstr "Hiba a cikk olvasottá tétele közben: %s "
+msgstr "Hiba a cikk olvasatlanná tétele közben: %s "
 
 #: src/itemview_formaction.cpp:297 src/urlview_formaction.cpp:117
 msgid "Open in Browser"
-msgstr "Megnyitni böngészõben"
+msgstr "Megnyitás böngészőben"
 
 #: src/itemview_formaction.cpp:298
 msgid "Enqueue"
@@ -735,7 +733,7 @@ msgstr "Forrás/cikk megnyitása"
 
 #: src/keymap.cpp:22
 msgid "Return to previous dialog/Quit"
-msgstr "Vissza az elõzõhöz/Kilépés"
+msgstr "Vissza az előzőhöz/Kilépés"
 
 #: src/keymap.cpp:23
 msgid "Reload currently selected feed"
@@ -759,15 +757,15 @@ msgstr "Cikk mentése"
 
 #: src/keymap.cpp:28
 msgid "Go to next unread article"
-msgstr "Következõ olvasatlan cikk"
+msgstr "Következő olvasatlan cikk"
 
 #: src/keymap.cpp:29
 msgid "Go to previous unread article"
-msgstr "Elõzõ olvasatlan cikk"
+msgstr "Elõző olvasatlan cikk"
 
 #: src/keymap.cpp:30
 msgid "Open article in browser"
-msgstr "Cikk megnyitása böngészõben"
+msgstr "Cikk megnyitása böngészőben"
 
 #: src/keymap.cpp:31
 msgid "Open help dialog"
@@ -811,7 +809,7 @@ msgstr "Az URL-ek listájának újratöltése"
 
 #: src/keymap.cpp:41
 msgid "Download file"
-msgstr "File letöltése"
+msgstr "Fájl letöltése"
 
 #: src/keymap.cpp:42
 msgid "Cancel download"
@@ -843,7 +841,7 @@ msgstr "Párhuzamos letöltések számának csökkentése"
 
 #: src/keymap.cpp:49
 msgid "Redraw screen"
-msgstr "Képernyõ újrarajzolása"
+msgstr "Képernyő újrarajzolása"
 
 #: src/keymap.cpp:50
 msgid "Open the commandline"
@@ -851,31 +849,31 @@ msgstr "Parancssor nyitása"
 
 #: src/keymap.cpp:51
 msgid "Set a filter"
-msgstr "Szûrõ állítása"
+msgstr "Szűrő állítása"
 
 #: src/keymap.cpp:52
 msgid "Select a predefined filter"
-msgstr "Elõredefiniált szûrõ kiválasztása"
+msgstr "Előredefiniált szűrő kiválasztása"
 
 #: src/keymap.cpp:53
 msgid "Clear currently set filter"
-msgstr "Aktuális szûrõ törlése"
+msgstr "Aktuális szűrő törlése"
 
 #: src/keymap.cpp:54
 msgid "Bookmark current link/article"
-msgstr "Aktuális link/cikk könyvjelzõbe"
+msgstr "Aktuális link/cikk könyvjelzőbe"
 
 #: src/keymap.cpp:55
 msgid "Edit flags"
-msgstr "Jelzõk szerkesztése"
+msgstr "Jelzők szerkesztése"
 
 #: src/keymap.cpp:56
 msgid "Go to next unread feed"
-msgstr "Következõ olvasatlan forrás"
+msgstr "Következő olvasatlan forrás"
 
 #: src/keymap.cpp:57
 msgid "Go to previous unread feed"
-msgstr "Elõzõ olvasatlan forrás"
+msgstr "Előző olvasatlan forrás"
 
 #: src/keymap.cpp:58
 msgid "Call a macro"
@@ -895,47 +893,47 @@ msgstr "Feliratkozott URL-ek szerkesztése"
 
 #: src/keymap.cpp:63
 msgid "Open URL 10"
-msgstr ""
+msgstr "10. URL megnyitása"
 
 #: src/keymap.cpp:64
 msgid "Open URL 1"
-msgstr ""
+msgstr "1. URL megnyitása"
 
 #: src/keymap.cpp:65
 msgid "Open URL 2"
-msgstr ""
+msgstr "2. URL megnyitása"
 
 #: src/keymap.cpp:66
 msgid "Open URL 3"
-msgstr ""
+msgstr "3. URL megnyitása"
 
 #: src/keymap.cpp:67
 msgid "Open URL 4"
-msgstr ""
+msgstr "4. URL megnyitása"
 
 #: src/keymap.cpp:68
 msgid "Open URL 5"
-msgstr ""
+msgstr "5. URL megnyitása"
 
 #: src/keymap.cpp:69
 msgid "Open URL 6"
-msgstr ""
+msgstr "6. URL megnyitása"
 
 #: src/keymap.cpp:70
 msgid "Open URL 7"
-msgstr ""
+msgstr "7. URL megnyitása"
 
 #: src/keymap.cpp:71
 msgid "Open URL 8"
-msgstr ""
+msgstr "8. URL megnyitása"
 
 #: src/keymap.cpp:72
 msgid "Open URL 9"
-msgstr ""
+msgstr "9. URL megnyitása"
 
 #: src/pb_controller.cpp:166
 msgid "Cleaning up queue..."
-msgstr "Teendõk törlése..."
+msgstr "Lista törlése..."
 
 #: src/pb_controller.cpp:179
 #, c-format
@@ -971,7 +969,7 @@ msgstr "Hiba: nem léphetsz ki: letöltés(ek) folyamatban."
 
 #: src/pb_view.cpp:127
 msgid "Error: download needs to be finished before the file can be played."
-msgstr "Hiba: a letöltésnek be kell fejezõdnie, mielõtt lejátszhatnád."
+msgstr "Hiba: a letöltésnek be kell fejeződnie, mielőtt lejátszhatnád."
 
 #: src/pb_view.cpp:156
 msgid "Error: unable to perform operation: download(s) in progress."
@@ -1008,7 +1006,7 @@ msgstr "Cimke kijelölése"
 
 #: src/select_formaction.cpp:142
 msgid "Select Filter"
-msgstr "Szûrõ kijelölése"
+msgstr "Szűrő kijelölése"
 
 #: src/tagsouppullparser.cpp:41
 msgid "attribute not found"
@@ -1024,12 +1022,12 @@ msgstr "Nincs link kijelölve!"
 
 #: src/urlview_formaction.cpp:118
 msgid "Save Bookmark"
-msgstr "Könyvjelzõ mentése"
+msgstr "Könyvjelző mentése"
 
 #: src/view.cpp:308 src/view.cpp:325
 #, c-format
 msgid "Error: applying the filter failed: %s"
-msgstr "Hiba: szûrõ alkalmazása nem sikerült: %s"
+msgstr "Hiba: szűrő alkalmazása nem sikerült: %s"
 
 #: src/view.cpp:345 src/view.cpp:365
 msgid "Error: feed contains no items!"
