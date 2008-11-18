@@ -244,89 +244,84 @@ msgid "refresh feeds on start"
 msgstr ""
 
 #: src/controller.cpp:700 src/controller.cpp:710 src/controller.cpp:711
-#, fuzzy
 msgid "<file>"
-msgstr "fallido"
+msgstr "<archivo>"
 
 #: src/controller.cpp:700
 msgid "import OPML file"
-msgstr ""
+msgstr "importar archivo OPML"
 
 #: src/controller.cpp:701
 msgid "<urlfile>"
-msgstr ""
+msgstr "<archivo_url>"
 
 #: src/controller.cpp:701
 msgid "read RSS feed URLs from <urlfile>"
-msgstr ""
+msgstr "leer URLs de feeds RSS desde <archivo_url>"
 
 #: src/controller.cpp:702
-#, fuzzy
 msgid "<cachefile>"
-msgstr "cancelado"
+msgstr "<archivo_cache>"
 
 #: src/controller.cpp:702
 msgid "use <cachefile> as cache file"
-msgstr ""
+msgstr "usar <archivo_cache> como archivo de cache"
 
 #: src/controller.cpp:703
 msgid "<configfile>"
-msgstr ""
+msgstr "<archivo_config>"
 
 #: src/controller.cpp:703
 msgid "read configuration from <configfile>"
-msgstr ""
+msgstr "leer configuracion desde <archivo_config>"
 
 #: src/controller.cpp:704
-#, fuzzy
 msgid "clean up cache thoroughly"
-msgstr "Limpiando el cache totalmente..."
+msgstr "Limpiar el cache totalmente"
 
 #: src/controller.cpp:705
 msgid "<command>..."
-msgstr ""
+msgstr "<comando>..."
 
 #: src/controller.cpp:705
 msgid "execute list of commands"
-msgstr ""
+msgstr "ejecutar lista de comandos"
 
 #: src/controller.cpp:706
 msgid "activate offline mode (only applies to bloglines synchronization mode)"
-msgstr ""
+msgstr "activar modo desconectado (solo se aplica al modo de sincronizacion de bloglines)"
 
 #: src/controller.cpp:707
 msgid "get version information"
-msgstr ""
+msgstr "informacion de la version"
 
 #: src/controller.cpp:708
 msgid "<loglevel>"
-msgstr ""
+msgstr "<nivel_bitacora>"
 
 #: src/controller.cpp:708
 msgid "write a log with a certain loglevel (valid values: 1 to 6)"
-msgstr ""
+msgstr "escribir una bitacora con un determinado nivel (valores validos: 1 a 6)"
 
 #: src/controller.cpp:709
 msgid "<logfile>"
-msgstr ""
+msgstr "<archivo_bitacora>"
 
 #: src/controller.cpp:709
 msgid "use <logfile> as output log file"
-msgstr ""
+msgstr "usar <archivo_bitacora> como archivo de salida de bitacora"
 
 #: src/controller.cpp:710
-#, fuzzy
 msgid "export list of read articles to <file>"
-msgstr "Exportando lista de articulos leidos..."
+msgstr "exportar lista de articulos leidos a <archivo>"
 
 #: src/controller.cpp:711
-#, fuzzy
 msgid "import list of read articles from <file>"
-msgstr "Importando lista de articulos leidos..."
+msgstr "importar lista de articulos leidos desde <archivo>"
 
 #: src/controller.cpp:712
 msgid "this help"
-msgstr ""
+msgstr "esta ayuda"
 
 #: src/controller.cpp:756
 #, c-format
@@ -720,9 +715,8 @@ msgid "URL list empty."
 msgstr "Lista de URL vacia."
 
 #: src/itemview_formaction.cpp:250
-#, fuzzy, c-format
 msgid "Error while marking article as unread: %s"
-msgstr "Error marcando articulo como leido: %s"
+msgstr "Error marcando articulo como no leido: %s"
 
 #: src/itemview_formaction.cpp:297 src/urlview_formaction.cpp:117
 msgid "Open in Browser"
@@ -898,43 +892,43 @@ msgstr "Editar URLs suscritas"
 
 #: src/keymap.cpp:63
 msgid "Open URL 10"
-msgstr ""
+msgstr "Abrir URL 10"
 
 #: src/keymap.cpp:64
 msgid "Open URL 1"
-msgstr ""
+msgstr "Abrir URL 1"
 
 #: src/keymap.cpp:65
 msgid "Open URL 2"
-msgstr ""
+msgstr "Abrir URL 2"
 
 #: src/keymap.cpp:66
 msgid "Open URL 3"
-msgstr ""
+msgstr "Abrir URL 3"
 
 #: src/keymap.cpp:67
 msgid "Open URL 4"
-msgstr ""
+msgstr "Abrir URL 4"
 
 #: src/keymap.cpp:68
 msgid "Open URL 5"
-msgstr ""
+msgstr "Abrir URL 5"
 
 #: src/keymap.cpp:69
 msgid "Open URL 6"
-msgstr ""
+msgstr "Abrir URL 6"
 
 #: src/keymap.cpp:70
 msgid "Open URL 7"
-msgstr ""
+msgstr "Abrir URL 7"
 
 #: src/keymap.cpp:71
 msgid "Open URL 8"
-msgstr ""
+msgstr "Abrir URL 8"
 
 #: src/keymap.cpp:72
 msgid "Open URL 9"
-msgstr ""
+msgstr "Abrir URL 9"
 
 #: src/pb_controller.cpp:166
 msgid "Cleaning up queue..."
