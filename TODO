@@ -5,7 +5,6 @@ TODO:
 - add an auto-flag configuration command to automatically flag articles that match a certain query
 - when reload is finished, the focus shall be in the current form's list
 - per-feed refresh settings
-- write documentation on feed-sortorder and related changes
 
 DONE:
 - clean up items that have been added but whose URL has been removed from the config file.
@@ -124,3 +123,4 @@ DONE:
 - make ":<number>" work on urlview dialog
 - replace std::vector<rss_item> with std::vector<std::tr1::shared_ptr<rss_item> > as a possible fix against these weird crashes.
   beta tester: mhellwig@in-ulm.de (regular crashes on sparc Linux)
+- write documentation on feed-sortorder and related changes
