@@ -48,9 +48,6 @@ void ctrl_c_action(int sig) {
 	GetLogger().log(LOG_DEBUG,"caugh signal %d",sig);
 	stfl::reset();
 	::unlink(lock_file.c_str());
-	if (SIGSEGV == sig) {
-		fprintf(stderr,"%s\n", _("Segmentation fault."));
-	}
 	::exit(EXIT_FAILURE);
 }
 
@@ -111,9 +108,6 @@ void controller::run(int argc, char * argv[]) {
 	queue_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
 
 	::signal(SIGINT, ctrl_c_action);
-#ifndef DEBUG
-	// ::signal(SIGSEGV, ctrl_c_action);
-#endif
 	::signal(SIGPIPE, ignore_signal);
 	::signal(SIGHUP, ctrl_c_action);
 	::signal(SIGCHLD, omg_a_child_died);

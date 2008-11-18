@@ -1,5 +1,3 @@
-PACKAGE=newsbeuter
-
 # important directories
 prefix?=/usr/local
 mandir?=$(prefix)/share/man
@@ -11,23 +9,16 @@ docdir?=$(datadir)/doc/$(PACKAGE)
 CXX=c++
 CC=cc
 
-SWIG=swig
 RUBY=ruby
 
 # compiler and linker flags
-DEFINES=-D_ENABLE_NLS -DLOCALEDIR=\"$(localedir)\" -DPACKAGE=\"$(PACKAGE)\"
+DEFINES=-DLOCALEDIR=\"$(localedir)\"
 WARNFLAGS=-Wall -Wextra
 CXXFLAGS+=-ggdb -I/sw/include -I./include -I./stfl -I./filter -I. -I./xmlrss $(WARNFLAGS) $(DEFINES)
 CFLAGS+=-ggdb -I./xmlrss $(WARNFLAGS) $(DEFINES)
 LDFLAGS+=-L. -L/sw/lib
 
 include config.mk
-
-SWIGFLAGS=-c++ -ruby
-
-ifeq ($(DEBUG),1)
-DEFINES+=-DDEBUG
-endif
 
 LIB_SOURCES:=$(shell cat libbeuter.deps)
 LIB_OBJS:=$(patsubst %.cpp,%.o,$(LIB_SOURCES))
@@ -37,7 +28,7 @@ FILTERLIB_SOURCES=filter/Scanner.cpp filter/Parser.cpp filter/FilterParser.cpp
 FILTERLIB_OBJS:=$(patsubst %.cpp,%.o,$(FILTERLIB_SOURCES))
 FILTERLIB_OUTPUT=libfilter.a
 
-NEWSBEUTER=$(PACKAGE)
+NEWSBEUTER=newsbeuter
 NEWSBEUTER_SOURCES:=$(shell cat newsbeuter.deps)
 NEWSBEUTER_OBJS:=$(patsubst %.cpp,%.o,$(NEWSBEUTER_SOURCES))
 NEWSBEUTER_LIBS=-lbeuter -lfilter -lstfl -lncursesw -lpthread -lxmlrss

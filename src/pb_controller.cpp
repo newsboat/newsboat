@@ -28,9 +28,6 @@ void ctrl_c_action(int sig) {
 	GetLogger().log(LOG_DEBUG,"caugh signal %d",sig);
 	stfl::reset();
 	utils::remove_fs_lock(lock_file);
-	if (SIGSEGV == sig) {
-		fprintf(stderr,"%s\n", _("Segmentation fault."));
-	}
 	::exit(EXIT_FAILURE);
 }
 
@@ -69,7 +66,6 @@ void pb_controller::run(int argc, char * argv[]) {
 	bool automatic_dl = false;
 
 	::signal(SIGINT, ctrl_c_action);
-	::signal(SIGSEGV, ctrl_c_action);
 
 	do {
 		if ((c = ::getopt(argc, argv, "C:q:d:l:ha")) < 0)
