@@ -236,9 +236,8 @@ msgid "refresh feeds on start"
 msgstr "在本软件启动之初刷新种子列表"
 
 #: src/controller.cpp:700 src/controller.cpp:710 src/controller.cpp:711
-#, fuzzy
 msgid "<file>"
-msgstr "已失败"
+msgstr "文件"
 
 #: src/controller.cpp:700
 msgid "import OPML file"
@@ -253,9 +252,8 @@ msgid "read RSS feed URLs from <urlfile>"
 msgstr "从超链文件里读取RSS种子列表"
 
 #: src/controller.cpp:702
-#, fuzzy
 msgid "<cachefile>"
-msgstr "已取消"
+msgstr "缓存文件"
 
 #: src/controller.cpp:702
 msgid "use <cachefile> as cache file"
@@ -270,7 +268,6 @@ msgid "read configuration from <configfile>"
 msgstr "从<配置文件>里读取配置信息"
 
 #: src/controller.cpp:704
-#, fuzzy
 msgid "clean up cache thoroughly"
 msgstr "彻底清除缓存"
 
@@ -307,9 +304,8 @@ msgid "use <logfile> as output log file"
 msgstr "使用<记录文件>作为导出记录的文件"
 
 #: src/controller.cpp:710
-#, fuzzy
 msgid "export list of read articles to <file>"
-msgstr "错误：无法将文章写至 %s"
+msgstr "将已阅读文章导出到<文件>"
 
 #: src/controller.cpp:711
 msgid "import list of read articles from <file>"
@@ -331,9 +327,9 @@ msgid ""
 msgstr "书签支持尚未配置，请在配置文件里设置相应变量 `bookmark-cmd' "
 
 #: src/controller.cpp:967
-#, fuzzy, c-format
+#, c-format
 msgid "%u unread articles"
-msgstr "转到下一篇未读文章"
+msgstr "%u 篇未读文章"
 
 #: src/controller.cpp:976 src/formaction.cpp:200
 #: src/itemview_formaction.cpp:81
@@ -381,9 +377,9 @@ msgid "incomplete"
 msgstr "未完毕"
 
 #: src/download.cpp:56
-#, fuzzy
+#, 
 msgid "played"
-msgstr "播放"
+msgstr "已播放"
 
 #: src/download.cpp:58
 msgid "unknown (bug)."
@@ -710,9 +706,9 @@ msgid "URL list empty."
 msgstr "空空如也的链接列表"
 
 #: src/itemview_formaction.cpp:250
-#, fuzzy, c-format
+#, c-format
 msgid "Error while marking article as unread: %s"
-msgstr "当标记文章为已读的时候出错: %s"
+msgstr "当标记文章为未读的时候出错: %s"
 
 #: src/itemview_formaction.cpp:297 src/urlview_formaction.cpp:117
 msgid "Open in Browser"
@@ -775,9 +771,9 @@ msgid "Toggle read status for article"
 msgstr "切换文章的阅读状态（已读/未读）"
 
 #: src/keymap.cpp:34
-#, fuzzy
+#, 
 msgid "Toggle show read feeds/articles"
-msgstr "切换显示已读种子"
+msgstr "切换显示已读种子/文章"
 
 #: src/keymap.cpp:35
 msgid "Show URLs in current article"
@@ -864,28 +860,28 @@ msgid "Edit flags"
 msgstr "编辑标记"
 
 #: src/keymap.cpp:56
-#, fuzzy
+#, 
 msgid "Go to next unread feed"
-msgstr "转到下一篇未读文章"
+msgstr "转到下一篇未读的种子"
 
 #: src/keymap.cpp:57
-#, fuzzy
+#, 
 msgid "Go to previous unread feed"
-msgstr "转到前一篇未读文章"
+msgstr "转到前一篇未读的种子"
 
 #: src/keymap.cpp:58
 msgid "Call a macro"
 msgstr "调用一个宏命令"
 
 #: src/keymap.cpp:59
-#, fuzzy
+#, 
 msgid "Delete article"
-msgstr "保存文章"
+msgstr "删除文章"
 
 #: src/keymap.cpp:60
-#, fuzzy
+#, 
 msgid "Purge deleted articles"
-msgstr "转到下一篇未读文章"
+msgstr "压缩已删除文章"
 
 #: src/keymap.cpp:61
 msgid "Edit subscribed URLs"
@@ -936,7 +932,7 @@ msgid "Cleaning up queue..."
 msgstr "清空队列..."
 
 #: src/pb_controller.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage %s [-C <file>] [-q <file>] [-h]\n"
@@ -949,6 +945,7 @@ msgstr ""
 "usage %s [-C <file>] [-q <file>] [-h]\n"
 "-C <configfile> 从<configfile>里读取配置信息\n"
 "-q <queuefile>  使用<queuefile>作为队列文件\n"
+"-a              在一开始就启动下载\n"
 "-h              显示当前帮助列表\n"
 
 #: src/pb_view.cpp:40
@@ -1035,7 +1032,6 @@ msgstr "错误: 种子里没有包含任何项目!"
 msgid "Updating query feed..."
 msgstr "更新查询种子..."
 
-#, fuzzy
 #~ msgid ""
 #~ "%s %s\n"
 #~ "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x "
@@ -1067,8 +1063,13 @@ msgstr "更新查询种子..."
 #~ "-c <cachefile>  使用<cachefile>作为缓存文件\n"
 #~ "-C <configfile> 从<configfile>读取配置信息\n"
 #~ "-v              彻底清空缓存\n"
+#~ "-x <command>... 执行一系列命令\n"
 #~ "-o              激活离线模式（只对bloglines同步模式有效）\n"
 #~ "-V              显示版本信息\n"
+#~ "-l <loglevel>   以某一等级做记录（有效值：1 - 6）\n "
+#~ "-d <logfile>    使用<记录文件>作为导出记录的文件\n"
+#~ "-E <file>       将已阅读文章导出到<文件>\n"
+#~ "-I <file>       从<文件>里导入阅读的文章列表\n"
 #~ "-h              显示这个帮助列表\n"
 
 #~ msgid "invalid attribute index"
@@ -1080,4 +1081,4 @@ msgstr "更新查询种子..."
 
 #, fuzzy
 #~ msgid "Error while calling `%s': %s"
-#~ msgstr "当查找 `%s'的时候出错: %s"
+#~ msgstr "当调用`%s'的时候出错: %s"
