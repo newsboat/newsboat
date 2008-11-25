@@ -138,23 +138,23 @@ doc:
 	$(A2X) -f manpage -D doc doc/manpage-podbeuter.txt
 
 install: install-mo
-	$(MKDIR) $(prefix)/bin
-	$(INSTALL) $(NEWSBEUTER) $(prefix)/bin
-	$(INSTALL) $(PODBEUTER) $(prefix)/bin
-	$(MKDIR) $(mandir)/man1
-	$(INSTALL) doc/$(NEWSBEUTER).1 $(mandir)/man1
-	$(INSTALL) doc/$(PODBEUTER).1 $(mandir)/man1
-	$(MKDIR) $(docdir)
-	$(INSTALL) -m 644 doc/xhtml/* $(docdir) || true
-	$(MKDIR) $(docdir)/examples
-	$(INSTALL) -m 644 doc/example-config $(docdir)/examples/config || true
+	$(MKDIR) $(DESTDIR)$(prefix)/bin
+	$(INSTALL) $(NEWSBEUTER) $(DESTDIR)$(prefix)/bin
+	$(INSTALL) $(PODBEUTER) $(DESTDIR)$(prefix)/bin
+	$(MKDIR) $(DESTDIR)$(mandir)/man1
+	$(INSTALL) doc/$(NEWSBEUTER).1 $(DESTDIR)$(mandir)/man1
+	$(INSTALL) doc/$(PODBEUTER).1 $(DESTDIR)$(mandir)/man1
+	$(MKDIR) $(DESTDIR)$(docdir)
+	$(INSTALL) -m 644 doc/xhtml/* $(DESTDIR)$(docdir) || true
+	$(MKDIR) $(DESTDIR)$(docdir)/examples
+	$(INSTALL) -m 644 doc/example-config $(DESTDIR)$(docdir)/examples/config || true
 
 uninstall:
-	$(RM) $(prefix)/bin/$(NEWSBEUTER)
-	$(RM) $(prefix)/bin/$(PODBEUTER)
-	$(RM) $(mandir)/man1/$(NEWSBEUTER).1
-	$(RM) $(mandir)/man1/$(PODBEUTER).1
-	$(RM) -r $(docdir)
+	$(RM) $(DESTDIR)$(prefix)/bin/$(NEWSBEUTER)
+	$(RM) $(DESTDIR)$(prefix)/bin/$(PODBEUTER)
+	$(RM) $(DESTDIR)$(mandir)/man1/$(NEWSBEUTER).1
+	$(RM) $(DESTDIR)$(mandir)/man1/$(PODBEUTER).1
+	$(RM) -r $(DESTDIR)$(docdir)
 
 .PHONY: doc clean all test install uninstall
 
@@ -174,11 +174,11 @@ clean-mo:
 	$(RM) $(MOFILES) po/*~
 
 install-mo:
-	$(MKDIR) $(datadir)
+	$(MKDIR) $(DESTDIR)$(datadir)
 	@for mof in $(MOFILES) ; do \
 		mofile=`basename $$mof` ; \
 		lang=`echo $$mofile | sed 's/\.mo$$//'`; \
-		dir=$(localedir)/$$lang/LC_MESSAGES; \
+		dir=$(DESTDIR)$(localedir)/$$lang/LC_MESSAGES; \
 		$(MKDIR) $$dir ; \
 		$(INSTALL) -m 644 $$mof $$dir/$(PACKAGE).mo ; \
 		echo "Installing $$mofile as $$dir/$(PACKAGE).mo" ; \
