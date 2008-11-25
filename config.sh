@@ -57,7 +57,7 @@ fail_custom() {
 	exit 1
 }
 
-echo -n "" > config.mk
+echo "" > config.mk
 
 check_pkg "sqlite3" || fail "sqlite3"
 check_pkg "libcurl" || check_custom "libcurl" "curl-config" || fail "libcurl"
