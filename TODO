@@ -5,6 +5,7 @@ TODO:
 - add an auto-flag configuration command to automatically flag articles that match a certain query
 - when reload is finished, the focus shall be in the current form's list
 - per-feed refresh settings
+- add support for interactive bookmarking plugins
 
 DONE:
 - clean up items that have been added but whose URL has been removed from the config file.
