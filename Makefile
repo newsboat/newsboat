@@ -89,9 +89,9 @@ $(FILTERLIB_OUTPUT): $(FILTERLIB_OBJS)
 	$(AR) qc $@ $^
 	$(RANLIB) $@
 
-filter/Scanner.cpp filter/Parser.cpp: filter/filter.atg filter/Scanner.frame filter/Parser.frame
-	$(RM) filter/Scanner.cpp filter/Parser.cpp filter/Scanner.h filter/Parser.h
-	cococpp -frames filter $<
+#filter/Scanner.cpp filter/Parser.cpp: filter/filter.atg filter/Scanner.frame filter/Parser.frame
+#	$(RM) filter/Scanner.cpp filter/Parser.cpp filter/Scanner.h filter/Parser.h
+#	cococpp -frames filter $<
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
@@ -115,14 +115,14 @@ clean-libbeuter:
 clean-libxmlrss:
 	$(RM) $(XMLRSSLIB_OUTPUT) $(XMLRSSLIB_OBJS)
 
-clean-libfilter:
-	$(RM) $(FILTERLIB_OUTPUT) $(FILTERLIB_OBJS) filter/Scanner.cpp filter/Scanner.h filter/Parser.cpp filter/Parser.h
+#clean-libfilter:
+#	$(RM) $(FILTERLIB_OUTPUT) $(FILTERLIB_OBJS) filter/Scanner.cpp filter/Scanner.h filter/Parser.cpp filter/Parser.h
 
 clean-doc:
 	$(RM) -r doc/xhtml 
 	$(RM) doc/*.xml doc/*.1 doc/newsbeuter-cfgcmds.txt doc/podbeuter-cfgcmds.txt doc/newsbeuter-keycmds.txt
 
-clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-doc clean-libxmlrss
+clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libxmlrss
 	$(RM) $(STFLHDRS)
 
 distclean: clean clean-mo test-clean
