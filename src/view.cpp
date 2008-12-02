@@ -123,9 +123,9 @@ void view::run() {
 	// create feedlist
 	std::tr1::shared_ptr<feedlist_formaction> feedlist(new feedlist_formaction(this, feedlist_str));
 	set_bindings(feedlist);
-	apply_colors(feedlist);
 	feedlist->set_regexmanager(rxman);
 	feedlist->set_tags(tags);
+	apply_colors(feedlist);
 	formaction_stack.push_back(feedlist);
 
 	get_top_formaction()->init();
@@ -326,10 +326,10 @@ void view::push_searchresult(std::tr1::shared_ptr<rss_feed> feed) {
 	if (feed->items().size() > 0) {
 		std::tr1::shared_ptr<itemlist_formaction> searchresult(new itemlist_formaction(this, itemlist_str));
 		set_bindings(searchresult);
-		apply_colors(searchresult);
 		searchresult->set_regexmanager(rxman);
 		searchresult->set_feed(feed);
 		searchresult->set_show_searchresult(true);
+		apply_colors(searchresult);
 		searchresult->init();
 		formaction_stack.push_back(searchresult);
 	} else {
@@ -350,10 +350,10 @@ void view::push_itemlist(std::tr1::shared_ptr<rss_feed> feed) {
 	if (feed->items().size() > 0) {
 		std::tr1::shared_ptr<itemlist_formaction> itemlist(new itemlist_formaction(this, itemlist_str));
 		set_bindings(itemlist);
-		apply_colors(itemlist);
 		itemlist->set_regexmanager(rxman);
 		itemlist->set_feed(feed);
 		itemlist->set_show_searchresult(false);
+		apply_colors(itemlist);
 		itemlist->init();
 		formaction_stack.push_back(itemlist);
 	} else {
@@ -376,10 +376,10 @@ void view::push_itemview(std::tr1::shared_ptr<rss_feed> f, const std::string& gu
 	assert(itemlist != NULL);
 	std::tr1::shared_ptr<itemview_formaction> itemview(new itemview_formaction(this, itemlist, itemview_str));
 	set_bindings(itemview);
-	apply_colors(itemview);
 	itemview->set_regexmanager(rxman);
 	itemview->set_feed(f);
 	itemview->set_guid(guid);
+	apply_colors(itemview);
 	itemview->init();
 	formaction_stack.push_back(itemview);
 }
@@ -604,7 +604,7 @@ void view::apply_colors(std::tr1::shared_ptr<formaction> fa) {
 			colorattr.append(*it);
 		} 
 
-		GetLogger().log(LOG_DEBUG,"view::set_colors: %s %s\n",fgcit->first.c_str(), colorattr.c_str());
+		GetLogger().log(LOG_DEBUG,"view::apply_colors: %s %s %s\n", fa->id().c_str(), fgcit->first.c_str(), colorattr.c_str());
 
 		fa->get_form()->set(fgcit->first, colorattr);
 
