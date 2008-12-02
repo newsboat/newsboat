@@ -19,19 +19,15 @@
 namespace newsbeuter {
 
 	class formaction;
-	class feedlist_formaction;
 	class itemlist_formaction;
 	class itemview_formaction;
-	class help_formaction;
-	class urlview_formaction;
-	class select_formaction;
 
 	class view {
 		public:
 			view(controller *);
 			~view();
 			void run();
-			std::string run_modal(formaction * f, const std::string& value = "");
+			std::string run_modal(std::tr1::shared_ptr<formaction> f, const std::string& value = "");
 
 			std::string id() const;
 
@@ -66,11 +62,11 @@ namespace newsbeuter {
 
 			std::string get_filename_suggestion(const std::string& s);
 
-			bool get_next_unread();
-			bool get_previous_unread();
+			bool get_next_unread(itemlist_formaction * itemlist, itemview_formaction * itemview = NULL);
+			bool get_previous_unread(itemlist_formaction * itemlist, itemview_formaction * itemview = NULL);
 
-			bool get_next_unread_feed();
-			bool get_prev_unread_feed();
+			bool get_next_unread_feed(itemlist_formaction * itemlist);
+			bool get_prev_unread_feed(itemlist_formaction * itemlist);
 
 			void set_colors(std::map<std::string,std::string>& fg_colors, std::map<std::string,std::string>& bg_colors, std::map<std::string,std::vector<std::string> >& attributes);
 
@@ -84,7 +80,10 @@ namespace newsbeuter {
 
 		protected:
 
-			void set_bindings();
+			std::tr1::shared_ptr<formaction> get_top_formaction() const;
+
+			void set_bindings(std::tr1::shared_ptr<formaction> fa);
+			void apply_colors(std::tr1::shared_ptr<formaction> fa);
 
 			controller * ctrl;
 
@@ -94,17 +93,16 @@ namespace newsbeuter {
 
 			friend class colormanager;
 
-			feedlist_formaction * feedlist;
-			itemlist_formaction * itemlist;
-			itemview_formaction * itemview;
-			help_formaction * helpview;
-			filebrowser_formaction * filebrowser;
-			urlview_formaction * urlview;
-			select_formaction * selecttag;
+			std::vector<std::tr1::shared_ptr<formaction> > formaction_stack;
 
-			std::list<formaction *> formaction_stack;
-
+			std::vector<std::string> tags;
 			unsigned int feeds_shown;
+
+			regexmanager * rxman;
+
+			std::map<std::string,std::string> fg_colors;
+			std::map<std::string,std::string> bg_colors;
+			std::map<std::string,std::vector<std::string> > attributes;
 	};
 
 }

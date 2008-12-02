@@ -53,83 +53,55 @@ namespace newsbeuter {
 
 view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0) {
 	mtx = new mutex();
-
-	feedlist = new feedlist_formaction(this, feedlist_str);
-	itemlist = new itemlist_formaction(this, itemlist_str);
-	itemview = new itemview_formaction(this, itemview_str);
-	helpview = new help_formaction(this, help_str);
-	filebrowser = new filebrowser_formaction(this, filebrowser_str);
-	urlview = new urlview_formaction(this, urlview_str);
-	selecttag = new select_formaction(this, selecttag_str);
-
-	// push the dialog to start with onto the stack
-	formaction_stack.push_front(feedlist);
 }
 
 view::~view() {
 	stfl::reset();
 	delete mtx;
-	delete feedlist;
-	delete itemlist;
-	delete itemview;
-	delete helpview;
-	delete filebrowser;
-	delete urlview;
-	delete selecttag;
 }
 
 void view::set_config_container(configcontainer * cfgcontainer) {
 	cfg = cfgcontainer;	
-	if (cfg) {
-		if (cfg->get_configvalue_as_bool("show-keymap-hint") == false) {
-			feedlist->get_form()->set("showhint", "0");
-			itemlist->get_form()->set("showhint", "0");
-			itemview->get_form()->set("showhint", "0");
-			helpview->get_form()->set("showhint", "0");
-			filebrowser->get_form()->set("showhint", "0");
-			urlview->get_form()->set("showhint", "0");
-			selecttag->get_form()->set("showhint", "0");
-		}
-	}
 }
 
 void view::set_keymap(keymap * k) {
 	keys = k;
-	set_bindings();
 }
 
 
+void view::set_bindings(std::tr1::shared_ptr<formaction> fa) {
+	std::string upkey("** "); upkey.append(keys->getkey(OP_SK_UP, fa->id()));
+	std::string downkey("** "); downkey.append(keys->getkey(OP_SK_DOWN, fa->id()));
+	fa->get_form()->set("bind_up", upkey);
+	fa->get_form()->set("bind_down", downkey);
 
-void view::set_bindings() {
-	formaction * fas2bind[] = { feedlist, itemlist, itemview, helpview, filebrowser, urlview, selecttag, NULL };
-	if (keys) {
-		for (unsigned int i=0;fas2bind[i];++i) {
-			std::string upkey("** "); upkey.append(keys->getkey(OP_SK_UP, fas2bind[i]->id()));
-			std::string downkey("** "); downkey.append(keys->getkey(OP_SK_DOWN, fas2bind[i]->id()));
-			std::string pgupkey("** "); pgupkey.append(keys->getkey(OP_SK_PGUP, fas2bind[i]->id()));
-			std::string pgdownkey("** "); pgdownkey.append(keys->getkey(OP_SK_PGDOWN, fas2bind[i]->id()));
-
-			std::string pgupkey_itemview("** b "); pgupkey_itemview.append(keys->getkey(OP_SK_PGUP, fas2bind[i]->id()));
-			std::string pgdownkey_itemview("** SPACE "); pgdownkey_itemview.append(keys->getkey(OP_SK_PGDOWN, fas2bind[i]->id()));
-
-			fas2bind[i]->get_form()->set("bind_up", upkey);
-			fas2bind[i]->get_form()->set("bind_down", downkey);
-			if (fas2bind[i] == itemview || fas2bind[i] == helpview) { // the forms that contain textviews
-				fas2bind[i]->get_form()->set("bind_page_up", pgupkey_itemview);
-				fas2bind[i]->get_form()->set("bind_page_down", pgdownkey_itemview);
-			} else {
-				fas2bind[i]->get_form()->set("bind_page_up", pgupkey);
-				fas2bind[i]->get_form()->set("bind_page_down", pgdownkey);
-			}
-		}
+	std::string pgupkey;
+	std::string pgdownkey;
+	if (fa->id() == "article" || fa->id() == "help") {
+		pgupkey.append("** b ");
+		pgdownkey.append("** SPACE ");
+	} else {
+		pgupkey.append("** "); 
+		pgdownkey.append("** "); 
 	}
 
-	GetLogger().log(LOG_DEBUG, "view::set_bindings: itemview bind_page_up = %s bind_page_down = %s", itemview->get_form()->get("bind_page_up").c_str(), itemview->get_form()->get("bind_page_down").c_str());
+	pgupkey.append(keys->getkey(OP_SK_PGUP, fa->id()));
+	pgdownkey.append(keys->getkey(OP_SK_PGDOWN, fa->id()));
+
+	fa->get_form()->set("bind_page_up", pgupkey);
+	fa->get_form()->set("bind_page_down", pgdownkey);
+}
+
+std::tr1::shared_ptr<formaction> view::get_top_formaction() const {
+	if (formaction_stack.size() > 0) {
+		return formaction_stack[formaction_stack.size()-1];
+	}
+	return std::tr1::shared_ptr<formaction>();
 }
 
 void view::set_status_unlocked(const std::string& msg) {
-	if (formaction_stack.size() > 0 && (*formaction_stack.begin()) != NULL) {
-		stfl::form * form = (*formaction_stack.begin())->get_form();
+	if (formaction_stack.size() > 0 && get_top_formaction() != NULL) {
+		stfl::form * form = get_top_formaction()->get_form();
 		form->set("msg",msg);
 		form->run(-1);
 	}
@@ -147,15 +119,24 @@ void view::show_error(const std::string& msg) {
 void view::run() {
 	bool have_macroprefix = false;
 	std::vector<macrocmd> macrocmds;
+
+	// create feedlist
+	std::tr1::shared_ptr<feedlist_formaction> feedlist(new feedlist_formaction(this, feedlist_str));
+	set_bindings(feedlist);
+	apply_colors(feedlist);
+	feedlist->set_regexmanager(rxman);
+	feedlist->set_tags(tags);
+	formaction_stack.push_back(feedlist);
+
+	get_top_formaction()->init();
+
 	/*
 	 * This is the main "event" loop of newsbeuter.
 	 */
 
-	feedlist->init();
-
 	while (formaction_stack.size() > 0) {
 		// first, we take the current formaction.
-		formaction * fa = *(formaction_stack.begin());
+		std::tr1::shared_ptr<formaction> fa = get_top_formaction();
 
 		// we signal "oh, you will receive an operation soon"
 		fa->prepare();
@@ -174,7 +155,7 @@ void view::run() {
 			const char * event = fa->get_form()->run(0);
 			if (!event || strcmp(event,"TIMEOUT")==0) {
 				if (fa->id() == "article")
-					itemview->update_percent();
+					std::tr1::dynamic_pointer_cast<itemview_formaction, formaction>(fa)->update_percent();
 				continue;
 			}
 
@@ -218,14 +199,14 @@ void view::run() {
 	stfl::reset();
 }
 
-std::string view::run_modal(formaction * f, const std::string& value) {
+std::string view::run_modal(std::tr1::shared_ptr<formaction> f, const std::string& value) {
 	f->init();
 	unsigned int stacksize = formaction_stack.size();
 
-	formaction_stack.push_front(f);
+	formaction_stack.push_back(f);
 
 	while (formaction_stack.size() > stacksize) {
-		formaction * fa = *(formaction_stack.begin());
+		std::tr1::shared_ptr<formaction> fa = get_top_formaction();
 
 		fa->prepare();
 
@@ -270,11 +251,11 @@ std::string view::get_filename_suggestion(const std::string& s) {
 }
 
 void view::push_empty_formaction() {
-	formaction_stack.push_front(NULL);
+	formaction_stack.push_back(std::tr1::shared_ptr<formaction>());
 }
 
 void view::open_in_browser(const std::string& url) {
-	formaction_stack.push_front(NULL); // we don't want a thread to write over the browser
+	formaction_stack.push_back(std::tr1::shared_ptr<formaction>());
 	std::string cmdline;
 	std::string browser = cfg->get_configvalue("browser");
 	if (browser.find("%u") != std::string::npos) {
@@ -297,13 +278,16 @@ void view::open_in_browser(const std::string& url) {
 	stfl::reset();
 	GetLogger().log(LOG_DEBUG, "view::open_in_browser: running `%s'", cmdline.c_str());
 	::system(cmdline.c_str());
-	formaction_stack.pop_front();
+	formaction_stack.pop_back();
 }
 
 void view::update_visible_feeds(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
 	scope_mutex lock(mtx);
 	try {
-		feedlist->update_visible_feeds(feeds);
+		if (formaction_stack_size() > 0) {
+			std::tr1::shared_ptr<feedlist_formaction> feedlist = std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
+			feedlist->update_visible_feeds(feeds);
+		}
 	} catch (matcherexception e) {
 		set_status_unlocked(utils::strprintf(_("Error: applying the filter failed: %s"), e.what()));
 		GetLogger().log(LOG_DEBUG, "view::update_visible_feeds: inside catch: %s", e.what());
@@ -320,7 +304,10 @@ void view::set_feedlist(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
 	}
 
 	try {
-		feedlist->set_feedlist(feeds);
+		if (formaction_stack_size() > 0) {
+			std::tr1::shared_ptr<feedlist_formaction> feedlist = std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
+			feedlist->set_feedlist(feeds);
+		}
 	} catch (matcherexception e) {
 		set_status_unlocked(utils::strprintf(_("Error: applying the filter failed: %s"), e.what()));
 		GetLogger().log(LOG_DEBUG, "view::set_feedlist: inside catch: %s", e.what());
@@ -329,7 +316,7 @@ void view::set_feedlist(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
 
 
 void view::set_tags(const std::vector<std::string>& t) {
-	feedlist->set_tags(t);
+	tags = t;
 }
 
 void view::push_searchresult(std::tr1::shared_ptr<rss_feed> feed) {
@@ -337,10 +324,14 @@ void view::push_searchresult(std::tr1::shared_ptr<rss_feed> feed) {
 	GetLogger().log(LOG_DEBUG, "view::push_searchresult: pushing search result");
 
 	if (feed->items().size() > 0) {
-		itemlist->set_feed(feed);
-		itemlist->set_show_searchresult(true);
-		itemlist->init();
-		formaction_stack.push_front(itemlist);
+		std::tr1::shared_ptr<itemlist_formaction> searchresult(new itemlist_formaction(this, itemlist_str));
+		set_bindings(searchresult);
+		apply_colors(searchresult);
+		searchresult->set_regexmanager(rxman);
+		searchresult->set_feed(feed);
+		searchresult->set_show_searchresult(true);
+		searchresult->init();
+		formaction_stack.push_back(searchresult);
 	} else {
 		show_error(_("Error: feed contains no items!"));
 	}
@@ -357,10 +348,14 @@ void view::push_itemlist(std::tr1::shared_ptr<rss_feed> feed) {
 	}
 
 	if (feed->items().size() > 0) {
+		std::tr1::shared_ptr<itemlist_formaction> itemlist(new itemlist_formaction(this, itemlist_str));
+		set_bindings(itemlist);
+		apply_colors(itemlist);
+		itemlist->set_regexmanager(rxman);
 		itemlist->set_feed(feed);
 		itemlist->set_show_searchresult(false);
 		itemlist->init();
-		formaction_stack.push_front(itemlist);
+		formaction_stack.push_back(itemlist);
 	} else {
 		show_error(_("Error: feed contains no items!"));
 	}
@@ -369,30 +364,47 @@ void view::push_itemlist(std::tr1::shared_ptr<rss_feed> feed) {
 void view::push_itemlist(unsigned int pos) {
 	std::tr1::shared_ptr<rss_feed> feed = ctrl->get_feed(pos);
 	GetLogger().log(LOG_DEBUG, "view::push_itemlist: retrieved feed at position %d", pos);
-	itemlist->set_pos(pos);
 	push_itemlist(feed);
+	if (feed->items().size() > 0) {
+		std::tr1::shared_ptr<itemlist_formaction> itemlist = std::tr1::dynamic_pointer_cast<itemlist_formaction, formaction>(get_top_formaction());
+		itemlist->set_pos(pos);
+	}
 }
 
 void view::push_itemview(std::tr1::shared_ptr<rss_feed> f, const std::string& guid) {
+	std::tr1::shared_ptr<itemlist_formaction> itemlist = std::tr1::dynamic_pointer_cast<itemlist_formaction, formaction>(get_top_formaction());
+	assert(itemlist != NULL);
+	std::tr1::shared_ptr<itemview_formaction> itemview(new itemview_formaction(this, itemlist, itemview_str));
+	set_bindings(itemview);
+	apply_colors(itemview);
+	itemview->set_regexmanager(rxman);
 	itemview->set_feed(f);
 	itemview->set_guid(guid);
 	itemview->init();
-	formaction_stack.push_front(itemview);
+	formaction_stack.push_back(itemview);
 }
 
 void view::push_help() {
-	helpview->set_context((*formaction_stack.begin())->id());
-	formaction_stack.push_front(helpview);
+	std::tr1::shared_ptr<help_formaction> helpview(new help_formaction(this, help_str));
+	set_bindings(helpview);
+	helpview->set_context(get_top_formaction()->id());
 	helpview->init();
+	formaction_stack.push_back(helpview);
 }
 
 void view::push_urlview(const std::vector<linkpair>& links) {
+	std::tr1::shared_ptr<urlview_formaction> urlview(new urlview_formaction(this, urlview_str));
+	set_bindings(urlview);
+	apply_colors(urlview);
 	urlview->init();
 	urlview->set_links(links);
-	formaction_stack.push_front(urlview);
+	formaction_stack.push_back(urlview);
 }
 
 std::string view::run_filebrowser(filebrowser_type type, const std::string& default_filename, const std::string& dir) {
+	std::tr1::shared_ptr<filebrowser_formaction> filebrowser(new filebrowser_formaction(this, filebrowser_str));
+	set_bindings(filebrowser);
+	apply_colors(filebrowser);
 	filebrowser->set_dir(dir);
 	filebrowser->set_default_filename(default_filename);
 	filebrowser->set_type(type);
@@ -400,6 +412,9 @@ std::string view::run_filebrowser(filebrowser_type type, const std::string& defa
 }
 
 std::string view::select_tag(const std::vector<std::string>& tags) {
+	std::tr1::shared_ptr<select_formaction> selecttag(new select_formaction(this, selecttag_str));
+	set_bindings(selecttag);
+	apply_colors(selecttag);
 	selecttag->set_type(select_formaction::SELECTTAG);
 	selecttag->set_tags(tags);
 	run_modal(selecttag, "");
@@ -407,6 +422,9 @@ std::string view::select_tag(const std::vector<std::string>& tags) {
 }
 
 std::string view::select_filter(const std::vector<filter_name_expr_pair>& filters) {
+	std::tr1::shared_ptr<select_formaction> selecttag(new select_formaction(this, selecttag_str));
+	set_bindings(selecttag);
+	apply_colors(selecttag);
 	selecttag->set_type(select_formaction::SELECTFILTER);
 	selecttag->set_filters(filters);
 	run_modal(selecttag, "");
@@ -416,8 +434,8 @@ std::string view::select_filter(const std::vector<filter_name_expr_pair>& filter
 char view::confirm(const std::string& prompt, const std::string& charset) {
 	GetLogger().log(LOG_DEBUG, "view::confirm: charset = %s", charset.c_str());
 
-	formaction * f = *formaction_stack.begin();
-	formaction_stack.push_front(NULL);
+	std::tr1::shared_ptr<formaction> f = get_top_formaction();
+	formaction_stack.push_back(std::tr1::shared_ptr<formaction>());
 	f->get_form()->set("msg", prompt);
 
 	char result = 0;
@@ -433,27 +451,37 @@ char view::confirm(const std::string& prompt, const std::string& charset) {
 	f->get_form()->set("msg", "");
 	f->get_form()->run(-1);
 
-	formaction_stack.pop_front(); // remove the NULL pointer from the formaction stack
+	formaction_stack.pop_back();
 
 	return result;
 }
 
 void view::notify_itemlist_change(std::tr1::shared_ptr<rss_feed>& feed) {
-	std::tr1::shared_ptr<rss_feed> f = itemlist->get_feed();
-	if (f != NULL && f->rssurl() == feed->rssurl()) {
-		itemlist->set_feed(feed);
-		itemlist->set_redraw(true);
+	for (std::vector<std::tr1::shared_ptr<formaction> >::iterator it=formaction_stack.begin();it!=formaction_stack.end();it++) {
+		if ((*it)->id() == "articlelist") {
+			std::tr1::shared_ptr<itemlist_formaction> itemlist = std::tr1::dynamic_pointer_cast<itemlist_formaction, formaction>(*it);
+			if (itemlist != NULL) {
+				std::tr1::shared_ptr<rss_feed> f = itemlist->get_feed();
+				if (f != NULL && f->rssurl() == feed->rssurl()) {
+					itemlist->set_feed(feed);
+					itemlist->set_redraw(true);
+				}
+			}
+		}
 	}
 }
 
-bool view::get_previous_unread() {
+bool view::get_previous_unread(itemlist_formaction * itemlist, itemview_formaction * itemview) {
 	unsigned int feedpos;
 	GetLogger().log(LOG_DEBUG, "view::get_previous_unread: trying to find previous unread");
+	std::tr1::shared_ptr<feedlist_formaction> feedlist = std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
 	if (itemlist->jump_to_previous_unread_item(false)) {
 		GetLogger().log(LOG_DEBUG, "view::get_previous_unread: found unread article in same feed");
-		itemview->init();
-		itemview->set_feed(itemlist->get_feed());
-		itemview->set_guid(itemlist->get_guid());
+		if (itemview) {
+			itemview->init();
+			itemview->set_feed(itemlist->get_feed());
+			itemview->set_guid(itemlist->get_guid());
+		}
 		return true;
 	} else if (cfg->get_configvalue_as_bool("goto-next-feed")==false) {
 		GetLogger().log(LOG_DEBUG, "view::get_previous_unread: goto-next-feed = false");
@@ -464,17 +492,21 @@ bool view::get_previous_unread() {
 		itemlist->set_pos(feedpos);
 		itemlist->init();
 		if (itemlist->jump_to_previous_unread_item(true)) {
-			itemview->init();
-			itemview->set_feed(itemlist->get_feed());
-			itemview->set_guid(itemlist->get_guid());
+			if (itemview) {
+				itemview->init();
+				itemview->set_feed(itemlist->get_feed());
+				itemview->set_guid(itemlist->get_guid());
+			}
 			return true;
 		}
 	}
 	return false;
 }
 
-bool view::get_next_unread_feed() {
+bool view::get_next_unread_feed(itemlist_formaction * itemlist) {
+	std::tr1::shared_ptr<feedlist_formaction> feedlist = std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
 	unsigned int feedpos;
+	assert(feedlist != NULL);
 	if (feedlist->jump_to_next_unread_feed(feedpos)) {
 		itemlist->set_feed(feedlist->get_feed());
 		itemlist->set_pos(feedpos);
@@ -484,8 +516,10 @@ bool view::get_next_unread_feed() {
 	return false;
 }
 
-bool view::get_prev_unread_feed() {
+bool view::get_prev_unread_feed(itemlist_formaction * itemlist) {
+	std::tr1::shared_ptr<feedlist_formaction> feedlist = std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
 	unsigned int feedpos;
+	assert(feedlist != NULL);
 	if (feedlist->jump_to_previous_unread_feed(feedpos)) {
 		itemlist->set_feed(feedlist->get_feed());
 		itemlist->set_pos(feedpos);
@@ -495,14 +529,17 @@ bool view::get_prev_unread_feed() {
 	return false;
 }
 
-bool view::get_next_unread() {
+bool view::get_next_unread(itemlist_formaction * itemlist, itemview_formaction * itemview) {
 	unsigned int feedpos;
+	std::tr1::shared_ptr<feedlist_formaction> feedlist = std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
 	GetLogger().log(LOG_DEBUG, "view::get_next_unread: trying to find next unread");
 	if (itemlist->jump_to_next_unread_item(false)) {
 		GetLogger().log(LOG_DEBUG, "view::get_next_unread: found unread article in same feed");
-		itemview->init();
-		itemview->set_feed(itemlist->get_feed());
-		itemview->set_guid(itemlist->get_guid());
+		if (itemview) {
+			itemview->init();
+			itemview->set_feed(itemlist->get_feed());
+			itemview->set_guid(itemlist->get_guid());
+		}
 		return true;
 	} else if (cfg->get_configvalue_as_bool("goto-next-feed")==false) {
 		GetLogger().log(LOG_DEBUG, "view::get_next_unread: goto-next-feed = false");
@@ -513,9 +550,11 @@ bool view::get_next_unread() {
 		itemlist->set_pos(feedpos);
 		itemlist->init();
 		if (itemlist->jump_to_next_unread_item(true)) {
-			itemview->init();
-			itemview->set_feed(itemlist->get_feed());
-			itemview->set_guid(itemlist->get_guid());
+			if (itemview) {
+				itemview->init();
+				itemview->set_feed(itemlist->get_feed());
+				itemview->set_guid(itemlist->get_guid());
+			}
 			return true;
 		}
 	}
@@ -523,9 +562,9 @@ bool view::get_next_unread() {
 }
 
 void view::pop_current_formaction() {
-	formaction_stack.pop_front();
+	formaction_stack.pop_back();
 	if (formaction_stack.size() > 0) {
-		formaction * f = (*formaction_stack.begin());
+		std::tr1::shared_ptr<formaction> f = get_top_formaction();
 		if (f) {
 			f->set_redraw(true);
 			f->get_form()->set("msg","");
@@ -535,7 +574,13 @@ void view::pop_current_formaction() {
 }
 
 
-void view::set_colors(std::map<std::string,std::string>& fg_colors, std::map<std::string,std::string>& bg_colors, std::map<std::string,std::vector<std::string> >& attributes) {
+void view::set_colors(std::map<std::string,std::string>& fgc, std::map<std::string,std::string>& bgc, std::map<std::string,std::vector<std::string> >& attribs) {
+	fg_colors = fgc;
+	bg_colors = bgc;
+	attributes = attribs;
+}
+
+void view::apply_colors(std::tr1::shared_ptr<formaction> fa) {
 	std::map<std::string,std::string>::const_iterator fgcit = fg_colors.begin();
 	std::map<std::string,std::string>::const_iterator bgcit = bg_colors.begin();
 	std::map<std::string,std::vector<std::string> >::const_iterator attit = attributes.begin();
@@ -561,34 +606,28 @@ void view::set_colors(std::map<std::string,std::string>& fg_colors, std::map<std
 
 		GetLogger().log(LOG_DEBUG,"view::set_colors: %s %s\n",fgcit->first.c_str(), colorattr.c_str());
 
-		feedlist->get_form()->set(fgcit->first, colorattr);
-		itemlist->get_form()->set(fgcit->first, colorattr);
-		itemview->get_form()->set(fgcit->first, colorattr);
-		helpview->get_form()->set(fgcit->first, colorattr);
-		filebrowser->get_form()->set(fgcit->first, colorattr);
-		urlview->get_form()->set(fgcit->first, colorattr);
-		selecttag->get_form()->set(fgcit->first, colorattr);
+		fa->get_form()->set(fgcit->first, colorattr);
 
 		if (fgcit->first == "article") {
-			std::string styleend_str;
-			
-			if (bgcit->second != "default") {
-				styleend_str.append("bg=");
-				styleend_str.append(bgcit->second);
-			}
-			if (styleend_str.length() > 0)
-				styleend_str.append(",");
-			styleend_str.append("attr=bold");
+			if (fa->id() == "article" || fa->id() == "help") {
+				std::string styleend_str;
+				if (bgcit->second != "default") {
+					styleend_str.append("bg=");
+					styleend_str.append(bgcit->second);
+				}
+				if (styleend_str.length() > 0)
+					styleend_str.append(",");
+				styleend_str.append("attr=bold");
 
-			helpview->get_form()->set("styleend", styleend_str.c_str());
-			itemview->get_form()->set("styleend", styleend_str.c_str());
+				fa->get_form()->set("styleend", styleend_str.c_str());
+			}
 		}
 	}
 }
 
 std::string view::id() const {
 	if (formaction_stack.size() > 0) {
-		return (*formaction_stack.begin())->id();
+		return get_top_formaction()->id();
 	}
 	return "";
 }
@@ -596,18 +635,18 @@ std::string view::id() const {
 std::string view::ask_user(const std::string& prompt) {
 	std::vector<qna_pair> qna;
 	qna.push_back(qna_pair(prompt, ""));
-	(*formaction_stack.begin())->start_qna(qna, OP_NIL);
-	return (*formaction_stack.begin())->get_qna_response(0);
+	get_top_formaction()->start_qna(qna, OP_NIL);
+	return get_top_formaction()->get_qna_response(0);
 }
 
 void view::feedlist_mark_pos_if_visible(unsigned int pos) {
-	feedlist->mark_pos_if_visible(pos);
+	if (formaction_stack_size() > 0) {
+		std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0])->mark_pos_if_visible(pos);
+	}
 }
 
 void view::set_regexmanager(regexmanager * r) {
-	itemview->set_regexmanager(r);
-	itemlist->set_regexmanager(r);
-	feedlist->set_regexmanager(r);
+	rxman = r;
 }
 
 

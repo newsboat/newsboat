@@ -178,7 +178,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		case OP_NEXTUNREAD:
 			GetLogger().log(LOG_INFO, "itemlist_formaction: jumping to next unread item");
 			if (!jump_to_next_unread_item(false)) {
-				if (!v->get_next_unread()) {
+				if (!v->get_next_unread(this)) {
 					v->show_error(_("No unread items."));
 				}
 			}
@@ -186,18 +186,18 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		case OP_PREVUNREAD:
 			GetLogger().log(LOG_INFO, "itemlist_formaction: jumping to previous unread item");
 			if (!jump_to_previous_unread_item(false)) {
-				if (!v->get_previous_unread()) {
+				if (!v->get_previous_unread(this)) {
 					v->show_error(_("No unread items."));
 				}
 			}
 			break;
 		case OP_NEXTFEED:
-			if (!v->get_next_unread_feed()) {
+			if (!v->get_next_unread_feed(this)) {
 				v->show_error(_("No unread feeds."));
 			}
 			break;
 		case OP_PREVFEED:
-			if (!v->get_prev_unread_feed()) {
+			if (!v->get_prev_unread_feed(this)) {
 				v->show_error(_("No unread feeds."));
 			}
 			break;

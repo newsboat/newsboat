@@ -8,9 +8,11 @@
 
 namespace newsbeuter {
 
+class itemlist_formaction;
+
 class itemview_formaction : public formaction {
 	public:
-		itemview_formaction(view *, std::string formstr);
+		itemview_formaction(view *, std::tr1::shared_ptr<itemlist_formaction> il, std::string formstr);
 		virtual ~itemview_formaction();
 		virtual void prepare();
 		virtual void init();
@@ -42,6 +44,7 @@ class itemview_formaction : public formaction {
 		bool quit;
 		regexmanager * rxman;
 		unsigned int num_lines;
+		std::tr1::shared_ptr<itemlist_formaction> itemlist;
 };
 
 }

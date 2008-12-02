@@ -11,8 +11,8 @@
 
 namespace newsbeuter {
 
-itemview_formaction::itemview_formaction(view * vv, std::string formstr)
-	: formaction(vv,formstr), show_source(false), quit(false), rxman(0), num_lines(0) { 
+itemview_formaction::itemview_formaction(view * vv, std::tr1::shared_ptr<itemlist_formaction> il, std::string formstr)
+	: formaction(vv,formstr), show_source(false), quit(false), rxman(0), num_lines(0), itemlist(il) { 
 }
 
 itemview_formaction::~itemview_formaction() { }
@@ -225,7 +225,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 			break;
 		case OP_NEXTUNREAD:
 			GetLogger().log(LOG_INFO, "view::run_itemview: jumping to next unread article");
-			if (v->get_next_unread()) {
+			if (v->get_next_unread(itemlist.get(), this)) {
 				do_redraw = true;
 			} else {
 				v->pop_current_formaction();
@@ -234,7 +234,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 			break;
 		case OP_PREVUNREAD:
 			GetLogger().log(LOG_INFO, "view::run_itemview: jumping to previous unread article");
-			if (v->get_previous_unread()) {
+			if (v->get_previous_unread(itemlist.get(), this)) {
 				do_redraw = true;
 			} else {
 				v->pop_current_formaction();

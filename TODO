@@ -7,6 +7,8 @@ TODO:
 - per-feed refresh settings
 - add support for interactive bookmarking plugins
 - add option similar to max-items but that deletes articles older than n days
+- make it possible to configure more than one opml source
+- use categories from OPML also when it is directly used as source
 
 DONE:
 - clean up items that have been added but whose URL has been removed from the config file.
