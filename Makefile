@@ -1,3 +1,4 @@
+PACKAGE=newsbeuter
 # important directories
 prefix?=/usr/local
 mandir?=$(prefix)/share/man
