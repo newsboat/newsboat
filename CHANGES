@@ -1,6 +1,6 @@
 Changes for newsbeuter:
 
-1.3 (2008-12-04):
+1.3 (2008-12-06):
 	Changed some internal data structures to smart pointers (stability improvement).
 	Extended podbeuter to keep finished downloads in the queue until they've been played.
 	Implemented placeholders for download-path (fixes #46).
