@@ -48,6 +48,9 @@ class formaction {
 		inline std::string get_qna_response(unsigned int i) { return (qna_responses.size() >= (i + 1)) ? qna_responses[i] : ""; }
 		void start_qna(const std::vector<qna_pair>& prompts, operation finish_op, history * h = NULL);
 
+		inline void set_parent_formaction(std::tr1::shared_ptr<formaction> fa) { parent_formaction = fa; }
+		inline std::tr1::shared_ptr<formaction> get_parent_formaction() { return parent_formaction; }
+
 	protected:
 		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL) = 0;
 		virtual void set_keymap_hints();
@@ -71,6 +74,7 @@ class formaction {
 		std::vector<qna_pair> qna_prompts;
 		operation finish_operation;
 		history * qna_history;
+		std::tr1::shared_ptr<formaction> parent_formaction;
 };
 
 

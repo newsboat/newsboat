@@ -80,7 +80,7 @@ namespace newsbeuter {
 
 		protected:
 
-			std::tr1::shared_ptr<formaction> get_top_formaction() const;
+			std::tr1::shared_ptr<formaction> get_current_formaction() const;
 
 			void set_bindings(std::tr1::shared_ptr<formaction> fa);
 			void apply_colors(std::tr1::shared_ptr<formaction> fa);
@@ -94,6 +94,7 @@ namespace newsbeuter {
 			friend class colormanager;
 
 			std::vector<std::tr1::shared_ptr<formaction> > formaction_stack;
+			unsigned int current_formaction;
 
 			std::vector<std::string> tags;
 			unsigned int feeds_shown;

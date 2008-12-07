@@ -50,7 +50,7 @@ void itemview_formaction::prepare() {
 		std::vector<std::string> lines;
 		std::string widthstr = f->get("article:w");
 		unsigned int render_width = 80;
-		unsigned int view_width;
+		unsigned int view_width = 0;
 		if (widthstr.length() > 0) {
 			view_width = render_width = utils::to_u(widthstr);
 			if (render_width - 5 > 0)
