@@ -47,11 +47,7 @@ void dialogs_formaction::process_operation(operation op, bool automatic, std::ve
 				std::string dialogposname = f->get("dialogpos");
 				unsigned int dialogpos = utils::to_u(dialogposname);
 				if (dialogposname.length() > 0) {
-					if (dialogpos != 0) {
-						v->set_current_formaction(dialogpos);
-					} else {
-						v->show_error(_("Error: you can't remove the feed list!"));
-					}
+					v->set_current_formaction(dialogpos);
 				} else {
 					v->show_error(_("No item selected!"));
 				}
@@ -61,8 +57,12 @@ void dialogs_formaction::process_operation(operation op, bool automatic, std::ve
 				std::string dialogposname = f->get("dialogpos");
 				unsigned int dialogpos = utils::to_u(dialogposname);
 				if (dialogposname.length() > 0) {
-					v->remove_formaction(dialogpos);
-					update_list = true;
+					if (dialogpos != 0) {
+						v->remove_formaction(dialogpos);
+						update_list = true;
+					} else {
+						v->show_error(_("Error: you can't remove the feed list!"));
+					}
 				} else {
 					v->show_error(_("No item selected!"));
 				}
