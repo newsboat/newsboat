@@ -103,6 +103,9 @@ void formaction::process_op(operation op, bool automatic, std::vector<std::strin
 			qna_responses.push_back(f->get("qna_value"));
 			start_next_question();
 			break;
+		case OP_VIEWDIALOGS:
+			v->view_dialogs();
+			break;
 		default:
 			this->process_operation(op, automatic, args);
 	}

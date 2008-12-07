@@ -5,6 +5,7 @@
 #include <urlview.h>
 #include <selecttag.h>
 #include <feedlist.h>
+#include <dialogs.h>
 #include <formatstring.h>
 
 #include <formaction.h>
@@ -14,6 +15,7 @@
 #include <help_formaction.h>
 #include <urlview_formaction.h>
 #include <select_formaction.h>
+#include <dialogs_formaction.h>
 
 #include <logger.h>
 #include <reloadthread.h>
@@ -398,6 +400,17 @@ void view::push_itemview(std::tr1::shared_ptr<rss_feed> f, const std::string& gu
 	current_formaction = formaction_stack_size() - 1;
 }
 
+void view::view_dialogs() {
+	if (get_current_formaction() != NULL && get_current_formaction()->id() != "dialogs") {
+		std::tr1::shared_ptr<dialogs_formaction> dialogs(new dialogs_formaction(this, dialogs_str));
+		dialogs->set_parent_formaction(get_current_formaction());
+		apply_colors(dialogs);
+		dialogs->init();
+		formaction_stack.push_back(dialogs);
+		current_formaction = formaction_stack_size() - 1;
+	}
+}
+
 void view::push_help() {
 	std::tr1::shared_ptr<help_formaction> helpview(new help_formaction(this, help_str));
 	set_bindings(helpview);
@@ -584,9 +597,18 @@ bool view::get_next_unread(itemlist_formaction * itemlist, itemview_formaction *
 }
 
 void view::pop_current_formaction() {
-	std::tr1::shared_ptr<formaction> f = formaction_stack[current_formaction];
+	remove_formaction(current_formaction);
+}
+
+void view::set_current_formaction(unsigned int pos) {
+	remove_formaction(current_formaction);
+	current_formaction = pos;
+}
+
+void view::remove_formaction(unsigned int pos) {
+	std::tr1::shared_ptr<formaction> f = formaction_stack[pos];
 	std::vector<std::tr1::shared_ptr<formaction> >::iterator it=formaction_stack.begin();
-	for (unsigned int i=0;i<current_formaction;i++)
+	for (unsigned int i=0;i<pos;i++)
 		it++;
 	formaction_stack.erase(it);
 	if (f == NULL) {
@@ -689,6 +711,18 @@ void view::feedlist_mark_pos_if_visible(unsigned int pos) {
 
 void view::set_regexmanager(regexmanager * r) {
 	rxman = r;
+}
+
+
+std::vector<std::pair<unsigned int, std::string> > view::get_formaction_names() {
+	std::vector<std::pair<unsigned int, std::string> > formaction_names;
+	unsigned int i=0;
+	for (std::vector<std::tr1::shared_ptr<formaction> >::iterator it=formaction_stack.begin();it!=formaction_stack.end();it++,i++) {
+		if (*it && (*it)->id() != "dialogs") {
+			formaction_names.push_back(std::pair<unsigned int, std::string>(i, (*it)->id()));
+		}
+	}
+	return formaction_names;
 }
 
 

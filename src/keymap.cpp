@@ -18,8 +18,8 @@ struct op_desc {
  * This is the list of operations, defining operation, operation name (for keybindings), default key, description, and where it's valid
  */
 static op_desc opdescs[] = {
-	{ OP_OPEN,				"open",						"ENTER",_("Open feed/article"),					KM_FEEDLIST | KM_FILEBROWSER | KM_HELP | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT | KM_URLVIEW | KM_PODBEUTER },
-	{ OP_QUIT,				"quit",						"q",	_("Return to previous dialog/Quit"),	KM_FEEDLIST | KM_FILEBROWSER | KM_HELP | KM_ARTICLELIST | KM_ARTICLE | KM_TAGSELECT | KM_FILTERSELECT | KM_URLVIEW | KM_PODBEUTER },
+	{ OP_OPEN,				"open",						"ENTER", _("Open feed/article"),				KM_FEEDLIST | KM_FILEBROWSER | KM_HELP | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT | KM_URLVIEW | KM_PODBEUTER | KM_DIALOGS },
+	{ OP_QUIT,				"quit",						"q",	_("Return to previous dialog/Quit"),	KM_FEEDLIST | KM_FILEBROWSER | KM_HELP | KM_ARTICLELIST | KM_ARTICLE | KM_TAGSELECT | KM_FILTERSELECT | KM_URLVIEW | KM_PODBEUTER | KM_DIALOGS },
 	{ OP_RELOAD,			"reload",					"r",	_("Reload currently selected feed"),	KM_FEEDLIST }, 
 	{ OP_RELOADALL,			"reload-all",				"R",	_("Reload all feeds"),					KM_FEEDLIST },
 	{ OP_MARKFEEDREAD,		"mark-feed-read",			"A",	_("Mark feed read"),					KM_FEEDLIST | KM_ARTICLELIST },
@@ -59,6 +59,8 @@ static op_desc opdescs[] = {
 	{ OP_DELETE,			"delete-article",			"D",	_("Delete article"),					KM_ARTICLELIST },
 	{ OP_PURGE_DELETED,		"purge-deleted",			"$",	_("Purge deleted articles"),			KM_ARTICLELIST },
 	{ OP_EDIT_URLS,			"edit-urls",				"E",	_("Edit subscribed URLs"),				KM_FEEDLIST },
+	{ OP_CLOSEDIALOG,		"close-dialog",				"^X",	_("Close currently selected dialog"),	KM_DIALOGS },
+	{ OP_VIEWDIALOGS,		"view-dialogs",				"v",	_("View list of open dialogs"),			KM_NEWSBEUTER },
 
 	{ OP_0,		"zero",	"0",	_("Open URL 10"), KM_URLVIEW | KM_ARTICLE },
 	{ OP_1,		"one",	"1",	_("Open URL 1"), KM_URLVIEW | KM_ARTICLE},
@@ -88,7 +90,7 @@ static op_desc opdescs[] = {
 };
 
 // "all" must be first, the following positions must be the same as the KM_* flag definitions (get_flag_from_context() relies on this).
-static const char * contexts[] = { "all", "feedlist", "filebrowser", "help", "articlelist", "article", "tagselection", "filterselection", "urlview", "podbeuter", NULL };
+static const char * contexts[] = { "all", "feedlist", "filebrowser", "help", "articlelist", "article", "tagselection", "filterselection", "urlview", "podbeuter", "dialogs", NULL };
 
 keymap::keymap(unsigned flags) { 
 	/*

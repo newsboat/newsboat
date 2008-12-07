@@ -1,0 +1,27 @@
+vbox
+  @style_normal[background]:
+  @info#style_normal[info]:bg=blue,fg=yellow,attr=bold
+  @bind_up[bind_up]:**
+  @bind_down[bind_down]:**
+  @bind_page_up[bind_page_up]:**
+  @bind_page_down[bind_page_down]:**
+  label#info
+    text[head]:"Dialogs"
+    .expand:h
+  !list[dialogs]
+    style_normal[listnormal]:
+    style_focus[listfocus]:fg=yellow,bg=blue,attr=bold
+    .expand:vh
+    pos_name[dialogposname]:
+    pos[dialogpos]:0
+  vbox
+    .expand:0
+    .display[showhint]:1
+    label#info
+      text[help]:"q:Close ENTER:Goto Dialog ^X:Close Dialog"
+      .expand:h
+  hbox[lastline]
+    .expand:0
+    label[msglabel]
+      text[msg]:""
+      .expand:h

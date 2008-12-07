@@ -44,6 +44,8 @@ namespace newsbeuter {
 			void set_tags(const std::vector<std::string>& t);
 			void push_empty_formaction();
 			void pop_current_formaction();
+			void remove_formaction(unsigned int pos);
+			void set_current_formaction(unsigned int pos);
 			inline unsigned int formaction_stack_size() { return formaction_stack.size(); }
 			char confirm(const std::string& prompt, const std::string& charset);
 
@@ -53,6 +55,7 @@ namespace newsbeuter {
 			void push_help();
 			void push_urlview(const std::vector<linkpair>& links);
 			void push_searchresult(std::tr1::shared_ptr<rss_feed> feed);
+			void view_dialogs();
 
 			std::string run_filebrowser(filebrowser_type type, const std::string& default_filename = "", const std::string& dir = "");
 			std::string select_tag(const std::vector<std::string>& tags);
@@ -77,6 +80,8 @@ namespace newsbeuter {
 			void feedlist_mark_pos_if_visible(unsigned int pos);
 
 			void set_regexmanager(regexmanager * r);
+
+			std::vector<std::pair<unsigned int, std::string> > get_formaction_names();
 
 		protected:
 

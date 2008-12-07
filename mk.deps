@@ -26,6 +26,8 @@ src/feedlist_formaction.o: include/feedlist_formaction.h include/view.h include/
 	include/reloadthread.h include/exceptions.h include/utils.h include/formatstring.h \
 	include/listformatter.h
 
+src/dialogs_formaction.o: include/dialogs_formaction.h include/view.h config.h
+
 src/filebrowser_formaction.o: include/filebrowser_formaction.h include/logger.h config.h \
 	include/view.h
 
@@ -87,7 +89,7 @@ src/view.o: stfl/feedlist.h stfl/itemlist.h stfl/itemview.h stfl/help.h stfl/fil
 	include/formaction.h include/feedlist_formaction.h include/itemlist_formaction.h \
 	include/itemview_formaction.h include/help_formaction.h include/urlview_formaction.h \
 	include/select_formaction.h include/logger.h include/reloadthread.h \
-	include/exception.h include/exceptions.h include/keymap.h
+	include/exception.h include/exceptions.h include/keymap.h stfl/dialogs.h
 
 src/tagsouppullparser.o: include/tagsouppullparser.h include/exceptions.h include/utils.h \
 	include/logger.h config.h
