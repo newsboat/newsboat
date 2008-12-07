@@ -329,7 +329,7 @@ void view::set_tags(const std::vector<std::string>& t) {
 	tags = t;
 }
 
-void view::push_searchresult(std::tr1::shared_ptr<rss_feed> feed) {
+void view::push_searchresult(std::tr1::shared_ptr<rss_feed> feed, const std::string& phrase) {
 	assert(feed != NULL);
 	GetLogger().log(LOG_DEBUG, "view::push_searchresult: pushing search result");
 
@@ -339,6 +339,7 @@ void view::push_searchresult(std::tr1::shared_ptr<rss_feed> feed) {
 		searchresult->set_regexmanager(rxman);
 		searchresult->set_feed(feed);
 		searchresult->set_show_searchresult(true);
+		searchresult->set_searchphrase(phrase);
 		apply_colors(searchresult);
 		searchresult->set_parent_formaction(get_current_formaction());
 		searchresult->init();
@@ -597,7 +598,35 @@ bool view::get_next_unread(itemlist_formaction * itemlist, itemview_formaction *
 }
 
 void view::pop_current_formaction() {
-	remove_formaction(current_formaction);
+	std::tr1::shared_ptr<formaction> f = get_current_formaction();
+	std::vector<std::tr1::shared_ptr<formaction> >::iterator it=formaction_stack.begin();
+	for (unsigned int i=0;i<current_formaction;i++)
+		it++;
+	formaction_stack.erase(it);
+	if (f == NULL) {
+		current_formaction = formaction_stack_size() - 1; // XXX TODO this is not correct... we'd need to return to the previous one, but NULL formactions have no parent
+	} else if (formaction_stack.size() > 0) {
+		// first, we set back the parent formactions of those who reference the formaction we just removed
+		for (std::vector<std::tr1::shared_ptr<formaction> >::iterator it=formaction_stack.begin();it!=formaction_stack.end();it++) {
+			if ((*it)->get_parent_formaction() == f) {
+				(*it)->set_parent_formaction(formaction_stack[0]);
+			}
+		}
+		// we set the new formaction based on the removed formaction's parent.
+		unsigned int i=0;
+		for (std::vector<std::tr1::shared_ptr<formaction> >::iterator it=formaction_stack.begin();it!=formaction_stack.end();it++,i++) {
+			if (*it == f->get_parent_formaction()) {
+				current_formaction = i;
+				break;
+			}
+		}
+		std::tr1::shared_ptr<formaction> f = get_current_formaction();
+		if (f) {
+			f->set_redraw(true);
+			f->get_form()->set("msg","");
+			f->recalculate_form();
+		}
+	}
 }
 
 void view::set_current_formaction(unsigned int pos) {
@@ -611,29 +640,13 @@ void view::remove_formaction(unsigned int pos) {
 	for (unsigned int i=0;i<pos;i++)
 		it++;
 	formaction_stack.erase(it);
-	if (f == NULL) {
-		current_formaction = formaction_stack_size() - 1; // XXX TODO this is not correct... we'd need to return to the previous one, but NULL formactions have no parent
-	} else if (formaction_stack.size() > 0) {
-		// first, we set back the parent formactions of those who reference the formaction we just removed
+	current_formaction--;
+	if (f != NULL && formaction_stack.size() > 0) {
+		// we set back the parent formactions of those who reference the formaction we just removed
 		for (std::vector<std::tr1::shared_ptr<formaction> >::iterator it=formaction_stack.begin();it!=formaction_stack.end();it++) {
 			if ((*it)->get_parent_formaction() == f) {
 				(*it)->set_parent_formaction(formaction_stack[0]);
 			}
-		}
-		// then we set the new formaction based on the removed formaction's parent.
-		unsigned int i=0;
-		for (std::vector<std::tr1::shared_ptr<formaction> >::iterator it=formaction_stack.begin();it!=formaction_stack.end();it++,i++) {
-			if (*it == f->get_parent_formaction()) {
-				current_formaction = i;
-				break;
-			}
-		}
-		// then we reset the new current formaction
-		std::tr1::shared_ptr<formaction> f = get_current_formaction();
-		if (f) {
-			f->set_redraw(true);
-			f->get_form()->set("msg","");
-			f->recalculate_form();
 		}
 	}
 }
@@ -719,7 +732,7 @@ std::vector<std::pair<unsigned int, std::string> > view::get_formaction_names() 
 	unsigned int i=0;
 	for (std::vector<std::tr1::shared_ptr<formaction> >::iterator it=formaction_stack.begin();it!=formaction_stack.end();it++,i++) {
 		if (*it && (*it)->id() != "dialogs") {
-			formaction_names.push_back(std::pair<unsigned int, std::string>(i, (*it)->id()));
+			formaction_names.push_back(std::pair<unsigned int, std::string>(i, (*it)->title()));
 		}
 	}
 	return formaction_names;

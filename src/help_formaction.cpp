@@ -101,4 +101,8 @@ void help_formaction::set_context(const std::string& ctx) {
 	}
 }
 
+std::string help_formaction::title() {
+	return _("Help");
+}
+
 }

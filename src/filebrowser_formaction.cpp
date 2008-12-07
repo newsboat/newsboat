@@ -255,4 +255,13 @@ std::string filebrowser_formaction::get_group(gid_t gid) {
 	return "????????";
 }
 
+std::string filebrowser_formaction::title() {
+	char cwdtmp[MAXPATHLEN];
+	::getcwd(cwdtmp,sizeof(cwdtmp));
+	if (type == FBT_OPEN)
+		return utils::strprintf(_("Open File - %s"), cwdtmp);
+	else
+		return utils::strprintf(_("Save File - %s"), cwdtmp);
+}
+
 }

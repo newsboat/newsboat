@@ -151,7 +151,16 @@ keymap_hint_entry * select_formaction::get_keymap_hint() {
 	return NULL;
 }
 
-
+std::string select_formaction::title() {
+	switch (type) {
+		case SELECTTAG:
+			return _("Select Tag");
+		case SELECTFILTER:
+			return _("Select Filter");
+		default:
+			return "";
+	}
+}
 
 
 }

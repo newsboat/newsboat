@@ -23,6 +23,7 @@ class feedlist_formaction : public formaction {
 		std::tr1::shared_ptr<rss_feed> get_feed();
 
 		virtual std::string id() const { return "feedlist"; }
+		virtual std::string title();
 
 		bool jump_to_next_unread_feed(unsigned int& feedpos);
 		bool jump_to_previous_unread_feed(unsigned int& feedpos);
@@ -76,6 +77,9 @@ class feedlist_formaction : public formaction {
 		regexmanager * rxman;
 
 		unsigned int old_width;
+
+		unsigned int unread_feeds;
+		unsigned int total_feeds;
 };
 
 }

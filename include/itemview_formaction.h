@@ -22,6 +22,7 @@ class itemview_formaction : public formaction {
 		virtual void handle_cmdline(const std::string& cmd);
 
 		virtual std::string id() const { return "article"; }
+		virtual std::string title();
 
 		virtual void finished_qna(operation op);
 

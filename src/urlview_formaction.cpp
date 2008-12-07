@@ -134,4 +134,8 @@ void urlview_formaction::handle_cmdline(const std::string& cmd) {
 	}
 }
 
+std::string urlview_formaction::title() {
+	return _("URLs");
+}
+
 }

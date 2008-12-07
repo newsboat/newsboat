@@ -20,6 +20,7 @@ class filebrowser_formaction : public formaction {
 		inline void set_type(filebrowser_type t) { type = t; }
 
 		virtual std::string id() const { return "filebrowser"; }
+		virtual std::string title();
 
 	private:
 		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);

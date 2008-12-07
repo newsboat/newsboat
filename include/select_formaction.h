@@ -21,6 +21,7 @@ class select_formaction : public formaction {
 		void set_type(int t) { type = t; }
 		virtual void handle_cmdline(const std::string& cmd);
 		virtual std::string id() const { return (type == SELECTTAG) ? "tagselection" : "filterselection"; }
+		virtual std::string title();
 	private:
 		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
 		bool quit;

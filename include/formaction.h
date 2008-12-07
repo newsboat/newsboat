@@ -51,6 +51,8 @@ class formaction {
 		inline void set_parent_formaction(std::tr1::shared_ptr<formaction> fa) { parent_formaction = fa; }
 		inline std::tr1::shared_ptr<formaction> get_parent_formaction() { return parent_formaction; }
 
+		virtual std::string title() = 0;
+
 	protected:
 		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL) = 0;
 		virtual void set_keymap_hints();

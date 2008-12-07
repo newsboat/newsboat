@@ -450,4 +450,9 @@ void itemview_formaction::update_percent() {
 	}
 }
 
+std::string itemview_formaction::title() {
+	std::tr1::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
+	return utils::strprintf(_("Article - %s"), item->title().c_str());
+}
+
 }

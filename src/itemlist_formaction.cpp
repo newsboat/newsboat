@@ -418,7 +418,7 @@ void itemlist_formaction::qna_start_search() {
 	if (show_searchresult) {
 		v->pop_current_formaction();
 	}
-	v->push_searchresult(search_dummy_feed);
+	v->push_searchresult(search_dummy_feed, searchphrase);
 }
 
 void itemlist_formaction::do_update_visible_items() {
@@ -729,6 +729,17 @@ void itemlist_formaction::set_feed(std::tr1::shared_ptr<rss_feed> fd) {
 	update_visible_items = true; 
 	apply_filter = false;
 	do_update_visible_items();
+}
+
+std::string itemlist_formaction::title() {
+	if (feed->rssurl() == "") {
+		return utils::strprintf(_("Search Result - '%s'"), searchphrase.c_str());
+	} else {
+		if (feed->rssurl().substr(0,6) == "query:")
+			return utils::strprintf(_("Query Feed - %s"), feed->rssurl().substr(6,feed->rssurl().length()-6).c_str());
+		else
+			return utils::strprintf(_("Article List - %s"), feed->title().c_str());
+	}
 }
 
 }

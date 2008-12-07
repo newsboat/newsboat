@@ -271,7 +271,8 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 			break;
 	}
 	if (quit) {
-		v->pop_current_formaction();
+		while (v->formaction_stack_size() > 0)
+			v->pop_current_formaction();
 	}
 }
 
@@ -297,7 +298,7 @@ void feedlist_formaction::set_feedlist(std::vector<std::tr1::shared_ptr<rss_feed
 	unsigned int width = utils::to_u(f->get("feeds:w"));
 
 	unsigned int i = 0;
-	unsigned int unread_feeds = 0;
+	unread_feeds = 0;
 
 	std::string feedlist_format = v->get_cfg()->get_configvalue("feedlist-format");
 
@@ -313,6 +314,8 @@ void feedlist_formaction::set_feedlist(std::vector<std::tr1::shared_ptr<rss_feed
 
 		listfmt.add_line(format_line(feedlist_format, it->first, it->second, width), it->second);
 	}
+
+	total_feeds = i;
 
 	f->modify("feeds","replace_inner",listfmt.format_list(rxman, "feedlist"));
 
@@ -552,7 +555,7 @@ void feedlist_formaction::op_start_search() {
 		}
 		if (items.size() > 0) {
 			search_dummy_feed->items() = items;
-			v->push_searchresult(search_dummy_feed);
+			v->push_searchresult(search_dummy_feed, searchphrase);
 		} else {
 			v->show_error(_("No results."));
 		}
@@ -615,6 +618,10 @@ std::string feedlist_formaction::format_line(const std::string& feedlist_format,
 	GetLogger().log(LOG_DEBUG, "feedlist_formaction::set_feedlist: format result = %s", format.c_str());
 
 	return format;
+}
+
+std::string feedlist_formaction::title() {
+	return utils::strprintf(_("Feed List - %u unread, %u total"), unread_feeds, total_feeds);
 }
 
 }

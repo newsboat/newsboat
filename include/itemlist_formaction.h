@@ -20,6 +20,7 @@ class itemlist_formaction : public formaction {
 		void set_feed(std::tr1::shared_ptr<rss_feed> fd);
 
 		virtual std::string id() const { return "articlelist"; }
+		virtual std::string title();
 
 		inline std::tr1::shared_ptr<rss_feed> get_feed() { return feed; }
 		inline void set_pos(unsigned int p) { pos = p; }
@@ -38,6 +39,7 @@ class itemlist_formaction : public formaction {
 		virtual void finished_qna(operation op);
 
 		inline void set_show_searchresult(bool b) { show_searchresult = b; }
+		inline void set_searchphrase(const std::string& s) { searchphrase = s; }
 
 		virtual void recalculate_form();
 
@@ -71,6 +73,7 @@ class itemlist_formaction : public formaction {
 		std::vector<itemptr_pos_pair> visible_items;
 		bool update_visible_items;
 		bool show_searchresult;
+		std::string searchphrase;
 
 		history filterhistory;
 

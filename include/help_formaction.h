@@ -13,6 +13,8 @@ class help_formaction : public formaction {
 		virtual void init();
 		virtual keymap_hint_entry * get_keymap_hint();
 		virtual std::string id() const { return "help"; }
+		virtual std::string title();
+
 		virtual void finished_qna(operation op);
 		void set_context(const std::string& ctx);
 	private:

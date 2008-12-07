@@ -13,6 +13,7 @@ class dialogs_formaction : public formaction {
 		virtual void init();
 		virtual keymap_hint_entry * get_keymap_hint();
 		virtual std::string id() const { return "dialogs"; }
+		virtual std::string title();
 
 	private:
 		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
