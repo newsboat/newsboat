@@ -20,7 +20,7 @@ namespace newsbeuter {
 itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
 	: formaction(vv,formstr), apply_filter(false), update_visible_items(true), show_searchresult(false),
 		search_dummy_feed(new rss_feed(v->get_ctrl()->get_cache())),
-		set_filterpos(false), filterpos(0), rxman(0), old_width(0) {
+		set_filterpos(false), filterpos(0), rxman(0), old_width(0), old_itempos(-1) {
 	assert(true==m.parse(FILTER_UNREAD_ITEMS));
 }
 
@@ -43,6 +43,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				GetLogger().log(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0) {
 					visible_items[itempos].first->set_unread(false); // set article as read
+					old_itempos = itempos;
 					v->push_itemview(feed, visible_items[itempos].first->guid());
 					do_redraw = true;
 				} else {
@@ -647,6 +648,19 @@ int itemlist_formaction::get_pos(unsigned int realidx) {
 void itemlist_formaction::recalculate_form() {
 	formaction::recalculate_form();
 	set_update_visible_items(true);
+
+	std::string itemposname = f->get("itempos");
+	unsigned int itempos = utils::to_u(itemposname);
+	
+	// If the old position was set and it is less than the itempos, use it for the feed's itempos
+	// Correct the problem when you open itemview and jump to next then exit to itemlist and the itempos is wrong
+	// This only applies when "show-read-articles" is set to false
+	if ( (old_itempos != -1) && itempos > (unsigned int)old_itempos
+		&& ! v->get_cfg()->get_configvalue_as_bool("show-read-articles") )
+	{
+		f->set("itempos", utils::strprintf("%u", old_itempos));
+		old_itempos = -1; // Reset
+	}
 }
 
 void itemlist_formaction::save_article(const std::string& filename, std::tr1::shared_ptr<rss_item> item) {

@@ -87,6 +87,7 @@ class itemlist_formaction : public formaction {
 		regexmanager * rxman;
 
 		unsigned int old_width;
+		int old_itempos;
 };
 
 }
