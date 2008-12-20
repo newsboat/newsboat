@@ -741,7 +741,6 @@ void itemlist_formaction::set_feed(std::tr1::shared_ptr<rss_feed> fd) {
 	GetLogger().log(LOG_DEBUG, "itemlist_formaction::set_feed: fd pointer = %p title = `%s'", fd.get(), fd->title().c_str());
 	feed = fd; 
 	update_visible_items = true; 
-	apply_filter = false;
 	do_update_visible_items();
 }
 
