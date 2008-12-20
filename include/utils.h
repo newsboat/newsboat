@@ -56,6 +56,8 @@ class utils {
 
 		static std::vector<std::pair<unsigned int, unsigned int> > partition_indexes(unsigned int start, unsigned int end, unsigned int parts);
 
+		static std::string join(const std::vector<std::string>& strings, const std::string& separator);
+
 	private:
 		static void append_escapes(std::string& str, char c);
 

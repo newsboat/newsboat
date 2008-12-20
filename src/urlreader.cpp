@@ -117,38 +117,41 @@ void opml_urlreader::reload() {
 
 	std::string user_agent = utils::get_useragent(cfg);
 
-	std::string urlcontent = utils::retrieve_url(this->get_source(), user_agent.c_str(), this->get_auth(), cfg->get_configvalue_as_int("download-timeout"));
-	// GetLogger().log(LOG_DEBUG, "bloglines_urlreader::reload: return OPML content is `%s'", urlcontent.c_str());
+	std::vector<std::string> urls = utils::tokenize_quoted(this->get_source(), " ");
 
-	nxml_t *data;
-	nxml_data_t * root, * body;
-	nxml_error_t ret;
+	for (std::vector<std::string>::iterator it=urls.begin();it!=urls.end();it++) {
+		GetLogger().log(LOG_DEBUG, "bloglines_urlread::reload: downloading `%s'", it->c_str());
+		std::string urlcontent = utils::retrieve_url(*it, user_agent.c_str(), this->get_auth(), cfg->get_configvalue_as_int("download-timeout"));
 
-	ret = nxml_new (&data);
-	if (ret != NXML_OK) {
-		// TODO: error message
-		return;
-	}
+		nxml_t *data;
+		nxml_data_t * root, * body;
+		nxml_error_t ret;
 
-	ret = nxml_parse_buffer(data, const_cast<char *>(urlcontent.c_str()), urlcontent.length());
-	if (ret != NXML_OK) {
-		// puts (nxml_strerror (data, ret));
-		GetLogger().log(LOG_ERROR, "opml_urlreader::reload: parsing XML file failed: %s", nxml_strerror(data, ret));
-		return;
-	}
-
-	nxml_root_element (data, &root);
-
-	if (root) {
-		body = nxmle_find_element(data, root, "body", NULL);
-		if (body) {
-			GetLogger().log(LOG_DEBUG, "opml_urlreader::reload: found body");
-			rec_find_rss_outlines(body, "");
+		ret = nxml_new (&data);
+		if (ret != NXML_OK) {
+			continue;
+			return;
 		}
+
+		ret = nxml_parse_buffer(data, const_cast<char *>(urlcontent.c_str()), urlcontent.length());
+		if (ret != NXML_OK) {
+			// puts (nxml_strerror (data, ret));
+			GetLogger().log(LOG_ERROR, "opml_urlreader::reload: parsing XML file failed: %s", nxml_strerror(data, ret));
+			continue;
+		}
+
+		nxml_root_element (data, &root);
+
+		if (root) {
+			body = nxmle_find_element(data, root, "body", NULL);
+			if (body) {
+				GetLogger().log(LOG_DEBUG, "opml_urlreader::reload: found body");
+				rec_find_rss_outlines(body, "");
+			}
+		}
+
+		nxml_free(data);
 	}
-
-	nxml_free(data);
-
 }
 
 void opml_urlreader::handle_node(nxml_data_t * node, const std::string& tag) {

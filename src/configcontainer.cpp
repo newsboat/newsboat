@@ -45,7 +45,7 @@ configcontainer::configcontainer()
 	config_data["bloglines-auth"]  = configdata("", configdata::STR);
 	config_data["bloglines-mark-read"] = configdata("no", configdata::BOOL);
 	config_data["bookmark-cmd"]    = configdata("", configdata::STR);
-	config_data["opml-url"]        = configdata("", configdata::STR);
+	config_data["opml-url"]        = configdata("", configdata::STR, true);
 	config_data["html-renderer"]   = configdata("internal", configdata::PATH);
 	config_data["feedlist-format"] = configdata("%4i %n %11u %t", configdata::STR);
 	config_data["articlelist-format"] = configdata("%4i %f %D   %?T?|%-17T|  &?%t", configdata::STR);
@@ -119,7 +119,10 @@ action_handler_status configcontainer::handle_action(const std::string& action, 
 
 		case configdata::STR:
 		case configdata::PATH:
-			cfgdata.value = params[0];
+			if (cfgdata.multi_option) {
+				cfgdata.value = utils::join(params, " ");
+			} else
+				cfgdata.value = params[0];
 			return AHS_OK;	
 
 		default:

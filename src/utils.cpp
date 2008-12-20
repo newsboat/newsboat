@@ -625,4 +625,17 @@ size_t utils::strwidth(const std::string& str) {
 	return wcswidth(wstr.c_str(), wstr.length());
 }
 
+std::string utils::join(const std::vector<std::string>& strings, const std::string& separator) {
+	std::string result;
+
+	for (std::vector<std::string>::const_iterator it=strings.begin();it!=strings.end();it++) {
+		result.append(*it);
+		result.append(separator);
+	}
+
+	result.erase(result.length()-separator.length(), result.length());
+
+	return result;
+}
+
 }
