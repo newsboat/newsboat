@@ -502,6 +502,8 @@ std::string utils::absolute_url(const std::string& url, const std::string& link)
 			if (strlen(foo)>=2) {
 				foo += 2;
 				foo = strchr(foo,'/');
+				if (!foo)
+					foo = u + strlen(u);
 				char u2[1024];
 				strcpy(u2, u);
 				snprintf(u2 + (foo - u), sizeof(u2) - (foo - u), "%s", link.c_str());

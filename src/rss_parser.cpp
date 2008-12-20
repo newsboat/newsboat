@@ -306,7 +306,7 @@ void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed>& feed, const cha
 		set_item_title(feed, x, item, encoding);
 
 		if (item->link) {
-			x->set_link(utils::absolute_url(my_uri, item->link));
+			x->set_link(utils::absolute_url(feed->link(), item->link));
 		}
 
 		set_item_author(x, item, encoding);
