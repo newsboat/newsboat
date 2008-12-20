@@ -9,6 +9,9 @@ TODO:
 - add option similar to max-items but that deletes articles older than n days
 - make it possible to configure more than one opml source
 - use categories from OPML also when it is directly used as source
+- when a feed is reloaded, and the article list is updated, the show-read-items flag is reset?
+- implement mark-as-read-on-hover
+
 
 DONE:
 - clean up items that have been added but whose URL has been removed from the config file.
