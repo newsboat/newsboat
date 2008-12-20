@@ -14,7 +14,7 @@ toggle-article-read|N|Toggle the read flag for the currently selected article.
 toggle-show-read-feeds|l|Toggle whether read feeds should be shown in the feed list.
 show-urls|u|Show all URLs in the article in a list (similar to urlview).
 clear-tag|^T|Clear current tag.
-select-tag|t|Select tag.
+set-tag|t|Select tag.
 open-search|/|Opens the search dialog. When a search is done in the article list, then the search operation only applies to the articles of the current feed, otherwise to all articles.
 enqueue|e|Add the podcast download URL of the current article (if any is found) to the podcast download queue (see below for more information on podcast support).
 edit-urls|E|Edit the list of subscribed URLs. newsbeuter will start the editor configured through the $EDITOR confiuration variable (fallback: "vi"). When editing is finished, newsbeuter will reload the URLs file.
