@@ -38,6 +38,7 @@ class cache {
 		void populate_tables();
 		void set_pragmas();
 		void delete_item(const std::tr1::shared_ptr<rss_item>& item);
+		void clean_old_articles();
 
 		std::string prepare_query(const char * format, ...);
 			

@@ -61,6 +61,7 @@ configcontainer::configcontainer()
 	config_data["download-retries"] = configdata("1", configdata::INT);
 	config_data["feed-sort-order"] = configdata("none", configdata::STR);
 	config_data["reload-threads"] = configdata("1", configdata::INT);
+	config_data["keep-articles-days"] = configdata("0", configdata::INT);
 
 
 	/* undocumented: */

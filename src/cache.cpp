@@ -187,6 +187,8 @@ cache::cache(const std::string& cachefile, configcontainer * c) : db(0),cfg(c), 
 	populate_tables();
 	set_pragmas();
 
+	clean_old_articles();
+
 	// we need to manually lock all DB operations because SQLite has no explicit support for multithreading.
 	mtx = new mutex();
 }
@@ -366,9 +368,13 @@ void cache::externalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, bool reset_
 			feed->items().erase(it, feed->items().end()); // delete entries that are too much
 	}
 
+	unsigned int days = cfg->get_configvalue_as_int("keep-articles-days");
+	time_t old_time = time(NULL) - days * 24*60*60;
+
 	// the reverse iterator is there for the sorting foo below (think about it)
 	for (std::vector<std::tr1::shared_ptr<rss_item> >::reverse_iterator it=feed->items().rbegin(); it != feed->items().rend(); ++it) {
-		update_rssitem(*it, feed->rssurl(), reset_unread);
+		if (days == 0 || (*it)->pubDate_timestamp() >= old_time)
+			update_rssitem(*it, feed->rssurl(), reset_unread);
 	}
 	sqlite3_exec(db, "END;", NULL, NULL, NULL);
 }
@@ -839,4 +845,21 @@ std::vector<std::string> cache::get_read_item_guids() {
 		GetLogger().log(LOG_DEBUG, "cache::get_read_item_guids: executed query successfully: %s", query.c_str());
 	}
 	return guids;
+}
+
+void cache::clean_old_articles() {
+	scope_mutex lock(mtx);
+	int rc;
+
+	unsigned int days = cfg->get_configvalue_as_int("keep-articles-days");
+	if (days > 0) {
+		time_t old_date = time(NULL) - days*24*60*60;
+
+		std::string query(utils::strprintf("DELETE FROM rss_item WHERE pubDate < %d", old_date));
+		GetLogger().log(LOG_DEBUG, "cache::clean_old_articles: about to delete articles with a pubDate older than %d", old_date);
+		rc = sqlite3_exec(db, query.c_str(), NULL, NULL, NULL);
+		GetLogger().log(LOG_DEBUG, "cache::clean_old_artgicles: old article delete result: rc = %d", rc);
+	} else {
+		GetLogger().log(LOG_DEBUG, "cache::clean_old_articles, days == 0, not cleaning up anything");
+	}
 }
