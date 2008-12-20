@@ -1,10 +1,10 @@
 #!/bin/sh
 # newsbeuter bookmarking plugin for del.icio.us
 # (c) 2007 Andreas Krennmair
-# documentation: http://del.icio.us/help/api/posts
+# documentation: http://delicious.com/help/api#posts_add
 
-username="your del.icio.us username here"
-password="your del.icio.us password here"
+username="your delicious.com username here"
+password="your delicious.com password here"
 
 url="$1"
 title="$2"
