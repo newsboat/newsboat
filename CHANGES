@@ -3,6 +3,7 @@ Changes for newsbeuter:
 1.4:
 	Added more flexible dialog handling
 	Improved position handling in article list (fixes #112; thanks to Isaac Good)
+	Fixed a lot of bugs (#102, #111, #117).
 
 1.3 (2008-12-06):
 	Changed some internal data structures to smart pointers (stability improvement).

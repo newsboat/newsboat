@@ -25,13 +25,14 @@ This chapter describes how to compile and install newsbeuter from source.
 
 Downloading Newsbeuter
 ~~~~~~~~~~~~~~~~~~~~~~
-Newsbeuter is available as source package. Simply go to
-http://www.newsbeuter.org/[] and download the latest source package,
-which is usually in the .tar.gz file format. Alternatively, you can check out
-the latest development source tree from the newsbeuter SVN repository by
-running the following command on the commandline:
 
-svn co http://bereshit.synflood.at/svn/noos/trunk
+Newsbeuter is available as source package. Simply go to
+http://www.newsbeuter.org/[] and download the latest source package, which is
+usually in the .tar.gz file format. Alternatively, you can check out the latest
+development source tree from the newsbeuter Git repository (hosted on GitHub)
+by running the following command on the commandline:
+
+git clone git://github.com/akrennmair/newsbeuter.git
 
 Dependencies
 ~~~~~~~~~~~~

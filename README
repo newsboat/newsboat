@@ -10,8 +10,8 @@ You can download the latest version of newsbeuter from the following website:
 http://www.newsbeuter.org/
 
 Alternatively, you can check out the latest version from the newsbeuter
-Subversion repository:
-http://bereshit.synflood.at/svn/noos/trunk/
+Git repository (hosted on GitHub):
+git clone git://github.com/akrennmair/newsbeuter.git
 
 == Dependencies ==
 Newsbeuter depends on a number of libraries, which need to be installed before
