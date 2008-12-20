@@ -6,3 +6,5 @@ filter/Scanner.h
 filter/Scanner.cpp
 filter/Parser.h
 filter/Parser.cpp
+newsbeuter
+podbeuter
