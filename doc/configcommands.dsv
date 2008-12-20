@@ -32,7 +32,7 @@ notify-program|<path>|""|If set, then the configured program will be executed if
 notify-screen|[yes/no]|no|If yes, then a "privacy message" will be sent to the terminal, containing a notification message about new articles. This is especially useful if you use terminal emulations such as GNU screen which implement privacy messages.|notify-screen yes
 notify-xterm|[yes/no]|no|If yes, then the xterm window title will be set to a notification message about new articles.|notify-xterm yes
 podcast-auto-enqueue|[yes/no]|no|If yes, then all podcast URLs that are found in articles are added to the podcast download queue. See below for more information on podcast support in newsbeuter.|podcast-auto-enqueue yes
-opml-url|<url>|""|If the OPML online subscription mode is enabled, then the list of feeds will be taken from the OPML file found on this location.|opml-url "http://host.domain.tld/blogroll.opml"
+opml-url|<url> ...|""|If the OPML online subscription mode is enabled, then the list of feeds will be taken from the OPML file found on this location. Optionally, you can specify more than one URL. All the listed OPML URLs will then be taken into account when loading the feed list.|opml-url "http://host.domain.tld/blogroll.opml" "http://example.com/anotheropmlfile.opml"
 proxy|<server:port>|n/a|Set the proxy to use for downloading RSS feeds.|proxy localhost:3128
 proxy-auth|<auth>|n/a|Set the proxy authentication string.|proxy-auth user:password
 refresh-on-startup|[yes/no]|no|If yes, then all feeds will be reloaded when newsbeuter starts up. This is equivalent to the -r commandline option.|refresh-on-startup yes

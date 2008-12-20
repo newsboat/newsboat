@@ -7,8 +7,6 @@ TODO:
 - per-feed refresh settings
 - add support for interactive bookmarking plugins
 - add option similar to max-items but that deletes articles older than n days
-- make it possible to configure more than one opml source
-- use categories from OPML also when it is directly used as source
 - when a feed is reloaded, and the article list is updated, the show-read-items flag is reset?
 - implement mark-as-read-on-hover
 
@@ -131,3 +129,5 @@ DONE:
 - replace std::vector<rss_item> with std::vector<std::tr1::shared_ptr<rss_item> > as a possible fix against these weird crashes.
   beta tester: mhellwig@in-ulm.de (regular crashes on sparc Linux)
 - write documentation on feed-sortorder and related changes
+- use categories from OPML also when it is directly used as source
+- make it possible to configure more than one opml source
