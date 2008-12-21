@@ -39,6 +39,7 @@ class cache {
 		void set_pragmas();
 		void delete_item(const std::tr1::shared_ptr<rss_item>& item);
 		void clean_old_articles();
+		void update_rssitem_unlocked(std::tr1::shared_ptr<rss_item>& item, const std::string& feedurl, bool reset_unread);
 
 		std::string prepare_query(const char * format, ...);
 			
