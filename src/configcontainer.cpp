@@ -75,6 +75,7 @@ configcontainer::configcontainer()
 	config_data["selectfilter-title-format"] = configdata(_("%N %V - Select Filter"), configdata::STR);
 	config_data["itemview-title-format"] = configdata(_("%N %V - Article '%T'"), configdata::STR);
 	config_data["urlview-title-format"] = configdata(_("%N %V - URLs"), configdata::STR);
+	config_data["dialogs-title-format"] = configdata(_("%N %V - Dialogs"), configdata::STR);
 }
 
 configcontainer::~configcontainer()

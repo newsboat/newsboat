@@ -2,6 +2,7 @@
 #include <view.h>
 #include <dialogs_formaction.h>
 #include <listformatter.h>
+#include <formatstring.h>
 #include <utils.h>
 
 namespace newsbeuter {
@@ -14,6 +15,13 @@ dialogs_formaction::~dialogs_formaction() {
 
 void dialogs_formaction::init() {
 	set_keymap_hints();
+
+	unsigned int width = utils::to_u(f->get("dialogs:w"));
+	std::string title_format = v->get_cfg()->get_configvalue("dialogs-title-format");
+	fmtstr_formatter fmt;
+	fmt.register_fmt('N', PROGRAM_NAME);
+	fmt.register_fmt('V', PROGRAM_VERSION);
+	f->set("head", fmt.do_format(title_format, width));
 }
 
 void dialogs_formaction::prepare() {
@@ -21,8 +29,9 @@ void dialogs_formaction::prepare() {
 		listformatter listfmt;
 		std::vector<std::pair<unsigned int, std::string> > formaction_names = v->get_formaction_names();
 
-		for (std::vector<std::pair<unsigned int, std::string> >::iterator it=formaction_names.begin();it!=formaction_names.end();it++) {
-			listfmt.add_line(it->second, it->first);
+		unsigned int i = 1;
+		for (std::vector<std::pair<unsigned int, std::string> >::iterator it=formaction_names.begin();it!=formaction_names.end();it++,i++) {
+			listfmt.add_line(utils::strprintf("%4u %s", i, it->second.c_str()), it->first);
 		}
 
 		f->modify("dialogs", "replace_inner", listfmt.format_list());
@@ -78,6 +87,19 @@ void dialogs_formaction::process_operation(operation op, bool automatic, std::ve
 
 std::string dialogs_formaction::title() {
 	return ""; // will never be displayed
+}
+
+void dialogs_formaction::handle_cmdline(const std::string& cmd) {
+	unsigned int idx = 0;
+	if (1==sscanf(cmd.c_str(), "%u", &idx)) {
+		if (idx <= v->formaction_stack_size()) {
+			f->set("dialogpos", utils::to_s(idx - 1));
+		} else {
+			v->show_error(_("Invalid position!"));
+		}
+	} else {
+		formaction::handle_cmdline(cmd);
+	}
 }
 
 }
