@@ -951,7 +951,8 @@ std::string controller::bookmark(const std::string& url, const std::string& titl
 }
 
 void controller::execute_commands(char ** argv, unsigned int i) {
-	v->pop_current_formaction();
+	if (v->formaction_stack_size() > 0)
+		v->pop_current_formaction();
 	for (;argv[i];++i) {
 		GetLogger().log(LOG_DEBUG, "controller::execute_commands: executing `%s'", argv[i]);
 		std::string cmd(argv[i]);
