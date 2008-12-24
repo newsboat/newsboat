@@ -738,5 +738,19 @@ std::vector<std::pair<unsigned int, std::string> > view::get_formaction_names() 
 	return formaction_names;
 }
 
+void view::goto_next_dialog() {
+	current_formaction++;
+	if (current_formaction >= formaction_stack.size())
+		current_formaction = 0;
+}
+
+void view::goto_prev_dialog() {
+	if (current_formaction > 0) {
+		current_formaction--;
+	} else {
+		current_formaction = formaction_stack.size() - 1;
+	}
+}
+
 
 }

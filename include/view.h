@@ -87,6 +87,9 @@ namespace newsbeuter {
 
 			std::tr1::shared_ptr<formaction> get_formaction(unsigned int idx) { return formaction_stack[idx]; }
 
+			void goto_next_dialog();
+			void goto_prev_dialog();
+
 		protected:
 			void set_bindings(std::tr1::shared_ptr<formaction> fa);
 			void apply_colors(std::tr1::shared_ptr<formaction> fa);

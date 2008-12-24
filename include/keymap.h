@@ -68,6 +68,8 @@ namespace newsbeuter {
 						OP_EDIT_URLS,
 						OP_CLOSEDIALOG,
 						OP_VIEWDIALOGS,
+						OP_NEXTDIALOG,
+						OP_PREVDIALOG,
 						OP_NB_MAX,
 
 						// podbeuter-specific operations:

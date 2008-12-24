@@ -106,6 +106,12 @@ void formaction::process_op(operation op, bool automatic, std::vector<std::strin
 		case OP_VIEWDIALOGS:
 			v->view_dialogs();
 			break;
+		case OP_NEXTDIALOG:
+			v->goto_next_dialog();
+			break;
+		case OP_PREVDIALOG:
+			v->goto_prev_dialog();
+			break;
 		default:
 			this->process_operation(op, automatic, args);
 	}

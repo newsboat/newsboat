@@ -61,6 +61,8 @@ static op_desc opdescs[] = {
 	{ OP_EDIT_URLS,			"edit-urls",				"E",	_("Edit subscribed URLs"),				KM_FEEDLIST },
 	{ OP_CLOSEDIALOG,		"close-dialog",				"^X",	_("Close currently selected dialog"),	KM_DIALOGS },
 	{ OP_VIEWDIALOGS,		"view-dialogs",				"v",	_("View list of open dialogs"),			KM_NEWSBEUTER },
+	{ OP_NEXTDIALOG,		"next-dialog",				"^V",	_("Go to next dialog"),					KM_NEWSBEUTER },
+	{ OP_PREVDIALOG,		"prev-dialog",				"^G",	_("Go to previous dialog"),				KM_NEWSBEUTER },
 
 	{ OP_0,		"zero",	"0",	_("Open URL 10"), KM_URLVIEW | KM_ARTICLE },
 	{ OP_1,		"one",	"1",	_("Open URL 1"), KM_URLVIEW | KM_ARTICLE},
