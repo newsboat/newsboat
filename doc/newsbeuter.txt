@@ -646,6 +646,22 @@ Examples for possible highlighting configurations are:
 	highlight feedlist "http?s://[^ ]+" yellow red bold
 
 
+Advanced Dialog Management
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Since version 1.4, newsbeuter supports an advanced concept of dialogs.
+Previously, all dialogs (feed list, article list, article view) were internally
+laid out as a pure stack. In 1.4, this changed: all dialogs are managed in a
+list, and the user can jump to another, previously opened dialog from
+everywhere. This allows a user to open more than one article list, more than one
+article view, etc., and switch between them without closing them.
+
+The main dialog for this feature can be reached by pressing the "v" key. This
+opens the list of open dialogs. From there, the user can switch to another
+dialog by selecting the appropriate entry and pressing "ENTER", or can close
+open dialogs by selecting them and pressing Ctrl-X.
+
+
 Podcast Support
 ~~~~~~~~~~~~~~~
 
