@@ -94,7 +94,7 @@ void view::set_bindings(std::tr1::shared_ptr<formaction> fa) {
 	fa->get_form()->set("bind_page_down", pgdownkey);
 }
 
-std::tr1::shared_ptr<formaction> view::get_current_formaction() const {
+std::tr1::shared_ptr<formaction> view::get_current_formaction() {
 	if (formaction_stack.size() > 0 && current_formaction < formaction_stack.size()) {
 		return formaction_stack[current_formaction];
 	}
@@ -702,7 +702,7 @@ void view::apply_colors(std::tr1::shared_ptr<formaction> fa) {
 	}
 }
 
-std::string view::id() const {
+std::string view::id() {
 	if (formaction_stack.size() > 0) {
 		return get_current_formaction()->id();
 	}

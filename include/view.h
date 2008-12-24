@@ -29,7 +29,7 @@ namespace newsbeuter {
 			void run();
 			std::string run_modal(std::tr1::shared_ptr<formaction> f, const std::string& value = "");
 
-			std::string id() const;
+			std::string id();
 
 			void set_feedlist(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds);
 			void update_visible_feeds(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds);
@@ -83,10 +83,11 @@ namespace newsbeuter {
 
 			std::vector<std::pair<unsigned int, std::string> > get_formaction_names();
 
+			std::tr1::shared_ptr<formaction> get_current_formaction();
+
+			std::tr1::shared_ptr<formaction> get_formaction(unsigned int idx) { return formaction_stack[idx]; }
+
 		protected:
-
-			std::tr1::shared_ptr<formaction> get_current_formaction() const;
-
 			void set_bindings(std::tr1::shared_ptr<formaction> fa);
 			void apply_colors(std::tr1::shared_ptr<formaction> fa);
 
