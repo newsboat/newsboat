@@ -933,18 +933,28 @@ void controller::set_feedptrs(std::tr1::shared_ptr<rss_feed> feed) {
 
 std::string controller::bookmark(const std::string& url, const std::string& title, const std::string& description) {
 	std::string bookmark_cmd = cfg->get_configvalue("bookmark-cmd");
+	bool is_interactive = cfg->get_configvalue_as_bool("bookmark-interactive");
 	if (bookmark_cmd.length() > 0) {
-		char * my_argv[4];
-		my_argv[0] = const_cast<char *>("/bin/sh");
-		my_argv[1] = const_cast<char *>("-c");
+		std::string cmdline = utils::strprintf("%s '%s' %s %s", 
+			bookmark_cmd.c_str(), utils::replace_all(url,"'", "%27").c_str(), 
+			stfl::quote(title).c_str(), stfl::quote(description).c_str());
 
-		// wow. what an abuse.
-		std::string cmdline = bookmark_cmd + " " + stfl::quote(url) + " " + stfl::quote(title) + " " + stfl::quote(description);
+		GetLogger().log(LOG_DEBUG, "controller::bookmark: cmd = %s", cmdline.c_str());
 
-		my_argv[2] = const_cast<char *>(cmdline.c_str());
-		my_argv[3] = NULL;
-
-		return utils::run_program(my_argv, "");
+		if (is_interactive) {
+			v->push_empty_formaction();
+			stfl::reset();
+			::system(cmdline.c_str());
+			v->pop_current_formaction();
+			return "";
+		} else {
+			char * my_argv[4];
+			my_argv[0] = const_cast<char *>("/bin/sh");
+			my_argv[1] = const_cast<char *>("-c");
+			my_argv[2] = const_cast<char *>(cmdline.c_str());
+			my_argv[3] = NULL;
+			return utils::run_program(my_argv, "");
+		}
 	} else {
 		return _("bookmarking support is not configured. Please set the configuration variable `bookmark-cmd' accordingly.");
 	}

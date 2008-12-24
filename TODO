@@ -5,7 +5,6 @@ TODO:
 - add an auto-flag configuration command to automatically flag articles that match a certain query
 - when reload is finished, the focus shall be in the current form's list
 - per-feed refresh settings
-- add support for interactive bookmarking plugins
 - implement mark-as-read-on-hover
 
 
@@ -131,3 +130,4 @@ DONE:
 - make it possible to configure more than one opml source
 - when a feed is reloaded, and the article list is updated, the show-read-items flag is reset
 - add option similar to max-items but that deletes articles older than n days
+- add support for interactive bookmarking plugins

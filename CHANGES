@@ -6,6 +6,7 @@ Changes for newsbeuter:
 	Fixed a lot of bugs (#102, #111, #117).
 	Added ability to specify a list of OPML URLs when using OPML as URL source.
 	Added config option "keep-articles-days" to optionally keep articles only for a limited number of days.
+	Added config option "bookmark-interactive" to indicate that the configured bookmarking command is interactive.
 
 1.3 (2008-12-06):
 	Changed some internal data structures to smart pointers (stability improvement).
