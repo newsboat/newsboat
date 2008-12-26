@@ -455,6 +455,17 @@ void itemlist_formaction::prepare() {
 
 	do_update_visible_items();
 
+	if (v->get_cfg()->get_configvalue_as_bool("mark-as-read-on-hover")) {
+		std::string itemposname = f->get("itempos");
+		if (itemposname.length() > 0) {
+			unsigned int itempos = utils::to_u(itemposname);
+			if (visible_items[itempos].first->unread()) {
+				visible_items[itempos].first->set_unread(false);
+				do_redraw = true;
+			}
+		}
+	}
+
 	unsigned int width = utils::to_u(f->get("items:w"));
 
 	if (old_width != width) {
