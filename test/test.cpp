@@ -633,3 +633,29 @@ BOOST_AUTO_TEST_CASE(TestIndexPartitioning) {
 	BOOST_CHECK_EQUAL(partitions[0].first, 0u);
 	BOOST_CHECK_EQUAL(partitions[0].second, 103u);
 }
+
+BOOST_AUTO_TEST_CASE(TestCensorUrl) {
+	BOOST_CHECK_EQUAL(utils::censor_url(""), "");
+	BOOST_CHECK_EQUAL(utils::censor_url("foobar"), "foobar");
+	BOOST_CHECK_EQUAL(utils::censor_url("foobar://xyz/"), "foobar://xyz/");
+
+	BOOST_CHECK_EQUAL(utils::censor_url("http://newsbeuter.org/"), "http://newsbeuter.org/");
+	BOOST_CHECK_EQUAL(utils::censor_url("https://newsbeuter.org/"), "https://newsbeuter.org/");
+
+	BOOST_CHECK_EQUAL(utils::censor_url("http://@newsbeuter.org/"), "http://*:*@newsbeuter.org/");
+	BOOST_CHECK_EQUAL(utils::censor_url("https://@newsbeuter.org/"), "https://*:*@newsbeuter.org/");
+
+	BOOST_CHECK_EQUAL(utils::censor_url("http://foo:bar@newsbeuter.org/"), "http://*:*@newsbeuter.org/");
+	BOOST_CHECK_EQUAL(utils::censor_url("https://foo:bar@newsbeuter.org/"), "https://*:*@newsbeuter.org/");
+
+	BOOST_CHECK_EQUAL(utils::censor_url("http://aschas@newsbeuter.org/"), "http://*:*@newsbeuter.org/");
+	BOOST_CHECK_EQUAL(utils::censor_url("https://aschas@newsbeuter.org/"), "https://*:*@newsbeuter.org/");
+
+	BOOST_CHECK_EQUAL(utils::censor_url("xxx://aschas@newsbeuter.org/"), "xxx://aschas@newsbeuter.org/");
+
+	BOOST_CHECK_EQUAL(utils::censor_url("http://foobar"), "http://foobar");
+	BOOST_CHECK_EQUAL(utils::censor_url("https://foobar"), "https://foobar");
+
+	BOOST_CHECK_EQUAL(utils::censor_url("http://aschas@"), "http://*:*@");
+	BOOST_CHECK_EQUAL(utils::censor_url("https://aschas@"), "https://*:*@");
+}

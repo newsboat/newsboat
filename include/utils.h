@@ -58,6 +58,8 @@ class utils {
 
 		static std::string join(const std::vector<std::string>& strings, const std::string& separator);
 
+		static std::string censor_url(const std::string& url);
+
 	private:
 		static void append_escapes(std::string& str, char c);
 

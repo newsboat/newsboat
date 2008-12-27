@@ -533,7 +533,7 @@ void itemlist_formaction::set_head(const std::string& s, unsigned int unread, un
 	fmt.register_fmt('t', utils::to_s(total));
 
 	fmt.register_fmt('T', s);
-	fmt.register_fmt('U', url);
+	fmt.register_fmt('U', utils::censor_url(url));
 
 	if (!show_searchresult) {
 		title = fmt.do_format(v->get_cfg()->get_configvalue("articlelist-title-format"));

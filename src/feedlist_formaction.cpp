@@ -595,7 +595,7 @@ void feedlist_formaction::set_pos() {
 std::string feedlist_formaction::get_title(std::tr1::shared_ptr<rss_feed> feed) {
 	std::string title = feed->title();
 	if (title.length()==0)
-		title = feed->rssurl();
+		title = utils::censor_url(feed->rssurl());
 	if (title.length()==0)
 		title = "<no title>";
 	return title;
@@ -610,8 +610,8 @@ std::string feedlist_formaction::format_line(const std::string& feedlist_format,
 	fmt.register_fmt('n', unread_count > 0 ? "N" : " ");
 	fmt.register_fmt('t', get_title(feed));
 	fmt.register_fmt('T', feed->get_firsttag());
-	fmt.register_fmt('l', feed->link());
-	fmt.register_fmt('L', feed->rssurl());
+	fmt.register_fmt('l', utils::censor_url(feed->link()));
+	fmt.register_fmt('L', utils::censor_url(feed->rssurl()));
 	fmt.register_fmt('d', feed->description());
 
 	std::string format = fmt.do_format(feedlist_format, width);

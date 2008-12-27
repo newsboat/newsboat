@@ -94,7 +94,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 								link = "";
 							}
 							if (link.length() > 0) {
-								link_num = add_link(links,utils::absolute_url(url,link), LINK_HREF);
+								link_num = add_link(links,utils::censor_url(utils::absolute_url(url,link)), LINK_HREF);
 								curline.append("[");
 							}
 						}
@@ -117,7 +117,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 									link = "";
 								}
 								if (link.length() > 0) {
-									unsigned int link_num = add_link(links,utils::absolute_url(url,link), LINK_EMBED);
+									unsigned int link_num = add_link(links,utils::censor_url(utils::absolute_url(url,link)), LINK_EMBED);
 									curline.append(utils::strprintf("[%s %u]", _("embedded flash:"), link_num));
 								}
 							}
@@ -150,7 +150,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 								imgurl = "";
 							}
 							if (imgurl.length() > 0) {
-								unsigned int link_num = add_link(links,utils::absolute_url(url,imgurl), LINK_IMG);
+								unsigned int link_num = add_link(links,utils::censor_url(utils::absolute_url(url,imgurl)), LINK_IMG);
 								curline.append(utils::strprintf("[%s %u]", _("image"), link_num));
 								image_count++;
 							}

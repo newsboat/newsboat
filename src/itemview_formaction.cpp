@@ -88,7 +88,7 @@ void itemview_formaction::prepare() {
 		}
 
 		if (item->link().length() > 0) {
-			std::string link = utils::strprintf("%s%s", _("Link: "), item->link().c_str());
+			std::string link = utils::strprintf("%s%s", _("Link: "), utils::censor_url(item->link()).c_str());
 			listfmt.add_line(link, UINT_MAX, view_width);
 		}
 
@@ -101,7 +101,7 @@ void itemview_formaction::prepare() {
 		}
 
 		if (item->enclosure_url().length() > 0) {
-			std::string enc_url = utils::strprintf("%s%s (%s%s)", _("Podcast Download URL: "), item->enclosure_url().c_str(), _("type: "), item->enclosure_type().c_str());
+			std::string enc_url = utils::strprintf("%s%s (%s%s)", _("Podcast Download URL: "), utils::censor_url(item->enclosure_url()).c_str(), _("type: "), item->enclosure_type().c_str());
 			listfmt.add_line(enc_url, UINT_MAX, view_width);
 		}
 

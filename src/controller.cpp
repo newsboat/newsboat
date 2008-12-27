@@ -507,7 +507,7 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
 	if (pos < feeds.size()) {
 		std::tr1::shared_ptr<rss_feed> feed = feeds[pos];
 		if (!unattended)
-			v->set_status(utils::strprintf(_("%sLoading %s..."), prepare_message(pos+1, max).c_str(), feed->rssurl().c_str()));
+			v->set_status(utils::strprintf(_("%sLoading %s..."), prepare_message(pos+1, max).c_str(), utils::censor_url(feed->rssurl()).c_str()));
 
 		rss_parser parser(feed->rssurl().c_str(), rsscache, cfg, &ign);
 		GetLogger().log(LOG_DEBUG, "controller::reload: created parser");
@@ -521,9 +521,9 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
 			}
 			v->set_status("");
 		} catch (const dbexception& e) {
-			v->set_status(utils::strprintf(_("Error while retrieving %s: %s"), feed->rssurl().c_str(), e.what()));
+			v->set_status(utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(feed->rssurl()).c_str(), e.what()));
 		} catch (const std::string& errmsg) {
-			v->set_status(utils::strprintf(_("Error while retrieving %s: %s"), feed->rssurl().c_str(), errmsg.c_str()));
+			v->set_status(utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(feed->rssurl()).c_str(), errmsg.c_str()));
 		}
 	} else {
 		v->show_error(_("Error: invalid feed!"));

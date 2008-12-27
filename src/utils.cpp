@@ -638,4 +638,31 @@ std::string utils::join(const std::vector<std::string>& strings, const std::stri
 	return result;
 }
 
+std::string utils::censor_url(const std::string& url) {
+	unsigned int start;
+	std::string rv;
+
+	if (url.substr(0,7) == "http://") {
+		start = 7;
+		rv = url.substr(0,7);
+	} else if (url.substr(0,8) == "https://") {
+		start = 8;
+		rv = url.substr(0,8);
+	} else {
+		return url;
+	}
+
+	while (start < url.length() && url[start] != '@' && url[start] != '/') {
+		start++;
+	}
+
+	if (start == url.length() || url[start] == '/') {
+		rv = url;
+	} else if (url[start] == '@') {
+		rv.append("*:*");
+		rv.append(url.substr(start, url.length() - start));
+	}
+	return rv;
+}
+
 }
