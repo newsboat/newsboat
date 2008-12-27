@@ -25,17 +25,17 @@ class stfl {
 				std::string get_focus();
 				void set_focus(const std::string& name);
 
-				std::string dump(const std::string& name, const std::string& prefix, int focus);
+				// std::string dump(const std::string& name, const std::string& prefix, int focus);
 				void modify(const std::string& name, const std::string& mode, const std::string& text);
-				std::string lookup(const std::string& path, const std::string& newname);
+				// std::string lookup(const std::string& path, const std::string& newname);
 
 			private:
 				stfl_form * f;
 				stfl_ipool * ipool;
 		};
 
-		static std::string error();
-		static void error_action(const std::string& mode);
+		// static std::string error();
+		// static void error_action(const std::string& mode);
 
 		static void reset();
 		static std::string quote(const std::string& text);

@@ -66,15 +66,6 @@ void stfl::form::set_focus(const std::string& name) {
 	stfl_ipool_flush(ipool);
 }
 
-std::string stfl::form::dump(const std::string& name, const std::string& prefix, int focus) {
-	const char * text = stfl_ipool_fromwc(ipool,stfl_dump(f, stfl_ipool_towc(ipool,name.c_str()), stfl_ipool_towc(ipool,prefix.c_str()), focus));
-	std::string retval;
-	if (text)
-		retval = text;
-	stfl_ipool_flush(ipool);
-	return retval;
-}
-
 void stfl::form::modify(const std::string& name, const std::string& mode, const std::string& text) {
 	GetLogger().log(LOG_INFO, "stfl::form::modify: name = `%s' mode = `%s' text = `%s'", name.c_str(), mode.c_str(), text.c_str());
 	const wchar_t * wname, * wmode, * wtext;
@@ -84,6 +75,30 @@ void stfl::form::modify(const std::string& name, const std::string& mode, const 
 	// GetLogger().log(LOG_INFO, "stfl::form::modify: wname = `%ls' mode = `%ls' text = `%ls'", wname, wmode, wtext);
 	stfl_modify(f, wname, wmode, wtext);
 	stfl_ipool_flush(ipool);
+}
+
+void stfl::reset() {
+	stfl_reset();
+}
+
+static mutex quote_mtx;
+
+std::string stfl::quote(const std::string& text) {
+	scope_mutex lock(&quote_mtx);
+	stfl_ipool * ipool = stfl_ipool_create(nl_langinfo(CODESET));
+	std::string retval = stfl_ipool_fromwc(ipool,stfl_quote(stfl_ipool_towc(ipool,text.c_str())));
+	stfl_ipool_destroy(ipool);
+	return retval;
+}
+
+/*
+std::string stfl::form::dump(const std::string& name, const std::string& prefix, int focus) {
+	const char * text = stfl_ipool_fromwc(ipool,stfl_dump(f, stfl_ipool_towc(ipool,name.c_str()), stfl_ipool_towc(ipool,prefix.c_str()), focus));
+	std::string retval;
+	if (text)
+		retval = text;
+	stfl_ipool_flush(ipool);
+	return retval;
 }
 
 std::string stfl::form::lookup(const std::string& path, const std::string& newname) {
@@ -107,17 +122,4 @@ void stfl::error_action(const std::string& mode) {
 	stfl_error_action(stfl_ipool_towc(ipool,mode.c_str()));
 	stfl_ipool_destroy(ipool);
 }
-
-void stfl::reset() {
-	stfl_reset();
-}
-
-static mutex quote_mtx;
-
-std::string stfl::quote(const std::string& text) {
-	scope_mutex lock(&quote_mtx);
-	stfl_ipool * ipool = stfl_ipool_create(nl_langinfo(CODESET));
-	std::string retval = stfl_ipool_fromwc(ipool,stfl_quote(stfl_ipool_towc(ipool,text.c_str())));
-	stfl_ipool_destroy(ipool);
-	return retval;
-}
+*/
