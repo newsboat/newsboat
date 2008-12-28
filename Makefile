@@ -14,7 +14,7 @@ RUBY=ruby
 # compiler and linker flags
 DEFINES=-DLOCALEDIR=\"$(localedir)\"
 WARNFLAGS=-Wall -Wextra
-CXXFLAGS+=-ggdb -I/sw/include -I./include -I./stfl -I./filter -I. -I./xmlrss $(WARNFLAGS) $(DEFINES)
+CXXFLAGS+=-ggdb -I/sw/include -I./include -I./stfl -I./filter -I. -I./xmlrss -I./rss $(WARNFLAGS) $(DEFINES)
 CFLAGS+=-ggdb -I./xmlrss $(WARNFLAGS) $(DEFINES)
 LDFLAGS+=-L. -L/sw/lib
 
@@ -31,11 +31,15 @@ FILTERLIB_OUTPUT=libfilter.a
 NEWSBEUTER=newsbeuter
 NEWSBEUTER_SOURCES:=$(shell cat newsbeuter.deps)
 NEWSBEUTER_OBJS:=$(patsubst %.cpp,%.o,$(NEWSBEUTER_SOURCES))
-NEWSBEUTER_LIBS=-lbeuter -lfilter -lstfl -lncursesw -lpthread -lxmlrss
+NEWSBEUTER_LIBS=-lbeuter -lfilter -lstfl -lncursesw -lpthread -lxmlrss -lrsspp
 
 XMLRSSLIB_SOURCES:=$(wildcard xmlrss/*.c)
 XMLRSSLIB_OBJS:=$(patsubst xmlrss/%.c,xmlrss/%.o,$(XMLRSSLIB_SOURCES))
 XMLRSSLIB_OUTPUT=libxmlrss.a
+
+RSSPPLIB_SOURCES=$(wildcard rss/*.cpp)
+RSSPPLIB_OBJS=$(patsubst rss/%.cpp,rss/%.o,$(RSSPPLIB_SOURCES))
+RSSPPLIB_OUTPUT=librsspp.a
 
 
 PODBEUTER=podbeuter
@@ -66,7 +70,7 @@ RM=rm -f
 
 all: $(NEWSBEUTER) $(PODBEUTER)
 
-NB_DEPS=$(MOFILES) $(XMLRSSLIB_OUTPUT) $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBEUTER_OBJS)
+NB_DEPS=$(MOFILES) $(XMLRSSLIB_OUTPUT) $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBEUTER_OBJS) $(RSSPPLIB_OUTPUT)
 
 $(NEWSBEUTER): $(NB_DEPS)
 	$(CXX) $(CXXFLAGS) -o $(NEWSBEUTER) $(NEWSBEUTER_OBJS) $(NEWSBEUTER_LIBS) $(LDFLAGS)
@@ -80,6 +84,11 @@ $(LIB_OUTPUT): $(LIB_OBJS)
 	$(RANLIB) $@
 
 $(XMLRSSLIB_OUTPUT): $(XMLRSSLIB_OBJS)
+	$(RM) $@
+	$(AR) qc $@ $^
+	$(RANLIB) $@
+
+$(RSSPPLIB_OUTPUT): $(RSSPPLIB_OBJS)
 	$(RM) $@
 	$(AR) qc $@ $^
 	$(RANLIB) $@
@@ -115,6 +124,9 @@ clean-libbeuter:
 clean-libxmlrss:
 	$(RM) $(XMLRSSLIB_OUTPUT) $(XMLRSSLIB_OBJS)
 
+clean-librsspp:
+	$(RM) $(RSSPPLIB_OUTPUT) $(RSSPPLIB_OBJS)
+
 clean-libfilter:
 	$(RM) $(FILTERLIB_OUTPUT) $(FILTERLIB_OBJS) filter/Scanner.cpp filter/Scanner.h filter/Parser.cpp filter/Parser.h
 
@@ -122,7 +134,7 @@ clean-doc:
 	$(RM) -r doc/xhtml 
 	$(RM) doc/*.xml doc/*.1 doc/newsbeuter-cfgcmds.txt doc/podbeuter-cfgcmds.txt doc/newsbeuter-keycmds.txt
 
-clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-doc clean-libxmlrss
+clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-doc clean-libxmlrss clean-librsspp
 	$(RM) $(STFLHDRS)
 
 distclean: clean clean-mo test-clean
