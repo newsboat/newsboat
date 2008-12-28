@@ -201,6 +201,9 @@ TEST_OBJS=$(patsubst test/%.cpp,test/%.o,$(wildcard test/*.cpp))
 test: $(LIB_OUTPUT) $(NEWSBEUTER_OBJS) $(TEST_OBJS)
 	$(CXX) $(CXXFLAGS) $(RUBYCXXFLAGS) -o test/test src/history.o src/rss.o src/rss_parser.o src/htmlrenderer.o src/cache.o src/tagsouppullparser.o src/urlreader.o src/regexmanager.o $(TEST_OBJS) $(NEWSBEUTER_LIBS) -lboost_unit_test_framework $(LDFLAGS)
 
+test-rss: $(RSSPPLIB_OUTPUT) test/test-rss.o
+	$(CXX) $(CXXFLAGS) -o test/test-rss test/test-rss.o $(NEWSBEUTER_LIBS) -lboost_unit_test_framework $(LDFLAGS)
+
 test/test.o: test/test.cpp
 	$(CXX) $(CXXFLAGS) $(RUBYCXXFLAGS) -o $@ -c $<
 

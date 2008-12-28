@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <exception>
+#include <libxml/parser.h>
 
 namespace rsspp {
 
@@ -71,6 +72,8 @@ class parser {
 		static void global_init();
 		static void global_cleanup();
 	private:
+
+		feed parse_xmlnode(xmlNode * node);
 		unsigned int to;
 		const char * ua;
 		const char * prx;

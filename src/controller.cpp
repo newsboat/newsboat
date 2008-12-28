@@ -38,6 +38,8 @@
 
 #include <ncursesw/ncurses.h>
 
+#include <libxml/xmlversion.h>
+
 namespace newsbeuter {
 
 #define LOCK_SUFFIX ".lock"
@@ -669,6 +671,7 @@ void controller::version_information() {
 	std::cout << "ncurses: " << curses_version() << " (compiled with " << NCURSES_VERSION << ")" << std::endl;
 	std::cout << "libcurl: " << curl_version()  << " (compiled with " << LIBCURL_VERSION << ")" << std::endl;
 	std::cout << "SQLite: " << sqlite3_libversion() << " (compiled with " << SQLITE_VERSION << ")" << std::endl;
+	std::cout << "libxml2: compiled with " << LIBXML_DOTTED_VERSION << std::endl;
 
 	::exit(EXIT_SUCCESS);
 }

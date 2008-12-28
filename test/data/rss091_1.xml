@@ -1,0 +1,27 @@
+<!DOCTYPE rss SYSTEM "http://my.netscape.com/publish/formats/rss-0.91.dtd">
+<rss version="0.91">
+<channel>
+<title>Example Channel</title>
+<link>http://example.com/</link>
+<description>an example feed</description>
+<language>en</language>
+<rating>(PICS-1.1 "http://www.classify.org/safesurf/" l r (SS~~000 1))</rating>
+<textinput>
+<title>Search this site:</title>
+<description>Find:</description>
+<name>q</name>
+<link>http://example.com/search</link>
+</textinput>
+<skipHours>
+<hour>0</hour>
+</skipHours>
+<item>
+<title>1 &lt; 2</title>
+<link>http://example.com/1_less_than_2.html</link>
+<description>1 &lt; 2, 3 &lt; 4.
+In HTML, &lt;b&gt; starts a bold phrase
+and you start a link with &lt;a href=
+</description>
+</item>
+</channel>
+</rss>
