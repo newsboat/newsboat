@@ -9,10 +9,6 @@
 
 #include <tr1/memory>
 
-extern "C" {
-#include <_mrss.h>
-}
-
 namespace newsbeuter {
 
 	typedef std::pair<std::string, matcher *> feedurl_expr_pair;

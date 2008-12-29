@@ -36,6 +36,8 @@ struct item {
 
 	// extensions:
 	std::string content_encoded;
+	std::string atom_content;
+	std::string itunes_summary;
 };
 
 struct feed {
@@ -47,6 +49,8 @@ struct feed {
 	std::string description;
 	std::string link;
 	std::string language;
+	std::string managingeditor;
+	std::string pubDate;
 
 	std::vector<item> items;
 };

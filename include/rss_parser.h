@@ -3,8 +3,8 @@
 
 #include <string>
 
-#include <_mrss.h>
 #include <rss.h>
+#include <rsspp.h>
 
 namespace newsbeuter {
 
@@ -19,7 +19,6 @@ namespace newsbeuter {
 			bool check_and_update_lastmodified();
 		private:
 			void replace_newline_characters(std::string& str);
-			mrss_options_t * create_mrss_options();
 			std::string render_xhtml_title(const std::string& title, const std::string& link);
 			time_t parse_date(const std::string& datestr);
 			unsigned int monthname_to_number(const std::string& mon);
@@ -36,26 +35,25 @@ namespace newsbeuter {
 			void fill_feed_fields(std::tr1::shared_ptr<rss_feed>& feed, const char * encoding);
 			void fill_feed_items(std::tr1::shared_ptr<rss_feed>& feed, const char * encoding);
 
-			void set_item_title(std::tr1::shared_ptr<rss_feed>& feed, std::tr1::shared_ptr<rss_item>& x, mrss_item_t * item, const char * encoding);
-			void set_item_author(std::tr1::shared_ptr<rss_item>& x, mrss_item_t * item, const char * encoding);
-			void set_item_content(std::tr1::shared_ptr<rss_item>& x, mrss_item_t * item, const char * encoding);
-			void set_item_enclosure(std::tr1::shared_ptr<rss_item>& x, mrss_item_t * item);
-			std::string get_guid(mrss_item_t * item);
+			void set_item_title(std::tr1::shared_ptr<rss_feed>& feed, std::tr1::shared_ptr<rss_item>& x, rsspp::item& item, const char * encoding);
+			void set_item_author(std::tr1::shared_ptr<rss_item>& x, rsspp::item& item, const char * encoding);
+			void set_item_content(std::tr1::shared_ptr<rss_item>& x, rsspp::item& item, const char * encoding);
+			void set_item_enclosure(std::tr1::shared_ptr<rss_item>& x, rsspp::item& item);
+			std::string get_guid(rsspp::item& item);
 
 			void add_item_to_feed(std::tr1::shared_ptr<rss_feed>& feed, std::tr1::shared_ptr<rss_item>& item);
 
-			void handle_content_encoded(std::tr1::shared_ptr<rss_item>& x, mrss_item_t * item, const char * encoding);
-			void handle_atom_content(std::tr1::shared_ptr<rss_item>& x, mrss_item_t * item, const char * encoding);
-			void handle_itunes_summary(std::tr1::shared_ptr<rss_item>& x, mrss_item_t * item, const char * encoding);
+			void handle_content_encoded(std::tr1::shared_ptr<rss_item>& x, rsspp::item& item, const char * encoding);
+			void handle_atom_content(std::tr1::shared_ptr<rss_item>& x, rsspp::item& item, const char * encoding);
+			void handle_itunes_summary(std::tr1::shared_ptr<rss_item>& x, rsspp::item& item, const char * encoding);
 
 			std::string my_uri;
 			cache * ch;
 			configcontainer *cfgcont;
-			mrss_t * mrss;
-			mrss_error_t err;
 			bool skip_parsing;
+			bool is_valid;
 			rss_ignores * ign;
-			CURLcode ccode;
+			rsspp::feed f;
 	};
 
 }
