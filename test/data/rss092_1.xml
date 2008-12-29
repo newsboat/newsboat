@@ -1,0 +1,21 @@
+<rss version="0.92">
+<channel>
+<title>Example Channel</title>
+<link>http://example.com/</link>
+<description>an example feed</description>
+<language>en</language>
+<item>
+<title><![CDATA[1 < 2]]></title>
+<link>http://example.com/1_less_than_2.html</link>
+<description><![CDATA[1 < 2, 3 < 4.
+In HTML, <b> starts a bold phrase
+and you start a link with <a href=
+]]></description>
+</item>
+<item>
+<title>A second item</title>
+<link>http://example.com/a_second_item.html</link>
+<description>no description</description>
+</item>
+</channel>
+</rss>

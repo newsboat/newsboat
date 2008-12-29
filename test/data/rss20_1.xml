@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<channel>
+    <title>my weblog</title>
+    <link>http://example.com/blog/</link>
+    <description>my description</description>
+
+<item>
+    <title>this is an item</title>
+    <link>http://example.com/blog/this_is_an_item.html</link>
+
+    <comments>http://example.com/blog/this_is_an_item.html#comments</comments>
+
+    <author>blog@synflood.at (Andreas Krennmair)</author>
+    <content:encoded>oh well, this is the content.</content:encoded>
+
+    <pubDate>Fri, 12 Dec 2008 02:36:10 +0100</pubDate>
+    <guid isPermaLink="false">http://example.com/blog/this_is_an_item.html</guid>
+</item>
+</channel>
+</rss>

@@ -23,7 +23,6 @@ struct item {
 	std::string description_type;
 
 	std::string author;
-	std::string author_uri;
 	std::string author_email;
 
 	std::string pubDate;
@@ -34,6 +33,9 @@ struct item {
 	std::string enclosure_url;
 	ssize_t enclosure_length;
 	std::string enclosure_type;
+
+	// extensions:
+	std::string content_encoded;
 };
 
 struct feed {
@@ -45,7 +47,6 @@ struct feed {
 	std::string description;
 	std::string link;
 	std::string language;
-	struct tm pubDate;
 
 	std::vector<item> items;
 };
