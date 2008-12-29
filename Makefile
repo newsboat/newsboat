@@ -208,7 +208,7 @@ test/test.o: test/test.cpp
 	$(CXX) $(CXXFLAGS) $(RUBYCXXFLAGS) -o $@ -c $<
 
 test-clean:
-	$(RM) test/test test/test.o
+	$(RM) test/test test/test.o test/test-rss test/test-rss.o
 
 config: config.mk
 

@@ -4,7 +4,7 @@
  */
 
 #ifndef RSSPP_H
-#define rSSPP_H
+#define RSSPP_H
 
 #include <string>
 #include <vector>
@@ -43,8 +43,8 @@ struct feed {
 	std::string title;
 	std::string title_type;
 	std::string description;
-	std::string description_type;
 	std::string link;
+	std::string language;
 	struct tm pubDate;
 
 	std::vector<item> items;

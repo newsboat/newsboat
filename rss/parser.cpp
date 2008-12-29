@@ -4,6 +4,7 @@
  */
 
 #include <rsspp.h>
+#include <rsspp_internal.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
@@ -35,8 +36,6 @@ feed parser::parse_buffer(const char * buffer, size_t size) {
 
 	xmlFreeDoc(doc);
 
-	throw exception(0, "unimplemented");
-
 	return f;
 }
 
@@ -54,8 +53,6 @@ feed parser::parse_file(const std::string& filename) {
 
 	xmlFreeDoc(doc);
 
-	throw exception(0, "unimplemented");
-
 	return f;
 }
 
@@ -65,12 +62,31 @@ feed parser::parse_xmlnode(xmlNode* node) {
 	if (node) {
 		if (node->name && node->type == XML_ELEMENT_NODE) {
 			if (strcmp((const char *)node->name, "rss")==0) {
-				// TODO: parse RSS 0.91, 0.92 or 2.0
+				const char * version = (const char *)xmlGetProp(node, (const xmlChar *)"version");
+				if (!version) {
+					xmlFree((void *)version);
+					throw exception(0, "no RSS version");
+				}
+				if (strcmp(version, "0.91")==0)
+					f.rss_version = RSS_0_91;
+				else if (strcmp(version, "0.92")==0)
+					f.rss_version = RSS_0_92;
+				else if (strcmp(version, "2.0")==0)
+					f.rss_version = RSS_2_0;
+				else {
+					xmlFree((void *)version);
+					throw exception(0, "invalid RSS version");
+				}
+				xmlFree((void *)version);
 			} else if (strcmp((const char *)node->name, "RDF")==0) {
 				// TODO: parse RSS 1.0
-			} else if (strcmp((const char *)node->name, "atom")==0) {
+			} else if (strcmp((const char *)node->name, "feed")==0) {
 				// TODO: parse Atom 0.3 or 1.0
 			}
+
+			rss_parser * parser = rss_parser_factory::get_object(f);
+
+			parser->parse_feed(f, node);
 		}
 	} else {
 		// TODO: throw exception
