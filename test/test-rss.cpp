@@ -72,3 +72,21 @@ BOOST_AUTO_TEST_CASE(TestParseSimpleRSS_2_0) {
 	BOOST_CHECK_EQUAL(f.items[0].guid, "http://example.com/blog/this_is_an_item.html");
 	BOOST_CHECK_EQUAL(f.items[0].guid_isPermaLink, false);
 }
+
+BOOST_AUTO_TEST_CASE(TestParseSimpleRSS_1_0) {
+	rsspp::parser p;
+
+	rsspp::feed f = p.parse_file("data/rss10_1.xml");
+	BOOST_CHECK_EQUAL(f.rss_version, rsspp::RSS_1_0);
+
+	BOOST_CHECK_EQUAL(f.title, "Example Dot Org");
+	BOOST_CHECK_EQUAL(f.link, "http://www.example.org");
+	BOOST_CHECK_EQUAL(f.description, "the Example Organization web site");
+
+	BOOST_CHECK_EQUAL(f.items.size(), 1u);
+
+	BOOST_CHECK_EQUAL(f.items[0].title, "New Status Updates");
+	BOOST_CHECK_EQUAL(f.items[0].link, "http://www.example.org/status/foo");
+	BOOST_CHECK_EQUAL(f.items[0].guid, "http://www.example.org/status/");
+	BOOST_CHECK_EQUAL(f.items[0].description, "News about the Example project");
+}

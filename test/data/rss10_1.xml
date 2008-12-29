@@ -1,0 +1,25 @@
+<rdf:RDF
+xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+xmlns="http://purl.org/rss/1.0/">
+<channel>
+<title>Example Dot Org</title>
+<link>http://www.example.org</link>
+<description>the Example Organization web site</description>
+<items>
+<rdf:Seq>
+<rdf:li resource="http://www.example.org/status/"/>
+</rdf:Seq>
+</items>
+</channel>
+<image rdf:about="http://www.example.org/images/logo.gif"/>
+<image rdf:about="http://www.example.org/images/logo.gif">
+<title>Example</title>
+<url>http://www.example.org/images/logo.gif</url>
+<link>http://www.example.org</link>
+</image>
+<item rdf:about="http://www.example.org/status/">
+<title>New Status Updates</title>
+<link>http://www.example.org/status/foo</link>
+<description>News about the Example project</description>
+</item>
+</rdf:RDF>

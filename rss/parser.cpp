@@ -79,7 +79,7 @@ feed parser::parse_xmlnode(xmlNode* node) {
 				}
 				xmlFree((void *)version);
 			} else if (strcmp((const char *)node->name, "RDF")==0) {
-				// TODO: parse RSS 1.0
+				f.rss_version = RSS_1_0;
 			} else if (strcmp((const char *)node->name, "feed")==0) {
 				// TODO: parse Atom 0.3 or 1.0
 			}

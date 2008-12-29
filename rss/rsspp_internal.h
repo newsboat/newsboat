@@ -8,7 +8,8 @@
 
 #include <rsspp.h>
 
-#define CONTENT_URI "http://purl.org/rss/1.0/modules/content/"
+#define CONTENT_URI		"http://purl.org/rss/1.0/modules/content/"
+#define RDF_URI			"http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 
 namespace rsspp {
 
@@ -24,12 +25,13 @@ struct rss_09x_parser : public rss_parser {
 	item parse_item(xmlNode * itemNode);
 };
 
+struct rss_20_parser : public rss_09x_parser {
+};
+
 struct rss_10_parser : public rss_parser {
 	virtual void parse_feed(feed& f, xmlNode * rootNode);
 };
 
-struct rss_20_parser : public rss_09x_parser {
-};
 
 struct atom_parser : public rss_parser {
 	virtual void parse_feed(feed& f, xmlNode * rootNode);
