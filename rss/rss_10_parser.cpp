@@ -16,7 +16,11 @@ void rss_10_parser::parse_feed(feed& f, xmlNode * rootNode) {
 					f.link = get_content(cnode);
 				} else if (strcmp((const char *)cnode->name, "description")==0) {
 					f.description = get_content(cnode);
-				} // TODO: also use the dc namespace
+				} else if (strcmp((const char *)cnode->name, "date")==0) {
+					if (cnode->ns != NULL && cnode->ns->href != NULL && strcmp((const char *)cnode->ns->href, DC_URI)==0) {
+						f.pubDate = w3cdtf_to_rfc822(get_content(cnode));
+					}
+				}
 			}
 		} else if (strcmp((const char *)node->name, "item")==0) {
 			item it;
@@ -33,7 +37,19 @@ void rss_10_parser::parse_feed(feed& f, xmlNode * rootNode) {
 					it.link = get_content(itnode);
 				} else if (strcmp((const char *)itnode->name, "description")==0) {
 					it.description = get_content(itnode);
-				} // TODO: also use the dc namespace
+				} else if (strcmp((const char *)itnode->name, "date")==0) {
+					if (itnode->ns != NULL && itnode->ns->href != NULL && strcmp((const char *)itnode->ns->href, DC_URI)==0) {
+						it.pubDate = w3cdtf_to_rfc822(get_content(itnode));
+					}
+				} else if (strcmp((const char *)itnode->name, "encoded")==0) {
+					if (itnode->ns != NULL && itnode->ns->href != NULL && strcmp((const char *)itnode->ns->href, CONTENT_URI)==0) {
+						it.content_encoded = get_content(itnode);
+					}
+				} else if (strcmp((const char *)itnode->name, "summary")==0) {
+					if (itnode->ns != NULL && itnode->ns->href != NULL && strcmp((const char *)itnode->ns->href, ITUNES_URI)==0) {
+						it.itunes_summary = get_content(itnode);
+					}
+				}
 			}
 			f.items.push_back(it);
 		}

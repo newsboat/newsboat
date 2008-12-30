@@ -29,6 +29,8 @@ void rss_09x_parser::parse_feed(feed& f, xmlNode * rootNode) {
 			f.description = get_content(node);
 		} else if (strcmp((const char *)node->name, "language")==0) {
 			f.language = get_content(node);
+		} else if (strcmp((const char *)node->name, "managingEditor")==0) {
+			f.managingeditor = get_content(node);
 		} else if (strcmp((const char *)node->name, "item")==0) {
 			f.items.push_back(parse_item(node));
 		}
@@ -49,6 +51,10 @@ item rss_09x_parser::parse_item(xmlNode * itemNode) {
 		} else if (strcmp((const char *)node->name, "encoded")==0) {
 			if (node->ns != NULL && node->ns->href != NULL && strcmp((const char *)node->ns->href, CONTENT_URI)==0) {
 				it.content_encoded = get_content(node);
+			}
+		} else if (strcmp((const char *)node->name, "summary")==0) {
+			if (node->ns != NULL && node->ns->href != NULL && strcmp((const char *)node->ns->href, ITUNES_URI)==0) {
+				it.itunes_summary = get_content(node);
 			}
 		} else if (strcmp((const char *)node->name, "guid")==0) {
 			it.guid = get_content(node);

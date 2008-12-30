@@ -479,22 +479,6 @@ void rss_parser::handle_itunes_summary(std::tr1::shared_ptr<rss_item>& x, rsspp:
 		desc.append("</ituneshack>");
 		x->set_description(desc);
 	}
-	/* a feed may be a podcast, and so we search for itunes:summary tags */
-	/* TODO: move this to rsspp
-	mrss_tag_t * content;
-	if (x->description().length() == 0 && mrss_search_tag(item, "summary", "http://www.itunes.com/dtds/podcast-1.0.dtd", &content) == MRSS_OK && content) {
-		GetLogger().log(LOG_DEBUG, "rss_parser::parse: found itunes:summary: %s\n", content->value);
-		if (content->value) {
-			std::string desc = "<ituneshack>";
-			desc.append(utils::convert_text(content->value, "utf-8", encoding));
-			desc.append("</ituneshack>");
-			x->set_description(desc);
-		}
-		
-	} else {
-		GetLogger().log(LOG_DEBUG, "rss_parser::parse: no luck with itunes:summary");
-	}
-	*/
 }
 
 }

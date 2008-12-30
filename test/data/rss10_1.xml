@@ -1,5 +1,6 @@
 <rdf:RDF
 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+xmlns:dc="http://purl.org/dc/elements/1.1/"
 xmlns="http://purl.org/rss/1.0/">
 <channel>
 <title>Example Dot Org</title>
@@ -21,5 +22,6 @@ xmlns="http://purl.org/rss/1.0/">
 <title>New Status Updates</title>
 <link>http://www.example.org/status/foo</link>
 <description>News about the Example project</description>
+<dc:date>2008-12-30T08:20:00+01:00</dc:date>
 </item>
 </rdf:RDF>

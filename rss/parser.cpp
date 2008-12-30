@@ -34,6 +34,10 @@ feed parser::parse_buffer(const char * buffer, size_t size) {
 
 	feed f = parse_xmlnode(root_element);
 
+	if (doc->encoding) {
+		f.encoding = (const char *)doc->encoding;
+	}
+
 	xmlFreeDoc(doc);
 
 	return f;
@@ -50,6 +54,10 @@ feed parser::parse_file(const std::string& filename) {
 	xmlNode* root_element = xmlDocGetRootElement(doc);
 
 	feed f = parse_xmlnode(root_element);
+
+	if (doc->encoding) {
+		f.encoding = (const char *)doc->encoding;
+	}
 
 	xmlFreeDoc(doc);
 

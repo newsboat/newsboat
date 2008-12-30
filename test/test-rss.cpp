@@ -89,4 +89,5 @@ BOOST_AUTO_TEST_CASE(TestParseSimpleRSS_1_0) {
 	BOOST_CHECK_EQUAL(f.items[0].link, "http://www.example.org/status/foo");
 	BOOST_CHECK_EQUAL(f.items[0].guid, "http://www.example.org/status/");
 	BOOST_CHECK_EQUAL(f.items[0].description, "News about the Example project");
+	BOOST_CHECK_EQUAL(f.items[0].pubDate, "Tue, 30 Dec 2008 07:20:00 +0000");
 }
