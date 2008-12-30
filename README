@@ -22,6 +22,7 @@ SQLite 3 (version 3.5 or newer): http://www.sqlite.org/
 libcurl: http://curlm.haxx.se/download.html
 GNU gettext (on systems that don't provide gettext in the libc): ftp://ftp.gnu.org/gnu/gettext/
 pkg-config: http://pkg-config.freedesktop.org/wiki/
+libxml2: http://xmlsoft.org/
 
 Debian unstable comes with ready-to-use packages for these dependencies.
 

@@ -47,6 +47,7 @@ has only been tested with GCC.
 - libcurl: http://curlm.haxx.se/download.html[]
 - GNU gettext (on systems that don't provide gettext in the libc): ftp://ftp.gnu.org/gnu/gettext/[]
 - pkg-config: http://pkg-config.freedesktop.org/wiki/[]
+- libxml2: http://xmlsoft.org/[]
 
 If you intend to modify the filter language parser, you will also need Coco/R for C++,
 which you can download from http://www.ssw.uni-linz.ac.at/coco/[]. The Coco/R binary
