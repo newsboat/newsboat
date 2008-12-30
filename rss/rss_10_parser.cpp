@@ -20,6 +20,10 @@ void rss_10_parser::parse_feed(feed& f, xmlNode * rootNode) {
 					if (cnode->ns != NULL && cnode->ns->href != NULL && strcmp((const char *)cnode->ns->href, DC_URI)==0) {
 						f.pubDate = w3cdtf_to_rfc822(get_content(cnode));
 					}
+				} else if (strcmp((const char *)cnode->name, "creator")==0) {
+					if (cnode->ns != NULL && cnode->ns->href != NULL && strcmp((const char *)cnode->ns->href, DC_URI)==0) {
+						f.dc_creator = get_content(cnode);
+					}
 				}
 			}
 		} else if (strcmp((const char *)node->name, "item")==0) {

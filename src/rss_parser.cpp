@@ -8,6 +8,7 @@
 #include <utils.h>
 #include <config.h>
 #include <htmlrenderer.h>
+#include <curl/curl.h>
 
 #include <cerrno>
 #include <cstring>
@@ -49,6 +50,16 @@ std::tr1::shared_ptr<rss_feed> rss_parser::parse() {
 	return feed;
 }
 
+static size_t get_lastmodified_header(void *ptr, size_t size, size_t nmemb, time_t * timing) {
+	char *header = (char *) ptr;
+
+	if (!strncasecmp ("Last-Modified:", header, 14))
+		*timing = curl_getdate (header + 14, NULL);
+
+	return size * nmemb;
+}
+
+
 bool rss_parser::check_and_update_lastmodified() {
 	if (my_uri.substr(0,5) != "http:" && my_uri.substr(0,6) != "https:")
 		return true;
@@ -58,29 +69,43 @@ bool rss_parser::check_and_update_lastmodified() {
 		return true;
 	}
 
-	return true; // TODO: implement
-
-/*
 	time_t oldlm = ch->get_lastmodified(my_uri);
 	time_t newlm = 0;
 
 	unsigned int retry_count = cfgcont->get_configvalue_as_int("download-retries");
 
 	unsigned int i;
+	CURLcode err;
 	for (i=0;i<retry_count;i++) {
+		CURL* curl = curl_easy_init();
+		if (!curl) return false;
 
-		mrss_options_t * options = create_mrss_options();
-		err = mrss_get_last_modified_with_options(const_cast<char *>(my_uri.c_str()), &newlm, options);
-		mrss_options_free(options);
+		std::string proxy = cfgcont->get_configvalue("proxy");
+		std::string proxyauth = cfgcont->get_configvalue("proxy-auth");
+
+		curl_easy_setopt(curl, CURLOPT_URL, my_uri.c_str());
+		curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
+		curl_easy_setopt(curl, CURLOPT_ENCODING, "gzip, deflate");
+		curl_easy_setopt(curl, CURLOPT_TIMEOUT, cfgcont->get_configvalue_as_int("download-timeout"));
+		if (proxy != "")
+			curl_easy_setopt(curl, CURLOPT_PROXY, proxy.c_str());
+		if (proxyauth != "")
+			curl_easy_setopt(curl, CURLOPT_PROXYUSERPWD, proxyauth.c_str());
+		curl_easy_setopt(curl, CURLOPT_USERAGENT, utils::get_useragent(cfgcont).c_str());
+		curl_easy_setopt(curl, CURLOPT_HEADERDATA, &newlm);
+		curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, get_lastmodified_header);
+		curl_easy_setopt(curl, CURLOPT_NOBODY, 1);
+		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
+
+		err = curl_easy_perform(curl);
+		curl_easy_cleanup(curl);
 
 		GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: err = %u oldlm = %d newlm = %d", err, oldlm, newlm);
-
-		if (err != MRSS_OK) {
-			// GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: no, don't download, due to error");
-			return false;
-		}
+		if (err == 0)
+			break;
 	}
-	if (i==retry_count && err != MRSS_OK) {
+	if (i==retry_count && err != 0) {
+		GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: couldn't get a result after %u retries", retry_count);
 		return false;
 	}
 
@@ -91,52 +116,16 @@ bool rss_parser::check_and_update_lastmodified() {
 
 	if (newlm > oldlm) {
 		ch->set_lastmodified(my_uri, newlm);
-		// GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: yes, download");
+		GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: yes, download (newlm > oldlm)");
 		return true;
 	}
 
-	// GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: no, don't download");
+	GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: no, don't download");
 	return false;
-	*/
 }
 
 time_t rss_parser::parse_date(const std::string& datestr) {
-	/* a quick and dirty RFC 822 date parser. */
-	std::istringstream is(datestr);
-	std::string tmpstr;
-	struct tm stm;
-	
-	memset(&stm,0,sizeof(stm));
-	
-	is >> tmpstr;
-	if (tmpstr[tmpstr.length()-1] == ',')
-		is >> tmpstr;
-	
-	std::istringstream dayis(tmpstr);
-	dayis >> stm.tm_mday;
-	
-	is >> tmpstr;
-	
-	stm.tm_mon = monthname_to_number(tmpstr);
-	
-	int year;
-	is >> year;
-	stm.tm_year = correct_year(year);
-	
-	is >> tmpstr;
-
-	std::vector<std::string> tkns = utils::tokenize(tmpstr,":");
-	if (tkns.size() > 0) {
-		stm.tm_hour = utils::to_u(tkns[0]);
-	}
-	if (tkns.size() > 1) {
-		stm.tm_min = utils::to_u(tkns[1]);
-	}
-	if (tkns.size() > 2) {
-		stm.tm_sec = utils::to_u(tkns[2]);
-	}
-
-	return mktime(&stm);
+	return curl_getdate(datestr.c_str(), NULL);
 }
 
 void rss_parser::replace_newline_characters(std::string& str) {
@@ -362,13 +351,7 @@ void rss_parser::set_item_author(std::tr1::shared_ptr<rss_item>& x, rsspp::item&
 		if (f.managingeditor != "")
 			x->set_author(f.managingeditor);
 		else {
-			/* TODO: look up dc:creator
-			mrss_tag_t * creator;
-			if (mrss_search_tag(item, "creator", "http://purl.org/dc/elements/1.1/", &creator) == MRSS_OK && creator) {
-				if (creator->value)
-					x->set_author(utils::convert_text(creator->value, "utf-8", encoding));
-			}
-			*/
+			x->set_author(f.dc_creator);
 		}
 	} else {
 		x->set_author(item.author);

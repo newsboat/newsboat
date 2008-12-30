@@ -50,6 +50,7 @@ struct feed {
 	std::string link;
 	std::string language;
 	std::string managingeditor;
+	std::string dc_creator;
 	std::string pubDate;
 
 	std::vector<item> items;
