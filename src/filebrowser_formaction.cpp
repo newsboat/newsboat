@@ -12,6 +12,7 @@
 
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <dirent.h>
 #include <sys/param.h>
 #include <pwd.h>

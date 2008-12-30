@@ -4,9 +4,9 @@
 #include <urlreader.h>
 #include <rss.h>
 #include <cache.h>
-#include <_nxml.h>
 #include <configcontainer.h>
 #include <filtercontainer.h>
+#include <libxml/tree.h>
 
 namespace newsbeuter {
 
@@ -69,7 +69,7 @@ namespace newsbeuter {
 			void version_information();
 			void import_opml(const char * filename);
 			void export_opml();
-			void rec_find_rss_outlines(nxml_data_t * node, std::string tag);
+			void rec_find_rss_outlines(xmlNode * node, std::string tag);
 			void compute_unread_numbers(unsigned int&, unsigned int& );
 			void execute_commands(char ** argv, unsigned int i);
 

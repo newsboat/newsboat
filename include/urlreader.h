@@ -7,7 +7,8 @@
 #include <string>
 
 #include <configcontainer.h>
-#include <_nxml.h>
+
+#include <libxml/tree.h>
 
 namespace newsbeuter {
 
@@ -49,11 +50,11 @@ namespace newsbeuter {
 			virtual void reload();
 			virtual std::string get_source();
 		protected:
-			virtual void handle_node(nxml_data_t * node, const std::string& tag);
+			virtual void handle_node(xmlNode * node, const std::string& tag);
 			virtual const char * get_auth();
 			configcontainer * cfg;
 		private:
-			void rec_find_rss_outlines(nxml_data_t * node, std::string tag);
+			void rec_find_rss_outlines(xmlNode * node, std::string tag);
 	};
 
 	class bloglines_urlreader : public opml_urlreader {
@@ -62,7 +63,7 @@ namespace newsbeuter {
 			virtual ~bloglines_urlreader();
 			virtual std::string get_source();
 		protected:
-			virtual void handle_node(nxml_data_t * node, const std::string& tag);
+			virtual void handle_node(xmlNode * node, const std::string& tag);
 			virtual const char * get_auth();
 		private:
 			std::string listsubs_url;

@@ -123,40 +123,31 @@ void opml_urlreader::reload() {
 		GetLogger().log(LOG_DEBUG, "bloglines_urlread::reload: downloading `%s'", it->c_str());
 		std::string urlcontent = utils::retrieve_url(*it, user_agent.c_str(), this->get_auth(), cfg->get_configvalue_as_int("download-timeout"));
 
-		nxml_t *data;
-		nxml_data_t * root, * body;
-		nxml_error_t ret;
+		xmlDoc * doc = xmlParseMemory(urlcontent.c_str(), urlcontent.length());
 
-		ret = nxml_new (&data);
-		if (ret != NXML_OK) {
-			continue;
-			return;
-		}
-
-		ret = nxml_parse_buffer(data, const_cast<char *>(urlcontent.c_str()), urlcontent.length());
-		if (ret != NXML_OK) {
-			// puts (nxml_strerror (data, ret));
-			GetLogger().log(LOG_ERROR, "opml_urlreader::reload: parsing XML file failed: %s", nxml_strerror(data, ret));
+		if (doc == NULL) {
+			GetLogger().log(LOG_ERROR, "opml_urlreader::reload: parsing XML file failed");
 			continue;
 		}
 
-		nxml_root_element (data, &root);
+		xmlNode * root = xmlDocGetRootElement(doc);
 
 		if (root) {
-			body = nxmle_find_element(data, root, "body", NULL);
-			if (body) {
-				GetLogger().log(LOG_DEBUG, "opml_urlreader::reload: found body");
-				rec_find_rss_outlines(body, "");
+			for (xmlNode * node = root->children; node != NULL; node = node->next) {
+				if (strcmp((const char *)node->name, "body")==0) {
+					GetLogger().log(LOG_DEBUG, "opml_urlreader::reload: found body");
+					rec_find_rss_outlines(node->children, "");
+				}
 			}
 		}
 
-		nxml_free(data);
+		xmlFreeDoc(doc);
 	}
 }
 
-void opml_urlreader::handle_node(nxml_data_t * node, const std::string& tag) {
+void opml_urlreader::handle_node(xmlNode * node, const std::string& tag) {
 	if (node) {
-		const char * rssurl = nxmle_find_attribute(node, "xmlUrl", NULL);
+		char * rssurl = (char *)xmlGetProp(node, (const xmlChar *)"xmlUrl");
 		if (rssurl && strlen(rssurl) > 0) {
 			std::string theurl(rssurl);
 			urls.push_back(theurl);
@@ -167,12 +158,14 @@ void opml_urlreader::handle_node(nxml_data_t * node, const std::string& tag) {
 				alltags.insert(tag);
 			}
 		}
+		if (rssurl)
+			xmlFree(rssurl);
 	}
 }
 
-void bloglines_urlreader::handle_node(nxml_data_t * node, const std::string& tag) {
+void bloglines_urlreader::handle_node(xmlNode * node, const std::string& tag) {
 	if (node) {
-		const char * sub_id = nxmle_find_attribute(node, "BloglinesSubId", NULL);
+		char * sub_id = (char *)xmlGetProp(node, (const xmlChar *)"BloglinesSubId");
 		if (sub_id) {
 			std::string theurl = getitems_url;
 			theurl.append("?s=");
@@ -199,29 +192,33 @@ void bloglines_urlreader::handle_node(nxml_data_t * node, const std::string& tag
 				tags[theurl] = tmptags;
 				alltags.insert(tag);
 			}
+			xmlFree(sub_id);
 		}
 	}
 }
 
-void opml_urlreader::rec_find_rss_outlines(nxml_data_t * node, std::string tag) {
+void opml_urlreader::rec_find_rss_outlines(xmlNode * node, std::string tag) {
 	while (node) {
-		const char * type = nxmle_find_attribute(node, "type", NULL);
+		char * type = (char *)xmlGetProp(node, (const xmlChar *)"type");
 
 		std::string newtag = tag;
 
-		if (node->type == NXML_TYPE_ELEMENT && strcmp(node->value,"outline")==0) {
+		if (strcmp((const char *)node->name, "outline")==0) {
 			if (type && strcmp(type,"rss")==0) {
 				handle_node(node, tag);
 			} else {
-				const char * text = nxmle_find_attribute(node, "title", NULL);
+				char * text = (char *)xmlGetProp(node, (const xmlChar *)"title");
 				if (text) {
 					if (newtag.length() > 0) {
 						newtag.append("/");
 					}
 					newtag.append(text);
+					xmlFree(text);
 				}
 			}
 		}
+		xmlFree(type);
+
 		rec_find_rss_outlines(node->children, newtag);
 
 		node = node->next;

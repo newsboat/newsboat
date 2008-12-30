@@ -30,15 +30,17 @@
 #include <langinfo.h>
 #include <libgen.h>
 
-#include <_nxml.h>
-
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 #include <pwd.h>
 
 #include <ncursesw/ncurses.h>
 
 #include <libxml/xmlversion.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+#include <curl/curl.h>
 
 namespace newsbeuter {
 
@@ -722,34 +724,23 @@ void controller::usage(char * argv0) {
 }
 
 void controller::import_opml(const char * filename) {
-	nxml_t *data;
-	nxml_data_t * root, * body;
-	nxml_error_t ret;
-
-	ret = nxml_new (&data);
-	if (ret != NXML_OK) {
-		puts (nxml_strerror (data, ret));
+	xmlDoc * doc = xmlReadFile(filename, NULL, 0);
+	if (doc == NULL) {
+		std::cout << utils::strprintf(_("An error occured while parsing %s."), filename) << std::endl;
 		return;
 	}
 
-	ret = nxml_parse_file (data, const_cast<char *>(filename));
-	if (ret != NXML_OK) {
-		puts (nxml_strerror (data, ret));
-		return;
-	}
+	xmlNode * root = xmlDocGetRootElement(doc);
 
-	nxml_root_element (data, &root);
-
-	if (root) {
-		body = nxmle_find_element(data, root, "body", NULL);
-		if (body) {
+	for (xmlNode * node = root->children; node != NULL; node = node->next) {
+		if (strcmp((const char *)node->name, "body")==0) {
 			GetLogger().log(LOG_DEBUG, "import_opml: found body");
-			rec_find_rss_outlines(body, "");
+			rec_find_rss_outlines(node->children, "");
 			urlcfg->write_config();
 		}
 	}
 
-	nxml_free(data);
+	xmlFreeDoc(doc);
 	std::cout << utils::strprintf(_("Import of %s finished."), filename) << std::endl;
 }
 
@@ -774,18 +765,18 @@ void controller::export_opml() {
 	std::cout << "</opml>" << std::endl;
 }
 
-void controller::rec_find_rss_outlines(nxml_data_t * node, std::string tag) {
+void controller::rec_find_rss_outlines(xmlNode * node, std::string tag) {
 	while (node) {
-		const char * url = nxmle_find_attribute(node, "xmlUrl", NULL);
 		std::string newtag = tag;
 
-		if (!url) {
-			url = nxmle_find_attribute(node, "url", NULL);
-		}
 
-		if (node->type == NXML_TYPE_ELEMENT && strcmp(node->value,"outline")==0) {
+		if (strcmp((const char *)node->name, "outline")==0) {
+			char * url = (char *)xmlGetProp(node, (const xmlChar *)"xmlUrl");
+			if (!url) {
+				url = (char *)xmlGetProp(node, (const xmlChar *)"url");
+			}
+
 			if (url) {
-
 				GetLogger().log(LOG_DEBUG,"OPML import: found RSS outline with url = %s",url);
 
 				bool found = false;
@@ -809,15 +800,17 @@ void controller::rec_find_rss_outlines(nxml_data_t * node, std::string tag) {
 				} else {
 					GetLogger().log(LOG_DEBUG,"OPML import: url = %s is already in list",url);
 				}
+				xmlFree(url);
 			} else {
-				const char * text = nxmle_find_attribute(node, "text", NULL);
+				char * text = (char *)xmlGetProp(node, (const xmlChar *)"text");
 				if (!text)
-					text = nxmle_find_attribute(node, "title", NULL);
+					text = (char *)xmlGetProp(node, (const xmlChar *)"title");
 				if (text) {
 					if (newtag.length() > 0) {
 						newtag.append("/");
 					}
 					newtag.append(text);
+					xmlFree(text);
 				}
 			}
 		}
