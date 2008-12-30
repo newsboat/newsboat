@@ -10,7 +10,6 @@ TODO:
 	- implement Atom parsing
 	- fix TODOs in src/rss_parser.cpp
 
-
 DONE:
 - clean up items that have been added but whose URL has been removed from the config file.
 - key for directly jumping to next unread article.
@@ -135,3 +134,5 @@ DONE:
 - add option similar to max-items but that deletes articles older than n days
 - add support for interactive bookmarking plugins
 - implement mark-as-read-on-hover
+- implement own RSS parser
+	- fix encoding issues

@@ -40,6 +40,8 @@ std::tr1::shared_ptr<rss_feed> rss_parser::parse() {
 
 		const char * encoding = (f.encoding != "") ? f.encoding.c_str() : "utf-8";
 
+		GetLogger().log(LOG_INFO, "rss_parser::parse: encoding = %s", encoding);
+
 		fill_feed_fields(feed, encoding);
 		fill_feed_items(feed, encoding);
 
@@ -289,14 +291,15 @@ void rss_parser::fill_feed_fields(std::tr1::shared_ptr<rss_feed>& feed, const ch
 	/*
 	 * we fill all the feed members with the appropriate values from the rsspp data structure
 	 */
+	GetLogger().log(LOG_DEBUG, "rss_parser::fill_feed_fields: f.title = %s converted = %s", f.title.c_str(), utils::convert_text(f.title, "utf-8", encoding).c_str());
 	if (f.title_type != "" && (f.title_type == "xhtml" || f.title_type == "html")) {
-		std::string xhtmltitle = utils::convert_text(f.title, "utf-8", encoding);
+		std::string xhtmltitle = f.title;
 		feed->set_title(render_xhtml_title(xhtmltitle, feed->link()));
 	} else {
-		feed->set_title(utils::convert_text(f.title, "utf-8", encoding));
+		feed->set_title(f.title);
 	}
 
-	feed->set_description(utils::convert_text(f.description, "utf-8", encoding));
+	feed->set_description(f.description);
 
 	feed->set_link(utils::absolute_url(my_uri, f.link));
 
@@ -348,10 +351,10 @@ void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed>& feed, const cha
 
 void rss_parser::set_item_title(std::tr1::shared_ptr<rss_feed>& feed, std::tr1::shared_ptr<rss_item>& x, rsspp::item& item, const char * encoding) {
 	if (item.title_type != "" && (item.title_type == "xhtml" || item.title_type == "html")) {
-		std::string xhtmltitle = utils::convert_text(item.title, "utf-8", encoding);
+		std::string xhtmltitle = item.title;
 		x->set_title(render_xhtml_title(xhtmltitle, feed->link()));
 	} else {
-		std::string title = utils::convert_text(item.title, "utf-8", encoding);
+		std::string title = item.title;
 		replace_newline_characters(title);
 		x->set_title(title);
 	}
@@ -364,7 +367,7 @@ void rss_parser::set_item_author(std::tr1::shared_ptr<rss_item>& x, rsspp::item&
 	 */
 	if (item.author == "") {
 		if (f.managingeditor != "")
-			x->set_author(utils::convert_text(f.managingeditor, "utf-8", encoding));
+			x->set_author(f.managingeditor);
 		else {
 			/* TODO: look up dc:creator
 			mrss_tag_t * creator;
@@ -375,7 +378,7 @@ void rss_parser::set_item_author(std::tr1::shared_ptr<rss_item>& x, rsspp::item&
 			*/
 		}
 	} else {
-		x->set_author(utils::convert_text(item.author, "utf-8", encoding));
+		x->set_author(item.author);
 	}
 }
 
@@ -388,10 +391,10 @@ void rss_parser::set_item_content(std::tr1::shared_ptr<rss_item>& x, rsspp::item
 	handle_itunes_summary(x, item, encoding);
 
 	if (x->description() == "") {
-		x->set_description(utils::convert_text(item.description, "utf-8", encoding));
+		x->set_description(item.description);
 	} else {
 		if (cfgcont->get_configvalue_as_bool("always-display-description") && item.description != "")
-			x->set_description(x->description() + "<hr>" + utils::convert_text(item.description, "utf-8", encoding));
+			x->set_description(x->description() + "<hr>" + item.description);
 	}
 	GetLogger().log(LOG_DEBUG, "rss_parser::set_item_content: content = %s", x->description().c_str());
 }
@@ -438,7 +441,7 @@ void rss_parser::handle_content_encoded(std::tr1::shared_ptr<rss_item>& x, rsspp
 
 	/* here we handle content:encoded tags that are an extension but very widespread */
 	if (item.content_encoded != "") {
-		std::string desc = utils::convert_text(item.content_encoded, "utf-8", encoding);
+		std::string desc = item.content_encoded;
 		x->set_description(desc);
 	} else {
 		GetLogger().log(LOG_DEBUG, "rss_parser::parse: found no content:encoded");
@@ -450,7 +453,7 @@ void rss_parser::handle_atom_content(std::tr1::shared_ptr<rss_item>& x, rsspp::i
 		return;
 
 	if (f.rss_version == rsspp::ATOM_0_3 || f.rss_version == rsspp::ATOM_1_0) {
-		x->set_description(utils::convert_text(item.atom_content, "utf-8", encoding));
+		x->set_description(item.atom_content);
 		/* TODO: move this to rsspp
 		int rc;
 		if (((rc = mrss_search_tag(item, "content", "http://www.w3.org/2005/Atom", &content)) == MRSS_OK && content) ||
@@ -472,7 +475,7 @@ void rss_parser::handle_itunes_summary(std::tr1::shared_ptr<rss_item>& x, rsspp:
 	if (x->description() != "")
 		return;
 
-	std::string summary = utils::convert_text(item.itunes_summary, "utf-8", encoding);
+	std::string summary = item.itunes_summary;
 	if (summary != "") {
 		std::string desc = "<ituneshack>";
 		desc.append(summary);

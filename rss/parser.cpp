@@ -7,6 +7,16 @@
 #include <rsspp_internal.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+#include <curl/curl.h>
+#include <logger.h>
+
+using namespace newsbeuter;
+
+static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp) {
+	std::string * pbuf = static_cast<std::string *>(userp);
+	pbuf->append(static_cast<const char *>(buffer), size * nmemb);
+	return size * nmemb;
+}
 
 namespace rsspp {
 
@@ -19,13 +29,46 @@ parser::~parser() {
 }
 
 feed parser::parse_url(const std::string& url) {
-	return parse_file(url);
+	std::string buf;
+	CURLcode ret;
+
+	CURL * easyhandle = curl_easy_init();
+	if (!easyhandle) {
+		throw exception(0, "curl_easy_init() failed");
+	}
+
+	if (ua) {
+		curl_easy_setopt(easyhandle, CURLOPT_USERAGENT, ua);
+	}
+	curl_easy_setopt(easyhandle, CURLOPT_URL, url.c_str());
+	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
+	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, &buf);
+	curl_easy_setopt(easyhandle, CURLOPT_NOSIGNAL, 1);
+	curl_easy_setopt(easyhandle, CURLOPT_ENCODING, "gzip, deflate");
+	if (to != 0)
+		curl_easy_setopt(easyhandle, CURLOPT_TIMEOUT, to);
+
+	if (prx)
+		curl_easy_setopt(easyhandle, CURLOPT_PROXY, prx);
+
+	if (prxauth)
+		curl_easy_setopt(easyhandle, CURLOPT_PROXYUSERPWD, prxauth);
+
+	ret = curl_easy_perform(easyhandle);
+	curl_easy_cleanup(easyhandle);
+
+	if (ret != 0)
+		throw exception(0, "curl_easy_perform error");
+
+	GetLogger().log(LOG_INFO, "parser::parse_url: retrieved data for %s: %s", url.c_str(), buf.c_str());
+
+	return parse_buffer(buf.c_str(), buf.length());
 }
 
-feed parser::parse_buffer(const char * buffer, size_t size) {
+feed parser::parse_buffer(const char * buffer, size_t size, const char * url) {
 	xmlDoc *doc = NULL;
 
-	doc = xmlParseMemory(buffer, size);
+	doc = xmlReadMemory(buffer, size, url, NULL, XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING);
 	if (doc == NULL) {
 		throw exception(0, "unable to parse buffer");
 	}
@@ -39,6 +82,8 @@ feed parser::parse_buffer(const char * buffer, size_t size) {
 	}
 
 	xmlFreeDoc(doc);
+
+	GetLogger().log(LOG_INFO, "parser::parse_buffer: encoding = %s", f.encoding.c_str());
 
 	return f;
 }
@@ -60,6 +105,8 @@ feed parser::parse_file(const std::string& filename) {
 	}
 
 	xmlFreeDoc(doc);
+
+	GetLogger().log(LOG_INFO, "parser::parse_file: encoding = %s", f.encoding.c_str());
 
 	return f;
 }
