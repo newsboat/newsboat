@@ -6,6 +6,7 @@
 #include <cache.h>
 #include <config.h>
 #include <rsspp.h>
+#include <errno.h>
 
 using namespace newsbeuter;
 
