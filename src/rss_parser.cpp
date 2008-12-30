@@ -38,12 +38,8 @@ std::tr1::shared_ptr<rss_feed> rss_parser::parse() {
 		 * available Unicode characters, unlike other non-Unicode encodings.
 		 */
 
-		const char * encoding = (f.encoding != "") ? f.encoding.c_str() : "utf-8";
-
-		GetLogger().log(LOG_INFO, "rss_parser::parse: encoding = %s", encoding);
-
-		fill_feed_fields(feed, encoding);
-		fill_feed_items(feed, encoding);
+		fill_feed_fields(feed);
+		fill_feed_items(feed);
 
 		feed->remove_old_deleted_items();
 	}
@@ -287,14 +283,12 @@ void rss_parser::check_and_log_error() {
 	}
 }
 
-void rss_parser::fill_feed_fields(std::tr1::shared_ptr<rss_feed>& feed, const char * encoding) {
+void rss_parser::fill_feed_fields(std::tr1::shared_ptr<rss_feed>& feed) {
 	/*
 	 * we fill all the feed members with the appropriate values from the rsspp data structure
 	 */
-	GetLogger().log(LOG_DEBUG, "rss_parser::fill_feed_fields: f.title = %s converted = %s", f.title.c_str(), utils::convert_text(f.title, "utf-8", encoding).c_str());
 	if (f.title_type != "" && (f.title_type == "xhtml" || f.title_type == "html")) {
-		std::string xhtmltitle = f.title;
-		feed->set_title(render_xhtml_title(xhtmltitle, feed->link()));
+		feed->set_title(render_xhtml_title(f.title, feed->link()));
 	} else {
 		feed->set_title(f.title);
 	}
@@ -313,7 +307,7 @@ void rss_parser::fill_feed_fields(std::tr1::shared_ptr<rss_feed>& feed, const ch
 	GetLogger().log(LOG_DEBUG, "rss_parser::parse: feed title = `%s' link = `%s'", feed->title().c_str(), feed->link().c_str());
 }
 
-void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed>& feed, const char * encoding) {
+void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed>& feed) {
 	/*
 	 * we iterate over all items of a feed, create an rss_item object for
 	 * each item, and fill it with the appropriate values from the data structure.
@@ -321,17 +315,17 @@ void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed>& feed, const cha
 	for (std::vector<rsspp::item>::iterator item=f.items.begin();item!=f.items.end();item++) {
 		std::tr1::shared_ptr<rss_item> x(new rss_item(ch));
 
-		set_item_title(feed, x, *item, encoding);
+		set_item_title(feed, x, *item);
 
 		if (item->link != "") {
 			x->set_link(utils::absolute_url(feed->link(), item->link));
 		}
 
-		set_item_author(x, *item, encoding);
+		set_item_author(x, *item);
 
 		x->set_feedurl(feed->rssurl());
 
-		set_item_content(x, *item, encoding);
+		set_item_content(x, *item);
 
 		if (item->pubDate != "") 
 			x->set_pubDate(parse_date(item->pubDate));
@@ -349,10 +343,9 @@ void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed>& feed, const cha
 	}
 }
 
-void rss_parser::set_item_title(std::tr1::shared_ptr<rss_feed>& feed, std::tr1::shared_ptr<rss_item>& x, rsspp::item& item, const char * encoding) {
+void rss_parser::set_item_title(std::tr1::shared_ptr<rss_feed>& feed, std::tr1::shared_ptr<rss_item>& x, rsspp::item& item) {
 	if (item.title_type != "" && (item.title_type == "xhtml" || item.title_type == "html")) {
-		std::string xhtmltitle = item.title;
-		x->set_title(render_xhtml_title(xhtmltitle, feed->link()));
+		x->set_title(render_xhtml_title(item.title, feed->link()));
 	} else {
 		std::string title = item.title;
 		replace_newline_characters(title);
@@ -360,7 +353,7 @@ void rss_parser::set_item_title(std::tr1::shared_ptr<rss_feed>& feed, std::tr1::
 	}
 }
 
-void rss_parser::set_item_author(std::tr1::shared_ptr<rss_item>& x, rsspp::item& item, const char * encoding) {
+void rss_parser::set_item_author(std::tr1::shared_ptr<rss_item>& x, rsspp::item& item) {
 	/* 
 	 * some feeds only have a feed-wide managingEditor, which we use as an item's
 	 * author if there is no item-specific one available.
@@ -382,13 +375,13 @@ void rss_parser::set_item_author(std::tr1::shared_ptr<rss_item>& x, rsspp::item&
 	}
 }
 
-void rss_parser::set_item_content(std::tr1::shared_ptr<rss_item>& x, rsspp::item& item, const char * encoding) {
+void rss_parser::set_item_content(std::tr1::shared_ptr<rss_item>& x, rsspp::item& item) {
 
-	handle_content_encoded(x, item, encoding);
+	handle_content_encoded(x, item);
 
-	handle_atom_content(x, item, encoding);
+	handle_atom_content(x, item);
 
-	handle_itunes_summary(x, item, encoding);
+	handle_itunes_summary(x, item);
 
 	if (x->description() == "") {
 		x->set_description(item.description);
@@ -435,20 +428,19 @@ void rss_parser::add_item_to_feed(std::tr1::shared_ptr<rss_feed>& feed, std::tr1
 	}
 }
 
-void rss_parser::handle_content_encoded(std::tr1::shared_ptr<rss_item>& x, rsspp::item& item, const char * encoding) {
+void rss_parser::handle_content_encoded(std::tr1::shared_ptr<rss_item>& x, rsspp::item& item) {
 	if (x->description() != "")
 		return;
 
 	/* here we handle content:encoded tags that are an extension but very widespread */
 	if (item.content_encoded != "") {
-		std::string desc = item.content_encoded;
-		x->set_description(desc);
+		x->set_description(item.content_encoded);
 	} else {
 		GetLogger().log(LOG_DEBUG, "rss_parser::parse: found no content:encoded");
 	}
 }
 
-void rss_parser::handle_atom_content(std::tr1::shared_ptr<rss_item>& x, rsspp::item& item, const char * encoding) {
+void rss_parser::handle_atom_content(std::tr1::shared_ptr<rss_item>& x, rsspp::item& item) {
 	if (x->description() != "")
 		return;
 
@@ -471,7 +463,7 @@ void rss_parser::handle_atom_content(std::tr1::shared_ptr<rss_item>& x, rsspp::i
 	}
 }
 
-void rss_parser::handle_itunes_summary(std::tr1::shared_ptr<rss_item>& x, rsspp::item& item, const char * encoding) {
+void rss_parser::handle_itunes_summary(std::tr1::shared_ptr<rss_item>& x, rsspp::item& item) {
 	if (x->description() != "")
 		return;
 
