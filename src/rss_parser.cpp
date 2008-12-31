@@ -254,24 +254,6 @@ void rss_parser::download_filterplugin(const std::string& filter, const std::str
 	GetLogger().log(LOG_DEBUG, "rss_parser::parse: filterplugin %s, is_valid = %s", filter.c_str(), is_valid ? "true" : "false");
 }
 
-void rss_parser::check_and_log_error() {
-	if (!is_valid) {
-		// TODO: improve
-		/*
-		if (err == MRSS_ERR_POSIX) {
-			GetLogger().log(LOG_ERROR,"rss_parser::parse: mrss_parse_* failed with POSIX error: error = %s",strerror(errno));
-		}
-		GetLogger().log(LOG_ERROR,"rss_parser::parse: mrss_parse_* failed: err = %s (%u %x)",mrss_strerror(err), err, err);
-		GetLogger().log(LOG_ERROR,"rss_parser::parse: CURLcode = %u (%s)", ccode, curl_easy_strerror(ccode));
-		GetLogger().log(LOG_USERERROR, "RSS feed `%s' couldn't be parsed: %s (error %u)", my_uri.c_str(), mrss_strerror(err), err);
-		if (mrss) {
-			mrss_free(mrss);
-		}
-		*/
-		throw std::string("some error occured");
-	}
-}
-
 void rss_parser::fill_feed_fields(std::tr1::shared_ptr<rss_feed>& feed) {
 	/*
 	 * we fill all the feed members with the appropriate values from the rsspp data structure
