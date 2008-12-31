@@ -5,6 +5,7 @@
 
 #include <rsspp_internal.h>
 #include <utils.h>
+#include <cstring>
 
 namespace rsspp {
 
@@ -73,7 +74,7 @@ item rss_09x_parser::parse_item(xmlNode * itemNode) {
 				it.author_email = newsbeuter::utils::tokenize(authorfield, " ")[0];
 				unsigned int start, end;
 				end = authorfield.length()-2;
-				for (start = end;start > 0 && authorfield[start] != '(';start--);
+				for (start = end;start > 0 && authorfield[start] != '(';start--) { }
 				it.author = authorfield.substr(start+1, end-start);
 			} else {
 				it.author_email = authorfield;

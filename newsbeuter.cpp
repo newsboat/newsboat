@@ -7,6 +7,7 @@
 #include <config.h>
 #include <rsspp.h>
 #include <errno.h>
+#include <cstring>
 
 using namespace newsbeuter;
 

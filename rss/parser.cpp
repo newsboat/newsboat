@@ -9,6 +9,7 @@
 #include <libxml/tree.h>
 #include <curl/curl.h>
 #include <logger.h>
+#include <cstring>
 
 using namespace newsbeuter;
 

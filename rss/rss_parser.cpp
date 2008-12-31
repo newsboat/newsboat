@@ -4,6 +4,7 @@
  */
 
 #include <rsspp_internal.h>
+#include <cstring>
 
 namespace rsspp {
 

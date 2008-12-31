@@ -13,6 +13,8 @@
 #include <sstream>
 #include <string>
 
+#include <cstring>
+
 #include <langinfo.h>
 
 #define FILTER_UNREAD_FEEDS "unread_count != \"0\""

@@ -6,6 +6,7 @@
 #include <utils.h>
 #include <formatstring.h>
 #include <listformatter.h>
+#include <cstring>
 
 #include <sstream>
 

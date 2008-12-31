@@ -5,6 +5,7 @@
 #include <view.h>
 #include <listformatter.h>
 #include <utils.h>
+#include <cstring>
 
 namespace newsbeuter {
 
