@@ -116,6 +116,7 @@ verifier.expect(24, 5, " updated.")
 
 Tuitest.keypress("s"[0])
 
+Tuitest.wait(1000)
 Tuitest.wait_until_idle
 
 # begin auto-generated verification #9 
