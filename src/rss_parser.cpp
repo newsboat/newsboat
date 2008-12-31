@@ -82,6 +82,9 @@ bool rss_parser::check_and_update_lastmodified() {
 
 		std::string proxy = cfgcont->get_configvalue("proxy");
 		std::string proxyauth = cfgcont->get_configvalue("proxy-auth");
+		std::string useragent = utils::get_useragent(cfgcont);
+
+		GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: useragent = %s", useragent.c_str());
 
 		curl_easy_setopt(curl, CURLOPT_URL, my_uri.c_str());
 		curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
@@ -91,7 +94,7 @@ bool rss_parser::check_and_update_lastmodified() {
 			curl_easy_setopt(curl, CURLOPT_PROXY, proxy.c_str());
 		if (proxyauth != "")
 			curl_easy_setopt(curl, CURLOPT_PROXYUSERPWD, proxyauth.c_str());
-		curl_easy_setopt(curl, CURLOPT_USERAGENT, utils::get_useragent(cfgcont).c_str());
+		curl_easy_setopt(curl, CURLOPT_USERAGENT, useragent.c_str());
 		curl_easy_setopt(curl, CURLOPT_HEADERDATA, &newlm);
 		curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, get_lastmodified_header);
 		curl_easy_setopt(curl, CURLOPT_NOBODY, 1);
@@ -214,7 +217,9 @@ void rss_parser::download_http(const std::string& uri) {
 
 	for (unsigned int i=0;i<retrycount && !is_valid;i++) {
 		try {
-			rsspp::parser p(cfgcont->get_configvalue_as_int("download-timeout"), utils::get_useragent(cfgcont).c_str(), proxy, proxy_auth);
+			std::string useragent = utils::get_useragent(cfgcont);
+			GetLogger().log(LOG_DEBUG, "rss_parser::download_http: user-agent = %s", useragent.c_str());
+			rsspp::parser p(cfgcont->get_configvalue_as_int("download-timeout"), useragent.c_str(), proxy, proxy_auth);
 			f = p.parse_url(uri);
 			is_valid = true;
 		} catch (rsspp::exception& e) {
