@@ -145,19 +145,21 @@ feed parser::parse_xmlnode(xmlNode* node) {
 					} else if (strcmp(xmlns, ATOM_1_0_URI)==0) {
 						f.rss_version = ATOM_1_0;
 					} else {
+						xmlFree(xmlns);
 						throw exception(0, "invalid Atom version");
 					}
+					xmlFree(xmlns);
 				} else {
-					f.rss_version = ATOM_1_0;
+					xmlFree(xmlns);
+					throw exception(0, "no Atom version");
 				}
 			}
 
-			rss_parser * parser = rss_parser_factory::get_object(f);
+			std::tr1::shared_ptr<rss_parser> parser = rss_parser_factory::get_object(f);
 
 			try {
 				parser->parse_feed(f, node);
 			} catch (exception& e) {
-				delete parser;
 				throw e;
 			}
 		}

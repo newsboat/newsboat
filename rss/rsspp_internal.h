@@ -7,6 +7,7 @@
 #define RSSPP_INTERNAL__H
 
 #include <rsspp.h>
+#include <tr1/memory>
 
 #define CONTENT_URI		"http://purl.org/rss/1.0/modules/content/"
 #define RDF_URI			"http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -27,26 +28,30 @@ struct rss_parser {
 
 struct rss_09x_parser : public rss_parser {
 		virtual void parse_feed(feed& f, xmlNode * rootNode);
+		virtual ~rss_09x_parser() { }
 	private:
 		item parse_item(xmlNode * itemNode);
 };
 
 struct rss_20_parser : public rss_09x_parser {
+	virtual ~rss_20_parser() { }
 };
 
 struct rss_10_parser : public rss_parser {
 	virtual void parse_feed(feed& f, xmlNode * rootNode);
+	virtual ~rss_10_parser() { }
 };
 
 
 struct atom_parser : public rss_parser {
 		virtual void parse_feed(feed& f, xmlNode * rootNode);
+		virtual ~atom_parser() { }
 	private:
 		item parse_entry(xmlNode * itemNode);
 };
 
 struct rss_parser_factory {
-	static rss_parser * get_object(feed& f);
+	static std::tr1::shared_ptr<rss_parser> get_object(feed& f);
 };
 
 }
