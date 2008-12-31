@@ -21,10 +21,12 @@ static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp
 namespace rsspp {
 
 parser::parser(unsigned int timeout, const char * user_agent, const char * proxy, const char * proxy_auth) 
-	: to(timeout), ua(user_agent), prx(proxy), prxauth(proxy_auth) {
+	: to(timeout), ua(user_agent), prx(proxy), prxauth(proxy_auth), doc(0) {
 }
 
 parser::~parser() {
+	if (doc)
+		xmlFreeDoc(doc);
 	xmlCleanupParser();
 }
 
@@ -67,8 +69,6 @@ feed parser::parse_url(const std::string& url) {
 }
 
 feed parser::parse_buffer(const char * buffer, size_t size, const char * url) {
-	xmlDoc *doc = NULL;
-
 	doc = xmlReadMemory(buffer, size, url, NULL, XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING);
 	if (doc == NULL) {
 		throw exception(0, "unable to parse buffer");
@@ -82,16 +82,12 @@ feed parser::parse_buffer(const char * buffer, size_t size, const char * url) {
 		f.encoding = (const char *)doc->encoding;
 	}
 
-	xmlFreeDoc(doc);
-
 	GetLogger().log(LOG_INFO, "parser::parse_buffer: encoding = %s", f.encoding.c_str());
 
 	return f;
 }
 
 feed parser::parse_file(const std::string& filename) {
-	xmlDoc *doc = NULL;
-
 	doc = xmlReadFile(filename.c_str(), NULL, 0);
 	if (doc == NULL) {
 		throw exception(0, "unable to parse file");
@@ -104,8 +100,6 @@ feed parser::parse_file(const std::string& filename) {
 	if (doc->encoding) {
 		f.encoding = (const char *)doc->encoding;
 	}
-
-	xmlFreeDoc(doc);
 
 	GetLogger().log(LOG_INFO, "parser::parse_file: encoding = %s", f.encoding.c_str());
 
@@ -153,7 +147,12 @@ feed parser::parse_xmlnode(xmlNode* node) {
 
 			rss_parser * parser = rss_parser_factory::get_object(f);
 
-			parser->parse_feed(f, node);
+			try {
+				parser->parse_feed(f, node);
+			} catch (exception& e) {
+				delete parser;
+				throw e;
+			}
 		}
 	} else {
 		// TODO: throw exception

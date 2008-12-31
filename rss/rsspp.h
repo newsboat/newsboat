@@ -83,6 +83,7 @@ class parser {
 		const char * ua;
 		const char * prx;
 		const char * prxauth;
+		xmlDoc * doc;
 };
 
 }
