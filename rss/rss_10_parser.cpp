@@ -1,3 +1,7 @@
+/* rsspp - Copyright (C) 2008 Andreas Krennmair <ak@newsbeuter.org> 
+ * Licensed under the MIT/X Consortium License. See file LICENSE 
+ * for more information. 
+ */
 #include <rsspp_internal.h>
 #include <cstring>
 
