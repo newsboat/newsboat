@@ -44,7 +44,6 @@ namespace newsbeuter {
 			void add_item_to_feed(std::tr1::shared_ptr<rss_feed>& feed, std::tr1::shared_ptr<rss_item>& item);
 
 			void handle_content_encoded(std::tr1::shared_ptr<rss_item>& x, rsspp::item& item);
-			void handle_atom_content(std::tr1::shared_ptr<rss_item>& x, rsspp::item& item);
 			void handle_itunes_summary(std::tr1::shared_ptr<rss_item>& x, rsspp::item& item);
 
 			std::string my_uri;

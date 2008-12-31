@@ -36,7 +36,6 @@ struct item {
 
 	// extensions:
 	std::string content_encoded;
-	std::string atom_content;
 	std::string itunes_summary;
 };
 

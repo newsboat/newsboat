@@ -362,8 +362,6 @@ void rss_parser::set_item_content(std::tr1::shared_ptr<rss_item>& x, rsspp::item
 
 	handle_content_encoded(x, item);
 
-	handle_atom_content(x, item);
-
 	handle_itunes_summary(x, item);
 
 	if (x->description() == "") {
@@ -420,29 +418,6 @@ void rss_parser::handle_content_encoded(std::tr1::shared_ptr<rss_item>& x, rsspp
 		x->set_description(item.content_encoded);
 	} else {
 		GetLogger().log(LOG_DEBUG, "rss_parser::parse: found no content:encoded");
-	}
-}
-
-void rss_parser::handle_atom_content(std::tr1::shared_ptr<rss_item>& x, rsspp::item& item) {
-	if (x->description() != "")
-		return;
-
-	if (f.rss_version == rsspp::ATOM_0_3 || f.rss_version == rsspp::ATOM_1_0) {
-		x->set_description(item.atom_content);
-		/* TODO: move this to rsspp
-		int rc;
-		if (((rc = mrss_search_tag(item, "content", "http://www.w3.org/2005/Atom", &content)) == MRSS_OK && content) ||
-			((rc = mrss_search_tag(item, "content", "http://purl.org/atom/ns#", &content)) == MRSS_OK && content)) {
-			GetLogger().log(LOG_DEBUG, "rss_parser::parse: found atom content: %s\n", content ? content->value : "(content = null)");
-			if (content && content->value) {
-				x->set_description(utils::convert_text(content->value, "utf-8", encoding));
-			}
-		} else {
-			GetLogger().log(LOG_DEBUG, "rss_parser::parse: mrss_search_tag(content) failed with rc = %d content = %p", rc, content);
-		}
-		*/
-	} else {
-		GetLogger().log(LOG_DEBUG, "rss_parser::parse: not an atom feed");
 	}
 }
 
