@@ -47,6 +47,7 @@ feed parser::parse_url(const std::string& url) {
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, &buf);
 	curl_easy_setopt(easyhandle, CURLOPT_NOSIGNAL, 1);
 	curl_easy_setopt(easyhandle, CURLOPT_FOLLOWLOCATION, 1);
+	curl_easy_setopt(easyhandle, CURLOPT_FAILONERROR, 1);
 	curl_easy_setopt(easyhandle, CURLOPT_ENCODING, "gzip, deflate");
 	if (to != 0)
 		curl_easy_setopt(easyhandle, CURLOPT_TIMEOUT, to);
@@ -60,12 +61,18 @@ feed parser::parse_url(const std::string& url) {
 	ret = curl_easy_perform(easyhandle);
 	curl_easy_cleanup(easyhandle);
 
-	if (ret != 0)
+	GetLogger().log(LOG_DEBUG, "rsspp::parser::parse_url: ret = %d", ret);
+
+	if (ret != 0) {
 		throw exception(0, "curl_easy_perform error");
+	}
 
 	GetLogger().log(LOG_INFO, "parser::parse_url: retrieved data for %s: %s", url.c_str(), buf.c_str());
 
-	return parse_buffer(buf.c_str(), buf.length());
+	if (buf.length() > 0)
+		return parse_buffer(buf.c_str(), buf.length());
+
+	return feed();
 }
 
 feed parser::parse_buffer(const char * buffer, size_t size, const char * url) {

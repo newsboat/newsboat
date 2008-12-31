@@ -99,6 +99,7 @@ bool rss_parser::check_and_update_lastmodified() {
 		curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, get_lastmodified_header);
 		curl_easy_setopt(curl, CURLOPT_NOBODY, 1);
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
+		curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1);
 
 		err = curl_easy_perform(curl);
 		curl_easy_cleanup(curl);
@@ -109,7 +110,7 @@ bool rss_parser::check_and_update_lastmodified() {
 	}
 	if (i==retry_count && err != 0) {
 		GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: couldn't get a result after %u retries", retry_count);
-		return false;
+		throw rsspp::exception(0, curl_easy_strerror(err));
 	}
 
 	if (newlm <= 0) {
@@ -224,6 +225,7 @@ void rss_parser::download_http(const std::string& uri) {
 			is_valid = true;
 		} catch (rsspp::exception& e) {
 			is_valid = false;
+			throw e;
 		}
 	}
 	GetLogger().log(LOG_DEBUG, "rss_parser::parse: http URL %s, is_valid = %s", uri.c_str(), is_valid ? "true" : "false");
@@ -238,6 +240,7 @@ void rss_parser::get_execplugin(const std::string& plugin) {
 		is_valid = true;
 	} catch (rsspp::exception& e) {
 		is_valid = false;
+		throw e;
 	}
 	GetLogger().log(LOG_DEBUG, "rss_parser::parse: execplugin %s, is_valid = %s", plugin.c_str(), is_valid ? "true" : "false");
 }
@@ -255,6 +258,7 @@ void rss_parser::download_filterplugin(const std::string& filter, const std::str
 		is_valid = true;
 	} catch (rsspp::exception& e) {
 		is_valid = false;
+		throw e;
 	}
 	GetLogger().log(LOG_DEBUG, "rss_parser::parse: filterplugin %s, is_valid = %s", filter.c_str(), is_valid ? "true" : "false");
 }

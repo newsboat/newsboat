@@ -528,6 +528,8 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
 			v->set_status(utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(feed->rssurl()).c_str(), e.what()));
 		} catch (const std::string& errmsg) {
 			v->set_status(utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(feed->rssurl()).c_str(), errmsg.c_str()));
+		} catch (rsspp::exception& e) {
+			v->set_status(utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(feed->rssurl()).c_str(), e.what()));
 		}
 	} else {
 		v->show_error(_("Error: invalid feed!"));
