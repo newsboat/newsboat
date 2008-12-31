@@ -91,3 +91,23 @@ BOOST_AUTO_TEST_CASE(TestParseSimpleRSS_1_0) {
 	BOOST_CHECK_EQUAL(f.items[0].description, "News about the Example project");
 	BOOST_CHECK_EQUAL(f.items[0].pubDate, "Tue, 30 Dec 2008 07:20:00 +0000");
 }
+
+BOOST_AUTO_TEST_CASE(TestParseSimpleAtom_1_0) {
+	rsspp::parser p;
+
+	rsspp::feed f = p.parse_file("data/atom10_1.xml");
+	BOOST_CHECK_EQUAL(f.rss_version, rsspp::ATOM_1_0);
+
+	BOOST_CHECK_EQUAL(f.title, "test atom");
+	BOOST_CHECK_EQUAL(f.title_type, "text");
+	BOOST_CHECK_EQUAL(f.description, "atom description!");
+	BOOST_CHECK_EQUAL(f.pubDate, "Tue, 30 Dec 2008 19:04:15 +0000");
+	BOOST_CHECK_EQUAL(f.link, "http://example.com/");
+
+	BOOST_CHECK_EQUAL(f.items.size(), 1u);
+	BOOST_CHECK_EQUAL(f.items[0].title, "A gentle introduction to Atom testing");
+	BOOST_CHECK_EQUAL(f.items[0].title_type, "html");
+	BOOST_CHECK_EQUAL(f.items[0].link, "http://example.com/atom_testing.html");
+	BOOST_CHECK_EQUAL(f.items[0].guid, "tag:example.com,2008-12-30:/atom_testing");
+	BOOST_CHECK_EQUAL(f.items[0].description, "some content");
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+<title type="text">test atom</title>
+<subtitle type="text">atom description!</subtitle>
+<id>tag:example.com</id>
+<updated>2008-12-30T20:04:15Z</updated>
+<link rel="alternate" type="text/html" href="http://example.com/" />
+
+<entry>
+<author>
+<name>A Person</name>
+<uri>http://example.com/</uri>
+</author>
+<title type="html"><![CDATA[A gentle introduction to Atom testing]]></title>
+<link rel="alternate" type="text/html" href="http://example.com/atom_testing.html" />
+<id>tag:example.com,2008-12-30:/atom_testing</id>
+<updated>2008-12-30T20:04:15Z</updated>
+<published>2008-12-30T20:04:15Z</published>
+<content type="html" xml:base="http://example.com/atom_testing.html">some content</content>
+</entry>
+</feed>
