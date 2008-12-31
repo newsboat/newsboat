@@ -138,19 +138,15 @@ feed parser::parse_xmlnode(xmlNode* node) {
 			} else if (strcmp((const char *)node->name, "RDF")==0) {
 				f.rss_version = RSS_1_0;
 			} else if (strcmp((const char *)node->name, "feed")==0) {
-				char * xmlns = (char *)xmlGetProp(node, (const xmlChar *)"xmlns");
-				if (xmlns) {
-					if (strcmp(xmlns, ATOM_0_3_URI)==0) {
+				if (node->ns && node->ns->href) {
+					if (strcmp((const char *)node->ns->href, ATOM_0_3_URI)==0) {
 						f.rss_version = ATOM_0_3;
-					} else if (strcmp(xmlns, ATOM_1_0_URI)==0) {
+					} else if (strcmp((const char *)node->ns->href, ATOM_1_0_URI)==0) {
 						f.rss_version = ATOM_1_0;
 					} else {
-						xmlFree(xmlns);
 						throw exception(0, "invalid Atom version");
 					}
-					xmlFree(xmlns);
 				} else {
-					xmlFree(xmlns);
 					throw exception(0, "no Atom version");
 				}
 			}
