@@ -54,6 +54,8 @@ void atom_parser::parse_feed(feed& f, xmlNode * rootNode) {
 
 item atom_parser::parse_entry(xmlNode * entryNode) {
 	item it;
+	std::string summary;
+	std::string summary_type;
 
 	for (xmlNode * node = entryNode->children; node != NULL; node = node->next) {
 		if (strcmp((const char *)node->name, "author")==0) {
@@ -95,8 +97,22 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 				}
 				xmlFree(rel);
 			}
-		} // TODO: is there more? enclosures?
+		} else if (strcmp((const char *)node->name, "summary")==0) {
+			summary = get_content(node);
+			char * type = (char *)xmlGetProp(node, (xmlChar *)"type");
+			if (type) {
+				summary_type = type;
+				xmlFree(type);
+			} else {
+				summary_type = "text";
+			}
+		}
 	} // for
+
+	if (it.description == "") {
+		it.description = summary;
+		it.description_type = summary_type;
+	}
 
 	return it;
 }
