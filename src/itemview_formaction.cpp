@@ -13,7 +13,7 @@
 namespace newsbeuter {
 
 itemview_formaction::itemview_formaction(view * vv, std::tr1::shared_ptr<itemlist_formaction> il, std::string formstr)
-	: formaction(vv,formstr), show_source(false), quit(false), rxman(0), num_lines(0), itemlist(il) { 
+	: formaction(vv,formstr), show_source(false), quit(false), rxman(0), num_lines(0), itemlist(il), in_search(false) { 
 }
 
 itemview_formaction::~itemview_formaction() { }
@@ -128,6 +128,11 @@ void itemview_formaction::prepare() {
 		f->modify("article","replace_inner",listfmt.format_list(rxman, "article"));
 		f->set("articleoffset","0");
 
+		if (in_search) {
+			rxman->remove_last_regex("article");
+			in_search = false;
+		}
+
 		do_redraw = false;
 	}
 
@@ -201,6 +206,20 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 				qna_responses.push_back(args->size() > 0 ? (*args)[0] : "");
 			} else {
 				this->start_bookmark_qna(item->title(), item->link(), "");
+			}
+			break;
+		case OP_SEARCH: {
+				std::vector<qna_pair> qna;
+				if (automatic) {
+					if (args->size() > 0) {
+						qna_responses.clear();
+						qna_responses.push_back((*args)[0]);
+						finished_qna(OP_INT_START_SEARCH);
+					}
+				} else {
+					qna.push_back(qna_pair(_("Search for: "), ""));
+					this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
+				}
 			}
 			break;
 		case OP_EDITFLAGS: 
@@ -386,6 +405,9 @@ void itemview_formaction::finished_qna(operation op) {
 			v->set_status(_("Flags updated."));
 			do_redraw = true;
 			break;
+		case OP_INT_START_SEARCH:
+			do_search();
+			break;
 		default:
 			break;
 	}
@@ -454,6 +476,34 @@ void itemview_formaction::update_percent() {
 std::string itemview_formaction::title() {
 	std::tr1::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
 	return utils::strprintf(_("Article - %s"), item->title().c_str());
+}
+
+void itemview_formaction::do_search() {
+	std::string searchphrase = qna_responses[0];
+	if (searchphrase.length() == 0)
+		return;
+
+	searchhistory.add_line(searchphrase);
+
+	GetLogger().log(LOG_DEBUG, "itemview_formaction::do_search: searchphrase = %s", searchphrase.c_str());
+
+	std::vector<std::string> params;
+	params.push_back("article");
+	params.push_back(searchphrase);
+
+	std::vector<std::string> colors = utils::tokenize(v->get_cfg()->get_configvalue("search-highlight-colors"), " ");
+	std::copy(colors.begin(), colors.end(), std::back_inserter(params));
+
+	if (rxman->handle_action("highlight", params) == AHS_OK) {
+		GetLogger().log(LOG_DEBUG, "itemview_formaction::do_search: configuration manipulation was successful");
+
+		set_regexmanager(rxman);
+
+		in_search = true;
+		do_redraw = true;
+	} else {
+		v->show_error(_("Error: invalid regular expression!"));
+	}
 }
 
 }

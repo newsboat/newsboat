@@ -38,6 +38,8 @@ class itemview_formaction : public formaction {
 
 		void render_source(std::vector<std::string>& lines, std::string desc, unsigned int width);
 
+		void do_search();
+		
 		std::string guid;
 		std::tr1::shared_ptr<rss_feed> feed;
 		bool show_source;
@@ -46,6 +48,7 @@ class itemview_formaction : public formaction {
 		regexmanager * rxman;
 		unsigned int num_lines;
 		std::tr1::shared_ptr<itemlist_formaction> itemlist;
+		bool in_search;
 };
 
 }

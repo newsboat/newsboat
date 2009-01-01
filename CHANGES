@@ -9,6 +9,7 @@ Changes for newsbeuter:
 	Added config option "bookmark-interactive" to indicate that the configured bookmarking command is interactive.
 	Don't display authentication information in URLs (fixes #121).
 	Replaced mrss with new RSS/Atom parser.
+	Added ability to search for text from the article view.
 
 1.3 (2008-12-06):
 	Changed some internal data structures to smart pointers (stability improvement).

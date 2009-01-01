@@ -86,6 +86,19 @@ action_handler_status regexmanager::handle_action(const std::string& action, con
 		return AHS_INVALID_COMMAND;
 }
 
+void regexmanager::remove_last_regex(const std::string& location) {
+	std::vector<regex_t *>& regexes = locations[location].first;
+
+	std::vector<regex_t *>::iterator it=regexes.begin();
+	for (unsigned int i=0;i<regexes.size()-1;i++) {
+		it++;
+	}
+	delete *it;
+	regexes.erase(it);
+}
+
+
+
 void regexmanager::quote_and_highlight(std::string& str, const std::string& location) {
 	std::vector<regex_t *>& regexes = locations[location].first;
 

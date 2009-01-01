@@ -44,6 +44,7 @@ reload-time|<number>|60|The number of minutes between automatic reloads.|reload-
 reload-threads|<number>|1|The number of parallel reload threads that shall be started when all feeds are reloaded.|reload-threads 3
 reset-unread-on-update|<url> ...|n/a|With this configuration command, you can provide a list of RSS feed URLs for whose articles the unread flag will be reset if an article has been updated, i.e. its content has been changed. This is especially useful for RSS feeds where single articles are updated after publication, and you want to be notified of the updates.|reset-unread-on-update "http://blog.fefe.de/rss.xml?html"
 save-path|<path>|~/|The default path where articles shall be saved to. If an invalid path is specified, the current directory is used.|save-path "~/Saved Articles"
+search-highlight-colors|<fgcolor> <bgcolor> [<attribute> ...]|black yellow bold|This configuration command specifies the highlighting colors when searching for text from the article view.|search-highlight-colors white black bold
 show-keymap-hint|[yes/no]|yes|If no, then the keymap hints on the bottom of screen will not be displayed.|show-keymap-hint no
 show-read-feeds|[yes/no]|yes|If yes, then all feeds, including those without unread articles, are listed. If no, then only feeds with one or more unread articles are list.|show-read-feeds no
 show-read-articles|[yes/no]|yes|If yes, then all articles of a feed are listed in the article list. If no, then only unread articles are listed.|show-read-articles no

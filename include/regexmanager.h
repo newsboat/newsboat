@@ -15,6 +15,7 @@ class regexmanager : public config_action_handler {
 		~regexmanager();
 		virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
 		void quote_and_highlight(std::string& str, const std::string& location);
+		void remove_last_regex(const std::string& location);
 	private:
 		typedef std::pair<std::vector<regex_t *>, std::vector<std::string> > rc_pair;
 		std::map<std::string, rc_pair> locations;

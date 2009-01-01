@@ -64,6 +64,7 @@ configcontainer::configcontainer()
 	config_data["keep-articles-days"] = configdata("0", configdata::INT);
 	config_data["bookmark-interactive"] = configdata("false", configdata::BOOL);
 	config_data["mark-as-read-on-hover"] = configdata("false", configdata::BOOL);
+	config_data["search-highlight-colors"] = configdata("black yellow bold", configdata::STR, true);
 
 
 	/* undocumented: */
