@@ -3,7 +3,7 @@
 <title type="text">test atom</title>
 <subtitle type="text">atom description!</subtitle>
 <id>tag:example.com</id>
-<updated>2008-12-30T20:04:15Z</updated>
+<updated>2008-12-30T20:24:15Z</updated>
 <link rel="alternate" type="text/html" href="http://example.com/" />
 
 <entry>
@@ -16,6 +16,33 @@
 <id>tag:example.com,2008-12-30:/atom_testing</id>
 <updated>2008-12-30T20:04:15Z</updated>
 <published>2008-12-30T20:04:15Z</published>
+<content type="html" xml:base="http://example.com/atom_testing.html">some content</content>
+</entry>
+
+<entry>
+<author>
+<name>A Person</name>
+<uri>http://example.com/</uri>
+</author>
+<title type="html"><![CDATA[A missing rel attribute]]></title>
+<link type="text/html" href="http://example.com/atom_testing.html" />
+<id>tag:example.com,2008-12-30:/atom_testing1</id>
+<updated>2008-12-30T20:14:15Z</updated>
+<published>2008-12-30T20:14:15Z</published>
+<content type="html" xml:base="http://example.com/atom_testing.html">some content</content>
+</entry>
+
+<entry>
+<author>
+<name>A Person</name>
+<uri>http://example.com/</uri>
+</author>
+<title type="html"><![CDATA[alternate link isn't first]]></title>
+<link rel="comments" type="text/html" href="http://example.com/atom_bad.html" />
+<link rel="alternate" type="text/html" href="http://example.com/atom_testing.html" />
+<id>tag:example.com,2008-12-30:/atom_testing2</id>
+<updated>2008-12-30T20:24:15Z</updated>
+<published>2008-12-30T20:24:15Z</published>
 <content type="html" xml:base="http://example.com/atom_testing.html">some content</content>
 </entry>
 </feed>

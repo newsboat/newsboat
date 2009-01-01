@@ -89,7 +89,7 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 			it.pubDate = w3cdtf_to_rfc822(get_content(node));
 		} else if (strcmp((const char *)node->name, "link")==0) {
 			char * rel = (char *)xmlGetProp(node, (xmlChar *)"rel");
-			if (rel) {
+			if (!rel || (rel && (strcmp((const char *)rel, "alternate")==0))) {
 				char * href = (char *)xmlGetProp(node, (xmlChar *)"href");
 				if (href) {
 					it.link = href;

@@ -101,13 +101,25 @@ BOOST_AUTO_TEST_CASE(TestParseSimpleAtom_1_0) {
 	BOOST_CHECK_EQUAL(f.title, "test atom");
 	BOOST_CHECK_EQUAL(f.title_type, "text");
 	BOOST_CHECK_EQUAL(f.description, "atom description!");
-	BOOST_CHECK_EQUAL(f.pubDate, "Tue, 30 Dec 2008 19:04:15 +0000");
+	BOOST_CHECK_EQUAL(f.pubDate, "Tue, 30 Dec 2008 19:24:15 +0000");
 	BOOST_CHECK_EQUAL(f.link, "http://example.com/");
 
-	BOOST_CHECK_EQUAL(f.items.size(), 1u);
+	BOOST_CHECK_EQUAL(f.items.size(), 3u);
 	BOOST_CHECK_EQUAL(f.items[0].title, "A gentle introduction to Atom testing");
 	BOOST_CHECK_EQUAL(f.items[0].title_type, "html");
 	BOOST_CHECK_EQUAL(f.items[0].link, "http://example.com/atom_testing.html");
 	BOOST_CHECK_EQUAL(f.items[0].guid, "tag:example.com,2008-12-30:/atom_testing");
 	BOOST_CHECK_EQUAL(f.items[0].description, "some content");
+
+	BOOST_CHECK_EQUAL(f.items[1].title, "A missing rel attribute");
+	BOOST_CHECK_EQUAL(f.items[1].title_type, "html");
+	BOOST_CHECK_EQUAL(f.items[1].link, "http://example.com/atom_testing.html");
+	BOOST_CHECK_EQUAL(f.items[1].guid, "tag:example.com,2008-12-30:/atom_testing1");
+	BOOST_CHECK_EQUAL(f.items[1].description, "some content");
+
+	BOOST_CHECK_EQUAL(f.items[2].title, "alternate link isn't first");
+	BOOST_CHECK_EQUAL(f.items[2].title_type, "html");
+	BOOST_CHECK_EQUAL(f.items[2].link, "http://example.com/atom_testing.html");
+	BOOST_CHECK_EQUAL(f.items[2].guid, "tag:example.com,2008-12-30:/atom_testing2");
+	BOOST_CHECK_EQUAL(f.items[2].description, "some content");
 }
