@@ -28,7 +28,6 @@ parser::parser(unsigned int timeout, const char * user_agent, const char * proxy
 parser::~parser() {
 	if (doc)
 		xmlFreeDoc(doc);
-	xmlCleanupParser();
 }
 
 feed parser::parse_url(const std::string& url) {
