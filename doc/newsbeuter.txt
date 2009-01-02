@@ -49,10 +49,12 @@ has only been tested with GCC.
 - pkg-config: http://pkg-config.freedesktop.org/wiki/[]
 - libxml2: http://xmlsoft.org/[]
 
-If you intend to modify the filter language parser, you will also need Coco/R for C++,
-which you can download from http://www.ssw.uni-linz.ac.at/coco/[]. The Coco/R binary
-must be installed as "coco-cpp" in your PATH. Debian users only need to install
-the package "coco-cpp".
+If you intend to modify and regenerate the filter language parser, you will also
+need Coco/R for C++, which you can download from
+http://www.ssw.uni-linz.ac.at/coco/[]. The Coco/R binary must be installed as
+"cococpp" in your PATH. Debian users only need to install the package
+"coco-cpp". Use the "regenerate-parser" make target to regenerate the necessary
+files.
 
 
 Compiling and Installing

@@ -87,9 +87,9 @@ $(FILTERLIB_OUTPUT): $(FILTERLIB_OBJS)
 	$(AR) qc $@ $^
 	$(RANLIB) $@
 
-filter/Scanner.cpp filter/Parser.cpp: filter/filter.atg filter/Scanner.frame filter/Parser.frame
+regenerate-parser:
 	$(RM) filter/Scanner.cpp filter/Parser.cpp filter/Scanner.h filter/Parser.h
-	cococpp -frames filter $<
+	cococpp -frames filter filter/filter.atg
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
@@ -114,7 +114,7 @@ clean-librsspp:
 	$(RM) $(RSSPPLIB_OUTPUT) $(RSSPPLIB_OBJS)
 
 clean-libfilter:
-	$(RM) $(FILTERLIB_OUTPUT) $(FILTERLIB_OBJS) filter/Scanner.cpp filter/Scanner.h filter/Parser.cpp filter/Parser.h
+	$(RM) $(FILTERLIB_OUTPUT) $(FILTERLIB_OBJS)
 
 clean-doc:
 	$(RM) -r doc/xhtml 
