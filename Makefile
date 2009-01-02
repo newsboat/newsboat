@@ -140,8 +140,8 @@ install: install-mo
 	$(INSTALL) $(NEWSBEUTER) $(DESTDIR)$(prefix)/bin
 	$(INSTALL) $(PODBEUTER) $(DESTDIR)$(prefix)/bin
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
-	$(INSTALL) doc/$(NEWSBEUTER).1 $(DESTDIR)$(mandir)/man1
-	$(INSTALL) doc/$(PODBEUTER).1 $(DESTDIR)$(mandir)/man1
+	$(INSTALL) doc/$(NEWSBEUTER).1 $(DESTDIR)$(mandir)/man1 || true
+	$(INSTALL) doc/$(PODBEUTER).1 $(DESTDIR)$(mandir)/man1 || true
 	$(MKDIR) $(DESTDIR)$(docdir)
 	$(INSTALL) -m 644 doc/xhtml/* $(DESTDIR)$(docdir) || true
 	$(MKDIR) $(DESTDIR)$(docdir)/examples
