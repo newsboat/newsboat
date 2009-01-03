@@ -29,9 +29,7 @@ struct item {
 	std::string guid;
 	bool guid_isPermaLink;
 
-	std::string enclosure;
 	std::string enclosure_url;
-	ssize_t enclosure_length;
 	std::string enclosure_type;
 
 	// extensions:

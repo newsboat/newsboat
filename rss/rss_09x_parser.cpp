@@ -80,6 +80,17 @@ item rss_09x_parser::parse_item(xmlNode * itemNode) {
 			} else {
 				it.author_email = authorfield;
 			}
+		} else if (strcmp((const char *)node->name, "enclosure")==0) {
+			char * encurl = (char *)xmlGetProp(node, (xmlChar *)"url");
+			char * enctype = (char *)xmlGetProp(node, (xmlChar *)"type");
+			if (encurl) {
+				it.enclosure_url = encurl;
+				xmlFree(encurl);
+			}
+			if (enctype) {
+				it.enclosure_type = enctype;
+				xmlFree(enctype);
+			}
 		}
 	}
 
