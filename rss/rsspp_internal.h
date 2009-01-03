@@ -15,6 +15,7 @@
 #define DC_URI			"http://purl.org/dc/elements/1.1/"
 #define ATOM_0_3_URI	"http://purl.org/atom/ns#"
 #define ATOM_1_0_URI	"http://www.w3.org/2005/Atom"
+#define MEDIA_RSS_URI	"http://search.yahoo.com/mrss/"
 
 namespace rsspp {
 
@@ -23,7 +24,9 @@ struct rss_parser {
 		virtual ~rss_parser() { }
 	protected:
 		std::string get_content(xmlNode * node);
+		std::string get_prop(xmlNode * node, const char * prop, const char * ns = NULL);
 		std::string w3cdtf_to_rfc822(const std::string& w3cdtf);
+		bool node_is(xmlNode * node, const char * name, const char * ns_uri = NULL);
 };
 
 struct rss_09x_parser : public rss_parser {

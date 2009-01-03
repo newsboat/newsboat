@@ -5,6 +5,7 @@
 
 #include <rsspp_internal.h>
 #include <cstring>
+#include <libxml/tree.h>
 
 namespace rsspp {
 
@@ -15,6 +16,22 @@ std::string rss_parser::get_content(xmlNode * node) {
 		if (content) {
 			retval = (const char *)content;
 			xmlFree(content);
+		}
+	}
+	return retval;
+}
+
+std::string rss_parser::get_prop(xmlNode * node, const char * prop, const char * ns) {
+	std::string retval;
+	if (node) {
+		xmlChar * value;
+		if (ns)
+			value = xmlGetProp(node, (xmlChar *)prop);
+		else
+			value = xmlGetNsProp(node, (xmlChar *)prop, (xmlChar *)ns);
+		if (value) {
+			retval = (const char*)value;
+			xmlFree(value);
 		}
 	}
 	return retval;
@@ -38,6 +55,19 @@ std::string rss_parser::w3cdtf_to_rfc822(const std::string& w3cdtf) {
 	}
 
 	return "";
+}
+
+bool rss_parser::node_is(xmlNode * node, const char * name, const char * ns_uri) {
+	if (!node || !name)
+		return false;
+
+	if (strcmp((const char *)node->name, name)==0) {
+		if (!ns_uri)
+			return true;
+		if (node->ns && node->ns->href && strcmp((const char *)node->ns->href, ns_uri)==0)
+			return true;
+	}
+	return false;
 }
 
 }

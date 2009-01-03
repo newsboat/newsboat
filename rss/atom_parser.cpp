@@ -21,7 +21,7 @@ void atom_parser::parse_feed(feed& f, xmlNode * rootNode) {
 	}
 
 	for (xmlNode * node = rootNode->children; node != NULL; node = node->next) {
-		if (strcmp((const char *)node->name, "title")==0) {
+		if (node_is(node, "title")) {
 			f.title = get_content(node);
 			char * type = (char *)xmlGetProp(node, (xmlChar *)"type");
 			if (type) {
@@ -30,23 +30,16 @@ void atom_parser::parse_feed(feed& f, xmlNode * rootNode) {
 			} else {
 				f.title_type = "text";
 			}
-		} else if (strcmp((const char *)node->name, "subtitle")==0) {
+		} else if (node_is(node, "subtitle")) {
 			f.description = get_content(node);
-		} else if (strcmp((const char *)node->name, "link")==0) {
-			char * rel = (char *)xmlGetProp(node, (xmlChar *)"rel");
-			if (rel) {
-				if (strcmp(rel, "alternate")==0) {
-					char * href = (char *)xmlGetProp(node, (xmlChar *)"href");
-					if (href) {
-						f.link = href;
-						xmlFree(href);
-					}
-				}
-				xmlFree(rel);
+		} else if (node_is(node, "link")) {
+			std::string rel = get_prop(node, "rel");
+			if (rel == "alternate") {
+				f.link = get_prop(node, "href");
 			}
-		} else if (strcmp((const char *)node->name, "updated")==0) {
+		} else if (node_is(node, "updated")) {
 			f.pubDate = w3cdtf_to_rfc822(get_content(node));
-		} else if (strcmp((const char *)node->name, "entry")==0) {
+		} else if (node_is(node, "entry")) {
 			f.items.push_back(parse_entry(node));
 		}
 	}
@@ -59,54 +52,40 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 	std::string summary_type;
 
 	for (xmlNode * node = entryNode->children; node != NULL; node = node->next) {
-		if (strcmp((const char *)node->name, "author")==0) {
+		if (node_is(node, "author")) {
 			for (xmlNode * authornode = node->children; authornode != NULL; authornode = authornode->next) {
-				if (strcmp((const char *)authornode->name, "name")==0) {
+				if (node_is(authornode, "name")) {
 					it.author = get_content(authornode);
 				} // TODO: is there more?
 			}
-		} else if (strcmp((const char *)node->name, "title")==0) {
+		} else if (node_is(node, "title")) {
 			it.title = get_content(node);
-			char * type = (char *)xmlGetProp(node, (xmlChar *)"type");
-			if (type) {
-				it.title_type = type;
-				xmlFree(type);
-			} else {
+			it.title_type = get_prop(node, "type");
+			if (it.title_type == "")
 				it.title_type = "text";
-			}
-		} else if (strcmp((const char *)node->name, "content")==0) {
+		} else if (node_is(node, "content")) {
 			it.description = get_content(node);
-			char * type = (char *)xmlGetProp(node, (xmlChar *)"type");
-			if (type) {
-				it.description_type = type;
-				xmlFree(type);
-			} else {
+			it.description_type = get_prop(node, "type");
+			if (it.description_type == "")
 				it.description_type = "text";
-			}
-		} else if (strcmp((const char *)node->name, "id")==0) {
+		} else if (node_is(node, "is")) {
 			it.guid = get_content(node);
 			it.guid_isPermaLink = false;
-		} else if (strcmp((const char *)node->name, "published")==0) {
+		} else if (node_is(node, "published")) {
 			it.pubDate = w3cdtf_to_rfc822(get_content(node));
-		} else if (strcmp((const char *)node->name, "link")==0) {
-			char * rel = (char *)xmlGetProp(node, (xmlChar *)"rel");
-			if (!rel || (rel && (strcmp((const char *)rel, "alternate")==0))) {
-				char * href = (char *)xmlGetProp(node, (xmlChar *)"href");
-				if (href) {
-					it.link = href;
-					xmlFree(href);
-				}
-				xmlFree(rel);
+		} else if (node_is(node, "link")) {
+			std::string rel = get_prop(node, "rel");
+			if (rel == "" || rel == "alternate") {
+				it.link = get_prop(node, "href");
+			} else if (rel == "enclosure") {
+				it.enclosure_url = get_prop(node, "href");
+				it.enclosure_type = get_prop(node, "type");
 			}
-		} else if (strcmp((const char *)node->name, "summary")==0) {
+		} else if (node_is(node, "summary")) {
 			summary = get_content(node);
-			char * type = (char *)xmlGetProp(node, (xmlChar *)"type");
-			if (type) {
-				summary_type = type;
-				xmlFree(type);
-			} else {
+			summary_type = get_prop(node, "type");
+			if (summary_type == "")
 				summary_type = "text";
-			}
 		}
 	} // for
 

@@ -22,18 +22,18 @@ void rss_09x_parser::parse_feed(feed& f, xmlNode * rootNode) {
 		throw exception(_("no RSS channel found"));
 
 	for (xmlNode * node = channel->children; node != NULL; node = node->next) {
-		if (strcmp((const char *)node->name, "title")==0) {
+		if (node_is(node, "title")) {
 			f.title = get_content(node);
 			f.title_type = "text";
-		} else if (strcmp((const char *)node->name, "link")==0) {
+		} else if (node_is(node, "link")) {
 			f.link = get_content(node);
-		} else if (strcmp((const char *)node->name, "description")==0) {
+		} else if (node_is(node, "description")) {
 			f.description = get_content(node);
-		} else if (strcmp((const char *)node->name, "language")==0) {
+		} else if (node_is(node, "language")) {
 			f.language = get_content(node);
-		} else if (strcmp((const char *)node->name, "managingEditor")==0) {
+		} else if (node_is(node, "managingEditor")) {
 			f.managingeditor = get_content(node);
-		} else if (strcmp((const char *)node->name, "item")==0) {
+		} else if (node_is(node, "item")) {
 			f.items.push_back(parse_item(node));
 		}
 	}
@@ -43,33 +43,26 @@ item rss_09x_parser::parse_item(xmlNode * itemNode) {
 	item it;
 
 	for (xmlNode * node = itemNode->children; node != NULL; node = node->next) {
-		if (strcmp((const char *)node->name, "title")==0) {
+		if (node_is(node, "title")) {
 			it.title = get_content(node);
 			it.title_type = "text";
-		} else if (strcmp((const char *)node->name, "link")==0) {
+		} else if (node_is(node, "link")) {
 			it.link = get_content(node);
-		} else if (strcmp((const char *)node->name, "description")==0) {
+		} else if (node_is(node, "description")) {
 			it.description = get_content(node);
-		} else if (strcmp((const char *)node->name, "encoded")==0) {
-			if (node->ns != NULL && node->ns->href != NULL && strcmp((const char *)node->ns->href, CONTENT_URI)==0) {
-				it.content_encoded = get_content(node);
-			}
-		} else if (strcmp((const char *)node->name, "summary")==0) {
-			if (node->ns != NULL && node->ns->href != NULL && strcmp((const char *)node->ns->href, ITUNES_URI)==0) {
-				it.itunes_summary = get_content(node);
-			}
-		} else if (strcmp((const char *)node->name, "guid")==0) {
+		} else if (node_is(node, "encoded", CONTENT_URI)) {
+			it.content_encoded = get_content(node);
+		} else if (node_is(node, "summary", ITUNES_URI)) {
+			it.itunes_summary = get_content(node);
+		} else if (node_is(node, "guid")) {
 			it.guid = get_content(node);
 			it.guid_isPermaLink = false;
-			const char * isPermaLink = (const char *)xmlGetProp(node, (const xmlChar *)"isPermaLink");
-			if (isPermaLink) {
-				if (strcmp(isPermaLink, "true")==0)
-					it.guid_isPermaLink = true;
-				xmlFree((void *)isPermaLink);
-			}
-		} else if (strcmp((const char *)node->name, "pubDate")==0) {
+			std::string isPermaLink = get_prop(node,"isPermaLink");
+			if (isPermaLink == "true")
+				it.guid_isPermaLink = true;
+		} else if (node_is(node, "pubDate")) {
 			it.pubDate = get_content(node);
-		} else if (strcmp((const char *)node->name, "author")==0) {
+		} else if (node_is(node, "author")) {
 			std::string authorfield = get_content(node);
 			if (authorfield[authorfield.length()-1] == ')') {
 				it.author_email = newsbeuter::utils::tokenize(authorfield, " ")[0];
@@ -80,16 +73,18 @@ item rss_09x_parser::parse_item(xmlNode * itemNode) {
 			} else {
 				it.author_email = authorfield;
 			}
-		} else if (strcmp((const char *)node->name, "enclosure")==0) {
-			char * encurl = (char *)xmlGetProp(node, (xmlChar *)"url");
-			char * enctype = (char *)xmlGetProp(node, (xmlChar *)"type");
-			if (encurl) {
-				it.enclosure_url = encurl;
-				xmlFree(encurl);
-			}
-			if (enctype) {
-				it.enclosure_type = enctype;
-				xmlFree(enctype);
+		} else if (node_is(node, "enclosure")) {
+			it.enclosure_url = get_prop(node, "url");
+			it.enclosure_type = get_prop(node, "type");
+		} else if (node_is(node, "content", MEDIA_RSS_URI)) {
+			it.enclosure_url = get_prop(node, "url");
+			it.enclosure_type = get_prop(node, "type");
+		} else if (node_is(node, "group", MEDIA_RSS_URI)) {
+			for (xmlNode * mnode = node->children; mnode != NULL; mnode = mnode->next) {
+				if (node_is(mnode, "content", MEDIA_RSS_URI)) {
+					it.enclosure_url = get_prop(mnode, "url");
+					it.enclosure_type = get_prop(mnode, "type");
+				}
 			}
 		}
 	}
