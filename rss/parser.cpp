@@ -170,6 +170,7 @@ feed parser::parse_xmlnode(xmlNode* node) {
 
 void parser::global_init() {
 	LIBXML_TEST_VERSION
+	curl_global_init(CURL_GLOBAL_ALL);
 }
 
 void parser::global_cleanup() {
