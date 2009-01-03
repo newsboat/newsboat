@@ -3,6 +3,7 @@
  * for more information.
  */
 
+#include <config.h>
 #include <rsspp_internal.h>
 #include <cstring>
 
@@ -11,7 +12,7 @@ namespace rsspp {
 
 void atom_parser::parse_feed(feed& f, xmlNode * rootNode) {
 	if (!rootNode)
-		throw exception(0, "rootNode is NULL");
+		throw exception(_("XML root node is NULL"));
 
 	char * lang = (char *)xmlGetProp(rootNode, (xmlChar *)"lang");
 	if (lang) {

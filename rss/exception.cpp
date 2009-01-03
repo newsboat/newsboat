@@ -8,9 +8,7 @@
 
 namespace rsspp {
 
-exception::exception(unsigned int error_code, const std::string& errmsg) : ecode(error_code), emsg(errmsg) { 
-	buf = std::string(_("Error: "));
-	buf.append(emsg);
+exception::exception(const std::string& errmsg) : emsg(errmsg) { 
 }
 
 exception::~exception() throw() {
@@ -18,7 +16,7 @@ exception::~exception() throw() {
 }
 
 const char* exception::what() const throw() {
-	return buf.c_str();
+	return emsg.c_str();
 }
 
 }

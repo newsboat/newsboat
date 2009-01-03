@@ -110,7 +110,7 @@ bool rss_parser::check_and_update_lastmodified() {
 	}
 	if (i==retry_count && err != 0) {
 		GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: couldn't get a result after %u retries", retry_count);
-		throw rsspp::exception(0, curl_easy_strerror(err));
+		throw rsspp::exception(curl_easy_strerror(err));
 	}
 
 	if (newlm <= 0) {

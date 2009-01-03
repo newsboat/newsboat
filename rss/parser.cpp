@@ -3,6 +3,7 @@
  * for more information.
  */
 
+#include <config.h>
 #include <rsspp.h>
 #include <rsspp_internal.h>
 #include <libxml/parser.h>
@@ -36,7 +37,7 @@ feed parser::parse_url(const std::string& url) {
 
 	CURL * easyhandle = curl_easy_init();
 	if (!easyhandle) {
-		throw exception(0, "curl_easy_init() failed");
+		throw exception(_("couldn't initialize libcurl"));
 	}
 
 	if (ua) {
@@ -64,7 +65,8 @@ feed parser::parse_url(const std::string& url) {
 	GetLogger().log(LOG_DEBUG, "rsspp::parser::parse_url: ret = %d", ret);
 
 	if (ret != 0) {
-		throw exception(0, "curl_easy_perform error");
+		GetLogger().log(LOG_ERROR, "rsspp::parser::parse_url: curl_easy_perform returned err %d: %s", ret, curl_easy_strerror(ret));
+		throw exception(curl_easy_strerror(ret));
 	}
 
 	GetLogger().log(LOG_INFO, "parser::parse_url: retrieved data for %s: %s", url.c_str(), buf.c_str());
@@ -78,7 +80,7 @@ feed parser::parse_url(const std::string& url) {
 feed parser::parse_buffer(const char * buffer, size_t size, const char * url) {
 	doc = xmlReadMemory(buffer, size, url, NULL, XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING);
 	if (doc == NULL) {
-		throw exception(0, "unable to parse buffer");
+		throw exception(_("could not parse buffer"));
 	}
 
 	xmlNode* root_element = xmlDocGetRootElement(doc);
@@ -97,7 +99,7 @@ feed parser::parse_buffer(const char * buffer, size_t size, const char * url) {
 feed parser::parse_file(const std::string& filename) {
 	doc = xmlReadFile(filename.c_str(), NULL, 0);
 	if (doc == NULL) {
-		throw exception(0, "unable to parse file");
+		throw exception(_("could not parse file"));
 	}
 
 	xmlNode* root_element = xmlDocGetRootElement(doc);
@@ -122,7 +124,7 @@ feed parser::parse_xmlnode(xmlNode* node) {
 				const char * version = (const char *)xmlGetProp(node, (const xmlChar *)"version");
 				if (!version) {
 					xmlFree((void *)version);
-					throw exception(0, "no RSS version");
+					throw exception(_("no RSS version"));
 				}
 				if (strcmp(version, "0.91")==0)
 					f.rss_version = RSS_0_91;
@@ -132,7 +134,7 @@ feed parser::parse_xmlnode(xmlNode* node) {
 					f.rss_version = RSS_2_0;
 				else {
 					xmlFree((void *)version);
-					throw exception(0, "invalid RSS version");
+					throw exception(_("invalid RSS version"));
 				}
 				xmlFree((void *)version);
 			} else if (strcmp((const char *)node->name, "RDF")==0) {
@@ -144,10 +146,10 @@ feed parser::parse_xmlnode(xmlNode* node) {
 					} else if (strcmp((const char *)node->ns->href, ATOM_1_0_URI)==0) {
 						f.rss_version = ATOM_1_0;
 					} else {
-						throw exception(0, "invalid Atom version");
+						throw exception(_("invalid Atom version"));
 					}
 				} else {
-					throw exception(0, "no Atom version");
+					throw exception(_("no Atom version"));
 				}
 			}
 
@@ -160,7 +162,7 @@ feed parser::parse_xmlnode(xmlNode* node) {
 			}
 		}
 	} else {
-		// TODO: throw exception
+		throw exception(_("XML root node is NULL"));
 	}
 
 	return f;

@@ -2,6 +2,7 @@
  * Licensed under the MIT/X Consortium License. See file LICENSE 
  * for more information. 
  */
+#include <config.h>
 #include <rsspp_internal.h>
 #include <cstring>
 
@@ -9,7 +10,7 @@ namespace rsspp {
 
 void rss_10_parser::parse_feed(feed& f, xmlNode * rootNode) {
 	if (!rootNode)
-		throw exception(0, "rootNode is NULL");
+		throw exception(_("XML root node is NULL"));
 
 	for (xmlNode * node = rootNode->children; node != NULL; node = node->next) {
 		if (strcmp((const char *)node->name, "channel")==0) {

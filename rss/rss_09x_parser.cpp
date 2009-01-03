@@ -3,6 +3,7 @@
  * for more information.
  */
 
+#include <config.h>
 #include <rsspp_internal.h>
 #include <utils.h>
 #include <cstring>
@@ -11,14 +12,14 @@ namespace rsspp {
 
 void rss_09x_parser::parse_feed(feed& f, xmlNode * rootNode) {
 	if (!rootNode)
-		throw exception(0, "rootNode is NULL");
+		throw exception(_("XML root node is NULL"));
 
 	xmlNode * channel = rootNode->children;
 	while (channel && strcmp((const char *)channel->name, "channel")!=0)
 		channel = channel->next;
 
 	if (!channel)
-		throw exception(0, "no channel found");
+		throw exception(_("no RSS channel found"));
 
 	for (xmlNode * node = channel->children; node != NULL; node = node->next) {
 		if (strcmp((const char *)node->name, "title")==0) {

@@ -57,13 +57,11 @@ struct feed {
 
 class exception : public std::exception {
 	public:
-		exception(unsigned int error_code = 0, const std::string& errmsg = "");
+		exception(const std::string& errmsg = "");
 		~exception() throw();
 		virtual const char* what() const throw();
 	private:
-		unsigned int ecode;
 		std::string emsg;
-		std::string buf;
 };
 
 class parser {

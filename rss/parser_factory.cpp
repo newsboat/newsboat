@@ -3,6 +3,7 @@
  * for more information.
  */
 
+#include <config.h>
 #include <rsspp_internal.h>
 
 namespace rsspp {
@@ -21,7 +22,7 @@ std::tr1::shared_ptr<rss_parser> rss_parser_factory::get_object(feed& f) {
 			return std::tr1::shared_ptr<rss_parser>(new atom_parser());
 		case UNKNOWN:
 		default:
-			throw exception(0, "unsupported RSS format");
+			throw exception(_("unsupported feed format"));
 	}
 }
 
