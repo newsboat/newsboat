@@ -57,7 +57,7 @@ AR=ar
 STFLHDRS:=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
 POFILES:=$(wildcard po/*.po)
 MOFILES:=$(patsubst %.po,%.mo,$(POFILES))
-POTFILE=po/$(PACKAGE).pot
+POTFILE=po/newsbeuter.pot
 
 STFLCONV=./stfl2h.pl
 RM=rm -f
@@ -160,7 +160,7 @@ uninstall:
 
 extract:
 	$(RM) $(POTFILE)
-	xgettext -k_ -o $(POTFILE) *.cpp src/*.cpp
+	xgettext -k_ -o $(POTFILE) *.cpp src/*.cpp rss/*.cpp
 
 msgmerge:
 	for f in $(POFILES) ; do msgmerge -U $$f $(POTFILE) ; done
