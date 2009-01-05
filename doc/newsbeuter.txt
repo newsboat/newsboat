@@ -646,7 +646,7 @@ Examples for possible highlighting configurations are:
 
 	highlight all "newsbeuter" red
 	highlight article "^(Feed|Title|Author|Link|Date):" default default underline
-	highlight feedlist "http?s://[^ ]+" yellow red bold
+	highlight feedlist "https?://[^ ]+" yellow red bold
 
 
 Advanced Dialog Management
