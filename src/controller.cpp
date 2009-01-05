@@ -1065,7 +1065,9 @@ std::string controller::generate_enqueue_filename(const std::string& url, std::t
 
 	std::string dlpath = fmt.do_format(dlformat);
 
-	char * base = basename(url.c_str());
+	char buf[2048];
+	snprintf(buf, sizeof(buf), "%s", url.c_str());
+	char * base = basename(buf);
 	if (!base || strlen(base) == 0) {
 		char lbuf[128];
 		time_t t = time(NULL);
