@@ -449,9 +449,7 @@ std::string htmlrenderer::type2str(link_type type) {
 
 void htmlrenderer::prepare_newline(std::string& line, int indent_level) {
 	line = "";
-	for (int i=0;i<indent_level;++i) {
-		line.append("  ");	
-	}
+	line.append(indent_level*2, ' ');
 }
 
 bool htmlrenderer::line_is_nonempty(const std::string& line) {

@@ -222,11 +222,10 @@ bool utils::try_fs_lock(const std::string& lock_file, pid_t & pid) {
 
 	// then we lock it (T_LOCK returns immediately if locking is not possible)
 	if (lockf(fd, F_TLOCK, 0) == 0) {
-		char buf[32];
-		snprintf(buf, sizeof(buf), "%u", getpid());
+		std::string pid = utils::to_s(getpid());
 		// locking successful -> truncate file and write own PID into it
 		ftruncate(fd, 0);
-		write(fd, buf, strlen(buf));
+		write(fd, pid.c_str(), pid.length());
 		return true;
 	}
 
@@ -235,7 +234,7 @@ bool utils::try_fs_lock(const std::string& lock_file, pid_t & pid) {
 	if (fd >= 0) {
 		char buf[32];
 		int len = read(fd, buf, sizeof(buf)-1);
-		unsigned int upid;
+		unsigned int upid = 0;
 		buf[len] = '\0';
 		sscanf(buf, "%u", &upid);
 		pid = upid;
