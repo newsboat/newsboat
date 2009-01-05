@@ -418,37 +418,37 @@ void rss_feed::set_rssurl(const std::string& u) {
 	}
 }
 
-struct sort_item_by_title : public std::binary_function<const std::tr1::shared_ptr<rss_item>&, const std::tr1::shared_ptr<rss_item>&, bool> {
+struct sort_item_by_title : public std::binary_function<std::tr1::shared_ptr<rss_item>, std::tr1::shared_ptr<rss_item>, bool> {
 	sort_item_by_title() { }
-	bool operator()(const std::tr1::shared_ptr<rss_item>& a, const std::tr1::shared_ptr<rss_item>& b) {
+	bool operator()(std::tr1::shared_ptr<rss_item> a, std::tr1::shared_ptr<rss_item> b) {
 		return strcasecmp(a->title().c_str(), b->title().c_str()) < 0;
 	}
 };
 
-struct sort_item_by_flags : public std::binary_function<const std::tr1::shared_ptr<rss_item>&, const std::tr1::shared_ptr<rss_item>&, bool> {
+struct sort_item_by_flags : public std::binary_function<std::tr1::shared_ptr<rss_item>, std::tr1::shared_ptr<rss_item>, bool> {
 	sort_item_by_flags() { }
-	bool operator()(const std::tr1::shared_ptr<rss_item>& a, const std::tr1::shared_ptr<rss_item>& b) {
+	bool operator()(std::tr1::shared_ptr<rss_item> a, std::tr1::shared_ptr<rss_item> b) {
 		return strcmp(a->flags().c_str(), b->flags().c_str()) < 0;
 	}
 };
 
-struct sort_item_by_author : public std::binary_function<const std::tr1::shared_ptr<rss_item>&, const std::tr1::shared_ptr<rss_item>&, bool> {
+struct sort_item_by_author : public std::binary_function<std::tr1::shared_ptr<rss_item>, std::tr1::shared_ptr<rss_item>, bool> {
 	sort_item_by_author() { }
-	bool operator()(const std::tr1::shared_ptr<rss_item>& a, const std::tr1::shared_ptr<rss_item>& b) {
+	bool operator()(std::tr1::shared_ptr<rss_item> a, std::tr1::shared_ptr<rss_item> b) {
 		return strcmp(a->author().c_str(), b->author().c_str()) < 0;
 	}
 };
 
-struct sort_item_by_link : public std::binary_function<const std::tr1::shared_ptr<rss_item>&, const std::tr1::shared_ptr<rss_item>&, bool> {
+struct sort_item_by_link : public std::binary_function<std::tr1::shared_ptr<rss_item>, std::tr1::shared_ptr<rss_item>, bool> {
 	sort_item_by_link() { }
-	bool operator()(const std::tr1::shared_ptr<rss_item>& a, const std::tr1::shared_ptr<rss_item>& b) {
+	bool operator()(std::tr1::shared_ptr<rss_item> a, std::tr1::shared_ptr<rss_item> b) {
 		return strcmp(a->link().c_str(), b->link().c_str()) < 0;
 	}
 };
 
-struct sort_item_by_guid : public std::binary_function<const std::tr1::shared_ptr<rss_item>&, const std::tr1::shared_ptr<rss_item>&, bool> {
+struct sort_item_by_guid : public std::binary_function<std::tr1::shared_ptr<rss_item>, std::tr1::shared_ptr<rss_item>, bool> {
 	sort_item_by_guid() { }
-	bool operator()(const std::tr1::shared_ptr<rss_item>& a, const std::tr1::shared_ptr<rss_item>& b) {
+	bool operator()(std::tr1::shared_ptr<rss_item> a, std::tr1::shared_ptr<rss_item> b) {
 		return strcmp(a->guid().c_str(), b->guid().c_str()) < 0;
 	}
 };

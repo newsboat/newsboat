@@ -1124,9 +1124,9 @@ void controller::export_read_information(const std::string& readinfofile) {
 	}
 }
 
-struct sort_feeds_by_firsttag : public std::binary_function<const std::tr1::shared_ptr<rss_feed>&, const std::tr1::shared_ptr<rss_feed>&, bool> {
+struct sort_feeds_by_firsttag : public std::binary_function<std::tr1::shared_ptr<rss_feed>, std::tr1::shared_ptr<rss_feed>, bool> {
 	sort_feeds_by_firsttag() { }
-	bool operator()(const std::tr1::shared_ptr<rss_feed>& a, const std::tr1::shared_ptr<rss_feed>& b) {
+	bool operator()(std::tr1::shared_ptr<rss_feed> a, std::tr1::shared_ptr<rss_feed> b) {
 		if (a->get_firsttag().length() == 0 || b->get_firsttag().length() == 0) {
 			return a->get_firsttag().length() > b->get_firsttag().length();
 		}

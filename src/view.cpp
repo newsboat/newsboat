@@ -492,7 +492,7 @@ char view::confirm(const std::string& prompt, const std::string& charset) {
 	return result;
 }
 
-void view::notify_itemlist_change(std::tr1::shared_ptr<rss_feed>& feed) {
+void view::notify_itemlist_change(std::tr1::shared_ptr<rss_feed> feed) {
 	for (std::vector<std::tr1::shared_ptr<formaction> >::iterator it=formaction_stack.begin();it!=formaction_stack.end();it++) {
 		if (*it != NULL && (*it)->id() == "articlelist") {
 			std::tr1::shared_ptr<itemlist_formaction> itemlist = std::tr1::dynamic_pointer_cast<itemlist_formaction, formaction>(*it);

@@ -73,7 +73,7 @@ namespace newsbeuter {
 
 			void set_colors(std::map<std::string,std::string>& fg_colors, std::map<std::string,std::string>& bg_colors, std::map<std::string,std::vector<std::string> >& attributes);
 
-			void notify_itemlist_change(std::tr1::shared_ptr<rss_feed>& feed);
+			void notify_itemlist_change(std::tr1::shared_ptr<rss_feed> feed);
 
 			std::string ask_user(const std::string& prompt);
 

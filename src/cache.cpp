@@ -504,7 +504,7 @@ std::vector<std::tr1::shared_ptr<rss_item> > cache::search_for_items(const std::
 	return items;
 }
 
-void cache::delete_item(const std::tr1::shared_ptr<rss_item>& item) {
+void cache::delete_item(const std::tr1::shared_ptr<rss_item> item) {
 	std::string query = prepare_query("DELETE FROM rss_item WHERE guid = '%q';",item->guid().c_str());
 	GetLogger().log(LOG_DEBUG,"running query: %s",query.c_str());
 	int rc = sqlite3_exec(db,query.c_str(),NULL,NULL,NULL);
@@ -586,12 +586,12 @@ void cache::cleanup_cache(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
 }
 
 /* this function writes an rss_item to the database, also checking whether this item already exists in the database */
-void cache::update_rssitem(std::tr1::shared_ptr<rss_item>& item, const std::string& feedurl, bool reset_unread) {
+void cache::update_rssitem(std::tr1::shared_ptr<rss_item> item, const std::string& feedurl, bool reset_unread) {
 	scope_mutex lock(mtx);
 	update_rssitem_unlocked(item, feedurl, reset_unread);
 }
 
-void cache::update_rssitem_unlocked(std::tr1::shared_ptr<rss_item>& item, const std::string& feedurl, bool reset_unread) {
+void cache::update_rssitem_unlocked(std::tr1::shared_ptr<rss_item> item, const std::string& feedurl, bool reset_unread) {
 	std::string query = prepare_query("SELECT count(*) FROM rss_item WHERE guid = '%q';",item->guid().c_str());
 	cb_handler count_cbh;
 	GetLogger().log(LOG_DEBUG,"running query: %s", query.c_str());
@@ -716,7 +716,7 @@ void cache::update_rssitem_unread_and_enqueued(rss_item* item, const std::string
 }
 
 /* this function updates the unread and enqueued flags */
-void cache::update_rssitem_unread_and_enqueued(std::tr1::shared_ptr<rss_item>& item, const std::string& feedurl) {
+void cache::update_rssitem_unread_and_enqueued(std::tr1::shared_ptr<rss_item> item, const std::string& feedurl) {
 	scope_mutex lock(mtx);
 
 	std::string query = prepare_query("SELECT count(*) FROM rss_item WHERE guid = '%q';",item->guid().c_str());
@@ -778,7 +778,7 @@ void cache::update_rssitem_flags(rss_item* item) {
 	}
 }
 
-void cache::update_rssitem_flags(std::tr1::shared_ptr<rss_item>& item) {
+void cache::update_rssitem_flags(std::tr1::shared_ptr<rss_item> item) {
 	scope_mutex lock(mtx);
 
 	std::string update = prepare_query("UPDATE rss_item SET flags = '%q' WHERE guid = '%q';", item->flags().c_str(), item->guid().c_str());
