@@ -195,6 +195,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					case TAG_LI:
 						if (inside_li) {
 							indent_level-=2;
+							if (indent_level < 0) indent_level = 0;
 							if (line_is_nonempty(curline))
 								lines.push_back(curline);
 							prepare_newline(curline, indent_level);	
@@ -258,8 +259,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				switch (current_tag) {
 					case TAG_BLOCKQUOTE:
 						--indent_level;
-						if (indent_level < 0)
-							indent_level = 0;
+						if (indent_level < 0) indent_level = 0;
 						if (line_is_nonempty(curline))
 							lines.push_back(curline);
 						lines.push_back("");
@@ -271,6 +271,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						inside_list = false;
 						if (inside_li) {
 							indent_level-=2;
+							if (indent_level < 0) indent_level = 0;
 							if (line_is_nonempty(curline))
 								lines.push_back(curline);
 							prepare_newline(curline, indent_level);
@@ -290,6 +291,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 
 					case TAG_DD:
 						indent_level-=4;
+						if (indent_level < 0) indent_level = 0;
 						if (line_is_nonempty(curline))
 							lines.push_back(curline);
 						lines.push_back("");
@@ -302,6 +304,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 
 					case TAG_LI:
 						indent_level-=2;
+						if (indent_level < 0) indent_level = 0;
 						inside_li = false;
 						if (line_is_nonempty(curline))
 							lines.push_back(curline);
