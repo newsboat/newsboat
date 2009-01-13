@@ -892,7 +892,8 @@ void controller::reload_urls_file() {
 			try {
 				rsscache->internalize_rssfeed(new_feed);
 			} catch(const dbexception& e) {
-				throw e; // TODO ?
+				GetLogger().log(LOG_ERROR, "controller::reload_urls_file: caught exception: %s", e.what());
+				throw e;
 			}
 			new_feeds.push_back(new_feed);
 		}
