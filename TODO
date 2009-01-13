@@ -6,9 +6,6 @@ TODO:
 - when reload is finished, the focus shall be in the current form's list
 - per-feed refresh settings
 
-- implement own RSS parser
-	- implement Atom parsing
-	- fix TODOs in src/rss_parser.cpp
 
 DONE:
 - clean up items that have been added but whose URL has been removed from the config file.
@@ -136,3 +133,5 @@ DONE:
 - implement mark-as-read-on-hover
 - implement own RSS parser
 	- fix encoding issues
+	- implement Atom parsing
+	- fix TODOs in src/rss_parser.cpp
