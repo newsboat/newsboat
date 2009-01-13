@@ -50,13 +50,14 @@ class dbexception : public std::exception {
 
 class matcherexception : public std::exception {
 	public:
-		enum errortype_t { ATTRIB_UNAVAIL };
-		matcherexception(errortype_t et, const std::string& info) : type(et), addinfo(info) { }
+		enum errortype_t { ATTRIB_UNAVAIL, INVALID_REGEX };
+		matcherexception(errortype_t et, const std::string& info, const std::string& info2 = "") : type(et), addinfo(info), addinfo2(info2) { }
 		virtual ~matcherexception() throw() { }
 		virtual const char * what() const throw();
 	private:
 		errortype_t type;
 		std::string addinfo;
+		std::string addinfo2;
 };
 
 }

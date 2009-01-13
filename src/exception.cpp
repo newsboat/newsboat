@@ -22,6 +22,9 @@ const char * matcherexception::what() const throw() {
 		case ATTRIB_UNAVAIL:
 			errmsg = utils::strprintf(_("attribute `%s' is not available."), addinfo.c_str());
 			break;
+		case INVALID_REGEX:
+			errmsg = utils::strprintf(_("regular expression '%s' is invalid: %s"), addinfo.c_str(), addinfo2.c_str());
+			break;
 		default:
 			errmsg = "";
 	}

@@ -213,7 +213,7 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 					filterhistory.add_line(newfilter);
 					if (newfilter.length() > 0) {
 						if (!m.parse(newfilter)) {
-							v->show_error(_("Error: couldn't parse filter command!"));
+							v->show_error(utils::strprintf(_("Error: couldn't parse filter command `%s': %s"), newfilter.c_str(), m.get_parse_error().c_str()));
 							m.parse(FILTER_UNREAD_FEEDS);
 						} else {
 							save_filterpos();

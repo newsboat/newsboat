@@ -88,7 +88,12 @@ bool matcher::matchop_rxeq(expression * e, matchable * item) {
 		throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
 	if (!e->regex) {
 		e->regex = new regex_t;
-		regcomp(e->regex, e->literal.c_str(), REG_EXTENDED | REG_ICASE | REG_NOSUB); // TODO: see below
+		int err;
+		if ((err = regcomp(e->regex, e->literal.c_str(), REG_EXTENDED | REG_ICASE | REG_NOSUB)) != 0) {
+			char buf[1024];
+			regerror(err, e->regex, buf, sizeof(buf));
+			throw matcherexception(matcherexception::INVALID_REGEX, e->literal, buf);
+		}
 	}
 	if (regexec(e->regex, item->get_attribute(e->name).c_str(), 0, NULL, 0)==0)
 		return true;
