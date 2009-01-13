@@ -309,7 +309,14 @@ void controller::run(int argc, char * argv[]) {
 		std::cout << _("Opening cache...");
 		std::cout.flush();
 	}
-	rsscache = new cache(cache_file,cfg);
+	try {
+		rsscache = new cache(cache_file,cfg);
+	} catch (const dbexception& e) {
+		std::cout << utils::strprintf(_("Error: opening the cache file `%s' failed: %s"), cache_file.c_str(), e.what()) << std::endl;
+		::unlink(lock_file.c_str());
+		::exit(EXIT_FAILURE);
+	}
+
 	if (!silent) {
 		std::cout << _("done.") << std::endl;
 	}

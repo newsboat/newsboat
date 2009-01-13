@@ -176,12 +176,9 @@ cache::cache(const std::string& cachefile, configcontainer * c) : db(0),cfg(c), 
 		file_exists = true;
 	}
 	int error = sqlite3_open(cachefile.c_str(),&db);
-	// TODO: this should be refactored into an exception
 	if (error != SQLITE_OK) {
 		GetLogger().log(LOG_ERROR,"couldn't sqlite3_open(%s): error = %d", cachefile.c_str(), error);
-		std::cout << utils::strprintf(_("Error: opening the cache file `%s' failed: %s"), cachefile.c_str(), sqlite3_errmsg(db)) << std::endl;
-		sqlite3_close(db);
-		::exit(EXIT_FAILURE);
+		throw dbexception(db);
 	}
 
 	populate_tables();
