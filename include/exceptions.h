@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <configparser.h>
 
 #include <sqlite3.h>
 
@@ -23,6 +24,18 @@ class configexception : public std::exception {
 		virtual ~configexception() throw() { }
 		virtual const char * what() const throw() { return msg.c_str(); }
 	private:
+		std::string msg;
+};
+
+class confighandlerexception : public std::exception {
+	public:
+		confighandlerexception(const std::string& emsg) { msg = emsg; }
+		confighandlerexception(action_handler_status e);
+		virtual ~confighandlerexception() throw() { }
+		virtual const char * what() const throw() { return msg.c_str(); }
+		int status() { return 0; }
+	private:
+		const char * get_errmsg(action_handler_status e);
 		std::string msg;
 };
 

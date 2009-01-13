@@ -144,7 +144,7 @@ namespace newsbeuter {
 			std::vector<macrocmd> get_macro(const std::string& key);
 			char get_key(const std::string& keycode);
 			std::string getkey(operation op, const std::string& context);
-			virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
+			virtual void handle_action(const std::string& action, const std::vector<std::string>& params);
 			void get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned short flags);
 			unsigned short get_flag_from_context(const std::string& context);
 		private:

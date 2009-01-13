@@ -19,6 +19,7 @@ namespace newsbeuter {
 			matcher(const std::string& expr);
 			bool parse(const std::string& expr);
 			bool matches(matchable* item);
+			const std::string& get_parse_error();
 		private:
 			bool matches_r(expression * e, matchable * item);
 
@@ -30,6 +31,7 @@ namespace newsbeuter {
 
 			FilterParser p;
 			bool success;
+			std::string errmsg;
 	};
 
 }

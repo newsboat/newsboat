@@ -27,6 +27,10 @@ bool matcher::parse(const std::string& expr) {
 
 	bool b = p.parse_string(expr);
 
+	if (!b) {
+		errmsg = utils::wstr2str(p.get_error());
+	}
+
 	gettimeofday(&tv2, NULL);
 	unsigned long diff = (((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) - tv1.tv_usec;
 	GetLogger().log(LOG_DEBUG, "matcher::parse: parsing `%s' took %lu µs (success = %d)", expr.c_str(), diff, b ? 1 : 0);
@@ -161,6 +165,10 @@ bool matcher::matches_r(expression * e, matchable * item) {
 	} else {
 		return true; // shouldn't happen
 	}
+}
+
+const std::string& matcher::get_parse_error() {
+	return errmsg;
 }
 
 }

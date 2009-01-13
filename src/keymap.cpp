@@ -3,6 +3,8 @@
 #include <vector>
 #include <iostream>
 #include <config.h>
+#include <exceptions.h>
+#include <utils.h>
 
 namespace newsbeuter {
 	
@@ -205,41 +207,34 @@ operation keymap::get_operation(const std::string& keycode, const std::string& c
 	return keymap_[context][key];
 }
 
-action_handler_status keymap::handle_action(const std::string& action, const std::vector<std::string>& params) {
+void keymap::handle_action(const std::string& action, const std::vector<std::string>& params) {
 	/*
 	 * The keymap acts as config_action_handler so that all the key-related configuration is immediately
 	 * handed to it.
 	 */
 	GetLogger().log(LOG_DEBUG,"keymap::handle_action(%s, ...) called",action.c_str());
 	if (action == "bind-key") {
-		if (params.size() < 2) {
-			return AHS_TOO_FEW_PARAMS;
-		} else {
-			std::string context = "all";
-			if (params.size() >= 3)
-				context = params[2];
-			if (!is_valid_context(context))
-				return AHS_INVALID_PARAMS;
-			operation op = get_opcode(params[1]);
-			if (op > OP_SK_MIN && op < OP_SK_MAX)
-				unset_key(getkey(op, context), context);
-			set_key(op, params[0], context);
-			return AHS_OK;
-		}
+		if (params.size() < 2)
+			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
+		std::string context = "all";
+		if (params.size() >= 3)
+			context = params[2];
+		if (!is_valid_context(context))
+			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid context"), context.c_str()));
+		operation op = get_opcode(params[1]);
+		if (op > OP_SK_MIN && op < OP_SK_MAX)
+			unset_key(getkey(op, context), context);
+		set_key(op, params[0], context);
 	} else if (action == "unbind-key") {
-		if (params.size() < 1) {
-			return AHS_TOO_FEW_PARAMS;
-		} else {
-			std::string context = "all";
-			if (params.size() >= 2)
-				context = params[1];
-			unset_key(params[0], context);
-			return AHS_OK;	
-		}
+		if (params.size() < 1)
+			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
+		std::string context = "all";
+		if (params.size() >= 2)
+			context = params[1];
+		unset_key(params[0], context);
 	} else if (action == "macro") {
-		if (params.size() < 1) {
-			return AHS_TOO_FEW_PARAMS;
-		}
+		if (params.size() < 1)
+			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
 		std::vector<std::string>::const_iterator it = params.begin();
 		std::string macrokey = *it;
 		std::vector<macrocmd> cmds;
@@ -253,7 +248,7 @@ action_handler_status keymap::handle_action(const std::string& action, const std
 				tmpcmd.op = get_opcode(*it);
 				GetLogger().log(LOG_DEBUG, "keymap::handle_action: new operation `%s' (op = %u)", it->c_str(), tmpcmd.op);
 				if (tmpcmd.op == OP_NIL)
-					return AHS_INVALID_PARAMS;
+					throw confighandlerexception(utils::strprintf(_("`%s' is not a valid key command"), it->c_str()));
 				first = false;
 			} else {
 				if (*it == ";") {
@@ -273,9 +268,8 @@ action_handler_status keymap::handle_action(const std::string& action, const std
 			cmds.push_back(tmpcmd);
 
 		macros_[macrokey] = cmds;
-		return AHS_OK;
 	} else
-		return AHS_INVALID_PARAMS;
+		throw confighandlerexception(AHS_INVALID_PARAMS);
 }
 
 std::string keymap::getkey(operation op, const std::string& context) {

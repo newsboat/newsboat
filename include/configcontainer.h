@@ -22,7 +22,7 @@ public:
 	configcontainer();
 	virtual ~configcontainer();
 	void register_commands(configparser& cfgparser);
-	virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
+	virtual void handle_action(const std::string& action, const std::vector<std::string>& params);
 	bool get_configvalue_as_bool(const std::string& key);
 	int get_configvalue_as_int(const std::string& key);
 	std::string get_configvalue(const std::string& key);

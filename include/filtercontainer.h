@@ -11,7 +11,7 @@ class filtercontainer : public config_action_handler {
 	public:
 		filtercontainer() { }
 		virtual ~filtercontainer();
-		virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
+		virtual void handle_action(const std::string& action, const std::vector<std::string>& params);
 		inline std::vector<filter_name_expr_pair>& get_filters() { return filters; }
 		inline unsigned int size() { return filters.size(); }
 	private:

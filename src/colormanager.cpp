@@ -10,6 +10,8 @@
 #include <filebrowser_formaction.h>
 #include <urlview_formaction.h>
 #include <select_formaction.h>
+#include <exceptions.h>
+#include <config.h>
 
 using namespace podbeuter;
 
@@ -23,11 +25,11 @@ void colormanager::register_commands(configparser& cfgparser) {
 	cfgparser.register_handler("color", this);
 }
 
-action_handler_status colormanager::handle_action(const std::string& action, const std::vector<std::string>& params) {
+void colormanager::handle_action(const std::string& action, const std::vector<std::string>& params) {
 	GetLogger().log(LOG_DEBUG, "colormanager::handle_action(%s,...) was called",action.c_str());
 	if (action == "color") {
 		if (params.size() < 3) {
-			return AHS_TOO_FEW_PARAMS;
+			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
 		}
 
 		/*
@@ -38,13 +40,15 @@ action_handler_status colormanager::handle_action(const std::string& action, con
 		std::string fgcolor = params[1];
 		std::string bgcolor = params[2];
 
-		if (!utils::is_valid_color(fgcolor) || !utils::is_valid_color(bgcolor))
-			return AHS_INVALID_PARAMS;
-
+		if (!utils::is_valid_color(fgcolor))
+			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), fgcolor.c_str()));
+		if (!utils::is_valid_color(bgcolor))
+			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), bgcolor.c_str()));
+		
 		std::vector<std::string> attribs;
 		for (unsigned int i=3;i<params.size();++i) {
 			if (!utils::is_valid_attribute(params[i]))
-				return AHS_INVALID_PARAMS;
+				throw confighandlerexception(utils::strprintf(_("`%s' is not a valid attribute"), params[i].c_str()));
 			attribs.push_back(params[i]);
 		}
 
@@ -54,12 +58,11 @@ action_handler_status colormanager::handle_action(const std::string& action, con
 			bg_colors[element] = bgcolor;
 			attributes[element] = attribs;
 			colors_loaded_ = true;
-			return AHS_OK;
 		} else
-			return AHS_INVALID_PARAMS;
+			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid configuration element")));
 
 	} else
-		return AHS_INVALID_COMMAND;
+		throw confighandlerexception(AHS_INVALID_COMMAND);
 }
 
 /*

@@ -146,15 +146,43 @@ BOOST_AUTO_TEST_CASE(TestConfigParserContainerAndKeymap) {
 	BOOST_CHECK_EQUAL(k.get_key("^A"), '\001');
 
 	std::vector<std::string> params;
-	BOOST_CHECK_EQUAL(k.handle_action("bind-key", params), AHS_TOO_FEW_PARAMS);
-	BOOST_CHECK_EQUAL(k.handle_action("unbind-key", params), AHS_TOO_FEW_PARAMS);
-	BOOST_CHECK_EQUAL(k.handle_action("macro", params), AHS_TOO_FEW_PARAMS);
+	try {
+		k.handle_action("bind-key", params);
+	} catch (const confighandlerexception& e) {
+		BOOST_CHECK(std::string(e.what()).length() > 0);
+	}
+	try {
+		k.handle_action("unbind-key", params);
+	} catch (const confighandlerexception& e) {
+		BOOST_CHECK(std::string(e.what()).length() > 0);
+	}
+	try {
+		k.handle_action("macro", params);
+	} catch (const confighandlerexception& e) {
+		BOOST_CHECK(std::string(e.what()).length() > 0);
+	}
 	params.push_back("r");
-	BOOST_CHECK_EQUAL(k.handle_action("bind-key", params), AHS_TOO_FEW_PARAMS);
-	BOOST_CHECK_EQUAL(k.handle_action("unbind-key", params), AHS_OK);
+	try {
+		k.handle_action("bind-key", params);
+	} catch (const confighandlerexception& e) {
+		BOOST_CHECK(std::string(e.what()).length() > 0);
+	}
+	try {
+		k.handle_action("unbind-key", params);
+	} catch (const confighandlerexception& e) {
+		BOOST_CHECK_EQUAL(std::string(e.what()).length(), 0u);
+	}
 	params.push_back("open");
-	BOOST_CHECK_EQUAL(k.handle_action("bind-key", params), AHS_OK);
-	BOOST_CHECK_EQUAL(k.handle_action("an-invalid-action", params), AHS_INVALID_PARAMS);
+	try {
+		k.handle_action("bind-key", params);
+	} catch (const confighandlerexception& e) {
+		BOOST_CHECK_EQUAL(std::string(e.what()).length(), 0u);
+	}
+	try {
+		k.handle_action("an-invalid-action", params);
+	} catch (const confighandlerexception& e) {
+		BOOST_CHECK(std::string(e.what()).length() > 0);
+	}
 }
 
 BOOST_AUTO_TEST_CASE(TestTagSoupPullParser) {
@@ -300,18 +328,18 @@ BOOST_AUTO_TEST_CASE(TestFilterLanguage) {
 	FilterParser fp;
 
 	// test parser
-	BOOST_CHECK_EQUAL(fp.parse_string("a = \"b\""), true);
-	BOOST_CHECK_EQUAL(fp.parse_string("a = \"b"), false);
-	BOOST_CHECK_EQUAL(fp.parse_string("a = b"), false);
-	BOOST_CHECK_EQUAL(fp.parse_string("(a=\"b\")"), true);
-	BOOST_CHECK_EQUAL(fp.parse_string("((a=\"b\"))"), true);
-	BOOST_CHECK_EQUAL(fp.parse_string("((a=\"b\")))"), false);
+	BOOST_CHECK_MESSAGE(fp.parse_string("a = \"b\""), utils::wstr2str(fp.get_error()).c_str());
+	BOOST_CHECK_MESSAGE(!fp.parse_string("a = \"b"), utils::wstr2str(fp.get_error()).c_str());
+	BOOST_CHECK_MESSAGE(!fp.parse_string("a = b"), utils::wstr2str(fp.get_error()).c_str());
+	BOOST_CHECK_MESSAGE(fp.parse_string("(a=\"b\")"), utils::wstr2str(fp.get_error()).c_str());
+	BOOST_CHECK_MESSAGE(fp.parse_string("((a=\"b\"))"), utils::wstr2str(fp.get_error()).c_str());
+	BOOST_CHECK_MESSAGE(!fp.parse_string("((a=\"b\")))"), utils::wstr2str(fp.get_error()).c_str());
 
 	// test operators
-	BOOST_CHECK_EQUAL(fp.parse_string("a != \"b\""), true);
-	BOOST_CHECK_EQUAL(fp.parse_string("a =~ \"b\""), true);
-	BOOST_CHECK_EQUAL(fp.parse_string("a !~ \"b\""), true);
-	BOOST_CHECK_EQUAL(fp.parse_string("a !! \"b\""), false);
+	BOOST_CHECK_MESSAGE(fp.parse_string("a != \"b\""), utils::wstr2str(fp.get_error()).c_str());
+	BOOST_CHECK_MESSAGE(fp.parse_string("a =~ \"b\""), utils::wstr2str(fp.get_error()).c_str());
+	BOOST_CHECK_MESSAGE(fp.parse_string("a !~ \"b\""), utils::wstr2str(fp.get_error()).c_str());
+	BOOST_CHECK_MESSAGE(!fp.parse_string("a !! \"b\""), utils::wstr2str(fp.get_error()).c_str());
 
 	// complex query
 	BOOST_CHECK_EQUAL(fp.parse_string("( a = \"b\") and ( b = \"c\" ) or ( ( c != \"d\" ) and ( c !~ \"asdf\" )) or c != \"xx\""), true);
@@ -516,13 +544,21 @@ BOOST_AUTO_TEST_CASE(TestRegexManager) {
 	regexmanager rxman;
 
 	std::vector<std::string> params;
-	BOOST_CHECK_EQUAL(rxman.handle_action("highlight", params), AHS_TOO_FEW_PARAMS);
+	try {
+		rxman.handle_action("highlight", params);
+	} catch (const confighandlerexception& e) {
+		BOOST_CHECK(std::string(e.what()).length() > 0);
+	}
 	params.push_back("articlelist");
 	params.push_back("foo");
 	params.push_back("blue");
 	params.push_back("red");
 
-	BOOST_CHECK_EQUAL(rxman.handle_action("highlight", params), AHS_OK);
+	try {
+		rxman.handle_action("highlight", params);
+	} catch (const confighandlerexception& e) {
+		BOOST_CHECK_EQUAL(std::string(e.what()).length(), 0u);
+	}
 
 	std::string str = "xfoox";
 	rxman.quote_and_highlight(str, "articlelist");
@@ -533,28 +569,52 @@ BOOST_AUTO_TEST_CASE(TestRegexManager) {
 	BOOST_CHECK_EQUAL(str, "xfoox");
 
 	params[0] = "feedlist";
-	BOOST_CHECK_EQUAL(rxman.handle_action("highlight", params), AHS_OK);
+	try {
+		rxman.handle_action("highlight", params);
+	} catch (const confighandlerexception& e) {
+		BOOST_CHECK_EQUAL(std::string(e.what()).length(), 0u);
+	}
 
 	str = "yfooy";
 	rxman.quote_and_highlight(str, "feedlist");
 	BOOST_CHECK_EQUAL(str, "y<0>foo</>y");
 
 	params[0] = "invalidloc";
-	BOOST_CHECK_EQUAL(rxman.handle_action("highlight", params), AHS_INVALID_PARAMS);
+	try {
+		rxman.handle_action("highlight", params);
+	} catch (const confighandlerexception& e) {
+		BOOST_CHECK(std::string(e.what()).length() > 0);
+	}
 
 	params[0] = "feedlist";
 	params[1] = "*";
-	BOOST_CHECK_EQUAL(rxman.handle_action("highlight", params), AHS_INVALID_PARAMS);
+	try {
+		rxman.handle_action("highlight", params);
+	} catch (const confighandlerexception& e) {
+		BOOST_CHECK(std::string(e.what()).length() > 0);
+	}
 
 	params[1] = "foo";
 	params.push_back("bold");
 	params.push_back("underline");
-	BOOST_CHECK_EQUAL(rxman.handle_action("highlight", params), AHS_OK);
+	try {
+		rxman.handle_action("highlight", params);
+	} catch (const confighandlerexception& e) {
+		BOOST_CHECK_EQUAL(std::string(e.what()).length(), 0u);
+	}
 
 	params[0] = "all";
-	BOOST_CHECK_EQUAL(rxman.handle_action("highlight", params), AHS_OK);
+	try {
+		rxman.handle_action("highlight", params);
+	} catch (const confighandlerexception& e) {
+		BOOST_CHECK_EQUAL(std::string(e.what()).length(), 0u);
+	}
 
-	BOOST_CHECK_EQUAL(rxman.handle_action("invalidcommand", params), AHS_INVALID_COMMAND);
+	try {
+		rxman.handle_action("an-invalid-command", params);
+	} catch (const confighandlerexception& e) {
+		BOOST_CHECK(std::string(e.what()).length() > 0);
+	}
 
 	str = "<";
 	rxman.quote_and_highlight(str, "feedlist");

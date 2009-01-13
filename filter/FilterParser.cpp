@@ -94,6 +94,7 @@ bool FilterParser::parse_string(const std::string& str) {
 	if (0 == p.errors->count) {
 		return true;
 	}
+	errmsg = p.errors->errors[0];
 	cleanup();
 	return false;
 }

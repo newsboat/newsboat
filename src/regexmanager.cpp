@@ -2,6 +2,8 @@
 #include <logger.h>
 #include <utils.h>
 #include <cstring>
+#include <exceptions.h>
+#include <config.h>
 
 namespace newsbeuter {
 
@@ -23,25 +25,28 @@ regexmanager::~regexmanager() {
 	}
 }
 
-action_handler_status regexmanager::handle_action(const std::string& action, const std::vector<std::string>& params) {
+void regexmanager::handle_action(const std::string& action, const std::vector<std::string>& params) {
 	if (action == "highlight") {
 		if (params.size() < 3)
-			return AHS_TOO_FEW_PARAMS;
+			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
 
 		std::string location = params[0];
 		if (location != "all" && location != "article" && location != "articlelist" && location != "feedlist")
-			return AHS_INVALID_PARAMS;
+			throw confighandlerexception(utils::strprintf(_("`%s' is an invalid dialog type"), location.c_str()));
 
 		regex_t * rx = new regex_t;
-		if (regcomp(rx, params[1].c_str(), REG_EXTENDED | REG_ICASE) != 0) {
+		int err;
+		if ((err = regcomp(rx, params[1].c_str(), REG_EXTENDED | REG_ICASE)) != 0) {
 			delete rx;
-			return AHS_INVALID_PARAMS;
+			char buf[1024];
+			regerror(err, rx, buf, sizeof(buf));
+			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid regular expression: %s"), params[1].c_str(), buf));
 		}
 		std::string colorstr;
 		if (params[2] != "default") {
 			colorstr.append("fg=");
 			if (!utils::is_valid_color(params[2]))
-				return AHS_INVALID_PARAMS;
+				throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), params[2].c_str()));
 			colorstr.append(params[2]);
 		}
 		if (params.size() > 2) {
@@ -50,7 +55,7 @@ action_handler_status regexmanager::handle_action(const std::string& action, con
 					colorstr.append(",");
 				colorstr.append("bg=");
 				if (!utils::is_valid_color(params[3]))
-					return AHS_INVALID_PARAMS;
+					throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), params[3].c_str()));
 				colorstr.append(params[3]);
 			}
 			for (unsigned int i=4;i<params.size();++i) {
@@ -59,7 +64,7 @@ action_handler_status regexmanager::handle_action(const std::string& action, con
 						colorstr.append(",");
 					colorstr.append("attr=");
 					if (!utils::is_valid_attribute(params[i]))
-						return AHS_INVALID_PARAMS;
+						throw confighandlerexception(utils::strprintf(_("`%s' is not a valid attribute"), params[i].c_str()));
 					colorstr.append(params[i]);
 				}
 			}
@@ -81,9 +86,8 @@ action_handler_status regexmanager::handle_action(const std::string& action, con
 				it->second.second.push_back(colorstr);
 			}
 		}
-		return AHS_OK;
 	} else
-		return AHS_INVALID_COMMAND;
+		throw confighandlerexception(AHS_INVALID_COMMAND);
 }
 
 void regexmanager::remove_last_regex(const std::string& location) {

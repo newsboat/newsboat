@@ -494,14 +494,17 @@ void itemview_formaction::do_search() {
 	std::vector<std::string> colors = utils::tokenize(v->get_cfg()->get_configvalue("search-highlight-colors"), " ");
 	std::copy(colors.begin(), colors.end(), std::back_inserter(params));
 
-	if (rxman->handle_action("highlight", params) == AHS_OK) {
+	try {
+		rxman->handle_action("highlight", params);
+
 		GetLogger().log(LOG_DEBUG, "itemview_formaction::do_search: configuration manipulation was successful");
 
 		set_regexmanager(rxman);
 
 		in_search = true;
 		do_redraw = true;
-	} else {
+	} catch (const confighandlerexception& e) {
+		GetLogger().log(LOG_ERROR, "itemview_formaction::do_search: handle_action failed, error = %s", e.what());
 		v->show_error(_("Error: invalid regular expression!"));
 	}
 }

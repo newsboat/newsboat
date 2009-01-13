@@ -307,33 +307,26 @@ std::string rss_feed::get_attribute(const std::string& attribname) {
 	return "";
 }
 
-action_handler_status rss_ignores::handle_action(const std::string& action, const std::vector<std::string>& params) {
+void rss_ignores::handle_action(const std::string& action, const std::vector<std::string>& params) {
 	if (action == "ignore-article") {
-		if (params.size() >= 2) {
-			std::string ignore_rssurl = params[0];
-			std::string ignore_expr = params[1];
-			matcher m;
-			if (m.parse(ignore_expr)) {
-				ignores.push_back(feedurl_expr_pair(ignore_rssurl, new matcher(ignore_expr)));
-				return AHS_OK;
-			} else {
-				return AHS_INVALID_PARAMS;
-			}
-		} else {
-			return AHS_TOO_FEW_PARAMS;
-		}
+		if (params.size() < 2)
+			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
+		std::string ignore_rssurl = params[0];
+		std::string ignore_expr = params[1];
+		matcher m;
+		if (!m.parse(ignore_expr))
+			throw confighandlerexception(utils::strprintf(_("couldn't parse filter expression `%s': %s"), ignore_expr.c_str(), m.get_parse_error().c_str()));
+		ignores.push_back(feedurl_expr_pair(ignore_rssurl, new matcher(ignore_expr)));
 	} else if (action == "always-download") {
 		for (std::vector<std::string>::const_iterator it=params.begin();it!=params.end();++it) {
 			ignores_lastmodified.push_back(*it);
 		}
-		return AHS_OK;
 	} else if (action == "reset-unread-on-update") {
 		for (std::vector<std::string>::const_iterator it=params.begin();it!=params.end();++it) {
 			resetflag.push_back(*it);
 		}
-		return AHS_OK;
-	}
-	return AHS_INVALID_COMMAND;
+	} else
+		throw confighandlerexception(AHS_INVALID_COMMAND);
 }
 
 rss_ignores::~rss_ignores() {

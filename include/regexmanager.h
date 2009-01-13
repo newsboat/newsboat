@@ -13,7 +13,7 @@ class regexmanager : public config_action_handler {
 	public:
 		regexmanager();
 		~regexmanager();
-		virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
+		virtual void handle_action(const std::string& action, const std::vector<std::string>& params);
 		void quote_and_highlight(std::string& str, const std::string& location);
 		void remove_last_regex(const std::string& location);
 	private:

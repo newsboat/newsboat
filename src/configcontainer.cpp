@@ -1,6 +1,7 @@
 #include <config.h>
 #include <configcontainer.h>
 #include <configparser.h>
+#include <exceptions.h>
 #include <logger.h>
 #include <sstream>
 #include <iostream>
@@ -94,49 +95,46 @@ void configcontainer::register_commands(configparser& cfgparser)
 	}
 }
 
-action_handler_status configcontainer::handle_action(const std::string& action, const std::vector<std::string>& params) {
+void configcontainer::handle_action(const std::string& action, const std::vector<std::string>& params) {
 	configdata& cfgdata = config_data[action];
 
 	// configdata::INVALID indicates that the action didn't exist, and that the returned object was created ad-hoc.
 	if (cfgdata.type == configdata::INVALID) {
 		GetLogger().log(LOG_WARN, "configcontainer::handler_action: unknown action %s", action.c_str());
-		return AHS_INVALID_COMMAND;	
+		throw confighandlerexception(AHS_INVALID_COMMAND);
 	}
 
 	GetLogger().log(LOG_DEBUG, "configcontainer::handle_action: action = %s, type = %u", action.c_str(), cfgdata.type);
 
 	if (params.size() < 1) {
-		return AHS_TOO_FEW_PARAMS;
+		throw confighandlerexception(AHS_TOO_FEW_PARAMS);
 	}
 
 	switch (cfgdata.type) {
 		case configdata::BOOL:
 			if (!is_bool(params[0]))
-				return AHS_INVALID_PARAMS;
+				throw confighandlerexception(utils::strprintf(_("expected boolean value, found `%s' instead"), params[0].c_str()));
 			cfgdata.value = params[0];
-			return AHS_OK; 
+			break;
 
 		case configdata::INT:
 			if (!is_int(params[0]))
-				return AHS_INVALID_PARAMS;
+				throw confighandlerexception(utils::strprintf(_("expected integer value, found `%s' instead"), params[0].c_str()));
 			cfgdata.value = params[0];
-			return AHS_OK;	
+			break;
 
 		case configdata::STR:
 		case configdata::PATH:
-			if (cfgdata.multi_option) {
+			if (cfgdata.multi_option)
 				cfgdata.value = utils::join(params, " ");
-			} else
+			else
 				cfgdata.value = params[0];
-			return AHS_OK;	
+			break;
 
 		default:
 			// should not happen
-			return AHS_INVALID_COMMAND;	
+			throw confighandlerexception(AHS_INVALID_COMMAND);
 	}
-
-	// should not happen
-	return AHS_INVALID_COMMAND;	
 }
 
 bool configcontainer::is_bool(const std::string& s) {

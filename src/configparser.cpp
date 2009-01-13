@@ -23,21 +23,19 @@ configparser::configparser() {
 
 configparser::~configparser() { }
 
-action_handler_status configparser::handle_action(const std::string& action, const std::vector<std::string>& params) {
+void configparser::handle_action(const std::string& action, const std::vector<std::string>& params) {
 	/*
 	 * configparser also acts as config_action_handler to implement to recursive "include" command.
 	 */
 	if (action == "include") {
 		if (params.size() < 1) {
-			return AHS_TOO_FEW_PARAMS;
+			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
 		}
 
-		if (this->parse(utils::resolve_tilde(params[0])))
-			return AHS_OK;
-		else
-			return AHS_FILENOTFOUND;
-	}
-	return AHS_INVALID_COMMAND;
+		if (!this->parse(utils::resolve_tilde(params[0])))
+			throw confighandlerexception(AHS_FILENOTFOUND);
+	} else
+		throw confighandlerexception(AHS_INVALID_COMMAND);
 }
 
 bool configparser::parse(const std::string& filename) {
@@ -75,10 +73,10 @@ bool configparser::parse(const std::string& filename) {
 			config_action_handler * handler = action_handlers[cmd];
 			if (handler) {
 				tokens.erase(tokens.begin()); // delete first element
-				action_handler_status status = handler->handle_action(cmd,tokens);
-				if (status != AHS_OK) {
-					const char * errmsg = get_errmsg(status);
-					throw configexception(utils::strprintf(_("Error while processing command `%s' (%s line %u): %s"), line.c_str(), filename.c_str(), linecounter, errmsg));
+				try {
+					handler->handle_action(cmd,tokens);
+				} catch (const confighandlerexception& e) {
+					throw configexception(utils::strprintf(_("Error while processing command `%s' (%s line %u): %s"), line.c_str(), filename.c_str(), linecounter, e.what()));
 				}
 			} else {
 				throw configexception(utils::strprintf(_("unknown command `%s'"), cmd.c_str()));
@@ -98,21 +96,6 @@ void configparser::register_handler(const std::string& cmd, config_action_handle
 void configparser::unregister_handler(const std::string& cmd) {
 	GetLogger().log(LOG_DEBUG,"configparser::unregister_handler: cmd = %s", cmd.c_str());
 	action_handlers[cmd] = 0;
-}
-
-const char * configparser::get_errmsg(action_handler_status status) {
-	switch (status) {
-		case AHS_INVALID_PARAMS:
-			return _("invalid parameters.");
-		case AHS_TOO_FEW_PARAMS:
-			return _("too few parameters.");
-		case AHS_INVALID_COMMAND:
-			return _("unknown command (bug).");
-		case AHS_FILENOTFOUND:
-			return _("file couldn't be opened.");
-		default:
-			return _("unknown error (bug).");
-	}
 }
 
 }

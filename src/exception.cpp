@@ -27,3 +27,22 @@ const char * matcherexception::what() const throw() {
 	}
 	return errmsg.c_str();
 }
+
+confighandlerexception::confighandlerexception(action_handler_status e) {
+	msg = get_errmsg(e);
+}
+
+const char * confighandlerexception::get_errmsg(action_handler_status status) {
+	switch (status) {
+		case AHS_INVALID_PARAMS:
+			return _("invalid parameters.");
+		case AHS_TOO_FEW_PARAMS:
+			return _("too few parameters.");
+		case AHS_INVALID_COMMAND:
+			return _("unknown command (bug).");
+		case AHS_FILENOTFOUND:
+			return _("file couldn't be opened.");
+		default:
+			return _("unknown error (bug).");
+	}
+}

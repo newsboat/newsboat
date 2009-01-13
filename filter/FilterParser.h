@@ -39,6 +39,8 @@ class FilterParser {
 		inline expression * get_root() { return root; }
 		FilterParser& operator=(FilterParser& p);
 
+		const std::wstring& get_error() { return errmsg; }
+
 	private:
 		void print_tree_r(expression * e, unsigned int depth);
 		void cleanup_r(expression * e);
@@ -47,6 +49,7 @@ class FilterParser {
 		expression * curpos;
 		bool next_must_descend_right;
 		std::string strexpr;
+		std::wstring errmsg;
 };
 
 

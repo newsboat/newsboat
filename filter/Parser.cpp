@@ -271,6 +271,7 @@ void Errors::SynErr(int n) {
 		}
 		break;
 	}
+	errors.push_back(std::wstring(s));
 	coco_string_delete(s);
 	count++;
 }

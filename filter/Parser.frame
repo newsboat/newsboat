@@ -31,6 +31,9 @@ Coco/R itself) does not fall under the GNU General Public License.
 #if !defined(COCO_PARSER_H__)
 #define COCO_PARSER_H__
 
+#include <vector>
+#include <string>
+
 -->headerdef
 
 #include "Scanner.h"
@@ -40,6 +43,7 @@ Coco/R itself) does not fall under the GNU General Public License.
 class Errors {
 public:
 	int count;			// number of errors detected
+	std::vector<std::wstring> errors;
 
 	Errors();
 	void SynErr(int n);
@@ -226,6 +230,7 @@ void Errors::SynErr(int n) {
 		}
 		break;
 	}
+	errors.push_back(std::wstring(s));
 	coco_string_delete(s);
 	count++;
 }

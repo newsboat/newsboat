@@ -3,6 +3,9 @@
 #if !defined(COCO_PARSER_H__)
 #define COCO_PARSER_H__
 
+#include <vector>
+#include <string>
+
 #include "FilterParser.h"
 
 
@@ -13,6 +16,7 @@
 class Errors {
 public:
 	int count;			// number of errors detected
+	std::vector<std::wstring> errors;
 
 	Errors();
 	void SynErr(int n);

@@ -11,7 +11,7 @@ namespace newsbeuter {
 	enum action_handler_status { AHS_OK = 0, AHS_INVALID_PARAMS, AHS_TOO_FEW_PARAMS, AHS_INVALID_COMMAND, AHS_FILENOTFOUND };
 
 	struct config_action_handler {
-		virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params) = 0;
+		virtual void handle_action(const std::string& action, const std::vector<std::string>& params) = 0;
 		config_action_handler() { }
 		virtual ~config_action_handler() { }
 	};
@@ -22,22 +22,19 @@ namespace newsbeuter {
 			virtual ~configparser();
 			void register_handler(const std::string& cmd, config_action_handler * handler);
 			void unregister_handler(const std::string& cmd);
-			virtual action_handler_status handle_action(const std::string& action, const std::vector<std::string>& params);
+			virtual void handle_action(const std::string& action, const std::vector<std::string>& params);
 			bool parse(const std::string& filename);
 		private:
 			std::vector<std::vector<std::string> > parsed_content;
 			std::map<std::string,config_action_handler *> action_handlers;
 			std::set<std::string> included_files;
-			const char * get_errmsg(action_handler_status status);
 	};
 
 	class null_config_action_handler : public config_action_handler {
 		public:
 			null_config_action_handler() { }
 			virtual ~null_config_action_handler() { }
-			virtual action_handler_status handle_action(const std::string& , const std::vector<std::string>& ) { 
-				return AHS_OK;
-			}
+			virtual void handle_action(const std::string& , const std::vector<std::string>& ) { }
 	};
 
 }
