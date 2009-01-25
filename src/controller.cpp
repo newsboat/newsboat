@@ -40,6 +40,7 @@
 #include <libxml/xmlversion.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+#include <libxml/xmlsave.h>
 #include <curl/curl.h>
 
 namespace newsbeuter {
@@ -754,24 +755,34 @@ void controller::import_opml(const char * filename) {
 }
 
 void controller::export_opml() {
-	std::cout << "<?xml version=\"1.0\"?>" << std::endl;
-	std::cout << "<opml version=\"1.0\">" << std::endl;
-	std::cout << "\t<head>" << std::endl << "\t\t<title>" PROGRAM_NAME " - Exported Feeds</title>" << std::endl << "\t</head>" << std::endl;
-	std::cout << "\t<body>" << std::endl;
+	xmlDocPtr root = xmlNewDoc((const xmlChar *)"1.0");
+	xmlNodePtr opml_node = xmlNewDocNode(root, NULL, (const xmlChar *)"opml", NULL);
+	xmlSetProp(opml_node, (const xmlChar *)"version", (const xmlChar *)"1.0");
+	xmlDocSetRootElement(root, opml_node);
+
+	xmlNodePtr head = xmlNewTextChild(opml_node, NULL, (const xmlChar *)"head", NULL);
+	xmlNewTextChild(head, NULL, (const xmlChar *)"title", (const xmlChar *)PROGRAM_NAME " - Exported Feeds");
+	xmlNodePtr body = xmlNewTextChild(opml_node, NULL, (const xmlChar *)"body", NULL);
+
 	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin(); it != feeds.end(); ++it) {
 		if ((*it)->rssurl().substr(0,6) != "query:" && (*it)->rssurl().substr(0,7) != "filter:") {
-			std::string rssurl = utils::replace_all((*it)->rssurl(),"&","&amp;");
-			std::string link = utils::replace_all((*it)->link(),"&", "&amp;");
-			std::string title = utils::replace_all((*it)->title(),"&", "&amp;");
+			std::string rssurl = (*it)->rssurl();
+			std::string link = (*it)->link();
+			std::string title = (*it)->title();
 
-			rssurl = utils::replace_all(rssurl, "\"", "&quot;");
-			link = utils::replace_all(link, "\"", "&quot;");
-			title = utils::replace_all(title, "\"", "&quot;");
-			std::cout << "\t\t<outline type=\"rss\" xmlUrl=\"" << rssurl << "\" htmlUrl=\"" << link << "\" title=\"" << title << "\" />" << std::endl;
+			xmlNodePtr outline = xmlNewTextChild(body, NULL, (const xmlChar *)"outline", NULL);
+			xmlSetProp(outline, (const xmlChar *)"type", (const xmlChar *)"rss");
+			xmlSetProp(outline, (const xmlChar *)"xmlUrl", (const xmlChar *)rssurl.c_str());
+			xmlSetProp(outline, (const xmlChar *)"htmlUrl", (const xmlChar *)link.c_str());
+			xmlSetProp(outline, (const xmlChar *)"title", (const xmlChar *)title.c_str());
 		}
 	}
-	std::cout << "\t</body>" << std::endl;
-	std::cout << "</opml>" << std::endl;
+
+	xmlSaveCtxtPtr savectx = xmlSaveToFd(1, NULL, 1);
+	xmlSaveDoc(savectx, root);
+	xmlSaveClose(savectx);
+
+	xmlFreeNode(opml_node);
 }
 
 void controller::rec_find_rss_outlines(xmlNode * node, std::string tag) {
