@@ -18,4 +18,6 @@
 
 #define _(string) gettext(string)
 
+/* #define NO_DEBUG */
+
 #endif

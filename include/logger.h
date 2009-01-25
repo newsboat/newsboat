@@ -8,6 +8,7 @@ namespace newsbeuter {
 
 	enum loglevel { LOG_NONE = 0, LOG_USERERROR, LOG_CRITICAL, LOG_ERROR, LOG_WARN, LOG_INFO, LOG_DEBUG };
 
+
 class logger {
 	public:
 		logger();
@@ -16,6 +17,7 @@ class logger {
 		void set_errorlogfile(const char * logfile);
 		void set_loglevel(loglevel level);
 		void log(loglevel level, const char * format, ...);
+		inline void nada() { }
 	private:
 		loglevel curlevel;
 		mutex mtx;
@@ -26,5 +28,9 @@ class logger {
 logger& GetLogger();
 
 }
+
+#ifdef NO_DEBUG
+#define log(x, ...) nada()
+#endif
 
 #endif
