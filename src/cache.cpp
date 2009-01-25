@@ -333,12 +333,10 @@ void cache::externalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, bool reset_
 		return;
 
 	scope_mutex lock(mtx);
+	scope_transaction dbtrans(db);
 
-	sqlite3_exec(db, "BEGIN;", NULL, NULL, NULL);
-
-	std::string countquery = prepare_query("SELECT count(*) FROM rss_feed WHERE rssurl = '%q';", feed->rssurl().c_str());
 	cb_handler count_cbh;
-	int rc = sqlite3_exec(db,countquery.c_str(),count_callback,&count_cbh,NULL);
+	int rc = sqlite3_exec(db,prepare_query("SELECT count(*) FROM rss_feed WHERE rssurl = '%q';", feed->rssurl().c_str()).c_str(),count_callback,&count_cbh,NULL);
 	int count = count_cbh.count();
 	GetLogger().log(LOG_DEBUG, "cache::externalize_rss_feed: rss_feeds with rssurl = '%s': found %d",feed->rssurl().c_str(), count);
 	if (count > 0) {
@@ -373,7 +371,6 @@ void cache::externalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, bool reset_
 		if (days == 0 || (*it)->pubDate_timestamp() >= old_time)
 			update_rssitem_unlocked(*it, feed->rssurl(), reset_unread);
 	}
-	sqlite3_exec(db, "END;", NULL, NULL, NULL);
 }
 
 // this function reads an rss_feed including all of its rss_items.
@@ -532,7 +529,7 @@ void cache::cleanup_cache(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
 	 *
 	 * The behaviour whether the cleanup is done or not is configurable via the configuration file.
 	 */
-	if (cfg->get_configvalue_as_bool("cleanup-on-quit")==true) {
+	if (cfg->get_configvalue_as_bool("cleanup-on-quit")) {
 		GetLogger().log(LOG_DEBUG,"cache::cleanup_cache: cleaning up cache...");
 		std::string list = "(";
 		int rc;
@@ -562,7 +559,6 @@ void cache::cleanup_cache(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
 		rc = sqlite3_exec(db,cleanup_rss_feeds_statement.c_str(),NULL,NULL,NULL);
 		if (rc != SQLITE_OK) {
 			GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", cleanup_rss_feeds_statement.c_str(), rc);
-			mtx->unlock(); // see above
 			throw dbexception(db);
 		}
 
@@ -570,7 +566,6 @@ void cache::cleanup_cache(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
 		rc = sqlite3_exec(db,cleanup_rss_items_statement.c_str(),NULL,NULL,NULL);
 		if (rc != SQLITE_OK) {
 			GetLogger().log(LOG_CRITICAL,"query \"%s\" failed: error = %d", cleanup_rss_items_statement.c_str(), rc);
-			mtx->unlock(); // see above
 			throw dbexception(db);
 		}
 
@@ -874,4 +869,13 @@ void cache::clean_old_articles() {
 	} else {
 		GetLogger().log(LOG_DEBUG, "cache::clean_old_articles, days == 0, not cleaning up anything");
 	}
+}
+
+scope_transaction::scope_transaction(sqlite3 * db) : d(db) {
+	sqlite3_exec(d, "BEGIN;", NULL, NULL, NULL);
+	GetLogger().log(LOG_DEBUG,"scope_transaction: started transaction for handle: %p", d);
+}
+scope_transaction::~scope_transaction() {
+	sqlite3_exec(d, "END;", NULL, NULL, NULL);
+	GetLogger().log(LOG_DEBUG,"scope_transaction: ended transaction for handle: %p", d);
 }

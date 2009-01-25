@@ -48,6 +48,13 @@ class cache {
 		mutex * mtx;
 };
 
+class scope_transaction {
+	public:
+		scope_transaction(sqlite3 * db);
+		~scope_transaction();
+	private:
+		sqlite3 * d;
+};
 
 }
 
