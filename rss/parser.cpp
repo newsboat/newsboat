@@ -175,6 +175,7 @@ void parser::global_init() {
 
 void parser::global_cleanup() {
 	xmlCleanupParser();
+	curl_global_cleanup();
 }
 
 
