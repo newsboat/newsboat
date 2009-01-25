@@ -186,7 +186,7 @@ found its primary use in the import and export of feed subscriptions between
 different RSS feed readers.
 
 The best thing to start with is to export your subscriptions from the old
-reader.  Usually, RSS feed readers have appropriate menu itmes available to do
+reader.  Usually, RSS feed readers have appropriate menu items available to do
 so.
 
 Snownews provides a script to convert your current subscription file into an
