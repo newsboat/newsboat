@@ -980,6 +980,18 @@ void controller::execute_commands(char ** argv, unsigned int i) {
 	}
 }
 
+std::string controller::write_temporary_item(std::tr1::shared_ptr<rss_item> item) {
+	char filename[1024];
+	snprintf(filename, sizeof(filename), "/tmp/newsbeuter-article.XXXXXX");
+	int fd = mkstemp(filename);
+	if (fd != -1) {
+		write_item(item, filename);
+		return std::string(filename);
+	} else {
+		return "";
+	}
+}
+
 void controller::write_item(std::tr1::shared_ptr<rss_item> item, const std::string& filename) {
 	std::vector<std::string> lines;
 	std::vector<linkpair> links; // not used

@@ -263,6 +263,32 @@ void view::push_empty_formaction() {
 	current_formaction = formaction_stack_size() - 1;
 }
 
+void view::open_in_pager(const std::string& filename) {
+	formaction_stack.push_back(std::tr1::shared_ptr<formaction>());
+	current_formaction = formaction_stack_size() - 1;
+	std::string cmdline;
+	std::string pager = cfg->get_configvalue("pager");
+	if (pager.find("%f") != std::string::npos) {
+		fmtstr_formatter fmt;
+		fmt.register_fmt('f', filename);
+		cmdline = fmt.do_format(pager, 0);
+	} else {
+		const char * env_pager = NULL;
+		if (pager != "")
+			cmdline.append(pager);
+		else if ((env_pager = getenv("PAGER")) != NULL)
+			cmdline.append(env_pager);
+		else
+			cmdline.append("more");
+		cmdline.append(" ");
+		cmdline.append(filename);
+	}
+	stfl::reset();
+	GetLogger().log(LOG_DEBUG, "view::open_in_browser: running `%s'", cmdline.c_str());
+	::system(cmdline.c_str());
+	pop_current_formaction();
+}
+
 void view::open_in_browser(const std::string& url) {
 	formaction_stack.push_back(std::tr1::shared_ptr<formaction>());
 	current_formaction = formaction_stack_size() - 1;
@@ -387,18 +413,25 @@ void view::push_itemlist(unsigned int pos) {
 }
 
 void view::push_itemview(std::tr1::shared_ptr<rss_feed> f, const std::string& guid) {
-	std::tr1::shared_ptr<itemlist_formaction> itemlist = std::tr1::dynamic_pointer_cast<itemlist_formaction, formaction>(get_current_formaction());
-	assert(itemlist != NULL);
-	std::tr1::shared_ptr<itemview_formaction> itemview(new itemview_formaction(this, itemlist, itemview_str));
-	set_bindings(itemview);
-	itemview->set_regexmanager(rxman);
-	itemview->set_feed(f);
-	itemview->set_guid(guid);
-	itemview->set_parent_formaction(get_current_formaction());
-	apply_colors(itemview);
-	itemview->init();
-	formaction_stack.push_back(itemview);
-	current_formaction = formaction_stack_size() - 1;
+	std::string pager;
+	if ((pager = cfg->get_configvalue("pager")) == "internal") {
+		std::tr1::shared_ptr<itemlist_formaction> itemlist = std::tr1::dynamic_pointer_cast<itemlist_formaction, formaction>(get_current_formaction());
+		assert(itemlist != NULL);
+		std::tr1::shared_ptr<itemview_formaction> itemview(new itemview_formaction(this, itemlist, itemview_str));
+		set_bindings(itemview);
+		itemview->set_regexmanager(rxman);
+		itemview->set_feed(f);
+		itemview->set_guid(guid);
+		itemview->set_parent_formaction(get_current_formaction());
+		apply_colors(itemview);
+		itemview->init();
+		formaction_stack.push_back(itemview);
+		current_formaction = formaction_stack_size() - 1;
+	} else {
+		std::string filename = get_ctrl()->write_temporary_item(f->get_item_by_guid(guid));
+		open_in_pager(filename);
+		::unlink(filename.c_str());
+	}
 }
 
 void view::view_dialogs() {

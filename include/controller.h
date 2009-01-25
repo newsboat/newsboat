@@ -61,6 +61,7 @@ namespace newsbeuter {
 			inline configcontainer * get_cfg() const { return cfg; }
 
 			void write_item(std::tr1::shared_ptr<rss_item> item, const std::string& filename);
+			std::string write_temporary_item(std::tr1::shared_ptr<rss_item> item);
 
 			void mark_deleted(const std::string& guid, bool b);
 

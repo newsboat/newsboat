@@ -1,5 +1,4 @@
 TODO:
-- add configurable pager
 - implement reloading of configuration (:source)
 - check for stfl in config.sh script
 - add an auto-flag configuration command to automatically flag articles that match a certain query
@@ -135,3 +134,4 @@ DONE:
 	- fix encoding issues
 	- implement Atom parsing
 	- fix TODOs in src/rss_parser.cpp
+- add configurable pager
