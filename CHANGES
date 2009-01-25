@@ -11,6 +11,7 @@ Changes for newsbeuter:
 	Replaced mrss with new RSS/Atom parser.
 	Added ability to search for text from the article view.
 	Added basic support for Yahoo Media RSS.
+	Made article view pager configurable.
 
 1.3 (2008-12-06):
 	Changed some internal data structures to smart pointers (stability improvement).
