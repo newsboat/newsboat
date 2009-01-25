@@ -103,7 +103,7 @@ std::tr1::shared_ptr<formaction> view::get_current_formaction() {
 
 void view::set_status_unlocked(const std::string& msg) {
 	if (formaction_stack.size() > 0 && get_current_formaction() != NULL) {
-		stfl::form * form = get_current_formaction()->get_form();
+		std::tr1::shared_ptr<stfl::form> form = get_current_formaction()->get_form();
 		if (form != NULL) {
 			form->set("msg",msg);
 			form->run(-1);

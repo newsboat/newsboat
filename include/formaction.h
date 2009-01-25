@@ -26,7 +26,7 @@ class formaction {
 		virtual ~formaction();
 		virtual void prepare() = 0;
 		virtual void init() = 0;
-		stfl::form * get_form();
+		std::tr1::shared_ptr<stfl::form> get_form();
 		inline void set_redraw(bool b) { do_redraw = b; }
 
 		virtual keymap_hint_entry * get_keymap_hint() = 0;
@@ -61,7 +61,7 @@ class formaction {
 		void start_bookmark_qna(const std::string& default_title, const std::string& default_url, const std::string& default_desc);
 
 		view * v;
-		stfl::form * f;
+		std::tr1::shared_ptr<stfl::form> f;
 		bool do_redraw;
 
 		std::vector<std::string> qna_responses;

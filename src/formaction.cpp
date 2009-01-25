@@ -10,8 +10,7 @@ namespace newsbeuter {
 history formaction::searchhistory;
 history formaction::cmdlinehistory;
 
-formaction::formaction(view * vv, std::string formstr) : v(vv), f(0), do_redraw(true) { 
-	f = new stfl::form(formstr);
+formaction::formaction(view * vv, std::string formstr) : v(vv), f(new stfl::form(formstr)), do_redraw(true) { 
 	if (v) {
 		if (v->get_cfg()->get_configvalue_as_bool("show-keymap-hint") == false) {
 			f->set("showhint", "0");
@@ -27,11 +26,9 @@ void formaction::recalculate_form() {
 	f->run(-3);
 }
 
-formaction::~formaction() { 
-	delete f;
-}
+formaction::~formaction() { }
 
-stfl::form * formaction::get_form() {
+std::tr1::shared_ptr<stfl::form> formaction::get_form() {
 	return f;
 }
 
