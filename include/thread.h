@@ -8,7 +8,7 @@ namespace newsbeuter {
 
 	class thread;
 
-	void * run_thread(thread * p);
+	void * run_thread(void * p);
 
 	// TODO: implement an option to provide attributes
 
@@ -23,7 +23,7 @@ namespace newsbeuter {
 			virtual void run() = 0;
 			void detach();
 
-			friend void * run_thread(thread * p);
+			friend void * run_thread(void * p);
 
 		private:
 			static void cleanup(thread * p);

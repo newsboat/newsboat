@@ -8,8 +8,6 @@ docdir?=$(datadir)/doc/$(PACKAGE)
 # compiler
 CXX=c++
 
-RUBY=ruby
-
 # compiler and linker flags
 DEFINES=-DLOCALEDIR=\"$(localedir)\"
 WARNFLAGS=-Wall -Wextra
@@ -94,12 +92,8 @@ regenerate-parser:
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
-%.o: %.c
-	$(CC) $(CFLAGS) -o $@ -c $<
-
 %.h: %.stfl
 	$(STFLCONV) $< > $@
-
 
 clean-newsbeuter:
 	$(RM) $(NEWSBEUTER) $(NEWSBEUTER_OBJS)
@@ -154,7 +148,9 @@ uninstall:
 	$(RM) $(DESTDIR)$(mandir)/man1/$(PODBEUTER).1
 	$(RM) -r $(DESTDIR)$(docdir)
 
-.PHONY: doc clean all test install uninstall
+.PHONY: doc clean distclean all test test-rss extract install uninstall regenerate-parser clean-newsbeuter \
+	clean-podbeuter clean-libbeuter clean-librsspp clean-libfilter clean-doc install-mo msgmerge clean-mo \
+	test-clean config
 
 # the following targets are i18n/l10n-related:
 
@@ -189,7 +185,7 @@ test-rss: $(RSSPPLIB_OUTPUT) test/test-rss.o
 	$(CXX) $(CXXFLAGS) -o test/test-rss test/test-rss.o src/utils.o $(NEWSBEUTER_LIBS) -lboost_unit_test_framework $(LDFLAGS)
 
 test/test.o: test/test.cpp
-	$(CXX) $(CXXFLAGS) $(RUBYCXXFLAGS) -o $@ -c $<
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 test-clean:
 	$(RM) test/test test/test.o test/test-rss test/test-rss.o

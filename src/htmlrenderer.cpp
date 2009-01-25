@@ -245,7 +245,8 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						lines.push_back(std::string(" ") + std::string(w - 2, '-') + std::string(" "));
 						prepare_newline(curline, indent_level);
 						break;
-
+					default:
+						break;
 				}
 				break;
 
@@ -345,6 +346,8 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					case TAG_IMG:
 					case TAG_HR:
 						// ignore closing tags
+						break;
+					default:
 						break;
 				}
 				break;

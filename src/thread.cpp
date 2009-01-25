@@ -22,7 +22,7 @@ thread::~thread() {
 }
 
 pthread_t thread::start() {
-	int rc = pthread_create(&pt, 0, (void *(*)(void*))run_thread, this);
+	int rc = pthread_create(&pt, 0, run_thread, this);
 	GetLogger().log(LOG_DEBUG, "thread::start: created new thread %d rc = %d", pt, rc);
 	if (rc != 0) {
 		throw exception(rc);
@@ -39,8 +39,8 @@ void thread::detach() {
 	pthread_detach(pt);
 }
 
-void * run_thread(thread * p) {
-	thread * t = p;
+void * run_thread(void * p) {
+	thread * t = reinterpret_cast<thread *>(p);
 	GetLogger().log(LOG_DEBUG, "run_thread: p = %p", p);
 	t->run();
 	delete t;
