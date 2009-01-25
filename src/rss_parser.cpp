@@ -75,7 +75,7 @@ bool rss_parser::check_and_update_lastmodified() {
 	unsigned int retry_count = cfgcont->get_configvalue_as_int("download-retries");
 
 	unsigned int i;
-	CURLcode err;
+	CURLcode err = CURLE_OK;
 	for (i=0;i<retry_count;i++) {
 		CURL* curl = curl_easy_init();
 		if (!curl) return false;
@@ -105,10 +105,10 @@ bool rss_parser::check_and_update_lastmodified() {
 		curl_easy_cleanup(curl);
 
 		GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: err = %u oldlm = %d newlm = %d", err, oldlm, newlm);
-		if (err == 0)
+		if (err == CURLE_OK)
 			break;
 	}
-	if (i==retry_count && err != 0) {
+	if (i==retry_count && err != CURLE_OK) {
 		GetLogger().log(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: couldn't get a result after %u retries", retry_count);
 		throw rsspp::exception(curl_easy_strerror(err));
 	}
