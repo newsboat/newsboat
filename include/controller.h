@@ -6,6 +6,8 @@
 #include <cache.h>
 #include <configcontainer.h>
 #include <filtercontainer.h>
+#include <colormanager.h>
+#include <regexmanager.h>
 #include <libxml/tree.h>
 
 namespace newsbeuter {
@@ -65,6 +67,10 @@ namespace newsbeuter {
 
 			void mark_deleted(const std::string& guid, bool b);
 
+			void update_config();
+
+			void load_configfile(const std::string& filename);
+
 		private:
 			void usage(char * argv0);
 			void version_information();
@@ -101,6 +107,9 @@ namespace newsbeuter {
 			filtercontainer filters;
 
 			mutex * reload_mutex;
+			configparser cfgparser;
+			colormanager * colorman;
+			regexmanager rxman;
 	};
 
 }

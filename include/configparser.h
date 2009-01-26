@@ -23,7 +23,7 @@ namespace newsbeuter {
 			void register_handler(const std::string& cmd, config_action_handler * handler);
 			void unregister_handler(const std::string& cmd);
 			virtual void handle_action(const std::string& action, const std::vector<std::string>& params);
-			bool parse(const std::string& filename);
+			bool parse(const std::string& filename, bool double_include = true);
 		private:
 			std::vector<std::vector<std::string> > parsed_content;
 			std::map<std::string,config_action_handler *> action_handlers;

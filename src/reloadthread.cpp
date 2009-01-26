@@ -3,7 +3,7 @@
 
 using namespace newsbeuter;
 
-reloadthread::reloadthread(controller * c, time_t wt_sec, configcontainer * cf) : ctrl(c), oldtime(0), waittime_sec(wt_sec), suppressed_first(false), cfg(cf) {
+reloadthread::reloadthread(controller * c, configcontainer * cf) : ctrl(c), oldtime(0), suppressed_first(false), cfg(cf) {
 	GetLogger().log(LOG_INFO,"reloadthread: waiting %u seconds between reloads",waittime_sec);
 }
 
@@ -14,13 +14,21 @@ void reloadthread::run() {
 		oldtime = time(NULL);
 		GetLogger().log(LOG_INFO,"reloadthread: starting reload");
 
-		if (suppressed_first) {
-			ctrl->start_reload_all_thread();
-		} else {
-			suppressed_first = true;
-			if (!cfg->get_configvalue_as_bool("suppress-first-reload")) {
+		waittime_sec = 60 * cfg->get_configvalue_as_int("reload-time");
+		if (waittime_sec == 0)
+			waittime_sec = 60;
+
+		if (cfg->get_configvalue_as_bool("auto-reload")) {
+			if (suppressed_first) {
 				ctrl->start_reload_all_thread();
+			} else {
+				suppressed_first = true;
+				if (!cfg->get_configvalue_as_bool("suppress-first-reload")) {
+					ctrl->start_reload_all_thread();
+				}
 			}
+		} else {
+			waittime_sec = 60; // if auto-reload is disabled, we poll every 60 seconds whether it changed.
 		}
 
 		time_t seconds_to_wait = 0;

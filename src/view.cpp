@@ -690,6 +690,13 @@ void view::set_colors(std::map<std::string,std::string>& fgc, std::map<std::stri
 	attributes = attribs;
 }
 
+void view::apply_colors_to_all_formactions() {
+	for (std::vector<std::tr1::shared_ptr<formaction> >::iterator it=formaction_stack.begin();it!=formaction_stack.end();it++) {
+		apply_colors(*it);
+	}
+	formaction_stack[current_formaction]->set_redraw(true);
+}
+
 void view::apply_colors(std::tr1::shared_ptr<formaction> fa) {
 	std::map<std::string,std::string>::const_iterator fgcit = fg_colors.begin();
 	std::map<std::string,std::string>::const_iterator bgcit = bg_colors.begin();

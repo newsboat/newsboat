@@ -91,6 +91,8 @@ namespace newsbeuter {
 			void goto_next_dialog();
 			void goto_prev_dialog();
 
+			void apply_colors_to_all_formactions();
+
 		protected:
 			void set_bindings(std::tr1::shared_ptr<formaction> fa);
 			void apply_colors(std::tr1::shared_ptr<formaction> fa);

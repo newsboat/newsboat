@@ -11,7 +11,7 @@ namespace newsbeuter
 class reloadthread : public thread
 {
 public:
-	reloadthread(controller * c, time_t wt_sec, configcontainer * cf);
+	reloadthread(controller * c, configcontainer * cf);
 	virtual ~reloadthread();
 protected:
 	virtual void run();

@@ -1,5 +1,4 @@
 TODO:
-- implement reloading of configuration (:source)
 - check for stfl in config.sh script
 - add an auto-flag configuration command to automatically flag articles that match a certain query
 - when reload is finished, the focus shall be in the current form's list
@@ -135,3 +134,4 @@ DONE:
 	- implement Atom parsing
 	- fix TODOs in src/rss_parser.cpp
 - add configurable pager
+- implement reloading of configuration (:source)

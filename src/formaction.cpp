@@ -4,6 +4,7 @@
 #include <config.h>
 #include <logger.h>
 #include <cassert>
+#include <exceptions.h>
 
 namespace newsbeuter {
 
@@ -144,6 +145,19 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 		} else if (cmd == "quit") {
 			while (v->formaction_stack_size() > 0) {
 				v->pop_current_formaction();
+			}
+		} else if (cmd == "source") {
+			if (tokens.size()==0) {
+				v->show_error(_("usage: source <file> [...]"));
+			} else {
+				for (std::vector<std::string>::iterator it=tokens.begin();it!=tokens.end();it++) {
+					try {
+						v->get_ctrl()->load_configfile(utils::resolve_tilde(*it));
+					} catch (const configexception& ex) {
+						v->show_error(ex.what());
+						break;
+					}
+				}
 			}
 		}
 	}

@@ -66,7 +66,7 @@ void omg_a_child_died(int /* sig */) {
 	while ((pid = waitpid(-1,&stat,WNOHANG)) > 0) { }
 }
 
-controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false), cfg(0) {
+controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false), cfg(new configcontainer()), colorman(new colormanager())  {
 	char * cfgdir;
 	if (!(cfgdir = ::getenv("HOME"))) {
 		struct passwd * spw = ::getpwuid(::getuid());
@@ -92,6 +92,7 @@ controller::~controller() {
 	delete reload_mutex;
 	delete cfg;
 	delete urlcfg;
+	delete colorman;
 
 	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();it++) {
 		(*it)->items().clear();
@@ -238,10 +239,7 @@ void controller::run(int argc, char * argv[]) {
 		std::cout << _("Loading configuration...");
 	std::cout.flush();
 	
-	configparser cfgparser;
-	cfg = new configcontainer();
 	cfg->register_commands(cfgparser);
-	colormanager * colorman = new colormanager();
 	colorman->register_commands(cfgparser);
 
 	keymap keys(KM_NEWSBEUTER);
@@ -254,9 +252,6 @@ void controller::run(int argc, char * argv[]) {
 	cfgparser.register_handler("reset-unread-on-update",&ign);
 
 	cfgparser.register_handler("define-filter",&filters);
-
-	regexmanager rxman;
-
 	cfgparser.register_handler("highlight", &rxman);
 
 	try {
@@ -269,16 +264,7 @@ void controller::run(int argc, char * argv[]) {
 		return;	
 	}
 
-	v->set_regexmanager(&rxman);
-
-	if (colorman->colors_loaded()) {
-		v->set_colors(colorman->get_fgcolors(), colorman->get_bgcolors(), colorman->get_attributes());
-	}
-	delete colorman;
-
-	if (cfg->get_configvalue("error-log").length() > 0) {
-		GetLogger().set_errorlogfile(cfg->get_configvalue("error-log").c_str());
-	}
+	update_config();
 
 	if (!silent)
 		std::cout << _("done.") << std::endl;
@@ -1172,6 +1158,28 @@ void controller::sort_feeds() {
 		// that's the default, do nothing
 	} else if (sortmethod == "firsttag") {
 		std::stable_sort(feeds.begin(), feeds.end(), sort_feeds_by_firsttag());
+	}
+}
+
+void controller::update_config() {
+	v->set_regexmanager(&rxman);
+
+	if (colorman->colors_loaded()) {
+		v->set_colors(colorman->get_fgcolors(), colorman->get_bgcolors(), colorman->get_attributes());
+		v->apply_colors_to_all_formactions();
+	}
+
+	if (cfg->get_configvalue("error-log").length() > 0) {
+		GetLogger().set_errorlogfile(cfg->get_configvalue("error-log").c_str());
+	}
+
+}
+
+void controller::load_configfile(const std::string& filename) {
+	if (cfgparser.parse(filename, true)) {
+		update_config();
+	} else {
+		v->show_error(utils::strprintf(_("Error: couldn't open configuration file `%s'!"), filename.c_str()));
 	}
 }
 

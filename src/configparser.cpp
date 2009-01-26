@@ -38,7 +38,7 @@ void configparser::handle_action(const std::string& action, const std::vector<st
 		throw confighandlerexception(AHS_INVALID_COMMAND);
 }
 
-bool configparser::parse(const std::string& filename) {
+bool configparser::parse(const std::string& filename, bool double_include) {
 	/*
 	 * this function parses a config file.
 	 *
@@ -51,7 +51,7 @@ bool configparser::parse(const std::string& filename) {
 	 *   - hand over the tokenize results to the config_action_handler
 	 *   - if an error happens, react accordingly.
 	 */
-	if (included_files.find(filename) != included_files.end()) {
+	if (!double_include && included_files.find(filename) != included_files.end()) {
 		GetLogger().log(LOG_WARN, "configparser::parse: file %s has already been included", filename.c_str());
 		return true;
 	}
