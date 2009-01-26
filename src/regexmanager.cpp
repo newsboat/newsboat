@@ -106,13 +106,6 @@ void regexmanager::remove_last_regex(const std::string& location) {
 void regexmanager::quote_and_highlight(std::string& str, const std::string& location) {
 	std::vector<regex_t *>& regexes = locations[location].first;
 
-	unsigned int len = str.length();
-	for (unsigned int i=0;i<len;++i) {
-		if (str[i] == '<') {
-			str.insert(i+1, ">");
-			++len;
-		}
-	}
 	unsigned int i = 0;
 	for (std::vector<regex_t *>::iterator it=regexes.begin();it!=regexes.end();++it, ++i) {
 		regmatch_t pmatch;

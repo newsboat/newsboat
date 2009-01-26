@@ -666,4 +666,15 @@ std::string utils::censor_url(const std::string& url) {
 	return rv;
 }
 
+std::string utils::quote_for_stfl(std::string str) {
+	unsigned int len = str.length();
+	for (unsigned int i=0;i<len;++i) {
+		if (str[i] == '<') {
+			str.insert(i+1, ">");
+			++len;
+		}
+	}
+	return str;
+}
+
 }

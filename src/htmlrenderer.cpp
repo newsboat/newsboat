@@ -31,6 +31,9 @@ htmlrenderer::htmlrenderer(unsigned int width) : w(width) {
 	tags["sup"] = TAG_SUP;
 	tags["sub"] = TAG_SUB;
 	tags["hr"] = TAG_HR;
+	tags["b"] = TAG_STRONG;
+	tags["strong"] = TAG_STRONG;
+	tags["u"] = TAG_UNDERLINE;
 }
 
 void htmlrenderer::render(const std::string& source, std::vector<std::string>& lines, std::vector<linkpair>& links, const std::string& url) {
@@ -95,9 +98,15 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 							}
 							if (link.length() > 0) {
 								link_num = add_link(links,utils::censor_url(utils::absolute_url(url,link)), LINK_HREF);
-								curline.append("[");
+								curline.append("<u>");
 							}
 						}
+						break;
+					case TAG_STRONG:
+						curline.append("<b>");
+						break;
+					case TAG_UNDERLINE:
+						curline.append("<u>");
 						break;
 
 					case TAG_EMBED: {
@@ -335,9 +344,17 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 
 					case TAG_A:
 						if (link_num != -1) {
-							curline.append(utils::strprintf("][%d]", link_num));
+							curline.append(utils::strprintf("</>[%d]", link_num));
 							link_num = -1;
 						}
+						break;
+
+					case TAG_UNDERLINE:
+						curline.append("</>");
+						break;
+
+					case TAG_STRONG:
+						curline.append("</>");
 						break;
 
 					case TAG_EMBED:
@@ -356,7 +373,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				{
 					GetLogger().log(LOG_DEBUG,"htmlrenderer::render: found text `%s'",xpp.getText().c_str());
 					if (itunes_hack) {
-						std::vector<std::string> words = utils::tokenize_nl(xpp.getText());
+						std::vector<std::string> words = utils::tokenize_nl(utils::quote_for_stfl(xpp.getText()));
 						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it) {
 							if (*it == "\n") {
 								lines.push_back(curline);
@@ -385,7 +402,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 							}
 						}
 					} else if (inside_pre) {
-						std::vector<std::string> words = utils::tokenize_nl(xpp.getText());
+						std::vector<std::string> words = utils::tokenize_nl(utils::quote_for_stfl(xpp.getText()));
 						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it) {
 							if (*it == "\n") {
 								lines.push_back(curline);
@@ -395,7 +412,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 							}
 						}
 					} else {
-						std::string s = xpp.getText();
+						std::string s = utils::quote_for_stfl(xpp.getText());
 						while (s.length() > 0 && s[0] == '\n')
 							s.erase(0, 1);
 						std::vector<std::string> words = utils::tokenize_spaced(s);

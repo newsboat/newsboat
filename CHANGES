@@ -12,6 +12,7 @@ Changes for newsbeuter:
 	Added ability to search for text from the article view.
 	Added basic support for Yahoo Media RSS.
 	Made article view pager configurable.
+	Improved HTML rendering of links and underlined and bold text.
 
 1.3 (2008-12-06):
 	Changed some internal data structures to smart pointers (stability improvement).

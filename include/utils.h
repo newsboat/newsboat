@@ -60,6 +60,8 @@ class utils {
 
 		static std::string censor_url(const std::string& url);
 
+		static std::string quote_for_stfl(std::string str);
+
 	private:
 		static void append_escapes(std::string& str, char c);
 
