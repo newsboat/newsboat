@@ -1097,19 +1097,12 @@ std::string controller::generate_enqueue_filename(const std::string& url, std::t
 }
 
 std::string controller::get_hostname_from_url(const std::string& url) {
+	xmlURIPtr uri = xmlParseURI(url.c_str());
 	std::string hostname;
-	const char * begin = url.c_str();
-	if (url.substr(0,7) == "http://") {
-		begin = url.c_str() + 7;
-	} else if (url.substr(0,8) == "https://") {
-		begin = url.c_str() + 8;
+	if (uri) {
+		hostname = uri->server;
+		xmlFreeURI(uri);
 	}
-	const char * slash = strchr(begin, '/');
-	if (!slash)
-		hostname = std::string(begin);
-	else
-		hostname = std::string(begin, slash-begin);
-
 	return hostname;
 }
 
