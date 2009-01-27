@@ -24,7 +24,6 @@ class cache {
 		std::tr1::shared_ptr<rss_feed> get_feed_by_url(const std::string& feedurl);
 		void catchup_all(const std::string& feedurl = "");
 		void catchup_all(std::tr1::shared_ptr<rss_feed> feed);
-		void update_rssitem_flags(std::tr1::shared_ptr<rss_item> item);
 		void update_rssitem_flags(rss_item* item);
 		std::vector<std::string> get_feed_urls();
 		time_t get_lastmodified(const std::string& feedurl);

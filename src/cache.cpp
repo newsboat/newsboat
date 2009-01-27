@@ -770,18 +770,6 @@ void cache::update_rssitem_flags(rss_item* item) {
 	}
 }
 
-void cache::update_rssitem_flags(std::tr1::shared_ptr<rss_item> item) {
-	scope_mutex lock(mtx);
-
-	std::string update = prepare_query("UPDATE rss_item SET flags = '%q' WHERE guid = '%q';", item->flags().c_str(), item->guid().c_str());
-	GetLogger().log(LOG_DEBUG,"running query: %s", update.c_str());
-	int rc = sqlite3_exec(db,update.c_str(), NULL, NULL, NULL);
-	if (rc != SQLITE_OK) {
-		GetLogger().log(LOG_CRITICAL, "query \"%s\" failed: error = %d", update.c_str(), rc);
-		throw dbexception(db);
-	}
-}
-
 void cache::remove_old_deleted_items(const std::string& rssurl, const std::vector<std::string>& guids) {
 	scope_measure m1("cache::remove_old_deleted_items");
 	std::string guidset = "(";
