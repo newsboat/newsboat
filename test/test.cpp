@@ -618,11 +618,11 @@ BOOST_AUTO_TEST_CASE(TestRegexManager) {
 
 	str = "<";
 	rxman.quote_and_highlight(str, "feedlist");
-	BOOST_CHECK_EQUAL(str, "<>");
+	BOOST_CHECK_EQUAL(str, "<");
 
 	str = "a<b>";
 	rxman.quote_and_highlight(str, "feedlist");
-	BOOST_CHECK_EQUAL(str, "a<>b>");
+	BOOST_CHECK_EQUAL(str, "a<b>");
 }
 BOOST_AUTO_TEST_CASE(TestHtmlRenderer) {
 	htmlrenderer rnd(100);
@@ -632,7 +632,7 @@ BOOST_AUTO_TEST_CASE(TestHtmlRenderer) {
 
 	rnd.render("<a href=\"http://slashdot.org/\">slashdot</a>", lines, links, "");
 	BOOST_CHECK(lines.size() >= 1);
-	BOOST_CHECK_EQUAL(lines[0], "[slashdot][1]");
+	BOOST_CHECK_EQUAL(lines[0], "<u>slashdot</>[1]");
 	BOOST_CHECK_EQUAL(links[0].first, "http://slashdot.org/");
 	BOOST_CHECK_EQUAL(links[0].second, LINK_HREF);
 
@@ -718,4 +718,12 @@ BOOST_AUTO_TEST_CASE(TestCensorUrl) {
 
 	BOOST_CHECK_EQUAL(utils::censor_url("http://aschas@"), "http://*:*@");
 	BOOST_CHECK_EQUAL(utils::censor_url("https://aschas@"), "https://*:*@");
+}
+
+BOOST_AUTO_TEST_CASE(TestMakeAbsoluteUrl) {
+	BOOST_CHECK_EQUAL(utils::absolute_url("http://foobar/hello/crook/", "bar.html"), "http://foobar/hello/crook/bar.html");
+	BOOST_CHECK_EQUAL(utils::absolute_url("https://foobar/foo/", "/bar.html"), "https://foobar/bar.html");
+	BOOST_CHECK_EQUAL(utils::absolute_url("https://foobar/foo/", "http://quux/bar.html"), "http://quux/bar.html");
+	BOOST_CHECK_EQUAL(utils::absolute_url("http://foobar", "bla.html"), "http://foobar/bla.html");
+	BOOST_CHECK_EQUAL(utils::absolute_url("http://test:test@foobar:33", "bla2.html"), "http://test:test@foobar:33/bla2.html");
 }
