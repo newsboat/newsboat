@@ -41,6 +41,7 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <libxml/xmlsave.h>
+#include <libxml/uri.h>
 #include <curl/curl.h>
 
 namespace newsbeuter {
