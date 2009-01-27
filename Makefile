@@ -14,6 +14,8 @@ WARNFLAGS=-Wall -Wextra
 CXXFLAGS+=-ggdb -I/sw/include -I./include -I./stfl -I./filter -I. -I./rss $(WARNFLAGS) $(DEFINES)
 LDFLAGS+=-L. -L/sw/lib
 
+PACKAGE=newsbeuter
+
 include config.mk
 
 LIB_SOURCES:=$(shell cat libbeuter.deps)
