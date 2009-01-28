@@ -86,14 +86,14 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				std::transform(tagname.begin(), tagname.end(), tagname.begin(), ::tolower);
 				current_tag = tags[tagname];
 
-				GetLogger().log(LOG_DEBUG,"htmlrenderer::render: found start tag %s (id = %u)",tagname.c_str(), current_tag);
+				LOG(LOG_DEBUG,"htmlrenderer::render: found start tag %s (id = %u)",tagname.c_str(), current_tag);
 				switch (current_tag) {
 					case TAG_A: {
 							std::string link;
 							try {
 								link = xpp.getAttributeValue("href");
 							} catch (const std::invalid_argument& ) {
-								GetLogger().log(LOG_WARN,"htmlrenderer::render: found a tag with no href attribute");
+								LOG(LOG_WARN,"htmlrenderer::render: found a tag with no href attribute");
 								link = "";
 							}
 							if (link.length() > 0) {
@@ -114,7 +114,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 							try {
 								type = xpp.getAttributeValue("type");
 							} catch (const std::invalid_argument& ) {
-								GetLogger().log(LOG_WARN, "htmlrenderer::render: found embed object without type attribute");
+								LOG(LOG_WARN, "htmlrenderer::render: found embed object without type attribute");
 								type = "";
 							}
 							if (type == "application/x-shockwave-flash") {
@@ -122,7 +122,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 								try {
 									link = xpp.getAttributeValue("src");
 								} catch (const std::invalid_argument& ) {
-									GetLogger().log(LOG_WARN, "htmlrenderer::render: found embed object without src attribute");
+									LOG(LOG_WARN, "htmlrenderer::render: found embed object without src attribute");
 									link = "";
 								}
 								if (link.length() > 0) {
@@ -134,7 +134,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						break;
 
 					case TAG_BR:
-						GetLogger().log(LOG_DEBUG, "htmlrenderer::render: pushing back `%s'", curline.c_str());
+						LOG(LOG_DEBUG, "htmlrenderer::render: pushing back `%s'", curline.c_str());
 						lines.push_back(curline);
 						prepare_newline(curline, indent_level);	
 						break;
@@ -155,7 +155,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 							try {
 								imgurl = xpp.getAttributeValue("src");
 							} catch (const std::invalid_argument& ) {
-								GetLogger().log(LOG_WARN,"htmlrenderer::render: found img tag with no src attribute");
+								LOG(LOG_WARN,"htmlrenderer::render: found img tag with no src attribute");
 								imgurl = "";
 							}
 							if (imgurl.length() > 0) {
@@ -264,7 +264,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				std::transform(tagname.begin(), tagname.end(), tagname.begin(), ::tolower);
 				current_tag = tags[tagname];
 
-				GetLogger().log(LOG_DEBUG, "htmlrenderer::render: found end tag %s (id = %u)",tagname.c_str(), current_tag);
+				LOG(LOG_DEBUG, "htmlrenderer::render: found end tag %s (id = %u)",tagname.c_str(), current_tag);
 
 				switch (current_tag) {
 					case TAG_BLOCKQUOTE:
@@ -371,7 +371,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 
 			case tagsouppullparser::TEXT:
 				{
-					GetLogger().log(LOG_DEBUG,"htmlrenderer::render: found text `%s'",xpp.getText().c_str());
+					LOG(LOG_DEBUG,"htmlrenderer::render: found text `%s'",xpp.getText().c_str());
 					if (itunes_hack) {
 						std::vector<std::string> words = utils::tokenize_nl(utils::quote_for_stfl(xpp.getText()));
 						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it) {
@@ -379,12 +379,12 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 								lines.push_back(curline);
 								prepare_newline(curline, indent_level);
 							} else {
-								GetLogger().log(LOG_DEBUG, "htmlrenderer::render: tokenizing `%s'", it->c_str());
+								LOG(LOG_DEBUG, "htmlrenderer::render: tokenizing `%s'", it->c_str());
 								std::vector<std::string> words2 = utils::tokenize_spaced(*it);
 								unsigned int i=0;
 								bool new_line = false;
 								for (std::vector<std::string>::iterator it2=words2.begin();it2!=words2.end();++it2,++i) {
-									GetLogger().log(LOG_DEBUG, "htmlrenderer::render: token[%u] = `%s'", i, it2->c_str());
+									LOG(LOG_DEBUG, "htmlrenderer::render: token[%u] = `%s'", i, it2->c_str());
 									if ((curline.length() + it2->length()) >= w) {
 										if (line_is_nonempty(curline))
 											lines.push_back(curline);
@@ -424,9 +424,9 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 							words.erase(words.begin());
 						}
 
-						GetLogger().log(LOG_DEBUG, "htmlrenderer::render: tokenized `%s'", xpp.getText().c_str());
+						LOG(LOG_DEBUG, "htmlrenderer::render: tokenized `%s'", xpp.getText().c_str());
 						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it,++i) {
-							GetLogger().log(LOG_DEBUG, "htmlrenderer::render: token[%u] = `%s'", i, it->c_str());
+							LOG(LOG_DEBUG, "htmlrenderer::render: token[%u] = `%s'", i, it->c_str());
 							if ((curline.length() + it->length()) >= w) {
 								if (line_is_nonempty(curline))
 									lines.push_back(curline);

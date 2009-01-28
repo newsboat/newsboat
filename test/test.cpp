@@ -96,7 +96,7 @@ BOOST_AUTO_TEST_CASE(TestConfigParserContainerAndKeymap) {
 	try {
 		cfgparser.parse("test-config.txt");
 	}  catch (const configexception& ex) {
-		GetLogger().log(LOG_ERROR,"an exception occured while parsing the configuration file: %s", ex.what());
+		LOG(LOG_ERROR,"an exception occured while parsing the configuration file: %s", ex.what());
 		BOOST_CHECK(false);
 	} catch (...) {
 		BOOST_CHECK(false);

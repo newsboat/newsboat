@@ -70,14 +70,14 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 			}
 		}
 		if (location != "all") {
-			GetLogger().log(LOG_DEBUG, "regexmanager::handle_action: adding rx = %s colorstr = %s to location %s",
+			LOG(LOG_DEBUG, "regexmanager::handle_action: adding rx = %s colorstr = %s to location %s",
 				params[1].c_str(), colorstr.c_str(), location.c_str());
 			locations[location].first.push_back(rx);
 			locations[location].second.push_back(colorstr);
 		} else {
 			delete rx;
 			for (std::map<std::string, rc_pair>::iterator it=locations.begin();it!=locations.end();it++) {
-				GetLogger().log(LOG_DEBUG, "regexmanager::handle_action: adding rx = %s colorstr = %s to location %s",
+				LOG(LOG_DEBUG, "regexmanager::handle_action: adding rx = %s colorstr = %s to location %s",
 					params[1].c_str(), colorstr.c_str(), it->first.c_str());
 				rx = new regex_t;
  				// we need to create a new one for each push_back, otherwise we'd have double frees.
@@ -112,12 +112,12 @@ void regexmanager::quote_and_highlight(std::string& str, const std::string& loca
 		unsigned int offset = 0;
 		int err = regexec(*it, str.c_str(), 1, &pmatch, 0);
 		while (err == 0) {
-			// GetLogger().log(LOG_DEBUG, "regexmanager::quote_and_highlight: matched %s rm_so = %u rm_eo = %u", str.c_str() + offset, pmatch.rm_so, pmatch.rm_eo);
+			// LOG(LOG_DEBUG, "regexmanager::quote_and_highlight: matched %s rm_so = %u rm_eo = %u", str.c_str() + offset, pmatch.rm_so, pmatch.rm_eo);
 			std::string marker = utils::strprintf("<%u>", i);
 			str.insert(offset + pmatch.rm_eo, "</>");
-			// GetLogger().log(LOG_DEBUG, "after first insert: %s", str.c_str());
+			// LOG(LOG_DEBUG, "after first insert: %s", str.c_str());
 			str.insert(offset + pmatch.rm_so, marker);
-			// GetLogger().log(LOG_DEBUG, "after second insert: %s", str.c_str());
+			// LOG(LOG_DEBUG, "after second insert: %s", str.c_str());
 			offset += pmatch.rm_eo + marker.length() + strlen("</>");
 			err = regexec(*it, str.c_str() + offset, 1, &pmatch, 0);
 		}

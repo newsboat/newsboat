@@ -62,14 +62,14 @@ feed parser::parse_url(const std::string& url) {
 	ret = curl_easy_perform(easyhandle);
 	curl_easy_cleanup(easyhandle);
 
-	GetLogger().log(LOG_DEBUG, "rsspp::parser::parse_url: ret = %d", ret);
+	LOG(LOG_DEBUG, "rsspp::parser::parse_url: ret = %d", ret);
 
 	if (ret != 0) {
-		GetLogger().log(LOG_ERROR, "rsspp::parser::parse_url: curl_easy_perform returned err %d: %s", ret, curl_easy_strerror(ret));
+		LOG(LOG_ERROR, "rsspp::parser::parse_url: curl_easy_perform returned err %d: %s", ret, curl_easy_strerror(ret));
 		throw exception(curl_easy_strerror(ret));
 	}
 
-	GetLogger().log(LOG_INFO, "parser::parse_url: retrieved data for %s: %s", url.c_str(), buf.c_str());
+	LOG(LOG_INFO, "parser::parse_url: retrieved data for %s: %s", url.c_str(), buf.c_str());
 
 	if (buf.length() > 0)
 		return parse_buffer(buf.c_str(), buf.length());
@@ -91,7 +91,7 @@ feed parser::parse_buffer(const char * buffer, size_t size, const char * url) {
 		f.encoding = (const char *)doc->encoding;
 	}
 
-	GetLogger().log(LOG_INFO, "parser::parse_buffer: encoding = %s", f.encoding.c_str());
+	LOG(LOG_INFO, "parser::parse_buffer: encoding = %s", f.encoding.c_str());
 
 	return f;
 }
@@ -110,7 +110,7 @@ feed parser::parse_file(const std::string& filename) {
 		f.encoding = (const char *)doc->encoding;
 	}
 
-	GetLogger().log(LOG_INFO, "parser::parse_file: encoding = %s", f.encoding.c_str());
+	LOG(LOG_INFO, "parser::parse_file: encoding = %s", f.encoding.c_str());
 
 	return f;
 }

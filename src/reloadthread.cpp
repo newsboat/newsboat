@@ -4,7 +4,7 @@
 using namespace newsbeuter;
 
 reloadthread::reloadthread(controller * c, configcontainer * cf) : ctrl(c), oldtime(0), suppressed_first(false), cfg(cf) {
-	GetLogger().log(LOG_INFO,"reloadthread: waiting %u seconds between reloads",waittime_sec);
+	LOG(LOG_INFO,"reloadthread: waiting %u seconds between reloads",waittime_sec);
 }
 
 reloadthread::~reloadthread() { }
@@ -12,7 +12,7 @@ reloadthread::~reloadthread() { }
 void reloadthread::run() {
 	for (;;) {
 		oldtime = time(NULL);
-		GetLogger().log(LOG_INFO,"reloadthread: starting reload");
+		LOG(LOG_INFO,"reloadthread: starting reload");
 
 		waittime_sec = 60 * cfg->get_configvalue_as_int("reload-time");
 		if (waittime_sec == 0)

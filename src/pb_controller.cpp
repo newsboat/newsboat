@@ -25,7 +25,7 @@ using namespace newsbeuter;
 static std::string lock_file = "pb-lock.pid";
 
 void ctrl_c_action(int sig) {
-	GetLogger().log(LOG_DEBUG,"caugh signal %d",sig);
+	LOG(LOG_DEBUG,"caugh signal %d",sig);
 	stfl::reset();
 	utils::remove_fs_lock(lock_file);
 	::exit(EXIT_FAILURE);
@@ -248,7 +248,7 @@ void pb_controller::play_file(const std::string& str) {
 	cmdline.append(str);
 	cmdline.append("'");
 	stfl::reset();
-	GetLogger().log(LOG_DEBUG, "pb_controller::play_file: running `%s'", cmdline.c_str());
+	LOG(LOG_DEBUG, "pb_controller::play_file: running `%s'", cmdline.c_str());
 	::system(cmdline.c_str());
 }
 

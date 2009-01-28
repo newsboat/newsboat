@@ -18,7 +18,7 @@ void downloadthread::run() {
 	 * A downloadthread is spawned whenever "reload all" is invoked, and whenever an auto-reload
 	 * comes up.
 	 */
-	GetLogger().log(LOG_DEBUG, "downloadthread::run: inside downloadthread, reloading all feeds...");
+	LOG(LOG_DEBUG, "downloadthread::run: inside downloadthread, reloading all feeds...");
 	if (ctrl->trylock_reload_mutex()) {
 		if (indexes.size() == 0) {
 			ctrl->reload_all();

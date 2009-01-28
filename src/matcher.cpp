@@ -33,7 +33,7 @@ bool matcher::parse(const std::string& expr) {
 
 	gettimeofday(&tv2, NULL);
 	unsigned long diff = (((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) - tv1.tv_usec;
-	GetLogger().log(LOG_DEBUG, "matcher::parse: parsing `%s' took %lu µs (success = %d)", expr.c_str(), diff, b ? 1 : 0);
+	LOG(LOG_DEBUG, "matcher::parse: parsing `%s' took %lu µs (success = %d)", expr.c_str(), diff, b ? 1 : 0);
 
 	return b;
 }
@@ -115,7 +115,7 @@ bool matcher::matchop_cont(expression * e, matchable * item) {
 
 bool matcher::matchop_eq(expression * e, matchable * item) {
 	if (!item->has_attribute(e->name)) {
-		GetLogger().log(LOG_WARN, "matcher::matches_r: attribute %s not available", e->name.c_str());
+		LOG(LOG_WARN, "matcher::matches_r: attribute %s not available", e->name.c_str());
 		throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
 	}
 	return (item->get_attribute(e->name)==e->literal);
@@ -163,7 +163,7 @@ bool matcher::matches_r(expression * e, matchable * item) {
 				return !matchop_cont(e, item);
 
 			default:
-				GetLogger().log(LOG_ERROR, "matcher::matches_r: invalid operator %d", e->op);
+				LOG(LOG_ERROR, "matcher::matches_r: invalid operator %d", e->op);
 				assert(false); // that's an error condition
 		}
 		return false;

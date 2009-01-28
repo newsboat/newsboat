@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <mutex.h>
+#include <config.h>
 
 namespace newsbeuter {
 
@@ -30,7 +31,9 @@ logger& GetLogger();
 }
 
 #ifdef NO_DEBUG
-#define log(x, ...) nada()
+#define LOG(x, ...) do { } while(0)
+#else
+#define LOG(x, ...) do { GetLogger().log(x, __VA_ARGS__); } while(0)
 #endif
 
 #endif

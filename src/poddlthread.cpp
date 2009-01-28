@@ -48,12 +48,12 @@ void poddlthread::run() {
 	struct stat sb;
 
 	if (stat(dl->filename(), &sb) == -1) {
-		GetLogger().log(LOG_INFO, "poddlthread::run: stat failed: starting normal download");
+		LOG(LOG_INFO, "poddlthread::run: stat failed: starting normal download");
 		mkdir_p(dl->filename());
 		f.open(dl->filename(), std::fstream::out);
 		dl->set_offset(0);
 	} else {
-		GetLogger().log(LOG_INFO, "poddlthread::run: stat ok: starting download from %u", sb.st_size);
+		LOG(LOG_INFO, "poddlthread::run: stat ok: starting download from %u", sb.st_size);
 		curl_easy_setopt(easyhandle, CURLOPT_RESUME_FROM, sb.st_size);
 		dl->set_offset(sb.st_size);
 		f.open(dl->filename(), std::fstream::out | std::fstream::app);
@@ -67,7 +67,7 @@ void poddlthread::run() {
 
 		f.close();
 
-		GetLogger().log(LOG_INFO,"poddlthread::run: curl_easy_perform rc = %u", success);
+		LOG(LOG_INFO,"poddlthread::run: curl_easy_perform rc = %u", success);
 
 		if (0 == success)
 			dl->set_status(DL_FINISHED);

@@ -62,17 +62,17 @@ std::string stfl::form::get_focus() {
 
 void stfl::form::set_focus(const std::string& name) {
 	stfl_set_focus(f, stfl_ipool_towc(ipool,name.c_str()));
-	GetLogger().log(LOG_DEBUG,"stfl::form::set_focus: %s rc = %d", name.c_str());
+	LOG(LOG_DEBUG,"stfl::form::set_focus: %s rc = %d", name.c_str());
 	stfl_ipool_flush(ipool);
 }
 
 void stfl::form::modify(const std::string& name, const std::string& mode, const std::string& text) {
-	GetLogger().log(LOG_INFO, "stfl::form::modify: name = `%s' mode = `%s' text = `%s'", name.c_str(), mode.c_str(), text.c_str());
+	LOG(LOG_INFO, "stfl::form::modify: name = `%s' mode = `%s' text = `%s'", name.c_str(), mode.c_str(), text.c_str());
 	const wchar_t * wname, * wmode, * wtext;
 	wname = stfl_ipool_towc(ipool,name.c_str());
 	wmode = stfl_ipool_towc(ipool,mode.c_str());
 	wtext = stfl_ipool_towc(ipool,text.c_str());
-	// GetLogger().log(LOG_INFO, "stfl::form::modify: wname = `%ls' mode = `%ls' text = `%ls'", wname, wmode, wtext);
+	// LOG(LOG_INFO, "stfl::form::modify: wname = `%ls' mode = `%ls' text = `%ls'", wname, wmode, wtext);
 	stfl_modify(f, wname, wmode, wtext);
 	stfl_ipool_flush(ipool);
 }

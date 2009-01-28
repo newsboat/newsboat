@@ -75,10 +75,10 @@ void formaction::process_op(operation op, bool automatic, std::vector<std::strin
 						cmdline.append(utils::strprintf("%s ", stfl::quote(*it).c_str()));
 					}
 				}
-				GetLogger().log(LOG_DEBUG, "formaction::process_op: running commandline `%s'", cmdline.c_str());
+				LOG(LOG_DEBUG, "formaction::process_op: running commandline `%s'", cmdline.c_str());
 				this->handle_cmdline(cmdline);
 			} else {
-				GetLogger().log(LOG_WARN, "formaction::process_op: got OP_INT_SET, but not automatic");
+				LOG(LOG_WARN, "formaction::process_op: got OP_INT_SET, but not automatic");
 			}
 			break;
 		case OP_INT_CANCEL_QNA:
@@ -207,7 +207,7 @@ void formaction::finished_qna(operation op) {
 				f->set_focus("feeds");
 				std::string cmdline = qna_responses[0];
 				formaction::cmdlinehistory.add_line(cmdline);
-				GetLogger().log(LOG_DEBUG,"formaction: commandline = `%s'", cmdline.c_str());
+				LOG(LOG_DEBUG,"formaction: commandline = `%s'", cmdline.c_str());
 				this->handle_cmdline(cmdline);
 			}
 			break;
@@ -218,7 +218,7 @@ void formaction::finished_qna(operation op) {
 
 
 void formaction::start_bookmark_qna(const std::string& default_title, const std::string& default_url, const std::string& default_desc) {
-	GetLogger().log(LOG_DEBUG, "formaction::start_bookmark_qna: OK, starting bookmark Q&A...");
+	LOG(LOG_DEBUG, "formaction::start_bookmark_qna: OK, starting bookmark Q&A...");
 	std::vector<qna_pair> prompts;
 
 	prompts.push_back(qna_pair(_("URL: "), default_url));

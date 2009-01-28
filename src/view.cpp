@@ -108,7 +108,7 @@ void view::set_status_unlocked(const std::string& msg) {
 			form->set("msg",msg);
 			form->run(-1);
 		} else {
-			GetLogger().log(LOG_ERROR, "view::set_status_unlocked: form for formaction of type %s is NULL!", get_current_formaction()->id().c_str());
+			LOG(LOG_ERROR, "view::set_status_unlocked: form for formaction of type %s is NULL!", get_current_formaction()->id().c_str());
 		}
 	}
 }
@@ -166,20 +166,20 @@ void view::run() {
 				continue;
 			}
 
-			GetLogger().log(LOG_DEBUG, "view::run: event = %s", event);
+			LOG(LOG_DEBUG, "view::run: event = %s", event);
 
 			// retrieve operation code through the keymap
 			operation op;
 			
 			if (have_macroprefix) {
 				have_macroprefix = false;
-				GetLogger().log(LOG_DEBUG, "view::run: running macro `%s'", event);
+				LOG(LOG_DEBUG, "view::run: running macro `%s'", event);
 				macrocmds = keys->get_macro(event);
 				set_status("");
 			} else {
 				op = keys->get_operation(event, fa->id());
 
-				GetLogger().log(LOG_DEBUG, "view::run: event = %s op = %u", event, op);
+				LOG(LOG_DEBUG, "view::run: event = %s op = %u", event, op);
 
 				// the redraw keybinding is handled globally so
 				// that it doesn't need to be handled by all
@@ -219,7 +219,7 @@ std::string view::run_modal(std::tr1::shared_ptr<formaction> f, const std::strin
 		fa->prepare();
 
 		const char * event = fa->get_form()->run(1000);
-		GetLogger().log(LOG_DEBUG, "view::run: event = %s", event);
+		LOG(LOG_DEBUG, "view::run: event = %s", event);
 		if (!event || strcmp(event,"TIMEOUT")==0) continue;
 
 		operation op = keys->get_operation(event, fa->id());
@@ -254,7 +254,7 @@ std::string view::get_filename_suggestion(const std::string& s) {
 		retval = "article.txt";
 	else
 		retval.append(".txt");
-	GetLogger().log(LOG_DEBUG,"view::get_filename_suggestion: %s -> %s", s.c_str(), retval.c_str());
+	LOG(LOG_DEBUG,"view::get_filename_suggestion: %s -> %s", s.c_str(), retval.c_str());
 	return retval;	
 }
 
@@ -284,7 +284,7 @@ void view::open_in_pager(const std::string& filename) {
 		cmdline.append(filename);
 	}
 	stfl::reset();
-	GetLogger().log(LOG_DEBUG, "view::open_in_browser: running `%s'", cmdline.c_str());
+	LOG(LOG_DEBUG, "view::open_in_browser: running `%s'", cmdline.c_str());
 	::system(cmdline.c_str());
 	pop_current_formaction();
 }
@@ -312,7 +312,7 @@ void view::open_in_browser(const std::string& url) {
 		cmdline.append("'");
 	}
 	stfl::reset();
-	GetLogger().log(LOG_DEBUG, "view::open_in_browser: running `%s'", cmdline.c_str());
+	LOG(LOG_DEBUG, "view::open_in_browser: running `%s'", cmdline.c_str());
 	::system(cmdline.c_str());
 	pop_current_formaction();
 }
@@ -326,7 +326,7 @@ void view::update_visible_feeds(std::vector<std::tr1::shared_ptr<rss_feed> >& fe
 		}
 	} catch (matcherexception e) {
 		set_status_unlocked(utils::strprintf(_("Error: applying the filter failed: %s"), e.what()));
-		GetLogger().log(LOG_DEBUG, "view::update_visible_feeds: inside catch: %s", e.what());
+		LOG(LOG_DEBUG, "view::update_visible_feeds: inside catch: %s", e.what());
 	}
 }
 
@@ -346,7 +346,7 @@ void view::set_feedlist(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
 		}
 	} catch (matcherexception e) {
 		set_status_unlocked(utils::strprintf(_("Error: applying the filter failed: %s"), e.what()));
-		GetLogger().log(LOG_DEBUG, "view::set_feedlist: inside catch: %s", e.what());
+		LOG(LOG_DEBUG, "view::set_feedlist: inside catch: %s", e.what());
 	}
 }
 
@@ -357,7 +357,7 @@ void view::set_tags(const std::vector<std::string>& t) {
 
 void view::push_searchresult(std::tr1::shared_ptr<rss_feed> feed, const std::string& phrase) {
 	assert(feed != NULL);
-	GetLogger().log(LOG_DEBUG, "view::push_searchresult: pushing search result");
+	LOG(LOG_DEBUG, "view::push_searchresult: pushing search result");
 
 	if (feed->items().size() > 0) {
 		std::tr1::shared_ptr<itemlist_formaction> searchresult(new itemlist_formaction(this, itemlist_str));
@@ -404,7 +404,7 @@ void view::push_itemlist(std::tr1::shared_ptr<rss_feed> feed) {
 
 void view::push_itemlist(unsigned int pos) {
 	std::tr1::shared_ptr<rss_feed> feed = ctrl->get_feed(pos);
-	GetLogger().log(LOG_DEBUG, "view::push_itemlist: retrieved feed at position %d", pos);
+	LOG(LOG_DEBUG, "view::push_itemlist: retrieved feed at position %d", pos);
 	push_itemlist(feed);
 	if (feed->items().size() > 0) {
 		std::tr1::shared_ptr<itemlist_formaction> itemlist = std::tr1::dynamic_pointer_cast<itemlist_formaction, formaction>(get_current_formaction());
@@ -500,7 +500,7 @@ std::string view::select_filter(const std::vector<filter_name_expr_pair>& filter
 }
 
 char view::confirm(const std::string& prompt, const std::string& charset) {
-	GetLogger().log(LOG_DEBUG, "view::confirm: charset = %s", charset.c_str());
+	LOG(LOG_DEBUG, "view::confirm: charset = %s", charset.c_str());
 
 	std::tr1::shared_ptr<formaction> f = get_current_formaction();
 	formaction_stack.push_back(std::tr1::shared_ptr<formaction>());
@@ -511,10 +511,10 @@ char view::confirm(const std::string& prompt, const std::string& charset) {
 
 	do {
 		const char * event = f->get_form()->run(0);
-		GetLogger().log(LOG_DEBUG,"view::confirm: event = %s", event);
+		LOG(LOG_DEBUG,"view::confirm: event = %s", event);
 		if (!event) continue;
 		result = keys->get_key(event);
-		GetLogger().log(LOG_DEBUG, "view::confirm: key = %c (%u)", result, result);
+		LOG(LOG_DEBUG, "view::confirm: key = %c (%u)", result, result);
 	} while (!result || strchr(charset.c_str(), result)==NULL);
 
 	f->get_form()->set("msg", "");
@@ -542,10 +542,10 @@ void view::notify_itemlist_change(std::tr1::shared_ptr<rss_feed> feed) {
 
 bool view::get_previous_unread(itemlist_formaction * itemlist, itemview_formaction * itemview) {
 	unsigned int feedpos;
-	GetLogger().log(LOG_DEBUG, "view::get_previous_unread: trying to find previous unread");
+	LOG(LOG_DEBUG, "view::get_previous_unread: trying to find previous unread");
 	std::tr1::shared_ptr<feedlist_formaction> feedlist = std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
 	if (itemlist->jump_to_previous_unread_item(false)) {
-		GetLogger().log(LOG_DEBUG, "view::get_previous_unread: found unread article in same feed");
+		LOG(LOG_DEBUG, "view::get_previous_unread: found unread article in same feed");
 		if (itemview) {
 			itemview->init();
 			itemview->set_feed(itemlist->get_feed());
@@ -553,10 +553,10 @@ bool view::get_previous_unread(itemlist_formaction * itemlist, itemview_formacti
 		}
 		return true;
 	} else if (cfg->get_configvalue_as_bool("goto-next-feed")==false) {
-		GetLogger().log(LOG_DEBUG, "view::get_previous_unread: goto-next-feed = false");
+		LOG(LOG_DEBUG, "view::get_previous_unread: goto-next-feed = false");
 		show_error(_("No unread items."));
 	} else if (feedlist->jump_to_previous_unread_feed(feedpos)) {
-		GetLogger().log(LOG_DEBUG, "view::get_previous_unread: found feed with unread articles");
+		LOG(LOG_DEBUG, "view::get_previous_unread: found feed with unread articles");
 		itemlist->set_feed(feedlist->get_feed());
 		itemlist->set_pos(feedpos);
 		itemlist->init();
@@ -601,9 +601,9 @@ bool view::get_prev_unread_feed(itemlist_formaction * itemlist) {
 bool view::get_next_unread(itemlist_formaction * itemlist, itemview_formaction * itemview) {
 	unsigned int feedpos;
 	std::tr1::shared_ptr<feedlist_formaction> feedlist = std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
-	GetLogger().log(LOG_DEBUG, "view::get_next_unread: trying to find next unread");
+	LOG(LOG_DEBUG, "view::get_next_unread: trying to find next unread");
 	if (itemlist->jump_to_next_unread_item(false)) {
-		GetLogger().log(LOG_DEBUG, "view::get_next_unread: found unread article in same feed");
+		LOG(LOG_DEBUG, "view::get_next_unread: found unread article in same feed");
 		if (itemview) {
 			itemview->init();
 			itemview->set_feed(itemlist->get_feed());
@@ -611,10 +611,10 @@ bool view::get_next_unread(itemlist_formaction * itemlist, itemview_formaction *
 		}
 		return true;
 	} else if (cfg->get_configvalue_as_bool("goto-next-feed")==false) {
-		GetLogger().log(LOG_DEBUG, "view::get_next_unread: goto-next-feed = false");
+		LOG(LOG_DEBUG, "view::get_next_unread: goto-next-feed = false");
 		show_error(_("No unread items."));
 	} else if (feedlist->jump_to_next_unread_feed(feedpos)) {
-		GetLogger().log(LOG_DEBUG, "view::get_next_unread: found feed with unread articles");
+		LOG(LOG_DEBUG, "view::get_next_unread: found feed with unread articles");
 		itemlist->set_feed(feedlist->get_feed());
 		itemlist->set_pos(feedpos);
 		itemlist->init();
@@ -721,7 +721,7 @@ void view::apply_colors(std::tr1::shared_ptr<formaction> fa) {
 			colorattr.append(*it);
 		} 
 
-		GetLogger().log(LOG_DEBUG,"view::apply_colors: %s %s %s\n", fa->id().c_str(), fgcit->first.c_str(), colorattr.c_str());
+		LOG(LOG_DEBUG,"view::apply_colors: %s %s %s\n", fa->id().c_str(), fgcit->first.c_str(), colorattr.c_str());
 
 		fa->get_form()->set(fgcit->first, colorattr);
 

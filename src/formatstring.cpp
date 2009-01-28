@@ -10,7 +10,7 @@
 namespace newsbeuter {
 
 void fmtstr_formatter::register_fmt(char f, const std::string& value) {
-	GetLogger().log(LOG_INFO, "fmtstr_formatter::register_fmt: char = %c value = %s", f, value.c_str());
+	LOG(LOG_INFO, "fmtstr_formatter::register_fmt: char = %c value = %s", f, value.c_str());
 	fmts[f] = utils::str2wstr(value);
 }
 
@@ -21,16 +21,16 @@ std::string fmtstr_formatter::do_format(const std::string& fmt, unsigned int wid
 		std::wstring w = do_wformat(wfmt, width);
 		result = utils::wstr2str(w);
 	}
-	GetLogger().log(LOG_INFO, "fmtstr_formatter::do_format: result = %s", result.c_str());
+	LOG(LOG_INFO, "fmtstr_formatter::do_format: result = %s", result.c_str());
 	return result;
 }
 
 std::wstring fmtstr_formatter::do_wformat(const std::wstring& wfmt, unsigned int width) {
-	GetLogger().log(LOG_DEBUG, "fmtstr_formatter::do_wformat: fmt = `%ls' width = %u", wfmt.c_str(), width);
+	LOG(LOG_DEBUG, "fmtstr_formatter::do_wformat: fmt = `%ls' width = %u", wfmt.c_str(), width);
 	std::wstring result;
 	unsigned int i;
 	unsigned int fmtlen = wfmt.length();
-	GetLogger().log(LOG_DEBUG, "fmtstr_formatter::do_wformat: fmtlen = %u", fmtlen);
+	LOG(LOG_DEBUG, "fmtstr_formatter::do_wformat: fmtlen = %u", fmtlen);
 	for (i=0;i<fmtlen;++i) {
 		if (wfmt[i] == L'%') {
 			if (i<(fmtlen-1)) {
@@ -41,7 +41,7 @@ std::wstring fmtstr_formatter::do_wformat(const std::wstring& wfmt, unsigned int
 						number.append(1,wfmt[i+1]);
 						++i;
 					}
-					GetLogger().log(LOG_DEBUG, "fmtstr_formatter::do_wformat: number = %ls", number.c_str());
+					LOG(LOG_DEBUG, "fmtstr_formatter::do_wformat: number = %ls", number.c_str());
 					if (i<(fmtlen-1)) {
 						c = wfmt[i+1];
 						++i;
@@ -51,7 +51,7 @@ std::wstring fmtstr_formatter::do_wformat(const std::wstring& wfmt, unsigned int
 						if (static_cast<unsigned int>(abs(align)) > fmts[c].length()) {
 							wchar_t buf[256];
 							swprintf(buf,sizeof(buf)/sizeof(*buf),L"%*ls", align, fmts[c].c_str());
-							GetLogger().log(LOG_DEBUG, "fmtstr_formatter::do_wformat: swprintf result = %ls", buf);
+							LOG(LOG_DEBUG, "fmtstr_formatter::do_wformat: swprintf result = %ls", buf);
 							result.append(buf);
 						} else {
 							result.append(fmts[c].substr(0,abs(align)));
@@ -59,7 +59,7 @@ std::wstring fmtstr_formatter::do_wformat(const std::wstring& wfmt, unsigned int
 					}
 				} else if (wfmt[i+1] == L'%') {
 					result.append(1, L'%');
-					GetLogger().log(LOG_DEBUG, "fmtstr_formatter::do_wformat: appending %");
+					LOG(LOG_DEBUG, "fmtstr_formatter::do_wformat: appending %");
 					++i;
 				} else if (wfmt[i+1] == L'>') {
 					if (wfmt[i+2]) {
@@ -68,9 +68,9 @@ std::wstring fmtstr_formatter::do_wformat(const std::wstring& wfmt, unsigned int
 							i += 2;
 						} else {
 							std::wstring rightside = do_wformat(&wfmt[i+3], 0);
-							GetLogger().log(LOG_DEBUG, "fmtstr_formatter::do_wformat: aligning, right side = %ls", rightside.c_str());
+							LOG(LOG_DEBUG, "fmtstr_formatter::do_wformat: aligning, right side = %ls", rightside.c_str());
 							int diff = width - wcswidth(result.c_str(),result.length()) - wcswidth(rightside.c_str(), rightside.length());
-							GetLogger().log(LOG_DEBUG, "fmtstr_formatter::do_wformat: diff = %d char = %lc", diff, wfmt[i+2]);
+							LOG(LOG_DEBUG, "fmtstr_formatter::do_wformat: diff = %d char = %lc", diff, wfmt[i+2]);
 							if (diff > 0) {
 								result.append(diff, wfmt[i+2]);
 							}
@@ -93,8 +93,8 @@ std::wstring fmtstr_formatter::do_wformat(const std::wstring& wfmt, unsigned int
 							while (pair.size() < 2)
 								pair.push_back(L"");
 
-							GetLogger().log(LOG_DEBUG, "fmtstr_formatter::do_wformat: values = `%ls' cond = `%ls' cond[0] = `%lc' fmts[cond[0]] = `%ls'", values.c_str(), cond.c_str(), cond[0], fmts[cond[0]].c_str());
-							GetLogger().log(LOG_DEBUG, "YYY pair0 = `%ls' pair1 = `%ls'", pair[0].c_str(), pair[1].c_str());
+							LOG(LOG_DEBUG, "fmtstr_formatter::do_wformat: values = `%ls' cond = `%ls' cond[0] = `%lc' fmts[cond[0]] = `%ls'", values.c_str(), cond.c_str(), cond[0], fmts[cond[0]].c_str());
+							LOG(LOG_DEBUG, "YYY pair0 = `%ls' pair1 = `%ls'", pair[0].c_str(), pair[1].c_str());
 							std::wstring subresult;
 							if (fmts[cond[0]].length() > 0) {
 								if (pair[0].length() > 0)
@@ -103,7 +103,7 @@ std::wstring fmtstr_formatter::do_wformat(const std::wstring& wfmt, unsigned int
 								if (pair[1].length() > 0)
 									subresult = do_wformat(pair[1], width);
 							}
-							GetLogger().log(LOG_DEBUG, "YYY result = `%ls'", subresult.c_str());
+							LOG(LOG_DEBUG, "YYY result = `%ls'", subresult.c_str());
 							result.append(subresult);
 
 
@@ -123,7 +123,7 @@ std::wstring fmtstr_formatter::do_wformat(const std::wstring& wfmt, unsigned int
 			result.append(1, wfmt[i]);
 		}
 	}
-	GetLogger().log(LOG_DEBUG, "end of do_wformat");
+	LOG(LOG_DEBUG, "end of do_wformat");
 	return result;
 }
 

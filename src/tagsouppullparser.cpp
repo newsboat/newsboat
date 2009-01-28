@@ -266,7 +266,7 @@ static struct {
 };
 
 std::string tagsouppullparser::decode_entity(std::string s) {
-	GetLogger().log(LOG_DEBUG, "tagsouppullparser::decode_entity: decoding '%s'...", s.c_str());
+	LOG(LOG_DEBUG, "tagsouppullparser::decode_entity: decoding '%s'...", s.c_str());
 	// TODO: improve entity decoder
 	if (s == "lt") {
 		return "<";
@@ -298,7 +298,7 @@ std::string tagsouppullparser::decode_entity(std::string s) {
 			mbc[pos] = '\0';
 			result.append(mbc);
 		}
-		GetLogger().log(LOG_DEBUG,"tagsouppullparser::decode_entity: wc = %u pos = %d mbc = '%s'", wc, pos, mbc);
+		LOG(LOG_DEBUG,"tagsouppullparser::decode_entity: wc = %u pos = %d mbc = '%s'", wc, pos, mbc);
 		return result;
 	} else {
 		for (unsigned int i=0;entity_table[i].entity;++i) {

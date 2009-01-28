@@ -52,7 +52,7 @@ bool configparser::parse(const std::string& filename, bool double_include) {
 	 *   - if an error happens, react accordingly.
 	 */
 	if (!double_include && included_files.find(filename) != included_files.end()) {
-		GetLogger().log(LOG_WARN, "configparser::parse: file %s has already been included", filename.c_str());
+		LOG(LOG_WARN, "configparser::parse: file %s has already been included", filename.c_str());
 		return true;
 	}
 	included_files.insert(included_files.begin(), filename);
@@ -62,11 +62,11 @@ bool configparser::parse(const std::string& filename, bool double_include) {
 	std::string line;
 	getline(f,line);
 	if (!f.is_open()) {
-		GetLogger().log(LOG_WARN, "configparser::parse: file %s couldn't be opened", filename.c_str());
+		LOG(LOG_WARN, "configparser::parse: file %s couldn't be opened", filename.c_str());
 		return false;
 	}
 	while (f.is_open() && !f.eof()) {
-		GetLogger().log(LOG_DEBUG,"configparser::parse: tokenizing %s",line.c_str());
+		LOG(LOG_DEBUG,"configparser::parse: tokenizing %s",line.c_str());
 		std::vector<std::string> tokens = utils::tokenize_quoted(line);
 		if (tokens.size() > 0) {
 			std::string cmd = tokens[0];
@@ -89,12 +89,12 @@ bool configparser::parse(const std::string& filename, bool double_include) {
 }
 
 void configparser::register_handler(const std::string& cmd, config_action_handler * handler) {
-	GetLogger().log(LOG_DEBUG,"configparser::register_handler: cmd = %s handler = %p", cmd.c_str(), handler);
+	LOG(LOG_DEBUG,"configparser::register_handler: cmd = %s handler = %p", cmd.c_str(), handler);
 	action_handlers[cmd] = handler;
 }
 
 void configparser::unregister_handler(const std::string& cmd) {
-	GetLogger().log(LOG_DEBUG,"configparser::unregister_handler: cmd = %s", cmd.c_str());
+	LOG(LOG_DEBUG,"configparser::unregister_handler: cmd = %s", cmd.c_str());
 	action_handlers[cmd] = 0;
 }
 

@@ -119,7 +119,7 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str, std::str
 		last_pos = str.find_first_not_of(delimiters, pos);
 	}
 
-	GetLogger().log(LOG_DEBUG, "utils::tokenize_quoted: tokenizing '%s' resulted in %u elements", str.c_str(), tokens.size());
+	LOG(LOG_DEBUG, "utils::tokenize_quoted: tokenizing '%s' resulted in %u elements", str.c_str(), tokens.size());
 
 	return tokens;
 }
@@ -183,7 +183,7 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str, std::string 
 	std::string::size_type pos = str.find_first_of(delimiters, last_pos);
 	unsigned int i;
 
-	GetLogger().log(LOG_DEBUG,"utils::tokenize_nl: last_pos = %u",last_pos);
+	LOG(LOG_DEBUG,"utils::tokenize_nl: last_pos = %u",last_pos);
 	if (last_pos != std::string::npos) {
 		for (i=0;i<last_pos;++i) {
 			tokens.push_back(std::string("\n"));
@@ -192,9 +192,9 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str, std::string 
 
 	while (std::string::npos != pos || std::string::npos != last_pos) {
 		tokens.push_back(str.substr(last_pos, pos - last_pos));
-		GetLogger().log(LOG_DEBUG,"utils::tokenize_nl: substr = %s", str.substr(last_pos, pos - last_pos).c_str());
+		LOG(LOG_DEBUG,"utils::tokenize_nl: substr = %s", str.substr(last_pos, pos - last_pos).c_str());
 		last_pos = str.find_first_not_of(delimiters, pos);
-		GetLogger().log(LOG_DEBUG,"utils::tokenize_nl: pos - last_pos = %u", last_pos - pos);
+		LOG(LOG_DEBUG,"utils::tokenize_nl: pos - last_pos = %u", last_pos - pos);
 		for (i=0;last_pos != std::string::npos && pos != std::string::npos && i<(last_pos - pos);++i) {
 			tokens.push_back(std::string("\n"));
 		}
@@ -205,7 +205,7 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str, std::string 
 }
 
 void utils::remove_fs_lock(const std::string& lock_file) {
-	GetLogger().log(LOG_DEBUG, "utils::remove_fs_lock: removed lockfile %s", lock_file.c_str());
+	LOG(LOG_DEBUG, "utils::remove_fs_lock: removed lockfile %s", lock_file.c_str());
 	::unlink(lock_file.c_str());
 }
 
@@ -214,7 +214,7 @@ bool utils::try_fs_lock(const std::string& lock_file, pid_t & pid) {
 	// pid == 0 indicates that something went majorly wrong during locking
 	pid = 0;
 
-	GetLogger().log(LOG_DEBUG, "utils::try_fs_lock: trying to lock %s", lock_file.c_str());
+	LOG(LOG_DEBUG, "utils::try_fs_lock: trying to lock %s", lock_file.c_str());
 
 	// first, we open (and possibly create) the lock file
 	fd = ::open(lock_file.c_str(), O_RDWR | O_CREAT, 0600);
@@ -327,7 +327,7 @@ void utils::extract_filter(const std::string& line, std::string& filter, std::st
 	filter = line.substr(pos+1, pos1 - pos - 1);
 	pos = pos1;
 	url = line.substr(pos+1, line.length() - pos);
-	GetLogger().log(LOG_DEBUG, "utils::extract_filter: %s -> filter: %s url: %s", line.c_str(), filter.c_str(), url.c_str());
+	LOG(LOG_DEBUG, "utils::extract_filter: %s -> filter: %s url: %s", line.c_str(), filter.c_str(), url.c_str());
 }
 
 static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp) {
@@ -358,7 +358,7 @@ std::string utils::retrieve_url(const std::string& url, const char * user_agent,
 	curl_easy_perform(easyhandle);
 	curl_easy_cleanup(easyhandle);
 
-	GetLogger().log(LOG_DEBUG, "utils::retrieve_url(%s): %s", url.c_str(), buf.c_str());
+	LOG(LOG_DEBUG, "utils::retrieve_url(%s): %s", url.c_str(), buf.c_str());
 
 	return buf;
 }
@@ -375,9 +375,9 @@ void utils::run_command(const std::string& cmd, const std::string& input) {
 			dup2(fd, 0);
 			dup2(fd, 1);
 			dup2(fd, 2);
-			GetLogger().log(LOG_DEBUG, "utils::run_command: %s '%s'", cmd.c_str(), input.c_str());
+			LOG(LOG_DEBUG, "utils::run_command: %s '%s'", cmd.c_str(), input.c_str());
 			execlp(cmd.c_str(), cmd.c_str(), input.c_str(), NULL);
-			GetLogger().log(LOG_DEBUG, "utils::run_command: execlp of %s failed: %s", cmd.c_str(), strerror(errno));
+			LOG(LOG_DEBUG, "utils::run_command: execlp of %s failed: %s", cmd.c_str(), strerror(errno));
 			exit(1);
 		}
 		default:
@@ -452,13 +452,13 @@ std::string utils::resolve_tilde(const std::string& str) {
 }
 
 std::string utils::replace_all(std::string str, const std::string& from, const std::string& to) {
-	GetLogger().log(LOG_DEBUG,"utils::replace_all: before str = %s", str.c_str());
+	LOG(LOG_DEBUG,"utils::replace_all: before str = %s", str.c_str());
 	std::string::size_type s = str.find(from);
 	while (s != std::string::npos) {
 		str.replace(s,from.length(), to);
 		s = str.find(from, s + to.length());
 	}
-	GetLogger().log(LOG_DEBUG,"utils::replace_all: after str = %s", str.c_str());
+	LOG(LOG_DEBUG,"utils::replace_all: after str = %s", str.c_str());
 	return str;
 }
 
@@ -545,13 +545,13 @@ scope_measure::scope_measure(const std::string& func, loglevel ll) : lvl(ll) {
 void scope_measure::stopover(const std::string& son) {
 	gettimeofday(&tv2, NULL);
 	unsigned long diff = (((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) - tv1.tv_usec;
-	GetLogger().log(lvl, "scope_measure: function `%s' (stop over `%s') took %lu.%06lu s so far", funcname.c_str(), son.c_str(), diff / 1000000, diff % 1000000);
+	LOG(lvl, "scope_measure: function `%s' (stop over `%s') took %lu.%06lu s so far", funcname.c_str(), son.c_str(), diff / 1000000, diff % 1000000);
 }
 
 scope_measure::~scope_measure() {
 	gettimeofday(&tv2, NULL);
 	unsigned long diff = (((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) - tv1.tv_usec;
-	GetLogger().log(LOG_INFO, "scope_measure: function `%s' took %lu.%06lu s", funcname.c_str(), diff / 1000000, diff % 1000000);
+	LOG(LOG_INFO, "scope_measure: function `%s' took %lu.%06lu s", funcname.c_str(), diff / 1000000, diff % 1000000);
 }
 
 void utils::append_escapes(std::string& str, char c) {

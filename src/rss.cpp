@@ -23,23 +23,23 @@
 using namespace newsbeuter;
 
 rss_item::rss_item(cache * c) : unread_(true), ch(c), enqueued_(false), deleted_(0) {
-	// GetLogger().log(LOG_CRITICAL, "new rss_item");
+	// LOG(LOG_CRITICAL, "new rss_item");
 }
 
 rss_item::~rss_item() {
-	// GetLogger().log(LOG_CRITICAL, "delete rss_item");
+	// LOG(LOG_CRITICAL, "delete rss_item");
 }
 
 rss_feed::rss_feed(cache * c) : ch(c), empty(true), is_rtl_(false) {
-	// GetLogger().log(LOG_CRITICAL, "new rss_feed");
+	// LOG(LOG_CRITICAL, "new rss_feed");
 }
 
 rss_feed::rss_feed() : ch(NULL), empty(true), is_rtl_(false) { 
-	// GetLogger().log(LOG_CRITICAL, "new rss_feed");
+	// LOG(LOG_CRITICAL, "new rss_feed");
 }
 
 rss_feed::~rss_feed() {
-	// GetLogger().log(LOG_CRITICAL, "delete rss_feed");
+	// LOG(LOG_CRITICAL, "delete rss_feed");
 }
 
 // rss_item setters
@@ -153,11 +153,11 @@ void rss_item::set_enclosure_type(const std::string& type) {
 }
 
 std::string rss_item::title() const {
-	GetLogger().log(LOG_DEBUG,"rss_item::title: title before conversion: %s", title_.c_str());
+	LOG(LOG_DEBUG,"rss_item::title: title before conversion: %s", title_.c_str());
 	std::string retval;
 	if (title_.length()>0)
 		retval = utils::convert_text(title_, nl_langinfo(CODESET), "utf-8");
-	GetLogger().log(LOG_DEBUG,"rss_item::title: title after conversion: %s", retval.c_str());
+	LOG(LOG_DEBUG,"rss_item::title: title after conversion: %s", retval.c_str());
 	return retval;
 }
 
@@ -192,13 +192,13 @@ std::tr1::shared_ptr<rss_item> rss_feed::get_item_by_guid(const std::string& gui
 			return *it;
 		}
 	}
-	GetLogger().log(LOG_DEBUG, "rss_feed::get_item_by_guid: hit dummy item!");
+	LOG(LOG_DEBUG, "rss_feed::get_item_by_guid: hit dummy item!");
 	// abort();
 	return std::tr1::shared_ptr<rss_item>(new rss_item(ch)); // should never happen!
 }
 
 bool rss_item::has_attribute(const std::string& attribname) {
-	// GetLogger().log(LOG_DEBUG, "rss_item::has_attribute(%s) called", attribname.c_str());
+	// LOG(LOG_DEBUG, "rss_item::has_attribute(%s) called", attribname.c_str());
 	if (attribname == "title" || 
 		attribname == "link" || 
 		attribname == "author" || 
@@ -337,10 +337,10 @@ rss_ignores::~rss_ignores() {
 
 bool rss_ignores::matches(rss_item* item) {
 	for (std::vector<feedurl_expr_pair>::iterator it=ignores.begin();it!=ignores.end();++it) {
-		GetLogger().log(LOG_DEBUG, "rss_ignores::matches: it->first = `%s' item->feedurl = `%s'", it->first.c_str(), item->feedurl().c_str());
+		LOG(LOG_DEBUG, "rss_ignores::matches: it->first = `%s' item->feedurl = `%s'", it->first.c_str(), item->feedurl().c_str());
 		if (it->first == "*" || item->feedurl() == it->first) {
 			if (it->second->matches(item)) {
-				GetLogger().log(LOG_DEBUG, "rss_ignores::matches: found match");
+				LOG(LOG_DEBUG, "rss_ignores::matches: found match");
 				return true;
 			}
 		}
@@ -368,7 +368,7 @@ void rss_feed::update_items(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds)
 	if (query.length() == 0)
 		return;
 
-	GetLogger().log(LOG_DEBUG, "rss_feed::update_items: query = `%s'", query.c_str());
+	LOG(LOG_DEBUG, "rss_feed::update_items: query = `%s'", query.c_str());
 
 
 	struct timeval tv1, tv2, tvx;
@@ -382,7 +382,7 @@ void rss_feed::update_items(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds)
 		if ((*it)->rssurl().substr(0,6) != "query:") { // don't fetch items from other query feeds!
 			for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator jt=(*it)->items().begin();jt!=(*it)->items().end();++jt) {
 				if (m.matches(jt->get())) {
-					GetLogger().log(LOG_DEBUG, "rss_feed::update_items: matcher matches!");
+					LOG(LOG_DEBUG, "rss_feed::update_items: matcher matches!");
 					(*jt)->set_feedptr(*it);
 					items_.push_back(*jt);
 				}
@@ -397,15 +397,15 @@ void rss_feed::update_items(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds)
 	gettimeofday(&tv2, NULL);
 	unsigned long diff = (((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) - tv1.tv_usec;
 	unsigned long diffx = (((tv2.tv_sec - tvx.tv_sec) * 1000000) + tv2.tv_usec) - tvx.tv_usec;
-	GetLogger().log(LOG_DEBUG, "rss_feed::update_items matching took %lu.%06lu s", diff / 1000000, diff % 1000000);
-	GetLogger().log(LOG_DEBUG, "rss_feed::update_items sorting took %lu.%06lu s", diffx / 1000000, diffx % 1000000);
+	LOG(LOG_DEBUG, "rss_feed::update_items matching took %lu.%06lu s", diff / 1000000, diff % 1000000);
+	LOG(LOG_DEBUG, "rss_feed::update_items sorting took %lu.%06lu s", diffx / 1000000, diffx % 1000000);
 }
 
 void rss_feed::set_rssurl(const std::string& u) {
 	rssurl_ = u;
 	if (rssurl_.substr(0,6) == "query:") {
 		std::vector<std::string> tokens = utils::tokenize_quoted(u, ":");
-		GetLogger().log(LOG_DEBUG, "rss_feed::set_rssurl: query name = `%s' expr = `%s'", tokens[1].c_str(), tokens[2].c_str());
+		LOG(LOG_DEBUG, "rss_feed::set_rssurl: query name = `%s' expr = `%s'", tokens[1].c_str(), tokens[2].c_str());
 		set_title(tokens[1]);
 		set_query(tokens[2]);
 	}

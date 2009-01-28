@@ -120,13 +120,13 @@ void opml_urlreader::reload() {
 	std::vector<std::string> urls = utils::tokenize_quoted(this->get_source(), " ");
 
 	for (std::vector<std::string>::iterator it=urls.begin();it!=urls.end();it++) {
-		GetLogger().log(LOG_DEBUG, "bloglines_urlread::reload: downloading `%s'", it->c_str());
+		LOG(LOG_DEBUG, "bloglines_urlread::reload: downloading `%s'", it->c_str());
 		std::string urlcontent = utils::retrieve_url(*it, user_agent.c_str(), this->get_auth(), cfg->get_configvalue_as_int("download-timeout"));
 
 		xmlDoc * doc = xmlParseMemory(urlcontent.c_str(), urlcontent.length());
 
 		if (doc == NULL) {
-			GetLogger().log(LOG_ERROR, "opml_urlreader::reload: parsing XML file failed");
+			LOG(LOG_ERROR, "opml_urlreader::reload: parsing XML file failed");
 			continue;
 		}
 
@@ -135,7 +135,7 @@ void opml_urlreader::reload() {
 		if (root) {
 			for (xmlNode * node = root->children; node != NULL; node = node->next) {
 				if (strcmp((const char *)node->name, "body")==0) {
-					GetLogger().log(LOG_DEBUG, "opml_urlreader::reload: found body");
+					LOG(LOG_DEBUG, "opml_urlreader::reload: found body");
 					rec_find_rss_outlines(node->children, "");
 				}
 			}
@@ -176,7 +176,7 @@ void bloglines_urlreader::handle_node(xmlNode * node, const std::string& tag) {
 			}
 
 			std::string auth = cfg->get_configvalue("bloglines-auth");
-			GetLogger().log(LOG_DEBUG, "bloglines_urlreader::rec_find_rss_outlines: auth = %s", auth.c_str());
+			LOG(LOG_DEBUG, "bloglines_urlreader::rec_find_rss_outlines: auth = %s", auth.c_str());
 			auth = utils::replace_all(auth,"@","%40");
 
 			if (theurl.substr(0,7) == "http://") {

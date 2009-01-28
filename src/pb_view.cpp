@@ -47,7 +47,7 @@ void pb_view::run(bool auto_download) {
 
 			dllist_form.set("head", buf);
 
-			GetLogger().log(LOG_DEBUG, "pb_view::run: updating view... downloads().size() = %u", ctrl->downloads().size());
+			LOG(LOG_DEBUG, "pb_view::run: updating view... downloads().size() = %u", ctrl->downloads().size());
 
 			if (ctrl->downloads().size() > 0) {
 
