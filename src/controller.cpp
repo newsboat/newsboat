@@ -53,7 +53,7 @@ static std::string lock_file;
 void ctrl_c_action(int sig) {
 	LOG(LOG_DEBUG,"caugh signal %d",sig);
 	stfl::reset();
-	::unlink(lock_file.c_str());
+	utils::remove_fs_lock(lock_file);
 	::exit(EXIT_FAILURE);
 }
 
@@ -301,7 +301,7 @@ void controller::run(int argc, char * argv[]) {
 		rsscache = new cache(cache_file,cfg);
 	} catch (const dbexception& e) {
 		std::cout << utils::strprintf(_("Error: opening the cache file `%s' failed: %s"), cache_file.c_str(), e.what()) << std::endl;
-		::unlink(lock_file.c_str());
+		utils::remove_fs_lock(lock_file);
 		::exit(EXIT_FAILURE);
 	}
 

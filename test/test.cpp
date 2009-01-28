@@ -711,13 +711,13 @@ BOOST_AUTO_TEST_CASE(TestCensorUrl) {
 	BOOST_CHECK_EQUAL(utils::censor_url("http://aschas@newsbeuter.org/"), "http://*:*@newsbeuter.org/");
 	BOOST_CHECK_EQUAL(utils::censor_url("https://aschas@newsbeuter.org/"), "https://*:*@newsbeuter.org/");
 
-	BOOST_CHECK_EQUAL(utils::censor_url("xxx://aschas@newsbeuter.org/"), "xxx://aschas@newsbeuter.org/");
+	BOOST_CHECK_EQUAL(utils::censor_url("xxx://aschas@newsbeuter.org/"), "xxx://*:*@newsbeuter.org/");
 
 	BOOST_CHECK_EQUAL(utils::censor_url("http://foobar"), "http://foobar");
 	BOOST_CHECK_EQUAL(utils::censor_url("https://foobar"), "https://foobar");
 
-	BOOST_CHECK_EQUAL(utils::censor_url("http://aschas@"), "http://*:*@");
-	BOOST_CHECK_EQUAL(utils::censor_url("https://aschas@"), "https://*:*@");
+	BOOST_CHECK_EQUAL(utils::censor_url("http://aschas@host"), "http://*:*@host");
+	BOOST_CHECK_EQUAL(utils::censor_url("https://aschas@host"), "https://*:*@host");
 }
 
 BOOST_AUTO_TEST_CASE(TestMakeAbsoluteUrl) {
