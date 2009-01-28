@@ -222,6 +222,20 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 				}
 			}
 			break;
+		case OP_PIPE_TO: {
+				std::vector<qna_pair> qna;
+				if (automatic) {
+					if (args->size() > 0) {
+						qna_responses.clear();
+						qna_responses.push_back((*args)[0]);
+						finished_qna(OP_PIPE_TO);
+					}
+				} else {
+					qna.push_back(qna_pair(_("Pipe article to command: "), ""));
+					this->start_qna(qna, OP_PIPE_TO, &cmdlinehistory);
+				}
+			}
+			break;
 		case OP_EDITFLAGS: 
 			if (automatic) {
 				qna_responses.clear();
@@ -407,6 +421,21 @@ void itemview_formaction::finished_qna(operation op) {
 			break;
 		case OP_INT_START_SEARCH:
 			do_search();
+			break;
+		case OP_PIPE_TO: {
+				std::string cmd = qna_responses[0];
+				std::ostringstream ostr;
+				v->get_ctrl()->write_item(feed->get_item_by_guid(guid), ostr);
+				v->push_empty_formaction();
+				stfl::reset();
+				FILE * f = popen(cmd.c_str(), "w");
+				if (f) {
+					std::string data = ostr.str();
+					fwrite(data.c_str(), data.length(), 1, f);
+					pclose(f);
+				}
+				v->pop_current_formaction();
+			}
 			break;
 		default:
 			break;

@@ -14,6 +14,7 @@ Changes for newsbeuter:
 	Made article view pager configurable.
 	Improved HTML rendering of links and underlined and bold text.
 	Added ":source" commandline command to (re)load configuration files.
+	Implemented "pipe-to" key to pipe articles to external commands.
 
 1.3 (2008-12-06):
 	Changed some internal data structures to smart pointers (stability improvement).

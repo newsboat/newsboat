@@ -235,6 +235,20 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			update_visible_items = true;
 			do_redraw = true;
 			break;
+		case OP_PIPE_TO: {
+				std::vector<qna_pair> qna;
+				if (automatic) {
+					if (args->size() > 0) {
+						qna_responses.clear();
+						qna_responses.push_back((*args)[0]);
+						finished_qna(OP_PIPE_TO);
+					}
+				} else {
+					qna.push_back(qna_pair(_("Pipe article to command: "), ""));
+					this->start_qna(qna, OP_PIPE_TO, &cmdlinehistory);
+				}
+			}
+			break;
 		case OP_SEARCH: {
 				std::vector<qna_pair> qna;
 				if (automatic) {
@@ -347,6 +361,26 @@ void itemlist_formaction::finished_qna(operation op) {
 
 		case OP_INT_START_SEARCH:
 			qna_start_search();
+			break;
+
+		case OP_PIPE_TO: {
+				std::string itemposname = f->get("itempos");
+				unsigned int itempos = utils::to_u(itemposname);
+				if (itemposname.length() > 0) {
+					std::string cmd = qna_responses[0];
+					std::ostringstream ostr;
+					v->get_ctrl()->write_item(visible_items[itempos].first, ostr);
+					v->push_empty_formaction();
+					stfl::reset();
+					FILE * f = popen(cmd.c_str(), "w");
+					if (f) {
+						std::string data = ostr.str();
+						fwrite(data.c_str(), data.length(), 1, f);
+						pclose(f);
+					}
+					v->pop_current_formaction();
+				}
+			}
 			break;
 
 		default:

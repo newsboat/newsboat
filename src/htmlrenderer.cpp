@@ -13,7 +13,7 @@
 
 using namespace newsbeuter;
 
-htmlrenderer::htmlrenderer(unsigned int width) : w(width) { 
+htmlrenderer::htmlrenderer(unsigned int width, bool raw) : w(width), raw_(raw) { 
 	tags["a"] = TAG_A;
 	tags["embed"] = TAG_EMBED;
 	tags["br"] = TAG_BR;
@@ -98,15 +98,18 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 							}
 							if (link.length() > 0) {
 								link_num = add_link(links,utils::censor_url(utils::absolute_url(url,link)), LINK_HREF);
-								curline.append("<u>");
+								if (!raw_) 
+									curline.append("<u>");
 							}
 						}
 						break;
 					case TAG_STRONG:
-						curline.append("<b>");
+						if (!raw_) 
+							curline.append("<b>");
 						break;
 					case TAG_UNDERLINE:
-						curline.append("<u>");
+						if (!raw_) 
+							curline.append("<u>");
 						break;
 
 					case TAG_EMBED: {
@@ -344,17 +347,21 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 
 					case TAG_A:
 						if (link_num != -1) {
-							curline.append(utils::strprintf("</>[%d]", link_num));
+							if (!raw_)
+								curline.append("</>");
+							curline.append(utils::strprintf("[%d]", link_num));
 							link_num = -1;
 						}
 						break;
 
 					case TAG_UNDERLINE:
-						curline.append("</>");
+						if (!raw_)
+							curline.append("</>");
 						break;
 
 					case TAG_STRONG:
-						curline.append("</>");
+						if (!raw_)
+							curline.append("</>");
 						break;
 
 					case TAG_EMBED:

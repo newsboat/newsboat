@@ -65,6 +65,7 @@ static op_desc opdescs[] = {
 	{ OP_VIEWDIALOGS,		"view-dialogs",				"v",	_("View list of open dialogs"),			KM_NEWSBEUTER },
 	{ OP_NEXTDIALOG,		"next-dialog",				"^V",	_("Go to next dialog"),					KM_NEWSBEUTER },
 	{ OP_PREVDIALOG,		"prev-dialog",				"^G",	_("Go to previous dialog"),				KM_NEWSBEUTER },
+	{ OP_PIPE_TO,			"pipe-to",					"|",	_("Pipe article to command"),			KM_ARTICLE | KM_ARTICLELIST },
 
 	{ OP_0,		"zero",	"0",	_("Open URL 10"), KM_URLVIEW | KM_ARTICLE },
 	{ OP_1,		"one",	"1",	_("Open URL 1"), KM_URLVIEW | KM_ARTICLE},

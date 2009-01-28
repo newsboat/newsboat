@@ -70,6 +70,7 @@ namespace newsbeuter {
 						OP_VIEWDIALOGS,
 						OP_NEXTDIALOG,
 						OP_PREVDIALOG,
+						OP_PIPE_TO,
 						OP_NB_MAX,
 
 						// podbeuter-specific operations:

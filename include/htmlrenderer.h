@@ -15,7 +15,7 @@ namespace newsbeuter {
 
 	class htmlrenderer {
 		public:
-			htmlrenderer(unsigned int width = 80);
+			htmlrenderer(unsigned int width = 80, bool raw = false);
 			void render(const std::string&, std::vector<std::string>& lines,  std::vector<linkpair>& links, const std::string& url);
 			void render(std::istream &, std::vector<std::string>& lines, std::vector<linkpair>& links, const std::string& url);
 		private:
@@ -27,6 +27,7 @@ namespace newsbeuter {
 			std::string absolute_url(const std::string& url, const std::string& link);
 			std::string type2str(link_type type);
 			std::map<std::string, htmltag> tags;
+			bool raw_;
 	};
 
 }

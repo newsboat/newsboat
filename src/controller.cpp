@@ -991,6 +991,15 @@ std::string controller::write_temporary_item(std::tr1::shared_ptr<rss_item> item
 }
 
 void controller::write_item(std::tr1::shared_ptr<rss_item> item, const std::string& filename) {
+	std::fstream f;
+	f.open(filename.c_str(),std::fstream::out);
+	if (!f.is_open())
+		throw exception(errno);
+
+	write_item(item, f);
+}
+
+void controller::write_item(std::tr1::shared_ptr<rss_item> item, std::ostream& ostr) {
 	std::vector<std::string> lines;
 	std::vector<linkpair> links; // not used
 	
@@ -1015,16 +1024,11 @@ void controller::write_item(std::tr1::shared_ptr<rss_item> item, const std::stri
 	unsigned int width = cfg->get_configvalue_as_int("text-width");
 	if (width == 0)
 		width = 80;
-	htmlrenderer rnd(width);
+	htmlrenderer rnd(width, true);
 	rnd.render(item->description(), lines, links, item->feedurl());
 
-	std::fstream f;
-	f.open(filename.c_str(),std::fstream::out);
-	if (!f.is_open())
-		throw exception(errno);
-		
 	for (std::vector<std::string>::iterator it=lines.begin();it!=lines.end();++it) {
-		f << *it << std::endl;	
+		ostr << *it << std::endl;
 	}
 }
 
