@@ -32,7 +32,7 @@ usually in the .tar.gz file format. Alternatively, you can check out the latest
 development source tree from the newsbeuter Git repository (hosted on GitHub)
 by running the following command on the commandline:
 
-git clone git://github.com/akrennmair/newsbeuter.git
+	git clone git://github.com/akrennmair/newsbeuter.git
 
 Dependencies
 ~~~~~~~~~~~~
@@ -85,7 +85,7 @@ include::configcommands.dsv[]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .Available Operations
-[frame="all", grid="all", format="dsv",separator="|"]
+[frame="all", grid="all", format="dsv",separator=":"]
 `20`20`60~~~~~~~~~~~~~~~~~~~~~~~~
 Operation:Default key:Description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
