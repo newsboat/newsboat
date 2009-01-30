@@ -1,7 +1,7 @@
 #include <reloadthread.h>
 #include <logger.h>
 
-using namespace newsbeuter;
+namespace newsbeuter {
 
 reloadthread::reloadthread(controller * c, configcontainer * cf) : ctrl(c), oldtime(0), suppressed_first(false), cfg(cf) {
 	LOG(LOG_INFO,"reloadthread: waiting %u seconds between reloads",waittime_sec);
@@ -39,4 +39,6 @@ void reloadthread::run() {
 			seconds_to_wait = ::sleep(seconds_to_wait);
 		}
 	}
+}
+
 }

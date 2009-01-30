@@ -20,7 +20,7 @@
 
 #include <functional>
 
-using namespace newsbeuter;
+namespace newsbeuter {
 
 rss_item::rss_item(cache * c) : unread_(true), ch(c), enqueued_(false), deleted_(0) {
 	// LOG(LOG_CRITICAL, "new rss_item");
@@ -504,3 +504,5 @@ void rss_item::set_feedptr(std::tr1::shared_ptr<rss_feed> ptr) {
 	feedptr = ptr;
 }
 
+
+}

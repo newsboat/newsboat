@@ -24,7 +24,7 @@ using namespace newsbeuter;
 
 static std::string lock_file = "pb-lock.pid";
 
-void ctrl_c_action(int sig) {
+static void ctrl_c_action(int sig) {
 	LOG(LOG_DEBUG,"caugh signal %d",sig);
 	stfl::reset();
 	utils::remove_fs_lock(lock_file);

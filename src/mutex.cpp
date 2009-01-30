@@ -3,7 +3,7 @@
 
 #include <cerrno>
 
-using namespace newsbeuter;
+namespace newsbeuter {
 
 mutex::mutex() {
 	pthread_mutexattr_init(&attr);
@@ -53,4 +53,6 @@ scope_mutex::~scope_mutex() {
 	if (mtx) {
 		mtx->unlock();
 	}
+}
+
 }

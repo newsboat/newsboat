@@ -5,7 +5,7 @@
 #include <cstring>
 #include <utils.h>
 
-using namespace newsbeuter;
+namespace newsbeuter {
 
 exception::exception(unsigned int error_code) : ecode(error_code) { }
 
@@ -48,4 +48,6 @@ const char * confighandlerexception::get_errmsg(action_handler_status status) {
 		default:
 			return _("unknown error (bug).");
 	}
+}
+
 }

@@ -14,9 +14,7 @@
 #include <exceptions.h>
 #include <utils.h>
 
-using namespace newsbeuter;
-
-//-------------------------------------------
+namespace newsbeuter {
 
 struct cb_handler {
 		cb_handler() : c(-1) { }
@@ -864,4 +862,6 @@ scope_transaction::scope_transaction(sqlite3 * db) : d(db) {
 scope_transaction::~scope_transaction() {
 	sqlite3_exec(d, "END;", NULL, NULL, NULL);
 	LOG(LOG_DEBUG,"scope_transaction: ended transaction for handle: %p", d);
+}
+
 }

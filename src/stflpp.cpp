@@ -5,7 +5,7 @@
 
 #include <langinfo.h>
 
-using namespace newsbeuter;
+namespace newsbeuter {
 
 /*
  * This is a wrapper around the low-level C functions of STFL.
@@ -123,3 +123,5 @@ void stfl::error_action(const std::string& mode) {
 	stfl_ipool_destroy(ipool);
 }
 */
+
+}

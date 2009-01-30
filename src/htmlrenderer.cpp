@@ -11,7 +11,7 @@
 #include <libgen.h>
 #include <config.h>
 
-using namespace newsbeuter;
+namespace newsbeuter {
 
 htmlrenderer::htmlrenderer(unsigned int width, bool raw) : w(width), raw_(raw) { 
 	tags["a"] = TAG_A;
@@ -488,4 +488,6 @@ bool htmlrenderer::line_is_nonempty(const std::string& line) {
 			return true;
 	}
 	return false;
+}
+
 }
