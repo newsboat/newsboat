@@ -23,6 +23,7 @@ struct rss_parser {
 		virtual void parse_feed(feed& f, xmlNode * rootNode) = 0;
 		rss_parser() { }
 		virtual ~rss_parser() { }
+		static std::string __w3cdtf_to_rfc822(const std::string& w3cdtf);
 	protected:
 		std::string get_content(xmlNode * node);
 		std::string get_prop(xmlNode * node, const char * prop, const char * ns = NULL);

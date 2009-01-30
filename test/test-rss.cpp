@@ -5,6 +5,7 @@
 #include <boost/test/auto_unit_test.hpp>
 
 #include <rsspp.h>
+#include <rsspp_internal.h>
 
 
 BOOST_AUTO_TEST_CASE(TestParseSimpleRSS_0_91) {
@@ -122,4 +123,12 @@ BOOST_AUTO_TEST_CASE(TestParseSimpleAtom_1_0) {
 	BOOST_CHECK_EQUAL(f.items[2].link, "http://example.com/atom_testing.html");
 	BOOST_CHECK_EQUAL(f.items[2].guid, "tag:example.com,2008-12-30:/atom_testing2");
 	BOOST_CHECK_EQUAL(f.items[2].description, "some content");
+}
+
+BOOST_AUTO_TEST_CASE(TestW3CDTFParser) {
+	BOOST_CHECK_EQUAL(rsspp::rss_parser::__w3cdtf_to_rfc822("2008"), "Tue, 01 Jan 2008 00:00:00 +0000");
+	BOOST_CHECK_EQUAL(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12"), "Mon, 01 Dec 2008 00:00:00 +0000");
+	BOOST_CHECK_EQUAL(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12-30"), "Tue, 30 Dec 2008 00:00:00 +0000");
+	BOOST_CHECK_EQUAL(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12-30T13:03:15Z"), "Tue, 30 Dec 2008 13:03:15 +0000");
+	BOOST_CHECK_EQUAL(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12-30T10:03:15-08:00"), "Tue, 30 Dec 2008 18:03:15 +0000");
 }

@@ -3,6 +3,7 @@ TODO:
 - add an auto-flag configuration command to automatically flag articles that match a certain query
 - when reload is finished, the focus shall be in the current form's list
 - per-feed refresh settings
+- fix W3CDTF parser
 
 
 DONE:
