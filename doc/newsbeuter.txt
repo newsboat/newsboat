@@ -110,6 +110,7 @@ in uppercase. The following identifiers for keys are supported:
 - DOWN (down cursor)
 - ESC (Esc key)
 
+The "Tab" key can't be bound due to technical limitations of STFL.
 
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
@@ -494,14 +495,15 @@ OPML Online Subscription Mode
 The OPML online subscription mode works similar to the Bloglines
 synchronization mode, except that no information about read articles is
 synchronized back. When enabled, all feeds that are listed in the feed list
-will be taken from an OPML that is downloaded from a freely configurable URL.
+will be taken from one or more OPML files that are downloaded from a freely
+configurable URL.
 
 To enable this mode, the following configuration needs to be done:
 
 	urls-source "opml"
-	opml-url "<opml url>"
+	opml-url "<opml url>" ["<opml url>" ...]
 
-"opml" must be specified as source for the feed URLs, and the URL of the OPML
+"opml" must be specified as source for the feed URLs, and the URLs of the OPML
 file needs to be specified, too. As with Bloglines synchronization mode, the offline
 mode via "newsbeuter -o" also works with OPML online subscription mode.
 

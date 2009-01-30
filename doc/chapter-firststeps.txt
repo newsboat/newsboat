@@ -36,7 +36,9 @@ provide the username/password in the following way:
 	http://username:password@hostname.domain.tld/feed.rss
 
 In order to protect username and password, make sure that
-$HOME/.newsbeuter/urls has the appropriate permissions.
+$HOME/.newsbeuter/urls has the appropriate permissions. Newsbeuter also makes
+sure that usernames and passwords within URLs aren't displayed in its user
+interface.
 
 Now you can run newsbeuter again, and it will present you with a controllable
 list of the URLs that you configured previously. You can now start downloading
