@@ -3,7 +3,6 @@ TODO:
 - add an auto-flag configuration command to automatically flag articles that match a certain query
 - when reload is finished, the focus shall be in the current form's list
 - per-feed refresh settings
-- make boolean config variables toggable via commandline and resettable to default
 - backtick evaluation in configuration
 
 
@@ -138,3 +137,4 @@ DONE:
 - add configurable pager
 - implement reloading of configuration (:source)
 - fix W3CDTF parser
+- make boolean config variables toggable via commandline and resettable to default

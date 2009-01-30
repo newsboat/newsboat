@@ -488,6 +488,12 @@ void itemlist_formaction::do_update_visible_items() {
 void itemlist_formaction::prepare() {
 	scope_mutex mtx(&redraw_mtx);
 
+	bool new_apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-articles"));
+	if (new_apply_filter != apply_filter) {
+		update_visible_items = true;
+		apply_filter = new_apply_filter;
+	}
+
 	do_update_visible_items();
 
 	if (v->get_cfg()->get_configvalue_as_bool("mark-as-read-on-hover")) {

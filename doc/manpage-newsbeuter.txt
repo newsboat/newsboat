@@ -116,8 +116,8 @@ include::chapter-cmdline.txt[]
 'save' <filename>::
         Save current article to <filename>
 
-'set' <variable>[=<value>]::
-        Set (or get) configuration variable value
+'set' <variable>[=<value>|&|!]::
+        Set (or get) configuration variable value. Specifying a '!' after the name of a boolean configuration variable toggles their values, a '&' directly after the name of a configuration variable of any type resets its value to the documented default value.
 
 'tag' <tagname>::
         Select a certain tag

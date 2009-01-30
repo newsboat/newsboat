@@ -183,4 +183,14 @@ void configcontainer::set_configvalue(const std::string& key, const std::string&
 	config_data[key].value = value;
 }
 
+void configcontainer::reset_to_default(const std::string& key) {
+	config_data[key].value = config_data[key].default_value;
+}
+
+void configcontainer::toggle(const std::string& key) {
+	if (config_data[key].type == configdata::BOOL) {
+		set_configvalue(key, std::string(get_configvalue_as_bool(key) ? "false" : "true"));
+	}
+}
+
 }

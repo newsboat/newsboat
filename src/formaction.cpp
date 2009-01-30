@@ -135,7 +135,19 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 			if (tokens.size()==0) {
 				v->show_error(_("usage: set <variable>[=<value>]"));
 			} else if (tokens.size()==1) {
-				v->set_status(utils::strprintf("  %s=%s", tokens[0].c_str(), cfg->get_configvalue(tokens[0]).c_str()));
+				std::string var = tokens[0];
+				if (var.length() > 0) {
+					if (var[var.length()-1] == '!') {
+						var.erase(var.length()-1);
+						cfg->toggle(var);
+						set_redraw(true);
+					} else if (var[var.length()-1] == '&') {
+						var.erase(var.length()-1);
+						cfg->reset_to_default(var);
+						set_redraw(true);
+					}
+					v->set_status(utils::strprintf("  %s=%s", var.c_str(), cfg->get_configvalue(var).c_str()));
+				}
 			} else if (tokens.size()==2) {
 				cfg->set_configvalue(tokens[0], tokens[1]);
 				set_redraw(true); // because some configuration value might have changed something UI-related

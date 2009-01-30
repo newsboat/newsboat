@@ -56,6 +56,8 @@ feedlist_formaction::~feedlist_formaction() { }
 void feedlist_formaction::prepare() {
 	unsigned int width = utils::to_u(f->get("items:w"));
 
+	apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-feeds"));
+
 	if (old_width != width) {
 		do_redraw = true;
 		old_width = width;
