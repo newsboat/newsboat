@@ -620,15 +620,18 @@ std::string utils::censor_url(const std::string& url) {
 	if (url.length() > 0) {
 		const char * myuri = url.c_str();
 		xmlURIPtr uri = xmlParseURI(myuri);
-		if (uri->user) {
-			xmlFree(uri->user);
-			uri->user = (char *)xmlStrdup((const xmlChar *)"*:*");
-		}
-		xmlChar * uristr = xmlSaveUri(uri);
-		
-		rv = (const char *)uristr;
-		xmlFree(uristr);
-		xmlFreeURI(uri);
+		if (uri) {
+			if (uri->user) {
+				xmlFree(uri->user);
+				uri->user = (char *)xmlStrdup((const xmlChar *)"*:*");
+			}
+			xmlChar * uristr = xmlSaveUri(uri);
+			
+			rv = (const char *)uristr;
+			xmlFree(uristr);
+			xmlFreeURI(uri);
+		} else
+			return url;
 	}
 	return rv;
 }
