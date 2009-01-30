@@ -44,7 +44,7 @@ class cache {
 			
 		sqlite3 * db;
 		configcontainer * cfg;
-		mutex * mtx;
+		mutex mtx;
 };
 
 class scope_transaction {

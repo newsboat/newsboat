@@ -168,7 +168,7 @@ static int search_item_callback(void * myfeed, int argc, char ** argv, char ** /
 
 
 
-cache::cache(const std::string& cachefile, configcontainer * c) : db(0),cfg(c), mtx(0) {
+cache::cache(const std::string& cachefile, configcontainer * c) : db(0),cfg(c) {
 	bool file_exists = false;
 	std::fstream f;
 	f.open(cachefile.c_str(), std::fstream::in | std::fstream::out);
@@ -187,12 +187,10 @@ cache::cache(const std::string& cachefile, configcontainer * c) : db(0),cfg(c), 
 	clean_old_articles();
 
 	// we need to manually lock all DB operations because SQLite has no explicit support for multithreading.
-	mtx = new mutex();
 }
 
 cache::~cache() {
 	sqlite3_close(db);
-	delete mtx;
 }
 
 void cache::set_pragmas() {
@@ -284,7 +282,7 @@ void cache::populate_tables() {
 }
 
 time_t cache::get_lastmodified(const std::string& feedurl) {
-	scope_mutex lock(mtx);
+	scope_mutex lock(&mtx);
 	time_t result = 0;
 	std::string query = prepare_query("SELECT lastmodified FROM rss_feed WHERE rssurl = '%q';", feedurl.c_str());
 	LOG(LOG_DEBUG, "running: query: %s", query.c_str());
@@ -297,7 +295,7 @@ time_t cache::get_lastmodified(const std::string& feedurl) {
 }
 
 void cache::set_lastmodified(const std::string& feedurl, time_t lastmod) {
-	scope_mutex lock(mtx);
+	scope_mutex lock(&mtx);
 	if (lastmod > 0) {
 		std::string query = prepare_query("UPDATE rss_feed SET lastmodified = '%d' WHERE rssurl = '%q';", lastmod, feedurl.c_str());
 		int rc = sqlite3_exec(db, query.c_str(), NULL, NULL, NULL);
@@ -306,7 +304,7 @@ void cache::set_lastmodified(const std::string& feedurl, time_t lastmod) {
 }
 
 void cache::mark_item_deleted(const std::string& guid, bool b) {
-	scope_mutex lock(mtx);
+	scope_mutex lock(&mtx);
 	std::string query = prepare_query("UPDATE rss_item SET deleted = %u WHERE guid = '%q'", b ? 1 : 0, guid.c_str());
 	int rc = sqlite3_exec(db, query.c_str(), NULL, NULL, NULL);
 	LOG(LOG_DEBUG, "cache::mark_item_deleted ran SQL statement: %s result = %d", query.c_str(), rc);
@@ -314,7 +312,7 @@ void cache::mark_item_deleted(const std::string& guid, bool b) {
 
 
 std::vector<std::string> cache::get_feed_urls() {
-	scope_mutex lock(mtx);
+	scope_mutex lock(&mtx);
 	std::string query = "SELECT rssurl FROM rss_feed;";
 
 	std::vector<std::string> urls;
@@ -332,7 +330,7 @@ void cache::externalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, bool reset_
 	if (feed->rssurl().substr(0,6) == "query:")
 		return;
 
-	scope_mutex lock(mtx);
+	scope_mutex lock(&mtx);
 	scope_transaction dbtrans(db);
 
 	cb_handler count_cbh;
@@ -380,7 +378,7 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed) {
 	if (feed->rssurl().substr(0,6) == "query:")
 		return;
 
-	scope_mutex lock(mtx);
+	scope_mutex lock(&mtx);
 
 	/* first, we check whether the feed is there at all */
 	std::string query = prepare_query("SELECT count(*) FROM rss_feed WHERE rssurl = '%q';",feed->rssurl().c_str());
@@ -445,7 +443,7 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed) {
 }
 
 void cache::get_latest_items(std::vector<std::tr1::shared_ptr<rss_item> >& items, unsigned int limit) {
-	scope_mutex lock(mtx);
+	scope_mutex lock(&mtx);
 	std::string query = prepare_query("SELECT guid,title,author,url,pubDate,content,unread,feedurl,enclosure_url,enclosure_type,enqueued,flags "
 									"FROM rss_item WHERE deleted = 0 ORDER BY pubDate DESC, id DESC LIMIT %d;", limit);
 	LOG(LOG_DEBUG, "running query: %s", query.c_str());
@@ -461,7 +459,7 @@ std::tr1::shared_ptr<rss_feed> cache::get_feed_by_url(const std::string& feedurl
 	std::string query;
 	int rc;
 
-	scope_mutex lock(mtx);
+	scope_mutex lock(&mtx);
 
 	query = prepare_query("SELECT title, url, is_rtl FROM rss_feed WHERE rssurl = '%q';",feedurl.c_str());
 	LOG(LOG_DEBUG,"running query: %s",query.c_str());
@@ -480,7 +478,7 @@ std::vector<std::tr1::shared_ptr<rss_item> > cache::search_for_items(const std::
 	std::vector<std::tr1::shared_ptr<rss_item> > items;
 	int rc;
 
-	scope_mutex lock(mtx);
+	scope_mutex lock(&mtx);
 	if (feedurl.length() > 0) {
 		query = prepare_query("SELECT guid,title,author,url,pubDate,content,unread,feedurl,enclosure_url,enclosure_type,enqueued,flags FROM rss_item WHERE (title LIKE '%%%q%%' OR content LIKE '%%%q%%') AND feedurl = '%q' AND deleted = 0 ORDER BY pubDate DESC, id DESC;",querystr.c_str(), querystr.c_str(), feedurl.c_str());
 	} else {
@@ -509,7 +507,7 @@ void cache::delete_item(const std::tr1::shared_ptr<rss_item> item) {
 }
 
 void cache::do_vacuum() {
-	scope_mutex lock(mtx);
+	scope_mutex lock(&mtx);
 	const char * vacuum_query = "VACUUM;";
 	int rc = sqlite3_exec(db,vacuum_query,NULL,NULL,NULL);
 	if (rc != SQLITE_OK) {
@@ -518,7 +516,7 @@ void cache::do_vacuum() {
 }
 
 void cache::cleanup_cache(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
-	mtx->lock(); // we don't use the scope_mutex here... see comments below
+	mtx.lock(); // we don't use the scope_mutex here... see comments below
 
 	/*
 	 * cache cleanup means that all entries in both the rss_feed and rss_item tables that are associated with
@@ -579,7 +577,7 @@ void cache::cleanup_cache(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
 
 /* this function writes an rss_item to the database, also checking whether this item already exists in the database */
 void cache::update_rssitem(std::tr1::shared_ptr<rss_item> item, const std::string& feedurl, bool reset_unread) {
-	scope_mutex lock(mtx);
+	scope_mutex lock(&mtx);
 	update_rssitem_unlocked(item, feedurl, reset_unread);
 }
 
@@ -637,7 +635,7 @@ void cache::update_rssitem_unlocked(std::tr1::shared_ptr<rss_item> item, const s
 }
 
 void cache::catchup_all(std::tr1::shared_ptr<rss_feed> feed) {
-	scope_mutex lock(mtx);
+	scope_mutex lock(&mtx);
 	std::string query = "UPDATE rss_item SET unread = '0' WHERE unread != '0' AND guid IN (";
 
 	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin();it!=feed->items().end();++it) {
@@ -655,7 +653,7 @@ void cache::catchup_all(std::tr1::shared_ptr<rss_feed> feed) {
 
 /* this function marks all rss_items (optionally of a certain feed url) as read */
 void cache::catchup_all(const std::string& feedurl) {
-	scope_mutex lock(mtx);
+	scope_mutex lock(&mtx);
 
 	std::string query;
 	if (feedurl.length() > 0) {
@@ -672,7 +670,7 @@ void cache::catchup_all(const std::string& feedurl) {
 }
 
 void cache::update_rssitem_unread_and_enqueued(rss_item* item, const std::string& feedurl) {
-	scope_mutex lock(mtx);
+	scope_mutex lock(&mtx);
 
 	std::string query = prepare_query("SELECT count(*) FROM rss_item WHERE guid = '%q';",item->guid().c_str());
 	cb_handler count_cbh;
@@ -709,7 +707,7 @@ void cache::update_rssitem_unread_and_enqueued(rss_item* item, const std::string
 
 /* this function updates the unread and enqueued flags */
 void cache::update_rssitem_unread_and_enqueued(std::tr1::shared_ptr<rss_item> item, const std::string& feedurl) {
-	scope_mutex lock(mtx);
+	scope_mutex lock(&mtx);
 
 	std::string query = prepare_query("SELECT count(*) FROM rss_item WHERE guid = '%q';",item->guid().c_str());
 	cb_handler count_cbh;
@@ -759,7 +757,7 @@ std::string cache::prepare_query(const char * format, ...) {
 }
 
 void cache::update_rssitem_flags(rss_item* item) {
-	scope_mutex lock(mtx);
+	scope_mutex lock(&mtx);
 
 	std::string update = prepare_query("UPDATE rss_item SET flags = '%q' WHERE guid = '%q';", item->flags().c_str(), item->guid().c_str());
 	LOG(LOG_DEBUG,"running query: %s", update.c_str());
@@ -778,7 +776,7 @@ void cache::remove_old_deleted_items(const std::string& rssurl, const std::vecto
 	}
 	guidset.append("'')");
 	std::string query = prepare_query("DELETE FROM rss_item WHERE feedurl = '%q' AND deleted = 1 AND guid NOT IN %s;", rssurl.c_str(), guidset.c_str());
-	scope_mutex lock(mtx);
+	scope_mutex lock(&mtx);
 	int rc = sqlite3_exec(db, query.c_str(), NULL, NULL, NULL);
 	if (rc != SQLITE_OK) {
 		LOG(LOG_CRITICAL, "query \"%s\" failed: error = %d", query.c_str(), rc);
@@ -789,7 +787,7 @@ void cache::remove_old_deleted_items(const std::string& rssurl, const std::vecto
 }
 
 unsigned int cache::get_unread_count() {
-	scope_mutex lock(mtx);
+	scope_mutex lock(&mtx);
 
 	std::string countquery = "SELECT count(id) FROM rss_item WHERE unread = 1;";
 	cb_handler count_cbh;
@@ -811,7 +809,7 @@ void cache::mark_items_read_by_guid(const std::vector<std::string> guids) {
 
 	int rc;
 	{
-		scope_mutex lock(mtx);
+		scope_mutex lock(&mtx);
 		rc = sqlite3_exec(db, updatequery.c_str(), NULL, NULL, NULL);
 	}
 
@@ -829,7 +827,7 @@ std::vector<std::string> cache::get_read_item_guids() {
 
 	int rc;
 	{
-		scope_mutex lock(mtx);
+		scope_mutex lock(&mtx);
 		rc = sqlite3_exec(db, query.c_str(), vectorofstring_callback, &guids, NULL);
 	}
 
@@ -843,7 +841,7 @@ std::vector<std::string> cache::get_read_item_guids() {
 }
 
 void cache::clean_old_articles() {
-	scope_mutex lock(mtx);
+	scope_mutex lock(&mtx);
 	int rc;
 
 	unsigned int days = cfg->get_configvalue_as_int("keep-articles-days");

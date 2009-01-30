@@ -67,7 +67,7 @@ void omg_a_child_died(int /* sig */) {
 	while ((pid = waitpid(-1,&stat,WNOHANG)) > 0) { }
 }
 
-controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false), cfg(new configcontainer()), colorman(new colormanager())  {
+controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false) {
 	char * cfgdir;
 	if (!(cfgdir = ::getenv("HOME"))) {
 		struct passwd * spw = ::getpwuid(::getuid());
@@ -84,16 +84,11 @@ controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache
 	config_dir.append(NEWSBEUTER_PATH_SEP);
 	config_dir.append(NEWSBEUTER_CONFIG_SUBDIR);
 	mkdir(config_dir.c_str(),0700); // create configuration directory if it doesn't exist
-
-	reload_mutex = new mutex();
 }
 
 controller::~controller() {
 	delete rsscache;
-	delete reload_mutex;
-	delete cfg;
 	delete urlcfg;
-	delete colorman;
 
 	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();it++) {
 		(*it)->items().clear();
@@ -240,8 +235,8 @@ void controller::run(int argc, char * argv[]) {
 		std::cout << _("Loading configuration...");
 	std::cout.flush();
 	
-	cfg->register_commands(cfgparser);
-	colorman->register_commands(cfgparser);
+	cfg.register_commands(cfgparser);
+	colorman.register_commands(cfgparser);
 
 	keymap keys(KM_NEWSBEUTER);
 	cfgparser.register_handler("bind-key",&keys);
@@ -271,7 +266,7 @@ void controller::run(int argc, char * argv[]) {
 		std::cout << _("done.") << std::endl;
 
 	// create cache object
-	std::string cachefilepath = cfg->get_configvalue("cache-file");
+	std::string cachefilepath = cfg.get_configvalue("cache-file");
 	if (cachefilepath.length() > 0 && !cachefile_given_on_cmdline) {
 		cache_file = cachefilepath.c_str();
 
@@ -298,7 +293,7 @@ void controller::run(int argc, char * argv[]) {
 		std::cout.flush();
 	}
 	try {
-		rsscache = new cache(cache_file,cfg);
+		rsscache = new cache(cache_file,&cfg);
 	} catch (const dbexception& e) {
 		std::cout << utils::strprintf(_("Error: opening the cache file `%s' failed: %s"), cache_file.c_str(), e.what()) << std::endl;
 		utils::remove_fs_lock(lock_file);
@@ -311,14 +306,14 @@ void controller::run(int argc, char * argv[]) {
 
 
 
-	std::string type = cfg->get_configvalue("urls-source");
+	std::string type = cfg.get_configvalue("urls-source");
 	if (type == "local") {
 		urlcfg = new file_urlreader(url_file);
 	} else if (type == "bloglines") {
-		urlcfg = new bloglines_urlreader(cfg);
+		urlcfg = new bloglines_urlreader(&cfg);
 		real_offline_mode = offline_mode;
 	} else if (type == "opml") {
-		urlcfg = new opml_urlreader(cfg);
+		urlcfg = new opml_urlreader(&cfg);
 		real_offline_mode = offline_mode;
 	} else {
 		LOG(LOG_ERROR,"unknown urls-source `%s'", urlcfg->get_source().c_str());
@@ -431,12 +426,12 @@ void controller::run(int argc, char * argv[]) {
 
 	// if the user wants to refresh on startup via configuration file, then do so,
 	// but only if -r hasn't been supplied.
-	if (!refresh_on_start && cfg->get_configvalue_as_bool("refresh-on-startup")) {
+	if (!refresh_on_start && cfg.get_configvalue_as_bool("refresh-on-startup")) {
 		refresh_on_start = true;
 	}
 
 	// hand over the important objects to the view
-	v->set_config_container(cfg);
+	v->set_config_container(&cfg);
 	v->set_keymap(&keys);
 	v->set_tags(tags);
 
@@ -508,7 +503,7 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
 		if (!unattended)
 			v->set_status(utils::strprintf(_("%sLoading %s..."), prepare_message(pos+1, max).c_str(), utils::censor_url(feed->rssurl()).c_str()));
 
-		rss_parser parser(feed->rssurl().c_str(), rsscache, cfg, &ign);
+		rss_parser parser(feed->rssurl().c_str(), rsscache, &cfg, &ign);
 		LOG(LOG_DEBUG, "controller::reload: created parser");
 		try {
 			if (parser.check_and_update_lastmodified()) {
@@ -555,7 +550,7 @@ void controller::reload_indexes(const std::vector<int>& indexes, bool unattended
 		fmt.register_fmt('n', utils::to_s(unread_articles2));
 		fmt.register_fmt('d', utils::to_s(unread_articles2 - unread_articles));
 		fmt.register_fmt('D', utils::to_s(unread_feeds2 - unread_feeds));
-		this->notify(fmt.do_format(cfg->get_configvalue("notify-format")));
+		this->notify(fmt.do_format(cfg.get_configvalue("notify-format")));
 	}
 	if (!unattended)
 		v->set_status("");
@@ -571,7 +566,7 @@ void controller::reload_range(unsigned int start, unsigned int end, unsigned int
 void controller::reload_all(bool unattended) {
 	unsigned int unread_feeds, unread_articles;
 	compute_unread_numbers(unread_feeds, unread_articles);
-	unsigned int num_threads = cfg->get_configvalue_as_int("reload-threads");
+	unsigned int num_threads = cfg.get_configvalue_as_int("reload-threads");
 	time_t t1, t2, dt;
 
 	t1 = time(NULL);
@@ -607,23 +602,23 @@ void controller::reload_all(bool unattended) {
 		fmt.register_fmt('n', utils::to_s(unread_articles2));
 		fmt.register_fmt('d', utils::to_s(unread_articles2 - unread_articles));
 		fmt.register_fmt('D', utils::to_s(unread_feeds2 - unread_feeds));
-		this->notify(fmt.do_format(cfg->get_configvalue("notify-format")));
+		this->notify(fmt.do_format(cfg.get_configvalue("notify-format")));
 	}
 }
 
 void controller::notify(const std::string& msg) {
-	if (cfg->get_configvalue_as_bool("notify-screen")) {
+	if (cfg.get_configvalue_as_bool("notify-screen")) {
 		LOG(LOG_DEBUG, "controller:notify: notifying screen");
 		std::cout << "\033^" << msg << "\033\\";
 		std::cout.flush();
 	}
-	if (cfg->get_configvalue_as_bool("notify-xterm")) {
+	if (cfg.get_configvalue_as_bool("notify-xterm")) {
 		LOG(LOG_DEBUG, "controller:notify: notifying xterm");
 		std::cout << "\033]2;" << msg << "\033\\";
 		std::cout.flush();
 	}
-	if (cfg->get_configvalue("notify-program").length() > 0) {
-		std::string prog = cfg->get_configvalue("notify-program");
+	if (cfg.get_configvalue("notify-program").length() > 0) {
+		std::string prog = cfg.get_configvalue("notify-program");
 		LOG(LOG_DEBUG, "controller:notify: notifying external program `%s'", prog.c_str());
 		utils::run_command(prog, msg);
 	}
@@ -642,7 +637,7 @@ void controller::compute_unread_numbers(unsigned int& unread_feeds, unsigned int
 }
 
 bool controller::trylock_reload_mutex() {
-	if (reload_mutex->trylock()) {
+	if (reload_mutex.trylock()) {
 		LOG(LOG_DEBUG, "controller::trylock_reload_mutex succeeded");
 		return true;
 	}
@@ -936,8 +931,8 @@ void controller::set_feedptrs(std::tr1::shared_ptr<rss_feed> feed) {
 }
 
 std::string controller::bookmark(const std::string& url, const std::string& title, const std::string& description) {
-	std::string bookmark_cmd = cfg->get_configvalue("bookmark-cmd");
-	bool is_interactive = cfg->get_configvalue_as_bool("bookmark-interactive");
+	std::string bookmark_cmd = cfg.get_configvalue("bookmark-cmd");
+	bool is_interactive = cfg.get_configvalue_as_bool("bookmark-interactive");
 	if (bookmark_cmd.length() > 0) {
 		std::string cmdline = utils::strprintf("%s '%s' %s %s", 
 			bookmark_cmd.c_str(), utils::replace_all(url,"'", "%27").c_str(), 
@@ -1021,7 +1016,7 @@ void controller::write_item(std::tr1::shared_ptr<rss_item> item, std::ostream& o
 	
 	lines.push_back(std::string(""));
 	
-	unsigned int width = cfg->get_configvalue_as_int("text-width");
+	unsigned int width = cfg.get_configvalue_as_int("text-width");
 	if (width == 0)
 		width = 80;
 	htmlrenderer rnd(width, true);
@@ -1061,7 +1056,7 @@ void controller::save_feed(std::tr1::shared_ptr<rss_feed> feed, unsigned int pos
 }
 
 void controller::enqueue_items(std::tr1::shared_ptr<rss_feed> feed) {
-	if (!cfg->get_configvalue_as_bool("podcast-auto-enqueue"))
+	if (!cfg.get_configvalue_as_bool("podcast-auto-enqueue"))
 		return;
 	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin();it!=feed->items().end();++it) {
 		if (!(*it)->enqueued() && (*it)->enclosure_url().length() > 0) {
@@ -1077,7 +1072,7 @@ void controller::enqueue_items(std::tr1::shared_ptr<rss_feed> feed) {
 }
 
 std::string controller::generate_enqueue_filename(const std::string& url, std::tr1::shared_ptr<rss_feed> feed) {
-	std::string dlformat = cfg->get_configvalue("download-path");
+	std::string dlformat = cfg.get_configvalue("download-path");
 	if (dlformat[dlformat.length()-1] != NEWSBEUTER_PATH_SEP[0])
 		dlformat.append(NEWSBEUTER_PATH_SEP);
 
@@ -1151,7 +1146,7 @@ struct sort_feeds_by_firsttag : public std::binary_function<std::tr1::shared_ptr
 
 
 void controller::sort_feeds() {
-	std::string sortmethod = cfg->get_configvalue("feed-sort-order");
+	std::string sortmethod = cfg.get_configvalue("feed-sort-order");
 	if (sortmethod == "none") {
 		// that's the default, do nothing
 	} else if (sortmethod == "firsttag") {
@@ -1162,13 +1157,13 @@ void controller::sort_feeds() {
 void controller::update_config() {
 	v->set_regexmanager(&rxman);
 
-	if (colorman->colors_loaded()) {
-		v->set_colors(colorman->get_fgcolors(), colorman->get_bgcolors(), colorman->get_attributes());
+	if (colorman.colors_loaded()) {
+		v->set_colors(colorman.get_fgcolors(), colorman.get_bgcolors(), colorman.get_attributes());
 		v->apply_colors_to_all_formactions();
 	}
 
-	if (cfg->get_configvalue("error-log").length() > 0) {
-		GetLogger().set_errorlogfile(cfg->get_configvalue("error-log").c_str());
+	if (cfg.get_configvalue("error-log").length() > 0) {
+		GetLogger().set_errorlogfile(cfg.get_configvalue("error-log").c_str());
 	}
 
 }

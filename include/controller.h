@@ -34,7 +34,7 @@ namespace newsbeuter {
 			std::vector<std::tr1::shared_ptr<rss_item> > search_for_items(const std::string& query, const std::string& feedurl);
 			inline unsigned int get_feedcount() { return feeds.size(); }
 
-			inline void unlock_reload_mutex() { reload_mutex->unlock(); }
+			inline void unlock_reload_mutex() { reload_mutex.unlock(); }
 			bool trylock_reload_mutex();
 
 			void update_feedlist();
@@ -60,7 +60,7 @@ namespace newsbeuter {
 
 			inline cache * get_cache() { return rsscache; }
 
-			inline configcontainer * get_cfg() const { return cfg; }
+			inline configcontainer * get_cfg() { return &cfg; }
 
 			void write_item(std::tr1::shared_ptr<rss_item> item, const std::string& filename);
 			void write_item(std::tr1::shared_ptr<rss_item> item, std::ostream& ostr);
@@ -103,13 +103,13 @@ namespace newsbeuter {
 			std::string config_file;
 			std::string queue_file;
 			bool refresh_on_start;
-			configcontainer * cfg;
+			configcontainer cfg;
 			rss_ignores ign;
 			filtercontainer filters;
 
-			mutex * reload_mutex;
+			mutex reload_mutex;
 			configparser cfgparser;
-			colormanager * colorman;
+			colormanager colorman;
 			regexmanager rxman;
 	};
 
