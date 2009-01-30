@@ -102,7 +102,7 @@ BOOST_AUTO_TEST_CASE(TestParseSimpleAtom_1_0) {
 	BOOST_CHECK_EQUAL(f.title, "test atom");
 	BOOST_CHECK_EQUAL(f.title_type, "text");
 	BOOST_CHECK_EQUAL(f.description, "atom description!");
-	BOOST_CHECK_EQUAL(f.pubDate, "Tue, 30 Dec 2008 19:24:15 +0000");
+	BOOST_CHECK_EQUAL(f.pubDate, "Tue, 30 Dec 2008 18:26:15 +0000");
 	BOOST_CHECK_EQUAL(f.link, "http://example.com/");
 
 	BOOST_CHECK_EQUAL(f.items.size(), 3u);
