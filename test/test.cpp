@@ -727,3 +727,15 @@ BOOST_AUTO_TEST_CASE(TestMakeAbsoluteUrl) {
 	BOOST_CHECK_EQUAL(utils::absolute_url("http://foobar", "bla.html"), "http://foobar/bla.html");
 	BOOST_CHECK_EQUAL(utils::absolute_url("http://test:test@foobar:33", "bla2.html"), "http://test:test@foobar:33/bla2.html");
 }
+
+BOOST_AUTO_TEST_CASE(TestBacktickEvaluation) {
+	BOOST_CHECK_EQUAL(configparser::evaluate_backticks(""), "");
+	BOOST_CHECK_EQUAL(configparser::evaluate_backticks("hello world"), "hello world");
+	BOOST_CHECK_EQUAL(configparser::evaluate_backticks("foo`true`baz"), "foobaz");
+	BOOST_CHECK_EQUAL(configparser::evaluate_backticks("foo`barbaz"), "foo`barbaz");
+	BOOST_CHECK_EQUAL(configparser::evaluate_backticks("foo `true` baz"), "foo  baz");
+	BOOST_CHECK_EQUAL(configparser::evaluate_backticks("foo `true` baz `xxx"), "foo  baz `xxx");
+	BOOST_CHECK_EQUAL(configparser::evaluate_backticks("`echo hello world`"), "hello world");
+	BOOST_CHECK_EQUAL(configparser::evaluate_backticks("xxx`echo yyy`zzz"), "xxxyyyzzz");
+	BOOST_CHECK_EQUAL(configparser::evaluate_backticks("`echo 3 \\* 4 | bc`"), "12");
+}

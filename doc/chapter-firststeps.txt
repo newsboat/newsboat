@@ -61,11 +61,15 @@ many articles shall be preserved by feed so that the article backlog doesn't
 grow endlessly (see "max-items" below).
 
 Several aspects of newsbeuter's behaviour can be configured via a configuration
-file, by default $HOME/.newsbeuter/config. This configuration files contains
+file, by default $HOME/.newsbeuter/config. This configuration file contains
 lines in the form "<config-command> <arg1> ...".  The configuration file can
 also contain comments, which start with the '#' character and go as far as the
 end of line. If you need to enter a configuration argument that contains
-spaces, use quotes (") around the whole argument.
+spaces, use quotes (") around the whole argument. It's even possible to
+integrate the output of external commands into the configuration. The text
+between two backticks ("`") is evaluated as shell command, and its output is
+put on its place instead. This allows to use external information from the
+system within the configuration.
 
 Searching for articles is possible in newsbeuter, too. Just press the "/" key,
 enter your search phrase, and the title and content of all articles are

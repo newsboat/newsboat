@@ -647,4 +647,12 @@ std::string utils::quote_for_stfl(std::string str) {
 	return str;
 }
 
+void utils::trim_end(std::string& str) {
+	std::string::size_type pos = str.length()-1;
+	while (str.length()>0 && (str[pos] == '\n' || str[pos] == '\r')) {
+		str.erase(pos);
+		pos--;
+	}
+}
+
 }

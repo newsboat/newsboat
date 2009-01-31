@@ -24,7 +24,10 @@ namespace newsbeuter {
 			void unregister_handler(const std::string& cmd);
 			virtual void handle_action(const std::string& action, const std::vector<std::string>& params);
 			bool parse(const std::string& filename, bool double_include = true);
+			static std::string evaluate_backticks(std::string token);
 		private:
+			void evaluate_backticks(std::vector<std::string>& tokens);
+			static std::string evaluate_cmd(const std::string& cmd);
 			std::vector<std::vector<std::string> > parsed_content;
 			std::map<std::string,config_action_handler *> action_handlers;
 			std::set<std::string> included_files;

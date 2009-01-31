@@ -74,6 +74,7 @@ bool configparser::parse(const std::string& filename, bool double_include) {
 			if (handler) {
 				tokens.erase(tokens.begin()); // delete first element
 				try {
+					evaluate_backticks(tokens);
 					handler->handle_action(cmd,tokens);
 				} catch (const confighandlerexception& e) {
 					throw configexception(utils::strprintf(_("Error while processing command `%s' (%s line %u): %s"), line.c_str(), filename.c_str(), linecounter, e.what()));
@@ -96,6 +97,29 @@ void configparser::register_handler(const std::string& cmd, config_action_handle
 void configparser::unregister_handler(const std::string& cmd) {
 	LOG(LOG_DEBUG,"configparser::unregister_handler: cmd = %s", cmd.c_str());
 	action_handlers[cmd] = 0;
+}
+
+void configparser::evaluate_backticks(std::vector<std::string>& tokens) {
+	for (std::vector<std::string>::iterator it=tokens.begin();it!=tokens.end();it++) {
+		*it = evaluate_backticks(*it);
+	}
+}
+
+std::string configparser::evaluate_backticks(std::string token) {
+	std::string::size_type pos1 = token.find_first_of("`", 0);
+	std::string::size_type pos2 = 0;
+	while (pos1 != std::string::npos && pos2 != std::string::npos) {
+		pos2 = token.find_first_of("`", pos1+1);
+		if (pos2 != std::string::npos) {
+			std::string cmd = token.substr(pos1+1, pos2-pos1-1);
+			token.erase(pos1, pos2-pos1+1);
+			std::string result = utils::get_command_output(cmd);
+			utils::trim_end(result);
+			token.insert(pos1, result);
+			pos1 = token.find_first_of("`", pos1+result.length()+1);
+		}
+	}
+	return token;
 }
 
 }

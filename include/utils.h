@@ -62,6 +62,8 @@ class utils {
 
 		static std::string quote_for_stfl(std::string str);
 
+		static void trim_end(std::string& str);
+
 	private:
 		static void append_escapes(std::string& str, char c);
 
