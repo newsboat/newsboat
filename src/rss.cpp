@@ -208,7 +208,8 @@ bool rss_item::has_attribute(const std::string& attribname) {
 		attribname == "unread" ||
 		attribname == "enclosure_url" ||
 		attribname == "enclosure_type" ||
-		attribname == "flags")
+		attribname == "flags" ||
+		attribname == "age")
 			return true;
 
 	// if we have a feed, then forward the request
@@ -239,6 +240,8 @@ std::string rss_item::get_attribute(const std::string& attribname) {
 		return enclosure_type();
 	else if (attribname == "flags")
 		return flags();
+	else if (attribname == "age")
+		return utils::to_s((time(NULL) - pubDate_timestamp()) / 86400);
 
 	// if we have a feed, then forward the request
 	if (feedptr)

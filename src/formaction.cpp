@@ -247,7 +247,7 @@ void formaction::start_next_question() {
 	if (qna_prompts.size() > 0) {
 		std::string replacestr("{hbox[lastline] .expand:0 {label .expand:0 text:");
 		replacestr.append(stfl::quote(qna_prompts[0].first));
-		replacestr.append("}{input[qnainput] on_ESC:cancel-qna on_UP:qna-prev-history on_DOWN:qna-next-history on_ENTER:end-question modal:1 .expand:h text[qna_value]:");
+		replacestr.append("}{input[qnainput] on_ESC:cancel-qna on_UP:qna-prev-history on_DOWN:qna-next-history on_ENTER:end-question modal:1 .expand:h text[qna_value]:\"\"");
 		replacestr.append(stfl::quote(qna_prompts[0].second));
 		replacestr.append("}}");
 		qna_prompts.erase(qna_prompts.begin());

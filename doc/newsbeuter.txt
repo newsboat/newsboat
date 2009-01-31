@@ -356,6 +356,7 @@ unread:article:indicates whether the article has been read
 enclosure_url:article:the URL of a possible enclosure (e.g. podcast file)
 enclosure_type:article:the MIME type of the enclosure URL
 flags:article:The set of flags of the article
+age:article:Age of an article (in days)
 feedtitle:feed, article:title of the feed
 description:feed, article:feed description
 feedlink:feed, article:link to the feed
