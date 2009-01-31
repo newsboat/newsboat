@@ -68,7 +68,8 @@ end of line. If you need to enter a configuration argument that contains
 spaces, use quotes (") around the whole argument. It's even possible to
 integrate the output of external commands into the configuration. The text
 between two backticks ("`") is evaluated as shell command, and its output is
-put on its place instead. This allows to use external information from the
+put on its place instead. This works like backtick evaluation in
+Bourne-compatible shells and allows users to use external information from the
 system within the configuration.
 
 Searching for articles is possible in newsbeuter, too. Just press the "/" key,
