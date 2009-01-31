@@ -67,7 +67,9 @@ void Parser::stringlit(char* &lit) {
 			Get();
 		} else if (la->kind == 5) {
 			Get();
-		} else SynErr(20);
+		} else if (la->kind == 6) {
+			Get();
+		} else SynErr(22);
 		lit = coco_string_create_char(t->val); 
 }
 
@@ -78,11 +80,6 @@ void Parser::matchattrib(char* &name) {
 
 void Parser::matchop(int &op) {
 		switch (la->kind) {
-		case 6: {
-			Get();
-			op = MATCHOP_EQ; 
-			break;
-		}
 		case 7: {
 			Get();
 			op = MATCHOP_EQ; 
@@ -90,61 +87,71 @@ void Parser::matchop(int &op) {
 		}
 		case 8: {
 			Get();
-			op = MATCHOP_NE; 
+			op = MATCHOP_EQ; 
 			break;
 		}
 		case 9: {
 			Get();
-			op = MATCHOP_RXEQ; 
+			op = MATCHOP_NE; 
 			break;
 		}
 		case 10: {
 			Get();
-			op = MATCHOP_RXNE; 
+			op = MATCHOP_RXEQ; 
 			break;
 		}
 		case 11: {
 			Get();
-			op = MATCHOP_LT; 
+			op = MATCHOP_RXNE; 
 			break;
 		}
 		case 12: {
 			Get();
-			op = MATCHOP_GT; 
+			op = MATCHOP_LT; 
 			break;
 		}
 		case 13: {
 			Get();
-			op = MATCHOP_LE; 
+			op = MATCHOP_GT; 
 			break;
 		}
 		case 14: {
 			Get();
-			op = MATCHOP_GE; 
+			op = MATCHOP_LE; 
 			break;
 		}
 		case 15: {
 			Get();
-			op = MATCHOP_CONTAINS; 
+			op = MATCHOP_GE; 
 			break;
 		}
 		case 16: {
 			Get();
+			op = MATCHOP_CONTAINS; 
+			break;
+		}
+		case 17: {
+			Get();
 			op = MATCHOP_CONTAINSNOT; 
 			break;
 		}
-		default: SynErr(21); break;
+		case 18: {
+			Get();
+			op = MATCHOP_BETWEEN; 
+			break;
+		}
+		default: SynErr(23); break;
 		}
 }
 
 void Parser::logop(int &lop) {
-		if (la->kind == 17) {
+		if (la->kind == 19) {
 			Get();
 			lop = LOGOP_AND; 
-		} else if (la->kind == 18) {
+		} else if (la->kind == 20) {
 			Get();
 			lop = LOGOP_OR; 
-		} else SynErr(22);
+		} else SynErr(24);
 }
 
 void Parser::matchexpr() {
@@ -169,15 +176,15 @@ void Parser::expr() {
 			matchexpr();
 		} else if (la->kind == 1) {
 			blockexpr();
-		} else SynErr(23);
-		while (la->kind == 17 || la->kind == 18) {
+		} else SynErr(25);
+		while (la->kind == 19 || la->kind == 20) {
 			logop(lop);
 			gen->add_logop(lop); 
 			if (la->kind == 3) {
 				matchexpr();
 			} else if (la->kind == 1) {
 				blockexpr();
-			} else SynErr(24);
+			} else SynErr(26);
 		}
 }
 
@@ -204,7 +211,8 @@ Parser::Parser(Scanner *scanner) {
 	_ident = 3;
 	_stringliteral = 4;
 	_numliteral = 5;
-	maxT = 19;
+	_rangeliteral = 6;
+	maxT = 21;
 
 	minErrDist = 2;
 	errDist = minErrDist;
@@ -216,8 +224,8 @@ bool Parser::StartOf(int s) {
 	const bool T = true;
 	const bool x = false;
 
-	static bool set[1][21] = {
-		{T,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x}
+	static bool set[1][23] = {
+		{T,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x}
 	};
 
 
@@ -243,25 +251,27 @@ void Errors::SynErr(int n) {
 			case 3: s = coco_string_create(L"ident expected"); break;
 			case 4: s = coco_string_create(L"stringliteral expected"); break;
 			case 5: s = coco_string_create(L"numliteral expected"); break;
-			case 6: s = coco_string_create(L"\"==\" expected"); break;
-			case 7: s = coco_string_create(L"\"=\" expected"); break;
-			case 8: s = coco_string_create(L"\"!=\" expected"); break;
-			case 9: s = coco_string_create(L"\"=~\" expected"); break;
-			case 10: s = coco_string_create(L"\"!~\" expected"); break;
-			case 11: s = coco_string_create(L"\"<\" expected"); break;
-			case 12: s = coco_string_create(L"\">\" expected"); break;
-			case 13: s = coco_string_create(L"\"<=\" expected"); break;
-			case 14: s = coco_string_create(L"\">=\" expected"); break;
-			case 15: s = coco_string_create(L"\"#\" expected"); break;
-			case 16: s = coco_string_create(L"\"!#\" expected"); break;
-			case 17: s = coco_string_create(L"\"and\" expected"); break;
-			case 18: s = coco_string_create(L"\"or\" expected"); break;
-			case 19: s = coco_string_create(L"??? expected"); break;
-			case 20: s = coco_string_create(L"invalid stringlit"); break;
-			case 21: s = coco_string_create(L"invalid matchop"); break;
-			case 22: s = coco_string_create(L"invalid logop"); break;
-			case 23: s = coco_string_create(L"invalid expr"); break;
-			case 24: s = coco_string_create(L"invalid expr"); break;
+			case 6: s = coco_string_create(L"rangeliteral expected"); break;
+			case 7: s = coco_string_create(L"\"==\" expected"); break;
+			case 8: s = coco_string_create(L"\"=\" expected"); break;
+			case 9: s = coco_string_create(L"\"!=\" expected"); break;
+			case 10: s = coco_string_create(L"\"=~\" expected"); break;
+			case 11: s = coco_string_create(L"\"!~\" expected"); break;
+			case 12: s = coco_string_create(L"\"<\" expected"); break;
+			case 13: s = coco_string_create(L"\">\" expected"); break;
+			case 14: s = coco_string_create(L"\"<=\" expected"); break;
+			case 15: s = coco_string_create(L"\">=\" expected"); break;
+			case 16: s = coco_string_create(L"\"#\" expected"); break;
+			case 17: s = coco_string_create(L"\"!#\" expected"); break;
+			case 18: s = coco_string_create(L"\"between\" expected"); break;
+			case 19: s = coco_string_create(L"\"and\" expected"); break;
+			case 20: s = coco_string_create(L"\"or\" expected"); break;
+			case 21: s = coco_string_create(L"??? expected"); break;
+			case 22: s = coco_string_create(L"invalid stringlit"); break;
+			case 23: s = coco_string_create(L"invalid matchop"); break;
+			case 24: s = coco_string_create(L"invalid logop"); break;
+			case 25: s = coco_string_create(L"invalid expr"); break;
+			case 26: s = coco_string_create(L"invalid expr"); break;
 
 		default:
 		{

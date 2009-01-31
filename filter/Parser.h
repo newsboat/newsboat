@@ -34,6 +34,7 @@ private:
 	int _ident;
 	int _stringliteral;
 	int _numliteral;
+	int _rangeliteral;
 	int maxT;
 
 	Token *dummyToken;

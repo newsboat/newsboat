@@ -306,6 +306,7 @@ Examples for simple filter expressions are:
 
 	unread_count > 0
 	rssurl =~ "^https:"
+	age between 0:10
 
 Logically connecting and grouping such expressions looks like in the
 following examples:
@@ -337,6 +338,7 @@ Operator:Meaning
 >:greater than
 <=:less than or equal
 >=:greater than or equal
+between:within a range of integer values, where the two integer values are separated by a colon (see above for an example)
 #:contains; this operator matches if a word is contained in a list of space-separated words (useful for matching tags, see below)
 !#:contains not; the negation of the # operator
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

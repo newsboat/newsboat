@@ -28,6 +28,7 @@ namespace newsbeuter {
 			bool matchop_rxeq(expression * e, matchable * item);
 			bool matchop_cont(expression * e, matchable * item);
 			bool matchop_eq(expression * e, matchable * item);
+			bool matchop_between(expression * e, matchable * item);
 
 			FilterParser p;
 			bool success;

@@ -19,11 +19,12 @@ TOKENS
 	ident = identchar { identchar }.
 	stringliteral = '"' { nonquote } '"'.
 	numliteral = ['-'] digit { digit }.
+	rangeliteral = digit { digit } ':' digit { digit }.
 
 PRODUCTIONS
 
 	stringlit<char* &lit>
-               = ( stringliteral | numliteral )		(. lit = coco_string_create_char(t->val); .)
+               = ( stringliteral | numliteral | rangeliteral )		(. lit = coco_string_create_char(t->val); .)
 			   .
 
 	matchattrib<char* &name>
@@ -42,6 +43,7 @@ PRODUCTIONS
 				| ">="								(. op = MATCHOP_GE; .)
 				| "#"								(. op = MATCHOP_CONTAINS; .)
 				| "!#"								(. op = MATCHOP_CONTAINSNOT; .)
+				| "between"							(. op = MATCHOP_BETWEEN; .)
 				.
 
 	logop<int &lop>

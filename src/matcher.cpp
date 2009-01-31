@@ -72,6 +72,27 @@ bool matcher::matchop_lt(expression * e, matchable * item) {
 	return iatt < ilit;
 }
 
+bool matcher::matchop_between(expression * e, matchable * item) {
+	if (!item->has_attribute(e->name))
+		throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
+	std::vector<std::string> lit = utils::tokenize(e->literal, ":");
+	std::istringstream isatt(item->get_attribute(e->name));
+	int att;
+	isatt >> att;
+	if (lit.size() != 2)
+		return false;
+	std::istringstream is1(lit[0]), is2(lit[1]);
+	int i1, i2, tmp;
+	is1 >> i1;
+	is2 >> i2;
+	if (i1 > i2) {
+		tmp = i1;
+		i1 = i2;
+		i2 = tmp;
+	}
+	return (att >= i1 && att <= i2);
+}
+
 bool matcher::matchop_gt(expression * e, matchable * item) {
 	if (!item->has_attribute(e->name))
 		throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
@@ -140,6 +161,9 @@ bool matcher::matches_r(expression * e, matchable * item) {
 
 			case MATCHOP_LT:
 				return matchop_lt(e, item);
+
+			case MATCHOP_BETWEEN:
+				return matchop_between(e, item);
 
 			case MATCHOP_GT:
 				return matchop_gt(e, item);
