@@ -27,7 +27,7 @@ class formaction {
 		virtual void prepare() = 0;
 		virtual void init() = 0;
 		std::tr1::shared_ptr<stfl::form> get_form();
-		inline void set_redraw(bool b) { do_redraw = b; }
+		virtual void set_redraw(bool b) { do_redraw = b; }
 
 		virtual keymap_hint_entry * get_keymap_hint() = 0;
 

@@ -5,6 +5,7 @@
 #include <history.h>
 #include <mutex.h>
 #include <regexmanager.h>
+#include <view.h>
 
 namespace newsbeuter {
 
@@ -16,6 +17,12 @@ class itemlist_formaction : public formaction {
 		virtual ~itemlist_formaction();
 		virtual void prepare();
 		virtual void init();
+
+		virtual void set_redraw(bool b) {
+			formaction::set_redraw(b);
+			apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-articles"));
+			update_visible_items = true;
+		}
 
 		void set_feed(std::tr1::shared_ptr<rss_feed> fd);
 

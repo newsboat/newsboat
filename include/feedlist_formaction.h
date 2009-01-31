@@ -5,6 +5,7 @@
 #include <matcher.h>
 #include <history.h>
 #include <regexmanager.h>
+#include <view.h>
 
 namespace newsbeuter {
 
@@ -21,6 +22,11 @@ class feedlist_formaction : public formaction {
 		void set_tags(const std::vector<std::string>& t);
 		virtual keymap_hint_entry * get_keymap_hint();
 		std::tr1::shared_ptr<rss_feed> get_feed();
+
+		virtual void set_redraw(bool b) { 
+			formaction::set_redraw(b); 
+			apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-feeds"));
+		}
 
 		virtual std::string id() const { return "feedlist"; }
 		virtual std::string title();
