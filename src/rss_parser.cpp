@@ -267,7 +267,7 @@ void rss_parser::fill_feed_fields(std::tr1::shared_ptr<rss_feed> feed) {
 	/*
 	 * we fill all the feed members with the appropriate values from the rsspp data structure
 	 */
-	if (f.title_type != "" && (f.title_type == "xhtml" || f.title_type == "html")) {
+	if (is_html_type(f.title_type)) {
 		feed->set_title(render_xhtml_title(f.title, feed->link()));
 	} else {
 		feed->set_title(f.title);
@@ -324,7 +324,7 @@ void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed> feed) {
 }
 
 void rss_parser::set_item_title(std::tr1::shared_ptr<rss_feed> feed, std::tr1::shared_ptr<rss_item> x, rsspp::item& item) {
-	if (item.title_type != "" && (item.title_type == "xhtml" || item.title_type == "html")) {
+	if (is_html_type(item.title_type)) {
 		x->set_title(render_xhtml_title(item.title, feed->link()));
 	} else {
 		std::string title = item.title;
@@ -423,6 +423,10 @@ void rss_parser::handle_itunes_summary(std::tr1::shared_ptr<rss_item> x, rsspp::
 		desc.append("</ituneshack>");
 		x->set_description(desc);
 	}
+}
+
+bool rss_parser::is_html_type(const std::string& type) {
+	return (type == "html" || type == "xhtml" || type == "application/xhtml+xml");
 }
 
 }
