@@ -5,6 +5,7 @@
 
 #include <config.h>
 #include <rsspp_internal.h>
+#include <utils.h>
 #include <cstring>
 
 namespace rsspp {
@@ -51,6 +52,8 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 	std::string summary;
 	std::string summary_type;
 
+	std::string base = get_prop(entryNode, "base", XML_URI);
+
 	for (xmlNode * node = entryNode->children; node != NULL; node = node->next) {
 		if (node_is(node, "author")) {
 			for (xmlNode * authornode = node->children; authornode != NULL; authornode = authornode->next) {
@@ -76,7 +79,7 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 		} else if (node_is(node, "link")) {
 			std::string rel = get_prop(node, "rel");
 			if (rel == "" || rel == "alternate") {
-				it.link = get_prop(node, "href");
+				it.link = newsbeuter::utils::absolute_url(base, get_prop(node, "href"));
 			} else if (rel == "enclosure") {
 				it.enclosure_url = get_prop(node, "href");
 				it.enclosure_type = get_prop(node, "type");

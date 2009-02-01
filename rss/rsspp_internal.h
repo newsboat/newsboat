@@ -16,6 +16,7 @@
 #define ATOM_0_3_URI	"http://purl.org/atom/ns#"
 #define ATOM_1_0_URI	"http://www.w3.org/2005/Atom"
 #define MEDIA_RSS_URI	"http://search.yahoo.com/mrss/"
+#define XML_URI			"http://www.w3.org/XML/1998/namespace"
 
 namespace rsspp {
 
