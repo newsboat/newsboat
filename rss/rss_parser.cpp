@@ -21,6 +21,27 @@ std::string rss_parser::get_content(xmlNode * node) {
 	return retval;
 }
 
+std::string rss_parser::get_xml_content(xmlNode * node) {
+	xmlBufferPtr buf = xmlBufferCreate();
+	std::string result;
+
+	if (node->children) {
+		for (xmlNodePtr ptr = node->children; ptr != NULL; ptr = ptr->next) {
+			if (xmlNodeDump(buf, doc, ptr, 0, 0) >= 0) {
+				result.append((const char *)xmlBufferContent(buf));
+				xmlBufferEmpty(buf);
+			} else {
+				result.append(get_content(ptr));
+			}
+		}
+	} else {
+		result = get_content(node); // fallback
+	}
+	xmlBufferFree(buf);
+
+	return result;
+}
+
 std::string rss_parser::get_prop(xmlNode * node, const char * prop, const char * ns) {
 	std::string retval;
 	if (node) {

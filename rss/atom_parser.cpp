@@ -15,28 +15,21 @@ void atom_parser::parse_feed(feed& f, xmlNode * rootNode) {
 	if (!rootNode)
 		throw exception(_("XML root node is NULL"));
 
-	char * lang = (char *)xmlGetProp(rootNode, (xmlChar *)"lang");
-	if (lang) {
-		f.language = lang;
-		xmlFree(lang);
-	}
+	f.language = get_prop(rootNode, "lang");
+	globalbase = get_prop(rootNode, "base", XML_URI);
 
 	for (xmlNode * node = rootNode->children; node != NULL; node = node->next) {
 		if (node_is(node, "title")) {
 			f.title = get_content(node);
-			char * type = (char *)xmlGetProp(node, (xmlChar *)"type");
-			if (type) {
-				f.title_type = type;
-				xmlFree(type);
-			} else {
+			f.title_type = get_prop(node, "type");
+			if (f.title_type == "")
 				f.title_type = "text";
-			}
 		} else if (node_is(node, "subtitle")) {
 			f.description = get_content(node);
 		} else if (node_is(node, "link")) {
 			std::string rel = get_prop(node, "rel");
 			if (rel == "alternate") {
-				f.link = get_prop(node, "href");
+				f.link = newsbeuter::utils::absolute_url(globalbase, get_prop(node, "href"));
 			}
 		} else if (node_is(node, "updated")) {
 			f.pubDate = w3cdtf_to_rfc822(get_content(node));
@@ -53,6 +46,8 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 	std::string summary_type;
 
 	std::string base = get_prop(entryNode, "base", XML_URI);
+	if (base == "")
+		base = globalbase;
 
 	for (xmlNode * node = entryNode->children; node != NULL; node = node->next) {
 		if (node_is(node, "author")) {
@@ -67,7 +62,7 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 			if (it.title_type == "")
 				it.title_type = "text";
 		} else if (node_is(node, "content")) {
-			it.description = get_content(node);
+			it.description = get_xml_content(node);
 			it.description_type = get_prop(node, "type");
 			if (it.description_type == "")
 				it.description_type = "text";
