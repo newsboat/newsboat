@@ -17,8 +17,12 @@ matchable::~matchable() { }
 
 matcher::matcher() { }
 
-matcher::matcher(const std::string& expr) {
+matcher::matcher(const std::string& expr) : exp(expr) {
 	parse(expr);
+}
+
+const std::string& matcher::get_expression() {
+	return exp;
 }
 
 bool matcher::parse(const std::string& expr) {

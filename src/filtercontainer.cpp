@@ -25,4 +25,10 @@ void filtercontainer::handle_action(const std::string& action, const std::vector
 		throw confighandlerexception(AHS_INVALID_COMMAND);
 }
 
+void filtercontainer::dump_config(std::vector<std::string>& config_output) {
+	for (std::vector<filter_name_expr_pair>::iterator it=filters.begin();it!=filters.end();it++) {
+		config_output.push_back(utils::strprintf("define-filter %s %s", utils::quote(it->first).c_str(), utils::quote(it->second).c_str()));
+	}
+}
+
 }

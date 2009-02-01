@@ -173,6 +173,13 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 					}
 				}
 			}
+		} else if (cmd == "dumpconfig") {
+			if (tokens.size()!=1) {
+				v->show_error(_("usage: dumpconfig <file>"));
+			} else {
+				v->get_ctrl()->dump_config(utils::resolve_tilde(tokens[1]));
+				v->show_error(utils::strprintf(_("Saved configuration to %s"), tokens[1].c_str()));
+			}
 		}
 	}
 }

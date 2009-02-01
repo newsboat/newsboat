@@ -12,6 +12,7 @@ namespace newsbeuter {
 
 	struct config_action_handler {
 		virtual void handle_action(const std::string& action, const std::vector<std::string>& params) = 0;
+		virtual void dump_config(std::vector<std::string>& config_output) = 0;
 		config_action_handler() { }
 		virtual ~config_action_handler() { }
 	};
@@ -23,6 +24,7 @@ namespace newsbeuter {
 			void register_handler(const std::string& cmd, config_action_handler * handler);
 			void unregister_handler(const std::string& cmd);
 			virtual void handle_action(const std::string& action, const std::vector<std::string>& params);
+			virtual void dump_config(std::vector<std::string>& ) { /* nothing because configparser itself only handles include */ }
 			bool parse(const std::string& filename, bool double_include = true);
 			static std::string evaluate_backticks(std::string token);
 		private:
@@ -38,6 +40,7 @@ namespace newsbeuter {
 			null_config_action_handler() { }
 			virtual ~null_config_action_handler() { }
 			virtual void handle_action(const std::string& , const std::vector<std::string>& ) { }
+			virtual void dump_config(std::vector<std::string>& ) { }
 	};
 
 }

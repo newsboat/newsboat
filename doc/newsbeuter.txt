@@ -288,6 +288,7 @@ set:set <variable>[=<value>|&|!]:Set configuration variable <variable> to <value
 tag:tag <tagname>:Only display feeds with the tag <tagname>.:tag news
 goto:goto <case-insensitive substring>:Go to the next feed whose name contains the case-insensitive substring.:goto foo
 source:source <filename> [...]:Load the specified configuration files. This allows it to load alternative configuration files or reload already loaded configuration files on-the-fly from the filesystem.:source ~/.newsbeuter/colors
+dumpconfig:dumpconfig <filename>:Save current internal state of configuration to file, so that it can be instantly reused as configuration file.:dumpconfig ~/.newsbeuter/config.saved
 n/a:<number>:Jump to the entry with the index <number> (usually seen at the left side of the list). This currently works for the feed list and the article list.:30
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

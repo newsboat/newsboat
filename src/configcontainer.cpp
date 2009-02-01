@@ -193,4 +193,33 @@ void configcontainer::toggle(const std::string& key) {
 	}
 }
 
+void configcontainer::dump_config(std::vector<std::string>& config_output) {
+	for (std::map<std::string, configdata>::iterator it=config_data.begin();it!=config_data.end();it++) {
+		std::string configline = it->first + " ";
+		switch (it->second.type) {
+		case configdata::BOOL:
+		case configdata::INT:
+			configline.append(it->second.value);
+			if (it->second.value != it->second.default_value)
+				configline.append(utils::strprintf(" # default: %s", it->second.default_value.c_str()));
+			break;
+		case configdata::STR:
+		case configdata::PATH:
+			if (it->second.multi_option) {
+				std::vector<std::string> tokens = utils::tokenize(it->second.value, " ");
+				for (std::vector<std::string>::iterator it=tokens.begin();it!=tokens.end();it++) {
+					configline.append(utils::quote(*it) + " ");
+				}
+			} else {
+				configline.append(utils::quote(it->second.value));
+				if (it->second.value != it->second.default_value) {
+					configline.append(utils::strprintf(" # default: %s", it->second.default_value.c_str()));
+				}
+			}
+			break;
+		}
+		config_output.push_back(configline);
+	}
+}
+
 }

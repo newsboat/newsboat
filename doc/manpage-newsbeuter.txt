@@ -128,6 +128,9 @@ include::chapter-cmdline.txt[]
 'source' <filename> [...]::
         Load the specified configuration files. This allows it to load alternative configuration files or reload already loaded configuration files on-the-fly from the filesystem.
 
+'dumpconfig' <filename>::
+       Save current internal state of configuration to file, so that it can be instantly reused as configuration file.
+
 '<number>'::
         Jump to the <number>th entry in the current dialog
 

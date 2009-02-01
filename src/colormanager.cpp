@@ -65,6 +65,18 @@ void colormanager::handle_action(const std::string& action, const std::vector<st
 		throw confighandlerexception(AHS_INVALID_COMMAND);
 }
 
+void colormanager::dump_config(std::vector<std::string>& config_output) {
+	for (std::map<std::string, std::string>::iterator it=fg_colors.begin();it!=fg_colors.end();it++) {
+		std::string configline = utils::strprintf("color %s %s %s", it->first.c_str(), it->second.c_str(), bg_colors[it->first].c_str());
+		std::vector<std::string> attribs = attributes[it->first];
+		for (std::vector<std::string>::iterator jt=attribs.begin();jt!=attribs.end();jt++) {
+			configline.append(" ");
+			configline.append(*jt);
+		}
+		config_output.push_back(configline);
+	}
+}
+
 /*
  * this is podbeuter-specific color management
  * TODO: refactor this

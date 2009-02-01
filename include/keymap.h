@@ -146,10 +146,12 @@ namespace newsbeuter {
 			char get_key(const std::string& keycode);
 			std::string getkey(operation op, const std::string& context);
 			virtual void handle_action(const std::string& action, const std::vector<std::string>& params);
+			virtual void dump_config(std::vector<std::string>& config_output);
 			void get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned short flags);
 			unsigned short get_flag_from_context(const std::string& context);
 		private:
 			bool is_valid_context(const std::string& context);
+			std::string getopname(operation op);
 			std::map<std::string, std::map<std::string, operation> > keymap_;
 			std::map<std::string,std::vector<macrocmd> > macros_;
 	};

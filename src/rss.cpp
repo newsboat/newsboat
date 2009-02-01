@@ -332,6 +332,25 @@ void rss_ignores::handle_action(const std::string& action, const std::vector<std
 		throw confighandlerexception(AHS_INVALID_COMMAND);
 }
 
+void rss_ignores::dump_config(std::vector<std::string>& config_output) {
+	for (std::vector<feedurl_expr_pair>::iterator it = ignores.begin();it!=ignores.end();it++) {
+		std::string configline = "ignore-article ";
+		if (it->first == "*")
+			configline.append("*");
+		else
+			configline.append(utils::quote(it->first));
+		configline.append(" ");
+		configline.append(utils::quote(it->second->get_expression()));
+		config_output.push_back(configline);
+	}
+	for (std::vector<std::string>::iterator it=ignores_lastmodified.begin();it!=ignores_lastmodified.end();it++) {
+		config_output.push_back(utils::strprintf("always-download %s", utils::quote(*it).c_str()));
+	}
+	for (std::vector<std::string>::iterator it=resetflag.begin();it!=resetflag.end();it++) {
+		config_output.push_back(utils::strprintf("reset-unread-on-update %s", utils::quote(*it).c_str()));
+	}
+}
+
 rss_ignores::~rss_ignores() {
 	for (std::vector<feedurl_expr_pair>::iterator it=ignores.begin();it!=ignores.end();++it) {
 		delete it->second;

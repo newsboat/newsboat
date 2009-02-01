@@ -72,6 +72,8 @@ namespace newsbeuter {
 
 			void load_configfile(const std::string& filename);
 
+			void dump_config(const std::string& filename);
+
 		private:
 			void usage(char * argv0);
 			void version_information();

@@ -25,6 +25,12 @@ regexmanager::~regexmanager() {
 	}
 }
 
+void regexmanager::dump_config(std::vector<std::string>& config_output) {
+	for (std::vector<std::string>::iterator it=cheat_store_for_dump_config.begin();it!=cheat_store_for_dump_config.end();it++) {
+		config_output.push_back(*it);
+	}
+}
+
 void regexmanager::handle_action(const std::string& action, const std::vector<std::string>& params) {
 	if (action == "highlight") {
 		if (params.size() < 3)
@@ -86,6 +92,12 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 				it->second.second.push_back(colorstr);
 			}
 		}
+		std::string line = "highlight";
+		for (std::vector<std::string>::const_iterator it=params.begin();it!=params.end();it++) {
+			line.append(" ");
+			line.append(utils::quote(*it));
+		}
+		cheat_store_for_dump_config.push_back(line);
 	} else
 		throw confighandlerexception(AHS_INVALID_COMMAND);
 }

@@ -739,3 +739,9 @@ BOOST_AUTO_TEST_CASE(TestBacktickEvaluation) {
 	BOOST_CHECK_EQUAL(configparser::evaluate_backticks("xxx`echo yyy`zzz"), "xxxyyyzzz");
 	BOOST_CHECK_EQUAL(configparser::evaluate_backticks("`echo 3 \\* 4 | bc`"), "12");
 }
+
+BOOST_AUTO_TEST_CASE(TestUtilsQuote) {
+	BOOST_CHECK_EQUAL(utils::quote(""), "\"\"");
+	BOOST_CHECK_EQUAL(utils::quote("hello world"), "\"hello world\"");
+	BOOST_CHECK_EQUAL(utils::quote("\"hello world\""), "\"\\\"hello world\\\"\"");
+}

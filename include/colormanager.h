@@ -21,6 +21,7 @@ class colormanager : public config_action_handler {
 		~colormanager();
 		void register_commands(configparser& cfgparser);
 		virtual void handle_action(const std::string& action, const std::vector<std::string>& params);
+		virtual void dump_config(std::vector<std::string>& config_output);
 		inline bool colors_loaded() { return colors_loaded_; }
 		void set_pb_colors(podbeuter::pb_view * v);
 		inline std::map<std::string,std::string>& get_fgcolors() { return fg_colors; }
