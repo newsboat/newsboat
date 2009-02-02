@@ -40,6 +40,11 @@ $HOME/.newsbeuter/urls has the appropriate permissions. Newsbeuter also makes
 sure that usernames and passwords within URLs aren't displayed in its user
 interface.
 
+You can also configure local files as feeds, by prefixing the local path with
+"file://" and adding it to the $HOME/.newsbeuter/urls file:
+
+	file:///var/log/rss_eventlog.xml
+
 Now you can run newsbeuter again, and it will present you with a controllable
 list of the URLs that you configured previously. You can now start downloading
 the feeds, either by pressing "R" to download all feeds, or by pressing "r" to

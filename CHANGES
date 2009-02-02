@@ -19,6 +19,7 @@ Changes for newsbeuter:
 	Extended filter language with "between" operator.
 	Added "age" attribute for articles to filter them for relative age (in days).
 	Extended "set" commandline command to toggle boolean variables and reset configuration variables of all types to their default.
+	Added ability to configure local files as feeds.
 
 1.3 (2008-12-06):
 	Changed some internal data structures to smart pointers (stability improvement).

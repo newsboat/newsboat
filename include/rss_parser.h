@@ -29,6 +29,7 @@ namespace newsbeuter {
 			void download_http(const std::string& uri);
 			void get_execplugin(const std::string& plugin);
 			void download_filterplugin(const std::string& filter, const std::string& uri);
+			void parse_file(const std::string& file);
 
 			void fill_feed_fields(std::tr1::shared_ptr<rss_feed> feed);
 			void fill_feed_items(std::tr1::shared_ptr<rss_feed> feed);

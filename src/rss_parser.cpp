@@ -201,6 +201,8 @@ void rss_parser::retrieve_uri(const std::string& uri) {
 		download_filterplugin(filter, url);
 	} else if (my_uri.substr(0,6) == "query:") {
 		skip_parsing = true;
+	} else if (my_uri.substr(0,7) == "file://") {
+		parse_file(my_uri.substr(7, my_uri.length()-7));
 	} else
 		throw utils::strprintf(_("Error: unsupported URL: %s"), my_uri.c_str());
 }
@@ -243,6 +245,19 @@ void rss_parser::get_execplugin(const std::string& plugin) {
 		throw e;
 	}
 	LOG(LOG_DEBUG, "rss_parser::parse: execplugin %s, is_valid = %s", plugin.c_str(), is_valid ? "true" : "false");
+}
+
+void rss_parser::parse_file(const std::string& file) {
+	is_valid = false;
+	try {
+		rsspp::parser p;
+		f = p.parse_file(file);
+		is_valid = true;
+	} catch (rsspp::exception& e) {
+		is_valid = false;
+		throw e;
+	}
+	LOG(LOG_DEBUG, "rss_parser::parse: parsed file %s, is_valid = %s", file.c_str(), is_valid ? "true" : "false");
 }
 
 void rss_parser::download_filterplugin(const std::string& filter, const std::string& uri) {
