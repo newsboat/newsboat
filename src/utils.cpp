@@ -493,8 +493,13 @@ std::string utils::to_s(unsigned int u) {
 
 std::string utils::absolute_url(const std::string& url, const std::string& link) {
 	xmlChar * newurl = xmlBuildURI((const xmlChar *)link.c_str(), (const xmlChar *)url.c_str());
-	std::string retval((const char *)newurl);
-	xmlFree(newurl);
+	std::string retval;
+	if (newurl) {
+		retval = (const char *)newurl;
+		xmlFree(newurl);
+	} else {
+		retval = link;
+	}
 	return retval;
 }
 

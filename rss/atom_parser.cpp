@@ -62,7 +62,12 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 			if (it.title_type == "")
 				it.title_type = "text";
 		} else if (node_is(node, "content")) {
-			it.description = get_xml_content(node);
+			std::string mode = get_prop(node, "mode");
+			if (mode == "xml") {
+				it.description = get_xml_content(node);
+			} else if (mode == "escaped" || mode == "") {
+				it.description = get_content(node);
+			}
 			it.description_type = get_prop(node, "type");
 			if (it.description_type == "")
 				it.description_type = "text";
