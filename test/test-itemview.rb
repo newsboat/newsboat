@@ -2,7 +2,7 @@
 # test misc. functions of itemview.
 require 'tuitest'
 
-Kernel.system("rm -f cache")
+Kernel.system("rm -f cache cache.lock")
 
 Tuitest.init
 verifier = Tuitest::Verifier.new("test-itemview.rb.log", "RESULT-test-itemview.rb.xml")
@@ -95,6 +95,6 @@ Tuitest.wait_until_idle
 Tuitest.close
 verifier.finish
 
-Kernel.system("rm -f cache article.txt")
+Kernel.system("rm -f cache article.txt cache.lock")
 
 # EOF

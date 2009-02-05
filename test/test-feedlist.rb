@@ -2,7 +2,7 @@
 # test misc. functionality of the feedlist dialog
 require 'tuitest'
 
-Kernel.system("rm -f cache")
+Kernel.system("rm -f cache cache.lock")
 
 Tuitest.init
 verifier = Tuitest::Verifier.new("test-feedlist.rb.log", "RESULT-test-feedlist.rb.xml")
@@ -119,6 +119,6 @@ Tuitest.wait_until_idle
 Tuitest.close
 verifier.finish
 
-Kernel.system("rm -f cache")
+Kernel.system("rm -f cache cache.lock")
 
 # EOF

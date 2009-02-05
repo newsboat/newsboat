@@ -718,6 +718,8 @@ BOOST_AUTO_TEST_CASE(TestCensorUrl) {
 
 	BOOST_CHECK_EQUAL(utils::censor_url("http://aschas@host"), "http://*:*@host");
 	BOOST_CHECK_EQUAL(utils::censor_url("https://aschas@host"), "https://*:*@host");
+
+	BOOST_CHECK_EQUAL(utils::censor_url("query:name:age between 1:10"), "query:name:age between 1:10");
 }
 
 BOOST_AUTO_TEST_CASE(TestMakeAbsoluteUrl) {
@@ -744,4 +746,28 @@ BOOST_AUTO_TEST_CASE(TestUtilsQuote) {
 	BOOST_CHECK_EQUAL(utils::quote(""), "\"\"");
 	BOOST_CHECK_EQUAL(utils::quote("hello world"), "\"hello world\"");
 	BOOST_CHECK_EQUAL(utils::quote("\"hello world\""), "\"\\\"hello world\\\"\"");
+}
+
+BOOST_AUTO_TEST_CASE(TestUtilsFunctions_to_u) {
+	BOOST_CHECK_EQUAL(utils::to_u("0"), 0u);
+	BOOST_CHECK_EQUAL(utils::to_u("23"), 23u);
+	BOOST_CHECK_EQUAL(utils::to_u(""), 0u);
+}
+
+BOOST_AUTO_TEST_CASE(TestUtilsFunctions_strwidth) {
+	BOOST_CHECK_EQUAL(utils::strwidth(""), 0u);
+	BOOST_CHECK_EQUAL(utils::strwidth("xx"), 2u);
+	BOOST_CHECK_EQUAL(utils::strwidth(utils::wstr2str(L"\uF91F")), 2u);
+}
+
+BOOST_AUTO_TEST_CASE(TestUtilsFunction_join) {
+	std::vector<std::string> str;
+	BOOST_CHECK_EQUAL(utils::join(str, ""), "");
+	BOOST_CHECK_EQUAL(utils::join(str, "-"), "");
+	str.push_back("foobar");
+	BOOST_CHECK_EQUAL(utils::join(str, ""), "foobar");
+	BOOST_CHECK_EQUAL(utils::join(str, "-"), "foobar");
+	str.push_back("quux");
+	BOOST_CHECK_EQUAL(utils::join(str, ""), "foobarquux");
+	BOOST_CHECK_EQUAL(utils::join(str, "-"), "foobar-quux");
 }

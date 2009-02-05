@@ -13,7 +13,7 @@ require 'tuitest'
 Tuitest.init
 verifier = Tuitest::Verifier.new("test-basic-ops.rb.log", "RESULT-test-basic-ops.rb.xml")
 
-Kernel.system("rm -f cache")
+Kernel.system("rm -f cache cache.lock")
 
 if ENV["OFFLINE"] then
 	Tuitest.run("../newsbeuter -c cache -C /dev/null -u urls-tuitest1-offline")
@@ -166,6 +166,6 @@ Tuitest.wait_until_idle
 Tuitest.close
 verifier.finish
 
-Kernel.system("rm -f cache")
+Kernel.system("rm -f cache cache.lock")
 
 # EOF

@@ -2,7 +2,7 @@
 # test "reload all" (which starts a background thread)
 require 'tuitest'
 
-Kernel.system("rm -f cache")
+Kernel.system("rm -f cache cache.lock")
 
 Tuitest.init
 verifier = Tuitest::Verifier.new("test-reloadall.rb.log", "RESULT-test-reloadall.rb.xml")
@@ -29,6 +29,6 @@ Tuitest.wait_until_idle
 Tuitest.close
 verifier.finish
 
-Kernel.system("rm -f cache")
+Kernel.system("rm -f cache cache.lock")
 
 # EOF

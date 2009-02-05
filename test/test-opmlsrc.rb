@@ -2,7 +2,7 @@
 # tests the urls-source "opml" configuration option
 require 'tuitest'
 
-Kernel.system("rm -f cache")
+Kernel.system("rm -f cache cache.lock")
 
 if not ENV["OFFLINE"] then # this test doesn't work in offline mode.
 
@@ -33,7 +33,7 @@ Tuitest.wait_until_idle
 Tuitest.close
 verifier.finish
 
-Kernel.system("rm -f cache")
+Kernel.system("rm -f cache cache.lock")
 
 end # not ENV["OFFLINE"]
 

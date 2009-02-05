@@ -537,7 +537,7 @@ std::string utils::get_useragent(configcontainer * cfgcont) {
 
 unsigned int utils::to_u(const std::string& str) {
 	std::istringstream is(str);
-	unsigned int u;
+	unsigned int u = 0;
 	is >> u;
 	return u;
 }
@@ -615,7 +615,8 @@ std::string utils::join(const std::vector<std::string>& strings, const std::stri
 		result.append(separator);
 	}
 
-	result.erase(result.length()-separator.length(), result.length());
+	if (result.length() > 0)
+		result.erase(result.length()-separator.length(), result.length());
 
 	return result;
 }

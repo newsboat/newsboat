@@ -2,7 +2,7 @@
 # auto-generated tuitest script
 require 'tuitest'
 
-Kernel.system("rm -f cache")
+Kernel.system("rm -f cache cache.lock")
 
 Tuitest.init
 verifier = Tuitest::Verifier.new("test-openalldialog.rb.log", "RESULT-test-openalldialog.rb.xml")
@@ -66,6 +66,6 @@ Tuitest.wait_until_idle
 Tuitest.close
 verifier.finish
 
-Kernel.system("rm -f cache")
+Kernel.system("rm -f cache cache.lock")
 
 # EOF
