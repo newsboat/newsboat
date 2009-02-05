@@ -51,7 +51,7 @@ keymap_hint_entry * dialogs_formaction::get_keymap_hint() {
 	return hints;
 }
 
-void dialogs_formaction::process_operation(operation op, bool automatic, std::vector<std::string> * args) {
+void dialogs_formaction::process_operation(operation op, bool /* automatic */, std::vector<std::string> * /* args */) {
 	switch (op) {
 		case OP_OPEN: {
 				std::string dialogposname = f->get("dialogpos");

@@ -89,7 +89,7 @@ keymap_hint_entry * help_formaction::get_keymap_hint() {
 	return hints;
 }
 
-void help_formaction::finished_qna(operation op) {
+void help_formaction::finished_qna(operation ) {
 	searchphrase = qna_responses[0];
 	apply_search = true;
 	do_redraw = true;
