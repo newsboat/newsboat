@@ -668,4 +668,14 @@ std::string utils::quote(const std::string& str) {
 	return rv;
 }
 
+unsigned int utils::get_random_value(unsigned int max) {
+	static bool initialized = false;
+	unsigned int var;
+	if (!initialized) {
+		initialized = true;
+		srand(~(time(NULL) ^ getpid() ^ getppid() ^ var));
+	}
+	return static_cast<unsigned int>(rand() % max);
+}
+
 }

@@ -71,10 +71,11 @@ namespace newsbeuter {
 						OP_NEXTDIALOG,
 						OP_PREVDIALOG,
 						OP_PIPE_TO,
+						OP_RANDOMUNREAD,
 						OP_NB_MAX,
 
 						// podbeuter-specific operations:
-						OP_PB_MIN, 
+						OP_PB_MIN = 1000, 
 						OP_PB_DOWNLOAD, 
 						OP_PB_CANCEL, 
 						OP_PB_DELETE,
@@ -85,7 +86,7 @@ namespace newsbeuter {
 						OP_PB_PLAY, 
 						OP_PB_MAX,
 						
-						OP_SK_MIN,
+						OP_SK_MIN = 1500,
 						OP_SK_UP,
 						OP_SK_DOWN,
 						OP_SK_PGUP,
@@ -93,7 +94,7 @@ namespace newsbeuter {
 						/* TODO: add more user-defined keys here */
 						OP_SK_MAX,
 
-						OP_INT_MIN,
+						OP_INT_MIN = 2000,
 
 						OP_INT_END_CMDLINE,
 						OP_INT_END_SETFILTER,
@@ -110,7 +111,7 @@ namespace newsbeuter {
 						OP_INT_SET,
 
 						OP_INT_MAX,
-						OP_1,
+						OP_1 = 3001,
 						OP_2,
 						OP_3,
 						OP_4,

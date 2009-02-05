@@ -169,6 +169,14 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 				}
 			}
 			break;
+		case OP_RANDOMUNREAD: {
+				unsigned int local_tmp;
+				LOG(LOG_INFO, "feedlist_formaction: jumping to random unread feed");
+				if (!jump_to_random_unread_feed(local_tmp)) {
+					v->show_error(_("No feeds with unread items."));
+				}
+			}
+			break;
 		case OP_MARKALLFEEDSREAD:
 			LOG(LOG_INFO, "feedlist_formaction: marking all feeds read");
 			v->set_status(_("Marking all feeds read..."));
@@ -394,6 +402,27 @@ void feedlist_formaction::goto_feed(const std::string& str) {
 			return;
 		}
 	}
+}
+
+bool feedlist_formaction::jump_to_random_unread_feed(unsigned int& feedpos) {
+	bool unread_feeds_available = false;
+	for (unsigned int i=0;i<visible_feeds.size();++i) {
+		if (visible_feeds[i].first->unread_item_count() > 0) {
+			unread_feeds_available = true;
+			break;
+		}
+	}
+	if (unread_feeds_available) {
+		for (;;) {
+			unsigned int pos = utils::get_random_value(visible_feeds.size());
+			if (visible_feeds[pos].first->unread_item_count() > 0) {
+				f->set("feedpos", utils::to_s(pos));
+				feedpos = visible_feeds[pos].second;
+				break;
+			}
+		}
+	}
+	return unread_feeds_available;
 }
 
 bool feedlist_formaction::jump_to_next_unread_feed(unsigned int& feedpos) {

@@ -540,6 +540,29 @@ void view::notify_itemlist_change(std::tr1::shared_ptr<rss_feed> feed) {
 	}
 }
 
+bool view::get_random_unread(itemlist_formaction * itemlist, itemview_formaction * itemview) {
+	unsigned int feedpos;
+	std::tr1::shared_ptr<feedlist_formaction> feedlist = std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
+	if (!cfg->get_configvalue_as_bool("goto-next-feed")) {
+		return false;
+	} 
+	if (feedlist->jump_to_random_unread_feed(feedpos)) {
+		LOG(LOG_DEBUG, "view::get_previous_unread: found feed with unread articles");
+		itemlist->set_feed(feedlist->get_feed());
+		itemlist->set_pos(feedpos);
+		itemlist->init();
+		if (itemlist->jump_to_random_unread_item()) {
+			if (itemview) {
+				itemview->init();
+				itemview->set_feed(itemlist->get_feed());
+				itemview->set_guid(itemlist->get_guid());
+			}
+			return true;
+		}
+	}
+	return false;
+}
+
 bool view::get_previous_unread(itemlist_formaction * itemlist, itemview_formaction * itemview) {
 	unsigned int feedpos;
 	LOG(LOG_DEBUG, "view::get_previous_unread: trying to find previous unread");

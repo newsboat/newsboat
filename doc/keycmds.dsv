@@ -7,6 +7,7 @@ mark-all-feeds-read:C:Mark articles in all feeds read.
 save:s:Save the currently selected article to a file.
 next-unread:n:Jump to the next unread article.
 prev-unread:p:Jump to the previous unread article.
+random-unread:^K:Jump to a random unred article.
 open-in-browser:o:Opens the URL associated with the current article.
 help:?:Runs the help screen.
 toggle-source-view:^U:Toggles between the HTML view and the source view in the article view.

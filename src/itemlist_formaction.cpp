@@ -192,6 +192,13 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				}
 			}
 			break;
+		case OP_RANDOMUNREAD:
+			if (!jump_to_random_unread_item()) {
+				if (!v->get_random_unread(this)) {
+					v->show_error(_("No unread items."));
+				}
+			}
+			break;
 		case OP_NEXTFEED:
 			if (!v->get_next_unread_feed(this)) {
 				v->show_error(_("No unread feeds."));
@@ -597,6 +604,26 @@ bool itemlist_formaction::jump_to_previous_unread_item(bool start_with_last) {
 	}
 	return false;
 
+}
+
+bool itemlist_formaction::jump_to_random_unread_item() {
+	bool has_unread_available = false;
+	for (unsigned int i=0;i<visible_items.size();++i) {
+		if (visible_items[i].first->unread()) {
+			has_unread_available = true;
+			break;
+		}
+	}
+	if (has_unread_available) {
+		for (;;) {
+			unsigned int pos = utils::get_random_value(visible_items.size());
+			if (visible_items[pos].first->unread()) {
+				f->set("itempos", utils::to_s(pos));
+				break;
+			}
+		}
+	}
+	return has_unread_available;
 }
 
 bool itemlist_formaction::jump_to_next_unread_item(bool start_with_first) {

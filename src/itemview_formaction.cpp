@@ -275,6 +275,15 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 				v->show_error(_("No unread items."));
 			}
 			break;
+		case OP_RANDOMUNREAD:
+			LOG(LOG_INFO, "view::run_itemview: jumping to random unread article");
+			if (v->get_random_unread(itemlist.get(), this)) {
+				do_redraw = true;
+			} else {
+				v->pop_current_formaction();
+				v->show_error(_("No unread items."));
+			}
+			break;
 		case OP_TOGGLEITEMREAD:
 			LOG(LOG_INFO, "view::run_itemview: setting unread and quitting");
 			v->set_status(_("Toggling read flag for article..."));

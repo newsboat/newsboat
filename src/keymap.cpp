@@ -29,6 +29,7 @@ static op_desc opdescs[] = {
 	{ OP_SAVE,				"save",						"s",	_("Save article"),						KM_ARTICLELIST | KM_ARTICLE },
 	{ OP_NEXTUNREAD,		"next-unread",				"n",	_("Go to next unread article"),			KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE },
 	{ OP_PREVUNREAD,		"prev-unread",				"p",	_("Go to previous unread article"),		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE },
+	{ OP_RANDOMUNREAD,		"random-unread",			"^K",	_("Go to a random unread article"),		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE },
 	{ OP_OPENINBROWSER,		"open-in-browser",			"o",	_("Open article in browser"),			KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE },
 	{ OP_HELP,				"help",						"?",	_("Open help dialog"),					KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE | KM_PODBEUTER },
 	{ OP_TOGGLESOURCEVIEW,	"toggle-source-view",		"^U",	_("Toggle source view"),				KM_ARTICLE },
