@@ -15,7 +15,11 @@ verifier = Tuitest::Verifier.new("test-basic-ops.rb.log", "RESULT-test-basic-ops
 
 Kernel.system("rm -f cache")
 
-Tuitest.run("../newsbeuter -c cache -C /dev/null -u urls-tuitest1")
+if ENV["OFFLINE"] then
+	Tuitest.run("../newsbeuter -c cache -C /dev/null -u urls-tuitest1-offline")
+else
+	Tuitest.run("../newsbeuter -c cache -C /dev/null -u urls-tuitest1")
+end
 
 Tuitest.wait_until_idle
 
@@ -71,15 +75,15 @@ verifier.expect(2, 20, "3")
 verifier.expect(4, 40, "3")
 verifier.expect(5, 6, "Thu, 28 Aug 2008 18:27:5")
 verifier.expect(7, 0, "And finally a third item, also description, but with some HTML...")
-verifier.expect(8, 0, "Yes, there was a line break. And here is a [link to slashdot][1]")
+verifier.expect(8, 0, "Yes, there was a line break. And here is a link to slashdot[1]")
 verifier.expect(9, 0, " ")
 verifier.expect(10, 0, "Links:")
 verifier.expect(11, 0, "[1]: http://slashdot.org/ (link)")
 
 Tuitest.keypress("n"[0])
 
-Tuitest.wait_until_expected_text(0, 24, "s in feed 'RSS 2.0 testbed feed' (0 unread, 3 total) - h")
-verifier.expect(0, 24, "s in feed 'RSS 2.0 testbed feed' (0 unread, 3 total) - h")
+Tuitest.wait_until_expected_text(0, 24, "s in feed 'RSS 2.0 testbed feed' (0 unread, 3 total)")
+verifier.expect(0, 24, "s in feed 'RSS 2.0 testbed feed' (0 unread, 3 total)")
 verifier.expect(1, 0, "   1    Aug 30   RSS 2.0 Item 1")
 verifier.expect(2, 0, "   2    Aug 29   RSS 2.0 Item 2")
 verifier.expect(3, 0, "   3    Aug 28   RSS 2.0 Item 3              ")
@@ -102,6 +106,7 @@ verifier.expect(21, 0, " ")
 verifier.expect(22, 0, " ")
 verifier.expect(23, 25, "r:Reload n:Next Unread A:Mark All Read /:Search ?:Help")
 verifier.expect(24, 0, "No unread items.")
+
 
 Tuitest.keypress("q"[0])
 Tuitest.keypress(10)

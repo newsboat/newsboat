@@ -8,7 +8,11 @@ Tuitest.init
 verifier = Tuitest::Verifier.new("test-filters.rb.log", "RESULT-test-filters.rb.xml")
 
 
-Tuitest.run("../newsbeuter -c cache -C config-filter -u urls-tuitest1")
+if ENV["OFFLINE"] then
+	Tuitest.run("../newsbeuter -c cache -C config-filter -u urls-tuitest1-offline")
+else
+	Tuitest.run("../newsbeuter -c cache -C config-filter -u urls-tuitest1")
+end
 
 
 Tuitest.wait_until_expected_text(0, 0, "newsbeuter ", 5000)

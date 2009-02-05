@@ -7,7 +7,11 @@ verifier = Tuitest::Verifier.new("test-itemlist2.rb.log", "RESULT-test-itemlist2
 
 Kernel.system("rm -f cache")
 
-Tuitest.run("../newsbeuter -c cache -C /dev/null -u urls-tuitest1")
+if ENV["OFFLINE"] then
+	Tuitest.run("../newsbeuter -c cache -C /dev/null -u urls-tuitest1-offline")
+else
+	Tuitest.run("../newsbeuter -c cache -C /dev/null -u urls-tuitest1")
+end
 
 
 Tuitest.wait_until_idle

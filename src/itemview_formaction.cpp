@@ -454,12 +454,15 @@ std::vector<std::string> itemview_formaction::render_html(const std::string& sou
 		argv[1] = const_cast<char *>("-c");
 		argv[2] = const_cast<char *>(renderer.c_str());
 		argv[3] = NULL;
+		GetLogger().log(LOG_DEBUG, "itemview_formaction::render_html: source = %s", source.c_str());
+		GetLogger().log(LOG_DEBUG, "itemview_formaction::render_html: html-renderer = %s", argv[2]);
+
 		std::string output = utils::run_program(argv, source);
 		std::istringstream is(output);
 		std::string line;
 		getline(is, line);
 		while (!is.eof()) {
-			lines.push_back(line);
+			lines.push_back(utils::quote_for_stfl(line));
 			getline(is, line);
 		}
 	}

@@ -8,7 +8,11 @@ Tuitest.init
 verifier = Tuitest::Verifier.new("test-reloadall-retry.rb.log", "RESULT-test-reloadall-retry.rb.xml")
 
 
-Tuitest.run("../newsbeuter -c cache -C config-retry -u urls-tuitest1")
+if ENV["OFFLINE"] then
+	Tuitest.run("../newsbeuter -c cache -C config-retry -u urls-tuitest1-offline")
+else
+	Tuitest.run("../newsbeuter -c cache -C config-retry -u urls-tuitest1")
+end
 Tuitest.wait_until_expected_text(0, 0, "newsbeuter ", 5000)
 
 Tuitest.keypress("R"[0])

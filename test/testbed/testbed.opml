@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<opml version="1.0">
+	<head>
+		<title>newsbeuter - testbed feeds</title>
+	</head>
+	<body>
+		<outline type="rss" xmlUrl="http://testbed.newsbeuter.org/rss20.xml" title="RSS 2.0 testbed feed" />
+		<outline type="rss" xmlUrl="http://testbed.newsbeuter.org/rss20-html.xml" title="HTML rendering test feed" />
+		<outline type="rss" xmlUrl="http://testbed.newsbeuter.org/atom10.xml" title="Atom 1.0 testbed feed" />
+	</body>
+</opml>

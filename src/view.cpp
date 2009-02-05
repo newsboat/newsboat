@@ -694,7 +694,9 @@ void view::apply_colors_to_all_formactions() {
 	for (std::vector<std::tr1::shared_ptr<formaction> >::iterator it=formaction_stack.begin();it!=formaction_stack.end();it++) {
 		apply_colors(*it);
 	}
-	formaction_stack[current_formaction]->set_redraw(true);
+	if (formaction_stack.size() > 0 && formaction_stack[current_formaction]) {
+		formaction_stack[current_formaction]->set_redraw(true);
+	}
 }
 
 void view::apply_colors(std::tr1::shared_ptr<formaction> fa) {

@@ -8,7 +8,11 @@ Tuitest.init
 verifier = Tuitest::Verifier.new("test-openalldialog.rb.log", "RESULT-test-openalldialog.rb.xml")
 
 
-Tuitest.run("../newsbeuter -c cache -C /dev/null -u urls-tuitest1")
+if ENV["OFFLINE"] then
+	Tuitest.run("../newsbeuter -c cache -C /dev/null -u urls-tuitest1-offline")
+else
+	Tuitest.run("../newsbeuter -c cache -C /dev/null -u urls-tuitest1")
+end
 
 Tuitest.wait_until_expected_text(0, 17, "Your feeds (0 unread, 1 total)", 5000)
 verifier.expect(0, 17, "Your feeds (0 unread, 1 total)")
@@ -16,8 +20,8 @@ verifier.expect(0, 17, "Your feeds (0 unread, 1 total)")
 Tuitest.keypress("r"[0])
 Tuitest.keypress(10)
 
-Tuitest.wait_until_expected_text(0, 17, "Articles in feed 'RSS 2.0 testbed feed' (3 unread, 3 total) - h", 5000)
-verifier.expect(0, 17, "Articles in feed 'RSS 2.0 testbed feed' (3 unread, 3 total) - h")
+Tuitest.wait_until_expected_text(0, 17, "Articles in feed 'RSS 2.0 testbed feed' (3 unread, 3 total)", 5000)
+verifier.expect(0, 17, "Articles in feed 'RSS 2.0 testbed feed' (3 unread, 3 total)")
 
 Tuitest.keypress(258)
 Tuitest.keypress(258)

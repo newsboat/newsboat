@@ -8,7 +8,11 @@ Tuitest.init
 verifier = Tuitest::Verifier.new("test-html.rb.log", "RESULT-test-html.rb.xml")
 
 
-Tuitest.run("../newsbeuter -c cache -C /dev/null -u urls-html")
+if ENV["OFFLINE"] then
+	Tuitest.run("../newsbeuter -c cache -C /dev/null -u urls-html-offline")
+else
+	Tuitest.run("../newsbeuter -c cache -C /dev/null -u urls-html")
+end
 
 
 Tuitest.wait_until_expected_text(0, 0, "newsbeuter ", 5000)
@@ -24,7 +28,7 @@ verifier.expect(2, 0, "Title: HTML Item 1          ")
 verifier.expect(3, 0, "Author: Andreas Krennmair")
 verifier.expect(4, 0, "Link: http://testbed.newsbeuter.org/htmlitem1.html")
 verifier.expect(5, 0, "Date: Sat, 30 Aug 2008 09:40:10")
-verifier.expect(7, 0, "[normal link][1]")
+verifier.expect(7, 0, "normal link[1]")
 verifier.expect(8, 0, "invalid link without href.")
 verifier.expect(9, 0, "[embedded flash: 2]")
 verifier.expect(10, 0, "hello world")

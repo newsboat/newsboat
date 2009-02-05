@@ -4,10 +4,10 @@ require 'tuitest'
 
 Kernel.system("rm -f cache")
 
+if not ENV["OFFLINE"] then # this test doesn't work in offline mode.
+
 Tuitest.init
 verifier = Tuitest::Verifier.new("test-opmlsrc.rb.log", "RESULT-test-opmlsrc.rb.xml")
-
-
 Tuitest.run("../newsbeuter -c cache -C config-tuitest2 -u /dev/null")
 
 Tuitest.wait_until_expected_text(1, 3, "1         (0/0) http://testbed.newsbeuter.org/rss20.xml", 5000)
@@ -34,5 +34,7 @@ Tuitest.close
 verifier.finish
 
 Kernel.system("rm -f cache")
+
+end # not ENV["OFFLINE"]
 
 # EOF
