@@ -163,6 +163,11 @@ static struct {
 	const char * entity;
 	unsigned int value;
 } entity_table[] = {
+	{ "quot", 34 },
+	{ "amp", 38 },
+	{ "apos", 39 },
+	{ "lt", 60 },
+	{ "gt", 62 },
 	// this table was created with some vim regex magic from the this list: http://www.ramsch.org/martin/uni/fmi-hp/iso8859-1.html
 	{ "nbsp", 160 },
 	{ "iexcl", 161 },
@@ -267,18 +272,7 @@ static struct {
 
 std::string tagsouppullparser::decode_entity(std::string s) {
 	LOG(LOG_DEBUG, "tagsouppullparser::decode_entity: decoding '%s'...", s.c_str());
-	// TODO: improve entity decoder
-	if (s == "lt") {
-		return "<";
-	} else if (s == "gt") {
-		return ">";
-	} else if (s == "quot") {
-		return "\"";
-	} else if (s == "apos") {
-		return "'";
-	} else if (s == "amp") {
-		return "&";
-	} else if (s.length() > 1 && s[0] == '#') {
+	if (s.length() > 1 && s[0] == '#') {
 		std::string result;
 		unsigned int wc;
 		char mbc[MB_CUR_MAX];
