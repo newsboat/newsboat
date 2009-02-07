@@ -24,6 +24,11 @@ struct cb_handler {
 		int c;
 };
 
+struct header_values {
+	time_t lastmodified;
+	std::string etag;
+};
+
 static int count_callback(void * handler, int argc, char ** argv, char ** /* azColName */) {
 	cb_handler * cbh = static_cast<cb_handler *>(handler);
 
@@ -34,17 +39,6 @@ static int count_callback(void * handler, int argc, char ** argv, char ** /* azC
 		cbh->set_count(x);
 	}
 
-	return 0;
-}
-
-static int single_int_callback(void * handler, int argc, char ** argv, char ** /* azColName */) {
-	int * value = static_cast<int *>(handler);
-	if (argc>0 && argv[0]) {
-		std::istringstream is(argv[0]);
-		int x;
-		is >> x;
-		*value = x;
-	}
 	return 0;
 }
 
@@ -67,6 +61,21 @@ static int rssfeed_callback(void * myfeed, int argc, char ** argv, char ** /* az
 	(*feed)->set_link(argv[1]);
 	(*feed)->set_rtl(strcmp(argv[2],"1")==0);
 	LOG(LOG_INFO, "rssfeed_callback: title = %s link = %s is_rtl = %s",argv[0],argv[1], argv[2]);
+	return 0;
+}
+
+static int lastmodified_callback(void * handler, int argc, char ** argv, char ** /* azColName */) {
+	header_values * result = static_cast<header_values *>(handler);
+	assert(argc == 2);
+	assert(result != NULL);
+	if (argv[0]) {
+		std::istringstream is(argv[0]);
+		is >> result->lastmodified;
+	}
+	if (argv[1]) {
+		result->etag = argv[1];
+	}
+	LOG(LOG_INFO, "lastmodified_callback: lastmodified = %d etag = %s", result->lastmodified, result->etag.c_str());
 	return 0;
 }
 
@@ -277,28 +286,41 @@ void cache::populate_tables() {
 	rc = sqlite3_exec(db, "ALTER TABLE rss_feed ADD is_rtl INTEGER(1) NOT NULL DEFAULT 0;", NULL, NULL, NULL);
 	LOG(LOG_DEBUG, "cache::populate_tables: ALTER TABLE rss_feed (8) rc = %d", rc);
 
+	rc = sqlite3_exec(db, "ALTER TABLE rss_feed ADD etag VARCHAR(128) NOT NULL DEFAULT \"\";", NULL, NULL, NULL);
+	LOG(LOG_DEBUG, "cache::populate_tables: ALTER TABLE rss_feed (9) rc = %d", rc);
+
 }
 
-time_t cache::get_lastmodified(const std::string& feedurl) {
+
+void cache::fetch_lastmodified(const std::string& feedurl, time_t& t, std::string& etag) {
 	scope_mutex lock(&mtx);
-	time_t result = 0;
-	std::string query = prepare_query("SELECT lastmodified FROM rss_feed WHERE rssurl = '%q';", feedurl.c_str());
+	std::string query = prepare_query("SELECT lastmodified, etag FROM rss_feed WHERE rssurl = '%q';", feedurl.c_str());
 	LOG(LOG_DEBUG, "running: query: %s", query.c_str());
-	int rc = sqlite3_exec(db, query.c_str(), single_int_callback, &result, NULL);
+	header_values result;
+	int rc = sqlite3_exec(db, query.c_str(), lastmodified_callback, &result, NULL);
 	if (rc != SQLITE_OK) {
 		LOG(LOG_CRITICAL, "query \"%s\" failed: error = %d", query.c_str(), rc);
 		throw dbexception(db);
 	}
-	return result;
+	t = result.lastmodified;
+	etag = result.etag;
 }
 
-void cache::set_lastmodified(const std::string& feedurl, time_t lastmod) {
-	scope_mutex lock(&mtx);
-	if (lastmod > 0) {
-		std::string query = prepare_query("UPDATE rss_feed SET lastmodified = '%d' WHERE rssurl = '%q';", lastmod, feedurl.c_str());
-		int rc = sqlite3_exec(db, query.c_str(), NULL, NULL, NULL);
-		LOG(LOG_DEBUG, "ran SQL statement: %s result = %d", query.c_str(), rc);
+void cache::update_lastmodified(const std::string& feedurl, time_t t, const std::string& etag) {
+	if (t == 0 && etag.length() == 0) {
+		LOG(LOG_INFO, "cache::update_lastmodified: both time and etag are empty, not updating anything");
+		return;
 	}
+	scope_mutex lock(&mtx);
+	std::string query = "UPDATE rss_feed SET ";
+	if (t > 0)
+		query.append(utils::strprintf("lastmodified = '%d'", t));
+	if (etag.length() > 0)
+		query.append(utils::strprintf("%c etag = %s", (t > 0 ? ',' : ' '), prepare_query("'%q'", etag.c_str()).c_str()));
+	query.append(" WHERE rssurl = ");
+	query.append(prepare_query("'%q'", feedurl.c_str()));
+	int rc = sqlite3_exec(db, query.c_str(), NULL, NULL, NULL);
+	LOG(LOG_DEBUG, "ran SQL statement: %s result = %d", query.c_str(), rc);
 }
 
 void cache::mark_item_deleted(const std::string& guid, bool b) {
@@ -768,6 +790,10 @@ void cache::update_rssitem_flags(rss_item* item) {
 
 void cache::remove_old_deleted_items(const std::string& rssurl, const std::vector<std::string>& guids) {
 	scope_measure m1("cache::remove_old_deleted_items");
+	if (guids.size() == 0) {
+		LOG(LOG_DEBUG, "cache::remove_old_deleted_items: not cleaning up anything because last reload brought no new items (detected no changes)");
+		return;
+	}
 	std::string guidset = "(";
 	for (std::vector<std::string>::const_iterator it=guids.begin();it!=guids.end();++it) {
 		guidset.append(prepare_query("'%q', ", it->c_str()));

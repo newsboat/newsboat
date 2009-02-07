@@ -50,84 +50,6 @@ std::tr1::shared_ptr<rss_feed> rss_parser::parse() {
 	return feed;
 }
 
-static size_t get_lastmodified_header(void *ptr, size_t size, size_t nmemb, time_t * timing) {
-	char *header = (char *) ptr;
-
-	if (!strncasecmp ("Last-Modified:", header, 14))
-		*timing = curl_getdate (header + 14, NULL);
-
-	return size * nmemb;
-}
-
-
-bool rss_parser::check_and_update_lastmodified() {
-	if (my_uri.substr(0,5) != "http:" && my_uri.substr(0,6) != "https:")
-		return true;
-
-	if (ign && ign->matches_lastmodified(my_uri)) {
-		// LOG(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: found %s on list of URLs that are always downloaded", my_uri.c_str());
-		return true;
-	}
-
-	time_t oldlm = ch->get_lastmodified(my_uri);
-	time_t newlm = 0;
-
-	unsigned int retry_count = cfgcont->get_configvalue_as_int("download-retries");
-
-	unsigned int i;
-	CURLcode err = CURLE_OK;
-	for (i=0;i<retry_count;i++) {
-		CURL* curl = curl_easy_init();
-		if (!curl) return false;
-
-		std::string proxy = cfgcont->get_configvalue("proxy");
-		std::string proxyauth = cfgcont->get_configvalue("proxy-auth");
-		std::string useragent = utils::get_useragent(cfgcont);
-
-		LOG(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: useragent = %s", useragent.c_str());
-
-		curl_easy_setopt(curl, CURLOPT_URL, my_uri.c_str());
-		curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
-		curl_easy_setopt(curl, CURLOPT_ENCODING, "gzip, deflate");
-		curl_easy_setopt(curl, CURLOPT_TIMEOUT, cfgcont->get_configvalue_as_int("download-timeout"));
-		if (proxy != "")
-			curl_easy_setopt(curl, CURLOPT_PROXY, proxy.c_str());
-		if (proxyauth != "")
-			curl_easy_setopt(curl, CURLOPT_PROXYUSERPWD, proxyauth.c_str());
-		curl_easy_setopt(curl, CURLOPT_USERAGENT, useragent.c_str());
-		curl_easy_setopt(curl, CURLOPT_HEADERDATA, &newlm);
-		curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, get_lastmodified_header);
-		curl_easy_setopt(curl, CURLOPT_NOBODY, 1);
-		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
-		curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1);
-
-		err = curl_easy_perform(curl);
-		curl_easy_cleanup(curl);
-
-		LOG(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: err = %u oldlm = %d newlm = %d", err, oldlm, newlm);
-		if (err == CURLE_OK)
-			break;
-	}
-	if (i==retry_count && err != CURLE_OK) {
-		LOG(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: couldn't get a result after %u retries", retry_count);
-		throw rsspp::exception(curl_easy_strerror(err));
-	}
-
-	if (newlm <= 0) {
-		LOG(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: yes, download (no or invalid Last-Modified header: newlm = %d", newlm);
-		return true;
-	}
-
-	if (newlm > oldlm) {
-		ch->set_lastmodified(my_uri, newlm);
-		LOG(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: yes, download (newlm > oldlm)");
-		return true;
-	}
-
-	LOG(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: no, don't download");
-	return false;
-}
-
 time_t rss_parser::parse_date(const std::string& datestr) {
 	return curl_getdate(datestr.c_str(), NULL);
 }
@@ -223,7 +145,19 @@ void rss_parser::download_http(const std::string& uri) {
 			std::string useragent = utils::get_useragent(cfgcont);
 			LOG(LOG_DEBUG, "rss_parser::download_http: user-agent = %s", useragent.c_str());
 			rsspp::parser p(cfgcont->get_configvalue_as_int("download-timeout"), useragent.c_str(), proxy, proxy_auth);
-			f = p.parse_url(uri);
+			time_t lm = 0;
+			std::string etag;
+			if (!ign || !ign->matches_lastmodified(uri)) {
+				ch->fetch_lastmodified(uri, lm, etag);
+			}
+			f = p.parse_url(uri, lm, etag);
+			if (p.get_last_modified() != 0 || p.get_etag().length() > 0) {
+				LOG(LOG_DEBUG, "rss_parser::download_http: lastmodified old: %d new: %d", lm, p.get_last_modified());
+				LOG(LOG_DEBUG, "rss_parser::download_http: etag old: %s new %s", etag.c_str(), p.get_etag().c_str());
+				ch->update_lastmodified(uri, (p.get_last_modified() != lm) ? p.get_last_modified() : 0 , (etag != p.get_etag()) ? p.get_etag() : "");
+			} else {
+				skip_parsing = true;
+			}
 			is_valid = true;
 		} catch (rsspp::exception& e) {
 			is_valid = false;
