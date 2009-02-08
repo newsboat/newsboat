@@ -42,12 +42,15 @@ check_custom() {
 }
 
 fail() {
-    pkgname=$1
-		rm -f config.mk
-		echo ""
-		echo "You need package ${pkgname} in order to compile this program."
-		echo "Please make sure it is installed."
-		exit 1
+	pkgname=$1
+	rm -f config.mk
+	dlurl=`grep -i "$pkgname" README | awk '{ print $NF }'`
+	echo ""
+	echo "You need package ${pkgname} in order to compile this program."
+	echo "Please make sure it is installed."
+	echo ""
+	echo "You can download ${pkgname} from here: ${dlurl}"
+	exit 1
 }
 
 fail_custom() {
