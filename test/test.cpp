@@ -65,6 +65,11 @@ BOOST_AUTO_TEST_CASE(TestNewsbeuterReload) {
 	BOOST_CHECK_EQUAL(feed2->items()[0]->title(), "Another Title");
 	BOOST_CHECK_EQUAL(feed2->items()[7]->title(), "Handy als IR-Detektor");
 
+	rsscache->set_lastmodified("http://bereshit.synflood.at/~ak/rss.xml", 1000);
+	BOOST_CHECK_EQUAL(rsscache->get_lastmodified("http://bereshit.synflood.at/~ak/rss.xml"), 1000);
+	rsscache->set_lastmodified("http://bereshit.synflood.at/~ak/rss.xml", 0);
+	BOOST_CHECK_EQUAL(rsscache->get_lastmodified("http://bereshit.synflood.at/~ak/rss.xml"), 1000);
+
 	std::vector<std::string> feedurls = rsscache->get_feed_urls();
 	BOOST_CHECK_EQUAL(feedurls.size(), 1u);
 	BOOST_CHECK_EQUAL(feedurls[0], "http://bereshit.synflood.at/~ak/rss.xml");
@@ -765,22 +770,4 @@ BOOST_AUTO_TEST_CASE(TestUtilsFunction_join) {
 	str.push_back("quux");
 	BOOST_CHECK_EQUAL(utils::join(str, ""), "foobarquux");
 	BOOST_CHECK_EQUAL(utils::join(str, "-"), "foobar-quux");
-}
-
-BOOST_AUTO_TEST_CASE(TestUtilsFunction_trim) {
-	std::string str = "  xxx\r\n";
-	utils::trim(str);
-	BOOST_CHECK_EQUAL(str, "xxx");
-	str = "\n\n abc  foobar\n";
-	utils::trim(str);
-	BOOST_CHECK_EQUAL(str, "abc  foobar");
-	str = "";
-	utils::trim(str);
-	BOOST_CHECK_EQUAL(str, "");
-	str = "     \n";
-	utils::trim(str);
-	BOOST_CHECK_EQUAL(str, "");
-	str = "quux\n";
-	utils::trim_end(str);
-	BOOST_CHECK_EQUAL(str, "quux");
 }

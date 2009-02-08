@@ -26,8 +26,8 @@ class cache {
 		void catchup_all(std::tr1::shared_ptr<rss_feed> feed);
 		void update_rssitem_flags(rss_item* item);
 		std::vector<std::string> get_feed_urls();
-		void fetch_lastmodified(const std::string& uri, time_t& t, std::string& etag);
-		void update_lastmodified(const std::string& uri, time_t t, const std::string& etag);
+		time_t get_lastmodified(const std::string& feedurl);
+		void set_lastmodified(const std::string& feedurl, time_t lastmod);
 		unsigned int get_unread_count();
 		void mark_item_deleted(const std::string& guid, bool b);
 		void remove_old_deleted_items(const std::string& rssurl, const std::vector<std::string>& guids);

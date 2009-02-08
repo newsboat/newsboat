@@ -506,8 +506,8 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
 		rss_parser parser(feed->rssurl().c_str(), rsscache, &cfg, &ign);
 		LOG(LOG_DEBUG, "controller::reload: created parser");
 		try {
-			feed = parser.parse();
-			if (feed->items().size() > 0) {
+			if (parser.check_and_update_lastmodified()) {
+				feed = parser.parse();
 				save_feed(feed, pos);
 				enqueue_items(feed);
 				if (!unattended)

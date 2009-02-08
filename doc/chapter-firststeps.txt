@@ -65,16 +65,6 @@ they aren't in the current RSS feeds anymore. Optionally you can configure how
 many articles shall be preserved by feed so that the article backlog doesn't
 grow endlessly (see "max-items" below).
 
-Newsbeuter also uses a number of measures to preserve the users' and feed
-providers' bandwidth, by trying to avoid unnecessary feed downloads through the
-use of conditional HTTP downloading. It saves every feed's "Last-Modified" and
-"ETag" response header values (if present) and advises the feed's HTTP server
-to only send data if the feed has been updated by modification date/time or
-"ETag" header. This doesn't only make feed downloads for RSS feeds with no new
-updates faster, it also reduces the amount of transferred data per request.
-Conditional HTTP downloading can be optionally disabled per feed by using the
-"always-download" configuration command.
-
 Several aspects of newsbeuter's behaviour can be configured via a configuration
 file, by default $HOME/.newsbeuter/config. This configuration file contains
 lines in the form "<config-command> <arg1> ...".  The configuration file can
