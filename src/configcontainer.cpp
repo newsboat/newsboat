@@ -6,6 +6,7 @@
 #include <sstream>
 #include <iostream>
 #include <utils.h>
+#include <cassert>
 
 #include <sys/types.h>
 #include <pwd.h>
