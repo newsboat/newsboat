@@ -67,12 +67,10 @@ void stfl::form::set_focus(const std::string& name) {
 }
 
 void stfl::form::modify(const std::string& name, const std::string& mode, const std::string& text) {
-	LOG(LOG_INFO, "stfl::form::modify: name = `%s' mode = `%s' text = `%s'", name.c_str(), mode.c_str(), text.c_str());
 	const wchar_t * wname, * wmode, * wtext;
 	wname = stfl_ipool_towc(ipool,name.c_str());
 	wmode = stfl_ipool_towc(ipool,mode.c_str());
 	wtext = stfl_ipool_towc(ipool,text.c_str());
-	// LOG(LOG_INFO, "stfl::form::modify: wname = `%ls' mode = `%ls' text = `%ls'", wname, wmode, wtext);
 	stfl_modify(f, wname, wmode, wtext);
 	stfl_ipool_flush(ipool);
 }

@@ -108,7 +108,6 @@ keymap::keymap(unsigned flags) {
 		for (int i=0;opdescs[i].op != OP_NIL;++i) {
 			if (opdescs[i].flags & (flags | KM_INTERNAL | KM_SYSKEYS)) {
 				keymap_[ctx][opdescs[i].default_key] = opdescs[i].op;
-				LOG(LOG_DEBUG, "keymap::keymap: keymap_[%s][%s] = %u (%s)", ctx.c_str(), opdescs[i].default_key, opdescs[i].op, opdescs[i].opstr);
 			}
 		}
 	}

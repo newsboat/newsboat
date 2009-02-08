@@ -119,8 +119,6 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str, std::str
 		last_pos = str.find_first_not_of(delimiters, pos);
 	}
 
-	LOG(LOG_DEBUG, "utils::tokenize_quoted: tokenizing '%s' resulted in %u elements", str.c_str(), tokens.size());
-
 	return tokens;
 }
 
@@ -452,13 +450,11 @@ std::string utils::resolve_tilde(const std::string& str) {
 }
 
 std::string utils::replace_all(std::string str, const std::string& from, const std::string& to) {
-	LOG(LOG_DEBUG,"utils::replace_all: before str = %s", str.c_str());
 	std::string::size_type s = str.find(from);
 	while (s != std::string::npos) {
 		str.replace(s,from.length(), to);
 		s = str.find(from, s + to.length());
 	}
-	LOG(LOG_DEBUG,"utils::replace_all: after str = %s", str.c_str());
 	return str;
 }
 

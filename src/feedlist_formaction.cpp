@@ -642,10 +642,7 @@ std::string feedlist_formaction::format_line(const std::string& feedlist_format,
 	fmt.register_fmt('L', utils::censor_url(feed->rssurl()));
 	fmt.register_fmt('d', feed->description());
 
-	std::string format = fmt.do_format(feedlist_format, width);
-	LOG(LOG_DEBUG, "feedlist_formaction::set_feedlist: format result = %s", format.c_str());
-
-	return format;
+	return fmt.do_format(feedlist_format, width);
 }
 
 std::string feedlist_formaction::title() {

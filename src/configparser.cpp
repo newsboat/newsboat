@@ -90,12 +90,10 @@ bool configparser::parse(const std::string& filename, bool double_include) {
 }
 
 void configparser::register_handler(const std::string& cmd, config_action_handler * handler) {
-	LOG(LOG_DEBUG,"configparser::register_handler: cmd = %s handler = %p", cmd.c_str(), handler);
 	action_handlers[cmd] = handler;
 }
 
 void configparser::unregister_handler(const std::string& cmd) {
-	LOG(LOG_DEBUG,"configparser::unregister_handler: cmd = %s", cmd.c_str());
 	action_handlers[cmd] = 0;
 }
 

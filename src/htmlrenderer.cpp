@@ -86,7 +86,6 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				std::transform(tagname.begin(), tagname.end(), tagname.begin(), ::tolower);
 				current_tag = tags[tagname];
 
-				LOG(LOG_DEBUG,"htmlrenderer::render: found start tag %s (id = %u)",tagname.c_str(), current_tag);
 				switch (current_tag) {
 					case TAG_A: {
 							std::string link;
@@ -137,7 +136,6 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						break;
 
 					case TAG_BR:
-						LOG(LOG_DEBUG, "htmlrenderer::render: pushing back `%s'", curline.c_str());
 						lines.push_back(curline);
 						prepare_newline(curline, indent_level);	
 						break;
@@ -267,8 +265,6 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				std::transform(tagname.begin(), tagname.end(), tagname.begin(), ::tolower);
 				current_tag = tags[tagname];
 
-				LOG(LOG_DEBUG, "htmlrenderer::render: found end tag %s (id = %u)",tagname.c_str(), current_tag);
-
 				switch (current_tag) {
 					case TAG_BLOCKQUOTE:
 						--indent_level;
@@ -378,7 +374,6 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 
 			case tagsouppullparser::TEXT:
 				{
-					LOG(LOG_DEBUG,"htmlrenderer::render: found text `%s'",xpp.getText().c_str());
 					if (itunes_hack) {
 						std::vector<std::string> words = utils::tokenize_nl(utils::quote_for_stfl(xpp.getText()));
 						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it) {
@@ -386,12 +381,10 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 								lines.push_back(curline);
 								prepare_newline(curline, indent_level);
 							} else {
-								LOG(LOG_DEBUG, "htmlrenderer::render: tokenizing `%s'", it->c_str());
 								std::vector<std::string> words2 = utils::tokenize_spaced(*it);
 								unsigned int i=0;
 								bool new_line = false;
 								for (std::vector<std::string>::iterator it2=words2.begin();it2!=words2.end();++it2,++i) {
-									LOG(LOG_DEBUG, "htmlrenderer::render: token[%u] = `%s'", i, it2->c_str());
 									if ((curline.length() + it2->length()) >= w) {
 										if (line_is_nonempty(curline))
 											lines.push_back(curline);
@@ -431,9 +424,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 							words.erase(words.begin());
 						}
 
-						LOG(LOG_DEBUG, "htmlrenderer::render: tokenized `%s'", xpp.getText().c_str());
 						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it,++i) {
-							LOG(LOG_DEBUG, "htmlrenderer::render: token[%u] = `%s'", i, it->c_str());
 							if ((curline.length() + it->length()) >= w) {
 								if (line_is_nonempty(curline))
 									lines.push_back(curline);

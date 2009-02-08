@@ -3,7 +3,7 @@
 
 namespace newsbeuter {
 
-reloadthread::reloadthread(controller * c, configcontainer * cf) : ctrl(c), oldtime(0), suppressed_first(false), cfg(cf) {
+reloadthread::reloadthread(controller * c, configcontainer * cf) : ctrl(c), oldtime(0), waittime_sec(0), suppressed_first(false), cfg(cf) {
 	LOG(LOG_INFO,"reloadthread: waiting %u seconds between reloads",waittime_sec);
 }
 

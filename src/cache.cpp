@@ -94,7 +94,6 @@ static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** /* az
 	std::tr1::shared_ptr<rss_item> item(new rss_item(NULL));
 	item->set_guid(argv[0]);
 	item->set_title(argv[1]);
-	LOG(LOG_DEBUG, "rssitem_callback: title = %s", argv[1]);
 	item->set_author(argv[2]);
 	item->set_link(argv[3]);
 	
