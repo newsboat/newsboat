@@ -53,6 +53,9 @@ void help_formaction::prepare() {
 		std::vector<keymap_desc> descs;
 		v->get_keys()->get_keymap_descriptions(descs, v->get_keys()->get_flag_from_context(context));
 
+		std::string highlighted_searchphrase = utils::strprintf("<hl>%s</>", searchphrase.c_str());
+		std::vector<std::string> colors = utils::tokenize(v->get_cfg()->get_configvalue("search-highlight-colors"), " ");
+		f->set("highlight", make_colorstring(colors));
 		listformatter listfmt;
 		
 		for (std::vector<keymap_desc>::iterator it=descs.begin();it!=descs.end();++it) {
@@ -61,13 +64,21 @@ void help_formaction::prepare() {
 			if (!apply_search || strcasestr(it->key.c_str(), searchphrase.c_str())!=NULL || 
 					strcasestr(it->cmd.c_str(), searchphrase.c_str())!=NULL ||
 					strcasestr(it->desc.c_str(), searchphrase.c_str())!=NULL) {
-				unsigned int how_often_1 = 2 - (it->key.length() / 8);
-				unsigned int how_often_2 = 3 - (it->cmd.length() / 8);
-				char tabs_1[] = "\t\t";
-				char tabs_2[] = "\t\t\t";
+				char tabs_1[] = "                ";
+				char tabs_2[] = "                        ";
+				unsigned int how_often_1 = strlen(tabs_1) - it->key.length();
+				unsigned int how_often_2 = strlen(tabs_2) - it->cmd.length();
 				tabs_1[how_often_1] = '\0';
 				tabs_2[how_often_2] = '\0';
-				listfmt.add_line(utils::strprintf("%s%s%s%s%s", it->key.c_str(), tabs_1, it->cmd.c_str(), tabs_2, it->desc.c_str()));
+				std::string line = utils::strprintf("%s%s%s%s%s", it->key.c_str(), tabs_1, it->cmd.c_str(), tabs_2, it->desc.c_str());
+				LOG(LOG_DEBUG, "help_formaction::prepare: step 1 - line = %s", line.c_str());
+				line = utils::quote_for_stfl(line);
+				LOG(LOG_DEBUG, "help_formaction::prepare: step 2 - line = %s", line.c_str());
+				if (apply_search && searchphrase.length() > 0) {
+					line = utils::replace_all(line, searchphrase, highlighted_searchphrase);
+					LOG(LOG_DEBUG, "help_formaction::prepare: step 3 - line = %s", line.c_str());
+				}
+				listfmt.add_line(line);
 			}
 		}
 
@@ -92,10 +103,16 @@ keymap_hint_entry * help_formaction::get_keymap_hint() {
 	return hints;
 }
 
-void help_formaction::finished_qna(operation ) {
-	searchphrase = qna_responses[0];
-	apply_search = true;
-	do_redraw = true;
+void help_formaction::finished_qna(operation op) {
+	switch (op) {
+	case OP_INT_START_SEARCH:
+		searchphrase = qna_responses[0];
+		apply_search = true;
+		do_redraw = true;
+		break;
+	default:
+		break;
+	}
 }
 
 void help_formaction::set_context(const std::string& ctx) {
@@ -107,6 +124,31 @@ void help_formaction::set_context(const std::string& ctx) {
 
 std::string help_formaction::title() {
 	return _("Help");
+}
+
+std::string help_formaction::make_colorstring(const std::vector<std::string>& colors) {
+	std::string result;
+	if (colors.size() > 0) {
+		if (colors[0] != "default") {
+			result.append("fg=");
+			result.append(colors[0]);
+		}
+		if (colors.size() > 1) {
+			if (colors[1] != "default") {
+				if (result.length() > 0)
+					result.append(",");
+				result.append("bg=");
+				result.append(colors[1]);
+			}
+		}
+		for (unsigned int i=2;i<colors.size();i++) {
+			if (result.length() > 0)
+				result.append(",");
+			result.append("attr=");
+			result.append(colors[i]);
+		}
+	}
+	return result;
 }
 
 }

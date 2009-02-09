@@ -521,6 +521,7 @@ BOOST_AUTO_TEST_CASE(TestMiscUtilsFunctions) {
 	BOOST_CHECK_EQUAL(utils::replace_all("", "a", "b"), "");
 	BOOST_CHECK_EQUAL(utils::replace_all("aaaa", "b", "c"), "aaaa");
 	BOOST_CHECK_EQUAL(utils::replace_all("this is a normal test text", " t", " T"), "this is a normal Test Text");
+	BOOST_CHECK_EQUAL(utils::replace_all("o o o", "o", "<o>"), "<o> <o> <o>");
 
 	BOOST_CHECK_EQUAL(utils::to_s(0), "0");
 	BOOST_CHECK_EQUAL(utils::to_s(100), "100");
