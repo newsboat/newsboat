@@ -102,6 +102,15 @@ bool rss_parser::check_and_update_lastmodified() {
 		curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1);
 
 		err = curl_easy_perform(curl);
+
+		long status = 0;
+		curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &status);
+
+		LOG(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: status = %ld", status);
+		if (status >= 400) {
+			LOG(LOG_USERERROR, _("Error: trying to download feed `%s' returned HTTP status code %ld."), my_uri.c_str(), status);
+		}
+
 		curl_easy_cleanup(curl);
 
 		LOG(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: err = %u oldlm = %d newlm = %d", err, oldlm, newlm);

@@ -4,7 +4,6 @@ TODO:
 - when reload is finished, the focus shall be in the current form's list
 - per-feed refresh settings
 - implement internal alias mechanism to allow transition of renamed config commands.
-- improve logging of which feeds are broken.
 - make search phrase stand out in help (just like article view instead of limit) - configurable? combine both limit and standout?
 
 
@@ -146,3 +145,4 @@ DONE:
 - make last search phrase stand out in article view.
 - persist search and command history to text files.
 - fix :source for bind-key: bind-key j down etc.
+- improve logging of which feeds are broken.

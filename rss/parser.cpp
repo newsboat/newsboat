@@ -10,6 +10,7 @@
 #include <libxml/tree.h>
 #include <curl/curl.h>
 #include <logger.h>
+#include <utils.h>
 #include <cstring>
 
 using namespace newsbeuter;
@@ -60,9 +61,16 @@ feed parser::parse_url(const std::string& url) {
 		curl_easy_setopt(easyhandle, CURLOPT_PROXYUSERPWD, prxauth);
 
 	ret = curl_easy_perform(easyhandle);
-	curl_easy_cleanup(easyhandle);
-
 	LOG(LOG_DEBUG, "rsspp::parser::parse_url: ret = %d", ret);
+
+	long status;
+	curl_easy_getinfo(easyhandle, CURLINFO_HTTP_CONNECTCODE, &status);
+
+	if (status >= 400) {
+		LOG(LOG_USERERROR, _("Error: trying to download feed `%s' returned HTTP status code %ld."), url.c_str(), status);
+	}
+
+	curl_easy_cleanup(easyhandle);
 
 	if (ret != 0) {
 		LOG(LOG_ERROR, "rsspp::parser::parse_url: curl_easy_perform returned err %d: %s", ret, curl_easy_strerror(ret));
