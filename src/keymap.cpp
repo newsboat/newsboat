@@ -79,10 +79,10 @@ static op_desc opdescs[] = {
 	{ OP_8,		"eight","8",	_("Open URL 8"), KM_URLVIEW | KM_ARTICLE},
 	{ OP_9,		"nine",	"9",	_("Open URL 9"), KM_URLVIEW | KM_ARTICLE},
 
-	{ OP_SK_UP, "up", "UP", NULL, KM_SYSKEYS },
-	{ OP_SK_DOWN, "down", "DOWN", NULL, KM_SYSKEYS },
-	{ OP_SK_PGUP, "pageup", "PAGEUP", NULL, KM_SYSKEYS },
-	{ OP_SK_PGDOWN, "pagedown", "PAGEDOWN", NULL, KM_SYSKEYS },
+	{ OP_SK_UP, "up", "UP", _("Move to the previous entry"), KM_SYSKEYS },
+	{ OP_SK_DOWN, "down", "DOWN", _("Move to the next entry"), KM_SYSKEYS },
+	{ OP_SK_PGUP, "pageup", "PAGEUP", _("Move to the previous page"), KM_SYSKEYS },
+	{ OP_SK_PGDOWN, "pagedown", "PAGEDOWN", _("Move to the next page"), KM_SYSKEYS },
 
 	{ OP_INT_END_QUESTION, "XXXNOKEY-end-question", "end-question", NULL, KM_INTERNAL },
 	{ OP_INT_CANCEL_QNA, "XXXNOKEY-cancel-qna", "cancel-qna", NULL, KM_INTERNAL },
@@ -127,7 +127,7 @@ void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned s
 			continue;
 		}
 
-		for (int i=0;opdescs[i].help_text;++i) {
+		for (int i=0;opdescs[i].op != OP_NIL;++i) {
 			bool already_added = false;
 			for (std::map<std::string,operation>::iterator it=keymap_[ctx].begin();it!=keymap_[ctx].end();++it) {
 				operation op = it->second;
@@ -138,7 +138,8 @@ void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned s
 						desc.ctx = ctx;
 						if (!already_added) {
 							desc.cmd = opdescs[i].opstr;
-							desc.desc = gettext(opdescs[i].help_text);
+							if (opdescs[i].help_text)
+								desc.desc = gettext(opdescs[i].help_text);
 							already_added = true;
 						}
 						descs.push_back(desc);
@@ -353,7 +354,7 @@ bool keymap::is_valid_context(const std::string& context) {
 unsigned short keymap::get_flag_from_context(const std::string& context) {
 	for (unsigned int i=1;contexts[i]!=NULL;i++) {
 		if (context == contexts[i])
-			return 1<<(i-1);
+			return (1<<(i-1)) | KM_SYSKEYS;
 	}
 	return 0; // shouldn't happen
 }

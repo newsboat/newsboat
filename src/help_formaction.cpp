@@ -61,10 +61,13 @@ void help_formaction::prepare() {
 			if (!apply_search || strcasestr(it->key.c_str(), searchphrase.c_str())!=NULL || 
 					strcasestr(it->cmd.c_str(), searchphrase.c_str())!=NULL ||
 					strcasestr(it->desc.c_str(), searchphrase.c_str())!=NULL) {
-				unsigned int how_often = 3 - (it->cmd.length() / 8);
-				char tabs[] = "\t\t\t";
-				tabs[how_often] = '\0';
-				listfmt.add_line(utils::strprintf("%s\t%s%s%s", it->key.c_str(), it->cmd.c_str(), tabs, it->desc.c_str()));
+				unsigned int how_often_1 = 2 - (it->key.length() / 8);
+				unsigned int how_often_2 = 3 - (it->cmd.length() / 8);
+				char tabs_1[] = "\t\t";
+				char tabs_2[] = "\t\t\t";
+				tabs_1[how_often_1] = '\0';
+				tabs_2[how_often_2] = '\0';
+				listfmt.add_line(utils::strprintf("%s%s%s%s%s", it->key.c_str(), tabs_1, it->cmd.c_str(), tabs_2, it->desc.c_str()));
 			}
 		}
 
