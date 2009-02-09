@@ -18,6 +18,7 @@ class itemview_formaction : public formaction {
 		virtual void init();
 		inline void set_guid(const std::string& guid_) { guid = guid_; }
 		inline void set_feed(std::tr1::shared_ptr<rss_feed> fd) { feed = fd; }
+		void set_highlightphrase(const std::string& text);
 		keymap_hint_entry * get_keymap_hint();
 		virtual void handle_cmdline(const std::string& cmd);
 
@@ -35,6 +36,7 @@ class itemview_formaction : public formaction {
 	private:
 		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
 		void set_head(const std::string& s);
+		void highlight_text(const std::string& searchphrase);
 
 		void render_source(std::vector<std::string>& lines, std::string desc, unsigned int width);
 

@@ -520,6 +520,10 @@ std::string itemview_formaction::title() {
 	return utils::strprintf(_("Article - %s"), item->title().c_str());
 }
 
+void itemview_formaction::set_highlightphrase(const std::string& text) {
+	highlight_text(text);
+}
+
 void itemview_formaction::do_search() {
 	std::string searchphrase = qna_responses[0];
 	if (searchphrase.length() == 0)
@@ -529,6 +533,10 @@ void itemview_formaction::do_search() {
 
 	LOG(LOG_DEBUG, "itemview_formaction::do_search: searchphrase = %s", searchphrase.c_str());
 
+	highlight_text(searchphrase);
+}
+
+void itemview_formaction::highlight_text(const std::string& searchphrase) {
 	std::vector<std::string> params;
 	params.push_back("article");
 	params.push_back(searchphrase);
@@ -539,14 +547,14 @@ void itemview_formaction::do_search() {
 	try {
 		rxman->handle_action("highlight", params);
 
-		LOG(LOG_DEBUG, "itemview_formaction::do_search: configuration manipulation was successful");
+		LOG(LOG_DEBUG, "itemview_formaction::highlight_text: configuration manipulation was successful");
 
 		set_regexmanager(rxman);
 
 		in_search = true;
 		do_redraw = true;
 	} catch (const confighandlerexception& e) {
-		LOG(LOG_ERROR, "itemview_formaction::do_search: handle_action failed, error = %s", e.what());
+		LOG(LOG_ERROR, "itemview_formaction::highlight_text: handle_action failed, error = %s", e.what());
 		v->show_error(_("Error: invalid regular expression!"));
 	}
 }

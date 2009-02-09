@@ -44,7 +44,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				if (itemposname.length() > 0) {
 					visible_items[itempos].first->set_unread(false); // set article as read
 					old_itempos = itempos;
-					v->push_itemview(feed, visible_items[itempos].first->guid());
+					v->push_itemview(feed, visible_items[itempos].first->guid(), show_searchresult ? searchphrase : "");
 					do_redraw = true;
 				} else {
 					v->show_error(_("No item selected!")); // should not happen
@@ -433,7 +433,7 @@ void itemlist_formaction::qna_end_editflags() {
 }
 
 void itemlist_formaction::qna_start_search() {
-	std::string searchphrase = qna_responses[0];
+	searchphrase = qna_responses[0];
 	if (searchphrase.length() == 0)
 		return;
 

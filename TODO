@@ -7,10 +7,7 @@ TODO:
 - implement internal alias mechanism to allow transition of renamed config commands.
 - improve logging of which feeds are broken.
 - persist search and command history to text files.
-- make last search phrase stand out in article view.
 - make search phrase stand out in help (just like article view instead of limit) - configurable? combine both limit and standout?
-- add license to -V output
-- rename -v to something else to avoid confusion
 
 
 DONE:
@@ -146,3 +143,6 @@ DONE:
 - fix W3CDTF parser
 - make boolean config variables toggable via commandline and resettable to default
 - backtick evaluation in configuration
+- add license to -V output
+- rename -v to something else to avoid confusion
+- make last search phrase stand out in article view.

@@ -412,7 +412,7 @@ void view::push_itemlist(unsigned int pos) {
 	}
 }
 
-void view::push_itemview(std::tr1::shared_ptr<rss_feed> f, const std::string& guid) {
+void view::push_itemview(std::tr1::shared_ptr<rss_feed> f, const std::string& guid, const std::string& searchphrase) {
 	std::string pager;
 	if ((pager = cfg->get_configvalue("pager")) == "internal") {
 		std::tr1::shared_ptr<itemlist_formaction> itemlist = std::tr1::dynamic_pointer_cast<itemlist_formaction, formaction>(get_current_formaction());
@@ -423,6 +423,8 @@ void view::push_itemview(std::tr1::shared_ptr<rss_feed> f, const std::string& gu
 		itemview->set_feed(f);
 		itemview->set_guid(guid);
 		itemview->set_parent_formaction(get_current_formaction());
+		if (searchphrase.length() > 0)
+			itemview->set_highlightphrase(searchphrase);
 		apply_colors(itemview);
 		itemview->init();
 		formaction_stack.push_back(itemview);

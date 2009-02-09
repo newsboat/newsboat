@@ -51,7 +51,7 @@ namespace newsbeuter {
 
 			void push_itemlist(unsigned int pos);
 			void push_itemlist(std::tr1::shared_ptr<rss_feed> feed);
-			void push_itemview(std::tr1::shared_ptr<rss_feed> f, const std::string& guid);
+			void push_itemview(std::tr1::shared_ptr<rss_feed> f, const std::string& guid, const std::string& searchphrase = "");
 			void push_help();
 			void push_urlview(const std::vector<linkpair>& links);
 			void push_searchresult(std::tr1::shared_ptr<rss_feed> feed, const std::string& phrase = "");
