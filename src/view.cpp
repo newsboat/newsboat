@@ -71,6 +71,14 @@ void view::set_keymap(keymap * k) {
 }
 
 
+void view::update_bindings() {
+	for (std::vector<std::tr1::shared_ptr<formaction> >::iterator it=formaction_stack.begin();it!=formaction_stack.end();it++) {
+		if (*it) {
+			set_bindings(*it);
+		}
+	}
+}
+
 void view::set_bindings(std::tr1::shared_ptr<formaction> fa) {
 	std::string upkey("** "); upkey.append(keys->getkey(OP_SK_UP, fa->id()));
 	std::string downkey("** "); downkey.append(keys->getkey(OP_SK_DOWN, fa->id()));

@@ -94,6 +94,8 @@ namespace newsbeuter {
 
 			void apply_colors_to_all_formactions();
 
+			void update_bindings();
+
 		protected:
 			void set_bindings(std::tr1::shared_ptr<formaction> fa);
 			void apply_colors(std::tr1::shared_ptr<formaction> fa);
