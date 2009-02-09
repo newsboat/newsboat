@@ -1,0 +1,8 @@
+# plain color scheme for newsbeuter <http://www.newsbeuter.org/>
+# boring black and white color configuration that resembles the classic look of really old terminals
+
+color listnormal default default
+color listfocus  default default reverse bold
+color info       default default reverse
+color background default default
+color article    default default

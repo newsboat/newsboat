@@ -1,0 +1,7 @@
+# a lightly-colored, well-readable newsbeuter color scheme
+
+color listnormal black white
+color listfocus  white blue bold
+color info       white red bold
+color background black white
+color article    black white

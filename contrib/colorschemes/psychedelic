@@ -1,0 +1,7 @@
+# a psychedelic newsbeuter color scheme
+
+color listnormal magenta green
+color listfocus  blue yellow
+color info       cyan red dim
+color background white cyan
+color article    black magenta

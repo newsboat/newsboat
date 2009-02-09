@@ -1,0 +1,8 @@
+# greenscreen color scheme for newsbeuter <http://www.newsbeuter.org/>
+# a simple theme that resembles the look and feel of old "green screen" terminals.
+
+color listnormal green default
+color listfocus  green default reverse
+color info       green default reverse
+color background green default
+color article    green default

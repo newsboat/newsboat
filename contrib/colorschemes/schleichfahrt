@@ -1,0 +1,7 @@
+# a newsbeuter color scheme especially designed for dark environments
+
+color listnormal red black
+color listfocus  red black bold reverse
+color info       red black reverse bold
+color background red black
+color article    red black

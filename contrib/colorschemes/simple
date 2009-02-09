@@ -1,0 +1,7 @@
+# a simple newsbeuter color scheme.
+
+color listnormal white black
+color listfocus  yellow red bold
+color info       cyan blue
+color background white black
+color article    white black

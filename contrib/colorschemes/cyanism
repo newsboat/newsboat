@@ -1,0 +1,7 @@
+# cyan-colored newsbeuter color scheme
+
+color listnormal cyan black
+color listfocus  cyan black reverse
+color info       white blue
+color background white black
+color article    white black
