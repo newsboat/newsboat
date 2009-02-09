@@ -81,4 +81,11 @@ Searching for articles is possible in newsbeuter, too. Just press the "/" key,
 enter your search phrase, and the title and content of all articles are
 searched for it. When you do a search from the list of feeds, all articles of
 all feeds will be searched. When you do a search from the article list of a
-feed, only the articles of the currently viewed feed are searched.
+feed, only the articles of the currently viewed feed are searched. When opening
+an article from a search result dialog, the search phrase is highlighted.
+
+The history of all your searches is saved to the filesystem, to
+\~/.newsbeuter/history.search. By default, the last 100 search phrases are
+stored, but this limited can be influenced through the "history-limit"
+configuration variable. To disable search history saving, simply set the
+history-limit to 0.

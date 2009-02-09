@@ -53,6 +53,9 @@ class formaction {
 
 		virtual std::string title() = 0;
 
+		static void load_histories(const std::string& searchfile, const std::string& cmdlinefile);
+		static void save_histories(const std::string& searchfile, const std::string& cmdlinefile, unsigned int limit);
+
 	protected:
 		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL) = 0;
 		virtual void set_keymap_hints();

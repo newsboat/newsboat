@@ -237,6 +237,9 @@ void controller::run(int argc, char * argv[]) {
 		}
 	}
 
+	std::string searchfile = utils::strprintf("%s%shistory.search", config_dir.c_str(), NEWSBEUTER_PATH_SEP);
+	std::string cmdlinefile = utils::strprintf("%s%shistory.cmdline", config_dir.c_str(), NEWSBEUTER_PATH_SEP);
+
 	if (!silent)
 		std::cout << _("Loading configuration...");
 	std::cout.flush();
@@ -441,8 +444,15 @@ void controller::run(int argc, char * argv[]) {
 	v->set_keymap(&keys);
 	v->set_tags(tags);
 
+
+	formaction::load_histories(searchfile, cmdlinefile);
+
 	// run the view
 	v->run();
+
+	unsigned int history_limit = cfg.get_configvalue_as_int("history-limit");
+	LOG(LOG_DEBUG, "controller::run: history-limit = %u", history_limit);
+	formaction::save_histories(searchfile, cmdlinefile, history_limit);
 
 	std::cout << _("Cleaning up cache...");
 	std::cout.flush();

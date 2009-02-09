@@ -271,5 +271,14 @@ void formaction::start_next_question() {
 	}
 }
 
+void formaction::load_histories(const std::string& searchfile, const std::string& cmdlinefile) {
+	searchhistory.load_from_file(searchfile);
+	cmdlinehistory.load_from_file(cmdlinefile);
+}
+
+void formaction::save_histories(const std::string& searchfile, const std::string& cmdlinefile, unsigned int limit) {
+	searchhistory.save_to_file(searchfile, limit);
+	cmdlinehistory.save_to_file(cmdlinefile, limit);
+}
 
 }

@@ -7,5 +7,10 @@ To start the commandline, type ":". You will see a ":" prompt at the bottom of
 the screen, similar to tools like vi(m) or mutt. You can now enter commands.
 Pressing the return key executes the command (possibly giving feedback to the
 user) and closes the commandline. You can cancel entering commands by pressing
-the ESC key. Currently, the following commands are available:
+the ESC key. The history of all the commands that you enter will be saved to
+\~/.newsbeuter/history.cmdline. The backlog is limited to 100 entries by default,
+but can be influenced by setting the "history-limit" configuration variable.
+To disable history saving, set the history-limit to 0.
+
+Currently, the following commands are available:
 
