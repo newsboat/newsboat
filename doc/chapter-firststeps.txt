@@ -11,10 +11,10 @@ After you've installed newsbeuter, you can run it for the first time by typing
 			-u <urlfile>    read RSS feed URLs from <urlfile>
 			-c <cachefile>  use <cachefile> as cache file
 			-C <configfile> read configuration from <configfile>
-			-v              clean up cache thoroughly
+			-X              clean up cache thoroughly
 			-x <command>... execute list of commands
 			-o              activate offline mode (only applies to bloglines synchronization mode)
-			-V              get version information
+			-v              get version information
 			-l <loglevel>   write a log with a certain loglevel (valid values: 1 to 6)
 			-d <logfile>    use <logfile> as output log file
 			-E <file>       export list of read articles to <file>

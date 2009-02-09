@@ -1,13 +1,14 @@
 #!/usr/bin/perl
 
-if ($#ARGV != 0) {
-  print STDOUT "usage: $0 <stflfile>\n";
+if (length(@ARGV) < 1) {
+  print STDOUT "usage: $0 <stflfile> [<extension>]\n";
   exit(1);
 }
 
-$id = `basename $ARGV[0] .stfl`;
+$filename = $ARGV[0];
+$extension = $ARGV[1];
+$id = `basename $filename $extension`;
 chomp($id);
-chomp($ucid);
 
 open(FILE,$ARGV[0]) or die "couldn't open $ARGV[0]: $!\n";
 

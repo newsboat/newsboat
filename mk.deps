@@ -14,7 +14,7 @@ src/configparser.o: include/configparser.h include/tagsouppullparser.h include/e
 src/controller.o: include/view.h include/controller.h include/configparser.h \
 	include/configcontainer.h include/exceptions.h include/downloadthread.h \
 	include/colormanager.h include/logger.h include/utils.h include/stflpp.h \
-	config.h
+	config.h xlicense.h
 
 src/download.o: include/download.h include/pb_controller.h config.h
 

@@ -59,7 +59,7 @@ POFILES:=$(wildcard po/*.po)
 MOFILES:=$(patsubst %.po,%.mo,$(POFILES))
 POTFILE=po/newsbeuter.pot
 
-STFLCONV=./stfl2h.pl
+TEXTCONV=./txt2h.pl
 RM=rm -f
 
 all: $(NEWSBEUTER) $(PODBEUTER)
@@ -95,7 +95,7 @@ regenerate-parser:
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 %.h: %.stfl
-	$(STFLCONV) $< > $@
+	$(TEXTCONV) $< .stfl > $@
 
 clean-newsbeuter:
 	$(RM) $(NEWSBEUTER) $(NEWSBEUTER_OBJS)
@@ -117,7 +117,7 @@ clean-doc:
 	$(RM) doc/*.xml doc/*.1 doc/newsbeuter-cfgcmds.txt doc/podbeuter-cfgcmds.txt doc/newsbeuter-keycmds.txt
 
 clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-doc clean-librsspp
-	$(RM) $(STFLHDRS)
+	$(RM) $(STFLHDRS) xlicense.h
 
 distclean: clean clean-mo test-clean
 	$(RM) core *.core core.* config.mk
@@ -196,5 +196,8 @@ config: config.mk
 
 config.mk:
 	@./config.sh
+
+xlicense.h: LICENSE
+	$(TEXTCONV) $< > $@
 
 include mk.deps

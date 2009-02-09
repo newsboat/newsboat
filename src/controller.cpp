@@ -13,6 +13,7 @@
 #include <formatstring.h>
 #include <regexmanager.h>
 #include <rss_parser.h>
+#include <xlicense.h>
 
 #include <cstdlib>
 #include <cstring>
@@ -119,12 +120,13 @@ void controller::run(int argc, char * argv[]) {
 	std::string importfile;
 	bool do_read_import = false, do_read_export = false;
 	std::string readinfofile;
+	unsigned int show_version = 0;
 
 	bool silent = false;
 	bool execute_cmds = false;
 
 	do {
-		if((c = ::getopt(argc,argv,"i:erhu:c:C:d:l:vVoxI:E:"))<0)
+		if((c = ::getopt(argc,argv,"i:erhu:c:C:d:l:vVoxXI:E:"))<0)
 			continue;
 		switch (c) {
 			case ':': /* fall-through */
@@ -161,11 +163,12 @@ void controller::run(int argc, char * argv[]) {
 			case 'C':
 				config_file = optarg;
 				break;
-			case 'v':
+			case 'X':
 				do_vacuum = true;
 				break;
+			case 'v':
 			case 'V':
-				version_information();
+				show_version++;
 				break;
 			case 'o':
 				offline_mode = true;
@@ -203,6 +206,9 @@ void controller::run(int argc, char * argv[]) {
 		}
 	} while (c != -1);
 
+	if (show_version) {
+		version_information(argv[0], show_version);
+	}
 
 	if (do_import) {
 		LOG(LOG_INFO,"Importing OPML file from %s",importfile.c_str());
@@ -651,21 +657,27 @@ void controller::start_reload_all_thread(std::vector<int> * indexes) {
 	dlt->start();
 }
 
-void controller::version_information() {
-	std::cout << PROGRAM_NAME << " " << PROGRAM_VERSION << " - " << PROGRAM_URL << std::endl;
-	std::cout << "Copyright (C) 2006-2009 Andreas Krennmair" << std::endl << std::endl;
+void controller::version_information(const char * argv0, unsigned int level) {
+	if (level<=1) {
+		std::cout << PROGRAM_NAME << " " << PROGRAM_VERSION << " - " << PROGRAM_URL << std::endl;
+		std::cout << "Copyright (C) 2006-2009 Andreas Krennmair" << std::endl << std::endl;
 
-	struct utsname xuts;
-	uname(&xuts);
+		std::cout << _("newsbeuter is free software and licensed under the MIT/X Consortium License.") << std::endl;
+		std::cout << utils::strprintf(_("Type `%s -vv' for more information."), argv0) << std::endl << std::endl;
 
-	std::cout << "System: " << xuts.sysname << " " << xuts.release << " (" << xuts.machine << ")" << std::endl;
+		struct utsname xuts;
+		uname(&xuts);
+		std::cout << "System: " << xuts.sysname << " " << xuts.release << " (" << xuts.machine << ")" << std::endl;
 #if defined(__GNUC__) && defined(__VERSION__)
-	std::cout << "Compiler: g++ " << __VERSION__ << std::endl;
+		std::cout << "Compiler: g++ " << __VERSION__ << std::endl;
 #endif
-	std::cout << "ncurses: " << curses_version() << " (compiled with " << NCURSES_VERSION << ")" << std::endl;
-	std::cout << "libcurl: " << curl_version()  << " (compiled with " << LIBCURL_VERSION << ")" << std::endl;
-	std::cout << "SQLite: " << sqlite3_libversion() << " (compiled with " << SQLITE_VERSION << ")" << std::endl;
-	std::cout << "libxml2: compiled with " << LIBXML_DOTTED_VERSION << std::endl;
+		std::cout << "ncurses: " << curses_version() << " (compiled with " << NCURSES_VERSION << ")" << std::endl;
+		std::cout << "libcurl: " << curl_version()  << " (compiled with " << LIBCURL_VERSION << ")" << std::endl;
+		std::cout << "SQLite: " << sqlite3_libversion() << " (compiled with " << SQLITE_VERSION << ")" << std::endl;
+		std::cout << "libxml2: compiled with " << LIBXML_DOTTED_VERSION << std::endl << std::endl;
+	} else {
+		std::cout << LICENSE_str << std::endl;
+	}
 
 	::exit(EXIT_SUCCESS);
 }
@@ -692,10 +704,10 @@ void controller::usage(char * argv0) {
 		{ 'u', _("<urlfile>"), _("read RSS feed URLs from <urlfile>") },
 		{ 'c', _("<cachefile>"), _("use <cachefile> as cache file") },
 		{ 'C', _("<configfile>"), _("read configuration from <configfile>") },
-		{ 'v', "", _("clean up cache thoroughly") },
+		{ 'X', "", _("clean up cache thoroughly") },
 		{ 'x', _("<command>..."), _("execute list of commands") },
 		{ 'o', "", _("activate offline mode (only applies to bloglines synchronization mode)") },
-		{ 'V', "", _("get version information") },
+		{ 'v', "", _("get version information") },
 		{ 'l', _("<loglevel>"), _("write a log with a certain loglevel (valid values: 1 to 6)") },
 		{ 'd', _("<logfile>"), _("use <logfile> as output log file") },
 		{ 'E', _("<file>"), _("export list of read articles to <file>") },
