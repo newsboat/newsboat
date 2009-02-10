@@ -17,6 +17,10 @@ formaction::formaction(view * vv, std::string formstr) : v(vv), f(new stfl::form
 			f->set("showhint", "0");
 		}
 	}
+	valid_cmds.push_back("set");
+	valid_cmds.push_back("quit");
+	valid_cmds.push_back("source");
+	valid_cmds.push_back("dumpconfig");
 }
 
 void formaction::set_keymap_hints() {
@@ -58,6 +62,7 @@ std::string formaction::get_value(const std::string& value) {
 void formaction::start_cmdline() {
 	std::vector<qna_pair> qna;
 	qna.push_back(qna_pair(":", ""));
+	v->inside_cmdline(true);
 	this->start_qna(qna, OP_INT_END_CMDLINE, &formaction::cmdlinehistory);
 }
 
@@ -83,6 +88,7 @@ void formaction::process_op(operation op, bool automatic, std::vector<std::strin
 			break;
 		case OP_INT_CANCEL_QNA:
 			f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
+			v->inside_cmdline(false);
 			break;
 		case OP_INT_QNA_NEXTHIST:
 			if (qna_history) {
@@ -113,6 +119,20 @@ void formaction::process_op(operation op, bool automatic, std::vector<std::strin
 		default:
 			this->process_operation(op, automatic, args);
 	}
+}
+
+std::vector<std::string> formaction::get_suggestions(const std::string& fragment) {
+	LOG(LOG_DEBUG, "formaction::get_suggestions: fragment = %s", fragment.c_str());
+	std::vector<std::string> result;
+	for (std::vector<std::string>::iterator it=valid_cmds.begin();it!=valid_cmds.end();it++) {
+		LOG(LOG_DEBUG, "formaction::get_suggestions: extracted part: %s", it->substr(0, fragment.length()).c_str());
+		if (it->substr(0, fragment.length()) == fragment) {
+			LOG(LOG_DEBUG, "...and it matches.");
+			result.push_back(*it + " ");
+		}
+	}
+	LOG(LOG_DEBUG, "formaction::get_suggestions: %u suggestions", result.size());
+	return result;
 }
 
 void formaction::handle_cmdline(const std::string& cmdline) {
@@ -180,6 +200,8 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 				v->get_ctrl()->dump_config(utils::resolve_tilde(tokens[1]));
 				v->show_error(utils::strprintf(_("Saved configuration to %s"), tokens[1].c_str()));
 			}
+		} else {
+			v->show_error(utils::strprintf(_("Not a command: %s"), cmdline.c_str()));
 		}
 	}
 }
@@ -230,6 +252,7 @@ void formaction::finished_qna(operation op) {
 				formaction::cmdlinehistory.add_line(cmdline);
 				LOG(LOG_DEBUG,"formaction: commandline = `%s'", cmdline.c_str());
 				this->handle_cmdline(cmdline);
+				v->inside_cmdline(false);
 			}
 			break;
 		default:
@@ -256,7 +279,7 @@ void formaction::start_next_question() {
 	if (qna_prompts.size() > 0) {
 		std::string replacestr("{hbox[lastline] .expand:0 {label .expand:0 text:");
 		replacestr.append(stfl::quote(qna_prompts[0].first));
-		replacestr.append("}{input[qnainput] on_ESC:cancel-qna on_UP:qna-prev-history on_DOWN:qna-next-history on_ENTER:end-question modal:1 .expand:h text[qna_value]:\"\"");
+		replacestr.append("}{input[qnainput] on_ESC:cancel-qna on_UP:qna-prev-history on_DOWN:qna-next-history on_ENTER:end-question modal:1 .expand:h text[qna_value]:\"\" pos[qna_value_pos]:0");
 		replacestr.append(stfl::quote(qna_prompts[0].second));
 		replacestr.append("}}");
 		qna_prompts.erase(qna_prompts.begin());
@@ -280,5 +303,6 @@ void formaction::save_histories(const std::string& searchfile, const std::string
 	searchhistory.save_to_file(searchfile, limit);
 	cmdlinehistory.save_to_file(cmdlinefile, limit);
 }
+
 
 }

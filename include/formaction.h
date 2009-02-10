@@ -52,6 +52,8 @@ class formaction {
 		inline std::tr1::shared_ptr<formaction> get_parent_formaction() { return parent_formaction; }
 
 		virtual std::string title() = 0;
+		
+		virtual std::vector<std::string> get_suggestions(const std::string& fragment);
 
 		static void load_histories(const std::string& searchfile, const std::string& cmdlinefile);
 		static void save_histories(const std::string& searchfile, const std::string& cmdlinefile, unsigned int limit);
@@ -71,6 +73,8 @@ class formaction {
 
 		static history searchhistory;
 		static history cmdlinehistory;
+
+		std::vector<std::string> valid_cmds;
 
 	private:
 		std::string prepare_keymap_hint(keymap_hint_entry * hints);

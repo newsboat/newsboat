@@ -23,6 +23,7 @@ Changes for newsbeuter:
 	Added a "random-unread" key to go to a random unread article.
 	When opening articles from a search result dialog, make search phrase stand out in article view.
 	Persist commandline and search history.
+	Implemented commandline completion.
 
 1.3 (2008-12-06):
 	Changed some internal data structures to smart pointers (stability improvement).

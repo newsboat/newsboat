@@ -53,7 +53,7 @@ extern "C" {
 
 namespace newsbeuter {
 
-view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0), current_formaction(0) {
+view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0), current_formaction(0), is_inside_cmdline(false), tab_count(0) {
 	mtx = new mutex();
 }
 
@@ -171,6 +171,11 @@ void view::run() {
 			if (!event || strcmp(event,"TIMEOUT")==0) {
 				if (fa->id() == "article")
 					std::tr1::dynamic_pointer_cast<itemview_formaction, formaction>(fa)->update_percent();
+				continue;
+			}
+
+			if (is_inside_cmdline && strcmp(event, "TAB")==0) {
+				handle_cmdline_completion(fa);
 				continue;
 			}
 
@@ -827,5 +832,33 @@ void view::goto_prev_dialog() {
 	}
 }
 
+void view::inside_cmdline(bool f) {
+	is_inside_cmdline = f;
+}
+
+void view::handle_cmdline_completion(std::tr1::shared_ptr<formaction> fa) {
+	std::string fragment = fa->get_form()->get("qna_value");
+	if (fragment != last_fragment) {
+		last_fragment = fragment;
+		suggestions = fa->get_suggestions(fragment);
+		tab_count = 0;
+	}
+	tab_count++;
+	std::string suggestion;
+	switch (suggestions.size()) {
+		case 0:
+			LOG(LOG_DEBUG, "view::handle_cmdline_completion: found no suggestion for `%s'", fragment.c_str());
+			return;
+		case 1:
+			suggestion = suggestions[0];
+			break;
+		default:
+			suggestion = suggestions[(tab_count-1) % suggestions.size()];
+			break;
+	}
+	fa->get_form()->set("qna_value", suggestion);
+	fa->get_form()->set("qna_value_pos", utils::to_s(suggestion.size()));
+	last_fragment = suggestion;
+}
 
 }

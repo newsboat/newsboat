@@ -14,6 +14,8 @@ namespace newsbeuter {
 
 itemview_formaction::itemview_formaction(view * vv, std::tr1::shared_ptr<itemlist_formaction> il, std::string formstr)
 	: formaction(vv,formstr), show_source(false), quit(false), rxman(0), num_lines(0), itemlist(il), in_search(false) { 
+	valid_cmds.push_back("save");
+	std::sort(valid_cmds.begin(), valid_cmds.end());
 }
 
 itemview_formaction::~itemview_formaction() { }

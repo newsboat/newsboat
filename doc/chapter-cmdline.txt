@@ -12,5 +12,12 @@ the ESC key. The history of all the commands that you enter will be saved to
 but can be influenced by setting the "history-limit" configuration variable.
 To disable history saving, set the history-limit to 0.
 
+Starting with newsbeuter 1.4, the commandline provides you with some help if
+you can't remember the full names of commandline commands. By pressing the TAB
+key, newsbeuter will try to automatically complete your command. If there is
+more than one possible completion, you can subsequently press the TAB key to
+cycle through all results. If no match is found, no suggestion will be inserted
+into the commandline.
+
 Currently, the following commands are available:
 

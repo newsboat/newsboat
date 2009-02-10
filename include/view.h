@@ -96,9 +96,13 @@ namespace newsbeuter {
 
 			void update_bindings();
 
+			void inside_cmdline(bool f);
+
 		protected:
 			void set_bindings(std::tr1::shared_ptr<formaction> fa);
 			void apply_colors(std::tr1::shared_ptr<formaction> fa);
+
+			void handle_cmdline_completion(std::tr1::shared_ptr<formaction> fa);
 
 			controller * ctrl;
 
@@ -119,6 +123,12 @@ namespace newsbeuter {
 			std::map<std::string,std::string> fg_colors;
 			std::map<std::string,std::string> bg_colors;
 			std::map<std::string,std::vector<std::string> > attributes;
+
+			bool is_inside_cmdline;
+
+			std::string last_fragment;
+			unsigned int tab_count;
+			std::vector<std::string> suggestions;
 	};
 
 }
