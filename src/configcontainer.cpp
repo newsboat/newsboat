@@ -227,4 +227,14 @@ void configcontainer::dump_config(std::vector<std::string>& config_output) {
 	}
 }
 
+std::vector<std::string> configcontainer::get_suggestions(const std::string& fragment) {
+	std::vector<std::string> result;
+	for (std::map<std::string, configdata>::iterator it=config_data.begin();it!=config_data.end();it++) {
+		if (it->first.substr(0, fragment.length()) == fragment)
+			result.push_back(it->first);
+	}
+	std::sort(result.begin(), result.end());
+	return result;
+}
+
 }

@@ -32,6 +32,7 @@ public:
 	void set_configvalue(const std::string& key, const std::string& value);
 	void reset_to_default(const std::string& key);
 	void toggle(const std::string& key);
+	std::vector<std::string> get_suggestions(const std::string& fragment);
 private:
 	std::map<std::string,configdata> config_data;
 	

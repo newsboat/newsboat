@@ -128,11 +128,31 @@ void formaction::process_op(operation op, bool automatic, std::vector<std::strin
 std::vector<std::string> formaction::get_suggestions(const std::string& fragment) {
 	LOG(LOG_DEBUG, "formaction::get_suggestions: fragment = %s", fragment.c_str());
 	std::vector<std::string> result;
+	// first check all formaction command suggestions
 	for (std::vector<std::string>::iterator it=valid_cmds.begin();it!=valid_cmds.end();it++) {
 		LOG(LOG_DEBUG, "formaction::get_suggestions: extracted part: %s", it->substr(0, fragment.length()).c_str());
 		if (it->substr(0, fragment.length()) == fragment) {
 			LOG(LOG_DEBUG, "...and it matches.");
-			result.push_back(*it + " ");
+			result.push_back(*it);
+		}
+	}
+	if (result.size()==0) {
+		std::vector<std::string> tokens = utils::tokenize_quoted(fragment, " \t=");
+		if (tokens.size() >= 1) {
+			if (tokens[0] == "set") {
+				if (tokens.size() < 3) {
+					std::vector<std::string> variable_suggestions;
+					std::string variable_fragment;
+					if (tokens.size() > 1)
+						variable_fragment = tokens[1];
+					variable_suggestions = v->get_cfg()->get_suggestions(variable_fragment);
+					for (std::vector<std::string>::iterator it=variable_suggestions.begin();it!=variable_suggestions.end();it++) {
+						std::string line = fragment + it->substr(variable_fragment.length(), it->length()-variable_fragment.length());
+						result.push_back(line);
+						LOG(LOG_DEBUG, "formaction::get_suggestions: suggested %s", line.c_str());
+					}
+				}
+			}
 		}
 	}
 	LOG(LOG_DEBUG, "formaction::get_suggestions: %u suggestions", result.size());

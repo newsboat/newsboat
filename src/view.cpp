@@ -39,6 +39,7 @@
 #include <config.h>
 #include <sys/param.h>
 #include <string.h>
+#include <ncursesw/ncurses.h>
 
 
 extern "C" {
@@ -848,6 +849,7 @@ void view::handle_cmdline_completion(std::tr1::shared_ptr<formaction> fa) {
 	switch (suggestions.size()) {
 		case 0:
 			LOG(LOG_DEBUG, "view::handle_cmdline_completion: found no suggestion for `%s'", fragment.c_str());
+			::beep(); // direct call to ncurses - we beep to signal that there is no suggestion available, just like vim
 			return;
 		case 1:
 			suggestion = suggestions[0];
