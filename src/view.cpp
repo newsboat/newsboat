@@ -857,7 +857,7 @@ void view::handle_cmdline_completion(std::tr1::shared_ptr<formaction> fa) {
 			break;
 	}
 	fa->get_form()->set("qna_value", suggestion);
-	fa->get_form()->set("qna_value_pos", utils::to_s(suggestion.size()));
+	fa->get_form()->set("qna_value_pos", utils::to_s(suggestion.length()));
 	last_fragment = suggestion;
 }
 

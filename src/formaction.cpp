@@ -92,12 +92,16 @@ void formaction::process_op(operation op, bool automatic, std::vector<std::strin
 			break;
 		case OP_INT_QNA_NEXTHIST:
 			if (qna_history) {
-				f->set("qna_value", qna_history->next());
+				std::string entry = qna_history->next();
+				f->set("qna_value", entry);
+				f->set("qna_value_pos", utils::to_s(entry.length()));
 			}
 			break;
 		case OP_INT_QNA_PREVHIST:
 			if (qna_history) {
-				f->set("qna_value", qna_history->prev());
+				std::string entry = qna_history->prev();
+				f->set("qna_value", entry);
+				f->set("qna_value_pos", utils::to_s(entry.length()));
 			}
 			break;
 		case OP_INT_END_QUESTION:
