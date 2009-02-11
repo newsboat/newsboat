@@ -839,7 +839,7 @@ void view::inside_cmdline(bool f) {
 
 void view::handle_cmdline_completion(std::tr1::shared_ptr<formaction> fa) {
 	std::string fragment = fa->get_form()->get("qna_value");
-	if (fragment != last_fragment) {
+	if (fragment != last_fragment || fragment == "") {
 		last_fragment = fragment;
 		suggestions = fa->get_suggestions(fragment);
 		tab_count = 0;
