@@ -397,6 +397,7 @@ void view::push_itemlist(std::tr1::shared_ptr<rss_feed> feed) {
 	if (feed->rssurl().substr(0,6) == "query:") {
 		set_status(_("Updating query feed..."));
 		feed->update_items(ctrl->get_all_feeds());
+		feed->sort(cfg->get_configvalue("article-sort-order"));
 		set_status("");
 	}
 
