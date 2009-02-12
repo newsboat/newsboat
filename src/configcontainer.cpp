@@ -69,6 +69,7 @@ configcontainer::configcontainer()
 	config_data["search-highlight-colors"] = configdata("black yellow bold", configdata::STR, true);
 	config_data["pager"] = configdata("internal", configdata::PATH);
 	config_data["history-limit"] = configdata("100", configdata::INT);
+	config_data["prepopulate-query-feeds"] = configdata("false", configdata::BOOL);
 
 	/* undocumented: */
 	config_data["feedlist-title-format"] = configdata(_("%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"), configdata::STR);

@@ -5,7 +5,6 @@ TODO:
 - per-feed refresh settings
 - implement internal alias mechanism to allow transition of renamed config commands.
 - fix HTML rendering of bold and underlined text when light background is configured
-- add option to prepopulate query feeds
 
 
 DONE:
@@ -149,3 +148,4 @@ DONE:
 - improve logging of which feeds are broken.
 - make search phrase stand out in help - combined with existing limit functionality
 - check correct sorting of query feeds
+- add option to prepopulate query feeds

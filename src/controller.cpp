@@ -396,12 +396,25 @@ void controller::run(int argc, char * argv[]) {
 		feeds.push_back(feed);
 	}
 
+
 	sort_feeds();
 
 	std::vector<std::string> tags = urlcfg->get_alltags();
 
 	if (!do_export && !silent)
 		std::cout << _("done.") << std::endl;
+
+	// if configured, we fill all query feeds with some data; no need to sort it, it will be refilled when actually opening it.
+	if (cfg.get_configvalue_as_bool("prepopulate-query-feeds")) {
+		std::cout << _("Prepopulating query feeds...");
+		std::cout.flush();
+		for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();it++) {
+			if ((*it)->rssurl().substr(0,6) == "query:") {
+				(*it)->update_items(get_all_feeds());
+			}
+		}
+		std::cout << _("done.") << std::endl;
+	}
 
 	if (do_export) {
 		export_opml();
