@@ -270,7 +270,8 @@ void formaction::finished_qna(operation op) {
 				if (retval.length() == 0) {
 					v->set_status(_("Saved bookmark."));
 				} else {
-					v->set_status((std::string(_("Error while saving bookmark: ")) + retval).c_str());
+					v->set_status(std::string(_("Error while saving bookmark: ")) + retval);
+					LOG(LOG_DEBUG, "formaction::finished_qna: error while saving bookmark, retval = `%s'", retval.c_str());
 				}
 			}
 			break;
@@ -290,7 +291,7 @@ void formaction::finished_qna(operation op) {
 
 
 void formaction::start_bookmark_qna(const std::string& default_title, const std::string& default_url, const std::string& default_desc) {
-	LOG(LOG_DEBUG, "formaction::start_bookmark_qna: OK, starting bookmark Q&A...");
+	LOG(LOG_DEBUG, "formaction::start_bookmark_qna: starting bookmark Q&A... default_title = %s default_url = %s default_desc = %s", default_title.c_str(), default_url.c_str(), default_desc.c_str());
 	std::vector<qna_pair> prompts;
 
 	prompts.push_back(qna_pair(_("URL: "), default_url));
@@ -307,8 +308,10 @@ void formaction::start_next_question() {
 	if (qna_prompts.size() > 0) {
 		std::string replacestr("{hbox[lastline] .expand:0 {label .expand:0 text:");
 		replacestr.append(stfl::quote(qna_prompts[0].first));
-		replacestr.append("}{input[qnainput] on_ESC:cancel-qna on_UP:qna-prev-history on_DOWN:qna-next-history on_ENTER:end-question modal:1 .expand:h text[qna_value]:\"\" pos[qna_value_pos]:0");
+		replacestr.append("}{input[qnainput] on_ESC:cancel-qna on_UP:qna-prev-history on_DOWN:qna-next-history on_ENTER:end-question modal:1 .expand:h text[qna_value]:");
 		replacestr.append(stfl::quote(qna_prompts[0].second));
+		replacestr.append(" pos[qna_value_pos]:");
+		replacestr.append(utils::to_s(qna_prompts[0].second.length()));
 		replacestr.append("}}");
 		qna_prompts.erase(qna_prompts.begin());
 		f->modify("lastline", "replace", replacestr);
