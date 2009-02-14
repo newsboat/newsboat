@@ -195,17 +195,6 @@ void view::run() {
 
 				LOG(LOG_DEBUG, "view::run: event = %s op = %u", event, op);
 
-				// the redraw keybinding is handled globally so
-				// that it doesn't need to be handled by all
-				// formactions. We simply reset the screen, the
-				// next time stfl_run() is called, it will be
-				// reinitialized, anyway, and thus we can secure
-				// that everything is redrawn.
-				if (OP_REDRAW == op) {
-					stfl::reset();
-					continue;
-				}
-
 				if (OP_MACROPREFIX == op) {
 					have_macroprefix = true;
 					set_status("macro-");

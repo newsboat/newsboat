@@ -69,6 +69,10 @@ void formaction::start_cmdline() {
 
 void formaction::process_op(operation op, bool automatic, std::vector<std::string> * args) {
 	switch (op) {
+		case OP_REDRAW:
+			LOG(LOG_DEBUG, "formaction::process_op: redrawing screen");
+			stfl::reset();
+			break;
 		case OP_CMDLINE: 
 			start_cmdline();
 			break;
