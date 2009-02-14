@@ -49,7 +49,7 @@ static op_desc opdescs[] = {
 	{ OP_PB_PLAY,			"pb-play",					"p",	_("Start player with currently selected download"),		KM_PODBEUTER },
 	{ OP_PB_MOREDL,			"pb-increase-max-dls",		"+",	_("Increase the number of concurrent downloads"),		KM_PODBEUTER },
 	{ OP_PB_LESSDL,			"pb-decreate-max-dls",		"-",	_("Decrease the number of concurrent downloads"),		KM_PODBEUTER },
-	{ OP_REDRAW,			"redraw",					"^L",	_("Redraw screen"),						KM_BOTH },
+	{ OP_REDRAW,			"redraw",					"^L",	_("Redraw screen"),						KM_SYSKEYS },
 	{ OP_CMDLINE,			"cmdline",					":",	_("Open the commandline"),				KM_NEWSBEUTER },
 	{ OP_SETFILTER,			"set-filter",				"F",	_("Set a filter"),						KM_FEEDLIST | KM_ARTICLELIST },
 	{ OP_SELECTFILTER,		"select-filter",			"f",	_("Select a predefined filter"),		KM_FEEDLIST | KM_ARTICLELIST },
@@ -142,6 +142,7 @@ void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned s
 								desc.desc = gettext(opdescs[j].help_text);
 							already_added = true;
 						}
+						desc.flags = opdescs[j].flags;
 						descs.push_back(desc);
 					}
 				}
@@ -154,6 +155,7 @@ void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned s
 					desc.cmd = opdescs[j].opstr;
 					if (opdescs[j].help_text)
 						desc.desc = gettext(opdescs[j].help_text);
+					desc.flags = opdescs[j].flags;
 					descs.push_back(desc);
 				}
 			}

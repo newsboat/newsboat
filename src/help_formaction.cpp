@@ -5,6 +5,7 @@
 #include <view.h>
 #include <listformatter.h>
 #include <utils.h>
+#include <keymap.h>
 #include <cstring>
 
 namespace newsbeuter {
@@ -59,17 +60,27 @@ void help_formaction::prepare() {
 		listformatter listfmt;
 
 		unsigned int unbound_count = 0;
+		unsigned int syskey_count = 0;
 
-		for (unsigned int i=0;i<2;i++) {
+		for (unsigned int i=0;i<3;i++) {
 			for (std::vector<keymap_desc>::iterator it=descs.begin();it!=descs.end();++it) {
 				bool condition;
 				switch (i) {
-					case 0: condition = it->key.length() == 0; break;
-					case 1: condition = it->key.length() > 0; break;
+					case 0: 
+						condition = (it->key.length() == 0 || it->flags & KM_SYSKEYS); 
+						if (it->key.length() == 0)
+							unbound_count++;
+						if (it->flags & KM_SYSKEYS)
+							syskey_count++;
+						break;
+					case 1: 
+						condition = !(it->flags & KM_SYSKEYS); 
+						break;
+					case 2: 
+						condition = (it->key.length() > 0 || it->flags & KM_SYSKEYS); 
+						break;
 					default: condition = true; break;
 				}
-				if (condition)
-					unbound_count++;
 				if (context.length() > 0 && it->ctx != context || condition)
 					continue;
 				if (!apply_search || strcasestr(it->key.c_str(), searchphrase.c_str())!=NULL || 
@@ -83,8 +94,9 @@ void help_formaction::prepare() {
 					tabs_2[how_often_2] = '\0';
 					std::string line;
 					switch (i) {
-						case 0: line = utils::strprintf("%s%s%s%s%s", it->key.c_str(), tabs_1, it->cmd.c_str(), tabs_2, it->desc.c_str()); break;
-						case 1: line = utils::strprintf("%s%s%s%s", it->cmd.c_str(), tabs_1, tabs_2, it->desc.c_str()); break;
+						case 0:
+						case 1: line = utils::strprintf("%s%s%s%s%s", it->key.c_str(), tabs_1, it->cmd.c_str(), tabs_2, it->desc.c_str()); break;
+						case 2: line = utils::strprintf("%s%s%s%s", it->cmd.c_str(), tabs_1, tabs_2, it->desc.c_str()); break;
 					}
 					LOG(LOG_DEBUG, "help_formaction::prepare: step 1 - line = %s", line.c_str());
 					line = utils::quote_for_stfl(line);
@@ -96,10 +108,21 @@ void help_formaction::prepare() {
 					listfmt.add_line(line);
 				}
 			}
-			if (i==0 && unbound_count > 0) {
-				listfmt.add_line("");
-				listfmt.add_line(_("Unbound functions:"));
-				listfmt.add_line("");
+			switch (i) {
+				case 0:
+					if (syskey_count > 0) {
+						listfmt.add_line("");
+						listfmt.add_line(_("Generic bindings:"));
+						listfmt.add_line("");
+					}
+					break;
+				case 1:
+					if (unbound_count > 0) {
+						listfmt.add_line("");
+						listfmt.add_line(_("Unbound functions:"));
+						listfmt.add_line("");
+					}
+				break;
 			}
 		}
 

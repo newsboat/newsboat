@@ -128,6 +128,7 @@ namespace newsbeuter {
 		std::string cmd;
 		std::string desc;
 		std::string ctx;
+		unsigned short flags;
 	};
 
 	struct macrocmd {
