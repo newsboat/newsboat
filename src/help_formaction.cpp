@@ -57,28 +57,49 @@ void help_formaction::prepare() {
 		std::vector<std::string> colors = utils::tokenize(v->get_cfg()->get_configvalue("search-highlight-colors"), " ");
 		f->set("highlight", make_colorstring(colors));
 		listformatter listfmt;
-		
-		for (std::vector<keymap_desc>::iterator it=descs.begin();it!=descs.end();++it) {
-			if (context.length() > 0 && it->ctx != context)
-				continue;
-			if (!apply_search || strcasestr(it->key.c_str(), searchphrase.c_str())!=NULL || 
-					strcasestr(it->cmd.c_str(), searchphrase.c_str())!=NULL ||
-					strcasestr(it->desc.c_str(), searchphrase.c_str())!=NULL) {
-				char tabs_1[] = "                ";
-				char tabs_2[] = "                        ";
-				unsigned int how_often_1 = strlen(tabs_1) - it->key.length();
-				unsigned int how_often_2 = strlen(tabs_2) - it->cmd.length();
-				tabs_1[how_often_1] = '\0';
-				tabs_2[how_often_2] = '\0';
-				std::string line = utils::strprintf("%s%s%s%s%s", it->key.c_str(), tabs_1, it->cmd.c_str(), tabs_2, it->desc.c_str());
-				LOG(LOG_DEBUG, "help_formaction::prepare: step 1 - line = %s", line.c_str());
-				line = utils::quote_for_stfl(line);
-				LOG(LOG_DEBUG, "help_formaction::prepare: step 2 - line = %s", line.c_str());
-				if (apply_search && searchphrase.length() > 0) {
-					line = utils::replace_all(line, searchphrase, highlighted_searchphrase);
-					LOG(LOG_DEBUG, "help_formaction::prepare: step 3 - line = %s", line.c_str());
+
+		unsigned int unbound_count = 0;
+
+		for (unsigned int i=0;i<2;i++) {
+			for (std::vector<keymap_desc>::iterator it=descs.begin();it!=descs.end();++it) {
+				bool condition;
+				switch (i) {
+					case 0: condition = it->key.length() == 0; break;
+					case 1: condition = it->key.length() > 0; break;
+					default: condition = true; break;
 				}
-				listfmt.add_line(line);
+				if (condition)
+					unbound_count++;
+				if (context.length() > 0 && it->ctx != context || condition)
+					continue;
+				if (!apply_search || strcasestr(it->key.c_str(), searchphrase.c_str())!=NULL || 
+						strcasestr(it->cmd.c_str(), searchphrase.c_str())!=NULL ||
+						strcasestr(it->desc.c_str(), searchphrase.c_str())!=NULL) {
+					char tabs_1[] = "                ";
+					char tabs_2[] = "                        ";
+					unsigned int how_often_1 = strlen(tabs_1) - it->key.length();
+					unsigned int how_often_2 = strlen(tabs_2) - it->cmd.length();
+					tabs_1[how_often_1] = '\0';
+					tabs_2[how_often_2] = '\0';
+					std::string line;
+					switch (i) {
+						case 0: line = utils::strprintf("%s%s%s%s%s", it->key.c_str(), tabs_1, it->cmd.c_str(), tabs_2, it->desc.c_str()); break;
+						case 1: line = utils::strprintf("%s%s%s%s", it->cmd.c_str(), tabs_1, tabs_2, it->desc.c_str()); break;
+					}
+					LOG(LOG_DEBUG, "help_formaction::prepare: step 1 - line = %s", line.c_str());
+					line = utils::quote_for_stfl(line);
+					LOG(LOG_DEBUG, "help_formaction::prepare: step 2 - line = %s", line.c_str());
+					if (apply_search && searchphrase.length() > 0) {
+						line = utils::replace_all(line, searchphrase, highlighted_searchphrase);
+						LOG(LOG_DEBUG, "help_formaction::prepare: step 3 - line = %s", line.c_str());
+					}
+					listfmt.add_line(line);
+				}
+			}
+			if (i==0 && unbound_count > 0) {
+				listfmt.add_line("");
+				listfmt.add_line(_("Unbound functions:"));
+				listfmt.add_line("");
 			}
 		}
 
