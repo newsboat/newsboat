@@ -121,7 +121,7 @@ void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned s
 	for (unsigned int i=1;contexts[i]!=NULL;i++) {
 		std::string ctx(contexts[i]);
 
-		if (flags & KM_PODBEUTER && ctx != "podbeuter" && ctx != "help") {
+		if (flags & KM_PODBEUTER && ctx != "podbeuter") {
 			continue;
 		} else if (flags & KM_NEWSBEUTER && ctx == "podbeuter") {
 			continue;

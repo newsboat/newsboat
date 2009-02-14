@@ -5,7 +5,6 @@ TODO:
 - per-feed refresh settings
 - implement internal alias mechanism to allow transition of renamed config commands.
 - fix HTML rendering of bold and underlined text when light background is configured
-- fix help screen in podbeuter
 
 
 DONE:
@@ -150,3 +149,4 @@ DONE:
 - make search phrase stand out in help - combined with existing limit functionality
 - check correct sorting of query feeds
 - add option to prepopulate query feeds
+- fix help screen in podbeuter

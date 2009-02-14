@@ -209,10 +209,9 @@ void pb_view::run_help() {
 
 		std::string descline;
 		descline.append(it->key);
-		descline.append(1,'\t');
+		descline.append(8-it->key.length(),' ');
 		descline.append(it->cmd);
-		unsigned int how_often = 3 - (it->cmd.length() / 8);
-		descline.append(how_often,'\t');
+		descline.append(24-it->cmd.length(),' ');
 		descline.append(it->desc);
 		line.append(stfl::quote(descline));
 		line.append("}");
