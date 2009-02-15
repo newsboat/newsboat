@@ -117,6 +117,36 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 		case OP_RELOADURLS:
 			v->get_ctrl()->reload_urls_file();
 			break;
+		case OP_SORT: {
+				char c = v->confirm(_("Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount?"), _("ftau"));
+				if (!c) break;
+				std::string result(1, c);
+				if (result == _("f")) {
+					v->get_cfg()->set_configvalue("feed-sort-order", "firsttag-desc");
+				} else if (result == _("t")) {
+					v->get_cfg()->set_configvalue("feed-sort-order", "title-desc");
+				} else if (result == _("a")) {
+					v->get_cfg()->set_configvalue("feed-sort-order", "articlecount-desc");
+				} else if (result == _("u")) {
+					v->get_cfg()->set_configvalue("feed-sort-order", "unreadarticlecount-desc");
+				}
+			}
+			break;
+		case OP_REVSORT: {
+				char c = v->confirm(_("Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount?"), _("ftau"));
+				if (!c) break;
+				std::string result(1, c);
+				if (result == _("f")) {
+					v->get_cfg()->set_configvalue("feed-sort-order", "firsttag-asc");
+				} else if (result == _("t")) {
+					v->get_cfg()->set_configvalue("feed-sort-order", "title-asc");
+				} else if (result == _("a")) {
+					v->get_cfg()->set_configvalue("feed-sort-order", "articlecount-asc");
+				} else if (result == _("u")) {
+					v->get_cfg()->set_configvalue("feed-sort-order", "unreadarticlecount-asc");
+				}
+			}
+			break;
 		case OP_OPENINBROWSER: {
 				std::tr1::shared_ptr<rss_feed> feed = v->get_ctrl()->get_feed(pos);
 				if (feed) {

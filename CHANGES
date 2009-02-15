@@ -25,6 +25,7 @@ Changes for newsbeuter:
 	Persist commandline and search history.
 	Implemented commandline completion.
 	Improved help dialog so that it now shows unbound functions.
+	Added ability to sort feed list and article list by interactively choosing the sort method.
 
 1.3 (2008-12-06):
 	Changed some internal data structures to smart pointers (stability improvement).

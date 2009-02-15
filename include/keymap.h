@@ -72,6 +72,8 @@ namespace newsbeuter {
 						OP_PREVDIALOG,
 						OP_PIPE_TO,
 						OP_RANDOMUNREAD,
+						OP_SORT,
+						OP_REVSORT,
 						OP_NB_MAX,
 
 						// podbeuter-specific operations:

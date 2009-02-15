@@ -519,6 +519,11 @@ char view::confirm(const std::string& prompt, const std::string& charset) {
 		const char * event = f->get_form()->run(0);
 		LOG(LOG_DEBUG,"view::confirm: event = %s", event);
 		if (!event) continue;
+		if (strcmp(event, "ESC")==0 || strcmp(event, "ENTER")==0) {
+			result = 0;
+			LOG(LOG_DEBUG, "view::confirm: user pressed ESC or ENTER, we cancel confirmation dialog");
+			break;
+		}
 		result = keys->get_key(event);
 		LOG(LOG_DEBUG, "view::confirm: key = %c (%u)", result, result);
 	} while (!result || strchr(charset.c_str(), result)==NULL);

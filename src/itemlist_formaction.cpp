@@ -22,6 +22,7 @@ itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
 		search_dummy_feed(new rss_feed(v->get_ctrl()->get_cache())),
 		set_filterpos(false), filterpos(0), rxman(0), old_width(0), old_itempos(-1) {
 	assert(true==m.parse(FILTER_UNREAD_ITEMS));
+	old_sort_order = v->get_cfg()->get_configvalue("article-sort-order");
 }
 
 itemlist_formaction::~itemlist_formaction() { }
@@ -343,6 +344,44 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			do_redraw = true;
 			save_filterpos();
 			break;
+		case OP_SORT: {
+				char c = v->confirm(_("Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"), _("dtfalg"));
+				if (!c) break;
+				std::string result(1, c);
+				if (result == _("d")) {
+					v->get_cfg()->set_configvalue("article-sort-order", "date-asc");
+				} else if (result == _("t")) {
+					v->get_cfg()->set_configvalue("article-sort-order", "title-asc");
+				} else if (result == _("f")) {
+					v->get_cfg()->set_configvalue("article-sort-order", "flags-asc");
+				} else if (result == _("a")) {
+					v->get_cfg()->set_configvalue("article-sort-order", "author-asc");
+				} else if (result == _("l")) {
+					v->get_cfg()->set_configvalue("article-sort-order", "link-asc");
+				} else if (result == _("g")) {
+					v->get_cfg()->set_configvalue("article-sort-order", "guid-asc");
+				}
+			}
+			break;
+		case OP_REVSORT: {
+				char c = v->confirm(_("Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"), _("dtfalg"));
+				if (!c) break;
+				std::string result(1, c);
+				if (result == _("d")) {
+					v->get_cfg()->set_configvalue("article-sort-order", "date-desc");
+				} else if (result == _("t")) {
+					v->get_cfg()->set_configvalue("article-sort-order", "title-desc");
+				} else if (result == _("f")) {
+					v->get_cfg()->set_configvalue("article-sort-order", "flags-desc");
+				} else if (result == _("a")) {
+					v->get_cfg()->set_configvalue("article-sort-order", "author-desc");
+				} else if (result == _("l")) {
+					v->get_cfg()->set_configvalue("article-sort-order", "link-desc");
+				} else if (result == _("g")) {
+					v->get_cfg()->set_configvalue("article-sort-order", "guid-desc");
+				}
+			}
+			break;
 		case OP_INT_RESIZE:
 			do_redraw = true;
 			break;
@@ -494,6 +533,14 @@ void itemlist_formaction::do_update_visible_items() {
 
 void itemlist_formaction::prepare() {
 	scope_mutex mtx(&redraw_mtx);
+
+	std::string sort_order = v->get_cfg()->get_configvalue("article-sort-order");
+	if (sort_order != old_sort_order) {
+		feed->sort(sort_order);
+		old_sort_order = sort_order;
+		update_visible_items = true;
+		do_redraw = true;
+	}
 
 	do_update_visible_items();
 

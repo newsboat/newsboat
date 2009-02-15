@@ -466,6 +466,14 @@ struct sort_item_by_guid : public std::binary_function<std::tr1::shared_ptr<rss_
 	}
 };
 
+struct sort_item_by_date : public std::binary_function<std::tr1::shared_ptr<rss_item>, std::tr1::shared_ptr<rss_item>, bool> {
+	sort_item_by_date() { }
+	bool operator()(std::tr1::shared_ptr<rss_item> a, std::tr1::shared_ptr<rss_item> b) {
+		return a->pubDate_timestamp()  < b->pubDate_timestamp();
+	}
+};
+
+
 void rss_feed::sort(const std::string& method) {
 	std::vector<std::string> methods = utils::tokenize(method,"-");
 	bool reverse = false;
@@ -480,7 +488,7 @@ void rss_feed::sort(const std::string& method) {
 		}
 	}
 
-	if (methods.size() > 0 && methods[0] != "date") {
+	if (methods.size() > 0) {
 		if (methods[0] == "title") {
 			std::stable_sort(items_.begin(), items_.end(), sort_item_by_title());
 		} else if (methods[0] == "flags") {
@@ -491,7 +499,9 @@ void rss_feed::sort(const std::string& method) {
 			std::stable_sort(items_.begin(), items_.end(), sort_item_by_link());
 		} else if (methods[0] == "guid") {
 			std::stable_sort(items_.begin(), items_.end(), sort_item_by_guid());
-		} // add new sorting methods here
+		} else if (methods[0] == "date") {
+			std::stable_sort(items_.begin(), items_.end(), sort_item_by_date());
+		}
 	}
 
 	if (reverse) {

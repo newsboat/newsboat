@@ -67,6 +67,8 @@ static op_desc opdescs[] = {
 	{ OP_NEXTDIALOG,		"next-dialog",				"^V",	_("Go to next dialog"),					KM_NEWSBEUTER },
 	{ OP_PREVDIALOG,		"prev-dialog",				"^G",	_("Go to previous dialog"),				KM_NEWSBEUTER },
 	{ OP_PIPE_TO,			"pipe-to",					"|",	_("Pipe article to command"),			KM_ARTICLE | KM_ARTICLELIST },
+	{ OP_SORT,				"sort",						"g",	_("Sort current list"),					KM_FEEDLIST | KM_ARTICLELIST },
+	{ OP_REVSORT,			"rev-sort",					"G",	_("Sort current list (reverse)"),		KM_FEEDLIST | KM_ARTICLELIST },
 
 	{ OP_0,		"zero",	"0",	_("Open URL 10"), KM_URLVIEW | KM_ARTICLE },
 	{ OP_1,		"one",	"1",	_("Open URL 1"), KM_URLVIEW | KM_ARTICLE},

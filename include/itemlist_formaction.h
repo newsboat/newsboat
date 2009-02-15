@@ -96,6 +96,7 @@ class itemlist_formaction : public formaction {
 
 		unsigned int old_width;
 		int old_itempos;
+		std::string old_sort_order;
 };
 
 }
