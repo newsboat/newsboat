@@ -87,6 +87,7 @@ bool rss_parser::check_and_update_lastmodified() {
 		LOG(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: useragent = %s", useragent.c_str());
 
 		curl_easy_setopt(curl, CURLOPT_URL, my_uri.c_str());
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
 		curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
 		curl_easy_setopt(curl, CURLOPT_ENCODING, "gzip, deflate");
 		curl_easy_setopt(curl, CURLOPT_TIMEOUT, cfgcont->get_configvalue_as_int("download-timeout"));

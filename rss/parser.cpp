@@ -45,6 +45,7 @@ feed parser::parse_url(const std::string& url) {
 		curl_easy_setopt(easyhandle, CURLOPT_USERAGENT, ua);
 	}
 	curl_easy_setopt(easyhandle, CURLOPT_URL, url.c_str());
+	curl_easy_setopt(easyhandle, CURLOPT_SSL_VERIFYPEER, 0);
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, &buf);
 	curl_easy_setopt(easyhandle, CURLOPT_NOSIGNAL, 1);
