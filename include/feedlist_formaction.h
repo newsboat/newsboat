@@ -87,6 +87,8 @@ class feedlist_formaction : public formaction {
 
 		unsigned int unread_feeds;
 		unsigned int total_feeds;
+
+		std::string old_sort_order;
 };
 
 }

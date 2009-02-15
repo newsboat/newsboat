@@ -1180,13 +1180,47 @@ struct sort_feeds_by_firsttag : public std::binary_function<std::tr1::shared_ptr
 	}
 };
 
+struct sort_feeds_by_title : public std::binary_function<std::tr1::shared_ptr<rss_feed>, std::tr1::shared_ptr<rss_feed>, bool> {
+	sort_feeds_by_title() { }
+	bool operator()(std::tr1::shared_ptr<rss_feed> a, std::tr1::shared_ptr<rss_feed> b) {
+		return strcasecmp(a->title().c_str(), b->title().c_str()) < 0;
+	}
+};
+
+struct sort_feeds_by_articles : public std::binary_function<std::tr1::shared_ptr<rss_feed>, std::tr1::shared_ptr<rss_feed>, bool> {
+	sort_feeds_by_articles() { }
+	bool operator()(std::tr1::shared_ptr<rss_feed> a, std::tr1::shared_ptr<rss_feed> b) {
+		return a->total_item_count() < b->total_item_count();
+	}
+};
+
+struct sort_feeds_by_unread_articles : public std::binary_function<std::tr1::shared_ptr<rss_feed>, std::tr1::shared_ptr<rss_feed>, bool> {
+	sort_feeds_by_unread_articles() { }
+	bool operator()(std::tr1::shared_ptr<rss_feed> a, std::tr1::shared_ptr<rss_feed> b) {
+		return a->unread_item_count() < b->unread_item_count();
+	}
+};
+
 
 void controller::sort_feeds() {
-	std::string sortmethod = cfg.get_configvalue("feed-sort-order");
+	std::vector<std::string> sortmethod_info = utils::tokenize(cfg.get_configvalue("feed-sort-order"), "-");
+	std::string sortmethod = sortmethod_info[0];
+	std::string direction = "desc";
+	if (sortmethod_info.size() > 1)
+		direction = sortmethod_info[1];
 	if (sortmethod == "none") {
 		// that's the default, do nothing
 	} else if (sortmethod == "firsttag") {
 		std::stable_sort(feeds.begin(), feeds.end(), sort_feeds_by_firsttag());
+	} else if (sortmethod == "title") {
+		std::stable_sort(feeds.begin(), feeds.end(), sort_feeds_by_title());
+	} else if (sortmethod == "articlecount") {
+		std::stable_sort(feeds.begin(), feeds.end(), sort_feeds_by_articles());
+	} else if (sortmethod == "unreadarticlecount") {
+		std::stable_sort(feeds.begin(), feeds.end(), sort_feeds_by_unread_articles());
+	}
+	if (direction == "asc") {
+		std::reverse(feeds.begin(), feeds.end());
 	}
 }
 

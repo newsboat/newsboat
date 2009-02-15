@@ -74,6 +74,7 @@ namespace newsbeuter {
 
 			void dump_config(const std::string& filename);
 
+			void sort_feeds();
 		private:
 			void usage(char * argv0);
 			void version_information(const char * argv0, unsigned int level);
@@ -92,8 +93,6 @@ namespace newsbeuter {
 
 			void import_read_information(const std::string& readinfofile);
 			void export_read_information(const std::string& readinfofile);
-
-			void sort_feeds();
 
 			view * v;
 			urlreader * urlcfg;

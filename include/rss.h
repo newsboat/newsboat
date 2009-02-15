@@ -126,6 +126,7 @@ namespace newsbeuter {
 			void set_rssurl(const std::string& u);
 			
 			unsigned int unread_item_count() const;
+			inline unsigned int total_item_count() const { return items_.size(); }
 
 			void set_tags(const std::vector<std::string>& tags);
 			bool matches_tag(const std::string& tag);

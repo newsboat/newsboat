@@ -29,6 +29,7 @@ feedlist_formaction::feedlist_formaction(view * vv, std::string formstr)
 	valid_cmds.push_back("tag");
 	valid_cmds.push_back("goto");
 	std::sort(valid_cmds.begin(), valid_cmds.end());
+	old_sort_order = v->get_cfg()->get_configvalue("feed-sort-order");
 }
 
 void feedlist_formaction::init() {
@@ -63,6 +64,13 @@ void feedlist_formaction::prepare() {
 		do_redraw = true;
 		old_width = width;
 		LOG(LOG_DEBUG, "feedlist_formaction::prepare: apparent resize");
+	}
+
+	std::string sort_order = v->get_cfg()->get_configvalue("feed-sort-order");
+	if (sort_order != old_sort_order) {
+		v->get_ctrl()->sort_feeds();
+		old_sort_order = sort_order;
+		do_redraw = true;
 	}
 
 	if (do_redraw) {
