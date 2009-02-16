@@ -159,6 +159,9 @@ namespace newsbeuter {
 			inline void set_index(unsigned int i) { idx = i; }
 			inline unsigned int get_index() { return idx; }
 
+			inline void set_order(unsigned int x) { order = x; }
+			inline unsigned int get_order() { return order; }
+
 		private:
 			std::string title_;
 			std::string description_;
@@ -174,6 +177,7 @@ namespace newsbeuter {
 			bool empty;
 			bool is_rtl_;
 			unsigned int idx;
+			unsigned int order;
 	};
 
 	class rss_ignores : public config_action_handler {

@@ -382,7 +382,8 @@ void controller::run(int argc, char * argv[]) {
 		return;
 	}
 
-	for (std::vector<std::string>::const_iterator it=urlcfg->get_urls().begin(); it != urlcfg->get_urls().end(); ++it) {
+	unsigned int i=0;
+	for (std::vector<std::string>::const_iterator it=urlcfg->get_urls().begin(); it != urlcfg->get_urls().end(); ++it, ++i) {
 		std::tr1::shared_ptr<rss_feed> feed(new rss_feed(rsscache));
 		feed->set_rssurl(*it);
 		feed->set_tags(urlcfg->get_tags(*it));
@@ -393,6 +394,7 @@ void controller::run(int argc, char * argv[]) {
 			utils::remove_fs_lock(lock_file);
 			return;
 		}
+		feed->set_order(i);
 		feeds.push_back(feed);
 	}
 
@@ -1201,6 +1203,13 @@ struct sort_feeds_by_unread_articles : public std::binary_function<std::tr1::sha
 	}
 };
 
+struct sort_feeds_by_order : public std::binary_function<std::tr1::shared_ptr<rss_feed>, std::tr1::shared_ptr<rss_feed>, bool> {
+	sort_feeds_by_order() { }
+	bool operator()(std::tr1::shared_ptr<rss_feed> a, std::tr1::shared_ptr<rss_feed> b) {
+		return a->get_order() < b->get_order();
+	}
+};
+
 
 void controller::sort_feeds() {
 	std::vector<std::string> sortmethod_info = utils::tokenize(cfg.get_configvalue("feed-sort-order"), "-");
@@ -1209,7 +1218,7 @@ void controller::sort_feeds() {
 	if (sortmethod_info.size() > 1)
 		direction = sortmethod_info[1];
 	if (sortmethod == "none") {
-		// that's the default, do nothing
+		std::stable_sort(feeds.begin(), feeds.end(), sort_feeds_by_order());
 	} else if (sortmethod == "firsttag") {
 		std::stable_sort(feeds.begin(), feeds.end(), sort_feeds_by_firsttag());
 	} else if (sortmethod == "title") {

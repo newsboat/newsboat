@@ -118,7 +118,7 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 			v->get_ctrl()->reload_urls_file();
 			break;
 		case OP_SORT: {
-				char c = v->confirm(_("Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount?"), _("ftau"));
+				char c = v->confirm(_("Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)one?"), _("ftaun"));
 				if (!c) break;
 				std::string result(1, c);
 				if (result == _("f")) {
@@ -129,11 +129,13 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 					v->get_cfg()->set_configvalue("feed-sort-order", "articlecount-desc");
 				} else if (result == _("u")) {
 					v->get_cfg()->set_configvalue("feed-sort-order", "unreadarticlecount-desc");
+				} else if (result == _("n")) {
+					v->get_cfg()->set_configvalue("feed-sort-order", "none-desc");
 				}
 			}
 			break;
 		case OP_REVSORT: {
-				char c = v->confirm(_("Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount?"), _("ftau"));
+				char c = v->confirm(_("Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)one?"), _("ftaun"));
 				if (!c) break;
 				std::string result(1, c);
 				if (result == _("f")) {
@@ -144,6 +146,8 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 					v->get_cfg()->set_configvalue("feed-sort-order", "articlecount-asc");
 				} else if (result == _("u")) {
 					v->get_cfg()->set_configvalue("feed-sort-order", "unreadarticlecount-asc");
+				} else if (result == _("n")) {
+					v->get_cfg()->set_configvalue("feed-sort-order", "none-asc");
 				}
 			}
 			break;
