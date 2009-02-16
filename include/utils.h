@@ -68,6 +68,8 @@ class utils {
 
 		static unsigned int get_random_value(unsigned int max);
 
+		static std::string quote_if_necessary(const std::string& str);
+
 	private:
 		static void append_escapes(std::string& str, char c);
 

@@ -195,7 +195,7 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 						cfg->reset_to_default(var);
 						set_redraw(true);
 					}
-					v->set_status(utils::strprintf("  %s=%s", var.c_str(), cfg->get_configvalue(var).c_str()));
+					v->set_status(utils::strprintf("  %s=%s", var.c_str(), utils::quote_if_necessary(cfg->get_configvalue(var)).c_str()));
 				}
 			} else if (tokens.size()==2) {
 				std::string result = configparser::evaluate_backticks(tokens[1]);
