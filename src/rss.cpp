@@ -22,7 +22,7 @@
 
 namespace newsbeuter {
 
-rss_item::rss_item(cache * c) : unread_(true), ch(c), enqueued_(false), deleted_(0) {
+rss_item::rss_item(cache * c) : unread_(true), ch(c), enqueued_(false), deleted_(0), idx(0) {
 	// LOG(LOG_CRITICAL, "new rss_item");
 }
 
@@ -30,7 +30,7 @@ rss_item::~rss_item() {
 	// LOG(LOG_CRITICAL, "delete rss_item");
 }
 
-rss_feed::rss_feed(cache * c) : ch(c), empty(true), is_rtl_(false) {
+rss_feed::rss_feed(cache * c) : ch(c), empty(true), is_rtl_(false), idx(0) {
 	// LOG(LOG_CRITICAL, "new rss_feed");
 }
 
@@ -207,7 +207,8 @@ bool rss_item::has_attribute(const std::string& attribname) {
 		attribname == "enclosure_url" ||
 		attribname == "enclosure_type" ||
 		attribname == "flags" ||
-		attribname == "age")
+		attribname == "age" ||
+		attribname == "articleindex")
 			return true;
 
 	// if we have a feed, then forward the request
@@ -240,6 +241,8 @@ std::string rss_item::get_attribute(const std::string& attribname) {
 		return flags();
 	else if (attribname == "age")
 		return utils::to_s((time(NULL) - pubDate_timestamp()) / 86400);
+	else if (attribname == "articleindex")
+		return utils::to_s(idx);
 
 	// if we have a feed, then forward the request
 	if (feedptr)
@@ -282,7 +285,8 @@ bool rss_feed::has_attribute(const std::string& attribname) {
 		attribname == "rssurl" ||
 		attribname == "unread_count" ||
 		attribname == "total_count" ||
-		attribname == "tags")
+		attribname == "tags" ||
+		attribname == "feedindex")
 			return true;
 	return false;
 }
@@ -304,6 +308,8 @@ std::string rss_feed::get_attribute(const std::string& attribname) {
 		return utils::to_s(items_.size());
 	} else if (attribname == "tags") {
 		return get_tags();
+	} else if (attribname == "feedindex") {
+		return utils::to_s(idx);
 	}
 	return "";
 }

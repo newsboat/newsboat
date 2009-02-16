@@ -332,6 +332,7 @@ void feedlist_formaction::update_visible_feeds(std::vector<std::tr1::shared_ptr<
 	unsigned int i = 0;
 
 	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it = feeds.begin(); it != feeds.end(); ++it, ++i) {
+		(*it)->set_index(i+1);
 		if ((tag == "" || (*it)->matches_tag(tag)) && (!apply_filter || m.matches(it->get()))) {
 			visible_feeds.push_back(feedptr_pos_pair(*it,i));
 		}

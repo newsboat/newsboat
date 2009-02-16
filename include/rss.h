@@ -81,6 +81,9 @@ namespace newsbeuter {
 			inline bool deleted() const { return deleted_; }
 			inline void set_deleted(bool b) { deleted_ = b; }
 
+			inline void set_index(unsigned int i) { idx = i; }
+			inline unsigned int get_index() { return idx; }
+
 		private:
 			std::string title_;
 			std::string link_;
@@ -97,6 +100,7 @@ namespace newsbeuter {
 			std::string flags_;
 			std::tr1::shared_ptr<rss_feed> feedptr;
 			bool deleted_;
+			unsigned int idx;
 	};
 
 	class rss_feed : public matchable {
@@ -152,6 +156,9 @@ namespace newsbeuter {
 			inline void set_rtl(bool b) { is_rtl_ = b; }
 			inline bool is_rtl() { return is_rtl_; }
 
+			inline void set_index(unsigned int i) { idx = i; }
+			inline unsigned int get_index() { return idx; }
+
 		private:
 			std::string title_;
 			std::string description_;
@@ -166,6 +173,7 @@ namespace newsbeuter {
 
 			bool empty;
 			bool is_rtl_;
+			unsigned int idx;
 	};
 
 	class rss_ignores : public config_action_handler {

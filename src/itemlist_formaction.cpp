@@ -521,6 +521,7 @@ void itemlist_formaction::do_update_visible_items() {
 
 	unsigned int i=0;
 	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it = items.begin(); it != items.end(); ++it, ++i) {
+		(*it)->set_index(i+1);
 		if (!apply_filter || m.matches(it->get())) {
 			visible_items.push_back(itemptr_pos_pair(*it, i));
 		}

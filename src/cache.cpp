@@ -411,7 +411,8 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed) {
 		throw dbexception(db);
 	}
 
-	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin(); it != feed->items().end(); ++it) {
+	unsigned int i=0;
+	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin(); it != feed->items().end(); ++it, ++i) {
 		(*it)->set_cache(this);
 		(*it)->set_feedptr(feed);
 		(*it)->set_feedurl(feed->rssurl());
