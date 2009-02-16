@@ -12,6 +12,9 @@
 
 namespace newsbeuter {
 
+	extern int ctrl_c_hit;
+	extern std::string lock_file;
+
 	class view;
 
 	class controller {

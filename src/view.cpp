@@ -168,7 +168,17 @@ void view::run() {
 		} else {
 
 			// we then receive the event and ignore timeouts.
-			const char * event = fa->get_form()->run(0);
+			const char * event = fa->get_form()->run(60000);
+
+			if (ctrl_c_hit) {
+				ctrl_c_hit = 0;
+				if (!get_cfg()->get_configvalue_as_bool("confirm-exit") || confirm(_("Do you really want to quit (y:Yes n:No)? "), _("yn")) == *_("y")) {
+					stfl::reset();
+					utils::remove_fs_lock(lock_file);
+					::exit(EXIT_FAILURE);
+				}
+			}
+
 			if (!event || strcmp(event,"TIMEOUT")==0) {
 				if (fa->id() == "article")
 					std::tr1::dynamic_pointer_cast<itemview_formaction, formaction>(fa)->update_percent();

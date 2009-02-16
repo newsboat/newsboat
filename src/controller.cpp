@@ -49,13 +49,19 @@ namespace newsbeuter {
 
 #define LOCK_SUFFIX ".lock"
 
-static std::string lock_file;
+std::string lock_file;
+
+int ctrl_c_hit = 0;
 
 void ctrl_c_action(int sig) {
-	LOG(LOG_DEBUG,"caugh signal %d",sig);
-	stfl::reset();
-	utils::remove_fs_lock(lock_file);
-	::exit(EXIT_FAILURE);
+	LOG(LOG_DEBUG,"caught signal %d",sig);
+	if (SIGINT == sig) {
+		ctrl_c_hit = 1;
+	} else {
+		stfl::reset();
+		utils::remove_fs_lock(lock_file);
+		::exit(EXIT_FAILURE);
+	}
 }
 
 void ignore_signal(int sig) {
