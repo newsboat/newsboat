@@ -77,8 +77,6 @@ namespace newsbeuter {
 
 			void notify_itemlist_change(std::tr1::shared_ptr<rss_feed> feed);
 
-			std::string ask_user(const std::string& prompt);
-
 			void feedlist_mark_pos_if_visible(unsigned int pos);
 
 			void set_regexmanager(regexmanager * r);
@@ -96,6 +94,7 @@ namespace newsbeuter {
 
 			void update_bindings();
 
+			void inside_qna(bool f);
 			void inside_cmdline(bool f);
 
 		protected:
@@ -103,6 +102,9 @@ namespace newsbeuter {
 			void apply_colors(std::tr1::shared_ptr<formaction> fa);
 
 			void handle_cmdline_completion(std::tr1::shared_ptr<formaction> fa);
+			void clear_line(std::tr1::shared_ptr<formaction> fa);
+			void clear_eol(std::tr1::shared_ptr<formaction> fa);
+			void cancel_input(std::tr1::shared_ptr<formaction> fa);
 
 			controller * ctrl;
 
@@ -124,6 +126,7 @@ namespace newsbeuter {
 			std::map<std::string,std::string> bg_colors;
 			std::map<std::string,std::vector<std::string> > attributes;
 
+			bool is_inside_qna;
 			bool is_inside_cmdline;
 
 			std::string last_fragment;

@@ -92,6 +92,7 @@ void formaction::process_op(operation op, bool automatic, std::vector<std::strin
 			break;
 		case OP_INT_CANCEL_QNA:
 			f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
+			v->inside_qna(false);
 			v->inside_cmdline(false);
 			break;
 		case OP_INT_QNA_NEXTHIST:
@@ -249,10 +250,13 @@ void formaction::start_qna(const std::vector<qna_pair>& prompts, operation finis
 	qna_responses.clear();
 	finish_operation = finish_op;
 	qna_history = h;
+	v->inside_qna(true);
 	start_next_question();
 }
 
 void formaction::finished_qna(operation op) {
+	v->inside_qna(false);
+	v->inside_cmdline(false);
 	switch (op) {
 		/*
 		 * since bookmarking is available in several formactions, I decided to put this into
@@ -281,7 +285,6 @@ void formaction::finished_qna(operation op) {
 				formaction::cmdlinehistory.add_line(cmdline);
 				LOG(LOG_DEBUG,"formaction: commandline = `%s'", cmdline.c_str());
 				this->handle_cmdline(cmdline);
-				v->inside_cmdline(false);
 			}
 			break;
 		default:

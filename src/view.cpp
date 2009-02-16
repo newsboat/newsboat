@@ -54,7 +54,7 @@ extern "C" {
 
 namespace newsbeuter {
 
-view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0), current_formaction(0), is_inside_cmdline(false), tab_count(0) {
+view::view(controller * c) : ctrl(c), cfg(0), keys(0), mtx(0), current_formaction(0), is_inside_qna(false), is_inside_cmdline(false), tab_count(0) {
 	mtx = new mutex();
 }
 
@@ -172,6 +172,7 @@ void view::run() {
 
 			if (ctrl_c_hit) {
 				ctrl_c_hit = 0;
+				cancel_input(fa);
 				if (!get_cfg()->get_configvalue_as_bool("confirm-exit") || confirm(_("Do you really want to quit (y:Yes n:No)? "), _("yn")) == *_("y")) {
 					stfl::reset();
 					utils::remove_fs_lock(lock_file);
@@ -185,9 +186,22 @@ void view::run() {
 				continue;
 			}
 
-			if (is_inside_cmdline && strcmp(event, "TAB")==0) {
-				handle_cmdline_completion(fa);
-				continue;
+			if (is_inside_qna) {
+				LOG(LOG_DEBUG, "view::run: we're inside QNA input");
+				if (is_inside_cmdline && strcmp(event, "TAB")==0) {
+					handle_cmdline_completion(fa);
+					continue;
+				}
+				if (strcmp(event, "^U")==0) {
+					clear_line(fa);
+					continue;
+				} else if (strcmp(event, "^K")==0) {
+					clear_eol(fa);
+					continue;
+				} else if (strcmp(event, "^G")==0) {
+					cancel_input(fa);
+					continue;
+				}
 			}
 
 			LOG(LOG_DEBUG, "view::run: event = %s", event);
@@ -795,13 +809,6 @@ std::string view::id() {
 	return "";
 }
 
-std::string view::ask_user(const std::string& prompt) {
-	std::vector<qna_pair> qna;
-	qna.push_back(qna_pair(prompt, ""));
-	get_current_formaction()->start_qna(qna, OP_NIL);
-	return get_current_formaction()->get_qna_response(0);
-}
-
 void view::feedlist_mark_pos_if_visible(unsigned int pos) {
 	if (formaction_stack_size() > 0) {
 		std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0])->mark_pos_if_visible(pos);
@@ -838,8 +845,32 @@ void view::goto_prev_dialog() {
 	}
 }
 
+void view::inside_qna(bool f) {
+	is_inside_qna = f;
+}
+
 void view::inside_cmdline(bool f) {
 	is_inside_cmdline = f;
+}
+
+void view::clear_line(std::tr1::shared_ptr<formaction> fa) {
+	fa->get_form()->set("qna_value", "");
+	fa->get_form()->set("qna_value_pos", "0");
+	LOG(LOG_DEBUG, "view::clear_line: cleared line");
+}
+
+void view::clear_eol(std::tr1::shared_ptr<formaction> fa) {
+	unsigned int pos = utils::to_u(fa->get_form()->get("qna_value_pos"));
+	std::string val = fa->get_form()->get("qna_value");
+	val.erase(pos, val.length()-1);
+	fa->get_form()->set("qna_value", val);
+	fa->get_form()->set("qna_value_pos", utils::to_s(val.length()));
+	LOG(LOG_DEBUG, "view::clear_eol: cleared to end of line");
+}
+
+void view::cancel_input(std::tr1::shared_ptr<formaction> fa) {
+	fa->process_op(OP_INT_CANCEL_QNA);
+	LOG(LOG_DEBUG, "view::cancel_input: cancelled input");
 }
 
 void view::handle_cmdline_completion(std::tr1::shared_ptr<formaction> fa) {
