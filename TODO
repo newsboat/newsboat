@@ -5,6 +5,9 @@ TODO:
 - per-feed refresh settings
 - implement internal alias mechanism to allow transition of renamed config commands.
 - fix HTML rendering of bold and underlined text when light background is configured
+- add quoting when printing out config variable values so that copy/paste can be applied.
+- make MacPort available for easy installation
+- test highlighting, especially of search phrases.
 
 
 DONE:
