@@ -5,6 +5,7 @@
 #include <logger.h>
 #include <sstream>
 #include <iostream>
+#include <algorithm>
 #include <utils.h>
 #include <cassert>
 

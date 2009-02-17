@@ -9,6 +9,7 @@
 #include <cstring>
 
 #include <sstream>
+#include <algorithm>
 
 namespace newsbeuter {
 
