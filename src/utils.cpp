@@ -334,27 +334,14 @@ static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp
 	return size * nmemb;
 }
 
-std::string utils::retrieve_url(const std::string& url, const char * user_agent, const char * auth, int download_timeout) {
+std::string utils::retrieve_url(const std::string& url, configcontainer * cfgcont) {
 	std::string buf;
 
 	CURL * easyhandle = curl_easy_init();
-	if (user_agent) {
-		curl_easy_setopt(easyhandle, CURLOPT_USERAGENT, user_agent);
-	}
+	set_common_curl_options(easyhandle, cfgcont);
 	curl_easy_setopt(easyhandle, CURLOPT_URL, url.c_str());
-	curl_easy_setopt(easyhandle, CURLOPT_SSL_VERIFYPEER, 0);
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, &buf);
-	curl_easy_setopt(easyhandle, CURLOPT_NOSIGNAL, 1);
-	curl_easy_setopt(easyhandle, CURLOPT_ENCODING, "gzip, deflate");
-	curl_easy_setopt(easyhandle, CURLOPT_TIMEOUT, download_timeout);
-	curl_easy_setopt(easyhandle, CURLOPT_FOLLOWLOCATION, 1);
-	curl_easy_setopt(easyhandle, CURLOPT_MAXREDIRS, 10);
-
-	if (auth) {
-		curl_easy_setopt(easyhandle, CURLOPT_USERPWD, auth);
-		curl_easy_setopt(easyhandle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-	}
 
 	curl_easy_perform(easyhandle);
 	curl_easy_cleanup(easyhandle);
@@ -687,6 +674,36 @@ std::string utils::quote_if_necessary(const std::string& str) {
 		result.append("\"");
 	}
 	return result;
+}
+
+void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
+	std::string proxy;
+	std::string proxyauth;
+	std::string useragent; 
+	unsigned int dl_timeout = 0;
+
+
+	if (cfg) {
+		proxy = cfg->get_configvalue("proxy");
+		proxyauth = cfg->get_configvalue("proxy-auth");
+		useragent = utils::get_useragent(cfg);
+		dl_timeout = cfg->get_configvalue_as_int("download-timeout");
+	}
+
+	curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 0);
+	curl_easy_setopt(handle, CURLOPT_NOSIGNAL, 1);
+	curl_easy_setopt(handle, CURLOPT_ENCODING, "gzip, deflate");
+	curl_easy_setopt(handle, CURLOPT_TIMEOUT, dl_timeout);
+
+	if (proxy != "")
+		curl_easy_setopt(handle, CURLOPT_PROXY, proxy.c_str());
+	if (proxyauth != "")
+		curl_easy_setopt(handle, CURLOPT_PROXYUSERPWD, proxyauth.c_str());
+	curl_easy_setopt(handle, CURLOPT_USERAGENT, useragent.c_str());
+
+	curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1);
+	curl_easy_setopt(handle, CURLOPT_MAXREDIRS, 10);
+	curl_easy_setopt(handle, CURLOPT_FAILONERROR, 1);
 }
 
 }

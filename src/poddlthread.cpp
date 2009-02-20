@@ -29,22 +29,15 @@ void poddlthread::run() {
 	++bytecount;
 
 	CURL * easyhandle = curl_easy_init();
-
-	std::string user_agent = utils::get_useragent(cfg);
-
-	curl_easy_setopt(easyhandle, CURLOPT_USERAGENT, user_agent.c_str());
+	utils::set_common_curl_options(easyhandle, cfg);
 
 	curl_easy_setopt(easyhandle, CURLOPT_URL, dl->url());
-	curl_easy_setopt(easyhandle, CURLOPT_SSL_VERIFYPEER, 0);
 	// set up write functions:
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, this);
 
 	// set up progress notification:
 	curl_easy_setopt(easyhandle, CURLOPT_NOPROGRESS, 0);
-	curl_easy_setopt(easyhandle, CURLOPT_ENCODING, "gzip, deflate");
-	curl_easy_setopt(easyhandle, CURLOPT_FOLLOWLOCATION, 1);
-	curl_easy_setopt(easyhandle, CURLOPT_MAXREDIRS, 10);
 	curl_easy_setopt(easyhandle, CURLOPT_PROGRESSFUNCTION, progress_callback);
 	curl_easy_setopt(easyhandle, CURLOPT_PROGRESSDATA, this);
 

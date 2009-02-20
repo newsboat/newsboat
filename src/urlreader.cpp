@@ -121,7 +121,7 @@ void opml_urlreader::reload() {
 
 	for (std::vector<std::string>::iterator it=urls.begin();it!=urls.end();it++) {
 		LOG(LOG_DEBUG, "bloglines_urlread::reload: downloading `%s'", it->c_str());
-		std::string urlcontent = utils::retrieve_url(*it, user_agent.c_str(), this->get_auth(), cfg->get_configvalue_as_int("download-timeout"));
+		std::string urlcontent = utils::retrieve_url(*it, cfg);
 
 		xmlDoc * doc = xmlParseMemory(urlcontent.c_str(), urlcontent.length());
 

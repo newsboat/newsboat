@@ -80,28 +80,12 @@ bool rss_parser::check_and_update_lastmodified() {
 		CURL* curl = curl_easy_init();
 		if (!curl) return false;
 
-		std::string proxy = cfgcont->get_configvalue("proxy");
-		std::string proxyauth = cfgcont->get_configvalue("proxy-auth");
-		std::string useragent = utils::get_useragent(cfgcont);
-
-		LOG(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: useragent = %s", useragent.c_str());
+		utils::set_common_curl_options(curl, cfgcont);
 
 		curl_easy_setopt(curl, CURLOPT_URL, my_uri.c_str());
-		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
-		curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
-		curl_easy_setopt(curl, CURLOPT_ENCODING, "gzip, deflate");
-		curl_easy_setopt(curl, CURLOPT_TIMEOUT, cfgcont->get_configvalue_as_int("download-timeout"));
-		if (proxy != "")
-			curl_easy_setopt(curl, CURLOPT_PROXY, proxy.c_str());
-		if (proxyauth != "")
-			curl_easy_setopt(curl, CURLOPT_PROXYUSERPWD, proxyauth.c_str());
-		curl_easy_setopt(curl, CURLOPT_USERAGENT, useragent.c_str());
 		curl_easy_setopt(curl, CURLOPT_HEADERDATA, &newlm);
 		curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, get_lastmodified_header);
 		curl_easy_setopt(curl, CURLOPT_NOBODY, 1);
-		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
-		curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 10);
-		curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1);
 
 		err = curl_easy_perform(curl);
 
@@ -272,7 +256,7 @@ void rss_parser::parse_file(const std::string& file) {
 }
 
 void rss_parser::download_filterplugin(const std::string& filter, const std::string& uri) {
-	std::string buf = utils::retrieve_url(uri, utils::get_useragent(cfgcont).c_str(), NULL, cfgcont->get_configvalue_as_int("download-timeout"));
+	std::string buf = utils::retrieve_url(uri, cfgcont);
 
 	char * argv[4] = { const_cast<char *>("/bin/sh"), const_cast<char *>("-c"), const_cast<char *>(filter.c_str()), NULL };
 	std::string result = utils::run_program(argv, buf);
