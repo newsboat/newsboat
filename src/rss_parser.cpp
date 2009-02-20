@@ -100,6 +100,7 @@ bool rss_parser::check_and_update_lastmodified() {
 		curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, get_lastmodified_header);
 		curl_easy_setopt(curl, CURLOPT_NOBODY, 1);
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
+		curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 10);
 		curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1);
 
 		err = curl_easy_perform(curl);

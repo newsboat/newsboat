@@ -348,6 +348,8 @@ std::string utils::retrieve_url(const std::string& url, const char * user_agent,
 	curl_easy_setopt(easyhandle, CURLOPT_NOSIGNAL, 1);
 	curl_easy_setopt(easyhandle, CURLOPT_ENCODING, "gzip, deflate");
 	curl_easy_setopt(easyhandle, CURLOPT_TIMEOUT, download_timeout);
+	curl_easy_setopt(easyhandle, CURLOPT_FOLLOWLOCATION, 1);
+	curl_easy_setopt(easyhandle, CURLOPT_MAXREDIRS, 10);
 
 	if (auth) {
 		curl_easy_setopt(easyhandle, CURLOPT_USERPWD, auth);

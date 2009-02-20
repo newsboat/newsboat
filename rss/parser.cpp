@@ -50,6 +50,7 @@ feed parser::parse_url(const std::string& url) {
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, &buf);
 	curl_easy_setopt(easyhandle, CURLOPT_NOSIGNAL, 1);
 	curl_easy_setopt(easyhandle, CURLOPT_FOLLOWLOCATION, 1);
+	curl_easy_setopt(easyhandle, CURLOPT_MAXREDIRS, 10);
 	curl_easy_setopt(easyhandle, CURLOPT_FAILONERROR, 1);
 	curl_easy_setopt(easyhandle, CURLOPT_ENCODING, "gzip, deflate");
 	if (to != 0)
