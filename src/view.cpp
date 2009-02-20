@@ -201,6 +201,9 @@ void view::run() {
 				} else if (strcmp(event, "^G")==0) {
 					cancel_input(fa);
 					continue;
+				} else if (strcmp(event, "^W")==0) {
+					delete_word(fa);
+					continue;
 				}
 			}
 
@@ -862,7 +865,7 @@ void view::clear_line(std::tr1::shared_ptr<formaction> fa) {
 void view::clear_eol(std::tr1::shared_ptr<formaction> fa) {
 	unsigned int pos = utils::to_u(fa->get_form()->get("qna_value_pos"));
 	std::string val = fa->get_form()->get("qna_value");
-	val.erase(pos, val.length()-1);
+	val.erase(pos, val.length());
 	fa->get_form()->set("qna_value", val);
 	fa->get_form()->set("qna_value_pos", utils::to_s(val.length()));
 	LOG(LOG_DEBUG, "view::clear_eol: cleared to end of line");
@@ -871,6 +874,29 @@ void view::clear_eol(std::tr1::shared_ptr<formaction> fa) {
 void view::cancel_input(std::tr1::shared_ptr<formaction> fa) {
 	fa->process_op(OP_INT_CANCEL_QNA);
 	LOG(LOG_DEBUG, "view::cancel_input: cancelled input");
+}
+
+void view::delete_word(std::tr1::shared_ptr<formaction> fa) {
+	std::string::size_type curpos = utils::to_u(fa->get_form()->get("qna_value_pos"));
+	std::string val = fa->get_form()->get("qna_value");
+	std::string::size_type firstpos = curpos;
+	LOG(LOG_DEBUG, "view::delete_word: before val = %s", val.c_str());
+	if (firstpos >= val.length() || ::isspace(val[firstpos])) {
+		if (firstpos != 0 && firstpos >= val.length())
+			firstpos = val.length() - 1;
+		while (firstpos > 0 && ::isspace(val[firstpos])) {
+			--firstpos;
+		}
+	}
+	while (firstpos > 0 && !::isspace(val[firstpos])) {
+		--firstpos;
+	}
+	if (firstpos != 0)
+		firstpos++;
+	val.erase(firstpos, curpos - firstpos);
+	LOG(LOG_DEBUG, "view::delete_word: after val = %s", val.c_str());
+	fa->get_form()->set("qna_value", val);
+	fa->get_form()->set("qna_value_pos", utils::to_s(firstpos));
 }
 
 void view::handle_cmdline_completion(std::tr1::shared_ptr<formaction> fa) {

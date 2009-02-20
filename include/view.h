@@ -105,6 +105,7 @@ namespace newsbeuter {
 			void clear_line(std::tr1::shared_ptr<formaction> fa);
 			void clear_eol(std::tr1::shared_ptr<formaction> fa);
 			void cancel_input(std::tr1::shared_ptr<formaction> fa);
+			void delete_word(std::tr1::shared_ptr<formaction> fa);
 
 			controller * ctrl;
 
