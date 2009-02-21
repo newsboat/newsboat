@@ -72,9 +72,8 @@ configcontainer::configcontainer()
 	config_data["history-limit"] = configdata("100", configdata::INT);
 	config_data["prepopulate-query-feeds"] = configdata("false", configdata::BOOL);
 
-	/* undocumented: */
+	/* title formats: */
 	config_data["feedlist-title-format"] = configdata(_("%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"), configdata::STR);
-	config_data["urlview-title-format"] = configdata(_("%N %V - URLs"), configdata::STR);
 	config_data["articlelist-title-format"] = configdata(_("%N %V - Articles in feed '%T' (%u unread, %t total) - %U"), configdata::STR);
 	config_data["searchresult-title-format"] = configdata(_("%N %V - Search result (%u unread, %t total)"), configdata::STR);
 	config_data["filebrowser-title-format"] = configdata(_("%N %V - %?O?Open File&Save File? - %f"), configdata::STR);

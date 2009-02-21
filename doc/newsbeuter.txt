@@ -579,10 +579,10 @@ is usually a single letter.
 In addition, newsbeuter provides other, more powerful sequences, such as
 "%>[char]", which indicates that the text right to the sequence will be aligned
 right on the screen, and characters between the text on the left and the text
-on the right will be filled by "[char]". Another powerful is the conditional
-sequence, "%?[char]?[format 1]&[format 2]?": if the text of the sequence
-identifier "[char]" is non-empty, then "[format 1]" will be evaluted and
-inserted, otherwise "[format 2]" will be evaluted and inserted. The "&" and
+on the right will be filled by "[char]". Another powerful format is the
+conditional sequence, "%?[char]?[format 1]&[format 2]?": if the text of the
+sequence identifier "[char]" is non-empty, then "[format 1]" will be evaluted
+and inserted, otherwise "[format 2]" will be evaluted and inserted. The "&" and
 "[format 2]" are optional, i.e. if the identifier's text is empty, then an
 empty string will be inserted.
 
@@ -633,6 +633,79 @@ Examples:
 	feedlist-format     "%4i %n %11u %t"
 	articlelist-format  "%4i %f %D   %?T?|%-17T|  ?%t"
 	notify-format       "%d new articles (%n unread articles, %f unread feeds)"
+
+
+Dialog Titles
+^^^^^^^^^^^^^
+
+Starting with newsbeuter 1.4, it is now officially supported to customize
+the title format of all available dialogs. Here is a list of dialogs with their
+respective title format configuration variables, and a list of available formats
+and their meaning. Please note taht the title formats are localized, so if you
+work on a different locale that is supported by newsbeuter, the actually displayed
+title text may vary unless you customize it.
+
+.Dialog Title Formats
+[frame="all", grid="all", format="dsv"]
+`20`30`50~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Dialog:Configuration Variable:Default Value
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Feed List:feedlist-title-format:%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?
+Article List:articlelist-title-format:%N %V - Articles in feed '%T' (%u unread, %t total) - %U
+Search Result:searchresult-title-format:%N %V - Search result (%u unread, %t total)
+File Browser:filebrowser-title-format:%N %V - %?O?Open File&Save File? - %f
+Help:help-title-format:%N %V - Help
+Select Tag Dialog:selecttag-title-format:%N %V - Select Tag
+Select Filter Dialog:selectfilter-title-format:%N %V - Select Filter
+Article View:itemview-title-format:%N %V - Article '%T'
+URL View:urlview-title-format:%N %V - URLs
+Dialog List:dialogs-title-format:%N %V - Dialogs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.Common Title Format Identifiers
+[frame="all", grid="all", format="dsv"]
+`30`60~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Identifier:Meaning
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+N:Name of the program, i.e. "newsbeuter"
+V:Program version
+u:Number of unread articles (if applicable)
+t:Number of total articles (if applicable)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.Feed List Title Format Identifiers
+[frame="all", grid="all", format="dsv"]
+`30`60~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Identifier:Meaning
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+T:Currently selected tag (empty if none selected)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.Article List Title Format Identifiers
+[frame="all", grid="all", format="dsv"]
+`30`60~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Identifier:Meaning
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+T:Feed title
+U:Feed URL
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.File Browser Title Format Identifiers
+[frame="all", grid="all", format="dsv"]
+`30`60~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Identifier:Meaning
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+f:Filename
+O:Non-empty if file browser is in open mode, empty if in save mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.Article View Title Format Identifiers
+[frame="all", grid="all", format="dsv"]
+`30`60~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Identifier:Meaning
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+T:Article title
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Highlighting Text
 ~~~~~~~~~~~~~~~~~
