@@ -957,7 +957,11 @@ void controller::reload_urls_file() {
 }
 
 void controller::edit_urls_file() {
-	const char * editor = getenv("EDITOR");
+	const char * editor;
+
+	editor = getenv("VISUAL");
+	if (!editor)
+		editor = getenv("EDITOR");
 	if (!editor)
 		editor = "vi";
 
