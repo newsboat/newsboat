@@ -9,7 +9,7 @@ open(FILE,$ARGV[0]) or die "couldn't open $ARGV[0]: $!\n";
 
 while ($line = <FILE>) {
 	chomp($line);
-	@fields = split(/:/, $line);
+	@fields = split(/:/, $line, 3);
 	print "'$fields[0]' (default key: '$fields[1]')::\n         $fields[2]\n\n";
 }
 
