@@ -491,18 +491,23 @@ std::string utils::absolute_url(const std::string& url, const std::string& link)
 
 std::string utils::strprintf(const char * format, ...) {
 	if (!format)
-		return std::string("");
+		return std::string();
+
+	char buffer[1024];
 
 	va_list ap;
 	va_start(ap, format);
 
-	unsigned int len = vsnprintf(NULL, 0, format, ap);
+	unsigned int len = vsnprintf(buffer, sizeof(buffer), format, ap)+1;
 
 	va_end(ap);
+	if (len <= sizeof(buffer))
+		return buffer;
+
 	va_start(ap, format);
 
-	char * buf = new char[len + 1];
-	vsnprintf(buf, len + 1, format, ap);
+	char * buf = new char[len];
+	vsnprintf(buf, len, format, ap);
 	va_end(ap);
 
 	std::string ret(buf);
