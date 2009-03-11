@@ -606,7 +606,7 @@ void controller::reload_range(unsigned int start, unsigned int end, unsigned int
 void controller::reload_all(bool unattended) {
 	unsigned int unread_feeds, unread_articles;
 	compute_unread_numbers(unread_feeds, unread_articles);
-	unsigned int num_threads = cfg.get_configvalue_as_int("reload-threads");
+	unsigned int num_threads = 1; // setting deactivated for now: cfg.get_configvalue_as_int("reload-threads");
 	time_t t1, t2, dt;
 
 	t1 = time(NULL);
