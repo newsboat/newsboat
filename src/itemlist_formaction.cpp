@@ -217,9 +217,12 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				if (feed->rssurl() != "") {
 					v->get_ctrl()->mark_all_read(pos);
 				} else {
-					LOG(LOG_DEBUG, "itemlist_formaction: oh, it looks like I'm in a pseudo-feed (search result, query feed)");
-					for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin();it!=feed->items().end();++it) {
-						(*it)->set_unread_nowrite_notify(false, true);
+					{
+						scope_mutex lock(&feed->item_mutex);
+						LOG(LOG_DEBUG, "itemlist_formaction: oh, it looks like I'm in a pseudo-feed (search result, query feed)");
+						for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin();it!=feed->items().end();++it) {
+							(*it)->set_unread_nowrite_notify(false, true);
+						}
 					}
 					v->get_ctrl()->catchup_all(feed);
 				}
@@ -496,7 +499,11 @@ void itemlist_formaction::qna_start_search() {
 		return;
 	}
 
-	search_dummy_feed->items() = items;
+	{
+	    scope_mutex lock(&search_dummy_feed->item_mutex);
+	    search_dummy_feed->items() = items;
+	}
+
 	if (show_searchresult) {
 		v->pop_current_formaction();
 	}
@@ -509,6 +516,7 @@ void itemlist_formaction::do_update_visible_items() {
 
 	update_visible_items = false;
 
+	scope_mutex lock(&feed->item_mutex);
 	std::vector<std::tr1::shared_ptr<rss_item> >& items = feed->items();
 
 	visible_items.clear();

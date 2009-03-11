@@ -6,6 +6,7 @@
 
 #include <configcontainer.h>
 #include <matcher.h>
+#include <mutex.h>
 
 #include <tr1/memory>
 
@@ -129,7 +130,7 @@ namespace newsbeuter {
 			inline const std::string& rssurl() const { return rssurl_; }
 			void set_rssurl(const std::string& u);
 			
-			unsigned int unread_item_count() const;
+			unsigned int unread_item_count();
 			inline unsigned int total_item_count() const { return items_.size(); }
 
 			void set_tags(const std::vector<std::string>& tags);
@@ -148,6 +149,7 @@ namespace newsbeuter {
 			void set_empty(bool t) { empty = t; }
 
 			void sort(const std::string& method);
+			void sort_unlocked(const std::string& method);
 
 			void remove_old_deleted_items();
 
@@ -162,6 +164,9 @@ namespace newsbeuter {
 			inline void set_order(unsigned int x) { order = x; }
 			inline unsigned int get_order() { return order; }
 
+			void set_feedptrs(std::tr1::shared_ptr<rss_feed> self);
+
+			mutex item_mutex; // this is ugly, but makes it possible to lock items use e.g. from the cache class
 		private:
 			std::string title_;
 			std::string description_;

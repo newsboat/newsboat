@@ -1,5 +1,6 @@
 #include <mutex.h>
 #include <exception.h>
+#include <logger.h>
 
 #include <cerrno>
 
@@ -26,7 +27,7 @@ void mutex::lock() {
 void mutex::unlock() {
 	int rc = pthread_mutex_unlock(&mtx);
 	if (rc != 0) {
-		throw exception(rc);
+		LOG(LOG_INFO, "mutex::unlock: unlock returned %d", rc);
 	}
 }
 

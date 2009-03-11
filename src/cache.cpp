@@ -328,6 +328,7 @@ void cache::externalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, bool reset_
 		return;
 
 	scope_mutex lock(&mtx);
+	scope_mutex feedlock(&feed->item_mutex);
 	scope_transaction dbtrans(db);
 
 	cb_handler count_cbh;
@@ -376,6 +377,7 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed) {
 		return;
 
 	scope_mutex lock(&mtx);
+	scope_mutex feedlock(&feed->item_mutex);
 
 	/* first, we check whether the feed is there at all */
 	std::string query = prepare_query("SELECT count(*) FROM rss_feed WHERE rssurl = '%q';",feed->rssurl().c_str());
@@ -437,7 +439,8 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed) {
 			feed->items().insert(feed->items().end(), flagged_items.begin(), flagged_items.end()); // if some flagged articles were saved, append them
 		}
 	}
-	feed->sort(cfg->get_configvalue("article-sort-order"));
+	feed->sort_unlocked(cfg->get_configvalue("article-sort-order"));
+
 }
 
 void cache::get_latest_items(std::vector<std::tr1::shared_ptr<rss_item> >& items, unsigned int limit) {
@@ -634,6 +637,7 @@ void cache::update_rssitem_unlocked(std::tr1::shared_ptr<rss_item> item, const s
 
 void cache::catchup_all(std::tr1::shared_ptr<rss_feed> feed) {
 	scope_mutex lock(&mtx);
+	scope_mutex feedlock(&feed->item_mutex);
 	std::string query = "UPDATE rss_item SET unread = '0' WHERE unread != '0' AND guid IN (";
 
 	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin();it!=feed->items().end();++it) {

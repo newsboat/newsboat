@@ -98,6 +98,7 @@ controller::~controller() {
 	delete urlcfg;
 
 	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();it++) {
+		scope_mutex lock(&((*it)->item_mutex));
 		(*it)->items().clear();
 	}
 	feeds.clear();
@@ -503,6 +504,7 @@ void controller::catchup_all() {
 		return;
 	}
 	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it) {
+		scope_mutex lock(&(*it)->item_mutex);
 		if ((*it)->items().size() > 0) {
 			for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator jt=(*it)->items().begin();jt!=(*it)->items().end();++jt) {
 				(*jt)->set_unread_nowrite(false);
@@ -521,6 +523,7 @@ void controller::mark_all_read(unsigned int pos) {
 			rsscache->catchup_all(feed->rssurl());
 		}
 		m.stopover("after rsscache->catchup_all, before iteration over items");
+		scope_mutex lock(&feed->item_mutex);
 		std::vector<std::tr1::shared_ptr<rss_item> >& items = feed->items();
 		std::vector<std::tr1::shared_ptr<rss_item> >::iterator begin = items.begin(), end = items.end();
 		if (items.size() > 0) {
@@ -969,9 +972,7 @@ void controller::edit_urls_file() {
 }
 
 void controller::set_feedptrs(std::tr1::shared_ptr<rss_feed> feed) {
-	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin();it!=feed->items().end();++it) {
-		(*it)->set_feedptr(feed);
-	}
+	feed->set_feedptrs(feed);
 }
 
 std::string controller::bookmark(const std::string& url, const std::string& title, const std::string& description) {
@@ -1091,8 +1092,11 @@ void controller::save_feed(std::tr1::shared_ptr<rss_feed> feed, unsigned int pos
 		rsscache->internalize_rssfeed(feed);
 		LOG(LOG_DEBUG, "controller::reload: after internalize_rssfeed");
 		feed->set_tags(urlcfg->get_tags(feed->rssurl()));
-		feeds[pos]->items().clear();
-		feeds[pos] = feed;
+		{
+			scope_mutex lock(&feeds[pos]->item_mutex);
+			feeds[pos]->items().clear();
+			feeds[pos] = feed;
+		}
 		v->notify_itemlist_change(feeds[pos]);
 	} else {
 		LOG(LOG_DEBUG, "controller::reload: feed is empty, not saving");
@@ -1102,6 +1106,7 @@ void controller::save_feed(std::tr1::shared_ptr<rss_feed> feed, unsigned int pos
 void controller::enqueue_items(std::tr1::shared_ptr<rss_feed> feed) {
 	if (!cfg.get_configvalue_as_bool("podcast-auto-enqueue"))
 		return;
+	scope_mutex lock(&feed->item_mutex);
 	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin();it!=feed->items().end();++it) {
 		if (!(*it)->enqueued() && (*it)->enclosure_url().length() > 0) {
 			LOG(LOG_DEBUG, "controller::reload: enclosure_url = `%s' enclosure_type = `%s'", (*it)->enclosure_url().c_str(), (*it)->enclosure_type().c_str());

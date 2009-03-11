@@ -102,7 +102,8 @@ std::string rss_item::pubDate() const {
 	return std::string(text);
 }
 
-unsigned int rss_feed::unread_item_count() const {
+unsigned int rss_feed::unread_item_count() {
+	// scope_mutex lock(&item_mutex);
 	unsigned int count = 0;
 	for (std::vector<std::tr1::shared_ptr<rss_item> >::const_iterator it=items_.begin();it!=items_.end();++it) {
 		if ((*it)->unread())
@@ -185,6 +186,7 @@ std::string rss_feed::description() const {
 }
 
 std::tr1::shared_ptr<rss_item> rss_feed::get_item_by_guid(const std::string& guid) {
+	scope_mutex lock(&item_mutex);
 	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items_.begin();it!=items_.end();++it) {
 		if ((*it)->guid() == guid) {
 			return *it;
@@ -391,6 +393,7 @@ bool rss_ignores::matches_resetunread(const std::string& url) {
 }
 
 void rss_feed::update_items(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
+	scope_mutex lock(&item_mutex);
 	if (query.length() == 0)
 		return;
 
@@ -479,8 +482,12 @@ struct sort_item_by_date : public std::binary_function<std::tr1::shared_ptr<rss_
 	}
 };
 
-
 void rss_feed::sort(const std::string& method) {
+	scope_mutex lock(&item_mutex);
+	sort_unlocked(method);
+}
+
+void rss_feed::sort_unlocked(const std::string& method) {
 	std::vector<std::string> methods = utils::tokenize(method,"-");
 	bool reverse = false;
 
@@ -516,6 +523,7 @@ void rss_feed::sort(const std::string& method) {
 }
 
 void rss_feed::remove_old_deleted_items() {
+	scope_mutex lock(&item_mutex);
 	std::vector<std::string> guids;
 	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items_.begin();it!=items_.end();++it) {
 		guids.push_back((*it)->guid());
@@ -524,6 +532,7 @@ void rss_feed::remove_old_deleted_items() {
 }
 
 void rss_feed::purge_deleted_items() {
+	scope_mutex lock(&item_mutex);
 	scope_measure m1("rss_feed::purge_deleted_items");
 	std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items_.begin();
 	while (it!=items_.end()) {
@@ -533,6 +542,13 @@ void rss_feed::purge_deleted_items() {
 		} else {
 			++it;
 		}
+	}
+}
+
+void rss_feed::set_feedptrs(std::tr1::shared_ptr<rss_feed> self) {
+	scope_mutex lock(&item_mutex);
+	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items_.begin();it!=items_.end();it++) {
+		(*it)->set_feedptr(self);
 	}
 }
 

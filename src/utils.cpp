@@ -246,7 +246,7 @@ bool utils::try_fs_lock(const std::string& lock_file, pid_t & pid) {
 std::string utils::convert_text(const std::string& text, const std::string& tocode, const std::string& fromcode) {
 	std::string result;
 
-	if (tocode == fromcode)
+	if (strcasecmp(tocode.c_str(), fromcode.c_str())==0)
 		return text;
 
 	iconv_t cd = ::iconv_open((tocode + "//TRANSLIT").c_str(), fromcode.c_str());

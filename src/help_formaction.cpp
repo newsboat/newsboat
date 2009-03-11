@@ -81,7 +81,7 @@ void help_formaction::prepare() {
 						break;
 					default: condition = true; break;
 				}
-				if (context.length() > 0 && it->ctx != context || condition)
+				if (context.length() > 0 && (it->ctx != context || condition))
 					continue;
 				if (!apply_search || strcasestr(it->key.c_str(), searchphrase.c_str())!=NULL || 
 						strcasestr(it->cmd.c_str(), searchphrase.c_str())!=NULL ||

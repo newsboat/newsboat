@@ -42,13 +42,11 @@ std::string stfl::form::get(const std::string& name) {
 	std::string retval;
 	if (text)
 		retval = text;
-	stfl_ipool_flush(ipool);
 	return retval;
 }
 
 void stfl::form::set(const std::string& name, const std::string& value) {
 	stfl_set(f, stfl_ipool_towc(ipool,name.c_str()), stfl_ipool_towc(ipool,value.c_str()));
-	stfl_ipool_flush(ipool);
 }
 
 std::string stfl::form::get_focus() {
@@ -56,14 +54,12 @@ std::string stfl::form::get_focus() {
 	std::string retval;
 	if (focus)
 		retval = focus;
-	stfl_ipool_flush(ipool);
 	return retval;
 }
 
 void stfl::form::set_focus(const std::string& name) {
 	stfl_set_focus(f, stfl_ipool_towc(ipool,name.c_str()));
 	LOG(LOG_DEBUG,"stfl::form::set_focus: %s", name.c_str());
-	stfl_ipool_flush(ipool);
 }
 
 void stfl::form::modify(const std::string& name, const std::string& mode, const std::string& text) {
@@ -72,7 +68,6 @@ void stfl::form::modify(const std::string& name, const std::string& mode, const 
 	wmode = stfl_ipool_towc(ipool,mode.c_str());
 	wtext = stfl_ipool_towc(ipool,text.c_str());
 	stfl_modify(f, wname, wmode, wtext);
-	stfl_ipool_flush(ipool);
 }
 
 void stfl::reset() {
