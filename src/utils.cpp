@@ -472,9 +472,9 @@ std::string utils::wstr2str(const std::wstring& wstr) {
 }
 
 std::string utils::to_s(unsigned int u) {
-	std::ostringstream os;
-	os << u;
-	return os.str();
+	char buf[32];
+	snprintf(buf, sizeof(buf), "%u", u);
+	return buf;
 }
 
 std::string utils::absolute_url(const std::string& url, const std::string& link) {
