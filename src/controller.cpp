@@ -606,8 +606,11 @@ void controller::reload_range(unsigned int start, unsigned int end, unsigned int
 void controller::reload_all(bool unattended) {
 	unsigned int unread_feeds, unread_articles;
 	compute_unread_numbers(unread_feeds, unread_articles);
-	unsigned int num_threads = 1; // setting deactivated for now: cfg.get_configvalue_as_int("reload-threads");
+	unsigned int num_threads = cfg.get_configvalue_as_int("reload-threads");
 	time_t t1, t2, dt;
+
+	if (num_threads < 1)
+		num_threads = 1;
 
 	t1 = time(NULL);
 
@@ -1092,11 +1095,7 @@ void controller::save_feed(std::tr1::shared_ptr<rss_feed> feed, unsigned int pos
 		rsscache->internalize_rssfeed(feed);
 		LOG(LOG_DEBUG, "controller::reload: after internalize_rssfeed");
 		feed->set_tags(urlcfg->get_tags(feed->rssurl()));
-		{
-			scope_mutex lock(&feeds[pos]->item_mutex);
-			feeds[pos]->items().clear();
-			feeds[pos] = feed;
-		}
+		feeds[pos] = feed;
 		v->notify_itemlist_change(feeds[pos]);
 	} else {
 		LOG(LOG_DEBUG, "controller::reload: feed is empty, not saving");
