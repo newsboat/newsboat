@@ -50,16 +50,6 @@ std::tr1::shared_ptr<rss_feed> rss_parser::parse() {
 	return feed;
 }
 
-static size_t get_lastmodified_header(void *ptr, size_t size, size_t nmemb, time_t * timing) {
-	char *header = (char *) ptr;
-
-	if (!strncasecmp ("Last-Modified:", header, 14))
-		*timing = curl_getdate (header + 14, NULL);
-
-	return size * nmemb;
-}
-
-
 time_t rss_parser::parse_date(const std::string& datestr) {
 	return curl_getdate(datestr.c_str(), NULL);
 }
