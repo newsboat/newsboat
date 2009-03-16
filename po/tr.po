@@ -14,17 +14,18 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Language: tr_TR\n"
 
 #: src/colormanager.cpp:44 src/colormanager.cpp:46 src/regexmanager.cpp:55
 #: src/regexmanager.cpp:64
 #, c-format
 msgid "`%s' is not a valid color"
-msgstr ""
+msgstr "`%s' geçerli bir renk değil"
 
 #: src/colormanager.cpp:51 src/regexmanager.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "`%s' is not a valid attribute"
-msgstr "geçersiz özellik indeksi"
+msgstr "`%s' geçersiz bir özellik"
 
 #: src/colormanager.cpp:62
 #, c-format
@@ -75,9 +76,8 @@ msgid "%N %V - URLs"
 msgstr "%N %V - Adres"
 
 #: src/configcontainer.cpp:85
-#, fuzzy
 msgid "%N %V - Dialogs"
-msgstr "%N %V - Adres"
+msgstr "%N %V - Diyalog"
 
 #: src/configcontainer.cpp:119
 #, c-format
@@ -194,7 +194,6 @@ msgid "Error while loading feeds from database: "
 msgstr "Veritabanından beslemeler alınırken hata oluştu: "
 
 #: src/controller.cpp:418
-#, fuzzy
 msgid "Prepopulating query feeds..."
 msgstr "Sorgu beslemesi güncelleniyor..."
 
@@ -370,8 +369,7 @@ msgstr ""
 msgid "%u unread articles"
 msgstr "%u okunmamış yazı"
 
-#: src/controller.cpp:1053 src/formaction.cpp:301
-#: src/itemview_formaction.cpp:85
+#: src/controller.cpp:1053 src/formaction.cpp:301 src/itemview_formaction.cpp:85
 msgid "Title: "
 msgstr "Başlık: "
 
@@ -388,9 +386,9 @@ msgid "Link: "
 msgstr "Bağlantı: "
 
 #: src/controller.cpp:1269
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't open configuration file `%s'!"
-msgstr "Hata: yazı %s'e kaydedilemedi"
+msgstr "Hata: ayar dosyası `%s' kaydedilemedi!"
 
 #: src/dialogs_formaction.cpp:46
 msgid "Close"
@@ -413,9 +411,8 @@ msgid "No item selected!"
 msgstr "Hiçbiri seçilmedi!"
 
 #: src/dialogs_formaction.cpp:74
-#, fuzzy
 msgid "Error: you can't remove the feed list!"
-msgstr "Hata: arama sonuçlarını yeniden yükleyemezsiniz."
+msgstr "Hata: besleme listesini silemezsiniz!"
 
 #: src/dialogs_formaction.cpp:99 src/feedlist_formaction.cpp:650
 #: src/itemlist_formaction.cpp:738 src/urlview_formaction.cpp:128
@@ -527,8 +524,8 @@ msgstr "h"
 
 #: src/feedlist_formaction.cpp:139
 msgid ""
-"Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)"
-"one?"
+"Reverse Sort by "
+"(f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)one?"
 msgstr ""
 
 #: src/feedlist_formaction.cpp:176 src/itemlist_formaction.cpp:215
@@ -554,9 +551,9 @@ msgid "No tags defined."
 msgstr "Hiçbir etiket tanımlanmadı."
 
 #: src/feedlist_formaction.cpp:267 src/itemlist_formaction.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't parse filter command `%s': %s"
-msgstr "Hata: filtre komutu ayrıştırılamadı!"
+msgstr "Hata: filtre komutu `%s' ayrıştırılamadı: %s"
 
 #: src/feedlist_formaction.cpp:277 src/itemlist_formaction.cpp:327
 msgid "No filters defined."
@@ -649,9 +646,9 @@ msgid "Position not visible!"
 msgstr "Konum görünür değil!"
 
 #: src/feedlist_formaction.cpp:697
-#, fuzzy, c-format
+#, c-format
 msgid "Feed List - %u unread, %u total"
-msgstr "%N %V - Arama sonucu (%u okunmamış, %t toplam)"
+msgstr "Besleme Listesi %u okunmamuş, %u toplam"
 
 #: src/filebrowser_formaction.cpp:102
 #, c-format
@@ -683,19 +680,19 @@ msgid "Save"
 msgstr "Kaydet"
 
 #: src/filebrowser_formaction.cpp:263
-#, fuzzy, c-format
+#, c-format
 msgid "Open File - %s"
-msgstr "%s %s - Dosya Aç - %s"
+msgstr "Dosya aç - %s"
 
 #: src/filebrowser_formaction.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Save File - %s"
-msgstr "%s %s - Dosya Kaydet - %s"
+msgstr "Kaydet - %s"
 
 #: src/filtercontainer.cpp:22 src/rss.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid "couldn't parse filter expression `%s': %s"
-msgstr "Hata: filtre komutu ayrıştırılamadı!"
+msgstr "filtre ifadesi `%s' ayrıştırılamadı: %s"
 
 #: src/formaction.cpp:185 src/formaction.cpp:206
 msgid "usage: set <variable>[=<value>]"
@@ -706,19 +703,18 @@ msgid "usage: source <file> [...]"
 msgstr ""
 
 #: src/formaction.cpp:227
-#, fuzzy
 msgid "usage: dumpconfig <file>"
-msgstr "<ayar_dosyası>"
+msgstr "kullanım: dumpconfig <dosya>"
 
 #: src/formaction.cpp:230
-#, fuzzy, c-format
+#, c-format
 msgid "Saved configuration to %s"
-msgstr "Yazı %s'e kaydedildi"
+msgstr "Ayarlar %s 'e kaydedildi"
 
 #: src/formaction.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid "Not a command: %s"
-msgstr "bilinmeyen komut `%s'"
+msgstr "bilinmeyen komut: %s"
 
 #: src/formaction.cpp:272
 msgid "Saving bookmark..."
@@ -822,9 +818,8 @@ msgid "Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"
 msgstr ""
 
 #: src/itemlist_formaction.cpp:351 src/itemlist_formaction.cpp:370
-#, fuzzy
 msgid "dtfalg"
-msgstr "Bayrakları düzenle"
+msgstr "dtfalg"
 
 #: src/itemlist_formaction.cpp:354 src/itemlist_formaction.cpp:373
 msgid "d"
@@ -876,9 +871,9 @@ msgid "Query Feed - %s"
 msgstr ""
 
 #: src/itemlist_formaction.cpp:883
-#, fuzzy, c-format
+#, c-format
 msgid "Article List - %s"
-msgstr "Yazı %s'e kaydedildi"
+msgstr "Yazı Listesi - %s"
 
 #: src/itemview_formaction.cpp:34 src/itemview_formaction.cpp:512
 msgid "Top"
@@ -939,14 +934,13 @@ msgid "Enqueue"
 msgstr "Kuyruktan Çıkar"
 
 #: src/itemview_formaction.cpp:523
-#, fuzzy, c-format
+#, c-format
 msgid "Article - %s"
-msgstr "Yazı %s'e kaydedildi"
+msgstr "Yazı - %s"
 
 #: src/itemview_formaction.cpp:561
-#, fuzzy
 msgid "Error: invalid regular expression!"
-msgstr "Hata: geçersiz besleme!"
+msgstr "Hata: geçersiz düzenli ifade!"
 
 #: src/keymap.cpp:23
 msgid "Open feed/article"
@@ -985,9 +979,8 @@ msgid "Go to previous unread article"
 msgstr "Önceki okunmamış yazıya git"
 
 #: src/keymap.cpp:32
-#, fuzzy
 msgid "Go to a random unread article"
-msgstr "Sonraki okunmamış yazıya git"
+msgstr "Rastgele okunmamış bir yazıya git"
 
 #: src/keymap.cpp:33
 msgid "Open article in browser"
@@ -1118,37 +1111,33 @@ msgid "Edit subscribed URLs"
 msgstr "Abone olunan adresleri düzenle"
 
 #: src/keymap.cpp:65
-#, fuzzy
 msgid "Close currently selected dialog"
-msgstr "Seçilen beslemeyi yeniden yükle"
+msgstr "Seçilen diyalogu kapat"
 
 #: src/keymap.cpp:66
 msgid "View list of open dialogs"
 msgstr ""
 
 #: src/keymap.cpp:67
-#, fuzzy
 msgid "Go to next dialog"
-msgstr "Sonraki okunmamış yazıya git"
+msgstr "Sonraki diyaloga git"
 
 #: src/keymap.cpp:68
-#, fuzzy
 msgid "Go to previous dialog"
 msgstr "Önceki diyaloğa dön/Çık"
 
 #: src/keymap.cpp:69
 #, fuzzy
 msgid "Pipe article to command"
-msgstr "Yazı %s'e kaydedildi"
+msgstr ""
 
 #: src/keymap.cpp:70
-#, fuzzy
 msgid "Sort current list"
-msgstr "Mevcut etiketi temizle"
+msgstr "Mevcut listeyi sırala"
 
 #: src/keymap.cpp:71
 msgid "Sort current list (reverse)"
-msgstr ""
+msgstr "Mevcut listeyi sırala (tersten)"
 
 #: src/keymap.cpp:73
 msgid "Open URL 10"
@@ -1191,23 +1180,20 @@ msgid "Open URL 9"
 msgstr "URL 9'u aç"
 
 #: src/keymap.cpp:84
-#, fuzzy
 msgid "Move to the previous entry"
-msgstr "Önceki okunmamış beslemeye git"
+msgstr "Önceki girdiye taşı"
 
 #: src/keymap.cpp:85
 msgid "Move to the next entry"
 msgstr ""
 
 #: src/keymap.cpp:86
-#, fuzzy
 msgid "Move to the previous page"
-msgstr "Önceki diyaloğa dön/Çık"
+msgstr "Önceki sayfaya taşı"
 
 #: src/keymap.cpp:87
-#, fuzzy
 msgid "Move to the next page"
-msgstr "Sonraki okunmamış yazıya git"
+msgstr "Sonraki sayfaya taşı"
 
 #: src/keymap.cpp:281
 #, c-format
@@ -1289,9 +1275,9 @@ msgid "`%s' is an invalid dialog type"
 msgstr ""
 
 #: src/regexmanager.cpp:49
-#, fuzzy, c-format
+#, c-format
 msgid "`%s' is not a valid regular expression: %s"
-msgstr "Hata: geçersiz besleme!"
+msgstr "`%s' geçerli bir düzenli ifade değil: %s"
 
 #: src/rss_parser.cpp:97 rss/parser.cpp:72
 #, c-format
@@ -1328,9 +1314,8 @@ msgid "Save Bookmark"
 msgstr "Yerimlerine Ekle"
 
 #: src/urlview_formaction.cpp:138
-#, fuzzy
 msgid "URLs"
-msgstr "Adres: "
+msgstr "Adresler"
 
 #: src/view.cpp:358 src/view.cpp:378
 #, c-format
@@ -1359,23 +1344,20 @@ msgid "could not parse buffer"
 msgstr ""
 
 #: rss/parser.cpp:112
-#, fuzzy
 msgid "could not parse file"
-msgstr "Hata: filtre komutu ayrıştırılamadı!"
+msgstr "dosya ayrıştırılamadı"
 
 #: rss/parser.cpp:137
 msgid "no RSS version"
 msgstr ""
 
 #: rss/parser.cpp:147
-#, fuzzy
 msgid "invalid RSS version"
-msgstr "Geçersiz konum!"
+msgstr "geçersiz RSS sürümü"
 
 #: rss/parser.cpp:159
-#, fuzzy
 msgid "invalid Atom version"
-msgstr "Geçersiz konum!"
+msgstr "geçersiz Atom sürümü"
 
 #: rss/parser.cpp:162
 msgid "no Atom version"
@@ -1394,8 +1376,8 @@ msgstr ""
 
 #~ msgid ""
 #~ "%s %s\n"
-#~ "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x "
-#~ "<command> ...] [-h]\n"
+#~ "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> "
+#~ "...] [-h]\n"
 #~ "-e              export OPML feed to stdout\n"
 #~ "-r              refresh feeds on start\n"
 #~ "-i <file>       import OPML file\n"
@@ -1415,8 +1397,8 @@ msgstr ""
 #~ "-h              this help\n"
 #~ msgstr ""
 #~ "%s %s\n"
-#~ "usage: %s [-i <file>|-e] [-u <dosya>] [-c <önbellekdosyası>] [-x "
-#~ "<komut> ...] [-h]\n"
+#~ "usage: %s [-i <file>|-e] [-u <dosya>] [-c <önbellekdosyası>] [-x <komut> "
+#~ "...] [-h]\n"
 #~ "-e                    OPML dosya içeriğini görüntüle\n"
 #~ "-r                    açılışta beslemeleri yenile\n"
 #~ "-i <dosya>            bir OPML dosyasını içe aktar\n"
