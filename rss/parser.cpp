@@ -12,6 +12,7 @@
 #include <logger.h>
 #include <utils.h>
 #include <cstring>
+#include <utils.h>
 
 using namespace newsbeuter;
 
@@ -24,7 +25,7 @@ static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp
 namespace rsspp {
 
 parser::parser(unsigned int timeout, const char * user_agent, const char * proxy, const char * proxy_auth) 
-	: to(timeout), ua(user_agent), prx(proxy), prxauth(proxy_auth), doc(0) {
+	: to(timeout), ua(user_agent), prx(proxy), prxauth(proxy_auth), doc(0), lm(0) {
 }
 
 parser::~parser() {
@@ -32,7 +33,33 @@ parser::~parser() {
 		xmlFreeDoc(doc);
 }
 
-feed parser::parse_url(const std::string& url) {
+struct header_values {
+	time_t lastmodified;
+	std::string etag;
+};
+
+static size_t handle_headers(void * ptr, size_t size, size_t nmemb, void * data) {
+	char * header = new char[size*nmemb + 1];
+	header_values * values = (header_values *)data;
+
+	memcpy(header, ptr, size*nmemb);
+	header[size*nmemb] = '\0';
+
+	if (!strncasecmp("Last-Modified:", header, 14)) {
+		values->lastmodified = curl_getdate(header+14, NULL);
+		LOG(LOG_DEBUG, "handle_headers: got last-modified %s (%d)", header+14, values->lastmodified);
+	} else if (!strncasecmp("ETag:",header, 5)) {
+		values->etag = std::string(header+5);
+		utils::trim(values->etag);
+		LOG(LOG_DEBUG, "handle_headers: got etag %s", values->etag.c_str());
+	}
+
+	delete[] header;
+
+	return size * nmemb;
+}
+
+feed parser::parse_url(const std::string& url, time_t lastmodified, const std::string& etag) {
 	std::string buf;
 	CURLcode ret;
 
@@ -62,7 +89,32 @@ feed parser::parse_url(const std::string& url) {
 	if (prxauth)
 		curl_easy_setopt(easyhandle, CURLOPT_PROXYUSERPWD, prxauth);
 
+	header_values hdrs = { 0, "" };
+
+	curl_slist * custom_headers = NULL;
+
+	if (lastmodified != 0) {
+		curl_easy_setopt(easyhandle, CURLOPT_TIMECONDITION, CURL_TIMECOND_IFMODSINCE);
+		curl_easy_setopt(easyhandle, CURLOPT_TIMEVALUE, lastmodified);
+		curl_easy_setopt(easyhandle, CURLOPT_HEADERDATA, &hdrs);
+		curl_easy_setopt(easyhandle, CURLOPT_HEADERFUNCTION, handle_headers);
+	}
+	if (etag.length() > 0) {
+		custom_headers = curl_slist_append(custom_headers, utils::strprintf("If-None-Match: %s", etag.c_str()).c_str());
+		curl_easy_setopt(easyhandle, CURLOPT_HTTPHEADER, custom_headers);
+		curl_easy_setopt(easyhandle, CURLOPT_HEADERDATA, &hdrs);
+		curl_easy_setopt(easyhandle, CURLOPT_HEADERFUNCTION, handle_headers);
+	}
+
 	ret = curl_easy_perform(easyhandle);
+
+	lm = hdrs.lastmodified;
+	et = hdrs.etag;
+
+	if (custom_headers) {
+		curl_slist_free_all(custom_headers);
+	}
+
 	LOG(LOG_DEBUG, "rsspp::parser::parse_url: ret = %d", ret);
 
 	long status;
@@ -81,8 +133,10 @@ feed parser::parse_url(const std::string& url) {
 
 	LOG(LOG_INFO, "parser::parse_url: retrieved data for %s: %s", url.c_str(), buf.c_str());
 
-	if (buf.length() > 0)
+	if (buf.length() > 0) {
+		LOG(LOG_DEBUG, "parser::parse_url: handing over data to parse_buffer()");
 		return parse_buffer(buf.c_str(), buf.length());
+	}
 
 	return feed();
 }

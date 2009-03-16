@@ -66,9 +66,11 @@ class parser {
 	public:
 		parser(unsigned int timeout = 30, const char * user_agent = 0, const char * proxy = 0, const char * proxy_auth = 0);
 		~parser();
-		feed parse_url(const std::string& url);
+		feed parse_url(const std::string& url, time_t lastmodified = 0, const std::string& etag = "");
 		feed parse_buffer(const char * buffer, size_t size, const char * url = NULL);
 		feed parse_file(const std::string& filename);
+		time_t get_last_modified() { return lm; }
+		const std::string& get_etag() { return et; }
 
 		static void global_init();
 		static void global_cleanup();
@@ -80,6 +82,8 @@ class parser {
 		const char * prx;
 		const char * prxauth;
 		xmlDocPtr doc;
+		time_t lm;
+		std::string et;
 };
 
 }

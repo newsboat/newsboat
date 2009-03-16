@@ -65,6 +65,8 @@ class utils {
 
 		static void trim_end(std::string& str);
 
+		static void trim(std::string& str);
+
 		static std::string quote(const std::string& str);
 
 		static unsigned int get_random_value(unsigned int max);

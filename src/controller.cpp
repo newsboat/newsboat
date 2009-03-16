@@ -546,12 +546,14 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
 		rss_parser parser(feed->rssurl().c_str(), rsscache, &cfg, &ign);
 		LOG(LOG_DEBUG, "controller::reload: created parser");
 		try {
-			if (parser.check_and_update_lastmodified()) {
-				feed = parser.parse();
+			feed = parser.parse();
+			if (feed->items().size() > 0) {
 				save_feed(feed, pos);
 				enqueue_items(feed);
 				if (!unattended)
 					v->set_feedlist(feeds);
+			} else {
+				LOG(LOG_DEBUG, "controller::reload: feed is empty");
 			}
 			v->set_status("");
 		} catch (const dbexception& e) {

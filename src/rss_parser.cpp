@@ -60,69 +60,6 @@ static size_t get_lastmodified_header(void *ptr, size_t size, size_t nmemb, time
 }
 
 
-bool rss_parser::check_and_update_lastmodified() {
-	if (my_uri.substr(0,5) != "http:" && my_uri.substr(0,6) != "https:")
-		return true;
-
-	if (ign && ign->matches_lastmodified(my_uri)) {
-		// LOG(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: found %s on list of URLs that are always downloaded", my_uri.c_str());
-		return true;
-	}
-
-	time_t oldlm = ch->get_lastmodified(my_uri);
-	time_t newlm = 0;
-
-	unsigned int retry_count = cfgcont->get_configvalue_as_int("download-retries");
-
-	unsigned int i;
-	CURLcode err = CURLE_OK;
-	for (i=0;i<retry_count;i++) {
-		CURL* curl = curl_easy_init();
-		if (!curl) return false;
-
-		utils::set_common_curl_options(curl, cfgcont);
-
-		curl_easy_setopt(curl, CURLOPT_URL, my_uri.c_str());
-		curl_easy_setopt(curl, CURLOPT_HEADERDATA, &newlm);
-		curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, get_lastmodified_header);
-		curl_easy_setopt(curl, CURLOPT_NOBODY, 1);
-
-		err = curl_easy_perform(curl);
-
-		long status = 0;
-		curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &status);
-
-		LOG(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: status = %ld", status);
-		if (status >= 400) {
-			LOG(LOG_USERERROR, _("Error: trying to download feed `%s' returned HTTP status code %ld."), my_uri.c_str(), status);
-		}
-
-		curl_easy_cleanup(curl);
-
-		LOG(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: err = %u oldlm = %d newlm = %d", err, oldlm, newlm);
-		if (err == CURLE_OK)
-			break;
-	}
-	if (i==retry_count && err != CURLE_OK) {
-		LOG(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: couldn't get a result after %u retries", retry_count);
-		throw rsspp::exception(curl_easy_strerror(err));
-	}
-
-	if (newlm <= 0) {
-		LOG(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: yes, download (no or invalid Last-Modified header: newlm = %d", newlm);
-		return true;
-	}
-
-	if (newlm > oldlm) {
-		ch->set_lastmodified(my_uri, newlm);
-		LOG(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: yes, download (newlm > oldlm)");
-		return true;
-	}
-
-	LOG(LOG_DEBUG, "rss_parser::check_and_update_lastmodified: no, don't download");
-	return false;
-}
-
 time_t rss_parser::parse_date(const std::string& datestr) {
 	return curl_getdate(datestr.c_str(), NULL);
 }
@@ -130,6 +67,7 @@ time_t rss_parser::parse_date(const std::string& datestr) {
 void rss_parser::replace_newline_characters(std::string& str) {
 	str = utils::replace_all(str, "\r", " ");
 	str = utils::replace_all(str, "\n", " ");
+	utils::trim(str);
 }
 
 std::string rss_parser::render_xhtml_title(const std::string& title, const std::string& link) {
@@ -218,7 +156,17 @@ void rss_parser::download_http(const std::string& uri) {
 			std::string useragent = utils::get_useragent(cfgcont);
 			LOG(LOG_DEBUG, "rss_parser::download_http: user-agent = %s", useragent.c_str());
 			rsspp::parser p(cfgcont->get_configvalue_as_int("download-timeout"), useragent.c_str(), proxy, proxy_auth);
-			f = p.parse_url(uri);
+			time_t lm = 0;
+			std::string etag;
+			if (!ign || !ign->matches_lastmodified(uri)) {
+				ch->fetch_lastmodified(uri, lm, etag);
+			}
+			f = p.parse_url(uri, lm, etag);
+			if (p.get_last_modified() != 0 || p.get_etag().length() > 0) {
+				LOG(LOG_DEBUG, "rss_parser::download_http: lastmodified old: %d new: %d", lm, p.get_last_modified());
+				LOG(LOG_DEBUG, "rss_parser::download_http: etag old: %s new %s", etag.c_str(), p.get_etag().c_str());
+				ch->update_lastmodified(uri, (p.get_last_modified() != lm) ? p.get_last_modified() : 0 , (etag != p.get_etag()) ? p.get_etag() : "");
+			}
 			is_valid = true;
 		} catch (rsspp::exception& e) {
 			is_valid = false;
