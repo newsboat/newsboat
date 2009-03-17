@@ -540,6 +540,7 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
 	LOG(LOG_DEBUG, "controller::reload: pos = %u max = %u", pos, max);
 	if (pos < feeds.size()) {
 		std::tr1::shared_ptr<rss_feed> feed = feeds[pos];
+		std::string errmsg;
 		if (!unattended)
 			v->set_status(utils::strprintf(_("%sLoading %s..."), prepare_message(pos+1, max).c_str(), utils::censor_url(feed->rssurl()).c_str()));
 
@@ -557,11 +558,15 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
 			}
 			v->set_status("");
 		} catch (const dbexception& e) {
-			v->set_status(utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(feed->rssurl()).c_str(), e.what()));
-		} catch (const std::string& errmsg) {
-			v->set_status(utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(feed->rssurl()).c_str(), errmsg.c_str()));
+			errmsg = utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(feed->rssurl()).c_str(), e.what());
+		} catch (const std::string& emsg) {
+			errmsg = utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(feed->rssurl()).c_str(), emsg.c_str());
 		} catch (rsspp::exception& e) {
-			v->set_status(utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(feed->rssurl()).c_str(), e.what()));
+			errmsg = utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(feed->rssurl()).c_str(), e.what());
+		}
+		if (errmsg != "") {
+			v->set_status(errmsg);
+			LOG(LOG_USERERROR, "%s", errmsg.c_str());
 		}
 	} else {
 		v->show_error(_("Error: invalid feed!"));
