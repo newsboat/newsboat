@@ -8,6 +8,7 @@ TODO:
 - add quoting when printing out config variable values so that copy/paste can be applied.
 - make MacPort available for easy installation
 - test highlighting, especially of search phrases.
+- compute "busy-ness" of feeds, make it a sort option
 
 
 DONE:
