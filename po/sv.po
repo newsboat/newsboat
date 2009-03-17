@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: newsbeuter-1.3\n"
+"Project-Id-Version: newsbeuter-1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-03-15 15:26+0100\n"
-"PO-Revision-Date: 2009-02-27 16:43+0100\n"
+"PO-Revision-Date: 2009-03-16 21:29+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -17,28 +17,29 @@ msgstr ""
 "X-Poedit-Language: Swedish\n"
 "X-Poedit-Country: SWEDEN\n"
 
-#: src/colormanager.cpp:44 src/colormanager.cpp:46 src/regexmanager.cpp:55
+#: src/colormanager.cpp:44
+#: src/colormanager.cpp:46
+#: src/regexmanager.cpp:55
 #: src/regexmanager.cpp:64
 #, c-format
 msgid "`%s' is not a valid color"
-msgstr ""
+msgstr "`%s' är inte en giltig färg"
 
-#: src/colormanager.cpp:51 src/regexmanager.cpp:73
-#, fuzzy, c-format
+#: src/colormanager.cpp:51
+#: src/regexmanager.cpp:73
+#, c-format
 msgid "`%s' is not a valid attribute"
-msgstr "attribut `%s' är inte tillgängligt."
+msgstr "`%s' är inte ett giltigt attribut"
 
 #: src/colormanager.cpp:62
 #, c-format
 msgid "`%s' is not a valid configuration element"
-msgstr ""
+msgstr "`%s' är inte ett giltigt konfigurationselement"
 
 #: src/configcontainer.cpp:45
 #, c-format
 msgid "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
-msgstr ""
-"newsbeuter: omläsning färdig, %f olästa webbkanaler (%n olästa artiklar "
-"totalt)"
+msgstr "newsbeuter: omläsning färdig, %f olästa webbkanaler (%n olästa artiklar totalt)"
 
 #: src/configcontainer.cpp:76
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
@@ -77,19 +78,18 @@ msgid "%N %V - URLs"
 msgstr "%N %V - Url:er"
 
 #: src/configcontainer.cpp:85
-#, fuzzy
 msgid "%N %V - Dialogs"
-msgstr "%N %V - Url:er"
+msgstr "%N %V - Dialogrutor"
 
 #: src/configcontainer.cpp:119
 #, c-format
 msgid "expected boolean value, found `%s' instead"
-msgstr ""
+msgstr "boolean-värde förväntades, hittade `%s' istället"
 
 #: src/configcontainer.cpp:125
 #, c-format
 msgid "expected integer value, found `%s' instead"
-msgstr ""
+msgstr "integer-värde förväntades, hittade `%s' istället"
 
 #: src/configparser.cpp:80
 #, c-format
@@ -101,46 +101,59 @@ msgstr "Fel vid behandling av kommando `%s' (%s rad %u): %s"
 msgid "unknown command `%s'"
 msgstr "okänt kommando `%s'"
 
-#: src/controller.cpp:84 src/pb_controller.cpp:43
+#: src/controller.cpp:84
+#: src/pb_controller.cpp:43
 msgid "Fatal error: couldn't determine home directory!"
 msgstr "Allvarligt fel: kunde inte fastställa hemkatalog!"
 
-#: src/controller.cpp:85 src/pb_controller.cpp:44
+#: src/controller.cpp:85
+#: src/pb_controller.cpp:44
 #, c-format
-msgid ""
-"Please set the HOME environment variable or add a valid user for UID %u!"
-msgstr ""
-"Var god ställ in HOME-miljövariabeln eller lägg till en giltig användare för "
-"UID %u!"
+msgid "Please set the HOME environment variable or add a valid user for UID %u!"
+msgstr "Var god ställ in HOME-miljövariabeln eller lägg till en giltig användare för UID %u!"
 
-#: src/controller.cpp:210 src/pb_controller.cpp:102
+#: src/controller.cpp:210
+#: src/pb_controller.cpp:102
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr "%s: okänt alternativ - %c"
 
-#: src/controller.cpp:233 src/pb_controller.cpp:108
+#: src/controller.cpp:233
+#: src/pb_controller.cpp:108
 #, c-format
 msgid "Starting %s %s..."
 msgstr "Startar %s %s..."
 
-#: src/controller.cpp:242 src/controller.cpp:302 src/pb_controller.cpp:112
+#: src/controller.cpp:242
+#: src/controller.cpp:302
+#: src/pb_controller.cpp:112
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "Fel: ett exemplar av %s körs redan (PID: %u)"
 
-#: src/controller.cpp:251 src/pb_controller.cpp:116
+#: src/controller.cpp:251
+#: src/pb_controller.cpp:116
 msgid "Loading configuration..."
 msgstr "Läser in konfiguration..."
 
-#: src/controller.cpp:282 src/controller.cpp:320 src/controller.cpp:346
-#: src/controller.cpp:355 src/controller.cpp:383 src/controller.cpp:387
-#: src/controller.cpp:414 src/controller.cpp:425 src/controller.cpp:439
-#: src/controller.cpp:448 src/controller.cpp:483 src/pb_controller.cpp:151
+#: src/controller.cpp:282
+#: src/controller.cpp:320
+#: src/controller.cpp:346
+#: src/controller.cpp:355
+#: src/controller.cpp:383
+#: src/controller.cpp:387
+#: src/controller.cpp:414
+#: src/controller.cpp:425
+#: src/controller.cpp:439
+#: src/controller.cpp:448
+#: src/controller.cpp:483
+#: src/pb_controller.cpp:151
 #: src/pb_controller.cpp:168
 msgid "done."
-msgstr "färdigt."
+msgstr "färdig."
 
-#: src/controller.cpp:308 src/controller.cpp:378
+#: src/controller.cpp:308
+#: src/controller.cpp:378
 msgid "Opening cache..."
 msgstr "Öppnar cache..."
 
@@ -160,29 +173,16 @@ msgstr "Läser in url:er från %s..."
 
 #: src/controller.cpp:363
 #, c-format
-msgid ""
-"Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
-"import an OPML file."
-msgstr ""
-"Fel: inga url:er konfigurerade. Var god fyll filen %s med RSS-webbkanalsurl:"
-"er eller importera en OPML-fil."
+msgid "Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."
+msgstr "Fel: inga url:er konfigurerade. Var god fyll filen %s med RSS-webbkanalsurl:er eller importera en OPML-fil."
 
 #: src/controller.cpp:365
-msgid ""
-"It looks like you haven't configured any feeds in your bloglines account. "
-"Please do so, and try again."
-msgstr ""
-"Det ser ut som om du inte har konfigurerat några webbkanaler i ditt "
-"bloglines-konto. Var god gör det och prova igen."
+msgid "It looks like you haven't configured any feeds in your bloglines account. Please do so, and try again."
+msgstr "Det ser ut som om du inte har konfigurerat några webbkanaler i ditt bloglines-konto. Var god gör det och prova igen."
 
 #: src/controller.cpp:367
-msgid ""
-"It looks like the OPML feed you subscribed contains no feeds. Please fill it "
-"with feeds, and try again."
-msgstr ""
-"Det ser ut som om OPML-webbkanalen som du valde att prenumerera på inte "
-"innehåller några webbkanaler. Var god fyll den med webbkanaler och prova "
-"igen."
+msgid "It looks like the OPML feed you subscribed contains no feeds. Please fill it with feeds, and try again."
+msgstr "Det ser ut som om OPML-webbkanalen som du valde att prenumerera på inte innehåller några webbkanaler. Var god fyll den med webbkanaler och prova igen."
 
 #: src/controller.cpp:376
 msgid "Loading articles from cache..."
@@ -197,9 +197,8 @@ msgid "Error while loading feeds from database: "
 msgstr "Fel inträffade vid inläsning av webbkanaler i databasen:"
 
 #: src/controller.cpp:418
-#, fuzzy
 msgid "Prepopulating query feeds..."
-msgstr "Uppdaterar webbkanalsförfrågan..."
+msgstr "Förbefolkar webbkanalsförfrågningar..."
 
 #: src/controller.cpp:436
 msgid "Importing list of read articles..."
@@ -227,7 +226,9 @@ msgstr "Fel: kunde inte markera alla webbkanaler som lästa: %s"
 msgid "%sLoading %s..."
 msgstr "%sLäser in %s..."
 
-#: src/controller.cpp:558 src/controller.cpp:560 src/controller.cpp:562
+#: src/controller.cpp:558
+#: src/controller.cpp:560
+#: src/controller.cpp:562
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr "Fel vid hämtning av %s: %s"
@@ -241,25 +242,22 @@ msgid "invalid feed index (bug)"
 msgstr "ogiltigt webbkanalsindex (fel)"
 
 #: src/controller.cpp:702
-msgid ""
-"newsbeuter is free software and licensed under the MIT/X Consortium License."
-msgstr ""
+msgid "newsbeuter is free software and licensed under the MIT/X Consortium License."
+msgstr "newsbeuter är fri programvara och licenserat under MIT/X Consortium-licensen."
 
 #: src/controller.cpp:703
 #, c-format
 msgid "Type `%s -vv' for more information."
-msgstr ""
+msgstr "Skriv `%s -vv' för mer information."
 
 #: src/controller.cpp:732
 #, c-format
 msgid ""
 "%s %s\n"
-"usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] "
-"[-h]\n"
+"usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-h]\n"
 msgstr ""
 "%s %s\n"
-"användning: %s [-i <fil>|-e] [-u <url-fil>] [-c <cache-fil>] [-x "
-"<kommando> ...] [-h]\n"
+"användning: %s [-i <fil>|-e] [-u <url-fil>] [-c <cache-fil>] [-x <kommando> ...] [-h]\n"
 
 #: src/controller.cpp:739
 msgid "export OPML feed to stdout"
@@ -269,7 +267,9 @@ msgstr "exportera OPML-webbkanal till stdout"
 msgid "refresh feeds on start"
 msgstr "uppdatera webbkanaler vid uppstart"
 
-#: src/controller.cpp:741 src/controller.cpp:751 src/controller.cpp:752
+#: src/controller.cpp:741
+#: src/controller.cpp:751
+#: src/controller.cpp:752
 msgid "<file>"
 msgstr "<fil>"
 
@@ -315,9 +315,7 @@ msgstr "verkställ lista över kommandon"
 
 #: src/controller.cpp:747
 msgid "activate offline mode (only applies to bloglines synchronization mode)"
-msgstr ""
-"aktivera frånkopplingsläge (verkställs bara till läge för bloglines-"
-"synkronisering)"
+msgstr "aktivera frånkopplingsläge (verkställs bara till läge för bloglines-synkronisering)"
 
 #: src/controller.cpp:748
 msgid "get version information"
@@ -354,7 +352,7 @@ msgstr "denna hjälp"
 #: src/controller.cpp:771
 #, c-format
 msgid "An error occured while parsing %s."
-msgstr ""
+msgstr "Ett fel inträffade vid tolkning av %s."
 
 #: src/controller.cpp:786
 #, c-format
@@ -362,67 +360,72 @@ msgid "Import of %s finished."
 msgstr "Importering av %s färdig"
 
 #: src/controller.cpp:1010
-msgid ""
-"bookmarking support is not configured. Please set the configuration variable "
-"`bookmark-cmd' accordingly."
-msgstr ""
-"Stöd för bokmarkering är inte konfigurerat. Var god ställ in "
-"konfigurationsvariablen `bookmark-cdm' korrekt."
+msgid "bookmarking support is not configured. Please set the configuration variable `bookmark-cmd' accordingly."
+msgstr "Stöd för bokmarkering är inte konfigurerat. Var god ställ in konfigurationsvariablen `bookmark-cdm' korrekt."
 
 #: src/controller.cpp:1023
 #, c-format
 msgid "%u unread articles"
 msgstr "%u olästa artiklar"
 
-#: src/controller.cpp:1053 src/formaction.cpp:301
+#: src/controller.cpp:1053
+#: src/formaction.cpp:301
 #: src/itemview_formaction.cpp:85
 msgid "Title: "
 msgstr "Titel:"
 
-#: src/controller.cpp:1057 src/itemview_formaction.cpp:90
+#: src/controller.cpp:1057
+#: src/itemview_formaction.cpp:90
 msgid "Author: "
 msgstr "Författare:"
 
-#: src/controller.cpp:1061 src/itemview_formaction.cpp:99
+#: src/controller.cpp:1061
+#: src/itemview_formaction.cpp:99
 msgid "Date: "
 msgstr "Datum:"
 
-#: src/controller.cpp:1065 src/itemview_formaction.cpp:95
+#: src/controller.cpp:1065
+#: src/itemview_formaction.cpp:95
 msgid "Link: "
 msgstr "Länk:"
 
 #: src/controller.cpp:1269
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't open configuration file `%s'!"
-msgstr "Fel: kunde inte skriva artikel till fil %s"
+msgstr "Fel: kunde inte öppna konfigurationsfil `%s'!"
 
 #: src/dialogs_formaction.cpp:46
 msgid "Close"
-msgstr ""
+msgstr "Stäng"
 
 #: src/dialogs_formaction.cpp:47
 msgid "Goto Dialog"
-msgstr ""
+msgstr "Gå till-dialogruta"
 
 #: src/dialogs_formaction.cpp:48
 msgid "Close Dialog"
-msgstr ""
+msgstr "Stäng dialogruta"
 
-#: src/dialogs_formaction.cpp:62 src/dialogs_formaction.cpp:77
-#: src/itemlist_formaction.cpp:51 src/itemlist_formaction.cpp:64
-#: src/itemlist_formaction.cpp:83 src/itemlist_formaction.cpp:101
-#: src/itemlist_formaction.cpp:119 src/itemlist_formaction.cpp:139
+#: src/dialogs_formaction.cpp:62
+#: src/dialogs_formaction.cpp:77
+#: src/itemlist_formaction.cpp:51
+#: src/itemlist_formaction.cpp:64
+#: src/itemlist_formaction.cpp:83
+#: src/itemlist_formaction.cpp:101
+#: src/itemlist_formaction.cpp:119
+#: src/itemlist_formaction.cpp:139
 #: src/itemlist_formaction.cpp:461
 msgid "No item selected!"
 msgstr "Ingen post markerad!"
 
 #: src/dialogs_formaction.cpp:74
-#, fuzzy
 msgid "Error: you can't remove the feed list!"
-msgstr "Fel: du kan inte läsa om sökresultat."
+msgstr "Fel: du kan inte ta bort webbkanalslistan!"
 
-#: src/dialogs_formaction.cpp:99 src/feedlist_formaction.cpp:650
-#: src/itemlist_formaction.cpp:738 src/urlview_formaction.cpp:128
+#: src/dialogs_formaction.cpp:99
+#: src/feedlist_formaction.cpp:650
+#: src/itemlist_formaction.cpp:738
+#: src/urlview_formaction.cpp:128
 msgid "Invalid position!"
 msgstr "Ogiltig position!"
 
@@ -470,7 +473,7 @@ msgstr "attribut `%s' är inte tillgängligt."
 #: src/exception.cpp:26
 #, c-format
 msgid "regular expression '%s' is invalid: %s"
-msgstr ""
+msgstr "reguljärt uttryck '%s' är ogiltigt: %s"
 
 #: src/exception.cpp:41
 msgid "invalid parameters."
@@ -492,59 +495,70 @@ msgstr "fil kunde inte öppnas."
 msgid "unknown error (bug)."
 msgstr "okänt fel (fel)."
 
-#: src/feedlist_formaction.cpp:101 src/feedlist_formaction.cpp:111
+#: src/feedlist_formaction.cpp:101
+#: src/feedlist_formaction.cpp:111
 #: src/feedlist_formaction.cpp:185
 msgid "No feed selected!"
 msgstr "Ingen kanal markerad!"
 
 #: src/feedlist_formaction.cpp:122
 msgid "Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)one?"
-msgstr ""
+msgstr "Sortera utifrån (f)örstatagg/(t)itel/(a)rtikelmängd/(o)lästartikelmängd/(i)nget?"
 
-#: src/feedlist_formaction.cpp:122 src/feedlist_formaction.cpp:139
+#: src/feedlist_formaction.cpp:122
+#: src/feedlist_formaction.cpp:139
 msgid "ftaun"
-msgstr ""
+msgstr "ftaun"
 
-#: src/feedlist_formaction.cpp:125 src/feedlist_formaction.cpp:142
-#: src/itemlist_formaction.cpp:358 src/itemlist_formaction.cpp:377
+#: src/feedlist_formaction.cpp:125
+#: src/feedlist_formaction.cpp:142
+#: src/itemlist_formaction.cpp:358
+#: src/itemlist_formaction.cpp:377
 msgid "f"
-msgstr ""
+msgstr "f"
 
-#: src/feedlist_formaction.cpp:127 src/feedlist_formaction.cpp:144
-#: src/itemlist_formaction.cpp:356 src/itemlist_formaction.cpp:375
+#: src/feedlist_formaction.cpp:127
+#: src/feedlist_formaction.cpp:144
+#: src/itemlist_formaction.cpp:356
+#: src/itemlist_formaction.cpp:375
 msgid "t"
-msgstr ""
+msgstr "t"
 
-#: src/feedlist_formaction.cpp:129 src/feedlist_formaction.cpp:146
-#: src/itemlist_formaction.cpp:360 src/itemlist_formaction.cpp:379
+#: src/feedlist_formaction.cpp:129
+#: src/feedlist_formaction.cpp:146
+#: src/itemlist_formaction.cpp:360
+#: src/itemlist_formaction.cpp:379
 msgid "a"
-msgstr ""
+msgstr "a"
 
-#: src/feedlist_formaction.cpp:131 src/feedlist_formaction.cpp:148
+#: src/feedlist_formaction.cpp:131
+#: src/feedlist_formaction.cpp:148
 msgid "u"
-msgstr ""
+msgstr "u"
 
-#: src/feedlist_formaction.cpp:133 src/feedlist_formaction.cpp:150
+#: src/feedlist_formaction.cpp:133
+#: src/feedlist_formaction.cpp:150
 #: src/filebrowser_formaction.cpp:102
 msgid "n"
 msgstr "n"
 
 #: src/feedlist_formaction.cpp:139
-msgid ""
-"Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)"
-"one?"
-msgstr ""
+msgid "Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)one?"
+msgstr "Sortera omvänt utifrån (f)örstatagg/(t)itel/a)rtikelmängd/(o)lästartikelmängd/(i)nget?"
 
-#: src/feedlist_formaction.cpp:176 src/itemlist_formaction.cpp:215
+#: src/feedlist_formaction.cpp:176
+#: src/itemlist_formaction.cpp:215
 msgid "Marking feed read..."
 msgstr "Markerar webbkanal som läst..."
 
-#: src/feedlist_formaction.cpp:182 src/itemlist_formaction.cpp:232
+#: src/feedlist_formaction.cpp:182
+#: src/itemlist_formaction.cpp:232
 #, c-format
 msgid "Error: couldn't mark feed read: %s"
 msgstr "Fel: kunde inte markera webbkanal som läst: %s"
 
-#: src/feedlist_formaction.cpp:206 src/feedlist_formaction.cpp:214
+#: src/feedlist_formaction.cpp:206
+#: src/feedlist_formaction.cpp:214
 #: src/feedlist_formaction.cpp:222
 msgid "No feeds with unread items."
 msgstr "Inga webbkanaler med olästa poster."
@@ -557,54 +571,69 @@ msgstr "Markerar alla webbkanaler som lästa..."
 msgid "No tags defined."
 msgstr "Inga taggar definierade."
 
-#: src/feedlist_formaction.cpp:267 src/itemlist_formaction.cpp:316
-#, fuzzy, c-format
+#: src/feedlist_formaction.cpp:267
+#: src/itemlist_formaction.cpp:316
+#, c-format
 msgid "Error: couldn't parse filter command `%s': %s"
-msgstr "Fel: kunde inte tolka filterkommando!"
+msgstr "Fel: kunde inte tolka filterkommando `%s': %s"
 
-#: src/feedlist_formaction.cpp:277 src/itemlist_formaction.cpp:327
+#: src/feedlist_formaction.cpp:277
+#: src/itemlist_formaction.cpp:327
 msgid "No filters defined."
 msgstr "Inga filter definierade."
 
-#: src/feedlist_formaction.cpp:290 src/help_formaction.cpp:26
-#: src/itemlist_formaction.cpp:272 src/itemview_formaction.cpp:223
+#: src/feedlist_formaction.cpp:290
+#: src/help_formaction.cpp:26
+#: src/itemlist_formaction.cpp:272
+#: src/itemview_formaction.cpp:223
 msgid "Search for: "
 msgstr "Sök efter:"
 
-#: src/feedlist_formaction.cpp:307 src/itemlist_formaction.cpp:340
+#: src/feedlist_formaction.cpp:307
+#: src/itemlist_formaction.cpp:340
 msgid "Filter: "
 msgstr "Filter: "
 
-#: src/feedlist_formaction.cpp:316 src/view.cpp:176
+#: src/feedlist_formaction.cpp:316
+#: src/view.cpp:176
 msgid "Do you really want to quit (y:Yes n:No)? "
 msgstr "Vill du verkligen avsluta (j:Ja n:Nej)?"
 
-#: src/feedlist_formaction.cpp:316 src/filebrowser_formaction.cpp:102
+#: src/feedlist_formaction.cpp:316
+#: src/filebrowser_formaction.cpp:102
 #: src/view.cpp:176
 msgid "yn"
 msgstr "jn"
 
-#: src/feedlist_formaction.cpp:316 src/view.cpp:176
+#: src/feedlist_formaction.cpp:316
+#: src/view.cpp:176
 msgid "y"
 msgstr "j"
 
-#: src/feedlist_formaction.cpp:394 src/help_formaction.cpp:142
-#: src/itemlist_formaction.cpp:716 src/itemview_formaction.cpp:339
-#: src/pb_view.cpp:257 src/pb_view.cpp:266 src/urlview_formaction.cpp:116
+#: src/feedlist_formaction.cpp:394
+#: src/help_formaction.cpp:142
+#: src/itemlist_formaction.cpp:716
+#: src/itemview_formaction.cpp:339
+#: src/pb_view.cpp:257
+#: src/pb_view.cpp:266
+#: src/urlview_formaction.cpp:116
 msgid "Quit"
 msgstr "Avsluta"
 
-#: src/feedlist_formaction.cpp:395 src/itemlist_formaction.cpp:717
+#: src/feedlist_formaction.cpp:395
+#: src/itemlist_formaction.cpp:717
 #: src/itemview_formaction.cpp:340
 msgid "Open"
 msgstr "Öppna"
 
-#: src/feedlist_formaction.cpp:396 src/itemlist_formaction.cpp:720
+#: src/feedlist_formaction.cpp:396
+#: src/itemlist_formaction.cpp:720
 #: src/itemview_formaction.cpp:342
 msgid "Next Unread"
 msgstr "Nästa olästa"
 
-#: src/feedlist_formaction.cpp:397 src/itemlist_formaction.cpp:719
+#: src/feedlist_formaction.cpp:397
+#: src/itemlist_formaction.cpp:719
 msgid "Reload"
 msgstr "Läs om"
 
@@ -620,42 +649,51 @@ msgstr "Markera som läst"
 msgid "Catchup All"
 msgstr "Catchup All"
 
-#: src/feedlist_formaction.cpp:401 src/help_formaction.cpp:143
+#: src/feedlist_formaction.cpp:401
+#: src/help_formaction.cpp:143
 #: src/itemlist_formaction.cpp:722
 msgid "Search"
 msgstr "Sök"
 
-#: src/feedlist_formaction.cpp:402 src/help_formaction.cpp:170
-#: src/itemlist_formaction.cpp:723 src/itemview_formaction.cpp:345
-#: src/pb_view.cpp:200 src/pb_view.cpp:273
+#: src/feedlist_formaction.cpp:402
+#: src/help_formaction.cpp:170
+#: src/itemlist_formaction.cpp:723
+#: src/itemview_formaction.cpp:345
+#: src/pb_view.cpp:200
+#: src/pb_view.cpp:273
 msgid "Help"
 msgstr "Hjälp"
 
-#: src/feedlist_formaction.cpp:606 src/itemlist_formaction.cpp:447
+#: src/feedlist_formaction.cpp:606
+#: src/itemlist_formaction.cpp:447
 msgid "Error: couldn't parse filter command!"
 msgstr "Fel: kunde inte tolka filterkommando!"
 
-#: src/feedlist_formaction.cpp:621 src/itemlist_formaction.cpp:482
+#: src/feedlist_formaction.cpp:621
+#: src/itemlist_formaction.cpp:482
 msgid "Searching..."
 msgstr "Söker..."
 
-#: src/feedlist_formaction.cpp:628 src/itemlist_formaction.cpp:493
+#: src/feedlist_formaction.cpp:628
+#: src/itemlist_formaction.cpp:493
 #, c-format
 msgid "Error while searching for `%s': %s"
 msgstr "Fel vid sökning efter `%s': %s"
 
-#: src/feedlist_formaction.cpp:636 src/itemlist_formaction.cpp:498
+#: src/feedlist_formaction.cpp:636
+#: src/itemlist_formaction.cpp:498
 msgid "No results."
 msgstr "Inga resultat."
 
-#: src/feedlist_formaction.cpp:645 src/itemlist_formaction.cpp:733
+#: src/feedlist_formaction.cpp:645
+#: src/itemlist_formaction.cpp:733
 msgid "Position not visible!"
 msgstr "Position syns inte!"
 
 #: src/feedlist_formaction.cpp:697
-#, fuzzy, c-format
+#, c-format
 msgid "Feed List - %u unread, %u total"
-msgstr "%N %V - Sökresultat (%u olästa, %t totalt)"
+msgstr "Webbkanalslista - %u olästa, %u totalt"
 
 #: src/filebrowser_formaction.cpp:102
 #, c-format
@@ -676,53 +714,57 @@ msgstr "%s %s - Öppna fil - %s"
 msgid "%s %s - Save File - %s"
 msgstr "%s %s - Spara fil - %s"
 
-#: src/filebrowser_formaction.cpp:186 src/pb_view.cpp:268
-#: src/select_formaction.cpp:136 src/select_formaction.cpp:141
+#: src/filebrowser_formaction.cpp:186
+#: src/pb_view.cpp:268
+#: src/select_formaction.cpp:136
+#: src/select_formaction.cpp:141
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: src/filebrowser_formaction.cpp:187 src/itemlist_formaction.cpp:718
+#: src/filebrowser_formaction.cpp:187
+#: src/itemlist_formaction.cpp:718
 #: src/itemview_formaction.cpp:341
 msgid "Save"
 msgstr "Spara"
 
 #: src/filebrowser_formaction.cpp:263
-#, fuzzy, c-format
+#, c-format
 msgid "Open File - %s"
-msgstr "%s %s - Öppna fil - %s"
+msgstr "Öppna fil - %s"
 
 #: src/filebrowser_formaction.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Save File - %s"
-msgstr "%s %s - Spara fil - %s"
+msgstr "Spara fil - %s"
 
-#: src/filtercontainer.cpp:22 src/rss.cpp:327
-#, fuzzy, c-format
+#: src/filtercontainer.cpp:22
+#: src/rss.cpp:327
+#, c-format
 msgid "couldn't parse filter expression `%s': %s"
-msgstr "Fel: kunde inte tolka filterkommando!"
+msgstr "kunde inte tolka filteruttryck `%s': %s"
 
-#: src/formaction.cpp:185 src/formaction.cpp:206
+#: src/formaction.cpp:185
+#: src/formaction.cpp:206
 msgid "usage: set <variable>[=<value>]"
 msgstr "användning: ställ in <variabel>[=<värde>]"
 
 #: src/formaction.cpp:214
 msgid "usage: source <file> [...]"
-msgstr ""
+msgstr "användning: source <fil> [...]"
 
 #: src/formaction.cpp:227
-#, fuzzy
 msgid "usage: dumpconfig <file>"
-msgstr "<konfigurationsfil>"
+msgstr "användning: dumpconfig <fil>"
 
 #: src/formaction.cpp:230
-#, fuzzy, c-format
+#, c-format
 msgid "Saved configuration to %s"
-msgstr "Sparade artikel till %s"
+msgstr "Sparade konfiguration till %s"
 
 #: src/formaction.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid "Not a command: %s"
-msgstr "okänt kommando `%s'"
+msgstr "Inte ett kommando: %s"
 
 #: src/formaction.cpp:272
 msgid "Saving bookmark..."
@@ -746,11 +788,11 @@ msgstr "Beskrivning:"
 
 #: src/help_formaction.cpp:115
 msgid "Generic bindings:"
-msgstr ""
+msgstr "Allmänna bindningar:"
 
 #: src/help_formaction.cpp:122
 msgid "Unbound functions:"
-msgstr ""
+msgstr "Lösgör funktioner:"
 
 #: src/help_formaction.cpp:144
 msgid "Clear"
@@ -760,7 +802,8 @@ msgstr "Töm"
 msgid "embedded flash:"
 msgstr "inbäddat flash:"
 
-#: src/htmlrenderer.cpp:164 src/htmlrenderer.cpp:465
+#: src/htmlrenderer.cpp:164
+#: src/htmlrenderer.cpp:465
 msgid "image"
 msgstr "bild"
 
@@ -780,16 +823,19 @@ msgstr "inbäddat flash"
 msgid "unknown (bug)"
 msgstr "okänt (fel)"
 
-#: src/itemlist_formaction.cpp:97 src/itemview_formaction.cpp:260
+#: src/itemlist_formaction.cpp:97
+#: src/itemview_formaction.cpp:260
 msgid "URL list empty."
 msgstr "Url-lista tom."
 
-#: src/itemlist_formaction.cpp:134 src/itemview_formaction.cpp:103
+#: src/itemlist_formaction.cpp:134
+#: src/itemview_formaction.cpp:103
 #: src/itemview_formaction.cpp:251
 msgid "Flags: "
 msgstr "Flaggor:"
 
-#: src/itemlist_formaction.cpp:157 src/itemlist_formaction.cpp:761
+#: src/itemlist_formaction.cpp:157
+#: src/itemlist_formaction.cpp:761
 msgid "Error: no item selected!"
 msgstr "Fel: ingen post markerad!"
 
@@ -797,22 +843,29 @@ msgstr "Fel: ingen post markerad!"
 msgid "Error: you can't reload search results."
 msgstr "Fel: du kan inte läsa om sökresultat."
 
-#: src/itemlist_formaction.cpp:184 src/itemlist_formaction.cpp:192
-#: src/itemlist_formaction.cpp:199 src/itemview_formaction.cpp:269
-#: src/itemview_formaction.cpp:278 src/itemview_formaction.cpp:287
-#: src/view.cpp:618 src/view.cpp:676
+#: src/itemlist_formaction.cpp:184
+#: src/itemlist_formaction.cpp:192
+#: src/itemlist_formaction.cpp:199
+#: src/itemview_formaction.cpp:269
+#: src/itemview_formaction.cpp:278
+#: src/itemview_formaction.cpp:287
+#: src/view.cpp:618
+#: src/view.cpp:676
 msgid "No unread items."
 msgstr "Inga olästa poster."
 
-#: src/itemlist_formaction.cpp:205 src/itemlist_formaction.cpp:210
+#: src/itemlist_formaction.cpp:205
+#: src/itemlist_formaction.cpp:210
 msgid "No unread feeds."
 msgstr "Inga olästa webbkanaler."
 
-#: src/itemlist_formaction.cpp:258 src/itemview_formaction.cpp:237
+#: src/itemlist_formaction.cpp:258
+#: src/itemview_formaction.cpp:237
 msgid "Pipe article to command: "
-msgstr ""
+msgstr "Överför artikel till kommando:"
 
-#: src/itemlist_formaction.cpp:280 src/itemview_formaction.cpp:292
+#: src/itemlist_formaction.cpp:280
+#: src/itemview_formaction.cpp:292
 msgid "Toggling read flag for article..."
 msgstr "Växlar läsflagg för artikel..."
 
@@ -823,30 +876,34 @@ msgstr "Fel vid växling av läsflagg: %s"
 
 #: src/itemlist_formaction.cpp:351
 msgid "Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"
-msgstr ""
+msgstr "Sortera utifrån (d)atum/(t)itel/(f)laggor/(f)örfattare/(l)änk/(g)uid?"
 
-#: src/itemlist_formaction.cpp:351 src/itemlist_formaction.cpp:370
-#, fuzzy
+#: src/itemlist_formaction.cpp:351
+#: src/itemlist_formaction.cpp:370
 msgid "dtfalg"
-msgstr "Redigera flaggor"
+msgstr "dtfalg"
 
-#: src/itemlist_formaction.cpp:354 src/itemlist_formaction.cpp:373
+#: src/itemlist_formaction.cpp:354
+#: src/itemlist_formaction.cpp:373
 msgid "d"
-msgstr ""
+msgstr "d"
 
-#: src/itemlist_formaction.cpp:362 src/itemlist_formaction.cpp:381
+#: src/itemlist_formaction.cpp:362
+#: src/itemlist_formaction.cpp:381
 msgid "l"
-msgstr ""
+msgstr "l"
 
-#: src/itemlist_formaction.cpp:364 src/itemlist_formaction.cpp:383
+#: src/itemlist_formaction.cpp:364
+#: src/itemlist_formaction.cpp:383
 msgid "g"
-msgstr ""
+msgstr "g"
 
 #: src/itemlist_formaction.cpp:370
 msgid "Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"
-msgstr ""
+msgstr "Sortera omvänt utifrån (d)atum/(t)itel/(f)laggor/(f)örfattare/(l)änk/(g)uid?"
 
-#: src/itemlist_formaction.cpp:471 src/itemview_formaction.cpp:431
+#: src/itemlist_formaction.cpp:471
+#: src/itemview_formaction.cpp:431
 msgid "Flags updated."
 msgstr "Flaggor uppdaterade."
 
@@ -854,17 +911,20 @@ msgstr "Flaggor uppdaterade."
 msgid "Mark All Read"
 msgstr "Markera alla som läst"
 
-#: src/itemlist_formaction.cpp:797 src/itemview_formaction.cpp:187
+#: src/itemlist_formaction.cpp:797
+#: src/itemview_formaction.cpp:187
 #: src/itemview_formaction.cpp:406
 msgid "Aborted saving."
 msgstr "Avbröt sparande."
 
-#: src/itemlist_formaction.cpp:801 src/itemview_formaction.cpp:410
+#: src/itemlist_formaction.cpp:801
+#: src/itemview_formaction.cpp:410
 #, c-format
 msgid "Saved article to %s"
 msgstr "Sparade artikel till %s"
 
-#: src/itemlist_formaction.cpp:803 src/itemview_formaction.cpp:412
+#: src/itemlist_formaction.cpp:803
+#: src/itemview_formaction.cpp:412
 #, c-format
 msgid "Error: couldn't save article to %s"
 msgstr "Fel: kunde inte spara artikel till %s"
@@ -872,23 +932,25 @@ msgstr "Fel: kunde inte spara artikel till %s"
 #: src/itemlist_formaction.cpp:878
 #, c-format
 msgid "Search Result - '%s'"
-msgstr ""
+msgstr "Sökresultat - '%s'"
 
 #: src/itemlist_formaction.cpp:881
 #, c-format
 msgid "Query Feed - %s"
-msgstr ""
+msgstr "Webbkanalsförfrågan - %s"
 
 #: src/itemlist_formaction.cpp:883
-#, fuzzy, c-format
+#, c-format
 msgid "Article List - %s"
-msgstr "Sparade artikel till %s"
+msgstr "Artikellista - %s"
 
-#: src/itemview_formaction.cpp:34 src/itemview_formaction.cpp:512
+#: src/itemview_formaction.cpp:34
+#: src/itemview_formaction.cpp:512
 msgid "Top"
 msgstr "Överkant"
 
-#: src/itemview_formaction.cpp:34 src/itemview_formaction.cpp:514
+#: src/itemview_formaction.cpp:34
+#: src/itemview_formaction.cpp:514
 msgid "Bottom"
 msgstr "Nederkant"
 
@@ -924,8 +986,10 @@ msgstr "Sparade artikel till %s."
 msgid "Error: couldn't write article to file %s"
 msgstr "Fel: kunde inte skriva artikel till fil %s"
 
-#: src/itemview_formaction.cpp:200 src/itemview_formaction.cpp:321
-#: src/urlview_formaction.cpp:33 src/urlview_formaction.cpp:68
+#: src/itemview_formaction.cpp:200
+#: src/itemview_formaction.cpp:321
+#: src/urlview_formaction.cpp:33
+#: src/urlview_formaction.cpp:68
 msgid "Starting browser..."
 msgstr "Startar webbläsare..."
 
@@ -934,7 +998,8 @@ msgstr "Startar webbläsare..."
 msgid "Error while marking article as unread: %s"
 msgstr "Fel vid markering av artikel som läst: %s"
 
-#: src/itemview_formaction.cpp:343 src/urlview_formaction.cpp:117
+#: src/itemview_formaction.cpp:343
+#: src/urlview_formaction.cpp:117
 msgid "Open in Browser"
 msgstr "Öppna i webbläsare"
 
@@ -943,14 +1008,13 @@ msgid "Enqueue"
 msgstr "Kölägg"
 
 #: src/itemview_formaction.cpp:523
-#, fuzzy, c-format
+#, c-format
 msgid "Article - %s"
-msgstr "Sparade artikel till %s"
+msgstr "Artikel - %s"
 
 #: src/itemview_formaction.cpp:561
-#, fuzzy
 msgid "Error: invalid regular expression!"
-msgstr "Fel: ogiltig webbkanal!"
+msgstr "Fel: ogiltigt reguljärt uttryck!"
 
 #: src/keymap.cpp:23
 msgid "Open feed/article"
@@ -989,9 +1053,8 @@ msgid "Go to previous unread article"
 msgstr "Gå till föregående olästa artikel"
 
 #: src/keymap.cpp:32
-#, fuzzy
 msgid "Go to a random unread article"
-msgstr "Gå till nästa olästa artikel"
+msgstr "Gå till en "
 
 #: src/keymap.cpp:33
 msgid "Open article in browser"
@@ -1122,37 +1185,32 @@ msgid "Edit subscribed URLs"
 msgstr "Redigera prenumererade url:er"
 
 #: src/keymap.cpp:65
-#, fuzzy
 msgid "Close currently selected dialog"
-msgstr "Läs om aktuell markerad webbkanal"
+msgstr "Stäng aktuell markerad dialogruta"
 
 #: src/keymap.cpp:66
 msgid "View list of open dialogs"
-msgstr ""
+msgstr "Se lista över öppna dialogrutor"
 
 #: src/keymap.cpp:67
-#, fuzzy
 msgid "Go to next dialog"
-msgstr "Gå till nästa olästa artikel"
+msgstr "Gå till nästa dialogruta"
 
 #: src/keymap.cpp:68
-#, fuzzy
 msgid "Go to previous dialog"
-msgstr "Återvänd till föregående dialogruta/Avsluta"
+msgstr "Gå till föregående dialogruta"
 
 #: src/keymap.cpp:69
-#, fuzzy
 msgid "Pipe article to command"
-msgstr "Sparade artikel till %s"
+msgstr "Överför artikel till kommando"
 
 #: src/keymap.cpp:70
-#, fuzzy
 msgid "Sort current list"
-msgstr "Töm nuvarande tagg"
+msgstr "Sortera aktuell lista"
 
 #: src/keymap.cpp:71
 msgid "Sort current list (reverse)"
-msgstr ""
+msgstr "Sortera aktuell lista (omvänt)"
 
 #: src/keymap.cpp:73
 msgid "Open URL 10"
@@ -1195,32 +1253,30 @@ msgid "Open URL 9"
 msgstr "Öppna url 9"
 
 #: src/keymap.cpp:84
-#, fuzzy
 msgid "Move to the previous entry"
-msgstr "Gå till föregående olästa webbkanal"
+msgstr "Flytta till föregående post"
 
 #: src/keymap.cpp:85
 msgid "Move to the next entry"
-msgstr ""
+msgstr "Flytta till nästa post"
 
 #: src/keymap.cpp:86
-#, fuzzy
 msgid "Move to the previous page"
-msgstr "Gå till föregående olästa webbkanal"
+msgstr "Flytta till föregående sida"
 
 #: src/keymap.cpp:87
 msgid "Move to the next page"
-msgstr ""
+msgstr "Flytta till nästa sida"
 
 #: src/keymap.cpp:281
 #, c-format
 msgid "`%s' is not a valid context"
-msgstr ""
+msgstr "`%s' är inte ett giltigt innehåll"
 
 #: src/keymap.cpp:309
 #, c-format
 msgid "`%s' is not a valid key command"
-msgstr ""
+msgstr "`%s' är inte ett giltigt tangentkommando"
 
 #: src/pb_controller.cpp:162
 msgid "Cleaning up queue..."
@@ -1288,28 +1344,31 @@ msgstr "Spela upp"
 #: src/regexmanager.cpp:41
 #, c-format
 msgid "`%s' is an invalid dialog type"
-msgstr ""
+msgstr "`%s' är en ogiltig typ av dialogruta"
 
 #: src/regexmanager.cpp:49
 #, c-format
 msgid "`%s' is not a valid regular expression: %s"
-msgstr ""
+msgstr "`%s' är inte ett giltigt reguljärt uttryck: %s"
 
-#: src/rss_parser.cpp:97 rss/parser.cpp:72
+#: src/rss_parser.cpp:97
+#: rss/parser.cpp:72
 #, c-format
 msgid "Error: trying to download feed `%s' returned HTTP status code %ld."
-msgstr ""
+msgstr "Fel: vid försök med att hämta webbkanal `%s' gav HTTP-statuskod %ld."
 
 #: src/rss_parser.cpp:202
 #, c-format
 msgid "Error: unsupported URL: %s"
 msgstr "Fel: url stöds inte: %s"
 
-#: src/select_formaction.cpp:137 src/select_formaction.cpp:157
+#: src/select_formaction.cpp:137
+#: src/select_formaction.cpp:157
 msgid "Select Tag"
 msgstr "Markera tagg"
 
-#: src/select_formaction.cpp:142 src/select_formaction.cpp:159
+#: src/select_formaction.cpp:142
+#: src/select_formaction.cpp:159
 msgid "Select Filter"
 msgstr "Markera filter"
 
@@ -1321,7 +1380,8 @@ msgstr "attribut hittades inte"
 msgid "EOF found while reading XML tag"
 msgstr "EOF hittades vid inläsning av XML-tagg"
 
-#: src/urlview_formaction.cpp:37 src/urlview_formaction.cpp:51
+#: src/urlview_formaction.cpp:37
+#: src/urlview_formaction.cpp:51
 msgid "No link selected!"
 msgstr "Ingen länk markerad!"
 
@@ -1330,16 +1390,17 @@ msgid "Save Bookmark"
 msgstr "Spara bokmärke"
 
 #: src/urlview_formaction.cpp:138
-#, fuzzy
 msgid "URLs"
-msgstr "Url:"
+msgstr "Url:er"
 
-#: src/view.cpp:358 src/view.cpp:378
+#: src/view.cpp:358
+#: src/view.cpp:378
 #, c-format
 msgid "Error: applying the filter failed: %s"
 msgstr "Fel: verkställande av filtret misslyckades: %s"
 
-#: src/view.cpp:405 src/view.cpp:432
+#: src/view.cpp:405
+#: src/view.cpp:432
 msgid "Error: feed contains no items!"
 msgstr "Fel: kanal innehåller inga poster!"
 
@@ -1347,49 +1408,49 @@ msgstr "Fel: kanal innehåller inga poster!"
 msgid "Updating query feed..."
 msgstr "Uppdaterar webbkanalsförfrågan..."
 
-#: rss/atom_parser.cpp:16 rss/parser.cpp:175 rss/rss_09x_parser.cpp:15
+#: rss/atom_parser.cpp:16
+#: rss/parser.cpp:175
+#: rss/rss_09x_parser.cpp:15
 #: rss/rss_10_parser.cpp:13
 msgid "XML root node is NULL"
-msgstr ""
+msgstr "XML root node är NULL"
 
 #: rss/parser.cpp:41
 msgid "couldn't initialize libcurl"
-msgstr ""
+msgstr "kunde inte initialisera libcurl"
 
 #: rss/parser.cpp:93
 msgid "could not parse buffer"
-msgstr ""
+msgstr "kunde inte tolka buffer"
 
 #: rss/parser.cpp:112
-#, fuzzy
 msgid "could not parse file"
-msgstr "Fel: kunde inte tolka filterkommando!"
+msgstr "kunde inte tolka fil"
 
 #: rss/parser.cpp:137
 msgid "no RSS version"
-msgstr ""
+msgstr "ingen RSS-version"
 
 #: rss/parser.cpp:147
-#, fuzzy
 msgid "invalid RSS version"
-msgstr "Ogiltig position!"
+msgstr "Ogiltig RSS-version!"
 
 #: rss/parser.cpp:159
-#, fuzzy
 msgid "invalid Atom version"
-msgstr "Ogiltig position!"
+msgstr "Ogiltig Atom-version!"
 
 #: rss/parser.cpp:162
 msgid "no Atom version"
-msgstr ""
+msgstr "ingen Atom-version"
 
 #: rss/parser_factory.cpp:25
 msgid "unsupported feed format"
-msgstr ""
+msgstr "webbkanalsformat stöds inte"
 
 #: rss/rss_09x_parser.cpp:22
 msgid "no RSS channel found"
-msgstr ""
+msgstr "ingen RSS-kanal hittades"
 
 #~ msgid "Segmentation fault."
 #~ msgstr "Segmenteringsfel."
+
