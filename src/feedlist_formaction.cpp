@@ -629,8 +629,9 @@ void feedlist_formaction::op_start_search() {
 			return;
 		}
 		if (items.size() > 0) {
-			scope_mutex lock(&search_dummy_feed->item_mutex);
+			search_dummy_feed->item_mutex.lock();
 			search_dummy_feed->items() = items;
+			search_dummy_feed->item_mutex.unlock();
 			v->push_searchresult(search_dummy_feed, searchphrase);
 		} else {
 			v->show_error(_("No results."));
