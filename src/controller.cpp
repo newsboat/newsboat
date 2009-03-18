@@ -619,6 +619,9 @@ void controller::reload_all(bool unattended) {
 	if (num_threads < 1)
 		num_threads = 1;
 
+	if (num_threads > feeds.size())
+		num_threads = feeds.size();
+
 	t1 = time(NULL);
 
 	LOG(LOG_DEBUG,"controller::reload_all: starting with reload all...");
