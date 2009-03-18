@@ -9,6 +9,7 @@ TODO:
 - make MacPort available for easy installation
 - test highlighting, especially of search phrases.
 - compute "busy-ness" of feeds, make it a sort option
+- reduce memory usage by loading feeds on demand when being opened
 
 
 DONE:
