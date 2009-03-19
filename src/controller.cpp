@@ -405,7 +405,6 @@ void controller::run(int argc, char * argv[]) {
 		feeds.push_back(feed);
 	}
 
-
 	sort_feeds();
 
 	std::vector<std::string> tags = urlcfg->get_alltags();
@@ -934,13 +933,15 @@ void controller::enqueue_url(const std::string& url, std::tr1::shared_ptr<rss_fe
 void controller::reload_urls_file() {
 	urlcfg->reload();
 	std::vector<std::tr1::shared_ptr<rss_feed> > new_feeds;
+	unsigned int i = 0;
 
-	for (std::vector<std::string>::const_iterator it=urlcfg->get_urls().begin();it!=urlcfg->get_urls().end();++it) {
+	for (std::vector<std::string>::const_iterator it=urlcfg->get_urls().begin();it!=urlcfg->get_urls().end();++it,++i) {
 		bool found = false;
 		for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator jt=feeds.begin();jt!=feeds.end();++jt) {
 			if (*it == (*jt)->rssurl()) {
 				found = true;
 				(*jt)->set_tags(urlcfg->get_tags(*it));
+				(*jt)->set_order(i);
 				new_feeds.push_back(*jt);
 				break;
 			}
@@ -949,6 +950,7 @@ void controller::reload_urls_file() {
 			std::tr1::shared_ptr<rss_feed> new_feed(new rss_feed(rsscache));
 			new_feed->set_rssurl(*it);
 			new_feed->set_tags(urlcfg->get_tags(*it));
+			new_feed->set_order(i);
 			try {
 				rsscache->internalize_rssfeed(new_feed);
 			} catch(const dbexception& e) {
