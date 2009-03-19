@@ -560,6 +560,20 @@ podbeuter's download queue:
 
 	macro E set browser "echo %u >> ~/.newsbeuter/queue" ; open ; set browser "elinks %u"
 
+Commandline Commands
+~~~~~~~~~~~~~~~~~~~~
+
+Newsbeuter comes with a -x option that indicates that commands added as arguments
+to the command line shall be executed. Currently, the following commands are
+available:
+
+- reload: this option reloads all feeds, and quits newsbeuter without printing any output. 
+  This is useful if a user wants to periodically reload all feeds without always having
+  a running newsbeuter instance.
+- print-unread: this option prints the number of unread articles and quits newsbeuter.
+  This is useful for users who want to integrate this number into some kind of monitoring
+  system.
+
 
 Format Strings
 ~~~~~~~~~~~~~~
