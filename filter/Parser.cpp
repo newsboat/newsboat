@@ -205,13 +205,6 @@ void Parser::Parse() {
 }
 
 Parser::Parser(Scanner *scanner) {
-	_EOF = 0;
-	_openblock = 1;
-	_closeblock = 2;
-	_ident = 3;
-	_stringliteral = 4;
-	_numliteral = 5;
-	_rangeliteral = 6;
 	maxT = 21;
 
 	minErrDist = 2;
