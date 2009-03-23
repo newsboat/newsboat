@@ -63,9 +63,9 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 				it.title_type = "text";
 		} else if (node_is(node, "content")) {
 			std::string mode = get_prop(node, "mode");
-			if (mode == "xml") {
+			if (mode == "xml" || mode == "") {
 				it.description = get_xml_content(node);
-			} else if (mode == "escaped" || mode == "") {
+			} else if (mode == "escaped") {
 				it.description = get_content(node);
 			}
 			it.description_type = get_prop(node, "type");
@@ -85,7 +85,12 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 				it.enclosure_type = get_prop(node, "type");
 			}
 		} else if (node_is(node, "summary")) {
-			summary = get_content(node);
+			std::string mode = get_prop(node, "mode");
+			if (mode == "xml" || mode == "") {
+				summary = get_xml_content(node);
+			} else if (mode == "escaped") {
+				summary = get_content(node);
+			}
 			summary_type = get_prop(node, "type");
 			if (summary_type == "")
 				summary_type = "text";
