@@ -64,12 +64,17 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 				it.title_type = "text";
 		} else if (node_is(node, "content")) {
 			std::string mode = get_prop(node, "mode");
+			std::string type = get_prop(node, "type");
 			if (mode == "xml" || mode == "") {
-				it.description = get_xml_content(node);
+				if (type == "html" || type == "text") {
+					it.description = get_content(node);
+				} else {
+					it.description = get_xml_content(node);
+				}
 			} else if (mode == "escaped") {
 				it.description = get_content(node);
 			}
-			it.description_type = get_prop(node, "type");
+			it.description_type = type;
 			if (it.description_type == "")
 				it.description_type = "text";
 		} else if (node_is(node, "id")) {

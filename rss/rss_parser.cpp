@@ -67,7 +67,7 @@ std::string rss_parser::__w3cdtf_to_rfc822(const std::string& w3cdtf) {
 	memset(&stm, 0, sizeof (stm));
 	stm.tm_mday = 1;
 
-	char * ptr = strptime(w3cdtf.c_str(), "%Y-%m-%dT%H:%M:%S%z", &stm);
+	char * ptr = strptime(w3cdtf.c_str(), "%Y-%m-%dT%H:%M:%S", &stm);
 	int offs = 0;
 	if (ptr != NULL) {
 		if (ptr[0] == '+' || ptr[0] == '-') {
@@ -78,6 +78,8 @@ std::string rss_parser::__w3cdtf_to_rfc822(const std::string& w3cdtf) {
 					offs = -offs;
 				stm.tm_gmtoff = offs;
 			}
+		} else if (ptr[0] == 'Z') {
+			stm.tm_gmtoff = 0;
 		}
 		time_t t = mktime(&stm);
 		time_t x = time(NULL);
