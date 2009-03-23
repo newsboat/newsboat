@@ -108,7 +108,7 @@ msgstr "Schwerer Fehler: konnte das Home-Verzeichnis nicht feststellen!"
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
-"Bitte setzen sie die HOME Umgebungsvariable oder fügen sie einen gültigen "
+"Bitte setzen Sie die HOME Umgebungsvariable oder fügen Sie einen gültigen "
 "Benutzer für UID %u hinzu!"
 
 #: src/controller.cpp:210 src/pb_controller.cpp:102
@@ -162,16 +162,16 @@ msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
 "import an OPML file."
 msgstr ""
-"Fehler: keine URLs konfiguriert. Bitte füllen sie die Datei %s mit RSS-Feed-"
-"URLs oder importieren sie eine OPML-Datei."
+"Fehler: keine URLs konfiguriert. Bitte füllen Sie die Datei %s mit RSS-Feed-"
+"URLs oder importieren Sie eine OPML-Datei."
 
 #: src/controller.cpp:365
 msgid ""
 "It looks like you haven't configured any feeds in your bloglines account. "
 "Please do so, and try again."
 msgstr ""
-"Es sieht so aus als hätten sie keine Feeds in ihrem Bloglines-Account "
-"konfiguriert. Bitte tun sie das, und probieren sie es erneut."
+"Es sieht so aus als hätten Sie keine Feeds in Ihrem Bloglines-Account "
+"konfiguriert. Bitte tun Sie das, und probieren Sie es erneut."
 
 #: src/controller.cpp:367
 msgid ""
@@ -179,7 +179,7 @@ msgid ""
 "with feeds, and try again."
 msgstr ""
 "Es sieht so aus als würde die konfigurierte OPML-Datei keine Feeds "
-"enthalten. Bitte füllen sie diese mit Feeds, und probieren sie es erneut."
+"enthalten. Bitte füllen Sie diese mit Feeds, und probieren Sie es erneut."
 
 #: src/controller.cpp:376
 msgid "Loading articles from cache..."
@@ -360,7 +360,7 @@ msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
 msgstr ""
-"Die Lesezeichen-Unterstützung ist nicht konfiguriert. Bitte setzen sie die "
+"Die Lesezeichen-Unterstützung ist nicht konfiguriert. Bitte setzen Sie die "
 "Konfigurationsvariable `bookmark-cmd' entsprechend."
 
 #: src/controller.cpp:1023
@@ -412,7 +412,7 @@ msgstr "Kein Element ausgewählt!"
 
 #: src/dialogs_formaction.cpp:74
 msgid "Error: you can't remove the feed list!"
-msgstr "Fehler: sie können die Feedliste nicht entfernen!"
+msgstr "Fehler: Sie können die Feedliste nicht entfernen!"
 
 #: src/dialogs_formaction.cpp:99 src/feedlist_formaction.cpp:650
 #: src/itemlist_formaction.cpp:738 src/urlview_formaction.cpp:128
@@ -570,7 +570,7 @@ msgstr "Filter: "
 
 #: src/feedlist_formaction.cpp:316 src/view.cpp:176
 msgid "Do you really want to quit (y:Yes n:No)? "
-msgstr "Wollen sie wirklich beenden (j:Ja n:Nein)? "
+msgstr "Wollen Sie wirklich beenden (j:Ja n:Nein)? "
 
 #: src/feedlist_formaction.cpp:316 src/filebrowser_formaction.cpp:102
 #: src/view.cpp:176
@@ -653,7 +653,7 @@ msgstr "Feedliste - %u ungelesen, %u gesamt"
 #: src/filebrowser_formaction.cpp:102
 #, c-format
 msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
-msgstr "Wollen sie wirklich `%s' überschreiben (y:Ja n:Nein)? "
+msgstr "Wollen Sie wirklich `%s' überschreiben (y:Ja n:Nein)? "
 
 #: src/filebrowser_formaction.cpp:158
 msgid "File: "
@@ -787,7 +787,7 @@ msgstr "Fehler: kein Element ausgewählt!"
 
 #: src/itemlist_formaction.cpp:171
 msgid "Error: you can't reload search results."
-msgstr "Fehler: sie können Suchergebnisse nicht neu laden."
+msgstr "Fehler: Sie können Suchergebnisse nicht neu laden."
 
 #: src/itemlist_formaction.cpp:184 src/itemlist_formaction.cpp:192
 #: src/itemlist_formaction.cpp:199 src/itemview_formaction.cpp:269
