@@ -1,4 +1,5 @@
 #include <rsspp.h>
+#include <rsspp_internal.h>
 
 #include <rss_parser.h>
 #include <configcontainer.h>
@@ -51,7 +52,15 @@ std::tr1::shared_ptr<rss_feed> rss_parser::parse() {
 }
 
 time_t rss_parser::parse_date(const std::string& datestr) {
-	return curl_getdate(datestr.c_str(), NULL);
+	time_t t = curl_getdate(datestr.c_str(), NULL);
+	if (t == -1) {
+		LOG(LOG_INFO, "rss_parser::parse_date: encountered t == -1, trying out W3CDTF parser...");
+		t = curl_getdate(rsspp::rss_parser::__w3cdtf_to_rfc822(datestr).c_str(), NULL);
+	}
+	if (t == -1) {
+		LOG(LOG_INFO, "rss_parser::parse_date: still t == -1");
+	}
+	return t;
 }
 
 void rss_parser::replace_newline_characters(std::string& str) {
