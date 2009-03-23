@@ -44,6 +44,7 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 	item it;
 	std::string summary;
 	std::string summary_type;
+	std::string updated;
 
 	std::string base = get_prop(entryNode, "base", XML_URI);
 	if (base == "")
@@ -63,9 +64,9 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 				it.title_type = "text";
 		} else if (node_is(node, "content")) {
 			std::string mode = get_prop(node, "mode");
-			if (mode == "xml") {
+			if (mode == "xml" || mode == "") {
 				it.description = get_xml_content(node);
-			} else if (mode == "escaped" || mode == "") {
+			} else if (mode == "escaped") {
 				it.description = get_content(node);
 			}
 			it.description_type = get_prop(node, "type");
@@ -76,6 +77,8 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 			it.guid_isPermaLink = false;
 		} else if (node_is(node, "published")) {
 			it.pubDate = w3cdtf_to_rfc822(get_content(node));
+		} else if (node_is(node, "updated")) {
+			updated = w3cdtf_to_rfc822(get_content(node));
 		} else if (node_is(node, "link")) {
 			std::string rel = get_prop(node, "rel");
 			if (rel == "" || rel == "alternate") {
@@ -85,7 +88,12 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 				it.enclosure_type = get_prop(node, "type");
 			}
 		} else if (node_is(node, "summary")) {
-			summary = get_content(node);
+			std::string mode = get_prop(node, "mode");
+			if (mode == "xml" || mode == "") {
+				summary = get_xml_content(node);
+			} else if (mode == "escaped") {
+				summary = get_content(node);
+			}
 			summary_type = get_prop(node, "type");
 			if (summary_type == "")
 				summary_type = "text";
@@ -95,6 +103,10 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 	if (it.description == "") {
 		it.description = summary;
 		it.description_type = summary_type;
+	}
+
+	if (it.pubDate == "") {
+		it.pubDate = updated;
 	}
 
 	return it;
