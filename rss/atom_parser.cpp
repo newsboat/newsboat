@@ -94,12 +94,16 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 			}
 		} else if (node_is(node, "summary")) {
 			std::string mode = get_prop(node, "mode");
+			summary_type = get_prop(node, "type");
 			if (mode == "xml" || mode == "") {
-				summary = get_xml_content(node);
+				if (summary_type == "html" || summary_type == "text") {
+					summary = get_content(node);
+				} else {
+					summary = get_xml_content(node);
+				}
 			} else if (mode == "escaped") {
 				summary = get_content(node);
 			}
-			summary_type = get_prop(node, "type");
 			if (summary_type == "")
 				summary_type = "text";
 		}
