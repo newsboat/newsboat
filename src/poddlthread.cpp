@@ -32,6 +32,7 @@ void poddlthread::run() {
 	utils::set_common_curl_options(easyhandle, cfg);
 
 	curl_easy_setopt(easyhandle, CURLOPT_URL, dl->url());
+	curl_easy_setopt(easyhandle, CURLOPT_TIMEOUT, 0);
 	// set up write functions:
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, this);
@@ -63,7 +64,7 @@ void poddlthread::run() {
 
 		f.close();
 
-		LOG(LOG_INFO,"poddlthread::run: curl_easy_perform rc = %u", success);
+		LOG(LOG_INFO,"poddlthread::run: curl_easy_perform rc = %u (%s)", success, curl_easy_strerror(success));
 
 		if (0 == success)
 			dl->set_status(DL_FINISHED);
@@ -93,6 +94,7 @@ size_t poddlthread::write_data(void * buffer, size_t size, size_t nmemb) {
 		return 0;
 	f.write(static_cast<char *>(buffer), size * nmemb);
 	bytecount += (size * nmemb);
+	LOG(LOG_DEBUG, "poddlthread::write_data: bad = %u size = %u", f.bad(), size * nmemb);
 	return f.bad() ? 0 : size * nmemb;
 }
 
