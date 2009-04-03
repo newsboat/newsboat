@@ -590,7 +590,8 @@ void controller::reload_indexes(const std::vector<int>& indexes, bool unattended
 
 	unsigned int unread_feeds2, unread_articles2;
 	compute_unread_numbers(unread_feeds2, unread_articles2);
-	if (unread_feeds2 != unread_feeds || unread_articles2 != unread_articles) {
+	bool notify_always = cfg->get_configvalue_as_bool("notify-always");
+	if (notify_always || unread_feeds2 != unread_feeds || unread_articles2 != unread_articles) {
 		fmtstr_formatter fmt;
 		fmt.register_fmt('f', utils::to_s(unread_feeds2));
 		fmt.register_fmt('n', utils::to_s(unread_articles2));
@@ -648,7 +649,8 @@ void controller::reload_all(bool unattended) {
 
 	unsigned int unread_feeds2, unread_articles2;
 	compute_unread_numbers(unread_feeds2, unread_articles2);
-	if (unread_feeds2 != unread_feeds || unread_articles2 != unread_articles) {
+	bool notify_always = cfg->get_configvalue_as_bool("notify-always");
+	if (notify_always || unread_feeds2 != unread_feeds || unread_articles2 != unread_articles) {
 		fmtstr_formatter fmt;
 		fmt.register_fmt('f', utils::to_s(unread_feeds2));
 		fmt.register_fmt('n', utils::to_s(unread_articles2));

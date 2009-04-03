@@ -40,6 +40,7 @@ configcontainer::configcontainer()
 	config_data["confirm-exit"]    = configdata("no", configdata::BOOL);
 	config_data["error-log"]       = configdata("", configdata::PATH);
 	config_data["notify-screen"]   = configdata("no", configdata::BOOL);
+	config_data["notify-always"]   = configdata("no", configdata::BOOL);
 	config_data["notify-xterm"]    = configdata("no", configdata::BOOL);
 	config_data["notify-program"]  = configdata("", configdata::PATH);
 	config_data["notify-format"]   = configdata(_("newsbeuter: finished reload, %f unread feeds (%n unread articles total)"), configdata::STR);
