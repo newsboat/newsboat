@@ -1,6 +1,6 @@
 Changes for newsbeuter:
 
-1.4:
+2.0:
 	Added more flexible dialog handling
 	Improved position handling in article list (fixes #112; thanks to Isaac Good)
 	Fixed a lot of bugs (#102, #111, #117, #130, #131).

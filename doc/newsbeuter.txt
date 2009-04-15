@@ -652,7 +652,7 @@ Examples:
 Dialog Titles
 ^^^^^^^^^^^^^
 
-Starting with newsbeuter 1.4, it is now officially supported to customize
+Starting with newsbeuter 2.0, it is now officially supported to customize
 the title format of all available dialogs. Here is a list of dialogs with their
 respective title format configuration variables, and a list of available formats
 and their meaning. Please note taht the title formats are localized, so if you
@@ -748,9 +748,9 @@ Examples for possible highlighting configurations are:
 Advanced Dialog Management
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Since version 1.4, newsbeuter supports an advanced concept of dialogs.
+Since version 2.0, newsbeuter supports an advanced concept of dialogs.
 Previously, all dialogs (feed list, article list, article view) were internally
-laid out as a pure stack. In 1.4, this changed: all dialogs are managed in a
+laid out as a pure stack. In 2.0, this changed: all dialogs are managed in a
 list, and the user can jump to another, previously opened dialog from
 everywhere. This allows a user to open more than one article list, more than one
 article view, etc., and switch between them without closing them.

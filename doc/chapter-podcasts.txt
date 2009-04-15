@@ -5,7 +5,7 @@ from other podcast aggregators or "podcatchers" in how it is done.
 
 Podcast content is transported in RSS feeds via special tags called
 "enclosures". Newsbeuter recognizes these enclosures and stores the relevant
-information for every podcast item it finds in an RSS feed. Since version 1.4,
+information for every podcast item it finds in an RSS feed. Since version 2.0,
 it also recognizes and handles the Yahoo Media RSS extensions. What the user
 then can do is to add the podcast download URL to a download queue.
 Alternatively, newsbeuter can be configured to automatically do that. This
