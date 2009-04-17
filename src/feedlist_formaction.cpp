@@ -569,7 +569,16 @@ void feedlist_formaction::mark_pos_if_visible(unsigned int pos) {
 		if (it->second == pos) {
 			LOG(LOG_DEBUG, "feedlist_formaction::mark_pos_if_visible: match, setting position to %u", vpos);
 			f->set("feedpos", utils::to_s(vpos));
-			break;
+			return;
+		}
+	}
+	vpos = 0;
+	pos = v->get_ctrl()->get_pos_of_next_unread(pos);
+	for (std::vector<feedptr_pos_pair>::iterator it=visible_feeds.begin();it!=visible_feeds.end();++it, ++vpos) {
+		if (it->second == pos) {
+			LOG(LOG_DEBUG, "feedlist_formaction::mark_pos_if_visible: match in 2nd try, setting position to %u", vpos);
+			f->set("feedpos", utils::to_s(vpos));
+			return;
 		}
 	}
 }
