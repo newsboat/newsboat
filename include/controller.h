@@ -49,6 +49,7 @@ namespace newsbeuter {
 			bool is_valid_podcast_type(const std::string& mimetype);
 			void enqueue_url(const std::string& url, std::tr1::shared_ptr<rss_feed> feed);
 			void notify(const std::string& msg);
+			unsigned int get_pos_of_next_unread(unsigned int pos);
 
 			void reload_urls_file();
 			void edit_urls_file();
