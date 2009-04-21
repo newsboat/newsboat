@@ -1,6 +1,6 @@
 Changes for newsbeuter:
 
-1.4:
+2.0 (2009-04-21):
 	Added more flexible dialog handling
 	Improved position handling in article list (fixes #112; thanks to Isaac Good)
 	Fixed a lot of bugs (#102, #111, #117, #130, #131).
@@ -26,7 +26,6 @@ Changes for newsbeuter:
 	Implemented commandline completion.
 	Improved help dialog so that it now shows unbound functions.
 	Added ability to sort feed list and article list by interactively choosing the sort method.
-	Deactivated reload-threads setting due to stability issues.
 	Improved and extended conditional HTTP download handling.
 
 1.3 (2008-12-06):
