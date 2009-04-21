@@ -1,5 +1,7 @@
 Changes for newsbeuter:
 
+2.1:
+
 2.0 (2009-04-21):
 	Added more flexible dialog handling
 	Improved position handling in article list (fixes #112; thanks to Isaac Good)
