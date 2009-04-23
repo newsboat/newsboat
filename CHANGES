@@ -1,6 +1,8 @@
 Changes for newsbeuter:
 
 2.1:
+	Added support for dc:creator tag for RSS 2.0 parser.
+	Fixed issue #141.
 
 2.0 (2009-04-21):
 	Added more flexible dialog handling
