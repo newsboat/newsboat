@@ -41,6 +41,7 @@ void rss_09x_parser::parse_feed(feed& f, xmlNode * rootNode) {
 
 item rss_09x_parser::parse_item(xmlNode * itemNode) {
 	item it;
+	std::string author;
 
 	for (xmlNode * node = itemNode->children; node != NULL; node = node->next) {
 		if (node_is(node, "title")) {
@@ -73,6 +74,8 @@ item rss_09x_parser::parse_item(xmlNode * itemNode) {
 			} else {
 				it.author_email = authorfield;
 			}
+		} else if (node_is(node, "creator", DC_URI)) {
+			author = get_content(node);
 		} else if (node_is(node, "enclosure")) {
 			it.enclosure_url = get_prop(node, "url");
 			it.enclosure_type = get_prop(node, "type");
@@ -87,6 +90,10 @@ item rss_09x_parser::parse_item(xmlNode * itemNode) {
 				}
 			}
 		}
+	}
+
+	if (it.author == "") {
+		it.author = author;
 	}
 
 	return it;
