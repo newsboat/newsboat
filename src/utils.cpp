@@ -691,8 +691,10 @@ void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
 
 
 	if (cfg) {
-		proxy = cfg->get_configvalue("proxy");
-		proxyauth = cfg->get_configvalue("proxy-auth");
+		if (cfg->get_configvalue_as_bool("use-proxy")) {
+			proxy = cfg->get_configvalue("proxy");
+			proxyauth = cfg->get_configvalue("proxy-auth");
+		}
 		useragent = utils::get_useragent(cfg);
 		dl_timeout = cfg->get_configvalue_as_int("download-timeout");
 	}
