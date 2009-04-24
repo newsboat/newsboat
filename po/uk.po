@@ -276,11 +276,11 @@ msgstr "імпортувати файл OPML"
 
 #: src/controller.cpp:742
 msgid "<urlfile>"
-msgstr "<файлпосилання>"
+msgstr "<файлпосил>"
 
 #: src/controller.cpp:742
 msgid "read RSS feed URLs from <urlfile>"
-msgstr "читати посилання на RSS теми з <файлпосилання>"
+msgstr "читати посилання на RSS теми з <файлпосил>"
 
 #: src/controller.cpp:743
 msgid "<cachefile>"
@@ -292,11 +292,11 @@ msgstr "використайте <файлкешу> як файл кешу"
 
 #: src/controller.cpp:744
 msgid "<configfile>"
-msgstr "<файлналаштування>"
+msgstr "<файлналашт>"
 
 #: src/controller.cpp:744
 msgid "read configuration from <configfile>"
-msgstr "читати налаштування з <файлналаштування>"
+msgstr "читати налаштування з <файлналашт>"
 
 #: src/controller.cpp:745
 msgid "clean up cache thoroughly"
