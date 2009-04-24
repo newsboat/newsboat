@@ -4,6 +4,7 @@ Changes for newsbeuter:
 	Added support for dc:creator tag for RSS 2.0 parser.
 	Fixed issue #141 (podbeuter ignored use-proxy configuration command).
 	When entering a feed, the first unread article is automatically selected (can be turned off with goto-first-unread no).
+	When marking a feed read, move the selection to the next feed (unless a filter is currently applied).
 
 2.0 (2009-04-21):
 	Added more flexible dialog handling

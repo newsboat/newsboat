@@ -178,6 +178,9 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 						v->get_ctrl()->mark_all_read(pos);
 						do_redraw = true;
 						v->set_status("");
+						if (feeds_shown > (pos + 1) && !apply_filter) {
+							f->set("feedpos", utils::to_s(pos + 1));
+						}
 					} catch (const dbexception& e) {
 						v->show_error(utils::strprintf(_("Error: couldn't mark feed read: %s"), e.what()));
 					}
