@@ -72,6 +72,7 @@ configcontainer::configcontainer()
 	config_data["pager"] = configdata("internal", configdata::PATH);
 	config_data["history-limit"] = configdata("100", configdata::INT);
 	config_data["prepopulate-query-feeds"] = configdata("false", configdata::BOOL);
+	config_data["goto-first-unread"] = configdata("true", configdata::BOOL);
 
 	/* title formats: */
 	config_data["feedlist-title-format"] = configdata(_("%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"), configdata::STR);
