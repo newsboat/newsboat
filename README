@@ -23,7 +23,7 @@ Dependencies
 Newsbeuter depends on a number of libraries, which need to be installed before
 newsbeuter can be compiled.
 
-- STFL (version 0.19 or newer): http://www.clifford.at/stfl/
+- STFL (version 0.20 or newer): http://www.clifford.at/stfl/
 - SQLite3 (version 3.5 or newer): http://www.sqlite.org/download.html
 - libcurl (version 7.17.0 or newer): http://curlm.haxx.se/download.html
 - GNU gettext (on systems that don't provide gettext in the libc): ftp://ftp.gnu.org/gnu/gettext/

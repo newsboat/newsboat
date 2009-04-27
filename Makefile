@@ -29,7 +29,7 @@ FILTERLIB_OUTPUT=libfilter.a
 NEWSBEUTER=newsbeuter
 NEWSBEUTER_SOURCES:=$(shell cat newsbeuter.deps)
 NEWSBEUTER_OBJS:=$(patsubst %.cpp,%.o,$(NEWSBEUTER_SOURCES))
-NEWSBEUTER_LIBS=-lbeuter -lfilter -lstfl -lncursesw -lpthread -lrsspp
+NEWSBEUTER_LIBS=-lbeuter -lfilter -lpthread -lrsspp
 
 RSSPPLIB_SOURCES=$(wildcard rss/*.cpp)
 RSSPPLIB_OBJS=$(patsubst rss/%.cpp,rss/%.o,$(RSSPPLIB_SOURCES))
@@ -39,7 +39,7 @@ RSSPPLIB_OUTPUT=librsspp.a
 PODBEUTER=podbeuter
 PODBEUTER_SOURCES:=$(shell cat podbeuter.deps)
 PODBEUTER_OBJS:=$(patsubst %.cpp,%.o,$(PODBEUTER_SOURCES))
-PODBEUTER_LIBS=-lbeuter -lstfl -lncursesw -lpthread
+PODBEUTER_LIBS=-lbeuter -lpthread
 
 ifneq ($(shell uname -s),Linux)
 NEWSBEUTER_LIBS+=-liconv -lintl
