@@ -609,6 +609,7 @@ void itemlist_formaction::init() {
 	set_keymap_hints();
 	apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-articles"));
 	update_visible_items = true;
+	do_update_visible_items();
 	if (v->get_cfg()->get_configvalue_as_bool("goto-first-unread")) {
 		jump_to_next_unread_item(true);
 	}
