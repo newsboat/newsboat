@@ -94,6 +94,9 @@ namespace newsbeuter {
 						OP_SK_PGUP,
 						OP_SK_PGDOWN,
 						/* TODO: add more user-defined keys here */
+						OP_SK_HOME,
+						OP_SK_END,
+						
 						OP_SK_MAX,
 
 						OP_INT_MIN = 2000,

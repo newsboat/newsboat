@@ -86,6 +86,9 @@ static op_desc opdescs[] = {
 	{ OP_SK_PGUP, "pageup", "PAGEUP", _("Move to the previous page"), KM_SYSKEYS },
 	{ OP_SK_PGDOWN, "pagedown", "PAGEDOWN", _("Move to the next page"), KM_SYSKEYS },
 
+	{ OP_SK_HOME, "home", "HOME", _("Move to the start of page/list"), KM_SYSKEYS },
+	{ OP_SK_END, "end", "END", _("Move to the end of page/list"), KM_SYSKEYS },
+
 	{ OP_INT_END_QUESTION, "XXXNOKEY-end-question", "end-question", NULL, KM_INTERNAL },
 	{ OP_INT_CANCEL_QNA, "XXXNOKEY-cancel-qna", "cancel-qna", NULL, KM_INTERNAL },
 	{ OP_INT_QNA_NEXTHIST, "XXXNOKEY-qna-next-history", "qna-next-history", NULL, KM_INTERNAL },

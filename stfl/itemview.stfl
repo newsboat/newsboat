@@ -5,6 +5,8 @@ vbox
   @bind_down[bind_down]:**
   @bind_page_up[bind_page_up]:"** b"
   @bind_page_down[bind_page_down]:"** SPACE"
+  @bind_home[bind_home]:**
+  @bind_end[bind_end]:**
   label#info
     text[head]:"Article '#'"
     .expand:h

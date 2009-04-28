@@ -101,6 +101,11 @@ void view::set_bindings(std::tr1::shared_ptr<formaction> fa) {
 
 	fa->get_form()->set("bind_page_up", pgupkey);
 	fa->get_form()->set("bind_page_down", pgdownkey);
+
+	std::string homekey("** "); homekey.append(keys->getkey(OP_SK_HOME, fa->id()));
+	std::string endkey("** "); endkey.append(keys->getkey(OP_SK_END, fa->id()));
+	fa->get_form()->set("bind_home", homekey);
+	fa->get_form()->set("bind_end", endkey);
 }
 
 std::tr1::shared_ptr<formaction> view::get_current_formaction() {
