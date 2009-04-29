@@ -591,6 +591,7 @@ void itemlist_formaction::prepare() {
 		}
 		fmt.register_fmt('t', it->first->title());
 		fmt.register_fmt('a', it->first->author());
+		fmt.register_fmt('L', it->first->length());
 
 		listfmt.add_line(fmt.do_format(itemlist_format, width), it->second);
 	}

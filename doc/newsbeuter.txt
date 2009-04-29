@@ -629,6 +629,7 @@ f:Article flags
 i:Article index
 t:Article title
 T:If the article list displays articles from different feeds, then this identifier contains the title of the feed to which the article belongs.
+L:Article length
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .Available Identifiers for notify-format

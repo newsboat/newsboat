@@ -61,6 +61,18 @@ void rss_item::set_description(const std::string& d) {
 	description_ = d; 
 }
 
+std::string rss_item::length() const {
+    std::string::size_type l = description_.length(); // get length from raw!
+	if (!l)
+		return "";
+	if (l < 1000)
+	return utils::strprintf("%u ", l);
+	if (l < 1024*1000)
+		return utils::strprintf("%.1fK", l/1024.0);
+
+	return utils::strprintf("%.1fM", l/1024.0/1024.0);
+}
+
 void rss_item::set_pubDate(time_t t) { 
 	pubDate_ = t; 
 }

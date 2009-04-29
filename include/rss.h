@@ -37,6 +37,7 @@ namespace newsbeuter {
 			std::string description_raw() const { return description_; }
 			void set_description(const std::string& d);
 			
+			std::string length() const;
 			std::string pubDate() const;
 			
 			inline time_t pubDate_timestamp() const {
