@@ -22,6 +22,10 @@ htmlrenderer::htmlrenderer(unsigned int width, bool raw) : w(width), raw_(raw) {
 	tags["img"] = TAG_IMG;
 	tags["blockquote"] = TAG_BLOCKQUOTE;
 	tags["p"] = TAG_P;
+	tags["h1"] = TAG_H1;
+	tags["h2"] = TAG_H2;
+	tags["h3"] = TAG_H3;
+	tags["h4"] = TAG_H4;
 	tags["ol"] = TAG_OL;
 	tags["ul"] = TAG_UL;
 	tags["li"] = TAG_LI;
@@ -175,6 +179,10 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						prepare_newline(curline, indent_level);	
 						break;
 
+					case TAG_H1:
+					case TAG_H2:
+					case TAG_H3:
+					case TAG_H4:
 					case TAG_P:
 						if (line_is_nonempty(curline))
 							lines.push_back(curline);
@@ -320,6 +328,19 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						prepare_newline(curline, indent_level);
 						break;
 
+					case TAG_H1:
+						if (line_is_nonempty(curline)) {
+							lines.push_back(curline);
+							size_t llen = curline.length();
+							prepare_newline(curline, indent_level);
+							lines.push_back(std::string(llen, '-'));
+						}
+						prepare_newline(curline, indent_level);
+						break;
+
+					case TAG_H2:
+					case TAG_H3:
+					case TAG_H4:
 					case TAG_P:
 						if (line_is_nonempty(curline))
 							lines.push_back(curline);
