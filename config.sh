@@ -3,15 +3,16 @@
 check_pkg() {
 	pkgname=$1
 	add_define=$2
+	pkgconfig_args=$3
 	echo -n "Checking for package ${pkgname}... "
 	if pkg-config --silence-errors "${pkgname}" ; then
 		echo "found"
 		echo "# configuration for package ${pkgname}" >> config.mk
-		echo "DEFINES+=`pkg-config --cflags ${pkgname}`" >> config.mk
+		echo "DEFINES+=`pkg-config --cflags $pkgconfig_args ${pkgname}`" >> config.mk
 		if [ -n "$add_define" ] ; then
 			echo "DEFINES+=${add_define}" >> config.mk
 		fi
-		echo "LDFLAGS+=`pkg-config --libs --static ${pkgname}`" >> config.mk
+		echo "LDFLAGS+=`pkg-config --libs $pkgconfig_args ${pkgname}`" >> config.mk
 		echo "" >> config.mk
 	else
 		echo "not found"
@@ -21,9 +22,9 @@ check_pkg() {
 }
 
 check_custom() {
-  pkgname=$1
-  customconfig=$2
-  add_define=$3
+	pkgname=$1
+	customconfig=$2
+	add_define=$3
 	echo -n "Checking for package ${pkgname} using ${customconfig}... "
 	if ${customconfig} --cflags > /dev/null 2>&1 ; then
 		echo "found"
@@ -65,4 +66,4 @@ echo "" > config.mk
 check_pkg "sqlite3" || fail "sqlite3"
 check_pkg "libcurl" || check_custom "libcurl" "curl-config" || fail "libcurl"
 check_pkg "libxml-2.0" || check_custom "libxml2" "xml2-config" || fail "libxml2"
-check_pkg "stfl" || fail "stfl"
+check_pkg "stfl" "" "--static" || fail "stfl"
