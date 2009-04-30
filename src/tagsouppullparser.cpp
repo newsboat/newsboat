@@ -164,6 +164,7 @@ static struct {
 	unsigned int value;
 } entity_table[] = {
 	{ "quot", 34 },
+	{ "bdquo", 34 },
 	{ "amp", 38 },
 	{ "apos", 39 },
 	{ "lt", 60 },
@@ -266,6 +267,7 @@ static struct {
 	{ "thorn", 254 },
 	{ "yuml", 255 },
 	/* more entities */
+	{ "mdash", 151 },
 	{ "ndash", 8211 },
 	{ 0, 0 }
 };
