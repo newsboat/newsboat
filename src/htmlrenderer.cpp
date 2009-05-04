@@ -331,7 +331,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					case TAG_H1:
 						if (line_is_nonempty(curline)) {
 							lines.push_back(curline);
-							size_t llen = curline.length();
+							size_t llen = utils::strwidth(curline);
 							prepare_newline(curline, indent_level);
 							lines.push_back(std::string(llen, '-'));
 						}
