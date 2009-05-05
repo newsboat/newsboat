@@ -567,6 +567,8 @@ bool utils::is_valid_color(const std::string& color) {
 		if (color == colors[i])
 			return true;
 	}
+	if (strncmp(color.c_str(), "color", 5)==0)
+		return true;
 	return false;
 }
 
