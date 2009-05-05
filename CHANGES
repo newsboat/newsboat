@@ -7,6 +7,7 @@ Changes for newsbeuter:
 	When marking a feed read, move the selection to the next feed (unless a filter is currently applied).
 	Improved HTML rendering (patch by Stefan Erben)
 	Added length field to article list format (patch by Stefan Erben)
+	Added support for 256-color terminals
 
 2.0 (2009-04-21):
 	Added more flexible dialog handling
