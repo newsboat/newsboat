@@ -7,6 +7,7 @@
 #include <configcontainer.h>
 #include <matcher.h>
 #include <mutex.h>
+#include <utils.h>
 
 #include <tr1/memory>
 
@@ -112,7 +113,7 @@ namespace newsbeuter {
 			~rss_feed();
 			std::string title_raw() const { return title_; }
 			std::string title() const;
-			inline void set_title(const std::string& t) { title_ = t; }
+			inline void set_title(const std::string& t) { title_ = t; utils::trim(title_); }
 			
 			std::string description_raw() const { return description_; }
 			std::string description() const;

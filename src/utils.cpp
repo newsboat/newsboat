@@ -647,7 +647,7 @@ std::string utils::quote_for_stfl(std::string str) {
 }
 
 void utils::trim(std::string& str) {
-	while (str.length() > 0 && (str[0] == ' ' || str[0] == '\n' || str[0] == '\r')) {
+	while (str.length() > 0 && (str[0] == ' ' || str[0] == '\n' || str[0] == '\r' || str[0] == '\t')) {
 		str.erase(0,1);
 	}
 	trim_end(str);

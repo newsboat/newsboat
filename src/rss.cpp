@@ -46,6 +46,7 @@ rss_feed::~rss_feed() {
 
 void rss_item::set_title(const std::string& t) { 
 	title_ = t; 
+	utils::trim(title_);
 }
 
 

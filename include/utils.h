@@ -5,8 +5,8 @@
 #include <string>
 
 #include <logger.h>
-#include <rss.h>
 #include <curl/curl.h>
+#include <configcontainer.h>
 
 namespace newsbeuter {
 
