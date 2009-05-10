@@ -930,4 +930,20 @@ void view::handle_cmdline_completion(std::tr1::shared_ptr<formaction> fa) {
 	last_fragment = suggestion;
 }
 
+void view::dump_current_form() {
+	std::string formtext = formaction_stack[current_formaction]->get_form()->dump("", "", 0);
+	char fnbuf[128];
+	time_t t = ::time(NULL);
+	struct tm * stm = localtime(&t);
+	strftime(fnbuf, sizeof(fnbuf), "dumpform-%Y%m%d-%H%M%S.stfl", stm);
+	std::fstream f(fnbuf, std::ios_base::out);
+	if (!f.is_open()) {
+		show_error(utils::strprintf("Error: couldn't open file %s: %s", fnbuf, strerror(errno)));
+		return;
+	}
+	f << formtext;
+	f.close();
+	set_status(utils::strprintf("Dumped current form to file %s", fnbuf));
+}
+
 }

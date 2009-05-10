@@ -97,6 +97,8 @@ namespace newsbeuter {
 			void inside_qna(bool f);
 			void inside_cmdline(bool f);
 
+			void dump_current_form();
+
 		protected:
 			void set_bindings(std::tr1::shared_ptr<formaction> fa);
 			void apply_colors(std::tr1::shared_ptr<formaction> fa);

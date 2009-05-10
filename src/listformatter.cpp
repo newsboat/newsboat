@@ -19,6 +19,7 @@ void listformatter::add_line(const std::string& text, unsigned int id, unsigned 
 	} else {
 		lines.push_back(line_id_pair(text, id));
 	}
+	LOG(LOG_DEBUG, "listformatter::add_line: `%s'", text.c_str());
 	refresh_cache = true;
 }
 

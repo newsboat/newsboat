@@ -21,6 +21,7 @@ formaction::formaction(view * vv, std::string formstr) : v(vv), f(new stfl::form
 	valid_cmds.push_back("quit");
 	valid_cmds.push_back("source");
 	valid_cmds.push_back("dumpconfig");
+	valid_cmds.push_back("dumpform");
 }
 
 void formaction::set_keymap_hints() {
@@ -229,6 +230,8 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 				v->get_ctrl()->dump_config(utils::resolve_tilde(tokens[1]));
 				v->show_error(utils::strprintf(_("Saved configuration to %s"), tokens[1].c_str()));
 			}
+		} else if (cmd == "dumpform") {
+			v->dump_current_form();
 		} else {
 			v->show_error(utils::strprintf(_("Not a command: %s"), cmdline.c_str()));
 		}

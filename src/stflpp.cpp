@@ -88,7 +88,6 @@ std::string stfl::quote(const std::string& text) {
 	return retval;
 }
 
-/*
 std::string stfl::form::dump(const std::string& name, const std::string& prefix, int focus) {
 	const char * text = stfl_ipool_fromwc(ipool,stfl_dump(f, stfl_ipool_towc(ipool,name.c_str()), stfl_ipool_towc(ipool,prefix.c_str()), focus));
 	std::string retval;
@@ -97,6 +96,8 @@ std::string stfl::form::dump(const std::string& name, const std::string& prefix,
 	stfl_ipool_flush(ipool);
 	return retval;
 }
+
+/*
 
 std::string stfl::form::lookup(const std::string& path, const std::string& newname) {
 	const char * text = stfl_ipool_fromwc(ipool, stfl_lookup(f, stfl_ipool_towc(ipool,path.c_str()), stfl_ipool_towc(ipool,newname.c_str())));
