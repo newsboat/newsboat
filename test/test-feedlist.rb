@@ -102,8 +102,8 @@ Tuitest.wait(2000)
 Tuitest.wait_until_expected_text(0, 17, "Search result (0 unread, 2 total)", 5000)
 # begin auto-generated verification #7 
 verifier.expect(0, 17, "Search result (0 unread, 2 total)")
-verifier.expect(1, 3, "1    Aug 29   |RSS 2.0 testbed f|  RSS 2.0 Item 2")
-verifier.expect(2, 3, "2    Aug 28   |RSS 2.0 testbed f|  RSS 2.0 Item 3")
+verifier.expect(1, 3, "1    Aug 29    67   |RSS 2.0 testbed f|  RSS 2.0 Item 2")
+verifier.expect(2, 3, "2    Aug 28   170   |RSS 2.0 testbed f|  RSS 2.0 Item 3")
 # end auto-generated verification #7 
 
 Tuitest.keypress(10)
