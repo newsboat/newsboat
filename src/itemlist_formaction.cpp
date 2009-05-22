@@ -22,7 +22,7 @@ itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
 		search_dummy_feed(new rss_feed(v->get_ctrl()->get_cache())),
 		set_filterpos(false), filterpos(0), rxman(0), old_width(0), old_itempos(-1) {
 	assert(true==m.parse(FILTER_UNREAD_ITEMS));
-	old_sort_order = v->get_cfg()->get_configvalue("article-sort-order");
+	old_sort_order = "";
 }
 
 itemlist_formaction::~itemlist_formaction() { }
