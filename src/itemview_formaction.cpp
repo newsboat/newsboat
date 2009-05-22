@@ -263,6 +263,11 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 				v->show_error(_("URL list empty."));
 			}
 			break;
+		case OP_DELETE:
+			LOG(LOG_INFO, "view::run_itemview: deleting current article");
+			item->set_deleted(true);
+			v->get_ctrl()->mark_deleted(guid, true);
+			/* fall-through! */
 		case OP_NEXTUNREAD:
 			LOG(LOG_INFO, "view::run_itemview: jumping to next unread article");
 			if (v->get_next_unread(itemlist.get(), this)) {
