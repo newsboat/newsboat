@@ -64,9 +64,9 @@ Tuitest.wait_until_idle
 
 # begin auto-generated verification #3 
 verifier.expect(0, 17, "Articles in feed 'RSS 2.0 testbed feed' (3 unread, 3 total)")
-verifier.expect(1, 1, "  1 N  Aug 30   RSS 2.0 Item 1")
-verifier.expect(2, 3, "2 N  Aug 29   RSS 2.0 Item 2")
-verifier.expect(3, 3, "3 N  Aug 28   RSS 2.0 Item 3")
+verifier.expect(1, 1, "  1 N  Aug 30   212   RSS 2.0 Item 1")
+verifier.expect(2, 3, "2 N  Aug 29    67   RSS 2.0 Item 2")
+verifier.expect(3, 3, "3 N  Aug 28   170   RSS 2.0 Item 3")
 verifier.expect(24, 0, "URL: http://testbed.newsbeuter.org/item3.html")
 # end auto-generated verification #3 
 
@@ -136,9 +136,9 @@ Tuitest.wait_until_idle
 
 # begin auto-generated verification #10 
 verifier.expect(0, 17, "Articles in feed 'RSS 2.0 testbed feed' (3 unread, 3 total)")
-verifier.expect(1, 0, "   1 N  Aug 30   RSS 2.0 Item 1             ")
-verifier.expect(2, 0, "   2 N  Aug 29   RSS 2.0 Item 2                ")
-verifier.expect(3, 0, "   3 N! Aug 28   RSS 2.0 Item 3                     ")
+verifier.expect(1, 0, "   1 N  Aug 30   212   RSS 2.0 Item 1             ")
+verifier.expect(2, 0, "   2 N  Aug 29    67   RSS 2.0 Item 2                ")
+verifier.expect(3, 0, "   3 N! Aug 28   170   RSS 2.0 Item 3                     ")
 verifier.expect(4, 0, "                                                ")
 verifier.expect(24, 0, "Aborted saving.")
 # end auto-generated verification #10 
