@@ -152,6 +152,8 @@ void view::run() {
 
 	get_current_formaction()->init();
 
+	stfl::reset();
+
 	/*
 	 * This is the main "event" loop of newsbeuter.
 	 */
@@ -770,6 +772,7 @@ void view::apply_colors(std::tr1::shared_ptr<formaction> fa) {
 	std::map<std::string,std::string>::const_iterator fgcit = fg_colors.begin();
 	std::map<std::string,std::string>::const_iterator bgcit = bg_colors.begin();
 	std::map<std::string,std::vector<std::string> >::const_iterator attit = attributes.begin();
+	LOG(LOG_DEBUG, "view::apply_colors: fa = %s", fa->id().c_str());
 
 	for (;fgcit != fg_colors.end(); ++fgcit, ++bgcit, ++attit) {
 		std::string colorattr;

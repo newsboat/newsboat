@@ -39,7 +39,6 @@ void feedlist_formaction::init() {
 	f->run(-3); // compute all widget dimensions
 
 	if(v->get_ctrl()->get_refresh_on_start()) {
-		f->run(-1); // FRUN
 		v->get_ctrl()->start_reload_all_thread();
 	}
 	v->get_ctrl()->update_feedlist();
@@ -49,7 +48,6 @@ void feedlist_formaction::init() {
 	 * The feedlist_formaction is responsible for starting up the reloadthread, which is responsible
 	 * for regularly spawning downloadthreads.
 	 */
-	f->run(-1); // FRUN
 	reloadthread  * rt = new reloadthread(v->get_ctrl(), v->get_cfg());
 	rt->start();
 
