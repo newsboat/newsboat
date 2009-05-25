@@ -116,7 +116,7 @@ std::string rss_item::pubDate() const {
 }
 
 unsigned int rss_feed::unread_item_count() {
-	// scope_mutex lock(&item_mutex);
+	scope_mutex lock(&item_mutex);
 	unsigned int count = 0;
 	for (std::vector<std::tr1::shared_ptr<rss_item> >::const_iterator it=items_.begin();it!=items_.end();++it) {
 		if ((*it)->unread())
