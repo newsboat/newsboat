@@ -75,6 +75,8 @@ class utils {
 
 		static void set_common_curl_options(CURL * handle, configcontainer * cfg);
 
+		static curl_proxytype get_proxy_type(const std::string& type);
+
 	private:
 		static void append_escapes(std::string& str, char c);
 

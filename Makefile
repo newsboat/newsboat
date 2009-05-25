@@ -11,7 +11,7 @@ CXX=c++
 # compiler and linker flags
 DEFINES=-DLOCALEDIR=\"$(localedir)\"
 WARNFLAGS=-Wall -Wextra
-CXXFLAGS+=-ggdb -I/sw/include -Iinclude -Istfl -Ifilter -I. -Irss $(WARNFLAGS) $(DEFINES)
+CXXFLAGS+=-O2 -I/sw/include -Iinclude -Istfl -Ifilter -I. -Irss $(WARNFLAGS) $(DEFINES)
 LDFLAGS+=-L. -L/sw/lib
 
 PACKAGE=newsbeuter

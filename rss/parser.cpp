@@ -24,8 +24,8 @@ static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp
 
 namespace rsspp {
 
-parser::parser(unsigned int timeout, const char * user_agent, const char * proxy, const char * proxy_auth) 
-	: to(timeout), ua(user_agent), prx(proxy), prxauth(proxy_auth), doc(0), lm(0) {
+parser::parser(unsigned int timeout, const char * user_agent, const char * proxy, const char * proxy_auth, curl_proxytype proxy_type) 
+	: to(timeout), ua(user_agent), prx(proxy), prxauth(proxy_auth), prxtype(proxy_type), doc(0), lm(0) {
 }
 
 parser::~parser() {
@@ -88,6 +88,8 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 
 	if (prxauth)
 		curl_easy_setopt(easyhandle, CURLOPT_PROXYUSERPWD, prxauth);
+
+	curl_easy_setopt(easyhandle, CURLOPT_PROXYTYPE, prxtype);
 
 	header_values hdrs = { 0, "" };
 

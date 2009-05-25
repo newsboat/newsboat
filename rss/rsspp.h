@@ -10,6 +10,7 @@
 #include <vector>
 #include <exception>
 #include <libxml/parser.h>
+#include <curl/curl.h>
 
 namespace rsspp {
 
@@ -64,7 +65,7 @@ class exception : public std::exception {
 
 class parser {
 	public:
-		parser(unsigned int timeout = 30, const char * user_agent = 0, const char * proxy = 0, const char * proxy_auth = 0);
+		parser(unsigned int timeout = 30, const char * user_agent = 0, const char * proxy = 0, const char * proxy_auth = 0, curl_proxytype proxy_type = CURLPROXY_HTTP);
 		~parser();
 		feed parse_url(const std::string& url, time_t lastmodified = 0, const std::string& etag = "");
 		feed parse_buffer(const char * buffer, size_t size, const char * url = NULL);
@@ -81,6 +82,7 @@ class parser {
 		const char * ua;
 		const char * prx;
 		const char * prxauth;
+		curl_proxytype prxtype;
 		xmlDocPtr doc;
 		time_t lm;
 		std::string et;
