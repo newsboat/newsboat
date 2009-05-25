@@ -143,13 +143,13 @@ void rss_parser::download_http(const std::string& uri) {
 	unsigned int retrycount = cfgcont->get_configvalue_as_int("download-retries");
 	char * proxy = NULL;
 	char * proxy_auth = NULL;
-	char * proxy_type = "";
+	std::string proxy_type;
 	is_valid = false;
 
 	if (cfgcont->get_configvalue_as_bool("use-proxy") == true) {
 		proxy = const_cast<char *>(cfgcont->get_configvalue("proxy").c_str());
 		proxy_auth = const_cast<char *>(cfgcont->get_configvalue("proxy-auth").c_str());
-		proxy_type = const_cast<char *>(cfgcont->get_configvalue("proxy-type").c_str());
+		proxy_type = cfgcont->get_configvalue("proxy-type");
 	}
 
 	for (unsigned int i=0;i<retrycount && !is_valid;i++) {
