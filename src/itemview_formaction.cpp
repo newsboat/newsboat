@@ -332,6 +332,20 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 				}
 			}
 			break;
+		case OP_GOTO_URL: {
+				std::vector<qna_pair> qna;
+				if (automatic) {
+					if (args->size() > 0) {
+						qna_responses.clear();
+						qna_responses.push_back((*args)[0]);
+						finished_qna(OP_INT_GOTO_URL);
+					}
+				} else {
+					qna.push_back(qna_pair(_("Goto URL #"), ""));
+					this->start_qna(qna, OP_INT_GOTO_URL);
+				}
+			}
+			break;
 		default:
 			break;
 	}
@@ -457,6 +471,16 @@ void itemview_formaction::finished_qna(operation op) {
 				v->pop_current_formaction();
 			}
 			break;
+                case OP_INT_GOTO_URL: {
+                                unsigned int idx = 0;
+                                sscanf(qna_responses[0].c_str(),"%u",&idx);
+				if(idx && idx-1 < links.size()) {
+					v->set_status(_("Starting browser..."));
+					v->open_in_browser(links[idx-1].first);
+					v->set_status("");
+				}
+                        }
+                        break;
 		default:
 			break;
 	}

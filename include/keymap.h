@@ -50,7 +50,8 @@ namespace newsbeuter {
 						OP_SHOWURLS,
 						OP_CLEARTAG, 
 						OP_SETTAG, 
-						OP_SEARCH, 
+						OP_SEARCH,
+						OP_GOTO_URL,
 						OP_ENQUEUE,
 						OP_REDRAW,
 						OP_CMDLINE,
@@ -106,6 +107,8 @@ namespace newsbeuter {
 						OP_INT_BM_END,
 						OP_INT_EDITFLAGS_END,
 						OP_INT_START_SEARCH,
+
+						OP_INT_GOTO_URL,
 
 						OP_INT_END_QUESTION,
 						OP_INT_CANCEL_QNA,

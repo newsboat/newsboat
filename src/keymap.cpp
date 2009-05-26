@@ -39,6 +39,7 @@ static op_desc opdescs[] = {
 	{ OP_CLEARTAG,			"clear-tag",				"^T",	_("Clear current tag"),					KM_FEEDLIST },
 	{ OP_SETTAG,			"set-tag",					"t",	_("Select tag"),						KM_FEEDLIST },
 	{ OP_SEARCH,			"open-search",				"/",	_("Open search dialog"),				KM_FEEDLIST | KM_HELP | KM_ARTICLELIST | KM_ARTICLE },
+	{ OP_GOTO_URL,			"goto-url",				"#",	_("Goto URL #"),				KM_ARTICLE },
 	{ OP_ENQUEUE,			"enqueue",					"e",	_("Add download to queue"),				KM_ARTICLE },
 	{ OP_RELOADURLS,		"reload-urls",				"^R",	_("Reload the list of URLs from the configuration"),	KM_ARTICLELIST },
 	{ OP_PB_DOWNLOAD,		"pb-download",				"d",	_("Download file"),						KM_PODBEUTER },
@@ -96,6 +97,8 @@ static op_desc opdescs[] = {
 
 	{ OP_INT_RESIZE, "RESIZE", "internal-resize", NULL, KM_INTERNAL },
 	{ OP_INT_SET,    "set",    "internal-set",    NULL, KM_INTERNAL },
+
+	{ OP_INT_GOTO_URL, "gotourl",    "internal-goto-url",    NULL, KM_INTERNAL },
 
 	{ OP_NIL, NULL, NULL, NULL, 0 }
 };

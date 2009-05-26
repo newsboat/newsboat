@@ -17,6 +17,7 @@ show-urls:u:Show all URLs in the article in a list (similar to urlview).
 clear-tag:^T:Clear current tag.
 set-tag:t:Select tag.
 open-search:/:Opens the search dialog. When a search is done in the article list, then the search operation only applies to the articles of the current feed, otherwise to all articles.
+goto-url:#:Open the URL dialog and then opens specified URL.
 enqueue:e:Add the podcast download URL of the current article (if any is found) to the podcast download queue (see below for more information on podcast support).
 edit-urls:E:Edit the list of subscribed URLs. newsbeuter will start the editor configured through the $VISUAL environment variable (if unset, $EDITOR is used; fallback: "vi"). When editing is finished, newsbeuter will reload the URLs file.
 reload-urls:^R:Reload the URLs configuration file.
