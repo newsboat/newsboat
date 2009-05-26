@@ -143,18 +143,20 @@ void rss_parser::download_http(const std::string& uri) {
 	unsigned int retrycount = cfgcont->get_configvalue_as_int("download-retries");
 	char * proxy = NULL;
 	char * proxy_auth = NULL;
+	std::string proxy_type;
 	is_valid = false;
 
 	if (cfgcont->get_configvalue_as_bool("use-proxy") == true) {
 		proxy = const_cast<char *>(cfgcont->get_configvalue("proxy").c_str());
 		proxy_auth = const_cast<char *>(cfgcont->get_configvalue("proxy-auth").c_str());
+		proxy_type = cfgcont->get_configvalue("proxy-type");
 	}
 
 	for (unsigned int i=0;i<retrycount && !is_valid;i++) {
 		try {
 			std::string useragent = utils::get_useragent(cfgcont);
 			LOG(LOG_DEBUG, "rss_parser::download_http: user-agent = %s", useragent.c_str());
-			rsspp::parser p(cfgcont->get_configvalue_as_int("download-timeout"), useragent.c_str(), proxy, proxy_auth);
+			rsspp::parser p(cfgcont->get_configvalue_as_int("download-timeout"), useragent.c_str(), proxy, proxy_auth, utils::get_proxy_type(proxy_type));
 			time_t lm = 0;
 			std::string etag;
 			if (!ign || !ign->matches_lastmodified(uri)) {

@@ -26,7 +26,7 @@ class utils {
 
 		static std::string get_command_output(const std::string& cmd);
 		static void extract_filter(const std::string& line, std::string& filter, std::string& url);
-		static std::string retrieve_url(const std::string& url, configcontainer * cfgcont = NULL);
+		static std::string retrieve_url(const std::string& url, configcontainer * cfgcont = NULL, const char * authinfo = NULL);
 		static void run_command(const std::string& cmd, const std::string& param); // used for notifications only
 		static std::string run_program(char * argv[], const std::string& input);
 
@@ -74,6 +74,8 @@ class utils {
 		static std::string quote_if_necessary(const std::string& str);
 
 		static void set_common_curl_options(CURL * handle, configcontainer * cfg);
+
+		static curl_proxytype get_proxy_type(const std::string& type);
 
 	private:
 		static void append_escapes(std::string& str, char c);

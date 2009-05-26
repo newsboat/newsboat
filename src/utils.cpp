@@ -334,7 +334,7 @@ static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp
 	return size * nmemb;
 }
 
-std::string utils::retrieve_url(const std::string& url, configcontainer * cfgcont) {
+std::string utils::retrieve_url(const std::string& url, configcontainer * cfgcont, const char * authinfo) {
 	std::string buf;
 
 	CURL * easyhandle = curl_easy_init();
@@ -342,6 +342,11 @@ std::string utils::retrieve_url(const std::string& url, configcontainer * cfgcon
 	curl_easy_setopt(easyhandle, CURLOPT_URL, url.c_str());
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, &buf);
+
+	if (authinfo) {
+		curl_easy_setopt(easyhandle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+		curl_easy_setopt(easyhandle, CURLOPT_USERPWD, authinfo);
+	}
 
 	curl_easy_perform(easyhandle);
 	curl_easy_cleanup(easyhandle);
@@ -693,6 +698,7 @@ std::string utils::quote_if_necessary(const std::string& str) {
 void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
 	std::string proxy;
 	std::string proxyauth;
+	std::string proxytype;
 	std::string useragent; 
 	unsigned int dl_timeout = 0;
 
@@ -701,6 +707,7 @@ void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
 		if (cfg->get_configvalue_as_bool("use-proxy")) {
 			proxy = cfg->get_configvalue("proxy");
 			proxyauth = cfg->get_configvalue("proxy-auth");
+			proxytype = cfg->get_configvalue("proxy-type");
 		}
 		useragent = utils::get_useragent(cfg);
 		dl_timeout = cfg->get_configvalue_as_int("download-timeout");
@@ -715,11 +722,30 @@ void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
 		curl_easy_setopt(handle, CURLOPT_PROXY, proxy.c_str());
 	if (proxyauth != "")
 		curl_easy_setopt(handle, CURLOPT_PROXYUSERPWD, proxyauth.c_str());
+	if (proxytype != "") {
+		LOG(LOG_DEBUG, "utils::set_common_curl_options: proxytype = %s", proxytype.c_str());
+		curl_easy_setopt(handle, CURLOPT_PROXYTYPE, get_proxy_type(proxytype));
+	}
+
 	curl_easy_setopt(handle, CURLOPT_USERAGENT, useragent.c_str());
 
 	curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1);
 	curl_easy_setopt(handle, CURLOPT_MAXREDIRS, 10);
 	curl_easy_setopt(handle, CURLOPT_FAILONERROR, 1);
+}
+
+curl_proxytype utils::get_proxy_type(const std::string& type) {
+	if (type == "http")
+		return CURLPROXY_HTTP;
+	if (type == "socks4")
+		return CURLPROXY_SOCKS4;
+	if (type == "socks5")
+		return CURLPROXY_SOCKS5;
+	if (type == "socks4a")
+		return CURLPROXY_SOCKS4A;
+
+	LOG(LOG_USERERROR, "you configured an invalid proxy type: %s", type.c_str());
+	return CURLPROXY_HTTP;
 }
 
 }
