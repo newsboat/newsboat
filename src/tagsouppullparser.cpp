@@ -267,7 +267,7 @@ static struct {
 	{ "thorn", 254 },
 	{ "yuml", 255 },
 	/* more entities */
-	{ "mdash", 151 },
+	{ "mdash", 8212 },
 	{ "ndash", 8211 },
 	{ 0, 0 }
 };
