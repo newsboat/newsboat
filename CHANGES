@@ -12,6 +12,7 @@ Changes for newsbeuter:
 	Allow deletion of articles from article view
 	Added support for SOCKS proxies
 	Added "notify-beep" notification beep (patch by Vern Sun)
+	Added key to quickly jump to article URLs above #10 (patch by Stefan Erben)
 
 2.0 (2009-04-21):
 	Added more flexible dialog handling
