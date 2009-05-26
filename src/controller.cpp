@@ -671,6 +671,10 @@ void controller::notify(const std::string& msg) {
 		std::cout << "\033]2;" << msg << "\033\\";
 		std::cout.flush();
 	}
+	if (cfg.get_configvalue_as_bool("notify-beep")) {
+		LOG(LOG_DEBUG, "controller:notify: notifying beep");
+		::beep();
+	}
 	if (cfg.get_configvalue("notify-program").length() > 0) {
 		std::string prog = cfg.get_configvalue("notify-program");
 		LOG(LOG_DEBUG, "controller:notify: notifying external program `%s'", prog.c_str());

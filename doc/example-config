@@ -117,6 +117,11 @@
 ## parameter syntax: [yes/no]
 # notify-xterm no
 
+## configuration option: notify-beep
+## description: If yes, then the speaker beep on new articles.
+## parameter syntax: [yes/no]
+# notify-beep no
+
 ## configuration option: podcast-auto-enqueue
 ## description: If yes, then all podcast URLs that are found in articles are added to the podcast download queue. See below for more information on podcast support in newsbeuter.
 ## parameter syntax: [yes/no]

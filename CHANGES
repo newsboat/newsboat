@@ -10,6 +10,7 @@ Changes for newsbeuter:
 	Added support for 256-color terminals
 	Added "dumpform" commandline command as a debugging aid.
 	Allow deletion of articles from article view
+	Added "notify-beep" notification beep (patch by Vern Sun)
 
 2.0 (2009-04-21):
 	Added more flexible dialog handling
