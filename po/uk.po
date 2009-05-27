@@ -937,7 +937,7 @@ msgstr "Помилка при позначенні статті як непро�
 
 #: src/itemview_formaction.cpp:344 src/keymap.cpp:42
 msgid "Goto URL #"
-msgstr ""
+msgstr "Слідувати посиланню #"
 
 #: src/itemview_formaction.cpp:365 src/urlview_formaction.cpp:117
 msgid "Open in Browser"
@@ -1209,14 +1209,12 @@ msgid "Move to the next page"
 msgstr "Перемістити до наступної сторінки"
 
 #: src/keymap.cpp:90
-#, fuzzy
 msgid "Move to the start of page/list"
-msgstr "Перемістити до наступної сторінки"
+msgstr "Перемістити до початкової сторінки/списку"
 
 #: src/keymap.cpp:91
-#, fuzzy
 msgid "Move to the end of page/list"
-msgstr "Перемістити до наступної сторінки"
+msgstr "Перемістити до кінцевої сторінки/списку"
 
 #: src/keymap.cpp:287
 #, c-format
