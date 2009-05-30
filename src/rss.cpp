@@ -52,6 +52,7 @@ void rss_item::set_title(const std::string& t) {
 
 void rss_item::set_link(const std::string& l) { 
 	link_ = l; 
+	utils::trim(link_);
 }
 
 void rss_item::set_author(const std::string& a) { 
