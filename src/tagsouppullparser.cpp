@@ -165,6 +165,7 @@ static struct {
 } entity_table[] = {
 	{ "quot", 34 },
 	{ "bdquo", 34 },
+	{ "rdquo", 34 },
 	{ "amp", 38 },
 	{ "apos", 39 },
 	{ "lt", 60 },
