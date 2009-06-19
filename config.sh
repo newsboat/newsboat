@@ -1,5 +1,7 @@
 #!/bin/sh
 
+FAILSTATUS=""
+
 check_pkg() {
 	pkgname=$1
 	add_define=$2
@@ -51,14 +53,24 @@ fail() {
 	echo "Please make sure it is installed."
 	echo ""
 	echo "You can download ${pkgname} from here: ${dlurl}"
-	exit 1
+	FAILSTATUS="1"
 }
 
 fail_custom() {
 	err=$1
 	echo ""
 	echo "ERROR: ${err}"
-	exit 1
+	FAILSTATUS="1"
+}
+
+all_aboard_the_fail_boat() {
+	if [ "x$FAILSTATUS" != "x" ] ; then
+		rm -f config.mk
+		echo ""
+		echo "One or more dependencies couldn't be found. Please install"
+		echo "these packages and retry compilation."
+		exit 1
+	fi
 }
 
 echo "" > config.mk
@@ -67,3 +79,4 @@ check_pkg "sqlite3" || fail "sqlite3"
 check_pkg "libcurl" || check_custom "libcurl" "curl-config" || fail "libcurl"
 check_pkg "libxml-2.0" || check_custom "libxml2" "xml2-config" || fail "libxml2"
 check_pkg "stfl" "" "--static" || fail "stfl"
+all_aboard_the_fail_boat
