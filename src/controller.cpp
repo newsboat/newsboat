@@ -812,7 +812,7 @@ void controller::export_opml() {
 	xmlNodePtr body = xmlNewTextChild(opml_node, NULL, (const xmlChar *)"body", NULL);
 
 	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin(); it != feeds.end(); ++it) {
-		if ((*it)->rssurl().substr(0,6) != "query:" && (*it)->rssurl().substr(0,7) != "filter:") {
+		if (!utils::is_special_url((*it)->rssurl())) {
 			std::string rssurl = (*it)->rssurl();
 			std::string link = (*it)->link();
 			std::string title = (*it)->title();

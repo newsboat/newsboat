@@ -619,9 +619,13 @@ std::string utils::join(const std::vector<std::string>& strings, const std::stri
 	return result;
 }
 
+bool utils::is_special_url(const std::string& url) {
+	return url.substr(0,6) == "query:" || url.substr(0,7) == "filter:" || url.substr(0,5) == "exec:";
+}
+
 std::string utils::censor_url(const std::string& url) {
 	std::string rv;
-	if (url.length() > 0) {
+	if (url.length() > 0 && !utils::is_special_url(url)) {
 		const char * myuri = url.c_str();
 		xmlURIPtr uri = xmlParseURI(myuri);
 		if (uri) {
@@ -636,6 +640,8 @@ std::string utils::censor_url(const std::string& url) {
 			xmlFreeURI(uri);
 		} else
 			return url;
+	} else {
+		rv = url;
 	}
 	return rv;
 }
