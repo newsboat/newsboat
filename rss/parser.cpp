@@ -137,7 +137,7 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 
 	if (buf.length() > 0) {
 		LOG(LOG_DEBUG, "parser::parse_url: handing over data to parse_buffer()");
-		return parse_buffer(buf.c_str(), buf.length());
+		return parse_buffer(buf.c_str(), buf.length(), url.c_str());
 	}
 
 	return feed();
