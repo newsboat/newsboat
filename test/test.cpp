@@ -36,12 +36,10 @@ BOOST_AUTO_TEST_CASE(InitTests) {
 }
 
 BOOST_AUTO_TEST_CASE(TestNewsbeuterReload) {
-	// disabled for now
-#if 0
 	configcontainer * cfg = new configcontainer();
 	cache * rsscache = new cache("test-cache.db", cfg);
 
-	rss_parser parser("http://bereshit.synflood.at/~ak/rss.xml", rsscache, cfg, NULL);
+	rss_parser parser("http://testbed.newsbeuter.org/unit-test/rss.xml", rsscache, cfg, NULL);
 	std::tr1::shared_ptr<rss_feed> feed = parser.parse();
 	BOOST_CHECK_EQUAL(feed->items().size(), 8u);
 
@@ -59,7 +57,7 @@ BOOST_AUTO_TEST_CASE(TestNewsbeuterReload) {
 	rsscache->externalize_rssfeed(feed, false);
 
 	std::tr1::shared_ptr<rss_feed> feed2(new rss_feed(rsscache));
-	feed2->set_rssurl("http://bereshit.synflood.at/~ak/rss.xml");
+	feed2->set_rssurl("http://testbed.newsbeuter.org/unit-test/rss.xml");
 	rsscache->internalize_rssfeed(feed2);
 
 	BOOST_CHECK_EQUAL(feed2->items().size(), 8u);
@@ -68,7 +66,7 @@ BOOST_AUTO_TEST_CASE(TestNewsbeuterReload) {
 
 	std::vector<std::string> feedurls = rsscache->get_feed_urls();
 	BOOST_CHECK_EQUAL(feedurls.size(), 1u);
-	BOOST_CHECK_EQUAL(feedurls[0], "http://bereshit.synflood.at/~ak/rss.xml");
+	BOOST_CHECK_EQUAL(feedurls[0], "http://testbed.newsbeuter.org/unit-test/rss.xml");
 
 	std::vector<std::tr1::shared_ptr<rss_feed> > feedv;
 	feedv.push_back(feed);
@@ -80,7 +78,6 @@ BOOST_AUTO_TEST_CASE(TestNewsbeuterReload) {
 	delete cfg;
 
 	::unlink("test-cache.db");
-#endif
 }
 
 BOOST_AUTO_TEST_CASE(TestConfigParserContainerAndKeymap) {
