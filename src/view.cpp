@@ -488,6 +488,7 @@ void view::view_dialogs() {
 void view::push_help() {
 	std::tr1::shared_ptr<help_formaction> helpview(new help_formaction(this, help_str));
 	set_bindings(helpview);
+	apply_colors(helpview);
 	helpview->set_context(get_current_formaction()->id());
 	helpview->set_parent_formaction(get_current_formaction());
 	helpview->init();
