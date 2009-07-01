@@ -8,12 +8,19 @@
 #  teleopils - Telepolis
 #  security  - heise security news
 #
+# Change history
+#
+#  26.06.2009    erb    suppressed error messages due to unrepsonsive servers
+#
 
 require 'net/http'
 require 'uri'
 
 require 'rexml/document'
 include REXML
+
+require "open-uri"
+require 'timeout'
 
 #try to retrieve web site, following up to 5 redirects
 def geturl(url, depth=5)
@@ -25,6 +32,10 @@ def geturl(url, depth=5)
   else
     response.error!
   end
+end
+
+if ENV['http_proxy'].nil? && !ENV['HTTP_PROXY'].nil?
+  ENV['http_proxy'] = ENV['HTTP_PROXY']
 end
 
 #          key            feed URL
@@ -58,17 +69,51 @@ end
 feedurl = FEEDS[feed]
 
 #get feed
-xml = Document.new(geturl(feedurl))
+feed_text = ""
+retries=4
+begin
+  Timeout::timeout(15) do
+    f = open(feedurl)
+    feed_text = f.read unless f.nil?
+  end
+rescue Timeout::Error
+  retries -= 1
+  exit 1 if retries < 1
+  sleep 1
+  retry
+end
+
+exit 2 if feed_text.length < 20
+
+#print "Got this feed: ", feed_text, "\n"; STDOUT.flush
+
+xml = Document.new(feed_text)
 
 #loop over items
-xml.elements.each("//item") { |item|
+xml.elements.each("//item") do |item|
   # extract link to article
   article_url = item.elements['link'].text
   article_url.sub!(%r{from/rss.*$}, "")
   article_short_url = article_url.sub(%r{/[^/]*--/}, "/")
 
   # get full text for article
-  article_text = geturl(article_url)
+  article_text = ""
+  retries = 4
+  begin
+#    print "<!-- Reading article from ", article_url, " -->\n"; STDOUT.flush
+    Timeout::timeout(15) do
+      article = open(article_url)
+      article_text = article.read unless article.nil?
+    end
+  rescue Timeout::Error
+    retries -= 1
+    next if retries < 1
+    sleep 1
+    retry
+  end
+
+  next if article_text.length < 20
+
   article_text.gsub!(/<!\[CDATA\[/, "")
   article_text.gsub!(/\]\]>/, "")
 
@@ -106,7 +151,7 @@ xml.elements.each("//item") { |item|
   guid = Element.new("guid")
   guid.text= article_short_url
   item.add_element(guid)
-}
-
+end
+  
 #reproduce enriched feed
 xml.write($stdout, -1)
