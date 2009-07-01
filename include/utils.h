@@ -77,6 +77,8 @@ class utils {
 
 		static curl_proxytype get_proxy_type(const std::string& type);
 
+		static bool is_special_url(const std::string& url);
+
 	private:
 		static void append_escapes(std::string& str, char c);
 

@@ -20,6 +20,7 @@ mutex::~mutex() {
 void mutex::lock() {
 	int rc = pthread_mutex_lock(&mtx);
 	if (rc != 0) {
+		LOG(LOG_INFO, "mutex::lock: lock returned %d", rc);
 		throw exception(rc);
 	}
 }

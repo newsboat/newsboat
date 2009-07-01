@@ -1,13 +1,10 @@
 TODO:
-- check for stfl in config.sh script
 - add an auto-flag configuration command to automatically flag articles that match a certain query
 - when reload is finished, the focus shall be in the current form's list
 - per-feed refresh settings
 - implement internal alias mechanism to allow transition of renamed config commands.
 - fix HTML rendering of bold and underlined text when light background is configured
-- add quoting when printing out config variable values so that copy/paste can be applied.
 - make MacPort available for easy installation
-- test highlighting, especially of search phrases.
 - compute "busy-ness" of feeds, make it a sort option
 - reduce memory usage by loading feeds on demand when being opened
 - implement RFC 5005 (http://www.ietf.org/rfc/rfc5005.txt)
@@ -156,3 +153,5 @@ DONE:
 - check correct sorting of query feeds
 - add option to prepopulate query feeds
 - fix help screen in podbeuter
+- add quoting when printing out config variable values so that copy/paste can be applied.
+- check for stfl in config.sh script

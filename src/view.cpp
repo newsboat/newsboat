@@ -356,7 +356,6 @@ void view::open_in_browser(const std::string& url) {
 }
 
 void view::update_visible_feeds(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
-	scope_mutex lock(mtx);
 	try {
 		if (formaction_stack_size() > 0) {
 			std::tr1::shared_ptr<feedlist_formaction> feedlist = std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
@@ -489,6 +488,7 @@ void view::view_dialogs() {
 void view::push_help() {
 	std::tr1::shared_ptr<help_formaction> helpview(new help_formaction(this, help_str));
 	set_bindings(helpview);
+	apply_colors(helpview);
 	helpview->set_context(get_current_formaction()->id());
 	helpview->set_parent_formaction(get_current_formaction());
 	helpview->init();

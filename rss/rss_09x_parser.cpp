@@ -73,6 +73,7 @@ item rss_09x_parser::parse_item(xmlNode * itemNode) {
 				it.author = authorfield.substr(start+1, end-start);
 			} else {
 				it.author_email = authorfield;
+				it.author = authorfield;
 			}
 		} else if (node_is(node, "creator", DC_URI)) {
 			author = get_content(node);
