@@ -356,7 +356,7 @@ void cache::externalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, bool reset_
 
 	scope_mutex lock(&mtx);
 	scope_mutex feedlock(&feed->item_mutex);
-	scope_transaction dbtrans(db);
+	//scope_transaction dbtrans(db);
 
 	cb_handler count_cbh;
 	int rc = sqlite3_exec(db,prepare_query("SELECT count(*) FROM rss_feed WHERE rssurl = '%q';", feed->rssurl().c_str()).c_str(),count_callback,&count_cbh,NULL);
@@ -891,12 +891,12 @@ void cache::clean_old_articles() {
 }
 
 scope_transaction::scope_transaction(sqlite3 * db) : d(db) {
-	sqlite3_exec(d, "BEGIN;", NULL, NULL, NULL);
-	LOG(LOG_DEBUG,"scope_transaction: started transaction for handle: %p", d);
+	int rc = sqlite3_exec(d, "BEGIN TRANSACTION", NULL, NULL, NULL);
+	LOG(LOG_DEBUG,"scope_transaction: started transaction for handle: %p, rc = %d", d, rc);
 }
 scope_transaction::~scope_transaction() {
-	sqlite3_exec(d, "END;", NULL, NULL, NULL);
-	LOG(LOG_DEBUG,"scope_transaction: ended transaction for handle: %p", d);
+	int rc = sqlite3_exec(d, "END TRANSACTION", NULL, NULL, NULL);
+	LOG(LOG_DEBUG,"scope_transaction: ended transaction for handle: %p, rc = %d", d, rc);
 }
 
 }
