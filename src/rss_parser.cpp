@@ -58,7 +58,8 @@ time_t rss_parser::parse_date(const std::string& datestr) {
 		t = curl_getdate(rsspp::rss_parser::__w3cdtf_to_rfc822(datestr).c_str(), NULL);
 	}
 	if (t == -1) {
-		LOG(LOG_INFO, "rss_parser::parse_date: still t == -1");
+		LOG(LOG_INFO, "rss_parser::parse_date: still t == -1, setting to current time");
+		t = ::time(NULL);
 	}
 	return t;
 }
