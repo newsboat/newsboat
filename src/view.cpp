@@ -376,14 +376,9 @@ void view::set_feedlist(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
 		}
 	}
 
-	try {
-		if (formaction_stack_size() > 0) {
-			std::tr1::shared_ptr<feedlist_formaction> feedlist = std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
-			feedlist->set_feedlist(feeds);
-		}
-	} catch (matcherexception e) {
-		set_status_unlocked(utils::strprintf(_("Error: applying the filter failed: %s"), e.what()));
-		LOG(LOG_DEBUG, "view::set_feedlist: inside catch: %s", e.what());
+	if (formaction_stack_size() > 0) {
+		std::tr1::shared_ptr<feedlist_formaction> feedlist = std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
+		feedlist->set_feedlist(feeds);
 	}
 }
 
