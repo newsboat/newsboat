@@ -358,10 +358,11 @@ void view::open_in_browser(const std::string& url) {
 void view::update_visible_feeds(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
 	try {
 		if (formaction_stack_size() > 0) {
+			scope_mutex lock(mtx);
 			std::tr1::shared_ptr<feedlist_formaction> feedlist = std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
 			feedlist->update_visible_feeds(feeds);
 		}
-	} catch (matcherexception e) {
+	} catch (const matcherexception& e) {
 		set_status_unlocked(utils::strprintf(_("Error: applying the filter failed: %s"), e.what()));
 		LOG(LOG_DEBUG, "view::update_visible_feeds: inside catch: %s", e.what());
 	}
