@@ -602,7 +602,10 @@ std::vector<std::pair<unsigned int, unsigned int> > utils::partition_indexes(uns
 
 size_t utils::strwidth(const std::string& str) {
 	std::wstring wstr = str2wstr(str);
-	return wcswidth(wstr.c_str(), wstr.length());
+	int width = wcswidth(wstr.c_str(), wstr.length());
+	if (width < 1) // a non-printable character found?
+		return wstr.length(); // return a sane width (which might be larger than necessary)
+	return width; // exact width
 }
 
 std::string utils::join(const std::vector<std::string>& strings, const std::string& separator) {
