@@ -56,8 +56,6 @@ namespace newsbeuter {
 
 			inline std::vector<std::tr1::shared_ptr<rss_feed> >& get_all_feeds() { return feeds; }
 
-			void set_feedptrs(std::tr1::shared_ptr<rss_feed> feed);
-
 			inline filtercontainer& get_filters() { return filters; }
 
 			std::string bookmark(const std::string& url, const std::string& title, const std::string& description);

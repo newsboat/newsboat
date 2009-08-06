@@ -996,10 +996,6 @@ void controller::edit_urls_file() {
 	reload_urls_file();
 }
 
-void controller::set_feedptrs(std::tr1::shared_ptr<rss_feed> feed) {
-	feed->set_feedptrs(feed);
-}
-
 std::string controller::bookmark(const std::string& url, const std::string& title, const std::string& description) {
 	std::string bookmark_cmd = cfg.get_configvalue("bookmark-cmd");
 	bool is_interactive = cfg.get_configvalue_as_bool("bookmark-interactive");

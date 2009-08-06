@@ -31,8 +31,8 @@ namespace newsbeuter {
 
 			std::string id();
 
-			void set_feedlist(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds);
-			void update_visible_feeds(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds);
+			void set_feedlist(std::vector<std::tr1::shared_ptr<rss_feed> > feeds);
+			void update_visible_feeds(std::vector<std::tr1::shared_ptr<rss_feed> > feeds);
 			void set_keymap(keymap * k);
 			void set_config_container(configcontainer * cfgcontainer);
 			void show_error(const std::string& msg);

@@ -355,7 +355,7 @@ void view::open_in_browser(const std::string& url) {
 	pop_current_formaction();
 }
 
-void view::update_visible_feeds(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
+void view::update_visible_feeds(std::vector<std::tr1::shared_ptr<rss_feed> > feeds) {
 	try {
 		if (formaction_stack_size() > 0) {
 			scope_mutex lock(mtx);
@@ -363,17 +363,17 @@ void view::update_visible_feeds(std::vector<std::tr1::shared_ptr<rss_feed> >& fe
 			feedlist->update_visible_feeds(feeds);
 		}
 	} catch (const matcherexception& e) {
-		set_status_unlocked(utils::strprintf(_("Error: applying the filter failed: %s"), e.what()));
+		set_status(utils::strprintf(_("Error: applying the filter failed: %s"), e.what()));
 		LOG(LOG_DEBUG, "view::update_visible_feeds: inside catch: %s", e.what());
 	}
 }
 
-void view::set_feedlist(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
+void view::set_feedlist(std::vector<std::tr1::shared_ptr<rss_feed> > feeds) {
 	scope_mutex lock(mtx);
 
 	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it) {
 		if ((*it)->rssurl().substr(0,6) != "query:") {
-			ctrl->set_feedptrs(*it);
+			(*it)->set_feedptrs(*it);
 		}
 	}
 
