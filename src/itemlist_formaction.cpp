@@ -586,7 +586,7 @@ void itemlist_formaction::prepare() {
 		fmt.register_fmt('i', utils::strprintf("%u",it->second + 1));
 		fmt.register_fmt('f', gen_flags(it->first));
 		fmt.register_fmt('D', gen_datestr(it->first->pubDate_timestamp(), datetimeformat.c_str()));
-		if (feed->rssurl() != it->first->feedurl()) {
+		if (feed->rssurl() != it->first->feedurl() && it->first->get_feedptr() != NULL) {
 			fmt.register_fmt('T', it->first->get_feedptr()->title());
 		}
 		fmt.register_fmt('t', it->first->title());
