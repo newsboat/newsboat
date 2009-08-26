@@ -41,7 +41,7 @@ PODBEUTER_SOURCES:=$(shell cat podbeuter.deps)
 PODBEUTER_OBJS:=$(patsubst %.cpp,%.o,$(PODBEUTER_SOURCES))
 PODBEUTER_LIBS=-lbeuter -lpthread
 
-ifneq ($(shell uname -s),Linux)
+ifeq (, $(filter Linux GNU GNU/%, $(shell uname -s)))
 NEWSBEUTER_LIBS+=-liconv -lintl
 PODBEUTER_LIBS+=-liconv -lintl
 endif
