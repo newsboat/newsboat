@@ -12,6 +12,7 @@ std::tr1::shared_ptr<rss_parser> rss_parser_factory::get_object(feed& f, xmlDocP
 	switch (f.rss_version) {
 		case RSS_0_91:
 		case RSS_0_92:
+		case RSS_0_94:
 			return std::tr1::shared_ptr<rss_parser>(new rss_09x_parser(doc));
 		case RSS_2_0:
 			return std::tr1::shared_ptr<rss_parser>(new rss_20_parser(doc));

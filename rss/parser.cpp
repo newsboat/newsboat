@@ -196,6 +196,8 @@ feed parser::parse_xmlnode(xmlNode* node) {
 					f.rss_version = RSS_0_91;
 				else if (strcmp(version, "0.92")==0)
 					f.rss_version = RSS_0_92;
+				else if (strcmp(version, "0.94")==0)
+					f.rss_version = RSS_0_94;
 				else if (strcmp(version, "2.0")==0 || strcmp(version, "2")==0)
 					f.rss_version = RSS_2_0;
 				else {
