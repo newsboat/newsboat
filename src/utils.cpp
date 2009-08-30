@@ -626,6 +626,10 @@ bool utils::is_special_url(const std::string& url) {
 	return url.substr(0,6) == "query:" || url.substr(0,7) == "filter:" || url.substr(0,5) == "exec:";
 }
 
+bool utils::is_http_url(const std::string& url) {
+	return url.substr(0,7) == "http://" || url.substr(0,8) == "https://";
+}
+
 std::string utils::censor_url(const std::string& url) {
 	std::string rv;
 	if (url.length() > 0 && !utils::is_special_url(url)) {

@@ -79,6 +79,8 @@ class utils {
 
 		static bool is_special_url(const std::string& url);
 
+		static bool is_http_url(const std::string& url);
+
 	private:
 		static void append_escapes(std::string& str, char c);
 
