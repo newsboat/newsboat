@@ -1131,7 +1131,7 @@ void controller::enqueue_items(std::tr1::shared_ptr<rss_feed> feed) {
 	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin();it!=feed->items().end();++it) {
 		if (!(*it)->enqueued() && (*it)->enclosure_url().length() > 0) {
 			LOG(LOG_DEBUG, "controller::reload: enclosure_url = `%s' enclosure_type = `%s'", (*it)->enclosure_url().c_str(), (*it)->enclosure_type().c_str());
-			if (is_valid_podcast_type((*it)->enclosure_type())) {
+			if (is_valid_podcast_type((*it)->enclosure_type()) && utils::is_http_url((*it)->enclosure_url())) {
 				LOG(LOG_INFO, "controller::reload: enqueuing `%s'", (*it)->enclosure_url().c_str());
 				enqueue_url((*it)->enclosure_url(), feed);
 				(*it)->set_enqueued(true);

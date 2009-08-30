@@ -170,9 +170,11 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 			do_redraw = true;
 			break;
 		case OP_ENQUEUE: {
-				if (item->enclosure_url().length() > 0) {
+				if (item->enclosure_url().length() > 0 && utils::is_http_url(item->enclosure_url())) {
 					v->get_ctrl()->enqueue_url(item->enclosure_url(), feed);
 					v->set_status(utils::strprintf(_("Added %s to download queue."), item->enclosure_url().c_str()));
+				} else {
+					v->set_status(utils::strprintf(_("Invalid URL: '%s'"), item->enclosure_url().c_str()));
 				}
 			}
 			break;
