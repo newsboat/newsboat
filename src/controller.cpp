@@ -220,6 +220,7 @@ void controller::run(int argc, char * argv[]) {
 	if (do_import) {
 		LOG(LOG_INFO,"Importing OPML file from %s",importfile.c_str());
 		urlcfg = new file_urlreader(url_file);
+		urlcfg->reload();
 		import_opml(importfile.c_str());
 		return;
 	}
