@@ -13,6 +13,8 @@
 #include <formatstring.h>
 #include <regexmanager.h>
 #include <rss_parser.h>
+#include <remote_api.h>
+#include <google_api.h>
 #include <xlicense.h>
 
 #include <cstdlib>
@@ -131,6 +133,7 @@ void controller::run(int argc, char * argv[]) {
 
 	bool silent = false;
 	bool execute_cmds = false;
+	remote_api * api = 0;
 
 	do {
 		if((c = ::getopt(argc,argv,"i:erhu:c:C:d:l:vVoxXI:E:"))<0)
@@ -332,6 +335,10 @@ void controller::run(int argc, char * argv[]) {
 	} else if (type == "opml") {
 		urlcfg = new opml_urlreader(&cfg);
 		real_offline_mode = offline_mode;
+	} else if (type == "googlereader") {
+		api = new googlereader_api(&cfg);
+		urlcfg = new googlereader_urlreader(&cfg, api);
+		real_offline_mode = offline_mode;
 	} else {
 		LOG(LOG_ERROR,"unknown urls-source `%s'", urlcfg->get_source().c_str());
 	}
@@ -351,6 +358,12 @@ void controller::run(int argc, char * argv[]) {
 			std::cout << utils::strprintf(_("Loading URLs from %s..."), urlcfg->get_source().c_str());
 			std::cout.flush();
 		}
+		if (api) {
+			if (!api->authenticate()) {
+				std::cout << "Authentication failed." << std::endl;
+				return;
+			}
+		}
 		urlcfg->reload();
 		if (!do_export && !silent) {
 			std::cout << _("done.") << std::endl;
@@ -366,6 +379,8 @@ void controller::run(int argc, char * argv[]) {
 			msg = utils::strprintf(_("It looks like you haven't configured any feeds in your bloglines account. Please do so, and try again."));
 		} else if (type == "opml") {
 			msg = utils::strprintf(_("It looks like the OPML feed you subscribed contains no feeds. Please fill it with feeds, and try again."));
+		} else if (type == "googlereader") {
+			msg = utils::strprintf(_("It looks like you haven't configured any feeds in your Google Reader account. Please do so, and try again."));
 		} else {
 			assert(0); // shouldn't happen
 		}
