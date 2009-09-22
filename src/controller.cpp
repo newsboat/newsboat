@@ -361,6 +361,7 @@ void controller::run(int argc, char * argv[]) {
 		if (api) {
 			if (!api->authenticate()) {
 				std::cout << "Authentication failed." << std::endl;
+				utils::remove_fs_lock(lock_file);
 				return;
 			}
 		}
