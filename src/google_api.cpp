@@ -7,9 +7,14 @@
 
 #include <curl/curl.h>
 
-#define GREADER_LOGIN "https://www.google.com/accounts/ClientLogin"
-#define GREADER_SUBSCRIPTION_LIST "http://www.google.com/reader/api/0/subscription/list"
-#define GREADER_FEED_PREFIX "http://www.google.com/reader/atom/"
+#define GREADER_LOGIN					"https://www.google.com/accounts/ClientLogin"
+#define GREADER_API_PREFIX				"http://www.google.com/reader/api/0/"
+#define GREADER_FEED_PREFIX				"http://www.google.com/reader/atom/"
+
+#define GREADER_SUBSCRIPTION_LIST		GREADER_API_PREFIX "subscription/list"
+#define GREADER_API_MARK_ALL_READ_URL	GREADER_API_PREFIX "mark-all-as-read"
+#define GREADER_API_EDIT_TAG_URL		GREADER_API_PREFIX "edit-tag"
+#define GREADER_API_TOKEN_URL			GREADER_API_PREFIX "token"
 
 // for reference, see http://code.google.com/p/pyrfeed/wiki/GoogleReaderAPI
 
@@ -108,7 +113,7 @@ std::vector<tagged_feedurl> googlereader_api::get_subscribed_urls() {
 							}
 						}
 						if (id != "") {
-							urls.push_back(tagged_feedurl(utils::strprintf("%s%s", GREADER_FEED_PREFIX, utils::replace_all(id, "?", "%3F").c_str()), tags));
+							urls.push_back(tagged_feedurl(utils::strprintf("%s%s?xt=user/-/state/com.google/read", GREADER_FEED_PREFIX, utils::replace_all(id, "?", "%3F").c_str()), tags));
 						}
 					}
 				}
@@ -144,6 +149,75 @@ std::vector<std::string> googlereader_api::get_tags(xmlNode * node) {
 void googlereader_api::configure_handle(CURL * handle) {
 	std::string cookie = utils::strprintf("SID=%s;", sid.c_str());
 	curl_easy_setopt(handle, CURLOPT_COOKIE, cookie.c_str());
+}
+
+bool googlereader_api::mark_all_read(const std::string& feedurl) {
+	std::string real_feedurl = feedurl.substr(strlen(GREADER_FEED_PREFIX), feedurl.length() - strlen(GREADER_FEED_PREFIX));
+	std::vector<std::string> elems = utils::tokenize(real_feedurl, "?");
+	real_feedurl = utils::replace_all(elems[0], "%3F", "?");
+
+	std::string token = get_new_token();
+
+	CURL * handle = curl_easy_init();
+	std::string post_content = utils::strprintf("s=%s&T=%s", real_feedurl.c_str(), token.c_str());
+	std::string result;
+	
+	utils::set_common_curl_options(handle, cfg);
+	configure_handle(handle);
+	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
+	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
+	curl_easy_setopt(handle, CURLOPT_POSTFIELDS, post_content.c_str());
+	curl_easy_setopt(handle, CURLOPT_URL, GREADER_API_MARK_ALL_READ_URL);
+	curl_easy_perform(handle);
+	curl_easy_cleanup(handle);
+
+	LOG(LOG_DEBUG, "googlereader_api::mark_all_read: feedurl = %s result = %s post_content = %s", real_feedurl.c_str(), result.c_str(), post_content.c_str());
+	
+	return result == "OK";
+}
+
+bool googlereader_api::mark_article_read(const std::string& guid, bool read) {
+	std::string token = get_new_token();
+
+	CURL * handle = curl_easy_init();
+	std::string post_content;
+	std::string result;
+
+	if (read) {
+		post_content = utils::strprintf("i=%s&a=user/-/state/com.google/read&r=user/-/state/com.google/kept-unread&ac=edit&T=%s", guid.c_str(), token.c_str());
+	} else {
+		post_content = utils::strprintf("i=%s&r=user/-/state/com.google/read&a=user/-/state/com.google/kept-unread&a=user/-/state/com.google/tracking-kept-unread&ac=edit&T=%s", guid.c_str(), token.c_str());
+	}
+
+	utils::set_common_curl_options(handle, cfg);
+	configure_handle(handle);
+	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
+	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
+	curl_easy_setopt(handle, CURLOPT_POSTFIELDS, post_content.c_str());
+	curl_easy_setopt(handle, CURLOPT_URL, GREADER_API_EDIT_TAG_URL);
+	curl_easy_perform(handle);
+	curl_easy_cleanup(handle);
+
+	LOG(LOG_DEBUG, "googlereader_api::mark_article_read: read = %s post_content = %s result = %s", read ? "true" : "false", post_content.c_str(), result.c_str());
+	
+	return result == "OK";
+}
+
+std::string googlereader_api::get_new_token() {
+	CURL * handle = curl_easy_init();
+	std::string result;
+	
+	utils::set_common_curl_options(handle, cfg);
+	configure_handle(handle);
+	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
+	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
+	curl_easy_setopt(handle, CURLOPT_URL, GREADER_API_TOKEN_URL);
+	curl_easy_perform(handle);
+	curl_easy_cleanup(handle);
+
+	LOG(LOG_DEBUG, "googlereader_api::get_new_token: token = %s", result.c_str());
+	
+	return result;
 }
 
 }

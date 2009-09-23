@@ -44,6 +44,7 @@ namespace newsbeuter {
 			void update_feedlist();
 			void update_visible_feeds();
 			void mark_all_read(unsigned int pos);
+			void mark_article_read(const std::string& guid, bool read);
 			void catchup_all();
 			inline void catchup_all(std::tr1::shared_ptr<rss_feed> feed) { rsscache->catchup_all(feed); }
 			inline bool get_refresh_on_start() { return refresh_on_start; }

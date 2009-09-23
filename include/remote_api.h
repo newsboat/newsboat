@@ -18,6 +18,8 @@ class remote_api {
 		virtual bool authenticate() = 0;
 		virtual std::vector<tagged_feedurl> get_subscribed_urls() = 0;
 		virtual void configure_handle(CURL * handle) = 0;
+		virtual bool mark_all_read(const std::string& feedurl) = 0;
+		virtual bool mark_article_read(const std::string& guid, bool read) = 0;
 		// TODO
 	protected:
 		configcontainer * cfg;

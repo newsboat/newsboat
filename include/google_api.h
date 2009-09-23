@@ -13,8 +13,11 @@ class googlereader_api : public remote_api {
 		virtual bool authenticate();
 		virtual std::vector<tagged_feedurl> get_subscribed_urls();
 		virtual void configure_handle(CURL * handle);
+		virtual bool mark_all_read(const std::string& feedurl);
+		virtual bool mark_article_read(const std::string& guid, bool read);
 	private:
 		std::vector<std::string> get_tags(xmlNode * node);
+		std::string get_new_token();
 		std::string retrieve_sid();
 		std::string sid;
 };

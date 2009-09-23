@@ -44,6 +44,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				LOG(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0) {
 					visible_items[itempos].first->set_unread(false); // set article as read
+					v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), true);
 					old_itempos = itempos;
 					v->push_itemview(feed, visible_items[itempos].first->guid(), show_searchresult ? searchphrase : "");
 					do_redraw = true;
@@ -287,6 +288,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 							}
 							v->set_status("");
 						} else {
+							v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), visible_items[itempos].first->unread()); // sic!
 							visible_items[itempos].first->set_unread(!visible_items[itempos].first->unread());
 							v->set_status("");
 						}

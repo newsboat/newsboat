@@ -529,6 +529,12 @@ void controller::catchup_all() {
 	}
 }
 
+void controller::mark_article_read(const std::string& guid, bool read) {
+	if (api) {
+		api->mark_article_read(guid, read);
+	}
+}
+
 void controller::mark_all_read(unsigned int pos) {
 	if (pos < feeds.size()) {
 		scope_measure m("controller::mark_all_read");
@@ -537,6 +543,9 @@ void controller::mark_all_read(unsigned int pos) {
 			rsscache->catchup_all(feed);
 		} else {
 			rsscache->catchup_all(feed->rssurl());
+			if (api) {
+				api->mark_all_read(feed->rssurl());
+			}
 		}
 		m.stopover("after rsscache->catchup_all, before iteration over items");
 		scope_mutex lock(&feed->item_mutex);
