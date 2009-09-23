@@ -8,6 +8,7 @@
 #include <filtercontainer.h>
 #include <colormanager.h>
 #include <regexmanager.h>
+#include <remote_api.h>
 #include <libxml/tree.h>
 
 namespace newsbeuter {
@@ -114,6 +115,7 @@ namespace newsbeuter {
 			configparser cfgparser;
 			colormanager colorman;
 			regexmanager rxman;
+			remote_api * api;
 	};
 
 }

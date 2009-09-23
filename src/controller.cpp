@@ -76,7 +76,7 @@ void omg_a_child_died(int /* sig */) {
 	while ((pid = waitpid(-1,&stat,WNOHANG)) > 0) { }
 }
 
-controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false) {
+controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false), api(0) {
 	char * cfgdir;
 	if (!(cfgdir = ::getenv("HOME"))) {
 		struct passwd * spw = ::getpwuid(::getuid());
@@ -98,6 +98,7 @@ controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache
 controller::~controller() {
 	delete rsscache;
 	delete urlcfg;
+	delete api;
 
 	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();it++) {
 		scope_mutex lock(&((*it)->item_mutex));
@@ -133,7 +134,6 @@ void controller::run(int argc, char * argv[]) {
 
 	bool silent = false;
 	bool execute_cmds = false;
-	remote_api * api = 0;
 
 	do {
 		if((c = ::getopt(argc,argv,"i:erhu:c:C:d:l:vVoxXI:E:"))<0)
@@ -560,7 +560,7 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
 		if (!unattended)
 			v->set_status(utils::strprintf(_("%sLoading %s..."), prepare_message(pos+1, max).c_str(), utils::censor_url(feed->rssurl()).c_str()));
 
-		rss_parser parser(feed->rssurl().c_str(), rsscache, &cfg, &ign);
+		rss_parser parser(feed->rssurl().c_str(), rsscache, &cfg, &ign, api);
 		LOG(LOG_DEBUG, "controller::reload: created parser");
 		try {
 			feed = parser.parse();

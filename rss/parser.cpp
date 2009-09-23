@@ -13,6 +13,7 @@
 #include <utils.h>
 #include <cstring>
 #include <utils.h>
+#include <remote_api.h>
 
 using namespace newsbeuter;
 
@@ -59,7 +60,7 @@ static size_t handle_headers(void * ptr, size_t size, size_t nmemb, void * data)
 	return size * nmemb;
 }
 
-feed parser::parse_url(const std::string& url, time_t lastmodified, const std::string& etag) {
+feed parser::parse_url(const std::string& url, time_t lastmodified, const std::string& etag, newsbeuter::remote_api * api) {
 	std::string buf;
 	CURLcode ret;
 
@@ -70,6 +71,9 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 
 	if (ua) {
 		curl_easy_setopt(easyhandle, CURLOPT_USERAGENT, ua);
+	}
+	if (api) {
+		api->configure_handle(easyhandle);
 	}
 	curl_easy_setopt(easyhandle, CURLOPT_URL, url.c_str());
 	curl_easy_setopt(easyhandle, CURLOPT_SSL_VERIFYPEER, 0);

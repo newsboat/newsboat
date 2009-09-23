@@ -17,8 +17,8 @@
 
 namespace newsbeuter {
 
-rss_parser::rss_parser(const char * uri, cache * c, configcontainer * cfg, rss_ignores * ii) 
-	: my_uri(uri), ch(c), cfgcont(cfg), skip_parsing(false), is_valid(false), ign(ii) { }
+rss_parser::rss_parser(const char * uri, cache * c, configcontainer * cfg, rss_ignores * ii, remote_api * a) 
+	: my_uri(uri), ch(c), cfgcont(cfg), skip_parsing(false), is_valid(false), ign(ii), api(a) { }
 
 rss_parser::~rss_parser() { }
 
@@ -163,7 +163,7 @@ void rss_parser::download_http(const std::string& uri) {
 			if (!ign || !ign->matches_lastmodified(uri)) {
 				ch->fetch_lastmodified(uri, lm, etag);
 			}
-			f = p.parse_url(uri, lm, etag);
+			f = p.parse_url(uri, lm, etag, api);
 			if (p.get_last_modified() != 0 || p.get_etag().length() > 0) {
 				LOG(LOG_DEBUG, "rss_parser::download_http: lastmodified old: %d new: %d", lm, p.get_last_modified());
 				LOG(LOG_DEBUG, "rss_parser::download_http: etag old: %s new %s", etag.c_str(), p.get_etag().c_str());

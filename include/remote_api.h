@@ -5,6 +5,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <curl/curl.h>
 
 namespace newsbeuter {
 
@@ -16,6 +17,7 @@ class remote_api {
 		virtual ~remote_api() { }
 		virtual bool authenticate() = 0;
 		virtual std::vector<tagged_feedurl> get_subscribed_urls() = 0;
+		virtual void configure_handle(CURL * handle) = 0;
 		// TODO
 	protected:
 		configcontainer * cfg;

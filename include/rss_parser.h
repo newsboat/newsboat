@@ -5,6 +5,7 @@
 
 #include <rss.h>
 #include <rsspp.h>
+#include <remote_api.h>
 
 namespace newsbeuter {
 
@@ -13,7 +14,7 @@ namespace newsbeuter {
 
 	class rss_parser {
 		public:
-			rss_parser(const char * uri, cache * c, configcontainer *, rss_ignores * ii);
+			rss_parser(const char * uri, cache * c, configcontainer *, rss_ignores * ii, remote_api * a = 0);
 			~rss_parser();
 			std::tr1::shared_ptr<rss_feed> parse();
 			bool check_and_update_lastmodified();
@@ -53,6 +54,7 @@ namespace newsbeuter {
 			bool is_valid;
 			rss_ignores * ign;
 			rsspp::feed f;
+			remote_api * api;
 	};
 
 }
