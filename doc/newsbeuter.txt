@@ -457,6 +457,40 @@ limited by what can be queried from articles and feeds with the filter language
 and by your creativity.
 
 
+Google Reader Support
+~~~~~~~~~~~~~~~~~~~~~
+
+http://www.google.com/reader/[Google Reader] is Google's web-based feed 
+aggregator. Newsbeuter provides functionality to use Google Reader as its 
+backend: people can use Google Reader to manage their subscriptions, and in 
+addition, use newsbeuter to download and read articles. Newsbeuter will keep 
+the information which articles have already been read synchronized with Google 
+Reader, so that users usually won't see articles more than once. In addition, it 
+will only ever download unread articles from Google Reader.
+
+In order to use Google Reader support, you first need to configure the proper URL source:
+
+	urls-source "googlereader"
+
+In addition, newsbeuter needs to know your Google Reader username and password 
+so that it can authenticate with Google Reader:
+
+	googlereader-login "your-googlereader-account"
+	googlereader-password "your-password"
+
+After setting these configuration values, you can start newsbeuter, it will 
+authenticate with Google Reader and download your subscription list. If you use 
+"folders" in Google Reader to organize your feeds, newsbeuter will regard them 
+and make them available via its "tags" capability: each feed is tagged with the 
+name of the folder in which it resides.
+
+When you mark single items or complete feeds as read, newsbeuter will 
+synchronize this information directly to Google Reader. This, of course, 
+includes opening articles. Toggling read articles back to "unread" is also 
+communicated to Google Reader.
+
+
+
 Bloglines Synchronization
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
