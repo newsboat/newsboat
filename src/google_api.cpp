@@ -102,17 +102,23 @@ std::vector<tagged_feedurl> googlereader_api::get_subscribed_urls() {
 					if (strcmp((const char *)objectnode->name, "object")==0) {
 						LOG(LOG_DEBUG, "found object");
 						std::string id;
+						std::string title;
 						std::vector<std::string> tags;
 						for (xmlNode * elem = objectnode->children; elem != NULL; elem = elem->next) {
 							if (strcmp((const char *)elem->name, "string")==0 && utils::get_prop(elem,"name")=="id") {
 								LOG(LOG_DEBUG, "found id");
 								id = utils::get_content(elem);
+							} else if (strcmp((const char *)elem->name, "string")==0 && utils::get_prop(elem,"name")=="title") {
+								title = utils::get_content(elem);
 							} else if (strcmp((const char *)elem->name, "list")==0 && utils::get_prop(elem,"name")=="categories") {
 								LOG(LOG_DEBUG, "found tag");
 								tags = get_tags(elem);
 							}
 						}
 						if (id != "") {
+							if (title != "") {
+								tags.push_back(utils::strprintf("~%s", title.c_str()));
+							}
 							urls.push_back(tagged_feedurl(utils::strprintf("%s%s?xt=user/-/state/com.google/read", GREADER_FEED_PREFIX, utils::replace_all(id, "?", "%3F").c_str()), tags));
 						}
 					}
