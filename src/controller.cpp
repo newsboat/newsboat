@@ -522,6 +522,9 @@ void controller::catchup_all() {
 	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it) {
 		scope_mutex lock(&(*it)->item_mutex);
 		if ((*it)->items().size() > 0) {
+			if (api) {
+				api->mark_all_read((*it)->rssurl());
+			}
 			for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator jt=(*it)->items().begin();jt!=(*it)->items().end();++jt) {
 				(*jt)->set_unread_nowrite(false);
 			}
