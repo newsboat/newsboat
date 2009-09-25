@@ -469,7 +469,7 @@ void itemlist_formaction::qna_end_editflags() {
 	posname >> itempos;
 	if (itempos < visible_items.size()) {
 		visible_items[itempos].first->set_flags(qna_responses[0]);
-		visible_items[itempos].first->update_flags();
+		v->get_ctrl()->update_flags(visible_items[itempos].first);
 		v->set_status(_("Flags updated."));
 		LOG(LOG_DEBUG, "itemlist_formaction::finished_qna: updated flags");
 		do_redraw = true;

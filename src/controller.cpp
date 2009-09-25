@@ -1341,4 +1341,12 @@ unsigned int controller::get_pos_of_next_unread(unsigned int pos) {
 	return pos;
 }
 
+void controller::update_flags(std::tr1::shared_ptr<rss_item> item) {
+	if (api) {
+		api->update_article_flags(item->oldflags(), item->flags(), item->guid());
+	}
+	item->update_flags();
+}
+
+
 }

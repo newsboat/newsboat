@@ -79,6 +79,8 @@ namespace newsbeuter {
 			void dump_config(const std::string& filename);
 
 			void sort_feeds();
+
+			void update_flags(std::tr1::shared_ptr<rss_item> item);
 		private:
 			void usage(char * argv0);
 			void version_information(const char * argv0, unsigned int level);

@@ -20,6 +20,7 @@ class remote_api {
 		virtual void configure_handle(CURL * handle) = 0;
 		virtual bool mark_all_read(const std::string& feedurl) = 0;
 		virtual bool mark_article_read(const std::string& guid, bool read) = 0;
+		virtual bool update_article_flags(const std::string& oldflags, const std::string& newflags, const std::string& guid) = 0;
 		// TODO
 	protected:
 		configcontainer * cfg;

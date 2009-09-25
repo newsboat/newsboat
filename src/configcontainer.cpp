@@ -77,6 +77,8 @@ configcontainer::configcontainer()
 	config_data["proxy-type"] = configdata("http", configdata::STR);
 	config_data["googlereader-login"] = configdata("", configdata::STR);
 	config_data["googlereader-password"] = configdata("", configdata::STR);
+	config_data["googlereader-flag-share"] = configdata("", configdata::STR);
+	config_data["googlereader-flag-star"] = configdata("", configdata::STR);
 
 	/* title formats: */
 	config_data["feedlist-title-format"] = configdata(_("%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"), configdata::STR);

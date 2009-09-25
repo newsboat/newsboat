@@ -451,7 +451,7 @@ void itemview_formaction::finished_qna(operation op) {
 	switch (op) {
 		case OP_INT_EDITFLAGS_END:
 			item->set_flags(qna_responses[0]);
-			item->update_flags();
+			v->get_ctrl()->update_flags(item);
 			v->set_status(_("Flags updated."));
 			do_redraw = true;
 			break;
