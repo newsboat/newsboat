@@ -788,4 +788,13 @@ curl_proxytype utils::get_proxy_type(const std::string& type) {
 	return CURLPROXY_HTTP;
 }
 
+std::string utils::escape_url(const std::string& url) {
+	return replace_all(replace_all(url,"?","%3F"), "&", "%26");
+}
+
+std::string utils::unescape_url(const std::string& url) {
+	return replace_all(replace_all(url,"%3F","?"), "%26", "&");
+}
+
+
 }

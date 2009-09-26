@@ -283,13 +283,15 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 						if (automatic && args->size() > 0) {
 							if ((*args)[0] == "read") {
 								visible_items[itempos].first->set_unread(false);
+								v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), true);
 							} else if ((*args)[0] == "unread") {
 								visible_items[itempos].first->set_unread(true);
+								v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), false);
 							}
 							v->set_status("");
 						} else {
-							v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), visible_items[itempos].first->unread()); // sic!
 							visible_items[itempos].first->set_unread(!visible_items[itempos].first->unread());
+							v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), visible_items[itempos].first->unread()); // sic!
 							v->set_status("");
 						}
 					} catch (const dbexception& e) {
@@ -561,6 +563,7 @@ void itemlist_formaction::prepare() {
 			unsigned int itempos = utils::to_u(itemposname);
 			if (visible_items[itempos].first->unread()) {
 				visible_items[itempos].first->set_unread(false);
+				v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), true);
 				do_redraw = true;
 			}
 		}

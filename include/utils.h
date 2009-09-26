@@ -85,6 +85,9 @@ class utils {
 		static std::string get_content(xmlNode * node);
 		static std::string get_prop(xmlNode * node, const char * prop, const char * ns = NULL);
 
+		static std::string escape_url(const std::string& url);
+		static std::string unescape_url(const std::string& url);
+
 	private:
 		static void append_escapes(std::string& str, char c);
 

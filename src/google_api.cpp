@@ -119,7 +119,7 @@ std::vector<tagged_feedurl> googlereader_api::get_subscribed_urls() {
 							if (title != "") {
 								tags.push_back(utils::strprintf("~%s", title.c_str()));
 							}
-							urls.push_back(tagged_feedurl(utils::strprintf("%s%s?xt=user/-/state/com.google/read", GREADER_FEED_PREFIX, utils::replace_all(id, "?", "%3F").c_str()), tags));
+							urls.push_back(tagged_feedurl(utils::strprintf("%s%s?xt=user/-/state/com.google/read", GREADER_FEED_PREFIX, utils::escape_url(id).c_str()), tags));
 						}
 					}
 				}
@@ -160,7 +160,7 @@ void googlereader_api::configure_handle(CURL * handle) {
 bool googlereader_api::mark_all_read(const std::string& feedurl) {
 	std::string real_feedurl = feedurl.substr(strlen(GREADER_FEED_PREFIX), feedurl.length() - strlen(GREADER_FEED_PREFIX));
 	std::vector<std::string> elems = utils::tokenize(real_feedurl, "?");
-	real_feedurl = utils::replace_all(elems[0], "%3F", "?");
+	real_feedurl = utils::unescape_url(elems[0]);
 	std::string token = get_new_token();
 
 	std::string postcontent = utils::strprintf("s=%s&T=%s", real_feedurl.c_str(), token.c_str());
