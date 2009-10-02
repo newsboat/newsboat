@@ -1,4 +1,5 @@
 TODO:
+- in the article view, the headers should be an own color configuration element
 - add an auto-flag configuration command to automatically flag articles that match a certain query
 - when reload is finished, the focus shall be in the current form's list
 - per-feed refresh settings
