@@ -180,7 +180,7 @@ BOOST_AUTO_TEST_CASE(TestConfigParserContainerAndKeymap) {
 }
 
 BOOST_AUTO_TEST_CASE(TestTagSoupPullParser) {
-	std::istringstream is("<test><foo quux='asdf' bar=\"qqq\">text</foo>more text<more>&quot;&#33;&#x40;</more></test>");
+	std::istringstream is("<test><foo quux='asdf' bar=\"qqq\">text</foo>more text<more>&quot;&#33;&#x40;</more><xxx foo=bar baz=\"qu ux\" hi='ho ho ho'></xxx></test>");
 	tagsouppullparser xpp;
 	tagsouppullparser::event e;
 	xpp.setInput(is);
@@ -213,6 +213,15 @@ BOOST_AUTO_TEST_CASE(TestTagSoupPullParser) {
 	e = xpp.next();
 	BOOST_CHECK_EQUAL(e, tagsouppullparser::END_TAG);
 	BOOST_CHECK_EQUAL(xpp.getText(), "more");
+	e = xpp.next();
+	BOOST_CHECK_EQUAL(e, tagsouppullparser::START_TAG);
+	BOOST_CHECK_EQUAL(xpp.getText(), "xxx");
+	BOOST_CHECK_EQUAL(xpp.getAttributeValue("foo"), "bar");
+	BOOST_CHECK_EQUAL(xpp.getAttributeValue("baz"), "qu ux");
+	BOOST_CHECK_EQUAL(xpp.getAttributeValue("hi"), "ho ho ho");
+	e = xpp.next();
+	BOOST_CHECK_EQUAL(e, tagsouppullparser::END_TAG);
+	BOOST_CHECK_EQUAL(xpp.getText(), "xxx");
 	e = xpp.next();
 	BOOST_CHECK_EQUAL(e, tagsouppullparser::END_TAG);
 	BOOST_CHECK_EQUAL(xpp.getText(), "test");
