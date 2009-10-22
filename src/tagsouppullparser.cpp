@@ -317,20 +317,47 @@ void tagsouppullparser::remove_trailing_whitespace(std::string& s) {
 }
 
 void tagsouppullparser::parse_tag(const std::string& tagstr) {
-	std::vector<std::string> tokens = utils::tokenize(tagstr);
-	if (tokens.size() > 0) {
-		text = tokens[0];
-		if (tokens.size() > 1) {
-			std::vector<std::string>::iterator it = tokens.begin();
-			++it;
-			while (it != tokens.end()) {
-				add_attribute(*it);
-				++it;	
-			}
+	std::string::size_type last_pos = tagstr.find_first_not_of(" \r\n\t", 0);
+	std::string::size_type pos = tagstr.find_first_of(" \r\n\t", last_pos);
+	unsigned int count = 0;
+
+	LOG(LOG_DEBUG, "parse_tag: parsing '%s', pos = %d, last_pos = %d", tagstr.c_str(), pos, last_pos);
+
+	while (last_pos != std::string::npos) {
+		if (count == 0) {
+			// first token: tag name
+			if (pos == std::string::npos)
+				pos = tagstr.length();
+			text = tagstr.substr(last_pos, pos - last_pos);
+			LOG(LOG_DEBUG, "parse_tag: tag name = %s", text.c_str());
 		} else {
-			if (text.length() > 0 && text[text.length()-1] == '/')
-				text.erase(text.length()-1, 1);
+			pos = tagstr.find_first_of("= ", last_pos);
+			std::string attr;
+			if (pos != std::string::npos) {
+				LOG(LOG_DEBUG, "parse_tag: found = or space");
+				if (tagstr[pos] == '=') {
+					LOG(LOG_DEBUG, "parse_tag: found =");
+					if (tagstr[pos+1] == '\'' || tagstr[pos+1] == '"') {
+						pos = tagstr.find_first_of("'\"", pos+2);
+						if (pos != std::string::npos)
+							pos++;
+						LOG(LOG_DEBUG, "parse_tag: finding ending quote, pos = %d", pos);
+					} else {
+						pos = tagstr.find_first_of(" \r\n\t", pos+1);
+						LOG(LOG_DEBUG, "parse_tag: finding end of unquoted attribute");
+					}
+				}
+			}
+			if (pos == std::string::npos) {
+				LOG(LOG_DEBUG, "parse_tag: found end of string, correcting end position");
+				pos = tagstr.length();
+			}
+			attr = tagstr.substr(last_pos, pos - last_pos);
+			LOG(LOG_DEBUG, "parse_tag: extracted attribute is '%s', adding", attr.c_str());
+			add_attribute(attr);
 		}
+		last_pos = tagstr.find_first_not_of(" \r\n\t", pos);
+		count++;
 	}
 }
 
