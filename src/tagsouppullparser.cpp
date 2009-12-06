@@ -289,8 +289,21 @@ std::string tagsouppullparser::decode_entity(std::string s) {
 			std::istringstream is(s);
 			is >> wc;
 		}
-		int pos = wctomb(mbc,static_cast<wchar_t>(wc));
+		int pos;
+		// convert some common but unknown numeric entities
+		switch (wc) {
+			case 133: wc = 8230; break; // &hellip;
+			case 134: wc = 8224; break; // &dagger;
+			case 135: wc = 8225; break; // &Dagger; (double dagger)
+			case 150: wc = 8211; break; // &ndash;
+			case 151: wc = 8212; break; // &mdash;
+			case 152: wc =  732; break; // &tilde;
+			case 153: wc = 8482; break; // &trade;
+			case 156: wc =  339; break; // &oelig;
+		}
+
 		// std::cerr << "value: " << wc << " " << static_cast<wchar_t>(wc) << " pos: " << pos << std::endl;
+		pos = wctomb(mbc,static_cast<wchar_t>(wc));
 		if (pos > 0) {
 			mbc[pos] = '\0';
 			result.append(mbc);
