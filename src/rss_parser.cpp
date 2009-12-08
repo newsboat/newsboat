@@ -274,6 +274,8 @@ void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed> feed) {
 			
 		x->set_guid(get_guid(*item));
 
+		x->set_base(item->base);
+
 		set_item_enclosure(x, *item);
 
 		LOG(LOG_DEBUG, "rss_parser::parse: item title = `%s' link = `%s' pubDate = `%s' (%d) description = `%s'", x->title().c_str(), 

@@ -77,6 +77,7 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 			it.description_type = type;
 			if (it.description_type == "")
 				it.description_type = "text";
+			it.base = get_prop(node, "base", XML_URI);
 		} else if (node_is(node, "id")) {
 			it.guid = get_content(node);
 			it.guid_isPermaLink = false;

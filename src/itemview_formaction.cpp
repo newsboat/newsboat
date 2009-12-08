@@ -124,7 +124,8 @@ void itemview_formaction::prepare() {
 		if (show_source) {
 			render_source(lines, utils::quote_for_stfl(item->description()), render_width);
 		} else {
-			lines = render_html(item->description(), links, item->feedurl(), render_width);
+			std::string baseurl = item->get_base() != "" ? item->get_base() : item->feedurl();
+			lines = render_html(item->description(), links, baseurl, render_width);
 		}
 
 		listfmt.add_lines(lines, view_width);

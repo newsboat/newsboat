@@ -91,7 +91,8 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					std::vector<linkpair> links;
 					std::vector<std::string> lines;
 					htmlrenderer rnd(80);
-					rnd.render(visible_items[itempos].first->description(), lines, links, visible_items[itempos].first->link());
+					std::string baseurl = visible_items[itempos].first->get_base() != "" ? visible_items[itempos].first->get_base() : visible_items[itempos].first->link();
+					rnd.render(visible_items[itempos].first->description(), lines, links, baseurl);
 					if (links.size() > 0) {
 						v->push_urlview(links);
 					} else {

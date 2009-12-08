@@ -37,6 +37,9 @@ struct item {
 	// extensions:
 	std::string content_encoded;
 	std::string itunes_summary;
+
+	// Atom-specific:
+	std::string base;
 };
 
 struct feed {

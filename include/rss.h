@@ -88,6 +88,9 @@ namespace newsbeuter {
 			inline void set_index(unsigned int i) { idx = i; }
 			inline unsigned int get_index() { return idx; }
 
+			inline void set_base(const std::string& b) { base = b; }
+			inline const std::string& get_base() { return base; }
+
 		private:
 			std::string title_;
 			std::string link_;
@@ -106,6 +109,7 @@ namespace newsbeuter {
 			std::tr1::shared_ptr<rss_feed> feedptr;
 			bool deleted_;
 			unsigned int idx;
+			std::string base;
 	};
 
 	class rss_feed : public matchable {
