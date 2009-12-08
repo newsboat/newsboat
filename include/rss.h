@@ -71,7 +71,8 @@ namespace newsbeuter {
 			inline void set_enqueued(bool v) { enqueued_ = v; }
 
 			inline const std::string& flags() const { return flags_; }
-			void set_flags(const std::string& ff) { flags_ = ff; sort_flags(); }
+			inline const std::string& oldflags() const { return oldflags_; }
+			void set_flags(const std::string& ff);
 			void update_flags();
 			void sort_flags();
 
@@ -101,6 +102,7 @@ namespace newsbeuter {
 			std::string enclosure_type_;
 			bool enqueued_;
 			std::string flags_;
+			std::string oldflags_;
 			std::tr1::shared_ptr<rss_feed> feedptr;
 			bool deleted_;
 			unsigned int idx;

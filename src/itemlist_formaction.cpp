@@ -44,6 +44,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				LOG(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0) {
 					visible_items[itempos].first->set_unread(false); // set article as read
+					v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), true);
 					old_itempos = itempos;
 					v->push_itemview(feed, visible_items[itempos].first->guid(), show_searchresult ? searchphrase : "");
 					do_redraw = true;
@@ -282,12 +283,15 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 						if (automatic && args->size() > 0) {
 							if ((*args)[0] == "read") {
 								visible_items[itempos].first->set_unread(false);
+								v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), true);
 							} else if ((*args)[0] == "unread") {
 								visible_items[itempos].first->set_unread(true);
+								v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), false);
 							}
 							v->set_status("");
 						} else {
 							visible_items[itempos].first->set_unread(!visible_items[itempos].first->unread());
+							v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), visible_items[itempos].first->unread()); // sic!
 							v->set_status("");
 						}
 					} catch (const dbexception& e) {
@@ -467,7 +471,7 @@ void itemlist_formaction::qna_end_editflags() {
 	posname >> itempos;
 	if (itempos < visible_items.size()) {
 		visible_items[itempos].first->set_flags(qna_responses[0]);
-		visible_items[itempos].first->update_flags();
+		v->get_ctrl()->update_flags(visible_items[itempos].first);
 		v->set_status(_("Flags updated."));
 		LOG(LOG_DEBUG, "itemlist_formaction::finished_qna: updated flags");
 		do_redraw = true;
@@ -559,6 +563,7 @@ void itemlist_formaction::prepare() {
 			unsigned int itempos = utils::to_u(itemposname);
 			if (visible_items[itempos].first->unread()) {
 				visible_items[itempos].first->set_unread(false);
+				v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), true);
 				do_redraw = true;
 			}
 		}

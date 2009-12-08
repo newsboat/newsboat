@@ -715,7 +715,6 @@ void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
 	std::string useragent; 
 	unsigned int dl_timeout = 0;
 
-
 	if (cfg) {
 		if (cfg->get_configvalue_as_bool("use-proxy")) {
 			proxy = cfg->get_configvalue("proxy");
@@ -747,6 +746,34 @@ void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
 	curl_easy_setopt(handle, CURLOPT_FAILONERROR, 1);
 }
 
+std::string utils::get_content(xmlNode * node) {
+	std::string retval;
+	if (node) {
+		xmlChar * content = xmlNodeGetContent(node);
+		if (content) {
+			retval = (const char *)content;
+			xmlFree(content);
+		}
+	}
+	return retval;
+}
+
+std::string utils::get_prop(xmlNode * node, const char * prop, const char * ns) {
+	std::string retval;
+	if (node) {
+		xmlChar * value;
+		if (ns)
+			value = xmlGetProp(node, (xmlChar *)prop);
+		else
+			value = xmlGetNsProp(node, (xmlChar *)prop, (xmlChar *)ns);
+		if (value) {
+			retval = (const char*)value;
+			xmlFree(value);
+		}
+	}
+	return retval;
+}
+
 curl_proxytype utils::get_proxy_type(const std::string& type) {
 	if (type == "http")
 		return CURLPROXY_HTTP;
@@ -760,5 +787,14 @@ curl_proxytype utils::get_proxy_type(const std::string& type) {
 	LOG(LOG_USERERROR, "you configured an invalid proxy type: %s", type.c_str());
 	return CURLPROXY_HTTP;
 }
+
+std::string utils::escape_url(const std::string& url) {
+	return replace_all(replace_all(url,"?","%3F"), "&", "%26");
+}
+
+std::string utils::unescape_url(const std::string& url) {
+	return replace_all(replace_all(url,"%3F","?"), "%26", "&");
+}
+
 
 }

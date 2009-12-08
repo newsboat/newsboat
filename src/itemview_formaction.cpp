@@ -155,7 +155,11 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 	 * recorded in the database.
 	 */
 	try {
+		bool old_unread = item->unread();
 		item->set_unread(false);
+		if (old_unread) {
+			v->get_ctrl()->mark_article_read(item->guid(), true);
+		}
 	} catch (const dbexception& e) {
 		v->show_error(utils::strprintf(_("Error while marking article as read: %s"), e.what()));
 	}
@@ -302,6 +306,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 			v->set_status(_("Toggling read flag for article..."));
 			try {
 				item->set_unread(true);
+				v->get_ctrl()->mark_article_read(item->guid(), false);
 			} catch (const dbexception& e) {
 				v->show_error(utils::strprintf(_("Error while marking article as unread: %s"), e.what()));
 			}
@@ -451,7 +456,7 @@ void itemview_formaction::finished_qna(operation op) {
 	switch (op) {
 		case OP_INT_EDITFLAGS_END:
 			item->set_flags(qna_responses[0]);
-			item->update_flags();
+			v->get_ctrl()->update_flags(item);
 			v->set_status(_("Flags updated."));
 			do_redraw = true;
 			break;

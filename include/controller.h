@@ -8,6 +8,7 @@
 #include <filtercontainer.h>
 #include <colormanager.h>
 #include <regexmanager.h>
+#include <remote_api.h>
 #include <libxml/tree.h>
 
 namespace newsbeuter {
@@ -43,6 +44,7 @@ namespace newsbeuter {
 			void update_feedlist();
 			void update_visible_feeds();
 			void mark_all_read(unsigned int pos);
+			void mark_article_read(const std::string& guid, bool read);
 			void catchup_all();
 			inline void catchup_all(std::tr1::shared_ptr<rss_feed> feed) { rsscache->catchup_all(feed); }
 			inline bool get_refresh_on_start() { return refresh_on_start; }
@@ -77,6 +79,8 @@ namespace newsbeuter {
 			void dump_config(const std::string& filename);
 
 			void sort_feeds();
+
+			void update_flags(std::tr1::shared_ptr<rss_item> item);
 		private:
 			void usage(char * argv0);
 			void version_information(const char * argv0, unsigned int level);
@@ -114,6 +118,7 @@ namespace newsbeuter {
 			configparser cfgparser;
 			colormanager colorman;
 			regexmanager rxman;
+			remote_api * api;
 	};
 
 }

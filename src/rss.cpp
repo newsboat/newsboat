@@ -273,6 +273,12 @@ void rss_item::update_flags() {
 	}
 }
 
+void rss_item::set_flags(const std::string& ff) {
+	oldflags_ = flags_;
+	flags_ = ff;
+	sort_flags();
+}
+
 void rss_item::sort_flags() {
 	std::sort(flags_.begin(), flags_.end());
 

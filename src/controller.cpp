@@ -13,6 +13,8 @@
 #include <formatstring.h>
 #include <regexmanager.h>
 #include <rss_parser.h>
+#include <remote_api.h>
+#include <google_api.h>
 #include <xlicense.h>
 
 #include <cstdlib>
@@ -74,7 +76,7 @@ void omg_a_child_died(int /* sig */) {
 	while ((pid = waitpid(-1,&stat,WNOHANG)) > 0) { }
 }
 
-controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false) {
+controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false), api(0) {
 	char * cfgdir;
 	if (!(cfgdir = ::getenv("HOME"))) {
 		struct passwd * spw = ::getpwuid(::getuid());
@@ -96,6 +98,7 @@ controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache
 controller::~controller() {
 	delete rsscache;
 	delete urlcfg;
+	delete api;
 
 	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();it++) {
 		scope_mutex lock(&((*it)->item_mutex));
@@ -332,6 +335,10 @@ void controller::run(int argc, char * argv[]) {
 	} else if (type == "opml") {
 		urlcfg = new opml_urlreader(&cfg);
 		real_offline_mode = offline_mode;
+	} else if (type == "googlereader") {
+		api = new googlereader_api(&cfg);
+		urlcfg = new googlereader_urlreader(&cfg, api);
+		real_offline_mode = offline_mode;
 	} else {
 		LOG(LOG_ERROR,"unknown urls-source `%s'", urlcfg->get_source().c_str());
 	}
@@ -351,6 +358,13 @@ void controller::run(int argc, char * argv[]) {
 			std::cout << utils::strprintf(_("Loading URLs from %s..."), urlcfg->get_source().c_str());
 			std::cout.flush();
 		}
+		if (api) {
+			if (!api->authenticate()) {
+				std::cout << "Authentication failed." << std::endl;
+				utils::remove_fs_lock(lock_file);
+				return;
+			}
+		}
 		urlcfg->reload();
 		if (!do_export && !silent) {
 			std::cout << _("done.") << std::endl;
@@ -366,6 +380,8 @@ void controller::run(int argc, char * argv[]) {
 			msg = utils::strprintf(_("It looks like you haven't configured any feeds in your bloglines account. Please do so, and try again."));
 		} else if (type == "opml") {
 			msg = utils::strprintf(_("It looks like the OPML feed you subscribed contains no feeds. Please fill it with feeds, and try again."));
+		} else if (type == "googlereader") {
+			msg = utils::strprintf(_("It looks like you haven't configured any feeds in your Google Reader account. Please do so, and try again."));
 		} else {
 			assert(0); // shouldn't happen
 		}
@@ -506,10 +522,19 @@ void controller::catchup_all() {
 	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it) {
 		scope_mutex lock(&(*it)->item_mutex);
 		if ((*it)->items().size() > 0) {
+			if (api) {
+				api->mark_all_read((*it)->rssurl());
+			}
 			for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator jt=(*it)->items().begin();jt!=(*it)->items().end();++jt) {
 				(*jt)->set_unread_nowrite(false);
 			}
 		}
+	}
+}
+
+void controller::mark_article_read(const std::string& guid, bool read) {
+	if (api) {
+		api->mark_article_read(guid, read);
 	}
 }
 
@@ -521,6 +546,9 @@ void controller::mark_all_read(unsigned int pos) {
 			rsscache->catchup_all(feed);
 		} else {
 			rsscache->catchup_all(feed->rssurl());
+			if (api) {
+				api->mark_all_read(feed->rssurl());
+			}
 		}
 		m.stopover("after rsscache->catchup_all, before iteration over items");
 		scope_mutex lock(&feed->item_mutex);
@@ -544,7 +572,7 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
 		if (!unattended)
 			v->set_status(utils::strprintf(_("%sLoading %s..."), prepare_message(pos+1, max).c_str(), utils::censor_url(feed->rssurl()).c_str()));
 
-		rss_parser parser(feed->rssurl().c_str(), rsscache, &cfg, &ign);
+		rss_parser parser(feed->rssurl().c_str(), rsscache, &cfg, &ign, api);
 		LOG(LOG_DEBUG, "controller::reload: created parser");
 		try {
 			feed = parser.parse();
@@ -1315,5 +1343,13 @@ unsigned int controller::get_pos_of_next_unread(unsigned int pos) {
 	}
 	return pos;
 }
+
+void controller::update_flags(std::tr1::shared_ptr<rss_item> item) {
+	if (api) {
+		api->update_article_flags(item->oldflags(), item->flags(), item->guid());
+	}
+	item->update_flags();
+}
+
 
 }
