@@ -16,7 +16,9 @@ LDFLAGS+=-L. -L/sw/lib
 
 PACKAGE=newsbeuter
 
+ifneq (distclean, $(MAKECMDGOALS))
 include config.mk
+endif
 
 LIB_SOURCES:=$(shell cat libbeuter.deps)
 LIB_OBJS:=$(patsubst %.cpp,%.o,$(LIB_SOURCES))
