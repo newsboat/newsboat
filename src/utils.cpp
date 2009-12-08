@@ -261,7 +261,7 @@ std::string utils::convert_text(const std::string& text, const std::string& toco
  * of all the Unix-like systems around there, only Linux/glibc seems to 
  * come with a SuSv3-conforming iconv implementation.
  */
-#if !(__linux) && !defined(__GLIBC__)
+#if !(__linux) && !defined(__GLIBC__) && !defined(__APPLE__)
 	const char * inbufp;
 #else
 	char * inbufp;
