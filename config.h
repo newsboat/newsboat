@@ -3,7 +3,7 @@
 
 #define PACKAGE				"newsbeuter"
 #define PROGRAM_NAME			PACKAGE
-#define PROGRAM_VERSION			"2.1"
+#define PROGRAM_VERSION			"2.2"
 #define PROGRAM_URL			"http://www.newsbeuter.org/"
 
 #define NEWSBEUTER_PATH_SEP			"/"
