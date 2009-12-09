@@ -32,7 +32,7 @@ void listformatter::add_lines(const std::vector<std::string>& thelines, unsigned
 std::string listformatter::format_list(regexmanager * rxman, const std::string& location) {
 	format_cache = "{list";
 	for (std::vector<line_id_pair>::iterator it=lines.begin();it!=lines.end();++it) {
-		std::string str = utils::replace_all(it->first, "<", "<>");
+		std::string str = it->first;
 		if (rxman)
 			rxman->quote_and_highlight(str, location);
 		if (it->second == UINT_MAX) {

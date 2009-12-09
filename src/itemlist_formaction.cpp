@@ -593,10 +593,10 @@ void itemlist_formaction::prepare() {
 		fmt.register_fmt('f', gen_flags(it->first));
 		fmt.register_fmt('D', gen_datestr(it->first->pubDate_timestamp(), datetimeformat.c_str()));
 		if (feed->rssurl() != it->first->feedurl() && it->first->get_feedptr() != NULL) {
-			fmt.register_fmt('T', it->first->get_feedptr()->title());
+			fmt.register_fmt('T', utils::replace_all(it->first->get_feedptr()->title(), "<", "<>"));
 		}
-		fmt.register_fmt('t', it->first->title());
-		fmt.register_fmt('a', it->first->author());
+		fmt.register_fmt('t', utils::replace_all(it->first->title(), "<", "<>"));
+		fmt.register_fmt('a', utils::replace_all(it->first->author(), "<", "<>"));
 		fmt.register_fmt('L', it->first->length());
 
 		listfmt.add_line(fmt.do_format(itemlist_format, width), it->second);
