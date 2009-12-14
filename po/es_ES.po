@@ -2,18 +2,18 @@
 # translation of es_ES.po to
 # Copyright (C) 2009 THE es_ES'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the es_ES package.
-# ROOT <epsilon.root@gmail.com>, 2008.
-# ROOT <epsilon.root@gmail.com>, 2009.
-# 
-# 
+# ROOT <epsilon@correoe.no-ip.org>, 2008.
+# ROOT <epsilon@correoe.no-ip.org>, 2009.
+#
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: es_ES\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-14 10:25+0100\n"
-"PO-Revision-Date: 2009-03-15 19:30+0100\n"
+"PO-Revision-Date: 2009-12-14 15:02+0100\n"
 "Last-Translator:  <>\n"
-"Language-Team: \n"
+"Language-Team:  <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: \n"
@@ -184,12 +184,11 @@ msgstr ""
 "favor, rellenalocon feeds e intentalo de nuevo."
 
 #: src/controller.cpp:384
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Google Reader "
 "account. Please do so, and try again."
 msgstr ""
-"Parece que no has configurado ningun feed en tu cuenta de bloglines.Por "
+"Parece que no has configurado ningun feed en tu cuenta de Google Reader. Por "
 "favor, hazlo e intentalo de nuevo."
 
 #: src/controller.cpp:393
@@ -928,7 +927,7 @@ msgstr "AÃ±adido %s para descarga."
 #: src/itemview_formaction.cpp:182
 #, c-format
 msgid "Invalid URL: '%s'"
-msgstr ""
+msgstr "URL inválido: '%s'"
 
 #: src/itemview_formaction.cpp:201
 #, c-format
@@ -953,7 +952,7 @@ msgstr "Error marcando articulo como no leido: %s"
 
 #: src/itemview_formaction.cpp:352 src/keymap.cpp:42
 msgid "Goto URL #"
-msgstr ""
+msgstr "Ir a URL #"
 
 #: src/itemview_formaction.cpp:373 src/urlview_formaction.cpp:117
 msgid "Open in Browser"
@@ -1225,14 +1224,12 @@ msgid "Move to the next page"
 msgstr "Ir a la página siguiente"
 
 #: src/keymap.cpp:90
-#, fuzzy
 msgid "Move to the start of page/list"
-msgstr "Ir a la página siguiente"
+msgstr "Ir al principio de la página/lista"
 
 #: src/keymap.cpp:91
-#, fuzzy
 msgid "Move to the end of page/list"
-msgstr "Ir a la página siguiente"
+msgstr "Ir al final de la página/lista"
 
 #: src/keymap.cpp:287
 #, c-format
@@ -1249,7 +1246,7 @@ msgid "Cleaning up queue..."
 msgstr "Limpiando cola..."
 
 #: src/pb_controller.cpp:175
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage %s [-C <file>] [-q <file>] [-h]\n"
@@ -1261,9 +1258,9 @@ msgstr ""
 "%s %s\n"
 "uso %s [-C <fichero>] [-q <fichero>] [-h]\n"
 "-C <fichero_de_config> leer configuracion desde <fichero_de_config>\n"
-"-q <fichero_de_cola> usa <fichero_de_cola> como fichero de cola\n"
-"-a comenzar a descargar al iniciar\n"
-"-h esta ayuda\n"
+"-q <fichero_de_cola>    usa <fichero_de_cola> como fichero de cola\n"
+"-a                                   comenzar a descargar al iniciar\n"
+"-h                                   esta ayuda\n"
 
 #: src/pb_view.cpp:40
 #, c-format
