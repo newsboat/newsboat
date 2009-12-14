@@ -369,17 +369,21 @@ void view::update_visible_feeds(std::vector<std::tr1::shared_ptr<rss_feed> > fee
 }
 
 void view::set_feedlist(std::vector<std::tr1::shared_ptr<rss_feed> > feeds) {
-	scope_mutex lock(mtx);
+	try {
+		scope_mutex lock(mtx);
 
-	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it) {
-		if ((*it)->rssurl().substr(0,6) != "query:") {
-			(*it)->set_feedptrs(*it);
+		for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it) {
+			if ((*it)->rssurl().substr(0,6) != "query:") {
+				(*it)->set_feedptrs(*it);
+			}
 		}
-	}
 
-	if (formaction_stack_size() > 0) {
-		std::tr1::shared_ptr<feedlist_formaction> feedlist = std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
-		feedlist->set_feedlist(feeds);
+		if (formaction_stack_size() > 0) {
+			std::tr1::shared_ptr<feedlist_formaction> feedlist = std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
+			feedlist->set_feedlist(feeds);
+		}
+	} catch (const matcherexception& e) {
+		set_status(utils::strprintf(_("Error: applying the filter failed: %s"), e.what()));
 	}
 }
 
