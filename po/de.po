@@ -182,12 +182,11 @@ msgstr ""
 "enthalten. Bitte füllen Sie diese mit Feeds, und probieren Sie es erneut."
 
 #: src/controller.cpp:384
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Google Reader "
 "account. Please do so, and try again."
 msgstr ""
-"Es sieht so aus als hätten Sie keine Feeds in Ihrem Bloglines-Account "
+"Es sieht so aus als hätten Sie keine Feeds in Ihrem Google-Reader-Account "
 "konfiguriert. Bitte tun Sie das, und probieren Sie es erneut."
 
 #: src/controller.cpp:393
@@ -924,7 +923,7 @@ msgstr "%s zur Download-Warteschlange hinzugefügt."
 #: src/itemview_formaction.cpp:182
 #, c-format
 msgid "Invalid URL: '%s'"
-msgstr ""
+msgstr "Ungültige URL: '%s'"
 
 #: src/itemview_formaction.cpp:201
 #, c-format
@@ -1221,7 +1220,6 @@ msgid "Move to the next page"
 msgstr "Zur nächsten Seite gehen"
 
 #: src/keymap.cpp:90
-#, fuzzy
 msgid "Move to the start of page/list"
 msgstr "Zum Anfang der Seite/Liste gehen"
 
