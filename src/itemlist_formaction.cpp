@@ -291,8 +291,8 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 							}
 							v->set_status("");
 						} else {
-							visible_items[itempos].first->set_unread(!visible_items[itempos].first->unread());
 							v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), visible_items[itempos].first->unread()); // sic!
+							visible_items[itempos].first->set_unread(!visible_items[itempos].first->unread());
 							v->set_status("");
 						}
 					} catch (const dbexception& e) {

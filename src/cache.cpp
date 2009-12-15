@@ -641,11 +641,21 @@ void cache::update_rssitem_unlocked(std::tr1::shared_ptr<rss_item> item, const s
 				}
 			}
 		}
-		std::string update = prepare_query("UPDATE rss_item SET title = '%q', author = '%q', url = '%q', feedurl = '%q', content = '%q', enclosure_url = '%q', enclosure_type = '%q', base = '%q' WHERE guid = '%q'",
-			item->title_raw().c_str(), item->author_raw().c_str(), item->link().c_str(), 
-			feedurl.c_str(), item->description_raw().c_str(), 
-			item->enclosure_url().c_str(), item->enclosure_type().c_str(), item->get_base().c_str(),
-			item->guid().c_str());
+		std::string update;
+		if (item->override_unread()) {
+			update = prepare_query("UPDATE rss_item SET title = '%q', author = '%q', url = '%q', feedurl = '%q', content = '%q', enclosure_url = '%q', enclosure_type = '%q', base = '%q', unread = '%d' WHERE guid = '%q'",
+				item->title_raw().c_str(), item->author_raw().c_str(), item->link().c_str(), 
+				feedurl.c_str(), item->description_raw().c_str(), 
+				item->enclosure_url().c_str(), item->enclosure_type().c_str(), item->get_base().c_str(),
+				(item->unread() ? 1 : 0),
+				item->guid().c_str());
+		} else {
+			update = prepare_query("UPDATE rss_item SET title = '%q', author = '%q', url = '%q', feedurl = '%q', content = '%q', enclosure_url = '%q', enclosure_type = '%q', base = '%q' WHERE guid = '%q'",
+				item->title_raw().c_str(), item->author_raw().c_str(), item->link().c_str(), 
+				feedurl.c_str(), item->description_raw().c_str(), 
+				item->enclosure_url().c_str(), item->enclosure_type().c_str(), item->get_base().c_str(),
+				item->guid().c_str());
+		}
 		LOG(LOG_DEBUG,"running query: %s", update.c_str());
 		rc = sqlite3_exec(db,update.c_str(),NULL,NULL,NULL);
 		if (rc != SQLITE_OK) {
@@ -654,9 +664,9 @@ void cache::update_rssitem_unlocked(std::tr1::shared_ptr<rss_item> item, const s
 		}
 	} else {
 		std::string insert = prepare_query("INSERT INTO rss_item (guid,title,author,url,feedurl,pubDate,content,unread,enclosure_url,enclosure_type,enqueued, base) "
-								"VALUES ('%q','%q','%q','%q','%q','%u','%q',1,'%q','%q',%d, '%q')",
+								"VALUES ('%q','%q','%q','%q','%q','%u','%q','%d','%q','%q',%d, '%q')",
 								item->guid().c_str(), item->title_raw().c_str(), item->author_raw().c_str(), 
-								item->link().c_str(), feedurl.c_str(), item->pubDate_timestamp(), item->description_raw().c_str(),
+								item->link().c_str(), feedurl.c_str(), item->pubDate_timestamp(), item->description_raw().c_str(), (item->unread() ? 1 : 0),
 								item->enclosure_url().c_str(), item->enclosure_type().c_str(), item->enqueued() ? 1 : 0, item->get_base().c_str());
 		LOG(LOG_DEBUG,"running query: %s", insert.c_str());
 		rc = sqlite3_exec(db,insert.c_str(),NULL,NULL,NULL);
@@ -726,9 +736,9 @@ void cache::update_rssitem_unread_and_enqueued(rss_item* item, const std::string
 		}
 	} else {
 		std::string insert = prepare_query("INSERT INTO rss_item (guid,title,author,url,feedurl,pubDate,content,unread,enclosure_url,enclosure_type,enqueued,flags,base) "
-										"VALUES ('%q','%q','%q','%q','%q','%u','%q',1,'%q','%q',%d, '%q', '%q')",
+										"VALUES ('%q','%q','%q','%q','%q','%u','%q','%d','%q','%q',%d, '%q', '%q')",
 										item->guid().c_str(), item->title_raw().c_str(), item->author_raw().c_str(), 
-										item->link().c_str(), feedurl.c_str(), item->pubDate_timestamp(), item->description_raw().c_str(),
+										item->link().c_str(), feedurl.c_str(), item->pubDate_timestamp(), item->description_raw().c_str(), item->unread() ? 1 : 0,
 										item->enclosure_url().c_str(), item->enclosure_type().c_str(), item->enqueued() ? 1 : 0, item->flags().c_str(), 
 										item->get_base().c_str());
 		LOG(LOG_DEBUG,"running query: %s", insert.c_str());
@@ -764,9 +774,9 @@ void cache::update_rssitem_unread_and_enqueued(std::tr1::shared_ptr<rss_item> it
 		}
 	} else {
 		std::string insert = prepare_query("INSERT INTO rss_item (guid,title,author,url,feedurl,pubDate,content,unread,enclosure_url,enclosure_type,enqueued,flags,base) "
-										"VALUES ('%q','%q','%q','%q','%q','%u','%q',1,'%q','%q',%d, '%q', '%q')",
+										"VALUES ('%q','%q','%q','%q','%q','%u','%q','%d','%q','%q',%d, '%q', '%q')",
 										item->guid().c_str(), item->title_raw().c_str(), item->author_raw().c_str(), 
-										item->link().c_str(), feedurl.c_str(), item->pubDate_timestamp(), item->description_raw().c_str(),
+										item->link().c_str(), feedurl.c_str(), item->pubDate_timestamp(), item->description_raw().c_str(), (item->unread() ? 1 : 0),
 										item->enclosure_url().c_str(), item->enclosure_type().c_str(), item->enqueued() ? 1 : 0, item->flags().c_str(),
 										item->get_base().c_str());
 		LOG(LOG_DEBUG,"running query: %s", insert.c_str());

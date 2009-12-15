@@ -14,6 +14,7 @@
 #include <cerrno>
 #include <cstring>
 #include <sstream>
+#include <algorithm>
 
 namespace newsbeuter {
 
@@ -264,6 +265,22 @@ void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed> feed) {
 		set_item_author(x, *item);
 
 		x->set_feedurl(feed->rssurl());
+
+		if (f.rss_version == rsspp::ATOM_1_0 && item->labels.size() > 0) {
+			std::vector<std::string>::const_iterator start, finish;
+			start = item->labels.begin();
+			finish = item->labels.end();
+			if (std::find(start, finish, "fresh") != finish) {
+				x->set_unread_nowrite(true);
+				x->set_override_unread(true);
+			} else if (std::find(start, finish, "kept-unread") != finish) {
+				x->set_unread_nowrite(true);
+				x->set_override_unread(true);
+			} else if (std::find(start, finish, "read") != finish) {
+				x->set_unread_nowrite(false);
+				x->set_override_unread(true);
+			}
+		}
 
 		set_item_content(x, *item);
 

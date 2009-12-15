@@ -40,6 +40,7 @@ struct item {
 
 	// Atom-specific:
 	std::string base;
+	std::vector<std::string> labels;
 };
 
 struct feed {

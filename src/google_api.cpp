@@ -119,7 +119,7 @@ std::vector<tagged_feedurl> googlereader_api::get_subscribed_urls() {
 							if (title != "") {
 								tags.push_back(utils::strprintf("~%s", title.c_str()));
 							}
-							urls.push_back(tagged_feedurl(utils::strprintf("%s%s?xt=user/-/state/com.google/read", GREADER_FEED_PREFIX, utils::escape_url(id).c_str()), tags));
+							urls.push_back(tagged_feedurl(utils::strprintf("%s%s", GREADER_FEED_PREFIX, utils::escape_url(id).c_str()), tags));
 						}
 					}
 				}
@@ -181,6 +181,8 @@ bool googlereader_api::mark_article_read(const std::string& guid, bool read) {
 	}
 
 	std::string result = post_content(GREADER_API_EDIT_TAG_URL, postcontent);
+
+	LOG(LOG_DEBUG, "googlereader_api::mark_article_read: postcontent = %s result = %s", postcontent.c_str(), result.c_str());
 
 	return result == "OK";
 }

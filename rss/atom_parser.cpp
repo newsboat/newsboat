@@ -107,6 +107,8 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 			}
 			if (summary_type == "")
 				summary_type = "text";
+		} else if (node_is(node, "category") && get_prop(node, "scheme")=="http://www.google.com/reader/") {
+			it.labels.push_back(get_prop(node, "label"));
 		}
 	} // for
 

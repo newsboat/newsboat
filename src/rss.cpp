@@ -22,7 +22,7 @@
 
 namespace newsbeuter {
 
-rss_item::rss_item(cache * c) : unread_(true), ch(c), enqueued_(false), deleted_(0), idx(0) {
+rss_item::rss_item(cache * c) : unread_(true), ch(c), enqueued_(false), deleted_(0), idx(0), override_unread_(false) {
 	// LOG(LOG_CRITICAL, "new rss_item");
 }
 

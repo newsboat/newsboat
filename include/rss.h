@@ -91,6 +91,9 @@ namespace newsbeuter {
 			inline void set_base(const std::string& b) { base = b; }
 			inline const std::string& get_base() { return base; }
 
+			inline void set_override_unread(bool b) { override_unread_ = b; }
+			inline bool override_unread() { return override_unread_; }
+
 		private:
 			std::string title_;
 			std::string link_;
@@ -110,6 +113,7 @@ namespace newsbeuter {
 			bool deleted_;
 			unsigned int idx;
 			std::string base;
+			bool override_unread_;
 	};
 
 	class rss_feed : public matchable {
