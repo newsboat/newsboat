@@ -28,13 +28,15 @@ public:
 
 class Parser {
 private:
-	int _EOF;
-	int _openblock;
-	int _closeblock;
-	int _ident;
-	int _stringliteral;
-	int _numliteral;
-	int _rangeliteral;
+	enum {
+		_EOF=0,
+		_openblock=1,
+		_closeblock=2,
+		_ident=3,
+		_stringliteral=4,
+		_numliteral=5,
+		_rangeliteral=6,
+	};
 	int maxT;
 
 	Token *dummyToken;
