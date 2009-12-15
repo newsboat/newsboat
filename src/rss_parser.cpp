@@ -273,10 +273,12 @@ void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed> feed) {
 			if (std::find(start, finish, "fresh") != finish) {
 				x->set_unread_nowrite(true);
 				x->set_override_unread(true);
-			} else if (std::find(start, finish, "kept-unread") != finish) {
+			} 
+			if (std::find(start, finish, "kept-unread") != finish) {
 				x->set_unread_nowrite(true);
 				x->set_override_unread(true);
-			} else if (std::find(start, finish, "read") != finish) {
+			}
+			if (std::find(start, finish, "read") != finish) {
 				x->set_unread_nowrite(false);
 				x->set_override_unread(true);
 			}

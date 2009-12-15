@@ -56,6 +56,10 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		case OP_DELETE: {
 				scope_measure m1("OP_DELETE");
 				if (itemposname.length() > 0) {
+					// mark as read
+					v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), true);
+					visible_items[itempos].first->set_unread(false);
+					// mark as deleted
 					visible_items[itempos].first->set_deleted(!visible_items[itempos].first->deleted());
 					v->get_ctrl()->mark_deleted(visible_items[itempos].first->guid(), visible_items[itempos].first->deleted());
 					if (itempos < visible_items.size()-1)
