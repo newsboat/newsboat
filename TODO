@@ -11,7 +11,6 @@ TODO:
 - implement RFC 5005 (http://www.ietf.org/rfc/rfc5005.txt)
 - implement a single key with which it is possible to go through all unread articles (like space in slrn)
 - Google Reader support
-	- add synchronization option so that Google Reader's subscription list is synchronized with ~/.newsbeuter/urls
 	- add option to show "special feeds" such as what your friends shared.
 
 
