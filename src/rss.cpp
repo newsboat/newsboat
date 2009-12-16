@@ -461,44 +461,50 @@ void rss_feed::set_rssurl(const std::string& u) {
 }
 
 struct sort_item_by_title : public std::binary_function<std::tr1::shared_ptr<rss_item>, std::tr1::shared_ptr<rss_item>, bool> {
-	sort_item_by_title() { }
+	bool reverse;
+	sort_item_by_title(bool b) : reverse(b) { }
 	bool operator()(std::tr1::shared_ptr<rss_item> a, std::tr1::shared_ptr<rss_item> b) {
-		return strcasecmp(a->title().c_str(), b->title().c_str()) < 0;
+		return reverse ?  (strcasecmp(a->title().c_str(), b->title().c_str()) > 0) : (strcasecmp(a->title().c_str(), b->title().c_str()) < 0);
 	}
 };
 
 struct sort_item_by_flags : public std::binary_function<std::tr1::shared_ptr<rss_item>, std::tr1::shared_ptr<rss_item>, bool> {
-	sort_item_by_flags() { }
+	bool reverse;
+	sort_item_by_flags(bool b) : reverse(b) { }
 	bool operator()(std::tr1::shared_ptr<rss_item> a, std::tr1::shared_ptr<rss_item> b) {
-		return strcmp(a->flags().c_str(), b->flags().c_str()) < 0;
+		return reverse ?  (strcmp(a->flags().c_str(), b->flags().c_str()) > 0) : (strcmp(a->flags().c_str(), b->flags().c_str()) < 0);
 	}
 };
 
 struct sort_item_by_author : public std::binary_function<std::tr1::shared_ptr<rss_item>, std::tr1::shared_ptr<rss_item>, bool> {
-	sort_item_by_author() { }
+	bool reverse;
+	sort_item_by_author(bool b) : reverse(b) { }
 	bool operator()(std::tr1::shared_ptr<rss_item> a, std::tr1::shared_ptr<rss_item> b) {
-		return strcmp(a->author().c_str(), b->author().c_str()) < 0;
+		return reverse ?  (strcmp(a->author().c_str(), b->author().c_str()) > 0) : (strcmp(a->author().c_str(), b->author().c_str()) < 0);
 	}
 };
 
 struct sort_item_by_link : public std::binary_function<std::tr1::shared_ptr<rss_item>, std::tr1::shared_ptr<rss_item>, bool> {
-	sort_item_by_link() { }
+	bool reverse;
+	sort_item_by_link(bool b) : reverse(b) { }
 	bool operator()(std::tr1::shared_ptr<rss_item> a, std::tr1::shared_ptr<rss_item> b) {
-		return strcmp(a->link().c_str(), b->link().c_str()) < 0;
+		return reverse ?  (strcmp(a->link().c_str(), b->link().c_str()) >  0) : (strcmp(a->link().c_str(), b->link().c_str()) < 0);
 	}
 };
 
 struct sort_item_by_guid : public std::binary_function<std::tr1::shared_ptr<rss_item>, std::tr1::shared_ptr<rss_item>, bool> {
-	sort_item_by_guid() { }
+	bool reverse;
+	sort_item_by_guid(bool b) : reverse(b) { }
 	bool operator()(std::tr1::shared_ptr<rss_item> a, std::tr1::shared_ptr<rss_item> b) {
-		return strcmp(a->guid().c_str(), b->guid().c_str()) < 0;
+		return reverse ?  (strcmp(a->guid().c_str(), b->guid().c_str()) > 0) : (strcmp(a->guid().c_str(), b->guid().c_str()) < 0);
 	}
 };
 
 struct sort_item_by_date : public std::binary_function<std::tr1::shared_ptr<rss_item>, std::tr1::shared_ptr<rss_item>, bool> {
-	sort_item_by_date() { }
+	bool reverse;
+	sort_item_by_date(bool b) : reverse(b) { }
 	bool operator()(std::tr1::shared_ptr<rss_item> a, std::tr1::shared_ptr<rss_item> b) {
-		return a->pubDate_timestamp()  < b->pubDate_timestamp();
+		return reverse ?  (a->pubDate_timestamp() > b->pubDate_timestamp()) : (a->pubDate_timestamp() < b->pubDate_timestamp());
 	}
 };
 
@@ -523,22 +529,18 @@ void rss_feed::sort_unlocked(const std::string& method) {
 
 	if (methods.size() > 0) {
 		if (methods[0] == "title") {
-			std::stable_sort(items_.begin(), items_.end(), sort_item_by_title());
+			std::stable_sort(items_.begin(), items_.end(), sort_item_by_title(reverse));
 		} else if (methods[0] == "flags") {
-			std::stable_sort(items_.begin(), items_.end(), sort_item_by_flags());
+			std::stable_sort(items_.begin(), items_.end(), sort_item_by_flags(reverse));
 		} else if (methods[0] == "author") {
-			std::stable_sort(items_.begin(), items_.end(), sort_item_by_author());
+			std::stable_sort(items_.begin(), items_.end(), sort_item_by_author(reverse));
 		} else if (methods[0] == "link") {
-			std::stable_sort(items_.begin(), items_.end(), sort_item_by_link());
+			std::stable_sort(items_.begin(), items_.end(), sort_item_by_link(reverse));
 		} else if (methods[0] == "guid") {
-			std::stable_sort(items_.begin(), items_.end(), sort_item_by_guid());
+			std::stable_sort(items_.begin(), items_.end(), sort_item_by_guid(reverse));
 		} else if (methods[0] == "date") {
-			std::stable_sort(items_.begin(), items_.end(), sort_item_by_date());
+			std::stable_sort(items_.begin(), items_.end(), sort_item_by_date(reverse));
 		}
-	}
-
-	if (reverse) {
-		std::reverse(items_.begin(), items_.end());
 	}
 }
 
