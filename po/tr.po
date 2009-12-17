@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-14 10:25+0100\n"
+"POT-Creation-Date: 2009-12-17 12:41+0100\n"
 "PO-Revision-Date: 2008-11-18 14:41+0200\n"
 "Last-Translator: H.Gökhan SARI <hsa2@difuzyon.net>\n"
 "Language-Team: Türkçe <en@li.org>\n"
@@ -39,52 +39,52 @@ msgstr ""
 "newsbeuter: yeniden yükleme tamamlandı, %f okunmamış besleme (%n okunmamış "
 "toplam yazı)"
 
-#: src/configcontainer.cpp:84
+#: src/configcontainer.cpp:85
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
 msgstr "%N %V - Beslemeler (%u okunmamış, %t toplam)%?T? - tag `%T'&?"
 
-#: src/configcontainer.cpp:85
+#: src/configcontainer.cpp:86
 msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
 msgstr "%N %V - '%T' yazı (%u okunmamış, %t toplam) - %U"
 
-#: src/configcontainer.cpp:86
+#: src/configcontainer.cpp:87
 msgid "%N %V - Search result (%u unread, %t total)"
 msgstr "%N %V - Arama sonucu (%u okunmamış, %t toplam)"
 
-#: src/configcontainer.cpp:87
+#: src/configcontainer.cpp:88
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Aç&Kaydet? - %f"
 
-#: src/configcontainer.cpp:88
+#: src/configcontainer.cpp:89
 msgid "%N %V - Help"
 msgstr "%N %V - Yardım"
 
-#: src/configcontainer.cpp:89
+#: src/configcontainer.cpp:90
 msgid "%N %V - Select Tag"
 msgstr "%N %V - Etiket Seç"
 
-#: src/configcontainer.cpp:90
+#: src/configcontainer.cpp:91
 msgid "%N %V - Select Filter"
 msgstr "%N %V - Filtre Seç"
 
-#: src/configcontainer.cpp:91
+#: src/configcontainer.cpp:92
 msgid "%N %V - Article '%T'"
 msgstr "%N %V - Yazı '%T'"
 
-#: src/configcontainer.cpp:92
+#: src/configcontainer.cpp:93
 msgid "%N %V - URLs"
 msgstr "%N %V - Adres"
 
-#: src/configcontainer.cpp:93
+#: src/configcontainer.cpp:94
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Diyalog"
 
-#: src/configcontainer.cpp:127
+#: src/configcontainer.cpp:128
 #, c-format
 msgid "expected boolean value, found `%s' instead"
 msgstr ""
 
-#: src/configcontainer.cpp:133
+#: src/configcontainer.cpp:134
 #, c-format
 msgid "expected integer value, found `%s' instead"
 msgstr ""
@@ -413,10 +413,10 @@ msgid "Close Dialog"
 msgstr ""
 
 #: src/dialogs_formaction.cpp:62 src/dialogs_formaction.cpp:77
-#: src/itemlist_formaction.cpp:52 src/itemlist_formaction.cpp:65
-#: src/itemlist_formaction.cpp:84 src/itemlist_formaction.cpp:103
-#: src/itemlist_formaction.cpp:121 src/itemlist_formaction.cpp:141
-#: src/itemlist_formaction.cpp:466
+#: src/itemlist_formaction.cpp:52 src/itemlist_formaction.cpp:69
+#: src/itemlist_formaction.cpp:88 src/itemlist_formaction.cpp:107
+#: src/itemlist_formaction.cpp:125 src/itemlist_formaction.cpp:145
+#: src/itemlist_formaction.cpp:470
 msgid "No item selected!"
 msgstr "Hiçbiri seçilmedi!"
 
@@ -425,7 +425,7 @@ msgid "Error: you can't remove the feed list!"
 msgstr "Hata: besleme listesini silemezsiniz!"
 
 #: src/dialogs_formaction.cpp:99 src/feedlist_formaction.cpp:661
-#: src/itemlist_formaction.cpp:749 src/urlview_formaction.cpp:128
+#: src/itemlist_formaction.cpp:753 src/urlview_formaction.cpp:128
 msgid "Invalid position!"
 msgstr "Geçersiz konum!"
 
@@ -509,17 +509,17 @@ msgid "ftaun"
 msgstr ""
 
 #: src/feedlist_formaction.cpp:123 src/feedlist_formaction.cpp:140
-#: src/itemlist_formaction.cpp:363 src/itemlist_formaction.cpp:382
+#: src/itemlist_formaction.cpp:367 src/itemlist_formaction.cpp:386
 msgid "f"
 msgstr ""
 
 #: src/feedlist_formaction.cpp:125 src/feedlist_formaction.cpp:142
-#: src/itemlist_formaction.cpp:361 src/itemlist_formaction.cpp:380
+#: src/itemlist_formaction.cpp:365 src/itemlist_formaction.cpp:384
 msgid "t"
 msgstr ""
 
 #: src/feedlist_formaction.cpp:127 src/feedlist_formaction.cpp:144
-#: src/itemlist_formaction.cpp:365 src/itemlist_formaction.cpp:384
+#: src/itemlist_formaction.cpp:369 src/itemlist_formaction.cpp:388
 msgid "a"
 msgstr ""
 
@@ -538,11 +538,11 @@ msgid ""
 "one?"
 msgstr ""
 
-#: src/feedlist_formaction.cpp:174 src/itemlist_formaction.cpp:217
+#: src/feedlist_formaction.cpp:174 src/itemlist_formaction.cpp:221
 msgid "Marking feed read..."
 msgstr "Besleme okundu olarak işaretleniyor..."
 
-#: src/feedlist_formaction.cpp:183 src/itemlist_formaction.cpp:234
+#: src/feedlist_formaction.cpp:183 src/itemlist_formaction.cpp:238
 #, c-format
 msgid "Error: couldn't mark feed read: %s"
 msgstr "Hata: besleme okundu olarak işaretlenemedi: %s"
@@ -560,21 +560,21 @@ msgstr "Tüm beslemeler okundu olarak işaretleniyor..."
 msgid "No tags defined."
 msgstr "Hiçbir etiket tanımlanmadı."
 
-#: src/feedlist_formaction.cpp:268 src/itemlist_formaction.cpp:321
+#: src/feedlist_formaction.cpp:268 src/itemlist_formaction.cpp:325
 #, c-format
 msgid "Error: couldn't parse filter command `%s': %s"
 msgstr "Hata: filtre komutu `%s' ayrıştırılamadı: %s"
 
-#: src/feedlist_formaction.cpp:278 src/itemlist_formaction.cpp:332
+#: src/feedlist_formaction.cpp:278 src/itemlist_formaction.cpp:336
 msgid "No filters defined."
 msgstr "Hiçbir filtre tanımlanmadı."
 
 #: src/feedlist_formaction.cpp:291 src/help_formaction.cpp:26
-#: src/itemlist_formaction.cpp:274 src/itemview_formaction.cpp:233
+#: src/itemlist_formaction.cpp:278 src/itemview_formaction.cpp:233
 msgid "Search for: "
 msgstr "Ara: "
 
-#: src/feedlist_formaction.cpp:308 src/itemlist_formaction.cpp:345
+#: src/feedlist_formaction.cpp:308 src/itemlist_formaction.cpp:349
 msgid "Filter: "
 msgstr "Filtre: "
 
@@ -592,22 +592,22 @@ msgid "y"
 msgstr "e"
 
 #: src/feedlist_formaction.cpp:395 src/help_formaction.cpp:142
-#: src/itemlist_formaction.cpp:727 src/itemview_formaction.cpp:369
+#: src/itemlist_formaction.cpp:731 src/itemview_formaction.cpp:369
 #: src/pb_view.cpp:258 src/pb_view.cpp:267 src/urlview_formaction.cpp:116
 msgid "Quit"
 msgstr "Çık"
 
-#: src/feedlist_formaction.cpp:396 src/itemlist_formaction.cpp:728
+#: src/feedlist_formaction.cpp:396 src/itemlist_formaction.cpp:732
 #: src/itemview_formaction.cpp:370
 msgid "Open"
 msgstr "Aç"
 
-#: src/feedlist_formaction.cpp:397 src/itemlist_formaction.cpp:731
+#: src/feedlist_formaction.cpp:397 src/itemlist_formaction.cpp:735
 #: src/itemview_formaction.cpp:372
 msgid "Next Unread"
 msgstr "Sonraki Okunmamış"
 
-#: src/feedlist_formaction.cpp:398 src/itemlist_formaction.cpp:730
+#: src/feedlist_formaction.cpp:398 src/itemlist_formaction.cpp:734
 msgid "Reload"
 msgstr "Yeniden Yükle"
 
@@ -624,34 +624,34 @@ msgid "Catchup All"
 msgstr "Tümünü Eşitle"
 
 #: src/feedlist_formaction.cpp:402 src/help_formaction.cpp:143
-#: src/itemlist_formaction.cpp:733
+#: src/itemlist_formaction.cpp:737
 msgid "Search"
 msgstr "Ara"
 
 #: src/feedlist_formaction.cpp:403 src/help_formaction.cpp:170
-#: src/itemlist_formaction.cpp:734 src/itemview_formaction.cpp:375
+#: src/itemlist_formaction.cpp:738 src/itemview_formaction.cpp:375
 #: src/pb_view.cpp:201 src/pb_view.cpp:274
 msgid "Help"
 msgstr "Yardım"
 
-#: src/feedlist_formaction.cpp:616 src/itemlist_formaction.cpp:452
+#: src/feedlist_formaction.cpp:616 src/itemlist_formaction.cpp:456
 msgid "Error: couldn't parse filter command!"
 msgstr "Hata: filtre komutu ayrıştırılamadı!"
 
-#: src/feedlist_formaction.cpp:631 src/itemlist_formaction.cpp:487
+#: src/feedlist_formaction.cpp:631 src/itemlist_formaction.cpp:491
 msgid "Searching..."
 msgstr "Aranıyor..."
 
-#: src/feedlist_formaction.cpp:638 src/itemlist_formaction.cpp:498
+#: src/feedlist_formaction.cpp:638 src/itemlist_formaction.cpp:502
 #, c-format
 msgid "Error while searching for `%s': %s"
 msgstr "`%s' aranırken hata: %s"
 
-#: src/feedlist_formaction.cpp:647 src/itemlist_formaction.cpp:503
+#: src/feedlist_formaction.cpp:647 src/itemlist_formaction.cpp:507
 msgid "No results."
 msgstr "Sonuç yok."
 
-#: src/feedlist_formaction.cpp:656 src/itemlist_formaction.cpp:744
+#: src/feedlist_formaction.cpp:656 src/itemlist_formaction.cpp:748
 msgid "Position not visible!"
 msgstr "Konum görünür değil!"
 
@@ -684,7 +684,7 @@ msgstr "%s %s - Dosya Kaydet - %s"
 msgid "Cancel"
 msgstr "İptal"
 
-#: src/filebrowser_formaction.cpp:187 src/itemlist_formaction.cpp:729
+#: src/filebrowser_formaction.cpp:187 src/itemlist_formaction.cpp:733
 #: src/itemview_formaction.cpp:371
 msgid "Save"
 msgstr "Kaydet"
@@ -746,6 +746,25 @@ msgstr "Adres: "
 msgid "Description: "
 msgstr "Açıklama: "
 
+#: src/googlereader_urlreader.cpp:33
+msgid "People you follow"
+msgstr ""
+
+#: src/googlereader_urlreader.cpp:34
+#, fuzzy
+msgid "Starred items"
+msgstr "Okunmamış yok."
+
+#: src/googlereader_urlreader.cpp:35
+#, fuzzy
+msgid "Shared items"
+msgstr "Okunmamış yok."
+
+#: src/googlereader_urlreader.cpp:36
+#, fuzzy
+msgid "Popular items"
+msgstr "Okunmamış yok."
+
 #: src/help_formaction.cpp:115
 msgid "Generic bindings:"
 msgstr ""
@@ -782,105 +801,105 @@ msgstr "gömülmüş flash"
 msgid "unknown (bug)"
 msgstr "bilinmiyor (bug)"
 
-#: src/itemlist_formaction.cpp:99 src/itemview_formaction.cpp:270
+#: src/itemlist_formaction.cpp:103 src/itemview_formaction.cpp:270
 msgid "URL list empty."
 msgstr "Adres listesi boş."
 
-#: src/itemlist_formaction.cpp:136 src/itemview_formaction.cpp:103
+#: src/itemlist_formaction.cpp:140 src/itemview_formaction.cpp:103
 #: src/itemview_formaction.cpp:261
 msgid "Flags: "
 msgstr "Bayraklar: "
 
-#: src/itemlist_formaction.cpp:159 src/itemlist_formaction.cpp:772
+#: src/itemlist_formaction.cpp:163 src/itemlist_formaction.cpp:776
 msgid "Error: no item selected!"
 msgstr "Hata: hiçbiri seçilmedi!"
 
-#: src/itemlist_formaction.cpp:173
+#: src/itemlist_formaction.cpp:177
 msgid "Error: you can't reload search results."
 msgstr "Hata: arama sonuçlarını yeniden yükleyemezsiniz."
 
-#: src/itemlist_formaction.cpp:186 src/itemlist_formaction.cpp:194
-#: src/itemlist_formaction.cpp:201 src/itemview_formaction.cpp:284
+#: src/itemlist_formaction.cpp:190 src/itemlist_formaction.cpp:198
+#: src/itemlist_formaction.cpp:205 src/itemview_formaction.cpp:284
 #: src/itemview_formaction.cpp:293 src/itemview_formaction.cpp:302
-#: src/view.cpp:622 src/view.cpp:680
+#: src/view.cpp:626 src/view.cpp:684
 msgid "No unread items."
 msgstr "Okunmamış yok."
 
-#: src/itemlist_formaction.cpp:207 src/itemlist_formaction.cpp:212
+#: src/itemlist_formaction.cpp:211 src/itemlist_formaction.cpp:216
 msgid "No unread feeds."
 msgstr "Okunmamış besleme yok."
 
-#: src/itemlist_formaction.cpp:260 src/itemview_formaction.cpp:247
+#: src/itemlist_formaction.cpp:264 src/itemview_formaction.cpp:247
 msgid "Pipe article to command: "
 msgstr ""
 
-#: src/itemlist_formaction.cpp:282 src/itemview_formaction.cpp:307
+#: src/itemlist_formaction.cpp:286 src/itemview_formaction.cpp:307
 msgid "Toggling read flag for article..."
 msgstr "Bayrak okuma açılıyor/kapatılıyor..."
 
-#: src/itemlist_formaction.cpp:299
+#: src/itemlist_formaction.cpp:303
 #, c-format
 msgid "Error while toggling read flag: %s"
 msgstr "Hata: %s"
 
-#: src/itemlist_formaction.cpp:356
+#: src/itemlist_formaction.cpp:360
 msgid "Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"
 msgstr ""
 
-#: src/itemlist_formaction.cpp:356 src/itemlist_formaction.cpp:375
+#: src/itemlist_formaction.cpp:360 src/itemlist_formaction.cpp:379
 msgid "dtfalg"
 msgstr "dtfalg"
 
-#: src/itemlist_formaction.cpp:359 src/itemlist_formaction.cpp:378
+#: src/itemlist_formaction.cpp:363 src/itemlist_formaction.cpp:382
 msgid "d"
 msgstr ""
 
-#: src/itemlist_formaction.cpp:367 src/itemlist_formaction.cpp:386
+#: src/itemlist_formaction.cpp:371 src/itemlist_formaction.cpp:390
 msgid "l"
 msgstr ""
 
-#: src/itemlist_formaction.cpp:369 src/itemlist_formaction.cpp:388
+#: src/itemlist_formaction.cpp:373 src/itemlist_formaction.cpp:392
 msgid "g"
 msgstr ""
 
-#: src/itemlist_formaction.cpp:375
+#: src/itemlist_formaction.cpp:379
 msgid "Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"
 msgstr ""
 
-#: src/itemlist_formaction.cpp:476 src/itemview_formaction.cpp:461
+#: src/itemlist_formaction.cpp:480 src/itemview_formaction.cpp:461
 msgid "Flags updated."
 msgstr "Bayraklar güncellendi."
 
-#: src/itemlist_formaction.cpp:732
+#: src/itemlist_formaction.cpp:736
 msgid "Mark All Read"
 msgstr "Tümünü Okundu Olarak İşaretle"
 
-#: src/itemlist_formaction.cpp:808 src/itemview_formaction.cpp:197
+#: src/itemlist_formaction.cpp:812 src/itemview_formaction.cpp:197
 #: src/itemview_formaction.cpp:436
 msgid "Aborted saving."
 msgstr "Kayıt işlemi iptal edildi."
 
-#: src/itemlist_formaction.cpp:812 src/itemview_formaction.cpp:440
+#: src/itemlist_formaction.cpp:816 src/itemview_formaction.cpp:440
 #, c-format
 msgid "Saved article to %s"
 msgstr "Yazı %s'e kaydedildi"
 
-#: src/itemlist_formaction.cpp:814 src/itemview_formaction.cpp:442
+#: src/itemlist_formaction.cpp:818 src/itemview_formaction.cpp:442
 #, c-format
 msgid "Error: couldn't save article to %s"
 msgstr "Hata: yazı %s'e kaydedilemedi"
 
-#: src/itemlist_formaction.cpp:889
+#: src/itemlist_formaction.cpp:893
 #, c-format
 msgid "Search Result - '%s'"
 msgstr ""
 
-#: src/itemlist_formaction.cpp:892
+#: src/itemlist_formaction.cpp:896
 #, c-format
 msgid "Query Feed - %s"
 msgstr ""
 
-#: src/itemlist_formaction.cpp:894
+#: src/itemlist_formaction.cpp:898
 #, c-format
 msgid "Article List - %s"
 msgstr "Yazı Listesi - %s"
@@ -1308,7 +1327,7 @@ msgstr ""
 msgid "`%s' is not a valid regular expression: %s"
 msgstr "`%s' geçerli bir düzenli ifade değil: %s"
 
-#: src/rss_parser.cpp:140
+#: src/rss_parser.cpp:141
 #, c-format
 msgid "Error: unsupported URL: %s"
 msgstr "Hata: desteklenmeyen adres: %s"
@@ -1341,16 +1360,16 @@ msgstr "Yerimlerine Ekle"
 msgid "URLs"
 msgstr "Adresler"
 
-#: src/view.cpp:366
+#: src/view.cpp:366 src/view.cpp:386
 #, c-format
 msgid "Error: applying the filter failed: %s"
 msgstr "Hata: filtre uygulanırken hata oluştu: %s"
 
-#: src/view.cpp:408 src/view.cpp:435
+#: src/view.cpp:412 src/view.cpp:439
 msgid "Error: feed contains no items!"
 msgstr "Hata: besleme boş!"
 
-#: src/view.cpp:417
+#: src/view.cpp:421
 msgid "Updating query feed..."
 msgstr "Sorgu beslemesi güncelleniyor..."
 
