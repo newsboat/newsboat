@@ -489,6 +489,30 @@ synchronize this information directly to Google Reader. This, of course,
 includes opening articles. Toggling read articles back to "unread" is also 
 communicated to Google Reader.
 
+In addition, Google Reader provides the ability to "star" and to "share"
+articles. Starred articles are basically bookmarks, while shared articles are
+shown to people that follow your Google Reader account. Newsbeuter allows the
+use of this feature by mapping its powerful "flags" to the "star"/"unstar"
+resp. "share"/"unshare" operations.
+
+In order to use this mapping, all you need to do is to configure the flags
+that shall be used:
+
+	googlereader-flag-share "a"
+	googlereader-flag-star "b"
+
+After that, use these flags when you edit flags for an article, and these
+articles will be starred resp. shared.
+
+By default, newsbeuter also shows Google Reader "special feeds":
+- People you follow: articles shared by people that you follow.
+- Starred items: articles that you starred.
+- Shared items: articles that you shared.
+- Popular items: articles that are considered to be popular by Google's algorithms.
+
+You can disable these feeds by setting the following configuration variable:
+
+	googlereader-show-special-feeds no
 
 
 Bloglines Synchronization
