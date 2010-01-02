@@ -97,9 +97,9 @@ bool rss_parser::node_is(xmlNode * node, const char * name, const char * ns_uri)
 		return false;
 
 	if (strcmp((const char *)node->name, name)==0) {
-		if (!ns_uri)
+		if (!ns_uri && !node->ns)
 			return true;
-		if (node->ns && node->ns->href && strcmp((const char *)node->ns->href, ns_uri)==0)
+		if (ns_uri && node->ns && node->ns->href && strcmp((const char *)node->ns->href, ns_uri)==0)
 			return true;
 	}
 	return false;
