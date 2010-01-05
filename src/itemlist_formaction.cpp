@@ -42,7 +42,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 	switch (op) {
 		case OP_OPEN: {
 				LOG(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
-				if (itemposname.length() > 0) {
+				if (itemposname.length() > 0 && visible_items.size() != 0) {
 					visible_items[itempos].first->set_unread(false); // set article as read
 					v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), true);
 					old_itempos = itempos;
@@ -55,7 +55,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			break;
 		case OP_DELETE: {
 				scope_measure m1("OP_DELETE");
-				if (itemposname.length() > 0) {
+				if (itemposname.length() > 0 && visible_items.size() != 0) {
 					// mark as read
 					v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), true);
 					visible_items[itempos].first->set_unread(false);
@@ -79,7 +79,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			break;
 		case OP_OPENINBROWSER: {
 				LOG(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
-				if (itemposname.length() > 0) {
+				if (itemposname.length() > 0 && visible_items.size() != 0) {
 					if (itempos < visible_items.size()) {
 						v->open_in_browser(visible_items[itempos].first->link());
 						do_redraw = true;
@@ -90,7 +90,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			}
 			break;
 		case OP_SHOWURLS:
-			if (itemposname.length() > 0) {
+			if (itemposname.length() > 0 && visible_items.size() != 0) {
 				if (itempos < visible_items.size()) {
 					std::vector<linkpair> links;
 					std::vector<std::string> lines;
@@ -109,7 +109,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			break;
 		case OP_BOOKMARK: {
 				LOG(LOG_INFO, "itemlist_formaction: bookmarking item at pos `%s'", itemposname.c_str());
-				if (itemposname.length() > 0) {
+				if (itemposname.length() > 0 && visible_items.size() != 0) {
 					if (itempos < visible_items.size()) {
 						if (automatic) {
 							qna_responses.clear();
@@ -127,7 +127,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			}
 			break;
 		case OP_EDITFLAGS: {
-				if (itemposname.length() > 0) {
+				if (itemposname.length() > 0 && visible_items.size() != 0) {
 					if (itempos < visible_items.size()) {
 						if (automatic) {
 							if (args->size() > 0) {
@@ -149,7 +149,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		case OP_SAVE: 
 			{
 				LOG(LOG_INFO, "itemlist_formaction: saving item at pos `%s'", itemposname.c_str());
-				if (itemposname.length() > 0) {
+				if (itemposname.length() > 0 && visible_items.size() != 0) {
 					std::string filename ;
 					if (automatic) {
 						if (args->size() > 0) {
@@ -252,7 +252,8 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			update_visible_items = true;
 			do_redraw = true;
 			break;
-		case OP_PIPE_TO: {
+		case OP_PIPE_TO:
+			if(visible_items.size() != 0) {
 				std::vector<qna_pair> qna;
 				if (automatic) {
 					if (args->size() > 0) {
@@ -264,6 +265,8 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					qna.push_back(qna_pair(_("Pipe article to command: "), ""));
 					this->start_qna(qna, OP_PIPE_TO, &cmdlinehistory);
 				}
+			} else {
+				v->show_error(_("No item selected!"));
 			}
 			break;
 		case OP_SEARCH: {
@@ -282,7 +285,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			break;
 		case OP_TOGGLEITEMREAD: {
 				LOG(LOG_INFO, "itemlist_formaction: toggling item read at pos `%s'", itemposname.c_str());
-				if (itemposname.length() > 0) {
+				if (itemposname.length() > 0 && visible_items.size() != 0) {
 					v->set_status(_("Toggling read flag for article..."));
 					try {
 						if (automatic && args->size() > 0) {
