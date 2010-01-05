@@ -811,6 +811,25 @@ Examples for possible highlighting configurations are:
 	highlight feedlist "https?://[^ ]+" yellow red bold
 
 
+Highlighting Articles in the Article List
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In addition to generally highlighting text, there is also a specific way to
+highlight articles in the article list based on whether they match a certain
+filter expression. This means that you can highlight items in the article list
+based on their content. This is done using the "highlight-article" configuration
+command.
+
+The syntax is similar to the "highlight" configuration command, with the difference
+that there's no need to specify a target (since it only applies in the article list),
+and instead of a regular expression, a filter expression is used. After the filter
+expression, the colors and attributs are specified in the same way.
+
+Example:
+
+	highlight-article "author =~ \"Andreas Krennmair\"" white red bold
+
+
 Advanced Dialog Management
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 

@@ -269,6 +269,7 @@ void controller::run(int argc, char * argv[]) {
 
 	cfgparser.register_handler("define-filter",&filters);
 	cfgparser.register_handler("highlight", &rxman);
+	cfgparser.register_handler("highlight-article", &rxman);
 
 	try {
 		cfgparser.parse("/etc/" PROGRAM_NAME "/config");

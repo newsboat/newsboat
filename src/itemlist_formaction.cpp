@@ -593,7 +593,9 @@ void itemlist_formaction::prepare() {
 	std::string datetimeformat = v->get_cfg()->get_configvalue("datetime-format");
 	std::string itemlist_format = v->get_cfg()->get_configvalue("articlelist-format");
 
+
 	for (std::vector<itemptr_pos_pair>::iterator it = visible_items.begin(); it != visible_items.end(); ++it) {
+		std::string tmp_itemlist_format = itemlist_format;
 		fmtstr_formatter fmt;
 
 		fmt.register_fmt('i', utils::strprintf("%u",it->second + 1));
@@ -606,7 +608,14 @@ void itemlist_formaction::prepare() {
 		fmt.register_fmt('a', utils::replace_all(it->first->author(), "<", "<>"));
 		fmt.register_fmt('L', it->first->length());
 
-		listfmt.add_line(fmt.do_format(itemlist_format, width), it->second);
+		if (rxman) {
+			int id;
+			if ((id = rxman->article_matches(it->first.get())) != -1) {
+				tmp_itemlist_format = utils::strprintf("<%d>%s</>", id, itemlist_format.c_str());
+			}
+		}
+
+		listfmt.add_line(fmt.do_format(tmp_itemlist_format, width), it->second);
 	}
 
 	f->modify("items","replace_inner", listfmt.format_list(rxman, "articlelist"));

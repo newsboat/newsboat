@@ -3,6 +3,7 @@ Changes for newsbeuter:
 2.2:
 	Added Google Reader support.
 	Fixed issues #160, #161, #169, #171.
+	Implemented article highlighting in article list based on the article content (fixes issue #174).
 
 2.1 (2009-12-08):
 	Added support for dc:creator tag for RSS 2.0 parser.
