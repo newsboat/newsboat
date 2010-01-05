@@ -1,4 +1,4 @@
-/* rsspp - Copyright (C) 2008-2009 Andreas Krennmair <ak@newsbeuter.org>
+/* rsspp - Copyright (C) 2008-2010 Andreas Krennmair <ak@newsbeuter.org>
  * Licensed under the MIT/X Consortium License. See file LICENSE
  * for more information.
  */

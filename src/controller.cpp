@@ -741,7 +741,7 @@ void controller::start_reload_all_thread(std::vector<int> * indexes) {
 void controller::version_information(const char * argv0, unsigned int level) {
 	if (level<=1) {
 		std::cout << PROGRAM_NAME << " " << PROGRAM_VERSION << " - " << PROGRAM_URL << std::endl;
-		std::cout << "Copyright (C) 2006-2009 Andreas Krennmair" << std::endl << std::endl;
+		std::cout << "Copyright (C) 2006-2010 Andreas Krennmair" << std::endl << std::endl;
 
 		std::cout << _("newsbeuter is free software and licensed under the MIT/X Consortium License.") << std::endl;
 		std::cout << utils::strprintf(_("Type `%s -vv' for more information."), argv0) << std::endl << std::endl;
