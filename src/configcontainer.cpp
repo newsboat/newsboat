@@ -16,6 +16,22 @@
 namespace newsbeuter
 {
 
+configdata::configdata(const std::string& v, ...) : value(v), default_value(v), type(ENUM) {
+	va_list ap;
+	va_start(ap, v);
+
+	const char * arg;
+
+	do {
+		arg = va_arg(ap, const char *);
+		if (arg) {
+			enum_values.insert(arg);
+		}
+	} while (arg != NULL);
+
+	va_end(ap);
+}
+
 configcontainer::configcontainer()
 {
 	// create the config options and set their resp. default value and type
@@ -46,7 +62,7 @@ configcontainer::configcontainer()
 	config_data["notify-program"]  = configdata("", configdata::PATH);
 	config_data["notify-format"]   = configdata(_("newsbeuter: finished reload, %f unread feeds (%n unread articles total)"), configdata::STR);
 	config_data["datetime-format"] = configdata("%b %d", configdata::STR);
-	config_data["urls-source"]     = configdata("local", configdata::STR);
+	config_data["urls-source"]     = configdata("local", "local", "bloglines", "opml", "googlereader", NULL); // enum
 	config_data["bloglines-auth"]  = configdata("", configdata::STR);
 	config_data["bloglines-mark-read"] = configdata("no", configdata::BOOL);
 	config_data["bookmark-cmd"]    = configdata("", configdata::STR);
@@ -74,13 +90,13 @@ configcontainer::configcontainer()
 	config_data["history-limit"] = configdata("100", configdata::INT);
 	config_data["prepopulate-query-feeds"] = configdata("false", configdata::BOOL);
 	config_data["goto-first-unread"] = configdata("true", configdata::BOOL);
-	config_data["proxy-type"] = configdata("http", configdata::STR);
+	config_data["proxy-type"] = configdata("http", "http", "socks4", "socks4a", "socks5", NULL); // enum
 	config_data["googlereader-login"] = configdata("", configdata::STR);
 	config_data["googlereader-password"] = configdata("", configdata::STR);
 	config_data["googlereader-flag-share"] = configdata("", configdata::STR);
 	config_data["googlereader-flag-star"] = configdata("", configdata::STR);
 	config_data["googlereader-show-special-feeds"] = configdata("true", configdata::BOOL);
-	config_data["ignore-mode"] = configdata("download", configdata::STR);
+	config_data["ignore-mode"] = configdata("download", "download", "display", NULL); // enum
 
 	/* title formats: */
 	config_data["feedlist-title-format"] = configdata(_("%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"), configdata::STR);
@@ -138,6 +154,10 @@ void configcontainer::handle_action(const std::string& action, const std::vector
 			cfgdata.value = params[0];
 			break;
 
+		case configdata::ENUM:
+			if (cfgdata.enum_values.find(params[0]) == cfgdata.enum_values.end())
+				throw confighandlerexception(utils::strprintf(_("invalid configuration value `%s'"), params[0].c_str()));
+			// fall-through
 		case configdata::STR:
 		case configdata::PATH:
 			if (cfgdata.multi_option)
@@ -230,6 +250,7 @@ void configcontainer::dump_config(std::vector<std::string>& config_output) {
 			if (it->second.value != it->second.default_value)
 				configline.append(utils::strprintf(" # default: %s", it->second.default_value.c_str()));
 			break;
+		case configdata::ENUM:
 		case configdata::STR:
 		case configdata::PATH:
 			if (it->second.multi_option) {
