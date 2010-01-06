@@ -3,7 +3,6 @@ TODO:
 - add an auto-flag configuration command to automatically flag articles that match a certain query
 - when reload is finished, the focus shall be in the current form's list
 - per-feed refresh settings
-- implement internal alias mechanism to allow transition of renamed config commands.
 - fix HTML rendering of bold and underlined text when light background is configured
 - make MacPort available for easy installation
 - compute "busy-ness" of feeds, make it a sort option
@@ -161,3 +160,4 @@ DONE:
 	- add options to define flags that mark whether an article should be "shared" or "starred" and communicate this to Google Reader if necessary
 	- use <category label="..." /> information to update read/unread status
 	- add option to show "special feeds" such as what your friends shared.
+- implement internal alias mechanism to allow transition of renamed config commands.
