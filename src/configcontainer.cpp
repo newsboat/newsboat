@@ -80,6 +80,7 @@ configcontainer::configcontainer()
 	config_data["googlereader-flag-share"] = configdata("", configdata::STR);
 	config_data["googlereader-flag-star"] = configdata("", configdata::STR);
 	config_data["googlereader-show-special-feeds"] = configdata("true", configdata::BOOL);
+	config_data["ignore-mode"] = configdata("download", configdata::STR);
 
 	/* title formats: */
 	config_data["feedlist-title-format"] = configdata(_("%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"), configdata::STR);

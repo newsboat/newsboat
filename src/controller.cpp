@@ -413,7 +413,8 @@ void controller::run(int argc, char * argv[]) {
 		feed->set_rssurl(*it);
 		feed->set_tags(urlcfg->get_tags(*it));
 		try {
-			rsscache->internalize_rssfeed(feed);
+			bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
+			rsscache->internalize_rssfeed(feed, ignore_disp ? &ign : NULL);
 		} catch(const dbexception& e) {
 			std::cout << _("Error while loading feeds from database: ") << e.what() << std::endl;
 			utils::remove_fs_lock(lock_file);
@@ -573,7 +574,9 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
 		if (!unattended)
 			v->set_status(utils::strprintf(_("%sLoading %s..."), prepare_message(pos+1, max).c_str(), utils::censor_url(feed->rssurl()).c_str()));
 
-		rss_parser parser(feed->rssurl().c_str(), rsscache, &cfg, &ign, api);
+		bool ignore_dl = (cfg.get_configvalue("ignore-mode") == "download");
+
+		rss_parser parser(feed->rssurl().c_str(), rsscache, &cfg, ignore_dl ? &ign : NULL, api);
 		LOG(LOG_DEBUG, "controller::reload: created parser");
 		try {
 			feed = parser.parse();
@@ -988,7 +991,8 @@ void controller::reload_urls_file() {
 			new_feed->set_tags(urlcfg->get_tags(*it));
 			new_feed->set_order(i);
 			try {
-				rsscache->internalize_rssfeed(new_feed);
+				bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
+				rsscache->internalize_rssfeed(new_feed, ignore_disp ? &ign : NULL);
 			} catch(const dbexception& e) {
 				LOG(LOG_ERROR, "controller::reload_urls_file: caught exception: %s", e.what());
 				throw e;
@@ -1140,7 +1144,8 @@ void controller::save_feed(std::tr1::shared_ptr<rss_feed> feed, unsigned int pos
 		rsscache->externalize_rssfeed(feed, ign.matches_resetunread(feed->rssurl()));
 		LOG(LOG_DEBUG, "controller::reload: after externalize_rssfeed");
 
-		rsscache->internalize_rssfeed(feed);
+		bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
+		rsscache->internalize_rssfeed(feed, ignore_disp ? &ign : NULL);
 		LOG(LOG_DEBUG, "controller::reload: after internalize_rssfeed");
 		feed->set_tags(urlcfg->get_tags(feed->rssurl()));
 		{

@@ -408,6 +408,26 @@ matches the specified filter expression, then this article is ignored and never
 presented to the user. The configuration itself can contain as many
 ignore-article commands as desired.
 
+Since newsbeuter 2.2, you can specify the way an article is ignored. There are
+two ways available:
+
+ - During download: articles are ignored when a feed is downloaded and parsed,
+   and thus won't be written to the local cache.
+ - During display: articles are downloaded and written to the local cache, but
+   are ignored when a feed is displayed.
+
+Both modes have their advantages and disadvantages: while the download ignore
+mode saves some storage, you cannot simply "undo" the ignore by removing it
+from the configuration file: if an ignored article has already vanished from a
+feed, it won't reappear. On the other hand, the display ignore mode requires
+some more space, but has the advantage that an ignore can be "undone" by
+removing the ignore-article configuration command from the configuration.
+
+The default ignore mode is "download". You can set the ignore mode in the
+configuration file:
+
+	ignore-mode "display"
+
 
 Query Feeds
 ~~~~~~~~~~~

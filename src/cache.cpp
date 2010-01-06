@@ -403,7 +403,7 @@ void cache::externalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, bool reset_
 
 // this function reads an rss_feed including all of its rss_items.
 // the feed parameter needs to have the rssurl member set.
-void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed) {
+void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, rss_ignores * ign) {
 	scope_measure m1("cache::internalize_rssfeed");
 	if (feed->rssurl().substr(0,6) == "query:")
 		return;
@@ -446,7 +446,18 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed) {
 	}
 
 	unsigned int i=0;
-	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin(); it != feed->items().end(); ++it, ++i) {
+	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin(); it != feed->items().end(); ++it,++i) {
+		if (ign && ign->matches(it->get())) {
+			feed->items().erase(it);
+			// since we modified the vector, we need to reset the iterator
+			// to the beginning of the vector, and then fast-forward to
+			// the next element.
+			it = feed->items().begin();
+			for (int j=0;j<int(i)-1;j++) {
+				it++;
+			}
+			continue;
+		}
 		(*it)->set_cache(this);
 		(*it)->set_feedptr(feed);
 		(*it)->set_feedurl(feed->rssurl());
