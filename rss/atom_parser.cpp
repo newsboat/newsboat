@@ -15,25 +15,34 @@ void atom_parser::parse_feed(feed& f, xmlNode * rootNode) {
 	if (!rootNode)
 		throw exception(_("XML root node is NULL"));
 
+	switch (f.rss_version) {
+		case ATOM_0_3:
+			ns = ATOM_0_3_URI; break;
+		case ATOM_1_0:
+			ns = ATOM_1_0_URI; break;
+		default:
+			ns = NULL; break;
+	}
+
 	f.language = get_prop(rootNode, "lang");
 	globalbase = get_prop(rootNode, "base", XML_URI);
 
 	for (xmlNode * node = rootNode->children; node != NULL; node = node->next) {
-		if (node_is(node, "title")) {
+		if (node_is(node, "title", ns)) {
 			f.title = get_content(node);
 			f.title_type = get_prop(node, "type");
 			if (f.title_type == "")
 				f.title_type = "text";
-		} else if (node_is(node, "subtitle")) {
+		} else if (node_is(node, "subtitle", ns)) {
 			f.description = get_content(node);
-		} else if (node_is(node, "link")) {
+		} else if (node_is(node, "link", ns)) {
 			std::string rel = get_prop(node, "rel");
 			if (rel == "alternate") {
 				f.link = newsbeuter::utils::absolute_url(globalbase, get_prop(node, "href"));
 			}
-		} else if (node_is(node, "updated")) {
+		} else if (node_is(node, "updated", ns)) {
 			f.pubDate = w3cdtf_to_rfc822(get_content(node));
-		} else if (node_is(node, "entry")) {
+		} else if (node_is(node, "entry", ns)) {
 			f.items.push_back(parse_entry(node));
 		}
 	}
@@ -51,18 +60,18 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 		base = globalbase;
 
 	for (xmlNode * node = entryNode->children; node != NULL; node = node->next) {
-		if (node_is(node, "author")) {
+		if (node_is(node, "author", ns)) {
 			for (xmlNode * authornode = node->children; authornode != NULL; authornode = authornode->next) {
-				if (node_is(authornode, "name")) {
+				if (node_is(authornode, "name", ns)) {
 					it.author = get_content(authornode);
 				} // TODO: is there more?
 			}
-		} else if (node_is(node, "title")) {
+		} else if (node_is(node, "title", ns)) {
 			it.title = get_content(node);
 			it.title_type = get_prop(node, "type");
 			if (it.title_type == "")
 				it.title_type = "text";
-		} else if (node_is(node, "content")) {
+		} else if (node_is(node, "content", ns)) {
 			std::string mode = get_prop(node, "mode");
 			std::string type = get_prop(node, "type");
 			if (mode == "xml" || mode == "") {
@@ -78,14 +87,14 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 			if (it.description_type == "")
 				it.description_type = "text";
 			it.base = get_prop(node, "base", XML_URI);
-		} else if (node_is(node, "id")) {
+		} else if (node_is(node, "id", ns)) {
 			it.guid = get_content(node);
 			it.guid_isPermaLink = false;
-		} else if (node_is(node, "published")) {
+		} else if (node_is(node, "published", ns)) {
 			it.pubDate = w3cdtf_to_rfc822(get_content(node));
-		} else if (node_is(node, "updated")) {
+		} else if (node_is(node, "updated", ns)) {
 			updated = w3cdtf_to_rfc822(get_content(node));
-		} else if (node_is(node, "link")) {
+		} else if (node_is(node, "link", ns)) {
 			std::string rel = get_prop(node, "rel");
 			if (rel == "" || rel == "alternate") {
 				it.link = newsbeuter::utils::absolute_url(base, get_prop(node, "href"));
@@ -93,7 +102,7 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 				it.enclosure_url = get_prop(node, "href");
 				it.enclosure_type = get_prop(node, "type");
 			}
-		} else if (node_is(node, "summary")) {
+		} else if (node_is(node, "summary", ns)) {
 			std::string mode = get_prop(node, "mode");
 			summary_type = get_prop(node, "type");
 			if (mode == "xml" || mode == "") {
@@ -107,7 +116,7 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 			}
 			if (summary_type == "")
 				summary_type = "text";
-		} else if (node_is(node, "category") && get_prop(node, "scheme")=="http://www.google.com/reader/") {
+		} else if (node_is(node, "category", ns) && get_prop(node, "scheme")=="http://www.google.com/reader/") {
 			it.labels.push_back(get_prop(node, "label"));
 		}
 	} // for

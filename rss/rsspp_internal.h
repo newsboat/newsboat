@@ -56,11 +56,12 @@ struct rss_10_parser : public rss_parser {
 
 struct atom_parser : public rss_parser {
 		virtual void parse_feed(feed& f, xmlNode * rootNode);
-		atom_parser(xmlDocPtr doc) : rss_parser(doc) { }
+		atom_parser(xmlDocPtr doc) : rss_parser(doc), ns(0) { }
 		virtual ~atom_parser() { }
 	private:
 		item parse_entry(xmlNode * itemNode);
 		std::string globalbase;
+		const char * ns;
 };
 
 struct rss_parser_factory {
