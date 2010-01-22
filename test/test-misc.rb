@@ -228,7 +228,7 @@ verifier.expect(19, 0, "~")
 verifier.expect(20, 0, "~")
 verifier.expect(21, 0, "~")
 verifier.expect(22, 0, "~")
-verifier.expect(23, 25, "n:Next Unread o:Open in Browser e:Enqueue ?:Help Top  ")
+verifier.expect(23, 14, "n:Next Unread o:Open in Browser e:Enqueue ?:Help      ")
 # end auto-generated verification #2 
 
 Tuitest.keypress("q"[0])

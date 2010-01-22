@@ -166,9 +166,6 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 	}
 
 	switch (op) {
-		case OP_OPEN:
-			// nothing
-			break;
 		case OP_TOGGLESOURCEVIEW:
 			LOG(LOG_INFO, "view::run_itemview: toggling source view");
 			show_source = !show_source;
@@ -367,7 +364,6 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 keymap_hint_entry * itemview_formaction::get_keymap_hint() {
 	static keymap_hint_entry hints[] = {
 		{ OP_QUIT, _("Quit") },
-		{ OP_OPEN, _("Open") },
 		{ OP_SAVE, _("Save") },
 		{ OP_NEXTUNREAD, _("Next Unread") },
 		{ OP_OPENINBROWSER, _("Open in Browser") },
