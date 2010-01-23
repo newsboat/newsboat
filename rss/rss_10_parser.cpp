@@ -37,7 +37,7 @@ void rss_10_parser::parse_feed(feed& f, xmlNode * rootNode) {
 				if (node_is(itnode, "title", RSS_1_0_NS)) {
 					it.title = get_content(itnode);
 					it.title_type = "text";
-				} else if (node_is(itnode, "link")) {
+				} else if (node_is(itnode, "link", RSS_1_0_NS)) {
 					it.link = get_content(itnode);
 				} else if (node_is(itnode, "description", RSS_1_0_NS)) {
 					it.description = get_content(itnode);
