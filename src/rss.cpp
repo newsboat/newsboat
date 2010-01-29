@@ -454,6 +454,9 @@ void rss_feed::set_rssurl(const std::string& u) {
 	rssurl_ = u;
 	if (rssurl_.substr(0,6) == "query:") {
 		std::vector<std::string> tokens = utils::tokenize_quoted(u, ":");
+		if (tokens.size() < 3) {
+			throw std::string(_("too few arguments"));
+		}
 		LOG(LOG_DEBUG, "rss_feed::set_rssurl: query name = `%s' expr = `%s'", tokens[1].c_str(), tokens[2].c_str());
 		set_title(tokens[1]);
 		set_query(tokens[2]);
