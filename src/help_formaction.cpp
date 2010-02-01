@@ -17,9 +17,13 @@ help_formaction::help_formaction(view * vv, std::string formstr)
 help_formaction::~help_formaction() { }
 
 void help_formaction::process_operation(operation op, bool /* automatic */, std::vector<std::string> * /* args */) {
+	bool hardquit = false;
 	switch (op) {
 		case OP_QUIT:
 			quit = true;
+			break;
+		case OP_HARDQUIT:
+			hardquit = true;
 			break;
 		case OP_SEARCH: {
 				std::vector<qna_pair> qna;
@@ -34,7 +38,11 @@ void help_formaction::process_operation(operation op, bool /* automatic */, std:
 		default:
 			break;
 	}
-	if (quit) {
+	if (hardquit) {
+		while (v->formaction_stack_size() > 0) {
+			v->pop_current_formaction();
+		}
+	} else if (quit) {
 		v->pop_current_formaction();
 	}
 }

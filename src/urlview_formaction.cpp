@@ -22,6 +22,7 @@ urlview_formaction::~urlview_formaction() {
 }
 
 void urlview_formaction::process_operation(operation op, bool /* automatic */, std::vector<std::string> * /* args */) {
+	bool hardquit = false;
 	switch (op) {
 		case OP_OPEN: 
 			{
@@ -74,10 +75,17 @@ void urlview_formaction::process_operation(operation op, bool /* automatic */, s
 		case OP_QUIT:
 			quit = true;
 			break;
+		case OP_HARDQUIT:
+			hardquit = true;
+			break;
 		default: // nothing
 			break;
 	}
-	if (quit) {
+	if (hardquit) {
+		while (v->formaction_stack_size() > 0) {
+			v->pop_current_formaction();
+		}
+	} else if (quit) {
 		v->pop_current_formaction();
 	}
 }

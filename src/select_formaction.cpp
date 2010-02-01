@@ -34,10 +34,15 @@ void select_formaction::handle_cmdline(const std::string& cmd) {
 }
 
 void select_formaction::process_operation(operation op, bool /* automatic */, std::vector<std::string> * /* args */) {
+	bool hardquit = false;
 	switch (op) {
 		case OP_QUIT:
 			value = "";
 			quit = true;
+			break;
+		case OP_HARDQUIT:
+			value = "";
+			hardquit = true;
 			break;
 		case OP_OPEN: {
 				std::string tagposname = f->get("tagposname");
@@ -70,7 +75,11 @@ void select_formaction::process_operation(operation op, bool /* automatic */, st
 			break;
 	}
 
-	if (quit) {
+	if (hardquit) {
+		while (v->formaction_stack_size() > 0) {
+			v->pop_current_formaction();
+		}
+	} else if (quit) {
 		v->pop_current_formaction();
 	}
 }

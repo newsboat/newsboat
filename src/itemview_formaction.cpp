@@ -147,6 +147,7 @@ void itemview_formaction::prepare() {
 
 void itemview_formaction::process_operation(operation op, bool automatic, std::vector<std::string> * args) {
 	std::tr1::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
+	bool hardquit = false;
 
 	/*
 	 * whenever we process an operation, we mark the item
@@ -315,6 +316,10 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 			LOG(LOG_INFO, "view::run_itemview: quitting");
 			quit = true;
 			break;
+		case OP_HARDQUIT:
+			LOG(LOG_INFO, "view::run_itemview: hard quitting");
+			hardquit = true;
+			break;
 		case OP_HELP:
 			v->push_help();
 			break;
@@ -355,7 +360,11 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 			break;
 	}
 
-	if (quit) {
+	if (hardquit) {
+		while (v->formaction_stack_size() > 0) {
+			v->pop_current_formaction();
+		}
+	} else if (quit) {
 		v->pop_current_formaction();
 	}
 

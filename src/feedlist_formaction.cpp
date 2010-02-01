@@ -318,6 +318,10 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 				quit = true;
 			}
 			break;
+		case OP_HARDQUIT:
+			LOG(LOG_INFO, "feedlist_formaction: hard quitting");
+			quit = true;
+			break;
 		case OP_HELP:
 			v->push_help();
 			break;

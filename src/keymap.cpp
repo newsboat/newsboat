@@ -22,6 +22,7 @@ struct op_desc {
 static op_desc opdescs[] = {
 	{ OP_OPEN,				"open",						"ENTER", _("Open feed/article"),				KM_FEEDLIST | KM_FILEBROWSER | KM_HELP | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT | KM_URLVIEW | KM_PODBEUTER | KM_DIALOGS },
 	{ OP_QUIT,				"quit",						"q",	_("Return to previous dialog/Quit"),	KM_FEEDLIST | KM_FILEBROWSER | KM_HELP | KM_ARTICLELIST | KM_ARTICLE | KM_TAGSELECT | KM_FILTERSELECT | KM_URLVIEW | KM_PODBEUTER | KM_DIALOGS },
+	{ OP_HARDQUIT,			"hard-quit",				"Q",	_("Quit program,  no confirmation"),	KM_FEEDLIST | KM_FILEBROWSER | KM_HELP | KM_ARTICLELIST | KM_ARTICLE | KM_TAGSELECT | KM_FILTERSELECT | KM_URLVIEW | KM_PODBEUTER | KM_DIALOGS },
 	{ OP_RELOAD,			"reload",					"r",	_("Reload currently selected feed"),	KM_FEEDLIST }, 
 	{ OP_RELOADALL,			"reload-all",				"R",	_("Reload all feeds"),					KM_FEEDLIST },
 	{ OP_MARKFEEDREAD,		"mark-feed-read",			"A",	_("Mark feed read"),					KM_FEEDLIST | KM_ARTICLELIST },

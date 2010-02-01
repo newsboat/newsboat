@@ -29,6 +29,7 @@ itemlist_formaction::~itemlist_formaction() { }
 
 void itemlist_formaction::process_operation(operation op, bool automatic, std::vector<std::string> * args) {
 	bool quit = false;
+	bool hardquit = false;
 
 	/*
 	 * most of the operations go like this:
@@ -182,6 +183,12 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			v->feedlist_mark_pos_if_visible(pos);
 			feed->purge_deleted_items();
 			quit = true;
+			break;
+		case OP_HARDQUIT:
+			LOG(LOG_INFO, "itemlist_formaction: hard quitting");
+			v->feedlist_mark_pos_if_visible(pos);
+			feed->purge_deleted_items();
+			hardquit = true;
 			break;
 		case OP_NEXTUNREAD:
 			LOG(LOG_INFO, "itemlist_formaction: jumping to next unread item");
@@ -403,7 +410,11 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		default:
 			break;
 	}
-	if (quit) {
+	if (hardquit) {
+		while (v->formaction_stack_size() > 0) {
+			v->pop_current_formaction();
+		}
+	} else if (quit) {
 		v->pop_current_formaction();
 	}
 }
