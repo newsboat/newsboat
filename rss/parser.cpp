@@ -218,7 +218,18 @@ feed parser::parse_xmlnode(xmlNode* node) {
 					} else if (strcmp((const char *)node->ns->href, ATOM_1_0_URI)==0) {
 						f.rss_version = ATOM_1_0;
 					} else {
-						throw exception(_("invalid Atom version"));
+						const char * version = (const char *)xmlGetProp(node, (const xmlChar *)"version");
+						if (!version) {
+							xmlFree((void *)version);
+							throw exception(_("invalid Atom version"));
+						}
+						if (strcmp(version, "0.3")==0) {
+							xmlFree((void *)version);
+							f.rss_version = ATOM_0_3_NONS;
+						} else {
+							xmlFree((void *)version);
+							throw exception(_("invalid Atom version"));
+						}
 					}
 				} else {
 					throw exception(_("no Atom version"));

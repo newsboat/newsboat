@@ -20,6 +20,8 @@ void atom_parser::parse_feed(feed& f, xmlNode * rootNode) {
 			ns = ATOM_0_3_URI; break;
 		case ATOM_1_0:
 			ns = ATOM_1_0_URI; break;
+		case ATOM_0_3_NONS:
+			ns = NULL; break;
 		default:
 			ns = NULL; break;
 	}

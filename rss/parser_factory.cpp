@@ -19,6 +19,7 @@ std::tr1::shared_ptr<rss_parser> rss_parser_factory::get_object(feed& f, xmlDocP
 		case RSS_1_0:
 			return std::tr1::shared_ptr<rss_parser>(new rss_10_parser(doc));
 		case ATOM_0_3:
+		case ATOM_0_3_NONS:
 		case ATOM_1_0:
 			return std::tr1::shared_ptr<rss_parser>(new atom_parser(doc));
 		case UNKNOWN:

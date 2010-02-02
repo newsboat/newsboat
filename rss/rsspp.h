@@ -15,7 +15,7 @@
 
 namespace rsspp {
 
-enum version { UNKNOWN = 0, RSS_0_91, RSS_0_92, RSS_1_0, RSS_2_0, ATOM_0_3, ATOM_1_0, RSS_0_94 };
+enum version { UNKNOWN = 0, RSS_0_91, RSS_0_92, RSS_1_0, RSS_2_0, ATOM_0_3, ATOM_1_0, RSS_0_94, ATOM_0_3_NONS };
 
 struct item {
 	std::string title;
