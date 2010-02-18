@@ -580,7 +580,7 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
 
 		bool ignore_dl = (cfg.get_configvalue("ignore-mode") == "download");
 
-		rss_parser parser(feed->rssurl().c_str(), rsscache, &cfg, ignore_dl ? &ign : NULL, api);
+		rss_parser parser(feed->rssurl(), rsscache, &cfg, ignore_dl ? &ign : NULL, api);
 		LOG(LOG_DEBUG, "controller::reload: created parser");
 		try {
 			feed = parser.parse();

@@ -18,7 +18,7 @@
 
 namespace newsbeuter {
 
-rss_parser::rss_parser(const char * uri, cache * c, configcontainer * cfg, rss_ignores * ii, remote_api * a) 
+rss_parser::rss_parser(const std::string& uri, cache * c, configcontainer * cfg, rss_ignores * ii, remote_api * a) 
 	: my_uri(uri), ch(c), cfgcont(cfg), skip_parsing(false), is_valid(false), ign(ii), api(a) { }
 
 rss_parser::~rss_parser() { }
