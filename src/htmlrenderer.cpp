@@ -406,7 +406,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 								unsigned int i=0;
 								bool new_line = false;
 								for (std::vector<std::string>::iterator it2=words2.begin();it2!=words2.end();++it2,++i) {
-									if ((curline.length() + it2->length()) >= w) {
+									if ((utils::strwidth(curline) + utils::strwidth(*it2)) >= w) {
 										if (line_is_nonempty(curline))
 											lines.push_back(curline);
 										prepare_newline(curline, indent_level);
@@ -446,7 +446,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						}
 
 						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it,++i) {
-							if ((curline.length() + it->length()) >= w) {
+							if ((utils::strwidth(curline) + utils::strwidth(*it)) >= w) {
 								if (line_is_nonempty(curline))
 									lines.push_back(curline);
 								prepare_newline(curline, indent_level);

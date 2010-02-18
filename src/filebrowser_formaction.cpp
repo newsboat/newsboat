@@ -114,12 +114,14 @@ void filebrowser_formaction::process_operation(operation op, bool /* automatic *
 			LOG(LOG_DEBUG,"view::filebrowser: quitting");
 			v->pop_current_formaction();
 			f->set("filenametext", "");
+			break;
 		case OP_HARDQUIT:
 			LOG(LOG_DEBUG,"view::filebrowser: hard quitting");
 			while (v->formaction_stack_size() >0) {
 				v->pop_current_formaction();
 			}
 			f->set("filenametext", "");
+			break;
 		default:
 			break;
 	}

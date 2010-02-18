@@ -27,14 +27,14 @@ Tuitest.wait_until_idle
 Tuitest.wait_until_expected_text(7, 0, "                             ", 5000)
 # begin auto-generated verification #1 
 verifier.expect(7, 0, "                             ")
-verifier.expect(8, 0, "<p>This is some example content. </p>")
-verifier.expect(9, 0, "<p>Here's a line break.<br />")
-verifier.expect(10, 0, "</p>                                           ")
-verifier.expect(11, 0, "<ul>")
-verifier.expect(12, 0, "<li>first entry</li>")
-verifier.expect(13, 0, "<li>second entry</li>")
-verifier.expect(14, 0, "<li>third entry</li>")
-verifier.expect(15, 0, "</ul>")
+verifier.expect(8, 0, "        <p>This is some example content. </p>")
+verifier.expect(9, 0, "        <p>Here's a line break.<br />")
+verifier.expect(10, 0, "        Second line. And now we try an unordered list.</p>")
+verifier.expect(11, 0, "        <ul>")
+verifier.expect(12, 0, "                <li>first entry</li>")
+verifier.expect(13, 0, "                <li>second entry</li>")
+verifier.expect(14, 0, "                <li>third entry</li>")
+verifier.expect(15, 0, "        </ul>")
 verifier.expect(16, 0, " ")
 # end auto-generated verification #1 
 
