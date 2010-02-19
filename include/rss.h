@@ -14,6 +14,8 @@
 namespace newsbeuter {
 
 	typedef std::pair<std::string, matcher *> feedurl_expr_pair;
+
+	enum dl_status { SUCCESS, TO_BE_DOWNLOADED, DURING_DOWNLOAD, DL_ERROR };
 	
 	class cache;
 	class rss_feed;
@@ -178,6 +180,11 @@ namespace newsbeuter {
 
 			void set_feedptrs(std::tr1::shared_ptr<rss_feed> self);
 
+			std::string get_status();
+
+			inline void reset_status() { status_ = TO_BE_DOWNLOADED; }
+			inline void set_status(dl_status st) { status_ = st; }
+
 			mutex item_mutex; // this is ugly, but makes it possible to lock items use e.g. from the cache class
 		private:
 			std::string title_;
@@ -195,6 +202,7 @@ namespace newsbeuter {
 			bool is_rtl_;
 			unsigned int idx;
 			unsigned int order;
+			dl_status status_;
 	};
 
 	class rss_ignores : public config_action_handler {

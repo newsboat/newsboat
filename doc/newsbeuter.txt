@@ -698,10 +698,16 @@ i:Feed index
 l:Feed link
 L:Feed RSS URL
 n:"unread" flag field
+S:download status
 t:Feed title
 T:First tag of a feed in the URLs file
 u:"unread/total" field
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+While a reload-all operation is running, the download status indicates the 
+download status of a feed, which can be "to be downloaded" (indicated by "_"), 
+"currently downloading" (indicated by "."), successfully downloaded (indicated 
+by " ") and "download error" (indicated by "x").
 
 .Available Identifiers for articlelist-format
 [frame="all", grid="all", format="dsv"]

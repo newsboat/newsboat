@@ -583,6 +583,7 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
 		rss_parser parser(feed->rssurl(), rsscache, &cfg, ignore_dl ? &ign : NULL, api);
 		LOG(LOG_DEBUG, "controller::reload: created parser");
 		try {
+			feed->set_status(DURING_DOWNLOAD);
 			feed = parser.parse();
 			if (feed->items().size() > 0) {
 				save_feed(feed, pos);
@@ -592,6 +593,7 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
 			} else {
 				LOG(LOG_DEBUG, "controller::reload: feed is empty");
 			}
+			feed->set_status(SUCCESS);
 			v->set_status("");
 		} catch (const dbexception& e) {
 			errmsg = utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(feed->rssurl()).c_str(), e.what());
@@ -601,6 +603,7 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
 			errmsg = utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(feed->rssurl()).c_str(), e.what());
 		}
 		if (errmsg != "") {
+			feed->set_status(DL_ERROR);
 			v->set_status(errmsg);
 			LOG(LOG_USERERROR, "%s", errmsg.c_str());
 		}
@@ -652,6 +655,10 @@ void controller::reload_all(bool unattended) {
 	compute_unread_numbers(unread_feeds, unread_articles);
 	unsigned int num_threads = cfg.get_configvalue_as_int("reload-threads");
 	time_t t1, t2, dt;
+
+	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();it++) {
+		(*it)->reset_status();
+	}
 
 	if (num_threads < 1)
 		num_threads = 1;

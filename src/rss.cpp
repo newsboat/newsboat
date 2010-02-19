@@ -30,7 +30,7 @@ rss_item::~rss_item() {
 	// LOG(LOG_CRITICAL, "delete rss_item");
 }
 
-rss_feed::rss_feed(cache * c) : ch(c), empty(true), is_rtl_(false), idx(0) {
+rss_feed::rss_feed(cache * c) : ch(c), empty(true), is_rtl_(false), idx(0), status_(SUCCESS) {
 	// LOG(LOG_CRITICAL, "new rss_feed");
 }
 
@@ -579,6 +579,16 @@ void rss_feed::set_feedptrs(std::tr1::shared_ptr<rss_feed> self) {
 
 void rss_item::set_feedptr(std::tr1::shared_ptr<rss_feed> ptr) {
 	feedptr = ptr;
+}
+
+std::string rss_feed::get_status() {
+	switch (status_) {
+		case SUCCESS: return " ";
+		case TO_BE_DOWNLOADED: return "_";
+		case DURING_DOWNLOAD: return ".";
+		case DL_ERROR: return "x";
+		default: return "?";
+	}
 }
 
 

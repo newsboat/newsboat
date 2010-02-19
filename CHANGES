@@ -6,6 +6,7 @@ Changes for newsbeuter:
 	Implemented article highlighting in article list based on the article content (fixes issue #174).
 	Extended "ignore article" functionality with different ignore modes (download/display; fixes issue #52).
 	Added "hard quit" key to immediately quit from newsbeuter (patch by Jim Pryor)
+	Added "download status" format specifier for feedlist-format (fixes issue #181).
 
 2.1 (2009-12-08):
 	Added support for dc:creator tag for RSS 2.0 parser.
