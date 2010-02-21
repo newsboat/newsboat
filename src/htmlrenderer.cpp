@@ -38,6 +38,11 @@ htmlrenderer::htmlrenderer(unsigned int width, bool raw) : w(width), raw_(raw) {
 	tags["b"] = TAG_STRONG;
 	tags["strong"] = TAG_STRONG;
 	tags["u"] = TAG_UNDERLINE;
+	tags["script"] = TAG_SCRIPT;
+	tags["table"] = TAG_TABLE;
+	tags["th"] = TAG_TH;
+	tags["tr"] = TAG_TR;
+	tags["td"] = TAG_TD;
 }
 
 void htmlrenderer::render(const std::string& source, std::vector<std::string>& lines, std::vector<linkpair>& links, const std::string& url) {
@@ -67,9 +72,11 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 	int indent_level = 0;
 	bool inside_list = false, inside_li = false, is_ol = false, inside_pre = false;
 	bool itunes_hack = false;
+	size_t inside_script = 0;
 	unsigned int ol_count = 1;
 	htmltag current_tag;
 	int link_num = -1;
+	std::vector<Table> tables;
 	
 	/*
 	 * to render the HTML, we use a self-developed "XML" pull parser.
@@ -140,15 +147,14 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						break;
 
 					case TAG_BR:
-						lines.push_back(curline);
-						prepare_newline(curline, indent_level);	
+						add_line(curline, tables, lines);
+						prepare_newline(curline, tables.size() ? 0 : indent_level);	
 						break;
 
 					case TAG_PRE:
 						inside_pre = true;
-						if (line_is_nonempty(curline))
-							lines.push_back(curline);
-						prepare_newline(curline, indent_level);	
+						add_nonempty_line(curline, tables, lines);
+						prepare_newline(curline,  tables.size() ? 0 : indent_level);	
 						break;
 
 					case TAG_ITUNESHACK:
@@ -173,10 +179,9 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 
 					case TAG_BLOCKQUOTE:
 						++indent_level;
-						if (line_is_nonempty(curline))
-							lines.push_back(curline);
-						lines.push_back("");
-						prepare_newline(curline, indent_level);	
+						add_nonempty_line(curline, tables, lines);
+						add_line("", tables, lines);
+						prepare_newline(curline, tables.size() ? 0 : indent_level);	
 						break;
 
 					case TAG_H1:
@@ -184,44 +189,39 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					case TAG_H3:
 					case TAG_H4:
 					case TAG_P:
-						if (line_is_nonempty(curline))
-							lines.push_back(curline);
+						add_nonempty_line(curline, tables, lines);
 						if (lines.size() > 0 && lines[lines.size()-1].length() > static_cast<unsigned int>(indent_level*2))
-							lines.push_back("");
-						prepare_newline(curline, indent_level);	
+							add_line("", tables, lines);
+						prepare_newline(curline,  tables.size() ? 0 : indent_level);	
 						break;
 
 					case TAG_OL:
 						inside_list = true;
 						is_ol = true;
 						ol_count = 1;
-						if (line_is_nonempty(curline))
-							lines.push_back(curline);
-						lines.push_back("");
-						prepare_newline(curline, indent_level);	
+						add_nonempty_line(curline, tables, lines);
+						add_line("", tables, lines);
+						prepare_newline(curline,  tables.size() ? 0 : indent_level);	
 						break;
 
 					case TAG_UL:
 						inside_list = true;
 						is_ol = false;
-						if (line_is_nonempty(curline))
-							lines.push_back(curline);
-						lines.push_back("");
-						prepare_newline(curline, indent_level);
+						add_nonempty_line(curline, tables, lines);
+						add_line("", tables, lines);
+						prepare_newline(curline,  tables.size() ? 0 : indent_level);
 						break;
 
 					case TAG_LI:
 						if (inside_li) {
 							indent_level-=2;
 							if (indent_level < 0) indent_level = 0;
-							if (line_is_nonempty(curline))
-								lines.push_back(curline);
-							prepare_newline(curline, indent_level);	
+							add_nonempty_line(curline, tables, lines);
+							prepare_newline(curline,  tables.size() ? 0 : indent_level);	
 						}
 						inside_li = true;
-						if (line_is_nonempty(curline))
-							lines.push_back(curline);
-						prepare_newline(curline, indent_level);
+						add_nonempty_line(curline, tables, lines);
+						prepare_newline(curline,  tables.size() ? 0 : indent_level);
 						indent_level+=2;
 						if (is_ol) {
 							curline.append(utils::strprintf("%2u.", ol_count));
@@ -232,16 +232,14 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						break;
 
 					case TAG_DT:
-						if (line_is_nonempty(curline))
-							lines.push_back(curline);
-						prepare_newline(curline, indent_level);
+						add_nonempty_line(curline, tables, lines);
+						prepare_newline(curline,  tables.size() ? 0 : indent_level);
 						break;
 
 					case TAG_DD:
 						indent_level+=4;
-						if (line_is_nonempty(curline))
-							lines.push_back(curline);
-						prepare_newline(curline, indent_level);
+						add_nonempty_line(curline, tables, lines);
+						prepare_newline(curline,  tables.size() ? 0 : indent_level);
 						break;
 
 					case TAG_DL:
@@ -257,12 +255,53 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						break;
 
 					case TAG_HR:
-						if (line_is_nonempty(curline))
-							lines.push_back(curline);
-						prepare_newline(curline, indent_level);
-						lines.push_back(std::string(" ") + std::string(w - 2, '-') + std::string(" "));
-						prepare_newline(curline, indent_level);
+						add_nonempty_line(curline, tables, lines);
+						prepare_newline(curline,  tables.size() ? 0 : indent_level);
+						add_line(std::string(" ") + std::string(w - 2, '-') + std::string(" "), tables, lines);
+						prepare_newline(curline,  tables.size() ? 0 : indent_level);
 						break;
+
+					case TAG_SCRIPT:
+						add_nonempty_line(curline, tables, lines);
+						prepare_newline(curline,  tables.size() ? 0 : indent_level);
+
+						// don't render scripts, ignore current line
+						inside_script++;
+						break;
+
+					case TAG_TABLE: {
+						add_nonempty_line(curline, tables, lines);
+						prepare_newline(curline, 0); // no indent in tables
+
+						bool border = false;
+						try {
+							std::string b = xpp.getAttributeValue("border");
+							border = (utils::to_u(b) > 0);
+						} catch (const std::invalid_argument& ) {
+							// is ok, no border than
+						}
+						tables.push_back(Table(border));
+						break;
+					}
+
+					case TAG_TR:
+						if (tables.size())
+							tables.back().start_row();
+						break;
+
+					case TAG_TH:
+					case TAG_TD: {
+						size_t span = 1;
+						try {
+							span = utils::to_u(xpp.getAttributeValue("colspan"));
+						} catch (const std::invalid_argument& ) {
+							// is ok, span 1 than
+						}
+						if (tables.size())
+							tables.back().start_cell(span);
+						break;
+					}
+
 					default:
 						break;
 				}
@@ -277,10 +316,9 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					case TAG_BLOCKQUOTE:
 						--indent_level;
 						if (indent_level < 0) indent_level = 0;
-						if (line_is_nonempty(curline))
-							lines.push_back(curline);
-						lines.push_back("");
-						prepare_newline(curline, indent_level);
+						add_nonempty_line(curline, tables, lines);
+						add_line("", tables, lines);
+						prepare_newline(curline,  tables.size() ? 0 : indent_level);
 						break;
 
 					case TAG_OL:
@@ -289,30 +327,26 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						if (inside_li) {
 							indent_level-=2;
 							if (indent_level < 0) indent_level = 0;
-							if (line_is_nonempty(curline))
-								lines.push_back(curline);
-							prepare_newline(curline, indent_level);
+							add_nonempty_line(curline, tables, lines);
+							prepare_newline(curline,  tables.size() ? 0 : indent_level);
 						}
-						if (line_is_nonempty(curline))
-							lines.push_back(curline);
-						lines.push_back("");
-						prepare_newline(curline, indent_level);	
+						add_nonempty_line(curline, tables, lines);
+						add_line("", tables, lines);
+						prepare_newline(curline,  tables.size() ? 0 : indent_level);	
 						break;
 
 					case TAG_DT:
-						if (line_is_nonempty(curline))
-							lines.push_back(curline);
-						lines.push_back("");
-						prepare_newline(curline, indent_level);	
+						add_nonempty_line(curline, tables, lines);
+						add_line("", tables, lines);
+						prepare_newline(curline,  tables.size() ? 0 : indent_level);	
 						break;
 
 					case TAG_DD:
 						indent_level-=4;
 						if (indent_level < 0) indent_level = 0;
-						if (line_is_nonempty(curline))
-							lines.push_back(curline);
-						lines.push_back("");
-						prepare_newline(curline, indent_level);	
+						add_nonempty_line(curline, tables, lines);
+						add_line("", tables, lines);
+						prepare_newline(curline,  tables.size() ? 0 : indent_level);	
 						break;
 
 					case TAG_DL:
@@ -323,34 +357,31 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						indent_level-=2;
 						if (indent_level < 0) indent_level = 0;
 						inside_li = false;
-						if (line_is_nonempty(curline))
-							lines.push_back(curline);
-						prepare_newline(curline, indent_level);
+						add_nonempty_line(curline, tables, lines);
+						prepare_newline(curline,  tables.size() ? 0 : indent_level);
 						break;
 
 					case TAG_H1:
 						if (line_is_nonempty(curline)) {
-							lines.push_back(curline);
+							add_line(curline, tables, lines);
 							size_t llen = utils::strwidth(curline);
-							prepare_newline(curline, indent_level);
-							lines.push_back(std::string(llen, '-'));
+							prepare_newline(curline,  tables.size() ? 0 : indent_level);
+							add_line(std::string(llen, '-'), tables, lines);
 						}
-						prepare_newline(curline, indent_level);
+						prepare_newline(curline,  tables.size() ? 0 : indent_level);
 						break;
 
 					case TAG_H2:
 					case TAG_H3:
 					case TAG_H4:
 					case TAG_P:
-						if (line_is_nonempty(curline))
-							lines.push_back(curline);
-						prepare_newline(curline, indent_level);
+						add_nonempty_line(curline, tables, lines);
+						prepare_newline(curline,  tables.size() ? 0 : indent_level);
 						break;
 
 					case TAG_PRE:
-						if (line_is_nonempty(curline))
-							lines.push_back(curline);
-						prepare_newline(curline, indent_level);
+						add_nonempty_line(curline, tables, lines);
+						prepare_newline(curline,  tables.size() ? 0 : indent_level);
 						inside_pre = false;
 						break;
 
@@ -388,6 +419,58 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					case TAG_HR:
 						// ignore closing tags
 						break;
+
+					case TAG_SCRIPT:
+						// don't render scripts, ignore current line
+						if (inside_script)
+							inside_script--;
+						prepare_newline(curline,  tables.size() ? 0 : indent_level);
+						break;
+
+					case TAG_TABLE:
+						add_nonempty_line(curline, tables, lines);
+						prepare_newline(curline, 0); // no indent in tables
+
+						if (tables.size()) {
+							std::vector<std::string> table_text;
+							tables.back().complete_cell();
+							tables.back().complete_row();
+							render_table(tables.back(), table_text);
+							tables.pop_back();
+
+							if (tables.size()) { // still a table on the outside?
+								for(size_t idx=0; idx < table_text.size(); ++idx)
+								tables.back().add_text(table_text[idx]); // add rendered table to current cell
+							} else {
+								for(size_t idx=0; idx < table_text.size(); ++idx) {
+									std::string s = utils::quote_for_stfl(table_text[idx]);
+									while (s.length() > 0 && s[0] == '\n')
+										s.erase(0, 1);
+									add_line(s, tables, lines);
+								}
+							}
+						}
+						prepare_newline(curline, tables.size() ? 0: indent_level);
+						break;
+
+
+					case TAG_TR:
+						add_nonempty_line(curline, tables, lines);
+						prepare_newline(curline, 0); // no indent in tables
+
+						if (tables.size())
+							tables.back().complete_row();
+						break;
+
+					case TAG_TH:
+					case TAG_TD:
+						add_nonempty_line(curline, tables, lines);
+						prepare_newline(curline, 0); // no indent in tables
+
+						if (tables.size())
+							tables.back().complete_cell();
+						break;
+
 					default:
 						break;
 				}
@@ -399,17 +482,16 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						std::vector<std::string> words = utils::tokenize_nl(utils::quote_for_stfl(xpp.getText()));
 						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it) {
 							if (*it == "\n") {
-								lines.push_back(curline);
-								prepare_newline(curline, indent_level);
+								add_line(curline, tables, lines);
+								prepare_newline(curline,  tables.size() ? 0 : indent_level);
 							} else {
 								std::vector<std::string> words2 = utils::tokenize_spaced(*it);
 								unsigned int i=0;
 								bool new_line = false;
 								for (std::vector<std::string>::iterator it2=words2.begin();it2!=words2.end();++it2,++i) {
 									if ((utils::strwidth(curline) + utils::strwidth(*it2)) >= w) {
-										if (line_is_nonempty(curline))
-											lines.push_back(curline);
-										prepare_newline(curline, indent_level);
+										add_nonempty_line(curline, tables, lines);
+										prepare_newline(curline,  tables.size() ? 0 : indent_level);
 										new_line = true;
 									}
 									if (new_line) {
@@ -426,12 +508,14 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						std::vector<std::string> words = utils::tokenize_nl(utils::quote_for_stfl(xpp.getText()));
 						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it) {
 							if (*it == "\n") {
-								lines.push_back(curline);
-								prepare_newline(curline, indent_level);
+								add_line(curline, tables, lines);
+								prepare_newline(curline,  tables.size() ? 0 : indent_level);
 							} else {
 								curline.append(*it);
 							}
 						}
+					} else if (inside_script) {
+						// skip scripts
 					} else {
 						std::string s = utils::quote_for_stfl(xpp.getText());
 						while (s.length() > 0 && s[0] == '\n')
@@ -447,9 +531,8 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 
 						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it,++i) {
 							if ((utils::strwidth(curline) + utils::strwidth(*it)) >= w) {
-								if (line_is_nonempty(curline))
-									lines.push_back(curline);
-								prepare_newline(curline, indent_level);
+								add_nonempty_line(curline, tables, lines);
+								prepare_newline(curline, tables.size() ? 0 : indent_level);
 								new_line = true;
 							}
 							if (new_line) {
@@ -468,9 +551,24 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				break;
 		}
 	}
-	if (line_is_nonempty(curline))
-		lines.push_back(curline);
+
+	// and the rest
+	add_nonempty_line(curline, tables, lines);
 	
+	// force all tables to be closed and rendered
+	while(tables.size()) {
+		std::vector<std::string> table_text;
+		render_table(tables.back(), table_text);
+		tables.pop_back();
+		for(size_t idx=0; idx < table_text.size(); ++idx) {
+			std::string s = table_text[idx];
+			while (s.length() > 0 && s[0] == '\n')
+				s.erase(0, 1);
+			add_line(s, tables, lines);
+		}
+	}
+
+	// add link list
 	if (links.size() > 0) {
 		lines.push_back("");
 		lines.push_back(_("Links: "));
@@ -489,6 +587,20 @@ std::string htmlrenderer::type2str(link_type type) {
 	}
 }
 
+void htmlrenderer::add_nonempty_line(const std::string& curline, std::vector<Table>& tables, std::vector<std::string>& lines)
+{
+	if (line_is_nonempty(curline))
+		add_line(curline, tables, lines);
+}
+
+void htmlrenderer::add_line(const std::string& curline, std::vector<Table>& tables, std::vector<std::string>& lines)
+{
+	if (tables.size())
+		tables.back().add_text(curline);
+	else
+		lines.push_back(curline);
+}
+
 void htmlrenderer::prepare_newline(std::string& line, int indent_level) {
 	line = "";
 	line.append(indent_level*2, ' ');
@@ -502,4 +614,143 @@ bool htmlrenderer::line_is_nonempty(const std::string& line) {
 	return false;
 }
 
+
+void htmlrenderer::TableRow::start_cell(size_t span)
+{
+	inside = true;
+	if (span < 1)
+		span = 1;
+	cells.push_back(TableCell(span));
 }
+
+void htmlrenderer::TableRow::add_text(const std::string& str)
+{
+	if (!inside)
+		start_cell(1); // colspan 1
+
+	cells.back().text.push_back(str);
+}
+
+void htmlrenderer::TableRow::complete_cell()
+{
+	inside = false;
+}
+
+
+
+void htmlrenderer::Table::start_cell(size_t span)
+{
+	rows.back().start_cell(span);
+}
+
+void htmlrenderer::Table::complete_cell()
+{
+	rows.back().complete_cell();
+}
+
+void htmlrenderer::Table::start_row()
+{
+	if (rows.size() && rows.back().inside)
+		rows.back().complete_cell();
+	inside = true;
+	rows.push_back(TableRow());
+}
+
+void htmlrenderer::Table::add_text(const std::string& str)
+{
+	if (!inside)
+		start_row();
+	rows.back().add_text(str);
+}
+
+void htmlrenderer::Table::complete_row()
+{
+	inside = false;
+}
+
+void htmlrenderer::render_table(const Table& table, std::vector<std::string>& lines)
+{
+	// get number of rows
+	size_t rows = table.rows.size();
+
+	// get maximum number of cells
+	size_t cells = 0;
+	for(size_t row=0; row < rows; row++) {
+		size_t count = 0;
+		for(size_t cell=0; cell < table.rows[row].cells.size(); cell++) {
+			count += table.rows[row].cells[cell].span;
+		}
+		cells  = std::max(cells, count);
+	}
+
+	// get width of each row
+	std::vector<size_t> cell_widths;
+	cell_widths.resize(cells, 0);
+	for(size_t row=0; row < rows; row++) {
+		for(size_t cell=0; cell < table.rows[row].cells.size(); cell++) {
+			size_t w = table.rows[row].cells[cell].text.back().size(); // use length of last line (for now)
+			if (table.rows[row].cells[cell].span > 1) {
+				w += table.rows[row].cells[cell].span;
+				w /= table.rows[row].cells[cell].span; // devide size evenly on columns (can be done better, I know)
+			}
+			cell_widths[cell] = std::max(cell_widths[cell], w);
+		}
+	}
+
+	char hsep = '-';
+	char vsep = '|';
+	char hvsep = '+';
+
+	// create a row separator
+	std::string separator;
+	if (table.border)
+		separator += hvsep;
+	for(size_t cell=0; cell < cells; cell++) {
+		separator += std::string(cell_widths[cell], hsep);
+		separator += hvsep;
+	}
+
+	if (!table.border)
+		vsep = ' ';
+
+	// render the table
+	if (table.border)
+		lines.push_back(separator);
+	for(size_t row=0; row < rows; row++) {
+		// calc height of this row
+		size_t height = 0;
+		for(size_t cell=0; cell < table.rows[row].cells.size(); cell++)
+			height = std::max(height, table.rows[row].cells[cell].text.size());
+
+		for(size_t idx=0; idx < height; ++idx) {
+			std::string line;
+			if (table.border)
+				line += vsep;
+			for(size_t cell=0; cell < table.rows[row].cells.size(); cell++) {
+				size_t cell_width = 0;
+				if (idx < table.rows[row].cells[cell].text.size()) {
+					cell_width = table.rows[row].cells[cell].text[idx].size();
+					line += table.rows[row].cells[cell].text[idx];
+				}
+				size_t reference_width = cell_widths[cell];
+				if (table.rows[row].cells[cell].span > 1) {
+					for(size_t ic=cell+1; ic < cell + table.rows[row].cells[cell].span; ++ic)
+						reference_width += cell_widths[ic]+1;
+				}
+				if (cell_width < reference_width) // pad, if necessary
+					line += std::string(reference_width - cell_width, ' ');
+
+				if (cell < table.rows[row].cells.size()-1)
+					line += vsep;
+			}
+			if (table.border)
+				line += vsep;
+			lines.push_back(line);
+		}
+		if (table.border)
+			lines.push_back(separator);
+	}
+}
+
+}
+
