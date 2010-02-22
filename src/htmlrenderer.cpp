@@ -688,7 +688,11 @@ void htmlrenderer::render_table(const Table& table, std::vector<std::string>& li
 	cell_widths.resize(cells, 0);
 	for(size_t row=0; row < rows; row++) {
 		for(size_t cell=0; cell < table.rows[row].cells.size(); cell++) {
-			size_t w = utils::strwidth_stfl(table.rows[row].cells[cell].text.back()); // use length of last line (for now)
+			size_t w = 0;
+			if (table.rows[row].cells[cell].text.size()) {
+				for(size_t idx=0; idx < table.rows[row].cells[cell].text.size(); idx++)
+					w = std::max(w, utils::strwidth_stfl(table.rows[row].cells[cell].text[idx]));
+			}
 			if (table.rows[row].cells[cell].span > 1) {
 				w += table.rows[row].cells[cell].span;
 				w /= table.rows[row].cells[cell].span; // devide size evenly on columns (can be done better, I know)
