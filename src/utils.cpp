@@ -608,6 +608,21 @@ size_t utils::strwidth(const std::string& str) {
 	return width; // exact width
 }
 
+size_t utils::strwidth_stfl(const std::string& str) {
+	size_t reduce_count = 0;
+	size_t len = str.length();
+	if (len > 1) {
+		for (size_t idx=0;idx<len-1;++idx) {
+			if (str[idx] == '<' && str[idx+1] != '>') {
+				reduce_count += 3;
+				idx += 3;
+			}
+		}
+	}
+
+	return strwidth(str) - reduce_count;
+}
+
 std::string utils::join(const std::vector<std::string>& strings, const std::string& separator) {
 	std::string result;
 

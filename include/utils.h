@@ -48,6 +48,7 @@ class utils {
 		static std::string get_useragent(configcontainer * cfgcont);
 
 		static size_t strwidth(const std::string& s);
+		static size_t strwidth_stfl(const std::string& str);
 
 		static inline unsigned int max(unsigned int a, unsigned int b) { return (a > b) ? a : b; }
 

@@ -364,7 +364,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					case TAG_H1:
 						if (line_is_nonempty(curline)) {
 							add_line(curline, tables, lines);
-							size_t llen = utils::strwidth(curline);
+							size_t llen = utils::strwidth_stfl(curline);
 							prepare_newline(curline,  tables.size() ? 0 : indent_level);
 							add_line(std::string(llen, '-'), tables, lines);
 						}
@@ -443,7 +443,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 								tables.back().add_text(table_text[idx]); // add rendered table to current cell
 							} else {
 								for(size_t idx=0; idx < table_text.size(); ++idx) {
-									std::string s = utils::quote_for_stfl(table_text[idx]);
+									std::string s = table_text[idx];
 									while (s.length() > 0 && s[0] == '\n')
 										s.erase(0, 1);
 									add_line(s, tables, lines);
@@ -489,7 +489,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 								unsigned int i=0;
 								bool new_line = false;
 								for (std::vector<std::string>::iterator it2=words2.begin();it2!=words2.end();++it2,++i) {
-									if ((utils::strwidth(curline) + utils::strwidth(*it2)) >= w) {
+									if ((utils::strwidth_stfl(curline) + utils::strwidth_stfl(*it2)) >= w) {
 										add_nonempty_line(curline, tables, lines);
 										prepare_newline(curline,  tables.size() ? 0 : indent_level);
 										new_line = true;
@@ -530,7 +530,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						}
 
 						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it,++i) {
-							if ((utils::strwidth(curline) + utils::strwidth(*it)) >= w) {
+							if ((utils::strwidth_stfl(curline) + utils::strwidth_stfl(*it)) >= w) {
 								add_nonempty_line(curline, tables, lines);
 								prepare_newline(curline, tables.size() ? 0 : indent_level);
 								new_line = true;
@@ -688,7 +688,7 @@ void htmlrenderer::render_table(const Table& table, std::vector<std::string>& li
 	cell_widths.resize(cells, 0);
 	for(size_t row=0; row < rows; row++) {
 		for(size_t cell=0; cell < table.rows[row].cells.size(); cell++) {
-			size_t w = table.rows[row].cells[cell].text.back().size(); // use length of last line (for now)
+			size_t w = utils::strwidth_stfl(table.rows[row].cells[cell].text.back()); // use length of last line (for now)
 			if (table.rows[row].cells[cell].span > 1) {
 				w += table.rows[row].cells[cell].span;
 				w /= table.rows[row].cells[cell].span; // devide size evenly on columns (can be done better, I know)
@@ -729,7 +729,7 @@ void htmlrenderer::render_table(const Table& table, std::vector<std::string>& li
 			for(size_t cell=0; cell < table.rows[row].cells.size(); cell++) {
 				size_t cell_width = 0;
 				if (idx < table.rows[row].cells[cell].text.size()) {
-					cell_width = table.rows[row].cells[cell].text[idx].size();
+					cell_width = utils::strwidth_stfl(table.rows[row].cells[cell].text[idx]);
 					line += table.rows[row].cells[cell].text[idx];
 				}
 				size_t reference_width = cell_widths[cell];
