@@ -4,6 +4,7 @@
 # This file is distributed under the same license as the es_ES package.
 # ROOT <epsilon@correoe.no-ip.org>, 2008.
 # ROOT <epsilon@correoe.no-ip.org>, 2009.
+# ROOT <epsilon@correoe.no-ip.org>, 2010.
 #
 #
 msgid ""
@@ -11,7 +12,7 @@ msgstr ""
 "Project-Id-Version: es_ES\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-23 13:45+0100\n"
-"PO-Revision-Date: 2009-12-14 15:02+0100\n"
+"PO-Revision-Date: 2010-02-23 14:50+0100\n"
 "Last-Translator:  <>\n"
 "Language-Team:  <>\n"
 "MIME-Version: 1.0\n"
@@ -92,9 +93,9 @@ msgid "expected integer value, found `%s' instead"
 msgstr "se esperaba un valor entero, se encontró `%s' en su lugar"
 
 #: src/configcontainer.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid "invalid configuration value `%s'"
-msgstr "Configuracion salvada en %s"
+msgstr "Valor de configuración `%s' inválido"
 
 #: src/configparser.cpp:80
 #, c-format
@@ -210,9 +211,9 @@ msgstr ""
 "Se produjo un error mientras se cargaban los feeds desde la base de datos:"
 
 #: src/controller.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid "Error while loading feed '%s': %s"
-msgstr "Error buscando `%s': %s"
+msgstr "Error cargando feed '%s': %s"
 
 #: src/controller.cpp:440
 msgid "Prepopulating query feeds..."
@@ -765,22 +766,19 @@ msgstr "Descripcion: "
 
 #: src/googlereader_urlreader.cpp:33
 msgid "People you follow"
-msgstr ""
+msgstr "Personas a las que sigues"
 
 #: src/googlereader_urlreader.cpp:34
-#, fuzzy
 msgid "Starred items"
-msgstr "Ningun elemento no leido."
+msgstr "Elementos declarados"
 
 #: src/googlereader_urlreader.cpp:35
-#, fuzzy
 msgid "Shared items"
-msgstr "Ningun elemento no leido."
+msgstr "Elementos compartidos"
 
 #: src/googlereader_urlreader.cpp:36
-#, fuzzy
 msgid "Popular items"
-msgstr "Ningun elemento no leido."
+msgstr "Elementos populares"
 
 #: src/help_formaction.cpp:123
 msgid "Generic bindings:"
@@ -1009,7 +1007,7 @@ msgstr "Volver/Salir"
 
 #: src/keymap.cpp:25
 msgid "Quit program,  no confirmation"
-msgstr ""
+msgstr "Salir del programa sin confirmación"
 
 #: src/keymap.cpp:26
 msgid "Reload currently selected feed"
@@ -1347,9 +1345,8 @@ msgid "`%s' is not a valid regular expression: %s"
 msgstr "`%s' no es una expresión regular válida: %s"
 
 #: src/rss.cpp:458
-#, fuzzy
 msgid "too few arguments"
-msgstr "pocos parametros."
+msgstr "muy pocos parámetros."
 
 #: src/rss_parser.cpp:141
 #, c-format
