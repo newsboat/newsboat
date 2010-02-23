@@ -89,9 +89,9 @@ msgid "expected integer value, found `%s' instead"
 msgstr "egész értéket várok, viszont `%s'-t találtam"
 
 #: src/configcontainer.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid "invalid configuration value `%s'"
-msgstr "Konfiguráció elmentve %s-be"
+msgstr "érvénytelen konfigurációs érték: `%s'"
 
 #: src/configparser.cpp:80
 #, c-format
@@ -186,12 +186,11 @@ msgstr ""
 "fel forrásokkal és próbáld újra!"
 
 #: src/controller.cpp:385
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Google Reader "
 "account. Please do so, and try again."
 msgstr ""
-"Úgy tűnik, még nem konfiguráltál semmilyen forrást a bloglines fiókodban. "
+"Úgy tűnik, még nem konfiguráltál semmilyen forrást a Google Reader fiókodban. "
 "Tedd meg, és próbáld újra!"
 
 #: src/controller.cpp:394
@@ -207,9 +206,9 @@ msgid "Error while loading feeds from database: "
 msgstr "Nem sikerült betölteni a forrásokat az adatbázisból: "
 
 #: src/controller.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid "Error while loading feed '%s': %s"
-msgstr "Hiba `%s' keresése közben: %s"
+msgstr "Hiba a `%s' forrás betöltése közben: %s"
 
 #: src/controller.cpp:440
 msgid "Prepopulating query feeds..."
@@ -319,7 +318,7 @@ msgstr "beállítások olvasása <configfile>-ból"
 
 #: src/controller.cpp:804
 msgid "clean up cache thoroughly"
-msgstr "A cache teljes ürítése..."
+msgstr "a cache teljes ürítése"
 
 #: src/controller.cpp:805
 msgid "<command>..."
@@ -761,22 +760,19 @@ msgstr "Leírás: "
 
 #: src/googlereader_urlreader.cpp:33
 msgid "People you follow"
-msgstr ""
+msgstr "Akik téged követnek"
 
 #: src/googlereader_urlreader.cpp:34
-#, fuzzy
 msgid "Starred items"
-msgstr "Nincs olvasatlan elem."
+msgstr "Csillagozott elemek"
 
 #: src/googlereader_urlreader.cpp:35
-#, fuzzy
 msgid "Shared items"
-msgstr "Nincs olvasatlan elem."
+msgstr "Megosztott elemek"
 
 #: src/googlereader_urlreader.cpp:36
-#, fuzzy
 msgid "Popular items"
-msgstr "Nincs olvasatlan elem."
+msgstr "Népszerű elemek"
 
 #: src/help_formaction.cpp:123
 msgid "Generic bindings:"
@@ -848,7 +844,7 @@ msgstr "A cikk pipe-olása a parancsnak: "
 
 #: src/itemlist_formaction.cpp:296 src/itemview_formaction.cpp:305
 msgid "Toggling read flag for article..."
-msgstr "Az olvasott jelző állítása a cikkre..."
+msgstr "Az olvasott jelző ki/beállítása a cikkre..."
 
 #: src/itemlist_formaction.cpp:313
 #, c-format
@@ -951,7 +947,7 @@ msgstr "%s hozzáadása a letöltési listához."
 #: src/itemview_formaction.cpp:180
 #, c-format
 msgid "Invalid URL: '%s'"
-msgstr ""
+msgstr "Érvénytelen URL: '%s'"
 
 #: src/itemview_formaction.cpp:199
 #, c-format
@@ -976,7 +972,7 @@ msgstr "Hiba a cikk olvasatlanná tétele közben: %s "
 
 #: src/itemview_formaction.cpp:354 src/keymap.cpp:43
 msgid "Goto URL #"
-msgstr ""
+msgstr "Ugrás: URL #"
 
 #: src/itemview_formaction.cpp:378 src/urlview_formaction.cpp:125
 msgid "Open in Browser"
@@ -1005,7 +1001,7 @@ msgstr "Vissza az előzőhöz/Kilépés"
 
 #: src/keymap.cpp:25
 msgid "Quit program,  no confirmation"
-msgstr ""
+msgstr "Kilépés a programból, megerősítés nélkül"
 
 #: src/keymap.cpp:26
 msgid "Reload currently selected feed"
@@ -1053,7 +1049,7 @@ msgstr "Forrás nézet"
 
 #: src/keymap.cpp:37
 msgid "Toggle read status for article"
-msgstr "Olvasott státusz a cikkre"
+msgstr "Olvasott státusz ki/beállítása a cikkre"
 
 #: src/keymap.cpp:38
 msgid "Toggle show read feeds/articles"
@@ -1252,14 +1248,12 @@ msgid "Move to the next page"
 msgstr "A következő oldalra"
 
 #: src/keymap.cpp:91
-#, fuzzy
 msgid "Move to the start of page/list"
-msgstr "A következő oldalra"
+msgstr "Mozgatás az oldal/lista elejére"
 
 #: src/keymap.cpp:92
-#, fuzzy
 msgid "Move to the end of page/list"
-msgstr "A következő oldalra"
+msgstr "Mozgatás az oldal/lista végére"
 
 #: src/keymap.cpp:288
 #, c-format
@@ -1345,9 +1339,8 @@ msgid "`%s' is not a valid regular expression: %s"
 msgstr "`%s' nem valódi reguláris kifejezés: %s"
 
 #: src/rss.cpp:458
-#, fuzzy
 msgid "too few arguments"
-msgstr "túl kevés paraméter."
+msgstr "túl kevés paraméter"
 
 #: src/rss_parser.cpp:141
 #, c-format
