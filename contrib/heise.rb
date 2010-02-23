@@ -30,7 +30,8 @@ def geturl(url, depth=5)
     when Net::HTTPSuccess     then response.body
     when Net::HTTPRedirection then geturl(response['location'], depth-1) # follow redirection
   else
-    response.error!
+    # any other error shall not make any noise (maybe shall we produce a fake RSS item)
+    ""
   end
 end
 
@@ -39,9 +40,11 @@ if ENV['http_proxy'].nil? && !ENV['HTTP_PROXY'].nil?
 end
 
 #          key            feed URL
-FEEDS = { "news"      => "http://www.heise.de/newsticker/heise.rdf",
-          "telepolis" => "http://www.heise.de/tp/news.rdf",
-	  "security"  => "http://www.heise.de/security/news/news.rdf"
+FEEDS = { "news"      => "http://www.heise.de/newsticker/heise-atom.xml",
+          "telepolis" => "http://www.heise.de/tp/news-atom.xml",
+	  "security"  => "http://www.heise.de/security/news/news-atom.xml",
+	  "netze"     => "http://www.heise.de/netze/rss/netze-atom.xml",
+	  "it-blog"   => "http://www.heise.de/developer/rss/world-of-it/blog-atom.xml"
 	}
 
 GOOGLEON="<!--googleon: index-->"
@@ -56,6 +59,41 @@ if ARGV.length < 1
   print "<feed> is one of\n"
   listFeeds
   exit
+end
+
+def shortenArticle(article_text)
+  article_text.gsub!(/<!\[CDATA\[/, "")
+  article_text.gsub!(/\]\]>/, "")
+
+  # now, heise speciality: get everything between GOOGLEON and GOOGLEOFF patterns :-)
+  p1 = article_text.index(GOOGLEON)
+  p2 = article_text.index(GOOGLEOFF)
+  if (p1 && p2)
+    result = ""
+    pos = p1
+    while(pos < article_text.length) do
+      p1 = article_text.index(GOOGLEON, pos)
+      break unless p1
+      p2 = article_text.index(GOOGLEOFF, pos)
+      p2 = article_text.length unless p2
+      if p1 < p2
+        result += article_text[p1+GOOGLEON.length..p2-1]
+        pos = p2+GOOGLEOFF.length
+      else
+        pos = p1+GOOGLEON.length
+      end
+    end
+    article_text = result
+  end
+
+  # get rid of comments and other annoying artifacts
+  article_text.gsub!(/<!--LINK_ICON--><img[^>]*><!--\/LINK_ICON-->/m, " ")
+  article_text.gsub!(/<!--[^>]*-->/, "")
+  article_text.gsub!(/\s+/m, " ")
+  article_text.gsub!(/href=\"\//m, "href=\"http://www.heise.de/")
+  article_text.gsub!(/src=\"\//m, "src=\"http://www.heise.de/")
+
+  article_text
 end
 
 feed=ARGV[0]
@@ -81,6 +119,8 @@ rescue Timeout::Error
   exit 1 if retries < 1
   sleep 1
   retry
+rescue
+  # any other error shall not make any noise (maybe shall we produce a fake RSS item)
 end
 
 exit 2 if feed_text.length < 20
@@ -90,10 +130,11 @@ exit 2 if feed_text.length < 20
 xml = Document.new(feed_text)
 
 #loop over items
-xml.elements.each("//item") do |item|
+xml.elements.each("//entry") do |item|
+
   # extract link to article
-  article_url = item.elements['link'].text
-  article_url.sub!(%r{from/rss.*$}, "")
+  article_url = item.elements['id'].text
+  article_url.sub!(%r{from/.*$}, "")
   article_short_url = article_url.sub(%r{/[^/]*--/}, "/")
 
   # get full text for article
@@ -110,47 +151,21 @@ xml.elements.each("//item") do |item|
     next if retries < 1
     sleep 1
     retry
+  rescue
   end
 
   next if article_text.length < 20
 
-  article_text.gsub!(/<!\[CDATA\[/, "")
-  article_text.gsub!(/\]\]>/, "")
-
-  # now, heise speciality: get everything between GOOGLEON and GOOGLEOFF patterns :-)
-  p1 = article_text.index(GOOGLEON)
-  p2 = article_text.index(GOOGLEOFF)
-  if (p1 && p2)
-    result = ""
-    pos = p1
-    while(pos < article_text.length) do
-      p1 = article_text.index(GOOGLEON, pos)
-      break unless p1
-      p2 = article_text.index(GOOGLEOFF, pos)
-      p2 = article_text.length unless p2
-      if p1 < p2
-        result += article_text[p1+GOOGLEON.length..p2-1]
-        pos=p2+GOOGLEOFF.length
-      else
-        pos=p1+GOOGLEON.length
-      end
-    end
-    article_text = result
-  end
-
-  # get rid of comments and other annoying artifacts
-  article_text.gsub!(/<!--LINK_ICON--><img[^>]*><!--\/LINK_ICON-->/m, " ")
-  article_text.gsub!(/<!--[^>]*-->/, "")
-  article_text.gsub!(/\s+/m, " ")
+  article_text = shortenArticle(article_text)
 
   # insert full text article into feed
-  description = Element.new("description")
+  description = Element.new("content")
   description.text= CData.new(article_text)
   item.add_element(description)
 
-  guid = Element.new("guid")
-  guid.text= article_short_url
-  item.add_element(guid)
+  #guid = Element.new("guid")
+  #guid.text= article_short_url
+  #item.add_element(guid)
 end
   
 #reproduce enriched feed
