@@ -17,7 +17,7 @@ void listformatter::add_line(const std::string& text, unsigned int id, unsigned 
 			if (iswprint(temp[idx]))
 				mytext += temp[idx];
 			else
-				mytext += L'?';
+				mytext += L'\uFFFD';
 
 		while (mytext.length() > 0) {
 			size_t size = mytext.length();
