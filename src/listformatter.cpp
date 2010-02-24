@@ -10,23 +10,25 @@ listformatter::~listformatter() { }
 
 void listformatter::add_line(const std::string& text, unsigned int id, unsigned int width) {
 	if (width > 0 && text.length() > 0) {
-		std::wstring mytext = utils::str2wstr(text);
+		std::wstring temp = utils::str2wstr(text);
+		// clean up the string
+		std::wstring mytext;
+		for(size_t idx=0; idx < temp.size(); ++idx)
+			if (iswprint(temp[idx]))
+				mytext += temp[idx];
+			else
+				mytext += L'?';
+
 		while (mytext.length() > 0) {
-			unsigned int size = mytext.length();
-			int w = wcswidth(mytext.c_str(), size);
-			if (w == width) {
-				lines.push_back(line_id_pair(utils::wstr2str(mytext.substr(0, size)), id));
-				mytext.erase(0, size);
-			} else if (w > width) {
-				while ((w=wcswidth(mytext.c_str(), size)) > width) {
+			size_t size = mytext.length();
+			size_t w = wcswidth(mytext.c_str(), size);
+			if (w > width) {
+				while (size && (w = wcswidth(mytext.c_str(), size)) > width) {
 					size--;
 				}
-				lines.push_back(line_id_pair(utils::wstr2str(mytext.substr(0, size)), id));
-				mytext.erase(0, size);
-			} else {
-				lines.push_back(line_id_pair(utils::wstr2str(mytext.substr(0, size)), id));
-				mytext.erase(0, size);
 			}
+			lines.push_back(line_id_pair(utils::wstr2str(mytext.substr(0, size)), id));
+			mytext.erase(0, size);
 		}
 	} else {
 		lines.push_back(line_id_pair(text, id));
