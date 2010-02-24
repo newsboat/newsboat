@@ -1,7 +1,7 @@
 # Ukrainian translation for newsbeuter.
-# Copyright (C) 2009
+# Copyright (C) 2010
 # This file is distributed under the same license as the newsbeuter package.
-# sevenfourk <sevenfourk@gmail.com>, 2009.
+# Ivan Kovnatsky <sevenfourk@gmail.com>, 2010.
 #
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-23 13:45+0100\n"
 "PO-Revision-Date: 2008-08-02 15:32+0400\n"
-"Last-Translator: sevenfourk <sevenfourk@gmail.com>\n"
+"Last-Translator: Ivan Kovnatsky <sevenfourk@gmail.com>\n"
 "Language-Team: Uk <sevenfourk@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -89,9 +89,8 @@ msgid "expected integer value, found `%s' instead"
 msgstr "потрібно вказати integer тип, натомість `%s'"
 
 #: src/configcontainer.cpp:159
-#, fuzzy, c-format
 msgid "invalid configuration value `%s'"
-msgstr "Конфігурацію збережено у %s"
+msgstr "невірне значення налаштунку %s"
 
 #: src/configparser.cpp:80
 #, c-format
@@ -186,13 +185,12 @@ msgstr ""
 "заповніть її темами, та спробуйте знову."
 
 #: src/controller.cpp:385
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Google Reader "
 "account. Please do so, and try again."
 msgstr ""
-"Схоже не те, що ви не налаштували ні одної теми у вашому блозі.Будь-ласка "
-"зробіть це, і спробуйте знову."
+"Схоже не те, що ви не налаштували ні одної теми у аккаунті Google Reader."
+"Будь-ласка зробіть це, і спробуйте знову."
 
 #: src/controller.cpp:394
 msgid "Loading articles from cache..."
@@ -207,9 +205,8 @@ msgid "Error while loading feeds from database: "
 msgstr "Помилка при завантаженні тем з бази даних:"
 
 #: src/controller.cpp:423
-#, fuzzy, c-format
 msgid "Error while loading feed '%s': %s"
-msgstr "Помилка при пошуку `%s': %s"
+msgstr "Помилка при завантаженні теми `%s': %s"
 
 #: src/controller.cpp:440
 msgid "Prepopulating query feeds..."
@@ -295,11 +292,11 @@ msgstr "імпортувати файл OPML"
 
 #: src/controller.cpp:801
 msgid "<urlfile>"
-msgstr "<файлпосил>"
+msgstr "<файлпосилання>"
 
 #: src/controller.cpp:801
 msgid "read RSS feed URLs from <urlfile>"
-msgstr "читати посилання на RSS теми з <файлпосил>"
+msgstr "читати посилання на RSS теми з <файлпосилання>"
 
 #: src/controller.cpp:802
 msgid "<cachefile>"
@@ -311,11 +308,11 @@ msgstr "використайте <файлкешу> як файл кешу"
 
 #: src/controller.cpp:803
 msgid "<configfile>"
-msgstr "<файлналашт>"
+msgstr "<файлналаштування>"
 
 #: src/controller.cpp:803
 msgid "read configuration from <configfile>"
-msgstr "читати налаштування з <файлналашт>"
+msgstr "читати налаштування з <файлналаштування>"
 
 #: src/controller.cpp:804
 msgid "clean up cache thoroughly"
@@ -765,19 +762,16 @@ msgid "People you follow"
 msgstr ""
 
 #: src/googlereader_urlreader.cpp:34
-#, fuzzy
 msgid "Starred items"
-msgstr "Немає непрочитаних статей."
+msgstr "Відмічені статті."
 
 #: src/googlereader_urlreader.cpp:35
-#, fuzzy
 msgid "Shared items"
-msgstr "Немає непрочитаних статей."
+msgstr "Загальні статті."
 
 #: src/googlereader_urlreader.cpp:36
-#, fuzzy
 msgid "Popular items"
-msgstr "Немає непрочитаних статей."
+msgstr "Популярні статті."
 
 #: src/help_formaction.cpp:123
 msgid "Generic bindings:"
@@ -979,7 +973,7 @@ msgstr "Помилка при позначенні статті як непро�
 
 #: src/itemview_formaction.cpp:354 src/keymap.cpp:43
 msgid "Goto URL #"
-msgstr "Слідувати посиланню #"
+msgstr ""
 
 #: src/itemview_formaction.cpp:378 src/urlview_formaction.cpp:125
 msgid "Open in Browser"
@@ -1256,11 +1250,11 @@ msgstr "Перемістити до наступної сторінки"
 
 #: src/keymap.cpp:91
 msgid "Move to the start of page/list"
-msgstr "Перемістити до початкової сторінки/списку"
+msgstr "Перемістити до початку сторінки/списку"
 
 #: src/keymap.cpp:92
 msgid "Move to the end of page/list"
-msgstr "Перемістити до кінцевої сторінки/списку"
+msgstr "Перемістити до кінця сторінки/списку"
 
 #: src/keymap.cpp:288
 #, c-format
@@ -1347,7 +1341,6 @@ msgid "`%s' is not a valid regular expression: %s"
 msgstr "`%s' неправильний вираз"
 
 #: src/rss.cpp:458
-#, fuzzy
 msgid "too few arguments"
 msgstr "замало параметрів"
 
