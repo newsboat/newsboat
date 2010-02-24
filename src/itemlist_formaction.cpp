@@ -78,6 +78,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				do_redraw = true;
 			}
 			break;
+		case OP_OPENBROWSER_AND_MARK:
 		case OP_OPENINBROWSER: {
 				LOG(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0 && visible_items.size() != 0) {
@@ -87,6 +88,31 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					}
 				} else {
 					v->show_error(_("No item selected!")); // should not happen
+				}
+			}
+			if (op == OP_OPENINBROWSER) break; //else fall through to OP_TOGGLEITEMREAD
+		case OP_TOGGLEITEMREAD: {
+				LOG(LOG_INFO, "itemlist_formaction: toggling item read at pos `%s'", itemposname.c_str());
+				if (itemposname.length() > 0) {
+					v->set_status(_("Toggling read flag for article..."));
+					try {
+						if (automatic && args->size() > 0) {
+							if ((*args)[0] == "read") {
+								visible_items[itempos].first->set_unread(false);
+							} else if ((*args)[0] == "unread") {
+								visible_items[itempos].first->set_unread(true);
+							}
+							v->set_status("");
+						} else {
+							visible_items[itempos].first->set_unread(!visible_items[itempos].first->unread());
+							v->set_status("");
+						}
+					} catch (const dbexception& e) {
+						v->set_status(utils::strprintf(_("Error while toggling read flag: %s"), e.what()));
+					}
+					if (itempos < visible_items.size()-1)
+						f->set("itempos", utils::strprintf("%u", itempos + 1));
+					do_redraw = true;
 				}
 			}
 			break;
@@ -287,34 +313,6 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				} else {
 					qna.push_back(qna_pair(_("Search for: "), ""));
 					this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
-				}
-			}
-			break;
-		case OP_TOGGLEITEMREAD: {
-				LOG(LOG_INFO, "itemlist_formaction: toggling item read at pos `%s'", itemposname.c_str());
-				if (itemposname.length() > 0 && visible_items.size() != 0) {
-					v->set_status(_("Toggling read flag for article..."));
-					try {
-						if (automatic && args->size() > 0) {
-							if ((*args)[0] == "read") {
-								visible_items[itempos].first->set_unread(false);
-								v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), true);
-							} else if ((*args)[0] == "unread") {
-								visible_items[itempos].first->set_unread(true);
-								v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), false);
-							}
-							v->set_status("");
-						} else {
-							v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), visible_items[itempos].first->unread()); // sic!
-							visible_items[itempos].first->set_unread(!visible_items[itempos].first->unread());
-							v->set_status("");
-						}
-					} catch (const dbexception& e) {
-						v->set_status(utils::strprintf(_("Error while toggling read flag: %s"), e.what()));
-					}
-					if (itempos < visible_items.size()-1)
-						f->set("itempos", utils::strprintf("%u", itempos + 1));
-					do_redraw = true;
 				}
 			}
 			break;

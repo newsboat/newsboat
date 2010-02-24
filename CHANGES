@@ -9,6 +9,7 @@ Changes for newsbeuter:
 	Added "download status" format specifier for feedlist-format (fixes issue #181).
 	Added HTML table renderer (patch by Stefan Erben)
 	Fixed issues #183, #188 (patch by Stefan Erben)
+	Added "open-in-browser-and-mark-read" key (patch by Isaac Good)
 
 2.1 (2009-12-08):
 	Added support for dc:creator tag for RSS 2.0 parser.

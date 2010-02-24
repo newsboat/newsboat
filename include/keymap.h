@@ -44,6 +44,7 @@ namespace newsbeuter {
 						OP_NEXTUNREAD, 
 						OP_PREVUNREAD,
 						OP_OPENINBROWSER, 
+						OP_OPENBROWSER_AND_MARK,
 						OP_HELP, 
 						OP_TOGGLESOURCEVIEW, 
 						OP_TOGGLEITEMREAD, 
