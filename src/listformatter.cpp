@@ -10,14 +10,7 @@ listformatter::~listformatter() { }
 
 void listformatter::add_line(const std::string& text, unsigned int id, unsigned int width) {
 	if (width > 0 && text.length() > 0) {
-		std::wstring temp = utils::str2wstr(text);
-		// clean up the string
-		std::wstring mytext;
-		for(size_t idx=0; idx < temp.size(); ++idx)
-			if (iswprint(temp[idx]))
-				mytext += temp[idx];
-			else
-				mytext += L'\uFFFD';
+		std::wstring mytext = utils::clean_nonprintable_characters(utils::str2wstr(text));
 
 		while (mytext.length() > 0) {
 			size_t size = mytext.length();
@@ -31,7 +24,7 @@ void listformatter::add_line(const std::string& text, unsigned int id, unsigned 
 			mytext.erase(0, size);
 		}
 	} else {
-		lines.push_back(line_id_pair(text, id));
+		lines.push_back(line_id_pair(utils::wstr2str(utils::clean_nonprintable_characters(utils::str2wstr(text))), id));
 	}
 	LOG(LOG_DEBUG, "listformatter::add_line: `%s'", text.c_str());
 	refresh_cache = true;

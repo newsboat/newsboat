@@ -813,5 +813,12 @@ std::string utils::unescape_url(const std::string& url) {
 	return replace_all(replace_all(url,"%3F","?"), "%26", "&");
 }
 
+std::wstring utils::clean_nonprintable_characters(std::wstring text) {
+	for (size_t idx=0;idx<text.size();++idx) {
+		if (!iswprint(text[idx]))
+			text[idx] = L'\uFFFD';
+	}
+	return text;
+}
 
 }

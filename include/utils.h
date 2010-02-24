@@ -37,6 +37,8 @@ class utils {
 		static std::wstring str2wstr(const std::string& str);
 		static std::string wstr2str(const std::wstring& wstr);
 
+		static std::wstring clean_nonprintable_characters(std::wstring text);
+
 		static std::wstring utf8str2wstr(const std::string& utf8str);
 
 		static std::string to_s(unsigned int u);
