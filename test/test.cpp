@@ -44,7 +44,7 @@ BOOST_AUTO_TEST_CASE(TestNewsbeuterReload) {
 	BOOST_CHECK_EQUAL(feed->items().size(), 8u);
 
 	rsscache->externalize_rssfeed(feed, false);
-	rsscache->internalize_rssfeed(feed);
+	rsscache->internalize_rssfeed(feed, NULL);
 	BOOST_CHECK_EQUAL(feed->items().size(), 8u);
 
 	BOOST_CHECK_EQUAL(feed->items()[0]->title(), "Teh Saxxi");
@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_CASE(TestNewsbeuterReload) {
 
 	std::tr1::shared_ptr<rss_feed> feed2(new rss_feed(rsscache));
 	feed2->set_rssurl("http://testbed.newsbeuter.org/unit-test/rss.xml");
-	rsscache->internalize_rssfeed(feed2);
+	rsscache->internalize_rssfeed(feed2, NULL);
 
 	BOOST_CHECK_EQUAL(feed2->items().size(), 8u);
 	BOOST_CHECK_EQUAL(feed2->items()[0]->title(), "Another Title");
