@@ -155,7 +155,7 @@ namespace newsbeuter {
 			virtual bool has_attribute(const std::string& attribname);
 			virtual std::string get_attribute(const std::string& attribname);
 
-			void update_items(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds);
+			void update_items(std::vector<std::tr1::shared_ptr<rss_feed> > feeds);
 
 			inline void set_query(const std::string& s) { query = s; }
 

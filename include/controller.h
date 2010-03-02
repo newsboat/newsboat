@@ -56,7 +56,7 @@ namespace newsbeuter {
 			void reload_urls_file();
 			void edit_urls_file();
 
-			inline std::vector<std::tr1::shared_ptr<rss_feed> >& get_all_feeds() { return feeds; }
+			std::vector<std::tr1::shared_ptr<rss_feed> > get_all_feeds();
 
 			inline filtercontainer& get_filters() { return filters; }
 
@@ -119,6 +119,7 @@ namespace newsbeuter {
 			colormanager colorman;
 			regexmanager rxman;
 			remote_api * api;
+			mutex feeds_mutex;
 	};
 
 }
