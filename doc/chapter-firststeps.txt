@@ -3,7 +3,7 @@ After you've installed newsbeuter, you can run it for the first time by typing
 
 	Error: no URLs configured. Please fill the file /home/ak/.newsbeuter/urls with RSS feed URLs or import an OPML file.
 
-	newsbeuter 2.1
+	newsbeuter 2.2
 	usage: ./newsbeuter [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-h]
 			-e              export OPML feed to stdout
 			-r              refresh feeds on start
