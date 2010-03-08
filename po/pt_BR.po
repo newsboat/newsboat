@@ -1,21 +1,23 @@
 # translation of pt_BR.po to Português do Brasil
-# Adiel Mittmann <adiel@inf.ufsc.br>, 2007, 2008, 2009.
 # translation of new.po to
 # translation of pt_BR.po to
+# Adiel Mittmann <adiel@inf.ufsc.br>, 2007, 2008, 2009, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-23 13:45+0100\n"
-"PO-Revision-Date: 2009-03-17 18:42-0300\n"
-"Last-Translator: Adiel Mittmann <adiel@inf.ufsc.br>\n"
-"Language-Team: Português do Brasil\n"
+"PO-Revision-Date: 2010-03-08 10:37-0300\n"
+"Last-Translator: \n"
+"Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Portuguese\n"
 "X-Poedit-Country: BRAZIL\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: src/colormanager.cpp:44 src/colormanager.cpp:46 src/regexmanager.cpp:55
 #: src/regexmanager.cpp:64 src/regexmanager.cpp:113 src/regexmanager.cpp:121
@@ -90,10 +92,9 @@ msgstr "um valor booleano era esperado, mas '%s' foi encontrado"
 msgid "expected integer value, found `%s' instead"
 msgstr "um valor inteiro era esperado, mas '%s' foi encontrado"
 
-#: src/configcontainer.cpp:159
-#, fuzzy, c-format
+#: src/configcontainer.cpp:159, c-format
 msgid "invalid configuration value `%s'"
-msgstr "Configuração salva em %s"
+msgstr "Valer de configuração '%s' é inválido"
 
 #: src/configparser.cpp:80
 #, c-format
@@ -188,12 +189,12 @@ msgstr ""
 "a com fontes RSS e tente novamente."
 
 #: src/controller.cpp:385
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Google Reader "
 "account. Please do so, and try again."
 msgstr ""
-"Parece que você não configurou nenhuma fonte não sua conta bloglines. Faça "
+"Parece que você não configurou nenhuma fonte não sua conta do Google Reader. "
+"Faça "
 "isso, e tente novamente."
 
 #: src/controller.cpp:394
@@ -208,10 +209,9 @@ msgstr "Limpando o cache completamente..."
 msgid "Error while loading feeds from database: "
 msgstr "Erro carregando as fontes do banco de dados: "
 
-#: src/controller.cpp:423
-#, fuzzy, c-format
+#: src/controller.cpp:423, c-format
 msgid "Error while loading feed '%s': %s"
-msgstr "Erro procurando por '%s': %s"
+msgstr "Erro carregando fonte '%s': %s"
 
 #: src/controller.cpp:440
 msgid "Prepopulating query feeds..."
@@ -766,22 +766,19 @@ msgstr "Descrição: "
 
 #: src/googlereader_urlreader.cpp:33
 msgid "People you follow"
-msgstr ""
+msgstr "Pessoas que você segue"
 
 #: src/googlereader_urlreader.cpp:34
-#, fuzzy
 msgid "Starred items"
-msgstr "Nenhum artigo não lido."
+msgstr "Itens com estrela"
 
 #: src/googlereader_urlreader.cpp:35
-#, fuzzy
 msgid "Shared items"
-msgstr "Nenhum artigo não lido."
+msgstr "Itens compartilhados"
 
 #: src/googlereader_urlreader.cpp:36
-#, fuzzy
 msgid "Popular items"
-msgstr "Nenhum artigo não lido."
+msgstr "Itens populares"
 
 #: src/help_formaction.cpp:123
 msgid "Generic bindings:"
@@ -957,7 +954,7 @@ msgstr "%s foi adicionado à fila para ser baixado."
 #: src/itemview_formaction.cpp:180
 #, c-format
 msgid "Invalid URL: '%s'"
-msgstr ""
+msgstr "URL inválida: '%s'"
 
 #: src/itemview_formaction.cpp:199
 #, c-format
@@ -982,7 +979,7 @@ msgstr "Erro marcando artigo como não lido: %s"
 
 #: src/itemview_formaction.cpp:354 src/keymap.cpp:43
 msgid "Goto URL #"
-msgstr ""
+msgstr "Ir para a URL #"
 
 #: src/itemview_formaction.cpp:378 src/urlview_formaction.cpp:125
 msgid "Open in Browser"
@@ -1011,7 +1008,7 @@ msgstr "Retornar à tela anterior/Sair"
 
 #: src/keymap.cpp:25
 msgid "Quit program,  no confirmation"
-msgstr ""
+msgstr "Fechar o programa, sem confirmação"
 
 #: src/keymap.cpp:26
 msgid "Reload currently selected feed"
@@ -1258,14 +1255,12 @@ msgid "Move to the next page"
 msgstr "Ir para a próxima página"
 
 #: src/keymap.cpp:91
-#, fuzzy
 msgid "Move to the start of page/list"
-msgstr "Ir para a próxima página"
+msgstr "Ir para o início da página/lista"
 
 #: src/keymap.cpp:92
-#, fuzzy
 msgid "Move to the end of page/list"
-msgstr "Ir para a próxima página"
+msgstr "Ir para o fim da página/lista"
 
 #: src/keymap.cpp:288
 #, c-format
@@ -1353,9 +1348,8 @@ msgid "`%s' is not a valid regular expression: %s"
 msgstr "'%s' não é uma expressão regular válida: %s"
 
 #: src/rss.cpp:458
-#, fuzzy
 msgid "too few arguments"
-msgstr "poucos parâmetros."
+msgstr "poucos parâmetros"
 
 #: src/rss_parser.cpp:141
 #, c-format
@@ -1449,3 +1443,4 @@ msgstr "formato de fonte não suportado"
 #: rss/rss_09x_parser.cpp:22
 msgid "no RSS channel found"
 msgstr "nenhum canal RSS encontrado"
+
