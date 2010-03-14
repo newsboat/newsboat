@@ -12,7 +12,7 @@ CXX=c++
 DEFINES=-DLOCALEDIR=\"$(localedir)\"
 WARNFLAGS=-Wall -Wextra
 CXXFLAGS+=-ggdb -Iinclude -Istfl -Ifilter -I. -Irss $(WARNFLAGS) $(DEFINES)
-LDFLAGS+=-L. -L/sw/lib
+LDFLAGS+=-L.
 
 PACKAGE=newsbeuter
 
