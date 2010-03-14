@@ -1426,7 +1426,7 @@ void controller::update_flags(std::tr1::shared_ptr<rss_item> item) {
 	item->update_flags();
 }
 
-inline std::vector<std::tr1::shared_ptr<rss_feed> > controller::get_all_feeds() { 
+std::vector<std::tr1::shared_ptr<rss_feed> > controller::get_all_feeds() { 
 	std::vector<std::tr1::shared_ptr<rss_feed> > tmpfeeds;
 	{
 		scope_mutex feedslock(&feeds_mutex);
