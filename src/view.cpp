@@ -774,6 +774,8 @@ void view::apply_colors(std::tr1::shared_ptr<formaction> fa) {
 	std::map<std::string,std::vector<std::string> >::const_iterator attit = attributes.begin();
 	LOG(LOG_DEBUG, "view::apply_colors: fa = %s", fa->id().c_str());
 
+	std::string article_colorstr;
+
 	for (;fgcit != fg_colors.end(); ++fgcit, ++bgcit, ++attit) {
 		std::string colorattr;
 		if (fgcit->second != "default") {
@@ -792,6 +794,22 @@ void view::apply_colors(std::tr1::shared_ptr<formaction> fa) {
 			colorattr.append("attr=");
 			colorattr.append(*it);
 		} 
+
+		if (fgcit->first == "article") {
+			article_colorstr = colorattr;
+			if (fa->id() == "article") {
+				std::string bold = article_colorstr;
+				std::string ul = article_colorstr;
+				if (bold.length() > 0)
+					bold.append(",");
+				if (ul.length() > 0)
+					ul.append(",");
+				bold.append("attr=bold");
+				ul.append("attr=underline");
+				fa->get_form()->set("color_bold", bold.c_str());
+				fa->get_form()->set("color_underline", ul.c_str());
+			}
+		}
 
 		LOG(LOG_DEBUG,"view::apply_colors: %s %s %s\n", fa->id().c_str(), fgcit->first.c_str(), colorattr.c_str());
 

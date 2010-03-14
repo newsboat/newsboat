@@ -534,7 +534,7 @@ void itemview_formaction::set_regexmanager(regexmanager * r) {
 	for (std::vector<std::string>::iterator it=attrs.begin();it!=attrs.end();++it,++i) {
 		attrstr.append(utils::strprintf("@style_%u_normal:%s ", i, it->c_str()));
 	}
-	attrstr.append("@style_b_normal:attr=bold @style_u_normal:attr=underline ");
+	attrstr.append("@style_b_normal[color_bold]:attr=bold @style_u_normal[color_underline]:attr=underline ");
 	std::string textview = utils::strprintf("{textview[article] style_normal[article]: style_end[styleend]:fg=blue,attr=bold %s .expand:vh offset[articleoffset]:0 richtext:1}", attrstr.c_str());
 	f->modify("article", "replace", textview);
 }
