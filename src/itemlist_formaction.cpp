@@ -78,7 +78,19 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				do_redraw = true;
 			}
 			break;
-		case OP_OPENBROWSER_AND_MARK:
+		case OP_OPENBROWSER_AND_MARK: {
+				LOG(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
+				if (itemposname.length() > 0 && visible_items.size() != 0) {
+					if (itempos < visible_items.size()) {
+						visible_items[itempos].first->set_unread(false);
+						v->open_in_browser(visible_items[itempos].first->link());
+						do_redraw = true;
+					}
+				} else {
+					v->show_error(_("No item selected!")); // should not happen
+				}
+			}
+			break;
 		case OP_OPENINBROWSER: {
 				LOG(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0 && visible_items.size() != 0) {
@@ -90,7 +102,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					v->show_error(_("No item selected!")); // should not happen
 				}
 			}
-			if (op == OP_OPENINBROWSER) break; //else fall through to OP_TOGGLEITEMREAD
+			break;
 		case OP_TOGGLEITEMREAD: {
 				LOG(LOG_INFO, "itemlist_formaction: toggling item read at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0) {
