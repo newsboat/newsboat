@@ -96,8 +96,12 @@ void help_formaction::prepare() {
 						strcasestr(it->desc.c_str(), searchphrase.c_str())!=NULL) {
 					char tabs_1[] = "                ";
 					char tabs_2[] = "                        ";
-					unsigned int how_often_1 = strlen(tabs_1) - it->key.length();
-					unsigned int how_often_2 = strlen(tabs_2) - it->cmd.length();
+					int how_often_1 = strlen(tabs_1) - it->key.length();
+					int how_often_2 = strlen(tabs_2) - it->cmd.length();
+					if (how_often_1 <= 0)
+						how_often_1 = 1;
+					if (how_often_2 <= 0)
+						how_often_2 = 1;
 					tabs_1[how_often_1] = '\0';
 					tabs_2[how_often_2] = '\0';
 					std::string line;
