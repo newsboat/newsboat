@@ -74,6 +74,7 @@ void omg_a_child_died(int /* sig */) {
 	pid_t pid;
 	int stat;
 	while ((pid = waitpid(-1,&stat,WNOHANG)) > 0) { }
+	::signal(SIGCHLD, omg_a_child_died); /* in case of unreliable signals */
 }
 
 controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false), api(0) {
