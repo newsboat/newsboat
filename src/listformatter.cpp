@@ -14,9 +14,9 @@ void listformatter::add_line(const std::string& text, unsigned int id, unsigned 
 
 		while (mytext.length() > 0) {
 			size_t size = mytext.length();
-			size_t w = wcswidth(mytext.c_str(), size);
+			size_t w = utils::wcswidth_stfl(mytext, size);
 			if (w > width) {
-				while (size && (w = wcswidth(mytext.c_str(), size)) > width) {
+				while (size && (w = utils::wcswidth_stfl(mytext, size)) > width) {
 					size--;
 				}
 			}
