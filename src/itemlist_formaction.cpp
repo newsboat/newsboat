@@ -83,6 +83,9 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				if (itemposname.length() > 0 && visible_items.size() != 0) {
 					if (itempos < visible_items.size()) {
 						visible_items[itempos].first->set_unread(false);
+						if (itempos < visible_items.size()-1) {
+							f->set("itempos", utils::strprintf("%u", itempos + 1));
+						}
 						v->open_in_browser(visible_items[itempos].first->link());
 						do_redraw = true;
 					}
