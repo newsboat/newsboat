@@ -176,12 +176,13 @@ code, so it's only helpful for developers.
 
 Use (and extend) the unit tests
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 In the test subdirectory resides a simple unit test to check the most important
-functionality of the newsbeuter internals. These test build upon Boost.Test which
-you can grab from http://www.boost.org/ (Debian users only need to install
-libboost-test-dev). Run "make test" to build the tests, the result is a binary
-called "test" within the test subdirectory. Run it and see whether everything
-still works as expected. Run "make clean-test" to clean up after the tests.
+functionality of the newsbeuter internals. These test build upon the lemon test 
+framework which comes bundled as test/lemon.h with newsbeuter. Run "make test" 
+to build the tests, the result is a binary called "test" within the test 
+subdirectory. Run it and see whether everything still works as expected. Run 
+"make clean-test" to clean up after the tests.
 
 Dump an STFL form
 ~~~~~~~~~~~~~~~~~

@@ -1,134 +1,118 @@
 /* test driver for rsspp */
 
-#define BOOST_AUTO_TEST_MAIN
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/auto_unit_test.hpp>
+#include "lemon.h"
 
 #include <rsspp.h>
 #include <rsspp_internal.h>
 
+int main(void) {
+	lemon::test<> lemon(71);
 
-BOOST_AUTO_TEST_CASE(TestParseSimpleRSS_0_91) {
 	rsspp::parser p;
 
+	// test of RSS 0.91
 	rsspp::feed f = p.parse_file("data/rss091_1.xml");
 
-	BOOST_CHECK_EQUAL(f.rss_version, rsspp::RSS_0_91);
-	BOOST_CHECK_EQUAL(f.title, "Example Channel");
-	BOOST_CHECK_EQUAL(f.description, "an example feed");
-	BOOST_CHECK_EQUAL(f.link, "http://example.com/");
-	BOOST_CHECK_EQUAL(f.language, "en");
+	lemon.is(f.rss_version, rsspp::RSS_0_91, "RSS type is RSS 0.91");
+	lemon.is(f.title, "Example Channel", "RSS feed title is Example Channel");
+	lemon.is(f.description, "an example feed", "RSS feed description is 'an example feed'");
+	lemon.is(f.link, "http://example.com/", "RSS feed link is http://example.com/");
+	lemon.is(f.language, "en", "RSS feed language is en");
 
-	BOOST_CHECK_EQUAL(f.items.size(), 1u);
-	BOOST_CHECK_EQUAL(f.items[0].title, "1 < 2");
-	BOOST_CHECK_EQUAL(f.items[0].link, "http://example.com/1_less_than_2.html");
-	BOOST_CHECK_EQUAL(f.items[0].description, "1 < 2, 3 < 4.\nIn HTML, <b> starts a bold phrase\nand you start a link with <a href=\n");
-	BOOST_CHECK_EQUAL(f.items[0].author, "");
-	BOOST_CHECK_EQUAL(f.items[0].guid, "");
-}
+	lemon.is(f.items.size(), 1u, "RSS feed contains 1 item");
+	lemon.is(f.items[0].title, "1 < 2", "item title with &lt; entity");
+	lemon.is(f.items[0].link, "http://example.com/1_less_than_2.html", "item link");
+	lemon.is(f.items[0].description, "1 < 2, 3 < 4.\nIn HTML, <b> starts a bold phrase\nand you start a link with <a href=\n", "item description with various entities");
+	lemon.is(f.items[0].author, "", "empty author");
+	lemon.is(f.items[0].guid, "", "empty guid");
 
-BOOST_AUTO_TEST_CASE(TestParseSimpleRSS_0_92) {
-	rsspp::parser p;
+	// test of RSS 0.92
+	f = p.parse_file("data/rss092_1.xml");
 
-	rsspp::feed f = p.parse_file("data/rss092_1.xml");
+	lemon.is(f.rss_version, rsspp::RSS_0_92, "RSS type is RSS 0.92");
+	lemon.is(f.title, "Example Channel", "RSS feed title");
+	lemon.is(f.description, "an example feed", "RSS feed description");
+	lemon.is(f.link, "http://example.com/", "RSS feed link");
+	lemon.is(f.language, "en", "RSS feed language");
 
-	BOOST_CHECK_EQUAL(f.rss_version, rsspp::RSS_0_92);
-	BOOST_CHECK_EQUAL(f.title, "Example Channel");
-	BOOST_CHECK_EQUAL(f.description, "an example feed");
-	BOOST_CHECK_EQUAL(f.link, "http://example.com/");
-	BOOST_CHECK_EQUAL(f.language, "en");
+	lemon.is(f.items.size(), 2u, "feed contains 2 items");
 
-	BOOST_CHECK_EQUAL(f.items.size(), 2u);
+	lemon.is(f.items[1].title, "A second item", "second item title");
+	lemon.is(f.items[1].link, "http://example.com/a_second_item.html", "second item link");
+	lemon.is(f.items[1].description, "no description", "second item description");
+	lemon.is(f.items[1].author, "", "empty second item author");
+	lemon.is(f.items[1].guid, "", "empty second item guid");
 
-	BOOST_CHECK_EQUAL(f.items[0].title, "1 < 2");
-	BOOST_CHECK_EQUAL(f.items[0].link, "http://example.com/1_less_than_2.html");
-	BOOST_CHECK_EQUAL(f.items[0].description, "1 < 2, 3 < 4.\nIn HTML, <b> starts a bold phrase\nand you start a link with <a href=\n");
-	BOOST_CHECK_EQUAL(f.items[0].author, "");
-	BOOST_CHECK_EQUAL(f.items[0].guid, "");
+	// test of RSS 2.0
+	f = p.parse_file("data/rss20_1.xml");
 
-	BOOST_CHECK_EQUAL(f.items[1].title, "A second item");
-	BOOST_CHECK_EQUAL(f.items[1].link, "http://example.com/a_second_item.html");
-	BOOST_CHECK_EQUAL(f.items[1].description, "no description");
-	BOOST_CHECK_EQUAL(f.items[1].author, "");
-	BOOST_CHECK_EQUAL(f.items[1].guid, "");
-}
+	lemon.is(f.title, "my weblog", "RSS 2.0 feed title");
+	lemon.is(f.link, "http://example.com/blog/", "RSS 2.0 feed link");
+	lemon.is(f.description, "my description", "RSS 2.0 description");
 
-BOOST_AUTO_TEST_CASE(TestParseSimpleRSS_2_0) {
-	rsspp::parser p;
+	lemon.is(f.items.size(), 1u, "RSS 2.0 feed contains 1 item");
 
-	rsspp::feed f = p.parse_file("data/rss20_1.xml");
+	lemon.is(f.items[0].title, "this is an item", "RSS 2.0 item title");
+	lemon.is(f.items[0].link, "http://example.com/blog/this_is_an_item.html", "RSS 2.0 item link");
+	lemon.is(f.items[0].author, "Andreas Krennmair", "RSS 2.0 item author");
+	lemon.is(f.items[0].author_email, "blog@synflood.at", "RSS 2.0 item author email");
+	lemon.is(f.items[0].content_encoded, "oh well, this is the content.", "RSS 2.0 item content:encoded");
+	lemon.is(f.items[0].pubDate, "Fri, 12 Dec 2008 02:36:10 +0100", "RSS 2.0 item publication date");
+	lemon.is(f.items[0].guid, "http://example.com/blog/this_is_an_item.html", "RSS 2.0 item guid");
+	lemon.is(f.items[0].guid_isPermaLink, false, "RSS 2.0 item guid is not a permalink");
 
-	BOOST_CHECK_EQUAL(f.title, "my weblog");
-	BOOST_CHECK_EQUAL(f.link, "http://example.com/blog/");
-	BOOST_CHECK_EQUAL(f.description, "my description");
+	// test of RSS 1.0
+	f = p.parse_file("data/rss10_1.xml");
+	lemon.is(f.rss_version, rsspp::RSS_1_0, "RSS 1.0 type");
 
-	BOOST_CHECK_EQUAL(f.items.size(), 1u);
+	lemon.is(f.title, "Example Dot Org", "RSS 1.0 feed title");
+	lemon.is(f.link, "http://www.example.org", "RSS 1.0 feed link");
+	lemon.is(f.description, "the Example Organization web site", "RSS 1.0 feed description");
 
-	BOOST_CHECK_EQUAL(f.items[0].title, "this is an item");
-	BOOST_CHECK_EQUAL(f.items[0].link, "http://example.com/blog/this_is_an_item.html");
-	BOOST_CHECK_EQUAL(f.items[0].author, "Andreas Krennmair");
-	BOOST_CHECK_EQUAL(f.items[0].author_email, "blog@synflood.at");
-	BOOST_CHECK_EQUAL(f.items[0].content_encoded, "oh well, this is the content.");
-	BOOST_CHECK_EQUAL(f.items[0].pubDate, "Fri, 12 Dec 2008 02:36:10 +0100");
-	BOOST_CHECK_EQUAL(f.items[0].guid, "http://example.com/blog/this_is_an_item.html");
-	BOOST_CHECK_EQUAL(f.items[0].guid_isPermaLink, false);
-}
+	lemon.is(f.items.size(), 1u, "RSS 1.0 feed contains 1 item");
 
-BOOST_AUTO_TEST_CASE(TestParseSimpleRSS_1_0) {
-	rsspp::parser p;
+	lemon.is(f.items[0].title, "New Status Updates", "RSS 1.0 item title");
+	lemon.is(f.items[0].link, "http://www.example.org/status/foo", "RSS 1.0 item link");
+	lemon.is(f.items[0].guid, "http://www.example.org/status/", "RSS 1.0 item guid");
+	lemon.is(f.items[0].description, "News about the Example project", "RSS 1.0 item description");
+	lemon.is(f.items[0].pubDate, "Tue, 30 Dec 2008 07:20:00 +0000", "RSS 1.0 item publication date");
 
-	rsspp::feed f = p.parse_file("data/rss10_1.xml");
-	BOOST_CHECK_EQUAL(f.rss_version, rsspp::RSS_1_0);
+	// test of Atom 1.0
 
-	BOOST_CHECK_EQUAL(f.title, "Example Dot Org");
-	BOOST_CHECK_EQUAL(f.link, "http://www.example.org");
-	BOOST_CHECK_EQUAL(f.description, "the Example Organization web site");
+	f = p.parse_file("data/atom10_1.xml");
+	lemon.is(f.rss_version, rsspp::ATOM_1_0, "Atom 1.0 type");
 
-	BOOST_CHECK_EQUAL(f.items.size(), 1u);
+	lemon.is(f.title, "test atom", "Atom 1.0 feed title");
+	lemon.is(f.title_type, "text", "Atom 1.0 feed title type");
+	lemon.is(f.description, "atom description!", "Atom 1.0 feed description");
+	lemon.is(f.pubDate, "Tue, 30 Dec 2008 18:26:15 +0000", "Atom 1.0 feed publication date");
+	lemon.is(f.link, "http://example.com/", "Atom 1.0 feed link");
 
-	BOOST_CHECK_EQUAL(f.items[0].title, "New Status Updates");
-	BOOST_CHECK_EQUAL(f.items[0].link, "http://www.example.org/status/foo");
-	BOOST_CHECK_EQUAL(f.items[0].guid, "http://www.example.org/status/");
-	BOOST_CHECK_EQUAL(f.items[0].description, "News about the Example project");
-	BOOST_CHECK_EQUAL(f.items[0].pubDate, "Tue, 30 Dec 2008 07:20:00 +0000");
-}
+	lemon.is(f.items.size(), 3u, "Atom 1.0 feed contains 3 items");
+	lemon.is(f.items[0].title, "A gentle introduction to Atom testing", "Atom 1.0 first item title");
+	lemon.is(f.items[0].title_type, "html", "Atom 1.0 first item title type");
+	lemon.is(f.items[0].link, "http://example.com/atom_testing.html", "Atom 1.0 first item link");
+	lemon.is(f.items[0].guid, "tag:example.com,2008-12-30:/atom_testing", "Atom 1.0 first item guid");
+	lemon.is(f.items[0].description, "some content", "Atom 1.0 first item description");
 
-BOOST_AUTO_TEST_CASE(TestParseSimpleAtom_1_0) {
-	rsspp::parser p;
+	lemon.is(f.items[1].title, "A missing rel attribute", "Atom 1.0 second item title");
+	lemon.is(f.items[1].title_type, "html", "Atom 1.0 second item title type");
+	lemon.is(f.items[1].link, "http://example.com/atom_testing.html", "Atom 1.0 second item link");
+	lemon.is(f.items[1].guid, "tag:example.com,2008-12-30:/atom_testing1", "Atom 1.0 second item guid");
+	lemon.is(f.items[1].description, "some content", "Atom 1.0 second item description");
 
-	rsspp::feed f = p.parse_file("data/atom10_1.xml");
-	BOOST_CHECK_EQUAL(f.rss_version, rsspp::ATOM_1_0);
+	lemon.is(f.items[2].title, "alternate link isn't first", "Atom 1.0 third item title");
+	lemon.is(f.items[2].title_type, "html", "Atom 1.0 third item title type");
+	lemon.is(f.items[2].link, "http://example.com/atom_testing.html", "Atom 1.0 third item link");
+	lemon.is(f.items[2].guid, "tag:example.com,2008-12-30:/atom_testing2", "Atom 1.0 third item guid");
+	lemon.is(f.items[2].description, "some content", "Atom 1.0 third item link");
 
-	BOOST_CHECK_EQUAL(f.title, "test atom");
-	BOOST_CHECK_EQUAL(f.title_type, "text");
-	BOOST_CHECK_EQUAL(f.description, "atom description!");
-	BOOST_CHECK_EQUAL(f.pubDate, "Tue, 30 Dec 2008 18:26:15 +0000");
-	BOOST_CHECK_EQUAL(f.link, "http://example.com/");
+	// test of W3CDTF parser
+	lemon.is(rsspp::rss_parser::__w3cdtf_to_rfc822("2008"), "Tue, 01 Jan 2008 00:00:00 +0000", "W3CDTF year only");
+	lemon.is(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12"), "Mon, 01 Dec 2008 00:00:00 +0000", "W3CDTF year-month only");
+	lemon.is(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12-30"), "Tue, 30 Dec 2008 00:00:00 +0000", "W3CDTF year-month-day only");
+	lemon.is(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12-30T13:03:15Z"), "Tue, 30 Dec 2008 13:03:15 +0000", "W3CDTF with Z timezone");
+	lemon.is(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12-30T10:03:15-08:00"), "Tue, 30 Dec 2008 18:03:15 +0000", "W3CDTF with -08:00 timezone");
 
-	BOOST_CHECK_EQUAL(f.items.size(), 3u);
-	BOOST_CHECK_EQUAL(f.items[0].title, "A gentle introduction to Atom testing");
-	BOOST_CHECK_EQUAL(f.items[0].title_type, "html");
-	BOOST_CHECK_EQUAL(f.items[0].link, "http://example.com/atom_testing.html");
-	BOOST_CHECK_EQUAL(f.items[0].guid, "tag:example.com,2008-12-30:/atom_testing");
-	BOOST_CHECK_EQUAL(f.items[0].description, "some content");
-
-	BOOST_CHECK_EQUAL(f.items[1].title, "A missing rel attribute");
-	BOOST_CHECK_EQUAL(f.items[1].title_type, "html");
-	BOOST_CHECK_EQUAL(f.items[1].link, "http://example.com/atom_testing.html");
-	BOOST_CHECK_EQUAL(f.items[1].guid, "tag:example.com,2008-12-30:/atom_testing1");
-	BOOST_CHECK_EQUAL(f.items[1].description, "some content");
-
-	BOOST_CHECK_EQUAL(f.items[2].title, "alternate link isn't first");
-	BOOST_CHECK_EQUAL(f.items[2].title_type, "html");
-	BOOST_CHECK_EQUAL(f.items[2].link, "http://example.com/atom_testing.html");
-	BOOST_CHECK_EQUAL(f.items[2].guid, "tag:example.com,2008-12-30:/atom_testing2");
-	BOOST_CHECK_EQUAL(f.items[2].description, "some content");
-}
-
-BOOST_AUTO_TEST_CASE(TestW3CDTFParser) {
-	BOOST_CHECK_EQUAL(rsspp::rss_parser::__w3cdtf_to_rfc822("2008"), "Tue, 01 Jan 2008 00:00:00 +0000");
-	BOOST_CHECK_EQUAL(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12"), "Mon, 01 Dec 2008 00:00:00 +0000");
-	BOOST_CHECK_EQUAL(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12-30"), "Tue, 30 Dec 2008 00:00:00 +0000");
-	BOOST_CHECK_EQUAL(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12-30T13:03:15Z"), "Tue, 30 Dec 2008 13:03:15 +0000");
-	BOOST_CHECK_EQUAL(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12-30T10:03:15-08:00"), "Tue, 30 Dec 2008 18:03:15 +0000");
+	return lemon.done() ? 0 : 1;
 }
