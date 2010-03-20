@@ -6,7 +6,7 @@ APPTOTAL_INFO=apptotal.info
 
 make distclean
 rm -rf $APPBASE_INFO $APPTEST_INFO html
-make -j 2 -f Makefile.prof all test test-rss
+make -j 5 -f Makefile.prof all test test-rss
 lcov -c -i -b . -d . -o $APPBASE_INFO
 export OFFLINE=1
 ( cd test
