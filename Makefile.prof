@@ -2,3 +2,7 @@ CXXFLAGS+=-fprofile-arcs -ftest-coverage
 CFLAGS+=-fprofile-arcs -ftest-coverage
 
 include Makefile
+
+profclean:
+	find . -name '*.gc*' -type f | xargs $(RM)
+	rm app*.info
