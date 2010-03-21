@@ -67,7 +67,28 @@ std::string rss_parser::__w3cdtf_to_rfc822(const std::string& w3cdtf) {
 	memset(&stm, 0, sizeof (stm));
 	stm.tm_mday = 1;
 
-	char * ptr = strptime(w3cdtf.c_str(), "%Y-%m-%dT%H:%M:%S", &stm);
+	//ptr = strptime(w3cdtf.c_str(), "%Y-%m-%dT%H:%M:%S", &stm);
+	char * ptr = strptime(w3cdtf.c_str(), "%Y", &stm);
+
+	if (ptr != NULL) {
+		ptr = strptime(ptr, "-%m", &stm);
+	} else {
+		return "";
+	}
+
+	if (ptr != NULL) {
+		ptr = strptime(ptr, "-%d", &stm);
+	}
+	if (ptr != NULL) {
+		ptr = strptime(ptr, "T%H", &stm);
+	}
+	if (ptr != NULL) {
+		ptr = strptime(ptr, ":%M", &stm);
+	}
+	if (ptr != NULL) {
+		ptr = strptime(ptr, ":%S", &stm);
+	}
+
 	int offs = 0;
 	if (ptr != NULL) {
 		if (ptr[0] == '+' || ptr[0] == '-') {
@@ -81,15 +102,14 @@ std::string rss_parser::__w3cdtf_to_rfc822(const std::string& w3cdtf) {
 		} else if (ptr[0] == 'Z') {
 			stm.tm_gmtoff = 0;
 		}
-		time_t t = mktime(&stm);
-		time_t x = time(NULL);
-		t += localtime(&x)->tm_gmtoff + offs;
-		char datebuf[256];
-		strftime (datebuf, sizeof (datebuf), "%a, %d %b %Y %H:%M:%S %z", gmtime(&t));
-		return datebuf;
 	}
 
-	return "";
+	time_t t = mktime(&stm);
+	time_t x = time(NULL);
+	t += localtime(&x)->tm_gmtoff + offs;
+	char datebuf[256];
+	strftime (datebuf, sizeof (datebuf), "%a, %d %b %Y %H:%M:%S %z", gmtime(&t));
+	return datebuf;
 }
 
 bool rss_parser::node_is(xmlNode * node, const char * name, const char * ns_uri) {

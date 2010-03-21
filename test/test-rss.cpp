@@ -6,7 +6,7 @@
 #include <rsspp_internal.h>
 
 int main(void) {
-	lemon::test<> lemon(71);
+	lemon::test<> lemon(74);
 
 	rsspp::parser p;
 
@@ -113,6 +113,9 @@ int main(void) {
 	lemon.is(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12-30"), "Tue, 30 Dec 2008 00:00:00 +0000", "W3CDTF year-month-day only");
 	lemon.is(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12-30T13:03:15Z"), "Tue, 30 Dec 2008 13:03:15 +0000", "W3CDTF with Z timezone");
 	lemon.is(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12-30T10:03:15-08:00"), "Tue, 30 Dec 2008 18:03:15 +0000", "W3CDTF with -08:00 timezone");
+	lemon.is(rsspp::rss_parser::__w3cdtf_to_rfc822("foobar"), "", "Invalid W3CDTF (foobar)");
+	lemon.is(rsspp::rss_parser::__w3cdtf_to_rfc822("-3"), "", "Invalid W3CDTF (negative number)");
+	lemon.is(rsspp::rss_parser::__w3cdtf_to_rfc822(""), "", "Invalid W3CDTF (empty string)");
 
 	return lemon.done() ? 0 : 1;
 }
