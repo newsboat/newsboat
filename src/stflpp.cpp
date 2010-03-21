@@ -16,7 +16,7 @@ namespace newsbeuter {
  */
 
 stfl::form::form(const std::string& text) : f(0) {
-	ipool = stfl_ipool_create(nl_langinfo(CODESET));
+	ipool = stfl_ipool_create((std::string(nl_langinfo(CODESET)) + "//TRANSLIT").c_str());
 	if (!ipool) {
 		throw exception(errno);
 	}
@@ -82,7 +82,7 @@ static mutex quote_mtx;
 
 std::string stfl::quote(const std::string& text) {
 	scope_mutex lock(&quote_mtx);
-	stfl_ipool * ipool = stfl_ipool_create(nl_langinfo(CODESET));
+	stfl_ipool * ipool = stfl_ipool_create((std::string(nl_langinfo(CODESET)) + "//TRANSLIT").c_str());
 	std::string retval = stfl_ipool_fromwc(ipool,stfl_quote(stfl_ipool_towc(ipool,text.c_str())));
 	stfl_ipool_destroy(ipool);
 	return retval;

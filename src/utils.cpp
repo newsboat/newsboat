@@ -469,8 +469,9 @@ std::wstring utils::str2wstr(const std::string& str) {
 }
 
 std::string utils::wstr2str(const std::wstring& wstr) {
-	const char * codeset = nl_langinfo(CODESET);
-	struct stfl_ipool * ipool = stfl_ipool_create(codeset);
+	std::string codeset = nl_langinfo(CODESET);
+	codeset.append("//TRANSLIT");
+	struct stfl_ipool * ipool = stfl_ipool_create(codeset.c_str());
 	std::string result = stfl_ipool_fromwc(ipool, wstr.c_str());
 	stfl_ipool_destroy(ipool);
 	return result;
@@ -635,7 +636,13 @@ size_t utils::wcswidth_stfl(const std::wstring& str, size_t size) {
 		}
 	}
 
-	return wcswidth(str.c_str(), size) - reduce_count;
+	int width = wcswidth(str.c_str(), size);
+	if (width < 0) {
+		LOG(LOG_ERROR, "oh, oh, wcswidth just failed: %ls", str.c_str());
+		return str.length() - reduce_count;
+	}
+
+	return width - reduce_count;
 }
 
 std::string utils::join(const std::vector<std::string>& strings, const std::string& separator) {
