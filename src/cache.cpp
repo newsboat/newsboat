@@ -611,14 +611,6 @@ void cache::cleanup_cache(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
 			throw dbexception(db);
 		}
 
-		std::string cleanup_deleted_items_statement = "DELETE FROM rss_item WHERE deleted = 1;";
-		LOG(LOG_DEBUG,"running query: %s", cleanup_deleted_items_statement.c_str());
-		rc = sqlite3_exec(db, cleanup_deleted_items_statement.c_str(), NULL, NULL, NULL);
-		if (rc != SQLITE_OK) {
-			LOG(LOG_CRITICAL,"query \"%s\" failed: error = %d", cleanup_rss_items_statement.c_str(), rc);
-			throw dbexception(db);
-		}
-
 		// WARNING: THE MISSING UNLOCK OPERATION IS MISSING FOR A PURPOSE!
 		// It's missing so that no database operation can occur after the cache cleanup!
 		// mtx->unlock();
