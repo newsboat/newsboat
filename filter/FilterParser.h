@@ -34,8 +34,6 @@ class FilterParser {
 		bool parse_string(const std::string& str);
 		void cleanup();
 
-		void print_tree();
-
 		inline expression * get_root() { return root; }
 		FilterParser& operator=(FilterParser& p);
 

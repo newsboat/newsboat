@@ -113,21 +113,6 @@ void FilterParser::cleanup_r(expression * e) {
 	}
 }
 
-void FilterParser::print_tree() {
-	print_tree_r(root,0);
-}
-
-void FilterParser::print_tree_r(expression * e, unsigned int depth) {
-	if (e) {
-		print_tree_r(e->l, depth + 1);
-		for (unsigned int i=0;i<depth;++i) {
-			printf("\t");
-		}
-		printf("op = %u name = %s literal = %s\n", e->op, e->name.c_str(), e->literal.c_str());
-		print_tree_r(e->r, depth + 1);
-	}
-}
-
 expression::expression(const std::string& n, const std::string& lit, int o) : name(n), literal(lit), op(o), l(NULL), r(NULL), parent(NULL), regex(NULL) {
 	if (literal[0] == '"' && literal[literal.length()-1] == '"') {
 		literal = literal.substr(1,literal.length()-2);
