@@ -245,7 +245,9 @@ void controller::run(int argc, char * argv[]) {
 			} else {
 				LOG(LOG_ERROR,"something went wrong with the lock: %s", strerror(errno));
 			}
-			std::cout << utils::strprintf(_("Error: an instance of %s is already running (PID: %u)"), PROGRAM_NAME, pid) << std::endl;
+			if (!execute_cmds) {
+				std::cout << utils::strprintf(_("Error: an instance of %s is already running (PID: %u)"), PROGRAM_NAME, pid) << std::endl;
+			}
 			return;
 		}
 	}
