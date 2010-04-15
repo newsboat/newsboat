@@ -296,6 +296,8 @@ static struct {
     { "lsaquo", 8249 },
     { "rsaquo", 8250 },
     { "euro", 8364 },
+/* from http://www.w3.org/2003/entities/xml/unicode.xml */
+	{ "hellip", 8230 },
 	{ 0, 0 }
 };
 
