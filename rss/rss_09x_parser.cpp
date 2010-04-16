@@ -8,7 +8,24 @@
 #include <utils.h>
 #include <cstring>
 
+using namespace newsbeuter;
+
 namespace rsspp {
+
+void rss_20_parser::parse_feed(feed& f, xmlNode * rootNode) {
+	if (!rootNode)
+		throw exception(_("XML root node is NULL"));
+
+	const char * ns = rootNode->ns ? (const char *)rootNode->ns->href : NULL; //(const char *)xmlGetProp(rootNode, (const xmlChar *)"xmlns");
+
+	if (ns != NULL) {
+		if (strcmp(ns, RSS20USERLAND_URI) == 0) {
+			this->ns = strdup(ns);
+		}
+	}
+
+	rss_09x_parser::parse_feed(f, rootNode);
+}
 
 void rss_09x_parser::parse_feed(feed& f, xmlNode * rootNode) {
 	if (!rootNode)
@@ -22,18 +39,18 @@ void rss_09x_parser::parse_feed(feed& f, xmlNode * rootNode) {
 		throw exception(_("no RSS channel found"));
 
 	for (xmlNode * node = channel->children; node != NULL; node = node->next) {
-		if (node_is(node, "title")) {
+		if (node_is(node, "title", ns)) {
 			f.title = get_content(node);
 			f.title_type = "text";
-		} else if (node_is(node, "link")) {
+		} else if (node_is(node, "link", ns)) {
 			f.link = get_content(node);
-		} else if (node_is(node, "description")) {
+		} else if (node_is(node, "description", ns)) {
 			f.description = get_content(node);
-		} else if (node_is(node, "language")) {
+		} else if (node_is(node, "language", ns)) {
 			f.language = get_content(node);
-		} else if (node_is(node, "managingEditor")) {
+		} else if (node_is(node, "managingEditor", ns)) {
 			f.managingeditor = get_content(node);
-		} else if (node_is(node, "item")) {
+		} else if (node_is(node, "item", ns)) {
 			f.items.push_back(parse_item(node));
 		}
 	}
@@ -44,26 +61,26 @@ item rss_09x_parser::parse_item(xmlNode * itemNode) {
 	std::string author;
 
 	for (xmlNode * node = itemNode->children; node != NULL; node = node->next) {
-		if (node_is(node, "title")) {
+		if (node_is(node, "title", ns)) {
 			it.title = get_content(node);
 			it.title_type = "text";
-		} else if (node_is(node, "link")) {
+		} else if (node_is(node, "link", ns)) {
 			it.link = get_content(node);
-		} else if (node_is(node, "description")) {
+		} else if (node_is(node, "description", ns)) {
 			it.description = get_content(node);
 		} else if (node_is(node, "encoded", CONTENT_URI)) {
 			it.content_encoded = get_content(node);
 		} else if (node_is(node, "summary", ITUNES_URI)) {
 			it.itunes_summary = get_content(node);
-		} else if (node_is(node, "guid")) {
+		} else if (node_is(node, "guid", ns)) {
 			it.guid = get_content(node);
 			it.guid_isPermaLink = false;
 			std::string isPermaLink = get_prop(node,"isPermaLink");
 			if (isPermaLink == "true")
 				it.guid_isPermaLink = true;
-		} else if (node_is(node, "pubDate")) {
+		} else if (node_is(node, "pubDate", ns)) {
 			it.pubDate = get_content(node);
-		} else if (node_is(node, "author")) {
+		} else if (node_is(node, "author", ns)) {
 			std::string authorfield = get_content(node);
 			if (authorfield[authorfield.length()-1] == ')') {
 				it.author_email = newsbeuter::utils::tokenize(authorfield, " ")[0];
@@ -77,7 +94,7 @@ item rss_09x_parser::parse_item(xmlNode * itemNode) {
 			}
 		} else if (node_is(node, "creator", DC_URI)) {
 			author = get_content(node);
-		} else if (node_is(node, "enclosure")) {
+		} else if (node_is(node, "enclosure", ns)) {
 			it.enclosure_url = get_prop(node, "url");
 			it.enclosure_type = get_prop(node, "type");
 		} else if (node_is(node, "content", MEDIA_RSS_URI)) {
@@ -98,6 +115,10 @@ item rss_09x_parser::parse_item(xmlNode * itemNode) {
 	}
 
 	return it;
+}
+
+rss_09x_parser::~rss_09x_parser() { 
+	free((void *)ns);
 }
 
 }
