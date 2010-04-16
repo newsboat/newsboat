@@ -1146,6 +1146,7 @@ std::string controller::write_temporary_item(std::tr1::shared_ptr<rss_item> item
 	int fd = mkstemp(filename);
 	if (fd != -1) {
 		write_item(item, filename);
+		close(fd);
 		return std::string(filename);
 	} else {
 		return "";

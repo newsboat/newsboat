@@ -140,6 +140,7 @@ void pb_controller::run(int argc, char * argv[]) {
 		cfgparser.parse(config_file);
 	} catch (const configexception& ex) {
 		std::cout << ex.what() << std::endl;
+		delete colorman;
 		return;	
 	}
 
