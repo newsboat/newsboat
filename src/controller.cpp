@@ -447,7 +447,7 @@ void controller::run(int argc, char * argv[]) {
 		scope_mutex feedslock(&feeds_mutex);
 		for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();it++) {
 			if ((*it)->rssurl().substr(0,6) == "query:") {
-				(*it)->update_items(get_all_feeds());
+				(*it)->update_items(get_all_feeds_unlocked());
 			}
 		}
 		std::cout << _("done.") << std::endl;
@@ -1439,6 +1439,8 @@ std::vector<std::tr1::shared_ptr<rss_feed> > controller::get_all_feeds() {
 	return tmpfeeds; 
 }
 
-
+std::vector<std::tr1::shared_ptr<rss_feed> > controller::get_all_feeds_unlocked() {
+	return feeds;
+}
 
 }

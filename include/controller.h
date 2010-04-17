@@ -57,6 +57,7 @@ namespace newsbeuter {
 			void edit_urls_file();
 
 			std::vector<std::tr1::shared_ptr<rss_feed> > get_all_feeds();
+			std::vector<std::tr1::shared_ptr<rss_feed> > get_all_feeds_unlocked();
 
 			inline filtercontainer& get_filters() { return filters; }
 
