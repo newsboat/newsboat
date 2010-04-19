@@ -6,11 +6,8 @@
 #
 #  26.06.2009    erb    stopped error from appearing if servers do not respond
 #
-
-require 'net/http'
-require 'uri'
-require 'open-uri'
-require 'timeout'
+$:.push(File.dirname($0))
+require 'feedgrabber'
 
 require 'rexml/document'
 include REXML
@@ -28,38 +25,39 @@ end
 
 feedurl = 'http://rss.slashdot.org/Slashdot/slashdot'
 
-feed_text = ""
-retries = 4
-begin
-  Timeout::timeout(15) do
-    feed = open(feedurl)
-    exit 1 if feed.nil?
-    feed_text = feed.read
-  end
-rescue Timeout::Error
-  retries -= 1
-  exit 2 if retries < 1
-  sleep 1
-  retry
-end
+fg = FeedGrabber.new("slashdot")
 
-exit 3 if feed_text.length < 20
+feed_text = fg.getURL_uncached(feedurl)
+
+exit 3 unless feed_text && feed_text.length >= 20
 
 xml = Document.new(feed_text)
 
 xml.elements.each("//item") do |item|
+  # correct entities in title
+  title=item.elements['title'].text
+  title.gsub!("\&amp;", "\&")
+  title.gsub!("\&amp;", "\&") # needs to be in there twice, because the error is in there twice :-)
+  title.gsub!("\&lsquo;", "\"")
+  title.gsub!("\&rsquo;", "\"")
+  title.gsub!("\&quo;", "\"")
+  title.gsub!("\&mdash;", "--")
+  item.elements['title'].text= title
+
   # extract link to article
   article_url = item.attributes.get_attribute('rdf:about').value
   article_url.sub!(%r{\?from=rss$}, "/")
 
   # get full text for article
   begin
-    article = open(article_url)
+    article = fg.getURL(article_url)
   rescue
     next
   end
-  next if article.nil?
 
+  next unless article && article.length >= 20
+
+  # now parse the article
   article_text=""
   begin
     article_xml = Hpricot(article)
@@ -89,5 +87,7 @@ xml.elements.each("//item") do |item|
   # set full text article into feed
   item.elements['description'].text= CData.new(article_text)
 end
+
+fg.cleanupDB
 
 xml.write($stdout, -1)
