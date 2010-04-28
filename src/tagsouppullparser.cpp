@@ -168,7 +168,7 @@ static struct {
 		- http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent
 		- http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent
 	*/
-	{ "nbsp", 160 },
+	{ "nbsp", ' ' },
 	{ "iexcl", 161 },
 	{ "cent", 162 },
 	{ "pound", 163 },

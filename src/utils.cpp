@@ -638,7 +638,7 @@ size_t utils::wcswidth_stfl(const std::wstring& str, size_t size) {
 
 	int width = wcswidth(str.c_str(), size);
 	if (width < 0) {
-		LOG(LOG_ERROR, "oh, oh, wcswidth just failed: %ls", str.c_str());
+		LOG(LOG_ERROR, "oh, oh, wcswidth just failed"); // : %ls", str.c_str());
 		return str.length() - reduce_count;
 	}
 
