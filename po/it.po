@@ -131,7 +131,7 @@ msgstr "%s: opzione sconosciuta - %c"
 #: src/pb_controller.cpp:108
 #, c-format
 msgid "Starting %s %s..."
-msgstr "Stò avviando %s %s..."
+msgstr "Sto avviando %s %s..."
 
 #: src/controller.cpp:246
 #: src/controller.cpp:307
@@ -143,7 +143,7 @@ msgstr "Errore: un'istanza di %s è già in esecuzione (PID: %u)"
 #: src/controller.cpp:255
 #: src/pb_controller.cpp:116
 msgid "Loading configuration..."
-msgstr "Stò caricando la configurazione..."
+msgstr "Sto caricando la configurazione..."
 
 #: src/controller.cpp:287
 #: src/controller.cpp:325
@@ -164,7 +164,7 @@ msgstr "fatto."
 #: src/controller.cpp:313
 #: src/controller.cpp:396
 msgid "Opening cache..."
-msgstr "Stò aprendo la cache..."
+msgstr "Sto aprendo la cache..."
 
 #: src/controller.cpp:319
 #, c-format
@@ -173,12 +173,12 @@ msgstr "Errore: apertura del file cache `%s' fallita: %s"
 
 #: src/controller.cpp:349
 msgid "Loading URLs from local cache..."
-msgstr "Stò caricando gli URL dalla cache locale..."
+msgstr "Sto caricando gli URL dalla cache locale..."
 
 #: src/controller.cpp:359
 #, c-format
 msgid "Loading URLs from %s..."
-msgstr "Stò caricando gli URL da %s..."
+msgstr "Sto caricando gli URL da %s..."
 
 #: src/controller.cpp:379
 #, c-format
@@ -199,11 +199,11 @@ msgstr "Sembra che tu non abbia configurato alcun feed nel tuo account di Google
 
 #: src/controller.cpp:394
 msgid "Loading articles from cache..."
-msgstr "Stò caricando gli articoli dalla cache..."
+msgstr "Sto caricando gli articoli dalla cache..."
 
 #: src/controller.cpp:402
 msgid "Cleaning up cache thoroughly..."
-msgstr "Stò pulendo accuratamente la cache..."
+msgstr "Sto pulendo accuratamente la cache..."
 
 #: src/controller.cpp:419
 msgid "Error while loading feeds from database: "
@@ -216,19 +216,19 @@ msgstr "Errore durante il caricamento del feed `%s': %s"
 
 #: src/controller.cpp:440
 msgid "Prepopulating query feeds..."
-msgstr "Stò precompilando l'interrogazione dei feed..."
+msgstr "Sto precompilando l'interrogazione dei feed..."
 
 #: src/controller.cpp:458
 msgid "Importing list of read articles..."
-msgstr "Stò importando la lista degli articoli letti..."
+msgstr "Sto importando la lista degli articoli letti..."
 
 #: src/controller.cpp:467
 msgid "Exporting list of read articles..."
-msgstr "Stò esportando la lista degli articoli letti..."
+msgstr "Sto esportando la lista degli articoli letti..."
 
 #: src/controller.cpp:501
 msgid "Cleaning up cache..."
-msgstr "Stò pulendo la cache..."
+msgstr "Sto pulendo la cache..."
 
 #: src/controller.cpp:507
 msgid "failed: "
@@ -242,7 +242,7 @@ msgstr "Errore: impossibile contrassegnare tutti i feed letti: %s"
 #: src/controller.cpp:579
 #, c-format
 msgid "%sLoading %s..."
-msgstr "%sStò caricando %s..."
+msgstr "%sSto caricando %s..."
 
 #: src/controller.cpp:599
 #: src/controller.cpp:601
@@ -454,7 +454,7 @@ msgstr "in coda"
 
 #: src/download.cpp:44
 msgid "downloading"
-msgstr "stò scaricando"
+msgstr "sto scaricando"
 
 #: src/download.cpp:46
 msgid "cancelled"
@@ -568,7 +568,7 @@ msgstr "Ordina inversamente per (p)rimotag/(t)itolo/n(u)meroarticolo/nu(m)eroart
 #: src/feedlist_formaction.cpp:174
 #: src/itemlist_formaction.cpp:228
 msgid "Marking feed read..."
-msgstr "Stò contrassegnando il feed come letto..."
+msgstr "Sto contrassegnando il feed come letto..."
 
 #: src/feedlist_formaction.cpp:183
 #: src/itemlist_formaction.cpp:245
@@ -584,7 +584,7 @@ msgstr "Nessun feed con voci non lette."
 
 #: src/feedlist_formaction.cpp:229
 msgid "Marking all feeds read..."
-msgstr "Stò segnando tutti i feed come letti..."
+msgstr "Sto segnando tutti i feed come letti..."
 
 #: src/feedlist_formaction.cpp:253
 msgid "No tags defined."
@@ -690,7 +690,7 @@ msgstr "Errore: impossibile analizzare il comando di filtro!"
 #: src/feedlist_formaction.cpp:635
 #: src/itemlist_formaction.cpp:505
 msgid "Searching..."
-msgstr "Stò cercando..."
+msgstr "Sto cercando..."
 
 #: src/feedlist_formaction.cpp:642
 #: src/itemlist_formaction.cpp:516
@@ -787,7 +787,7 @@ msgstr "Non è un comando: %s"
 
 #: src/formaction.cpp:275
 msgid "Saving bookmark..."
-msgstr "Stò salvando il segnalibro..."
+msgstr "Sto salvando il segnalibro..."
 
 #: src/formaction.cpp:278
 msgid "Saved bookmark."
@@ -1032,7 +1032,7 @@ msgstr "Errore: impossibile scrivere l'articolo sul file %s"
 #: src/urlview_formaction.cpp:34
 #: src/urlview_formaction.cpp:69
 msgid "Starting browser..."
-msgstr "Stò avviando il browser..."
+msgstr "Sto avviando il browser..."
 
 #: src/itemview_formaction.cpp:310
 #, c-format
@@ -1338,7 +1338,7 @@ msgstr "`%s' non è una tasto di comando valido"
 
 #: src/pb_controller.cpp:163
 msgid "Cleaning up queue..."
-msgstr "Stò pulendo la coda..."
+msgstr "Sto pulendo la coda..."
 
 #: src/pb_controller.cpp:176
 #, c-format
