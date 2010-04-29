@@ -59,6 +59,7 @@ void rss_09x_parser::parse_feed(feed& f, xmlNode * rootNode) {
 item rss_09x_parser::parse_item(xmlNode * itemNode) {
 	item it;
 	std::string author;
+	std::string dc_date;
 
 	for (xmlNode * node = itemNode->children; node != NULL; node = node->next) {
 		if (node_is(node, "title", ns)) {
@@ -80,6 +81,8 @@ item rss_09x_parser::parse_item(xmlNode * itemNode) {
 				it.guid_isPermaLink = true;
 		} else if (node_is(node, "pubDate", ns)) {
 			it.pubDate = get_content(node);
+		} else if (node_is(node, "date", DC_URI)) {
+			dc_date = w3cdtf_to_rfc822(get_content(node));
 		} else if (node_is(node, "author", ns)) {
 			std::string authorfield = get_content(node);
 			if (authorfield[authorfield.length()-1] == ')') {
@@ -112,6 +115,10 @@ item rss_09x_parser::parse_item(xmlNode * itemNode) {
 
 	if (it.author == "") {
 		it.author = author;
+	}
+
+	if (it.pubDate == "") {
+		it.pubDate = dc_date;
 	}
 
 	return it;
