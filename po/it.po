@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: newsbeuter 2.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-23 13:45+0100\n"
-"PO-Revision-Date: 2010-02-23 14:47+0100\n"
+"PO-Revision-Date: 2010-04-29 12:01+0200\n"
 "Last-Translator: Andrea Marchesini <baku@ippolita.net>\n"
 "Language-Team: Claudio M. Alessi <somppy@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -47,7 +47,7 @@ msgstr "newsbeuter: caricamento terminato, %f feed non letti (%n totale articoli
 
 #: src/configcontainer.cpp:102
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
-msgstr "%N %V - Tuoi feed (%u non letti, %t totali)%?T? - tag `%T'&?"
+msgstr "%N %V - I tuoi feed (%u non letti, %t totali)%?T? - tag `%T'&?"
 
 #: src/configcontainer.cpp:103
 msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
@@ -98,7 +98,7 @@ msgstr "atteso valore intero, trovato `%s' invece"
 #: src/configcontainer.cpp:159
 #, c-format
 msgid "invalid configuration value `%s'"
-msgstr "Valore di configurazione invalido %s"
+msgstr "Valore di configurazione non valido %s"
 
 #: src/configparser.cpp:80
 #, c-format
@@ -183,7 +183,7 @@ msgstr "Sto caricando gli URL da %s..."
 #: src/controller.cpp:379
 #, c-format
 msgid "Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."
-msgstr "Errore: nessun URL configurato. Si prega di riempire il file %s con gli URL dei feed RSS o importare un file OPML."
+msgstr "Errore: nessun URL configurato. Si prega di inserire nel file %s gli URL dei feed RSS o importare un file OPML."
 
 #: src/controller.cpp:381
 msgid "It looks like you haven't configured any feeds in your bloglines account. Please do so, and try again."
@@ -191,7 +191,7 @@ msgstr "Sembra che tu non abbia configurato alcun feed nel tuo account bloglines
 
 #: src/controller.cpp:383
 msgid "It looks like the OPML feed you subscribed contains no feeds. Please fill it with feeds, and try again."
-msgstr "Sembra che il feed OPML alla quale ti sei sottoscritto non contiene feed. Sei pregato di riempirlo con i feed, e riprovare."
+msgstr "Sembra che il feed OPML di cui hai chiesto la sottoscrizione non contenga feed. Sei pregato di inserire i feed, e riprovare."
 
 #: src/controller.cpp:385
 msgid "It looks like you haven't configured any feeds in your Google Reader account. Please do so, and try again."
@@ -261,7 +261,7 @@ msgstr "indice del feed non valido (bug)"
 
 #: src/controller.cpp:761
 msgid "newsbeuter is free software and licensed under the MIT/X Consortium License."
-msgstr "newsbeuter è software libero e licenziato sotto la Licensa MIT/X Consortium."
+msgstr "newsbeuter è software libero e concesso in licenza nei termini della Licenza MIT/X Consortium."
 
 #: src/controller.cpp:762
 #, c-format
@@ -329,7 +329,7 @@ msgstr "<comando>..."
 
 #: src/controller.cpp:805
 msgid "execute list of commands"
-msgstr "esegui un'elenco di comandi"
+msgstr "esegui un elenco di comandi"
 
 #: src/controller.cpp:806
 msgid "activate offline mode (only applies to bloglines synchronization mode)"
@@ -500,7 +500,7 @@ msgstr "parametri non validi."
 
 #: src/exception.cpp:43
 msgid "too few parameters."
-msgstr "troppo pochi parametri."
+msgstr "parametri insufficienti."
 
 #: src/exception.cpp:45
 msgid "unknown command (bug)."
@@ -563,7 +563,7 @@ msgstr "n"
 
 #: src/feedlist_formaction.cpp:137
 msgid "Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)one?"
-msgstr "Ordina inversamente per (p)rimotag/(t)itolo/n(u)meroarticolo/nu(m)eroarticolononletto/(n)iente?"
+msgstr "Ordina al contrario per (p)rimotag/(t)itolo/n(u)meroarticolo/nu(m)eroarticolononletto/(n)iente?"
 
 #: src/feedlist_formaction.cpp:174
 #: src/itemlist_formaction.cpp:228
@@ -760,7 +760,7 @@ msgstr "Salva File - %s"
 #: src/rss.cpp:347
 #, c-format
 msgid "couldn't parse filter expression `%s': %s"
-msgstr "imposibile analizzare l'espressione di filtro `%s': %s"
+msgstr "impossibile analizzare l'espressione di filtro `%s': %s"
 
 #: src/formaction.cpp:186
 #: src/formaction.cpp:207
@@ -935,7 +935,7 @@ msgstr "g"
 
 #: src/itemlist_formaction.cpp:389
 msgid "Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"
-msgstr "Ordina inversamente per (d)ata/(t)itolo/(f)lag/(a)utore/(c)ollegamento/(g)uid?"
+msgstr "Ordina al contrario per (d)ata/(t)itolo/(f)lag/(a)utore/(c)ollegamento/(g)uid?"
 
 #: src/itemlist_formaction.cpp:494
 #: src/itemview_formaction.cpp:466
@@ -1116,15 +1116,15 @@ msgstr "Apri schermata di aiuto"
 
 #: src/keymap.cpp:36
 msgid "Toggle source view"
-msgstr "Alterna la visualizzazione del sorgente"
+msgstr "Attiva/Disattiva la visualizzazione del sorgente"
 
 #: src/keymap.cpp:37
 msgid "Toggle read status for article"
-msgstr "Alterna lo stato di \"letto\" per l'articolo"
+msgstr "Attiva/Disattiva lo stato di \"letto\" per l'articolo"
 
 #: src/keymap.cpp:38
 msgid "Toggle show read feeds/articles"
-msgstr "Alterna la visualizzazione dei feed/articoli letti"
+msgstr "Attiva/Disattiva la visualizzazione dei feed/articoli letti"
 
 #: src/keymap.cpp:39
 msgid "Show URLs in current article"
@@ -1168,7 +1168,7 @@ msgstr "Elimina finiti e cancella i download dalla coda"
 
 #: src/keymap.cpp:50
 msgid "Toggle automatic download on/off"
-msgstr "Alterna download automatico on/off"
+msgstr "Attiva/Disattiva download automatico on/off"
 
 #: src/keymap.cpp:51
 msgid "Start player with currently selected download"
@@ -1176,11 +1176,11 @@ msgstr "Avvia il player con il download correntemente selezionato"
 
 #: src/keymap.cpp:52
 msgid "Increase the number of concurrent downloads"
-msgstr "Incrementa il numero di download concorrenti"
+msgstr "Incrementa il numero di download paralleli"
 
 #: src/keymap.cpp:53
 msgid "Decrease the number of concurrent downloads"
-msgstr "Decrementa il numero di download concorrenti"
+msgstr "Decrementa il numero di download paralleli"
 
 #: src/keymap.cpp:54
 msgid "Redraw screen"
@@ -1320,7 +1320,7 @@ msgstr "Spostati alla pagina successiva"
 
 #: src/keymap.cpp:91
 msgid "Move to the start of page/list"
-msgstr "Spostati all'inizio pagina/lista"
+msgstr "Spostati all'inizio della pagina/lista"
 
 #: src/keymap.cpp:92
 msgid "Move to the end of page/list"
@@ -1392,7 +1392,7 @@ msgstr "Pulisci terminati"
 
 #: src/pb_view.cpp:274
 msgid "Toggle Automatic Download"
-msgstr "Caambia Download Automatico"
+msgstr "Attiva/Disattiva Download Automatico"
 
 #: src/pb_view.cpp:275
 msgid "Play"
@@ -1410,7 +1410,7 @@ msgstr "`%s' non è un'espressione regolare valida: %s"
 
 #: src/rss.cpp:458
 msgid "too few arguments"
-msgstr "troppo pochi parametri"
+msgstr "parametri insufficienti"
 
 #: src/rss_parser.cpp:141
 #, c-format
@@ -1489,7 +1489,7 @@ msgstr "impossibile analizzare il file"
 
 #: rss/parser.cpp:197
 msgid "no RSS version"
-msgstr "non c'è la versione RSS"
+msgstr "versione RSS non presente"
 
 #: rss/parser.cpp:209
 msgid "invalid RSS version"
@@ -1502,7 +1502,7 @@ msgstr "versione Atom non valida"
 
 #: rss/parser.cpp:235
 msgid "no Atom version"
-msgstr "non c'è la versione Atom"
+msgstr "versione Atom non presente"
 
 #: rss/parser_factory.cpp:27
 msgid "unsupported feed format"
