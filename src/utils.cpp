@@ -818,8 +818,10 @@ curl_proxytype utils::get_proxy_type(const std::string& type) {
 		return CURLPROXY_SOCKS4;
 	if (type == "socks5")
 		return CURLPROXY_SOCKS5;
+#ifdef CURLPROXY_SOCKS4A
 	if (type == "socks4a")
 		return CURLPROXY_SOCKS4A;
+#endif
 
 	if (type != "") {
 		LOG(LOG_USERERROR, "you configured an invalid proxy type: %s", type.c_str());
