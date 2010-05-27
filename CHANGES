@@ -2,7 +2,7 @@ Changes for newsbeuter:
 
 2.3:
 	Fixed HTML rendering of bold and underline text when light background is configured.
-	Fixed issues #194, #197, #198, #199, #200, #201, #202, #210.
+	Fixed issues #192, #194, #197, #198, #199, #200, #201, #202, #210.
 	Made newsbeuter silent on lockfile errors when '-x' option is used.
 
 2.2 (2010-03-14):
