@@ -24,6 +24,7 @@ feedlist-format|<format>|"%4i %n %11u %t"|This variable defines the format of en
 googlereader-flag-share|<flag>|""|If this is set and Google Reader support is used, then all articles that are flagged with the specified flag are being "shared" in Google Reader so that people that follow you can see it.|googlereader-flag-share "a"
 googlereader-flag-star|<flag>|""|If this is set and Google Reader support is used, then all articles that are flagged with the specified flag are being "starred" in Google Reader and appear in the list of "Starred items".|googlereader-flag-star "b"
 googlereader-login|<login>|""|This variable sets your Google Reader login for the Google Reader support.|googlereader-login "your-login"
+googlereader-min-items|<number>|20|This variable sets the number of articles that are loaded from Google Reader per feed.|googlereader-min-items 100
 googlereader-password|<password>|""|This variable sets your Google Reader password for the Google Reader support.|google-password "your-password"
 googlereader-show-special-feeds|[yes/no]|yes|If this is set, then "special feeds" like "People you follow" (articles shared by people you follow), "Starred items" (your starred articles), "Shared items" (your shared articles) and "Popular items" (articles considered to be popular by Google's magic algorithms) appear in your subscription list.|googlereader-show-special-feeds "no"
 goto-first-unread|[yes/no]|yes|If set to yes (the default), then the first unread article will be selected whenever a feed is entered.|goto-first-unread no

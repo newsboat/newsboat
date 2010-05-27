@@ -119,7 +119,7 @@ std::vector<tagged_feedurl> googlereader_api::get_subscribed_urls() {
 							if (title != "") {
 								tags.push_back(utils::strprintf("~%s", title.c_str()));
 							}
-							urls.push_back(tagged_feedurl(utils::strprintf("%s%s", GREADER_FEED_PREFIX, utils::escape_url(id).c_str()), tags));
+							urls.push_back(tagged_feedurl(utils::strprintf("%s%s?n=%u", GREADER_FEED_PREFIX, utils::escape_url(id).c_str(), cfg->get_configvalue_as_int("googlereader-min-items")), tags));
 						}
 					}
 				}

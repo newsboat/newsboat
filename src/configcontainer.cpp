@@ -96,6 +96,7 @@ configcontainer::configcontainer()
 	config_data["googlereader-flag-share"] = configdata("", configdata::STR);
 	config_data["googlereader-flag-star"] = configdata("", configdata::STR);
 	config_data["googlereader-show-special-feeds"] = configdata("true", configdata::BOOL);
+	config_data["googlereader-min-items"] = configdata("20", configdata::INT);
 	config_data["ignore-mode"] = configdata("download", "download", "display", NULL); // enum
 
 	/* title formats: */
