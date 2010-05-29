@@ -114,11 +114,11 @@ clean-librsspp:
 clean-libfilter:
 	$(RM) $(FILTERLIB_OUTPUT) $(FILTERLIB_OBJS)
 
-clean-doc:
-	$(RM) -r doc/xhtml 
-	$(RM) doc/*.xml doc/*.1 doc/newsbeuter-cfgcmds.txt doc/podbeuter-cfgcmds.txt doc/newsbeuter-keycmds.txt
+#clean-doc:
+#	$(RM) -r doc/xhtml 
+#	$(RM) doc/*.xml doc/*.1 doc/newsbeuter-cfgcmds.txt doc/podbeuter-cfgcmds.txt doc/newsbeuter-keycmds.txt
 
-clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-doc clean-librsspp
+clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-librsspp
 	$(RM) $(STFLHDRS) xlicense.h
 
 distclean: clean clean-mo test-clean
