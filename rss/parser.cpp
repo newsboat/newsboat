@@ -90,8 +90,10 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 	if (prx)
 		curl_easy_setopt(easyhandle, CURLOPT_PROXY, prx);
 
-	if (prxauth)
+	if (prxauth) {
+		curl_easy_setopt(easyhandle, CURLOPT_PROXYAUTH, CURLAUTH_ANY);
 		curl_easy_setopt(easyhandle, CURLOPT_PROXYUSERPWD, prxauth);
+	}
 
 	curl_easy_setopt(easyhandle, CURLOPT_PROXYTYPE, prxtype);
 
