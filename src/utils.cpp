@@ -769,8 +769,10 @@ void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
 
 	if (proxy != "")
 		curl_easy_setopt(handle, CURLOPT_PROXY, proxy.c_str());
-	if (proxyauth != "")
+	if (proxyauth != "") {
+		curl_easy_setopt(easyhandle, CURLOPT_PROXYAUTH, CURLAUTH_ANY);
 		curl_easy_setopt(handle, CURLOPT_PROXYUSERPWD, proxyauth.c_str());
+	}
 	if (proxytype != "") {
 		LOG(LOG_DEBUG, "utils::set_common_curl_options: proxytype = %s", proxytype.c_str());
 		curl_easy_setopt(handle, CURLOPT_PROXYTYPE, get_proxy_type(proxytype));
