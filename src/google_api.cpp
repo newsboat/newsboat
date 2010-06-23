@@ -154,7 +154,7 @@ std::vector<std::string> googlereader_api::get_tags(xmlNode * node) {
 void googlereader_api::configure_handle(CURL * handle) {
 	struct curl_slist *chunk = NULL;
 	std::string header = utils::strprintf("Authorization: GoogleLogin auth=%s", auth.c_str());
-	LOG(LOG_DEBUG, "googlereader_api::configure_handle header = %s result = %s", header.c_str());
+	LOG(LOG_DEBUG, "googlereader_api::configure_handle header = %s", header.c_str());
 	chunk = curl_slist_append(chunk, header.c_str());
 	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, chunk);
 }
