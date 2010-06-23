@@ -29,9 +29,9 @@ googlereader_api::~googlereader_api() {
 }
 
 bool googlereader_api::authenticate() {
-	sid = retrieve_sid();
-	LOG(LOG_DEBUG, "googlereader_api::authenticate: SID = %s", sid.c_str());
-	return sid != "";
+	auth = retrieve_auth();
+	LOG(LOG_DEBUG, "googlereader_api::authenticate: Auth = %s", auth.c_str());
+	return auth != "";
 }
 
 static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp) {
@@ -40,12 +40,12 @@ static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp
 	return size * nmemb;
 }
 
-std::string googlereader_api::retrieve_sid() {
+std::string googlereader_api::retrieve_auth() {
 	CURL * handle = curl_easy_init();
 	std::string postcontent = utils::strprintf("service=reader&Email=%s&Passwd=%s&source=%s/%s&continue=http://www.google.com/", 
 		cfg->get_configvalue("googlereader-login").c_str(), cfg->get_configvalue("googlereader-password").c_str(), PROGRAM_NAME, PROGRAM_VERSION);
 	std::string result;
-	
+
 	utils::set_common_curl_options(handle, cfg);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
@@ -56,10 +56,10 @@ std::string googlereader_api::retrieve_sid() {
 
 	std::vector<std::string> lines = utils::tokenize(result);
 	for (std::vector<std::string>::iterator it=lines.begin();it!=lines.end();it++) {
-		LOG(LOG_DEBUG, "googlereader_api::retrieve_sid: line = %s", it->c_str());
-		if (it->substr(0,4)=="SID=") {
-			std::string sid = it->substr(4, it->length()-4);
-			return sid;
+		LOG(LOG_DEBUG, "googlereader_api::retrieve_auth: line = %s", it->c_str());
+		if (it->substr(0,5)=="Auth=") {
+			std::string auth = it->substr(5, it->length()-5);
+			return auth;
 		}
 	}
 
@@ -71,10 +71,9 @@ std::vector<tagged_feedurl> googlereader_api::get_subscribed_urls() {
 
 	CURL * handle = curl_easy_init();
 	std::string result;
-	std::string cookie = utils::strprintf("SID=%s;", sid.c_str());
-	
+	configure_handle(handle);
+
 	utils::set_common_curl_options(handle, cfg);
-	curl_easy_setopt(handle, CURLOPT_COOKIE, cookie.c_str());
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle, CURLOPT_URL, GREADER_SUBSCRIPTION_LIST);
