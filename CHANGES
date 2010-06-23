@@ -4,6 +4,7 @@ Changes for newsbeuter:
 	Fixed HTML rendering of bold and underline text when light background is configured.
 	Fixed issues #192, #194, #197, #198, #199, #200, #201, #202, #210, #216.
 	Made newsbeuter silent on lockfile errors when '-x' option is used.
+	Fixed Google Reader authentication (by Seth Mason)
 
 2.2 (2010-03-14):
 	Added Google Reader support.
