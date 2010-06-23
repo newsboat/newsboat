@@ -770,7 +770,7 @@ void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
 	if (proxy != "")
 		curl_easy_setopt(handle, CURLOPT_PROXY, proxy.c_str());
 	if (proxyauth != "") {
-		curl_easy_setopt(easyhandle, CURLOPT_PROXYAUTH, CURLAUTH_ANY);
+		curl_easy_setopt(handle, CURLOPT_PROXYAUTH, CURLAUTH_ANY);
 		curl_easy_setopt(handle, CURLOPT_PROXYUSERPWD, proxyauth.c_str());
 	}
 	if (proxytype != "") {

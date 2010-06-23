@@ -19,11 +19,11 @@ class googlereader_api : public remote_api {
 	private:
 		std::vector<std::string> get_tags(xmlNode * node);
 		std::string get_new_token();
-		std::string retrieve_sid();
+		std::string retrieve_auth();
 		std::string post_content(const std::string& url, const std::string& postdata);
 		bool star_article(const std::string& guid, bool star);
 		bool share_article(const std::string& guid, bool share);
-		std::string sid;
+		std::string auth;
 };
 
 class googlereader_urlreader : public urlreader {
