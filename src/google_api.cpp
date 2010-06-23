@@ -153,8 +153,11 @@ std::vector<std::string> googlereader_api::get_tags(xmlNode * node) {
 }
 
 void googlereader_api::configure_handle(CURL * handle) {
-	std::string cookie = utils::strprintf("SID=%s;", sid.c_str());
-	curl_easy_setopt(handle, CURLOPT_COOKIE, cookie.c_str());
+	struct curl_slist *chunk = NULL;
+	std::string header = utils::strprintf("Authorization: GoogleLogin auth=%s", auth.c_str());
+	LOG(LOG_DEBUG, "googlereader_api::configure_handle header = %s", header.c_str());
+	chunk = curl_slist_append(chunk, header.c_str());
+	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, chunk);
 }
 
 bool googlereader_api::mark_all_read(const std::string& feedurl) {
