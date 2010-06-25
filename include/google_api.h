@@ -28,13 +28,14 @@ class googlereader_api : public remote_api {
 
 class googlereader_urlreader : public urlreader {
 	public:
-		googlereader_urlreader(configcontainer * c, remote_api * a);
+		googlereader_urlreader(configcontainer * c, const std::string& url_file, remote_api * a);
 		virtual ~googlereader_urlreader();
 		virtual void write_config();
 		virtual void reload();
 		virtual std::string get_source();
 	private:
 		configcontainer * cfg;
+		std::string file;
 		remote_api * api;
 
 };

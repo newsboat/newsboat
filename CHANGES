@@ -1,5 +1,8 @@
 Changes for newsbeuter:
 
+2.4:
+	Added support for query feeds in combination with Google Reader support.
+
 2.3 (2010-06-24):
 	Fixed HTML rendering of bold and underline text when light background is configured.
 	Fixed issues #192, #194, #197, #198, #199, #200, #201, #202, #210, #216.

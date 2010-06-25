@@ -342,7 +342,7 @@ void controller::run(int argc, char * argv[]) {
 		real_offline_mode = offline_mode;
 	} else if (type == "googlereader") {
 		api = new googlereader_api(&cfg);
-		urlcfg = new googlereader_urlreader(&cfg, api);
+		urlcfg = new googlereader_urlreader(&cfg, url_file, api);
 		real_offline_mode = offline_mode;
 	} else {
 		LOG(LOG_ERROR,"unknown urls-source `%s'", urlcfg->get_source().c_str());

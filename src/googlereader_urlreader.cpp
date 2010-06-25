@@ -3,7 +3,7 @@
 
 namespace newsbeuter {
 
-googlereader_urlreader::googlereader_urlreader(configcontainer * c, remote_api * a) : cfg(c), api(a) { }
+googlereader_urlreader::googlereader_urlreader(configcontainer * c, const std::string& url_file, remote_api * a) : cfg(c), file(url_file), api(a) { }
 
 googlereader_urlreader::~googlereader_urlreader() { }
 
@@ -34,6 +34,21 @@ void googlereader_urlreader::reload() {
 		ADD_URL(STARRED_ITEMS_URL, std::string("~") + _("Starred items"));
 		ADD_URL(SHARED_ITEMS_URL, std::string("~") + _("Shared items"));
 		ADD_URL(POPULAR_ITEMS_URL, std::string("~") + _("Popular items"));
+	}
+
+	file_urlreader ur(file);
+	ur.reload();
+
+	std::vector<std::string>& file_urls(ur.get_urls());
+	for(std::vector<std::string>::iterator it=file_urls.begin();it!=file_urls.end();it++) {
+		if (it->substr(0,6) == "query:") {
+			urls.push_back(*it);
+			std::vector<std::string>& file_tags(ur.get_tags(*it));
+			tags[*it] = ur.get_tags(*it);
+			for (std::vector<std::string>::iterator jt=file_tags.begin();jt!=file_tags.end();jt++) {
+				alltags.insert(*jt);
+			}
+		}
 	}
 
 	std::vector<tagged_feedurl> feedurls = api->get_subscribed_urls();
