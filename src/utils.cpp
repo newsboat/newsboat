@@ -748,6 +748,7 @@ std::string utils::quote_if_necessary(const std::string& str) {
 void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
 	std::string proxy;
 	std::string proxyauth;
+	std::string proxyauthmethod;
 	std::string proxytype;
 	std::string useragent; 
 	unsigned int dl_timeout = 0;
@@ -756,6 +757,7 @@ void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
 		if (cfg->get_configvalue_as_bool("use-proxy")) {
 			proxy = cfg->get_configvalue("proxy");
 			proxyauth = cfg->get_configvalue("proxy-auth");
+			proxyauthmethod = cfg->get_configvalue("proxy-auth-method");
 			proxytype = cfg->get_configvalue("proxy-type");
 		}
 		useragent = utils::get_useragent(cfg);
@@ -770,7 +772,7 @@ void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
 	if (proxy != "")
 		curl_easy_setopt(handle, CURLOPT_PROXY, proxy.c_str());
 	if (proxyauth != "") {
-		curl_easy_setopt(handle, CURLOPT_PROXYAUTH, CURLAUTH_ANY);
+		curl_easy_setopt(handle, CURLOPT_PROXYAUTH, get_proxy_auth_method(proxyauthmethod));
 		curl_easy_setopt(handle, CURLOPT_PROXYUSERPWD, proxyauth.c_str());
 	}
 	if (proxytype != "") {
@@ -811,6 +813,31 @@ std::string utils::get_prop(xmlNode * node, const char * prop, const char * ns) 
 		}
 	}
 	return retval;
+}
+
+int utils::get_proxy_auth_method(const std::string& type) {
+	if (type == "any")
+		return CURLAUTH_ANY;
+	if (type == "basic")
+		return CURLAUTH_BASIC;
+	if (type == "digest")
+		return CURLAUTH_DIGEST;
+#ifdef CURLAUTH_DIGEST_IE
+	if (type == "digest_ie")
+		return CURLAUTH_DIGEST_IE;
+#else
+# warning "proxy-auth-method digest_ie not added due to libcurl older than 7.19.3"
+#endif
+	if (type == "gssnegotiate")
+		return CURLAUTH_GSSNEGOTIATE;
+	if (type == "ntlm")
+		return CURLAUTH_NTLM;
+	if (type == "anysafe")
+		return CURLAUTH_ANYSAFE;
+	if (type != "") {
+		LOG(LOG_USERERROR, "you configured an invalid proxy authentication method: %s", type.c_str());
+	}
+	return CURLAUTH_ANY;
 }
 
 curl_proxytype utils::get_proxy_type(const std::string& type) {

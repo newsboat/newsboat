@@ -53,6 +53,7 @@ configcontainer::configcontainer()
 	config_data["cache-file"]      = configdata("", configdata::PATH);
 	config_data["proxy"]           = configdata("", configdata::STR);
 	config_data["proxy-auth"]      = configdata("", configdata::STR);
+	config_data["proxy-auth-method"] = configdata("any", "any", "basic", "digest", "digest_ie", "gssnegotiate", "ntlm", "anysafe", NULL);
 	config_data["confirm-exit"]    = configdata("no", configdata::BOOL);
 	config_data["error-log"]       = configdata("", configdata::PATH);
 	config_data["notify-screen"]   = configdata("no", configdata::BOOL);
