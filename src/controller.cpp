@@ -138,7 +138,7 @@ void controller::run(int argc, char * argv[]) {
 	bool execute_cmds = false;
 
 	do {
-		if((c = ::getopt(argc,argv,"i:erhu:c:C:d:l:vVoxXI:E:"))<0)
+		if((c = ::getopt(argc,argv,"i:erhqu:c:C:d:l:vVoxXI:E:"))<0)
 			continue;
 		switch (c) {
 			case ':': /* fall-through */
@@ -187,6 +187,9 @@ void controller::run(int argc, char * argv[]) {
 				break;
 			case 'x':
 				execute_cmds = true;
+				silent = true;
+				break;
+			case 'q':
 				silent = true;
 				break;
 			case 'd': // this is an undocumented debug commandline option!
@@ -833,6 +836,7 @@ void controller::usage(char * argv0) {
 		{ 'X', "", _("clean up cache thoroughly") },
 		{ 'x', _("<command>..."), _("execute list of commands") },
 		{ 'o', "", _("activate offline mode (only applies to bloglines synchronization mode)") },
+		{ 'q', "", _("quiet startup") },
 		{ 'v', "", _("get version information") },
 		{ 'l', _("<loglevel>"), _("write a log with a certain loglevel (valid values: 1 to 6)") },
 		{ 'd', _("<logfile>"), _("use <logfile> as output log file") },
