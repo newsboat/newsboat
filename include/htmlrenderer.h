@@ -14,7 +14,7 @@ namespace newsbeuter {
                 TAG_IMG, TAG_BLOCKQUOTE, TAG_H1, TAG_H2, TAG_H3, TAG_H4,
                 TAG_P, TAG_OL, TAG_UL, TAG_LI, TAG_DT, TAG_DD, TAG_DL,
                 TAG_SUP, TAG_SUB, TAG_HR, TAG_STRONG, TAG_UNDERLINE,
-                TAG_SCRIPT, TAG_TABLE, TAG_TH, TAG_TR, TAG_TD
+                TAG_SCRIPT, TAG_STYLE, TAG_TABLE, TAG_TH, TAG_TR, TAG_TD
         };
 
 	typedef std::pair<std::string,link_type> linkpair;

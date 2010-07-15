@@ -39,6 +39,7 @@ htmlrenderer::htmlrenderer(unsigned int width, bool raw) : w(width), raw_(raw) {
 	tags["strong"] = TAG_STRONG;
 	tags["u"] = TAG_UNDERLINE;
 	tags["script"] = TAG_SCRIPT;
+	tags["style"] = TAG_STYLE;
 	tags["table"] = TAG_TABLE;
 	tags["th"] = TAG_TH;
 	tags["tr"] = TAG_TR;
@@ -73,6 +74,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 	bool inside_list = false, inside_li = false, is_ol = false, inside_pre = false;
 	bool itunes_hack = false;
 	size_t inside_script = 0;
+	size_t inside_style = 0;
 	unsigned int ol_count = 1;
 	htmltag current_tag;
 	int link_num = -1;
@@ -269,6 +271,10 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						inside_script++;
 						break;
 
+					case TAG_STYLE:
+						inside_style++;
+						break;
+
 					case TAG_TABLE: {
 						add_nonempty_line(curline, tables, lines);
 						prepare_newline(curline, 0); // no indent in tables
@@ -427,6 +433,11 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						prepare_newline(curline,  tables.size() ? 0 : indent_level);
 						break;
 
+					case TAG_STYLE:
+						if (inside_style)
+							inside_style--;
+						break;
+
 					case TAG_TABLE:
 						add_nonempty_line(curline, tables, lines);
 						prepare_newline(curline, 0); // no indent in tables
@@ -514,8 +525,8 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 								curline.append(*it);
 							}
 						}
-					} else if (inside_script) {
-						// skip scripts
+					} else if (inside_script || inside_style) {
+						// skip scripts and CSS styles
 					} else {
 						std::string s = utils::quote_for_stfl(xpp.getText());
 						while (s.length() > 0 && s[0] == '\n')
