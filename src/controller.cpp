@@ -719,6 +719,9 @@ void controller::reload_all(bool unattended) {
 		}
 	}
 
+	sort_feeds();
+	update_feedlist();
+
 	t2 = time(NULL);
 	dt = t2 - t1;
 	LOG(LOG_INFO, "controller::reload_all: reload took %d seconds", dt);
