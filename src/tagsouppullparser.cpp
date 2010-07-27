@@ -502,7 +502,7 @@ void tagsouppullparser::parse_tag(const std::string& tagstr) {
 				if (tagstr[pos] == '=') {
 					LOG(LOG_DEBUG, "parse_tag: found =");
 					if (tagstr[pos+1] == '\'' || tagstr[pos+1] == '"') {
-						pos = tagstr.find_first_of("'\"", pos+2);
+						pos = tagstr.find_first_of(tagstr[pos+1], pos+2);
 						if (pos != std::string::npos)
 							pos++;
 						LOG(LOG_DEBUG, "parse_tag: finding ending quote, pos = %d", pos);
