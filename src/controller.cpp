@@ -507,14 +507,21 @@ void controller::run(int argc, char * argv[]) {
 	LOG(LOG_DEBUG, "controller::run: history-limit = %u", history_limit);
 	formaction::save_histories(searchfile, cmdlinefile, history_limit);
 
-	std::cout << _("Cleaning up cache...");
-	std::cout.flush();
+	if (!silent) {
+		std::cout << _("Cleaning up cache...");
+		std::cout.flush();
+	}
 	try {
 		scope_mutex feedslock(&feeds_mutex);
 		rsscache->cleanup_cache(feeds);
-		std::cout << _("done.") << std::endl;
+		if (!silent) {
+			std::cout << _("done.") << std::endl;
+		}
 	} catch (const dbexception& e) {
-		std::cout << _("failed: ") << e.what() << std::endl;
+		LOG(LOG_USERERROR, "Cleaning up cache failed: %s", e.what());
+		if (!silent) {
+			std::cout << _("failed: ") << e.what() << std::endl;
+		}
 	}
 
 	utils::remove_fs_lock(lock_file);
