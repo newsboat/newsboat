@@ -202,7 +202,7 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 			break;
 		case OP_NEXTUNREAD: {
 				unsigned int local_tmp;
-				LOG(LOG_INFO, "feedlist_formaction: jumping to next unred feed");
+				LOG(LOG_INFO, "feedlist_formaction: jumping to next unread feed");
 				if (!jump_to_next_unread_feed(local_tmp)) {
 					v->show_error(_("No feeds with unread items."));
 				}
@@ -210,7 +210,7 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 			break;
 		case OP_PREVUNREAD: {
 				unsigned int local_tmp;
-				LOG(LOG_INFO, "feedlist_formaction: jumping to previous unred feed");
+				LOG(LOG_INFO, "feedlist_formaction: jumping to previous unread feed");
 				if (!jump_to_previous_unread_feed(local_tmp)) {
 					v->show_error(_("No feeds with unread items."));
 				}
