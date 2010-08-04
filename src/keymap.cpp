@@ -40,6 +40,7 @@ static op_desc opdescs[] = {
 	{ OP_SHOWURLS,			"show-urls",				"u",	_("Show URLs in current article"),		KM_ARTICLE | KM_ARTICLELIST },
 	{ OP_CLEARTAG,			"clear-tag",				"^T",	_("Clear current tag"),					KM_FEEDLIST },
 	{ OP_SETTAG,			"set-tag",					"t",	_("Select tag"),						KM_FEEDLIST },
+	{ OP_SETTAG,			"select-tag",				"t",	_("Select tag"),						KM_FEEDLIST },
 	{ OP_SEARCH,			"open-search",				"/",	_("Open search dialog"),				KM_FEEDLIST | KM_HELP | KM_ARTICLELIST | KM_ARTICLE },
 	{ OP_GOTO_URL,			"goto-url",				"#",	_("Goto URL #"),				KM_ARTICLE },
 	{ OP_ENQUEUE,			"enqueue",					"e",	_("Add download to queue"),				KM_ARTICLE },
