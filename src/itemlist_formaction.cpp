@@ -254,12 +254,12 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				}
 			}
 			break;
-		case OP_NEXTFEED:
+		case OP_NEXTUNREADFEED:
 			if (!v->get_next_unread_feed(this)) {
 				v->show_error(_("No unread feeds."));
 			}
 			break;
-		case OP_PREVFEED:
+		case OP_PREVUNREADFEED:
 			if (!v->get_prev_unread_feed(this)) {
 				v->show_error(_("No unread feeds."));
 			}
