@@ -179,16 +179,22 @@ void pb_view::set_bindings() {
 		std::string downkey("** "); downkey.append(keys->getkey(OP_SK_DOWN, "podbeuter"));
 		std::string pgupkey("** "); pgupkey.append(keys->getkey(OP_SK_PGUP, "podbeuter"));
 		std::string pgdownkey("** "); pgdownkey.append(keys->getkey(OP_SK_PGDOWN, "podbeuter"));
+		std::string homekey("** "); homekey.append(keys->getkey(OP_SK_HOME, "podbeuter"));
+		std::string endkey("** "); endkey.append(keys->getkey(OP_SK_END, "podbeuter"));
 
 		dllist_form.set("bind_up", upkey);
 		dllist_form.set("bind_down", downkey);
 		dllist_form.set("bind_page_up", pgupkey);
 		dllist_form.set("bind_page_down", pgdownkey);
+		dllist_form.set("bind_home", homekey);
+		dllist_form.set("bind_end", endkey);
 
 		help_form.set("bind_up", upkey);
 		help_form.set("bind_down", downkey);
 		help_form.set("bind_page_up", pgupkey);
 		help_form.set("bind_page_down", pgdownkey);
+		help_form.set("bind_home", homekey);
+		help_form.set("bind_end", endkey);
 
 	}
 }
