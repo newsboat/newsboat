@@ -331,6 +331,9 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				}
 			}
 			break;
+		case OP_EDIT_URLS:
+			v->get_ctrl()->edit_urls_file();
+			break;
 		case OP_SELECTFILTER:
 			if (v->get_ctrl()->get_filters().size() > 0) {
 				std::string newfilter;

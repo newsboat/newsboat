@@ -64,7 +64,7 @@ static op_desc opdescs[] = {
 	{ OP_MACROPREFIX,		"macro-prefix",				",",	_("Call a macro"),						KM_NEWSBEUTER  },
 	{ OP_DELETE,			"delete-article",			"D",	_("Delete article"),					KM_ARTICLELIST | KM_ARTICLE },
 	{ OP_PURGE_DELETED,		"purge-deleted",			"$",	_("Purge deleted articles"),			KM_ARTICLELIST },
-	{ OP_EDIT_URLS,			"edit-urls",				"E",	_("Edit subscribed URLs"),				KM_FEEDLIST },
+	{ OP_EDIT_URLS,			"edit-urls",				"E",	_("Edit subscribed URLs"),				KM_FEEDLIST | KM_ARTICLELIST },
 	{ OP_CLOSEDIALOG,		"close-dialog",				"^X",	_("Close currently selected dialog"),	KM_DIALOGS },
 	{ OP_VIEWDIALOGS,		"view-dialogs",				"v",	_("View list of open dialogs"),			KM_NEWSBEUTER },
 	{ OP_NEXTDIALOG,		"next-dialog",				"^V",	_("Go to next dialog"),					KM_NEWSBEUTER },
