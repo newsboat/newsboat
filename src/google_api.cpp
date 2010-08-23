@@ -1,5 +1,6 @@
 #include <vector>
 #include <cstring>
+#include <iostream>
 
 #include <google_api.h>
 #include <config.h>
@@ -42,8 +43,15 @@ static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp
 
 std::string googlereader_api::retrieve_auth() {
 	CURL * handle = curl_easy_init();
+	std::string pass = cfg->get_configvalue("googlereader-password");
+	if( pass == "" ) {
+		std::cout << std::endl;
+		std::cout.flush();
+		// Find a way to do this in C++ by removing cin echoing.
+		pass = std::string( getpass("Password for google reader: ") );
+	}
 	std::string postcontent = utils::strprintf("service=reader&Email=%s&Passwd=%s&source=%s/%s&continue=http://www.google.com/", 
-		cfg->get_configvalue("googlereader-login").c_str(), cfg->get_configvalue("googlereader-password").c_str(), PROGRAM_NAME, PROGRAM_VERSION);
+		cfg->get_configvalue("googlereader-login").c_str(), pass.c_str(), PROGRAM_NAME, PROGRAM_VERSION);
 	std::string result;
 
 	utils::set_common_curl_options(handle, cfg);
