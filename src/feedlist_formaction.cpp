@@ -217,6 +217,22 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 				}
 			}
 			break;
+		case OP_NEXT: {
+				unsigned int local_tmp;
+				LOG(LOG_INFO, "feedlist_formaction: jumping to next feed");
+				if (!jump_to_next_feed(local_tmp)) {
+					v->show_error(_("Already on last feed."));
+				}
+			}
+			break;
+		case OP_PREV: {
+				unsigned int local_tmp;
+				LOG(LOG_INFO, "feedlist_formaction: jumping to previous feed");
+				if (!jump_to_previous_feed(local_tmp)) {
+					v->show_error(_("Already on first feed."));
+				}
+			}
+			break;
 		case OP_RANDOMUNREAD: {
 				unsigned int local_tmp;
 				LOG(LOG_INFO, "feedlist_formaction: jumping to random unread feed");

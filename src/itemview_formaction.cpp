@@ -291,6 +291,24 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 				v->show_error(_("No unread items."));
 			}
 			break;
+		case OP_NEXT:
+			LOG(LOG_INFO, "view::run_itemview: jumping to next article");
+			if (v->get_next(itemlist.get(), this)) {
+				do_redraw = true;
+			} else {
+				v->pop_current_formaction();
+				v->show_error(_("Already on last item."));
+			}
+			break;
+		case OP_PREV:
+			LOG(LOG_INFO, "view::run_itemview: jumping to previous article");
+			if (v->get_previous(itemlist.get(), this)) {
+				do_redraw = true;
+			} else {
+				v->pop_current_formaction();
+				v->show_error(_("Already on first item."));
+			}
+			break;
 		case OP_RANDOMUNREAD:
 			LOG(LOG_INFO, "view::run_itemview: jumping to random unread article");
 			if (v->get_random_unread(itemlist.get(), this)) {

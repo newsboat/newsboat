@@ -699,6 +699,68 @@ bool view::get_next_unread(itemlist_formaction * itemlist, itemview_formaction *
 	return false;
 }
 
+bool view::get_previous(itemlist_formaction * itemlist, itemview_formaction * itemview) {
+	unsigned int feedpos;
+	std::tr1::shared_ptr<feedlist_formaction> feedlist = std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
+	if (itemlist->jump_to_previous_item(false)) {
+		LOG(LOG_DEBUG, "view::get_previous: article in same feed");
+		if (itemview) {
+			itemview->init();
+			itemview->set_feed(itemlist->get_feed());
+			itemview->set_guid(itemlist->get_guid());
+		}
+		return true;
+	} else if (cfg->get_configvalue_as_bool("goto-next-feed")==false) {
+		LOG(LOG_DEBUG, "view::get_previous: goto-next-feed = false");
+		show_error(_("Already on first item."));
+	} else if (feedlist->jump_to_previous_feed(feedpos)) {
+		LOG(LOG_DEBUG, "view::get_previous: previous feed");
+		itemlist->set_feed(feedlist->get_feed());
+		itemlist->set_pos(feedpos);
+		itemlist->init();
+		if (itemlist->jump_to_previous_item(true)) {
+			if (itemview) {
+				itemview->init();
+				itemview->set_feed(itemlist->get_feed());
+				itemview->set_guid(itemlist->get_guid());
+			}
+			return true;
+		}
+	}
+	return false;
+}
+
+bool view::get_next(itemlist_formaction * itemlist, itemview_formaction * itemview) {
+	unsigned int feedpos;
+	std::tr1::shared_ptr<feedlist_formaction> feedlist = std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
+	if (itemlist->jump_to_next_item(false)) {
+		LOG(LOG_DEBUG, "view::get_next: article in same feed");
+		if (itemview) {
+			itemview->init();
+			itemview->set_feed(itemlist->get_feed());
+			itemview->set_guid(itemlist->get_guid());
+		}
+		return true;
+	} else if (cfg->get_configvalue_as_bool("goto-next-feed")==false) {
+		LOG(LOG_DEBUG, "view::get_next: goto-next-feed = false");
+		show_error(_("Already on last item."));
+	} else if (feedlist->jump_to_next_feed(feedpos)) {
+		LOG(LOG_DEBUG, "view::get_next: next feed");
+		itemlist->set_feed(feedlist->get_feed());
+		itemlist->set_pos(feedpos);
+		itemlist->init();
+		if (itemlist->jump_to_next_item(true)) {
+			if (itemview) {
+				itemview->init();
+				itemview->set_feed(itemlist->get_feed());
+				itemview->set_guid(itemlist->get_guid());
+			}
+			return true;
+		}
+	}
+	return false;
+}
+
 bool view::get_next_feed(itemlist_formaction * itemlist) {
 	std::tr1::shared_ptr<feedlist_formaction> feedlist = std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
 	unsigned int feedpos;

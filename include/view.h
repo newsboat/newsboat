@@ -68,6 +68,8 @@ namespace newsbeuter {
 
 			bool get_next_unread(itemlist_formaction * itemlist, itemview_formaction * itemview = NULL);
 			bool get_previous_unread(itemlist_formaction * itemlist, itemview_formaction * itemview = NULL);
+			bool get_next(itemlist_formaction * itemlist, itemview_formaction * itemview = NULL);
+			bool get_previous(itemlist_formaction * itemlist, itemview_formaction * itemview = NULL);
 			bool get_random_unread(itemlist_formaction * itemlist, itemview_formaction * itemview = NULL);
 
 			bool get_next_unread_feed(itemlist_formaction * itemlist);

@@ -36,6 +36,8 @@ class itemlist_formaction : public formaction {
 
 		bool jump_to_next_unread_item(bool start_with_first);
 		bool jump_to_previous_unread_item(bool start_with_last);
+		bool jump_to_next_item(bool start_with_first);
+		bool jump_to_previous_item(bool start_with_last);
 		bool jump_to_random_unread_item();
 
 		virtual void handle_cmdline(const std::string& cmd);

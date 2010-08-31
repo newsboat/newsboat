@@ -43,6 +43,8 @@ namespace newsbeuter {
 						OP_SAVE, 
 						OP_NEXTUNREAD, 
 						OP_PREVUNREAD,
+						OP_NEXT,
+						OP_PREV,
 						OP_OPENINBROWSER, 
 						OP_OPENBROWSER_AND_MARK,
 						OP_HELP, 

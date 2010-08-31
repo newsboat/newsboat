@@ -28,6 +28,8 @@ static op_desc opdescs[] = {
 	{ OP_MARKFEEDREAD,		"mark-feed-read",			"A",	_("Mark feed read"),					KM_FEEDLIST | KM_ARTICLELIST },
 	{ OP_MARKALLFEEDSREAD,	"mark-all-feeds-read",		"C",	_("Mark all feeds read"),				KM_FEEDLIST },
 	{ OP_SAVE,				"save",						"s",	_("Save article"),						KM_ARTICLELIST | KM_ARTICLE },
+	{ OP_NEXT,				"next",						"J",	_("Go to next article"),			KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE },
+	{ OP_PREV,				"prev",						"K",	_("Go to previous article"),		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE },
 	{ OP_NEXTUNREAD,		"next-unread",				"n",	_("Go to next unread article"),			KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE },
 	{ OP_PREVUNREAD,		"prev-unread",				"p",	_("Go to previous unread article"),		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE },
 	{ OP_RANDOMUNREAD,		"random-unread",			"^K",	_("Go to a random unread article"),		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE },

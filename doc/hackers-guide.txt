@@ -196,6 +196,6 @@ Unused keys
 ~~~~~~~~~~~
 
 	      _bc____hi___m_________wxyz
-	      _B_____HIJK_M_O___STUVWXYZ
+	      _B_____HI___M_O___STUVWXYZ
 	Ctrl- A__D___HIJ____O_______W_Y_
 
