@@ -7,6 +7,8 @@ mark-all-feeds-read:C:Mark articles in all feeds read.
 save:s:Save the currently selected article to a file.
 next-unread:n:Jump to the next unread article.
 prev-unread:p:Jump to the previous unread article.
+next:J:Jump to next article.
+prev:K:Jump to previosu article.
 random-unread:^K:Jump to a random unred article.
 open-in-browser:o:Opens the URL associated with the current article.
 open-in-browser-and-mark-read:O:Opens the URL associated with the current article and marks the article as read.
@@ -31,6 +33,8 @@ bookmark:^B:Bookmark currently selected article or URL.
 edit-flags:^E:Edit the flags of the currently selected article.
 next-unread-feed:^N:Go to the next feed with unread articles. This only works from the article list.
 prev-unread-feed:^P:Go to the previous feed with unread articles. This only works from the article list.
+next-feed:j:Go to the next feed. This only works from the article list.
+prev-feed:k:Go to the previous feed. This only works from the article list.
 delete-article:D:Delete the currently selected article.
 purge-deleted:$:Purge all article that are marked as deleted from the article list.
 view-dialogs:v:View list of open dialogs.
