@@ -699,6 +699,32 @@ bool view::get_next_unread(itemlist_formaction * itemlist, itemview_formaction *
 	return false;
 }
 
+bool view::get_next_feed(itemlist_formaction * itemlist) {
+	std::tr1::shared_ptr<feedlist_formaction> feedlist = std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
+	unsigned int feedpos;
+	assert(feedlist != NULL);
+	if (feedlist->jump_to_next_feed(feedpos)) {
+		itemlist->set_feed(feedlist->get_feed());
+		itemlist->set_pos(feedpos);
+		itemlist->init();
+		return true;
+	}
+	return false;
+}
+
+bool view::get_prev_feed(itemlist_formaction * itemlist) {
+	std::tr1::shared_ptr<feedlist_formaction> feedlist = std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
+	unsigned int feedpos;
+	assert(feedlist != NULL);
+	if (feedlist->jump_to_previous_feed(feedpos)) {
+		itemlist->set_feed(feedlist->get_feed());
+		itemlist->set_pos(feedpos);
+		itemlist->init();
+		return true;
+	}
+	return false;
+}
+
 void view::pop_current_formaction() {
 	std::tr1::shared_ptr<formaction> f = get_current_formaction();
 	std::vector<std::tr1::shared_ptr<formaction> >::iterator it=formaction_stack.begin();

@@ -505,6 +505,50 @@ bool feedlist_formaction::jump_to_next_unread_feed(unsigned int& feedpos) {
 	return false;
 }
 
+bool feedlist_formaction::jump_to_previous_feed(unsigned int& feedpos) {
+	unsigned int curpos;
+	std::istringstream is(f->get("feedpos"));
+	is >> curpos;
+
+	for (int i=curpos-1;i>=0;--i) {
+		LOG(LOG_DEBUG, "feedlist_formaction::jump_to_previous_feed: visible_feeds[%u]", i);
+		f->set("feedpos", utils::to_s(i));
+		feedpos = visible_feeds[i].second;
+		return true;
+	}
+	return false; // not sure if we should exit here or continue
+	// wrap to last feed
+	for (int i=visible_feeds.size()-1;i>=static_cast<int>(curpos);--i) {
+		LOG(LOG_DEBUG, "feedlist_formaction::jump_to_previous_feed: visible_feeds[%u]", i);
+		f->set("feedpos", utils::to_s(i));
+		feedpos = visible_feeds[i].second;
+		return true;
+	}
+	return false;
+}
+
+bool feedlist_formaction::jump_to_next_feed(unsigned int& feedpos) {
+	unsigned int curpos;
+	std::istringstream is(f->get("feedpos"));
+	is >> curpos;
+
+	for (unsigned int i=curpos+1;i<visible_feeds.size();++i) {
+		LOG(LOG_DEBUG, "feedlist_formaction::jump_to_next_feed: visible_feeds[%u]", i);
+		f->set("feedpos", utils::to_s(i));
+		feedpos = visible_feeds[i].second;
+		return true;
+	}
+	return false; // not sure if we should exit here or continue
+	// wrap to first feed
+	for (unsigned int i=0;i<=curpos;++i) {
+		LOG(LOG_DEBUG, "feedlist_formaction::jump_to_next_feed: visible_feeds[%u]", i);
+		f->set("feedpos", utils::to_s(i));
+		feedpos = visible_feeds[i].second;
+		return true;
+	}
+	return false;
+}
+
 std::tr1::shared_ptr<rss_feed> feedlist_formaction::get_feed() {
 	unsigned int curpos;
 	std::istringstream is(f->get("feedpos"));

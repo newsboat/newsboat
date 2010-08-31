@@ -60,6 +60,8 @@ static op_desc opdescs[] = {
 	{ OP_CLEARFILTER,		"clear-filter",				"^F",	_("Clear currently set filter"),		KM_FEEDLIST | KM_HELP | KM_ARTICLELIST },
 	{ OP_BOOKMARK,			"bookmark",					"^B",	_("Bookmark current link/article"),		KM_ARTICLELIST | KM_ARTICLE | KM_URLVIEW },
 	{ OP_EDITFLAGS,			"edit-flags",				"^E",	_("Edit flags"),						KM_ARTICLELIST | KM_ARTICLE },
+	{ OP_NEXTFEED,			"next-feed",				"j",	_("Go to next feed"),					KM_ARTICLELIST },
+	{ OP_PREVFEED,			"prev-feed",				"k",	_("Go to previous feed"),				KM_ARTICLELIST },
 	{ OP_NEXTUNREADFEED,	"next-unread-feed",			"^N",	_("Go to next unread feed"),			KM_ARTICLELIST },
 	{ OP_PREVUNREADFEED,	"prev-unread-feed",			"^P",	_("Go to previous unread feed"),		KM_ARTICLELIST },
 	{ OP_MACROPREFIX,		"macro-prefix",				",",	_("Call a macro"),						KM_NEWSBEUTER  },

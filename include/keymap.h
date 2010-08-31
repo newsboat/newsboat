@@ -65,6 +65,8 @@ namespace newsbeuter {
 						OP_EDITFLAGS,
 						OP_NEXTUNREADFEED,
 						OP_PREVUNREADFEED,
+						OP_NEXTFEED,
+						OP_PREVFEED,
 						OP_MACROPREFIX,
 						OP_DELETE,
 						OP_PURGE_DELETED,

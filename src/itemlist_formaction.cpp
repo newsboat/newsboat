@@ -264,6 +264,16 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				v->show_error(_("No unread feeds."));
 			}
 			break;
+		case OP_NEXTFEED:
+			if (!v->get_next_feed(this)) {
+				v->show_error(_("Already on last feed."));
+			}
+			break;
+		case OP_PREVFEED:
+			if (!v->get_prev_feed(this)) {
+				v->show_error(_("Already on first feed."));
+			}
+			break;
 		case OP_MARKFEEDREAD:
 			LOG(LOG_INFO, "itemlist_formaction: marking feed read");
 			v->set_status(_("Marking feed read..."));
