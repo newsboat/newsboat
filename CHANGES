@@ -5,6 +5,7 @@ Changes for newsbeuter:
 	Added ability to configure proxy authentication method.
 	Added commandline option -q to enable quiet startup (patch by Isaac Good)
 	Re-sort feed list after all feeds have been reloaded.
+	Added keys to jump to the next/previous feed or article regardless of its "unread" status (patches by Jim Pryor)
 
 2.3 (2010-06-24):
 	Fixed HTML rendering of bold and underline text when light background is configured.
