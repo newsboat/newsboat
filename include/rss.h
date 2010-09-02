@@ -39,6 +39,7 @@ namespace newsbeuter {
 			std::string description() const;
 			std::string description_raw() const { return description_; }
 			void set_description(const std::string& d);
+			void set_size(unsigned int size);
 			
 			std::string length() const;
 			std::string pubDate() const;
@@ -96,6 +97,8 @@ namespace newsbeuter {
 			inline void set_override_unread(bool b) { override_unread_ = b; }
 			inline bool override_unread() { return override_unread_; }
 
+			inline void unload() { description_.clear(); }
+
 		private:
 			std::string title_;
 			std::string link_;
@@ -116,6 +119,7 @@ namespace newsbeuter {
 			unsigned int idx;
 			std::string base;
 			bool override_unread_;
+			unsigned int size_;
 	};
 
 	class rss_feed : public matchable {
@@ -184,6 +188,8 @@ namespace newsbeuter {
 
 			inline void reset_status() { status_ = TO_BE_DOWNLOADED; }
 			inline void set_status(dl_status st) { status_ = st; }
+
+			void unload();
 
 			mutex item_mutex; // this is ugly, but makes it possible to lock items use e.g. from the cache class
 		private:

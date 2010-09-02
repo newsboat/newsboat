@@ -106,7 +106,7 @@ static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** /* az
 	is >> t;
 	item->set_pubDate(t);
 	
-	item->set_description(argv[5]);
+	item->set_size(utils::to_u(argv[5]));
 	item->set_unread((std::string("1") == argv[6]));
 
 	item->set_feedurl(argv[7]);
@@ -136,7 +136,7 @@ static int rssitemvector_callback(void * vector, int argc, char ** argv, char **
 	is >> t;
 	item->set_pubDate(t);
 	
-	item->set_description(argv[5]);
+	item->set_size(utils::to_u(argv[5]));
 	item->set_unread((std::string("1") == argv[6]));
 
 	item->set_feedurl(argv[7]);
@@ -165,7 +165,7 @@ static int search_item_callback(void * myfeed, int argc, char ** argv, char ** /
 	is >> t;
 	item->set_pubDate(t);
 	
-	item->set_description(argv[5]);
+	item->set_size(utils::to_u(argv[5]));
 	item->set_unread((std::string("1") == argv[6]));
 	item->set_feedurl(argv[7]);
 
@@ -437,7 +437,7 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, rss_ignores
 	feed->items().clear();
 
 	/* ...and then the associated items */
-	query = prepare_query("SELECT guid,title,author,url,pubDate,content,unread,feedurl,enclosure_url,enclosure_type,enqueued,flags,base FROM rss_item WHERE feedurl = '%q' AND deleted = 0 ORDER BY pubDate DESC, id DESC;",feed->rssurl().c_str());
+	query = prepare_query("SELECT guid,title,author,url,pubDate,length(content),unread,feedurl,enclosure_url,enclosure_type,enqueued,flags,base FROM rss_item WHERE feedurl = '%q' AND deleted = 0 ORDER BY pubDate DESC, id DESC;",feed->rssurl().c_str());
 	LOG(LOG_DEBUG,"running query: %s",query.c_str());
 	rc = sqlite3_exec(db,query.c_str(),rssitem_callback,&feed,NULL);
 	if (rc != SQLITE_OK) {
@@ -488,7 +488,7 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, rss_ignores
 
 void cache::get_latest_items(std::vector<std::tr1::shared_ptr<rss_item> >& items, unsigned int limit) {
 	scope_mutex lock(&mtx);
-	std::string query = prepare_query("SELECT guid,title,author,url,pubDate,content,unread,feedurl,enclosure_url,enclosure_type,enqueued,flags,base "
+	std::string query = prepare_query("SELECT guid,title,author,url,pubDate,length(content),unread,feedurl,enclosure_url,enclosure_type,enqueued,flags,base "
 									"FROM rss_item WHERE deleted = 0 ORDER BY pubDate DESC, id DESC LIMIT %d;", limit);
 	LOG(LOG_DEBUG, "running query: %s", query.c_str());
 	int rc = sqlite3_exec(db, query.c_str(), rssitemvector_callback, &items, NULL);
@@ -524,9 +524,9 @@ std::vector<std::tr1::shared_ptr<rss_item> > cache::search_for_items(const std::
 
 	scope_mutex lock(&mtx);
 	if (feedurl.length() > 0) {
-		query = prepare_query("SELECT guid,title,author,url,pubDate,content,unread,feedurl,enclosure_url,enclosure_type,enqueued,flags,base FROM rss_item WHERE (title LIKE '%%%q%%' OR content LIKE '%%%q%%') AND feedurl = '%q' AND deleted = 0 ORDER BY pubDate DESC, id DESC;",querystr.c_str(), querystr.c_str(), feedurl.c_str());
+		query = prepare_query("SELECT guid,title,author,url,pubDate,length(content),unread,feedurl,enclosure_url,enclosure_type,enqueued,flags,base FROM rss_item WHERE (title LIKE '%%%q%%' OR content LIKE '%%%q%%') AND feedurl = '%q' AND deleted = 0 ORDER BY pubDate DESC, id DESC;",querystr.c_str(), querystr.c_str(), feedurl.c_str());
 	} else {
-		query = prepare_query("SELECT guid,title,author,url,pubDate,content,unread,feedurl,enclosure_url,enclosure_type,enqueued,flags,base FROM rss_item WHERE (title LIKE '%%%q%%' OR content LIKE '%%%q%%') AND deleted = 0 ORDER BY pubDate DESC, id DESC;",querystr.c_str(), querystr.c_str());
+		query = prepare_query("SELECT guid,title,author,url,pubDate,length(content),unread,feedurl,enclosure_url,enclosure_type,enqueued,flags,base FROM rss_item WHERE (title LIKE '%%%q%%' OR content LIKE '%%%q%%') AND deleted = 0 ORDER BY pubDate DESC, id DESC;",querystr.c_str(), querystr.c_str());
 	}
 
 	LOG(LOG_DEBUG,"running query: %s",query.c_str());
