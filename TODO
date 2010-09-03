@@ -5,7 +5,6 @@ TODO:
 - per-feed refresh settings
 - make MacPort available for easy installation
 - compute "busy-ness" of feeds, make it a sort option
-- reduce memory usage by loading feeds on demand when being opened
 - implement RFC 5005 (http://www.ietf.org/rfc/rfc5005.txt)
 - implement a single key with which it is possible to go through all unread articles (like space in slrn)
 - when in offline mode of Google Reader support, record which articles have been marked as read, and sync that back to Google Reader.
@@ -164,3 +163,4 @@ DONE:
 - implement internal alias mechanism to allow transition of renamed config commands.
 - fix HTML rendering of bold and underlined text when light background is configured
 - add support for query feeds to Google Reader support.
+- reduce memory usage by loading feeds on demand when being opened
