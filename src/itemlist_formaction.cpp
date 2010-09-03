@@ -223,6 +223,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			LOG(LOG_INFO, "itemlist_formaction: quitting");
 			v->feedlist_mark_pos_if_visible(pos);
 			feed->purge_deleted_items();
+			feed->unload();
 			quit = true;
 			break;
 		case OP_HARDQUIT:
@@ -987,7 +988,8 @@ void itemlist_formaction::prepare_set_filterpos() {
 
 void itemlist_formaction::set_feed(std::tr1::shared_ptr<rss_feed> fd) {
 	LOG(LOG_DEBUG, "itemlist_formaction::set_feed: fd pointer = %p title = `%s'", fd.get(), fd->title().c_str());
-	feed = fd; 
+	feed = fd;
+	feed->load();
 	update_visible_items = true; 
 	do_update_visible_items();
 }

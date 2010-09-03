@@ -205,12 +205,16 @@ std::string rss_feed::description() const {
 
 std::tr1::shared_ptr<rss_item> rss_feed::get_item_by_guid(const std::string& guid) {
 	scope_mutex lock(&item_mutex);
+	return get_item_by_guid_unlocked(guid);
+}
+
+std::tr1::shared_ptr<rss_item> rss_feed::get_item_by_guid_unlocked(const std::string& guid) {
 	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items_.begin();it!=items_.end();++it) {
 		if ((*it)->guid() == guid) {
 			return *it;
 		}
 	}
-	LOG(LOG_DEBUG, "rss_feed::get_item_by_guid: hit dummy item!");
+	LOG(LOG_DEBUG, "rss_feed::get_item_by_guid_unlocked: hit dummy item!");
 	// abort();
 	return std::tr1::shared_ptr<rss_item>(new rss_item(ch)); // should never happen!
 }
@@ -600,6 +604,11 @@ void rss_feed::unload() {
 	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items_.begin();it!=items_.end();it++) {
 		(*it)->unload();
 	}
+}
+
+void rss_feed::load() {
+	scope_mutex lock(&item_mutex);
+	ch->fetch_descriptions(this);
 }
 
 

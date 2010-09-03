@@ -151,6 +151,16 @@ static int rssitemvector_callback(void * vector, int argc, char ** argv, char **
 	return 0;
 }
 
+static int fill_content_callback(void * myfeed, int argc, char ** argv, char ** /* azColName */) {
+	rss_feed * feed = static_cast<rss_feed *>(myfeed);
+	assert(argc == 2);
+	if (argv[0]) {
+		std::tr1::shared_ptr<rss_item> item = feed->get_item_by_guid_unlocked(argv[0]);
+		item->set_description(argv[1] ? argv[1] : "");
+	}
+	return 0;
+}
+
 static int search_item_callback(void * myfeed, int argc, char ** argv, char ** /* azColName */) {
 	std::vector<std::tr1::shared_ptr<rss_item> > * items = static_cast<std::vector<std::tr1::shared_ptr<rss_item> > *>(myfeed);
 	assert (argc == 13);
@@ -917,6 +927,26 @@ void cache::clean_old_articles() {
 		LOG(LOG_DEBUG, "cache::clean_old_articles, days == 0, not cleaning up anything");
 	}
 }
+
+void cache::fetch_descriptions(rss_feed * feed) {
+	std::vector<std::tr1::shared_ptr<rss_item> >& items = feed->items();
+	std::vector<std::string> guids;
+	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items.begin();it!=items.end();it++) {
+		guids.push_back(prepare_query("'%q'", (*it)->guid().c_str()));
+	}
+	std::string in_clause = utils::join(guids, ", ");
+
+	std::string query = prepare_query("SELECT guid,content FROM rss_item WHERE guid IN (%s);", in_clause.c_str());
+
+	LOG(LOG_DEBUG, "running query: %s", query.c_str());
+
+	int rc = sqlite3_exec(db, query.c_str(), fill_content_callback, feed, NULL);
+	if (rc != SQLITE_OK) {
+		LOG(LOG_CRITICAL, "query: \"%s\" failed: error = %d", query.c_str(), rc);
+		throw dbexception(db);
+	}
+}
+
 
 scope_transaction::scope_transaction(sqlite3 * db) : d(db) {
 	int rc = sqlite3_exec(d, "BEGIN TRANSACTION", NULL, NULL, NULL);

@@ -144,6 +144,7 @@ namespace newsbeuter {
 			inline std::vector<std::tr1::shared_ptr<rss_item> >& items() { return items_; }
 
 			std::tr1::shared_ptr<rss_item> get_item_by_guid(const std::string& guid);
+			std::tr1::shared_ptr<rss_item> get_item_by_guid_unlocked(const std::string& guid);
 			
 			inline const std::string& rssurl() const { return rssurl_; }
 			void set_rssurl(const std::string& u);
@@ -190,6 +191,7 @@ namespace newsbeuter {
 			inline void set_status(dl_status st) { status_ = st; }
 
 			void unload();
+			void load();
 
 			mutex item_mutex; // this is ugly, but makes it possible to lock items use e.g. from the cache class
 		private:
