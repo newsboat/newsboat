@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-23 13:45+0100\n"
+"POT-Creation-Date: 2010-09-06 16:17+0200\n"
 "PO-Revision-Date: 2007-11-21 22:51+0100\n"
 "Last-Translator: josh yu <joshyupeng@gmail.com>\n"
 "Language-Team: Chinese <joshyupeng@gmail.com>\n"
@@ -32,63 +32,63 @@ msgstr "无效的属性索引"
 msgid "`%s' is not a valid configuration element"
 msgstr ""
 
-#: src/configcontainer.cpp:63
+#: src/configcontainer.cpp:64
 #, c-format
 msgid "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
 msgstr "newsbeuter:重新加载完毕, %f个种子含未读文章(共有 %n 篇未读文章)"
 
-#: src/configcontainer.cpp:102
+#: src/configcontainer.cpp:104
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
 msgstr "%N %V - 你的种子 (%u 篇未读, 共有 %t 篇)%?T? - 标签 `%T'&?"
 
-#: src/configcontainer.cpp:103
+#: src/configcontainer.cpp:105
 msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
 msgstr "%N %V - 种子 '%T' 里的文章（%u 未读, 共有 %t 篇） - %U"
 
-#: src/configcontainer.cpp:104
+#: src/configcontainer.cpp:106
 msgid "%N %V - Search result (%u unread, %t total)"
 msgstr "%N %V - 查找结果 (%u 未读, 共有 %t)"
 
-#: src/configcontainer.cpp:105
+#: src/configcontainer.cpp:107
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?打开文件&保存文件? - %f"
 
-#: src/configcontainer.cpp:106
+#: src/configcontainer.cpp:108
 msgid "%N %V - Help"
 msgstr "%N %V - 帮助"
 
-#: src/configcontainer.cpp:107
+#: src/configcontainer.cpp:109
 msgid "%N %V - Select Tag"
 msgstr "%N %V - 选择标签"
 
-#: src/configcontainer.cpp:108
+#: src/configcontainer.cpp:110
 msgid "%N %V - Select Filter"
 msgstr "%N %V - 选择过滤器"
 
-#: src/configcontainer.cpp:109
+#: src/configcontainer.cpp:111
 msgid "%N %V - Article '%T'"
 msgstr "%N %V - 文章 '%T'"
 
-#: src/configcontainer.cpp:110
+#: src/configcontainer.cpp:112
 msgid "%N %V - URLs"
 msgstr "%N %V - 链接"
 
-#: src/configcontainer.cpp:111
+#: src/configcontainer.cpp:113
 #, fuzzy
 msgid "%N %V - Dialogs"
 msgstr "%N %V - 链接"
 
-#: src/configcontainer.cpp:147
+#: src/configcontainer.cpp:149
 #, c-format
 msgid "expected boolean value, found `%s' instead"
 msgstr ""
 
-#: src/configcontainer.cpp:153
+#: src/configcontainer.cpp:155
 #, c-format
 msgid "expected integer value, found `%s' instead"
 msgstr ""
 
-#: src/configcontainer.cpp:159
+#: src/configcontainer.cpp:161
 #, fuzzy, c-format
 msgid "invalid configuration value `%s'"
 msgstr "把文章保存到 %s"
@@ -103,82 +103,82 @@ msgstr "当处理命令`%s'(%s 第 %n 行)时出错: %s"
 msgid "unknown command `%s'"
 msgstr "未知的命令 `%s' "
 
-#: src/controller.cpp:86 src/pb_controller.cpp:43
+#: src/controller.cpp:87 src/pb_controller.cpp:43
 msgid "Fatal error: couldn't determine home directory!"
 msgstr "致命错误:无法确定主目录！"
 
-#: src/controller.cpp:87 src/pb_controller.cpp:44
+#: src/controller.cpp:88 src/pb_controller.cpp:44
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr "请设置主目录的环境变量，或者添加一个有效的用户其UID为 %u!"
 
-#: src/controller.cpp:213 src/pb_controller.cpp:102
+#: src/controller.cpp:218 src/pb_controller.cpp:102
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr "%s: 未知的选项 - %c"
 
-#: src/controller.cpp:237 src/pb_controller.cpp:108
+#: src/controller.cpp:242 src/pb_controller.cpp:108
 #, c-format
 msgid "Starting %s %s..."
 msgstr "启动 %s %s..."
 
-#: src/controller.cpp:246 src/controller.cpp:307 src/pb_controller.cpp:112
+#: src/controller.cpp:252 src/controller.cpp:314 src/pb_controller.cpp:112
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "错误：%s的一个进程已经在运行中（PID: %u)"
 
-#: src/controller.cpp:255 src/pb_controller.cpp:116
+#: src/controller.cpp:262 src/pb_controller.cpp:116
 msgid "Loading configuration..."
 msgstr "加载配置文件..."
 
-#: src/controller.cpp:287 src/controller.cpp:325 src/controller.cpp:355
-#: src/controller.cpp:371 src/controller.cpp:401 src/controller.cpp:405
-#: src/controller.cpp:436 src/controller.cpp:447 src/controller.cpp:461
-#: src/controller.cpp:470 src/controller.cpp:505 src/pb_controller.cpp:152
-#: src/pb_controller.cpp:169
+#: src/controller.cpp:294 src/controller.cpp:332 src/controller.cpp:362
+#: src/controller.cpp:378 src/controller.cpp:408 src/controller.cpp:412
+#: src/controller.cpp:444 src/controller.cpp:456 src/controller.cpp:470
+#: src/controller.cpp:479 src/controller.cpp:518 src/pb_controller.cpp:153
+#: src/pb_controller.cpp:170
 msgid "done."
 msgstr "完毕."
 
-#: src/controller.cpp:313 src/controller.cpp:396
+#: src/controller.cpp:320 src/controller.cpp:403
 msgid "Opening cache..."
 msgstr "打开缓存..."
 
-#: src/controller.cpp:319
+#: src/controller.cpp:326
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "错误:打开缓存文件`%s' 失败:%s"
 
-#: src/controller.cpp:349
+#: src/controller.cpp:356
 msgid "Loading URLs from local cache..."
 msgstr "从本地缓存中加载链接..."
 
-#: src/controller.cpp:359
+#: src/controller.cpp:366
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "从 %s 文件加载链接..."
 
-#: src/controller.cpp:379
+#: src/controller.cpp:386
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
 "import an OPML file."
 msgstr "错误：没有配置链接。请用RSS种子的链接替换 %s 或者导入一个OPML文件."
 
-#: src/controller.cpp:381
+#: src/controller.cpp:388
 msgid ""
 "It looks like you haven't configured any feeds in your bloglines account. "
 "Please do so, and try again."
 msgstr ""
 "看起来你还没有在bloglines账户里配置任何种子 请先配置种子，然后再尝试一下。"
 
-#: src/controller.cpp:383
+#: src/controller.cpp:390
 msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
 msgstr "看起来你订阅的OPML种子没有包含任何种子请更正之后再尝试一下。"
 
-#: src/controller.cpp:385
+#: src/controller.cpp:392
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Google Reader "
@@ -186,78 +186,78 @@ msgid ""
 msgstr ""
 "看起来你还没有在bloglines账户里配置任何种子 请先配置种子，然后再尝试一下。"
 
-#: src/controller.cpp:394
+#: src/controller.cpp:401
 msgid "Loading articles from cache..."
 msgstr "从缓存中加载文章"
 
-#: src/controller.cpp:402
+#: src/controller.cpp:409
 msgid "Cleaning up cache thoroughly..."
 msgstr "彻底清除缓存"
 
-#: src/controller.cpp:419
+#: src/controller.cpp:426
 msgid "Error while loading feeds from database: "
 msgstr "当从数据库中加载种子的时候出错:"
 
-#: src/controller.cpp:423
+#: src/controller.cpp:430
 #, fuzzy, c-format
 msgid "Error while loading feed '%s': %s"
 msgstr "当调用`%s'的时候出错: %s"
 
-#: src/controller.cpp:440
+#: src/controller.cpp:448
 #, fuzzy
 msgid "Prepopulating query feeds..."
 msgstr "更新查询种子..."
 
-#: src/controller.cpp:458
+#: src/controller.cpp:467
 msgid "Importing list of read articles..."
 msgstr "导入阅读文章列表"
 
-#: src/controller.cpp:467
+#: src/controller.cpp:476
 msgid "Exporting list of read articles..."
 msgstr "导出阅读文章列表"
 
-#: src/controller.cpp:501
+#: src/controller.cpp:511
 msgid "Cleaning up cache..."
 msgstr "清空缓存..."
 
-#: src/controller.cpp:507
+#: src/controller.cpp:523
 msgid "failed: "
 msgstr "失败: "
 
-#: src/controller.cpp:525
+#: src/controller.cpp:544
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "错误:无法将所有种子都标记为已读: %s"
 
-#: src/controller.cpp:579
+#: src/controller.cpp:600
 #, c-format
 msgid "%sLoading %s..."
 msgstr "%s加载中 %s..."
 
-#: src/controller.cpp:599 src/controller.cpp:601 src/controller.cpp:603
+#: src/controller.cpp:622 src/controller.cpp:624 src/controller.cpp:626
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr "当抓取%s的时候出错: %s"
 
-#: src/controller.cpp:611
+#: src/controller.cpp:634
 msgid "Error: invalid feed!"
 msgstr "错误:无效的种子!"
 
-#: src/controller.cpp:617
+#: src/controller.cpp:641
 msgid "invalid feed index (bug)"
 msgstr "无效的种子索引(bug）"
 
-#: src/controller.cpp:761
+#: src/controller.cpp:803
 msgid ""
 "newsbeuter is free software and licensed under the MIT/X Consortium License."
 msgstr ""
 
-#: src/controller.cpp:762
+#: src/controller.cpp:804
 #, c-format
 msgid "Type `%s -vv' for more information."
 msgstr ""
 
-#: src/controller.cpp:791
+#: src/controller.cpp:833
 #, c-format
 msgid ""
 "%s %s\n"
@@ -268,133 +268,137 @@ msgstr ""
 "用法: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-"
 "h]\n"
 
-#: src/controller.cpp:798
+#: src/controller.cpp:840
 msgid "export OPML feed to stdout"
 msgstr "导出OPML种子列表到控制台"
 
-#: src/controller.cpp:799
+#: src/controller.cpp:841
 msgid "refresh feeds on start"
 msgstr "在本软件启动之初刷新种子列表"
 
-#: src/controller.cpp:800 src/controller.cpp:810 src/controller.cpp:811
+#: src/controller.cpp:842 src/controller.cpp:853 src/controller.cpp:854
 msgid "<file>"
 msgstr "文件"
 
-#: src/controller.cpp:800
+#: src/controller.cpp:842
 msgid "import OPML file"
 msgstr "导入opml文件"
 
-#: src/controller.cpp:801
+#: src/controller.cpp:843
 msgid "<urlfile>"
 msgstr "<超链文件>"
 
-#: src/controller.cpp:801
+#: src/controller.cpp:843
 msgid "read RSS feed URLs from <urlfile>"
 msgstr "从超链文件里读取RSS种子列表"
 
-#: src/controller.cpp:802
+#: src/controller.cpp:844
 msgid "<cachefile>"
 msgstr "缓存文件"
 
-#: src/controller.cpp:802
+#: src/controller.cpp:844
 msgid "use <cachefile> as cache file"
 msgstr "使用<cachefile>作为保存缓存数据的文件"
 
-#: src/controller.cpp:803
+#: src/controller.cpp:845
 msgid "<configfile>"
 msgstr "<配置文件>"
 
-#: src/controller.cpp:803
+#: src/controller.cpp:845
 msgid "read configuration from <configfile>"
 msgstr "从<配置文件>里读取配置信息"
 
-#: src/controller.cpp:804
+#: src/controller.cpp:846
 msgid "clean up cache thoroughly"
 msgstr "彻底清除缓存"
 
-#: src/controller.cpp:805
+#: src/controller.cpp:847
 msgid "<command>..."
 msgstr "命令 ..."
 
-#: src/controller.cpp:805
+#: src/controller.cpp:847
 msgid "execute list of commands"
 msgstr "执行一系列命令"
 
-#: src/controller.cpp:806
+#: src/controller.cpp:848
 msgid "activate offline mode (only applies to bloglines synchronization mode)"
 msgstr "激活离线模式（只对bloglines同步模式有效）"
 
-#: src/controller.cpp:807
+#: src/controller.cpp:849
+msgid "quiet startup"
+msgstr ""
+
+#: src/controller.cpp:850
 msgid "get version information"
 msgstr "获得版本信息"
 
-#: src/controller.cpp:808
+#: src/controller.cpp:851
 msgid "<loglevel>"
 msgstr "记录等级"
 
-#: src/controller.cpp:808
+#: src/controller.cpp:851
 msgid "write a log with a certain loglevel (valid values: 1 to 6)"
 msgstr "以某一等级做记录（有效值：1 - 6）"
 
-#: src/controller.cpp:809
+#: src/controller.cpp:852
 msgid "<logfile>"
 msgstr "<记录文件>"
 
-#: src/controller.cpp:809
+#: src/controller.cpp:852
 msgid "use <logfile> as output log file"
 msgstr "使用<记录文件>作为导出记录的文件"
 
-#: src/controller.cpp:810
+#: src/controller.cpp:853
 msgid "export list of read articles to <file>"
 msgstr "将已阅读文章导出到<文件>"
 
-#: src/controller.cpp:811
+#: src/controller.cpp:854
 msgid "import list of read articles from <file>"
 msgstr "从<文件>里导入阅读的文章列表"
 
-#: src/controller.cpp:812
+#: src/controller.cpp:855
 msgid "this help"
 msgstr "该帮助"
 
-#: src/controller.cpp:830
+#: src/controller.cpp:873
 #, c-format
 msgid "An error occured while parsing %s."
 msgstr ""
 
-#: src/controller.cpp:845
+#: src/controller.cpp:888
 #, c-format
 msgid "Import of %s finished."
 msgstr "%s 导入完毕"
 
-#: src/controller.cpp:1074
+#: src/controller.cpp:1120
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
 msgstr "书签支持尚未配置，请在配置文件里设置相应变量 `bookmark-cmd' "
 
-#: src/controller.cpp:1087
+#: src/controller.cpp:1133
 #, c-format
 msgid "%u unread articles"
 msgstr "%u 篇未读文章"
 
-#: src/controller.cpp:1117 src/formaction.cpp:304
+#: src/controller.cpp:1164 src/formaction.cpp:304
 #: src/itemview_formaction.cpp:85
 msgid "Title: "
 msgstr "标题: "
 
-#: src/controller.cpp:1121 src/itemview_formaction.cpp:90
+#: src/controller.cpp:1168 src/itemview_formaction.cpp:90
 msgid "Author: "
 msgstr "作者: "
 
-#: src/controller.cpp:1125 src/itemview_formaction.cpp:99
+#: src/controller.cpp:1172 src/itemview_formaction.cpp:99
 msgid "Date: "
 msgstr "日期: "
 
-#: src/controller.cpp:1129 src/itemview_formaction.cpp:95
+#: src/controller.cpp:1176 src/itemview_formaction.cpp:95
 msgid "Link: "
 msgstr "链接: "
 
-#: src/controller.cpp:1338
+#: src/controller.cpp:1388
 #, fuzzy, c-format
 msgid "Error: couldn't open configuration file `%s'!"
 msgstr "错误：无法将文章写至 %s"
@@ -413,9 +417,10 @@ msgstr ""
 
 #: src/dialogs_formaction.cpp:62 src/dialogs_formaction.cpp:77
 #: src/itemlist_formaction.cpp:53 src/itemlist_formaction.cpp:70
-#: src/itemlist_formaction.cpp:89 src/itemlist_formaction.cpp:108
-#: src/itemlist_formaction.cpp:126 src/itemlist_formaction.cpp:146
-#: src/itemlist_formaction.cpp:276 src/itemlist_formaction.cpp:484
+#: src/itemlist_formaction.cpp:93 src/itemlist_formaction.cpp:105
+#: src/itemlist_formaction.cpp:149 src/itemlist_formaction.cpp:167
+#: src/itemlist_formaction.cpp:187 src/itemlist_formaction.cpp:344
+#: src/itemlist_formaction.cpp:527
 msgid "No item selected!"
 msgstr "没有选择任何项目"
 
@@ -424,8 +429,8 @@ msgstr "没有选择任何项目"
 msgid "Error: you can't remove the feed list!"
 msgstr "错误：你不能重新加载所选项目"
 
-#: src/dialogs_formaction.cpp:99 src/feedlist_formaction.cpp:665
-#: src/itemlist_formaction.cpp:776 src/urlview_formaction.cpp:136
+#: src/dialogs_formaction.cpp:99 src/feedlist_formaction.cpp:726
+#: src/itemlist_formaction.cpp:858 src/urlview_formaction.cpp:136
 msgid "Invalid position!"
 msgstr "无效位置！"
 
@@ -496,7 +501,7 @@ msgid "unknown error (bug)."
 msgstr "未知的错误（bug）"
 
 #: src/feedlist_formaction.cpp:99 src/feedlist_formaction.cpp:109
-#: src/feedlist_formaction.cpp:186
+#: src/feedlist_formaction.cpp:187
 msgid "No feed selected!"
 msgstr "没有选择种子"
 
@@ -509,17 +514,17 @@ msgid "ftaun"
 msgstr ""
 
 #: src/feedlist_formaction.cpp:123 src/feedlist_formaction.cpp:140
-#: src/itemlist_formaction.cpp:377 src/itemlist_formaction.cpp:396
+#: src/itemlist_formaction.cpp:420 src/itemlist_formaction.cpp:439
 msgid "f"
 msgstr ""
 
 #: src/feedlist_formaction.cpp:125 src/feedlist_formaction.cpp:142
-#: src/itemlist_formaction.cpp:375 src/itemlist_formaction.cpp:394
+#: src/itemlist_formaction.cpp:418 src/itemlist_formaction.cpp:437
 msgid "t"
 msgstr ""
 
 #: src/feedlist_formaction.cpp:127 src/feedlist_formaction.cpp:144
-#: src/itemlist_formaction.cpp:379 src/itemlist_formaction.cpp:398
+#: src/itemlist_formaction.cpp:422 src/itemlist_formaction.cpp:441
 msgid "a"
 msgstr ""
 
@@ -538,123 +543,131 @@ msgid ""
 "one?"
 msgstr ""
 
-#: src/feedlist_formaction.cpp:174 src/itemlist_formaction.cpp:228
+#: src/feedlist_formaction.cpp:175 src/itemlist_formaction.cpp:296
 msgid "Marking feed read..."
 msgstr "标记该种子已读"
 
-#: src/feedlist_formaction.cpp:183 src/itemlist_formaction.cpp:245
+#: src/feedlist_formaction.cpp:184 src/itemlist_formaction.cpp:313
 #, c-format
 msgid "Error: couldn't mark feed read: %s"
 msgstr "错误：无法将种子标记为已读"
 
-#: src/feedlist_formaction.cpp:207 src/feedlist_formaction.cpp:215
-#: src/feedlist_formaction.cpp:223
+#: src/feedlist_formaction.cpp:208 src/feedlist_formaction.cpp:216
+#: src/feedlist_formaction.cpp:240
 msgid "No feeds with unread items."
 msgstr "任何种子里都没有未读的文章"
 
-#: src/feedlist_formaction.cpp:229
+#: src/feedlist_formaction.cpp:224 src/itemlist_formaction.cpp:286
+msgid "Already on last feed."
+msgstr ""
+
+#: src/feedlist_formaction.cpp:232 src/itemlist_formaction.cpp:291
+msgid "Already on first feed."
+msgstr ""
+
+#: src/feedlist_formaction.cpp:246
 msgid "Marking all feeds read..."
 msgstr "将所有种子都标记为已读..."
 
-#: src/feedlist_formaction.cpp:253
+#: src/feedlist_formaction.cpp:270
 msgid "No tags defined."
 msgstr "没有定义任何标签"
 
-#: src/feedlist_formaction.cpp:268 src/itemlist_formaction.cpp:335
+#: src/feedlist_formaction.cpp:285 src/itemlist_formaction.cpp:378
 #, fuzzy, c-format
 msgid "Error: couldn't parse filter command `%s': %s"
 msgstr "错误：无法分析过滤器（filter）命令"
 
-#: src/feedlist_formaction.cpp:278 src/itemlist_formaction.cpp:346
+#: src/feedlist_formaction.cpp:295 src/itemlist_formaction.cpp:389
 msgid "No filters defined."
 msgstr "没有定义任何过滤器（filter）"
 
-#: src/feedlist_formaction.cpp:291 src/help_formaction.cpp:30
-#: src/itemlist_formaction.cpp:288 src/itemview_formaction.cpp:231
+#: src/feedlist_formaction.cpp:308 src/help_formaction.cpp:30
+#: src/itemlist_formaction.cpp:356 src/itemview_formaction.cpp:231
 msgid "Search for: "
 msgstr "查找: "
 
-#: src/feedlist_formaction.cpp:308 src/itemlist_formaction.cpp:359
+#: src/feedlist_formaction.cpp:325 src/itemlist_formaction.cpp:402
 msgid "Filter: "
 msgstr "过滤器: "
 
-#: src/feedlist_formaction.cpp:317 src/view.cpp:184
+#: src/feedlist_formaction.cpp:334 src/view.cpp:184
 msgid "Do you really want to quit (y:Yes n:No)? "
 msgstr "你真的想离开么（y:是的 n:不是)?"
 
-#: src/feedlist_formaction.cpp:317 src/filebrowser_formaction.cpp:102
+#: src/feedlist_formaction.cpp:334 src/filebrowser_formaction.cpp:102
 #: src/view.cpp:184
 msgid "yn"
 msgstr "yn"
 
-#: src/feedlist_formaction.cpp:317 src/view.cpp:184
+#: src/feedlist_formaction.cpp:334 src/view.cpp:184
 msgid "y"
 msgstr "y"
 
-#: src/feedlist_formaction.cpp:399 src/help_formaction.cpp:150
-#: src/itemlist_formaction.cpp:754 src/itemview_formaction.cpp:375
-#: src/pb_view.cpp:260 src/pb_view.cpp:269 src/urlview_formaction.cpp:124
+#: src/feedlist_formaction.cpp:416 src/help_formaction.cpp:154
+#: src/itemlist_formaction.cpp:836 src/itemview_formaction.cpp:393
+#: src/pb_view.cpp:266 src/pb_view.cpp:275 src/urlview_formaction.cpp:124
 msgid "Quit"
 msgstr "放弃"
 
-#: src/feedlist_formaction.cpp:400 src/itemlist_formaction.cpp:755
+#: src/feedlist_formaction.cpp:417 src/itemlist_formaction.cpp:837
 msgid "Open"
 msgstr "打开"
 
-#: src/feedlist_formaction.cpp:401 src/itemlist_formaction.cpp:758
-#: src/itemview_formaction.cpp:377
+#: src/feedlist_formaction.cpp:418 src/itemlist_formaction.cpp:840
+#: src/itemview_formaction.cpp:395
 msgid "Next Unread"
 msgstr "下一篇未读"
 
-#: src/feedlist_formaction.cpp:402 src/itemlist_formaction.cpp:757
+#: src/feedlist_formaction.cpp:419 src/itemlist_formaction.cpp:839
 msgid "Reload"
 msgstr "重新加载当前种子"
 
-#: src/feedlist_formaction.cpp:403
+#: src/feedlist_formaction.cpp:420
 msgid "Reload All"
 msgstr "重新加载所有种子"
 
-#: src/feedlist_formaction.cpp:404
+#: src/feedlist_formaction.cpp:421
 msgid "Mark Read"
 msgstr "标记为已读"
 
-#: src/feedlist_formaction.cpp:405
+#: src/feedlist_formaction.cpp:422
 msgid "Catchup All"
 msgstr "抓取所有"
 
-#: src/feedlist_formaction.cpp:406 src/help_formaction.cpp:151
-#: src/itemlist_formaction.cpp:760
+#: src/feedlist_formaction.cpp:423 src/help_formaction.cpp:155
+#: src/itemlist_formaction.cpp:842
 msgid "Search"
 msgstr "查找"
 
-#: src/feedlist_formaction.cpp:407 src/help_formaction.cpp:178
-#: src/itemlist_formaction.cpp:761 src/itemview_formaction.cpp:380
-#: src/pb_view.cpp:202 src/pb_view.cpp:276
+#: src/feedlist_formaction.cpp:424 src/help_formaction.cpp:182
+#: src/itemlist_formaction.cpp:843 src/itemview_formaction.cpp:398
+#: src/pb_view.cpp:208 src/pb_view.cpp:282
 msgid "Help"
 msgstr "帮助"
 
-#: src/feedlist_formaction.cpp:620 src/itemlist_formaction.cpp:470
+#: src/feedlist_formaction.cpp:681 src/itemlist_formaction.cpp:513
 msgid "Error: couldn't parse filter command!"
 msgstr "错误：无法分析过滤器（filter）命令"
 
-#: src/feedlist_formaction.cpp:635 src/itemlist_formaction.cpp:505
+#: src/feedlist_formaction.cpp:696 src/itemlist_formaction.cpp:548
 msgid "Searching..."
 msgstr "查找..."
 
-#: src/feedlist_formaction.cpp:642 src/itemlist_formaction.cpp:516
+#: src/feedlist_formaction.cpp:703 src/itemlist_formaction.cpp:559
 #, c-format
 msgid "Error while searching for `%s': %s"
 msgstr "当查找 `%s'的时候出错: %s"
 
-#: src/feedlist_formaction.cpp:651 src/itemlist_formaction.cpp:521
+#: src/feedlist_formaction.cpp:712 src/itemlist_formaction.cpp:564
 msgid "No results."
 msgstr "没有结果"
 
-#: src/feedlist_formaction.cpp:660 src/itemlist_formaction.cpp:771
+#: src/feedlist_formaction.cpp:721 src/itemlist_formaction.cpp:853
 msgid "Position not visible!"
 msgstr "找不到这个位置"
 
-#: src/feedlist_formaction.cpp:713
+#: src/feedlist_formaction.cpp:774
 #, fuzzy, c-format
 msgid "Feed List - %u unread, %u total"
 msgstr "%N %V - 查找结果 (%u 未读, 共有 %t)"
@@ -678,13 +691,13 @@ msgstr "%s %s - 打开文件 - %s"
 msgid "%s %s - Save File - %s"
 msgstr "%s %s - 保存文件 - %s"
 
-#: src/filebrowser_formaction.cpp:194 src/pb_view.cpp:271
+#: src/filebrowser_formaction.cpp:194 src/pb_view.cpp:277
 #: src/select_formaction.cpp:145 src/select_formaction.cpp:150
 msgid "Cancel"
 msgstr "取消"
 
-#: src/filebrowser_formaction.cpp:195 src/itemlist_formaction.cpp:756
-#: src/itemview_formaction.cpp:376
+#: src/filebrowser_formaction.cpp:195 src/itemlist_formaction.cpp:838
+#: src/itemview_formaction.cpp:394
 msgid "Save"
 msgstr "保存"
 
@@ -698,7 +711,7 @@ msgstr "%s %s - 打开文件 - %s"
 msgid "Save File - %s"
 msgstr "%s %s - 保存文件 - %s"
 
-#: src/filtercontainer.cpp:22 src/regexmanager.cpp:138 src/rss.cpp:347
+#: src/filtercontainer.cpp:22 src/regexmanager.cpp:138 src/rss.cpp:355
 #, fuzzy, c-format
 msgid "couldn't parse filter expression `%s': %s"
 msgstr "错误：无法分析过滤器（filter）命令"
@@ -765,151 +778,161 @@ msgstr "没有未读的文章"
 msgid "Popular items"
 msgstr "没有未读的文章"
 
-#: src/help_formaction.cpp:123
+#: src/help_formaction.cpp:127
 msgid "Generic bindings:"
 msgstr ""
 
-#: src/help_formaction.cpp:130
+#: src/help_formaction.cpp:134
 msgid "Unbound functions:"
 msgstr ""
 
-#: src/help_formaction.cpp:152
+#: src/help_formaction.cpp:156
 msgid "Clear"
 msgstr "清空"
 
-#: src/htmlrenderer.cpp:136
+#: src/htmlrenderer.cpp:145
 msgid "embedded flash:"
 msgstr "内嵌flash"
 
-#: src/htmlrenderer.cpp:168 src/htmlrenderer.cpp:486
+#: src/htmlrenderer.cpp:176 src/htmlrenderer.cpp:595
 msgid "image"
 msgstr "图片"
 
-#: src/htmlrenderer.cpp:476
+#: src/htmlrenderer.cpp:585
 msgid "Links: "
 msgstr "所有链接"
 
-#: src/htmlrenderer.cpp:485
+#: src/htmlrenderer.cpp:594
 msgid "link"
 msgstr "链接"
 
-#: src/htmlrenderer.cpp:487
+#: src/htmlrenderer.cpp:596
 msgid "embedded flash"
 msgstr "内嵌flash"
 
-#: src/htmlrenderer.cpp:488
+#: src/htmlrenderer.cpp:597
 msgid "unknown (bug)"
 msgstr "未知（bug）"
 
-#: src/itemlist_formaction.cpp:104 src/itemview_formaction.cpp:268
-msgid "URL list empty."
-msgstr "空空如也的链接列表"
-
-#: src/itemlist_formaction.cpp:141 src/itemview_formaction.cpp:103
-#: src/itemview_formaction.cpp:259
-msgid "Flags: "
-msgstr "标记: "
-
-#: src/itemlist_formaction.cpp:164 src/itemlist_formaction.cpp:799
-msgid "Error: no item selected!"
-msgstr "错误：没有选择任何项目！"
-
-#: src/itemlist_formaction.cpp:178
-msgid "Error: you can't reload search results."
-msgstr "错误：你不能重新加载所选项目"
-
-#: src/itemlist_formaction.cpp:197 src/itemlist_formaction.cpp:205
-#: src/itemlist_formaction.cpp:212 src/itemview_formaction.cpp:282
-#: src/itemview_formaction.cpp:291 src/itemview_formaction.cpp:300
-#: src/view.cpp:626 src/view.cpp:684
-msgid "No unread items."
-msgstr "没有未读的文章"
-
-#: src/itemlist_formaction.cpp:218 src/itemlist_formaction.cpp:223
-msgid "No unread feeds."
-msgstr "没有未读的种子"
-
-#: src/itemlist_formaction.cpp:272 src/itemview_formaction.cpp:245
-msgid "Pipe article to command: "
-msgstr ""
-
-#: src/itemlist_formaction.cpp:296 src/itemview_formaction.cpp:305
+#: src/itemlist_formaction.cpp:112 src/itemview_formaction.cpp:323
 msgid "Toggling read flag for article..."
 msgstr "切换文章阅读标记（已读/未读）"
 
-#: src/itemlist_formaction.cpp:313
+#: src/itemlist_formaction.cpp:126
 #, c-format
 msgid "Error while toggling read flag: %s"
 msgstr "当切换阅读标记（已读/未读）时出错: %s"
 
-#: src/itemlist_formaction.cpp:370
+#: src/itemlist_formaction.cpp:145 src/itemview_formaction.cpp:268
+msgid "URL list empty."
+msgstr "空空如也的链接列表"
+
+#: src/itemlist_formaction.cpp:182 src/itemview_formaction.cpp:103
+#: src/itemview_formaction.cpp:259
+msgid "Flags: "
+msgstr "标记: "
+
+#: src/itemlist_formaction.cpp:205 src/itemlist_formaction.cpp:881
+msgid "Error: no item selected!"
+msgstr "错误：没有选择任何项目！"
+
+#: src/itemlist_formaction.cpp:219
+msgid "Error: you can't reload search results."
+msgstr "错误：你不能重新加载所选项目"
+
+#: src/itemlist_formaction.cpp:239 src/itemlist_formaction.cpp:247
+#: src/itemlist_formaction.cpp:270 src/itemview_formaction.cpp:282
+#: src/itemview_formaction.cpp:291 src/itemview_formaction.cpp:318
+#: src/view.cpp:626 src/view.cpp:684
+msgid "No unread items."
+msgstr "没有未读的文章"
+
+#: src/itemlist_formaction.cpp:255 src/itemview_formaction.cpp:300
+#: src/view.cpp:746
+msgid "Already on last item."
+msgstr ""
+
+#: src/itemlist_formaction.cpp:263 src/itemview_formaction.cpp:309
+#: src/view.cpp:715
+msgid "Already on first item."
+msgstr ""
+
+#: src/itemlist_formaction.cpp:276 src/itemlist_formaction.cpp:281
+msgid "No unread feeds."
+msgstr "没有未读的种子"
+
+#: src/itemlist_formaction.cpp:340 src/itemview_formaction.cpp:245
+msgid "Pipe article to command: "
+msgstr ""
+
+#: src/itemlist_formaction.cpp:413
 msgid "Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"
 msgstr ""
 
-#: src/itemlist_formaction.cpp:370 src/itemlist_formaction.cpp:389
+#: src/itemlist_formaction.cpp:413 src/itemlist_formaction.cpp:432
 #, fuzzy
 msgid "dtfalg"
 msgstr "编辑标记"
 
-#: src/itemlist_formaction.cpp:373 src/itemlist_formaction.cpp:392
+#: src/itemlist_formaction.cpp:416 src/itemlist_formaction.cpp:435
 msgid "d"
 msgstr ""
 
-#: src/itemlist_formaction.cpp:381 src/itemlist_formaction.cpp:400
+#: src/itemlist_formaction.cpp:424 src/itemlist_formaction.cpp:443
 msgid "l"
 msgstr ""
 
-#: src/itemlist_formaction.cpp:383 src/itemlist_formaction.cpp:402
+#: src/itemlist_formaction.cpp:426 src/itemlist_formaction.cpp:445
 msgid "g"
 msgstr ""
 
-#: src/itemlist_formaction.cpp:389
+#: src/itemlist_formaction.cpp:432
 msgid "Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"
 msgstr ""
 
-#: src/itemlist_formaction.cpp:494 src/itemview_formaction.cpp:466
+#: src/itemlist_formaction.cpp:537 src/itemview_formaction.cpp:484
 msgid "Flags updated."
 msgstr "标记已更新"
 
-#: src/itemlist_formaction.cpp:759
+#: src/itemlist_formaction.cpp:841
 msgid "Mark All Read"
 msgstr "将所有都标记为已读"
 
-#: src/itemlist_formaction.cpp:835 src/itemview_formaction.cpp:195
-#: src/itemview_formaction.cpp:441
+#: src/itemlist_formaction.cpp:917 src/itemview_formaction.cpp:195
+#: src/itemview_formaction.cpp:459
 msgid "Aborted saving."
 msgstr "放弃保存"
 
-#: src/itemlist_formaction.cpp:839 src/itemview_formaction.cpp:445
+#: src/itemlist_formaction.cpp:921 src/itemview_formaction.cpp:463
 #, c-format
 msgid "Saved article to %s"
 msgstr "把文章保存到 %s"
 
-#: src/itemlist_formaction.cpp:841 src/itemview_formaction.cpp:447
+#: src/itemlist_formaction.cpp:923 src/itemview_formaction.cpp:465
 #, c-format
 msgid "Error: couldn't save article to %s"
 msgstr "错误：无法保存文章到 %s"
 
-#: src/itemlist_formaction.cpp:916
+#: src/itemlist_formaction.cpp:999
 #, c-format
 msgid "Search Result - '%s'"
 msgstr ""
 
-#: src/itemlist_formaction.cpp:919
+#: src/itemlist_formaction.cpp:1002
 #, c-format
 msgid "Query Feed - %s"
 msgstr ""
 
-#: src/itemlist_formaction.cpp:921
+#: src/itemlist_formaction.cpp:1004
 #, fuzzy, c-format
 msgid "Article List - %s"
 msgstr "把文章保存到 %s"
 
-#: src/itemview_formaction.cpp:34 src/itemview_formaction.cpp:557
+#: src/itemview_formaction.cpp:34 src/itemview_formaction.cpp:575
 msgid "Top"
 msgstr "顶部"
 
-#: src/itemview_formaction.cpp:34 src/itemview_formaction.cpp:559
+#: src/itemview_formaction.cpp:34 src/itemview_formaction.cpp:577
 msgid "Bottom"
 msgstr "底部"
 
@@ -950,35 +973,35 @@ msgstr "将文章保存至 %s "
 msgid "Error: couldn't write article to file %s"
 msgstr "错误：无法将文章写至 %s"
 
-#: src/itemview_formaction.cpp:208 src/itemview_formaction.cpp:339
-#: src/itemview_formaction.cpp:491 src/urlview_formaction.cpp:34
+#: src/itemview_formaction.cpp:208 src/itemview_formaction.cpp:357
+#: src/itemview_formaction.cpp:509 src/urlview_formaction.cpp:34
 #: src/urlview_formaction.cpp:69
 msgid "Starting browser..."
 msgstr "启动浏览器..."
 
-#: src/itemview_formaction.cpp:310
+#: src/itemview_formaction.cpp:328
 #, c-format
 msgid "Error while marking article as unread: %s"
 msgstr "当标记文章为未读的时候出错: %s"
 
-#: src/itemview_formaction.cpp:354 src/keymap.cpp:43
+#: src/itemview_formaction.cpp:372 src/keymap.cpp:47
 msgid "Goto URL #"
 msgstr ""
 
-#: src/itemview_formaction.cpp:378 src/urlview_formaction.cpp:125
+#: src/itemview_formaction.cpp:396 src/urlview_formaction.cpp:125
 msgid "Open in Browser"
 msgstr "在浏览器里打开"
 
-#: src/itemview_formaction.cpp:379
+#: src/itemview_formaction.cpp:397
 msgid "Enqueue"
 msgstr "加入队列"
 
-#: src/itemview_formaction.cpp:568
+#: src/itemview_formaction.cpp:586
 #, fuzzy, c-format
 msgid "Article - %s"
 msgstr "把文章保存到 %s"
 
-#: src/itemview_formaction.cpp:606
+#: src/itemview_formaction.cpp:624
 #, fuzzy
 msgid "Error: invalid regular expression!"
 msgstr "错误:无效的种子!"
@@ -1016,263 +1039,288 @@ msgid "Save article"
 msgstr "保存文章"
 
 #: src/keymap.cpp:31
-msgid "Go to next unread article"
+#, fuzzy
+msgid "Go to next article"
 msgstr "转到下一篇未读文章"
 
 #: src/keymap.cpp:32
-msgid "Go to previous unread article"
+#, fuzzy
+msgid "Go to previous article"
 msgstr "转到前一篇未读文章"
 
 #: src/keymap.cpp:33
+msgid "Go to next unread article"
+msgstr "转到下一篇未读文章"
+
+#: src/keymap.cpp:34
+msgid "Go to previous unread article"
+msgstr "转到前一篇未读文章"
+
+#: src/keymap.cpp:35
 #, fuzzy
 msgid "Go to a random unread article"
 msgstr "转到下一篇未读文章"
 
-#: src/keymap.cpp:34
+#: src/keymap.cpp:36
+#, fuzzy
+msgid "Open article in browser and mark read"
+msgstr "在浏览器里打开文章"
+
+#: src/keymap.cpp:37
 msgid "Open article in browser"
 msgstr "在浏览器里打开文章"
 
-#: src/keymap.cpp:35
+#: src/keymap.cpp:38
 msgid "Open help dialog"
 msgstr "打开帮助对话框"
 
-#: src/keymap.cpp:36
+#: src/keymap.cpp:39
 msgid "Toggle source view"
 msgstr "切换源代码显示"
 
-#: src/keymap.cpp:37
+#: src/keymap.cpp:40
 msgid "Toggle read status for article"
 msgstr "切换文章的阅读状态（已读/未读）"
 
-#: src/keymap.cpp:38
+#: src/keymap.cpp:41
 msgid "Toggle show read feeds/articles"
 msgstr "切换显示已读种子/文章"
 
-#: src/keymap.cpp:39
+#: src/keymap.cpp:42
 msgid "Show URLs in current article"
 msgstr "列出当前文章里的所有链接"
 
-#: src/keymap.cpp:40
+#: src/keymap.cpp:43
 msgid "Clear current tag"
 msgstr "清除当前标签"
 
-#: src/keymap.cpp:41
+#: src/keymap.cpp:44 src/keymap.cpp:45
 msgid "Select tag"
 msgstr "选择标签"
 
-#: src/keymap.cpp:42
+#: src/keymap.cpp:46
 msgid "Open search dialog"
 msgstr "打开搜索对话框"
 
-#: src/keymap.cpp:44
+#: src/keymap.cpp:48
 msgid "Add download to queue"
 msgstr "将该下载项目加入队列"
 
-#: src/keymap.cpp:45
+#: src/keymap.cpp:49
 msgid "Reload the list of URLs from the configuration"
 msgstr "重新加载配置文件里的链接列表"
 
-#: src/keymap.cpp:46
+#: src/keymap.cpp:50
 msgid "Download file"
 msgstr "下载文件"
 
-#: src/keymap.cpp:47
+#: src/keymap.cpp:51
 msgid "Cancel download"
 msgstr "取消下载"
 
-#: src/keymap.cpp:48
+#: src/keymap.cpp:52
 msgid "Mark download as deleted"
 msgstr "将下载的项目标记为已删除"
 
-#: src/keymap.cpp:49
+#: src/keymap.cpp:53
 msgid "Purge finished and deleted downloads from queue"
 msgstr "清除队列中已完成的和已删除的下载项目"
 
-#: src/keymap.cpp:50
+#: src/keymap.cpp:54
 msgid "Toggle automatic download on/off"
 msgstr "切换是否自动下载"
 
-#: src/keymap.cpp:51
+#: src/keymap.cpp:55
 msgid "Start player with currently selected download"
 msgstr "播放当前所选的下载项目"
 
-#: src/keymap.cpp:52
+#: src/keymap.cpp:56
 msgid "Increase the number of concurrent downloads"
 msgstr "增加同步下载的进程数目"
 
-#: src/keymap.cpp:53
+#: src/keymap.cpp:57
 msgid "Decrease the number of concurrent downloads"
 msgstr "减少同步下载的进程数目"
 
-#: src/keymap.cpp:54
+#: src/keymap.cpp:58
 msgid "Redraw screen"
 msgstr "刷新屏显"
 
-#: src/keymap.cpp:55
+#: src/keymap.cpp:59
 msgid "Open the commandline"
 msgstr "打开命令行"
 
-#: src/keymap.cpp:56
+#: src/keymap.cpp:60
 msgid "Set a filter"
 msgstr "设置一个过滤器"
 
-#: src/keymap.cpp:57
+#: src/keymap.cpp:61
 msgid "Select a predefined filter"
 msgstr "选择一个预设置的过滤器"
 
-#: src/keymap.cpp:58
+#: src/keymap.cpp:62
 msgid "Clear currently set filter"
 msgstr "清除当前所选的过滤器"
 
-#: src/keymap.cpp:59
+#: src/keymap.cpp:63
 msgid "Bookmark current link/article"
 msgstr "将当前文章/链接加入书签"
 
-#: src/keymap.cpp:60
+#: src/keymap.cpp:64
 msgid "Edit flags"
 msgstr "编辑标记"
 
-#: src/keymap.cpp:61
+#: src/keymap.cpp:65
+#, fuzzy
+msgid "Go to next feed"
+msgstr "转到下一篇未读的种子"
+
+#: src/keymap.cpp:66
+#, fuzzy
+msgid "Go to previous feed"
+msgstr "转到前一篇未读的种子"
+
+#: src/keymap.cpp:67
 msgid "Go to next unread feed"
 msgstr "转到下一篇未读的种子"
 
-#: src/keymap.cpp:62
+#: src/keymap.cpp:68
 msgid "Go to previous unread feed"
 msgstr "转到前一篇未读的种子"
 
-#: src/keymap.cpp:63
+#: src/keymap.cpp:69
 msgid "Call a macro"
 msgstr "调用一个宏命令"
 
-#: src/keymap.cpp:64
+#: src/keymap.cpp:70
 msgid "Delete article"
 msgstr "删除文章"
 
-#: src/keymap.cpp:65
+#: src/keymap.cpp:71
 msgid "Purge deleted articles"
 msgstr "压缩已删除文章"
 
-#: src/keymap.cpp:66
+#: src/keymap.cpp:72
 msgid "Edit subscribed URLs"
 msgstr "编辑已提交链接"
 
-#: src/keymap.cpp:67
+#: src/keymap.cpp:73
 #, fuzzy
 msgid "Close currently selected dialog"
 msgstr "重新加载当前选择的种子"
 
-#: src/keymap.cpp:68
+#: src/keymap.cpp:74
 msgid "View list of open dialogs"
 msgstr ""
 
-#: src/keymap.cpp:69
+#: src/keymap.cpp:75
 #, fuzzy
 msgid "Go to next dialog"
 msgstr "转到下一篇未读文章"
 
-#: src/keymap.cpp:70
+#: src/keymap.cpp:76
 #, fuzzy
 msgid "Go to previous dialog"
 msgstr "返回到前一个对话框/退出"
 
-#: src/keymap.cpp:71
+#: src/keymap.cpp:77
 #, fuzzy
 msgid "Pipe article to command"
 msgstr "把文章保存到 %s"
 
-#: src/keymap.cpp:72
+#: src/keymap.cpp:78
 #, fuzzy
 msgid "Sort current list"
 msgstr "清除当前标签"
 
-#: src/keymap.cpp:73
+#: src/keymap.cpp:79
 msgid "Sort current list (reverse)"
 msgstr ""
 
-#: src/keymap.cpp:75
+#: src/keymap.cpp:81
 msgid "Open URL 10"
 msgstr "打开链接10"
 
-#: src/keymap.cpp:76
+#: src/keymap.cpp:82
 msgid "Open URL 1"
 msgstr "打开链接1"
 
-#: src/keymap.cpp:77
+#: src/keymap.cpp:83
 msgid "Open URL 2"
 msgstr "打开链接2"
 
-#: src/keymap.cpp:78
+#: src/keymap.cpp:84
 msgid "Open URL 3"
 msgstr "打开链接3"
 
-#: src/keymap.cpp:79
+#: src/keymap.cpp:85
 msgid "Open URL 4"
 msgstr "打开链接4"
 
-#: src/keymap.cpp:80
+#: src/keymap.cpp:86
 msgid "Open URL 5"
 msgstr "打开链接5"
 
-#: src/keymap.cpp:81
+#: src/keymap.cpp:87
 msgid "Open URL 6"
 msgstr "打开链接6"
 
-#: src/keymap.cpp:82
+#: src/keymap.cpp:88
 msgid "Open URL 7"
 msgstr "打开链接7"
 
-#: src/keymap.cpp:83
+#: src/keymap.cpp:89
 msgid "Open URL 8"
 msgstr "打开链接8"
 
-#: src/keymap.cpp:84
+#: src/keymap.cpp:90
 msgid "Open URL 9"
 msgstr "打开链接9"
 
-#: src/keymap.cpp:86
+#: src/keymap.cpp:92
 #, fuzzy
 msgid "Move to the previous entry"
 msgstr "转到前一篇未读的种子"
 
-#: src/keymap.cpp:87
+#: src/keymap.cpp:93
 msgid "Move to the next entry"
 msgstr ""
 
-#: src/keymap.cpp:88
+#: src/keymap.cpp:94
 #, fuzzy
 msgid "Move to the previous page"
 msgstr "返回到前一个对话框/退出"
 
-#: src/keymap.cpp:89
+#: src/keymap.cpp:95
 #, fuzzy
 msgid "Move to the next page"
 msgstr "转到下一篇未读文章"
 
-#: src/keymap.cpp:91
+#: src/keymap.cpp:97
 #, fuzzy
 msgid "Move to the start of page/list"
 msgstr "转到下一篇未读文章"
 
-#: src/keymap.cpp:92
+#: src/keymap.cpp:98
 #, fuzzy
 msgid "Move to the end of page/list"
 msgstr "转到下一篇未读文章"
 
-#: src/keymap.cpp:288
+#: src/keymap.cpp:294
 #, c-format
 msgid "`%s' is not a valid context"
 msgstr ""
 
-#: src/keymap.cpp:316
+#: src/keymap.cpp:322
 #, c-format
 msgid "`%s' is not a valid key command"
 msgstr ""
 
-#: src/pb_controller.cpp:163
+#: src/pb_controller.cpp:164
 msgid "Cleaning up queue..."
 msgstr "清空队列..."
 
-#: src/pb_controller.cpp:176
+#: src/pb_controller.cpp:177
 #, c-format
 msgid ""
 "%s %s\n"
@@ -1311,23 +1359,23 @@ msgstr "错误：下载项目必须下载完毕才可以播放"
 msgid "Error: unable to perform operation: download(s) in progress."
 msgstr "错误：无法执行操作：有项目在下载中"
 
-#: src/pb_view.cpp:270
+#: src/pb_view.cpp:276
 msgid "Download"
 msgstr "下载"
 
-#: src/pb_view.cpp:272
+#: src/pb_view.cpp:278
 msgid "Delete"
 msgstr "删除"
 
-#: src/pb_view.cpp:273
+#: src/pb_view.cpp:279
 msgid "Purge Finished"
 msgstr "清除完毕的项目"
 
-#: src/pb_view.cpp:274
+#: src/pb_view.cpp:280
 msgid "Toggle Automatic Download"
 msgstr "切换自动下载"
 
-#: src/pb_view.cpp:275
+#: src/pb_view.cpp:281
 msgid "Play"
 msgstr "播放"
 
@@ -1341,7 +1389,7 @@ msgstr ""
 msgid "`%s' is not a valid regular expression: %s"
 msgstr "错误:无效的种子!"
 
-#: src/rss.cpp:458
+#: src/rss.cpp:466
 #, fuzzy
 msgid "too few arguments"
 msgstr "参数太少"
@@ -1393,8 +1441,8 @@ msgstr "错误: 种子里没有包含任何项目!"
 msgid "Updating query feed..."
 msgstr "更新查询种子..."
 
-#: rss/atom_parser.cpp:16 rss/parser.cpp:248 rss/rss_09x_parser.cpp:15
-#: rss/rss_10_parser.cpp:15
+#: rss/atom_parser.cpp:16 rss/parser.cpp:250 rss/rss_09x_parser.cpp:17
+#: rss/rss_09x_parser.cpp:32 rss/rss_10_parser.cpp:15
 msgid "XML root node is NULL"
 msgstr ""
 
@@ -1402,35 +1450,35 @@ msgstr ""
 msgid "couldn't initialize libcurl"
 msgstr ""
 
-#: rss/parser.cpp:130
+#: rss/parser.cpp:132
 #, c-format
 msgid "Error: trying to download feed `%s' returned HTTP status code %ld."
 msgstr ""
 
-#: rss/parser.cpp:153
+#: rss/parser.cpp:155
 msgid "could not parse buffer"
 msgstr ""
 
-#: rss/parser.cpp:172
+#: rss/parser.cpp:174
 #, fuzzy
 msgid "could not parse file"
 msgstr "错误：无法分析过滤器（filter）命令"
 
-#: rss/parser.cpp:197
+#: rss/parser.cpp:199
 msgid "no RSS version"
 msgstr ""
 
-#: rss/parser.cpp:209
+#: rss/parser.cpp:211
 #, fuzzy
 msgid "invalid RSS version"
 msgstr "无效位置！"
 
-#: rss/parser.cpp:224 rss/parser.cpp:231
+#: rss/parser.cpp:226 rss/parser.cpp:233
 #, fuzzy
 msgid "invalid Atom version"
 msgstr "无效位置！"
 
-#: rss/parser.cpp:235
+#: rss/parser.cpp:237
 msgid "no Atom version"
 msgstr ""
 
@@ -1438,7 +1486,7 @@ msgstr ""
 msgid "unsupported feed format"
 msgstr ""
 
-#: rss/rss_09x_parser.cpp:22
+#: rss/rss_09x_parser.cpp:39
 msgid "no RSS channel found"
 msgstr ""
 
