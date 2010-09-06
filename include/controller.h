@@ -84,6 +84,7 @@ namespace newsbeuter {
 			void update_flags(std::tr1::shared_ptr<rss_item> item);
 		private:
 			void usage(char * argv0);
+			void setup_dirs();
 			void version_information(const char * argv0, unsigned int level);
 			void import_opml(const char * filename);
 			void export_opml();
@@ -110,6 +111,8 @@ namespace newsbeuter {
 			std::string cache_file;
 			std::string config_file;
 			std::string queue_file;
+			std::string searchfile;
+			std::string cmdlinefile;
 			bool refresh_on_start;
 			configcontainer cfg;
 			rss_ignores ign;

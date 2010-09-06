@@ -78,6 +78,9 @@ void omg_a_child_died(int /* sig */) {
 }
 
 controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false), api(0) {
+}
+
+void controller::setup_dirs() {
 	char * cfgdir;
 	if (!(cfgdir = ::getenv("HOME"))) {
 		struct passwd * spw = ::getpwuid(::getuid());
@@ -94,6 +97,15 @@ controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache
 	config_dir.append(NEWSBEUTER_PATH_SEP);
 	config_dir.append(NEWSBEUTER_CONFIG_SUBDIR);
 	mkdir(config_dir.c_str(),0700); // create configuration directory if it doesn't exist
+
+	url_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + url_file;
+	cache_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + cache_file;
+	lock_file = cache_file + LOCK_SUFFIX;
+	config_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
+	queue_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
+
+	searchfile = utils::strprintf("%s%shistory.search", config_dir.c_str(), NEWSBEUTER_PATH_SEP);
+	cmdlinefile = utils::strprintf("%s%shistory.cmdline", config_dir.c_str(), NEWSBEUTER_PATH_SEP);
 }
 
 controller::~controller() {
@@ -116,11 +128,7 @@ void controller::set_view(view * vv) {
 void controller::run(int argc, char * argv[]) {
 	int c;
 
-	url_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + url_file;
-	cache_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + cache_file;
-	lock_file = cache_file + LOCK_SUFFIX;
-	config_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
-	queue_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
+	setup_dirs();
 
 	::signal(SIGINT, ctrl_c_action);
 	::signal(SIGPIPE, ignore_signal);
@@ -254,9 +262,6 @@ void controller::run(int argc, char * argv[]) {
 			return;
 		}
 	}
-
-	std::string searchfile = utils::strprintf("%s%shistory.search", config_dir.c_str(), NEWSBEUTER_PATH_SEP);
-	std::string cmdlinefile = utils::strprintf("%s%shistory.cmdline", config_dir.c_str(), NEWSBEUTER_PATH_SEP);
 
 	if (!silent)
 		std::cout << _("Loading configuration...");
