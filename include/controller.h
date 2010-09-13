@@ -84,6 +84,7 @@ namespace newsbeuter {
 			void update_flags(std::tr1::shared_ptr<rss_item> item);
 		private:
 			void usage(char * argv0);
+			bool setup_dirs_xdg(const char *env_home);
 			void setup_dirs();
 			void version_information(const char * argv0, unsigned int level);
 			void import_opml(const char * filename);

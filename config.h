@@ -8,6 +8,7 @@
 
 #define NEWSBEUTER_PATH_SEP			"/"
 #define NEWSBEUTER_CONFIG_SUBDIR	".newsbeuter"
+#define NEWSBEUTER_SUBDIR_XDG		"newsbeuter"
 
 #include <libintl.h>
 #include <locale.h>
