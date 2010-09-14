@@ -156,6 +156,32 @@ void opml_urlreader::handle_node(xmlNode * node, const std::string& tag) {
 	}
 }
 
+void opml_urlreader::rec_find_rss_outlines(xmlNode * node, std::string tag) {
+	while (node) {
+		char * type = (char *)xmlGetProp(node, (const xmlChar *)"type");
+
+		std::string newtag = tag;
+
+		if (strcmp((const char *)node->name, "outline")==0) {
+			 if (type && strcmp(type,"rss")==0) {
+				 handle_node(node, tag);
+			  } else {
+				char * text = (char *)xmlGetProp(node, (const xmlChar *)"title");
+				if (text) {
+					if (newtag.length() > 0) {
+						newtag.append("/");
+					}
+					newtag.append(text);
+					xmlFree(text);
+				}
+			}
+		}
+		rec_find_rss_outlines(node->children, newtag);
+		node = node->next;
+	}
+}
+
+
 std::string opml_urlreader::get_source() {
 	return cfg->get_configvalue("opml-url");
 }
