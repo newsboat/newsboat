@@ -1,11 +1,13 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
+
+use strict;
 
 print "####################################\n";
 print "# newsbeuter example configuration #\n";
 print "####################################\n\n";
 
-while ($line = <STDIN>) {
-	($option,$syntax,$defaultparam,$desc,$example) = split(/\|/, $line);
+while (my $line = <STDIN>) {
+	my ($option,$syntax,$defaultparam,$desc,$example) = split(/\|/, $line);
 	if ($defaultparam ne "n/a") {
 		print "## configuration option: " . $option . "\n";
 		if ($desc =~ /limitation in AsciiDoc/) {
