@@ -138,7 +138,7 @@ bool controller::setup_dirs_xdg(const char *env_home) {
 	/* in data */
 	cache_file = xdg_data_dir + std::string(NEWSBEUTER_PATH_SEP) + cache_file;
 	lock_file = cache_file + LOCK_SUFFIX;
-	queue_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
+	queue_file = xdg_data_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
 	searchfile = utils::strprintf("%s%shistory.search", xdg_data_dir.c_str(), NEWSBEUTER_PATH_SEP);
 	cmdlinefile = utils::strprintf("%s%shistory.cmdline", xdg_data_dir.c_str(), NEWSBEUTER_PATH_SEP);
 
@@ -157,7 +157,6 @@ void controller::setup_dirs() {
 			::exit(EXIT_FAILURE);
 		}
 	}
-
 
 	config_dir = env_home;
 	config_dir.append(NEWSBEUTER_PATH_SEP);
