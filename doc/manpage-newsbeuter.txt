@@ -55,10 +55,10 @@ OPTIONS
        commands are "reload" and "print-unread".
 
 -o::
-       Active offline reading mode. When bloglines synchronization mode is configured,
-       then the list of feeds will not be loaded from bloglines.com, but instead from
+       Active offline reading mode. When Google Reader synchronization mode is configured,
+       then the list of feeds will not be loaded from Google Reader, but instead from
        the local cache. This makes it possible to read locally cached articles even
-       without internet connection to connect to the bloglines server.
+       without internet connection to connect to Google Reader.
 
 -l loglevel::
        Generate a loglevel with a certain loglevel. Valid loglevels are 1 to 6. An

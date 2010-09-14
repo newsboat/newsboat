@@ -95,13 +95,6 @@ opml_urlreader::opml_urlreader(configcontainer * c) : cfg(c) { }
 opml_urlreader::~opml_urlreader() { }
 
 
-bloglines_urlreader::bloglines_urlreader(configcontainer * c) : opml_urlreader(c) { 
-	listsubs_url = "http://rpc.bloglines.com/listsubs";
-	getitems_url = "http://rpc.bloglines.com/getitems";
-}
-
-bloglines_urlreader::~bloglines_urlreader() { }
-
 void opml_urlreader::write_config() {
 	// do nothing.
 }
@@ -120,7 +113,7 @@ void opml_urlreader::reload() {
 	std::vector<std::string> urls = utils::tokenize_quoted(this->get_source(), " ");
 
 	for (std::vector<std::string>::iterator it=urls.begin();it!=urls.end();it++) {
-		LOG(LOG_DEBUG, "bloglines_urlread::reload: downloading `%s'", it->c_str());
+		LOG(LOG_DEBUG, "opml_urlreader::reload: downloading `%s'", it->c_str());
 		std::string urlcontent = utils::retrieve_url(*it, cfg, this->get_auth());
 
 		xmlDoc * doc = xmlParseMemory(urlcontent.c_str(), urlcontent.length());
@@ -163,73 +156,6 @@ void opml_urlreader::handle_node(xmlNode * node, const std::string& tag) {
 	}
 }
 
-void bloglines_urlreader::handle_node(xmlNode * node, const std::string& tag) {
-	if (node) {
-		char * sub_id = (char *)xmlGetProp(node, (const xmlChar *)"BloglinesSubId");
-		if (sub_id) {
-			std::string theurl = getitems_url;
-			theurl.append("?s=");
-			theurl.append(sub_id);
-
-			if (cfg->get_configvalue_as_bool("bloglines-mark-read")) {
-				theurl.append("&n=1");
-			}
-
-			std::string auth = cfg->get_configvalue("bloglines-auth");
-			LOG(LOG_DEBUG, "bloglines_urlreader::rec_find_rss_outlines: auth = %s", auth.c_str());
-			auth = utils::replace_all(auth,"@","%40");
-
-			if (theurl.substr(0,7) == "http://") {
-				theurl.insert(7, auth + "@");
-			} else if (theurl.substr(0,8) == "https://") {
-				theurl.insert(8, auth + "@");
-			}
-
-			urls.push_back(theurl);
-			if (tag.length() > 0) {
-				std::vector<std::string> tmptags;
-				tmptags.push_back(tag);
-				tags[theurl] = tmptags;
-				alltags.insert(tag);
-			}
-			xmlFree(sub_id);
-		}
-	}
-}
-
-void opml_urlreader::rec_find_rss_outlines(xmlNode * node, std::string tag) {
-	while (node) {
-		char * type = (char *)xmlGetProp(node, (const xmlChar *)"type");
-
-		std::string newtag = tag;
-
-		if (strcmp((const char *)node->name, "outline")==0) {
-			if (type && strcmp(type,"rss")==0) {
-				handle_node(node, tag);
-			} else {
-				char * text = (char *)xmlGetProp(node, (const xmlChar *)"title");
-				if (text) {
-					if (newtag.length() > 0) {
-						newtag.append("/");
-					}
-					newtag.append(text);
-					xmlFree(text);
-				}
-			}
-		}
-		xmlFree(type);
-
-		rec_find_rss_outlines(node->children, newtag);
-
-		node = node->next;
-	}
-
-}
-
-std::string bloglines_urlreader::get_source() {
-	return listsubs_url;
-}
-
 std::string opml_urlreader::get_source() {
 	return cfg->get_configvalue("opml-url");
 }
@@ -237,11 +163,5 @@ std::string opml_urlreader::get_source() {
 const char * opml_urlreader::get_auth() {
 	return NULL;
 }
-
-const char * bloglines_urlreader::get_auth() {
-	return cfg->get_configvalue("bloglines-auth").c_str();
-}
-
-
 
 }

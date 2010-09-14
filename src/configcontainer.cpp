@@ -63,9 +63,7 @@ configcontainer::configcontainer()
 	config_data["notify-program"]  = configdata("", configdata::PATH);
 	config_data["notify-format"]   = configdata(_("newsbeuter: finished reload, %f unread feeds (%n unread articles total)"), configdata::STR);
 	config_data["datetime-format"] = configdata("%b %d", configdata::STR);
-	config_data["urls-source"]     = configdata("local", "local", "bloglines", "opml", "googlereader", NULL); // enum
-	config_data["bloglines-auth"]  = configdata("", configdata::STR);
-	config_data["bloglines-mark-read"] = configdata("no", configdata::BOOL);
+	config_data["urls-source"]     = configdata("local", "local", "opml", "googlereader", NULL); // enum
 	config_data["bookmark-cmd"]    = configdata("", configdata::STR);
 	config_data["opml-url"]        = configdata("", configdata::STR, true);
 	config_data["html-renderer"]   = configdata("internal", configdata::PATH);

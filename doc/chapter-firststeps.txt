@@ -13,7 +13,7 @@ After you've installed newsbeuter, you can run it for the first time by typing
 			-C <configfile> read configuration from <configfile>
 			-X              clean up cache thoroughly
 			-x <command>... execute list of commands
-			-o              activate offline mode (only applies to bloglines synchronization mode)
+			-o              activate offline mode (only applies to Google Reader synchronization mode)
 			-q              quiet startup
 			-v              get version information
 			-l <loglevel>   write a log with a certain loglevel (valid values: 1 to 6)

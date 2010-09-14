@@ -57,19 +57,6 @@ namespace newsbeuter {
 			void rec_find_rss_outlines(xmlNode * node, std::string tag);
 	};
 
-	class bloglines_urlreader : public opml_urlreader {
-		public:
-			bloglines_urlreader(configcontainer * c);
-			virtual ~bloglines_urlreader();
-			virtual std::string get_source();
-		protected:
-			virtual void handle_node(xmlNode * node, const std::string& tag);
-			virtual const char * get_auth();
-		private:
-			std::string listsubs_url;
-			std::string getitems_url;
-	};
-
 }
 
 

@@ -342,9 +342,6 @@ void controller::run(int argc, char * argv[]) {
 	std::string type = cfg.get_configvalue("urls-source");
 	if (type == "local") {
 		urlcfg = new file_urlreader(url_file);
-	} else if (type == "bloglines") {
-		urlcfg = new bloglines_urlreader(&cfg);
-		real_offline_mode = offline_mode;
 	} else if (type == "opml") {
 		urlcfg = new opml_urlreader(&cfg);
 		real_offline_mode = offline_mode;
@@ -389,8 +386,6 @@ void controller::run(int argc, char * argv[]) {
 		std::string msg;
 		if (type == "local") {
 			msg = utils::strprintf(_("Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."), url_file.c_str());
-		} else if (type == "bloglines") {
-			msg = utils::strprintf(_("It looks like you haven't configured any feeds in your bloglines account. Please do so, and try again."));
 		} else if (type == "opml") {
 			msg = utils::strprintf(_("It looks like the OPML feed you subscribed contains no feeds. Please fill it with feeds, and try again."));
 		} else if (type == "googlereader") {
@@ -850,7 +845,7 @@ void controller::usage(char * argv0) {
 		{ 'C', _("<configfile>"), _("read configuration from <configfile>") },
 		{ 'X', "", _("clean up cache thoroughly") },
 		{ 'x', _("<command>..."), _("execute list of commands") },
-		{ 'o', "", _("activate offline mode (only applies to bloglines synchronization mode)") },
+		{ 'o', "", _("activate offline mode (only applies to Google Reader synchronization mode)") },
 		{ 'q', "", _("quiet startup") },
 		{ 'v', "", _("get version information") },
 		{ 'l', _("<loglevel>"), _("write a log with a certain loglevel (valid values: 1 to 6)") },

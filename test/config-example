@@ -5,188 +5,286 @@
 ## configuration option: always-display-description
 ## description: If true, then the description will always displayed even if e.g. a content:encoded tag has been found.
 ## parameter syntax: [true/false]
-always-display-description false
+# always-display-description false
 
 ## configuration option: article-sort-order
 ## description: The sortfield specifies which article property shall be used for sorting (currently available: date, title, flags, author, link, guid). The optional direction specifies the sort direction ("asc" specifies ascending sorting, "desc" specifies descending sorting. for date, "desc" is default, for all others, "asc" is default).
 ## parameter syntax: <sortfield>[-<direction>]
-article-sort-order date
+# article-sort-order date
 
 ## configuration option: articlelist-format
-## description: This variable defines the format of entries in the article list. See below for more information on format strings.
+## description: This variable defines the format of entries in the article list. See the respective section in the documentation for more information on format strings.
 ## parameter syntax: <format>
-articlelist-format "%4i %f %D   %?T?|%-17T|  ?%t"
+# articlelist-format "%4i %f %D %6L  %?T?|%-17T|  ?%t"
 
 ## configuration option: auto-reload
 ## description: If enabled, all feeds will be automatically reloaded at start up and then continuously after a certain time has passed (see reload-time).
 ## parameter syntax: [yes/no]
-auto-reload no
+# auto-reload no
 
 ## configuration option: bookmark-cmd
-## description: If set, the configured command will be used as bookmark plugin. Please refer to the documentation for further information on bookmark plugins.
-## parameter syntax: <command>
-bookmark-cmd ""
+## description: If set, then <bookmark-command> will be used as bookmarking plugin. See the documentation on bookmarking for further information.
+## parameter syntax: <bookmark-command>
+# bookmark-cmd ""
 
-## configuration option: bloglines-auth
-## description: Set the Bloglines username and password. This is necessary for the Bloglines synchronization mode.
-## parameter syntax: <login>:<password>
-bloglines-auth ""
-
-## configuration option: bloglines-mark-read
-## description: If set to yes, it will mark all articles that are downloaded from Bloglines as read.
+## configuration option: bookmark-interactive
+## description: If set to yes, then the configured bookmark command is an interactive program.
 ## parameter syntax: [yes/no]
-bloglines-mark-read no
+# bookmark-interactive no
 
 ## configuration option: browser
 ## description: Set the browser command to use when opening an article in the browser. If <browser-command> contains %u, it will be used as complete commandline and %u will be replaced with the URL that shall be opened.
 ## parameter syntax: <browser-command>
-browser lynx
+# browser lynx
 
 ## configuration option: cache-file
 ## description: This configuration option sets the cache file. This is especially useful if the filesystem of your home directory doesn't support proper locking (e.g. NFS).
 ## parameter syntax: <path>
-cache-file "~/.newsbeuter/cache.db"
+# cache-file "~/.newsbeuter/cache.db"
 
 ## configuration option: cleanup-on-quit
 ## description: If yes, then the cache gets locked and superfluous feeds and items are removed, such as feeds that can't be found in the urls configuration file anymore.
 ## parameter syntax: [yes/no]
-cleanup-on-quit yes
+# cleanup-on-quit yes
 
 ## configuration option: confirm-exit
 ## description: If set to yes, then newsbeuter will ask for confirmation whether the user really wants to quit newsbeuter.
 ## parameter syntax: [yes/no]
-confirm-exit no
+# confirm-exit no
 
 ## configuration option: datetime-format
 ## description: This format specifies the date/time format in the article list. For a detailed documentation on the allowed formats, consult the manpage of strftime(3).
 ## parameter syntax: <date/time format>
-datetime-format %b %d
+# datetime-format %b %d
 
 ## configuration option: display-article-progress
 ## description: If set to yes, then a read progress (in percent) is displayed in the article view. Otherwise, no read progress is displayed.
 ## parameter syntax: [yes/no]
-display-article-progress yes
+# display-article-progress yes
+
+## configuration option: download-retries
+## description: How many times newsbeuter shall try to successfully download a feed before giving up. This is an option to improve the success of downloads on slow and shaky connections such as via a TOR proxy.
+## parameter syntax: <number retries>
+# download-retries 1
+
+## configuration option: download-timeout
+## description: The number of seconds newsbeuter shall wait when downloading a feed before giving up. This is an option to improve the success of downloads on slow and shaky connections such as via a TOR proxy.
+## parameter syntax: <seconds>
+# download-timeout 30
 
 ## configuration option: error-log
 ## description: If set, then user errors (e.g. errors regarding defunct RSS feeds) will be logged to this file.
 ## parameter syntax: <path>
-error-log ""
+# error-log ""
+
+## configuration option: feed-sort-order
+## description: If set to "firsttag", the feeds in the feed list will be sorted by their first tag in the urls file.
+## parameter syntax: <sortorder>
+# feed-sort-order none
 
 ## configuration option: feedlist-format
-## description: This variable defines the format of entries in the feed list. See below for more information on format strings.
+## description: This variable defines the format of entries in the feed list. See the respective section in the documentation for more information on format strings.
 ## parameter syntax: <format>
-feedlist-format "%4i %n %11u %t"
+# feedlist-format "%4i %n %11u %t"
+
+## configuration option: googlereader-flag-share
+## description: If this is set and Google Reader support is used, then all articles that are flagged with the specified flag are being "shared" in Google Reader so that people that follow you can see it.
+## parameter syntax: <flag>
+# googlereader-flag-share ""
+
+## configuration option: googlereader-flag-star
+## description: If this is set and Google Reader support is used, then all articles that are flagged with the specified flag are being "starred" in Google Reader and appear in the list of "Starred items".
+## parameter syntax: <flag>
+# googlereader-flag-star ""
+
+## configuration option: googlereader-login
+## description: This variable sets your Google Reader login for the Google Reader support.
+## parameter syntax: <login>
+# googlereader-login ""
+
+## configuration option: googlereader-min-items
+## description: This variable sets the number of articles that are loaded from Google Reader per feed.
+## parameter syntax: <number>
+# googlereader-min-items 20
+
+## configuration option: googlereader-password
+## description: This variable sets your Google Reader password for the Google Reader support.
+## parameter syntax: <password>
+# googlereader-password ""
+
+## configuration option: googlereader-show-special-feeds
+## description: If this is set, then "special feeds" like "People you follow" (articles shared by people you follow), "Starred items" (your starred articles), "Shared items" (your shared articles) and "Popular items" (articles considered to be popular by Google's magic algorithms) appear in your subscription list.
+## parameter syntax: [yes/no]
+# googlereader-show-special-feeds yes
+
+## configuration option: goto-first-unread
+## description: If set to yes (the default), then the first unread article will be selected whenever a feed is entered.
+## parameter syntax: [yes/no]
+# goto-first-unread yes
 
 ## configuration option: goto-next-feed
 ## description: If set to yes, then the next-unread and prev-unread keys will search in other feeds for unread articles if all articles in the current feed are read. If set to no, then the next-unread and prev-unread keys will stop in the current feed.
 ## parameter syntax: [yes/no]
-goto-next-feed yes
+# goto-next-feed yes
+
+## configuration option: history-limit
+## description: Defines the maximum number of entries of commandline resp. search history to be saved. To disable history saving, set history-limit to 0.
+## parameter syntax: <number>
+# history-limit 100
 
 ## configuration option: html-renderer
 ## description: If set to "internal", then the internal HTML renderer will be used. Otherwise, the specified command will be executed, the HTML to be rendered will be written to the command's stdin, and the program's output will be displayed. This makes it possible to use other, external programs, such as w3m, links or lynx, to render HTML.
 ## parameter syntax: <path>
-html-renderer internal
+# html-renderer internal
+
+## configuration option: ignore-mode
+## description: This configuration option defines in what way an article is ignored (see ignore-article). If set to "download", then it is ignored in the download/parsing phase (which is the default) and thus never written to the cache, if it set to "display", it is ignored when displaying articles but is kept in the cache.
+## parameter syntax: [download/display]
+# ignore-mode download
+
+## configuration option: keep-articles-days
+## description: If set the a number greater than 0, only articles that are were published within the last <n> days are kept, and older articles are deleted. If set to 0 (default value), this option is not active.
+## parameter syntax: <days>
+# keep-articles-days 0
+
+## configuration option: mark-as-read-on-hover
+## description: If set to yes, then all articles that get selected in the article list are marked as read.
+## parameter syntax: [yes/no]
+# mark-as-read-on-hover no
 
 ## configuration option: max-items
 ## description: Set the number of articles to maximally keep per feed. If the number is set to 0, then all articles are kept.
 ## parameter syntax: <number>
-max-items 0
+# max-items 0
 
 ## configuration option: notify-format
 ## description: Format string that is used for formatting notifications. See the chapter on format strings for more information.
 ## parameter syntax: <string>
-notify-format "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
+# notify-format "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
 
 ## configuration option: notify-program
-## description: If set, then the configured program will be executed if new articles arrived (through a reload). The first parameter of the called program contains the notification message.
+## description: If set, then the configured program will be executed if new articles arrived (through a reload) or if notify-always is true. The first parameter of the called program contains the notification message.
 ## parameter syntax: <path>
-notify-program ""
+# notify-program ""
+
+## configuration option: notify-always
+## description: If no, notifications will only be made when there are new feeds or articles. If yes, notifications will be made regardless.
+## parameter syntax: [yes/no]
+# notify-always no
 
 ## configuration option: notify-screen
 ## description: If yes, then a "privacy message" will be sent to the terminal, containing a notification message about new articles. This is especially useful if you use terminal emulations such as GNU screen which implement privacy messages.
 ## parameter syntax: [yes/no]
-notify-screen no
+# notify-screen no
 
 ## configuration option: notify-xterm
 ## description: If yes, then the xterm window title will be set to a notification message about new articles.
 ## parameter syntax: [yes/no]
-notify-xterm no
+# notify-xterm no
 
-## configuration option: podcast-auto-enqueue
-## description: If yes, then all podcast URLs that are found in articles are added to the podcast download queue. See below for more information on podcast support in newsbeuter.
+## configuration option: notify-beep
+## description: If yes, then the speaker beep on new articles.
 ## parameter syntax: [yes/no]
-podcast-auto-enqueue no
+# notify-beep no
 
 ## configuration option: opml-url
-## description: If the OPML online subscription mode is enabled, then the list of feeds will be taken from the OPML file found on this location.
-## parameter syntax: <url>
-opml-url ""
+## description: If the OPML online subscription mode is enabled, then the list of feeds will be taken from the OPML file found on this location. Optionally, you can specify more than one URL. All the listed OPML URLs will then be taken into account when loading the feed list.
+## parameter syntax: <url> ...
+# opml-url ""
+
+## configuration option: pager
+## description: If set to "internal", then the internal pager will be used. Otherwise, the article to be displayed will be rendered to be a temporary file and then displayed with the configured pager. If the pager path is set to an empty string, the content of the "PAGER" environment variable will be used. If the pager path contains a placeholder "%f", it will be replaced with the temporary filename.
+## parameter syntax: [<path>/internal]
+# pager internal
+
+## configuration option: podcast-auto-enqueue
+## description: If yes, then all podcast URLs that are found in articles are added to the podcast download queue. See the respective section in the documentation for more information on podcast support in newsbeuter.
+## parameter syntax: [yes/no]
+# podcast-auto-enqueue no
+
+## configuration option: prepopulate-query-feeds
+## description: If yes, then all query feeds are prepopulated with articles on startup.
+## parameter syntax: [yes/no]
+# prepopulate-query-feeds no
+
+## configuration option: proxy-auth-method
+## description: Set proxy authentication method. Allowed values: any, basic, digest, digest_ie (only available with libcurl 7.19.3 and newer), gssnegotiate, ntlm, anysafe.
+## parameter syntax: <method>
+# proxy-auth-method any
+
+## configuration option: proxy-type
+## description: Set proxy type. Allowed values: http, socks4, socks4a, socks5.
+## parameter syntax: <type>
+# proxy-type http
 
 ## configuration option: refresh-on-startup
 ## description: If yes, then all feeds will be reloaded when newsbeuter starts up. This is equivalent to the -r commandline option.
 ## parameter syntax: [yes/no]
-refresh-on-startup no
+# refresh-on-startup no
 
 ## configuration option: reload-only-visible-feeds
 ## description: If yes, then manually reloading all feeds will only reload the currently visible feeds, e.g. if a filter or a tag is set.
 ## parameter syntax: [yes/no]
-reload-only-visible-feeds no
+# reload-only-visible-feeds no
 
 ## configuration option: reload-time
 ## description: The number of minutes between automatic reloads.
 ## parameter syntax: <number>
-reload-time 60
+# reload-time 60
+
+## configuration option: reload-threads
+## description: The number of parallel reload threads that shall be started when all feeds are reloaded.
+## parameter syntax: <number>
+# reload-threads 1
 
 ## configuration option: save-path
 ## description: The default path where articles shall be saved to. If an invalid path is specified, the current directory is used.
 ## parameter syntax: <path>
-save-path ~/
+# save-path ~/
+
+## configuration option: search-highlight-colors
+## description: This configuration command specifies the highlighting colors when searching for text from the article view.
+## parameter syntax: <fgcolor> <bgcolor> [<attribute> ...]
+# search-highlight-colors black yellow bold
 
 ## configuration option: show-keymap-hint
 ## description: If no, then the keymap hints on the bottom of screen will not be displayed.
 ## parameter syntax: [yes/no]
-show-keymap-hint yes
+# show-keymap-hint yes
 
 ## configuration option: show-read-feeds
 ## description: If yes, then all feeds, including those without unread articles, are listed. If no, then only feeds with one or more unread articles are list.
 ## parameter syntax: [yes/no]
-show-read-feeds yes
+# show-read-feeds yes
 
 ## configuration option: show-read-articles
 ## description: If yes, then all articles of a feed are listed in the article list. If no, then only unread articles are listed.
 ## parameter syntax: [yes/no]
-show-read-articles yes
+# show-read-articles yes
 
 ## configuration option: suppress-first-reload
 ## description: If yes, then the first automatic reload will be suppressed if auto-reload is set to yes.
 ## parameter syntax: [yes/no]
-suppress-first-reload no
+# suppress-first-reload no
 
 ## configuration option: text-width
 ## description: If set to a number greater than 0, then all HTML will be rendered to this maximum line length. If set to 0, the terminal width will be used.
 ## parameter syntax: <number>
-text-width 0
+# text-width 0
 
 ## configuration option: urls-source
-## description: This configuration command sets the source where URLs shall be retrieved from. By default, this is ~/.newsbeuter/urls. Alternatively, you can set it to "bloglines", which enables newsbeuter's Bloglines synchronization mode, or to "opml", which enables newsbeuter's OPML online subscription mode.
+## description: This configuration command sets the source where URLs shall be retrieved from. By default, this is ~/.newsbeuter/urls. Alternatively, you can set it to "opml", which enables newsbeuter's OPML online subscription mode, or to "googlereader", which enables newsbeuter's Google Reader support. In order to make Google Reader support work correctly, you also need to set googlereader-login and googlereader-password.
 ## parameter syntax: <source>
-urls-source "local"
+# urls-source "local"
 
 ## configuration option: use-proxy
 ## description: If yes, then the configured proxy will be used for downloading the RSS feeds.
 ## parameter syntax: [yes/no]
-use-proxy no
+# use-proxy no
 
 ## configuration option: user-agent
 ## description: If set to a non-zero-length string, this value will be used as HTTP User-Agent header for all HTTP requests.
 ## parameter syntax: <user agent string>
-user-agent ""
-
-# some color configurations
-color listnormal black white
-color listfocus  white green bold
-color info       white red bold
-color background black white
-color article    black white
+# user-agent ""
 
 # EOF
