@@ -7,10 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-06 16:17+0200\n"
+"POT-Creation-Date: 2010-09-14 17:33+0200\n"
 "PO-Revision-Date: 2010-03-03 16:55+0800\n"
 "Last-Translator: Aeglos <aeglos.lin@gmail.com>\n"
 "Language-Team: Traditional Chinese <aeglos.lin@gmail.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -39,57 +40,57 @@ msgstr "`%s'不是一個有效的組態項目"
 msgid "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
 msgstr "newsbeuter:重新載入完成, %f個來源含未讀文章(共有 %n 篇未讀文章)"
 
-#: src/configcontainer.cpp:104
+#: src/configcontainer.cpp:102
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
 msgstr "%N %V - 你的來源 (%u 篇未讀, 共有 %t 篇)%?T? - 標籤 `%T'&?"
 
-#: src/configcontainer.cpp:105
+#: src/configcontainer.cpp:103
 msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
 msgstr "%N %V - 來源 '%T' 裡的文章（%u 未讀, 共有 %t 篇） - %U"
 
-#: src/configcontainer.cpp:106
+#: src/configcontainer.cpp:104
 msgid "%N %V - Search result (%u unread, %t total)"
 msgstr "%N %V - 搜尋結果 (%u 未讀, 共有 %t)"
 
-#: src/configcontainer.cpp:107
+#: src/configcontainer.cpp:105
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?打開檔案&儲存檔案? - %f"
 
-#: src/configcontainer.cpp:108
+#: src/configcontainer.cpp:106
 msgid "%N %V - Help"
 msgstr "%N %V - 說明"
 
-#: src/configcontainer.cpp:109
+#: src/configcontainer.cpp:107
 msgid "%N %V - Select Tag"
 msgstr "%N %V - 選擇標籤"
 
-#: src/configcontainer.cpp:110
+#: src/configcontainer.cpp:108
 msgid "%N %V - Select Filter"
 msgstr "%N %V - 選擇過濾器"
 
-#: src/configcontainer.cpp:111
+#: src/configcontainer.cpp:109
 msgid "%N %V - Article '%T'"
 msgstr "%N %V - 文章 '%T'"
 
-#: src/configcontainer.cpp:112
+#: src/configcontainer.cpp:110
 msgid "%N %V - URLs"
 msgstr "%N %V - 網址"
 
-#: src/configcontainer.cpp:113
+#: src/configcontainer.cpp:111
 msgid "%N %V - Dialogs"
 msgstr "%N %V - 對話窗"
 
-#: src/configcontainer.cpp:149
+#: src/configcontainer.cpp:147
 #, c-format
 msgid "expected boolean value, found `%s' instead"
 msgstr "預期的布林變數被`%s'取代"
 
-#: src/configcontainer.cpp:155
+#: src/configcontainer.cpp:153
 #, c-format
 msgid "expected integer value, found `%s' instead"
 msgstr "預期的整數變數被`%s'取代"
 
-#: src/configcontainer.cpp:161
+#: src/configcontainer.cpp:159
 #, c-format
 msgid "invalid configuration value `%s'"
 msgstr "無效的組態值 `%s'"
@@ -104,74 +105,67 @@ msgstr "在處理命令`%s'(%s 第 %u 行)時發生錯誤: %s"
 msgid "unknown command `%s'"
 msgstr "未知的命令 `%s' "
 
-#: src/controller.cpp:87 src/pb_controller.cpp:43
+#: src/controller.cpp:90 src/pb_controller.cpp:43
 msgid "Fatal error: couldn't determine home directory!"
 msgstr "嚴重錯誤:無法確認主目錄！"
 
-#: src/controller.cpp:88 src/pb_controller.cpp:44
+#: src/controller.cpp:91 src/pb_controller.cpp:44
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr "請設定主目錄的環境變數，或者增加一個UID為 %u的有效使用者!"
 
-#: src/controller.cpp:218 src/pb_controller.cpp:102
+#: src/controller.cpp:226 src/pb_controller.cpp:102
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr "%s: 未知的選項 - %c"
 
-#: src/controller.cpp:242 src/pb_controller.cpp:108
+#: src/controller.cpp:250 src/pb_controller.cpp:108
 #, c-format
 msgid "Starting %s %s..."
 msgstr "啟動 %s %s..."
 
-#: src/controller.cpp:252 src/controller.cpp:314 src/pb_controller.cpp:112
+#: src/controller.cpp:260 src/controller.cpp:319 src/pb_controller.cpp:112
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "錯誤：已有一個%s程序在執行中（PID: %u)"
 
-#: src/controller.cpp:262 src/pb_controller.cpp:116
+#: src/controller.cpp:267 src/pb_controller.cpp:116
 msgid "Loading configuration..."
 msgstr "載入設定檔..."
 
-#: src/controller.cpp:294 src/controller.cpp:332 src/controller.cpp:362
-#: src/controller.cpp:378 src/controller.cpp:408 src/controller.cpp:412
+#: src/controller.cpp:299 src/controller.cpp:337 src/controller.cpp:364
+#: src/controller.cpp:380 src/controller.cpp:408 src/controller.cpp:412
 #: src/controller.cpp:444 src/controller.cpp:456 src/controller.cpp:470
 #: src/controller.cpp:479 src/controller.cpp:518 src/pb_controller.cpp:153
 #: src/pb_controller.cpp:170
 msgid "done."
 msgstr "完成。"
 
-#: src/controller.cpp:320 src/controller.cpp:403
+#: src/controller.cpp:325 src/controller.cpp:403
 msgid "Opening cache..."
 msgstr "打開快取中..."
 
-#: src/controller.cpp:326
+#: src/controller.cpp:331
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "錯誤:打開快取檔案`%s' 失敗:%s"
 
-#: src/controller.cpp:356
+#: src/controller.cpp:358
 msgid "Loading URLs from local cache..."
 msgstr "從本地快取中載入鏈結..."
 
-#: src/controller.cpp:366
+#: src/controller.cpp:368
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "從 %s 中載入鏈結..."
 
-#: src/controller.cpp:386
+#: src/controller.cpp:388
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
 "import an OPML file."
 msgstr "錯誤：沒有設置鏈結。請用RSS來源的鏈結替換 %s 或者匯入一個OPML檔案"
-
-#: src/controller.cpp:388
-msgid ""
-"It looks like you haven't configured any feeds in your bloglines account. "
-"Please do so, and try again."
-msgstr ""
-"看來你還沒有在bloglines帳號裡配置任何來源。請先配置來源，然後再試一次。"
 
 #: src/controller.cpp:390
 msgid ""
@@ -320,7 +314,9 @@ msgid "execute list of commands"
 msgstr "執行列出的命令"
 
 #: src/controller.cpp:848
-msgid "activate offline mode (only applies to bloglines synchronization mode)"
+#, fuzzy
+msgid ""
+"activate offline mode (only applies to Google Reader synchronization mode)"
 msgstr "啟動離線模式((只套用到bloglines synchronization mode)"
 
 #: src/controller.cpp:849
@@ -1466,9 +1462,6 @@ msgstr "不支援的來源格式"
 msgid "no RSS channel found"
 msgstr "找不到RSS頻道"
 
-#~ msgid "Segmentation fault."
-#~ msgstr "區段錯誤"
-
 #~ msgid ""
 #~ "%s %s\n"
 #~ "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x "
@@ -1508,7 +1501,3 @@ msgstr "找不到RSS頻道"
 #~ "-E <file>       匯出已閱讀文章列表到<file>\n"
 #~ "-I <file>       從<file>匯入已閱讀文章列表\n"
 #~ "-h              顯示說明\n"
-
-#~ msgid ""
-#~ "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
-#~ msgstr "newsbeuter:重新載入完畢, %u個種子含未讀文章(共有 %u 篇未讀文章)"

@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-06 16:17+0200\n"
+"POT-Creation-Date: 2010-09-14 17:33+0200\n"
 "PO-Revision-Date: 2007-11-21 22:51+0100\n"
 "Last-Translator: josh yu <joshyupeng@gmail.com>\n"
 "Language-Team: Chinese <joshyupeng@gmail.com>\n"
+"Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -37,58 +38,58 @@ msgstr ""
 msgid "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
 msgstr "newsbeuter:重新加载完毕, %f个种子含未读文章(共有 %n 篇未读文章)"
 
-#: src/configcontainer.cpp:104
+#: src/configcontainer.cpp:102
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
 msgstr "%N %V - 你的种子 (%u 篇未读, 共有 %t 篇)%?T? - 标签 `%T'&?"
 
-#: src/configcontainer.cpp:105
+#: src/configcontainer.cpp:103
 msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
 msgstr "%N %V - 种子 '%T' 里的文章（%u 未读, 共有 %t 篇） - %U"
 
-#: src/configcontainer.cpp:106
+#: src/configcontainer.cpp:104
 msgid "%N %V - Search result (%u unread, %t total)"
 msgstr "%N %V - 查找结果 (%u 未读, 共有 %t)"
 
-#: src/configcontainer.cpp:107
+#: src/configcontainer.cpp:105
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?打开文件&保存文件? - %f"
 
-#: src/configcontainer.cpp:108
+#: src/configcontainer.cpp:106
 msgid "%N %V - Help"
 msgstr "%N %V - 帮助"
 
-#: src/configcontainer.cpp:109
+#: src/configcontainer.cpp:107
 msgid "%N %V - Select Tag"
 msgstr "%N %V - 选择标签"
 
-#: src/configcontainer.cpp:110
+#: src/configcontainer.cpp:108
 msgid "%N %V - Select Filter"
 msgstr "%N %V - 选择过滤器"
 
-#: src/configcontainer.cpp:111
+#: src/configcontainer.cpp:109
 msgid "%N %V - Article '%T'"
 msgstr "%N %V - 文章 '%T'"
 
-#: src/configcontainer.cpp:112
+#: src/configcontainer.cpp:110
 msgid "%N %V - URLs"
 msgstr "%N %V - 链接"
 
-#: src/configcontainer.cpp:113
+#: src/configcontainer.cpp:111
 #, fuzzy
 msgid "%N %V - Dialogs"
 msgstr "%N %V - 链接"
 
-#: src/configcontainer.cpp:149
+#: src/configcontainer.cpp:147
 #, c-format
 msgid "expected boolean value, found `%s' instead"
 msgstr ""
 
-#: src/configcontainer.cpp:155
+#: src/configcontainer.cpp:153
 #, c-format
 msgid "expected integer value, found `%s' instead"
 msgstr ""
 
-#: src/configcontainer.cpp:161
+#: src/configcontainer.cpp:159
 #, fuzzy, c-format
 msgid "invalid configuration value `%s'"
 msgstr "把文章保存到 %s"
@@ -103,74 +104,67 @@ msgstr "当处理命令`%s'(%s 第 %n 行)时出错: %s"
 msgid "unknown command `%s'"
 msgstr "未知的命令 `%s' "
 
-#: src/controller.cpp:87 src/pb_controller.cpp:43
+#: src/controller.cpp:90 src/pb_controller.cpp:43
 msgid "Fatal error: couldn't determine home directory!"
 msgstr "致命错误:无法确定主目录！"
 
-#: src/controller.cpp:88 src/pb_controller.cpp:44
+#: src/controller.cpp:91 src/pb_controller.cpp:44
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr "请设置主目录的环境变量，或者添加一个有效的用户其UID为 %u!"
 
-#: src/controller.cpp:218 src/pb_controller.cpp:102
+#: src/controller.cpp:226 src/pb_controller.cpp:102
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr "%s: 未知的选项 - %c"
 
-#: src/controller.cpp:242 src/pb_controller.cpp:108
+#: src/controller.cpp:250 src/pb_controller.cpp:108
 #, c-format
 msgid "Starting %s %s..."
 msgstr "启动 %s %s..."
 
-#: src/controller.cpp:252 src/controller.cpp:314 src/pb_controller.cpp:112
+#: src/controller.cpp:260 src/controller.cpp:319 src/pb_controller.cpp:112
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "错误：%s的一个进程已经在运行中（PID: %u)"
 
-#: src/controller.cpp:262 src/pb_controller.cpp:116
+#: src/controller.cpp:267 src/pb_controller.cpp:116
 msgid "Loading configuration..."
 msgstr "加载配置文件..."
 
-#: src/controller.cpp:294 src/controller.cpp:332 src/controller.cpp:362
-#: src/controller.cpp:378 src/controller.cpp:408 src/controller.cpp:412
+#: src/controller.cpp:299 src/controller.cpp:337 src/controller.cpp:364
+#: src/controller.cpp:380 src/controller.cpp:408 src/controller.cpp:412
 #: src/controller.cpp:444 src/controller.cpp:456 src/controller.cpp:470
 #: src/controller.cpp:479 src/controller.cpp:518 src/pb_controller.cpp:153
 #: src/pb_controller.cpp:170
 msgid "done."
 msgstr "完毕."
 
-#: src/controller.cpp:320 src/controller.cpp:403
+#: src/controller.cpp:325 src/controller.cpp:403
 msgid "Opening cache..."
 msgstr "打开缓存..."
 
-#: src/controller.cpp:326
+#: src/controller.cpp:331
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "错误:打开缓存文件`%s' 失败:%s"
 
-#: src/controller.cpp:356
+#: src/controller.cpp:358
 msgid "Loading URLs from local cache..."
 msgstr "从本地缓存中加载链接..."
 
-#: src/controller.cpp:366
+#: src/controller.cpp:368
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "从 %s 文件加载链接..."
 
-#: src/controller.cpp:386
+#: src/controller.cpp:388
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
 "import an OPML file."
 msgstr "错误：没有配置链接。请用RSS种子的链接替换 %s 或者导入一个OPML文件."
-
-#: src/controller.cpp:388
-msgid ""
-"It looks like you haven't configured any feeds in your bloglines account. "
-"Please do so, and try again."
-msgstr ""
-"看起来你还没有在bloglines账户里配置任何种子 请先配置种子，然后再尝试一下。"
 
 #: src/controller.cpp:390
 msgid ""
@@ -321,7 +315,9 @@ msgid "execute list of commands"
 msgstr "执行一系列命令"
 
 #: src/controller.cpp:848
-msgid "activate offline mode (only applies to bloglines synchronization mode)"
+#, fuzzy
+msgid ""
+"activate offline mode (only applies to Google Reader synchronization mode)"
 msgstr "激活离线模式（只对bloglines同步模式有效）"
 
 #: src/controller.cpp:849
@@ -1490,9 +1486,6 @@ msgstr ""
 msgid "no RSS channel found"
 msgstr ""
 
-#~ msgid "Segmentation fault."
-#~ msgstr "段错误"
-
 #~ msgid ""
 #~ "%s %s\n"
 #~ "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x "
@@ -1532,7 +1525,3 @@ msgstr ""
 #~ "-E <file>       将已阅读文章导出到<文件>\n"
 #~ "-I <file>       从<文件>里导入阅读的文章列表\n"
 #~ "-h              显示这个帮助列表\n"
-
-#~ msgid ""
-#~ "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
-#~ msgstr "newsbeuter:重新加载完毕, %u个种子含未读文章(共有 %u 篇未读文章)"

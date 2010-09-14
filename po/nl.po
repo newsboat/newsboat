@@ -7,10 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 0.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-06 16:17+0200\n"
+"POT-Creation-Date: 2010-09-14 17:33+0200\n"
 "PO-Revision-Date: 2009-04-08 12:45+0200\n"
 "Last-Translator: Bart Van Loon <bart@zeropoint.it>\n"
 "Language-Team: Dutch <bart@zeropoint.it>\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -38,57 +39,57 @@ msgstr ""
 "newsbeuter: klaar met herladen, %f ongelezen feeds (%n ongelezen artikels in "
 "totaal)"
 
-#: src/configcontainer.cpp:104
+#: src/configcontainer.cpp:102
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
 msgstr "%N %V - Uw feeds (%u ongelezen, %t totaal)%?T? - tag `%T'&?"
 
-#: src/configcontainer.cpp:105
+#: src/configcontainer.cpp:103
 msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
 msgstr "%N %V - Artikels in feed '%T' (%u ongelezen, %t totaal) - %U"
 
-#: src/configcontainer.cpp:106
+#: src/configcontainer.cpp:104
 msgid "%N %V - Search result (%u unread, %t total)"
 msgstr "%N %V - Zoekresultaten (%u ongelezen, %t totaal)"
 
-#: src/configcontainer.cpp:107
+#: src/configcontainer.cpp:105
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Open Bestand&Bestand Opslagen? - %f"
 
-#: src/configcontainer.cpp:108
+#: src/configcontainer.cpp:106
 msgid "%N %V - Help"
 msgstr "%N %V - Hulp"
 
-#: src/configcontainer.cpp:109
+#: src/configcontainer.cpp:107
 msgid "%N %V - Select Tag"
 msgstr "%N %V - Tag Selecteren"
 
-#: src/configcontainer.cpp:110
+#: src/configcontainer.cpp:108
 msgid "%N %V - Select Filter"
 msgstr "%N %V - Filter Selecteren"
 
-#: src/configcontainer.cpp:111
+#: src/configcontainer.cpp:109
 msgid "%N %V - Article '%T'"
 msgstr "%N %V - Artikel '%T'"
 
-#: src/configcontainer.cpp:112
+#: src/configcontainer.cpp:110
 msgid "%N %V - URLs"
 msgstr "%N %V - URLs"
 
-#: src/configcontainer.cpp:113
+#: src/configcontainer.cpp:111
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Dialogen"
 
-#: src/configcontainer.cpp:149
+#: src/configcontainer.cpp:147
 #, c-format
 msgid "expected boolean value, found `%s' instead"
 msgstr "verwachtte booelaanse waarden, vond `%s' in de plaats"
 
-#: src/configcontainer.cpp:155
+#: src/configcontainer.cpp:153
 #, c-format
 msgid "expected integer value, found `%s' instead"
 msgstr "verwachtte geheel getal, vond `%s' in de plaats"
 
-#: src/configcontainer.cpp:161
+#: src/configcontainer.cpp:159
 #, fuzzy, c-format
 msgid "invalid configuration value `%s'"
 msgstr "Configuratie opgeslagen naar %s"
@@ -103,63 +104,63 @@ msgstr "Fout bij het behadelen van opdrachtregel `%s' (%s regel %u): %s"
 msgid "unknown command `%s'"
 msgstr "onbekende opdrachtregel `%s'"
 
-#: src/controller.cpp:87 src/pb_controller.cpp:43
+#: src/controller.cpp:90 src/pb_controller.cpp:43
 msgid "Fatal error: couldn't determine home directory!"
 msgstr "Fatale fout: can de home directory niet bepalen!"
 
-#: src/controller.cpp:88 src/pb_controller.cpp:44
+#: src/controller.cpp:91 src/pb_controller.cpp:44
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
 "Zet de HOME omgevingsvariabele of voeg een geldige gebruiker toe voor UID %u!"
 
-#: src/controller.cpp:218 src/pb_controller.cpp:102
+#: src/controller.cpp:226 src/pb_controller.cpp:102
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr "%s: onbekende optie - %c"
 
-#: src/controller.cpp:242 src/pb_controller.cpp:108
+#: src/controller.cpp:250 src/pb_controller.cpp:108
 #, c-format
 msgid "Starting %s %s..."
 msgstr "Bezig met starten van %s %s..."
 
-#: src/controller.cpp:252 src/controller.cpp:314 src/pb_controller.cpp:112
+#: src/controller.cpp:260 src/controller.cpp:319 src/pb_controller.cpp:112
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "Fout: er draait al een instantie van %s (PID: %u)"
 
-#: src/controller.cpp:262 src/pb_controller.cpp:116
+#: src/controller.cpp:267 src/pb_controller.cpp:116
 msgid "Loading configuration..."
 msgstr "Bezig met laden van de configuratie..."
 
-#: src/controller.cpp:294 src/controller.cpp:332 src/controller.cpp:362
-#: src/controller.cpp:378 src/controller.cpp:408 src/controller.cpp:412
+#: src/controller.cpp:299 src/controller.cpp:337 src/controller.cpp:364
+#: src/controller.cpp:380 src/controller.cpp:408 src/controller.cpp:412
 #: src/controller.cpp:444 src/controller.cpp:456 src/controller.cpp:470
 #: src/controller.cpp:479 src/controller.cpp:518 src/pb_controller.cpp:153
 #: src/pb_controller.cpp:170
 msgid "done."
 msgstr "klaar."
 
-#: src/controller.cpp:320 src/controller.cpp:403
+#: src/controller.cpp:325 src/controller.cpp:403
 msgid "Opening cache..."
 msgstr "Bezig met openen van de cache..."
 
-#: src/controller.cpp:326
+#: src/controller.cpp:331
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Fout: openen van het cachebestand `%s' is mislukt: %s"
 
-#: src/controller.cpp:356
+#: src/controller.cpp:358
 msgid "Loading URLs from local cache..."
 msgstr "Bezig met laden van artikels uit de lokale cache..."
 
-#: src/controller.cpp:366
+#: src/controller.cpp:368
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "Bezig met URLs te laden laden van %s..."
 
-#: src/controller.cpp:386
+#: src/controller.cpp:388
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
@@ -167,14 +168,6 @@ msgid ""
 msgstr ""
 "Fout: geen URLs geconfigureerd. Plaats RSS feed URLs in het bestand %s of "
 "importeer een OPML bestand."
-
-#: src/controller.cpp:388
-msgid ""
-"It looks like you haven't configured any feeds in your bloglines account. "
-"Please do so, and try again."
-msgstr ""
-"Blijkbaar hebt u nog geen feeds geconfigureerd in uw bloglines accountDoe "
-"dit even aub, en probeer dan opnieuw."
 
 #: src/controller.cpp:390
 msgid ""
@@ -329,7 +322,9 @@ msgid "execute list of commands"
 msgstr "voer lijst van opdrachten uit"
 
 #: src/controller.cpp:848
-msgid "activate offline mode (only applies to bloglines synchronization mode)"
+#, fuzzy
+msgid ""
+"activate offline mode (only applies to Google Reader synchronization mode)"
 msgstr "activeer offline mode (enkel geldig voor bloglines synchronizationmde)"
 
 #: src/controller.cpp:849
@@ -1454,8 +1449,8 @@ msgstr "not libcurl niet initializeren"
 #, c-format
 msgid "Error: trying to download feed `%s' returned HTTP status code %ld."
 msgstr ""
-"Fout: het proberen downloaden van feed `%s' resulteerde in HTTP status code %"
-"ld."
+"Fout: het proberen downloaden van feed `%s' resulteerde in HTTP status code "
+"%ld."
 
 #: rss/parser.cpp:155
 msgid "could not parse buffer"
@@ -1488,9 +1483,6 @@ msgstr "niet ondersteund feedformaat"
 #: rss/rss_09x_parser.cpp:39
 msgid "no RSS channel found"
 msgstr "geen RSS kanaal gevonden"
-
-#~ msgid "Segmentation fault."
-#~ msgstr "Segmentatiefout"
 
 #~ msgid ""
 #~ "%s %s\n"
@@ -1533,16 +1525,3 @@ msgstr "geen RSS kanaal gevonden"
 #~ "-E <bestand>       exporteer lijst van gelezen artikels naar <bestand>\n"
 #~ "-I <bestand>       importeer lijst van gelezen artikels van <bestand>\n"
 #~ "-h                 deze hulptekst\n"
-
-#~ msgid ""
-#~ "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
-#~ msgstr ""
-#~ "newsbeuter: klaar met herladen, %u ongelezen feeds (%u ongelezen artikels "
-#~ "in totaal)"
-
-#~ msgid ""
-#~ "Error: newsbeuter is compiled without Ruby support. Please recompile with "
-#~ "Ruby support in order to run Ruby functions."
-#~ msgstr ""
-#~ "Fout: newsbeuter is gecompileerd zonder Ruby ondersteuning. Hercompileer "
-#~ "metRuby ondersteuning om Ruby functies uit te voeren."

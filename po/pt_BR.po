@@ -6,18 +6,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-06 16:17+0200\n"
+"POT-Creation-Date: 2010-09-14 17:33+0200\n"
 "PO-Revision-Date: 2010-03-08 10:37-0300\n"
 "Last-Translator: \n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Portuguese\n"
 "X-Poedit-Country: BRAZIL\n"
 "X-Generator: Lokalize 0.3\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: src/colormanager.cpp:44 src/colormanager.cpp:46 src/regexmanager.cpp:55
 #: src/regexmanager.cpp:64 src/regexmanager.cpp:113 src/regexmanager.cpp:121
@@ -42,57 +43,57 @@ msgstr ""
 "newsbeuter: recarregamento terminado, %f fontes não lidos (%n artigos não "
 "lidos no total)"
 
-#: src/configcontainer.cpp:104
+#: src/configcontainer.cpp:102
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
 msgstr "%N %V - Suas fontes (%u não lidas, %t no total)%?T? - etiqueta '%T'&?"
 
-#: src/configcontainer.cpp:105
+#: src/configcontainer.cpp:103
 msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
 msgstr "%N %V - Artigos na fonte '%T' (%u não lidos, %t no total) - %U"
 
-#: src/configcontainer.cpp:106
+#: src/configcontainer.cpp:104
 msgid "%N %V - Search result (%u unread, %t total)"
 msgstr "%N %V - Resultado da busca (%u não lidos, %t no total)"
 
-#: src/configcontainer.cpp:107
+#: src/configcontainer.cpp:105
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Abrir Arquivo&Salvar arquivo? - %f"
 
-#: src/configcontainer.cpp:108
+#: src/configcontainer.cpp:106
 msgid "%N %V - Help"
 msgstr "%N %V - Ajuda"
 
-#: src/configcontainer.cpp:109
+#: src/configcontainer.cpp:107
 msgid "%N %V - Select Tag"
 msgstr "%N %V - Selecione a etiqueta"
 
-#: src/configcontainer.cpp:110
+#: src/configcontainer.cpp:108
 msgid "%N %V - Select Filter"
 msgstr "%N %V - Selecione o Filtro"
 
-#: src/configcontainer.cpp:111
+#: src/configcontainer.cpp:109
 msgid "%N %V - Article '%T'"
 msgstr "%N %V - Artigo '%T'"
 
-#: src/configcontainer.cpp:112
+#: src/configcontainer.cpp:110
 msgid "%N %V - URLs"
 msgstr "%N %V - URLs"
 
-#: src/configcontainer.cpp:113
+#: src/configcontainer.cpp:111
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Telas"
 
-#: src/configcontainer.cpp:149
+#: src/configcontainer.cpp:147
 #, c-format
 msgid "expected boolean value, found `%s' instead"
 msgstr "um valor booleano era esperado, mas '%s' foi encontrado"
 
-#: src/configcontainer.cpp:155
+#: src/configcontainer.cpp:153
 #, c-format
 msgid "expected integer value, found `%s' instead"
 msgstr "um valor inteiro era esperado, mas '%s' foi encontrado"
 
-#: src/configcontainer.cpp:161
+#: src/configcontainer.cpp:159
 #, c-format
 msgid "invalid configuration value `%s'"
 msgstr "Valer de configuração '%s' é inválido"
@@ -107,11 +108,11 @@ msgstr "Erro ao processar o comando '%s' (%s linha %u). %s"
 msgid "unknown command `%s'"
 msgstr "comando desconhecido '%s'"
 
-#: src/controller.cpp:87 src/pb_controller.cpp:43
+#: src/controller.cpp:90 src/pb_controller.cpp:43
 msgid "Fatal error: couldn't determine home directory!"
 msgstr "Erro fatal: não foi possível determinar o diretório do usuário!"
 
-#: src/controller.cpp:88 src/pb_controller.cpp:44
+#: src/controller.cpp:91 src/pb_controller.cpp:44
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
@@ -119,52 +120,52 @@ msgstr ""
 "Por favor defina a variável de ambiente HOME ou adicione um usuário válido "
 "para o UID %u!"
 
-#: src/controller.cpp:218 src/pb_controller.cpp:102
+#: src/controller.cpp:226 src/pb_controller.cpp:102
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr "%s: opção desconhecida - %c"
 
-#: src/controller.cpp:242 src/pb_controller.cpp:108
+#: src/controller.cpp:250 src/pb_controller.cpp:108
 #, c-format
 msgid "Starting %s %s..."
 msgstr "Iniciando o %s %s..."
 
-#: src/controller.cpp:252 src/controller.cpp:314 src/pb_controller.cpp:112
+#: src/controller.cpp:260 src/controller.cpp:319 src/pb_controller.cpp:112
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "Erro: uma instância de %s já está sendo executada (PID: %u)"
 
-#: src/controller.cpp:262 src/pb_controller.cpp:116
+#: src/controller.cpp:267 src/pb_controller.cpp:116
 msgid "Loading configuration..."
 msgstr "Carregando configuração..."
 
-#: src/controller.cpp:294 src/controller.cpp:332 src/controller.cpp:362
-#: src/controller.cpp:378 src/controller.cpp:408 src/controller.cpp:412
+#: src/controller.cpp:299 src/controller.cpp:337 src/controller.cpp:364
+#: src/controller.cpp:380 src/controller.cpp:408 src/controller.cpp:412
 #: src/controller.cpp:444 src/controller.cpp:456 src/controller.cpp:470
 #: src/controller.cpp:479 src/controller.cpp:518 src/pb_controller.cpp:153
 #: src/pb_controller.cpp:170
 msgid "done."
 msgstr "pronto."
 
-#: src/controller.cpp:320 src/controller.cpp:403
+#: src/controller.cpp:325 src/controller.cpp:403
 msgid "Opening cache..."
 msgstr "Abrindo o cache..."
 
-#: src/controller.cpp:326
+#: src/controller.cpp:331
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Erro: falha ao abrir o arquivo de cache '%s': %s"
 
-#: src/controller.cpp:356
+#: src/controller.cpp:358
 msgid "Loading URLs from local cache..."
 msgstr "Carregando URLs do cache local..."
 
-#: src/controller.cpp:366
+#: src/controller.cpp:368
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "Carregando URLS a partir de %s..."
 
-#: src/controller.cpp:386
+#: src/controller.cpp:388
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
@@ -172,14 +173,6 @@ msgid ""
 msgstr ""
 "Erro: nenhuma URL configurada. Por favor preencha o arquivo %s com URLs de "
 "fontes RSS ou importe um arquivo OPML."
-
-#: src/controller.cpp:388
-msgid ""
-"It looks like you haven't configured any feeds in your bloglines account. "
-"Please do so, and try again."
-msgstr ""
-"Parece que você não configurou nenhuma fonte não sua conta bloglines. Faça "
-"isso, e tente novamente."
 
 #: src/controller.cpp:390
 msgid ""
@@ -333,7 +326,9 @@ msgid "execute list of commands"
 msgstr "executar lista de comandos"
 
 #: src/controller.cpp:848
-msgid "activate offline mode (only applies to bloglines synchronization mode)"
+#, fuzzy
+msgid ""
+"activate offline mode (only applies to Google Reader synchronization mode)"
 msgstr ""
 "ativar modo offline (aplica-se somente ao modo de sincronização do bloglines)"
 
@@ -1492,3 +1487,10 @@ msgstr "formato de fonte não suportado"
 #: rss/rss_09x_parser.cpp:39
 msgid "no RSS channel found"
 msgstr "nenhum canal RSS encontrado"
+
+#~ msgid ""
+#~ "It looks like you haven't configured any feeds in your bloglines account. "
+#~ "Please do so, and try again."
+#~ msgstr ""
+#~ "Parece que você não configurou nenhuma fonte não sua conta bloglines. "
+#~ "Faça isso, e tente novamente."

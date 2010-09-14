@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-06 16:17+0200\n"
+"POT-Creation-Date: 2010-09-14 17:33+0200\n"
 "PO-Revision-Date: 2008-04-18 20:10+0100\n"
 "Last-Translator: Maciej Delmanowski <maciej.delmanowski@harnir.net>\n"
 "Language-Team: Polish <pl@li.org>\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -39,58 +40,58 @@ msgstr ""
 "newsbeuter: odświeżanie zakończone, %f nieprzeczytanych kanałów (%n nowych "
 "artykułów)"
 
-#: src/configcontainer.cpp:104
+#: src/configcontainer.cpp:102
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
 msgstr "%N %V - Twoje kanały (%u nowe, %t wszystkie)%?T? - tag '%T'&?"
 
-#: src/configcontainer.cpp:105
+#: src/configcontainer.cpp:103
 msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
 msgstr "%N %V - Artykuły w kanale '%T' (%u nowe, %t wszystkie) - %U"
 
-#: src/configcontainer.cpp:106
+#: src/configcontainer.cpp:104
 msgid "%N %V - Search result (%u unread, %t total)"
 msgstr "%N %V - Wynik wyszukiwania (%u nowe, %t wszystkie)"
 
-#: src/configcontainer.cpp:107
+#: src/configcontainer.cpp:105
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Otwórz plik&Zapisz plik? - %f"
 
-#: src/configcontainer.cpp:108
+#: src/configcontainer.cpp:106
 msgid "%N %V - Help"
 msgstr "%N %V - Pomoc"
 
-#: src/configcontainer.cpp:109
+#: src/configcontainer.cpp:107
 msgid "%N %V - Select Tag"
 msgstr "%N %V - Wybierz tag"
 
-#: src/configcontainer.cpp:110
+#: src/configcontainer.cpp:108
 msgid "%N %V - Select Filter"
 msgstr "%N %V - Wybierz filtr"
 
-#: src/configcontainer.cpp:111
+#: src/configcontainer.cpp:109
 msgid "%N %V - Article '%T'"
 msgstr "%N %V - Artykuł '%T'"
 
-#: src/configcontainer.cpp:112
+#: src/configcontainer.cpp:110
 msgid "%N %V - URLs"
 msgstr "%N %V - Odnośniki"
 
-#: src/configcontainer.cpp:113
+#: src/configcontainer.cpp:111
 #, fuzzy
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Odnośniki"
 
-#: src/configcontainer.cpp:149
+#: src/configcontainer.cpp:147
 #, c-format
 msgid "expected boolean value, found `%s' instead"
 msgstr ""
 
-#: src/configcontainer.cpp:155
+#: src/configcontainer.cpp:153
 #, c-format
 msgid "expected integer value, found `%s' instead"
 msgstr ""
 
-#: src/configcontainer.cpp:161
+#: src/configcontainer.cpp:159
 #, fuzzy, c-format
 msgid "invalid configuration value `%s'"
 msgstr "Zapisano artykuł do %s"
@@ -105,11 +106,11 @@ msgstr "Błąd podczas przetwarzania komendy '%s' (%s linia %u): %s"
 msgid "unknown command `%s'"
 msgstr "nieznana komenda '%s'"
 
-#: src/controller.cpp:87 src/pb_controller.cpp:43
+#: src/controller.cpp:90 src/pb_controller.cpp:43
 msgid "Fatal error: couldn't determine home directory!"
 msgstr "Błąd krytyczy: nie mogę znaleźć katalogu domowego!"
 
-#: src/controller.cpp:88 src/pb_controller.cpp:44
+#: src/controller.cpp:91 src/pb_controller.cpp:44
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
@@ -117,52 +118,52 @@ msgstr ""
 "Proszę ustawić prawidłową zmienną HOME lub dodać prawidłowego użytkownika "
 "dla UID %u!"
 
-#: src/controller.cpp:218 src/pb_controller.cpp:102
+#: src/controller.cpp:226 src/pb_controller.cpp:102
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr "%s: nieznana opcja - %c"
 
-#: src/controller.cpp:242 src/pb_controller.cpp:108
+#: src/controller.cpp:250 src/pb_controller.cpp:108
 #, c-format
 msgid "Starting %s %s..."
 msgstr "Uruchamianie %s %s..."
 
-#: src/controller.cpp:252 src/controller.cpp:314 src/pb_controller.cpp:112
+#: src/controller.cpp:260 src/controller.cpp:319 src/pb_controller.cpp:112
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "Błąd: inny proces %s jest już uruchomiony (PID: %u)"
 
-#: src/controller.cpp:262 src/pb_controller.cpp:116
+#: src/controller.cpp:267 src/pb_controller.cpp:116
 msgid "Loading configuration..."
 msgstr "Czytanie konfiguracji..."
 
-#: src/controller.cpp:294 src/controller.cpp:332 src/controller.cpp:362
-#: src/controller.cpp:378 src/controller.cpp:408 src/controller.cpp:412
+#: src/controller.cpp:299 src/controller.cpp:337 src/controller.cpp:364
+#: src/controller.cpp:380 src/controller.cpp:408 src/controller.cpp:412
 #: src/controller.cpp:444 src/controller.cpp:456 src/controller.cpp:470
 #: src/controller.cpp:479 src/controller.cpp:518 src/pb_controller.cpp:153
 #: src/pb_controller.cpp:170
 msgid "done."
 msgstr "gotowe."
 
-#: src/controller.cpp:320 src/controller.cpp:403
+#: src/controller.cpp:325 src/controller.cpp:403
 msgid "Opening cache..."
 msgstr "Otwieram pamięć podręczną..."
 
-#: src/controller.cpp:326
+#: src/controller.cpp:331
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Błąd: otwieranie pliku pamięci podręcznej '%s' nieudane: %s"
 
-#: src/controller.cpp:356
+#: src/controller.cpp:358
 msgid "Loading URLs from local cache..."
 msgstr "Czytanie odnośników z lokalnej pamięci podręcznej..."
 
-#: src/controller.cpp:366
+#: src/controller.cpp:368
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "Czytanie odnośników z %s..."
 
-#: src/controller.cpp:386
+#: src/controller.cpp:388
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
@@ -170,14 +171,6 @@ msgid ""
 msgstr ""
 "Błąd: brak skonfigurowanych odnośników. Dodaj do pliku %s kilka odnośników "
 "do kanałów RSS lub zaimportuj plik OPML."
-
-#: src/controller.cpp:388
-msgid ""
-"It looks like you haven't configured any feeds in your bloglines account. "
-"Please do so, and try again."
-msgstr ""
-"Wygląda na to, że nie skonfigurowałeś żadnych kanałów na swoim koncie "
-"Bloglines.Wykonaj to proszę i spróbuj ponownie."
 
 #: src/controller.cpp:390
 msgid ""
@@ -331,7 +324,8 @@ msgid "execute list of commands"
 msgstr ""
 
 #: src/controller.cpp:848
-msgid "activate offline mode (only applies to bloglines synchronization mode)"
+msgid ""
+"activate offline mode (only applies to Google Reader synchronization mode)"
 msgstr ""
 
 #: src/controller.cpp:849
@@ -1507,9 +1501,6 @@ msgstr ""
 msgid "no RSS channel found"
 msgstr ""
 
-#~ msgid "Segmentation fault."
-#~ msgstr "Naruszenie ochrony pamięci."
-
 #, fuzzy
 #~ msgid ""
 #~ "%s %s\n"
@@ -1548,16 +1539,3 @@ msgstr ""
 #~ "bloglines)\n"
 #~ "-V              wyświetl informację o wersji\n"
 #~ "-h              wyświetl tą pomoc\n"
-
-#~ msgid ""
-#~ "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
-#~ msgstr ""
-#~ "newsbeuter: odświeżanie zakończone, %u nieprzeczytanych kanałów (%u "
-#~ "nowych artykułów)"
-
-#~ msgid ""
-#~ "Error: newsbeuter is compiled without Ruby support. Please recompile with "
-#~ "Ruby support in order to run Ruby functions."
-#~ msgstr ""
-#~ "Błąd: newsbeuter jest skompilowany bez obsługy języka Ruby. Przekompiluj "
-#~ "go z obsługą Ruby aby używać funkcji tego języka."

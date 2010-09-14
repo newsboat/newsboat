@@ -5,10 +5,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 1.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-06 16:17+0200\n"
+"POT-Creation-Date: 2010-09-14 17:33+0200\n"
 "PO-Revision-Date: 2008-11-18 17:38+0300\n"
 "Last-Translator: Sergey Dryabzhinsky <sergey.dryabzhinsky@gmail.com>\n"
 "Language-Team: ru <sergey.dryabzhinsky@gmail.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -39,58 +40,58 @@ msgstr ""
 "newsbeuter: обновление завершено, %f не прочитанных лент (всего %n заметок "
 "не прочитано)"
 
-#: src/configcontainer.cpp:104
+#: src/configcontainer.cpp:102
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
 msgstr "%N %V - Ваши ленты (непрочитанно %u, всего %t)%?T? - метка `%T'&?"
 
-#: src/configcontainer.cpp:105
+#: src/configcontainer.cpp:103
 msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
 msgstr "%N %V - Заметок в ленте '%T' (непрочитанно %u, всего %t) - %U"
 
-#: src/configcontainer.cpp:106
+#: src/configcontainer.cpp:104
 msgid "%N %V - Search result (%u unread, %t total)"
 msgstr "%N %V - Результаты поиска (непрчитанно %u, всего %t)"
 
-#: src/configcontainer.cpp:107
+#: src/configcontainer.cpp:105
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Открыть файл&Сохранить файл? - %f"
 
-#: src/configcontainer.cpp:108
+#: src/configcontainer.cpp:106
 msgid "%N %V - Help"
 msgstr "%N %V - Помощь"
 
-#: src/configcontainer.cpp:109
+#: src/configcontainer.cpp:107
 msgid "%N %V - Select Tag"
 msgstr "%N %V - Выбрать Метку"
 
-#: src/configcontainer.cpp:110
+#: src/configcontainer.cpp:108
 msgid "%N %V - Select Filter"
 msgstr "%N %V - Выбрать Фильтр"
 
-#: src/configcontainer.cpp:111
+#: src/configcontainer.cpp:109
 msgid "%N %V - Article '%T'"
 msgstr "%N %V - Заметка '%T'"
 
-#: src/configcontainer.cpp:112
+#: src/configcontainer.cpp:110
 msgid "%N %V - URLs"
 msgstr "%N %V - Ссылки"
 
-#: src/configcontainer.cpp:113
+#: src/configcontainer.cpp:111
 #, fuzzy
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Ссылки"
 
-#: src/configcontainer.cpp:149
+#: src/configcontainer.cpp:147
 #, c-format
 msgid "expected boolean value, found `%s' instead"
 msgstr ""
 
-#: src/configcontainer.cpp:155
+#: src/configcontainer.cpp:153
 #, c-format
 msgid "expected integer value, found `%s' instead"
 msgstr ""
 
-#: src/configcontainer.cpp:161
+#: src/configcontainer.cpp:159
 #, fuzzy, c-format
 msgid "invalid configuration value `%s'"
 msgstr "Заметка сохранена в %s"
@@ -105,11 +106,11 @@ msgstr "Ошибка во время выполнения команды `%s' (%
 msgid "unknown command `%s'"
 msgstr "неизвестная команда `%s'"
 
-#: src/controller.cpp:87 src/pb_controller.cpp:43
+#: src/controller.cpp:90 src/pb_controller.cpp:43
 msgid "Fatal error: couldn't determine home directory!"
 msgstr "Фатальная ошибка: невозможно определить домашний каталог!"
 
-#: src/controller.cpp:88 src/pb_controller.cpp:44
+#: src/controller.cpp:91 src/pb_controller.cpp:44
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
@@ -117,52 +118,52 @@ msgstr ""
 "Пожалуйста, задайте значение переменной HOME окружения пользователя "
 "илидобавьте подходящего пользователя для UID %u!"
 
-#: src/controller.cpp:218 src/pb_controller.cpp:102
+#: src/controller.cpp:226 src/pb_controller.cpp:102
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr "%s: неизвестный параметр - %c"
 
-#: src/controller.cpp:242 src/pb_controller.cpp:108
+#: src/controller.cpp:250 src/pb_controller.cpp:108
 #, c-format
 msgid "Starting %s %s..."
 msgstr "Запускаю %s %s..."
 
-#: src/controller.cpp:252 src/controller.cpp:314 src/pb_controller.cpp:112
+#: src/controller.cpp:260 src/controller.cpp:319 src/pb_controller.cpp:112
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "Ошибка: уже запущена копия %s (PID: %u)"
 
-#: src/controller.cpp:262 src/pb_controller.cpp:116
+#: src/controller.cpp:267 src/pb_controller.cpp:116
 msgid "Loading configuration..."
 msgstr "Загружаю настройки..."
 
-#: src/controller.cpp:294 src/controller.cpp:332 src/controller.cpp:362
-#: src/controller.cpp:378 src/controller.cpp:408 src/controller.cpp:412
+#: src/controller.cpp:299 src/controller.cpp:337 src/controller.cpp:364
+#: src/controller.cpp:380 src/controller.cpp:408 src/controller.cpp:412
 #: src/controller.cpp:444 src/controller.cpp:456 src/controller.cpp:470
 #: src/controller.cpp:479 src/controller.cpp:518 src/pb_controller.cpp:153
 #: src/pb_controller.cpp:170
 msgid "done."
 msgstr "сделано."
 
-#: src/controller.cpp:320 src/controller.cpp:403
+#: src/controller.cpp:325 src/controller.cpp:403
 msgid "Opening cache..."
 msgstr "Открываю кеш..."
 
-#: src/controller.cpp:326
+#: src/controller.cpp:331
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Ошибка: попытка отрыть файл кэша `%s' завершилась неудачей: %s"
 
-#: src/controller.cpp:356
+#: src/controller.cpp:358
 msgid "Loading URLs from local cache..."
 msgstr "Загружаю ссылки из локального кеша..."
 
-#: src/controller.cpp:366
+#: src/controller.cpp:368
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "Загружаю ссылки из %s..."
 
-#: src/controller.cpp:386
+#: src/controller.cpp:388
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
@@ -170,14 +171,6 @@ msgid ""
 msgstr ""
 "Ошибка: не найдено ни одной ссылки. Пожалуйста, занесите в файл %s ссылкина "
 "RSS ленты или импортируйте файл OPML."
-
-#: src/controller.cpp:388
-msgid ""
-"It looks like you haven't configured any feeds in your bloglines account. "
-"Please do so, and try again."
-msgstr ""
-"Похоже что вы не настроили ни одной ленты новостей в своей учётной записи в "
-"блоггере. Сделайте это и попробуйте еще раз."
 
 #: src/controller.cpp:390
 msgid ""
@@ -331,7 +324,9 @@ msgid "execute list of commands"
 msgstr "выполнить список команд"
 
 #: src/controller.cpp:848
-msgid "activate offline mode (only applies to bloglines synchronization mode)"
+#, fuzzy
+msgid ""
+"activate offline mode (only applies to Google Reader synchronization mode)"
 msgstr "включить автономный режим (только для синхронизации bloglines)"
 
 #: src/controller.cpp:849
@@ -1503,9 +1498,6 @@ msgstr ""
 msgid "no RSS channel found"
 msgstr ""
 
-#~ msgid "Segmentation fault."
-#~ msgstr "Ошибка сегментирования."
-
 #~ msgid ""
 #~ "%s %s\n"
 #~ "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x "
@@ -1544,17 +1536,3 @@ msgstr ""
 #~ "значения: от 1 до 6)\n"
 #~ "-d <файл>           использовать для журнала файл <файл>\n"
 #~ "-h                  показать эту справку\n"
-
-#~ msgid ""
-#~ "newsbeuter: finished reload, %u unread feeds (%u unread articles total)"
-#~ msgstr ""
-#~ "newsbeuter: обновление завершено, %u не прочитанных лент (всего %u "
-#~ "заметок непрочитано)"
-
-#~ msgid ""
-#~ "Error: newsbeuter is compiled without Ruby support. Please recompile with "
-#~ "Ruby support in order to run Ruby functions."
-#~ msgstr ""
-#~ "Ошибка: newsbeuter был собран без поддержки Ruby. Пожалуйста "
-#~ "пересоберитеего с поддержкой Ruby, чтобы иметь возможность запускать "
-#~ "функции Ruby."

@@ -7,10 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter-1.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-06 16:17+0200\n"
+"POT-Creation-Date: 2010-09-14 17:33+0200\n"
 "PO-Revision-Date: 2009-03-16 21:29+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -40,57 +41,57 @@ msgstr ""
 "newsbeuter: omläsning färdig, %f olästa webbkanaler (%n olästa artiklar "
 "totalt)"
 
-#: src/configcontainer.cpp:104
+#: src/configcontainer.cpp:102
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
 msgstr "%N %V - Dina webbkanaler (%u olästa, %t totalt)%?T? - tag `%T'&?"
 
-#: src/configcontainer.cpp:105
+#: src/configcontainer.cpp:103
 msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
 msgstr "%N %V - Artiklar i webbkanal '%T' (%u olästa, %t totalt) - %U"
 
-#: src/configcontainer.cpp:106
+#: src/configcontainer.cpp:104
 msgid "%N %V - Search result (%u unread, %t total)"
 msgstr "%N %V - Sökresultat (%u olästa, %t totalt)"
 
-#: src/configcontainer.cpp:107
+#: src/configcontainer.cpp:105
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Öppna fil&Spara fil? - %f"
 
-#: src/configcontainer.cpp:108
+#: src/configcontainer.cpp:106
 msgid "%N %V - Help"
 msgstr "%N %V - Hjälp"
 
-#: src/configcontainer.cpp:109
+#: src/configcontainer.cpp:107
 msgid "%N %V - Select Tag"
 msgstr "%N %V - Markera tagg"
 
-#: src/configcontainer.cpp:110
+#: src/configcontainer.cpp:108
 msgid "%N %V - Select Filter"
 msgstr "%N %V - Markera filter"
 
-#: src/configcontainer.cpp:111
+#: src/configcontainer.cpp:109
 msgid "%N %V - Article '%T'"
 msgstr "%N %V - Artikel '%T'"
 
-#: src/configcontainer.cpp:112
+#: src/configcontainer.cpp:110
 msgid "%N %V - URLs"
 msgstr "%N %V - Url:er"
 
-#: src/configcontainer.cpp:113
+#: src/configcontainer.cpp:111
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Dialogrutor"
 
-#: src/configcontainer.cpp:149
+#: src/configcontainer.cpp:147
 #, c-format
 msgid "expected boolean value, found `%s' instead"
 msgstr "boolean-värde förväntades, hittade `%s' istället"
 
-#: src/configcontainer.cpp:155
+#: src/configcontainer.cpp:153
 #, c-format
 msgid "expected integer value, found `%s' instead"
 msgstr "integer-värde förväntades, hittade `%s' istället"
 
-#: src/configcontainer.cpp:161
+#: src/configcontainer.cpp:159
 #, fuzzy, c-format
 msgid "invalid configuration value `%s'"
 msgstr "Sparade konfiguration till %s"
@@ -105,11 +106,11 @@ msgstr "Fel vid behandling av kommando `%s' (%s rad %u): %s"
 msgid "unknown command `%s'"
 msgstr "okänt kommando `%s'"
 
-#: src/controller.cpp:87 src/pb_controller.cpp:43
+#: src/controller.cpp:90 src/pb_controller.cpp:43
 msgid "Fatal error: couldn't determine home directory!"
 msgstr "Allvarligt fel: kunde inte fastställa hemkatalog!"
 
-#: src/controller.cpp:88 src/pb_controller.cpp:44
+#: src/controller.cpp:91 src/pb_controller.cpp:44
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
@@ -117,52 +118,52 @@ msgstr ""
 "Var god ställ in HOME-miljövariabeln eller lägg till en giltig användare för "
 "UID %u!"
 
-#: src/controller.cpp:218 src/pb_controller.cpp:102
+#: src/controller.cpp:226 src/pb_controller.cpp:102
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr "%s: okänt alternativ - %c"
 
-#: src/controller.cpp:242 src/pb_controller.cpp:108
+#: src/controller.cpp:250 src/pb_controller.cpp:108
 #, c-format
 msgid "Starting %s %s..."
 msgstr "Startar %s %s..."
 
-#: src/controller.cpp:252 src/controller.cpp:314 src/pb_controller.cpp:112
+#: src/controller.cpp:260 src/controller.cpp:319 src/pb_controller.cpp:112
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "Fel: ett exemplar av %s körs redan (PID: %u)"
 
-#: src/controller.cpp:262 src/pb_controller.cpp:116
+#: src/controller.cpp:267 src/pb_controller.cpp:116
 msgid "Loading configuration..."
 msgstr "Läser in konfiguration..."
 
-#: src/controller.cpp:294 src/controller.cpp:332 src/controller.cpp:362
-#: src/controller.cpp:378 src/controller.cpp:408 src/controller.cpp:412
+#: src/controller.cpp:299 src/controller.cpp:337 src/controller.cpp:364
+#: src/controller.cpp:380 src/controller.cpp:408 src/controller.cpp:412
 #: src/controller.cpp:444 src/controller.cpp:456 src/controller.cpp:470
 #: src/controller.cpp:479 src/controller.cpp:518 src/pb_controller.cpp:153
 #: src/pb_controller.cpp:170
 msgid "done."
 msgstr "färdig."
 
-#: src/controller.cpp:320 src/controller.cpp:403
+#: src/controller.cpp:325 src/controller.cpp:403
 msgid "Opening cache..."
 msgstr "Öppnar cache..."
 
-#: src/controller.cpp:326
+#: src/controller.cpp:331
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Fel: öppnande av cache-fil `%s' misslyckades: %s"
 
-#: src/controller.cpp:356
+#: src/controller.cpp:358
 msgid "Loading URLs from local cache..."
 msgstr "Läser in url:er från lokal cache..."
 
-#: src/controller.cpp:366
+#: src/controller.cpp:368
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "Läser in url:er från %s..."
 
-#: src/controller.cpp:386
+#: src/controller.cpp:388
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
@@ -170,14 +171,6 @@ msgid ""
 msgstr ""
 "Fel: inga url:er konfigurerade. Var god fyll filen %s med RSS-webbkanalsurl:"
 "er eller importera en OPML-fil."
-
-#: src/controller.cpp:388
-msgid ""
-"It looks like you haven't configured any feeds in your bloglines account. "
-"Please do so, and try again."
-msgstr ""
-"Det ser ut som om du inte har konfigurerat några webbkanaler i ditt "
-"bloglines-konto. Var god gör det och prova igen."
 
 #: src/controller.cpp:390
 msgid ""
@@ -332,7 +325,9 @@ msgid "execute list of commands"
 msgstr "verkställ lista över kommandon"
 
 #: src/controller.cpp:848
-msgid "activate offline mode (only applies to bloglines synchronization mode)"
+#, fuzzy
+msgid ""
+"activate offline mode (only applies to Google Reader synchronization mode)"
 msgstr ""
 "aktivera frånkopplingsläge (verkställs bara till läge för bloglines-"
 "synkronisering)"
@@ -1492,6 +1487,3 @@ msgstr "webbkanalsformat stöds inte"
 #: rss/rss_09x_parser.cpp:39
 msgid "no RSS channel found"
 msgstr "ingen RSS-kanal hittades"
-
-#~ msgid "Segmentation fault."
-#~ msgstr "Segmenteringsfel."
