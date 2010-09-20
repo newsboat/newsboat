@@ -846,6 +846,22 @@ dialog by selecting the appropriate entry and pressing "ENTER", or can close
 open dialogs by selecting them and pressing Ctrl-X.
 
 
+XDG Base Directory Support
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Newsbeuter implements limited support for the
+http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html[XDG Base
+Directory Specification]. It needs to be set up manually by creating the
+following directories:
+
+	~/.local/share/newsbeuter/
+	~/.config/newsbeuter/
+
+If these directories exist or the environment variables $XDG_CONFIG_HOME and
+$XDG_DATA_HOME are set, newsbeuter will use these directories, otherwise it
+will default to ~/.newsbeuter as its configuration directory.
+
+
 Podcast Support
 ~~~~~~~~~~~~~~~
 
