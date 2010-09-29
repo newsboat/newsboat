@@ -180,8 +180,31 @@ bool googlereader_api::mark_all_read(const std::string& feedurl) {
 	return result == "OK";
 }
 
+std::vector<std::string> googlereader_api::bulk_mark_articles_read(const std::vector<google_replay_pair>& actions) {
+	std::vector<std::string> successful_tokens;
+	std::string token = get_new_token();
+	for (std::vector<google_replay_pair>::const_iterator it=actions.begin();it!=actions.end();it++) {
+		bool read;
+		if (it->second == GOOGLE_MARK_READ) {
+			read = true;
+		} else if (it->second == GOOGLE_MARK_UNREAD) {
+			read = false;
+		} else {
+			continue;
+		}
+		if (mark_article_read_with_token(it->first, read, token)) {
+			successful_tokens.push_back(it->first);
+		}
+	}
+	return successful_tokens;
+}
+
 bool googlereader_api::mark_article_read(const std::string& guid, bool read) {
 	std::string token = get_new_token();
+	return mark_article_read_with_token(guid, read, token);
+}
+
+bool googlereader_api::mark_article_read_with_token(const std::string& guid, bool read, const std::string& token) {
 	std::string postcontent;
 
 	if (read) {
@@ -192,7 +215,7 @@ bool googlereader_api::mark_article_read(const std::string& guid, bool read) {
 
 	std::string result = post_content(GREADER_API_EDIT_TAG_URL, postcontent);
 
-	LOG(LOG_DEBUG, "googlereader_api::mark_article_read: postcontent = %s result = %s", postcontent.c_str(), result.c_str());
+	LOG(LOG_DEBUG, "googlereader_api::mark_article_read_with_token: postcontent = %s result = %s", postcontent.c_str(), result.c_str());
 
 	return result == "OK";
 }

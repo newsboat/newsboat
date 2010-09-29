@@ -83,6 +83,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				if (itemposname.length() > 0 && visible_items.size() != 0) {
 					if (itempos < visible_items.size()) {
 						visible_items[itempos].first->set_unread(false);
+						v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), true);
 						if (itempos < visible_items.size()-1) {
 							f->set("itempos", utils::strprintf("%u", itempos + 1));
 						}
@@ -114,12 +115,16 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 						if (automatic && args->size() > 0) {
 							if ((*args)[0] == "read") {
 								visible_items[itempos].first->set_unread(false);
+								v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), true);
 							} else if ((*args)[0] == "unread") {
 								visible_items[itempos].first->set_unread(true);
+								v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), false);
 							}
 							v->set_status("");
 						} else {
-							visible_items[itempos].first->set_unread(!visible_items[itempos].first->unread());
+							bool unread = visible_items[itempos].first->unread();
+							visible_items[itempos].first->set_unread(!unread);
+							v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), unread);
 							v->set_status("");
 						}
 					} catch (const dbexception& e) {
@@ -302,7 +307,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 						scope_mutex lock(&feed->item_mutex);
 						LOG(LOG_DEBUG, "itemlist_formaction: oh, it looks like I'm in a pseudo-feed (search result, query feed)");
 						for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin();it!=feed->items().end();++it) {
-							(*it)->set_unread_nowrite_notify(false, true);
+							(*it)->set_unread_nowrite_notify(false, true); // TODO: do we need to call mark_article_read here, too?
 						}
 					}
 					v->get_ctrl()->catchup_all(feed);

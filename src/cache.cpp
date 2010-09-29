@@ -1,3 +1,4 @@
+#include <controller.h>
 #include <cache.h>
 #include <sqlite3.h>
 #include <cstdlib>
@@ -258,6 +259,13 @@ void cache::populate_tables() {
 						" content VARCHAR(65535) NOT NULL,"
 						" unread INTEGER(1) NOT NULL );", NULL, NULL, NULL);
 	LOG(LOG_DEBUG, "cache::populate_tables: CREATE TABLE rss_item rc = %d", rc);
+
+	rc = sqlite3_exec(db, "CREATE TABLE google_replay ( "
+						" id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+						" guid VARCHAR(64) NOT NULL, "
+						" state INTEGER NOT NULL, "
+						" ts INTEGER NOT NULL );", NULL, NULL, NULL);
+	LOG(LOG_DEBUG, "cache::populate_tables: CREATE TABLE google_replay rc = %d", rc);
 
 	/* we need to do these ALTER TABLE statements because we need to store additional data for the podcast support */
 	rc = sqlite3_exec(db, "ALTER TABLE rss_item ADD enclosure_url VARCHAR(1024);", NULL, NULL, NULL);
@@ -945,6 +953,51 @@ void cache::fetch_descriptions(rss_feed * feed) {
 		LOG(LOG_CRITICAL, "query: \"%s\" failed: error = %d", query.c_str(), rc);
 		throw dbexception(db);
 	}
+}
+
+void cache::record_google_replay(const std::string& guid, unsigned int state) {
+	scope_mutex lock(&mtx);
+
+	std::string query = prepare_query("INSERT INTO google_replay ( guid, state, ts ) VALUES ( '%q', %u, %u );", guid.c_str(), state, (unsigned int)time(NULL));
+
+	int rc = sqlite3_exec(db, query.c_str(), NULL, NULL, NULL);
+	LOG(LOG_DEBUG, "ran SQL statement: %s rc = %d", query.c_str(), rc);
+}
+
+void cache::delete_google_replay_by_guid(const std::vector<std::string>& guids) {
+	std::vector<std::string> escaped_guids;
+
+	for (std::vector<std::string>::const_iterator it=guids.begin();it!=guids.end();it++) {
+		escaped_guids.push_back(prepare_query("'%q'", it->c_str()));
+	}
+
+	std::string query = prepare_query("DELETE FROM google_replay WHERE guid IN ( %s );", utils::join(escaped_guids, ", ").c_str());
+
+	int rc = sqlite3_exec(db, query.c_str(), NULL, NULL, NULL);
+	LOG(LOG_DEBUG, "ran SQL statement: %s rc = %d", query.c_str(), rc);
+}
+
+static int google_replay_cb(void * result, int argc, char ** argv, char ** /* azColName */) {
+	std::vector<google_replay_pair> * google_replay_data = static_cast<std::vector<google_replay_pair> *>(result);
+	assert(argc == 2);
+
+	google_replay_data->push_back(google_replay_pair(argv[0], utils::to_u(argv[1])));
+
+	return 0;
+}
+
+std::vector<google_replay_pair> cache::get_google_replay() {
+	std::vector<google_replay_pair> result;
+
+	std::string query = "SELECT guid, state FROM google_replay ORDER BY ts;";
+
+	int rc = sqlite3_exec(db, query.c_str(), google_replay_cb, &result, NULL);
+	if (rc != SQLITE_OK) {
+		LOG(LOG_CRITICAL, "query \"%s\" failed: error = %d", query.c_str(), rc);
+		throw dbexception(db);
+	}
+
+	return result;
 }
 
 

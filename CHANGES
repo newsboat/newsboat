@@ -9,6 +9,7 @@ Changes for newsbeuter:
 	Implemented on-demand loading of feeds to reduce memory usage.
 	Removed Bloglines support as the service shuts down on October 1, 2010.
 	Implemented XDG Base Directory support (patch by Elrond)
+	Google Reader: when in offline mode, record unread status changes and later replay when in online mode.
 
 2.3 (2010-06-24):
 	Fixed HTML rendering of bold and underline text when light background is configured.

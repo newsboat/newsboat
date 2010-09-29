@@ -77,7 +77,7 @@ void omg_a_child_died(int /* sig */) {
 	::signal(SIGCHLD, omg_a_child_died); /* in case of unreliable signals */
 }
 
-controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false), api(0) {
+controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false), api(0), offline_mode(false) {
 }
 
 
@@ -205,7 +205,7 @@ void controller::run(int argc, char * argv[]) {
 	::signal(SIGCHLD, omg_a_child_died);
 
 	bool do_import = false, do_export = false, cachefile_given_on_cmdline = false, do_vacuum = false;
-	bool offline_mode = false, real_offline_mode = false;
+	bool real_offline_mode = false;
 	std::string importfile;
 	bool do_read_import = false, do_read_export = false;
 	std::string readinfofile;
@@ -448,6 +448,19 @@ void controller::run(int argc, char * argv[]) {
 		if (!do_export && !silent) {
 			std::cout << _("done.") << std::endl;
 		}
+		if (api && type == "googlereader") { // ugly hack!
+			std::vector<google_replay_pair> actions = rsscache->get_google_replay();
+			if (actions.size() > 0) {
+				std::cout << _("Updating Google Reader unread states...");
+				std::cout.flush();
+
+				std::vector<std::string> successful_guids = dynamic_cast<googlereader_api *>(api)->bulk_mark_articles_read(actions);
+
+				rsscache->delete_google_replay_by_guid(successful_guids);
+
+				std::cout << _("done.") << std::endl;
+			}
+		}
 	}
 
 	if (urlcfg->get_urls().size() == 0) {
@@ -629,9 +642,23 @@ void controller::catchup_all() {
 
 void controller::mark_article_read(const std::string& guid, bool read) {
 	if (api) {
-		api->mark_article_read(guid, read);
+		if (offline_mode) {
+			if (dynamic_cast<googlereader_api *>(api) != NULL) {
+				LOG(LOG_DEBUG, "controller::mark_article_read: recording %s", guid.c_str());
+				record_google_replay(guid, read);
+			} else {
+				LOG(LOG_DEBUG, "not on googlereader_api");
+			}
+		} else {
+			api->mark_article_read(guid, read);
+		}
 	}
 }
+
+void controller::record_google_replay(const std::string& guid, bool read) {
+	rsscache->record_google_replay(guid, read ? GOOGLE_MARK_READ : GOOGLE_MARK_UNREAD);
+}
+
 
 void controller::mark_all_read(unsigned int pos) {
 	if (pos < feeds.size()) {

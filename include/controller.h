@@ -18,6 +18,7 @@ namespace newsbeuter {
 
 	class view;
 
+
 	class controller {
 		public:
 			controller();
@@ -45,6 +46,7 @@ namespace newsbeuter {
 			void update_visible_feeds();
 			void mark_all_read(unsigned int pos);
 			void mark_article_read(const std::string& guid, bool read);
+			void record_google_replay(const std::string& guid, bool read);
 			void catchup_all();
 			inline void catchup_all(std::tr1::shared_ptr<rss_feed> feed) { rsscache->catchup_all(feed); }
 			inline bool get_refresh_on_start() { return refresh_on_start; }
@@ -125,6 +127,7 @@ namespace newsbeuter {
 			regexmanager rxman;
 			remote_api * api;
 			mutex feeds_mutex;
+			bool offline_mode;
 	};
 
 }
