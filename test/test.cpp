@@ -31,7 +31,7 @@ using namespace newsbeuter;
 
 namespace test {
 
-lemon::test<> lemon(306);
+lemon::test<> lemon(323);
 
 void TestNewsbeuterReload() {
 	configcontainer * cfg = new configcontainer();
@@ -407,6 +407,11 @@ void TestFilterLanguage() {
 	m.parse("tags # \"foo\" or tags # \"xyz\"");
 	lemon.is(m.matches(&tm), true, "tags # foo or tags # xyz matches");
 
+	m.parse("tags !# \"nein\"");
+	lemon.is(m.matches(&tm), true, "tags !# nein matches");
+	m.parse("tags !# \"foo\"");
+	lemon.is(m.matches(&tm), false, "tags !# foo doesn't match");
+
 	m.parse("AAAA > 12344");
 	lemon.is(m.matches(&tm), true, "AAAA > 12344 matches");
 	m.parse("AAAA > 12345");
@@ -417,6 +422,76 @@ void TestFilterLanguage() {
 	lemon.is(m.matches(&tm), false, "AAAA < 12345 doesn't match");
 	m.parse("AAAA <= 12345");
 	lemon.is(m.matches(&tm), true, "AAAA <= 12345 matches");
+
+	m.parse("AAAA between 0:12345");
+	lemon.is(m.matches(&tm), true, "AAAA between 0:12345 matches");
+	m.parse("AAAA between 12345:12345");
+	lemon.is(m.matches(&tm), true, "AAAA between 12345:12345 matches");
+	m.parse("AAAA between 23:12344");
+	lemon.is(m.matches(&tm), false, "AAAA between 23:12344 doesn't match");
+
+	m.parse("AAAA between 0");
+	lemon.is(m.matches(&tm), false, "invalid between expression (1)");
+
+	lemon.is(m.parse("AAAA between 0:15:30"), false, "invalid between expression won't be parsed");
+	lemon.ok(m.get_parse_error() != "", "invalid between expression leads to parse error");
+
+	m.parse("AAAA between 1:23");
+	lemon.ok(m.get_parse_error() == "", "valid between expression returns no parse error");
+
+	m.parse("AAAA between 12346:12344");
+	lemon.is(m.matches(&tm), true, "reverse ranges will match, too");
+
+	try {
+		m.parse("BBBB < 0");
+		m.matches(&tm);
+		lemon.fail("attribute BBBB shouldn't have been found");
+	} catch (const matcherexception& e) {
+		lemon.ok(true, "attribute BBBB was detected as non-existent");
+	}
+
+	try {
+		m.parse("BBBB > 0");
+		m.matches(&tm);
+		lemon.fail("attribute BBBB shouldn't have been found");
+	} catch (const matcherexception& e) {
+		lemon.ok(true, "attribute BBBB was detected as non-existent");
+	}
+
+	try {
+		m.parse("BBBB =~ \"foo\"");
+		m.matches(&tm);
+		lemon.fail("attribute BBBB shouldn't have been found");
+	} catch (const matcherexception& e) {
+		lemon.ok(true, "attribute BBBB was detected as non-existent");
+	}
+
+	try {
+		m.parse("BBBB between 1:23");
+		m.matches(&tm);
+		lemon.fail("attribute BBBB shouldn't have been found");
+	} catch (const matcherexception& e) {
+		lemon.ok(true, "attribute BBBB was detected as non-existent");
+	}
+
+	try {
+		m.parse("AAAA =~ \"[[\"");
+		m.matches(&tm);
+		lemon.fail("invalid regex should have been found");
+	} catch (const matcherexception& e) {
+		lemon.ok(true, "invalid regex was found");
+	}
+
+	try {
+		m.parse("BBBB # \"foo\"");
+		m.matches(&tm);
+		lemon.fail("attribute BBBB shouldn't have been found");
+	} catch (const matcherexception& e) {
+		lemon.ok(true, "attribute BBBB was detected as non-existent");
+	}
+
+	matcher m2("AAAA between 1:30000");
+	lemon.is(m2.get_expression(), "AAAA between 1:30000", "get_expression returns previously parsed expression");
 }
 
 
