@@ -507,13 +507,12 @@ void view::push_urlview(const std::vector<linkpair>& links) {
 	current_formaction = formaction_stack_size() - 1;
 }
 
-std::string view::run_filebrowser(filebrowser_type type, const std::string& default_filename, const std::string& dir) {
+std::string view::run_filebrowser(const std::string& default_filename, const std::string& dir) {
 	std::tr1::shared_ptr<filebrowser_formaction> filebrowser(new filebrowser_formaction(this, filebrowser_str));
 	set_bindings(filebrowser);
 	apply_colors(filebrowser);
 	filebrowser->set_dir(dir);
 	filebrowser->set_default_filename(default_filename);
-	filebrowser->set_type(type);
 	filebrowser->set_parent_formaction(get_current_formaction());
 	return run_modal(filebrowser, "filenametext");
 }

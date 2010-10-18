@@ -57,7 +57,7 @@ namespace newsbeuter {
 			void push_searchresult(std::tr1::shared_ptr<rss_feed> feed, const std::string& phrase = "");
 			void view_dialogs();
 
-			std::string run_filebrowser(filebrowser_type type, const std::string& default_filename = "", const std::string& dir = "");
+			std::string run_filebrowser(const std::string& default_filename = "", const std::string& dir = "");
 			std::string select_tag(const std::vector<std::string>& tags);
 			std::string select_filter(const std::vector<filter_name_expr_pair>& filters);
 

@@ -5,8 +5,6 @@
 
 namespace newsbeuter {
 
-enum filebrowser_type { FBT_OPEN, FBT_SAVE };
-
 class filebrowser_formaction : public formaction {
 	public:
 		filebrowser_formaction(view *, std::string formstr);
@@ -17,7 +15,6 @@ class filebrowser_formaction : public formaction {
 
 		inline void set_dir(const std::string& d) { dir = d; }
 		inline void set_default_filename(const std::string& fn) { default_filename = fn; }
-		inline void set_type(filebrowser_type t) { type = t; }
 
 		virtual std::string id() const { return "filebrowser"; }
 		virtual std::string title();
@@ -37,7 +34,6 @@ class filebrowser_formaction : public formaction {
 		std::string cwd;
 		std::string dir;
 		std::string default_filename;
-		filebrowser_type type;
 };
 
 }

@@ -53,14 +53,10 @@ void filebrowser_formaction::process_operation(operation op, bool /* automatic *
 									fmtstr_formatter fmt;
 									fmt.register_fmt('N', PROGRAM_NAME);
 									fmt.register_fmt('V', PROGRAM_VERSION);
-									// we use O only to distinguish between "open file" and "save file" for the %? format:
-									fmt.register_fmt('O', (type == FBT_OPEN) ? "dummy" : ""); 
 									fmt.register_fmt('f', filename);
 									f->set("head", fmt.do_format(v->get_cfg()->get_configvalue("filebrowser-title-format"), width));
-								}
-								::chdir(filename.c_str());
-								f->set("listpos","0");
-								if (type == FBT_SAVE) {
+									::chdir(filename.c_str());
+									f->set("listpos","0");
 									char cwdtmp[MAXPATHLEN];
 									::getcwd(cwdtmp,sizeof(cwdtmp));
 									std::string fn(cwdtmp);
@@ -71,8 +67,8 @@ void filebrowser_formaction::process_operation(operation op, bool /* automatic *
 										base = fnstr.c_str();
 									fn.append(base);
 									f->set("filenametext",fn);
+									do_redraw = true;
 								}
-								do_redraw = true;
 								break;
 							case '-': 
 								{
@@ -97,7 +93,7 @@ void filebrowser_formaction::process_operation(operation op, bool /* automatic *
 						 * this check is very important, as people will kill us if they accidentaly overwrote their files
 						 * with no further warning...
 						 */
-						if (::stat(fn.c_str(), &sbuf)!=-1 && type == FBT_SAVE) {
+						if (::stat(fn.c_str(), &sbuf)!=-1) {
 							f->set_focus("files");
 							if (v->confirm(utils::strprintf(_("Do you really want to overwrite `%s' (y:Yes n:No)? "), fn.c_str()), _("yn")) == *_("n")) {
 								do_pop = false;
@@ -180,13 +176,7 @@ void filebrowser_formaction::init() {
 	
 	f->set("filenametext", default_filename);
 	
-	std::string buf;
-	if (type == FBT_OPEN) {
-		buf = utils::strprintf(_("%s %s - Open File - %s"), PROGRAM_NAME, PROGRAM_VERSION, cwdtmp);
-	} else {
-		buf = utils::strprintf(_("%s %s - Save File - %s"), PROGRAM_NAME, PROGRAM_VERSION, cwdtmp);
-	}
-	f->set("head", buf);
+	f->set("head", utils::strprintf(_("%s %s - Save File - %s"), PROGRAM_NAME, PROGRAM_VERSION, cwdtmp));
 }
 
 keymap_hint_entry * filebrowser_formaction::get_keymap_hint() {
@@ -267,10 +257,7 @@ std::string filebrowser_formaction::get_group(gid_t gid) {
 std::string filebrowser_formaction::title() {
 	char cwdtmp[MAXPATHLEN];
 	::getcwd(cwdtmp,sizeof(cwdtmp));
-	if (type == FBT_OPEN)
-		return utils::strprintf(_("Open File - %s"), cwdtmp);
-	else
-		return utils::strprintf(_("Save File - %s"), cwdtmp);
+	return utils::strprintf(_("Save File - %s"), cwdtmp);
 }
 
 }

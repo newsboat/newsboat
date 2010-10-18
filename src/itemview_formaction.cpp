@@ -189,7 +189,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 					if (args->size() > 0)
 						filename = (*args)[0];
 				} else {
-					filename = v->run_filebrowser(FBT_SAVE,v->get_filename_suggestion(item->title()));
+					filename = v->run_filebrowser(v->get_filename_suggestion(item->title()));
 				}
 				if (filename == "") {
 					v->show_error(_("Aborted saving."));

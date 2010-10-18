@@ -203,7 +203,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 							filename = (*args)[0];
 						}
 					} else {
-						filename = v->run_filebrowser(FBT_SAVE,v->get_filename_suggestion(visible_items[itempos].first->title()));
+						filename = v->run_filebrowser(v->get_filename_suggestion(visible_items[itempos].first->title()));
 					}
 					save_article(filename, visible_items[itempos].first);
 				} else {
