@@ -182,7 +182,7 @@ install-mo:
 		echo "Installing $$mofile as $$dir/$(PACKAGE).mo" ; \
 	done
 
-test: $(LIB_OUTPUT) $(NEWSBEUTER_OBJS) test/test.o
+test: $(LIB_OUTPUT) $(NEWSBEUTER_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) test/test.o
 	$(CXX) $(CXXFLAGS) -o test/test src/history.o src/rss.o src/rss_parser.o src/htmlrenderer.o src/cache.o src/tagsouppullparser.o src/urlreader.o src/regexmanager.o test/test.o $(NEWSBEUTER_LIBS) $(LDFLAGS)
 
 test-rss: $(RSSPPLIB_OUTPUT) test/test-rss.o
