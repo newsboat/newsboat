@@ -15,7 +15,7 @@ Tuitest.wait_until_idle
 
 # begin auto-generated verification #1 
 verifier.expect(0, 0, "Queue (0 downloads in progress, 1 total) - 0.00 kb/s total")
-verifier.expect(1, 4, "1 [   0.0MB/   0.0MB] [  0.0 %] [   0.00 kb/s] incomplete")
+verifier.expect(1, 4, "1 [   0.0MB/   0.0MB] [  0.0 %] [   0.00 kb/s] queued")
 verifier.expect(23, 0, "q:Quit d:Download c:Cancel D:Delete P:Purge Finished a:Toggle Automatic Download")
 # end auto-generated verification #1 
 
