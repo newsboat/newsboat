@@ -5,4 +5,4 @@ include Makefile
 
 profclean:
 	find . -name '*.gc*' -type f | xargs $(RM)
-	rm app*.info
+	$(RM) app*.info
