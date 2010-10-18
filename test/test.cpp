@@ -735,6 +735,13 @@ void TestHtmlRenderer() {
 	rnd.render("A<sub>i</sub>", lines, links, "");
 	lemon.is(lines.size(), 1u, "subscription produced 1 line");
 	lemon.is(lines[0], "A[i]", "subscription of A[i]");
+
+	lines.erase(lines.begin(), lines.end());
+	links.erase(links.begin(), links.end());
+
+	rnd.render("abc<script></script>", lines, links, "");
+	lemon.is(lines.size(), 1u, "rendering produced one line");
+	lemon.is(lines.at(0),"abc", "rendering of abc<script></script> produced one empty line");
 }
 
 void TestIndexPartitioning() {
