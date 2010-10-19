@@ -17,14 +17,11 @@ class cache {
 		~cache();
 		void externalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, bool reset_unread);
 		void internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, rss_ignores * ign);
-		void update_rssitem(std::tr1::shared_ptr<rss_item> item, const std::string& feedurl, bool reset_unread);
 		void update_rssitem_unread_and_enqueued(std::tr1::shared_ptr<rss_item> item, const std::string& feedurl);
 		void update_rssitem_unread_and_enqueued(rss_item* item, const std::string& feedurl);
 		void cleanup_cache(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds);
 		void do_vacuum();
-		void get_latest_items(std::vector<std::tr1::shared_ptr<rss_item> >& items, unsigned int limit);
 		std::vector<std::tr1::shared_ptr<rss_item> > search_for_items(const std::string& querystr, const std::string& feedurl);
-		std::tr1::shared_ptr<rss_feed> get_feed_by_url(const std::string& feedurl);
 		void catchup_all(const std::string& feedurl = "");
 		void catchup_all(std::tr1::shared_ptr<rss_feed> feed);
 		void update_rssitem_flags(rss_item* item);
@@ -52,14 +49,6 @@ class cache {
 		sqlite3 * db;
 		configcontainer * cfg;
 		mutex mtx;
-};
-
-class scope_transaction {
-	public:
-		scope_transaction(sqlite3 * db);
-		~scope_transaction();
-	private:
-		sqlite3 * d;
 };
 
 }

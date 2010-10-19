@@ -29,8 +29,6 @@ namespace newsbeuter {
 			void run();
 			std::string run_modal(std::tr1::shared_ptr<formaction> f, const std::string& value = "");
 
-			std::string id();
-
 			void set_feedlist(std::vector<std::tr1::shared_ptr<rss_feed> > feeds);
 			void update_visible_feeds(std::vector<std::tr1::shared_ptr<rss_feed> > feeds);
 			void set_keymap(keymap * k);

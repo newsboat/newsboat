@@ -34,10 +34,6 @@ rss_feed::rss_feed(cache * c) : ch(c), empty(true), is_rtl_(false), idx(0), stat
 	// LOG(LOG_CRITICAL, "new rss_feed");
 }
 
-rss_feed::rss_feed() : ch(NULL), empty(true), is_rtl_(false) { 
-	// LOG(LOG_CRITICAL, "new rss_feed");
-}
-
 rss_feed::~rss_feed() {
 	// LOG(LOG_CRITICAL, "delete rss_feed");
 }

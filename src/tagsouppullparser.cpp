@@ -474,12 +474,6 @@ std::string tagsouppullparser::decode_entity(std::string s) {
 	return ""; 	
 }
 
-void tagsouppullparser::remove_trailing_whitespace(std::string& s) {
-	while (s.length() > 0 && isspace(s[s.length()-1])) {
-		s.erase(s.length()-1,1);
-	}
-}
-
 void tagsouppullparser::parse_tag(const std::string& tagstr) {
 	std::string::size_type last_pos = tagstr.find_first_not_of(" \r\n\t", 0);
 	std::string::size_type pos = tagstr.find_first_of(" \r\n\t", last_pos);

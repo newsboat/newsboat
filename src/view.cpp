@@ -919,13 +919,6 @@ void view::apply_colors(std::tr1::shared_ptr<formaction> fa) {
 	}
 }
 
-std::string view::id() {
-	if (formaction_stack.size() > 0) {
-		return get_current_formaction()->id();
-	}
-	return "";
-}
-
 void view::feedlist_mark_pos_if_visible(unsigned int pos) {
 	if (formaction_stack_size() > 0) {
 		std::tr1::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0])->mark_pos_if_visible(pos);

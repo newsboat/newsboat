@@ -81,15 +81,6 @@ std::string rss_parser::render_xhtml_title(const std::string& title, const std::
 	return "";
 }
 
-unsigned int rss_parser::monthname_to_number(const std::string& monthstr) {
-	static const char * monthtable[] = { "Jan", "Feb", "Mar", "Apr","May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", NULL };
-	for (unsigned int i=0;monthtable[i]!=NULL;i++) {
-		if (monthstr == monthtable[i])
-			return i;
-	}
-	return 0;
-}
-
 void rss_parser::set_rtl(std::tr1::shared_ptr<rss_feed> feed, const char * lang) {
 	// we implement right-to-left support for the languages listed in
 	// http://blogs.msdn.com/rssteam/archive/2007/05/17/reading-feeds-in-right-to-left-order.aspx
@@ -110,12 +101,6 @@ void rss_parser::set_rtl(std::tr1::shared_ptr<rss_feed> feed, const char * lang)
 			break;
 		}
 	}
-}
-
-int rss_parser::correct_year(int year) {
-	if (year < 100)
-		year += 2000;
-	return year - 1900;
 }
 
 void rss_parser::retrieve_uri(const std::string& uri) {

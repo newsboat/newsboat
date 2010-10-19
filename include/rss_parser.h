@@ -22,9 +22,7 @@ namespace newsbeuter {
 			void replace_newline_characters(std::string& str);
 			std::string render_xhtml_title(const std::string& title, const std::string& link);
 			time_t parse_date(const std::string& datestr);
-			unsigned int monthname_to_number(const std::string& mon);
 			void set_rtl(std::tr1::shared_ptr<rss_feed> feed, const char * lang);
-			int correct_year(int year);
 
 			void retrieve_uri(const std::string& uri);
 			void download_http(const std::string& uri);

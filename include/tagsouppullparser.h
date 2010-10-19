@@ -35,7 +35,6 @@ private:
 	std::string decode_attribute(const std::string& s);
 	std::string decode_entities(const std::string& s);
 	std::string decode_entity(std::string s);
-	void remove_trailing_whitespace(std::string& s);
 	void parse_tag(const std::string& tagstr);
 	void handle_tag();
 	void handle_text();
