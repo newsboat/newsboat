@@ -79,4 +79,6 @@ Tuitest.wait_until_idle
 Tuitest.close
 verifier.finish
 
+Kernel.system("rm -f cache")
+
 # EOF
