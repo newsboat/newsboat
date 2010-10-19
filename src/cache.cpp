@@ -595,6 +595,7 @@ void cache::update_rssitem_unlocked(std::tr1::shared_ptr<rss_item> item, const s
 				throw dbexception(db);
 			}
 			if (content != item->description_raw()) {
+				LOG(LOG_DEBUG, "cache::update_rssitem_unlocked: '%s' is different from '%s'", content.c_str(), item->description_raw().c_str());
 				query = prepare_query("UPDATE rss_item SET unread = 1 WHERE guid = '%q';", item->guid().c_str());
 				rc = sqlite3_exec(db, query.c_str(), NULL, NULL, NULL);
 				if (rc != SQLITE_OK) {
