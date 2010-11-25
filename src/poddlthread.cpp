@@ -42,6 +42,12 @@ void poddlthread::run() {
 	curl_easy_setopt(easyhandle, CURLOPT_PROGRESSFUNCTION, progress_callback);
 	curl_easy_setopt(easyhandle, CURLOPT_PROGRESSDATA, this);
 
+	// set up max download speed
+	int max_dl_speed = cfg->get_configvalue_as_int("max-download-speed");
+	if (max_dl_speed > 0) {
+		curl_easy_setopt(easyhandle, CURLOPT_MAX_RECV_SPEED_LARGE, (curl_off_t)(max_dl_speed * 1024));
+	}
+
 	struct stat sb;
 
 	if (stat(dl->filename(), &sb) == -1) {
