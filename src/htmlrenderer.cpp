@@ -651,6 +651,8 @@ void htmlrenderer::TableRow::complete_cell()
 
 void htmlrenderer::Table::start_cell(size_t span)
 {
+	if (!inside)
+		start_row();
 	rows.back().start_cell(span);
 }
 
