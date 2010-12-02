@@ -150,6 +150,7 @@ void rss_parser::download_http(const std::string& uri) {
 				ch->fetch_lastmodified(uri, lm, etag);
 			}
 			f = p.parse_url(uri, lm, etag, api);
+			LOG(LOG_DEBUG, "rss_parser::download_http: lm = %d etag = %s", p.get_last_modified(), p.get_etag().c_str());
 			if (p.get_last_modified() != 0 || p.get_etag().length() > 0) {
 				LOG(LOG_DEBUG, "rss_parser::download_http: lastmodified old: %d new: %d", lm, p.get_last_modified());
 				LOG(LOG_DEBUG, "rss_parser::download_http: etag old: %s new %s", etag.c_str(), p.get_etag().c_str());
