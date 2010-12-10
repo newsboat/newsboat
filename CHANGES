@@ -11,6 +11,7 @@ Changes for newsbeuter:
 	Implemented XDG Base Directory support (patch by Elrond)
 	Google Reader: when in offline mode, record unread status changes and later replay when in online mode.
 	Fixed Google Reader authentication issue with certain passwords (fixes issue #238).
+	Added configuration option "cookie-cache" (fixes issue #234).
 
 2.3 (2010-06-24):
 	Fixed HTML rendering of bold and underline text when light background is configured.

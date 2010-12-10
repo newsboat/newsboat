@@ -11,6 +11,7 @@ cache-file|<path>|"~/.newsbeuter/cache.db"|This configuration option sets the ca
 cleanup-on-quit|[yes/no]|yes|If yes, then the cache gets locked and superfluous feeds and items are removed, such as feeds that can't be found in the urls configuration file anymore.|cleanup-on-quit no
 color|<element> <fgcolor> <bgcolor> [<attr> ...]|n/a|Set the foreground color, background color and optional attributes for a certain element|color background white black
 confirm-exit|[yes/no]|no|If set to yes, then newsbeuter will ask for confirmation whether the user really wants to quit newsbeuter.|confirm-exit yes
+cookie-cache|<file>|""|Set a cookie cache. If set, then cookies will be cached (i.e. read from and written to) in this file.|cookie-cache "~/.newsbeuter/cookies.txt"
 datetime-format|<date/time format>|%b %d|This format specifies the date/time format in the article list. For a detailed documentation on the allowed formats, consult the manpage of strftime(3).|datetime-format "%D, %R"
 define-filter|<name> <filter>|n/a|With this command, you can predefine filters, which can you later select from a list, and which are then applied after selection. This is especially useful for filters that you need often and you don't want to enter them every time you need them.|define-filter "all feeds with 'fun' tag" "tags # \\"fun\\""
 display-article-progress|[yes/no]|yes|If set to yes, then a read progress (in percent) is displayed in the article view. Otherwise, no read progress is displayed.|display-article-progress no

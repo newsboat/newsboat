@@ -98,6 +98,7 @@ configcontainer::configcontainer()
 	config_data["googlereader-min-items"] = configdata("20", configdata::INT);
 	config_data["ignore-mode"] = configdata("download", "download", "display", NULL); // enum
 	config_data["max-download-speed"] = configdata("0", configdata::INT);
+	config_data["cookie-cache"] = configdata("", configdata::STR);
 
 	/* title formats: */
 	config_data["feedlist-title-format"] = configdata(_("%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"), configdata::STR);

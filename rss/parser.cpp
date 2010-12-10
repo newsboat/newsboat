@@ -60,7 +60,7 @@ static size_t handle_headers(void * ptr, size_t size, size_t nmemb, void * data)
 	return size * nmemb;
 }
 
-feed parser::parse_url(const std::string& url, time_t lastmodified, const std::string& etag, newsbeuter::remote_api * api) {
+feed parser::parse_url(const std::string& url, time_t lastmodified, const std::string& etag, newsbeuter::remote_api * api, const std::string& cookie_cache) {
 	std::string buf;
 	CURLcode ret;
 
@@ -84,6 +84,10 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 	curl_easy_setopt(easyhandle, CURLOPT_MAXREDIRS, 10);
 	curl_easy_setopt(easyhandle, CURLOPT_FAILONERROR, 1);
 	curl_easy_setopt(easyhandle, CURLOPT_ENCODING, "gzip, deflate");
+	if (cookie_cache != "") {
+		curl_easy_setopt(easyhandle, CURLOPT_COOKIEFILE, cookie_cache.c_str());
+		curl_easy_setopt(easyhandle, CURLOPT_COOKIEJAR, cookie_cache.c_str());
+	}
 	if (to != 0)
 		curl_easy_setopt(easyhandle, CURLOPT_TIMEOUT, to);
 

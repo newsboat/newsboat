@@ -751,6 +751,7 @@ void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
 	std::string proxyauthmethod;
 	std::string proxytype;
 	std::string useragent; 
+	std::string cookie_cache;
 	unsigned int dl_timeout = 0;
 
 	if (cfg) {
@@ -762,6 +763,7 @@ void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
 		}
 		useragent = utils::get_useragent(cfg);
 		dl_timeout = cfg->get_configvalue_as_int("download-timeout");
+		cookie_cache = cfg->get_configvalue("cookie-cache");
 	}
 
 	curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 0);
@@ -785,6 +787,11 @@ void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
 	curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1);
 	curl_easy_setopt(handle, CURLOPT_MAXREDIRS, 10);
 	curl_easy_setopt(handle, CURLOPT_FAILONERROR, 1);
+
+	if (cookie_cache != "") {
+		curl_easy_setopt(handle, CURLOPT_COOKIEFILE, cookie_cache.c_str());
+		curl_easy_setopt(handle, CURLOPT_COOKIEJAR, cookie_cache.c_str());
+	}
 }
 
 std::string utils::get_content(xmlNode * node) {
