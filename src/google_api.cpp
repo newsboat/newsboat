@@ -50,8 +50,15 @@ std::string googlereader_api::retrieve_auth() {
 		// Find a way to do this in C++ by removing cin echoing.
 		pass = std::string( getpass("Password for Google Reader: ") );
 	}
+	char * username = curl_easy_escape(handle, cfg->get_configvalue("googlereader-login").c_str(), 0);
+	char * password = curl_easy_escape(handle, pass.c_str(), 0);
+
 	std::string postcontent = utils::strprintf("service=reader&Email=%s&Passwd=%s&source=%s/%s&continue=http://www.google.com/", 
-		cfg->get_configvalue("googlereader-login").c_str(), pass.c_str(), PROGRAM_NAME, PROGRAM_VERSION);
+		username, password, PROGRAM_NAME, PROGRAM_VERSION);
+
+	curl_free(username);
+	curl_free(password);
+
 	std::string result;
 
 	utils::set_common_curl_options(handle, cfg);
