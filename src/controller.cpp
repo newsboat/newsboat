@@ -1029,6 +1029,18 @@ void controller::rec_find_rss_outlines(xmlNode * node, std::string tag) {
 			if (url) {
 				LOG(LOG_DEBUG,"OPML import: found RSS outline with url = %s",url);
 
+				// Liferea uses a pipe to signal feeds read from the output of
+				// a program in its OPMLs. Convert them to our syntax.
+				// These URLs may have arguments, so, quote them when needed.
+				if (*url == '|') {
+					std::string nurl = utils::quote_if_necessary(utils::strprintf("exec:%s", url+1));
+					char * buf = (char*) xmlStrdup((const xmlChar*)nurl.c_str());
+					assert(buf);
+					LOG(LOG_DEBUG,"OPML import: liferea-style url %s converted to %s", url, buf);
+					xmlFree(url);
+					url = buf;
+				}
+
 				bool found = false;
 
 				LOG(LOG_DEBUG, "OPML import: size = %u", urlcfg->get_urls().size());
