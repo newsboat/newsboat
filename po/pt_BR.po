@@ -2,13 +2,14 @@
 # translation of new.po to
 # translation of pt_BR.po to
 # Adiel Mittmann <adiel@inf.ufsc.br>, 2007, 2008, 2009, 2010.
+#  <>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-09-14 17:33+0200\n"
-"PO-Revision-Date: 2010-03-08 10:37-0300\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2011-01-01 06:56-0200\n"
+"Last-Translator:  <>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -17,8 +18,8 @@ msgstr ""
 "X-Poedit-Language: Portuguese\n"
 "X-Poedit-Country: BRAZIL\n"
 "X-Generator: Lokalize 0.3\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: src/colormanager.cpp:44 src/colormanager.cpp:46 src/regexmanager.cpp:55
 #: src/regexmanager.cpp:64 src/regexmanager.cpp:113 src/regexmanager.cpp:121
@@ -326,15 +327,15 @@ msgid "execute list of commands"
 msgstr "executar lista de comandos"
 
 #: src/controller.cpp:848
-#, fuzzy
 msgid ""
 "activate offline mode (only applies to Google Reader synchronization mode)"
 msgstr ""
-"ativar modo offline (aplica-se somente ao modo de sincronização do bloglines)"
+"ativar modo offline (aplica-se somente ao modo de sincronização do Google "
+"Reader)"
 
 #: src/controller.cpp:849
 msgid "quiet startup"
-msgstr ""
+msgstr "início silencioso"
 
 #: src/controller.cpp:850
 msgid "get version information"
@@ -574,11 +575,11 @@ msgstr "Nenhuma fonte RSS com artigos não lidos."
 
 #: src/feedlist_formaction.cpp:224 src/itemlist_formaction.cpp:286
 msgid "Already on last feed."
-msgstr ""
+msgstr "Já na última fonte"
 
 #: src/feedlist_formaction.cpp:232 src/itemlist_formaction.cpp:291
 msgid "Already on first feed."
-msgstr ""
+msgstr "Já na primeira fonte"
 
 #: src/feedlist_formaction.cpp:246
 msgid "Marking all feeds read..."
@@ -861,12 +862,12 @@ msgstr "Nenhum artigo não lido."
 #: src/itemlist_formaction.cpp:255 src/itemview_formaction.cpp:300
 #: src/view.cpp:746
 msgid "Already on last item."
-msgstr ""
+msgstr "Já no último item"
 
 #: src/itemlist_formaction.cpp:263 src/itemview_formaction.cpp:309
 #: src/view.cpp:715
 msgid "Already on first item."
-msgstr ""
+msgstr "Já no primeiro item"
 
 #: src/itemlist_formaction.cpp:276 src/itemlist_formaction.cpp:281
 msgid "No unread feeds."
@@ -1050,14 +1051,12 @@ msgid "Save article"
 msgstr "Salvar artigo"
 
 #: src/keymap.cpp:31
-#, fuzzy
 msgid "Go to next article"
-msgstr "Ir para o próximo artigo não lido"
+msgstr "Ir para o próximo artigo"
 
 #: src/keymap.cpp:32
-#, fuzzy
 msgid "Go to previous article"
-msgstr "Ir para o artigo não lido anterior"
+msgstr "Ir para o artigo anterior"
 
 #: src/keymap.cpp:33
 msgid "Go to next unread article"
@@ -1072,9 +1071,8 @@ msgid "Go to a random unread article"
 msgstr "Pular para um artigo não lido aleatório"
 
 #: src/keymap.cpp:36
-#, fuzzy
 msgid "Open article in browser and mark read"
-msgstr "Abrir artigo no navegador"
+msgstr "Abrir artigo no navegador e marca-o como lido"
 
 #: src/keymap.cpp:37
 msgid "Open article in browser"
@@ -1181,14 +1179,12 @@ msgid "Edit flags"
 msgstr "Editar sinalizações"
 
 #: src/keymap.cpp:65
-#, fuzzy
 msgid "Go to next feed"
-msgstr "Ir para a próxima fonte não lida"
+msgstr "Ir para a próxima fonte"
 
 #: src/keymap.cpp:66
-#, fuzzy
 msgid "Go to previous feed"
-msgstr "Ir para a fonte não lida anterior"
+msgstr "Ir para a fonte anterior"
 
 #: src/keymap.cpp:67
 msgid "Go to next unread feed"
