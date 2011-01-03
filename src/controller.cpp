@@ -1029,6 +1029,28 @@ void controller::rec_find_rss_outlines(xmlNode * node, std::string tag) {
 			if (url) {
 				LOG(LOG_DEBUG,"OPML import: found RSS outline with url = %s",url);
 
+				std::string nurl = std::string(url);
+
+				// Liferea uses a pipe to signal feeds read from the output of
+				// a program in its OPMLs. Convert them to our syntax.
+				if (*url == '|') {
+					nurl = utils::strprintf("exec:%s", url+1);
+					LOG(LOG_DEBUG,"OPML import: liferea-style url %s converted to %s", url, nurl.c_str());
+				}
+
+				// Handle OPML filters.
+				char * filtercmd = (char *)xmlGetProp(node, (const xmlChar *)"filtercmd");
+				if (filtercmd) {
+					LOG(LOG_DEBUG,"OPML import: adding filter command %s to url %s", filtercmd, nurl.c_str());
+					nurl.insert(0, utils::strprintf("filter:%s:", filtercmd));
+					xmlFree(filtercmd);
+				}
+
+				xmlFree(url);
+				// Filters and scripts may have arguments, so, quote them when needed.
+				url = (char*) xmlStrdup((const xmlChar*)utils::quote_if_necessary(nurl).c_str());
+				assert(url);
+
 				bool found = false;
 
 				LOG(LOG_DEBUG, "OPML import: size = %u", urlcfg->get_urls().size());

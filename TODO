@@ -8,7 +8,6 @@ TODO:
 - implement RFC 5005 (http://www.ietf.org/rfc/rfc5005.txt)
 - implement a single key with which it is possible to go through all unread articles (like space in slrn)
 - make it configurable whether "n" jumps to the next feed or stays in the same.
-- implement filter extension support also for OPML
 
 
 DONE:
@@ -166,3 +165,4 @@ DONE:
 - reduce memory usage by loading feeds on demand when being opened
 - when in offline mode of Google Reader support, record which articles have been marked as read, and sync that back to Google Reader.
 - document XDG base directory support.
+- implement filter extension support also for OPML
