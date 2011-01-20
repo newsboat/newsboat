@@ -114,11 +114,11 @@ clean-librsspp:
 clean-libfilter:
 	$(RM) $(FILTERLIB_OUTPUT) $(FILTERLIB_OBJS)
 
-clean-doc:
-	$(RM) -r doc/xhtml 
-	$(RM) doc/*.xml doc/*.1 doc/newsbeuter-cfgcmds.txt doc/podbeuter-cfgcmds.txt doc/newsbeuter-keycmds.txt
+#clean-doc:
+#	$(RM) -r doc/xhtml 
+#	$(RM) doc/*.xml doc/*.1 doc/newsbeuter-cfgcmds.txt doc/podbeuter-cfgcmds.txt doc/newsbeuter-keycmds.txt
 
-clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-doc clean-librsspp
+clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-librsspp
 	$(RM) $(STFLHDRS) xlicense.h
 
 distclean: clean clean-mo test-clean
@@ -153,7 +153,7 @@ uninstall:
 	$(RM) -r $(DESTDIR)$(docdir)
 
 .PHONY: doc clean distclean all test test-rss extract install uninstall regenerate-parser clean-newsbeuter \
-	clean-podbeuter clean-libbeuter clean-librsspp clean-libfilter clean-doc install-mo msgmerge clean-mo \
+	clean-podbeuter clean-libbeuter clean-librsspp clean-libfilter install-mo msgmerge clean-mo \
 	test-clean config
 
 # the following targets are i18n/l10n-related:

@@ -1,0 +1,920 @@
+.\"     Title: newsbeuter
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
+.\"      Date: 01/20/2011
+.\"    Manual: 
+.\"    Source: 
+.\"
+.TH "NEWSBEUTER" "1" "01/20/2011" "" ""
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+newsbeuter \- an RSS feed reader for text terminals
+.SH "SYNOPSIS"
+\fInewsbeuter\fR [\-r] [\-e] [\-i opmlfile] [\-u urlfile] [\-c cachefile] [\-C configfile] [\-X] [\-o] [\-x <command> \&...] [\-h]
+.sp
+.SH "DESCRIPTION"
+\fInewsbeuter\fR is an RSS feed reader for text terminals\&. RSS is a number of widely\-used XML formats to transmit, publish and syndicate articles, for example news or blog articles\&. Newsbeuter is designed to be used on text terminals on Unix or Unix\-like systems such as Linux, BSD or Mac OS X\&.
+.sp
+.SH "OPTIONS"
+.PP
+\-h
+.RS 4
+Display help
+.RE
+.PP
+\-r
+.RS 4
+Refresh feeds on start
+.RE
+.PP
+\-e
+.RS 4
+Export feeds as OPML to stdout
+.RE
+.PP
+\-X
+.RS 4
+Clean up cache thoroughly (i\&.e\&. reduce it in size if possible)
+.RE
+.PP
+\-v, \-V
+.RS 4
+Get version information about newsbeuter and the libraries it uses
+.RE
+.PP
+\-i opmlfile
+.RS 4
+Import an OPML file
+.RE
+.PP
+\-u urlfile
+.RS 4
+Use an alternative URL file
+.RE
+.PP
+\-c cachefile
+.RS 4
+Use an alternative cache file
+.RE
+.PP
+\-C configfile
+.RS 4
+Use an alternative configuration file
+.RE
+.PP
+\-x command \&...
+.RS 4
+Execute one or more commands to run newsbeuter unattended\&. Currently available commands are "reload" and "print\-unread"\&.
+.RE
+.PP
+\-o
+.RS 4
+Active offline reading mode\&. When Google Reader synchronization mode is configured, then the list of feeds will not be loaded from Google Reader, but instead from the local cache\&. This makes it possible to read locally cached articles even without internet connection to connect to Google Reader\&.
+.RE
+.PP
+\-l loglevel
+.RS 4
+Generate a loglevel with a certain loglevel\&. Valid loglevels are 1 to 6\&. An actual logfile will only be written when you provide a logfile name\&.
+.RE
+.PP
+\-d logfile
+.RS 4
+Use this logfile as output when logging debug messages\&. Please note that this only works when providing a loglevel\&.
+.RE
+.PP
+\-E file
+.RS 4
+Export a list of read articles (resp\&. their GUIDs)\&. This can be used to transfer information about read articles between different computers\&.
+.RE
+.PP
+\-I file
+.RS 4
+Import a list of read articles and mark them as read if they are held in the cache\&. This is to be used in conjunction with the \-E commandline parameter\&.
+.RE
+.SH "FIRST STEPS"
+After you\'ve installed newsbeuter, you can run it for the first time by typing "newsbeuter" on your command prompt\&. This will bring you the following message:
+.sp
+.sp
+.RS 4
+.nf
+Error: no URLs configured\&. Please fill the file /home/ak/\&.newsbeuter/urls with RSS feed URLs or import an OPML file\&.
+.fi
+.RE
+.sp
+.RS 4
+.nf
+newsbeuter 2\&.4
+usage: \&./newsbeuter [\-i <file>|\-e] [\-u <urlfile>] [\-c <cachefile>] [\-x <command> \&.\&.\&.] [\-h]
+                \-e              export OPML feed to stdout
+                \-r              refresh feeds on start
+                \-i <file>       import OPML file
+                \-u <urlfile>    read RSS feed URLs from <urlfile>
+                \-c <cachefile>  use <cachefile> as cache file
+                \-C <configfile> read configuration from <configfile>
+                \-X              clean up cache thoroughly
+                \-x <command>\&.\&.\&. execute list of commands
+                \-o              activate offline mode (only applies to Google Reader synchronization mode)
+                \-q              quiet startup
+                \-v              get version information
+                \-l <loglevel>   write a log with a certain loglevel (valid values: 1 to 6)
+                \-d <logfile>    use <logfile> as output log file
+                \-E <file>       export list of read articles to <file>
+                \-I <file>       import list of read articles from <file>
+                \-h              this help
+.fi
+.RE
+This means that newsbeuter can\'t start without any configured feeds\&. To add feeds to newsbeuter, you can either add URLs to the configuration file $HOME/\&.newsbeuter/urls or you can import an OPML file by running "newsbeuter \-i blogroll\&.opml"\&. To manually add URLs, open the file with your favorite text editor and add the URLs, one per line:
+.sp
+.sp
+.RS 4
+.nf
+http://rss\&.cnn\&.com/rss/cnn_topstories\&.rss
+http://newsrss\&.bbc\&.co\&.uk/rss/newsonline_world_edition/front_page/rss\&.xml
+.fi
+.RE
+If you need to add URLs that have restricted access via username/password, simply provide the username/password in the following way:
+.sp
+.sp
+.RS 4
+.nf
+http://username:password@hostname\&.domain\&.tld/feed\&.rss
+.fi
+.RE
+In order to protect username and password, make sure that $HOME/\&.newsbeuter/urls has the appropriate permissions\&. Newsbeuter also makes sure that usernames and passwords within URLs aren\'t displayed in its user interface\&. In case there is a \fI@\fR in the username, you need to write it as \fI%40\fR instead so that it can be distinguished from the \fI@\fR that separates the username/password part from the hostname part\&.
+.sp
+You can also configure local files as feeds, by prefixing the local path with "file://" and adding it to the $HOME/\&.newsbeuter/urls file:
+.sp
+.sp
+.RS 4
+.nf
+file:///var/log/rss_eventlog\&.xml
+.fi
+.RE
+Now you can run newsbeuter again, and it will present you with a controllable list of the URLs that you configured previously\&. You can now start downloading the feeds, either by pressing "R" to download all feeds, or by pressing "r" to download the currently selected feed\&. You can then select a feed you want to read, and by pressing "Enter", you can go to the article list for this feed\&. This works even while the downloading is still in progress\&. You can now see the list of available articles by their title\&. A "N" on the left indicates that an article wasn\'t read yet\&. Pressing Enter brings you to the content of the article\&. You can scroll through this text, and also run a browser (default: lynx) to view the complete article if the content is empty or just an abstract or a short description\&. Pressing "q" brings you back to the article list, and pressing "q" again brings you back to the feed list\&. Pressing "q" a third time then closes newsbeuter\&.
+.sp
+Newsbeuter caches the article that it downloads\&. This means that when you start newsbeuter again and reload a feed, the old articles can still be read even if they aren\'t in the current RSS feeds anymore\&. Optionally you can configure how many articles shall be preserved by feed so that the article backlog doesn\'t grow endlessly (see "max\-items" below)\&.
+.sp
+Newsbeuter also uses a number of measures to preserve the users\' and feed providers\' bandwidth, by trying to avoid unnecessary feed downloads through the use of conditional HTTP downloading\&. It saves every feed\'s "Last\-Modified" and "ETag" response header values (if present) and advises the feed\'s HTTP server to only send data if the feed has been updated by modification date/time or "ETag" header\&. This doesn\'t only make feed downloads for RSS feeds with no new updates faster, it also reduces the amount of transferred data per request\&. Conditional HTTP downloading can be optionally disabled per feed by using the "always\-download" configuration command\&.
+.sp
+Several aspects of newsbeuter\'s behaviour can be configured via a configuration file, by default $HOME/\&.newsbeuter/config\&. This configuration file contains lines in the form "<config\-command> <arg1> \&..."\&. The configuration file can also contain comments, which start with the \fI#\fR character and go as far as the end of line\&. If you need to enter a configuration argument that contains spaces, use quotes (") around the whole argument\&. It\'s even possible to integrate the output of external commands into the configuration\&. The text between two backticks ("`") is evaluated as shell command, and its output is put on its place instead\&. This works like backtick evaluation in Bourne\-compatible shells and allows users to use external information from the system within the configuration\&.
+.sp
+Searching for articles is possible in newsbeuter, too\&. Just press the "/" key, enter your search phrase, and the title and content of all articles are searched for it\&. When you do a search from the list of feeds, all articles of all feeds will be searched\&. When you do a search from the article list of a feed, only the articles of the currently viewed feed are searched\&. When opening an article from a search result dialog, the search phrase is highlighted\&.
+.sp
+The history of all your searches is saved to the filesystem, to ~/\&.newsbeuter/history\&.search\&. By default, the last 100 search phrases are stored, but this limited can be influenced through the "history\-limit" configuration variable\&. To disable search history saving, simply set the history\-limit to 0\&.
+.sp
+.SH "CONFIGURATION COMMANDS"
+.PP
+\fIalways\-display\-description\fR (parameters: [true/false]; default value: \fIfalse\fR)
+.RS 4
+If true, then the description will always displayed even if e\&.g\&. a content:encoded tag has been found\&. (example: always\-display\-description true)
+.RE
+.PP
+\fIalways\-download\fR (parameters: <rssurl> [<rssurl>]; default value: \fIn/a\fR)
+.RS 4
+The parameters of this configuration command are one or more RSS URLs\&. These URLs will always get downloaded, regardless of their Last\-Modified timestamp and ETag header\&. (example: always\-download "http://www\&.n\-tv\&.de/23\&.rss")
+.RE
+.PP
+\fIarticle\-sort\-order\fR (parameters: <sortfield>[\-<direction>]; default value: \fIdate\fR)
+.RS 4
+The sortfield specifies which article property shall be used for sorting (currently available: date, title, flags, author, link, guid)\&. The optional direction specifies the sort direction ("asc" specifies ascending sorting, "desc" specifies descending sorting\&. for date, "desc" is default, for all others, "asc" is default)\&. (example: article\-sort\-order author\-desc)
+.RE
+.PP
+\fIarticlelist\-format\fR (parameters: <format>; default value: \fI"%4i %f %D %6L %?T?;%\-17T; ?%t"\fR)
+.RS 4
+This variable defines the format of entries in the article list\&. See the respective section in the documentation for more information on format strings (note that the semicolon should actually be a vertical bar; this is a limitation in AsciiDoc)\&. (example: articlelist\-format "%4i %f %D %?T?;%\-17T; ?%t")
+.RE
+.PP
+\fIauto\-reload\fR (parameters: [yes/no]; default value: \fIno\fR)
+.RS 4
+If enabled, all feeds will be automatically reloaded at start up and then continuously after a certain time has passed (see reload\-time)\&. (example: auto\-reload yes)
+.RE
+.PP
+\fIbind\-key\fR (parameters: <key> <operation> [<dialog>]; default value: \fIn/a\fR)
+.RS 4
+Bind key <key> to <operation>\&. This means that whenever <key> is pressed, then <operation> is executed (if applicable in the current dialog)\&. A list of available operations can be found below\&. Optionally, you can specify a dialog\&. If you specify one, the key binding will only be added to the specified dialog\&. Available dialogs are "all" (default if none is specified), "feedlist", "filebrowser", "help", "articlelist", "article", "tagselection", "filterselection", "urlview" and "podbeuter"\&. (example: bind\-key ^R reload\-all)
+.RE
+.PP
+\fIbookmark\-cmd\fR (parameters: <bookmark\-command>; default value: \fI""\fR)
+.RS 4
+If set, then <bookmark\-command> will be used as bookmarking plugin\&. See the documentation on bookmarking for further information\&. (example: bookmark\-cmd "~/bin/delicious\-bookmark\&.sh")
+.RE
+.PP
+\fIbookmark\-interactive\fR (parameters: [yes/no]; default value: \fIno\fR)
+.RS 4
+If set to yes, then the configured bookmark command is an interactive program\&. (example: bookmark\-interactive yes)
+.RE
+.PP
+\fIbrowser\fR (parameters: <browser\-command>; default value: \fIlynx\fR)
+.RS 4
+Set the browser command to use when opening an article in the browser\&. If <browser\-command> contains %u, it will be used as complete commandline and %u will be replaced with the URL that shall be opened\&. (example: browser "w3m %u")
+.RE
+.PP
+\fIcache\-file\fR (parameters: <path>; default value: \fI"~/\&.newsbeuter/cache\&.db"\fR)
+.RS 4
+This configuration option sets the cache file\&. This is especially useful if the filesystem of your home directory doesn\'t support proper locking (e\&.g\&. NFS)\&. (example: cache\-file "/tmp/testcache\&.db")
+.RE
+.PP
+\fIcleanup\-on\-quit\fR (parameters: [yes/no]; default value: \fIyes\fR)
+.RS 4
+If yes, then the cache gets locked and superfluous feeds and items are removed, such as feeds that can\'t be found in the urls configuration file anymore\&. (example: cleanup\-on\-quit no)
+.RE
+.PP
+\fIcolor\fR (parameters: <element> <fgcolor> <bgcolor> [<attr> \&...]; default value: \fIn/a\fR)
+.RS 4
+Set the foreground color, background color and optional attributes for a certain element (example: color background white black)
+.RE
+.PP
+\fIconfirm\-exit\fR (parameters: [yes/no]; default value: \fIno\fR)
+.RS 4
+If set to yes, then newsbeuter will ask for confirmation whether the user really wants to quit newsbeuter\&. (example: confirm\-exit yes)
+.RE
+.PP
+\fIcookie\-cache\fR (parameters: <file>; default value: \fI""\fR)
+.RS 4
+Set a cookie cache\&. If set, then cookies will be cached (i\&.e\&. read from and written to) in this file\&. (example: cookie\-cache "~/\&.newsbeuter/cookies\&.txt")
+.RE
+.PP
+\fIdatetime\-format\fR (parameters: <date/time format>; default value: \fI%b %d\fR)
+.RS 4
+This format specifies the date/time format in the article list\&. For a detailed documentation on the allowed formats, consult the manpage of strftime(3)\&. (example: datetime\-format "%D, %R")
+.RE
+.PP
+\fIdefine\-filter\fR (parameters: <name> <filter>; default value: \fIn/a\fR)
+.RS 4
+With this command, you can predefine filters, which can you later select from a list, and which are then applied after selection\&. This is especially useful for filters that you need often and you don\'t want to enter them every time you need them\&. (example: define\-filter "all feeds with
+\fIfun\fR
+tag" "tags # \e\e"fun\e\e"")
+.RE
+.PP
+\fIdisplay\-article\-progress\fR (parameters: [yes/no]; default value: \fIyes\fR)
+.RS 4
+If set to yes, then a read progress (in percent) is displayed in the article view\&. Otherwise, no read progress is displayed\&. (example: display\-article\-progress no)
+.RE
+.PP
+\fIdownload\-retries\fR (parameters: <number retries>; default value: \fI1\fR)
+.RS 4
+How many times newsbeuter shall try to successfully download a feed before giving up\&. This is an option to improve the success of downloads on slow and shaky connections such as via a TOR proxy\&. (example: download\-retries 4)
+.RE
+.PP
+\fIdownload\-timeout\fR (parameters: <seconds>; default value: \fI30\fR)
+.RS 4
+The number of seconds newsbeuter shall wait when downloading a feed before giving up\&. This is an option to improve the success of downloads on slow and shaky connections such as via a TOR proxy\&. (example: download\-timeout 60)
+.RE
+.PP
+\fIerror\-log\fR (parameters: <path>; default value: \fI""\fR)
+.RS 4
+If set, then user errors (e\&.g\&. errors regarding defunct RSS feeds) will be logged to this file\&. (example: error\-log "~/\&.newsbeuter/error\&.log")
+.RE
+.PP
+\fIfeed\-sort\-order\fR (parameters: <sortorder>; default value: \fInone\fR)
+.RS 4
+If set to "firsttag", the feeds in the feed list will be sorted by their first tag in the urls file\&. (example: feed\-sort\-order firsttag)
+.RE
+.PP
+\fIfeedlist\-format\fR (parameters: <format>; default value: \fI"%4i %n %11u %t"\fR)
+.RS 4
+This variable defines the format of entries in the feed list\&. See the respective section in the documentation for more information on format strings\&. (example: feedlist\-format " %n %4i \- %11u \-%> %t")
+.RE
+.PP
+\fIgooglereader\-flag\-share\fR (parameters: <flag>; default value: \fI""\fR)
+.RS 4
+If this is set and Google Reader support is used, then all articles that are flagged with the specified flag are being "shared" in Google Reader so that people that follow you can see it\&. (example: googlereader\-flag\-share "a")
+.RE
+.PP
+\fIgooglereader\-flag\-star\fR (parameters: <flag>; default value: \fI""\fR)
+.RS 4
+If this is set and Google Reader support is used, then all articles that are flagged with the specified flag are being "starred" in Google Reader and appear in the list of "Starred items"\&. (example: googlereader\-flag\-star "b")
+.RE
+.PP
+\fIgooglereader\-login\fR (parameters: <login>; default value: \fI""\fR)
+.RS 4
+This variable sets your Google Reader login for the Google Reader support\&. (example: googlereader\-login "your\-login")
+.RE
+.PP
+\fIgooglereader\-min\-items\fR (parameters: <number>; default value: \fI20\fR)
+.RS 4
+This variable sets the number of articles that are loaded from Google Reader per feed\&. (example: googlereader\-min\-items 100)
+.RE
+.PP
+\fIgooglereader\-password\fR (parameters: <password>; default value: \fI""\fR)
+.RS 4
+This variable sets your Google Reader password for the Google Reader support\&. (example: googlereader\-password "your\-password")
+.RE
+.PP
+\fIgooglereader\-show\-special\-feeds\fR (parameters: [yes/no]; default value: \fIyes\fR)
+.RS 4
+If this is set, then "special feeds" like "People you follow" (articles shared by people you follow), "Starred items" (your starred articles), "Shared items" (your shared articles) and "Popular items" (articles considered to be popular by Google\'s magic algorithms) appear in your subscription list\&. (example: googlereader\-show\-special\-feeds "no")
+.RE
+.PP
+\fIgoto\-first\-unread\fR (parameters: [yes/no]; default value: \fIyes\fR)
+.RS 4
+If set to yes (the default), then the first unread article will be selected whenever a feed is entered\&. (example: goto\-first\-unread no)
+.RE
+.PP
+\fIgoto\-next\-feed\fR (parameters: [yes/no]; default value: \fIyes\fR)
+.RS 4
+If set to yes, then the next\-unread and prev\-unread keys will search in other feeds for unread articles if all articles in the current feed are read\&. If set to no, then the next\-unread and prev\-unread keys will stop in the current feed\&. (example: goto\-next\-feed no)
+.RE
+.PP
+\fIhighlight\fR (parameters: <target> <regex> <fgcolor> [<bgcolor> [<attribute> \&...]]; default value: \fIn/a\fR)
+.RS 4
+With this command, you can highlight text parts in the feed list, the article list and the article view\&. For a detailed documentation, see the chapter on highlighting\&. (example: highlight all "newsbeuter" red)
+.RE
+.PP
+\fIhighlight\-article\fR (parameters: <filterexpr> <fgcolor> <bgcolor> [<attribute> \&...]; default value: \fIn/a\fR)
+.RS 4
+With this command, you can highlight articles in the article list if they match a filter expression\&. For a detailed documentation, see the chapter on highlighting\&. (example: highlight\-article "author =~ \e\e"Andreas Krennmair\e\e"" white red bold)
+.RE
+.PP
+\fIhistory\-limit\fR (parameters: <number>; default value: \fI100\fR)
+.RS 4
+Defines the maximum number of entries of commandline resp\&. search history to be saved\&. To disable history saving, set history\-limit to 0\&. (example: history\-limit 0)
+.RE
+.PP
+\fIhtml\-renderer\fR (parameters: <path>; default value: \fIinternal\fR)
+.RS 4
+If set to "internal", then the internal HTML renderer will be used\&. Otherwise, the specified command will be executed, the HTML to be rendered will be written to the command\'s stdin, and the program\'s output will be displayed\&. This makes it possible to use other, external programs, such as w3m, links or lynx, to render HTML\&. (example: html\-renderer "w3m \-dump \-T text/html")
+.RE
+.PP
+\fIignore\-article\fR (parameters: <feed> <filterexpr>; default value: \fIn/a\fR)
+.RS 4
+If a downloaded article from <feed> matches <filterexpr>, then it is ignored and not presented to the user\&. This command is further explained in the "kill file" section below\&. (example: ignore\-article "*" "title =~ \e\e"Windows\e\e"")
+.RE
+.PP
+\fIignore\-mode\fR (parameters: [download/display]; default value: \fIdownload\fR)
+.RS 4
+This configuration option defines in what way an article is ignored (see ignore\-article)\&. If set to "download", then it is ignored in the download/parsing phase (which is the default) and thus never written to the cache, if it set to "display", it is ignored when displaying articles but is kept in the cache\&. (example: ignore\-mode "display")
+.RE
+.PP
+\fIinclude\fR (parameters: <path>; default value: \fIn/a\fR)
+.RS 4
+With this command, you can include other files to be interpreted as configuration files\&. This is especially useful to separate your configuration into several files, e\&.g\&. key configuration, color configuration, \&... (example: include "~/\&.newsbeuter/colors")
+.RE
+.PP
+\fIkeep\-articles\-days\fR (parameters: <days>; default value: \fI0\fR)
+.RS 4
+If set the a number greater than 0, only articles that are were published within the last <n> days are kept, and older articles are deleted\&. If set to 0 (default value), this option is not active\&. (example: keep\-articles\-days 30)
+.RE
+.PP
+\fImacro\fR (parameters: <macro key> <command list>; default value: \fIn/a\fR)
+.RS 4
+With this command, you can define a macro key and specify a list of commands that shall be executed when the macro prefix and the macro key are pressed\&. (example: macro k open ; reload ; quit)
+.RE
+.PP
+\fImark\-as\-read\-on\-hover\fR (parameters: [yes/no]; default value: \fIno\fR)
+.RS 4
+If set to yes, then all articles that get selected in the article list are marked as read\&. (example: mark\-as\-read\-on\-hover yes)
+.RE
+.PP
+\fImax\-download\-speed\fR (parameters: <number>; default value: \fI0\fR)
+.RS 4
+If set to a number great than 0, the download speed per download is set to that limit (in kB)\&. (example: max\-download\-speed 50)
+.RE
+.PP
+\fImax\-items\fR (parameters: <number>; default value: \fI0\fR)
+.RS 4
+Set the number of articles to maximally keep per feed\&. If the number is set to 0, then all articles are kept\&. (example: max\-items 100)
+.RE
+.PP
+\fInotify\-format\fR (parameters: <string>; default value: \fI"newsbeuter: finished reload, %f unread feeds (%n unread articles total)"\fR)
+.RS 4
+Format string that is used for formatting notifications\&. See the chapter on format strings for more information\&. (example: notify\-format "%d new articles (%n unread articles, %f unread feeds)")
+.RE
+.PP
+\fInotify\-program\fR (parameters: <path>; default value: \fI""\fR)
+.RS 4
+If set, then the configured program will be executed if new articles arrived (through a reload) or if notify\-always is true\&. The first parameter of the called program contains the notification message\&. (example: notify\-program "~/bin/my\-notifier")
+.RE
+.PP
+\fInotify\-always\fR (parameters: [yes/no]; default value: \fIno\fR)
+.RS 4
+If no, notifications will only be made when there are new feeds or articles\&. If yes, notifications will be made regardless\&. (example: notify\-always yes)
+.RE
+.PP
+\fInotify\-screen\fR (parameters: [yes/no]; default value: \fIno\fR)
+.RS 4
+If yes, then a "privacy message" will be sent to the terminal, containing a notification message about new articles\&. This is especially useful if you use terminal emulations such as GNU screen which implement privacy messages\&. (example: notify\-screen yes)
+.RE
+.PP
+\fInotify\-xterm\fR (parameters: [yes/no]; default value: \fIno\fR)
+.RS 4
+If yes, then the xterm window title will be set to a notification message about new articles\&. (example: notify\-xterm yes)
+.RE
+.PP
+\fInotify\-beep\fR (parameters: [yes/no]; default value: \fIno\fR)
+.RS 4
+If yes, then the speaker beep on new articles\&. (example: notify\-beep yes)
+.RE
+.PP
+\fIopml\-url\fR (parameters: <url> \&...; default value: \fI""\fR)
+.RS 4
+If the OPML online subscription mode is enabled, then the list of feeds will be taken from the OPML file found on this location\&. Optionally, you can specify more than one URL\&. All the listed OPML URLs will then be taken into account when loading the feed list\&. (example: opml\-url "http://host\&.domain\&.tld/blogroll\&.opml" "http://example\&.com/anotheropmlfile\&.opml")
+.RE
+.PP
+\fIpager\fR (parameters: [<path>/internal]; default value: \fIinternal\fR)
+.RS 4
+If set to "internal", then the internal pager will be used\&. Otherwise, the article to be displayed will be rendered to be a temporary file and then displayed with the configured pager\&. If the pager path is set to an empty string, the content of the "PAGER" environment variable will be used\&. If the pager path contains a placeholder "%f", it will be replaced with the temporary filename\&. (example: less %f)
+.RE
+.PP
+\fIpodcast\-auto\-enqueue\fR (parameters: [yes/no]; default value: \fIno\fR)
+.RS 4
+If yes, then all podcast URLs that are found in articles are added to the podcast download queue\&. See the respective section in the documentation for more information on podcast support in newsbeuter\&. (example: podcast\-auto\-enqueue yes)
+.RE
+.PP
+\fIprepopulate\-query\-feeds\fR (parameters: [yes/no]; default value: \fIno\fR)
+.RS 4
+If yes, then all query feeds are prepopulated with articles on startup\&. (example: prepopulate\-query\-feeds yes)
+.RE
+.PP
+\fIproxy\fR (parameters: <server:port>; default value: \fIn/a\fR)
+.RS 4
+Set the proxy to use for downloading RSS feeds\&. (example: proxy localhost:3128)
+.RE
+.PP
+\fIproxy\-auth\fR (parameters: <auth>; default value: \fIn/a\fR)
+.RS 4
+Set the proxy authentication string\&. (example: proxy\-auth user:password)
+.RE
+.PP
+\fIproxy\-auth\-method\fR (parameters: <method>; default value: \fIany\fR)
+.RS 4
+Set proxy authentication method\&. Allowed values: any, basic, digest, digest_ie (only available with libcurl 7\&.19\&.3 and newer), gssnegotiate, ntlm, anysafe\&. (example: proxy\-auth\-method ntlm)
+.RE
+.PP
+\fIproxy\-type\fR (parameters: <type>; default value: \fIhttp\fR)
+.RS 4
+Set proxy type\&. Allowed values: http, socks4, socks4a, socks5\&. (example: proxy\-type socks5)
+.RE
+.PP
+\fIrefresh\-on\-startup\fR (parameters: [yes/no]; default value: \fIno\fR)
+.RS 4
+If yes, then all feeds will be reloaded when newsbeuter starts up\&. This is equivalent to the \-r commandline option\&. (example: refresh\-on\-startup yes)
+.RE
+.PP
+\fIreload\-only\-visible\-feeds\fR (parameters: [yes/no]; default value: \fIno\fR)
+.RS 4
+If yes, then manually reloading all feeds will only reload the currently visible feeds, e\&.g\&. if a filter or a tag is set\&. (example: reload\-only\-visible\-feeds yes)
+.RE
+.PP
+\fIreload\-time\fR (parameters: <number>; default value: \fI60\fR)
+.RS 4
+The number of minutes between automatic reloads\&. (example: reload\-time 120)
+.RE
+.PP
+\fIreload\-threads\fR (parameters: <number>; default value: \fI1\fR)
+.RS 4
+The number of parallel reload threads that shall be started when all feeds are reloaded\&. (example: reload\-threads 3)
+.RE
+.PP
+\fIreset\-unread\-on\-update\fR (parameters: <url> \&...; default value: \fIn/a\fR)
+.RS 4
+With this configuration command, you can provide a list of RSS feed URLs for whose articles the unread flag will be reset if an article has been updated, i\&.e\&. its content has been changed\&. This is especially useful for RSS feeds where single articles are updated after publication, and you want to be notified of the updates\&. (example: reset\-unread\-on\-update "http://blog\&.fefe\&.de/rss\&.xml?html")
+.RE
+.PP
+\fIsave\-path\fR (parameters: <path>; default value: \fI~/\fR)
+.RS 4
+The default path where articles shall be saved to\&. If an invalid path is specified, the current directory is used\&. (example: save\-path "~/Saved Articles")
+.RE
+.PP
+\fIsearch\-highlight\-colors\fR (parameters: <fgcolor> <bgcolor> [<attribute> \&...]; default value: \fIblack yellow bold\fR)
+.RS 4
+This configuration command specifies the highlighting colors when searching for text from the article view\&. (example: search\-highlight\-colors white black bold)
+.RE
+.PP
+\fIshow\-keymap\-hint\fR (parameters: [yes/no]; default value: \fIyes\fR)
+.RS 4
+If no, then the keymap hints on the bottom of screen will not be displayed\&. (example: show\-keymap\-hint no)
+.RE
+.PP
+\fIshow\-read\-feeds\fR (parameters: [yes/no]; default value: \fIyes\fR)
+.RS 4
+If yes, then all feeds, including those without unread articles, are listed\&. If no, then only feeds with one or more unread articles are list\&. (example: show\-read\-feeds no)
+.RE
+.PP
+\fIshow\-read\-articles\fR (parameters: [yes/no]; default value: \fIyes\fR)
+.RS 4
+If yes, then all articles of a feed are listed in the article list\&. If no, then only unread articles are listed\&. (example: show\-read\-articles no)
+.RE
+.PP
+\fIsuppress\-first\-reload\fR (parameters: [yes/no]; default value: \fIno\fR)
+.RS 4
+If yes, then the first automatic reload will be suppressed if auto\-reload is set to yes\&. (example: suppress\-first\-reload yes)
+.RE
+.PP
+\fItext\-width\fR (parameters: <number>; default value: \fI0\fR)
+.RS 4
+If set to a number greater than 0, then all HTML will be rendered to this maximum line length\&. If set to 0, the terminal width will be used\&. (example: text\-width 72)
+.RE
+.PP
+\fIunbind\-key\fR (parameters: <key> [<dialog>]; default value: \fIn/a\fR)
+.RS 4
+Unbind key <key>\&. This means that no operation is called when <key> is pressed\&. Optionally, you can specify a dialog (for a list of available dialogs, see "bind\-key" above)\&. If you specify one, the key binding will only be unbound for the specified dialog\&. (example: unbind\-key R)
+.RE
+.PP
+\fIurls\-source\fR (parameters: <source>; default value: \fI"local"\fR)
+.RS 4
+This configuration command sets the source where URLs shall be retrieved from\&. By default, this is ~/\&.newsbeuter/urls\&. Alternatively, you can set it to "opml", which enables newsbeuter\'s OPML online subscription mode, or to "googlereader", which enables newsbeuter\'s Google Reader support\&. In order to make Google Reader support work correctly, you also need to set googlereader\-login and googlereader\-password\&. (example: urls\-source "googlereader")
+.RE
+.PP
+\fIuse\-proxy\fR (parameters: [yes/no]; default value: \fIno\fR)
+.RS 4
+If yes, then the configured proxy will be used for downloading the RSS feeds\&. (example: use\-proxy yes)
+.RE
+.PP
+\fIuser\-agent\fR (parameters: <user agent string>; default value: \fI""\fR)
+.RS 4
+If set to a non\-zero\-length string, this value will be used as HTTP User\-Agent header for all HTTP requests\&. (example: user\-agent "Lynx/2\&.8\&.5rel\&.1 libwww\-FM/2\&.14")
+.RE
+.SH "AVAILABLE OPERATIONS"
+.PP
+\fIopen\fR (default key: \fIENTER\fR)
+.RS 4
+Open the currently selected feed or article\&.
+.RE
+.PP
+\fIquit\fR (default key: \fIq\fR)
+.RS 4
+Quit the program or return to the previous dialog (depending on the context)\&.
+.RE
+.PP
+\fIreload\fR (default key: \fIr\fR)
+.RS 4
+Reload the currently selected feed\&.
+.RE
+.PP
+\fIreload\-all\fR (default key: \fIR\fR)
+.RS 4
+Reload all feeds\&.
+.RE
+.PP
+\fImark\-feed\-read\fR (default key: \fIA\fR)
+.RS 4
+Mark all articles in the currently selected feed read\&.
+.RE
+.PP
+\fImark\-all\-feeds\-read\fR (default key: \fIC\fR)
+.RS 4
+Mark articles in all feeds read\&.
+.RE
+.PP
+\fIsave\fR (default key: \fIs\fR)
+.RS 4
+Save the currently selected article to a file\&.
+.RE
+.PP
+\fInext\-unread\fR (default key: \fIn\fR)
+.RS 4
+Jump to the next unread article\&.
+.RE
+.PP
+\fIprev\-unread\fR (default key: \fIp\fR)
+.RS 4
+Jump to the previous unread article\&.
+.RE
+.PP
+\fInext\fR (default key: \fIJ\fR)
+.RS 4
+Jump to next article\&.
+.RE
+.PP
+\fIprev\fR (default key: \fIK\fR)
+.RS 4
+Jump to previosu article\&.
+.RE
+.PP
+\fIrandom\-unread\fR (default key: \fI^K\fR)
+.RS 4
+Jump to a random unred article\&.
+.RE
+.PP
+\fIopen\-in\-browser\fR (default key: \fIo\fR)
+.RS 4
+Opens the URL associated with the current article\&.
+.RE
+.PP
+\fIopen\-in\-browser\-and\-mark\-read\fR (default key: \fIO\fR)
+.RS 4
+Opens the URL associated with the current article and marks the article as read\&.
+.RE
+.PP
+\fIhelp\fR (default key: \fI?\fR)
+.RS 4
+Runs the help screen\&.
+.RE
+.PP
+\fItoggle\-source\-view\fR (default key: \fI^U\fR)
+.RS 4
+Toggles between the HTML view and the source view in the article view\&.
+.RE
+.PP
+\fItoggle\-article\-read\fR (default key: \fIN\fR)
+.RS 4
+Toggle the read flag for the currently selected article\&.
+.RE
+.PP
+\fItoggle\-show\-read\-feeds\fR (default key: \fIl\fR)
+.RS 4
+Toggle whether read feeds should be shown in the feed list\&.
+.RE
+.PP
+\fIshow\-urls\fR (default key: \fIu\fR)
+.RS 4
+Show all URLs in the article in a list (similar to urlview)\&.
+.RE
+.PP
+\fIclear\-tag\fR (default key: \fI^T\fR)
+.RS 4
+Clear current tag\&.
+.RE
+.PP
+\fIset\-tag\fR (default key: \fIt\fR)
+.RS 4
+Select tag\&.
+.RE
+.PP
+\fIopen\-search\fR (default key: \fI/\fR)
+.RS 4
+Opens the search dialog\&. When a search is done in the article list, then the search operation only applies to the articles of the current feed, otherwise to all articles\&.
+.RE
+.PP
+\fIgoto\-url\fR (default key: \fI#\fR)
+.RS 4
+Open the URL dialog and then opens specified URL\&.
+.RE
+.PP
+\fIenqueue\fR (default key: \fIe\fR)
+.RS 4
+Add the podcast download URL of the current article (if any is found) to the podcast download queue (see the respective section in the documentation for more information on podcast support)\&.
+.RE
+.PP
+\fIedit\-urls\fR (default key: \fIE\fR)
+.RS 4
+Edit the list of subscribed URLs\&. newsbeuter will start the editor configured through the $VISUAL environment variable (if unset, $EDITOR is used; fallback: "vi")\&. When editing is finished, newsbeuter will reload the URLs file\&.
+.RE
+.PP
+\fIreload\-urls\fR (default key: \fI^R\fR)
+.RS 4
+Reload the URLs configuration file\&.
+.RE
+.PP
+\fIredraw\fR (default key: \fI^L\fR)
+.RS 4
+Redraw the screen\&.
+.RE
+.PP
+\fIcmdline\fR (default key: \fI<colon>\fR)
+.RS 4
+Open the command line\&.
+.RE
+.PP
+\fIset\-filter\fR (default key: \fIF\fR)
+.RS 4
+Set a filter\&.
+.RE
+.PP
+\fIselect\-filter\fR (default key: \fIf\fR)
+.RS 4
+Select a predefined filter\&.
+.RE
+.PP
+\fIclear\-filter\fR (default key: \fI^F\fR)
+.RS 4
+Clear currently set filter\&.
+.RE
+.PP
+\fIbookmark\fR (default key: \fI^B\fR)
+.RS 4
+Bookmark currently selected article or URL\&.
+.RE
+.PP
+\fIedit\-flags\fR (default key: \fI^E\fR)
+.RS 4
+Edit the flags of the currently selected article\&.
+.RE
+.PP
+\fInext\-unread\-feed\fR (default key: \fI^N\fR)
+.RS 4
+Go to the next feed with unread articles\&. This only works from the article list\&.
+.RE
+.PP
+\fIprev\-unread\-feed\fR (default key: \fI^P\fR)
+.RS 4
+Go to the previous feed with unread articles\&. This only works from the article list\&.
+.RE
+.PP
+\fInext\-feed\fR (default key: \fIj\fR)
+.RS 4
+Go to the next feed\&. This only works from the article list\&.
+.RE
+.PP
+\fIprev\-feed\fR (default key: \fIk\fR)
+.RS 4
+Go to the previous feed\&. This only works from the article list\&.
+.RE
+.PP
+\fIdelete\-article\fR (default key: \fID\fR)
+.RS 4
+Delete the currently selected article\&.
+.RE
+.PP
+\fIpurge\-deleted\fR (default key: \fI$\fR)
+.RS 4
+Purge all article that are marked as deleted from the article list\&.
+.RE
+.PP
+\fIview\-dialogs\fR (default key: \fIv\fR)
+.RS 4
+View list of open dialogs\&.
+.RE
+.PP
+\fIclose\-dialog\fR (default key: \fI^X\fR)
+.RS 4
+Close currently selected dialog\&.
+.RE
+.PP
+\fInext\-dialog\fR (default key: \fI^V\fR)
+.RS 4
+Go to next dialog\&.
+.RE
+.PP
+\fIprev\-dialog\fR (default key: \fI^G\fR)
+.RS 4
+Go to previous dialog\&.
+.RE
+.PP
+\fIpipe\-to\fR (default key: \fI|\fR)
+.RS 4
+Pipe article to command\&.
+.RE
+.PP
+\fIsort\fR (default key: \fIg\fR)
+.RS 4
+Sort feeds/articles by interactively choosing the sort method\&.
+.RE
+.PP
+\fIrevsort\fR (default key: \fIG\fR)
+.RS 4
+Sort feeds/articles by interactively choosing the sort method (reversed)\&.
+.RE
+.PP
+\fIup\fR (default key: \fIUP\fR)
+.RS 4
+Goes up one item in the list\&.
+.RE
+.PP
+\fIdown\fR (default key: \fIDOWN\fR)
+.RS 4
+Goes down one item in the list\&.
+.RE
+.PP
+\fIpageup\fR (default key: \fIPPAGE\fR)
+.RS 4
+Goes up one page in the list\&.
+.RE
+.PP
+\fIpagedown\fR (default key: \fINPAGE\fR)
+.RS 4
+Goes down one page in the list\&.
+.RE
+.SH "TAGGING"
+Newsbeuter comes with the possibility to categorize or "tag", as we call it, RSS feeds\&. Every RSS feed can be assigned 0 or more tags\&. Within newsbeuter, you can then select to only show RSS feeds that match a certain tag\&. That makes it easy to categorize your feeds in a flexible and powerful way\&.
+.sp
+Usually, the ~/\&.newsbeuter/urls file contains one RSS feed URL per line\&. To assign a tag to an RSS feed, simply attach it as a single word, separated by blanks such as space or tab\&. If the tag needs to contain spaces, you must use quotes (") around the tag (see example below)\&. An example ~/\&.newsbeuter/urls file may look like this:
+.sp
+.sp
+.RS 4
+.nf
+http://blog\&.fefe\&.de/rss\&.xml?html interesting conspiracy news "cool stuff"
+http://rss\&.orf\&.at/news\&.xml news orf
+http://www\&.heise\&.de/newsticker/heise\&.rdf news interesting
+.fi
+.RE
+When you now start newsbeuter with this configuration, you can press "t" to select a tag\&. When you select the tag "news", you will see all three RSS feeds\&. Pressing "t" again and e\&.g\&. selecting the "conspiracy" tag, you will only see the http://blog\&.fefe\&.de/rss\&.xml?html RSS feed\&. Pressing "^T" clears the current tag, and again shows all RSS feeds, regardless of their assigned tags\&.
+.sp
+A special type of tag are tags that start with the tilde character ("~")\&. When such a tag is found, the feed title is set to the tag name (excluding the ~ character)\&. With this feature, you can give feeds any title you want in your feed list:
+.sp
+.sp
+.RS 4
+.nf
+http://rss\&.orf\&.at/news\&.xml "~ORF News"
+.fi
+.RE
+.SH "SCRIPTS AND FILTERS"
+From version 0\&.4 on, newsbeuter contains support for Snownews extensions\&. The RSS feed readers Snownews and Liferea share a common way of extending the readers with custom scripts\&. Two mechanisms, namely "execurl" and "filter" type scripts, are available and supported by newsbeuter\&.
+.sp
+An "execurl" script can be any program that gets executed and whose output is interpreted as RSS feed, while "filter" scripts are fed with the content of a configured URL and whose output is interpreted as RSS feed\&.
+.sp
+The configuration is simple and straight\-forward\&. Just add to your ~/\&.newsbeuter/urls file configuration lines like the following ones:
+.sp
+.sp
+.RS 4
+.nf
+exec:~/bin/execurl\-script
+filter:~/bin/filter\-script:http://some\&.test/url
+.fi
+.RE
+The first line shows how to add an execurl script to your configuration: start the line with "exec:" and then immediately append the path of the script that shall be executed\&. If this script requires additional parameters, simply use quotes:
+.sp
+.sp
+.RS 4
+.nf
+"exec:~/bin/execurl\-script param1 param2"
+.fi
+.RE
+The second line shows how to add a filter script to your configuration: start the line with "filter:", then immediately append the path of the script, then append a colon (":"), and then append the URL of the file that shall be fed to the script\&. Again, if the script requires any parameters, simply quote:
+.sp
+.sp
+.RS 4
+.nf
+"filter:~/bin/filter\-script param1 param2:http://url/foobar"
+.fi
+.RE
+In both cases, the tagging feature as described above is still available:
+.sp
+.sp
+.RS 4
+.nf
+exec:~/bin/execurl\-script tag1 tag2 "quoted tag"
+filter:~/bin/filter\-script:http://some\&.test/url tag3 tag4 tag5
+.fi
+.RE
+A collection of such extension scripts can be found on this website: http://kiza\&.kcore\&.de/software/snownews/snowscripts/extensions
+.sp
+If you want to write your own extensions, refer to this website for further instructions: http://kiza\&.kcore\&.de/software/snownews/snowscripts/writing
+.sp
+.SH "COMMAND LINE"
+Like other text\-oriented software, newsbeuter contains an internal commandline to modify configuration variables ad hoc and to run own commands\&. It provides a flexible access to the functionality of newsbeuter which is especially useful for advanced users\&.
+.sp
+To start the commandline, type ":"\&. You will see a ":" prompt at the bottom of the screen, similar to tools like vi(m) or mutt\&. You can now enter commands\&. Pressing the return key executes the command (possibly giving feedback to the user) and closes the commandline\&. You can cancel entering commands by pressing the ESC key\&. The history of all the commands that you enter will be saved to ~/\&.newsbeuter/history\&.cmdline\&. The backlog is limited to 100 entries by default, but can be influenced by setting the "history\-limit" configuration variable\&. To disable history saving, set the history\-limit to 0\&.
+.sp
+Starting with newsbeuter 2\&.0, the commandline provides you with some help if you can\'t remember the full names of commandline commands\&. By pressing the TAB key, newsbeuter will try to automatically complete your command\&. If there is more than one possible completion, you can subsequently press the TAB key to cycle through all results\&. If no match is found, no suggestion will be inserted into the commandline\&. For the "set" command, the completion also works for configuration variable names\&.
+.sp
+In additon, some common key combination such as Ctrl\-G (to cancel input), Ctrl\-K (to delete text from the cursor position to the end of line), Ctrl\-U (to clear the whole line) and Ctrl\-W (to delete the word before the current cursor position) were added\&.
+.sp
+Please be aware that the input history of both the command line and the search functions are saved to the filesystems, to the files ~/\&.newsbeuter/history\&.cmdline resp\&. ~/\&.newsbeuter/history\&.search\&. By default, the last 100 entries are saved, but this can be configured (configuratin variable history\-limit) and also totally disabled (by setting said variable to 0)\&.
+.sp
+Currently, the following command line commands are available:
+.PP
+\fIquit\fR
+.RS 4
+Quit newsbeuter
+.RE
+.PP
+\fIsave\fR <filename>
+.RS 4
+Save current article to <filename>
+.RE
+.PP
+\fIset\fR <variable>[=<value>|&|!]
+.RS 4
+Set (or get) configuration variable value\&. Specifying a
+\fI!\fR
+after the name of a boolean configuration variable toggles their values, a
+\fI&\fR
+directly after the name of a configuration variable of any type resets its value to the documented default value\&.
+.RE
+.PP
+\fItag\fR <tagname>
+.RS 4
+Select a certain tag
+.RE
+.PP
+\fIgoto\fR <case\-insensitive substring>
+.RS 4
+Go to the next feed whose name contains the case\-insensitive substring\&.
+.RE
+.PP
+\fIsource\fR <filename> [\&...]
+.RS 4
+Load the specified configuration files\&. This allows it to load alternative configuration files or reload already loaded configuration files on\-the\-fly from the filesystem\&.
+.RE
+.PP
+\fIdumpconfig\fR <filename>
+.RS 4
+Save current internal state of configuration to file, so that it can be instantly reused as configuration file\&.
+.RE
+.PP
+\fI<number>\fR
+.RS 4
+Jump to the <number>th entry in the current dialog
+.RE
+.SH "FILES"
+\fI$HOME/\&.newsbeuter/config\fR
+.sp
+\fI$HOME/\&.newsbeuter/urls\fR
+.sp
+.SH "SEE ALSO"
+podbeuter(1)\&. The documentation that comes with newsbeuter is a good source about the general use and configuration of newsbeuter\&.
+.sp
+.SH "AUTHORS"
+Andreas Krennmair <ak@newsbeuter\&.org>, for contributors see AUTHORS file\&.
+.sp
+.SH "NOTES"
+.IP " 1." 4
+ak@newsbeuter.org
+.RS 4
+\%mailto:ak@newsbeuter.org
+.RE
