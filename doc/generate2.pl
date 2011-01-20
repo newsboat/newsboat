@@ -2,8 +2,8 @@
 
 use strict;
 
-if (scalar(@ARGV) != 0) {
-	print STDOUT "usage: $0 <dsv-file>\n";
+if (scalar(@ARGV) < 1) {
+	print STDERR "usage: $0 <dsv-file>\n";
 	exit(1);
 }
 
