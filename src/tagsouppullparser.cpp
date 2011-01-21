@@ -7,6 +7,7 @@
 #include <sstream>
 #include <iostream>
 #include <cstdlib>
+#include <algorithm>
 
 #include <config.h>
 
@@ -113,6 +114,7 @@ void tagsouppullparser::add_attribute(std::string s) {
 		attribname = attribvalue = s;
 	}
 	attribvalue = decode_attribute(attribvalue);
+	std::transform(attribname.begin(), attribname.end(), attribname.begin(), ::tolower);
 	attributes.push_back(attribute(attribname,attribvalue));
 }
 
