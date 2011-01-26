@@ -260,12 +260,20 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 				this->start_qna(qna, OP_INT_EDITFLAGS_END);
 			}
 			break;
-		case OP_SHOWURLS:
-			LOG(LOG_DEBUG, "view::run_itemview: showing URLs");
-			if (links.size() > 0) {
-				v->push_urlview(links);
-			} else {
-				v->show_error(_("URL list empty."));
+		case OP_SHOWURLS: {
+				std::string urlviewer = v->get_cfg()->get_configvalue("external-url-viewer");
+				LOG(LOG_DEBUG, "view::run_itemview: showing URLs");
+				if (urlviewer == "") {
+					if (links.size() > 0) {
+						v->push_urlview(links);
+					} else {
+						v->show_error(_("URL list empty."));
+					}
+				} else {
+					qna_responses.clear();
+					qna_responses.push_back(urlviewer);
+					this->finished_qna(OP_PIPE_TO);
+				}
 			}
 			break;
 		case OP_DELETE:

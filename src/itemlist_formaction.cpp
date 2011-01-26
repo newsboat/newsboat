@@ -139,15 +139,22 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		case OP_SHOWURLS:
 			if (itemposname.length() > 0 && visible_items.size() != 0) {
 				if (itempos < visible_items.size()) {
-					std::vector<linkpair> links;
-					std::vector<std::string> lines;
-					htmlrenderer rnd(80);
-					std::string baseurl = visible_items[itempos].first->get_base() != "" ? visible_items[itempos].first->get_base() : visible_items[itempos].first->link();
-					rnd.render(visible_items[itempos].first->description(), lines, links, baseurl);
-					if (links.size() > 0) {
-						v->push_urlview(links);
+					std::string urlviewer = v->get_cfg()->get_configvalue("external-url-viewer");
+					if (urlviewer == "") {
+						std::vector<linkpair> links;
+						std::vector<std::string> lines;
+						htmlrenderer rnd(80);
+						std::string baseurl = visible_items[itempos].first->get_base() != "" ? visible_items[itempos].first->get_base() : visible_items[itempos].first->link();
+						rnd.render(visible_items[itempos].first->description(), lines, links, baseurl);
+						if (links.size() > 0) {
+							v->push_urlview(links);
+						} else {
+							v->show_error(_("URL list empty."));
+						}
 					} else {
-						v->show_error(_("URL list empty."));
+						qna_responses.clear();
+						qna_responses.push_back(urlviewer);
+						this->finished_qna(OP_PIPE_TO);
 					}
 				}
 			} else {
