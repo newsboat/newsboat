@@ -31,7 +31,7 @@ using namespace newsbeuter;
 
 namespace test {
 
-lemon::test<> lemon(323);
+lemon::test<> lemon(0);
 
 void TestNewsbeuterReload() {
 	configcontainer * cfg = new configcontainer();
