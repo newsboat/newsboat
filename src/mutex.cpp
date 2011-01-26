@@ -18,22 +18,11 @@ mutex::~mutex() {
 }
 
 void mutex::lock() {
-	int rc = pthread_mutex_lock(&mtx);
-	/*
-	if (rc != 0) {
-		LOG(LOG_INFO, "mutex::lock: lock returned %d", rc);
-		throw exception(rc);
-	}
-	*/
+	pthread_mutex_lock(&mtx);
 }
 
 void mutex::unlock() {
-	int rc = pthread_mutex_unlock(&mtx);
-	/*
-	if (rc != 0) {
-		LOG(LOG_INFO, "mutex::unlock: unlock returned %d", rc);
-	}
-	*/
+	pthread_mutex_unlock(&mtx);
 }
 
 bool mutex::trylock() {
