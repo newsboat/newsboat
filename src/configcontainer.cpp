@@ -99,6 +99,7 @@ configcontainer::configcontainer()
 	config_data["ignore-mode"] = configdata("download", "download", "display", NULL); // enum
 	config_data["max-download-speed"] = configdata("0", configdata::INT);
 	config_data["cookie-cache"] = configdata("", configdata::STR);
+	config_data["download-full-page"] = configdata("false", configdata::BOOL);
 
 	/* title formats: */
 	config_data["feedlist-title-format"] = configdata(_("%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"), configdata::STR);

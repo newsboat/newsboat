@@ -328,6 +328,12 @@ void rss_parser::set_item_content(std::tr1::shared_ptr<rss_item> x, rsspp::item&
 		if (cfgcont->get_configvalue_as_bool("always-display-description") && item.description != "")
 			x->set_description(x->description() + "<hr>" + item.description);
 	}
+
+	/* if it's still empty and we shall download the full page, then we do so. */
+	if (x->description() == "" && cfgcont->get_configvalue_as_bool("download-full-page") && x->link() != "") {
+		x->set_description(utils::retrieve_url(x->link(), cfgcont));
+	}
+
 	LOG(LOG_DEBUG, "rss_parser::set_item_content: content = %s", x->description().c_str());
 }
 
