@@ -1294,6 +1294,12 @@ void controller::write_item(std::tr1::shared_ptr<rss_item> item, std::ostream& o
 	std::string link(_("Link: "));
 	link.append(item->link());
 	lines.push_back(link);
+
+	if (item->enclosure_url() != "") {
+		std::string dlurl(_("Podcast Download URL: "));
+		dlurl.append(item->enclosure_url());
+		lines.push_back(dlurl);
+	}
 	
 	lines.push_back(std::string(""));
 	
