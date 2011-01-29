@@ -92,6 +92,7 @@ configcontainer::configcontainer()
 	config_data["proxy-type"] = configdata("http", "http", "socks4", "socks4a", "socks5", NULL); // enum
 	config_data["googlereader-login"] = configdata("", configdata::STR);
 	config_data["googlereader-password"] = configdata("", configdata::STR);
+	config_data["googlereader-passwordfile"] = configdata("", configdata::PATH);
 	config_data["googlereader-flag-share"] = configdata("", configdata::STR);
 	config_data["googlereader-flag-star"] = configdata("", configdata::STR);
 	config_data["googlereader-show-special-feeds"] = configdata("true", configdata::BOOL);

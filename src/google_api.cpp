@@ -1,6 +1,7 @@
 #include <vector>
 #include <cstring>
 #include <iostream>
+#include <wordexp.h>
 
 #include <google_api.h>
 #include <config.h>
@@ -45,10 +46,22 @@ std::string googlereader_api::retrieve_auth() {
 	CURL * handle = curl_easy_init();
 	std::string pass = cfg->get_configvalue("googlereader-password");
 	if( pass == "" ) {
-		std::cout << std::endl;
-		std::cout.flush();
-		// Find a way to do this in C++ by removing cin echoing.
-		pass = std::string( getpass("Password for Google Reader: ") );
+		wordexp_t exp;
+		std::ifstream ifs;
+		wordexp(cfg->get_configvalue("googlereader-passwordfile").c_str(),&exp,0);
+		ifs.open(exp.we_wordv[0]); 
+		wordfree(&exp);
+		if (!ifs) {
+			std::cout << std::endl;
+			std::cout.flush();
+			// Find a way to do this in C++ by removing cin echoing.
+			pass = std::string( getpass("Password for Google Reader: ") );
+		} else {
+				ifs >> pass;
+				if(pass == "") {
+						return "";
+				}
+		}
 	}
 	char * username = curl_easy_escape(handle, cfg->get_configvalue("googlereader-login").c_str(), 0);
 	char * password = curl_easy_escape(handle, pass.c_str(), 0);
