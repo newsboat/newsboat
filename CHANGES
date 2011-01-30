@@ -1,6 +1,6 @@
 Changes for newsbeuter:
 
-2.4:
+2.4 (2010-02-01):
 	Added support for query feeds in combination with Google Reader support.
 	Added ability to configure proxy authentication method.
 	Added commandline option -q to enable quiet startup (patch by Isaac Good)
