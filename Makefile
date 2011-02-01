@@ -20,7 +20,11 @@ ifneq (distclean, $(MAKECMDGOALS))
 include config.mk
 endif
 
-LIB_SOURCES:=$(shell cat libbeuter.deps)
+ifeq ($(PROFILE),1)
+CXXFLAGS+=-fprofile-arcs -ftest-coverage
+endif
+
+LIB_SOURCES:=$(shell cat mk/libbeuter.deps)
 LIB_OBJS:=$(patsubst %.cpp,%.o,$(LIB_SOURCES))
 LIB_OUTPUT=libbeuter.a
 
@@ -29,7 +33,7 @@ FILTERLIB_OBJS:=$(patsubst %.cpp,%.o,$(FILTERLIB_SOURCES))
 FILTERLIB_OUTPUT=libfilter.a
 
 NEWSBEUTER=newsbeuter
-NEWSBEUTER_SOURCES:=$(shell cat newsbeuter.deps)
+NEWSBEUTER_SOURCES:=$(shell cat mk/newsbeuter.deps)
 NEWSBEUTER_OBJS:=$(patsubst %.cpp,%.o,$(NEWSBEUTER_SOURCES))
 NEWSBEUTER_LIBS=-lbeuter -lfilter -lpthread -lrsspp
 
@@ -39,7 +43,7 @@ RSSPPLIB_OUTPUT=librsspp.a
 
 
 PODBEUTER=podbeuter
-PODBEUTER_SOURCES:=$(shell cat podbeuter.deps)
+PODBEUTER_SOURCES:=$(shell cat mk/podbeuter.deps)
 PODBEUTER_OBJS:=$(patsubst %.cpp,%.o,$(PODBEUTER_SOURCES))
 PODBEUTER_LIBS=-lbeuter -lpthread
 
@@ -194,6 +198,10 @@ test/test.o: test/test.cpp
 test-clean:
 	$(RM) test/test test/test.o test/test-rss test/test-rss.o
 
+profclean:
+	find . -name '*.gc*' -type f | xargs $(RM)
+	$(RM) app*.info
+
 config: config.mk
 
 config.mk:
@@ -202,4 +210,4 @@ config.mk:
 xlicense.h: LICENSE
 	$(TEXTCONV) $< > $@
 
-include mk.deps
+include mk/mk.deps
