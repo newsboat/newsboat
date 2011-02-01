@@ -5,7 +5,7 @@ Changes for newsbeuter:
 	Added configuration option to use external URL viewer (fixes issue #242).
 	Added ability to store Google Reader password in an external file (fixes issue #239).
 
-2.4:
+2.4 (2010-02-01):
 	Added support for query feeds in combination with Google Reader support.
 	Added ability to configure proxy authentication method.
 	Added commandline option -q to enable quiet startup (patch by Isaac Good)
