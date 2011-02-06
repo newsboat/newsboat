@@ -12,6 +12,7 @@
 using namespace newsbeuter;
 
 int main(int argc, char * argv[]) {
+	utils::initialize_ssl_implementation();
 
 	if (!setlocale(LC_CTYPE,"") || !setlocale(LC_MESSAGES,"")) {
 		std::cerr << "setlocale failed: " << strerror(errno) << std::endl;

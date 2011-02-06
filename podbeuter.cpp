@@ -5,10 +5,12 @@
 #include <cstring>
 #include <pb_view.h>
 #include <errno.h>
+#include <utils.h>
 
 using namespace podbeuter;
 
 int main(int argc, char * argv[]) {
+	utils::initialize_ssl_implementation();
 
 	if (!setlocale(LC_CTYPE,"") || !setlocale(LC_MESSAGES,"")) {
 		std::cerr << "setlocale failed: " << strerror(errno) << std::endl;

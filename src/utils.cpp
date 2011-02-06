@@ -24,6 +24,18 @@
 #include <stfl.h>
 #include <libxml/uri.h>
 
+#if HAVE_GCRYPT
+#include <gnutls/gnutls.h>
+#include <gcrypt.h>
+#include <errno.h>
+#include <pthread.h>
+GCRY_THREAD_OPTION_PTHREAD_IMPL;
+#endif
+
+#if HAVE_OPENSSL
+#include <openssl/crypto.h>
+#endif
+
 namespace newsbeuter {
 
 std::vector<std::string> utils::tokenize_quoted(const std::string& str, std::string delimiters) {
@@ -879,6 +891,47 @@ std::wstring utils::clean_nonprintable_characters(std::wstring text) {
 			text[idx] = L'\uFFFD';
 	}
 	return text;
+}
+
+/*
+ * See http://curl.haxx.se/libcurl/c/libcurl-tutorial.html#Multi-threading for a reason why we do this.
+ */
+
+#if HAVE_OPENSSL
+static mutex * openssl_mutexes = NULL;
+static int openssl_mutexes_size = 0;
+
+static void openssl_mth_locking_function(int mode, int n, const char * file, int line) {
+	if (n < 0 || n >= openssl_mutexes_size) {
+		LOG(LOG_ERROR,"openssl_mth_locking_function: index is out of bounds (called by %s:%d)", file, line);
+		return;
+	}
+	if (mode & CRYPTO_LOCK) {
+		LOG(LOG_DEBUG, "OpenSSL lock %d: %s:%d", n, file, line);
+		openssl_mutexes[n].lock();
+	} else {
+		LOG(LOG_DEBUG, "OpenSSL unlock %d: %s:%d", n, file, line);
+		openssl_mutexes[n].unlock();
+	}
+}
+
+static unsigned long openssl_mth_id_function(void) {
+	return (unsigned long)pthread_self();
+}
+#endif
+
+void utils::initialize_ssl_implementation(void) {
+#if HAVE_OPENSSL
+	openssl_mutexes_size = CRYPTO_num_locks();
+	openssl_mutexes = new mutex[openssl_mutexes_size];
+	CRYPTO_set_id_callback(openssl_mth_id_function);
+	CRYPTO_set_locking_callback(openssl_mth_locking_function);
+#endif
+
+#if HAVE_GCRYPT
+	gcry_control (GCRYCTL_SET_THREAD_CBS, &gcry_threads_pthread);
+	gnutls_global_init();
+#endif
 }
 
 }

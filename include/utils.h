@@ -92,6 +92,7 @@ class utils {
 
 		static std::string escape_url(const std::string& url);
 		static std::string unescape_url(const std::string& url);
+		static void initialize_ssl_implementation(void);
 
 	private:
 		static void append_escapes(std::string& str, char c);
