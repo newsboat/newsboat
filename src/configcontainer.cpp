@@ -63,7 +63,7 @@ configcontainer::configcontainer()
 	config_data["notify-program"]  = configdata("", configdata::PATH);
 	config_data["notify-format"]   = configdata(_("newsbeuter: finished reload, %f unread feeds (%n unread articles total)"), configdata::STR);
 	config_data["datetime-format"] = configdata("%b %d", configdata::STR);
-	config_data["urls-source"]     = configdata("local", "local", "opml", "googlereader", NULL); // enum
+	config_data["urls-source"]     = configdata("local", "local", "opml", "googlereader", "ttrss", NULL); // enum
 	config_data["bookmark-cmd"]    = configdata("", configdata::STR);
 	config_data["opml-url"]        = configdata("", configdata::STR, true);
 	config_data["html-renderer"]   = configdata("internal", configdata::PATH);
@@ -102,6 +102,9 @@ configcontainer::configcontainer()
 	config_data["cookie-cache"] = configdata("", configdata::STR);
 	config_data["download-full-page"] = configdata("false", configdata::BOOL);
 	config_data["external-url-viewer"] = configdata("", configdata::STR);
+	config_data["ttrss-login"] = configdata("", configdata::STR);
+	config_data["ttrss-password"] = configdata("", configdata::STR);
+	config_data["ttrss-url"] = configdata("", configdata::STR);
 
 	/* title formats: */
 	config_data["feedlist-title-format"] = configdata(_("%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"), configdata::STR);

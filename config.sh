@@ -87,5 +87,6 @@ check_pkg "sqlite3" || fail "sqlite3"
 check_pkg "libcurl" || check_custom "libcurl" "curl-config" || fail "libcurl"
 check_pkg "libxml-2.0" || check_custom "libxml2" "xml2-config" || fail "libxml2"
 check_pkg "stfl" "" "--static" || fail "stfl"
+check_pkg "json" || fail "json"
 all_aboard_the_fail_boat
 check_ssl_implementation

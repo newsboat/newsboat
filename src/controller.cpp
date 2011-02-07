@@ -15,6 +15,7 @@
 #include <rss_parser.h>
 #include <remote_api.h>
 #include <google_api.h>
+#include <ttrss_api.h>
 #include <xlicense.h>
 
 #include <cstdlib>
@@ -418,6 +419,10 @@ void controller::run(int argc, char * argv[]) {
 		api = new googlereader_api(&cfg);
 		urlcfg = new googlereader_urlreader(&cfg, url_file, api);
 		real_offline_mode = offline_mode;
+	} else if (type == "ttrss") {
+		api = new ttrss_api(&cfg);
+		urlcfg = new ttrss_urlreader(&cfg, url_file, api);
+		real_offline_mode = offline_mode;
 	} else {
 		LOG(LOG_ERROR,"unknown urls-source `%s'", urlcfg->get_source().c_str());
 	}
@@ -472,6 +477,8 @@ void controller::run(int argc, char * argv[]) {
 			msg = utils::strprintf(_("It looks like the OPML feed you subscribed contains no feeds. Please fill it with feeds, and try again."));
 		} else if (type == "googlereader") {
 			msg = utils::strprintf(_("It looks like you haven't configured any feeds in your Google Reader account. Please do so, and try again."));
+		} else if (type == "ttrss") {
+			msg = utils::strprintf(_("It looks like you haven't configured any feeds in your Tiny Tiny RSS account. Please do so, and try again."));
 		} else {
 			assert(0); // shouldn't happen
 		}
