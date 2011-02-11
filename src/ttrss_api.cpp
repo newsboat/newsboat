@@ -1,5 +1,6 @@
 #include <remote_api.h>
 #include <ttrss_api.h>
+#include <cstring>
 #include <json.h>
 
 namespace newsbeuter {
@@ -117,20 +118,67 @@ std::vector<tagged_feedurl> ttrss_api::get_subscribed_urls() {
 	return feeds;
 }
 
-void ttrss_api::configure_handle(CURL * handle) {
-	// TODO: implement
+void ttrss_api::configure_handle(CURL * /*handle*/) {
+	// nothing required
 }
 
-bool ttrss_api::mark_all_read(const std::string& feedurl) {
+bool ttrss_api::mark_all_read(const std::string& feed_url) {
+	std::string catchup_url = utils::strprintf("%s/api/?op=catchupFeed&feed_id=%s&sid=%s", 
+			cfg->get_configvalue("ttrss-url").c_str(), feed_url.substr(6,feed_url.length()-6).c_str(), sid.c_str());
 
+	std::string result = utils::retrieve_url(catchup_url, cfg);
+
+	LOG(LOG_DEBUG, "ttrss_api::mark_all_read: result = %s", result.c_str());
+
+	struct json_object * reply = json_tokener_parse(result.c_str());
+
+	struct json_object * status = json_object_object_get(reply, "status");
+	if (json_object_get_int(status) != 0) {
+		json_object_put(reply);
+		return false;
+	}
+
+	struct json_object * content = json_object_object_get(reply, "content");
+
+	if (strcmp(json_object_get_string(json_object_object_get(content, "status")), "OK") != 0) {
+		json_object_put(reply);
+		return false;
+	}
+
+	json_object_put(reply);
+	return true;
 }
 
 bool ttrss_api::mark_article_read(const std::string& guid, bool read) {
+	std::string update_url = utils::strprintf("%s/api/?op=updateArticle&article_ids=%s&field=2&mode=%d&sid=%s", 
+			cfg->get_configvalue("ttrss-url").c_str(), guid.c_str(), read ? 0 : 1, sid.c_str());
 
+	std::string result = utils::retrieve_url(update_url, cfg);
+
+	LOG(LOG_DEBUG, "ttrss_api::mark_article_read: result = %s", result.c_str());
+
+	struct json_object * reply = json_tokener_parse(result.c_str());
+
+	struct json_object * status = json_object_object_get(reply, "status");
+	if (json_object_get_int(status) != 0) {
+		json_object_put(reply);
+		return false;
+	}
+
+	struct json_object * content = json_object_object_get(reply, "content");
+
+	if (strcmp(json_object_get_string(json_object_object_get(content, "status")), "OK") != 0) {
+		json_object_put(reply);
+		return false;
+	}
+
+	json_object_put(reply);
+	return true;
 }
 
-bool ttrss_api::update_article_flags(const std::string& oldflags, const std::string& newflags, const std::string& guid) {
-
+bool ttrss_api::update_article_flags(const std::string& /*oldflags*/, const std::string& /*newflags*/, const std::string& /*guid*/) {
+	// TODO: is there a way to update flags such as "starred" or "published"?
+	return true;
 }
 
 rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
