@@ -9,6 +9,7 @@
 #include <utils.h>
 #include <config.h>
 #include <htmlrenderer.h>
+#include <ttrss_api.h>
 #include <curl/curl.h>
 
 #include <cerrno>
@@ -120,6 +121,8 @@ void rss_parser::retrieve_uri(const std::string& uri) {
 		download_filterplugin(filter, url);
 	} else if (my_uri.substr(0,6) == "query:") {
 		skip_parsing = true;
+	} else if (my_uri.substr(0,6) == "ttrss:") {
+		fetch_ttrss(my_uri.substr(6, my_uri.length()-6));
 	} else if (my_uri.substr(0,7) == "file://") {
 		parse_file(my_uri.substr(7, my_uri.length()-7));
 	} else
@@ -400,6 +403,15 @@ void rss_parser::handle_itunes_summary(std::tr1::shared_ptr<rss_item> x, rsspp::
 
 bool rss_parser::is_html_type(const std::string& type) {
 	return (type == "html" || type == "xhtml" || type == "application/xhtml+xml");
+}
+
+void rss_parser::fetch_ttrss(const std::string& feed_id) {
+	ttrss_api * tapi = dynamic_cast<ttrss_api *>(api);
+	if (tapi) {
+		f = tapi->fetch_feed(feed_id);
+		is_valid = true;
+	}
+	LOG(LOG_DEBUG, "rss_parser::fetch_ttrss: f.items.size = %u", f.items.size());
 }
 
 }

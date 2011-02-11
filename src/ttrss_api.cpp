@@ -133,5 +133,63 @@ bool ttrss_api::update_article_flags(const std::string& oldflags, const std::str
 
 }
 
+rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
+	rsspp::feed f;
+
+	std::string feed_url = utils::strprintf("%s/api/?op=getHeadlines&feed_id=%s&show_content=1&sid=%s", 
+		cfg->get_configvalue("ttrss-url").c_str(), id.c_str(), sid.c_str());
+	std::string result = utils::retrieve_url(feed_url, cfg);
+
+	LOG(LOG_DEBUG, "ttrss_api::fetch_feed: %s", result.c_str());
+
+	struct json_object * reply = json_tokener_parse(result.c_str());
+	int rc;
+	if ((rc=json_object_get_int(json_object_object_get(reply, "status"))) != 0) {
+		LOG(LOG_ERROR, "ttrss_api::fetch_feed: status = %d", rc);
+		return f;
+	}
+
+	struct json_object * content = json_object_object_get(reply, "content");
+	if (json_object_get_type(content) != json_type_array) {
+		LOG(LOG_ERROR, "ttrss_api::fetch_feed: content is not an array");
+		return f;
+	}
+
+	struct array_list * items = json_object_get_array(content);
+	int items_size = array_list_length(items);
+	LOG(LOG_DEBUG, "ttrss_api::fetch_feed: %d items", items_size);
+
+	for (int i=0;i<items_size;i++) {
+		struct json_object * item_obj = (struct json_object *)array_list_get_idx(items, i);
+		int id = json_object_get_int(json_object_object_get(item_obj, "id"));
+		const char * title = json_object_get_string(json_object_object_get(item_obj, "title"));
+		const char * link = json_object_get_string(json_object_object_get(item_obj, "link"));
+		const char * content = json_object_get_string(json_object_object_get(item_obj, "content"));
+		time_t updated = (time_t)json_object_get_int(json_object_object_get(item_obj, "updated"));
+
+		rsspp::item item;
+
+		if (title)
+			item.title = title;
+
+		if (link)
+			item.link = link;
+
+		if (content)
+			item.content_encoded = content;
+
+		item.guid = utils::strprintf("%d", id);
+
+		char rfc822_date[128];
+		strftime(rfc822_date, sizeof(rfc822_date), "%a, %d %b %Y %H:%M:%S %z", gmtime(&updated));
+		item.pubDate = rfc822_date;
+
+		f.items.push_back(item);
+	}
+
+	json_object_put(reply);
+	return f;
+}
+
 
 }
