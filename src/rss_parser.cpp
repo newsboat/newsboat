@@ -255,7 +255,7 @@ void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed> feed) {
 
 		x->set_feedurl(feed->rssurl());
 
-		if (f.rss_version == rsspp::ATOM_1_0 && item->labels.size() > 0) {
+		if ((f.rss_version == rsspp::ATOM_1_0 || f.rss_version == rsspp::TTRSS_JSON) && item->labels.size() > 0) {
 			std::vector<std::string>::const_iterator start, finish;
 			start = item->labels.begin();
 			finish = item->labels.end();
@@ -268,6 +268,14 @@ void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed> feed) {
 				x->set_override_unread(true);
 			}
 			if (std::find(start, finish, "read") != finish) {
+				x->set_unread_nowrite(false);
+				x->set_override_unread(true);
+			}
+			if (std::find(start, finish, "ttrss:unread") != finish) {
+				x->set_unread_nowrite(true);
+				x->set_override_unread(true);
+			}
+			if (std::find(start, finish, "ttrss:read") != finish) {
 				x->set_unread_nowrite(false);
 				x->set_override_unread(true);
 			}

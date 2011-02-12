@@ -162,6 +162,8 @@ bool ttrss_api::update_article_flags(const std::string& /*oldflags*/, const std:
 rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 	rsspp::feed f;
 
+	f.rss_version = rsspp::TTRSS_JSON;
+
 	std::string feed_url = utils::strprintf("%s/api/?op=getHeadlines&feed_id=%s&show_content=1&sid=%s", 
 		cfg->get_configvalue("ttrss-url").c_str(), id.c_str(), sid.c_str());
 	std::string result = utils::retrieve_url(feed_url, cfg, auth_info_ptr);
@@ -192,6 +194,7 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 		const char * link = json_object_get_string(json_object_object_get(item_obj, "link"));
 		const char * content = json_object_get_string(json_object_object_get(item_obj, "content"));
 		time_t updated = (time_t)json_object_get_int(json_object_object_get(item_obj, "updated"));
+		boolean unread = json_object_get_boolean(json_object_object_get(item_obj, "unread"));
 
 		rsspp::item item;
 
@@ -205,6 +208,12 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 			item.content_encoded = content;
 
 		item.guid = utils::strprintf("%d", id);
+
+		if (unread) {
+			item.labels.push_back("ttrss:unread");
+		} else {
+			item.labels.push_back("ttrss:read");
+		}
 
 		char rfc822_date[128];
 		strftime(rfc822_date, sizeof(rfc822_date), "%a, %d %b %Y %H:%M:%S %z", gmtime(&updated));
