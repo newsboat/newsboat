@@ -9,7 +9,7 @@ next-unread:n:Jump to the next unread article.
 prev-unread:p:Jump to the previous unread article.
 next:J:Jump to next article.
 prev:K:Jump to previosu article.
-random-unread:^K:Jump to a random unred article.
+random-unread:^K:Jump to a random unread article.
 open-in-browser:o:Opens the URL associated with the current article.
 open-in-browser-and-mark-read:O:Opens the URL associated with the current article and marks the article as read.
 help:?:Runs the help screen.
