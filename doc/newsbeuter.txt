@@ -554,6 +554,41 @@ Up to and including version 2.3, newsbeuter contained support for synchronizatio
 with Bloglines. On October 1, 2010, Bloglines was discontinued, and newsbeuter's
 support for Bloglines was subsequently removed.
 
+Tiny Tiny RSS Synchronization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Since version 2.5, newsbeuter can be used to synchronize with Tiny Tiny RSS 
+installations. Tiny Tiny RSS is a web-based and (optionally) multi-user feed 
+reader. By providing the ability to use Tiny Tiny RSS as its backend, it's 
+possible for users to manage their subscriptions centrally within Tiny Tiny RSS 
+while reading them wherever the are using newsbeuter.
+
+If you want to use Tiny Tiny RSS support, don't forget to activate the external 
+API support in your preferences.
+
+To use Tiny Tiny RSS support, you need to configure a few things. First of all, 
+newsbeuter needs to know that you want to use Tiny Tiny RSS and which 
+installation exactly:
+
+	urls-source "ttrss"
+	ttrss-url "http://example.com/ttrss/"
+
+In addition, it requires username and password for authentication:
+
+	ttrss-login "myusername"
+	ttrss-password "mypassword"
+
+Tiny Tiny RSS provides two modes of usage, single-user mode and multi-user 
+mode. newsbeuter needs to know about this, too: In single-user mode, 
+authentication is done via Basic HTTP authentication, while in multi-user mode, 
+authentication is done against Tiny Tiny RSS itself.
+
+	ttrss-mode "single"		# "multi" is default
+
+With these settings, newsbeuter should be able to connect to Tiny Tiny RSS and 
+download your subscribed feeds. Articles or even complete feeds that you marked 
+as read are synchronized directly to Tiny Tiny RSS.
+
 OPML Online Subscription Mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
