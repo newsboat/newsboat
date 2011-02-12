@@ -4,6 +4,7 @@ Changes for newsbeuter:
 	Implemented download-full-page configuration option.
 	Added configuration option to use external URL viewer (fixes issue #242).
 	Added ability to store Google Reader password in an external file (fixes issue #239).
+	Added Tiny Tiny RSS support (fixes issue #243).
 
 2.4 (2010-02-01):
 	Added support for query feeds in combination with Google Reader support.

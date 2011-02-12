@@ -589,6 +589,19 @@ With these settings, newsbeuter should be able to connect to Tiny Tiny RSS and
 download your subscribed feeds. Articles or even complete feeds that you marked 
 as read are synchronized directly to Tiny Tiny RSS.
 
+Tiny Tiny RSS provides the ability to "star" and to "publish" articles. Starred 
+articles are basically bookmarks, while published articles can be retrieved via 
+a pubic RSS feed. Newsbeuter allows the use of these features by mapping its
+flags to the "star" and "publish" operations.
+
+In order to use this mapping, you need to configure the flags that shall be used:
+
+	ttrss-flag-star "s"
+	ttrss-flag-publish "p"
+
+After that, use these flags when you edit flags for an article, and these articles
+will be starred resp. published.
+
 OPML Online Subscription Mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
