@@ -105,6 +105,7 @@ configcontainer::configcontainer()
 	config_data["ttrss-login"] = configdata("", configdata::STR);
 	config_data["ttrss-password"] = configdata("", configdata::STR);
 	config_data["ttrss-url"] = configdata("", configdata::STR);
+	config_data["ttrss-mode"] = configdata("multi", "single", "multi", NULL); // enum
 
 	/* title formats: */
 	config_data["feedlist-title-format"] = configdata(_("%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"), configdata::STR);

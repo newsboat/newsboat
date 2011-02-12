@@ -20,8 +20,12 @@ class ttrss_api : public remote_api {
 		virtual bool update_article_flags(const std::string& oldflags, const std::string& newflags, const std::string& guid);
 		rsspp::feed fetch_feed(const std::string& id);
 	private:
+		void fetch_feeds_per_category(struct json_object * cat, std::vector<tagged_feedurl>& feeds);
 		std::string retrieve_sid();
 		std::string sid;
+		std::string auth_info;
+		const char * auth_info_ptr;
+		bool single;
 };
 
 class ttrss_urlreader : public urlreader {
