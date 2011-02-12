@@ -69,6 +69,8 @@ show-read-feeds|[yes/no]|yes|If yes, then all feeds, including those without unr
 show-read-articles|[yes/no]|yes|If yes, then all articles of a feed are listed in the article list. If no, then only unread articles are listed.|show-read-articles no
 suppress-first-reload|[yes/no]|no|If yes, then the first automatic reload will be suppressed if auto-reload is set to yes.|suppress-first-reload yes
 text-width|<number>|0|If set to a number greater than 0, then all HTML will be rendered to this maximum line length. If set to 0, the terminal width will be used.|text-width 72
+ttrss-flag-publish|<character>|""|If this is set and Tiny Tiny RSS support is used, then all articles that are flagged with the specified flag are being marked as "published" in Tiny Tiny RSS.|ttrss-flag-publish "b"
+ttrss-flag-star|<character>|""|If this is set and Tiny Tiny RSS support is used, then all articles that are flagged with the specified flag are being "starred" in Tiny Tiny RSS.|ttrss-flag-star "a"
 ttrss-login|<username>|""|Sets the username for use with Tiny Tiny RSS.|ttrss-login "admin"
 ttrss-mode|[multi/single]|multi|Configures the mode in which Tiny Tiny RSS is used. In single-user mode, login and password are used for HTTP authentication, while in multi-user mode, they are used for authenticating with Tiny Tiny RSS.|ttrss-mode "single"
 ttrss-passowrd|<password>|""|Configures the password for use with Tiny Tiny RSS.|ttrss-password "mypassword"

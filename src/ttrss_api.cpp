@@ -128,35 +128,31 @@ bool ttrss_api::mark_all_read(const std::string& feed_url) {
 }
 
 bool ttrss_api::mark_article_read(const std::string& guid, bool read) {
-	std::string update_url = utils::strprintf("%s/api/?op=updateArticle&article_ids=%s&field=2&mode=%d&sid=%s", 
-			cfg->get_configvalue("ttrss-url").c_str(), guid.c_str(), read ? 0 : 1, sid.c_str());
-
-	std::string result = utils::retrieve_url(update_url, cfg, auth_info_ptr);
-
-	LOG(LOG_DEBUG, "ttrss_api::mark_article_read: result = %s", result.c_str());
-
-	struct json_object * reply = json_tokener_parse(result.c_str());
-
-	struct json_object * status = json_object_object_get(reply, "status");
-	if (json_object_get_int(status) != 0) {
-		json_object_put(reply);
-		return false;
-	}
-
-	struct json_object * content = json_object_object_get(reply, "content");
-
-	if (strcmp(json_object_get_string(json_object_object_get(content, "status")), "OK") != 0) {
-		json_object_put(reply);
-		return false;
-	}
-
-	json_object_put(reply);
-	return true;
+	return update_article(guid, 2, read ? 0 : 1);
 }
 
-bool ttrss_api::update_article_flags(const std::string& /*oldflags*/, const std::string& /*newflags*/, const std::string& /*guid*/) {
-	// TODO: is there a way to update flags such as "starred" or "published"?
-	return true;
+bool ttrss_api::update_article_flags(const std::string& oldflags, const std::string& newflags, const std::string& guid) {
+	std::string star_flag = cfg->get_configvalue("ttrss-flag-star");
+	std::string publish_flag = cfg->get_configvalue("ttrss-flag-publish");
+	bool success;
+
+	if (star_flag.length() > 0) {
+		if (strchr(oldflags.c_str(), star_flag[0])==NULL && strchr(newflags.c_str(), star_flag[0])!=NULL) {
+			success = star_article(guid, true);
+		} else if (strchr(oldflags.c_str(), star_flag[0])!=NULL && strchr(newflags.c_str(), star_flag[0])==NULL) {
+			success = star_article(guid, false);
+		}
+	}
+
+	if (publish_flag.length() > 0) {
+		if (strchr(oldflags.c_str(), publish_flag[0])==NULL && strchr(newflags.c_str(), publish_flag[0])!=NULL) {
+			success = publish_article(guid, true);
+		} else if (strchr(oldflags.c_str(), publish_flag[0])!=NULL && strchr(newflags.c_str(), publish_flag[0])==NULL) {
+			success = publish_article(guid, false);
+		}
+	}
+
+	return success;
 }
 
 rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
@@ -274,6 +270,41 @@ void ttrss_api::fetch_feeds_per_category(struct json_object * cat, std::vector<t
 
 	json_object_put(feeds_reply);
 
+}
+
+bool ttrss_api::star_article(const std::string& guid, bool star) {
+	return update_article(guid, 0, star ? 1 : 0);
+}
+
+bool ttrss_api::publish_article(const std::string& guid, bool publish) {
+	return update_article(guid, 1, publish ? 1 : 0);
+}
+
+bool ttrss_api::update_article(const std::string& guid, int field, int mode) {
+	std::string update_url = utils::strprintf("%s/api/?op=updateArticle&article_ids=%s&field=%d&mode=%d&sid=%s", 
+			cfg->get_configvalue("ttrss-url").c_str(), guid.c_str(), field, mode, sid.c_str());
+
+	std::string result = utils::retrieve_url(update_url, cfg, auth_info_ptr);
+
+	LOG(LOG_DEBUG, "ttrss_api::update_article: result = %s", result.c_str());
+
+	struct json_object * reply = json_tokener_parse(result.c_str());
+
+	struct json_object * status = json_object_object_get(reply, "status");
+	if (json_object_get_int(status) != 0) {
+		json_object_put(reply);
+		return false;
+	}
+
+	struct json_object * content = json_object_object_get(reply, "content");
+
+	if (strcmp(json_object_get_string(json_object_object_get(content, "status")), "OK") != 0) {
+		json_object_put(reply);
+		return false;
+	}
+
+	json_object_put(reply);
+	return true;
 }
 
 

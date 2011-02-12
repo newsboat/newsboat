@@ -21,6 +21,9 @@ class ttrss_api : public remote_api {
 		rsspp::feed fetch_feed(const std::string& id);
 	private:
 		void fetch_feeds_per_category(struct json_object * cat, std::vector<tagged_feedurl>& feeds);
+		bool star_article(const std::string& guid, bool star);
+		bool publish_article(const std::string& guid, bool publish);
+		bool update_article(const std::string& guid, int mode, int field);
 		std::string retrieve_sid();
 		std::string sid;
 		std::string auth_info;
