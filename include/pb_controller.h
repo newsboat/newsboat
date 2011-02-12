@@ -44,6 +44,8 @@ namespace podbeuter {
 			inline newsbeuter::configcontainer * get_cfgcont() { return cfg; }
 
 		private:
+			bool setup_dirs_xdg(const char *env_home);
+
 			pb_view * v;
 			std::string config_file;
 			std::string queue_file;
@@ -52,6 +54,10 @@ namespace podbeuter {
 			std::vector<download> downloads_;
 
 			std::string config_dir;
+			std::string url_file;
+			std::string cache_file;
+			std::string searchfile;
+			std::string cmdlinefile;
 
 			unsigned int max_dls;
 
