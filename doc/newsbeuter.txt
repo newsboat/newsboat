@@ -561,7 +561,7 @@ Since version 2.5, newsbeuter can be used to synchronize with Tiny Tiny RSS
 installations. Tiny Tiny RSS is a web-based and (optionally) multi-user feed 
 reader. By providing the ability to use Tiny Tiny RSS as its backend, it's 
 possible for users to manage their subscriptions centrally within Tiny Tiny RSS 
-while reading them wherever the are using newsbeuter.
+while reading them wherever they are using newsbeuter.
 
 If you want to use Tiny Tiny RSS support, don't forget to activate the external 
 API support in your preferences.
