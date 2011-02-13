@@ -167,6 +167,10 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 	LOG(LOG_DEBUG, "ttrss_api::fetch_feed: %s", result.c_str());
 
 	struct json_object * reply = json_tokener_parse(result.c_str());
+	if (is_error(reply)) {
+		return f;
+	}
+
 	int rc;
 	if ((rc=json_object_get_int(json_object_object_get(reply, "status"))) != 0) {
 		LOG(LOG_ERROR, "ttrss_api::fetch_feed: status = %d", rc);
@@ -246,6 +250,9 @@ void ttrss_api::fetch_feeds_per_category(struct json_object * cat, std::vector<t
 	LOG(LOG_DEBUG, "ttrss_api::fetch_feeds_per_category: feeds_data = %s", feeds_data.c_str());
 
 	struct json_object * feeds_reply = json_tokener_parse(feeds_data.c_str());
+	if (is_error(feeds_reply)) {
+		return;
+	}
 
 	struct json_object * feed_list_obj = json_object_object_get(feeds_reply, "content");
 	struct array_list * feed_list = json_object_get_array(feed_list_obj);
@@ -289,6 +296,9 @@ bool ttrss_api::update_article(const std::string& guid, int field, int mode) {
 	LOG(LOG_DEBUG, "ttrss_api::update_article: result = %s", result.c_str());
 
 	struct json_object * reply = json_tokener_parse(result.c_str());
+	if (is_error(reply)) {
+		return false;
+	}
 
 	struct json_object * status = json_object_object_get(reply, "status");
 	if (json_object_get_int(status) != 0) {
