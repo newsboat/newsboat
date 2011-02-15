@@ -356,7 +356,7 @@ std::string utils::retrieve_url(const std::string& url, configcontainer * cfgcon
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, &buf);
 
 	if (authinfo) {
-		curl_easy_setopt(easyhandle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+		curl_easy_setopt(easyhandle, CURLOPT_HTTPAUTH, get_auth_method(cfgcont->get_configvalue("http-auth-method")));
 		curl_easy_setopt(easyhandle, CURLOPT_USERPWD, authinfo);
 	}
 
@@ -786,7 +786,7 @@ void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
 	if (proxy != "")
 		curl_easy_setopt(handle, CURLOPT_PROXY, proxy.c_str());
 	if (proxyauth != "") {
-		curl_easy_setopt(handle, CURLOPT_PROXYAUTH, get_proxy_auth_method(proxyauthmethod));
+		curl_easy_setopt(handle, CURLOPT_PROXYAUTH, get_auth_method(proxyauthmethod));
 		curl_easy_setopt(handle, CURLOPT_PROXYUSERPWD, proxyauth.c_str());
 	}
 	if (proxytype != "") {
@@ -834,7 +834,7 @@ std::string utils::get_prop(xmlNode * node, const char * prop, const char * ns) 
 	return retval;
 }
 
-int utils::get_proxy_auth_method(const std::string& type) {
+int utils::get_auth_method(const std::string& type) {
 	if (type == "any")
 		return CURLAUTH_ANY;
 	if (type == "basic")
