@@ -10,6 +10,7 @@
 #include <utils.h>
 
 #include <tr1/memory>
+#include <tr1/unordered_map>
 
 namespace newsbeuter {
 
@@ -201,6 +202,7 @@ namespace newsbeuter {
 			time_t pubDate_;
 			std::string rssurl_;
 			std::vector<std::tr1::shared_ptr<rss_item> > items_;
+			std::tr1::unordered_map<std::string, std::tr1::shared_ptr<rss_item> > items_guid_map;
 			std::vector<std::string> tags_;
 			std::string query;
 			

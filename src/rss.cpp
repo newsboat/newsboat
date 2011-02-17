@@ -205,10 +205,9 @@ std::tr1::shared_ptr<rss_item> rss_feed::get_item_by_guid(const std::string& gui
 }
 
 std::tr1::shared_ptr<rss_item> rss_feed::get_item_by_guid_unlocked(const std::string& guid) {
-	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items_.begin();it!=items_.end();++it) {
-		if ((*it)->guid() == guid) {
-			return *it;
-		}
+	std::tr1::unordered_map<std::string, std::tr1::shared_ptr<rss_item> >::const_iterator it;
+	if ((it = items_guid_map.find(guid)) != items_guid_map.end()) {
+		return it->second;
 	}
 	LOG(LOG_DEBUG, "rss_feed::get_item_by_guid_unlocked: hit dummy item!");
 	// abort();
@@ -430,6 +429,7 @@ void rss_feed::update_items(std::vector<std::tr1::shared_ptr<rss_feed> > feeds) 
 	matcher m(query);
 
 	items_.clear();
+	items_guid_map.clear();
 
 	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it) {
 		if ((*it)->rssurl().substr(0,6) != "query:") { // don't fetch items from other query feeds!
@@ -438,6 +438,7 @@ void rss_feed::update_items(std::vector<std::tr1::shared_ptr<rss_feed> > feeds) 
 					LOG(LOG_DEBUG, "rss_feed::update_items: matcher matches!");
 					(*jt)->set_feedptr(*it);
 					items_.push_back(*jt);
+					items_guid_map[(*jt)->guid()] = *jt;
 				}
 			}
 		}
@@ -566,6 +567,7 @@ void rss_feed::purge_deleted_items() {
 	std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items_.begin();
 	while (it!=items_.end()) {
 		if ((*it)->deleted()) {
+			items_guid_map.erase((*it)->guid());
 			items_.erase(it);
 			it = items_.begin(); // items_ modified -> iterator invalidated
 		} else {
