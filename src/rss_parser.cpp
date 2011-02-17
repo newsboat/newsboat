@@ -377,7 +377,7 @@ void rss_parser::set_item_enclosure(std::tr1::shared_ptr<rss_item> x, rsspp::ite
 void rss_parser::add_item_to_feed(std::tr1::shared_ptr<rss_feed> feed, std::tr1::shared_ptr<rss_item> item) {
 	// only add item to feed if it isn't on the ignore list or if there is no ignore list
 	if (!ign || !ign->matches(item.get())) {
-		feed->items().push_back(item);
+		feed->add_item(item);
 		LOG(LOG_INFO, "rss_parser::parse: added article title = `%s' link = `%s' ign = %p", item->title().c_str(), item->link().c_str(), ign);
 	} else {
 		LOG(LOG_INFO, "rss_parser::parse: ignored article title = `%s' link = `%s'", item->title().c_str(), item->link().c_str());

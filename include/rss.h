@@ -143,6 +143,21 @@ namespace newsbeuter {
 			inline void set_pubDate(time_t t) { pubDate_ = t; }
 			
 			inline std::vector<std::tr1::shared_ptr<rss_item> >& items() { return items_; }
+			inline void add_item(std::tr1::shared_ptr<rss_item> item) {
+				items_.push_back(item);
+				items_guid_map[item->guid()] = item;
+			}
+
+			inline void erase_items(std::vector<std::tr1::shared_ptr<rss_item> >::iterator begin, std::vector<std::tr1::shared_ptr<rss_item> >::iterator end) {
+				for (std::vector<std::tr1::shared_ptr<rss_item> >::const_iterator it=begin;it!=end;it++) {
+					items_guid_map.erase((*it)->guid());
+				}
+				items_.erase(begin, end);
+			}
+			inline void erase_item(std::vector<std::tr1::shared_ptr<rss_item> >::iterator pos) {
+				items_guid_map.erase((*pos)->guid());
+				items_.erase(pos);
+			}
 
 			std::tr1::shared_ptr<rss_item> get_item_by_guid(const std::string& guid);
 			std::tr1::shared_ptr<rss_item> get_item_by_guid_unlocked(const std::string& guid);

@@ -118,7 +118,8 @@ static int rssitem_callback(void * myfeed, int argc, char ** argv, char ** /* az
 	item->set_flags(argv[11] ? argv[11] : "");
 	item->set_base(argv[12] ? argv[12] : "");
 
-	(*feed)->items().push_back(item);
+	//(*feed)->items().push_back(item);
+	(*feed)->add_item(item);
 	return 0;
 }
 
@@ -369,14 +370,14 @@ void cache::externalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, bool reset_
 	
 	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
 
-	LOG(LOG_INFO, "cache::externalize_feed: max_items = %u feed.items().size() = %u", max_items, feed->items().size());
+	LOG(LOG_INFO, "cache::externalize_feed: max_items = %u feed.items().size() = %u", max_items, feed->total_item_count());
 	
 	if (max_items > 0 && feed->items().size() > max_items) {
 		std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin();
 		for (unsigned int i=0;i<max_items;++i)
 			++it;	
 		if (it != feed->items().end())
-			feed->items().erase(it, feed->items().end()); // delete entries that are too much
+			feed->erase_items(it, feed->items().end()); // delete entries that are too much
 	}
 
 	unsigned int days = cfg->get_configvalue_as_int("keep-articles-days");
@@ -436,7 +437,7 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, rss_ignores
 	unsigned int i=0;
 	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin(); it != feed->items().end(); ++it,++i) {
 		if (ign && ign->matches(it->get())) {
-			feed->items().erase(it);
+			feed->erase_item(it);
 			// since we modified the vector, we need to reset the iterator
 			// to the beginning of the vector, and then fast-forward to
 			// the next element.
