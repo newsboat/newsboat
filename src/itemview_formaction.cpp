@@ -124,7 +124,7 @@ void itemview_formaction::prepare() {
 		if (show_source) {
 			render_source(lines, utils::quote_for_stfl(item->description()), render_width);
 		} else {
-			std::string baseurl = item->get_base() != "" ? item->get_base() : item->feedurl();
+			std::string baseurl = item->get_base() != "" ? item->get_base() : item->link();
 			lines = render_html(item->description(), links, baseurl, render_width);
 		}
 
@@ -525,12 +525,12 @@ void itemview_formaction::finished_qna(operation op) {
 	}
 }
 
-std::vector<std::string> itemview_formaction::render_html(const std::string& source, std::vector<linkpair>& thelinks, const std::string& feedurl, unsigned int render_width) {
+std::vector<std::string> itemview_formaction::render_html(const std::string& source, std::vector<linkpair>& thelinks, const std::string& url, unsigned int render_width) {
 	std::vector<std::string> lines;
 	std::string renderer = v->get_cfg()->get_configvalue("html-renderer");
 	if (renderer == "internal") {
 		htmlrenderer rnd(render_width);
-		rnd.render(source, lines, thelinks, feedurl);
+		rnd.render(source, lines, thelinks, url);
 	} else {
 		char * argv[4];
 		argv[0] = const_cast<char *>("/bin/sh");
