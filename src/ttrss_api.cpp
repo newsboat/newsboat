@@ -68,6 +68,9 @@ std::vector<tagged_feedurl> ttrss_api::get_subscribed_urls() {
 	std::vector<tagged_feedurl> feeds;
 
 	struct json_object * reply = json_tokener_parse(result.c_str());
+	if (is_error(reply)) {
+		return feeds;
+	}
 
 	struct json_object * status = json_object_object_get(reply, "status");
 	if (json_object_get_int(status) != 0)
@@ -109,6 +112,10 @@ bool ttrss_api::mark_all_read(const std::string& feed_url) {
 	LOG(LOG_DEBUG, "ttrss_api::mark_all_read: result = %s", result.c_str());
 
 	struct json_object * reply = json_tokener_parse(result.c_str());
+
+	if (is_error(reply)) {
+		return false;
+	}
 
 	struct json_object * status = json_object_object_get(reply, "status");
 	if (json_object_get_int(status) != 0) {
