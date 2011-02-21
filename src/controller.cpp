@@ -1314,7 +1314,7 @@ void controller::write_item(std::tr1::shared_ptr<rss_item> item, std::ostream& o
 	if (width == 0)
 		width = 80;
 	htmlrenderer rnd(width, true);
-	rnd.render(item->description(), lines, links, item->link());
+	rnd.render(item->description(), lines, links, item->feedurl());
 
 	for (std::vector<std::string>::iterator it=lines.begin();it!=lines.end();++it) {
 		ostr << *it << std::endl;

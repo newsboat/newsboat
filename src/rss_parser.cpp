@@ -20,7 +20,9 @@
 namespace newsbeuter {
 
 rss_parser::rss_parser(const std::string& uri, cache * c, configcontainer * cfg, rss_ignores * ii, remote_api * a) 
-	: my_uri(uri), ch(c), cfgcont(cfg), skip_parsing(false), is_valid(false), ign(ii), api(a) { }
+	: my_uri(uri), ch(c), cfgcont(cfg), skip_parsing(false), is_valid(false), ign(ii), api(a) { 
+	is_ttrss = cfgcont->get_configvalue("urls-source") == "ttrss";
+}
 
 rss_parser::~rss_parser() { }
 
@@ -111,7 +113,13 @@ void rss_parser::retrieve_uri(const std::string& uri) {
 	 *	- filter: URLs are downloaded, executed, and their output is parsed
 	 *	- query: URLs are ignored
 	 */
-	if (uri.substr(0,5) == "http:" || uri.substr(0,6) == "https:") {
+	if (is_ttrss) {
+		const char * uri = my_uri.c_str();
+		const char * pound = strrchr(uri, '#');
+		if (pound != NULL) {
+			fetch_ttrss(pound+1);
+		}
+	} else if (uri.substr(0,5) == "http:" || uri.substr(0,6) == "https:") {
 		download_http(uri);
 	} else if (uri.substr(0,5) == "exec:") {
 		get_execplugin(uri.substr(5,uri.length()-5));
@@ -121,8 +129,6 @@ void rss_parser::retrieve_uri(const std::string& uri) {
 		download_filterplugin(filter, url);
 	} else if (my_uri.substr(0,6) == "query:") {
 		skip_parsing = true;
-	} else if (my_uri.substr(0,6) == "ttrss:") {
-		fetch_ttrss(my_uri.substr(6, my_uri.length()-6));
 	} else if (my_uri.substr(0,7) == "file://") {
 		parse_file(my_uri.substr(7, my_uri.length()-7));
 	} else

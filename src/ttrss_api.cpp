@@ -271,13 +271,14 @@ void ttrss_api::fetch_feeds_per_category(struct json_object * cat, std::vector<t
 
 		int feed_id = json_object_get_int(json_object_object_get(feed, "id"));
 		const char * feed_title = json_object_get_string(json_object_object_get(feed, "title"));
+		const char * feed_url = json_object_get_string(json_object_object_get(feed, "feed_url"));
 
 		std::vector<std::string> tags;
 		tags.push_back(std::string("~") + feed_title);
 		if (cat_name) {
 			tags.push_back(cat_name);
 		}
-		feeds.push_back(tagged_feedurl(utils::strprintf("ttrss:%d", feed_id), tags));
+		feeds.push_back(tagged_feedurl(utils::strprintf("%s#%d", feed_url, feed_id), tags));
 
 		// TODO: cache feed_id -> feed_url (or feed_url -> feed_id ?)
 	}

@@ -54,6 +54,7 @@ namespace newsbeuter {
 			rss_ignores * ign;
 			rsspp::feed f;
 			remote_api * api;
+			bool is_ttrss;
 	};
 
 }

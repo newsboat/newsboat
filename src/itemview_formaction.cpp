@@ -124,7 +124,7 @@ void itemview_formaction::prepare() {
 		if (show_source) {
 			render_source(lines, utils::quote_for_stfl(item->description()), render_width);
 		} else {
-			std::string baseurl = item->get_base() != "" ? item->get_base() : item->link();
+			std::string baseurl = item->get_base() != "" ? item->get_base() : item->feedurl();
 			lines = render_html(item->description(), links, baseurl, render_width);
 		}
 
