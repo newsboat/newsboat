@@ -82,7 +82,10 @@ check_ssl_implementation() {
 	fi
 }
 
-echo "" > config.mk
+echo "# overrides of LDFLAGS and LDFLAGS from environment" > config.mk
+[ -n "$CXXFLAGS" ] && echo "CXXFLAGS+=$CXXFLAGS" >> config.mk
+[ -n "$LDFLAGS" ] && echo "LDFLAGS+=$LDFLAGS" >> config.mk
+echo "" >> config.mk
 
 check_pkg "sqlite3" || fail "sqlite3"
 check_pkg "libcurl" || check_custom "libcurl" "curl-config" || fail "libcurl"
