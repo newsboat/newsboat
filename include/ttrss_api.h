@@ -24,6 +24,7 @@ class ttrss_api : public remote_api {
 		bool star_article(const std::string& guid, bool star);
 		bool publish_article(const std::string& guid, bool publish);
 		bool update_article(const std::string& guid, int mode, int field);
+		std::string url_to_id(const std::string& url);
 		std::string retrieve_sid();
 		std::string sid;
 		std::string auth_info;

@@ -104,8 +104,9 @@ void ttrss_api::configure_handle(CURL * /*handle*/) {
 }
 
 bool ttrss_api::mark_all_read(const std::string& feed_url) {
+
 	std::string catchup_url = utils::strprintf("%s/api/?op=catchupFeed&feed_id=%s&sid=%s", 
-			cfg->get_configvalue("ttrss-url").c_str(), feed_url.substr(6,feed_url.length()-6).c_str(), sid.c_str());
+			cfg->get_configvalue("ttrss-url").c_str(), url_to_id(feed_url).c_str(), sid.c_str());
 
 	std::string result = utils::retrieve_url(catchup_url, cfg, auth_info_ptr);
 
@@ -323,6 +324,14 @@ bool ttrss_api::update_article(const std::string& guid, int field, int mode) {
 
 	json_object_put(reply);
 	return true;
+}
+
+std::string ttrss_api::url_to_id(const std::string& url) {
+	const char * uri = url.c_str();
+	const char * pound = strrchr(uri, '#');
+	if (!pound)
+		return "";
+	return std::string(pound+1);
 }
 
 
