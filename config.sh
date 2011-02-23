@@ -74,7 +74,7 @@ all_aboard_the_fail_boat() {
 }
 
 check_ssl_implementation() {
-	if curl-config --static-libs | grep -- -lssl > /dev/null 2>&1 ; then
+	if curl-config --static-libs | egrep -- "-lssl( |^)" > /dev/null 2>&1 ; then
 		echo "DEFINES+=-DHAVE_OPENSSL=1" >> config.mk
 		echo "LDFLAGS+=-lcrypto" >> config.mk
 	elif curl-config --static-libs | grep -- -lgcrypt > /dev/null 2>&1 ; then
