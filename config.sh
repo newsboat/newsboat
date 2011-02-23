@@ -10,7 +10,10 @@ check_pkg() {
 	if pkg-config --silence-errors "${pkgname}" ; then
 		echo "found"
 		echo "# configuration for package ${pkgname}" >> config.mk
-		echo "DEFINES+=`pkg-config --cflags $pkgconfig_args ${pkgname}`" >> config.mk
+		result=`pkg-config --cflags $pkgconfig_args ${pkgname}`
+		if [ -n "$result" ] ; then
+			echo "DEFINES+=$result" >> config.mk
+		fi
 		if [ -n "$add_define" ] ; then
 			echo "DEFINES+=${add_define}" >> config.mk
 		fi
@@ -31,7 +34,10 @@ check_custom() {
 	if ${customconfig} --cflags > /dev/null 2>&1 ; then
 		echo "found"
 		echo "# configuration for package ${pkgname}" >> config.mk
-		echo "DEFINES+=`${customconfig} --cflags`" >> config.mk
+		result=`${customconfig} --cflags`
+		if [ -n "$result" ] ; then
+			echo "DEFINES+=${result}" >> config.mk
+		fi
 		if [ -n "$add_define" ] ; then
 			echo "DEFINES+=${add_define}" >> config.mk
 		fi
@@ -75,9 +81,11 @@ all_aboard_the_fail_boat() {
 
 check_ssl_implementation() {
 	if curl-config --static-libs | egrep -- "-lssl( |^)" > /dev/null 2>&1 ; then
+		check_pkg "libcrypto" || fail "libcrypto"
 		echo "DEFINES+=-DHAVE_OPENSSL=1" >> config.mk
-		echo "LDFLAGS+=-lcrypto" >> config.mk
 	elif curl-config --static-libs | grep -- -lgcrypt > /dev/null 2>&1 ; then
+		check_pkg "gnutls" || fail "gnutls"
+		check_custom "libgcrypt" "libgcrypt-config" || fail "libgcrypt"
 		echo "DEFINES+=-DHAVE_GCRYPT=1" >> config.mk
 	fi
 }
@@ -92,5 +100,5 @@ check_pkg "libcurl" || check_custom "libcurl" "curl-config" || fail "libcurl"
 check_pkg "libxml-2.0" || check_custom "libxml2" "xml2-config" || fail "libxml2"
 check_pkg "stfl" "" "--static" || fail "stfl"
 check_pkg "json" || fail "json"
-all_aboard_the_fail_boat
 check_ssl_implementation
+all_aboard_the_fail_boat
