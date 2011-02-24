@@ -41,6 +41,9 @@ struct item {
 	// Atom-specific:
 	std::string base;
 	std::vector<std::string> labels;
+
+	// only required for ttrss support:
+	time_t pubDate_ts;
 };
 
 struct feed {

@@ -2,6 +2,7 @@
 #include <remote_api.h>
 #include <ttrss_api.h>
 #include <cstring>
+#include <algorithm>
 
 namespace newsbeuter {
 
@@ -163,6 +164,10 @@ bool ttrss_api::update_article_flags(const std::string& oldflags, const std::str
 	return success;
 }
 
+static bool sort_by_pubdate(const rsspp::item& a, const rsspp::item& b) {
+	return a.pubDate_ts > b.pubDate_ts;
+}
+
 rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 	rsspp::feed f;
 
@@ -226,9 +231,12 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 		char rfc822_date[128];
 		strftime(rfc822_date, sizeof(rfc822_date), "%a, %d %b %Y %H:%M:%S %z", gmtime(&updated));
 		item.pubDate = rfc822_date;
+		item.pubDate_ts = updated;
 
 		f.items.push_back(item);
 	}
+
+	std::sort(f.items.begin(), f.items.end(), sort_by_pubdate);
 
 	json_object_put(reply);
 	return f;
