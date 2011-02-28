@@ -705,7 +705,9 @@ void feedlist_formaction::op_start_search() {
 		}
 		if (items.size() > 0) {
 			search_dummy_feed->item_mutex.lock();
-			search_dummy_feed->items() = items;
+			for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items.begin();it!=items.end();it++) {
+				search_dummy_feed->add_item(*it);
+			}
 			search_dummy_feed->item_mutex.unlock();
 			v->push_searchresult(search_dummy_feed, searchphrase);
 		} else {

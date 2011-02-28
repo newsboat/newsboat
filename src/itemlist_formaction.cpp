@@ -578,8 +578,10 @@ void itemlist_formaction::qna_start_search() {
 	}
 
 	{
-	    scope_mutex lock(&search_dummy_feed->item_mutex);
-	    search_dummy_feed->items() = items;
+		scope_mutex lock(&search_dummy_feed->item_mutex);
+		for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items.begin();it!=items.end();it++) {
+			search_dummy_feed->add_item(*it);
+		}
 	}
 
 	if (show_searchresult) {
