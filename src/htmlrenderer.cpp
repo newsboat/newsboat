@@ -658,7 +658,9 @@ void htmlrenderer::Table::start_cell(size_t span)
 
 void htmlrenderer::Table::complete_cell()
 {
-	rows.back().complete_cell();
+    if (rows.size()) {
+	    rows.back().complete_cell();
+    }
 }
 
 void htmlrenderer::Table::start_row()
