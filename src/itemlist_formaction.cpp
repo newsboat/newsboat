@@ -599,7 +599,7 @@ void itemlist_formaction::do_update_visible_items() {
 	scope_mutex lock(&feed->item_mutex);
 	std::vector<std::tr1::shared_ptr<rss_item> >& items = feed->items();
 
-	visible_items.clear();
+	std::vector<itemptr_pos_pair> new_visible_items;
 
 	/*
 	 * this method doesn't redraw, all it does is to go through all
@@ -611,11 +611,13 @@ void itemlist_formaction::do_update_visible_items() {
 	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it = items.begin(); it != items.end(); ++it, ++i) {
 		(*it)->set_index(i+1);
 		if (!apply_filter || m.matches(it->get())) {
-			visible_items.push_back(itemptr_pos_pair(*it, i));
+			new_visible_items.push_back(itemptr_pos_pair(*it, i));
 		}
 	}
 
 	LOG(LOG_DEBUG, "itemlist_formaction::do_update_visible_items: size = %u", visible_items.size());
+
+	visible_items = new_visible_items;
 
 	do_redraw = true;
 }
@@ -631,7 +633,12 @@ void itemlist_formaction::prepare() {
 		do_redraw = true;
 	}
 
-	do_update_visible_items();
+	try {
+		do_update_visible_items();
+	} catch (matcherexception& e) {
+		v->show_error(utils::strprintf(_("Couldn't apply filter: %s"), e.what()));
+		return;
+	}
 
 	if (v->get_cfg()->get_configvalue_as_bool("mark-as-read-on-hover")) {
 		std::string itemposname = f->get("itempos");
