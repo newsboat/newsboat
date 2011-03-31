@@ -636,7 +636,7 @@ void itemlist_formaction::prepare() {
 	try {
 		do_update_visible_items();
 	} catch (matcherexception& e) {
-		v->show_error(utils::strprintf(_("Couldn't apply filter: %s"), e.what()));
+		v->show_error(utils::strprintf(_("Error: applying the filter failed: %s"), e.what()));
 		return;
 	}
 
