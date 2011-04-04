@@ -40,7 +40,7 @@
 #include <config.h>
 #include <sys/param.h>
 #include <string.h>
-#include <ncursesw/ncurses.h>
+#include <ncurses.h>
 
 
 extern "C" {
