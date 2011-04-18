@@ -839,12 +839,18 @@ void controller::reload_all(bool unattended) {
 	unsigned int unread_feeds2, unread_articles2;
 	compute_unread_numbers(unread_feeds2, unread_articles2);
 	bool notify_always = cfg.get_configvalue_as_bool("notify-always");
-	if (notify_always || unread_feeds2 != unread_feeds || unread_articles2 != unread_articles) {
+	if (notify_always || unread_feeds2 > unread_feeds || unread_articles2 > unread_articles) {
+		int article_count = unread_articles2 - unread_articles;
+		int feed_count = unread_feeds2 - unread_feeds;
+
+		LOG(LOG_DEBUG, "unread article count: %d", article_count);
+		LOG(LOG_DEBUG, "unread feed count: %d", feed_count);
+
 		fmtstr_formatter fmt;
 		fmt.register_fmt('f', utils::to_s(unread_feeds2));
 		fmt.register_fmt('n', utils::to_s(unread_articles2));
-		fmt.register_fmt('d', utils::to_s(unread_articles2 - unread_articles));
-		fmt.register_fmt('D', utils::to_s(unread_feeds2 - unread_feeds));
+		fmt.register_fmt('d', utils::to_s(article_count >= 0 ? article_count : 0));
+		fmt.register_fmt('D', utils::to_s(feed_count >= 0 ? feed_count : 0));
 		this->notify(fmt.do_format(cfg.get_configvalue("notify-format")));
 	}
 }
