@@ -84,6 +84,8 @@ namespace newsbeuter {
 			void sort_feeds();
 
 			void update_flags(std::tr1::shared_ptr<rss_item> item);
+
+			unsigned int get_feed_count_per_tag(const std::string& tag);
 		private:
 			void usage(char * argv0);
 			bool setup_dirs_xdg(const char *env_home);

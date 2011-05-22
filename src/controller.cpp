@@ -1568,4 +1568,18 @@ std::vector<std::tr1::shared_ptr<rss_feed> > controller::get_all_feeds_unlocked(
 	return feeds;
 }
 
+
+unsigned int controller::get_feed_count_per_tag(const std::string& tag) {
+	unsigned int count = 0;
+	scope_mutex feedslock(&feeds_mutex);
+
+	for (std::vector<std::tr1::shared_ptr<rss_feed> >::const_iterator it=feeds.begin();it!=feeds.end();it++) {
+		if ((*it)->matches_tag(tag)) {
+			count++;
+		}
+	}
+
+	return count;
+}
+
 }
