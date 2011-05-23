@@ -186,7 +186,7 @@ controller::~controller() {
 	scope_mutex feedslock(&feeds_mutex);
 	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();it++) {
 		scope_mutex lock(&((*it)->item_mutex));
-		(*it)->items().clear();
+		(*it)->clear_items();
 	}
 	feeds.clear();
 }
@@ -1351,7 +1351,7 @@ void controller::save_feed(std::tr1::shared_ptr<rss_feed> feed, unsigned int pos
 		{
 			unsigned int order = feeds[pos]->get_order();
 			scope_mutex itemlock(&feeds[pos]->item_mutex);
-			feeds[pos]->items().clear();
+			feeds[pos]->clear_items();
 			feed->set_order(order);
 		}
 		feeds[pos] = feed;

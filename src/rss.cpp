@@ -36,6 +36,7 @@ rss_feed::rss_feed(cache * c) : ch(c), empty(true), is_rtl_(false), idx(0), stat
 
 rss_feed::~rss_feed() {
 	// LOG(LOG_CRITICAL, "delete rss_feed");
+	clear_items();
 }
 
 // rss_item setters

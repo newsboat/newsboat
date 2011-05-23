@@ -423,7 +423,7 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, rss_ignores
 		throw dbexception(db);
 	}
 
-	feed->items().clear();
+	feed->clear_items();
 
 	/* ...and then the associated items */
 	query = prepare_query("SELECT guid,title,author,url,pubDate,length(content),unread,feedurl,enclosure_url,enclosure_type,enqueued,flags,base FROM rss_item WHERE feedurl = '%q' AND deleted = 0 ORDER BY pubDate DESC, id DESC;",feed->rssurl().c_str());
@@ -466,9 +466,12 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, rss_ignores
 				flagged_items.push_back(feed->items()[i]);
 			}
 		}	
-		feed->items().erase(it, feed->items().end()); // delete old entries
+		feed->erase_items(it, feed->items().end()); // delete old entries
 		if (flagged_items.size() > 0) {
-			feed->items().insert(feed->items().end(), flagged_items.begin(), flagged_items.end()); // if some flagged articles were saved, append them
+			// if some flagged articles were saved, append them
+			for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator jt=flagged_items.begin();jt!=flagged_items.end();jt++) {
+				feed->add_item(*jt);
+			}
 		}
 	}
 	feed->sort_unlocked(cfg->get_configvalue("article-sort-order"));
