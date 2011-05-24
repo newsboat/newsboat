@@ -17,7 +17,7 @@ Tuitest.keypress(9)
 Tuitest.wait_until_idle
 
 # begin auto-generated verification #1 
-verifier.expect(0, 0, "newsbeuter 2.4 - Your feeds (0 unread, 1 total)")
+verifier.expect(0, 14, " - Your feeds (0 unread, 1 total)")
 verifier.expect(1, 3, "1         (0/0) http://testbed.newsbeuter.org/rss20.xml")
 verifier.expect(23, 0, "q:Quit ENTER:Open n:Next Unread r:Reload R:Reload All A:Mark Read C:Catchup All")
 verifier.expect(24, 0, ":set")
