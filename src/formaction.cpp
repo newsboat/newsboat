@@ -81,7 +81,7 @@ void formaction::process_op(operation op, bool automatic, std::vector<std::strin
 			if (automatic) {
 				std::string cmdline = "set ";
 				if (args) {
-					for (std::vector<std::string>::iterator it=args->begin();it!=args->end();it++) {
+					for (std::vector<std::string>::iterator it=args->begin();it!=args->end();++it) {
 						cmdline.append(utils::strprintf("%s ", stfl::quote(*it).c_str()));
 					}
 				}
@@ -135,14 +135,14 @@ std::vector<std::string> formaction::get_suggestions(const std::string& fragment
 	LOG(LOG_DEBUG, "formaction::get_suggestions: fragment = %s", fragment.c_str());
 	std::vector<std::string> result;
 	// first check all formaction command suggestions
-	for (std::vector<std::string>::iterator it=valid_cmds.begin();it!=valid_cmds.end();it++) {
+	for (std::vector<std::string>::iterator it=valid_cmds.begin();it!=valid_cmds.end();++it) {
 		LOG(LOG_DEBUG, "formaction::get_suggestions: extracted part: %s", it->substr(0, fragment.length()).c_str());
 		if (it->substr(0, fragment.length()) == fragment) {
 			LOG(LOG_DEBUG, "...and it matches.");
 			result.push_back(*it);
 		}
 	}
-	if (result.size()==0) {
+	if (result.empty()) {
 		std::vector<std::string> tokens = utils::tokenize_quoted(fragment, " \t=");
 		if (tokens.size() >= 1) {
 			if (tokens[0] == "set") {
@@ -152,7 +152,7 @@ std::vector<std::string> formaction::get_suggestions(const std::string& fragment
 					if (tokens.size() > 1)
 						variable_fragment = tokens[1];
 					variable_suggestions = v->get_cfg()->get_suggestions(variable_fragment);
-					for (std::vector<std::string>::iterator it=variable_suggestions.begin();it!=variable_suggestions.end();it++) {
+					for (std::vector<std::string>::iterator it=variable_suggestions.begin();it!=variable_suggestions.end();++it) {
 						std::string line = fragment + it->substr(variable_fragment.length(), it->length()-variable_fragment.length());
 						result.push_back(line);
 						LOG(LOG_DEBUG, "formaction::get_suggestions: suggested %s", line.c_str());
@@ -178,11 +178,11 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 	std::vector<std::string> tokens = utils::tokenize_quoted(cmdline, " \t=");
 	configcontainer * cfg = v->get_cfg();
 	assert(cfg != NULL);
-	if (tokens.size() > 0) {
+	if (!tokens.empty()) {
 		std::string cmd = tokens[0];
 		tokens.erase(tokens.begin());
 		if (cmd == "set") {
-			if (tokens.size()==0) {
+			if (tokens.empty()) {
 				v->show_error(_("usage: set <variable>[=<value>]"));
 			} else if (tokens.size()==1) {
 				std::string var = tokens[0];
@@ -211,10 +211,10 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 				v->pop_current_formaction();
 			}
 		} else if (cmd == "source") {
-			if (tokens.size()==0) {
+			if (tokens.empty()) {
 				v->show_error(_("usage: source <file> [...]"));
 			} else {
-				for (std::vector<std::string>::iterator it=tokens.begin();it!=tokens.end();it++) {
+				for (std::vector<std::string>::iterator it=tokens.begin();it!=tokens.end();++it) {
 					try {
 						v->get_ctrl()->load_configfile(utils::resolve_tilde(*it));
 					} catch (const configexception& ex) {

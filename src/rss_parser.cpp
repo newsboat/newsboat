@@ -79,7 +79,7 @@ std::string rss_parser::render_xhtml_title(const std::string& title, const std::
 	std::vector<std::string> lines;
 	std::vector<linkpair> links; // not needed
 	rnd.render(title, lines, links, link);
-	if (lines.size() > 0)
+	if (!lines.empty())
 		return lines[0];
 	return "";
 }
@@ -248,7 +248,7 @@ void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed> feed) {
 	 * we iterate over all items of a feed, create an rss_item object for
 	 * each item, and fill it with the appropriate values from the data structure.
 	 */
-	for (std::vector<rsspp::item>::iterator item=f.items.begin();item!=f.items.end();item++) {
+	for (std::vector<rsspp::item>::iterator item=f.items.begin();item!=f.items.end();++item) {
 		std::tr1::shared_ptr<rss_item> x(new rss_item(ch));
 
 		set_item_title(feed, x, *item);

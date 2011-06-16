@@ -20,7 +20,7 @@ namespace podbeuter {
 			inline void set_view(pb_view * vv) { v = vv; }
 			void run(int argc, char * argv[] = 0);
 
-			inline bool view_update_necessary() { return view_update_; }
+			inline bool view_update_necessary() const { return view_update_; }
 			inline void set_view_update_necessary(bool b) { view_update_ = b; }
 			std::vector<download>& downloads() { return downloads_; }
 

@@ -15,7 +15,7 @@ class download {
 		~download();
 		double percents_finished();
 		const char * status_text();
-		inline dlstatus_t status() { return dlstatus; }
+		inline dlstatus_t status() const { return dlstatus; }
 		const char * filename();
 		const char * url();
 		void set_filename(const std::string& str);
@@ -26,8 +26,8 @@ class download {
 		double kbps();
 		void set_offset(unsigned long offset);
 
-		inline double current_size() { return cursize + offs; }
-		inline double total_size() { return totalsize + offs; }
+		inline double current_size() const { return cursize + offs; }
+		inline double total_size() const { return totalsize + offs; }
 
 	private:
 		std::string fn;

@@ -146,7 +146,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 						htmlrenderer rnd(80);
 						std::string baseurl = visible_items[itempos].first->get_base() != "" ? visible_items[itempos].first->get_base() : visible_items[itempos].first->feedurl();
 						rnd.render(visible_items[itempos].first->description(), lines, links, baseurl);
-						if (links.size() > 0) {
+						if (!links.empty()) {
 							v->push_urlview(links);
 						} else {
 							v->show_error(_("URL list empty."));
@@ -572,14 +572,14 @@ void itemlist_formaction::qna_start_search() {
 		return;
 	}
 
-	if (items.size() == 0) {
+	if (items.empty()) {
 		v->show_error(_("No results."));
 		return;
 	}
 
 	{
 		scope_mutex lock(&search_dummy_feed->item_mutex);
-		for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items.begin();it!=items.end();it++) {
+		for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items.begin();it!=items.end();++it) {
 			search_dummy_feed->add_item(*it);
 		}
 	}
@@ -886,7 +886,7 @@ void itemlist_formaction::handle_cmdline(const std::string& cmd) {
 		handle_cmdline_num(idx);
 	} else {
 		std::vector<std::string> tokens = utils::tokenize_quoted(cmd);
-		if (tokens.size() == 0)
+		if (tokens.empty())
 			return;
 		if (tokens[0] == "save" && tokens.size() >= 2) {
 			std::string filename = utils::resolve_tilde(tokens[1]);

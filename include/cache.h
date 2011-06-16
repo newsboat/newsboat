@@ -31,7 +31,7 @@ class cache {
 		unsigned int get_unread_count();
 		void mark_item_deleted(const std::string& guid, bool b);
 		void remove_old_deleted_items(const std::string& rssurl, const std::vector<std::string>& guids);
-		void mark_items_read_by_guid(const std::vector<std::string> guids);
+		void mark_items_read_by_guid(const std::vector<std::string>& guids);
 		std::vector<std::string> get_read_item_guids();
 		void fetch_descriptions(rss_feed * feed);
 		void record_google_replay(const std::string& guid, unsigned int state);

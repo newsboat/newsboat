@@ -291,7 +291,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					}
 
 					case TAG_TR:
-						if (tables.size())
+						if (!tables.empty())
 							tables.back().start_row();
 						break;
 
@@ -303,7 +303,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						} catch (const std::invalid_argument& ) {
 							// is ok, span 1 than
 						}
-						if (tables.size())
+						if (!tables.empty())
 							tables.back().start_cell(span);
 						break;
 					}
@@ -442,14 +442,14 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						add_nonempty_line(curline, tables, lines);
 						prepare_newline(curline, 0); // no indent in tables
 
-						if (tables.size()) {
+						if (!tables.empty()) {
 							std::vector<std::string> table_text;
 							tables.back().complete_cell();
 							tables.back().complete_row();
 							render_table(tables.back(), table_text);
 							tables.pop_back();
 
-							if (tables.size()) { // still a table on the outside?
+							if (!tables.empty()) { // still a table on the outside?
 								for(size_t idx=0; idx < table_text.size(); ++idx)
 								tables.back().add_text(table_text[idx]); // add rendered table to current cell
 							} else {
@@ -469,7 +469,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						add_nonempty_line(curline, tables, lines);
 						prepare_newline(curline, 0); // no indent in tables
 
-						if (tables.size())
+						if (!tables.empty())
 							tables.back().complete_row();
 						break;
 
@@ -478,7 +478,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						add_nonempty_line(curline, tables, lines);
 						prepare_newline(curline, 0); // no indent in tables
 
-						if (tables.size())
+						if (!tables.empty())
 							tables.back().complete_cell();
 						break;
 
@@ -536,7 +536,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						unsigned int i=0;
 						bool new_line = false;
 
-						if (!line_is_nonempty(curline) && words.size() > 0 && words[0] == " ") {
+						if (!line_is_nonempty(curline) && !words.empty() && words[0] == " ") {
 							words.erase(words.begin());
 						}
 
@@ -567,7 +567,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 	add_nonempty_line(curline, tables, lines);
 	
 	// force all tables to be closed and rendered
-	while(tables.size()) {
+	while(!tables.empty()) {
 		std::vector<std::string> table_text;
 		render_table(tables.back(), table_text);
 		tables.pop_back();

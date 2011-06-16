@@ -164,12 +164,6 @@ static int search_item_callback(void * myfeed, int argc, char ** argv, char ** /
 
 
 cache::cache(const std::string& cachefile, configcontainer * c) : db(0),cfg(c) {
-	bool file_exists = false;
-	std::fstream f;
-	f.open(cachefile.c_str(), std::fstream::in | std::fstream::out);
-	if (f.is_open()) {
-		file_exists = true;
-	}
 	int error = sqlite3_open(cachefile.c_str(),&db);
 	if (error != SQLITE_OK) {
 		LOG(LOG_ERROR,"couldn't sqlite3_open(%s): error = %d", cachefile.c_str(), error);
@@ -354,6 +348,11 @@ void cache::externalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, bool reset_
 
 	cb_handler count_cbh;
 	int rc = sqlite3_exec(db,prepare_query("SELECT count(*) FROM rss_feed WHERE rssurl = '%q';", feed->rssurl().c_str()).c_str(),count_callback,&count_cbh,NULL);
+	if (rc != SQLITE_OK) {
+		LOG(LOG_CRITICAL,"query failed: error = %d", rc);
+		throw dbexception(db);
+	}
+
 	int count = count_cbh.count();
 	LOG(LOG_DEBUG, "cache::externalize_rss_feed: rss_feeds with rssurl = '%s': found %d",feed->rssurl().c_str(), count);
 	if (count > 0) {
@@ -443,7 +442,7 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, rss_ignores
 			// the next element.
 			it = feed->items().begin();
 			for (int j=0;j<int(i)-1;j++) {
-				it++;
+				++it;
 			}
 			continue;
 		}
@@ -469,7 +468,7 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, rss_ignores
 		feed->erase_items(it, feed->items().end()); // delete old entries
 		if (flagged_items.size() > 0) {
 			// if some flagged articles were saved, append them
-			for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator jt=flagged_items.begin();jt!=flagged_items.end();jt++) {
+			for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator jt=flagged_items.begin();jt!=flagged_items.end();++jt) {
 				feed->add_item(*jt);
 			}
 		}
@@ -814,10 +813,10 @@ unsigned int cache::get_unread_count() {
 	return count;
 }
 
-void cache::mark_items_read_by_guid(const std::vector<std::string> guids) {
+void cache::mark_items_read_by_guid(const std::vector<std::string>& guids) {
 	scope_measure m1("cache::mark_items_read_by_guid");
 	std::string guidset("(");
-	for (std::vector<std::string>::const_iterator it=guids.begin();it!=guids.end();it++) {
+	for (std::vector<std::string>::const_iterator it=guids.begin();it!=guids.end();++it) {
 		guidset.append(prepare_query("'%q', ", it->c_str()));
 	}
 	guidset.append("'')");
@@ -859,7 +858,6 @@ std::vector<std::string> cache::get_read_item_guids() {
 
 void cache::clean_old_articles() {
 	scope_mutex lock(&mtx);
-	int rc;
 
 	unsigned int days = cfg->get_configvalue_as_int("keep-articles-days");
 	if (days > 0) {
@@ -867,7 +865,7 @@ void cache::clean_old_articles() {
 
 		std::string query(utils::strprintf("DELETE FROM rss_item WHERE pubDate < %d", old_date));
 		LOG(LOG_DEBUG, "cache::clean_old_articles: about to delete articles with a pubDate older than %d", old_date);
-		rc = sqlite3_exec(db, query.c_str(), NULL, NULL, NULL);
+		int rc = sqlite3_exec(db, query.c_str(), NULL, NULL, NULL);
 		LOG(LOG_DEBUG, "cache::clean_old_artgicles: old article delete result: rc = %d", rc);
 	} else {
 		LOG(LOG_DEBUG, "cache::clean_old_articles, days == 0, not cleaning up anything");
@@ -877,7 +875,7 @@ void cache::clean_old_articles() {
 void cache::fetch_descriptions(rss_feed * feed) {
 	std::vector<std::tr1::shared_ptr<rss_item> >& items = feed->items();
 	std::vector<std::string> guids;
-	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items.begin();it!=items.end();it++) {
+	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items.begin();it!=items.end();++it) {
 		guids.push_back(prepare_query("'%q'", (*it)->guid().c_str()));
 	}
 	std::string in_clause = utils::join(guids, ", ");
@@ -905,7 +903,7 @@ void cache::record_google_replay(const std::string& guid, unsigned int state) {
 void cache::delete_google_replay_by_guid(const std::vector<std::string>& guids) {
 	std::vector<std::string> escaped_guids;
 
-	for (std::vector<std::string>::const_iterator it=guids.begin();it!=guids.end();it++) {
+	for (std::vector<std::string>::const_iterator it=guids.begin();it!=guids.end();++it) {
 		escaped_guids.push_back(prepare_query("'%q'", it->c_str()));
 	}
 

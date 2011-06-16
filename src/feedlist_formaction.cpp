@@ -597,7 +597,7 @@ void feedlist_formaction::handle_cmdline(const std::string& cmd) {
 	} else {
 		// hand over all other commands to formaction
 		std::vector<std::string> tokens = utils::tokenize_quoted(cmd, " \t");
-		if (tokens.size() > 0) {
+		if (!tokens.empty()) {
 			if (tokens[0] == "tag") {
 				if (tokens.size() >= 2 && tokens[1] != "") {
 					tag = tokens[1];
@@ -706,9 +706,9 @@ void feedlist_formaction::op_start_search() {
 			v->show_error(utils::strprintf(_("Error while searching for `%s': %s"), searchphrase.c_str(), e.what()));
 			return;
 		}
-		if (items.size() > 0) {
+		if (!items.empty()) {
 			search_dummy_feed->item_mutex.lock();
-			for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items.begin();it!=items.end();it++) {
+			for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items.begin();it!=items.end();++it) {
 				search_dummy_feed->add_item(*it);
 			}
 			search_dummy_feed->item_mutex.unlock();

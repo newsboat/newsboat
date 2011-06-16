@@ -252,7 +252,7 @@ void configcontainer::toggle(const std::string& key) {
 }
 
 void configcontainer::dump_config(std::vector<std::string>& config_output) {
-	for (std::map<std::string, configdata>::iterator it=config_data.begin();it!=config_data.end();it++) {
+	for (std::map<std::string, configdata>::iterator it=config_data.begin();it!=config_data.end();++it) {
 		std::string configline = it->first + " ";
 		assert(it->second.type != configdata::INVALID);
 		switch (it->second.type) {
@@ -267,7 +267,7 @@ void configcontainer::dump_config(std::vector<std::string>& config_output) {
 		case configdata::PATH:
 			if (it->second.multi_option) {
 				std::vector<std::string> tokens = utils::tokenize(it->second.value, " ");
-				for (std::vector<std::string>::iterator it=tokens.begin();it!=tokens.end();it++) {
+				for (std::vector<std::string>::iterator it=tokens.begin();it!=tokens.end();++it) {
 					configline.append(utils::quote(*it) + " ");
 				}
 			} else {
@@ -290,7 +290,7 @@ void configcontainer::dump_config(std::vector<std::string>& config_output) {
 
 std::vector<std::string> configcontainer::get_suggestions(const std::string& fragment) {
 	std::vector<std::string> result;
-	for (std::map<std::string, configdata>::iterator it=config_data.begin();it!=config_data.end();it++) {
+	for (std::map<std::string, configdata>::iterator it=config_data.begin();it!=config_data.end();++it) {
 		if (it->first.substr(0, fragment.length()) == fragment)
 			result.push_back(it->first);
 	}

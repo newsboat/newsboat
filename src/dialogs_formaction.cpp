@@ -30,7 +30,7 @@ void dialogs_formaction::prepare() {
 		std::vector<std::pair<unsigned int, std::string> > formaction_names = v->get_formaction_names();
 
 		unsigned int i = 1;
-		for (std::vector<std::pair<unsigned int, std::string> >::iterator it=formaction_names.begin();it!=formaction_names.end();it++,i++) {
+		for (std::vector<std::pair<unsigned int, std::string> >::iterator it=formaction_names.begin();it!=formaction_names.end();++it,i++) {
 			LOG(LOG_DEBUG, "dialogs_formaction::prepare: p1 = %p p2 = %p", v->get_current_formaction().get(), get_parent_formaction().get());
 			listfmt.add_line(utils::strprintf("%4u %s %s", i, (v->get_formaction(it->first).get() == get_parent_formaction().get()) ? "*" : " ", it->second.c_str()), it->first);
 		}

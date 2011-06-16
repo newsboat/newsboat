@@ -247,7 +247,7 @@ feed parser::parse_xmlnode(xmlNode* node) {
 			try {
 				parser->parse_feed(f, node);
 			} catch (exception& e) {
-				throw e;
+				throw;
 			}
 		}
 	} else {

@@ -15,7 +15,7 @@ regexmanager::regexmanager() {
 }
 
 regexmanager::~regexmanager() {
-	for (std::map<std::string, rc_pair>::iterator jt=locations.begin();jt!=locations.end();jt++) {
+	for (std::map<std::string, rc_pair>::iterator jt=locations.begin();jt!=locations.end();++jt) {
 		std::vector<regex_t *>& regexes(jt->second.first);
 		if (regexes.size() > 0) {
 			for (std::vector<regex_t *>::iterator it=regexes.begin();it!=regexes.end();++it) {
@@ -26,7 +26,7 @@ regexmanager::~regexmanager() {
 }
 
 void regexmanager::dump_config(std::vector<std::string>& config_output) {
-	for (std::vector<std::string>::iterator it=cheat_store_for_dump_config.begin();it!=cheat_store_for_dump_config.end();it++) {
+	for (std::vector<std::string>::iterator it=cheat_store_for_dump_config.begin();it!=cheat_store_for_dump_config.end();++it) {
 		config_output.push_back(*it);
 	}
 }
@@ -82,7 +82,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 			locations[location].second.push_back(colorstr);
 		} else {
 			delete rx;
-			for (std::map<std::string, rc_pair>::iterator it=locations.begin();it!=locations.end();it++) {
+			for (std::map<std::string, rc_pair>::iterator it=locations.begin();it!=locations.end();++it) {
 				LOG(LOG_DEBUG, "regexmanager::handle_action: adding rx = %s colorstr = %s to location %s",
 					params[1].c_str(), colorstr.c_str(), it->first.c_str());
 				rx = new regex_t;
@@ -93,7 +93,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 			}
 		}
 		std::string line = "highlight";
-		for (std::vector<std::string>::const_iterator it=params.begin();it!=params.end();it++) {
+		for (std::vector<std::string>::const_iterator it=params.begin();it!=params.end();++it) {
 			line.append(" ");
 			line.append(utils::quote(*it));
 		}
@@ -150,7 +150,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 }
 
 int regexmanager::article_matches(matchable * item) {
-	for (std::vector<std::pair<std::tr1::shared_ptr<matcher>, int> >::iterator it=matchers.begin();it!=matchers.end();it++) {
+	for (std::vector<std::pair<std::tr1::shared_ptr<matcher>, int> >::iterator it=matchers.begin();it!=matchers.end();++it) {
 		if (it->first->matches(item)) {
 			return it->second;
 		}
@@ -163,7 +163,7 @@ void regexmanager::remove_last_regex(const std::string& location) {
 
 	std::vector<regex_t *>::iterator it=regexes.begin();
 	for (unsigned int i=0;i<regexes.size()-1;i++) {
-		it++;
+		++it;
 	}
 	delete *it;
 	regexes.erase(it);

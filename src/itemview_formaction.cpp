@@ -458,7 +458,7 @@ void itemview_formaction::render_source(std::vector<std::string>& lines, std::st
 
 void itemview_formaction::handle_cmdline(const std::string& cmd) {
 	std::vector<std::string> tokens = utils::tokenize_quoted(cmd);
-	if (tokens.size() > 0) {
+	if (!tokens.empty()) {
 		if (tokens[0] == "save" && tokens.size() >= 2) {
 			std::string filename = utils::resolve_tilde(tokens[1]);
 			std::tr1::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);

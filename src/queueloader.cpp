@@ -54,7 +54,7 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 				LOG(LOG_DEBUG, "queueloader::reload: loaded `%s' from queue file", line.c_str());
 				std::vector<std::string> fields = utils::tokenize_quoted(line);
 				bool url_found = false;
-				if (dltemp.size() > 0) {
+				if (!dltemp.empty()) {
 					for (std::vector<download>::iterator it=dltemp.begin();it!=dltemp.end();++it) {
 						if (fields[0] == it->url()) {
 							LOG(LOG_INFO, "queueloader::reload: found `%s' in old vector", fields[0].c_str());
@@ -63,7 +63,7 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 						}
 					}
 				}
-				if (downloads.size() > 0) {
+				if (!downloads.empty()) {
 					for (std::vector<download>::iterator it=downloads.begin();it!=downloads.end();++it) {
 						if (fields[0] == it->url()) {
 							LOG(LOG_INFO, "queueloader::reload: found `%s' in new vector", line.c_str());

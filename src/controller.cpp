@@ -184,7 +184,7 @@ controller::~controller() {
 	delete api;
 
 	scope_mutex feedslock(&feeds_mutex);
-	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();it++) {
+	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it) {
 		scope_mutex lock(&((*it)->item_mutex));
 		(*it)->clear_items();
 	}
@@ -455,7 +455,7 @@ void controller::run(int argc, char * argv[]) {
 		}
 		if (api && type == "googlereader") { // ugly hack!
 			std::vector<google_replay_pair> actions = rsscache->get_google_replay();
-			if (actions.size() > 0) {
+			if (!actions.empty()) {
 				std::cout << _("Updating Google Reader unread states...");
 				std::cout.flush();
 
@@ -537,7 +537,7 @@ void controller::run(int argc, char * argv[]) {
 		std::cout << _("Prepopulating query feeds...");
 		std::cout.flush();
 		scope_mutex feedslock(&feeds_mutex);
-		for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();it++) {
+		for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it) {
 			if ((*it)->rssurl().substr(0,6) == "query:") {
 				(*it)->update_items(get_all_feeds_unlocked());
 			}
@@ -794,7 +794,7 @@ void controller::reload_all(bool unattended) {
 
 	{
 		scope_mutex feedlock(&feeds_mutex);
-		for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();it++) {
+		for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it) {
 			(*it)->reset_status();
 		}
 		size = feeds.size();
@@ -824,7 +824,7 @@ void controller::reload_all(bool unattended) {
 		LOG(LOG_DEBUG, "controller::reload_all: starting my own reload...");
 		this->reload_range(partitions[num_threads-1].first, partitions[num_threads-1].second, size, unattended);
 		LOG(LOG_DEBUG, "controller::reload_all: joining other threads...");
-		for (std::vector<pthread_t>::iterator it=threads.begin();it!=threads.end();it++) {
+		for (std::vector<pthread_t>::iterator it=threads.begin();it!=threads.end();++it) {
 			::pthread_join(*it, NULL);
 		}
 	}
@@ -1138,7 +1138,7 @@ void controller::enqueue_url(const std::string& url, std::tr1::shared_ptr<rss_fe
 			getline(f, line);
 			if (!f.eof() && line.length() > 0) {
 				std::vector<std::string> fields = utils::tokenize_quoted(line);
-				if (fields.size() > 0 && fields[0] == url) {
+				if (!fields.empty() && fields[0] == url) {
 					url_found = true;
 					break;
 				}
@@ -1185,7 +1185,7 @@ void controller::reload_urls_file() {
 				rsscache->internalize_rssfeed(new_feed, ignore_disp ? &ign : NULL);
 			} catch(const dbexception& e) {
 				LOG(LOG_ERROR, "controller::reload_urls_file: caught exception: %s", e.what());
-				throw e;
+				throw;
 			}
 			new_feeds.push_back(new_feed);
 		}
@@ -1435,7 +1435,7 @@ void controller::export_read_information(const std::string& readinfofile) {
 	std::fstream f;
 	f.open(readinfofile.c_str(), std::fstream::out);
 	if (f.is_open()) {
-		for (std::vector<std::string>::iterator it=guids.begin();it!=guids.end();it++) {
+		for (std::vector<std::string>::iterator it=guids.begin();it!=guids.end();++it) {
 			f << *it << std::endl;
 		}
 	}
@@ -1539,7 +1539,7 @@ void controller::dump_config(const std::string& filename) {
 	std::fstream f;
 	f.open(filename.c_str(), std::fstream::out);
 	if (f.is_open()) {
-		for (std::vector<std::string>::iterator it=configlines.begin();it!=configlines.end();it++) {
+		for (std::vector<std::string>::iterator it=configlines.begin();it!=configlines.end();++it) {
 			f << *it << std::endl;
 		}
 	}

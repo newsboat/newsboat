@@ -68,7 +68,7 @@ bool configparser::parse(const std::string& filename, bool double_include) {
 	while (f.is_open() && !f.eof()) {
 		LOG(LOG_DEBUG,"configparser::parse: tokenizing %s",line.c_str());
 		std::vector<std::string> tokens = utils::tokenize_quoted(line);
-		if (tokens.size() > 0) {
+		if (!tokens.empty()) {
 			std::string cmd = tokens[0];
 			config_action_handler * handler = action_handlers[cmd];
 			if (handler) {
@@ -98,7 +98,7 @@ void configparser::unregister_handler(const std::string& cmd) {
 }
 
 void configparser::evaluate_backticks(std::vector<std::string>& tokens) {
-	for (std::vector<std::string>::iterator it=tokens.begin();it!=tokens.end();it++) {
+	for (std::vector<std::string>::iterator it=tokens.begin();it!=tokens.end();++it) {
 		*it = evaluate_backticks(*it);
 	}
 }

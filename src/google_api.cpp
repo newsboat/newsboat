@@ -83,7 +83,7 @@ std::string googlereader_api::retrieve_auth() {
 	curl_easy_cleanup(handle);
 
 	std::vector<std::string> lines = utils::tokenize(result);
-	for (std::vector<std::string>::iterator it=lines.begin();it!=lines.end();it++) {
+	for (std::vector<std::string>::iterator it=lines.begin();it!=lines.end();++it) {
 		LOG(LOG_DEBUG, "googlereader_api::retrieve_auth: line = %s", it->c_str());
 		if (it->substr(0,5)=="Auth=") {
 			std::string auth = it->substr(5, it->length()-5);
@@ -203,7 +203,7 @@ bool googlereader_api::mark_all_read(const std::string& feedurl) {
 std::vector<std::string> googlereader_api::bulk_mark_articles_read(const std::vector<google_replay_pair>& actions) {
 	std::vector<std::string> successful_tokens;
 	std::string token = get_new_token();
-	for (std::vector<google_replay_pair>::const_iterator it=actions.begin();it!=actions.end();it++) {
+	for (std::vector<google_replay_pair>::const_iterator it=actions.begin();it!=actions.end();++it) {
 		bool read;
 		if (it->second == GOOGLE_MARK_READ) {
 			read = true;

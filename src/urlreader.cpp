@@ -53,11 +53,11 @@ void file_urlreader::reload() {
 			getline(f,line);
 			if (!f.eof() && line.length() > 0 && line[0] != '#') {
 				std::vector<std::string> tokens = utils::tokenize_quoted(line);
-				if (tokens.size() > 0) {
+				if (!tokens.empty()) {
 					std::string url = tokens[0];
 					urls.push_back(url);
 					tokens.erase(tokens.begin());
-					if (tokens.size() > 0) {
+					if (!tokens.empty()) {
 						tags[url] = tokens;
 						for (std::vector<std::string>::iterator it=tokens.begin();it!=tokens.end();++it) {
 							alltags.insert(*it);
@@ -112,7 +112,7 @@ void opml_urlreader::reload() {
 
 	std::vector<std::string> urls = utils::tokenize_quoted(this->get_source(), " ");
 
-	for (std::vector<std::string>::iterator it=urls.begin();it!=urls.end();it++) {
+	for (std::vector<std::string>::iterator it=urls.begin();it!=urls.end();++it) {
 		LOG(LOG_DEBUG, "opml_urlreader::reload: downloading `%s'", it->c_str());
 		std::string urlcontent = utils::retrieve_url(*it, cfg, this->get_auth());
 

@@ -106,7 +106,7 @@ void rss_item::set_unread(bool u) {
 		} catch (const dbexception& e) {
 			// if the update failed, restore the old unread flag and rethrow the exception
 			unread_ = old_u; 
-			throw e;
+			throw;
 		}
 	}
 }
@@ -186,7 +186,7 @@ std::string rss_item::description() const {
 std::string rss_feed::title() const {
 	bool found_title = false;
 	std::string alt_title;
-	for (std::vector<std::string>::const_iterator it=tags_.begin();it!=tags_.end();it++) {
+	for (std::vector<std::string>::const_iterator it=tags_.begin();it!=tags_.end();++it) {
 		if (it->substr(0,1) == "~") {
 			found_title = true;
 			alt_title = it->substr(1, it->length()-1);
@@ -363,7 +363,7 @@ void rss_ignores::handle_action(const std::string& action, const std::vector<std
 }
 
 void rss_ignores::dump_config(std::vector<std::string>& config_output) {
-	for (std::vector<feedurl_expr_pair>::iterator it = ignores.begin();it!=ignores.end();it++) {
+	for (std::vector<feedurl_expr_pair>::iterator it = ignores.begin();it!=ignores.end();++it) {
 		std::string configline = "ignore-article ";
 		if (it->first == "*")
 			configline.append("*");
@@ -373,10 +373,10 @@ void rss_ignores::dump_config(std::vector<std::string>& config_output) {
 		configline.append(utils::quote(it->second->get_expression()));
 		config_output.push_back(configline);
 	}
-	for (std::vector<std::string>::iterator it=ignores_lastmodified.begin();it!=ignores_lastmodified.end();it++) {
+	for (std::vector<std::string>::iterator it=ignores_lastmodified.begin();it!=ignores_lastmodified.end();++it) {
 		config_output.push_back(utils::strprintf("always-download %s", utils::quote(*it).c_str()));
 	}
-	for (std::vector<std::string>::iterator it=resetflag.begin();it!=resetflag.end();it++) {
+	for (std::vector<std::string>::iterator it=resetflag.begin();it!=resetflag.end();++it) {
 		config_output.push_back(utils::strprintf("reset-unread-on-update %s", utils::quote(*it).c_str()));
 	}
 }
@@ -526,7 +526,7 @@ void rss_feed::sort_unlocked(const std::string& method) {
 	std::vector<std::string> methods = utils::tokenize(method,"-");
 	bool reverse = false;
 
-	if (methods.size() > 0 && methods[0] == "date") { // date is descending by default
+	if (!methods.empty() && methods[0] == "date") { // date is descending by default
 		if (methods.size() > 1 && methods[1] == "asc") {
 			reverse = true;
 		}
@@ -536,7 +536,7 @@ void rss_feed::sort_unlocked(const std::string& method) {
 		}
 	}
 
-	if (methods.size() > 0) {
+	if (!methods.empty()) {
 		if (methods[0] == "title") {
 			std::stable_sort(items_.begin(), items_.end(), sort_item_by_title(reverse));
 		} else if (methods[0] == "flags") {
@@ -579,7 +579,7 @@ void rss_feed::purge_deleted_items() {
 
 void rss_feed::set_feedptrs(std::tr1::shared_ptr<rss_feed> self) {
 	scope_mutex lock(&item_mutex);
-	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items_.begin();it!=items_.end();it++) {
+	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items_.begin();it!=items_.end();++it) {
 		(*it)->set_feedptr(self);
 	}
 }
@@ -600,7 +600,7 @@ std::string rss_feed::get_status() {
 
 void rss_feed::unload() {
 	scope_mutex lock(&item_mutex);
-	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items_.begin();it!=items_.end();it++) {
+	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items_.begin();it!=items_.end();++it) {
 		(*it)->unload();
 	}
 }

@@ -88,11 +88,11 @@ bool matcher::matchop_between(expression * e, matchable * item) {
 	if (lit.size() < 2)
 		return false;
 	std::istringstream is1(lit[0]), is2(lit[1]);
-	int i1, i2, tmp;
+	int i1, i2;
 	is1 >> i1;
 	is2 >> i2;
 	if (i1 > i2) {
-		tmp = i1;
+		int tmp = i1;
 		i1 = i2;
 		i2 = tmp;
 	}

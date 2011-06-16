@@ -321,8 +321,8 @@ std::string utils::get_command_output(const std::string& cmd) {
 	FILE * f = popen(cmd.c_str(), "r");
 	std::string buf;
 	char cbuf[1024];
-	size_t s;
 	if (f) {
+		size_t s;
 		while ((s = fread(cbuf, 1, sizeof(cbuf), f)) > 0) {
 			buf.append(cbuf, s);
 		}
@@ -660,7 +660,7 @@ size_t utils::wcswidth_stfl(const std::wstring& str, size_t size) {
 std::string utils::join(const std::vector<std::string>& strings, const std::string& separator) {
 	std::string result;
 
-	for (std::vector<std::string>::const_iterator it=strings.begin();it!=strings.end();it++) {
+	for (std::vector<std::string>::const_iterator it=strings.begin();it!=strings.end();++it) {
 		result.append(*it);
 		result.append(separator);
 	}
@@ -737,8 +737,8 @@ std::string utils::quote(const std::string& str) {
 
 unsigned int utils::get_random_value(unsigned int max) {
 	static bool initialized = false;
-	unsigned int var;
 	if (!initialized) {
+		unsigned int var;
 		initialized = true;
 		srand(~(time(NULL) ^ getpid() ^ getppid() ^ var));
 	}

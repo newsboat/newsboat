@@ -49,7 +49,7 @@ class formaction {
 		void start_qna(const std::vector<qna_pair>& prompts, operation finish_op, history * h = NULL);
 
 		inline void set_parent_formaction(std::tr1::shared_ptr<formaction> fa) { parent_formaction = fa; }
-		inline std::tr1::shared_ptr<formaction> get_parent_formaction() { return parent_formaction; }
+		inline std::tr1::shared_ptr<formaction> get_parent_formaction() const { return parent_formaction; }
 
 		virtual std::string title() = 0;
 		

@@ -240,7 +240,7 @@ operation keymap::get_operation(const std::string& keycode, const std::string& c
 void keymap::dump_config(std::vector<std::string>& config_output) {
 	for (unsigned int i=1;contexts[i]!=NULL;i++) { // TODO: optimize
 		std::map<std::string,operation>& x = keymap_[contexts[i]];
-		for (std::map<std::string,operation>::iterator it = x.begin();it!=x.end();it++) {
+		for (std::map<std::string,operation>::iterator it = x.begin();it!=x.end();++it) {
 			if (it->second < OP_INT_MIN) {
 				std::string configline = "bind-key ";
 				configline.append(it->first);
@@ -252,14 +252,14 @@ void keymap::dump_config(std::vector<std::string>& config_output) {
 			}
 		}
 	}
-	for (std::map<std::string,std::vector<macrocmd> >::iterator it=macros_.begin();it!=macros_.end();it++) {
+	for (std::map<std::string,std::vector<macrocmd> >::iterator it=macros_.begin();it!=macros_.end();++it) {
 		std::string configline = "macro ";
 		configline.append(it->first);
 		configline.append(" ");
 		unsigned int i=0;
-		for (std::vector<macrocmd>::iterator jt=it->second.begin();jt!=it->second.end();jt++,i++) {
+		for (std::vector<macrocmd>::iterator jt=it->second.begin();jt!=it->second.end();++jt,i++) {
 			configline.append(getopname(jt->op));
-			for (std::vector<std::string>::iterator kt=jt->args.begin();kt!=jt->args.end();kt++) {
+			for (std::vector<std::string>::iterator kt=jt->args.begin();kt!=jt->args.end();++kt) {
 				configline.append(" ");
 				configline.append(utils::quote(*kt));
 			}
@@ -312,7 +312,7 @@ void keymap::handle_action(const std::string& action, const std::vector<std::str
 		macrocmd tmpcmd;
 		tmpcmd.op = OP_NIL;
 		bool first = true;
-		it++;
+		++it;
 
 		while (it != params.end()) {
 			if (first && *it != ";") {
