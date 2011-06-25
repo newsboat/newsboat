@@ -143,7 +143,7 @@ bool ttrss_api::mark_article_read(const std::string& guid, bool read) {
 bool ttrss_api::update_article_flags(const std::string& oldflags, const std::string& newflags, const std::string& guid) {
 	std::string star_flag = cfg->get_configvalue("ttrss-flag-star");
 	std::string publish_flag = cfg->get_configvalue("ttrss-flag-publish");
-	bool success;
+	bool success = true;
 
 	if (star_flag.length() > 0) {
 		if (strchr(oldflags.c_str(), star_flag[0])==NULL && strchr(newflags.c_str(), star_flag[0])!=NULL) {
