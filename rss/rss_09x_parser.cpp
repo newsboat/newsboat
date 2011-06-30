@@ -75,10 +75,10 @@ item rss_09x_parser::parse_item(xmlNode * itemNode) {
 			it.itunes_summary = get_content(node);
 		} else if (node_is(node, "guid", ns)) {
 			it.guid = get_content(node);
-			it.guid_isPermaLink = false;
+			it.guid_isPermaLink = true;
 			std::string isPermaLink = get_prop(node,"isPermaLink");
-			if (isPermaLink == "true")
-				it.guid_isPermaLink = true;
+			if (isPermaLink == "false")
+				it.guid_isPermaLink = false;
 		} else if (node_is(node, "pubDate", ns)) {
 			it.pubDate = get_content(node);
 		} else if (node_is(node, "date", DC_URI)) {
