@@ -257,6 +257,10 @@ void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed> feed) {
 			x->set_link(utils::absolute_url(feed->link(), item->link));
 		}
 
+		if (x->link().empty() && item->guid_isPermaLink) {
+			x->set_link(item->guid);
+		}
+
 		set_item_author(x, *item);
 
 		x->set_feedurl(feed->rssurl());
