@@ -87,7 +87,7 @@ controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache
  *
  * returns false, if that fails
  */
-bool controller::setup_dirs_xdg(const char *env_home) {
+bool controller::setup_dirs_xdg(const char *env_home, bool silent) {
 	const char *env_xdg_config;
 	const char *env_xdg_data;
 	std::string xdg_config_dir;
@@ -121,12 +121,16 @@ bool controller::setup_dirs_xdg(const char *env_home) {
 
 	if (access(xdg_config_dir.c_str(), R_OK | X_OK) != 0)
 	{
-		std::cout << utils::strprintf(_("XDG: configuration directory '%s' not accessible, using '%s' instead."), xdg_config_dir.c_str(), config_dir.c_str()) << std::endl;
+		if (!silent) {
+			std::cerr << utils::strprintf(_("XDG: configuration directory '%s' not accessible, using '%s' instead."), xdg_config_dir.c_str(), config_dir.c_str()) << std::endl;
+		}
 		return false;
 	}
 	if (access(xdg_data_dir.c_str(), R_OK | X_OK | W_OK) != 0)
 	{
-		std::cout << utils::strprintf(_("XDG: data directory '%s' not accessible, using '%s' instead."), xdg_data_dir.c_str(), config_dir.c_str()) << std::endl;
+		if (!silent) {
+			std::cerr << utils::strprintf(_("XDG: data directory '%s' not accessible, using '%s' instead."), xdg_data_dir.c_str(), config_dir.c_str()) << std::endl;
+		}
 		return false;
 	}
 
@@ -146,7 +150,7 @@ bool controller::setup_dirs_xdg(const char *env_home) {
 	return true;
 }
 
-void controller::setup_dirs() {
+void controller::setup_dirs(bool silent) {
 	const char * env_home;
 	if (!(env_home = ::getenv("HOME"))) {
 		struct passwd * spw = ::getpwuid(::getuid());
@@ -163,7 +167,7 @@ void controller::setup_dirs() {
 	config_dir.append(NEWSBEUTER_PATH_SEP);
 	config_dir.append(NEWSBEUTER_CONFIG_SUBDIR);
 
-	if (setup_dirs_xdg(env_home))
+	if (setup_dirs_xdg(env_home, silent))
 		return;
 
 	mkdir(config_dir.c_str(),0700); // create configuration directory if it doesn't exist
@@ -197,8 +201,6 @@ void controller::set_view(view * vv) {
 
 void controller::run(int argc, char * argv[]) {
 	int c;
-
-	setup_dirs();
 
 	::signal(SIGINT, ctrl_c_action);
 	::signal(SIGPIPE, ignore_signal);
@@ -298,6 +300,8 @@ void controller::run(int argc, char * argv[]) {
 				break;
 		}
 	} while (c != -1);
+
+	setup_dirs(silent);
 
 	if (show_version) {
 		version_information(argv[0], show_version);

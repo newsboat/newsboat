@@ -88,8 +88,8 @@ namespace newsbeuter {
 			unsigned int get_feed_count_per_tag(const std::string& tag);
 		private:
 			void usage(char * argv0);
-			bool setup_dirs_xdg(const char *env_home);
-			void setup_dirs();
+			bool setup_dirs_xdg(const char *env_home, bool silent);
+			void setup_dirs(bool silent);
 			void version_information(const char * argv0, unsigned int level);
 			void import_opml(const char * filename);
 			void export_opml();
