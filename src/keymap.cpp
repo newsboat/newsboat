@@ -53,6 +53,7 @@ static op_desc opdescs[] = {
 	{ OP_PB_PURGE,			"pb-purge",					"P",	_("Purge finished and deleted downloads from queue"),	KM_PODBEUTER },
 	{ OP_PB_TOGGLE_DLALL,	"pb-toggle-download-all",	"a",	_("Toggle automatic download on/off"),	KM_PODBEUTER },
 	{ OP_PB_PLAY,			"pb-play",					"p",	_("Start player with currently selected download"),		KM_PODBEUTER },
+	{ OP_PB_MARK_FINISHED,  "pb-mark-as-finished",          "m",    _("Mark file as finished (not played)"), KM_PODBEUTER },
 	{ OP_PB_MOREDL,			"pb-increase-max-dls",		"+",	_("Increase the number of concurrent downloads"),		KM_PODBEUTER },
 	{ OP_PB_LESSDL,			"pb-decreate-max-dls",		"-",	_("Decrease the number of concurrent downloads"),		KM_PODBEUTER },
 	{ OP_REDRAW,			"redraw",					"^L",	_("Redraw screen"),						KM_SYSKEYS },

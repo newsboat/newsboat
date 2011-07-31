@@ -93,6 +93,7 @@ namespace newsbeuter {
 						OP_PB_MOREDL, 
 						OP_PB_LESSDL, 
 						OP_PB_PLAY, 
+						OP_PB_MARK_FINISHED,
 						OP_PB_MAX,
 						
 						OP_SK_MIN = 1500,
