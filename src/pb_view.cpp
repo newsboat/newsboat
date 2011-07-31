@@ -131,6 +131,18 @@ void pb_view::run(bool auto_download) {
 					}
 				}
 				break;
+			case OP_PB_MARK_FINISHED: {
+					std::istringstream os(dllist_form.get("dlposname"));
+					int idx = -1;
+					os >> idx;
+					if (idx != -1) {
+						dlstatus_t status = ctrl->downloads()[idx].status();
+						if ( status == DL_PLAYED ) {
+							ctrl->downloads()[idx].set_status(DL_FINISHED);
+						}
+					}
+				}
+				break;
 			case OP_PB_CANCEL: {
 					std::istringstream os(dllist_form.get("dlposname"));
 					int idx = -1;
@@ -279,6 +291,7 @@ void pb_view::set_dllist_keymap_hint() {
 		{ OP_PB_PURGE, _("Purge Finished") },
 		{ OP_PB_TOGGLE_DLALL, _("Toggle Automatic Download") },
 		{ OP_PB_PLAY, _("Play") },
+		{ OP_PB_MARK_FINISHED, _("Mark as Finished") },
 		{ OP_HELP, _("Help") },
 		{ OP_NIL, NULL }
 	};
