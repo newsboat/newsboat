@@ -24,6 +24,8 @@ namespace newsbeuter {
 			htmlrenderer(unsigned int width = 80, bool raw = false);
 			void render(const std::string&, std::vector<std::string>& lines,  std::vector<linkpair>& links, const std::string& url);
 			void render(std::istream &, std::vector<std::string>& lines, std::vector<linkpair>& links, const std::string& url);
+			// only public for unit testing purposes:
+			std::string format_ol_count(unsigned int count, char type);
 
 			struct TableCell {
 			        TableCell(size_t s) : span(s) { }
@@ -68,7 +70,6 @@ namespace newsbeuter {
                         void render_table(const Table& table, std::vector<std::string>& lines);
 			void add_nonempty_line(const std::string& curline, std::vector<Table>& tables, std::vector<std::string>& lines);
 			void add_line(const std::string& curline, std::vector<Table>& tables, std::vector<std::string>& lines);
-			std::string format_ol_count(unsigned int count, char type);
 			std::string get_char_numbering(unsigned int count);
 			bool raw_;
 	};

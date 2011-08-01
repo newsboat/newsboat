@@ -875,6 +875,22 @@ void TestUtilsFunction_trim() {
 	lemon.is(str, "quux", "trim end of string that ends with newline");
 }
 
+void TestOlFormatting() {
+	htmlrenderer r;
+	lemon.is(r.format_ol_count(1, '1'), " 1", "1 in digit formats to \"1\"");
+	lemon.is(r.format_ol_count(3, '1'), " 3", "3 in digit formats to \"3\"");
+	lemon.is(r.format_ol_count(3, 'a'), "c", "3 in alphabetic formats to \"c\"");
+	lemon.is(r.format_ol_count(26 + 3, 'a'), "ac", "26+3 in alphabetic formats to \"ac\"");
+	lemon.is(r.format_ol_count(3*26*26 + 5*26 + 2, 'a'), "ceb", "3*26*26 + 5*26 + 2 in alphabetic formats to \"ceb\"");
+
+	lemon.is(r.format_ol_count(3, 'A'), "C", "3 in alphabetic uppercase formats to \"C\"");
+	lemon.is(r.format_ol_count(26 + 5, 'A'), "AE", "26+5 in alphabetic uppercase formats to \"AE\"");
+	lemon.is(r.format_ol_count(27, 'A'), "AA", "27 in alphabetic uppercase formats to \"AA\"");
+	lemon.is(r.format_ol_count(26, 'A'), "Z", "26 in alphabetic uppercase formats to \"Z\"");
+	lemon.is(r.format_ol_count(26*26+26, 'A'), "ZZ", "26*26+26 in alphabetic uppercase formats to \"ZZ\"");
+	lemon.is(r.format_ol_count(25*26*26 + 26*26+26, 'A'), "YZZ", "26*26*26+26*26+26 in alphabetic uppercase formats to \"YZZ\"");
+}
+
 } // namespace test
 
 int main(void) {
@@ -904,6 +920,7 @@ int main(void) {
 	test::TestUtilsFunctions_strwidth();
 	test::TestUtilsFunction_join();
 	test::TestUtilsFunction_trim();
+	test::TestOlFormatting();
 
 	return test::lemon.done() ? 0 : 1;
 }
