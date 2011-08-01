@@ -931,6 +931,7 @@ Operation:Default key:Description
 quit:q:Quit the program.
 pb-download:d:Download the currently selected URL.
 pb-cancel:c:Cancel the currently selected download.
+pb-play:p:Start player with currently selected download.
 pb-delete:D:Delete the currently selected URL from the queue.
 pb-purge:P:Remove all finished and deleted downloads from the queue and load URLs that were newly added to the queue.
 pb-toggle-download-all:a:Toggle the "automatic download" feature where all queued URLs are downloaded one after the other. The "max-downloads" configuration option controls how many downloads are done in parallel.
