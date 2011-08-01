@@ -75,7 +75,8 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 	bool itunes_hack = false;
 	size_t inside_script = 0;
 	size_t inside_style = 0;
-	unsigned int ol_count = 1;
+	std::vector<unsigned int> ol_counts;
+	std::vector<char> ol_types;
 	htmltag current_tag;
 	int link_num = -1;
 	std::vector<Table> tables;
@@ -200,7 +201,28 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					case TAG_OL:
 						inside_list = true;
 						is_ol = true;
-						ol_count = 1;
+						{
+							unsigned int ol_count = 1;
+							try {
+								std::string ol_count_str = xpp.getAttributeValue("start");
+								std::istringstream is(ol_count_str);
+								is >> ol_count;
+							} catch (const std::invalid_argument& ) {
+								ol_count = 1;
+							}
+							ol_counts.push_back(ol_count);
+
+							std::string ol_type;
+							try {
+								ol_type = xpp.getAttributeValue("type");
+								if (ol_type != "1" && ol_type != "a" && ol_type != "A" && ol_type != "i" && ol_type != "I") {
+									ol_type = "1";
+								}
+							} catch (const std::invalid_argument& ) {
+								ol_type = "1";
+							}
+							ol_types.push_back(ol_type[0]);
+						}
 						add_nonempty_line(curline, tables, lines);
 						add_line("", tables, lines);
 						prepare_newline(curline,  tables.size() ? 0 : indent_level);	
@@ -226,8 +248,8 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						prepare_newline(curline,  tables.size() ? 0 : indent_level);
 						indent_level+=2;
 						if (is_ol) {
-							curline.append(utils::strprintf("%2u.", ol_count));
-							++ol_count;
+							curline.append(utils::strprintf("%s.", format_ol_count(ol_counts[ol_counts.size()-1], ol_types[ol_types.size()-1]).c_str()));
+							++ol_counts[ol_counts.size()-1];
 						} else {
 							curline.append("  * ");
 						}
@@ -328,6 +350,9 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						break;
 
 					case TAG_OL:
+						ol_types.pop_back();
+						ol_counts.pop_back();
+						// fall-through
 					case TAG_UL:
 						inside_list = false;
 						if (inside_li) {
@@ -768,6 +793,33 @@ void htmlrenderer::render_table(const Table& table, std::vector<std::string>& li
 		}
 		if (table.border)
 			lines.push_back(separator);
+	}
+}
+
+std::string htmlrenderer::get_char_numbering(unsigned int count) {
+	std::string result;
+	while (count > 0) {
+		result.append(1, 'a'+(count % 26)-1);
+		count /= 26;
+	}
+	std::reverse(result.begin(), result.end());
+	return result;
+}
+
+
+std::string htmlrenderer::format_ol_count(unsigned int count, char type) {
+	switch (type) {
+		case 'a':
+			return get_char_numbering(count);
+		case 'A': {
+			std::string num = get_char_numbering(count);
+			std::transform(num.begin(), num.end(), num.begin(), ::toupper);
+			return num;
+		}
+		// TODO: implement 'i' and 'I'
+		case '1':
+		default:
+			return utils::strprintf("%2u", count);
 	}
 }
 
