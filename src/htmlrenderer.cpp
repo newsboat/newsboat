@@ -798,10 +798,11 @@ void htmlrenderer::render_table(const Table& table, std::vector<std::string>& li
 
 std::string htmlrenderer::get_char_numbering(unsigned int count) {
 	std::string result;
-	while (count > 0) {
-		result.append(1, 'a'+(count % 26)-1);
+	do {
+		count--;
+		result.append(1, 'a'+(count % 26));
 		count /= 26;
-	}
+	} while (count > 0);
 	std::reverse(result.begin(), result.end());
 	return result;
 }
