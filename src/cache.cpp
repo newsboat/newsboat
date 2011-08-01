@@ -555,6 +555,8 @@ void cache::cleanup_cache(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
 		cleanup_rss_items_statement.append(list);
 		cleanup_rss_items_statement.append(1,';');
 
+		std::string cleanup_read_items_statement("DELETE FROM rss_item WHERE unread = 0");
+
 		// std::cerr << "statements: " << cleanup_rss_feeds_statement << " " << cleanup_rss_items_statement << std::endl;
 
 		LOG(LOG_DEBUG,"running query: %s", cleanup_rss_feeds_statement.c_str());
@@ -569,6 +571,15 @@ void cache::cleanup_cache(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
 		if (rc != SQLITE_OK) {
 			LOG(LOG_CRITICAL,"query \"%s\" failed: error = %d", cleanup_rss_items_statement.c_str(), rc);
 			throw dbexception(db);
+		}
+
+		if (cfg->get_configvalue_as_bool("delete-read-articles-on-quit")) {
+			LOG(LOG_DEBUG,"running query: %s", cleanup_read_items_statement.c_str());
+			rc = sqlite3_exec(db,cleanup_read_items_statement.c_str(),NULL,NULL,NULL);
+			if (rc != SQLITE_OK) {
+				LOG(LOG_CRITICAL,"query \"%s\" failed: error = %d", cleanup_read_items_statement.c_str(), rc);
+				throw dbexception(db);
+			}
 		}
 
 		// WARNING: THE MISSING UNLOCK OPERATION IS MISSING FOR A PURPOSE!

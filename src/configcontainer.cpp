@@ -109,6 +109,7 @@ configcontainer::configcontainer()
 	config_data["ttrss-mode"] = configdata("multi", "single", "multi", NULL); // enum
 	config_data["ttrss-flag-star"] = configdata("", configdata::STR);
 	config_data["ttrss-flag-publish"] = configdata("", configdata::STR);
+	config_data["delete-read-articles-on-quit"] = configdata("false", configdata::BOOL);
 
 	/* title formats: */
 	config_data["feedlist-title-format"] = configdata(_("%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"), configdata::STR);
