@@ -417,6 +417,8 @@ void view::push_searchresult(std::tr1::shared_ptr<rss_feed> feed, const std::str
 void view::push_itemlist(std::tr1::shared_ptr<rss_feed> feed) {
 	assert(feed != NULL);
 
+	feed->purge_deleted_items();
+
 	if (feed->rssurl().substr(0,6) == "query:") {
 		set_status(_("Updating query feed..."));
 		feed->update_items(ctrl->get_all_feeds());
