@@ -71,6 +71,7 @@ namespace newsbeuter {
 			void add_nonempty_line(const std::string& curline, std::vector<Table>& tables, std::vector<std::string>& lines);
 			void add_line(const std::string& curline, std::vector<Table>& tables, std::vector<std::string>& lines);
 			std::string get_char_numbering(unsigned int count);
+			std::string get_roman_numbering(unsigned int count);
 			bool raw_;
 	};
 

@@ -807,6 +807,19 @@ std::string htmlrenderer::get_char_numbering(unsigned int count) {
 	return result;
 }
 
+std::string htmlrenderer::get_roman_numbering(unsigned int count) {
+	unsigned int values[] = { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
+	const char * numerals[] = { "m", "cm", "d", "cd", "c", "xc", "l", "xl", "x", "ix", "v", "iv", "i" };
+	std::string result;
+	for (unsigned int i=0;i<(sizeof(values)/sizeof(values[0]));i++) {
+		while (count >= values[i]) {
+			count -= values[i];
+			result.append(numerals[i]);
+		}
+	}
+	return result;
+}
+
 
 std::string htmlrenderer::format_ol_count(unsigned int count, char type) {
 	switch (type) {
@@ -817,7 +830,13 @@ std::string htmlrenderer::format_ol_count(unsigned int count, char type) {
 			std::transform(num.begin(), num.end(), num.begin(), ::toupper);
 			return num;
 		}
-		// TODO: implement 'i' and 'I'
+		case 'i':
+			return get_roman_numbering(count);
+		case 'I': {
+			std::string roman = get_roman_numbering(count);
+			std::transform(roman.begin(), roman.end(), roman.begin(), ::toupper);
+			return roman;
+		}
 		case '1':
 		default:
 			return utils::strprintf("%2u", count);

@@ -889,6 +889,19 @@ void TestOlFormatting() {
 	lemon.is(r.format_ol_count(26, 'A'), "Z", "26 in alphabetic uppercase formats to \"Z\"");
 	lemon.is(r.format_ol_count(26*26+26, 'A'), "ZZ", "26*26+26 in alphabetic uppercase formats to \"ZZ\"");
 	lemon.is(r.format_ol_count(25*26*26 + 26*26+26, 'A'), "YZZ", "26*26*26+26*26+26 in alphabetic uppercase formats to \"YZZ\"");
+
+	lemon.is(r.format_ol_count(1, 'i'), "i", "1 in roman numerals is i");
+	lemon.is(r.format_ol_count(2, 'i'), "ii", "2 in roman numerals is ii");
+	lemon.is(r.format_ol_count(5, 'i'), "v", "5 in roman numerals is v");
+	lemon.is(r.format_ol_count(4, 'i'), "iv", "4 in roman numerals is iv");
+	lemon.is(r.format_ol_count(6, 'i'), "vi", "6 in roman numerals is vi");
+	lemon.is(r.format_ol_count(7, 'i'), "vii", "6 in roman numerals is vii");
+	lemon.is(r.format_ol_count(10, 'i'), "x", "10 in roman numerals is x");
+
+	lemon.is(r.format_ol_count(32, 'i'), "xxxii", "32 in roman numerals is xxxii");
+	lemon.is(r.format_ol_count(1972, 'i'), "mcmlxxii", "1972 in roman numerals is mcmlxxii");
+
+	lemon.is(r.format_ol_count(2011, 'I'), "MMXI", "201 in roman numerals uppercase is MMXI");
 }
 
 } // namespace test
