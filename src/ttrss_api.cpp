@@ -77,7 +77,17 @@ struct json_object * ttrss_api::run_op(const std::string& op,
 	}
 
 	struct json_object * status = json_object_object_get(reply, "status");
+	if (is_error(status)) {
+		LOG(LOG_ERROR, "ttrss_api::run_op: no status code");
+		return NULL;
+	}
+
 	struct json_object * content = json_object_object_get(reply, "content");
+	if (is_error(content)) {
+		LOG(LOG_ERROR, "ttrss_api::run_op: no content part in answer from server");
+		return NULL;
+	}
+	
 	if (json_object_get_int(status) != 0) {
 		struct json_object * error = json_object_object_get(content, "error");
 		if ((strcmp(json_object_get_string(error), "NOT_LOGGED_IN") == 0) && try_login) {
