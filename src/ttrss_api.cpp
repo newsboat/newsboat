@@ -17,7 +17,14 @@ ttrss_api::~ttrss_api() {
 }
 
 bool ttrss_api::authenticate() {
-	sid = retrieve_sid();
+	 if (auth_lock.trylock()) {
+		sid = retrieve_sid();
+		auth_lock.unlock();
+	 } else {
+	 	// wait for other thread to finish and return its result:
+	 	auth_lock.lock();
+	 	auth_lock.unlock();
+	 }
 
 	return sid != "";
 }
