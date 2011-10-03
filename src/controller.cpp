@@ -217,8 +217,23 @@ void controller::run(int argc, char * argv[]) {
 	bool silent = false;
 	bool execute_cmds = false;
 
+	static char getopt_str[] = "i:erhqu:c:C:d:l:vVoxXI:E:";
+
 	do {
-		if((c = ::getopt(argc,argv,"i:erhqu:c:C:d:l:vVoxXI:E:"))<0)
+		if ((c = ::getopt(argc,argv,getopt_str)) < 0)
+				continue;
+		if (strchr("iexq", c) != NULL) {
+			silent = true;
+			break;
+		}
+	} while (c != -1);
+
+	setup_dirs(silent);
+
+	optind = 1;
+
+	do {
+		if((c = ::getopt(argc,argv,getopt_str))<0)
 			continue;
 		switch (c) {
 			case ':': /* fall-through */
@@ -229,7 +244,6 @@ void controller::run(int argc, char * argv[]) {
 				if (do_export)
 					usage(argv[0]);
 				do_import = true;
-				silent = true;
 				importfile = optarg;
 				break;
 			case 'r':
@@ -239,7 +253,6 @@ void controller::run(int argc, char * argv[]) {
 				if (do_import)
 					usage(argv[0]);
 				do_export = true;
-				silent = true;
 				break;
 			case 'h':
 				usage(argv[0]);
@@ -267,10 +280,6 @@ void controller::run(int argc, char * argv[]) {
 				break;
 			case 'x':
 				execute_cmds = true;
-				silent = true;
-				break;
-			case 'q':
-				silent = true;
 				break;
 			case 'd': // this is an undocumented debug commandline option!
 				GetLogger().set_logfile(optarg);
@@ -301,7 +310,6 @@ void controller::run(int argc, char * argv[]) {
 		}
 	} while (c != -1);
 
-	setup_dirs(silent);
 
 	if (show_version) {
 		version_information(argv[0], show_version);
