@@ -13,6 +13,8 @@ class ttrss_api : public remote_api {
 		ttrss_api(configcontainer * c);
 		virtual ~ttrss_api();
 		virtual bool authenticate();
+		virtual struct json_object * run_op(const std::string& op, const std::map<std::string, std::string>& args,
+						    bool try_login = true);
 		virtual std::vector<tagged_feedurl> get_subscribed_urls();
 		virtual void configure_handle(CURL * handle);
 		virtual bool mark_all_read(const std::string& feedurl);
@@ -30,6 +32,7 @@ class ttrss_api : public remote_api {
 		std::string auth_info;
 		const char * auth_info_ptr;
 		bool single;
+		mutex auth_lock;
 };
 
 class ttrss_urlreader : public urlreader {
