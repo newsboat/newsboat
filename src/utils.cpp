@@ -395,8 +395,6 @@ std::string utils::run_program(char * argv[], const std::string& input) {
 	int ipipe[2]; int opipe[2];
 	pipe(ipipe);  pipe(opipe);
 
-	int errfd = ::open("/dev/null", O_WRONLY);
-
 	int rc = fork();
 	switch (rc) {
 		case -1: break;
@@ -404,6 +402,8 @@ std::string utils::run_program(char * argv[], const std::string& input) {
 				close(ipipe[1]);   close(opipe[0]);
 				dup2(ipipe[0], 0); dup2(opipe[1], 1);
 				close(2);
+
+				int errfd = ::open("/dev/null", O_WRONLY);
 				if (errfd != -1) dup2(errfd, 2);
 
 				execvp(argv[0], argv);
