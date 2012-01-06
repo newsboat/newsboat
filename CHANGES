@@ -1,6 +1,6 @@
 Changes for newsbeuter:
 
-2.5:
+2.5 (2012-01-06):
 	Implemented download-full-page configuration option.
 	Added configuration option to use external URL viewer (fixes issue #242).
 	Added ability to store Google Reader password in an external file (fixes issue #239).
