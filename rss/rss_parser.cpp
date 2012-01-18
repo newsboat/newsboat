@@ -113,7 +113,7 @@ std::string rss_parser::__w3cdtf_to_rfc822(const std::string& w3cdtf) {
 }
 
 bool rss_parser::node_is(xmlNode * node, const char * name, const char * ns_uri) {
-	if (!node || !name)
+	if (!node || !name || !node->name)
 		return false;
 
 	if (strcmp((const char *)node->name, name)==0) {
