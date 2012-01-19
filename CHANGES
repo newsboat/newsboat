@@ -2,6 +2,7 @@ Changes for newsbeuter:
 
 2.6:
 	Fixed crash in RSS parser (thanks to Isaac Good).
+	Fixed authentication issues with Google Reader (thanks to Fabrice Noilhan).
 
 2.5 (2012-01-06):
 	Implemented download-full-page configuration option.
