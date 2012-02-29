@@ -20,7 +20,7 @@ cycle through all results. If no match is found, no suggestion will be inserted
 into the commandline. For the "set" command, the completion also works for
 configuration variable names.
 
-In additon, some common key combination such as Ctrl-G (to cancel input),
+In addition, some common key combination such as Ctrl-G (to cancel input),
 Ctrl-K (to delete text from the cursor position to the end of line), Ctrl-U (to
 clear the whole line) and Ctrl-W (to delete the word before the current cursor
 position) were added.
@@ -28,7 +28,7 @@ position) were added.
 Please be aware that the input history of both the command line and the search
 functions are saved to the filesystems, to the files
 \~/.newsbeuter/history.cmdline resp. \~/.newsbeuter/history.search. By default,
-the last 100 entries are saved, but this can be configured (configuratin
+the last 100 entries are saved, but this can be configured (configuration
 variable history-limit) and also totally disabled (by setting said variable to
 0).
 
