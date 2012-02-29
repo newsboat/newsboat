@@ -8,7 +8,7 @@ save:s:Save the currently selected article to a file.
 next-unread:n:Jump to the next unread article.
 prev-unread:p:Jump to the previous unread article.
 next:J:Jump to next article.
-prev:K:Jump to previosu article.
+prev:K:Jump to previous article.
 random-unread:^K:Jump to a random unread article.
 open-in-browser:o:Opens the URL associated with the current article.
 open-in-browser-and-mark-read:O:Opens the URL associated with the current article and marks the article as read.
