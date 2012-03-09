@@ -27,7 +27,7 @@ Why "Newsbeuter"?
 "Newsbeuter" is a pun on the German word "Wildbeuter", which means
 "hunter-gatherer". During the stone age, people hunted and gathered their food,
 and these days, they hunt and gather news and information. Credits for this
-idea goes to Clifford Wolf, who submitted it to a little competiton that was
+idea goes to Clifford Wolf, who submitted it to a little competition that was
 started when I got aware that the original name would violate French and
 European registered trademarks.
 
@@ -702,8 +702,8 @@ In addition, newsbeuter provides other, more powerful sequences, such as
 right on the screen, and characters between the text on the left and the text
 on the right will be filled by "[char]". Another powerful format is the
 conditional sequence, "%?[char]?[format 1]&[format 2]?": if the text of the
-sequence identifier "[char]" is non-empty, then "[format 1]" will be evaluted
-and inserted, otherwise "[format 2]" will be evaluted and inserted. The "&" and
+sequence identifier "[char]" is non-empty, then "[format 1]" will be evaluated
+and inserted, otherwise "[format 2]" will be evaluated and inserted. The "&" and
 "[format 2]" are optional, i.e. if the identifier's text is empty, then an
 empty string will be inserted.
 
@@ -871,7 +871,7 @@ command.
 The syntax is similar to the "highlight" configuration command, with the difference
 that there's no need to specify a target (since it only applies in the article list),
 and instead of a regular expression, a filter expression is used. After the filter
-expression, the colors and attributs are specified in the same way.
+expression, the colors and attributes are specified in the same way.
 
 Example:
 

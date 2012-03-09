@@ -143,7 +143,7 @@
 # ignore-mode download
 
 ## configuration option: keep-articles-days
-## description: If set the a number greater than 0, only articles that are were published within the last <n> days are kept, and older articles are deleted. If set to 0 (default value), this option is not active.
+## description: If set to a number greater than 0, only articles that are were published within the last <n> days are kept, and older articles are deleted. If set to 0 (default value), this option is not active.
 ## parameter syntax: <days>
 # keep-articles-days 0
 

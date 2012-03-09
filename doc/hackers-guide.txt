@@ -154,8 +154,8 @@ Use the full potential of modern C++
 The C++ standard library comes with an extensive set of algorithms and data
 structures. Developers are encouraged to use especially the data structures,
 because the available container classes are standardized, their behaviour and
-usage is well-documented, and makes it possible to keeep the the overall logic
-is a pretty high level. More complex things that can only be done in C (like
+usage is well-documented, and makes it possible to keep the overall logic
+at a pretty high level. More complex things that can only be done in C (like
 special system calls) /should/ be encapsulated by a wrapper class in order to
 avoid potential mis-use of low-level functions and data structures. Good
 examples for wrapping low-level stuff are *class rss_feed*, *class rss_item*
