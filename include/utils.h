@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <stdexcept>
 
 #include <logger.h>
 #include <curl/curl.h>
@@ -10,6 +11,28 @@
 #include <libxml/parser.h>
 
 namespace newsbeuter {
+
+// wrapped curl handle for exception safety and so on
+// see also: https://github.com/gsauthof/ccurl
+class curl_handle {
+	private:
+		CURL *h;
+		curl_handle(const curl_handle &);
+		curl_handle &operator=(const curl_handle &);
+	public:
+		curl_handle()
+			: h(0)
+		{
+			h = curl_easy_init();
+			if (!h)
+				throw std::runtime_error("Can't obtain curl handle");
+		}
+		~curl_handle()
+		{
+			curl_easy_cleanup(h);
+		}
+		CURL *ptr() { return h; }
+};
 
 class utils {
 	public:

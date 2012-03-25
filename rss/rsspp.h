@@ -75,7 +75,7 @@ class parser {
 	public:
 		parser(unsigned int timeout = 30, const char * user_agent = 0, const char * proxy = 0, const char * proxy_auth = 0, curl_proxytype proxy_type = CURLPROXY_HTTP);
 		~parser();
-		feed parse_url(const std::string& url, time_t lastmodified = 0, const std::string& etag = "", newsbeuter::remote_api * api = 0, const std::string& cookie_cache = "");
+		feed parse_url(const std::string& url, time_t lastmodified = 0, const std::string& etag = "", newsbeuter::remote_api * api = 0, const std::string& cookie_cache = "", CURL *ehandle = 0);
 		feed parse_buffer(const char * buffer, size_t size, const char * url = NULL);
 		feed parse_file(const std::string& filename);
 		time_t get_last_modified() { return lm; }

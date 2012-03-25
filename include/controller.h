@@ -18,6 +18,7 @@ namespace newsbeuter {
 
 	class view;
 
+	class curl_handle;
 
 	class controller {
 		public:
@@ -27,7 +28,7 @@ namespace newsbeuter {
 			view * get_view() { return v; }
 			void run(int argc = 0, char * argv[] = NULL);
 
-			void reload(unsigned int pos, unsigned int max = 0, bool unattended = false);
+			void reload(unsigned int pos, unsigned int max = 0, bool unattended = false, curl_handle *easyhandle = 0);
 
 			void reload_all(bool unattended = false);
 			void reload_indexes(const std::vector<int>& indexes, bool unattended = false);

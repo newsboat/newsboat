@@ -60,13 +60,16 @@ static size_t handle_headers(void * ptr, size_t size, size_t nmemb, void * data)
 	return size * nmemb;
 }
 
-feed parser::parse_url(const std::string& url, time_t lastmodified, const std::string& etag, newsbeuter::remote_api * api, const std::string& cookie_cache) {
+feed parser::parse_url(const std::string& url, time_t lastmodified, const std::string& etag, newsbeuter::remote_api * api, const std::string& cookie_cache, CURL *ehandle) {
 	std::string buf;
 	CURLcode ret;
 
-	CURL * easyhandle = curl_easy_init();
+	CURL * easyhandle = ehandle;
 	if (!easyhandle) {
-		throw exception(_("couldn't initialize libcurl"));
+		easyhandle = curl_easy_init();
+		if (!easyhandle) {
+			throw exception(_("couldn't initialize libcurl"));
+		}
 	}
 
 	if (ua) {
@@ -136,7 +139,8 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 		LOG(LOG_USERERROR, _("Error: trying to download feed `%s' returned HTTP status code %ld."), url.c_str(), status);
 	}
 
-	curl_easy_cleanup(easyhandle);
+	if (!ehandle)
+		curl_easy_cleanup(easyhandle);
 
 	if (ret != 0) {
 		LOG(LOG_ERROR, "rsspp::parser::parse_url: curl_easy_perform returned err %d: %s", ret, curl_easy_strerror(ret));

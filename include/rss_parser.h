@@ -18,6 +18,8 @@ namespace newsbeuter {
 			~rss_parser();
 			std::tr1::shared_ptr<rss_feed> parse();
 			bool check_and_update_lastmodified();
+
+			void set_easyhandle(curl_handle *h) { easyhandle = h; }
 		private:
 			void replace_newline_characters(std::string& str);
 			std::string render_xhtml_title(const std::string& title, const std::string& link);
@@ -55,6 +57,8 @@ namespace newsbeuter {
 			rsspp::feed f;
 			remote_api * api;
 			bool is_ttrss;
+
+			curl_handle *easyhandle;
 	};
 
 }
