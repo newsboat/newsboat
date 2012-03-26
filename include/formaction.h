@@ -79,6 +79,7 @@ class formaction {
 	private:
 		std::string prepare_keymap_hint(keymap_hint_entry * hints);
 		void start_next_question();
+		std::string make_title(const std::string& url); 
 
 		std::vector<qna_pair> qna_prompts;
 		operation finish_operation;
