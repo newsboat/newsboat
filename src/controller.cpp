@@ -706,7 +706,7 @@ void controller::mark_all_read(unsigned int pos) {
 	}
 }
 
-void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
+void controller::reload(unsigned int pos, unsigned int max, bool unattended, curl_handle *easyhandle) {
 	LOG(LOG_DEBUG, "controller::reload: pos = %u max = %u", pos, max);
 	if (pos < feeds.size()) {
 		std::tr1::shared_ptr<rss_feed> oldfeed = feeds[pos];
@@ -717,6 +717,7 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended) {
 		bool ignore_dl = (cfg.get_configvalue("ignore-mode") == "download");
 
 		rss_parser parser(oldfeed->rssurl(), rsscache, &cfg, ignore_dl ? &ign : NULL, api);
+		parser.set_easyhandle(easyhandle);
 		LOG(LOG_DEBUG, "controller::reload: created parser");
 		try {
 			oldfeed->set_status(DURING_DOWNLOAD);
@@ -789,10 +790,48 @@ void controller::reload_indexes(const std::vector<int>& indexes, bool unattended
 		v->set_status("");
 }
 
+struct feed_cmp {
+	const std::vector<std::tr1::shared_ptr<rss_feed> > &feeds;
+	feed_cmp(const std::vector<std::tr1::shared_ptr<rss_feed> > &f)
+		: feeds(f)
+	{
+	}
+	void extract(std::string &s, const std::string &url) const
+	{
+		size_t p = url.find("//");
+		p = (p == std::string::npos) ? 0 : p+2;
+		std::string suff(url.substr(p));
+		p = suff.find('/');
+		s = suff.substr(0, p);
+	}
+	bool operator()(unsigned a, unsigned b) const
+	{
+		std::tr1::shared_ptr<rss_feed> x = feeds[a];
+		std::tr1::shared_ptr<rss_feed> y = feeds[b];
+		const std::string &u = x->rssurl();
+		const std::string &v = y->rssurl();
+		
+		std::string domain1, domain2;
+		extract(domain1, u);
+		extract(domain2, v);
+		std::reverse(domain1.begin(), domain1.end());
+		std::reverse(domain2.begin(), domain2.end());
+		return domain1 < domain2;
+	}
+};
+
 void controller::reload_range(unsigned int start, unsigned int end, unsigned int size, bool unattended) {
-	for (unsigned int i=start;i<=end;i++) {
-		LOG(LOG_DEBUG, "controller::reload_range: reloading feed #%u", i);
-		this->reload(i, size, unattended);
+
+	std::vector<unsigned> v;
+	for (unsigned i=start;i<=end;++i)
+		v.push_back(i);
+	std::sort(v.begin(), v.end(), feed_cmp(feeds));
+
+	curl_handle easyhandle;
+
+	for (std::vector<unsigned>::iterator i = v.begin(); i!= v.end(); ++i) {
+		LOG(LOG_DEBUG, "controller::reload_range: reloading feed #%u", *i);
+		this->reload(*i, size, unattended, &easyhandle);
 	}
 }
 

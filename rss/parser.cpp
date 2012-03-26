@@ -37,6 +37,11 @@ parser::~parser() {
 struct header_values {
 	time_t lastmodified;
 	std::string etag;
+
+	header_values()
+		: lastmodified(0)
+	{
+	}
 };
 
 static size_t handle_headers(void * ptr, size_t size, size_t nmemb, void * data) {
@@ -47,8 +52,13 @@ static size_t handle_headers(void * ptr, size_t size, size_t nmemb, void * data)
 	header[size*nmemb] = '\0';
 
 	if (!strncasecmp("Last-Modified:", header, 14)) {
-		values->lastmodified = curl_getdate(header+14, NULL);
-		LOG(LOG_DEBUG, "handle_headers: got last-modified %s (%d)", header+14, values->lastmodified);
+		time_t r = curl_getdate(header+14, NULL);
+		if (r == -1) {
+			LOG(LOG_DEBUG, "handle_headers: last-modified %s (curl_getdate FAILED)", header+14);
+		} else {
+			values->lastmodified = curl_getdate(header+14, NULL);
+			LOG(LOG_DEBUG, "handle_headers: got last-modified %s (%d)", header+14, values->lastmodified);
+		}
 	} else if (!strncasecmp("ETag:",header, 5)) {
 		values->etag = std::string(header+5);
 		utils::trim(values->etag);
@@ -60,13 +70,16 @@ static size_t handle_headers(void * ptr, size_t size, size_t nmemb, void * data)
 	return size * nmemb;
 }
 
-feed parser::parse_url(const std::string& url, time_t lastmodified, const std::string& etag, newsbeuter::remote_api * api, const std::string& cookie_cache) {
+feed parser::parse_url(const std::string& url, time_t lastmodified, const std::string& etag, newsbeuter::remote_api * api, const std::string& cookie_cache, CURL *ehandle) {
 	std::string buf;
 	CURLcode ret;
 
-	CURL * easyhandle = curl_easy_init();
+	CURL * easyhandle = ehandle;
 	if (!easyhandle) {
-		throw exception(_("couldn't initialize libcurl"));
+		easyhandle = curl_easy_init();
+		if (!easyhandle) {
+			throw exception(_("couldn't initialize libcurl"));
+		}
 	}
 
 	if (ua) {
@@ -101,21 +114,20 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 
 	curl_easy_setopt(easyhandle, CURLOPT_PROXYTYPE, prxtype);
 
-	header_values hdrs = { 0, "" };
+	header_values hdrs;
+	curl_easy_setopt(easyhandle, CURLOPT_HEADERDATA, &hdrs);
+	curl_easy_setopt(easyhandle, CURLOPT_HEADERFUNCTION, handle_headers);
+
+	curl_easy_setopt(easyhandle, CURLOPT_TIMECONDITION, CURL_TIMECOND_IFMODSINCE);
+	if (lastmodified != 0)
+		curl_easy_setopt(easyhandle, CURLOPT_TIMEVALUE, lastmodified);
+	else
+		curl_easy_setopt(easyhandle, CURLOPT_TIMEVALUE, 0);
 
 	curl_slist * custom_headers = NULL;
-
-	if (lastmodified != 0) {
-		curl_easy_setopt(easyhandle, CURLOPT_TIMECONDITION, CURL_TIMECOND_IFMODSINCE);
-		curl_easy_setopt(easyhandle, CURLOPT_TIMEVALUE, lastmodified);
-		curl_easy_setopt(easyhandle, CURLOPT_HEADERDATA, &hdrs);
-		curl_easy_setopt(easyhandle, CURLOPT_HEADERFUNCTION, handle_headers);
-	}
 	if (etag.length() > 0) {
 		custom_headers = curl_slist_append(custom_headers, utils::strprintf("If-None-Match: %s", etag.c_str()).c_str());
 		curl_easy_setopt(easyhandle, CURLOPT_HTTPHEADER, custom_headers);
-		curl_easy_setopt(easyhandle, CURLOPT_HEADERDATA, &hdrs);
-		curl_easy_setopt(easyhandle, CURLOPT_HEADERFUNCTION, handle_headers);
 	}
 
 	ret = curl_easy_perform(easyhandle);
@@ -124,6 +136,7 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 	et = hdrs.etag;
 
 	if (custom_headers) {
+		curl_easy_setopt(easyhandle, CURLOPT_HTTPHEADER, 0);
 		curl_slist_free_all(custom_headers);
 	}
 
@@ -136,7 +149,8 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 		LOG(LOG_USERERROR, _("Error: trying to download feed `%s' returned HTTP status code %ld."), url.c_str(), status);
 	}
 
-	curl_easy_cleanup(easyhandle);
+	if (!ehandle)
+		curl_easy_cleanup(easyhandle);
 
 	if (ret != 0) {
 		LOG(LOG_ERROR, "rsspp::parser::parse_url: curl_easy_perform returned err %d: %s", ret, curl_easy_strerror(ret));
