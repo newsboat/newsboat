@@ -32,6 +32,11 @@
 ## parameter syntax: [yes/no]
 # bookmark-interactive no
 
+## configuration option: bookmark-autopilot
+## description: If set to yes, the configured bookmark command is executed without any further input asked from user, uless the url or the title cannot be found/guessed.
+## parameter syntax: [yes/no]
+# bookmark-autopilot no
+
 ## configuration option: browser
 ## description: Set the browser command to use when opening an article in the browser. If <browser-command> contains %u, it will be used as complete commandline and %u will be replaced with the URL that shall be opened.
 ## parameter syntax: <browser-command>
