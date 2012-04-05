@@ -302,6 +302,7 @@ void formaction::start_bookmark_qna(const std::string& default_title, const std:
 	std::vector<qna_pair> prompts;
 
 	std::string new_title = "";
+	bool is_bm_autopilot = v->get_cfg()->get_configvalue_as_bool("bookmark-autopilot");
 	prompts.push_back(qna_pair(_("URL: "), default_url));
 	if(default_title.empty()) { // call the function to figure out title from url only if the default_title is no good
 		new_title = make_title(default_url);
@@ -311,8 +312,29 @@ void formaction::start_bookmark_qna(const std::string& default_title, const std:
 		prompts.push_back(qna_pair(_("Title: "), default_title));
 	}
 	prompts.push_back(qna_pair(_("Description: "), default_desc));
-
-	start_qna(prompts, OP_INT_BM_END);
+	
+	if (is_bm_autopilot) {	//If bookmarking is set to autopilot don't prompt for url, title, desc
+		if (default_title.empty())
+			new_title = make_title(default_url); // try to make the title from url
+		else 
+			new_title = default_title; // assignment just to make the call to bookmark() below easier
+		if (default_url.empty() || new_title.empty()) { //if url or title is missing, abort autopilot and ask user
+			start_qna(prompts, OP_INT_BM_END);
+		}
+		else {
+			v->set_status(_("Saving bookmark on autopilot..."));
+			std::string retval = v->get_ctrl()->bookmark(default_url, new_title, default_desc);
+			if (retval.length() == 0) {
+				v->set_status(_("Saved bookmark."));
+			} else {
+				v->set_status(std::string(_("Error while saving bookmark: ")) + retval);
+				LOG(LOG_DEBUG, "formaction::finished_qna: error while saving bookmark, retval = `%s'", retval.c_str());
+			}
+		}
+	}
+	else {
+		start_qna(prompts, OP_INT_BM_END);
+	}
 }
 
 std::string formaction::make_title(const std::string& const_url) {
