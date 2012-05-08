@@ -11,6 +11,7 @@
 #include <libgen.h>
 #include <sys/utsname.h>
 
+#include <unistd.h>
 #include <sstream>
 #include <locale>
 #include <cwchar>

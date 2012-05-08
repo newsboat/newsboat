@@ -12,6 +12,7 @@
 #include <pwd.h>
 #include <cstdlib>
 #include <signal.h>
+#include <unistd.h>
 
 #include <keymap.h>
 #include <configcontainer.h>

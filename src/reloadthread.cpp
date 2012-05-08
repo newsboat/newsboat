@@ -1,5 +1,6 @@
 #include <reloadthread.h>
 #include <logger.h>
+#include <unistd.h>
 
 namespace newsbeuter {
 

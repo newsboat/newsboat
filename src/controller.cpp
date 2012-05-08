@@ -30,6 +30,7 @@
 #include <ctime>
 #include <cassert>
 #include <signal.h>
+#include <unistd.h>
 #include <sys/utsname.h>
 #include <langinfo.h>
 #include <libgen.h>

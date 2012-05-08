@@ -7,6 +7,8 @@
 #include <config.h>
 #include <utils.h>
 
+#include <unistd.h>
+
 #include <curl/curl.h>
 
 #define GREADER_LOGIN					"https://www.google.com/accounts/ClientLogin"

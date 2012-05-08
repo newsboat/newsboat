@@ -8,6 +8,8 @@
 #include <config.h>
 #include <libgen.h>
 
+#include <unistd.h>
+
 using namespace newsbeuter;
 
 namespace podbeuter {
