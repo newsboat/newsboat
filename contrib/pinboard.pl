@@ -4,6 +4,12 @@ use strict;
 use Net::Delicious;
 use LWP::UserAgent;
 
+# Daemonising the process
+# Use this only is you are sure things are workin as expected
+# Uncomment next two line and make sure that module is installed on system
+#use Proc::Daemon; 
+#Proc::Daemon::Init();
+
 my $url='';
 my $tag='newsbeuter';
 
