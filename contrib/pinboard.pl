@@ -4,9 +4,9 @@ use strict;
 use Net::Delicious;
 use LWP::UserAgent;
 
-# Daemonising the process
-# Use this only is you are sure things are workin as expected
-# Uncomment next two line and make sure that module is installed on system
+# Daemonising the bookmarking process
+# Use this only is you are sure things are working as expected
+# Uncomment the next two lines and make sure that the required module is installed
 #use Proc::Daemon; 
 #Proc::Daemon::Init();
 
