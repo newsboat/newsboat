@@ -19,7 +19,7 @@ my $ua = LWP::UserAgent->new(
     requests_redirectable => [],
 );
 my $res = $ua->get($ARGV[0]);
-if ($res->status_line == 301)
+if ($res->code == 301)
 	{$url = $res->header( 'location');}
 else
 	{$url = $ARGV[0];}
