@@ -1,0 +1,1559 @@
+# Norwegian bokmål translation for newsbeuter.
+# Copyright (C) 2012
+# This file is distributed under the same license as the newsbeuter package.
+# Daniel Aleksandersen <code@daniel.priv.no>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: newsbeuter 2.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-09-14 17:33+0200\n"
+"PO-Revision-Date: 2012-08-08 20:07+0100\n"
+"Last-Translator: Daniel Aleksandersen <code@daniel.priv.no>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Norwegian Bokmal\n"
+"X-Poedit-Country: NORWAY\n"
+
+#: src/colormanager.cpp:44
+#: src/colormanager.cpp:46
+#: src/regexmanager.cpp:55
+#: src/regexmanager.cpp:64
+#: src/regexmanager.cpp:113
+#: src/regexmanager.cpp:121
+#, c-format
+msgid "`%s' is not a valid color"
+msgstr "`%s' er ikke en gyldig farge"
+
+#: src/colormanager.cpp:51
+#: src/regexmanager.cpp:73
+#: src/regexmanager.cpp:131
+#, c-format
+msgid "`%s' is not a valid attribute"
+msgstr "`%s' er ikke en gyldig attributt"
+
+#: src/colormanager.cpp:62
+#, c-format
+msgid "`%s' is not a valid configuration element"
+msgstr "`%s' er ikke et gyldig oppsettselement"
+
+#: src/configcontainer.cpp:64
+#, c-format
+msgid "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
+msgstr "newsbeuter: fullførte oppdateringen, %f uleste nyhetsstrømmer (totalt %n uleste artikler)"
+
+#: src/configcontainer.cpp:102
+msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
+msgstr "%N %V - Nyhetsstrømmene dine (%u uleste, %t totalt)%?T? - etikett `%T'&?"
+
+#: src/configcontainer.cpp:103
+msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
+msgstr "%N %V - Artikler i nyhetsnyhetsstrømmen '%T' (%u ulest, %t totalt) - %U"
+
+#: src/configcontainer.cpp:104
+msgid "%N %V - Search result (%u unread, %t total)"
+msgstr "%N %V - Søkeresultater (%u ulest, %t totalt)"
+
+#: src/configcontainer.cpp:105
+msgid "%N %V - %?O?Open File&Save File? - %f"
+msgstr "%N %V - %?O?Åpne fil&Lagre fil? - %f"
+
+#: src/configcontainer.cpp:106
+msgid "%N %V - Help"
+msgstr "%N %V - Hjelp"
+
+#: src/configcontainer.cpp:107
+msgid "%N %V - Select Tag"
+msgstr "%N %V - Velg etikett"
+
+#: src/configcontainer.cpp:108
+msgid "%N %V - Select Filter"
+msgstr "%N %V - Velg filter"
+
+#: src/configcontainer.cpp:109
+msgid "%N %V - Article '%T'"
+msgstr "%N %V - Artikkel '%T'"
+
+#: src/configcontainer.cpp:110
+msgid "%N %V - URLs"
+msgstr "%N %V - URLer"
+
+#: src/configcontainer.cpp:111
+msgid "%N %V - Dialogs"
+msgstr "%N %V - Dialoger"
+
+#: src/configcontainer.cpp:147
+#, c-format
+msgid "expected boolean value, found `%s' instead"
+msgstr "forventet en boolsk verdi, fant `%s' istedenfor"
+
+#: src/configcontainer.cpp:153
+#, c-format
+msgid "expected integer value, found `%s' instead"
+msgstr "forventet en heltallsverdi, fant `%s' i stedet"
+
+#: src/configcontainer.cpp:159
+#, c-format
+msgid "invalid configuration value `%s'"
+msgstr "ugyldig oppsettsverdi `%s'"
+
+#: src/configparser.cpp:80
+#, c-format
+msgid "Error while processing command `%s' (%s line %u): %s"
+msgstr "Feil under behandling av kommandoen `%s' (%s linje %u): %s"
+
+#: src/configparser.cpp:83
+#, c-format
+msgid "unknown command `%s'"
+msgstr "ukjent kommando `%s'"
+
+#: src/controller.cpp:90
+#: src/pb_controller.cpp:43
+msgid "Fatal error: couldn't determine home directory!"
+msgstr "Kraftig feil: kunne ikke finne hjemmemappen!"
+
+#: src/controller.cpp:91
+#: src/pb_controller.cpp:44
+#, c-format
+msgid "Please set the HOME environment variable or add a valid user for UID %u!"
+msgstr "Vennligst sett miljøvariablen HOME eller legg til en gyldig bruker for UID %u!"
+
+#: src/controller.cpp:226
+#: src/pb_controller.cpp:102
+#, c-format
+msgid "%s: unknown option - %c"
+msgstr "%s: ukjent valg - %c"
+
+#: src/controller.cpp:250
+#: src/pb_controller.cpp:108
+#, c-format
+msgid "Starting %s %s..."
+msgstr "Starter %s %s..."
+
+#: src/controller.cpp:260
+#: src/controller.cpp:319
+#: src/pb_controller.cpp:112
+#, c-format
+msgid "Error: an instance of %s is already running (PID: %u)"
+msgstr "Feil: en annen instanse av %s kjører allerede (PID: %u)"
+
+#: src/controller.cpp:267
+#: src/pb_controller.cpp:116
+msgid "Loading configuration..."
+msgstr "Leser oppsett..."
+
+#: src/controller.cpp:299
+#: src/controller.cpp:337
+#: src/controller.cpp:364
+#: src/controller.cpp:380
+#: src/controller.cpp:408
+#: src/controller.cpp:412
+#: src/controller.cpp:444
+#: src/controller.cpp:456
+#: src/controller.cpp:470
+#: src/controller.cpp:479
+#: src/controller.cpp:518
+#: src/pb_controller.cpp:153
+#: src/pb_controller.cpp:170
+msgid "done."
+msgstr "utført."
+
+#: src/controller.cpp:325
+#: src/controller.cpp:403
+msgid "Opening cache..."
+msgstr "Åpner mellomlager..."
+
+#: src/controller.cpp:331
+#, c-format
+msgid "Error: opening the cache file `%s' failed: %s"
+msgstr "Feil: åpning av mellomlagerfilen `%s' feilet: %s"
+
+#: src/controller.cpp:358
+msgid "Loading URLs from local cache..."
+msgstr "Laster inn URLer fra lokalt mellomlager..."
+
+#: src/controller.cpp:368
+#, c-format
+msgid "Loading URLs from %s..."
+msgstr "Laster inn URLer fra %s..."
+
+#: src/controller.cpp:388
+#, c-format
+msgid "Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."
+msgstr "Feil: ingen URLer er satt opp. Vennligst fyll inn filen %s med RSS nyhetsstrømmer, eller importer fra en OPML-fil."
+
+#: src/controller.cpp:390
+msgid "It looks like the OPML feed you subscribed contains no feeds. Please fill it with feeds, and try again."
+msgstr "Det ser ut til at OPML-strømmen du abonnerer på ikke inneholder noen nyhetsstrømmer. Vennligst sørg for at den inneholder noen nyhetsstrømmer og prøv igjen."
+
+#: src/controller.cpp:392
+msgid "It looks like you haven't configured any feeds in your Google Reader account. Please do so, and try again."
+msgstr "Det ser ikke ut til at du har satt opp noen nyhetsstrømmer i din Google Reader-konto. Vennligst sørg for å gjøre det og prøv igjen."
+
+#: src/controller.cpp:401
+msgid "Loading articles from cache..."
+msgstr "Leser artikler fra mellomlageret..."
+
+#: src/controller.cpp:409
+msgid "Cleaning up cache thoroughly..."
+msgstr "Rydder grundig opp i mellomlageret..."
+
+#: src/controller.cpp:426
+msgid "Error while loading feeds from database: "
+msgstr "Feil under innlesing av nyhetsstrømmer fra databasen: "
+
+#: src/controller.cpp:430
+#, c-format
+msgid "Error while loading feed '%s': %s"
+msgstr "Feil under innlastning av nyhetsstrømmen '%s': %s"
+
+#: src/controller.cpp:448
+msgid "Prepopulating query feeds..."
+msgstr "Forhåndsutfyller spørringsstrømmer..."
+
+#: src/controller.cpp:467
+msgid "Importing list of read articles..."
+msgstr "Importerer liste over leste artikler..."
+
+#: src/controller.cpp:476
+msgid "Exporting list of read articles..."
+msgstr "Eksporterer liste over leste artikler..."
+
+#: src/controller.cpp:511
+msgid "Cleaning up cache..."
+msgstr "Rydder opp i mellomlageret..."
+
+#: src/controller.cpp:523
+msgid "failed: "
+msgstr "feilet: "
+
+#: src/controller.cpp:544
+#, c-format
+msgid "Error: couldn't mark all feeds read: %s"
+msgstr "Feil: kunne ikke markere alle nyhetsstrømmene som lest: %s"
+
+#: src/controller.cpp:600
+#, c-format
+msgid "%sLoading %s..."
+msgstr "%sLaster inn %s..."
+
+#: src/controller.cpp:622
+#: src/controller.cpp:624
+#: src/controller.cpp:626
+#, c-format
+msgid "Error while retrieving %s: %s"
+msgstr "Feil under innhenting av %s: %s"
+
+#: src/controller.cpp:634
+msgid "Error: invalid feed!"
+msgstr "Feil: ugyldig nyhetsstrøm!"
+
+#: src/controller.cpp:641
+msgid "invalid feed index (bug)"
+msgstr "ugyldig strøminndeks (programfeil)"
+
+#: src/controller.cpp:803
+msgid "newsbeuter is free software and licensed under the MIT/X Consortium License."
+msgstr "newsbeuter er fri programvare lisensiert under MIT/X Consortium License."
+
+#: src/controller.cpp:804
+#, c-format
+msgid "Type `%s -vv' for more information."
+msgstr "Skriv `%s -vv' for mer informasjon."
+
+#: src/controller.cpp:833
+#, c-format
+msgid ""
+"%s %s\n"
+"usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-h]\n"
+msgstr ""
+"%s %s\n"
+"bruk: %s [-i <fil>|-e] [-u <URL fil>] [-c <mellomlagerfil>] [-x <kommando> ...] [-h]\n"
+
+#: src/controller.cpp:840
+msgid "export OPML feed to stdout"
+msgstr "eksporter OPML strømmer til stdout"
+
+#: src/controller.cpp:841
+msgid "refresh feeds on start"
+msgstr "oppdater nyhetsstrømmer under oppstart"
+
+#: src/controller.cpp:842
+#: src/controller.cpp:853
+#: src/controller.cpp:854
+msgid "<file>"
+msgstr "<fil>"
+
+#: src/controller.cpp:842
+msgid "import OPML file"
+msgstr "importer OPML-fil"
+
+#: src/controller.cpp:843
+msgid "<urlfile>"
+msgstr "<URL fil>"
+
+#: src/controller.cpp:843
+msgid "read RSS feed URLs from <urlfile>"
+msgstr "les RSS-strømmer fra <URL-fil>"
+
+#: src/controller.cpp:844
+msgid "<cachefile>"
+msgstr "<mellomlagerfil>"
+
+#: src/controller.cpp:844
+msgid "use <cachefile> as cache file"
+msgstr "bruk <mellomlagerfil> som mellomlagerfil"
+
+#: src/controller.cpp:845
+msgid "<configfile>"
+msgstr "<oppsettsfil>"
+
+#: src/controller.cpp:845
+msgid "read configuration from <configfile>"
+msgstr "les oppsettsfilen fra <oppsettsfil>"
+
+#: src/controller.cpp:846
+msgid "clean up cache thoroughly"
+msgstr "grunndig opprydding av mellomlagret"
+
+#: src/controller.cpp:847
+msgid "<command>..."
+msgstr "<kommando>..."
+
+#: src/controller.cpp:847
+msgid "execute list of commands"
+msgstr "utfør kommandoliste"
+
+#: src/controller.cpp:848
+msgid "activate offline mode (only applies to Google Reader synchronization mode)"
+msgstr "bytt til frakoblet modus (kun for Google Reader-synkroniseringsmodus)"
+
+#: src/controller.cpp:849
+msgid "quiet startup"
+msgstr "stille oppstart"
+
+#: src/controller.cpp:850
+msgid "get version information"
+msgstr "få versjonsinformasjon"
+
+#: src/controller.cpp:851
+msgid "<loglevel>"
+msgstr "<loggnivå>"
+
+#: src/controller.cpp:851
+msgid "write a log with a certain loglevel (valid values: 1 to 6)"
+msgstr "skriv en logg med angitt loggskrivningsnivå mellom 1 og 6"
+
+#: src/controller.cpp:852
+msgid "<logfile>"
+msgstr "<loggfil>"
+
+#: src/controller.cpp:852
+msgid "use <logfile> as output log file"
+msgstr "bruk <loggfil> som loggfil"
+
+#: src/controller.cpp:853
+msgid "export list of read articles to <file>"
+msgstr "eksporterer en liste med leste artikler til <fil>"
+
+#: src/controller.cpp:854
+msgid "import list of read articles from <file>"
+msgstr "importer en liste med leste artikler fra <fil>"
+
+#: src/controller.cpp:855
+msgid "this help"
+msgstr "denne hjelpen"
+
+#: src/controller.cpp:873
+#, c-format
+msgid "An error occured while parsing %s."
+msgstr "En feil oppsto under tolkningen av %s"
+
+#: src/controller.cpp:888
+#, c-format
+msgid "Import of %s finished."
+msgstr "Fullførte importeringen av %s."
+
+#: src/controller.cpp:1120
+msgid "bookmarking support is not configured. Please set the configuration variable `bookmark-cmd' accordingly."
+msgstr "bokmerkestøtte er ikke satt opp. Vennligst sett valgvariabelen `bookmark-cmd' etter ønske."
+
+#: src/controller.cpp:1133
+#, c-format
+msgid "%u unread articles"
+msgstr "%u uleste artikler"
+
+#: src/controller.cpp:1164
+#: src/formaction.cpp:304
+#: src/itemview_formaction.cpp:85
+msgid "Title: "
+msgstr "Tittel: "
+
+#: src/controller.cpp:1168
+#: src/itemview_formaction.cpp:90
+msgid "Author: "
+msgstr "Forfatter: "
+
+#: src/controller.cpp:1172
+#: src/itemview_formaction.cpp:99
+msgid "Date: "
+msgstr "Dato: "
+
+#: src/controller.cpp:1176
+#: src/itemview_formaction.cpp:95
+msgid "Link: "
+msgstr "Lenke: "
+
+#: src/controller.cpp:1388
+#, c-format
+msgid "Error: couldn't open configuration file `%s'!"
+msgstr "Feil: kunne ikke åpne oppsettsfilen `%s'!"
+
+#: src/dialogs_formaction.cpp:46
+msgid "Close"
+msgstr "Lukk"
+
+#: src/dialogs_formaction.cpp:47
+msgid "Goto Dialog"
+msgstr "Gå til dialogen"
+
+#: src/dialogs_formaction.cpp:48
+msgid "Close Dialog"
+msgstr "Lukk dialogen"
+
+#: src/dialogs_formaction.cpp:62
+#: src/dialogs_formaction.cpp:77
+#: src/itemlist_formaction.cpp:53
+#: src/itemlist_formaction.cpp:70
+#: src/itemlist_formaction.cpp:93
+#: src/itemlist_formaction.cpp:105
+#: src/itemlist_formaction.cpp:149
+#: src/itemlist_formaction.cpp:167
+#: src/itemlist_formaction.cpp:187
+#: src/itemlist_formaction.cpp:344
+#: src/itemlist_formaction.cpp:527
+msgid "No item selected!"
+msgstr "Ingen innlegg merket!"
+
+#: src/dialogs_formaction.cpp:74
+msgid "Error: you can't remove the feed list!"
+msgstr "Feil: du kan ikke fjerne nyhetsstrømlisten!"
+
+#: src/dialogs_formaction.cpp:99
+#: src/feedlist_formaction.cpp:726
+#: src/itemlist_formaction.cpp:858
+#: src/urlview_formaction.cpp:136
+msgid "Invalid position!"
+msgstr "ugyldig posisjon!"
+
+#: src/download.cpp:42
+msgid "queued"
+msgstr "lagt i køen"
+
+#: src/download.cpp:44
+msgid "downloading"
+msgstr "laster ned"
+
+#: src/download.cpp:46
+msgid "cancelled"
+msgstr "avbrutt"
+
+#: src/download.cpp:48
+msgid "deleted"
+msgstr "slettet"
+
+#: src/download.cpp:50
+msgid "finished"
+msgstr "fullført"
+
+#: src/download.cpp:52
+msgid "failed"
+msgstr "feilet"
+
+#: src/download.cpp:54
+msgid "incomplete"
+msgstr "ufullstendig"
+
+#: src/download.cpp:56
+msgid "played"
+msgstr "avspilt"
+
+#: src/download.cpp:58
+msgid "unknown (bug)."
+msgstr "ukjent (programfeil)."
+
+#: src/exception.cpp:23
+#, c-format
+msgid "attribute `%s' is not available."
+msgstr "attributten `%s' er ikke tilgjengelig."
+
+#: src/exception.cpp:26
+#, c-format
+msgid "regular expression '%s' is invalid: %s"
+msgstr "det regulære uttrykket '%s' er ugyldig: %s"
+
+#: src/exception.cpp:41
+msgid "invalid parameters."
+msgstr "ugyldige parametere."
+
+#: src/exception.cpp:43
+msgid "too few parameters."
+msgstr "for få parametere."
+
+#: src/exception.cpp:45
+msgid "unknown command (bug)."
+msgstr "ukjent kommando (programfeil)."
+
+#: src/exception.cpp:47
+msgid "file couldn't be opened."
+msgstr "filen kunne ikke åpnes."
+
+#: src/exception.cpp:49
+msgid "unknown error (bug)."
+msgstr "ukjent feil (programfeil)."
+
+#: src/feedlist_formaction.cpp:99
+#: src/feedlist_formaction.cpp:109
+#: src/feedlist_formaction.cpp:187
+msgid "No feed selected!"
+msgstr "Ingen nyhetsstrømmer merket!"
+
+#: src/feedlist_formaction.cpp:120
+msgid "Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)one?"
+msgstr "Sorter stigende etter (f)ørste etikett/(t)ittel/antall (a)artikler/antall (u)leste artikler/(i)ngen?"
+
+#: src/feedlist_formaction.cpp:120
+#: src/feedlist_formaction.cpp:137
+msgid "ftaun"
+msgstr "ftaui"
+
+#: src/feedlist_formaction.cpp:123
+#: src/feedlist_formaction.cpp:140
+#: src/itemlist_formaction.cpp:420
+#: src/itemlist_formaction.cpp:439
+msgid "f"
+msgstr "f"
+
+#: src/feedlist_formaction.cpp:125
+#: src/feedlist_formaction.cpp:142
+#: src/itemlist_formaction.cpp:418
+#: src/itemlist_formaction.cpp:437
+msgid "t"
+msgstr "t"
+
+#: src/feedlist_formaction.cpp:127
+#: src/feedlist_formaction.cpp:144
+#: src/itemlist_formaction.cpp:422
+#: src/itemlist_formaction.cpp:441
+msgid "a"
+msgstr "a"
+
+#: src/feedlist_formaction.cpp:129
+#: src/feedlist_formaction.cpp:146
+msgid "u"
+msgstr "u"
+
+#: src/feedlist_formaction.cpp:131
+#: src/feedlist_formaction.cpp:148
+#: src/filebrowser_formaction.cpp:102
+msgid "n"
+msgstr "i"
+
+#: src/feedlist_formaction.cpp:137
+msgid "Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)one?"
+msgstr "Sorter synkende etter (f)ørste etikett/(t)ittel/antall (a)artikler/antall (u)leste artikler/(i)ngen?"
+
+#: src/feedlist_formaction.cpp:175
+#: src/itemlist_formaction.cpp:296
+msgid "Marking feed read..."
+msgstr "Markerer nyhetsstrømmen som lest..."
+
+#: src/feedlist_formaction.cpp:184
+#: src/itemlist_formaction.cpp:313
+#, c-format
+msgid "Error: couldn't mark feed read: %s"
+msgstr "Feil: kunne ikke markere nyhetsstrømmen som lest: %s"
+
+#: src/feedlist_formaction.cpp:208
+#: src/feedlist_formaction.cpp:216
+#: src/feedlist_formaction.cpp:240
+msgid "No feeds with unread items."
+msgstr "Ingen nyhetsstrømmer med uleste innlegg."
+
+#: src/feedlist_formaction.cpp:224
+#: src/itemlist_formaction.cpp:286
+msgid "Already on last feed."
+msgstr "Allerede i den siste nyhetsstrømmen."
+
+#: src/feedlist_formaction.cpp:232
+#: src/itemlist_formaction.cpp:291
+msgid "Already on first feed."
+msgstr "Allerede i den første nyhetsstrømmen."
+
+#: src/feedlist_formaction.cpp:246
+msgid "Marking all feeds read..."
+msgstr "Markerer alle nyhetsstrømmer som lest..."
+
+#: src/feedlist_formaction.cpp:270
+msgid "No tags defined."
+msgstr "Ingen etiketter angitt."
+
+#: src/feedlist_formaction.cpp:285
+#: src/itemlist_formaction.cpp:378
+#, c-format
+msgid "Error: couldn't parse filter command `%s': %s"
+msgstr "Feil: kunne ikke tolke filterkommandoen `%s': %s"
+
+#: src/feedlist_formaction.cpp:295
+#: src/itemlist_formaction.cpp:389
+msgid "No filters defined."
+msgstr "Ingen angitte filtere."
+
+#: src/feedlist_formaction.cpp:308
+#: src/help_formaction.cpp:30
+#: src/itemlist_formaction.cpp:356
+#: src/itemview_formaction.cpp:231
+msgid "Search for: "
+msgstr "Søk etter: "
+
+#: src/feedlist_formaction.cpp:325
+#: src/itemlist_formaction.cpp:402
+msgid "Filter: "
+msgstr "Filter: "
+
+#: src/feedlist_formaction.cpp:334
+#: src/view.cpp:184
+msgid "Do you really want to quit (y:Yes n:No)? "
+msgstr "Vil du virkelig avslutte (j:Ja n:Nei)? "
+
+#: src/feedlist_formaction.cpp:334
+#: src/filebrowser_formaction.cpp:102
+#: src/view.cpp:184
+msgid "yn"
+msgstr "jn"
+
+#: src/feedlist_formaction.cpp:334
+#: src/view.cpp:184
+msgid "y"
+msgstr "j"
+
+#: src/feedlist_formaction.cpp:416
+#: src/help_formaction.cpp:154
+#: src/itemlist_formaction.cpp:836
+#: src/itemview_formaction.cpp:393
+#: src/pb_view.cpp:266
+#: src/pb_view.cpp:275
+#: src/urlview_formaction.cpp:124
+msgid "Quit"
+msgstr "Avslutt"
+
+#: src/feedlist_formaction.cpp:417
+#: src/itemlist_formaction.cpp:837
+msgid "Open"
+msgstr "Åpne"
+
+#: src/feedlist_formaction.cpp:418
+#: src/itemlist_formaction.cpp:840
+#: src/itemview_formaction.cpp:395
+msgid "Next Unread"
+msgstr "Neste uleste"
+
+#: src/feedlist_formaction.cpp:419
+#: src/itemlist_formaction.cpp:839
+msgid "Reload"
+msgstr "Oppdater"
+
+#: src/feedlist_formaction.cpp:420
+msgid "Reload All"
+msgstr "Oppdater alle"
+
+#: src/feedlist_formaction.cpp:421
+msgid "Mark Read"
+msgstr "Merk som lest"
+
+#: src/feedlist_formaction.cpp:422
+msgid "Catchup All"
+msgstr "Merk alt som lest"
+
+#: src/feedlist_formaction.cpp:423
+#: src/help_formaction.cpp:155
+#: src/itemlist_formaction.cpp:842
+msgid "Search"
+msgstr "Søk"
+
+#: src/feedlist_formaction.cpp:424
+#: src/help_formaction.cpp:182
+#: src/itemlist_formaction.cpp:843
+#: src/itemview_formaction.cpp:398
+#: src/pb_view.cpp:208
+#: src/pb_view.cpp:282
+msgid "Help"
+msgstr "Hjelp"
+
+#: src/feedlist_formaction.cpp:681
+#: src/itemlist_formaction.cpp:513
+msgid "Error: couldn't parse filter command!"
+msgstr "Feil: kunne ikke  tolke filterkommandoen!"
+
+#: src/feedlist_formaction.cpp:696
+#: src/itemlist_formaction.cpp:548
+msgid "Searching..."
+msgstr "Leter..."
+
+#: src/feedlist_formaction.cpp:703
+#: src/itemlist_formaction.cpp:559
+#, c-format
+msgid "Error while searching for `%s': %s"
+msgstr "Feil under søket etter `%s': %s"
+
+#: src/feedlist_formaction.cpp:712
+#: src/itemlist_formaction.cpp:564
+msgid "No results."
+msgstr "Ingen resultater."
+
+#: src/feedlist_formaction.cpp:721
+#: src/itemlist_formaction.cpp:853
+msgid "Position not visible!"
+msgstr "Posisjonen er ikke synlig!"
+
+#: src/feedlist_formaction.cpp:774
+#, c-format
+msgid "Feed List - %u unread, %u total"
+msgstr "Nyhetsstrømliste  - %u uleste, %u totalt"
+
+#: src/filebrowser_formaction.cpp:102
+#, c-format
+msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
+msgstr "Vil du virkelig overskrive `%s' (j:Ja n:Nei)? "
+
+#: src/filebrowser_formaction.cpp:166
+msgid "File: "
+msgstr "Fil: "
+
+#: src/filebrowser_formaction.cpp:185
+#, c-format
+msgid "%s %s - Open File - %s"
+msgstr "%s %s - Åpne fil - %s"
+
+#: src/filebrowser_formaction.cpp:187
+#, c-format
+msgid "%s %s - Save File - %s"
+msgstr "%s %s - Lagre fil - %s"
+
+#: src/filebrowser_formaction.cpp:194
+#: src/pb_view.cpp:277
+#: src/select_formaction.cpp:145
+#: src/select_formaction.cpp:150
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: src/filebrowser_formaction.cpp:195
+#: src/itemlist_formaction.cpp:838
+#: src/itemview_formaction.cpp:394
+msgid "Save"
+msgstr "Lagre"
+
+#: src/filebrowser_formaction.cpp:271
+#, c-format
+msgid "Open File - %s"
+msgstr "Åpne fil - %s"
+
+#: src/filebrowser_formaction.cpp:273
+#, c-format
+msgid "Save File - %s"
+msgstr "Lagre fil - %s"
+
+#: src/filtercontainer.cpp:22
+#: src/regexmanager.cpp:138
+#: src/rss.cpp:355
+#, c-format
+msgid "couldn't parse filter expression `%s': %s"
+msgstr "kunne ikke tolke filteruttrykket `%s': %s"
+
+#: src/formaction.cpp:186
+#: src/formaction.cpp:207
+msgid "usage: set <variable>[=<value>]"
+msgstr "bruk: set <variabel>[=<verdi>]"
+
+#: src/formaction.cpp:215
+msgid "usage: source <file> [...]"
+msgstr "bruk: source <fil> [...]"
+
+#: src/formaction.cpp:228
+msgid "usage: dumpconfig <file>"
+msgstr "bruk: dumpconfig <fil>"
+
+#: src/formaction.cpp:231
+#, c-format
+msgid "Saved configuration to %s"
+msgstr "Lagret oppsettsfilen til %s"
+
+#: src/formaction.cpp:236
+#, c-format
+msgid "Not a command: %s"
+msgstr "Ikke en kommando: %s"
+
+#: src/formaction.cpp:275
+msgid "Saving bookmark..."
+msgstr "Lagrer bokmerke..."
+
+#: src/formaction.cpp:278
+msgid "Saved bookmark."
+msgstr "Lagret bokmerke."
+
+#: src/formaction.cpp:280
+msgid "Error while saving bookmark: "
+msgstr "Feil under lagring av bokmerke: "
+
+#: src/formaction.cpp:303
+msgid "URL: "
+msgstr "URL: "
+
+#: src/formaction.cpp:305
+msgid "Description: "
+msgstr "Beskrivelse: "
+
+#: src/googlereader_urlreader.cpp:33
+msgid "People you follow"
+msgstr "Folk du følger"
+
+#: src/googlereader_urlreader.cpp:34
+msgid "Starred items"
+msgstr "Favorittinnlegg"
+
+#: src/googlereader_urlreader.cpp:35
+msgid "Shared items"
+msgstr "Delte innlegg"
+
+#: src/googlereader_urlreader.cpp:36
+msgid "Popular items"
+msgstr "Populære innlegg"
+
+#: src/help_formaction.cpp:127
+msgid "Generic bindings:"
+msgstr "Generelle bindinger:"
+
+#: src/help_formaction.cpp:134
+msgid "Unbound functions:"
+msgstr "Utilknyttede funksjoner:"
+
+#: src/help_formaction.cpp:156
+msgid "Clear"
+msgstr "Tøm"
+
+#: src/htmlrenderer.cpp:145
+msgid "embedded flash:"
+msgstr "innbakt Flash-tillegg"
+
+#: src/htmlrenderer.cpp:176
+#: src/htmlrenderer.cpp:595
+msgid "image"
+msgstr "bilde"
+
+#: src/htmlrenderer.cpp:585
+msgid "Links: "
+msgstr "Lenker: "
+
+#: src/htmlrenderer.cpp:594
+msgid "link"
+msgstr "lenke"
+
+#: src/htmlrenderer.cpp:596
+msgid "embedded flash"
+msgstr "innbakt Flash-tillegg"
+
+#: src/htmlrenderer.cpp:597
+msgid "unknown (bug)"
+msgstr "ukjent (programfeil)"
+
+#: src/itemlist_formaction.cpp:112
+#: src/itemview_formaction.cpp:323
+msgid "Toggling read flag for article..."
+msgstr "Setter lestflagg for artikkelen..."
+
+#: src/itemlist_formaction.cpp:126
+#, c-format
+msgid "Error while toggling read flag: %s"
+msgstr "Feil under setting av lestflagg: %s"
+
+#: src/itemlist_formaction.cpp:145
+#: src/itemview_formaction.cpp:268
+msgid "URL list empty."
+msgstr "URL-listen er tom."
+
+#: src/itemlist_formaction.cpp:182
+#: src/itemview_formaction.cpp:103
+#: src/itemview_formaction.cpp:259
+msgid "Flags: "
+msgstr "Flagg: "
+
+#: src/itemlist_formaction.cpp:205
+#: src/itemlist_formaction.cpp:881
+msgid "Error: no item selected!"
+msgstr "Feil: ingen markerte innlegg!"
+
+#: src/itemlist_formaction.cpp:219
+msgid "Error: you can't reload search results."
+msgstr "Feil: du kan ikke oppdatere søkeresultater."
+
+#: src/itemlist_formaction.cpp:239
+#: src/itemlist_formaction.cpp:247
+#: src/itemlist_formaction.cpp:270
+#: src/itemview_formaction.cpp:282
+#: src/itemview_formaction.cpp:291
+#: src/itemview_formaction.cpp:318
+#: src/view.cpp:626
+#: src/view.cpp:684
+msgid "No unread items."
+msgstr "Ingen uleste innlegg."
+
+#: src/itemlist_formaction.cpp:255
+#: src/itemview_formaction.cpp:300
+#: src/view.cpp:746
+msgid "Already on last item."
+msgstr "Allerede på siste innlegg."
+
+#: src/itemlist_formaction.cpp:263
+#: src/itemview_formaction.cpp:309
+#: src/view.cpp:715
+msgid "Already on first item."
+msgstr "Allerede på første innlegg."
+
+#: src/itemlist_formaction.cpp:276
+#: src/itemlist_formaction.cpp:281
+msgid "No unread feeds."
+msgstr "Ingen uleste nyhetsstrømmer."
+
+#: src/itemlist_formaction.cpp:340
+#: src/itemview_formaction.cpp:245
+msgid "Pipe article to command: "
+msgstr "Send artikkel til kommando: "
+
+#: src/itemlist_formaction.cpp:413
+msgid "Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"
+msgstr "Sorter etter (d)ato)/(t)ittel/(f)lagg/f(o)rfatter/(l)enke/(g)uide?"
+
+#: src/itemlist_formaction.cpp:413
+#: src/itemlist_formaction.cpp:432
+msgid "dtfalg"
+msgstr "dtfolg"
+
+#: src/itemlist_formaction.cpp:416
+#: src/itemlist_formaction.cpp:435
+msgid "d"
+msgstr "d"
+
+#: src/itemlist_formaction.cpp:424
+#: src/itemlist_formaction.cpp:443
+msgid "l"
+msgstr "l"
+
+#: src/itemlist_formaction.cpp:426
+#: src/itemlist_formaction.cpp:445
+msgid "g"
+msgstr "g"
+
+#: src/itemlist_formaction.cpp:432
+msgid "Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"
+msgstr "Sorter synkende etter (d)ato)/(t)ittel/(f)lagg/f(o)rfatter/(l)enke/(g)uide?"
+
+#: src/itemlist_formaction.cpp:537
+#: src/itemview_formaction.cpp:484
+msgid "Flags updated."
+msgstr "Flagg oppdatert."
+
+#: src/itemlist_formaction.cpp:841
+msgid "Mark All Read"
+msgstr "Marker alle som lest"
+
+#: src/itemlist_formaction.cpp:917
+#: src/itemview_formaction.cpp:195
+#: src/itemview_formaction.cpp:459
+msgid "Aborted saving."
+msgstr "Avbrøt lagringen."
+
+#: src/itemlist_formaction.cpp:921
+#: src/itemview_formaction.cpp:463
+#, c-format
+msgid "Saved article to %s"
+msgstr "Lagret artikkelen til %s"
+
+#: src/itemlist_formaction.cpp:923
+#: src/itemview_formaction.cpp:465
+#, c-format
+msgid "Error: couldn't save article to %s"
+msgstr "Feil: kunne ikke lagre artikkelen til %s"
+
+#: src/itemlist_formaction.cpp:999
+#, c-format
+msgid "Search Result - '%s'"
+msgstr "Søkeresultater - '%s'"
+
+#: src/itemlist_formaction.cpp:1002
+#, c-format
+msgid "Query Feed - %s"
+msgstr "Spørringsstrøm - %s"
+
+#: src/itemlist_formaction.cpp:1004
+#, c-format
+msgid "Article List - %s"
+msgstr "Artikkelliste - %s"
+
+#: src/itemview_formaction.cpp:34
+#: src/itemview_formaction.cpp:575
+msgid "Top"
+msgstr "Toppen"
+
+#: src/itemview_formaction.cpp:34
+#: src/itemview_formaction.cpp:577
+msgid "Bottom"
+msgstr "Bunnen"
+
+#: src/itemview_formaction.cpp:80
+msgid "Feed: "
+msgstr "Strøm: "
+
+#: src/itemview_formaction.cpp:108
+msgid "Podcast Download URL: "
+msgstr "Podkastnedlastnings-URL: "
+
+#: src/itemview_formaction.cpp:110
+msgid "type: "
+msgstr "slag: "
+
+#: src/itemview_formaction.cpp:166
+#, c-format
+msgid "Error while marking article as read: %s"
+msgstr "Feil mens artikkelen ble markert som lest: %s"
+
+#: src/itemview_formaction.cpp:178
+#, c-format
+msgid "Added %s to download queue."
+msgstr "La til %s til nedlastningskøen."
+
+#: src/itemview_formaction.cpp:180
+#, c-format
+msgid "Invalid URL: '%s'"
+msgstr "Ugyldig URL: '%s'"
+
+#: src/itemview_formaction.cpp:199
+#, c-format
+msgid "Saved article to %s."
+msgstr "Lagret artikkel til %s."
+
+#: src/itemview_formaction.cpp:201
+#, c-format
+msgid "Error: couldn't write article to file %s"
+msgstr "Feil: kunne ikke skrive artikkelen til filen %s"
+
+#: src/itemview_formaction.cpp:208
+#: src/itemview_formaction.cpp:357
+#: src/itemview_formaction.cpp:509
+#: src/urlview_formaction.cpp:34
+#: src/urlview_formaction.cpp:69
+msgid "Starting browser..."
+msgstr "Åpner nettleseren..."
+
+#: src/itemview_formaction.cpp:328
+#, c-format
+msgid "Error while marking article as unread: %s"
+msgstr "Feil mens artikkelen ble markert som lest: %s"
+
+#: src/itemview_formaction.cpp:372
+#: src/keymap.cpp:47
+msgid "Goto URL #"
+msgstr "Gå til URL #"
+
+#: src/itemview_formaction.cpp:396
+#: src/urlview_formaction.cpp:125
+msgid "Open in Browser"
+msgstr "Åpne i nettleseren"
+
+#: src/itemview_formaction.cpp:397
+msgid "Enqueue"
+msgstr "Legg til i køen"
+
+#: src/itemview_formaction.cpp:586
+#, c-format
+msgid "Article - %s"
+msgstr "Artikkel - %s"
+
+#: src/itemview_formaction.cpp:624
+msgid "Error: invalid regular expression!"
+msgstr "Feil: ugyldig regulært uttrykk!"
+
+#: src/keymap.cpp:23
+msgid "Open feed/article"
+msgstr "Åpne nyhetsstrøm/artikkel"
+
+#: src/keymap.cpp:24
+msgid "Return to previous dialog/Quit"
+msgstr "Vend tilbake til forrige dialog/avslutt"
+
+#: src/keymap.cpp:25
+msgid "Quit program,  no confirmation"
+msgstr "Avslutt programmet uten bekreftelse"
+
+#: src/keymap.cpp:26
+msgid "Reload currently selected feed"
+msgstr "Oppdater den markerte nyhetsstrømmen"
+
+#: src/keymap.cpp:27
+msgid "Reload all feeds"
+msgstr "Oppdater alle nyhetsstrømmer"
+
+#: src/keymap.cpp:28
+msgid "Mark feed read"
+msgstr "Marker nyhetsstrømmen som lest"
+
+#: src/keymap.cpp:29
+msgid "Mark all feeds read"
+msgstr "Marker alle nyhetsstrømmer som lest"
+
+#: src/keymap.cpp:30
+msgid "Save article"
+msgstr "Lagre artikkel"
+
+#: src/keymap.cpp:31
+msgid "Go to next article"
+msgstr "Gå til neste artikkel"
+
+#: src/keymap.cpp:32
+msgid "Go to previous article"
+msgstr "Gå til forrige artikkel"
+
+#: src/keymap.cpp:33
+msgid "Go to next unread article"
+msgstr "Gå til neste uleste artikkel"
+
+#: src/keymap.cpp:34
+msgid "Go to previous unread article"
+msgstr "Gå til forrige uleste artikkel"
+
+#: src/keymap.cpp:35
+msgid "Go to a random unread article"
+msgstr "Gå til en tilfeldig ulest artikkel"
+
+#: src/keymap.cpp:36
+msgid "Open article in browser and mark read"
+msgstr "Åpne artikkel i en nettleser og marker som lest"
+
+#: src/keymap.cpp:37
+msgid "Open article in browser"
+msgstr "Åpne artikkel i en nettleser"
+
+#: src/keymap.cpp:38
+msgid "Open help dialog"
+msgstr "Åpne hjelpedialog"
+
+#: src/keymap.cpp:39
+msgid "Toggle source view"
+msgstr "Kildevisning [av/på]"
+
+#: src/keymap.cpp:40
+msgid "Toggle read status for article"
+msgstr "Leststatus for artikkel [av/på]"
+
+#: src/keymap.cpp:41
+msgid "Toggle show read feeds/articles"
+msgstr "Vis leste nyhetsstrømmer/artikler [av/på]"
+
+#: src/keymap.cpp:42
+msgid "Show URLs in current article"
+msgstr "Vis artikkelens URLer"
+
+#: src/keymap.cpp:43
+msgid "Clear current tag"
+msgstr "Tøm valgte etikett"
+
+#: src/keymap.cpp:44
+#: src/keymap.cpp:45
+msgid "Select tag"
+msgstr "Velg etikett"
+
+#: src/keymap.cpp:46
+msgid "Open search dialog"
+msgstr "Åpne søkedialog"
+
+#: src/keymap.cpp:48
+msgid "Add download to queue"
+msgstr "Legg til i nedlastningskøen"
+
+#: src/keymap.cpp:49
+msgid "Reload the list of URLs from the configuration"
+msgstr "Oppdater listen over URLer fra oppsettet"
+
+#: src/keymap.cpp:50
+msgid "Download file"
+msgstr "Last ned filen"
+
+#: src/keymap.cpp:51
+msgid "Cancel download"
+msgstr "Avbryt nedlastningen"
+
+#: src/keymap.cpp:52
+msgid "Mark download as deleted"
+msgstr "Merk nedlastningen som slettet"
+
+#: src/keymap.cpp:53
+msgid "Purge finished and deleted downloads from queue"
+msgstr "Fjern ferdige og slettede nedlastninger fra køen"
+
+#: src/keymap.cpp:54
+msgid "Toggle automatic download on/off"
+msgstr "Automatisk nedlastning [av/på]"
+
+#: src/keymap.cpp:55
+msgid "Start player with currently selected download"
+msgstr "Start markerte nedlastning i avspilleren"
+
+#: src/keymap.cpp:56
+msgid "Increase the number of concurrent downloads"
+msgstr "Øk antallet samtidige nedlastninger"
+
+#: src/keymap.cpp:57
+msgid "Decrease the number of concurrent downloads"
+msgstr "Reduser antallet samtidige nedlastninger"
+
+#: src/keymap.cpp:58
+msgid "Redraw screen"
+msgstr "Tegn skjermen på nytt"
+
+#: src/keymap.cpp:59
+msgid "Open the commandline"
+msgstr "Åpne kommandolinjen"
+
+#: src/keymap.cpp:60
+msgid "Set a filter"
+msgstr "Velg et filter"
+
+#: src/keymap.cpp:61
+msgid "Select a predefined filter"
+msgstr "Velg et eksisterende filter"
+
+#: src/keymap.cpp:62
+msgid "Clear currently set filter"
+msgstr "Tøm gjeldende filtrering"
+
+#: src/keymap.cpp:63
+msgid "Bookmark current link/article"
+msgstr "Sett bokmerke på denne lenken/artikkelen"
+
+#: src/keymap.cpp:64
+msgid "Edit flags"
+msgstr "Endre flagg"
+
+#: src/keymap.cpp:65
+msgid "Go to next feed"
+msgstr "Gå til neste nyhetsstrøm"
+
+#: src/keymap.cpp:66
+msgid "Go to previous feed"
+msgstr "Gå til forrige nyhetsstrøm"
+
+#: src/keymap.cpp:67
+msgid "Go to next unread feed"
+msgstr "Gå til neste uleste nyhetsstrøm"
+
+#: src/keymap.cpp:68
+msgid "Go to previous unread feed"
+msgstr "Gå til forrige uleste nyhetsstrøm"
+
+#: src/keymap.cpp:69
+msgid "Call a macro"
+msgstr "Bruk en makro"
+
+#: src/keymap.cpp:70
+msgid "Delete article"
+msgstr "Slett artikkel"
+
+#: src/keymap.cpp:71
+msgid "Purge deleted articles"
+msgstr "Fjern slettede artikkler"
+
+#: src/keymap.cpp:72
+msgid "Edit subscribed URLs"
+msgstr "Endre abonnements-URLene"
+
+#: src/keymap.cpp:73
+msgid "Close currently selected dialog"
+msgstr "Lukk den markerte dialogen"
+
+#: src/keymap.cpp:74
+msgid "View list of open dialogs"
+msgstr "Vis listen over åpne dialoger"
+
+#: src/keymap.cpp:75
+msgid "Go to next dialog"
+msgstr "Gå til neste dialog"
+
+#: src/keymap.cpp:76
+msgid "Go to previous dialog"
+msgstr "Vend tilbake til forrige dialog"
+
+#: src/keymap.cpp:77
+msgid "Pipe article to command"
+msgstr "Send artikkel til kommando"
+
+#: src/keymap.cpp:78
+msgid "Sort current list"
+msgstr "Sorter denne listen stigende"
+
+#: src/keymap.cpp:79
+msgid "Sort current list (reverse)"
+msgstr "Sorter denne listen synkende"
+
+#: src/keymap.cpp:81
+msgid "Open URL 10"
+msgstr "Åpne URL 10"
+
+#: src/keymap.cpp:82
+msgid "Open URL 1"
+msgstr "Åpne URL 1"
+
+#: src/keymap.cpp:83
+msgid "Open URL 2"
+msgstr "Åpne URL 2"
+
+#: src/keymap.cpp:84
+msgid "Open URL 3"
+msgstr "Åpne URL 3"
+
+#: src/keymap.cpp:85
+msgid "Open URL 4"
+msgstr "Åpne URL 4"
+
+#: src/keymap.cpp:86
+msgid "Open URL 5"
+msgstr "Åpne URL 5"
+
+#: src/keymap.cpp:87
+msgid "Open URL 6"
+msgstr "Åpne URL 6"
+
+#: src/keymap.cpp:88
+msgid "Open URL 7"
+msgstr "Åpne URL 7"
+
+#: src/keymap.cpp:89
+msgid "Open URL 8"
+msgstr "Åpne URL 8"
+
+#: src/keymap.cpp:90
+msgid "Open URL 9"
+msgstr "Åpne URL 9"
+
+#: src/keymap.cpp:92
+msgid "Move to the previous entry"
+msgstr "Gå til forrige innlegg"
+
+#: src/keymap.cpp:93
+msgid "Move to the next entry"
+msgstr "Gå til neste innlegg"
+
+#: src/keymap.cpp:94
+msgid "Move to the previous page"
+msgstr "Gå til forrige side"
+
+#: src/keymap.cpp:95
+msgid "Move to the next page"
+msgstr "Gå til neste side"
+
+#: src/keymap.cpp:97
+msgid "Move to the start of page/list"
+msgstr "Gå til starten av siden/listen"
+
+#: src/keymap.cpp:98
+msgid "Move to the end of page/list"
+msgstr "Gå til slutten av siden/listen"
+
+#: src/keymap.cpp:294
+#, c-format
+msgid "`%s' is not a valid context"
+msgstr "`%s' er ikke en gyldig kontekst"
+
+#: src/keymap.cpp:322
+#, c-format
+msgid "`%s' is not a valid key command"
+msgstr "`%s' er en ugyldig nøkkelkommando"
+
+#: src/pb_controller.cpp:164
+msgid "Cleaning up queue..."
+msgstr "Rydder opp i køen..."
+
+#: src/pb_controller.cpp:177
+#, c-format
+msgid ""
+"%s %s\n"
+"usage %s [-C <file>] [-q <file>] [-h]\n"
+"-C <configfile> read configuration from <configfile>\n"
+"-q <queuefile>  use <queuefile> as queue file\n"
+"-a              start download on startup\n"
+"-h              this help\n"
+msgstr ""
+"%s %s\n"
+"bruk %s [-C <fil>] [-q <fil>] [-h]\n"
+"-C <oppsettsfil> les instillinger fra <oppsettsfil>\n"
+"-q <køfil>  bruk <køfil> som kilde for køen\n"
+"-a              start nedlastninger under oppstart\n"
+"-h              vis denne hjelpen\n"
+
+#: src/pb_view.cpp:40
+#, c-format
+msgid " - %u parallel downloads"
+msgstr " - %u samtidige nedlastninger"
+
+#: src/pb_view.cpp:44
+#, c-format
+msgid "Queue (%u downloads in progress, %u total) - %.2f kb/s total%s"
+msgstr "Kø (%u nedlastninger pågår, %u totalt) - %.2f kb/s totalt%s"
+
+#: src/pb_view.cpp:95
+msgid "Error: can't quit: download(s) in progress."
+msgstr "Feil: kan ikke avslutte: nedlastning(er) pågår."
+
+#: src/pb_view.cpp:129
+msgid "Error: download needs to be finished before the file can be played."
+msgstr "Feil: nedlastninger må fullføres før filen kan spilles av."
+
+#: src/pb_view.cpp:158
+msgid "Error: unable to perform operation: download(s) in progress."
+msgstr "Feil: klarte ikke å utføre oppgaven: nedlastning(er) pågår."
+
+#: src/pb_view.cpp:276
+msgid "Download"
+msgstr "Last ned"
+
+#: src/pb_view.cpp:278
+msgid "Delete"
+msgstr "Slett"
+
+#: src/pb_view.cpp:279
+msgid "Purge Finished"
+msgstr "Fjern fullførte"
+
+#: src/pb_view.cpp:280
+msgid "Toggle Automatic Download"
+msgstr "Automatisk nedlastning [av/på]"
+
+#: src/pb_view.cpp:281
+msgid "Play"
+msgstr "Spill av"
+
+#: src/regexmanager.cpp:41
+#, c-format
+msgid "`%s' is an invalid dialog type"
+msgstr "`%s' er en ugyldig dialogtype"
+
+#: src/regexmanager.cpp:49
+#, c-format
+msgid "`%s' is not a valid regular expression: %s"
+msgstr "`%s' er ikke et gyldig regulært utrykk: %s"
+
+#: src/rss.cpp:466
+msgid "too few arguments"
+msgstr "for få argumenter"
+
+#: src/rss_parser.cpp:141
+#, c-format
+msgid "Error: unsupported URL: %s"
+msgstr "Feil: URLen støttes ikke: %s"
+
+#: src/select_formaction.cpp:146
+#: src/select_formaction.cpp:166
+msgid "Select Tag"
+msgstr "Velg etikett"
+
+#: src/select_formaction.cpp:151
+#: src/select_formaction.cpp:168
+msgid "Select Filter"
+msgstr "Velg filter"
+
+#: src/tagsouppullparser.cpp:41
+msgid "attribute not found"
+msgstr "attributten ble ikke funnet"
+
+#: src/tagsouppullparser.cpp:123
+msgid "EOF found while reading XML tag"
+msgstr "fant EOF mens XML-element ble lest inn"
+
+#: src/urlview_formaction.cpp:38
+#: src/urlview_formaction.cpp:52
+msgid "No link selected!"
+msgstr "Ingen lenke valgt!"
+
+#: src/urlview_formaction.cpp:126
+msgid "Save Bookmark"
+msgstr "Lagre bokmerke"
+
+#: src/urlview_formaction.cpp:146
+msgid "URLs"
+msgstr "URLer"
+
+#: src/view.cpp:366
+#: src/view.cpp:386
+#, c-format
+msgid "Error: applying the filter failed: %s"
+msgstr "Feil: bruk av filteret feilet: %s"
+
+#: src/view.cpp:412
+#: src/view.cpp:439
+msgid "Error: feed contains no items!"
+msgstr "Feil: nyhetsstrømmen inneholder ingen innlegg!"
+
+#: src/view.cpp:421
+msgid "Updating query feed..."
+msgstr "Frisker opp spørringsstrømmen..."
+
+#: rss/atom_parser.cpp:16
+#: rss/parser.cpp:250
+#: rss/rss_09x_parser.cpp:17
+#: rss/rss_09x_parser.cpp:32
+#: rss/rss_10_parser.cpp:15
+msgid "XML root node is NULL"
+msgstr "XML-rotelementet er NULL"
+
+#: rss/parser.cpp:69
+msgid "couldn't initialize libcurl"
+msgstr "kunne ikke initialisere libcurl"
+
+#: rss/parser.cpp:132
+#, c-format
+msgid "Error: trying to download feed `%s' returned HTTP status code %ld."
+msgstr "Feil: forsøket på å laste ned nyhetsstrømmen `%s' ga HTTP-feilkoden %ld."
+
+#: rss/parser.cpp:155
+msgid "could not parse buffer"
+msgstr "kunne ikke tolke bufferen"
+
+#: rss/parser.cpp:174
+msgid "could not parse file"
+msgstr "kunne ikke tolke filen"
+
+#: rss/parser.cpp:199
+msgid "no RSS version"
+msgstr "ingen RSS-versjon"
+
+#: rss/parser.cpp:211
+msgid "invalid RSS version"
+msgstr "ugyldig RSS-versjon"
+
+#: rss/parser.cpp:226
+#: rss/parser.cpp:233
+msgid "invalid Atom version"
+msgstr "ugyldig Atom-versjon"
+
+#: rss/parser.cpp:237
+msgid "no Atom version"
+msgstr "ingen Atom-versjon"
+
+#: rss/parser_factory.cpp:27
+msgid "unsupported feed format"
+msgstr "strømformatet støttes ikke"
+
+#: rss/rss_09x_parser.cpp:39
+msgid "no RSS channel found"
+msgstr "fant ingen RSS-kanal"
+
