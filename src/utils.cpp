@@ -747,9 +747,8 @@ std::string utils::quote(const std::string& str) {
 unsigned int utils::get_random_value(unsigned int max) {
 	static bool initialized = false;
 	if (!initialized) {
-		unsigned int var;
 		initialized = true;
-		srand(~(time(NULL) ^ getpid() ^ getppid() ^ var));
+		srand(~(time(NULL) ^ getpid() ^ getppid()));
 	}
 	return static_cast<unsigned int>(rand() % max);
 }
