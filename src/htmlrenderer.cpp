@@ -21,6 +21,7 @@ htmlrenderer::htmlrenderer(unsigned int width, bool raw) : w(width), raw_(raw) {
 	tags["ituneshack"] = TAG_ITUNESHACK;
 	tags["img"] = TAG_IMG;
 	tags["blockquote"] = TAG_BLOCKQUOTE;
+	tags["aside"] = TAG_BLOCKQUOTE;
 	tags["p"] = TAG_P;
 	tags["h1"] = TAG_H1;
 	tags["h2"] = TAG_H2;
