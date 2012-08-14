@@ -84,7 +84,7 @@ std::string googlereader_api::retrieve_auth() {
 	char * username = curl_easy_escape(handle, user.c_str(), 0);
 	char * password = curl_easy_escape(handle, pass.c_str(), 0);
 
-	std::string postcontent = utils::strprintf("service=reader&Email=%s&Passwd=%s&source=%s/%s&accountType=HOSTED_OR_GOOGLE&continue=http://www.google.com/", 
+	std::string postcontent = utils::strprintf("service=reader&Email=%s&Passwd=%s&source=%s%2F%s&accountType=HOSTED_OR_GOOGLE&continue=http://www.google.com/", 
 		username, password, PROGRAM_NAME, PROGRAM_VERSION);
 
 	curl_free(username);
