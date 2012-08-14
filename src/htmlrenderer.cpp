@@ -38,6 +38,7 @@ htmlrenderer::htmlrenderer(unsigned int width, bool raw) : w(width), raw_(raw) {
 	tags["b"] = TAG_STRONG;
 	tags["strong"] = TAG_STRONG;
 	tags["u"] = TAG_UNDERLINE;
+	tags["q"] = TAG_QUOTATION;
 	tags["script"] = TAG_SCRIPT;
 	tags["style"] = TAG_STYLE;
 	tags["table"] = TAG_TABLE;
@@ -117,12 +118,16 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						}
 						break;
 					case TAG_STRONG:
-						if (!raw_) 
+						if (!raw_)
 							curline.append("<b>");
 						break;
 					case TAG_UNDERLINE:
-						if (!raw_) 
+						if (!raw_)
 							curline.append("<u>");
+						break;
+					case TAG_QUOTATION:
+						if (!raw_)
+							curline.append("\"");
 						break;
 
 					case TAG_EMBED: {
@@ -441,6 +446,11 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					case TAG_STRONG:
 						if (!raw_)
 							curline.append("</>");
+						break;
+
+					case TAG_QUOTATION:
+						if (!raw_)
+							curline.append("\"");
 						break;
 
 					case TAG_EMBED:
