@@ -323,7 +323,19 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 							tables.back().start_row();
 						break;
 
-					case TAG_TH:
+					case TAG_TH: {
+						size_t span = 1;
+						try {
+							span = utils::to_u(xpp.getAttributeValue("colspan"));
+						} catch (const std::invalid_argument& ) {
+							// is ok, span 1 than
+						}
+						if (!tables.empty())
+							tables.back().start_cell(span);
+							curline.append("<b>");
+						break;
+					}
+
 					case TAG_TD: {
 						size_t span = 1;
 						try {
@@ -510,6 +522,14 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						break;
 
 					case TAG_TH:
+						add_nonempty_line(curline, tables, lines);
+						prepare_newline(curline, 0); // no indent in tables
+
+						if (!tables.empty())
+							curline.append("</>");
+							tables.back().complete_cell();
+						break;
+
 					case TAG_TD:
 						add_nonempty_line(curline, tables, lines);
 						prepare_newline(curline, 0); // no indent in tables
