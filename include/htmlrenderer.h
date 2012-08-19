@@ -13,7 +13,7 @@ namespace newsbeuter {
 	        TAG_A = 1, TAG_EMBED, TAG_BR, TAG_PRE, TAG_ITUNESHACK,
                 TAG_IMG, TAG_BLOCKQUOTE, TAG_H1, TAG_H2, TAG_H3, TAG_H4,
                 TAG_P, TAG_OL, TAG_UL, TAG_LI, TAG_DT, TAG_DD, TAG_DL,
-                TAG_SUP, TAG_SUB, TAG_HR, TAG_STRONG, TAG_UNDERLINE,
+                TAG_SUP, TAG_SUB, TAG_HR, TAG_STRONG, TAG_UNDERLINE, TAG_QUOTATION,
                 TAG_SCRIPT, TAG_STYLE, TAG_TABLE, TAG_TH, TAG_TR, TAG_TD
         };
 
