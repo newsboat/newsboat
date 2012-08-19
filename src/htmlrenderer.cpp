@@ -21,6 +21,7 @@ htmlrenderer::htmlrenderer(unsigned int width, bool raw) : w(width), raw_(raw) {
 	tags["ituneshack"] = TAG_ITUNESHACK;
 	tags["img"] = TAG_IMG;
 	tags["blockquote"] = TAG_BLOCKQUOTE;
+	tags["aside"] = TAG_BLOCKQUOTE;
 	tags["p"] = TAG_P;
 	tags["h1"] = TAG_H1;
 	tags["h2"] = TAG_H2;
@@ -38,6 +39,7 @@ htmlrenderer::htmlrenderer(unsigned int width, bool raw) : w(width), raw_(raw) {
 	tags["b"] = TAG_STRONG;
 	tags["strong"] = TAG_STRONG;
 	tags["u"] = TAG_UNDERLINE;
+	tags["q"] = TAG_QUOTATION;
 	tags["script"] = TAG_SCRIPT;
 	tags["style"] = TAG_STYLE;
 	tags["table"] = TAG_TABLE;
@@ -117,12 +119,16 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						}
 						break;
 					case TAG_STRONG:
-						if (!raw_) 
+						if (!raw_)
 							curline.append("<b>");
 						break;
 					case TAG_UNDERLINE:
-						if (!raw_) 
+						if (!raw_)
 							curline.append("<u>");
+						break;
+					case TAG_QUOTATION:
+						if (!raw_)
+							curline.append("\"");
 						break;
 
 					case TAG_EMBED: {
@@ -317,7 +323,19 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 							tables.back().start_row();
 						break;
 
-					case TAG_TH:
+					case TAG_TH: {
+						size_t span = 1;
+						try {
+							span = utils::to_u(xpp.getAttributeValue("colspan"));
+						} catch (const std::invalid_argument& ) {
+							// is ok, span 1 than
+						}
+						if (!tables.empty())
+							tables.back().start_cell(span);
+							curline.append("<b>");
+						break;
+					}
+
 					case TAG_TD: {
 						size_t span = 1;
 						try {
@@ -443,6 +461,11 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 							curline.append("</>");
 						break;
 
+					case TAG_QUOTATION:
+						if (!raw_)
+							curline.append("\"");
+						break;
+
 					case TAG_EMBED:
 					case TAG_BR:
 					case TAG_ITUNESHACK:
@@ -499,6 +522,14 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						break;
 
 					case TAG_TH:
+						add_nonempty_line(curline, tables, lines);
+						prepare_newline(curline, 0); // no indent in tables
+
+						if (!tables.empty())
+							curline.append("</>");
+							tables.back().complete_cell();
+						break;
+
 					case TAG_TD:
 						add_nonempty_line(curline, tables, lines);
 						prepare_newline(curline, 0); // no indent in tables
