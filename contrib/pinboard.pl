@@ -4,6 +4,12 @@ use strict;
 use Net::Delicious;
 use LWP::UserAgent;
 
+# Daemonising the bookmarking process
+# Use this only is you are sure things are working as expected
+# Uncomment the next two lines and make sure that the required module is installed
+#use Proc::Daemon; 
+#Proc::Daemon::Init();
+
 my $url='';
 my $tag='newsbeuter';
 
@@ -13,7 +19,7 @@ my $ua = LWP::UserAgent->new(
     requests_redirectable => [],
 );
 my $res = $ua->get($ARGV[0]);
-if ($res->status_line == 301)
+if ($res->code == 301)
 	{$url = $res->header( 'location');}
 else
 	{$url = $ARGV[0];}
