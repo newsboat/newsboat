@@ -540,7 +540,15 @@ std::string utils::get_useragent(configcontainer * cfgcont) {
 	if (ua_pref.length() == 0) {
 		struct utsname buf;
 		uname(&buf);
-		return utils::strprintf("%s/%s (%s %s; %s; %s) %s", PROGRAM_NAME, PROGRAM_VERSION, buf.sysname, buf.release, buf.machine, PROGRAM_URL, curl_version());
+		if (strcmp(buf.sysname, "Darwin") == 0) {
+			/* Assume it is a Mac from the last decade or at least Mac-like */
+			const char* PROCESSOR = "";
+			if (strcmp(buf.machine, "x86_64") == 0 || strcmp(buf.machine, "i386") == 0) {
+				PROCESSOR = "Intel ";
+			}
+			return utils::strprintf("%s/%s (Macintosh; %sMac OS X)", PROGRAM_NAME, PROGRAM_VERSION, PROCESSOR);
+		}
+		return utils::strprintf("%s/%s (%s %s)", PROGRAM_NAME, PROGRAM_VERSION, buf.sysname, buf.machine);
 	}
 	return ua_pref;
 }
@@ -739,9 +747,8 @@ std::string utils::quote(const std::string& str) {
 unsigned int utils::get_random_value(unsigned int max) {
 	static bool initialized = false;
 	if (!initialized) {
-		unsigned int var;
 		initialized = true;
-		srand(~(time(NULL) ^ getpid() ^ getppid() ^ var));
+		srand(~(time(NULL) ^ getpid() ^ getppid()));
 	}
 	return static_cast<unsigned int>(rand() % max);
 }
