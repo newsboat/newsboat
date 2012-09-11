@@ -9,6 +9,7 @@ Changes for newsbeuter:
 	Remove all soft-hyphens (Daniel Aleksandersen).
 	More compact default user-agent on Mac OS X (Daniel Aleksandersen).
 	Add Norwegian bokmål translation (Daniel Aleksandersen).
+	Updated Russian translation (Justin Forest).
 
 2.5 (2012-01-06):
 	Implemented download-full-page configuration option.
