@@ -4,6 +4,8 @@
 #include <cstring>
 #include <algorithm>
 
+#include <markreadthread.h>
+
 namespace newsbeuter {
 
 ttrss_api::ttrss_api(configcontainer * c) : remote_api(c) {
@@ -160,7 +162,13 @@ bool ttrss_api::mark_all_read(const std::string& feed_url) {
 }
 
 bool ttrss_api::mark_article_read(const std::string& guid, bool read) {
-	return update_article(guid, 2, read ? 0 : 1);
+
+	// Do this in a thread, as we don't care about the result enough to wait for
+	// it.
+	thread * mrt = new markreadthread( this, guid, read );
+	mrt->start();
+	return true;
+
 }
 
 bool ttrss_api::update_article_flags(const std::string& oldflags, const std::string& newflags, const std::string& guid) {

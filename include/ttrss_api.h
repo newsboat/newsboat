@@ -21,11 +21,11 @@ class ttrss_api : public remote_api {
 		virtual bool mark_article_read(const std::string& guid, bool read);
 		virtual bool update_article_flags(const std::string& oldflags, const std::string& newflags, const std::string& guid);
 		rsspp::feed fetch_feed(const std::string& id);
+		bool update_article(const std::string& guid, int mode, int field);
 	private:
 		void fetch_feeds_per_category(struct json_object * cat, std::vector<tagged_feedurl>& feeds);
 		bool star_article(const std::string& guid, bool star);
 		bool publish_article(const std::string& guid, bool publish);
-		bool update_article(const std::string& guid, int mode, int field);
 		std::string url_to_id(const std::string& url);
 		std::string retrieve_sid();
 		std::string sid;
