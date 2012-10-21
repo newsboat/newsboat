@@ -282,6 +282,8 @@ void controller::run(int argc, char * argv[]) {
 			case 'x':
 				execute_cmds = true;
 				break;
+			case 'q':
+				break;
 			case 'd': // this is an undocumented debug commandline option!
 				GetLogger().set_logfile(optarg);
 				break;
