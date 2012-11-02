@@ -228,7 +228,7 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 		const char * link = json_object_get_string(json_object_object_get(item_obj, "link"));
 		const char * content = json_object_get_string(json_object_object_get(item_obj, "content"));
 		time_t updated = (time_t)json_object_get_int(json_object_object_get(item_obj, "updated"));
-		boolean unread = json_object_get_boolean(json_object_object_get(item_obj, "unread"));
+		bool unread = json_object_get_boolean(json_object_object_get(item_obj, "unread"));
 
 		rsspp::item item;
 
