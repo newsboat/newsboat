@@ -3,6 +3,6 @@ before_install:
 language: cpp
 compiler:
     - gcc
-script: "make && make test"
+script: make
 after_script:
-    - "cd test && ./test"
+    - "make test && cd test && ./test"
