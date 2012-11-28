@@ -1,0 +1,8 @@
+before_install:
+    - sudo apt-get install libsqlite3-dev libcurl4-openssl-dev libxml2-dev libstfl-dev libjson0-dev libncursesw5-dev
+language: cpp
+compiler:
+    - gcc
+script: "make && make test"
+after_script:
+    - "cd test && ./test"
