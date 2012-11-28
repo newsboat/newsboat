@@ -1,5 +1,5 @@
 before_install:
-    - sudo apt-get install libsqlite3-dev libcurl4-openssl-dev libxml2-dev libstfl-dev libjson0-dev libncursesw5-dev
+    - sudo apt-get install libsqlite3-dev libcurl4-openssl-dev libxml2-dev libstfl-dev libjson0-dev libncursesw5-dev bc
 language: cpp
 compiler:
     - gcc
