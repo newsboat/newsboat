@@ -275,6 +275,11 @@ void ttrss_api::fetch_feeds_per_category(struct json_object * cat, std::vector<t
 		cat_name = json_object_get_string(cat_title_obj);
 		LOG(LOG_DEBUG, "ttrss_api::fetch_feeds_per_category: id = %d title = %s", cat_id, cat_name);
 	}
+	else {
+		// As uncategorized is a category itself (id = 0) and the default value
+		// for a getFeeds is id = 0, the feeds in uncategorized will appear twice
+		return;
+	}
 
 	std::map<std::string, std::string> args;
 	if (cat)
