@@ -33,16 +33,11 @@ bool ttrss_api::authenticate() {
 
 std::string ttrss_api::retrieve_sid() {
 	CURL * handle = curl_easy_init();
-	char * user = curl_easy_escape(handle, cfg->get_configvalue("ttrss-login").c_str(), 0);
-	char * pass = curl_easy_escape(handle, cfg->get_configvalue("ttrss-password").c_str(), 0);
 
 	std::map<std::string, std::string> args;
-	args["user"] = single ? "admin" : std::string(user);
-	args["password"] = std::string(pass);
+	args["user"] = single ? "admin" : cfg->get_configvalue("ttrss-login");
+	args["password"] = cfg->get_configvalue("ttrss-password");
 	struct json_object * content = run_op("login", args);
-
-	curl_free(user);
-	curl_free(pass);
 
 	if (content == NULL)
 		return "";
@@ -62,15 +57,18 @@ std::string ttrss_api::retrieve_sid() {
 struct json_object * ttrss_api::run_op(const std::string& op,
 				       const std::map<std::string, std::string >& args,
 				       bool try_login) {
-	std::string url = utils::strprintf("%s/api/?op=%s&sid=%s", cfg->get_configvalue("ttrss-url").c_str(),
-		op.c_str(), sid.c_str());
+	std::string url = utils::strprintf("%s/api/", cfg->get_configvalue("ttrss-url").c_str());
+
+	std::string req_data = "{\"op\":\"" + op + "\",\"sid\":\"" + sid + "\"";
 
 	for (std::map<std::string, std::string>::const_iterator it = args.begin(); it != args.end(); it++) {
-		url += "&" + it->first + "=" + it->second;
+		req_data += ",\"" + it->first + "\":\"" + it->second + "\"";
 	}
-	std::string result = utils::retrieve_url(url, cfg, auth_info_ptr);
+	req_data += "}";
 
-	LOG(LOG_DEBUG, "ttrss_api::run_op(%s,...): reply = %s", op.c_str(), result.c_str());
+	std::string result = utils::retrieve_url(url, cfg, auth_info_ptr, &req_data);
+
+	LOG(LOG_DEBUG, "ttrss_api::run_op(%s,...): post=%s reply = %s", op.c_str(), req_data.c_str(), result.c_str());
 
 	struct json_object * reply = json_tokener_parse(result.c_str());
 	if (is_error(reply)) {
@@ -112,8 +110,9 @@ struct json_object * ttrss_api::run_op(const std::string& op,
 
 std::vector<tagged_feedurl> ttrss_api::get_subscribed_urls() {
 
-	std::string cat_url = utils::strprintf("%s/api/?op=getCategories&sid=%s", cfg->get_configvalue("ttrss-url").c_str(), sid.c_str());
-	std::string result = utils::retrieve_url(cat_url, cfg, auth_info_ptr);
+	std::string cat_url = utils::strprintf("%s/api/");
+	std::string req_data = "{\"op\":\"getCategories\",\"sid\":\"" + sid + "\"}";
+	std::string result = utils::retrieve_url(cat_url, cfg, auth_info_ptr, &req_data);
 
 	LOG(LOG_DEBUG, "ttrss_api::get_subscribed_urls: reply = %s", result.c_str());
 
@@ -275,6 +274,11 @@ void ttrss_api::fetch_feeds_per_category(struct json_object * cat, std::vector<t
 		cat_title_obj = json_object_object_get(cat, "title");
 		cat_name = json_object_get_string(cat_title_obj);
 		LOG(LOG_DEBUG, "ttrss_api::fetch_feeds_per_category: id = %d title = %s", cat_id, cat_name);
+	}
+	else {
+		// As uncategorized is a category itself (id = 0) and the default value
+		// for a getFeeds is id = 0, the feeds in uncategorized will appear twice
+		return;
 	}
 
 	std::map<std::string, std::string> args;
