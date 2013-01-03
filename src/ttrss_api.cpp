@@ -32,8 +32,6 @@ bool ttrss_api::authenticate() {
 }
 
 std::string ttrss_api::retrieve_sid() {
-	CURL * handle = curl_easy_init();
-
 	std::map<std::string, std::string> args;
 	args["user"] = single ? "admin" : cfg->get_configvalue("ttrss-login");
 	args["password"] = cfg->get_configvalue("ttrss-password");

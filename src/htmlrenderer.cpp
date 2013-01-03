@@ -73,7 +73,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 	unsigned int image_count = 0;
 	std::string curline;
 	int indent_level = 0;
-	bool inside_list = false, inside_li = false, is_ol = false, inside_pre = false;
+	bool inside_li = false, is_ol = false, inside_pre = false;
 	bool itunes_hack = false;
 	size_t inside_script = 0;
 	size_t inside_style = 0;
@@ -205,7 +205,6 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						break;
 
 					case TAG_OL:
-						inside_list = true;
 						is_ol = true;
 						{
 							unsigned int ol_count = 1;
@@ -235,7 +234,6 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						break;
 
 					case TAG_UL:
-						inside_list = true;
 						is_ol = false;
 						add_nonempty_line(curline, tables, lines);
 						add_line("", tables, lines);
@@ -372,7 +370,6 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						ol_counts.pop_back();
 						// fall-through
 					case TAG_UL:
-						inside_list = false;
 						if (inside_li) {
 							indent_level-=2;
 							if (indent_level < 0) indent_level = 0;

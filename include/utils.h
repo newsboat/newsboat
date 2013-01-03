@@ -104,7 +104,7 @@ class utils {
 		static void set_common_curl_options(CURL * handle, configcontainer * cfg);
 
 		static curl_proxytype get_proxy_type(const std::string& type);
-		static int get_auth_method(const std::string& type);
+		static unsigned long get_auth_method(const std::string& type);
 
 		static bool is_special_url(const std::string& url);
 

@@ -852,7 +852,7 @@ std::string utils::get_prop(xmlNode * node, const char * prop, const char * ns) 
 	return retval;
 }
 
-int utils::get_auth_method(const std::string& type) {
+unsigned long utils::get_auth_method(const std::string& type) {
 	if (type == "any")
 		return CURLAUTH_ANY;
 	if (type == "basic")
