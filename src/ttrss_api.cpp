@@ -108,12 +108,6 @@ struct json_object * ttrss_api::run_op(const std::string& op,
 
 std::vector<tagged_feedurl> ttrss_api::get_subscribed_urls() {
 
-	std::string cat_url = utils::strprintf("%s/api/");
-	std::string req_data = "{\"op\":\"getCategories\",\"sid\":\"" + sid + "\"}";
-	std::string result = utils::retrieve_url(cat_url, cfg, auth_info_ptr, &req_data);
-
-	LOG(LOG_DEBUG, "ttrss_api::get_subscribed_urls: reply = %s", result.c_str());
-
 	std::vector<tagged_feedurl> feeds;
 
 	struct json_object * content = run_op("getCategories", std::map<std::string, std::string>());
