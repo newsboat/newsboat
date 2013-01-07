@@ -281,7 +281,7 @@ void ttrss_api::fetch_feeds_per_category(struct json_object * cat, std::vector<t
 
 	std::map<std::string, std::string> args;
 	if (cat)
-		args["cat_id"] = utils::to_s(cat_id);
+		args["cat_id"] = utils::signed_to_s(cat_id);
 	struct json_object * feed_list_obj = run_op("getFeeds", args);
 
 	if (!feed_list_obj)
