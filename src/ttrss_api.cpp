@@ -263,6 +263,10 @@ void ttrss_api::fetch_feeds_per_category(struct json_object * cat, std::vector<t
 		struct json_object * cat_id_obj = json_object_object_get(cat, "id");
 		cat_id = json_object_get_int(cat_id_obj);
 
+		// ignore special categories, for now
+		if(cat_id < 0)
+			return;
+
 		cat_title_obj = json_object_object_get(cat, "title");
 		cat_name = json_object_get_string(cat_title_obj);
 		LOG(LOG_DEBUG, "ttrss_api::fetch_feeds_per_category: id = %d title = %s", cat_id, cat_name);
