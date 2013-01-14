@@ -266,6 +266,10 @@ msgid ""
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] "
 "[-h]\n"
 msgstr ""
+"%s %s\n"
+"Składnia: %s [-i <plik>|-e] [-u <plik url>] [-c <plik pamięci podręcznej>] "
+"[-x <polecenie> ...]"
+"[-h]\n"
 
 #: src/controller.cpp:840
 msgid "export OPML feed to stdout"
@@ -514,8 +518,8 @@ msgstr "Sortuj wg (p)ierwszego taga/(t)ytułu/(l)iczby artykułów/liczby"
 "(n)ieprzeczytanych artykułów/(b)rak"
 
 #: src/feedlist_formaction.cpp:120 src/feedlist_formaction.cpp:137
-msgid "ptlnb"
-msgstr ""
+msgid "ftaun"
+msgstr "ptlnb"
 
 #: src/feedlist_formaction.cpp:123 src/feedlist_formaction.cpp:140
 #: src/itemlist_formaction.cpp:420 src/itemlist_formaction.cpp:439
@@ -721,7 +725,7 @@ msgstr "Zapisz plik - %s"
 #: src/filtercontainer.cpp:22 src/regexmanager.cpp:138 src/rss.cpp:355
 #, c-format
 msgid "couldn't parse filter expression `%s': %s"
-msgstr "błąd składniowy komendy filtra `%sv': %s"
+msgstr "błąd składniowy komendy filtra `%s': %s"
 
 #: src/formaction.cpp:186 src/formaction.cpp:207
 msgid "usage: set <variable>[=<value>]"
@@ -782,12 +786,14 @@ msgid "Popular items"
 msgstr "Popularne pozycje"
 
 #: src/help_formaction.cpp:127
+#, fuzzy
 msgid "Generic bindings:"
-msgstr ""
+msgstr "Ogólne dowiązania:"
 
 #: src/help_formaction.cpp:134
+#, fuzzy
 msgid "Unbound functions:"
-msgstr ""
+msgstr "Niezwiązane funkcje:"
 
 #: src/help_formaction.cpp:156
 msgid "Clear"
@@ -795,7 +801,7 @@ msgstr "Wyczyść"
 
 #: src/htmlrenderer.cpp:145
 msgid "embedded flash:"
-msgstr "zagnieżdżony flash:"
+msgstr "osadzony flash:"
 
 #: src/htmlrenderer.cpp:176 src/htmlrenderer.cpp:595
 msgid "image"
@@ -811,7 +817,7 @@ msgstr "odsyłacz"
 
 #: src/htmlrenderer.cpp:596
 msgid "embedded flash"
-msgstr "zagnieżdżony flash"
+msgstr "osadzony flash"
 
 #: src/htmlrenderer.cpp:597
 msgid "unknown (bug)"
@@ -1197,7 +1203,7 @@ msgstr "Wyczyść usunięte artykuły"
 
 #: src/keymap.cpp:72
 msgid "Edit subscribed URLs"
-msgstr ""
+msgstr "Edytuj subskrybowane adresy URL"
 
 #: src/keymap.cpp:73
 msgid "Close currently selected dialog"
@@ -1294,12 +1300,12 @@ msgstr "Przejdź do końca strony/listy"
 #: src/keymap.cpp:294
 #, c-format
 msgid "`%s' is not a valid context"
-msgstr ""
+msgstr "`%s' nie jest dopuszczalnym kontekstem"
 
 #: src/keymap.cpp:322
 #, c-format
 msgid "`%s' is not a valid key command"
-msgstr ""
+msgstr "`%s' nie jest dopuszczalnym poleceniem"
 
 #: src/pb_controller.cpp:164
 msgid "Cleaning up queue..."
@@ -1316,7 +1322,7 @@ msgid ""
 "-h              this help\n"
 msgstr ""
 "%s %s\n"
-"użycie %s [-C <file>] [-q <file>] [-h]\n"
+"składnia %s [-C <file>] [-q <file>] [-h]\n"
 "-C <configfile> użyj konfiguracji z pliku <configfile>\n"
 "-q <queuefile>  użyj <queuefile> jako pliku kolejki\n"
 "-a              uruchom pobieranie przy starcie\n"
@@ -1368,7 +1374,7 @@ msgstr "Odtwórz"
 #: src/regexmanager.cpp:41
 #, c-format
 msgid "`%s' is an invalid dialog type"
-msgstr ""
+msgstr "`%s' nie jest dopuszczalnym typem dialogu"
 
 #: src/regexmanager.cpp:49
 #, c-format
