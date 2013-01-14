@@ -441,7 +441,8 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, rss_ignores
 			// to the beginning of the vector, and then fast-forward to
 			// the next element.
 			it = feed->items().begin();
-			for (int j=0;j<int(i)-1;j++) {
+      --i;
+			for (int j=0;j<int(i);j++) {
 				++it;
 			}
 			continue;
