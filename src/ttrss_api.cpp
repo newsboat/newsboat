@@ -108,12 +108,6 @@ struct json_object * ttrss_api::run_op(const std::string& op,
 
 std::vector<tagged_feedurl> ttrss_api::get_subscribed_urls() {
 
-	std::string cat_url = utils::strprintf("%s/api/");
-	std::string req_data = "{\"op\":\"getCategories\",\"sid\":\"" + sid + "\"}";
-	std::string result = utils::retrieve_url(cat_url, cfg, auth_info_ptr, &req_data);
-
-	LOG(LOG_DEBUG, "ttrss_api::get_subscribed_urls: reply = %s", result.c_str());
-
 	std::vector<tagged_feedurl> feeds;
 
 	struct json_object * content = run_op("getCategories", std::map<std::string, std::string>());
@@ -269,6 +263,10 @@ void ttrss_api::fetch_feeds_per_category(struct json_object * cat, std::vector<t
 		struct json_object * cat_id_obj = json_object_object_get(cat, "id");
 		cat_id = json_object_get_int(cat_id_obj);
 
+		// ignore special categories, for now
+		if(cat_id < 0)
+			return;
+
 		cat_title_obj = json_object_object_get(cat, "title");
 		cat_name = json_object_get_string(cat_title_obj);
 		LOG(LOG_DEBUG, "ttrss_api::fetch_feeds_per_category: id = %d title = %s", cat_id, cat_name);
@@ -281,7 +279,7 @@ void ttrss_api::fetch_feeds_per_category(struct json_object * cat, std::vector<t
 
 	std::map<std::string, std::string> args;
 	if (cat)
-		args["cat_id"] = utils::to_s(cat_id);
+		args["cat_id"] = utils::signed_to_s(cat_id);
 	struct json_object * feed_list_obj = run_op("getFeeds", args);
 
 	if (!feed_list_obj)

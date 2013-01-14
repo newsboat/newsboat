@@ -506,6 +506,12 @@ std::string utils::to_s(unsigned int u) {
 	return buf;
 }
 
+std::string utils::signed_to_s(int u) {
+	char buf[32];
+	snprintf(buf, sizeof(buf), "%d", u);
+	return buf;
+}
+
 std::string utils::absolute_url(const std::string& url, const std::string& link) {
 	xmlChar * newurl = xmlBuildURI((const xmlChar *)link.c_str(), (const xmlChar *)url.c_str());
 	std::string retval;
