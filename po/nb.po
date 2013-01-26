@@ -137,7 +137,7 @@ msgstr "Starter %s %s..."
 #: src/pb_controller.cpp:112
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
-msgstr "Feil: en annen instanse av %s kjører allerede (PID: %u)"
+msgstr "Feil: en annen instans av %s kjører allerede (PID: %u)"
 
 #: src/controller.cpp:267
 #: src/pb_controller.cpp:116
@@ -237,7 +237,7 @@ msgstr "Feil: kunne ikke markere alle nyhetsstrømmene som lest: %s"
 #: src/controller.cpp:600
 #, c-format
 msgid "%sLoading %s..."
-msgstr "%sLaster inn %s..."
+msgstr "%sInnlasting%s..."
 
 #: src/controller.cpp:622
 #: src/controller.cpp:624
@@ -1017,7 +1017,7 @@ msgstr "Strøm: "
 
 #: src/itemview_formaction.cpp:108
 msgid "Podcast Download URL: "
-msgstr "Podkastnedlastnings-URL: "
+msgstr "Podkastnedlastings-URL: "
 
 #: src/itemview_formaction.cpp:110
 msgid "type: "
@@ -1031,7 +1031,7 @@ msgstr "Feil mens artikkelen ble markert som lest: %s"
 #: src/itemview_formaction.cpp:178
 #, c-format
 msgid "Added %s to download queue."
-msgstr "La til %s til nedlastningskøen."
+msgstr "La til %s til nedlastingskøen."
 
 #: src/itemview_formaction.cpp:180
 #, c-format
@@ -1179,7 +1179,7 @@ msgstr "Åpne søkedialog"
 
 #: src/keymap.cpp:48
 msgid "Add download to queue"
-msgstr "Legg til i nedlastningskøen"
+msgstr "Legg til i nedlastingskøen"
 
 #: src/keymap.cpp:49
 msgid "Reload the list of URLs from the configuration"
@@ -1191,31 +1191,31 @@ msgstr "Last ned filen"
 
 #: src/keymap.cpp:51
 msgid "Cancel download"
-msgstr "Avbryt nedlastningen"
+msgstr "Avbryt nedlastingen"
 
 #: src/keymap.cpp:52
 msgid "Mark download as deleted"
-msgstr "Merk nedlastningen som slettet"
+msgstr "Merk nedlastingen som slettet"
 
 #: src/keymap.cpp:53
 msgid "Purge finished and deleted downloads from queue"
-msgstr "Fjern ferdige og slettede nedlastninger fra køen"
+msgstr "Fjern ferdige og slettede nedlastinger fra køen"
 
 #: src/keymap.cpp:54
 msgid "Toggle automatic download on/off"
-msgstr "Automatisk nedlastning [av/på]"
+msgstr "Automatisk nedlasting [av/på]"
 
 #: src/keymap.cpp:55
 msgid "Start player with currently selected download"
-msgstr "Start markerte nedlastning i avspilleren"
+msgstr "Start markerte nedlasting i avspilleren"
 
 #: src/keymap.cpp:56
 msgid "Increase the number of concurrent downloads"
-msgstr "Øk antallet samtidige nedlastninger"
+msgstr "Øk antallet samtidige nedlastinger"
 
 #: src/keymap.cpp:57
 msgid "Decrease the number of concurrent downloads"
-msgstr "Reduser antallet samtidige nedlastninger"
+msgstr "Reduser antallet samtidige nedlastinger"
 
 #: src/keymap.cpp:58
 msgid "Redraw screen"
@@ -1397,30 +1397,30 @@ msgstr ""
 "bruk %s [-C <fil>] [-q <fil>] [-h]\n"
 "-C <oppsettsfil> les instillinger fra <oppsettsfil>\n"
 "-q <køfil>  bruk <køfil> som kilde for køen\n"
-"-a              start nedlastninger under oppstart\n"
+"-a              start nedlastinger under oppstart\n"
 "-h              vis denne hjelpen\n"
 
 #: src/pb_view.cpp:40
 #, c-format
 msgid " - %u parallel downloads"
-msgstr " - %u samtidige nedlastninger"
+msgstr " - %u samtidige nedlastinger"
 
 #: src/pb_view.cpp:44
 #, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f kb/s total%s"
-msgstr "Kø (%u nedlastninger pågår, %u totalt) - %.2f kb/s totalt%s"
+msgstr "Kø (%u nedlastinger pågår, %u totalt) - %.2f kb/s totalt%s"
 
 #: src/pb_view.cpp:95
 msgid "Error: can't quit: download(s) in progress."
-msgstr "Feil: kan ikke avslutte: nedlastning(er) pågår."
+msgstr "Feil: kan ikke avslutte: nedlasting(er) pågår."
 
 #: src/pb_view.cpp:129
 msgid "Error: download needs to be finished before the file can be played."
-msgstr "Feil: nedlastninger må fullføres før filen kan spilles av."
+msgstr "Feil: nedlastinger må fullføres før filen kan spilles av."
 
 #: src/pb_view.cpp:158
 msgid "Error: unable to perform operation: download(s) in progress."
-msgstr "Feil: klarte ikke å utføre oppgaven: nedlastning(er) pågår."
+msgstr "Feil: klarte ikke å utføre oppgaven: nedlasting(er) pågår."
 
 #: src/pb_view.cpp:276
 msgid "Download"
@@ -1436,7 +1436,7 @@ msgstr "Fjern fullførte"
 
 #: src/pb_view.cpp:280
 msgid "Toggle Automatic Download"
-msgstr "Automatisk nedlastning [av/på]"
+msgstr "Automatisk nedlasting [av/på]"
 
 #: src/pb_view.cpp:281
 msgid "Play"
