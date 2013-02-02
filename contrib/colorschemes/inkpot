@@ -1,0 +1,17 @@
+# inkpotish color scheme for newsbeuter <http://www.newsbeuter.org/>
+# more on inkpot: http://www.vim.org/scripts/script.php?script_id=1143
+
+# colors
+color background   color229   default
+color listnormal   color229   default
+color listfocus    color229   color61 bold
+color info         color247   color235
+color article      color229   default
+
+# highlights
+highlight article "^(Feed|Link):.*$" color46 default bold
+highlight article "^(Title|Date|Author):.*$" color39 default bold
+highlight article "https?://[^ ]+" color46 default underline
+highlight article "\\[[0-9]+\\]" color63 default bold
+highlight article "\\[image\\ [0-9]+\\]" color63 default bold
+highlight feedlist "^─.*$" color61 color235 bold
