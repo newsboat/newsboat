@@ -1,0 +1,17 @@
+# Light Solarized color scheme for newsbeuter, based on
+# Ethan Schoonover's Solarized. 
+#
+# In order to use this color scheme, you must first configure
+# your terminal emulator to use the Solarized palette.
+# See <http://ethanschoonover.com/solarized/> for more information.
+
+color background   default   default
+color listnormal   default   default
+color listfocus    white     yellow
+color info         default   white
+color article      default   default
+
+# highlights
+highlight article "^(Title):.*$" blue default
+highlight article "https?://[^ ]+" red default
+highlight article "\\[image\\ [0-9]+\\]" green default
