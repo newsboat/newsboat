@@ -290,8 +290,12 @@ void controller::run(int argc, char * argv[]) {
 			case 'l': // this is an undocumented debug commandline option!
 				{
 					loglevel level = static_cast<loglevel>(atoi(optarg));
-					if (level > LOG_NONE && level <= LOG_DEBUG)
+					if (level > LOG_NONE && level <= LOG_DEBUG) {
 						GetLogger().set_loglevel(level);
+					} else {
+						std::cout << utils::strprintf(_("%s: %d: invalid loglevel value\n"), argv[0], level);
+						::std::exit(EXIT_FAILURE);
+					}
 				}
 				break;
 			case 'I':
