@@ -293,7 +293,7 @@ void controller::run(int argc, char * argv[]) {
 					if (level > LOG_NONE && level <= LOG_DEBUG) {
 						GetLogger().set_loglevel(level);
 					} else {
-						std::cout << utils::strprintf(_("%s: %d: invalid loglevel value\n"), argv[0], level);
+						std::cout << utils::strprintf(_("%s: %d: invalid loglevel value"), argv[0], level) << std::endl;
 						::std::exit(EXIT_FAILURE);
 					}
 				}
