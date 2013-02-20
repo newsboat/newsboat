@@ -158,8 +158,8 @@ void controller::setup_dirs(bool silent) {
 		if (spw) {
 			env_home = spw->pw_dir;
 		} else {
-			std::cout << _("Fatal error: couldn't determine home directory!") << std::endl;
-			std::cout << utils::strprintf(_("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid()) << std::endl;
+			std::cerr << _("Fatal error: couldn't determine home directory!") << std::endl;
+			std::cerr << utils::strprintf(_("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid()) << std::endl;
 			::exit(EXIT_FAILURE);
 		}
 	}
@@ -293,7 +293,7 @@ void controller::run(int argc, char * argv[]) {
 					if (level > LOG_NONE && level <= LOG_DEBUG) {
 						GetLogger().set_loglevel(level);
 					} else {
-						std::cout << utils::strprintf(_("%s: %d: invalid loglevel value\n"), argv[0], level);
+						std::cerr << utils::strprintf(_("%s: %d: invalid loglevel value"), argv[0], level) << std::endl;
 						::std::exit(EXIT_FAILURE);
 					}
 				}
@@ -417,7 +417,7 @@ void controller::run(int argc, char * argv[]) {
 	try {
 		rsscache = new cache(cache_file,&cfg);
 	} catch (const dbexception& e) {
-		std::cout << utils::strprintf(_("Error: opening the cache file `%s' failed: %s"), cache_file.c_str(), e.what()) << std::endl;
+		std::cerr << utils::strprintf(_("Error: opening the cache file `%s' failed: %s"), cache_file.c_str(), e.what()) << std::endl;
 		utils::remove_fs_lock(lock_file);
 		::exit(EXIT_FAILURE);
 	}
@@ -1320,6 +1320,9 @@ void controller::execute_commands(char ** argv, unsigned int i) {
 			reload_all(true);
 		} else if (cmd == "print-unread") {
 			std::cout << utils::strprintf(_("%u unread articles"), rsscache->get_unread_count()) << std::endl;
+		} else {
+			std::cerr << utils::strprintf(_("%s: %s: unknown command"), argv[0], argv[i]) << std::endl;
+			::std::exit(EXIT_FAILURE);
 		}
 	}
 }
