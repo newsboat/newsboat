@@ -1320,6 +1320,9 @@ void controller::execute_commands(char ** argv, unsigned int i) {
 			reload_all(true);
 		} else if (cmd == "print-unread") {
 			std::cout << utils::strprintf(_("%u unread articles"), rsscache->get_unread_count()) << std::endl;
+		} else {
+			std::cerr << utils::strprintf(_("%s: %s: unknown command"), argv[0], argv[i]) << std::endl;
+			::std::exit(EXIT_FAILURE);
 		}
 	}
 }
