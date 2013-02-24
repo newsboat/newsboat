@@ -200,7 +200,7 @@ std::string rss_feed::description() const {
 	return utils::convert_text(description_, nl_langinfo(CODESET), "utf-8");
 }
 
-bool hidden() const {
+bool rss_feed::hidden() const {
 	for (std::vector<std::string>::const_iterator it=tags_.begin();it!=tags_.end();++it) {
 		if (it->substr(0,1) == "!") {
 			return true;
