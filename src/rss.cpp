@@ -145,7 +145,7 @@ std::string rss_feed::get_firsttag() {
 std::string rss_feed::get_tags() {
 	std::string tags;
 	for (std::vector<std::string>::iterator it=tags_.begin();it!=tags_.end();++it) {
-		if (it->substr(0,1) != "~") {
+		if (it->substr(0,1) != "~" && it->substr(0,1) != "!") {
 			tags.append(*it);
 			tags.append(" ");
 		}
@@ -187,7 +187,7 @@ std::string rss_feed::title() const {
 	bool found_title = false;
 	std::string alt_title;
 	for (std::vector<std::string>::const_iterator it=tags_.begin();it!=tags_.end();++it) {
-		if (it->substr(0,1) == "~") {
+		if (it->substr(0,1) == "~" || it->substr(0,1) == "!") {
 			found_title = true;
 			alt_title = it->substr(1, it->length()-1);
 			break;
@@ -198,6 +198,15 @@ std::string rss_feed::title() const {
 
 std::string rss_feed::description() const {
 	return utils::convert_text(description_, nl_langinfo(CODESET), "utf-8");
+}
+
+bool rss_feed::hidden() const {
+	for (std::vector<std::string>::const_iterator it=tags_.begin();it!=tags_.end();++it) {
+		if (it->substr(0,1) == "!") {
+			return true;
+		}
+	}
+	return false;
 }
 
 std::tr1::shared_ptr<rss_item> rss_feed::get_item_by_guid(const std::string& guid) {

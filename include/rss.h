@@ -142,6 +142,8 @@ namespace newsbeuter {
 			inline std::string pubDate() const { return "TODO"; }
 			inline void set_pubDate(time_t t) { pubDate_ = t; }
 			
+			bool hidden() const;
+			
 			inline std::vector<std::tr1::shared_ptr<rss_item> >& items() { return items_; }
 			inline void add_item(std::tr1::shared_ptr<rss_item> item) {
 				items_.push_back(item);
