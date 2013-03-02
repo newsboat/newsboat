@@ -134,8 +134,12 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					} catch (const dbexception& e) {
 						v->set_status(utils::strprintf(_("Error while toggling read flag: %s"), e.what()));
 					}
-					if (itempos < visible_items.size()-1)
-						f->set("itempos", utils::strprintf("%u", itempos + 1));
+					if (!v->get_cfg()->get_configvalue_as_bool("toogleitemread-jumps-to-next-unread")) {
+						if (itempos < visible_items.size()-1)
+							f->set("itempos", utils::strprintf("%u", itempos + 1));
+					} else {
+						process_operation(OP_NEXTUNREAD);
+					}
 					do_redraw = true;
 				}
 			}
