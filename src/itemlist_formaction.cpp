@@ -84,8 +84,12 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					if (itempos < visible_items.size()) {
 						visible_items[itempos].first->set_unread(false);
 						v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), true);
-						if (itempos < visible_items.size()-1) {
-							f->set("itempos", utils::strprintf("%u", itempos + 1));
+						if (!v->get_cfg()->get_configvalue_as_bool("openbrowser-and-mark-jumps-to-next-unread")) {
+							if (itempos < visible_items.size()-1) {
+								f->set("itempos", utils::strprintf("%u", itempos + 1));
+							}
+						} else {
+							process_operation(OP_NEXTUNREAD);
 						}
 						v->open_in_browser(visible_items[itempos].first->link());
 						do_redraw = true;
