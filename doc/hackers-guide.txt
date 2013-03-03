@@ -196,8 +196,8 @@ Keys
 
 Unused keys
 ~~~~~~~~~~~
+	      _b_____hi_____________wxyz
+	      _B_____HI__LM_____STUVWXYZ
+	Ctrl- A__D___HIJ____O_Q_S___W_Y_
 
-	      _bc____hi___m_________wxyz
-	      _B_____HI___M_O___STUVWXYZ
-	Ctrl- A__D___HIJ____O_______W_Y_
-
+Used special keys: ENTER ? / # + - : , $ |
