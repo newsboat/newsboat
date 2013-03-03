@@ -327,6 +327,8 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					}
 					v->get_ctrl()->catchup_all(feed);
 				}
+				if (v->get_cfg()->get_configvalue_as_bool("markfeedread-jumps-to-next-unread"))
+					process_operation(OP_NEXTUNREAD);
 				do_redraw = true;
 				v->set_status("");
 			} catch (const dbexception& e) {
