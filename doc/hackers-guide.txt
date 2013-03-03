@@ -60,7 +60,7 @@ Logging can be enabled by developers (see below).
 
 *class mutex*: a C++ wrapper around the pthread mutex.
 
-*class reloadhtread*: similar to downloadthread, but starts a reload every n
+*class reloadthread*: similar to downloadthread, but starts a reload every n
 minutes (configurable).
 
 *class rss_feed*: represents an RSS feed, including RSS url, page link, title,
