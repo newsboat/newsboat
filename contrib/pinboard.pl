@@ -2,14 +2,23 @@
 
 use strict;
 use LWP::UserAgent;
-use Proc::Daemon;
 use URI::Escape;
 
 # Daemonising the bookmarking process
-# Use this only is you are sure things are working as expected
-# Uncomment the next two lines and make sure that the required module is installed
-# use Proc::Daemon;
-# Proc::Daemon::Init();
+# Use this only is you are sure things 
+# are working as expected
+# set to '0' if not needed
+my $daemon = 1;
+
+if ($daemon){
+    eval{
+        require Proc::Daemon;
+        Proc::Damoen->import();
+    };
+    unless ($@){
+        Proc::Daemon::Init();
+    }
+}
 
 my $API_URL='https://api.pinboard.in/v1/posts/add?';
 my $bkmrk_url='';
