@@ -52,6 +52,8 @@ const char * download::status_text() {
 			return _("failed");
 		case DL_ALREADY_DOWNLOADED:
 			return _("incomplete");
+		case DL_READY:
+			return _("ready");
 		case DL_PLAYED:
 			return _("played");
 		default:

@@ -122,7 +122,7 @@ void pb_view::run(bool auto_download) {
 					os >> idx;
 					if (idx != -1) {
 						dlstatus_t status = ctrl->downloads()[idx].status();
-						if (status == DL_FINISHED || status == DL_PLAYED) {
+						if (status == DL_FINISHED || status == DL_PLAYED || status == DL_READY) {
 							ctrl->play_file(ctrl->downloads()[idx].filename());
 							ctrl->downloads()[idx].set_status(DL_PLAYED);
 						} else {

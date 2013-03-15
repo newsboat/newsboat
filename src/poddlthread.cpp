@@ -73,7 +73,7 @@ void poddlthread::run() {
 		LOG(LOG_INFO,"poddlthread::run: curl_easy_perform rc = %u (%s)", success, curl_easy_strerror(success));
 
 		if (0 == success)
-			dl->set_status(DL_FINISHED);
+			dl->set_status(DL_READY);
 		else if (dl->status() != DL_CANCELLED) {
 			dl->set_status(DL_FAILED);
 			::unlink(dl->filename());

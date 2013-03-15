@@ -32,6 +32,7 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 				case DL_CANCELLED:
 				case DL_FAILED:
 				case DL_ALREADY_DOWNLOADED:
+				case DL_READY:
 					LOG(LOG_DEBUG, "queueloader::reload: storing %s to new vector", it->url());
 					dltemp.push_back(*it);
 					break;
@@ -88,7 +89,7 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 						LOG(LOG_INFO, "queueloader::reload: found `%s' on file system -> mark as already downloaded", fn.c_str());
 						if (fields.size() >= 3) {
 							if (fields[2] == "downloaded")
-								d.set_status(DL_FINISHED);
+								d.set_status(DL_READY);
 							if (fields[2] == "played")
 								d.set_status(DL_PLAYED);
 						}
@@ -107,7 +108,7 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 	if (f.is_open()) {
 		for (std::vector<download>::iterator it=dltemp.begin();it!=dltemp.end();++it) {
 			f << it->url() << " " << stfl::quote(it->filename());
-			if (it->status() == DL_FINISHED)
+			if (it->status() == DL_READY)
 				f << " downloaded";
 			if (it->status() == DL_PLAYED)
 				f << " played";
