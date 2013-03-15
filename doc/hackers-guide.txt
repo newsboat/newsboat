@@ -60,7 +60,7 @@ Logging can be enabled by developers (see below).
 
 *class mutex*: a C++ wrapper around the pthread mutex.
 
-*class reloadhtread*: similar to downloadthread, but starts a reload every n
+*class reloadthread*: similar to downloadthread, but starts a reload every n
 minutes (configurable).
 
 *class rss_feed*: represents an RSS feed, including RSS url, page link, title,
@@ -138,19 +138,22 @@ Why C++ and not C, [insert your favorite language], ...?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 C++ has many advantages compared to other programming languages.
 
-- C++ is backwards-compatible to C. That means we can theoretically use all the C libraries.
-- C++ makes it easier to structure your program in an object-oriented way, and helps maintain inheritance hierarchies without a lot of fuzz.
+- C++ is backwards-compatible to C. That means we can theoretically use all the
+  C libraries.
+- C++ makes it easier to structure your program in an object-oriented way, and 
+  helps maintain inheritance hierarchies without a lot of fuzz.
 - C++ compiles to fast, native code.
 - C++ comes with an extensive standard library (see next section).
 - C++ is widespread.
-- C++ on Linux/Unix systems does not require any exotic compilers to be installed in order to compile newsbeuter. g++ (part of GCC) is enough.
+- C++ on Linux/Unix systems does not require any exotic compilers to be 
+  installed in order to compile newsbeuter. g++ (part of GCC) is enough.
 
-These were the reasons why C++ was initially chosen, and it proved to be a useable language during the development process.
+These were the reasons why C++ was initially chosen, and it proved to be a 
+useable language during the development process.
 
 
 Use the full potential of modern C++
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 The C++ standard library comes with an extensive set of algorithms and data
 structures. Developers are encouraged to use especially the data structures,
 because the available container classes are standardized, their behaviour and
@@ -176,7 +179,6 @@ code, so it's only helpful for developers.
 
 Use (and extend) the unit tests
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 In the test subdirectory resides a simple unit test to check the most important
 functionality of the newsbeuter internals. These test build upon the lemon test 
 framework which comes bundled as test/lemon.h with newsbeuter. Run "make test" 
@@ -194,8 +196,8 @@ Keys
 
 Unused keys
 ~~~~~~~~~~~
+	      _b_____hi_____________wxyz
+	      _B_____HI__LM_____STUVWXYZ
+	Ctrl- A__D___HIJ____O_Q_S___W_Y_
 
-	      _bc____hi___m_________wxyz
-	      _B_____HI___M_O___STUVWXYZ
-	Ctrl- A__D___HIJ____O_______W_Y_
-
+Used special keys: ENTER ? / # + - : , $ |
