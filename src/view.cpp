@@ -794,9 +794,12 @@ bool view::get_prev_feed(itemlist_formaction * itemlist) {
 
 void view::prepare_query_feed(std::tr1::shared_ptr<rss_feed> feed) {
 	if (feed->rssurl().substr(0,6) == "query:") {
+		LOG(LOG_DEBUG, "view::prepare_query_feed: %s", feed->rssurl().c_str());
+
 		set_status(_("Updating query feed..."));
 		feed->update_items(ctrl->get_all_feeds());
 		feed->sort(cfg->get_configvalue("article-sort-order"));
+		notify_itemlist_change(feed);
 		set_status("");
 	}
 }
