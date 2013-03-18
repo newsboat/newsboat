@@ -887,6 +887,13 @@ void controller::reload_all(bool unattended) {
 		}
 	}
 
+	// refresh query feeds (update and sort)
+	LOG(LOG_DEBUG, "controller::reload_all: refresh query feeds");
+	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it) {
+		v->prepare_query_feed(*it);
+	}
+	v->force_redraw();
+
 	sort_feeds();
 	update_feedlist();
 

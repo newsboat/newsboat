@@ -419,12 +419,7 @@ void view::push_itemlist(std::tr1::shared_ptr<rss_feed> feed) {
 
 	feed->purge_deleted_items();
 
-	if (feed->rssurl().substr(0,6) == "query:") {
-		set_status(_("Updating query feed..."));
-		feed->update_items(ctrl->get_all_feeds());
-		feed->sort(cfg->get_configvalue("article-sort-order"));
-		set_status("");
-	}
+	prepare_query_feed(feed);
 
 	if (feed->items().size() > 0) {
 		std::tr1::shared_ptr<itemlist_formaction> itemlist(new itemlist_formaction(this, itemlist_str));
@@ -595,6 +590,7 @@ bool view::get_random_unread(itemlist_formaction * itemlist, itemview_formaction
 	} 
 	if (feedlist->jump_to_random_unread_feed(feedpos)) {
 		LOG(LOG_DEBUG, "view::get_previous_unread: found feed with unread articles");
+		prepare_query_feed(feedlist->get_feed());
 		itemlist->set_feed(feedlist->get_feed());
 		itemlist->set_pos(feedpos);
 		itemlist->init();
@@ -627,6 +623,7 @@ bool view::get_previous_unread(itemlist_formaction * itemlist, itemview_formacti
 		show_error(_("No unread items."));
 	} else if (feedlist->jump_to_previous_unread_feed(feedpos)) {
 		LOG(LOG_DEBUG, "view::get_previous_unread: found feed with unread articles");
+		prepare_query_feed(feedlist->get_feed());
 		itemlist->set_feed(feedlist->get_feed());
 		itemlist->set_pos(feedpos);
 		itemlist->init();
@@ -647,6 +644,7 @@ bool view::get_next_unread_feed(itemlist_formaction * itemlist) {
 	unsigned int feedpos;
 	assert(feedlist != NULL);
 	if (feedlist->jump_to_next_unread_feed(feedpos)) {
+		prepare_query_feed(feedlist->get_feed());
 		itemlist->set_feed(feedlist->get_feed());
 		itemlist->set_pos(feedpos);
 		itemlist->init();
@@ -660,6 +658,7 @@ bool view::get_prev_unread_feed(itemlist_formaction * itemlist) {
 	unsigned int feedpos;
 	assert(feedlist != NULL);
 	if (feedlist->jump_to_previous_unread_feed(feedpos)) {
+		prepare_query_feed(feedlist->get_feed());
 		itemlist->set_feed(feedlist->get_feed());
 		itemlist->set_pos(feedpos);
 		itemlist->init();
@@ -685,6 +684,7 @@ bool view::get_next_unread(itemlist_formaction * itemlist, itemview_formaction *
 		show_error(_("No unread items."));
 	} else if (feedlist->jump_to_next_unread_feed(feedpos)) {
 		LOG(LOG_DEBUG, "view::get_next_unread: found feed with unread articles");
+		prepare_query_feed(feedlist->get_feed());
 		itemlist->set_feed(feedlist->get_feed());
 		itemlist->set_pos(feedpos);
 		itemlist->init();
@@ -716,6 +716,7 @@ bool view::get_previous(itemlist_formaction * itemlist, itemview_formaction * it
 		show_error(_("Already on first item."));
 	} else if (feedlist->jump_to_previous_feed(feedpos)) {
 		LOG(LOG_DEBUG, "view::get_previous: previous feed");
+		prepare_query_feed(feedlist->get_feed());
 		itemlist->set_feed(feedlist->get_feed());
 		itemlist->set_pos(feedpos);
 		itemlist->init();
@@ -747,6 +748,7 @@ bool view::get_next(itemlist_formaction * itemlist, itemview_formaction * itemvi
 		show_error(_("Already on last item."));
 	} else if (feedlist->jump_to_next_feed(feedpos)) {
 		LOG(LOG_DEBUG, "view::get_next: next feed");
+		prepare_query_feed(feedlist->get_feed());
 		itemlist->set_feed(feedlist->get_feed());
 		itemlist->set_pos(feedpos);
 		itemlist->init();
@@ -767,6 +769,7 @@ bool view::get_next_feed(itemlist_formaction * itemlist) {
 	unsigned int feedpos;
 	assert(feedlist != NULL);
 	if (feedlist->jump_to_next_feed(feedpos)) {
+		prepare_query_feed(feedlist->get_feed());
 		itemlist->set_feed(feedlist->get_feed());
 		itemlist->set_pos(feedpos);
 		itemlist->init();
@@ -780,12 +783,32 @@ bool view::get_prev_feed(itemlist_formaction * itemlist) {
 	unsigned int feedpos;
 	assert(feedlist != NULL);
 	if (feedlist->jump_to_previous_feed(feedpos)) {
+		prepare_query_feed(feedlist->get_feed());
 		itemlist->set_feed(feedlist->get_feed());
 		itemlist->set_pos(feedpos);
 		itemlist->init();
 		return true;
 	}
 	return false;
+}
+
+void view::prepare_query_feed(std::tr1::shared_ptr<rss_feed> feed) {
+	if (feed->rssurl().substr(0,6) == "query:") {
+		LOG(LOG_DEBUG, "view::prepare_query_feed: %s", feed->rssurl().c_str());
+
+		set_status(_("Updating query feed..."));
+		feed->update_items(ctrl->get_all_feeds());
+		feed->sort(cfg->get_configvalue("article-sort-order"));
+		notify_itemlist_change(feed);
+		set_status("");
+	}
+}
+
+void view::force_redraw() {
+	std::tr1::shared_ptr<formaction> fa = get_current_formaction();
+	fa->set_redraw(true);
+	fa->prepare();
+	fa->get_form()->run(-1);
 }
 
 void view::pop_current_formaction() {
