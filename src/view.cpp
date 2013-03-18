@@ -804,6 +804,13 @@ void view::prepare_query_feed(std::tr1::shared_ptr<rss_feed> feed) {
 	}
 }
 
+void view::force_redraw() {
+	std::tr1::shared_ptr<formaction> fa = get_current_formaction();
+	fa->set_redraw(true);
+	fa->prepare();
+	fa->get_form()->run(-1);
+}
+
 void view::pop_current_formaction() {
 	std::tr1::shared_ptr<formaction> f = get_current_formaction();
 	std::vector<std::tr1::shared_ptr<formaction> >::iterator it=formaction_stack.begin();
