@@ -1401,13 +1401,13 @@ std::string controller::prepare_message(unsigned int pos, unsigned int max) {
 
 void controller::save_feed(std::tr1::shared_ptr<rss_feed> feed, unsigned int pos) {
 	if (!feed->is_empty()) {
-		LOG(LOG_DEBUG, "controller::reload: feed is nonempty, saving");
+		LOG(LOG_DEBUG, "controller::save_feed: feed is nonempty, saving");
 		rsscache->externalize_rssfeed(feed, ign.matches_resetunread(feed->rssurl()));
-		LOG(LOG_DEBUG, "controller::reload: after externalize_rssfeed");
+		LOG(LOG_DEBUG, "controller::save_feed: after externalize_rssfeed");
 
 		bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
 		rsscache->internalize_rssfeed(feed, ignore_disp ? &ign : NULL);
-		LOG(LOG_DEBUG, "controller::reload: after internalize_rssfeed");
+		LOG(LOG_DEBUG, "controller::save_feed: after internalize_rssfeed");
 		feed->set_tags(urlcfg->get_tags(feed->rssurl()));
 		{
 			unsigned int order = feeds[pos]->get_order();
@@ -1418,7 +1418,7 @@ void controller::save_feed(std::tr1::shared_ptr<rss_feed> feed, unsigned int pos
 		feeds[pos] = feed;
 		v->notify_itemlist_change(feeds[pos]);
 	} else {
-		LOG(LOG_DEBUG, "controller::reload: feed is empty, not saving");
+		LOG(LOG_DEBUG, "controller::save_feed: feed is empty, not saving");
 	}
 }
 
@@ -1428,9 +1428,9 @@ void controller::enqueue_items(std::tr1::shared_ptr<rss_feed> feed) {
 	scope_mutex lock(&feed->item_mutex);
 	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin();it!=feed->items().end();++it) {
 		if (!(*it)->enqueued() && (*it)->enclosure_url().length() > 0) {
-			LOG(LOG_DEBUG, "controller::reload: enclosure_url = `%s' enclosure_type = `%s'", (*it)->enclosure_url().c_str(), (*it)->enclosure_type().c_str());
+			LOG(LOG_DEBUG, "controller::enqueue_items: enclosure_url = `%s' enclosure_type = `%s'", (*it)->enclosure_url().c_str(), (*it)->enclosure_type().c_str());
 			if (is_valid_podcast_type((*it)->enclosure_type()) && utils::is_http_url((*it)->enclosure_url())) {
-				LOG(LOG_INFO, "controller::reload: enqueuing `%s'", (*it)->enclosure_url().c_str());
+				LOG(LOG_INFO, "controller::enqueue_items: enqueuing `%s'", (*it)->enclosure_url().c_str());
 				enqueue_url((*it)->enclosure_url(), feed);
 				(*it)->set_enqueued(true);
 				rsscache->update_rssitem_unread_and_enqueued(*it, feed->rssurl());
