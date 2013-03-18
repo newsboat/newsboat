@@ -1,6 +1,6 @@
 Changes for newsbeuter:
 
-2.6:
+2.6 (2013-03-18):
 	Fixed crash in RSS parser (thanks to Isaac Good).
 	Fixed authentication issues with Google Reader (thanks to Fabrice Noilhan).
 	Fixed bug in Google authentication (Daniel Aleksandersen).
