@@ -264,6 +264,7 @@ void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed> feed) {
 		set_item_author(x, *item);
 
 		x->set_feedurl(feed->rssurl());
+    x->set_feedptr(feed);
 
 		if ((f.rss_version == rsspp::ATOM_1_0 || f.rss_version == rsspp::TTRSS_JSON) && item->labels.size() > 0) {
 			std::vector<std::string>::const_iterator start, finish;
