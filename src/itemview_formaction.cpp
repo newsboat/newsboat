@@ -114,8 +114,11 @@ void itemview_formaction::prepare() {
 
 		listfmt.add_line("");
 
-		// we need to subtract because the current item isn't marked as read
-		set_head(item->title(), feed->unread_item_count() - 1, feed->items().size());
+		unsigned int unread_item_count = feed->unread_item_count();
+		// we need to subtract because the current item isn't yet marked as read
+		if (item->unread())
+			unread_item_count--;
+		set_head(item->title(), unread_item_count, feed->items().size());
 
 		unsigned int textwidth = v->get_cfg()->get_configvalue_as_int("text-width");
 		if (textwidth > 0) {
