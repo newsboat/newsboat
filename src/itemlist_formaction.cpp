@@ -44,8 +44,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		case OP_OPEN: {
 				LOG(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
 				if (itemposname.length() > 0 && visible_items.size() != 0) {
-					visible_items[itempos].first->set_unread(false); // set article as read
-					v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), true);
+					// no need to mark item as read, the itemview already do that
 					old_itempos = itempos;
 					v->push_itemview(feed, visible_items[itempos].first->guid(), show_searchresult ? searchphrase : "");
 					do_redraw = true;
