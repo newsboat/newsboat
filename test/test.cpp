@@ -908,8 +908,8 @@ void TestOlFormatting() {
 
 int main(void) {
 	setlocale(LC_CTYPE, "");
-	GetLogger().set_logfile("testlog.txt");
-	GetLogger().set_loglevel(LOG_DEBUG);
+	logger::getInstance().set_logfile("testlog.txt");
+	logger::getInstance().set_loglevel(LOG_DEBUG);
 
 	test::TestNewsbeuterReload();
 	test::TestConfigParserContainerAndKeymap();
