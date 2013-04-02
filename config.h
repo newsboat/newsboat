@@ -19,6 +19,6 @@
 
 #define _(string) gettext(string)
 
-/* #define NO_DEBUG */ // only enable this #define if you want to disable all debug logging.
+/* #define NDEBUG */ // only enable this #define if you want to disable all debug logging.
 
 #endif

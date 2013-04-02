@@ -30,8 +30,8 @@ logger& GetLogger();
 
 }
 
-#ifdef NO_DEBUG
 #define LOG(x, ...) do { } while(0)
+#ifdef NDEBUG
 #else
 #define LOG(x, ...) do { GetLogger().log(x, __VA_ARGS__); } while(0)
 #endif
