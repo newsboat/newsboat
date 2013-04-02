@@ -18,7 +18,7 @@ class logger {
 		void set_errorlogfile(const char * logfile);
 		void set_loglevel(loglevel level);
 		void log(loglevel level, const char * format, ...);
-		inline void nada() { }
+
 	private:
 		loglevel curlevel;
 		mutex mtx;
