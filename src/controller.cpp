@@ -285,13 +285,13 @@ void controller::run(int argc, char * argv[]) {
 			case 'q':
 				break;
 			case 'd': // this is an undocumented debug commandline option!
-				GetLogger().set_logfile(optarg);
+				logger::getInstance().set_logfile(optarg);
 				break;
 			case 'l': // this is an undocumented debug commandline option!
 				{
 					loglevel level = static_cast<loglevel>(atoi(optarg));
 					if (level > LOG_NONE && level <= LOG_DEBUG) {
-						GetLogger().set_loglevel(level);
+						logger::getInstance().set_loglevel(level);
 					} else {
 						std::cerr << utils::strprintf(_("%s: %d: invalid loglevel value"), argv[0], level) << std::endl;
 						::std::exit(EXIT_FAILURE);
@@ -1574,7 +1574,7 @@ void controller::update_config() {
 	}
 
 	if (cfg.get_configvalue("error-log").length() > 0) {
-		GetLogger().set_errorlogfile(cfg.get_configvalue("error-log").c_str());
+		logger::getInstance().set_errorlogfile(cfg.get_configvalue("error-log").c_str());
 	}
 
 }
