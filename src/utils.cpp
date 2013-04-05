@@ -234,7 +234,7 @@ bool utils::try_fs_lock(const std::string& lock_file, pid_t & pid) {
 
 	// then we lock it (T_LOCK returns immediately if locking is not possible)
 	if (lockf(fd, F_TLOCK, 0) == 0) {
-		std::string pidtext = utils::to_s(getpid());
+		std::string pidtext = utils::to_string<unsigned int>(getpid());
 		// locking successful -> truncate file and write own PID into it
 		ftruncate(fd, 0);
 		write(fd, pidtext.c_str(), pidtext.length());

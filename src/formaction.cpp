@@ -101,14 +101,14 @@ void formaction::process_op(operation op, bool automatic, std::vector<std::strin
 			if (qna_history) {
 				std::string entry = qna_history->next();
 				f->set("qna_value", entry);
-				f->set("qna_value_pos", utils::to_s(entry.length()));
+				f->set("qna_value_pos", utils::to_string<unsigned int>(entry.length()));
 			}
 			break;
 		case OP_INT_QNA_PREVHIST:
 			if (qna_history) {
 				std::string entry = qna_history->prev();
 				f->set("qna_value", entry);
-				f->set("qna_value_pos", utils::to_s(entry.length()));
+				f->set("qna_value_pos", utils::to_string<unsigned int>(entry.length()));
 			}
 			break;
 		case OP_INT_END_QUESTION:
@@ -363,7 +363,7 @@ void formaction::start_next_question() {
 		replacestr.append("}{input[qnainput] on_ESC:cancel-qna on_UP:qna-prev-history on_DOWN:qna-next-history on_ENTER:end-question modal:1 .expand:h @bind_home:** @bind_end:** text[qna_value]:");
 		replacestr.append(stfl::quote(qna_prompts[0].second));
 		replacestr.append(" pos[qna_value_pos]:");
-		replacestr.append(utils::to_s(qna_prompts[0].second.length()));
+		replacestr.append(utils::to_string<unsigned int>(qna_prompts[0].second.length()));
 		replacestr.append("}}");
 		qna_prompts.erase(qna_prompts.begin());
 		f->modify("lastline", "replace", replacestr);

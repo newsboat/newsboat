@@ -31,7 +31,7 @@ void itemview_formaction::init() {
 	if (!v->get_cfg()->get_configvalue_as_bool("display-article-progress")) {
 		f->set("percentwidth", "0");
 	} else {
-		f->set("percentwidth", utils::to_s(utils::max(6, utils::max(strlen(_("Top")), strlen(_("Bottom"))))));
+		f->set("percentwidth", utils::to_string<unsigned int>(utils::max(6, utils::max(strlen(_("Top")), strlen(_("Bottom"))))));
 		update_percent();
 	}
 	set_keymap_hints();
