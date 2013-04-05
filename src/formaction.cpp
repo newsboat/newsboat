@@ -17,6 +17,14 @@ formaction::formaction(view * vv, std::string formstr) : v(vv), f(new stfl::form
 		if (v->get_cfg()->get_configvalue_as_bool("show-keymap-hint") == false) {
 			f->set("showhint", "0");
 		}
+		if (v->get_cfg()->get_configvalue_as_bool("swap-title-and-hints") == true) {
+			std::string hints = f->dump("hints", "", 0);
+			std::string title = f->dump("title", "", 0);
+			f->modify("title", "replace", "label[swap-title]");
+			f->modify("hints", "replace", "label[swap-hints]");
+			f->modify("swap-title", "replace", hints);
+			f->modify("swap-hints", "replace", title);
+		}
 	}
 	valid_cmds.push_back("set");
 	valid_cmds.push_back("quit");

@@ -7,7 +7,7 @@ vbox
   @bind_page_down[bind_page_down]:**
   @bind_home[bind_home]:**
   @bind_end[bind_end]:**
-  label#info
+  label#info[title]
     text[head]:"File Browser"
     .expand:h
   list[files]
@@ -17,7 +17,7 @@ vbox
     style_focus[listfocus]:fg=yellow,bg=blue,attr=bold
     pos_name[listposname]:
     pos[listpos]:0
-  table
+  table[hints]
     .expand:0 .height:1
     label
       .expand:0

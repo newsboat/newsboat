@@ -7,7 +7,7 @@ vbox
   @bind_page_down[bind_page_down]:**
   @bind_home[bind_home]:**
   @bind_end[bind_end]:**
-  label#info
+  label#info[title]
     text[head]:"Select Tag"
     .expand:h
   list[taglist]
@@ -16,7 +16,7 @@ vbox
     style_focus[listfocus]:fg=yellow,bg=blue,attr=bold
     pos_name[tagposname]:
     pos[tagpos]:0
-  vbox
+  vbox[hints]
     .expand:0
     .display[showhint]:1
     label#info
