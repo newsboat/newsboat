@@ -64,8 +64,8 @@ class utils {
 
 		static std::wstring utf8str2wstr(const std::string& utf8str);
 
-		static std::string to_s(unsigned int u);
-		static std::string signed_to_s(int u);
+		template<class T>
+		static std::string to_string(T var);
 
 		static std::string absolute_url(const std::string& url, const std::string& link);
 

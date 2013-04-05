@@ -500,17 +500,12 @@ std::string utils::wstr2str(const std::wstring& wstr) {
 	return result;
 }
 
-std::string utils::to_s(unsigned int u) {
-	char buf[32];
-	snprintf(buf, sizeof(buf), "%u", u);
-	return buf;
+template<class T> std::string utils::to_string(T var) {
+    std::stringstream ret;
+    ret << var;
+    return ret.str();
 }
-
-std::string utils::signed_to_s(int u) {
-	char buf[32];
-	snprintf(buf, sizeof(buf), "%d", u);
-	return buf;
-}
+template std::string utils::to_string<int>(int var); // to avoid linker errors
 
 std::string utils::absolute_url(const std::string& url, const std::string& link) {
 	xmlChar * newurl = xmlBuildURI((const xmlChar *)link.c_str(), (const xmlChar *)url.c_str());
