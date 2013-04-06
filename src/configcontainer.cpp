@@ -77,6 +77,7 @@ configcontainer::configcontainer()
 	config_data["show-read-articles"] = configdata("yes", configdata::BOOL);
 	config_data["goto-next-feed"] = configdata("yes", configdata::BOOL);
 	config_data["display-article-progress"] = configdata("yes", configdata::BOOL);
+	config_data["swap-title-and-hints"] = configdata("no", configdata::BOOL);
 	config_data["show-keymap-hint"] = configdata("yes", configdata::BOOL);
 	config_data["download-timeout"] = configdata("30", configdata::INT);
 	config_data["download-retries"] = configdata("1", configdata::INT);

@@ -7,7 +7,7 @@ vbox
   @bind_page_down[bind_page_down]:**
   @bind_home[bind_home]:**
   @bind_end[bind_end]:**
-  label#info
+  label#info[title]
     text[head]:"Your feeds"
     .expand:h
   !list[feeds]
@@ -16,7 +16,7 @@ vbox
     .expand:vh
     pos_name[feedposname]:
     pos[feedpos]:0
-  vbox
+  vbox[hints]
     .expand:0
     .display[showhint]:1
     label#info
