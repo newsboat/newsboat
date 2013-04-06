@@ -724,6 +724,8 @@ S:download status
 t:Feed title
 T:First tag of a feed in the URLs file
 u:"unread/total" field
+U:"unread" field
+c:"total" field
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 While a reload-all operation is running, the download status indicates the 
