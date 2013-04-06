@@ -505,7 +505,10 @@ template<class T> std::string utils::to_string(T var) {
     ret << var;
     return ret.str();
 }
-template std::string utils::to_string<int>(int var); // to avoid linker errors
+
+// to avoid linker errors
+template std::string utils::to_string<int>(int var);
+template std::string utils::to_string<unsigned long>(unsigned long var);
 
 std::string utils::absolute_url(const std::string& url, const std::string& link) {
 	xmlChar * newurl = xmlBuildURI((const xmlChar *)link.c_str(), (const xmlChar *)url.c_str());
