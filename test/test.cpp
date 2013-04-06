@@ -595,10 +595,10 @@ void TestMiscUtilsFunctions() {
 	lemon.is(utils::replace_all("this is a normal test text", " t", " T"), "this is a normal Test Text", "replace t by T");
 	lemon.is(utils::replace_all("o o o", "o", "<o>"), "<o> <o> <o>", "replace o by <o>");
 
-	lemon.is(utils::to_s(0), "0", "convert 0 to string");
-	lemon.is(utils::to_s(100), "100", "convert 100 to string");
-	lemon.is(utils::to_s(65536), "65536", "convert 65536 to string");
-	lemon.is(utils::to_s(65537), "65537", "convert 65537 to string");
+	lemon.is(utils::to_string<int>(0), "0", "convert 0 to string");
+	lemon.is(utils::to_string<int>(100), "100", "convert 100 to string");
+	lemon.is(utils::to_string<unsigned int>(65536), "65536", "convert 65536 to string");
+	lemon.is(utils::to_string<unsigned int>(65537), "65537", "convert 65537 to string");
 }
 
 void TestUtilsStrPrintf() {
@@ -908,8 +908,8 @@ void TestOlFormatting() {
 
 int main(void) {
 	setlocale(LC_CTYPE, "");
-	GetLogger().set_logfile("testlog.txt");
-	GetLogger().set_loglevel(LOG_DEBUG);
+	logger::getInstance().set_logfile("testlog.txt");
+	logger::getInstance().set_loglevel(LOG_DEBUG);
 
 	test::TestNewsbeuterReload();
 	test::TestConfigParserContainerAndKeymap();

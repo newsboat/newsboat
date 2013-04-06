@@ -234,7 +234,7 @@ bool utils::try_fs_lock(const std::string& lock_file, pid_t & pid) {
 
 	// then we lock it (T_LOCK returns immediately if locking is not possible)
 	if (lockf(fd, F_TLOCK, 0) == 0) {
-		std::string pidtext = utils::to_s(getpid());
+		std::string pidtext = utils::to_string<unsigned int>(getpid());
 		// locking successful -> truncate file and write own PID into it
 		ftruncate(fd, 0);
 		write(fd, pidtext.c_str(), pidtext.length());
@@ -500,17 +500,12 @@ std::string utils::wstr2str(const std::wstring& wstr) {
 	return result;
 }
 
-std::string utils::to_s(unsigned int u) {
-	char buf[32];
-	snprintf(buf, sizeof(buf), "%u", u);
-	return buf;
+template<class T> std::string utils::to_string(T var) {
+    std::stringstream ret;
+    ret << var;
+    return ret.str();
 }
-
-std::string utils::signed_to_s(int u) {
-	char buf[32];
-	snprintf(buf, sizeof(buf), "%d", u);
-	return buf;
-}
+template std::string utils::to_string<int>(int var); // to avoid linker errors
 
 std::string utils::absolute_url(const std::string& url, const std::string& link) {
 	xmlChar * newurl = xmlBuildURI((const xmlChar *)link.c_str(), (const xmlChar *)url.c_str());

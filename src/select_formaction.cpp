@@ -26,7 +26,7 @@ void select_formaction::handle_cmdline(const std::string& cmd) {
 	unsigned int idx = 0;
 	if (1==sscanf(cmd.c_str(),"%u",&idx)) {
 		if (idx > 0 && idx <= ((type == SELECTTAG) ? tags.size() : filters.size())) {
-			f->set("tagpos", utils::to_s(idx - 1));
+			f->set("tagpos", utils::to_string<unsigned int>(idx - 1));
 		}
 	} else {
 		formaction::handle_cmdline(cmd);

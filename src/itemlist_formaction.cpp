@@ -134,7 +134,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					} catch (const dbexception& e) {
 						v->set_status(utils::strprintf(_("Error while toggling read flag: %s"), e.what()));
 					}
-					if (!v->get_cfg()->get_configvalue_as_bool("toogleitemread-jumps-to-next-unread")) {
+					if (!v->get_cfg()->get_configvalue_as_bool("toggleitemread-jumps-to-next-unread")) {
 						if (itempos < visible_items.size()-1)
 							f->set("itempos", utils::strprintf("%u", itempos + 1));
 					} else {
@@ -739,8 +739,8 @@ void itemlist_formaction::set_head(const std::string& s, unsigned int unread, un
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', PROGRAM_VERSION);
 
-	fmt.register_fmt('u', utils::to_s(unread));
-	fmt.register_fmt('t', utils::to_s(total));
+	fmt.register_fmt('u', utils::to_string<unsigned int>(unread));
+	fmt.register_fmt('t', utils::to_string<unsigned int>(total));
 
 	fmt.register_fmt('T', s);
 	fmt.register_fmt('U', utils::censor_url(url));
@@ -760,13 +760,13 @@ bool itemlist_formaction::jump_to_previous_unread_item(bool start_with_last) {
 	for (int i=(start_with_last?itempos:(itempos-1));i>=0;--i) {
 		LOG(LOG_DEBUG, "itemlist_formaction::jump_to_previous_unread_item: visible_items[%u] unread = %s", i, visible_items[i].first->unread() ? "true" : "false");
 		if (visible_items[i].first->unread()) {
-			f->set("itempos", utils::to_s(i));
+			f->set("itempos", utils::to_string<unsigned int>(i));
 			return true;
 		}
 	}
 	for (int i=visible_items.size()-1;i>=itempos;--i) {
 		if (visible_items[i].first->unread()) {
-			f->set("itempos", utils::to_s(i));
+			f->set("itempos", utils::to_string<unsigned int>(i));
 			return true;
 		}
 	}
@@ -786,7 +786,7 @@ bool itemlist_formaction::jump_to_random_unread_item() {
 		for (;;) {
 			unsigned int pos = utils::get_random_value(visible_items.size());
 			if (visible_items[pos].first->unread()) {
-				f->set("itempos", utils::to_s(pos));
+				f->set("itempos", utils::to_string<unsigned int>(pos));
 				break;
 			}
 		}
@@ -802,14 +802,14 @@ bool itemlist_formaction::jump_to_next_unread_item(bool start_with_first) {
 	for (unsigned int i=(start_with_first?itempos:(itempos+1));i<visible_items.size();++i) {
 		LOG(LOG_DEBUG, "itemlist_formaction::jump_to_next_unread_item: i = %u", i);
 		if (visible_items[i].first->unread()) {
-			f->set("itempos", utils::to_s(i));
+			f->set("itempos", utils::to_string<unsigned int>(i));
 			return true;
 		}
 	}
 	for (unsigned int i=0;i<=itempos;++i) {
 		LOG(LOG_DEBUG, "itemlist_formaction::jump_to_next_unread_item: i = %u", i);
 		if (visible_items[i].first->unread()) {
-			f->set("itempos", utils::to_s(i));
+			f->set("itempos", utils::to_string<unsigned int>(i));
 			return true;
 		}
 	}
@@ -822,13 +822,13 @@ bool itemlist_formaction::jump_to_previous_item(bool start_with_last) {
 	is >> itempos;
 	for (int i=(start_with_last?itempos:(itempos-1));i>=0;--i) {
 		LOG(LOG_DEBUG, "itemlist_formaction::jump_to_previous_item: visible_items[%u]", i);
-		f->set("itempos", utils::to_s(i));
+		f->set("itempos", utils::to_string<unsigned int>(i));
 		return true;
 	}
 	return false; // not sure if we should exit here or continue
 	// wrap to last item
 	for (int i=visible_items.size()-1;i>=itempos;--i) {
-		f->set("itempos", utils::to_s(i));
+		f->set("itempos", utils::to_string<unsigned int>(i));
 		return true;
 	}
 	return false;
@@ -842,14 +842,14 @@ bool itemlist_formaction::jump_to_next_item(bool start_with_first) {
 	LOG(LOG_DEBUG, "itemlist_formaction::jump_to_next_item: itempos = %u visible_items.size = %u", itempos, visible_items.size());
 	for (unsigned int i=(start_with_first?itempos:(itempos+1));i<visible_items.size();++i) {
 		LOG(LOG_DEBUG, "itemlist_formaction::jump_to_next_item: i = %u", i);
-		f->set("itempos", utils::to_s(i));
+		f->set("itempos", utils::to_string<unsigned int>(i));
 		return true;
 	}
 	return false; // not sure if we should exit here or continue
 	// wrap to first item
 	for (unsigned int i=0;i<=itempos;++i) {
 		LOG(LOG_DEBUG, "itemlist_formaction::jump_to_next_item: i = %u", i);
-		f->set("itempos", utils::to_s(i));
+		f->set("itempos", utils::to_string<unsigned int>(i));
 		return true;
 	}
 	return false;
@@ -883,7 +883,7 @@ void itemlist_formaction::handle_cmdline_num(unsigned int idx) {
 		if (i == -1) {
 			v->show_error(_("Position not visible!"));
 		} else {
-			f->set("itempos", utils::to_s(i));
+			f->set("itempos", utils::to_string<unsigned int>(i));
 		}
 	} else {
 		v->show_error(_("Invalid position!"));
@@ -1009,7 +1009,7 @@ void itemlist_formaction::prepare_set_filterpos() {
 		unsigned int i=0;
 		for (std::vector<itemptr_pos_pair>::iterator it=visible_items.begin();it!=visible_items.end();++it, ++i) {
 			if (it->second == filterpos) {
-				f->set("itempos", utils::to_s(i));
+				f->set("itempos", utils::to_string<unsigned int>(i));
 				return;
 			}
 		}

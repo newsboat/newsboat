@@ -155,13 +155,13 @@ void pb_controller::run(int argc, char * argv[]) {
 				automatic_dl = true;
 				break;
 			case 'd': // this is an undocumented debug commandline option!
-				GetLogger().set_logfile(optarg);
+				logger::getInstance().set_logfile(optarg);
 				break;
 			case 'l': // this is an undocumented debug commandline option!
 				{
 					loglevel level = static_cast<loglevel>(atoi(optarg));
 					if (level > LOG_NONE && level <= LOG_DEBUG)
-						GetLogger().set_loglevel(level);
+						logger::getInstance().set_loglevel(level);
 				}
 				break;
 			case 'h':

@@ -285,13 +285,13 @@ void controller::run(int argc, char * argv[]) {
 			case 'q':
 				break;
 			case 'd': // this is an undocumented debug commandline option!
-				GetLogger().set_logfile(optarg);
+				logger::getInstance().set_logfile(optarg);
 				break;
 			case 'l': // this is an undocumented debug commandline option!
 				{
 					loglevel level = static_cast<loglevel>(atoi(optarg));
 					if (level > LOG_NONE && level <= LOG_DEBUG) {
-						GetLogger().set_loglevel(level);
+						logger::getInstance().set_loglevel(level);
 					} else {
 						std::cerr << utils::strprintf(_("%s: %d: invalid loglevel value"), argv[0], level) << std::endl;
 						::std::exit(EXIT_FAILURE);
@@ -787,10 +787,10 @@ void controller::reload_indexes(const std::vector<int>& indexes, bool unattended
 	bool notify_always = cfg.get_configvalue_as_bool("notify-always");
 	if (notify_always || unread_feeds2 != unread_feeds || unread_articles2 != unread_articles) {
 		fmtstr_formatter fmt;
-		fmt.register_fmt('f', utils::to_s(unread_feeds2));
-		fmt.register_fmt('n', utils::to_s(unread_articles2));
-		fmt.register_fmt('d', utils::to_s(unread_articles2 - unread_articles));
-		fmt.register_fmt('D', utils::to_s(unread_feeds2 - unread_feeds));
+		fmt.register_fmt('f', utils::to_string<unsigned int>(unread_feeds2));
+		fmt.register_fmt('n', utils::to_string<unsigned int>(unread_articles2));
+		fmt.register_fmt('d', utils::to_string<unsigned int>(unread_articles2 - unread_articles));
+		fmt.register_fmt('D', utils::to_string<unsigned int>(unread_feeds2 - unread_feeds));
 		this->notify(fmt.do_format(cfg.get_configvalue("notify-format")));
 	}
 	if (!unattended)
@@ -912,10 +912,10 @@ void controller::reload_all(bool unattended) {
 		LOG(LOG_DEBUG, "unread feed count: %d", feed_count);
 
 		fmtstr_formatter fmt;
-		fmt.register_fmt('f', utils::to_s(unread_feeds2));
-		fmt.register_fmt('n', utils::to_s(unread_articles2));
-		fmt.register_fmt('d', utils::to_s(article_count >= 0 ? article_count : 0));
-		fmt.register_fmt('D', utils::to_s(feed_count >= 0 ? feed_count : 0));
+		fmt.register_fmt('f', utils::to_string<unsigned int>(unread_feeds2));
+		fmt.register_fmt('n', utils::to_string<unsigned int>(unread_articles2));
+		fmt.register_fmt('d', utils::to_string<unsigned int>(article_count >= 0 ? article_count : 0));
+		fmt.register_fmt('D', utils::to_string<unsigned int>(feed_count >= 0 ? feed_count : 0));
 		this->notify(fmt.do_format(cfg.get_configvalue("notify-format")));
 	}
 }
@@ -1408,13 +1408,13 @@ std::string controller::prepare_message(unsigned int pos, unsigned int max) {
 
 void controller::save_feed(std::tr1::shared_ptr<rss_feed> feed, unsigned int pos) {
 	if (!feed->is_empty()) {
-		LOG(LOG_DEBUG, "controller::reload: feed is nonempty, saving");
+		LOG(LOG_DEBUG, "controller::save_feed: feed is nonempty, saving");
 		rsscache->externalize_rssfeed(feed, ign.matches_resetunread(feed->rssurl()));
-		LOG(LOG_DEBUG, "controller::reload: after externalize_rssfeed");
+		LOG(LOG_DEBUG, "controller::save_feed: after externalize_rssfeed");
 
 		bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
 		rsscache->internalize_rssfeed(feed, ignore_disp ? &ign : NULL);
-		LOG(LOG_DEBUG, "controller::reload: after internalize_rssfeed");
+		LOG(LOG_DEBUG, "controller::save_feed: after internalize_rssfeed");
 		feed->set_tags(urlcfg->get_tags(feed->rssurl()));
 		{
 			unsigned int order = feeds[pos]->get_order();
@@ -1425,7 +1425,7 @@ void controller::save_feed(std::tr1::shared_ptr<rss_feed> feed, unsigned int pos
 		feeds[pos] = feed;
 		v->notify_itemlist_change(feeds[pos]);
 	} else {
-		LOG(LOG_DEBUG, "controller::reload: feed is empty, not saving");
+		LOG(LOG_DEBUG, "controller::save_feed: feed is empty, not saving");
 	}
 }
 
@@ -1435,9 +1435,9 @@ void controller::enqueue_items(std::tr1::shared_ptr<rss_feed> feed) {
 	scope_mutex lock(&feed->item_mutex);
 	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin();it!=feed->items().end();++it) {
 		if (!(*it)->enqueued() && (*it)->enclosure_url().length() > 0) {
-			LOG(LOG_DEBUG, "controller::reload: enclosure_url = `%s' enclosure_type = `%s'", (*it)->enclosure_url().c_str(), (*it)->enclosure_type().c_str());
+			LOG(LOG_DEBUG, "controller::enqueue_items: enclosure_url = `%s' enclosure_type = `%s'", (*it)->enclosure_url().c_str(), (*it)->enclosure_type().c_str());
 			if (is_valid_podcast_type((*it)->enclosure_type()) && utils::is_http_url((*it)->enclosure_url())) {
-				LOG(LOG_INFO, "controller::reload: enqueuing `%s'", (*it)->enclosure_url().c_str());
+				LOG(LOG_INFO, "controller::enqueue_items: enqueuing `%s'", (*it)->enclosure_url().c_str());
 				enqueue_url((*it)->enclosure_url(), feed);
 				(*it)->set_enqueued(true);
 				rsscache->update_rssitem_unread_and_enqueued(*it, feed->rssurl());
@@ -1581,7 +1581,7 @@ void controller::update_config() {
 	}
 
 	if (cfg.get_configvalue("error-log").length() > 0) {
-		GetLogger().set_errorlogfile(cfg.get_configvalue("error-log").c_str());
+		logger::getInstance().set_errorlogfile(cfg.get_configvalue("error-log").c_str());
 	}
 
 }

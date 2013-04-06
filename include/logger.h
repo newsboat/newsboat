@@ -12,28 +12,33 @@ namespace newsbeuter {
 
 class logger {
 	public:
-		logger();
-		~logger() { }
+		static logger &getInstance();
+
 		void set_logfile(const char * logfile);
 		void set_errorlogfile(const char * logfile);
 		void set_loglevel(loglevel level);
 		void log(loglevel level, const char * format, ...);
-		inline void nada() { }
+
 	private:
+		logger();
+		logger(const logger &) {}
+		logger& operator=(const logger &) { return *this; }
+		~logger() { }
+
 		loglevel curlevel;
-		mutex mtx;
+		mutex logMutex;
+		static mutex instanceMutex;
 		std::fstream f;
 		std::fstream ef;
 };
 
-logger& GetLogger();
-
 }
 
-#ifdef NO_DEBUG
+// see http://kernelnewbies.org/FAQ/DoWhile0
+#ifdef NDEBUG
 #define LOG(x, ...) do { } while(0)
 #else
-#define LOG(x, ...) do { GetLogger().log(x, __VA_ARGS__); } while(0)
+#define LOG(x, ...) do { logger::getInstance().log(x, __VA_ARGS__); } while(0)
 #endif
 
 #endif
