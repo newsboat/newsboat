@@ -419,8 +419,8 @@ void itemview_formaction::set_head(const std::string& s, unsigned int unread, un
 	fmt.register_fmt('V', PROGRAM_VERSION);
 	fmt.register_fmt('T', s);
 
-	fmt.register_fmt('u', utils::to_s(unread));
-	fmt.register_fmt('t', utils::to_s(total));
+	fmt.register_fmt('u', utils::to_string(unread));
+	fmt.register_fmt('t', utils::to_string(total));
 
 	std::string listwidth = f->get("article:w");
 	std::istringstream is(listwidth);
