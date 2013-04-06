@@ -435,6 +435,10 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, rss_ignores
 
 	unsigned int i=0;
 	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin(); it != feed->items().end(); ++it,++i) {
+		(*it)->set_cache(this);
+		(*it)->set_feedptr(feed);
+		(*it)->set_feedurl(feed->rssurl());
+
 		if (ign && ign->matches(it->get())) {
 			feed->erase_item(it);
 			// since we modified the vector, we need to reset the iterator
@@ -447,9 +451,6 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, rss_ignores
 			}
 			continue;
 		}
-		(*it)->set_cache(this);
-		(*it)->set_feedptr(feed);
-		(*it)->set_feedurl(feed->rssurl());
 	}
 	
 	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
