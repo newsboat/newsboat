@@ -272,6 +272,11 @@
 ## parameter syntax: [yes/no]
 # suppress-first-reload no
 
+## configuration option: swap-title-and-hints
+## description: If yes, then the title at the top of screen and keymap hints at the bottom of screen will be swapped.
+## parameter syntax: [yes/no]
+# swap-title-and-hints yes
+
 ## configuration option: text-width
 ## description: If set to a number greater than 0, then all HTML will be rendered to this maximum line length. If set to 0, the terminal width will be used.
 ## parameter syntax: <number>

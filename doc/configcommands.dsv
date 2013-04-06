@@ -71,6 +71,7 @@ show-keymap-hint|[yes/no]|yes|If no, then the keymap hints on the bottom of scre
 show-read-feeds|[yes/no]|yes|If yes, then all feeds, including those without unread articles, are listed. If no, then only feeds with one or more unread articles are list.|show-read-feeds no
 show-read-articles|[yes/no]|yes|If yes, then all articles of a feed are listed in the article list. If no, then only unread articles are listed.|show-read-articles no
 suppress-first-reload|[yes/no]|no|If yes, then the first automatic reload will be suppressed if auto-reload is set to yes.|suppress-first-reload yes
+swap-title-and-hints|[yes/no]|no|If yes, then the title at the top of screen and keymap hints at the bottom of screen will be swapped.|swap-title-and-hints yes
 text-width|<number>|0|If set to a number greater than 0, then all HTML will be rendered to this maximum line length. If set to 0, the terminal width will be used.|text-width 72
 ttrss-flag-publish|<character>|""|If this is set and Tiny Tiny RSS support is used, then all articles that are flagged with the specified flag are being marked as "published" in Tiny Tiny RSS.|ttrss-flag-publish "b"
 ttrss-flag-star|<character>|""|If this is set and Tiny Tiny RSS support is used, then all articles that are flagged with the specified flag are being "starred" in Tiny Tiny RSS.|ttrss-flag-star "a"

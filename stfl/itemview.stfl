@@ -7,7 +7,7 @@ vbox
   @bind_page_down[bind_page_down]:"** SPACE"
   @bind_home[bind_home]:**
   @bind_end[bind_end]:**
-  label#info
+  label#info[title]
     text[head]:"Article '#'"
     .expand:h
   textview[article]
@@ -16,7 +16,7 @@ vbox
     .expand:vh
     offset[articleoffset]:0
     richtext:1
-  vbox
+  vbox[hints]
     .expand:0
     .display[showhint]:1
     hbox
