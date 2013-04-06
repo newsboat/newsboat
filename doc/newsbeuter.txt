@@ -785,7 +785,7 @@ File Browser:filebrowser-title-format:%N %V - %?O?Open File&Save File? - %f
 Help:help-title-format:%N %V - Help
 Select Tag Dialog:selecttag-title-format:%N %V - Select Tag
 Select Filter Dialog:selectfilter-title-format:%N %V - Select Filter
-Article View:itemview-title-format:%N %V - Article '%T'
+Article View:itemview-title-format:%N %V - Article '%T' (%u unread, %t total)
 URL View:urlview-title-format:%N %V - URLs
 Dialog List:dialogs-title-format:%N %V - Dialogs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

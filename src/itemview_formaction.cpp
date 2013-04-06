@@ -114,7 +114,11 @@ void itemview_formaction::prepare() {
 
 		listfmt.add_line("");
 
-		set_head(item->title());
+		unsigned int unread_item_count = feed->unread_item_count();
+		// we need to subtract because the current item isn't yet marked as read
+		if (item->unread())
+			unread_item_count--;
+		set_head(item->title(), unread_item_count, feed->items().size());
 
 		unsigned int textwidth = v->get_cfg()->get_configvalue_as_int("text-width");
 		if (textwidth > 0) {
@@ -409,11 +413,14 @@ keymap_hint_entry * itemview_formaction::get_keymap_hint() {
 	return hints;
 }
 
-void itemview_formaction::set_head(const std::string& s) {
+void itemview_formaction::set_head(const std::string& s, unsigned int unread, unsigned int total) {
 	fmtstr_formatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', PROGRAM_VERSION);
 	fmt.register_fmt('T', s);
+
+	fmt.register_fmt('u', utils::to_s(unread));
+	fmt.register_fmt('t', utils::to_s(total));
 
 	std::string listwidth = f->get("article:w");
 	std::istringstream is(listwidth);
