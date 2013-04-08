@@ -7,11 +7,14 @@ vbox
   @bind_page_down[bind_page_down]:**
   @bind_home[bind_home]:**
   @bind_end[bind_end]:**
+  @style_unread_normal[listnormal_unread]:fg=magenta
+  @style_unread_focus[listfocus_unread]:fg=magenta,bg=blue,attr=bold
   label#info[title]
     text[head]:"Articles for '#'"
     .expand:h
   list[items]
     .expand:vh
+    richtext:1
     style_normal[listnormal]:
     style_focus[listfocus]:fg=yellow,bg=blue,attr=bold
     pos_name[itemposname]:

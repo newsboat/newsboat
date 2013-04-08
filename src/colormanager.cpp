@@ -53,7 +53,8 @@ void colormanager::handle_action(const std::string& action, const std::vector<st
 		}
 
 		/* we only allow certain elements to be configured, also to indicate the user possible mis-spellings */
-		if (element == "listnormal" || element == "listfocus" || element == "info" || element == "background" || element == "article") {
+		if (element == "listnormal" || element == "listfocus" || element == "listnormal_unread" || element =="listfocus_unread"
+                || element == "info" || element == "background" || element == "article") {
 			fg_colors[element] = fgcolor;
 			bg_colors[element] = bgcolor;
 			attributes[element] = attribs;

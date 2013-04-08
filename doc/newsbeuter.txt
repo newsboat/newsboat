@@ -181,17 +181,21 @@ Currently, the following elements are supported:
 
 - *listnormal*: a normal list item
 - *listfocus*: the currently selected list item
+- *listnormal_unread*: an unread list item
+- *listfocus_unread*: the currently selected and unread list item
 - *info*: the info bars on top and bottom
 - *background*: the application background
 - *article*: the article text
 
 The default color configuration of newsbeuter looks like this:
 
-	background   white   black
-	listnormal   white   black
-	listfocus    yellow  blue   bold
-	info         yellow  blue   bold
-	article      white   black
+	background          white   black
+	listnormal          white   black
+	listfocus           yellow  blue   bold
+	listnormal_unread   magenta black
+	listfocus_unread    magenta blue   bold
+	info                yellow  blue   bold
+	article             white   black
 
 
 Migrating from other RSS Feed Readers
