@@ -187,7 +187,7 @@ install-mo:
 	done
 
 test: $(LIB_OUTPUT) $(NEWSBEUTER_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) test/test.o
-	$(CXX) $(CXXFLAGS) -o test/test src/history.o src/rss.o src/rss_parser.o src/htmlrenderer.o src/cache.o src/tagsouppullparser.o src/urlreader.o src/regexmanager.o test/test.o src/ttrss_api.o src/markreadthread.o $(NEWSBEUTER_LIBS) $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o test/test src/history.o src/rss.o src/rss_parser.o src/htmlrenderer.o src/cache.o src/tagsouppullparser.o src/urlreader.o src/regexmanager.o test/test.o src/ttrss_api.o src/newsblur_api.o src/markreadthread.o $(NEWSBEUTER_LIBS) $(LDFLAGS)
 
 test-rss: $(RSSPPLIB_OUTPUT) test/test-rss.o
 	$(CXX) $(CXXFLAGS) -o test/test-rss test/test-rss.o src/utils.o $(NEWSBEUTER_LIBS) $(LDFLAGS)

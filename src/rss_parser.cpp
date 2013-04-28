@@ -10,6 +10,7 @@
 #include <config.h>
 #include <htmlrenderer.h>
 #include <ttrss_api.h>
+#include <newsblur_api.h>
 #include <curl/curl.h>
 
 #include <cerrno>
@@ -22,6 +23,7 @@ namespace newsbeuter {
 rss_parser::rss_parser(const std::string& uri, cache * c, configcontainer * cfg, rss_ignores * ii, remote_api * a) 
 	: my_uri(uri), ch(c), cfgcont(cfg), skip_parsing(false), is_valid(false), ign(ii), api(a), easyhandle(0) { 
 	is_ttrss = cfgcont->get_configvalue("urls-source") == "ttrss";
+	is_newsblur = cfgcont->get_configvalue("urls-source") == "newsblur";
 }
 
 rss_parser::~rss_parser() { }
@@ -119,6 +121,8 @@ void rss_parser::retrieve_uri(const std::string& uri) {
 		if (pound != NULL) {
 			fetch_ttrss(pound+1);
 		}
+	} else if (is_newsblur) {
+		fetch_newsblur(uri);
 	} else if (uri.substr(0,5) == "http:" || uri.substr(0,6) == "https:") {
 		download_http(uri);
 	} else if (uri.substr(0,5) == "exec:") {
@@ -266,7 +270,7 @@ void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed> feed) {
 		x->set_feedurl(feed->rssurl());
     x->set_feedptr(feed);
 
-		if ((f.rss_version == rsspp::ATOM_1_0 || f.rss_version == rsspp::TTRSS_JSON) && item->labels.size() > 0) {
+		if ((f.rss_version == rsspp::ATOM_1_0 || f.rss_version == rsspp::TTRSS_JSON || f.rss_version == rsspp::NEWSBLUR_JSON) && item->labels.size() > 0) {
 			std::vector<std::string>::const_iterator start, finish;
 			start = item->labels.begin();
 			finish = item->labels.end();
@@ -287,6 +291,14 @@ void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed> feed) {
 				x->set_override_unread(true);
 			}
 			if (std::find(start, finish, "ttrss:read") != finish) {
+				x->set_unread_nowrite(false);
+				x->set_override_unread(true);
+			}
+			if (std::find(start, finish, "newsblur:unread") != finish) {
+				x->set_unread_nowrite(true);
+				x->set_override_unread(true);
+			}
+			if (std::find(start, finish, "newsblur:read") != finish) {
 				x->set_unread_nowrite(false);
 				x->set_override_unread(true);
 			}
@@ -433,6 +445,15 @@ void rss_parser::fetch_ttrss(const std::string& feed_id) {
 		is_valid = true;
 	}
 	LOG(LOG_DEBUG, "rss_parser::fetch_ttrss: f.items.size = %u", f.items.size());
+}
+
+void rss_parser::fetch_newsblur(const std::string& feed_id) {
+	newsblur_api * napi = dynamic_cast<newsblur_api *>(api);
+	if (napi) {
+		f = napi->fetch_feed(feed_id);
+		is_valid = true;
+	}
+	LOG(LOG_INFO, "rss_parser::fetch_newsblur: f.items.size = %u", f.items.size());
 }
 
 }
