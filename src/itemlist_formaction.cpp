@@ -699,6 +699,10 @@ void itemlist_formaction::prepare() {
 			}
 		}
 
+		if (it->first->unread()) {
+			tmp_itemlist_format = utils::strprintf("<unread>%s</>", itemlist_format.c_str());
+		}
+
 		listfmt.add_line(fmt.do_format(tmp_itemlist_format, width), it->second);
 	}
 
