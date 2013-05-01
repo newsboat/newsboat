@@ -216,8 +216,8 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 		case OP_BOOKMARK:
 			if (automatic) {
 				qna_responses.clear();
-				qna_responses.push_back(item->title());
 				qna_responses.push_back(item->link());
+				qna_responses.push_back(item->title());
 				qna_responses.push_back(args->size() > 0 ? (*args)[0] : "");
 			} else {
 				this->start_bookmark_qna(item->title(), item->link(), "");
