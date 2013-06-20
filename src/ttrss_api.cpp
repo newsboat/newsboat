@@ -4,6 +4,10 @@
 #include <cstring>
 #include <algorithm>
 
+#include <wordexp.h>
+#include <unistd.h>
+#include <iostream>
+
 #include <markreadthread.h>
 
 namespace newsbeuter {
@@ -33,8 +37,48 @@ bool ttrss_api::authenticate() {
 
 std::string ttrss_api::retrieve_sid() {
 	std::map<std::string, std::string> args;
-	args["user"] = single ? "admin" : cfg->get_configvalue("ttrss-login");
-	args["password"] = cfg->get_configvalue("ttrss-password");
+	
+	std::string user = cfg->get_configvalue("ttrss-login");
+	bool flushed = false;
+	if (user == "") {
+                std::cout << std::endl; 
+                std::cout.flush();
+                flushed = true;
+                std::cout << "Username for Tiny Tiny RSS: ";
+                std::cin >> user;
+
+                if (user == "") {
+                    return "";
+                }
+    }
+                                                                                                             
+    std::string pass = cfg->get_configvalue("ttrss-password");
+    if (pass == "") {
+        wordexp_t exp; 
+        std::ifstream ifs;
+        wordexp(cfg->get_configvalue("ttrss-passwordfile").c_str(),&exp,0);
+        ifs.open(exp.we_wordv[0]);
+        wordfree(&exp);
+        if (!ifs) { 
+                        if(!flushed) {
+                            std::cout << std::endl;
+                            std::cout.flush();
+                        }
+            // Find a way to do this in C++ by removing cin echoing. 
+            pass = std::string( getpass("Password for Tiny Tiny RSS: ") ); 
+
+        } else {
+                ifs >> pass; 
+                if(pass == "") {
+                        return ""; 
+                }
+        }
+    }
+
+	args["user"] = single ? "admin" : user.c_str();
+	args["password"] = pass.c_str();
+	auth_info = utils::strprintf("%s:%s", user.c_str(), pass.c_str());
+	auth_info_ptr = auth_info.c_str();
 	struct json_object * content = run_op("login", args);
 
 	if (content == NULL)
