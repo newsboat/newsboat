@@ -242,6 +242,7 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 	std::map<std::string, std::string> args;
 	args["feed_id"] = id;
 	args["show_content"] = "1";
+	args["include_attachments"] = "1";
 	struct json_object * content = run_op("getHeadlines", args);
 
 	if (!content)
@@ -264,6 +265,7 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 		const char * content = json_object_get_string(json_object_object_get(item_obj, "content"));
 		time_t updated = (time_t)json_object_get_int(json_object_object_get(item_obj, "updated"));
 		bool unread = json_object_get_boolean(json_object_object_get(item_obj, "unread"));
+		struct json_object * attachments = json_object_object_get(item_obj, "attachments");
 
 		rsspp::item item;
 
@@ -275,6 +277,20 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 
 		if (content)
 			item.content_encoded = content;
+
+		if (attachments) {
+			struct array_list * attachments_list = json_object_get_array(attachments);
+			int attachments_size = array_list_length(attachments_list);
+			if (attachments_size > 0) {
+				struct json_object * attachment = (struct json_object *)array_list_get_idx(attachments_list, 0);
+				const char * content_url = json_object_get_string(json_object_object_get(attachment, "content_url"));
+				const char * content_type = json_object_get_string(json_object_object_get(attachment, "content_type"));
+				if (content_url)
+					item.enclosure_url = content_url;
+				if (content_type)
+					item.enclosure_type = content_type;
+			}
+		}
 
 		item.guid = utils::strprintf("%d", id);
 
