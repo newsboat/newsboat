@@ -1,0 +1,100 @@
+'\" t
+.\"     Title: podbeuter
+.\"    Author: Andreas Krennmair <ak@newsbeuter.org>
+.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
+.\"      Date: 08/27/2013
+.\"    Manual: \ \&
+.\"    Source: \ \&
+.\"  Language: English
+.\"
+.TH "PODBEUTER" "1" "08/27/2013" "\ \&" "\ \&"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+podbeuter \- a podcast download manage for text terminals
+.SH "SYNOPSIS"
+.sp
+\fIpodbeuter\fR [\-C configfile] [\-q queuefile] [\-a] [\-h]
+.SH "DESCRIPTION"
+.sp
+\fIpodbeuter\fR is a podcast manager for text terminals\&. It is a helper program to \fInewsbeuter\fR which queues podcast downloads into a file\&. These queued downloads can then be download with \fInewsbeuter\fR\&.
+.SH "OPTIONS"
+.PP
+\-h
+.RS 4
+Display help
+.RE
+.PP
+\-C configfile
+.RS 4
+Use an alternative configuration file
+.RE
+.PP
+\-q queuefile
+.RS 4
+Use an alternative queue file
+.RE
+.PP
+\-a
+.RS 4
+Start automatic download of all queued files on startup
+.RE
+.SH "PODCAST SUPPORT"
+.sp
+A podcast is a media file distributed over the internet using syndication feeds such as RSS, for later playback on portable players or computers\&. Newsbeuter contains support for downloading and saving podcasts\&. This support differs a bit from other podcast aggregators or "podcatchers" in how it is done\&.
+.sp
+Podcast content is transported in RSS feeds via special tags called "enclosures"\&. Newsbeuter recognizes these enclosures and stores the relevant information for every podcast item it finds in an RSS feed\&. Since version 2\&.0, it also recognizes and handles the Yahoo Media RSS extensions\&. What the user then can do is to add the podcast download URL to a download queue\&. Alternatively, newsbeuter can be configured to automatically do that\&. This queue is stored in the file $HOME/\&.newsbeuter/queue\&.
+.sp
+The user can then use the download manager "podbeuter" to download these files to a directory on the local filesystem\&. Podbeuter comes with the newsbeuter package, and features a look and feel very close to the one of newsbeuter\&. It also shares the same configuration file\&.
+.sp
+Podcasts that have been downloaded but haven\(cqt been played yet remain in the queue but are marked as downloaded\&. You can remove them by purging them from the queue with the \fIP\fR key\&. After you\(cqve played a file and close podbeuter, it will be removed from the queue\&. The downloaded file remains on the filesystem\&.
+.SH "CONFIGURATION COMMANDS"
+.PP
+\fIdownload\-path\fR (parameters: <path>; default value: \fI~/\fR)
+.RS 4
+Specifies the directory where podbeuter shall download the files to\&. Optionally, the placeholders "%n" (for the podcast feed\(cqs name) and "%h" (for the podcast feed\(cqs hostname) can be used to place downloads in a directory structure\&. (example: download\-path "~/Downloads/%h/%n")
+.RE
+.PP
+\fImax\-downloads\fR (parameters: <number>; default value: \fI1\fR)
+.RS 4
+Specifies the maximum number of parallel downloads when automatic download is enabled\&. (example: max\-downloads 3)
+.RE
+.PP
+\fIplayer\fR (parameters: <player command>; default value: \fI""\fR)
+.RS 4
+Specifies the player that shall be used for playback of downloaded files\&. (example: player "mp3blaster")
+.RE
+.SH "FILES"
+.sp
+\fI$HOME/\&.newsbeuter/config\fR
+.sp
+\fI$HOME/\&.newsbeuter/queue\fR
+.SH "SEE ALSO"
+.sp
+newsbeuter(1)\&. The documentation that comes with newsbeuter is a good source about the general use and configuration of newsbeuter\(cqs podcast support\&.
+.SH "AUTHORS"
+.sp
+Andreas Krennmair <ak@newsbeuter\&.org>, for contributors see AUTHORS file\&.
+.SH "AUTHOR"
+.PP
+\fBAndreas Krennmair\fR <\&ak@newsbeuter\&.org\&>
+.RS 4
+Author.
+.RE
