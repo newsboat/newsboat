@@ -1,6 +1,7 @@
 Changes for newsbeuter:
 
-2.7:
+2.7 (2013-08-27):
+	Various bugfixes.
 
 2.6 (2013-03-19):
 	Fixed crash in RSS parser (thanks to Isaac Good).
