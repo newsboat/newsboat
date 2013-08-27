@@ -1,7 +1,11 @@
 Changes for newsbeuter:
 
 2.7 (2013-08-27):
-	Various bugfixes.
+	Fix crash bug.
+	Add option to colorize unread messages (Patrick Steinhardt).
+	Add option to swap title and hints bar (Patrick Steinhardt).
+	Add %u and %t support to itemview (Giuliano Schneider).
+	Only force redraw if a form action is active (Patrick Steinhardt).
 
 2.6 (2013-03-19):
 	Fixed crash in RSS parser (thanks to Isaac Good).
