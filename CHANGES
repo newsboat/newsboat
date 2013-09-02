@@ -1,5 +1,7 @@
 Changes for newsbeuter:
 
+2.8:
+
 2.7 (2013-08-27):
 	Fix crash bug.
 	Add option to colorize unread messages (Patrick Steinhardt).
