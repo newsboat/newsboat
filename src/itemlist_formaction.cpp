@@ -174,8 +174,8 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					if (itempos < visible_items.size()) {
 						if (automatic) {
 							qna_responses.clear();
-							qna_responses.push_back(visible_items[itempos].first->title());
 							qna_responses.push_back(visible_items[itempos].first->link());
+							qna_responses.push_back(visible_items[itempos].first->title());
 							qna_responses.push_back(args->size() > 0 ? (*args)[0] : "");
 							this->finished_qna(OP_INT_BM_END);
 						} else {

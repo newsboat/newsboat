@@ -107,6 +107,7 @@ configcontainer::configcontainer()
 	config_data["external-url-viewer"] = configdata("", configdata::STR);
 	config_data["ttrss-login"] = configdata("", configdata::STR);
 	config_data["ttrss-password"] = configdata("", configdata::STR);
+	config_data["ttrss-passwordfile"] = configdata("", configdata::PATH);
 	config_data["ttrss-url"] = configdata("", configdata::STR);
 	config_data["ttrss-mode"] = configdata("multi", "single", "multi", NULL); // enum
 	config_data["ttrss-flag-star"] = configdata("", configdata::STR);
