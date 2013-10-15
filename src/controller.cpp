@@ -434,10 +434,6 @@ void controller::run(int argc, char * argv[]) {
 	} else if (type == "opml") {
 		urlcfg = new opml_urlreader(&cfg);
 		real_offline_mode = offline_mode;
-	} else if (type == "googlereader") {
-		api = new googlereader_api(&cfg);
-		urlcfg = new googlereader_urlreader(&cfg, url_file, api);
-		real_offline_mode = offline_mode;
 	} else if (type == "ttrss") {
 		api = new ttrss_api(&cfg);
 		urlcfg = new ttrss_urlreader(&cfg, url_file, api);
@@ -471,19 +467,6 @@ void controller::run(int argc, char * argv[]) {
 		urlcfg->reload();
 		if (!do_export && !silent) {
 			std::cout << _("done.") << std::endl;
-		}
-		if (api && type == "googlereader") { // ugly hack!
-			std::vector<google_replay_pair> actions = rsscache->get_google_replay();
-			if (!actions.empty()) {
-				std::cout << _("Updating Google Reader unread states...");
-				std::cout.flush();
-
-				std::vector<std::string> successful_guids = dynamic_cast<googlereader_api *>(api)->bulk_mark_articles_read(actions);
-
-				rsscache->delete_google_replay_by_guid(successful_guids);
-
-				std::cout << _("done.") << std::endl;
-			}
 		}
 	}
 
@@ -669,12 +652,7 @@ void controller::catchup_all() {
 void controller::mark_article_read(const std::string& guid, bool read) {
 	if (api) {
 		if (offline_mode) {
-			if (dynamic_cast<googlereader_api *>(api) != NULL) {
-				LOG(LOG_DEBUG, "controller::mark_article_read: recording %s", guid.c_str());
-				record_google_replay(guid, read);
-			} else {
-				LOG(LOG_DEBUG, "not on googlereader_api");
-			}
+			LOG(LOG_DEBUG, "not on googlereader_api");
 		} else {
 			api->mark_article_read(guid, read);
 		}
