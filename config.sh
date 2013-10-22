@@ -109,8 +109,8 @@ check_pkg "stfl" || fail "stfl"
 
 if [ `uname -s` = "Darwin" ]; then
 	check_custom "ncurses5.4" "ncurses5.4-config" || fail "ncurses5.4"
-else 
-	check_custom "ncursesw5" "ncursesw5-config" || fail "ncursesw5"
+elif [ `uname -s` != "OpenBSD" ]; then
+	check_custom "ncursesw5" "ncursesw5-config" ||  fail "ncursesw"
 fi
 check_ssl_implementation
 all_aboard_the_fail_boat
