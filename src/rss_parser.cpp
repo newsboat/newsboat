@@ -370,6 +370,8 @@ std::string rss_parser::get_guid(rsspp::item& item) {
 	 */
 	if (item.guid != "")
 		return item.guid;
+	else if (item.link != "" && item.pubDate != "")
+		return item.link + item.pubDate;
 	else if (item.link != "")
 		return item.link;
 	else if (item.title != "")
