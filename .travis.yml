@@ -1,5 +1,5 @@
 before_install:
-    - sudo apt-add-repository ppa:ondrej/php5-experimental
+    - sudo apt-add-repository -y ppa:ondrej/php5-experimental
     - sudo apt-get install -qq libsqlite3-dev libcurl4-openssl-dev libxml2-dev libstfl-dev libjson0-dev libncursesw5-dev bc
 language: cpp
 compiler:
