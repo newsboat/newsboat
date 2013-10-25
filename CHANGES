@@ -1,6 +1,9 @@
 Changes for newsbeuter:
 
 2.8:
+	Add bookmark script for getpocket.com support (Andreas Happe).
+	Fix issues with the build process on OpenBSD (Kyle Isom).
+	Make guid generation smarter (Jochen Sprickerhof).
 
 2.7 (2013-08-27):
 	Fix crash bug.
