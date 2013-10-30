@@ -1,8 +1,11 @@
 before_install:
-    - sudo apt-get install libsqlite3-dev libcurl4-openssl-dev libxml2-dev libstfl-dev libjson0-dev libncursesw5-dev bc
+    - sudo apt-add-repository -y ppa:ondrej/php5-experimental
+    - sudo apt-get update
+    - sudo apt-get install -qq libsqlite3-dev libcurl4-openssl-dev libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev bc
 language: cpp
 compiler:
     - gcc
+    - clang
 script: make
 after_script:
     - "make test && cd test && ./test"
