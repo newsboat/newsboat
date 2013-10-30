@@ -7,10 +7,10 @@
 
 namespace newsbeuter {
 
-class googlereader_api : public remote_api {
+class oldreader_api : public remote_api {
 	public:
-		googlereader_api(configcontainer * c);
-		virtual ~googlereader_api();
+		oldreader_api(configcontainer * c);
+		virtual ~oldreader_api();
 		virtual bool authenticate();
 		virtual std::vector<tagged_feedurl> get_subscribed_urls();
 		virtual void configure_handle(CURL * handle);
@@ -29,10 +29,10 @@ class googlereader_api : public remote_api {
 		std::string auth;
 };
 
-class googlereader_urlreader : public urlreader {
+class oldreader_urlreader : public urlreader {
 	public:
-		googlereader_urlreader(configcontainer * c, const std::string& url_file, remote_api * a);
-		virtual ~googlereader_urlreader();
+		oldreader_urlreader(configcontainer * c, const std::string& url_file, remote_api * a);
+		virtual ~oldreader_urlreader();
 		virtual void write_config();
 		virtual void reload();
 		virtual std::string get_source();

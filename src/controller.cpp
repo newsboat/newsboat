@@ -14,7 +14,7 @@
 #include <regexmanager.h>
 #include <rss_parser.h>
 #include <remote_api.h>
-#include <google_api.h>
+#include <oldreader_api.h>
 #include <ttrss_api.h>
 #include <xlicense.h>
 
@@ -434,6 +434,10 @@ void controller::run(int argc, char * argv[]) {
 	} else if (type == "opml") {
 		urlcfg = new opml_urlreader(&cfg);
 		real_offline_mode = offline_mode;
+	} else if (type == "oldreader") {
+		api = new oldreader_api(&cfg);
+		urlcfg = new oldreader_urlreader(&cfg, url_file, api);
+		real_offline_mode = offline_mode;
 	} else if (type == "ttrss") {
 		api = new ttrss_api(&cfg);
 		urlcfg = new ttrss_urlreader(&cfg, url_file, api);
@@ -477,8 +481,8 @@ void controller::run(int argc, char * argv[]) {
 			msg = utils::strprintf(_("Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."), url_file.c_str());
 		} else if (type == "opml") {
 			msg = utils::strprintf(_("It looks like the OPML feed you subscribed contains no feeds. Please fill it with feeds, and try again."));
-		} else if (type == "googlereader") {
-			msg = utils::strprintf(_("It looks like you haven't configured any feeds in your Google Reader account. Please do so, and try again."));
+		} else if (type == "oldreader") {
+			msg = utils::strprintf(_("It looks like you haven't configured any feeds in your The Old Reader account. Please do so, and try again."));
 		} else if (type == "ttrss") {
 			msg = utils::strprintf(_("It looks like you haven't configured any feeds in your Tiny Tiny RSS account. Please do so, and try again."));
 		} else {
@@ -997,7 +1001,7 @@ void controller::usage(char * argv0) {
 		{ 'C', _("<configfile>"), _("read configuration from <configfile>") },
 		{ 'X', "", _("clean up cache thoroughly") },
 		{ 'x', _("<command>..."), _("execute list of commands") },
-		{ 'o', "", _("activate offline mode (only applies to Google Reader synchronization mode)") },
+		{ 'o', "", _("activate offline mode (only applies to The Old Reader synchronization mode)") },
 		{ 'q', "", _("quiet startup") },
 		{ 'v', "", _("get version information") },
 		{ 'l', _("<loglevel>"), _("write a log with a certain loglevel (valid values: 1 to 6)") },
