@@ -118,11 +118,10 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 	curl_easy_setopt(easyhandle, CURLOPT_HEADERDATA, &hdrs);
 	curl_easy_setopt(easyhandle, CURLOPT_HEADERFUNCTION, handle_headers);
 
-	curl_easy_setopt(easyhandle, CURLOPT_TIMECONDITION, CURL_TIMECOND_IFMODSINCE);
-	if (lastmodified != 0)
+	if (lastmodified != 0) {
+		curl_easy_setopt(easyhandle, CURLOPT_TIMECONDITION, CURL_TIMECOND_IFMODSINCE);
 		curl_easy_setopt(easyhandle, CURLOPT_TIMEVALUE, lastmodified);
-	else
-		curl_easy_setopt(easyhandle, CURLOPT_TIMEVALUE, 0);
+	}
 
 	curl_slist * custom_headers = NULL;
 	if (etag.length() > 0) {
