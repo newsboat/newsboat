@@ -33,7 +33,6 @@ void oldreader_urlreader::reload() {
 		ADD_URL(BROADCAST_FRIENDS_URL, std::string("~") + _("People you follow"));
 		ADD_URL(STARRED_ITEMS_URL, std::string("~") + _("Starred items"));
 		ADD_URL(SHARED_ITEMS_URL, std::string("~") + _("Shared items"));
-		ADD_URL(POPULAR_ITEMS_URL, std::string("~") + _("Popular items"));
 	}
 
 	file_urlreader ur(file);
