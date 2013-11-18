@@ -153,7 +153,7 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 		const char * title = json_object_get_string(json_object_object_get(sub, "title"));
 		tags.push_back(std::string("~") + title);
 
-		urls.push_back(tagged_feedurl(utils::strprintf("%s%s", OLDREADER_FEED_PREFIX, id), tags));
+		urls.push_back(tagged_feedurl(utils::strprintf("%s%s?n=%u", OLDREADER_FEED_PREFIX, id, cfg->get_configvalue_as_int("oldreader-min-items")), tags));
 	}
 
 	json_object_put(reply);
