@@ -588,6 +588,7 @@ void itemlist_formaction::qna_start_search() {
 
 	{
 		scope_mutex lock(&search_dummy_feed->item_mutex);
+		search_dummy_feed->clear_items();
 		for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items.begin();it!=items.end();++it) {
 			search_dummy_feed->add_item(*it);
 		}
