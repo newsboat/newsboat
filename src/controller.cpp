@@ -582,10 +582,15 @@ void controller::run(int argc, char * argv[]) {
 		return;
 	}
 
+	// hand over the important objects to the view
+	v->set_config_container(&cfg);
+	v->set_keymap(&keys);
+	v->set_tags(tags);
+
 	if (execute_cmds) {
 		execute_commands(argv, optind);
 		utils::remove_fs_lock(lock_file);
-		return;	
+		return;
 	}
 
 	// if the user wants to refresh on startup via configuration file, then do so,
@@ -593,12 +598,6 @@ void controller::run(int argc, char * argv[]) {
 	if (!refresh_on_start && cfg.get_configvalue_as_bool("refresh-on-startup")) {
 		refresh_on_start = true;
 	}
-
-	// hand over the important objects to the view
-	v->set_config_container(&cfg);
-	v->set_keymap(&keys);
-	v->set_tags(tags);
-
 
 	formaction::load_histories(searchfile, cmdlinefile);
 
