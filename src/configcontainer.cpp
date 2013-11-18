@@ -64,7 +64,7 @@ configcontainer::configcontainer()
 	config_data["notify-program"]  = configdata("", configdata::PATH);
 	config_data["notify-format"]   = configdata(_("newsbeuter: finished reload, %f unread feeds (%n unread articles total)"), configdata::STR);
 	config_data["datetime-format"] = configdata("%b %d", configdata::STR);
-	config_data["urls-source"]     = configdata("local", "local", "opml", "oldreader", "ttrss", NULL); // enum
+	config_data["urls-source"]     = configdata("local", "local", "opml", "oldreader", "ttrss", "newsblur", NULL); // enum
 	config_data["bookmark-cmd"]    = configdata("", configdata::STR);
 	config_data["opml-url"]        = configdata("", configdata::STR, true);
 	config_data["html-renderer"]   = configdata("internal", configdata::PATH);
@@ -112,6 +112,10 @@ configcontainer::configcontainer()
 	config_data["ttrss-mode"] = configdata("multi", "single", "multi", NULL); // enum
 	config_data["ttrss-flag-star"] = configdata("", configdata::STR);
 	config_data["ttrss-flag-publish"] = configdata("", configdata::STR);
+	config_data["newsblur-login"] = configdata("", configdata::STR);
+	config_data["newsblur-password"] = configdata("", configdata::STR);
+	config_data["newsblur-url"] = configdata("https://newsblur.com", configdata::STR);
+	config_data["newsblur-min-items"] = configdata("20", configdata::INT);
 	config_data["delete-read-articles-on-quit"] = configdata("false", configdata::BOOL);
 	config_data["openbrowser-and-mark-jumps-to-next-unread"] = configdata("false", configdata::BOOL);
 	config_data["toggleitemread-jumps-to-next-unread"] = configdata("false", configdata::BOOL);

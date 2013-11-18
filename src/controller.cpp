@@ -16,6 +16,7 @@
 #include <remote_api.h>
 #include <oldreader_api.h>
 #include <ttrss_api.h>
+#include <newsblur_api.h>
 #include <xlicense.h>
 
 #include <cstdlib>
@@ -442,6 +443,10 @@ void controller::run(int argc, char * argv[]) {
 		api = new ttrss_api(&cfg);
 		urlcfg = new ttrss_urlreader(&cfg, url_file, api);
 		real_offline_mode = offline_mode;
+	} else if (type == "newsblur") {
+		api = new newsblur_api(&cfg);
+		urlcfg = new newsblur_urlreader(&cfg, url_file, api);
+		real_offline_mode = offline_mode;
 	} else {
 		LOG(LOG_ERROR,"unknown urls-source `%s'", urlcfg->get_source().c_str());
 	}
@@ -485,6 +490,8 @@ void controller::run(int argc, char * argv[]) {
 			msg = utils::strprintf(_("It looks like you haven't configured any feeds in your The Old Reader account. Please do so, and try again."));
 		} else if (type == "ttrss") {
 			msg = utils::strprintf(_("It looks like you haven't configured any feeds in your Tiny Tiny RSS account. Please do so, and try again."));
+		} else if (type == "newsblur") {
+			msg = utils::strprintf(_("It looks like you haven't configured any feeds in your NewsBlur account. Please do so, and try again."));
 		} else {
 			assert(0); // shouldn't happen
 		}

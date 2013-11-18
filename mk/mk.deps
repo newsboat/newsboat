@@ -101,3 +101,5 @@ src/interpreter.o: include/interpreter.h
 src/rss_parser.o: include/rss_parser.h include/configcontainer.h include/cache.h include/rss.h
 
 src/ttrss_api.o: include/ttrss_api.h
+
+src/newsblur_api.o: include/newsblur_api.h
