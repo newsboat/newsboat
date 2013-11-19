@@ -12,8 +12,7 @@ void Parser::SynErr(int n) {
 	errDist = 0;
 }
 
-void Parser::SemErr(wchar_t* msg) {
-	msg = msg;
+void Parser::SemErr(const wchar_t* msg) {
 	if (errDist >= minErrDist) errors->Error();
 	errDist = 0;
 }
@@ -63,79 +62,79 @@ bool Parser::WeakSeparator(int n, int syFol, int repFol) {
 }
 
 void Parser::stringlit(char* &lit) {
-		if (la->kind == 4) {
+		if (la->kind == _stringliteral) {
 			Get();
-		} else if (la->kind == 5) {
+		} else if (la->kind == _numliteral) {
 			Get();
-		} else if (la->kind == 6) {
+		} else if (la->kind == _rangeliteral) {
 			Get();
 		} else SynErr(22);
 		lit = coco_string_create_char(t->val); 
 }
 
 void Parser::matchattrib(char* &name) {
-		Expect(3);
+		Expect(_ident);
 		name = coco_string_create_char(t->val); 
 }
 
 void Parser::matchop(int &op) {
 		switch (la->kind) {
-		case 7: {
+		case 7 /* "==" */: {
 			Get();
 			op = MATCHOP_EQ; 
 			break;
 		}
-		case 8: {
+		case 8 /* "=" */: {
 			Get();
 			op = MATCHOP_EQ; 
 			break;
 		}
-		case 9: {
+		case 9 /* "!=" */: {
 			Get();
 			op = MATCHOP_NE; 
 			break;
 		}
-		case 10: {
+		case 10 /* "=~" */: {
 			Get();
 			op = MATCHOP_RXEQ; 
 			break;
 		}
-		case 11: {
+		case 11 /* "!~" */: {
 			Get();
 			op = MATCHOP_RXNE; 
 			break;
 		}
-		case 12: {
+		case 12 /* "<" */: {
 			Get();
 			op = MATCHOP_LT; 
 			break;
 		}
-		case 13: {
+		case 13 /* ">" */: {
 			Get();
 			op = MATCHOP_GT; 
 			break;
 		}
-		case 14: {
+		case 14 /* "<=" */: {
 			Get();
 			op = MATCHOP_LE; 
 			break;
 		}
-		case 15: {
+		case 15 /* ">=" */: {
 			Get();
 			op = MATCHOP_GE; 
 			break;
 		}
-		case 16: {
+		case 16 /* "#" */: {
 			Get();
 			op = MATCHOP_CONTAINS; 
 			break;
 		}
-		case 17: {
+		case 17 /* "!#" */: {
 			Get();
 			op = MATCHOP_CONTAINSNOT; 
 			break;
 		}
-		case 18: {
+		case 18 /* "between" */: {
 			Get();
 			op = MATCHOP_BETWEEN; 
 			break;
@@ -145,10 +144,10 @@ void Parser::matchop(int &op) {
 }
 
 void Parser::logop(int &lop) {
-		if (la->kind == 19) {
+		if (la->kind == 19 /* "and" */) {
 			Get();
 			lop = LOGOP_AND; 
-		} else if (la->kind == 20) {
+		} else if (la->kind == 20 /* "or" */) {
 			Get();
 			lop = LOGOP_OR; 
 		} else SynErr(24);
@@ -163,26 +162,26 @@ void Parser::matchexpr() {
 }
 
 void Parser::blockexpr() {
-		Expect(1);
+		Expect(_openblock);
 		gen->open_block(); 
 		expr();
-		Expect(2);
+		Expect(_closeblock);
 		gen->close_block(); 
 }
 
 void Parser::expr() {
 		int lop; 
-		if (la->kind == 3) {
+		if (la->kind == _ident) {
 			matchexpr();
-		} else if (la->kind == 1) {
+		} else if (la->kind == _openblock) {
 			blockexpr();
 		} else SynErr(25);
-		while (la->kind == 19 || la->kind == 20) {
+		while (la->kind == 19 /* "and" */ || la->kind == 20 /* "or" */) {
 			logop(lop);
 			gen->add_logop(lop); 
-			if (la->kind == 3) {
+			if (la->kind == _ident) {
 				matchexpr();
-			} else if (la->kind == 1) {
+			} else if (la->kind == _openblock) {
 				blockexpr();
 			} else SynErr(26);
 		}
@@ -194,19 +193,110 @@ void Parser::Filter() {
 
 
 
+
+// If the user declared a method Init and a mehtod Destroy they should
+// be called in the contructur and the destructor respctively.
+//
+// The following templates are used to recognize if the user declared
+// the methods Init and Destroy.
+
+template<typename T>
+struct ParserInitExistsRecognizer {
+	template<typename U, void (U::*)() = &U::Init>
+	struct ExistsIfInitIsDefinedMarker{};
+
+	struct InitIsMissingType {
+		char dummy1;
+	};
+	
+	struct InitExistsType {
+		char dummy1; char dummy2;
+	};
+
+	// exists always
+	template<typename U>
+	static InitIsMissingType is_here(...);
+
+	// exist only if ExistsIfInitIsDefinedMarker is defined
+	template<typename U>
+	static InitExistsType is_here(ExistsIfInitIsDefinedMarker<U>*);
+
+	enum { InitExists = (sizeof(is_here<T>(NULL)) == sizeof(InitExistsType)) };
+};
+
+template<typename T>
+struct ParserDestroyExistsRecognizer {
+	template<typename U, void (U::*)() = &U::Destroy>
+	struct ExistsIfDestroyIsDefinedMarker{};
+
+	struct DestroyIsMissingType {
+		char dummy1;
+	};
+	
+	struct DestroyExistsType {
+		char dummy1; char dummy2;
+	};
+
+	// exists always
+	template<typename U>
+	static DestroyIsMissingType is_here(...);
+
+	// exist only if ExistsIfDestroyIsDefinedMarker is defined
+	template<typename U>
+	static DestroyExistsType is_here(ExistsIfDestroyIsDefinedMarker<U>*);
+
+	enum { DestroyExists = (sizeof(is_here<T>(NULL)) == sizeof(DestroyExistsType)) };
+};
+
+// The folloing templates are used to call the Init and Destroy methods if they exist.
+
+// Generic case of the ParserInitCaller, gets used if the Init method is missing
+template<typename T, bool = ParserInitExistsRecognizer<T>::InitExists>
+struct ParserInitCaller {
+	static void CallInit(T *t) {
+		// nothing to do
+	}
+};
+
+// True case of the ParserInitCaller, gets used if the Init method exists
+template<typename T>
+struct ParserInitCaller<T, true> {
+	static void CallInit(T *t) {
+		t->Init();
+	}
+};
+
+// Generic case of the ParserDestroyCaller, gets used if the Destroy method is missing
+template<typename T, bool = ParserDestroyExistsRecognizer<T>::DestroyExists>
+struct ParserDestroyCaller {
+	static void CallDestroy(T *t) {
+		// nothing to do
+	}
+};
+
+// True case of the ParserDestroyCaller, gets used if the Destroy method exists
+template<typename T>
+struct ParserDestroyCaller<T, true> {
+	static void CallDestroy(T *t) {
+		t->Destroy();
+	}
+};
+
 void Parser::Parse() {
 	t = NULL;
 	la = dummyToken = new Token();
 	la->val = coco_string_create(L"Dummy Token");
 	Get();
 	Filter();
-
 	Expect(0);
 }
 
 Parser::Parser(Scanner *scanner) {
 	maxT = 21;
 
+	ParserInitCaller<Parser>::CallInit(this);
+	dummyToken = NULL;
+	t = la = NULL;
 	minErrDist = 2;
 	errDist = minErrDist;
 	this->scanner = scanner;
@@ -227,6 +317,7 @@ bool Parser::StartOf(int s) {
 }
 
 Parser::~Parser() {
+	ParserDestroyCaller<Parser>::CallDestroy(this);
 	delete errors;
 	delete dummyToken;
 }
@@ -280,7 +371,6 @@ void Errors::SynErr(int n) {
 }
 
 void Errors::Error() {
-	count++;
 }
 
 void Errors::Warning() {
@@ -288,6 +378,5 @@ void Errors::Warning() {
 
 void Errors::Exception() {
 }
-
 
 

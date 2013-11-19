@@ -1,7 +1,7 @@
 #include "logger.h"
 #include "FilterParser.h"
 #include "Parser.h"
-#include <sstream>
+#include <utils.h>
 
 using namespace newsbeuter;
 
@@ -86,8 +86,7 @@ bool FilterParser::parse_string(const std::string& str) {
 	cleanup();
 	strexpr = str;
 
-	std::istringstream is(str);
-	Scanner s(is);
+	Scanner s((const unsigned char *)str.c_str(), str.length());
 	Parser p(&s);
 	p.gen = this;
 	p.Parse();

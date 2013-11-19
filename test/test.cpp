@@ -334,7 +334,7 @@ struct testmatchable : public matchable {
 void TestIssue94Crash() {
 	FilterParser fp;
 
-	lemon.ok(fp.parse_string("title =¯ \"foo\""), utils::wstr2str(fp.get_error()).c_str());
+	lemon.not_ok(fp.parse_string("title =¯ \"foo\""), "parse expression with invalid character in operator - must not crash.");
 }
 
 void TestFilterLanguage() {

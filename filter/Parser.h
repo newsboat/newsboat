@@ -35,7 +35,7 @@ private:
 		_ident=3,
 		_stringliteral=4,
 		_numliteral=5,
-		_rangeliteral=6,
+		_rangeliteral=6
 	};
 	int maxT;
 
@@ -63,7 +63,7 @@ FilterParser * gen;
 
 	Parser(Scanner *scanner);
 	~Parser();
-	void SemErr(wchar_t* msg);
+	void SemErr(const wchar_t* msg);
 
 	void stringlit(char* &lit);
 	void matchattrib(char* &name);
@@ -80,5 +80,5 @@ FilterParser * gen;
 
 
 
-#endif // !defined(COCO_PARSER_H__)
+#endif
 

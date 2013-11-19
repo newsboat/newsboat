@@ -9,38 +9,48 @@
 #include <string.h>
 #include <wchar.h>
 
+// io.h and fcntl are used to ensure binary read from streams on windows
+#if _MSC_VER >= 1300
+#include <io.h>
+#include <fcntl.h>
+#endif
+
 #if _MSC_VER >= 1400
 #define coco_swprintf swprintf_s
 #elif _MSC_VER >= 1300
 #define coco_swprintf _snwprintf
-#elif defined __GNUC__
+#elif defined __MINGW32__
+#define coco_swprintf _snwprintf
+#else
+// assume every other compiler knows swprintf
 #define coco_swprintf swprintf
-#else 
-#error unknown compiler!
-#endif 
-
-#include <iostream>
-#include <fstream>
+#endif
 
 #define COCO_WCHAR_MAX 65535
-#define MAX_BUFFER_LENGTH (64*1024)
-#define HEAP_BLOCK_SIZE (64*1024)
+#define COCO_MIN_BUFFER_LENGTH 1024
+#define COCO_MAX_BUFFER_LENGTH (64*COCO_MIN_BUFFER_LENGTH)
+#define COCO_HEAP_BLOCK_SIZE (64*1024)
+#define COCO_CPP_NAMESPACE_SEPARATOR L':'
+
+
 
 // string handling, wide character
 wchar_t* coco_string_create(const wchar_t *value);
-wchar_t* coco_string_create(const wchar_t *value , int startIndex, int length);
-wchar_t* coco_string_create_upper(wchar_t* data);
-wchar_t* coco_string_create_lower(wchar_t* data);
+wchar_t* coco_string_create(const wchar_t *value, int startIndex);
+wchar_t* coco_string_create(const wchar_t *value, int startIndex, int length);
+wchar_t* coco_string_create_upper(const wchar_t* data);
+wchar_t* coco_string_create_lower(const wchar_t* data);
+wchar_t* coco_string_create_lower(const wchar_t* data, int startIndex, int dataLen);
 wchar_t* coco_string_create_append(const wchar_t* data1, const wchar_t* data2);
 wchar_t* coco_string_create_append(const wchar_t* data, const wchar_t value);
 void  coco_string_delete(wchar_t* &data);
 int   coco_string_length(const wchar_t* data);
-bool  coco_string_endswith(wchar_t* data, wchar_t *value);
-int   coco_string_indexof(wchar_t* data, wchar_t value);
-int   coco_string_lastindexof(wchar_t* data, wchar_t value);
-void  coco_string_merge(wchar_t* &data, wchar_t* value);
-bool  coco_string_equal(wchar_t* data1, wchar_t* data2);
-int   coco_string_compareto(wchar_t* data1, wchar_t* data2);
+bool  coco_string_endswith(const wchar_t* data, const wchar_t *value);
+int   coco_string_indexof(const wchar_t* data, const wchar_t value);
+int   coco_string_lastindexof(const wchar_t* data, const wchar_t value);
+void  coco_string_merge(wchar_t* &data, const wchar_t* value);
+bool  coco_string_equal(const wchar_t* data1, const wchar_t* data2);
+int   coco_string_compareto(const wchar_t* data1, const wchar_t* data2);
 int   coco_string_hash(const wchar_t* data);
 
 // string handling, ascii character
@@ -49,13 +59,12 @@ char* coco_string_create_char(const wchar_t *value);
 void  coco_string_delete(char* &data);
 
 
-
-
 class Token  
 {
 public:
 	int kind;     // token kind
-	int pos;      // token position in the source text (starting at 0)
+	int pos;      // token position in bytes in the source text (starting at 0)
+	int charPos;  // token position in characters in the source text (starting at 0)
 	int col;      // token column (starting at 1)
 	int line;     // token line (starting at 1)
 	wchar_t* val; // token value
@@ -63,30 +72,39 @@ public:
 
 	Token();
 	~Token();
-
 };
 
 class Buffer {
+// This Buffer supports the following cases:
+// 1) seekable stream (file)
+//    a) whole stream in buffer
+//    b) part of stream in buffer
+// 2) non seekable stream (network, console)
 private:
-	char *buf;          // input buffer
+	unsigned char *buf; // input buffer
+	int bufCapacity;    // capacity of buf
 	int bufStart;       // position of first byte in buffer relative to input stream
 	int bufLen;         // length of buffer
-	int fileLen;        // length of input stream
-	int pos;            // current position in buffer
-	std::istream* stream;      // input stream (seekable)
+	int fileLen;        // length of input stream (may change if the stream is no file)
+	int bufPos;         // current position in buffer
+	FILE* stream;       // input stream (seekable)
 	bool isUserStream;  // was the stream opened by the user?
+	
+	int ReadNextStreamChunk();
+	bool CanSeek();     // true if stream can be seeked otherwise false
 	
 public:
 	static const int EoF = COCO_WCHAR_MAX + 1;
 
-	Buffer(std::istream* s, bool isUserStream);
+	Buffer(FILE* s, bool isUserStream);
+	Buffer(const unsigned char* buf, int len);
 	Buffer(Buffer *b);
 	virtual ~Buffer();
 	
 	virtual void Close();
 	virtual int Read();
 	virtual int Peek();
-	virtual char* GetString(int beg, int end);
+	virtual wchar_t* GetString(int beg, int end);
 	virtual int GetPos();
 	virtual void SetPos(int value);
 };
@@ -98,7 +116,7 @@ public:
 };
 
 //-----------------------------------------------------------------------------------
-// StartStates  -- maps charactes to start states of tokens
+// StartStates  -- maps characters to start states of tokens
 //-----------------------------------------------------------------------------------
 class StartStates {
 private:
@@ -127,12 +145,12 @@ public:
 
 	void set(int key, int val) {
 		Elem *e = new Elem(key, val);
-		int k = key % 128;
+		int k = ((unsigned int) key) % 128;
 		e->next = tab[k]; tab[k] = e;
 	}
 
 	int state(int key) {
-		Elem *e = tab[key % 128];
+		Elem *e = tab[((unsigned int) key) % 128];
 		while (e != NULL && e->key != key) e = e->next;
 		return e == NULL ? 0 : e->val;
 	}
@@ -174,7 +192,7 @@ public:
 		e->next = tab[k]; tab[k] = e;
 	}
 
-	int get(wchar_t *key, int defaultVal) {
+	int get(const wchar_t *key, int defaultVal) {
 		Elem *e = tab[coco_string_hash(key) % 128];
 		while (e != NULL && !coco_string_equal(e->key, key)) e = e->next;
 		return e == NULL ? defaultVal : e->val;
@@ -188,7 +206,7 @@ private:
 	void *heapTop;
 	void **heapEnd;
 
-	char EOL;
+	unsigned char EOL;
 	int eofSym;
 	int noSym;
 	int maxT;
@@ -207,6 +225,7 @@ private:
 	int ch;           // current input character
 
 	int pos;          // byte position of current character
+	int charPos;      // position by unicode characters starting with 0
 	int line;         // line number of current character
 	int col;          // column number of current character
 	int oldEols;      // EOLs that appeared in a comment;
@@ -214,6 +233,7 @@ private:
 	void CreateHeapBlock();
 	Token* CreateToken();
 	void AppendVal(Token *t);
+	void SetScannerBehindT();
 
 	void Init();
 	void NextCh();
@@ -224,8 +244,9 @@ private:
 public:
 	Buffer *buffer;   // scanner buffer
 	
+	Scanner(const unsigned char* buf, int len);
 	Scanner(const wchar_t* fileName);
-	Scanner(std::istream& s);
+	Scanner(FILE* s);
 	~Scanner();
 	Token* Scan();
 	Token* Peek();
@@ -235,5 +256,5 @@ public:
 
 
 
-#endif // !defined(COCO_SCANNER_H__)
+#endif
 
