@@ -29,7 +29,7 @@ newsbeuter can be compiled.
 - GNU gettext (on systems that don't provide gettext in the libc): ftp://ftp.gnu.org/gnu/gettext/
 - pkg-config: http://pkg-config.freedesktop.org/wiki/
 - libxml2: http://xmlsoft.org/downloads.html
-- json-c: http://oss.metaparadigm.com/json-c/
+- json-c (version 0.11 or newer): https://github.com/json-c/json-c/wiki
 
 Debian unstable comes with ready-to-use packages for these dependencies.
 
