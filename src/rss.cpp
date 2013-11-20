@@ -113,7 +113,7 @@ void rss_item::set_unread(bool u) {
 
 std::string rss_item::pubDate() const {
 	char text[1024];
-	strftime(text,sizeof(text),"%a, %d %b %Y %T %z", localtime(&pubDate_)); 
+	strftime(text,sizeof(text), _("%a, %d %b %Y %T %z"), localtime(&pubDate_)); 
 	return std::string(text);
 }
 
