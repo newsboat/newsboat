@@ -6,6 +6,8 @@ Changes for newsbeuter:
 	Make guid generation smarter (Jochen Sprickerhof).
 	In the feed list, quitting now is the same as clearing the tag in case a tag is selected.
 	Add support for The Old Reader (theoldreader.com).
+	Add support for NewsBlur (Thomas Weißschuh).
+	Fix crash bug in filter expression parsing.
 
 2.7 (2013-08-27):
 	Fix crash bug.
