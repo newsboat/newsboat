@@ -492,64 +492,88 @@ Basically, the possibility of what can be realized with query feeds is only
 limited by what can be queried from articles and feeds with the filter language
 and by your creativity.
 
-
 Google Reader Support
 ~~~~~~~~~~~~~~~~~~~~~
 
-http://www.google.com/reader/[Google Reader] is Google's web-based feed 
-aggregator. Newsbeuter provides functionality to use Google Reader as its 
-backend: people can use Google Reader to manage their subscriptions, and in 
+Since version 2.2, newsbeuter contained support for Google Reader. After Google 
+Reader was discontinued by Google, Google Reader support was subsequently 
+removed from newsbeuter and replaced with support for alternatives such as The 
+Old Reader and NewsBlur.
+
+The Old Reader Support
+~~~~~~~~~~~~~~~~~~~~~
+
+http://theoldreader.com/[The Old Reader] is a successor to Google Reader.
+Newsbeuter provides functionality to use The Old Reader as its 
+backend: people can use The Old Reader to manage their subscriptions, and in 
 addition, use newsbeuter to download and read articles. Newsbeuter will keep 
-the information which articles have already been read synchronized with Google 
+the information which articles have already been read synchronized with The Old 
 Reader, so that users usually won't see articles more than once. In addition, it 
-will only ever download unread articles from Google Reader.
+will only ever download unread articles from The Old Reader.
 
-In order to use Google Reader support, you first need to configure the proper URL source:
+In order to use The Old Reader support, you first need to configure the proper URL source:
 
-	urls-source "googlereader"
+	urls-source "oldreader"
 
-In addition, newsbeuter needs to know your Google Reader username and password 
-so that it can authenticate with Google Reader:
+In addition, newsbeuter needs to know your The Old Reader username and password 
+so that it can authenticate with The Old Reader:
 
-	googlereader-login "your-googlereader-account"
-	googlereader-password "your-password"
+	oldreader-login "your-oldreader-account"
+	oldreader-password "your-password"
 
 After setting these configuration values, you can start newsbeuter, it will 
-authenticate with Google Reader and download your subscription list. If you use 
-"folders" in Google Reader to organize your feeds, newsbeuter will regard them 
+authenticate with The Old Reader and download your subscription list. If you use 
+"folders" in The Old Reader to organize your feeds, newsbeuter will regard them 
 and make them available via its "tags" capability: each feed is tagged with the 
 name of the folder in which it resides.
 
 When you mark single items or complete feeds as read, newsbeuter will 
-synchronize this information directly to Google Reader. This, of course, 
+synchronize this information directly to The Old Reader. This, of course, 
 includes opening articles. Toggling read articles back to "unread" is also 
-communicated to Google Reader.
+communicated to The Old Reader.
 
-In addition, Google Reader provides the ability to "star" and to "share"
+In addition, The Old Reader provides the ability to "star" and to "share"
 articles. Starred articles are basically bookmarks, while shared articles are
-shown to people that follow your Google Reader account. Newsbeuter allows the
+shown to people that follow your The Old Reader account. Newsbeuter allows the
 use of this feature by mapping its powerful "flags" to the "star"/"unstar"
 resp. "share"/"unshare" operations.
 
 In order to use this mapping, all you need to do is to configure the flags
 that shall be used:
 
-	googlereader-flag-share "a"
-	googlereader-flag-star "b"
+	oldreader-flag-share "a"
+	oldreader-flag-star "b"
 
 After that, use these flags when you edit flags for an article, and these
 articles will be starred resp. shared.
 
-By default, newsbeuter also shows Google Reader "special feeds":
+By default, newsbeuter also shows The Old Reader "special feeds":
 - People you follow: articles shared by people that you follow.
 - Starred items: articles that you starred.
 - Shared items: articles that you shared.
-- Popular items: articles that are considered to be popular by Google's algorithms.
 
 You can disable these feeds by setting the following configuration variable:
 
-	googlereader-show-special-feeds no
+	oldreader-show-special-feeds no
 
+NewsBlur Support
+~~~~~~~~~~~~~~~~
+
+Newsbeuter also supports NewsBlur, another alternative to Google Reader. 
+Configuration basically works the same as with The Old Reader.
+
+First, set your urls-source:
+
+	urls-source "newsblur"
+
+Then, configure your NewsBlur credentials:
+
+	newsblur-login "your-newsblur-account"
+	newsblur-password "your-password"
+
+When you start newsbeuter, it will download the feeds that you configured
+in NewsBlur. Please take a closer look at the configuration commands for what 
+you can configure in newsbeuter regarding NewsBlur.
 
 Bloglines Synchronization
 ~~~~~~~~~~~~~~~~~~~~~~~~~
