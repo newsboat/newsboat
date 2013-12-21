@@ -431,6 +431,8 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			save_filterpos();
 			break;
 		case OP_SORT: {
+				/// This string is related to the letters in parentheses in the
+				/// "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..." messages
 				std::string input_options = _("dtfalg");
 				char c = v->confirm(_("Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"), input_options);
 				if (!c) break;
