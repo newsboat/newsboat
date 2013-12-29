@@ -13,7 +13,7 @@ namespace newsbeuter {
 newsblur_api::newsblur_api(configcontainer * c) : remote_api(c) {
 	auth_info = utils::strprintf("username=%s&password=%s", cfg->get_configvalue("newsblur-login").c_str(), cfg->get_configvalue("newsblur-password").c_str());
 	api_location = cfg->get_configvalue("newsblur-url");
-	min_pages = (cfg->get_configvalue_as_int("min-items") + (NEWSBLUR_ITEMS_PER_PAGE + 1)) / NEWSBLUR_ITEMS_PER_PAGE;
+	min_pages = (cfg->get_configvalue_as_int("newsblur-min-items") + (NEWSBLUR_ITEMS_PER_PAGE + 1)) / NEWSBLUR_ITEMS_PER_PAGE;
 
 	if(cfg->get_configvalue("cookie-cache").empty()) {
 		LOG(LOG_CRITICAL, "newsblur_api::newsblur_api: No cookie-cache has been configured the login won't work.");
