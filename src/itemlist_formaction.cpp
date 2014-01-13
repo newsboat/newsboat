@@ -431,39 +431,45 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			save_filterpos();
 			break;
 		case OP_SORT: {
-				char c = v->confirm(_("Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"), _("dtfalg"));
+				/// This string is related to the letters in parentheses in the
+				/// "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..." messages
+				std::string input_options = _("dtfalg");
+				char c = v->confirm(_("Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"), input_options);
 				if (!c) break;
-				std::string result(1, c);
-				if (result == _("d")) {
+				unsigned int n_options = ((std::string) "dtfalg").length();
+				if (input_options.length() < n_options) break;
+				if (c == input_options.at(0)) {
 					v->get_cfg()->set_configvalue("article-sort-order", "date-asc");
-				} else if (result == _("t")) {
+				} else if (c == input_options.at(1)) {
 					v->get_cfg()->set_configvalue("article-sort-order", "title-asc");
-				} else if (result == _("f")) {
+				} else if (c == input_options.at(2)) {
 					v->get_cfg()->set_configvalue("article-sort-order", "flags-asc");
-				} else if (result == _("a")) {
+				} else if (c == input_options.at(3)) {
 					v->get_cfg()->set_configvalue("article-sort-order", "author-asc");
-				} else if (result == _("l")) {
+				} else if (c == input_options.at(4)) {
 					v->get_cfg()->set_configvalue("article-sort-order", "link-asc");
-				} else if (result == _("g")) {
+				} else if (c == input_options.at(5)) {
 					v->get_cfg()->set_configvalue("article-sort-order", "guid-asc");
 				}
 			}
 			break;
 		case OP_REVSORT: {
-				char c = v->confirm(_("Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"), _("dtfalg"));
+				std::string input_options = _("dtfalg");
+				char c = v->confirm(_("Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"), input_options);
 				if (!c) break;
-				std::string result(1, c);
-				if (result == _("d")) {
+				unsigned int n_options = ((std::string) "dtfalg").length();
+				if (input_options.length() < n_options) break;
+				if (c == input_options.at(0)) {
 					v->get_cfg()->set_configvalue("article-sort-order", "date-desc");
-				} else if (result == _("t")) {
+				} else if (c == input_options.at(1)) {
 					v->get_cfg()->set_configvalue("article-sort-order", "title-desc");
-				} else if (result == _("f")) {
+				} else if (c == input_options.at(2)) {
 					v->get_cfg()->set_configvalue("article-sort-order", "flags-desc");
-				} else if (result == _("a")) {
+				} else if (c == input_options.at(3)) {
 					v->get_cfg()->set_configvalue("article-sort-order", "author-desc");
-				} else if (result == _("l")) {
+				} else if (c == input_options.at(4)) {
 					v->get_cfg()->set_configvalue("article-sort-order", "link-desc");
-				} else if (result == _("g")) {
+				} else if (c == input_options.at(5)) {
 					v->get_cfg()->set_configvalue("article-sort-order", "guid-desc");
 				}
 			}

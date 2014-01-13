@@ -118,35 +118,41 @@ REDO:
 			v->get_ctrl()->reload_urls_file();
 			break;
 		case OP_SORT: {
-				char c = v->confirm(_("Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)one?"), _("ftaun"));
+				/// This string is related to the letters in parentheses in the
+				/// "Sort by (f)irsttag/..." and "Reverse Sort by (f)irsttag/..." messages
+				std::string input_options = _("ftaun");
+				char c = v->confirm(_("Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)one?"), input_options);
 				if (!c) break;
-				std::string result(1, c);
-				if (result == _("f")) {
+				unsigned int n_options = ((std::string) "ftaun").length();
+				if (input_options.length() < n_options) break;
+				if (c == input_options.at(0)) {
 					v->get_cfg()->set_configvalue("feed-sort-order", "firsttag-desc");
-				} else if (result == _("t")) {
+				} else if (c == input_options.at(1)) {
 					v->get_cfg()->set_configvalue("feed-sort-order", "title-desc");
-				} else if (result == _("a")) {
+				} else if (c == input_options.at(2)) {
 					v->get_cfg()->set_configvalue("feed-sort-order", "articlecount-desc");
-				} else if (result == _("u")) {
+				} else if (c == input_options.at(3)) {
 					v->get_cfg()->set_configvalue("feed-sort-order", "unreadarticlecount-desc");
-				} else if (result == _("n")) {
+				} else if (c == input_options.at(4)) {
 					v->get_cfg()->set_configvalue("feed-sort-order", "none-desc");
 				}
 			}
 			break;
 		case OP_REVSORT: {
-				char c = v->confirm(_("Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)one?"), _("ftaun"));
+				std::string input_options = _("ftaun");
+				char c = v->confirm(_("Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)one?"), input_options);
 				if (!c) break;
-				std::string result(1, c);
-				if (result == _("f")) {
+				unsigned int n_options = ((std::string) "ftaun").length();
+				if (input_options.length() < n_options) break;
+				if (c == input_options.at(0)) {
 					v->get_cfg()->set_configvalue("feed-sort-order", "firsttag-asc");
-				} else if (result == _("t")) {
+				} else if (c == input_options.at(1)) {
 					v->get_cfg()->set_configvalue("feed-sort-order", "title-asc");
-				} else if (result == _("a")) {
+				} else if (c == input_options.at(2)) {
 					v->get_cfg()->set_configvalue("feed-sort-order", "articlecount-asc");
-				} else if (result == _("u")) {
+				} else if (c == input_options.at(3)) {
 					v->get_cfg()->set_configvalue("feed-sort-order", "unreadarticlecount-asc");
-				} else if (result == _("n")) {
+				} else if (c == input_options.at(4)) {
 					v->get_cfg()->set_configvalue("feed-sort-order", "none-asc");
 				}
 			}
