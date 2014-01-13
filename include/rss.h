@@ -235,6 +235,7 @@ namespace newsbeuter {
 			unsigned int idx;
 			unsigned int order;
 			dl_status status_;
+			mutex items_guid_map_mutex;
 	};
 
 	class rss_ignores : public config_action_handler {

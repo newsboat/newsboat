@@ -3,7 +3,7 @@
 use strict;
 use File::Basename;
 
-if (length(@ARGV) < 1) {
+if (scalar(@ARGV) < 1) {
   print STDOUT "usage: $0 <stflfile> [<extension>]\n";
   exit(1);
 }

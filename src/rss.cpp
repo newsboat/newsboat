@@ -215,12 +215,17 @@ std::tr1::shared_ptr<rss_item> rss_feed::get_item_by_guid(const std::string& gui
 }
 
 std::tr1::shared_ptr<rss_item> rss_feed::get_item_by_guid_unlocked(const std::string& guid) {
-	std::tr1::unordered_map<std::string, std::tr1::shared_ptr<rss_item> >::const_iterator it;
-	if ((it = items_guid_map.find(guid)) != items_guid_map.end()) {
-		return it->second;
+	LOG(LOG_DEBUG, "get_item_by_guid_unlocked: guid = %s", guid.c_str());
+	{
+		scope_mutex lock(&items_guid_map_mutex);
+		std::tr1::unordered_map<std::string, std::tr1::shared_ptr<rss_item> >::const_iterator it;
+		if ((it = items_guid_map.find(guid)) != items_guid_map.end()) {
+			return it->second;
+		}
+		LOG(LOG_DEBUG, "rss_feed::get_item_by_guid_unlocked: hit dummy item!");
+		LOG(LOG_DEBUG, "rss_feed::get_item_by_guid_unlocked: items_guid_map.size = %d", items_guid_map.size());
 	}
-	LOG(LOG_DEBUG, "rss_feed::get_item_by_guid_unlocked: hit dummy item!");
-	// abort();
+	abort();
 	return std::tr1::shared_ptr<rss_item>(new rss_item(ch)); // should never happen!
 }
 
@@ -439,16 +444,19 @@ void rss_feed::update_items(std::vector<std::tr1::shared_ptr<rss_feed> > feeds) 
 	matcher m(query);
 
 	items_.clear();
-	items_guid_map.clear();
+	{
+		scope_mutex lock(&items_guid_map_mutex);
+		items_guid_map.clear();
 
-	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it) {
-		if ((*it)->rssurl().substr(0,6) != "query:") { // don't fetch items from other query feeds!
-			for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator jt=(*it)->items().begin();jt!=(*it)->items().end();++jt) {
-				if (m.matches(jt->get())) {
-					LOG(LOG_DEBUG, "rss_feed::update_items: matcher matches!");
-					(*jt)->set_feedptr(*it);
-					items_.push_back(*jt);
-					items_guid_map[(*jt)->guid()] = *jt;
+		for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it) {
+			if ((*it)->rssurl().substr(0,6) != "query:") { // don't fetch items from other query feeds!
+				for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator jt=(*it)->items().begin();jt!=(*it)->items().end();++jt) {
+					if (m.matches(jt->get())) {
+						LOG(LOG_DEBUG, "rss_feed::update_items: matcher matches!");
+						(*jt)->set_feedptr(*it);
+						items_.push_back(*jt);
+						items_guid_map[(*jt)->guid()] = *jt;
+					}
 				}
 			}
 		}
@@ -577,7 +585,10 @@ void rss_feed::purge_deleted_items() {
 	std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items_.begin();
 	while (it!=items_.end()) {
 		if ((*it)->deleted()) {
-			items_guid_map.erase((*it)->guid());
+			{
+				scope_mutex lock2(&items_guid_map_mutex);
+				items_guid_map.erase((*it)->guid());
+			}
 			items_.erase(it);
 			it = items_.begin(); // items_ modified -> iterator invalidated
 		} else {
@@ -618,6 +629,5 @@ void rss_feed::load() {
 	scope_mutex lock(&item_mutex);
 	ch->fetch_descriptions(this);
 }
-
 
 }

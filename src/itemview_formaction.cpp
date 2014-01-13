@@ -61,6 +61,7 @@ void itemview_formaction::prepare() {
 				render_width -= 5; 	
 		}
 
+		LOG(LOG_DEBUG, "itemview_formaction::prepare: guid = %s", guid.c_str());
 		std::tr1::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
 		listformatter listfmt;
 

@@ -16,7 +16,10 @@ class itemview_formaction : public formaction {
 		virtual ~itemview_formaction();
 		virtual void prepare();
 		virtual void init();
-		inline void set_guid(const std::string& guid_) { guid = guid_; }
+		inline void set_guid(const std::string& guid_) { 
+			LOG(LOG_DEBUG, "itemview_formaction::set_guid: new guid = %s", guid_.c_str()); 
+			guid = guid_; 
+		}
 		inline void set_feed(std::tr1::shared_ptr<rss_feed> fd) { feed = fd; }
 		void set_highlightphrase(const std::string& text);
 		keymap_hint_entry * get_keymap_hint();
