@@ -1404,12 +1404,6 @@ void controller::save_feed(std::tr1::shared_ptr<rss_feed> feed, unsigned int pos
 		rsscache->internalize_rssfeed(feed, ignore_disp ? &ign : NULL);
 		LOG(LOG_DEBUG, "controller::save_feed: after internalize_rssfeed");
 		feed->set_tags(urlcfg->get_tags(feed->rssurl()));
-		{
-			unsigned int order = feeds[pos]->get_order();
-			scope_mutex itemlock(&feeds[pos]->item_mutex);
-			feeds[pos]->clear_items();
-			feed->set_order(order);
-		}
 		feeds[pos] = feed;
 		v->notify_itemlist_change(feeds[pos]);
 	} else {
