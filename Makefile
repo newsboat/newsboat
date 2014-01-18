@@ -6,7 +6,7 @@ localedir?=$(datadir)/locale
 docdir?=$(datadir)/doc/$(PACKAGE)
 
 # compiler
-CXX=c++
+CXX?=c++
 
 # compiler and linker flags
 DEFINES=-DLOCALEDIR=\"$(localedir)\"
