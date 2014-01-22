@@ -6,7 +6,7 @@ check_pkg() {
 	pkgname=$1
 	add_define=$2
 	atleast_version=$3
-	echo -n "Checking for package ${pkgname}... "
+	printf "Checking for package ${pkgname}... "
 	if pkg-config --silence-errors "${pkgname}" ; then
 		echo "found"
 		if [ -n "$atleast_version" ] ; then
@@ -36,7 +36,7 @@ check_custom() {
 	pkgname=$1
 	customconfig=$2
 	add_define=$3
-	echo -n "Checking for package ${pkgname} using ${customconfig}... "
+	printf "Checking for package ${pkgname} using ${customconfig}... "
 	if ${customconfig} --cflags > /dev/null 2>&1 ; then
 		echo "found"
 		echo "# configuration for package ${pkgname}" >> config.mk
