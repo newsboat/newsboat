@@ -516,10 +516,10 @@ std::string view::run_filebrowser(const std::string& default_filename, const std
 
 std::string view::select_tag(const std::vector<std::string>& tags) {
 	std::tr1::shared_ptr<select_formaction> selecttag(new select_formaction(this, selecttag_str));
+	selecttag->set_type(select_formaction::SELECTTAG);
 	set_bindings(selecttag);
 	apply_colors(selecttag);
 	selecttag->set_parent_formaction(get_current_formaction());
-	selecttag->set_type(select_formaction::SELECTTAG);
 	selecttag->set_tags(tags);
 	run_modal(selecttag, "");
 	return selecttag->get_selected_value();
@@ -527,10 +527,10 @@ std::string view::select_tag(const std::vector<std::string>& tags) {
 
 std::string view::select_filter(const std::vector<filter_name_expr_pair>& filters) {
 	std::tr1::shared_ptr<select_formaction> selecttag(new select_formaction(this, selecttag_str));
+	selecttag->set_type(select_formaction::SELECTFILTER);
 	set_bindings(selecttag);
 	apply_colors(selecttag);
 	selecttag->set_parent_formaction(get_current_formaction());
-	selecttag->set_type(select_formaction::SELECTFILTER);
 	selecttag->set_filters(filters);
 	run_modal(selecttag, "");
 	return selecttag->get_selected_value();

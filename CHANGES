@@ -1,6 +1,7 @@
 Changes for newsbeuter:
 
 2.9:
+	Fix custom keybindings in tag and filter selection dialogs (fixes #78).
 
 2.8 (2014-01-19):
 	Add bookmark script for getpocket.com support (Andreas Happe).
