@@ -20,9 +20,9 @@ Tuitest.keypress("r"[0])
 Tuitest.keypress(10)
 Tuitest.keypress(10)
 
-Tuitest.wait_until_expected_text(0, 24, " 'HTML Item 1'                                          ", 5000)
+Tuitest.wait_until_expected_text(0, 24, " 'HTML Item 1' (2 unread, 3 total)                      ", 5000)
 # begin auto-generated verification #1 
-verifier.expect(0, 24, " 'HTML Item 1'                                          ")
+verifier.expect(0, 24, " 'HTML Item 1' (2 unread, 3 total)                      ")
 verifier.expect(1, 0, "Feed: HTML rendering testbed feed")
 verifier.expect(2, 0, "Title: HTML Item 1          ")
 verifier.expect(3, 0, "Author: Andreas Krennmair")
