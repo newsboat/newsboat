@@ -519,12 +519,16 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						break;
 
 					case TAG_TH:
+						if (!tables.empty()) {
+							curline.append("</>");
+						}
+
 						add_nonempty_line(curline, tables, lines);
 						prepare_newline(curline, 0); // no indent in tables
 
-						if (!tables.empty())
-							curline.append("</>");
+						if (!tables.empty()) {
 							tables.back().complete_cell();
+						}
 						break;
 
 					case TAG_TD:
@@ -800,6 +804,7 @@ void htmlrenderer::render_table(const Table& table, std::vector<std::string>& li
 				line += vsep;
 			for(size_t cell=0; cell < table.rows[row].cells.size(); cell++) {
 				size_t cell_width = 0;
+				LOG(LOG_DEBUG, "row = %d cell = %d text = %s", row, cell, table.rows[row].cells[cell].text[idx].c_str());
 				if (idx < table.rows[row].cells[cell].text.size()) {
 					cell_width = utils::strwidth_stfl(table.rows[row].cells[cell].text[idx]);
 					line += table.rows[row].cells[cell].text[idx];
@@ -809,6 +814,7 @@ void htmlrenderer::render_table(const Table& table, std::vector<std::string>& li
 					for(size_t ic=cell+1; ic < cell + table.rows[row].cells[cell].span; ++ic)
 						reference_width += cell_widths[ic]+1;
 				}
+				LOG(LOG_DEBUG, "cell_width = %d reference_width = %d", cell_width, reference_width);
 				if (cell_width < reference_width) // pad, if necessary
 					line += std::string(reference_width - cell_width, ' ');
 
