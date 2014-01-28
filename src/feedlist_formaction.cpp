@@ -263,21 +263,18 @@ REDO:
 			do_redraw = true;
 			zero_feedpos = true;
 			break;
-		case OP_SETTAG: 
-			if (tags.size() > 0) {
+		case OP_SETTAG: {
 				std::string newtag;
 				if (automatic && args->size() > 0) {
 					newtag = (*args)[0];
 				} else {
-					newtag = v->select_tag(tags);
+					newtag = v->select_tag();
 				}
 				if (newtag != "") {
 					tag = newtag;
 					do_redraw = true;
 					zero_feedpos = true;
 				}
-			} else {
-				v->show_error(_("No tags defined."));
 			}
 			break;
 		case OP_SELECTFILTER:

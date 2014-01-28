@@ -91,6 +91,7 @@ void select_formaction::prepare() {
 		switch (type) {
 		case SELECTTAG:
 			for (std::vector<std::string>::const_iterator it=tags.begin();it!=tags.end();++it,++i) {
+				LOG(LOG_DEBUG, "select_formaction::prepare: tag = %s", it->c_str());
 				std::string tagstr = utils::strprintf("%4u  %s (%u)", i+1, it->c_str(), v->get_ctrl()->get_feed_count_per_tag(*it));
 				listfmt.add_line(tagstr, i);
 			}

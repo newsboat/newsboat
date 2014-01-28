@@ -1244,6 +1244,8 @@ void controller::reload_urls_file() {
 		}
 	}
 
+	v->set_tags(urlcfg->get_alltags());
+
 	{
 		scope_mutex feedslock(&feeds_mutex);
 		feeds = new_feeds;

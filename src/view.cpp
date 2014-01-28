@@ -514,7 +514,11 @@ std::string view::run_filebrowser(const std::string& default_filename, const std
 	return run_modal(filebrowser, "filenametext");
 }
 
-std::string view::select_tag(const std::vector<std::string>& tags) {
+std::string view::select_tag() {
+	if (tags.size() == 0) {
+		show_error(_("No tags defined."));
+		return "";
+	}
 	std::tr1::shared_ptr<select_formaction> selecttag(new select_formaction(this, selecttag_str));
 	selecttag->set_type(select_formaction::SELECTTAG);
 	set_bindings(selecttag);
