@@ -187,7 +187,7 @@ std::string rss_feed::title() const {
 	bool found_title = false;
 	std::string alt_title;
 	for (std::vector<std::string>::const_iterator it=tags_.begin();it!=tags_.end();++it) {
-		if (it->substr(0,1) == "~" || it->substr(0,1) == "!") {
+		if (it->substr(0,1) == "~") {
 			found_title = true;
 			alt_title = it->substr(1, it->length()-1);
 			break;
