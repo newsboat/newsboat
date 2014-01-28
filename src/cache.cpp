@@ -439,17 +439,21 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, rss_ignores
 		(*it)->set_feedptr(feed);
 		(*it)->set_feedurl(feed->rssurl());
 
-		if (ign && ign->matches(it->get())) {
-			feed->erase_item(it);
-			// since we modified the vector, we need to reset the iterator
-			// to the beginning of the vector, and then fast-forward to
-			// the next element.
-			it = feed->items().begin();
-      --i;
-			for (int j=0;j<int(i);j++) {
-				++it;
+		try {
+			if (ign && ign->matches(it->get())) {
+				feed->erase_item(it);
+				// since we modified the vector, we need to reset the iterator
+				// to the beginning of the vector, and then fast-forward to
+				// the next element.
+				it = feed->items().begin();
+		  --i;
+				for (int j=0;j<int(i);j++) {
+					++it;
+				}
+				continue;
 			}
-			continue;
+		} catch(const matcherexception& ex) {
+			LOG(LOG_DEBUG, "oops, matcher exception: %s", ex.what());
 		}
 	}
 	
