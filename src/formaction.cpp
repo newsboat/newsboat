@@ -366,12 +366,13 @@ void formaction::start_next_question() {
 	 * If there is one more prompt to be presented to the user, set it up.
 	 */
 	if (qna_prompts.size() > 0) {
+		//LOG(LOG_DEBUG, "formaction::start_next_question: qna_prompts[0].first = %s qna_prompts[0].second = %s", qna_prompts[0].first.c_str(), qna_prompts[0].second.c_str());
 		std::string replacestr("{hbox[lastline] .expand:0 {label .expand:0 text:");
 		replacestr.append(stfl::quote(qna_prompts[0].first));
 		replacestr.append("}{input[qnainput] on_ESC:cancel-qna on_UP:qna-prev-history on_DOWN:qna-next-history on_ENTER:end-question modal:1 .expand:h @bind_home:** @bind_end:** text[qna_value]:");
 		replacestr.append(stfl::quote(qna_prompts[0].second));
-		replacestr.append(" pos[qna_value_pos]:");
-		replacestr.append(utils::to_string<unsigned int>(qna_prompts[0].second.length()));
+		replacestr.append(" pos[qna_value_pos]:0");
+		//replacestr.append(utils::to_string<unsigned int>(qna_prompts[0].second.length()));
 		replacestr.append("}}");
 		qna_prompts.erase(qna_prompts.begin());
 		f->modify("lastline", "replace", replacestr);
