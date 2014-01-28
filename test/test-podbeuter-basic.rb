@@ -35,9 +35,10 @@ verifier.expect(7, 0, "D       pb-delete               Mark download as deleted"
 verifier.expect(8, 0, "P       pb-purge                Purge finished and deleted downloads from queue")
 verifier.expect(9, 0, "a       pb-toggle-download-all  Toggle automatic download on/off")
 verifier.expect(10, 0, "p       pb-play                 Start player with currently selected download")
-verifier.expect(11, 0, "+       pb-increase-max-dls     Increase the number of concurrent downloads")
-verifier.expect(12, 0, "-       pb-decreate-max-dls     Decrease the number of concurrent downloads")
-verifier.expect(13, 0, "~")
+verifier.expect(11, 0, "m       pb-mark-as-finished     Mark file as finished (not played)")
+verifier.expect(12, 0, "+       pb-increase-max-dls     Increase the number of concurrent downloads")
+verifier.expect(13, 0, "-       pb-decreate-max-dls     Decrease the number of concurrent downloads")
+verifier.expect(14, 0, "~")
 # end auto-generated verification #2 
 
 Tuitest.keypress("q"[0])
