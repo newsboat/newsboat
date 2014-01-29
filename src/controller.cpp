@@ -15,6 +15,7 @@
 #include <rss_parser.h>
 #include <remote_api.h>
 #include <oldreader_api.h>
+#include <feedhq_api.h>
 #include <ttrss_api.h>
 #include <newsblur_api.h>
 #include <xlicense.h>
@@ -446,6 +447,10 @@ void controller::run(int argc, char * argv[]) {
 	} else if (type == "newsblur") {
 		api = new newsblur_api(&cfg);
 		urlcfg = new newsblur_urlreader(&cfg, url_file, api);
+		real_offline_mode = offline_mode;
+	} else if (type == "feedhq") {
+		api = new feedhq_api(&cfg);
+		urlcfg = new feedhq_urlreader(&cfg, url_file, api);
 		real_offline_mode = offline_mode;
 	} else {
 		LOG(LOG_ERROR,"unknown urls-source `%s'", urlcfg->get_source().c_str());

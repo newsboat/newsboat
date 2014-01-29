@@ -498,7 +498,7 @@ Google Reader Support
 Since version 2.2, newsbeuter contained support for Google Reader. After Google 
 Reader was discontinued by Google, Google Reader support was subsequently 
 removed from newsbeuter and replaced with support for alternatives such as The 
-Old Reader and NewsBlur.
+Old Reader, NewsBlur and FeedHQ.
 
 The Old Reader Support
 ~~~~~~~~~~~~~~~~~~~~~
@@ -574,6 +574,25 @@ Then, configure your NewsBlur credentials:
 When you start newsbeuter, it will download the feeds that you configured
 in NewsBlur. Please take a closer look at the configuration commands for what 
 you can configure in newsbeuter regarding NewsBlur.
+
+FeedHQ Support
+~~~~~~~~~~~~~~
+
+Newsbeuter also supports FeedHQ, another alternative to Google Reader. 
+Configuration basically works the same as with The Old Reader.
+
+First, set your urls-source:
+
+	urls-source "feedhq"
+
+Then, configure your FeedHQ credentials:
+
+	feedhq-login "your-feedhq-account"
+	feedhq-password "your-password"
+
+When you start newsbeuter, it will download the feeds that you configured
+in FeedHQ. Please take a closer look at the configuration commands for what 
+you can configure in newsbeuter regarding FeedHQ.
 
 Bloglines Synchronization
 ~~~~~~~~~~~~~~~~~~~~~~~~~

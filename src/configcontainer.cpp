@@ -64,7 +64,7 @@ configcontainer::configcontainer()
 	config_data["notify-program"]  = configdata("", configdata::PATH);
 	config_data["notify-format"]   = configdata(_("newsbeuter: finished reload, %f unread feeds (%n unread articles total)"), configdata::STR);
 	config_data["datetime-format"] = configdata("%b %d", configdata::STR);
-	config_data["urls-source"]     = configdata("local", "local", "opml", "oldreader", "ttrss", "newsblur", NULL); // enum
+	config_data["urls-source"]     = configdata("local", "local", "opml", "oldreader", "ttrss", "newsblur", "feedhq", NULL); // enum
 	config_data["bookmark-cmd"]    = configdata("", configdata::STR);
 	config_data["opml-url"]        = configdata("", configdata::STR, true);
 	config_data["html-renderer"]   = configdata("internal", configdata::PATH);
@@ -100,6 +100,13 @@ configcontainer::configcontainer()
 	config_data["oldreader-flag-star"] = configdata("", configdata::STR);
 	config_data["oldreader-show-special-feeds"] = configdata("true", configdata::BOOL);
 	config_data["oldreader-min-items"] = configdata("20", configdata::INT);
+	config_data["feedhq-login"] = configdata("", configdata::STR);
+	config_data["feedhq-password"] = configdata("", configdata::STR);
+	config_data["feedhq-passwordfile"] = configdata("", configdata::PATH);
+	config_data["feedhq-flag-share"] = configdata("", configdata::STR);
+	config_data["feedhq-flag-star"] = configdata("", configdata::STR);
+	config_data["feedhq-show-special-feeds"] = configdata("true", configdata::BOOL);
+	config_data["feedhq-min-items"] = configdata("20", configdata::INT);
 	config_data["ignore-mode"] = configdata("download", "download", "display", NULL); // enum
 	config_data["max-download-speed"] = configdata("0", configdata::INT);
 	config_data["cookie-cache"] = configdata("", configdata::STR);
