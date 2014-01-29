@@ -278,6 +278,9 @@ void configcontainer::dump_config(std::vector<std::string>& config_output) {
 		case configdata::PATH:
 			if (it->second.multi_option) {
 				std::vector<std::string> tokens = utils::tokenize(it->second.value, " ");
+				if (tokens.size() == 0) {
+					goto ignore_entry;
+				}
 				for (std::vector<std::string>::iterator it=tokens.begin();it!=tokens.end();++it) {
 					configline.append(utils::quote(*it) + " ");
 				}
@@ -296,6 +299,7 @@ void configcontainer::dump_config(std::vector<std::string>& config_output) {
 			break;
 		}
 		config_output.push_back(configline);
+ignore_entry: ;
 	}
 }
 

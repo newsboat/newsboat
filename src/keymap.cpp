@@ -244,7 +244,7 @@ void keymap::dump_config(std::vector<std::string>& config_output) {
 		for (std::map<std::string,operation>::iterator it = x.begin();it!=x.end();++it) {
 			if (it->second < OP_INT_MIN) {
 				std::string configline = "bind-key ";
-				configline.append(it->first);
+				configline.append(utils::quote(it->first));
 				configline.append(" ");
 				configline.append(getopname(it->second));
 				configline.append(" ");
