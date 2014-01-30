@@ -359,11 +359,19 @@ void cache::externalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, bool reset_
 		std::string updatequery = prepare_query("UPDATE rss_feed SET title = '%q', url = '%q', is_rtl = %u WHERE rssurl = '%q';",
 			feed->title_raw().c_str(),feed->link().c_str(), feed->is_rtl() ? 1 : 0, feed->rssurl().c_str());
 		rc = sqlite3_exec(db,updatequery.c_str(),NULL,NULL,NULL);
+		if (rc != SQLITE_OK) {
+			LOG(LOG_CRITICAL,"query \"%s\" failed: error = %d", updatequery.c_str(), rc);
+			throw dbexception(db);
+		}
 		LOG(LOG_DEBUG,"ran SQL statement: %s", updatequery.c_str());
 	} else {
 		std::string insertquery = prepare_query("INSERT INTO rss_feed (rssurl, url, title, is_rtl) VALUES ( '%q', '%q', '%q', %u );", 
 			feed->rssurl().c_str(), feed->link().c_str(), feed->title_raw().c_str(), feed->is_rtl() ? 1 : 0);
 		rc = sqlite3_exec(db,insertquery.c_str(),NULL,NULL,NULL);
+		if (rc != SQLITE_OK) {
+			LOG(LOG_CRITICAL,"query \"%s\" failed: error = %d", insertquery.c_str(), rc);
+			throw dbexception(db);
+		}
 		LOG(LOG_DEBUG,"ran SQL statement: %s", insertquery.c_str());
 	}
 	
