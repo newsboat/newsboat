@@ -302,6 +302,7 @@ void configcontainer::dump_config(std::vector<std::string>& config_output) {
 			// skip entry, generate no output
 			continue;
 		case configdata::INVALID:
+		default:
 			assert(0);
 			break;
 		}
