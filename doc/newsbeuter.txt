@@ -4,10 +4,10 @@ Andreas Krennmair <ak@newsbeuter.org>
 
 Introduction
 ------------
-Newsbeuter is an RSS feedreader. RSS is a number of widely-used XML formats to
-transmit, publish and syndicate articles, for example news or blog articles.
-Newsbeuter is designed to be used on text terminals on Unix or Unix-like
-systems such as Linux, FreeBSD or Mac OS X. 
+Newsbeuter is an RSS/Atom feedreader. RSS and Atom are a number of widely-used 
+XML formats to transmit, publish and syndicate articles, for example news or 
+blog articles.  Newsbeuter is designed to be used on text terminals on Unix or 
+Unix-like systems such as Linux, FreeBSD or Mac OS X.
 
 Platforms
 ~~~~~~~~~
