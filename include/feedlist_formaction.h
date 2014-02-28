@@ -67,7 +67,6 @@ class feedlist_formaction : public formaction {
 
 		bool zero_feedpos;
 		unsigned int feeds_shown;
-		bool auto_open;
 		bool quit;
 		std::vector<feedptr_pos_pair> visible_feeds;
 		std::string tag;

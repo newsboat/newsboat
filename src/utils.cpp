@@ -420,7 +420,6 @@ std::string utils::run_program(char * argv[], const std::string& input) {
 				execvp(argv[0], argv);
 				exit(1);
 			}
-			break;
 		default: {
 				close(ipipe[0]); close(opipe[1]);
 				write(ipipe[1], input.c_str(), input.length());

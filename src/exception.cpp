@@ -25,8 +25,6 @@ const char * matcherexception::what() const throw() {
 		case INVALID_REGEX:
 			errmsg = utils::strprintf(_("regular expression '%s' is invalid: %s"), addinfo.c_str(), addinfo2.c_str());
 			break;
-		default:
-			errmsg = "";
 	}
 	return errmsg.c_str();
 }

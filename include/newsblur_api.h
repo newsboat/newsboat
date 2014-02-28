@@ -28,7 +28,6 @@ class newsblur_api : public remote_api {
 		json_object * query_api(const std::string& url, const std::string* postdata);
 		std::string auth_info;
 		std::string api_location;
-		char * cookie_cache;
 		feedmap known_feeds;
 		unsigned int min_pages;
 };
@@ -36,13 +35,12 @@ class newsblur_api : public remote_api {
 
 class newsblur_urlreader : public urlreader {
 	public:
-		newsblur_urlreader(configcontainer * c, const std::string& url_file, remote_api * a);
+		newsblur_urlreader(const std::string& url_file, remote_api * a);
 		virtual ~newsblur_urlreader();
 		virtual void write_config();
 		virtual void reload();
 		virtual std::string get_source();
 	private:
-		configcontainer * cfg;
 		std::string file;
 		remote_api * api;
 };

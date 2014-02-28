@@ -442,11 +442,11 @@ void controller::run(int argc, char * argv[]) {
 		real_offline_mode = offline_mode;
 	} else if (type == "ttrss") {
 		api = new ttrss_api(&cfg);
-		urlcfg = new ttrss_urlreader(&cfg, url_file, api);
+		urlcfg = new ttrss_urlreader(url_file, api);
 		real_offline_mode = offline_mode;
 	} else if (type == "newsblur") {
 		api = new newsblur_api(&cfg);
-		urlcfg = new newsblur_urlreader(&cfg, url_file, api);
+		urlcfg = new newsblur_urlreader(url_file, api);
 		real_offline_mode = offline_mode;
 	} else if (type == "feedhq") {
 		api = new feedhq_api(&cfg);

@@ -32,7 +32,6 @@ namespace newsbeuter {
 			bool matchop_between(expression * e, matchable * item);
 
 			FilterParser p;
-			bool success;
 			std::string errmsg;
 			std::string exp;
 	};

@@ -3,7 +3,7 @@
 
 namespace newsbeuter {
 
-newsblur_urlreader::newsblur_urlreader(configcontainer * c, const std::string& url_file, remote_api * a) : cfg(c), file(url_file), api(a) { }
+newsblur_urlreader::newsblur_urlreader(const std::string& url_file, remote_api * a) : file(url_file), api(a) { }
 
 newsblur_urlreader::~newsblur_urlreader() { }
 

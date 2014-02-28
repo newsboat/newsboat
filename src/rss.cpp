@@ -226,7 +226,6 @@ std::tr1::shared_ptr<rss_item> rss_feed::get_item_by_guid_unlocked(const std::st
 		LOG(LOG_DEBUG, "rss_feed::get_item_by_guid_unlocked: items_guid_map.size = %d", items_guid_map.size());
 	}
 	abort();
-	return std::tr1::shared_ptr<rss_item>(new rss_item(ch)); // should never happen!
 }
 
 bool rss_item::has_attribute(const std::string& attribname) {
@@ -614,7 +613,6 @@ std::string rss_feed::get_status() {
 		case TO_BE_DOWNLOADED: return "_";
 		case DURING_DOWNLOAD: return ".";
 		case DL_ERROR: return "x";
-		default: return "?";
 	}
 }
 

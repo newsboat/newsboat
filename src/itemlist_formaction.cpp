@@ -830,34 +830,23 @@ bool itemlist_formaction::jump_to_previous_item(bool start_with_last) {
 	int itempos;
 	std::istringstream is(f->get("itempos"));
 	is >> itempos;
-	for (int i=(start_with_last?itempos:(itempos-1));i>=0;--i) {
+
+	int i=(start_with_last?itempos:(itempos-1));
+	if (i>=0) {
 		LOG(LOG_DEBUG, "itemlist_formaction::jump_to_previous_item: visible_items[%u]", i);
-		f->set("itempos", utils::to_string<unsigned int>(i));
-		return true;
-	}
-	return false; // not sure if we should exit here or continue
-	// wrap to last item
-	for (int i=visible_items.size()-1;i>=itempos;--i) {
-		f->set("itempos", utils::to_string<unsigned int>(i));
+		f->set("itempos", utils::to_string<int>(i));
 		return true;
 	}
 	return false;
-
 }
 
 bool itemlist_formaction::jump_to_next_item(bool start_with_first) {
-	unsigned int itempos;
+	int itempos;
 	std::istringstream is(f->get("itempos"));
 	is >> itempos;
 	LOG(LOG_DEBUG, "itemlist_formaction::jump_to_next_item: itempos = %u visible_items.size = %u", itempos, visible_items.size());
-	for (unsigned int i=(start_with_first?itempos:(itempos+1));i<visible_items.size();++i) {
-		LOG(LOG_DEBUG, "itemlist_formaction::jump_to_next_item: i = %u", i);
-		f->set("itempos", utils::to_string<unsigned int>(i));
-		return true;
-	}
-	return false; // not sure if we should exit here or continue
-	// wrap to first item
-	for (unsigned int i=0;i<=itempos;++i) {
+	unsigned int i=(start_with_first?itempos:(itempos+1));
+	if (i<visible_items.size()) {
 		LOG(LOG_DEBUG, "itemlist_formaction::jump_to_next_item: i = %u", i);
 		f->set("itempos", utils::to_string<unsigned int>(i));
 		return true;

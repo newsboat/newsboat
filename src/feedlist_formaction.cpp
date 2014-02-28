@@ -24,7 +24,7 @@ namespace newsbeuter {
 
 feedlist_formaction::feedlist_formaction(view * vv, std::string formstr) 
 	: formaction(vv,formstr), zero_feedpos(false), feeds_shown(0),
-		auto_open(false), quit(false), apply_filter(false), search_dummy_feed(new rss_feed(v->get_ctrl()->get_cache())),
+		quit(false), apply_filter(false), search_dummy_feed(new rss_feed(v->get_ctrl()->get_cache())),
 		filterpos(0), set_filterpos(false), rxman(0), old_width(0) {
 	assert(true==m.parse(FILTER_UNREAD_FEEDS));
 	valid_cmds.push_back("tag");
@@ -533,19 +533,12 @@ bool feedlist_formaction::jump_to_next_unread_feed(unsigned int& feedpos) {
 }
 
 bool feedlist_formaction::jump_to_previous_feed(unsigned int& feedpos) {
-	unsigned int curpos;
+	int curpos;
 	std::istringstream is(f->get("feedpos"));
 	is >> curpos;
 
-	for (int i=curpos-1;i>=0;--i) {
-		LOG(LOG_DEBUG, "feedlist_formaction::jump_to_previous_feed: visible_feeds[%u]", i);
-		f->set("feedpos", utils::to_string<unsigned int>(i));
-		feedpos = visible_feeds[i].second;
-		return true;
-	}
-	return false; // not sure if we should exit here or continue
-	// wrap to last feed
-	for (int i=visible_feeds.size()-1;i>=static_cast<int>(curpos);--i) {
+	if ((curpos-1) >= 0) {
+		int i = curpos-1;
 		LOG(LOG_DEBUG, "feedlist_formaction::jump_to_previous_feed: visible_feeds[%u]", i);
 		f->set("feedpos", utils::to_string<unsigned int>(i));
 		feedpos = visible_feeds[i].second;
@@ -559,15 +552,8 @@ bool feedlist_formaction::jump_to_next_feed(unsigned int& feedpos) {
 	std::istringstream is(f->get("feedpos"));
 	is >> curpos;
 
-	for (unsigned int i=curpos+1;i<visible_feeds.size();++i) {
-		LOG(LOG_DEBUG, "feedlist_formaction::jump_to_next_feed: visible_feeds[%u]", i);
-		f->set("feedpos", utils::to_string<unsigned int>(i));
-		feedpos = visible_feeds[i].second;
-		return true;
-	}
-	return false; // not sure if we should exit here or continue
-	// wrap to first feed
-	for (unsigned int i=0;i<=curpos;++i) {
+	if ((curpos+1)<visible_feeds.size()) {
+		unsigned int i = curpos+1;
 		LOG(LOG_DEBUG, "feedlist_formaction::jump_to_next_feed: visible_feeds[%u]", i);
 		f->set("feedpos", utils::to_string<unsigned int>(i));
 		feedpos = visible_feeds[i].second;

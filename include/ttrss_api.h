@@ -37,13 +37,12 @@ class ttrss_api : public remote_api {
 
 class ttrss_urlreader : public urlreader {
 	public:
-		ttrss_urlreader(configcontainer * c, const std::string& url_file, remote_api * a);
+		ttrss_urlreader(const std::string& url_file, remote_api * a);
 		virtual ~ttrss_urlreader();
 		virtual void write_config();
 		virtual void reload();
 		virtual std::string get_source();
 	private:
-		configcontainer * cfg;
 		std::string file;
 		remote_api * api;
 };

@@ -345,9 +345,6 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 							tables.back().start_cell(span);
 						break;
 					}
-
-					default:
-						break;
 				}
 				break;
 
@@ -537,9 +534,6 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 
 						if (!tables.empty())
 							tables.back().complete_cell();
-						break;
-
-					default:
 						break;
 				}
 				break;
