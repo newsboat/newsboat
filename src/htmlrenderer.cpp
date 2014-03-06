@@ -798,8 +798,8 @@ void htmlrenderer::render_table(const Table& table, std::vector<std::string>& li
 				line += vsep;
 			for(size_t cell=0; cell < table.rows[row].cells.size(); cell++) {
 				size_t cell_width = 0;
-				LOG(LOG_DEBUG, "row = %d cell = %d text = %s", row, cell, table.rows[row].cells[cell].text[idx].c_str());
 				if (idx < table.rows[row].cells[cell].text.size()) {
+					LOG(LOG_DEBUG, "row = %d cell = %d text = %s", row, cell, table.rows[row].cells[cell].text[idx].c_str());
 					cell_width = utils::strwidth_stfl(table.rows[row].cells[cell].text[idx]);
 					line += table.rows[row].cells[cell].text[idx];
 				}
