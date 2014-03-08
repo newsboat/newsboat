@@ -399,16 +399,18 @@ void cache::externalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, bool reset_
 
 // this function reads an rss_feed including all of its rss_items.
 // the feed parameter needs to have the rssurl member set.
-void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, rss_ignores * ign) {
+std::tr1::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl, rss_ignores * ign) {
+	std::tr1::shared_ptr<rss_feed> feed(new rss_feed(this));
+	feed->set_rssurl(rssurl);
+
 	scope_measure m1("cache::internalize_rssfeed");
-	if (feed->rssurl().substr(0,6) == "query:")
-		return;
+	if (rssurl.substr(0,6) == "query:")
+		return feed;
 
 	scope_mutex lock(&mtx);
-	scope_mutex feedlock(&feed->item_mutex);
 
 	/* first, we check whether the feed is there at all */
-	std::string query = prepare_query("SELECT count(*) FROM rss_feed WHERE rssurl = '%q';",feed->rssurl().c_str());
+	std::string query = prepare_query("SELECT count(*) FROM rss_feed WHERE rssurl = '%q';",rssurl.c_str());
 	cb_handler count_cbh;
 	LOG(LOG_DEBUG,"running query: %s",query.c_str());
 	int rc = sqlite3_exec(db,query.c_str(),count_callback,&count_cbh,NULL);
@@ -418,11 +420,11 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, rss_ignores
 	}
 
 	if (count_cbh.count() == 0) {
-		return;
+		return feed;
 	}
 
 	/* then we first read the feed from the database */
-	query = prepare_query("SELECT title, url, is_rtl FROM rss_feed WHERE rssurl = '%q';",feed->rssurl().c_str());
+	query = prepare_query("SELECT title, url, is_rtl FROM rss_feed WHERE rssurl = '%q';",rssurl.c_str());
 	LOG(LOG_DEBUG,"running query: %s",query.c_str());
 	rc = sqlite3_exec(db,query.c_str(),rssfeed_callback,&feed,NULL);
 	if (rc != SQLITE_OK) {
@@ -430,10 +432,8 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, rss_ignores
 		throw dbexception(db);
 	}
 
-	feed->clear_items();
-
 	/* ...and then the associated items */
-	query = prepare_query("SELECT guid,title,author,url,pubDate,length(content),unread,feedurl,enclosure_url,enclosure_type,enqueued,flags,base FROM rss_item WHERE feedurl = '%q' AND deleted = 0 ORDER BY pubDate DESC, id DESC;",feed->rssurl().c_str());
+	query = prepare_query("SELECT guid,title,author,url,pubDate,length(content),unread,feedurl,enclosure_url,enclosure_type,enqueued,flags,base FROM rss_item WHERE feedurl = '%q' AND deleted = 0 ORDER BY pubDate DESC, id DESC;", rssurl.c_str());
 	LOG(LOG_DEBUG,"running query: %s",query.c_str());
 	rc = sqlite3_exec(db,query.c_str(),rssitem_callback,&feed,NULL);
 	if (rc != SQLITE_OK) {
@@ -454,7 +454,7 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, rss_ignores
 				// to the beginning of the vector, and then fast-forward to
 				// the next element.
 				it = feed->items().begin();
-		  --i;
+				--i;
 				for (int j=0;j<int(i);j++) {
 					++it;
 				}
@@ -488,7 +488,7 @@ void cache::internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, rss_ignores
 		}
 	}
 	feed->sort_unlocked(cfg->get_configvalue("article-sort-order"));
-
+	return feed;
 }
 
 std::vector<std::tr1::shared_ptr<rss_item> > cache::search_for_items(const std::string& querystr, const std::string& feedurl) {

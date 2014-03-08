@@ -16,7 +16,7 @@ class cache {
 		cache(const std::string& cachefile, configcontainer * c);
 		~cache();
 		void externalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, bool reset_unread);
-		void internalize_rssfeed(std::tr1::shared_ptr<rss_feed> feed, rss_ignores * ign);
+		std::tr1::shared_ptr<rss_feed> internalize_rssfeed(std::string rssurl, rss_ignores * ign);
 		void update_rssitem_unread_and_enqueued(std::tr1::shared_ptr<rss_item> item, const std::string& feedurl);
 		void update_rssitem_unread_and_enqueued(rss_item* item, const std::string& feedurl);
 		void cleanup_cache(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds);

@@ -99,7 +99,6 @@ namespace newsbeuter {
 			void execute_commands(char ** argv, unsigned int i);
 
 			std::string prepare_message(unsigned int pos, unsigned int max);
-			void save_feed(std::tr1::shared_ptr<rss_feed> feed, unsigned int pos);
 			void enqueue_items(std::tr1::shared_ptr<rss_feed> feed);
 
 			std::string generate_enqueue_filename(const std::string& url, std::tr1::shared_ptr<rss_feed> feed);

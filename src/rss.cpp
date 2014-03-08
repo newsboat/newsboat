@@ -27,6 +27,7 @@ rss_item::rss_item(cache * c) : pubDate_(0), unread_(true), ch(c), enqueued_(fal
 }
 
 rss_item::~rss_item() {
+	feedptr.reset();
 	// LOG(LOG_CRITICAL, "delete rss_item");
 }
 

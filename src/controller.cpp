@@ -523,12 +523,13 @@ void controller::run(int argc, char * argv[]) {
 
 	unsigned int i=0;
 	for (std::vector<std::string>::const_iterator it=urlcfg->get_urls().begin(); it != urlcfg->get_urls().end(); ++it, ++i) {
-		std::tr1::shared_ptr<rss_feed> feed(new rss_feed(rsscache));
 		try {
-			feed->set_rssurl(*it);
-			feed->set_tags(urlcfg->get_tags(*it));
 			bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
-			rsscache->internalize_rssfeed(feed, ignore_disp ? &ign : NULL);
+			std::tr1::shared_ptr<rss_feed> feed = rsscache->internalize_rssfeed(*it, ignore_disp ? &ign : NULL);
+			feed->set_tags(urlcfg->get_tags(*it));
+			feed->set_order(i);
+			scope_mutex feedslock(&feeds_mutex);
+			feeds.push_back(feed);
 		} catch(const dbexception& e) {
 			std::cout << _("Error while loading feeds from database: ") << e.what() << std::endl;
 			utils::remove_fs_lock(lock_file);
@@ -538,9 +539,6 @@ void controller::run(int argc, char * argv[]) {
 			utils::remove_fs_lock(lock_file);
 			return;
 		}
-		feed->set_order(i);
-		scope_mutex feedslock(&feeds_mutex);
-		feeds.push_back(feed);
 	}
 
 	sort_feeds();
@@ -724,8 +722,20 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended, cur
 			std::tr1::shared_ptr<rss_feed> newfeed = parser.parse();
 			if (newfeed->items().size() > 0) {
 				scope_mutex feedslock(&feeds_mutex);
-				save_feed(newfeed, pos);
+				rsscache->externalize_rssfeed(newfeed, ign.matches_resetunread(newfeed->rssurl()));
 				enqueue_items(newfeed);
+
+				newfeed->clear_items();
+
+				bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
+				std::tr1::shared_ptr<rss_feed> feed = rsscache->internalize_rssfeed(oldfeed->rssurl(), ignore_disp ? &ign : NULL);
+				feed->set_tags(urlcfg->get_tags(oldfeed->rssurl()));
+				feed->set_order(oldfeed->get_order());
+				feeds[pos] = feed;
+
+				oldfeed->clear_items();
+
+				v->notify_itemlist_change(feeds[pos]);
 				if (!unattended) {
 					v->set_feedlist(feeds);
 				}
@@ -1229,23 +1239,16 @@ void controller::reload_urls_file() {
 			}
 		}
 		if (!found) {
-			std::tr1::shared_ptr<rss_feed> new_feed(new rss_feed(rsscache));
-			try {
-				new_feed->set_rssurl(*it);
-			} catch (const std::string& str) {
-				LOG(LOG_USERERROR, "ignored invalid RSS URL '%s'", it->c_str());
-				continue;
-			}
-			new_feed->set_tags(urlcfg->get_tags(*it));
-			new_feed->set_order(i);
 			try {
 				bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
-				rsscache->internalize_rssfeed(new_feed, ignore_disp ? &ign : NULL);
+				std::tr1::shared_ptr<rss_feed> new_feed = rsscache->internalize_rssfeed(*it, ignore_disp ? &ign : NULL);
+				new_feed->set_tags(urlcfg->get_tags(*it));
+				new_feed->set_order(i);
+				new_feeds.push_back(new_feed);
 			} catch(const dbexception& e) {
 				LOG(LOG_ERROR, "controller::reload_urls_file: caught exception: %s", e.what());
 				throw;
 			}
-			new_feeds.push_back(new_feed);
 		}
 	}
 
@@ -1399,24 +1402,6 @@ std::string controller::prepare_message(unsigned int pos, unsigned int max) {
 		return utils::strprintf("(%u/%u) ", pos, max);
 	}
 	return "";
-}
-
-void controller::save_feed(std::tr1::shared_ptr<rss_feed> feed, unsigned int pos) {
-	if (!feed->is_empty()) {
-		LOG(LOG_DEBUG, "controller::save_feed: feed is nonempty, saving");
-		rsscache->externalize_rssfeed(feed, ign.matches_resetunread(feed->rssurl()));
-		LOG(LOG_DEBUG, "controller::save_feed: after externalize_rssfeed");
-
-		bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
-		rsscache->internalize_rssfeed(feed, ignore_disp ? &ign : NULL);
-		LOG(LOG_DEBUG, "controller::save_feed: after internalize_rssfeed");
-		feed->set_tags(urlcfg->get_tags(feed->rssurl()));
-		feed->set_order(feeds[pos]->get_order());
-		feeds[pos] = feed;
-		v->notify_itemlist_change(feeds[pos]);
-	} else {
-		LOG(LOG_DEBUG, "controller::save_feed: feed is empty, not saving");
-	}
 }
 
 void controller::enqueue_items(std::tr1::shared_ptr<rss_feed> feed) {
