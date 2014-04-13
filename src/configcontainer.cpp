@@ -109,9 +109,9 @@ configcontainer::configcontainer()
 	config_data["feedhq-min-items"] = configdata("20", configdata::INT);
 	config_data["ignore-mode"] = configdata("download", "download", "display", NULL); // enum
 	config_data["max-download-speed"] = configdata("0", configdata::INT);
-	config_data["cookie-cache"] = configdata("", configdata::STR);
+	config_data["cookie-cache"] = configdata("", configdata::PATH);
 	config_data["download-full-page"] = configdata("false", configdata::BOOL);
-	config_data["external-url-viewer"] = configdata("", configdata::STR);
+	config_data["external-url-viewer"] = configdata("", configdata::PATH);
 	config_data["ttrss-login"] = configdata("", configdata::STR);
 	config_data["ttrss-password"] = configdata("", configdata::STR);
 	config_data["ttrss-passwordfile"] = configdata("", configdata::PATH);
