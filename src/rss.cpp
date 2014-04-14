@@ -223,10 +223,11 @@ std::tr1::shared_ptr<rss_item> rss_feed::get_item_by_guid_unlocked(const std::st
 		if ((it = items_guid_map.find(guid)) != items_guid_map.end()) {
 			return it->second;
 		}
-		LOG(LOG_DEBUG, "rss_feed::get_item_by_guid_unlocked: hit dummy item!");
-		LOG(LOG_DEBUG, "rss_feed::get_item_by_guid_unlocked: items_guid_map.size = %d", items_guid_map.size());
 	}
-	abort();
+	//abort();
+	LOG(LOG_DEBUG, "rss_feed::get_item_by_guid_unlocked: hit dummy item!");
+	LOG(LOG_DEBUG, "rss_feed::get_item_by_guid_unlocked: items_guid_map.size = %d", items_guid_map.size());
+	return std::tr1::shared_ptr<rss_item>(new rss_item(ch));
 }
 
 bool rss_item::has_attribute(const std::string& attribname) {
