@@ -12,7 +12,7 @@ check_pkg() {
 		if [ -n "$atleast_version" ] ; then
 			if ! pkg-config --atleast-version=$atleast_version ${pkgname} ; then
 				echo "at least ${pkgname} $atleast_version required."
-				exit 1
+				return 1
 			fi
 		fi
 		echo "# configuration for package ${pkgname}" >> config.mk
