@@ -816,7 +816,7 @@ bool itemlist_formaction::jump_to_next_unread_item(bool start_with_first) {
 			return true;
 		}
 	}
-	for (unsigned int i=0;i<=itempos;++i) {
+	for (unsigned int i=0;i<=itempos&&i<visible_items.size();++i) {
 		LOG(LOG_DEBUG, "itemlist_formaction::jump_to_next_unread_item: i = %u", i);
 		if (visible_items[i].first->unread()) {
 			f->set("itempos", utils::to_string<unsigned int>(i));
