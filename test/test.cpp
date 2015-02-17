@@ -42,7 +42,7 @@ void TestNewsbeuterReload() {
 	lemon.is(feed->items().size(), 8u, "rss.xml contains 8 items");
 
 	rsscache->externalize_rssfeed(feed, false);
-	rsscache->internalize_rssfeed(feed, NULL);
+	feed = rsscache->internalize_rssfeed("http://testbed.newsbeuter.org/unit-test/rss.xml", NULL);
 	lemon.is(feed->items().size(), 8u, "feed contains 8 items after externalization/internalization");
 
 	lemon.is(feed->items()[0]->title(), "Teh Saxxi", "first item title");
@@ -54,9 +54,7 @@ void TestNewsbeuterReload() {
 
 	rsscache->externalize_rssfeed(feed, false);
 
-	std::tr1::shared_ptr<rss_feed> feed2(new rss_feed(rsscache));
-	feed2->set_rssurl("http://testbed.newsbeuter.org/unit-test/rss.xml");
-	rsscache->internalize_rssfeed(feed2, NULL);
+	std::tr1::shared_ptr<rss_feed> feed2 = rsscache->internalize_rssfeed("http://testbed.newsbeuter.org/unit-test/rss.xml", NULL);
 
 	lemon.is(feed2->items().size(), 8u, "feed2 contains 8 items after internalizaton");
 	lemon.is(feed2->items()[0]->title(), "Another Title", "feed2 first item title");
