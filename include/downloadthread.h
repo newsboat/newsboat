@@ -4,28 +4,25 @@
 #include <thread>
 #include <controller.h>
 
-namespace newsbeuter
-{
-	
+namespace newsbeuter {
+
 class controller;
 
-class downloadthread
-{
-public:
+class downloadthread {
+  public:
 	downloadthread(controller * c, std::vector<int> * idxs = 0);
 	virtual ~downloadthread();
 	void operator()();
-private:
+  private:
 	controller * ctrl;
 	std::vector<int> indexes;
 };
 
-class reloadrangethread
-{
-public:
+class reloadrangethread {
+  public:
 	reloadrangethread(controller * c, unsigned int start, unsigned int end, unsigned int size, bool unattended);
 	void operator()();
-private:
+  private:
 	controller * ctrl;
 	unsigned int s, e, ss;
 	bool u;

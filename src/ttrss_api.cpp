@@ -23,57 +23,57 @@ ttrss_api::~ttrss_api() {
 }
 
 bool ttrss_api::authenticate() {
-	 if (auth_lock.try_lock()) {
+	if (auth_lock.try_lock()) {
 		sid = retrieve_sid();
 		auth_lock.unlock();
-	 } else {
-	 	// wait for other thread to finish and return its result:
-	 	auth_lock.lock();
-	 	auth_lock.unlock();
-	 }
+	} else {
+		// wait for other thread to finish and return its result:
+		auth_lock.lock();
+		auth_lock.unlock();
+	}
 
 	return sid != "";
 }
 
 std::string ttrss_api::retrieve_sid() {
 	std::map<std::string, std::string> args;
-	
+
 	std::string user = cfg->get_configvalue("ttrss-login");
 	bool flushed = false;
 	if (user == "") {
-                std::cout << std::endl; 
-                std::cout.flush();
-                flushed = true;
-                std::cout << "Username for Tiny Tiny RSS: ";
-                std::cin >> user;
+		std::cout << std::endl;
+		std::cout.flush();
+		flushed = true;
+		std::cout << "Username for Tiny Tiny RSS: ";
+		std::cin >> user;
 
-                if (user == "") {
-                    return "";
-                }
-    }
-                                                                                                             
-    std::string pass = cfg->get_configvalue("ttrss-password");
-    if (pass == "") {
-        wordexp_t exp; 
-        std::ifstream ifs;
-        wordexp(cfg->get_configvalue("ttrss-passwordfile").c_str(),&exp,0);
-        ifs.open(exp.we_wordv[0]);
-        wordfree(&exp);
-        if (!ifs) { 
-                        if(!flushed) {
-                            std::cout << std::endl;
-                            std::cout.flush();
-                        }
-            // Find a way to do this in C++ by removing cin echoing. 
-            pass = std::string( getpass("Password for Tiny Tiny RSS: ") ); 
+		if (user == "") {
+			return "";
+		}
+	}
 
-        } else {
-                ifs >> pass; 
-                if(pass == "") {
-                        return ""; 
-                }
-        }
-    }
+	std::string pass = cfg->get_configvalue("ttrss-password");
+	if (pass == "") {
+		wordexp_t exp;
+		std::ifstream ifs;
+		wordexp(cfg->get_configvalue("ttrss-passwordfile").c_str(),&exp,0);
+		ifs.open(exp.we_wordv[0]);
+		wordfree(&exp);
+		if (!ifs) {
+			if(!flushed) {
+				std::cout << std::endl;
+				std::cout.flush();
+			}
+			// Find a way to do this in C++ by removing cin echoing.
+			pass = std::string( getpass("Password for Tiny Tiny RSS: ") );
+
+		} else {
+			ifs >> pass;
+			if(pass == "") {
+				return "";
+			}
+		}
+	}
 
 	args["user"] = single ? "admin" : user.c_str();
 	args["password"] = pass.c_str();
@@ -97,8 +97,8 @@ std::string ttrss_api::retrieve_sid() {
 }
 
 struct json_object * ttrss_api::run_op(const std::string& op,
-				       const std::map<std::string, std::string >& args,
-				       bool try_login) {
+                                       const std::map<std::string, std::string >& args,
+                                       bool try_login) {
 	std::string url = utils::strprintf("%s/api/", cfg->get_configvalue("ttrss-url").c_str());
 
 	std::string req_data = "{\"op\":\"" + op + "\",\"sid\":\"" + sid + "\"";
@@ -129,7 +129,7 @@ struct json_object * ttrss_api::run_op(const std::string& op,
 		LOG(LOG_ERROR, "ttrss_api::run_op: no content part in answer from server");
 		return NULL;
 	}
-	
+
 	if (json_object_get_int(status) != 0) {
 		struct json_object * error = json_object_object_get(content, "error");
 		if ((strcmp(json_object_get_string(error), "NOT_LOGGED_IN") == 0) && try_login) {
@@ -169,7 +169,7 @@ std::vector<tagged_feedurl> ttrss_api::get_subscribed_urls() {
 	fetch_feeds_per_category(NULL, feeds);
 
 	// then fetch the feeds of all categories
-	for (int i=0;i<catsize;i++) {
+	for (int i=0; i<catsize; i++) {
 		struct json_object * cat = (struct json_object *)array_list_get_idx(categories, i);
 		fetch_feeds_per_category(cat, feeds);
 	}
@@ -200,7 +200,7 @@ bool ttrss_api::mark_article_read(const std::string& guid, bool read) {
 
 	// Do this in a thread, as we don't care about the result enough to wait for
 	// it.
-	std::thread t{markreadthread(this, guid, read)};
+	std::thread t {markreadthread(this, guid, read)};
 	t.detach();
 	return true;
 
@@ -253,7 +253,7 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 	int items_size = array_list_length(items);
 	LOG(LOG_DEBUG, "ttrss_api::fetch_feed: %d items", items_size);
 
-	for (int i=0;i<items_size;i++) {
+	for (int i=0; i<items_size; i++) {
 		struct json_object * item_obj = (struct json_object *)array_list_get_idx(items, i);
 		int id = json_object_get_int(json_object_object_get(item_obj, "id"));
 		const char * title = json_object_get_string(json_object_object_get(item_obj, "title"));
@@ -328,8 +328,7 @@ void ttrss_api::fetch_feeds_per_category(struct json_object * cat, std::vector<t
 		cat_title_obj = json_object_object_get(cat, "title");
 		cat_name = json_object_get_string(cat_title_obj);
 		LOG(LOG_DEBUG, "ttrss_api::fetch_feeds_per_category: id = %d title = %s", cat_id, cat_name);
-	}
-	else {
+	} else {
 		// As uncategorized is a category itself (id = 0) and the default value
 		// for a getFeeds is id = 0, the feeds in uncategorized will appear twice
 		return;
@@ -347,7 +346,7 @@ void ttrss_api::fetch_feeds_per_category(struct json_object * cat, std::vector<t
 
 	int feed_list_size = array_list_length(feed_list);
 
-	for (int j=0;j<feed_list_size;j++) {
+	for (int j=0; j<feed_list_size; j++) {
 		struct json_object * feed = (struct json_object *)array_list_get_idx(feed_list, j);
 
 		int feed_id = json_object_get_int(json_object_object_get(feed, "id"));
@@ -385,7 +384,7 @@ bool ttrss_api::update_article(const std::string& guid, int field, int mode) {
 	struct json_object * content = run_op("updateArticle", args);
 
 	if (!content)
-	    return false;
+		return false;
 
 	json_object_put(content);
 	return true;

@@ -27,23 +27,23 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 			return;
 		}
 		switch (dl.status()) {
-			case DL_QUEUED:
-			case DL_CANCELLED:
-			case DL_FAILED:
-			case DL_ALREADY_DOWNLOADED:
-			case DL_READY:
+		case DL_QUEUED:
+		case DL_CANCELLED:
+		case DL_FAILED:
+		case DL_ALREADY_DOWNLOADED:
+		case DL_READY:
+			LOG(LOG_DEBUG, "queueloader::reload: storing %s to new vector", dl.url());
+			dltemp.push_back(dl);
+			break;
+		case DL_PLAYED:
+		case DL_FINISHED:
+			if (!remove_unplayed) {
 				LOG(LOG_DEBUG, "queueloader::reload: storing %s to new vector", dl.url());
 				dltemp.push_back(dl);
-				break;
-			case DL_PLAYED:
-			case DL_FINISHED:
-				if (!remove_unplayed) {
-					LOG(LOG_DEBUG, "queueloader::reload: storing %s to new vector", dl.url());
-					dltemp.push_back(dl);
-				}
-				break;
-			default:
-				break;
+			}
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -89,8 +89,7 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 								d.set_status(DL_READY);
 							if (fields[2] == "played")
 								d.set_status(DL_PLAYED);
-						}
-						else
+						} else
 							d.set_status(DL_ALREADY_DOWNLOADED); // TODO: scrap DL_ALREADY_DOWNLOADED state
 					}
 					d.set_url(fields[0]);

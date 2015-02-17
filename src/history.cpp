@@ -57,7 +57,7 @@ void history::save_to_file(const std::string& file, unsigned int limit) {
 		if (limit > lines.size())
 			limit = lines.size();
 		if (limit > 0) {
-			for (unsigned int i=limit-1;i>0;i--) {
+			for (unsigned int i=limit-1; i>0; i--) {
 				f << lines[i] << std::endl;
 			}
 			f << lines[0] << std::endl;

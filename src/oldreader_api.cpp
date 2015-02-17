@@ -49,26 +49,26 @@ static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp
 
 std::string oldreader_api::retrieve_auth() {
 	CURL * handle = curl_easy_init();
-        std::string user = cfg->get_configvalue("oldreader-login");
-        bool flushed = false;
+	std::string user = cfg->get_configvalue("oldreader-login");
+	bool flushed = false;
 
-        if (user == "") {
-                std::cout << std::endl;
-                std::cout.flush();
-                flushed = true;
-                std::cout << "Username for The Old Reader: ";
-                std::cin >> user;
-                if (user == "") {
-                    return "";
-                }
-        }
+	if (user == "") {
+		std::cout << std::endl;
+		std::cout.flush();
+		flushed = true;
+		std::cout << "Username for The Old Reader: ";
+		std::cin >> user;
+		if (user == "") {
+			return "";
+		}
+	}
 
 	std::string pass = cfg->get_configvalue("oldreader-password");
 	if( pass == "" ) {
 		wordexp_t exp;
 		std::ifstream ifs;
 		wordexp(cfg->get_configvalue("oldreader-passwordfile").c_str(),&exp,0);
-		ifs.open(exp.we_wordv[0]); 
+		ifs.open(exp.we_wordv[0]);
 		wordfree(&exp);
 		if (!ifs) {
 			if(!flushed) {
@@ -80,15 +80,15 @@ std::string oldreader_api::retrieve_auth() {
 		} else {
 			std::getline(ifs, pass);
 			if(pass == "") {
-					return "";
+				return "";
 			}
 		}
 	}
 	char * username = curl_easy_escape(handle, user.c_str(), 0);
 	char * password = curl_easy_escape(handle, pass.c_str(), 0);
 
-	std::string postcontent = utils::strprintf("service=reader&Email=%s&Passwd=%s&source=%s%2F%s&accountType=HOSTED_OR_GOOGLE&continue=http://www.google.com/", 
-		username, password, PROGRAM_NAME, PROGRAM_VERSION);
+	std::string postcontent = utils::strprintf("service=reader&Email=%s&Passwd=%s&source=%s%2F%s&accountType=HOSTED_OR_GOOGLE&continue=http://www.google.com/",
+	                          username, password, PROGRAM_NAME, PROGRAM_VERSION);
 
 	curl_free(username);
 	curl_free(password);
@@ -132,7 +132,7 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 	LOG(LOG_DEBUG, "oldreader_api::get_subscribed_urls: document = %s", result.c_str());
 
 	// TODO: parse result
-	
+
 	struct json_object * reply = json_tokener_parse(result.c_str());
 	if (is_error(reply)) {
 		LOG(LOG_ERROR, "oldreader_api::get_subscribed_urls: failed to parse response as JSON.");
@@ -145,7 +145,7 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 
 	int len = array_list_length(subscriptions);
 
-	for (int i=0;i<len;i++) {
+	for (int i=0; i<len; i++) {
 		std::vector<std::string> tags;
 		struct json_object * sub = json_object_array_get_idx(subscription_obj, i);
 
@@ -176,7 +176,7 @@ bool oldreader_api::mark_all_read(const std::string& feedurl) {
 	std::string token = get_new_token();
 
 	std::string postcontent = utils::strprintf("s=%s&T=%s", real_feedurl.c_str(), token.c_str());
-	
+
 	std::string result = post_content(OLDREADER_API_MARK_ALL_READ_URL, postcontent);
 
 	return result == "OK";
@@ -225,7 +225,7 @@ bool oldreader_api::mark_article_read_with_token(const std::string& guid, bool r
 std::string oldreader_api::get_new_token() {
 	CURL * handle = curl_easy_init();
 	std::string result;
-	
+
 	utils::set_common_curl_options(handle, cfg);
 	configure_handle(handle);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
@@ -235,7 +235,7 @@ std::string oldreader_api::get_new_token() {
 	curl_easy_cleanup(handle);
 
 	LOG(LOG_DEBUG, "oldreader_api::get_new_token: token = %s", result.c_str());
-	
+
 	return result;
 }
 

@@ -264,7 +264,7 @@ void TestTokenizers() {
 
 	tokens = utils::tokenize("	");
 	lemon.is(tokens.size(), 0u, "tokenize of tab resulted in 0 tokens");
-	
+
 	tokens = utils::tokenize("");
 	lemon.is(tokens.size(), 0u, "tokenize of empty string resulted in 0 tokens");
 
@@ -536,7 +536,7 @@ void TestStringConversion() {
 
 	std::string s2 = utils::wstr2str(L"");
 	lemon.is(s2, "", "conversion from empty wstring to string");
-	
+
 }
 
 void TestFmtStrFormatter() {

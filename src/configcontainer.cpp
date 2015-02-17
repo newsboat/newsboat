@@ -13,8 +13,7 @@
 #include <pwd.h>
 
 
-namespace newsbeuter
-{
+namespace newsbeuter {
 
 configdata::configdata(std::string v, ...) : value(v), default_value(v), type(ENUM) {
 	va_list ap;
@@ -32,8 +31,7 @@ configdata::configdata(std::string v, ...) : value(v), default_value(v), type(EN
 	va_end(ap);
 }
 
-configcontainer::configcontainer()
-{
+configcontainer::configcontainer() {
 	// create the config options and set their resp. default value and type
 	config_data["show-read-feeds"] = configdata("yes", configdata::BOOL);
 	config_data["browser"]         = configdata("lynx", configdata::PATH);
@@ -142,12 +140,10 @@ configcontainer::configcontainer()
 	config_data["dialogs-title-format"] = configdata(_("%N %V - Dialogs"), configdata::STR);
 }
 
-configcontainer::~configcontainer()
-{
+configcontainer::~configcontainer() {
 }
 
-void configcontainer::register_commands(configparser& cfgparser)
-{
+void configcontainer::register_commands(configparser& cfgparser) {
 	// this registers the config options defined above in the configuration parser
 	// -> if the resp. config option is encountered, it is passed to the configcontainer
 	for (auto cfg : config_data) {
@@ -173,33 +169,33 @@ void configcontainer::handle_action(const std::string& action, const std::vector
 	}
 
 	switch (cfgdata.type) {
-		case configdata::BOOL:
-			if (!is_bool(params[0]))
-				throw confighandlerexception(utils::strprintf(_("expected boolean value, found `%s' instead"), params[0].c_str()));
+	case configdata::BOOL:
+		if (!is_bool(params[0]))
+			throw confighandlerexception(utils::strprintf(_("expected boolean value, found `%s' instead"), params[0].c_str()));
+		cfgdata.value = params[0];
+		break;
+
+	case configdata::INT:
+		if (!is_int(params[0]))
+			throw confighandlerexception(utils::strprintf(_("expected integer value, found `%s' instead"), params[0].c_str()));
+		cfgdata.value = params[0];
+		break;
+
+	case configdata::ENUM:
+		if (cfgdata.enum_values.find(params[0]) == cfgdata.enum_values.end())
+			throw confighandlerexception(utils::strprintf(_("invalid configuration value `%s'"), params[0].c_str()));
+	// fall-through
+	case configdata::STR:
+	case configdata::PATH:
+		if (cfgdata.multi_option)
+			cfgdata.value = utils::join(params, " ");
+		else
 			cfgdata.value = params[0];
-			break;
+		break;
 
-		case configdata::INT:
-			if (!is_int(params[0]))
-				throw confighandlerexception(utils::strprintf(_("expected integer value, found `%s' instead"), params[0].c_str()));
-			cfgdata.value = params[0];
-			break;
-
-		case configdata::ENUM:
-			if (cfgdata.enum_values.find(params[0]) == cfgdata.enum_values.end())
-				throw confighandlerexception(utils::strprintf(_("invalid configuration value `%s'"), params[0].c_str()));
-			// fall-through
-		case configdata::STR:
-		case configdata::PATH:
-			if (cfgdata.multi_option)
-				cfgdata.value = utils::join(params, " ");
-			else
-				cfgdata.value = params[0];
-			break;
-
-		default:
-			// should not happen
-			throw confighandlerexception(AHS_INVALID_COMMAND);
+	default:
+		// should not happen
+		throw confighandlerexception(AHS_INVALID_COMMAND);
 	}
 }
 
@@ -223,7 +219,7 @@ std::string configcontainer::lookup_alias(const std::string& s) {
 
 bool configcontainer::is_int(const std::string& s) {
 	const char * s1 = s.c_str();
-	for (;*s1;s1++) {
+	for (; *s1; s1++) {
 		if (!isdigit(*s1))
 			return false;
 	}

@@ -7,7 +7,7 @@
 #include <utils.h>
 
 namespace newsbeuter {
-	
+
 struct op_desc {
 	operation op;
 	const char * opstr;
@@ -23,7 +23,7 @@ static op_desc opdescs[] = {
 	{ OP_OPEN,				"open",						"ENTER", _("Open feed/article"),				KM_FEEDLIST | KM_FILEBROWSER | KM_HELP | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT | KM_URLVIEW | KM_PODBEUTER | KM_DIALOGS },
 	{ OP_QUIT,				"quit",						"q",	_("Return to previous dialog/Quit"),	KM_FEEDLIST | KM_FILEBROWSER | KM_HELP | KM_ARTICLELIST | KM_ARTICLE | KM_TAGSELECT | KM_FILTERSELECT | KM_URLVIEW | KM_PODBEUTER | KM_DIALOGS },
 	{ OP_HARDQUIT,			"hard-quit",				"Q",	_("Quit program,  no confirmation"),	KM_FEEDLIST | KM_FILEBROWSER | KM_HELP | KM_ARTICLELIST | KM_ARTICLE | KM_TAGSELECT | KM_FILTERSELECT | KM_URLVIEW | KM_PODBEUTER | KM_DIALOGS },
-	{ OP_RELOAD,			"reload",					"r",	_("Reload currently selected feed"),	KM_FEEDLIST }, 
+	{ OP_RELOAD,			"reload",					"r",	_("Reload currently selected feed"),	KM_FEEDLIST },
 	{ OP_RELOADALL,			"reload-all",				"R",	_("Reload all feeds"),					KM_FEEDLIST },
 	{ OP_MARKFEEDREAD,		"mark-feed-read",			"A",	_("Mark feed read"),					KM_FEEDLIST | KM_ARTICLELIST },
 	{ OP_MARKALLFEEDSREAD,	"mark-all-feeds-read",		"C",	_("Mark all feeds read"),				KM_FEEDLIST },
@@ -114,14 +114,14 @@ static op_desc opdescs[] = {
 // "all" must be first, the following positions must be the same as the KM_* flag definitions (get_flag_from_context() relies on this).
 static const char * contexts[] = { "all", "feedlist", "filebrowser", "help", "articlelist", "article", "tagselection", "filterselection", "urlview", "podbeuter", "dialogs", NULL };
 
-keymap::keymap(unsigned flags) { 
+keymap::keymap(unsigned flags) {
 	/*
 	 * At startup, initialize the keymap with the default settings from the list above.
 	 */
 	LOG(LOG_DEBUG, "keymap::keymap: flags = %x", flags);
-	for (unsigned int j=1;contexts[j]!=NULL;j++) {
+	for (unsigned int j=1; contexts[j]!=NULL; j++) {
 		std::string ctx(contexts[j]);
-		for (int i=0;opdescs[i].op != OP_NIL;++i) {
+		for (int i=0; opdescs[i].op != OP_NIL; ++i) {
 			if (opdescs[i].flags & (flags | KM_INTERNAL | KM_SYSKEYS)) {
 				keymap_[ctx][opdescs[i].default_key] = opdescs[i].op;
 			}
@@ -134,7 +134,7 @@ void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned s
 	 * Here we return the keymap descriptions for the specified application (handed to us via flags)
 	 * This is used for the help screen.
 	 */
-	for (unsigned int i=1;contexts[i]!=NULL;i++) {
+	for (unsigned int i=1; contexts[i]!=NULL; i++) {
 		std::string ctx(contexts[i]);
 
 		if (flags & KM_PODBEUTER && ctx != "podbeuter") {
@@ -143,7 +143,7 @@ void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned s
 			continue;
 		}
 
-		for (unsigned int j=0;opdescs[j].op != OP_NIL;++j) {
+		for (unsigned int j=0; opdescs[j].op != OP_NIL; ++j) {
 			bool already_added = false;
 			for (auto keymap : keymap_[ctx]) {
 				operation op = keymap.second;
@@ -185,7 +185,7 @@ keymap::~keymap() { }
 void keymap::set_key(operation op, const std::string& key, const std::string& context) {
 	LOG(LOG_DEBUG,"keymap::set_key(%d,%s) called", op, key.c_str());
 	if (context == "all") {
-		for (unsigned int i=0;contexts[i]!=NULL;i++) {
+		for (unsigned int i=0; contexts[i]!=NULL; i++) {
 			keymap_[contexts[i]][key] = op;
 		}
 	} else {
@@ -196,16 +196,16 @@ void keymap::set_key(operation op, const std::string& key, const std::string& co
 void keymap::unset_key(const std::string& key, const std::string& context) {
 	LOG(LOG_DEBUG,"keymap::unset_key(%s) called", key.c_str());
 	if (context == "all") {
-		for (unsigned int i=0;contexts[i]!=NULL;i++) {
+		for (unsigned int i=0; contexts[i]!=NULL; i++) {
 			keymap_[contexts[i]][key] = OP_NIL;
 		}
 	} else {
-		keymap_[context][key] = OP_NIL;	
+		keymap_[context][key] = OP_NIL;
 	}
 }
 
 operation keymap::get_opcode(const std::string& opstr) {
-	for (int i=0;opdescs[i].opstr;++i) {
+	for (int i=0; opdescs[i].opstr; ++i) {
 		if (opstr == opdescs[i].opstr) {
 			return opdescs[i].op;
 		}
@@ -239,7 +239,7 @@ operation keymap::get_operation(const std::string& keycode, const std::string& c
 }
 
 void keymap::dump_config(std::vector<std::string>& config_output) {
-	for (unsigned int i=1;contexts[i]!=NULL;i++) { // TODO: optimize
+	for (unsigned int i=1; contexts[i]!=NULL; i++) { // TODO: optimize
 		std::map<std::string,operation>& x = keymap_[contexts[i]];
 		for (auto keymap : x) {
 			if (keymap.second < OP_INT_MIN) {
@@ -272,7 +272,7 @@ void keymap::dump_config(std::vector<std::string>& config_output) {
 }
 
 std::string keymap::getopname(operation op) {
-	for (unsigned int i=0;opdescs[i].op != OP_NIL;i++) {
+	for (unsigned int i=0; opdescs[i].op != OP_NIL; i++) {
 		if (opdescs[i].op == op)
 			return opdescs[i].opstr;
 	}
@@ -346,7 +346,7 @@ void keymap::handle_action(const std::string& action, const std::vector<std::str
 
 std::string keymap::getkey(operation op, const std::string& context) {
 	if (context == "all") {
-		for (unsigned int i=0;contexts[i]!=NULL;i++) {
+		for (unsigned int i=0; contexts[i]!=NULL; i++) {
 			std::string ctx(contexts[i]);
 			for (auto keymap : keymap_[ctx]) {
 				if (keymap.second == op)
@@ -357,7 +357,7 @@ std::string keymap::getkey(operation op, const std::string& context) {
 		for (auto keymap : keymap_[context]) {
 			if (keymap.second == op)
 				return keymap.first;
-		}	
+		}
 	}
 	return "<none>";
 }
@@ -373,7 +373,7 @@ std::vector<macrocmd> keymap::get_macro(const std::string& key) {
 }
 
 bool keymap::is_valid_context(const std::string& context) {
-	for (unsigned int i=0;contexts[i]!=NULL;i++) {
+	for (unsigned int i=0; contexts[i]!=NULL; i++) {
 		if (context == contexts[i])
 			return true;
 	}
@@ -381,7 +381,7 @@ bool keymap::is_valid_context(const std::string& context) {
 }
 
 unsigned short keymap::get_flag_from_context(const std::string& context) {
-	for (unsigned int i=1;contexts[i]!=NULL;i++) {
+	for (unsigned int i=1; contexts[i]!=NULL; i++) {
 		if (context == contexts[i])
 			return (1<<(i-1)) | KM_SYSKEYS;
 	}

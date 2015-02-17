@@ -137,6 +137,9 @@ doc:
 	doc/generate.pl doc/podbeuter-cmds.dsv > doc/podbeuter-cfgcmds.txt
 	$(A2X) -f manpage -D doc doc/manpage-podbeuter.txt
 
+fmt:
+	astyle --style=java --indent=tab --indent-classes *.cpp include/*.h src/*.cpp rss/*.{cpp,h} test/*.cpp
+
 install: install-mo
 	$(MKDIR) $(DESTDIR)$(prefix)/bin
 	$(INSTALL) $(NEWSBEUTER) $(DESTDIR)$(prefix)/bin

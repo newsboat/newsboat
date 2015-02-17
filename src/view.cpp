@@ -63,7 +63,7 @@ view::~view() {
 }
 
 void view::set_config_container(configcontainer * cfgcontainer) {
-	cfg = cfgcontainer;	
+	cfg = cfgcontainer;
 }
 
 void view::set_keymap(keymap * k) {
@@ -80,8 +80,10 @@ void view::update_bindings() {
 }
 
 void view::set_bindings(std::shared_ptr<formaction> fa) {
-	std::string upkey("** "); upkey.append(keys->getkey(OP_SK_UP, fa->id()));
-	std::string downkey("** "); downkey.append(keys->getkey(OP_SK_DOWN, fa->id()));
+	std::string upkey("** ");
+	upkey.append(keys->getkey(OP_SK_UP, fa->id()));
+	std::string downkey("** ");
+	downkey.append(keys->getkey(OP_SK_DOWN, fa->id()));
 	fa->get_form()->set("bind_up", upkey);
 	fa->get_form()->set("bind_down", downkey);
 
@@ -91,8 +93,8 @@ void view::set_bindings(std::shared_ptr<formaction> fa) {
 		pgupkey.append("** b ");
 		pgdownkey.append("** SPACE ");
 	} else {
-		pgupkey.append("** "); 
-		pgdownkey.append("** "); 
+		pgupkey.append("** ");
+		pgdownkey.append("** ");
 	}
 
 	pgupkey.append(keys->getkey(OP_SK_PGUP, fa->id()));
@@ -101,8 +103,10 @@ void view::set_bindings(std::shared_ptr<formaction> fa) {
 	fa->get_form()->set("bind_page_up", pgupkey);
 	fa->get_form()->set("bind_page_down", pgdownkey);
 
-	std::string homekey("** "); homekey.append(keys->getkey(OP_SK_HOME, fa->id()));
-	std::string endkey("** "); endkey.append(keys->getkey(OP_SK_END, fa->id()));
+	std::string homekey("** ");
+	homekey.append(keys->getkey(OP_SK_HOME, fa->id()));
+	std::string endkey("** ");
+	endkey.append(keys->getkey(OP_SK_END, fa->id()));
 	fa->get_form()->set("bind_home", homekey);
 	fa->get_form()->set("bind_end", endkey);
 }
@@ -217,7 +221,7 @@ void view::run() {
 
 			// retrieve operation code through the keymap
 			operation op;
-			
+
 			if (have_macroprefix) {
 				have_macroprefix = false;
 				LOG(LOG_DEBUG, "view::run: running macro `%s'", event);
@@ -280,10 +284,10 @@ std::string view::get_filename_suggestion(const std::string& s) {
 	 * articles to files.
 	 */
 	std::string retval;
-	for (unsigned int i=0;i<s.length();++i) {
+	for (unsigned int i=0; i<s.length(); ++i) {
 		if (isalnum(s[i]))
 			retval.append(1,s[i]);
-		else if (s[i] == '/' || s[i] == ' ' || s[i] == '\r' || s[i] == '\n') 
+		else if (s[i] == '/' || s[i] == ' ' || s[i] == '\r' || s[i] == '\n')
 			retval.append(1,'_');
 	}
 	if (retval.length() == 0)
@@ -291,7 +295,7 @@ std::string view::get_filename_suggestion(const std::string& s) {
 	else
 		retval.append(".txt");
 	LOG(LOG_DEBUG,"view::get_filename_suggestion: %s -> %s", s.c_str(), retval.c_str());
-	return retval;	
+	return retval;
 }
 
 void view::push_empty_formaction() {
@@ -590,7 +594,7 @@ bool view::get_random_unread(itemlist_formaction * itemlist, itemview_formaction
 	std::shared_ptr<feedlist_formaction> feedlist = std::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
 	if (!cfg->get_configvalue_as_bool("goto-next-feed")) {
 		return false;
-	} 
+	}
 	if (feedlist->jump_to_random_unread_feed(feedpos)) {
 		LOG(LOG_DEBUG, "view::get_previous_unread: found feed with unread articles");
 		prepare_query_feed(feedlist->get_feed());
@@ -819,7 +823,7 @@ void view::force_redraw() {
 void view::pop_current_formaction() {
 	std::shared_ptr<formaction> f = get_current_formaction();
 	auto it=formaction_stack.begin();
-	for (unsigned int i=0;i<current_formaction;i++)
+	for (unsigned int i=0; i<current_formaction; i++)
 		++it;
 	formaction_stack.erase(it);
 	if (f == NULL) {
@@ -857,7 +861,7 @@ void view::set_current_formaction(unsigned int pos) {
 void view::remove_formaction(unsigned int pos) {
 	std::shared_ptr<formaction> f = formaction_stack[pos];
 	auto it = formaction_stack.begin();
-	for (unsigned int i=0;i<pos;i++)
+	for (unsigned int i=0; i<pos; i++)
 		++it;
 	formaction_stack.erase(it);
 	current_formaction--;
@@ -895,7 +899,7 @@ void view::apply_colors(std::shared_ptr<formaction> fa) {
 
 	std::string article_colorstr;
 
-	for (;fgcit != fg_colors.end(); ++fgcit, ++bgcit, ++attit) {
+	for (; fgcit != fg_colors.end(); ++fgcit, ++bgcit, ++attit) {
 		std::string colorattr;
 		if (fgcit->second != "default") {
 			colorattr.append("fg=");
@@ -912,7 +916,7 @@ void view::apply_colors(std::shared_ptr<formaction> fa) {
 				colorattr.append(",");
 			colorattr.append("attr=");
 			colorattr.append(attr);
-		} 
+		}
 
 		if (fgcit->first == "article") {
 			article_colorstr = colorattr;
@@ -1049,16 +1053,16 @@ void view::handle_cmdline_completion(std::shared_ptr<formaction> fa) {
 	tab_count++;
 	std::string suggestion;
 	switch (suggestions.size()) {
-		case 0:
-			LOG(LOG_DEBUG, "view::handle_cmdline_completion: found no suggestion for `%s'", fragment.c_str());
-			::beep(); // direct call to ncurses - we beep to signal that there is no suggestion available, just like vim
-			return;
-		case 1:
-			suggestion = suggestions[0];
-			break;
-		default:
-			suggestion = suggestions[(tab_count-1) % suggestions.size()];
-			break;
+	case 0:
+		LOG(LOG_DEBUG, "view::handle_cmdline_completion: found no suggestion for `%s'", fragment.c_str());
+		::beep(); // direct call to ncurses - we beep to signal that there is no suggestion available, just like vim
+		return;
+	case 1:
+		suggestion = suggestions[0];
+		break;
+	default:
+		suggestion = suggestions[(tab_count-1) % suggestions.size()];
+		break;
 	}
 	fa->get_form()->set("qna_value", suggestion);
 	fa->get_form()->set("qna_value_pos", utils::to_string<unsigned int>(suggestion.length()));

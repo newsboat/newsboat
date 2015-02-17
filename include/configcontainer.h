@@ -3,12 +3,10 @@
 
 #include <configparser.h>
 
-namespace newsbeuter
-{
+namespace newsbeuter {
 
 
-struct configdata
-{
+struct configdata {
 	enum configdata_type { INVALID, BOOL, INT, STR, PATH, ALIAS, ENUM };
 	configdata(std::string v = "", configdata_type t = INVALID, bool m = false) : value(v), default_value(v), type(t), multi_option(m) { }
 	configdata(std::string v, ...);
@@ -19,9 +17,8 @@ struct configdata
 	bool multi_option;
 };
 
-class configcontainer : public config_action_handler
-{
-public:
+class configcontainer : public config_action_handler {
+  public:
 	configcontainer();
 	virtual ~configcontainer();
 	void register_commands(configparser& cfgparser);
@@ -35,9 +32,9 @@ public:
 	void reset_to_default(const std::string& key);
 	void toggle(const std::string& key);
 	std::vector<std::string> get_suggestions(const std::string& fragment);
-private:
+  private:
 	std::map<std::string,configdata> config_data;
-	
+
 	bool is_bool(const std::string& s);
 	bool is_int(const std::string& s);
 	std::string lookup_alias(const std::string& s);

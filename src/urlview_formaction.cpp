@@ -24,62 +24,61 @@ urlview_formaction::~urlview_formaction() {
 void urlview_formaction::process_operation(operation op, bool /* automatic */, std::vector<std::string> * /* args */) {
 	bool hardquit = false;
 	switch (op) {
-		case OP_OPEN: 
-			{
-				std::string posstr = f->get("feedpos");
-				if (posstr.length() > 0) {
-					std::istringstream is(posstr);
-					unsigned int idx;
-					is >> idx;
-					v->set_status(_("Starting browser..."));
-					v->open_in_browser(links[idx].first);
-					v->set_status("");
-				} else {
-					v->show_error(_("No link selected!"));
-				}
-			}
-			break;
-		case OP_BOOKMARK: {
-				std::string posstr = f->get("feedpos");
-				if (posstr.length() > 0) {
-					std::istringstream is(posstr);
-					unsigned int idx;
-					is >> idx;
+	case OP_OPEN: {
+		std::string posstr = f->get("feedpos");
+		if (posstr.length() > 0) {
+			std::istringstream is(posstr);
+			unsigned int idx;
+			is >> idx;
+			v->set_status(_("Starting browser..."));
+			v->open_in_browser(links[idx].first);
+			v->set_status("");
+		} else {
+			v->show_error(_("No link selected!"));
+		}
+	}
+	break;
+	case OP_BOOKMARK: {
+		std::string posstr = f->get("feedpos");
+		if (posstr.length() > 0) {
+			std::istringstream is(posstr);
+			unsigned int idx;
+			is >> idx;
 
-					this->start_bookmark_qna("", links[idx].first, "");
+			this->start_bookmark_qna("", links[idx].first, "");
 
-				} else {
-					v->show_error(_("No link selected!"));
-				}
-			}
-			break;
-		case OP_1:
-		case OP_2:
-		case OP_3:
-		case OP_4:
-		case OP_5:
-		case OP_6:
-		case OP_7:
-		case OP_8:
-		case OP_9:
-		case OP_0: {
-				unsigned int idx = op - OP_1;
+		} else {
+			v->show_error(_("No link selected!"));
+		}
+	}
+	break;
+	case OP_1:
+	case OP_2:
+	case OP_3:
+	case OP_4:
+	case OP_5:
+	case OP_6:
+	case OP_7:
+	case OP_8:
+	case OP_9:
+	case OP_0: {
+		unsigned int idx = op - OP_1;
 
-				if(idx < links.size()) {
-					v->set_status(_("Starting browser..."));
-					v->open_in_browser(links[idx].first);
-					v->set_status("");
-				}
-			}
-			break;
-		case OP_QUIT:
-			quit = true;
-			break;
-		case OP_HARDQUIT:
-			hardquit = true;
-			break;
-		default: // nothing
-			break;
+		if(idx < links.size()) {
+			v->set_status(_("Starting browser..."));
+			v->open_in_browser(links[idx].first);
+			v->set_status("");
+		}
+	}
+	break;
+	case OP_QUIT:
+		quit = true;
+		break;
+	case OP_HARDQUIT:
+		hardquit = true;
+		break;
+	default: // nothing
+		break;
 	}
 	if (hardquit) {
 		while (v->formaction_stack_size() > 0) {

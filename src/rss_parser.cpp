@@ -20,8 +20,8 @@
 
 namespace newsbeuter {
 
-rss_parser::rss_parser(const std::string& uri, cache * c, configcontainer * cfg, rss_ignores * ii, remote_api * a) 
-	: my_uri(uri), ch(c), cfgcont(cfg), skip_parsing(false), is_valid(false), ign(ii), api(a), easyhandle(0) { 
+rss_parser::rss_parser(const std::string& uri, cache * c, configcontainer * cfg, rss_ignores * ii, remote_api * a)
+	: my_uri(uri), ch(c), cfgcont(cfg), skip_parsing(false), is_valid(false), ign(ii), api(a), easyhandle(0) {
 	is_ttrss = cfgcont->get_configvalue("urls-source") == "ttrss";
 	is_newsblur = cfgcont->get_configvalue("urls-source") == "newsblur";
 }
@@ -89,7 +89,7 @@ std::string rss_parser::render_xhtml_title(const std::string& title, const std::
 void rss_parser::set_rtl(std::shared_ptr<rss_feed> feed, const char * lang) {
 	// we implement right-to-left support for the languages listed in
 	// http://blogs.msdn.com/rssteam/archive/2007/05/17/reading-feeds-in-right-to-left-order.aspx
-	static const char * rtl_langprefix[] = { 
+	static const char * rtl_langprefix[] = {
 		"ar",  // Arabic
 		"fa",  // Farsi
 		"ur",  // Urdu
@@ -98,8 +98,9 @@ void rss_parser::set_rtl(std::shared_ptr<rss_feed> feed, const char * lang) {
 		"dv",  // Divehi
 		"he",  // Hebrew
 		"yi",  // Yiddish
-		NULL };
-	for (unsigned int i=0;rtl_langprefix[i]!=NULL;++i) {
+		NULL
+	};
+	for (unsigned int i=0; rtl_langprefix[i]!=NULL; ++i) {
 		if (strncmp(lang,rtl_langprefix[i],strlen(rtl_langprefix[i]))==0) {
 			LOG(LOG_DEBUG, "rss_parser::parse: detected right-to-left order, language code = %s", rtl_langprefix[i]);
 			feed->set_rtl(true);
@@ -152,7 +153,7 @@ void rss_parser::download_http(const std::string& uri) {
 		proxy_type = cfgcont->get_configvalue("proxy-type");
 	}
 
-	for (unsigned int i=0;i<retrycount && !is_valid;i++) {
+	for (unsigned int i=0; i<retrycount && !is_valid; i++) {
 		try {
 			std::string useragent = utils::get_useragent(cfgcont);
 			LOG(LOG_DEBUG, "rss_parser::download_http: user-agent = %s", useragent.c_str());
@@ -277,7 +278,7 @@ void rss_parser::fill_feed_items(std::shared_ptr<rss_feed> feed) {
 			if (std::find(start, finish, "fresh") != finish) {
 				x->set_unread_nowrite(true);
 				x->set_override_unread(true);
-			} 
+			}
 			if (std::find(start, finish, "kept-unread") != finish) {
 				x->set_unread_nowrite(true);
 				x->set_override_unread(true);
@@ -306,19 +307,19 @@ void rss_parser::fill_feed_items(std::shared_ptr<rss_feed> feed) {
 
 		set_item_content(x, item);
 
-		if (item.pubDate != "") 
+		if (item.pubDate != "")
 			x->set_pubDate(parse_date(item.pubDate));
 		else
 			x->set_pubDate(::time(NULL));
-			
+
 		x->set_guid(get_guid(item));
 
 		x->set_base(item.base);
 
 		set_item_enclosure(x, item);
 
-		LOG(LOG_DEBUG, "rss_parser::parse: item title = `%s' link = `%s' pubDate = `%s' (%d) description = `%s'", x->title().c_str(), 
-			x->link().c_str(), x->pubDate().c_str(), x->pubDate_timestamp(), x->description().c_str());
+		LOG(LOG_DEBUG, "rss_parser::parse: item title = `%s' link = `%s' pubDate = `%s' (%d) description = `%s'", x->title().c_str(),
+		    x->link().c_str(), x->pubDate().c_str(), x->pubDate_timestamp(), x->description().c_str());
 
 		add_item_to_feed(feed, x);
 	}
@@ -335,7 +336,7 @@ void rss_parser::set_item_title(std::shared_ptr<rss_feed> feed, std::shared_ptr<
 }
 
 void rss_parser::set_item_author(std::shared_ptr<rss_item> x, rsspp::item& item) {
-	/* 
+	/*
 	 * some feeds only have a feed-wide managingEditor, which we use as an item's
 	 * author if there is no item-specific one available.
 	 */

@@ -11,8 +11,7 @@
 
 #include <config.h>
 
-namespace newsbeuter
-{
+namespace newsbeuter {
 
 /*
  * This method implements an "XML" pull parser. In reality, it's more liberal
@@ -20,12 +19,10 @@ namespace newsbeuter
  * remotely looks like XML. We use this parser for the HTML renderer.
  */
 
-tagsouppullparser::tagsouppullparser() : inputstream(0), current_event(START_DOCUMENT)
-{
+tagsouppullparser::tagsouppullparser() : inputstream(0), current_event(START_DOCUMENT) {
 }
 
-tagsouppullparser::~tagsouppullparser()
-{
+tagsouppullparser::~tagsouppullparser() {
 }
 
 void tagsouppullparser::setInput(std::istream& is) {
@@ -64,25 +61,25 @@ tagsouppullparser::event tagsouppullparser::next() {
 	}
 
 	switch (current_event) {
-		case START_DOCUMENT: 
-		case START_TAG:
-		case END_TAG:
-			skip_whitespace();
-			if (inputstream->eof()) {
-				current_event = END_DOCUMENT;
-				break;
-			}
-			if (c != '<') {
-				handle_text();
-				break;
-			}
-		case TEXT:
-			handle_tag();
+	case START_DOCUMENT:
+	case START_TAG:
+	case END_TAG:
+		skip_whitespace();
+		if (inputstream->eof()) {
+			current_event = END_DOCUMENT;
 			break;
-		case END_DOCUMENT:
+		}
+		if (c != '<') {
+			handle_text();
 			break;
+		}
+	case TEXT:
+		handle_tag();
+		break;
+	case END_DOCUMENT:
+		break;
 	}
-	return getEventType();	
+	return getEventType();
 }
 
 void tagsouppullparser::skip_whitespace() {
@@ -106,7 +103,7 @@ void tagsouppullparser::add_attribute(std::string s) {
 		return;
 	std::string::size_type equalpos = s.find_first_of("=",0);
 	std::string attribname, attribvalue;
-	
+
 	if (equalpos != std::string::npos) {
 		attribname = s.substr(0,equalpos);
 		attribvalue = s.substr(equalpos+1,s.length()-(equalpos+1));
@@ -132,7 +129,7 @@ tagsouppullparser::event tagsouppullparser::determine_tag_type() {
 		text.erase(0,1);
 		return END_TAG;
 	}
-	return START_TAG;	
+	return START_TAG;
 }
 
 std::string tagsouppullparser::decode_attribute(const std::string& s) {
@@ -141,7 +138,7 @@ std::string tagsouppullparser::decode_attribute(const std::string& s) {
 		if (s1.length() > 0)
 			s1.erase(0,1);
 		if (s1.length() > 0)
-			s1.erase(s1.length()-1,1);	
+			s1.erase(s1.length()-1,1);
 	}
 	return decode_entities(s1);
 }
@@ -445,14 +442,30 @@ std::string tagsouppullparser::decode_entity(std::string s) {
 		int pos;
 		// convert some common but unknown numeric entities
 		switch (wc) {
-			case 133: wc = 8230; break; // &hellip;
-			case 134: wc = 8224; break; // &dagger;
-			case 135: wc = 8225; break; // &Dagger; (double dagger)
-			case 150: wc = 8211; break; // &ndash;
-			case 151: wc = 8212; break; // &mdash;
-			case 152: wc =  732; break; // &tilde;
-			case 153: wc = 8482; break; // &trade;
-			case 156: wc =  339; break; // &oelig;
+		case 133:
+			wc = 8230;
+			break; // &hellip;
+		case 134:
+			wc = 8224;
+			break; // &dagger;
+		case 135:
+			wc = 8225;
+			break; // &Dagger; (double dagger)
+		case 150:
+			wc = 8211;
+			break; // &ndash;
+		case 151:
+			wc = 8212;
+			break; // &mdash;
+		case 152:
+			wc =  732;
+			break; // &tilde;
+		case 153:
+			wc = 8482;
+			break; // &trade;
+		case 156:
+			wc =  339;
+			break; // &oelig;
 		}
 
 		// std::cerr << "value: " << wc << " " << static_cast<wchar_t>(wc) << " pos: " << pos << std::endl;
@@ -464,7 +477,7 @@ std::string tagsouppullparser::decode_entity(std::string s) {
 		LOG(LOG_DEBUG,"tagsouppullparser::decode_entity: wc = %u pos = %d mbc = '%s'", wc, pos, mbc);
 		return result;
 	} else {
-		for (unsigned int i=0;entity_table[i].entity;++i) {
+		for (unsigned int i=0; entity_table[i].entity; ++i) {
 			if (s == entity_table[i].entity) {
 				char mbc[MB_CUR_MAX];
 				int pos = wctomb(mbc, entity_table[i].value);
@@ -473,7 +486,7 @@ std::string tagsouppullparser::decode_entity(std::string s) {
 			}
 		}
 	}
-	return ""; 	
+	return "";
 }
 
 void tagsouppullparser::parse_tag(const std::string& tagstr) {
@@ -534,7 +547,7 @@ void tagsouppullparser::handle_tag() {
 }
 
 void tagsouppullparser::handle_text() {
-	if (current_event != START_DOCUMENT) 
+	if (current_event != START_DOCUMENT)
 		text.append(ws);
 	text.append(1,c);
 	std::string tmp;

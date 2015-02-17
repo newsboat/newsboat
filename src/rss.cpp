@@ -42,23 +42,23 @@ rss_feed::~rss_feed() {
 
 // rss_item setters
 
-void rss_item::set_title(const std::string& t) { 
-	title_ = t; 
+void rss_item::set_title(const std::string& t) {
+	title_ = t;
 	utils::trim(title_);
 }
 
 
-void rss_item::set_link(const std::string& l) { 
-	link_ = l; 
+void rss_item::set_link(const std::string& l) {
+	link_ = l;
 	utils::trim(link_);
 }
 
-void rss_item::set_author(const std::string& a) { 
-	author_ = a; 
+void rss_item::set_author(const std::string& a) {
+	author_ = a;
 }
 
-void rss_item::set_description(const std::string& d) { 
-	description_ = d; 
+void rss_item::set_description(const std::string& d) {
+	description_ = d;
 }
 
 void rss_item::set_size(unsigned int size) {
@@ -70,19 +70,19 @@ std::string rss_item::length() const {
 	if (!l)
 		return "";
 	if (l < 1000)
-	return utils::strprintf("%u ", l);
+		return utils::strprintf("%u ", l);
 	if (l < 1024*1000)
 		return utils::strprintf("%.1fK", l/1024.0);
 
 	return utils::strprintf("%.1fM", l/1024.0/1024.0);
 }
 
-void rss_item::set_pubDate(time_t t) { 
-	pubDate_ = t; 
+void rss_item::set_pubDate(time_t t) {
+	pubDate_ = t;
 }
 
-void rss_item::set_guid(const std::string& g) { 
-	guid_ = g; 
+void rss_item::set_guid(const std::string& g) {
+	guid_ = g;
 }
 
 void rss_item::set_unread_nowrite(bool u) {
@@ -96,17 +96,17 @@ void rss_item::set_unread_nowrite_notify(bool u, bool notify) {
 	}
 }
 
-void rss_item::set_unread(bool u) { 
+void rss_item::set_unread(bool u) {
 	if (unread_ != u) {
 		bool old_u = unread_;
 		unread_ = u;
 		if (feedptr)
 			feedptr->get_item_by_guid(guid_)->set_unread_nowrite(unread_); // notify parent feed
 		try {
-			if (ch) ch->update_rssitem_unread_and_enqueued(this, feedurl_); 
+			if (ch) ch->update_rssitem_unread_and_enqueued(this, feedurl_);
 		} catch (const dbexception& e) {
 			// if the update failed, restore the old unread flag and rethrow the exception
-			unread_ = old_u; 
+			unread_ = old_u;
 			throw;
 		}
 	}
@@ -114,7 +114,7 @@ void rss_item::set_unread(bool u) {
 
 std::string rss_item::pubDate() const {
 	char text[1024];
-	strftime(text,sizeof(text), _("%a, %d %b %Y %T %z"), localtime(&pubDate_)); 
+	strftime(text,sizeof(text), _("%a, %d %b %Y %T %z"), localtime(&pubDate_));
 	return std::string(text);
 }
 
@@ -228,19 +228,19 @@ std::shared_ptr<rss_item> rss_feed::get_item_by_guid_unlocked(const std::string&
 
 bool rss_item::has_attribute(const std::string& attribname) {
 	// LOG(LOG_DEBUG, "rss_item::has_attribute(%s) called", attribname.c_str());
-	if (attribname == "title" || 
-		attribname == "link" || 
-		attribname == "author" || 
-		attribname == "content" || 
-		attribname == "date"  ||
-		attribname == "guid" ||
-		attribname == "unread" ||
-		attribname == "enclosure_url" ||
-		attribname == "enclosure_type" ||
-		attribname == "flags" ||
-		attribname == "age" ||
-		attribname == "articleindex")
-			return true;
+	if (attribname == "title" ||
+	        attribname == "link" ||
+	        attribname == "author" ||
+	        attribname == "content" ||
+	        attribname == "date"  ||
+	        attribname == "guid" ||
+	        attribname == "unread" ||
+	        attribname == "enclosure_url" ||
+	        attribname == "enclosure_type" ||
+	        attribname == "flags" ||
+	        attribname == "age" ||
+	        attribname == "articleindex")
+		return true;
 
 	// if we have a feed, then forward the request
 	if (feedptr)
@@ -297,14 +297,14 @@ void rss_item::set_flags(const std::string& ff) {
 void rss_item::sort_flags() {
 	std::sort(flags_.begin(), flags_.end());
 
-	for (auto it=flags_.begin();flags_.size() > 0 && it!=flags_.end();++it) {
+	for (auto it=flags_.begin(); flags_.size() > 0 && it!=flags_.end(); ++it) {
 		if (!isalpha(*it)) {
 			flags_.erase(it);
 			it = flags_.begin();
 		}
 	}
 
-	for (unsigned int i=0;i<flags_.size();++i) {
+	for (unsigned int i=0; i<flags_.size(); ++i) {
 		if (i < (flags_.size()-1)) {
 			if (flags_[i] == flags_[i+1]) {
 				flags_.erase(i+1,i+1);
@@ -316,15 +316,15 @@ void rss_item::sort_flags() {
 
 bool rss_feed::has_attribute(const std::string& attribname) {
 	if (attribname == "feedtitle" ||
-		attribname == "description" ||
-		attribname == "feedlink" ||
-		attribname == "feeddate" ||
-		attribname == "rssurl" ||
-		attribname == "unread_count" ||
-		attribname == "total_count" ||
-		attribname == "tags" ||
-		attribname == "feedindex")
-			return true;
+	        attribname == "description" ||
+	        attribname == "feedlink" ||
+	        attribname == "feeddate" ||
+	        attribname == "rssurl" ||
+	        attribname == "unread_count" ||
+	        attribname == "total_count" ||
+	        attribname == "tags" ||
+	        attribname == "feedindex")
+		return true;
 	return false;
 }
 
@@ -568,10 +568,14 @@ void rss_item::set_feedptr(std::shared_ptr<rss_feed> ptr) {
 
 std::string rss_feed::get_status() {
 	switch (status_) {
-		case SUCCESS: return " ";
-		case TO_BE_DOWNLOADED: return "_";
-		case DURING_DOWNLOAD: return ".";
-		case DL_ERROR: return "x";
+	case SUCCESS:
+		return " ";
+	case TO_BE_DOWNLOADED:
+		return "_";
+	case DURING_DOWNLOAD:
+		return ".";
+	case DL_ERROR:
+		return "x";
 	}
 	return "?";
 }

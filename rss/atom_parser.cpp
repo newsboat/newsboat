@@ -16,14 +16,18 @@ void atom_parser::parse_feed(feed& f, xmlNode * rootNode) {
 		throw exception(_("XML root node is NULL"));
 
 	switch (f.rss_version) {
-		case ATOM_0_3:
-			ns = ATOM_0_3_URI; break;
-		case ATOM_1_0:
-			ns = ATOM_1_0_URI; break;
-		case ATOM_0_3_NONS:
-			ns = NULL; break;
-		default:
-			ns = NULL; break;
+	case ATOM_0_3:
+		ns = ATOM_0_3_URI;
+		break;
+	case ATOM_1_0:
+		ns = ATOM_1_0_URI;
+		break;
+	case ATOM_0_3_NONS:
+		ns = NULL;
+		break;
+	default:
+		ns = NULL;
+		break;
 	}
 
 	f.language = get_prop(rootNode, "lang");

@@ -1,8 +1,7 @@
 #include <markreadthread.h>
 #include <logger.h>
 
-namespace newsbeuter
-{
+namespace newsbeuter {
 
 markreadthread::markreadthread( ttrss_api* r_api, const std::string& guid, bool read ) :
 	_r_api( r_api ),

@@ -134,7 +134,7 @@ double poddlthread::compute_kbps() {
 void poddlthread::mkdir_p(const char * file) {
 	char path[2048];
 	snprintf(path, sizeof(path), "%s", file);
-	for (char * x = path;*x != '\0';x++) {
+	for (char * x = path; *x != '\0'; x++) {
 		if (*x == '/') {
 			*x = '\0';
 			mkdir(path, 0755);

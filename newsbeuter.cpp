@@ -16,7 +16,7 @@ int main(int argc, char * argv[]) {
 
 	if (!setlocale(LC_CTYPE,"") || !setlocale(LC_MESSAGES,"")) {
 		std::cerr << "setlocale failed: " << strerror(errno) << std::endl;
-		return 1;	
+		return 1;
 	}
 	bindtextdomain (PACKAGE, LOCALEDIR);
 	textdomain (PACKAGE);

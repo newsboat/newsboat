@@ -14,7 +14,7 @@
 namespace newsbeuter {
 
 itemview_formaction::itemview_formaction(view * vv, std::shared_ptr<itemlist_formaction> il, std::string formstr)
-	: formaction(vv,formstr), show_source(false), quit(false), rxman(0), num_lines(0), itemlist(il), in_search(false) { 
+	: formaction(vv,formstr), show_source(false), quit(false), rxman(0), num_lines(0), itemlist(il), in_search(false) {
 	valid_cmds.push_back("save");
 	std::sort(valid_cmds.begin(), valid_cmds.end());
 }
@@ -47,8 +47,8 @@ void itemview_formaction::prepare() {
 	if (do_redraw) {
 
 		{
-		scope_measure("itemview::prepare: rendering");
-		f->run(-3); // XXX HACK: render once so that we get a proper widget width
+			scope_measure("itemview::prepare: rendering");
+			f->run(-3); // XXX HACK: render once so that we get a proper widget width
 		}
 
 		std::vector<std::string> lines;
@@ -58,7 +58,7 @@ void itemview_formaction::prepare() {
 		if (widthstr.length() > 0) {
 			view_width = render_width = utils::to_u(widthstr);
 			if (render_width - 5 > 0)
-				render_width -= 5; 	
+				render_width -= 5;
 		}
 
 		std::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
@@ -171,223 +171,222 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 	}
 
 	switch (op) {
-		case OP_TOGGLESOURCEVIEW:
-			LOG(LOG_INFO, "view::run_itemview: toggling source view");
-			show_source = !show_source;
-			do_redraw = true;
-			break;
-		case OP_ENQUEUE: {
-				if (item->enclosure_url().length() > 0 && utils::is_http_url(item->enclosure_url())) {
-					v->get_ctrl()->enqueue_url(item->enclosure_url(), feed);
-					v->set_status(utils::strprintf(_("Added %s to download queue."), item->enclosure_url().c_str()));
-				} else {
-					v->set_status(utils::strprintf(_("Invalid URL: '%s'"), item->enclosure_url().c_str()));
-				}
-			}
-			break;
-		case OP_SAVE:
-			{
-				LOG(LOG_INFO, "view::run_itemview: saving article");
-				std::string filename;
-				if (automatic) {
-					if (args->size() > 0)
-						filename = (*args)[0];
-				} else {
-					filename = v->run_filebrowser(v->get_filename_suggestion(item->title()));
-				}
-				if (filename == "") {
-					v->show_error(_("Aborted saving."));
-				} else {
-					try {
-						v->get_ctrl()->write_item(item, filename);
-						v->show_error(utils::strprintf(_("Saved article to %s."), filename.c_str()));
-					} catch (...) {
-						v->show_error(utils::strprintf(_("Error: couldn't write article to file %s"), filename.c_str()));
-					}
-				}
-			}
-			break;
-		case OP_OPENINBROWSER:
-			LOG(LOG_INFO, "view::run_itemview: starting browser");
-			v->set_status(_("Starting browser..."));
-			v->open_in_browser(item->link());
-			v->set_status("");
-			break;
-		case OP_BOOKMARK:
-			if (automatic) {
-				qna_responses.clear();
-				qna_responses.push_back(item->link());
-				qna_responses.push_back(item->title());
-				qna_responses.push_back(args->size() > 0 ? (*args)[0] : "");
-			} else {
-				this->start_bookmark_qna(item->title(), item->link(), "");
-			}
-			break;
-		case OP_SEARCH: {
-				std::vector<qna_pair> qna;
-				if (automatic) {
-					if (args->size() > 0) {
-						qna_responses.clear();
-						qna_responses.push_back((*args)[0]);
-						finished_qna(OP_INT_START_SEARCH);
-					}
-				} else {
-					qna.push_back(qna_pair(_("Search for: "), ""));
-					this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
-				}
-			}
-			break;
-		case OP_PIPE_TO: {
-				std::vector<qna_pair> qna;
-				if (automatic) {
-					if (args->size() > 0) {
-						qna_responses.clear();
-						qna_responses.push_back((*args)[0]);
-						finished_qna(OP_PIPE_TO);
-					}
-				} else {
-					qna.push_back(qna_pair(_("Pipe article to command: "), ""));
-					this->start_qna(qna, OP_PIPE_TO, &cmdlinehistory);
-				}
-			}
-			break;
-		case OP_EDITFLAGS: 
-			if (automatic) {
-				qna_responses.clear();
-				if (args->size() > 0) {
-					qna_responses.push_back((*args)[0]);
-					this->finished_qna(OP_INT_EDITFLAGS_END);
-				}
-			} else {
-				std::vector<qna_pair> qna;
-				qna.push_back(qna_pair(_("Flags: "), item->flags()));
-				this->start_qna(qna, OP_INT_EDITFLAGS_END);
-			}
-			break;
-		case OP_SHOWURLS: {
-				std::string urlviewer = v->get_cfg()->get_configvalue("external-url-viewer");
-				LOG(LOG_DEBUG, "view::run_itemview: showing URLs");
-				if (urlviewer == "") {
-					if (links.size() > 0) {
-						v->push_urlview(links);
-					} else {
-						v->show_error(_("URL list empty."));
-					}
-				} else {
-					qna_responses.clear();
-					qna_responses.push_back(urlviewer);
-					this->finished_qna(OP_PIPE_TO);
-				}
-			}
-			break;
-		case OP_DELETE:
-			LOG(LOG_INFO, "view::run_itemview: deleting current article");
-			item->set_deleted(true);
-			v->get_ctrl()->mark_deleted(guid, true);
-			/* fall-through! */
-		case OP_NEXTUNREAD:
-			LOG(LOG_INFO, "view::run_itemview: jumping to next unread article");
-			if (v->get_next_unread(itemlist.get(), this)) {
-				do_redraw = true;
-			} else {
-				v->pop_current_formaction();
-				v->show_error(_("No unread items."));
-			}
-			break;
-		case OP_PREVUNREAD:
-			LOG(LOG_INFO, "view::run_itemview: jumping to previous unread article");
-			if (v->get_previous_unread(itemlist.get(), this)) {
-				do_redraw = true;
-			} else {
-				v->pop_current_formaction();
-				v->show_error(_("No unread items."));
-			}
-			break;
-		case OP_NEXT:
-			LOG(LOG_INFO, "view::run_itemview: jumping to next article");
-			if (v->get_next(itemlist.get(), this)) {
-				do_redraw = true;
-			} else {
-				v->pop_current_formaction();
-				v->show_error(_("Already on last item."));
-			}
-			break;
-		case OP_PREV:
-			LOG(LOG_INFO, "view::run_itemview: jumping to previous article");
-			if (v->get_previous(itemlist.get(), this)) {
-				do_redraw = true;
-			} else {
-				v->pop_current_formaction();
-				v->show_error(_("Already on first item."));
-			}
-			break;
-		case OP_RANDOMUNREAD:
-			LOG(LOG_INFO, "view::run_itemview: jumping to random unread article");
-			if (v->get_random_unread(itemlist.get(), this)) {
-				do_redraw = true;
-			} else {
-				v->pop_current_formaction();
-				v->show_error(_("No unread items."));
-			}
-			break;
-		case OP_TOGGLEITEMREAD:
-			LOG(LOG_INFO, "view::run_itemview: setting unread and quitting");
-			v->set_status(_("Toggling read flag for article..."));
+	case OP_TOGGLESOURCEVIEW:
+		LOG(LOG_INFO, "view::run_itemview: toggling source view");
+		show_source = !show_source;
+		do_redraw = true;
+		break;
+	case OP_ENQUEUE: {
+		if (item->enclosure_url().length() > 0 && utils::is_http_url(item->enclosure_url())) {
+			v->get_ctrl()->enqueue_url(item->enclosure_url(), feed);
+			v->set_status(utils::strprintf(_("Added %s to download queue."), item->enclosure_url().c_str()));
+		} else {
+			v->set_status(utils::strprintf(_("Invalid URL: '%s'"), item->enclosure_url().c_str()));
+		}
+	}
+	break;
+	case OP_SAVE: {
+		LOG(LOG_INFO, "view::run_itemview: saving article");
+		std::string filename;
+		if (automatic) {
+			if (args->size() > 0)
+				filename = (*args)[0];
+		} else {
+			filename = v->run_filebrowser(v->get_filename_suggestion(item->title()));
+		}
+		if (filename == "") {
+			v->show_error(_("Aborted saving."));
+		} else {
 			try {
-				item->set_unread(true);
-				v->get_ctrl()->mark_article_read(item->guid(), false);
-			} catch (const dbexception& e) {
-				v->show_error(utils::strprintf(_("Error while marking article as unread: %s"), e.what()));
+				v->get_ctrl()->write_item(item, filename);
+				v->show_error(utils::strprintf(_("Saved article to %s."), filename.c_str()));
+			} catch (...) {
+				v->show_error(utils::strprintf(_("Error: couldn't write article to file %s"), filename.c_str()));
 			}
+		}
+	}
+	break;
+	case OP_OPENINBROWSER:
+		LOG(LOG_INFO, "view::run_itemview: starting browser");
+		v->set_status(_("Starting browser..."));
+		v->open_in_browser(item->link());
+		v->set_status("");
+		break;
+	case OP_BOOKMARK:
+		if (automatic) {
+			qna_responses.clear();
+			qna_responses.push_back(item->link());
+			qna_responses.push_back(item->title());
+			qna_responses.push_back(args->size() > 0 ? (*args)[0] : "");
+		} else {
+			this->start_bookmark_qna(item->title(), item->link(), "");
+		}
+		break;
+	case OP_SEARCH: {
+		std::vector<qna_pair> qna;
+		if (automatic) {
+			if (args->size() > 0) {
+				qna_responses.clear();
+				qna_responses.push_back((*args)[0]);
+				finished_qna(OP_INT_START_SEARCH);
+			}
+		} else {
+			qna.push_back(qna_pair(_("Search for: "), ""));
+			this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
+		}
+	}
+	break;
+	case OP_PIPE_TO: {
+		std::vector<qna_pair> qna;
+		if (automatic) {
+			if (args->size() > 0) {
+				qna_responses.clear();
+				qna_responses.push_back((*args)[0]);
+				finished_qna(OP_PIPE_TO);
+			}
+		} else {
+			qna.push_back(qna_pair(_("Pipe article to command: "), ""));
+			this->start_qna(qna, OP_PIPE_TO, &cmdlinehistory);
+		}
+	}
+	break;
+	case OP_EDITFLAGS:
+		if (automatic) {
+			qna_responses.clear();
+			if (args->size() > 0) {
+				qna_responses.push_back((*args)[0]);
+				this->finished_qna(OP_INT_EDITFLAGS_END);
+			}
+		} else {
+			std::vector<qna_pair> qna;
+			qna.push_back(qna_pair(_("Flags: "), item->flags()));
+			this->start_qna(qna, OP_INT_EDITFLAGS_END);
+		}
+		break;
+	case OP_SHOWURLS: {
+		std::string urlviewer = v->get_cfg()->get_configvalue("external-url-viewer");
+		LOG(LOG_DEBUG, "view::run_itemview: showing URLs");
+		if (urlviewer == "") {
+			if (links.size() > 0) {
+				v->push_urlview(links);
+			} else {
+				v->show_error(_("URL list empty."));
+			}
+		} else {
+			qna_responses.clear();
+			qna_responses.push_back(urlviewer);
+			this->finished_qna(OP_PIPE_TO);
+		}
+	}
+	break;
+	case OP_DELETE:
+		LOG(LOG_INFO, "view::run_itemview: deleting current article");
+		item->set_deleted(true);
+		v->get_ctrl()->mark_deleted(guid, true);
+	/* fall-through! */
+	case OP_NEXTUNREAD:
+		LOG(LOG_INFO, "view::run_itemview: jumping to next unread article");
+		if (v->get_next_unread(itemlist.get(), this)) {
+			do_redraw = true;
+		} else {
+			v->pop_current_formaction();
+			v->show_error(_("No unread items."));
+		}
+		break;
+	case OP_PREVUNREAD:
+		LOG(LOG_INFO, "view::run_itemview: jumping to previous unread article");
+		if (v->get_previous_unread(itemlist.get(), this)) {
+			do_redraw = true;
+		} else {
+			v->pop_current_formaction();
+			v->show_error(_("No unread items."));
+		}
+		break;
+	case OP_NEXT:
+		LOG(LOG_INFO, "view::run_itemview: jumping to next article");
+		if (v->get_next(itemlist.get(), this)) {
+			do_redraw = true;
+		} else {
+			v->pop_current_formaction();
+			v->show_error(_("Already on last item."));
+		}
+		break;
+	case OP_PREV:
+		LOG(LOG_INFO, "view::run_itemview: jumping to previous article");
+		if (v->get_previous(itemlist.get(), this)) {
+			do_redraw = true;
+		} else {
+			v->pop_current_formaction();
+			v->show_error(_("Already on first item."));
+		}
+		break;
+	case OP_RANDOMUNREAD:
+		LOG(LOG_INFO, "view::run_itemview: jumping to random unread article");
+		if (v->get_random_unread(itemlist.get(), this)) {
+			do_redraw = true;
+		} else {
+			v->pop_current_formaction();
+			v->show_error(_("No unread items."));
+		}
+		break;
+	case OP_TOGGLEITEMREAD:
+		LOG(LOG_INFO, "view::run_itemview: setting unread and quitting");
+		v->set_status(_("Toggling read flag for article..."));
+		try {
+			item->set_unread(true);
+			v->get_ctrl()->mark_article_read(item->guid(), false);
+		} catch (const dbexception& e) {
+			v->show_error(utils::strprintf(_("Error while marking article as unread: %s"), e.what()));
+		}
+		v->set_status("");
+		quit = true;
+		break;
+	case OP_QUIT:
+		LOG(LOG_INFO, "view::run_itemview: quitting");
+		quit = true;
+		break;
+	case OP_HARDQUIT:
+		LOG(LOG_INFO, "view::run_itemview: hard quitting");
+		hardquit = true;
+		break;
+	case OP_HELP:
+		v->push_help();
+		break;
+	case OP_1:
+	case OP_2:
+	case OP_3:
+	case OP_4:
+	case OP_5:
+	case OP_6:
+	case OP_7:
+	case OP_8:
+	case OP_9:
+	case OP_0: {
+		unsigned int idx = op - OP_1;
+		LOG(LOG_DEBUG, "itemview::run: OP_1 = %d op = %d idx = %u", OP_1, op, idx);
+		if(idx < links.size()) {
+			v->set_status(_("Starting browser..."));
+			v->open_in_browser(links[idx].first);
 			v->set_status("");
-			quit = true;
-			break;
-		case OP_QUIT:
-			LOG(LOG_INFO, "view::run_itemview: quitting");
-			quit = true;
-			break;
-		case OP_HARDQUIT:
-			LOG(LOG_INFO, "view::run_itemview: hard quitting");
-			hardquit = true;
-			break;
-		case OP_HELP:
-			v->push_help();
-			break;
-		case OP_1:
-		case OP_2:
-		case OP_3:
-		case OP_4:
-		case OP_5:
-		case OP_6:
-		case OP_7:
-		case OP_8:
-		case OP_9:
-		case OP_0: {
-				unsigned int idx = op - OP_1;
-				LOG(LOG_DEBUG, "itemview::run: OP_1 = %d op = %d idx = %u", OP_1, op, idx);
-				if(idx < links.size()) {
-					v->set_status(_("Starting browser..."));
-					v->open_in_browser(links[idx].first);
-					v->set_status("");
-				}
+		}
+	}
+	break;
+	case OP_GOTO_URL: {
+		std::vector<qna_pair> qna;
+		if (automatic) {
+			if (args->size() > 0) {
+				qna_responses.clear();
+				qna_responses.push_back((*args)[0]);
+				finished_qna(OP_INT_GOTO_URL);
 			}
-			break;
-		case OP_GOTO_URL: {
-				std::vector<qna_pair> qna;
-				if (automatic) {
-					if (args->size() > 0) {
-						qna_responses.clear();
-						qna_responses.push_back((*args)[0]);
-						finished_qna(OP_INT_GOTO_URL);
-					}
-				} else {
-					qna.push_back(qna_pair(_("Goto URL #"), ""));
-					this->start_qna(qna, OP_INT_GOTO_URL);
-				}
-			}
-			break;
-		default:
-			break;
+		} else {
+			qna.push_back(qna_pair(_("Goto URL #"), ""));
+			this->start_qna(qna, OP_INT_GOTO_URL);
+		}
+	}
+	break;
+	default:
+		break;
 	}
 
 	if (hardquit) {
@@ -493,42 +492,42 @@ void itemview_formaction::finished_qna(operation op) {
 	std::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
 
 	switch (op) {
-		case OP_INT_EDITFLAGS_END:
-			item->set_flags(qna_responses[0]);
-			v->get_ctrl()->update_flags(item);
-			v->set_status(_("Flags updated."));
-			do_redraw = true;
-			break;
-		case OP_INT_START_SEARCH:
-			do_search();
-			break;
-		case OP_PIPE_TO: {
-				std::string cmd = qna_responses[0];
-				std::ostringstream ostr;
-				v->get_ctrl()->write_item(feed->get_item_by_guid(guid), ostr);
-				v->push_empty_formaction();
-				stfl::reset();
-				FILE * f = popen(cmd.c_str(), "w");
-				if (f) {
-					std::string data = ostr.str();
-					fwrite(data.c_str(), data.length(), 1, f);
-					pclose(f);
-				}
-				v->pop_current_formaction();
-			}
-			break;
-                case OP_INT_GOTO_URL: {
-                                unsigned int idx = 0;
-                                sscanf(qna_responses[0].c_str(),"%u",&idx);
-				if(idx && idx-1 < links.size()) {
-					v->set_status(_("Starting browser..."));
-					v->open_in_browser(links[idx-1].first);
-					v->set_status("");
-				}
-                        }
-                        break;
-		default:
-			break;
+	case OP_INT_EDITFLAGS_END:
+		item->set_flags(qna_responses[0]);
+		v->get_ctrl()->update_flags(item);
+		v->set_status(_("Flags updated."));
+		do_redraw = true;
+		break;
+	case OP_INT_START_SEARCH:
+		do_search();
+		break;
+	case OP_PIPE_TO: {
+		std::string cmd = qna_responses[0];
+		std::ostringstream ostr;
+		v->get_ctrl()->write_item(feed->get_item_by_guid(guid), ostr);
+		v->push_empty_formaction();
+		stfl::reset();
+		FILE * f = popen(cmd.c_str(), "w");
+		if (f) {
+			std::string data = ostr.str();
+			fwrite(data.c_str(), data.length(), 1, f);
+			pclose(f);
+		}
+		v->pop_current_formaction();
+	}
+	break;
+	case OP_INT_GOTO_URL: {
+		unsigned int idx = 0;
+		sscanf(qna_responses[0].c_str(),"%u",&idx);
+		if(idx && idx-1 < links.size()) {
+			v->set_status(_("Starting browser..."));
+			v->open_in_browser(links[idx-1].first);
+			v->set_status("");
+		}
+	}
+	break;
+	default:
+		break;
 	}
 }
 

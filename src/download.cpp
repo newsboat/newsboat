@@ -38,26 +38,26 @@ double download::percents_finished() {
 
 const char * download::status_text() {
 	switch (dlstatus) {
-		case DL_QUEUED:
-			return _("queued");
-		case DL_DOWNLOADING:
-			return _("downloading");
-		case DL_CANCELLED:
-			return _("cancelled");
-		case DL_DELETED:
-			return _("deleted");
-		case DL_FINISHED:
-			return _("finished");
-		case DL_FAILED:
-			return _("failed");
-		case DL_ALREADY_DOWNLOADED:
-			return _("incomplete");
-		case DL_READY:
-			return _("ready");
-		case DL_PLAYED:
-			return _("played");
-		default:
-			return _("unknown (bug).");
+	case DL_QUEUED:
+		return _("queued");
+	case DL_DOWNLOADING:
+		return _("downloading");
+	case DL_CANCELLED:
+		return _("cancelled");
+	case DL_DELETED:
+		return _("deleted");
+	case DL_FINISHED:
+		return _("finished");
+	case DL_FAILED:
+		return _("failed");
+	case DL_ALREADY_DOWNLOADED:
+		return _("incomplete");
+	case DL_READY:
+		return _("ready");
+	case DL_PLAYED:
+		return _("played");
+	default:
+		return _("unknown (bug).");
 	}
 }
 

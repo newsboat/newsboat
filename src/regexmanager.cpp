@@ -63,7 +63,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 					throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), params[3].c_str()));
 				colorstr.append(params[3]);
 			}
-			for (unsigned int i=4;i<params.size();++i) {
+			for (unsigned int i=4; i<params.size(); ++i) {
 				if (params[i] != "default") {
 					if (colorstr.length() > 0)
 						colorstr.append(",");
@@ -76,16 +76,16 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 		}
 		if (location != "all") {
 			LOG(LOG_DEBUG, "regexmanager::handle_action: adding rx = %s colorstr = %s to location %s",
-				params[1].c_str(), colorstr.c_str(), location.c_str());
+			    params[1].c_str(), colorstr.c_str(), location.c_str());
 			locations[location].first.push_back(rx);
 			locations[location].second.push_back(colorstr);
 		} else {
 			delete rx;
 			for (auto location : locations) {
 				LOG(LOG_DEBUG, "regexmanager::handle_action: adding rx = %s colorstr = %s to location %s",
-					params[1].c_str(), colorstr.c_str(), location.first.c_str());
+				    params[1].c_str(), colorstr.c_str(), location.first.c_str());
 				rx = new regex_t;
- 				// we need to create a new one for each push_back, otherwise we'd have double frees.
+				// we need to create a new one for each push_back, otherwise we'd have double frees.
 				regcomp(rx, params[1].c_str(), REG_EXTENDED | REG_ICASE);
 				location.second.first.push_back(rx);
 				location.second.second.push_back(colorstr);
@@ -121,7 +121,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 			colorstr.append(bgcolor);
 		}
 
-		for (unsigned int i=3;i<params.size();i++) {
+		for (unsigned int i=3; i<params.size(); i++) {
 			if (params[i] != "default") {
 				if (colorstr.length() > 0)
 					colorstr.append(",");

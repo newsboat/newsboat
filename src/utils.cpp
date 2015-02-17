@@ -196,7 +196,7 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str, std::string 
 
 	LOG(LOG_DEBUG,"utils::tokenize_nl: last_pos = %u",last_pos);
 	if (last_pos != std::string::npos) {
-		for (i=0;i<last_pos;++i) {
+		for (i=0; i<last_pos; ++i) {
 			tokens.push_back(std::string("\n"));
 		}
 	}
@@ -206,7 +206,7 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str, std::string 
 		LOG(LOG_DEBUG,"utils::tokenize_nl: substr = %s", str.substr(last_pos, pos - last_pos).c_str());
 		last_pos = str.find_first_not_of(delimiters, pos);
 		LOG(LOG_DEBUG,"utils::tokenize_nl: pos - last_pos = %u", last_pos - pos);
-		for (i=0;last_pos != std::string::npos && pos != std::string::npos && i<(last_pos - pos);++i) {
+		for (i=0; last_pos != std::string::npos && pos != std::string::npos && i<(last_pos - pos); ++i) {
 			tokens.push_back(std::string("\n"));
 		}
 		pos = str.find_first_of(delimiters, last_pos);
@@ -270,10 +270,10 @@ std::string utils::convert_text(const std::string& text, const std::string& toco
 	size_t inbytesleft;
 	size_t outbytesleft;
 
-/*
- * of all the Unix-like systems around there, only Linux/glibc seems to 
- * come with a SuSv3-conforming iconv implementation.
- */
+	/*
+	 * of all the Unix-like systems around there, only Linux/glibc seems to
+	 * come with a SuSv3-conforming iconv implementation.
+	 */
 #if !(__linux) && !defined(__GLIBC__) && !defined(__APPLE__) && !defined(__OpenBSD__)
 	const char * inbufp;
 #else
@@ -291,22 +291,22 @@ std::string utils::convert_text(const std::string& text, const std::string& toco
 		int rc = ::iconv(cd, &inbufp, &inbytesleft, &outbufp, &outbytesleft);
 		if (-1 == rc) {
 			switch (errno) {
-				case E2BIG:
-					result.append(old_outbufp, outbufp - old_outbufp);
-					outbufp = outbuf;
-					outbytesleft = sizeof(outbuf);
-					inbufp += strlen(inbufp) - inbytesleft;
-					inbytesleft = strlen(inbufp);
-					break;
-				case EILSEQ:
-				case EINVAL:
-					result.append(old_outbufp, outbufp - old_outbufp);
-					result.append("?");
-					inbufp += strlen(inbufp) - inbytesleft + 1;
-					inbytesleft = strlen(inbufp);
-					break;
-				default:
-					break;
+			case E2BIG:
+				result.append(old_outbufp, outbufp - old_outbufp);
+				outbufp = outbuf;
+				outbytesleft = sizeof(outbuf);
+				inbufp += strlen(inbufp) - inbytesleft;
+				inbytesleft = strlen(inbufp);
+				break;
+			case EILSEQ:
+			case EINVAL:
+				result.append(old_outbufp, outbufp - old_outbufp);
+				result.append("?");
+				inbufp += strlen(inbufp) - inbytesleft + 1;
+				inbytesleft = strlen(inbufp);
+				break;
+			default:
+				break;
 			}
 		} else {
 			result.append(old_outbufp, outbufp - old_outbufp);
@@ -371,8 +371,7 @@ std::string utils::retrieve_url(const std::string& url, configcontainer * cfgcon
 
 	if(postdata != NULL) {
 		LOG(LOG_DEBUG, "utils::retrieve_url(%s)[%s]: %s", url.c_str(), postdata->c_str(), buf.c_str());
-	}
-	else {
+	} else {
 		LOG(LOG_DEBUG, "utils::retrieve_url(%s)[-]: %s", url.c_str(), buf.c_str());
 	}
 
@@ -382,56 +381,63 @@ std::string utils::retrieve_url(const std::string& url, configcontainer * cfgcon
 void utils::run_command(const std::string& cmd, const std::string& input) {
 	int rc = fork();
 	switch (rc) {
-		case -1: break;
-		case 0: { // child:
-			int fd = ::open("/dev/null", O_RDWR);
-			close(0);
-			close(1);
-			close(2);
-			dup2(fd, 0);
-			dup2(fd, 1);
-			dup2(fd, 2);
-			LOG(LOG_DEBUG, "utils::run_command: %s '%s'", cmd.c_str(), input.c_str());
-			execlp(cmd.c_str(), cmd.c_str(), input.c_str(), NULL);
-			LOG(LOG_DEBUG, "utils::run_command: execlp of %s failed: %s", cmd.c_str(), strerror(errno));
-			exit(1);
-		}
-		default:
-			break;
+	case -1:
+		break;
+	case 0: { // child:
+		int fd = ::open("/dev/null", O_RDWR);
+		close(0);
+		close(1);
+		close(2);
+		dup2(fd, 0);
+		dup2(fd, 1);
+		dup2(fd, 2);
+		LOG(LOG_DEBUG, "utils::run_command: %s '%s'", cmd.c_str(), input.c_str());
+		execlp(cmd.c_str(), cmd.c_str(), input.c_str(), NULL);
+		LOG(LOG_DEBUG, "utils::run_command: execlp of %s failed: %s", cmd.c_str(), strerror(errno));
+		exit(1);
+	}
+	default:
+		break;
 	}
 }
 
 std::string utils::run_program(char * argv[], const std::string& input) {
 	std::string buf;
-	int ipipe[2]; int opipe[2];
-	pipe(ipipe);  pipe(opipe);
+	int ipipe[2];
+	int opipe[2];
+	pipe(ipipe);
+	pipe(opipe);
 
 	int rc = fork();
 	switch (rc) {
-		case -1: break;
-		case 0: { // child:
-				close(ipipe[1]);   close(opipe[0]);
-				dup2(ipipe[0], 0); dup2(opipe[1], 1);
-				close(2);
+	case -1:
+		break;
+	case 0: { // child:
+		close(ipipe[1]);
+		close(opipe[0]);
+		dup2(ipipe[0], 0);
+		dup2(opipe[1], 1);
+		close(2);
 
-				int errfd = ::open("/dev/null", O_WRONLY);
-				if (errfd != -1) dup2(errfd, 2);
+		int errfd = ::open("/dev/null", O_WRONLY);
+		if (errfd != -1) dup2(errfd, 2);
 
-				execvp(argv[0], argv);
-				exit(1);
-			}
-		default: {
-				close(ipipe[0]); close(opipe[1]);
-				write(ipipe[1], input.c_str(), input.length());
-				close(ipipe[1]);
-				char cbuf[1024];
-				int rc2;
-				while ((rc2 = read(opipe[0], cbuf, sizeof(cbuf))) > 0) {
-					buf.append(cbuf, rc2);
-				}
-				close(opipe[0]);
-			}
-			break;
+		execvp(argv[0], argv);
+		exit(1);
+	}
+	default: {
+		close(ipipe[0]);
+		close(opipe[1]);
+		write(ipipe[1], input.c_str(), input.length());
+		close(ipipe[1]);
+		char cbuf[1024];
+		int rc2;
+		while ((rc2 = read(opipe[0], cbuf, sizeof(cbuf))) > 0) {
+			buf.append(cbuf, rc2);
+		}
+		close(opipe[0]);
+	}
+	break;
 	}
 	return buf;
 }
@@ -443,9 +449,9 @@ std::string utils::resolve_tilde(const std::string& str) {
 	if (!(homedir = ::getenv("HOME"))) {
 		struct passwd * spw = ::getpwuid(::getuid());
 		if (spw) {
-				homedir = spw->pw_dir;
+			homedir = spw->pw_dir;
 		} else {
-				homedir = "";
+			homedir = "";
 		}
 	}
 
@@ -500,9 +506,9 @@ std::string utils::wstr2str(const std::wstring& wstr) {
 }
 
 template<class T> std::string utils::to_string(T var) {
-    std::stringstream ret;
-    ret << var;
-    return ret.str();
+	std::stringstream ret;
+	ret << var;
+	return ret.str();
 }
 
 // to avoid linker errors
@@ -593,18 +599,29 @@ scope_measure::~scope_measure() {
 
 void utils::append_escapes(std::string& str, char c) {
 	switch (c) {
-		case 'n': str.append("\n"); break;
-		case 'r': str.append("\r"); break;
-		case 't': str.append("\t"); break;
-		case '"': str.append("\""); break;
-		case '\\': break;
-		default: str.append(1, c); break;
+	case 'n':
+		str.append("\n");
+		break;
+	case 'r':
+		str.append("\r");
+		break;
+	case 't':
+		str.append("\t");
+		break;
+	case '"':
+		str.append("\"");
+		break;
+	case '\\':
+		break;
+	default:
+		str.append(1, c);
+		break;
 	}
 }
 
 bool utils::is_valid_color(const std::string& color) {
 	const char * colors[] = { "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white", "default", NULL };
-	for (unsigned int i=0;colors[i];i++) {
+	for (unsigned int i=0; colors[i]; i++) {
 		if (color == colors[i])
 			return true;
 	}
@@ -615,7 +632,7 @@ bool utils::is_valid_color(const std::string& color) {
 
 bool utils::is_valid_attribute(const std::string& attrib) {
 	const char * attribs[] = { "standout", "underline", "reverse", "blink", "dim", "bold", "protect", "invis", "default", NULL };
-	for (unsigned int i=0;attribs[i];i++) {
+	for (unsigned int i=0; attribs[i]; i++) {
 		if (attrib == attribs[i])
 			return true;
 	}
@@ -627,7 +644,7 @@ std::vector<std::pair<unsigned int, unsigned int>> utils::partition_indexes(unsi
 	unsigned int count = end - start + 1;
 	unsigned int size = count / parts;
 
-	for (unsigned int i=0;i<parts-1;i++) {
+	for (unsigned int i=0; i<parts-1; i++) {
 		partitions.push_back(std::pair<unsigned int, unsigned int>(start, start + size - 1));
 		start += size;
 	}
@@ -648,7 +665,7 @@ size_t utils::strwidth_stfl(const std::string& str) {
 	size_t reduce_count = 0;
 	size_t len = str.length();
 	if (len > 1) {
-		for (size_t idx=0;idx<len-1;++idx) {
+		for (size_t idx=0; idx<len-1; ++idx) {
 			if (str[idx] == '<' && str[idx+1] != '>') {
 				reduce_count += 3;
 				idx += 3;
@@ -663,7 +680,7 @@ size_t utils::wcswidth_stfl(const std::wstring& str, size_t size) {
 	size_t reduce_count = 0;
 	size_t len = std::min(str.length(), size);
 	if (len > 1) {
-		for (size_t idx=0;idx<len-1;++idx) {
+		for (size_t idx=0; idx<len-1; ++idx) {
 			if (str[idx] == L'<' && str[idx+1] != L'>') {
 				reduce_count += 3;
 				idx += 3;
@@ -713,7 +730,7 @@ std::string utils::censor_url(const std::string& url) {
 				uri->user = (char *)xmlStrdup((const xmlChar *)"*:*");
 			}
 			xmlChar * uristr = xmlSaveUri(uri);
-			
+
 			rv = (const char *)uristr;
 			xmlFree(uristr);
 			xmlFreeURI(uri);
@@ -727,7 +744,7 @@ std::string utils::censor_url(const std::string& url) {
 
 std::string utils::quote_for_stfl(std::string str) {
 	unsigned int len = str.length();
-	for (unsigned int i=0;i<len;++i) {
+	for (unsigned int i=0; i<len; ++i) {
 		if (str[i] == '<') {
 			str.insert(i+1, ">");
 			++len;
@@ -784,7 +801,7 @@ void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
 	std::string proxyauth;
 	std::string proxyauthmethod;
 	std::string proxytype;
-	std::string useragent; 
+	std::string useragent;
 	std::string cookie_cache;
 	unsigned int dl_timeout = 0;
 
@@ -908,7 +925,7 @@ std::string utils::unescape_url(const std::string& url) {
 }
 
 std::wstring utils::clean_nonprintable_characters(std::wstring text) {
-	for (size_t idx=0;idx<text.size();++idx) {
+	for (size_t idx=0; idx<text.size(); ++idx) {
 		if (!iswprint(text[idx]))
 			text[idx] = L'\uFFFD';
 	}

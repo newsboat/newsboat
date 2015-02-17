@@ -11,7 +11,7 @@
 namespace newsbeuter {
 
 help_formaction::help_formaction(view * vv, std::string formstr)
-	: formaction(vv, formstr), quit(false), apply_search(false) { 
+	: formaction(vv, formstr), quit(false), apply_search(false) {
 }
 
 help_formaction::~help_formaction() { }
@@ -19,24 +19,24 @@ help_formaction::~help_formaction() { }
 void help_formaction::process_operation(operation op, bool /* automatic */, std::vector<std::string> * /* args */) {
 	bool hardquit = false;
 	switch (op) {
-		case OP_QUIT:
-			quit = true;
-			break;
-		case OP_HARDQUIT:
-			hardquit = true;
-			break;
-		case OP_SEARCH: {
-				std::vector<qna_pair> qna;
-				qna.push_back(qna_pair(_("Search for: "), ""));
-				this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
-			}
-			break;
-		case OP_CLEARFILTER:
-			apply_search = false;
-			do_redraw = true;
-			break;
-		default:
-			break;
+	case OP_QUIT:
+		quit = true;
+		break;
+	case OP_HARDQUIT:
+		hardquit = true;
+		break;
+	case OP_SEARCH: {
+		std::vector<qna_pair> qna;
+		qna.push_back(qna_pair(_("Search for: "), ""));
+		this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
+	}
+	break;
+	case OP_CLEARFILTER:
+		apply_search = false;
+		do_redraw = true;
+		break;
+	default:
+		break;
 	}
 	if (hardquit) {
 		while (v->formaction_stack_size() > 0) {
@@ -58,7 +58,7 @@ void help_formaction::prepare() {
 		fmt.register_fmt('N', PROGRAM_NAME);
 		fmt.register_fmt('V', PROGRAM_VERSION);
 		f->set("head",fmt.do_format(v->get_cfg()->get_configvalue("help-title-format"), width));
-		
+
 		std::vector<keymap_desc> descs;
 		v->get_keys()->get_keymap_descriptions(descs, v->get_keys()->get_flag_from_context(context));
 
@@ -70,30 +70,32 @@ void help_formaction::prepare() {
 		unsigned int unbound_count = 0;
 		unsigned int syskey_count = 0;
 
-		for (unsigned int i=0;i<3;i++) {
+		for (unsigned int i=0; i<3; i++) {
 			for (auto desc : descs) {
 				bool condition;
 				switch (i) {
-					case 0: 
-						condition = (desc.key.length() == 0 || desc.flags & KM_SYSKEYS); 
-						if (desc.key.length() == 0)
-							unbound_count++;
-						if (desc.flags & KM_SYSKEYS)
-							syskey_count++;
-						break;
-					case 1: 
-						condition = !(desc.flags & KM_SYSKEYS); 
-						break;
-					case 2: 
-						condition = (desc.key.length() > 0 || desc.flags & KM_SYSKEYS); 
-						break;
-					default: condition = true; break;
+				case 0:
+					condition = (desc.key.length() == 0 || desc.flags & KM_SYSKEYS);
+					if (desc.key.length() == 0)
+						unbound_count++;
+					if (desc.flags & KM_SYSKEYS)
+						syskey_count++;
+					break;
+				case 1:
+					condition = !(desc.flags & KM_SYSKEYS);
+					break;
+				case 2:
+					condition = (desc.key.length() > 0 || desc.flags & KM_SYSKEYS);
+					break;
+				default:
+					condition = true;
+					break;
 				}
 				if (context.length() > 0 && (desc.ctx != context || condition))
 					continue;
-				if (!apply_search || strcasestr(desc.key.c_str(), searchphrase.c_str())!=NULL || 
-						strcasestr(desc.cmd.c_str(), searchphrase.c_str())!=NULL ||
-						strcasestr(desc.desc.c_str(), searchphrase.c_str())!=NULL) {
+				if (!apply_search || strcasestr(desc.key.c_str(), searchphrase.c_str())!=NULL ||
+				        strcasestr(desc.cmd.c_str(), searchphrase.c_str())!=NULL ||
+				        strcasestr(desc.desc.c_str(), searchphrase.c_str())!=NULL) {
 					char tabs_1[] = "                ";
 					char tabs_2[] = "                        ";
 					int how_often_1 = strlen(tabs_1) - desc.key.length();
@@ -106,9 +108,13 @@ void help_formaction::prepare() {
 					tabs_2[how_often_2] = '\0';
 					std::string line;
 					switch (i) {
-						case 0:
-						case 1: line = utils::strprintf("%s%s%s%s%s", desc.key.c_str(), tabs_1, desc.cmd.c_str(), tabs_2, desc.desc.c_str()); break;
-						case 2: line = utils::strprintf("%s%s%s%s", desc.cmd.c_str(), tabs_1, tabs_2, desc.desc.c_str()); break;
+					case 0:
+					case 1:
+						line = utils::strprintf("%s%s%s%s%s", desc.key.c_str(), tabs_1, desc.cmd.c_str(), tabs_2, desc.desc.c_str());
+						break;
+					case 2:
+						line = utils::strprintf("%s%s%s%s", desc.cmd.c_str(), tabs_1, tabs_2, desc.desc.c_str());
+						break;
 					}
 					LOG(LOG_DEBUG, "help_formaction::prepare: step 1 - line = %s", line.c_str());
 					line = utils::quote_for_stfl(line);
@@ -121,19 +127,19 @@ void help_formaction::prepare() {
 				}
 			}
 			switch (i) {
-				case 0:
-					if (syskey_count > 0) {
-						listfmt.add_line("");
-						listfmt.add_line(_("Generic bindings:"));
-						listfmt.add_line("");
-					}
-					break;
-				case 1:
-					if (unbound_count > 0) {
-						listfmt.add_line("");
-						listfmt.add_line(_("Unbound functions:"));
-						listfmt.add_line("");
-					}
+			case 0:
+				if (syskey_count > 0) {
+					listfmt.add_line("");
+					listfmt.add_line(_("Generic bindings:"));
+					listfmt.add_line("");
+				}
+				break;
+			case 1:
+				if (unbound_count > 0) {
+					listfmt.add_line("");
+					listfmt.add_line(_("Unbound functions:"));
+					listfmt.add_line("");
+				}
 				break;
 			}
 		}
@@ -197,7 +203,7 @@ std::string help_formaction::make_colorstring(const std::vector<std::string>& co
 				result.append(colors[1]);
 			}
 		}
-		for (unsigned int i=2;i<colors.size();i++) {
+		for (unsigned int i=2; i<colors.size(); i++) {
 			if (result.length() > 0)
 				result.append(",");
 			result.append("attr=");

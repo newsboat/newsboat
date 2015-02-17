@@ -44,9 +44,9 @@ void colormanager::handle_action(const std::string& action, const std::vector<st
 			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), fgcolor.c_str()));
 		if (!utils::is_valid_color(bgcolor))
 			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), bgcolor.c_str()));
-		
+
 		std::vector<std::string> attribs;
-		for (unsigned int i=3;i<params.size();++i) {
+		for (unsigned int i=3; i<params.size(); ++i) {
 			if (!utils::is_valid_attribute(params[i]))
 				throw confighandlerexception(utils::strprintf(_("`%s' is not a valid attribute"), params[i].c_str()));
 			attribs.push_back(params[i]);
@@ -54,7 +54,7 @@ void colormanager::handle_action(const std::string& action, const std::vector<st
 
 		/* we only allow certain elements to be configured, also to indicate the user possible mis-spellings */
 		if (element == "listnormal" || element == "listfocus" || element == "listnormal_unread" || element =="listfocus_unread"
-                || element == "info" || element == "background" || element == "article") {
+		        || element == "info" || element == "background" || element == "article") {
 			fg_colors[element] = fgcolor;
 			bg_colors[element] = bgcolor;
 			attributes[element] = attribs;
@@ -86,7 +86,7 @@ void colormanager::set_pb_colors(podbeuter::pb_view * v) {
 	auto bgcit = bg_colors.begin();
 	auto attit = attributes.begin();
 
-	for (;fgcit != fg_colors.end(); ++fgcit, ++bgcit, ++attit) {
+	for (; fgcit != fg_colors.end(); ++fgcit, ++bgcit, ++attit) {
 		std::string colorattr;
 		if (fgcit->second != "default") {
 			colorattr.append("fg=");
@@ -103,7 +103,7 @@ void colormanager::set_pb_colors(podbeuter::pb_view * v) {
 				colorattr.append(",");
 			colorattr.append("attr=");
 			colorattr.append(attr);
-		} 
+		}
 
 		LOG(LOG_DEBUG,"colormanager::set_pb_colors: %s %s\n",fgcit->first.c_str(), colorattr.c_str());
 
@@ -112,7 +112,7 @@ void colormanager::set_pb_colors(podbeuter::pb_view * v) {
 
 		if (fgcit->first == "article") {
 			std::string styleend_str;
-			
+
 			if (bgcit->second != "default") {
 				styleend_str.append("bg=");
 				styleend_str.append(bgcit->second);

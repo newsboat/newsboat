@@ -7,29 +7,31 @@
 
 namespace newsbeuter {
 
-	enum loglevel { LOG_NONE = 0, LOG_USERERROR, LOG_CRITICAL, LOG_ERROR, LOG_WARN, LOG_INFO, LOG_DEBUG };
+enum loglevel { LOG_NONE = 0, LOG_USERERROR, LOG_CRITICAL, LOG_ERROR, LOG_WARN, LOG_INFO, LOG_DEBUG };
 
 
 class logger {
-	public:
-		static logger &getInstance();
+  public:
+	static logger &getInstance();
 
-		void set_logfile(const char * logfile);
-		void set_errorlogfile(const char * logfile);
-		void set_loglevel(loglevel level);
-		void log(loglevel level, const char * format, ...);
+	void set_logfile(const char * logfile);
+	void set_errorlogfile(const char * logfile);
+	void set_loglevel(loglevel level);
+	void log(loglevel level, const char * format, ...);
 
-	private:
-		logger();
-		logger(const logger &) {}
-		logger& operator=(const logger &) { return *this; }
-		~logger() { }
+  private:
+	logger();
+	logger(const logger &) {}
+	logger& operator=(const logger &) {
+		return *this;
+	}
+	~logger() { }
 
-		loglevel curlevel;
-		std::mutex logMutex;
-		static std::mutex instanceMutex;
-		std::fstream f;
-		std::fstream ef;
+	loglevel curlevel;
+	std::mutex logMutex;
+	static std::mutex instanceMutex;
+	std::fstream f;
+	std::fstream ef;
 };
 
 }

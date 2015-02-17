@@ -27,7 +27,7 @@ std::wstring fmtstr_formatter::do_wformat(const std::wstring& wfmt, unsigned int
 	std::wstring result;
 	unsigned int i;
 	unsigned int fmtlen = wfmt.length();
-	for (i=0;i<fmtlen;++i) {
+	for (i=0; i<fmtlen; ++i) {
 		if (wfmt[i] == L'%') {
 			if (i<(fmtlen-1)) {
 				if (wfmt[i+1] == L'-' || iswdigit(wfmt[i+1])) {

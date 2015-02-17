@@ -48,6 +48,6 @@ void ttrss_urlreader::reload() {
 std::string ttrss_urlreader::get_source() {
 	return "Tiny Tiny RSS";
 }
-	// TODO
+// TODO
 
 }

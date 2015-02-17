@@ -59,8 +59,8 @@ bool matcher::matches(matchable* item) {
 	 * lot of different occassions, and slow matching can be easily measured
 	 * (and felt by the user) on slow computers with a lot of items to match.
 	 */
-	bool retval = false; 
-	if (item) { 
+	bool retval = false;
+	if (item) {
 		scope_measure m1("matcher::matches");
 		retval = matches_r(p.get_root(), item);
 	}
@@ -151,46 +151,46 @@ bool matcher::matchop_eq(expression * e, matchable * item) {
 bool matcher::matches_r(expression * e, matchable * item) {
 	if (e) {
 		switch (e->op) {
-			/* the operator "and" and "or" simply connect two different subexpressions */
-			case LOGOP_AND:
-				return matches_r(e->l, item) && matches_r(e->r, item); // short-circuit evaulation in C -> short circuit evaluation in the filter language
+		/* the operator "and" and "or" simply connect two different subexpressions */
+		case LOGOP_AND:
+			return matches_r(e->l, item) && matches_r(e->r, item); // short-circuit evaulation in C -> short circuit evaluation in the filter language
 
-			case LOGOP_OR:
-				return matches_r(e->l, item) || matches_r(e->r, item); // same here
+		case LOGOP_OR:
+			return matches_r(e->l, item) || matches_r(e->r, item); // same here
 
-			/* while the other operator connect an attribute with a value */
-			case MATCHOP_EQ:
-				return matchop_eq(e, item);
+		/* while the other operator connect an attribute with a value */
+		case MATCHOP_EQ:
+			return matchop_eq(e, item);
 
-			case MATCHOP_NE:
-				return !matchop_eq(e, item);
+		case MATCHOP_NE:
+			return !matchop_eq(e, item);
 
-			case MATCHOP_LT:
-				return matchop_lt(e, item);
+		case MATCHOP_LT:
+			return matchop_lt(e, item);
 
-			case MATCHOP_BETWEEN:
-				return matchop_between(e, item);
+		case MATCHOP_BETWEEN:
+			return matchop_between(e, item);
 
-			case MATCHOP_GT:
-				return matchop_gt(e, item);
+		case MATCHOP_GT:
+			return matchop_gt(e, item);
 
-			case MATCHOP_LE:
-				return !matchop_gt(e, item);
+		case MATCHOP_LE:
+			return !matchop_gt(e, item);
 
-			case MATCHOP_GE:
-				return !matchop_lt(e, item);
+		case MATCHOP_GE:
+			return !matchop_lt(e, item);
 
-			case MATCHOP_RXEQ:
-				return matchop_rxeq(e, item);
+		case MATCHOP_RXEQ:
+			return matchop_rxeq(e, item);
 
-			case MATCHOP_RXNE:
-				return !matchop_rxeq(e, item);
+		case MATCHOP_RXNE:
+			return !matchop_rxeq(e, item);
 
-			case MATCHOP_CONTAINS:
-				return matchop_cont(e, item);
+		case MATCHOP_CONTAINS:
+			return matchop_cont(e, item);
 
-			case MATCHOP_CONTAINSNOT:
-				return !matchop_cont(e, item);
+		case MATCHOP_CONTAINSNOT:
+			return !matchop_cont(e, item);
 
 		}
 		return false;

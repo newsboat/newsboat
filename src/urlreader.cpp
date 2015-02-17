@@ -163,9 +163,9 @@ void opml_urlreader::rec_find_rss_outlines(xmlNode * node, std::string tag) {
 		std::string newtag = tag;
 
 		if (strcmp((const char *)node->name, "outline")==0) {
-			 if (type && strcmp(type,"rss")==0) {
-				 handle_node(node, tag);
-			  } else {
+			if (type && strcmp(type,"rss")==0) {
+				handle_node(node, tag);
+			} else {
 				char * text = (char *)xmlGetProp(node, (const xmlChar *)"title");
 				if (text) {
 					if (newtag.length() > 0) {

@@ -21,110 +21,108 @@
 
 namespace newsbeuter {
 
-filebrowser_formaction::filebrowser_formaction(view * vv, std::string formstr) 
+filebrowser_formaction::filebrowser_formaction(view * vv, std::string formstr)
 	: formaction(vv,formstr), quit(false) { }
 
 filebrowser_formaction::~filebrowser_formaction() { }
 
 void filebrowser_formaction::process_operation(operation op, bool /* automatic */, std::vector<std::string> * /* args */) {
 	switch (op) {
-		case OP_OPEN: 
-			{
-				/*
-				 * whenever "ENTER" is hit, we need to distinguish two different cases:
-				 *   - the focus is in the list of files, then we need to set the filename field to the currently selected entry
-				 *   - the focus is in the filename field, then the filename needs to be returned.
-				 */
-				LOG(LOG_DEBUG,"filebrowser_formaction: 'opening' item");
-				std::string focus = f->get_focus();
-				if (focus.length() > 0) {
-					if (focus == "files") {
-						std::string selection = f->get("listposname");
-						char filetype = selection[0];
-						selection.erase(0,1);
-						std::string filename(selection);
-						switch (filetype) {
-							case 'd': {
-									std::string fileswidth = f->get("files:w");
-									std::istringstream is(fileswidth);
-									unsigned int width;
-									is >> width;
+	case OP_OPEN: {
+		/*
+		 * whenever "ENTER" is hit, we need to distinguish two different cases:
+		 *   - the focus is in the list of files, then we need to set the filename field to the currently selected entry
+		 *   - the focus is in the filename field, then the filename needs to be returned.
+		 */
+		LOG(LOG_DEBUG,"filebrowser_formaction: 'opening' item");
+		std::string focus = f->get_focus();
+		if (focus.length() > 0) {
+			if (focus == "files") {
+				std::string selection = f->get("listposname");
+				char filetype = selection[0];
+				selection.erase(0,1);
+				std::string filename(selection);
+				switch (filetype) {
+				case 'd': {
+					std::string fileswidth = f->get("files:w");
+					std::istringstream is(fileswidth);
+					unsigned int width;
+					is >> width;
 
-									fmtstr_formatter fmt;
-									fmt.register_fmt('N', PROGRAM_NAME);
-									fmt.register_fmt('V', PROGRAM_VERSION);
-									fmt.register_fmt('f', filename);
-									f->set("head", fmt.do_format(v->get_cfg()->get_configvalue("filebrowser-title-format"), width));
-									::chdir(filename.c_str());
-									f->set("listpos","0");
-									char cwdtmp[MAXPATHLEN];
-									::getcwd(cwdtmp,sizeof(cwdtmp));
-									std::string fn(cwdtmp);
-									fn.append(NEWSBEUTER_PATH_SEP);
-									std::string fnstr = f->get("filenametext");
-									const char * base = strrchr(fnstr.c_str(),'/');
-									if (!base)
-										base = fnstr.c_str();
-									fn.append(base);
-									f->set("filenametext",fn);
-									do_redraw = true;
-								}
-								break;
-							case '-': 
-								{
-									char cwdtmp[MAXPATHLEN];
-									::getcwd(cwdtmp,sizeof(cwdtmp));
-									std::string fn(cwdtmp);
-									fn.append(NEWSBEUTER_PATH_SEP);
-									fn.append(filename);
-									f->set("filenametext",fn);
-									f->set_focus("filename");
-								}
-								break;
-							default:
-								// TODO: show error message
-								break;
-						}
-					} else {
-						bool do_pop = true;
-						std::string fn = f->get("filenametext");
-						struct stat sbuf;
-						/*
-						 * this check is very important, as people will kill us if they accidentaly overwrote their files
-						 * with no further warning...
-						 */
-						if (::stat(fn.c_str(), &sbuf)!=-1) {
-							f->set_focus("files");
-							if (v->confirm(utils::strprintf(_("Do you really want to overwrite `%s' (y:Yes n:No)? "), fn.c_str()), _("yn")) == *_("n")) {
-								do_pop = false;
-							}
-							f->set_focus("filenametext");
-						}
-						if (do_pop)
-							v->pop_current_formaction();
-					}
+					fmtstr_formatter fmt;
+					fmt.register_fmt('N', PROGRAM_NAME);
+					fmt.register_fmt('V', PROGRAM_VERSION);
+					fmt.register_fmt('f', filename);
+					f->set("head", fmt.do_format(v->get_cfg()->get_configvalue("filebrowser-title-format"), width));
+					::chdir(filename.c_str());
+					f->set("listpos","0");
+					char cwdtmp[MAXPATHLEN];
+					::getcwd(cwdtmp,sizeof(cwdtmp));
+					std::string fn(cwdtmp);
+					fn.append(NEWSBEUTER_PATH_SEP);
+					std::string fnstr = f->get("filenametext");
+					const char * base = strrchr(fnstr.c_str(),'/');
+					if (!base)
+						base = fnstr.c_str();
+					fn.append(base);
+					f->set("filenametext",fn);
+					do_redraw = true;
 				}
+				break;
+				case '-': {
+					char cwdtmp[MAXPATHLEN];
+					::getcwd(cwdtmp,sizeof(cwdtmp));
+					std::string fn(cwdtmp);
+					fn.append(NEWSBEUTER_PATH_SEP);
+					fn.append(filename);
+					f->set("filenametext",fn);
+					f->set_focus("filename");
+				}
+				break;
+				default:
+					// TODO: show error message
+					break;
+				}
+			} else {
+				bool do_pop = true;
+				std::string fn = f->get("filenametext");
+				struct stat sbuf;
+				/*
+				 * this check is very important, as people will kill us if they accidentaly overwrote their files
+				 * with no further warning...
+				 */
+				if (::stat(fn.c_str(), &sbuf)!=-1) {
+					f->set_focus("files");
+					if (v->confirm(utils::strprintf(_("Do you really want to overwrite `%s' (y:Yes n:No)? "), fn.c_str()), _("yn")) == *_("n")) {
+						do_pop = false;
+					}
+					f->set_focus("filenametext");
+				}
+				if (do_pop)
+					v->pop_current_formaction();
 			}
-			break;
-		case OP_QUIT:
-			LOG(LOG_DEBUG,"view::filebrowser: quitting");
+		}
+	}
+	break;
+	case OP_QUIT:
+		LOG(LOG_DEBUG,"view::filebrowser: quitting");
+		v->pop_current_formaction();
+		f->set("filenametext", "");
+		break;
+	case OP_HARDQUIT:
+		LOG(LOG_DEBUG,"view::filebrowser: hard quitting");
+		while (v->formaction_stack_size() >0) {
 			v->pop_current_formaction();
-			f->set("filenametext", "");
-			break;
-		case OP_HARDQUIT:
-			LOG(LOG_DEBUG,"view::filebrowser: hard quitting");
-			while (v->formaction_stack_size() >0) {
-				v->pop_current_formaction();
-			}
-			f->set("filenametext", "");
-			break;
-		default:
-			break;
+		}
+		f->set("filenametext", "");
+		break;
+	default:
+		break;
 	}
 }
 
 void filebrowser_formaction::prepare() {
-	/* 
+	/*
 	 * prepare is always called before an operation is processed,
 	 * and if a redraw is necessary, it updates the list of files
 	 * in the current directory.
@@ -133,7 +131,7 @@ void filebrowser_formaction::prepare() {
 		char cwdtmp[MAXPATHLEN];
 		std::string code = "{list";
 		::getcwd(cwdtmp,sizeof(cwdtmp));
-		
+
 		DIR * dirp = ::opendir(cwdtmp);
 		if (dirp) {
 			struct dirent * de = ::readdir(dirp);
@@ -144,9 +142,9 @@ void filebrowser_formaction::prepare() {
 			}
 			::closedir(dirp);
 		}
-		
+
 		code.append("}");
-		
+
 		f->modify("files", "replace_inner", code);
 		do_redraw = false;
 	}
@@ -170,12 +168,12 @@ void filebrowser_formaction::init() {
 	}
 
 	LOG(LOG_DEBUG, "view::filebrowser: chdir(%s)", dir.c_str());
-			
+
 	::chdir(dir.c_str());
 	::getcwd(cwdtmp,sizeof(cwdtmp));
-	
+
 	f->set("filenametext", default_filename);
-	
+
 	f->set("head", utils::strprintf(_("%s %s - Save File - %s"), PROGRAM_NAME, PROGRAM_VERSION, cwdtmp));
 }
 
@@ -208,7 +206,7 @@ std::string filebrowser_formaction::add_file(std::string filename) {
 std::string filebrowser_formaction::get_rwx(unsigned short val) {
 	std::string str;
 	const char * bitstrs[] = { "---", "--x", "-w-", "-wx", "r--", "r-x", "rw-", "rwx" };
-	for (int i=0;i<3;++i) {
+	for (int i=0; i<3; ++i) {
 		unsigned char bits = val % 8;
 		val /= 8;
 		str.insert(0, bitstrs[bits]);
@@ -218,12 +216,13 @@ std::string filebrowser_formaction::get_rwx(unsigned short val) {
 
 char filebrowser_formaction::get_filetype(mode_t mode) {
 	static struct flag_char {
-		mode_t flag; char ftype;
+		mode_t flag;
+		char ftype;
 	} flags[] = {
 		{ S_IFREG, '-' }, { S_IFDIR, 'd' }, { S_IFBLK, 'b' }, { S_IFCHR, 'c' },
 		{ S_IFIFO, 'p' }, { S_IFLNK, 'l' }, { 0      ,  0  }
 	};
-	for (unsigned int i=0;flags[i].flag != 0;i++) {
+	for (unsigned int i=0; flags[i].flag != 0; i++) {
 		if (mode & flags[i].flag)
 			return flags[i].ftype;
 	}
@@ -234,7 +233,7 @@ std::string filebrowser_formaction::get_owner(uid_t uid) {
 	struct passwd * spw = getpwuid(uid);
 	if (spw) {
 		std::string owner = spw->pw_name;
-		for (int i=owner.length();i<8;++i) {
+		for (int i=owner.length(); i<8; ++i) {
 			owner.append(" ");
 		}
 		return owner;
@@ -246,7 +245,7 @@ std::string filebrowser_formaction::get_group(gid_t gid) {
 	struct group * sgr = getgrgid(gid);
 	if (sgr) {
 		std::string group = sgr->gr_name;
-		for (int i=group.length();i<8;++i) {
+		for (int i=group.length(); i<8; ++i) {
 			group.append(" ");
 		}
 		return group;

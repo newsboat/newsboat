@@ -22,10 +22,10 @@
 
 namespace newsbeuter {
 
-feedlist_formaction::feedlist_formaction(view * vv, std::string formstr) 
+feedlist_formaction::feedlist_formaction(view * vv, std::string formstr)
 	: formaction(vv,formstr), zero_feedpos(false), feeds_shown(0),
-		quit(false), apply_filter(false), search_dummy_feed(new rss_feed(v->get_ctrl()->get_cache())),
-		filterpos(0), set_filterpos(false), rxman(0), old_width(0) {
+	  quit(false), apply_filter(false), search_dummy_feed(new rss_feed(v->get_ctrl()->get_cache())),
+	  filterpos(0), set_filterpos(false), rxman(0), old_width(0) {
 	assert(true==m.parse(FILTER_UNREAD_FEEDS));
 	valid_cmds.push_back("tag");
 	valid_cmds.push_back("goto");
@@ -48,7 +48,7 @@ void feedlist_formaction::init() {
 	 * The feedlist_formaction is responsible for starting up the reloadthread, which is responsible
 	 * for regularly spawning downloadthreads.
 	 */
-	std::thread t{reloadthread(v->get_ctrl(), v->get_cfg())};
+	std::thread t {reloadthread(v->get_ctrl(), v->get_cfg())};
 	t.detach();
 
 	apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-feeds"));
@@ -87,274 +87,274 @@ void feedlist_formaction::process_operation(operation op, bool automatic, std::v
 	posname >> pos;
 REDO:
 	switch (op) {
-		case OP_OPEN: {
-				if (f->get_focus() == "feeds") {
-					if (automatic && args->size() > 0) {
-						std::istringstream x((*args)[0]);
-						x >> pos;
-					}
-					LOG(LOG_INFO, "feedlist_formaction: opening feed at position `%s'",feedpos.c_str());
-					if (feeds_shown > 0 && feedpos.length() > 0) {
-						v->push_itemlist(pos);
-					} else {
-						v->show_error(_("No feed selected!")); // should not happen
-					}
-				}
+	case OP_OPEN: {
+		if (f->get_focus() == "feeds") {
+			if (automatic && args->size() > 0) {
+				std::istringstream x((*args)[0]);
+				x >> pos;
 			}
-			break;
-		case OP_RELOAD: {
-				LOG(LOG_INFO, "feedlist_formaction: reloading feed at position `%s'",feedpos.c_str());
-				if (feeds_shown > 0 && feedpos.length() > 0) {
-					v->get_ctrl()->reload(pos);
-				} else {
-					v->show_error(_("No feed selected!")); // should not happen
-				}
-			}
-			break;
-		case OP_INT_RESIZE:
-			do_redraw = true;
-			break;
-		case OP_RELOADURLS:
-			v->get_ctrl()->reload_urls_file();
-			break;
-		case OP_SORT: {
-				/// This string is related to the letters in parentheses in the
-				/// "Sort by (f)irsttag/..." and "Reverse Sort by (f)irsttag/..." messages
-				std::string input_options = _("ftaun");
-				char c = v->confirm(_("Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)one?"), input_options);
-				if (!c) break;
-				unsigned int n_options = ((std::string) "ftaun").length();
-				if (input_options.length() < n_options) break;
-				if (c == input_options.at(0)) {
-					v->get_cfg()->set_configvalue("feed-sort-order", "firsttag-desc");
-				} else if (c == input_options.at(1)) {
-					v->get_cfg()->set_configvalue("feed-sort-order", "title-desc");
-				} else if (c == input_options.at(2)) {
-					v->get_cfg()->set_configvalue("feed-sort-order", "articlecount-desc");
-				} else if (c == input_options.at(3)) {
-					v->get_cfg()->set_configvalue("feed-sort-order", "unreadarticlecount-desc");
-				} else if (c == input_options.at(4)) {
-					v->get_cfg()->set_configvalue("feed-sort-order", "none-desc");
-				}
-			}
-			break;
-		case OP_REVSORT: {
-				std::string input_options = _("ftaun");
-				char c = v->confirm(_("Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)one?"), input_options);
-				if (!c) break;
-				unsigned int n_options = ((std::string) "ftaun").length();
-				if (input_options.length() < n_options) break;
-				if (c == input_options.at(0)) {
-					v->get_cfg()->set_configvalue("feed-sort-order", "firsttag-asc");
-				} else if (c == input_options.at(1)) {
-					v->get_cfg()->set_configvalue("feed-sort-order", "title-asc");
-				} else if (c == input_options.at(2)) {
-					v->get_cfg()->set_configvalue("feed-sort-order", "articlecount-asc");
-				} else if (c == input_options.at(3)) {
-					v->get_cfg()->set_configvalue("feed-sort-order", "unreadarticlecount-asc");
-				} else if (c == input_options.at(4)) {
-					v->get_cfg()->set_configvalue("feed-sort-order", "none-asc");
-				}
-			}
-			break;
-		case OP_OPENINBROWSER: 
+			LOG(LOG_INFO, "feedlist_formaction: opening feed at position `%s'",feedpos.c_str());
 			if (feeds_shown > 0 && feedpos.length() > 0) {
-				std::shared_ptr<rss_feed> feed = v->get_ctrl()->get_feed(pos);
-				if (feed) {
-					LOG(LOG_INFO, "feedlist_formaction: opening feed at position `%s': %s", feedpos.c_str(), feed->link().c_str());
-					v->open_in_browser(feed->link());
-				}
+				v->push_itemlist(pos);
 			} else {
-				v->show_error(_("No feed selected!"));
+				v->show_error(_("No feed selected!")); // should not happen
 			}
-			break;
-		case OP_RELOADALL:
-			LOG(LOG_INFO, "feedlist_formaction: reloading all feeds");
-			{
-				bool reload_only_visible_feeds = v->get_cfg()->get_configvalue_as_bool("reload-only-visible-feeds");
-				std::vector<int> idxs;
-				for (auto feed : visible_feeds) {
-					idxs.push_back(feed.second);
+		}
+	}
+	break;
+	case OP_RELOAD: {
+		LOG(LOG_INFO, "feedlist_formaction: reloading feed at position `%s'",feedpos.c_str());
+		if (feeds_shown > 0 && feedpos.length() > 0) {
+			v->get_ctrl()->reload(pos);
+		} else {
+			v->show_error(_("No feed selected!")); // should not happen
+		}
+	}
+	break;
+	case OP_INT_RESIZE:
+		do_redraw = true;
+		break;
+	case OP_RELOADURLS:
+		v->get_ctrl()->reload_urls_file();
+		break;
+	case OP_SORT: {
+		/// This string is related to the letters in parentheses in the
+		/// "Sort by (f)irsttag/..." and "Reverse Sort by (f)irsttag/..." messages
+		std::string input_options = _("ftaun");
+		char c = v->confirm(_("Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)one?"), input_options);
+		if (!c) break;
+		unsigned int n_options = ((std::string) "ftaun").length();
+		if (input_options.length() < n_options) break;
+		if (c == input_options.at(0)) {
+			v->get_cfg()->set_configvalue("feed-sort-order", "firsttag-desc");
+		} else if (c == input_options.at(1)) {
+			v->get_cfg()->set_configvalue("feed-sort-order", "title-desc");
+		} else if (c == input_options.at(2)) {
+			v->get_cfg()->set_configvalue("feed-sort-order", "articlecount-desc");
+		} else if (c == input_options.at(3)) {
+			v->get_cfg()->set_configvalue("feed-sort-order", "unreadarticlecount-desc");
+		} else if (c == input_options.at(4)) {
+			v->get_cfg()->set_configvalue("feed-sort-order", "none-desc");
+		}
+	}
+	break;
+	case OP_REVSORT: {
+		std::string input_options = _("ftaun");
+		char c = v->confirm(_("Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)one?"), input_options);
+		if (!c) break;
+		unsigned int n_options = ((std::string) "ftaun").length();
+		if (input_options.length() < n_options) break;
+		if (c == input_options.at(0)) {
+			v->get_cfg()->set_configvalue("feed-sort-order", "firsttag-asc");
+		} else if (c == input_options.at(1)) {
+			v->get_cfg()->set_configvalue("feed-sort-order", "title-asc");
+		} else if (c == input_options.at(2)) {
+			v->get_cfg()->set_configvalue("feed-sort-order", "articlecount-asc");
+		} else if (c == input_options.at(3)) {
+			v->get_cfg()->set_configvalue("feed-sort-order", "unreadarticlecount-asc");
+		} else if (c == input_options.at(4)) {
+			v->get_cfg()->set_configvalue("feed-sort-order", "none-asc");
+		}
+	}
+	break;
+	case OP_OPENINBROWSER:
+		if (feeds_shown > 0 && feedpos.length() > 0) {
+			std::shared_ptr<rss_feed> feed = v->get_ctrl()->get_feed(pos);
+			if (feed) {
+				LOG(LOG_INFO, "feedlist_formaction: opening feed at position `%s': %s", feedpos.c_str(), feed->link().c_str());
+				v->open_in_browser(feed->link());
+			}
+		} else {
+			v->show_error(_("No feed selected!"));
+		}
+		break;
+	case OP_RELOADALL:
+		LOG(LOG_INFO, "feedlist_formaction: reloading all feeds");
+		{
+			bool reload_only_visible_feeds = v->get_cfg()->get_configvalue_as_bool("reload-only-visible-feeds");
+			std::vector<int> idxs;
+			for (auto feed : visible_feeds) {
+				idxs.push_back(feed.second);
+			}
+			v->get_ctrl()->start_reload_all_thread(reload_only_visible_feeds ? &idxs : NULL);
+		}
+		break;
+	case OP_MARKFEEDREAD: {
+		LOG(LOG_INFO, "feedlist_formaction: marking feed read at position `%s'",feedpos.c_str());
+		if (feeds_shown > 0 && feedpos.length() > 0) {
+			v->set_status(_("Marking feed read..."));
+			try {
+				v->get_ctrl()->mark_all_read(pos);
+				do_redraw = true;
+				v->set_status("");
+				if (feeds_shown > (pos + 1) && !apply_filter) {
+					f->set("feedpos", utils::to_string<unsigned int>(pos + 1));
 				}
-				v->get_ctrl()->start_reload_all_thread(reload_only_visible_feeds ? &idxs : NULL);
+			} catch (const dbexception& e) {
+				v->show_error(utils::strprintf(_("Error: couldn't mark feed read: %s"), e.what()));
 			}
-			break;
-		case OP_MARKFEEDREAD: {
-				LOG(LOG_INFO, "feedlist_formaction: marking feed read at position `%s'",feedpos.c_str());
-				if (feeds_shown > 0 && feedpos.length() > 0) {
-					v->set_status(_("Marking feed read..."));
-					try {
-						v->get_ctrl()->mark_all_read(pos);
-						do_redraw = true;
-						v->set_status("");
-						if (feeds_shown > (pos + 1) && !apply_filter) {
-							f->set("feedpos", utils::to_string<unsigned int>(pos + 1));
-						}
-					} catch (const dbexception& e) {
-						v->show_error(utils::strprintf(_("Error: couldn't mark feed read: %s"), e.what()));
-					}
-				} else {
-					v->show_error(_("No feed selected!")); // should not happen
-				}
-			}
-			break;
-		case OP_TOGGLESHOWREAD:
-			m.parse(FILTER_UNREAD_FEEDS);
-			LOG(LOG_INFO, "feedlist_formaction: toggling show-read-feeds");
-			if (v->get_cfg()->get_configvalue_as_bool("show-read-feeds")) {
-				v->get_cfg()->set_configvalue("show-read-feeds","no");
-				apply_filter = true;
-			} else {
-				v->get_cfg()->set_configvalue("show-read-feeds","yes");
-				apply_filter = false;
-			}
-			save_filterpos();
-			do_redraw = true;
-			break;
-		case OP_NEXTUNREAD: {
-				unsigned int local_tmp;
-				LOG(LOG_INFO, "feedlist_formaction: jumping to next unread feed");
-				if (!jump_to_next_unread_feed(local_tmp)) {
-					v->show_error(_("No feeds with unread items."));
-				}
-			}
-			break;
-		case OP_PREVUNREAD: {
-				unsigned int local_tmp;
-				LOG(LOG_INFO, "feedlist_formaction: jumping to previous unread feed");
-				if (!jump_to_previous_unread_feed(local_tmp)) {
-					v->show_error(_("No feeds with unread items."));
-				}
-			}
-			break;
-		case OP_NEXT: {
-				unsigned int local_tmp;
-				LOG(LOG_INFO, "feedlist_formaction: jumping to next feed");
-				if (!jump_to_next_feed(local_tmp)) {
-					v->show_error(_("Already on last feed."));
-				}
-			}
-			break;
-		case OP_PREV: {
-				unsigned int local_tmp;
-				LOG(LOG_INFO, "feedlist_formaction: jumping to previous feed");
-				if (!jump_to_previous_feed(local_tmp)) {
-					v->show_error(_("Already on first feed."));
-				}
-			}
-			break;
-		case OP_RANDOMUNREAD: {
-				unsigned int local_tmp;
-				LOG(LOG_INFO, "feedlist_formaction: jumping to random unread feed");
-				if (!jump_to_random_unread_feed(local_tmp)) {
-					v->show_error(_("No feeds with unread items."));
-				}
-			}
-			break;
-		case OP_MARKALLFEEDSREAD:
-			LOG(LOG_INFO, "feedlist_formaction: marking all feeds read");
-			v->set_status(_("Marking all feeds read..."));
-			v->get_ctrl()->catchup_all();
-			v->set_status("");
-			do_redraw = true;
-			break;
-		case OP_CLEARTAG:
-			tag = "";
+		} else {
+			v->show_error(_("No feed selected!")); // should not happen
+		}
+	}
+	break;
+	case OP_TOGGLESHOWREAD:
+		m.parse(FILTER_UNREAD_FEEDS);
+		LOG(LOG_INFO, "feedlist_formaction: toggling show-read-feeds");
+		if (v->get_cfg()->get_configvalue_as_bool("show-read-feeds")) {
+			v->get_cfg()->set_configvalue("show-read-feeds","no");
+			apply_filter = true;
+		} else {
+			v->get_cfg()->set_configvalue("show-read-feeds","yes");
+			apply_filter = false;
+		}
+		save_filterpos();
+		do_redraw = true;
+		break;
+	case OP_NEXTUNREAD: {
+		unsigned int local_tmp;
+		LOG(LOG_INFO, "feedlist_formaction: jumping to next unread feed");
+		if (!jump_to_next_unread_feed(local_tmp)) {
+			v->show_error(_("No feeds with unread items."));
+		}
+	}
+	break;
+	case OP_PREVUNREAD: {
+		unsigned int local_tmp;
+		LOG(LOG_INFO, "feedlist_formaction: jumping to previous unread feed");
+		if (!jump_to_previous_unread_feed(local_tmp)) {
+			v->show_error(_("No feeds with unread items."));
+		}
+	}
+	break;
+	case OP_NEXT: {
+		unsigned int local_tmp;
+		LOG(LOG_INFO, "feedlist_formaction: jumping to next feed");
+		if (!jump_to_next_feed(local_tmp)) {
+			v->show_error(_("Already on last feed."));
+		}
+	}
+	break;
+	case OP_PREV: {
+		unsigned int local_tmp;
+		LOG(LOG_INFO, "feedlist_formaction: jumping to previous feed");
+		if (!jump_to_previous_feed(local_tmp)) {
+			v->show_error(_("Already on first feed."));
+		}
+	}
+	break;
+	case OP_RANDOMUNREAD: {
+		unsigned int local_tmp;
+		LOG(LOG_INFO, "feedlist_formaction: jumping to random unread feed");
+		if (!jump_to_random_unread_feed(local_tmp)) {
+			v->show_error(_("No feeds with unread items."));
+		}
+	}
+	break;
+	case OP_MARKALLFEEDSREAD:
+		LOG(LOG_INFO, "feedlist_formaction: marking all feeds read");
+		v->set_status(_("Marking all feeds read..."));
+		v->get_ctrl()->catchup_all();
+		v->set_status("");
+		do_redraw = true;
+		break;
+	case OP_CLEARTAG:
+		tag = "";
+		do_redraw = true;
+		zero_feedpos = true;
+		break;
+	case OP_SETTAG: {
+		std::string newtag;
+		if (automatic && args->size() > 0) {
+			newtag = (*args)[0];
+		} else {
+			newtag = v->select_tag();
+		}
+		if (newtag != "") {
+			tag = newtag;
 			do_redraw = true;
 			zero_feedpos = true;
-			break;
-		case OP_SETTAG: {
-				std::string newtag;
-				if (automatic && args->size() > 0) {
-					newtag = (*args)[0];
-				} else {
-					newtag = v->select_tag();
-				}
-				if (newtag != "") {
-					tag = newtag;
-					do_redraw = true;
-					zero_feedpos = true;
-				}
+		}
+	}
+	break;
+	case OP_SELECTFILTER:
+		if (v->get_ctrl()->get_filters().size() > 0) {
+			std::string newfilter;
+			if (automatic && args->size() > 0) {
+				newfilter = (*args)[0];
+			} else {
+				newfilter = v->select_filter(v->get_ctrl()->get_filters().get_filters());
 			}
-			break;
-		case OP_SELECTFILTER:
-			if (v->get_ctrl()->get_filters().size() > 0) {
-				std::string newfilter;
-				if (automatic && args->size() > 0) {
-					newfilter = (*args)[0];
-				} else {
-					newfilter = v->select_filter(v->get_ctrl()->get_filters().get_filters());
-				}
-				if (newfilter != "") {
-					filterhistory.add_line(newfilter);
-					if (newfilter.length() > 0) {
-						if (!m.parse(newfilter)) {
-							v->show_error(utils::strprintf(_("Error: couldn't parse filter command `%s': %s"), newfilter.c_str(), m.get_parse_error().c_str()));
-							m.parse(FILTER_UNREAD_FEEDS);
-						} else {
-							save_filterpos();
-							apply_filter = true;
-							do_redraw = true;
-						}
+			if (newfilter != "") {
+				filterhistory.add_line(newfilter);
+				if (newfilter.length() > 0) {
+					if (!m.parse(newfilter)) {
+						v->show_error(utils::strprintf(_("Error: couldn't parse filter command `%s': %s"), newfilter.c_str(), m.get_parse_error().c_str()));
+						m.parse(FILTER_UNREAD_FEEDS);
+					} else {
+						save_filterpos();
+						apply_filter = true;
+						do_redraw = true;
 					}
 				}
-			} else {
-				v->show_error(_("No filters defined."));
 			}
-			break;
-		case OP_SEARCH:
-			if (automatic && args->size() > 0) {
-				qna_responses.clear();
-				// when in automatic mode, we manually fill the qna_responses vector from the arguments
-				// and then run the finished_qna() by ourselves to simulate a "Q&A" session that is
-				// in fact macro-driven.
-				qna_responses.push_back((*args)[0]);
-				finished_qna(OP_INT_START_SEARCH);
-			} else {
-				std::vector<qna_pair> qna;
-				qna.push_back(qna_pair(_("Search for: "), ""));
-				this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
-			}
-			break;
-		case OP_CLEARFILTER:
-			apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-feeds"));
-			m.parse(FILTER_UNREAD_FEEDS);
-			do_redraw = true;
-			save_filterpos();
-			break;
-		case OP_SETFILTER:
-			if (automatic && args->size() > 0) {
-				qna_responses.clear();
-				qna_responses.push_back((*args)[0]);
-				finished_qna(OP_INT_END_SETFILTER);
-			} else {
-				std::vector<qna_pair> qna;
-				qna.push_back(qna_pair(_("Filter: "), ""));
-				this->start_qna(qna, OP_INT_END_SETFILTER, &filterhistory);
-			}
-			break;
-		case OP_EDIT_URLS:
-			v->get_ctrl()->edit_urls_file();
-			break;
-		case OP_QUIT:
-			if (tag != "") {
-				op = OP_CLEARTAG;
-				goto REDO;
-			}
-			LOG(LOG_INFO, "feedlist_formaction: quitting");
-			if (automatic || !v->get_cfg()->get_configvalue_as_bool("confirm-exit") || v->confirm(_("Do you really want to quit (y:Yes n:No)? "), _("yn")) == *_("y")) {
-				quit = true;
-			}
-			break;
-		case OP_HARDQUIT:
-			LOG(LOG_INFO, "feedlist_formaction: hard quitting");
+		} else {
+			v->show_error(_("No filters defined."));
+		}
+		break;
+	case OP_SEARCH:
+		if (automatic && args->size() > 0) {
+			qna_responses.clear();
+			// when in automatic mode, we manually fill the qna_responses vector from the arguments
+			// and then run the finished_qna() by ourselves to simulate a "Q&A" session that is
+			// in fact macro-driven.
+			qna_responses.push_back((*args)[0]);
+			finished_qna(OP_INT_START_SEARCH);
+		} else {
+			std::vector<qna_pair> qna;
+			qna.push_back(qna_pair(_("Search for: "), ""));
+			this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
+		}
+		break;
+	case OP_CLEARFILTER:
+		apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-feeds"));
+		m.parse(FILTER_UNREAD_FEEDS);
+		do_redraw = true;
+		save_filterpos();
+		break;
+	case OP_SETFILTER:
+		if (automatic && args->size() > 0) {
+			qna_responses.clear();
+			qna_responses.push_back((*args)[0]);
+			finished_qna(OP_INT_END_SETFILTER);
+		} else {
+			std::vector<qna_pair> qna;
+			qna.push_back(qna_pair(_("Filter: "), ""));
+			this->start_qna(qna, OP_INT_END_SETFILTER, &filterhistory);
+		}
+		break;
+	case OP_EDIT_URLS:
+		v->get_ctrl()->edit_urls_file();
+		break;
+	case OP_QUIT:
+		if (tag != "") {
+			op = OP_CLEARTAG;
+			goto REDO;
+		}
+		LOG(LOG_INFO, "feedlist_formaction: quitting");
+		if (automatic || !v->get_cfg()->get_configvalue_as_bool("confirm-exit") || v->confirm(_("Do you really want to quit (y:Yes n:No)? "), _("yn")) == *_("y")) {
 			quit = true;
-			break;
-		case OP_HELP:
-			v->push_help();
-			break;
-		default:
-			break;
+		}
+		break;
+	case OP_HARDQUIT:
+		LOG(LOG_INFO, "feedlist_formaction: hard quitting");
+		quit = true;
+		break;
+	case OP_HELP:
+		v->push_help();
+		break;
+	default:
+		break;
 	}
 	if (quit) {
 		while (v->formaction_stack_size() > 0)
@@ -446,7 +446,7 @@ bool feedlist_formaction::jump_to_previous_unread_feed(unsigned int& feedpos) {
 	is >> curpos;
 	LOG(LOG_DEBUG, "feedlist_formaction::jump_to_previous_unread_feed: searching for unread feed");
 
-	for (int i=curpos-1;i>=0;--i) {
+	for (int i=curpos-1; i>=0; --i) {
 		LOG(LOG_DEBUG, "feedlist_formaction::jump_to_previous_unread_feed: visible_feeds[%u] unread items: %u", i, visible_feeds[i].first->unread_item_count());
 		if (visible_feeds[i].first->unread_item_count() > 0) {
 			LOG(LOG_DEBUG, "feedlist_formaction::jump_to_previous_unread_feed: hit");
@@ -455,7 +455,7 @@ bool feedlist_formaction::jump_to_previous_unread_feed(unsigned int& feedpos) {
 			return true;
 		}
 	}
-	for (int i=visible_feeds.size()-1;i>=static_cast<int>(curpos);--i) {
+	for (int i=visible_feeds.size()-1; i>=static_cast<int>(curpos); --i) {
 		LOG(LOG_DEBUG, "feedlist_formaction::jump_to_previous_unread_feed: visible_feeds[%u] unread items: %u", i, visible_feeds[i].first->unread_item_count());
 		if (visible_feeds[i].first->unread_item_count() > 0) {
 			LOG(LOG_DEBUG, "feedlist_formaction::jump_to_previous_unread_feed: hit");
@@ -472,13 +472,13 @@ void feedlist_formaction::goto_feed(const std::string& str) {
 	std::istringstream is(f->get("feedpos"));
 	is >> curpos;
 	LOG(LOG_DEBUG, "feedlist_formaction::goto_feed: curpos = %u str = `%s'", curpos, str.c_str());
-	for (unsigned int i=curpos+1;i<visible_feeds.size();++i) {
+	for (unsigned int i=curpos+1; i<visible_feeds.size(); ++i) {
 		if (strcasestr(visible_feeds[i].first->title().c_str(), str.c_str()) != NULL) {
 			f->set("feedpos", utils::to_string<unsigned int>(i));
 			return;
 		}
 	}
-	for (unsigned int i=0;i<=curpos;++i) {
+	for (unsigned int i=0; i<=curpos; ++i) {
 		if (strcasestr(visible_feeds[i].first->title().c_str(), str.c_str()) != NULL) {
 			f->set("feedpos", utils::to_string<unsigned int>(i));
 			return;
@@ -488,7 +488,7 @@ void feedlist_formaction::goto_feed(const std::string& str) {
 
 bool feedlist_formaction::jump_to_random_unread_feed(unsigned int& feedpos) {
 	bool unread_feeds_available = false;
-	for (unsigned int i=0;i<visible_feeds.size();++i) {
+	for (unsigned int i=0; i<visible_feeds.size(); ++i) {
 		if (visible_feeds[i].first->unread_item_count() > 0) {
 			unread_feeds_available = true;
 			break;
@@ -513,7 +513,7 @@ bool feedlist_formaction::jump_to_next_unread_feed(unsigned int& feedpos) {
 	is >> curpos;
 	LOG(LOG_DEBUG, "feedlist_formaction::jump_to_next_unread_feed: searching for unread feed");
 
-	for (unsigned int i=curpos+1;i<visible_feeds.size();++i) {
+	for (unsigned int i=curpos+1; i<visible_feeds.size(); ++i) {
 		LOG(LOG_DEBUG, "feedlist_formaction::jump_to_next_unread_feed: visible_feeds[%u] unread items: %u", i, visible_feeds[i].first->unread_item_count());
 		if (visible_feeds[i].first->unread_item_count() > 0) {
 			LOG(LOG_DEBUG, "feedlist_formaction::jump_to_next_unread_feed: hit");
@@ -522,7 +522,7 @@ bool feedlist_formaction::jump_to_next_unread_feed(unsigned int& feedpos) {
 			return true;
 		}
 	}
-	for (unsigned int i=0;i<=curpos;++i) {
+	for (unsigned int i=0; i<=curpos; ++i) {
 		LOG(LOG_DEBUG, "feedlist_formaction::jump_to_next_unread_feed: visible_feeds[%u] unread items: %u", i, visible_feeds[i].first->unread_item_count());
 		if (visible_feeds[i].first->unread_item_count() > 0) {
 			LOG(LOG_DEBUG, "feedlist_formaction::jump_to_next_unread_feed: hit");
@@ -572,7 +572,7 @@ std::shared_ptr<rss_feed> feedlist_formaction::get_feed() {
 }
 
 int feedlist_formaction::get_pos(unsigned int realidx) {
-	for (unsigned int i=0;i<visible_feeds.size();++i) {
+	for (unsigned int i=0; i<visible_feeds.size(); ++i) {
 		if (visible_feeds[i].second == realidx)
 			return i;
 	}
@@ -615,14 +615,14 @@ void feedlist_formaction::finished_qna(operation op) {
 	formaction::finished_qna(op); // important!
 
 	switch (op) {
-		case OP_INT_END_SETFILTER:
-			op_end_setfilter();
-			break;
-		case OP_INT_START_SEARCH:
-			op_start_search();
-			break;
-		default:
-			break;
+	case OP_INT_END_SETFILTER:
+		op_end_setfilter();
+		break;
+	case OP_INT_START_SEARCH:
+		op_start_search();
+		break;
+	default:
+		break;
 	}
 }
 

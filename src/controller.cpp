@@ -123,15 +123,13 @@ bool controller::setup_dirs_xdg(const char *env_home, bool silent) {
 	xdg_data_dir.append(NEWSBEUTER_PATH_SEP);
 	xdg_data_dir.append(NEWSBEUTER_SUBDIR_XDG);
 
-	if (access(xdg_config_dir.c_str(), R_OK | X_OK) != 0)
-	{
+	if (access(xdg_config_dir.c_str(), R_OK | X_OK) != 0) {
 		if (!silent) {
 			std::cerr << utils::strprintf(_("XDG: configuration directory '%s' not accessible, using '%s' instead."), xdg_config_dir.c_str(), config_dir.c_str()) << std::endl;
 		}
 		return false;
 	}
-	if (access(xdg_data_dir.c_str(), R_OK | X_OK | W_OK) != 0)
-	{
+	if (access(xdg_data_dir.c_str(), R_OK | X_OK | W_OK) != 0) {
 		if (!silent) {
 			std::cerr << utils::strprintf(_("XDG: data directory '%s' not accessible, using '%s' instead."), xdg_data_dir.c_str(), config_dir.c_str()) << std::endl;
 		}
@@ -225,7 +223,7 @@ void controller::run(int argc, char * argv[]) {
 
 	do {
 		if ((c = ::getopt(argc,argv,getopt_str)) < 0)
-				continue;
+			continue;
 		if (strchr("iexq", c) != NULL) {
 			silent = true;
 			break;
@@ -240,83 +238,82 @@ void controller::run(int argc, char * argv[]) {
 		if((c = ::getopt(argc,argv,getopt_str))<0)
 			continue;
 		switch (c) {
-			case ':': /* fall-through */
-			case '?': /* missing option */
+		case ':': /* fall-through */
+		case '?': /* missing option */
+			usage(argv[0]);
+			break;
+		case 'i':
+			if (do_export)
 				usage(argv[0]);
-				break;
-			case 'i':
-				if (do_export)
-					usage(argv[0]);
-				do_import = true;
-				importfile = optarg;
-				break;
-			case 'r':
-				refresh_on_start = true;
-				break;
-			case 'e':
-				if (do_import)
-					usage(argv[0]);
-				do_export = true;
-				break;
-			case 'h':
+			do_import = true;
+			importfile = optarg;
+			break;
+		case 'r':
+			refresh_on_start = true;
+			break;
+		case 'e':
+			if (do_import)
 				usage(argv[0]);
-				break;
-			case 'u':
-				url_file = optarg;
-				break;
-			case 'c':
-				cache_file = optarg;
-				lock_file = std::string(cache_file) + LOCK_SUFFIX;
-				cachefile_given_on_cmdline = true;
-				break;
-			case 'C':
-				config_file = optarg;
-				break;
-			case 'X':
-				do_vacuum = true;
-				break;
-			case 'v':
-			case 'V':
-				show_version++;
-				break;
-			case 'o':
-				offline_mode = true;
-				break;
-			case 'x':
-				execute_cmds = true;
-				break;
-			case 'q':
-				break;
-			case 'd': // this is an undocumented debug commandline option!
-				logger::getInstance().set_logfile(optarg);
-				break;
-			case 'l': // this is an undocumented debug commandline option!
-				{
-					loglevel level = static_cast<loglevel>(atoi(optarg));
-					if (level > LOG_NONE && level <= LOG_DEBUG) {
-						logger::getInstance().set_loglevel(level);
-					} else {
-						std::cerr << utils::strprintf(_("%s: %d: invalid loglevel value"), argv[0], level) << std::endl;
-						::std::exit(EXIT_FAILURE);
-					}
-				}
-				break;
-			case 'I':
-				if (do_read_export)
-					usage(argv[0]);
-				do_read_import = true;
-				readinfofile = optarg;
-				break;
-			case 'E':
-				if (do_read_import)
-					usage(argv[0]);
-				do_read_export = true;
-				readinfofile = optarg;
-				break;
-			default:
-				std::cout << utils::strprintf(_("%s: unknown option - %c"), argv[0], static_cast<char>(c)) << std::endl;
+			do_export = true;
+			break;
+		case 'h':
+			usage(argv[0]);
+			break;
+		case 'u':
+			url_file = optarg;
+			break;
+		case 'c':
+			cache_file = optarg;
+			lock_file = std::string(cache_file) + LOCK_SUFFIX;
+			cachefile_given_on_cmdline = true;
+			break;
+		case 'C':
+			config_file = optarg;
+			break;
+		case 'X':
+			do_vacuum = true;
+			break;
+		case 'v':
+		case 'V':
+			show_version++;
+			break;
+		case 'o':
+			offline_mode = true;
+			break;
+		case 'x':
+			execute_cmds = true;
+			break;
+		case 'q':
+			break;
+		case 'd': // this is an undocumented debug commandline option!
+			logger::getInstance().set_logfile(optarg);
+			break;
+		case 'l': { // this is an undocumented debug commandline option!
+			loglevel level = static_cast<loglevel>(atoi(optarg));
+			if (level > LOG_NONE && level <= LOG_DEBUG) {
+				logger::getInstance().set_loglevel(level);
+			} else {
+				std::cerr << utils::strprintf(_("%s: %d: invalid loglevel value"), argv[0], level) << std::endl;
+				::std::exit(EXIT_FAILURE);
+			}
+		}
+		break;
+		case 'I':
+			if (do_read_export)
 				usage(argv[0]);
-				break;
+			do_read_import = true;
+			readinfofile = optarg;
+			break;
+		case 'E':
+			if (do_read_import)
+				usage(argv[0]);
+			do_read_export = true;
+			readinfofile = optarg;
+			break;
+		default:
+			std::cout << utils::strprintf(_("%s: unknown option - %c"), argv[0], static_cast<char>(c)) << std::endl;
+			usage(argv[0]);
+			break;
 		}
 	} while (c != -1);
 
@@ -358,7 +355,7 @@ void controller::run(int argc, char * argv[]) {
 	if (!silent)
 		std::cout << _("Loading configuration...");
 	std::cout.flush();
-	
+
 	cfg.register_commands(cfgparser);
 	colorman.register_commands(cfgparser);
 
@@ -382,7 +379,7 @@ void controller::run(int argc, char * argv[]) {
 		LOG(LOG_ERROR,"an exception occured while parsing the configuration file: %s",ex.what());
 		std::cout << ex.what() << std::endl;
 		utils::remove_fs_lock(lock_file);
-		return;	
+		return;
 	}
 
 	update_config();
@@ -804,7 +801,7 @@ void controller::reload_indexes(const std::vector<int>& indexes, bool unattended
 void controller::reload_range(unsigned int start, unsigned int end, unsigned int size, bool unattended) {
 
 	std::vector<unsigned int> v;
-	for (unsigned int i=start;i<=end;++i)
+	for (unsigned int i=start; i<=end; ++i)
 		v.push_back(i);
 
 	auto extract = [](std::string& s, const std::string& url) {
@@ -865,13 +862,13 @@ void controller::reload_all(bool unattended) {
 		std::vector<std::pair<unsigned int, unsigned int>> partitions = utils::partition_indexes(0, size-1, num_threads);
 		std::vector<std::thread> threads;
 		LOG(LOG_DEBUG, "controller::reload_all: starting reload threads...");
-		for (unsigned int i=0;i<num_threads-1;i++) {
+		for (unsigned int i=0; i<num_threads-1; i++) {
 			threads.push_back(std::thread(reloadrangethread(this, partitions[i].first, partitions[i].second, size, unattended)));
 		}
 		LOG(LOG_DEBUG, "controller::reload_all: starting my own reload...");
 		this->reload_range(partitions[num_threads-1].first, partitions[num_threads-1].second, size, unattended);
 		LOG(LOG_DEBUG, "controller::reload_all: joining other threads...");
-		for (size_t i=0;i<threads.size();i++) {
+		for (size_t i=0; i<threads.size(); i++) {
 			threads[i].join();
 		}
 	}
@@ -993,8 +990,8 @@ static unsigned int gentabs(const std::string& str) {
 }
 
 void controller::usage(char * argv0) {
-	std::cout << utils::strprintf(_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-h]\n"), 
-					PROGRAM_NAME, PROGRAM_VERSION, argv0);
+	std::cout << utils::strprintf(_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-h]\n"),
+	                              PROGRAM_NAME, PROGRAM_VERSION, argv0);
 	struct {
 		char arg;
 		const char * params;
@@ -1019,10 +1016,10 @@ void controller::usage(char * argv0) {
 		{ '\0', NULL, NULL }
 	};
 
-	for (unsigned int i=0;args[i].arg != '\0';i++) {
+	for (unsigned int i=0; args[i].arg != '\0'; i++) {
 		unsigned int tabs = gentabs(args[i].params);
 		std::cout << "\t-" << args[i].arg << " " << args[i].params;
-		for (unsigned int j=0;j<tabs;j++) { 
+		for (unsigned int j=0; j<tabs; j++) {
 			std::cout << "\t";
 		}
 		std::cout << args[i].desc << std::endl;
@@ -1278,9 +1275,9 @@ std::string controller::bookmark(const std::string& url, const std::string& titl
 	std::string bookmark_cmd = cfg.get_configvalue("bookmark-cmd");
 	bool is_interactive = cfg.get_configvalue_as_bool("bookmark-interactive");
 	if (bookmark_cmd.length() > 0) {
-		std::string cmdline = utils::strprintf("%s '%s' %s %s", 
-			bookmark_cmd.c_str(), utils::replace_all(url,"'", "%27").c_str(), 
-			stfl::quote(title).c_str(), stfl::quote(description).c_str());
+		std::string cmdline = utils::strprintf("%s '%s' %s %s",
+		                                       bookmark_cmd.c_str(), utils::replace_all(url,"'", "%27").c_str(),
+		                                       stfl::quote(title).c_str(), stfl::quote(description).c_str());
 
 		LOG(LOG_DEBUG, "controller::bookmark: cmd = %s", cmdline.c_str());
 
@@ -1306,7 +1303,7 @@ std::string controller::bookmark(const std::string& url, const std::string& titl
 void controller::execute_commands(char ** argv, unsigned int i) {
 	if (v->formaction_stack_size() > 0)
 		v->pop_current_formaction();
-	for (;argv[i];++i) {
+	for (; argv[i]; ++i) {
 		LOG(LOG_DEBUG, "controller::execute_commands: executing `%s'", argv[i]);
 		std::string cmd(argv[i]);
 		if (cmd == "reload") {
@@ -1345,15 +1342,15 @@ void controller::write_item(std::shared_ptr<rss_item> item, const std::string& f
 void controller::write_item(std::shared_ptr<rss_item> item, std::ostream& ostr) {
 	std::vector<std::string> lines;
 	std::vector<linkpair> links; // not used
-	
+
 	std::string title(_("Title: "));
 	title.append(item->title());
 	lines.push_back(title);
-	
+
 	std::string author(_("Author: "));
 	author.append(item->author());
 	lines.push_back(author);
-	
+
 	std::string date(_("Date: "));
 	date.append(item->pubDate());
 	lines.push_back(date);
@@ -1367,9 +1364,9 @@ void controller::write_item(std::shared_ptr<rss_item> item, std::ostream& ostr) 
 		dlurl.append(item->enclosure_url());
 		lines.push_back(dlurl);
 	}
-	
+
 	lines.push_back(std::string(""));
-	
+
 	unsigned int width = cfg.get_configvalue_as_int("text-width");
 	if (width == 0)
 		width = 80;
@@ -1575,7 +1572,7 @@ void controller::dump_config(const std::string& filename) {
 
 unsigned int controller::get_pos_of_next_unread(unsigned int pos) {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	for (pos++;pos < feeds.size();pos++) {
+	for (pos++; pos < feeds.size(); pos++) {
 		if (feeds[pos]->unread_item_count() > 0)
 			break;
 	}
@@ -1589,13 +1586,13 @@ void controller::update_flags(std::shared_ptr<rss_item> item) {
 	item->update_flags();
 }
 
-std::vector<std::shared_ptr<rss_feed>> controller::get_all_feeds() { 
+std::vector<std::shared_ptr<rss_feed>> controller::get_all_feeds() {
 	std::vector<std::shared_ptr<rss_feed>> tmpfeeds;
 	{
 		std::lock_guard<std::mutex> feedslock(feeds_mutex);
 		tmpfeeds = feeds;
 	}
-	return tmpfeeds; 
+	return tmpfeeds;
 }
 
 std::vector<std::shared_ptr<rss_feed>> controller::get_all_feeds_unlocked() {

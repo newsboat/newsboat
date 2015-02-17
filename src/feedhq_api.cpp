@@ -47,46 +47,46 @@ static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp
 
 std::string feedhq_api::retrieve_auth() {
 	CURL * handle = curl_easy_init();
-        std::string user = cfg->get_configvalue("feedhq-login");
-        bool flushed = false;
+	std::string user = cfg->get_configvalue("feedhq-login");
+	bool flushed = false;
 
-        if (user == "") {
-                std::cout << std::endl;
-                std::cout.flush();
-                flushed = true;
-                std::cout << "Username for FeedHQ: ";
-                std::cin >> user;
-                if (user == "") {
-                    return "";
-                }
-        }
+	if (user == "") {
+		std::cout << std::endl;
+		std::cout.flush();
+		flushed = true;
+		std::cout << "Username for FeedHQ: ";
+		std::cin >> user;
+		if (user == "") {
+			return "";
+		}
+	}
 
 	std::string pass = cfg->get_configvalue("feedhq-password");
 	if( pass == "" ) {
 		wordexp_t exp;
 		std::ifstream ifs;
 		wordexp(cfg->get_configvalue("feedhq-passwordfile").c_str(),&exp,0);
-		ifs.open(exp.we_wordv[0]); 
+		ifs.open(exp.we_wordv[0]);
 		wordfree(&exp);
 		if (!ifs) {
-                        if(!flushed) {
-                            std::cout << std::endl;
-                            std::cout.flush();
-                        }
+			if(!flushed) {
+				std::cout << std::endl;
+				std::cout.flush();
+			}
 			// Find a way to do this in C++ by removing cin echoing.
 			pass = std::string( getpass("Password for FeedHQ: ") );
 		} else {
-				ifs >> pass;
-				if(pass == "") {
-						return "";
-				}
+			ifs >> pass;
+			if(pass == "") {
+				return "";
+			}
 		}
 	}
 	char * username = curl_easy_escape(handle, user.c_str(), 0);
 	char * password = curl_easy_escape(handle, pass.c_str(), 0);
 
 	std::string postcontent = utils::strprintf("service=reader&Email=%s&Passwd=%s&source=%s%2F%s&accountType=HOSTED_OR_GOOGLE&continue=http://www.google.com/",
-		username, password, PROGRAM_NAME, PROGRAM_VERSION);
+	                          username, password, PROGRAM_NAME, PROGRAM_VERSION);
 
 	curl_free(username);
 	curl_free(password);
@@ -102,7 +102,7 @@ std::string feedhq_api::retrieve_auth() {
 	curl_easy_cleanup(handle);
 
 	std::vector<std::string> lines = utils::tokenize(result);
-	for (std::vector<std::string>::iterator it=lines.begin();it!=lines.end();++it) {
+	for (std::vector<std::string>::iterator it=lines.begin(); it!=lines.end(); ++it) {
 		LOG(LOG_DEBUG, "feedhq_api::retrieve_auth: line = %s", it->c_str());
 		if (it->substr(0,5)=="Auth=") {
 			std::string auth = it->substr(5, it->length()-5);
@@ -130,7 +130,7 @@ std::vector<tagged_feedurl> feedhq_api::get_subscribed_urls() {
 	LOG(LOG_DEBUG, "feedhq_api::get_subscribed_urls: document = %s", result.c_str());
 
 	// TODO: parse result
-	
+
 	struct json_object * reply = json_tokener_parse(result.c_str());
 	if (is_error(reply)) {
 		LOG(LOG_ERROR, "feedhq_api::get_subscribed_urls: failed to parse response as JSON.");
@@ -143,7 +143,7 @@ std::vector<tagged_feedurl> feedhq_api::get_subscribed_urls() {
 
 	int len = array_list_length(subscriptions);
 
-	for (int i=0;i<len;i++) {
+	for (int i=0; i<len; i++) {
 		std::vector<std::string> tags;
 		struct json_object * sub = json_object_array_get_idx(subscription_obj, i);
 
@@ -179,7 +179,7 @@ bool feedhq_api::mark_all_read(const std::string& feedurl) {
 	std::string token = get_new_token();
 
 	std::string postcontent = utils::strprintf("s=%s&T=%s", real_feedurl.c_str(), token.c_str());
-	
+
 	std::string result = post_content(cfg->get_configvalue("feedhq-url") + FEEDHQ_API_MARK_ALL_READ_URL, postcontent);
 
 	return result == "OK";
@@ -188,7 +188,7 @@ bool feedhq_api::mark_all_read(const std::string& feedurl) {
 std::vector<std::string> feedhq_api::bulk_mark_articles_read(const std::vector<google_replay_pair>& actions) {
 	std::vector<std::string> successful_tokens;
 	std::string token = get_new_token();
-	for (std::vector<google_replay_pair>::const_iterator it=actions.begin();it!=actions.end();++it) {
+	for (std::vector<google_replay_pair>::const_iterator it=actions.begin(); it!=actions.end(); ++it) {
 		bool read;
 		if (it->second == GOOGLE_MARK_READ) {
 			read = true;
@@ -228,7 +228,7 @@ bool feedhq_api::mark_article_read_with_token(const std::string& guid, bool read
 std::string feedhq_api::get_new_token() {
 	CURL * handle = curl_easy_init();
 	std::string result;
-	
+
 	utils::set_common_curl_options(handle, cfg);
 	configure_handle(handle);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
@@ -238,7 +238,7 @@ std::string feedhq_api::get_new_token() {
 	curl_easy_cleanup(handle);
 
 	LOG(LOG_DEBUG, "feedhq_api::get_new_token: token = %s", result.c_str());
-	
+
 	return result;
 }
 

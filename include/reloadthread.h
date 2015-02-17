@@ -5,16 +5,14 @@
 #include <controller.h>
 #include <configcontainer.h>
 
-namespace newsbeuter
-{
+namespace newsbeuter {
 
-class reloadthread
-{
-public:
+class reloadthread {
+  public:
 	reloadthread(controller * c, configcontainer * cf);
 	virtual ~reloadthread();
 	void operator()();
-private:
+  private:
 	controller * ctrl;
 	time_t oldtime;
 	time_t waittime_sec;

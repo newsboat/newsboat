@@ -12,7 +12,7 @@ namespace newsbeuter {
 history formaction::searchhistory;
 history formaction::cmdlinehistory;
 
-formaction::formaction(view * vv, std::string formstr) : v(vv), f(new stfl::form(formstr)), do_redraw(true) { 
+formaction::formaction(view * vv, std::string formstr) : v(vv), f(new stfl::form(formstr)), do_redraw(true) {
 	if (v) {
 		if (v->get_cfg()->get_configvalue_as_bool("show-keymap-hint") == false) {
 			f->set("showhint", "0");
@@ -55,13 +55,13 @@ std::string formaction::prepare_keymap_hint(keymap_hint_entry * hints) {
 	 * reflects the current configuration.
 	 */
 	std::string keymap_hint;
-	for (int i=0;hints[i].op != OP_NIL; ++i) {
+	for (int i=0; hints[i].op != OP_NIL; ++i) {
 		keymap_hint.append(v->get_keys()->getkey(hints[i].op, this->id()));
 		keymap_hint.append(":");
 		keymap_hint.append(hints[i].text);
 		keymap_hint.append(" ");
 	}
-	return keymap_hint;	
+	return keymap_hint;
 }
 
 std::string formaction::get_value(const std::string& value) {
@@ -79,64 +79,64 @@ void formaction::start_cmdline() {
 
 void formaction::process_op(operation op, bool automatic, std::vector<std::string> * args) {
 	switch (op) {
-		case OP_REDRAW:
-			LOG(LOG_DEBUG, "formaction::process_op: redrawing screen");
-			stfl::reset();
-			break;
-		case OP_CMDLINE: 
-			start_cmdline();
-			break;
-		case OP_INT_SET:
-			if (automatic) {
-				std::string cmdline = "set ";
-				if (args) {
-					for (auto arg : *args) {
-						cmdline.append(utils::strprintf("%s ", stfl::quote(arg).c_str()));
-					}
+	case OP_REDRAW:
+		LOG(LOG_DEBUG, "formaction::process_op: redrawing screen");
+		stfl::reset();
+		break;
+	case OP_CMDLINE:
+		start_cmdline();
+		break;
+	case OP_INT_SET:
+		if (automatic) {
+			std::string cmdline = "set ";
+			if (args) {
+				for (auto arg : *args) {
+					cmdline.append(utils::strprintf("%s ", stfl::quote(arg).c_str()));
 				}
-				LOG(LOG_DEBUG, "formaction::process_op: running commandline `%s'", cmdline.c_str());
-				this->handle_cmdline(cmdline);
-			} else {
-				LOG(LOG_WARN, "formaction::process_op: got OP_INT_SET, but not automatic");
 			}
-			break;
-		case OP_INT_CANCEL_QNA:
-			f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
-			v->inside_qna(false);
-			v->inside_cmdline(false);
-			break;
-		case OP_INT_QNA_NEXTHIST:
-			if (qna_history) {
-				std::string entry = qna_history->next();
-				f->set("qna_value", entry);
-				f->set("qna_value_pos", utils::to_string<unsigned int>(entry.length()));
-			}
-			break;
-		case OP_INT_QNA_PREVHIST:
-			if (qna_history) {
-				std::string entry = qna_history->prev();
-				f->set("qna_value", entry);
-				f->set("qna_value_pos", utils::to_string<unsigned int>(entry.length()));
-			}
-			break;
-		case OP_INT_END_QUESTION:
-			/*
-			 * An answer has been entered, we save the value, and ask the next question.
-			 */
-			qna_responses.push_back(f->get("qna_value"));
-			start_next_question();
-			break;
-		case OP_VIEWDIALOGS:
-			v->view_dialogs();
-			break;
-		case OP_NEXTDIALOG:
-			v->goto_next_dialog();
-			break;
-		case OP_PREVDIALOG:
-			v->goto_prev_dialog();
-			break;
-		default:
-			this->process_operation(op, automatic, args);
+			LOG(LOG_DEBUG, "formaction::process_op: running commandline `%s'", cmdline.c_str());
+			this->handle_cmdline(cmdline);
+		} else {
+			LOG(LOG_WARN, "formaction::process_op: got OP_INT_SET, but not automatic");
+		}
+		break;
+	case OP_INT_CANCEL_QNA:
+		f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
+		v->inside_qna(false);
+		v->inside_cmdline(false);
+		break;
+	case OP_INT_QNA_NEXTHIST:
+		if (qna_history) {
+			std::string entry = qna_history->next();
+			f->set("qna_value", entry);
+			f->set("qna_value_pos", utils::to_string<unsigned int>(entry.length()));
+		}
+		break;
+	case OP_INT_QNA_PREVHIST:
+		if (qna_history) {
+			std::string entry = qna_history->prev();
+			f->set("qna_value", entry);
+			f->set("qna_value_pos", utils::to_string<unsigned int>(entry.length()));
+		}
+		break;
+	case OP_INT_END_QUESTION:
+		/*
+		 * An answer has been entered, we save the value, and ask the next question.
+		 */
+		qna_responses.push_back(f->get("qna_value"));
+		start_next_question();
+		break;
+	case OP_VIEWDIALOGS:
+		v->view_dialogs();
+		break;
+	case OP_NEXTDIALOG:
+		v->goto_next_dialog();
+		break;
+	case OP_PREVDIALOG:
+		v->goto_prev_dialog();
+		break;
+	default:
+		this->process_operation(op, automatic, args);
 	}
 }
 
@@ -253,7 +253,7 @@ void formaction::start_qna(const std::vector<qna_pair>& prompts, operation finis
 	 * query the user for 1 or more values, optionally with a history.
 	 *
 	 * Every question is a prompt (such as "Search for: "), with an default value. These need to be provided as a vector
-	 * of (string, string) tuples. What also needs to be provided is the operation that will to be signaled to the 
+	 * of (string, string) tuples. What also needs to be provided is the operation that will to be signaled to the
 	 * finished_qna() method when reading all answers is finished, and optionally, a pointer to a history object to support
 	 * browsing of the input history. When reading is done, the responses can be found in the qna_responses vector. In this
 	 * vector, the first fields corresponds with the first prompt, the second field with the second prompt, etc.
@@ -270,37 +270,37 @@ void formaction::finished_qna(operation op) {
 	v->inside_qna(false);
 	v->inside_cmdline(false);
 	switch (op) {
-		/*
-		 * since bookmarking is available in several formactions, I decided to put this into
-		 * the base class so that all derived classes can take advantage of it. We also see
-		 * here how the signaling of a finished "Q&A" is handled:
-		 * 	- check for the right operation
-		 * 	- take the responses
-		 * 	- run operation (in this case, save the bookmark)
-		 * 	- signal success (or failure) to the user
-		 */
-		case OP_INT_BM_END: {
-				assert(qna_responses.size() == 3 && qna_prompts.size() == 0); // everything must be answered
-				v->set_status(_("Saving bookmark..."));
-				std::string retval = v->get_ctrl()->bookmark(qna_responses[0], qna_responses[1], qna_responses[2]);
-				if (retval.length() == 0) {
-					v->set_status(_("Saved bookmark."));
-				} else {
-					v->set_status(std::string(_("Error while saving bookmark: ")) + retval);
-					LOG(LOG_DEBUG, "formaction::finished_qna: error while saving bookmark, retval = `%s'", retval.c_str());
-				}
-			}
-			break;
-		case OP_INT_END_CMDLINE: {
-				f->set_focus("feeds");
-				std::string cmdline = qna_responses[0];
-				formaction::cmdlinehistory.add_line(cmdline);
-				LOG(LOG_DEBUG,"formaction: commandline = `%s'", cmdline.c_str());
-				this->handle_cmdline(cmdline);
-			}
-			break;
-		default:
-			break;
+	/*
+	 * since bookmarking is available in several formactions, I decided to put this into
+	 * the base class so that all derived classes can take advantage of it. We also see
+	 * here how the signaling of a finished "Q&A" is handled:
+	 * 	- check for the right operation
+	 * 	- take the responses
+	 * 	- run operation (in this case, save the bookmark)
+	 * 	- signal success (or failure) to the user
+	 */
+	case OP_INT_BM_END: {
+		assert(qna_responses.size() == 3 && qna_prompts.size() == 0); // everything must be answered
+		v->set_status(_("Saving bookmark..."));
+		std::string retval = v->get_ctrl()->bookmark(qna_responses[0], qna_responses[1], qna_responses[2]);
+		if (retval.length() == 0) {
+			v->set_status(_("Saved bookmark."));
+		} else {
+			v->set_status(std::string(_("Error while saving bookmark: ")) + retval);
+			LOG(LOG_DEBUG, "formaction::finished_qna: error while saving bookmark, retval = `%s'", retval.c_str());
+		}
+	}
+	break;
+	case OP_INT_END_CMDLINE: {
+		f->set_focus("feeds");
+		std::string cmdline = qna_responses[0];
+		formaction::cmdlinehistory.add_line(cmdline);
+		LOG(LOG_DEBUG,"formaction: commandline = `%s'", cmdline.c_str());
+		this->handle_cmdline(cmdline);
+	}
+	break;
+	default:
+		break;
 	}
 }
 
@@ -315,21 +315,19 @@ void formaction::start_bookmark_qna(const std::string& default_title, const std:
 	if(default_title.empty()) { // call the function to figure out title from url only if the default_title is no good
 		new_title = make_title(default_url);
 		prompts.push_back(qna_pair(_("Title: "), new_title));
-	}
-	else {
+	} else {
 		prompts.push_back(qna_pair(_("Title: "), default_title));
 	}
 	prompts.push_back(qna_pair(_("Description: "), default_desc));
-	
+
 	if (is_bm_autopilot) {	//If bookmarking is set to autopilot don't prompt for url, title, desc
 		if (default_title.empty())
 			new_title = make_title(default_url); // try to make the title from url
-		else 
+		else
 			new_title = default_title; // assignment just to make the call to bookmark() below easier
 		if (default_url.empty() || new_title.empty()) { //if url or title is missing, abort autopilot and ask user
 			start_qna(prompts, OP_INT_BM_END);
-		}
-		else {
+		} else {
 			v->set_status(_("Saving bookmark on autopilot..."));
 			std::string retval = v->get_ctrl()->bookmark(default_url, new_title, default_desc);
 			if (retval.length() == 0) {
@@ -339,8 +337,7 @@ void formaction::start_bookmark_qna(const std::string& default_title, const std:
 				LOG(LOG_DEBUG, "formaction::finished_qna: error while saving bookmark, retval = `%s'", retval.c_str());
 			}
 		}
-	}
-	else {
+	} else {
 		start_qna(prompts, OP_INT_BM_END);
 	}
 }
@@ -355,9 +352,9 @@ std::string formaction::make_title(const std::string& const_url) {
 		url.erase((int)url.length()-1);
 	std::string path=url.substr(pos_of_slash+1); 				// extract just the juicy part 'title-with-dashes?a=b'
 	std::string::size_type pos_of_qmrk = path.find_first_of('?'); 		// find where query part of URI starts
-        std::string title = path.substr(0,pos_of_qmrk); 			//throw away the query part 'title-with-dashes'
+	std::string title = path.substr(0,pos_of_qmrk); 			//throw away the query part 'title-with-dashes'
 	std::replace(title.begin(), title.end(), '-', ' ');			// 'title with dashes'
-        if (title.at(0)>= 'a' && title.at(0)<= 'z') title[0] -= 'a' - 'A';	//'Title with dashes'
+	if (title.at(0)>= 'a' && title.at(0)<= 'z') title[0] -= 'a' - 'A';	//'Title with dashes'
 	return title;
 }
 
@@ -378,9 +375,9 @@ void formaction::start_next_question() {
 		f->modify("lastline", "replace", replacestr);
 		f->set_focus("qnainput");
 	} else {
-	/* 
-	 * If there are no more prompts, restore the last line with the usual label, and signal the end of the "Q&A" to the finished_qna() method.
-	 */
+		/*
+		 * If there are no more prompts, restore the last line with the usual label, and signal the end of the "Q&A" to the finished_qna() method.
+		 */
 		f->modify("lastline","replace","{hbox[lastline] .expand:0 {label[msglabel] .expand:h text[msg]:\"\"}}");
 		this->finished_qna(finish_operation);
 	}

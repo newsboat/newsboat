@@ -4,18 +4,16 @@
 #include <thread>
 #include <ttrss_api.h>
 
-namespace newsbeuter
-{
-	
+namespace newsbeuter {
+
 class controller;
 
-class markreadthread
-{
-public:
+class markreadthread {
+  public:
 	markreadthread( ttrss_api* r_api, const std::string& guid, bool read );
 	virtual ~markreadthread();
 	void operator()();
-private:
+  private:
 	ttrss_api* _r_api;
 	const std::string& _guid;
 	bool _read;

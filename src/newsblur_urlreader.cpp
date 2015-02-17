@@ -37,6 +37,6 @@ void newsblur_urlreader::reload() {
 std::string newsblur_urlreader::get_source() {
 	return "NewsBlur";
 }
-	// TODO
+// TODO
 
 }

@@ -36,43 +36,43 @@ void select_formaction::handle_cmdline(const std::string& cmd) {
 void select_formaction::process_operation(operation op, bool /* automatic */, std::vector<std::string> * /* args */) {
 	bool hardquit = false;
 	switch (op) {
-		case OP_QUIT:
-			value = "";
-			quit = true;
-			break;
-		case OP_HARDQUIT:
-			value = "";
-			hardquit = true;
-			break;
-		case OP_OPEN: {
-				std::string tagposname = f->get("tagposname");
-				std::istringstream posname(tagposname);
-				unsigned int pos = 0;
-				posname >> pos;
-				if (tagposname.length() > 0) {
-					switch (type) {
-					case SELECTTAG: {
-							if (pos < tags.size()) {
-								value = tags[pos];
-								quit = true;
-							}
-						}
-						break;
-					case SELECTFILTER: {
-							if (pos < filters.size()) {
-								value = filters[pos].second;
-								quit = true;
-							}
-						}
-						break;
-					default:
-						assert(0); // should never happen
-					}
+	case OP_QUIT:
+		value = "";
+		quit = true;
+		break;
+	case OP_HARDQUIT:
+		value = "";
+		hardquit = true;
+		break;
+	case OP_OPEN: {
+		std::string tagposname = f->get("tagposname");
+		std::istringstream posname(tagposname);
+		unsigned int pos = 0;
+		posname >> pos;
+		if (tagposname.length() > 0) {
+			switch (type) {
+			case SELECTTAG: {
+				if (pos < tags.size()) {
+					value = tags[pos];
+					quit = true;
 				}
 			}
 			break;
-		default:
+			case SELECTFILTER: {
+				if (pos < filters.size()) {
+					value = filters[pos].second;
+					quit = true;
+				}
+			}
 			break;
+			default:
+				assert(0); // should never happen
+			}
+		}
+	}
+	break;
+	default:
+		break;
 	}
 
 	if (hardquit) {
@@ -107,7 +107,7 @@ void select_formaction::prepare() {
 			assert(0);
 		}
 		f->modify("taglist", "replace_inner", listfmt.format_list());
-		
+
 		do_redraw = false;
 	}
 }
@@ -164,12 +164,12 @@ keymap_hint_entry * select_formaction::get_keymap_hint() {
 
 std::string select_formaction::title() {
 	switch (type) {
-		case SELECTTAG:
-			return _("Select Tag");
-		case SELECTFILTER:
-			return _("Select Filter");
-		default:
-			return "";
+	case SELECTTAG:
+		return _("Select Tag");
+	case SELECTFILTER:
+		return _("Select Filter");
+	default:
+		return "";
 	}
 }
 
