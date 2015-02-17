@@ -71,17 +71,17 @@ std::string oldreader_api::retrieve_auth() {
 		ifs.open(exp.we_wordv[0]); 
 		wordfree(&exp);
 		if (!ifs) {
-                        if(!flushed) {
-                            std::cout << std::endl;
-                            std::cout.flush();
-                        }
+			if(!flushed) {
+				std::cout << std::endl;
+				std::cout.flush();
+			}
 			// Find a way to do this in C++ by removing cin echoing.
 			pass = std::string( getpass("Password for The Old Reader: ") );
 		} else {
-				ifs >> pass;
-				if(pass == "") {
-						return "";
-				}
+			std::getline(ifs, pass);
+			if(pass == "") {
+					return "";
+			}
 		}
 	}
 	char * username = curl_easy_escape(handle, user.c_str(), 0);
