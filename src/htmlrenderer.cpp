@@ -180,7 +180,12 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 								imgurl = "";
 							}
 							if (imgurl.length() > 0) {
-								unsigned int link_num = add_link(links,utils::censor_url(utils::absolute_url(url,imgurl)), LINK_IMG);
+								unsigned int link_num;
+								if (imgurl.substr(0,5) == "data:") {
+									link_num = add_link(links, "inline image", LINK_IMG);
+								} else {
+									link_num = add_link(links,utils::censor_url(utils::absolute_url(url,imgurl)), LINK_IMG);
+								}
 								curline.append(utils::strprintf("[%s %u]", _("image"), link_num));
 								image_count++;
 							}
