@@ -472,13 +472,13 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl, rss_ign
 	if (max_items > 0 && feed->items().size() > max_items) {
 		std::vector<std::shared_ptr<rss_item>> flagged_items;
 		auto it=feed->items().begin();
-		for (unsigned int i=0;i<max_items;++i)
+		for (unsigned int j=0;j<max_items;++j)
 			++it;
-		for (unsigned int i=max_items;i<feed->items().size();++i) {
-			if (feed->items()[i]->flags().length() == 0) {
-				delete_item(feed->items()[i]);
+		for (unsigned int j=max_items;j<feed->items().size();++j) {
+			if (feed->items()[j]->flags().length() == 0) {
+				delete_item(feed->items()[j]);
 			} else {
-				flagged_items.push_back(feed->items()[i]);
+				flagged_items.push_back(feed->items()[j]);
 			}
 		}	
 		feed->erase_items(it, feed->items().end()); // delete old entries

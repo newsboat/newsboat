@@ -149,7 +149,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 									link = "";
 								}
 								if (link.length() > 0) {
-									unsigned int link_num = add_link(links,utils::censor_url(utils::absolute_url(url,link)), LINK_EMBED);
+									link_num = add_link(links,utils::censor_url(utils::absolute_url(url,link)), LINK_EMBED);
 									curline.append(utils::strprintf("[%s %u]", _("embedded flash:"), link_num));
 								}
 							}
@@ -180,7 +180,6 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 								imgurl = "";
 							}
 							if (imgurl.length() > 0) {
-								unsigned int link_num;
 								if (imgurl.substr(0,5) == "data:") {
 									link_num = add_link(links, "inline image", LINK_IMG);
 								} else {
@@ -760,16 +759,16 @@ void htmlrenderer::render_table(const Table& table, std::vector<std::string>& li
 	cell_widths.resize(cells, 0);
 	for(size_t row=0; row < rows; row++) {
 		for(size_t cell=0; cell < table.rows[row].cells.size(); cell++) {
-			size_t w = 0;
+			size_t width = 0;
 			if (table.rows[row].cells[cell].text.size()) {
 				for(size_t idx=0; idx < table.rows[row].cells[cell].text.size(); idx++)
-					w = std::max(w, utils::strwidth_stfl(table.rows[row].cells[cell].text[idx]));
+					width = std::max(width, utils::strwidth_stfl(table.rows[row].cells[cell].text[idx]));
 			}
 			if (table.rows[row].cells[cell].span > 1) {
-				w += table.rows[row].cells[cell].span;
-				w /= table.rows[row].cells[cell].span; // devide size evenly on columns (can be done better, I know)
+				width += table.rows[row].cells[cell].span;
+				width /= table.rows[row].cells[cell].span; // devide size evenly on columns (can be done better, I know)
 			}
-			cell_widths[cell] = std::max(cell_widths[cell], w);
+			cell_widths[cell] = std::max(cell_widths[cell], width);
 		}
 	}
 
