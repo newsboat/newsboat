@@ -524,13 +524,13 @@ void controller::run(int argc, char * argv[]) {
 
 	unsigned int i=0;
 	for (auto url : urlcfg->get_urls()) {
-		std::shared_ptr<rss_feed> feed(new rss_feed(rsscache));
 		try {
-			feed->set_rssurl(url);
-			feed->set_tags(urlcfg->get_tags(url));
 			bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
 			std::shared_ptr<rss_feed> feed = rsscache->internalize_rssfeed(url, ignore_disp ? &ign : NULL);
 			feed->set_tags(urlcfg->get_tags(url));
+			feed->set_order(i);
+			std::lock_guard<std::mutex> feedslock(feeds_mutex);
+			feeds.push_back(feed);
 		} catch(const dbexception& e) {
 			std::cout << _("Error while loading feeds from database: ") << e.what() << std::endl;
 			utils::remove_fs_lock(lock_file);
@@ -540,9 +540,6 @@ void controller::run(int argc, char * argv[]) {
 			utils::remove_fs_lock(lock_file);
 			return;
 		}
-		feed->set_order(i);
-		std::lock_guard<std::mutex> feedslock(feeds_mutex);
-		feeds.push_back(feed);
 		i++;
 	}
 
@@ -1229,15 +1226,6 @@ void controller::reload_urls_file() {
 			}
 		}
 		if (!found) {
-			std::shared_ptr<rss_feed> new_feed(new rss_feed(rsscache));
-			try {
-				new_feed->set_rssurl(url);
-			} catch (const std::string& str) {
-				LOG(LOG_USERERROR, "ignored invalid RSS URL '%s'", url.c_str());
-				continue;
-			}
-			new_feed->set_tags(urlcfg->get_tags(url));
-			new_feed->set_order(i);
 			try {
 				bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
 				std::shared_ptr<rss_feed> new_feed = rsscache->internalize_rssfeed(url, ignore_disp ? &ign : NULL);

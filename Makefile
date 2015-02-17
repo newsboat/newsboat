@@ -10,7 +10,7 @@ CXX?=c++
 
 # compiler and linker flags
 DEFINES=-DLOCALEDIR=\"$(localedir)\"
-WARNFLAGS=-Wall -Wextra -Wunreachable-code
+WARNFLAGS=-Wall -Wextra -Wunreachable-code -Wshadow
 CXXFLAGS+=-std=c++11 -ggdb -Iinclude -Istfl -Ifilter -I. -Irss $(WARNFLAGS) $(DEFINES)
 LDFLAGS+=-L.
 
