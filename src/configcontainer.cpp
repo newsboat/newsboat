@@ -304,7 +304,6 @@ void configcontainer::dump_config(std::vector<std::string>& config_output) {
 			break;
 		}
 		config_output.push_back(configline);
-ignore_entry: ;
 	}
 }
 
