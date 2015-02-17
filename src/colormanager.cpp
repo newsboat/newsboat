@@ -67,12 +67,11 @@ void colormanager::handle_action(const std::string& action, const std::vector<st
 }
 
 void colormanager::dump_config(std::vector<std::string>& config_output) {
-	for (std::map<std::string, std::string>::iterator it=fg_colors.begin();it!=fg_colors.end();++it) {
-		std::string configline = utils::strprintf("color %s %s %s", it->first.c_str(), it->second.c_str(), bg_colors[it->first].c_str());
-		std::vector<std::string> attribs = attributes[it->first];
-		for (std::vector<std::string>::iterator jt=attribs.begin();jt!=attribs.end();++jt) {
+	for (auto color : fg_colors) {
+		std::string configline = utils::strprintf("color %s %s %s", color.first.c_str(), color.second.c_str(), bg_colors[color.first].c_str());
+		for (auto attrib : attributes[color.first]) {
 			configline.append(" ");
-			configline.append(*jt);
+			configline.append(attrib);
 		}
 		config_output.push_back(configline);
 	}
@@ -83,9 +82,9 @@ void colormanager::dump_config(std::vector<std::string>& config_output) {
  * TODO: refactor this
  */
 void colormanager::set_pb_colors(podbeuter::pb_view * v) {
-	std::map<std::string,std::string>::iterator fgcit = fg_colors.begin();
-	std::map<std::string,std::string>::iterator bgcit = bg_colors.begin();
-	std::map<std::string,std::vector<std::string> >::iterator attit = attributes.begin();
+	auto fgcit = fg_colors.begin();
+	auto bgcit = bg_colors.begin();
+	auto attit = attributes.begin();
 
 	for (;fgcit != fg_colors.end(); ++fgcit, ++bgcit, ++attit) {
 		std::string colorattr;
@@ -99,11 +98,11 @@ void colormanager::set_pb_colors(podbeuter::pb_view * v) {
 			colorattr.append("bg=");
 			colorattr.append(bgcit->second);
 		}
-		for (std::vector<std::string>::iterator it=attit->second.begin(); it!= attit->second.end(); ++it) {
+		for (auto attr : attit->second) {
 			if (colorattr.length() > 0)
 				colorattr.append(",");
 			colorattr.append("attr=");
-			colorattr.append(*it);
+			colorattr.append(attr);
 		} 
 
 		LOG(LOG_DEBUG,"colormanager::set_pb_colors: %s %s\n",fgcit->first.c_str(), colorattr.c_str());

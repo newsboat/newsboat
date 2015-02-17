@@ -84,7 +84,7 @@ class utils {
 		static bool is_valid_color(const std::string& color);
 		static bool is_valid_attribute(const std::string& attrib);
 
-		static std::vector<std::pair<unsigned int, unsigned int> > partition_indexes(unsigned int start, unsigned int end, unsigned int parts);
+		static std::vector<std::pair<unsigned int, unsigned int>> partition_indexes(unsigned int start, unsigned int end, unsigned int parts);
 
 		static std::string join(const std::vector<std::string>& strings, const std::string& separator);
 

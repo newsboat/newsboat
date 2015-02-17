@@ -78,10 +78,10 @@ void stfl::reset() {
 	stfl_reset();
 }
 
-static mutex quote_mtx;
+static std::mutex quote_mtx;
 
 std::string stfl::quote(const std::string& text) {
-	scope_mutex lock(&quote_mtx);
+	std::lock_guard<std::mutex> lock(quote_mtx);
 	stfl_ipool * ipool = stfl_ipool_create((std::string(nl_langinfo(CODESET)) + "//TRANSLIT").c_str());
 	std::string retval = stfl_ipool_fromwc(ipool,stfl_quote(stfl_ipool_towc(ipool,text.c_str())));
 	stfl_ipool_destroy(ipool);

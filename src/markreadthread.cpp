@@ -13,7 +13,7 @@ markreadthread::markreadthread( ttrss_api* r_api, const std::string& guid, bool 
 markreadthread::~markreadthread() {
 }
 
-void markreadthread::run() {
+void markreadthread::operator()() {
 	/*
 	 * the markreadthread class handles marking a thread as read in a way that
 	 * doesn't halt the presentation of the content. this is for remote sources,

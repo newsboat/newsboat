@@ -1,20 +1,19 @@
 #ifndef RELOADTHREAD_H_
 #define RELOADTHREAD_H_
 
-#include <thread.h>
+#include <thread>
 #include <controller.h>
 #include <configcontainer.h>
 
 namespace newsbeuter
 {
 
-class reloadthread : public thread
+class reloadthread
 {
 public:
 	reloadthread(controller * c, configcontainer * cf);
 	virtual ~reloadthread();
-protected:
-	virtual void run();
+	void operator()();
 private:
 	controller * ctrl;
 	time_t oldtime;

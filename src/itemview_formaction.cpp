@@ -13,7 +13,7 @@
 
 namespace newsbeuter {
 
-itemview_formaction::itemview_formaction(view * vv, std::tr1::shared_ptr<itemlist_formaction> il, std::string formstr)
+itemview_formaction::itemview_formaction(view * vv, std::shared_ptr<itemlist_formaction> il, std::string formstr)
 	: formaction(vv,formstr), show_source(false), quit(false), rxman(0), num_lines(0), itemlist(il), in_search(false) { 
 	valid_cmds.push_back("save");
 	std::sort(valid_cmds.begin(), valid_cmds.end());
@@ -61,11 +61,10 @@ void itemview_formaction::prepare() {
 				render_width -= 5; 	
 		}
 
-		LOG(LOG_DEBUG, "itemview_formaction::prepare: guid = %s", guid.c_str());
-		std::tr1::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
+		std::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
 		listformatter listfmt;
 
-		std::tr1::shared_ptr<rss_feed> feedptr = item->get_feedptr();
+		std::shared_ptr<rss_feed> feedptr = item->get_feedptr();
 
 		std::string title, feedtitle;
 		if (feedptr.get() != NULL) {
@@ -151,7 +150,7 @@ void itemview_formaction::prepare() {
 }
 
 void itemview_formaction::process_operation(operation op, bool automatic, std::vector<std::string> * args) {
-	std::tr1::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
+	std::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
 	bool hardquit = false;
 
 	/*
@@ -469,7 +468,7 @@ void itemview_formaction::handle_cmdline(const std::string& cmd) {
 	if (!tokens.empty()) {
 		if (tokens[0] == "save" && tokens.size() >= 2) {
 			std::string filename = utils::resolve_tilde(tokens[1]);
-			std::tr1::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
+			std::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
 
 			if (filename == "") {
 				v->show_error(_("Aborted saving."));
@@ -491,7 +490,7 @@ void itemview_formaction::handle_cmdline(const std::string& cmd) {
 void itemview_formaction::finished_qna(operation op) {
 	formaction::finished_qna(op); // important!
 
-	std::tr1::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
+	std::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
 
 	switch (op) {
 		case OP_INT_EDITFLAGS_END:
@@ -565,8 +564,8 @@ void itemview_formaction::set_regexmanager(regexmanager * r) {
 	std::vector<std::string>& attrs = r->get_attrs("article");
 	unsigned int i=0;
 	std::string attrstr;
-	for (std::vector<std::string>::iterator it=attrs.begin();it!=attrs.end();++it,++i) {
-		attrstr.append(utils::strprintf("@style_%u_normal:%s ", i, it->c_str()));
+	for (auto attribute : attrs) {
+		attrstr.append(utils::strprintf("@style_%u_normal:%s ", i, attribute.c_str()));
 	}
 	attrstr.append("@style_b_normal[color_bold]:attr=bold @style_u_normal[color_underline]:attr=underline ");
 	std::string textview = utils::strprintf("{textview[article] style_normal[article]: style_end[styleend]:fg=blue,attr=bold %s .expand:vh offset[articleoffset]:0 richtext:1}", attrstr.c_str());
@@ -598,7 +597,7 @@ void itemview_formaction::update_percent() {
 }
 
 std::string itemview_formaction::title() {
-	std::tr1::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
+	std::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
 	return utils::strprintf(_("Article - %s"), item->title().c_str());
 }
 

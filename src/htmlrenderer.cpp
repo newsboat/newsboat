@@ -57,11 +57,12 @@ void htmlrenderer::render(const std::string& source, std::vector<std::string>& l
 unsigned int htmlrenderer::add_link(std::vector<linkpair>& links, const std::string& link, link_type type) {
 	bool found = false;
 	unsigned int i=1;
-	for (std::vector<linkpair>::iterator it=links.begin();it!=links.end();++it, ++i) {
-		if (it->first == link) {
+	for (auto l : links) {
+		if (l.first == link) {
 			found = true;
 			break;
 		}
+		i++;
 	}
 	if (!found)
 		links.push_back(linkpair(link,type));
@@ -542,38 +543,39 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				{
 					if (itunes_hack) {
 						std::vector<std::string> words = utils::tokenize_nl(utils::quote_for_stfl(xpp.getText()));
-						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it) {
-							if (*it == "\n") {
+						for (auto word : words) {
+							if (word == "\n") {
 								add_line(curline, tables, lines);
 								prepare_newline(curline,  tables.size() ? 0 : indent_level);
 							} else {
-								std::vector<std::string> words2 = utils::tokenize_spaced(*it);
+								std::vector<std::string> words2 = utils::tokenize_spaced(word);
 								unsigned int i=0;
 								bool new_line = false;
-								for (std::vector<std::string>::iterator it2=words2.begin();it2!=words2.end();++it2,++i) {
-									if ((utils::strwidth_stfl(curline) + utils::strwidth_stfl(*it2)) >= w) {
+								for (auto word2 : words2) {
+									if ((utils::strwidth_stfl(curline) + utils::strwidth_stfl(word2)) >= w) {
 										add_nonempty_line(curline, tables, lines);
 										prepare_newline(curline,  tables.size() ? 0 : indent_level);
 										new_line = true;
 									}
 									if (new_line) {
-										if (*it2 != " ")
-											curline.append(*it2);
+										if (word2 != " ")
+											curline.append(word2);
 										new_line = false;
 									} else {
-										curline.append(*it2);
+										curline.append(word2);
 									}
+									i++;
 								}
 							}
 						}
 					} else if (inside_pre) {
 						std::vector<std::string> words = utils::tokenize_nl(utils::quote_for_stfl(xpp.getText()));
-						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it) {
-							if (*it == "\n") {
+						for (auto word : words) {
+							if (word == "\n") {
 								add_line(curline, tables, lines);
 								prepare_newline(curline,  tables.size() ? 0 : indent_level);
 							} else {
-								curline.append(*it);
+								curline.append(word);
 							}
 						}
 					} else if (inside_script || inside_style) {
@@ -584,25 +586,24 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 							s.erase(0, 1);
 						std::vector<std::string> words = utils::tokenize_spaced(s);
 
-						unsigned int i=0;
 						bool new_line = false;
 
 						if (!line_is_nonempty(curline) && !words.empty() && words[0] == " ") {
 							words.erase(words.begin());
 						}
 
-						for (std::vector<std::string>::iterator it=words.begin();it!=words.end();++it,++i) {
-							if ((utils::strwidth_stfl(curline) + utils::strwidth_stfl(*it)) >= w) {
+						for (auto word : words) {
+							if ((utils::strwidth_stfl(curline) + utils::strwidth_stfl(word)) >= w) {
 								add_nonempty_line(curline, tables, lines);
 								prepare_newline(curline, tables.size() ? 0 : indent_level);
 								new_line = true;
 							}
 							if (new_line) {
-								if (*it != " ")
-									curline.append(*it);
+								if (word != " ")
+									curline.append(word);
 								new_line = false;
 							} else {
-								curline.append(*it);
+								curline.append(word);
 							}
 						}
 					}

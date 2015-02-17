@@ -6,11 +6,11 @@
 
 #include <configcontainer.h>
 #include <matcher.h>
-#include <mutex.h>
+#include <mutex>
 #include <utils.h>
 
-#include <tr1/memory>
-#include <tr1/unordered_map>
+#include <memory>
+#include <unordered_map>
 
 namespace newsbeuter {
 
@@ -83,8 +83,8 @@ namespace newsbeuter {
 			virtual bool has_attribute(const std::string& attribname);
 			virtual std::string get_attribute(const std::string& attribname);
 
-			void set_feedptr(std::tr1::shared_ptr<rss_feed> ptr);
-			inline std::tr1::shared_ptr<rss_feed> get_feedptr() { return feedptr; }
+			void set_feedptr(std::shared_ptr<rss_feed> ptr);
+			inline std::shared_ptr<rss_feed> get_feedptr() { return feedptr; }
 
 			inline bool deleted() const { return deleted_; }
 			inline void set_deleted(bool b) { deleted_ = b; }
@@ -115,7 +115,7 @@ namespace newsbeuter {
 			bool enqueued_;
 			std::string flags_;
 			std::string oldflags_;
-			std::tr1::shared_ptr<rss_feed> feedptr;
+			std::shared_ptr<rss_feed> feedptr;
 			bool deleted_;
 			unsigned int idx;
 			std::string base;
@@ -144,8 +144,8 @@ namespace newsbeuter {
 			
 			bool hidden() const;
 			
-			inline std::vector<std::tr1::shared_ptr<rss_item> >& items() { return items_; }
-			inline void add_item(std::tr1::shared_ptr<rss_item> item) {
+			inline std::vector<std::shared_ptr<rss_item>>& items() { return items_; }
+			inline void add_item(std::shared_ptr<rss_item> item) {
 				items_.push_back(item);
 				items_guid_map[item->guid()] = item;
 			}
@@ -156,19 +156,19 @@ namespace newsbeuter {
 				items_guid_map.clear();
 			}
 
-			inline void erase_items(std::vector<std::tr1::shared_ptr<rss_item> >::iterator begin, std::vector<std::tr1::shared_ptr<rss_item> >::iterator end) {
-				for (std::vector<std::tr1::shared_ptr<rss_item> >::const_iterator it=begin;it!=end;++it) {
+			inline void erase_items(std::vector<std::shared_ptr<rss_item>>::iterator begin, std::vector<std::shared_ptr<rss_item>>::iterator end) {
+				for (auto it=begin;it!=end;++it) {
 					items_guid_map.erase((*it)->guid());
 				}
 				items_.erase(begin, end);
 			}
-			inline void erase_item(std::vector<std::tr1::shared_ptr<rss_item> >::iterator pos) {
+			inline void erase_item(std::vector<std::shared_ptr<rss_item>>::iterator pos) {
 				items_guid_map.erase((*pos)->guid());
 				items_.erase(pos);
 			}
 
-			std::tr1::shared_ptr<rss_item> get_item_by_guid(const std::string& guid);
-			std::tr1::shared_ptr<rss_item> get_item_by_guid_unlocked(const std::string& guid);
+			std::shared_ptr<rss_item> get_item_by_guid(const std::string& guid);
+			std::shared_ptr<rss_item> get_item_by_guid_unlocked(const std::string& guid);
 			
 			inline const std::string& rssurl() const { return rssurl_; }
 			void set_rssurl(const std::string& u);
@@ -184,7 +184,7 @@ namespace newsbeuter {
 			virtual bool has_attribute(const std::string& attribname);
 			virtual std::string get_attribute(const std::string& attribname);
 
-			void update_items(std::vector<std::tr1::shared_ptr<rss_feed> > feeds);
+			void update_items(std::vector<std::shared_ptr<rss_feed>> feeds);
 
 			inline void set_query(const std::string& s) { query = s; }
 
@@ -207,7 +207,7 @@ namespace newsbeuter {
 			inline void set_order(unsigned int x) { order = x; }
 			inline unsigned int get_order() { return order; }
 
-			void set_feedptrs(std::tr1::shared_ptr<rss_feed> self);
+			void set_feedptrs(std::shared_ptr<rss_feed> self);
 
 			std::string get_status();
 
@@ -217,15 +217,15 @@ namespace newsbeuter {
 			void unload();
 			void load();
 
-			mutex item_mutex; // this is ugly, but makes it possible to lock items use e.g. from the cache class
+			std::mutex item_mutex; // this is ugly, but makes it possible to lock items use e.g. from the cache class
 		private:
 			std::string title_;
 			std::string description_;
 			std::string link_;
 			time_t pubDate_;
 			std::string rssurl_;
-			std::vector<std::tr1::shared_ptr<rss_item> > items_;
-			std::tr1::unordered_map<std::string, std::tr1::shared_ptr<rss_item> > items_guid_map;
+			std::vector<std::shared_ptr<rss_item>> items_;
+			std::unordered_map<std::string, std::shared_ptr<rss_item>> items_guid_map;
 			std::vector<std::string> tags_;
 			std::string query;
 			
@@ -236,7 +236,7 @@ namespace newsbeuter {
 			unsigned int idx;
 			unsigned int order;
 			dl_status status_;
-			mutex items_guid_map_mutex;
+			std::mutex items_guid_map_mutex;
 	};
 
 	class rss_ignores : public config_action_handler {

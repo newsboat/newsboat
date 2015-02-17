@@ -145,12 +145,12 @@ void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned s
 
 		for (unsigned int j=0;opdescs[j].op != OP_NIL;++j) {
 			bool already_added = false;
-			for (std::map<std::string,operation>::iterator it=keymap_[ctx].begin();it!=keymap_[ctx].end();++it) {
-				operation op = it->second;
+			for (auto keymap : keymap_[ctx]) {
+				operation op = keymap.second;
 				if (op != OP_NIL) {
 					if (opdescs[j].op == op && opdescs[j].flags & flags) {
 						keymap_desc desc;
-						desc.key = it->first;
+						desc.key = keymap.first;
 						desc.ctx = ctx;
 						if (!already_added) {
 							desc.cmd = opdescs[j].opstr;
@@ -241,30 +241,30 @@ operation keymap::get_operation(const std::string& keycode, const std::string& c
 void keymap::dump_config(std::vector<std::string>& config_output) {
 	for (unsigned int i=1;contexts[i]!=NULL;i++) { // TODO: optimize
 		std::map<std::string,operation>& x = keymap_[contexts[i]];
-		for (std::map<std::string,operation>::iterator it = x.begin();it!=x.end();++it) {
-			if (it->second < OP_INT_MIN) {
+		for (auto keymap : x) {
+			if (keymap.second < OP_INT_MIN) {
 				std::string configline = "bind-key ";
-				configline.append(utils::quote(it->first));
+				configline.append(utils::quote(keymap.first));
 				configline.append(" ");
-				configline.append(getopname(it->second));
+				configline.append(getopname(keymap.second));
 				configline.append(" ");
 				configline.append(contexts[i]);
 				config_output.push_back(configline);
 			}
 		}
 	}
-	for (std::map<std::string,std::vector<macrocmd> >::iterator it=macros_.begin();it!=macros_.end();++it) {
+	for (auto macro : macros_) {
 		std::string configline = "macro ";
-		configline.append(it->first);
+		configline.append(macro.first);
 		configline.append(" ");
 		unsigned int i=0;
-		for (std::vector<macrocmd>::iterator jt=it->second.begin();jt!=it->second.end();++jt,i++) {
-			configline.append(getopname(jt->op));
-			for (std::vector<std::string>::iterator kt=jt->args.begin();kt!=jt->args.end();++kt) {
+		for (auto cmd : macro.second) {
+			configline.append(getopname(cmd.op));
+			for (auto arg : cmd.args) {
 				configline.append(" ");
-				configline.append(utils::quote(*kt));
+				configline.append(utils::quote(arg));
 			}
-			if (i < (it->second.size()-1))
+			if (i < (macro.second.size()-1))
 				configline.append(" ; ");
 		}
 		config_output.push_back(configline);
@@ -307,7 +307,7 @@ void keymap::handle_action(const std::string& action, const std::vector<std::str
 	} else if (action == "macro") {
 		if (params.size() < 1)
 			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
-		std::vector<std::string>::const_iterator it = params.begin();
+		auto it = params.begin();
 		std::string macrokey = *it;
 		std::vector<macrocmd> cmds;
 		macrocmd tmpcmd;
@@ -348,24 +348,24 @@ std::string keymap::getkey(operation op, const std::string& context) {
 	if (context == "all") {
 		for (unsigned int i=0;contexts[i]!=NULL;i++) {
 			std::string ctx(contexts[i]);
-			for (std::map<std::string,operation>::iterator it=keymap_[ctx].begin(); it!=keymap_[ctx].end(); ++it) {
-				if (it->second == op)
-					return it->first;
+			for (auto keymap : keymap_[ctx]) {
+				if (keymap.second == op)
+					return keymap.first;
 			}
 		}
 	} else {
-		for (std::map<std::string,operation>::iterator it=keymap_[context].begin(); it!=keymap_[context].end(); ++it) {
-			if (it->second == op)
-				return it->first;
+		for (auto keymap : keymap_[context]) {
+			if (keymap.second == op)
+				return keymap.first;
 		}	
 	}
 	return "<none>";
 }
 
 std::vector<macrocmd> keymap::get_macro(const std::string& key) {
-	for (std::map<std::string,std::vector<macrocmd> >::iterator it=macros_.begin(); it!=macros_.end(); ++it) {
-		if (it->first == key) {
-			return it->second;
+	for (auto macro : macros_) {
+		if (macro.first == key) {
+			return macro.second;
 		}
 	}
 	std::vector<macrocmd> dummyvector;

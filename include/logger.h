@@ -2,7 +2,7 @@
 #define LOGGER__H
 
 #include <fstream>
-#include <mutex.h>
+#include <mutex>
 #include <config.h>
 
 namespace newsbeuter {
@@ -26,8 +26,8 @@ class logger {
 		~logger() { }
 
 		loglevel curlevel;
-		mutex logMutex;
-		static mutex instanceMutex;
+		std::mutex logMutex;
+		static std::mutex instanceMutex;
 		std::fstream f;
 		std::fstream ef;
 };

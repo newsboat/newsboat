@@ -119,10 +119,10 @@ std::string rss_item::pubDate() const {
 }
 
 unsigned int rss_feed::unread_item_count() {
-	scope_mutex lock(&item_mutex);
+	std::lock_guard<std::mutex> lock(item_mutex);
 	unsigned int count = 0;
-	for (std::vector<std::tr1::shared_ptr<rss_item> >::const_iterator it=items_.begin();it!=items_.end();++it) {
-		if ((*it)->unread())
+	for (auto item : items_) {
+		if (item->unread())
 			++count;
 	}
 	return count;
@@ -130,8 +130,8 @@ unsigned int rss_feed::unread_item_count() {
 
 
 bool rss_feed::matches_tag(const std::string& tag) {
-	for (std::vector<std::string>::iterator it=tags_.begin();it!=tags_.end();++it) {
-		if (tag == *it)
+	for (auto t : tags_) {
+		if (tag == t)
 			return true;
 	}
 	return false;
@@ -145,9 +145,9 @@ std::string rss_feed::get_firsttag() {
 
 std::string rss_feed::get_tags() {
 	std::string tags;
-	for (std::vector<std::string>::iterator it=tags_.begin();it!=tags_.end();++it) {
-		if (it->substr(0,1) != "~" && it->substr(0,1) != "!") {
-			tags.append(*it);
+	for (auto t : tags_) {
+		if (t.substr(0,1) != "~" && t.substr(0,1) != "!") {
+			tags.append(t);
 			tags.append(" ");
 		}
 	}
@@ -156,8 +156,8 @@ std::string rss_feed::get_tags() {
 
 void rss_feed::set_tags(const std::vector<std::string>& tags) {
 	tags_.clear();
-	for (std::vector<std::string>::const_iterator it=tags.begin();it!=tags.end();++it) {
-		tags_.push_back(*it);
+	for (auto tag : tags) {
+		tags_.push_back(tag);
 	}
 }
 
@@ -187,10 +187,10 @@ std::string rss_item::description() const {
 std::string rss_feed::title() const {
 	bool found_title = false;
 	std::string alt_title;
-	for (std::vector<std::string>::const_iterator it=tags_.begin();it!=tags_.end();++it) {
-		if (it->substr(0,1) == "~") {
+	for (auto tag : tags_) {
+		if (tag.substr(0,1) == "~" || tag.substr(0,1) == "!") {
 			found_title = true;
-			alt_title = it->substr(1, it->length()-1);
+			alt_title = tag.substr(1, tag.length()-1);
 			break;
 		}
 	}
@@ -202,32 +202,28 @@ std::string rss_feed::description() const {
 }
 
 bool rss_feed::hidden() const {
-	for (std::vector<std::string>::const_iterator it=tags_.begin();it!=tags_.end();++it) {
-		if (it->substr(0,1) == "!") {
+	for (auto tag : tags_) {
+		if (tag.substr(0,1) == "!") {
 			return true;
 		}
 	}
 	return false;
 }
 
-std::tr1::shared_ptr<rss_item> rss_feed::get_item_by_guid(const std::string& guid) {
-	scope_mutex lock(&item_mutex);
+std::shared_ptr<rss_item> rss_feed::get_item_by_guid(const std::string& guid) {
+	std::lock_guard<std::mutex> lock(item_mutex);
 	return get_item_by_guid_unlocked(guid);
 }
 
-std::tr1::shared_ptr<rss_item> rss_feed::get_item_by_guid_unlocked(const std::string& guid) {
-	LOG(LOG_DEBUG, "get_item_by_guid_unlocked: guid = %s", guid.c_str());
-	{
-		scope_mutex lock(&items_guid_map_mutex);
-		std::tr1::unordered_map<std::string, std::tr1::shared_ptr<rss_item> >::const_iterator it;
-		if ((it = items_guid_map.find(guid)) != items_guid_map.end()) {
-			return it->second;
-		}
+std::shared_ptr<rss_item> rss_feed::get_item_by_guid_unlocked(const std::string& guid) {
+	auto it = items_guid_map.find(guid);
+	if (it != items_guid_map.end()) {
+		return it->second;
 	}
-	//abort();
 	LOG(LOG_DEBUG, "rss_feed::get_item_by_guid_unlocked: hit dummy item!");
 	LOG(LOG_DEBUG, "rss_feed::get_item_by_guid_unlocked: items_guid_map.size = %d", items_guid_map.size());
-	return std::tr1::shared_ptr<rss_item>(new rss_item(ch));
+	// abort();
+	return std::shared_ptr<rss_item>(new rss_item(ch)); // should never happen!
 }
 
 bool rss_item::has_attribute(const std::string& attribname) {
@@ -301,7 +297,7 @@ void rss_item::set_flags(const std::string& ff) {
 void rss_item::sort_flags() {
 	std::sort(flags_.begin(), flags_.end());
 
-	for (std::string::iterator it=flags_.begin();flags_.size() > 0 && it!=flags_.end();++it) {
+	for (auto it=flags_.begin();flags_.size() > 0 && it!=flags_.end();++it) {
 		if (!isalpha(*it)) {
 			flags_.erase(it);
 			it = flags_.begin();
@@ -366,47 +362,47 @@ void rss_ignores::handle_action(const std::string& action, const std::vector<std
 			throw confighandlerexception(utils::strprintf(_("couldn't parse filter expression `%s': %s"), ignore_expr.c_str(), m.get_parse_error().c_str()));
 		ignores.push_back(feedurl_expr_pair(ignore_rssurl, new matcher(ignore_expr)));
 	} else if (action == "always-download") {
-		for (std::vector<std::string>::const_iterator it=params.begin();it!=params.end();++it) {
-			ignores_lastmodified.push_back(*it);
+		for (auto param : params) {
+			ignores_lastmodified.push_back(param);
 		}
 	} else if (action == "reset-unread-on-update") {
-		for (std::vector<std::string>::const_iterator it=params.begin();it!=params.end();++it) {
-			resetflag.push_back(*it);
+		for (auto param : params) {
+			resetflag.push_back(param);
 		}
 	} else
 		throw confighandlerexception(AHS_INVALID_COMMAND);
 }
 
 void rss_ignores::dump_config(std::vector<std::string>& config_output) {
-	for (std::vector<feedurl_expr_pair>::iterator it = ignores.begin();it!=ignores.end();++it) {
+	for (auto ign : ignores) {
 		std::string configline = "ignore-article ";
-		if (it->first == "*")
+		if (ign.first == "*")
 			configline.append("*");
 		else
-			configline.append(utils::quote(it->first));
+			configline.append(utils::quote(ign.first));
 		configline.append(" ");
-		configline.append(utils::quote(it->second->get_expression()));
+		configline.append(utils::quote(ign.second->get_expression()));
 		config_output.push_back(configline);
 	}
-	for (std::vector<std::string>::iterator it=ignores_lastmodified.begin();it!=ignores_lastmodified.end();++it) {
-		config_output.push_back(utils::strprintf("always-download %s", utils::quote(*it).c_str()));
+	for (auto ign_lm : ignores_lastmodified) {
+		config_output.push_back(utils::strprintf("always-download %s", utils::quote(ign_lm).c_str()));
 	}
-	for (std::vector<std::string>::iterator it=resetflag.begin();it!=resetflag.end();++it) {
-		config_output.push_back(utils::strprintf("reset-unread-on-update %s", utils::quote(*it).c_str()));
+	for (auto rf : resetflag) {
+		config_output.push_back(utils::strprintf("reset-unread-on-update %s", utils::quote(rf).c_str()));
 	}
 }
 
 rss_ignores::~rss_ignores() {
-	for (std::vector<feedurl_expr_pair>::iterator it=ignores.begin();it!=ignores.end();++it) {
-		delete it->second;
+	for (auto ign : ignores) {
+		delete ign.second;
 	}
 }
 
 bool rss_ignores::matches(rss_item* item) {
-	for (std::vector<feedurl_expr_pair>::iterator it=ignores.begin();it!=ignores.end();++it) {
-		LOG(LOG_DEBUG, "rss_ignores::matches: it->first = `%s' item->feedurl = `%s'", it->first.c_str(), item->feedurl().c_str());
-		if (it->first == "*" || item->feedurl() == it->first) {
-			if (it->second->matches(item)) {
+	for (auto ign : ignores) {
+		LOG(LOG_DEBUG, "rss_ignores::matches: ign.first = `%s' item->feedurl = `%s'", ign.first.c_str(), item->feedurl().c_str());
+		if (ign.first == "*" || item->feedurl() == ign.first) {
+			if (ign.second->matches(item)) {
 				LOG(LOG_DEBUG, "rss_ignores::matches: found match");
 				return true;
 			}
@@ -416,23 +412,23 @@ bool rss_ignores::matches(rss_item* item) {
 }
 
 bool rss_ignores::matches_lastmodified(const std::string& url) {
-	for (std::vector<std::string>::iterator it=ignores_lastmodified.begin();it!=ignores_lastmodified.end();++it) {
-		if (url == *it)
+	for (auto ignore_url : ignores_lastmodified) {
+		if (url == ignore_url)
 			return true;
 	}
 	return false;
 }
 
 bool rss_ignores::matches_resetunread(const std::string& url) {
-	for (std::vector<std::string>::iterator it=resetflag.begin();it!=resetflag.end();++it) {
-		if (url == *it)
+	for (auto rf : resetflag) {
+		if (url == rf)
 			return true;
 	}
 	return false;
 }
 
-void rss_feed::update_items(std::vector<std::tr1::shared_ptr<rss_feed> > feeds) {
-	scope_mutex lock(&item_mutex);
+void rss_feed::update_items(std::vector<std::shared_ptr<rss_feed>> feeds) {
+	std::lock_guard<std::mutex> lock(item_mutex);
 	if (query.length() == 0)
 		return;
 
@@ -445,19 +441,16 @@ void rss_feed::update_items(std::vector<std::tr1::shared_ptr<rss_feed> > feeds) 
 	matcher m(query);
 
 	items_.clear();
-	{
-		scope_mutex lock(&items_guid_map_mutex);
-		items_guid_map.clear();
+	items_guid_map.clear();
 
-		for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it=feeds.begin();it!=feeds.end();++it) {
-			if ((*it)->rssurl().substr(0,6) != "query:") { // don't fetch items from other query feeds!
-				for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator jt=(*it)->items().begin();jt!=(*it)->items().end();++jt) {
-					if (m.matches(jt->get())) {
-						LOG(LOG_DEBUG, "rss_feed::update_items: matcher matches!");
-						(*jt)->set_feedptr(*it);
-						items_.push_back(*jt);
-						items_guid_map[(*jt)->guid()] = *jt;
-					}
+	for (auto feed : feeds) {
+		if (feed->rssurl().substr(0,6) != "query:") { // don't fetch items from other query feeds!
+			for (auto item : feed->items()) {
+				if (m.matches(item.get())) {
+					LOG(LOG_DEBUG, "rss_feed::update_items: matcher matches!");
+					item->set_feedptr(feed);
+					items_.push_back(item);
+					items_guid_map[item->guid()] = item;
 				}
 			}
 		}
@@ -487,56 +480,8 @@ void rss_feed::set_rssurl(const std::string& u) {
 	}
 }
 
-struct sort_item_by_title : public std::binary_function<std::tr1::shared_ptr<rss_item>, std::tr1::shared_ptr<rss_item>, bool> {
-	bool reverse;
-	sort_item_by_title(bool b) : reverse(b) { }
-	bool operator()(std::tr1::shared_ptr<rss_item> a, std::tr1::shared_ptr<rss_item> b) {
-		return reverse ?  (strcasecmp(a->title().c_str(), b->title().c_str()) > 0) : (strcasecmp(a->title().c_str(), b->title().c_str()) < 0);
-	}
-};
-
-struct sort_item_by_flags : public std::binary_function<std::tr1::shared_ptr<rss_item>, std::tr1::shared_ptr<rss_item>, bool> {
-	bool reverse;
-	sort_item_by_flags(bool b) : reverse(b) { }
-	bool operator()(std::tr1::shared_ptr<rss_item> a, std::tr1::shared_ptr<rss_item> b) {
-		return reverse ?  (strcmp(a->flags().c_str(), b->flags().c_str()) > 0) : (strcmp(a->flags().c_str(), b->flags().c_str()) < 0);
-	}
-};
-
-struct sort_item_by_author : public std::binary_function<std::tr1::shared_ptr<rss_item>, std::tr1::shared_ptr<rss_item>, bool> {
-	bool reverse;
-	sort_item_by_author(bool b) : reverse(b) { }
-	bool operator()(std::tr1::shared_ptr<rss_item> a, std::tr1::shared_ptr<rss_item> b) {
-		return reverse ?  (strcmp(a->author().c_str(), b->author().c_str()) > 0) : (strcmp(a->author().c_str(), b->author().c_str()) < 0);
-	}
-};
-
-struct sort_item_by_link : public std::binary_function<std::tr1::shared_ptr<rss_item>, std::tr1::shared_ptr<rss_item>, bool> {
-	bool reverse;
-	sort_item_by_link(bool b) : reverse(b) { }
-	bool operator()(std::tr1::shared_ptr<rss_item> a, std::tr1::shared_ptr<rss_item> b) {
-		return reverse ?  (strcmp(a->link().c_str(), b->link().c_str()) >  0) : (strcmp(a->link().c_str(), b->link().c_str()) < 0);
-	}
-};
-
-struct sort_item_by_guid : public std::binary_function<std::tr1::shared_ptr<rss_item>, std::tr1::shared_ptr<rss_item>, bool> {
-	bool reverse;
-	sort_item_by_guid(bool b) : reverse(b) { }
-	bool operator()(std::tr1::shared_ptr<rss_item> a, std::tr1::shared_ptr<rss_item> b) {
-		return reverse ?  (strcmp(a->guid().c_str(), b->guid().c_str()) > 0) : (strcmp(a->guid().c_str(), b->guid().c_str()) < 0);
-	}
-};
-
-struct sort_item_by_date : public std::binary_function<std::tr1::shared_ptr<rss_item>, std::tr1::shared_ptr<rss_item>, bool> {
-	bool reverse;
-	sort_item_by_date(bool b) : reverse(b) { }
-	bool operator()(std::tr1::shared_ptr<rss_item> a, std::tr1::shared_ptr<rss_item> b) {
-		return reverse ?  (a->pubDate_timestamp() > b->pubDate_timestamp()) : (a->pubDate_timestamp() < b->pubDate_timestamp());
-	}
-};
-
 void rss_feed::sort(const std::string& method) {
-	scope_mutex lock(&item_mutex);
+	std::lock_guard<std::mutex> lock(item_mutex);
 	sort_unlocked(method);
 }
 
@@ -556,38 +501,50 @@ void rss_feed::sort_unlocked(const std::string& method) {
 
 	if (!methods.empty()) {
 		if (methods[0] == "title") {
-			std::stable_sort(items_.begin(), items_.end(), sort_item_by_title(reverse));
+			std::stable_sort(items_.begin(), items_.end(), [&](std::shared_ptr<rss_item> a, std::shared_ptr<rss_item> b) {
+				return reverse ?  (strcasecmp(a->title().c_str(), b->title().c_str()) > 0) : (strcasecmp(a->title().c_str(), b->title().c_str()) < 0);
+			});
 		} else if (methods[0] == "flags") {
-			std::stable_sort(items_.begin(), items_.end(), sort_item_by_flags(reverse));
+			std::stable_sort(items_.begin(), items_.end(), [&](std::shared_ptr<rss_item> a, std::shared_ptr<rss_item> b) {
+				return reverse ?  (strcmp(a->flags().c_str(), b->flags().c_str()) > 0) : (strcmp(a->flags().c_str(), b->flags().c_str()) < 0);
+			});
 		} else if (methods[0] == "author") {
-			std::stable_sort(items_.begin(), items_.end(), sort_item_by_author(reverse));
+			std::stable_sort(items_.begin(), items_.end(), [&](std::shared_ptr<rss_item> a, std::shared_ptr<rss_item> b) {
+				return reverse ?  (strcmp(a->author().c_str(), b->author().c_str()) > 0) : (strcmp(a->author().c_str(), b->author().c_str()) < 0);
+			});
 		} else if (methods[0] == "link") {
-			std::stable_sort(items_.begin(), items_.end(), sort_item_by_link(reverse));
+			std::stable_sort(items_.begin(), items_.end(), [&](std::shared_ptr<rss_item> a, std::shared_ptr<rss_item> b) {
+				return reverse ?  (strcmp(a->link().c_str(), b->link().c_str()) >  0) : (strcmp(a->link().c_str(), b->link().c_str()) < 0);
+			});
 		} else if (methods[0] == "guid") {
-			std::stable_sort(items_.begin(), items_.end(), sort_item_by_guid(reverse));
+			std::stable_sort(items_.begin(), items_.end(), [&](std::shared_ptr<rss_item> a, std::shared_ptr<rss_item> b) {
+				return reverse ?  (strcmp(a->guid().c_str(), b->guid().c_str()) > 0) : (strcmp(a->guid().c_str(), b->guid().c_str()) < 0);
+			});
 		} else if (methods[0] == "date") {
-			std::stable_sort(items_.begin(), items_.end(), sort_item_by_date(reverse));
+			std::stable_sort(items_.begin(), items_.end(), [&](std::shared_ptr<rss_item> a, std::shared_ptr<rss_item> b) {
+				return reverse ?  (a->pubDate_timestamp() > b->pubDate_timestamp()) : (a->pubDate_timestamp() < b->pubDate_timestamp());
+			});
 		}
 	}
 }
 
 void rss_feed::remove_old_deleted_items() {
-	scope_mutex lock(&item_mutex);
+	std::lock_guard<std::mutex> lock(item_mutex);
 	std::vector<std::string> guids;
-	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items_.begin();it!=items_.end();++it) {
-		guids.push_back((*it)->guid());
+	for (auto item : items_) {
+		guids.push_back(item->guid());
 	}
 	ch->remove_old_deleted_items(rssurl_, guids);
 }
 
 void rss_feed::purge_deleted_items() {
-	scope_mutex lock(&item_mutex);
+	std::lock_guard<std::mutex> lock(item_mutex);
 	scope_measure m1("rss_feed::purge_deleted_items");
-	std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items_.begin();
+	auto it=items_.begin();
 	while (it!=items_.end()) {
 		if ((*it)->deleted()) {
 			{
-				scope_mutex lock2(&items_guid_map_mutex);
+				std::lock_guard<std::mutex> lock2(items_guid_map_mutex);
 				items_guid_map.erase((*it)->guid());
 			}
 			items_.erase(it);
@@ -598,14 +555,14 @@ void rss_feed::purge_deleted_items() {
 	}
 }
 
-void rss_feed::set_feedptrs(std::tr1::shared_ptr<rss_feed> self) {
-	scope_mutex lock(&item_mutex);
-	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items_.begin();it!=items_.end();++it) {
-		(*it)->set_feedptr(self);
+void rss_feed::set_feedptrs(std::shared_ptr<rss_feed> self) {
+	std::lock_guard<std::mutex> lock(item_mutex);
+	for (auto item : items_) {
+		item->set_feedptr(self);
 	}
 }
 
-void rss_item::set_feedptr(std::tr1::shared_ptr<rss_feed> ptr) {
+void rss_item::set_feedptr(std::shared_ptr<rss_feed> ptr) {
 	feedptr = ptr;
 }
 
@@ -620,14 +577,14 @@ std::string rss_feed::get_status() {
 }
 
 void rss_feed::unload() {
-	scope_mutex lock(&item_mutex);
-	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items_.begin();it!=items_.end();++it) {
-		(*it)->unload();
+	std::lock_guard<std::mutex> lock(item_mutex);
+	for (auto item : items_) {
+		item->unload();
 	}
 }
 
 void rss_feed::load() {
-	scope_mutex lock(&item_mutex);
+	std::lock_guard<std::mutex> lock(item_mutex);
 	ch->fetch_descriptions(this);
 }
 

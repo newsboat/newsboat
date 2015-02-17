@@ -15,19 +15,18 @@ regexmanager::regexmanager() {
 }
 
 regexmanager::~regexmanager() {
-	for (std::map<std::string, rc_pair>::iterator jt=locations.begin();jt!=locations.end();++jt) {
-		std::vector<regex_t *>& regexes(jt->second.first);
-		if (regexes.size() > 0) {
-			for (std::vector<regex_t *>::iterator it=regexes.begin();it!=regexes.end();++it) {
-				delete *it;
+	for (auto location : locations) {
+		if (location.second.first.size() > 0) {
+			for (auto regex : location.second.first) {
+				delete regex;
 			}
 		}
 	}
 }
 
 void regexmanager::dump_config(std::vector<std::string>& config_output) {
-	for (std::vector<std::string>::iterator it=cheat_store_for_dump_config.begin();it!=cheat_store_for_dump_config.end();++it) {
-		config_output.push_back(*it);
+	for (auto foo : cheat_store_for_dump_config) {
+		config_output.push_back(foo);
 	}
 }
 
@@ -82,20 +81,20 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 			locations[location].second.push_back(colorstr);
 		} else {
 			delete rx;
-			for (std::map<std::string, rc_pair>::iterator it=locations.begin();it!=locations.end();++it) {
+			for (auto location : locations) {
 				LOG(LOG_DEBUG, "regexmanager::handle_action: adding rx = %s colorstr = %s to location %s",
-					params[1].c_str(), colorstr.c_str(), it->first.c_str());
+					params[1].c_str(), colorstr.c_str(), location.first.c_str());
 				rx = new regex_t;
  				// we need to create a new one for each push_back, otherwise we'd have double frees.
 				regcomp(rx, params[1].c_str(), REG_EXTENDED | REG_ICASE);
-				it->second.first.push_back(rx);
-				it->second.second.push_back(colorstr);
+				location.second.first.push_back(rx);
+				location.second.second.push_back(colorstr);
 			}
 		}
 		std::string line = "highlight";
-		for (std::vector<std::string>::const_iterator it=params.begin();it!=params.end();++it) {
+		for (const auto& param : params) {
 			line.append(" ");
-			line.append(utils::quote(*it));
+			line.append(utils::quote(param));
 		}
 		cheat_store_for_dump_config.push_back(line);
 	} else if (action == "highlight-article") {
@@ -133,7 +132,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 			}
 		}
 
-		std::tr1::shared_ptr<matcher> m(new matcher());
+		std::shared_ptr<matcher> m(new matcher());
 		if (!m->parse(params[0])) {
 			throw confighandlerexception(utils::strprintf(_("couldn't parse filter expression `%s': %s"), params[0].c_str(), m->get_parse_error().c_str()));
 		}
@@ -143,16 +142,16 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 		locations["articlelist"].first.push_back(NULL);
 		locations["articlelist"].second.push_back(colorstr);
 
-		matchers.push_back(std::pair<std::tr1::shared_ptr<matcher>, int>(m, pos));
+		matchers.push_back(std::pair<std::shared_ptr<matcher>, int>(m, pos));
 
 	} else
 		throw confighandlerexception(AHS_INVALID_COMMAND);
 }
 
 int regexmanager::article_matches(matchable * item) {
-	for (std::vector<std::pair<std::tr1::shared_ptr<matcher>, int> >::iterator it=matchers.begin();it!=matchers.end();++it) {
-		if (it->first->matches(item)) {
-			return it->second;
+	for (auto matcher : matchers) {
+		if (matcher.first->matches(item)) {
+			return matcher.second;
 		}
 	}
 	return -1;
@@ -161,10 +160,7 @@ int regexmanager::article_matches(matchable * item) {
 void regexmanager::remove_last_regex(const std::string& location) {
 	std::vector<regex_t *>& regexes = locations[location].first;
 
-	std::vector<regex_t *>::iterator it=regexes.begin();
-	for (unsigned int i=0;i<regexes.size()-1;i++) {
-		++it;
-	}
+	auto it = regexes.begin() + regexes.size() - 1;
 	delete *it;
 	regexes.erase(it);
 }
@@ -187,13 +183,13 @@ void regexmanager::quote_and_highlight(std::string& str, const std::string& loca
 	std::vector<regex_t *>& regexes = locations[location].first;
 
 	unsigned int i = 0;
-	for (std::vector<regex_t *>::iterator it=regexes.begin();it!=regexes.end();++it, ++i) {
-		if (!*it)
+	for (auto regex : regexes) {
+		if (!regex)
 			continue;
 		std::string initial_marker = extract_initial_marker(str);
 		regmatch_t pmatch;
 		unsigned int offset = 0;
-		int err = regexec(*it, str.c_str(), 1, &pmatch, 0);
+		int err = regexec(regex, str.c_str(), 1, &pmatch, 0);
 		while (err == 0) {
 			// LOG(LOG_DEBUG, "regexmanager::quote_and_highlight: matched %s rm_so = %u rm_eo = %u", str.c_str() + offset, pmatch.rm_so, pmatch.rm_eo);
 			std::string marker = utils::strprintf("<%u>", i);
@@ -202,8 +198,9 @@ void regexmanager::quote_and_highlight(std::string& str, const std::string& loca
 			str.insert(offset + pmatch.rm_so, marker);
 			// LOG(LOG_DEBUG, "after second insert: %s", str.c_str());
 			offset += pmatch.rm_eo + marker.length() + strlen("</>") + initial_marker.length();
-			err = regexec(*it, str.c_str() + offset, 1, &pmatch, 0);
+			err = regexec(regex, str.c_str() + offset, 1, &pmatch, 0);
 		}
+		i++;
 	}
 }
 

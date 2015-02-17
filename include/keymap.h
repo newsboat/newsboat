@@ -169,8 +169,8 @@ namespace newsbeuter {
 		private:
 			bool is_valid_context(const std::string& context);
 			std::string getopname(operation op);
-			std::map<std::string, std::map<std::string, operation> > keymap_;
-			std::map<std::string,std::vector<macrocmd> > macros_;
+			std::map<std::string, std::map<std::string, operation>> keymap_;
+			std::map<std::string,std::vector<macrocmd>> macros_;
 	};
 
 }

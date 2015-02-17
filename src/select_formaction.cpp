@@ -90,16 +90,17 @@ void select_formaction::prepare() {
 		unsigned int i=0;
 		switch (type) {
 		case SELECTTAG:
-			for (std::vector<std::string>::const_iterator it=tags.begin();it!=tags.end();++it,++i) {
-				LOG(LOG_DEBUG, "select_formaction::prepare: tag = %s", it->c_str());
-				std::string tagstr = utils::strprintf("%4u  %s (%u)", i+1, it->c_str(), v->get_ctrl()->get_feed_count_per_tag(*it));
+			for (auto tag : tags) {
+				std::string tagstr = utils::strprintf("%4u  %s (%u)", i+1, tag.c_str(), v->get_ctrl()->get_feed_count_per_tag(tag));
 				listfmt.add_line(tagstr, i);
+				i++;
 			}
 			break;
 		case SELECTFILTER:
-			for (std::vector<filter_name_expr_pair>::const_iterator it=filters.begin();it!=filters.end();++it,++i) {
-				std::string tagstr = utils::strprintf("%4u  %s", i+1, it->first.c_str());
+			for (auto filter : filters) {
+				std::string tagstr = utils::strprintf("%4u  %s", i+1, filter.first.c_str());
 				listfmt.add_line(tagstr, i);
+				i++;
 			}
 			break;
 		default:

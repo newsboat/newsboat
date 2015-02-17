@@ -98,8 +98,8 @@ void configparser::unregister_handler(const std::string& cmd) {
 }
 
 void configparser::evaluate_backticks(std::vector<std::string>& tokens) {
-	for (std::vector<std::string>::iterator it=tokens.begin();it!=tokens.end();++it) {
-		*it = evaluate_backticks(*it);
+	for (auto& token : tokens) {
+		token = evaluate_backticks(token);
 	}
 }
 

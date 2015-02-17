@@ -9,7 +9,7 @@
 
 namespace newsbeuter {
 
-typedef std::pair<std::string, std::vector<std::string> > tagged_feedurl;
+typedef std::pair<std::string, std::vector<std::string>> tagged_feedurl;
 
 class remote_api {
 	public:

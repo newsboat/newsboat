@@ -4,7 +4,7 @@
 #include <cerrno>
 
 namespace newsbeuter {
-mutex logger::instanceMutex;
+std::mutex logger::instanceMutex;
 
 logger::logger() : curlevel(LOG_NONE) { }
 
@@ -12,7 +12,7 @@ void logger::set_logfile(const char * logfile) {
 	/*
 	 * This sets the filename of the debug logfile
 	 */
-	scope_mutex lock(&logMutex);
+	std::lock_guard<std::mutex> lock(logMutex);
 	if (f.is_open())
 		f.close();
 	f.open(logfile, std::fstream::out);
@@ -25,7 +25,7 @@ void logger::set_errorlogfile(const char * logfile) {
 	/*
 	 * This sets the filename of the error logfile, i.e. the one that can be configured to be generated.
 	 */
-	scope_mutex lock(&logMutex);
+	std::lock_guard<std::mutex> lock(logMutex);
 	if (ef.is_open())
 		ef.close();
 	ef.open(logfile, std::fstream::out);
@@ -38,7 +38,7 @@ void logger::set_errorlogfile(const char * logfile) {
 }
 
 void logger::set_loglevel(loglevel level) {
-	scope_mutex lock(&logMutex);
+	std::lock_guard<std::mutex> lock(logMutex);
 	curlevel = level;
 	if (curlevel == LOG_NONE)
 		f.close();
@@ -51,7 +51,7 @@ void logger::log(loglevel level, const char * format, ...) {
 	 * This function checks the loglevel, creates the error message, and then
 	 * writes it to the debug logfile and to the error logfile (if applicable).
 	 */
-	scope_mutex lock(&logMutex);
+	std::lock_guard<std::mutex> lock(logMutex);
 	if (level <= curlevel && curlevel > LOG_NONE && (f.is_open() || ef.is_open())) {
 		char * buf, * logmsgbuf;
 		char date[128];
@@ -94,7 +94,7 @@ logger &logger::getInstance() {
 	/*
 	 * This is the global logger that everyone uses
 	 */
-	scope_mutex lock(&instanceMutex);
+	std::lock_guard<std::mutex> lock(instanceMutex);
 	static logger theLogger;
 	return theLogger;
 }

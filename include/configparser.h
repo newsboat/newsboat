@@ -30,7 +30,7 @@ namespace newsbeuter {
 		private:
 			void evaluate_backticks(std::vector<std::string>& tokens);
 			static std::string evaluate_cmd(const std::string& cmd);
-			std::vector<std::vector<std::string> > parsed_content;
+			std::vector<std::vector<std::string>> parsed_content;
 			std::map<std::string,config_action_handler *> action_handlers;
 			std::set<std::string> included_files;
 	};

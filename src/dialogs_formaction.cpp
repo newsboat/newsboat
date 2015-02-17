@@ -27,12 +27,12 @@ void dialogs_formaction::init() {
 void dialogs_formaction::prepare() {
 	if (update_list) {
 		listformatter listfmt;
-		std::vector<std::pair<unsigned int, std::string> > formaction_names = v->get_formaction_names();
 
 		unsigned int i = 1;
-		for (std::vector<std::pair<unsigned int, std::string> >::iterator it=formaction_names.begin();it!=formaction_names.end();++it,i++) {
-			LOG(LOG_DEBUG, "dialogs_formaction::prepare: p1 = %p p2 = %p", v->get_current_formaction().get(), get_parent_formaction().get());
-			listfmt.add_line(utils::strprintf("%4u %s %s", i, (v->get_formaction(it->first).get() == get_parent_formaction().get()) ? "*" : " ", it->second.c_str()), it->first);
+		for (auto fa : v->get_formaction_names()) {
+			LOG(LOG_DEBUG, "dialogs_formaction::prepare: p1 = %p p2 = %p", v->get_formaction(fa.first).get(), get_parent_formaction().get());
+			listfmt.add_line(utils::strprintf("%4u %s %s", i, (v->get_formaction(fa.first).get() == get_parent_formaction().get()) ? "*" : " ", fa.second.c_str()), fa.first);
+			i++;
 		}
 
 		f->modify("dialogs", "replace_inner", listfmt.format_list());

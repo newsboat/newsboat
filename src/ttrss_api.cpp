@@ -23,7 +23,7 @@ ttrss_api::~ttrss_api() {
 }
 
 bool ttrss_api::authenticate() {
-	 if (auth_lock.trylock()) {
+	 if (auth_lock.try_lock()) {
 		sid = retrieve_sid();
 		auth_lock.unlock();
 	 } else {
@@ -103,8 +103,8 @@ struct json_object * ttrss_api::run_op(const std::string& op,
 
 	std::string req_data = "{\"op\":\"" + op + "\",\"sid\":\"" + sid + "\"";
 
-	for (std::map<std::string, std::string>::const_iterator it = args.begin(); it != args.end(); it++) {
-		req_data += ",\"" + it->first + "\":\"" + it->second + "\"";
+	for (auto arg : args) {
+		req_data += ",\"" + arg.first + "\":\"" + arg.second + "\"";
 	}
 	req_data += "}";
 
@@ -200,8 +200,8 @@ bool ttrss_api::mark_article_read(const std::string& guid, bool read) {
 
 	// Do this in a thread, as we don't care about the result enough to wait for
 	// it.
-	thread * mrt = new markreadthread( this, guid, read );
-	mrt->start();
+	std::thread t{markreadthread(this, guid, read)};
+	t.detach();
 	return true;
 
 }
@@ -228,10 +228,6 @@ bool ttrss_api::update_article_flags(const std::string& oldflags, const std::str
 	}
 
 	return success;
-}
-
-static bool sort_by_pubdate(const rsspp::item& a, const rsspp::item& b) {
-	return a.pubDate_ts > b.pubDate_ts;
 }
 
 rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
@@ -308,7 +304,9 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 		f.items.push_back(item);
 	}
 
-	std::sort(f.items.begin(), f.items.end(), sort_by_pubdate);
+	std::sort(f.items.begin(), f.items.end(), [](const rsspp::item& a, const rsspp::item& b) {
+		return a.pubDate_ts > b.pubDate_ts;
+	});
 
 	json_object_put(content);
 	return f;

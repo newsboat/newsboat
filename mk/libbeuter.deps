@@ -1,1 +1,1 @@
-src/configcontainer.cpp src/configparser.cpp src/colormanager.cpp src/keymap.cpp src/stflpp.cpp src/logger.cpp src/exception.cpp src/mutex.cpp src/utils.cpp src/thread.cpp src/matcher.cpp src/formatstring.cpp
+src/configcontainer.cpp src/configparser.cpp src/colormanager.cpp src/keymap.cpp src/stflpp.cpp src/logger.cpp src/exception.cpp src/utils.cpp src/matcher.cpp src/formatstring.cpp

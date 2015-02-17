@@ -43,7 +43,7 @@ void formaction::recalculate_form() {
 
 formaction::~formaction() { }
 
-std::tr1::shared_ptr<stfl::form> formaction::get_form() {
+std::shared_ptr<stfl::form> formaction::get_form() {
 	return f;
 }
 
@@ -90,8 +90,8 @@ void formaction::process_op(operation op, bool automatic, std::vector<std::strin
 			if (automatic) {
 				std::string cmdline = "set ";
 				if (args) {
-					for (std::vector<std::string>::iterator it=args->begin();it!=args->end();++it) {
-						cmdline.append(utils::strprintf("%s ", stfl::quote(*it).c_str()));
+					for (auto arg : *args) {
+						cmdline.append(utils::strprintf("%s ", stfl::quote(arg).c_str()));
 					}
 				}
 				LOG(LOG_DEBUG, "formaction::process_op: running commandline `%s'", cmdline.c_str());
@@ -144,11 +144,11 @@ std::vector<std::string> formaction::get_suggestions(const std::string& fragment
 	LOG(LOG_DEBUG, "formaction::get_suggestions: fragment = %s", fragment.c_str());
 	std::vector<std::string> result;
 	// first check all formaction command suggestions
-	for (std::vector<std::string>::iterator it=valid_cmds.begin();it!=valid_cmds.end();++it) {
-		LOG(LOG_DEBUG, "formaction::get_suggestions: extracted part: %s", it->substr(0, fragment.length()).c_str());
-		if (it->substr(0, fragment.length()) == fragment) {
+	for (auto cmd : valid_cmds) {
+		LOG(LOG_DEBUG, "formaction::get_suggestions: extracted part: %s", cmd.substr(0, fragment.length()).c_str());
+		if (cmd.substr(0, fragment.length()) == fragment) {
 			LOG(LOG_DEBUG, "...and it matches.");
-			result.push_back(*it);
+			result.push_back(cmd);
 		}
 	}
 	if (result.empty()) {
@@ -161,8 +161,8 @@ std::vector<std::string> formaction::get_suggestions(const std::string& fragment
 					if (tokens.size() > 1)
 						variable_fragment = tokens[1];
 					variable_suggestions = v->get_cfg()->get_suggestions(variable_fragment);
-					for (std::vector<std::string>::iterator it=variable_suggestions.begin();it!=variable_suggestions.end();++it) {
-						std::string line = fragment + it->substr(variable_fragment.length(), it->length()-variable_fragment.length());
+					for (auto suggestion : variable_suggestions) {
+						std::string line = fragment + suggestion.substr(variable_fragment.length(), suggestion.length()-variable_fragment.length());
 						result.push_back(line);
 						LOG(LOG_DEBUG, "formaction::get_suggestions: suggested %s", line.c_str());
 					}
@@ -223,9 +223,9 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 			if (tokens.empty()) {
 				v->show_error(_("usage: source <file> [...]"));
 			} else {
-				for (std::vector<std::string>::iterator it=tokens.begin();it!=tokens.end();++it) {
+				for (auto token : tokens) {
 					try {
-						v->get_ctrl()->load_configfile(utils::resolve_tilde(*it));
+						v->get_ctrl()->load_configfile(utils::resolve_tilde(token));
 					} catch (const configexception& ex) {
 						v->show_error(ex.what());
 						break;

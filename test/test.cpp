@@ -38,7 +38,7 @@ void TestNewsbeuterReload() {
 	cache * rsscache = new cache("test-cache.db", cfg);
 
 	rss_parser parser("http://testbed.newsbeuter.org/unit-test/rss.xml", rsscache, cfg, NULL);
-	std::tr1::shared_ptr<rss_feed> feed = parser.parse();
+	std::shared_ptr<rss_feed> feed = parser.parse();
 	lemon.is(feed->items().size(), 8u, "rss.xml contains 8 items");
 
 	rsscache->externalize_rssfeed(feed, false);
@@ -54,7 +54,7 @@ void TestNewsbeuterReload() {
 
 	rsscache->externalize_rssfeed(feed, false);
 
-	std::tr1::shared_ptr<rss_feed> feed2 = rsscache->internalize_rssfeed("http://testbed.newsbeuter.org/unit-test/rss.xml", NULL);
+	std::shared_ptr<rss_feed> feed2 = rsscache->internalize_rssfeed("http://testbed.newsbeuter.org/unit-test/rss.xml", NULL);
 
 	lemon.is(feed2->items().size(), 8u, "feed2 contains 8 items after internalizaton");
 	lemon.is(feed2->items()[0]->title(), "Another Title", "feed2 first item title");
@@ -64,7 +64,7 @@ void TestNewsbeuterReload() {
 	lemon.is(feedurls.size(), 1u, "1 feed url");
 	lemon.is(feedurls[0], "http://testbed.newsbeuter.org/unit-test/rss.xml", "first feed url");
 
-	std::vector<std::tr1::shared_ptr<rss_feed> > feedv;
+	std::vector<std::shared_ptr<rss_feed>> feedv;
 	feedv.push_back(feed);
 
 	cfg->set_configvalue("cleanup-on-quit", "true");
@@ -749,7 +749,7 @@ void TestHtmlRenderer() {
 }
 
 void TestIndexPartitioning() {
-	std::vector<std::pair<unsigned int, unsigned int> > partitions = utils::partition_indexes(0, 9, 2);
+	std::vector<std::pair<unsigned int, unsigned int>> partitions = utils::partition_indexes(0, 9, 2);
 	lemon.is(partitions.size(), 2u, "partitioning of [0,9] in 2 parts produced 2 parts");
 	lemon.is(partitions[0].first, 0u, "first partition start is 0");
 	lemon.is(partitions[0].second, 4u, "first partition end is 4");

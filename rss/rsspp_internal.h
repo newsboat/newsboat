@@ -7,7 +7,7 @@
 #define RSSPP_INTERNAL__H
 
 #include <rsspp.h>
-#include <tr1/memory>
+#include <memory>
 
 #define CONTENT_URI		"http://purl.org/rss/1.0/modules/content/"
 #define RDF_URI			"http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -69,7 +69,7 @@ struct atom_parser : public rss_parser {
 };
 
 struct rss_parser_factory {
-	static std::tr1::shared_ptr<rss_parser> get_object(feed& f, xmlDocPtr doc);
+	static std::shared_ptr<rss_parser> get_object(feed& f, xmlDocPtr doc);
 };
 
 }

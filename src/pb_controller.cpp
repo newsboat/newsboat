@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #include <pwd.h>
 #include <cstdlib>
+#include <thread>
 #include <signal.h>
 #include <unistd.h>
 
@@ -256,11 +257,9 @@ std::string pb_controller::get_dlpath() {
 
 unsigned int pb_controller::downloads_in_progress() {
 	unsigned int count = 0;
-	if (downloads_.size() > 0) {
-		for (std::vector<download>::iterator it=downloads_.begin();it!=downloads_.end();++it) {
-			if (it->status() == DL_DOWNLOADING)
-				++count;
-		}
+	for (auto dl : downloads_) {
+		if (dl.status() == DL_DOWNLOADING)
+			++count;
 	}
 	return count;
 }
@@ -277,11 +276,9 @@ void pb_controller::reload_queue(bool remove_unplayed) {
 
 double pb_controller::get_total_kbps() {
 	double result = 0.0;
-	if (downloads_.size() > 0) {
-		for (std::vector<download>::iterator it=downloads_.begin();it!=downloads_.end();++it) {
-			if (it->status() == DL_DOWNLOADING) {
-				result += it->kbps();
-			}
+	for (auto dl : downloads_) {
+		if (dl.status() == DL_DOWNLOADING) {
+			result += dl.kbps();
 		}
 	}
 	return result;
@@ -289,10 +286,9 @@ double pb_controller::get_total_kbps() {
 
 void pb_controller::start_downloads() {
 	int dl2start = get_maxdownloads() - downloads_in_progress();
-	for (std::vector<download>::iterator it=downloads_.begin();dl2start > 0 && it!=downloads_.end();++it) {
+	for (auto it=downloads_.begin();dl2start > 0 && it!=downloads_.end();++it) {
 		if (it->status() == DL_QUEUED) {
-			poddlthread * thread = new poddlthread(&(*it), cfg);
-			thread->start();
+			std::thread t{poddlthread(&(*it), cfg)};
 			--dl2start;
 		}
 	}

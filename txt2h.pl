@@ -9,7 +9,7 @@ if (scalar(@ARGV) < 1) {
 }
 
 my ($filename, $extension) = @ARGV;
-my $id = basename($filename, $extension);
+my $id = basename($filename, $extension || "");
 chomp($id);
 
 open(my $fh, '<', $filename) or die "couldn't open $filename: $!\n";

@@ -104,10 +104,10 @@ std::string oldreader_api::retrieve_auth() {
 	curl_easy_cleanup(handle);
 
 	std::vector<std::string> lines = utils::tokenize(result);
-	for (std::vector<std::string>::iterator it=lines.begin();it!=lines.end();++it) {
-		LOG(LOG_DEBUG, "oldreader_api::retrieve_auth: line = %s", it->c_str());
-		if (it->substr(0,5)=="Auth=") {
-			std::string auth = it->substr(5, it->length()-5);
+	for (auto line : lines) {
+		LOG(LOG_DEBUG, "oldreader_api::retrieve_auth: line = %s", line.c_str());
+		if (line.substr(0,5)=="Auth=") {
+			std::string auth = line.substr(5, line.length()-5);
 			return auth;
 		}
 	}
@@ -185,17 +185,17 @@ bool oldreader_api::mark_all_read(const std::string& feedurl) {
 std::vector<std::string> oldreader_api::bulk_mark_articles_read(const std::vector<google_replay_pair>& actions) {
 	std::vector<std::string> successful_tokens;
 	std::string token = get_new_token();
-	for (std::vector<google_replay_pair>::const_iterator it=actions.begin();it!=actions.end();++it) {
+	for (auto action : actions) {
 		bool read;
-		if (it->second == GOOGLE_MARK_READ) {
+		if (action.second == GOOGLE_MARK_READ) {
 			read = true;
-		} else if (it->second == GOOGLE_MARK_UNREAD) {
+		} else if (action.second == GOOGLE_MARK_UNREAD) {
 			read = false;
 		} else {
 			continue;
 		}
-		if (mark_article_read_with_token(it->first, read, token)) {
-			successful_tokens.push_back(it->first);
+		if (mark_article_read_with_token(action.first, read, token)) {
+			successful_tokens.push_back(action.first);
 		}
 	}
 	return successful_tokens;

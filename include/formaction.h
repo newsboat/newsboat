@@ -26,7 +26,7 @@ class formaction {
 		virtual ~formaction();
 		virtual void prepare() = 0;
 		virtual void init() = 0;
-		std::tr1::shared_ptr<stfl::form> get_form();
+		std::shared_ptr<stfl::form> get_form();
 		virtual void set_redraw(bool b) { do_redraw = b; }
 
 		virtual keymap_hint_entry * get_keymap_hint() = 0;
@@ -48,8 +48,8 @@ class formaction {
 		inline std::string get_qna_response(unsigned int i) { return (qna_responses.size() >= (i + 1)) ? qna_responses[i] : ""; }
 		void start_qna(const std::vector<qna_pair>& prompts, operation finish_op, history * h = NULL);
 
-		inline void set_parent_formaction(std::tr1::shared_ptr<formaction> fa) { parent_formaction = fa; }
-		inline std::tr1::shared_ptr<formaction> get_parent_formaction() const { return parent_formaction; }
+		inline void set_parent_formaction(std::shared_ptr<formaction> fa) { parent_formaction = fa; }
+		inline std::shared_ptr<formaction> get_parent_formaction() const { return parent_formaction; }
 
 		virtual std::string title() = 0;
 		
@@ -66,7 +66,7 @@ class formaction {
 		void start_bookmark_qna(const std::string& default_title, const std::string& default_url, const std::string& default_desc);
 
 		view * v;
-		std::tr1::shared_ptr<stfl::form> f;
+		std::shared_ptr<stfl::form> f;
 		bool do_redraw;
 
 		std::vector<std::string> qna_responses;
@@ -84,7 +84,7 @@ class formaction {
 		std::vector<qna_pair> qna_prompts;
 		operation finish_operation;
 		history * qna_history;
-		std::tr1::shared_ptr<formaction> parent_formaction;
+		std::shared_ptr<formaction> parent_formaction;
 };
 
 

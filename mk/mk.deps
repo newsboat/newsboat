@@ -55,8 +55,6 @@ src/logger.o: include/logger.h include/exception.h
 
 src/matcher.o: include/matcher.h include/logger.h include/utils.h include/exceptions.h
 
-src/mutex.o: include/mutex.h
-
 src/pb_controller.o: include/pb_controller.h include/pb_view.h include/poddlthread.h \
 	include/utils.h config.h include/keymap.h include/configcontainer.h include/colormanager.h \
 	include/exceptions.h include/queueloader.h include/logger.h
@@ -76,8 +74,6 @@ src/rss.o: include/rss.h config.h include/cache.h include/tagsouppullparser.h in
 src/select_formaction.o: include/select_formaction.h include/view.h config.h include/listformatter.h
 
 src/stflpp.o: include/stflpp.h include/logger.h include/exception.h
-
-src/thread.o: include/thread.h include/exception.h include/logger.h
 
 src/urlreader.o: include/urlreader.h include/utils.h include/logger.h config.h
 

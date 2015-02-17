@@ -318,10 +318,10 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					v->get_ctrl()->mark_all_read(pos);
 				} else {
 					{
-						scope_mutex lock(&feed->item_mutex);
+						std::lock_guard<std::mutex> lock(feed->item_mutex);
 						LOG(LOG_DEBUG, "itemlist_formaction: oh, it looks like I'm in a pseudo-feed (search result, query feed)");
-						for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=feed->items().begin();it!=feed->items().end();++it) {
-							(*it)->set_unread_nowrite_notify(false, true); // TODO: do we need to call mark_article_read here, too?
+						for (auto item : feed->items()) {
+							item->set_unread_nowrite_notify(false, true); // TODO: do we need to call mark_article_read here, too?
 						}
 					}
 					v->get_ctrl()->catchup_all(feed);
@@ -574,7 +574,7 @@ void itemlist_formaction::qna_start_search() {
 
 	v->set_status(_("Searching..."));
 	searchhistory.add_line(searchphrase);
-	std::vector<std::tr1::shared_ptr<rss_item> > items;
+	std::vector<std::shared_ptr<rss_item>> items;
 	try {
 		std::string utf8searchphrase = utils::convert_text(searchphrase, "utf-8", nl_langinfo(CODESET));
 		if (show_searchresult) {
@@ -593,10 +593,10 @@ void itemlist_formaction::qna_start_search() {
 	}
 
 	{
-		scope_mutex lock(&search_dummy_feed->item_mutex);
+		std::lock_guard<std::mutex> lock(search_dummy_feed->item_mutex);
 		search_dummy_feed->clear_items();
-		for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items.begin();it!=items.end();++it) {
-			search_dummy_feed->add_item(*it);
+		for (auto item : items) {
+			search_dummy_feed->add_item(item);
 		}
 	}
 
@@ -612,8 +612,8 @@ void itemlist_formaction::do_update_visible_items() {
 
 	update_visible_items = false;
 
-	scope_mutex lock(&feed->item_mutex);
-	std::vector<std::tr1::shared_ptr<rss_item> >& items = feed->items();
+	std::lock_guard<std::mutex> lock(feed->item_mutex);
+	std::vector<std::shared_ptr<rss_item>>& items = feed->items();
 
 	std::vector<itemptr_pos_pair> new_visible_items;
 
@@ -624,10 +624,10 @@ void itemlist_formaction::do_update_visible_items() {
 	 */
 
 	unsigned int i=0;
-	for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it = items.begin(); it != items.end(); ++it, ++i) {
-		(*it)->set_index(i+1);
-		if (!apply_filter || m.matches(it->get())) {
-			new_visible_items.push_back(itemptr_pos_pair(*it, i));
+	for (auto item : items) {
+		item->set_index(i+1);
+		if (!apply_filter || m.matches(item.get())) {
+			new_visible_items.push_back(itemptr_pos_pair(item, i));
 		}
 	}
 
@@ -639,7 +639,7 @@ void itemlist_formaction::do_update_visible_items() {
 }
 
 void itemlist_formaction::prepare() {
-	scope_mutex mtx(&redraw_mtx);
+	std::lock_guard<std::mutex> mtx(redraw_mtx);
 
 	std::string sort_order = v->get_cfg()->get_configvalue("article-sort-order");
 	if (sort_order != old_sort_order) {
@@ -685,32 +685,32 @@ void itemlist_formaction::prepare() {
 	std::string itemlist_format = v->get_cfg()->get_configvalue("articlelist-format");
 
 
-	for (std::vector<itemptr_pos_pair>::iterator it = visible_items.begin(); it != visible_items.end(); ++it) {
+	for (auto item : visible_items) {
 		std::string tmp_itemlist_format = itemlist_format;
 		fmtstr_formatter fmt;
 
-		fmt.register_fmt('i', utils::strprintf("%u",it->second + 1));
-		fmt.register_fmt('f', gen_flags(it->first));
-		fmt.register_fmt('D', gen_datestr(it->first->pubDate_timestamp(), datetimeformat.c_str()));
-		if (feed->rssurl() != it->first->feedurl() && it->first->get_feedptr() != NULL) {
-			fmt.register_fmt('T', utils::replace_all(it->first->get_feedptr()->title(), "<", "<>"));
+		fmt.register_fmt('i', utils::strprintf("%u",item.second + 1));
+		fmt.register_fmt('f', gen_flags(item.first));
+		fmt.register_fmt('D', gen_datestr(item.first->pubDate_timestamp(), datetimeformat.c_str()));
+		if (feed->rssurl() != item.first->feedurl() && item.first->get_feedptr() != NULL) {
+			fmt.register_fmt('T', utils::replace_all(item.first->get_feedptr()->title(), "<", "<>"));
 		}
-		fmt.register_fmt('t', utils::replace_all(it->first->title(), "<", "<>"));
-		fmt.register_fmt('a', utils::replace_all(it->first->author(), "<", "<>"));
-		fmt.register_fmt('L', it->first->length());
+		fmt.register_fmt('t', utils::replace_all(item.first->title(), "<", "<>"));
+		fmt.register_fmt('a', utils::replace_all(item.first->author(), "<", "<>"));
+		fmt.register_fmt('L', item.first->length());
 
 		if (rxman) {
 			int id;
-			if ((id = rxman->article_matches(it->first.get())) != -1) {
+			if ((id = rxman->article_matches(item.first.get())) != -1) {
 				tmp_itemlist_format = utils::strprintf("<%d>%s</>", id, itemlist_format.c_str());
 			}
 		}
 
-		if (it->first->unread()) {
+		if (item.first->unread()) {
 			tmp_itemlist_format = utils::strprintf("<unread>%s</>", itemlist_format.c_str());
 		}
 
-		listfmt.add_line(fmt.do_format(tmp_itemlist_format, width), it->second);
+		listfmt.add_line(fmt.do_format(tmp_itemlist_format, width), item.second);
 	}
 
 	f->modify("items","replace_inner", listfmt.format_list(rxman, "articlelist"));
@@ -942,7 +942,7 @@ void itemlist_formaction::recalculate_form() {
 	}
 }
 
-void itemlist_formaction::save_article(const std::string& filename, std::tr1::shared_ptr<rss_item> item) {
+void itemlist_formaction::save_article(const std::string& filename, std::shared_ptr<rss_item> item) {
 	if (filename == "") {
 		v->show_error(_("Aborted saving."));
 	} else {
@@ -970,15 +970,15 @@ void itemlist_formaction::set_regexmanager(regexmanager * r) {
 	std::vector<std::string>& attrs = r->get_attrs("articlelist");
 	unsigned int i=0;
 	std::string attrstr;
-	for (std::vector<std::string>::iterator it=attrs.begin();it!=attrs.end();++it,++i) {
-		attrstr.append(utils::strprintf("@style_%u_normal:%s ", i, it->c_str()));
-		attrstr.append(utils::strprintf("@style_%u_focus:%s ", i, it->c_str()));
+	for (auto attribute : attrs) {
+		attrstr.append(utils::strprintf("@style_%u_normal:%s ", i, attribute.c_str()));
+		attrstr.append(utils::strprintf("@style_%u_focus:%s ", i, attribute.c_str()));
 	}
 	std::string textview = utils::strprintf("{list[items] .expand:vh style_normal[listnormal]: style_focus[listfocus]:fg=yellow,bg=blue,attr=bold pos_name[itemposname]: pos[itempos]:0 %s richtext:1}", attrstr.c_str());
 	f->modify("items", "replace", textview);
 }
 
-std::string itemlist_formaction::gen_flags(std::tr1::shared_ptr<rss_item> item) {
+std::string itemlist_formaction::gen_flags(std::shared_ptr<rss_item> item) {
 	std::string flags;
 	if (item->deleted()) {
 		flags.append("D");
@@ -1006,17 +1006,18 @@ void itemlist_formaction::prepare_set_filterpos() {
 	if (set_filterpos) {
 		set_filterpos = false;
 		unsigned int i=0;
-		for (std::vector<itemptr_pos_pair>::iterator it=visible_items.begin();it!=visible_items.end();++it, ++i) {
-			if (it->second == filterpos) {
+		for (auto item : visible_items) {
+			if (item.second == filterpos) {
 				f->set("itempos", utils::to_string<unsigned int>(i));
 				return;
 			}
+			i++;
 		}
 		f->set("itempos", "0");
 	}
 }
 
-void itemlist_formaction::set_feed(std::tr1::shared_ptr<rss_feed> fd) {
+void itemlist_formaction::set_feed(std::shared_ptr<rss_feed> fd) {
 	LOG(LOG_DEBUG, "itemlist_formaction::set_feed: fd pointer = %p title = `%s'", fd.get(), fd->title().c_str());
 	feed = fd;
 	feed->load();

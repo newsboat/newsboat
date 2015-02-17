@@ -1,7 +1,7 @@
 #ifndef DOWNLOADTHREAD_H_
 #define DOWNLOADTHREAD_H_
 
-#include <thread.h>
+#include <thread>
 #include <controller.h>
 
 namespace newsbeuter
@@ -9,24 +9,22 @@ namespace newsbeuter
 	
 class controller;
 
-class downloadthread : public thread
+class downloadthread
 {
 public:
 	downloadthread(controller * c, std::vector<int> * idxs = 0);
 	virtual ~downloadthread();
-protected:
-	virtual void run();
+	void operator()();
 private:
 	controller * ctrl;
 	std::vector<int> indexes;
 };
 
-class reloadrangethread : public thread
+class reloadrangethread
 {
 public:
 	reloadrangethread(controller * c, unsigned int start, unsigned int end, unsigned int size, bool unattended);
-protected:
-	virtual void run();
+	void operator()();
 private:
 	controller * ctrl;
 	unsigned int s, e, ss;

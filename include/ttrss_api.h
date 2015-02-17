@@ -32,7 +32,7 @@ class ttrss_api : public remote_api {
 		std::string auth_info;
 		const char * auth_info_ptr;
 		bool single;
-		mutex auth_lock;
+		std::mutex auth_lock;
 };
 
 class ttrss_urlreader : public urlreader {

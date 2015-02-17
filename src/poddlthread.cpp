@@ -18,13 +18,14 @@ namespace podbeuter {
 static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp);
 static int progress_callback(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow);
 
-poddlthread::poddlthread(download * dl_, newsbeuter::configcontainer * c) : dl(dl_), cfg(c) {
+poddlthread::poddlthread(download * dl_, newsbeuter::configcontainer * c) : dl(dl_), f(new std::ofstream()), cfg(c) {
 }
 
 poddlthread::~poddlthread() {
+	delete f;
 }
 
-void poddlthread::run() {
+void poddlthread::operator()() {
 	gettimeofday(&tv1, NULL);
 	++bytecount;
 
@@ -53,22 +54,22 @@ void poddlthread::run() {
 	if (stat(dl->filename(), &sb) == -1) {
 		LOG(LOG_INFO, "poddlthread::run: stat failed: starting normal download");
 		mkdir_p(dl->filename());
-		f.open(dl->filename(), std::fstream::out);
+		f->open(dl->filename(), std::fstream::out);
 		dl->set_offset(0);
 	} else {
 		LOG(LOG_INFO, "poddlthread::run: stat ok: starting download from %u", sb.st_size);
 		curl_easy_setopt(easyhandle, CURLOPT_RESUME_FROM, sb.st_size);
 		dl->set_offset(sb.st_size);
-		f.open(dl->filename(), std::fstream::out | std::fstream::app);
+		f->open(dl->filename(), std::fstream::out | std::fstream::app);
 	}
 
-	if (f.is_open()) {
+	if (f->is_open()) {
 
 		dl->set_status(DL_DOWNLOADING);
 
 		CURLcode success = curl_easy_perform(easyhandle);
 
-		f.close();
+		f->close();
 
 		LOG(LOG_INFO,"poddlthread::run: curl_easy_perform rc = %u (%s)", success, curl_easy_strerror(success));
 
@@ -98,10 +99,10 @@ static int progress_callback(void *clientp, double dltotal, double dlnow, double
 size_t poddlthread::write_data(void * buffer, size_t size, size_t nmemb) {
 	if (dl->status() == DL_CANCELLED)
 		return 0;
-	f.write(static_cast<char *>(buffer), size * nmemb);
+	f->write(static_cast<char *>(buffer), size * nmemb);
 	bytecount += (size * nmemb);
-	LOG(LOG_DEBUG, "poddlthread::write_data: bad = %u size = %u", f.bad(), size * nmemb);
-	return f.bad() ? 0 : size * nmemb;
+	LOG(LOG_DEBUG, "poddlthread::write_data: bad = %u size = %u", f->bad(), size * nmemb);
+	return f->bad() ? 0 : size * nmemb;
 }
 
 int poddlthread::progress(double dlnow, double dltotal) {

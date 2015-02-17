@@ -28,8 +28,8 @@ rss_parser::rss_parser(const std::string& uri, cache * c, configcontainer * cfg,
 
 rss_parser::~rss_parser() { }
 
-std::tr1::shared_ptr<rss_feed> rss_parser::parse() {
-	std::tr1::shared_ptr<rss_feed> feed(new rss_feed(ch));
+std::shared_ptr<rss_feed> rss_parser::parse() {
+	std::shared_ptr<rss_feed> feed(new rss_feed(ch));
 
 	feed->set_rssurl(my_uri);
 
@@ -86,7 +86,7 @@ std::string rss_parser::render_xhtml_title(const std::string& title, const std::
 	return "";
 }
 
-void rss_parser::set_rtl(std::tr1::shared_ptr<rss_feed> feed, const char * lang) {
+void rss_parser::set_rtl(std::shared_ptr<rss_feed> feed, const char * lang) {
 	// we implement right-to-left support for the languages listed in
 	// http://blogs.msdn.com/rssteam/archive/2007/05/17/reading-feeds-in-right-to-left-order.aspx
 	static const char * rtl_langprefix[] = { 
@@ -223,7 +223,7 @@ void rss_parser::download_filterplugin(const std::string& filter, const std::str
 	LOG(LOG_DEBUG, "rss_parser::parse: filterplugin %s, is_valid = %s", filter.c_str(), is_valid ? "true" : "false");
 }
 
-void rss_parser::fill_feed_fields(std::tr1::shared_ptr<rss_feed> feed) {
+void rss_parser::fill_feed_fields(std::shared_ptr<rss_feed> feed) {
 	/*
 	 * we fill all the feed members with the appropriate values from the rsspp data structure
 	 */
@@ -247,33 +247,33 @@ void rss_parser::fill_feed_fields(std::tr1::shared_ptr<rss_feed> feed) {
 	LOG(LOG_DEBUG, "rss_parser::parse: feed title = `%s' link = `%s'", feed->title().c_str(), feed->link().c_str());
 }
 
-void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed> feed) {
+void rss_parser::fill_feed_items(std::shared_ptr<rss_feed> feed) {
 	/*
 	 * we iterate over all items of a feed, create an rss_item object for
 	 * each item, and fill it with the appropriate values from the data structure.
 	 */
-	for (std::vector<rsspp::item>::iterator item=f.items.begin();item!=f.items.end();++item) {
-		std::tr1::shared_ptr<rss_item> x(new rss_item(ch));
+	for (auto item : f.items) {
+		std::shared_ptr<rss_item> x(new rss_item(ch));
 
-		set_item_title(feed, x, *item);
+		set_item_title(feed, x, item);
 
-		if (item->link != "") {
-			x->set_link(utils::absolute_url(feed->link(), item->link));
+		if (item.link != "") {
+			x->set_link(utils::absolute_url(feed->link(), item.link));
 		}
 
-		if (x->link().empty() && item->guid_isPermaLink) {
-			x->set_link(item->guid);
+		if (x->link().empty() && item.guid_isPermaLink) {
+			x->set_link(item.guid);
 		}
 
-		set_item_author(x, *item);
+		set_item_author(x, item);
 
 		x->set_feedurl(feed->rssurl());
-    x->set_feedptr(feed);
+		x->set_feedptr(feed);
 
-		if ((f.rss_version == rsspp::ATOM_1_0 || f.rss_version == rsspp::TTRSS_JSON || f.rss_version == rsspp::NEWSBLUR_JSON) && item->labels.size() > 0) {
-			std::vector<std::string>::const_iterator start, finish;
-			start = item->labels.begin();
-			finish = item->labels.end();
+		if ((f.rss_version == rsspp::ATOM_1_0 || f.rss_version == rsspp::TTRSS_JSON || f.rss_version == rsspp::NEWSBLUR_JSON) && item.labels.size() > 0) {
+			auto start = item.labels.begin();
+			auto finish = item.labels.end();
+
 			if (std::find(start, finish, "fresh") != finish) {
 				x->set_unread_nowrite(true);
 				x->set_override_unread(true);
@@ -304,18 +304,18 @@ void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed> feed) {
 			}
 		}
 
-		set_item_content(x, *item);
+		set_item_content(x, item);
 
-		if (item->pubDate != "") 
-			x->set_pubDate(parse_date(item->pubDate));
+		if (item.pubDate != "") 
+			x->set_pubDate(parse_date(item.pubDate));
 		else
 			x->set_pubDate(::time(NULL));
 			
-		x->set_guid(get_guid(*item));
+		x->set_guid(get_guid(item));
 
-		x->set_base(item->base);
+		x->set_base(item.base);
 
-		set_item_enclosure(x, *item);
+		set_item_enclosure(x, item);
 
 		LOG(LOG_DEBUG, "rss_parser::parse: item title = `%s' link = `%s' pubDate = `%s' (%d) description = `%s'", x->title().c_str(), 
 			x->link().c_str(), x->pubDate().c_str(), x->pubDate_timestamp(), x->description().c_str());
@@ -324,7 +324,7 @@ void rss_parser::fill_feed_items(std::tr1::shared_ptr<rss_feed> feed) {
 	}
 }
 
-void rss_parser::set_item_title(std::tr1::shared_ptr<rss_feed> feed, std::tr1::shared_ptr<rss_item> x, rsspp::item& item) {
+void rss_parser::set_item_title(std::shared_ptr<rss_feed> feed, std::shared_ptr<rss_item> x, rsspp::item& item) {
 	if (is_html_type(item.title_type)) {
 		x->set_title(render_xhtml_title(item.title, feed->link()));
 	} else {
@@ -334,7 +334,7 @@ void rss_parser::set_item_title(std::tr1::shared_ptr<rss_feed> feed, std::tr1::s
 	}
 }
 
-void rss_parser::set_item_author(std::tr1::shared_ptr<rss_item> x, rsspp::item& item) {
+void rss_parser::set_item_author(std::shared_ptr<rss_item> x, rsspp::item& item) {
 	/* 
 	 * some feeds only have a feed-wide managingEditor, which we use as an item's
 	 * author if there is no item-specific one available.
@@ -350,7 +350,7 @@ void rss_parser::set_item_author(std::tr1::shared_ptr<rss_item> x, rsspp::item& 
 	}
 }
 
-void rss_parser::set_item_content(std::tr1::shared_ptr<rss_item> x, rsspp::item& item) {
+void rss_parser::set_item_content(std::shared_ptr<rss_item> x, rsspp::item& item) {
 
 	handle_content_encoded(x, item);
 
@@ -392,14 +392,14 @@ std::string rss_parser::get_guid(rsspp::item& item) {
 		return "";	// too bad.
 }
 
-void rss_parser::set_item_enclosure(std::tr1::shared_ptr<rss_item> x, rsspp::item& item) {
+void rss_parser::set_item_enclosure(std::shared_ptr<rss_item> x, rsspp::item& item) {
 	x->set_enclosure_url(item.enclosure_url);
 	x->set_enclosure_type(item.enclosure_type);
 	LOG(LOG_DEBUG, "rss_parser::parse: found enclosure_url: %s", item.enclosure_url.c_str());
 	LOG(LOG_DEBUG, "rss_parser::parse: found enclosure_type: %s", item.enclosure_type.c_str());
 }
 
-void rss_parser::add_item_to_feed(std::tr1::shared_ptr<rss_feed> feed, std::tr1::shared_ptr<rss_item> item) {
+void rss_parser::add_item_to_feed(std::shared_ptr<rss_feed> feed, std::shared_ptr<rss_item> item) {
 	// only add item to feed if it isn't on the ignore list or if there is no ignore list
 	if (!ign || !ign->matches(item.get())) {
 		feed->add_item(item);
@@ -409,7 +409,7 @@ void rss_parser::add_item_to_feed(std::tr1::shared_ptr<rss_feed> feed, std::tr1:
 	}
 }
 
-void rss_parser::handle_content_encoded(std::tr1::shared_ptr<rss_item> x, rsspp::item& item) {
+void rss_parser::handle_content_encoded(std::shared_ptr<rss_item> x, rsspp::item& item) {
 	if (x->description() != "")
 		return;
 
@@ -421,7 +421,7 @@ void rss_parser::handle_content_encoded(std::tr1::shared_ptr<rss_item> x, rsspp:
 	}
 }
 
-void rss_parser::handle_itunes_summary(std::tr1::shared_ptr<rss_item> x, rsspp::item& item) {
+void rss_parser::handle_itunes_summary(std::shared_ptr<rss_item> x, rsspp::item& item) {
 	if (x->description() != "")
 		return;
 

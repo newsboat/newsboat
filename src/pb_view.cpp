@@ -50,14 +50,14 @@ void pb_view::run(bool auto_download) {
 			LOG(LOG_DEBUG, "pb_view::run: updating view... downloads().size() = %u", ctrl->downloads().size());
 
 			if (ctrl->downloads().size() > 0) {
-
 				std::string code = "{list";
 				
 				unsigned int i = 0;
-				for (std::vector<download>::iterator it=ctrl->downloads().begin();it!=ctrl->downloads().end();++it,++i) {
+				for (auto dl : ctrl->downloads()) {
 					char lbuf[1024];
-					snprintf(lbuf, sizeof(lbuf), " %4u [%6.1fMB/%6.1fMB] [%5.1f %%] [%7.2f kb/s] %-20s %s -> %s", i+1, it->current_size()/(1024*1024), it->total_size()/(1024*1024), it->percents_finished(), it->kbps(), it->status_text(), it->url(), it->filename());
+					snprintf(lbuf, sizeof(lbuf), " %4u [%6.1fMB/%6.1fMB] [%5.1f %%] [%7.2f kb/s] %-20s %s -> %s", i+1, dl.current_size()/(1024*1024), dl.total_size()/(1024*1024), dl.percents_finished(), dl.kbps(), dl.status_text(), dl.url(), dl.filename());
 					code.append(utils::strprintf("{listitem[%u] text:%s}", i, stfl::quote(lbuf).c_str()));
+					i++;
 				}
 
 				code.append("}");
@@ -110,8 +110,7 @@ void pb_view::run(bool auto_download) {
 					os >> idx;
 					if (idx != -1) {
 						if (ctrl->downloads()[idx].status() != DL_DOWNLOADING) {
-							poddlthread * thread = new poddlthread(&ctrl->downloads()[idx], ctrl->get_cfgcont());
-							thread->start();
+							std::thread t{poddlthread(&ctrl->downloads()[idx], ctrl->get_cfgcont())};
 						}
 					}
 				}
@@ -224,16 +223,17 @@ void pb_view::run_help() {
 	
 	std::string code = "{list";
 	
-	for (std::vector<keymap_desc>::iterator it=descs.begin();it!=descs.end();++it) {
+	for (auto desc : descs) {
 		std::string line = "{listitem text:";
 
 		std::string descline;
-		descline.append(it->key);
-		descline.append(8-it->key.length(),' ');
-		descline.append(it->cmd);
-		descline.append(24-it->cmd.length(),' ');
-		descline.append(it->desc);
+		descline.append(desc.key);
+		descline.append(8-desc.key.length(),' ');
+		descline.append(desc.cmd);
+		descline.append(24-desc.cmd.length(),' ');
+		descline.append(desc.desc);
 		line.append(stfl::quote(descline));
+
 		line.append("}");
 		
 		code.append(line);

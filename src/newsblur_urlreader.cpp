@@ -20,17 +20,17 @@ void newsblur_urlreader::reload() {
 	ur.reload();
 
 	std::vector<std::string>& file_urls(ur.get_urls());
-	for(std::vector<std::string>::iterator it=file_urls.begin();it!=file_urls.end();++it) {
-		if (it->substr(0,6) == "query:") {
-			urls.push_back(*it);
+	for (auto url : file_urls) {
+		if (url.substr(0,6) == "query:") {
+			urls.push_back(url);
 		}
 	}
 
 	std::vector<tagged_feedurl> feedurls = api->get_subscribed_urls();
 
-	for (std::vector<tagged_feedurl>::iterator it=feedurls.begin();it!=feedurls.end();++it) {
-		LOG(LOG_INFO, "added %s to URL list", it->first.c_str());
-		urls.push_back(it->first);
+	for (auto url : feedurls) {
+		LOG(LOG_INFO, "added %s to URL list", url.first.c_str());
+		urls.push_back(url.first);
 	}
 }
 

@@ -622,8 +622,8 @@ bool utils::is_valid_attribute(const std::string& attrib) {
 	return false;
 }
 
-std::vector<std::pair<unsigned int, unsigned int> > utils::partition_indexes(unsigned int start, unsigned int end, unsigned int parts) {
-	std::vector<std::pair<unsigned int, unsigned int> > partitions;
+std::vector<std::pair<unsigned int, unsigned int>> utils::partition_indexes(unsigned int start, unsigned int end, unsigned int parts) {
+	std::vector<std::pair<unsigned int, unsigned int>> partitions;
 	unsigned int count = end - start + 1;
 	unsigned int size = count / parts;
 
@@ -683,8 +683,8 @@ size_t utils::wcswidth_stfl(const std::wstring& str, size_t size) {
 std::string utils::join(const std::vector<std::string>& strings, const std::string& separator) {
 	std::string result;
 
-	for (std::vector<std::string>::const_iterator it=strings.begin();it!=strings.end();++it) {
-		result.append(*it);
+	for (auto str : strings) {
+		result.append(str);
 		result.append(separator);
 	}
 
@@ -920,7 +920,7 @@ std::wstring utils::clean_nonprintable_characters(std::wstring text) {
  */
 
 #if HAVE_OPENSSL
-static mutex * openssl_mutexes = NULL;
+static std::mutex * openssl_mutexes = NULL;
 static int openssl_mutexes_size = 0;
 
 static void openssl_mth_locking_function(int mode, int n, const char * file, int line) {
@@ -945,7 +945,7 @@ static unsigned long openssl_mth_id_function(void) {
 void utils::initialize_ssl_implementation(void) {
 #if HAVE_OPENSSL
 	openssl_mutexes_size = CRYPTO_num_locks();
-	openssl_mutexes = new mutex[openssl_mutexes_size];
+	openssl_mutexes = new std::mutex[openssl_mutexes_size];
 	CRYPTO_set_id_callback(openssl_mth_id_function);
 	CRYPTO_set_locking_callback(openssl_mth_locking_function);
 #endif

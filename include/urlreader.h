@@ -25,7 +25,7 @@ namespace newsbeuter {
 			inline void set_offline(bool off) { offline = off; }
 		protected:
 			std::vector<std::string> urls;
-			std::map<std::string, std::vector<std::string> > tags;
+			std::map<std::string, std::vector<std::string>> tags;
 			std::set<std::string> alltags;
 			bool offline;
 	};

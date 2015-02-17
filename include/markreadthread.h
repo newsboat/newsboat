@@ -1,7 +1,7 @@
 #ifndef MARKREADTHREAD_H_
 #define MARKREADTHREAD_H_
 
-#include <thread.h>
+#include <thread>
 #include <ttrss_api.h>
 
 namespace newsbeuter
@@ -9,13 +9,12 @@ namespace newsbeuter
 	
 class controller;
 
-class markreadthread : public thread
+class markreadthread
 {
 public:
 	markreadthread( ttrss_api* r_api, const std::string& guid, bool read );
 	virtual ~markreadthread();
-protected:
-	virtual void run();
+	void operator()();
 private:
 	ttrss_api* _r_api;
 	const std::string& _guid;

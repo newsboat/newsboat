@@ -48,8 +48,8 @@ void feedlist_formaction::init() {
 	 * The feedlist_formaction is responsible for starting up the reloadthread, which is responsible
 	 * for regularly spawning downloadthreads.
 	 */
-	reloadthread  * rt = new reloadthread(v->get_ctrl(), v->get_cfg());
-	rt->start();
+	std::thread t{reloadthread(v->get_ctrl(), v->get_cfg())};
+	t.detach();
 
 	apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-feeds"));
 }
@@ -159,7 +159,7 @@ REDO:
 			break;
 		case OP_OPENINBROWSER: 
 			if (feeds_shown > 0 && feedpos.length() > 0) {
-				std::tr1::shared_ptr<rss_feed> feed = v->get_ctrl()->get_feed(pos);
+				std::shared_ptr<rss_feed> feed = v->get_ctrl()->get_feed(pos);
 				if (feed) {
 					LOG(LOG_INFO, "feedlist_formaction: opening feed at position `%s': %s", feedpos.c_str(), feed->link().c_str());
 					v->open_in_browser(feed->link());
@@ -173,8 +173,8 @@ REDO:
 			{
 				bool reload_only_visible_feeds = v->get_cfg()->get_configvalue_as_bool("reload-only-visible-feeds");
 				std::vector<int> idxs;
-				for (std::vector<feedptr_pos_pair>::iterator it=visible_feeds.begin();it!=visible_feeds.end();++it) {
-					idxs.push_back(it->second);
+				for (auto feed : visible_feeds) {
+					idxs.push_back(feed.second);
 				}
 				v->get_ctrl()->start_reload_all_thread(reload_only_visible_feeds ? &idxs : NULL);
 			}
@@ -362,24 +362,25 @@ REDO:
 	}
 }
 
-void feedlist_formaction::update_visible_feeds(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
+void feedlist_formaction::update_visible_feeds(std::vector<std::shared_ptr<rss_feed>>& feeds) {
 	assert(v->get_cfg() != NULL); // must not happen
 
 	visible_feeds.clear();
 
 	unsigned int i = 0;
 
-	for (std::vector<std::tr1::shared_ptr<rss_feed> >::iterator it = feeds.begin(); it != feeds.end(); ++it, ++i) {
-		(*it)->set_index(i+1);
-		if ((tag == "" || (*it)->matches_tag(tag)) && (!apply_filter || m.matches(it->get())) && !(*it)->hidden()) {
-			visible_feeds.push_back(feedptr_pos_pair(*it,i));
+	for (auto feed : feeds) {
+		feed->set_index(i+1);
+		if ((tag == "" || feed->matches_tag(tag)) && (!apply_filter || m.matches(feed.get())) && !feed->hidden()) {
+			visible_feeds.push_back(feedptr_pos_pair(feed,i));
 		}
+		i++;
 	}
 
 	feeds_shown = visible_feeds.size();
 }
 
-void feedlist_formaction::set_feedlist(std::vector<std::tr1::shared_ptr<rss_feed> >& feeds) {
+void feedlist_formaction::set_feedlist(std::vector<std::shared_ptr<rss_feed>>& feeds) {
 	assert(v->get_cfg() != NULL); // must not happen
 
 	unsigned int width = utils::to_u(f->get("feeds:w"));
@@ -393,13 +394,14 @@ void feedlist_formaction::set_feedlist(std::vector<std::tr1::shared_ptr<rss_feed
 
 	update_visible_feeds(feeds);
 
-	for (std::vector<feedptr_pos_pair>::iterator it = visible_feeds.begin(); it != visible_feeds.end(); ++it, ++i) {
-		std::string title = get_title(it->first);
+	for (auto feed : visible_feeds) {
+		std::string title = get_title(feed.first);
 
-		if (it->first->unread_item_count() > 0)
+		if (feed.first->unread_item_count() > 0)
 			++unread_feeds;
 
-		listfmt.add_line(format_line(feedlist_format, it->first, it->second, width), it->second);
+		listfmt.add_line(format_line(feedlist_format, feed.first, feed.second, width), feed.second);
+		i++;
 	}
 
 	total_feeds = i;
@@ -562,7 +564,7 @@ bool feedlist_formaction::jump_to_next_feed(unsigned int& feedpos) {
 	return false;
 }
 
-std::tr1::shared_ptr<rss_feed> feedlist_formaction::get_feed() {
+std::shared_ptr<rss_feed> feedlist_formaction::get_feed() {
 	unsigned int curpos;
 	std::istringstream is(f->get("feedpos"));
 	is >> curpos;
@@ -628,21 +630,23 @@ void feedlist_formaction::mark_pos_if_visible(unsigned int pos) {
 	scope_measure m1("feedlist_formaction::mark_pos_if_visible");
 	unsigned int vpos = 0;
 	v->get_ctrl()->update_visible_feeds();
-	for (std::vector<feedptr_pos_pair>::iterator it=visible_feeds.begin();it!=visible_feeds.end();++it, ++vpos) {
-		if (it->second == pos) {
+	for (auto feed : visible_feeds) {
+		if (feed.second == pos) {
 			LOG(LOG_DEBUG, "feedlist_formaction::mark_pos_if_visible: match, setting position to %u", vpos);
 			f->set("feedpos", utils::to_string<unsigned int>(vpos));
 			return;
 		}
+		vpos++;
 	}
 	vpos = 0;
 	pos = v->get_ctrl()->get_pos_of_next_unread(pos);
-	for (std::vector<feedptr_pos_pair>::iterator it=visible_feeds.begin();it!=visible_feeds.end();++it, ++vpos) {
-		if (it->second == pos) {
+	for (auto feed : visible_feeds) {
+		if (feed.second == pos) {
 			LOG(LOG_DEBUG, "feedlist_formaction::mark_pos_if_visible: match in 2nd try, setting position to %u", vpos);
 			f->set("feedpos", utils::to_string<unsigned int>(vpos));
 			return;
 		}
+		vpos++;
 	}
 }
 
@@ -661,9 +665,9 @@ void feedlist_formaction::set_regexmanager(regexmanager * r) {
 	std::vector<std::string>& attrs = r->get_attrs("feedlist");
 	unsigned int i=0;
 	std::string attrstr;
-	for (std::vector<std::string>::iterator it=attrs.begin();it!=attrs.end();++it,++i) {
-		attrstr.append(utils::strprintf("@style_%u_normal:%s ", i, it->c_str()));
-		attrstr.append(utils::strprintf("@style_%u_focus:%s ", i, it->c_str()));
+	for (auto attribute : attrs) {
+		attrstr.append(utils::strprintf("@style_%u_normal:%s ", i, attribute.c_str()));
+		attrstr.append(utils::strprintf("@style_%u_focus:%s ", i, attribute.c_str()));
 	}
 	std::string textview = utils::strprintf("{!list[feeds] .expand:vh style_normal[listnormal]: style_focus[listfocus]:fg=yellow,bg=blue,attr=bold pos_name[feedposname]: pos[feedpos]:0 %s richtext:1}", attrstr.c_str());
 	f->modify("feeds", "replace", textview);
@@ -692,7 +696,7 @@ void feedlist_formaction::op_start_search() {
 	if (searchphrase.length() > 0) {
 		v->set_status(_("Searching..."));
 		searchhistory.add_line(searchphrase);
-		std::vector<std::tr1::shared_ptr<rss_item> > items;
+		std::vector<std::shared_ptr<rss_item>> items;
 		try {
 			std::string utf8searchphrase = utils::convert_text(searchphrase, "utf-8", nl_langinfo(CODESET));
 			items = v->get_ctrl()->search_for_items(utf8searchphrase, "");
@@ -703,8 +707,8 @@ void feedlist_formaction::op_start_search() {
 		if (!items.empty()) {
 			search_dummy_feed->item_mutex.lock();
 			search_dummy_feed->clear_items();
-			for (std::vector<std::tr1::shared_ptr<rss_item> >::iterator it=items.begin();it!=items.end();++it) {
-				search_dummy_feed->add_item(*it);
+			for (auto item : items) {
+				search_dummy_feed->add_item(item);
 			}
 			search_dummy_feed->item_mutex.unlock();
 			v->push_searchresult(search_dummy_feed, searchphrase);
@@ -731,11 +735,12 @@ void feedlist_formaction::set_pos() {
 	if (set_filterpos) {
 		set_filterpos = false;
 		unsigned int i = 0;
-		for (std::vector<feedptr_pos_pair>::iterator it=visible_feeds.begin();it!=visible_feeds.end();++it, ++i) {
-			if (it->second == filterpos) {
+		for (auto feed : visible_feeds) {
+			if (feed.second == filterpos) {
 				f->set("feedpos", utils::to_string<unsigned int>(i));
 				return;
 			}
+			i++;
 		}
 		f->set("feedpos", "0");
 	} else if (zero_feedpos) {
@@ -744,7 +749,7 @@ void feedlist_formaction::set_pos() {
 	}
 }
 
-std::string feedlist_formaction::get_title(std::tr1::shared_ptr<rss_feed> feed) {
+std::string feedlist_formaction::get_title(std::shared_ptr<rss_feed> feed) {
 	std::string title = feed->title();
 	if (title.length()==0)
 		title = utils::censor_url(feed->rssurl());
@@ -753,7 +758,7 @@ std::string feedlist_formaction::get_title(std::tr1::shared_ptr<rss_feed> feed) 
 	return title;
 }
 
-std::string feedlist_formaction::format_line(const std::string& feedlist_format, std::tr1::shared_ptr<rss_feed> feed, unsigned int pos, unsigned int width) {
+std::string feedlist_formaction::format_line(const std::string& feedlist_format, std::shared_ptr<rss_feed> feed, unsigned int pos, unsigned int width) {
 	fmtstr_formatter fmt;
 	unsigned int unread_count = feed->unread_item_count();
 

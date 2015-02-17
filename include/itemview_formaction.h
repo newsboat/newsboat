@@ -12,15 +12,12 @@ class itemlist_formaction;
 
 class itemview_formaction : public formaction {
 	public:
-		itemview_formaction(view *, std::tr1::shared_ptr<itemlist_formaction> il, std::string formstr);
+		itemview_formaction(view *, std::shared_ptr<itemlist_formaction> il, std::string formstr);
 		virtual ~itemview_formaction();
 		virtual void prepare();
 		virtual void init();
-		inline void set_guid(const std::string& guid_) { 
-			LOG(LOG_DEBUG, "itemview_formaction::set_guid: new guid = %s", guid_.c_str()); 
-			guid = guid_; 
-		}
-		inline void set_feed(std::tr1::shared_ptr<rss_feed> fd) { feed = fd; }
+		inline void set_guid(const std::string& guid_) { guid = guid_; }
+		inline void set_feed(std::shared_ptr<rss_feed> fd) { feed = fd; }
 		void set_highlightphrase(const std::string& text);
 		keymap_hint_entry * get_keymap_hint();
 		virtual void handle_cmdline(const std::string& cmd);
@@ -46,13 +43,13 @@ class itemview_formaction : public formaction {
 		void do_search();
 		
 		std::string guid;
-		std::tr1::shared_ptr<rss_feed> feed;
+		std::shared_ptr<rss_feed> feed;
 		bool show_source;
 		std::vector<linkpair> links;
 		bool quit;
 		regexmanager * rxman;
 		unsigned int num_lines;
-		std::tr1::shared_ptr<itemlist_formaction> itemlist;
+		std::shared_ptr<itemlist_formaction> itemlist;
 		bool in_search;
 };
 

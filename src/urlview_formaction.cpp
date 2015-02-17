@@ -94,8 +94,9 @@ void urlview_formaction::prepare() {
 	if (do_redraw) {
 		listformatter listfmt;
 		unsigned int i=0;
-		for (std::vector<linkpair>::iterator it = links.begin(); it != links.end(); ++it, ++i) {
-			listfmt.add_line(utils::strprintf("%2u  %s",i+1,it->first.c_str()), i);
+		for (auto link : links) {
+			listfmt.add_line(utils::strprintf("%2u  %s",i+1,link.first.c_str()), i);
+			i++;
 		}
 		f->modify("urls","replace_inner", listfmt.format_list());
 	}

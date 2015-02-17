@@ -34,11 +34,11 @@ void tagsouppullparser::setInput(std::istream& is) {
 }
 
 std::string tagsouppullparser::getAttributeValue(const std::string& name) const {
-	for (std::vector<attribute>::const_iterator it=attributes.begin();it!=attributes.end();++it) {
-		if (it->first == name) {
-			return it->second;
-		}	
-	}	
+	for (auto attr : attributes) {
+		if (attr.first == name) {
+			return attr.second;
+		}
+	}
 	throw std::invalid_argument(_("attribute not found"));
 }
 

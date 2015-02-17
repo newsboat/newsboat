@@ -71,33 +71,33 @@ void help_formaction::prepare() {
 		unsigned int syskey_count = 0;
 
 		for (unsigned int i=0;i<3;i++) {
-			for (std::vector<keymap_desc>::iterator it=descs.begin();it!=descs.end();++it) {
+			for (auto desc : descs) {
 				bool condition;
 				switch (i) {
 					case 0: 
-						condition = (it->key.length() == 0 || it->flags & KM_SYSKEYS); 
-						if (it->key.length() == 0)
+						condition = (desc.key.length() == 0 || desc.flags & KM_SYSKEYS); 
+						if (desc.key.length() == 0)
 							unbound_count++;
-						if (it->flags & KM_SYSKEYS)
+						if (desc.flags & KM_SYSKEYS)
 							syskey_count++;
 						break;
 					case 1: 
-						condition = !(it->flags & KM_SYSKEYS); 
+						condition = !(desc.flags & KM_SYSKEYS); 
 						break;
 					case 2: 
-						condition = (it->key.length() > 0 || it->flags & KM_SYSKEYS); 
+						condition = (desc.key.length() > 0 || desc.flags & KM_SYSKEYS); 
 						break;
 					default: condition = true; break;
 				}
-				if (context.length() > 0 && (it->ctx != context || condition))
+				if (context.length() > 0 && (desc.ctx != context || condition))
 					continue;
-				if (!apply_search || strcasestr(it->key.c_str(), searchphrase.c_str())!=NULL || 
-						strcasestr(it->cmd.c_str(), searchphrase.c_str())!=NULL ||
-						strcasestr(it->desc.c_str(), searchphrase.c_str())!=NULL) {
+				if (!apply_search || strcasestr(desc.key.c_str(), searchphrase.c_str())!=NULL || 
+						strcasestr(desc.cmd.c_str(), searchphrase.c_str())!=NULL ||
+						strcasestr(desc.desc.c_str(), searchphrase.c_str())!=NULL) {
 					char tabs_1[] = "                ";
 					char tabs_2[] = "                        ";
-					int how_often_1 = strlen(tabs_1) - it->key.length();
-					int how_often_2 = strlen(tabs_2) - it->cmd.length();
+					int how_often_1 = strlen(tabs_1) - desc.key.length();
+					int how_often_2 = strlen(tabs_2) - desc.cmd.length();
 					if (how_often_1 <= 0)
 						how_often_1 = 1;
 					if (how_often_2 <= 0)
@@ -107,8 +107,8 @@ void help_formaction::prepare() {
 					std::string line;
 					switch (i) {
 						case 0:
-						case 1: line = utils::strprintf("%s%s%s%s%s", it->key.c_str(), tabs_1, it->cmd.c_str(), tabs_2, it->desc.c_str()); break;
-						case 2: line = utils::strprintf("%s%s%s%s", it->cmd.c_str(), tabs_1, tabs_2, it->desc.c_str()); break;
+						case 1: line = utils::strprintf("%s%s%s%s%s", desc.key.c_str(), tabs_1, desc.cmd.c_str(), tabs_2, desc.desc.c_str()); break;
+						case 2: line = utils::strprintf("%s%s%s%s", desc.cmd.c_str(), tabs_1, tabs_2, desc.desc.c_str()); break;
 					}
 					LOG(LOG_DEBUG, "help_formaction::prepare: step 1 - line = %s", line.c_str());
 					line = utils::quote_for_stfl(line);

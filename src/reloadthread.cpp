@@ -10,7 +10,7 @@ reloadthread::reloadthread(controller * c, configcontainer * cf) : ctrl(c), oldt
 
 reloadthread::~reloadthread() { }
 
-void reloadthread::run() {
+void reloadthread::operator()() {
 	for (;;) {
 		oldtime = time(NULL);
 		LOG(LOG_INFO,"reloadthread: starting reload");

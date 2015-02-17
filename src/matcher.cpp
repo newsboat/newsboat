@@ -132,8 +132,8 @@ bool matcher::matchop_cont(expression * e, matchable * item) {
 		throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
 	std::vector<std::string> elements = utils::tokenize(item->get_attribute(e->name), " ");
 	std::string literal = e->literal;
-	for (std::vector<std::string>::iterator it=elements.begin();it!=elements.end();++it) {
-		if (literal == *it) {
+	for (auto elem : elements) {
+		if (literal == elem) {
 			return true;
 		}
 	}

@@ -26,13 +26,13 @@ class colormanager : public config_action_handler {
 		void set_pb_colors(podbeuter::pb_view * v);
 		inline std::map<std::string,std::string>& get_fgcolors() { return fg_colors; }
 		inline std::map<std::string,std::string>& get_bgcolors() { return bg_colors; }
-		inline std::map<std::string,std::vector<std::string> >& get_attributes() { return attributes; }
+		inline std::map<std::string,std::vector<std::string>>& get_attributes() { return attributes; }
 	private:
 
 		bool colors_loaded_;
 		std::map<std::string,std::string> fg_colors;
 		std::map<std::string,std::string> bg_colors;
-		std::map<std::string,std::vector<std::string> > attributes;
+		std::map<std::string,std::vector<std::string>> attributes;
 };
 
 }

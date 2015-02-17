@@ -12,7 +12,7 @@ downloadthread::downloadthread(controller * c, std::vector<int> * idxs) : ctrl(c
 downloadthread::~downloadthread() {
 }
 
-void downloadthread::run() {
+void downloadthread::operator()() {
 	/*
 	 * the downloadthread class drives the reload-all process.
 	 * A downloadthread is spawned whenever "reload all" is invoked, and whenever an auto-reload
@@ -27,14 +27,13 @@ void downloadthread::run() {
 		}
 		ctrl->unlock_reload_mutex();
 	}
-	this->detach();
 }
 
 reloadrangethread::reloadrangethread(controller * c, unsigned int start, unsigned int end, unsigned int size, bool unattended) : ctrl(c), s(start), e(end), ss(size), u(unattended)
 {
 }
 
-void reloadrangethread::run() {
+void reloadrangethread::operator()() {
 	ctrl->reload_range(s, e, ss, u);
 }
 

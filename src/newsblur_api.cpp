@@ -110,10 +110,6 @@ bool newsblur_api::update_article_flags(const std::string& oldflags, const std::
 	return false;
 }
 
-static bool sort_by_pubdate(const rsspp::item& a, const rsspp::item& b) {
-	return a.pubDate_ts > b.pubDate_ts;
-}
-
 time_t parse_date(const char * raw) {
 	struct tm tm;
 	memset(&tm, 0, sizeof(tm));
@@ -189,7 +185,9 @@ rsspp::feed newsblur_api::fetch_feed(const std::string& id) {
 		}
 	}
 
-	std::sort(f.items.begin(), f.items.end(), sort_by_pubdate);
+	std::sort(f.items.begin(), f.items.end(), [](const rsspp::item& a, const rsspp::item& b) {
+		return a.pubDate_ts > b.pubDate_ts;
+	});
 	return f;
 }
 

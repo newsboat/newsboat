@@ -31,21 +31,21 @@ void listformatter::add_line(const std::string& text, unsigned int id, unsigned 
 }
 
 void listformatter::add_lines(const std::vector<std::string>& thelines, unsigned int width) {
-	for (std::vector<std::string>::const_iterator it=thelines.begin();it!=thelines.end();++it) {
-		add_line(utils::replace_all(*it, "\t", "        "), UINT_MAX, width);
+	for (auto line : thelines) {
+		add_line(utils::replace_all(line, "\t", "        "), UINT_MAX, width);
 	}
 }
 
 std::string listformatter::format_list(regexmanager * rxman, const std::string& location) {
 	format_cache = "{list";
-	for (std::vector<line_id_pair>::iterator it=lines.begin();it!=lines.end();++it) {
-		std::string str = it->first;
+	for (auto line : lines) {
+		std::string str = line.first;
 		if (rxman)
 			rxman->quote_and_highlight(str, location);
-		if (it->second == UINT_MAX) {
+		if (line.second == UINT_MAX) {
 			format_cache.append(utils::strprintf("{listitem text:%s}", stfl::quote(str).c_str()));
 		} else {
-			format_cache.append(utils::strprintf("{listitem[%u] text:%s}", it->second, stfl::quote(str).c_str()));
+			format_cache.append(utils::strprintf("{listitem[%u] text:%s}", line.second, stfl::quote(str).c_str()));
 		}
 	}
 	format_cache.append(1, '}');

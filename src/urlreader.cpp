@@ -22,9 +22,9 @@ std::vector<std::string>& urlreader::get_tags(const std::string& url) {
 
 std::vector<std::string> urlreader::get_alltags() {
 	std::vector<std::string> tmptags;
-	for (std::set<std::string>::iterator it=alltags.begin();it!=alltags.end();++it) {
-		if (it->substr(0,1) != "~")
-			tmptags.push_back(*it);
+	for (auto t : alltags) {
+		if (t.substr(0,1) != "~")
+			tmptags.push_back(t);
 	}
 	return tmptags;
 }
@@ -59,8 +59,8 @@ void file_urlreader::reload() {
 					tokens.erase(tokens.begin());
 					if (!tokens.empty()) {
 						tags[url] = tokens;
-						for (std::vector<std::string>::iterator it=tokens.begin();it!=tokens.end();++it) {
-							alltags.insert(*it);
+						for (auto token : tokens) {
+							alltags.insert(token);
 						}
 					}
 				}
@@ -78,11 +78,11 @@ void file_urlreader::write_config() {
 	std::fstream f;
 	f.open(filename.c_str(),std::fstream::out);
 	if (f.is_open()) {
-		for (std::vector<std::string>::iterator it=urls.begin(); it != urls.end(); ++it) {
-			f << *it;
-			if (tags[*it].size() > 0) {
-				for (std::vector<std::string>::iterator jt=tags[*it].begin();jt!=tags[*it].end();++jt) {
-					f << " \"" << *jt << "\"";
+		for (auto url : urls) {
+			f << url;
+			if (tags[url].size() > 0) {
+				for (auto tag : tags[url]) {
+					f << " \"" << tag << "\"";
 				}
 			}
 			f << std::endl;
@@ -112,9 +112,9 @@ void opml_urlreader::reload() {
 
 	std::vector<std::string> urls = utils::tokenize_quoted(this->get_source(), " ");
 
-	for (std::vector<std::string>::iterator it=urls.begin();it!=urls.end();++it) {
-		LOG(LOG_DEBUG, "opml_urlreader::reload: downloading `%s'", it->c_str());
-		std::string urlcontent = utils::retrieve_url(*it, cfg, this->get_auth());
+	for (auto url : urls) {
+		LOG(LOG_DEBUG, "opml_urlreader::reload: downloading `%s'", url.c_str());
+		std::string urlcontent = utils::retrieve_url(url, cfg, this->get_auth());
 
 		xmlDoc * doc = xmlParseMemory(urlcontent.c_str(), urlcontent.length());
 
