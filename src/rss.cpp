@@ -616,6 +616,7 @@ std::string rss_feed::get_status() {
 		case DURING_DOWNLOAD: return ".";
 		case DL_ERROR: return "x";
 	}
+	return "?";
 }
 
 void rss_feed::unload() {
