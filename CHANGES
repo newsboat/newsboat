@@ -7,6 +7,15 @@ Changes for newsbeuter:
 	Don't override feed titles for hidden feeds.
 	Fix dumpconfig.
 	Add support for FeedHQ (feedhq.org).
+	Fix missing variable in log output (fixes #124).
+	Fix type of configuration variables to path where appropriate (fixes #125).
+	Update to Brazilian Portuguese translation (fixes #126).
+	Fix crash when GUID is lost (fixes #127).
+	Fix dependency check (fixes #132).
+	Fix segfault in jump_to_next_unread_item (fixes #133).
+	Change code base to C++11.
+	Don't render inline images (fixes #154).
+	Fixed bug where feeds would appear empty due to variable shadowing issue.
 
 2.8 (2014-01-19):
 	Add bookmark script for getpocket.com support (Andreas Happe).
