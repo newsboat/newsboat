@@ -60,7 +60,7 @@ void colormanager::handle_action(const std::string& action, const std::vector<st
 			attributes[element] = attribs;
 			colors_loaded_ = true;
 		} else
-			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid configuration element")));
+			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid configuration element"), element.c_str()));
 
 	} else
 		throw confighandlerexception(AHS_INVALID_COMMAND);
