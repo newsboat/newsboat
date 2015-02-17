@@ -12,9 +12,9 @@
 #include <curl/curl.h>
 #include <json.h>
 
-#define FEEDHQ_LOGIN					"https://feedhq.org/accounts/ClientLogin"
-#define FEEDHQ_API_PREFIX				"https://feedhq.org/reader/api/0/"
-#define FEEDHQ_FEED_PREFIX				"https://feedhq.org/reader/atom/"
+#define FEEDHQ_LOGIN					"/accounts/ClientLogin"
+#define FEEDHQ_API_PREFIX				"/reader/api/0/"
+#define FEEDHQ_FEED_PREFIX				"/reader/atom/"
 
 #define FEEDHQ_OUTPUT_SUFFIX "?output=json"
 
@@ -97,7 +97,7 @@ std::string feedhq_api::retrieve_auth() {
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle, CURLOPT_POSTFIELDS, postcontent.c_str());
-	curl_easy_setopt(handle, CURLOPT_URL, FEEDHQ_LOGIN);
+	curl_easy_setopt(handle, CURLOPT_URL, (cfg->get_configvalue("feedhq-url") + FEEDHQ_LOGIN).c_str());
 	curl_easy_perform(handle);
 	curl_easy_cleanup(handle);
 
@@ -123,7 +123,7 @@ std::vector<tagged_feedurl> feedhq_api::get_subscribed_urls() {
 	utils::set_common_curl_options(handle, cfg);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
-	curl_easy_setopt(handle, CURLOPT_URL, FEEDHQ_SUBSCRIPTION_LIST);
+	curl_easy_setopt(handle, CURLOPT_URL, (cfg->get_configvalue("feedhq-url") + FEEDHQ_SUBSCRIPTION_LIST).c_str());
 	curl_easy_perform(handle);
 	curl_easy_cleanup(handle);
 
@@ -153,7 +153,7 @@ std::vector<tagged_feedurl> feedhq_api::get_subscribed_urls() {
 
 		char * escaped_id = curl_easy_escape(handle, id, 0);
 
-		urls.push_back(tagged_feedurl(utils::strprintf("%s%s?n=%u", FEEDHQ_FEED_PREFIX, escaped_id, cfg->get_configvalue_as_int("feedhq-min-items")), tags));
+		urls.push_back(tagged_feedurl(utils::strprintf("%s%s%s?n=%u", cfg->get_configvalue("feedhq-url").c_str(), FEEDHQ_FEED_PREFIX, escaped_id, cfg->get_configvalue_as_int("feedhq-min-items")), tags));
 
 		curl_free(escaped_id);
 	}
@@ -172,14 +172,15 @@ void feedhq_api::configure_handle(CURL * handle) {
 }
 
 bool feedhq_api::mark_all_read(const std::string& feedurl) {
-	std::string real_feedurl = feedurl.substr(strlen(FEEDHQ_FEED_PREFIX), feedurl.length() - strlen(FEEDHQ_FEED_PREFIX));
+	std::string prefix = cfg->get_configvalue("feedhq-url") + FEEDHQ_FEED_PREFIX;
+	std::string real_feedurl = feedurl.substr(prefix.length(), feedurl.length() - prefix.length());
 	std::vector<std::string> elems = utils::tokenize(real_feedurl, "?");
 	real_feedurl = utils::unescape_url(elems[0]);
 	std::string token = get_new_token();
 
 	std::string postcontent = utils::strprintf("s=%s&T=%s", real_feedurl.c_str(), token.c_str());
 	
-	std::string result = post_content(FEEDHQ_API_MARK_ALL_READ_URL, postcontent);
+	std::string result = post_content(cfg->get_configvalue("feedhq-url") + FEEDHQ_API_MARK_ALL_READ_URL, postcontent);
 
 	return result == "OK";
 }
@@ -217,7 +218,7 @@ bool feedhq_api::mark_article_read_with_token(const std::string& guid, bool read
 		postcontent = utils::strprintf("i=%s&r=user/-/state/com.google/read&a=user/-/state/com.google/kept-unread&a=user/-/state/com.google/tracking-kept-unread&ac=edit&T=%s", guid.c_str(), token.c_str());
 	}
 
-	std::string result = post_content(FEEDHQ_API_EDIT_TAG_URL, postcontent);
+	std::string result = post_content(cfg->get_configvalue("feedhq-url") + FEEDHQ_API_EDIT_TAG_URL, postcontent);
 
 	LOG(LOG_DEBUG, "feedhq_api::mark_article_read_with_token: postcontent = %s result = %s", postcontent.c_str(), result.c_str());
 
@@ -275,7 +276,7 @@ bool feedhq_api::star_article(const std::string& guid, bool star) {
 		postcontent = utils::strprintf("i=%s&r=user/-/state/com.google/starred&ac=edit&T=%s", guid.c_str(), token.c_str());
 	}
 
-	std::string result = post_content(FEEDHQ_API_EDIT_TAG_URL, postcontent);
+	std::string result = post_content(cfg->get_configvalue("feedhq-url") + FEEDHQ_API_EDIT_TAG_URL, postcontent);
 
 	return result == "OK";
 }
@@ -290,7 +291,7 @@ bool feedhq_api::share_article(const std::string& guid, bool share) {
 		postcontent = utils::strprintf("i=%s&r=user/-/state/com.google/broadcast&ac=edit&T=%s", guid.c_str(), token.c_str());
 	}
 
-	std::string result = post_content(FEEDHQ_API_EDIT_TAG_URL, postcontent);
+	std::string result = post_content(cfg->get_configvalue("feedhq-url") + FEEDHQ_API_EDIT_TAG_URL, postcontent);
 
 	return result == "OK";
 }

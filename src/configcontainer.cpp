@@ -107,6 +107,7 @@ configcontainer::configcontainer()
 	config_data["feedhq-flag-star"] = configdata("", configdata::STR);
 	config_data["feedhq-show-special-feeds"] = configdata("true", configdata::BOOL);
 	config_data["feedhq-min-items"] = configdata("20", configdata::INT);
+	config_data["feedhq-url"] = configdata("https://feedhq.org/", configdata::STR);
 	config_data["ignore-mode"] = configdata("download", "download", "display", NULL); // enum
 	config_data["max-download-speed"] = configdata("0", configdata::INT);
 	config_data["cookie-cache"] = configdata("", configdata::PATH);
