@@ -173,11 +173,17 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 
 					case TAG_IMG: {
 							std::string imgurl;
+							std::string imgtitle;
 							try {
 								imgurl = xpp.getAttributeValue("src");
 							} catch (const std::invalid_argument& ) {
 								LOG(LOG_WARN,"htmlrenderer::render: found img tag with no src attribute");
 								imgurl = "";
+							}
+							try {
+								imgtitle = xpp.getAttributeValue("title");
+							} catch (const std::invalid_argument& ) {
+								imgtitle = "";
 							}
 							if (imgurl.length() > 0) {
 								if (imgurl.substr(0,5) == "data:") {
@@ -185,7 +191,11 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 								} else {
 									link_num = add_link(links,utils::censor_url(utils::absolute_url(url,imgurl)), LINK_IMG);
 								}
-								curline.append(utils::strprintf("[%s %u]", _("image"), link_num));
+								if (imgtitle != "") {
+									curline.append(utils::strprintf("[%s %u: %s]", _("image"), link_num, imgtitle.c_str()));
+								} else {
+									curline.append(utils::strprintf("[%s %u]", _("image"), link_num));
+								}
 								image_count++;
 							}
 						}
