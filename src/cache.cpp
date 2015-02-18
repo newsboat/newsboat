@@ -18,15 +18,15 @@
 namespace newsbeuter {
 
 struct cb_handler {
-	cb_handler() : c(-1) { }
-	void set_count(int i) {
-		c = i;
-	}
-	int count() {
-		return c;
-	}
-  private:
-	int c;
+		cb_handler() : c(-1) { }
+		void set_count(int i) {
+			c = i;
+		}
+		int count() {
+			return c;
+		}
+	private:
+		int c;
 };
 
 struct header_values {

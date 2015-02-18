@@ -8,16 +8,16 @@
 namespace newsbeuter {
 
 class reloadthread {
-  public:
-	reloadthread(controller * c, configcontainer * cf);
-	virtual ~reloadthread();
-	void operator()();
-  private:
-	controller * ctrl;
-	time_t oldtime;
-	time_t waittime_sec;
-	bool suppressed_first;
-	configcontainer * cfg;
+	public:
+		reloadthread(controller * c, configcontainer * cf);
+		virtual ~reloadthread();
+		void operator()();
+	private:
+		controller * ctrl;
+		time_t oldtime;
+		time_t waittime_sec;
+		bool suppressed_first;
+		configcontainer * cfg;
 };
 
 }

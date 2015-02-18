@@ -9,14 +9,14 @@ namespace newsbeuter {
 class controller;
 
 class markreadthread {
-  public:
-	markreadthread( ttrss_api* r_api, const std::string& guid, bool read );
-	virtual ~markreadthread();
-	void operator()();
-  private:
-	ttrss_api* _r_api;
-	const std::string& _guid;
-	bool _read;
+	public:
+		markreadthread( ttrss_api* r_api, const std::string& guid, bool read );
+		virtual ~markreadthread();
+		void operator()();
+	private:
+		ttrss_api* _r_api;
+		const std::string& _guid;
+		bool _read;
 };
 
 }

@@ -14,34 +14,34 @@ class pb_controller;
 struct keymap_hint_entry;
 
 class pb_view {
-  public:
-	pb_view(pb_controller * c = 0);
-	~pb_view();
-	void run(bool auto_download);
-	void set_keymap(newsbeuter::keymap * k) {
-		keys = k;
-		set_bindings();
-	}
+	public:
+		pb_view(pb_controller * c = 0);
+		~pb_view();
+		void run(bool auto_download);
+		void set_keymap(newsbeuter::keymap * k) {
+			keys = k;
+			set_bindings();
+		}
 
-  private:
+	private:
 
-	friend class newsbeuter::colormanager;
+		friend class newsbeuter::colormanager;
 
-	struct keymap_hint_entry {
-		operation op;
-		char * text;
-	};
+		struct keymap_hint_entry {
+			operation op;
+			char * text;
+		};
 
-	void run_help();
-	void set_dllist_keymap_hint();
-	void set_help_keymap_hint();
-	void set_bindings();
+		void run_help();
+		void set_dllist_keymap_hint();
+		void set_help_keymap_hint();
+		void set_bindings();
 
-	std::string prepare_keymaphint(keymap_hint_entry * hints);
-	pb_controller * ctrl;
-	newsbeuter::stfl::form dllist_form;
-	newsbeuter::stfl::form help_form;
-	newsbeuter::keymap * keys;
+		std::string prepare_keymaphint(keymap_hint_entry * hints);
+		pb_controller * ctrl;
+		newsbeuter::stfl::form dllist_form;
+		newsbeuter::stfl::form help_form;
+		newsbeuter::keymap * keys;
 };
 
 }

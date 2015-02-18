@@ -6,12 +6,12 @@
 namespace newsbeuter {
 
 class exception : public std::exception {
-  public:
-	exception(unsigned int error_code = 0);
-	~exception() throw();
-	virtual const char* what() const throw();
-  private:
-	unsigned int ecode;
+	public:
+		exception(unsigned int error_code = 0);
+		~exception() throw();
+		virtual const char* what() const throw();
+	private:
+		unsigned int ecode;
 };
 
 }
