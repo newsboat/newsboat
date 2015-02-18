@@ -21,9 +21,18 @@ std::string rss_parser::get_content(xmlNode * node) {
 	return retval;
 }
 
+void rss_parser::cleanup_namespaces(xmlNodePtr node) {
+	node->ns = NULL;
+	for (auto ptr = node->children; ptr != NULL; ptr = ptr->next) {
+		cleanup_namespaces(ptr);
+	}
+}
+
 std::string rss_parser::get_xml_content(xmlNode * node) {
 	xmlBufferPtr buf = xmlBufferCreate();
 	std::string result;
+
+	cleanup_namespaces(node);
 
 	if (node->children) {
 		for (xmlNodePtr ptr = node->children; ptr != NULL; ptr = ptr->next) {

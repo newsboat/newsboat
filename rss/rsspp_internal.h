@@ -29,6 +29,7 @@ struct rss_parser {
   protected:
 	std::string get_content(xmlNode * node);
 	std::string get_xml_content(xmlNode * node);
+	void cleanup_namespaces(xmlNodePtr node);
 	std::string get_prop(xmlNode * node, const char * prop, const char * ns = NULL);
 	std::string w3cdtf_to_rfc822(const std::string& w3cdtf);
 	bool node_is(xmlNode * node, const char * name, const char * ns_uri = NULL);
