@@ -628,6 +628,7 @@ void itemlist_formaction::do_update_visible_items() {
 		if (!apply_filter || m.matches(item.get())) {
 			new_visible_items.push_back(itemptr_pos_pair(item, i));
 		}
+		i++;
 	}
 
 	LOG(LOG_DEBUG, "itemlist_formaction::do_update_visible_items: size = %u", visible_items.size());
