@@ -1,6 +1,6 @@
 Changes for newsbeuter:
 
-2.9:
+2.9 (2015-02-19):
 	Fix custom keybindings in tag and filter selection dialogs (fixes #78).
 	Fix incorrect reloading of tags after editing the urls file.
 	Catch an exception that might be thrown by the "killfile" function.
