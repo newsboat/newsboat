@@ -22,7 +22,6 @@ poddlthread::poddlthread(download * dl_, newsbeuter::configcontainer * c) : dl(d
 }
 
 poddlthread::~poddlthread() {
-	delete f;
 }
 
 void poddlthread::operator()() {

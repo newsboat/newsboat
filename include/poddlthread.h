@@ -7,6 +7,7 @@
 
 #include <sys/time.h>
 #include <time.h>
+#include <memory>
 
 #include <configcontainer.h>
 
@@ -24,7 +25,7 @@ class poddlthread {
 	private:
 		void mkdir_p(const char * file);
 		download * dl;
-		std::ofstream *f;
+		std::shared_ptr<std::ofstream> f;
 		timeval tv1;
 		timeval tv2;
 		size_t bytecount;
