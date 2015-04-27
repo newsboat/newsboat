@@ -3,11 +3,10 @@
 # This file is distributed under the same license as the newsbeuter package.
 # Grady Martin <GradyMartin@gmail.com>, 2015
 
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: newsbeuter 2.9\n"
+"Report-Msgid-Bugs-To: Grady Martin <GradyMartin@gmail.com>\n"
 "POT-Creation-Date: 2013-12-21 16:44+0100\n"
 "PO-Revision-Date: 2015-04-26 05:55+0900\n"
 "Last-Translator: Grady Martin <GradyMartin@gmail.com>\n"
@@ -141,7 +140,7 @@ msgstr "%s%sを起動中…"
 #: src/controller.cpp:350 src/controller.cpp:409 src/pb_controller.cpp:181
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
-msgstr ""
+msgstr "エラー：%sは既に起動中です（PID: %u）"
 
 #: src/controller.cpp:357 src/pb_controller.cpp:185
 msgid "Loading configuration..."
@@ -162,7 +161,7 @@ msgstr "キャッシュを読み込み中…"
 #: src/controller.cpp:421
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
-msgstr "エラー：キャッシュ（%s）を読み込めませんでした。"
+msgstr ""
 
 #: src/controller.cpp:456
 msgid "Loading URLs from local cache..."
