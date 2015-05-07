@@ -555,15 +555,11 @@ void cache::cleanup_cache(std::vector<std::shared_ptr<rss_feed>>& feeds) {
 		LOG(LOG_DEBUG,"cache::cleanup_cache: cleaning up cache...");
 		std::string list = "(";
 		int rc;
-		unsigned int i = 0;
-		unsigned int feed_size = feeds.size();
 
 		for (auto feed : feeds) {
 			std::string name = prepare_query("'%q'",feed->rssurl().c_str());
 			list.append(name);
-			if (i < feed_size-1) {
-				list.append(", ");
-			}
+			list.append(", ");
 		}
 		list.append("'')");
 
