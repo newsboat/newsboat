@@ -561,7 +561,7 @@ void cache::cleanup_cache(std::vector<std::shared_ptr<rss_feed>>& feeds) {
 		for (auto feed : feeds) {
 			std::string name = prepare_query("'%q'",feed->rssurl().c_str());
 			list.append(name);
-			if (i < feed_size-1) {
+			if (i <= feed_size-1) {
 				list.append(", ");
 			}
 		}
