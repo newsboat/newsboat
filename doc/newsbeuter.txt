@@ -712,7 +712,7 @@ something else, such as running an image viewer from the URLs view:
 You can even use this feature to enqueue any of the URLs from the URLs view to
 podbeuter's download queue:
 
-	macro E set browser "echo %u >> ~/.newsbeuter/queue" ; open ; set browser "elinks %u"
+	macro E set browser "echo %u >> ~/.newsbeuter/queue" ; open-in-browser ; set browser "elinks %u"
 
 Commandline Commands
 ~~~~~~~~~~~~~~~~~~~~
