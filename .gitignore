@@ -8,3 +8,6 @@ test/test
 test/test-rss
 test/testlog.txt
 xlicense.h
+*.gc*
+html/*
+*.info
