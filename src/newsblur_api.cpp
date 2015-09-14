@@ -42,7 +42,6 @@ std::vector<tagged_feedurl> newsblur_api::get_subscribed_urls() {
             query_api("/reader/feeds/", NULL), json_object_put
     );
     json_object * response = response_manager.get();
-	//json_object * response = query_api("/reader/feeds", NULL);
 
 	json_object * feeds = json_object_object_get(response, "feeds");
 
