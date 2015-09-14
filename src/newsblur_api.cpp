@@ -4,6 +4,7 @@
 #include <remote_api.h>
 #include <newsblur_api.h>
 #include <algorithm>
+#include <numeric>
 #include <string.h>
 
 #define NEWSBLUR_ITEMS_PER_PAGE 6
@@ -44,6 +45,10 @@ std::vector<tagged_feedurl> newsblur_api::get_subscribed_urls() {
 	json_object_iterator it = json_object_iter_begin(feeds);
 	json_object_iterator itEnd = json_object_iter_end(feeds);
 
+    json_object * folders = json_object_object_get(response, "folders");
+
+    std::map<std::string, std::vector<std::string>> feeds_to_tags = mk_feeds_to_tags(folders);
+
 	while (!json_object_iter_equal(&it, &itEnd)) {
 		const char * feed_id = json_object_iter_peek_name(&it);
 		json_object * node;
@@ -59,13 +64,39 @@ std::vector<tagged_feedurl> newsblur_api::get_subscribed_urls() {
 
 		known_feeds[feed_id] = current_feed;
 
-		std::vector<std::string> tags = std::vector<std::string>();
-		result.push_back(tagged_feedurl(std::string(feed_id), tags));
+        std::string std_feed_id(feed_id);
+		std::vector<std::string> tags = feeds_to_tags[std_feed_id];
+        std::string tags_string;
+        tags_string = accumulate(begin(tags), end(tags), tags_string);
+        LOG(LOG_DEBUG, "newsblur_api::get_subscribed_urls: feed %s has tags %s", feed_id, tags_string.c_str());
+		result.push_back(tagged_feedurl(std_feed_id, tags));
 
 		json_object_iter_next(&it);
 	}
+    LOG(LOG_DEBUG, "newsblur_api::get_subscribed_urls: finished");
 
 	return result;
+}
+
+std::map<std::string, std::vector<std::string>> newsblur_api::mk_feeds_to_tags(
+        json_object * folders) {
+    std::map<std::string, std::vector<std::string>> result;
+    array_list * tags = json_object_get_array(folders);
+    int tags_len = array_list_length(tags);
+    for (int i = 0; i < tags_len; ++i) {
+        json_object * tag_to_feed_ids = json_object_array_get_idx(folders, i);
+        json_object_object_foreach(tag_to_feed_ids, key, feeds_with_tag_obj) {
+            std::string std_key(key);
+            array_list * feeds_with_tag_arr = json_object_get_array(feeds_with_tag_obj);
+            int feeds_with_tag_len = array_list_length(feeds_with_tag_arr);
+            for (int j = 0; j < feeds_with_tag_len; ++j) {
+                json_object * feed_id_obj = json_object_array_get_idx(feeds_with_tag_obj, j);
+                std::string feed_id(json_object_get_string(feed_id_obj));
+                result[feed_id].push_back(std_key);
+            }
+        }
+    }
+    return result;
 }
 
 void newsblur_api::configure_handle(CURL * /*handle*/) {
