@@ -37,10 +37,7 @@ bool newsblur_api::authenticate() {
 std::vector<tagged_feedurl> newsblur_api::get_subscribed_urls() {
 	std::vector<tagged_feedurl> result;
 
-    std::unique_ptr<json_object, decltype(json_object_put)*> response_manager(
-            query_api("/reader/feeds/", NULL), json_object_put
-    );
-    json_object * response = response_manager.get();
+    json_object * response = query_api("/reader/feeds/", NULL);
 
 	json_object * feeds = json_object_object_get(response, "feeds");
 
