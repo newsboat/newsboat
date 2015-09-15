@@ -121,6 +121,10 @@ bool newsblur_api::mark_all_read(const std::string& feed_url) {
 }
 
 bool newsblur_api::mark_article_read(const std::string& guid, bool read) {
+    // handle dummy articles
+    if (guid.empty()) {
+        return false;
+    }
 	std::string endpoint;
 	int separator = guid.find(ID_SEPARATOR);
 	std::string feed_id = guid.substr(0, separator);
