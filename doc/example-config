@@ -33,7 +33,7 @@
 # bookmark-interactive no
 
 ## configuration option: bookmark-autopilot
-## description: If set to yes, the configured bookmark command is executed without any further input asked from user, uless the url or the title cannot be found/guessed.
+## description: If set to yes, the configured bookmark command is executed without any further input asked from user, unless the url or the title cannot be found/guessed.
 ## parameter syntax: [yes/no]
 # bookmark-autopilot no
 
