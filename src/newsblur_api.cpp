@@ -4,7 +4,6 @@
 #include <remote_api.h>
 #include <newsblur_api.h>
 #include <algorithm>
-#include <numeric>
 #include <string.h>
 
 #define NEWSBLUR_ITEMS_PER_PAGE 6
@@ -69,14 +68,10 @@ std::vector<tagged_feedurl> newsblur_api::get_subscribed_urls() {
 
         std::string std_feed_id(feed_id);
 		std::vector<std::string> tags = feeds_to_tags[std_feed_id];
-        std::string tags_string;
-        tags_string = accumulate(begin(tags), end(tags), tags_string);
-        LOG(LOG_DEBUG, "newsblur_api::get_subscribed_urls: feed %s has tags %s", feed_id, tags_string.c_str());
 		result.push_back(tagged_feedurl(std_feed_id, tags));
 
 		json_object_iter_next(&it);
 	}
-    LOG(LOG_DEBUG, "newsblur_api::get_subscribed_urls: finished");
 
 	return result;
 }
