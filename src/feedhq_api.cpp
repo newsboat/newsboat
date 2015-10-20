@@ -233,7 +233,7 @@ std::string feedhq_api::get_new_token() {
 	configure_handle(handle);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
-	curl_easy_setopt(handle, CURLOPT_URL, FEEDHQ_API_TOKEN_URL);
+	curl_easy_setopt(handle, CURLOPT_URL, (cfg->get_configvalue("feedhq-url") + FEEDHQ_API_TOKEN_URL).c_str());
 	curl_easy_perform(handle);
 	curl_easy_cleanup(handle);
 
