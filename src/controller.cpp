@@ -1318,7 +1318,7 @@ void controller::execute_commands(char ** argv, unsigned int i) {
 }
 
 std::string controller::write_temporary_item(std::shared_ptr<rss_item> item) {
-	char filename[1024];
+	char filename[_POSIX_PATH_MAX];
 	snprintf(filename, sizeof(filename), "/tmp/newsbeuter-article.XXXXXX");
 	int fd = mkstemp(filename);
 	if (fd != -1) {
