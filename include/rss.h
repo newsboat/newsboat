@@ -117,7 +117,7 @@ class rss_item : public matchable {
 
 		void set_feedptr(std::shared_ptr<rss_feed> ptr);
 		inline std::shared_ptr<rss_feed> get_feedptr() {
-			return feedptr;
+			return feedptr_.lock();
 		}
 
 		inline bool deleted() const {
@@ -167,7 +167,7 @@ class rss_item : public matchable {
 		bool enqueued_;
 		std::string flags_;
 		std::string oldflags_;
-		std::shared_ptr<rss_feed> feedptr;
+		std::weak_ptr<rss_feed> feedptr_;
 		bool deleted_;
 		unsigned int idx;
 		std::string base;
