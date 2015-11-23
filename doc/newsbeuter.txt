@@ -707,7 +707,7 @@ It is also possible to modify configuration variables within macros, which can
 e.g. be used to temporarily modify the browser configuration variable to do
 something else, such as running an image viewer from the URLs view:
 
-	macro i set browser "feh %u"; open ; set browser "elinks %u"
+	macro i set browser "feh %u"; open-in-browser ; set browser "elinks %u"
 
 You can even use this feature to enqueue any of the URLs from the URLs view to
 podbeuter's download queue:
