@@ -15,7 +15,7 @@
 
 namespace newsbeuter {
 
-configdata::configdata(std::string v, ...) : value(v), default_value(v), type(ENUM) {
+configdata::configdata(std::string v, ...) : value(v), default_value(v), type(ENUM), multi_option(false) {
 	va_list ap;
 	va_start(ap, v);
 
