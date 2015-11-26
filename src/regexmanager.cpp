@@ -42,9 +42,9 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 		regex_t * rx = new regex_t;
 		int err;
 		if ((err = regcomp(rx, params[1].c_str(), REG_EXTENDED | REG_ICASE)) != 0) {
-			delete rx;
 			char buf[1024];
 			regerror(err, rx, buf, sizeof(buf));
+			delete rx;
 			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid regular expression: %s"), params[1].c_str(), buf));
 		}
 		std::string colorstr;
