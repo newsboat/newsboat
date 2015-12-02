@@ -762,6 +762,7 @@ std::string feedlist_formaction::get_title(std::shared_ptr<rss_feed> feed) {
 std::string feedlist_formaction::format_line(const std::string& feedlist_format, std::shared_ptr<rss_feed> feed, unsigned int pos, unsigned int width) {
 	fmtstr_formatter fmt;
 	unsigned int unread_count = feed->unread_item_count();
+        std::string tmp_feedlist_format = feedlist_format;
 
 	fmt.register_fmt('i', utils::strprintf("%u", pos + 1));
 	fmt.register_fmt('u', utils::strprintf("(%u/%u)",unread_count,static_cast<unsigned int>(feed->items().size())));
@@ -775,7 +776,11 @@ std::string feedlist_formaction::format_line(const std::string& feedlist_format,
 	fmt.register_fmt('L', utils::censor_url(feed->rssurl()));
 	fmt.register_fmt('d', feed->description());
 
-	return fmt.do_format(feedlist_format, width);
+        if (unread_count > 0) {
+          tmp_feedlist_format = utils::strprintf("<unread>%s</>", feedlist_format.c_str());
+        }
+
+	return fmt.do_format(tmp_feedlist_format, width);
 }
 
 std::string feedlist_formaction::title() {
