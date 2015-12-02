@@ -668,7 +668,7 @@ void feedlist_formaction::set_regexmanager(regexmanager * r) {
 	for (auto attribute : attrs) {
 		attrstr.append(utils::strprintf("@style_%u_normal:%s ", i, attribute.c_str()));
 		attrstr.append(utils::strprintf("@style_%u_focus:%s ", i, attribute.c_str()));
-        i++;
+		i++;
 	}
 	std::string textview = utils::strprintf("{!list[feeds] .expand:vh style_normal[listnormal]: style_focus[listfocus]:fg=yellow,bg=blue,attr=bold pos_name[feedposname]: pos[feedpos]:0 %s richtext:1}", attrstr.c_str());
 	f->modify("feeds", "replace", textview);
@@ -776,10 +776,10 @@ std::string feedlist_formaction::format_line(const std::string& feedlist_format,
 	fmt.register_fmt('L', utils::censor_url(feed->rssurl()));
 	fmt.register_fmt('d', feed->description());
 
-        if (unread_count > 0) {
-          tmp_feedlist_format = utils::strprintf("<unread>%s</>", feedlist_format.c_str());
-        }
-
+	if (unread_count > 0) {
+	  tmp_feedlist_format = utils::strprintf("<unread>%s</>", feedlist_format.c_str());
+	}
+	
 	return fmt.do_format(tmp_feedlist_format, width);
 }
 
