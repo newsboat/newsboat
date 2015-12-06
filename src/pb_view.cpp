@@ -9,6 +9,8 @@
 #include <help.h>
 #include <utils.h>
 
+#include <curses.h>
+
 #include <sstream>
 #include <iostream>
 #include <cstring>
@@ -18,6 +20,9 @@ using namespace newsbeuter;
 namespace podbeuter {
 
 pb_view::pb_view(pb_controller * c) : ctrl(c), dllist_form(dllist_str), help_form(help_str), keys(0) {
+	if(getenv("ESCDELAY") == NULL) {
+		set_escdelay(25);
+	}
 }
 
 pb_view::~pb_view() {
