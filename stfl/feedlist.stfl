@@ -7,13 +7,16 @@ vbox
   @bind_page_down[bind_page_down]:**
   @bind_home[bind_home]:**
   @bind_end[bind_end]:**
+  @style_unread_normal[listnormal_unread]:attr=bold
+  @style_unread_focus[listfocus_unread]:fg=yellow,bg=blue,attr=bold
   label#info[title]
     text[head]:"Your feeds"
     .expand:h
   !list[feeds]
+    .expand:vh
+    richtext:1
     style_normal[listnormal]:
     style_focus[listfocus]:fg=yellow,bg=blue,attr=bold
-    .expand:vh
     pos_name[feedposname]:
     pos[feedpos]:0
   vbox[hints]
