@@ -1,4 +1,4 @@
-README for newsbeuter
+Newsbeuter
 =====================
 Andreas Krennmair <ak@newsbeuter.org>
 
@@ -23,13 +23,13 @@ Dependencies
 Newsbeuter depends on a number of libraries, which need to be installed before
 newsbeuter can be compiled.
 
-- STFL (version 0.21 or newer): http://www.clifford.at/stfl/
-- SQLite3 (version 3.5 or newer): http://www.sqlite.org/download.html
-- libcurl (version 7.18.0 or newer): http://curl.haxx.se/download.html
+- [STFL (version 0.21 or newer)](http://www.clifford.at/stfl/)
+- [SQLite3 (version 3.5 or newer)](http://www.sqlite.org/download.html)
+- [libcurl (version 7.18.0 or newer)](http://curl.haxx.se/download.html)
 - GNU gettext (on systems that don't provide gettext in the libc): ftp://ftp.gnu.org/gnu/gettext/
-- pkg-config: http://pkg-config.freedesktop.org/wiki/
-- libxml2: http://xmlsoft.org/downloads.html
-- json-c (version 0.11 or newer): https://github.com/json-c/json-c/wiki
+- [pkg-config](http://pkg-config.freedesktop.org/wiki/)
+- [libxml2](http://xmlsoft.org/downloads.html)
+- [json-c (version 0.11 or newer)](https://github.com/json-c/json-c/wiki)
 
 Debian unstable comes with ready-to-use packages for these dependencies.
 
