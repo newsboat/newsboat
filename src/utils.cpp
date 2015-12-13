@@ -625,8 +625,21 @@ bool utils::is_valid_color(const std::string& color) {
 		if (color == colors[i])
 			return true;
 	}
-	if (strncmp(color.c_str(), "color", 5)==0)
-		return true;
+	// does it start with "color"?
+	const char * str = color.c_str();
+	if (strncmp(str, "color", 5)==0) {
+		// is the remainder of the string a decimal number *not* starting with
+		// zero?
+		char * tail = NULL;
+		strtol(str+5, &tail, 10);
+		// the part after "color"...
+		if(    *(str+5) != '0'  // doesn't start with zero
+			&& str != tail      // is not empty
+			&& *tail == '\0')   // doesn't contain trailing characters
+		{
+			return true;
+		}
+	}
 	return false;
 }
 

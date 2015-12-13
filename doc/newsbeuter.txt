@@ -159,10 +159,11 @@ supported:
 - color<n>, e.g. color123
 
 The "default" color means that the terminal's default color will be used. The
-"color<n>" color name can be used if your terminal support 256 colors (e.g.
-gnome-terminal, xterm with $TERM set to xterm-256color). Newsbeuter contains
-support for 256 color terminals since version 2.1. For a complete chart of
-colors and their corresponding numbers, please see
+"color<n>" color name (where "n" is a decimal number *not* starting with zero)
+can be used if your terminal support 256 colors (e.g. gnome-terminal, xterm
+with $TERM set to xterm-256color). Newsbeuter contains support for 256 color
+terminals since version 2.1. For a complete chart of colors and their
+corresponding numbers, please see
 http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html[].
 
 Optionally, you can also add one or more attributes. The following attributes are
