@@ -762,7 +762,7 @@ std::string feedlist_formaction::get_title(std::shared_ptr<rss_feed> feed) {
 std::string feedlist_formaction::format_line(const std::string& feedlist_format, std::shared_ptr<rss_feed> feed, unsigned int pos, unsigned int width) {
 	fmtstr_formatter fmt;
 	unsigned int unread_count = feed->unread_item_count();
-        std::string tmp_feedlist_format = feedlist_format;
+	std::string tmp_feedlist_format = feedlist_format;
 
 	fmt.register_fmt('i', utils::strprintf("%u", pos + 1));
 	fmt.register_fmt('u', utils::strprintf("(%u/%u)",unread_count,static_cast<unsigned int>(feed->items().size())));
