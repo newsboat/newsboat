@@ -4,29 +4,33 @@ Andreas Krennmair <ak@newsbeuter.org>
 
 Introduction
 ------------
+
 Newsbeuter is an RSS feed reader for the text console. It is designed to run
 Unix-like operating systems such as Linux. NetBSD is currently not supported,
 due to technical limitations.
 
 Downloading
 -----------
+
 You can download the latest version of newsbeuter from the following website:
 http://www.newsbeuter.org/
 
 Alternatively, you can check out the latest version from the newsbeuter
 Git repository (hosted on GitHub):
 
-	git clone git://github.com/akrennmair/newsbeuter.git
+    git clone git://github.com/akrennmair/newsbeuter.git
 
 Dependencies
 ------------
+
 Newsbeuter depends on a number of libraries, which need to be installed before
 newsbeuter can be compiled.
 
 - [STFL (version 0.21 or newer)](http://www.clifford.at/stfl/)
 - [SQLite3 (version 3.5 or newer)](http://www.sqlite.org/download.html)
 - [libcurl (version 7.18.0 or newer)](http://curl.haxx.se/download.html)
-- GNU gettext (on systems that don't provide gettext in the libc): ftp://ftp.gnu.org/gnu/gettext/
+- GNU gettext (on systems that don't provide gettext in the libc):
+  ftp://ftp.gnu.org/gnu/gettext/
 - [pkg-config](http://pkg-config.freedesktop.org/wiki/)
 - [libxml2](http://xmlsoft.org/downloads.html)
 - [json-c (version 0.11 or newer)](https://github.com/json-c/json-c/wiki)
@@ -43,6 +47,16 @@ Compiling and installing newsbeuter is as simple as:
 Contact
 -------
 Andreas Krennmair <ak@newsbeuter.org>
+
+Support
+-------
+
+* Bugs and whatnot should be reported to the
+  [issue tracker](https://github.com/akrennmair/newsbeuter/issues)
+* Drop us a line at
+  [Newsbeuter mailing list](http://groups.google.com/group/newsbeuter)
+* Chat with developers and feelow users on #newsbeuter at
+  [Freenode](https://freenode.net)
 
 License
 -------
