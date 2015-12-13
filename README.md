@@ -1,13 +1,18 @@
 Newsbeuter
 =====================
-Andreas Krennmair <ak@newsbeuter.org>
+by Andreas Krennmair <ak@newsbeuter.org>
 
-Introduction
-------------
+<a href="http://newsbeuter.org">
+<img
+    src="https://newsbeuter.files.wordpress.com/2008/04/newsbeuter_640x640.png"
+    align="left" height="80" width="80" vspace="6" /></a>
 
-Newsbeuter is an RSS feed reader for the text console. It is designed to run
-Unix-like operating systems such as Linux. NetBSD is currently not supported,
-due to technical limitations.
+Newsbeuter is an RSS feed reader for the text console. Zed Shaw
+[called](http://zedshaw.com/archive/i-want-the-mutt-of-feed-readers/) it "The
+Mutt of Feed Readers".
+
+It is designed to run on Unix-like operating systems such as Linux. NetBSD is
+currently not supported, due to technical limitations.
 
 Downloading
 -----------
