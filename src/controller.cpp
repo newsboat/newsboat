@@ -721,7 +721,6 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended, cur
 			if (newfeed->items().size() > 0) {
 				std::lock_guard<std::mutex> feedslock(feeds_mutex);
 				save_feed(newfeed, pos);
-				enqueue_items(newfeed);
 
 				newfeed->clear_items();
 
@@ -730,6 +729,7 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended, cur
 				feed->set_tags(urlcfg->get_tags(oldfeed->rssurl()));
 				feed->set_order(oldfeed->get_order());
 				feeds[pos] = feed;
+				enqueue_items(newfeed);
 
 				oldfeed->clear_items();
 
