@@ -11,6 +11,7 @@
 #include <libgen.h>
 #include <sys/utsname.h>
 
+#include <unordered_set>
 #include <unistd.h>
 #include <sstream>
 #include <locale>
@@ -620,11 +621,13 @@ void utils::append_escapes(std::string& str, char c) {
 }
 
 bool utils::is_valid_color(const std::string& color) {
-	const char * colors[] = { "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white", "default", NULL };
-	for (unsigned int i=0; colors[i]; i++) {
-		if (color == colors[i])
-			return true;
+	static const std::unordered_set<std::string> colors =
+		{ "black", "red", "green", "yellow", "blue",
+		"magenta", "cyan", "white", "default" };
+	if(colors.find(color) != colors.end()) {
+		return true;
 	}
+
 	// does it start with "color"?
 	if (color.size() > 5 && color.substr(0, 5) == "color") {
 		if(color[5] == '0') {
