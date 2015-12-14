@@ -653,12 +653,14 @@ bool utils::is_valid_color(const std::string& color) {
 }
 
 bool utils::is_valid_attribute(const std::string& attrib) {
-	const char * attribs[] = { "standout", "underline", "reverse", "blink", "dim", "bold", "protect", "invis", "default", NULL };
-	for (unsigned int i=0; attribs[i]; i++) {
-		if (attrib == attribs[i])
-			return true;
+	static const std::unordered_set<std::string> attribs =
+		{ "standout", "underline", "reverse", "blink",
+		"dim", "bold", "protect", "invis", "default" };
+	if(attribs.find(attrib) != attribs.end()) {
+		return true;
+	} else {
+		return false;
 	}
-	return false;
 }
 
 std::vector<std::pair<unsigned int, unsigned int>> utils::partition_indexes(unsigned int start, unsigned int end, unsigned int parts) {
