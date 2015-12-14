@@ -626,7 +626,7 @@ bool utils::is_valid_color(const std::string& color) {
 			return true;
 	}
 	// does it start with "color"?
-	if (color.substr(0, 5) == "color") {
+	if (color.size() > 5 && color.substr(0, 5) == "color") {
 		if(color[5] == '0') {
 			// if the remainder of the string starts with zero, it can only be
 			// "color0"
@@ -634,9 +634,6 @@ bool utils::is_valid_color(const std::string& color) {
 		} else {
 			// we're now sure that the remainder doesn't start with zero, but
 			// is it a valid decimal number?
-			// remainder should not be empty string
-			if(color.size() <= 5) return false;
-
 			const std::string number = color.substr(5, color.size()-5);
 			size_t pos {};
 			int n = std::stoi(number, &pos);
