@@ -626,21 +626,24 @@ bool utils::is_valid_color(const std::string& color) {
 			return true;
 	}
 	// does it start with "color"?
-	const char * str = color.c_str();
-	if (strncmp(str, "color", 5)==0) {
-		if(*(str+5) == '0') {
+	if (color.substr(0, 5) == "color") {
+		if(color[5] == '0') {
 			// if the remainder of the string starts with zero, it can only be
 			// "color0"
 			return color == "color0" ? true : false;
 		} else {
 			// we're now sure that the remainder doesn't start with zero, but
 			// is it a valid decimal number?
-			char * tail = NULL;
-			long int n = strtol(str+5, &tail, 10);
 			// remainder should not be empty string
-			if(str+5 == tail) return false;
+			if(color.size() <= 5) return false;
+
+			const std::string number = color.substr(5, color.size()-5);
+			size_t pos {};
+			int n = std::stoi(number, &pos);
+
 			// remainder should not contain any trailing characters
-			if(*tail != '\0') return false;
+			if(number.size() != pos) return false;
+
 			// remainder should be a number in (0; 255]. The interval is
 			// half-open because zero is already handled above.
 			if(n > 0 && n < 256) return true;
