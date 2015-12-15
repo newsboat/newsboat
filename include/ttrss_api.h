@@ -16,7 +16,7 @@ class ttrss_api : public remote_api {
 		virtual struct json_object * run_op(const std::string& op, const std::map<std::string, std::string>& args,
 		                                    bool try_login = true);
 		virtual std::vector<tagged_feedurl> get_subscribed_urls();
-		virtual void configure_handle(CURL * handle);
+		virtual void configure_handle(curl_slist** custom_headers);
 		virtual bool mark_all_read(const std::string& feedurl);
 		virtual bool mark_article_read(const std::string& guid, bool read);
 		virtual bool update_article_flags(const std::string& oldflags, const std::string& newflags, const std::string& guid);

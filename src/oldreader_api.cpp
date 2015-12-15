@@ -117,10 +117,12 @@ std::string oldreader_api::retrieve_auth() {
 
 std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 	std::vector<tagged_feedurl> urls;
+	curl_slist* custom_headers {};
 
 	CURL * handle = curl_easy_init();
 	std::string result;
-	configure_handle(handle);
+	configure_handle(&custom_headers);
+	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
 
 	utils::set_common_curl_options(handle, cfg);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
@@ -158,9 +160,19 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 		json_object_object_get_ex(sub, "title", &node);
 		const char * title = json_object_get_string(node);
 
-		tags.push_back(std::string("~") + title);
+		// Ignore URLs where ID start with given prefix - those never load,
+		// always returning 404 and annoying people
+		const char* prefix = "tor/sponsored/";
+		if(strncmp(id, prefix, strlen(prefix)) != 0) {
+			tags.push_back(std::string("~") + title);
 
-		urls.push_back(tagged_feedurl(utils::strprintf("%s%s?n=%u", OLDREADER_FEED_PREFIX, id, cfg->get_configvalue_as_int("oldreader-min-items")), tags));
+			auto url = utils::strprintf(
+				"%s%s?n=%u",
+				OLDREADER_FEED_PREFIX,
+				id,
+				cfg->get_configvalue_as_int("oldreader-min-items"));
+			urls.push_back(tagged_feedurl(url, tags));
+		}
 	}
 
 	json_object_put(reply);
@@ -168,12 +180,12 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 	return urls;
 }
 
-void oldreader_api::configure_handle(CURL * handle) {
-	struct curl_slist *chunk = NULL;
-	std::string header = utils::strprintf("Authorization: GoogleLogin auth=%s", auth.c_str());
-	LOG(LOG_DEBUG, "oldreader_api::configure_handle header = %s", header.c_str());
-	chunk = curl_slist_append(chunk, header.c_str());
-	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, chunk);
+void oldreader_api::configure_handle(curl_slist** custom_headers) {
+	if(auth_header.empty()) {
+		auth_header = utils::strprintf("Authorization: GoogleLogin auth=%s", auth.c_str());
+	}
+	LOG(LOG_DEBUG, "oldreader_api::configure_handle header = %s", auth_header.c_str());
+	*custom_headers = curl_slist_append(*custom_headers, auth_header.c_str());
 }
 
 bool oldreader_api::mark_all_read(const std::string& feedurl) {
@@ -232,9 +244,11 @@ bool oldreader_api::mark_article_read_with_token(const std::string& guid, bool r
 std::string oldreader_api::get_new_token() {
 	CURL * handle = curl_easy_init();
 	std::string result;
+	curl_slist* custom_headers {};
 
 	utils::set_common_curl_options(handle, cfg);
-	configure_handle(handle);
+	configure_handle(&custom_headers);
+	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle, CURLOPT_URL, OLDREADER_API_TOKEN_URL);
@@ -302,10 +316,12 @@ bool oldreader_api::share_article(const std::string& guid, bool share) {
 
 std::string oldreader_api::post_content(const std::string& url, const std::string& postdata) {
 	std::string result;
+	curl_slist* custom_headers {};
 
 	CURL * handle = curl_easy_init();
 	utils::set_common_curl_options(handle, cfg);
-	configure_handle(handle);
+	configure_handle(&custom_headers);
+	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle, CURLOPT_POSTFIELDS, postdata.c_str());

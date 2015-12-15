@@ -102,7 +102,7 @@ std::map<std::string, std::vector<std::string>> newsblur_api::mk_feeds_to_tags(
     return result;
 }
 
-void newsblur_api::configure_handle(CURL * /*handle*/) {
+void newsblur_api::configure_handle(curl_slist** /* custom_headers */) {
 	// nothing required
 }
 

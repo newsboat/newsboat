@@ -118,7 +118,9 @@ std::vector<tagged_feedurl> feedhq_api::get_subscribed_urls() {
 
 	CURL * handle = curl_easy_init();
 	std::string result;
-	configure_handle(handle);
+	curl_slist* custom_headers {};
+	configure_handle(&custom_headers);
+	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
 
 	utils::set_common_curl_options(handle, cfg);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
@@ -175,12 +177,14 @@ std::vector<tagged_feedurl> feedhq_api::get_subscribed_urls() {
 	return urls;
 }
 
-void feedhq_api::configure_handle(CURL * handle) {
-	struct curl_slist *chunk = NULL;
-	std::string header = utils::strprintf("Authorization: GoogleLogin auth=%s", auth.c_str());
-	LOG(LOG_DEBUG, "feedhq_api::configure_handle header = %s", header.c_str());
-	chunk = curl_slist_append(chunk, header.c_str());
-	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, chunk);
+void feedhq_api::configure_handle(curl_slist** custom_headers) {
+	if(auth_header.empty()) {
+		auth_header = utils::strprintf(
+				"Authorization: GoogleLogin auth=%s", auth.c_str());
+	}
+	LOG(LOG_DEBUG, "feedhq_api::configure_handle header = %s",
+			auth_header.c_str());
+	*custom_headers = curl_slist_append(*custom_headers, auth_header.c_str());
 }
 
 bool feedhq_api::mark_all_read(const std::string& feedurl) {
@@ -240,9 +244,11 @@ bool feedhq_api::mark_article_read_with_token(const std::string& guid, bool read
 std::string feedhq_api::get_new_token() {
 	CURL * handle = curl_easy_init();
 	std::string result;
+	curl_slist* custom_headers {};
 
 	utils::set_common_curl_options(handle, cfg);
-	configure_handle(handle);
+	configure_handle(&custom_headers);
+	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle, CURLOPT_URL, (cfg->get_configvalue("feedhq-url") + FEEDHQ_API_TOKEN_URL).c_str());
@@ -310,10 +316,12 @@ bool feedhq_api::share_article(const std::string& guid, bool share) {
 
 std::string feedhq_api::post_content(const std::string& url, const std::string& postdata) {
 	std::string result;
+	curl_slist* custom_headers {};
 
 	CURL * handle = curl_easy_init();
 	utils::set_common_curl_options(handle, cfg);
-	configure_handle(handle);
+	configure_handle(&custom_headers);
+	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle, CURLOPT_POSTFIELDS, postdata.c_str());

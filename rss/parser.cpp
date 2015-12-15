@@ -72,6 +72,7 @@ static size_t handle_headers(void * ptr, size_t size, size_t nmemb, void * data)
 feed parser::parse_url(const std::string& url, time_t lastmodified, const std::string& etag, newsbeuter::remote_api * api, const std::string& cookie_cache, CURL *ehandle) {
 	std::string buf;
 	CURLcode ret;
+	curl_slist* custom_headers {};
 
 	CURL * easyhandle = ehandle;
 	if (!easyhandle) {
@@ -84,8 +85,9 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 	if (ua) {
 		curl_easy_setopt(easyhandle, CURLOPT_USERAGENT, ua);
 	}
+
 	if (api) {
-		api->configure_handle(easyhandle);
+		api->configure_handle(&custom_headers);
 	}
 	curl_easy_setopt(easyhandle, CURLOPT_URL, url.c_str());
 	curl_easy_setopt(easyhandle, CURLOPT_SSL_VERIFYPEER, 0);
@@ -122,9 +124,13 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 		curl_easy_setopt(easyhandle, CURLOPT_TIMEVALUE, lastmodified);
 	}
 
-	curl_slist * custom_headers = NULL;
 	if (etag.length() > 0) {
-		custom_headers = curl_slist_append(custom_headers, utils::strprintf("If-None-Match: %s", etag.c_str()).c_str());
+		custom_headers = curl_slist_append(
+				custom_headers,
+				utils::strprintf("If-None-Match: %s", etag.c_str()).c_str());
+	}
+
+	if(custom_headers) {
 		curl_easy_setopt(easyhandle, CURLOPT_HTTPHEADER, custom_headers);
 	}
 
@@ -146,6 +152,8 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 	if (status >= 400) {
 		LOG(LOG_USERERROR, _("Error: trying to download feed `%s' returned HTTP status code %ld."), url.c_str(), status);
 	}
+
+	curl_easy_reset(easyhandle);
 
 	if (!ehandle)
 		curl_easy_cleanup(easyhandle);
