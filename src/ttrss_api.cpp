@@ -112,21 +112,21 @@ json_object* ttrss_api::run_op(const std::string& op,
 	LOG(LOG_DEBUG, "ttrss_api::run_op(%s,...): post=%s reply = %s", op.c_str(), req_data.c_str(), result.c_str());
 
 	json_object * reply = json_tokener_parse(result.c_str());
-	if (is_error(reply)) {
+	if (reply == NULL) {
 		LOG(LOG_ERROR, "ttrss_api::run_op: reply failed to parse: %s", result.c_str());
 		return NULL;
 	}
 
 	json_object* status {};
 	json_object_object_get_ex(reply, "status", &status);
-	if (is_error(status)) {
+	if (status == NULL) {
 		LOG(LOG_ERROR, "ttrss_api::run_op: no status code");
 		return NULL;
 	}
 
 	json_object* content {};
 	json_object_object_get_ex(reply, "content", &content);
-	if (is_error(content)) {
+	if (content == NULL) {
 		LOG(LOG_ERROR, "ttrss_api::run_op: no content part in answer from server");
 		return NULL;
 	}

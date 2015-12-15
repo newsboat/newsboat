@@ -134,7 +134,7 @@ std::vector<tagged_feedurl> feedhq_api::get_subscribed_urls() {
 	// TODO: parse result
 
 	json_object * reply = json_tokener_parse(result.c_str());
-	if (is_error(reply)) {
+	if (reply == NULL) {
 		LOG(LOG_ERROR, "feedhq_api::get_subscribed_urls: failed to parse response as JSON.");
 		return urls;
 	}
