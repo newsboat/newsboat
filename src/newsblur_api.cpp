@@ -189,7 +189,7 @@ rsspp::feed newsblur_api::fetch_feed(const std::string& id) {
 		LOG(LOG_DEBUG, "newsblur_api::fetch_feed: %d items", items_size);
 
 		for (int i = 0; i < items_size; i++) {
-			struct json_object * item_obj = (struct json_object *)array_list_get_idx(items, i);
+			json_object* item_obj = (json_object*)array_list_get_idx(items, i);
 
 			rsspp::item item;
 

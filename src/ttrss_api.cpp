@@ -95,7 +95,7 @@ std::string ttrss_api::retrieve_sid() {
 	return sid;
 }
 
-struct json_object * ttrss_api::run_op(const std::string& op,
+json_object* ttrss_api::run_op(const std::string& op,
                                        const std::map<std::string, std::string >& args,
                                        bool try_login) {
 	std::string url = utils::strprintf("%s/api/", cfg->get_configvalue("ttrss-url").c_str());
@@ -156,7 +156,7 @@ std::vector<tagged_feedurl> ttrss_api::get_subscribed_urls() {
 
 	std::vector<tagged_feedurl> feeds;
 
-	struct json_object * content = run_op("getCategories", std::map<std::string, std::string>());
+	json_object* content = run_op("getCategories", std::map<std::string, std::string>());
 	if (!content)
 		return feeds;
 
@@ -172,7 +172,7 @@ std::vector<tagged_feedurl> ttrss_api::get_subscribed_urls() {
 
 	// then fetch the feeds of all categories
 	for (int i=0; i<catsize; i++) {
-		struct json_object * cat = (struct json_object *)array_list_get_idx(categories, i);
+		json_object* cat = (json_object*)array_list_get_idx(categories, i);
 		fetch_feeds_per_category(cat, feeds);
 	}
 
@@ -189,7 +189,7 @@ bool ttrss_api::mark_all_read(const std::string& feed_url) {
 
 	std::map<std::string, std::string> args;
 	args["feed_id"] = url_to_id(feed_url);
-	struct json_object * content = run_op("catchupFeed", args);
+	json_object* content = run_op("catchupFeed", args);
 
 	if(!content)
 		return false;
@@ -241,7 +241,7 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 	args["feed_id"] = id;
 	args["show_content"] = "1";
 	args["include_attachments"] = "1";
-	struct json_object * content = run_op("getHeadlines", args);
+	json_object* content = run_op("getHeadlines", args);
 
 	if (!content)
 		return f;
@@ -256,7 +256,7 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 	LOG(LOG_DEBUG, "ttrss_api::fetch_feed: %d items", items_size);
 
 	for (int i=0; i<items_size; i++) {
-		struct json_object * item_obj = (struct json_object *)array_list_get_idx(items, i);
+		json_object* item_obj = (json_object*)array_list_get_idx(items, i);
 
 		rsspp::item item;
 
@@ -356,7 +356,7 @@ void ttrss_api::fetch_feeds_per_category(
 	std::map<std::string, std::string> args;
 	if (cat)
 		args["cat_id"] = utils::to_string<int>(cat_id);
-	struct json_object * feed_list_obj = run_op("getFeeds", args);
+	json_object* feed_list_obj = run_op("getFeeds", args);
 
 	if (!feed_list_obj)
 		return;
@@ -366,7 +366,7 @@ void ttrss_api::fetch_feeds_per_category(
 	int feed_list_size = array_list_length(feed_list);
 
 	for (int j=0; j<feed_list_size; j++) {
-		struct json_object * feed = (struct json_object *)array_list_get_idx(feed_list, j);
+		json_object* feed = (json_object*)array_list_get_idx(feed_list, j);
 
 		json_object* node {};
 
@@ -410,7 +410,7 @@ bool ttrss_api::update_article(const std::string& guid, int field, int mode) {
 	args["article_ids"] = guid;
 	args["field"] = utils::to_string<unsigned int>(field);
 	args["mode"] = utils::to_string<unsigned int>(mode);
-	struct json_object * content = run_op("updateArticle", args);
+	json_object* content = run_op("updateArticle", args);
 
 	if (!content)
 		return false;

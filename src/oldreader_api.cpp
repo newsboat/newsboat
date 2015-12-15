@@ -133,14 +133,14 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 
 	// TODO: parse result
 
-	struct json_object * reply = json_tokener_parse(result.c_str());
+	json_object* reply = json_tokener_parse(result.c_str());
 	if (is_error(reply)) {
 		LOG(LOG_ERROR, "oldreader_api::get_subscribed_urls: failed to parse response as JSON.");
 		return urls;
 	}
 
 
-	struct json_object * subscription_obj {};
+	json_object* subscription_obj {};
 	json_object_object_get_ex(reply, "subscriptions", &subscription_obj);
 	struct array_list * subscriptions = json_object_get_array(subscription_obj);
 
@@ -148,7 +148,7 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 
 	for (int i=0; i<len; i++) {
 		std::vector<std::string> tags;
-		struct json_object * sub = json_object_array_get_idx(subscription_obj, i);
+		json_object* sub = json_object_array_get_idx(subscription_obj, i);
 
 		json_object* node {};
 
