@@ -79,15 +79,14 @@ std::string ttrss_api::retrieve_sid() {
 	args["password"] = pass.c_str();
 	auth_info = utils::strprintf("%s:%s", user.c_str(), pass.c_str());
 	auth_info_ptr = auth_info.c_str();
-	struct json_object * content = run_op("login", args);
+	json_object * content = run_op("login", args);
 
 	if (content == NULL)
 		return "";
 
-	std::string sid;
-
-	struct json_object * session_id = json_object_object_get(content, "session_id");
-	sid = json_object_get_string(session_id);
+	json_object * session_id {};
+	json_object_object_get_ex(content, "session_id", &session_id);
+	std::string sid = json_object_get_string(session_id);
 
 	json_object_put(content);
 
@@ -112,26 +111,29 @@ struct json_object * ttrss_api::run_op(const std::string& op,
 
 	LOG(LOG_DEBUG, "ttrss_api::run_op(%s,...): post=%s reply = %s", op.c_str(), req_data.c_str(), result.c_str());
 
-	struct json_object * reply = json_tokener_parse(result.c_str());
+	json_object * reply = json_tokener_parse(result.c_str());
 	if (is_error(reply)) {
 		LOG(LOG_ERROR, "ttrss_api::run_op: reply failed to parse: %s", result.c_str());
 		return NULL;
 	}
 
-	struct json_object * status = json_object_object_get(reply, "status");
+	json_object* status {};
+	json_object_object_get_ex(reply, "status", &status);
 	if (is_error(status)) {
 		LOG(LOG_ERROR, "ttrss_api::run_op: no status code");
 		return NULL;
 	}
 
-	struct json_object * content = json_object_object_get(reply, "content");
+	json_object* content {};
+	json_object_object_get_ex(reply, "content", &content);
 	if (is_error(content)) {
 		LOG(LOG_ERROR, "ttrss_api::run_op: no content part in answer from server");
 		return NULL;
 	}
 
 	if (json_object_get_int(status) != 0) {
-		struct json_object * error = json_object_object_get(content, "error");
+		json_object* error {};
+		json_object_object_get_ex(content, "error", &error);
 		if ((strcmp(json_object_get_string(error), "NOT_LOGGED_IN") == 0) && try_login) {
 			json_object_put(reply);
 			if (authenticate())
@@ -255,47 +257,61 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 
 	for (int i=0; i<items_size; i++) {
 		struct json_object * item_obj = (struct json_object *)array_list_get_idx(items, i);
-		int id = json_object_get_int(json_object_object_get(item_obj, "id"));
-		const char * title = json_object_get_string(json_object_object_get(item_obj, "title"));
-		const char * link = json_object_get_string(json_object_object_get(item_obj, "link"));
-		const char * content = json_object_get_string(json_object_object_get(item_obj, "content"));
-		time_t updated = (time_t)json_object_get_int(json_object_object_get(item_obj, "updated"));
-		json_bool unread = json_object_get_boolean(json_object_object_get(item_obj, "unread"));
-		struct json_object * attachments = json_object_object_get(item_obj, "attachments");
 
 		rsspp::item item;
 
-		if (title)
-			item.title = title;
+		json_object* node {};
 
-		if (link)
-			item.link = link;
+		if(json_object_object_get_ex(item_obj, "title", &node) == TRUE) {
+			item.title = json_object_get_string(node);
+		}
 
-		if (content)
-			item.content_encoded = content;
+		if(json_object_object_get_ex(item_obj, "link", &node) == TRUE) {
+			item.link = json_object_get_string(node);
+		}
 
-		if (attachments) {
+		if(json_object_object_get_ex(item_obj, "content", &node) == TRUE) {
+			item.content_encoded = json_object_get_string(node);
+		}
+
+		json_object * attachments {};
+		if(json_object_object_get_ex(item_obj, "attachments", &attachments)
+				== TRUE)
+		{
 			struct array_list * attachments_list = json_object_get_array(attachments);
 			int attachments_size = array_list_length(attachments_list);
 			if (attachments_size > 0) {
-				struct json_object * attachment = (struct json_object *)array_list_get_idx(attachments_list, 0);
-				const char * content_url = json_object_get_string(json_object_object_get(attachment, "content_url"));
-				const char * content_type = json_object_get_string(json_object_object_get(attachment, "content_type"));
-				if (content_url)
-					item.enclosure_url = content_url;
-				if (content_type)
-					item.enclosure_type = content_type;
+				json_object* attachment =
+					(json_object*)array_list_get_idx(attachments_list, 0);
+
+				if(json_object_object_get_ex(attachment, "content_url", &node)
+						== TRUE)
+				{
+					item.enclosure_url = json_object_get_string(node);
+				}
+
+				if(json_object_object_get_ex(attachment, "content_type", &node)
+						== TRUE)
+				{
+					item.enclosure_type = json_object_get_string(node);
+				}
 			}
 		}
 
+		json_object_object_get_ex(item_obj, "id", &node);
+		int id = json_object_get_int(node);
 		item.guid = utils::strprintf("%d", id);
 
+		json_object_object_get_ex(item_obj, "unread", &node);
+		json_bool unread = json_object_get_boolean(node);
 		if (unread) {
 			item.labels.push_back("ttrss:unread");
 		} else {
 			item.labels.push_back("ttrss:read");
 		}
 
+		json_object_object_get_ex(item_obj, "updated", &node);
+		time_t updated = (time_t)json_object_get_int(node);
 		char rfc822_date[128];
 		strftime(rfc822_date, sizeof(rfc822_date), "%a, %d %b %Y %H:%M:%S %z", gmtime(&updated));
 		item.pubDate = rfc822_date;
@@ -312,20 +328,23 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 	return f;
 }
 
-void ttrss_api::fetch_feeds_per_category(struct json_object * cat, std::vector<tagged_feedurl>& feeds) {
+void ttrss_api::fetch_feeds_per_category(
+		json_object * cat, std::vector<tagged_feedurl>& feeds)
+{
 	const char * cat_name = NULL;
-	struct json_object * cat_title_obj = NULL;
+	json_object * cat_title_obj {};
 	int cat_id;
 
 	if (cat) {
-		struct json_object * cat_id_obj = json_object_object_get(cat, "id");
+		json_object* cat_id_obj {};
+		json_object_object_get_ex(cat, "id", &cat_id_obj);
 		cat_id = json_object_get_int(cat_id_obj);
 
 		// ignore special categories, for now
 		if(cat_id < 0)
 			return;
 
-		cat_title_obj = json_object_object_get(cat, "title");
+		json_object_object_get_ex(cat, "title", &cat_title_obj);
 		cat_name = json_object_get_string(cat_title_obj);
 		LOG(LOG_DEBUG, "ttrss_api::fetch_feeds_per_category: id = %d title = %s", cat_id, cat_name);
 	} else {
@@ -349,16 +368,26 @@ void ttrss_api::fetch_feeds_per_category(struct json_object * cat, std::vector<t
 	for (int j=0; j<feed_list_size; j++) {
 		struct json_object * feed = (struct json_object *)array_list_get_idx(feed_list, j);
 
-		int feed_id = json_object_get_int(json_object_object_get(feed, "id"));
-		const char * feed_title = json_object_get_string(json_object_object_get(feed, "title"));
-		const char * feed_url = json_object_get_string(json_object_object_get(feed, "feed_url"));
+		json_object* node {};
+
+		json_object_object_get_ex(feed, "id", &node);
+		int feed_id = json_object_get_int(node);
+
+		json_object_object_get_ex(feed, "title", &node);
+		const char * feed_title = json_object_get_string(node);
+
+		json_object_object_get_ex(feed, "feed_url", &node);
+		const char * feed_url = json_object_get_string(node);
 
 		std::vector<std::string> tags;
 		tags.push_back(std::string("~") + feed_title);
+
 		if (cat_name) {
 			tags.push_back(cat_name);
 		}
-		feeds.push_back(tagged_feedurl(utils::strprintf("%s#%d", feed_url, feed_id), tags));
+
+		auto url = utils::strprintf("%s#%d", feed_url, feed_id);
+		feeds.push_back(tagged_feedurl(url, tags));
 
 		// TODO: cache feed_id -> feed_url (or feed_url -> feed_id ?)
 	}

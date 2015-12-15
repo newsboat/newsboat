@@ -140,7 +140,8 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 	}
 
 
-	struct json_object * subscription_obj = json_object_object_get(reply, "subscriptions");
+	struct json_object * subscription_obj {};
+	json_object_object_get_ex(reply, "subscriptions", &subscription_obj);
 	struct array_list * subscriptions = json_object_get_array(subscription_obj);
 
 	int len = array_list_length(subscriptions);
@@ -149,8 +150,14 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 		std::vector<std::string> tags;
 		struct json_object * sub = json_object_array_get_idx(subscription_obj, i);
 
-		const char * id = json_object_get_string(json_object_object_get(sub, "id"));
-		const char * title = json_object_get_string(json_object_object_get(sub, "title"));
+		json_object* node {};
+
+		json_object_object_get_ex(sub, "id", &node);
+		const char * id = json_object_get_string(node);
+
+		json_object_object_get_ex(sub, "title", &node);
+		const char * title = json_object_get_string(node);
+
 		tags.push_back(std::string("~") + title);
 
 		urls.push_back(tagged_feedurl(utils::strprintf("%s%s?n=%u", OLDREADER_FEED_PREFIX, id, cfg->get_configvalue_as_int("oldreader-min-items")), tags));

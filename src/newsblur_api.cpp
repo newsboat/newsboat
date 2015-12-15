@@ -24,46 +24,54 @@ newsblur_api::~newsblur_api() {
 }
 
 bool newsblur_api::authenticate() {
-	json_object * response;
-	json_object * status;
+	json_object * response {};
+	json_object * status {};
 
 	response = newsblur_api::query_api("/api/login", &auth_info);
-	status = json_object_object_get(response, "authenticated");
+	json_object_object_get_ex(response, "authenticated", &status);
 	bool result = json_object_get_boolean(status);
-	LOG(LOG_INFO, "newsblur_api::authenticate: authentication resulted in %u, cached in %s", result, cfg->get_configvalue("cookie-cache").c_str());
+
+	LOG(
+		LOG_INFO,
+		"newsblur_api::authenticate: authentication resulted in %u, cached in %s",
+		result,
+		cfg->get_configvalue("cookie-cache").c_str());
+
 	return result;
 }
 
 std::vector<tagged_feedurl> newsblur_api::get_subscribed_urls() {
 	std::vector<tagged_feedurl> result;
 
-    json_object * response = query_api("/reader/feeds/", NULL);
+	json_object * response = query_api("/reader/feeds/", NULL);
 
-	json_object * feeds = json_object_object_get(response, "feeds");
+	json_object * feeds {};
+	json_object_object_get_ex(response, "feeds", &feeds);
 
 	json_object_iterator it = json_object_iter_begin(feeds);
 	json_object_iterator itEnd = json_object_iter_end(feeds);
 
-    json_object * folders = json_object_object_get(response, "folders");
+	json_object * folders {};
+	json_object_object_get_ex(response, "folders", &folders);
 
-    std::map<std::string, std::vector<std::string>> feeds_to_tags = mk_feeds_to_tags(folders);
+	std::map<std::string, std::vector<std::string>> feeds_to_tags = mk_feeds_to_tags(folders);
 
 	while (!json_object_iter_equal(&it, &itEnd)) {
 		const char * feed_id = json_object_iter_peek_name(&it);
-		json_object * node;
+		json_object * node {};
 		rsspp::feed current_feed;
 
 		current_feed.rss_version = rsspp::NEWSBLUR_JSON;
 
 		json_object * feed_json = json_object_iter_peek_value(&it);
-		node = json_object_object_get(feed_json, "feed_title");
+		json_object_object_get_ex(feed_json, "feed_title", &node);
 		current_feed.title = json_object_get_string(node);
-		node = json_object_object_get(feed_json, "feed_link");
+		json_object_object_get_ex(feed_json, "feed_link", &node);
 		current_feed.link = json_object_get_string(node);
 
 		known_feeds[feed_id] = current_feed;
 
-        std::string std_feed_id(feed_id);
+		std::string std_feed_id(feed_id);
 		std::vector<std::string> tags = feeds_to_tags[std_feed_id];
 		result.push_back(tagged_feedurl(std_feed_id, tags));
 
@@ -99,11 +107,12 @@ void newsblur_api::configure_handle(CURL * /*handle*/) {
 }
 
 bool request_successfull(json_object * payload) {
-	json_object * result = json_object_object_get(payload, "result");
-	if (result == NULL)
+	json_object * result {};
+	if(json_object_object_get_ex(payload, "result", &result) == FALSE) {
 		return false;
-
-	return !strcmp("ok", json_object_get_string(result));
+	} else {
+		return !strcmp("ok", json_object_get_string(result));
+	}
 }
 
 bool newsblur_api::mark_all_read(const std::string& feed_url) {
@@ -162,9 +171,10 @@ rsspp::feed newsblur_api::fetch_feed(const std::string& id) {
 		if (!query_result)
 			return f;
 
-		json_object * stories = json_object_object_get(query_result, "stories");
-
-		if (!stories) {
+		json_object * stories {};
+		if(json_object_object_get_ex(query_result, "stories", &stories)
+				== FALSE)
+		{
 			LOG(LOG_ERROR, "newsblur_api::fetch_feed: request returned no stories");
 			return f;
 		}
@@ -180,44 +190,71 @@ rsspp::feed newsblur_api::fetch_feed(const std::string& id) {
 
 		for (int i = 0; i < items_size; i++) {
 			struct json_object * item_obj = (struct json_object *)array_list_get_idx(items, i);
-			const char * article_id = json_object_get_string(json_object_object_get(item_obj, "id"));
-			const char * title = json_object_get_string(json_object_object_get(item_obj, "story_title"));
-			const char * link = json_object_get_string(json_object_object_get(item_obj, "story_permalink"));
-			const char * content = json_object_get_string(json_object_object_get(item_obj, "story_content"));
-			const char * pub_date = json_object_get_string(json_object_object_get(item_obj, "story_date"));
-			bool read_status = json_object_get_int(json_object_object_get(item_obj, "read_status"));
 
 			rsspp::item item;
 
-			if (title)
-				item.title = title;
+			json_object* node {};
 
-			if (link)
-				item.link = link;
-
-			if (content)
-				item.content_encoded = content;
-
-			item.guid = id + ID_SEPARATOR + article_id;
-
-			if (read_status == 0) {
-				item.labels.push_back("newsblur:unread");
-			} else if (read_status == 1) {
-				item.labels.push_back("newsblur:read");
+			if(json_object_object_get_ex(item_obj, "story_title", &node)
+					== TRUE)
+			{
+				item.title = json_object_get_string(node);
 			}
 
-			item.pubDate_ts = parse_date(pub_date);
-			char rfc822_date[128];
-			strftime(rfc822_date, sizeof(rfc822_date), "%a, %d %b %Y %H:%M:%S %z", gmtime(&item.pubDate_ts));
-			item.pubDate = rfc822_date;
+			if(json_object_object_get_ex(item_obj, "story_permalink", &node)
+					== TRUE)
+			{
+				item.link = json_object_get_string(node);
+			}
+
+			if(json_object_object_get_ex(item_obj, "story_content", &node)
+					== TRUE)
+			{
+				item.content_encoded = json_object_get_string(node);
+			}
+
+			const char * article_id {};
+			if(json_object_object_get_ex(item_obj, "id", &node) == TRUE) {
+				article_id = json_object_get_string(node);
+			}
+			item.guid = id + ID_SEPARATOR + article_id;
+
+			if(json_object_object_get_ex(item_obj, "read_status", &node)
+					== TRUE)
+			{
+				if (! static_cast<bool>(json_object_get_int(node))) {
+					item.labels.push_back("newsblur:unread");
+				} else {
+					item.labels.push_back("newsblur:read");
+				}
+			}
+
+			if(json_object_object_get_ex(item_obj, "story_date", &node)
+					== TRUE)
+			{
+				const char* pub_date = json_object_get_string(node);
+				item.pubDate_ts = parse_date(pub_date);
+
+				char rfc822_date[128];
+				strftime(
+						rfc822_date,
+						sizeof(rfc822_date),
+						"%a, %d %b %Y %H:%M:%S %z",
+						gmtime(&item.pubDate_ts));
+				item.pubDate = rfc822_date;
+			}
 
 			f.items.push_back(item);
 		}
 	}
 
-	std::sort(f.items.begin(), f.items.end(), [](const rsspp::item& a, const rsspp::item& b) {
-		return a.pubDate_ts > b.pubDate_ts;
+	std::sort(
+		f.items.begin(),
+		f.items.end(),
+		[](const rsspp::item& a, const rsspp::item& b) {
+			return a.pubDate_ts > b.pubDate_ts;
 	});
+
 	return f;
 }
 

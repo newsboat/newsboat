@@ -131,29 +131,41 @@ std::vector<tagged_feedurl> feedhq_api::get_subscribed_urls() {
 
 	// TODO: parse result
 
-	struct json_object * reply = json_tokener_parse(result.c_str());
+	json_object * reply = json_tokener_parse(result.c_str());
 	if (is_error(reply)) {
 		LOG(LOG_ERROR, "feedhq_api::get_subscribed_urls: failed to parse response as JSON.");
 		return urls;
 	}
 
-
-	struct json_object * subscription_obj = json_object_object_get(reply, "subscriptions");
-	struct array_list * subscriptions = json_object_get_array(subscription_obj);
+	json_object* subscription_obj {};
+	json_object_object_get_ex(reply, "subscriptions", &subscription_obj);
+	array_list * subscriptions = json_object_get_array(subscription_obj);
 
 	int len = array_list_length(subscriptions);
 
 	for (int i=0; i<len; i++) {
 		std::vector<std::string> tags;
-		struct json_object * sub = json_object_array_get_idx(subscription_obj, i);
+		json_object * sub = json_object_array_get_idx(subscription_obj, i);
 
-		const char * id = json_object_get_string(json_object_object_get(sub, "id"));
-		const char * title = json_object_get_string(json_object_object_get(sub, "title"));
+		json_object* id_str {};
+		json_object_object_get_ex(sub, "id", &id_str);
+		const char * id = json_object_get_string(id_str);
+
+		json_object* title_str {};
+		json_object_object_get_ex(sub, "title", &title_str);
+		const char * title = json_object_get_string(title_str);
+
 		tags.push_back(std::string("~") + title);
 
 		char * escaped_id = curl_easy_escape(handle, id, 0);
 
-		urls.push_back(tagged_feedurl(utils::strprintf("%s%s%s?n=%u", cfg->get_configvalue("feedhq-url").c_str(), FEEDHQ_FEED_PREFIX, escaped_id, cfg->get_configvalue_as_int("feedhq-min-items")), tags));
+		auto url = utils::strprintf(
+				"%s%s%s?n=%u",
+				cfg->get_configvalue("feedhq-url").c_str(),
+				FEEDHQ_FEED_PREFIX,
+				escaped_id,
+				cfg->get_configvalue_as_int("feedhq-min-items"));
+		urls.push_back(tagged_feedurl(url, tags));
 
 		curl_free(escaped_id);
 	}
