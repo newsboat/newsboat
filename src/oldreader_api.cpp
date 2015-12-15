@@ -121,7 +121,7 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 
 	CURL * handle = curl_easy_init();
 	std::string result;
-	configure_handle(&custom_headers);
+	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
 
 	utils::set_common_curl_options(handle, cfg);
@@ -180,11 +180,11 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 	return urls;
 }
 
-void oldreader_api::configure_handle(curl_slist** custom_headers) {
+void oldreader_api::add_custom_headers(curl_slist** custom_headers) {
 	if(auth_header.empty()) {
 		auth_header = utils::strprintf("Authorization: GoogleLogin auth=%s", auth.c_str());
 	}
-	LOG(LOG_DEBUG, "oldreader_api::configure_handle header = %s", auth_header.c_str());
+	LOG(LOG_DEBUG, "oldreader_api::add_custom_headers header = %s", auth_header.c_str());
 	*custom_headers = curl_slist_append(*custom_headers, auth_header.c_str());
 }
 
@@ -247,7 +247,7 @@ std::string oldreader_api::get_new_token() {
 	curl_slist* custom_headers {};
 
 	utils::set_common_curl_options(handle, cfg);
-	configure_handle(&custom_headers);
+	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
@@ -320,7 +320,7 @@ std::string oldreader_api::post_content(const std::string& url, const std::strin
 
 	CURL * handle = curl_easy_init();
 	utils::set_common_curl_options(handle, cfg);
-	configure_handle(&custom_headers);
+	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);

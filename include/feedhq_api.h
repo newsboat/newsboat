@@ -13,7 +13,7 @@ class feedhq_api : public remote_api {
 		virtual ~feedhq_api();
 		virtual bool authenticate();
 		virtual std::vector<tagged_feedurl> get_subscribed_urls();
-		virtual void configure_handle(curl_slist** custom_headers);
+		virtual void add_custom_headers(curl_slist** custom_headers);
 		virtual bool mark_all_read(const std::string& feedurl);
 		virtual bool mark_article_read(const std::string& guid, bool read);
 		virtual bool update_article_flags(const std::string& oldflags, const std::string& newflags, const std::string& guid);

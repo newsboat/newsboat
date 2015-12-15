@@ -87,7 +87,7 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 	}
 
 	if (api) {
-		api->configure_handle(&custom_headers);
+		api->add_custom_headers(&custom_headers);
 	}
 	curl_easy_setopt(easyhandle, CURLOPT_URL, url.c_str());
 	curl_easy_setopt(easyhandle, CURLOPT_SSL_VERIFYPEER, 0);

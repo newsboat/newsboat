@@ -181,7 +181,7 @@ std::vector<tagged_feedurl> ttrss_api::get_subscribed_urls() {
 	return feeds;
 }
 
-void ttrss_api::configure_handle(curl_slist** /* custom_headers */) {
+void ttrss_api::add_custom_headers(curl_slist** /* custom_headers */) {
 	// nothing required
 }
 
