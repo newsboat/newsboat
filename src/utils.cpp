@@ -621,9 +621,10 @@ void utils::append_escapes(std::string& str, char c) {
 }
 
 bool utils::is_valid_color(const std::string& color) {
-	static const std::unordered_set<std::string> colors =
-		{ "black", "red", "green", "yellow", "blue",
-		"magenta", "cyan", "white", "default" };
+	static const std::unordered_set<std::string> colors = {
+		"black", "red", "green", "yellow", "blue",
+		"magenta", "cyan", "white", "default"
+	};
 	if(colors.find(color) != colors.end()) {
 		return true;
 	}
@@ -653,9 +654,10 @@ bool utils::is_valid_color(const std::string& color) {
 }
 
 bool utils::is_valid_attribute(const std::string& attrib) {
-	static const std::unordered_set<std::string> attribs =
-		{ "standout", "underline", "reverse", "blink",
-		"dim", "bold", "protect", "invis", "default" };
+	static const std::unordered_set<std::string> attribs = {
+		"standout", "underline", "reverse", "blink",
+		"dim", "bold", "protect", "invis", "default"
+	};
 	if(attribs.find(attrib) != attribs.end()) {
 		return true;
 	} else {

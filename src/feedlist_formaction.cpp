@@ -777,9 +777,11 @@ std::string feedlist_formaction::format_line(const std::string& feedlist_format,
 	fmt.register_fmt('d', feed->description());
 
 	if (unread_count > 0) {
-	  tmp_feedlist_format = utils::strprintf("<unread>%s</>", feedlist_format.c_str());
+		tmp_feedlist_format = utils::strprintf(
+		                          "<unread>%s</>",
+		                          feedlist_format.c_str());
 	}
-	
+
 	return fmt.do_format(tmp_feedlist_format, width);
 }
 

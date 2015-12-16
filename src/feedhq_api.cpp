@@ -162,11 +162,11 @@ std::vector<tagged_feedurl> feedhq_api::get_subscribed_urls() {
 		char * escaped_id = curl_easy_escape(handle, id, 0);
 
 		auto url = utils::strprintf(
-				"%s%s%s?n=%u",
-				cfg->get_configvalue("feedhq-url").c_str(),
-				FEEDHQ_FEED_PREFIX,
-				escaped_id,
-				cfg->get_configvalue_as_int("feedhq-min-items"));
+		               "%s%s%s?n=%u",
+		               cfg->get_configvalue("feedhq-url").c_str(),
+		               FEEDHQ_FEED_PREFIX,
+		               escaped_id,
+		               cfg->get_configvalue_as_int("feedhq-min-items"));
 		urls.push_back(tagged_feedurl(url, tags));
 
 		curl_free(escaped_id);
@@ -180,10 +180,11 @@ std::vector<tagged_feedurl> feedhq_api::get_subscribed_urls() {
 void feedhq_api::add_custom_headers(curl_slist** custom_headers) {
 	if(auth_header.empty()) {
 		auth_header = utils::strprintf(
-				"Authorization: GoogleLogin auth=%s", auth.c_str());
+		                  "Authorization: GoogleLogin auth=%s", auth.c_str());
 	}
-	LOG(LOG_DEBUG, "feedhq_api::add_custom_headers header = %s",
-			auth_header.c_str());
+	LOG(LOG_DEBUG,
+	    "feedhq_api::add_custom_headers header = %s",
+	    auth_header.c_str());
 	*custom_headers = curl_slist_append(*custom_headers, auth_header.c_str());
 }
 

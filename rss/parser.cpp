@@ -125,9 +125,8 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 	}
 
 	if (etag.length() > 0) {
-		custom_headers = curl_slist_append(
-				custom_headers,
-				utils::strprintf("If-None-Match: %s", etag.c_str()).c_str());
+		auto header = utils::strprintf("If-None-Match: %s", etag.c_str());
+		custom_headers = curl_slist_append(custom_headers, header.c_str());
 	}
 
 	if(custom_headers) {

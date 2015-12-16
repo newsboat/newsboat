@@ -32,10 +32,10 @@ bool newsblur_api::authenticate() {
 	bool result = json_object_get_boolean(status);
 
 	LOG(
-		LOG_INFO,
-		"newsblur_api::authenticate: authentication resulted in %u, cached in %s",
-		result,
-		cfg->get_configvalue("cookie-cache").c_str());
+	    LOG_INFO,
+	    "newsblur_api::authenticate: authentication resulted in %u, cached in %s",
+	    result,
+	    cfg->get_configvalue("cookie-cache").c_str());
 
 	return result;
 }
@@ -82,24 +82,25 @@ std::vector<tagged_feedurl> newsblur_api::get_subscribed_urls() {
 }
 
 std::map<std::string, std::vector<std::string>> newsblur_api::mk_feeds_to_tags(
-        json_object * folders) {
-    std::map<std::string, std::vector<std::string>> result;
-    array_list * tags = json_object_get_array(folders);
-    int tags_len = array_list_length(tags);
-    for (int i = 0; i < tags_len; ++i) {
-        json_object * tag_to_feed_ids = json_object_array_get_idx(folders, i);
-        json_object_object_foreach(tag_to_feed_ids, key, feeds_with_tag_obj) {
-            std::string std_key(key);
-            array_list * feeds_with_tag_arr = json_object_get_array(feeds_with_tag_obj);
-            int feeds_with_tag_len = array_list_length(feeds_with_tag_arr);
-            for (int j = 0; j < feeds_with_tag_len; ++j) {
-                json_object * feed_id_obj = json_object_array_get_idx(feeds_with_tag_obj, j);
-                std::string feed_id(json_object_get_string(feed_id_obj));
-                result[feed_id].push_back(std_key);
-            }
-        }
-    }
-    return result;
+json_object * folders)
+{
+	std::map<std::string, std::vector<std::string>> result;
+	array_list * tags = json_object_get_array(folders);
+	int tags_len = array_list_length(tags);
+	for (int i = 0; i < tags_len; ++i) {
+		json_object * tag_to_feed_ids = json_object_array_get_idx(folders, i);
+		json_object_object_foreach(tag_to_feed_ids, key, feeds_with_tag_obj) {
+			std::string std_key(key);
+			array_list * feeds_with_tag_arr = json_object_get_array(feeds_with_tag_obj);
+			int feeds_with_tag_len = array_list_length(feeds_with_tag_arr);
+			for (int j = 0; j < feeds_with_tag_len; ++j) {
+				json_object * feed_id_obj = json_object_array_get_idx(feeds_with_tag_obj, j);
+				std::string feed_id(json_object_get_string(feed_id_obj));
+				result[feed_id].push_back(std_key);
+			}
+		}
+	}
+	return result;
 }
 
 void newsblur_api::add_custom_headers(curl_slist** /* custom_headers */) {
@@ -122,10 +123,10 @@ bool newsblur_api::mark_all_read(const std::string& feed_url) {
 }
 
 bool newsblur_api::mark_article_read(const std::string& guid, bool read) {
-    // handle dummy articles
-    if (guid.empty()) {
-        return false;
-    }
+	// handle dummy articles
+	if (guid.empty()) {
+		return false;
+	}
 	std::string endpoint;
 	int separator = guid.find(ID_SEPARATOR);
 	std::string feed_id = guid.substr(0, separator);
@@ -237,10 +238,10 @@ rsspp::feed newsblur_api::fetch_feed(const std::string& id) {
 
 				char rfc822_date[128];
 				strftime(
-						rfc822_date,
-						sizeof(rfc822_date),
-						"%a, %d %b %Y %H:%M:%S %z",
-						gmtime(&item.pubDate_ts));
+				    rfc822_date,
+				    sizeof(rfc822_date),
+				    "%a, %d %b %Y %H:%M:%S %z",
+				    gmtime(&item.pubDate_ts));
 				item.pubDate = rfc822_date;
 			}
 
@@ -249,10 +250,10 @@ rsspp::feed newsblur_api::fetch_feed(const std::string& id) {
 	}
 
 	std::sort(
-		f.items.begin(),
-		f.items.end(),
-		[](const rsspp::item& a, const rsspp::item& b) {
-			return a.pubDate_ts > b.pubDate_ts;
+	    f.items.begin(),
+	    f.items.end(),
+	    [](const rsspp::item& a, const rsspp::item& b) {
+	        return a.pubDate_ts > b.pubDate_ts;
 	});
 
 	return f;

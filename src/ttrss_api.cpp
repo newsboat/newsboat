@@ -96,8 +96,9 @@ std::string ttrss_api::retrieve_sid() {
 }
 
 json_object* ttrss_api::run_op(const std::string& op,
-                                       const std::map<std::string, std::string >& args,
-                                       bool try_login) {
+                               const std::map<std::string, std::string >& args,
+                               bool try_login)
+{
 	std::string url = utils::strprintf("%s/api/", cfg->get_configvalue("ttrss-url").c_str());
 
 	std::string req_data = "{\"op\":\"" + op + "\",\"sid\":\"" + sid + "\"";
@@ -282,7 +283,7 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 			int attachments_size = array_list_length(attachments_list);
 			if (attachments_size > 0) {
 				json_object* attachment =
-					(json_object*)array_list_get_idx(attachments_list, 0);
+				    (json_object*)array_list_get_idx(attachments_list, 0);
 
 				if(json_object_object_get_ex(attachment, "content_url", &node)
 						== TRUE)
@@ -329,7 +330,7 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 }
 
 void ttrss_api::fetch_feeds_per_category(
-		json_object * cat, std::vector<tagged_feedurl>& feeds)
+    json_object * cat, std::vector<tagged_feedurl>& feeds)
 {
 	const char * cat_name = NULL;
 	json_object * cat_title_obj {};

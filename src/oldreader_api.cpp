@@ -167,10 +167,10 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 			tags.push_back(std::string("~") + title);
 
 			auto url = utils::strprintf(
-				"%s%s?n=%u",
-				OLDREADER_FEED_PREFIX,
-				id,
-				cfg->get_configvalue_as_int("oldreader-min-items"));
+			               "%s%s?n=%u",
+			               OLDREADER_FEED_PREFIX,
+			               id,
+			               cfg->get_configvalue_as_int("oldreader-min-items"));
 			urls.push_back(tagged_feedurl(url, tags));
 		}
 	}

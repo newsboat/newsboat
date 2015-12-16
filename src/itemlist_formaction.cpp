@@ -972,7 +972,7 @@ void itemlist_formaction::set_regexmanager(regexmanager * r) {
 	for (auto attribute : attrs) {
 		attrstr.append(utils::strprintf("@style_%u_normal:%s ", i, attribute.c_str()));
 		attrstr.append(utils::strprintf("@style_%u_focus:%s ", i, attribute.c_str()));
-        i++;
+		i++;
 	}
 	std::string textview = utils::strprintf("{list[items] .expand:vh style_normal[listnormal]: style_focus[listfocus]:fg=yellow,bg=blue,attr=bold pos_name[itemposname]: pos[itempos]:0 %s richtext:1}", attrstr.c_str());
 	f->modify("items", "replace", textview);
