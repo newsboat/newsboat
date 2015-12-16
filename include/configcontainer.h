@@ -3,17 +3,22 @@
 
 #include <configparser.h>
 
+#include <unordered_set>
+
 namespace newsbeuter {
 
 
 struct configdata {
 	enum configdata_type { INVALID, BOOL, INT, STR, PATH, ALIAS, ENUM };
-	configdata(std::string v = "", configdata_type t = INVALID, bool m = false) : value(v), default_value(v), type(t), multi_option(m) { }
-	configdata(std::string v, ...);
+	configdata(const std::string& v = "", configdata_type t = INVALID,
+	    bool m = false)
+	    : value(v), default_value(v), type(t), multi_option(m) { }
+	configdata(const std::string& v,
+	    const std::unordered_set<std::string>& values);
 	std::string value;
 	std::string default_value;
 	configdata_type type;
-	std::set<std::string> enum_values;
+	std::unordered_set<std::string> enum_values;
 	bool multi_option;
 };
 

@@ -15,20 +15,11 @@
 
 namespace newsbeuter {
 
-configdata::configdata(std::string v, ...) : value(v), default_value(v), type(ENUM), multi_option(false) {
-	va_list ap;
-	va_start(ap, v);
-
-	const char * arg;
-
-	do {
-		arg = va_arg(ap, const char *);
-		if (arg) {
-			enum_values.insert(arg);
-		}
-	} while (arg != NULL);
-
-	va_end(ap);
+configdata::configdata(const std::string& v,
+    const std::unordered_set<std::string>& values)
+    : value(v), default_value(v), type(ENUM), multi_option(false)
+{
+	enum_values.insert(values.begin(), values.end());
 }
 
 configcontainer::configcontainer() {
@@ -51,8 +42,16 @@ configcontainer::configcontainer() {
 	config_data["cache-file"]      = configdata("", configdata::PATH);
 	config_data["proxy"]           = configdata("", configdata::STR);
 	config_data["proxy-auth"]      = configdata("", configdata::STR);
-	config_data["proxy-auth-method"] = configdata("any", "any", "basic", "digest", "digest_ie", "gssnegotiate", "ntlm", "anysafe", NULL);
-	config_data["http-auth-method"] = configdata("any", "any", "basic", "digest", "digest_ie", "gssnegotiate", "ntlm", "anysafe", NULL);
+	auto proxy_auth_methods = std::unordered_set<std::string>({
+		"any", "basic", "digest", "digest_ie", "gssnegotiate", "ntlm",
+		"anysafe"
+	});
+	config_data["proxy-auth-method"] = configdata("any", proxy_auth_methods);
+	auto http_auth_methods = std::unordered_set<std::string>({
+		"any", "basic", "digest", "digest_ie", "gssnegotiate", "ntlm",
+		"anysafe"
+	});
+	config_data["http-auth-method"] = configdata("any", http_auth_methods);
 	config_data["confirm-exit"]    = configdata("no", configdata::BOOL);
 	config_data["error-log"]       = configdata("", configdata::PATH);
 	config_data["notify-screen"]   = configdata("no", configdata::BOOL);
@@ -62,7 +61,10 @@ configcontainer::configcontainer() {
 	config_data["notify-program"]  = configdata("", configdata::PATH);
 	config_data["notify-format"]   = configdata(_("newsbeuter: finished reload, %f unread feeds (%n unread articles total)"), configdata::STR);
 	config_data["datetime-format"] = configdata("%b %d", configdata::STR);
-	config_data["urls-source"]     = configdata("local", "local", "opml", "oldreader", "ttrss", "newsblur", "feedhq", NULL); // enum
+	auto urls_sources = std::unordered_set<std::string>({
+	    "local", "opml", "oldreader", "ttrss", "newsblur", "feedhq"
+	});
+	config_data["urls-source"]     = configdata("local", urls_sources);
 	config_data["bookmark-cmd"]    = configdata("", configdata::STR);
 	config_data["opml-url"]        = configdata("", configdata::STR, true);
 	config_data["html-renderer"]   = configdata("internal", configdata::PATH);
@@ -90,7 +92,10 @@ configcontainer::configcontainer() {
 	config_data["history-limit"] = configdata("100", configdata::INT);
 	config_data["prepopulate-query-feeds"] = configdata("false", configdata::BOOL);
 	config_data["goto-first-unread"] = configdata("true", configdata::BOOL);
-	config_data["proxy-type"] = configdata("http", "http", "socks4", "socks4a", "socks5", NULL); // enum
+	auto proxy_types = std::unordered_set<std::string>({
+	    "http", "socks4", "socks4a", "socks5"
+	});
+	config_data["proxy-type"] = configdata("http", proxy_types);
 	config_data["oldreader-login"] = configdata("", configdata::STR);
 	config_data["oldreader-password"] = configdata("", configdata::STR);
 	config_data["oldreader-passwordfile"] = configdata("", configdata::PATH);
@@ -106,7 +111,10 @@ configcontainer::configcontainer() {
 	config_data["feedhq-show-special-feeds"] = configdata("true", configdata::BOOL);
 	config_data["feedhq-min-items"] = configdata("20", configdata::INT);
 	config_data["feedhq-url"] = configdata("https://feedhq.org/", configdata::STR);
-	config_data["ignore-mode"] = configdata("download", "download", "display", NULL); // enum
+	auto ignore_modes = std::unordered_set<std::string>({
+	    "download", "display"
+	});
+	config_data["ignore-mode"] = configdata("download", ignore_modes);
 	config_data["max-download-speed"] = configdata("0", configdata::INT);
 	config_data["cookie-cache"] = configdata("", configdata::PATH);
 	config_data["download-full-page"] = configdata("false", configdata::BOOL);
@@ -115,7 +123,10 @@ configcontainer::configcontainer() {
 	config_data["ttrss-password"] = configdata("", configdata::STR);
 	config_data["ttrss-passwordfile"] = configdata("", configdata::PATH);
 	config_data["ttrss-url"] = configdata("", configdata::STR);
-	config_data["ttrss-mode"] = configdata("multi", "single", "multi", NULL); // enum
+	auto ttrss_modes = std::unordered_set<std::string>({
+	    "single", "multi"
+	});
+	config_data["ttrss-mode"] = configdata("multi", ttrss_modes);
 	config_data["ttrss-flag-star"] = configdata("", configdata::STR);
 	config_data["ttrss-flag-publish"] = configdata("", configdata::STR);
 	config_data["newsblur-login"] = configdata("", configdata::STR);
