@@ -12,13 +12,16 @@ struct configdata {
 	enum configdata_type { INVALID, BOOL, INT, STR, PATH, ALIAS, ENUM };
 	configdata(const std::string& v = "", configdata_type t = INVALID,
 	    bool m = false)
-	    : value(v), default_value(v), type(t), multi_option(m) { }
+	    : value(v), default_value(v), type(t), enum_values(),
+	      multi_option(m) { }
 	configdata(const std::string& v,
-	    const std::unordered_set<std::string>& values);
+	    const std::unordered_set<std::string>& values)
+	    : value(v), default_value(v), type(ENUM), enum_values(values),
+	      multi_option(false) { }
 	std::string value;
 	std::string default_value;
 	configdata_type type;
-	std::unordered_set<std::string> enum_values;
+	const std::unordered_set<std::string> enum_values;
 	bool multi_option;
 };
 
