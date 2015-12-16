@@ -1501,36 +1501,3 @@ msgstr "формат теми не підтримується"
 #: rss/rss_09x_parser.cpp:39
 msgid "no RSS channel found"
 msgstr "не знайдено каналу RSS"
-
-#~ msgid "f"
-#~ msgstr "f"
-
-#~ msgid "t"
-#~ msgstr "t"
-
-#~ msgid "a"
-#~ msgstr "a"
-
-#~ msgid "u"
-#~ msgstr "u"
-
-#~ msgid "d"
-#~ msgstr "d"
-
-#~ msgid "l"
-#~ msgstr "l"
-
-#~ msgid "g"
-#~ msgstr "g"
-
-#~ msgid "Popular items"
-#~ msgstr "Популярні статті."
-
-#~ msgid "%N %V - Article '%T'"
-#~ msgstr "%N %V - Стаття '%T'"
-
-#~ msgid "%s %s - Open File - %s"
-#~ msgstr "%s %s - Відкрити файл - %s"
-
-#~ msgid "Open File - %s"
-#~ msgstr "Відкрити Файл - %s"

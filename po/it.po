@@ -1505,36 +1505,3 @@ msgstr "formato feed non supportato"
 #: rss/rss_09x_parser.cpp:39
 msgid "no RSS channel found"
 msgstr "nessun canale RSS trovato"
-
-#~ msgid "f"
-#~ msgstr "p"
-
-#~ msgid "t"
-#~ msgstr "t"
-
-#~ msgid "a"
-#~ msgstr "u"
-
-#~ msgid "u"
-#~ msgstr "m"
-
-#~ msgid "d"
-#~ msgstr "d"
-
-#~ msgid "l"
-#~ msgstr "c"
-
-#~ msgid "g"
-#~ msgstr "g"
-
-#~ msgid "Popular items"
-#~ msgstr "Item popolari"
-
-#~ msgid "%N %V - Article '%T'"
-#~ msgstr "%N %V - Articolo '%T'"
-
-#~ msgid "%s %s - Open File - %s"
-#~ msgstr "%s %s - Apri File - %s"
-
-#~ msgid "Open File - %s"
-#~ msgstr "Apri File - %s"

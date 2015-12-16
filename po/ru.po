@@ -1490,15 +1490,3 @@ msgstr "неизвестный тип ленты"
 #: rss/rss_09x_parser.cpp:39
 msgid "no RSS channel found"
 msgstr "RSS-лента не найдена"
-
-#~ msgid "Popular items"
-#~ msgstr "Популярные элементы"
-
-#~ msgid "%N %V - Article '%T'"
-#~ msgstr "%N %V - Заметка '%T'"
-
-#~ msgid "%s %s - Open File - %s"
-#~ msgstr "%s %s - Открыть файл - %s"
-
-#~ msgid "Open File - %s"
-#~ msgstr "Открыть файл - %s"

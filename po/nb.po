@@ -1497,36 +1497,3 @@ msgstr "strømformatet støttes ikke"
 #: rss/rss_09x_parser.cpp:39
 msgid "no RSS channel found"
 msgstr "fant ingen RSS-kanal"
-
-#~ msgid "f"
-#~ msgstr "f"
-
-#~ msgid "t"
-#~ msgstr "t"
-
-#~ msgid "a"
-#~ msgstr "a"
-
-#~ msgid "u"
-#~ msgstr "u"
-
-#~ msgid "d"
-#~ msgstr "d"
-
-#~ msgid "l"
-#~ msgstr "l"
-
-#~ msgid "g"
-#~ msgstr "g"
-
-#~ msgid "Popular items"
-#~ msgstr "Populære innlegg"
-
-#~ msgid "%N %V - Article '%T'"
-#~ msgstr "%N %V - Artikkel '%T'"
-
-#~ msgid "%s %s - Open File - %s"
-#~ msgstr "%s %s - Åpne fil - %s"
-
-#~ msgid "Open File - %s"
-#~ msgstr "Åpne fil - %s"

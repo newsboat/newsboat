@@ -1505,37 +1505,3 @@ msgstr "webbkanalsformat stöds inte"
 #: rss/rss_09x_parser.cpp:39
 msgid "no RSS channel found"
 msgstr "ingen RSS-kanal hittades"
-
-#~ msgid "f"
-#~ msgstr "f"
-
-#~ msgid "t"
-#~ msgstr "t"
-
-#~ msgid "a"
-#~ msgstr "a"
-
-#~ msgid "u"
-#~ msgstr "u"
-
-#~ msgid "d"
-#~ msgstr "d"
-
-#~ msgid "l"
-#~ msgstr "l"
-
-#~ msgid "g"
-#~ msgstr "g"
-
-#, fuzzy
-#~ msgid "Popular items"
-#~ msgstr "Inga olästa poster."
-
-#~ msgid "%N %V - Article '%T'"
-#~ msgstr "%N %V - Artikel '%T'"
-
-#~ msgid "%s %s - Open File - %s"
-#~ msgstr "%s %s - Öppna fil - %s"
-
-#~ msgid "Open File - %s"
-#~ msgstr "Öppna fil - %s"

@@ -1492,39 +1492,3 @@ msgstr "nicht unterstütztes Feed-Format"
 #: rss/rss_09x_parser.cpp:39
 msgid "no RSS channel found"
 msgstr "kein RSS-Channel gefunden"
-
-#~ msgid "f"
-#~ msgstr "e"
-
-#~ msgid "t"
-#~ msgstr "t"
-
-#~ msgid "a"
-#~ msgstr "a"
-
-#~ msgid "u"
-#~ msgstr "u"
-
-#~ msgid "d"
-#~ msgstr "d"
-
-#~ msgid "l"
-#~ msgstr "l"
-
-#~ msgid "g"
-#~ msgstr "g"
-
-#~ msgid "Updating Google Reader unread states..."
-#~ msgstr "Update Google Reader ungelesen-Stati..."
-
-#~ msgid "Popular items"
-#~ msgstr "Populäre Artikel"
-
-#~ msgid "%N %V - Article '%T'"
-#~ msgstr "%N %V - Artikel '%T'"
-
-#~ msgid "%s %s - Open File - %s"
-#~ msgstr "%s %s - Datei öffnen - %s"
-
-#~ msgid "Open File - %s"
-#~ msgstr "Datei öffnen - %s"

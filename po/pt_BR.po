@@ -1497,36 +1497,3 @@ msgstr "formato de fonte não suportado"
 #: rss/rss_09x_parser.cpp:39
 msgid "no RSS channel found"
 msgstr "nenhum canal RSS encontrado"
-
-#~ msgid "f"
-#~ msgstr "p"
-
-#~ msgid "t"
-#~ msgstr "t"
-
-#~ msgid "a"
-#~ msgstr "q"
-
-#~ msgid "u"
-#~ msgstr "n"
-
-#~ msgid "d"
-#~ msgstr "d"
-
-#~ msgid "l"
-#~ msgstr "t"
-
-#~ msgid "g"
-#~ msgstr "s"
-
-#~ msgid "Popular items"
-#~ msgstr "Itens populares"
-
-#~ msgid "%N %V - Article '%T'"
-#~ msgstr "%N %V - Artigo '%T'"
-
-#~ msgid "%s %s - Open File - %s"
-#~ msgstr "%s %s - Abrir Arquivo - %s"
-
-#~ msgid "Open File - %s"
-#~ msgstr "Abrir Arquivo - %s"
