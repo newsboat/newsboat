@@ -1,9 +1,6 @@
 os:
     - linux
     - osx
-matrix:
-    allow_failures:
-        - os: osx
 before_install:
     - ./travis-get-deps.sh
 language: cpp
