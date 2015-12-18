@@ -15,9 +15,9 @@
 
 namespace newsbeuter {
 
-configcontainer::configcontainer() {
+configcontainer::configcontainer()
 	// create the config options and set their resp. default value and type
-	config_data = {
+	: config_data {
 		{ "always-display-description",
 		    configdata("false", configdata::BOOL) },
 		{ "article-sort-order", configdata("date-asc", configdata::STR) },
@@ -171,7 +171,8 @@ configcontainer::configcontainer() {
 		    configdata(_("%N %V - Select Tag"), configdata::STR) },
 		{ "urlview-title-format",
 		    configdata(_("%N %V - URLs"), configdata::STR) }
-	};
+	}
+{
 }
 
 configcontainer::~configcontainer() {
