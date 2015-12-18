@@ -1,4 +1,4 @@
-Newsbeuter
+Newsbeuter [![Build Status](https://travis-ci.org/akrennmair/newsbeuter.svg?branch=master)](https://travis-ci.org/akrennmair/newsbeuter)
 =====================
 by Andreas Krennmair <ak@newsbeuter.org>
 
