@@ -54,7 +54,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 				throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), params[2].c_str()));
 			colorstr.append(params[2]);
 		}
-		if (params.size() > 2) {
+		if (params.size() > 3) {
 			if (params[3] != "default") {
 				if (colorstr.length() > 0)
 					colorstr.append(",");
