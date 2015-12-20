@@ -19,6 +19,12 @@
 
 #define _(string) gettext(string)
 
+#ifdef _s
+#undef _s
+#endif
+
+#define _s(msg) std::string(gettext(msg))
+
 /* #define NDEBUG */ // only enable this #define if you want to disable all debug logging.
 
 #endif

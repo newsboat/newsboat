@@ -22,17 +22,25 @@ can then be download with 'newsbeuter'.
 
 OPTIONS
 -------
--h::
+-h, --help::
         Display help
 
--C configfile::
+-C configfile, --config-file=configfile::
        Use an alternative configuration file
 
--q queuefile::
+-q queuefile, --queue-file=queuefile::
        Use an alternative queue file
 
--a::
+-a, --autodownload::
        Start automatic download of all queued files on startup
+
+-l loglevel, --log-level=loglevel::
+       Generate a logfile with a certain loglevel. Valid loglevels are 1 to 6. An
+       actual logfile will only be written when you provide a logfile name.
+
+-d logfile, --log-file=logfile::
+       Use this logfile as output when logging debug messages. Please note that this
+       only works when providing a loglevel.
 
 PODCAST SUPPORT
 ---------------
