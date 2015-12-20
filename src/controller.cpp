@@ -221,6 +221,8 @@ void controller::run(int argc, char * argv[]) {
 
 	static char getopt_str[] = "i:erhqu:c:C:d:l:vVoxXI:E:";
 
+	/* First of all, let's check for options that imply silencing of the
+	 * output: import, export, command execution and, well, quiet mode */
 	do {
 		if ((c = ::getopt(argc,argv,getopt_str)) < 0)
 			continue;
@@ -232,6 +234,8 @@ void controller::run(int argc, char * argv[]) {
 
 	setup_dirs(silent);
 
+	/* Now that silencing's set up, let's rewind to the beginning of argv and
+	 * process the options */
 	optind = 1;
 
 	do {
