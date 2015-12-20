@@ -134,9 +134,9 @@ doc:
 	$(A2X) -f xhtml -D doc/xhtml doc/faq.txt
 	doc/generate.pl doc/configcommands.dsv > doc/newsbeuter-cfgcmds.txt
 	doc/generate2.pl doc/keycmds.dsv > doc/newsbeuter-keycmds.txt
-	$(A2X) -f manpage -D doc doc/manpage-newsbeuter.txt
+	$(A2X) -f manpage doc/manpage-newsbeuter.txt
 	doc/generate.pl doc/podbeuter-cmds.dsv > doc/podbeuter-cfgcmds.txt
-	$(A2X) -f manpage -D doc doc/manpage-podbeuter.txt
+	$(A2X) -f manpage doc/manpage-podbeuter.txt
 
 fmt:
 	astyle --suffix=none --style=java --indent=tab --indent-classes *.cpp include/*.h src/*.cpp rss/*.{cpp,h} test/*.cpp
