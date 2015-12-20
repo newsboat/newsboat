@@ -223,14 +223,12 @@ void controller::run(int argc, char * argv[]) {
 
 	/* First of all, let's check for options that imply silencing of the
 	 * output: import, export, command execution and, well, quiet mode */
-	do {
-		if ((c = ::getopt(argc,argv,getopt_str)) < 0)
-			continue;
+	while ((c = ::getopt(argc, argv, getopt_str)) != -1) {
 		if (strchr("iexq", c) != NULL) {
 			silent = true;
 			break;
 		}
-	} while (c != -1);
+	}
 
 	setup_dirs(silent);
 
@@ -238,9 +236,7 @@ void controller::run(int argc, char * argv[]) {
 	 * process the options */
 	optind = 1;
 
-	do {
-		if((c = ::getopt(argc,argv,getopt_str))<0)
-			continue;
+	while ((c = ::getopt(argc,argv,getopt_str)) != -1) {
 		switch (c) {
 		case ':': /* fall-through */
 		case '?': /* missing option */
@@ -319,7 +315,7 @@ void controller::run(int argc, char * argv[]) {
 			usage(argv[0]);
 			break;
 		}
-	} while (c != -1);
+	};
 
 
 	if (show_version) {
