@@ -131,6 +131,7 @@ distclean: clean clean-mo test-clean
 doc:
 	$(MKDIR) doc/xhtml
 	$(A2X) -f xhtml -D doc/xhtml doc/newsbeuter.txt
+	$(A2X) -f xhtml -D doc/xhtml doc/faq.txt
 	doc/generate.pl doc/configcommands.dsv > doc/newsbeuter-cfgcmds.txt
 	doc/generate2.pl doc/keycmds.dsv > doc/newsbeuter-keycmds.txt
 	$(A2X) -f manpage -D doc doc/manpage-newsbeuter.txt
