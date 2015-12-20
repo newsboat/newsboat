@@ -271,6 +271,10 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 			item.link = json_object_get_string(node);
 		}
 
+		if(json_object_object_get_ex(item_obj, "author", &node) == TRUE) {
+			item.author = json_object_get_string(node);
+		}
+
 		if(json_object_object_get_ex(item_obj, "content", &node) == TRUE) {
 			item.content_encoded = json_object_get_string(node);
 		}
