@@ -34,6 +34,7 @@
 #include <cassert>
 #include <signal.h>
 #include <unistd.h>
+#include <getopt.h>
 #include <sys/utsname.h>
 #include <langinfo.h>
 #include <libgen.h>
@@ -219,24 +220,43 @@ void controller::run(int argc, char * argv[]) {
 	bool silent = false;
 	bool execute_cmds = false;
 
-	static char getopt_str[] = "i:erhqu:c:C:d:l:vVoxXI:E:";
+	static const char getopt_str[] = "i:erhqu:c:C:d:l:vVoxXI:E:";
+	static const struct option longopts[] = {
+		{"cache-file"      , required_argument, 0, 'c'},
+		{"config-file"     , required_argument, 0, 'C'},
+		{"execute"         , required_argument, 0, 'x'},
+		{"export-to-file"  , required_argument, 0, 'E'},
+		{"export-to-opml"  , no_argument      , 0, 'e'},
+		{"help"            , no_argument      , 0, 'h'},
+		{"import-from-file", required_argument, 0, 'I'},
+		{"import-from-opml", required_argument, 0, 'i'},
+		{"log-file"        , required_argument, 0, 'd'},
+		{"log-level"       , required_argument, 0, 'l'},
+		{"offline-mode"    , no_argument      , 0, 'o'},
+		{"quiet"           , no_argument      , 0, 'q'},
+		{"refresh-on-start", no_argument      , 0, 'r'},
+		{"url-file"        , required_argument, 0, 'u'},
+		{"vacuum"          , no_argument      , 0, 'X'},
+		{"version"         , no_argument      , 0, 'v'},
+		{0                 , 0                , 0,  0 }
+	};
 
-	do {
-		if ((c = ::getopt(argc,argv,getopt_str)) < 0)
-			continue;
+	/* First of all, let's check for options that imply silencing of the
+	 * output: import, export, command execution and, well, quiet mode */
+	while ((c = ::getopt_long(argc, argv, getopt_str, longopts, NULL)) != -1) {
 		if (strchr("iexq", c) != NULL) {
 			silent = true;
 			break;
 		}
-	} while (c != -1);
+	}
 
 	setup_dirs(silent);
 
+	/* Now that silencing's set up, let's rewind to the beginning of argv and
+	 * process the options */
 	optind = 1;
 
-	do {
-		if((c = ::getopt(argc,argv,getopt_str))<0)
-			continue;
+	while ((c = ::getopt_long(argc, argv, getopt_str, longopts, NULL)) != -1) {
 		switch (c) {
 		case ':': /* fall-through */
 		case '?': /* missing option */
@@ -285,10 +305,10 @@ void controller::run(int argc, char * argv[]) {
 			break;
 		case 'q':
 			break;
-		case 'd': // this is an undocumented debug commandline option!
+		case 'd':
 			logger::getInstance().set_logfile(optarg);
 			break;
-		case 'l': { // this is an undocumented debug commandline option!
+		case 'l': {
 			loglevel level = static_cast<loglevel>(atoi(optarg));
 			if (level > LOG_NONE && level <= LOG_DEBUG) {
 				logger::getInstance().set_loglevel(level);
@@ -315,7 +335,7 @@ void controller::run(int argc, char * argv[]) {
 			usage(argv[0]);
 			break;
 		}
-	} while (c != -1);
+	};
 
 
 	if (show_version) {
@@ -981,49 +1001,53 @@ void controller::version_information(const char * argv0, unsigned int level) {
 	::exit(EXIT_SUCCESS);
 }
 
-static unsigned int gentabs(const std::string& str) {
-	int tabcount = 2 - ((3 + utils::strwidth(str)) / 8);
-	if (tabcount <= 0) {
-		tabcount = 1;
-	}
-	return tabcount;
-}
-
 void controller::usage(char * argv0) {
-	std::cout << utils::strprintf(_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-h]\n"),
-	                              PROGRAM_NAME, PROGRAM_VERSION, argv0);
-	struct {
-		char arg;
-		const char * params;
-		const char * desc;
-	} args[] = {
-		{ 'e', "", _("export OPML feed to stdout") },
-		{ 'r', "", _("refresh feeds on start") },
-		{ 'i', _("<file>"), _("import OPML file") },
-		{ 'u', _("<urlfile>"), _("read RSS feed URLs from <urlfile>") },
-		{ 'c', _("<cachefile>"), _("use <cachefile> as cache file") },
-		{ 'C', _("<configfile>"), _("read configuration from <configfile>") },
-		{ 'X', "", _("clean up cache thoroughly") },
-		{ 'x', _("<command>..."), _("execute list of commands") },
-		{ 'o', "", _("activate offline mode (only applies to The Old Reader synchronization mode)") },
-		{ 'q', "", _("quiet startup") },
-		{ 'v', "", _("get version information") },
-		{ 'l', _("<loglevel>"), _("write a log with a certain loglevel (valid values: 1 to 6)") },
-		{ 'd', _("<logfile>"), _("use <logfile> as output log file") },
-		{ 'E', _("<file>"), _("export list of read articles to <file>") },
-		{ 'I', _("<file>"), _("import list of read articles from <file>") },
-		{ 'h', "", _("this help") },
-		{ '\0', NULL, NULL }
+	auto msg =
+	    utils::strprintf(_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] "
+	    "[-c <cachefile>] [-x <command> ...] [-h]\n"),
+	    PROGRAM_NAME,
+	    PROGRAM_VERSION,
+	    argv0);
+	std::cout << msg;
+
+	struct arg {
+		const char name;
+		const std::string longname;
+		const std::string params;
+		const std::string desc;
 	};
 
-	for (unsigned int i=0; args[i].arg != '\0'; i++) {
-		unsigned int tabs = gentabs(args[i].params);
-		std::cout << "\t-" << args[i].arg << " " << args[i].params;
-		for (unsigned int j=0; j<tabs; j++) {
+	static const std::vector<arg> args = {
+		{ 'e', "export-to-opml"  , ""                , _s("export OPML feed to stdout") }                                                 ,
+		{ 'r', "refresh-on-start", ""                , _s("refresh feeds on start") }                                                     ,
+		{ 'i', "import-from-opml", _s("<file>")      , _s("import OPML file") }                                                           ,
+		{ 'u', "url-file"        , _s("<urlfile>")   , _s("read RSS feed URLs from <urlfile>") }                                          ,
+		{ 'c', "cache-file"      , _s("<cachefile>") , _s("use <cachefile> as cache file") }                                              ,
+		{ 'C', "config-file"     , _s("<configfile>"), _s("read configuration from <configfile>") }                                       ,
+		{ 'X', "vacuum"          , ""                , _s("clean up cache thoroughly") }                                                  ,
+		{ 'x', "execute"         , _s("<command>..."), _s("execute list of commands") }                                                   ,
+		{ 'o', "offline-mode"    , ""                , _s("activate offline mode (only applies to The Old Reader synchronization mode)") },
+		{ 'q', "quiet"           , ""                , _s("quiet startup") }                                                              ,
+		{ 'v', "version"         , ""                , _s("get version information") }                                                    ,
+		{ 'l', "log-level"       , _s("<loglevel>")  , _s("write a log with a certain loglevel (valid values: 1 to 6)") }                 ,
+		{ 'd', "log-file"        , _s("<logfile>")   , _s("use <logfile> as output log file") }                                           ,
+		{ 'E', "export-to-file"  , _s("<file>")      , _s("export list of read articles to <file>") }                                     ,
+		{ 'I', "import-from-file", _s("<file>")      , _s("import list of read articles from <file>") }                                   ,
+		{ 'h', "help"            , ""                , _s("this help") }
+	};
+
+	for (const auto & a : args) {
+		std::string longcolumn("-");
+		longcolumn += a.name;
+		longcolumn += ", --" + a.longname;
+		longcolumn += a.params.size() > 0 ? "=" + a.params : "";
+		std::cout << "\t" << longcolumn;
+		for (unsigned int j = 0; j < utils::gentabs(longcolumn); j++) {
 			std::cout << "\t";
 		}
-		std::cout << args[i].desc << std::endl;
+		std::cout << a.desc << std::endl;
 	}
+
 	::exit(EXIT_FAILURE);
 }
 

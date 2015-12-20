@@ -14,6 +14,7 @@
 #include <thread>
 #include <signal.h>
 #include <unistd.h>
+#include <getopt.h>
 
 #include <keymap.h>
 #include <configcontainer.h>
@@ -135,10 +136,19 @@ void pb_controller::run(int argc, char * argv[]) {
 
 	::signal(SIGINT, ctrl_c_action);
 
-	do {
-		if ((c = ::getopt(argc, argv, "C:q:d:l:ha")) < 0)
-			continue;
+	static const char getopt_str[] = "C:q:d:l:havV";
+	static const struct option longopts[] = {
+		{"config-file"     , required_argument, 0, 'C'},
+		{"quiet"           , no_argument      , 0, 'q'},
+		{"log-file"        , required_argument, 0, 'd'},
+		{"log-level"       , required_argument, 0, 'l'},
+		{"help"            , no_argument      , 0, 'h'},
+		{"autodownload"    , no_argument      , 0, 'a'},
+		{"version"         , no_argument      , 0, 'v'},
+		{0                 , 0                , 0,  0 }
+	};
 
+	while ((c = ::getopt_long(argc, argv, getopt_str, longopts, NULL)) != -1) {
 		switch (c) {
 		case ':':
 		case '?':
@@ -153,15 +163,19 @@ void pb_controller::run(int argc, char * argv[]) {
 		case 'a':
 			automatic_dl = true;
 			break;
-		case 'd': // this is an undocumented debug commandline option!
+		case 'd':
 			logger::getInstance().set_logfile(optarg);
 			break;
-		case 'l': { // this is an undocumented debug commandline option!
+		case 'l': {
 			loglevel level = static_cast<loglevel>(atoi(optarg));
-			if (level > LOG_NONE && level <= LOG_DEBUG)
+			if (level > LOG_NONE && level <= LOG_DEBUG) {
 				logger::getInstance().set_loglevel(level);
-		}
-		break;
+			} else {
+				std::cerr << utils::strprintf(_("%s: %d: invalid loglevel value"), argv[0], level) << std::endl;
+				::std::exit(EXIT_FAILURE);
+			}
+			}
+			break;
 		case 'h':
 			usage(argv[0]);
 			break;
@@ -170,7 +184,7 @@ void pb_controller::run(int argc, char * argv[]) {
 			usage(argv[0]);
 			break;
 		}
-	} while (c != -1);
+	};
 
 	std::cout << utils::strprintf(_("Starting %s %s..."), "podbeuter", PROGRAM_VERSION) << std::endl;
 
@@ -240,11 +254,41 @@ void pb_controller::run(int argc, char * argv[]) {
 }
 
 void pb_controller::usage(const char * argv0) {
-	std::cout << utils::strprintf(_("%s %s\nusage %s [-C <file>] [-q <file>] [-h]\n"
-	                                "-C <configfile> read configuration from <configfile>\n"
-	                                "-q <queuefile>  use <queuefile> as queue file\n"
-	                                "-a              start download on startup\n"
-	                                "-h              this help\n"), "podbeuter", PROGRAM_VERSION, argv0);
+	auto msg =
+	    utils::strprintf(_("%s %s\nusage %s [-C <file>] [-q <file>] [-h]\n"),
+	    "podbeuter",
+	    PROGRAM_VERSION,
+	    argv0);
+	std::cout << msg;
+
+	struct arg {
+		const char name;
+		const std::string longname;
+		const std::string params;
+		const std::string desc;
+	};
+
+	static const std::vector<arg> args = {
+		{ 'C', "config-file" , _s("<configfile>"), _s("read configuration from <configfile>") }                      ,
+		{ 'q', "queue-file"  , _s("<queuefile>") , _s("use <queuefile> as queue file") }                             ,
+		{ 'a', "autodownload", ""                , _s("start download on startup") }                                 ,
+		{ 'l', "log-level"   , _s("<loglevel>")  , _s("write a log with a certain loglevel (valid values: 1 to 6)") },
+		{ 'd', "log-file"    , _s("<logfile>")   , _s("use <logfile> as output log file") }                          ,
+		{ 'h', "help"        , ""                , _s("this help") }
+	};
+
+	for (const auto & a : args) {
+		std::string longcolumn("-");
+		longcolumn += a.name;
+		longcolumn += ", --" + a.longname;
+		longcolumn += a.params.size() > 0 ? "=" + a.params : "";
+		std::cout << "\t" << longcolumn;
+		for (unsigned int j = 0; j < utils::gentabs(longcolumn); j++) {
+			std::cout << "\t";
+		}
+		std::cout << a.desc << std::endl;
+	}
+
 	::exit(EXIT_FAILURE);
 }
 

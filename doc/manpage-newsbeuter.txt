@@ -23,56 +23,56 @@ terminals on Unix or Unix-like systems such as Linux, BSD or Mac OS X.
 
 OPTIONS
 -------
--h::
+-h, --help::
         Display help
 
--r::
+-r, --refresh-on-start::
         Refresh feeds on start
 
--e::
+-e, --export-to-opml::
         Export feeds as OPML to stdout
 
--X::
+-X, --vacuum::
         Clean up cache thoroughly (i.e. reduce it in size if possible)
 
--v, -V::
+-v, -V, --version::
         Get version information about newsbeuter and the libraries it uses
 
--i opmlfile::
+-i opmlfile, --import-from-opml=opmlfile::
        Import an OPML file
 
--u urlfile::
+-u urlfile, --url-file=urlfile::
        Use an alternative URL file
 
--c cachefile::
+-c cachefile, --cache-file=cachefile::
        Use an alternative cache file
 
--C configfile::
+-C configfile, --config-file=configfile::
        Use an alternative configuration file
 
--x command ...::
+-x command ..., --execute=command...::
        Execute one or more commands to run newsbeuter unattended. Currently available
        commands are "reload" and "print-unread".
 
--o::
+-o, --offline-mode::
        Active offline reading mode. When Google Reader synchronization mode is configured,
        then the list of feeds will not be loaded from Google Reader, but instead from
        the local cache. This makes it possible to read locally cached articles even
        without internet connection to connect to Google Reader.
 
--l loglevel::
-       Generate a loglevel with a certain loglevel. Valid loglevels are 1 to 6. An
+-l loglevel, --log-level=loglevel::
+       Generate a logfile with a certain loglevel. Valid loglevels are 1 to 6. An
        actual logfile will only be written when you provide a logfile name.
 
--d logfile::
+-d logfile, --log-file=logfile::
        Use this logfile as output when logging debug messages. Please note that this
        only works when providing a loglevel.
 
--E file::
+-E file, --export-to-file=file::
        Export a list of read articles (resp. their GUIDs). This can be used to
        transfer information about read articles between different computers.
 
--I file::
+-I file, --import-from-file=file::
       Import a list of read articles and mark them as read if they are held in the
       cache. This is to be used in conjunction with the -E commandline parameter.
 

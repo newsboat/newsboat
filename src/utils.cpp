@@ -958,6 +958,14 @@ std::wstring utils::clean_nonprintable_characters(std::wstring text) {
 	return text;
 }
 
+unsigned int utils::gentabs(const std::string& str) {
+	int tabcount = 4 - (utils::strwidth(str) / 8);
+	if (tabcount <= 0) {
+		tabcount = 1;
+	}
+	return tabcount;
+}
+
 /*
  * See http://curl.haxx.se/libcurl/c/libcurl-tutorial.html#Multi-threading for a reason why we do this.
  */
