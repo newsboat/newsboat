@@ -168,7 +168,7 @@ uninstall:
 
 extract:
 	$(RM) $(POTFILE)
-	xgettext -c/ -k_ -o $(POTFILE) *.cpp src/*.cpp rss/*.cpp
+	xgettext -c/ -k_ -k_s -o $(POTFILE) *.cpp src/*.cpp rss/*.cpp
 
 msgmerge:
 	for f in $(POFILES) ; do msgmerge -U $$f $(POTFILE) ; done
