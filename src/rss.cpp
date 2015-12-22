@@ -473,13 +473,43 @@ void rss_feed::update_items(std::vector<std::shared_ptr<rss_feed>> feeds) {
 void rss_feed::set_rssurl(const std::string& u) {
 	rssurl_ = u;
 	if (rssurl_.substr(0,6) == "query:") {
-		std::vector<std::string> tokens = utils::tokenize_quoted(u, ":");
+		/* Query string looks like this:
+		 *
+		 * "query:Title:unread = \"yes\" and age between 0:7" tag1 "tag two"
+		 *
+		 * At this point, we're only interested in the first part enclosed in
+		 * the quotes. Thus, we first tokenize using space as delimiter... */
+		std::vector<std::string> tokens = utils::tokenize_quoted(u, " ");
+		// and then further split by colon, so as to extract title and query
+		tokens = utils::tokenize_quoted(u, ":");
+
 		if (tokens.size() < 3) {
 			throw std::string(_("too few arguments"));
 		}
-		LOG(LOG_DEBUG, "rss_feed::set_rssurl: query name = `%s' expr = `%s'", tokens[1].c_str(), tokens[2].c_str());
+
+		/* "Between" operator requires a range, which contains a colon. Since
+		 * we've been tokenizing by colon, we might've inadertently split the
+		 * query itself. Let's reconstruct it! */
+		auto query = tokens[2];
+		for (auto it = tokens.begin() + 3; it != tokens.end(); ++it)
+		{
+			query += ":";
+			query += *it;
+		}
+		// Have to check if the result is a valid query, just in case
+		matcher m;
+		if (!m.parse(query)) {
+			throw utils::strprintf(
+			    _("`%s' is not a valid filter expression"), query.c_str());
+		}
+
+		LOG(LOG_DEBUG,
+		    "rss_feed::set_rssurl: query name = `%s' expr = `%s'",
+		    tokens[1].c_str(),
+		    query.c_str());
+
 		set_title(tokens[1]);
-		set_query(tokens[2]);
+		set_query(query);
 	}
 }
 
