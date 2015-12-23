@@ -66,19 +66,19 @@ void itemview_formaction::prepare() {
 
 		std::shared_ptr<rss_feed> feedptr = item->get_feedptr();
 
-		std::string title, feedtitle;
+		std::string title, feedtitle, feedheader;
 		if (feedptr.get() != NULL) {
 			if (feedptr->title().length() > 0) {
-				title = feedptr->title();
+				feedtitle = feedptr->title();
 			} else if (feedptr->link().length() > 0) {
-				title = feedptr->link();
+				feedtitle = feedptr->link();
 			} else if (feedptr->rssurl().length() > 0) {
-				title = feedptr->rssurl();
+				feedtitle = feedptr->rssurl();
 			}
 		}
-		if (title.length() > 0) {
-			feedtitle = utils::strprintf("%s%s", _("Feed: "), title.c_str());
-			listfmt.add_line(feedtitle, UINT_MAX, view_width);
+		if (feedtitle.length() > 0) {
+			feedheader = utils::strprintf("%s%s", _("Feed: "), feedtitle.c_str());
+			listfmt.add_line(feedheader, UINT_MAX, view_width);
 		}
 
 		if (item->title().length() > 0) {
@@ -118,7 +118,7 @@ void itemview_formaction::prepare() {
 		// we need to subtract because the current item isn't yet marked as read
 		if (item->unread())
 			unread_item_count--;
-		set_head(item->title(), unread_item_count, feed->items().size());
+		set_head(item->title(), feedtitle, unread_item_count, feed->items().size());
 
 		unsigned int textwidth = v->get_cfg()->get_configvalue_as_int("text-width");
 		if (textwidth > 0) {
@@ -412,11 +412,12 @@ keymap_hint_entry * itemview_formaction::get_keymap_hint() {
 	return hints;
 }
 
-void itemview_formaction::set_head(const std::string& s, unsigned int unread, unsigned int total) {
+void itemview_formaction::set_head(const std::string& s, const std::string& feedtitle, unsigned int unread, unsigned int total) {
 	fmtstr_formatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', PROGRAM_VERSION);
 	fmt.register_fmt('T', s);
+	fmt.register_fmt('F', feedtitle);
 
 	fmt.register_fmt('u', utils::to_string(unread));
 	fmt.register_fmt('t', utils::to_string(total));
