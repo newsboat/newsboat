@@ -883,6 +883,7 @@ O:Non-empty if file browser is in open mode, empty if in save mode
 Identifier:Meaning
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 T:Article title
+F:Feed title
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Highlighting Text

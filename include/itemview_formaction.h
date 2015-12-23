@@ -41,7 +41,7 @@ class itemview_formaction : public formaction {
 
 	private:
 		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
-		void set_head(const std::string& s, unsigned int unread, unsigned int total);
+		void set_head(const std::string& s, const std::string& feedtitle, unsigned int unread, unsigned int total);
 		void highlight_text(const std::string& searchphrase);
 
 		void render_source(std::vector<std::string>& lines, std::string desc, unsigned int width);
