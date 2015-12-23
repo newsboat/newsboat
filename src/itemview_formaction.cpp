@@ -66,7 +66,7 @@ void itemview_formaction::prepare() {
 
 		std::shared_ptr<rss_feed> feedptr = item->get_feedptr();
 
-		std::string title, feedtitle, feedheader;
+		std::string feedtitle, feedheader;
 		if (feedptr.get() != NULL) {
 			if (feedptr->title().length() > 0) {
 				feedtitle = feedptr->title();
@@ -82,7 +82,7 @@ void itemview_formaction::prepare() {
 		}
 
 		if (item->title().length() > 0) {
-			title = utils::strprintf("%s%s", _("Title: "), item->title().c_str());
+			std::string title = utils::strprintf("%s%s", _("Title: "), item->title().c_str());
 			listfmt.add_line(title, UINT_MAX, view_width);
 		}
 
