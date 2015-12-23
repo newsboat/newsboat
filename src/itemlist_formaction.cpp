@@ -702,12 +702,14 @@ void itemlist_formaction::prepare() {
 		if (rxman) {
 			int id;
 			if ((id = rxman->article_matches(item.first.get())) != -1) {
-				tmp_itemlist_format = utils::strprintf("<%d>%s</>", id, itemlist_format.c_str());
+				tmp_itemlist_format = utils::strprintf(
+				    "<%d>%s</>", id, tmp_itemlist_format.c_str());
 			}
 		}
 
 		if (item.first->unread()) {
-			tmp_itemlist_format = utils::strprintf("<unread>%s</>", itemlist_format.c_str());
+			tmp_itemlist_format = utils::strprintf(
+			    "<unread>%s</>", tmp_itemlist_format.c_str());
 		}
 
 		listfmt.add_line(fmt.do_format(tmp_itemlist_format, width), item.second);
