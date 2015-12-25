@@ -5,10 +5,14 @@
 #include <history.h>
 #include <regexmanager.h>
 #include <view.h>
+#include <assert.h>
+#include <listformatter.h>
 
 namespace newsbeuter {
 
 typedef std::pair<std::shared_ptr<rss_item>, unsigned int> itemptr_pos_pair;
+
+enum class InvalidationMode {PARTIAL, COMPLETE};
 
 class itemlist_formaction : public formaction {
 	public:
@@ -86,6 +90,34 @@ class itemlist_formaction : public formaction {
 
 		void prepare_set_filterpos();
 
+		inline void invalidate(InvalidationMode m) {
+			assert(m == InvalidationMode::COMPLETE);
+
+			invalidated = true;
+			invalidation_mode = InvalidationMode::COMPLETE;
+		}
+
+		inline void invalidate(const unsigned int pos) {
+			/* This function should never be called when itemlist is partially
+			 * invalidated.
+			 *
+			 * Theoretically, we could just work around that by upgrading
+			 * invalidation mode to "complete", but that will open up
+			 * a possibility for inadvertently degrading performance by calling
+			 * invalidate() two times in a row */
+			assert(invalidated == false ||
+			    (invalidated == true &&
+			    invalidation_mode == InvalidationMode::COMPLETE));
+
+			invalidated = true;
+			invalidation_mode = InvalidationMode::PARTIAL;
+			invalidated_itempos = pos;
+		}
+
+		std::string item2formatted_line(const itemptr_pos_pair& item,
+		    const unsigned int width, const std::string& itemlist_format,
+		    const std::string& datetime_format);
+
 		unsigned int pos;
 		std::shared_ptr<rss_feed> feed;
 		bool apply_filter;
@@ -109,6 +141,12 @@ class itemlist_formaction : public formaction {
 		unsigned int old_width;
 		int old_itempos;
 		std::string old_sort_order;
+
+		bool invalidated;
+		InvalidationMode invalidation_mode;
+		unsigned int invalidated_itempos;
+
+		listformatter listfmt;
 };
 
 }
