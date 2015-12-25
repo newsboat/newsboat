@@ -17,7 +17,7 @@
 namespace newsbeuter {
 
 itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
-	: formaction(vv,formstr), apply_filter(false), update_visible_items(true), show_searchresult(false),
+	: formaction(vv,formstr), apply_filter(false), show_searchresult(false),
 	  search_dummy_feed(new rss_feed(v->get_ctrl()->get_cache())),
 	  set_filterpos(false), filterpos(0), rxman(0), old_width(0),
 	  old_itempos(-1), old_sort_order(""), invalidated(false)
@@ -73,7 +73,6 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 	case OP_PURGE_DELETED: {
 		scope_measure m1("OP_PURGE_DELETED");
 		feed->purge_deleted_items();
-		update_visible_items = true;
 		invalidate(InvalidationMode::COMPLETE);
 	}
 	break;
@@ -232,7 +231,6 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			LOG(LOG_INFO, "itemlist_formaction: reloading current feed");
 			v->get_ctrl()->reload(pos);
 			invalidate(InvalidationMode::COMPLETE);
-			update_visible_items = true;
 		} else {
 			v->show_error(_("Error: you can't reload search results."));
 		}
@@ -344,7 +342,6 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			apply_filter = false;
 		}
 		save_filterpos();
-		update_visible_items = true;
 		invalidate(InvalidationMode::COMPLETE);
 		break;
 	case OP_PIPE_TO:
@@ -400,7 +397,6 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					} else {
 						apply_filter = true;
 						invalidate(InvalidationMode::COMPLETE);
-						update_visible_items = true;
 						save_filterpos();
 					}
 				}
@@ -426,7 +422,6 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 	case OP_CLEARFILTER:
 		apply_filter = false;
 		invalidate(InvalidationMode::COMPLETE);
-		update_visible_items = true;
 		save_filterpos();
 		break;
 	case OP_SORT: {
@@ -542,7 +537,6 @@ void itemlist_formaction::qna_end_setfilter() {
 
 		apply_filter = true;
 		invalidate(InvalidationMode::COMPLETE);
-		update_visible_items = true;
 		save_filterpos();
 	}
 }
@@ -606,10 +600,8 @@ void itemlist_formaction::qna_start_search() {
 }
 
 void itemlist_formaction::do_update_visible_items() {
-	if (!update_visible_items)
+	if (! (invalidated && invalidation_mode == InvalidationMode::COMPLETE))
 		return;
-
-	update_visible_items = false;
 
 	std::lock_guard<std::mutex> lock(feed->item_mutex);
 	std::vector<std::shared_ptr<rss_item>>& items = feed->items();
@@ -644,7 +636,6 @@ void itemlist_formaction::prepare() {
 		feed->sort(sort_order);
 		old_sort_order = sort_order;
 		invalidate(InvalidationMode::COMPLETE);
-		update_visible_items = true;
 	}
 
 	try {
@@ -742,7 +733,6 @@ void itemlist_formaction::init() {
 	f->set("msg","");
 	set_keymap_hints();
 	apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-articles"));
-	update_visible_items = true;
 	invalidate(InvalidationMode::COMPLETE);
 	do_update_visible_items();
 	if (v->get_cfg()->get_configvalue_as_bool("goto-first-unread")) {
@@ -943,7 +933,7 @@ int itemlist_formaction::get_pos(unsigned int realidx) {
 
 void itemlist_formaction::recalculate_form() {
 	formaction::recalculate_form();
-	set_update_visible_items(true);
+	invalidate(InvalidationMode::COMPLETE);
 
 	std::string itemposname = f->get("itempos");
 	unsigned int itempos = utils::to_u(itemposname);
@@ -1038,7 +1028,7 @@ void itemlist_formaction::set_feed(std::shared_ptr<rss_feed> fd) {
 	LOG(LOG_DEBUG, "itemlist_formaction::set_feed: fd pointer = %p title = `%s'", fd.get(), fd->title().c_str());
 	feed = fd;
 	feed->load();
-	update_visible_items = true;
+	invalidate(InvalidationMode::COMPLETE);
 	do_update_visible_items();
 }
 

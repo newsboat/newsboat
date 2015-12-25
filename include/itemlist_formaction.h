@@ -24,7 +24,7 @@ class itemlist_formaction : public formaction {
 		virtual void set_redraw(bool b) {
 			formaction::set_redraw(b);
 			apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-articles"));
-			update_visible_items = true;
+			invalidate(InvalidationMode::COMPLETE);
 		}
 
 		void set_feed(std::shared_ptr<rss_feed> fd);
@@ -50,10 +50,6 @@ class itemlist_formaction : public formaction {
 		bool jump_to_random_unread_item();
 
 		virtual void handle_cmdline(const std::string& cmd);
-
-		inline void set_update_visible_items(bool b) {
-			update_visible_items = b;
-		}
 
 		void do_update_visible_items();
 
@@ -123,7 +119,6 @@ class itemlist_formaction : public formaction {
 		bool apply_filter;
 		matcher m;
 		std::vector<itemptr_pos_pair> visible_items;
-		bool update_visible_items;
 		bool show_searchresult;
 		std::string searchphrase;
 
