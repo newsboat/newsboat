@@ -47,6 +47,8 @@ void rss_10_parser::parse_feed(feed& f, xmlNode * rootNode) {
 					it.content_encoded = get_content(itnode);
 				} else if (node_is(itnode, "summary", ITUNES_URI)) {
 					it.itunes_summary = get_content(itnode);
+				} else if (node_is(itnode, "creator", DC_URI)) {
+					it.author = get_content(itnode);
 				}
 			}
 			f.items.push_back(it);
