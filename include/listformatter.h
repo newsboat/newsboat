@@ -17,9 +17,15 @@ class listformatter {
 	public:
 		listformatter();
 		~listformatter();
-		void add_line(const std::string& text, unsigned int id = UINT_MAX, unsigned int width = 0);
-		void add_lines(const std::vector<std::string>& lines, unsigned int width = 0);
-		std::string format_list(regexmanager * r = NULL, const std::string& location = "");
+		void add_line(const std::string& text, unsigned int id = UINT_MAX,
+		    unsigned int width = 0);
+		void add_lines(const std::vector<std::string>& lines,
+		    unsigned int width = 0);
+		void set_line(const unsigned int itempos, const std::string& text,
+		    unsigned int id = UINT_MAX, unsigned int width = 0);
+		inline void clear() { lines.clear(); }
+		std::string format_list(regexmanager * r = NULL,
+		    const std::string& location = "");
 		inline unsigned int get_lines_count() {
 			return lines.size();
 		}

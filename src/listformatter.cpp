@@ -1,6 +1,8 @@
 #include <listformatter.h>
 #include <utils.h>
 #include <stflpp.h>
+#include <assert.h>
+#include <limits.h>
 
 namespace newsbeuter {
 
@@ -9,6 +11,16 @@ listformatter::listformatter() : refresh_cache(true) { }
 listformatter::~listformatter() { }
 
 void listformatter::add_line(const std::string& text, unsigned int id, unsigned int width) {
+	set_line(UINT_MAX, text, id, width);
+	LOG(LOG_DEBUG, "listformatter::add_line: `%s'", text.c_str());
+	refresh_cache = true;
+}
+
+void listformatter::set_line(const unsigned int itempos,
+    const std::string& text, unsigned int id, unsigned int width)
+{
+	line_id_pair line;
+
 	if (width > 0 && text.length() > 0) {
 		std::wstring mytext = utils::clean_nonprintable_characters(utils::str2wstr(text));
 
@@ -20,14 +32,18 @@ void listformatter::add_line(const std::string& text, unsigned int id, unsigned 
 					size--;
 				}
 			}
-			lines.push_back(line_id_pair(utils::wstr2str(mytext.substr(0, size)), id));
+			line = line_id_pair(utils::wstr2str(mytext.substr(0, size)), id);
 			mytext.erase(0, size);
 		}
 	} else {
-		lines.push_back(line_id_pair(utils::wstr2str(utils::clean_nonprintable_characters(utils::str2wstr(text))), id));
+		line = line_id_pair(utils::wstr2str(utils::clean_nonprintable_characters(utils::str2wstr(text))), id);
 	}
-	LOG(LOG_DEBUG, "listformatter::add_line: `%s'", text.c_str());
-	refresh_cache = true;
+
+	if (itempos == UINT_MAX) {
+		lines.push_back(line);
+	} else {
+		lines[itempos] = line;
+	}
 }
 
 void listformatter::add_lines(const std::vector<std::string>& thelines, unsigned int width) {

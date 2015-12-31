@@ -6,7 +6,6 @@
 #include <exceptions.h>
 #include <utils.h>
 #include <formatstring.h>
-#include <listformatter.h>
 
 #include <cassert>
 #include <sstream>
@@ -18,11 +17,12 @@
 namespace newsbeuter {
 
 itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
-	: formaction(vv,formstr), apply_filter(false), update_visible_items(true), show_searchresult(false),
+	: formaction(vv,formstr), apply_filter(false), show_searchresult(false),
 	  search_dummy_feed(new rss_feed(v->get_ctrl()->get_cache())),
-	  set_filterpos(false), filterpos(0), rxman(0), old_width(0), old_itempos(-1) {
+	  set_filterpos(false), filterpos(0), rxman(0), old_width(0),
+	  old_itempos(-1), old_sort_order(""), invalidated(false)
+{
 	assert(true==m.parse(FILTER_UNREAD_ITEMS));
-	old_sort_order = "";
 }
 
 itemlist_formaction::~itemlist_formaction() { }
@@ -47,7 +47,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			// no need to mark item as read, the itemview already do that
 			old_itempos = itempos;
 			v->push_itemview(feed, visible_items[itempos].first->guid(), show_searchresult ? searchphrase : "");
-			do_redraw = true;
+			invalidate(itempos);
 		} else {
 			v->show_error(_("No item selected!")); // should not happen
 		}
@@ -64,7 +64,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			v->get_ctrl()->mark_deleted(visible_items[itempos].first->guid(), visible_items[itempos].first->deleted());
 			if (itempos < visible_items.size()-1)
 				f->set("itempos", utils::strprintf("%u", itempos + 1));
-			do_redraw = true;
+			invalidate(itempos);
 		} else {
 			v->show_error(_("No item selected!")); // should not happen
 		}
@@ -73,8 +73,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 	case OP_PURGE_DELETED: {
 		scope_measure m1("OP_PURGE_DELETED");
 		feed->purge_deleted_items();
-		update_visible_items = true;
-		do_redraw = true;
+		invalidate(InvalidationMode::COMPLETE);
 	}
 	break;
 	case OP_OPENBROWSER_AND_MARK: {
@@ -91,7 +90,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				} else {
 					process_operation(OP_NEXTUNREAD);
 				}
-				do_redraw = true;
+				invalidate(itempos);
 			}
 		} else {
 			v->show_error(_("No item selected!")); // should not happen
@@ -103,7 +102,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
 				v->open_in_browser(visible_items[itempos].first->link());
-				do_redraw = true;
+				invalidate(itempos);
 			}
 		} else {
 			v->show_error(_("No item selected!")); // should not happen
@@ -139,7 +138,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			} else {
 				process_operation(OP_NEXTUNREAD);
 			}
-			do_redraw = true;
+			invalidate(itempos);
 		}
 	}
 	break;
@@ -231,8 +230,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		if (!show_searchresult) {
 			LOG(LOG_INFO, "itemlist_formaction: reloading current feed");
 			v->get_ctrl()->reload(pos);
-			update_visible_items = true;
-			do_redraw = true;
+			invalidate(InvalidationMode::COMPLETE);
 		} else {
 			v->show_error(_("Error: you can't reload search results."));
 		}
@@ -327,7 +325,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			}
 			if (v->get_cfg()->get_configvalue_as_bool("markfeedread-jumps-to-next-unread"))
 				process_operation(OP_NEXTUNREAD);
-			do_redraw = true;
+			invalidate(itempos);
 			v->set_status("");
 		} catch (const dbexception& e) {
 			v->show_error(utils::strprintf(_("Error: couldn't mark feed read: %s"), e.what()));
@@ -344,8 +342,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			apply_filter = false;
 		}
 		save_filterpos();
-		update_visible_items = true;
-		do_redraw = true;
+		invalidate(InvalidationMode::COMPLETE);
 		break;
 	case OP_PIPE_TO:
 		if(visible_items.size() != 0) {
@@ -399,8 +396,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 						m.parse(FILTER_UNREAD_ITEMS);
 					} else {
 						apply_filter = true;
-						update_visible_items = true;
-						do_redraw = true;
+						invalidate(InvalidationMode::COMPLETE);
 						save_filterpos();
 					}
 				}
@@ -425,8 +421,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		break;
 	case OP_CLEARFILTER:
 		apply_filter = false;
-		update_visible_items = true;
-		do_redraw = true;
+		invalidate(InvalidationMode::COMPLETE);
 		save_filterpos();
 		break;
 	case OP_SORT: {
@@ -474,7 +469,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 	}
 	break;
 	case OP_INT_RESIZE:
-		do_redraw = true;
+		invalidate(InvalidationMode::COMPLETE);
 		break;
 	default:
 		break;
@@ -541,8 +536,7 @@ void itemlist_formaction::qna_end_setfilter() {
 		}
 
 		apply_filter = true;
-		update_visible_items = true;
-		do_redraw = true;
+		invalidate(InvalidationMode::COMPLETE);
 		save_filterpos();
 	}
 }
@@ -562,7 +556,7 @@ void itemlist_formaction::qna_end_editflags() {
 		v->get_ctrl()->update_flags(visible_items[itempos].first);
 		v->set_status(_("Flags updated."));
 		LOG(LOG_DEBUG, "itemlist_formaction::finished_qna: updated flags");
-		do_redraw = true;
+		invalidate(itempos);
 	}
 }
 
@@ -606,10 +600,8 @@ void itemlist_formaction::qna_start_search() {
 }
 
 void itemlist_formaction::do_update_visible_items() {
-	if (!update_visible_items)
+	if (! (invalidated && invalidation_mode == InvalidationMode::COMPLETE))
 		return;
-
-	update_visible_items = false;
 
 	std::lock_guard<std::mutex> lock(feed->item_mutex);
 	std::vector<std::shared_ptr<rss_item>>& items = feed->items();
@@ -634,8 +626,6 @@ void itemlist_formaction::do_update_visible_items() {
 	LOG(LOG_DEBUG, "itemlist_formaction::do_update_visible_items: size = %u", visible_items.size());
 
 	visible_items = new_visible_items;
-
-	do_redraw = true;
 }
 
 void itemlist_formaction::prepare() {
@@ -645,8 +635,7 @@ void itemlist_formaction::prepare() {
 	if (sort_order != old_sort_order) {
 		feed->sort(sort_order);
 		old_sort_order = sort_order;
-		update_visible_items = true;
-		do_redraw = true;
+		invalidate(InvalidationMode::COMPLETE);
 	}
 
 	try {
@@ -663,7 +652,7 @@ void itemlist_formaction::prepare() {
 			if (visible_items[itempos].first->unread()) {
 				visible_items[itempos].first->set_unread(false);
 				v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), true);
-				do_redraw = true;
+				invalidate(itempos);
 			}
 		}
 	}
@@ -671,64 +660,80 @@ void itemlist_formaction::prepare() {
 	unsigned int width = utils::to_u(f->get("items:w"));
 
 	if (old_width != width) {
-		do_redraw = true;
+		invalidate(InvalidationMode::COMPLETE);
 		old_width = width;
 	}
 
-	if (!do_redraw)
+	if (!invalidated)
 		return;
-	do_redraw = false;
 
-	listformatter listfmt;
+	if (invalidated) {
+		auto datetime_format = v->get_cfg()->get_configvalue("datetime-format");
+		auto itemlist_format = v->get_cfg()->get_configvalue("articlelist-format");
 
-	std::string datetimeformat = v->get_cfg()->get_configvalue("datetime-format");
-	std::string itemlist_format = v->get_cfg()->get_configvalue("articlelist-format");
+		if (invalidation_mode == InvalidationMode::COMPLETE) {
+			listfmt.clear();
 
-
-	for (auto item : visible_items) {
-		std::string tmp_itemlist_format = itemlist_format;
-		fmtstr_formatter fmt;
-
-		fmt.register_fmt('i', utils::strprintf("%u",item.second + 1));
-		fmt.register_fmt('f', gen_flags(item.first));
-		fmt.register_fmt('D', gen_datestr(item.first->pubDate_timestamp(), datetimeformat.c_str()));
-		if (feed->rssurl() != item.first->feedurl() && item.first->get_feedptr() != NULL) {
-			fmt.register_fmt('T', utils::replace_all(item.first->get_feedptr()->title(), "<", "<>"));
-		}
-		fmt.register_fmt('t', utils::replace_all(item.first->title(), "<", "<>"));
-		fmt.register_fmt('a', utils::replace_all(item.first->author(), "<", "<>"));
-		fmt.register_fmt('L', item.first->length());
-
-		if (rxman) {
-			int id;
-			if ((id = rxman->article_matches(item.first.get())) != -1) {
-				tmp_itemlist_format = utils::strprintf(
-				    "<%d>%s</>", id, tmp_itemlist_format.c_str());
+			for (auto item : visible_items) {
+				auto line = item2formatted_line(item, width, itemlist_format, datetime_format);
+				listfmt.add_line(line, item.second);
 			}
+		} else if (invalidation_mode == InvalidationMode::PARTIAL) {
+			auto item = visible_items[invalidated_itempos];
+			auto line = item2formatted_line(item, width, itemlist_format, datetime_format);
+			listfmt.set_line(invalidated_itempos, line, item.second);
+		} else {
+			LOG(LOG_ERROR, "invalidation_mode is neither COMPLETE nor PARTIAL");
 		}
 
-		if (item.first->unread()) {
-			tmp_itemlist_format = utils::strprintf(
-			    "<unread>%s</>", tmp_itemlist_format.c_str());
-		}
-
-		listfmt.add_line(fmt.do_format(tmp_itemlist_format, width), item.second);
+		f->modify("items", "replace_inner", listfmt.format_list(rxman, "articlelist"));
 	}
 
-	f->modify("items","replace_inner", listfmt.format_list(rxman, "articlelist"));
+	invalidated = false;
 
 	set_head(feed->title(),feed->unread_item_count(),feed->items().size(), feed->rssurl());
 
 	prepare_set_filterpos();
 }
 
+std::string itemlist_formaction::item2formatted_line(
+    const itemptr_pos_pair& item, const unsigned int width,
+    const std::string& itemlist_format, const std::string& datetime_format)
+{
+	std::string tmp_itemlist_format = itemlist_format;
+	fmtstr_formatter fmt;
+	fmt.register_fmt('i', utils::strprintf("%u",item.second + 1));
+	fmt.register_fmt('f', gen_flags(item.first));
+	fmt.register_fmt('D', gen_datestr(item.first->pubDate_timestamp(), datetime_format.c_str()));
+	if (feed->rssurl() != item.first->feedurl() && item.first->get_feedptr() != NULL) {
+		fmt.register_fmt('T', utils::replace_all(item.first->get_feedptr()->title(), "<", "<>"));
+	}
+	fmt.register_fmt('t', utils::replace_all(item.first->title(), "<", "<>"));
+	fmt.register_fmt('a', utils::replace_all(item.first->author(), "<", "<>"));
+	fmt.register_fmt('L', item.first->length());
+
+	if (rxman) {
+		int id;
+		if ((id = rxman->article_matches(item.first.get())) != -1) {
+			tmp_itemlist_format = utils::strprintf(
+				"<%d>%s</>", id, tmp_itemlist_format.c_str());
+		}
+	}
+
+	if (item.first->unread()) {
+		tmp_itemlist_format = utils::strprintf(
+			"<unread>%s</>", tmp_itemlist_format.c_str());
+	}
+
+	return fmt.do_format(tmp_itemlist_format, width);
+}
+
 void itemlist_formaction::init() {
 	f->set("itempos","0");
 	f->set("msg","");
-	do_redraw = true;
 	set_keymap_hints();
 	apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-articles"));
-	update_visible_items = true;
+	invalidate(InvalidationMode::COMPLETE);
 	do_update_visible_items();
 	if (v->get_cfg()->get_configvalue_as_bool("goto-first-unread")) {
 		jump_to_next_unread_item(true);
@@ -928,7 +933,7 @@ int itemlist_formaction::get_pos(unsigned int realidx) {
 
 void itemlist_formaction::recalculate_form() {
 	formaction::recalculate_form();
-	set_update_visible_items(true);
+	invalidate(InvalidationMode::COMPLETE);
 
 	std::string itemposname = f->get("itempos");
 	unsigned int itempos = utils::to_u(itemposname);
@@ -1023,7 +1028,7 @@ void itemlist_formaction::set_feed(std::shared_ptr<rss_feed> fd) {
 	LOG(LOG_DEBUG, "itemlist_formaction::set_feed: fd pointer = %p title = `%s'", fd.get(), fd->title().c_str());
 	feed = fd;
 	feed->load();
-	update_visible_items = true;
+	invalidate(InvalidationMode::COMPLETE);
 	do_update_visible_items();
 }
 
