@@ -163,7 +163,7 @@ install-examples:
 
 install: install-newsbeuter install-podbeuter install-docs install-examples install-mo
 
-uninstall:
+uninstall: uninstall-mo
 	$(RM) $(DESTDIR)$(prefix)/bin/$(NEWSBEUTER)
 	$(RM) $(DESTDIR)$(prefix)/bin/$(PODBEUTER)
 	$(RM) $(DESTDIR)$(mandir)/man1/$(NEWSBEUTER).1
@@ -200,6 +200,15 @@ install-mo: mo-files
 		$(MKDIR) $$dir ; \
 		$(INSTALL) -m 644 $$mof $$dir/$(PACKAGE).mo ; \
 		echo "Installing $$mofile as $$dir/$(PACKAGE).mo" ; \
+	done
+
+uninstall-mo:
+	@for mof in $(MOFILES) ; do \
+		mofile=`basename $$mof` ; \
+		lang=`echo $$mofile | sed 's/\.mo$$//'`; \
+		dir=$(DESTDIR)$(localedir)/$$lang/LC_MESSAGES; \
+		$(RM) -f $$dir/$(PACKAGE).mo ; \
+		echo "Uninstalling $$dir/$(PACKAGE).mo" ; \
 	done
 
 test: $(LIB_OUTPUT) $(NEWSBEUTER_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) test/test.o
