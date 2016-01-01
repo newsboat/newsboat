@@ -68,14 +68,14 @@ POTFILE=po/newsbeuter.pot
 TEXTCONV=./txt2h.pl
 RM=rm -f
 
-all: $(NEWSBEUTER) $(PODBEUTER)
+all: $(NEWSBEUTER) $(PODBEUTER) mo-files
 
-NB_DEPS=$(MOFILES) $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBEUTER_OBJS) $(RSSPPLIB_OUTPUT)
+NB_DEPS=$(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBEUTER_OBJS) $(RSSPPLIB_OUTPUT)
 
 $(NEWSBEUTER): $(NB_DEPS)
 	$(CXX) $(CXXFLAGS) -o $(NEWSBEUTER) $(NEWSBEUTER_OBJS) $(NEWSBEUTER_LIBS) $(LDFLAGS)
 
-$(PODBEUTER): $(MOFILES) $(LIB_OUTPUT) $(PODBEUTER_OBJS)
+$(PODBEUTER): $(LIB_OUTPUT) $(PODBEUTER_OBJS)
 	$(CXX) $(CXXFLAGS) -o $(PODBEUTER) $(PODBEUTER_OBJS) $(PODBEUTER_LIBS) $(LDFLAGS)
 
 $(LIB_OUTPUT): $(LIB_OBJS)
@@ -141,17 +141,27 @@ doc:
 fmt:
 	astyle --suffix=none --style=java --indent=tab --indent-classes *.cpp include/*.h src/*.cpp rss/*.{cpp,h} test/*.cpp
 
-install: install-mo
+install-newsbeuter:
 	$(MKDIR) $(DESTDIR)$(prefix)/bin
 	$(INSTALL) $(NEWSBEUTER) $(DESTDIR)$(prefix)/bin
-	$(INSTALL) $(PODBEUTER) $(DESTDIR)$(prefix)/bin
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
 	$(INSTALL) doc/$(NEWSBEUTER).1 $(DESTDIR)$(mandir)/man1 || true
+
+install-podbeuter:
+	$(MKDIR) $(DESTDIR)$(prefix)/bin
+	$(INSTALL) $(PODBEUTER) $(DESTDIR)$(prefix)/bin
+	$(MKDIR) $(DESTDIR)$(mandir)/man1
 	$(INSTALL) doc/$(PODBEUTER).1 $(DESTDIR)$(mandir)/man1 || true
+
+install-docs:
 	$(MKDIR) $(DESTDIR)$(docdir)
 	$(INSTALL) -m 644 doc/xhtml/* $(DESTDIR)$(docdir) || true
+
+install-examples:
 	$(MKDIR) $(DESTDIR)$(docdir)/examples
 	$(INSTALL) -m 644 doc/example-config $(DESTDIR)$(docdir)/examples/config || true
+
+install: install-newsbeuter install-podbeuter install-docs install-examples install-mo
 
 uninstall:
 	$(RM) $(DESTDIR)$(prefix)/bin/$(NEWSBEUTER)
@@ -166,6 +176,8 @@ uninstall:
 
 # the following targets are i18n/l10n-related:
 
+mo-files: $(MOFILES)
+
 extract:
 	$(RM) $(POTFILE)
 	xgettext -c/ -k_ -k_s -o $(POTFILE) *.cpp src/*.cpp rss/*.cpp
@@ -179,7 +191,7 @@ msgmerge:
 clean-mo:
 	$(RM) $(MOFILES) po/*~
 
-install-mo:
+install-mo: mo-files
 	$(MKDIR) $(DESTDIR)$(datadir)
 	@for mof in $(MOFILES) ; do \
 		mofile=`basename $$mof` ; \
