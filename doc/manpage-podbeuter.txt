@@ -5,7 +5,7 @@ Andreas Krennmair <ak@newsbeuter.org>
 
 NAME
 ----
-podbeuter - a podcast download manage for text terminals
+podbeuter - a podcast download manager for text terminals
 
 
 SYNOPSIS
