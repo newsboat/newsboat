@@ -144,8 +144,7 @@ bool controller::setup_dirs_xdg(const char *env_home, bool silent) {
 	 * data dir exists, because if it doesn't we'll create it. */
 
 	config_dir = xdg_config_dir;
-	// create configuration directory if it doesn't exist
-	utils::mkdir_parents(config_dir.c_str(), 0700);
+
 	// create data directory if it doesn't exist
 	utils::mkdir_parents(xdg_data_dir.c_str(), 0700);
 
