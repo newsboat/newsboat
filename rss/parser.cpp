@@ -129,7 +129,7 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 		custom_headers = curl_slist_append(custom_headers, header.c_str());
 	}
 
-	if(custom_headers) {
+	if (custom_headers) {
 		curl_easy_setopt(easyhandle, CURLOPT_HTTPHEADER, custom_headers);
 	}
 

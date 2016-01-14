@@ -20,7 +20,7 @@ using namespace newsbeuter;
 namespace podbeuter {
 
 pb_view::pb_view(pb_controller * c) : ctrl(c), dllist_form(dllist_str), help_form(help_str), keys(0) {
-	if(getenv("ESCDELAY") == NULL) {
+	if (getenv("ESCDELAY") == NULL) {
 		set_escdelay(25);
 	}
 }

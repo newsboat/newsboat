@@ -364,7 +364,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 	case OP_0: {
 		unsigned int idx = op - OP_1;
 		LOG(LOG_DEBUG, "itemview::run: OP_1 = %d op = %d idx = %u", OP_1, op, idx);
-		if(idx < links.size()) {
+		if (idx < links.size()) {
 			v->set_status(_("Starting browser..."));
 			v->open_in_browser(links[idx].first);
 			v->set_status("");
@@ -520,7 +520,7 @@ void itemview_formaction::finished_qna(operation op) {
 	case OP_INT_GOTO_URL: {
 		unsigned int idx = 0;
 		sscanf(qna_responses[0].c_str(),"%u",&idx);
-		if(idx && idx-1 < links.size()) {
+		if (idx && idx-1 < links.size()) {
 			v->set_status(_("Starting browser..."));
 			v->open_in_browser(links[idx-1].first);
 			v->set_status("");

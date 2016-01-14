@@ -64,14 +64,14 @@ std::string oldreader_api::retrieve_auth() {
 	}
 
 	std::string pass = cfg->get_configvalue("oldreader-password");
-	if( pass == "" ) {
+	if ( pass == "" ) {
 		wordexp_t exp;
 		std::ifstream ifs;
 		wordexp(cfg->get_configvalue("oldreader-passwordfile").c_str(),&exp,0);
 		ifs.open(exp.we_wordv[0]);
 		wordfree(&exp);
 		if (!ifs) {
-			if(!flushed) {
+			if (!flushed) {
 				std::cout << std::endl;
 				std::cout.flush();
 			}
@@ -79,7 +79,7 @@ std::string oldreader_api::retrieve_auth() {
 			pass = std::string( getpass("Password for The Old Reader: ") );
 		} else {
 			std::getline(ifs, pass);
-			if(pass == "") {
+			if (pass == "") {
 				return "";
 			}
 		}
@@ -163,7 +163,7 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 		// Ignore URLs where ID start with given prefix - those never load,
 		// always returning 404 and annoying people
 		const char* prefix = "tor/sponsored/";
-		if(strncmp(id, prefix, strlen(prefix)) != 0) {
+		if (strncmp(id, prefix, strlen(prefix)) != 0) {
 			tags.push_back(std::string("~") + title);
 
 			auto url = utils::strprintf(
@@ -181,7 +181,7 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 }
 
 void oldreader_api::add_custom_headers(curl_slist** custom_headers) {
-	if(auth_header.empty()) {
+	if (auth_header.empty()) {
 		auth_header = utils::strprintf("Authorization: GoogleLogin auth=%s", auth.c_str());
 	}
 	LOG(LOG_DEBUG, "oldreader_api::add_custom_headers header = %s", auth_header.c_str());

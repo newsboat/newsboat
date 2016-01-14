@@ -345,7 +345,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		invalidate(InvalidationMode::COMPLETE);
 		break;
 	case OP_PIPE_TO:
-		if(visible_items.size() != 0) {
+		if (visible_items.size() != 0) {
 			std::vector<qna_pair> qna;
 			if (automatic) {
 				if (args->size() > 0) {

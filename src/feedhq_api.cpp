@@ -62,14 +62,14 @@ std::string feedhq_api::retrieve_auth() {
 	}
 
 	std::string pass = cfg->get_configvalue("feedhq-password");
-	if( pass == "" ) {
+	if ( pass == "" ) {
 		wordexp_t exp;
 		std::ifstream ifs;
 		wordexp(cfg->get_configvalue("feedhq-passwordfile").c_str(),&exp,0);
 		ifs.open(exp.we_wordv[0]);
 		wordfree(&exp);
 		if (!ifs) {
-			if(!flushed) {
+			if (!flushed) {
 				std::cout << std::endl;
 				std::cout.flush();
 			}
@@ -77,7 +77,7 @@ std::string feedhq_api::retrieve_auth() {
 			pass = std::string( getpass("Password for FeedHQ: ") );
 		} else {
 			ifs >> pass;
-			if(pass == "") {
+			if (pass == "") {
 				return "";
 			}
 		}
@@ -178,7 +178,7 @@ std::vector<tagged_feedurl> feedhq_api::get_subscribed_urls() {
 }
 
 void feedhq_api::add_custom_headers(curl_slist** custom_headers) {
-	if(auth_header.empty()) {
+	if (auth_header.empty()) {
 		auth_header = utils::strprintf(
 		                  "Authorization: GoogleLogin auth=%s", auth.c_str());
 	}

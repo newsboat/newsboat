@@ -64,7 +64,7 @@ void urlview_formaction::process_operation(operation op, bool /* automatic */, s
 	case OP_0: {
 		unsigned int idx = op - OP_1;
 
-		if(idx < links.size()) {
+		if (idx < links.size()) {
 			v->set_status(_("Starting browser..."));
 			v->open_in_browser(links[idx].first);
 			v->set_status("");

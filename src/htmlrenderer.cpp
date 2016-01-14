@@ -632,7 +632,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 	add_nonempty_line(curline, tables, lines);
 
 	// force all tables to be closed and rendered
-	while(!tables.empty()) {
+	while (!tables.empty()) {
 		std::vector<std::string> table_text;
 		render_table(tables.back(), table_text);
 		tables.pop_back();

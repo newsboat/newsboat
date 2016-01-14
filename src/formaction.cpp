@@ -312,7 +312,7 @@ void formaction::start_bookmark_qna(const std::string& default_title, const std:
 	std::string new_title = "";
 	bool is_bm_autopilot = v->get_cfg()->get_configvalue_as_bool("bookmark-autopilot");
 	prompts.push_back(qna_pair(_("URL: "), default_url));
-	if(default_title.empty()) { // call the function to figure out title from url only if the default_title is no good
+	if (default_title.empty()) { // call the function to figure out title from url only if the default_title is no good
 		new_title = make_title(default_url);
 		prompts.push_back(qna_pair(_("Title: "), new_title));
 	} else {

@@ -60,7 +60,7 @@ std::string ttrss_api::retrieve_sid() {
 		ifs.open(exp.we_wordv[0]);
 		wordfree(&exp);
 		if (!ifs) {
-			if(!flushed) {
+			if (!flushed) {
 				std::cout << std::endl;
 				std::cout.flush();
 			}
@@ -69,7 +69,7 @@ std::string ttrss_api::retrieve_sid() {
 
 		} else {
 			ifs >> pass;
-			if(pass == "") {
+			if (pass == "") {
 				return "";
 			}
 		}
@@ -192,7 +192,7 @@ bool ttrss_api::mark_all_read(const std::string& feed_url) {
 	args["feed_id"] = url_to_id(feed_url);
 	json_object* content = run_op("catchupFeed", args);
 
-	if(!content)
+	if (!content)
 		return false;
 
 	json_object_put(content);
@@ -263,24 +263,24 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 
 		json_object* node {};
 
-		if(json_object_object_get_ex(item_obj, "title", &node) == TRUE) {
+		if (json_object_object_get_ex(item_obj, "title", &node) == TRUE) {
 			item.title = json_object_get_string(node);
 		}
 
-		if(json_object_object_get_ex(item_obj, "link", &node) == TRUE) {
+		if (json_object_object_get_ex(item_obj, "link", &node) == TRUE) {
 			item.link = json_object_get_string(node);
 		}
 
-		if(json_object_object_get_ex(item_obj, "author", &node) == TRUE) {
+		if (json_object_object_get_ex(item_obj, "author", &node) == TRUE) {
 			item.author = json_object_get_string(node);
 		}
 
-		if(json_object_object_get_ex(item_obj, "content", &node) == TRUE) {
+		if (json_object_object_get_ex(item_obj, "content", &node) == TRUE) {
 			item.content_encoded = json_object_get_string(node);
 		}
 
 		json_object * attachments {};
-		if(json_object_object_get_ex(item_obj, "attachments", &attachments)
+		if (json_object_object_get_ex(item_obj, "attachments", &attachments)
 				== TRUE)
 		{
 			struct array_list * attachments_list = json_object_get_array(attachments);
@@ -289,13 +289,13 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 				json_object* attachment =
 				    (json_object*)array_list_get_idx(attachments_list, 0);
 
-				if(json_object_object_get_ex(attachment, "content_url", &node)
+				if (json_object_object_get_ex(attachment, "content_url", &node)
 						== TRUE)
 				{
 					item.enclosure_url = json_object_get_string(node);
 				}
 
-				if(json_object_object_get_ex(attachment, "content_type", &node)
+				if (json_object_object_get_ex(attachment, "content_type", &node)
 						== TRUE)
 				{
 					item.enclosure_type = json_object_get_string(node);
@@ -346,7 +346,7 @@ void ttrss_api::fetch_feeds_per_category(
 		cat_id = json_object_get_int(cat_id_obj);
 
 		// ignore special categories, for now
-		if(cat_id < 0)
+		if (cat_id < 0)
 			return;
 
 		json_object_object_get_ex(cat, "title", &cat_title_obj);

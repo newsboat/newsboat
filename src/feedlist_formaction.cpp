@@ -38,7 +38,7 @@ void feedlist_formaction::init() {
 
 	f->run(-3); // compute all widget dimensions
 
-	if(v->get_ctrl()->get_refresh_on_start()) {
+	if (v->get_ctrl()->get_refresh_on_start()) {
 		v->get_ctrl()->start_reload_all_thread();
 	}
 	v->get_ctrl()->update_feedlist();

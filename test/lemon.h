@@ -187,7 +187,7 @@ namespace lemon {
       output_ << "# Looks like you failed " << num_failed_;
       output_ << " of " << total_tests << "\n";
       return false;
-    } else if(num_planned_ > 0 && total_tests > num_planned_) {
+    } else if (num_planned_ > 0 && total_tests > num_planned_) {
       output_ << "# Looks like you ran " << total_tests << " tests, ";
       output_ << "but only planned " <<  num_planned_ << "\n";
       return false;

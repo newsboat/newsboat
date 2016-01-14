@@ -357,7 +357,7 @@ std::string utils::retrieve_url(const std::string& url, configcontainer * cfgcon
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, &buf);
 
-	if(postdata != NULL) {
+	if (postdata != NULL) {
 		curl_easy_setopt(easyhandle, CURLOPT_POST, 1);
 		curl_easy_setopt(easyhandle, CURLOPT_POSTFIELDS, postdata->c_str());
 	}
@@ -370,7 +370,7 @@ std::string utils::retrieve_url(const std::string& url, configcontainer * cfgcon
 	curl_easy_perform(easyhandle);
 	curl_easy_cleanup(easyhandle);
 
-	if(postdata != NULL) {
+	if (postdata != NULL) {
 		LOG(LOG_DEBUG, "utils::retrieve_url(%s)[%s]: %s", url.c_str(), postdata->c_str(), buf.c_str());
 	} else {
 		LOG(LOG_DEBUG, "utils::retrieve_url(%s)[-]: %s", url.c_str(), buf.c_str());
@@ -625,13 +625,13 @@ bool utils::is_valid_color(const std::string& color) {
 		"black", "red", "green", "yellow", "blue",
 		"magenta", "cyan", "white", "default"
 	};
-	if(colors.find(color) != colors.end()) {
+	if (colors.find(color) != colors.end()) {
 		return true;
 	}
 
 	// does it start with "color"?
 	if (color.size() > 5 && color.substr(0, 5) == "color") {
-		if(color[5] == '0') {
+		if (color[5] == '0') {
 			// if the remainder of the string starts with zero, it can only be
 			// "color0"
 			return color == "color0" ? true : false;
@@ -643,11 +643,11 @@ bool utils::is_valid_color(const std::string& color) {
 			int n = std::stoi(number, &pos);
 
 			// remainder should not contain any trailing characters
-			if(number.size() != pos) return false;
+			if (number.size() != pos) return false;
 
 			// remainder should be a number in (0; 255]. The interval is
 			// half-open because zero is already handled above.
-			if(n > 0 && n < 256) return true;
+			if (n > 0 && n < 256) return true;
 		}
 	}
 	return false;
@@ -658,7 +658,7 @@ bool utils::is_valid_attribute(const std::string& attrib) {
 		"standout", "underline", "reverse", "blink",
 		"dim", "bold", "protect", "invis", "default"
 	};
-	if(attribs.find(attrib) != attribs.end()) {
+	if (attribs.find(attrib) != attribs.end()) {
 		return true;
 	} else {
 		return false;
