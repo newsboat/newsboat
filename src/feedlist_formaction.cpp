@@ -254,7 +254,16 @@ REDO:
 	case OP_MARKALLFEEDSREAD:
 		LOG(LOG_INFO, "feedlist_formaction: marking all feeds read");
 		v->set_status(_("Marking all feeds read..."));
-		v->get_ctrl()->catchup_all();
+		if (tag == "") {
+			v->get_ctrl()->catchup_all("");
+		} else {
+			// we're in tag view, so let's only touch feeds that are visible
+			for (const auto& feedptr_pos_pair : visible_feeds) {
+				auto rss_feed_ptr = feedptr_pos_pair.first;
+				auto feedurl = rss_feed_ptr->rssurl();
+				v->get_ctrl()->catchup_all(feedurl);
+			}
+		}
 		v->set_status("");
 		do_redraw = true;
 		break;

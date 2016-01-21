@@ -669,16 +669,21 @@ void controller::update_visible_feeds() {
 	v->update_visible_feeds(feeds);
 }
 
-void controller::catchup_all() {
+void controller::catchup_all(const std::string& feedurl) {
 	try {
-		rsscache->catchup_all();
+		rsscache->catchup_all(feedurl);
 	} catch (const dbexception& e) {
 		v->show_error(utils::strprintf(_("Error: couldn't mark all feeds read: %s"), e.what()));
 		return;
 	}
+
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	for (auto feed : feeds) {
+	for (const auto& feed : feeds) {
 		std::lock_guard<std::mutex> lock(feed->item_mutex);
+
+		if (feedurl.length() > 0 && feed->rssurl() != feedurl)
+			continue;
+
 		if (feed->items().size() > 0) {
 			if (api) {
 				api->mark_all_read(feed->rssurl());
@@ -687,6 +692,9 @@ void controller::catchup_all() {
 				item->set_unread_nowrite(false);
 			}
 		}
+
+		// no point in going on - there is only one feed with a given URL
+		if (feedurl.length() > 0) break;
 	}
 }
 

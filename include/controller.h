@@ -54,7 +54,7 @@ class controller {
 		void mark_all_read(unsigned int pos);
 		void mark_article_read(const std::string& guid, bool read);
 		void record_google_replay(const std::string& guid, bool read);
-		void catchup_all();
+		void catchup_all(const std::string& feedurl);
 		inline void catchup_all(std::shared_ptr<rss_feed> feed) {
 			rsscache->catchup_all(feed);
 		}
