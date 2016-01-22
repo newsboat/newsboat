@@ -23,6 +23,7 @@ class poddlthread {
 	protected:
 		double compute_kbps();
 	private:
+		void run();
 		void mkdir_p(const char * file);
 		download * dl;
 		std::shared_ptr<std::ofstream> f;

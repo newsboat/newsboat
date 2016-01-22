@@ -25,6 +25,13 @@ poddlthread::~poddlthread() {
 }
 
 void poddlthread::operator()() {
+	run();
+}
+
+void poddlthread::run() {
+	// are we resuming previous download?
+	bool resumed_download = false;
+
 	gettimeofday(&tv1, NULL);
 	++bytecount;
 
@@ -55,11 +62,13 @@ void poddlthread::operator()() {
 		mkdir_p(dl->filename());
 		f->open(dl->filename(), std::fstream::out);
 		dl->set_offset(0);
+		resumed_download = false;
 	} else {
 		LOG(LOG_INFO, "poddlthread::run: stat ok: starting download from %u", sb.st_size);
 		curl_easy_setopt(easyhandle, CURLOPT_RESUME_FROM, sb.st_size);
 		dl->set_offset(sb.st_size);
 		f->open(dl->filename(), std::fstream::out | std::fstream::app);
+		resumed_download = true;
 	}
 
 	if (f->is_open()) {
@@ -75,8 +84,14 @@ void poddlthread::operator()() {
 		if (0 == success)
 			dl->set_status(DL_READY);
 		else if (dl->status() != DL_CANCELLED) {
-			dl->set_status(DL_FAILED);
-			::unlink(dl->filename());
+			// attempt complete re-download
+			if (resumed_download) {
+				::unlink(dl->filename());
+				this->run();
+			} else {
+				dl->set_status(DL_FAILED);
+				::unlink(dl->filename());
+			}
 		}
 	} else {
 		dl->set_status(DL_FAILED);
