@@ -1,12 +1,16 @@
 os:
     - linux
     - osx
-before_install:
+
+install:
+    - cd ${TRAVIS_BUILD_DIR}
     - ./travis-get-deps.sh
 language: cpp
 compiler:
     - gcc
     - clang
-script: make
-after_script:
-    - "make test && cd test && ./test"
+
+script:
+    - cd ${TRAVIS_BUILD_DIR}
+    - make all test-rss
+    - cd test && ./test-rss
