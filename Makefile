@@ -125,7 +125,7 @@ clean-doc:
 clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-doc clean-librsspp
 	$(RM) $(STFLHDRS) xlicense.h
 
-distclean: clean clean-mo test-clean
+distclean: clean clean-mo test-clean profclean
 	$(RM) core *.core core.* config.mk
 
 doc: doc/xhtml/newsbeuter.html doc/xhtml/faq.html doc/newsbeuter.1 doc/podbeuter.1
@@ -243,7 +243,7 @@ test-clean:
 	$(RM) test/test test/*.o
 
 profclean:
-	find . -name '*.gc*' -type f | xargs $(RM)
+	find . -name '*.gc*' -type f -print0 | xargs -0 $(RM) --
 	$(RM) app*.info
 
 # miscellaneous stuff

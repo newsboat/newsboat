@@ -64,3 +64,7 @@ script:
     - cd ${TRAVIS_BUILD_DIR}
     - make PROFILE=1 all test
     - cd test && ./test
+
+after_success:
+    - cd ${TRAVIS_BUILD_DIR}
+    - ./submit-to-coveralls.sh

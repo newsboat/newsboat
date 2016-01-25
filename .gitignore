@@ -16,3 +16,6 @@ doc/newsbeuter.1
 doc/podbeuter-cfgcmds.txt
 doc/podbeuter.1
 doc/xhtml/*
+*.gcov
+*.gcno
+*.gcda
