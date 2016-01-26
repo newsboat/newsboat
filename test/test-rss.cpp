@@ -6,11 +6,29 @@
 #include <rsspp_internal.h>
 
 int main(void) {
-	lemon::test<> lemon(74);
+	lemon::test<> lemon(76);
 
 	rsspp::parser p;
 
+	// non-existent file
+	try {
+		rsspp::feed f = p.parse_file("data/non-existent.xml");
+	} catch (rsspp::exception e) {
+		lemon.is(e.what(), std::string("could not parse file"),
+		    "Exception if file doesn't exist");
+	}
+
 	// test of RSS 0.91
+
+	// empty file
+	try {
+		rsspp::feed f = p.parse_file("data/empty.xml");
+	} catch (rsspp::exception e) {
+		lemon.is(e.what(), std::string("XML root node is NULL"),
+		    "Exception if can't parse");
+	}
+
+	// test data
 	rsspp::feed f = p.parse_file("data/rss091_1.xml");
 
 	lemon.is(f.rss_version, rsspp::RSS_0_91, "RSS type is RSS 0.91");
