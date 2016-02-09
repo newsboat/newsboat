@@ -1062,7 +1062,7 @@ Alternatively, you can reach the newsbeuter developers on IRC: channel
 #newsbeuter on irc.freenode.net.
 
 If you want to report newsbeuter bugs, please use this issue tracker:
-http://code.google.com/p/newsbeuter/issues/list[]
+https://github.com/akrennmair/newsbeuter/issues/[]
 
 License
 -------
