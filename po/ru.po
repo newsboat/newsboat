@@ -184,7 +184,7 @@ msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
 "import an OPML file."
 msgstr ""
-"Ошибка: не найдено ни одной ссылки. Пожалуйста, занесите в файл %s ссылкина "
+"Ошибка: не найдено ни одной ссылки. Пожалуйста, занесите в файл %s ссылки на "
 "RSS ленты или импортируйте файл OPML."
 
 #: src/controller.cpp:491
@@ -413,7 +413,7 @@ msgid ""
 "`bookmark-cmd' accordingly."
 msgstr ""
 "поддержка закладок не настроена. Пожалуйста установите в настройках "
-"верноезначение переменной `bookmark-cmd'."
+"верное значение переменной `bookmark-cmd'."
 
 #: src/controller.cpp:1312
 #, c-format
@@ -545,7 +545,7 @@ msgstr "неизвестная команда (сбой)."
 
 #: src/exception.cpp:45
 msgid "file couldn't be opened."
-msgstr "файл невозможно открытым."
+msgstr "файл невозможно открыть."
 
 #: src/exception.cpp:47
 msgid "unknown error (bug)."
@@ -1315,7 +1315,7 @@ msgstr "команда `%s' не поддерживается"
 
 #: src/pb_controller.cpp:231
 msgid "Cleaning up queue..."
-msgstr "Очистищаю очередь..."
+msgstr "Очищаю очередь..."
 
 #: src/pb_controller.cpp:243
 #, c-format
