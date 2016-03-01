@@ -50,7 +50,7 @@ msgstr "%N %V - Заметок в ленте '%T' (непрочитанно %u, 
 
 #: src/configcontainer.cpp:133
 msgid "%N %V - Search result (%u unread, %t total)"
-msgstr "%N %V - Результаты поиска (непрчитанно %u, всего %t)"
+msgstr "%N %V - Результаты поиска (непрочитанно %u, всего %t)"
 
 #: src/configcontainer.cpp:134
 msgid "%N %V - %?O?Open File&Save File? - %f"
@@ -196,31 +196,28 @@ msgstr ""
 "Пожалуйста заполните её лентами и попробуйте еще раз."
 
 #: src/controller.cpp:493
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your The Old Reader "
 "account. Please do so, and try again."
 msgstr ""
 "Похоже что вы не настроили ни одной ленты новостей в своей учётной записи в "
-"Google Reader. Сделайте это и попробуйте еще раз."
+"The Old Reader. Сделайте это и попробуйте еще раз."
 
 #: src/controller.cpp:495
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Tiny Tiny RSS "
 "account. Please do so, and try again."
 msgstr ""
 "Похоже что вы не настроили ни одной ленты новостей в своей учётной записи в "
-"Google Reader. Сделайте это и попробуйте еще раз."
+"Tiny Tiny RSS. Сделайте это и попробуйте еще раз."
 
 #: src/controller.cpp:497
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your NewsBlur account. "
 "Please do so, and try again."
 msgstr ""
 "Похоже что вы не настроили ни одной ленты новостей в своей учётной записи в "
-"Google Reader. Сделайте это и попробуйте еще раз."
+"NewsBlur. Сделайте это и попробуйте еще раз."
 
 #: src/controller.cpp:506
 msgid "Loading articles from cache..."
@@ -577,7 +574,7 @@ msgstr ""
 #: src/feedlist_formaction.cpp:124
 msgid "Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)one?"
 msgstr ""
-"Сотировать по первой метке (f)/заголовку (t)/количеству записей (a)/"
+"Сортировать по первой метке (f)/заголовку (t)/количеству записей (a)/"
 "непрочитанным (u)/никак (n)?"
 
 #: src/feedlist_formaction.cpp:143
@@ -961,7 +958,7 @@ msgstr "тип: "
 #: src/itemview_formaction.cpp:170
 #, c-format
 msgid "Error while marking article as read: %s"
-msgstr "Ошибка во время потметки заметки как прочитанной: %s"
+msgstr "Ошибка во время пометки заметки как прочитанной: %s"
 
 #: src/itemview_formaction.cpp:182
 #, c-format
@@ -992,7 +989,7 @@ msgstr "Запускаю навигатор..."
 #: src/itemview_formaction.cpp:339
 #, c-format
 msgid "Error while marking article as unread: %s"
-msgstr "Ошибка во время пометки заметки как прочитанной: %s"
+msgstr "Ошибка во время пометки заметки как непрочитанной: %s"
 
 #: src/itemview_formaction.cpp:383 src/keymap.cpp:47
 msgid "Goto URL #"
