@@ -166,6 +166,16 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 		if (strncmp(id, prefix, strlen(prefix)) != 0) {
 			tags.push_back(std::string("~") + title);
 
+			json_object_object_get_ex(sub, "categories", &node);
+			struct array_list * categories = json_object_get_array(node);
+			for (int i = 0; i < array_list_length(categories); i++) {
+				json_object* cat = json_object_array_get_idx(node, i);
+				json_object* label_node {};
+				json_object_object_get_ex(cat, "label", &label_node);
+				const char * label = json_object_get_string(label_node);
+				tags.push_back(std::string(label));
+			}
+
 			auto url = utils::strprintf(
 			               "%s%s?n=%u",
 			               OLDREADER_FEED_PREFIX,
