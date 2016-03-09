@@ -1400,7 +1400,7 @@ msgstr "`%s' недійсний тип діалогу"
 #: src/regexmanager.cpp:48
 #, c-format
 msgid "`%s' is not a valid regular expression: %s"
-msgstr "`%s' неправильний вираз"
+msgstr "`%s' не є правильним регулярним виразом: %s"
 
 #: src/rss.cpp:118
 msgid "%a, %d %b %Y %T %z"
