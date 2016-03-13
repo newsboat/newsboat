@@ -29,7 +29,7 @@ feedhq-flag-share|<flag>|""|If this is set and FeedHQ support is used, then all 
 feedhq-flag-star|<flag>|""|If this is set and FeedHQ support is used, then all articles that are flagged with the specified flag are being "starred" in FeedHQ and appear in the list of "Starred items".|feedhq-flag-star "b"
 feedhq-login|<login>|""|This variable sets your FeedHQ login for FeedHQ support.|feedhq-login "your-login"
 feedhq-min-items|<number>|20|This variable sets the number of articles that are loaded from FeedHQ per feed.|feedhq-min-items 100
-feedhq-password|<password>|""|This variable sets your FeedHQ password for FeedHQ support.|feedhq-password "your-password"
+feedhq-password|<password>|""|This variable sets your FeedHQ password for FeedHQ support. Double quotes should be escaped, i.e. you should write +{backslash}"+ instead of +"+.|feedhq-password "here_goesAquote:{backslash}""
 feedhq-passwordfile|<path-to-file|""|A more secure alternative to the above, by storing your password elsewhere in your system.|feedhq-passwordfile "path-to-file"
 feedhq-show-special-feeds|[yes/no]|yes|If this is set, then "special feeds" like "People you follow" (articles shared by people you follow), "Starred items" (your starred articles) and "Shared items" (your shared articles) appear in your subscription list.|feedhq-show-special-feeds "no"
 feedlist-format|<format>|"%4i %n %11u %t"|This variable defines the format of entries in the feed list. See the respective section in the documentation for more information on format strings.|feedlist-format " %n %4i - %11u -%> %t"
@@ -52,6 +52,9 @@ macro|<macro key> <command list>|n/a|With this command, you can define a macro k
 mark-as-read-on-hover|[yes/no]|no|If set to yes, then all articles that get selected in the article list are marked as read.|mark-as-read-on-hover yes
 max-download-speed|<number>|0|If set to a number great than 0, the download speed per download is set to that limit (in kB).|max-download-speed 50
 max-items|<number>|0|Set the number of articles to maximally keep per feed. If the number is set to 0, then all articles are kept.|max-items 100
+newsblur-login|<login>|""|This variable sets your NewsBlur login for NewsBlur support.|newsblur-login "your-login"
+newsblur-min-items|<number>|20|This variable sets the number of articles that are loaded from NewsBlur per feed.|newsblur-min-items 100
+newsblur-password|<password>|""|This variable sets your NewsBlur password for Newsblur support. Double quotes should be escaped, i.e. you should write +{backslash}"+ instead of +"+.|newsblur-password "here_goesAquote:{backslash}""
 notify-always|[yes/no]|no|If no, notifications will only be made when there are new feeds or articles. If yes, notifications will be made regardless.|notify-always yes
 notify-beep|[yes/no]|no|If yes, then the speaker beep on new articles.|notify-beep yes
 notify-format|<string>|"newsbeuter: finished reload, %f unread feeds (%n unread articles total)"|Format string that is used for formatting notifications. See the chapter on format strings for more information.|notify-format "%d new articles (%n unread articles, %f unread feeds)"
@@ -62,7 +65,7 @@ oldreader-flag-share|<flag>|""|If this is set and The Old Reader support is used
 oldreader-flag-star|<flag>|""|If this is set and The Old Reader support is used, then all articles that are flagged with the specified flag are being "starred" in The Old Reader and appear in the list of "Starred items".|oldreader-flag-star "b"
 oldreader-login|<login>|""|This variable sets your The Old Reader login for The Older Reader support.|oldreader-login "your-login"
 oldreader-min-items|<number>|20|This variable sets the number of articles that are loaded from The Old Reader per feed.|oldreader-min-items 100
-oldreader-password|<password>|""|This variable sets your The Old Reader password for The Old Reader support.|oldreader-password "your-password"
+oldreader-password|<password>|""|This variable sets your The Old Reader password for The Old Reader support. Double quotes should be escaped, i.e. you should write +{backslash}"+ instead of +"+.|oldreader-password "here_goesAquote:{backslash}""
 oldreader-passwordfile|<path-to-file|""|A more secure alternative to the above, by storing your password elsewhere in your system.|oldreader-passwordfile "path-to-file"
 oldreader-show-special-feeds|[yes/no]|yes|If this is set, then "special feeds" like "People you follow" (articles shared by people you follow), "Starred items" (your starred articles) and "Shared items" (your shared articles) appear in your subscription list.|oldreader-show-special-feeds "no"
 opml-url|<url> ...|""|If the OPML online subscription mode is enabled, then the list of feeds will be taken from the OPML file found on this location. Optionally, you can specify more than one URL. All the listed OPML URLs will then be taken into account when loading the feed list.|opml-url "http://host.domain.tld/blogroll.opml" "http://example.com/anotheropmlfile.opml"
@@ -93,7 +96,7 @@ ttrss-flag-publish|<character>|""|If this is set and Tiny Tiny RSS support is us
 ttrss-flag-star|<character>|""|If this is set and Tiny Tiny RSS support is used, then all articles that are flagged with the specified flag are being "starred" in Tiny Tiny RSS.|ttrss-flag-star "a"
 ttrss-login|<username>|""|Sets the username for use with Tiny Tiny RSS.|ttrss-login "admin"
 ttrss-mode|[multi/single]|multi|Configures the mode in which Tiny Tiny RSS is used. In single-user mode, login and password are used for HTTP authentication, while in multi-user mode, they are used for authenticating with Tiny Tiny RSS.|ttrss-mode "single"
-ttrss-password|<password>|""|Configures the password for use with Tiny Tiny RSS.|ttrss-password "mypassword"
+ttrss-password|<password>|""|Configures the password for use with Tiny Tiny RSS. Double quotes should be escaped, i.e. you should write +{backslash}"+ instead of +"+.|ttrss-password "here_goesAquote:{backslash}""
 ttrss-passwordfile|<path-to-file|""|A more secure alternative to the above, by storing your password elsewhere in your system.|ttrss-passwordfile "path-to-file"
 ttrss-url|<url>|""|Configures the URL where the Tiny Tiny RSS installation you want to use resides.|ttrss-url "http://example.com/ttrss/"
 unbind-key|<key> [<dialog>]|n/a|Unbind key <key>. This means that no operation is called when <key> is pressed. Optionally, you can specify a dialog (for a list of available dialogs, see "bind-key" above). If you specify one, the key binding will only be unbound for the specified dialog.|unbind-key R
