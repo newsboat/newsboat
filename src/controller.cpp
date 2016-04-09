@@ -1003,7 +1003,6 @@ void controller::version_information(const char * argv0, unsigned int level) {
 		struct utsname xuts;
 		uname(&xuts);
 		std::cout << PROGRAM_NAME << " " << PROGRAM_VERSION << std::endl;
-		std::cout << "Compilation date/time: " << __DATE__ << " " << __TIME__ << std::endl;
 		std::cout << "System: " << xuts.sysname << " " << xuts.release << " (" << xuts.machine << ")" << std::endl;
 #if defined(__GNUC__) && defined(__VERSION__)
 		std::cout << "Compiler: g++ " << __VERSION__ << std::endl;
