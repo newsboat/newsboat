@@ -59,7 +59,7 @@ check_custom() {
 fail() {
 	pkgname=$1
 	rm -f config.mk
-	dlurl=`grep -i "$pkgname" README | awk '{ print $NF }'`
+	dlurl=`grep -i "$pkgname" README.md | awk '{ print $NF }'`
 	echo ""
 	echo "You need package ${pkgname} in order to compile this program."
 	echo "Please make sure it is installed."
