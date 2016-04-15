@@ -141,19 +141,19 @@ doc:
 fmt:
 	astyle --suffix=none --style=java --indent=tab --indent-classes *.cpp include/*.h src/*.cpp rss/*.{cpp,h} test/*.cpp
 
-install-newsbeuter:
+install-newsbeuter: $(NEWSBEUTER) doc
 	$(MKDIR) $(DESTDIR)$(prefix)/bin
 	$(INSTALL) $(NEWSBEUTER) $(DESTDIR)$(prefix)/bin
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
 	$(INSTALL) doc/$(NEWSBEUTER).1 $(DESTDIR)$(mandir)/man1 || true
 
-install-podbeuter:
+install-podbeuter: $(PODBEUTER) doc
 	$(MKDIR) $(DESTDIR)$(prefix)/bin
 	$(INSTALL) $(PODBEUTER) $(DESTDIR)$(prefix)/bin
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
 	$(INSTALL) doc/$(PODBEUTER).1 $(DESTDIR)$(mandir)/man1 || true
 
-install-docs:
+install-docs: doc
 	$(MKDIR) $(DESTDIR)$(docdir)
 	$(INSTALL) -m 644 doc/xhtml/* $(DESTDIR)$(docdir) || true
 
