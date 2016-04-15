@@ -49,9 +49,9 @@ void file_urlreader::reload() {
 	f.open(filename.c_str(),std::fstream::in);
 	if (f.is_open()) {
 		std::string line;
-		do {
+		while (!f.eof()) {
 			getline(f,line);
-			if (!f.eof() && line.length() > 0 && line[0] != '#') {
+			if (line.length() > 0 && line[0] != '#') {
 				std::vector<std::string> tokens = utils::tokenize_quoted(line);
 				if (!tokens.empty()) {
 					std::string url = tokens[0];
@@ -65,7 +65,7 @@ void file_urlreader::reload() {
 					}
 				}
 			}
-		} while (!f.eof());
+		};
 	}
 }
 
