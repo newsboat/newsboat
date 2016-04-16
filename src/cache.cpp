@@ -450,7 +450,7 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl, rss_ign
 	std::vector<std::shared_ptr<rss_item>> filtered_items;
 	for (auto item : feed->items()) {
 		try {
-			if (ign && ! ign->matches(item.get())) {
+			if (!ign || (ign && ! ign->matches(item.get()))) {
 				item->set_cache(this);
 				item->set_feedptr(feed);
 				item->set_feedurl(feed->rssurl());
