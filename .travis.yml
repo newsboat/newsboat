@@ -7,6 +7,10 @@ language: cpp
 compiler:
     - gcc
     - clang
-script: make
+script:
+    # a2x will run xmllint on generated files, so we have to pass the path
+    # to AsciiDoc's catalog files
+    - if [ $TRAVIS_OS_NAME = "osx" ]; then export XML_CATALOG_FILES=/usr/local/etc/xml/catalog ; fi
+    - make
 after_script:
     - "make test && cd test && ./test"
