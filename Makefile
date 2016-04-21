@@ -168,7 +168,7 @@ install-podbeuter: $(PODBEUTER)
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
 	$(INSTALL) doc/$(PODBEUTER).1 $(DESTDIR)$(mandir)/man1 || true
 
-install-docs: doc
+install-docs: doc/xhtml/faq.html doc/xhtml/newsbeuter.html
 	$(MKDIR) $(DESTDIR)$(docdir)
 	$(INSTALL) -m 644 doc/xhtml/* $(DESTDIR)$(docdir) || true
 
