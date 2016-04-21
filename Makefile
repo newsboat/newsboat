@@ -156,13 +156,13 @@ doc/podbeuter.1: doc/manpage-podbeuter.txt doc/podbeuter-cfgcmds.txt
 fmt:
 	astyle --suffix=none --style=java --indent=tab --indent-classes *.cpp include/*.h src/*.cpp rss/*.{cpp,h} test/*.cpp
 
-install-newsbeuter: $(NEWSBEUTER) doc
+install-newsbeuter: $(NEWSBEUTER)
 	$(MKDIR) $(DESTDIR)$(prefix)/bin
 	$(INSTALL) $(NEWSBEUTER) $(DESTDIR)$(prefix)/bin
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
 	$(INSTALL) doc/$(NEWSBEUTER).1 $(DESTDIR)$(mandir)/man1 || true
 
-install-podbeuter: $(PODBEUTER) doc
+install-podbeuter: $(PODBEUTER)
 	$(MKDIR) $(DESTDIR)$(prefix)/bin
 	$(INSTALL) $(PODBEUTER) $(DESTDIR)$(prefix)/bin
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
