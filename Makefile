@@ -128,14 +128,29 @@ clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-do
 distclean: clean clean-mo test-clean
 	$(RM) core *.core core.* config.mk
 
-doc:
+doc: doc/xhtml/newsbeuter.html doc/xhtml/faq.html doc/newsbeuter.1 doc/podbeuter.1
+
+doc/xhtml/newsbeuter.html: doc/newsbeuter.txt
 	$(MKDIR) doc/xhtml
 	$(A2X) -f xhtml -D doc/xhtml doc/newsbeuter.txt
+
+doc/xhtml/faq.html: doc/faq.txt
+	$(MKDIR) doc/xhtml
 	$(A2X) -f xhtml -D doc/xhtml doc/faq.txt
+
+doc/newsbeuter-cfgcmds.txt: doc/generate.pl doc/configcommands.dsv
 	doc/generate.pl doc/configcommands.dsv > doc/newsbeuter-cfgcmds.txt
+
+doc/newsbeuter-keycmds.txt: doc/generate2.pl doc/keycmds.dsv
 	doc/generate2.pl doc/keycmds.dsv > doc/newsbeuter-keycmds.txt
+
+doc/newsbeuter.1: doc/manpage-newsbeuter.txt doc/newsbeuter-cfgcmds.txt doc/newsbeuter-keycmds.txt
 	$(A2X) -f manpage doc/manpage-newsbeuter.txt
+
+doc/podbeuter-cfgcmds.txt: doc/generate.pl doc/podbeuter-cmds.dsv
 	doc/generate.pl doc/podbeuter-cmds.dsv > doc/podbeuter-cfgcmds.txt
+
+doc/podbeuter.1: doc/manpage-podbeuter.txt doc/podbeuter-cfgcmds.txt
 	$(A2X) -f manpage doc/manpage-podbeuter.txt
 
 fmt:
