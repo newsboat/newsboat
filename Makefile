@@ -68,7 +68,7 @@ POTFILE=po/newsbeuter.pot
 TEXTCONV=./txt2h.pl
 RM=rm -f
 
-all: $(NEWSBEUTER) $(PODBEUTER) mo-files
+all: $(NEWSBEUTER) $(PODBEUTER) doc mo-files
 
 NB_DEPS=$(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBEUTER_OBJS) $(RSSPPLIB_OUTPUT)
 
