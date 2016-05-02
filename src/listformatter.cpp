@@ -19,7 +19,7 @@ void listformatter::add_line(const std::string& text, unsigned int id, unsigned 
 void listformatter::set_line(const unsigned int itempos,
     const std::string& text, unsigned int id, unsigned int width)
 {
-	line_id_pair line;
+	std::vector<line_id_pair> formatted_text;
 
 	if (width > 0 && text.length() > 0) {
 		std::wstring mytext = utils::clean_nonprintable_characters(utils::str2wstr(text));
@@ -32,17 +32,26 @@ void listformatter::set_line(const unsigned int itempos,
 					size--;
 				}
 			}
-			line = line_id_pair(utils::wstr2str(mytext.substr(0, size)), id);
+			formatted_text.push_back(
+					line_id_pair(utils::wstr2str(mytext.substr(0, size)), id));
 			mytext.erase(0, size);
 		}
 	} else {
-		line = line_id_pair(utils::wstr2str(utils::clean_nonprintable_characters(utils::str2wstr(text))), id);
+		formatted_text.push_back(
+				line_id_pair(
+					utils::wstr2str(
+						utils::clean_nonprintable_characters(
+							utils::str2wstr(text))),
+					id));
 	}
 
 	if (itempos == UINT_MAX) {
-		lines.push_back(line);
+		lines.insert(
+				lines.cend(),
+				formatted_text.cbegin(),
+				formatted_text.cend());
 	} else {
-		lines[itempos] = line;
+		lines[itempos] = formatted_text[0];
 	}
 }
 
