@@ -32,7 +32,6 @@ class listformatter {
 	private:
 		std::vector<line_id_pair> lines;
 		std::string format_cache;
-		bool refresh_cache;
 };
 
 }

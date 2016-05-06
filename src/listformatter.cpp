@@ -6,14 +6,13 @@
 
 namespace newsbeuter {
 
-listformatter::listformatter() : refresh_cache(true) { }
+listformatter::listformatter() { }
 
 listformatter::~listformatter() { }
 
 void listformatter::add_line(const std::string& text, unsigned int id, unsigned int width) {
 	set_line(UINT_MAX, text, id, width);
 	LOG(LOG_DEBUG, "listformatter::add_line: `%s'", text.c_str());
-	refresh_cache = true;
 }
 
 void listformatter::set_line(const unsigned int itempos,
@@ -74,7 +73,6 @@ std::string listformatter::format_list(regexmanager * rxman, const std::string& 
 		}
 	}
 	format_cache.append(1, '}');
-	refresh_cache = false;
 	return format_cache;
 }
 
