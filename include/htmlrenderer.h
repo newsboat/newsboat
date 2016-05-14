@@ -60,7 +60,7 @@ class htmlrenderer {
 
 	private:
 		unsigned int w;
-		void prepare_newline(std::string& line, int indent_level);
+		void prepare_new_line(std::string& line, int indent_level);
 		bool line_is_nonempty(const std::string& line);
 		unsigned int add_link(std::vector<linkpair>& links, const std::string& link, link_type type);
 		std::string quote_for_stfl(std::string str);
