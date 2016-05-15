@@ -24,7 +24,7 @@ int main(void) {
 	try {
 		rsspp::feed f = p.parse_file("data/empty.xml");
 	} catch (rsspp::exception e) {
-		lemon.is(e.what(), std::string("XML root node is NULL"),
+		lemon.is(e.what(), std::string("could not parse file"),
 		    "Exception if can't parse");
 	}
 
