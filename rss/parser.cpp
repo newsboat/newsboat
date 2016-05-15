@@ -193,11 +193,11 @@ feed parser::parse_buffer(const char * buffer, size_t size, const char * url) {
 
 feed parser::parse_file(const std::string& filename) {
 	doc = xmlReadFile(filename.c_str(), NULL, XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING);
-	if (doc == NULL) {
+	xmlNode* root_element = xmlDocGetRootElement(doc);
+
+	if (root_element == NULL) {
 		throw exception(_("could not parse file"));
 	}
-
-	xmlNode* root_element = xmlDocGetRootElement(doc);
 
 	feed f = parse_xmlnode(root_element);
 
