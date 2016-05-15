@@ -33,49 +33,6 @@ namespace test {
 
 lemon::test<> lemon(0);
 
-void TestNewsbeuterReload() {
-	configcontainer * cfg = new configcontainer();
-	cache * rsscache = new cache("test-cache.db", cfg);
-
-	rss_parser parser("http://testbed.newsbeuter.org/unit-test/rss.xml", rsscache, cfg, NULL);
-	std::shared_ptr<rss_feed> feed = parser.parse();
-	lemon.is(feed->items().size(), 8u, "rss.xml contains 8 items");
-
-	rsscache->externalize_rssfeed(feed, false);
-	feed = rsscache->internalize_rssfeed("http://testbed.newsbeuter.org/unit-test/rss.xml", NULL);
-	lemon.is(feed->items().size(), 8u, "feed contains 8 items after externalization/internalization");
-
-	lemon.is(feed->items()[0]->title(), "Teh Saxxi", "first item title");
-	lemon.is(feed->items()[7]->title(), "Handy als IR-Detektor", "last item title");
-
-	feed->items()[0]->set_title("Another Title");
-	feed->items()[0]->set_pubDate(time(NULL));
-	lemon.is(feed->items()[0]->title(), "Another Title", "first item title after set_title");
-
-	rsscache->externalize_rssfeed(feed, false);
-
-	std::shared_ptr<rss_feed> feed2 = rsscache->internalize_rssfeed("http://testbed.newsbeuter.org/unit-test/rss.xml", NULL);
-
-	lemon.is(feed2->items().size(), 8u, "feed2 contains 8 items after internalizaton");
-	lemon.is(feed2->items()[0]->title(), "Another Title", "feed2 first item title");
-	lemon.is(feed2->items()[7]->title(), "Handy als IR-Detektor", "feed2 last item title");
-
-	std::vector<std::string> feedurls = rsscache->get_feed_urls();
-	lemon.is(feedurls.size(), 1u, "1 feed url");
-	lemon.is(feedurls[0], "http://testbed.newsbeuter.org/unit-test/rss.xml", "first feed url");
-
-	std::vector<std::shared_ptr<rss_feed>> feedv;
-	feedv.push_back(feed);
-
-	cfg->set_configvalue("cleanup-on-quit", "true");
-	rsscache->cleanup_cache(feedv);
-
-	delete rsscache;
-	delete cfg;
-
-	::unlink("test-cache.db");
-}
-
 void TestConfigParserContainerAndKeymap() {
 	configcontainer * cfg = new configcontainer();
 	configparser cfgparser;
@@ -915,7 +872,6 @@ int main(void) {
 	logger::getInstance().set_logfile("testlog.txt");
 	logger::getInstance().set_loglevel(LOG_DEBUG);
 
-	test::TestNewsbeuterReload();
 	test::TestConfigParserContainerAndKeymap();
 	test::TestTagSoupPullParser();
 	test::TestUrlReader();
