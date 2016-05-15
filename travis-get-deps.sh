@@ -15,7 +15,6 @@ case $TRAVIS_OS_NAME in
         brew install "gettext" && brew link --force "gettext"
         brew outdated "sqlite" || brew upgrade "sqlite"
         brew outdated "curl" || brew upgrade "curl"
-        brew outdated "libxml2" || brew upgrade "libxml2"
         brew install "libstfl"
         brew outdated "json-c" || brew upgrade "json-c"
         ;;
