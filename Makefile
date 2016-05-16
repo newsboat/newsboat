@@ -213,17 +213,18 @@ uninstall-mo:
 
 # tests and coverage reports
 
-test: $(LIB_OUTPUT) $(NEWSBEUTER_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) test/test.o
-	$(CXX) $(CXXFLAGS) -o test/test src/history.o src/rss.o src/rss_parser.o src/htmlrenderer.o src/cache.o src/tagsouppullparser.o src/urlreader.o src/regexmanager.o test/test.o src/ttrss_api.o src/newsblur_api.o src/markreadthread.o $(NEWSBEUTER_LIBS) $(LDFLAGS)
+test: test/test
 
-test-rss: $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) src/utils.o test/test-rss.o
-	$(CXX) $(CXXFLAGS) -o test/test-rss test/test-rss.o src/utils.o $(NEWSBEUTER_LIBS) $(LDFLAGS)
-
-test/test.o: test/test.cpp
-	$(CXX) $(CXXFLAGS) -o $@ -c $<
+TEST_OBJS=test/rss.o test/tagsouppullparser.o test/urlreader.o \
+	  test/filterparser.o test/matcher.o test/history.o test/utils.o \
+	  test/test.o test/configparser.o test/configcontainer.o \
+	  test/keymap.o test/formatstring.o test/htmlrenderer.o \
+	  test/regexmanager.o
+test/test: $(LIB_OUTPUT) $(NEWSBEUTER_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) $(TEST_OBJS)
+	$(CXX) $(CXXFLAGS) -o test/test $(TEST_OBJS) src/*.o $(NEWSBEUTER_LIBS) $(LDFLAGS)
 
 test-clean:
-	$(RM) test/test test/test.o test/test-rss test/test-rss.o
+	$(RM) test/test test/*.o
 
 profclean:
 	find . -name '*.gc*' -type f | xargs $(RM)

@@ -54,11 +54,5 @@ install:
 
 script:
     - cd ${TRAVIS_BUILD_DIR}
-    - make all test test-rss
-    - cd test && ./test-rss && ./test
-
-after_success:
-    - cd ${TRAVIS_BUILD_DIR}
-    - make distclean
-    - make PROFILE=1 all test test-rss
-    - cd test && ./test-rss && ./test
+    - make PROFILE=1 all test
+    - cd test && ./test
