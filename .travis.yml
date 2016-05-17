@@ -10,7 +10,9 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-4.9
-      env: COMPILER=g++-4.9
+      env:
+        - COMPILER=g++-4.9
+        - GCOV=/usr/bin/gcov-4.9
     - compiler: gcc
       os: linux
       addons:
@@ -19,7 +21,9 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-5
-      env: COMPILER=g++-5
+      env:
+        - COMPILER=g++-5
+        - GCOV=/usr/bin/gcov-5
     - compiler: clang
       os: linux
       addons:
@@ -29,7 +33,9 @@ matrix:
             - llvm-toolchain-precise-3.6
           packages:
             - clang-3.6
-      env: COMPILER=clang++-3.6
+      env:
+        - COMPILER=clang++-3.6
+        - GCOV=/usr/bin/gcov
     - compiler: clang
       os: linux
       addons:
@@ -39,11 +45,14 @@ matrix:
             - llvm-toolchain-precise-3.7
           packages:
             - clang-3.7
-      env: COMPILER=clang++-3.7
+      env:
+        - COMPILER=clang++-3.7
+        - GCOV=/usr/bin/gcov
     - compiler: gcc
       os: osx
       env:
         - COMPILER=g++
+        - GCOV=/usr/bin/gcov
         # a2x will run xmllint on generated files, so we have to pass the path
         # to AsciiDoc's catalog files
         - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
@@ -51,6 +60,7 @@ matrix:
       os: osx
       env:
         - COMPILER=clang++
+        - GCOV=/usr/bin/gcov
         # a2x will run xmllint on generated files, so we have to pass the path
         # to AsciiDoc's catalog files
         - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
