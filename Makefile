@@ -68,7 +68,7 @@ POTFILE=po/newsbeuter.pot
 TEXTCONV=./txt2h.pl
 RM=rm -f
 
-all: $(NEWSBEUTER) $(PODBEUTER) doc mo-files
+all: $(NEWSBEUTER) $(PODBEUTER) mo-files
 
 NB_DEPS=$(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBEUTER_OBJS) $(RSSPPLIB_OUTPUT)
 
@@ -168,7 +168,7 @@ install-podbeuter: $(PODBEUTER)
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
 	$(INSTALL) doc/$(PODBEUTER).1 $(DESTDIR)$(mandir)/man1 || true
 
-install-docs: doc/xhtml/faq.html doc/xhtml/newsbeuter.html
+install-docs:
 	$(MKDIR) $(DESTDIR)$(docdir)
 	$(INSTALL) -m 644 doc/xhtml/* $(DESTDIR)$(docdir) || true
 
