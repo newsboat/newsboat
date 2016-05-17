@@ -25,10 +25,14 @@ TEST_CASE("HTMLRenderer behaves correctly") {
 	}
 
 	SECTION("line break rendering") {
-		rnd.render("hello<br />world!", lines, links, "");
-		REQUIRE(lines.size() == 2);
-		REQUIRE(lines[0] == "hello");
-		REQUIRE(lines[1] == "world!");
+		for (std::string tag : {"<br>", "<br/>", "<br />"}) {
+			SECTION(tag) {
+				rnd.render("hello" + tag + "world!", lines, links, "");
+				REQUIRE(lines.size() == 2);
+				REQUIRE(lines[0] == "hello");
+				REQUIRE(lines[1] == "world!");
+			}
+		}
 	}
 
 	SECTION("superscript rendering") {
