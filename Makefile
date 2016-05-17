@@ -219,7 +219,7 @@ TEST_OBJS=test/rss.o test/tagsouppullparser.o test/urlreader.o \
 	  test/filterparser.o test/matcher.o test/history.o test/utils.o \
 	  test/test.o test/configparser.o test/configcontainer.o \
 	  test/keymap.o test/formatstring.o test/htmlrenderer.o \
-	  test/regexmanager.o
+	  test/regexmanager.o test/newsbeuter.o
 test/test: $(LIB_OUTPUT) $(NEWSBEUTER_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) $(TEST_OBJS)
 	$(CXX) $(CXXFLAGS) -o test/test $(TEST_OBJS) src/*.o $(NEWSBEUTER_LIBS) $(LDFLAGS)
 
