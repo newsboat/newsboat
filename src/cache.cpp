@@ -447,29 +447,20 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl, rss_ign
 		throw dbexception(db);
 	}
 
-	unsigned int i=0;
-	for (auto it=feed->items().begin(); it != feed->items().end(); ++it,++i) {
-		(*it)->set_cache(this);
-		(*it)->set_feedptr(feed);
-		(*it)->set_feedurl(feed->rssurl());
-
+	std::vector<std::shared_ptr<rss_item>> filtered_items;
+	for (auto item : feed->items()) {
 		try {
-			if (ign && ign->matches(it->get())) {
-				feed->erase_item(it);
-				// since we modified the vector, we need to reset the iterator
-				// to the beginning of the vector, and then fast-forward to
-				// the next element.
-				it = feed->items().begin();
-				--i;
-				for (int j=0; j<int(i); j++) {
-					++it;
-				}
-				continue;
+			if (!ign || (ign && ! ign->matches(item.get()))) {
+				item->set_cache(this);
+				item->set_feedptr(feed);
+				item->set_feedurl(feed->rssurl());
+				filtered_items.push_back(item);
 			}
 		} catch(const matcherexception& ex) {
 			LOG(LOG_DEBUG, "oops, matcher exception: %s", ex.what());
 		}
 	}
+	feed->set_items(filtered_items);
 
 	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
 

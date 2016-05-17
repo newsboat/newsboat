@@ -42,10 +42,18 @@ matrix:
       env: COMPILER=clang++-3.7
     - compiler: gcc
       os: osx
-      env: COMPILER=g++
+      env:
+        - COMPILER=g++
+        # a2x will run xmllint on generated files, so we have to pass the path
+        # to AsciiDoc's catalog files
+        - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
     - compiler: clang
       os: osx
-      env: COMPILER=clang++
+      env:
+        - COMPILER=clang++
+        # a2x will run xmllint on generated files, so we have to pass the path
+        # to AsciiDoc's catalog files
+        - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
 
 install:
     - export CXX=$COMPILER

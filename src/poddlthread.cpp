@@ -18,7 +18,7 @@ namespace podbeuter {
 static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp);
 static int progress_callback(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow);
 
-poddlthread::poddlthread(download * dl_, newsbeuter::configcontainer * c) : dl(dl_), f(new std::ofstream()), cfg(c) {
+poddlthread::poddlthread(download * dl_, newsbeuter::configcontainer * c) : dl(dl_), f(new std::ofstream()), bytecount(0), cfg(c) {
 }
 
 poddlthread::~poddlthread() {

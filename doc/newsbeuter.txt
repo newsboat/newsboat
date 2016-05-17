@@ -522,6 +522,9 @@ so that it can authenticate with The Old Reader:
 	oldreader-login "your-oldreader-account"
 	oldreader-password "your-password"
 
+(Note that double quotes should be escaped, i.e. you should write +{backslash}"+ 
+instead of +"+.)
+
 After setting these configuration values, you can start newsbeuter, it will 
 authenticate with The Old Reader and download your subscription list. If you use 
 "folders" in The Old Reader to organize your feeds, newsbeuter will regard them 
@@ -572,6 +575,9 @@ Then, configure your NewsBlur credentials:
 	newsblur-login "your-newsblur-account"
 	newsblur-password "your-password"
 
+(Note that double quotes should be escaped, i.e. you should write +{backslash}"+ 
+instead of +"+.)
+
 When you start newsbeuter, it will download the feeds that you configured
 in NewsBlur. Please take a closer look at the configuration commands for what 
 you can configure in newsbeuter regarding NewsBlur.
@@ -590,6 +596,9 @@ Then, configure your FeedHQ credentials:
 
 	feedhq-login "your-feedhq-account"
 	feedhq-password "your-password"
+
+(Note that double quotes should be escaped, i.e. you should write +{backslash}"+ 
+instead of +"+.)
 
 When you start newsbeuter, it will download the feeds that you configured
 in FeedHQ. Please take a closer look at the configuration commands for what 
@@ -625,6 +634,9 @@ In addition, it requires username and password for authentication:
 
 	ttrss-login "myusername"
 	ttrss-password "mypassword"
+
+(Note that double quotes should be escaped, i.e. you should write +{backslash}"+ 
+instead of +"+.)
 
 Tiny Tiny RSS provides two modes of usage, single-user mode and multi-user 
 mode. newsbeuter needs to know about this, too: In single-user mode, 
@@ -1062,7 +1074,7 @@ Alternatively, you can reach the newsbeuter developers on IRC: channel
 #newsbeuter on irc.freenode.net.
 
 If you want to report newsbeuter bugs, please use this issue tracker:
-http://code.google.com/p/newsbeuter/issues/list[]
+https://github.com/akrennmair/newsbeuter/issues/[]
 
 License
 -------

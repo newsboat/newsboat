@@ -60,7 +60,7 @@ Support
   [issue tracker](https://github.com/akrennmair/newsbeuter/issues)
 * Drop us a line at
   [Newsbeuter mailing list](http://groups.google.com/group/newsbeuter)
-* Chat with developers and feelow users on #newsbeuter at
+* Chat with developers and fellow users on #newsbeuter at
   [Freenode](https://freenode.net)
 
 License

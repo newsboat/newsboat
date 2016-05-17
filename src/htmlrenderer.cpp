@@ -158,13 +158,13 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 
 			case TAG_BR:
 				add_line(curline, tables, lines);
-				prepare_newline(curline, tables.size() ? 0 : indent_level);
+				prepare_new_line(curline, tables.size() ? 0 : indent_level);
 				break;
 
 			case TAG_PRE:
 				inside_pre = true;
 				add_nonempty_line(curline, tables, lines);
-				prepare_newline(curline,  tables.size() ? 0 : indent_level);
+				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
 			case TAG_ITUNESHACK:
@@ -205,7 +205,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				++indent_level;
 				add_nonempty_line(curline, tables, lines);
 				add_line("", tables, lines);
-				prepare_newline(curline, tables.size() ? 0 : indent_level);
+				prepare_new_line(curline, tables.size() ? 0 : indent_level);
 				break;
 
 			case TAG_H1:
@@ -216,7 +216,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				add_nonempty_line(curline, tables, lines);
 				if (lines.size() > 0 && lines[lines.size()-1].length() > static_cast<unsigned int>(indent_level*2))
 					add_line("", tables, lines);
-				prepare_newline(curline,  tables.size() ? 0 : indent_level);
+				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
 			case TAG_OL:
@@ -245,14 +245,14 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				}
 				add_nonempty_line(curline, tables, lines);
 				add_line("", tables, lines);
-				prepare_newline(curline,  tables.size() ? 0 : indent_level);
+				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
 			case TAG_UL:
 				is_ol = false;
 				add_nonempty_line(curline, tables, lines);
 				add_line("", tables, lines);
-				prepare_newline(curline,  tables.size() ? 0 : indent_level);
+				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
 			case TAG_LI:
@@ -260,11 +260,11 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					indent_level-=2;
 					if (indent_level < 0) indent_level = 0;
 					add_nonempty_line(curline, tables, lines);
-					prepare_newline(curline,  tables.size() ? 0 : indent_level);
+					prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				}
 				inside_li = true;
 				add_nonempty_line(curline, tables, lines);
-				prepare_newline(curline,  tables.size() ? 0 : indent_level);
+				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				indent_level+=2;
 				if (is_ol && ol_counts.size() != 0) {
 					curline.append(utils::strprintf("%s.", format_ol_count(ol_counts[ol_counts.size()-1], ol_types[ol_types.size()-1]).c_str()));
@@ -276,13 +276,13 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 
 			case TAG_DT:
 				add_nonempty_line(curline, tables, lines);
-				prepare_newline(curline,  tables.size() ? 0 : indent_level);
+				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
 			case TAG_DD:
 				indent_level+=4;
 				add_nonempty_line(curline, tables, lines);
-				prepare_newline(curline,  tables.size() ? 0 : indent_level);
+				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
 			case TAG_DL:
@@ -299,14 +299,14 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 
 			case TAG_HR:
 				add_nonempty_line(curline, tables, lines);
-				prepare_newline(curline,  tables.size() ? 0 : indent_level);
+				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				add_line(std::string(" ") + std::string(w - 2, '-') + std::string(" "), tables, lines);
-				prepare_newline(curline,  tables.size() ? 0 : indent_level);
+				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
 			case TAG_SCRIPT:
 				add_nonempty_line(curline, tables, lines);
-				prepare_newline(curline,  tables.size() ? 0 : indent_level);
+				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 
 				// don't render scripts, ignore current line
 				inside_script++;
@@ -318,7 +318,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 
 			case TAG_TABLE: {
 				add_nonempty_line(curline, tables, lines);
-				prepare_newline(curline, 0); // no indent in tables
+				prepare_new_line(curline, 0); // no indent in tables
 
 				bool border = false;
 				try {
@@ -374,7 +374,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				if (indent_level < 0) indent_level = 0;
 				add_nonempty_line(curline, tables, lines);
 				add_line("", tables, lines);
-				prepare_newline(curline,  tables.size() ? 0 : indent_level);
+				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
 			case TAG_OL:
@@ -386,17 +386,17 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 					indent_level-=2;
 					if (indent_level < 0) indent_level = 0;
 					add_nonempty_line(curline, tables, lines);
-					prepare_newline(curline,  tables.size() ? 0 : indent_level);
+					prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				}
 				add_nonempty_line(curline, tables, lines);
 				add_line("", tables, lines);
-				prepare_newline(curline,  tables.size() ? 0 : indent_level);
+				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
 			case TAG_DT:
 				add_nonempty_line(curline, tables, lines);
 				add_line("", tables, lines);
-				prepare_newline(curline,  tables.size() ? 0 : indent_level);
+				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
 			case TAG_DD:
@@ -404,7 +404,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				if (indent_level < 0) indent_level = 0;
 				add_nonempty_line(curline, tables, lines);
 				add_line("", tables, lines);
-				prepare_newline(curline,  tables.size() ? 0 : indent_level);
+				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
 			case TAG_DL:
@@ -416,17 +416,17 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				if (indent_level < 0) indent_level = 0;
 				inside_li = false;
 				add_nonempty_line(curline, tables, lines);
-				prepare_newline(curline,  tables.size() ? 0 : indent_level);
+				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
 			case TAG_H1:
 				if (line_is_nonempty(curline)) {
 					add_line(curline, tables, lines);
 					size_t llen = utils::strwidth_stfl(curline);
-					prepare_newline(curline,  tables.size() ? 0 : indent_level);
+					prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 					add_line(std::string(llen, '-'), tables, lines);
 				}
-				prepare_newline(curline,  tables.size() ? 0 : indent_level);
+				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
 			case TAG_H2:
@@ -434,12 +434,12 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 			case TAG_H4:
 			case TAG_P:
 				add_nonempty_line(curline, tables, lines);
-				prepare_newline(curline,  tables.size() ? 0 : indent_level);
+				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
 			case TAG_PRE:
 				add_nonempty_line(curline, tables, lines);
-				prepare_newline(curline,  tables.size() ? 0 : indent_level);
+				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				inside_pre = false;
 				break;
 
@@ -487,7 +487,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				// don't render scripts, ignore current line
 				if (inside_script)
 					inside_script--;
-				prepare_newline(curline,  tables.size() ? 0 : indent_level);
+				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
 			case TAG_STYLE:
@@ -497,7 +497,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 
 			case TAG_TABLE:
 				add_nonempty_line(curline, tables, lines);
-				prepare_newline(curline, 0); // no indent in tables
+				prepare_new_line(curline, 0); // no indent in tables
 
 				if (!tables.empty()) {
 					std::vector<std::string> table_text;
@@ -518,13 +518,13 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						}
 					}
 				}
-				prepare_newline(curline, tables.size() ? 0: indent_level);
+				prepare_new_line(curline, tables.size() ? 0: indent_level);
 				break;
 
 
 			case TAG_TR:
 				add_nonempty_line(curline, tables, lines);
-				prepare_newline(curline, 0); // no indent in tables
+				prepare_new_line(curline, 0); // no indent in tables
 
 				if (!tables.empty())
 					tables.back().complete_row();
@@ -536,7 +536,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				}
 
 				add_nonempty_line(curline, tables, lines);
-				prepare_newline(curline, 0); // no indent in tables
+				prepare_new_line(curline, 0); // no indent in tables
 
 				if (!tables.empty()) {
 					tables.back().complete_cell();
@@ -545,7 +545,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 
 			case TAG_TD:
 				add_nonempty_line(curline, tables, lines);
-				prepare_newline(curline, 0); // no indent in tables
+				prepare_new_line(curline, 0); // no indent in tables
 
 				if (!tables.empty())
 					tables.back().complete_cell();
@@ -559,7 +559,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				for (auto word : words) {
 					if (word == "\n") {
 						add_line(curline, tables, lines);
-						prepare_newline(curline,  tables.size() ? 0 : indent_level);
+						prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 					} else {
 						std::vector<std::string> words2 = utils::tokenize_spaced(word);
 						unsigned int i=0;
@@ -567,7 +567,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 						for (auto word2 : words2) {
 							if ((utils::strwidth_stfl(curline) + utils::strwidth_stfl(word2)) >= w) {
 								add_nonempty_line(curline, tables, lines);
-								prepare_newline(curline,  tables.size() ? 0 : indent_level);
+								prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 								new_line = true;
 							}
 							if (new_line) {
@@ -586,7 +586,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				for (auto word : words) {
 					if (word == "\n") {
 						add_line(curline, tables, lines);
-						prepare_newline(curline,  tables.size() ? 0 : indent_level);
+						prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 					} else {
 						curline.append(word);
 					}
@@ -608,7 +608,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				for (auto word : words) {
 					if ((utils::strwidth_stfl(curline) + utils::strwidth_stfl(word)) >= w) {
 						add_nonempty_line(curline, tables, lines);
-						prepare_newline(curline, tables.size() ? 0 : indent_level);
+						prepare_new_line(curline, tables.size() ? 0 : indent_level);
 						new_line = true;
 					}
 					if (new_line) {
@@ -679,7 +679,7 @@ void htmlrenderer::add_line(const std::string& curline, std::vector<Table>& tabl
 		lines.push_back(curline);
 }
 
-void htmlrenderer::prepare_newline(std::string& line, int indent_level) {
+void htmlrenderer::prepare_new_line(std::string& line, int indent_level) {
 	line = "";
 	line.append(indent_level*2, ' ');
 }

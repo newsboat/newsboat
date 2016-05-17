@@ -220,6 +220,12 @@ class rss_feed : public matchable {
 			items_.push_back(item);
 			items_guid_map[item->guid()] = item;
 		}
+		inline void set_items(std::vector<std::shared_ptr<rss_item>>& items) {
+			erase_items(items_.begin(), items_.end());
+			for (auto item : items) {
+				add_item(item);
+			}
+		}
 
 		inline void clear_items() {
 			LOG(LOG_DEBUG, "rss_feed: clearing items");

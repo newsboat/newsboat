@@ -68,7 +68,7 @@ POTFILE=po/newsbeuter.pot
 TEXTCONV=./txt2h.pl
 RM=rm -f
 
-all: $(NEWSBEUTER) $(PODBEUTER) mo-files
+all: $(NEWSBEUTER) $(PODBEUTER) doc mo-files
 
 NB_DEPS=$(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBEUTER_OBJS) $(RSSPPLIB_OUTPUT)
 
@@ -128,32 +128,47 @@ clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-do
 distclean: clean clean-mo test-clean
 	$(RM) core *.core core.* config.mk
 
-doc:
+doc: doc/xhtml/newsbeuter.html doc/xhtml/faq.html doc/newsbeuter.1 doc/podbeuter.1
+
+doc/xhtml/newsbeuter.html: doc/newsbeuter.txt
 	$(MKDIR) doc/xhtml
 	$(A2X) -f xhtml -D doc/xhtml doc/newsbeuter.txt
+
+doc/xhtml/faq.html: doc/faq.txt
+	$(MKDIR) doc/xhtml
 	$(A2X) -f xhtml -D doc/xhtml doc/faq.txt
+
+doc/newsbeuter-cfgcmds.txt: doc/generate.pl doc/configcommands.dsv
 	doc/generate.pl doc/configcommands.dsv > doc/newsbeuter-cfgcmds.txt
+
+doc/newsbeuter-keycmds.txt: doc/generate2.pl doc/keycmds.dsv
 	doc/generate2.pl doc/keycmds.dsv > doc/newsbeuter-keycmds.txt
+
+doc/newsbeuter.1: doc/manpage-newsbeuter.txt doc/newsbeuter-cfgcmds.txt doc/newsbeuter-keycmds.txt
 	$(A2X) -f manpage doc/manpage-newsbeuter.txt
+
+doc/podbeuter-cfgcmds.txt: doc/generate.pl doc/podbeuter-cmds.dsv
 	doc/generate.pl doc/podbeuter-cmds.dsv > doc/podbeuter-cfgcmds.txt
+
+doc/podbeuter.1: doc/manpage-podbeuter.txt doc/podbeuter-cfgcmds.txt
 	$(A2X) -f manpage doc/manpage-podbeuter.txt
 
 fmt:
 	astyle --suffix=none --style=java --indent=tab --indent-classes *.cpp include/*.h src/*.cpp rss/*.{cpp,h} test/*.cpp
 
-install-newsbeuter:
+install-newsbeuter: $(NEWSBEUTER)
 	$(MKDIR) $(DESTDIR)$(prefix)/bin
 	$(INSTALL) $(NEWSBEUTER) $(DESTDIR)$(prefix)/bin
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
 	$(INSTALL) doc/$(NEWSBEUTER).1 $(DESTDIR)$(mandir)/man1 || true
 
-install-podbeuter:
+install-podbeuter: $(PODBEUTER)
 	$(MKDIR) $(DESTDIR)$(prefix)/bin
 	$(INSTALL) $(PODBEUTER) $(DESTDIR)$(prefix)/bin
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
 	$(INSTALL) doc/$(PODBEUTER).1 $(DESTDIR)$(mandir)/man1 || true
 
-install-docs:
+install-docs: doc/xhtml/faq.html doc/xhtml/newsbeuter.html
 	$(MKDIR) $(DESTDIR)$(docdir)
 	$(INSTALL) -m 644 doc/xhtml/* $(DESTDIR)$(docdir) || true
 
@@ -168,6 +183,7 @@ uninstall: uninstall-mo
 	$(RM) $(DESTDIR)$(prefix)/bin/$(PODBEUTER)
 	$(RM) $(DESTDIR)$(mandir)/man1/$(NEWSBEUTER).1
 	$(RM) $(DESTDIR)$(mandir)/man1/$(PODBEUTER).1
+	$(RM) $(DESTDIR)$(docdir)
 	$(RM) -r $(DESTDIR)$(docdir)
 
 .PHONY: doc clean distclean all test test-rss extract install uninstall regenerate-parser clean-newsbeuter \

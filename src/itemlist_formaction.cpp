@@ -325,7 +325,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			}
 			if (v->get_cfg()->get_configvalue_as_bool("markfeedread-jumps-to-next-unread"))
 				process_operation(OP_NEXTUNREAD);
-			invalidate(itempos);
+			invalidate(InvalidationMode::COMPLETE);
 			v->set_status("");
 		} catch (const dbexception& e) {
 			v->show_error(utils::strprintf(_("Error: couldn't mark feed read: %s"), e.what()));
