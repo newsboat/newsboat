@@ -502,6 +502,10 @@ void tagsouppullparser::parse_tag(const std::string& tagstr) {
 			if (pos == std::string::npos)
 				pos = tagstr.length();
 			text = tagstr.substr(last_pos, pos - last_pos);
+			if (text[text.length()-1] == '/') {
+				// a kludge for <br/>
+				text.pop_back();
+			}
 			LOG(LOG_DEBUG, "parse_tag: tag name = %s", text.c_str());
 		} else {
 			pos = tagstr.find_first_of("= ", last_pos);

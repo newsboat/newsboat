@@ -75,3 +75,26 @@ TEST_CASE("Tagsoup pull parser behaves properly") {
 	e = xpp.next();
 	REQUIRE(e == tagsouppullparser::END_DOCUMENT);
 }
+
+TEST_CASE("<br>, <br/> and <br /> behave the same way") {
+	std::istringstream input_stream;
+	tagsouppullparser parser;
+	tagsouppullparser::event event;
+
+	for (auto input : {"<br>", "<br/>", "<br />"}) {
+		SECTION(input) {
+			input_stream.str(input);
+			parser.setInput(input_stream);
+
+			event = parser.getEventType();
+			REQUIRE(event == tagsouppullparser::START_DOCUMENT);
+
+			event = parser.next();
+			REQUIRE(event == tagsouppullparser::START_TAG);
+			REQUIRE(parser.getText() == "br");
+
+			event = parser.next();
+			REQUIRE(event == tagsouppullparser::END_DOCUMENT);
+		}
+	}
+}
