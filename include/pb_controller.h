@@ -55,6 +55,7 @@ class pb_controller {
 
 	private:
 		bool setup_dirs_xdg(const char *env_home);
+		void setup_dirs(const char *custom_home);
 
 		pb_view * v;
 		std::string config_file;
