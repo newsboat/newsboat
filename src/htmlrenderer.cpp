@@ -267,7 +267,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				indent_level+=2;
 				if (is_ol && ol_counts.size() != 0) {
-					curline.append(utils::strprintf("%s.", format_ol_count(ol_counts[ol_counts.size()-1], ol_types[ol_types.size()-1]).c_str()));
+					curline.append(utils::strprintf("%s. ", format_ol_count(ol_counts[ol_counts.size()-1], ol_types[ol_types.size()-1]).c_str()));
 					++ol_counts[ol_counts.size()-1];
 				} else {
 					curline.append("  * ");
