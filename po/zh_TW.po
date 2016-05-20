@@ -390,7 +390,7 @@ msgstr "這份說明"
 
 #: src/controller.cpp:1033
 #, c-format
-msgid "An error occured while parsing %s."
+msgid "An error occurred while parsing %s."
 msgstr "在分析%s時發生錯誤"
 
 #: src/controller.cpp:1048

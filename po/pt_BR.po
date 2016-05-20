@@ -404,7 +404,7 @@ msgstr "esta ajuda"
 
 #: src/controller.cpp:1033
 #, c-format
-msgid "An error occured while parsing %s."
+msgid "An error occurred while parsing %s."
 msgstr "Um erro ocorreu durante a análise de %s."
 
 #: src/controller.cpp:1048

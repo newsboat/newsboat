@@ -390,7 +390,7 @@ msgstr "该帮助"
 
 #: src/controller.cpp:1033
 #, c-format
-msgid "An error occured while parsing %s."
+msgid "An error occurred while parsing %s."
 msgstr ""
 
 #: src/controller.cpp:1048
