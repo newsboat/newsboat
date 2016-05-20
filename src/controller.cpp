@@ -405,7 +405,7 @@ void controller::run(int argc, char * argv[]) {
 		cfgparser.parse("/etc/" PROGRAM_NAME "/config");
 		cfgparser.parse(config_file);
 	} catch (const configexception& ex) {
-		LOG(LOG_ERROR,"an exception occured while parsing the configuration file: %s",ex.what());
+		LOG(LOG_ERROR,"an exception occurred while parsing the configuration file: %s",ex.what());
 		std::cout << ex.what() << std::endl;
 		utils::remove_fs_lock(lock_file);
 		return;
@@ -1071,7 +1071,7 @@ void controller::usage(char * argv0) {
 void controller::import_opml(const char * filename) {
 	xmlDoc * doc = xmlReadFile(filename, NULL, 0);
 	if (doc == NULL) {
-		std::cout << utils::strprintf(_("An error occured while parsing %s."), filename) << std::endl;
+		std::cout << utils::strprintf(_("An error occurred while parsing %s."), filename) << std::endl;
 		return;
 	}
 

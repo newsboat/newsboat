@@ -401,7 +401,7 @@ msgstr "ця довідка"
 
 #: src/controller.cpp:1033
 #, c-format
-msgid "An error occured while parsing %s."
+msgid "An error occurred while parsing %s."
 msgstr "Виникла помилка при парсуванні %s"
 
 #: src/controller.cpp:1048

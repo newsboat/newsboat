@@ -402,7 +402,7 @@ msgstr "ta strona pomocy"
 
 #: src/controller.cpp:1033
 #, c-format
-msgid "An error occured while parsing %s."
+msgid "An error occurred while parsing %s."
 msgstr "Wystąpił błąd podczas przetwarzania %s."
 
 #: src/controller.cpp:1048

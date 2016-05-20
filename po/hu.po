@@ -400,7 +400,7 @@ msgstr "ez a súgó"
 
 #: src/controller.cpp:1033
 #, c-format
-msgid "An error occured while parsing %s."
+msgid "An error occurred while parsing %s."
 msgstr "Egy hiba lépett fel, miközben %s-t elemeztem."
 
 #: src/controller.cpp:1048

@@ -152,7 +152,7 @@ void pb_controller::run(int argc, char * argv[]) {
 	static const char getopt_str[] = "C:q:d:l:havV";
 	static const struct option longopts[] = {
 		{"config-file"     , required_argument, 0, 'C'},
-		{"quiet"           , no_argument      , 0, 'q'},
+		{"queue-file"      , required_argument, 0, 'q'},
 		{"log-file"        , required_argument, 0, 'd'},
 		{"log-level"       , required_argument, 0, 'l'},
 		{"help"            , no_argument      , 0, 'h'},
