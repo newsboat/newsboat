@@ -6,6 +6,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -113,30 +114,44 @@ bool pb_controller::setup_dirs_xdg(const char *env_home) {
 	return true;
 }
 
-pb_controller::pb_controller() : v(0), config_file("config"), queue_file("queue"), cfg(0), view_update_(true),  max_dls(1), ql(0) {
+void pb_controller::setup_dirs(const char *custom_home){
 	char * cfgdir;
-	if (!(cfgdir = ::getenv("HOME"))) {
-		struct passwd * spw = ::getpwuid(::getuid());
-		if (spw) {
-			cfgdir = spw->pw_dir;
-		} else {
-			std::cout << _("Fatal error: couldn't determine home directory!") << std::endl;
-			std::cout << utils::strprintf(_("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid()) << std::endl;
-			::exit(EXIT_FAILURE);
+	if (custom_home) {
+		LOG(LOG_INFO, "pb_controller::setup_dirs: Using home directory provided by the command line: %s", custom_home);
+		config_dir = custom_home;
+	} else if ((cfgdir = ::getenv("NEWSBEUTER_HOME"))) {
+		LOG(LOG_INFO, "pb_controller::setup_dirs: Using home directory provided by the NEWSBEUTER_HOME environment variable: %s", cfgdir);
+		config_dir = cfgdir;
+	} else {
+		if (!(cfgdir = ::getenv("HOME"))) {
+			struct passwd * spw = ::getpwuid(::getuid());
+			if (spw) {
+				cfgdir = spw->pw_dir;
+			} else {
+				std::cout << _("Fatal error: couldn't determine home directory!") << std::endl;
+				std::cout << utils::strprintf(_("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid()) << std::endl;
+				::exit(EXIT_FAILURE);
+			}
 		}
+		config_dir = cfgdir;
+
+		if (setup_dirs_xdg(cfgdir))
+			return;
+
+		config_dir.append(NEWSBEUTER_PATH_SEP);
+		config_dir.append(NEWSBEUTER_CONFIG_SUBDIR);
 	}
-	config_dir = cfgdir;
 
-	if (setup_dirs_xdg(cfgdir))
-		return;
-
-	config_dir.append(NEWSBEUTER_PATH_SEP);
-	config_dir.append(NEWSBEUTER_CONFIG_SUBDIR);
 	::mkdir(config_dir.c_str(),0700); // create configuration directory if it doesn't exist
 
 	config_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
 	queue_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
 	lock_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + lock_file;
+	searchfile = utils::strprintf("%s%shistory.search", config_dir.c_str(), NEWSBEUTER_PATH_SEP);
+	cmdlinefile = utils::strprintf("%s%shistory.cmdline", config_dir.c_str(), NEWSBEUTER_PATH_SEP);
+}
+
+pb_controller::pb_controller() : v(0), config_file("config"), queue_file("queue"), cfg(0), view_update_(true),  max_dls(1), ql(0) {
 }
 
 pb_controller::~pb_controller() {
@@ -149,10 +164,11 @@ void pb_controller::run(int argc, char * argv[]) {
 
 	::signal(SIGINT, ctrl_c_action);
 
-	static const char getopt_str[] = "C:q:d:l:havV";
+	static const char getopt_str[] = "C:q:H:d:l:havV";
 	static const struct option longopts[] = {
 		{"config-file"     , required_argument, 0, 'C'},
 		{"queue-file"      , required_argument, 0, 'q'},
+		{"home-dir"        , required_argument, 0, 'H'},
 		{"log-file"        , required_argument, 0, 'd'},
 		{"log-level"       , required_argument, 0, 'l'},
 		{"help"            , no_argument      , 0, 'h'},
@@ -160,6 +176,20 @@ void pb_controller::run(int argc, char * argv[]) {
 		{"version"         , no_argument      , 0, 'v'},
 		{0                 , 0                , 0,  0 }
 	};
+
+	/* Lets check if there is a homedir argument first so individual files can
+	 * be properly overridden later. */
+	char *homedir = NULL;
+	while ((c = ::getopt_long(argc, argv, getopt_str, longopts, NULL)) != -1) {
+		if (strchr("H", c) != NULL) {
+			homedir = optarg;
+			break;
+		}
+	}
+
+	setup_dirs(homedir);
+
+	optind = 1;
 
 	while ((c = ::getopt_long(argc, argv, getopt_str, longopts, NULL)) != -1) {
 		switch (c) {
@@ -173,6 +203,8 @@ void pb_controller::run(int argc, char * argv[]) {
 		case 'q':
 			queue_file = optarg;
 			break;
+		case 'H':
+			break; //Homedir processing was done earlier.
 		case 'a':
 			automatic_dl = true;
 			break;
@@ -268,7 +300,7 @@ void pb_controller::run(int argc, char * argv[]) {
 
 void pb_controller::usage(const char * argv0) {
 	auto msg =
-	    utils::strprintf(_("%s %s\nusage %s [-C <file>] [-q <file>] [-h]\n"),
+	    utils::strprintf(_("%s %s\nusage %s [-H <homedir>] [-C <file>] [-q <file>] [-h]\n"),
 	    "podbeuter",
 	    PROGRAM_VERSION,
 	    argv0);
@@ -282,6 +314,7 @@ void pb_controller::usage(const char * argv0) {
 	};
 
 	static const std::vector<arg> args = {
+		{ 'H', "home-dir"    , _s("<homedir>")   , _s("set the home directory") }                                    ,
 		{ 'C', "config-file" , _s("<configfile>"), _s("read configuration from <configfile>") }                      ,
 		{ 'q', "queue-file"  , _s("<queuefile>") , _s("use <queuefile> as queue file") }                             ,
 		{ 'a', "autodownload", ""                , _s("start download on startup") }                                 ,

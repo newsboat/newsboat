@@ -41,6 +41,9 @@ OPTIONS
 -i opmlfile, --import-from-opml=opmlfile::
        Import an OPML file
 
+-H homedir, --home-dir=homedir::
+       Use an alternative home directory, individual files can be overridden using -u, -c and -C as described bellow.
+
 -u urlfile, --url-file=urlfile::
        Use an alternative URL file
 
@@ -134,6 +137,11 @@ include::chapter-cmdline.txt[]
 '<number>'::
         Jump to the <number>th entry in the current dialog
 
+ENVIRONMENT
+----------
+
+'NEWSBEUTER_HOME'::
+        If set, that directory is used instead of the default.
 
 FILES
 -----

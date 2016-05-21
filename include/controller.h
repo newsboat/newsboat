@@ -106,7 +106,7 @@ class controller {
 	private:
 		void usage(char * argv0);
 		bool setup_dirs_xdg(const char *env_home, bool silent);
-		void setup_dirs(bool silent);
+		void setup_dirs(const char *custom_home, bool silent);
 		void version_information(const char * argv0, unsigned int level);
 		void import_opml(const char * filename);
 		void export_opml();
