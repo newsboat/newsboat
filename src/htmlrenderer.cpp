@@ -341,7 +341,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				try {
 					span = utils::to_u(xpp.getAttributeValue("colspan"), 1);
 				} catch (const std::invalid_argument& ) {
-					// is ok, span 1 than
+					// is ok, span 1 then
 				}
 				if (!tables.empty())
 					tables.back().start_cell(span);
@@ -354,7 +354,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				try {
 					span = utils::to_u(xpp.getAttributeValue("colspan"), 1);
 				} catch (const std::invalid_argument& ) {
-					// is ok, span 1 than
+					// is ok, span 1 then
 				}
 				if (!tables.empty())
 					tables.back().start_cell(span);
