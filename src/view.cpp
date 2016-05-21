@@ -1011,7 +1011,7 @@ void view::clear_line(std::shared_ptr<formaction> fa) {
 }
 
 void view::clear_eol(std::shared_ptr<formaction> fa) {
-	unsigned int pos = utils::to_u(fa->get_form()->get("qna_value_pos"));
+	unsigned int pos = utils::to_u(fa->get_form()->get("qna_value_pos"), 0);
 	std::string val = fa->get_form()->get("qna_value");
 	val.erase(pos, val.length());
 	fa->get_form()->set("qna_value", val);
@@ -1025,7 +1025,7 @@ void view::cancel_input(std::shared_ptr<formaction> fa) {
 }
 
 void view::delete_word(std::shared_ptr<formaction> fa) {
-	std::string::size_type curpos = utils::to_u(fa->get_form()->get("qna_value_pos"));
+	std::string::size_type curpos = utils::to_u(fa->get_form()->get("qna_value_pos"), 0);
 	std::string val = fa->get_form()->get("qna_value");
 	std::string::size_type firstpos = curpos;
 	LOG(LOG_DEBUG, "view::delete_word: before val = %s", val.c_str());

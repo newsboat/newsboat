@@ -45,9 +45,7 @@ void filebrowser_formaction::process_operation(operation op, bool /* automatic *
 				switch (filetype) {
 				case 'd': {
 					std::string fileswidth = f->get("files:w");
-					std::istringstream is(fileswidth);
-					unsigned int width;
-					is >> width;
+					unsigned int width = utils::to_u(fileswidth);
 
 					fmtstr_formatter fmt;
 					fmt.register_fmt('N', PROGRAM_NAME);

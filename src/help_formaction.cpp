@@ -50,9 +50,7 @@ void help_formaction::process_operation(operation op, bool /* automatic */, std:
 void help_formaction::prepare() {
 	if (do_redraw) {
 		std::string listwidth = f->get("helptext:w");
-		std::istringstream is(listwidth);
-		unsigned int width;
-		is >> width;
+		unsigned int width = utils::to_u(listwidth);
 
 		fmtstr_formatter fmt;
 		fmt.register_fmt('N', PROGRAM_NAME);

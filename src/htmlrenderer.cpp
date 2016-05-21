@@ -223,13 +223,13 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				is_ol = true;
 				{
 					unsigned int ol_count = 1;
+					std::string ol_count_str;
 					try {
-						std::string ol_count_str = xpp.getAttributeValue("start");
-						std::istringstream is(ol_count_str);
-						is >> ol_count;
+						ol_count_str = xpp.getAttributeValue("start");
 					} catch (const std::invalid_argument& ) {
-						ol_count = 1;
+						ol_count_str = "1";
 					}
+					ol_count = utils::to_u(ol_count_str, 1);
 					ol_counts.push_back(ol_count);
 
 					std::string ol_type;
@@ -323,9 +323,9 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 				bool border = false;
 				try {
 					std::string b = xpp.getAttributeValue("border");
-					border = (utils::to_u(b) > 0);
+					border = (utils::to_u(b, 0) > 0);
 				} catch (const std::invalid_argument& ) {
-					// is ok, no border than
+					// is ok, no border then
 				}
 				tables.push_back(Table(border));
 				break;
@@ -339,7 +339,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 			case TAG_TH: {
 				size_t span = 1;
 				try {
-					span = utils::to_u(xpp.getAttributeValue("colspan"));
+					span = utils::to_u(xpp.getAttributeValue("colspan"), 1);
 				} catch (const std::invalid_argument& ) {
 					// is ok, span 1 than
 				}
@@ -352,7 +352,7 @@ void htmlrenderer::render(std::istream& input, std::vector<std::string>& lines, 
 			case TAG_TD: {
 				size_t span = 1;
 				try {
-					span = utils::to_u(xpp.getAttributeValue("colspan"));
+					span = utils::to_u(xpp.getAttributeValue("colspan"), 1);
 				} catch (const std::invalid_argument& ) {
 					// is ok, span 1 than
 				}

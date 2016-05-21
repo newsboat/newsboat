@@ -27,9 +27,7 @@ void urlview_formaction::process_operation(operation op, bool /* automatic */, s
 	case OP_OPEN: {
 		std::string posstr = f->get("feedpos");
 		if (posstr.length() > 0) {
-			std::istringstream is(posstr);
-			unsigned int idx;
-			is >> idx;
+			unsigned int idx = utils::to_u(posstr, 0);
 			v->set_status(_("Starting browser..."));
 			v->open_in_browser(links[idx].first);
 			v->set_status("");
@@ -41,9 +39,7 @@ void urlview_formaction::process_operation(operation op, bool /* automatic */, s
 	case OP_BOOKMARK: {
 		std::string posstr = f->get("feedpos");
 		if (posstr.length() > 0) {
-			std::istringstream is(posstr);
-			unsigned int idx;
-			is >> idx;
+			unsigned int idx = utils::to_u(posstr, 0);
 
 			this->start_bookmark_qna("", links[idx].first, "");
 
@@ -105,9 +101,7 @@ void urlview_formaction::init() {
 	v->set_status("");
 
 	std::string viewwidth = f->get("urls:w");
-	std::istringstream is(viewwidth);
-	unsigned int width;
-	is >> width;
+	unsigned int width = utils::to_u(viewwidth, 80);
 
 	fmtstr_formatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);

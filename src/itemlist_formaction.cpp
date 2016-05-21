@@ -548,9 +548,7 @@ void itemlist_formaction::qna_end_editflags() {
 		return;
 	}
 
-	std::istringstream posname(itemposname);
-	unsigned int itempos = 0;
-	posname >> itempos;
+	unsigned int itempos = utils::to_u(itemposname);
 	if (itempos < visible_items.size()) {
 		visible_items[itempos].first->set_flags(qna_responses[0]);
 		v->get_ctrl()->update_flags(visible_items[itempos].first);
@@ -748,11 +746,6 @@ void itemlist_formaction::set_head(const std::string& s, unsigned int unread, un
 	std::string title;
 	fmtstr_formatter fmt;
 
-	std::string listwidth = f->get("items:w");
-	std::istringstream is(listwidth);
-	unsigned int width;
-	is >> width;
-
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', PROGRAM_VERSION);
 
@@ -812,9 +805,7 @@ bool itemlist_formaction::jump_to_random_unread_item() {
 }
 
 bool itemlist_formaction::jump_to_next_unread_item(bool start_with_first) {
-	unsigned int itempos;
-	std::istringstream is(f->get("itempos"));
-	is >> itempos;
+	unsigned int itempos = utils::to_u(f->get("itempos"));
 	LOG(LOG_DEBUG, "itemlist_formaction::jump_to_next_unread_item: itempos = %u visible_items.size = %u", itempos, visible_items.size());
 	for (unsigned int i=(start_with_first?itempos:(itempos+1)); i<visible_items.size(); ++i) {
 		LOG(LOG_DEBUG, "itemlist_formaction::jump_to_next_unread_item: i = %u", i);
@@ -848,9 +839,7 @@ bool itemlist_formaction::jump_to_previous_item(bool start_with_last) {
 }
 
 bool itemlist_formaction::jump_to_next_item(bool start_with_first) {
-	int itempos;
-	std::istringstream is(f->get("itempos"));
-	is >> itempos;
+	unsigned int itempos = utils::to_u(f->get("itempos"));
 	LOG(LOG_DEBUG, "itemlist_formaction::jump_to_next_item: itempos = %u visible_items.size = %u", itempos, visible_items.size());
 	unsigned int i=(start_with_first?itempos:(itempos+1));
 	if (i<visible_items.size()) {
@@ -862,9 +851,7 @@ bool itemlist_formaction::jump_to_next_item(bool start_with_first) {
 }
 
 std::string itemlist_formaction::get_guid() {
-	unsigned int itempos;
-	std::istringstream is(f->get("itempos"));
-	is >> itempos;
+	unsigned int itempos = utils::to_u(f->get("itempos"));
 	return visible_items[itempos].first->guid();
 }
 
@@ -909,10 +896,7 @@ void itemlist_formaction::handle_cmdline(const std::string& cmd) {
 			std::string itemposname = f->get("itempos");
 			LOG(LOG_INFO, "itemlist_formaction::handle_cmdline: saving item at pos `%s' to `%s'", itemposname.c_str(), filename.c_str());
 			if (itemposname.length() > 0) {
-				std::istringstream posname(itemposname);
-				unsigned int itempos = 0;
-				posname >> itempos;
-
+				unsigned int itempos = utils::to_u(itemposname);
 				save_article(filename, visible_items[itempos].first);
 			} else {
 				v->show_error(_("Error: no item selected!"));
@@ -962,9 +946,7 @@ void itemlist_formaction::save_article(const std::string& filename, std::shared_
 }
 
 void itemlist_formaction::save_filterpos() {
-	std::istringstream is(f->get("itempos"));
-	unsigned int i;
-	is >> i;
+	unsigned int i = utils::to_u(f->get("itempos"));
 	if (i<visible_items.size()) {
 		filterpos = visible_items[i].second;
 		set_filterpos = true;

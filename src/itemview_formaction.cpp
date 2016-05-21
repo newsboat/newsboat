@@ -56,7 +56,7 @@ void itemview_formaction::prepare() {
 		unsigned int render_width = 80;
 		unsigned int view_width = 0;
 		if (widthstr.length() > 0) {
-			view_width = render_width = utils::to_u(widthstr);
+			view_width = render_width = utils::to_u(widthstr, 80);
 			if (render_width - 5 > 0)
 				render_width -= 5;
 		}
@@ -423,9 +423,7 @@ void itemview_formaction::set_head(const std::string& s, const std::string& feed
 	fmt.register_fmt('t', utils::to_string(total));
 
 	std::string listwidth = f->get("article:w");
-	std::istringstream is(listwidth);
-	unsigned int width;
-	is >> width;
+	unsigned int width = utils::to_u(listwidth);
 
 	f->set("head",fmt.do_format(v->get_cfg()->get_configvalue("itemview-title-format"), width));
 }
@@ -575,10 +573,8 @@ void itemview_formaction::set_regexmanager(regexmanager * r) {
 
 void itemview_formaction::update_percent() {
 	if (v->get_cfg()->get_configvalue_as_bool("display-article-progress")) {
-		std::istringstream is(f->get("articleoffset"));
-		unsigned int offset = 0;
 		unsigned int percent = 0;
-		is >> offset;
+		unsigned int offset = utils::to_u(f->get("articleoffset"), 0);
 
 		if (num_lines > 0)
 			percent = (100 * (offset + 1)) / num_lines;

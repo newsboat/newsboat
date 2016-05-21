@@ -82,16 +82,13 @@ void feedlist_formaction::prepare() {
 
 void feedlist_formaction::process_operation(operation op, bool automatic, std::vector<std::string> * args) {
 	std::string feedpos = f->get("feedposname");
-	std::istringstream posname(feedpos);
-	unsigned int pos = 0;
-	posname >> pos;
+	unsigned int pos = utils::to_u(feedpos);
 REDO:
 	switch (op) {
 	case OP_OPEN: {
 		if (f->get_focus() == "feeds") {
 			if (automatic && args->size() > 0) {
-				std::istringstream x((*args)[0]);
-				x >> pos;
+				pos = utils::to_u((*args)[0]);
 			}
 			LOG(LOG_INFO, "feedlist_formaction: opening feed at position `%s'",feedpos.c_str());
 			if (feeds_shown > 0 && feedpos.length() > 0) {
@@ -450,9 +447,7 @@ keymap_hint_entry * feedlist_formaction::get_keymap_hint() {
 }
 
 bool feedlist_formaction::jump_to_previous_unread_feed(unsigned int& feedpos) {
-	unsigned int curpos;
-	std::istringstream is(f->get("feedpos"));
-	is >> curpos;
+	unsigned int curpos = utils::to_u(f->get("feedpos"));
 	LOG(LOG_DEBUG, "feedlist_formaction::jump_to_previous_unread_feed: searching for unread feed");
 
 	for (int i=curpos-1; i>=0; --i) {
@@ -477,9 +472,7 @@ bool feedlist_formaction::jump_to_previous_unread_feed(unsigned int& feedpos) {
 }
 
 void feedlist_formaction::goto_feed(const std::string& str) {
-	unsigned int curpos;
-	std::istringstream is(f->get("feedpos"));
-	is >> curpos;
+	unsigned int curpos = utils::to_u(f->get("feedpos"));
 	LOG(LOG_DEBUG, "feedlist_formaction::goto_feed: curpos = %u str = `%s'", curpos, str.c_str());
 	for (unsigned int i=curpos+1; i<visible_feeds.size(); ++i) {
 		if (strcasestr(visible_feeds[i].first->title().c_str(), str.c_str()) != NULL) {
@@ -517,9 +510,7 @@ bool feedlist_formaction::jump_to_random_unread_feed(unsigned int& feedpos) {
 }
 
 bool feedlist_formaction::jump_to_next_unread_feed(unsigned int& feedpos) {
-	unsigned int curpos;
-	std::istringstream is(f->get("feedpos"));
-	is >> curpos;
+	unsigned int curpos = utils::to_u(f->get("feedpos"));
 	LOG(LOG_DEBUG, "feedlist_formaction::jump_to_next_unread_feed: searching for unread feed");
 
 	for (unsigned int i=curpos+1; i<visible_feeds.size(); ++i) {
@@ -544,12 +535,10 @@ bool feedlist_formaction::jump_to_next_unread_feed(unsigned int& feedpos) {
 }
 
 bool feedlist_formaction::jump_to_previous_feed(unsigned int& feedpos) {
-	int curpos;
-	std::istringstream is(f->get("feedpos"));
-	is >> curpos;
+	unsigned int curpos = utils::to_u(f->get("feedpos"));
 
-	if ((curpos-1) >= 0) {
-		int i = curpos-1;
+	if (curpos > 0) {
+		unsigned int i = curpos-1;
 		LOG(LOG_DEBUG, "feedlist_formaction::jump_to_previous_feed: visible_feeds[%u]", i);
 		f->set("feedpos", utils::to_string<unsigned int>(i));
 		feedpos = visible_feeds[i].second;
@@ -559,9 +548,7 @@ bool feedlist_formaction::jump_to_previous_feed(unsigned int& feedpos) {
 }
 
 bool feedlist_formaction::jump_to_next_feed(unsigned int& feedpos) {
-	unsigned int curpos;
-	std::istringstream is(f->get("feedpos"));
-	is >> curpos;
+	unsigned int curpos = utils::to_u(f->get("feedpos"));
 
 	if ((curpos+1)<visible_feeds.size()) {
 		unsigned int i = curpos+1;
@@ -574,9 +561,7 @@ bool feedlist_formaction::jump_to_next_feed(unsigned int& feedpos) {
 }
 
 std::shared_ptr<rss_feed> feedlist_formaction::get_feed() {
-	unsigned int curpos;
-	std::istringstream is(f->get("feedpos"));
-	is >> curpos;
+	unsigned int curpos = utils::to_u(f->get("feedpos"));
 	return visible_feeds[curpos].first;
 }
 
@@ -660,9 +645,7 @@ void feedlist_formaction::mark_pos_if_visible(unsigned int pos) {
 }
 
 void feedlist_formaction::save_filterpos() {
-	std::istringstream is(f->get("feedpos"));
-	unsigned int i;
-	is >> i;
+	unsigned int i = utils::to_u(f->get("feedpos"));
 	if (i<visible_feeds.size()) {
 		filterpos = visible_feeds[i].second;
 		set_filterpos = true;

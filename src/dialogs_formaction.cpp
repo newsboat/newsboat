@@ -55,9 +55,8 @@ void dialogs_formaction::process_operation(operation op, bool /* automatic */, s
 	switch (op) {
 	case OP_OPEN: {
 		std::string dialogposname = f->get("dialogpos");
-		unsigned int dialogpos = utils::to_u(dialogposname);
 		if (dialogposname.length() > 0) {
-			v->set_current_formaction(dialogpos);
+			v->set_current_formaction(utils::to_u(dialogposname));
 		} else {
 			v->show_error(_("No item selected!"));
 		}
@@ -65,8 +64,8 @@ void dialogs_formaction::process_operation(operation op, bool /* automatic */, s
 	break;
 	case OP_CLOSEDIALOG: {
 		std::string dialogposname = f->get("dialogpos");
-		unsigned int dialogpos = utils::to_u(dialogposname);
 		if (dialogposname.length() > 0) {
+			unsigned int dialogpos = utils::to_u(dialogposname);
 			if (dialogpos != 0) {
 				v->remove_formaction(dialogpos);
 				update_list = true;

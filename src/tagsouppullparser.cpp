@@ -436,8 +436,7 @@ std::string tagsouppullparser::decode_entity(std::string s) {
 			is >> std::hex >> wc;
 		} else {
 			s.erase(0,1);
-			std::istringstream is(s);
-			is >> wc;
+			wc = utils::to_u(s);
 		}
 		int pos;
 		// convert some common but unknown numeric entities

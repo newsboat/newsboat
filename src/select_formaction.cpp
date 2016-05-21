@@ -46,9 +46,7 @@ void select_formaction::process_operation(operation op, bool /* automatic */, st
 		break;
 	case OP_OPEN: {
 		std::string tagposname = f->get("tagposname");
-		std::istringstream posname(tagposname);
-		unsigned int pos = 0;
-		posname >> pos;
+		unsigned int pos = utils::to_u(tagposname);
 		if (tagposname.length() > 0) {
 			switch (type) {
 			case SELECTTAG: {
@@ -119,9 +117,7 @@ void select_formaction::init() {
 	value = "";
 
 	std::string viewwidth = f->get("taglist:w");
-	std::istringstream is(viewwidth);
-	unsigned int width;
-	is >> width;
+	unsigned int width = utils::to_u(viewwidth, 80);
 
 	set_keymap_hints();
 
