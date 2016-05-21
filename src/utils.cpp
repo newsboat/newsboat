@@ -574,10 +574,16 @@ std::string utils::get_useragent(configcontainer * cfgcont) {
 	return ua_pref;
 }
 
-unsigned int utils::to_u(const std::string& str) {
+unsigned int utils::to_u(
+		const std::string& str,
+		const unsigned int default_value)
+{
 	std::istringstream is(str);
-	unsigned int u = 0;
+	unsigned int u;
 	is >> u;
+	if (is.fail() || ! is.eof()) {
+		u = default_value;
+	}
 	return u;
 }
 

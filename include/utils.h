@@ -81,7 +81,12 @@ class utils {
 			return (a > b) ? a : b;
 		}
 
-		static unsigned int to_u(const std::string& str);
+		static inline unsigned int to_u(const std::string& str) {
+			return to_u(str, 0);
+		}
+		static unsigned int to_u(
+				const std::string& str,
+				const unsigned int default_value);
 
 		static bool is_valid_color(const std::string& color);
 		static bool is_valid_attribute(const std::string& attrib);
