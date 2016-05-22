@@ -81,7 +81,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 			locations[location].second.push_back(colorstr);
 		} else {
 			delete rx;
-			for (auto location : locations) {
+			for (auto& location : locations) {
 				LOG(LOG_DEBUG, "regexmanager::handle_action: adding rx = %s colorstr = %s to location %s",
 				    params[1].c_str(), colorstr.c_str(), location.first.c_str());
 				rx = new regex_t;

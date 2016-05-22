@@ -68,3 +68,17 @@ TEST_CASE("RegexManager behaves correctly") {
 		}
 	}
 }
+
+TEST_CASE("regexmanager: `highlight all` adds rules for all locations") {
+	regexmanager rxman;
+	std::vector<std::string> params = {"all", "foo", "red"};
+	REQUIRE_NOTHROW(rxman.handle_action("highlight", params));
+	std::string input = "xxfooyy";
+
+	for (auto location : {"article", "articlelist", "feedlist"}) {
+		SECTION(location) {
+		rxman.quote_and_highlight(input, location);
+		REQUIRE(input == "xx<0>foo</>yy");
+		}
+	}
+}
