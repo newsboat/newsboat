@@ -49,6 +49,8 @@ Compiling and installing newsbeuter is as simple as:
 	make
 	make install
 
+(And if you ever need to uninstall it, use `make uninstall`.)
+
 Contact
 -------
 Andreas Krennmair <ak@newsbeuter.org>
