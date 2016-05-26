@@ -25,9 +25,6 @@ OPTIONS
 -h, --help::
         Display help
 
--H homedir, --home-dir=homedir::
-       Use an alternative home directory, individual files can be overridden using -C and -q as described bellow.
-
 -C configfile, --config-file=configfile::
        Use an alternative configuration file
 
@@ -56,12 +53,6 @@ CONFIGURATION COMMANDS
 
 include::podbeuter-cfgcmds.txt[]
 
-
-ENVIRONMENT
-----------
-
-'NEWSBEUTER_HOME'::
-        If set, that directory is used instead of the default.
 
 FILES
 -----

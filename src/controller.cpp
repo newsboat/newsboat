@@ -162,33 +162,25 @@ bool controller::setup_dirs_xdg(const char *env_home, bool silent) {
 	return true;
 }
 
-void controller::setup_dirs(const char *custom_home, bool silent) {
+void controller::setup_dirs(bool silent) {
 	const char * env_home;
-	if (custom_home) {
-		LOG(LOG_INFO, "controller::setup_dirs: Using home directory provided by the command line: %s", custom_home);
-		config_dir = custom_home;
-	} else if ((env_home = ::getenv("NEWSBEUTER_HOME"))) {
-		LOG(LOG_INFO, "controller::setup_dirs: Using home directory provided by the NEWSBEUTER_HOME environment variable: %s", env_home);
-		config_dir = env_home;
-	} else {
-		if (!(env_home = ::getenv("HOME"))) {
-			struct passwd * spw = ::getpwuid(::getuid());
-			if (spw) {
-				env_home = spw->pw_dir;
-			} else {
-				std::cerr << _("Fatal error: couldn't determine home directory!") << std::endl;
-				std::cerr << utils::strprintf(_("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid()) << std::endl;
-				::exit(EXIT_FAILURE);
-			}
+	if (!(env_home = ::getenv("HOME"))) {
+		struct passwd * spw = ::getpwuid(::getuid());
+		if (spw) {
+			env_home = spw->pw_dir;
+		} else {
+			std::cerr << _("Fatal error: couldn't determine home directory!") << std::endl;
+			std::cerr << utils::strprintf(_("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid()) << std::endl;
+			::exit(EXIT_FAILURE);
 		}
-
-		config_dir = env_home;
-		config_dir.append(NEWSBEUTER_PATH_SEP);
-		config_dir.append(NEWSBEUTER_CONFIG_SUBDIR);
-
-		if (setup_dirs_xdg(env_home, silent))
-			return;
 	}
+
+	config_dir = env_home;
+	config_dir.append(NEWSBEUTER_PATH_SEP);
+	config_dir.append(NEWSBEUTER_CONFIG_SUBDIR);
+
+	if (setup_dirs_xdg(env_home, silent))
+		return;
 
 	mkdir(config_dir.c_str(),0700); // create configuration directory if it doesn't exist
 
@@ -237,11 +229,10 @@ void controller::run(int argc, char * argv[]) {
 	bool silent = false;
 	bool execute_cmds = false;
 
-	static const char getopt_str[] = "i:erhqu:c:C:H:d:l:vVoxXI:E:";
+	static const char getopt_str[] = "i:erhqu:c:C:d:l:vVoxXI:E:";
 	static const struct option longopts[] = {
 		{"cache-file"      , required_argument, 0, 'c'},
 		{"config-file"     , required_argument, 0, 'C'},
-		{"home-dir"        , required_argument, 0, 'H'},
 		{"execute"         , required_argument, 0, 'x'},
 		{"export-to-file"  , required_argument, 0, 'E'},
 		{"export-to-opml"  , no_argument      , 0, 'e'},
@@ -259,22 +250,18 @@ void controller::run(int argc, char * argv[]) {
 		{0                 , 0                , 0,  0 }
 	};
 
-	/* First, lets check for options that imply output silencing i.e. import,
-	 * export command execution and, well, quiet mode. Additionally, check if a
-	 * custom home directory has been supplied so we can set it up early */
-	char *homedir = NULL;
+	/* First of all, let's check for options that imply silencing of the
+	 * output: import, export, command execution and, well, quiet mode */
 	while ((c = ::getopt_long(argc, argv, getopt_str, longopts, NULL)) != -1) {
 		if (strchr("iexq", c) != NULL) {
 			silent = true;
-		}
-		if (strchr("H", c) != NULL) {
-			homedir = optarg;
+			break;
 		}
 	}
 
-	setup_dirs(homedir, silent);
+	setup_dirs(silent);
 
-	/* Now that silencing and the home directory's set up, let's rewind to the beginning of argv and
+	/* Now that silencing's set up, let's rewind to the beginning of argv and
 	 * process the options */
 	optind = 1;
 
@@ -304,8 +291,6 @@ void controller::run(int argc, char * argv[]) {
 		case 'u':
 			url_file = optarg;
 			break;
-		case 'H':
-			break; //Homedir processing was done earlier.
 		case 'c':
 			cache_file = optarg;
 			lock_file = std::string(cache_file) + LOCK_SUFFIX;
@@ -1035,7 +1020,7 @@ void controller::version_information(const char * argv0, unsigned int level) {
 
 void controller::usage(char * argv0) {
 	auto msg =
-	    utils::strprintf(_("%s %s\nusage: %s [-H <homedir>] [-i <file>|-e] [-u <urlfile>] "
+	    utils::strprintf(_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] "
 	    "[-c <cachefile>] [-x <command> ...] [-h]\n"),
 	    PROGRAM_NAME,
 	    PROGRAM_VERSION,
@@ -1053,7 +1038,6 @@ void controller::usage(char * argv0) {
 		{ 'e', "export-to-opml"  , ""                , _s("export OPML feed to stdout") }                                                 ,
 		{ 'r', "refresh-on-start", ""                , _s("refresh feeds on start") }                                                     ,
 		{ 'i', "import-from-opml", _s("<file>")      , _s("import OPML file") }                                                           ,
-		{ 'H', "home-dir"        , _s("<homedir>")   , _s("set the home directory") }                                                     ,
 		{ 'u', "url-file"        , _s("<urlfile>")   , _s("read RSS feed URLs from <urlfile>") }                                          ,
 		{ 'c', "cache-file"      , _s("<cachefile>") , _s("use <cachefile> as cache file") }                                              ,
 		{ 'C', "config-file"     , _s("<configfile>"), _s("read configuration from <configfile>") }                                       ,
