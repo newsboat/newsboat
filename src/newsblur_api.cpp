@@ -89,6 +89,10 @@ json_object * folders)
 	int tags_len = array_list_length(tags);
 	for (int i = 0; i < tags_len; ++i) {
 		json_object * tag_to_feed_ids = json_object_array_get_idx(folders, i);
+
+		if (!json_object_is_type(tag_to_feed_ids, json_type_object))
+			continue;
+
 		json_object_object_foreach(tag_to_feed_ids, key, feeds_with_tag_obj) {
 			std::string std_key(key);
 			array_list * feeds_with_tag_arr = json_object_get_array(feeds_with_tag_obj);
