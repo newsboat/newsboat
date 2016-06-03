@@ -261,12 +261,12 @@ rsspp::feed newsblur_api::fetch_feed(const std::string& id) {
 
 json_object * newsblur_api::query_api(const std::string& endpoint, const std::string* postdata) {
 
-	const char * url = (api_location + endpoint).c_str();
-	std::string data = utils::retrieve_url(url, cfg, NULL, postdata);
+	std::string url = api_location + endpoint;
+	std::string data = utils::retrieve_url(url.c_str(), cfg, NULL, postdata);
 
 	json_object * result =  json_tokener_parse(data.c_str());
 	if (!result)
-		LOG(LOG_WARN, "newsblur_api::query_api: request to %s failed", url);
+		LOG(LOG_WARN, "newsblur_api::query_api: request to %s failed", url.c_str());
 	return result;
 }
 
