@@ -190,13 +190,13 @@ Currently, the following elements are supported:
 
 The default color configuration of newsbeuter looks like this:
 
-	background          white   black
-	listnormal          white   black
-	listfocus           yellow  blue   bold
-	listnormal_unread   magenta black
-	listfocus_unread    magenta blue   bold
-	info                yellow  blue   bold
-	article             white   black
+	color background          white   black
+	color listnormal          white   black
+	color listfocus           yellow  blue   bold
+	color listnormal_unread   magenta black
+	color listfocus_unread    magenta blue   bold
+	color info                yellow  blue   bold
+	color article             white   black
 
 
 Migrating from other RSS Feed Readers
