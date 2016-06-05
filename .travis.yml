@@ -24,30 +24,6 @@ matrix:
       env:
         - COMPILER=g++-5
         - GCOV=/usr/bin/gcov-5
-    - compiler: clang
-      os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.6
-          packages:
-            - clang-3.6
-      env:
-        - COMPILER=clang++-3.6
-        - GCOV=/usr/bin/gcov
-    - compiler: clang
-      os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.7
-          packages:
-            - clang-3.7
-      env:
-        - COMPILER=clang++-3.7
-        - GCOV=/usr/bin/gcov
     - compiler: gcc
       os: osx
       env:
