@@ -99,3 +99,5 @@ src/rss_parser.o: include/rss_parser.h include/configcontainer.h include/cache.h
 src/ttrss_api.o: include/ttrss_api.h
 
 src/newsblur_api.o: include/newsblur_api.h
+
+src/ocnews_api.o: include/ocnews_api.h

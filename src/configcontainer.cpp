@@ -133,10 +133,16 @@ configcontainer::configcontainer()
 		{ "ttrss-password", configdata("", configdata::STR) },
 		{ "ttrss-passwordfile", configdata("", configdata::PATH) },
 		{ "ttrss-url", configdata("", configdata::STR) },
+		{ "ocnews-login", configdata("", configdata::STR) },
+		{ "ocnews-password", configdata("", configdata::STR) },
+		{ "ocnews-flag-star", configdata("", configdata::STR) },
+		{ "ocnews-url", configdata("", configdata::STR) },
+		{ "ocnews-verifyhost",
+		    configdata("yes", configdata::BOOL) },
 		{ "urls-source",
 		    configdata("local", std::unordered_set<std::string>({
 		        "local", "opml", "oldreader", "ttrss", "newsblur",
-		        "feedhq" })) },
+		        "feedhq", "ocnews" })) },
 		{ "use-proxy", configdata("no", configdata::BOOL) },
 		{ "user-agent", configdata("", configdata::STR) },
 
