@@ -91,3 +91,29 @@ TEST_CASE("textformatter: when wrapping, spaces at the beginning of lines are dr
 		"test\n";
 	REQUIRE(fmt.format_text_plain(4) == expected);
 }
+
+TEST_CASE("textformatter: nonwrappable lines are wrapped by format_text_to_list if total_width != 0") {
+	textformatter fmt;
+	fmt.add_line(nonwrappable, "just a test");
+	const size_t wrap_width = 100;
+	regexmanager * rxman = NULL;
+	const std::string location = "";
+
+	SECTION("total_width == 4") {
+		const std::string expected =
+			"{list"
+				"{listitem text:\"just\"}"
+				"{listitem text:\"a \"}"
+				"{listitem text:\"test\"}"
+			"}";
+		REQUIRE(fmt.format_text_to_list(rxman, location, wrap_width, 4) == expected);
+	}
+
+	SECTION("total_width == 0") {
+		const std::string expected =
+			"{list"
+				"{listitem text:\"just a test\"}"
+			"}";
+		REQUIRE(fmt.format_text_to_list(rxman, location, wrap_width, 0) == expected);
+	}
+}

@@ -80,11 +80,15 @@ std::string format_text_plain_helper(
 		const std::vector<std::pair<LineType, std::string>>& lines,
 		regexmanager * rxman,
 		const std::string& location,
-		const size_t width)
+		// wrappable lines are wrapped at this width
+		const size_t wrap_width,
+		// if non-zero, nonwrappable lines are wrapped at this width
+		const size_t total_width)
 {
 	LOG(LOG_DEBUG,
-		"textformatter::format_text_plain: rxman = %p, location = `%s', width = %zu, %u lines",
-		rxman, location.c_str(), width, lines.size());
+		"textformatter::format_text_plain: rxman = %p, location = `%s', "
+		"wrap_width = %zu, total_width = %zu, %u lines",
+		rxman, location.c_str(), wrap_width, total_width, lines.size());
 
 	std::string format_cache;
 	auto store_line =
@@ -110,17 +114,23 @@ std::string format_text_plain_helper(
 
 		switch(type) {
 			case wrappable:
-				for(auto line : wrap_line(text, width)) {
+				for(auto line : wrap_line(text, wrap_width)) {
 					store_line(line);
 				}
 				break;
 
 			case nonwrappable:
-				store_line(text);
+				if (total_width == 0) {
+					store_line(text);
+				} else {
+					for(auto line : wrap_line(text, total_width)) {
+						store_line(line);
+					}
+				}
 				break;
 
 			case hr:
-				store_line(htmlrenderer::render_hr(width));
+				store_line(htmlrenderer::render_hr(wrap_width));
 				break;
 		}
 	}
@@ -131,9 +141,11 @@ std::string format_text_plain_helper(
 std::string textformatter::format_text_to_list(
 		regexmanager * rxman,
 		const std::string& location,
-		const size_t width)
+		const size_t wrap_width,
+		const size_t total_width)
 {
-	auto formatted = format_text_plain_helper(lines, rxman, location, width);
+	auto formatted = format_text_plain_helper(
+			lines, rxman, location, wrap_width, total_width);
 
 	auto format_cache = std::string("{list");
 	for (auto line : utils::tokenize_nl(formatted)) {
@@ -152,7 +164,7 @@ std::string textformatter::format_text_to_list(
 }
 
 std::string textformatter::format_text_plain(const size_t width) {
-	return format_text_plain_helper(lines, NULL, std::string(), width);
+	return format_text_plain_helper(lines, NULL, std::string(), width, 0);
 }
 
 }

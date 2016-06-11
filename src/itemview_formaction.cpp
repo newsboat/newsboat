@@ -120,17 +120,18 @@ void itemview_formaction::prepare() {
 
 		textfmt.add_lines(lines);
 
+		std::string widthstr = f->get("article:w");
+		unsigned int window_width = utils::to_u(widthstr, 0);
+
 		unsigned int textwidth = v->get_cfg()->get_configvalue_as_int("text-width");
 		if (textwidth == 0) {
-			std::string widthstr = f->get("article:w");
-			if (widthstr.length() > 0) {
-				textwidth = utils::to_u(widthstr);
-				if (textwidth - 5 > 0) {
-					textwidth -= 5;
-				}
+			textwidth = window_width;
+			if (textwidth - 5 > 0) {
+				textwidth -= 5;
 			}
 		}
-		auto formatted_text = textfmt.format_text_to_list(rxman, "article", textwidth);
+		auto formatted_text = textfmt.format_text_to_list(
+				rxman, "article", textwidth, window_width);
 		num_lines = formatted_text.size();
 
 		f->modify("article", "replace_inner", formatted_text);
