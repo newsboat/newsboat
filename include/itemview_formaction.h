@@ -3,6 +3,7 @@
 
 #include <formaction.h>
 #include <htmlrenderer.h>
+#include <textformatter.h>
 #include <regexmanager.h>
 #include <rss.h>
 
@@ -33,7 +34,11 @@ class itemview_formaction : public formaction {
 
 		virtual void finished_qna(operation op);
 
-		std::vector<std::string> render_html(const std::string& source, std::vector<linkpair>& links, const std::string& feedurl, unsigned int render_width);
+		std::vector<std::pair<LineType, std::string>>
+			render_html(
+				const std::string& source,
+				std::vector<linkpair>& thelinks,
+				const std::string& url);
 
 		void set_regexmanager(regexmanager * r);
 
@@ -44,7 +49,9 @@ class itemview_formaction : public formaction {
 		void set_head(const std::string& s, const std::string& feedtitle, unsigned int unread, unsigned int total);
 		void highlight_text(const std::string& searchphrase);
 
-		void render_source(std::vector<std::string>& lines, std::string desc, unsigned int width);
+		void render_source(
+				std::vector<std::pair<LineType, std::string>>& lines,
+				std::string source);
 
 		void do_search();
 

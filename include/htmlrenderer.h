@@ -1,6 +1,7 @@
 #ifndef NEWSBEUTER_HTMLRENDERER__H
 #define NEWSBEUTER_HTMLRENDERER__H
 
+#include <textformatter.h>
 #include <vector>
 #include <string>
 #include <istream>
@@ -21,9 +22,16 @@ typedef std::pair<std::string,link_type> linkpair;
 
 class htmlrenderer {
 	public:
-		htmlrenderer(unsigned int width = 80, bool raw = false);
-		void render(const std::string&, std::vector<std::string>& lines,  std::vector<linkpair>& links, const std::string& url);
-		void render(std::istream &, std::vector<std::string>& lines, std::vector<linkpair>& links, const std::string& url);
+		htmlrenderer(bool raw = false);
+		void render(const std::string& source,
+				std::vector<std::pair<LineType, std::string>>& lines,
+				std::vector<linkpair>& links,
+				const std::string& url);
+		void render(std::istream & input,
+				std::vector<std::pair<LineType, std::string>>& lines,
+				std::vector<linkpair>& links,
+				const std::string& url);
+		static std::string render_hr(const unsigned int width);
 		// only public for unit testing purposes:
 		std::string format_ol_count(unsigned int count, char type);
 
@@ -59,7 +67,6 @@ class htmlrenderer {
 		};
 
 	private:
-		unsigned int w;
 		void prepare_new_line(std::string& line, int indent_level);
 		bool line_is_nonempty(const std::string& line);
 		unsigned int add_link(std::vector<linkpair>& links, const std::string& link, link_type type);
@@ -67,9 +74,21 @@ class htmlrenderer {
 		std::string absolute_url(const std::string& url, const std::string& link);
 		std::string type2str(link_type type);
 		std::map<std::string, htmltag> tags;
-		void render_table(const Table& table, std::vector<std::string>& lines);
-		void add_nonempty_line(const std::string& curline, std::vector<Table>& tables, std::vector<std::string>& lines);
-		void add_line(const std::string& curline, std::vector<Table>& tables, std::vector<std::string>& lines);
+		void render_table(
+				const Table& table,
+				std::vector<std::pair<LineType, std::string>>& lines);
+		void add_nonempty_line(
+				const std::string& curline,
+				std::vector<Table>& tables,
+				std::vector<std::pair<LineType, std::string>>& lines);
+		void add_line(
+				const std::string& curline,
+				std::vector<Table>& tables,
+				std::vector<std::pair<LineType, std::string>>& lines);
+		void add_line_verbatim(
+				const std::string& line,
+				std::vector<std::pair<LineType, std::string>>& lines);
+		void add_hr(std::vector<std::pair<LineType, std::string>>& lines);
 		std::string get_char_numbering(unsigned int count);
 		std::string get_roman_numbering(unsigned int count);
 		bool raw_;
