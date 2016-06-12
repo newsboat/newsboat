@@ -22,7 +22,14 @@
 namespace newsbeuter {
 
 filebrowser_formaction::filebrowser_formaction(view * vv, std::string formstr)
-	: formaction(vv,formstr), quit(false) { }
+	: formaction(vv,formstr), quit(false)
+{
+	// In filebrowser, keyboard focus is at the input field, so user can't
+	// possibly use 'q' key to exit the dialog
+	keymap *keys = vv->get_keys();
+	keys->set_key(OP_QUIT, "ESC", id());
+	vv->set_keymap(keys);
+}
 
 filebrowser_formaction::~filebrowser_formaction() { }
 
