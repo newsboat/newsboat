@@ -1,5 +1,7 @@
 #include "catch.hpp"
 
+#include <sstream>
+
 #include <htmlrenderer.h>
 #include <utils.h>
 
@@ -7,9 +9,64 @@ using namespace newsbeuter;
 
 const std::string url = "http://example.com/feed.rss";
 
+/*
+ * We're going to do an awful lot of comparisons of these pairs, so it makes
+ * sense to create a function to make constructing them easier.
+ *
+ * And while we're at it, let's make it accept char* instead of string so that
+ * we don't have to wrap string literals in std::string() calls (we don't
+ * support C++14 yet so can't use their fancy string literal operators.)
+ */
+std::pair<newsbeuter::LineType, std::string>
+p(newsbeuter::LineType type, const char* str) {
+	return std::make_pair(type, std::string(str));
+}
+
+namespace Catch {
+	/* Catch doesn't know how to print out newsbeuter::LineType values, so
+	 * let's teach it!
+	 *
+	 * Technically, any one of the following two definitions shouls be enough,
+	 * but somehow it's not that way: toString works in std::pair<> while
+	 * StringMaker is required for simple things like REQUIRE(newsbeuter::hr ==
+	 * newsbeuter::hr). Weird, but at least this works.
+	 */
+	std::string toString(newsbeuter::LineType const& value) {
+		switch(value) {
+			case wrappable:
+				return "wrappable";
+			case nonwrappable:
+				return "nonwrappable";
+			case hr:
+				return "hr";
+			default:
+				return "(unknown LineType)";
+		}
+	}
+
+	template<> struct StringMaker<newsbeuter::LineType> {
+		static std::string convert(newsbeuter::LineType const& value) {
+			return toString(value);
+		}
+	};
+
+	// Catch also doesn't know about std::pair
+	template<> struct StringMaker<std::pair<newsbeuter::LineType, std::string>> {
+		static std::string convert(std::pair<newsbeuter::LineType, std::string> const& value ) {
+			std::ostringstream o;
+			o << "(";
+			o << toString(value.first);
+			o << ", \"";
+			o << value.second;
+			o << "\")";
+			return o.str();
+		}
+	};
+}
+
 TEST_CASE("HTMLRenderer behaves correctly") {
-	htmlrenderer rnd(100);
-	std::vector<std::string> lines;
+	htmlrenderer rnd;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	SECTION("link rendering") {
@@ -17,10 +74,10 @@ TEST_CASE("HTMLRenderer behaves correctly") {
 
 		REQUIRE(lines.size() == 4);
 
-		REQUIRE(lines[0] == "<u>slashdot</>[1]");
-		REQUIRE(lines[1] == "");
-		REQUIRE(lines[2] == "Links: ");
-		REQUIRE(lines[3] == "[1]: http://slashdot.org/ (link)");
+		REQUIRE(lines[0] == p(wrappable, "<u>slashdot</>[1]"));
+		REQUIRE(lines[1] == p(wrappable, ""));
+		REQUIRE(lines[2] == p(wrappable, "Links: "));
+		REQUIRE(lines[3] == p(nonwrappable, "[1]: http://slashdot.org/ (link)"));
 
 		REQUIRE(links[0].first == "http://slashdot.org/");
 		REQUIRE(links[0].second == LINK_HREF);
@@ -32,8 +89,8 @@ TEST_CASE("HTMLRenderer behaves correctly") {
 			SECTION(tag) {
 				rnd.render("hello" + tag + "world!", lines, links, "");
 				REQUIRE(lines.size() == 2);
-				REQUIRE(lines[0] == "hello");
-				REQUIRE(lines[1] == "world!");
+				REQUIRE(lines[0] == p(wrappable, "hello"));
+				REQUIRE(lines[1] == p(wrappable, "world!"));
 			}
 		}
 	}
@@ -41,19 +98,19 @@ TEST_CASE("HTMLRenderer behaves correctly") {
 	SECTION("superscript rendering") {
 		rnd.render("3<sup>10</sup>", lines, links, "");
 		REQUIRE(lines.size() == 1);
-		REQUIRE(lines[0] == "3^10");
+		REQUIRE(lines[0] == p(wrappable, "3^10"));
 	}
 
 	SECTION("subscript rendering") {
 		rnd.render("A<sub>i</sub>", lines, links, "");
 		REQUIRE(lines.size() == 1);
-		REQUIRE(lines[0] == "A[i]");
+		REQUIRE(lines[0] == p(wrappable, "A[i]"));
 	}
 
 	SECTION("scripts are ignored") {
 		rnd.render("abc<script></script>", lines, links, "");
 		REQUIRE(lines.size() == 1);
-		REQUIRE(lines[0] == "abc");
+		REQUIRE(lines[0] == p(wrappable, "abc"));
 	}
 }
 
@@ -103,7 +160,7 @@ TEST_CASE("htmlrenderer: links with same URL are coalesced under one number") {
 	const std::string input =
 		"<a href='http://example.com/about'>About us</a>"
 		"<a href='http://example.com/about'>Another link</a>";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
@@ -118,7 +175,7 @@ TEST_CASE("htmlrenderer: links with different URLs have different numbers") {
 	const std::string input =
 		"<a href='http://example.com/one'>One</a>"
 		"<a href='http://example.com/two'>Two</a>";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
@@ -133,12 +190,12 @@ TEST_CASE("htmlrenderer: link without `href' is neither highlighted nor added to
 	htmlrenderer r;
 
 	const std::string input = "<a>test</a>";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
-	REQUIRE(lines[0] == "test");
+	REQUIRE(lines[0] == p(wrappable, "test"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -146,12 +203,12 @@ TEST_CASE("htmlrenderer: link with empty `href' is neither highlighted nor added
 	htmlrenderer r;
 
 	const std::string input = "<a href=''>test</a>";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
-	REQUIRE(lines[0] == "test");
+	REQUIRE(lines[0] == p(wrappable, "test"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -159,36 +216,36 @@ TEST_CASE("htmlrenderer: <strong> is rendered in bold font") {
 	htmlrenderer r;
 
 	const std::string input = "<strong>test</strong>";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
-	REQUIRE(lines[0] == "<b>test</>");
+	REQUIRE(lines[0] == p(wrappable, "<b>test</>"));
 }
 
 TEST_CASE("htmlrenderer: <u> is rendered as underlined text") {
 	htmlrenderer r;
 
 	const std::string input = "<u>test</u>";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
-	REQUIRE(lines[0] == "<u>test</>");
+	REQUIRE(lines[0] == p(wrappable, "<u>test</>"));
 }
 
 TEST_CASE("htmlrenderer: <q> is rendered as text in quotes") {
 	htmlrenderer r;
 
 	const std::string input = "<q>test</q>";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
-	REQUIRE(lines[0] == "\"test\"");
+	REQUIRE(lines[0] == p(wrappable, "\"test\""));
 }
 
 TEST_CASE("htmlrenderer: Flash <embed>s are added to links if `src' is set") {
@@ -198,15 +255,15 @@ TEST_CASE("htmlrenderer: Flash <embed>s are added to links if `src' is set") {
 		"<embed type='application/x-shockwave-flash'"
 			"src='http://example.com/game.swf'>"
 		"</embed>";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
-	REQUIRE(lines[0] == "[embedded flash: 1]");
-	REQUIRE(lines[1] == "");
-	REQUIRE(lines[2] == "Links: ");
-	REQUIRE(lines[3] == "[1]: http://example.com/game.swf (embedded flash)");
+	REQUIRE(lines[0] == p(wrappable, "[embedded flash: 1]"));
+	REQUIRE(lines[1] == p(wrappable, ""));
+	REQUIRE(lines[2] == p(wrappable, "Links: "));
+	REQUIRE(lines[3] == p(nonwrappable, "[1]: http://example.com/game.swf (embedded flash)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "http://example.com/game.swf");
 	REQUIRE(links[0].second == LINK_EMBED);
@@ -217,7 +274,7 @@ TEST_CASE("htmlrenderer: Flash <embed>s are ignored if `src' is not set") {
 
 	const std::string input =
 		"<embed type='application/x-shockwave-flash'></embed>";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
@@ -231,7 +288,7 @@ TEST_CASE("htmlrenderer: non-flash <embed>s are ignored") {
 	const std::string input =
 		"<embed type='whatever'"
 			"src='http://example.com/thingy'></embed>";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
@@ -244,7 +301,7 @@ TEST_CASE("htmlrenderer: <embed>s are ignored if `type' is not set") {
 
 	const std::string input =
 		"<embed src='http://example.com/yet.another.thingy'></embed>";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
@@ -259,13 +316,13 @@ TEST_CASE("htmlrenderer: spaces and line breaks are preserved inside <pre>") {
 		"<pre>oh cool\n"
 		"  check this\tstuff  out!\n"
 		"</pre>";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 2);
-	REQUIRE(lines[0] == "oh cool");
-	REQUIRE(lines[1] == "  check this\tstuff  out!");
+	REQUIRE(lines[0] == p(nonwrappable, "oh cool"));
+	REQUIRE(lines[1] == p(nonwrappable, "  check this\tstuff  out!"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -277,12 +334,12 @@ TEST_CASE("htmlrenderer: tags still work inside <pre>") {
 			"<strong>bold text</strong>"
 			"<u>underlined text</u>"
 		"</pre>";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
-	REQUIRE(lines[0] == "<b>bold text</><u>underlined text</>");
+	REQUIRE(lines[0] == p(nonwrappable, "<b>bold text</><u>underlined text</>"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -291,15 +348,15 @@ TEST_CASE("htmlrenderer: <img> results in a placeholder and a link") {
 
 	const std::string input =
 		"<img src='http://example.com/image.png'></img>";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
-	REQUIRE(lines[0] == "[image 1]");
-	REQUIRE(lines[1] == "");
-	REQUIRE(lines[2] == "Links: ");
-	REQUIRE(lines[3] == "[1]: http://example.com/image.png (image)");
+	REQUIRE(lines[0] == p(wrappable, "[image 1]"));
+	REQUIRE(lines[1] == p(wrappable, ""));
+	REQUIRE(lines[2] == p(wrappable, "Links: "));
+	REQUIRE(lines[3] == p(nonwrappable, "[1]: http://example.com/image.png (image)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "http://example.com/image.png");
 	REQUIRE(links[0].second == LINK_IMG);
@@ -310,7 +367,7 @@ TEST_CASE("htmlrenderer: <img>s without `src' are ignored") {
 
 	const std::string input =
 		"<img></img>";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
@@ -324,15 +381,15 @@ TEST_CASE("htmlrenderer: title is mentioned in placeholder if <img> has `title'"
 	const std::string input =
 		"<img src='http://example.com/image.png'"
 			"title='Just a test image'></img>";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
-	REQUIRE(lines[0] == "[image 1: Just a test image]");
-	REQUIRE(lines[1] == "");
-	REQUIRE(lines[2] == "Links: ");
-	REQUIRE(lines[3] == "[1]: http://example.com/image.png (image)");
+	REQUIRE(lines[0] == p(wrappable, "[image 1: Just a test image]"));
+	REQUIRE(lines[1] == p(wrappable, ""));
+	REQUIRE(lines[2] == p(wrappable, "Links: "));
+	REQUIRE(lines[3] == p(nonwrappable, "[1]: http://example.com/image.png (image)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "http://example.com/image.png");
 	REQUIRE(links[0].second == LINK_IMG);
@@ -345,15 +402,15 @@ TEST_CASE("htmlrenderer: URL of <img> with data inside `src' is replaced with st
 		"<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA"
 		"AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO"
 		"9TXL0Y4OHwAAAABJRU5ErkJggg==' alt='Red dot' />";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
-	REQUIRE(lines[0] == "[image 1]");
-	REQUIRE(lines[1] == "");
-	REQUIRE(lines[2] == "Links: ");
-	REQUIRE(lines[3] == "[1]: inline image (image)");
+	REQUIRE(lines[0] == p(wrappable, "[image 1]"));
+	REQUIRE(lines[1] == p(wrappable, ""));
+	REQUIRE(lines[2] == p(wrappable, "Links: "));
+	REQUIRE(lines[3] == p(nonwrappable, "[1]: inline image (image)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "inline image");
 	REQUIRE(links[0].second == LINK_IMG);
@@ -367,15 +424,15 @@ TEST_CASE("htmlrenderer: <blockquote> is indented and is separated by empty line
 			"Experience is what you get when you didn't get what you wanted. "
 			"&mdash;Randy Pausch"
 		"</blockquote>";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 3);
-	REQUIRE(lines[0] == "");
-	REQUIRE(lines[1] == "  Experience is what you get when you didn't get "
-	                    "what you wanted. —Randy Pausch");
-	REQUIRE(lines[2] == "");
+	REQUIRE(lines[0] == p(wrappable, ""));
+	REQUIRE(lines[1] == p(wrappable, "  Experience is what you get when you didn't get "
+	                    "what you wanted. —Randy Pausch"));
+	REQUIRE(lines[2] == p(wrappable, ""));
 	REQUIRE(links.size() == 0);
 }
 
@@ -390,25 +447,25 @@ TEST_CASE("htmlrenderer: <dl>, <dt> and <dd> are rendered properly") {
 			"<dt>Tea</dt>"
 			"<dd>Soldier's friend</dd>"
 		"</dl>";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 8);
-	REQUIRE(lines[0] == "Coffee");
-	REQUIRE(lines[1] == "");
-	REQUIRE(lines[2] == "        Foul muck");
-	REQUIRE(lines[3] == "");
-	REQUIRE(lines[4] == "Tea");
-	REQUIRE(lines[5] == "");
-	REQUIRE(lines[6] == "        Soldier's friend");
-	REQUIRE(lines[7] == "");
+	REQUIRE(lines[0] == p(wrappable, "Coffee"));
+	REQUIRE(lines[1] == p(wrappable, ""));
+	REQUIRE(lines[2] == p(wrappable, "        Foul muck"));
+	REQUIRE(lines[3] == p(wrappable, ""));
+	REQUIRE(lines[4] == p(wrappable, "Tea"));
+	REQUIRE(lines[5] == p(wrappable, ""));
+	REQUIRE(lines[6] == p(wrappable, "        Soldier's friend"));
+	REQUIRE(lines[7] == p(wrappable, ""));
 	REQUIRE(links.size() == 0);
 }
 
 TEST_CASE("htmlrenderer: <h[2-6]> and <p>") {
 	htmlrenderer r;
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	SECTION("<h1> is rendered with setext-style underlining") {
@@ -416,8 +473,8 @@ TEST_CASE("htmlrenderer: <h[2-6]> and <p>") {
 
 		REQUIRE_NOTHROW(r.render(input, lines, links, url));
 		REQUIRE(lines.size() == 2);
-		REQUIRE(lines[0] == "Why are we here?");
-		REQUIRE(lines[1] == "----------------");
+		REQUIRE(lines[0] == p(wrappable, "Why are we here?"));
+		REQUIRE(lines[1] == p(wrappable, "----------------"));
 		REQUIRE(links.size() == 0);
 	}
 
@@ -430,7 +487,7 @@ TEST_CASE("htmlrenderer: <h[2-6]> and <p>") {
 				tag + std::string("hello world") + closing_tag;
 			REQUIRE_NOTHROW(r.render(input, lines, links, url));
 			REQUIRE(lines.size() == 1);
-			REQUIRE(lines[0] == "hello world");
+			REQUIRE(lines[0] == p(wrappable, "hello world"));
 			REQUIRE(links.size() == 0);
 		}
 	}
@@ -441,7 +498,7 @@ TEST_CASE("htmlrenderer: <h[2-6]> and <p>") {
 			const std::string input = "<h1>header</h1><p>paragraph</p>";
 			REQUIRE_NOTHROW(r.render(input, lines, links, url));
 			REQUIRE(lines.size() == 4);
-			REQUIRE(lines[2] == "");
+			REQUIRE(lines[2] == p(wrappable, ""));
 			REQUIRE(links.size() == 0);
 		}
 
@@ -456,7 +513,7 @@ TEST_CASE("htmlrenderer: <h[2-6]> and <p>") {
 
 				REQUIRE_NOTHROW(r.render(input, lines, links, url));
 				REQUIRE(lines.size() == 3);
-				REQUIRE(lines[1] == "");
+				REQUIRE(lines[1] == p(wrappable, ""));
 				REQUIRE(links.size() == 0);
 			}
 		}
@@ -466,7 +523,7 @@ TEST_CASE("htmlrenderer: <h[2-6]> and <p>") {
 				"<ul><li>one</li><li>two</li></ul><p>paragraph</p>";
 			REQUIRE_NOTHROW(r.render(input, lines, links, url));
 			REQUIRE(lines.size() == 5);
-			REQUIRE(lines[3] == "");
+			REQUIRE(lines[3] == p(wrappable, ""));
 			REQUIRE(links.size() == 0);
 		}
 
@@ -475,7 +532,7 @@ TEST_CASE("htmlrenderer: <h[2-6]> and <p>") {
 				"<ol><li>one</li><li>two</li></ol><p>paragraph</p>";
 			REQUIRE_NOTHROW(r.render(input, lines, links, url));
 			REQUIRE(lines.size() == 5);
-			REQUIRE(lines[3] == "");
+			REQUIRE(lines[3] == p(wrappable, ""));
 			REQUIRE(links.size() == 0);
 		}
 	}
@@ -489,37 +546,35 @@ TEST_CASE("htmlrenderer: whitespace is erased at the beginning of the paragraph"
 			"     \n"
 			"here comes the text"
 		"</p>";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
-	REQUIRE(lines[0] == "here comes the text");
+	REQUIRE(lines[0] == p(wrappable, "here comes the text"));
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: paragraph is fit to width") {
-	htmlrenderer r(23);
+TEST_CASE("htmlrenderer: paragraph is just a long line of text") {
+	htmlrenderer r;
 
 	const std::string input =
 		"<p>"
 			"here comes a long, boring chunk text that we have to fit to width"
 		"</p>";
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 4);
-	REQUIRE(lines[0] == "here comes a long, ");
-	REQUIRE(lines[1] == "boring chunk text that");
-	REQUIRE(lines[2] == "we have to fit to ");
-	REQUIRE(lines[3] == "width");
+	REQUIRE(lines.size() == 1);
+	REQUIRE(lines[0] == p(wrappable, "here comes a long, boring chunk text "
+				"that we have to fit to width"));
 	REQUIRE(links.size() == 0);
 }
 
 TEST_CASE("htmlrenderer: default style for <ol> is Arabic numerals") {
 	htmlrenderer r;
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	SECTION("no `type' attribute") {
@@ -531,8 +586,8 @@ TEST_CASE("htmlrenderer: default style for <ol> is Arabic numerals") {
 
 		REQUIRE_NOTHROW(r.render(input, lines, links, url));
 		REQUIRE(lines.size() == 4);
-		REQUIRE(lines[1] == " 1. one");
-		REQUIRE(lines[2] == " 2. two");
+		REQUIRE(lines[1] == p(wrappable, " 1. one"));
+		REQUIRE(lines[2] == p(wrappable, " 2. two"));
 		REQUIRE(links.size() == 0);
 	}
 
@@ -545,15 +600,15 @@ TEST_CASE("htmlrenderer: default style for <ol> is Arabic numerals") {
 
 		REQUIRE_NOTHROW(r.render(input, lines, links, url));
 		REQUIRE(lines.size() == 4);
-		REQUIRE(lines[1] == " 1. one");
-		REQUIRE(lines[2] == " 2. two");
+		REQUIRE(lines[1] == p(wrappable, " 1. one"));
+		REQUIRE(lines[2] == p(wrappable, " 2. two"));
 		REQUIRE(links.size() == 0);
 	}
 }
 
 TEST_CASE("htmlrenderer: default starting number for <ol> is 1") {
 	htmlrenderer r;
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	SECTION("no `start' attribute") {
@@ -565,8 +620,8 @@ TEST_CASE("htmlrenderer: default starting number for <ol> is 1") {
 
 		REQUIRE_NOTHROW(r.render(input, lines, links, url));
 		REQUIRE(lines.size() == 4);
-		REQUIRE(lines[1] == " 1. one");
-		REQUIRE(lines[2] == " 2. two");
+		REQUIRE(lines[1] == p(wrappable, " 1. one"));
+		REQUIRE(lines[2] == p(wrappable, " 2. two"));
 		REQUIRE(links.size() == 0);
 	}
 
@@ -579,15 +634,15 @@ TEST_CASE("htmlrenderer: default starting number for <ol> is 1") {
 
 		REQUIRE_NOTHROW(r.render(input, lines, links, url));
 		REQUIRE(lines.size() == 4);
-		REQUIRE(lines[1] == " 1. one");
-		REQUIRE(lines[2] == " 2. two");
+		REQUIRE(lines[1] == p(wrappable, " 1. one"));
+		REQUIRE(lines[2] == p(wrappable, " 2. two"));
 		REQUIRE(links.size() == 0);
 	}
 }
 
 TEST_CASE("htmlrenderer: type='1' for <ol> means Arabic numbering") {
 	htmlrenderer r;
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 	const std::string input =
 		"<ol type='1'>"
@@ -597,14 +652,14 @@ TEST_CASE("htmlrenderer: type='1' for <ol> means Arabic numbering") {
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
-	REQUIRE(lines[1] == " 1. one");
-	REQUIRE(lines[2] == " 2. two");
+	REQUIRE(lines[1] == p(wrappable, " 1. one"));
+	REQUIRE(lines[2] == p(wrappable, " 2. two"));
 	REQUIRE(links.size() == 0);
 }
 
 TEST_CASE("htmlrenderer: type='a' for <ol> means lowercase alphabetic numbering") {
 	htmlrenderer r;
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 	const std::string input =
 		"<ol type='a'>"
@@ -614,14 +669,14 @@ TEST_CASE("htmlrenderer: type='a' for <ol> means lowercase alphabetic numbering"
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
-	REQUIRE(lines[1] == "a. one");
-	REQUIRE(lines[2] == "b. two");
+	REQUIRE(lines[1] == p(wrappable, "a. one"));
+	REQUIRE(lines[2] == p(wrappable, "b. two"));
 	REQUIRE(links.size() == 0);
 }
 
 TEST_CASE("htmlrenderer: type='A' for <ol> means uppercase alphabetic numbering") {
 	htmlrenderer r;
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 	const std::string input =
 		"<ol type='A'>"
@@ -631,14 +686,14 @@ TEST_CASE("htmlrenderer: type='A' for <ol> means uppercase alphabetic numbering"
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
-	REQUIRE(lines[1] == "A. one");
-	REQUIRE(lines[2] == "B. two");
+	REQUIRE(lines[1] == p(wrappable, "A. one"));
+	REQUIRE(lines[2] == p(wrappable, "B. two"));
 	REQUIRE(links.size() == 0);
 }
 
 TEST_CASE("htmlrenderer: type='i' for <ol> means lowercase Roman numbering") {
 	htmlrenderer r;
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 	const std::string input =
 		"<ol type='i'>"
@@ -648,14 +703,14 @@ TEST_CASE("htmlrenderer: type='i' for <ol> means lowercase Roman numbering") {
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
-	REQUIRE(lines[1] == "i. one");
-	REQUIRE(lines[2] == "ii. two");
+	REQUIRE(lines[1] == p(wrappable, "i. one"));
+	REQUIRE(lines[2] == p(wrappable, "ii. two"));
 	REQUIRE(links.size() == 0);
 }
 
 TEST_CASE("htmlrenderer: type='I' for <ol> means uppercase Roman numbering") {
 	htmlrenderer r;
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 	const std::string input =
 		"<ol type='I'>"
@@ -665,14 +720,14 @@ TEST_CASE("htmlrenderer: type='I' for <ol> means uppercase Roman numbering") {
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
-	REQUIRE(lines[1] == "I. one");
-	REQUIRE(lines[2] == "II. two");
+	REQUIRE(lines[1] == p(wrappable, "I. one"));
+	REQUIRE(lines[2] == p(wrappable, "II. two"));
 	REQUIRE(links.size() == 0);
 }
 
 TEST_CASE("htmlrenderer: every next <li> implicitly closes the previous one") {
 	htmlrenderer r;
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 	const std::string input =
 		"<ol type='I'>"
@@ -685,16 +740,16 @@ TEST_CASE("htmlrenderer: every next <li> implicitly closes the previous one") {
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 6);
-	REQUIRE(lines[1] == "I. one");
-	REQUIRE(lines[2] == "II. two");
-	REQUIRE(lines[3] == "III. three");
-	REQUIRE(lines[4] == "IV. four");
+	REQUIRE(lines[1] == p(wrappable, "I. one"));
+	REQUIRE(lines[2] == p(wrappable, "II. two"));
+	REQUIRE(lines[3] == p(wrappable, "III. three"));
+	REQUIRE(lines[4] == p(wrappable, "IV. four"));
 	REQUIRE(links.size() == 0);
 }
 
 TEST_CASE("htmlrenderer: <style> tags are ignored") {
 	htmlrenderer r;
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 	const std::string input =
 		"<style><h1>ignore me</h1><p>and me</p> body{width: 100%;}</style>";
@@ -704,45 +759,22 @@ TEST_CASE("htmlrenderer: <style> tags are ignored") {
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: <hr> is a sequence of `-' chars framed with spaces") {
-	std::vector<std::string> lines;
+TEST_CASE("htmlrenderer: <hr> is not a string, but a special type of line") {
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
+	htmlrenderer r;
 	const std::string input = "<hr>";
 
-	SECTION("width = 3") {
-		htmlrenderer r(3);
+	REQUIRE_NOTHROW(r.render(input, lines, links, url));
+	REQUIRE(links.size() == 0);
 
-		REQUIRE_NOTHROW(r.render(input, lines, links, url));
-		REQUIRE(links.size() == 0);
-
-		REQUIRE(lines.size() == 1);
-		REQUIRE(lines[0] == " - ");
-	}
-
-	SECTION("width = 10") {
-		htmlrenderer r(10);
-
-		REQUIRE_NOTHROW(r.render(input, lines, links, url));
-		REQUIRE(links.size() == 0);
-
-		REQUIRE(lines.size() == 1);
-		REQUIRE(lines[0] == " -------- ");
-	}
-
-	SECTION("width = 72") {
-		htmlrenderer r(72);
-
-		REQUIRE_NOTHROW(r.render(input, lines, links, url));
-		REQUIRE(links.size() == 0);
-
-		REQUIRE(lines.size() == 1);
-		REQUIRE(lines[0] == " ---------------------------------------------------------------------- ");
-	}
+	REQUIRE(lines.size() == 1);
+	REQUIRE(lines[0].first == hr);
 }
 
 TEST_CASE("htmlrenderer: header rows of tables are in bold") {
 	htmlrenderer r;
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	SECTION("one column") {
@@ -755,7 +787,7 @@ TEST_CASE("htmlrenderer: header rows of tables are in bold") {
 
 		REQUIRE_NOTHROW(r.render(input, lines, links, url));
 		REQUIRE(lines.size() == 1);
-		REQUIRE(lines[0] == "<b>header</>");
+		REQUIRE(lines[0] == p(wrappable, "<b>header</>"));
 		REQUIRE(links.size() == 0);
 	}
 
@@ -770,14 +802,14 @@ TEST_CASE("htmlrenderer: header rows of tables are in bold") {
 
 		REQUIRE_NOTHROW(r.render(input, lines, links, url));
 		REQUIRE(lines.size() == 1);
-		REQUIRE(lines[0] == "<b>another</> <b>header</>");
+		REQUIRE(lines[0] == p(wrappable, "<b>another</> <b>header</>"));
 		REQUIRE(links.size() == 0);
 	}
 }
 
 TEST_CASE("htmlrenderer: cells are separated by space if `border' is not set") {
 	htmlrenderer r;
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	const std::string input =
@@ -790,13 +822,13 @@ TEST_CASE("htmlrenderer: cells are separated by space if `border' is not set") {
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
-	REQUIRE(lines[0] == "hello world");
+	REQUIRE(lines[0] == p(wrappable, "hello world"));
 	REQUIRE(links.size() == 0);
 }
 
 TEST_CASE("htmlrenderer: cells are separated by vertical bar if `border' is set (regardless of actual value)") {
 	htmlrenderer r;
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	for (auto border_width = 1; border_width < 10; ++border_width) {
@@ -813,7 +845,7 @@ TEST_CASE("htmlrenderer: cells are separated by vertical bar if `border' is set 
 
 		REQUIRE_NOTHROW(r.render(input, lines, links, url));
 		REQUIRE(lines.size() == 3);
-		REQUIRE(lines[1] == "|hello|world|");
+		REQUIRE(lines[1] == p(wrappable, "|hello|world|"));
 		REQUIRE(links.size() == 0);
 		}
 	}
@@ -821,7 +853,7 @@ TEST_CASE("htmlrenderer: cells are separated by vertical bar if `border' is set 
 
 TEST_CASE("htmlrenderer: tables with `border' have borders") {
 	htmlrenderer r;
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	const std::string input =
@@ -834,15 +866,15 @@ TEST_CASE("htmlrenderer: tables with `border' have borders") {
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 3);
-	REQUIRE(lines[0] == "+-----+-----+");
-	REQUIRE(lines[1] == "|hello|world|");
-	REQUIRE(lines[2] == "+-----+-----+");
+	REQUIRE(lines[0] == p(wrappable, "+-----+-----+"));
+	REQUIRE(lines[1] == p(wrappable, "|hello|world|"));
+	REQUIRE(lines[2] == p(wrappable, "+-----+-----+"));
 	REQUIRE(links.size() == 0);
 }
 
 TEST_CASE("htmlrenderer: if document ends before </table> is found, table is rendered anyway") {
 	htmlrenderer r;
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	const std::string input =
@@ -854,15 +886,15 @@ TEST_CASE("htmlrenderer: if document ends before </table> is found, table is ren
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 3);
-	REQUIRE(lines[0] == "+-----+-----+");
-	REQUIRE(lines[1] == "|hello|world|");
-	REQUIRE(lines[2] == "+-----+-----+");
+	REQUIRE(lines[0] == p(wrappable, "+-----+-----+"));
+	REQUIRE(lines[1] == p(wrappable, "|hello|world|"));
+	REQUIRE(lines[2] == p(wrappable, "+-----+-----+"));
 	REQUIRE(links.size() == 0);
 }
 
 TEST_CASE("htmlrenderer: tables can be nested") {
 	htmlrenderer r;
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	const std::string input =
@@ -886,20 +918,20 @@ TEST_CASE("htmlrenderer: tables can be nested") {
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 7);
-	REQUIRE(lines[0] == "+---------------+-----------+");
-	REQUIRE(lines[1] == "|+-------+-----+|lonely cell|");
-	REQUIRE(lines[2] == "||hello  |world||           |");
-	REQUIRE(lines[3] == "|+-------+-----+|           |");
-	REQUIRE(lines[4] == "||another|row  ||           |");
-	REQUIRE(lines[5] == "|+-------+-----+|           |");
-	REQUIRE(lines[6] == "+---------------+-----------+");
+	REQUIRE(lines[0] == p(wrappable, "+---------------+-----------+"));
+	REQUIRE(lines[1] == p(wrappable, "|+-------+-----+|lonely cell|"));
+	REQUIRE(lines[2] == p(wrappable, "||hello  |world||           |"));
+	REQUIRE(lines[3] == p(wrappable, "|+-------+-----+|           |"));
+	REQUIRE(lines[4] == p(wrappable, "||another|row  ||           |"));
+	REQUIRE(lines[5] == p(wrappable, "|+-------+-----+|           |"));
+	REQUIRE(lines[6] == p(wrappable, "+---------------+-----------+"));
 
 	REQUIRE(links.size() == 0);
 }
 
 TEST_CASE("htmlrenderer: if <td> appears inside table but outside of a row, one is created implicitly") {
 	htmlrenderer r;
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	const std::string input =
@@ -911,15 +943,15 @@ TEST_CASE("htmlrenderer: if <td> appears inside table but outside of a row, one 
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 3);
-	REQUIRE(lines[0] == "+-----+-----+");
-	REQUIRE(lines[1] == "|hello|world|");
-	REQUIRE(lines[2] == "+-----+-----+");
+	REQUIRE(lines[0] == p(wrappable, "+-----+-----+"));
+	REQUIRE(lines[1] == p(wrappable, "|hello|world|"));
+	REQUIRE(lines[2] == p(wrappable, "+-----+-----+"));
 	REQUIRE(links.size() == 0);
 }
 
 TEST_CASE("htmlrenderer: previous row is implicitly closed when <tr> is found") {
 	htmlrenderer r;
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	const std::string input =
@@ -930,17 +962,17 @@ TEST_CASE("htmlrenderer: previous row is implicitly closed when <tr> is found") 
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 5);
-	REQUIRE(lines[0] == "+-----+");
-	REQUIRE(lines[1] == "|hello|");
-	REQUIRE(lines[2] == "+-----+");
-	REQUIRE(lines[3] == "|world|");
-	REQUIRE(lines[4] == "+-----+");
+	REQUIRE(lines[0] == p(wrappable, "+-----+"));
+	REQUIRE(lines[1] == p(wrappable, "|hello|"));
+	REQUIRE(lines[2] == p(wrappable, "+-----+"));
+	REQUIRE(lines[3] == p(wrappable, "|world|"));
+	REQUIRE(lines[4] == p(wrappable, "+-----+"));
 	REQUIRE(links.size() == 0);
 }
 
 TEST_CASE("htmlrenderer: free-standing text outside of <td> is implicitly concatenated with the next cell") {
 	htmlrenderer r;
-	std::vector<std::string> lines;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	const std::string input =
@@ -952,15 +984,15 @@ TEST_CASE("htmlrenderer: free-standing text outside of <td> is implicitly concat
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 3);
-	REQUIRE(lines[0] == "+-----------+");
-	REQUIRE(lines[1] == "|hello world|");
-	REQUIRE(lines[2] == "+-----------+");
+	REQUIRE(lines[0] == p(wrappable, "+-----------+"));
+	REQUIRE(lines[1] == p(wrappable, "|hello world|"));
+	REQUIRE(lines[2] == p(wrappable, "+-----------+"));
 	REQUIRE(links.size() == 0);
 }
 
 TEST_CASE("htmlrenderer: text within <ituneshack> is to be treated specially") {
-	htmlrenderer r(20);
-	std::vector<std::string> lines;
+	htmlrenderer r;
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
 	const std::string input =
@@ -971,13 +1003,31 @@ TEST_CASE("htmlrenderer: text within <ituneshack> is to be treated specially") {
 		"</ituneshack>";
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 7);
-	REQUIRE(lines[0] == "hello world!");
-	REQUIRE(lines[1] == "I'm a description ");
-	REQUIRE(lines[2] == "from an iTunes ");
-	REQUIRE(lines[3] == "feed. Apple just ");
-	REQUIRE(lines[4] == "puts plain text ");
-	REQUIRE(lines[5] == "into <>summary> ");
-	REQUIRE(lines[6] == "tag.");
+	REQUIRE(lines.size() == 2);
+	REQUIRE(lines[0] == p(wrappable, "hello world!"));
+	REQUIRE(lines[1]
+			==
+			p(wrappable, "I'm a description from an iTunes feed. Apple just "
+				"puts plain text into <>summary> tag."));
 	REQUIRE(links.size() == 0);
+}
+
+TEST_CASE("htmlrenderer: <hr> is rendered correctly") {
+	htmlrenderer r;
+	std::string result;
+
+	SECTION("width = 3") {
+			REQUIRE_NOTHROW(result = r.render_hr(3));
+			REQUIRE(result == "\n - \n");
+	}
+
+	SECTION("width = 10") {
+			REQUIRE_NOTHROW(result = r.render_hr(10));
+			REQUIRE(result == "\n -------- \n");
+	}
+
+	SECTION("width = 72") {
+			REQUIRE_NOTHROW(result = r.render_hr(72));
+			REQUIRE(result == "\n ---------------------------------------------------------------------- \n");
+	}
 }

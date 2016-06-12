@@ -77,12 +77,12 @@ void rss_parser::replace_newline_characters(std::string& str) {
 }
 
 std::string rss_parser::render_xhtml_title(const std::string& title, const std::string& link) {
-	htmlrenderer rnd(1 << 16, true); // a huge number
-	std::vector<std::string> lines;
+	htmlrenderer rnd(true);
+	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links; // not needed
 	rnd.render(title, lines, links, link);
 	if (!lines.empty())
-		return lines[0];
+		return lines[0].second;
 	return "";
 }
 

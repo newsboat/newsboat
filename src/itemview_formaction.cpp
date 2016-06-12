@@ -5,7 +5,7 @@
 #include <exceptions.h>
 #include <utils.h>
 #include <formatstring.h>
-#include <listformatter.h>
+#include <textformatter.h>
 #include <cstring>
 
 #include <sstream>
@@ -51,18 +51,8 @@ void itemview_formaction::prepare() {
 			f->run(-3); // XXX HACK: render once so that we get a proper widget width
 		}
 
-		std::vector<std::string> lines;
-		std::string widthstr = f->get("article:w");
-		unsigned int render_width = 80;
-		unsigned int view_width = 0;
-		if (widthstr.length() > 0) {
-			view_width = render_width = utils::to_u(widthstr, 80);
-			if (render_width - 5 > 0)
-				render_width -= 5;
-		}
-
 		std::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
-		listformatter listfmt;
+		textformatter textfmt;
 
 		std::shared_ptr<rss_feed> feedptr = item->get_feedptr();
 
@@ -78,30 +68,30 @@ void itemview_formaction::prepare() {
 		}
 		if (feedtitle.length() > 0) {
 			feedheader = utils::strprintf("%s%s", _("Feed: "), feedtitle.c_str());
-			listfmt.add_line(feedheader, UINT_MAX, view_width);
+			textfmt.add_line(newsbeuter::wrappable, feedheader);
 		}
 
 		if (item->title().length() > 0) {
 			std::string title = utils::strprintf("%s%s", _("Title: "), item->title().c_str());
-			listfmt.add_line(title, UINT_MAX, view_width);
+			textfmt.add_line(newsbeuter::wrappable, title);
 		}
 
 		if (item->author().length() > 0) {
 			std::string author = utils::strprintf("%s%s", _("Author: "), item->author().c_str());
-			listfmt.add_line(author, UINT_MAX, view_width);
+			textfmt.add_line(newsbeuter::wrappable, author);
 		}
 
 		if (item->link().length() > 0) {
 			std::string link = utils::strprintf("%s%s", _("Link: "), utils::censor_url(item->link()).c_str());
-			listfmt.add_line(link, UINT_MAX, view_width);
+			textfmt.add_line(newsbeuter::nonwrappable, link);
 		}
 
 		std::string date = utils::strprintf("%s%s", _("Date: "), item->pubDate().c_str());
-		listfmt.add_line(date, UINT_MAX, view_width);
+		textfmt.add_line(newsbeuter::wrappable, date);
 
 		if (item->flags().length() > 0) {
 			std::string flags = utils::strprintf("%s%s", _("Flags: "), item->flags().c_str());
-			listfmt.add_line(flags, UINT_MAX, view_width);
+			textfmt.add_line(newsbeuter::wrappable, flags);
 		}
 
 		if (item->enclosure_url().length() > 0) {
@@ -109,10 +99,10 @@ void itemview_formaction::prepare() {
 			if (item->enclosure_type() != "") {
 				enc_url.append(utils::strprintf(" (%s%s)",  _("type: "), item->enclosure_type().c_str()));
 			}
-			listfmt.add_line(enc_url, UINT_MAX, view_width);
+			textfmt.add_line(newsbeuter::nonwrappable, enc_url);
 		}
 
-		listfmt.add_line("");
+		textfmt.add_line(newsbeuter::wrappable, std::string());
 
 		unsigned int unread_item_count = feed->unread_item_count();
 		// we need to subtract because the current item isn't yet marked as read
@@ -120,23 +110,31 @@ void itemview_formaction::prepare() {
 			unread_item_count--;
 		set_head(item->title(), feedtitle, unread_item_count, feed->items().size());
 
-		unsigned int textwidth = v->get_cfg()->get_configvalue_as_int("text-width");
-		if (textwidth > 0) {
-			render_width = textwidth;
-		}
-
+		std::vector<std::pair<LineType, std::string>> lines;
 		if (show_source) {
-			render_source(lines, utils::quote_for_stfl(item->description()), render_width);
+			render_source(lines, utils::quote_for_stfl(item->description()));
 		} else {
 			std::string baseurl = item->get_base() != "" ? item->get_base() : item->feedurl();
-			lines = render_html(item->description(), links, baseurl, render_width);
+			lines = render_html(item->description(), links, baseurl);
 		}
 
-		listfmt.add_lines(lines, view_width);
+		textfmt.add_lines(lines);
 
-		num_lines = listfmt.get_lines_count();
+		std::string widthstr = f->get("article:w");
+		unsigned int window_width = utils::to_u(widthstr, 0);
 
-		f->modify("article","replace_inner",listfmt.format_list(rxman, "article"));
+		unsigned int textwidth = v->get_cfg()->get_configvalue_as_int("text-width");
+		if (textwidth == 0) {
+			textwidth = window_width;
+			if (textwidth - 5 > 0) {
+				textwidth -= 5;
+			}
+		}
+		auto formatted_text = textfmt.format_text_to_list(
+				rxman, "article", textwidth, window_width);
+		num_lines = formatted_text.size();
+
+		f->modify("article", "replace_inner", formatted_text);
 		f->set("articleoffset","0");
 
 		if (in_search) {
@@ -428,37 +426,25 @@ void itemview_formaction::set_head(const std::string& s, const std::string& feed
 	f->set("head",fmt.do_format(v->get_cfg()->get_configvalue("itemview-title-format"), width));
 }
 
-void itemview_formaction::render_source(std::vector<std::string>& lines, std::string desc, unsigned int width) {
+void itemview_formaction::render_source(
+		std::vector<std::pair<LineType, std::string>>& lines,
+		std::string source)
+{
 	/*
-	 * this function is called instead of htmlrenderer::render() when the
+	 * This function is called instead of htmlrenderer::render() when the
 	 * user requests to have the source displayed instead of seeing the
 	 * rendered HTML.
 	 */
 	std::string line;
 	do {
-		std::string::size_type pos = desc.find_first_of("\r\n");
-		line = desc.substr(0,pos);
+		std::string::size_type pos = source.find_first_of("\r\n");
+		line = source.substr(0, pos);
 		if (pos == std::string::npos)
-			desc.erase();
+			source.erase();
 		else
-			desc.erase(0,pos+1);
-		while (line.length() > width) {
-			int i = width;
-			while (i > 0 && line[i] != ' ' && line[i] != '<')
-				--i;
-			if (0 == i) {
-				i = width;
-			}
-			std::string subline = line.substr(0, i);
-			line.erase(0, i);
-			pos = subline.find_first_not_of(" ");
-			subline.erase(0,pos);
-			lines.push_back(subline);
-		}
-		pos = line.find_first_not_of(" ");
-		line.erase(0,pos);
-		lines.push_back(line);
-	} while (desc.length() > 0);
+			source.erase(0, pos+1);
+		lines.push_back(std::make_pair(nonwrappable, line));
+	} while (source.length() > 0);
 }
 
 void itemview_formaction::handle_cmdline(const std::string& cmd) {
@@ -530,12 +516,17 @@ void itemview_formaction::finished_qna(operation op) {
 	}
 }
 
-std::vector<std::string> itemview_formaction::render_html(const std::string& source, std::vector<linkpair>& thelinks, const std::string& url, unsigned int render_width) {
-	std::vector<std::string> lines;
+std::vector<std::pair<LineType, std::string>>
+	itemview_formaction::render_html(
+		const std::string& source,
+		std::vector<linkpair>& thelinks,
+		const std::string& url)
+{
+	std::vector<std::pair<LineType, std::string>> result;
 	std::string renderer = v->get_cfg()->get_configvalue("html-renderer");
 	if (renderer == "internal") {
-		htmlrenderer rnd(render_width);
-		rnd.render(source, lines, thelinks, url);
+		htmlrenderer rnd;
+		rnd.render(source, result, thelinks, url);
 	} else {
 		char * argv[4];
 		argv[0] = const_cast<char *>("/bin/sh");
@@ -550,11 +541,11 @@ std::vector<std::string> itemview_formaction::render_html(const std::string& sou
 		std::string line;
 		getline(is, line);
 		while (!is.eof()) {
-			lines.push_back(utils::quote_for_stfl(line));
+			result.push_back(std::make_pair(newsbeuter::nonwrappable, utils::quote_for_stfl(line)));
 			getline(is, line);
 		}
 	}
-	return lines;
+	return result;
 }
 
 void itemview_formaction::set_regexmanager(regexmanager * r) {
