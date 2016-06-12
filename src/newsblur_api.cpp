@@ -91,6 +91,9 @@ json_object * folders)
 		json_object * tag_to_feed_ids = json_object_array_get_idx(folders, i);
 
 		if (!json_object_is_type(tag_to_feed_ids, json_type_object))
+			// "folders" array contains not only dictionaries describing
+			// folders but also numbers, which are IDs of feeds that don't
+			// belong to any folder. This check skips these IDs.
 			continue;
 
 		json_object_object_foreach(tag_to_feed_ids, key, feeds_with_tag_obj) {
