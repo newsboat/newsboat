@@ -89,6 +89,10 @@ json_object * folders)
 	int tags_len = array_list_length(tags);
 	for (int i = 0; i < tags_len; ++i) {
 		json_object * tag_to_feed_ids = json_object_array_get_idx(folders, i);
+
+		if (!json_object_is_type(tag_to_feed_ids, json_type_object))
+			continue;
+
 		json_object_object_foreach(tag_to_feed_ids, key, feeds_with_tag_obj) {
 			std::string std_key(key);
 			array_list * feeds_with_tag_arr = json_object_get_array(feeds_with_tag_obj);
@@ -261,12 +265,12 @@ rsspp::feed newsblur_api::fetch_feed(const std::string& id) {
 
 json_object * newsblur_api::query_api(const std::string& endpoint, const std::string* postdata) {
 
-	const char * url = (api_location + endpoint).c_str();
-	std::string data = utils::retrieve_url(url, cfg, NULL, postdata);
+	std::string url = api_location + endpoint;
+	std::string data = utils::retrieve_url(url.c_str(), cfg, NULL, postdata);
 
 	json_object * result =  json_tokener_parse(data.c_str());
 	if (!result)
-		LOG(LOG_WARN, "newsblur_api::query_api: request to %s failed", url);
+		LOG(LOG_WARN, "newsblur_api::query_api: request to %s failed", url.c_str());
 	return result;
 }
 
