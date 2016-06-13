@@ -665,14 +665,15 @@ will be starred resp. published.
 ownCloud News Synchronization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For use the ownCloud News support you need to configure a few things.
+To use ownCloud News support you need to configure a few things.
 
-First, set your urls-source and also set where the ownCloud instance reside:
+First, set your +urls-source+ to +ocnews+ and tell Newsbeuter where to find
+your ownCloud instance:
 
 	urls-source "ocnews"
 	ocnews-url "https://localhost/owncloud"
 
-In addition, it requires username and password for authentication:
+Username and password are required:
 
 	ocnews-login "user"
 	ocnews-password "password"
@@ -680,17 +681,17 @@ In addition, it requires username and password for authentication:
 ownCloud News API uses HTTP basic auth, therefore running ownCloud with SSL is highly
 recommended.
 
-ownCloud News provides the ability to "star" articless, starred articles are basically
-bookmarks. Newsbeuter allows the use of this feature by mapping it flag to the "star"
-operation.
+ownCloud News provides the ability to "star" articless; starred articles are basically
+bookmarks. Newsbeuter allows the use of this feature by mapping user-specified
+flag to the "star" operation.
 
 In order to use this mapping, you need to configure the flag that shall be used:
 
 	ocnews-flag-star "s"
 
-If you connect to your owncloud instance through a local network, you should prefer use
-a local ip rather than the host domain name, therefore you could set verifyhost to no,
-so the connection will not verify the certificate's name against the host's name.
+If for any reason you don't want Newsbeuter to verify the hostname of your
+instance against the hostname specified in the SSL certificate you're using,
+just say so:
 
 	ocnews-verifyhost "no"
 
