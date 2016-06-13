@@ -286,7 +286,7 @@ void formaction::finished_qna(operation op) {
 		if (retval.length() == 0) {
 			v->set_status(_("Saved bookmark."));
 		} else {
-			v->set_status(std::string(_("Error while saving bookmark: ")) + retval);
+			v->set_status(_s("Error while saving bookmark: ") + retval);
 			LOG(LOG_DEBUG, "formaction::finished_qna: error while saving bookmark, retval = `%s'", retval.c_str());
 		}
 	}
@@ -333,7 +333,7 @@ void formaction::start_bookmark_qna(const std::string& default_title, const std:
 			if (retval.length() == 0) {
 				v->set_status(_("Saved bookmark."));
 			} else {
-				v->set_status(std::string(_("Error while saving bookmark: ")) + retval);
+				v->set_status(_s("Error while saving bookmark: ") + retval);
 				LOG(LOG_DEBUG, "formaction::finished_qna: error while saving bookmark, retval = `%s'", retval.c_str());
 			}
 		}

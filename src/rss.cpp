@@ -484,7 +484,7 @@ void rss_feed::set_rssurl(const std::string& u) {
 		tokens = utils::tokenize_quoted(u, ":");
 
 		if (tokens.size() < 3) {
-			throw std::string(_("too few arguments"));
+			throw _s("too few arguments");
 		}
 
 		/* "Between" operator requires a range, which contains a colon. Since
