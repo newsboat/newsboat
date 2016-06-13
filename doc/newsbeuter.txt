@@ -1056,6 +1056,48 @@ newsbeuter, and after that, he/she uses podbeuter to view the current queue, and
 either selectively download certain files or automatically download them all
 together by pressing "a" within podbeuter.
 
+Running multiple copies of Newsbeuter simultaneously
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+During development and testing, you might want to run a second copy of
+Newsbeuter, operating with different config, URLs list or cache file. This can
+be achieved by creative use of XDG environment variables. This approach is not
+beautiful, but it works.
+
+First of all, you will need to create a directory to store the data. Let's call
+it +test+:
+
+	$ mkdir -p test/newsbeuter
+
+Note that we also create a subdirectory called +newsbeuter+; this is required
+to satisfy XDG specification. **ATTENTION**: if this subdirectory is absent,
+Newsbeuter will attempt to run on your live data!
+
+You can now create +config+ and +urls+ files inside +test/newsbeuter+; you can
+also copy +cache.db+ if you don't want to start with a fresh one.
+
+When the files are ready, you can invoke Newsbeuter as follows:
+
+	$ XDG_CONFIG_HOME=test XDG_DATA_HOME=test newsbeuter
+
+(This will look +newsbeuter+ binary up in your +PATH+; if you've just built
+your own, use +./newsbeuter+ instead, or provide a full path.)
+
+By modifying the environment in which Newsbeuter runs you also modify
+environments of all the programs that Newsbeuter starts; that includes filters
+and external HTML renderers. If they rely on +XDG_*+ variables, they will look
+for things in +test+ directory and might fail.
+
+For filters, you should either copy the files they need to +test+, or invoke
+them in such a way that they don't look in XDG directories at all.
+
+For renderers, you can work around the issue by undoing the modifications to
+environment, e.g.:
+
+	html-renderer "XDG_CONFIG_HOME=$HOME/.config XDG_DATA_HOME=$HOME/.data w3c"
+
+As already said: not beautiful, but gets the job done.
+
 Using SQLite Triggers with newsbeuter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
