@@ -61,6 +61,11 @@ notify-format|<string>|"newsbeuter: finished reload, %f unread feeds (%n unread 
 notify-program|<path>|""|If set, then the configured program will be executed if new articles arrived (through a reload) or if notify-always is true. The first parameter of the called program contains the notification message.|notify-program "~/bin/my-notifier"
 notify-screen|[yes/no]|no|If yes, then a "privacy message" will be sent to the terminal, containing a notification message about new articles. This is especially useful if you use terminal emulations such as GNU screen which implement privacy messages.|notify-screen yes
 notify-xterm|[yes/no]|no|If yes, then the xterm window title will be set to a notification message about new articles.|notify-xterm yes
+ocnews-flag-star|<character>|""|If this is set and ownCloud News support is used, then all articles that are flagged with the specified flag are being "starred" in ownCloud News.|ocnews-flag-star "s"
+ocnews-login|<username>|""|Sets the username to use with the ownCloud instance.|ocnews-login "user"
+ocnews-password|<password>|""|Configures the password to use with the ownCloud instance. Double quotes should be escaped, i.e. you should write +{backslash}"+ instead of +"+.|ocnews-password "here_goesAquote:{backslash}""
+ocnews-url|<url>|""|Configures the URL where the ownCloud instance resides.|ocnews-url "https://localhost/owncloud"
+ocnews-verifyhost|[yes/no]|yes|If this is set to no, the connection the ownCloud instance will not verify the certificate's name against the host's name.|ocnews-verifyhost no
 oldreader-flag-share|<flag>|""|If this is set and The Old Reader support is used, then all articles that are flagged with the specified flag are being "shared" in The Old Reader so that people that follow you can see it.|oldreader-flag-share "a"
 oldreader-flag-star|<flag>|""|If this is set and The Old Reader support is used, then all articles that are flagged with the specified flag are being "starred" in The Old Reader and appear in the list of "Starred items".|oldreader-flag-star "b"
 oldreader-login|<login>|""|This variable sets your The Old Reader login for The Older Reader support.|oldreader-login "your-login"
@@ -72,10 +77,10 @@ opml-url|<url> ...|""|If the OPML online subscription mode is enabled, then the 
 pager|[<path>/internal]|internal|If set to "internal", then the internal pager will be used. Otherwise, the article to be displayed will be rendered to be a temporary file and then displayed with the configured pager. If the pager path is set to an empty string, the content of the "PAGER" environment variable will be used. If the pager path contains a placeholder "%f", it will be replaced with the temporary filename.|less %f
 podcast-auto-enqueue|[yes/no]|no|If yes, then all podcast URLs that are found in articles are added to the podcast download queue. See the respective section in the documentation for more information on podcast support in newsbeuter.|podcast-auto-enqueue yes
 prepopulate-query-feeds|[yes/no]|no|If yes, then all query feeds are prepopulated with articles on startup.|prepopulate-query-feeds yes
-proxy|<server:port>|n/a|Set the proxy to use for downloading RSS feeds.|proxy localhost:3128
-proxy-auth|<auth>|n/a|Set the proxy authentication string.|proxy-auth user:password
 proxy-auth-method|<method>|any|Set proxy authentication method. Allowed values: any, basic, digest, digest_ie (only available with libcurl 7.19.3 and newer), gssnegotiate, ntlm, anysafe.|proxy-auth-method ntlm
+proxy-auth|<auth>|n/a|Set the proxy authentication string.|proxy-auth user:password
 proxy-type|<type>|http|Set proxy type. Allowed values: http, socks4, socks4a, socks5.|proxy-type socks5
+proxy|<server:port>|n/a|Set the proxy to use for downloading RSS feeds.|proxy localhost:3128
 refresh-on-startup|[yes/no]|no|If yes, then all feeds will be reloaded when newsbeuter starts up. This is equivalent to the -r commandline option.|refresh-on-startup yes
 reload-only-visible-feeds|[yes/no]|no|If yes, then manually reloading all feeds will only reload the currently visible feeds, e.g. if a filter or a tag is set.|reload-only-visible-feeds yes
 reload-threads|<number>|1|The number of parallel reload threads that shall be started when all feeds are reloaded.|reload-threads 3
@@ -99,11 +104,6 @@ ttrss-mode|[multi/single]|multi|Configures the mode in which Tiny Tiny RSS is us
 ttrss-password|<password>|""|Configures the password for use with Tiny Tiny RSS. Double quotes should be escaped, i.e. you should write +{backslash}"+ instead of +"+.|ttrss-password "here_goesAquote:{backslash}""
 ttrss-passwordfile|<path-to-file|""|A more secure alternative to the above, by storing your password elsewhere in your system.|ttrss-passwordfile "path-to-file"
 ttrss-url|<url>|""|Configures the URL where the Tiny Tiny RSS installation you want to use resides.|ttrss-url "http://example.com/ttrss/"
-ocnews-login|<username>|""|Sets the username to use with the ownCloud instance.|ocnews-login "user"
-ocnews-password|<password>|""|Configures the password to use with the ownCloud instance. Double quotes should be escaped, i.e. you should write +{backslash}"+ instead of +"+.|ocnews-password "here_goesAquote:{backslash}""
-ocnews-url|<url>|""|Configures the URL where the ownCloud instance resides.|ocnews-url "https://localhost/owncloud"
-ocnews-flag-star|<character>|""|If this is set and ownCloud News support is used, then all articles that are flagged with the specified flag are being "starred" in ownCloud News.|ocnews-flag-star "s"
-ocnews-verifyhost|[yes/no]|yes|If this is set to no, the connection the ownCloud instance will not verify the certificate's name against the host's name.|ocnews-verifyhost no
 unbind-key|<key> [<dialog>]|n/a|Unbind key <key>. This means that no operation is called when <key> is pressed. Optionally, you can specify a dialog (for a list of available dialogs, see "bind-key" above). If you specify one, the key binding will only be unbound for the specified dialog.|unbind-key R
 urls-source|<source>|"local"|This configuration command sets the source where URLs shall be retrieved from. By default, this is ~/.newsbeuter/urls. Alternatively, you can set it to "opml", which enables newsbeuter's OPML online subscription mode, to "ttrss" which enables newsbeuter's Tiny Tiny RSS support, to "oldreader", which enables newsbeuter's The Old Reader support, to "newsblur", which enables NewsBlur support, or "feedhq" for FeedHQ support, or "ocnews" for ownCloud News support. Query feed specifications will be read from the local urls file regardless of this setting.|urls-source "oldreader"
 urlview-title-format|<format>|"%N %V - URLs"|Format of the title in URL view. See "Format Strings" section of Newsbeuter manual for details on available formats.|N %V - URLs|urlview-title-format "URLs"
