@@ -98,7 +98,7 @@ msgstr "把文章保存到 %s"
 #: src/configparser.cpp:80
 #, c-format
 msgid "Error while processing command `%s' (%s line %u): %s"
-msgstr "当处理命令`%s'(%s 第 %n 行)时出错: %s"
+msgstr "当处理命令`%s'(%s 第 %u 行)时出错: %s"
 
 #: src/configparser.cpp:83
 #, c-format
@@ -583,7 +583,7 @@ msgstr "标记该种子已读"
 #: src/feedlist_formaction.cpp:194 src/itemlist_formaction.cpp:333
 #, c-format
 msgid "Error: couldn't mark feed read: %s"
-msgstr "错误：无法将种子标记为已读"
+msgstr "错误：无法将种子标记为已读: %s"
 
 #: src/feedlist_formaction.cpp:218 src/feedlist_formaction.cpp:226
 #: src/feedlist_formaction.cpp:250
