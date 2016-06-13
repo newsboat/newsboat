@@ -183,7 +183,7 @@ uninstall: uninstall-mo
 	$(RM) $(DESTDIR)$(prefix)/bin/$(PODBEUTER)
 	$(RM) $(DESTDIR)$(mandir)/man1/$(NEWSBEUTER).1
 	$(RM) $(DESTDIR)$(mandir)/man1/$(PODBEUTER).1
-	$(RM) $(DESTDIR)$(docdir)
+	$(RM) -rf $(DESTDIR)$(docdir)
 	$(RM) -r $(DESTDIR)$(docdir)
 
 .PHONY: doc clean distclean all test test-rss extract install uninstall regenerate-parser clean-newsbeuter \
