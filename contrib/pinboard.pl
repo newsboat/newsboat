@@ -4,14 +4,29 @@ use strict;
 use LWP::UserAgent;
 use URI::Escape;
 
-# $ARGV[0] is the URL of the article
-# $ARGV[1] is the title of the article
 
-# Daemonising the bookmarking process
-# Use this only is you are sure things 
-# are working as expected
+######## User settings #############
+# Daemonise the bookmarking process
+# Use this only if you are sure things 
+# are working as expected. Needs the
+# Proc::Daemon Perl module
 # set to '0' if not needed
 my $daemon = 1;
+
+
+# Change the tag value to what you 
+# want the bookmarks to be tagged as
+# at Pinboard
+my $tag='newsbeuter';
+
+# Get yours at https://pinboard.in/settings/password
+# Of the form 'username:alphanumeric'
+my $API_token='***REPLACE***';
+######## No user settings below this line #############
+
+
+# $ARGV[0] is the URL of the article
+# $ARGV[1] is the title of the article
 
 if ($daemon){
     eval{
@@ -27,9 +42,6 @@ if ($daemon){
 
 my $API_URL='https://api.pinboard.in/v1/posts/add?';
 my $bkmrk_url='';
-my $tag='newsbeuter';
-my $API_token='***REPLACE***';  # Get yours at https://pinboard.in/settings/password
-                                # Of the form 'username:alphanumeric'
 
 # Get redirected URL's permalink
 my $ua = LWP::UserAgent->new(
