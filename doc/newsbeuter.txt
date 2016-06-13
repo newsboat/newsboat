@@ -560,6 +560,9 @@ You can disable these feeds by setting the following configuration variable:
 
 	oldreader-show-special-feeds no
 
+The Old Reader's folders are converted into Newsbeuter tags. You can select and
+filter feeds by tags; see "Tagging" and "Filter Language" sections for details.
+
 NewsBlur Support
 ~~~~~~~~~~~~~~~~
 
@@ -582,6 +585,9 @@ When you start newsbeuter, it will download the feeds that you configured
 in NewsBlur. Please take a closer look at the configuration commands for what 
 you can configure in newsbeuter regarding NewsBlur.
 
+NewsBlur's folders are converted into Newsbeuter tags. You can select and
+filter feeds by tags; see "Tagging" and "Filter Language" sections for details.
+
 FeedHQ Support
 ~~~~~~~~~~~~~~
 
@@ -603,6 +609,9 @@ instead of +"+.)
 When you start newsbeuter, it will download the feeds that you configured
 in FeedHQ. Please take a closer look at the configuration commands for what 
 you can configure in newsbeuter regarding FeedHQ.
+
+FeedHQ's folders are converted into Newsbeuter tags. You can select and filter
+feeds by tags; see "Tagging" and "Filter Language" sections for details.
 
 Bloglines Synchronization
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -662,6 +671,9 @@ In order to use this mapping, you need to configure the flags that shall be used
 After that, use these flags when you edit flags for an article, and these articles
 will be starred resp. published.
 
+TT-RSS folders are converted into Newsbeuter tags. You can select and filter
+feeds by tags; see "Tagging" and "Filter Language" sections for details.
+
 ownCloud News Synchronization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -694,6 +706,9 @@ instance against the hostname specified in the SSL certificate you're using,
 just say so:
 
 	ocnews-verifyhost "no"
+
+OwnCloud News' folders are converted into Newsbeuter tags. You can select and
+filter feeds by tags; see "Tagging" and "Filter Language" sections for details.
 
 OPML Online Subscription Mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
