@@ -11,6 +11,7 @@
 #include <htmlrenderer.h>
 #include <ttrss_api.h>
 #include <newsblur_api.h>
+#include <ocnews_api.h>
 #include <curl/curl.h>
 
 #include <cerrno>
@@ -24,6 +25,7 @@ rss_parser::rss_parser(const std::string& uri, cache * c, configcontainer * cfg,
 	: my_uri(uri), ch(c), cfgcont(cfg), skip_parsing(false), is_valid(false), ign(ii), api(a), easyhandle(0) {
 	is_ttrss = cfgcont->get_configvalue("urls-source") == "ttrss";
 	is_newsblur = cfgcont->get_configvalue("urls-source") == "newsblur";
+	is_ocnews = cfgcont->get_configvalue("urls-source") == "ocnews";
 }
 
 rss_parser::~rss_parser() { }
@@ -124,6 +126,8 @@ void rss_parser::retrieve_uri(const std::string& uri) {
 		}
 	} else if (is_newsblur) {
 		fetch_newsblur(uri);
+	} else if (is_ocnews) {
+		fetch_ocnews(uri);
 	} else if (uri.substr(0,5) == "http:" || uri.substr(0,6) == "https:") {
 		download_http(uri);
 	} else if (uri.substr(0,5) == "exec:") {
@@ -271,7 +275,7 @@ void rss_parser::fill_feed_items(std::shared_ptr<rss_feed> feed) {
 		x->set_feedurl(feed->rssurl());
 		x->set_feedptr(feed);
 
-		if ((f.rss_version == rsspp::ATOM_1_0 || f.rss_version == rsspp::TTRSS_JSON || f.rss_version == rsspp::NEWSBLUR_JSON) && item.labels.size() > 0) {
+		if ((f.rss_version == rsspp::ATOM_1_0 || f.rss_version == rsspp::TTRSS_JSON || f.rss_version == rsspp::NEWSBLUR_JSON || f.rss_version == rsspp::OCNEWS_JSON) && item.labels.size() > 0) {
 			auto start = item.labels.begin();
 			auto finish = item.labels.end();
 
@@ -300,6 +304,14 @@ void rss_parser::fill_feed_items(std::shared_ptr<rss_feed> feed) {
 				x->set_override_unread(true);
 			}
 			if (std::find(start, finish, "newsblur:read") != finish) {
+				x->set_unread_nowrite(false);
+				x->set_override_unread(true);
+			}
+			if (std::find(start, finish, "ocnews:unread") != finish) {
+				x->set_unread_nowrite(true);
+				x->set_override_unread(true);
+			}
+			if (std::find(start, finish, "ocnews:read") != finish) {
 				x->set_unread_nowrite(false);
 				x->set_override_unread(true);
 			}
@@ -455,6 +467,15 @@ void rss_parser::fetch_newsblur(const std::string& feed_id) {
 		is_valid = true;
 	}
 	LOG(LOG_INFO, "rss_parser::fetch_newsblur: f.items.size = %u", f.items.size());
+}
+
+void rss_parser::fetch_ocnews(const std::string& feed_id) {
+    ocnews_api * napi = dynamic_cast<ocnews_api *>(api);
+    if (napi) {
+        f = napi->fetch_feed(feed_id);
+        is_valid = true;
+    }
+    LOG(LOG_INFO, "rss_parser::fetch_ocnews: f.items.size = %u", f.items.size());
 }
 
 }

@@ -18,6 +18,7 @@
 #include <feedhq_api.h>
 #include <ttrss_api.h>
 #include <newsblur_api.h>
+#include <ocnews_api.h>
 #include <xlicense.h>
 
 #include <cstdlib>
@@ -478,6 +479,10 @@ void controller::run(int argc, char * argv[]) {
 	} else if (type == "feedhq") {
 		api = new feedhq_api(&cfg);
 		urlcfg = new feedhq_urlreader(&cfg, url_file, api);
+		real_offline_mode = offline_mode;
+	} else if (type == "ocnews") {
+		api = new ocnews_api(&cfg);
+		urlcfg = new ocnews_urlreader(url_file, api);
 		real_offline_mode = offline_mode;
 	} else {
 		LOG(LOG_ERROR,"unknown urls-source `%s'", urlcfg->get_source().c_str());

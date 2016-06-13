@@ -101,3 +101,5 @@ src/ttrss_api.o: include/ttrss_api.h
 src/newsblur_api.o: include/newsblur_api.h
 
 src/textformatter.o: include/textformatter.h include/utils.h include/htmlrenderer.h include/stflpp.h
+
+src/ocnews_api.o: include/ocnews_api.h

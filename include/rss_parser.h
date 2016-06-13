@@ -50,6 +50,7 @@ class rss_parser {
 		bool is_html_type(const std::string& type);
 		void fetch_ttrss(const std::string& feed_id);
 		void fetch_newsblur(const std::string& feed_id);
+		void fetch_ocnews(const std::string& feed_id);
 
 		std::string my_uri;
 		cache * ch;
@@ -61,6 +62,7 @@ class rss_parser {
 		remote_api * api;
 		bool is_ttrss;
 		bool is_newsblur;
+		bool is_ocnews;
 
 		curl_handle *easyhandle;
 };
