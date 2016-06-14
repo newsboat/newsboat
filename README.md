@@ -31,6 +31,7 @@ Dependencies
 Newsbeuter depends on a number of libraries, which need to be installed before
 newsbeuter can be compiled.
 
+- GCC 4.9 or newer, or Clang 3.6 or newer
 - [STFL (version 0.21 or newer)](http://www.clifford.at/stfl/)
 - [SQLite3 (version 3.5 or newer)](http://www.sqlite.org/download.html)
 - [libcurl (version 7.18.0 or newer)](http://curl.haxx.se/download.html)
