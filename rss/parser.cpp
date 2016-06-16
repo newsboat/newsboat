@@ -168,14 +168,19 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 
 	if (buf.length() > 0) {
 		LOG(LOG_DEBUG, "parser::parse_url: handing over data to parse_buffer()");
-		return parse_buffer(buf.c_str(), buf.length(), url.c_str());
+		return parse_buffer(buf, url);
 	}
 
 	return feed();
 }
 
-feed parser::parse_buffer(const char * buffer, size_t size, const char * url) {
-	doc = xmlReadMemory(buffer, size, url, nullptr, XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING);
+feed parser::parse_buffer(const std::string& buffer, const std::string& url) {
+	doc = xmlReadMemory(
+			buffer.c_str(),
+			buffer.length(),
+			url.c_str(),
+			nullptr,
+			XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING);
 	if (doc == nullptr) {
 		throw exception(_("could not parse buffer"));
 	}

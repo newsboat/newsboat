@@ -189,7 +189,7 @@ void rss_parser::get_execplugin(const std::string& plugin) {
 	is_valid = false;
 	try {
 		rsspp::parser p;
-		f = p.parse_buffer(buf.c_str(), buf.length());
+		f = p.parse_buffer(buf);
 		is_valid = true;
 	} catch (rsspp::exception& e) {
 		is_valid = false;
@@ -220,7 +220,7 @@ void rss_parser::download_filterplugin(const std::string& filter, const std::str
 	is_valid = false;
 	try {
 		rsspp::parser p;
-		f = p.parse_buffer(result.c_str(), result.length());
+		f = p.parse_buffer(result);
 		is_valid = true;
 	} catch (rsspp::exception& e) {
 		is_valid = false;

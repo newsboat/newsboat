@@ -76,7 +76,6 @@ std::string rss_parser::__w3cdtf_to_rfc822(const std::string& w3cdtf) {
 	memset(&stm, 0, sizeof (stm));
 	stm.tm_mday = 1;
 
-	//ptr = strptime(w3cdtf.c_str(), "%Y-%m-%dT%H:%M:%S", &stm);
 	char * ptr = strptime(w3cdtf.c_str(), "%Y", &stm);
 
 	if (ptr != nullptr) {
