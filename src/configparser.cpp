@@ -103,20 +103,50 @@ void configparser::evaluate_backticks(std::vector<std::string>& tokens) {
 	}
 }
 
-std::string configparser::evaluate_backticks(std::string token) {
-	std::string::size_type pos1 = token.find_first_of("`", 0);
-	std::string::size_type pos2 = 0;
-	while (pos1 != std::string::npos && pos2 != std::string::npos) {
-		pos2 = token.find_first_of("`", pos1+1);
-		if (pos2 != std::string::npos) {
-			std::string cmd = token.substr(pos1+1, pos2-pos1-1);
-			token.erase(pos1, pos2-pos1+1);
-			std::string result = utils::get_command_output(cmd);
-			utils::trim_end(result);
-			token.insert(pos1, result);
-			pos1 = token.find_first_of("`", pos1+result.length()+1);
-		}
+/* Note that this function not only finds next backtick that isn't prefixed
+ * with a backslash, but also un-escapes all the escaped backticks it finds in
+ * the process */
+std::string::size_type find_non_escaped_backtick(
+		std::string& input,
+		const std::string::size_type startpos)
+{
+	if (startpos == std::string::npos)
+		return startpos;
+
+	std::string::size_type result = startpos;
+	result = input.find_first_of("`", result);
+
+	while (
+			result != std::string::npos &&
+			result > 0 &&
+			input[result-1] == '\\')
+	{
+		// remove the backslash
+		input.erase(result-1, 1);
+
+		// *not* adding one to start position as we already shortened the input
+		// by one character
+		result = input.find_first_of("`", result);
 	}
+
+	return result;
+}
+
+std::string configparser::evaluate_backticks(std::string token) {
+	std::string::size_type pos1 = find_non_escaped_backtick(token, 0);
+	std::string::size_type pos2 = find_non_escaped_backtick(token, pos1+1);
+
+	while (pos1 != std::string::npos && pos2 != std::string::npos) {
+		std::string cmd = token.substr(pos1+1, pos2-pos1-1);
+		token.erase(pos1, pos2-pos1+1);
+		std::string result = utils::get_command_output(cmd);
+		utils::trim_end(result);
+		token.insert(pos1, result);
+
+		pos1 = find_non_escaped_backtick(token, pos1+result.length()+1);
+		pos2 = find_non_escaped_backtick(token, pos1+1);
+	}
+
 	return token;
 }
 

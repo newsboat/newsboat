@@ -664,6 +664,11 @@ void utils::append_escapes(std::string& str, char c) {
 	case '"':
 		str.append("\"");
 		break;
+	// escaped backticks are passed through, still escaped. We un-escape them
+	// in configparser::evaluate_backticks
+	case '`':
+		str.append("\\`");
+		break;
 	case '\\':
 		break;
 	default:

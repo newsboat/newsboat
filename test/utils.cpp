@@ -108,6 +108,14 @@ TEST_CASE("Tokenizers behave correctly") {
 			// tokenize_quoted escape test 4 token is three backslashes
 			REQUIRE(tokens[0] == "\\\\\\");
 		}
+
+		SECTION("Escaped backticks should NOT be touched") {
+			tokens = utils::tokenize_quoted("asdf \"\\`foobar `bla`\\`\"");
+
+			REQUIRE(tokens.size() == 2);
+			REQUIRE(tokens[0] == "asdf");
+			REQUIRE(tokens[1] == "\\`foobar `bla`\\`");
+		}
 	}
 }
 
