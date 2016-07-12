@@ -94,20 +94,12 @@ class itemlist_formaction : public formaction {
 		}
 
 		inline void invalidate(const unsigned int pos) {
-			/* This function should never be called when itemlist is partially
-			 * invalidated.
-			 *
-			 * Theoretically, we could just work around that by upgrading
-			 * invalidation mode to "complete", but that will open up
-			 * a possibility for inadvertently degrading performance by calling
-			 * invalidate() two times in a row */
-			assert(invalidated == false ||
-			    (invalidated == true &&
-			    invalidation_mode == InvalidationMode::COMPLETE));
+			if (invalidated == true && invalidation_mode == InvalidationMode::COMPLETE)
+				return;
 
 			invalidated = true;
 			invalidation_mode = InvalidationMode::PARTIAL;
-			invalidated_itempos = pos;
+			invalidated_itempos.push_back(pos);
 		}
 
 		std::string item2formatted_line(const itemptr_pos_pair& item,
@@ -139,7 +131,7 @@ class itemlist_formaction : public formaction {
 
 		bool invalidated;
 		InvalidationMode invalidation_mode;
-		unsigned int invalidated_itempos;
+		std::vector<unsigned int> invalidated_itempos;
 
 		listformatter listfmt;
 };
