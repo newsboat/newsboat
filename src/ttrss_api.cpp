@@ -57,9 +57,11 @@ std::string ttrss_api::retrieve_sid() {
 		wordexp_t exp;
 		std::ifstream ifs;
 		wordexp(cfg->get_configvalue("ttrss-passwordfile").c_str(),&exp,0);
-		ifs.open(exp.we_wordv[0]);
+		if (exp.we_wordc > 0) {
+			ifs.open(exp.we_wordv[0]);
+		}
 		wordfree(&exp);
-		if (!ifs) {
+		if (!ifs.is_open()) {
 			if (!flushed) {
 				std::cout << std::endl;
 				std::cout.flush();
