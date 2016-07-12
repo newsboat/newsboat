@@ -677,9 +677,12 @@ void itemlist_formaction::prepare() {
 				listfmt.add_line(line, item.second);
 			}
 		} else if (invalidation_mode == InvalidationMode::PARTIAL) {
-			auto item = visible_items[invalidated_itempos];
-			auto line = item2formatted_line(item, width, itemlist_format, datetime_format);
-			listfmt.set_line(invalidated_itempos, line, item.second);
+			for (auto itempos : invalidated_itempos) {
+				auto item = visible_items[itempos];
+				auto line = item2formatted_line(item, width, itemlist_format, datetime_format);
+				listfmt.set_line(itempos, line, item.second);
+			}
+			invalidated_itempos.clear();
 		} else {
 			LOG(LOG_ERROR, "invalidation_mode is neither COMPLETE nor PARTIAL");
 		}
