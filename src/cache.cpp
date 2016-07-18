@@ -503,6 +503,9 @@ std::vector<std::shared_ptr<rss_item>> cache::search_for_items(const std::string
 	LOG(LOG_DEBUG,"running query: %s",query.c_str());
 
 	rc = sqlite3_exec(db,query.c_str(),search_item_callback,&items,NULL);
+	for (auto item: items) {
+		item->set_cache(this);
+	}
 	if (rc != SQLITE_OK) {
 		LOG(LOG_CRITICAL,"query \"%s\" failed: error = %d", query.c_str(), rc);
 		throw dbexception(db);
