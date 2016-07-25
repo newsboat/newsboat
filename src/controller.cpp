@@ -1204,11 +1204,20 @@ void controller::rec_find_rss_outlines(xmlNode * node, std::string tag) {
 
 
 
-std::vector<std::shared_ptr<rss_item>> controller::search_for_items(const std::string& query, const std::string& feedurl) {
-	std::vector<std::shared_ptr<rss_item>> items = rsscache->search_for_items(query, feedurl);
+std::vector<std::shared_ptr<rss_item>> controller::search_for_items(const std::string& query, std::shared_ptr<rss_feed> feed) {
+	std::vector<std::shared_ptr<rss_item>> items;
 	LOG(LOG_DEBUG, "controller::search_for_items: setting feed pointers");
-	for (auto item : items) {
-		item->set_feedptr(get_feed_by_url(item->feedurl()));
+	if(feed != NULL && feed->rssurl().substr(0,6) == "query:") {
+		for (auto item : feed->items()) {
+			if(item->title().find(query) != std::string::npos || item->description().find(query) != std::string::npos){
+				items.push_back(item);
+			}
+		}
+	} else {
+		items = rsscache->search_for_items(query, (feed != NULL ? feed->rssurl() : ""));
+		for (auto item : items) {
+			item->set_feedptr(get_feed_by_url(item->feedurl()));
+		}
 	}
 	return items;
 }

@@ -569,9 +569,9 @@ void itemlist_formaction::qna_start_search() {
 	try {
 		std::string utf8searchphrase = utils::convert_text(searchphrase, "utf-8", nl_langinfo(CODESET));
 		if (show_searchresult) {
-			items = v->get_ctrl()->search_for_items(utf8searchphrase, "");
+			items = v->get_ctrl()->search_for_items(utf8searchphrase, NULL);
 		} else {
-			items = v->get_ctrl()->search_for_items(utf8searchphrase, feed->rssurl());
+			items = v->get_ctrl()->search_for_items(utf8searchphrase, feed);
 		}
 	} catch (const dbexception& e) {
 		v->show_error(utils::strprintf(_("Error while searching for `%s': %s"), searchphrase.c_str(), e.what()));

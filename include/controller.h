@@ -39,7 +39,7 @@ class controller {
 
 		std::shared_ptr<rss_feed> get_feed(unsigned int pos);
 		std::shared_ptr<rss_feed> get_feed_by_url(const std::string& feedurl);
-		std::vector<std::shared_ptr<rss_item>> search_for_items(const std::string& query, const std::string& feedurl);
+		std::vector<std::shared_ptr<rss_item>> search_for_items(const std::string& query, std::shared_ptr<rss_feed> feed);
 		inline unsigned int get_feedcount() {
 			return feeds.size();
 		}
