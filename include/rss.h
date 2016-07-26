@@ -48,6 +48,10 @@ class rss_item : public matchable {
 			return description_;
 		}
 		void set_description(const std::string& d);
+
+		inline unsigned int size() const {
+			return size_;
+		}
 		void set_size(unsigned int size);
 
 		std::string length() const;

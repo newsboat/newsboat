@@ -1211,7 +1211,28 @@ std::vector<std::shared_ptr<rss_item>> controller::search_for_items(const std::s
 		for (auto item : feed->items()) {
 			if((item->title().find(query) != std::string::npos || item->description().find(query) != std::string::npos)
 					&& !item->deleted()){
-				items.push_back(item);
+				std::shared_ptr<rss_item> newitem(new rss_item(NULL));
+				newitem->set_guid(item->guid());
+				newitem->set_title(item->title());
+				newitem->set_author(item->author());
+				newitem->set_link(item->link());
+
+				newitem->set_pubDate(item->pubDate_timestamp());
+
+				newitem->set_size(item->size());
+				newitem->set_unread(item->unread());
+				newitem->set_feedurl(item->feedurl());
+
+				newitem->set_enclosure_url(item->enclosure_url());
+				newitem->set_enclosure_type(item->enclosure_type());
+				newitem->set_enqueued(item->enqueued());
+				newitem->set_flags(item->flags());
+				newitem->set_base(item->get_base());
+
+				newitem->set_feedptr(item->get_feedptr());
+				newitem->set_cache(get_cache());
+
+				items.push_back(newitem);
 			}
 		}
 	} else {
