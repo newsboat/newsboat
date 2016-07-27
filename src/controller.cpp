@@ -1209,8 +1209,7 @@ std::vector<std::shared_ptr<rss_item>> controller::search_for_items(const std::s
 	LOG(LOG_DEBUG, "controller::search_for_items: setting feed pointers");
 	if(feed != NULL && feed->rssurl().substr(0,6) == "query:") {
 		for (auto item : feed->items()) {
-			if((item->title().find(query) != std::string::npos || item->description().find(query) != std::string::npos)
-					&& !item->deleted()){
+			if(!item->deleted() && (item->title().find(query) != std::string::npos || item->description().find(query) != std::string::npos)){
 				std::shared_ptr<rss_item> newitem(new rss_item(NULL));
 				newitem->set_guid(item->guid());
 				newitem->set_title(item->title());
