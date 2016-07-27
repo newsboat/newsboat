@@ -489,6 +489,7 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl, rss_ign
 }
 
 std::vector<std::shared_ptr<rss_item>> cache::search_for_items(const std::string& querystr, const std::string& feedurl) {
+	assert(feedurl.substr(0,6) != "query:");
 	std::string query;
 	std::vector<std::shared_ptr<rss_item>> items;
 	int rc;

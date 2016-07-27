@@ -692,7 +692,7 @@ void feedlist_formaction::op_start_search() {
 		std::vector<std::shared_ptr<rss_item>> items;
 		try {
 			std::string utf8searchphrase = utils::convert_text(searchphrase, "utf-8", nl_langinfo(CODESET));
-			items = v->get_ctrl()->search_for_items(utf8searchphrase, "");
+			items = v->get_ctrl()->search_for_items(utf8searchphrase, NULL);
 		} catch (const dbexception& e) {
 			v->show_error(utils::strprintf(_("Error while searching for `%s': %s"), searchphrase.c_str(), e.what()));
 			return;
