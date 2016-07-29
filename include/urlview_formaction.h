@@ -8,7 +8,7 @@ namespace newsbeuter {
 
 class urlview_formaction : public formaction {
 	public:
-		urlview_formaction(view *, std::string formstr);
+		urlview_formaction(view *, std::shared_ptr<rss_feed>& feed, std::string formstr);
 		virtual ~urlview_formaction();
 		virtual void prepare();
 		virtual void init();
@@ -25,6 +25,7 @@ class urlview_formaction : public formaction {
 		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
 		std::vector<linkpair> links;
 		bool quit;
+		std::shared_ptr<rss_feed> feed;
 };
 
 }

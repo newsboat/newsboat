@@ -499,8 +499,8 @@ void view::push_help() {
 	current_formaction = formaction_stack_size() - 1;
 }
 
-void view::push_urlview(const std::vector<linkpair>& links) {
-	std::shared_ptr<urlview_formaction> urlview(new urlview_formaction(this, urlview_str));
+void view::push_urlview(const std::vector<linkpair>& links, std::shared_ptr<rss_feed>& feed) {
+	std::shared_ptr<urlview_formaction> urlview(new urlview_formaction(this, feed, urlview_str));
 	set_bindings(urlview);
 	apply_colors(urlview);
 	urlview->set_parent_formaction(get_current_formaction());

@@ -1347,13 +1347,32 @@ void controller::edit_urls_file() {
 	reload_urls_file();
 }
 
-std::string controller::bookmark(const std::string& url, const std::string& title, const std::string& description) {
+/* When passing an argument to a shell script, empty string should be
+ * represented as '' (two quote marks), otherwise shell won't be able to tell
+ * that the parameter is empty */
+std::string quote_empty(const std::string& input) {
+	if (input.empty()) {
+		return "''";
+	} else {
+		return input;
+	}
+}
+
+std::string controller::bookmark(
+		const std::string& url,
+		const std::string& title,
+		const std::string& description,
+		const std::string& feed_title)
+{
 	std::string bookmark_cmd = cfg.get_configvalue("bookmark-cmd");
 	bool is_interactive = cfg.get_configvalue_as_bool("bookmark-interactive");
 	if (bookmark_cmd.length() > 0) {
-		std::string cmdline = utils::strprintf("%s '%s' %s %s",
-		                                       bookmark_cmd.c_str(), utils::replace_all(url,"'", "%27").c_str(),
-		                                       stfl::quote(title).c_str(), stfl::quote(description).c_str());
+		std::string cmdline = utils::strprintf("%s '%s' %s %s %s",
+		                                       bookmark_cmd.c_str(),
+		                                       utils::replace_all(url,"'", "%27").c_str(),
+		                                       quote_empty(stfl::quote(title)).c_str(),
+		                                       quote_empty(stfl::quote(description)).c_str(),
+		                                       quote_empty(stfl::quote(feed_title)).c_str());
 
 		LOG(LOG_DEBUG, "controller::bookmark: cmd = %s", cmdline.c_str());
 

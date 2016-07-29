@@ -280,9 +280,9 @@ void formaction::finished_qna(operation op) {
 	 * 	- signal success (or failure) to the user
 	 */
 	case OP_INT_BM_END: {
-		assert(qna_responses.size() == 3 && qna_prompts.size() == 0); // everything must be answered
+		assert(qna_responses.size() == 4 && qna_prompts.size() == 0); // everything must be answered
 		v->set_status(_("Saving bookmark..."));
-		std::string retval = v->get_ctrl()->bookmark(qna_responses[0], qna_responses[1], qna_responses[2]);
+		std::string retval = v->get_ctrl()->bookmark(qna_responses[0], qna_responses[1], qna_responses[2], qna_responses[3]);
 		if (retval.length() == 0) {
 			v->set_status(_("Saved bookmark."));
 		} else {
@@ -305,8 +305,20 @@ void formaction::finished_qna(operation op) {
 }
 
 
-void formaction::start_bookmark_qna(const std::string& default_title, const std::string& default_url, const std::string& default_desc) {
-	LOG(LOG_DEBUG, "formaction::start_bookmark_qna: starting bookmark Q&A... default_title = %s default_url = %s default_desc = %s", default_title.c_str(), default_url.c_str(), default_desc.c_str());
+void formaction::start_bookmark_qna(
+		const std::string& default_title,
+		const std::string& default_url,
+		const std::string& default_desc,
+		const std::string& default_feed_title)
+{
+	LOG(LOG_DEBUG,
+			"formaction::start_bookmark_qna: starting bookmark Q&A... "
+			"default_title = %s default_url = %s default_desc = %s "
+			"default_feed_title = %s",
+			default_title.c_str(),
+			default_url.c_str(),
+			default_desc.c_str(),
+			default_feed_title.c_str());
 	std::vector<qna_pair> prompts;
 
 	std::string new_title = "";
@@ -319,17 +331,21 @@ void formaction::start_bookmark_qna(const std::string& default_title, const std:
 		prompts.push_back(qna_pair(_("Title: "), default_title));
 	}
 	prompts.push_back(qna_pair(_("Description: "), default_desc));
+	prompts.push_back(qna_pair(_("Feed title: "), default_feed_title));
 
 	if (is_bm_autopilot) {	//If bookmarking is set to autopilot don't prompt for url, title, desc
-		if (default_title.empty())
+		if (default_title.empty()) {
 			new_title = make_title(default_url); // try to make the title from url
-		else
+		} else {
 			new_title = default_title; // assignment just to make the call to bookmark() below easier
-		if (default_url.empty() || new_title.empty()) { //if url or title is missing, abort autopilot and ask user
+		}
+
+		//if url or title is missing, abort autopilot and ask user
+		if (default_url.empty() || new_title.empty() || default_feed_title.empty()) {
 			start_qna(prompts, OP_INT_BM_END);
 		} else {
 			v->set_status(_("Saving bookmark on autopilot..."));
-			std::string retval = v->get_ctrl()->bookmark(default_url, new_title, default_desc);
+			std::string retval = v->get_ctrl()->bookmark(default_url, new_title, default_desc, default_feed_title);
 			if (retval.length() == 0) {
 				v->set_status(_("Saved bookmark."));
 			} else {

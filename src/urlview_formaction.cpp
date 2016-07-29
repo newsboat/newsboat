@@ -15,8 +15,8 @@ namespace newsbeuter {
  * in a browser or to bookmark them.
  */
 
-urlview_formaction::urlview_formaction(view * vv, std::string formstr)
-	: formaction(vv, formstr), quit(false) { }
+urlview_formaction::urlview_formaction(view * vv, std::shared_ptr<rss_feed>& feed, std::string formstr)
+	: formaction(vv, formstr), quit(false), feed(feed) { }
 
 urlview_formaction::~urlview_formaction() {
 }
@@ -41,7 +41,7 @@ void urlview_formaction::process_operation(operation op, bool /* automatic */, s
 		if (posstr.length() > 0) {
 			unsigned int idx = utils::to_u(posstr, 0);
 
-			this->start_bookmark_qna("", links[idx].first, "");
+			this->start_bookmark_qna("", links[idx].first, "", feed->title());
 
 		} else {
 			v->show_error(_("No link selected!"));

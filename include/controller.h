@@ -76,7 +76,7 @@ class controller {
 			return filters;
 		}
 
-		std::string bookmark(const std::string& url, const std::string& title, const std::string& description);
+		std::string bookmark(const std::string& url, const std::string& title, const std::string& description, const std::string& feed_title);
 
 		inline cache * get_cache() {
 			return rsscache;

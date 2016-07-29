@@ -59,7 +59,7 @@ class view {
 		void push_itemlist(std::shared_ptr<rss_feed> feed);
 		void push_itemview(std::shared_ptr<rss_feed> f, const std::string& guid, const std::string& searchphrase = "");
 		void push_help();
-		void push_urlview(const std::vector<linkpair>& links);
+		void push_urlview(const std::vector<linkpair>& links, std::shared_ptr<rss_feed>& feed);
 		void push_searchresult(std::shared_ptr<rss_feed> feed, const std::string& phrase = "");
 		void view_dialogs();
 

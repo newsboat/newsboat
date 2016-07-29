@@ -71,7 +71,7 @@ class formaction {
 		virtual void set_keymap_hints();
 
 
-		void start_bookmark_qna(const std::string& default_title, const std::string& default_url, const std::string& default_desc);
+		void start_bookmark_qna(const std::string& default_title, const std::string& default_url, const std::string& default_desc, const std::string& default_feed_title);
 
 		view * v;
 		std::shared_ptr<stfl::form> f;

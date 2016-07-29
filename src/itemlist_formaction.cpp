@@ -153,7 +153,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					std::string baseurl = visible_items[itempos].first->get_base() != "" ? visible_items[itempos].first->get_base() : visible_items[itempos].first->feedurl();
 					rnd.render(visible_items[itempos].first->description(), lines, links, baseurl);
 					if (!links.empty()) {
-						v->push_urlview(links);
+						v->push_urlview(links, feed);
 					} else {
 						v->show_error(_("URL list empty."));
 					}
@@ -176,9 +176,14 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					qna_responses.push_back(visible_items[itempos].first->link());
 					qna_responses.push_back(visible_items[itempos].first->title());
 					qna_responses.push_back(args->size() > 0 ? (*args)[0] : "");
+					qna_responses.push_back(feed->title());
 					this->finished_qna(OP_INT_BM_END);
 				} else {
-					this->start_bookmark_qna(visible_items[itempos].first->title(), visible_items[itempos].first->link(), "");
+					this->start_bookmark_qna(
+							visible_items[itempos].first->title(),
+							visible_items[itempos].first->link(),
+							"",
+							feed->title());
 				}
 			}
 		} else {

@@ -216,8 +216,10 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 			qna_responses.push_back(item->link());
 			qna_responses.push_back(item->title());
 			qna_responses.push_back(args->size() > 0 ? (*args)[0] : "");
+			qna_responses.push_back(feed->title());
 		} else {
-			this->start_bookmark_qna(item->title(), item->link(), "");
+			this->start_bookmark_qna(
+					item->title(), item->link(), "", feed->title());
 		}
 		break;
 	case OP_SEARCH: {
@@ -266,7 +268,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 		LOG(LOG_DEBUG, "view::run_itemview: showing URLs");
 		if (urlviewer == "") {
 			if (links.size() > 0) {
-				v->push_urlview(links);
+				v->push_urlview(links, feed);
 			} else {
 				v->show_error(_("URL list empty."));
 			}
