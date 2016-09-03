@@ -595,6 +595,7 @@ void htmlrenderer::render(
 			} else if (inside_script || inside_style) {
 				// skip scripts and CSS styles
 			} else {
+				//strip leading whitespace
 				bool had_whitespace = false;
 				while (text.length() > 0 && (text[0] == '\n' || text[0] == ' ')) {
 					text.erase(0, 1);
@@ -603,6 +604,8 @@ void htmlrenderer::render(
 				if (line_is_nonempty(curline) && had_whitespace) {
 					curline.append(" ");
 				}
+				//strip newlines
+				text = utils::replace_all(text, "\n", " ");
 				curline.append(text);
 			}
 		}
