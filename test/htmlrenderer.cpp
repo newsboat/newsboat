@@ -555,6 +555,19 @@ TEST_CASE("htmlrenderer: whitespace is erased at the beginning of the paragraph"
 	REQUIRE(links.size() == 0);
 }
 
+TEST_CASE("htmlrenderer: newlines are replaced with space") {
+	htmlrenderer r;
+
+	const std::string input = "newlines\nshould\nbe\nreplaced\nwith\na\nspace\ncharacter.";
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<linkpair> links;
+
+	REQUIRE_NOTHROW(r.render(input, lines, links, url));
+	REQUIRE(lines.size() == 1);
+	REQUIRE(lines[0] == p(wrappable, "newlines should be replaced with a space character."));
+	REQUIRE(links.size() == 0);
+}
+
 TEST_CASE("htmlrenderer: paragraph is just a long line of text") {
 	htmlrenderer r;
 
