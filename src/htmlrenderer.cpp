@@ -106,13 +106,13 @@ void htmlrenderer::render(
 	 *   - we then can iterate over all continuous elements, such as start tag, close tag, text element, ...
 	 */
 	tagsouppullparser xpp;
-	xpp.setInput(input);
+	xpp.set_input(input);
 
 	for (tagsouppullparser::event e = xpp.next(); e != tagsouppullparser::END_DOCUMENT; e = xpp.next()) {
 		std::string tagname;
 		switch (e) {
 		case tagsouppullparser::START_TAG:
-			tagname = xpp.getText();
+			tagname = xpp.get_text();
 			std::transform(tagname.begin(), tagname.end(), tagname.begin(), ::tolower);
 			current_tag = tags[tagname];
 
@@ -120,7 +120,7 @@ void htmlrenderer::render(
 			case TAG_A: {
 				std::string link;
 				try {
-					link = xpp.getAttributeValue("href");
+					link = xpp.get_attribute_value("href");
 				} catch (const std::invalid_argument& ) {
 					LOG(LOG_WARN,"htmlrenderer::render: found a tag with no href attribute");
 					link = "";
@@ -148,7 +148,7 @@ void htmlrenderer::render(
 			case TAG_EMBED: {
 				std::string type;
 				try {
-					type = xpp.getAttributeValue("type");
+					type = xpp.get_attribute_value("type");
 				} catch (const std::invalid_argument& ) {
 					LOG(LOG_WARN, "htmlrenderer::render: found embed object without type attribute");
 					type = "";
@@ -156,7 +156,7 @@ void htmlrenderer::render(
 				if (type == "application/x-shockwave-flash") {
 					std::string link;
 					try {
-						link = xpp.getAttributeValue("src");
+						link = xpp.get_attribute_value("src");
 					} catch (const std::invalid_argument& ) {
 						LOG(LOG_WARN, "htmlrenderer::render: found embed object without src attribute");
 						link = "";
@@ -188,13 +188,13 @@ void htmlrenderer::render(
 				std::string imgurl;
 				std::string imgtitle;
 				try {
-					imgurl = xpp.getAttributeValue("src");
+					imgurl = xpp.get_attribute_value("src");
 				} catch (const std::invalid_argument& ) {
 					LOG(LOG_WARN,"htmlrenderer::render: found img tag with no src attribute");
 					imgurl = "";
 				}
 				try {
-					imgtitle = xpp.getAttributeValue("title");
+					imgtitle = xpp.get_attribute_value("title");
 				} catch (const std::invalid_argument& ) {
 					imgtitle = "";
 				}
@@ -244,7 +244,7 @@ void htmlrenderer::render(
 					unsigned int ol_count = 1;
 					std::string ol_count_str;
 					try {
-						ol_count_str = xpp.getAttributeValue("start");
+						ol_count_str = xpp.get_attribute_value("start");
 					} catch (const std::invalid_argument& ) {
 						ol_count_str = "1";
 					}
@@ -253,7 +253,7 @@ void htmlrenderer::render(
 
 					std::string ol_type;
 					try {
-						ol_type = xpp.getAttributeValue("type");
+						ol_type = xpp.get_attribute_value("type");
 						if (ol_type != "1" && ol_type != "a" && ol_type != "A" && ol_type != "i" && ol_type != "I") {
 							ol_type = "1";
 						}
@@ -340,7 +340,7 @@ void htmlrenderer::render(
 
 				bool border = false;
 				try {
-					std::string b = xpp.getAttributeValue("border");
+					std::string b = xpp.get_attribute_value("border");
 					border = (utils::to_u(b, 0) > 0);
 				} catch (const std::invalid_argument& ) {
 					// is ok, no border then
@@ -357,7 +357,7 @@ void htmlrenderer::render(
 			case TAG_TH: {
 				size_t span = 1;
 				try {
-					span = utils::to_u(xpp.getAttributeValue("colspan"), 1);
+					span = utils::to_u(xpp.get_attribute_value("colspan"), 1);
 				} catch (const std::invalid_argument& ) {
 					// is ok, span 1 then
 				}
@@ -370,7 +370,7 @@ void htmlrenderer::render(
 			case TAG_TD: {
 				size_t span = 1;
 				try {
-					span = utils::to_u(xpp.getAttributeValue("colspan"), 1);
+					span = utils::to_u(xpp.get_attribute_value("colspan"), 1);
 				} catch (const std::invalid_argument& ) {
 					// is ok, span 1 then
 				}
@@ -382,7 +382,7 @@ void htmlrenderer::render(
 			break;
 
 		case tagsouppullparser::END_TAG:
-			tagname = xpp.getText();
+			tagname = xpp.get_text();
 			std::transform(tagname.begin(), tagname.end(), tagname.begin(), ::tolower);
 			current_tag = tags[tagname];
 
@@ -572,7 +572,7 @@ void htmlrenderer::render(
 			break;
 
 		case tagsouppullparser::TEXT: {
-			auto text = utils::quote_for_stfl(xpp.getText());
+			auto text = utils::quote_for_stfl(xpp.get_text());
 			if (itunes_hack) {
 				std::vector<std::string> paragraphs = utils::tokenize_nl(text);
 				for (auto paragraph : paragraphs) {

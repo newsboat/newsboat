@@ -13,10 +13,10 @@ class tagsouppullparser {
 
 		tagsouppullparser();
 		virtual ~tagsouppullparser();
-		void setInput(std::istream& is);
-		std::string getAttributeValue(const std::string& name) const;
-		event getEventType() const;
-		std::string getText() const;
+		void set_input(std::istream& is);
+		std::string get_attribute_value(const std::string& name) const;
+		event get_event_type() const;
+		std::string get_text() const;
 		event next();
 
 	private:

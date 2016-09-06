@@ -25,12 +25,12 @@ tagsouppullparser::tagsouppullparser() : inputstream(0), current_event(START_DOC
 tagsouppullparser::~tagsouppullparser() {
 }
 
-void tagsouppullparser::setInput(std::istream& is) {
+void tagsouppullparser::set_input(std::istream& is) {
 	inputstream = &is;
 	current_event = START_DOCUMENT;
 }
 
-std::string tagsouppullparser::getAttributeValue(const std::string& name) const {
+std::string tagsouppullparser::get_attribute_value(const std::string& name) const {
 	for (auto attr : attributes) {
 		if (attr.first == name) {
 			return attr.second;
@@ -39,11 +39,11 @@ std::string tagsouppullparser::getAttributeValue(const std::string& name) const 
 	throw std::invalid_argument(_("attribute not found"));
 }
 
-tagsouppullparser::event tagsouppullparser::getEventType() const {
+tagsouppullparser::event tagsouppullparser::get_event_type() const {
 	return current_event;
 }
 
-std::string tagsouppullparser::getText() const {
+std::string tagsouppullparser::get_text() const {
 	return text;
 }
 
@@ -79,7 +79,7 @@ tagsouppullparser::event tagsouppullparser::next() {
 	case END_DOCUMENT:
 		break;
 	}
-	return getEventType();
+	return get_event_type();
 }
 
 void tagsouppullparser::skip_whitespace() {
