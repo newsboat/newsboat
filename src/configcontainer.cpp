@@ -100,6 +100,7 @@ configcontainer::configcontainer()
 		{ "player", configdata("", configdata::PATH) },
 		{ "podcast-auto-enqueue", configdata("no", configdata::BOOL) },
 		{ "prepopulate-query-feeds", configdata("false", configdata::BOOL) },
+		{ "ssl-verify", configdata("true", configdata::BOOL) },
 		{ "proxy", configdata("", configdata::STR) },
 		{ "proxy-auth", configdata("", configdata::STR) },
 		{ "proxy-auth-method",

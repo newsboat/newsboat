@@ -161,7 +161,7 @@ void rss_parser::download_http(const std::string& uri) {
 		try {
 			std::string useragent = utils::get_useragent(cfgcont);
 			LOG(LOG_DEBUG, "rss_parser::download_http: user-agent = %s", useragent.c_str());
-			rsspp::parser p(cfgcont->get_configvalue_as_int("download-timeout"), useragent.c_str(), proxy.c_str(), proxy_auth.c_str(), utils::get_proxy_type(proxy_type));
+			rsspp::parser p(cfgcont->get_configvalue_as_int("download-timeout"), useragent.c_str(), proxy.c_str(), proxy_auth.c_str(), utils::get_proxy_type(proxy_type), cfgcont->get_configvalue_as_bool("ssl-verify"));
 			time_t lm = 0;
 			std::string etag;
 			if (!ign || !ign->matches_lastmodified(uri)) {

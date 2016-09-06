@@ -25,8 +25,8 @@ static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp
 
 namespace rsspp {
 
-parser::parser(unsigned int timeout, const char * user_agent, const char * proxy, const char * proxy_auth, curl_proxytype proxy_type)
-	: to(timeout), ua(user_agent), prx(proxy), prxauth(proxy_auth), prxtype(proxy_type), doc(0), lm(0) {
+parser::parser(unsigned int timeout, const char * user_agent, const char * proxy, const char * proxy_auth, curl_proxytype proxy_type, const bool ssl_verify)
+	: to(timeout), ua(user_agent), prx(proxy), prxauth(proxy_auth), prxtype(proxy_type), verify_ssl(ssl_verify), doc(0), lm(0) {
 }
 
 parser::~parser() {
@@ -90,7 +90,7 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 		api->add_custom_headers(&custom_headers);
 	}
 	curl_easy_setopt(easyhandle, CURLOPT_URL, url.c_str());
-	curl_easy_setopt(easyhandle, CURLOPT_SSL_VERIFYPEER, 0);
+	curl_easy_setopt(easyhandle, CURLOPT_SSL_VERIFYPEER, verify_ssl);
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, &buf);
 	curl_easy_setopt(easyhandle, CURLOPT_NOSIGNAL, 1);
