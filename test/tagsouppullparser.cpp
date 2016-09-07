@@ -15,59 +15,59 @@ TEST_CASE("Tagsoup pull parser behaves properly") {
 
 	tagsouppullparser xpp;
 	tagsouppullparser::event e;
-	xpp.setInput(input_stream);
+	xpp.set_input(input_stream);
 
-	e = xpp.getEventType();
+	e = xpp.get_event_type();
 	REQUIRE(e == tagsouppullparser::START_DOCUMENT);
 
 	e = xpp.next();
 	REQUIRE(e == tagsouppullparser::START_TAG);
-	REQUIRE(xpp.getText() == "test");
+	REQUIRE(xpp.get_text() == "test");
 
 	e = xpp.next();
 	REQUIRE(e == tagsouppullparser::START_TAG);
-	REQUIRE(xpp.getText() == "foo");
-	REQUIRE(xpp.getAttributeValue("quux") == "asdf");
-	REQUIRE(xpp.getAttributeValue("bar") == "qqq");
+	REQUIRE(xpp.get_text() == "foo");
+	REQUIRE(xpp.get_attribute_value("quux") == "asdf");
+	REQUIRE(xpp.get_attribute_value("bar") == "qqq");
 
 	e = xpp.next();
 	REQUIRE(e == tagsouppullparser::TEXT);
-	REQUIRE(xpp.getText() == "text");
+	REQUIRE(xpp.get_text() == "text");
 
 	e = xpp.next();
 	REQUIRE(e == tagsouppullparser::END_TAG);
-	REQUIRE(xpp.getText() == "foo");
+	REQUIRE(xpp.get_text() == "foo");
 
 	e = xpp.next();
 	REQUIRE(e == tagsouppullparser::TEXT);
-	REQUIRE(xpp.getText() == "more text");
+	REQUIRE(xpp.get_text() == "more text");
 
 	e = xpp.next();
 	REQUIRE(e == tagsouppullparser::START_TAG);
-	REQUIRE(xpp.getText() == "more");
+	REQUIRE(xpp.get_text() == "more");
 
 	e = xpp.next();
 	REQUIRE(e == tagsouppullparser::TEXT);
-	REQUIRE(xpp.getText() == "\"!@");
+	REQUIRE(xpp.get_text() == "\"!@");
 
 	e = xpp.next();
 	REQUIRE(e == tagsouppullparser::END_TAG);
-	REQUIRE(xpp.getText() == "more");
+	REQUIRE(xpp.get_text() == "more");
 
 	e = xpp.next();
 	REQUIRE(e == tagsouppullparser::START_TAG);
-	REQUIRE(xpp.getText() == "xxx");
-	REQUIRE(xpp.getAttributeValue("foo") == "bar");
-	REQUIRE(xpp.getAttributeValue("baz") == "qu ux");
-	REQUIRE(xpp.getAttributeValue("hi") == "ho ho ho");
+	REQUIRE(xpp.get_text() == "xxx");
+	REQUIRE(xpp.get_attribute_value("foo") == "bar");
+	REQUIRE(xpp.get_attribute_value("baz") == "qu ux");
+	REQUIRE(xpp.get_attribute_value("hi") == "ho ho ho");
 
 	e = xpp.next();
 	REQUIRE(e == tagsouppullparser::END_TAG);
-	REQUIRE(xpp.getText() == "xxx");
+	REQUIRE(xpp.get_text() == "xxx");
 
 	e = xpp.next();
 	REQUIRE(e == tagsouppullparser::END_TAG);
-	REQUIRE(xpp.getText() == "test");
+	REQUIRE(xpp.get_text() == "test");
 
 	e = xpp.next();
 	REQUIRE(e == tagsouppullparser::END_DOCUMENT);
@@ -84,14 +84,14 @@ TEST_CASE("<br>, <br/> and <br /> behave the same way") {
 	for (auto input : {"<br>", "<br/>", "<br />"}) {
 		SECTION(input) {
 			input_stream.str(input);
-			parser.setInput(input_stream);
+			parser.set_input(input_stream);
 
-			event = parser.getEventType();
+			event = parser.get_event_type();
 			REQUIRE(event == tagsouppullparser::START_DOCUMENT);
 
 			event = parser.next();
 			REQUIRE(event == tagsouppullparser::START_TAG);
-			REQUIRE(parser.getText() == "br");
+			REQUIRE(parser.get_text() == "br");
 
 			event = parser.next();
 			REQUIRE(event == tagsouppullparser::END_DOCUMENT);
