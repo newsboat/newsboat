@@ -916,6 +916,16 @@
 #
 # prepopulate-query-feeds yes
 
+####  ssl-verify
+#
+# If no, skip SSL certificate validation.
+#
+# Syntax: [yes/no]
+#
+# Default value: yes
+#
+# ssl-verify no
+
 ####  proxy-auth-method
 #
 # Set proxy authentication method. Allowed values: any, basic, digest,
