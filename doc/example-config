@@ -866,6 +866,17 @@
 #
 # oldreader-show-special-feeds "no"
 
+#### openbrowser-and-mark-jumps-to-next-unread
+#
+# If set to yes, jump to the next unread item when an item is opened in the
+# browser and marked as read.
+#
+# Syntax: [yes/no]
+#
+# Default value: no
+#
+# openbrowser-and-mark-jumps-to-next-unread yes
+
 ####  opml-url
 #
 # If the OPML online subscription mode is enabled, then the list of feeds will
@@ -1147,6 +1158,16 @@
 # Default value: 0
 #
 # text-width 72
+
+#### toggleitemread-jumps-to-next-unread
+#
+# If set to yes, jump to the next unread item when an item's read status is
+# toggled in the articlelist.
+#
+# Syntax: [yes/no]
+# Default value: no
+#
+# toggleitemread-jumps-to-next-unread yes
 
 ####  ttrss-flag-publish
 #
