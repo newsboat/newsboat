@@ -236,8 +236,8 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 			if (tokens.size()!=1) {
 				v->show_error(_("usage: dumpconfig <file>"));
 			} else {
-				v->get_ctrl()->dump_config(utils::resolve_tilde(tokens[1]));
-				v->show_error(utils::strprintf(_("Saved configuration to %s"), tokens[1].c_str()));
+				v->get_ctrl()->dump_config(utils::resolve_tilde(tokens[0]));
+				v->show_error(utils::strprintf(_("Saved configuration to %s"), tokens[0].c_str()));
 			}
 		} else if (cmd == "dumpform") {
 			v->dump_current_form();
