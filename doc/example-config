@@ -666,6 +666,16 @@
 #
 # newsblur-password "here_goesAquote:{backslash}""
 
+#### newsblur-url
+#
+# Configures the URL where the newsblur instance resides.
+#
+# Syntax: <url>
+#
+# Default value: https://newsblur.com
+#
+# newsblur-url https://localhost
+
 ####  notify-always
 #
 # If no, notifications will only be made when there are new feeds or articles.
@@ -865,6 +875,17 @@
 # Default value: yes
 #
 # oldreader-show-special-feeds "no"
+
+#### openbrowser-and-mark-jumps-to-next-unread
+#
+# If set to yes, jump to the next unread item when an item is opened in the
+# browser and marked as read.
+#
+# Syntax: [yes/no]
+#
+# Default value: no
+#
+# openbrowser-and-mark-jumps-to-next-unread yes
 
 ####  opml-url
 #
@@ -1147,6 +1168,16 @@
 # Default value: 0
 #
 # text-width 72
+
+#### toggleitemread-jumps-to-next-unread
+#
+# If set to yes, jump to the next unread item when an item's read status is
+# toggled in the articlelist.
+#
+# Syntax: [yes/no]
+# Default value: no
+#
+# toggleitemread-jumps-to-next-unread yes
 
 ####  ttrss-flag-publish
 #
