@@ -574,8 +574,6 @@ void controller::run(int argc, char * argv[]) {
 		i++;
 	}
 
-	sort_feeds();
-
 	std::vector<std::string> tags = urlcfg->get_alltags();
 
 	if (!do_export && !silent)
@@ -593,6 +591,8 @@ void controller::run(int argc, char * argv[]) {
 		}
 		std::cout << _("done.") << std::endl;
 	}
+
+	sort_feeds();
 
 	if (do_export) {
 		export_opml();
