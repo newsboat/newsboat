@@ -35,7 +35,7 @@ FILTERLIB_OUTPUT=libfilter.a
 NEWSBEUTER=newsbeuter
 NEWSBEUTER_SOURCES:=$(shell cat mk/newsbeuter.deps)
 NEWSBEUTER_OBJS:=$(patsubst %.cpp,%.o,$(NEWSBEUTER_SOURCES))
-NEWSBEUTER_LIBS=-lbeuter -lfilter -lpthread -lrsspp
+NEWSBEUTER_LIBS=-lbeuter -lfilter -lpthread -lrsspp -lintl
 
 RSSPPLIB_SOURCES=$(wildcard rss/*.cpp)
 RSSPPLIB_OBJS=$(patsubst rss/%.cpp,rss/%.o,$(RSSPPLIB_SOURCES))
