@@ -46,6 +46,7 @@ class utils {
 		static bool try_fs_lock(const std::string& lock_file, pid_t & pid);
 		static void remove_fs_lock(const std::string& lock_file);
 
+		static std::string translit(const std::string& tocode, const std::string& fromcode);
 		static std::string convert_text(const std::string& text, const std::string& tocode, const std::string& fromcode);
 
 		static std::string get_command_output(const std::string& cmd);

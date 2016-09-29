@@ -256,6 +256,46 @@ bool utils::try_fs_lock(const std::string& lock_file, pid_t & pid) {
 	return false;
 }
 
+std::string utils::translit(const std::string& tocode, const std::string& fromcode)
+{
+	std::string tlit = "//TRANSLIT";
+
+	typedef enum translit_state {
+		UNKNOWN,
+		SUPPORTED,
+		UNSUPPORTED
+	} translit_state_t;
+
+	static translit_state_t state = UNKNOWN;
+
+	// TRANSLIT is not needed when converting to unicode encodings
+	if (tocode == "utf-8" || tocode == "WCHAR_T") return tocode;
+
+	if (state == UNKNOWN) {
+		iconv_t cd = ::iconv_open((tocode + "//TRANSLIT").c_str(), fromcode.c_str());
+
+		if (cd == reinterpret_cast<iconv_t>(-1)) {
+			if (errno == EINVAL) {
+				iconv_t cd = ::iconv_open(tocode.c_str(), fromcode.c_str());
+				if (cd != reinterpret_cast<iconv_t>(-1)) {
+					state = UNSUPPORTED;
+				} else {
+					fprintf(stderr, "iconv_open('%s', '%s') failed: %s", tocode.c_str(), fromcode.c_str(), strerror(errno));
+					abort();
+				}
+			} else {
+				fprintf(stderr, "iconv_open('%s//TRANSLIT', '%s') failed: %s", tocode.c_str(), fromcode.c_str(), strerror(errno));
+				abort();
+			}
+		} else {
+			state = SUPPORTED;
+		}
+
+		iconv_close(cd);
+	}
+
+	return ((state == SUPPORTED) ? (tocode + tlit) : (tocode));
+}
 
 std::string utils::convert_text(const std::string& text, const std::string& tocode, const std::string& fromcode) {
 	std::string result;
@@ -263,7 +303,7 @@ std::string utils::convert_text(const std::string& text, const std::string& toco
 	if (strcasecmp(tocode.c_str(), fromcode.c_str())==0)
 		return text;
 
-	iconv_t cd = ::iconv_open((tocode + "//TRANSLIT").c_str(), fromcode.c_str());
+	iconv_t cd = ::iconv_open(translit(tocode, fromcode).c_str(), fromcode.c_str());
 
 	if (cd == reinterpret_cast<iconv_t>(-1))
 		return result;
@@ -499,7 +539,7 @@ std::wstring utils::str2wstr(const std::string& str) {
 
 std::string utils::wstr2str(const std::wstring& wstr) {
 	std::string codeset = nl_langinfo(CODESET);
-	codeset.append("//TRANSLIT");
+	codeset = translit(codeset, "WCHAR_T");
 	struct stfl_ipool * ipool = stfl_ipool_create(codeset.c_str());
 	std::string result = stfl_ipool_fromwc(ipool, wstr.c_str());
 	stfl_ipool_destroy(ipool);
