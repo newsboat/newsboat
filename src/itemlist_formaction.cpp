@@ -124,6 +124,10 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					}
 					v->set_status("");
 				} else {
+					// mark as undeleted
+					visible_items[itempos].first->set_deleted(false);
+					v->get_ctrl()->mark_deleted(visible_items[itempos].first->guid(), false);
+					// toggle read
 					bool unread = visible_items[itempos].first->unread();
 					visible_items[itempos].first->set_unread(!unread);
 					v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), unread);
