@@ -14,7 +14,7 @@ open-in-browser:o:Opens the URL associated with the current article.
 open-in-browser-and-mark-read:O:Opens the URL associated with the current article and marks the article as read.
 help:?:Runs the help screen.
 toggle-source-view:^U:Toggles between the HTML view and the source view in the article view.
-toggle-article-read:N:Toggle the read flag for the currently selected article.
+toggle-article-read:N:Toggle the read flag for the currently selected article, and clears delete flag if set.
 toggle-show-read-feeds:l:Toggle whether read feeds should be shown in the feed list.
 show-urls:u:Show all URLs in the article in a list (similar to urlview).
 clear-tag:^T:Clear current tag.
