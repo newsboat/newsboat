@@ -166,3 +166,50 @@ TEST_CASE("W3CDTF parser behaves correctly") {
 		REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822("") == "");
 	}
 }
+
+TEST_CASE("W3C DTF to RFC 822 conversion behaves correctly with different local timezones") {
+	// There has been a problem in the C date conversion functions when the TZ is
+	// set to different locations, and localtime is in daylight savings. One of
+	// these two next tests sections should be in active daylight savings.
+	// https://github.com/akrennmair/newsbeuter/issues/369
+	
+	char *tz = getenv("TZ");
+	std::string tz_saved_value;
+	if (tz) {
+		// tz can be null, and buffer may be reused.  Save it if it exists.
+		tz_saved_value = tz;
+	}
+
+	SECTION("Timezone Pacific") {
+		setenv("TZ", "US/Pacific", 1);
+		tzset();
+		REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12-30T10:03:15-08:00") == "Tue, 30 Dec 2008 18:03:15 +0000");
+	}
+
+	SECTION("Timezone Australia") {
+		setenv("TZ", "Australia/Sydney", 1);
+		tzset();
+		REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12-30T10:03:15-08:00") == "Tue, 30 Dec 2008 18:03:15 +0000");
+	}
+
+	SECTION("Timezone Arizona") {
+		setenv("TZ", "US/Arizona", 1);
+		tzset();
+		REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12-30T10:03:15-08:00") == "Tue, 30 Dec 2008 18:03:15 +0000");
+	}
+
+	SECTION("Timezone UTC") {
+		setenv("TZ", "UTC", 1);
+		tzset();
+		REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12-30T10:03:15-08:00") == "Tue, 30 Dec 2008 18:03:15 +0000");
+	}
+
+	// Reset back to original value
+	if (tz) {
+		setenv("TZ", tz_saved_value.c_str(), 1);
+	}
+	else {
+		unsetenv("TZ");
+	}
+	tzset();
+}
