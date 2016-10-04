@@ -113,11 +113,13 @@ std::string rss_parser::__w3cdtf_to_rfc822(const std::string& w3cdtf) {
 		}
 	}
 
-	time_t t = mktime(&stm);
-	time_t x = time(NULL);
-	t += localtime(&x)->tm_gmtoff + offs;
+	// tm_isdst will force mktime to consider DST, like localtime(), but
+	// then the offset will be zeroed out, since that was manually added
+	// https://github.com/akrennmair/newsbeuter/issues/369
+	stm.tm_isdst = -1;
+	time_t gmttime = mktime(&stm) + offs;
 	char datebuf[256];
-	strftime (datebuf, sizeof (datebuf), "%a, %d %b %Y %H:%M:%S %z", gmtime(&t));
+	strftime (datebuf, sizeof (datebuf), "%a, %d %b %Y %H:%M:%S +0000", localtime(&gmttime));
 	return datebuf;
 }
 
