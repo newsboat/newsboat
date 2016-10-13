@@ -839,6 +839,9 @@ void cache::clean_old_articles() {
 		LOG(LOG_DEBUG, "cache::clean_old_articles: about to delete articles with a pubDate older than %d", old_date);
 		int rc = sqlite3_exec(db, query.c_str(), nullptr, nullptr, nullptr);
 		LOG(LOG_DEBUG, "cache::clean_old_artgicles: old article delete result: rc = %d", rc);
+		if (rc != SQLITE_OK) {
+			throw dbexception(db);
+		}
 	} else {
 		LOG(LOG_DEBUG, "cache::clean_old_articles, days == 0, not cleaning up anything");
 	}
