@@ -207,85 +207,71 @@ void cache::set_pragmas() {
 
 }
 
-void cache::populate_tables() {
-	int rc;
+static const schema_queries_list schemaQueries {
+	"CREATE TABLE rss_feed ( "
+	" rssurl VARCHAR(1024) PRIMARY KEY NOT NULL, "
+	" url VARCHAR(1024) NOT NULL, "
+	" title VARCHAR(1024) NOT NULL ); ",
 
-	rc = sqlite3_exec(db,"CREATE TABLE rss_feed ( "
-	                  " rssurl VARCHAR(1024) PRIMARY KEY NOT NULL, "
-	                  " url VARCHAR(1024) NOT NULL, "
-	                  " title VARCHAR(1024) NOT NULL ); " , nullptr, nullptr, nullptr);
+	"CREATE TABLE rss_item ( "
+	" id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+	" guid VARCHAR(64) NOT NULL, "
+	" title VARCHAR(1024) NOT NULL, "
+	" author VARCHAR(1024) NOT NULL, "
+	" url VARCHAR(1024) NOT NULL, "
+	" feedurl VARCHAR(1024) NOT NULL, "
+	" pubDate INTEGER NOT NULL, "
+	" content VARCHAR(65535) NOT NULL,"
+	" unread INTEGER(1) NOT NULL );",
 
-	LOG(LOG_DEBUG, "cache::populate_tables: CREATE TABLE rss_feed rc = %d", rc);
+	 "CREATE TABLE google_replay ( "
+	" id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+	" guid VARCHAR(64) NOT NULL, "
+	" state INTEGER NOT NULL, "
+	" ts INTEGER NOT NULL );",
 
-	rc = sqlite3_exec(db,"CREATE TABLE rss_item ( "
-	                  " id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-	                  " guid VARCHAR(64) NOT NULL, "
-	                  " title VARCHAR(1024) NOT NULL, "
-	                  " author VARCHAR(1024) NOT NULL, "
-	                  " url VARCHAR(1024) NOT NULL, "
-	                  " feedurl VARCHAR(1024) NOT NULL, "
-	                  " pubDate INTEGER NOT NULL, "
-	                  " content VARCHAR(65535) NOT NULL,"
-	                  " unread INTEGER(1) NOT NULL );", nullptr, nullptr, nullptr);
-	LOG(LOG_DEBUG, "cache::populate_tables: CREATE TABLE rss_item rc = %d", rc);
+	/* we need to do these ALTER TABLE statements because we need to store
+	 * additional data for the podcast support */
+	"ALTER TABLE rss_item ADD enclosure_url VARCHAR(1024);",
 
-	rc = sqlite3_exec(db, "CREATE TABLE google_replay ( "
-	                  " id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-	                  " guid VARCHAR(64) NOT NULL, "
-	                  " state INTEGER NOT NULL, "
-	                  " ts INTEGER NOT NULL );", nullptr, nullptr, nullptr);
-	LOG(LOG_DEBUG, "cache::populate_tables: CREATE TABLE google_replay rc = %d", rc);
+	"ALTER TABLE rss_item ADD enclosure_type VARCHAR(1024);",
 
-	/* we need to do these ALTER TABLE statements because we need to store additional data for the podcast support */
-	rc = sqlite3_exec(db, "ALTER TABLE rss_item ADD enclosure_url VARCHAR(1024);", nullptr, nullptr, nullptr);
-	LOG(LOG_DEBUG, "cache::populate_tables: ALTER TABLE rss_item (1) rc = %d", rc);
+	"ALTER TABLE rss_item ADD enqueued INTEGER(1) NOT NULL DEFAULT 0;",
 
-	rc = sqlite3_exec(db, "ALTER TABLE rss_item ADD enclosure_type VARCHAR(1024);", nullptr, nullptr, nullptr);
-	LOG(LOG_DEBUG, "cache::populate_tables: ALTER TABLE rss_item (2) rc = %d", rc);
-
-	rc = sqlite3_exec(db, "ALTER TABLE rss_item ADD enqueued INTEGER(1) NOT NULL DEFAULT 0;", nullptr, nullptr, nullptr);
-	LOG(LOG_DEBUG, "cache::populate_tables: ALTER TABLE rss_item (3) rc = %d", rc);
-
-	rc = sqlite3_exec(db, "ALTER TABLE rss_item ADD flags VARCHAR(52);", nullptr, nullptr, nullptr);
-	LOG(LOG_DEBUG, "cache::populate_tables: ALTER TABLE rss_item (4) rc = %d", rc);
+	"ALTER TABLE rss_item ADD flags VARCHAR(52);",
 
 	/* create indexes to speed up certain queries */
-	rc = sqlite3_exec(db, "CREATE INDEX IF NOT EXISTS idx_rssurl ON rss_feed(rssurl);", nullptr, nullptr, nullptr);
-	LOG(LOG_DEBUG, "cache::populate_tables: CREATE INDEX ON rss_feed(rssurl) (4) rc = %d", rc);
+	"CREATE INDEX IF NOT EXISTS idx_rssurl ON rss_feed(rssurl);",
 
-	rc = sqlite3_exec(db, "CREATE INDEX IF NOT EXISTS idx_guid ON rss_item(guid);", nullptr, nullptr, nullptr);
-	LOG(LOG_DEBUG, "cache::populate_tables: CREATE INDEX ON rss_item(guid) (5) rc = %d", rc);
+	"CREATE INDEX IF NOT EXISTS idx_guid ON rss_item(guid);",
 
-	rc = sqlite3_exec(db, "CREATE INDEX IF NOT EXISTS idx_feedurl ON rss_item(feedurl);", nullptr, nullptr, nullptr);
-	LOG(LOG_DEBUG, "cache::populate_tables: CREATE INDEX ON rss_item(feedurl) (5) rc = %d", rc);
-	if (rc == SQLITE_OK) {
-		/* we analyse the indices for better statistics */
-		rc = sqlite3_exec(db, "ANALYZE;", nullptr, nullptr, nullptr);
-		LOG(LOG_DEBUG, "cache::populate_tables: ANALYZE indices (6) rc = %d", rc);
+	"CREATE INDEX IF NOT EXISTS idx_feedurl ON rss_item(feedurl);",
+	/* we analyse the indices for better statistics */
+	"ANALYZE;",
+
+	"ALTER TABLE rss_feed ADD lastmodified INTEGER(11) NOT NULL DEFAULT 0;",
+
+	"CREATE INDEX IF NOT EXISTS idx_lastmodified ON rss_feed(lastmodified);",
+
+	"ALTER TABLE rss_item ADD deleted INTEGER(1) NOT NULL DEFAULT 0;",
+
+	"CREATE INDEX IF NOT EXISTS idx_deleted ON rss_item(deleted);",
+
+	"ALTER TABLE rss_feed ADD is_rtl INTEGER(1) NOT NULL DEFAULT 0;",
+
+	"ALTER TABLE rss_feed ADD etag VARCHAR(128) NOT NULL DEFAULT \"\";",
+
+	"ALTER TABLE rss_item ADD base VARCHAR(128) NOT NULL DEFAULT \"\";",
+};
+
+void cache::populate_tables() {
+	int rc;
+	for (const auto& query : schemaQueries) {
+		rc = sqlite3_exec(db, query.c_str(), nullptr, nullptr, nullptr);
+		LOG(LOG_DEBUG, "cache::populate_tables: %s rc = %d",
+			query.c_str(), rc);
 	}
-
-	rc = sqlite3_exec(db, "ALTER TABLE rss_feed ADD lastmodified INTEGER(11) NOT NULL DEFAULT 0;", nullptr, nullptr, nullptr);
-	LOG(LOG_DEBUG, "cache::populate_tables: ALTER TABLE rss_feed ADD lastmodified: rc = %d", rc);
-
-	rc = sqlite3_exec(db, "CREATE INDEX IF NOT EXISTS idx_lastmodified ON rss_feed(lastmodified);", nullptr, nullptr, nullptr);
-	LOG(LOG_DEBUG, "cache::populate_tables: CREATE INDEX ON rss_feed(lastmodified) rc = %d", rc);
-
-	rc = sqlite3_exec(db, "ALTER TABLE rss_item ADD deleted INTEGER(1) NOT NULL DEFAULT 0;", nullptr, nullptr, nullptr);
-	LOG(LOG_DEBUG, "cache::populate_tables: ALTER TABLE rss_item (7) rc = %d", rc);
-
-	rc = sqlite3_exec(db, "CREATE INDEX IF NOT EXISTS idx_deleted ON rss_item(deleted);", nullptr, nullptr, nullptr);
-	LOG(LOG_DEBUG, "cache::populate_tables: CREATE INDEX ON rss_item(deleted) rc = %d", rc);
-
-	rc = sqlite3_exec(db, "ALTER TABLE rss_feed ADD is_rtl INTEGER(1) NOT NULL DEFAULT 0;", nullptr, nullptr, nullptr);
-	LOG(LOG_DEBUG, "cache::populate_tables: ALTER TABLE rss_feed (8) rc = %d", rc);
-
-	rc = sqlite3_exec(db, "ALTER TABLE rss_feed ADD etag VARCHAR(128) NOT NULL DEFAULT \"\";", nullptr, nullptr, nullptr);
-	LOG(LOG_DEBUG, "cache::populate_tables: ALTER TABLE rss_feed (9) rc = %d", rc);
-
-	rc = sqlite3_exec(db, "ALTER TABLE rss_item ADD base VARCHAR(128) NOT NULL DEFAULT \"\";", nullptr, nullptr, nullptr);
-	LOG(LOG_DEBUG, "cache::populate_tables: ALTER TABLE rss_feed(10) rc = %d", rc);
 }
-
 
 void cache::fetch_lastmodified(const std::string& feedurl, time_t& t, std::string& etag) {
 	std::lock_guard<std::mutex> lock(mtx);

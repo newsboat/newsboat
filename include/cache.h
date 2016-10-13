@@ -8,6 +8,8 @@
 
 namespace newsbeuter {
 
+typedef std::vector<std::string> schema_queries_list;
+
 class cache {
 	public:
 		cache(const std::string& cachefile, configcontainer * c);
