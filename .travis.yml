@@ -73,7 +73,7 @@ install:
 script:
     - cd ${TRAVIS_BUILD_DIR}
     - make PROFILE=1 all test
-    - cd test && ./test
+    - cd test && ./test --order rand
 
 after_success:
     - cd ${TRAVIS_BUILD_DIR}
