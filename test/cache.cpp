@@ -193,3 +193,72 @@ TEST_CASE("catchup_all marks all items read") {
 		REQUIRE(unread_items_count(feed) == 1);
 	}
 }
+
+TEST_CASE("cleanup_cache behaves as expected") {
+	TestHelpers::TempFile dbfile;
+
+	std::vector<std::string> feedurls = {
+		"file://data/rss.xml",
+		"file://data/atom10_1.xml"
+	};
+
+	std::vector<std::shared_ptr<rss_feed>> feeds;
+	rss_ignores ign;
+	std::unique_ptr<configcontainer> cfg( new configcontainer() );
+	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), cfg.get()) );
+	for (const auto& url : feedurls) {
+		rss_parser parser(url, rsscache.get(), cfg.get(), nullptr);
+		std::shared_ptr<rss_feed> feed = parser.parse();
+		feeds.push_back(feed);
+		rsscache->externalize_rssfeed(feed, false);
+	}
+
+	SECTION("cleanup-on-quit set to \"no\"") {
+		cfg->set_configvalue("cleanup-on-quit", "no");
+		rsscache->cleanup_cache(feeds);
+
+		cfg.reset( new configcontainer() );
+		rsscache.reset( new cache(dbfile.getPath(), cfg.get()) );
+
+		for (const auto& url : feedurls) {
+			std::shared_ptr<rss_feed> feed =
+				rsscache->internalize_rssfeed(url, &ign);
+			REQUIRE(feed->total_item_count() != 0);
+		}
+	}
+
+	SECTION("cleanup-on-quit set to \"yes\"") {
+		cfg->set_configvalue("cleanup-on-quit", "yes");
+
+		SECTION("delete-read-articles-on-quit set to \"no\"") {
+			/* Drop first feed; it should now be removed from the cache, too. */
+			feeds.erase(feeds.cbegin(), feeds.cbegin()+1);
+			rsscache->cleanup_cache(feeds);
+
+			cfg.reset( new configcontainer() );
+			rsscache.reset( new cache(dbfile.getPath(), cfg.get()) );
+
+			std::shared_ptr<rss_feed> feed =
+				rsscache->internalize_rssfeed(feedurls[0], &ign);
+			REQUIRE(feed->total_item_count() == 0);
+			feed = rsscache->internalize_rssfeed(feedurls[1], &ign);
+			REQUIRE(feed->total_item_count() != 0);
+		}
+
+		SECTION("delete-read-articles-on-quit set to \"yes\"") {
+			cfg->set_configvalue("delete-read-articles-on-quit", "yes");
+			REQUIRE(feeds[0]->total_item_count() == 8);
+			feeds[0]->items()[0]->set_unread(false);
+			feeds[0]->items()[1]->set_unread(false);
+
+			rsscache->cleanup_cache(feeds);
+
+			cfg.reset( new configcontainer() );
+			rsscache.reset( new cache(dbfile.getPath(), cfg.get()) );
+
+			std::shared_ptr<rss_feed> feed =
+				rsscache->internalize_rssfeed(feedurls[0], &ign);
+			REQUIRE(feed->total_item_count() == 6);
+		}
+	}
+}
