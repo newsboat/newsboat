@@ -112,3 +112,84 @@ TEST_CASE("Last-Modified and ETag values are preserved correctly") {
 		test(1476382350, "1234567890");
 	}
 }
+
+TEST_CASE("catchup_all marks all items read") {
+	std::shared_ptr<rss_feed> feed, test_feed;
+
+	rss_ignores ign;
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+
+	test_feed = std::make_shared<rss_feed>(&rsscache);
+	test_feed->set_title("Test feed");
+	test_feed->set_link("http://example.com/atom.xml");
+
+	std::vector<std::string> feeds = {
+		// { feed's URL, number of items in the feed }
+		"file://data/rss.xml",
+		"file://data/atom10_1.xml"
+	};
+
+	/* Ensure that the feeds contain expected number of items, then externalize
+	 * them (put into cache). */
+	for (const auto& feedurl : feeds) {
+		rss_parser parser(feedurl, &rsscache, &cfg, nullptr);
+		feed = parser.parse();
+
+		test_feed->add_item(feed->items()[0]);
+
+		rsscache.externalize_rssfeed(feed, false);
+	}
+
+	SECTION("empty feedurl") {
+		INFO("All items should be marked as read.");
+		rsscache.catchup_all();
+
+		for (const auto& feedurl : feeds) {
+			feed = rsscache.internalize_rssfeed(feedurl, &ign);
+			for (const auto& item : feed->items()) {
+				REQUIRE_FALSE(item->unread());
+			}
+		}
+	}
+
+	SECTION("non-empty feedurl") {
+		INFO("All items with particular feedurl should be marked as read");
+		rsscache.catchup_all(feeds[0]);
+
+		INFO("First feed should all be marked read");
+		feed = rsscache.internalize_rssfeed(feeds[0], &ign);
+		for (const auto& item : feed->items()) {
+			REQUIRE_FALSE(item->unread());
+		}
+
+		INFO("Second feed should all be marked unread");
+		feed = rsscache.internalize_rssfeed(feeds[1], &ign);
+		for (const auto& item : feed->items()) {
+			REQUIRE(item->unread());
+		}
+	}
+
+	SECTION("actual feed") {
+		INFO("All items that are in the specific feed should be marked as read");
+		rsscache.catchup_all(test_feed);
+
+		/* Since test_feed contains the first item of each feed, only these two
+		 * items should be marked read. */
+		auto unread_items_count = [](std::shared_ptr<rss_feed>& feed) {
+			unsigned int count = 0;
+			for (const auto& item : feed->items()) {
+				if (! item->unread()) {
+					count++;
+				}
+			}
+			return count;
+		};
+
+		feed = rsscache.internalize_rssfeed(feeds[0], &ign);
+		REQUIRE(unread_items_count(feed) == 1);
+
+		feed = rsscache.internalize_rssfeed(feeds[1], &ign);
+		REQUIRE(unread_items_count(feed) == 1);
+	}
+}
