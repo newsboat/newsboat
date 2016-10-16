@@ -127,14 +127,16 @@ bool controller::setup_dirs_xdg(const char *env_home, bool silent) {
 
 	bool config_dir_exists = 0 == access(xdg_config_dir.c_str(), R_OK | X_OK);
 
-	if (!config_dir_exists && !silent) {
-		std::cerr
-		    << utils::strprintf(
-		           _("XDG: configuration directory '%s' not accessible, "
-		             "using '%s' instead."),
-		           xdg_config_dir.c_str(),
-		           config_dir.c_str())
-		    << std::endl;
+	if (!config_dir_exists) {
+		if (!silent) {
+			std::cerr
+				<< utils::strprintf(
+					   _("XDG: configuration directory '%s' not accessible, "
+						 "using '%s' instead."),
+					   xdg_config_dir.c_str(),
+					   config_dir.c_str())
+				<< std::endl;
+		}
 
 		return false;
 	}
