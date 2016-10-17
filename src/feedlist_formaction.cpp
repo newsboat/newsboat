@@ -700,9 +700,7 @@ void feedlist_formaction::op_start_search() {
 		if (!items.empty()) {
 			search_dummy_feed->item_mutex.lock();
 			search_dummy_feed->clear_items();
-			for (auto item : items) {
-				search_dummy_feed->add_item(item);
-			}
+			search_dummy_feed->add_items(items);
 			search_dummy_feed->item_mutex.unlock();
 			v->push_searchresult(search_dummy_feed, searchphrase);
 		} else {

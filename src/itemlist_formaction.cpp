@@ -595,9 +595,7 @@ void itemlist_formaction::qna_start_search() {
 	{
 		std::lock_guard<std::mutex> lock(search_dummy_feed->item_mutex);
 		search_dummy_feed->clear_items();
-		for (auto item : items) {
-			search_dummy_feed->add_item(item);
-		}
+		search_dummy_feed->add_items(items);
 	}
 
 	if (show_searchresult) {

@@ -477,12 +477,9 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl, rss_ign
 			}
 		}
 		feed->erase_items(it, feed->items().end()); // delete old entries
-		if (flagged_items.size() > 0) {
-			// if some flagged articles were saved, append them
-			for (auto item : flagged_items) {
-				feed->add_item(item);
-			}
-		}
+
+		// if some flagged articles were saved, append them
+		feed->add_items(flagged_items);
 	}
 	feed->sort_unlocked(cfg->get_configvalue("article-sort-order"));
 	return feed;

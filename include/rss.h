@@ -224,11 +224,15 @@ class rss_feed : public matchable {
 			items_.push_back(item);
 			items_guid_map[item->guid()] = item;
 		}
+		inline void add_items(const std::vector<std::shared_ptr<rss_item>>& items) {
+			for (const auto& item : items) {
+				items_.push_back(item);
+				items_guid_map[item->guid()] = item;
+			}
+		}
 		inline void set_items(std::vector<std::shared_ptr<rss_item>>& items) {
 			erase_items(items_.begin(), items_.end());
-			for (auto item : items) {
-				add_item(item);
-			}
+			add_items(items);
 		}
 
 		inline void clear_items() {
