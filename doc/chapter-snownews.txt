@@ -33,7 +33,8 @@ In both cases, the tagging feature as described above is still available:
 	filter:~/bin/filter-script:http://some.test/url tag3 tag4 tag5
 
 A collection of such extension scripts can be found on this website:
-http://kiza.kcore.de/software/snownews/snowscripts/extensions[]
+https://kiza.eu/software/snownews/snowscripts/extensions/[]
 
 If you want to write your own extensions, refer to this website for further
-instructions: http://kiza.kcore.de/software/snownews/snowscripts/writing[]
+instructions:
+https://web.archive.org/web/20090724045314/http://kiza.kcore.de/software/snownews/snowscripts/writing[]
