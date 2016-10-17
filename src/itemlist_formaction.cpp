@@ -701,7 +701,7 @@ void itemlist_formaction::prepare() {
 
 	invalidated = false;
 
-	set_head(feed->title(),feed->unread_item_count(),feed->items().size(), feed->rssurl());
+	set_head(feed->title(),feed->unread_item_count(),feed->total_item_count(), feed->rssurl());
 
 	prepare_set_filterpos();
 }

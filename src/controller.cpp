@@ -668,7 +668,7 @@ void controller::catchup_all(const std::string& feedurl) {
 		if (feedurl.length() > 0 && feed->rssurl() != feedurl)
 			continue;
 
-		if (feed->items().size() > 0) {
+		if (feed->total_item_count() > 0) {
 			if (api) {
 				api->mark_all_read(feed->rssurl());
 			}
@@ -730,7 +730,7 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended, cur
 		try {
 			oldfeed->set_status(DURING_DOWNLOAD);
 			std::shared_ptr<rss_feed> newfeed = parser.parse();
-			if (newfeed->items().size() > 0) {
+			if (newfeed->total_item_count() > 0) {
 				std::lock_guard<std::mutex> feedslock(feeds_mutex);
 				save_feed(newfeed, pos);
 

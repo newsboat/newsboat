@@ -381,9 +381,9 @@ void cache::externalize_rssfeed(std::shared_ptr<rss_feed> feed, bool reset_unrea
 
 	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
 
-	LOG(LOG_INFO, "cache::externalize_feed: max_items = %u feed.items().size() = %u", max_items, feed->total_item_count());
+	LOG(LOG_INFO, "cache::externalize_feed: max_items = %u feed.total_item_count() = %u", max_items, feed->total_item_count());
 
-	if (max_items > 0 && feed->items().size() > max_items) {
+	if (max_items > 0 && feed->total_item_count() > max_items) {
 		auto it=feed->items().begin();
 		for (unsigned int i=0; i<max_items; ++i)
 			++it;
@@ -464,12 +464,12 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl, rss_ign
 
 	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
 
-	if (max_items > 0 && feed->items().size() > max_items) {
+	if (max_items > 0 && feed->total_item_count() > max_items) {
 		std::vector<std::shared_ptr<rss_item>> flagged_items;
 		auto it=feed->items().begin();
 		for (unsigned int j=0; j<max_items; ++j)
 			++it;
-		for (unsigned int j=max_items; j<feed->items().size(); ++j) {
+		for (unsigned int j=max_items; j<feed->total_item_count(); ++j) {
 			if (feed->items()[j]->flags().length() == 0) {
 				delete_item(feed->items()[j]);
 			} else {

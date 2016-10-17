@@ -13,7 +13,7 @@ TEST_CASE("cache behaves correctly") {
 	cache * rsscache = new cache("test-cache.db", cfg);
 	rss_parser parser("file://data/rss.xml", rsscache, cfg, NULL);
 	std::shared_ptr<rss_feed> feed = parser.parse();
-	REQUIRE(feed->items().size() == 8);
+	REQUIRE(feed->total_item_count() == 8);
 	rsscache->externalize_rssfeed(feed, false);
 
 	SECTION("items in search result are marked as read") {

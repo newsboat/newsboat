@@ -404,7 +404,7 @@ void view::push_searchresult(std::shared_ptr<rss_feed> feed, const std::string& 
 	assert(feed != NULL);
 	LOG(LOG_DEBUG, "view::push_searchresult: pushing search result");
 
-	if (feed->items().size() > 0) {
+	if (feed->total_item_count() > 0) {
 		std::shared_ptr<itemlist_formaction> searchresult(new itemlist_formaction(this, itemlist_str));
 		set_bindings(searchresult);
 		searchresult->set_regexmanager(rxman);
@@ -429,7 +429,7 @@ void view::push_itemlist(std::shared_ptr<rss_feed> feed) {
 
 	prepare_query_feed(feed);
 
-	if (feed->items().size() > 0) {
+	if (feed->total_item_count() > 0) {
 		std::shared_ptr<itemlist_formaction> itemlist(new itemlist_formaction(this, itemlist_str));
 		set_bindings(itemlist);
 		itemlist->set_regexmanager(rxman);
@@ -449,7 +449,7 @@ void view::push_itemlist(unsigned int pos) {
 	std::shared_ptr<rss_feed> feed = ctrl->get_feed(pos);
 	LOG(LOG_DEBUG, "view::push_itemlist: retrieved feed at position %d", pos);
 	push_itemlist(feed);
-	if (feed->items().size() > 0) {
+	if (feed->total_item_count() > 0) {
 		std::shared_ptr<itemlist_formaction> itemlist = std::dynamic_pointer_cast<itemlist_formaction, formaction>(get_current_formaction());
 		itemlist->set_pos(pos);
 	}

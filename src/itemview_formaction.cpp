@@ -108,7 +108,7 @@ void itemview_formaction::prepare() {
 		// we need to subtract because the current item isn't yet marked as read
 		if (item->unread())
 			unread_item_count--;
-		set_head(item->title(), feedtitle, unread_item_count, feed->items().size());
+		set_head(item->title(), feedtitle, unread_item_count, feed->total_item_count());
 
 		std::vector<std::pair<LineType, std::string>> lines;
 		if (show_source) {
