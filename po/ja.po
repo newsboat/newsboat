@@ -332,11 +332,6 @@ msgstr "<コマンド>…"
 msgid "execute list of commands"
 msgstr "コマンドリストを実行する"
 
-#: src/controller.cpp:1051
-msgid ""
-"activate offline mode (only applies to The Old Reader synchronization mode)"
-msgstr "オフラインモード（theoldreader.comからのフィードにしか効果がない）"
-
 #: src/controller.cpp:1052
 msgid "quiet startup"
 msgstr "出力を制御する"

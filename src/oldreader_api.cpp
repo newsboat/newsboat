@@ -213,25 +213,6 @@ bool oldreader_api::mark_all_read(const std::string& feedurl) {
 	return result == "OK";
 }
 
-std::vector<std::string> oldreader_api::bulk_mark_articles_read(const std::vector<google_replay_pair>& actions) {
-	std::vector<std::string> successful_tokens;
-	std::string token = get_new_token();
-	for (auto action : actions) {
-		bool read;
-		if (action.second == GOOGLE_MARK_READ) {
-			read = true;
-		} else if (action.second == GOOGLE_MARK_UNREAD) {
-			read = false;
-		} else {
-			continue;
-		}
-		if (mark_article_read_with_token(action.first, read, token)) {
-			successful_tokens.push_back(action.first);
-		}
-	}
-	return successful_tokens;
-}
-
 bool oldreader_api::mark_article_read(const std::string& guid, bool read) {
 	std::string token = get_new_token();
 	return mark_article_read_with_token(guid, read, token);

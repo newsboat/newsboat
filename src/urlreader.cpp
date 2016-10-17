@@ -9,7 +9,7 @@
 
 namespace newsbeuter {
 
-urlreader::urlreader() : offline(false) { }
+urlreader::urlreader() { }
 urlreader::~urlreader() { }
 
 std::vector<std::string>& urlreader::get_urls() {
@@ -38,9 +38,6 @@ std::string file_urlreader::get_source() {
 }
 
 void file_urlreader::reload() {
-	if (offline)
-		return;
-
 	urls.clear();
 	tags.clear();
 	alltags.clear();
@@ -101,9 +98,6 @@ void opml_urlreader::write_config() {
 
 
 void opml_urlreader::reload() {
-	if (offline)
-		return;
-
 	urls.clear();
 	tags.clear();
 	alltags.clear();

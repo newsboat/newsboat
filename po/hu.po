@@ -351,12 +351,6 @@ msgstr "<command>..."
 msgid "execute list of commands"
 msgstr "parancsok listájának futtatása"
 
-#: src/controller.cpp:1051
-#, fuzzy
-msgid ""
-"activate offline mode (only applies to The Old Reader synchronization mode)"
-msgstr "offline mód aktiválása (csak a blogline szinkronizációra érvényes)"
-
 #: src/controller.cpp:1052
 msgid "quiet startup"
 msgstr ""

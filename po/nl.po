@@ -352,14 +352,6 @@ msgstr "<opdracht>…"
 msgid "execute list of commands"
 msgstr "lijst van opdrachten uitvoeren"
 
-#: src/controller.cpp:1051
-#, fuzzy
-msgid ""
-"activate offline mode (only applies to The Old Reader synchronization mode)"
-msgstr ""
-"activeer offline-modus (alleen geldig voor synchronizatiemodus van Google "
-"Reader)"
-
 #: src/controller.cpp:1052
 msgid "quiet startup"
 msgstr "opstarten zonder opdrachtregeluitvoer"

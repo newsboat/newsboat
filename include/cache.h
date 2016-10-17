@@ -8,9 +8,6 @@
 
 namespace newsbeuter {
 
-typedef std::pair<std::string, unsigned int> google_replay_pair;
-enum { GOOGLE_MARK_READ = 1, GOOGLE_MARK_UNREAD = 2 };
-
 class cache {
 	public:
 		cache(const std::string& cachefile, configcontainer * c);
@@ -34,9 +31,6 @@ class cache {
 		void mark_items_read_by_guid(const std::vector<std::string>& guids);
 		std::vector<std::string> get_read_item_guids();
 		void fetch_descriptions(rss_feed * feed);
-		void record_google_replay(const std::string& guid, unsigned int state);
-		std::vector<google_replay_pair> get_google_replay();
-		void delete_google_replay_by_guid(const std::vector<std::string>& guids);
 	private:
 		void populate_tables();
 		void set_pragmas();

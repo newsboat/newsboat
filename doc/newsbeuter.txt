@@ -726,8 +726,7 @@ To enable this mode, the following configuration needs to be done:
 	opml-url "<opml url>" ["<opml url>" ...]
 
 "opml" must be specified as source for the feed URLs, and the URLs of the OPML
-file needs to be specified, too. As with Google Reader synchronization mode, the offline
-mode via "newsbeuter -o" also works with OPML online subscription mode.
+file needs to be specified, too.
 
 
 Flagging Articles

@@ -349,11 +349,6 @@ msgstr "<kommando>..."
 msgid "execute list of commands"
 msgstr "führe eine Liste von Befehlen aus"
 
-#: src/controller.cpp:1051
-msgid ""
-"activate offline mode (only applies to The Old Reader synchronization mode)"
-msgstr "Offline-Modus aktivieren (nur im The Old Reader Synchronisationsmodus)"
-
 #: src/controller.cpp:1052
 msgid "quiet startup"
 msgstr "ruhiger Start"

@@ -84,7 +84,7 @@ void omg_a_child_died(int /* sig */) {
 	::signal(SIGCHLD, omg_a_child_died); /* in case of unreliable signals */
 }
 
-controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false), api(0), offline_mode(false) {
+controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache_file("cache.db"), config_file("config"), queue_file("queue"), refresh_on_start(false), api(0) {
 }
 
 
@@ -223,7 +223,6 @@ void controller::run(int argc, char * argv[]) {
 	::signal(SIGCHLD, omg_a_child_died);
 
 	bool do_import = false, do_export = false, cachefile_given_on_cmdline = false, do_vacuum = false;
-	bool real_offline_mode = false;
 	std::string importfile;
 	bool do_read_import = false, do_read_export = false;
 	std::string readinfofile;
@@ -244,7 +243,6 @@ void controller::run(int argc, char * argv[]) {
 		{"import-from-opml", required_argument, 0, 'i'},
 		{"log-file"        , required_argument, 0, 'd'},
 		{"log-level"       , required_argument, 0, 'l'},
-		{"offline-mode"    , no_argument      , 0, 'o'},
 		{"quiet"           , no_argument      , 0, 'q'},
 		{"refresh-on-start", no_argument      , 0, 'r'},
 		{"url-file"        , required_argument, 0, 'u'},
@@ -308,9 +306,6 @@ void controller::run(int argc, char * argv[]) {
 		case 'v':
 		case 'V':
 			show_version++;
-			break;
-		case 'o':
-			offline_mode = true;
 			break;
 		case 'x':
 			execute_cmds = true;
@@ -465,57 +460,39 @@ void controller::run(int argc, char * argv[]) {
 		urlcfg = new file_urlreader(url_file);
 	} else if (type == "opml") {
 		urlcfg = new opml_urlreader(&cfg);
-		real_offline_mode = offline_mode;
 	} else if (type == "oldreader") {
 		api = new oldreader_api(&cfg);
 		urlcfg = new oldreader_urlreader(&cfg, url_file, api);
-		real_offline_mode = offline_mode;
 	} else if (type == "ttrss") {
 		api = new ttrss_api(&cfg);
 		urlcfg = new ttrss_urlreader(url_file, api);
-		real_offline_mode = offline_mode;
 	} else if (type == "newsblur") {
 		api = new newsblur_api(&cfg);
 		urlcfg = new newsblur_urlreader(url_file, api);
-		real_offline_mode = offline_mode;
 	} else if (type == "feedhq") {
 		api = new feedhq_api(&cfg);
 		urlcfg = new feedhq_urlreader(&cfg, url_file, api);
-		real_offline_mode = offline_mode;
 	} else if (type == "ocnews") {
 		api = new ocnews_api(&cfg);
 		urlcfg = new ocnews_urlreader(url_file, api);
-		real_offline_mode = offline_mode;
 	} else {
 		LOG(LOG_ERROR,"unknown urls-source `%s'", urlcfg->get_source().c_str());
 	}
 
-	if (real_offline_mode) {
-		if (!do_export) {
-			std::cout << _("Loading URLs from local cache...");
-			std::cout.flush();
+	if (!do_export && !silent) {
+		std::cout << utils::strprintf(_("Loading URLs from %s..."), urlcfg->get_source().c_str());
+		std::cout.flush();
+	}
+	if (api) {
+		if (!api->authenticate()) {
+			std::cout << "Authentication failed." << std::endl;
+			utils::remove_fs_lock(lock_file);
+			return;
 		}
-		urlcfg->set_offline(true);
-		urlcfg->get_urls() = rsscache->get_feed_urls();
-		if (!do_export) {
-			std::cout << _("done.") << std::endl;
-		}
-	} else {
-		if (!do_export && !silent) {
-			std::cout << utils::strprintf(_("Loading URLs from %s..."), urlcfg->get_source().c_str());
-			std::cout.flush();
-		}
-		if (api) {
-			if (!api->authenticate()) {
-				std::cout << "Authentication failed." << std::endl;
-				utils::remove_fs_lock(lock_file);
-				return;
-			}
-		}
-		urlcfg->reload();
-		if (!do_export && !silent) {
-			std::cout << _("done.") << std::endl;
-		}
+	}
+	urlcfg->reload();
+	if (!do_export && !silent) {
+		std::cout << _("done.") << std::endl;
 	}
 
 	if (urlcfg->get_urls().size() == 0) {
@@ -707,18 +684,9 @@ void controller::catchup_all(const std::string& feedurl) {
 
 void controller::mark_article_read(const std::string& guid, bool read) {
 	if (api) {
-		if (offline_mode) {
-			LOG(LOG_DEBUG, "not on googlereader_api");
-		} else {
-			api->mark_article_read(guid, read);
-		}
+		api->mark_article_read(guid, read);
 	}
 }
-
-void controller::record_google_replay(const std::string& guid, bool read) {
-	rsscache->record_google_replay(guid, read ? GOOGLE_MARK_READ : GOOGLE_MARK_UNREAD);
-}
-
 
 void controller::mark_all_read(unsigned int pos) {
 	if (pos < feeds.size()) {
@@ -1050,7 +1018,6 @@ void controller::usage(char * argv0) {
 		{ 'C', "config-file"     , _s("<configfile>"), _s("read configuration from <configfile>") }                                       ,
 		{ 'X', "vacuum"          , ""                , _s("clean up cache thoroughly") }                                                  ,
 		{ 'x', "execute"         , _s("<command>..."), _s("execute list of commands") }                                                   ,
-		{ 'o', "offline-mode"    , ""                , _s("activate offline mode (only applies to The Old Reader synchronization mode)") },
 		{ 'q', "quiet"           , ""                , _s("quiet startup") }                                                              ,
 		{ 'v', "version"         , ""                , _s("get version information") }                                                    ,
 		{ 'l', "log-level"       , _s("<loglevel>")  , _s("write a log with a certain loglevel (valid values: 1 to 6)") }                 ,

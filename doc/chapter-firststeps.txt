@@ -13,7 +13,6 @@ After you've installed newsbeuter, you can run it for the first time by typing
 		-C, --config-file=<configfile>  read configuration from <configfile>
 		-X, --vacuum                    clean up cache thoroughly
 		-x, --execute=<command>...      execute list of commands
-		-o, --offline-mode              activate offline mode (only applies to The Old Reader synchronization mode)
 		-q, --quiet                     quiet startup
 		-v, --version                   get version information
 		-l, --log-level=<loglevel>      write a log with a certain loglevel (valid values: 1 to 6)

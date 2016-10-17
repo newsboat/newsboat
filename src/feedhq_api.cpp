@@ -204,25 +204,6 @@ bool feedhq_api::mark_all_read(const std::string& feedurl) {
 	return result == "OK";
 }
 
-std::vector<std::string> feedhq_api::bulk_mark_articles_read(const std::vector<google_replay_pair>& actions) {
-	std::vector<std::string> successful_tokens;
-	std::string token = get_new_token();
-	for (std::vector<google_replay_pair>::const_iterator it=actions.begin(); it!=actions.end(); ++it) {
-		bool read;
-		if (it->second == GOOGLE_MARK_READ) {
-			read = true;
-		} else if (it->second == GOOGLE_MARK_UNREAD) {
-			read = false;
-		} else {
-			continue;
-		}
-		if (mark_article_read_with_token(it->first, read, token)) {
-			successful_tokens.push_back(it->first);
-		}
-	}
-	return successful_tokens;
-}
-
 bool feedhq_api::mark_article_read(const std::string& guid, bool read) {
 	std::string token = get_new_token();
 	return mark_article_read_with_token(guid, read, token);

@@ -350,13 +350,6 @@ msgstr "<komut>..."
 msgid "execute list of commands"
 msgstr "bir dizi komut çalıştır"
 
-#: src/controller.cpp:1051
-#, fuzzy
-msgid ""
-"activate offline mode (only applies to The Old Reader synchronization mode)"
-msgstr ""
-"çevrimdışı modunu aktifleştir (sadece bloglines eşleştirme modunu etkiler)"
-
 #: src/controller.cpp:1052
 msgid "quiet startup"
 msgstr ""

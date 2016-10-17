@@ -879,49 +879,4 @@ void cache::fetch_descriptions(rss_feed * feed) {
 	}
 }
 
-void cache::record_google_replay(const std::string& guid, unsigned int state) {
-	std::lock_guard<std::mutex> lock(mtx);
-
-	std::string query = prepare_query("INSERT INTO google_replay ( guid, state, ts ) VALUES ( '%q', %u, %u );", guid.c_str(), state, (unsigned int)time(NULL));
-
-	int rc = sqlite3_exec(db, query.c_str(), NULL, NULL, NULL);
-	LOG(LOG_DEBUG, "ran SQL statement: %s rc = %d", query.c_str(), rc);
-}
-
-void cache::delete_google_replay_by_guid(const std::vector<std::string>& guids) {
-	std::vector<std::string> escaped_guids;
-
-	for (auto guid : guids) {
-		escaped_guids.push_back(prepare_query("'%q'", guid.c_str()));
-	}
-
-	std::string query = prepare_query("DELETE FROM google_replay WHERE guid IN ( %s );", utils::join(escaped_guids, ", ").c_str());
-
-	int rc = sqlite3_exec(db, query.c_str(), NULL, NULL, NULL);
-	LOG(LOG_DEBUG, "ran SQL statement: %s rc = %d", query.c_str(), rc);
-}
-
-static int google_replay_cb(void * result, int argc, char ** argv, char ** /* azColName */) {
-	std::vector<google_replay_pair> * google_replay_data = static_cast<std::vector<google_replay_pair> *>(result);
-	assert(argc == 2);
-
-	google_replay_data->push_back(google_replay_pair(argv[0], utils::to_u(argv[1])));
-
-	return 0;
-}
-
-std::vector<google_replay_pair> cache::get_google_replay() {
-	std::vector<google_replay_pair> result;
-
-	std::string query = "SELECT guid, state FROM google_replay ORDER BY ts;";
-
-	int rc = sqlite3_exec(db, query.c_str(), google_replay_cb, &result, NULL);
-	if (rc != SQLITE_OK) {
-		LOG(LOG_CRITICAL, "query \"%s\" failed: error = %d", query.c_str(), rc);
-		throw dbexception(db);
-	}
-
-	return result;
-}
-
 }
