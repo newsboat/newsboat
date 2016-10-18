@@ -728,7 +728,7 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended, cur
 		parser.set_easyhandle(easyhandle);
 		LOG(level::DEBUG, "controller::reload: created parser");
 		try {
-			oldfeed->set_status(DURING_DOWNLOAD);
+			oldfeed->set_status(dl_status::DURING_DOWNLOAD);
 			std::shared_ptr<rss_feed> newfeed = parser.parse();
 			if (newfeed->total_item_count() > 0) {
 				std::lock_guard<std::mutex> feedslock(feeds_mutex);
@@ -752,7 +752,7 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended, cur
 			} else {
 				LOG(level::DEBUG, "controller::reload: feed is empty");
 			}
-			oldfeed->set_status(SUCCESS);
+			oldfeed->set_status(dl_status::SUCCESS);
 			v->set_status("");
 		} catch (const dbexception& e) {
 			errmsg = utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(oldfeed->rssurl()).c_str(), e.what());
@@ -762,7 +762,7 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended, cur
 			errmsg = utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(oldfeed->rssurl()).c_str(), e.what());
 		}
 		if (errmsg != "") {
-			oldfeed->set_status(DL_ERROR);
+			oldfeed->set_status(dl_status::DL_ERROR);
 			v->set_status(errmsg);
 			LOG(level::USERERROR, "%s", errmsg.c_str());
 		}

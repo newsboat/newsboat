@@ -30,7 +30,7 @@ rss_item::~rss_item() {
 	// LOG(level::CRITICAL, "delete rss_item");
 }
 
-rss_feed::rss_feed(cache * c) : ch(c), empty(true), is_rtl_(false), idx(0), status_(SUCCESS) {
+rss_feed::rss_feed(cache * c) : ch(c), empty(true), is_rtl_(false), idx(0), status_(dl_status::SUCCESS) {
 	// LOG(level::CRITICAL, "new rss_feed");
 }
 
@@ -603,13 +603,13 @@ void rss_item::set_feedptr(std::shared_ptr<rss_feed> ptr) {
 
 std::string rss_feed::get_status() {
 	switch (status_) {
-	case SUCCESS:
+	case dl_status::SUCCESS:
 		return " ";
-	case TO_BE_DOWNLOADED:
+	case dl_status::TO_BE_DOWNLOADED:
 		return "_";
-	case DURING_DOWNLOAD:
+	case dl_status::DURING_DOWNLOAD:
 		return ".";
-	case DL_ERROR:
+	case dl_status::DL_ERROR:
 		return "x";
 	}
 	return "?";
