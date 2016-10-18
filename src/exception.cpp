@@ -18,11 +18,11 @@ const char * exception::what() const throw() {
 
 const char * matcherexception::what() const throw() {
 	static std::string errmsg;
-	switch (type) {
-	case ATTRIB_UNAVAIL:
+	switch (type_) {
+	case type::ATTRIB_UNAVAIL:
 		errmsg = utils::strprintf(_("attribute `%s' is not available."), addinfo.c_str());
 		break;
-	case INVALID_REGEX:
+	case type::INVALID_REGEX:
 		errmsg = utils::strprintf(_("regular expression '%s' is invalid: %s"), addinfo.c_str(), addinfo2.c_str());
 		break;
 	}
