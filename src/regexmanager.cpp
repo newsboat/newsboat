@@ -33,7 +33,7 @@ void regexmanager::dump_config(std::vector<std::string>& config_output) {
 void regexmanager::handle_action(const std::string& action, const std::vector<std::string>& params) {
 	if (action == "highlight") {
 		if (params.size() < 3)
-			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
+			throw confighandlerexception(action_handler_status::TOO_FEW_PARAMS);
 
 		std::string location = params[0];
 		if (location != "all" && location != "article" && location != "articlelist" && location != "feedlist")
@@ -99,7 +99,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 		cheat_store_for_dump_config.push_back(line);
 	} else if (action == "highlight-article") {
 		if (params.size() < 3)
-			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
+			throw confighandlerexception(action_handler_status::TOO_FEW_PARAMS);
 
 		std::string expr = params[0];
 		std::string fgcolor = params[1];
@@ -145,7 +145,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 		matchers.push_back(std::pair<std::shared_ptr<matcher>, int>(m, pos));
 
 	} else
-		throw confighandlerexception(AHS_INVALID_COMMAND);
+		throw confighandlerexception(action_handler_status::INVALID_COMMAND);
 }
 
 int regexmanager::article_matches(matchable * item) {

@@ -29,7 +29,7 @@ void colormanager::handle_action(const std::string& action, const std::vector<st
 	LOG(LOG_DEBUG, "colormanager::handle_action(%s,...) was called",action.c_str());
 	if (action == "color") {
 		if (params.size() < 3) {
-			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
+			throw confighandlerexception(action_handler_status::TOO_FEW_PARAMS);
 		}
 
 		/*
@@ -63,7 +63,7 @@ void colormanager::handle_action(const std::string& action, const std::vector<st
 			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid configuration element"), element.c_str()));
 
 	} else
-		throw confighandlerexception(AHS_INVALID_COMMAND);
+		throw confighandlerexception(action_handler_status::INVALID_COMMAND);
 }
 
 void colormanager::dump_config(std::vector<std::string>& config_output) {

@@ -35,13 +35,13 @@ confighandlerexception::confighandlerexception(action_handler_status e) {
 
 const char * confighandlerexception::get_errmsg(action_handler_status status) {
 	switch (status) {
-	case AHS_INVALID_PARAMS:
+	case action_handler_status::INVALID_PARAMS:
 		return _("invalid parameters.");
-	case AHS_TOO_FEW_PARAMS:
+	case action_handler_status::TOO_FEW_PARAMS:
 		return _("too few parameters.");
-	case AHS_INVALID_COMMAND:
+	case action_handler_status::INVALID_COMMAND:
 		return _("unknown command (bug).");
-	case AHS_FILENOTFOUND:
+	case action_handler_status::FILENOTFOUND:
 		return _("file couldn't be opened.");
 	default:
 		return _("unknown error (bug).");

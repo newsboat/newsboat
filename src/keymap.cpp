@@ -287,7 +287,7 @@ void keymap::handle_action(const std::string& action, const std::vector<std::str
 	LOG(LOG_DEBUG,"keymap::handle_action(%s, ...) called",action.c_str());
 	if (action == "bind-key") {
 		if (params.size() < 2)
-			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
+			throw confighandlerexception(action_handler_status::TOO_FEW_PARAMS);
 		std::string context = "all";
 		if (params.size() >= 3)
 			context = params[2];
@@ -299,14 +299,14 @@ void keymap::handle_action(const std::string& action, const std::vector<std::str
 		set_key(op, params[0], context);
 	} else if (action == "unbind-key") {
 		if (params.size() < 1)
-			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
+			throw confighandlerexception(action_handler_status::TOO_FEW_PARAMS);
 		std::string context = "all";
 		if (params.size() >= 2)
 			context = params[1];
 		unset_key(params[0], context);
 	} else if (action == "macro") {
 		if (params.size() < 1)
-			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
+			throw confighandlerexception(action_handler_status::TOO_FEW_PARAMS);
 		auto it = params.begin();
 		std::string macrokey = *it;
 		std::vector<macrocmd> cmds;
@@ -341,7 +341,7 @@ void keymap::handle_action(const std::string& action, const std::vector<std::str
 
 		macros_[macrokey] = cmds;
 	} else
-		throw confighandlerexception(AHS_INVALID_PARAMS);
+		throw confighandlerexception(action_handler_status::INVALID_PARAMS);
 }
 
 std::string keymap::getkey(operation op, const std::string& context) {

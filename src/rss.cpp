@@ -359,7 +359,7 @@ std::string rss_feed::get_attribute(const std::string& attribname) {
 void rss_ignores::handle_action(const std::string& action, const std::vector<std::string>& params) {
 	if (action == "ignore-article") {
 		if (params.size() < 2)
-			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
+			throw confighandlerexception(action_handler_status::TOO_FEW_PARAMS);
 		std::string ignore_rssurl = params[0];
 		std::string ignore_expr = params[1];
 		matcher m;
@@ -375,7 +375,7 @@ void rss_ignores::handle_action(const std::string& action, const std::vector<std
 			resetflag.push_back(param);
 		}
 	} else
-		throw confighandlerexception(AHS_INVALID_COMMAND);
+		throw confighandlerexception(action_handler_status::INVALID_COMMAND);
 }
 
 void rss_ignores::dump_config(std::vector<std::string>& config_output) {

@@ -29,13 +29,13 @@ void configparser::handle_action(const std::string& action, const std::vector<st
 	 */
 	if (action == "include") {
 		if (params.size() < 1) {
-			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
+			throw confighandlerexception(action_handler_status::TOO_FEW_PARAMS);
 		}
 
 		if (!this->parse(utils::resolve_tilde(params[0])))
-			throw confighandlerexception(AHS_FILENOTFOUND);
+			throw confighandlerexception(action_handler_status::FILENOTFOUND);
 	} else
-		throw confighandlerexception(AHS_INVALID_COMMAND);
+		throw confighandlerexception(action_handler_status::INVALID_COMMAND);
 }
 
 bool configparser::parse(const std::string& filename, bool double_include) {

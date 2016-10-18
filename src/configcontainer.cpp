@@ -201,13 +201,13 @@ void configcontainer::handle_action(const std::string& action, const std::vector
 	// configdata_t::INVALID indicates that the action didn't exist, and that the returned object was created ad-hoc.
 	if (cfgdata.type == configdata_t::INVALID) {
 		LOG(LOG_WARN, "configcontainer::handler_action: unknown action %s", action.c_str());
-		throw confighandlerexception(AHS_INVALID_COMMAND);
+		throw confighandlerexception(action_handler_status::INVALID_COMMAND);
 	}
 
 	LOG(LOG_DEBUG, "configcontainer::handle_action: action = %s, type = %u", action.c_str(), cfgdata.type);
 
 	if (params.size() < 1) {
-		throw confighandlerexception(AHS_TOO_FEW_PARAMS);
+		throw confighandlerexception(action_handler_status::TOO_FEW_PARAMS);
 	}
 
 	switch (cfgdata.type) {
@@ -237,7 +237,7 @@ void configcontainer::handle_action(const std::string& action, const std::vector
 
 	default:
 		// should not happen
-		throw confighandlerexception(AHS_INVALID_COMMAND);
+		throw confighandlerexception(action_handler_status::INVALID_COMMAND);
 	}
 }
 
