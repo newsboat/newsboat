@@ -138,13 +138,13 @@ class utils {
 
 class scope_measure {
 	public:
-		scope_measure(const std::string& func, loglevel ll = LOG_DEBUG);
+		scope_measure(const std::string& func, level ll = level::DEBUG);
 		~scope_measure();
 		void stopover(const std::string& son = "");
 	private:
 		struct timeval tv1, tv2;
 		std::string funcname;
-		loglevel lvl;
+		level lvl;
 };
 
 }

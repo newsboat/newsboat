@@ -7,8 +7,17 @@
 
 namespace newsbeuter {
 
-enum loglevel { LOG_NONE = 0, LOG_USERERROR, LOG_CRITICAL, LOG_ERROR, LOG_WARN, LOG_INFO, LOG_DEBUG };
-
+/* Be sure to update loglevel_str array in src/logger.cpp if you change this
+ * enum. */
+enum class level {
+	NONE = 0,
+	USERERROR,
+	CRITICAL,
+	ERROR,
+	WARN,
+	INFO,
+	DEBUG
+};
 
 class logger {
 	public:
@@ -16,8 +25,8 @@ class logger {
 
 		void set_logfile(const char * logfile);
 		void set_errorlogfile(const char * logfile);
-		void set_loglevel(loglevel level);
-		void log(loglevel level, const char * format, ...);
+		void set_loglevel(level l);
+		void log(level l, const char * format, ...);
 
 	private:
 		logger();
@@ -27,7 +36,7 @@ class logger {
 		}
 		~logger() { }
 
-		loglevel curlevel;
+		level curlevel;
 		std::mutex logMutex;
 		static std::mutex instanceMutex;
 		std::fstream f;

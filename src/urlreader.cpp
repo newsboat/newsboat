@@ -107,13 +107,13 @@ void opml_urlreader::reload() {
 	std::vector<std::string> urls = utils::tokenize_quoted(this->get_source(), " ");
 
 	for (auto url : urls) {
-		LOG(LOG_DEBUG, "opml_urlreader::reload: downloading `%s'", url.c_str());
+		LOG(level::DEBUG, "opml_urlreader::reload: downloading `%s'", url.c_str());
 		std::string urlcontent = utils::retrieve_url(url, cfg, this->get_auth());
 
 		xmlDoc * doc = xmlParseMemory(urlcontent.c_str(), urlcontent.length());
 
 		if (doc == nullptr) {
-			LOG(LOG_ERROR, "opml_urlreader::reload: parsing XML file failed");
+			LOG(level::ERROR, "opml_urlreader::reload: parsing XML file failed");
 			continue;
 		}
 
@@ -122,7 +122,7 @@ void opml_urlreader::reload() {
 		if (root) {
 			for (xmlNode * node = root->children; node != nullptr; node = node->next) {
 				if (strcmp((const char *)node->name, "body")==0) {
-					LOG(LOG_DEBUG, "opml_urlreader::reload: found body");
+					LOG(level::DEBUG, "opml_urlreader::reload: found body");
 					rec_find_rss_outlines(node->children, "");
 				}
 			}

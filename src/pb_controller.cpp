@@ -28,7 +28,7 @@ using namespace newsbeuter;
 static std::string lock_file = "pb-lock.pid";
 
 static void ctrl_c_action(int sig) {
-	LOG(LOG_DEBUG,"caugh signal %d",sig);
+	LOG(level::DEBUG,"caugh signal %d",sig);
 	stfl::reset();
 	utils::remove_fs_lock(lock_file);
 	::exit(EXIT_FAILURE);
@@ -180,11 +180,11 @@ void pb_controller::run(int argc, char * argv[]) {
 			logger::getInstance().set_logfile(optarg);
 			break;
 		case 'l': {
-			loglevel level = static_cast<loglevel>(atoi(optarg));
-			if (level > LOG_NONE && level <= LOG_DEBUG) {
-				logger::getInstance().set_loglevel(level);
+			level l = static_cast<level>(atoi(optarg));
+			if (l > level::NONE && l <= level::DEBUG) {
+				logger::getInstance().set_loglevel(l);
 			} else {
-				std::cerr << utils::strprintf(_("%s: %d: invalid loglevel value"), argv[0], level) << std::endl;
+				std::cerr << utils::strprintf(_("%s: %d: invalid loglevel value"), argv[0], l) << std::endl;
 				::std::exit(EXIT_FAILURE);
 			}
 			}
@@ -368,7 +368,7 @@ void pb_controller::play_file(const std::string& file) {
 	cmdline.append(utils::replace_all(file,"\"", "\\\""));
 	cmdline.append("\"");
 	stfl::reset();
-	LOG(LOG_DEBUG, "pb_controller::play_file: running `%s'", cmdline.c_str());
+	LOG(level::DEBUG, "pb_controller::play_file: running `%s'", cmdline.c_str());
 	::system(cmdline.c_str());
 }
 

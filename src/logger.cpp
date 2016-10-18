@@ -3,10 +3,11 @@
 #include <exception.h>
 #include <cerrno>
 
+
 namespace newsbeuter {
 std::mutex logger::instanceMutex;
 
-logger::logger() : curlevel(LOG_NONE) { }
+logger::logger() : curlevel(level::NONE) { }
 
 void logger::set_logfile(const char * logfile) {
 	/*
@@ -32,34 +33,44 @@ void logger::set_errorlogfile(const char * logfile) {
 	if (!ef.is_open()) {
 		throw exception(errno);
 	}
-	if (LOG_NONE == curlevel) {
-		curlevel = LOG_USERERROR;
+	if (level::NONE == curlevel) {
+		curlevel = level::USERERROR;
 	}
 }
 
-void logger::set_loglevel(loglevel level) {
+void logger::set_loglevel(level l) {
 	std::lock_guard<std::mutex> lock(logMutex);
-	curlevel = level;
-	if (curlevel == LOG_NONE)
+	curlevel = l;
+	if (curlevel == level::NONE)
 		f.close();
 }
 
-const char * loglevel_str[] = { "NONE", "USERERROR", "CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG" };
+/* Be sure to update enum class level in include/logger.h if you change this
+ * array. */
+const char * loglevel_str[] = {
+	"NONE",
+	"USERERROR",
+	"CRITICAL",
+	"ERROR",
+	"WARNING",
+	"INFO",
+	"DEBUG"
+};
 
-void logger::log(loglevel level, const char * format, ...) {
+void logger::log(level l, const char * format, ...) {
 	/*
 	 * This function checks the loglevel, creates the error message, and then
 	 * writes it to the debug logfile and to the error logfile (if applicable).
 	 */
 	std::lock_guard<std::mutex> lock(logMutex);
-	if (level <= curlevel && curlevel > LOG_NONE && (f.is_open() || ef.is_open())) {
+	if (l <= curlevel && curlevel > level::NONE && (f.is_open() || ef.is_open())) {
 		char * buf, * logmsgbuf;
 		char date[128];
 		time_t t = time(nullptr);
 		struct tm * stm = localtime(&t);
 		strftime(date,sizeof(date),"%Y-%m-%d %H:%M:%S",stm);
-		if (curlevel > LOG_DEBUG)
-			curlevel = LOG_DEBUG;
+		if (curlevel > level::DEBUG)
+			curlevel = level::DEBUG;
 
 		va_list ap;
 		va_start(ap, format);
@@ -71,15 +82,19 @@ void logger::log(loglevel level, const char * format, ...) {
 		vsnprintf(logmsgbuf, len + 1, format, ap);
 		va_end(ap);
 
-		len = snprintf(nullptr, 0, "[%s] %s: %s",date, loglevel_str[level], logmsgbuf);
+		len = snprintf(
+				nullptr, 0, "[%s] %s: %s",
+				date, loglevel_str[static_cast<int>(l)], logmsgbuf);
 		buf = new char[len + 1];
-		snprintf(buf,len + 1,"[%s] %s: %s",date, loglevel_str[level], logmsgbuf);
+		snprintf(
+				buf, len + 1, "[%s] %s: %s",
+				date, loglevel_str[static_cast<int>(l)], logmsgbuf);
 
 		if (f.is_open()) {
 			f << buf << std::endl;
 		}
 
-		if (LOG_USERERROR == level && ef.is_open()) {
+		if (level::USERERROR == l && ef.is_open()) {
 			snprintf(buf, len + 1, "[%s] %s", date, logmsgbuf);
 			ef << buf << std::endl;
 			ef.flush();

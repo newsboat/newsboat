@@ -16,7 +16,7 @@ newsblur_api::newsblur_api(configcontainer * c) : remote_api(c) {
 	min_pages = (cfg->get_configvalue_as_int("newsblur-min-items") + (NEWSBLUR_ITEMS_PER_PAGE + 1)) / NEWSBLUR_ITEMS_PER_PAGE;
 
 	if (cfg->get_configvalue("cookie-cache").empty()) {
-		LOG(LOG_CRITICAL, "newsblur_api::newsblur_api: No cookie-cache has been configured the login won't work.");
+		LOG(level::CRITICAL, "newsblur_api::newsblur_api: No cookie-cache has been configured the login won't work.");
 	}
 }
 
@@ -32,7 +32,7 @@ bool newsblur_api::authenticate() {
 	bool result = json_object_get_boolean(status);
 
 	LOG(
-	    LOG_INFO,
+	    level::INFO,
 	    "newsblur_api::authenticate: authentication resulted in %u, cached in %s",
 	    result,
 	    cfg->get_configvalue("cookie-cache").c_str());
@@ -168,7 +168,7 @@ time_t parse_date(const char * raw) {
 rsspp::feed newsblur_api::fetch_feed(const std::string& id) {
 	rsspp::feed f = known_feeds[id];
 
-	LOG(LOG_INFO, "newsblur_api::fetch_feed: about to fetch %u pages of feed %s", min_pages, id.c_str());
+	LOG(level::INFO, "newsblur_api::fetch_feed: about to fetch %u pages of feed %s", min_pages, id.c_str());
 
 	for(unsigned int i = 1; i <= min_pages; i++) {
 
@@ -183,18 +183,18 @@ rsspp::feed newsblur_api::fetch_feed(const std::string& id) {
 		if (json_object_object_get_ex(query_result, "stories", &stories)
 				== FALSE)
 		{
-			LOG(LOG_ERROR, "newsblur_api::fetch_feed: request returned no stories");
+			LOG(level::ERROR, "newsblur_api::fetch_feed: request returned no stories");
 			return f;
 		}
 
 		if (json_object_get_type(stories) != json_type_array) {
-			LOG(LOG_ERROR, "newsblur_api::fetch_feed: content is not an array");
+			LOG(level::ERROR, "newsblur_api::fetch_feed: content is not an array");
 			return f;
 		}
 
 		struct array_list * items = json_object_get_array(stories);
 		int items_size = array_list_length(items);
-		LOG(LOG_DEBUG, "newsblur_api::fetch_feed: %d items", items_size);
+		LOG(level::DEBUG, "newsblur_api::fetch_feed: %d items", items_size);
 
 		for (int i = 0; i < items_size; i++) {
 			json_object* item_obj = (json_object*)array_list_get_idx(items, i);
@@ -273,7 +273,7 @@ json_object * newsblur_api::query_api(const std::string& endpoint, const std::st
 
 	json_object * result =  json_tokener_parse(data.c_str());
 	if (!result)
-		LOG(LOG_WARN, "newsblur_api::query_api: request to %s failed", url.c_str());
+		LOG(level::WARN, "newsblur_api::query_api: request to %s failed", url.c_str());
 	return result;
 }
 

@@ -41,7 +41,7 @@ void filebrowser_formaction::process_operation(operation op, bool /* automatic *
 		 *   - the focus is in the list of files, then we need to set the filename field to the currently selected entry
 		 *   - the focus is in the filename field, then the filename needs to be returned.
 		 */
-		LOG(LOG_DEBUG,"filebrowser_formaction: 'opening' item");
+		LOG(level::DEBUG,"filebrowser_formaction: 'opening' item");
 		std::string focus = f->get_focus();
 		if (focus.length() > 0) {
 			if (focus == "files") {
@@ -110,12 +110,12 @@ void filebrowser_formaction::process_operation(operation op, bool /* automatic *
 	}
 	break;
 	case OP_QUIT:
-		LOG(LOG_DEBUG,"view::filebrowser: quitting");
+		LOG(level::DEBUG,"view::filebrowser: quitting");
 		v->pop_current_formaction();
 		f->set("filenametext", "");
 		break;
 	case OP_HARDQUIT:
-		LOG(LOG_DEBUG,"view::filebrowser: hard quitting");
+		LOG(level::DEBUG,"view::filebrowser: hard quitting");
 		while (v->formaction_stack_size() >0) {
 			v->pop_current_formaction();
 		}
@@ -167,12 +167,12 @@ void filebrowser_formaction::init() {
 	if (dir == "") {
 		std::string save_path = v->get_cfg()->get_configvalue("save-path");
 
-		LOG(LOG_DEBUG,"view::filebrowser: save-path is '%s'",save_path.c_str());
+		LOG(level::DEBUG,"view::filebrowser: save-path is '%s'",save_path.c_str());
 
 		dir = save_path;
 	}
 
-	LOG(LOG_DEBUG, "view::filebrowser: chdir(%s)", dir.c_str());
+	LOG(level::DEBUG, "view::filebrowser: chdir(%s)", dir.c_str());
 
 	::chdir(dir.c_str());
 	::getcwd(cwdtmp,sizeof(cwdtmp));

@@ -122,7 +122,7 @@ void htmlrenderer::render(
 				try {
 					link = xpp.get_attribute_value("href");
 				} catch (const std::invalid_argument& ) {
-					LOG(LOG_WARN,"htmlrenderer::render: found a tag with no href attribute");
+					LOG(level::WARN,"htmlrenderer::render: found a tag with no href attribute");
 					link = "";
 				}
 				if (link.length() > 0) {
@@ -150,7 +150,7 @@ void htmlrenderer::render(
 				try {
 					type = xpp.get_attribute_value("type");
 				} catch (const std::invalid_argument& ) {
-					LOG(LOG_WARN, "htmlrenderer::render: found embed object without type attribute");
+					LOG(level::WARN, "htmlrenderer::render: found embed object without type attribute");
 					type = "";
 				}
 				if (type == "application/x-shockwave-flash") {
@@ -158,7 +158,7 @@ void htmlrenderer::render(
 					try {
 						link = xpp.get_attribute_value("src");
 					} catch (const std::invalid_argument& ) {
-						LOG(LOG_WARN, "htmlrenderer::render: found embed object without src attribute");
+						LOG(level::WARN, "htmlrenderer::render: found embed object without src attribute");
 						link = "";
 					}
 					if (link.length() > 0) {
@@ -190,7 +190,7 @@ void htmlrenderer::render(
 				try {
 					imgurl = xpp.get_attribute_value("src");
 				} catch (const std::invalid_argument& ) {
-					LOG(LOG_WARN,"htmlrenderer::render: found img tag with no src attribute");
+					LOG(level::WARN,"htmlrenderer::render: found img tag with no src attribute");
 					imgurl = "";
 				}
 				try {
@@ -829,7 +829,7 @@ void htmlrenderer::render_table(
 			for(size_t cell=0; cell < table.rows[row].cells.size(); cell++) {
 				size_t cell_width = 0;
 				if (idx < table.rows[row].cells[cell].text.size()) {
-					LOG(LOG_DEBUG, "row = %d cell = %d text = %s", row, cell, table.rows[row].cells[cell].text[idx].c_str());
+					LOG(level::DEBUG, "row = %d cell = %d text = %s", row, cell, table.rows[row].cells[cell].text[idx].c_str());
 					cell_width = utils::strwidth_stfl(table.rows[row].cells[cell].text[idx]);
 					line += table.rows[row].cells[cell].text[idx];
 				}
@@ -838,7 +838,7 @@ void htmlrenderer::render_table(
 					for(size_t ic=cell+1; ic < cell + table.rows[row].cells[cell].span; ++ic)
 						reference_width += cell_widths[ic]+1;
 				}
-				LOG(LOG_DEBUG, "cell_width = %d reference_width = %d", cell_width, reference_width);
+				LOG(level::DEBUG, "cell_width = %d reference_width = %d", cell_width, reference_width);
 				if (cell_width < reference_width) // pad, if necessary
 					line += std::string(reference_width - cell_width, ' ');
 

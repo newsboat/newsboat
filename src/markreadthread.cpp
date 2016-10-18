@@ -19,7 +19,7 @@ void markreadthread::operator()() {
 	 * like TinyTinyRSS.
 	 */
 
-	LOG(LOG_DEBUG, "markreadthread::run: inside markreadthread, marking thread as read...");
+	LOG(level::DEBUG, "markreadthread::run: inside markreadthread, marking thread as read...");
 
 	// Call the ttrss_api's update_article function as a thread.
 	_r_api->update_article( _guid, 2, _read ? 0 : 1 );

@@ -424,7 +424,7 @@ static struct {
 };
 
 std::string tagsouppullparser::decode_entity(std::string s) {
-	LOG(LOG_DEBUG, "tagsouppullparser::decode_entity: decoding '%s'...", s.c_str());
+	LOG(level::DEBUG, "tagsouppullparser::decode_entity: decoding '%s'...", s.c_str());
 	if (s.length() > 1 && s[0] == '#') {
 		std::string result;
 		unsigned int wc;
@@ -473,7 +473,7 @@ std::string tagsouppullparser::decode_entity(std::string s) {
 			mbc[pos] = '\0';
 			result.append(mbc);
 		}
-		LOG(LOG_DEBUG,"tagsouppullparser::decode_entity: wc = %u pos = %d mbc = '%s'", wc, pos, mbc);
+		LOG(level::DEBUG,"tagsouppullparser::decode_entity: wc = %u pos = %d mbc = '%s'", wc, pos, mbc);
 		return result;
 	} else {
 		for (unsigned int i=0; entity_table[i].entity; ++i) {
@@ -493,7 +493,7 @@ void tagsouppullparser::parse_tag(const std::string& tagstr) {
 	std::string::size_type pos = tagstr.find_first_of(" \r\n\t", last_pos);
 	unsigned int count = 0;
 
-	LOG(LOG_DEBUG, "parse_tag: parsing '%s', pos = %d, last_pos = %d", tagstr.c_str(), pos, last_pos);
+	LOG(level::DEBUG, "parse_tag: parsing '%s', pos = %d, last_pos = %d", tagstr.c_str(), pos, last_pos);
 
 	while (last_pos != std::string::npos) {
 		if (count == 0) {
@@ -505,31 +505,31 @@ void tagsouppullparser::parse_tag(const std::string& tagstr) {
 				// a kludge for <br/>
 				text.pop_back();
 			}
-			LOG(LOG_DEBUG, "parse_tag: tag name = %s", text.c_str());
+			LOG(level::DEBUG, "parse_tag: tag name = %s", text.c_str());
 		} else {
 			pos = tagstr.find_first_of("= ", last_pos);
 			std::string attr;
 			if (pos != std::string::npos) {
-				LOG(LOG_DEBUG, "parse_tag: found = or space");
+				LOG(level::DEBUG, "parse_tag: found = or space");
 				if (tagstr[pos] == '=') {
-					LOG(LOG_DEBUG, "parse_tag: found =");
+					LOG(level::DEBUG, "parse_tag: found =");
 					if (tagstr[pos+1] == '\'' || tagstr[pos+1] == '"') {
 						pos = tagstr.find_first_of(tagstr[pos+1], pos+2);
 						if (pos != std::string::npos)
 							pos++;
-						LOG(LOG_DEBUG, "parse_tag: finding ending quote, pos = %d", pos);
+						LOG(level::DEBUG, "parse_tag: finding ending quote, pos = %d", pos);
 					} else {
 						pos = tagstr.find_first_of(" \r\n\t", pos+1);
-						LOG(LOG_DEBUG, "parse_tag: finding end of unquoted attribute");
+						LOG(level::DEBUG, "parse_tag: finding end of unquoted attribute");
 					}
 				}
 			}
 			if (pos == std::string::npos) {
-				LOG(LOG_DEBUG, "parse_tag: found end of string, correcting end position");
+				LOG(level::DEBUG, "parse_tag: found end of string, correcting end position");
 				pos = tagstr.length();
 			}
 			attr = tagstr.substr(last_pos, pos - last_pos);
-			LOG(LOG_DEBUG, "parse_tag: extracted attribute is '%s', adding", attr.c_str());
+			LOG(level::DEBUG, "parse_tag: extracted attribute is '%s', adding", attr.c_str());
 			add_attribute(attr);
 		}
 		last_pos = tagstr.find_first_not_of(" \r\n\t", pos);

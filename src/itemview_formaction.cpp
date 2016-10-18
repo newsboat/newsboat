@@ -170,7 +170,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 
 	switch (op) {
 	case OP_TOGGLESOURCEVIEW:
-		LOG(LOG_INFO, "view::run_itemview: toggling source view");
+		LOG(level::INFO, "view::run_itemview: toggling source view");
 		show_source = !show_source;
 		do_redraw = true;
 		break;
@@ -184,7 +184,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 	}
 	break;
 	case OP_SAVE: {
-		LOG(LOG_INFO, "view::run_itemview: saving article");
+		LOG(level::INFO, "view::run_itemview: saving article");
 		std::string filename;
 		if (automatic) {
 			if (args->size() > 0)
@@ -205,7 +205,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 	}
 	break;
 	case OP_OPENINBROWSER:
-		LOG(LOG_INFO, "view::run_itemview: starting browser");
+		LOG(level::INFO, "view::run_itemview: starting browser");
 		v->set_status(_("Starting browser..."));
 		v->open_in_browser(item->link());
 		v->set_status("");
@@ -265,7 +265,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 		break;
 	case OP_SHOWURLS: {
 		std::string urlviewer = v->get_cfg()->get_configvalue("external-url-viewer");
-		LOG(LOG_DEBUG, "view::run_itemview: showing URLs");
+		LOG(level::DEBUG, "view::run_itemview: showing URLs");
 		if (urlviewer == "") {
 			if (links.size() > 0) {
 				v->push_urlview(links, feed);
@@ -280,12 +280,12 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 	}
 	break;
 	case OP_DELETE:
-		LOG(LOG_INFO, "view::run_itemview: deleting current article");
+		LOG(level::INFO, "view::run_itemview: deleting current article");
 		item->set_deleted(true);
 		v->get_ctrl()->mark_deleted(guid, true);
 	/* fall-through! */
 	case OP_NEXTUNREAD:
-		LOG(LOG_INFO, "view::run_itemview: jumping to next unread article");
+		LOG(level::INFO, "view::run_itemview: jumping to next unread article");
 		if (v->get_next_unread(itemlist.get(), this)) {
 			do_redraw = true;
 		} else {
@@ -294,7 +294,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 		}
 		break;
 	case OP_PREVUNREAD:
-		LOG(LOG_INFO, "view::run_itemview: jumping to previous unread article");
+		LOG(level::INFO, "view::run_itemview: jumping to previous unread article");
 		if (v->get_previous_unread(itemlist.get(), this)) {
 			do_redraw = true;
 		} else {
@@ -303,7 +303,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 		}
 		break;
 	case OP_NEXT:
-		LOG(LOG_INFO, "view::run_itemview: jumping to next article");
+		LOG(level::INFO, "view::run_itemview: jumping to next article");
 		if (v->get_next(itemlist.get(), this)) {
 			do_redraw = true;
 		} else {
@@ -312,7 +312,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 		}
 		break;
 	case OP_PREV:
-		LOG(LOG_INFO, "view::run_itemview: jumping to previous article");
+		LOG(level::INFO, "view::run_itemview: jumping to previous article");
 		if (v->get_previous(itemlist.get(), this)) {
 			do_redraw = true;
 		} else {
@@ -321,7 +321,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 		}
 		break;
 	case OP_RANDOMUNREAD:
-		LOG(LOG_INFO, "view::run_itemview: jumping to random unread article");
+		LOG(level::INFO, "view::run_itemview: jumping to random unread article");
 		if (v->get_random_unread(itemlist.get(), this)) {
 			do_redraw = true;
 		} else {
@@ -330,7 +330,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 		}
 		break;
 	case OP_TOGGLEITEMREAD:
-		LOG(LOG_INFO, "view::run_itemview: setting unread and quitting");
+		LOG(level::INFO, "view::run_itemview: setting unread and quitting");
 		v->set_status(_("Toggling read flag for article..."));
 		try {
 			item->set_unread(true);
@@ -342,11 +342,11 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 		quit = true;
 		break;
 	case OP_QUIT:
-		LOG(LOG_INFO, "view::run_itemview: quitting");
+		LOG(level::INFO, "view::run_itemview: quitting");
 		quit = true;
 		break;
 	case OP_HARDQUIT:
-		LOG(LOG_INFO, "view::run_itemview: hard quitting");
+		LOG(level::INFO, "view::run_itemview: hard quitting");
 		hardquit = true;
 		break;
 	case OP_HELP:
@@ -363,7 +363,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 	case OP_9:
 	case OP_0: {
 		unsigned int idx = op - OP_1;
-		LOG(LOG_DEBUG, "itemview::run: OP_1 = %d op = %d idx = %u", OP_1, op, idx);
+		LOG(level::DEBUG, "itemview::run: OP_1 = %d op = %d idx = %u", OP_1, op, idx);
 		if (idx < links.size()) {
 			v->set_status(_("Starting browser..."));
 			v->open_in_browser(links[idx].first);
@@ -535,8 +535,8 @@ std::vector<std::pair<LineType, std::string>>
 		argv[1] = const_cast<char *>("-c");
 		argv[2] = const_cast<char *>(renderer.c_str());
 		argv[3] = nullptr;
-		LOG(LOG_DEBUG, "itemview_formaction::render_html: source = %s", source.c_str());
-		LOG(LOG_DEBUG, "itemview_formaction::render_html: html-renderer = %s", argv[2]);
+		LOG(level::DEBUG, "itemview_formaction::render_html: source = %s", source.c_str());
+		LOG(level::DEBUG, "itemview_formaction::render_html: html-renderer = %s", argv[2]);
 
 		std::string output = utils::run_program(argv, source);
 		std::istringstream is(output);
@@ -574,7 +574,7 @@ void itemview_formaction::update_percent() {
 		else
 			percent = 0;
 
-		LOG(LOG_DEBUG, "itemview_formaction::update_percent: offset = %u num_lines = %u percent = %u", offset, num_lines, percent);
+		LOG(level::DEBUG, "itemview_formaction::update_percent: offset = %u num_lines = %u percent = %u", offset, num_lines, percent);
 
 		if (offset == 0 || percent == 0) {
 			f->set("percent", _("Top"));
@@ -602,7 +602,7 @@ void itemview_formaction::do_search() {
 
 	searchhistory.add_line(searchphrase);
 
-	LOG(LOG_DEBUG, "itemview_formaction::do_search: searchphrase = %s", searchphrase.c_str());
+	LOG(level::DEBUG, "itemview_formaction::do_search: searchphrase = %s", searchphrase.c_str());
 
 	highlight_text(searchphrase);
 }
@@ -618,14 +618,14 @@ void itemview_formaction::highlight_text(const std::string& searchphrase) {
 	try {
 		rxman->handle_action("highlight", params);
 
-		LOG(LOG_DEBUG, "itemview_formaction::highlight_text: configuration manipulation was successful");
+		LOG(level::DEBUG, "itemview_formaction::highlight_text: configuration manipulation was successful");
 
 		set_regexmanager(rxman);
 
 		in_search = true;
 		do_redraw = true;
 	} catch (const confighandlerexception& e) {
-		LOG(LOG_ERROR, "itemview_formaction::highlight_text: handle_action failed, error = %s", e.what());
+		LOG(level::ERROR, "itemview_formaction::highlight_text: handle_action failed, error = %s", e.what());
 		v->show_error(_("Error: invalid regular expression!"));
 	}
 }

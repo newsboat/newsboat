@@ -236,7 +236,7 @@ class rss_feed : public matchable {
 		}
 
 		inline void clear_items() {
-			LOG(LOG_DEBUG, "rss_feed: clearing items");
+			LOG(level::DEBUG, "rss_feed: clearing items");
 			items_.clear();
 			items_guid_map.clear();
 		}

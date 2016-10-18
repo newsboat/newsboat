@@ -26,7 +26,7 @@ void colormanager::register_commands(configparser& cfgparser) {
 }
 
 void colormanager::handle_action(const std::string& action, const std::vector<std::string>& params) {
-	LOG(LOG_DEBUG, "colormanager::handle_action(%s,...) was called",action.c_str());
+	LOG(level::DEBUG, "colormanager::handle_action(%s,...) was called",action.c_str());
 	if (action == "color") {
 		if (params.size() < 3) {
 			throw confighandlerexception(action_handler_status::TOO_FEW_PARAMS);
@@ -105,7 +105,7 @@ void colormanager::set_pb_colors(podbeuter::pb_view * v) {
 			colorattr.append(attr);
 		}
 
-		LOG(LOG_DEBUG,"colormanager::set_pb_colors: %s %s\n",fgcit->first.c_str(), colorattr.c_str());
+		LOG(level::DEBUG,"colormanager::set_pb_colors: %s %s\n",fgcit->first.c_str(), colorattr.c_str());
 
 		v->dllist_form.set(fgcit->first, colorattr);
 		v->help_form.set(fgcit->first, colorattr);

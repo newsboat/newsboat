@@ -52,7 +52,7 @@ bool configparser::parse(const std::string& filename, bool double_include) {
 	 *   - if an error happens, react accordingly.
 	 */
 	if (!double_include && included_files.find(filename) != included_files.end()) {
-		LOG(LOG_WARN, "configparser::parse: file %s has already been included", filename.c_str());
+		LOG(level::WARN, "configparser::parse: file %s has already been included", filename.c_str());
 		return true;
 	}
 	included_files.insert(included_files.begin(), filename);
@@ -62,11 +62,11 @@ bool configparser::parse(const std::string& filename, bool double_include) {
 	std::string line;
 	getline(f,line);
 	if (!f.is_open()) {
-		LOG(LOG_WARN, "configparser::parse: file %s couldn't be opened", filename.c_str());
+		LOG(level::WARN, "configparser::parse: file %s couldn't be opened", filename.c_str());
 		return false;
 	}
 	while (f.is_open() && !f.eof()) {
-		LOG(LOG_DEBUG,"configparser::parse: tokenizing %s",line.c_str());
+		LOG(level::DEBUG,"configparser::parse: tokenizing %s",line.c_str());
 		std::vector<std::string> tokens = utils::tokenize_quoted(line);
 		if (!tokens.empty()) {
 			std::string cmd = tokens[0];

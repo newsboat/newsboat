@@ -92,7 +92,7 @@ std::string ttrss_api::retrieve_sid() {
 
 	json_object_put(content);
 
-	LOG(LOG_DEBUG, "ttrss_api::retrieve_sid: sid = '%s'", sid.c_str());
+	LOG(level::DEBUG, "ttrss_api::retrieve_sid: sid = '%s'", sid.c_str());
 
 	return sid;
 }
@@ -112,25 +112,25 @@ json_object* ttrss_api::run_op(const std::string& op,
 
 	std::string result = utils::retrieve_url(url, cfg, auth_info_ptr, &req_data);
 
-	LOG(LOG_DEBUG, "ttrss_api::run_op(%s,...): post=%s reply = %s", op.c_str(), req_data.c_str(), result.c_str());
+	LOG(level::DEBUG, "ttrss_api::run_op(%s,...): post=%s reply = %s", op.c_str(), req_data.c_str(), result.c_str());
 
 	json_object * reply = json_tokener_parse(result.c_str());
 	if (reply == nullptr) {
-		LOG(LOG_ERROR, "ttrss_api::run_op: reply failed to parse: %s", result.c_str());
+		LOG(level::ERROR, "ttrss_api::run_op: reply failed to parse: %s", result.c_str());
 		return nullptr;
 	}
 
 	json_object* status {};
 	json_object_object_get_ex(reply, "status", &status);
 	if (status == nullptr) {
-		LOG(LOG_ERROR, "ttrss_api::run_op: no status code");
+		LOG(level::ERROR, "ttrss_api::run_op: no status code");
 		return nullptr;
 	}
 
 	json_object* content {};
 	json_object_object_get_ex(reply, "content", &content);
 	if (content == nullptr) {
-		LOG(LOG_ERROR, "ttrss_api::run_op: no content part in answer from server");
+		LOG(level::ERROR, "ttrss_api::run_op: no content part in answer from server");
 		return nullptr;
 	}
 
@@ -250,13 +250,13 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 		return f;
 
 	if (json_object_get_type(content) != json_type_array) {
-		LOG(LOG_ERROR, "ttrss_api::fetch_feed: content is not an array");
+		LOG(level::ERROR, "ttrss_api::fetch_feed: content is not an array");
 		return f;
 	}
 
 	struct array_list * items = json_object_get_array(content);
 	int items_size = array_list_length(items);
-	LOG(LOG_DEBUG, "ttrss_api::fetch_feed: %d items", items_size);
+	LOG(level::DEBUG, "ttrss_api::fetch_feed: %d items", items_size);
 
 	for (int i=0; i<items_size; i++) {
 		json_object* item_obj = (json_object*)array_list_get_idx(items, i);
@@ -353,7 +353,7 @@ void ttrss_api::fetch_feeds_per_category(
 
 		json_object_object_get_ex(cat, "title", &cat_title_obj);
 		cat_name = json_object_get_string(cat_title_obj);
-		LOG(LOG_DEBUG, "ttrss_api::fetch_feeds_per_category: id = %d title = %s", cat_id, cat_name);
+		LOG(level::DEBUG, "ttrss_api::fetch_feeds_per_category: id = %d title = %s", cat_id, cat_name);
 	} else {
 		// As uncategorized is a category itself (id = 0) and the default value
 		// for a getFeeds is id = 0, the feeds in uncategorized will appear twice

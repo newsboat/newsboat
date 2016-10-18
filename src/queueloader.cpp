@@ -23,7 +23,7 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 
 	for (auto dl : downloads) {
 		if (dl.status() == dlstatus::DOWNLOADING) { // we are not allowed to reload if a download is in progress!
-			LOG(LOG_INFO, "queueloader::reload: aborting reload due to dlstatus::DOWNLOADING status");
+			LOG(level::INFO, "queueloader::reload: aborting reload due to dlstatus::DOWNLOADING status");
 			return;
 		}
 		switch (dl.status()) {
@@ -32,13 +32,13 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 		case dlstatus::FAILED:
 		case dlstatus::ALREADY_DOWNLOADED:
 		case dlstatus::READY:
-			LOG(LOG_DEBUG, "queueloader::reload: storing %s to new vector", dl.url());
+			LOG(level::DEBUG, "queueloader::reload: storing %s to new vector", dl.url());
 			dltemp.push_back(dl);
 			break;
 		case dlstatus::PLAYED:
 		case dlstatus::FINISHED:
 			if (!remove_unplayed) {
-				LOG(LOG_DEBUG, "queueloader::reload: storing %s to new vector", dl.url());
+				LOG(level::DEBUG, "queueloader::reload: storing %s to new vector", dl.url());
 				dltemp.push_back(dl);
 			}
 			break;
@@ -53,13 +53,13 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 		do {
 			getline(f, line);
 			if (!f.eof() && line.length() > 0) {
-				LOG(LOG_DEBUG, "queueloader::reload: loaded `%s' from queue file", line.c_str());
+				LOG(level::DEBUG, "queueloader::reload: loaded `%s' from queue file", line.c_str());
 				std::vector<std::string> fields = utils::tokenize_quoted(line);
 				bool url_found = false;
 
 				for (auto dl : dltemp) {
 					if (fields[0] == dl.url()) {
-						LOG(LOG_INFO, "queueloader::reload: found `%s' in old vector", fields[0].c_str());
+						LOG(level::INFO, "queueloader::reload: found `%s' in old vector", fields[0].c_str());
 						url_found = true;
 						break;
 					}
@@ -67,14 +67,14 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 
 				for (auto dl : downloads) {
 					if (fields[0] == dl.url()) {
-						LOG(LOG_INFO, "queueloader::reload: found `%s' in new vector", line.c_str());
+						LOG(level::INFO, "queueloader::reload: found `%s' in new vector", line.c_str());
 						url_found = true;
 						break;
 					}
 				}
 
 				if (!url_found) {
-					LOG(LOG_INFO, "queueloader::reload: found `%s' nowhere -> storing to new vector", line.c_str());
+					LOG(level::INFO, "queueloader::reload: found `%s' nowhere -> storing to new vector", line.c_str());
 					download d(ctrl);
 					std::string fn;
 					if (fields.size() == 1)
@@ -83,7 +83,7 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 						fn = fields[1];
 					d.set_filename(fn);
 					if (access(fn.c_str(), F_OK)==0) {
-						LOG(LOG_INFO, "queueloader::reload: found `%s' on file system -> mark as already downloaded", fn.c_str());
+						LOG(level::INFO, "queueloader::reload: found `%s' on file system -> mark as already downloaded", fn.c_str());
 						if (fields.size() >= 3) {
 							if (fields[2] == "downloaded")
 								d.set_status(dlstatus::READY);

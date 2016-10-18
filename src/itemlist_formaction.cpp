@@ -42,7 +42,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 
 	switch (op) {
 	case OP_OPEN: {
-		LOG(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
+		LOG(level::INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			// no need to mark item as read, the itemview already do that
 			old_itempos = itempos;
@@ -77,7 +77,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 	}
 	break;
 	case OP_OPENBROWSER_AND_MARK: {
-		LOG(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
+		LOG(level::INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
 				visible_items[itempos].first->set_unread(false);
@@ -98,7 +98,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 	}
 	break;
 	case OP_OPENINBROWSER: {
-		LOG(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
+		LOG(level::INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
 				v->open_in_browser(visible_items[itempos].first->link());
@@ -110,7 +110,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 	}
 	break;
 	case OP_TOGGLEITEMREAD: {
-		LOG(LOG_INFO, "itemlist_formaction: toggling item read at pos `%s'", itemposname.c_str());
+		LOG(level::INFO, "itemlist_formaction: toggling item read at pos `%s'", itemposname.c_str());
 		if (itemposname.length() > 0) {
 			v->set_status(_("Toggling read flag for article..."));
 			try {
@@ -172,7 +172,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		}
 		break;
 	case OP_BOOKMARK: {
-		LOG(LOG_INFO, "itemlist_formaction: bookmarking item at pos `%s'", itemposname.c_str());
+		LOG(level::INFO, "itemlist_formaction: bookmarking item at pos `%s'", itemposname.c_str());
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
 				if (automatic) {
@@ -216,7 +216,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 	}
 	break;
 	case OP_SAVE: {
-		LOG(LOG_INFO, "itemlist_formaction: saving item at pos `%s'", itemposname.c_str());
+		LOG(level::INFO, "itemlist_formaction: saving item at pos `%s'", itemposname.c_str());
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			std::string filename ;
 			if (automatic) {
@@ -237,7 +237,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		break;
 	case OP_RELOAD:
 		if (!show_searchresult) {
-			LOG(LOG_INFO, "itemlist_formaction: reloading current feed");
+			LOG(level::INFO, "itemlist_formaction: reloading current feed");
 			v->get_ctrl()->reload(pos);
 			invalidate(InvalidationMode::COMPLETE);
 		} else {
@@ -245,20 +245,20 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		}
 		break;
 	case OP_QUIT:
-		LOG(LOG_INFO, "itemlist_formaction: quitting");
+		LOG(level::INFO, "itemlist_formaction: quitting");
 		v->feedlist_mark_pos_if_visible(pos);
 		feed->purge_deleted_items();
 		feed->unload();
 		quit = true;
 		break;
 	case OP_HARDQUIT:
-		LOG(LOG_INFO, "itemlist_formaction: hard quitting");
+		LOG(level::INFO, "itemlist_formaction: hard quitting");
 		v->feedlist_mark_pos_if_visible(pos);
 		feed->purge_deleted_items();
 		hardquit = true;
 		break;
 	case OP_NEXTUNREAD:
-		LOG(LOG_INFO, "itemlist_formaction: jumping to next unread item");
+		LOG(level::INFO, "itemlist_formaction: jumping to next unread item");
 		if (!jump_to_next_unread_item(false)) {
 			if (!v->get_next_unread(this)) {
 				v->show_error(_("No unread items."));
@@ -266,7 +266,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		}
 		break;
 	case OP_PREVUNREAD:
-		LOG(LOG_INFO, "itemlist_formaction: jumping to previous unread item");
+		LOG(level::INFO, "itemlist_formaction: jumping to previous unread item");
 		if (!jump_to_previous_unread_item(false)) {
 			if (!v->get_previous_unread(this)) {
 				v->show_error(_("No unread items."));
@@ -274,7 +274,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		}
 		break;
 	case OP_NEXT:
-		LOG(LOG_INFO, "itemlist_formaction: jumping to next item");
+		LOG(level::INFO, "itemlist_formaction: jumping to next item");
 		if (!jump_to_next_item(false)) {
 			if (!v->get_next(this)) {
 				v->show_error(_("Already on last item."));
@@ -282,7 +282,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		}
 		break;
 	case OP_PREV:
-		LOG(LOG_INFO, "itemlist_formaction: jumping to previous item");
+		LOG(level::INFO, "itemlist_formaction: jumping to previous item");
 		if (!jump_to_previous_item(false)) {
 			if (!v->get_previous(this)) {
 				v->show_error(_("Already on first item."));
@@ -317,7 +317,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		}
 		break;
 	case OP_MARKFEEDREAD:
-		LOG(LOG_INFO, "itemlist_formaction: marking feed read");
+		LOG(level::INFO, "itemlist_formaction: marking feed read");
 		v->set_status(_("Marking feed read..."));
 		try {
 			if (feed->rssurl() != "") {
@@ -325,7 +325,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			} else {
 				{
 					std::lock_guard<std::mutex> lock(feed->item_mutex);
-					LOG(LOG_DEBUG, "itemlist_formaction: oh, it looks like I'm in a pseudo-feed (search result, query feed)");
+					LOG(level::DEBUG, "itemlist_formaction: oh, it looks like I'm in a pseudo-feed (search result, query feed)");
 					for (auto item : feed->items()) {
 						item->set_unread_nowrite_notify(false, true); // TODO: do we need to call mark_article_read here, too?
 					}
@@ -342,7 +342,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		break;
 	case OP_TOGGLESHOWREAD:
 		m.parse(FILTER_UNREAD_ITEMS);
-		LOG(LOG_DEBUG, "itemlist_formaction: toggling show-read-articles");
+		LOG(level::DEBUG, "itemlist_formaction: toggling show-read-articles");
 		if (v->get_cfg()->get_configvalue_as_bool("show-read-articles")) {
 			v->get_cfg()->set_configvalue("show-read-articles", "no");
 			apply_filter = true;
@@ -395,7 +395,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					newfilter = (*args)[0];
 			} else {
 				newfilter = v->select_filter(v->get_ctrl()->get_filters().get_filters());
-				LOG(LOG_DEBUG,"itemlist_formaction::run: newfilters = %s", newfilter.c_str());
+				LOG(level::DEBUG,"itemlist_formaction::run: newfilters = %s", newfilter.c_str());
 			}
 			if (newfilter != "") {
 				filterhistory.add_line(newfilter);
@@ -562,7 +562,7 @@ void itemlist_formaction::qna_end_editflags() {
 		visible_items[itempos].first->set_flags(qna_responses[0]);
 		v->get_ctrl()->update_flags(visible_items[itempos].first);
 		v->set_status(_("Flags updated."));
-		LOG(LOG_DEBUG, "itemlist_formaction::finished_qna: updated flags");
+		LOG(level::DEBUG, "itemlist_formaction::finished_qna: updated flags");
 		invalidate(itempos);
 	}
 }
@@ -628,7 +628,7 @@ void itemlist_formaction::do_update_visible_items() {
 		i++;
 	}
 
-	LOG(LOG_DEBUG, "itemlist_formaction::do_update_visible_items: size = %u", visible_items.size());
+	LOG(level::DEBUG, "itemlist_formaction::do_update_visible_items: size = %u", visible_items.size());
 
 	visible_items = new_visible_items;
 }
@@ -691,7 +691,7 @@ void itemlist_formaction::prepare() {
 			}
 			invalidated_itempos.clear();
 		} else {
-			LOG(LOG_ERROR, "invalidation_mode is neither COMPLETE nor PARTIAL");
+			LOG(level::ERROR, "invalidation_mode is neither COMPLETE nor PARTIAL");
 		}
 
 		f->modify("items", "replace_inner", listfmt.format_list(rxman, "articlelist"));
@@ -778,7 +778,7 @@ bool itemlist_formaction::jump_to_previous_unread_item(bool start_with_last) {
 	std::istringstream is(f->get("itempos"));
 	is >> itempos;
 	for (int i=(start_with_last?itempos:(itempos-1)); i>=0; --i) {
-		LOG(LOG_DEBUG, "itemlist_formaction::jump_to_previous_unread_item: visible_items[%u] unread = %s", i, visible_items[i].first->unread() ? "true" : "false");
+		LOG(level::DEBUG, "itemlist_formaction::jump_to_previous_unread_item: visible_items[%u] unread = %s", i, visible_items[i].first->unread() ? "true" : "false");
 		if (visible_items[i].first->unread()) {
 			f->set("itempos", utils::to_string<unsigned int>(i));
 			return true;
@@ -816,16 +816,16 @@ bool itemlist_formaction::jump_to_random_unread_item() {
 
 bool itemlist_formaction::jump_to_next_unread_item(bool start_with_first) {
 	unsigned int itempos = utils::to_u(f->get("itempos"));
-	LOG(LOG_DEBUG, "itemlist_formaction::jump_to_next_unread_item: itempos = %u visible_items.size = %u", itempos, visible_items.size());
+	LOG(level::DEBUG, "itemlist_formaction::jump_to_next_unread_item: itempos = %u visible_items.size = %u", itempos, visible_items.size());
 	for (unsigned int i=(start_with_first?itempos:(itempos+1)); i<visible_items.size(); ++i) {
-		LOG(LOG_DEBUG, "itemlist_formaction::jump_to_next_unread_item: i = %u", i);
+		LOG(level::DEBUG, "itemlist_formaction::jump_to_next_unread_item: i = %u", i);
 		if (visible_items[i].first->unread()) {
 			f->set("itempos", utils::to_string<unsigned int>(i));
 			return true;
 		}
 	}
 	for (unsigned int i=0; i<=itempos&&i<visible_items.size(); ++i) {
-		LOG(LOG_DEBUG, "itemlist_formaction::jump_to_next_unread_item: i = %u", i);
+		LOG(level::DEBUG, "itemlist_formaction::jump_to_next_unread_item: i = %u", i);
 		if (visible_items[i].first->unread()) {
 			f->set("itempos", utils::to_string<unsigned int>(i));
 			return true;
@@ -841,7 +841,7 @@ bool itemlist_formaction::jump_to_previous_item(bool start_with_last) {
 
 	int i=(start_with_last?itempos:(itempos-1));
 	if (i>=0) {
-		LOG(LOG_DEBUG, "itemlist_formaction::jump_to_previous_item: visible_items[%u]", i);
+		LOG(level::DEBUG, "itemlist_formaction::jump_to_previous_item: visible_items[%u]", i);
 		f->set("itempos", utils::to_string<int>(i));
 		return true;
 	}
@@ -850,10 +850,10 @@ bool itemlist_formaction::jump_to_previous_item(bool start_with_last) {
 
 bool itemlist_formaction::jump_to_next_item(bool start_with_first) {
 	unsigned int itempos = utils::to_u(f->get("itempos"));
-	LOG(LOG_DEBUG, "itemlist_formaction::jump_to_next_item: itempos = %u visible_items.size = %u", itempos, visible_items.size());
+	LOG(level::DEBUG, "itemlist_formaction::jump_to_next_item: itempos = %u visible_items.size = %u", itempos, visible_items.size());
 	unsigned int i=(start_with_first?itempos:(itempos+1));
 	if (i<visible_items.size()) {
-		LOG(LOG_DEBUG, "itemlist_formaction::jump_to_next_item: i = %u", i);
+		LOG(level::DEBUG, "itemlist_formaction::jump_to_next_item: i = %u", i);
 		f->set("itempos", utils::to_string<unsigned int>(i));
 		return true;
 	}
@@ -904,7 +904,7 @@ void itemlist_formaction::handle_cmdline(const std::string& cmd) {
 		if (tokens[0] == "save" && tokens.size() >= 2) {
 			std::string filename = utils::resolve_tilde(tokens[1]);
 			std::string itemposname = f->get("itempos");
-			LOG(LOG_INFO, "itemlist_formaction::handle_cmdline: saving item at pos `%s' to `%s'", itemposname.c_str(), filename.c_str());
+			LOG(level::INFO, "itemlist_formaction::handle_cmdline: saving item at pos `%s' to `%s'", itemposname.c_str(), filename.c_str());
 			if (itemposname.length() > 0) {
 				unsigned int itempos = utils::to_u(itemposname);
 				save_article(filename, visible_items[itempos].first);
@@ -1017,7 +1017,7 @@ void itemlist_formaction::prepare_set_filterpos() {
 }
 
 void itemlist_formaction::set_feed(std::shared_ptr<rss_feed> fd) {
-	LOG(LOG_DEBUG, "itemlist_formaction::set_feed: fd pointer = %p title = `%s'", fd.get(), fd->title().c_str());
+	LOG(level::DEBUG, "itemlist_formaction::set_feed: fd pointer = %p title = `%s'", fd.get(), fd->title().c_str());
 	feed = fd;
 	feed->load();
 	invalidate(InvalidationMode::COMPLETE);

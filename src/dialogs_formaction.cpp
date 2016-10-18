@@ -30,7 +30,7 @@ void dialogs_formaction::prepare() {
 
 		unsigned int i = 1;
 		for (auto fa : v->get_formaction_names()) {
-			LOG(LOG_DEBUG, "dialogs_formaction::prepare: p1 = %p p2 = %p", v->get_formaction(fa.first).get(), get_parent_formaction().get());
+			LOG(level::DEBUG, "dialogs_formaction::prepare: p1 = %p p2 = %p", v->get_formaction(fa.first).get(), get_parent_formaction().get());
 			listfmt.add_line(utils::strprintf("%4u %s %s", i, (v->get_formaction(fa.first).get() == get_parent_formaction().get()) ? "*" : " ", fa.second.c_str()), fa.first);
 			i++;
 		}

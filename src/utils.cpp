@@ -195,7 +195,7 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str, std::string 
 	std::string::size_type pos = str.find_first_of(delimiters, last_pos);
 	unsigned int i;
 
-	LOG(LOG_DEBUG,"utils::tokenize_nl: last_pos = %u",last_pos);
+	LOG(level::DEBUG,"utils::tokenize_nl: last_pos = %u",last_pos);
 	if (last_pos != std::string::npos) {
 		for (i=0; i<last_pos; ++i) {
 			tokens.push_back(std::string("\n"));
@@ -204,9 +204,9 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str, std::string 
 
 	while (std::string::npos != pos || std::string::npos != last_pos) {
 		tokens.push_back(str.substr(last_pos, pos - last_pos));
-		LOG(LOG_DEBUG,"utils::tokenize_nl: substr = %s", str.substr(last_pos, pos - last_pos).c_str());
+		LOG(level::DEBUG,"utils::tokenize_nl: substr = %s", str.substr(last_pos, pos - last_pos).c_str());
 		last_pos = str.find_first_not_of(delimiters, pos);
-		LOG(LOG_DEBUG,"utils::tokenize_nl: pos - last_pos = %u", last_pos - pos);
+		LOG(level::DEBUG,"utils::tokenize_nl: pos - last_pos = %u", last_pos - pos);
 		for (i=0; last_pos != std::string::npos && pos != std::string::npos && i<(last_pos - pos); ++i) {
 			tokens.push_back(std::string("\n"));
 		}
@@ -217,7 +217,7 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str, std::string 
 }
 
 void utils::remove_fs_lock(const std::string& lock_file) {
-	LOG(LOG_DEBUG, "utils::remove_fs_lock: removed lockfile %s", lock_file.c_str());
+	LOG(level::DEBUG, "utils::remove_fs_lock: removed lockfile %s", lock_file.c_str());
 	::unlink(lock_file.c_str());
 }
 
@@ -226,7 +226,7 @@ bool utils::try_fs_lock(const std::string& lock_file, pid_t & pid) {
 	// pid == 0 indicates that something went majorly wrong during locking
 	pid = 0;
 
-	LOG(LOG_DEBUG, "utils::try_fs_lock: trying to lock %s", lock_file.c_str());
+	LOG(level::DEBUG, "utils::try_fs_lock: trying to lock %s", lock_file.c_str());
 
 	// first, we open (and possibly create) the lock file
 	fd = ::open(lock_file.c_str(), O_RDWR | O_CREAT, 0600);
@@ -385,7 +385,7 @@ void utils::extract_filter(const std::string& line, std::string& filter, std::st
 	filter = line.substr(pos+1, pos1 - pos - 1);
 	pos = pos1;
 	url = line.substr(pos+1, line.length() - pos);
-	LOG(LOG_DEBUG, "utils::extract_filter: %s -> filter: %s url: %s", line.c_str(), filter.c_str(), url.c_str());
+	LOG(level::DEBUG, "utils::extract_filter: %s -> filter: %s url: %s", line.c_str(), filter.c_str(), url.c_str());
 }
 
 static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp) {
@@ -417,9 +417,9 @@ std::string utils::retrieve_url(const std::string& url, configcontainer * cfgcon
 	curl_easy_cleanup(easyhandle);
 
 	if (postdata != nullptr) {
-		LOG(LOG_DEBUG, "utils::retrieve_url(%s)[%s]: %s", url.c_str(), postdata->c_str(), buf.c_str());
+		LOG(level::DEBUG, "utils::retrieve_url(%s)[%s]: %s", url.c_str(), postdata->c_str(), buf.c_str());
 	} else {
-		LOG(LOG_DEBUG, "utils::retrieve_url(%s)[-]: %s", url.c_str(), buf.c_str());
+		LOG(level::DEBUG, "utils::retrieve_url(%s)[-]: %s", url.c_str(), buf.c_str());
 	}
 
 	return buf;
@@ -438,9 +438,9 @@ void utils::run_command(const std::string& cmd, const std::string& input) {
 		dup2(fd, 0);
 		dup2(fd, 1);
 		dup2(fd, 2);
-		LOG(LOG_DEBUG, "utils::run_command: %s '%s'", cmd.c_str(), input.c_str());
+		LOG(level::DEBUG, "utils::run_command: %s '%s'", cmd.c_str(), input.c_str());
 		execlp(cmd.c_str(), cmd.c_str(), input.c_str(), nullptr);
-		LOG(LOG_DEBUG, "utils::run_command: execlp of %s failed: %s", cmd.c_str(), strerror(errno));
+		LOG(level::DEBUG, "utils::run_command: execlp of %s failed: %s", cmd.c_str(), strerror(errno));
 		exit(1);
 	}
 	default:
@@ -633,7 +633,7 @@ unsigned int utils::to_u(
 	return u;
 }
 
-scope_measure::scope_measure(const std::string& func, loglevel ll) : lvl(ll) {
+scope_measure::scope_measure(const std::string& func, level ll) : lvl(ll) {
 	funcname = func;
 	gettimeofday(&tv1, nullptr);
 }
@@ -647,7 +647,7 @@ void scope_measure::stopover(const std::string& son) {
 scope_measure::~scope_measure() {
 	gettimeofday(&tv2, nullptr);
 	unsigned long diff = (((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) - tv1.tv_usec;
-	LOG(LOG_INFO, "scope_measure: function `%s' took %lu.%06lu s", funcname.c_str(), diff / 1000000, diff % 1000000);
+	LOG(level::INFO, "scope_measure: function `%s' took %lu.%06lu s", funcname.c_str(), diff / 1000000, diff % 1000000);
 }
 
 void utils::append_escapes(std::string& str, char c) {
@@ -768,7 +768,7 @@ size_t utils::wcswidth_stfl(const std::wstring& str, size_t size) {
 
 	int width = wcswidth(str.c_str(), size);
 	if (width < 0) {
-		LOG(LOG_ERROR, "oh, oh, wcswidth just failed"); // : %ls", str.c_str());
+		LOG(level::ERROR, "oh, oh, wcswidth just failed"); // : %ls", str.c_str());
 		return str.length() - reduce_count;
 	}
 
@@ -907,7 +907,7 @@ void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
 		curl_easy_setopt(handle, CURLOPT_PROXYUSERPWD, proxyauth.c_str());
 	}
 	if (proxytype != "") {
-		LOG(LOG_DEBUG, "utils::set_common_curl_options: proxytype = %s", proxytype.c_str());
+		LOG(level::DEBUG, "utils::set_common_curl_options: proxytype = %s", proxytype.c_str());
 		curl_easy_setopt(handle, CURLOPT_PROXYTYPE, get_proxy_type(proxytype));
 	}
 
@@ -971,7 +971,7 @@ unsigned long utils::get_auth_method(const std::string& type) {
 	if (type == "anysafe")
 		return CURLAUTH_ANYSAFE;
 	if (type != "") {
-		LOG(LOG_USERERROR, "you configured an invalid proxy authentication method: %s", type.c_str());
+		LOG(level::USERERROR, "you configured an invalid proxy authentication method: %s", type.c_str());
 	}
 	return CURLAUTH_ANY;
 }
@@ -989,7 +989,7 @@ curl_proxytype utils::get_proxy_type(const std::string& type) {
 #endif
 
 	if (type != "") {
-		LOG(LOG_USERERROR, "you configured an invalid proxy type: %s", type.c_str());
+		LOG(level::USERERROR, "you configured an invalid proxy type: %s", type.c_str());
 	}
 	return CURLPROXY_HTTP;
 }
@@ -1061,14 +1061,14 @@ static int openssl_mutexes_size = 0;
 
 static void openssl_mth_locking_function(int mode, int n, const char * file, int line) {
 	if (n < 0 || n >= openssl_mutexes_size) {
-		LOG(LOG_ERROR,"openssl_mth_locking_function: index is out of bounds (called by %s:%d)", file, line);
+		LOG(level::ERROR,"openssl_mth_locking_function: index is out of bounds (called by %s:%d)", file, line);
 		return;
 	}
 	if (mode & CRYPTO_LOCK) {
-		LOG(LOG_DEBUG, "OpenSSL lock %d: %s:%d", n, file, line);
+		LOG(level::DEBUG, "OpenSSL lock %d: %s:%d", n, file, line);
 		openssl_mutexes[n].lock();
 	} else {
-		LOG(LOG_DEBUG, "OpenSSL unlock %d: %s:%d", n, file, line);
+		LOG(level::DEBUG, "OpenSSL unlock %d: %s:%d", n, file, line);
 		openssl_mutexes[n].unlock();
 	}
 }
