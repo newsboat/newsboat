@@ -312,7 +312,7 @@ std::string pb_controller::get_dlpath() {
 unsigned int pb_controller::downloads_in_progress() {
 	unsigned int count = 0;
 	for (auto dl : downloads_) {
-		if (dl.status() == DL_DOWNLOADING)
+		if (dl.status() == dlstatus::DOWNLOADING)
 			++count;
 	}
 	return count;
@@ -331,7 +331,7 @@ void pb_controller::reload_queue(bool remove_unplayed) {
 double pb_controller::get_total_kbps() {
 	double result = 0.0;
 	for (auto dl : downloads_) {
-		if (dl.status() == DL_DOWNLOADING) {
+		if (dl.status() == dlstatus::DOWNLOADING) {
 			result += dl.kbps();
 		}
 	}
@@ -341,7 +341,7 @@ double pb_controller::get_total_kbps() {
 void pb_controller::start_downloads() {
 	int dl2start = get_maxdownloads() - downloads_in_progress();
 	for (auto it=downloads_.begin(); dl2start > 0 && it!=downloads_.end(); ++it) {
-		if (it->status() == DL_QUEUED) {
+		if (it->status() == dlstatus::QUEUED) {
 			std::thread t {poddlthread(&(*it), cfg)};
 			--dl2start;
 			t.detach();

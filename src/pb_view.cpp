@@ -114,7 +114,7 @@ void pb_view::run(bool auto_download) {
 			int idx = -1;
 			os >> idx;
 			if (idx != -1) {
-				if (ctrl->downloads()[idx].status() != DL_DOWNLOADING) {
+				if (ctrl->downloads()[idx].status() != dlstatus::DOWNLOADING) {
 					std::thread t {poddlthread(&ctrl->downloads()[idx], ctrl->get_cfgcont())};
 					t.detach();
 				}
@@ -126,10 +126,10 @@ void pb_view::run(bool auto_download) {
 			int idx = -1;
 			os >> idx;
 			if (idx != -1) {
-				dlstatus_t status = ctrl->downloads()[idx].status();
-				if (status == DL_FINISHED || status == DL_PLAYED || status == DL_READY) {
+				dlstatus status = ctrl->downloads()[idx].status();
+				if (status == dlstatus::FINISHED || status == dlstatus::PLAYED || status == dlstatus::READY) {
 					ctrl->play_file(ctrl->downloads()[idx].filename());
-					ctrl->downloads()[idx].set_status(DL_PLAYED);
+					ctrl->downloads()[idx].set_status(dlstatus::PLAYED);
 				} else {
 					dllist_form.set("msg", _("Error: download needs to be finished before the file can be played."));
 				}
@@ -141,9 +141,9 @@ void pb_view::run(bool auto_download) {
 			int idx = -1;
 			os >> idx;
 			if (idx != -1) {
-				dlstatus_t status = ctrl->downloads()[idx].status();
-				if ( status == DL_PLAYED ) {
-					ctrl->downloads()[idx].set_status(DL_FINISHED);
+				dlstatus status = ctrl->downloads()[idx].status();
+				if ( status == dlstatus::PLAYED ) {
+					ctrl->downloads()[idx].set_status(dlstatus::FINISHED);
 				}
 			}
 		}
@@ -153,8 +153,8 @@ void pb_view::run(bool auto_download) {
 			int idx = -1;
 			os >> idx;
 			if (idx != -1) {
-				if (ctrl->downloads()[idx].status() == DL_DOWNLOADING) {
-					ctrl->downloads()[idx].set_status(DL_CANCELLED);
+				if (ctrl->downloads()[idx].status() == dlstatus::DOWNLOADING) {
+					ctrl->downloads()[idx].set_status(dlstatus::CANCELLED);
 				}
 			}
 		}
@@ -164,8 +164,8 @@ void pb_view::run(bool auto_download) {
 			int idx = -1;
 			os >> idx;
 			if (idx != -1) {
-				if (ctrl->downloads()[idx].status() != DL_DOWNLOADING) {
-					ctrl->downloads()[idx].set_status(DL_DELETED);
+				if (ctrl->downloads()[idx].status() != dlstatus::DOWNLOADING) {
+					ctrl->downloads()[idx].set_status(dlstatus::DELETED);
 				}
 			}
 		}

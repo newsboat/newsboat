@@ -73,7 +73,7 @@ void poddlthread::run() {
 
 	if (f->is_open()) {
 
-		dl->set_status(DL_DOWNLOADING);
+		dl->set_status(dlstatus::DOWNLOADING);
 
 		CURLcode success = curl_easy_perform(easyhandle);
 
@@ -82,19 +82,19 @@ void poddlthread::run() {
 		LOG(LOG_INFO,"poddlthread::run: curl_easy_perform rc = %u (%s)", success, curl_easy_strerror(success));
 
 		if (0 == success)
-			dl->set_status(DL_READY);
-		else if (dl->status() != DL_CANCELLED) {
+			dl->set_status(dlstatus::READY);
+		else if (dl->status() != dlstatus::CANCELLED) {
 			// attempt complete re-download
 			if (resumed_download) {
 				::unlink(dl->filename());
 				this->run();
 			} else {
-				dl->set_status(DL_FAILED);
+				dl->set_status(dlstatus::FAILED);
 				::unlink(dl->filename());
 			}
 		}
 	} else {
-		dl->set_status(DL_FAILED);
+		dl->set_status(dlstatus::FAILED);
 	}
 
 	curl_easy_cleanup(easyhandle);
@@ -111,7 +111,7 @@ static int progress_callback(void *clientp, double dltotal, double dlnow, double
 }
 
 size_t poddlthread::write_data(void * buffer, size_t size, size_t nmemb) {
-	if (dl->status() == DL_CANCELLED)
+	if (dl->status() == dlstatus::CANCELLED)
 		return 0;
 	f->write(static_cast<char *>(buffer), size * nmemb);
 	bytecount += (size * nmemb);
@@ -120,7 +120,7 @@ size_t poddlthread::write_data(void * buffer, size_t size, size_t nmemb) {
 }
 
 int poddlthread::progress(double dlnow, double dltotal) {
-	if (dl->status() == DL_CANCELLED)
+	if (dl->status() == dlstatus::CANCELLED)
 		return -1;
 	gettimeofday(&tv2, nullptr);
 	double kbps = compute_kbps();

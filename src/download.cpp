@@ -10,8 +10,10 @@ namespace podbeuter {
  * It manages the filename, the URL, the current state, the progress, etc.
  */
 
-download::download(pb_controller * c) : dlstatus(DL_QUEUED), cursize(0.0), totalsize(0.0), curkbps(0.0), offs(0), ctrl(c) {
-}
+download::download(pb_controller * c)
+: download_status(dlstatus::QUEUED), cursize(0.0), totalsize(0.0), curkbps(0.0),
+	offs(0), ctrl(c)
+{ }
 
 download::~download() {
 }
@@ -37,24 +39,24 @@ double download::percents_finished() {
 }
 
 const char * download::status_text() {
-	switch (dlstatus) {
-	case DL_QUEUED:
+	switch (download_status) {
+	case dlstatus::QUEUED:
 		return _("queued");
-	case DL_DOWNLOADING:
+	case dlstatus::DOWNLOADING:
 		return _("downloading");
-	case DL_CANCELLED:
+	case dlstatus::CANCELLED:
 		return _("cancelled");
-	case DL_DELETED:
+	case dlstatus::DELETED:
 		return _("deleted");
-	case DL_FINISHED:
+	case dlstatus::FINISHED:
 		return _("finished");
-	case DL_FAILED:
+	case dlstatus::FAILED:
 		return _("failed");
-	case DL_ALREADY_DOWNLOADED:
+	case dlstatus::ALREADY_DOWNLOADED:
 		return _("incomplete");
-	case DL_READY:
+	case dlstatus::READY:
 		return _("ready");
-	case DL_PLAYED:
+	case dlstatus::PLAYED:
 		return _("played");
 	default:
 		return _("unknown (bug).");
@@ -72,11 +74,11 @@ void download::set_progress(double cur, double max) {
 	totalsize = max;
 }
 
-void download::set_status(dlstatus_t dls) {
-	if (dlstatus != dls) {
+void download::set_status(dlstatus dls) {
+	if (download_status != dls) {
 		ctrl->set_view_update_necessary(true);
 	}
-	dlstatus = dls;
+	download_status = dls;
 }
 
 void download::set_kbps(double k) {

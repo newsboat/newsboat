@@ -22,21 +22,21 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 	std::fstream f;
 
 	for (auto dl : downloads) {
-		if (dl.status() == DL_DOWNLOADING) { // we are not allowed to reload if a download is in progress!
-			LOG(LOG_INFO, "queueloader::reload: aborting reload due to DL_DOWNLOADING status");
+		if (dl.status() == dlstatus::DOWNLOADING) { // we are not allowed to reload if a download is in progress!
+			LOG(LOG_INFO, "queueloader::reload: aborting reload due to dlstatus::DOWNLOADING status");
 			return;
 		}
 		switch (dl.status()) {
-		case DL_QUEUED:
-		case DL_CANCELLED:
-		case DL_FAILED:
-		case DL_ALREADY_DOWNLOADED:
-		case DL_READY:
+		case dlstatus::QUEUED:
+		case dlstatus::CANCELLED:
+		case dlstatus::FAILED:
+		case dlstatus::ALREADY_DOWNLOADED:
+		case dlstatus::READY:
 			LOG(LOG_DEBUG, "queueloader::reload: storing %s to new vector", dl.url());
 			dltemp.push_back(dl);
 			break;
-		case DL_PLAYED:
-		case DL_FINISHED:
+		case dlstatus::PLAYED:
+		case dlstatus::FINISHED:
 			if (!remove_unplayed) {
 				LOG(LOG_DEBUG, "queueloader::reload: storing %s to new vector", dl.url());
 				dltemp.push_back(dl);
@@ -86,11 +86,11 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 						LOG(LOG_INFO, "queueloader::reload: found `%s' on file system -> mark as already downloaded", fn.c_str());
 						if (fields.size() >= 3) {
 							if (fields[2] == "downloaded")
-								d.set_status(DL_READY);
+								d.set_status(dlstatus::READY);
 							if (fields[2] == "played")
-								d.set_status(DL_PLAYED);
+								d.set_status(dlstatus::PLAYED);
 						} else
-							d.set_status(DL_ALREADY_DOWNLOADED); // TODO: scrap DL_ALREADY_DOWNLOADED state
+							d.set_status(dlstatus::ALREADY_DOWNLOADED); // TODO: scrap dlstatus::ALREADY_DOWNLOADED state
 					}
 					d.set_url(fields[0]);
 					dltemp.push_back(d);
@@ -104,9 +104,9 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 	if (f.is_open()) {
 		for (auto dl : dltemp) {
 			f << dl.url() << " " << stfl::quote(dl.filename());
-			if (dl.status() == DL_READY)
+			if (dl.status() == dlstatus::READY)
 				f << " downloaded";
-			if (dl.status() == DL_PLAYED)
+			if (dl.status() == dlstatus::PLAYED)
 				f << " played";
 			f << std::endl;
 		}
