@@ -8,19 +8,26 @@
 namespace newsbeuter {
 
 
+enum class configdata_t { INVALID, BOOL, INT, STR, PATH, ALIAS, ENUM };
+
 struct configdata {
-	enum configdata_type { INVALID, BOOL, INT, STR, PATH, ALIAS, ENUM };
-	configdata(const std::string& v = "", configdata_type t = INVALID,
-	    bool m = false)
-	    : value(v), default_value(v), type(t), enum_values(),
-	      multi_option(m) { }
-	configdata(const std::string& v,
-	    const std::unordered_set<std::string>& values)
-	    : value(v), default_value(v), type(ENUM), enum_values(values),
-	      multi_option(false) { }
+	configdata(
+			const std::string& v = "",
+			configdata_t t = configdata_t::INVALID,
+			bool m = false)
+	: value(v), default_value(v), type(t), enum_values(), multi_option(m)
+	{ }
+
+	configdata(
+			const std::string& v,
+			const std::unordered_set<std::string>& values)
+	: value(v), default_value(v), type(configdata_t::ENUM),
+		enum_values(values), multi_option(false)
+	{ }
+
 	std::string value;
 	std::string default_value;
-	configdata_type type;
+	configdata_t type;
 	const std::unordered_set<std::string> enum_values;
 	bool multi_option;
 };
