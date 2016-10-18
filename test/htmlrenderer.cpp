@@ -80,7 +80,7 @@ TEST_CASE("HTMLRenderer behaves correctly") {
 		REQUIRE(lines[3] == p(nonwrappable, "[1]: http://slashdot.org/ (link)"));
 
 		REQUIRE(links[0].first == "http://slashdot.org/");
-		REQUIRE(links[0].second == LINK_HREF);
+		REQUIRE(links[0].second == link_type::HREF);
 
 	}
 
@@ -166,7 +166,7 @@ TEST_CASE("htmlrenderer: links with same URL are coalesced under one number") {
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "http://example.com/about");
-	REQUIRE(links[0].second == LINK_HREF);
+	REQUIRE(links[0].second == link_type::HREF);
 }
 
 TEST_CASE("htmlrenderer: links with different URLs have different numbers") {
@@ -181,9 +181,9 @@ TEST_CASE("htmlrenderer: links with different URLs have different numbers") {
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(links.size() == 2);
 	REQUIRE(links[0].first == "http://example.com/one");
-	REQUIRE(links[0].second == LINK_HREF);
+	REQUIRE(links[0].second == link_type::HREF);
 	REQUIRE(links[1].first == "http://example.com/two");
-	REQUIRE(links[1].second == LINK_HREF);
+	REQUIRE(links[1].second == link_type::HREF);
 }
 
 TEST_CASE("htmlrenderer: link without `href' is neither highlighted nor added to links list") {
@@ -266,7 +266,7 @@ TEST_CASE("htmlrenderer: Flash <embed>s are added to links if `src' is set") {
 	REQUIRE(lines[3] == p(nonwrappable, "[1]: http://example.com/game.swf (embedded flash)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "http://example.com/game.swf");
-	REQUIRE(links[0].second == LINK_EMBED);
+	REQUIRE(links[0].second == link_type::EMBED);
 }
 
 TEST_CASE("htmlrenderer: Flash <embed>s are ignored if `src' is not set") {
@@ -359,7 +359,7 @@ TEST_CASE("htmlrenderer: <img> results in a placeholder and a link") {
 	REQUIRE(lines[3] == p(nonwrappable, "[1]: http://example.com/image.png (image)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "http://example.com/image.png");
-	REQUIRE(links[0].second == LINK_IMG);
+	REQUIRE(links[0].second == link_type::IMG);
 }
 
 TEST_CASE("htmlrenderer: <img>s without `src' are ignored") {
@@ -392,7 +392,7 @@ TEST_CASE("htmlrenderer: title is mentioned in placeholder if <img> has `title'"
 	REQUIRE(lines[3] == p(nonwrappable, "[1]: http://example.com/image.png (image)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "http://example.com/image.png");
-	REQUIRE(links[0].second == LINK_IMG);
+	REQUIRE(links[0].second == link_type::IMG);
 }
 
 TEST_CASE("htmlrenderer: URL of <img> with data inside `src' is replaced with string \"inline image\"") {
@@ -413,7 +413,7 @@ TEST_CASE("htmlrenderer: URL of <img> with data inside `src' is replaced with st
 	REQUIRE(lines[3] == p(nonwrappable, "[1]: inline image (image)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "inline image");
-	REQUIRE(links[0].second == LINK_IMG);
+	REQUIRE(links[0].second == link_type::IMG);
 }
 
 TEST_CASE("htmlrenderer: <blockquote> is indented and is separated by empty lines") {

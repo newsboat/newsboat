@@ -9,7 +9,7 @@
 
 namespace newsbeuter {
 
-enum link_type { LINK_HREF, LINK_IMG, LINK_EMBED };
+enum class link_type { HREF, IMG, EMBED };
 enum htmltag {
 	TAG_A = 1, TAG_EMBED, TAG_BR, TAG_PRE, TAG_ITUNESHACK,
 	TAG_IMG, TAG_BLOCKQUOTE, TAG_H1, TAG_H2, TAG_H3, TAG_H4,

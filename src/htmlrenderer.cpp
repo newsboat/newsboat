@@ -126,7 +126,7 @@ void htmlrenderer::render(
 					link = "";
 				}
 				if (link.length() > 0) {
-					link_num = add_link(links,utils::censor_url(utils::absolute_url(url,link)), LINK_HREF);
+					link_num = add_link(links,utils::censor_url(utils::absolute_url(url,link)), link_type::HREF);
 					if (!raw_)
 						curline.append("<u>");
 				}
@@ -162,7 +162,7 @@ void htmlrenderer::render(
 						link = "";
 					}
 					if (link.length() > 0) {
-						link_num = add_link(links,utils::censor_url(utils::absolute_url(url,link)), LINK_EMBED);
+						link_num = add_link(links,utils::censor_url(utils::absolute_url(url,link)), link_type::EMBED);
 						curline.append(utils::strprintf("[%s %u]", _("embedded flash:"), link_num));
 					}
 				}
@@ -200,9 +200,9 @@ void htmlrenderer::render(
 				}
 				if (imgurl.length() > 0) {
 					if (imgurl.substr(0,5) == "data:") {
-						link_num = add_link(links, "inline image", LINK_IMG);
+						link_num = add_link(links, "inline image", link_type::IMG);
 					} else {
-						link_num = add_link(links,utils::censor_url(utils::absolute_url(url,imgurl)), LINK_IMG);
+						link_num = add_link(links,utils::censor_url(utils::absolute_url(url,imgurl)), link_type::IMG);
 					}
 					if (imgtitle != "") {
 						curline.append(utils::strprintf("[%s %u: %s]", _("image"), link_num, imgtitle.c_str()));
@@ -657,11 +657,11 @@ std::string htmlrenderer::render_hr(const unsigned int width) {
 
 std::string htmlrenderer::type2str(link_type type) {
 	switch (type) {
-	case LINK_HREF:
+	case link_type::HREF:
 		return _("link");
-	case LINK_IMG:
+	case link_type::IMG:
 		return _("image");
-	case LINK_EMBED:
+	case link_type::EMBED:
 		return _("embedded flash");
 	default:
 		return _("unknown (bug)");
