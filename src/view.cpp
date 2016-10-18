@@ -529,7 +529,7 @@ std::string view::select_tag() {
 		return "";
 	}
 	std::shared_ptr<select_formaction> selecttag(new select_formaction(this, selecttag_str));
-	selecttag->set_type(select_formaction::SELECTTAG);
+	selecttag->set_type(select_formaction::selection_type::TAG);
 	set_bindings(selecttag);
 	apply_colors(selecttag);
 	selecttag->set_parent_formaction(get_current_formaction());
@@ -540,7 +540,7 @@ std::string view::select_tag() {
 
 std::string view::select_filter(const std::vector<filter_name_expr_pair>& filters) {
 	std::shared_ptr<select_formaction> selecttag(new select_formaction(this, selecttag_str));
-	selecttag->set_type(select_formaction::SELECTFILTER);
+	selecttag->set_type(select_formaction::selection_type::FILTER);
 	set_bindings(selecttag);
 	apply_colors(selecttag);
 	selecttag->set_parent_formaction(get_current_formaction());
