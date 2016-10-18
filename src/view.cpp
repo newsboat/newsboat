@@ -160,6 +160,8 @@ void view::run() {
 
 	stfl::reset();
 
+	curs_set(0);
+
 	/*
 	 * This is the main "event" loop of newsbeuter.
 	 */
