@@ -67,7 +67,7 @@ class itemlist_formaction : public formaction {
 		void set_regexmanager(regexmanager * r);
 
 	private:
-		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
+		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr);
 		void set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);
 		int get_pos(unsigned int idx);
 

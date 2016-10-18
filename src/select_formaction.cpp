@@ -142,12 +142,12 @@ keymap_hint_entry * select_formaction::get_keymap_hint() {
 	static keymap_hint_entry hints_tag[] = {
 		{ OP_QUIT, _("Cancel") },
 		{ OP_OPEN, _("Select Tag") },
-		{ OP_NIL, NULL }
+		{ OP_NIL, nullptr }
 	};
 	static keymap_hint_entry hints_filter[] = {
 		{ OP_QUIT, _("Cancel") },
 		{ OP_OPEN, _("Select Filter") },
-		{ OP_NIL, NULL }
+		{ OP_NIL, nullptr }
 	};
 	switch (type) {
 	case SELECTTAG:
@@ -155,7 +155,7 @@ keymap_hint_entry * select_formaction::get_keymap_hint() {
 	case SELECTFILTER:
 		return hints_filter;
 	}
-	return NULL;
+	return nullptr;
 }
 
 std::string select_formaction::title() {

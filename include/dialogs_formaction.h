@@ -19,7 +19,7 @@ class dialogs_formaction : public formaction {
 		virtual void handle_cmdline(const std::string& cmd);
 
 	private:
-		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
+		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr);
 		bool update_list;
 };
 

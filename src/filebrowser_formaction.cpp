@@ -186,7 +186,7 @@ keymap_hint_entry * filebrowser_formaction::get_keymap_hint() {
 	static keymap_hint_entry hints[] = {
 		{ OP_QUIT, _("Cancel") },
 		{ OP_OPEN, _("Save") },
-		{ OP_NIL, NULL }
+		{ OP_NIL, nullptr }
 	};
 	return hints;
 }

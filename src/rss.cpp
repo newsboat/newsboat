@@ -275,7 +275,7 @@ std::string rss_item::get_attribute(const std::string& attribname) {
 	else if (attribname == "flags")
 		return flags();
 	else if (attribname == "age")
-		return utils::to_string<unsigned int>((time(NULL) - pubDate_timestamp()) / 86400);
+		return utils::to_string<unsigned int>((time(nullptr) - pubDate_timestamp()) / 86400);
 	else if (attribname == "articleindex")
 		return utils::to_string<unsigned int>(idx);
 
@@ -441,7 +441,7 @@ void rss_feed::update_items(std::vector<std::shared_ptr<rss_feed>> feeds) {
 
 
 	struct timeval tv1, tv2, tvx;
-	gettimeofday(&tv1, NULL);
+	gettimeofday(&tv1, nullptr);
 
 	matcher m(query);
 
@@ -461,11 +461,11 @@ void rss_feed::update_items(std::vector<std::shared_ptr<rss_feed>> feeds) {
 		}
 	}
 
-	gettimeofday(&tvx, NULL);
+	gettimeofday(&tvx, nullptr);
 
 	std::sort(items_.begin(), items_.end());
 
-	gettimeofday(&tv2, NULL);
+	gettimeofday(&tv2, nullptr);
 	unsigned long diff = (((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) - tv1.tv_usec;
 	unsigned long diffx = (((tv2.tv_sec - tvx.tv_sec) * 1000000) + tv2.tv_usec) - tvx.tv_usec;
 	LOG(LOG_DEBUG, "rss_feed::update_items matching took %lu.%06lu s", diff / 1000000, diff % 1000000);

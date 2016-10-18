@@ -173,7 +173,7 @@ REDO:
 			for (auto feed : visible_feeds) {
 				idxs.push_back(feed.second);
 			}
-			v->get_ctrl()->start_reload_all_thread(reload_only_visible_feeds ? &idxs : NULL);
+			v->get_ctrl()->start_reload_all_thread(reload_only_visible_feeds ? &idxs : nullptr);
 		}
 		break;
 	case OP_MARKFEEDREAD: {
@@ -369,7 +369,7 @@ REDO:
 }
 
 void feedlist_formaction::update_visible_feeds(std::vector<std::shared_ptr<rss_feed>>& feeds) {
-	assert(v->get_cfg() != NULL); // must not happen
+	assert(v->get_cfg() != nullptr); // must not happen
 
 	visible_feeds.clear();
 
@@ -387,7 +387,7 @@ void feedlist_formaction::update_visible_feeds(std::vector<std::shared_ptr<rss_f
 }
 
 void feedlist_formaction::set_feedlist(std::vector<std::shared_ptr<rss_feed>>& feeds) {
-	assert(v->get_cfg() != NULL); // must not happen
+	assert(v->get_cfg() != nullptr); // must not happen
 
 	unsigned int width = utils::to_u(f->get("feeds:w"));
 
@@ -441,7 +441,7 @@ keymap_hint_entry * feedlist_formaction::get_keymap_hint() {
 		{ OP_MARKALLFEEDSREAD, _("Catchup All") },
 		{ OP_SEARCH, _("Search") },
 		{ OP_HELP, _("Help") },
-		{ OP_NIL, NULL }
+		{ OP_NIL, nullptr }
 	};
 	return hints;
 }
@@ -475,13 +475,13 @@ void feedlist_formaction::goto_feed(const std::string& str) {
 	unsigned int curpos = utils::to_u(f->get("feedpos"));
 	LOG(LOG_DEBUG, "feedlist_formaction::goto_feed: curpos = %u str = `%s'", curpos, str.c_str());
 	for (unsigned int i=curpos+1; i<visible_feeds.size(); ++i) {
-		if (strcasestr(visible_feeds[i].first->title().c_str(), str.c_str()) != NULL) {
+		if (strcasestr(visible_feeds[i].first->title().c_str(), str.c_str()) != nullptr) {
 			f->set("feedpos", utils::to_string<unsigned int>(i));
 			return;
 		}
 	}
 	for (unsigned int i=0; i<=curpos; ++i) {
-		if (strcasestr(visible_feeds[i].first->title().c_str(), str.c_str()) != NULL) {
+		if (strcasestr(visible_feeds[i].first->title().c_str(), str.c_str()) != nullptr) {
 			f->set("feedpos", utils::to_string<unsigned int>(i));
 			return;
 		}
@@ -692,7 +692,7 @@ void feedlist_formaction::op_start_search() {
 		std::vector<std::shared_ptr<rss_item>> items;
 		try {
 			std::string utf8searchphrase = utils::convert_text(searchphrase, "utf-8", nl_langinfo(CODESET));
-			items = v->get_ctrl()->search_for_items(utf8searchphrase, NULL);
+			items = v->get_ctrl()->search_for_items(utf8searchphrase, nullptr);
 		} catch (const dbexception& e) {
 			v->show_error(utils::strprintf(_("Error while searching for `%s': %s"), searchphrase.c_str(), e.what()));
 			return;

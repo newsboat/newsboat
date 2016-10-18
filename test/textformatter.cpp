@@ -32,7 +32,7 @@ TEST_CASE("textformatter: lines marked as `wrappable` are wrapped to fit width")
 				"{listitem text:\"wrapped\"}"
 				"{listitem text:\"this one is going to be preserved\"}"
 			"}";
-		REQUIRE(fmt.format_text_to_list(NULL, "", 10) == expected);
+		REQUIRE(fmt.format_text_to_list(nullptr, "", 10) == expected);
 	}
 }
 
@@ -96,7 +96,7 @@ TEST_CASE("textformatter: nonwrappable lines are wrapped by format_text_to_list 
 	textformatter fmt;
 	fmt.add_line(nonwrappable, "just a test");
 	const size_t wrap_width = 100;
-	regexmanager * rxman = NULL;
+	regexmanager * rxman = nullptr;
 	const std::string location = "";
 
 	SECTION("total_width == 4") {

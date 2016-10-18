@@ -14,11 +14,11 @@ namespace rsspp {
 
 void rss_20_parser::parse_feed(feed& f, xmlNode * rootNode) {
 	if (!rootNode)
-		throw exception(_("XML root node is NULL"));
+		throw exception(_("XML root node is nullptr"));
 
-	const char * ns = rootNode->ns ? (const char *)rootNode->ns->href : NULL; //(const char *)xmlGetProp(rootNode, (const xmlChar *)"xmlns");
+	const char * ns = rootNode->ns ? (const char *)rootNode->ns->href : nullptr; //(const char *)xmlGetProp(rootNode, (const xmlChar *)"xmlns");
 
-	if (ns != NULL) {
+	if (ns != nullptr) {
 		if (strcmp(ns, RSS20USERLAND_URI) == 0) {
 			this->ns = strdup(ns);
 		}
@@ -29,7 +29,7 @@ void rss_20_parser::parse_feed(feed& f, xmlNode * rootNode) {
 
 void rss_09x_parser::parse_feed(feed& f, xmlNode * rootNode) {
 	if (!rootNode)
-		throw exception(_("XML root node is NULL"));
+		throw exception(_("XML root node is nullptr"));
 
 	xmlNode * channel = rootNode->children;
 	while (channel && strcmp((const char *)channel->name, "channel")!=0)
@@ -38,7 +38,7 @@ void rss_09x_parser::parse_feed(feed& f, xmlNode * rootNode) {
 	if (!channel)
 		throw exception(_("no RSS channel found"));
 
-	for (xmlNode * node = channel->children; node != NULL; node = node->next) {
+	for (xmlNode * node = channel->children; node != nullptr; node = node->next) {
 		if (node_is(node, "title", ns)) {
 			f.title = get_content(node);
 			f.title_type = "text";
@@ -61,7 +61,7 @@ item rss_09x_parser::parse_item(xmlNode * itemNode) {
 	std::string author;
 	std::string dc_date;
 
-	for (xmlNode * node = itemNode->children; node != NULL; node = node->next) {
+	for (xmlNode * node = itemNode->children; node != nullptr; node = node->next) {
 		if (node_is(node, "title", ns)) {
 			it.title = get_content(node);
 			it.title_type = "text";
@@ -104,7 +104,7 @@ item rss_09x_parser::parse_item(xmlNode * itemNode) {
 			it.enclosure_url = get_prop(node, "url");
 			it.enclosure_type = get_prop(node, "type");
 		} else if (node_is(node, "group", MEDIA_RSS_URI)) {
-			for (xmlNode * mnode = node->children; mnode != NULL; mnode = mnode->next) {
+			for (xmlNode * mnode = node->children; mnode != nullptr; mnode = mnode->next) {
 				if (node_is(mnode, "content", MEDIA_RSS_URI)) {
 					it.enclosure_url = get_prop(mnode, "url");
 					it.enclosure_type = get_prop(mnode, "type");

@@ -83,7 +83,7 @@ std::string ttrss_api::retrieve_sid() {
 	auth_info_ptr = auth_info.c_str();
 	json_object * content = run_op("login", args);
 
-	if (content == NULL)
+	if (content == nullptr)
 		return "";
 
 	json_object * session_id {};
@@ -115,23 +115,23 @@ json_object* ttrss_api::run_op(const std::string& op,
 	LOG(LOG_DEBUG, "ttrss_api::run_op(%s,...): post=%s reply = %s", op.c_str(), req_data.c_str(), result.c_str());
 
 	json_object * reply = json_tokener_parse(result.c_str());
-	if (reply == NULL) {
+	if (reply == nullptr) {
 		LOG(LOG_ERROR, "ttrss_api::run_op: reply failed to parse: %s", result.c_str());
-		return NULL;
+		return nullptr;
 	}
 
 	json_object* status {};
 	json_object_object_get_ex(reply, "status", &status);
-	if (status == NULL) {
+	if (status == nullptr) {
 		LOG(LOG_ERROR, "ttrss_api::run_op: no status code");
-		return NULL;
+		return nullptr;
 	}
 
 	json_object* content {};
 	json_object_object_get_ex(reply, "content", &content);
-	if (content == NULL) {
+	if (content == nullptr) {
 		LOG(LOG_ERROR, "ttrss_api::run_op: no content part in answer from server");
-		return NULL;
+		return nullptr;
 	}
 
 	if (json_object_get_int(status) != 0) {
@@ -142,10 +142,10 @@ json_object* ttrss_api::run_op(const std::string& op,
 			if (authenticate())
 				return run_op(op, args, false);
 			else
-				return NULL;
+				return nullptr;
 		} else {
 			json_object_put(reply);
-			return NULL;
+			return nullptr;
 		}
 	}
 
@@ -171,7 +171,7 @@ std::vector<tagged_feedurl> ttrss_api::get_subscribed_urls() {
 	int catsize = array_list_length(categories);
 
 	// first fetch feeds within no category
-	fetch_feeds_per_category(NULL, feeds);
+	fetch_feeds_per_category(nullptr, feeds);
 
 	// then fetch the feeds of all categories
 	for (int i=0; i<catsize; i++) {
@@ -217,17 +217,17 @@ bool ttrss_api::update_article_flags(const std::string& oldflags, const std::str
 	bool success = true;
 
 	if (star_flag.length() > 0) {
-		if (strchr(oldflags.c_str(), star_flag[0])==NULL && strchr(newflags.c_str(), star_flag[0])!=NULL) {
+		if (strchr(oldflags.c_str(), star_flag[0])==nullptr && strchr(newflags.c_str(), star_flag[0])!=nullptr) {
 			success = star_article(guid, true);
-		} else if (strchr(oldflags.c_str(), star_flag[0])!=NULL && strchr(newflags.c_str(), star_flag[0])==NULL) {
+		} else if (strchr(oldflags.c_str(), star_flag[0])!=nullptr && strchr(newflags.c_str(), star_flag[0])==nullptr) {
 			success = star_article(guid, false);
 		}
 	}
 
 	if (publish_flag.length() > 0) {
-		if (strchr(oldflags.c_str(), publish_flag[0])==NULL && strchr(newflags.c_str(), publish_flag[0])!=NULL) {
+		if (strchr(oldflags.c_str(), publish_flag[0])==nullptr && strchr(newflags.c_str(), publish_flag[0])!=nullptr) {
 			success = publish_article(guid, true);
-		} else if (strchr(oldflags.c_str(), publish_flag[0])!=NULL && strchr(newflags.c_str(), publish_flag[0])==NULL) {
+		} else if (strchr(oldflags.c_str(), publish_flag[0])!=nullptr && strchr(newflags.c_str(), publish_flag[0])==nullptr) {
 			success = publish_article(guid, false);
 		}
 	}
@@ -338,7 +338,7 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 void ttrss_api::fetch_feeds_per_category(
     json_object * cat, std::vector<tagged_feedurl>& feeds)
 {
-	const char * cat_name = NULL;
+	const char * cat_name = nullptr;
 	json_object * cat_title_obj {};
 	int cat_id;
 

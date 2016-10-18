@@ -91,9 +91,9 @@ void help_formaction::prepare() {
 				}
 				if (context.length() > 0 && (desc.ctx != context || condition))
 					continue;
-				if (!apply_search || strcasestr(desc.key.c_str(), searchphrase.c_str())!=NULL ||
-				        strcasestr(desc.cmd.c_str(), searchphrase.c_str())!=NULL ||
-				        strcasestr(desc.desc.c_str(), searchphrase.c_str())!=NULL) {
+				if (!apply_search || strcasestr(desc.key.c_str(), searchphrase.c_str())!=nullptr ||
+				        strcasestr(desc.cmd.c_str(), searchphrase.c_str())!=nullptr ||
+				        strcasestr(desc.desc.c_str(), searchphrase.c_str())!=nullptr) {
 					char tabs_1[] = "                ";
 					char tabs_2[] = "                        ";
 					int how_often_1 = strlen(tabs_1) - desc.key.length();
@@ -158,7 +158,7 @@ keymap_hint_entry * help_formaction::get_keymap_hint() {
 		{ OP_QUIT, _("Quit") },
 		{ OP_SEARCH, _("Search") },
 		{ OP_CLEARFILTER, _("Clear") },
-		{ OP_NIL, NULL }
+		{ OP_NIL, nullptr }
 	};
 	return hints;
 }

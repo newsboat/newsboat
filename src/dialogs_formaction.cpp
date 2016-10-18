@@ -46,7 +46,7 @@ keymap_hint_entry * dialogs_formaction::get_keymap_hint() {
 		{ OP_QUIT, _("Close") },
 		{ OP_OPEN, _("Goto Dialog") },
 		{ OP_CLOSEDIALOG, _("Close Dialog") },
-		{ OP_NIL, NULL }
+		{ OP_NIL, nullptr }
 	};
 	return hints;
 }

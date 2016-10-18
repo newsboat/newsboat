@@ -164,7 +164,7 @@ std::string textformatter::format_text_to_list(
 }
 
 std::string textformatter::format_text_plain(const size_t width) {
-	return format_text_plain_helper(lines, NULL, std::string(), width, 0);
+	return format_text_plain_helper(lines, nullptr, std::string(), width, 0);
 }
 
 }

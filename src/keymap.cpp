@@ -98,28 +98,28 @@ static op_desc opdescs[] = {
 	{ OP_SK_HOME, "home", "HOME", _("Move to the start of page/list"), KM_SYSKEYS },
 	{ OP_SK_END, "end", "END", _("Move to the end of page/list"), KM_SYSKEYS },
 
-	{ OP_INT_END_QUESTION, "XXXNOKEY-end-question", "end-question", NULL, KM_INTERNAL },
-	{ OP_INT_CANCEL_QNA, "XXXNOKEY-cancel-qna", "cancel-qna", NULL, KM_INTERNAL },
-	{ OP_INT_QNA_NEXTHIST, "XXXNOKEY-qna-next-history", "qna-next-history", NULL, KM_INTERNAL },
-	{ OP_INT_QNA_PREVHIST, "XXXNOKEY-qna-prev-history", "qna-prev-history", NULL, KM_INTERNAL },
+	{ OP_INT_END_QUESTION, "XXXNOKEY-end-question", "end-question", nullptr, KM_INTERNAL },
+	{ OP_INT_CANCEL_QNA, "XXXNOKEY-cancel-qna", "cancel-qna", nullptr, KM_INTERNAL },
+	{ OP_INT_QNA_NEXTHIST, "XXXNOKEY-qna-next-history", "qna-next-history", nullptr, KM_INTERNAL },
+	{ OP_INT_QNA_PREVHIST, "XXXNOKEY-qna-prev-history", "qna-prev-history", nullptr, KM_INTERNAL },
 
-	{ OP_INT_RESIZE, "RESIZE", "internal-resize", NULL, KM_INTERNAL },
-	{ OP_INT_SET,    "set",    "internal-set",    NULL, KM_INTERNAL },
+	{ OP_INT_RESIZE, "RESIZE", "internal-resize", nullptr, KM_INTERNAL },
+	{ OP_INT_SET,    "set",    "internal-set",    nullptr, KM_INTERNAL },
 
-	{ OP_INT_GOTO_URL, "gotourl",    "internal-goto-url",    NULL, KM_INTERNAL },
+	{ OP_INT_GOTO_URL, "gotourl",    "internal-goto-url",    nullptr, KM_INTERNAL },
 
-	{ OP_NIL, NULL, NULL, NULL, 0 }
+	{ OP_NIL, nullptr, nullptr, nullptr, 0 }
 };
 
 // "all" must be first, the following positions must be the same as the KM_* flag definitions (get_flag_from_context() relies on this).
-static const char * contexts[] = { "all", "feedlist", "filebrowser", "help", "articlelist", "article", "tagselection", "filterselection", "urlview", "podbeuter", "dialogs", NULL };
+static const char * contexts[] = { "all", "feedlist", "filebrowser", "help", "articlelist", "article", "tagselection", "filterselection", "urlview", "podbeuter", "dialogs", nullptr };
 
 keymap::keymap(unsigned flags) {
 	/*
 	 * At startup, initialize the keymap with the default settings from the list above.
 	 */
 	LOG(LOG_DEBUG, "keymap::keymap: flags = %x", flags);
-	for (unsigned int j=1; contexts[j]!=NULL; j++) {
+	for (unsigned int j=1; contexts[j]!=nullptr; j++) {
 		std::string ctx(contexts[j]);
 		for (int i=0; opdescs[i].op != OP_NIL; ++i) {
 			if (opdescs[i].flags & (flags | KM_INTERNAL | KM_SYSKEYS)) {
@@ -134,7 +134,7 @@ void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned s
 	 * Here we return the keymap descriptions for the specified application (handed to us via flags)
 	 * This is used for the help screen.
 	 */
-	for (unsigned int i=1; contexts[i]!=NULL; i++) {
+	for (unsigned int i=1; contexts[i]!=nullptr; i++) {
 		std::string ctx(contexts[i]);
 
 		if (flags & KM_PODBEUTER && ctx != "podbeuter") {
@@ -185,7 +185,7 @@ keymap::~keymap() { }
 void keymap::set_key(operation op, const std::string& key, const std::string& context) {
 	LOG(LOG_DEBUG,"keymap::set_key(%d,%s) called", op, key.c_str());
 	if (context == "all") {
-		for (unsigned int i=0; contexts[i]!=NULL; i++) {
+		for (unsigned int i=0; contexts[i]!=nullptr; i++) {
 			keymap_[contexts[i]][key] = op;
 		}
 	} else {
@@ -196,7 +196,7 @@ void keymap::set_key(operation op, const std::string& key, const std::string& co
 void keymap::unset_key(const std::string& key, const std::string& context) {
 	LOG(LOG_DEBUG,"keymap::unset_key(%s) called", key.c_str());
 	if (context == "all") {
-		for (unsigned int i=0; contexts[i]!=NULL; i++) {
+		for (unsigned int i=0; contexts[i]!=nullptr; i++) {
 			keymap_[contexts[i]][key] = OP_NIL;
 		}
 	} else {
@@ -239,7 +239,7 @@ operation keymap::get_operation(const std::string& keycode, const std::string& c
 }
 
 void keymap::dump_config(std::vector<std::string>& config_output) {
-	for (unsigned int i=1; contexts[i]!=NULL; i++) { // TODO: optimize
+	for (unsigned int i=1; contexts[i]!=nullptr; i++) { // TODO: optimize
 		std::map<std::string,operation>& x = keymap_[contexts[i]];
 		for (auto keymap : x) {
 			if (keymap.second < OP_INT_MIN) {
@@ -346,7 +346,7 @@ void keymap::handle_action(const std::string& action, const std::vector<std::str
 
 std::string keymap::getkey(operation op, const std::string& context) {
 	if (context == "all") {
-		for (unsigned int i=0; contexts[i]!=NULL; i++) {
+		for (unsigned int i=0; contexts[i]!=nullptr; i++) {
 			std::string ctx(contexts[i]);
 			for (auto keymap : keymap_[ctx]) {
 				if (keymap.second == op)
@@ -373,7 +373,7 @@ std::vector<macrocmd> keymap::get_macro(const std::string& key) {
 }
 
 bool keymap::is_valid_context(const std::string& context) {
-	for (unsigned int i=0; contexts[i]!=NULL; i++) {
+	for (unsigned int i=0; contexts[i]!=nullptr; i++) {
 		if (context == contexts[i])
 			return true;
 	}
@@ -381,7 +381,7 @@ bool keymap::is_valid_context(const std::string& context) {
 }
 
 unsigned short keymap::get_flag_from_context(const std::string& context) {
-	for (unsigned int i=1; contexts[i]!=NULL; i++) {
+	for (unsigned int i=1; contexts[i]!=nullptr; i++) {
 		if (context == contexts[i])
 			return (1<<(i-1)) | KM_SYSKEYS;
 	}

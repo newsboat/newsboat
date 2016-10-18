@@ -118,7 +118,7 @@ keymap_hint_entry * urlview_formaction::get_keymap_hint() {
 		{ OP_QUIT, _("Quit") },
 		{ OP_OPEN, _("Open in Browser") },
 		{ OP_BOOKMARK, _("Save Bookmark") },
-		{ OP_NIL, NULL }
+		{ OP_NIL, nullptr }
 	};
 	return hints;
 }

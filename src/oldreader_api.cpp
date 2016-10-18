@@ -138,7 +138,7 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 	// TODO: parse result
 
 	json_object* reply = json_tokener_parse(result.c_str());
-	if (reply == NULL) {
+	if (reply == nullptr) {
 		LOG(LOG_ERROR, "oldreader_api::get_subscribed_urls: failed to parse response as JSON.");
 		return urls;
 	}
@@ -259,17 +259,17 @@ bool oldreader_api::update_article_flags(const std::string& oldflags, const std:
 	bool success = true;
 
 	if (star_flag.length() > 0) {
-		if (strchr(oldflags.c_str(), star_flag[0])==NULL && strchr(newflags.c_str(), star_flag[0])!=NULL) {
+		if (strchr(oldflags.c_str(), star_flag[0])==nullptr && strchr(newflags.c_str(), star_flag[0])!=nullptr) {
 			success = star_article(guid, true);
-		} else if (strchr(oldflags.c_str(), star_flag[0])!=NULL && strchr(newflags.c_str(), star_flag[0])==NULL) {
+		} else if (strchr(oldflags.c_str(), star_flag[0])!=nullptr && strchr(newflags.c_str(), star_flag[0])==nullptr) {
 			success = star_article(guid, false);
 		}
 	}
 
 	if (share_flag.length() > 0) {
-		if (strchr(oldflags.c_str(), share_flag[0])==NULL && strchr(newflags.c_str(), share_flag[0])!=NULL) {
+		if (strchr(oldflags.c_str(), share_flag[0])==nullptr && strchr(newflags.c_str(), share_flag[0])!=nullptr) {
 			success = share_article(guid, true);
-		} else if (strchr(oldflags.c_str(), share_flag[0])!=NULL && strchr(newflags.c_str(), share_flag[0])==NULL) {
+		} else if (strchr(oldflags.c_str(), share_flag[0])!=nullptr && strchr(newflags.c_str(), share_flag[0])==nullptr) {
 			success = share_article(guid, false);
 		}
 	}

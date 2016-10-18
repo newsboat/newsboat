@@ -55,7 +55,7 @@ void logger::log(loglevel level, const char * format, ...) {
 	if (level <= curlevel && curlevel > LOG_NONE && (f.is_open() || ef.is_open())) {
 		char * buf, * logmsgbuf;
 		char date[128];
-		time_t t = time(NULL);
+		time_t t = time(nullptr);
 		struct tm * stm = localtime(&t);
 		strftime(date,sizeof(date),"%Y-%m-%d %H:%M:%S",stm);
 		if (curlevel > LOG_DEBUG)
@@ -63,7 +63,7 @@ void logger::log(loglevel level, const char * format, ...) {
 
 		va_list ap;
 		va_start(ap, format);
-		unsigned int len = vsnprintf(NULL,0,format,ap);
+		unsigned int len = vsnprintf(nullptr,0,format,ap);
 		va_end(ap);
 
 		va_start(ap, format);
@@ -71,7 +71,7 @@ void logger::log(loglevel level, const char * format, ...) {
 		vsnprintf(logmsgbuf, len + 1, format, ap);
 		va_end(ap);
 
-		len = snprintf(NULL, 0, "[%s] %s: %s",date, loglevel_str[level], logmsgbuf);
+		len = snprintf(nullptr, 0, "[%s] %s: %s",date, loglevel_str[level], logmsgbuf);
 		buf = new char[len + 1];
 		snprintf(buf,len + 1,"[%s] %s: %s",date, loglevel_str[level], logmsgbuf);
 

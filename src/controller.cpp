@@ -253,8 +253,8 @@ void controller::run(int argc, char * argv[]) {
 
 	/* First of all, let's check for options that imply silencing of the
 	 * output: import, export, command execution and, well, quiet mode */
-	while ((c = ::getopt_long(argc, argv, getopt_str, longopts, NULL)) != -1) {
-		if (strchr("iexq", c) != NULL) {
+	while ((c = ::getopt_long(argc, argv, getopt_str, longopts, nullptr)) != -1) {
+		if (strchr("iexq", c) != nullptr) {
 			silent = true;
 			break;
 		}
@@ -266,7 +266,7 @@ void controller::run(int argc, char * argv[]) {
 	 * process the options */
 	optind = 1;
 
-	while ((c = ::getopt_long(argc, argv, getopt_str, longopts, NULL)) != -1) {
+	while ((c = ::getopt_long(argc, argv, getopt_str, longopts, nullptr)) != -1) {
 		switch (c) {
 		case ':': /* fall-through */
 		case '?': /* missing option */
@@ -536,7 +536,7 @@ void controller::run(int argc, char * argv[]) {
 	for (auto url : urlcfg->get_urls()) {
 		try {
 			bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
-			std::shared_ptr<rss_feed> feed = rsscache->internalize_rssfeed(url, ignore_disp ? &ign : NULL);
+			std::shared_ptr<rss_feed> feed = rsscache->internalize_rssfeed(url, ignore_disp ? &ign : nullptr);
 			feed->set_tags(urlcfg->get_tags(url));
 			feed->set_order(i);
 			std::lock_guard<std::mutex> feedslock(feeds_mutex);
@@ -724,7 +724,7 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended, cur
 
 		bool ignore_dl = (cfg.get_configvalue("ignore-mode") == "download");
 
-		rss_parser parser(oldfeed->rssurl(), rsscache, &cfg, ignore_dl ? &ign : NULL, api);
+		rss_parser parser(oldfeed->rssurl(), rsscache, &cfg, ignore_dl ? &ign : nullptr, api);
 		parser.set_easyhandle(easyhandle);
 		LOG(LOG_DEBUG, "controller::reload: created parser");
 		try {
@@ -737,7 +737,7 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended, cur
 				newfeed->clear_items();
 
 				bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
-				std::shared_ptr<rss_feed> feed = rsscache->internalize_rssfeed(oldfeed->rssurl(), ignore_disp ? &ign : NULL);
+				std::shared_ptr<rss_feed> feed = rsscache->internalize_rssfeed(oldfeed->rssurl(), ignore_disp ? &ign : nullptr);
 				feed->set_tags(urlcfg->get_tags(oldfeed->rssurl()));
 				feed->set_order(oldfeed->get_order());
 				feeds[pos] = feed;
@@ -865,7 +865,7 @@ void controller::reload_all(bool unattended) {
 	}
 
 
-	t1 = time(NULL);
+	t1 = time(nullptr);
 
 	LOG(LOG_DEBUG,"controller::reload_all: starting with reload all...");
 	if (num_threads <= 1) {
@@ -895,7 +895,7 @@ void controller::reload_all(bool unattended) {
 	sort_feeds();
 	update_feedlist();
 
-	t2 = time(NULL);
+	t2 = time(nullptr);
 	dt = t2 - t1;
 	LOG(LOG_INFO, "controller::reload_all: reload took %d seconds", dt);
 
@@ -1043,15 +1043,15 @@ void controller::usage(char * argv0) {
 }
 
 void controller::import_opml(const char * filename) {
-	xmlDoc * doc = xmlReadFile(filename, NULL, 0);
-	if (doc == NULL) {
+	xmlDoc * doc = xmlReadFile(filename, nullptr, 0);
+	if (doc == nullptr) {
 		std::cout << utils::strprintf(_("An error occurred while parsing %s."), filename) << std::endl;
 		return;
 	}
 
 	xmlNode * root = xmlDocGetRootElement(doc);
 
-	for (xmlNode * node = root->children; node != NULL; node = node->next) {
+	for (xmlNode * node = root->children; node != nullptr; node = node->next) {
 		if (strcmp((const char *)node->name, "body")==0) {
 			LOG(LOG_DEBUG, "import_opml: found body");
 			rec_find_rss_outlines(node->children, "");
@@ -1065,13 +1065,13 @@ void controller::import_opml(const char * filename) {
 
 void controller::export_opml() {
 	xmlDocPtr root = xmlNewDoc((const xmlChar *)"1.0");
-	xmlNodePtr opml_node = xmlNewDocNode(root, NULL, (const xmlChar *)"opml", NULL);
+	xmlNodePtr opml_node = xmlNewDocNode(root, nullptr, (const xmlChar *)"opml", nullptr);
 	xmlSetProp(opml_node, (const xmlChar *)"version", (const xmlChar *)"1.0");
 	xmlDocSetRootElement(root, opml_node);
 
-	xmlNodePtr head = xmlNewTextChild(opml_node, NULL, (const xmlChar *)"head", NULL);
-	xmlNewTextChild(head, NULL, (const xmlChar *)"title", (const xmlChar *)PROGRAM_NAME " - Exported Feeds");
-	xmlNodePtr body = xmlNewTextChild(opml_node, NULL, (const xmlChar *)"body", NULL);
+	xmlNodePtr head = xmlNewTextChild(opml_node, nullptr, (const xmlChar *)"head", nullptr);
+	xmlNewTextChild(head, nullptr, (const xmlChar *)"title", (const xmlChar *)PROGRAM_NAME " - Exported Feeds");
+	xmlNodePtr body = xmlNewTextChild(opml_node, nullptr, (const xmlChar *)"body", nullptr);
 
 	for (auto feed : feeds) {
 		if (!utils::is_special_url(feed->rssurl())) {
@@ -1079,7 +1079,7 @@ void controller::export_opml() {
 			std::string link = feed->link();
 			std::string title = feed->title();
 
-			xmlNodePtr outline = xmlNewTextChild(body, NULL, (const xmlChar *)"outline", NULL);
+			xmlNodePtr outline = xmlNewTextChild(body, nullptr, (const xmlChar *)"outline", nullptr);
 			xmlSetProp(outline, (const xmlChar *)"type", (const xmlChar *)"rss");
 			xmlSetProp(outline, (const xmlChar *)"xmlUrl", (const xmlChar *)rssurl.c_str());
 			xmlSetProp(outline, (const xmlChar *)"htmlUrl", (const xmlChar *)link.c_str());
@@ -1087,7 +1087,7 @@ void controller::export_opml() {
 		}
 	}
 
-	xmlSaveCtxtPtr savectx = xmlSaveToFd(1, NULL, 1);
+	xmlSaveCtxtPtr savectx = xmlSaveToFd(1, nullptr, 1);
 	xmlSaveDoc(savectx, root);
 	xmlSaveClose(savectx);
 
@@ -1176,10 +1176,10 @@ void controller::rec_find_rss_outlines(xmlNode * node, std::string tag) {
 std::vector<std::shared_ptr<rss_item>> controller::search_for_items(const std::string& query, std::shared_ptr<rss_feed> feed) {
 	std::vector<std::shared_ptr<rss_item>> items;
 	LOG(LOG_DEBUG, "controller::search_for_items: setting feed pointers");
-	if(feed != NULL && feed->rssurl().substr(0,6) == "query:") {
+	if(feed != nullptr && feed->rssurl().substr(0,6) == "query:") {
 		for (auto item : feed->items()) {
 			if(!item->deleted() && (item->title().find(query) != std::string::npos || item->description().find(query) != std::string::npos)){
-				std::shared_ptr<rss_item> newitem(new rss_item(NULL));
+				std::shared_ptr<rss_item> newitem(new rss_item(nullptr));
 				newitem->set_guid(item->guid());
 				newitem->set_title(item->title());
 				newitem->set_author(item->author());
@@ -1204,7 +1204,7 @@ std::vector<std::shared_ptr<rss_item>> controller::search_for_items(const std::s
 			}
 		}
 	} else {
-		items = rsscache->search_for_items(query, (feed != NULL ? feed->rssurl() : ""));
+		items = rsscache->search_for_items(query, (feed != nullptr ? feed->rssurl() : ""));
 		for (auto item : items) {
 			item->set_feedptr(get_feed_by_url(item->feedurl()));
 		}
@@ -1270,7 +1270,7 @@ void controller::reload_urls_file() {
 		if (!found) {
 			try {
 				bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
-				std::shared_ptr<rss_feed> new_feed = rsscache->internalize_rssfeed(url, ignore_disp ? &ign : NULL);
+				std::shared_ptr<rss_feed> new_feed = rsscache->internalize_rssfeed(url, ignore_disp ? &ign : nullptr);
 				new_feed->set_tags(urlcfg->get_tags(url));
 				new_feed->set_order(i);
 				new_feeds.push_back(new_feed);
@@ -1356,7 +1356,7 @@ std::string controller::bookmark(
 			my_argv[0] = const_cast<char *>("/bin/sh");
 			my_argv[1] = const_cast<char *>("-c");
 			my_argv[2] = const_cast<char *>(cmdline.c_str());
-			my_argv[3] = NULL;
+			my_argv[3] = nullptr;
 			return utils::run_program(my_argv, "");
 		}
 	} else {
@@ -1460,7 +1460,7 @@ void controller::save_feed(std::shared_ptr<rss_feed> feed, unsigned int pos) {
 		LOG(LOG_DEBUG, "controller::save_feed: after externalize_rssfeed");
 
 		bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
-		feed = rsscache->internalize_rssfeed(feed->rssurl(), ignore_disp ? &ign : NULL);
+		feed = rsscache->internalize_rssfeed(feed->rssurl(), ignore_disp ? &ign : nullptr);
 		LOG(LOG_DEBUG, "controller::save_feed: after internalize_rssfeed");
 		feed->set_tags(urlcfg->get_tags(feed->rssurl()));
 		{
@@ -1509,7 +1509,7 @@ std::string controller::generate_enqueue_filename(const std::string& url, std::s
 	char * base = basename(buf);
 	if (!base || strlen(base) == 0) {
 		char lbuf[128];
-		time_t t = time(NULL);
+		time_t t = time(nullptr);
 		strftime(lbuf, sizeof(lbuf), "%Y-%b-%d-%H%M%S.unknown", localtime(&t));
 		dlpath.append(lbuf);
 	} else {

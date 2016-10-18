@@ -26,7 +26,7 @@ class filebrowser_formaction : public formaction {
 		virtual std::string title();
 
 	private:
-		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
+		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr);
 
 		std::string add_file(std::string filename);
 		std::string get_filename_suggestion(const std::string& s);

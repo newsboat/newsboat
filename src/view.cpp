@@ -57,7 +57,7 @@ extern "C" {
 namespace newsbeuter {
 
 view::view(controller * c) : ctrl(c), cfg(0), keys(0), current_formaction(0), is_inside_qna(false), is_inside_cmdline(false), tab_count(0) {
-	if (getenv("ESCDELAY") == NULL) {
+	if (getenv("ESCDELAY") == nullptr) {
 		set_escdelay(25);
 	}
 }
@@ -123,13 +123,13 @@ std::shared_ptr<formaction> view::get_current_formaction() {
 }
 
 void view::set_status_unlocked(const std::string& msg) {
-	if (formaction_stack.size() > 0 && get_current_formaction() != NULL) {
+	if (formaction_stack.size() > 0 && get_current_formaction() != nullptr) {
 		std::shared_ptr<stfl::form> form = get_current_formaction()->get_form();
-		if (form != NULL) {
+		if (form != nullptr) {
 			form->set("msg",msg);
 			form->run(-1);
 		} else {
-			LOG(LOG_ERROR, "view::set_status_unlocked: form for formaction of type %s is NULL!", get_current_formaction()->id().c_str());
+			LOG(LOG_ERROR, "view::set_status_unlocked: form for formaction of type %s is nullptr!", get_current_formaction()->id().c_str());
 		}
 	}
 }
@@ -319,10 +319,10 @@ void view::open_in_pager(const std::string& filename) {
 		fmt.register_fmt('f', filename);
 		cmdline = fmt.do_format(pager, 0);
 	} else {
-		const char * env_pager = NULL;
+		const char * env_pager = nullptr;
 		if (pager != "")
 			cmdline.append(pager);
-		else if ((env_pager = getenv("PAGER")) != NULL)
+		else if ((env_pager = getenv("PAGER")) != nullptr)
 			cmdline.append(env_pager);
 		else
 			cmdline.append("more");
@@ -401,7 +401,7 @@ void view::set_tags(const std::vector<std::string>& t) {
 }
 
 void view::push_searchresult(std::shared_ptr<rss_feed> feed, const std::string& phrase) {
-	assert(feed != NULL);
+	assert(feed != nullptr);
 	LOG(LOG_DEBUG, "view::push_searchresult: pushing search result");
 
 	if (feed->total_item_count() > 0) {
@@ -423,7 +423,7 @@ void view::push_searchresult(std::shared_ptr<rss_feed> feed, const std::string& 
 }
 
 void view::push_itemlist(std::shared_ptr<rss_feed> feed) {
-	assert(feed != NULL);
+	assert(feed != nullptr);
 
 	feed->purge_deleted_items();
 
@@ -459,7 +459,7 @@ void view::push_itemview(std::shared_ptr<rss_feed> f, const std::string& guid, c
 	std::string pager;
 	if ((pager = cfg->get_configvalue("pager")) == "internal") {
 		std::shared_ptr<itemlist_formaction> itemlist = std::dynamic_pointer_cast<itemlist_formaction, formaction>(get_current_formaction());
-		assert(itemlist != NULL);
+		assert(itemlist != nullptr);
 		std::shared_ptr<itemview_formaction> itemview(new itemview_formaction(this, itemlist, itemview_str));
 		set_bindings(itemview);
 		itemview->set_regexmanager(rxman);
@@ -480,7 +480,7 @@ void view::push_itemview(std::shared_ptr<rss_feed> f, const std::string& guid, c
 }
 
 void view::view_dialogs() {
-	if (get_current_formaction() != NULL && get_current_formaction()->id() != "dialogs") {
+	if (get_current_formaction() != nullptr && get_current_formaction()->id() != "dialogs") {
 		std::shared_ptr<dialogs_formaction> dialogs(new dialogs_formaction(this, dialogs_str));
 		dialogs->set_parent_formaction(get_current_formaction());
 		apply_colors(dialogs);
@@ -570,7 +570,7 @@ char view::confirm(const std::string& prompt, const std::string& charset) {
 		}
 		result = keys->get_key(event);
 		LOG(LOG_DEBUG, "view::confirm: key = %c (%u)", result, result);
-	} while (!result || strchr(charset.c_str(), result)==NULL);
+	} while (!result || strchr(charset.c_str(), result)==nullptr);
 
 	f->get_form()->set("msg", "");
 	f->get_form()->run(-1);
@@ -582,11 +582,11 @@ char view::confirm(const std::string& prompt, const std::string& charset) {
 
 void view::notify_itemlist_change(std::shared_ptr<rss_feed> feed) {
 	for (auto& form : formaction_stack) {
-		if (form != NULL && form->id() == "articlelist") {
+		if (form != nullptr && form->id() == "articlelist") {
 			std::shared_ptr<itemlist_formaction> itemlist = std::dynamic_pointer_cast<itemlist_formaction, formaction>(form);
-			if (itemlist != NULL) {
+			if (itemlist != nullptr) {
 				std::shared_ptr<rss_feed> f = itemlist->get_feed();
-				if (f != NULL && f->rssurl() == feed->rssurl()) {
+				if (f != nullptr && f->rssurl() == feed->rssurl()) {
 					itemlist->set_feed(feed);
 					itemlist->set_redraw(true);
 				}
@@ -655,7 +655,7 @@ bool view::get_previous_unread(itemlist_formaction * itemlist, itemview_formacti
 bool view::get_next_unread_feed(itemlist_formaction * itemlist) {
 	std::shared_ptr<feedlist_formaction> feedlist = std::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
 	unsigned int feedpos;
-	assert(feedlist != NULL);
+	assert(feedlist != nullptr);
 	if (feedlist->jump_to_next_unread_feed(feedpos)) {
 		prepare_query_feed(feedlist->get_feed());
 		itemlist->set_feed(feedlist->get_feed());
@@ -669,7 +669,7 @@ bool view::get_next_unread_feed(itemlist_formaction * itemlist) {
 bool view::get_prev_unread_feed(itemlist_formaction * itemlist) {
 	std::shared_ptr<feedlist_formaction> feedlist = std::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
 	unsigned int feedpos;
-	assert(feedlist != NULL);
+	assert(feedlist != nullptr);
 	if (feedlist->jump_to_previous_unread_feed(feedpos)) {
 		prepare_query_feed(feedlist->get_feed());
 		itemlist->set_feed(feedlist->get_feed());
@@ -780,7 +780,7 @@ bool view::get_next(itemlist_formaction * itemlist, itemview_formaction * itemvi
 bool view::get_next_feed(itemlist_formaction * itemlist) {
 	std::shared_ptr<feedlist_formaction> feedlist = std::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
 	unsigned int feedpos;
-	assert(feedlist != NULL);
+	assert(feedlist != nullptr);
 	if (feedlist->jump_to_next_feed(feedpos)) {
 		prepare_query_feed(feedlist->get_feed());
 		itemlist->set_feed(feedlist->get_feed());
@@ -794,7 +794,7 @@ bool view::get_next_feed(itemlist_formaction * itemlist) {
 bool view::get_prev_feed(itemlist_formaction * itemlist) {
 	std::shared_ptr<feedlist_formaction> feedlist = std::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
 	unsigned int feedpos;
-	assert(feedlist != NULL);
+	assert(feedlist != nullptr);
 	if (feedlist->jump_to_previous_feed(feedpos)) {
 		prepare_query_feed(feedlist->get_feed());
 		itemlist->set_feed(feedlist->get_feed());
@@ -819,7 +819,7 @@ void view::prepare_query_feed(std::shared_ptr<rss_feed> feed) {
 
 void view::force_redraw() {
 	std::shared_ptr<formaction> fa = get_current_formaction();
-	if (fa != NULL) {
+	if (fa != nullptr) {
 		fa->set_redraw(true);
 		fa->prepare();
 		fa->get_form()->run(-1);
@@ -832,8 +832,8 @@ void view::pop_current_formaction() {
 	for (unsigned int i=0; i<current_formaction; i++)
 		++it;
 	formaction_stack.erase(it);
-	if (f == NULL) {
-		current_formaction = formaction_stack_size() - 1; // XXX TODO this is not correct... we'd need to return to the previous one, but NULL formactions have no parent
+	if (f == nullptr) {
+		current_formaction = formaction_stack_size() - 1; // XXX TODO this is not correct... we'd need to return to the previous one, but nullptr formactions have no parent
 	} else if (formaction_stack.size() > 0) {
 		// first, we set back the parent formactions of those who reference the formaction we just removed
 		for (auto& form : formaction_stack) {
@@ -871,7 +871,7 @@ void view::remove_formaction(unsigned int pos) {
 		++it;
 	formaction_stack.erase(it);
 	current_formaction--;
-	if (f != NULL && formaction_stack.size() > 0) {
+	if (f != nullptr && formaction_stack.size() > 0) {
 		// we set back the parent formactions of those who reference the formaction we just removed
 		for (auto& form : formaction_stack) {
 			if (form->get_parent_formaction() == f) {
@@ -1078,7 +1078,7 @@ void view::handle_cmdline_completion(std::shared_ptr<formaction> fa) {
 void view::dump_current_form() {
 	std::string formtext = formaction_stack[current_formaction]->get_form()->dump("", "", 0);
 	char fnbuf[128];
-	time_t t = ::time(NULL);
+	time_t t = ::time(nullptr);
 	struct tm * stm = localtime(&t);
 	strftime(fnbuf, sizeof(fnbuf), "dumpform-%Y%m%d-%H%M%S.stfl", stm);
 	std::fstream f(fnbuf, std::ios_base::out);

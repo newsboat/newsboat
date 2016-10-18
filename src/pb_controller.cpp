@@ -161,7 +161,7 @@ void pb_controller::run(int argc, char * argv[]) {
 		{0                 , 0                , 0,  0 }
 	};
 
-	while ((c = ::getopt_long(argc, argv, getopt_str, longopts, NULL)) != -1) {
+	while ((c = ::getopt_long(argc, argv, getopt_str, longopts, nullptr)) != -1) {
 		switch (c) {
 		case ':':
 		case '?':

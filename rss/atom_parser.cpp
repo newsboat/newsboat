@@ -13,7 +13,7 @@ namespace rsspp {
 
 void atom_parser::parse_feed(feed& f, xmlNode * rootNode) {
 	if (!rootNode)
-		throw exception(_("XML root node is NULL"));
+		throw exception(_("XML root node is nullptr"));
 
 	switch (f.rss_version) {
 	case ATOM_0_3:
@@ -23,17 +23,17 @@ void atom_parser::parse_feed(feed& f, xmlNode * rootNode) {
 		ns = ATOM_1_0_URI;
 		break;
 	case ATOM_0_3_NONS:
-		ns = NULL;
+		ns = nullptr;
 		break;
 	default:
-		ns = NULL;
+		ns = nullptr;
 		break;
 	}
 
 	f.language = get_prop(rootNode, "lang");
 	globalbase = get_prop(rootNode, "base", XML_URI);
 
-	for (xmlNode * node = rootNode->children; node != NULL; node = node->next) {
+	for (xmlNode * node = rootNode->children; node != nullptr; node = node->next) {
 		if (node_is(node, "title", ns)) {
 			f.title = get_content(node);
 			f.title_type = get_prop(node, "type");
@@ -65,9 +65,9 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 	if (base == "")
 		base = globalbase;
 
-	for (xmlNode * node = entryNode->children; node != NULL; node = node->next) {
+	for (xmlNode * node = entryNode->children; node != nullptr; node = node->next) {
 		if (node_is(node, "author", ns)) {
-			for (xmlNode * authornode = node->children; authornode != NULL; authornode = authornode->next) {
+			for (xmlNode * authornode = node->children; authornode != nullptr; authornode = authornode->next) {
 				if (node_is(authornode, "name", ns)) {
 					it.author = get_content(authornode);
 				} // TODO: is there more?

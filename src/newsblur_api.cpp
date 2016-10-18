@@ -43,7 +43,7 @@ bool newsblur_api::authenticate() {
 std::vector<tagged_feedurl> newsblur_api::get_subscribed_urls() {
 	std::vector<tagged_feedurl> result;
 
-	json_object * response = query_api("/reader/feeds/", NULL);
+	json_object * response = query_api("/reader/feeds/", nullptr);
 
 	json_object * feeds {};
 	json_object_object_get_ex(response, "feeds", &feeds);
@@ -174,7 +174,7 @@ rsspp::feed newsblur_api::fetch_feed(const std::string& id) {
 
 		std::string page = utils::to_string(i);
 
-		json_object * query_result = query_api("/reader/feed/" + id + "?page=" + page, NULL);
+		json_object * query_result = query_api("/reader/feed/" + id + "?page=" + page, nullptr);
 
 		if (!query_result)
 			return f;
@@ -269,7 +269,7 @@ rsspp::feed newsblur_api::fetch_feed(const std::string& id) {
 json_object * newsblur_api::query_api(const std::string& endpoint, const std::string* postdata) {
 
 	std::string url = api_location + endpoint;
-	std::string data = utils::retrieve_url(url.c_str(), cfg, NULL, postdata);
+	std::string data = utils::retrieve_url(url.c_str(), cfg, nullptr, postdata);
 
 	json_object * result =  json_tokener_parse(data.c_str());
 	if (!result)

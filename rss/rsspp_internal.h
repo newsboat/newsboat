@@ -30,15 +30,15 @@ struct rss_parser {
 		std::string get_content(xmlNode * node);
 		std::string get_xml_content(xmlNode * node);
 		void cleanup_namespaces(xmlNodePtr node);
-		std::string get_prop(xmlNode * node, const char * prop, const char * ns = NULL);
+		std::string get_prop(xmlNode * node, const char * prop, const char * ns = nullptr);
 		std::string w3cdtf_to_rfc822(const std::string& w3cdtf);
-		bool node_is(xmlNode * node, const char * name, const char * ns_uri = NULL);
+		bool node_is(xmlNode * node, const char * name, const char * ns_uri = nullptr);
 		xmlDocPtr doc;
 };
 
 struct rss_09x_parser : public rss_parser {
 		virtual void parse_feed(feed& f, xmlNode * rootNode);
-		rss_09x_parser(xmlDocPtr doc) : rss_parser(doc), ns(NULL) { }
+		rss_09x_parser(xmlDocPtr doc) : rss_parser(doc), ns(nullptr) { }
 		virtual ~rss_09x_parser();
 	protected:
 		const char * ns;

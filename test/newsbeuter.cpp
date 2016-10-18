@@ -12,13 +12,13 @@ TEST_CASE("Newsbeuter reload behaves correctly") {
 	configcontainer * cfg = new configcontainer();
 	cache * rsscache = new cache("test-cache.db", cfg);
 
-	rss_parser parser("file://data/rss.xml", rsscache, cfg, NULL);
+	rss_parser parser("file://data/rss.xml", rsscache, cfg, nullptr);
 	std::shared_ptr<rss_feed> feed = parser.parse();
 	REQUIRE(feed->total_item_count() == 8);
 
 	SECTION("externalization and internalization preserve number of items") {
 		rsscache->externalize_rssfeed(feed, false);
-		feed = rsscache->internalize_rssfeed("file://data/rss.xml", NULL);
+		feed = rsscache->internalize_rssfeed("file://data/rss.xml", nullptr);
 		REQUIRE(feed->total_item_count() == 8);
 
 			SECTION("cache contains correct feed URLs") {

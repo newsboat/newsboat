@@ -11,7 +11,7 @@ using namespace newsbeuter;
 TEST_CASE("cache behaves correctly") {
 	configcontainer * cfg = new configcontainer();
 	cache * rsscache = new cache("test-cache.db", cfg);
-	rss_parser parser("file://data/rss.xml", rsscache, cfg, NULL);
+	rss_parser parser("file://data/rss.xml", rsscache, cfg, nullptr);
 	std::shared_ptr<rss_feed> feed = parser.parse();
 	REQUIRE(feed->total_item_count() == 8);
 	rsscache->externalize_rssfeed(feed, false);

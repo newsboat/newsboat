@@ -578,7 +578,7 @@ void itemlist_formaction::qna_start_search() {
 	try {
 		std::string utf8searchphrase = utils::convert_text(searchphrase, "utf-8", nl_langinfo(CODESET));
 		if (show_searchresult) {
-			items = v->get_ctrl()->search_for_items(utf8searchphrase, NULL);
+			items = v->get_ctrl()->search_for_items(utf8searchphrase, nullptr);
 		} else {
 			items = v->get_ctrl()->search_for_items(utf8searchphrase, feed);
 		}
@@ -713,7 +713,7 @@ std::string itemlist_formaction::item2formatted_line(
 	fmt.register_fmt('i', utils::strprintf("%u",item.second + 1));
 	fmt.register_fmt('f', gen_flags(item.first));
 	fmt.register_fmt('D', gen_datestr(item.first->pubDate_timestamp(), datetime_format.c_str()));
-	if (feed->rssurl() != item.first->feedurl() && item.first->get_feedptr() != NULL) {
+	if (feed->rssurl() != item.first->feedurl() && item.first->get_feedptr() != nullptr) {
 		fmt.register_fmt('T', utils::replace_all(item.first->get_feedptr()->title(), "<", "<>"));
 	}
 	fmt.register_fmt('t', utils::replace_all(item.first->title(), "<", "<>"));
@@ -875,7 +875,7 @@ keymap_hint_entry * itemlist_formaction::get_keymap_hint() {
 		{ OP_MARKFEEDREAD, _("Mark All Read") },
 		{ OP_SEARCH, _("Search") },
 		{ OP_HELP, _("Help") },
-		{ OP_NIL, NULL }
+		{ OP_NIL, nullptr }
 	};
 	return hints;
 }

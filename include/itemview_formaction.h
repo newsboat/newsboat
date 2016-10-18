@@ -45,7 +45,7 @@ class itemview_formaction : public formaction {
 		void update_percent();
 
 	private:
-		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
+		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr);
 		void set_head(const std::string& s, const std::string& feedtitle, unsigned int unread, unsigned int total);
 		void highlight_text(const std::string& searchphrase);
 

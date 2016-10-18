@@ -112,7 +112,7 @@ void opml_urlreader::reload() {
 
 		xmlDoc * doc = xmlParseMemory(urlcontent.c_str(), urlcontent.length());
 
-		if (doc == NULL) {
+		if (doc == nullptr) {
 			LOG(LOG_ERROR, "opml_urlreader::reload: parsing XML file failed");
 			continue;
 		}
@@ -120,7 +120,7 @@ void opml_urlreader::reload() {
 		xmlNode * root = xmlDocGetRootElement(doc);
 
 		if (root) {
-			for (xmlNode * node = root->children; node != NULL; node = node->next) {
+			for (xmlNode * node = root->children; node != nullptr; node = node->next) {
 				if (strcmp((const char *)node->name, "body")==0) {
 					LOG(LOG_DEBUG, "opml_urlreader::reload: found body");
 					rec_find_rss_outlines(node->children, "");
@@ -181,7 +181,7 @@ std::string opml_urlreader::get_source() {
 }
 
 const char * opml_urlreader::get_auth() {
-	return NULL;
+	return nullptr;
 }
 
 }

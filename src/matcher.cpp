@@ -27,7 +27,7 @@ const std::string& matcher::get_expression() {
 
 bool matcher::parse(const std::string& expr) {
 	struct timeval tv1, tv2;
-	gettimeofday(&tv1, NULL);
+	gettimeofday(&tv1, nullptr);
 
 	errmsg = "";
 
@@ -37,7 +37,7 @@ bool matcher::parse(const std::string& expr) {
 		errmsg = utils::wstr2str(p.get_error());
 	}
 
-	gettimeofday(&tv2, NULL);
+	gettimeofday(&tv2, nullptr);
 	unsigned long diff = (((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) - tv1.tv_usec;
 	LOG(LOG_DEBUG, "matcher::parse: parsing `%s' took %lu µs (success = %d)", expr.c_str(), diff, b ? 1 : 0);
 
@@ -122,7 +122,7 @@ bool matcher::matchop_rxeq(expression * e, matchable * item) {
 			throw matcherexception(matcherexception::INVALID_REGEX, e->literal, buf);
 		}
 	}
-	if (regexec(e->regex, item->get_attribute(e->name).c_str(), 0, NULL, 0)==0)
+	if (regexec(e->regex, item->get_attribute(e->name).c_str(), 0, nullptr, 0)==0)
 		return true;
 	return false;
 }

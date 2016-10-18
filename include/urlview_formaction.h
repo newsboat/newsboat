@@ -22,7 +22,7 @@ class urlview_formaction : public formaction {
 		virtual std::string title();
 		virtual void handle_cmdline(const std::string& cmd);
 	private:
-		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
+		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr);
 		std::vector<linkpair> links;
 		bool quit;
 		std::shared_ptr<rss_feed> feed;

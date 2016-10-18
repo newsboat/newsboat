@@ -145,9 +145,9 @@ bool ocnews_api::update_article_flags(const std::string& oldflags, const std::st
 	query += guid.substr(guid.find_first_of(":")+1);
 
 	if (star_flag.length() > 0) {
-		if (strchr(oldflags.c_str(), star_flag[0])==NULL && strchr(newflags.c_str(), star_flag[0])!=NULL) {
+		if (strchr(oldflags.c_str(), star_flag[0])==nullptr && strchr(newflags.c_str(), star_flag[0])!=nullptr) {
 			query += "/star";
-		} else if (strchr(oldflags.c_str(), star_flag[0])!=NULL && strchr(newflags.c_str(), star_flag[0])==NULL) {
+		} else if (strchr(oldflags.c_str(), star_flag[0])!=nullptr && strchr(newflags.c_str(), star_flag[0])==nullptr) {
 			query += "/unstar";
 		}
 	}

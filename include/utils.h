@@ -52,7 +52,7 @@ class utils {
 
 		static std::string get_command_output(const std::string& cmd);
 		static void extract_filter(const std::string& line, std::string& filter, std::string& url);
-		static std::string retrieve_url(const std::string& url, configcontainer * cfgcont = NULL, const char * authinfo = NULL, const std::string* postdata = NULL);
+		static std::string retrieve_url(const std::string& url, configcontainer * cfgcont = nullptr, const char * authinfo = nullptr, const std::string* postdata = nullptr);
 		static void run_command(const std::string& cmd, const std::string& param); // used for notifications only
 		static std::string run_program(char * argv[], const std::string& input);
 
@@ -121,7 +121,7 @@ class utils {
 		static bool is_http_url(const std::string& url);
 
 		static std::string get_content(xmlNode * node);
-		static std::string get_prop(xmlNode * node, const char * prop, const char * ns = NULL);
+		static std::string get_prop(xmlNode * node, const char * prop, const char * ns = nullptr);
 
 		static std::string escape_url(const std::string& url);
 		static std::string unescape_url(const std::string& url);

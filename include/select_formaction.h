@@ -33,7 +33,7 @@ class select_formaction : public formaction {
 		}
 		virtual std::string title();
 	private:
-		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
+		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr);
 		bool quit;
 		int type;
 		std::string value;

@@ -57,7 +57,7 @@ void itemview_formaction::prepare() {
 		std::shared_ptr<rss_feed> feedptr = item->get_feedptr();
 
 		std::string feedtitle, feedheader;
-		if (feedptr.get() != NULL) {
+		if (feedptr.get() != nullptr) {
 			if (feedptr->title().length() > 0) {
 				feedtitle = feedptr->title();
 			} else if (feedptr->link().length() > 0) {
@@ -407,7 +407,7 @@ keymap_hint_entry * itemview_formaction::get_keymap_hint() {
 		{ OP_OPENINBROWSER, _("Open in Browser") },
 		{ OP_ENQUEUE, _("Enqueue") },
 		{ OP_HELP, _("Help") },
-		{ OP_NIL, NULL }
+		{ OP_NIL, nullptr }
 	};
 	return hints;
 }
@@ -534,7 +534,7 @@ std::vector<std::pair<LineType, std::string>>
 		argv[0] = const_cast<char *>("/bin/sh");
 		argv[1] = const_cast<char *>("-c");
 		argv[2] = const_cast<char *>(renderer.c_str());
-		argv[3] = NULL;
+		argv[3] = nullptr;
 		LOG(LOG_DEBUG, "itemview_formaction::render_html: source = %s", source.c_str());
 		LOG(LOG_DEBUG, "itemview_formaction::render_html: html-renderer = %s", argv[2]);
 

@@ -139,7 +139,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 
 		int pos = locations["articlelist"].first.size();
 
-		locations["articlelist"].first.push_back(NULL);
+		locations["articlelist"].first.push_back(nullptr);
 		locations["articlelist"].second.push_back(colorstr);
 
 		matchers.push_back(std::pair<std::shared_ptr<matcher>, int>(m, pos));

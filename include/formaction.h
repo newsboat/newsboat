@@ -39,7 +39,7 @@ class formaction {
 
 		virtual void handle_cmdline(const std::string& cmd);
 
-		void process_op(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
+		void process_op(operation op, bool automatic = false, std::vector<std::string> * args = nullptr);
 
 		virtual void finished_qna(operation op);
 
@@ -50,7 +50,7 @@ class formaction {
 		inline std::string get_qna_response(unsigned int i) {
 			return (qna_responses.size() >= (i + 1)) ? qna_responses[i] : "";
 		}
-		void start_qna(const std::vector<qna_pair>& prompts, operation finish_op, history * h = NULL);
+		void start_qna(const std::vector<qna_pair>& prompts, operation finish_op, history * h = nullptr);
 
 		inline void set_parent_formaction(std::shared_ptr<formaction> fa) {
 			parent_formaction = fa;
@@ -67,7 +67,7 @@ class formaction {
 		static void save_histories(const std::string& searchfile, const std::string& cmdlinefile, unsigned int limit);
 
 	protected:
-		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL) = 0;
+		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr) = 0;
 		virtual void set_keymap_hints();
 
 

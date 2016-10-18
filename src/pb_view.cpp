@@ -20,7 +20,7 @@ using namespace newsbeuter;
 namespace podbeuter {
 
 pb_view::pb_view(pb_controller * c) : ctrl(c), dllist_form(dllist_str), help_form(help_str), keys(0) {
-	if (getenv("ESCDELAY") == NULL) {
+	if (getenv("ESCDELAY") == nullptr) {
 		set_escdelay(25);
 	}
 }
@@ -288,7 +288,7 @@ std::string pb_view::prepare_keymaphint(keymap_hint_entry * hints) {
 void pb_view::set_help_keymap_hint() {
 	keymap_hint_entry hints[] = {
 		{ OP_QUIT, _("Quit") },
-		{ OP_NIL, NULL }
+		{ OP_NIL, nullptr }
 	};
 	std::string keymap_hint = prepare_keymaphint(hints);
 	help_form.set("help", keymap_hint);
@@ -305,7 +305,7 @@ void pb_view::set_dllist_keymap_hint() {
 		{ OP_PB_PLAY, _("Play") },
 		{ OP_PB_MARK_FINISHED, _("Mark as Finished") },
 		{ OP_HELP, _("Help") },
-		{ OP_NIL, NULL }
+		{ OP_NIL, nullptr }
 	};
 
 	std::string keymap_hint = prepare_keymaphint(hints);

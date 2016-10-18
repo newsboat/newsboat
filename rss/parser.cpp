@@ -51,11 +51,11 @@ static size_t handle_headers(void * ptr, size_t size, size_t nmemb, void * data)
 	header[size*nmemb] = '\0';
 
 	if (!strncasecmp("Last-Modified:", header, 14)) {
-		time_t r = curl_getdate(header+14, NULL);
+		time_t r = curl_getdate(header+14, nullptr);
 		if (r == -1) {
 			LOG(LOG_DEBUG, "handle_headers: last-modified %s (curl_getdate FAILED)", header+14);
 		} else {
-			values->lastmodified = curl_getdate(header+14, NULL);
+			values->lastmodified = curl_getdate(header+14, nullptr);
 			LOG(LOG_DEBUG, "handle_headers: got last-modified %s (%d)", header+14, values->lastmodified);
 		}
 	} else if (!strncasecmp("ETag:",header, 5)) {
@@ -173,8 +173,8 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 }
 
 feed parser::parse_buffer(const char * buffer, size_t size, const char * url) {
-	doc = xmlReadMemory(buffer, size, url, NULL, XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING);
-	if (doc == NULL) {
+	doc = xmlReadMemory(buffer, size, url, nullptr, XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING);
+	if (doc == nullptr) {
 		throw exception(_("could not parse buffer"));
 	}
 
@@ -192,10 +192,10 @@ feed parser::parse_buffer(const char * buffer, size_t size, const char * url) {
 }
 
 feed parser::parse_file(const std::string& filename) {
-	doc = xmlReadFile(filename.c_str(), NULL, XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING);
+	doc = xmlReadFile(filename.c_str(), nullptr, XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING);
 	xmlNode* root_element = xmlDocGetRootElement(doc);
 
-	if (root_element == NULL) {
+	if (root_element == nullptr) {
 		throw exception(_("could not parse file"));
 	}
 
@@ -272,7 +272,7 @@ feed parser::parse_xmlnode(xmlNode* node) {
 			}
 		}
 	} else {
-		throw exception(_("XML root node is NULL"));
+		throw exception(_("XML root node is nullptr"));
 	}
 
 	return f;

@@ -186,7 +186,7 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 	 */
 	std::vector<std::string> tokens = utils::tokenize_quoted(cmdline, " \t=");
 	configcontainer * cfg = v->get_cfg();
-	assert(cfg != NULL);
+	assert(cfg != nullptr);
 	if (!tokens.empty()) {
 		std::string cmd = tokens[0];
 		tokens.erase(tokens.begin());

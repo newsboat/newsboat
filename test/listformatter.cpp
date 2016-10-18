@@ -50,7 +50,7 @@ TEST_CASE("listformatter::add_line() splits overly long sequences to fit width")
 				"{listitem text:\"ut word bo\"}"
 				"{listitem text:\"undaries\"}"
 			"}";
-		REQUIRE(fmt.format_list(NULL, "") == expected);
+		REQUIRE(fmt.format_list(nullptr, "") == expected);
 	}
 
 	SECTION("numbered list") {
@@ -70,7 +70,7 @@ TEST_CASE("listformatter::add_line() splits overly long sequences to fit width")
 				"{listitem[3] text:\"ut word bo\"}"
 				"{listitem[3] text:\"undaries\"}"
 			"}";
-		REQUIRE(fmt.format_list(NULL, "") == expected);
+		REQUIRE(fmt.format_list(nullptr, "") == expected);
 	}
 }
 
@@ -86,7 +86,7 @@ TEST_CASE("listformatter::set_line() replaces the item in a list") {
 			"{listitem[2] text:\"goodb\"}"
 			"{listitem[2] text:\"ye\"}"
 		"}";
-	REQUIRE(fmt.format_list(NULL, "") == expected);
+	REQUIRE(fmt.format_list(nullptr, "") == expected);
 
 	fmt.set_line(1, "oh", 3, 3);
 
@@ -96,7 +96,7 @@ TEST_CASE("listformatter::set_line() replaces the item in a list") {
 			"{listitem[3] text:\"oh\"}"
 			"{listitem[2] text:\"ye\"}"
 		"}";
-	REQUIRE(fmt.format_list(NULL, "") == expected);
+	REQUIRE(fmt.format_list(nullptr, "") == expected);
 }
 
 TEST_CASE("listformatter::format_list() uses regex manager if one is passed") {

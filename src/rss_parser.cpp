@@ -60,14 +60,14 @@ std::shared_ptr<rss_feed> rss_parser::parse() {
 }
 
 time_t rss_parser::parse_date(const std::string& datestr) {
-	time_t t = curl_getdate(datestr.c_str(), NULL);
+	time_t t = curl_getdate(datestr.c_str(), nullptr);
 	if (t == -1) {
 		LOG(LOG_INFO, "rss_parser::parse_date: encountered t == -1, trying out W3CDTF parser...");
-		t = curl_getdate(rsspp::rss_parser::__w3cdtf_to_rfc822(datestr).c_str(), NULL);
+		t = curl_getdate(rsspp::rss_parser::__w3cdtf_to_rfc822(datestr).c_str(), nullptr);
 	}
 	if (t == -1) {
 		LOG(LOG_INFO, "rss_parser::parse_date: still t == -1, setting to current time");
-		t = ::time(NULL);
+		t = ::time(nullptr);
 	}
 	return t;
 }
@@ -100,9 +100,9 @@ void rss_parser::set_rtl(std::shared_ptr<rss_feed> feed, const char * lang) {
 		"dv",  // Divehi
 		"he",  // Hebrew
 		"yi",  // Yiddish
-		NULL
+		nullptr
 	};
-	for (unsigned int i=0; rtl_langprefix[i]!=NULL; ++i) {
+	for (unsigned int i=0; rtl_langprefix[i]!=nullptr; ++i) {
 		if (strncmp(lang,rtl_langprefix[i],strlen(rtl_langprefix[i]))==0) {
 			LOG(LOG_DEBUG, "rss_parser::parse: detected right-to-left order, language code = %s", rtl_langprefix[i]);
 			feed->set_rtl(true);
@@ -121,7 +121,7 @@ void rss_parser::retrieve_uri(const std::string& uri) {
 	if (is_ttrss) {
 		const char * uri = my_uri.c_str();
 		const char * pound = strrchr(uri, '#');
-		if (pound != NULL) {
+		if (pound != nullptr) {
 			fetch_ttrss(pound+1);
 		}
 	} else if (is_newsblur) {
@@ -213,7 +213,7 @@ void rss_parser::parse_file(const std::string& file) {
 void rss_parser::download_filterplugin(const std::string& filter, const std::string& uri) {
 	std::string buf = utils::retrieve_url(uri, cfgcont);
 
-	char * argv[4] = { const_cast<char *>("/bin/sh"), const_cast<char *>("-c"), const_cast<char *>(filter.c_str()), NULL };
+	char * argv[4] = { const_cast<char *>("/bin/sh"), const_cast<char *>("-c"), const_cast<char *>(filter.c_str()), nullptr };
 	std::string result = utils::run_program(argv, buf);
 	LOG(LOG_DEBUG, "rss_parser::parse: output of `%s' is: %s", filter.c_str(), result.c_str());
 	is_valid = false;
@@ -245,7 +245,7 @@ void rss_parser::fill_feed_fields(std::shared_ptr<rss_feed> feed) {
 	if (f.pubDate != "")
 		feed->set_pubDate(parse_date(f.pubDate));
 	else
-		feed->set_pubDate(::time(NULL));
+		feed->set_pubDate(::time(nullptr));
 
 	set_rtl(feed, f.language.c_str());
 
@@ -322,7 +322,7 @@ void rss_parser::fill_feed_items(std::shared_ptr<rss_feed> feed) {
 		if (item.pubDate != "")
 			x->set_pubDate(parse_date(item.pubDate));
 		else
-			x->set_pubDate(::time(NULL));
+			x->set_pubDate(::time(nullptr));
 
 		x->set_guid(get_guid(item));
 

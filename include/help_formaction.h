@@ -20,7 +20,7 @@ class help_formaction : public formaction {
 		virtual void finished_qna(operation op);
 		void set_context(const std::string& ctx);
 	private:
-		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = NULL);
+		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr);
 		std::string make_colorstring(const std::vector<std::string>& colors);
 		bool quit;
 		bool apply_search;

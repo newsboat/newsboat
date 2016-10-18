@@ -12,7 +12,7 @@ reloadthread::~reloadthread() { }
 
 void reloadthread::operator()() {
 	for (;;) {
-		oldtime = time(NULL);
+		oldtime = time(nullptr);
 		LOG(LOG_INFO,"reloadthread: starting reload");
 
 		waittime_sec = 60 * cfg->get_configvalue_as_int("reload-time");
@@ -33,8 +33,8 @@ void reloadthread::operator()() {
 		}
 
 		time_t seconds_to_wait = 0;
-		if ((oldtime + waittime_sec) > time(NULL))
-			seconds_to_wait = oldtime + waittime_sec - time(NULL);
+		if ((oldtime + waittime_sec) > time(nullptr))
+			seconds_to_wait = oldtime + waittime_sec - time(nullptr);
 
 		while (seconds_to_wait > 0) {
 			seconds_to_wait = ::sleep(seconds_to_wait);

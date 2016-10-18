@@ -137,7 +137,7 @@ TEST_CASE("utils::run_program()") {
 	char * argv[4];
 	char cat[] = "cat";
 	argv[0] = cat;
-	argv[1] = NULL;
+	argv[1] = nullptr;
 	REQUIRE(utils::run_program(argv, "this is a multine-line\ntest string") == "this is a multine-line\ntest string");
 
 	char echo[] = "echo";
@@ -146,7 +146,7 @@ TEST_CASE("utils::run_program()") {
 	argv[0] = echo;
 	argv[1] = dashn;
 	argv[2] = helloworld;
-	argv[3] = NULL;
+	argv[3] = nullptr;
 	REQUIRE(utils::run_program(argv, "") == "hello world");
 }
 
@@ -168,10 +168,10 @@ TEST_CASE("utils::to_string()") {
 }
 
 TEST_CASE("utils::strprintf()") {
-	REQUIRE(utils::strprintf(NULL) == "");
+	REQUIRE(utils::strprintf(nullptr) == "");
 	REQUIRE(utils::strprintf("%s", "") == "");
 	REQUIRE(utils::strprintf("%u", 0) == "0");
-	REQUIRE(utils::strprintf("%s", NULL) == "(null)");
+	REQUIRE(utils::strprintf("%s", nullptr) == "(null)");
 	REQUIRE(utils::strprintf("%u-%s-%c", 23, "hello world", 'X') == "23-hello world-X");
 }
 

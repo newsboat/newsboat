@@ -403,7 +403,7 @@ std::string utils::retrieve_url(const std::string& url, configcontainer * cfgcon
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, &buf);
 
-	if (postdata != NULL) {
+	if (postdata != nullptr) {
 		curl_easy_setopt(easyhandle, CURLOPT_POST, 1);
 		curl_easy_setopt(easyhandle, CURLOPT_POSTFIELDS, postdata->c_str());
 	}
@@ -416,7 +416,7 @@ std::string utils::retrieve_url(const std::string& url, configcontainer * cfgcon
 	curl_easy_perform(easyhandle);
 	curl_easy_cleanup(easyhandle);
 
-	if (postdata != NULL) {
+	if (postdata != nullptr) {
 		LOG(LOG_DEBUG, "utils::retrieve_url(%s)[%s]: %s", url.c_str(), postdata->c_str(), buf.c_str());
 	} else {
 		LOG(LOG_DEBUG, "utils::retrieve_url(%s)[-]: %s", url.c_str(), buf.c_str());
@@ -439,7 +439,7 @@ void utils::run_command(const std::string& cmd, const std::string& input) {
 		dup2(fd, 1);
 		dup2(fd, 2);
 		LOG(LOG_DEBUG, "utils::run_command: %s '%s'", cmd.c_str(), input.c_str());
-		execlp(cmd.c_str(), cmd.c_str(), input.c_str(), NULL);
+		execlp(cmd.c_str(), cmd.c_str(), input.c_str(), nullptr);
 		LOG(LOG_DEBUG, "utils::run_command: execlp of %s failed: %s", cmd.c_str(), strerror(errno));
 		exit(1);
 	}
@@ -635,17 +635,17 @@ unsigned int utils::to_u(
 
 scope_measure::scope_measure(const std::string& func, loglevel ll) : lvl(ll) {
 	funcname = func;
-	gettimeofday(&tv1, NULL);
+	gettimeofday(&tv1, nullptr);
 }
 
 void scope_measure::stopover(const std::string& son) {
-	gettimeofday(&tv2, NULL);
+	gettimeofday(&tv2, nullptr);
 	unsigned long diff = (((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) - tv1.tv_usec;
 	LOG(lvl, "scope_measure: function `%s' (stop over `%s') took %lu.%06lu s so far", funcname.c_str(), son.c_str(), diff / 1000000, diff % 1000000);
 }
 
 scope_measure::~scope_measure() {
-	gettimeofday(&tv2, NULL);
+	gettimeofday(&tv2, nullptr);
 	unsigned long diff = (((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) - tv1.tv_usec;
 	LOG(LOG_INFO, "scope_measure: function `%s' took %lu.%06lu s", funcname.c_str(), diff / 1000000, diff % 1000000);
 }
@@ -857,7 +857,7 @@ unsigned int utils::get_random_value(unsigned int max) {
 	static bool initialized = false;
 	if (!initialized) {
 		initialized = true;
-		srand(~(time(NULL) ^ getpid() ^ getppid()));
+		srand(~(time(nullptr) ^ getpid() ^ getppid()));
 	}
 	return static_cast<unsigned int>(rand() % max);
 }
@@ -1056,7 +1056,7 @@ int utils::mkdir_parents(const char* p, mode_t mode) {
  */
 
 #if HAVE_OPENSSL
-static std::mutex * openssl_mutexes = NULL;
+static std::mutex * openssl_mutexes = nullptr;
 static int openssl_mutexes_size = 0;
 
 static void openssl_mth_locking_function(int mode, int n, const char * file, int line) {

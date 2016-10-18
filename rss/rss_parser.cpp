@@ -22,8 +22,8 @@ std::string rss_parser::get_content(xmlNode * node) {
 }
 
 void rss_parser::cleanup_namespaces(xmlNodePtr node) {
-	node->ns = NULL;
-	for (auto ptr = node->children; ptr != NULL; ptr = ptr->next) {
+	node->ns = nullptr;
+	for (auto ptr = node->children; ptr != nullptr; ptr = ptr->next) {
 		cleanup_namespaces(ptr);
 	}
 }
@@ -35,7 +35,7 @@ std::string rss_parser::get_xml_content(xmlNode * node) {
 	cleanup_namespaces(node);
 
 	if (node->children) {
-		for (xmlNodePtr ptr = node->children; ptr != NULL; ptr = ptr->next) {
+		for (xmlNodePtr ptr = node->children; ptr != nullptr; ptr = ptr->next) {
 			if (xmlNodeDump(buf, doc, ptr, 0, 0) >= 0) {
 				result.append((const char *)xmlBufferContent(buf));
 				xmlBufferEmpty(buf);
@@ -79,27 +79,27 @@ std::string rss_parser::__w3cdtf_to_rfc822(const std::string& w3cdtf) {
 	//ptr = strptime(w3cdtf.c_str(), "%Y-%m-%dT%H:%M:%S", &stm);
 	char * ptr = strptime(w3cdtf.c_str(), "%Y", &stm);
 
-	if (ptr != NULL) {
+	if (ptr != nullptr) {
 		ptr = strptime(ptr, "-%m", &stm);
 	} else {
 		return "";
 	}
 
-	if (ptr != NULL) {
+	if (ptr != nullptr) {
 		ptr = strptime(ptr, "-%d", &stm);
 	}
-	if (ptr != NULL) {
+	if (ptr != nullptr) {
 		ptr = strptime(ptr, "T%H", &stm);
 	}
-	if (ptr != NULL) {
+	if (ptr != nullptr) {
 		ptr = strptime(ptr, ":%M", &stm);
 	}
-	if (ptr != NULL) {
+	if (ptr != nullptr) {
 		ptr = strptime(ptr, ":%S", &stm);
 	}
 
 	int offs = 0;
-	if (ptr != NULL) {
+	if (ptr != nullptr) {
 		if (ptr[0] == '+' || ptr[0] == '-') {
 			unsigned int hour, min;
 			if (sscanf(ptr+1,"%02u:%02u", &hour, &min)==2) {

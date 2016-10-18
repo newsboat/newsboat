@@ -24,7 +24,7 @@ class textformatter {
 		void add_lines(
 				const std::vector<std::pair<LineType, std::string>> lines);
 		std::string format_text_to_list(
-				regexmanager * r = NULL,
+				regexmanager * r = nullptr,
 				const std::string& location = "",
 				const size_t wrap_width = 80,
 				const size_t total_width = 0);
