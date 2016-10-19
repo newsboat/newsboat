@@ -999,11 +999,11 @@ void view::goto_prev_dialog() {
 }
 
 void view::inside_qna(bool f) {
+	curs_set(f ? 1 : 0);
 	is_inside_qna = f;
 }
 
 void view::inside_cmdline(bool f) {
-	curs_set(f ? 1 : 0);
 	is_inside_cmdline = f;
 }
 
