@@ -262,3 +262,23 @@ TEST_CASE("cleanup_cache behaves as expected") {
 		}
 	}
 }
+
+TEST_CASE("fetch_descriptions fills out feed item's descriptions") {
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	const auto feedurl = "file://data/rss.xml";
+	rss_parser parser(feedurl, &rsscache, &cfg, nullptr);
+	std::shared_ptr<rss_feed> feed = parser.parse();
+
+	rsscache.externalize_rssfeed(feed, false);
+
+	for (auto& item : feed->items()) {
+		item->set_description("your test failed!");
+	}
+
+	REQUIRE_NOTHROW(rsscache.fetch_descriptions(feed.get()));
+
+	for (auto& item : feed->items()) {
+		REQUIRE(item->description() != "your test failed!");
+	}
+}

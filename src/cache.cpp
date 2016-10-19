@@ -840,7 +840,10 @@ void cache::fetch_descriptions(rss_feed * feed) {
 	}
 	std::string in_clause = utils::join(guids, ", ");
 
-	std::string query = prepare_query("SELECT guid,content FROM rss_item WHERE guid IN (%s);", in_clause.c_str());
+	std::string query =
+		prepare_query(
+			"SELECT guid, content FROM rss_item WHERE guid IN (%s);",
+			in_clause.c_str());
 
 	LOG(LOG_DEBUG, "running query: %s", query.c_str());
 
