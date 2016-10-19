@@ -108,10 +108,10 @@ void htmlrenderer::render(
 	tagsouppullparser xpp;
 	xpp.set_input(input);
 
-	for (tagsouppullparser::event e = xpp.next(); e != tagsouppullparser::END_DOCUMENT; e = xpp.next()) {
+	for (tagsouppullparser::event e = xpp.next(); e != tagsouppullparser::event::END_DOCUMENT; e = xpp.next()) {
 		std::string tagname;
 		switch (e) {
-		case tagsouppullparser::START_TAG:
+		case tagsouppullparser::event::START_TAG:
 			tagname = xpp.get_text();
 			std::transform(tagname.begin(), tagname.end(), tagname.begin(), ::tolower);
 			current_tag = tags[tagname];
@@ -381,7 +381,7 @@ void htmlrenderer::render(
 			}
 			break;
 
-		case tagsouppullparser::END_TAG:
+		case tagsouppullparser::event::END_TAG:
 			tagname = xpp.get_text();
 			std::transform(tagname.begin(), tagname.end(), tagname.begin(), ::tolower);
 			current_tag = tags[tagname];
@@ -571,7 +571,7 @@ void htmlrenderer::render(
 			}
 			break;
 
-		case tagsouppullparser::TEXT: {
+		case tagsouppullparser::event::TEXT: {
 			auto text = utils::quote_for_stfl(xpp.get_text());
 			if (itunes_hack) {
 				std::vector<std::string> paragraphs = utils::tokenize_nl(text);

@@ -19,15 +19,16 @@ namespace newsbeuter {
  * remotely looks like XML. We use this parser for the HTML renderer.
  */
 
-tagsouppullparser::tagsouppullparser() : inputstream(0), current_event(START_DOCUMENT) {
-}
+tagsouppullparser::tagsouppullparser()
+: inputstream(0), current_event(event::START_DOCUMENT)
+{ }
 
 tagsouppullparser::~tagsouppullparser() {
 }
 
 void tagsouppullparser::set_input(std::istream& is) {
 	inputstream = &is;
-	current_event = START_DOCUMENT;
+	current_event = event::START_DOCUMENT;
 }
 
 std::string tagsouppullparser::get_attribute_value(const std::string& name) const {
@@ -57,26 +58,26 @@ tagsouppullparser::event tagsouppullparser::next() {
 	text = "";
 
 	if (inputstream->eof()) {
-		current_event = END_DOCUMENT;
+		current_event = event::END_DOCUMENT;
 	}
 
 	switch (current_event) {
-	case START_DOCUMENT:
-	case START_TAG:
-	case END_TAG:
+		case event::START_DOCUMENT:
+	case event::START_TAG:
+	case event::END_TAG:
 		skip_whitespace();
 		if (inputstream->eof()) {
-			current_event = END_DOCUMENT;
+			current_event = event::END_DOCUMENT;
 			break;
 		}
 		if (c != '<') {
 			handle_text();
 			break;
 		}
-	case TEXT:
+	case event::TEXT:
 		handle_tag();
 		break;
-	case END_DOCUMENT:
+	case event::END_DOCUMENT:
 		break;
 	}
 	return get_event_type();
@@ -127,9 +128,9 @@ std::string tagsouppullparser::read_tag() {
 tagsouppullparser::event tagsouppullparser::determine_tag_type() {
 	if (text.length() > 0 && text[0] == '/') {
 		text.erase(0,1);
-		return END_TAG;
+		return event::END_TAG;
 	}
-	return START_TAG;
+	return event::START_TAG;
 }
 
 std::string tagsouppullparser::decode_attribute(const std::string& s) {
@@ -542,7 +543,7 @@ void tagsouppullparser::handle_tag() {
 	try {
 		s = read_tag();
 	} catch (const xmlexception &) {
-		current_event = END_DOCUMENT;
+		current_event = event::END_DOCUMENT;
 		return;
 	}
 	parse_tag(s);
@@ -550,7 +551,7 @@ void tagsouppullparser::handle_tag() {
 }
 
 void tagsouppullparser::handle_text() {
-	if (current_event != START_DOCUMENT)
+	if (current_event != event::START_DOCUMENT)
 		text.append(ws);
 	text.append(1,c);
 	std::string tmp;
@@ -559,7 +560,7 @@ void tagsouppullparser::handle_text() {
 	text = decode_entities(text);
 	/* Remove all soft-hyphens as they can behave unpredictable and inadvertently render as hyphens */
 	text.erase(std::remove(text.begin(), text.end(), 0xad), text.end());
-	current_event = TEXT;
+	current_event = event::TEXT;
 }
 
 }
