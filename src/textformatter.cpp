@@ -114,7 +114,7 @@ std::string format_text_plain_helper(
 
 		switch(type) {
 			case wrappable:
-				for(auto line : wrap_line(text, wrap_width)) {
+				for (auto line : wrap_line(text, wrap_width)) {
 					store_line(line);
 				}
 				break;
@@ -123,7 +123,7 @@ std::string format_text_plain_helper(
 				if (total_width == 0) {
 					store_line(text);
 				} else {
-					for(auto line : wrap_line(text, total_width)) {
+					for (auto line : wrap_line(text, total_width)) {
 						store_line(line);
 					}
 				}

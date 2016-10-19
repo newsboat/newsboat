@@ -525,10 +525,10 @@ void htmlrenderer::render(
 					tables.pop_back();
 
 					if (!tables.empty()) { // still a table on the outside?
-						for(size_t idx=0; idx < table_text.size(); ++idx)
+						for (size_t idx=0; idx < table_text.size(); ++idx)
 							tables.back().add_text(table_text[idx].second); // add rendered table to current cell
 					} else {
-						for(size_t idx=0; idx < table_text.size(); ++idx) {
+						for (size_t idx=0; idx < table_text.size(); ++idx) {
 							std::string s = table_text[idx].second;
 							while (s.length() > 0 && s[0] == '\n')
 								s.erase(0, 1);
@@ -624,7 +624,7 @@ void htmlrenderer::render(
 		std::vector<std::pair<LineType, std::string>> table_text;
 		render_table(tables.back(), table_text);
 		tables.pop_back();
-		for(size_t idx=0; idx < table_text.size(); ++idx) {
+		for (size_t idx=0; idx < table_text.size(); ++idx) {
 			std::string s = table_text[idx].second;
 			while (s.length() > 0 && s[0] == '\n')
 				s.erase(0, 1);
@@ -771,9 +771,9 @@ void htmlrenderer::render_table(
 
 	// get maximum number of cells
 	size_t cells = 0;
-	for(size_t row=0; row < rows; row++) {
+	for (size_t row=0; row < rows; row++) {
 		size_t count = 0;
-		for(size_t cell=0; cell < table.rows[row].cells.size(); cell++) {
+		for (size_t cell=0; cell < table.rows[row].cells.size(); cell++) {
 			count += table.rows[row].cells[cell].span;
 		}
 		cells  = std::max(cells, count);
@@ -782,11 +782,11 @@ void htmlrenderer::render_table(
 	// get width of each row
 	std::vector<size_t> cell_widths;
 	cell_widths.resize(cells, 0);
-	for(size_t row=0; row < rows; row++) {
-		for(size_t cell=0; cell < table.rows[row].cells.size(); cell++) {
+	for (size_t row=0; row < rows; row++) {
+		for (size_t cell=0; cell < table.rows[row].cells.size(); cell++) {
 			size_t width = 0;
 			if (table.rows[row].cells[cell].text.size()) {
-				for(size_t idx=0; idx < table.rows[row].cells[cell].text.size(); idx++)
+				for (size_t idx=0; idx < table.rows[row].cells[cell].text.size(); idx++)
 					width = std::max(width, utils::strwidth_stfl(table.rows[row].cells[cell].text[idx]));
 			}
 			if (table.rows[row].cells[cell].span > 1) {
@@ -805,7 +805,7 @@ void htmlrenderer::render_table(
 	std::string separator;
 	if (table.border)
 		separator += hvsep;
-	for(size_t cell=0; cell < cells; cell++) {
+	for (size_t cell=0; cell < cells; cell++) {
 		separator += std::string(cell_widths[cell], hsep);
 		separator += hvsep;
 	}
@@ -816,17 +816,17 @@ void htmlrenderer::render_table(
 	// render the table
 	if (table.border)
 		lines.push_back(std::make_pair(newsbeuter::nonwrappable, separator));
-	for(size_t row=0; row < rows; row++) {
+	for (size_t row=0; row < rows; row++) {
 		// calc height of this row
 		size_t height = 0;
-		for(size_t cell=0; cell < table.rows[row].cells.size(); cell++)
+		for (size_t cell=0; cell < table.rows[row].cells.size(); cell++)
 			height = std::max(height, table.rows[row].cells[cell].text.size());
 
-		for(size_t idx=0; idx < height; ++idx) {
+		for (size_t idx=0; idx < height; ++idx) {
 			std::string line;
 			if (table.border)
 				line += vsep;
-			for(size_t cell=0; cell < table.rows[row].cells.size(); cell++) {
+			for (size_t cell=0; cell < table.rows[row].cells.size(); cell++) {
 				size_t cell_width = 0;
 				if (idx < table.rows[row].cells[cell].text.size()) {
 					LOG(LOG_DEBUG, "row = %d cell = %d text = %s", row, cell, table.rows[row].cells[cell].text[idx].c_str());
@@ -835,7 +835,7 @@ void htmlrenderer::render_table(
 				}
 				size_t reference_width = cell_widths[cell];
 				if (table.rows[row].cells[cell].span > 1) {
-					for(size_t ic=cell+1; ic < cell + table.rows[row].cells[cell].span; ++ic)
+					for (size_t ic=cell+1; ic < cell + table.rows[row].cells[cell].span; ++ic)
 						reference_width += cell_widths[ic]+1;
 				}
 				LOG(LOG_DEBUG, "cell_width = %d reference_width = %d", cell_width, reference_width);

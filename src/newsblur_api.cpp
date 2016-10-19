@@ -170,7 +170,7 @@ rsspp::feed newsblur_api::fetch_feed(const std::string& id) {
 
 	LOG(LOG_INFO, "newsblur_api::fetch_feed: about to fetch %u pages of feed %s", min_pages, id.c_str());
 
-	for(unsigned int i = 1; i <= min_pages; i++) {
+	for (unsigned int i = 1; i <= min_pages; i++) {
 
 		std::string page = utils::to_string(i);
 

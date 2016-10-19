@@ -1176,9 +1176,12 @@ void controller::rec_find_rss_outlines(xmlNode * node, std::string tag) {
 std::vector<std::shared_ptr<rss_item>> controller::search_for_items(const std::string& query, std::shared_ptr<rss_feed> feed) {
 	std::vector<std::shared_ptr<rss_item>> items;
 	LOG(LOG_DEBUG, "controller::search_for_items: setting feed pointers");
-	if(feed != nullptr && feed->rssurl().substr(0,6) == "query:") {
+	if (feed != nullptr && feed->rssurl().substr(0,6) == "query:") {
 		for (auto item : feed->items()) {
-			if(!item->deleted() && (item->title().find(query) != std::string::npos || item->description().find(query) != std::string::npos)){
+			if (!item->deleted()
+				&& (item->title().find(query) != std::string::npos
+				    || item->description().find(query) != std::string::npos))
+			{
 				std::shared_ptr<rss_item> newitem(new rss_item(nullptr));
 				newitem->set_guid(item->guid());
 				newitem->set_title(item->title());
