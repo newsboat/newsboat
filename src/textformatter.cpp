@@ -108,18 +108,18 @@ std::string format_text_plain_helper(
 			"textformatter::format_text_plain: got line `%s' type %u",
 			text.c_str(), type);
 
-		if (rxman && type != hr) {
+		if (rxman && type != LineType::hr) {
 			rxman->quote_and_highlight(text, location);
 		}
 
 		switch(type) {
-			case wrappable:
+			case LineType::wrappable:
 				for(auto line : wrap_line(text, wrap_width)) {
 					store_line(line);
 				}
 				break;
 
-			case nonwrappable:
+			case LineType::nonwrappable:
 				if (total_width == 0) {
 					store_line(text);
 				} else {
@@ -129,7 +129,7 @@ std::string format_text_plain_helper(
 				}
 				break;
 
-			case hr:
+			case LineType::hr:
 				store_line(htmlrenderer::render_hr(wrap_width));
 				break;
 		}

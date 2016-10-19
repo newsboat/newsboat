@@ -642,7 +642,7 @@ void htmlrenderer::render(
 					i+1,
 					links[i].first.c_str(),
 					type2str(links[i].second).c_str());
-			lines.push_back(std::make_pair(newsbeuter::nonwrappable, link_text));
+			lines.push_back(std::make_pair(LineType::nonwrappable, link_text));
 		}
 	}
 }
@@ -678,7 +678,7 @@ void htmlrenderer::add_nonempty_line(
 }
 
 void htmlrenderer::add_hr(std::vector<std::pair<LineType, std::string>>& lines) {
-	lines.push_back(std::make_pair(newsbeuter::hr, std::string("")));
+	lines.push_back(std::make_pair(LineType::hr, std::string("")));
 }
 
 void htmlrenderer::add_line(
@@ -689,14 +689,14 @@ void htmlrenderer::add_line(
 	if (tables.size())
 		tables.back().add_text(curline);
 	else
-		lines.push_back(std::make_pair(newsbeuter::wrappable, curline));
+		lines.push_back(std::make_pair(LineType::wrappable, curline));
 }
 
 void htmlrenderer::add_line_verbatim(
 		const std::string& line,
 		std::vector<std::pair<LineType, std::string>>& lines)
 {
-	lines.push_back(std::make_pair(newsbeuter::nonwrappable, line));
+	lines.push_back(std::make_pair(LineType::nonwrappable, line));
 }
 
 void htmlrenderer::prepare_new_line(std::string& line, int indent_level) {
@@ -815,7 +815,7 @@ void htmlrenderer::render_table(
 
 	// render the table
 	if (table.border)
-		lines.push_back(std::make_pair(newsbeuter::nonwrappable, separator));
+		lines.push_back(std::make_pair(LineType::nonwrappable, separator));
 	for(size_t row=0; row < rows; row++) {
 		// calc height of this row
 		size_t height = 0;
@@ -847,10 +847,10 @@ void htmlrenderer::render_table(
 			}
 			if (table.border)
 				line += vsep;
-			lines.push_back(std::make_pair(newsbeuter::nonwrappable, line));
+			lines.push_back(std::make_pair(LineType::nonwrappable, line));
 		}
 		if (table.border)
-			lines.push_back(std::make_pair(newsbeuter::nonwrappable, separator));
+			lines.push_back(std::make_pair(LineType::nonwrappable, separator));
 	}
 }
 

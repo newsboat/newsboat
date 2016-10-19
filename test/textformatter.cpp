@@ -9,8 +9,8 @@ TEST_CASE("textformatter: lines marked as `wrappable` are wrapped to fit width")
 
 	fmt.add_lines(
 		{
-			std::make_pair(wrappable, "this one is going to be wrapped"),
-			std::make_pair(nonwrappable, "this one is going to be preserved")
+			std::make_pair(LineType::wrappable, "this one is going to be wrapped"),
+			std::make_pair(LineType::nonwrappable, "this one is going to be preserved")
 		});
 
 	SECTION("formatting to plain text") {
@@ -39,7 +39,7 @@ TEST_CASE("textformatter: lines marked as `wrappable` are wrapped to fit width")
 TEST_CASE("textformatter: regex manager is used by format_text_to_list if one is passed") {
 	textformatter fmt;
 
-	fmt.add_line(wrappable, "Highlight me please!");
+	fmt.add_line(LineType::wrappable, "Highlight me please!");
 
 	regexmanager rxmgr;
 	// the choice of green text on red background does not reflect my personal
@@ -57,7 +57,7 @@ TEST_CASE("textformatter: regex manager is used by format_text_to_list if one is
 TEST_CASE("textformatter: <hr> is rendered properly") {
 	textformatter fmt;
 
-	fmt.add_line(hr, "");
+	fmt.add_line(LineType::hr, "");
 
 	SECTION("width = 10") {
 		const std::string expected =
@@ -71,8 +71,8 @@ TEST_CASE("textformatter: <hr> is rendered properly") {
 
 TEST_CASE("textformatter: wrappable sequences longer then format width are forced-wrapped") {
 	textformatter fmt;
-	fmt.add_line(wrappable, "0123456789");
-	fmt.add_line(nonwrappable, "0123456789");
+	fmt.add_line(LineType::wrappable, "0123456789");
+	fmt.add_line(LineType::nonwrappable, "0123456789");
 
 	const std::string expected =
 		"01234\n"
@@ -83,7 +83,7 @@ TEST_CASE("textformatter: wrappable sequences longer then format width are force
 
 TEST_CASE("textformatter: when wrapping, spaces at the beginning of lines are dropped") {
 	textformatter fmt;
-	fmt.add_line(wrappable, "just a test");
+	fmt.add_line(LineType::wrappable, "just a test");
 
 	const std::string expected =
 		"just\n"
@@ -94,7 +94,7 @@ TEST_CASE("textformatter: when wrapping, spaces at the beginning of lines are dr
 
 TEST_CASE("textformatter: nonwrappable lines are wrapped by format_text_to_list if total_width != 0") {
 	textformatter fmt;
-	fmt.add_line(nonwrappable, "just a test");
+	fmt.add_line(LineType::nonwrappable, "just a test");
 	const size_t wrap_width = 100;
 	regexmanager * rxman = nullptr;
 	const std::string location = "";

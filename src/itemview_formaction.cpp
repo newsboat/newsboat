@@ -68,30 +68,30 @@ void itemview_formaction::prepare() {
 		}
 		if (feedtitle.length() > 0) {
 			feedheader = utils::strprintf("%s%s", _("Feed: "), feedtitle.c_str());
-			textfmt.add_line(newsbeuter::wrappable, feedheader);
+			textfmt.add_line(LineType::wrappable, feedheader);
 		}
 
 		if (item->title().length() > 0) {
 			std::string title = utils::strprintf("%s%s", _("Title: "), item->title().c_str());
-			textfmt.add_line(newsbeuter::wrappable, title);
+			textfmt.add_line(LineType::wrappable, title);
 		}
 
 		if (item->author().length() > 0) {
 			std::string author = utils::strprintf("%s%s", _("Author: "), item->author().c_str());
-			textfmt.add_line(newsbeuter::wrappable, author);
+			textfmt.add_line(LineType::wrappable, author);
 		}
 
 		if (item->link().length() > 0) {
 			std::string link = utils::strprintf("%s%s", _("Link: "), utils::censor_url(item->link()).c_str());
-			textfmt.add_line(newsbeuter::nonwrappable, link);
+			textfmt.add_line(LineType::nonwrappable, link);
 		}
 
 		std::string date = utils::strprintf("%s%s", _("Date: "), item->pubDate().c_str());
-		textfmt.add_line(newsbeuter::wrappable, date);
+		textfmt.add_line(LineType::wrappable, date);
 
 		if (item->flags().length() > 0) {
 			std::string flags = utils::strprintf("%s%s", _("Flags: "), item->flags().c_str());
-			textfmt.add_line(newsbeuter::wrappable, flags);
+			textfmt.add_line(LineType::wrappable, flags);
 		}
 
 		if (item->enclosure_url().length() > 0) {
@@ -99,10 +99,10 @@ void itemview_formaction::prepare() {
 			if (item->enclosure_type() != "") {
 				enc_url.append(utils::strprintf(" (%s%s)",  _("type: "), item->enclosure_type().c_str()));
 			}
-			textfmt.add_line(newsbeuter::nonwrappable, enc_url);
+			textfmt.add_line(LineType::nonwrappable, enc_url);
 		}
 
-		textfmt.add_line(newsbeuter::wrappable, std::string());
+		textfmt.add_line(LineType::wrappable, std::string());
 
 		unsigned int unread_item_count = feed->unread_item_count();
 		// we need to subtract because the current item isn't yet marked as read
@@ -445,7 +445,7 @@ void itemview_formaction::render_source(
 			source.erase();
 		else
 			source.erase(0, pos+1);
-		lines.push_back(std::make_pair(nonwrappable, line));
+		lines.push_back(std::make_pair(LineType::nonwrappable, line));
 	} while (source.length() > 0);
 }
 
@@ -543,7 +543,7 @@ std::vector<std::pair<LineType, std::string>>
 		std::string line;
 		getline(is, line);
 		while (!is.eof()) {
-			result.push_back(std::make_pair(newsbeuter::nonwrappable, utils::quote_for_stfl(line)));
+			result.push_back(std::make_pair(LineType::nonwrappable, utils::quote_for_stfl(line)));
 			getline(is, line);
 		}
 	}

@@ -9,7 +9,7 @@
 
 namespace newsbeuter {
 
-enum LineType {
+enum class LineType {
 	wrappable = 1,
 	nonwrappable,
 	hr

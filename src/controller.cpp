@@ -1409,27 +1409,27 @@ void controller::write_item(std::shared_ptr<rss_item> item, std::ostream& ostr) 
 
 	std::string title(_("Title: "));
 	title.append(item->title());
-	lines.push_back(std::make_pair(newsbeuter::wrappable, title));
+	lines.push_back(std::make_pair(LineType::wrappable, title));
 
 	std::string author(_("Author: "));
 	author.append(item->author());
-	lines.push_back(std::make_pair(newsbeuter::wrappable, author));
+	lines.push_back(std::make_pair(LineType::wrappable, author));
 
 	std::string date(_("Date: "));
 	date.append(item->pubDate());
-	lines.push_back(std::make_pair(newsbeuter::wrappable, date));
+	lines.push_back(std::make_pair(LineType::wrappable, date));
 
 	std::string link(_("Link: "));
 	link.append(item->link());
-	lines.push_back(std::make_pair(newsbeuter::nonwrappable, link));
+	lines.push_back(std::make_pair(LineType::nonwrappable, link));
 
 	if (item->enclosure_url() != "") {
 		std::string dlurl(_("Podcast Download URL: "));
 		dlurl.append(item->enclosure_url());
-		lines.push_back(std::make_pair(newsbeuter::nonwrappable, dlurl));
+		lines.push_back(std::make_pair(LineType::nonwrappable, dlurl));
 	}
 
-	lines.push_back(std::make_pair(newsbeuter::wrappable, std::string("")));
+	lines.push_back(std::make_pair(LineType::wrappable, std::string("")));
 
 	htmlrenderer rnd(true);
 	rnd.render(item->description(), lines, links, item->feedurl());
