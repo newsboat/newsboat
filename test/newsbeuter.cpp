@@ -18,14 +18,10 @@ TEST_CASE("Newsbeuter reload behaves correctly") {
 
 	SECTION("externalization and internalization preserve number of items") {
 		rsscache->externalize_rssfeed(feed, false);
-		feed = rsscache->internalize_rssfeed("file://data/rss.xml", nullptr);
+		REQUIRE_NOTHROW(
+				feed = rsscache->internalize_rssfeed(
+					"file://data/rss.xml", nullptr));
 		REQUIRE(feed->total_item_count() == 8);
-
-			SECTION("cache contains correct feed URLs") {
-				std::vector<std::string> feedurls = rsscache->get_feed_urls();
-				REQUIRE(feedurls.size() == 1);
-				REQUIRE(feedurls[0] == "file://data/rss.xml");
-			}
 	}
 
 	SECTION("item titles are correct") {

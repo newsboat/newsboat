@@ -312,20 +312,6 @@ void cache::mark_item_deleted(const std::string& guid, bool b) {
 	LOG(LOG_DEBUG, "cache::mark_item_deleted ran SQL statement: %s result = %d", query.c_str(), rc);
 }
 
-
-std::vector<std::string> cache::get_feed_urls() {
-	std::lock_guard<std::mutex> lock(mtx);
-	std::string query = "SELECT rssurl FROM rss_feed;";
-
-	std::vector<std::string> urls;
-
-	int rc = sqlite3_exec(db, query.c_str(), vectorofstring_callback,&urls, nullptr);
-	assert(rc == SQLITE_OK);
-
-	return urls;
-}
-
-
 // this function writes an rss_feed including all rss_items to the database
 void cache::externalize_rssfeed(std::shared_ptr<rss_feed> feed, bool reset_unread) {
 	scope_measure m1("cache::externalize_feed");
