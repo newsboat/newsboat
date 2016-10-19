@@ -103,11 +103,10 @@ std::string feedhq_api::retrieve_auth() {
 	curl_easy_perform(handle);
 	curl_easy_cleanup(handle);
 
-	std::vector<std::string> lines = utils::tokenize(result);
-	for (std::vector<std::string>::iterator it=lines.begin(); it!=lines.end(); ++it) {
-		LOG(LOG_DEBUG, "feedhq_api::retrieve_auth: line = %s", it->c_str());
-		if (it->substr(0,5)=="Auth=") {
-			std::string auth = it->substr(5, it->length()-5);
+	for (const auto& line : utils::tokenize(result)) {
+		LOG(LOG_DEBUG, "feedhq_api::retrieve_auth: line = %s", line.c_str());
+		if (line.substr(0,5) == "Auth=") {
+			std::string auth = line.substr(5, line.length()-5);
 			return auth;
 		}
 	}
