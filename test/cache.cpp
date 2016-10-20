@@ -384,3 +384,24 @@ TEST_CASE("get_read_item_guids returns GUIDs of items that are marked read") {
 	INFO("Testing on two feeds with new `cache` object");
 	check(rsscache->get_read_item_guids());
 }
+
+TEST_CASE("mark_item_deleted changes \"deleted\" flag of item with given GUID ") {
+	TestHelpers::TempFile dbfile;
+	rss_ignores ign;
+	configcontainer cfg;
+	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), &cfg) );
+	auto feedurl = "file://data/rss.xml";
+	rss_parser parser(feedurl, rsscache.get(), &cfg, nullptr);
+	std::shared_ptr<rss_feed> feed = parser.parse();
+
+	auto item = feed->items()[1];
+	auto guid = item->guid();
+	REQUIRE(feed->total_item_count() == 8);
+	rsscache->externalize_rssfeed(feed, false);
+	rsscache->mark_item_deleted(guid, true);
+
+	rsscache.reset( new cache(dbfile.getPath(), &cfg) );
+	feed = rsscache->internalize_rssfeed(feedurl, &ign);
+	// One item was deleted, so shouldn't have been loaded
+	REQUIRE(feed->total_item_count() == 7);
+}
