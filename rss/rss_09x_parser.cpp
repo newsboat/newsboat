@@ -31,6 +31,8 @@ void rss_09x_parser::parse_feed(feed& f, xmlNode * rootNode) {
 	if (!rootNode)
 		throw exception(_("XML root node is nullptr"));
 
+	globalbase = get_prop(rootNode, "base", XML_URI);
+
 	xmlNode * channel = rootNode->children;
 	while (channel && strcmp((const char *)channel->name, "channel")!=0)
 		channel = channel->next;
@@ -43,7 +45,7 @@ void rss_09x_parser::parse_feed(feed& f, xmlNode * rootNode) {
 			f.title = get_content(node);
 			f.title_type = "text";
 		} else if (node_is(node, "link", ns)) {
-			f.link = get_content(node);
+			f.link = utils::absolute_url(globalbase, get_content(node));
 		} else if (node_is(node, "description", ns)) {
 			f.description = get_content(node);
 		} else if (node_is(node, "language", ns)) {
@@ -61,13 +63,20 @@ item rss_09x_parser::parse_item(xmlNode * itemNode) {
 	std::string author;
 	std::string dc_date;
 
+	std::string base = get_prop(itemNode, "base", XML_URI);
+	if (base.empty())
+		base = globalbase;
+
 	for (xmlNode * node = itemNode->children; node != nullptr; node = node->next) {
 		if (node_is(node, "title", ns)) {
 			it.title = get_content(node);
 			it.title_type = "text";
 		} else if (node_is(node, "link", ns)) {
-			it.link = get_content(node);
+			it.link = utils::absolute_url(base, get_content(node));
 		} else if (node_is(node, "description", ns)) {
+			it.base = get_prop(node, "base", XML_URI);
+			if (it.base.empty())
+				it.base = base;
 			it.description = get_content(node);
 		} else if (node_is(node, "encoded", CONTENT_URI)) {
 			it.content_encoded = get_content(node);
@@ -75,10 +84,12 @@ item rss_09x_parser::parse_item(xmlNode * itemNode) {
 			it.itunes_summary = get_content(node);
 		} else if (node_is(node, "guid", ns)) {
 			it.guid = get_content(node);
-			it.guid_isPermaLink = true;
-			std::string isPermaLink = get_prop(node,"isPermaLink");
-			if (isPermaLink == "false")
+			if (get_prop(node, "isPermaLink") == "false") {
 				it.guid_isPermaLink = false;
+			} else {
+				it.guid_isPermaLink = true;
+				it.guid = utils::absolute_url(base, it.guid);
+			}
 		} else if (node_is(node, "pubDate", ns)) {
 			it.pubDate = get_content(node);
 		} else if (node_is(node, "date", DC_URI)) {
@@ -86,7 +97,7 @@ item rss_09x_parser::parse_item(xmlNode * itemNode) {
 		} else if (node_is(node, "author", ns)) {
 			std::string authorfield = get_content(node);
 			if (authorfield[authorfield.length()-1] == ')') {
-				it.author_email = newsbeuter::utils::tokenize(authorfield, " ")[0];
+				it.author_email = utils::tokenize(authorfield, " ")[0];
 				unsigned int start, end;
 				end = authorfield.length()-2;
 				for (start = end; start > 0 && authorfield[start] != '('; start--) { }

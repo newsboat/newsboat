@@ -1,4 +1,4 @@
-<rss version="0.92">
+<rss version="0.92" xml:base="http://example.com/feed/rss_testing.html">
 <channel>
 <title>Example Channel</title>
 <link>http://example.com/</link>
@@ -12,10 +12,15 @@ In HTML, <b> starts a bold phrase
 and you start a link with <a href=
 ]]></description>
 </item>
-<item>
+<item xml:base="http://example.com/item/rss_testing.html">
 <title>A second item</title>
 <link>http://example.com/a_second_item.html</link>
 <description>no description</description>
+</item>
+<item>
+<title>A third item</title>
+<link>/a_third_item.html</link>
+<description xml:base="http://example.com/desc/rss_testing.html">no description</description>
 </item>
 </channel>
 </rss>
