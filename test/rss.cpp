@@ -118,18 +118,21 @@ TEST_CASE("Parsers behave correctly") {
 		REQUIRE(f.items[0].link == "http://example.com/atom_testing.html");
 		REQUIRE(f.items[0].guid == "tag:example.com,2008-12-30:/atom_testing");
 		REQUIRE(f.items[0].description == "some content");
+		REQUIRE(f.items[0].base == "http://example.com/feed/atom_testing.html");
 
 		REQUIRE(f.items[1].title == "A missing rel attribute");
 		REQUIRE(f.items[1].title_type == "html");
 		REQUIRE(f.items[1].link == "http://example.com/atom_testing.html");
 		REQUIRE(f.items[1].guid == "tag:example.com,2008-12-30:/atom_testing1");
 		REQUIRE(f.items[1].description == "some content");
+		REQUIRE(f.items[1].base == "http://example.com/entry/atom_testing.html");
 
 		REQUIRE(f.items[2].title == "alternate link isn't first");
 		REQUIRE(f.items[2].title_type == "html");
 		REQUIRE(f.items[2].link == "http://example.com/atom_testing.html");
 		REQUIRE(f.items[2].guid == "tag:example.com,2008-12-30:/atom_testing2");
 		REQUIRE(f.items[2].description == "some content");
+		REQUIRE(f.items[2].base == "http://example.com/content/atom_testing.html");
 	}
 }
 
