@@ -319,3 +319,68 @@ TEST_CASE("get_unread_count returns number of yet unread articles") {
 	rsscache.reset( new cache(dbfile.getPath(), &cfg) );
 	REQUIRE(rsscache->get_unread_count() == 8);
 }
+
+TEST_CASE("get_read_item_guids returns GUIDs of items that are marked read") {
+	TestHelpers::TempFile dbfile;
+	configcontainer cfg;
+	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), &cfg) );
+
+	// We'll keep our own count of which GUIDs are unread
+	std::unordered_set<std::string> read_guids;
+	std::unique_ptr<rss_parser> parser(
+		new rss_parser(
+			"file://data/rss.xml",
+			rsscache.get(),
+			&cfg,
+			nullptr) );
+	std::shared_ptr<rss_feed> feed = parser->parse();
+
+	auto mark_read = [&read_guids](std::shared_ptr<rss_item> item) {
+		item->set_unread(false);
+		INFO("add  " + item->guid());
+		read_guids.insert(item->guid());
+	};
+
+	// This function will be used to check if the result is consistent with our
+	// count
+	auto check = [&read_guids](const std::vector<std::string>& result) {
+		auto local = read_guids;
+		REQUIRE(local.size() != 0);
+
+		for (const auto& guid : result) {
+			INFO("check " + guid);
+			auto it = local.find(guid);
+			REQUIRE(it != local.end());
+			local.erase(it);
+		}
+
+		REQUIRE(local.size() == 0);
+	};
+
+	mark_read(feed->items()[0]);
+	rsscache->externalize_rssfeed(feed, false);
+
+	INFO("Testing on single feed");
+	check(rsscache->get_read_item_guids());
+
+	// Let's add another article to make sure get_unread_count looks at all
+	// feeds present in the cache
+	parser.reset( new rss_parser(
+			"file://data/atom10_1.xml",
+			rsscache.get(),
+			&cfg,
+			nullptr) );
+	feed = parser->parse();
+	mark_read(feed->items()[0]);
+	mark_read(feed->items()[2]);
+
+	rsscache->externalize_rssfeed(feed, false);
+	INFO("Testing on two feeds");
+	check(rsscache->get_read_item_guids());
+
+	// Lastly, let's make sure the info is indeed retrieved from the database
+	// and isn't just stored in the cache object
+	rsscache.reset( new cache(dbfile.getPath(), &cfg) );
+	INFO("Testing on two feeds with new `cache` object");
+	check(rsscache->get_read_item_guids());
+}
