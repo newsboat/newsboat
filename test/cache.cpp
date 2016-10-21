@@ -517,3 +517,23 @@ TEST_CASE("search_for_items finds all items with matching title or content") {
 		REQUIRE(items.size() == 1);
 	}
 }
+
+TEST_CASE("update_rssitem_flags dumps `rss_item` object's flags to DB") {
+	TestHelpers::TempFile dbfile;
+	configcontainer cfg;
+	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), &cfg) );
+	const auto feedurl = "file://data/rss.xml";
+	rss_parser parser(feedurl, rsscache.get(), &cfg, nullptr);
+	std::shared_ptr<rss_feed> feed = parser.parse();
+	rsscache->externalize_rssfeed(feed, false);
+
+	auto item = feed->items()[0];
+	item->set_flags("abc");
+	REQUIRE_NOTHROW(rsscache->update_rssitem_flags(item.get()));
+
+	rsscache.reset( new cache(dbfile.getPath(), &cfg) );
+	rss_ignores ign;
+	feed = rsscache->internalize_rssfeed("file://data/rss.xml", &ign);
+
+	REQUIRE(feed->items()[0]->flags() == "abc");
+}

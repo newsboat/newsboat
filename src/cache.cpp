@@ -749,9 +749,14 @@ std::string cache::prepare_query(const char * format, ...) {
 void cache::update_rssitem_flags(rss_item* item) {
 	std::lock_guard<std::mutex> lock(mtx);
 
-	std::string update = prepare_query("UPDATE rss_item SET flags = '%q' WHERE guid = '%q';", item->flags().c_str(), item->guid().c_str());
+	std::string update = prepare_query(
+			"UPDATE rss_item SET flags = '%q' WHERE guid = '%q';",
+			item->flags().c_str(),
+			item->guid().c_str());
+
 	LOG(LOG_DEBUG,"running query: %s", update.c_str());
 	int rc = sqlite3_exec(db,update.c_str(), nullptr, nullptr, nullptr);
+
 	if (rc != SQLITE_OK) {
 		LOG(LOG_CRITICAL, "query \"%s\" failed: error = %d", update.c_str(), rc);
 		throw dbexception(db);
