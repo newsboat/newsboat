@@ -19,7 +19,7 @@ TEST_CASE("cache behaves correctly") {
 		auto search_items = rsscache.search_for_items("Botox", "");
 		REQUIRE(search_items.size() == 1);
 		auto item = search_items.front();
-		REQUIRE(true == item->unread());
+		REQUIRE(item->unread());
 
 		item->set_unread(false);
 		search_items.clear();
@@ -27,7 +27,7 @@ TEST_CASE("cache behaves correctly") {
 		search_items = rsscache.search_for_items("Botox", "");
 		REQUIRE(search_items.size() == 1);
 		auto updatedItem = search_items.front();
-		REQUIRE(false == updatedItem->unread());
+		REQUIRE_FALSE(updatedItem->unread());
 	}
 
 	std::vector<std::shared_ptr<rss_feed>> feedv;
