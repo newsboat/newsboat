@@ -485,3 +485,35 @@ TEST_CASE("remove_old_deleted_items removes deleted items with particular "
 	// Two items should've been removed by remove_old_deleted_items
 	REQUIRE(feed->total_item_count() == 6);
 }
+
+TEST_CASE("search_for_items finds all items with matching title or content") {
+	configcontainer cfg;
+	rss_ignores ign;
+	cache rsscache(":memory:", &cfg);
+	std::vector<std::string> feedurls = {
+		"file://data/atom10_1.xml",
+		"file://data/rss20_1.xml"
+	};
+	for (const auto& url : feedurls) {
+		rss_parser parser(url, &rsscache, &cfg, nullptr);
+		std::shared_ptr<rss_feed> feed = parser.parse();
+
+		rsscache.externalize_rssfeed(feed, false);
+	}
+
+	auto query = "content";
+	std::vector<std::shared_ptr<rss_item>> items;
+
+	SECTION("Search the whole DB") {
+		REQUIRE_NOTHROW(items = rsscache.search_for_items(query, ""));
+		REQUIRE(items.size() == 4);
+	}
+
+	SECTION("Search specific feed") {
+		REQUIRE_NOTHROW(items = rsscache.search_for_items(query, feedurls[0]));
+		REQUIRE(items.size() == 3);
+
+		REQUIRE_NOTHROW(items = rsscache.search_for_items(query, feedurls[1]));
+		REQUIRE(items.size() == 1);
+	}
+}

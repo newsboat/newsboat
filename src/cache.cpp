@@ -465,9 +465,29 @@ std::vector<std::shared_ptr<rss_item>> cache::search_for_items(const std::string
 
 	std::lock_guard<std::mutex> lock(mtx);
 	if (feedurl.length() > 0) {
-		query = prepare_query("SELECT guid,title,author,url,pubDate,length(content),unread,feedurl,enclosure_url,enclosure_type,enqueued,flags,base FROM rss_item WHERE (title LIKE '%%%q%%' OR content LIKE '%%%q%%') AND feedurl = '%q' AND deleted = 0 ORDER BY pubDate DESC, id DESC;",querystr.c_str(), querystr.c_str(), feedurl.c_str());
+		query = prepare_query(
+				"SELECT guid, title, author, url, pubDate, length(content), "
+				       "unread, feedurl, enclosure_url, enclosure_type, "
+				       "enqueued, flags, base "
+				"FROM rss_item "
+				"WHERE (title LIKE '%%%q%%' OR content LIKE '%%%q%%') "
+				  "AND feedurl = '%q' "
+				  "AND deleted = 0 "
+				"ORDER BY pubDate DESC, id DESC;",
+				querystr.c_str(),
+				querystr.c_str(),
+				feedurl.c_str());
 	} else {
-		query = prepare_query("SELECT guid,title,author,url,pubDate,length(content),unread,feedurl,enclosure_url,enclosure_type,enqueued,flags,base FROM rss_item WHERE (title LIKE '%%%q%%' OR content LIKE '%%%q%%') AND deleted = 0 ORDER BY pubDate DESC, id DESC;",querystr.c_str(), querystr.c_str());
+		query = prepare_query(
+				"SELECT guid, title, author, url, pubDate, length(content), "
+				       "unread, feedurl, enclosure_url, enclosure_type, "
+				       "enqueued, flags, base "
+				"FROM rss_item "
+				"WHERE (title LIKE '%%%q%%' OR content LIKE '%%%q%%') "
+				  "AND deleted = 0 "
+				"ORDER BY pubDate DESC,  id DESC;",
+				querystr.c_str(),
+				querystr.c_str());
 	}
 
 	LOG(LOG_DEBUG,"running query: %s",query.c_str());
