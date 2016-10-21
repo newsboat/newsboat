@@ -405,3 +405,36 @@ TEST_CASE("mark_item_deleted changes \"deleted\" flag of item with given GUID ")
 	// One item was deleted, so shouldn't have been loaded
 	REQUIRE(feed->total_item_count() == 7);
 }
+
+TEST_CASE("mark_items_read_by_guid marks items with given GUIDs as unread ") {
+	TestHelpers::TempFile dbfile;
+	rss_ignores ign;
+	configcontainer cfg;
+	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), &cfg) );
+	auto feedurl = "file://data/rss.xml";
+	rss_parser parser(feedurl, rsscache.get(), &cfg, nullptr);
+	std::shared_ptr<rss_feed> feed = parser.parse();
+
+	REQUIRE(feed->unread_item_count() == 8);
+
+	SECTION("Not marking any items read") {
+		rsscache->externalize_rssfeed(feed, false);
+
+		REQUIRE_NOTHROW(rsscache->mark_items_read_by_guid({}));
+
+		rsscache.reset( new cache(dbfile.getPath(), &cfg) );
+		feed = rsscache->internalize_rssfeed(feedurl, &ign);
+		REQUIRE(feed->unread_item_count() == 8);
+	}
+
+	SECTION("Marking two items read") {
+		auto guids = { feed->items()[0]->guid(), feed->items()[2]->guid() };
+		rsscache->externalize_rssfeed(feed, false);
+
+		REQUIRE_NOTHROW(rsscache->mark_items_read_by_guid(guids));
+
+		rsscache.reset( new cache(dbfile.getPath(), &cfg) );
+		feed = rsscache->internalize_rssfeed(feedurl, &ign);
+		REQUIRE(feed->unread_item_count() == 6);
+	}
+}
