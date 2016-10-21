@@ -438,3 +438,50 @@ TEST_CASE("mark_items_read_by_guid marks items with given GUIDs as unread ") {
 		REQUIRE(feed->unread_item_count() == 6);
 	}
 }
+
+TEST_CASE("remove_old_deleted_items removes deleted items with particular "
+          "feedurl if its GUID is not in the vector") {
+	rss_ignores ign;
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	auto feedurl = "file://data/rss.xml";
+	rss_parser parser(feedurl, &rsscache, &cfg, nullptr);
+	std::shared_ptr<rss_feed> feed = parser.parse();
+
+	REQUIRE(feed->total_item_count() == 8);
+
+	std::vector<std::string> should_be_absent = {
+		feed->items()[0]->guid(),
+		feed->items()[3]->guid()
+	};
+	std::vector<std::string> should_be_present = {
+		feed->items()[2]->guid(),
+		feed->items()[5]->guid()
+	};
+
+	rsscache.externalize_rssfeed(feed, false);
+
+	for (const auto& guid : should_be_absent) {
+		rsscache.mark_item_deleted(guid, true);
+	}
+	for (const auto& guid : should_be_present) {
+		rsscache.mark_item_deleted(guid, true);
+	}
+
+	REQUIRE_NOTHROW(
+			rsscache.remove_old_deleted_items(
+				feed->rssurl(),
+				should_be_present));
+
+	// Trying to "undelete" items
+	for (const auto& guid : should_be_absent) {
+		rsscache.mark_item_deleted(guid, false);
+	}
+	for (const auto& guid : should_be_present) {
+		rsscache.mark_item_deleted(guid, false);
+	}
+
+	feed = rsscache.internalize_rssfeed(feedurl, &ign);
+	// Two items should've been removed by remove_old_deleted_items
+	REQUIRE(feed->total_item_count() == 6);
+}
