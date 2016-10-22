@@ -537,3 +537,57 @@ TEST_CASE("update_rssitem_flags dumps `rss_item` object's flags to DB") {
 
 	REQUIRE(feed->items()[0]->flags() == "abc");
 }
+
+TEST_CASE("update_rssitem_unread_and_enqueued updates item's \"unread\" and "
+          "\"enqueued\" fields") {
+	TestHelpers::TempFile dbfile;
+	rss_ignores ign;
+	configcontainer cfg;
+	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), &cfg) );
+	const auto feedurl = "file://data/rss.xml";
+	rss_parser parser(feedurl, rsscache.get(), &cfg, nullptr);
+	std::shared_ptr<rss_feed> feed = parser.parse();
+
+	auto item = feed->items()[0];
+
+	rsscache->externalize_rssfeed(feed, false);
+
+	SECTION("\"unread\" field is updated") {
+		REQUIRE(item->unread());
+		item->set_unread_nowrite(false);
+
+		REQUIRE_NOTHROW(
+				rsscache->update_rssitem_unread_and_enqueued(item, feedurl));
+		rsscache.reset( new cache(dbfile.getPath(), &cfg) );
+		feed = rsscache->internalize_rssfeed(feedurl, &ign);
+
+		REQUIRE_FALSE(feed->items()[0]->unread());
+	}
+
+	SECTION("\"enqueued\" field is updated") {
+		REQUIRE_FALSE(item->enqueued());
+		item->set_enqueued(true);
+
+		REQUIRE_NOTHROW(
+				rsscache->update_rssitem_unread_and_enqueued(item, feedurl));
+		rsscache.reset( new cache(dbfile.getPath(), &cfg) );
+		feed = rsscache->internalize_rssfeed(feedurl, &ign);
+
+		REQUIRE(feed->items()[0]->enqueued());
+	}
+
+	SECTION("both \"unread\" and \"enqueued\" fields are updated") {
+		REQUIRE(item->unread());
+		item->set_unread_nowrite(false);
+		REQUIRE_FALSE(item->enqueued());
+		item->set_enqueued(true);
+
+		REQUIRE_NOTHROW(
+				rsscache->update_rssitem_unread_and_enqueued(item, feedurl));
+		rsscache.reset( new cache(dbfile.getPath(), &cfg) );
+		feed = rsscache->internalize_rssfeed(feedurl, &ign);
+
+		REQUIRE_FALSE(feed->items()[0]->unread());
+		REQUIRE(feed->items()[0]->enqueued());
+	}
+}

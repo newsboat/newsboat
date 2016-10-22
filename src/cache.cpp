@@ -693,7 +693,9 @@ void cache::catchup_all(const std::string& feedurl) {
 void cache::update_rssitem_unread_and_enqueued(rss_item* item, const std::string& feedurl) {
 	std::lock_guard<std::mutex> lock(mtx);
 
-	std::string query = prepare_query("SELECT count(*) FROM rss_item WHERE guid = '%q';",item->guid().c_str());
+	std::string query = prepare_query(
+			"SELECT count(*) FROM rss_item WHERE guid = '%q';",
+			item->guid().c_str());
 	cb_handler count_cbh;
 	LOG(LOG_DEBUG,"running query: %s", query.c_str());
 	int rc = sqlite3_exec(db,query.c_str(),count_callback,&count_cbh,nullptr);
@@ -703,27 +705,34 @@ void cache::update_rssitem_unread_and_enqueued(rss_item* item, const std::string
 	}
 
 	if (count_cbh.count() > 0) {
-		std::string update = prepare_query("UPDATE rss_item SET unread = '%d', enqueued = '%d' WHERE guid = '%q'",
-		                                   item->unread()?1:0, item->enqueued()?1:0, item->guid().c_str());
-		LOG(LOG_DEBUG,"running query: %s", update.c_str());
-		rc = sqlite3_exec(db,update.c_str(),nullptr,nullptr,nullptr);
-		if (rc != SQLITE_OK) {
-			LOG(LOG_CRITICAL,"query \"%s\" failed: error = %d", update.c_str(), rc);
-			throw dbexception(db);
-		}
+		query = prepare_query(
+				"UPDATE rss_item "
+				"SET unread = '%d', enqueued = '%d' "
+				"WHERE guid = '%q'",
+				item->unread()?1:0,
+				item->enqueued()?1:0,
+				item->guid().c_str());
 	} else {
-		std::string insert = prepare_query("INSERT INTO rss_item (guid,title,author,url,feedurl,pubDate,content,unread,enclosure_url,enclosure_type,enqueued,flags,base) "
-		                                   "VALUES ('%q','%q','%q','%q','%q','%u','%q','%d','%q','%q',%d, '%q', '%q')",
-		                                   item->guid().c_str(), item->title_raw().c_str(), item->author_raw().c_str(),
-		                                   item->link().c_str(), feedurl.c_str(), item->pubDate_timestamp(), item->description_raw().c_str(), item->unread() ? 1 : 0,
-		                                   item->enclosure_url().c_str(), item->enclosure_type().c_str(), item->enqueued() ? 1 : 0, item->flags().c_str(),
-		                                   item->get_base().c_str());
-		LOG(LOG_DEBUG,"running query: %s", insert.c_str());
-		rc = sqlite3_exec(db,insert.c_str(),nullptr,nullptr,nullptr);
-		if (rc != SQLITE_OK) {
-			LOG(LOG_CRITICAL,"query \"%s\" failed: error = %d", insert.c_str(), rc);
-			throw dbexception(db);
-		}
+		query = prepare_query(
+				"INSERT INTO rss_item (guid, title, author, url, feedurl, "
+				        "pubDate, content, unread, enclosure_url, "
+				        "enclosure_type, enqueued, flags, base) "
+				"VALUES ('%q','%q','%q','%q','%q','%u','%q','%d','%q','%q',%d, "
+				        "'%q', '%q')",
+				item->guid().c_str(), item->title_raw().c_str(),
+				item->author_raw().c_str(), item->link().c_str(),
+				feedurl.c_str(), item->pubDate_timestamp(),
+				item->description_raw().c_str(), item->unread() ? 1 : 0,
+				item->enclosure_url().c_str(), item->enclosure_type().c_str(),
+				item->enqueued() ? 1 : 0, item->flags().c_str(),
+				item->get_base().c_str());
+	}
+
+	LOG(LOG_DEBUG,"running query: %s", query.c_str());
+	rc = sqlite3_exec(db, query.c_str(), nullptr, nullptr, nullptr);
+	if (rc != SQLITE_OK) {
+		LOG(LOG_CRITICAL, "query \"%s\" failed: error = %d", query.c_str(), rc);
+		throw dbexception(db);
 	}
 }
 
