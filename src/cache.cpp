@@ -323,17 +323,34 @@ void cache::externalize_rssfeed(std::shared_ptr<rss_feed> feed, bool reset_unrea
 	//scope_transaction dbtrans(db);
 
 	cb_handler count_cbh;
-	int rc = sqlite3_exec(db,prepare_query("SELECT count(*) FROM rss_feed WHERE rssurl = '%q';", feed->rssurl().c_str()).c_str(),count_callback,&count_cbh,nullptr);
+	int rc = sqlite3_exec(
+			db,
+			prepare_query(
+				"SELECT count(*) FROM rss_feed WHERE rssurl = '%q';",
+				feed->rssurl().c_str()).c_str(),
+			count_callback,
+			&count_cbh,
+			nullptr);
 	if (rc != SQLITE_OK) {
 		LOG(LOG_CRITICAL,"query failed: error = %d", rc);
 		throw dbexception(db);
 	}
 
 	int count = count_cbh.count();
-	LOG(LOG_DEBUG, "cache::externalize_rss_feed: rss_feeds with rssurl = '%s': found %d",feed->rssurl().c_str(), count);
+	LOG(LOG_DEBUG,
+			"cache::externalize_rss_feed: rss_feeds with rssurl = '%s': found %d",
+			feed->rssurl().c_str(),
+			count);
 	if (count > 0) {
-		std::string updatequery = prepare_query("UPDATE rss_feed SET title = '%q', url = '%q', is_rtl = %u WHERE rssurl = '%q';",
-		                                        feed->title_raw().c_str(),feed->link().c_str(), feed->is_rtl() ? 1 : 0, feed->rssurl().c_str());
+		std::string updatequery =
+			prepare_query(
+					"UPDATE rss_feed "
+					"SET title = '%q', url = '%q', is_rtl = %u "
+					"WHERE rssurl = '%q';",
+					feed->title_raw().c_str(),
+					feed->link().c_str(),
+					feed->is_rtl() ? 1 : 0,
+					feed->rssurl().c_str());
 		rc = sqlite3_exec(db,updatequery.c_str(),nullptr,nullptr,nullptr);
 		if (rc != SQLITE_OK) {
 			LOG(LOG_CRITICAL,"query \"%s\" failed: error = %d", updatequery.c_str(), rc);
@@ -341,8 +358,14 @@ void cache::externalize_rssfeed(std::shared_ptr<rss_feed> feed, bool reset_unrea
 		}
 		LOG(LOG_DEBUG,"ran SQL statement: %s", updatequery.c_str());
 	} else {
-		std::string insertquery = prepare_query("INSERT INTO rss_feed (rssurl, url, title, is_rtl) VALUES ( '%q', '%q', '%q', %u );",
-		                                        feed->rssurl().c_str(), feed->link().c_str(), feed->title_raw().c_str(), feed->is_rtl() ? 1 : 0);
+		std::string insertquery =
+			prepare_query(
+					"INSERT INTO rss_feed (rssurl, url, title, is_rtl) "
+					"VALUES ( '%q', '%q', '%q', %u );",
+					feed->rssurl().c_str(),
+					feed->link().c_str(),
+					feed->title_raw().c_str(),
+					feed->is_rtl() ? 1 : 0);
 		rc = sqlite3_exec(db,insertquery.c_str(),nullptr,nullptr,nullptr);
 		if (rc != SQLITE_OK) {
 			LOG(LOG_CRITICAL,"query \"%s\" failed: error = %d", insertquery.c_str(), rc);
@@ -353,7 +376,10 @@ void cache::externalize_rssfeed(std::shared_ptr<rss_feed> feed, bool reset_unrea
 
 	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
 
-	LOG(LOG_INFO, "cache::externalize_feed: max_items = %u feed.total_item_count() = %u", max_items, feed->total_item_count());
+	LOG(LOG_INFO,
+			"cache::externalize_feed: max_items = %u feed.total_item_count() = %u",
+			max_items,
+			feed->total_item_count());
 
 	if (max_items > 0 && feed->total_item_count() > max_items) {
 		auto it=feed->items().begin();
@@ -388,7 +414,9 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl, rss_ign
 	std::lock_guard<std::mutex> feedlock(feed->item_mutex);
 
 	/* first, we check whether the feed is there at all */
-	std::string query = prepare_query("SELECT count(*) FROM rss_feed WHERE rssurl = '%q';",rssurl.c_str());
+	std::string query = prepare_query(
+				"SELECT count(*) FROM rss_feed WHERE rssurl = '%q';",
+				rssurl.c_str());
 	cb_handler count_cbh;
 	LOG(LOG_DEBUG,"running query: %s",query.c_str());
 	int rc = sqlite3_exec(db,query.c_str(),count_callback,&count_cbh,nullptr);
@@ -402,7 +430,9 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl, rss_ign
 	}
 
 	/* then we first read the feed from the database */
-	query = prepare_query("SELECT title, url, is_rtl FROM rss_feed WHERE rssurl = '%q';",rssurl.c_str());
+	query = prepare_query(
+			"SELECT title, url, is_rtl FROM rss_feed WHERE rssurl = '%q';",
+			rssurl.c_str());
 	LOG(LOG_DEBUG,"running query: %s",query.c_str());
 	rc = sqlite3_exec(db,query.c_str(),rssfeed_callback,&feed,nullptr);
 	if (rc != SQLITE_OK) {
@@ -411,7 +441,14 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl, rss_ign
 	}
 
 	/* ...and then the associated items */
-	query = prepare_query("SELECT guid,title,author,url,pubDate,length(content),unread,feedurl,enclosure_url,enclosure_type,enqueued,flags,base FROM rss_item WHERE feedurl = '%q' AND deleted = 0 ORDER BY pubDate DESC, id DESC;", rssurl.c_str());
+	query = prepare_query(
+			"SELECT guid, title, author, url, pubDate, length(content), unread, "
+			       "feedurl, enclosure_url, enclosure_type, enqueued, flags, base "
+			"FROM rss_item "
+			"WHERE feedurl = '%q' "
+			  "AND deleted = 0 "
+			"ORDER BY pubDate DESC, id DESC;",
+			rssurl.c_str());
 	LOG(LOG_DEBUG,"running query: %s",query.c_str());
 	rc = sqlite3_exec(db,query.c_str(),rssitem_callback,&feed,nullptr);
 	if (rc != SQLITE_OK) {
