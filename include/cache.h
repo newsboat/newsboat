@@ -41,6 +41,20 @@ class cache {
 
 		std::string prepare_query(const char * format, ...);
 
+		void run_sql(
+				const std::string& query,
+				int (*callback)(void*,int,char**,char**) = nullptr,
+				void * callback_argument = nullptr);
+		void run_sql_nothrow(
+				const std::string& query,
+				int (*callback)(void*,int,char**,char**) = nullptr,
+				void * callback_argument = nullptr);
+		void run_sql_impl(
+				const std::string& query,
+				int (*callback)(void*,int,char**,char**),
+				void * callback_argument,
+				bool do_throw);
+
 		sqlite3 * db;
 		configcontainer * cfg;
 		std::mutex mtx;
