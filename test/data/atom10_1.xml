@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en" xml:base="http://example.com/feed/atom_testing.html">
 <title type="text">test atom</title>
 <subtitle type="text">atom description!</subtitle>
 <id>tag:example.com</id>
@@ -16,10 +16,10 @@
 <id>tag:example.com,2008-12-30:/atom_testing</id>
 <updated>2008-12-30T20:04:15Z</updated>
 <published>2008-12-30T20:04:15Z</published>
-<content type="html" xml:base="http://example.com/atom_testing.html">some content</content>
+<content type="html">some content</content>
 </entry>
 
-<entry>
+<entry xml:base="http://example.com/entry/atom_testing.html">
 <author>
 <name>A Person</name>
 <uri>http://example.com/</uri>
@@ -29,7 +29,7 @@
 <id>tag:example.com,2008-12-30:/atom_testing1</id>
 <updated>2008-12-30T20:14:15Z</updated>
 <published>2008-12-30T20:14:15Z</published>
-<content type="html" xml:base="http://example.com/atom_testing.html">some content</content>
+<content type="html">some content</content>
 </entry>
 
 <entry>
@@ -43,6 +43,6 @@
 <id>tag:example.com,2008-12-30:/atom_testing2</id>
 <updated>2008-12-30T20:24:15Z</updated>
 <published>2008-12-30T20:24:15Z</published>
-<content type="html" xml:base="http://example.com/atom_testing.html">some content</content>
+<content type="html" xml:base="http://example.com/content/atom_testing.html">some content</content>
 </entry>
 </feed>

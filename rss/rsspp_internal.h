@@ -34,6 +34,7 @@ struct rss_parser {
 		std::string w3cdtf_to_rfc822(const std::string& w3cdtf);
 		bool node_is(xmlNode * node, const char * name, const char * ns_uri = nullptr);
 		xmlDocPtr doc;
+		std::string globalbase;
 };
 
 struct rss_09x_parser : public rss_parser {
@@ -65,7 +66,6 @@ struct atom_parser : public rss_parser {
 		virtual ~atom_parser() { }
 	private:
 		item parse_entry(xmlNode * itemNode);
-		std::string globalbase;
 		const char * ns;
 };
 
