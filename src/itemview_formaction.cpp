@@ -83,7 +83,7 @@ void itemview_formaction::prepare() {
 
 		if (item->link().length() > 0) {
 			std::string link = utils::strprintf("%s%s", _("Link: "), utils::censor_url(item->link()).c_str());
-			textfmt.add_line(newsbeuter::nonwrappable, link);
+			textfmt.add_line(newsbeuter::softwrappable, link);
 		}
 
 		std::string date = utils::strprintf("%s%s", _("Date: "), item->pubDate().c_str());
@@ -99,7 +99,7 @@ void itemview_formaction::prepare() {
 			if (item->enclosure_type() != "") {
 				enc_url.append(utils::strprintf(" (%s%s)",  _("type: "), item->enclosure_type().c_str()));
 			}
-			textfmt.add_line(newsbeuter::nonwrappable, enc_url);
+			textfmt.add_line(newsbeuter::softwrappable, enc_url);
 		}
 
 		textfmt.add_line(newsbeuter::wrappable, std::string());
@@ -445,7 +445,7 @@ void itemview_formaction::render_source(
 			source.erase();
 		else
 			source.erase(0, pos+1);
-		lines.push_back(std::make_pair(nonwrappable, line));
+		lines.push_back(std::make_pair(softwrappable, line));
 	} while (source.length() > 0);
 }
 
@@ -543,7 +543,7 @@ std::vector<std::pair<LineType, std::string>>
 		std::string line;
 		getline(is, line);
 		while (!is.eof()) {
-			result.push_back(std::make_pair(newsbeuter::nonwrappable, utils::quote_for_stfl(line)));
+			result.push_back(std::make_pair(newsbeuter::softwrappable, utils::quote_for_stfl(line)));
 			getline(is, line);
 		}
 	}

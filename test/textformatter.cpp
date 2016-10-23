@@ -10,7 +10,7 @@ TEST_CASE("textformatter: lines marked as `wrappable` are wrapped to fit width")
 	fmt.add_lines(
 		{
 			std::make_pair(wrappable, "this one is going to be wrapped"),
-			std::make_pair(nonwrappable, "this one is going to be preserved")
+			std::make_pair(softwrappable, "this one is going to be preserved")
 		});
 
 	SECTION("formatting to plain text") {
@@ -72,7 +72,7 @@ TEST_CASE("textformatter: <hr> is rendered properly") {
 TEST_CASE("textformatter: wrappable sequences longer then format width are forced-wrapped") {
 	textformatter fmt;
 	fmt.add_line(wrappable, "0123456789");
-	fmt.add_line(nonwrappable, "0123456789");
+	fmt.add_line(softwrappable, "0123456789");
 
 	const std::string expected =
 		"01234\n"
@@ -92,9 +92,9 @@ TEST_CASE("textformatter: when wrapping, spaces at the beginning of lines are dr
 	REQUIRE(fmt.format_text_plain(4) == expected);
 }
 
-TEST_CASE("textformatter: nonwrappable lines are wrapped by format_text_to_list if total_width != 0") {
+TEST_CASE("textformatter: softwrappable lines are wrapped by format_text_to_list if total_width != 0") {
 	textformatter fmt;
-	fmt.add_line(nonwrappable, "just a test");
+	fmt.add_line(softwrappable, "just a test");
 	const size_t wrap_width = 100;
 	regexmanager * rxman = nullptr;
 	const std::string location = "";

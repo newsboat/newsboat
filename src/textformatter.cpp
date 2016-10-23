@@ -82,7 +82,7 @@ std::string format_text_plain_helper(
 		const std::string& location,
 		// wrappable lines are wrapped at this width
 		const size_t wrap_width,
-		// if non-zero, nonwrappable lines are wrapped at this width
+		// if non-zero, softwrappable lines are wrapped at this width
 		const size_t total_width)
 {
 	LOG(LOG_DEBUG,
@@ -119,7 +119,7 @@ std::string format_text_plain_helper(
 				}
 				break;
 
-			case nonwrappable:
+			case softwrappable:
 				if (total_width == 0) {
 					store_line(text);
 				} else {
@@ -127,6 +127,10 @@ std::string format_text_plain_helper(
 						store_line(line);
 					}
 				}
+				break;
+
+			case nonwrappable:
+				store_line(text);
 				break;
 
 			case hr:

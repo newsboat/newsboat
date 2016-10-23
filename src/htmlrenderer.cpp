@@ -456,7 +456,7 @@ void htmlrenderer::render(
 				break;
 
 			case TAG_PRE:
-				add_line_verbatim(curline, lines);
+				add_line_softwrappable(curline, lines);
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				inside_pre = false;
 				break;
@@ -586,7 +586,7 @@ void htmlrenderer::render(
 				std::vector<std::string> paragraphs = utils::tokenize_nl(text);
 				for (auto paragraph : paragraphs) {
 					if (paragraph == "\n") {
-						add_line_verbatim(curline, lines);
+						add_line_softwrappable(curline, lines);
 						prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 					} else {
 						curline.append(paragraph);
@@ -642,7 +642,7 @@ void htmlrenderer::render(
 					i+1,
 					links[i].first.c_str(),
 					type2str(links[i].second).c_str());
-			lines.push_back(std::make_pair(newsbeuter::nonwrappable, link_text));
+			lines.push_back(std::make_pair(newsbeuter::softwrappable, link_text));
 		}
 	}
 }
@@ -692,7 +692,14 @@ void htmlrenderer::add_line(
 		lines.push_back(std::make_pair(newsbeuter::wrappable, curline));
 }
 
-void htmlrenderer::add_line_verbatim(
+void htmlrenderer::add_line_softwrappable(
+		const std::string& line,
+		std::vector<std::pair<LineType, std::string>>& lines)
+{
+	lines.push_back(std::make_pair(newsbeuter::softwrappable, line));
+}
+
+void htmlrenderer::add_line_nonwrappable(
 		const std::string& line,
 		std::vector<std::pair<LineType, std::string>>& lines)
 {
@@ -815,7 +822,7 @@ void htmlrenderer::render_table(
 
 	// render the table
 	if (table.border)
-		lines.push_back(std::make_pair(newsbeuter::nonwrappable, separator));
+		lines.push_back(std::make_pair(newsbeuter::softwrappable, separator));
 	for (size_t row=0; row < rows; row++) {
 		// calc height of this row
 		size_t height = 0;
@@ -847,10 +854,10 @@ void htmlrenderer::render_table(
 			}
 			if (table.border)
 				line += vsep;
-			lines.push_back(std::make_pair(newsbeuter::nonwrappable, line));
+			lines.push_back(std::make_pair(newsbeuter::softwrappable, line));
 		}
 		if (table.border)
-			lines.push_back(std::make_pair(newsbeuter::nonwrappable, separator));
+			lines.push_back(std::make_pair(newsbeuter::softwrappable, separator));
 	}
 }
 

@@ -1424,12 +1424,12 @@ void controller::write_item(std::shared_ptr<rss_item> item, std::ostream& ostr) 
 
 	std::string link(_("Link: "));
 	link.append(item->link());
-	lines.push_back(std::make_pair(newsbeuter::nonwrappable, link));
+	lines.push_back(std::make_pair(newsbeuter::softwrappable, link));
 
 	if (item->enclosure_url() != "") {
 		std::string dlurl(_("Podcast Download URL: "));
 		dlurl.append(item->enclosure_url());
-		lines.push_back(std::make_pair(newsbeuter::nonwrappable, dlurl));
+		lines.push_back(std::make_pair(newsbeuter::softwrappable, dlurl));
 	}
 
 	lines.push_back(std::make_pair(newsbeuter::wrappable, std::string("")));

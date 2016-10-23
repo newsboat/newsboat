@@ -9,8 +9,21 @@
 
 namespace newsbeuter {
 
+/*
+ * LineType specifies the way wrapping should be handled.
+ *
+ * wrappable: Wrap lines at the user-specified text-width setting, if not set
+ * wrap at the window border.
+ *
+ * softwrappable: Wrap at the window border
+ *
+ * nonwrappable: Don't wrap lines, characters that cannot be drawn due to
+ *               insufficient window width will be ignored.
+ */
+
 enum LineType {
 	wrappable = 1,
+	softwrappable,
 	nonwrappable,
 	hr
 };

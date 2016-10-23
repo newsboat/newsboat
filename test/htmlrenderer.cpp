@@ -35,6 +35,8 @@ namespace Catch {
 		switch(value) {
 			case wrappable:
 				return "wrappable";
+			case softwrappable:
+				return "softwrappable";
 			case nonwrappable:
 				return "nonwrappable";
 			case hr:
@@ -77,7 +79,7 @@ TEST_CASE("HTMLRenderer behaves correctly") {
 		REQUIRE(lines[0] == p(wrappable, "<u>slashdot</>[1]"));
 		REQUIRE(lines[1] == p(wrappable, ""));
 		REQUIRE(lines[2] == p(wrappable, "Links: "));
-		REQUIRE(lines[3] == p(nonwrappable, "[1]: http://slashdot.org/ (link)"));
+		REQUIRE(lines[3] == p(softwrappable, "[1]: http://slashdot.org/ (link)"));
 
 		REQUIRE(links[0].first == "http://slashdot.org/");
 		REQUIRE(links[0].second == LINK_HREF);
@@ -263,7 +265,7 @@ TEST_CASE("htmlrenderer: Flash <embed>s are added to links if `src' is set") {
 	REQUIRE(lines[0] == p(wrappable, "[embedded flash: 1]"));
 	REQUIRE(lines[1] == p(wrappable, ""));
 	REQUIRE(lines[2] == p(wrappable, "Links: "));
-	REQUIRE(lines[3] == p(nonwrappable, "[1]: http://example.com/game.swf (embedded flash)"));
+	REQUIRE(lines[3] == p(softwrappable, "[1]: http://example.com/game.swf (embedded flash)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "http://example.com/game.swf");
 	REQUIRE(links[0].second == LINK_EMBED);
@@ -321,8 +323,8 @@ TEST_CASE("htmlrenderer: spaces and line breaks are preserved inside <pre>") {
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 2);
-	REQUIRE(lines[0] == p(nonwrappable, "oh cool"));
-	REQUIRE(lines[1] == p(nonwrappable, "  check this\tstuff  out!"));
+	REQUIRE(lines[0] == p(softwrappable, "oh cool"));
+	REQUIRE(lines[1] == p(softwrappable, "  check this\tstuff  out!"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -339,7 +341,7 @@ TEST_CASE("htmlrenderer: tags still work inside <pre>") {
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
-	REQUIRE(lines[0] == p(nonwrappable, "<b>bold text</><u>underlined text</>"));
+	REQUIRE(lines[0] == p(softwrappable, "<b>bold text</><u>underlined text</>"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -356,7 +358,7 @@ TEST_CASE("htmlrenderer: <img> results in a placeholder and a link") {
 	REQUIRE(lines[0] == p(wrappable, "[image 1]"));
 	REQUIRE(lines[1] == p(wrappable, ""));
 	REQUIRE(lines[2] == p(wrappable, "Links: "));
-	REQUIRE(lines[3] == p(nonwrappable, "[1]: http://example.com/image.png (image)"));
+	REQUIRE(lines[3] == p(softwrappable, "[1]: http://example.com/image.png (image)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "http://example.com/image.png");
 	REQUIRE(links[0].second == LINK_IMG);
@@ -389,7 +391,7 @@ TEST_CASE("htmlrenderer: title is mentioned in placeholder if <img> has `title'"
 	REQUIRE(lines[0] == p(wrappable, "[image 1: Just a test image]"));
 	REQUIRE(lines[1] == p(wrappable, ""));
 	REQUIRE(lines[2] == p(wrappable, "Links: "));
-	REQUIRE(lines[3] == p(nonwrappable, "[1]: http://example.com/image.png (image)"));
+	REQUIRE(lines[3] == p(softwrappable, "[1]: http://example.com/image.png (image)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "http://example.com/image.png");
 	REQUIRE(links[0].second == LINK_IMG);
@@ -410,7 +412,7 @@ TEST_CASE("htmlrenderer: URL of <img> with data inside `src' is replaced with st
 	REQUIRE(lines[0] == p(wrappable, "[image 1]"));
 	REQUIRE(lines[1] == p(wrappable, ""));
 	REQUIRE(lines[2] == p(wrappable, "Links: "));
-	REQUIRE(lines[3] == p(nonwrappable, "[1]: inline image (image)"));
+	REQUIRE(lines[3] == p(softwrappable, "[1]: inline image (image)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "inline image");
 	REQUIRE(links[0].second == LINK_IMG);
