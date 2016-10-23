@@ -542,7 +542,7 @@ void cache::delete_item(const std::shared_ptr<rss_item> item) {
 
 void cache::do_vacuum() {
 	std::lock_guard<std::mutex> lock(mtx);
-	run_sql_nothrow("VACUUM;");
+	run_sql("VACUUM;");
 }
 
 void cache::cleanup_cache(std::vector<std::shared_ptr<rss_feed>>& feeds) {

@@ -811,3 +811,17 @@ TEST_CASE("externalize_rssfeed only updates \"unread\" field if override_unread 
 		REQUIRE(feed->items()[0]->unread());
 	}
 }
+
+TEST_CASE("do_vacuum doesn't throw an exception") {
+	TestHelpers::TempFile dbfile;
+	configcontainer cfg;
+	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), &cfg) );
+	rss_parser parser("file://data/rss.xml", rsscache.get(), &cfg, nullptr);
+	std::shared_ptr<rss_feed> feed = parser.parse();
+	rsscache->externalize_rssfeed(feed, false);
+
+	REQUIRE_NOTHROW(rsscache->do_vacuum());
+
+	// Checking that cache can still be opened
+	REQUIRE_NOTHROW(rsscache.reset( new cache(dbfile.getPath(), &cfg) ));
+}
