@@ -802,7 +802,7 @@ TEST_CASE("htmlrenderer: header rows of tables are in bold") {
 
 		REQUIRE_NOTHROW(r.render(input, lines, links, url));
 		REQUIRE(lines.size() == 1);
-		REQUIRE(lines[0] == p(wrappable, "<b>header</>"));
+		REQUIRE(lines[0] == p(nonwrappable, "<b>header</>"));
 		REQUIRE(links.size() == 0);
 	}
 
@@ -817,7 +817,7 @@ TEST_CASE("htmlrenderer: header rows of tables are in bold") {
 
 		REQUIRE_NOTHROW(r.render(input, lines, links, url));
 		REQUIRE(lines.size() == 1);
-		REQUIRE(lines[0] == p(wrappable, "<b>another</> <b>header</>"));
+		REQUIRE(lines[0] == p(nonwrappable, "<b>another</> <b>header</>"));
 		REQUIRE(links.size() == 0);
 	}
 }
@@ -837,7 +837,7 @@ TEST_CASE("htmlrenderer: cells are separated by space if `border' is not set") {
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
-	REQUIRE(lines[0] == p(wrappable, "hello world"));
+	REQUIRE(lines[0] == p(nonwrappable, "hello world"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -860,7 +860,7 @@ TEST_CASE("htmlrenderer: cells are separated by vertical bar if `border' is set 
 
 		REQUIRE_NOTHROW(r.render(input, lines, links, url));
 		REQUIRE(lines.size() == 3);
-		REQUIRE(lines[1] == p(wrappable, "|hello|world|"));
+		REQUIRE(lines[1] == p(nonwrappable, "|hello|world|"));
 		REQUIRE(links.size() == 0);
 		}
 	}
@@ -881,9 +881,9 @@ TEST_CASE("htmlrenderer: tables with `border' have borders") {
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 3);
-	REQUIRE(lines[0] == p(wrappable, "+-----+-----+"));
-	REQUIRE(lines[1] == p(wrappable, "|hello|world|"));
-	REQUIRE(lines[2] == p(wrappable, "+-----+-----+"));
+	REQUIRE(lines[0] == p(nonwrappable, "+-----+-----+"));
+	REQUIRE(lines[1] == p(nonwrappable, "|hello|world|"));
+	REQUIRE(lines[2] == p(nonwrappable, "+-----+-----+"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -901,9 +901,9 @@ TEST_CASE("htmlrenderer: if document ends before </table> is found, table is ren
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 3);
-	REQUIRE(lines[0] == p(wrappable, "+-----+-----+"));
-	REQUIRE(lines[1] == p(wrappable, "|hello|world|"));
-	REQUIRE(lines[2] == p(wrappable, "+-----+-----+"));
+	REQUIRE(lines[0] == p(nonwrappable, "+-----+-----+"));
+	REQUIRE(lines[1] == p(nonwrappable, "|hello|world|"));
+	REQUIRE(lines[2] == p(nonwrappable, "+-----+-----+"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -933,13 +933,13 @@ TEST_CASE("htmlrenderer: tables can be nested") {
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 7);
-	REQUIRE(lines[0] == p(wrappable, "+---------------+-----------+"));
-	REQUIRE(lines[1] == p(wrappable, "|+-------+-----+|lonely cell|"));
-	REQUIRE(lines[2] == p(wrappable, "||hello  |world||           |"));
-	REQUIRE(lines[3] == p(wrappable, "|+-------+-----+|           |"));
-	REQUIRE(lines[4] == p(wrappable, "||another|row  ||           |"));
-	REQUIRE(lines[5] == p(wrappable, "|+-------+-----+|           |"));
-	REQUIRE(lines[6] == p(wrappable, "+---------------+-----------+"));
+	REQUIRE(lines[0] == p(nonwrappable, "+---------------+-----------+"));
+	REQUIRE(lines[1] == p(nonwrappable, "|+-------+-----+|lonely cell|"));
+	REQUIRE(lines[2] == p(nonwrappable, "||hello  |world||           |"));
+	REQUIRE(lines[3] == p(nonwrappable, "|+-------+-----+|           |"));
+	REQUIRE(lines[4] == p(nonwrappable, "||another|row  ||           |"));
+	REQUIRE(lines[5] == p(nonwrappable, "|+-------+-----+|           |"));
+	REQUIRE(lines[6] == p(nonwrappable, "+---------------+-----------+"));
 
 	REQUIRE(links.size() == 0);
 }
@@ -958,9 +958,9 @@ TEST_CASE("htmlrenderer: if <td> appears inside table but outside of a row, one 
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 3);
-	REQUIRE(lines[0] == p(wrappable, "+-----+-----+"));
-	REQUIRE(lines[1] == p(wrappable, "|hello|world|"));
-	REQUIRE(lines[2] == p(wrappable, "+-----+-----+"));
+	REQUIRE(lines[0] == p(nonwrappable, "+-----+-----+"));
+	REQUIRE(lines[1] == p(nonwrappable, "|hello|world|"));
+	REQUIRE(lines[2] == p(nonwrappable, "+-----+-----+"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -977,11 +977,11 @@ TEST_CASE("htmlrenderer: previous row is implicitly closed when <tr> is found") 
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 5);
-	REQUIRE(lines[0] == p(wrappable, "+-----+"));
-	REQUIRE(lines[1] == p(wrappable, "|hello|"));
-	REQUIRE(lines[2] == p(wrappable, "+-----+"));
-	REQUIRE(lines[3] == p(wrappable, "|world|"));
-	REQUIRE(lines[4] == p(wrappable, "+-----+"));
+	REQUIRE(lines[0] == p(nonwrappable, "+-----+"));
+	REQUIRE(lines[1] == p(nonwrappable, "|hello|"));
+	REQUIRE(lines[2] == p(nonwrappable, "+-----+"));
+	REQUIRE(lines[3] == p(nonwrappable, "|world|"));
+	REQUIRE(lines[4] == p(nonwrappable, "+-----+"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -999,9 +999,9 @@ TEST_CASE("htmlrenderer: free-standing text outside of <td> is implicitly concat
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 3);
-	REQUIRE(lines[0] == p(wrappable, "+-----------+"));
-	REQUIRE(lines[1] == p(wrappable, "|hello world|"));
-	REQUIRE(lines[2] == p(wrappable, "+-----------+"));
+	REQUIRE(lines[0] == p(nonwrappable, "+-----------+"));
+	REQUIRE(lines[1] == p(nonwrappable, "|hello world|"));
+	REQUIRE(lines[2] == p(nonwrappable, "+-----------+"));
 	REQUIRE(links.size() == 0);
 }
 

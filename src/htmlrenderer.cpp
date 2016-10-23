@@ -532,7 +532,7 @@ void htmlrenderer::render(
 							std::string s = table_text[idx].second;
 							while (s.length() > 0 && s[0] == '\n')
 								s.erase(0, 1);
-							add_line(s, tables, lines);
+							add_line_nonwrappable(s, lines);
 						}
 					}
 				}
@@ -628,7 +628,7 @@ void htmlrenderer::render(
 			std::string s = table_text[idx].second;
 			while (s.length() > 0 && s[0] == '\n')
 				s.erase(0, 1);
-			add_line(s, tables, lines);
+			add_line_nonwrappable(s, lines);
 		}
 	}
 
@@ -822,7 +822,7 @@ void htmlrenderer::render_table(
 
 	// render the table
 	if (table.border)
-		lines.push_back(std::make_pair(newsbeuter::softwrappable, separator));
+		lines.push_back(std::make_pair(newsbeuter::nonwrappable, separator));
 	for (size_t row=0; row < rows; row++) {
 		// calc height of this row
 		size_t height = 0;
@@ -854,10 +854,10 @@ void htmlrenderer::render_table(
 			}
 			if (table.border)
 				line += vsep;
-			lines.push_back(std::make_pair(newsbeuter::softwrappable, line));
+			lines.push_back(std::make_pair(newsbeuter::nonwrappable, line));
 		}
 		if (table.border)
-			lines.push_back(std::make_pair(newsbeuter::softwrappable, separator));
+			lines.push_back(std::make_pair(newsbeuter::nonwrappable, separator));
 	}
 }
 
