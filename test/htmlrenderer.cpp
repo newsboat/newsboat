@@ -66,7 +66,7 @@ namespace Catch {
 	};
 }
 
-TEST_CASE("HTMLRenderer behaves correctly") {
+TEST_CASE("HTMLRenderer behaves correctly", "[htmlrenderer]") {
 	htmlrenderer rnd;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -116,7 +116,8 @@ TEST_CASE("HTMLRenderer behaves correctly") {
 	}
 }
 
-TEST_CASE("htmlrenderer::format_ol_count()") {
+TEST_CASE("format_ol_count formats list count in specified format",
+          "[htmlrenderer]") {
 	htmlrenderer r;
 
 	SECTION("format to digit") {
@@ -156,7 +157,8 @@ TEST_CASE("htmlrenderer::format_ol_count()") {
 	}
 }
 
-TEST_CASE("htmlrenderer: links with same URL are coalesced under one number") {
+TEST_CASE("links with same URL are coalesced under one number",
+          "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input =
@@ -171,7 +173,7 @@ TEST_CASE("htmlrenderer: links with same URL are coalesced under one number") {
 	REQUIRE(links[0].second == LINK_HREF);
 }
 
-TEST_CASE("htmlrenderer: links with different URLs have different numbers") {
+TEST_CASE("links with different URLs have different numbers", "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input =
@@ -188,7 +190,8 @@ TEST_CASE("htmlrenderer: links with different URLs have different numbers") {
 	REQUIRE(links[1].second == LINK_HREF);
 }
 
-TEST_CASE("htmlrenderer: link without `href' is neither highlighted nor added to links list") {
+TEST_CASE("link without `href' is neither highlighted nor added to links list",
+          "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input = "<a>test</a>";
@@ -201,7 +204,8 @@ TEST_CASE("htmlrenderer: link without `href' is neither highlighted nor added to
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: link with empty `href' is neither highlighted nor added to links list") {
+TEST_CASE("link with empty `href' is neither highlighted nor added to links list",
+          "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input = "<a href=''>test</a>";
@@ -214,7 +218,7 @@ TEST_CASE("htmlrenderer: link with empty `href' is neither highlighted nor added
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: <strong> is rendered in bold font") {
+TEST_CASE("<strong> is rendered in bold font", "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input = "<strong>test</strong>";
@@ -226,7 +230,7 @@ TEST_CASE("htmlrenderer: <strong> is rendered in bold font") {
 	REQUIRE(lines[0] == p(wrappable, "<b>test</>"));
 }
 
-TEST_CASE("htmlrenderer: <u> is rendered as underlined text") {
+TEST_CASE("<u> is rendered as underlined text", "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input = "<u>test</u>";
@@ -238,7 +242,7 @@ TEST_CASE("htmlrenderer: <u> is rendered as underlined text") {
 	REQUIRE(lines[0] == p(wrappable, "<u>test</>"));
 }
 
-TEST_CASE("htmlrenderer: <q> is rendered as text in quotes") {
+TEST_CASE("<q> is rendered as text in quotes", "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input = "<q>test</q>";
@@ -250,7 +254,7 @@ TEST_CASE("htmlrenderer: <q> is rendered as text in quotes") {
 	REQUIRE(lines[0] == p(wrappable, "\"test\""));
 }
 
-TEST_CASE("htmlrenderer: Flash <embed>s are added to links if `src' is set") {
+TEST_CASE("Flash <embed>s are added to links if `src' is set", "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input =
@@ -271,7 +275,7 @@ TEST_CASE("htmlrenderer: Flash <embed>s are added to links if `src' is set") {
 	REQUIRE(links[0].second == LINK_EMBED);
 }
 
-TEST_CASE("htmlrenderer: Flash <embed>s are ignored if `src' is not set") {
+TEST_CASE("Flash <embed>s are ignored if `src' is not set", "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input =
@@ -284,7 +288,7 @@ TEST_CASE("htmlrenderer: Flash <embed>s are ignored if `src' is not set") {
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: non-flash <embed>s are ignored") {
+TEST_CASE("non-flash <embed>s are ignored", "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input =
@@ -298,7 +302,7 @@ TEST_CASE("htmlrenderer: non-flash <embed>s are ignored") {
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: <embed>s are ignored if `type' is not set") {
+TEST_CASE("<embed>s are ignored if `type' is not set", "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input =
@@ -311,7 +315,7 @@ TEST_CASE("htmlrenderer: <embed>s are ignored if `type' is not set") {
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: spaces and line breaks are preserved inside <pre>") {
+TEST_CASE("spaces and line breaks are preserved inside <pre>", "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input =
@@ -328,7 +332,7 @@ TEST_CASE("htmlrenderer: spaces and line breaks are preserved inside <pre>") {
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: tags still work inside <pre>") {
+TEST_CASE("tags still work inside <pre>", "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input =
@@ -345,7 +349,7 @@ TEST_CASE("htmlrenderer: tags still work inside <pre>") {
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: <img> results in a placeholder and a link") {
+TEST_CASE("<img> results in a placeholder and a link", "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input =
@@ -364,7 +368,7 @@ TEST_CASE("htmlrenderer: <img> results in a placeholder and a link") {
 	REQUIRE(links[0].second == LINK_IMG);
 }
 
-TEST_CASE("htmlrenderer: <img>s without `src' are ignored") {
+TEST_CASE("<img>s without `src' are ignored", "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input =
@@ -377,7 +381,8 @@ TEST_CASE("htmlrenderer: <img>s without `src' are ignored") {
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: title is mentioned in placeholder if <img> has `title'") {
+TEST_CASE("title is mentioned in placeholder if <img> has `title'",
+          "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input =
@@ -397,7 +402,8 @@ TEST_CASE("htmlrenderer: title is mentioned in placeholder if <img> has `title'"
 	REQUIRE(links[0].second == LINK_IMG);
 }
 
-TEST_CASE("htmlrenderer: URL of <img> with data inside `src' is replaced with string \"inline image\"") {
+TEST_CASE("URL of <img> with data inside `src' is replaced with string "
+          "\"inline image\"", "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input =
@@ -418,7 +424,8 @@ TEST_CASE("htmlrenderer: URL of <img> with data inside `src' is replaced with st
 	REQUIRE(links[0].second == LINK_IMG);
 }
 
-TEST_CASE("htmlrenderer: <blockquote> is indented and is separated by empty lines") {
+TEST_CASE("<blockquote> is indented and is separated by empty lines",
+          "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input =
@@ -438,7 +445,7 @@ TEST_CASE("htmlrenderer: <blockquote> is indented and is separated by empty line
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: <dl>, <dt> and <dd> are rendered properly") {
+TEST_CASE("<dl>, <dt> and <dd> are rendered properly", "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input =
@@ -465,7 +472,7 @@ TEST_CASE("htmlrenderer: <dl>, <dt> and <dd> are rendered properly") {
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: <h[2-6]> and <p>") {
+TEST_CASE("<h[2-6]> and <p>", "[htmlrenderer]") {
 	htmlrenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -540,7 +547,8 @@ TEST_CASE("htmlrenderer: <h[2-6]> and <p>") {
 	}
 }
 
-TEST_CASE("htmlrenderer: whitespace is erased at the beginning of the paragraph") {
+TEST_CASE("whitespace is erased at the beginning of the paragraph",
+          "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input =
@@ -557,7 +565,7 @@ TEST_CASE("htmlrenderer: whitespace is erased at the beginning of the paragraph"
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: newlines are replaced with space") {
+TEST_CASE("newlines are replaced with space", "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input = "newlines\nshould\nbe\nreplaced\nwith\na\nspace\ncharacter.";
@@ -570,7 +578,7 @@ TEST_CASE("htmlrenderer: newlines are replaced with space") {
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: paragraph is just a long line of text") {
+TEST_CASE("paragraph is just a long line of text", "[htmlrenderer]") {
 	htmlrenderer r;
 
 	const std::string input =
@@ -587,7 +595,7 @@ TEST_CASE("htmlrenderer: paragraph is just a long line of text") {
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: default style for <ol> is Arabic numerals") {
+TEST_CASE("default style for <ol> is Arabic numerals", "[htmlrenderer]") {
 	htmlrenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -621,7 +629,7 @@ TEST_CASE("htmlrenderer: default style for <ol> is Arabic numerals") {
 	}
 }
 
-TEST_CASE("htmlrenderer: default starting number for <ol> is 1") {
+TEST_CASE("default starting number for <ol> is 1", "[htmlrenderer]") {
 	htmlrenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -655,7 +663,7 @@ TEST_CASE("htmlrenderer: default starting number for <ol> is 1") {
 	}
 }
 
-TEST_CASE("htmlrenderer: type='1' for <ol> means Arabic numbering") {
+TEST_CASE("type='1' for <ol> means Arabic numbering", "[htmlrenderer]") {
 	htmlrenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -672,7 +680,8 @@ TEST_CASE("htmlrenderer: type='1' for <ol> means Arabic numbering") {
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: type='a' for <ol> means lowercase alphabetic numbering") {
+TEST_CASE("type='a' for <ol> means lowercase alphabetic numbering",
+          "[htmlrenderer]") {
 	htmlrenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -689,7 +698,8 @@ TEST_CASE("htmlrenderer: type='a' for <ol> means lowercase alphabetic numbering"
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: type='A' for <ol> means uppercase alphabetic numbering") {
+TEST_CASE("type='A' for <ol> means uppercase alphabetic numbering",
+          "[htmlrenderer]") {
 	htmlrenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -706,7 +716,8 @@ TEST_CASE("htmlrenderer: type='A' for <ol> means uppercase alphabetic numbering"
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: type='i' for <ol> means lowercase Roman numbering") {
+TEST_CASE("type='i' for <ol> means lowercase Roman numbering",
+          "[htmlrenderer]") {
 	htmlrenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -723,7 +734,8 @@ TEST_CASE("htmlrenderer: type='i' for <ol> means lowercase Roman numbering") {
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: type='I' for <ol> means uppercase Roman numbering") {
+TEST_CASE("type='I' for <ol> means uppercase Roman numbering",
+          "[htmlrenderer]") {
 	htmlrenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -740,7 +752,8 @@ TEST_CASE("htmlrenderer: type='I' for <ol> means uppercase Roman numbering") {
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: every next <li> implicitly closes the previous one") {
+TEST_CASE("every next <li> implicitly closes the previous one",
+          "[htmlrenderer]") {
 	htmlrenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -762,7 +775,7 @@ TEST_CASE("htmlrenderer: every next <li> implicitly closes the previous one") {
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: <style> tags are ignored") {
+TEST_CASE("<style> tags are ignored", "[htmlrenderer]") {
 	htmlrenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -774,7 +787,8 @@ TEST_CASE("htmlrenderer: <style> tags are ignored") {
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: <hr> is not a string, but a special type of line") {
+TEST_CASE("<hr> is not a string, but a special type of line",
+          "[htmlrenderer]") {
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 	htmlrenderer r;
@@ -787,7 +801,7 @@ TEST_CASE("htmlrenderer: <hr> is not a string, but a special type of line") {
 	REQUIRE(lines[0].first == hr);
 }
 
-TEST_CASE("htmlrenderer: header rows of tables are in bold") {
+TEST_CASE("header rows of tables are in bold", "[htmlrenderer]") {
 	htmlrenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -822,7 +836,8 @@ TEST_CASE("htmlrenderer: header rows of tables are in bold") {
 	}
 }
 
-TEST_CASE("htmlrenderer: cells are separated by space if `border' is not set") {
+TEST_CASE("cells are separated by space if `border' is not set",
+          "[htmlrenderer]") {
 	htmlrenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -841,7 +856,8 @@ TEST_CASE("htmlrenderer: cells are separated by space if `border' is not set") {
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: cells are separated by vertical bar if `border' is set (regardless of actual value)") {
+TEST_CASE("cells are separated by vertical bar if `border' is set (regardless "
+          "of actual value)", "[htmlrenderer]") {
 	htmlrenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -866,7 +882,7 @@ TEST_CASE("htmlrenderer: cells are separated by vertical bar if `border' is set 
 	}
 }
 
-TEST_CASE("htmlrenderer: tables with `border' have borders") {
+TEST_CASE("tables with `border' have borders", "[htmlrenderer]") {
 	htmlrenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -887,7 +903,8 @@ TEST_CASE("htmlrenderer: tables with `border' have borders") {
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: if document ends before </table> is found, table is rendered anyway") {
+TEST_CASE("if document ends before </table> is found, table is rendered anyway",
+          "[htmlrenderer]") {
 	htmlrenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -907,7 +924,7 @@ TEST_CASE("htmlrenderer: if document ends before </table> is found, table is ren
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: tables can be nested") {
+TEST_CASE("tables can be nested", "[htmlrenderer]") {
 	htmlrenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -944,7 +961,8 @@ TEST_CASE("htmlrenderer: tables can be nested") {
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: if <td> appears inside table but outside of a row, one is created implicitly") {
+TEST_CASE("if <td> appears inside table but outside of a row, one is created "
+          "implicitly", "[htmlrenderer]") {
 	htmlrenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -964,7 +982,8 @@ TEST_CASE("htmlrenderer: if <td> appears inside table but outside of a row, one 
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: previous row is implicitly closed when <tr> is found") {
+TEST_CASE("previous row is implicitly closed when <tr> is found",
+          "[htmlrenderer]") {
 	htmlrenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -985,7 +1004,8 @@ TEST_CASE("htmlrenderer: previous row is implicitly closed when <tr> is found") 
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: free-standing text outside of <td> is implicitly concatenated with the next cell") {
+TEST_CASE("free-standing text outside of <td> is implicitly concatenated with "
+          "the next cell", "[htmlrenderer]") {
 	htmlrenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -1005,7 +1025,8 @@ TEST_CASE("htmlrenderer: free-standing text outside of <td> is implicitly concat
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: text within <ituneshack> is to be treated specially") {
+TEST_CASE("text within <ituneshack> is to be treated specially",
+          "[htmlrenderer]") {
 	htmlrenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
@@ -1027,7 +1048,7 @@ TEST_CASE("htmlrenderer: text within <ituneshack> is to be treated specially") {
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("htmlrenderer: <hr> is rendered correctly") {
+TEST_CASE("<hr> is rendered correctly", "[htmlrenderer]") {
 	htmlrenderer r;
 	std::string result;
 

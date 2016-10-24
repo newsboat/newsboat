@@ -4,7 +4,7 @@
 
 using namespace newsbeuter;
 
-TEST_CASE("Tokenizers behave correctly") {
+TEST_CASE("Tokenizers behave correctly", "[utils]") {
 	std::vector<std::string> tokens;
 
 	SECTION("utils::tokenize()") {
@@ -111,7 +111,7 @@ TEST_CASE("Tokenizers behave correctly") {
 	}
 }
 
-TEST_CASE("String conversions behave correctly") {
+TEST_CASE("String conversions behave correctly", "[utils]") {
 	SECTION("Conversion from wstring to string") {
 		std::string s1 = utils::wstr2str(L"This is a simple string. Let's have a look at the outcome...");
 		REQUIRE(s1 == "This is a simple string. Let's have a look at the outcome...");
@@ -129,11 +129,11 @@ TEST_CASE("String conversions behave correctly") {
 	}
 }
 
-TEST_CASE("utils::get_command_output()") {
+TEST_CASE("get_command_output()", "[utils]") {
 	REQUIRE(utils::get_command_output("ls /dev/null") == "/dev/null\n");
 }
 
-TEST_CASE("utils::run_program()") {
+TEST_CASE("run_program()", "[utils]") {
 	char * argv[4];
 	char cat[] = "cat";
 	argv[0] = cat;
@@ -150,7 +150,7 @@ TEST_CASE("utils::run_program()") {
 	REQUIRE(utils::run_program(argv, "") == "hello world");
 }
 
-TEST_CASE("utils::replace_all()") {
+TEST_CASE("replace_all()", "[utils]") {
 	REQUIRE(utils::replace_all("aaa", "a", "b") == "bbb");
 	REQUIRE(utils::replace_all("aaa", "aa", "ba") == "baa");
 	REQUIRE(utils::replace_all("aaaaaa", "aa", "ba") == "bababa");
@@ -160,14 +160,14 @@ TEST_CASE("utils::replace_all()") {
 	REQUIRE(utils::replace_all("o o o", "o", "<o>") == "<o> <o> <o>");
 }
 
-TEST_CASE("utils::to_string()") {
+TEST_CASE("to_string()", "[utils]") {
 	REQUIRE(utils::to_string<int>(0) == "0");
 	REQUIRE(utils::to_string<int>(100) == "100");
 	REQUIRE(utils::to_string<unsigned int>(65536) == "65536");
 	REQUIRE(utils::to_string<unsigned int>(65537) == "65537");
 }
 
-TEST_CASE("utils::strprintf()") {
+TEST_CASE("strprintf()", "[utils]") {
 	REQUIRE(utils::strprintf(nullptr) == "");
 	REQUIRE(utils::strprintf("%s", "") == "");
 	REQUIRE(utils::strprintf("%u", 0) == "0");
@@ -175,7 +175,7 @@ TEST_CASE("utils::strprintf()") {
 	REQUIRE(utils::strprintf("%u-%s-%c", 23, "hello world", 'X') == "23-hello world-X");
 }
 
-TEST_CASE("utils::partition_index()") {
+TEST_CASE("partition_index()", "[utils]") {
 	std::vector<std::pair<unsigned int, unsigned int>> partitions;
 
 	SECTION("[0, 9] into 2") {
@@ -245,7 +245,7 @@ TEST_CASE("utils::partition_index()") {
 	}
 }
 
-TEST_CASE("utils::censor_url()") {
+TEST_CASE("censor_url()", "[utils]") {
 	// censor empty string
 	REQUIRE(utils::censor_url("") == "");
 	// censor foobar
@@ -290,7 +290,7 @@ TEST_CASE("utils::censor_url()") {
 	REQUIRE(utils::censor_url("query:name:age between 1:10") == "query:name:age between 1:10");
 }
 
-TEST_CASE("utils::absolute_url()") {
+TEST_CASE("absolute_url()", "[utils]") {
 	REQUIRE(utils::absolute_url("http://foobar/hello/crook/", "bar.html")
 			== "http://foobar/hello/crook/bar.html");
 	REQUIRE(utils::absolute_url("https://foobar/foo/", "/bar.html")
@@ -303,19 +303,19 @@ TEST_CASE("utils::absolute_url()") {
 			== "http://test:test@foobar:33/bla2.html");
 }
 
-TEST_CASE("utils::quote()") {
+TEST_CASE("quote()", "[utils]") {
 	REQUIRE(utils::quote("") == "\"\"");
 	REQUIRE(utils::quote("hello world") == "\"hello world\"");
 	REQUIRE(utils::quote("\"hello world\"") == "\"\\\"hello world\\\"\"");
 }
 
-TEST_CASE("utils::to_u()") {
+TEST_CASE("to_u()", "[utils]") {
 	REQUIRE(utils::to_u("0") == 0);
 	REQUIRE(utils::to_u("23") == 23);
 	REQUIRE(utils::to_u("") == 0);
 }
 
-TEST_CASE("utils::strwidth()") {
+TEST_CASE("strwidth()", "[utils]") {
 	// empty string is 0 colums wide
 	REQUIRE(utils::strwidth("") == 0);
 
@@ -326,7 +326,7 @@ TEST_CASE("utils::strwidth()") {
 	REQUIRE(utils::strwidth(utils::wstr2str(L"\uF91F")) == 2);
 }
 
-TEST_CASE("utils::join()") {
+TEST_CASE("join()", "[utils]") {
 	std::vector<std::string> str;
 	REQUIRE(utils::join(str, "") == "");
 	REQUIRE(utils::join(str, "-") == "");
@@ -344,7 +344,7 @@ TEST_CASE("utils::join()") {
 	}
 }
 
-TEST_CASE("utils::trim()") {
+TEST_CASE("trim()", "[utils]") {
 	std::string str = "  xxx\r\n";
 	utils::trim(str);
 	REQUIRE(str == "xxx");
@@ -362,7 +362,7 @@ TEST_CASE("utils::trim()") {
 	REQUIRE(str == "");
 }
 
-TEST_CASE("utils::trim_end()") {
+TEST_CASE("trim_end()", "[utils]") {
 	std::string str = "quux\n";
 	utils::trim_end(str);
 	REQUIRE(str == "quux");

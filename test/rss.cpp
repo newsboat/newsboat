@@ -3,7 +3,7 @@
 #include <rsspp.h>
 #include <rsspp_internal.h>
 
-TEST_CASE("Throws exception if file doesn't exist") {
+TEST_CASE("Throws exception if file doesn't exist", "[rsspp::parser]") {
 	rsspp::parser p;
 
 	try {
@@ -13,7 +13,7 @@ TEST_CASE("Throws exception if file doesn't exist") {
 	}
 }
 
-TEST_CASE("Throws exception if file can't be parsed") {
+TEST_CASE("Throws exception if file can't be parsed", "[rsspp::parser]") {
 	rsspp::parser p;
 
 	try {
@@ -23,7 +23,7 @@ TEST_CASE("Throws exception if file can't be parsed") {
 	}
 }
 
-TEST_CASE("Parsers behave correctly") {
+TEST_CASE("Parsers behave correctly", "[rsspp::parser]") {
 	rsspp::parser p;
 	rsspp::feed f;
 
@@ -146,7 +146,7 @@ TEST_CASE("Parsers behave correctly") {
 	}
 }
 
-TEST_CASE("W3CDTF parser behaves correctly") {
+TEST_CASE("W3CDTF parser behaves correctly", "[rsspp::rss_parser]") {
 	SECTION("W3CDTF year only") {
 		REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822("2008") == "Tue, 01 Jan 2008 00:00:00 +0000");
 	}
@@ -180,7 +180,8 @@ TEST_CASE("W3CDTF parser behaves correctly") {
 	}
 }
 
-TEST_CASE("W3C DTF to RFC 822 conversion behaves correctly with different local timezones") {
+TEST_CASE("W3C DTF to RFC 822 conversion behaves correctly with different "
+          "local timezones", "[rsspp::rss_parser]") {
 	// There has been a problem in the C date conversion functions when the TZ is
 	// set to different locations, and localtime is in daylight savings. One of
 	// these two next tests sections should be in active daylight savings.

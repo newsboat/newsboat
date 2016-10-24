@@ -2,13 +2,14 @@
 
 #include <FilterParser.h>
 
-TEST_CASE("FilterParser doesn't crash parsing expression with invalid character in operator") {
+TEST_CASE("FilterParser doesn't crash parsing expression with invalid character "
+          "in operator", "[FilterParser]") {
 	FilterParser fp;
 
 	REQUIRE_FALSE(fp.parse_string("title =¯ \"foo\""));
 }
 
-TEST_CASE("FilterParser behaves correctly") {
+TEST_CASE("FilterParser behaves correctly", "[FilterParser]") {
 	FilterParser fp;
 
 	SECTION("test parser") {

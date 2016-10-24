@@ -4,7 +4,7 @@
 
 using namespace newsbeuter;
 
-TEST_CASE("History behaves correctly") {
+TEST_CASE("History behaves correctly", "[history]") {
 	history h;
 
 	SECTION("Empty history returns nothing") {
