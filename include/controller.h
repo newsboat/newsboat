@@ -107,7 +107,7 @@ class controller {
 		bool setup_dirs_xdg(const char *env_home, bool silent);
 		void setup_dirs(bool silent);
 		void version_information(const char * argv0, unsigned int level);
-		void import_opml(const char * filename);
+		void import_opml(const std::string& filename);
 		void export_opml();
 		void rec_find_rss_outlines(xmlNode * node, std::string tag);
 		void compute_unread_numbers(unsigned int&, unsigned int& );

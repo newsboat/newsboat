@@ -354,7 +354,7 @@ void controller::run(int argc, char * argv[]) {
 		LOG(LOG_INFO, "Importing OPML file from %s", importfile);
 		urlcfg = new file_urlreader(url_file);
 		urlcfg->reload();
-		import_opml(importfile.c_str());
+		import_opml(importfile);
 		return;
 	}
 
@@ -1043,10 +1043,12 @@ void controller::usage(char * argv0) {
 	::exit(EXIT_FAILURE);
 }
 
-void controller::import_opml(const char * filename) {
-	xmlDoc * doc = xmlReadFile(filename, nullptr, 0);
+void controller::import_opml(const std::string& filename) {
+	xmlDoc * doc = xmlReadFile(filename.c_str(), nullptr, 0);
 	if (doc == nullptr) {
-		std::cout << strprintf::fmt(_("An error occurred while parsing %s."), filename) << std::endl;
+		std::cout
+			<< strprintf::fmt(_("An error occurred while parsing %s."), filename)
+			<< std::endl;
 		return;
 	}
 
