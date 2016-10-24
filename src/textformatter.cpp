@@ -167,8 +167,8 @@ std::string textformatter::format_text_to_list(
 	return format_cache;
 }
 
-std::string textformatter::format_text_plain(const size_t width) {
-	return format_text_plain_helper(lines, nullptr, std::string(), width, 0);
+std::string textformatter::format_text_plain(const size_t width, const size_t total_width) {
+	return format_text_plain_helper(lines, nullptr, std::string(), width, total_width);
 }
 
 }

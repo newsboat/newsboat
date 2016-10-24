@@ -642,7 +642,7 @@ void htmlrenderer::render(
 					i+1,
 					links[i].first.c_str(),
 					type2str(links[i].second).c_str());
-			lines.push_back(std::make_pair(newsbeuter::softwrappable, link_text));
+			add_line_softwrappable(link_text, lines);
 		}
 	}
 }

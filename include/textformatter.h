@@ -41,7 +41,7 @@ class textformatter {
 				const std::string& location = "",
 				const size_t wrap_width = 80,
 				const size_t total_width = 0);
-		std::string format_text_plain(const size_t width = 80);
+		std::string format_text_plain(const size_t width = 80, const size_t total_width = 0);
 
 		inline void clear() {
 			lines.clear();

@@ -10,7 +10,8 @@ TEST_CASE("textformatter: lines marked as `wrappable` are wrapped to fit width")
 	fmt.add_lines(
 		{
 			std::make_pair(wrappable, "this one is going to be wrapped"),
-			std::make_pair(softwrappable, "this one is going to be preserved")
+			std::make_pair(softwrappable, "this one is going to be wrapped at the window border"),
+			std::make_pair(nonwrappable, "this one is going to be preserved even though it's much longer")
 		});
 
 	SECTION("formatting to plain text") {
@@ -19,8 +20,10 @@ TEST_CASE("textformatter: lines marked as `wrappable` are wrapped to fit width")
 			"is going \n"
 			"to be \n"
 			"wrapped\n"
-			"this one is going to be preserved\n";
-		REQUIRE(fmt.format_text_plain(10) == expected);
+			"this one is going to be wrapped at the \n"
+			"window border\n"
+			"this one is going to be preserved even though it's much longer\n";
+		REQUIRE(fmt.format_text_plain(10, 40) == expected);
 	}
 
 	SECTION("formatting to list") {
@@ -30,9 +33,11 @@ TEST_CASE("textformatter: lines marked as `wrappable` are wrapped to fit width")
 				"{listitem text:\"is going \"}"
 				"{listitem text:\"to be \"}"
 				"{listitem text:\"wrapped\"}"
-				"{listitem text:\"this one is going to be preserved\"}"
+				"{listitem text:\"this one is going to be wrapped at the \"}"
+				"{listitem text:\"window border\"}"
+				"{listitem text:\"this one is going to be preserved even though it's much longer\"}"
 			"}";
-		REQUIRE(fmt.format_text_to_list(nullptr, "", 10) == expected);
+		REQUIRE(fmt.format_text_to_list(nullptr, "", 10, 40) == expected);
 	}
 }
 
@@ -71,14 +76,19 @@ TEST_CASE("textformatter: <hr> is rendered properly") {
 
 TEST_CASE("textformatter: wrappable sequences longer then format width are forced-wrapped") {
 	textformatter fmt;
-	fmt.add_line(wrappable, "0123456789");
-	fmt.add_line(softwrappable, "0123456789");
+	fmt.add_line(wrappable, "0123456789101112");
+	fmt.add_line(softwrappable, "0123456789101112");
+	fmt.add_line(nonwrappable, "0123456789101112");
 
 	const std::string expected =
 		"01234\n"
 		"56789\n"
-		"0123456789\n";
-	REQUIRE(fmt.format_text_plain(5) == expected);
+		"10111\n"
+		"2\n"
+		"0123456789\n"
+		"101112\n"
+		"0123456789101112\n";
+	REQUIRE(fmt.format_text_plain(5, 10) == expected);
 }
 
 TEST_CASE("textformatter: when wrapping, spaces at the beginning of lines are dropped") {
