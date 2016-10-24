@@ -18,7 +18,7 @@ TEST_CASE("ConfigContainer behaves correctly") {
 
 		SECTION("bool value") {
 			REQUIRE(cfg->get_configvalue("show-read-feeds") == "no");
-			REQUIRE(cfg->get_configvalue_as_bool("show-read-feeds") == false);
+			REQUIRE_FALSE(cfg->get_configvalue_as_bool("show-read-feeds"));
 		}
 
 		SECTION("string value") {

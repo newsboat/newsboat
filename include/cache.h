@@ -8,6 +8,8 @@
 
 namespace newsbeuter {
 
+typedef std::vector<std::string> schema_queries_list;
+
 class cache {
 	public:
 		cache(const std::string& cachefile, configcontainer * c);
@@ -22,7 +24,6 @@ class cache {
 		void catchup_all(const std::string& feedurl = "");
 		void catchup_all(std::shared_ptr<rss_feed> feed);
 		void update_rssitem_flags(rss_item* item);
-		std::vector<std::string> get_feed_urls();
 		void fetch_lastmodified(const std::string& uri, time_t& t, std::string& etag);
 		void update_lastmodified(const std::string& uri, time_t t, const std::string& etag);
 		unsigned int get_unread_count();
@@ -39,6 +40,20 @@ class cache {
 		void update_rssitem_unlocked(std::shared_ptr<rss_item> item, const std::string& feedurl, bool reset_unread);
 
 		std::string prepare_query(const char * format, ...);
+
+		void run_sql(
+				const std::string& query,
+				int (*callback)(void*,int,char**,char**) = nullptr,
+				void * callback_argument = nullptr);
+		void run_sql_nothrow(
+				const std::string& query,
+				int (*callback)(void*,int,char**,char**) = nullptr,
+				void * callback_argument = nullptr);
+		void run_sql_impl(
+				const std::string& query,
+				int (*callback)(void*,int,char**,char**),
+				void * callback_argument,
+				bool do_throw);
 
 		sqlite3 * db;
 		configcontainer * cfg;

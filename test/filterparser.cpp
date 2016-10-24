@@ -29,6 +29,6 @@ TEST_CASE("FilterParser behaves correctly") {
 
 	// complex query
 	SECTION("Parse string of complex query") {
-		REQUIRE(fp.parse_string("( a = \"b\") and ( b = \"c\" ) or ( ( c != \"d\" ) and ( c !~ \"asdf\" )) or c != \"xx\"") == true);
+		REQUIRE(fp.parse_string("( a = \"b\") and ( b = \"c\" ) or ( ( c != \"d\" ) and ( c !~ \"asdf\" )) or c != \"xx\""));
 	}
 }

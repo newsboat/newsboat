@@ -89,7 +89,7 @@ TEST_CASE("Parsers behave correctly") {
 		REQUIRE(f.items[0].content_encoded == "oh well, this is the content.");
 		REQUIRE(f.items[0].pubDate == "Fri, 12 Dec 2008 02:36:10 +0100");
 		REQUIRE(f.items[0].guid == "http://example.com/blog/this_is_an_item.html");
-		REQUIRE(f.items[0].guid_isPermaLink == false);
+		REQUIRE_FALSE(f.items[0].guid_isPermaLink);
 	}
 
 	SECTION("RSS 1.0 is parsed correctly") {
