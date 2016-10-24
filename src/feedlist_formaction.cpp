@@ -158,8 +158,12 @@ REDO:
 		if (feeds_shown > 0 && feedpos.length() > 0) {
 			std::shared_ptr<rss_feed> feed = v->get_ctrl()->get_feed(pos);
 			if (feed) {
-				LOG(LOG_INFO, "feedlist_formaction: opening feed at position `%s': %s", feedpos.c_str(), feed->link().c_str());
-				v->open_in_browser(feed->link());
+				if (feed->rssurl().substr(0,6) != "query:") {
+					LOG(LOG_INFO, "feedlist_formaction: opening feed at position `%s': %s", feedpos.c_str(), feed->link().c_str());
+					v->open_in_browser(feed->link());
+				} else {
+					v->show_error(_("Cannot open query feeds in the browser!"));
+				}
 			}
 		} else {
 			v->show_error(_("No feed selected!"));
