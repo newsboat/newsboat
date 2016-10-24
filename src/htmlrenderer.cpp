@@ -456,7 +456,7 @@ void htmlrenderer::render(
 				break;
 
 			case TAG_PRE:
-				add_line_verbatim(curline, lines);
+				add_line_softwrappable(curline, lines);
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				inside_pre = false;
 				break;
@@ -532,7 +532,7 @@ void htmlrenderer::render(
 							std::string s = table_text[idx].second;
 							while (s.length() > 0 && s[0] == '\n')
 								s.erase(0, 1);
-							add_line(s, tables, lines);
+							add_line_nonwrappable(s, lines);
 						}
 					}
 				}
@@ -586,7 +586,7 @@ void htmlrenderer::render(
 				std::vector<std::string> paragraphs = utils::tokenize_nl(text);
 				for (auto paragraph : paragraphs) {
 					if (paragraph == "\n") {
-						add_line_verbatim(curline, lines);
+						add_line_softwrappable(curline, lines);
 						prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 					} else {
 						curline.append(paragraph);
@@ -628,7 +628,7 @@ void htmlrenderer::render(
 			std::string s = table_text[idx].second;
 			while (s.length() > 0 && s[0] == '\n')
 				s.erase(0, 1);
-			add_line(s, tables, lines);
+			add_line_nonwrappable(s, lines);
 		}
 	}
 
@@ -642,7 +642,7 @@ void htmlrenderer::render(
 					i+1,
 					links[i].first.c_str(),
 					type2str(links[i].second).c_str());
-			lines.push_back(std::make_pair(newsbeuter::nonwrappable, link_text));
+			add_line_softwrappable(link_text, lines);
 		}
 	}
 }
@@ -692,7 +692,14 @@ void htmlrenderer::add_line(
 		lines.push_back(std::make_pair(newsbeuter::wrappable, curline));
 }
 
-void htmlrenderer::add_line_verbatim(
+void htmlrenderer::add_line_softwrappable(
+		const std::string& line,
+		std::vector<std::pair<LineType, std::string>>& lines)
+{
+	lines.push_back(std::make_pair(newsbeuter::softwrappable, line));
+}
+
+void htmlrenderer::add_line_nonwrappable(
 		const std::string& line,
 		std::vector<std::pair<LineType, std::string>>& lines)
 {

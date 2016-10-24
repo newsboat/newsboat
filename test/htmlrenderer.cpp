@@ -35,6 +35,8 @@ namespace Catch {
 		switch(value) {
 			case wrappable:
 				return "wrappable";
+			case softwrappable:
+				return "softwrappable";
 			case nonwrappable:
 				return "nonwrappable";
 			case hr:
@@ -77,7 +79,7 @@ TEST_CASE("HTMLRenderer behaves correctly") {
 		REQUIRE(lines[0] == p(wrappable, "<u>slashdot</>[1]"));
 		REQUIRE(lines[1] == p(wrappable, ""));
 		REQUIRE(lines[2] == p(wrappable, "Links: "));
-		REQUIRE(lines[3] == p(nonwrappable, "[1]: http://slashdot.org/ (link)"));
+		REQUIRE(lines[3] == p(softwrappable, "[1]: http://slashdot.org/ (link)"));
 
 		REQUIRE(links[0].first == "http://slashdot.org/");
 		REQUIRE(links[0].second == LINK_HREF);
@@ -263,7 +265,7 @@ TEST_CASE("htmlrenderer: Flash <embed>s are added to links if `src' is set") {
 	REQUIRE(lines[0] == p(wrappable, "[embedded flash: 1]"));
 	REQUIRE(lines[1] == p(wrappable, ""));
 	REQUIRE(lines[2] == p(wrappable, "Links: "));
-	REQUIRE(lines[3] == p(nonwrappable, "[1]: http://example.com/game.swf (embedded flash)"));
+	REQUIRE(lines[3] == p(softwrappable, "[1]: http://example.com/game.swf (embedded flash)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "http://example.com/game.swf");
 	REQUIRE(links[0].second == LINK_EMBED);
@@ -321,8 +323,8 @@ TEST_CASE("htmlrenderer: spaces and line breaks are preserved inside <pre>") {
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 2);
-	REQUIRE(lines[0] == p(nonwrappable, "oh cool"));
-	REQUIRE(lines[1] == p(nonwrappable, "  check this\tstuff  out!"));
+	REQUIRE(lines[0] == p(softwrappable, "oh cool"));
+	REQUIRE(lines[1] == p(softwrappable, "  check this\tstuff  out!"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -339,7 +341,7 @@ TEST_CASE("htmlrenderer: tags still work inside <pre>") {
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
-	REQUIRE(lines[0] == p(nonwrappable, "<b>bold text</><u>underlined text</>"));
+	REQUIRE(lines[0] == p(softwrappable, "<b>bold text</><u>underlined text</>"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -356,7 +358,7 @@ TEST_CASE("htmlrenderer: <img> results in a placeholder and a link") {
 	REQUIRE(lines[0] == p(wrappable, "[image 1]"));
 	REQUIRE(lines[1] == p(wrappable, ""));
 	REQUIRE(lines[2] == p(wrappable, "Links: "));
-	REQUIRE(lines[3] == p(nonwrappable, "[1]: http://example.com/image.png (image)"));
+	REQUIRE(lines[3] == p(softwrappable, "[1]: http://example.com/image.png (image)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "http://example.com/image.png");
 	REQUIRE(links[0].second == LINK_IMG);
@@ -389,7 +391,7 @@ TEST_CASE("htmlrenderer: title is mentioned in placeholder if <img> has `title'"
 	REQUIRE(lines[0] == p(wrappable, "[image 1: Just a test image]"));
 	REQUIRE(lines[1] == p(wrappable, ""));
 	REQUIRE(lines[2] == p(wrappable, "Links: "));
-	REQUIRE(lines[3] == p(nonwrappable, "[1]: http://example.com/image.png (image)"));
+	REQUIRE(lines[3] == p(softwrappable, "[1]: http://example.com/image.png (image)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "http://example.com/image.png");
 	REQUIRE(links[0].second == LINK_IMG);
@@ -410,7 +412,7 @@ TEST_CASE("htmlrenderer: URL of <img> with data inside `src' is replaced with st
 	REQUIRE(lines[0] == p(wrappable, "[image 1]"));
 	REQUIRE(lines[1] == p(wrappable, ""));
 	REQUIRE(lines[2] == p(wrappable, "Links: "));
-	REQUIRE(lines[3] == p(nonwrappable, "[1]: inline image (image)"));
+	REQUIRE(lines[3] == p(softwrappable, "[1]: inline image (image)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "inline image");
 	REQUIRE(links[0].second == LINK_IMG);
@@ -800,7 +802,7 @@ TEST_CASE("htmlrenderer: header rows of tables are in bold") {
 
 		REQUIRE_NOTHROW(r.render(input, lines, links, url));
 		REQUIRE(lines.size() == 1);
-		REQUIRE(lines[0] == p(wrappable, "<b>header</>"));
+		REQUIRE(lines[0] == p(nonwrappable, "<b>header</>"));
 		REQUIRE(links.size() == 0);
 	}
 
@@ -815,7 +817,7 @@ TEST_CASE("htmlrenderer: header rows of tables are in bold") {
 
 		REQUIRE_NOTHROW(r.render(input, lines, links, url));
 		REQUIRE(lines.size() == 1);
-		REQUIRE(lines[0] == p(wrappable, "<b>another</> <b>header</>"));
+		REQUIRE(lines[0] == p(nonwrappable, "<b>another</> <b>header</>"));
 		REQUIRE(links.size() == 0);
 	}
 }
@@ -835,7 +837,7 @@ TEST_CASE("htmlrenderer: cells are separated by space if `border' is not set") {
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
-	REQUIRE(lines[0] == p(wrappable, "hello world"));
+	REQUIRE(lines[0] == p(nonwrappable, "hello world"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -858,7 +860,7 @@ TEST_CASE("htmlrenderer: cells are separated by vertical bar if `border' is set 
 
 		REQUIRE_NOTHROW(r.render(input, lines, links, url));
 		REQUIRE(lines.size() == 3);
-		REQUIRE(lines[1] == p(wrappable, "|hello|world|"));
+		REQUIRE(lines[1] == p(nonwrappable, "|hello|world|"));
 		REQUIRE(links.size() == 0);
 		}
 	}
@@ -879,9 +881,9 @@ TEST_CASE("htmlrenderer: tables with `border' have borders") {
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 3);
-	REQUIRE(lines[0] == p(wrappable, "+-----+-----+"));
-	REQUIRE(lines[1] == p(wrappable, "|hello|world|"));
-	REQUIRE(lines[2] == p(wrappable, "+-----+-----+"));
+	REQUIRE(lines[0] == p(nonwrappable, "+-----+-----+"));
+	REQUIRE(lines[1] == p(nonwrappable, "|hello|world|"));
+	REQUIRE(lines[2] == p(nonwrappable, "+-----+-----+"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -899,9 +901,9 @@ TEST_CASE("htmlrenderer: if document ends before </table> is found, table is ren
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 3);
-	REQUIRE(lines[0] == p(wrappable, "+-----+-----+"));
-	REQUIRE(lines[1] == p(wrappable, "|hello|world|"));
-	REQUIRE(lines[2] == p(wrappable, "+-----+-----+"));
+	REQUIRE(lines[0] == p(nonwrappable, "+-----+-----+"));
+	REQUIRE(lines[1] == p(nonwrappable, "|hello|world|"));
+	REQUIRE(lines[2] == p(nonwrappable, "+-----+-----+"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -931,13 +933,13 @@ TEST_CASE("htmlrenderer: tables can be nested") {
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 7);
-	REQUIRE(lines[0] == p(wrappable, "+---------------+-----------+"));
-	REQUIRE(lines[1] == p(wrappable, "|+-------+-----+|lonely cell|"));
-	REQUIRE(lines[2] == p(wrappable, "||hello  |world||           |"));
-	REQUIRE(lines[3] == p(wrappable, "|+-------+-----+|           |"));
-	REQUIRE(lines[4] == p(wrappable, "||another|row  ||           |"));
-	REQUIRE(lines[5] == p(wrappable, "|+-------+-----+|           |"));
-	REQUIRE(lines[6] == p(wrappable, "+---------------+-----------+"));
+	REQUIRE(lines[0] == p(nonwrappable, "+---------------+-----------+"));
+	REQUIRE(lines[1] == p(nonwrappable, "|+-------+-----+|lonely cell|"));
+	REQUIRE(lines[2] == p(nonwrappable, "||hello  |world||           |"));
+	REQUIRE(lines[3] == p(nonwrappable, "|+-------+-----+|           |"));
+	REQUIRE(lines[4] == p(nonwrappable, "||another|row  ||           |"));
+	REQUIRE(lines[5] == p(nonwrappable, "|+-------+-----+|           |"));
+	REQUIRE(lines[6] == p(nonwrappable, "+---------------+-----------+"));
 
 	REQUIRE(links.size() == 0);
 }
@@ -956,9 +958,9 @@ TEST_CASE("htmlrenderer: if <td> appears inside table but outside of a row, one 
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 3);
-	REQUIRE(lines[0] == p(wrappable, "+-----+-----+"));
-	REQUIRE(lines[1] == p(wrappable, "|hello|world|"));
-	REQUIRE(lines[2] == p(wrappable, "+-----+-----+"));
+	REQUIRE(lines[0] == p(nonwrappable, "+-----+-----+"));
+	REQUIRE(lines[1] == p(nonwrappable, "|hello|world|"));
+	REQUIRE(lines[2] == p(nonwrappable, "+-----+-----+"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -975,11 +977,11 @@ TEST_CASE("htmlrenderer: previous row is implicitly closed when <tr> is found") 
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 5);
-	REQUIRE(lines[0] == p(wrappable, "+-----+"));
-	REQUIRE(lines[1] == p(wrappable, "|hello|"));
-	REQUIRE(lines[2] == p(wrappable, "+-----+"));
-	REQUIRE(lines[3] == p(wrappable, "|world|"));
-	REQUIRE(lines[4] == p(wrappable, "+-----+"));
+	REQUIRE(lines[0] == p(nonwrappable, "+-----+"));
+	REQUIRE(lines[1] == p(nonwrappable, "|hello|"));
+	REQUIRE(lines[2] == p(nonwrappable, "+-----+"));
+	REQUIRE(lines[3] == p(nonwrappable, "|world|"));
+	REQUIRE(lines[4] == p(nonwrappable, "+-----+"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -997,9 +999,9 @@ TEST_CASE("htmlrenderer: free-standing text outside of <td> is implicitly concat
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 3);
-	REQUIRE(lines[0] == p(wrappable, "+-----------+"));
-	REQUIRE(lines[1] == p(wrappable, "|hello world|"));
-	REQUIRE(lines[2] == p(wrappable, "+-----------+"));
+	REQUIRE(lines[0] == p(nonwrappable, "+-----------+"));
+	REQUIRE(lines[1] == p(nonwrappable, "|hello world|"));
+	REQUIRE(lines[2] == p(nonwrappable, "+-----------+"));
 	REQUIRE(links.size() == 0);
 }
 

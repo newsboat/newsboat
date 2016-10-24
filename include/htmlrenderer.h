@@ -85,7 +85,10 @@ class htmlrenderer {
 				const std::string& curline,
 				std::vector<Table>& tables,
 				std::vector<std::pair<LineType, std::string>>& lines);
-		void add_line_verbatim(
+		void add_line_softwrappable(
+				const std::string& line,
+				std::vector<std::pair<LineType, std::string>>& lines);
+		void add_line_nonwrappable(
 				const std::string& line,
 				std::vector<std::pair<LineType, std::string>>& lines);
 		void add_hr(std::vector<std::pair<LineType, std::string>>& lines);
