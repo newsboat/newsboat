@@ -26,7 +26,7 @@ LDFLAGS+=-L. -fprofile-arcs -ftest-coverage
 
 PACKAGE=newsbeuter
 
-ifneq (distclean, $(MAKECMDGOALS))
+ifeq (, $(filter $(MAKECMDGOALS),distclean run-i18nspector))
 include config.mk
 endif
 
