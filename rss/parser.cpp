@@ -273,7 +273,7 @@ feed parser::parse_xmlnode(xmlNode* node) {
 			}
 		}
 	} else {
-		throw exception(_("XML root node is nullptr"));
+		throw exception(_("XML root node is NULL"));
 	}
 
 	return f;

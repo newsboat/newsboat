@@ -14,7 +14,7 @@ namespace rsspp {
 
 void rss_20_parser::parse_feed(feed& f, xmlNode * rootNode) {
 	if (!rootNode)
-		throw exception(_("XML root node is nullptr"));
+		throw exception(_("XML root node is NULL"));
 
 	const char * ns = rootNode->ns ? (const char *)rootNode->ns->href : nullptr; //(const char *)xmlGetProp(rootNode, (const xmlChar *)"xmlns");
 
@@ -29,7 +29,7 @@ void rss_20_parser::parse_feed(feed& f, xmlNode * rootNode) {
 
 void rss_09x_parser::parse_feed(feed& f, xmlNode * rootNode) {
 	if (!rootNode)
-		throw exception(_("XML root node is nullptr"));
+		throw exception(_("XML root node is NULL"));
 
 	globalbase = get_prop(rootNode, "base", XML_URI);
 
