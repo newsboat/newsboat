@@ -211,6 +211,9 @@ uninstall: uninstall-mo
 
 # the following targets are i18n/l10n-related:
 
+run-i18nspector: $(POFILES)
+	i18nspector $^
+
 mo-files: $(MOFILES)
 
 extract:
