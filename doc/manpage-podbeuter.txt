@@ -54,12 +54,32 @@ CONFIGURATION COMMANDS
 include::podbeuter-cfgcmds.txt[]
 
 
+XDG Base Directory Support
+--------------------------
+
+Podbeuter defaults to storing everything in '$HOME/.newsbeuter' directory. If
+you prefer XDG, create '$HOME/.config/newsbeuter' and
+'$HOME/.local/share/newsbeuter' directories, and Podbeuter will use them from
+there on.
+
+If you already have some files in '$HOME/.newsbeuter/', move the 'queue' file to
+'$HOME/.local/share/newsbeuter/', and that should be it.
+
+See also a corresponding section in newsbeuter(1).
+
+
 FILES
 -----
 
-'$HOME/.newsbeuter/config'
+dotfiles::
+        '$HOME/.newsbeuter/config'
+        +
+        '$HOME/.newsbeuter/urls'
 
-'$HOME/.newsbeuter/queue'
+XDG::
+        '$HOME/.config/newsbeuter/config'
+        +
+        '$HOME/.config/newsbeuter/urls'
 
 
 SEE ALSO

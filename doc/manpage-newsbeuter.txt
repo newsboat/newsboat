@@ -129,12 +129,37 @@ include::chapter-cmdline.txt[]
         Jump to the <number>th entry in the current dialog
 
 
+XDG Base Directory Support
+--------------------------
+
+Newsbeuter defaults to storing everything in '$HOME/.newsbeuter' directory. If
+you prefer XDG, create '$HOME/.config/newsbeuter' and
+'$HOME/.local/share/newsbeuter' directories, and Newsbeuter will use them
+from there on.
+
+If you already have some files in '$HOME/.newsbeuter/', move them as follows:
+
+'config', 'urls'::
+        to '$HOME/.config/newsbeuter/'
+
+'cache.db', 'history.search', 'history.cmdline'::
+        to '$HOME/.local/share/newsbeuter/'
+
+See also a corresponding section in podbeuter(1).
+
+
 FILES
 -----
 
-'$HOME/.newsbeuter/config'
+dotfiles::
+        '$HOME/.newsbeuter/config'
+        +
+        '$HOME/.newsbeuter/urls'
 
-'$HOME/.newsbeuter/urls'
+XDG::
+        '$HOME/.config/newsbeuter/config'
+        +
+        '$HOME/.config/newsbeuter/urls'
 
 
 SEE ALSO

@@ -1013,12 +1013,21 @@ http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html[XDG Base
 Directory Specification]. It needs to be set up manually by creating the
 following directories:
 
-	~/.local/share/newsbeuter/
-	~/.config/newsbeuter/
+	'~/.local/share/newsbeuter/'
+	'~/.config/newsbeuter/'
 
-If these directories exist or the environment variables $XDG_CONFIG_HOME and
-$XDG_DATA_HOME are set, newsbeuter will use these directories, otherwise it
-will default to ~/.newsbeuter as its configuration directory.
+If these directories exist or the environment variables `$XDG_CONFIG_HOME` and
+`$XDG_DATA_HOME` are set, newsbeuter will use these directories, otherwise it
+will default to '~/.newsbeuter' as its configuration directory.
+
+If you're currently using '~/.newsbeuter/' but wish to migrate to XDG
+directories, you should move the files as follows:
+
+'config', 'urls'::
+        to '$HOME/.config/newsbeuter/'
+
+'cache.db', 'history.search', 'history.cmdline', 'queue'::
+        to '$HOME/.local/share/newsbeuter/'
 
 
 Podcast Support
