@@ -318,13 +318,13 @@ void cache::update_lastmodified(const std::string& feedurl, time_t t, const std:
 	std::lock_guard<std::mutex> lock(mtx);
 	std::string query = "UPDATE rss_feed SET ";
 	if (t > 0)
-		query.append(utils::strprintf("lastmodified = '%d'", t));
+		query.append(prepare_query("lastmodified = '%d'", t));
 	if (etag.length() > 0) {
 		query.append(
-				utils::strprintf(
+				prepare_query(
 					"%c etag = %s",
 					(t > 0 ? ',' : ' '),
-					prepare_query("'%q'", etag).c_str()));
+					prepare_query("'%q'", etag)));
 	}
 	query.append(" WHERE rssurl = ");
 	query.append(prepare_query("'%q'", feedurl));
@@ -828,9 +828,9 @@ void cache::mark_items_read_by_guid(const std::vector<std::string>& guids) {
 	guidset.append("'')");
 
 	std::string updatequery =
-		utils::strprintf(
+		prepare_query(
 				"UPDATE rss_item SET unread = 0 WHERE unread = 1 AND guid IN %s;",
-				guidset.c_str());
+				guidset);
 
 	std::lock_guard<std::mutex> lock(mtx);
 	run_sql(updatequery);
@@ -854,7 +854,7 @@ void cache::clean_old_articles() {
 		time_t old_date = time(nullptr) - days*24*60*60;
 
 		std::string query(
-				utils::strprintf(
+				prepare_query(
 					"DELETE FROM rss_item WHERE pubDate < %d", old_date));
 		LOG(LOG_DEBUG, "cache::clean_old_articles: about to delete articles "
 				"with a pubDate older than %d", old_date);
