@@ -66,15 +66,15 @@ matrix:
         - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
 
 install:
-    - export CXX=$COMPILER
-    - cd ${TRAVIS_BUILD_DIR}
-    - ./travis-get-deps.sh
+  - export CXX=$COMPILER
+  - cd ${TRAVIS_BUILD_DIR}
+  - ./travis-get-deps.sh
 
 script:
-    - cd ${TRAVIS_BUILD_DIR}
-    - make PROFILE=1 all test
-    - cd test && ./test --order rand
+  - cd ${TRAVIS_BUILD_DIR}
+  - make PROFILE=1 all test
+  - cd test && ./test --order rand
 
 after_success:
-    - cd ${TRAVIS_BUILD_DIR}
-    - ./submit-to-coveralls.sh
+  - cd ${TRAVIS_BUILD_DIR}
+  - ./submit-to-coveralls.sh
