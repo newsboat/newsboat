@@ -91,7 +91,7 @@ REDO:
 			if (automatic && args->size() > 0) {
 				pos = utils::to_u((*args)[0]);
 			}
-			LOG(LOG_INFO, "feedlist_formaction: opening feed at position `%s'",feedpos.c_str());
+			LOG(LOG_INFO, "feedlist_formaction: opening feed at position `%s'",feedpos);
 			if (feeds_shown > 0 && feedpos.length() > 0) {
 				v->push_itemlist(pos);
 			} else {
@@ -101,7 +101,7 @@ REDO:
 	}
 	break;
 	case OP_RELOAD: {
-		LOG(LOG_INFO, "feedlist_formaction: reloading feed at position `%s'",feedpos.c_str());
+		LOG(LOG_INFO, "feedlist_formaction: reloading feed at position `%s'",feedpos);
 		if (feeds_shown > 0 && feedpos.length() > 0) {
 			v->get_ctrl()->reload(pos);
 		} else {
@@ -160,7 +160,7 @@ REDO:
 			std::shared_ptr<rss_feed> feed = v->get_ctrl()->get_feed(pos);
 			if (feed) {
 				if (feed->rssurl().substr(0,6) != "query:") {
-					LOG(LOG_INFO, "feedlist_formaction: opening feed at position `%s': %s", feedpos.c_str(), feed->link().c_str());
+					LOG(LOG_INFO, "feedlist_formaction: opening feed at position `%s': %s", feedpos, feed->link());
 					v->open_in_browser(feed->link());
 				} else {
 					v->show_error(_("Cannot open query feeds in the browser!"));
@@ -182,7 +182,7 @@ REDO:
 		}
 		break;
 	case OP_MARKFEEDREAD: {
-		LOG(LOG_INFO, "feedlist_formaction: marking feed read at position `%s'",feedpos.c_str());
+		LOG(LOG_INFO, "feedlist_formaction: marking feed read at position `%s'",feedpos);
 		if (feeds_shown > 0 && feedpos.length() > 0) {
 			v->set_status(_("Marking feed read..."));
 			try {
@@ -478,7 +478,7 @@ bool feedlist_formaction::jump_to_previous_unread_feed(unsigned int& feedpos) {
 
 void feedlist_formaction::goto_feed(const std::string& str) {
 	unsigned int curpos = utils::to_u(f->get("feedpos"));
-	LOG(LOG_DEBUG, "feedlist_formaction::goto_feed: curpos = %u str = `%s'", curpos, str.c_str());
+	LOG(LOG_DEBUG, "feedlist_formaction::goto_feed: curpos = %u str = `%s'", curpos, str);
 	for (unsigned int i=curpos+1; i<visible_feeds.size(); ++i) {
 		if (strcasestr(visible_feeds[i].first->title().c_str(), str.c_str()) != nullptr) {
 			f->set("feedpos", utils::to_string<unsigned int>(i));
@@ -690,7 +690,7 @@ void feedlist_formaction::op_end_setfilter() {
 
 void feedlist_formaction::op_start_search() {
 	std::string searchphrase = qna_responses[0];
-	LOG(LOG_DEBUG, "feedlist_formaction::op_start_search: starting search for `%s'", searchphrase.c_str());
+	LOG(LOG_DEBUG, "feedlist_formaction::op_start_search: starting search for `%s'", searchphrase);
 	if (searchphrase.length() > 0) {
 		v->set_status(_("Searching..."));
 		searchhistory.add_line(searchphrase);

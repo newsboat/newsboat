@@ -265,7 +265,7 @@ bool ocnews_api::query(const std::string& query, json_object** result, const std
 	if (res != CURLE_OK && res != CURLE_HTTP_RETURNED_ERROR) {
 		std::string msg = "ocnews_api::query: connection error code ";
 		msg += std::to_string(res);
-		LOG(LOG_CRITICAL, msg.c_str());
+		LOG(LOG_CRITICAL, msg);
 		return false;
 	}
 
@@ -277,7 +277,7 @@ bool ocnews_api::query(const std::string& query, json_object** result, const std
 		else {
 			std::string msg = "ocnews_api::query: error ";
 			msg += response_code;
-			LOG(LOG_CRITICAL, msg.c_str());
+			LOG(LOG_CRITICAL, msg);
 		}
 		return false;
 	}

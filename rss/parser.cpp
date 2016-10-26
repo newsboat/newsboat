@@ -62,7 +62,7 @@ static size_t handle_headers(void * ptr, size_t size, size_t nmemb, void * data)
 	} else if (!strncasecmp("ETag:",header, 5)) {
 		values->etag = std::string(header+5);
 		utils::trim(values->etag);
-		LOG(LOG_DEBUG, "handle_headers: got etag %s", values->etag.c_str());
+		LOG(LOG_DEBUG, "handle_headers: got etag %s", values->etag);
 	}
 
 	delete[] header;
@@ -151,7 +151,7 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 	curl_easy_getinfo(easyhandle, CURLINFO_HTTP_CONNECTCODE, &status);
 
 	if (status >= 400) {
-		LOG(LOG_USERERROR, _("Error: trying to download feed `%s' returned HTTP status code %ld."), url.c_str(), status);
+		LOG(LOG_USERERROR, _("Error: trying to download feed `%s' returned HTTP status code %ld."), url, status);
 	}
 
 	curl_easy_reset(easyhandle);
@@ -164,7 +164,7 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 		throw exception(curl_easy_strerror(ret));
 	}
 
-	LOG(LOG_INFO, "parser::parse_url: retrieved data for %s: %s", url.c_str(), buf.c_str());
+	LOG(LOG_INFO, "parser::parse_url: retrieved data for %s: %s", url, buf);
 
 	if (buf.length() > 0) {
 		LOG(LOG_DEBUG, "parser::parse_url: handing over data to parse_buffer()");
@@ -188,7 +188,7 @@ feed parser::parse_buffer(const char * buffer, size_t size, const char * url) {
 		f.encoding = (const char *)doc->encoding;
 	}
 
-	LOG(LOG_INFO, "parser::parse_buffer: encoding = %s", f.encoding.c_str());
+	LOG(LOG_INFO, "parser::parse_buffer: encoding = %s", f.encoding);
 
 	return f;
 }
@@ -207,7 +207,7 @@ feed parser::parse_file(const std::string& filename) {
 		f.encoding = (const char *)doc->encoding;
 	}
 
-	LOG(LOG_INFO, "parser::parse_file: encoding = %s", f.encoding.c_str());
+	LOG(LOG_INFO, "parser::parse_file: encoding = %s", f.encoding);
 
 	return f;
 }

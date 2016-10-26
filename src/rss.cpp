@@ -24,19 +24,15 @@
 namespace newsbeuter {
 
 rss_item::rss_item(cache * c) : pubDate_(0), unread_(true), ch(c), enqueued_(false), deleted_(0), idx(0), override_unread_(false), size_(0) {
-	// LOG(LOG_CRITICAL, "new rss_item");
 }
 
 rss_item::~rss_item() {
-	// LOG(LOG_CRITICAL, "delete rss_item");
 }
 
 rss_feed::rss_feed(cache * c) : ch(c), empty(true), is_rtl_(false), idx(0), status_(SUCCESS) {
-	// LOG(LOG_CRITICAL, "new rss_feed");
 }
 
 rss_feed::~rss_feed() {
-	// LOG(LOG_CRITICAL, "delete rss_feed");
 	clear_items();
 }
 
@@ -231,7 +227,6 @@ std::shared_ptr<rss_item> rss_feed::get_item_by_guid_unlocked(const std::string&
 }
 
 bool rss_item::has_attribute(const std::string& attribname) {
-	// LOG(LOG_DEBUG, "rss_item::has_attribute(%s) called", attribname.c_str());
 	if (attribname == "title" ||
 	        attribname == "link" ||
 	        attribname == "author" ||
@@ -406,7 +401,7 @@ rss_ignores::~rss_ignores() {
 
 bool rss_ignores::matches(rss_item* item) {
 	for (auto ign : ignores) {
-		LOG(LOG_DEBUG, "rss_ignores::matches: ign.first = `%s' item->feedurl = `%s'", ign.first.c_str(), item->feedurl().c_str());
+		LOG(LOG_DEBUG, "rss_ignores::matches: ign.first = `%s' item->feedurl = `%s'", ign.first, item->feedurl());
 		if (ign.first == "*" || item->feedurl() == ign.first) {
 			if (ign.second->matches(item)) {
 				LOG(LOG_DEBUG, "rss_ignores::matches: found match");
@@ -438,7 +433,7 @@ void rss_feed::update_items(std::vector<std::shared_ptr<rss_feed>> feeds) {
 	if (query.length() == 0)
 		return;
 
-	LOG(LOG_DEBUG, "rss_feed::update_items: query = `%s'", query.c_str());
+	LOG(LOG_DEBUG, "rss_feed::update_items: query = `%s'", query);
 
 
 	struct timeval tv1, tv2, tvx;
@@ -508,8 +503,8 @@ void rss_feed::set_rssurl(const std::string& u) {
 
 		LOG(LOG_DEBUG,
 		    "rss_feed::set_rssurl: query name = `%s' expr = `%s'",
-		    tokens[1].c_str(),
-		    query.c_str());
+		    tokens[1],
+		    query);
 
 		set_title(tokens[1]);
 		set_query(query);

@@ -161,7 +161,7 @@ void rss_parser::download_http(const std::string& uri) {
 	for (unsigned int i=0; i<retrycount && !is_valid; i++) {
 		try {
 			std::string useragent = utils::get_useragent(cfgcont);
-			LOG(LOG_DEBUG, "rss_parser::download_http: user-agent = %s", useragent.c_str());
+			LOG(LOG_DEBUG, "rss_parser::download_http: user-agent = %s", useragent);
 			rsspp::parser p(cfgcont->get_configvalue_as_int("download-timeout"), useragent.c_str(), proxy.c_str(), proxy_auth.c_str(), utils::get_proxy_type(proxy_type), cfgcont->get_configvalue_as_bool("ssl-verify"));
 			time_t lm = 0;
 			std::string etag;
@@ -169,10 +169,10 @@ void rss_parser::download_http(const std::string& uri) {
 				ch->fetch_lastmodified(uri, lm, etag);
 			}
 			f = p.parse_url(uri, lm, etag, api, cfgcont->get_configvalue("cookie-cache"), easyhandle ? easyhandle->ptr() : 0);
-			LOG(LOG_DEBUG, "rss_parser::download_http: lm = %d etag = %s", p.get_last_modified(), p.get_etag().c_str());
+			LOG(LOG_DEBUG, "rss_parser::download_http: lm = %d etag = %s", p.get_last_modified(), p.get_etag());
 			if (p.get_last_modified() != 0 || p.get_etag().length() > 0) {
 				LOG(LOG_DEBUG, "rss_parser::download_http: lastmodified old: %d new: %d", lm, p.get_last_modified());
-				LOG(LOG_DEBUG, "rss_parser::download_http: etag old: %s new %s", etag.c_str(), p.get_etag().c_str());
+				LOG(LOG_DEBUG, "rss_parser::download_http: etag old: %s new %s", etag, p.get_etag());
 				ch->update_lastmodified(uri, (p.get_last_modified() != lm) ? p.get_last_modified() : 0 , (etag != p.get_etag()) ? p.get_etag() : "");
 			}
 			is_valid = true;
@@ -181,7 +181,7 @@ void rss_parser::download_http(const std::string& uri) {
 			throw e;
 		}
 	}
-	LOG(LOG_DEBUG, "rss_parser::parse: http URL %s, is_valid = %s", uri.c_str(), is_valid ? "true" : "false");
+	LOG(LOG_DEBUG, "rss_parser::parse: http URL %s, is_valid = %s", uri, is_valid ? "true" : "false");
 }
 
 void rss_parser::get_execplugin(const std::string& plugin) {
@@ -195,7 +195,7 @@ void rss_parser::get_execplugin(const std::string& plugin) {
 		is_valid = false;
 		throw e;
 	}
-	LOG(LOG_DEBUG, "rss_parser::parse: execplugin %s, is_valid = %s", plugin.c_str(), is_valid ? "true" : "false");
+	LOG(LOG_DEBUG, "rss_parser::parse: execplugin %s, is_valid = %s", plugin, is_valid ? "true" : "false");
 }
 
 void rss_parser::parse_file(const std::string& file) {
@@ -208,7 +208,7 @@ void rss_parser::parse_file(const std::string& file) {
 		is_valid = false;
 		throw e;
 	}
-	LOG(LOG_DEBUG, "rss_parser::parse: parsed file %s, is_valid = %s", file.c_str(), is_valid ? "true" : "false");
+	LOG(LOG_DEBUG, "rss_parser::parse: parsed file %s, is_valid = %s", file, is_valid ? "true" : "false");
 }
 
 void rss_parser::download_filterplugin(const std::string& filter, const std::string& uri) {
@@ -216,7 +216,7 @@ void rss_parser::download_filterplugin(const std::string& filter, const std::str
 
 	char * argv[4] = { const_cast<char *>("/bin/sh"), const_cast<char *>("-c"), const_cast<char *>(filter.c_str()), nullptr };
 	std::string result = utils::run_program(argv, buf);
-	LOG(LOG_DEBUG, "rss_parser::parse: output of `%s' is: %s", filter.c_str(), result.c_str());
+	LOG(LOG_DEBUG, "rss_parser::parse: output of `%s' is: %s", filter, result);
 	is_valid = false;
 	try {
 		rsspp::parser p;
@@ -226,7 +226,7 @@ void rss_parser::download_filterplugin(const std::string& filter, const std::str
 		is_valid = false;
 		throw e;
 	}
-	LOG(LOG_DEBUG, "rss_parser::parse: filterplugin %s, is_valid = %s", filter.c_str(), is_valid ? "true" : "false");
+	LOG(LOG_DEBUG, "rss_parser::parse: filterplugin %s, is_valid = %s", filter, is_valid ? "true" : "false");
 }
 
 void rss_parser::fill_feed_fields(std::shared_ptr<rss_feed> feed) {
@@ -250,7 +250,7 @@ void rss_parser::fill_feed_fields(std::shared_ptr<rss_feed> feed) {
 
 	set_rtl(feed, f.language.c_str());
 
-	LOG(LOG_DEBUG, "rss_parser::parse: feed title = `%s' link = `%s'", feed->title().c_str(), feed->link().c_str());
+	LOG(LOG_DEBUG, "rss_parser::parse: feed title = `%s' link = `%s'", feed->title(), feed->link());
 }
 
 void rss_parser::fill_feed_items(std::shared_ptr<rss_feed> feed) {
@@ -331,8 +331,8 @@ void rss_parser::fill_feed_items(std::shared_ptr<rss_feed> feed) {
 
 		set_item_enclosure(x, item);
 
-		LOG(LOG_DEBUG, "rss_parser::parse: item title = `%s' link = `%s' pubDate = `%s' (%d) description = `%s'", x->title().c_str(),
-		    x->link().c_str(), x->pubDate().c_str(), x->pubDate_timestamp(), x->description().c_str());
+		LOG(LOG_DEBUG, "rss_parser::parse: item title = `%s' link = `%s' pubDate = `%s' (%d) description = `%s'", x->title(),
+		    x->link(), x->pubDate(), x->pubDate_timestamp(), x->description());
 
 		add_item_to_feed(feed, x);
 	}
@@ -382,7 +382,7 @@ void rss_parser::set_item_content(std::shared_ptr<rss_item> x, rsspp::item& item
 		x->set_description(utils::retrieve_url(x->link(), cfgcont));
 	}
 
-	LOG(LOG_DEBUG, "rss_parser::set_item_content: content = %s", x->description().c_str());
+	LOG(LOG_DEBUG, "rss_parser::set_item_content: content = %s", x->description());
 }
 
 
@@ -409,17 +409,17 @@ std::string rss_parser::get_guid(rsspp::item& item) {
 void rss_parser::set_item_enclosure(std::shared_ptr<rss_item> x, rsspp::item& item) {
 	x->set_enclosure_url(item.enclosure_url);
 	x->set_enclosure_type(item.enclosure_type);
-	LOG(LOG_DEBUG, "rss_parser::parse: found enclosure_url: %s", item.enclosure_url.c_str());
-	LOG(LOG_DEBUG, "rss_parser::parse: found enclosure_type: %s", item.enclosure_type.c_str());
+	LOG(LOG_DEBUG, "rss_parser::parse: found enclosure_url: %s", item.enclosure_url);
+	LOG(LOG_DEBUG, "rss_parser::parse: found enclosure_type: %s", item.enclosure_type);
 }
 
 void rss_parser::add_item_to_feed(std::shared_ptr<rss_feed> feed, std::shared_ptr<rss_item> item) {
 	// only add item to feed if it isn't on the ignore list or if there is no ignore list
 	if (!ign || !ign->matches(item.get())) {
 		feed->add_item(item);
-		LOG(LOG_INFO, "rss_parser::parse: added article title = `%s' link = `%s' ign = %p", item->title().c_str(), item->link().c_str(), ign);
+		LOG(LOG_INFO, "rss_parser::parse: added article title = `%s' link = `%s' ign = %p", item->title(), item->link(), ign);
 	} else {
-		LOG(LOG_INFO, "rss_parser::parse: ignored article title = `%s' link = `%s'", item->title().c_str(), item->link().c_str());
+		LOG(LOG_INFO, "rss_parser::parse: ignored article title = `%s' link = `%s'", item->title(), item->link());
 	}
 }
 

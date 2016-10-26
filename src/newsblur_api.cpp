@@ -36,7 +36,7 @@ bool newsblur_api::authenticate() {
 	    LOG_INFO,
 	    "newsblur_api::authenticate: authentication resulted in %u, cached in %s",
 	    result,
-	    cfg->get_configvalue("cookie-cache").c_str());
+	    cfg->get_configvalue("cookie-cache"));
 
 	return result;
 }
@@ -169,7 +169,7 @@ time_t parse_date(const char * raw) {
 rsspp::feed newsblur_api::fetch_feed(const std::string& id) {
 	rsspp::feed f = known_feeds[id];
 
-	LOG(LOG_INFO, "newsblur_api::fetch_feed: about to fetch %u pages of feed %s", min_pages, id.c_str());
+	LOG(LOG_INFO, "newsblur_api::fetch_feed: about to fetch %u pages of feed %s", min_pages, id);
 
 	for (unsigned int i = 1; i <= min_pages; i++) {
 
@@ -274,7 +274,7 @@ json_object * newsblur_api::query_api(const std::string& endpoint, const std::st
 
 	json_object * result =  json_tokener_parse(data.c_str());
 	if (!result)
-		LOG(LOG_WARN, "newsblur_api::query_api: request to %s failed", url.c_str());
+		LOG(LOG_WARN, "newsblur_api::query_api: request to %s failed", url);
 	return result;
 }
 

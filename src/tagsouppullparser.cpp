@@ -424,7 +424,7 @@ static struct {
 };
 
 std::string tagsouppullparser::decode_entity(std::string s) {
-	LOG(LOG_DEBUG, "tagsouppullparser::decode_entity: decoding '%s'...", s.c_str());
+	LOG(LOG_DEBUG, "tagsouppullparser::decode_entity: decoding '%s'...", s);
 	if (s.length() > 1 && s[0] == '#') {
 		std::string result;
 		unsigned int wc;
@@ -493,7 +493,7 @@ void tagsouppullparser::parse_tag(const std::string& tagstr) {
 	std::string::size_type pos = tagstr.find_first_of(" \r\n\t", last_pos);
 	unsigned int count = 0;
 
-	LOG(LOG_DEBUG, "parse_tag: parsing '%s', pos = %d, last_pos = %d", tagstr.c_str(), pos, last_pos);
+	LOG(LOG_DEBUG, "parse_tag: parsing '%s', pos = %d, last_pos = %d", tagstr, pos, last_pos);
 
 	while (last_pos != std::string::npos) {
 		if (count == 0) {
@@ -505,7 +505,7 @@ void tagsouppullparser::parse_tag(const std::string& tagstr) {
 				// a kludge for <br/>
 				text.pop_back();
 			}
-			LOG(LOG_DEBUG, "parse_tag: tag name = %s", text.c_str());
+			LOG(LOG_DEBUG, "parse_tag: tag name = %s", text);
 		} else {
 			pos = tagstr.find_first_of("= ", last_pos);
 			std::string attr;
@@ -529,7 +529,7 @@ void tagsouppullparser::parse_tag(const std::string& tagstr) {
 				pos = tagstr.length();
 			}
 			attr = tagstr.substr(last_pos, pos - last_pos);
-			LOG(LOG_DEBUG, "parse_tag: extracted attribute is '%s', adding", attr.c_str());
+			LOG(LOG_DEBUG, "parse_tag: extracted attribute is '%s', adding", attr);
 			add_attribute(attr);
 		}
 		last_pos = tagstr.find_first_not_of(" \r\n\t", pos);

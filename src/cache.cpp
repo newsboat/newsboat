@@ -24,12 +24,12 @@ inline void cache::run_sql_impl(
 		void * callback_argument,
 		bool do_throw)
 {
-	LOG(LOG_DEBUG, "running query: %s", query.c_str());
+	LOG(LOG_DEBUG, "running query: %s", query);
 	int rc = sqlite3_exec(
 			db, query.c_str(), callback, callback_argument, nullptr);
 	if (rc != SQLITE_OK) {
 		std::string message = "query \"%s\" failed: error = %d";
-		LOG(LOG_CRITICAL, message.c_str(), query.c_str(), rc);
+		LOG(LOG_CRITICAL, message, query, rc);
 		if (do_throw) {
 			throw dbexception(db);
 		}
@@ -120,7 +120,7 @@ static int lastmodified_callback(void * handler, int argc, char ** argv, char **
 		result->etag = "";
 	}
 	LOG(LOG_INFO, "lastmodified_callback: lastmodified = %d etag = %s",
-			result->lastmodified, result->etag.c_str());
+			result->lastmodified, result->etag);
 	return 0;
 }
 
@@ -207,8 +207,7 @@ static int search_item_callback(void * myfeed, int argc, char ** argv, char ** /
 cache::cache(const std::string& cachefile, configcontainer * c) : db(0),cfg(c) {
 	int error = sqlite3_open(cachefile.c_str(),&db);
 	if (error != SQLITE_OK) {
-		LOG(LOG_ERROR,"couldn't sqlite3_open(%s): error = %d",
-				cachefile.c_str(), error);
+		LOG(LOG_ERROR,"couldn't sqlite3_open(%s): error = %d", cachefile, error);
 		throw dbexception(db);
 	}
 
@@ -307,7 +306,7 @@ void cache::fetch_lastmodified(const std::string& feedurl, time_t& t, std::strin
 	run_sql(query, lastmodified_callback, &result);
 	t = result.lastmodified;
 	etag = result.etag;
-	LOG(LOG_DEBUG, "cache::fetch_lastmodified: t = %d etag = %s", t, etag.c_str());
+	LOG(LOG_DEBUG, "cache::fetch_lastmodified: t = %d etag = %s", t, etag);
 }
 
 void cache::update_lastmodified(const std::string& feedurl, time_t t, const std::string& etag) {
@@ -361,7 +360,7 @@ void cache::externalize_rssfeed(std::shared_ptr<rss_feed> feed, bool reset_unrea
 	int count = count_cbh.count();
 	LOG(LOG_DEBUG,
 			"cache::externalize_rss_feed: rss_feeds with rssurl = '%s': found %d",
-			feed->rssurl().c_str(),
+			feed->rssurl(),
 			count);
 	if (count > 0) {
 		std::string updatequery =
@@ -617,7 +616,7 @@ void cache::update_rssitem_unlocked(
 			if (content != item->description_raw()) {
 				LOG(LOG_DEBUG,
 						"cache::update_rssitem_unlocked: '%s' is different from '%s'",
-						content.c_str(), item->description_raw().c_str());
+						content, item->description_raw());
 				query = prepare_query(
 						"UPDATE rss_item SET unread = 1 WHERE guid = '%q';",
 						item->guid());

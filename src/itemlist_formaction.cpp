@@ -43,7 +43,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 
 	switch (op) {
 	case OP_OPEN: {
-		LOG(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
+		LOG(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname);
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			// no need to mark item as read, the itemview already do that
 			old_itempos = itempos;
@@ -78,7 +78,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 	}
 	break;
 	case OP_OPENBROWSER_AND_MARK: {
-		LOG(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
+		LOG(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname);
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
 				visible_items[itempos].first->set_unread(false);
@@ -99,7 +99,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 	}
 	break;
 	case OP_OPENINBROWSER: {
-		LOG(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname.c_str());
+		LOG(LOG_INFO, "itemlist_formaction: opening item at pos `%s'", itemposname);
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
 				v->open_in_browser(visible_items[itempos].first->link());
@@ -111,7 +111,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 	}
 	break;
 	case OP_TOGGLEITEMREAD: {
-		LOG(LOG_INFO, "itemlist_formaction: toggling item read at pos `%s'", itemposname.c_str());
+		LOG(LOG_INFO, "itemlist_formaction: toggling item read at pos `%s'", itemposname);
 		if (itemposname.length() > 0) {
 			v->set_status(_("Toggling read flag for article..."));
 			try {
@@ -173,7 +173,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		}
 		break;
 	case OP_BOOKMARK: {
-		LOG(LOG_INFO, "itemlist_formaction: bookmarking item at pos `%s'", itemposname.c_str());
+		LOG(LOG_INFO, "itemlist_formaction: bookmarking item at pos `%s'", itemposname);
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
 				if (automatic) {
@@ -217,7 +217,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 	}
 	break;
 	case OP_SAVE: {
-		LOG(LOG_INFO, "itemlist_formaction: saving item at pos `%s'", itemposname.c_str());
+		LOG(LOG_INFO, "itemlist_formaction: saving item at pos `%s'", itemposname);
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			std::string filename ;
 			if (automatic) {
@@ -396,7 +396,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 					newfilter = (*args)[0];
 			} else {
 				newfilter = v->select_filter(v->get_ctrl()->get_filters().get_filters());
-				LOG(LOG_DEBUG,"itemlist_formaction::run: newfilters = %s", newfilter.c_str());
+				LOG(LOG_DEBUG,"itemlist_formaction::run: newfilters = %s", newfilter);
 			}
 			if (newfilter != "") {
 				filterhistory.add_line(newfilter);
@@ -905,7 +905,7 @@ void itemlist_formaction::handle_cmdline(const std::string& cmd) {
 		if (tokens[0] == "save" && tokens.size() >= 2) {
 			std::string filename = utils::resolve_tilde(tokens[1]);
 			std::string itemposname = f->get("itempos");
-			LOG(LOG_INFO, "itemlist_formaction::handle_cmdline: saving item at pos `%s' to `%s'", itemposname.c_str(), filename.c_str());
+			LOG(LOG_INFO, "itemlist_formaction::handle_cmdline: saving item at pos `%s' to `%s'", itemposname, filename);
 			if (itemposname.length() > 0) {
 				unsigned int itempos = utils::to_u(itemposname);
 				save_article(filename, visible_items[itempos].first);
@@ -1018,7 +1018,7 @@ void itemlist_formaction::prepare_set_filterpos() {
 }
 
 void itemlist_formaction::set_feed(std::shared_ptr<rss_feed> fd) {
-	LOG(LOG_DEBUG, "itemlist_formaction::set_feed: fd pointer = %p title = `%s'", fd.get(), fd->title().c_str());
+	LOG(LOG_DEBUG, "itemlist_formaction::set_feed: fd pointer = %p title = `%s'", fd.get(), fd->title());
 	feed = fd;
 	feed->load();
 	invalidate(InvalidationMode::COMPLETE);

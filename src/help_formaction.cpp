@@ -115,12 +115,12 @@ void help_formaction::prepare() {
 						line = strprintf::fmt("%s%s%s%s", desc.cmd, tabs_1, tabs_2, desc.desc);
 						break;
 					}
-					LOG(LOG_DEBUG, "help_formaction::prepare: step 1 - line = %s", line.c_str());
+					LOG(LOG_DEBUG, "help_formaction::prepare: step 1 - line = %s", line);
 					line = utils::quote_for_stfl(line);
-					LOG(LOG_DEBUG, "help_formaction::prepare: step 2 - line = %s", line.c_str());
+					LOG(LOG_DEBUG, "help_formaction::prepare: step 2 - line = %s", line);
 					if (apply_search && searchphrase.length() > 0) {
 						line = utils::replace_all(line, searchphrase, highlighted_searchphrase);
-						LOG(LOG_DEBUG, "help_formaction::prepare: step 3 - line = %s", line.c_str());
+						LOG(LOG_DEBUG, "help_formaction::prepare: step 3 - line = %s", line);
 					}
 					listfmt.add_line(line);
 				}

@@ -2,6 +2,7 @@
 #define NEWSBEUTER_STRPRINTF_H_
 
 #include <memory>
+#include <string>
 
 namespace newsbeuter {
 
@@ -10,7 +11,7 @@ class strprintf {
 		static std::pair<std::string, std::string>
 			split_format(const std::string& printf_format);
 
-		static inline std::string fmt(const std::string& format) {
+		static std::string fmt(const std::string& format) {
 			return format;
 		}
 

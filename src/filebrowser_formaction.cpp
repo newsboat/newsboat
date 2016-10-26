@@ -168,12 +168,12 @@ void filebrowser_formaction::init() {
 	if (dir == "") {
 		std::string save_path = v->get_cfg()->get_configvalue("save-path");
 
-		LOG(LOG_DEBUG,"view::filebrowser: save-path is '%s'",save_path.c_str());
+		LOG(LOG_DEBUG, "view::filebrowser: save-path is '%s'", save_path);
 
 		dir = save_path;
 	}
 
-	LOG(LOG_DEBUG, "view::filebrowser: chdir(%s)", dir.c_str());
+	LOG(LOG_DEBUG, "view::filebrowser: chdir(%s)", dir);
 
 	::chdir(dir.c_str());
 	::getcwd(cwdtmp,sizeof(cwdtmp));

@@ -201,11 +201,11 @@ void configcontainer::handle_action(const std::string& action, const std::vector
 
 	// configdata::INVALID indicates that the action didn't exist, and that the returned object was created ad-hoc.
 	if (cfgdata.type == configdata::INVALID) {
-		LOG(LOG_WARN, "configcontainer::handler_action: unknown action %s", action.c_str());
+		LOG(LOG_WARN, "configcontainer::handler_action: unknown action %s", action);
 		throw confighandlerexception(AHS_INVALID_COMMAND);
 	}
 
-	LOG(LOG_DEBUG, "configcontainer::handle_action: action = %s, type = %u", action.c_str(), cfgdata.type);
+	LOG(LOG_DEBUG, "configcontainer::handle_action: action = %s, type = %u", action, cfgdata.type);
 
 	if (params.size() < 1) {
 		throw confighandlerexception(AHS_TOO_FEW_PARAMS);
@@ -293,7 +293,7 @@ bool configcontainer::get_configvalue_as_bool(const std::string& key) {
 }
 
 void configcontainer::set_configvalue(const std::string& key, const std::string& value) {
-	LOG(LOG_DEBUG,"configcontainer::set_configvalue(%s [resolved: %s],%s) called", key.c_str(), lookup_alias(key).c_str(), value.c_str());
+	LOG(LOG_DEBUG,"configcontainer::set_configvalue(%s [resolved: %s],%s) called", key, lookup_alias(key), value);
 	config_data[lookup_alias(key)].value = value;
 }
 

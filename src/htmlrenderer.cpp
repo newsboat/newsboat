@@ -837,7 +837,7 @@ void htmlrenderer::render_table(
 			for (size_t cell=0; cell < table.rows[row].cells.size(); cell++) {
 				size_t cell_width = 0;
 				if (idx < table.rows[row].cells[cell].text.size()) {
-					LOG(LOG_DEBUG, "row = %d cell = %d text = %s", row, cell, table.rows[row].cells[cell].text[idx].c_str());
+					LOG(LOG_DEBUG, "row = %d cell = %d text = %s", row, cell, table.rows[row].cells[cell].text[idx]);
 					cell_width = utils::strwidth_stfl(table.rows[row].cells[cell].text[idx]);
 					line += table.rows[row].cells[cell].text[idx];
 				}

@@ -536,7 +536,7 @@ std::vector<std::pair<LineType, std::string>>
 		argv[1] = const_cast<char *>("-c");
 		argv[2] = const_cast<char *>(renderer.c_str());
 		argv[3] = nullptr;
-		LOG(LOG_DEBUG, "itemview_formaction::render_html: source = %s", source.c_str());
+		LOG(LOG_DEBUG, "itemview_formaction::render_html: source = %s", source);
 		LOG(LOG_DEBUG, "itemview_formaction::render_html: html-renderer = %s", argv[2]);
 
 		std::string output = utils::run_program(argv, source);
@@ -603,7 +603,7 @@ void itemview_formaction::do_search() {
 
 	searchhistory.add_line(searchphrase);
 
-	LOG(LOG_DEBUG, "itemview_formaction::do_search: searchphrase = %s", searchphrase.c_str());
+	LOG(LOG_DEBUG, "itemview_formaction::do_search: searchphrase = %s", searchphrase);
 
 	highlight_text(searchphrase);
 }

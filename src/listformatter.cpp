@@ -13,7 +13,7 @@ listformatter::~listformatter() { }
 
 void listformatter::add_line(const std::string& text, unsigned int id, unsigned int width) {
 	set_line(UINT_MAX, text, id, width);
-	LOG(LOG_DEBUG, "listformatter::add_line: `%s'", text.c_str());
+	LOG(LOG_DEBUG, "listformatter::add_line: `%s'", text);
 }
 
 void listformatter::set_line(const unsigned int itempos,

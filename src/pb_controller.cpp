@@ -369,7 +369,7 @@ void pb_controller::play_file(const std::string& file) {
 	cmdline.append(utils::replace_all(file,"\"", "\\\""));
 	cmdline.append("\"");
 	stfl::reset();
-	LOG(LOG_DEBUG, "pb_controller::play_file: running `%s'", cmdline.c_str());
+	LOG(LOG_DEBUG, "pb_controller::play_file: running `%s'", cmdline);
 	::system(cmdline.c_str());
 }
 

@@ -130,7 +130,7 @@ void view::set_status_unlocked(const std::string& msg) {
 			form->set("msg",msg);
 			form->run(-1);
 		} else {
-			LOG(LOG_ERROR, "view::set_status_unlocked: form for formaction of type %s is nullptr!", get_current_formaction()->id().c_str());
+			LOG(LOG_ERROR, "view::set_status_unlocked: form for formaction of type %s is nullptr!", get_current_formaction()->id());
 		}
 	}
 }
@@ -301,7 +301,7 @@ std::string view::get_filename_suggestion(const std::string& s) {
 		retval = "article.txt";
 	else
 		retval.append(".txt");
-	LOG(LOG_DEBUG,"view::get_filename_suggestion: %s -> %s", s.c_str(), retval.c_str());
+	LOG(LOG_DEBUG,"view::get_filename_suggestion: %s -> %s", s, retval);
 	return retval;
 }
 
@@ -331,7 +331,7 @@ void view::open_in_pager(const std::string& filename) {
 		cmdline.append(filename);
 	}
 	stfl::reset();
-	LOG(LOG_DEBUG, "view::open_in_pager: running `%s'", cmdline.c_str());
+	LOG(LOG_DEBUG, "view::open_in_pager: running `%s'", cmdline);
 	::system(cmdline.c_str());
 	pop_current_formaction();
 }
@@ -359,7 +359,7 @@ void view::open_in_browser(const std::string& url) {
 		cmdline.append("'");
 	}
 	stfl::reset();
-	LOG(LOG_DEBUG, "view::open_in_browser: running `%s'", cmdline.c_str());
+	LOG(LOG_DEBUG, "view::open_in_browser: running `%s'", cmdline);
 	::system(cmdline.c_str());
 	pop_current_formaction();
 }
@@ -551,7 +551,7 @@ std::string view::select_filter(const std::vector<filter_name_expr_pair>& filter
 }
 
 char view::confirm(const std::string& prompt, const std::string& charset) {
-	LOG(LOG_DEBUG, "view::confirm: charset = %s", charset.c_str());
+	LOG(LOG_DEBUG, "view::confirm: charset = %s", charset);
 
 	std::shared_ptr<formaction> f = get_current_formaction();
 	formaction_stack.push_back(std::shared_ptr<formaction>());
@@ -808,7 +808,7 @@ bool view::get_prev_feed(itemlist_formaction * itemlist) {
 
 void view::prepare_query_feed(std::shared_ptr<rss_feed> feed) {
 	if (feed->rssurl().substr(0,6) == "query:") {
-		LOG(LOG_DEBUG, "view::prepare_query_feed: %s", feed->rssurl().c_str());
+		LOG(LOG_DEBUG, "view::prepare_query_feed: %s", feed->rssurl());
 
 		set_status(_("Updating query feed..."));
 		feed->update_items(ctrl->get_all_feeds());
@@ -902,7 +902,7 @@ void view::apply_colors(std::shared_ptr<formaction> fa) {
 	auto bgcit = bg_colors.begin();
 	auto attit = attributes.begin();
 
-	LOG(LOG_DEBUG, "view::apply_colors: fa = %s", fa->id().c_str());
+	LOG(LOG_DEBUG, "view::apply_colors: fa = %s", fa->id());
 
 	std::string article_colorstr;
 
@@ -941,7 +941,7 @@ void view::apply_colors(std::shared_ptr<formaction> fa) {
 			}
 		}
 
-		LOG(LOG_DEBUG,"view::apply_colors: %s %s %s\n", fa->id().c_str(), fgcit->first.c_str(), colorattr.c_str());
+		LOG(LOG_DEBUG,"view::apply_colors: %s %s %s\n", fa->id(), fgcit->first, colorattr);
 
 		fa->get_form()->set(fgcit->first, colorattr);
 
@@ -1031,7 +1031,7 @@ void view::delete_word(std::shared_ptr<formaction> fa) {
 	std::string::size_type curpos = utils::to_u(fa->get_form()->get("qna_value_pos"), 0);
 	std::string val = fa->get_form()->get("qna_value");
 	std::string::size_type firstpos = curpos;
-	LOG(LOG_DEBUG, "view::delete_word: before val = %s", val.c_str());
+	LOG(LOG_DEBUG, "view::delete_word: before val = %s", val);
 	if (firstpos >= val.length() || ::isspace(val[firstpos])) {
 		if (firstpos != 0 && firstpos >= val.length())
 			firstpos = val.length() - 1;
@@ -1045,7 +1045,7 @@ void view::delete_word(std::shared_ptr<formaction> fa) {
 	if (firstpos != 0)
 		firstpos++;
 	val.erase(firstpos, curpos - firstpos);
-	LOG(LOG_DEBUG, "view::delete_word: after val = %s", val.c_str());
+	LOG(LOG_DEBUG, "view::delete_word: after val = %s", val);
 	fa->get_form()->set("qna_value", val);
 	fa->get_form()->set("qna_value_pos", utils::to_string<unsigned int>(firstpos));
 }
@@ -1061,7 +1061,7 @@ void view::handle_cmdline_completion(std::shared_ptr<formaction> fa) {
 	std::string suggestion;
 	switch (suggestions.size()) {
 	case 0:
-		LOG(LOG_DEBUG, "view::handle_cmdline_completion: found no suggestion for `%s'", fragment.c_str());
+		LOG(LOG_DEBUG, "view::handle_cmdline_completion: found no suggestion for `%s'", fragment);
 		::beep(); // direct call to ncurses - we beep to signal that there is no suggestion available, just like vim
 		return;
 	case 1:

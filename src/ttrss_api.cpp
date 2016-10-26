@@ -93,7 +93,7 @@ std::string ttrss_api::retrieve_sid() {
 
 	json_object_put(content);
 
-	LOG(LOG_DEBUG, "ttrss_api::retrieve_sid: sid = '%s'", sid.c_str());
+	LOG(LOG_DEBUG, "ttrss_api::retrieve_sid: sid = '%s'", sid);
 
 	return sid;
 }
@@ -113,11 +113,11 @@ json_object* ttrss_api::run_op(const std::string& op,
 
 	std::string result = utils::retrieve_url(url, cfg, auth_info_ptr, &req_data);
 
-	LOG(LOG_DEBUG, "ttrss_api::run_op(%s,...): post=%s reply = %s", op.c_str(), req_data.c_str(), result.c_str());
+	LOG(LOG_DEBUG, "ttrss_api::run_op(%s,...): post=%s reply = %s", op, req_data, result);
 
 	json_object * reply = json_tokener_parse(result.c_str());
 	if (reply == nullptr) {
-		LOG(LOG_ERROR, "ttrss_api::run_op: reply failed to parse: %s", result.c_str());
+		LOG(LOG_ERROR, "ttrss_api::run_op: reply failed to parse: %s", result);
 		return nullptr;
 	}
 

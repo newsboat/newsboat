@@ -35,11 +35,11 @@ void ttrss_urlreader::reload() {
 	auto feedurls = api->get_subscribed_urls();
 
 	for (auto url : feedurls) {
-		LOG(LOG_DEBUG, "added %s to URL list", url.first.c_str());
+		LOG(LOG_DEBUG, "added %s to URL list", url.first);
 		urls.push_back(url.first);
 		tags[url.first] = url.second;
 		for (auto tag : url.second) {
-			LOG(LOG_DEBUG, "%s: added tag %s", url.first.c_str(), tag.c_str());
+			LOG(LOG_DEBUG, "%s: added tag %s", url.first, tag);
 			alltags.insert(tag);
 		}
 	}

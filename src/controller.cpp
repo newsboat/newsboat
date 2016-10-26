@@ -351,7 +351,7 @@ void controller::run(int argc, char * argv[]) {
 	}
 
 	if (do_import) {
-		LOG(LOG_INFO,"Importing OPML file from %s",importfile.c_str());
+		LOG(LOG_INFO, "Importing OPML file from %s", importfile);
 		urlcfg = new file_urlreader(url_file);
 		urlcfg->reload();
 		import_opml(importfile.c_str());
@@ -477,7 +477,7 @@ void controller::run(int argc, char * argv[]) {
 		api = new ocnews_api(&cfg);
 		urlcfg = new ocnews_urlreader(url_file, api);
 	} else {
-		LOG(LOG_ERROR,"unknown urls-source `%s'", urlcfg->get_source().c_str());
+		LOG(LOG_ERROR,"unknown urls-source `%s'", urlcfg->get_source());
 	}
 
 	if (!do_export && !silent) {
@@ -581,7 +581,7 @@ void controller::run(int argc, char * argv[]) {
 	}
 
 	if (do_read_import) {
-		LOG(LOG_INFO,"Importing read information file from %s",readinfofile.c_str());
+		LOG(LOG_INFO, "Importing read information file from %s", readinfofile);
 		std::cout << _("Importing list of read articles...");
 		std::cout.flush();
 		import_read_information(readinfofile);
@@ -590,7 +590,7 @@ void controller::run(int argc, char * argv[]) {
 	}
 
 	if (do_read_export) {
-		LOG(LOG_INFO,"Exporting read information file to %s",readinfofile.c_str());
+		LOG(LOG_INFO, "Exporting read information file to %s", readinfofile);
 		std::cout << _("Exporting list of read articles...");
 		std::cout.flush();
 		export_read_information(readinfofile);
@@ -765,7 +765,7 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended, cur
 		if (errmsg != "") {
 			oldfeed->set_status(DL_ERROR);
 			v->set_status(errmsg);
-			LOG(LOG_USERERROR, "%s", errmsg.c_str());
+			LOG(LOG_USERERROR, "%s", errmsg);
 		}
 	} else {
 		v->show_error(_("Error: invalid feed!"));
@@ -936,7 +936,7 @@ void controller::notify(const std::string& msg) {
 	}
 	if (cfg.get_configvalue("notify-program").length() > 0) {
 		std::string prog = cfg.get_configvalue("notify-program");
-		LOG(LOG_DEBUG, "controller:notify: notifying external program `%s'", prog.c_str());
+		LOG(LOG_DEBUG, "controller:notify: notifying external program `%s'", prog);
 		utils::run_command(prog, msg);
 	}
 }
@@ -1115,13 +1115,13 @@ void controller::rec_find_rss_outlines(xmlNode * node, std::string tag) {
 				// a program in its OPMLs. Convert them to our syntax.
 				if (*url == '|') {
 					nurl = strprintf::fmt("exec:%s", url+1);
-					LOG(LOG_DEBUG,"OPML import: liferea-style url %s converted to %s", url, nurl.c_str());
+					LOG(LOG_DEBUG,"OPML import: liferea-style url %s converted to %s", url, nurl);
 				}
 
 				// Handle OPML filters.
 				char * filtercmd = (char *)xmlGetProp(node, (const xmlChar *)"filtercmd");
 				if (filtercmd) {
-					LOG(LOG_DEBUG,"OPML import: adding filter command %s to url %s", filtercmd, nurl.c_str());
+					LOG(LOG_DEBUG,"OPML import: adding filter command %s to url %s", filtercmd, nurl);
 					nurl.insert(0, strprintf::fmt("filter:%s:", filtercmd));
 					xmlFree(filtercmd);
 				}
@@ -1146,7 +1146,7 @@ void controller::rec_find_rss_outlines(xmlNode * node, std::string tag) {
 					LOG(LOG_DEBUG,"OPML import: added url = %s",url);
 					urlcfg->get_urls().push_back(std::string(url));
 					if (tag.length() > 0) {
-						LOG(LOG_DEBUG, "OPML import: appending tag %s to url %s", tag.c_str(), url);
+						LOG(LOG_DEBUG, "OPML import: appending tag %s to url %s", tag, url);
 						urlcfg->get_tags(url).push_back(tag);
 					}
 				} else {
@@ -1221,7 +1221,7 @@ std::shared_ptr<rss_feed> controller::get_feed_by_url(const std::string& feedurl
 		if (feedurl == feed->rssurl())
 			return feed;
 	}
-	LOG(LOG_ERROR, "controller:get_feed_by_url failed for %s", feedurl.c_str());
+	LOG(LOG_ERROR, "controller:get_feed_by_url failed for %s", feedurl);
 	return std::shared_ptr<rss_feed>();
 }
 
@@ -1312,7 +1312,7 @@ void controller::edit_urls_file() {
 	v->push_empty_formaction();
 	stfl::reset();
 
-	LOG(LOG_DEBUG, "controller::edit_urls_file: running `%s'", cmdline.c_str());
+	LOG(LOG_DEBUG, "controller::edit_urls_file: running `%s'", cmdline);
 	::system(cmdline.c_str());
 
 	v->pop_current_formaction();
@@ -1347,7 +1347,7 @@ std::string controller::bookmark(
 		                                       quote_empty(stfl::quote(description)),
 		                                       quote_empty(stfl::quote(feed_title)));
 
-		LOG(LOG_DEBUG, "controller::bookmark: cmd = %s", cmdline.c_str());
+		LOG(LOG_DEBUG, "controller::bookmark: cmd = %s", cmdline);
 
 		if (is_interactive) {
 			v->push_empty_formaction();
@@ -1486,9 +1486,9 @@ void controller::enqueue_items(std::shared_ptr<rss_feed> feed) {
 	std::lock_guard<std::mutex> lock(feed->item_mutex);
 	for (auto item : feed->items()) {
 		if (!item->enqueued() && item->enclosure_url().length() > 0) {
-			LOG(LOG_DEBUG, "controller::enqueue_items: enclosure_url = `%s' enclosure_type = `%s'", item->enclosure_url().c_str(), item->enclosure_type().c_str());
+			LOG(LOG_DEBUG, "controller::enqueue_items: enclosure_url = `%s' enclosure_type = `%s'", item->enclosure_url(), item->enclosure_type());
 			if (is_valid_podcast_type(item->enclosure_type()) && utils::is_http_url(item->enclosure_url())) {
-				LOG(LOG_INFO, "controller::enqueue_items: enqueuing `%s'", item->enclosure_url().c_str());
+				LOG(LOG_INFO, "controller::enqueue_items: enqueuing `%s'", item->enclosure_url());
 				enqueue_url(item->enclosure_url(), feed);
 				item->set_enqueued(true);
 				rsscache->update_rssitem_unread_and_enqueued(item, feed->rssurl());
