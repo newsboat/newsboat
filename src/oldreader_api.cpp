@@ -194,7 +194,7 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 
 void oldreader_api::add_custom_headers(curl_slist** custom_headers) {
 	if (auth_header.empty()) {
-		auth_header = utils::strprintf("Authorization: GoogleLogin auth=%s", auth.c_str());
+		auth_header = utils::strprintf("Authorization: GoogleLogin auth=%s", auth);
 	}
 	LOG(LOG_DEBUG, "oldreader_api::add_custom_headers header = %s", auth_header.c_str());
 	*custom_headers = curl_slist_append(*custom_headers, auth_header.c_str());
@@ -206,7 +206,7 @@ bool oldreader_api::mark_all_read(const std::string& feedurl) {
 	real_feedurl = utils::unescape_url(elems[0]);
 	std::string token = get_new_token();
 
-	std::string postcontent = utils::strprintf("s=%s&T=%s", real_feedurl.c_str(), token.c_str());
+	std::string postcontent = utils::strprintf("s=%s&T=%s", real_feedurl, token);
 
 	std::string result = post_content(OLDREADER_API_MARK_ALL_READ_URL, postcontent);
 
@@ -222,9 +222,9 @@ bool oldreader_api::mark_article_read_with_token(const std::string& guid, bool r
 	std::string postcontent;
 
 	if (read) {
-		postcontent = utils::strprintf("i=%s&a=user/-/state/com.google/read&r=user/-/state/com.google/kept-unread&ac=edit&T=%s", guid.c_str(), token.c_str());
+		postcontent = utils::strprintf("i=%s&a=user/-/state/com.google/read&r=user/-/state/com.google/kept-unread&ac=edit&T=%s", guid, token);
 	} else {
-		postcontent = utils::strprintf("i=%s&r=user/-/state/com.google/read&a=user/-/state/com.google/kept-unread&a=user/-/state/com.google/tracking-kept-unread&ac=edit&T=%s", guid.c_str(), token.c_str());
+		postcontent = utils::strprintf("i=%s&r=user/-/state/com.google/read&a=user/-/state/com.google/kept-unread&a=user/-/state/com.google/tracking-kept-unread&ac=edit&T=%s", guid, token);
 	}
 
 	std::string result = post_content(OLDREADER_API_EDIT_TAG_URL, postcontent);
@@ -282,9 +282,9 @@ bool oldreader_api::star_article(const std::string& guid, bool star) {
 	std::string postcontent;
 
 	if (star) {
-		postcontent = utils::strprintf("i=%s&a=user/-/state/com.google/starred&ac=edit&T=%s", guid.c_str(), token.c_str());
+		postcontent = utils::strprintf("i=%s&a=user/-/state/com.google/starred&ac=edit&T=%s", guid, token);
 	} else {
-		postcontent = utils::strprintf("i=%s&r=user/-/state/com.google/starred&ac=edit&T=%s", guid.c_str(), token.c_str());
+		postcontent = utils::strprintf("i=%s&r=user/-/state/com.google/starred&ac=edit&T=%s", guid, token);
 	}
 
 	std::string result = post_content(OLDREADER_API_EDIT_TAG_URL, postcontent);
@@ -297,9 +297,9 @@ bool oldreader_api::share_article(const std::string& guid, bool share) {
 	std::string postcontent;
 
 	if (share) {
-		postcontent = utils::strprintf("i=%s&a=user/-/state/com.google/broadcast&ac=edit&T=%s", guid.c_str(), token.c_str());
+		postcontent = utils::strprintf("i=%s&a=user/-/state/com.google/broadcast&ac=edit&T=%s", guid, token);
 	} else {
-		postcontent = utils::strprintf("i=%s&r=user/-/state/com.google/broadcast&ac=edit&T=%s", guid.c_str(), token.c_str());
+		postcontent = utils::strprintf("i=%s&r=user/-/state/com.google/broadcast&ac=edit&T=%s", guid, token);
 	}
 
 	std::string result = post_content(OLDREADER_API_EDIT_TAG_URL, postcontent);

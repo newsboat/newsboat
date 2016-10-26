@@ -205,7 +205,7 @@ void htmlrenderer::render(
 						link_num = add_link(links,utils::censor_url(utils::absolute_url(url,imgurl)), LINK_IMG);
 					}
 					if (imgtitle != "") {
-						curline.append(utils::strprintf("[%s %u: %s]", _("image"), link_num, imgtitle.c_str()));
+						curline.append(utils::strprintf("[%s %u: %s]", _("image"), link_num, imgtitle));
 					} else {
 						curline.append(utils::strprintf("[%s %u]", _("image"), link_num));
 					}
@@ -286,7 +286,7 @@ void htmlrenderer::render(
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				indent_level+=2;
 				if (is_ol && ol_counts.size() != 0) {
-					curline.append(utils::strprintf("%s. ", format_ol_count(ol_counts[ol_counts.size()-1], ol_types[ol_types.size()-1]).c_str()));
+					curline.append(utils::strprintf("%s. ", format_ol_count(ol_counts[ol_counts.size()-1], ol_types[ol_types.size()-1])));
 					++ol_counts[ol_counts.size()-1];
 				} else {
 					curline.append("  * ");
@@ -640,8 +640,8 @@ void htmlrenderer::render(
 			auto link_text = utils::strprintf(
 					"[%u]: %s (%s)",
 					i+1,
-					links[i].first.c_str(),
-					type2str(links[i].second).c_str());
+					links[i].first,
+					type2str(links[i].second));
 			add_line_softwrappable(link_text, lines);
 		}
 	}

@@ -133,8 +133,8 @@ bool controller::setup_dirs_xdg(const char *env_home, bool silent) {
 				<< utils::strprintf(
 					   _("XDG: configuration directory '%s' not accessible, "
 						 "using '%s' instead."),
-					   xdg_config_dir.c_str(),
-					   config_dir.c_str())
+					   xdg_config_dir,
+					   config_dir)
 				<< std::endl;
 		}
 
@@ -159,8 +159,8 @@ bool controller::setup_dirs_xdg(const char *env_home, bool silent) {
 	cache_file = xdg_data_dir + std::string(NEWSBEUTER_PATH_SEP) + cache_file;
 	lock_file = cache_file + LOCK_SUFFIX;
 	queue_file = xdg_data_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
-	searchfile = utils::strprintf("%s%shistory.search", xdg_data_dir.c_str(), NEWSBEUTER_PATH_SEP);
-	cmdlinefile = utils::strprintf("%s%shistory.cmdline", xdg_data_dir.c_str(), NEWSBEUTER_PATH_SEP);
+	searchfile = utils::strprintf("%s%shistory.search", xdg_data_dir, NEWSBEUTER_PATH_SEP);
+	cmdlinefile = utils::strprintf("%s%shistory.cmdline", xdg_data_dir, NEWSBEUTER_PATH_SEP);
 
 	return true;
 }
@@ -193,8 +193,8 @@ void controller::setup_dirs(bool silent) {
 	config_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
 	queue_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
 
-	searchfile = utils::strprintf("%s%shistory.search", config_dir.c_str(), NEWSBEUTER_PATH_SEP);
-	cmdlinefile = utils::strprintf("%s%shistory.cmdline", config_dir.c_str(), NEWSBEUTER_PATH_SEP);
+	searchfile = utils::strprintf("%s%shistory.search", config_dir, NEWSBEUTER_PATH_SEP);
+	cmdlinefile = utils::strprintf("%s%shistory.cmdline", config_dir, NEWSBEUTER_PATH_SEP);
 }
 
 controller::~controller() {
@@ -444,7 +444,7 @@ void controller::run(int argc, char * argv[]) {
 	try {
 		rsscache = new cache(cache_file,&cfg);
 	} catch (const dbexception& e) {
-		std::cerr << utils::strprintf(_("Error: opening the cache file `%s' failed: %s"), cache_file.c_str(), e.what()) << std::endl;
+		std::cerr << utils::strprintf(_("Error: opening the cache file `%s' failed: %s"), cache_file, e.what()) << std::endl;
 		utils::remove_fs_lock(lock_file);
 		::exit(EXIT_FAILURE);
 	}
@@ -480,7 +480,7 @@ void controller::run(int argc, char * argv[]) {
 	}
 
 	if (!do_export && !silent) {
-		std::cout << utils::strprintf(_("Loading URLs from %s..."), urlcfg->get_source().c_str());
+		std::cout << utils::strprintf(_("Loading URLs from %s..."), urlcfg->get_source());
 		std::cout.flush();
 	}
 	if (api) {
@@ -499,7 +499,7 @@ void controller::run(int argc, char * argv[]) {
 		LOG(LOG_ERROR,"no URLs configured.");
 		std::string msg;
 		if (type == "local") {
-			msg = utils::strprintf(_("Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."), url_file.c_str());
+			msg = utils::strprintf(_("Error: no URLs configured. Please fill the file %s with RSS feed URLs or import an OPML file."), url_file);
 		} else if (type == "opml") {
 			msg = utils::strprintf(_("It looks like the OPML feed you subscribed contains no feeds. Please fill it with feeds, and try again."));
 		} else if (type == "oldreader") {
@@ -546,7 +546,7 @@ void controller::run(int argc, char * argv[]) {
 			utils::remove_fs_lock(lock_file);
 			return;
 		} catch(const std::string& str) {
-			std::cout << utils::strprintf(_("Error while loading feed '%s': %s"), url.c_str(), str.c_str()) << std::endl;
+			std::cout << utils::strprintf(_("Error while loading feed '%s': %s"), url, str) << std::endl;
 			utils::remove_fs_lock(lock_file);
 			return;
 		}
@@ -720,7 +720,7 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended, cur
 		std::shared_ptr<rss_feed> oldfeed = feeds[pos];
 		std::string errmsg;
 		if (!unattended)
-			v->set_status(utils::strprintf(_("%sLoading %s..."), prepare_message(pos+1, max).c_str(), utils::censor_url(oldfeed->rssurl()).c_str()));
+			v->set_status(utils::strprintf(_("%sLoading %s..."), prepare_message(pos+1, max), utils::censor_url(oldfeed->rssurl())));
 
 		bool ignore_dl = (cfg.get_configvalue("ignore-mode") == "download");
 
@@ -755,11 +755,11 @@ void controller::reload(unsigned int pos, unsigned int max, bool unattended, cur
 			oldfeed->set_status(SUCCESS);
 			v->set_status("");
 		} catch (const dbexception& e) {
-			errmsg = utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(oldfeed->rssurl()).c_str(), e.what());
+			errmsg = utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(oldfeed->rssurl()), e.what());
 		} catch (const std::string& emsg) {
-			errmsg = utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(oldfeed->rssurl()).c_str(), emsg.c_str());
+			errmsg = utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(oldfeed->rssurl()), emsg);
 		} catch (rsspp::exception& e) {
-			errmsg = utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(oldfeed->rssurl()).c_str(), e.what());
+			errmsg = utils::strprintf(_("Error while retrieving %s: %s"), utils::censor_url(oldfeed->rssurl()), e.what());
 		}
 		if (errmsg != "") {
 			oldfeed->set_status(DL_ERROR);
@@ -1306,7 +1306,7 @@ void controller::edit_urls_file() {
 	if (!editor)
 		editor = "vi";
 
-	std::string cmdline = utils::strprintf("%s \"%s\"", editor, utils::replace_all(url_file,"\"","\\\"").c_str());
+	std::string cmdline = utils::strprintf("%s \"%s\"", editor, utils::replace_all(url_file,"\"","\\\""));
 
 	v->push_empty_formaction();
 	stfl::reset();
@@ -1340,11 +1340,11 @@ std::string controller::bookmark(
 	bool is_interactive = cfg.get_configvalue_as_bool("bookmark-interactive");
 	if (bookmark_cmd.length() > 0) {
 		std::string cmdline = utils::strprintf("%s '%s' %s %s %s",
-		                                       bookmark_cmd.c_str(),
-		                                       utils::replace_all(url,"'", "%27").c_str(),
-		                                       quote_empty(stfl::quote(title)).c_str(),
-		                                       quote_empty(stfl::quote(description)).c_str(),
-		                                       quote_empty(stfl::quote(feed_title)).c_str());
+		                                       bookmark_cmd,
+		                                       utils::replace_all(url,"'", "%27"),
+		                                       quote_empty(stfl::quote(title)),
+		                                       quote_empty(stfl::quote(description)),
+		                                       quote_empty(stfl::quote(feed_title)));
 
 		LOG(LOG_DEBUG, "controller::bookmark: cmd = %s", cmdline.c_str());
 
@@ -1614,7 +1614,7 @@ void controller::load_configfile(const std::string& filename) {
 	if (cfgparser.parse(filename, true)) {
 		update_config();
 	} else {
-		v->show_error(utils::strprintf(_("Error: couldn't open configuration file `%s'!"), filename.c_str()));
+		v->show_error(utils::strprintf(_("Error: couldn't open configuration file `%s'!"), filename));
 	}
 }
 

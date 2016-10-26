@@ -299,7 +299,7 @@ REDO:
 				filterhistory.add_line(newfilter);
 				if (newfilter.length() > 0) {
 					if (!m.parse(newfilter)) {
-						v->show_error(utils::strprintf(_("Error: couldn't parse filter command `%s': %s"), newfilter.c_str(), m.get_parse_error().c_str()));
+						v->show_error(utils::strprintf(_("Error: couldn't parse filter command `%s': %s"), newfilter, m.get_parse_error()));
 						m.parse(FILTER_UNREAD_FEEDS);
 					} else {
 						save_filterpos();
@@ -662,11 +662,11 @@ void feedlist_formaction::set_regexmanager(regexmanager * r) {
 	unsigned int i=0;
 	std::string attrstr;
 	for (auto attribute : attrs) {
-		attrstr.append(utils::strprintf("@style_%u_normal:%s ", i, attribute.c_str()));
-		attrstr.append(utils::strprintf("@style_%u_focus:%s ", i, attribute.c_str()));
+		attrstr.append(utils::strprintf("@style_%u_normal:%s ", i, attribute));
+		attrstr.append(utils::strprintf("@style_%u_focus:%s ", i, attribute));
 		i++;
 	}
-	std::string textview = utils::strprintf("{!list[feeds] .expand:vh style_normal[listnormal]: style_focus[listfocus]:fg=yellow,bg=blue,attr=bold pos_name[feedposname]: pos[feedpos]:0 %s richtext:1}", attrstr.c_str());
+	std::string textview = utils::strprintf("{!list[feeds] .expand:vh style_normal[listnormal]: style_focus[listfocus]:fg=yellow,bg=blue,attr=bold pos_name[feedposname]: pos[feedpos]:0 %s richtext:1}", attrstr);
 	f->modify("feeds", "replace", textview);
 }
 
@@ -698,7 +698,7 @@ void feedlist_formaction::op_start_search() {
 			std::string utf8searchphrase = utils::convert_text(searchphrase, "utf-8", nl_langinfo(CODESET));
 			items = v->get_ctrl()->search_for_items(utf8searchphrase, nullptr);
 		} catch (const dbexception& e) {
-			v->show_error(utils::strprintf(_("Error while searching for `%s': %s"), searchphrase.c_str(), e.what()));
+			v->show_error(utils::strprintf(_("Error while searching for `%s': %s"), searchphrase, e.what()));
 			return;
 		}
 		if (!items.empty()) {
@@ -773,7 +773,7 @@ std::string feedlist_formaction::format_line(const std::string& feedlist_format,
 	if (unread_count > 0) {
 		tmp_feedlist_format = utils::strprintf(
 		                          "<unread>%s</>",
-		                          feedlist_format.c_str());
+		                          feedlist_format);
 	}
 
 	return fmt.do_format(tmp_feedlist_format, width);

@@ -158,7 +158,7 @@ std::string textformatter::format_text_to_list(
 			format_cache.append(
 					utils::strprintf(
 						"{listitem text:%s}",
-						stfl::quote(line).c_str()));
+						stfl::quote(line)));
 		}
 	}
 

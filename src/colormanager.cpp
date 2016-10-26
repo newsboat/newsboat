@@ -41,14 +41,14 @@ void colormanager::handle_action(const std::string& action, const std::vector<st
 		std::string bgcolor = params[2];
 
 		if (!utils::is_valid_color(fgcolor))
-			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), fgcolor.c_str()));
+			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), fgcolor));
 		if (!utils::is_valid_color(bgcolor))
-			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), bgcolor.c_str()));
+			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), bgcolor));
 
 		std::vector<std::string> attribs;
 		for (unsigned int i=3; i<params.size(); ++i) {
 			if (!utils::is_valid_attribute(params[i]))
-				throw confighandlerexception(utils::strprintf(_("`%s' is not a valid attribute"), params[i].c_str()));
+				throw confighandlerexception(utils::strprintf(_("`%s' is not a valid attribute"), params[i]));
 			attribs.push_back(params[i]);
 		}
 
@@ -60,7 +60,7 @@ void colormanager::handle_action(const std::string& action, const std::vector<st
 			attributes[element] = attribs;
 			colors_loaded_ = true;
 		} else
-			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid configuration element"), element.c_str()));
+			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid configuration element"), element));
 
 	} else
 		throw confighandlerexception(AHS_INVALID_COMMAND);
@@ -68,7 +68,7 @@ void colormanager::handle_action(const std::string& action, const std::vector<st
 
 void colormanager::dump_config(std::vector<std::string>& config_output) {
 	for (auto color : fg_colors) {
-		std::string configline = utils::strprintf("color %s %s %s", color.first.c_str(), color.second.c_str(), bg_colors[color.first].c_str());
+		std::string configline = utils::strprintf("color %s %s %s", color.first, color.second, bg_colors[color.first]);
 		for (auto attrib : attributes[color.first]) {
 			configline.append(" ");
 			configline.append(attrib);

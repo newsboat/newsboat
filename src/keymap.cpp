@@ -292,7 +292,7 @@ void keymap::handle_action(const std::string& action, const std::vector<std::str
 		if (params.size() >= 3)
 			context = params[2];
 		if (!is_valid_context(context))
-			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid context"), context.c_str()));
+			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid context"), context));
 		operation op = get_opcode(params[1]);
 		if (op > OP_SK_MIN && op < OP_SK_MAX)
 			unset_key(getkey(op, context), context);
@@ -320,7 +320,7 @@ void keymap::handle_action(const std::string& action, const std::vector<std::str
 				tmpcmd.op = get_opcode(*it);
 				LOG(LOG_DEBUG, "keymap::handle_action: new operation `%s' (op = %u)", it->c_str(), tmpcmd.op);
 				if (tmpcmd.op == OP_NIL)
-					throw confighandlerexception(utils::strprintf(_("`%s' is not a valid key command"), it->c_str()));
+					throw confighandlerexception(utils::strprintf(_("`%s' is not a valid key command"), *it));
 				first = false;
 			} else {
 				if (*it == ";") {

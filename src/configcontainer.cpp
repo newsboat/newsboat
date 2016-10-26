@@ -213,19 +213,19 @@ void configcontainer::handle_action(const std::string& action, const std::vector
 	switch (cfgdata.type) {
 	case configdata::BOOL:
 		if (!is_bool(params[0]))
-			throw confighandlerexception(utils::strprintf(_("expected boolean value, found `%s' instead"), params[0].c_str()));
+			throw confighandlerexception(utils::strprintf(_("expected boolean value, found `%s' instead"), params[0]));
 		cfgdata.value = params[0];
 		break;
 
 	case configdata::INT:
 		if (!is_int(params[0]))
-			throw confighandlerexception(utils::strprintf(_("expected integer value, found `%s' instead"), params[0].c_str()));
+			throw confighandlerexception(utils::strprintf(_("expected integer value, found `%s' instead"), params[0]));
 		cfgdata.value = params[0];
 		break;
 
 	case configdata::ENUM:
 		if (cfgdata.enum_values.find(params[0]) == cfgdata.enum_values.end())
-			throw confighandlerexception(utils::strprintf(_("invalid configuration value `%s'"), params[0].c_str()));
+			throw confighandlerexception(utils::strprintf(_("invalid configuration value `%s'"), params[0]));
 	// fall-through
 	case configdata::STR:
 	case configdata::PATH:
@@ -317,7 +317,7 @@ void configcontainer::dump_config(std::vector<std::string>& config_output) {
 		case configdata::INT:
 			configline.append(cfg.second.value);
 			if (cfg.second.value != cfg.second.default_value)
-				configline.append(utils::strprintf(" # default: %s", cfg.second.default_value.c_str()));
+				configline.append(utils::strprintf(" # default: %s", cfg.second.default_value));
 			break;
 		case configdata::ENUM:
 		case configdata::STR:
@@ -330,7 +330,7 @@ void configcontainer::dump_config(std::vector<std::string>& config_output) {
 			} else {
 				configline.append(utils::quote(cfg.second.value));
 				if (cfg.second.value != cfg.second.default_value) {
-					configline.append(utils::strprintf(" # default: %s", cfg.second.default_value.c_str()));
+					configline.append(utils::strprintf(" # default: %s", cfg.second.default_value));
 				}
 			}
 			break;

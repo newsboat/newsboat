@@ -67,9 +67,9 @@ std::string listformatter::format_list(regexmanager * rxman, const std::string& 
 		if (rxman)
 			rxman->quote_and_highlight(str, location);
 		if (line.second == UINT_MAX) {
-			format_cache.append(utils::strprintf("{listitem text:%s}", stfl::quote(str).c_str()));
+			format_cache.append(utils::strprintf("{listitem text:%s}", stfl::quote(str)));
 		} else {
-			format_cache.append(utils::strprintf("{listitem[%u] text:%s}", line.second, stfl::quote(str).c_str()));
+			format_cache.append(utils::strprintf("{listitem[%u] text:%s}", line.second, stfl::quote(str)));
 		}
 	}
 	format_cache.append(1, '}');

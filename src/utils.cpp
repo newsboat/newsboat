@@ -575,33 +575,6 @@ std::string utils::absolute_url(const std::string& url, const std::string& link)
 	return retval;
 }
 
-std::string utils::strprintf(const char * format, ...) {
-	if (!format)
-		return std::string();
-
-	char buffer[1024];
-
-	va_list ap;
-	va_start(ap, format);
-
-	unsigned int len = vsnprintf(buffer, sizeof(buffer), format, ap)+1;
-
-	va_end(ap);
-	if (len <= sizeof(buffer))
-		return buffer;
-
-	va_start(ap, format);
-
-	char * buf = new char[len];
-	vsnprintf(buf, len, format, ap);
-	va_end(ap);
-
-	std::string ret(buf);
-	delete[] buf;
-
-	return ret;
-}
-
 std::string utils::get_useragent(configcontainer * cfgcont) {
 	std::string ua_pref = cfgcont->get_configvalue("user-agent");
 	if (ua_pref.length() == 0) {

@@ -20,10 +20,10 @@ const char * matcherexception::what() const throw() {
 	static std::string errmsg;
 	switch (type) {
 	case ATTRIB_UNAVAIL:
-		errmsg = utils::strprintf(_("attribute `%s' is not available."), addinfo.c_str());
+		errmsg = utils::strprintf(_("attribute `%s' is not available."), addinfo);
 		break;
 	case INVALID_REGEX:
-		errmsg = utils::strprintf(_("regular expression '%s' is invalid: %s"), addinfo.c_str(), addinfo2.c_str());
+		errmsg = utils::strprintf(_("regular expression '%s' is invalid: %s"), addinfo, addinfo2);
 		break;
 	}
 	return errmsg.c_str();

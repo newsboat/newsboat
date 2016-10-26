@@ -98,7 +98,7 @@ void filebrowser_formaction::process_operation(operation op, bool /* automatic *
 				 */
 				if (::stat(fn.c_str(), &sbuf)!=-1) {
 					f->set_focus("files");
-					if (v->confirm(utils::strprintf(_("Do you really want to overwrite `%s' (y:Yes n:No)? "), fn.c_str()), _("yn")) == *_("n")) {
+					if (v->confirm(utils::strprintf(_("Do you really want to overwrite `%s' (y:Yes n:No)? "), fn), _("yn")) == *_("n")) {
 						do_pop = false;
 					}
 					f->set_focus("filenametext");
@@ -202,8 +202,8 @@ std::string filebrowser_formaction::add_file(std::string filename) {
 		std::string group = get_group(sb.st_gid);
 
 		std::string sizestr = utils::strprintf("%12u", sb.st_size);
-		std::string line = utils::strprintf("%c%s %s %s %s %s", ftype, rwxbits.c_str(), owner.c_str(), group.c_str(), sizestr.c_str(), filename.c_str());
-		retval = utils::strprintf("{listitem[%c%s] text:%s}", ftype, stfl::quote(filename).c_str(), stfl::quote(line).c_str());
+		std::string line = utils::strprintf("%c%s %s %s %s %s", ftype, rwxbits, owner, group, sizestr, filename);
+		retval = utils::strprintf("{listitem[%c%s] text:%s}", ftype, stfl::quote(filename), stfl::quote(line));
 	}
 	return retval;
 }

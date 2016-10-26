@@ -176,7 +176,7 @@ TEST_CASE("utils::to_string()") {
 }
 
 TEST_CASE("utils::strprintf()") {
-	REQUIRE(utils::strprintf(nullptr) == "");
+	REQUIRE(utils::strprintf("") == "");
 	REQUIRE(utils::strprintf("%s", "") == "");
 	REQUIRE(utils::strprintf("%u", 0) == "0");
 	REQUIRE(utils::strprintf("%s", nullptr) == "(null)");

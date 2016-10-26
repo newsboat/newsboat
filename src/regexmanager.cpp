@@ -37,7 +37,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 
 		std::string location = params[0];
 		if (location != "all" && location != "article" && location != "articlelist" && location != "feedlist")
-			throw confighandlerexception(utils::strprintf(_("`%s' is an invalid dialog type"), location.c_str()));
+			throw confighandlerexception(utils::strprintf(_("`%s' is an invalid dialog type"), location));
 
 		regex_t * rx = new regex_t;
 		int err;
@@ -45,13 +45,13 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 			char buf[1024];
 			regerror(err, rx, buf, sizeof(buf));
 			delete rx;
-			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid regular expression: %s"), params[1].c_str(), buf));
+			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid regular expression: %s"), params[1], buf));
 		}
 		std::string colorstr;
 		if (params[2] != "default") {
 			colorstr.append("fg=");
 			if (!utils::is_valid_color(params[2]))
-				throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), params[2].c_str()));
+				throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), params[2]));
 			colorstr.append(params[2]);
 		}
 		if (params.size() > 3) {
@@ -60,7 +60,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 					colorstr.append(",");
 				colorstr.append("bg=");
 				if (!utils::is_valid_color(params[3]))
-					throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), params[3].c_str()));
+					throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), params[3]));
 				colorstr.append(params[3]);
 			}
 			for (unsigned int i=4; i<params.size(); ++i) {
@@ -69,7 +69,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 						colorstr.append(",");
 					colorstr.append("attr=");
 					if (!utils::is_valid_attribute(params[i]))
-						throw confighandlerexception(utils::strprintf(_("`%s' is not a valid attribute"), params[i].c_str()));
+						throw confighandlerexception(utils::strprintf(_("`%s' is not a valid attribute"), params[i]));
 					colorstr.append(params[i]);
 				}
 			}
@@ -109,7 +109,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 		if (fgcolor != "default") {
 			colorstr.append("fg=");
 			if (!utils::is_valid_color(fgcolor))
-				throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), fgcolor.c_str()));
+				throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), fgcolor));
 			colorstr.append(fgcolor);
 		}
 		if (bgcolor != "default") {
@@ -117,7 +117,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 				colorstr.append(",");
 			colorstr.append("bg=");
 			if (!utils::is_valid_color(bgcolor))
-				throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), bgcolor.c_str()));
+				throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), bgcolor));
 			colorstr.append(bgcolor);
 		}
 
@@ -127,14 +127,14 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 					colorstr.append(",");
 				colorstr.append("attr=");
 				if (!utils::is_valid_attribute(params[i]))
-					throw confighandlerexception(utils::strprintf(_("`%s' is not a valid attribute"), params[i].c_str()));
+					throw confighandlerexception(utils::strprintf(_("`%s' is not a valid attribute"), params[i]));
 				colorstr.append(params[i]);
 			}
 		}
 
 		std::shared_ptr<matcher> m(new matcher());
 		if (!m->parse(params[0])) {
-			throw confighandlerexception(utils::strprintf(_("couldn't parse filter expression `%s': %s"), params[0].c_str(), m->get_parse_error().c_str()));
+			throw confighandlerexception(utils::strprintf(_("couldn't parse filter expression `%s': %s"), params[0], m->get_parse_error()));
 		}
 
 		int pos = locations["articlelist"].first.size();

@@ -82,8 +82,8 @@ bool pb_controller::setup_dirs_xdg(const char *env_home) {
 		    << utils::strprintf(
 		           _("XDG: configuration directory '%s' not accessible, "
 		             "using '%s' instead."),
-		           xdg_config_dir.c_str(),
-		           config_dir.c_str())
+		           xdg_config_dir,
+		           config_dir)
 		    << std::endl;
 
 		return false;
@@ -107,8 +107,8 @@ bool pb_controller::setup_dirs_xdg(const char *env_home) {
 	cache_file = xdg_data_dir + std::string(NEWSBEUTER_PATH_SEP) + cache_file;
 	lock_file = cache_file + LOCK_SUFFIX;
 	queue_file = xdg_data_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
-	searchfile = utils::strprintf("%s%shistory.search", xdg_data_dir.c_str(), NEWSBEUTER_PATH_SEP);
-	cmdlinefile = utils::strprintf("%s%shistory.cmdline", xdg_data_dir.c_str(), NEWSBEUTER_PATH_SEP);
+	searchfile = utils::strprintf("%s%shistory.search", xdg_data_dir, NEWSBEUTER_PATH_SEP);
+	cmdlinefile = utils::strprintf("%s%shistory.cmdline", xdg_data_dir, NEWSBEUTER_PATH_SEP);
 
 	return true;
 }

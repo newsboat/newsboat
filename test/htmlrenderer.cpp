@@ -856,7 +856,7 @@ TEST_CASE("htmlrenderer: cells are separated by vertical bar if `border' is set 
 				"</tr>"
 			"</table>";
 		const std::string input =
-			utils::strprintf(input_template.c_str(), border_width);
+			utils::strprintf(input_template, border_width);
 
 		REQUIRE_NOTHROW(r.render(input, lines, links, url));
 		REQUIRE(lines.size() == 3);

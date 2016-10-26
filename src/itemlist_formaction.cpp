@@ -401,7 +401,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 				filterhistory.add_line(newfilter);
 				if (newfilter.length() > 0) {
 					if (!m.parse(newfilter)) {
-						v->show_error(utils::strprintf(_("Error: couldn't parse filter command `%s': %s"), newfilter.c_str(), m.get_parse_error().c_str()));
+						v->show_error(utils::strprintf(_("Error: couldn't parse filter command `%s': %s"), newfilter, m.get_parse_error()));
 						m.parse(FILTER_UNREAD_ITEMS);
 					} else {
 						apply_filter = true;
@@ -583,7 +583,7 @@ void itemlist_formaction::qna_start_search() {
 			items = v->get_ctrl()->search_for_items(utf8searchphrase, feed);
 		}
 	} catch (const dbexception& e) {
-		v->show_error(utils::strprintf(_("Error while searching for `%s': %s"), searchphrase.c_str(), e.what()));
+		v->show_error(utils::strprintf(_("Error while searching for `%s': %s"), searchphrase, e.what()));
 		return;
 	}
 
@@ -724,13 +724,13 @@ std::string itemlist_formaction::item2formatted_line(
 		int id;
 		if ((id = rxman->article_matches(item.first.get())) != -1) {
 			tmp_itemlist_format = utils::strprintf(
-				"<%d>%s</>", id, tmp_itemlist_format.c_str());
+				"<%d>%s</>", id, tmp_itemlist_format);
 		}
 	}
 
 	if (item.first->unread()) {
 		tmp_itemlist_format = utils::strprintf(
-			"<unread>%s</>", tmp_itemlist_format.c_str());
+			"<unread>%s</>", tmp_itemlist_format);
 	}
 
 	return fmt.do_format(tmp_itemlist_format, width);
@@ -948,9 +948,9 @@ void itemlist_formaction::save_article(const std::string& filename, std::shared_
 	} else {
 		try {
 			v->get_ctrl()->write_item(item, filename);
-			v->show_error(utils::strprintf(_("Saved article to %s"), filename.c_str()));
+			v->show_error(utils::strprintf(_("Saved article to %s"), filename));
 		} catch (...) {
-			v->show_error(utils::strprintf(_("Error: couldn't save article to %s"), filename.c_str()));
+			v->show_error(utils::strprintf(_("Error: couldn't save article to %s"), filename));
 		}
 	}
 }
@@ -969,11 +969,11 @@ void itemlist_formaction::set_regexmanager(regexmanager * r) {
 	unsigned int i=0;
 	std::string attrstr;
 	for (auto attribute : attrs) {
-		attrstr.append(utils::strprintf("@style_%u_normal:%s ", i, attribute.c_str()));
-		attrstr.append(utils::strprintf("@style_%u_focus:%s ", i, attribute.c_str()));
+		attrstr.append(utils::strprintf("@style_%u_normal:%s ", i, attribute));
+		attrstr.append(utils::strprintf("@style_%u_focus:%s ", i, attribute));
 		i++;
 	}
-	std::string textview = utils::strprintf("{list[items] .expand:vh style_normal[listnormal]: style_focus[listfocus]:fg=yellow,bg=blue,attr=bold pos_name[itemposname]: pos[itempos]:0 %s richtext:1}", attrstr.c_str());
+	std::string textview = utils::strprintf("{list[items] .expand:vh style_normal[listnormal]: style_focus[listfocus]:fg=yellow,bg=blue,attr=bold pos_name[itemposname]: pos[itempos]:0 %s richtext:1}", attrstr);
 	f->modify("items", "replace", textview);
 }
 
@@ -1026,12 +1026,12 @@ void itemlist_formaction::set_feed(std::shared_ptr<rss_feed> fd) {
 
 std::string itemlist_formaction::title() {
 	if (feed->rssurl() == "") {
-		return utils::strprintf(_("Search Result - '%s'"), searchphrase.c_str());
+		return utils::strprintf(_("Search Result - '%s'"), searchphrase);
 	} else {
 		if (feed->rssurl().substr(0,6) == "query:")
-			return utils::strprintf(_("Query Feed - %s"), feed->rssurl().substr(6,feed->rssurl().length()-6).c_str());
+			return utils::strprintf(_("Query Feed - %s"), feed->rssurl().substr(6,feed->rssurl().length()-6));
 		else
-			return utils::strprintf(_("Article List - %s"), feed->title().c_str());
+			return utils::strprintf(_("Article List - %s"), feed->title());
 	}
 }
 

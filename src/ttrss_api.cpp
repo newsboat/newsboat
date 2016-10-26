@@ -14,7 +14,7 @@ namespace newsbeuter {
 
 ttrss_api::ttrss_api(configcontainer * c) : remote_api(c) {
 	single = (cfg->get_configvalue("ttrss-mode") == "single");
-	auth_info = utils::strprintf("%s:%s", cfg->get_configvalue("ttrss-login").c_str(), cfg->get_configvalue("ttrss-password").c_str());
+	auth_info = utils::strprintf("%s:%s", cfg->get_configvalue("ttrss-login"), cfg->get_configvalue("ttrss-password"));
 	auth_info_ptr = auth_info.c_str();
 	sid = "";
 }
@@ -79,7 +79,7 @@ std::string ttrss_api::retrieve_sid() {
 
 	args["user"] = single ? "admin" : user.c_str();
 	args["password"] = pass.c_str();
-	auth_info = utils::strprintf("%s:%s", user.c_str(), pass.c_str());
+	auth_info = utils::strprintf("%s:%s", user, pass);
 	auth_info_ptr = auth_info.c_str();
 	json_object * content = run_op("login", args);
 
@@ -101,7 +101,7 @@ json_object* ttrss_api::run_op(const std::string& op,
                                const std::map<std::string, std::string >& args,
                                bool try_login)
 {
-	std::string url = utils::strprintf("%s/api/", cfg->get_configvalue("ttrss-url").c_str());
+	std::string url = utils::strprintf("%s/api/", cfg->get_configvalue("ttrss-url"));
 
 	std::string req_data = "{\"op\":\"" + op + "\",\"sid\":\"" + sid + "\"";
 
