@@ -13,6 +13,7 @@
 #include <utils.h>
 #include <cstring>
 #include <utils.h>
+#include <strprintf.h>
 #include <remote_api.h>
 
 using namespace newsbeuter;
@@ -125,7 +126,7 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 	}
 
 	if (etag.length() > 0) {
-		auto header = utils::strprintf("If-None-Match: %s", etag);
+		auto header = strprintf::fmt("If-None-Match: %s", etag);
 		custom_headers = curl_slist_append(custom_headers, header.c_str());
 		custom_headers = curl_slist_append(custom_headers, "A-IM: feed");
 	}

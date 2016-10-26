@@ -1,6 +1,7 @@
 #include <regexmanager.h>
 #include <logger.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <cstring>
 #include <exceptions.h>
 #include <config.h>
@@ -37,7 +38,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 
 		std::string location = params[0];
 		if (location != "all" && location != "article" && location != "articlelist" && location != "feedlist")
-			throw confighandlerexception(utils::strprintf(_("`%s' is an invalid dialog type"), location));
+			throw confighandlerexception(strprintf::fmt(_("`%s' is an invalid dialog type"), location));
 
 		regex_t * rx = new regex_t;
 		int err;
@@ -45,13 +46,13 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 			char buf[1024];
 			regerror(err, rx, buf, sizeof(buf));
 			delete rx;
-			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid regular expression: %s"), params[1], buf));
+			throw confighandlerexception(strprintf::fmt(_("`%s' is not a valid regular expression: %s"), params[1], buf));
 		}
 		std::string colorstr;
 		if (params[2] != "default") {
 			colorstr.append("fg=");
 			if (!utils::is_valid_color(params[2]))
-				throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), params[2]));
+				throw confighandlerexception(strprintf::fmt(_("`%s' is not a valid color"), params[2]));
 			colorstr.append(params[2]);
 		}
 		if (params.size() > 3) {
@@ -60,7 +61,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 					colorstr.append(",");
 				colorstr.append("bg=");
 				if (!utils::is_valid_color(params[3]))
-					throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), params[3]));
+					throw confighandlerexception(strprintf::fmt(_("`%s' is not a valid color"), params[3]));
 				colorstr.append(params[3]);
 			}
 			for (unsigned int i=4; i<params.size(); ++i) {
@@ -69,7 +70,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 						colorstr.append(",");
 					colorstr.append("attr=");
 					if (!utils::is_valid_attribute(params[i]))
-						throw confighandlerexception(utils::strprintf(_("`%s' is not a valid attribute"), params[i]));
+						throw confighandlerexception(strprintf::fmt(_("`%s' is not a valid attribute"), params[i]));
 					colorstr.append(params[i]);
 				}
 			}
@@ -109,7 +110,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 		if (fgcolor != "default") {
 			colorstr.append("fg=");
 			if (!utils::is_valid_color(fgcolor))
-				throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), fgcolor));
+				throw confighandlerexception(strprintf::fmt(_("`%s' is not a valid color"), fgcolor));
 			colorstr.append(fgcolor);
 		}
 		if (bgcolor != "default") {
@@ -117,7 +118,7 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 				colorstr.append(",");
 			colorstr.append("bg=");
 			if (!utils::is_valid_color(bgcolor))
-				throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), bgcolor));
+				throw confighandlerexception(strprintf::fmt(_("`%s' is not a valid color"), bgcolor));
 			colorstr.append(bgcolor);
 		}
 
@@ -127,14 +128,14 @@ void regexmanager::handle_action(const std::string& action, const std::vector<st
 					colorstr.append(",");
 				colorstr.append("attr=");
 				if (!utils::is_valid_attribute(params[i]))
-					throw confighandlerexception(utils::strprintf(_("`%s' is not a valid attribute"), params[i]));
+					throw confighandlerexception(strprintf::fmt(_("`%s' is not a valid attribute"), params[i]));
 				colorstr.append(params[i]);
 			}
 		}
 
 		std::shared_ptr<matcher> m(new matcher());
 		if (!m->parse(params[0])) {
-			throw confighandlerexception(utils::strprintf(_("couldn't parse filter expression `%s': %s"), params[0], m->get_parse_error()));
+			throw confighandlerexception(strprintf::fmt(_("couldn't parse filter expression `%s': %s"), params[0], m->get_parse_error()));
 		}
 
 		int pos = locations["articlelist"].first.size();
@@ -192,7 +193,7 @@ void regexmanager::quote_and_highlight(std::string& str, const std::string& loca
 		int err = regexec(regex, str.c_str(), 1, &pmatch, 0);
 		while (err == 0) {
 			// LOG(LOG_DEBUG, "regexmanager::quote_and_highlight: matched %s rm_so = %u rm_eo = %u", str.c_str() + offset, pmatch.rm_so, pmatch.rm_eo);
-			std::string marker = utils::strprintf("<%u>", i);
+			std::string marker = strprintf::fmt("<%u>", i);
 			str.insert(offset + pmatch.rm_eo, std::string("</>") + initial_marker);
 			// LOG(LOG_DEBUG, "after first insert: %s", str.c_str());
 			str.insert(offset + pmatch.rm_so, marker);

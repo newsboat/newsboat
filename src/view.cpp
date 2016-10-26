@@ -23,6 +23,7 @@
 #include <exceptions.h>
 #include <keymap.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <regexmanager.h>
 
 #include <iostream>
@@ -371,7 +372,7 @@ void view::update_visible_feeds(std::vector<std::shared_ptr<rss_feed>> feeds) {
 			feedlist->update_visible_feeds(feeds);
 		}
 	} catch (const matcherexception& e) {
-		set_status(utils::strprintf(_("Error: applying the filter failed: %s"), e.what()));
+		set_status(strprintf::fmt(_("Error: applying the filter failed: %s"), e.what()));
 		LOG(LOG_DEBUG, "view::update_visible_feeds: inside catch: %s", e.what());
 	}
 }
@@ -391,7 +392,7 @@ void view::set_feedlist(std::vector<std::shared_ptr<rss_feed>> feeds) {
 			feedlist->set_feedlist(feeds);
 		}
 	} catch (const matcherexception& e) {
-		set_status(utils::strprintf(_("Error: applying the filter failed: %s"), e.what()));
+		set_status(strprintf::fmt(_("Error: applying the filter failed: %s"), e.what()));
 	}
 }
 
@@ -1083,12 +1084,12 @@ void view::dump_current_form() {
 	strftime(fnbuf, sizeof(fnbuf), "dumpform-%Y%m%d-%H%M%S.stfl", stm);
 	std::fstream f(fnbuf, std::ios_base::out);
 	if (!f.is_open()) {
-		show_error(utils::strprintf("Error: couldn't open file %s: %s", fnbuf, strerror(errno)));
+		show_error(strprintf::fmt("Error: couldn't open file %s: %s", fnbuf, strerror(errno)));
 		return;
 	}
 	f << formtext;
 	f.close();
-	set_status(utils::strprintf("Dumped current form to file %s", fnbuf));
+	set_status(strprintf::fmt("Dumped current form to file %s", fnbuf));
 }
 
 }

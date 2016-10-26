@@ -2,6 +2,7 @@
 #include <tagsouppullparser.h>
 #include <exceptions.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <logger.h>
 #include <fstream>
 #include <config.h>
@@ -77,10 +78,10 @@ bool configparser::parse(const std::string& filename, bool double_include) {
 					evaluate_backticks(tokens);
 					handler->handle_action(cmd,tokens);
 				} catch (const confighandlerexception& e) {
-					throw configexception(utils::strprintf(_("Error while processing command `%s' (%s line %u): %s"), line, filename, linecounter, e.what()));
+					throw configexception(strprintf::fmt(_("Error while processing command `%s' (%s line %u): %s"), line, filename, linecounter, e.what()));
 				}
 			} else {
-				throw configexception(utils::strprintf(_("unknown command `%s'"), cmd));
+				throw configexception(strprintf::fmt(_("unknown command `%s'"), cmd));
 			}
 		}
 		getline(f,line);

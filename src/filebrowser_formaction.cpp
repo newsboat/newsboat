@@ -4,6 +4,7 @@
 #include <config.h>
 #include <view.h>
 #include <utils.h>
+#include <strprintf.h>
 
 #include <iostream>
 #include <iomanip>
@@ -98,7 +99,7 @@ void filebrowser_formaction::process_operation(operation op, bool /* automatic *
 				 */
 				if (::stat(fn.c_str(), &sbuf)!=-1) {
 					f->set_focus("files");
-					if (v->confirm(utils::strprintf(_("Do you really want to overwrite `%s' (y:Yes n:No)? "), fn), _("yn")) == *_("n")) {
+					if (v->confirm(strprintf::fmt(_("Do you really want to overwrite `%s' (y:Yes n:No)? "), fn), _("yn")) == *_("n")) {
 						do_pop = false;
 					}
 					f->set_focus("filenametext");
@@ -179,7 +180,7 @@ void filebrowser_formaction::init() {
 
 	f->set("filenametext", default_filename);
 
-	f->set("head", utils::strprintf(_("%s %s - Save File - %s"), PROGRAM_NAME, PROGRAM_VERSION, cwdtmp));
+	f->set("head", strprintf::fmt(_("%s %s - Save File - %s"), PROGRAM_NAME, PROGRAM_VERSION, cwdtmp));
 }
 
 keymap_hint_entry * filebrowser_formaction::get_keymap_hint() {
@@ -201,9 +202,9 @@ std::string filebrowser_formaction::add_file(std::string filename) {
 		std::string owner = get_owner(sb.st_uid);
 		std::string group = get_group(sb.st_gid);
 
-		std::string sizestr = utils::strprintf("%12u", sb.st_size);
-		std::string line = utils::strprintf("%c%s %s %s %s %s", ftype, rwxbits, owner, group, sizestr, filename);
-		retval = utils::strprintf("{listitem[%c%s] text:%s}", ftype, stfl::quote(filename), stfl::quote(line));
+		std::string sizestr = strprintf::fmt("%12u", sb.st_size);
+		std::string line = strprintf::fmt("%c%s %s %s %s %s", ftype, rwxbits, owner, group, sizestr, filename);
+		retval = strprintf::fmt("{listitem[%c%s] text:%s}", ftype, stfl::quote(filename), stfl::quote(line));
 	}
 	return retval;
 }
@@ -261,7 +262,7 @@ std::string filebrowser_formaction::get_group(gid_t gid) {
 std::string filebrowser_formaction::title() {
 	char cwdtmp[MAXPATHLEN];
 	::getcwd(cwdtmp,sizeof(cwdtmp));
-	return utils::strprintf(_("Save File - %s"), cwdtmp);
+	return strprintf::fmt(_("Save File - %s"), cwdtmp);
 }
 
 }

@@ -3,6 +3,7 @@
 #include <view.h>
 #include <config.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <listformatter.h>
 
 #include <sstream>
@@ -89,14 +90,14 @@ void select_formaction::prepare() {
 		switch (type) {
 		case SELECTTAG:
 			for (auto tag : tags) {
-				std::string tagstr = utils::strprintf("%4u  %s (%u)", i+1, tag, v->get_ctrl()->get_feed_count_per_tag(tag));
+				std::string tagstr = strprintf::fmt("%4u  %s (%u)", i+1, tag, v->get_ctrl()->get_feed_count_per_tag(tag));
 				listfmt.add_line(tagstr, i);
 				i++;
 			}
 			break;
 		case SELECTFILTER:
 			for (auto filter : filters) {
-				std::string tagstr = utils::strprintf("%4u  %s", i+1, filter.first);
+				std::string tagstr = strprintf::fmt("%4u  %s", i+1, filter.first);
 				listfmt.add_line(tagstr, i);
 				i++;
 			}

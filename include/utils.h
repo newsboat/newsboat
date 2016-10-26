@@ -72,40 +72,6 @@ class utils {
 
 		static std::string absolute_url(const std::string& url, const std::string& link);
 
-		static std::string strprintf(const std::string& format) {
-			return format;
-		}
-
-		template<typename... Args>
-		static std::string strprintf(
-				const std::string& format, const std::string& argument, Args... args)
-		{
-			return strprintf(format, argument.c_str(), args...);
-		}
-
-		template<typename T, typename... Args>
-		static std::string strprintf(
-				const std::string& format, const T& argument, Args... args)
-		{
-			std::string local_format, remaining_format;
-			std::tie(local_format, remaining_format) =
-				utils::split_format(format);
-
-			char buffer[1024];
-			std::string result;
-			unsigned int len = 1 + snprintf(
-					buffer, sizeof(buffer), local_format.c_str(), argument);
-			if (len <= sizeof(buffer)) {
-				result = buffer;
-			} else {
-				std::unique_ptr<char> buf(new char[len]);
-				snprintf(buf.get(), len, local_format.c_str(), argument);
-				result = *buf;
-			}
-
-			return result + strprintf(remaining_format, args...);
-		}
-
 		static std::string get_useragent(configcontainer * cfgcont);
 
 		static size_t strwidth(const std::string& s);
@@ -163,9 +129,6 @@ class utils {
 		static unsigned int gentabs(const std::string& str);
 
 		static int mkdir_parents(const char* pathname, mode_t mode);
-
-		static std::pair<std::string, std::string>
-			split_format(const std::string& printf_format);
 
 	private:
 		static void append_escapes(std::string& str, char c);

@@ -1,6 +1,7 @@
 #include <formaction.h>
 #include <view.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <config.h>
 #include <logger.h>
 #include <cassert>
@@ -91,7 +92,7 @@ void formaction::process_op(operation op, bool automatic, std::vector<std::strin
 			std::string cmdline = "set ";
 			if (args) {
 				for (auto arg : *args) {
-					cmdline.append(utils::strprintf("%s ", stfl::quote(arg)));
+					cmdline.append(strprintf::fmt("%s ", stfl::quote(arg)));
 				}
 			}
 			LOG(LOG_DEBUG, "formaction::process_op: running commandline `%s'", cmdline.c_str());
@@ -205,7 +206,7 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 						cfg->reset_to_default(var);
 						set_redraw(true);
 					}
-					v->set_status(utils::strprintf("  %s=%s", var, utils::quote_if_necessary(cfg->get_configvalue(var))));
+					v->set_status(strprintf::fmt("  %s=%s", var, utils::quote_if_necessary(cfg->get_configvalue(var))));
 				}
 			} else if (tokens.size()==2) {
 				std::string result = configparser::evaluate_backticks(tokens[1]);
@@ -237,12 +238,12 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 				v->show_error(_("usage: dumpconfig <file>"));
 			} else {
 				v->get_ctrl()->dump_config(utils::resolve_tilde(tokens[0]));
-				v->show_error(utils::strprintf(_("Saved configuration to %s"), tokens[0]));
+				v->show_error(strprintf::fmt(_("Saved configuration to %s"), tokens[0]));
 			}
 		} else if (cmd == "dumpform") {
 			v->dump_current_form();
 		} else {
-			v->show_error(utils::strprintf(_("Not a command: %s"), cmdline));
+			v->show_error(strprintf::fmt(_("Not a command: %s"), cmdline));
 		}
 	}
 }

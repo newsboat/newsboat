@@ -4,6 +4,7 @@
 #include <cerrno>
 #include <cstring>
 #include <utils.h>
+#include <strprintf.h>
 
 namespace newsbeuter {
 
@@ -20,10 +21,10 @@ const char * matcherexception::what() const throw() {
 	static std::string errmsg;
 	switch (type) {
 	case ATTRIB_UNAVAIL:
-		errmsg = utils::strprintf(_("attribute `%s' is not available."), addinfo);
+		errmsg = strprintf::fmt(_("attribute `%s' is not available."), addinfo);
 		break;
 	case INVALID_REGEX:
-		errmsg = utils::strprintf(_("regular expression '%s' is invalid: %s"), addinfo, addinfo2);
+		errmsg = strprintf::fmt(_("regular expression '%s' is invalid: %s"), addinfo, addinfo2);
 		break;
 	}
 	return errmsg.c_str();

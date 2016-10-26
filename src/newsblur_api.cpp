@@ -1,6 +1,7 @@
 #include <rsspp.h>
 #include <json.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <remote_api.h>
 #include <newsblur_api.h>
 #include <algorithm>
@@ -11,7 +12,7 @@
 namespace newsbeuter {
 
 newsblur_api::newsblur_api(configcontainer * c) : remote_api(c) {
-	auth_info = utils::strprintf("username=%s&password=%s", cfg->get_configvalue("newsblur-login"), cfg->get_configvalue("newsblur-password"));
+	auth_info = strprintf::fmt("username=%s&password=%s", cfg->get_configvalue("newsblur-login"), cfg->get_configvalue("newsblur-password"));
 	api_location = cfg->get_configvalue("newsblur-url");
 	min_pages = (cfg->get_configvalue_as_int("newsblur-min-items") + (NEWSBLUR_ITEMS_PER_PAGE + 1)) / NEWSBLUR_ITEMS_PER_PAGE;
 
@@ -124,7 +125,7 @@ bool request_successfull(json_object * payload) {
 }
 
 bool newsblur_api::mark_all_read(const std::string& feed_url) {
-	std::string post_data = utils::strprintf("feed_id=%s", feed_url);
+	std::string post_data = strprintf::fmt("feed_id=%s", feed_url);
 	json_object * query_result = query_api("/reader/mark_feed_as_read", &post_data);
 	return request_successfull(query_result);
 }

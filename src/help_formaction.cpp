@@ -5,6 +5,7 @@
 #include <view.h>
 #include <listformatter.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <keymap.h>
 #include <cstring>
 
@@ -60,7 +61,7 @@ void help_formaction::prepare() {
 		std::vector<keymap_desc> descs;
 		v->get_keys()->get_keymap_descriptions(descs, v->get_keys()->get_flag_from_context(context));
 
-		std::string highlighted_searchphrase = utils::strprintf("<hl>%s</>", searchphrase);
+		std::string highlighted_searchphrase = strprintf::fmt("<hl>%s</>", searchphrase);
 		std::vector<std::string> colors = utils::tokenize(v->get_cfg()->get_configvalue("search-highlight-colors"), " ");
 		f->set("highlight", make_colorstring(colors));
 		listformatter listfmt;
@@ -108,10 +109,10 @@ void help_formaction::prepare() {
 					switch (i) {
 					case 0:
 					case 1:
-						line = utils::strprintf("%s%s%s%s%s", desc.key, tabs_1, desc.cmd, tabs_2, desc.desc);
+						line = strprintf::fmt("%s%s%s%s%s", desc.key, tabs_1, desc.cmd, tabs_2, desc.desc);
 						break;
 					case 2:
-						line = utils::strprintf("%s%s%s%s", desc.cmd, tabs_1, tabs_2, desc.desc);
+						line = strprintf::fmt("%s%s%s%s", desc.cmd, tabs_1, tabs_2, desc.desc);
 						break;
 					}
 					LOG(LOG_DEBUG, "help_formaction::prepare: step 1 - line = %s", line.c_str());

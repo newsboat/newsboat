@@ -1,5 +1,6 @@
 #include <textformatter.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <htmlrenderer.h>
 #include <stflpp.h>
 #include <assert.h>
@@ -156,7 +157,7 @@ std::string textformatter::format_text_to_list(
 		if (line != "\n") {
 			utils::trim_end(line);
 			format_cache.append(
-					utils::strprintf(
+					strprintf::fmt(
 						"{listitem text:%s}",
 						stfl::quote(line)));
 		}

@@ -6,6 +6,7 @@
 #include <reloadthread.h>
 #include <exceptions.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <formatstring.h>
 
 #include <listformatter.h>
@@ -192,7 +193,7 @@ REDO:
 					f->set("feedpos", utils::to_string<unsigned int>(pos + 1));
 				}
 			} catch (const dbexception& e) {
-				v->show_error(utils::strprintf(_("Error: couldn't mark feed read: %s"), e.what()));
+				v->show_error(strprintf::fmt(_("Error: couldn't mark feed read: %s"), e.what()));
 			}
 		} else {
 			v->show_error(_("No feed selected!")); // should not happen
@@ -299,7 +300,7 @@ REDO:
 				filterhistory.add_line(newfilter);
 				if (newfilter.length() > 0) {
 					if (!m.parse(newfilter)) {
-						v->show_error(utils::strprintf(_("Error: couldn't parse filter command `%s': %s"), newfilter, m.get_parse_error()));
+						v->show_error(strprintf::fmt(_("Error: couldn't parse filter command `%s': %s"), newfilter, m.get_parse_error()));
 						m.parse(FILTER_UNREAD_FEEDS);
 					} else {
 						save_filterpos();
@@ -662,11 +663,11 @@ void feedlist_formaction::set_regexmanager(regexmanager * r) {
 	unsigned int i=0;
 	std::string attrstr;
 	for (auto attribute : attrs) {
-		attrstr.append(utils::strprintf("@style_%u_normal:%s ", i, attribute));
-		attrstr.append(utils::strprintf("@style_%u_focus:%s ", i, attribute));
+		attrstr.append(strprintf::fmt("@style_%u_normal:%s ", i, attribute));
+		attrstr.append(strprintf::fmt("@style_%u_focus:%s ", i, attribute));
 		i++;
 	}
-	std::string textview = utils::strprintf("{!list[feeds] .expand:vh style_normal[listnormal]: style_focus[listfocus]:fg=yellow,bg=blue,attr=bold pos_name[feedposname]: pos[feedpos]:0 %s richtext:1}", attrstr);
+	std::string textview = strprintf::fmt("{!list[feeds] .expand:vh style_normal[listnormal]: style_focus[listfocus]:fg=yellow,bg=blue,attr=bold pos_name[feedposname]: pos[feedpos]:0 %s richtext:1}", attrstr);
 	f->modify("feeds", "replace", textview);
 }
 
@@ -698,7 +699,7 @@ void feedlist_formaction::op_start_search() {
 			std::string utf8searchphrase = utils::convert_text(searchphrase, "utf-8", nl_langinfo(CODESET));
 			items = v->get_ctrl()->search_for_items(utf8searchphrase, nullptr);
 		} catch (const dbexception& e) {
-			v->show_error(utils::strprintf(_("Error while searching for `%s': %s"), searchphrase, e.what()));
+			v->show_error(strprintf::fmt(_("Error while searching for `%s': %s"), searchphrase, e.what()));
 			return;
 		}
 		if (!items.empty()) {
@@ -758,8 +759,8 @@ std::string feedlist_formaction::format_line(const std::string& feedlist_format,
 	unsigned int unread_count = feed->unread_item_count();
 	std::string tmp_feedlist_format = feedlist_format;
 
-	fmt.register_fmt('i', utils::strprintf("%u", pos + 1));
-	fmt.register_fmt('u', utils::strprintf("(%u/%u)",unread_count,static_cast<unsigned int>(feed->total_item_count())));
+	fmt.register_fmt('i', strprintf::fmt("%u", pos + 1));
+	fmt.register_fmt('u', strprintf::fmt("(%u/%u)",unread_count,static_cast<unsigned int>(feed->total_item_count())));
 	fmt.register_fmt('U', utils::to_string(unread_count));
 	fmt.register_fmt('c', utils::to_string(feed->total_item_count()));
 	fmt.register_fmt('n', unread_count > 0 ? "N" : " ");
@@ -771,7 +772,7 @@ std::string feedlist_formaction::format_line(const std::string& feedlist_format,
 	fmt.register_fmt('d', feed->description());
 
 	if (unread_count > 0) {
-		tmp_feedlist_format = utils::strprintf(
+		tmp_feedlist_format = strprintf::fmt(
 		                          "<unread>%s</>",
 		                          feedlist_format);
 	}
@@ -780,7 +781,7 @@ std::string feedlist_formaction::format_line(const std::string& feedlist_format,
 }
 
 std::string feedlist_formaction::title() {
-	return utils::strprintf(_("Feed List - %u unread, %u total"), unread_feeds, total_feeds);
+	return strprintf::fmt(_("Feed List - %u unread, %u total"), unread_feeds, total_feeds);
 }
 
 }

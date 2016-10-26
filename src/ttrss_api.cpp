@@ -9,12 +9,13 @@
 #include <iostream>
 
 #include <markreadthread.h>
+#include <strprintf.h>
 
 namespace newsbeuter {
 
 ttrss_api::ttrss_api(configcontainer * c) : remote_api(c) {
 	single = (cfg->get_configvalue("ttrss-mode") == "single");
-	auth_info = utils::strprintf("%s:%s", cfg->get_configvalue("ttrss-login"), cfg->get_configvalue("ttrss-password"));
+	auth_info = strprintf::fmt("%s:%s", cfg->get_configvalue("ttrss-login"), cfg->get_configvalue("ttrss-password"));
 	auth_info_ptr = auth_info.c_str();
 	sid = "";
 }
@@ -79,7 +80,7 @@ std::string ttrss_api::retrieve_sid() {
 
 	args["user"] = single ? "admin" : user.c_str();
 	args["password"] = pass.c_str();
-	auth_info = utils::strprintf("%s:%s", user, pass);
+	auth_info = strprintf::fmt("%s:%s", user, pass);
 	auth_info_ptr = auth_info.c_str();
 	json_object * content = run_op("login", args);
 
@@ -101,7 +102,7 @@ json_object* ttrss_api::run_op(const std::string& op,
                                const std::map<std::string, std::string >& args,
                                bool try_login)
 {
-	std::string url = utils::strprintf("%s/api/", cfg->get_configvalue("ttrss-url"));
+	std::string url = strprintf::fmt("%s/api/", cfg->get_configvalue("ttrss-url"));
 
 	std::string req_data = "{\"op\":\"" + op + "\",\"sid\":\"" + sid + "\"";
 
@@ -307,7 +308,7 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 
 		json_object_object_get_ex(item_obj, "id", &node);
 		int id = json_object_get_int(node);
-		item.guid = utils::strprintf("%d", id);
+		item.guid = strprintf::fmt("%d", id);
 
 		json_object_object_get_ex(item_obj, "unread", &node);
 		json_bool unread = json_object_get_boolean(node);
@@ -393,7 +394,7 @@ void ttrss_api::fetch_feeds_per_category(
 			tags.push_back(cat_name);
 		}
 
-		auto url = utils::strprintf("%s#%d", feed_url, feed_id);
+		auto url = strprintf::fmt("%s#%d", feed_url, feed_id);
 		feeds.push_back(tagged_feedurl(url, tags));
 
 		// TODO: cache feed_id -> feed_url (or feed_url -> feed_id ?)

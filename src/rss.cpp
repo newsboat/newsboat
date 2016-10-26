@@ -3,6 +3,7 @@
 #include <cache.h>
 #include <tagsouppullparser.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <logger.h>
 #include <exceptions.h>
 #include <sstream>
@@ -69,11 +70,11 @@ std::string rss_item::length() const {
 	if (!l)
 		return "";
 	if (l < 1000)
-		return utils::strprintf("%u ", l);
+		return strprintf::fmt("%u ", l);
 	if (l < 1024*1000)
-		return utils::strprintf("%.1fK", l/1024.0);
+		return strprintf::fmt("%.1fK", l/1024.0);
 
-	return utils::strprintf("%.1fM", l/1024.0/1024.0);
+	return strprintf::fmt("%.1fM", l/1024.0/1024.0);
 }
 
 void rss_item::set_pubDate(time_t t) {
@@ -364,7 +365,7 @@ void rss_ignores::handle_action(const std::string& action, const std::vector<std
 		std::string ignore_expr = params[1];
 		matcher m;
 		if (!m.parse(ignore_expr))
-			throw confighandlerexception(utils::strprintf(_("couldn't parse filter expression `%s': %s"), ignore_expr, m.get_parse_error()));
+			throw confighandlerexception(strprintf::fmt(_("couldn't parse filter expression `%s': %s"), ignore_expr, m.get_parse_error()));
 		ignores.push_back(feedurl_expr_pair(ignore_rssurl, new matcher(ignore_expr)));
 	} else if (action == "always-download") {
 		for (auto param : params) {
@@ -390,10 +391,10 @@ void rss_ignores::dump_config(std::vector<std::string>& config_output) {
 		config_output.push_back(configline);
 	}
 	for (auto ign_lm : ignores_lastmodified) {
-		config_output.push_back(utils::strprintf("always-download %s", utils::quote(ign_lm)));
+		config_output.push_back(strprintf::fmt("always-download %s", utils::quote(ign_lm)));
 	}
 	for (auto rf : resetflag) {
-		config_output.push_back(utils::strprintf("reset-unread-on-update %s", utils::quote(rf)));
+		config_output.push_back(strprintf::fmt("reset-unread-on-update %s", utils::quote(rf)));
 	}
 }
 
@@ -501,7 +502,7 @@ void rss_feed::set_rssurl(const std::string& u) {
 		// Have to check if the result is a valid query, just in case
 		matcher m;
 		if (!m.parse(query)) {
-			throw utils::strprintf(
+			throw strprintf::fmt(
 			    _("`%s' is not a valid filter expression"), query);
 		}
 

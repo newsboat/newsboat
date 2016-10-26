@@ -4,6 +4,7 @@
 #include <logger.h>
 #include <exceptions.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <formatstring.h>
 #include <textformatter.h>
 #include <cstring>
@@ -67,37 +68,37 @@ void itemview_formaction::prepare() {
 			}
 		}
 		if (feedtitle.length() > 0) {
-			feedheader = utils::strprintf("%s%s", _("Feed: "), feedtitle);
+			feedheader = strprintf::fmt("%s%s", _("Feed: "), feedtitle);
 			textfmt.add_line(newsbeuter::wrappable, feedheader);
 		}
 
 		if (item->title().length() > 0) {
-			std::string title = utils::strprintf("%s%s", _("Title: "), item->title());
+			std::string title = strprintf::fmt("%s%s", _("Title: "), item->title());
 			textfmt.add_line(newsbeuter::wrappable, title);
 		}
 
 		if (item->author().length() > 0) {
-			std::string author = utils::strprintf("%s%s", _("Author: "), item->author());
+			std::string author = strprintf::fmt("%s%s", _("Author: "), item->author());
 			textfmt.add_line(newsbeuter::wrappable, author);
 		}
 
 		if (item->link().length() > 0) {
-			std::string link = utils::strprintf("%s%s", _("Link: "), utils::censor_url(item->link()));
+			std::string link = strprintf::fmt("%s%s", _("Link: "), utils::censor_url(item->link()));
 			textfmt.add_line(newsbeuter::softwrappable, link);
 		}
 
-		std::string date = utils::strprintf("%s%s", _("Date: "), item->pubDate());
+		std::string date = strprintf::fmt("%s%s", _("Date: "), item->pubDate());
 		textfmt.add_line(newsbeuter::wrappable, date);
 
 		if (item->flags().length() > 0) {
-			std::string flags = utils::strprintf("%s%s", _("Flags: "), item->flags());
+			std::string flags = strprintf::fmt("%s%s", _("Flags: "), item->flags());
 			textfmt.add_line(newsbeuter::wrappable, flags);
 		}
 
 		if (item->enclosure_url().length() > 0) {
-			std::string enc_url = utils::strprintf("%s%s", _("Podcast Download URL: "), utils::censor_url(item->enclosure_url()));
+			std::string enc_url = strprintf::fmt("%s%s", _("Podcast Download URL: "), utils::censor_url(item->enclosure_url()));
 			if (item->enclosure_type() != "") {
-				enc_url.append(utils::strprintf(" (%s%s)",  _("type: "), item->enclosure_type()));
+				enc_url.append(strprintf::fmt(" (%s%s)",  _("type: "), item->enclosure_type()));
 			}
 			textfmt.add_line(newsbeuter::softwrappable, enc_url);
 		}
@@ -165,7 +166,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 			v->get_ctrl()->mark_article_read(item->guid(), true);
 		}
 	} catch (const dbexception& e) {
-		v->show_error(utils::strprintf(_("Error while marking article as read: %s"), e.what()));
+		v->show_error(strprintf::fmt(_("Error while marking article as read: %s"), e.what()));
 	}
 
 	switch (op) {
@@ -177,9 +178,9 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 	case OP_ENQUEUE: {
 		if (item->enclosure_url().length() > 0 && utils::is_http_url(item->enclosure_url())) {
 			v->get_ctrl()->enqueue_url(item->enclosure_url(), feed);
-			v->set_status(utils::strprintf(_("Added %s to download queue."), item->enclosure_url()));
+			v->set_status(strprintf::fmt(_("Added %s to download queue."), item->enclosure_url()));
 		} else {
-			v->set_status(utils::strprintf(_("Invalid URL: '%s'"), item->enclosure_url()));
+			v->set_status(strprintf::fmt(_("Invalid URL: '%s'"), item->enclosure_url()));
 		}
 	}
 	break;
@@ -197,9 +198,9 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 		} else {
 			try {
 				v->get_ctrl()->write_item(item, filename);
-				v->show_error(utils::strprintf(_("Saved article to %s."), filename));
+				v->show_error(strprintf::fmt(_("Saved article to %s."), filename));
 			} catch (...) {
-				v->show_error(utils::strprintf(_("Error: couldn't write article to file %s"), filename));
+				v->show_error(strprintf::fmt(_("Error: couldn't write article to file %s"), filename));
 			}
 		}
 	}
@@ -336,7 +337,7 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 			item->set_unread(true);
 			v->get_ctrl()->mark_article_read(item->guid(), false);
 		} catch (const dbexception& e) {
-			v->show_error(utils::strprintf(_("Error while marking article as unread: %s"), e.what()));
+			v->show_error(strprintf::fmt(_("Error while marking article as unread: %s"), e.what()));
 		}
 		v->set_status("");
 		quit = true;
@@ -461,9 +462,9 @@ void itemview_formaction::handle_cmdline(const std::string& cmd) {
 			} else {
 				try {
 					v->get_ctrl()->write_item(item, filename);
-					v->show_error(utils::strprintf(_("Saved article to %s"), filename));
+					v->show_error(strprintf::fmt(_("Saved article to %s"), filename));
 				} catch (...) {
-					v->show_error(utils::strprintf(_("Error: couldn't save article to %s"), filename));
+					v->show_error(strprintf::fmt(_("Error: couldn't save article to %s"), filename));
 				}
 			}
 
@@ -556,11 +557,11 @@ void itemview_formaction::set_regexmanager(regexmanager * r) {
 	unsigned int i=0;
 	std::string attrstr;
 	for (auto attribute : attrs) {
-		attrstr.append(utils::strprintf("@style_%u_normal:%s ", i, attribute));
+		attrstr.append(strprintf::fmt("@style_%u_normal:%s ", i, attribute));
 		i++;
 	}
 	attrstr.append("@style_b_normal[color_bold]:attr=bold @style_u_normal[color_underline]:attr=underline ");
-	std::string textview = utils::strprintf("{textview[article] style_normal[article]: style_end[styleend]:fg=blue,attr=bold %s .expand:vh offset[articleoffset]:0 richtext:1}", attrstr);
+	std::string textview = strprintf::fmt("{textview[article] style_normal[article]: style_end[styleend]:fg=blue,attr=bold %s .expand:vh offset[articleoffset]:0 richtext:1}", attrstr);
 	f->modify("article", "replace", textview);
 }
 
@@ -581,14 +582,14 @@ void itemview_formaction::update_percent() {
 		} else if (offset == (num_lines - 1)) {
 			f->set("percent", _("Bottom"));
 		} else {
-			f->set("percent", utils::strprintf("%3u %% ", percent));
+			f->set("percent", strprintf::fmt("%3u %% ", percent));
 		}
 	}
 }
 
 std::string itemview_formaction::title() {
 	std::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
-	return utils::strprintf(_("Article - %s"), item->title());
+	return strprintf::fmt(_("Article - %s"), item->title());
 }
 
 void itemview_formaction::set_highlightphrase(const std::string& text) {
