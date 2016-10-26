@@ -17,7 +17,7 @@ class logger {
 		void set_logfile(const char * logfile);
 		void set_errorlogfile(const char * logfile);
 		void set_loglevel(loglevel level);
-		void log(loglevel level, const char * format, ...);
+		void log(loglevel level, const std::string& format, ...);
 
 	private:
 		logger();

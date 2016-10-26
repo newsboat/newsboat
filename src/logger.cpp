@@ -46,7 +46,7 @@ void logger::set_loglevel(loglevel level) {
 
 const char * loglevel_str[] = { "NONE", "USERERROR", "CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG" };
 
-void logger::log(loglevel level, const char * format, ...) {
+void logger::log(loglevel level, const std::string& format, ...) {
 	/*
 	 * This function checks the loglevel, creates the error message, and then
 	 * writes it to the debug logfile and to the error logfile (if applicable).
@@ -63,12 +63,12 @@ void logger::log(loglevel level, const char * format, ...) {
 
 		va_list ap;
 		va_start(ap, format);
-		unsigned int len = vsnprintf(nullptr,0,format,ap);
+		unsigned int len = vsnprintf(nullptr,0,format.c_str(),ap);
 		va_end(ap);
 
 		va_start(ap, format);
 		logmsgbuf = new char[len + 1];
-		vsnprintf(logmsgbuf, len + 1, format, ap);
+		vsnprintf(logmsgbuf, len + 1, format.c_str(), ap);
 		va_end(ap);
 
 		len = snprintf(nullptr, 0, "[%s] %s: %s",date, loglevel_str[level], logmsgbuf);
