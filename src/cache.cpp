@@ -749,17 +749,25 @@ void cache::update_rssitem_unread_and_enqueued(
 }
 
 /* helper function to wrap std::string around the sqlite3_*mprintf function */
-std::string cache::prepare_query(const char * format, ...) {
+std::string cache::prepare_query(const std::string& format) {
+	return format;
+}
+
+template<typename T, typename... Args>
+std::string cache::prepare_query(
+		const std::string& format, const T& argument, Args... args)
+{
+	std::string local_format, remaining_format;
+	std::tie(local_format, remaining_format) = utils::split_format(format);
+
+	char* piece = sqlite3_mprintf(local_format.c_str(), argument);
 	std::string result;
-	va_list ap;
-	va_start(ap, format);
-	char * query = sqlite3_vmprintf(format, ap);
-	if (query) {
-		result = query;
-		sqlite3_free(query);
+	if (piece) {
+		result = piece;
+		sqlite3_free(piece);
 	}
-	va_end(ap);
-	return result;
+
+	return result + prepare_query(remaining_format, args...);
 }
 
 void cache::update_rssitem_flags(rss_item* item) {

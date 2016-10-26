@@ -131,6 +131,9 @@ class utils {
 
 		static int mkdir_parents(const char* pathname, mode_t mode);
 
+		static std::pair<std::string, std::string>
+			split_format(const std::string& printf_format);
+
 	private:
 		static void append_escapes(std::string& str, char c);
 

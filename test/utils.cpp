@@ -375,3 +375,46 @@ TEST_CASE("utils::trim_end()") {
 	utils::trim_end(str);
 	REQUIRE(str == "quux");
 }
+
+TEST_CASE("utils::split_format") {
+	std::string first, rest;
+
+	SECTION("empty format string") {
+		std::tie(first, rest) = utils::split_format("");
+		REQUIRE(first == "");
+		REQUIRE(rest  == "");
+	}
+
+	SECTION("string without formats") {
+		const std::string input = "hello world!";
+		std::tie(first, rest) = utils::split_format(input);
+		REQUIRE(first == input);
+		REQUIRE(rest  == "");
+	}
+
+	SECTION("string with a couple formats") {
+		const std::string input = "hello %i world %s haha";
+		std::tie(first, rest) = utils::split_format(input);
+		REQUIRE(first == "hello %i world ");
+		REQUIRE(rest  == "%s haha");
+
+		std::tie(first, rest) = utils::split_format(rest);
+		REQUIRE(first == "%s haha");
+		REQUIRE(rest  == "");
+	}
+
+	SECTION("string with %% (escaped percent sign)") {
+		const std::string input = "a 100%% rel%iable e%xamp%le";
+		std::tie(first, rest) = utils::split_format(input);
+		REQUIRE(first == "a 100%% rel%iable e");
+		REQUIRE(rest  == "%xamp%le");
+
+		std::tie(first, rest) = utils::split_format(rest);
+		REQUIRE(first == "%xamp");
+		REQUIRE(rest  == "%le");
+
+		std::tie(first, rest) = utils::split_format(rest);
+		REQUIRE(first == "%le");
+		REQUIRE(rest  == "");
+	}
+}
