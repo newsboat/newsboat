@@ -119,10 +119,9 @@ void rss_parser::retrieve_uri(const std::string& uri) {
 	 *	- query: URLs are ignored
 	 */
 	if (is_ttrss) {
-		const char * uri = my_uri.c_str();
-		const char * pound = strrchr(uri, '#');
-		if (pound != nullptr) {
-			fetch_ttrss(pound+1);
+		std::string::size_type pound = uri.find_first_of('#');
+		if (pound != std::string::npos) {
+			fetch_ttrss(my_uri.substr(pound+1).c_str());
 		}
 	} else if (is_newsblur) {
 		fetch_newsblur(uri);
