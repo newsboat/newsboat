@@ -1000,12 +1000,12 @@ unsigned int utils::gentabs(const std::string& str) {
 
 /* Like mkdir(), but creates ancestors (parent directories) if they don't
  * exist. */
-int utils::mkdir_parents(const char* p, mode_t mode) {
+int utils::mkdir_parents(const std::string& p, mode_t mode) {
 	int result;
 
 	/* Have to copy the path because we're going to modify it */
-	char* pathname = (char*)malloc(strlen(p) + 1);
-	strcpy(pathname, p);
+	char* pathname = (char*)malloc(p.length() + 1);
+	strcpy(pathname, p.c_str());
 	/* This pointer will run through the whole string looking for '/'.
 	 * We move it by one if path starts with slash because if we don't, the
 	 * first call to access() will fail (because of empty path) */
@@ -1025,7 +1025,7 @@ int utils::mkdir_parents(const char* p, mode_t mode) {
 		curr++;
 	}
 
-	if (result == 0) mkdir(p, mode);
+	if (result == 0) mkdir(p.c_str(), mode);
 
 	free(pathname);
 	return result;

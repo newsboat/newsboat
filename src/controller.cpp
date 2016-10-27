@@ -150,7 +150,7 @@ bool controller::setup_dirs_xdg(const char *env_home, bool silent) {
 	config_dir = xdg_config_dir;
 
 	// create data directory if it doesn't exist
-	utils::mkdir_parents(xdg_data_dir.c_str(), 0700);
+	utils::mkdir_parents(xdg_data_dir, 0700);
 
 	/* in config */
 	url_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + url_file;
