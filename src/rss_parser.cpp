@@ -212,7 +212,12 @@ void rss_parser::parse_file(const std::string& file) {
 void rss_parser::download_filterplugin(const std::string& filter, const std::string& uri) {
 	std::string buf = utils::retrieve_url(uri, cfgcont);
 
-	char * argv[4] = { const_cast<char *>("/bin/sh"), const_cast<char *>("-c"), const_cast<char *>(filter.c_str()), nullptr };
+	char * argv[4] = {
+		const_cast<char *>("/bin/sh"),
+		const_cast<char *>("-c"),
+		const_cast<char *>(filter.c_str()),
+		nullptr
+	};
 	std::string result = utils::run_program(argv, buf);
 	LOG(LOG_DEBUG, "rss_parser::parse: output of `%s' is: %s", filter, result);
 	is_valid = false;
