@@ -8,7 +8,7 @@ std::mutex logger::instanceMutex;
 
 logger::logger() : curlevel(LOG_NONE) { }
 
-void logger::set_logfile(const char * logfile) {
+void logger::set_logfile(const std::string& logfile) {
 	/*
 	 * This sets the filename of the debug logfile
 	 */
