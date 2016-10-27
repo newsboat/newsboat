@@ -426,11 +426,12 @@ bool ttrss_api::update_article(const std::string& guid, int field, int mode) {
 }
 
 std::string ttrss_api::url_to_id(const std::string& url) {
-	const char * uri = url.c_str();
-	const char * pound = strrchr(uri, '#');
-	if (!pound)
+	const std::string::size_type pound = url.find_first_of('#');
+	if (pound == std::string::npos) {
 		return "";
-	return std::string(pound+1);
+	} else {
+		return url.substr(pound+1);
+	}
 }
 
 
