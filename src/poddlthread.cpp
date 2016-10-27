@@ -59,7 +59,7 @@ void poddlthread::run() {
 
 	if (stat(dl->filename().c_str(), &sb) == -1) {
 		LOG(LOG_INFO, "poddlthread::run: stat failed: starting normal download");
-		mkdir_p(dl->filename());
+		utils::mkdir_parents(dl->filename());
 		f->open(dl->filename().c_str(), std::fstream::out);
 		dl->set_offset(0);
 		resumed_download = false;
@@ -143,18 +143,6 @@ double poddlthread::compute_kbps() {
 	result = (bytecount / (t2 - t1))/1024;
 
 	return result;
-}
-
-void poddlthread::mkdir_p(const std::string& file) {
-	char path[2048];
-	snprintf(path, sizeof(path), "%s", file.c_str());
-	for (char * x = path; *x != '\0'; x++) {
-		if (*x == '/') {
-			*x = '\0';
-			mkdir(path, 0755);
-			*x = '/';
-		}
-	}
 }
 
 }

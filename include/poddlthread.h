@@ -24,7 +24,6 @@ class poddlthread {
 		double compute_kbps();
 	private:
 		void run();
-		void mkdir_p(const std::string& file);
 		download * dl;
 		std::shared_ptr<std::ofstream> f;
 		timeval tv1;

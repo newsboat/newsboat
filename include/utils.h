@@ -131,7 +131,8 @@ class utils {
 
 		static unsigned int gentabs(const std::string& str);
 
-		static int mkdir_parents(const std::string& pathname, mode_t mode);
+		static int mkdir_parents(
+				const std::string& pathname, mode_t mode = 0755);
 
 	private:
 		static void append_escapes(std::string& str, char c);
