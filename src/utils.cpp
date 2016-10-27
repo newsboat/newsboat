@@ -257,11 +257,6 @@ bool utils::try_fs_lock(const std::string& lock_file, pid_t & pid) {
 	return false;
 }
 
-std::string utils::translit(const char* tocode, const std::string& fromcode)
-{
-	return translit(std::string(tocode), fromcode);
-}
-
 std::string utils::translit(const std::string& tocode, const std::string& fromcode)
 {
 	std::string tlit = "//TRANSLIT";
