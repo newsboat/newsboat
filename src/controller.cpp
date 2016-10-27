@@ -1608,7 +1608,7 @@ void controller::update_config() {
 	}
 
 	if (cfg.get_configvalue("error-log").length() > 0) {
-		logger::getInstance().set_errorlogfile(cfg.get_configvalue("error-log").c_str());
+		logger::getInstance().set_errorlogfile(cfg.get_configvalue("error-log"));
 	}
 
 }

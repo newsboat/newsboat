@@ -17,7 +17,7 @@ class logger {
 		static logger &getInstance();
 
 		void set_logfile(const std::string& logfile);
-		void set_errorlogfile(const char * logfile);
+		void set_errorlogfile(const std::string& logfile);
 		void set_loglevel(loglevel level);
 
 		template<typename... Args>
