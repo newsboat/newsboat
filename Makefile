@@ -11,7 +11,8 @@ CXX?=c++
 # compiler and linker flags
 DEFINES=-DLOCALEDIR=\"$(localedir)\"
 WARNFLAGS=-Wall -Wextra -Wunreachable-code
-CXXFLAGS+=-std=c++11 -ggdb -Iinclude -Istfl -Ifilter -I. -Irss $(WARNFLAGS) $(DEFINES)
+BARE_CXXFLAGS=-std=c++11 -Iinclude -Istfl -Ifilter -I. -Irss
+CXXFLAGS+=$(BARE_CXXFLAGS) $(WARNFLAGS) $(DEFINES)
 LDFLAGS+=-L. -fprofile-arcs -ftest-coverage
 
 PACKAGE=newsbeuter
@@ -252,5 +253,17 @@ config.mk:
 
 xlicense.h: LICENSE
 	$(TEXTCONV) $< > $@
+
+ALL_SRCS:=$(shell ls filter/*.cpp rss/*.cpp src/*.cpp test/*.cpp)
+ALL_HDRS:=$(shell ls filter/*.h rss/*.h test/*.h test/*.hpp) $(STFLHDRS) xlicense.h
+depslist: $(ALL_SRCS) $(ALL_HDRS)
+	> mk/mk.deps
+	for dir in filter rss src test ; do \
+		for file in $$dir/*.cpp ; do \
+			target=`echo $$file | sed 's/cpp$$/o/'`; \
+			$(CXX) $(BARE_CXXFLAGS) -MM -MG -MQ $$target $$file >> mk/mk.deps ; \
+			echo $$file ; \
+		done; \
+	done
 
 include mk/mk.deps
