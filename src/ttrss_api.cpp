@@ -109,7 +109,7 @@ json_object* ttrss_api::run_op(const std::string& op,
 	}
 	req_data += "}";
 
-	std::string result = utils::retrieve_url(url, cfg, auth_info.c_str(), &req_data);
+	std::string result = utils::retrieve_url(url, cfg, auth_info, &req_data);
 
 	LOG(LOG_DEBUG, "ttrss_api::run_op(%s,...): post=%s reply = %s", op, req_data, result);
 

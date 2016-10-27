@@ -108,7 +108,7 @@ void opml_urlreader::reload() {
 
 	for (auto url : urls) {
 		LOG(LOG_DEBUG, "opml_urlreader::reload: downloading `%s'", url);
-		std::string urlcontent = utils::retrieve_url(url, cfg, nullptr);
+		std::string urlcontent = utils::retrieve_url(url, cfg);
 
 		xmlDoc * doc = xmlParseMemory(urlcontent.c_str(), urlcontent.length());
 

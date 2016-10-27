@@ -390,7 +390,12 @@ static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp
 	return size * nmemb;
 }
 
-std::string utils::retrieve_url(const std::string& url, configcontainer * cfgcont, const char * authinfo, const std::string* postdata) {
+std::string utils::retrieve_url(
+		const std::string& url,
+		configcontainer * cfgcont,
+		const std::string& authinfo,
+		const std::string* postdata)
+{
 	std::string buf;
 
 	CURL * easyhandle = curl_easy_init();
@@ -404,9 +409,10 @@ std::string utils::retrieve_url(const std::string& url, configcontainer * cfgcon
 		curl_easy_setopt(easyhandle, CURLOPT_POSTFIELDS, postdata->c_str());
 	}
 
-	if (authinfo) {
-		curl_easy_setopt(easyhandle, CURLOPT_HTTPAUTH, get_auth_method(cfgcont->get_configvalue("http-auth-method")));
-		curl_easy_setopt(easyhandle, CURLOPT_USERPWD, authinfo);
+	if (! authinfo.empty()) {
+		curl_easy_setopt(easyhandle, CURLOPT_HTTPAUTH,
+				get_auth_method(cfgcont->get_configvalue("http-auth-method")));
+		curl_easy_setopt(easyhandle, CURLOPT_USERPWD, authinfo.c_str());
 	}
 
 	curl_easy_perform(easyhandle);

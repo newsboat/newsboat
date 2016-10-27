@@ -270,7 +270,7 @@ rsspp::feed newsblur_api::fetch_feed(const std::string& id) {
 json_object * newsblur_api::query_api(const std::string& endpoint, const std::string* postdata) {
 
 	std::string url = api_location + endpoint;
-	std::string data = utils::retrieve_url(url, cfg, nullptr, postdata);
+	std::string data = utils::retrieve_url(url, cfg, "", postdata);
 
 	json_object * result =  json_tokener_parse(data.c_str());
 	if (!result)
