@@ -16,8 +16,8 @@ download::download(pb_controller * c) : dlstatus(DL_QUEUED), cursize(0.0), total
 download::~download() {
 }
 
-const char * download::filename() {
-	return fn.c_str();
+const std::string download::filename() {
+	return fn;
 }
 
 const char * download::url() {

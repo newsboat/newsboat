@@ -57,10 +57,10 @@ void poddlthread::run() {
 
 	struct stat sb;
 
-	if (stat(dl->filename(), &sb) == -1) {
+	if (stat(dl->filename().c_str(), &sb) == -1) {
 		LOG(LOG_INFO, "poddlthread::run: stat failed: starting normal download");
-		mkdir_p(dl->filename());
-		f->open(dl->filename(), std::fstream::out);
+		mkdir_p(dl->filename().c_str());
+		f->open(dl->filename().c_str(), std::fstream::out);
 		dl->set_offset(0);
 		resumed_download = false;
 	} else {
@@ -86,11 +86,11 @@ void poddlthread::run() {
 		else if (dl->status() != DL_CANCELLED) {
 			// attempt complete re-download
 			if (resumed_download) {
-				::unlink(dl->filename());
+				::unlink(dl->filename().c_str());
 				this->run();
 			} else {
 				dl->set_status(DL_FAILED);
-				::unlink(dl->filename());
+				::unlink(dl->filename().c_str());
 			}
 		}
 	} else {

@@ -18,7 +18,7 @@ class download {
 		inline dlstatus_t status() const {
 			return dlstatus;
 		}
-		const char * filename();
+		const std::string filename();
 		const char * url();
 		void set_filename(const std::string& str);
 		void set_url(const std::string& url);
