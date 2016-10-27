@@ -20,8 +20,8 @@ const std::string download::filename() {
 	return fn;
 }
 
-const char * download::url() {
-	return url_.c_str();
+const std::string download::url() {
+	return url_;
 }
 
 void download::set_filename(const std::string& str) {

@@ -19,7 +19,7 @@ class download {
 			return dlstatus;
 		}
 		const std::string filename();
-		const char * url();
+		const std::string url();
 		void set_filename(const std::string& str);
 		void set_url(const std::string& url);
 		void set_progress(double cur, double max);

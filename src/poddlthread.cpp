@@ -38,7 +38,7 @@ void poddlthread::run() {
 	CURL * easyhandle = curl_easy_init();
 	utils::set_common_curl_options(easyhandle, cfg);
 
-	curl_easy_setopt(easyhandle, CURLOPT_URL, dl->url());
+	curl_easy_setopt(easyhandle, CURLOPT_URL, dl->url().c_str());
 	curl_easy_setopt(easyhandle, CURLOPT_TIMEOUT, 0);
 	// set up write functions:
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
