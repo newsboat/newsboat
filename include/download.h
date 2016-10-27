@@ -14,7 +14,7 @@ class download {
 		download(pb_controller * c = 0);
 		~download();
 		double percents_finished();
-		const char * status_text();
+		const std::string status_text();
 		inline dlstatus_t status() const {
 			return dlstatus;
 		}

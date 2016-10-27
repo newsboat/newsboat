@@ -60,8 +60,16 @@ void pb_view::run(bool auto_download) {
 
 				unsigned int i = 0;
 				for (auto dl : ctrl->downloads()) {
-					char lbuf[1024];
-					snprintf(lbuf, sizeof(lbuf), " %4u [%6.1fMB/%6.1fMB] [%5.1f %%] [%7.2f kb/s] %-20s %s -> %s", i+1, dl.current_size()/(1024*1024), dl.total_size()/(1024*1024), dl.percents_finished(), dl.kbps(), dl.status_text(), dl.url(), dl.filename());
+					auto lbuf = strprintf::fmt(
+							" %4u [%6.1fMB/%6.1fMB] [%5.1f %%] [%7.2f kb/s] %-20s %s -> %s",
+							i+1,
+							dl.current_size()/(1024*1024),
+							dl.total_size()/(1024*1024),
+							dl.percents_finished(),
+							dl.kbps(),
+							dl.status_text(),
+							dl.url(),
+							dl.filename());
 					code.append(strprintf::fmt("{listitem[%u] text:%s}", i, stfl::quote(lbuf)));
 					i++;
 				}
