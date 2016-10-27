@@ -11,7 +11,7 @@ CXX?=c++
 # compiler and linker flags
 DEFINES=-DLOCALEDIR=\"$(localedir)\"
 WARNFLAGS=-Wall -Wextra -Wunreachable-code
-BARE_CXXFLAGS=-std=c++11 -Iinclude -Istfl -Ifilter -I. -Irss
+BARE_CXXFLAGS=-std=c++11 -ggdb -Iinclude -Istfl -Ifilter -I. -Irss
 CXXFLAGS+=$(BARE_CXXFLAGS) $(WARNFLAGS) $(DEFINES)
 LDFLAGS+=-L. -fprofile-arcs -ftest-coverage
 
