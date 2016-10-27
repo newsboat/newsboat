@@ -915,22 +915,6 @@ std::string utils::get_content(xmlNode * node) {
 	return retval;
 }
 
-std::string utils::get_prop(xmlNode * node, const char * prop, const char * ns) {
-	std::string retval;
-	if (node) {
-		xmlChar * value;
-		if (ns)
-			value = xmlGetProp(node, (xmlChar *)prop);
-		else
-			value = xmlGetNsProp(node, (xmlChar *)prop, (xmlChar *)ns);
-		if (value) {
-			retval = (const char*)value;
-			xmlFree(value);
-		}
-	}
-	return retval;
-}
-
 unsigned long utils::get_auth_method(const std::string& type) {
 	if (type == "any")
 		return CURLAUTH_ANY;

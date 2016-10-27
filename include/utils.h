@@ -123,7 +123,6 @@ class utils {
 		static bool is_http_url(const std::string& url);
 
 		static std::string get_content(xmlNode * node);
-		static std::string get_prop(xmlNode * node, const char * prop, const char * ns = nullptr);
 
 		static std::string escape_url(const std::string& url);
 		static std::string unescape_url(const std::string& url);
