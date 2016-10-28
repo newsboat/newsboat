@@ -91,7 +91,21 @@ TEST_CASE("textformatter: wrappable sequences longer then format width are force
 	REQUIRE(fmt.format_text_plain(5, 10) == expected);
 }
 
-TEST_CASE("textformatter: when wrapping, spaces at the beginning of lines are dropped") {
+/*
+ * A simple wrapping function would simply split the line at the wrapping width.
+ * This, while it technically works, misaligns the text if the line is split
+ * before the whitespace separating the words.
+ * For example:
+ * "just a test"
+ * would be wrapped as
+ * "just"
+ * " a "
+ * "test"
+ * on a screen 4 columns wide. In this example, the 'a' is misaligned on the
+ * second line and it would make the text look jagged with a bigger input. Thus
+ * spaces at the beginning of lines after wrapping should be dropped.
+ */
+TEST_CASE("textformatter: ignore whitespace that's going to be wrapped onto the next line") {
 	textformatter fmt;
 	fmt.add_line(wrappable, "just a test");
 
