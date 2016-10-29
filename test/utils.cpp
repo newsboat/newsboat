@@ -374,8 +374,21 @@ TEST_CASE("utils::make_title extracts possible title from URL") {
 		REQUIRE(utils::make_title(input) == "Item");
 	}
 
-	SECTION("Replaces dashes with spaces") {
-		auto input = "http://example.com/This-is-the-title";
+	SECTION("Replaces dashes and underscores with spaces") {
+		std::string input;
+
+		SECTION("Dashes") {
+			input = "http://example.com/This-is-the-title";
+		}
+
+		SECTION("Underscores") {
+			input = "http://example.com/This_is_the_title";
+		}
+
+		SECTION("Mix of dashes and underscores") {
+			input = "http://example.com/This_is-the_title";
+		}
+
 		REQUIRE(utils::make_title(input) == "This is the title");
 	}
 

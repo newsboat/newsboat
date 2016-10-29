@@ -1035,6 +1035,7 @@ std::string utils::make_title(const std::string& const_url) {
 	std::string title = path.substr(0,pos_of_qmrk);
 	// 'title with dashes'
 	std::replace(title.begin(), title.end(), '-', ' ');
+	std::replace(title.begin(), title.end(), '_', ' ');
 	//'Title with dashes'
 	if (title.at(0)>= 'a' && title.at(0)<= 'z') {
 		title[0] -= 'a' - 'A';
