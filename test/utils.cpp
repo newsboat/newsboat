@@ -390,7 +390,16 @@ TEST_CASE("utils::make_title extracts possible title from URL") {
 	}
 
 	SECTION("Strips out trailing slashes") {
-		auto input = "http://example.com/item/";
+		std::string input;
+
+		SECTION("One slash") {
+			input = "http://example.com/item/";
+		}
+
+		SECTION("Numerous slashes") {
+			input = "http://example.com/item/////////////";
+		}
+
 		REQUIRE(utils::make_title(input) == "Item");
 	}
 

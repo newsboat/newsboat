@@ -1021,11 +1021,12 @@ std::string utils::make_title(const std::string& const_url) {
 	 * This attempts to do just that. eg: http://domain.com/story/yy/mm/dd/title-with-dashes?a=b
 	*/
 	std::string url = (std::string&) const_url;
-	// get to the final part of the URI's path, catering for situation where
-	// last char is '/'
-	std::string::size_type pos_of_slash = url.find_last_of('/', (int)url.length()-2);
-	if (url[url.length()-1] == '/')
-		url.erase((int)url.length()-1);
+	// Strip out trailing slashes
+	while (url.length() > 0  &&  url.back() == '/') {
+		url.erase(url.length() - 1);
+	}
+	// get to the final part of the URI's path
+	std::string::size_type pos_of_slash = url.find_last_of('/');
 	// extract just the juicy part 'title-with-dashes?a=b'
 	std::string path = url.substr(pos_of_slash+1);
 	// find where query part of URI starts
