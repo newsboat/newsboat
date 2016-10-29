@@ -16,9 +16,8 @@ void rss_20_parser::parse_feed(feed& f, xmlNode * rootNode) {
 	if (!rootNode)
 		throw exception(_("XML root node is NULL"));
 
-	const char * ns = rootNode->ns ? (const char *)rootNode->ns->href : nullptr; //(const char *)xmlGetProp(rootNode, (const xmlChar *)"xmlns");
-
-	if (ns != nullptr) {
+	if (rootNode->ns) {
+		const char * ns = (const char *)rootNode->ns->href;
 		if (strcmp(ns, RSS20USERLAND_URI) == 0) {
 			this->ns = strdup(ns);
 		}
