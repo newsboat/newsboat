@@ -39,7 +39,7 @@ bool matcher::parse(const std::string& expr) {
 
 	gettimeofday(&tv2, nullptr);
 	unsigned long diff = (((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) - tv1.tv_usec;
-	LOG(LOG_DEBUG, "matcher::parse: parsing `%s' took %lu µs (success = %d)", expr.c_str(), diff, b ? 1 : 0);
+	LOG(level::DEBUG, "matcher::parse: parsing `%s' took %lu µs (success = %d)", expr.c_str(), diff, b ? 1 : 0);
 
 	return b;
 }
@@ -69,7 +69,7 @@ bool matcher::matches(matchable* item) {
 
 bool matcher::matchop_lt(expression * e, matchable * item) {
 	if (!item->has_attribute(e->name))
-		throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
+		throw matcherexception(matcherexception::type::ATTRIB_UNAVAIL, e->name);
 	std::istringstream islit(e->literal);
 	std::istringstream isatt(item->get_attribute(e->name));
 	int ilit, iatt;
@@ -80,7 +80,7 @@ bool matcher::matchop_lt(expression * e, matchable * item) {
 
 bool matcher::matchop_between(expression * e, matchable * item) {
 	if (!item->has_attribute(e->name))
-		throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
+		throw matcherexception(matcherexception::type::ATTRIB_UNAVAIL, e->name);
 	std::vector<std::string> lit = utils::tokenize(e->literal, ":");
 	std::istringstream isatt(item->get_attribute(e->name));
 	int att;
@@ -101,7 +101,7 @@ bool matcher::matchop_between(expression * e, matchable * item) {
 
 bool matcher::matchop_gt(expression * e, matchable * item) {
 	if (!item->has_attribute(e->name))
-		throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
+		throw matcherexception(matcherexception::type::ATTRIB_UNAVAIL, e->name);
 	std::istringstream islit(e->literal);
 	std::istringstream isatt(item->get_attribute(e->name));
 	int ilit, iatt;
@@ -112,14 +112,14 @@ bool matcher::matchop_gt(expression * e, matchable * item) {
 
 bool matcher::matchop_rxeq(expression * e, matchable * item) {
 	if (!item->has_attribute(e->name))
-		throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
+		throw matcherexception(matcherexception::type::ATTRIB_UNAVAIL, e->name);
 	if (!e->regex) {
 		e->regex = new regex_t;
 		int err;
 		if ((err = regcomp(e->regex, e->literal.c_str(), REG_EXTENDED | REG_ICASE | REG_NOSUB)) != 0) {
 			char buf[1024];
 			regerror(err, e->regex, buf, sizeof(buf));
-			throw matcherexception(matcherexception::INVALID_REGEX, e->literal, buf);
+			throw matcherexception(matcherexception::type::INVALID_REGEX, e->literal, buf);
 		}
 	}
 	if (regexec(e->regex, item->get_attribute(e->name).c_str(), 0, nullptr, 0)==0)
@@ -129,7 +129,7 @@ bool matcher::matchop_rxeq(expression * e, matchable * item) {
 
 bool matcher::matchop_cont(expression * e, matchable * item) {
 	if (!item->has_attribute(e->name))
-		throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
+		throw matcherexception(matcherexception::type::ATTRIB_UNAVAIL, e->name);
 	std::vector<std::string> elements = utils::tokenize(item->get_attribute(e->name), " ");
 	std::string literal = e->literal;
 	for (auto elem : elements) {
@@ -142,8 +142,8 @@ bool matcher::matchop_cont(expression * e, matchable * item) {
 
 bool matcher::matchop_eq(expression * e, matchable * item) {
 	if (!item->has_attribute(e->name)) {
-		LOG(LOG_WARN, "matcher::matches_r: attribute %s not available", e->name.c_str());
-		throw matcherexception(matcherexception::ATTRIB_UNAVAIL, e->name);
+		LOG(level::WARN, "matcher::matches_r: attribute %s not available", e->name.c_str());
+		throw matcherexception(matcherexception::type::ATTRIB_UNAVAIL, e->name);
 	}
 	return (item->get_attribute(e->name)==e->literal);
 }

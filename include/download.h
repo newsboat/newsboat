@@ -5,7 +5,17 @@
 
 namespace podbeuter {
 
-enum dlstatus_t { DL_QUEUED = 0, DL_DOWNLOADING, DL_CANCELLED, DL_DELETED, DL_FINISHED, DL_FAILED, DL_ALREADY_DOWNLOADED, DL_READY, DL_PLAYED };
+enum class dlstatus {
+	QUEUED = 0,
+	DOWNLOADING,
+	CANCELLED,
+	DELETED,
+	FINISHED,
+	FAILED,
+	ALREADY_DOWNLOADED,
+	READY,
+	PLAYED
+};
 
 class pb_controller;
 
@@ -15,15 +25,15 @@ class download {
 		~download();
 		double percents_finished();
 		const char * status_text();
-		inline dlstatus_t status() const {
-			return dlstatus;
+		inline dlstatus status() const {
+			return download_status;
 		}
 		const char * filename();
 		const char * url();
 		void set_filename(const std::string& str);
 		void set_url(const std::string& url);
 		void set_progress(double cur, double max);
-		void set_status(dlstatus_t dls);
+		void set_status(dlstatus dls);
 		void set_kbps(double kbps);
 		double kbps();
 		void set_offset(unsigned long offset);
@@ -38,7 +48,7 @@ class download {
 	private:
 		std::string fn;
 		std::string url_;
-		dlstatus_t dlstatus;
+		dlstatus download_status;
 		float cursize;
 		float totalsize;
 		double curkbps;

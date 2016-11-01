@@ -453,7 +453,7 @@ keymap::keymap(unsigned flags) {
 	/*
 	 * At startup, initialize the keymap with the default settings from the list above.
 	 */
-	LOG(LOG_DEBUG, "keymap::keymap: flags = %x", flags);
+	LOG(level::DEBUG, "keymap::keymap: flags = %x", flags);
 	for (unsigned int j=1; contexts[j]!=nullptr; j++) {
 		std::string ctx(contexts[j]);
 		for (int i=0; opdescs[i].op != OP_NIL; ++i) {
@@ -500,7 +500,7 @@ void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned s
 			}
 			if (!already_added) {
 				if (opdescs[j].flags & flags) {
-					LOG(LOG_DEBUG, "keymap::get_keymap_descriptions: found unbound function: %s ctx = %s", opdescs[j].opstr, ctx.c_str());
+					LOG(level::DEBUG, "keymap::get_keymap_descriptions: found unbound function: %s ctx = %s", opdescs[j].opstr, ctx.c_str());
 					keymap_desc desc;
 					desc.ctx = ctx;
 					desc.cmd = opdescs[j].opstr;
@@ -518,7 +518,7 @@ keymap::~keymap() { }
 
 
 void keymap::set_key(operation op, const std::string& key, const std::string& context) {
-	LOG(LOG_DEBUG,"keymap::set_key(%d,%s) called", op, key.c_str());
+	LOG(level::DEBUG,"keymap::set_key(%d,%s) called", op, key.c_str());
 	if (context == "all") {
 		for (unsigned int i=0; contexts[i]!=nullptr; i++) {
 			keymap_[contexts[i]][key] = op;
@@ -529,7 +529,7 @@ void keymap::set_key(operation op, const std::string& key, const std::string& co
 }
 
 void keymap::unset_key(const std::string& key, const std::string& context) {
-	LOG(LOG_DEBUG,"keymap::unset_key(%s) called", key.c_str());
+	LOG(level::DEBUG,"keymap::unset_key(%s) called", key.c_str());
 	if (context == "all") {
 		for (unsigned int i=0; contexts[i]!=nullptr; i++) {
 			keymap_[contexts[i]][key] = OP_NIL;
@@ -564,7 +564,7 @@ char keymap::get_key(const std::string& keycode) {
 
 operation keymap::get_operation(const std::string& keycode, const std::string& context) {
 	std::string key;
-	LOG(LOG_DEBUG, "keymap::get_operation: keycode = %s context = %s", keycode.c_str(), context.c_str());
+	LOG(level::DEBUG, "keymap::get_operation: keycode = %s context = %s", keycode.c_str(), context.c_str());
 	if (keycode.length() > 0) {
 		key = keycode;
 	} else {
@@ -619,10 +619,10 @@ void keymap::handle_action(const std::string& action, const std::vector<std::str
 	 * The keymap acts as config_action_handler so that all the key-related configuration is immediately
 	 * handed to it.
 	 */
-	LOG(LOG_DEBUG,"keymap::handle_action(%s, ...) called",action.c_str());
+	LOG(level::DEBUG,"keymap::handle_action(%s, ...) called",action.c_str());
 	if (action == "bind-key") {
 		if (params.size() < 2)
-			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
+			throw confighandlerexception(action_handler_status::TOO_FEW_PARAMS);
 		std::string context = "all";
 		if (params.size() >= 3)
 			context = params[2];
@@ -634,14 +634,14 @@ void keymap::handle_action(const std::string& action, const std::vector<std::str
 		set_key(op, params[0], context);
 	} else if (action == "unbind-key") {
 		if (params.size() < 1)
-			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
+			throw confighandlerexception(action_handler_status::TOO_FEW_PARAMS);
 		std::string context = "all";
 		if (params.size() >= 2)
 			context = params[1];
 		unset_key(params[0], context);
 	} else if (action == "macro") {
 		if (params.size() < 1)
-			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
+			throw confighandlerexception(action_handler_status::TOO_FEW_PARAMS);
 		auto it = params.begin();
 		std::string macrokey = *it;
 		std::vector<macrocmd> cmds;
@@ -653,7 +653,7 @@ void keymap::handle_action(const std::string& action, const std::vector<std::str
 		while (it != params.end()) {
 			if (first && *it != ";") {
 				tmpcmd.op = get_opcode(*it);
-				LOG(LOG_DEBUG, "keymap::handle_action: new operation `%s' (op = %u)", it->c_str(), tmpcmd.op);
+				LOG(level::DEBUG, "keymap::handle_action: new operation `%s' (op = %u)", it->c_str(), tmpcmd.op);
 				if (tmpcmd.op == OP_NIL)
 					throw confighandlerexception(utils::strprintf(_("`%s' is not a valid key command"), it->c_str()));
 				first = false;
@@ -665,7 +665,7 @@ void keymap::handle_action(const std::string& action, const std::vector<std::str
 					tmpcmd.args.clear();
 					first = true;
 				} else {
-					LOG(LOG_DEBUG, "keymap::handle_action: new parameter `%s' (op = %u)", it->c_str());
+					LOG(level::DEBUG, "keymap::handle_action: new parameter `%s' (op = %u)", it->c_str());
 					tmpcmd.args.push_back(*it);
 				}
 			}
@@ -676,7 +676,7 @@ void keymap::handle_action(const std::string& action, const std::vector<std::str
 
 		macros_[macrokey] = cmds;
 	} else
-		throw confighandlerexception(AHS_INVALID_PARAMS);
+		throw confighandlerexception(action_handler_status::INVALID_PARAMS);
 }
 
 std::string keymap::getkey(operation op, const std::string& context) {

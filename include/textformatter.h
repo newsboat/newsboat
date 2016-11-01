@@ -21,7 +21,7 @@ namespace newsbeuter {
  *               insufficient window width will be ignored.
  */
 
-enum LineType {
+enum class LineType {
 	wrappable = 1,
 	softwrappable,
 	nonwrappable,

@@ -53,15 +53,15 @@ static size_t handle_headers(void * ptr, size_t size, size_t nmemb, void * data)
 	if (!strncasecmp("Last-Modified:", header, 14)) {
 		time_t r = curl_getdate(header+14, nullptr);
 		if (r == -1) {
-			LOG(LOG_DEBUG, "handle_headers: last-modified %s (curl_getdate FAILED)", header+14);
+			LOG(level::DEBUG, "handle_headers: last-modified %s (curl_getdate FAILED)", header+14);
 		} else {
 			values->lastmodified = curl_getdate(header+14, nullptr);
-			LOG(LOG_DEBUG, "handle_headers: got last-modified %s (%d)", header+14, values->lastmodified);
+			LOG(level::DEBUG, "handle_headers: got last-modified %s (%d)", header+14, values->lastmodified);
 		}
 	} else if (!strncasecmp("ETag:",header, 5)) {
 		values->etag = std::string(header+5);
 		utils::trim(values->etag);
-		LOG(LOG_DEBUG, "handle_headers: got etag %s", values->etag.c_str());
+		LOG(level::DEBUG, "handle_headers: got etag %s", values->etag.c_str());
 	}
 
 	delete[] header;
@@ -147,13 +147,13 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 		curl_slist_free_all(custom_headers);
 	}
 
-	LOG(LOG_DEBUG, "rsspp::parser::parse_url: ret = %d", ret);
+	LOG(level::DEBUG, "rsspp::parser::parse_url: ret = %d", ret);
 
 	long status;
 	curl_easy_getinfo(easyhandle, CURLINFO_HTTP_CONNECTCODE, &status);
 
 	if (status >= 400) {
-		LOG(LOG_USERERROR, _("Error: trying to download feed `%s' returned HTTP status code %ld."), url.c_str(), status);
+		LOG(level::USERERROR, _("Error: trying to download feed `%s' returned HTTP status code %ld."), url.c_str(), status);
 	}
 
 	curl_easy_reset(easyhandle);
@@ -162,14 +162,14 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 		curl_easy_cleanup(easyhandle);
 
 	if (ret != 0) {
-		LOG(LOG_ERROR, "rsspp::parser::parse_url: curl_easy_perform returned err %d: %s", ret, curl_easy_strerror(ret));
+		LOG(level::ERROR, "rsspp::parser::parse_url: curl_easy_perform returned err %d: %s", ret, curl_easy_strerror(ret));
 		throw exception(curl_easy_strerror(ret));
 	}
 
-	LOG(LOG_INFO, "parser::parse_url: retrieved data for %s: %s", url.c_str(), buf.c_str());
+	LOG(level::INFO, "parser::parse_url: retrieved data for %s: %s", url.c_str(), buf.c_str());
 
 	if (buf.length() > 0) {
-		LOG(LOG_DEBUG, "parser::parse_url: handing over data to parse_buffer()");
+		LOG(level::DEBUG, "parser::parse_url: handing over data to parse_buffer()");
 		return parse_buffer(buf.c_str(), buf.length(), url.c_str());
 	}
 
@@ -190,7 +190,7 @@ feed parser::parse_buffer(const char * buffer, size_t size, const char * url) {
 		f.encoding = (const char *)doc->encoding;
 	}
 
-	LOG(LOG_INFO, "parser::parse_buffer: encoding = %s", f.encoding.c_str());
+	LOG(level::INFO, "parser::parse_buffer: encoding = %s", f.encoding.c_str());
 
 	return f;
 }
@@ -209,7 +209,7 @@ feed parser::parse_file(const std::string& filename) {
 		f.encoding = (const char *)doc->encoding;
 	}
 
-	LOG(LOG_INFO, "parser::parse_file: encoding = %s", f.encoding.c_str());
+	LOG(level::INFO, "parser::parse_file: encoding = %s", f.encoding.c_str());
 
 	return f;
 }

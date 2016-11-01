@@ -23,12 +23,12 @@ inline void cache::run_sql_impl(
 		void * callback_argument,
 		bool do_throw)
 {
-	LOG(LOG_DEBUG, "running query: %s", query.c_str());
+	LOG(level::DEBUG, "running query: %s", query.c_str());
 	int rc = sqlite3_exec(
 			db, query.c_str(), callback, callback_argument, nullptr);
 	if (rc != SQLITE_OK) {
 		std::string message = "query \"%s\" failed: error = %d";
-		LOG(LOG_CRITICAL, message.c_str(), query.c_str(), rc);
+		LOG(level::CRITICAL, message.c_str(), query.c_str(), rc);
 		if (do_throw) {
 			throw dbexception(db);
 		}
@@ -99,7 +99,7 @@ static int rssfeed_callback(void * myfeed, int argc, char ** argv, char ** /* az
 	(*feed)->set_title(argv[0]);
 	(*feed)->set_link(argv[1]);
 	(*feed)->set_rtl(strcmp(argv[2],"1")==0);
-	LOG(LOG_INFO, "rssfeed_callback: title = %s link = %s is_rtl = %s",argv[0],argv[1], argv[2]);
+	LOG(level::INFO, "rssfeed_callback: title = %s link = %s is_rtl = %s",argv[0],argv[1], argv[2]);
 	return 0;
 }
 
@@ -118,7 +118,7 @@ static int lastmodified_callback(void * handler, int argc, char ** argv, char **
 	} else {
 		result->etag = "";
 	}
-	LOG(LOG_INFO, "lastmodified_callback: lastmodified = %d etag = %s",
+	LOG(level::INFO, "lastmodified_callback: lastmodified = %d etag = %s",
 			result->lastmodified, result->etag.c_str());
 	return 0;
 }
@@ -128,7 +128,7 @@ static int vectorofstring_callback(void * vp, int argc, char ** argv, char ** /*
 	assert(argc == 1);
 	assert(argv[0] != nullptr);
 	vectorptr->push_back(std::string(argv[0]));
-	LOG(LOG_INFO, "vectorofstring_callback: element = %s", argv[0]);
+	LOG(level::INFO, "vectorofstring_callback: element = %s", argv[0]);
 	return 0;
 }
 
@@ -206,7 +206,7 @@ static int search_item_callback(void * myfeed, int argc, char ** argv, char ** /
 cache::cache(const std::string& cachefile, configcontainer * c) : db(0),cfg(c) {
 	int error = sqlite3_open(cachefile.c_str(),&db);
 	if (error != SQLITE_OK) {
-		LOG(LOG_ERROR,"couldn't sqlite3_open(%s): error = %d",
+		LOG(level::ERROR,"couldn't sqlite3_open(%s): error = %d",
 				cachefile.c_str(), error);
 		throw dbexception(db);
 	}
@@ -306,12 +306,12 @@ void cache::fetch_lastmodified(const std::string& feedurl, time_t& t, std::strin
 	run_sql(query, lastmodified_callback, &result);
 	t = result.lastmodified;
 	etag = result.etag;
-	LOG(LOG_DEBUG, "cache::fetch_lastmodified: t = %d etag = %s", t, etag.c_str());
+	LOG(level::DEBUG, "cache::fetch_lastmodified: t = %d etag = %s", t, etag.c_str());
 }
 
 void cache::update_lastmodified(const std::string& feedurl, time_t t, const std::string& etag) {
 	if (t == 0 && etag.length() == 0) {
-		LOG(LOG_INFO, "cache::update_lastmodified: both time and etag are "
+		LOG(level::INFO, "cache::update_lastmodified: both time and etag are "
 				"empty, not updating anything");
 		return;
 	}
@@ -358,7 +358,7 @@ void cache::externalize_rssfeed(std::shared_ptr<rss_feed> feed, bool reset_unrea
 	run_sql(query, count_callback, &count_cbh);
 
 	int count = count_cbh.count();
-	LOG(LOG_DEBUG,
+	LOG(level::DEBUG,
 			"cache::externalize_rss_feed: rss_feeds with rssurl = '%s': found %d",
 			feed->rssurl().c_str(),
 			count);
@@ -387,7 +387,7 @@ void cache::externalize_rssfeed(std::shared_ptr<rss_feed> feed, bool reset_unrea
 
 	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
 
-	LOG(LOG_INFO,
+	LOG(level::INFO,
 			"cache::externalize_feed: max_items = %u feed.total_item_count() = %u",
 			max_items,
 			feed->total_item_count());
@@ -462,7 +462,7 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl, rss_ign
 				filtered_items.push_back(item);
 			}
 		} catch(const matcherexception& ex) {
-			LOG(LOG_DEBUG, "oops, matcher exception: %s", ex.what());
+			LOG(level::DEBUG, "oops, matcher exception: %s", ex.what());
 		}
 	}
 	feed->set_items(filtered_items);
@@ -560,7 +560,7 @@ void cache::cleanup_cache(std::vector<std::shared_ptr<rss_feed>>& feeds) {
 	 * configuration file.
 	 */
 	if (cfg->get_configvalue_as_bool("cleanup-on-quit")) {
-		LOG(LOG_DEBUG,"cache::cleanup_cache: cleaning up cache...");
+		LOG(level::DEBUG,"cache::cleanup_cache: cleaning up cache...");
 		std::string list = "(";
 
 		for (auto feed : feeds) {
@@ -593,7 +593,7 @@ void cache::cleanup_cache(std::vector<std::shared_ptr<rss_feed>>& feeds) {
 		// It's missing so that no database operation can occur after the cache cleanup!
 		// mtx->unlock();
 	} else {
-		LOG(LOG_DEBUG,"cache::cleanup_cache: NOT cleaning up cache...");
+		LOG(level::DEBUG,"cache::cleanup_cache: NOT cleaning up cache...");
 	}
 }
 
@@ -614,7 +614,7 @@ void cache::update_rssitem_unlocked(
 					item->guid().c_str());
 			run_sql(query, single_string_callback, &content);
 			if (content != item->description_raw()) {
-				LOG(LOG_DEBUG,
+				LOG(level::DEBUG,
 						"cache::update_rssitem_unlocked: '%s' is different from '%s'",
 						content.c_str(), item->description_raw().c_str());
 				query = prepare_query(
@@ -778,7 +778,7 @@ void cache::remove_old_deleted_items(
 {
 	scope_measure m1("cache::remove_old_deleted_items");
 	if (guids.size() == 0) {
-		LOG(LOG_DEBUG, "cache::remove_old_deleted_items: not cleaning up "
+		LOG(level::DEBUG, "cache::remove_old_deleted_items: not cleaning up "
 				"anything because last reload brought no new items (detected "
 				"no changes)");
 		return;
@@ -806,7 +806,7 @@ unsigned int cache::get_unread_count() {
 	cb_handler count_cbh;
 	run_sql(countquery, count_callback, &count_cbh);
 	unsigned int count = static_cast<unsigned int>(count_cbh.count());
-	LOG(LOG_DEBUG, "cache::get_unread_count: count = %u", count);
+	LOG(level::DEBUG, "cache::get_unread_count: count = %u", count);
 	return count;
 }
 
@@ -847,11 +847,11 @@ void cache::clean_old_articles() {
 		std::string query(
 				utils::strprintf(
 					"DELETE FROM rss_item WHERE pubDate < %d", old_date));
-		LOG(LOG_DEBUG, "cache::clean_old_articles: about to delete articles "
+		LOG(level::DEBUG, "cache::clean_old_articles: about to delete articles "
 				"with a pubDate older than %d", old_date);
 		run_sql(query);
 	} else {
-		LOG(LOG_DEBUG, "cache::clean_old_articles, days == 0, not cleaning up anything");
+		LOG(level::DEBUG, "cache::clean_old_articles, days == 0, not cleaning up anything");
 	}
 }
 

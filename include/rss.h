@@ -16,7 +16,7 @@ namespace newsbeuter {
 
 typedef std::pair<std::string, matcher *> feedurl_expr_pair;
 
-enum dl_status { SUCCESS, TO_BE_DOWNLOADED, DURING_DOWNLOAD, DL_ERROR };
+enum class dl_status { SUCCESS, TO_BE_DOWNLOADED, DURING_DOWNLOAD, DL_ERROR };
 
 class cache;
 class rss_feed;
@@ -236,7 +236,7 @@ class rss_feed : public matchable {
 		}
 
 		inline void clear_items() {
-			LOG(LOG_DEBUG, "rss_feed: clearing items");
+			LOG(level::DEBUG, "rss_feed: clearing items");
 			items_.clear();
 			items_guid_map.clear();
 		}
@@ -319,7 +319,7 @@ class rss_feed : public matchable {
 		std::string get_status();
 
 		inline void reset_status() {
-			status_ = TO_BE_DOWNLOADED;
+			status_ = dl_status::TO_BE_DOWNLOADED;
 		}
 		inline void set_status(dl_status st) {
 			status_ = st;

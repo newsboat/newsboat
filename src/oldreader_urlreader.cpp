@@ -52,11 +52,11 @@ void oldreader_urlreader::reload() {
 
 	std::vector<tagged_feedurl> feedurls = api->get_subscribed_urls();
 	for (auto url : feedurls) {
-		LOG(LOG_DEBUG, "added %s to URL list", url.first.c_str());
+		LOG(level::DEBUG, "added %s to URL list", url.first.c_str());
 		urls.push_back(url.first);
 		tags[url.first] = url.second;
 		for (auto tag : url.second) {
-			LOG(LOG_DEBUG, "%s: added tag %s", url.first.c_str(), tag.c_str());
+			LOG(level::DEBUG, "%s: added tag %s", url.first.c_str(), tag.c_str());
 			alltags.insert(tag);
 		}
 	}

@@ -9,7 +9,9 @@ namespace newsbeuter {
 
 class tagsouppullparser {
 	public:
-		enum event { START_DOCUMENT, END_DOCUMENT, START_TAG, END_TAG, TEXT };
+		enum class event {
+			START_DOCUMENT, END_DOCUMENT, START_TAG, END_TAG, TEXT
+		};
 
 		tagsouppullparser();
 		virtual ~tagsouppullparser();

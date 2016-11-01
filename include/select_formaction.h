@@ -8,7 +8,7 @@ namespace newsbeuter {
 
 class select_formaction : public formaction {
 	public:
-		enum { SELECTTAG, SELECTFILTER };
+		enum class selection_type { TAG, FILTER };
 
 		select_formaction(view *, std::string formstr);
 		virtual ~select_formaction();
@@ -24,18 +24,18 @@ class select_formaction : public formaction {
 		inline void set_filters(const std::vector<filter_name_expr_pair>& ff) {
 			filters = ff;
 		}
-		void set_type(int t) {
+		void set_type(selection_type t) {
 			type = t;
 		}
 		virtual void handle_cmdline(const std::string& cmd);
 		virtual std::string id() const {
-			return (type == SELECTTAG) ? "tagselection" : "filterselection";
+			return (type == selection_type::TAG) ? "tagselection" : "filterselection";
 		}
 		virtual std::string title();
 	private:
 		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr);
 		bool quit;
-		int type;
+		selection_type type;
 		std::string value;
 		std::vector<std::string> tags;
 		std::vector<filter_name_expr_pair> filters;

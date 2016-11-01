@@ -12,7 +12,7 @@ textformatter::textformatter() { }
 textformatter::~textformatter() { }
 
 void textformatter::add_line(LineType type, std::string line) {
-	LOG(LOG_DEBUG,
+	LOG(level::DEBUG,
 		"textformatter::add_line: `%s' (line type %i)",
 		line.c_str(),
 		type);
@@ -85,7 +85,7 @@ std::string format_text_plain_helper(
 		// if non-zero, softwrappable lines are wrapped at this width
 		const size_t total_width)
 {
-	LOG(LOG_DEBUG,
+	LOG(level::DEBUG,
 		"textformatter::format_text_plain: rxman = %p, location = `%s', "
 		"wrap_width = %zu, total_width = %zu, %u lines",
 		rxman, location.c_str(), wrap_width, total_width, lines.size());
@@ -96,7 +96,7 @@ std::string format_text_plain_helper(
 		(std::string line) {
 			format_cache.append(line + "\n");
 
-			LOG(LOG_DEBUG,
+			LOG(level::DEBUG,
 				"textformatter::format_text_plain: stored `%s'",
 				line.c_str());
 		};
@@ -104,22 +104,22 @@ std::string format_text_plain_helper(
 		auto type = line.first;
 		auto text = line.second;
 
-		LOG(LOG_DEBUG,
+		LOG(level::DEBUG,
 			"textformatter::format_text_plain: got line `%s' type %u",
 			text.c_str(), type);
 
-		if (rxman && type != hr) {
+		if (rxman && type != LineType::hr) {
 			rxman->quote_and_highlight(text, location);
 		}
 
 		switch(type) {
-			case wrappable:
+			case LineType::wrappable:
 				for (auto line : wrap_line(text, wrap_width)) {
 					store_line(line);
 				}
 				break;
 
-			case softwrappable:
+			case LineType::softwrappable:
 				if (total_width == 0) {
 					store_line(text);
 				} else {
@@ -129,11 +129,11 @@ std::string format_text_plain_helper(
 				}
 				break;
 
-			case nonwrappable:
+			case LineType::nonwrappable:
 				store_line(text);
 				break;
 
-			case hr:
+			case LineType::hr:
 				store_line(htmlrenderer::render_hr(wrap_width));
 				break;
 		}

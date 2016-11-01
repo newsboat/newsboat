@@ -23,19 +23,19 @@
 namespace newsbeuter {
 
 rss_item::rss_item(cache * c) : pubDate_(0), unread_(true), ch(c), enqueued_(false), deleted_(0), idx(0), override_unread_(false), size_(0) {
-	// LOG(LOG_CRITICAL, "new rss_item");
+	// LOG(level::CRITICAL, "new rss_item");
 }
 
 rss_item::~rss_item() {
-	// LOG(LOG_CRITICAL, "delete rss_item");
+	// LOG(level::CRITICAL, "delete rss_item");
 }
 
-rss_feed::rss_feed(cache * c) : ch(c), empty(true), is_rtl_(false), idx(0), status_(SUCCESS) {
-	// LOG(LOG_CRITICAL, "new rss_feed");
+rss_feed::rss_feed(cache * c) : ch(c), empty(true), is_rtl_(false), idx(0), status_(dl_status::SUCCESS) {
+	// LOG(level::CRITICAL, "new rss_feed");
 }
 
 rss_feed::~rss_feed() {
-	// LOG(LOG_CRITICAL, "delete rss_feed");
+	// LOG(level::CRITICAL, "delete rss_feed");
 	clear_items();
 }
 
@@ -223,14 +223,14 @@ std::shared_ptr<rss_item> rss_feed::get_item_by_guid_unlocked(const std::string&
 	if (it != items_guid_map.end()) {
 		return it->second;
 	}
-	LOG(LOG_DEBUG, "rss_feed::get_item_by_guid_unlocked: hit dummy item!");
-	LOG(LOG_DEBUG, "rss_feed::get_item_by_guid_unlocked: items_guid_map.size = %d", items_guid_map.size());
+	LOG(level::DEBUG, "rss_feed::get_item_by_guid_unlocked: hit dummy item!");
+	LOG(level::DEBUG, "rss_feed::get_item_by_guid_unlocked: items_guid_map.size = %d", items_guid_map.size());
 	// abort();
 	return std::shared_ptr<rss_item>(new rss_item(ch)); // should never happen!
 }
 
 bool rss_item::has_attribute(const std::string& attribname) {
-	// LOG(LOG_DEBUG, "rss_item::has_attribute(%s) called", attribname.c_str());
+	// LOG(level::DEBUG, "rss_item::has_attribute(%s) called", attribname.c_str());
 	if (attribname == "title" ||
 	        attribname == "link" ||
 	        attribname == "author" ||
@@ -359,7 +359,7 @@ std::string rss_feed::get_attribute(const std::string& attribname) {
 void rss_ignores::handle_action(const std::string& action, const std::vector<std::string>& params) {
 	if (action == "ignore-article") {
 		if (params.size() < 2)
-			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
+			throw confighandlerexception(action_handler_status::TOO_FEW_PARAMS);
 		std::string ignore_rssurl = params[0];
 		std::string ignore_expr = params[1];
 		matcher m;
@@ -375,7 +375,7 @@ void rss_ignores::handle_action(const std::string& action, const std::vector<std
 			resetflag.push_back(param);
 		}
 	} else
-		throw confighandlerexception(AHS_INVALID_COMMAND);
+		throw confighandlerexception(action_handler_status::INVALID_COMMAND);
 }
 
 void rss_ignores::dump_config(std::vector<std::string>& config_output) {
@@ -405,10 +405,10 @@ rss_ignores::~rss_ignores() {
 
 bool rss_ignores::matches(rss_item* item) {
 	for (auto ign : ignores) {
-		LOG(LOG_DEBUG, "rss_ignores::matches: ign.first = `%s' item->feedurl = `%s'", ign.first.c_str(), item->feedurl().c_str());
+		LOG(level::DEBUG, "rss_ignores::matches: ign.first = `%s' item->feedurl = `%s'", ign.first.c_str(), item->feedurl().c_str());
 		if (ign.first == "*" || item->feedurl() == ign.first) {
 			if (ign.second->matches(item)) {
-				LOG(LOG_DEBUG, "rss_ignores::matches: found match");
+				LOG(level::DEBUG, "rss_ignores::matches: found match");
 				return true;
 			}
 		}
@@ -437,7 +437,7 @@ void rss_feed::update_items(std::vector<std::shared_ptr<rss_feed>> feeds) {
 	if (query.length() == 0)
 		return;
 
-	LOG(LOG_DEBUG, "rss_feed::update_items: query = `%s'", query.c_str());
+	LOG(level::DEBUG, "rss_feed::update_items: query = `%s'", query.c_str());
 
 
 	struct timeval tv1, tv2, tvx;
@@ -452,7 +452,7 @@ void rss_feed::update_items(std::vector<std::shared_ptr<rss_feed>> feeds) {
 		if (feed->rssurl().substr(0,6) != "query:") { // don't fetch items from other query feeds!
 			for (auto item : feed->items()) {
 				if (m.matches(item.get())) {
-					LOG(LOG_DEBUG, "rss_feed::update_items: matcher matches!");
+					LOG(level::DEBUG, "rss_feed::update_items: matcher matches!");
 					item->set_feedptr(feed);
 					items_.push_back(item);
 					items_guid_map[item->guid()] = item;
@@ -468,8 +468,8 @@ void rss_feed::update_items(std::vector<std::shared_ptr<rss_feed>> feeds) {
 	gettimeofday(&tv2, nullptr);
 	unsigned long diff = (((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) - tv1.tv_usec;
 	unsigned long diffx = (((tv2.tv_sec - tvx.tv_sec) * 1000000) + tv2.tv_usec) - tvx.tv_usec;
-	LOG(LOG_DEBUG, "rss_feed::update_items matching took %lu.%06lu s", diff / 1000000, diff % 1000000);
-	LOG(LOG_DEBUG, "rss_feed::update_items sorting took %lu.%06lu s", diffx / 1000000, diffx % 1000000);
+	LOG(level::DEBUG, "rss_feed::update_items matching took %lu.%06lu s", diff / 1000000, diff % 1000000);
+	LOG(level::DEBUG, "rss_feed::update_items sorting took %lu.%06lu s", diffx / 1000000, diffx % 1000000);
 }
 
 void rss_feed::set_rssurl(const std::string& u) {
@@ -505,7 +505,7 @@ void rss_feed::set_rssurl(const std::string& u) {
 			    _("`%s' is not a valid filter expression"), query.c_str());
 		}
 
-		LOG(LOG_DEBUG,
+		LOG(level::DEBUG,
 		    "rss_feed::set_rssurl: query name = `%s' expr = `%s'",
 		    tokens[1].c_str(),
 		    query.c_str());
@@ -603,13 +603,13 @@ void rss_item::set_feedptr(std::shared_ptr<rss_feed> ptr) {
 
 std::string rss_feed::get_status() {
 	switch (status_) {
-	case SUCCESS:
+	case dl_status::SUCCESS:
 		return " ";
-	case TO_BE_DOWNLOADED:
+	case dl_status::TO_BE_DOWNLOADED:
 		return "_";
-	case DURING_DOWNLOAD:
+	case dl_status::DURING_DOWNLOAD:
 		return ".";
-	case DL_ERROR:
+	case dl_status::DL_ERROR:
 		return "x";
 	}
 	return "?";

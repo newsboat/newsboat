@@ -129,7 +129,7 @@ void view::set_status_unlocked(const std::string& msg) {
 			form->set("msg",msg);
 			form->run(-1);
 		} else {
-			LOG(LOG_ERROR, "view::set_status_unlocked: form for formaction of type %s is nullptr!", get_current_formaction()->id().c_str());
+			LOG(level::ERROR, "view::set_status_unlocked: form for formaction of type %s is nullptr!", get_current_formaction()->id().c_str());
 		}
 	}
 }
@@ -203,7 +203,7 @@ void view::run() {
 			}
 
 			if (is_inside_qna) {
-				LOG(LOG_DEBUG, "view::run: we're inside QNA input");
+				LOG(level::DEBUG, "view::run: we're inside QNA input");
 				if (is_inside_cmdline && strcmp(event, "TAB")==0) {
 					handle_cmdline_completion(fa);
 					continue;
@@ -223,20 +223,20 @@ void view::run() {
 				}
 			}
 
-			LOG(LOG_DEBUG, "view::run: event = %s", event);
+			LOG(level::DEBUG, "view::run: event = %s", event);
 
 			// retrieve operation code through the keymap
 			operation op;
 
 			if (have_macroprefix) {
 				have_macroprefix = false;
-				LOG(LOG_DEBUG, "view::run: running macro `%s'", event);
+				LOG(level::DEBUG, "view::run: running macro `%s'", event);
 				macrocmds = keys->get_macro(event);
 				set_status("");
 			} else {
 				op = keys->get_operation(event, fa->id());
 
-				LOG(LOG_DEBUG, "view::run: event = %s op = %u", event, op);
+				LOG(level::DEBUG, "view::run: event = %s op = %u", event, op);
 
 				if (OP_MACROPREFIX == op) {
 					have_macroprefix = true;
@@ -265,7 +265,7 @@ std::string view::run_modal(std::shared_ptr<formaction> f, const std::string& va
 		fa->prepare();
 
 		const char * event = fa->get_form()->run(1000);
-		LOG(LOG_DEBUG, "view::run: event = %s", event);
+		LOG(level::DEBUG, "view::run: event = %s", event);
 		if (!event || strcmp(event,"TIMEOUT")==0) continue;
 
 		operation op = keys->get_operation(event, fa->id());
@@ -300,7 +300,7 @@ std::string view::get_filename_suggestion(const std::string& s) {
 		retval = "article.txt";
 	else
 		retval.append(".txt");
-	LOG(LOG_DEBUG,"view::get_filename_suggestion: %s -> %s", s.c_str(), retval.c_str());
+	LOG(level::DEBUG,"view::get_filename_suggestion: %s -> %s", s.c_str(), retval.c_str());
 	return retval;
 }
 
@@ -330,7 +330,7 @@ void view::open_in_pager(const std::string& filename) {
 		cmdline.append(filename);
 	}
 	stfl::reset();
-	LOG(LOG_DEBUG, "view::open_in_pager: running `%s'", cmdline.c_str());
+	LOG(level::DEBUG, "view::open_in_pager: running `%s'", cmdline.c_str());
 	::system(cmdline.c_str());
 	pop_current_formaction();
 }
@@ -358,7 +358,7 @@ void view::open_in_browser(const std::string& url) {
 		cmdline.append("'");
 	}
 	stfl::reset();
-	LOG(LOG_DEBUG, "view::open_in_browser: running `%s'", cmdline.c_str());
+	LOG(level::DEBUG, "view::open_in_browser: running `%s'", cmdline.c_str());
 	::system(cmdline.c_str());
 	pop_current_formaction();
 }
@@ -372,7 +372,7 @@ void view::update_visible_feeds(std::vector<std::shared_ptr<rss_feed>> feeds) {
 		}
 	} catch (const matcherexception& e) {
 		set_status(utils::strprintf(_("Error: applying the filter failed: %s"), e.what()));
-		LOG(LOG_DEBUG, "view::update_visible_feeds: inside catch: %s", e.what());
+		LOG(level::DEBUG, "view::update_visible_feeds: inside catch: %s", e.what());
 	}
 }
 
@@ -402,7 +402,7 @@ void view::set_tags(const std::vector<std::string>& t) {
 
 void view::push_searchresult(std::shared_ptr<rss_feed> feed, const std::string& phrase) {
 	assert(feed != nullptr);
-	LOG(LOG_DEBUG, "view::push_searchresult: pushing search result");
+	LOG(level::DEBUG, "view::push_searchresult: pushing search result");
 
 	if (feed->total_item_count() > 0) {
 		std::shared_ptr<itemlist_formaction> searchresult(new itemlist_formaction(this, itemlist_str));
@@ -447,7 +447,7 @@ void view::push_itemlist(std::shared_ptr<rss_feed> feed) {
 
 void view::push_itemlist(unsigned int pos) {
 	std::shared_ptr<rss_feed> feed = ctrl->get_feed(pos);
-	LOG(LOG_DEBUG, "view::push_itemlist: retrieved feed at position %d", pos);
+	LOG(level::DEBUG, "view::push_itemlist: retrieved feed at position %d", pos);
 	push_itemlist(feed);
 	if (feed->total_item_count() > 0) {
 		std::shared_ptr<itemlist_formaction> itemlist = std::dynamic_pointer_cast<itemlist_formaction, formaction>(get_current_formaction());
@@ -529,7 +529,7 @@ std::string view::select_tag() {
 		return "";
 	}
 	std::shared_ptr<select_formaction> selecttag(new select_formaction(this, selecttag_str));
-	selecttag->set_type(select_formaction::SELECTTAG);
+	selecttag->set_type(select_formaction::selection_type::TAG);
 	set_bindings(selecttag);
 	apply_colors(selecttag);
 	selecttag->set_parent_formaction(get_current_formaction());
@@ -540,7 +540,7 @@ std::string view::select_tag() {
 
 std::string view::select_filter(const std::vector<filter_name_expr_pair>& filters) {
 	std::shared_ptr<select_formaction> selecttag(new select_formaction(this, selecttag_str));
-	selecttag->set_type(select_formaction::SELECTFILTER);
+	selecttag->set_type(select_formaction::selection_type::FILTER);
 	set_bindings(selecttag);
 	apply_colors(selecttag);
 	selecttag->set_parent_formaction(get_current_formaction());
@@ -550,7 +550,7 @@ std::string view::select_filter(const std::vector<filter_name_expr_pair>& filter
 }
 
 char view::confirm(const std::string& prompt, const std::string& charset) {
-	LOG(LOG_DEBUG, "view::confirm: charset = %s", charset.c_str());
+	LOG(level::DEBUG, "view::confirm: charset = %s", charset.c_str());
 
 	std::shared_ptr<formaction> f = get_current_formaction();
 	formaction_stack.push_back(std::shared_ptr<formaction>());
@@ -561,15 +561,15 @@ char view::confirm(const std::string& prompt, const std::string& charset) {
 
 	do {
 		const char * event = f->get_form()->run(0);
-		LOG(LOG_DEBUG,"view::confirm: event = %s", event);
+		LOG(level::DEBUG,"view::confirm: event = %s", event);
 		if (!event) continue;
 		if (strcmp(event, "ESC")==0 || strcmp(event, "ENTER")==0) {
 			result = 0;
-			LOG(LOG_DEBUG, "view::confirm: user pressed ESC or ENTER, we cancel confirmation dialog");
+			LOG(level::DEBUG, "view::confirm: user pressed ESC or ENTER, we cancel confirmation dialog");
 			break;
 		}
 		result = keys->get_key(event);
-		LOG(LOG_DEBUG, "view::confirm: key = %c (%u)", result, result);
+		LOG(level::DEBUG, "view::confirm: key = %c (%u)", result, result);
 	} while (!result || strchr(charset.c_str(), result)==nullptr);
 
 	f->get_form()->set("msg", "");
@@ -602,7 +602,7 @@ bool view::get_random_unread(itemlist_formaction * itemlist, itemview_formaction
 		return false;
 	}
 	if (feedlist->jump_to_random_unread_feed(feedpos)) {
-		LOG(LOG_DEBUG, "view::get_previous_unread: found feed with unread articles");
+		LOG(level::DEBUG, "view::get_previous_unread: found feed with unread articles");
 		prepare_query_feed(feedlist->get_feed());
 		itemlist->set_feed(feedlist->get_feed());
 		itemlist->set_pos(feedpos);
@@ -621,10 +621,10 @@ bool view::get_random_unread(itemlist_formaction * itemlist, itemview_formaction
 
 bool view::get_previous_unread(itemlist_formaction * itemlist, itemview_formaction * itemview) {
 	unsigned int feedpos;
-	LOG(LOG_DEBUG, "view::get_previous_unread: trying to find previous unread");
+	LOG(level::DEBUG, "view::get_previous_unread: trying to find previous unread");
 	std::shared_ptr<feedlist_formaction> feedlist = std::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
 	if (itemlist->jump_to_previous_unread_item(false)) {
-		LOG(LOG_DEBUG, "view::get_previous_unread: found unread article in same feed");
+		LOG(level::DEBUG, "view::get_previous_unread: found unread article in same feed");
 		if (itemview) {
 			itemview->init();
 			itemview->set_feed(itemlist->get_feed());
@@ -632,10 +632,10 @@ bool view::get_previous_unread(itemlist_formaction * itemlist, itemview_formacti
 		}
 		return true;
 	} else if (cfg->get_configvalue_as_bool("goto-next-feed")==false) {
-		LOG(LOG_DEBUG, "view::get_previous_unread: goto-next-feed = false");
+		LOG(level::DEBUG, "view::get_previous_unread: goto-next-feed = false");
 		show_error(_("No unread items."));
 	} else if (feedlist->jump_to_previous_unread_feed(feedpos)) {
-		LOG(LOG_DEBUG, "view::get_previous_unread: found feed with unread articles");
+		LOG(level::DEBUG, "view::get_previous_unread: found feed with unread articles");
 		prepare_query_feed(feedlist->get_feed());
 		itemlist->set_feed(feedlist->get_feed());
 		itemlist->set_pos(feedpos);
@@ -683,9 +683,9 @@ bool view::get_prev_unread_feed(itemlist_formaction * itemlist) {
 bool view::get_next_unread(itemlist_formaction * itemlist, itemview_formaction * itemview) {
 	unsigned int feedpos;
 	std::shared_ptr<feedlist_formaction> feedlist = std::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
-	LOG(LOG_DEBUG, "view::get_next_unread: trying to find next unread");
+	LOG(level::DEBUG, "view::get_next_unread: trying to find next unread");
 	if (itemlist->jump_to_next_unread_item(false)) {
-		LOG(LOG_DEBUG, "view::get_next_unread: found unread article in same feed");
+		LOG(level::DEBUG, "view::get_next_unread: found unread article in same feed");
 		if (itemview) {
 			itemview->init();
 			itemview->set_feed(itemlist->get_feed());
@@ -693,10 +693,10 @@ bool view::get_next_unread(itemlist_formaction * itemlist, itemview_formaction *
 		}
 		return true;
 	} else if (cfg->get_configvalue_as_bool("goto-next-feed")==false) {
-		LOG(LOG_DEBUG, "view::get_next_unread: goto-next-feed = false");
+		LOG(level::DEBUG, "view::get_next_unread: goto-next-feed = false");
 		show_error(_("No unread items."));
 	} else if (feedlist->jump_to_next_unread_feed(feedpos)) {
-		LOG(LOG_DEBUG, "view::get_next_unread: found feed with unread articles");
+		LOG(level::DEBUG, "view::get_next_unread: found feed with unread articles");
 		prepare_query_feed(feedlist->get_feed());
 		itemlist->set_feed(feedlist->get_feed());
 		itemlist->set_pos(feedpos);
@@ -717,7 +717,7 @@ bool view::get_previous(itemlist_formaction * itemlist, itemview_formaction * it
 	unsigned int feedpos;
 	std::shared_ptr<feedlist_formaction> feedlist = std::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
 	if (itemlist->jump_to_previous_item(false)) {
-		LOG(LOG_DEBUG, "view::get_previous: article in same feed");
+		LOG(level::DEBUG, "view::get_previous: article in same feed");
 		if (itemview) {
 			itemview->init();
 			itemview->set_feed(itemlist->get_feed());
@@ -725,10 +725,10 @@ bool view::get_previous(itemlist_formaction * itemlist, itemview_formaction * it
 		}
 		return true;
 	} else if (cfg->get_configvalue_as_bool("goto-next-feed")==false) {
-		LOG(LOG_DEBUG, "view::get_previous: goto-next-feed = false");
+		LOG(level::DEBUG, "view::get_previous: goto-next-feed = false");
 		show_error(_("Already on first item."));
 	} else if (feedlist->jump_to_previous_feed(feedpos)) {
-		LOG(LOG_DEBUG, "view::get_previous: previous feed");
+		LOG(level::DEBUG, "view::get_previous: previous feed");
 		prepare_query_feed(feedlist->get_feed());
 		itemlist->set_feed(feedlist->get_feed());
 		itemlist->set_pos(feedpos);
@@ -749,7 +749,7 @@ bool view::get_next(itemlist_formaction * itemlist, itemview_formaction * itemvi
 	unsigned int feedpos;
 	std::shared_ptr<feedlist_formaction> feedlist = std::dynamic_pointer_cast<feedlist_formaction, formaction>(formaction_stack[0]);
 	if (itemlist->jump_to_next_item(false)) {
-		LOG(LOG_DEBUG, "view::get_next: article in same feed");
+		LOG(level::DEBUG, "view::get_next: article in same feed");
 		if (itemview) {
 			itemview->init();
 			itemview->set_feed(itemlist->get_feed());
@@ -757,10 +757,10 @@ bool view::get_next(itemlist_formaction * itemlist, itemview_formaction * itemvi
 		}
 		return true;
 	} else if (cfg->get_configvalue_as_bool("goto-next-feed")==false) {
-		LOG(LOG_DEBUG, "view::get_next: goto-next-feed = false");
+		LOG(level::DEBUG, "view::get_next: goto-next-feed = false");
 		show_error(_("Already on last item."));
 	} else if (feedlist->jump_to_next_feed(feedpos)) {
-		LOG(LOG_DEBUG, "view::get_next: next feed");
+		LOG(level::DEBUG, "view::get_next: next feed");
 		prepare_query_feed(feedlist->get_feed());
 		itemlist->set_feed(feedlist->get_feed());
 		itemlist->set_pos(feedpos);
@@ -807,7 +807,7 @@ bool view::get_prev_feed(itemlist_formaction * itemlist) {
 
 void view::prepare_query_feed(std::shared_ptr<rss_feed> feed) {
 	if (feed->rssurl().substr(0,6) == "query:") {
-		LOG(LOG_DEBUG, "view::prepare_query_feed: %s", feed->rssurl().c_str());
+		LOG(level::DEBUG, "view::prepare_query_feed: %s", feed->rssurl().c_str());
 
 		set_status(_("Updating query feed..."));
 		feed->update_items(ctrl->get_all_feeds());
@@ -901,7 +901,7 @@ void view::apply_colors(std::shared_ptr<formaction> fa) {
 	auto bgcit = bg_colors.begin();
 	auto attit = attributes.begin();
 
-	LOG(LOG_DEBUG, "view::apply_colors: fa = %s", fa->id().c_str());
+	LOG(level::DEBUG, "view::apply_colors: fa = %s", fa->id().c_str());
 
 	std::string article_colorstr;
 
@@ -940,7 +940,7 @@ void view::apply_colors(std::shared_ptr<formaction> fa) {
 			}
 		}
 
-		LOG(LOG_DEBUG,"view::apply_colors: %s %s %s\n", fa->id().c_str(), fgcit->first.c_str(), colorattr.c_str());
+		LOG(level::DEBUG,"view::apply_colors: %s %s %s\n", fa->id().c_str(), fgcit->first.c_str(), colorattr.c_str());
 
 		fa->get_form()->set(fgcit->first, colorattr);
 
@@ -1009,7 +1009,7 @@ void view::inside_cmdline(bool f) {
 void view::clear_line(std::shared_ptr<formaction> fa) {
 	fa->get_form()->set("qna_value", "");
 	fa->get_form()->set("qna_value_pos", "0");
-	LOG(LOG_DEBUG, "view::clear_line: cleared line");
+	LOG(level::DEBUG, "view::clear_line: cleared line");
 }
 
 void view::clear_eol(std::shared_ptr<formaction> fa) {
@@ -1018,19 +1018,19 @@ void view::clear_eol(std::shared_ptr<formaction> fa) {
 	val.erase(pos, val.length());
 	fa->get_form()->set("qna_value", val);
 	fa->get_form()->set("qna_value_pos", utils::to_string<unsigned int>(val.length()));
-	LOG(LOG_DEBUG, "view::clear_eol: cleared to end of line");
+	LOG(level::DEBUG, "view::clear_eol: cleared to end of line");
 }
 
 void view::cancel_input(std::shared_ptr<formaction> fa) {
 	fa->process_op(OP_INT_CANCEL_QNA);
-	LOG(LOG_DEBUG, "view::cancel_input: cancelled input");
+	LOG(level::DEBUG, "view::cancel_input: cancelled input");
 }
 
 void view::delete_word(std::shared_ptr<formaction> fa) {
 	std::string::size_type curpos = utils::to_u(fa->get_form()->get("qna_value_pos"), 0);
 	std::string val = fa->get_form()->get("qna_value");
 	std::string::size_type firstpos = curpos;
-	LOG(LOG_DEBUG, "view::delete_word: before val = %s", val.c_str());
+	LOG(level::DEBUG, "view::delete_word: before val = %s", val.c_str());
 	if (firstpos >= val.length() || ::isspace(val[firstpos])) {
 		if (firstpos != 0 && firstpos >= val.length())
 			firstpos = val.length() - 1;
@@ -1044,7 +1044,7 @@ void view::delete_word(std::shared_ptr<formaction> fa) {
 	if (firstpos != 0)
 		firstpos++;
 	val.erase(firstpos, curpos - firstpos);
-	LOG(LOG_DEBUG, "view::delete_word: after val = %s", val.c_str());
+	LOG(level::DEBUG, "view::delete_word: after val = %s", val.c_str());
 	fa->get_form()->set("qna_value", val);
 	fa->get_form()->set("qna_value_pos", utils::to_string<unsigned int>(firstpos));
 }
@@ -1060,7 +1060,7 @@ void view::handle_cmdline_completion(std::shared_ptr<formaction> fa) {
 	std::string suggestion;
 	switch (suggestions.size()) {
 	case 0:
-		LOG(LOG_DEBUG, "view::handle_cmdline_completion: found no suggestion for `%s'", fragment.c_str());
+		LOG(level::DEBUG, "view::handle_cmdline_completion: found no suggestion for `%s'", fragment.c_str());
 		::beep(); // direct call to ncurses - we beep to signal that there is no suggestion available, just like vim
 		return;
 	case 1:

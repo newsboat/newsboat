@@ -58,13 +58,13 @@ void poddlthread::run() {
 	struct stat sb;
 
 	if (stat(dl->filename(), &sb) == -1) {
-		LOG(LOG_INFO, "poddlthread::run: stat failed: starting normal download");
+		LOG(level::INFO, "poddlthread::run: stat failed: starting normal download");
 		mkdir_p(dl->filename());
 		f->open(dl->filename(), std::fstream::out);
 		dl->set_offset(0);
 		resumed_download = false;
 	} else {
-		LOG(LOG_INFO, "poddlthread::run: stat ok: starting download from %u", sb.st_size);
+		LOG(level::INFO, "poddlthread::run: stat ok: starting download from %u", sb.st_size);
 		curl_easy_setopt(easyhandle, CURLOPT_RESUME_FROM, sb.st_size);
 		dl->set_offset(sb.st_size);
 		f->open(dl->filename(), std::fstream::out | std::fstream::app);
@@ -73,28 +73,28 @@ void poddlthread::run() {
 
 	if (f->is_open()) {
 
-		dl->set_status(DL_DOWNLOADING);
+		dl->set_status(dlstatus::DOWNLOADING);
 
 		CURLcode success = curl_easy_perform(easyhandle);
 
 		f->close();
 
-		LOG(LOG_INFO,"poddlthread::run: curl_easy_perform rc = %u (%s)", success, curl_easy_strerror(success));
+		LOG(level::INFO,"poddlthread::run: curl_easy_perform rc = %u (%s)", success, curl_easy_strerror(success));
 
 		if (0 == success)
-			dl->set_status(DL_READY);
-		else if (dl->status() != DL_CANCELLED) {
+			dl->set_status(dlstatus::READY);
+		else if (dl->status() != dlstatus::CANCELLED) {
 			// attempt complete re-download
 			if (resumed_download) {
 				::unlink(dl->filename());
 				this->run();
 			} else {
-				dl->set_status(DL_FAILED);
+				dl->set_status(dlstatus::FAILED);
 				::unlink(dl->filename());
 			}
 		}
 	} else {
-		dl->set_status(DL_FAILED);
+		dl->set_status(dlstatus::FAILED);
 	}
 
 	curl_easy_cleanup(easyhandle);
@@ -111,16 +111,16 @@ static int progress_callback(void *clientp, double dltotal, double dlnow, double
 }
 
 size_t poddlthread::write_data(void * buffer, size_t size, size_t nmemb) {
-	if (dl->status() == DL_CANCELLED)
+	if (dl->status() == dlstatus::CANCELLED)
 		return 0;
 	f->write(static_cast<char *>(buffer), size * nmemb);
 	bytecount += (size * nmemb);
-	LOG(LOG_DEBUG, "poddlthread::write_data: bad = %u size = %u", f->bad(), size * nmemb);
+	LOG(level::DEBUG, "poddlthread::write_data: bad = %u size = %u", f->bad(), size * nmemb);
 	return f->bad() ? 0 : size * nmemb;
 }
 
 int poddlthread::progress(double dlnow, double dltotal) {
-	if (dl->status() == DL_CANCELLED)
+	if (dl->status() == dlstatus::CANCELLED)
 		return -1;
 	gettimeofday(&tv2, nullptr);
 	double kbps = compute_kbps();

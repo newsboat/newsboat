@@ -8,7 +8,13 @@
 
 namespace newsbeuter {
 
-enum action_handler_status { AHS_OK = 0, AHS_INVALID_PARAMS, AHS_TOO_FEW_PARAMS, AHS_INVALID_COMMAND, AHS_FILENOTFOUND };
+enum class action_handler_status {
+	OK = 0,
+	INVALID_PARAMS,
+	TOO_FEW_PARAMS,
+	INVALID_COMMAND,
+	FILENOTFOUND
+};
 
 struct config_action_handler {
 	virtual void handle_action(const std::string& action, const std::vector<std::string>& params) = 0;

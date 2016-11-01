@@ -14,38 +14,38 @@
 namespace newsbeuter {
 
 htmlrenderer::htmlrenderer(bool raw) : raw_(raw) {
-	tags["a"] = TAG_A;
-	tags["embed"] = TAG_EMBED;
-	tags["br"] = TAG_BR;
-	tags["pre"] = TAG_PRE;
-	tags["ituneshack"] = TAG_ITUNESHACK;
-	tags["img"] = TAG_IMG;
-	tags["blockquote"] = TAG_BLOCKQUOTE;
-	tags["aside"] = TAG_BLOCKQUOTE;
-	tags["p"] = TAG_P;
-	tags["h1"] = TAG_H1;
-	tags["h2"] = TAG_H2;
-	tags["h3"] = TAG_H3;
-	tags["h4"] = TAG_H4;
-	tags["ol"] = TAG_OL;
-	tags["ul"] = TAG_UL;
-	tags["li"] = TAG_LI;
-	tags["dt"] = TAG_DT;
-	tags["dd"] = TAG_DD;
-	tags["dl"] = TAG_DL;
-	tags["sup"] = TAG_SUP;
-	tags["sub"] = TAG_SUB;
-	tags["hr"] = TAG_HR;
-	tags["b"] = TAG_STRONG;
-	tags["strong"] = TAG_STRONG;
-	tags["u"] = TAG_UNDERLINE;
-	tags["q"] = TAG_QUOTATION;
-	tags["script"] = TAG_SCRIPT;
-	tags["style"] = TAG_STYLE;
-	tags["table"] = TAG_TABLE;
-	tags["th"] = TAG_TH;
-	tags["tr"] = TAG_TR;
-	tags["td"] = TAG_TD;
+	tags["a"] = htmltag::A;
+	tags["embed"] = htmltag::EMBED;
+	tags["br"] = htmltag::BR;
+	tags["pre"] = htmltag::PRE;
+	tags["ituneshack"] = htmltag::ITUNESHACK;
+	tags["img"] = htmltag::IMG;
+	tags["blockquote"] = htmltag::BLOCKQUOTE;
+	tags["aside"] = htmltag::BLOCKQUOTE;
+	tags["p"] = htmltag::P;
+	tags["h1"] = htmltag::H1;
+	tags["h2"] = htmltag::H2;
+	tags["h3"] = htmltag::H3;
+	tags["h4"] = htmltag::H4;
+	tags["ol"] = htmltag::OL;
+	tags["ul"] = htmltag::UL;
+	tags["li"] = htmltag::LI;
+	tags["dt"] = htmltag::DT;
+	tags["dd"] = htmltag::DD;
+	tags["dl"] = htmltag::DL;
+	tags["sup"] = htmltag::SUP;
+	tags["sub"] = htmltag::SUB;
+	tags["hr"] = htmltag::HR;
+	tags["b"] = htmltag::STRONG;
+	tags["strong"] = htmltag::STRONG;
+	tags["u"] = htmltag::UNDERLINE;
+	tags["q"] = htmltag::QUOTATION;
+	tags["script"] = htmltag::SCRIPT;
+	tags["style"] = htmltag::STYLE;
+	tags["table"] = htmltag::TABLE;
+	tags["th"] = htmltag::TH;
+	tags["tr"] = htmltag::TR;
+	tags["td"] = htmltag::TD;
 }
 
 void htmlrenderer::render(
@@ -108,49 +108,49 @@ void htmlrenderer::render(
 	tagsouppullparser xpp;
 	xpp.set_input(input);
 
-	for (tagsouppullparser::event e = xpp.next(); e != tagsouppullparser::END_DOCUMENT; e = xpp.next()) {
+	for (tagsouppullparser::event e = xpp.next(); e != tagsouppullparser::event::END_DOCUMENT; e = xpp.next()) {
 		std::string tagname;
 		switch (e) {
-		case tagsouppullparser::START_TAG:
+		case tagsouppullparser::event::START_TAG:
 			tagname = xpp.get_text();
 			std::transform(tagname.begin(), tagname.end(), tagname.begin(), ::tolower);
 			current_tag = tags[tagname];
 
 			switch (current_tag) {
-			case TAG_A: {
+			case htmltag::A: {
 				std::string link;
 				try {
 					link = xpp.get_attribute_value("href");
 				} catch (const std::invalid_argument& ) {
-					LOG(LOG_WARN,"htmlrenderer::render: found a tag with no href attribute");
+					LOG(level::WARN,"htmlrenderer::render: found a tag with no href attribute");
 					link = "";
 				}
 				if (link.length() > 0) {
-					link_num = add_link(links,utils::censor_url(utils::absolute_url(url,link)), LINK_HREF);
+					link_num = add_link(links,utils::censor_url(utils::absolute_url(url,link)), link_type::HREF);
 					if (!raw_)
 						curline.append("<u>");
 				}
 			}
 			break;
-			case TAG_STRONG:
+			case htmltag::STRONG:
 				if (!raw_)
 					curline.append("<b>");
 				break;
-			case TAG_UNDERLINE:
+			case htmltag::UNDERLINE:
 				if (!raw_)
 					curline.append("<u>");
 				break;
-			case TAG_QUOTATION:
+			case htmltag::QUOTATION:
 				if (!raw_)
 					curline.append("\"");
 				break;
 
-			case TAG_EMBED: {
+			case htmltag::EMBED: {
 				std::string type;
 				try {
 					type = xpp.get_attribute_value("type");
 				} catch (const std::invalid_argument& ) {
-					LOG(LOG_WARN, "htmlrenderer::render: found embed object without type attribute");
+					LOG(level::WARN, "htmlrenderer::render: found embed object without type attribute");
 					type = "";
 				}
 				if (type == "application/x-shockwave-flash") {
@@ -158,39 +158,39 @@ void htmlrenderer::render(
 					try {
 						link = xpp.get_attribute_value("src");
 					} catch (const std::invalid_argument& ) {
-						LOG(LOG_WARN, "htmlrenderer::render: found embed object without src attribute");
+						LOG(level::WARN, "htmlrenderer::render: found embed object without src attribute");
 						link = "";
 					}
 					if (link.length() > 0) {
-						link_num = add_link(links,utils::censor_url(utils::absolute_url(url,link)), LINK_EMBED);
+						link_num = add_link(links,utils::censor_url(utils::absolute_url(url,link)), link_type::EMBED);
 						curline.append(utils::strprintf("[%s %u]", _("embedded flash:"), link_num));
 					}
 				}
 			}
 			break;
 
-			case TAG_BR:
+			case htmltag::BR:
 				add_line(curline, tables, lines);
 				prepare_new_line(curline, tables.size() ? 0 : indent_level);
 				break;
 
-			case TAG_PRE:
+			case htmltag::PRE:
 				inside_pre = true;
 				add_nonempty_line(curline, tables, lines);
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
-			case TAG_ITUNESHACK:
+			case htmltag::ITUNESHACK:
 				itunes_hack = true;
 				break;
 
-			case TAG_IMG: {
+			case htmltag::IMG: {
 				std::string imgurl;
 				std::string imgtitle;
 				try {
 					imgurl = xpp.get_attribute_value("src");
 				} catch (const std::invalid_argument& ) {
-					LOG(LOG_WARN,"htmlrenderer::render: found img tag with no src attribute");
+					LOG(level::WARN,"htmlrenderer::render: found img tag with no src attribute");
 					imgurl = "";
 				}
 				try {
@@ -200,9 +200,9 @@ void htmlrenderer::render(
 				}
 				if (imgurl.length() > 0) {
 					if (imgurl.substr(0,5) == "data:") {
-						link_num = add_link(links, "inline image", LINK_IMG);
+						link_num = add_link(links, "inline image", link_type::IMG);
 					} else {
-						link_num = add_link(links,utils::censor_url(utils::absolute_url(url,imgurl)), LINK_IMG);
+						link_num = add_link(links,utils::censor_url(utils::absolute_url(url,imgurl)), link_type::IMG);
 					}
 					if (imgtitle != "") {
 						curline.append(utils::strprintf("[%s %u: %s]", _("image"), link_num, imgtitle.c_str()));
@@ -214,18 +214,18 @@ void htmlrenderer::render(
 			}
 			break;
 
-			case TAG_BLOCKQUOTE:
+			case htmltag::BLOCKQUOTE:
 				++indent_level;
 				add_nonempty_line(curline, tables, lines);
 				add_line("", tables, lines);
 				prepare_new_line(curline, tables.size() ? 0 : indent_level);
 				break;
 
-			case TAG_H1:
-			case TAG_H2:
-			case TAG_H3:
-			case TAG_H4:
-			case TAG_P:
+			case htmltag::H1:
+			case htmltag::H2:
+			case htmltag::H3:
+			case htmltag::H4:
+			case htmltag::P:
 				{
 				add_nonempty_line(curline, tables, lines);
 				if (lines.size() > 0) {
@@ -238,7 +238,7 @@ void htmlrenderer::render(
 				}
 				break;
 
-			case TAG_OL:
+			case htmltag::OL:
 				is_ol = true;
 				{
 					unsigned int ol_count = 1;
@@ -267,14 +267,14 @@ void htmlrenderer::render(
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
-			case TAG_UL:
+			case htmltag::UL:
 				is_ol = false;
 				add_nonempty_line(curline, tables, lines);
 				add_line("", tables, lines);
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
-			case TAG_LI:
+			case htmltag::LI:
 				if (inside_li) {
 					indent_level-=2;
 					if (indent_level < 0) indent_level = 0;
@@ -293,36 +293,36 @@ void htmlrenderer::render(
 				}
 				break;
 
-			case TAG_DT:
+			case htmltag::DT:
 				add_nonempty_line(curline, tables, lines);
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
-			case TAG_DD:
+			case htmltag::DD:
 				indent_level+=4;
 				add_nonempty_line(curline, tables, lines);
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
-			case TAG_DL:
+			case htmltag::DL:
 				// ignore tag
 				break;
 
-			case TAG_SUP:
+			case htmltag::SUP:
 				curline.append("^");
 				break;
 
-			case TAG_SUB:
+			case htmltag::SUB:
 				curline.append("[");
 				break;
 
-			case TAG_HR:
+			case htmltag::HR:
 				add_nonempty_line(curline, tables, lines);
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				add_hr(lines);
 				break;
 
-			case TAG_SCRIPT:
+			case htmltag::SCRIPT:
 				add_nonempty_line(curline, tables, lines);
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 
@@ -330,11 +330,11 @@ void htmlrenderer::render(
 				inside_script++;
 				break;
 
-			case TAG_STYLE:
+			case htmltag::STYLE:
 				inside_style++;
 				break;
 
-			case TAG_TABLE: {
+			case htmltag::TABLE: {
 				add_nonempty_line(curline, tables, lines);
 				prepare_new_line(curline, 0); // no indent in tables
 
@@ -349,12 +349,12 @@ void htmlrenderer::render(
 				break;
 			}
 
-			case TAG_TR:
+			case htmltag::TR:
 				if (!tables.empty())
 					tables.back().start_row();
 				break;
 
-			case TAG_TH: {
+			case htmltag::TH: {
 				size_t span = 1;
 				try {
 					span = utils::to_u(xpp.get_attribute_value("colspan"), 1);
@@ -367,7 +367,7 @@ void htmlrenderer::render(
 				break;
 			}
 
-			case TAG_TD: {
+			case htmltag::TD: {
 				size_t span = 1;
 				try {
 					span = utils::to_u(xpp.get_attribute_value("colspan"), 1);
@@ -381,13 +381,13 @@ void htmlrenderer::render(
 			}
 			break;
 
-		case tagsouppullparser::END_TAG:
+		case tagsouppullparser::event::END_TAG:
 			tagname = xpp.get_text();
 			std::transform(tagname.begin(), tagname.end(), tagname.begin(), ::tolower);
 			current_tag = tags[tagname];
 
 			switch (current_tag) {
-			case TAG_BLOCKQUOTE:
+			case htmltag::BLOCKQUOTE:
 				--indent_level;
 				if (indent_level < 0) indent_level = 0;
 				add_nonempty_line(curline, tables, lines);
@@ -395,11 +395,11 @@ void htmlrenderer::render(
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
-			case TAG_OL:
+			case htmltag::OL:
 				ol_types.pop_back();
 				ol_counts.pop_back();
 			// fall-through
-			case TAG_UL:
+			case htmltag::UL:
 				if (inside_li) {
 					indent_level-=2;
 					if (indent_level < 0) indent_level = 0;
@@ -411,13 +411,13 @@ void htmlrenderer::render(
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
-			case TAG_DT:
+			case htmltag::DT:
 				add_nonempty_line(curline, tables, lines);
 				add_line("", tables, lines);
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
-			case TAG_DD:
+			case htmltag::DD:
 				indent_level-=4;
 				if (indent_level < 0) indent_level = 0;
 				add_nonempty_line(curline, tables, lines);
@@ -425,11 +425,11 @@ void htmlrenderer::render(
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
-			case TAG_DL:
+			case htmltag::DL:
 				// ignore tag
 				break;
 
-			case TAG_LI:
+			case htmltag::LI:
 				indent_level-=2;
 				if (indent_level < 0) indent_level = 0;
 				inside_li = false;
@@ -437,7 +437,7 @@ void htmlrenderer::render(
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
-			case TAG_H1:
+			case htmltag::H1:
 				if (line_is_nonempty(curline)) {
 					add_line(curline, tables, lines);
 					size_t llen = utils::strwidth_stfl(curline);
@@ -447,29 +447,29 @@ void htmlrenderer::render(
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
-			case TAG_H2:
-			case TAG_H3:
-			case TAG_H4:
-			case TAG_P:
+			case htmltag::H2:
+			case htmltag::H3:
+			case htmltag::H4:
+			case htmltag::P:
 				add_nonempty_line(curline, tables, lines);
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
-			case TAG_PRE:
+			case htmltag::PRE:
 				add_line_softwrappable(curline, lines);
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				inside_pre = false;
 				break;
 
-			case TAG_SUB:
+			case htmltag::SUB:
 				curline.append("]");
 				break;
 
-			case TAG_SUP:
+			case htmltag::SUP:
 				// has closing tag, but we render nothing.
 				break;
 
-			case TAG_A:
+			case htmltag::A:
 				if (link_num != -1) {
 					if (!raw_)
 						curline.append("</>");
@@ -478,42 +478,42 @@ void htmlrenderer::render(
 				}
 				break;
 
-			case TAG_UNDERLINE:
+			case htmltag::UNDERLINE:
 				if (!raw_)
 					curline.append("</>");
 				break;
 
-			case TAG_STRONG:
+			case htmltag::STRONG:
 				if (!raw_)
 					curline.append("</>");
 				break;
 
-			case TAG_QUOTATION:
+			case htmltag::QUOTATION:
 				if (!raw_)
 					curline.append("\"");
 				break;
 
-			case TAG_EMBED:
-			case TAG_BR:
-			case TAG_ITUNESHACK:
-			case TAG_IMG:
-			case TAG_HR:
+			case htmltag::EMBED:
+			case htmltag::BR:
+			case htmltag::ITUNESHACK:
+			case htmltag::IMG:
+			case htmltag::HR:
 				// ignore closing tags
 				break;
 
-			case TAG_SCRIPT:
+			case htmltag::SCRIPT:
 				// don't render scripts, ignore current line
 				if (inside_script)
 					inside_script--;
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				break;
 
-			case TAG_STYLE:
+			case htmltag::STYLE:
 				if (inside_style)
 					inside_style--;
 				break;
 
-			case TAG_TABLE:
+			case htmltag::TABLE:
 				add_nonempty_line(curline, tables, lines);
 				prepare_new_line(curline, 0); // no indent in tables
 
@@ -540,7 +540,7 @@ void htmlrenderer::render(
 				break;
 
 
-			case TAG_TR:
+			case htmltag::TR:
 				add_nonempty_line(curline, tables, lines);
 				prepare_new_line(curline, 0); // no indent in tables
 
@@ -548,7 +548,7 @@ void htmlrenderer::render(
 					tables.back().complete_row();
 				break;
 
-			case TAG_TH:
+			case htmltag::TH:
 				if (!tables.empty()) {
 					curline.append("</>");
 				}
@@ -561,7 +561,7 @@ void htmlrenderer::render(
 				}
 				break;
 
-			case TAG_TD:
+			case htmltag::TD:
 				add_nonempty_line(curline, tables, lines);
 				prepare_new_line(curline, 0); // no indent in tables
 
@@ -571,7 +571,7 @@ void htmlrenderer::render(
 			}
 			break;
 
-		case tagsouppullparser::TEXT: {
+		case tagsouppullparser::event::TEXT: {
 			auto text = utils::quote_for_stfl(xpp.get_text());
 			if (itunes_hack) {
 				std::vector<std::string> paragraphs = utils::tokenize_nl(text);
@@ -657,11 +657,11 @@ std::string htmlrenderer::render_hr(const unsigned int width) {
 
 std::string htmlrenderer::type2str(link_type type) {
 	switch (type) {
-	case LINK_HREF:
+	case link_type::HREF:
 		return _("link");
-	case LINK_IMG:
+	case link_type::IMG:
 		return _("image");
-	case LINK_EMBED:
+	case link_type::EMBED:
 		return _("embedded flash");
 	default:
 		return _("unknown (bug)");
@@ -678,7 +678,7 @@ void htmlrenderer::add_nonempty_line(
 }
 
 void htmlrenderer::add_hr(std::vector<std::pair<LineType, std::string>>& lines) {
-	lines.push_back(std::make_pair(newsbeuter::hr, std::string("")));
+	lines.push_back(std::make_pair(LineType::hr, std::string("")));
 }
 
 void htmlrenderer::add_line(
@@ -689,21 +689,21 @@ void htmlrenderer::add_line(
 	if (tables.size())
 		tables.back().add_text(curline);
 	else
-		lines.push_back(std::make_pair(newsbeuter::wrappable, curline));
+		lines.push_back(std::make_pair(LineType::wrappable, curline));
 }
 
 void htmlrenderer::add_line_softwrappable(
 		const std::string& line,
 		std::vector<std::pair<LineType, std::string>>& lines)
 {
-	lines.push_back(std::make_pair(newsbeuter::softwrappable, line));
+	lines.push_back(std::make_pair(LineType::softwrappable, line));
 }
 
 void htmlrenderer::add_line_nonwrappable(
 		const std::string& line,
 		std::vector<std::pair<LineType, std::string>>& lines)
 {
-	lines.push_back(std::make_pair(newsbeuter::nonwrappable, line));
+	lines.push_back(std::make_pair(LineType::nonwrappable, line));
 }
 
 void htmlrenderer::prepare_new_line(std::string& line, int indent_level) {
@@ -822,7 +822,7 @@ void htmlrenderer::render_table(
 
 	// render the table
 	if (table.border)
-		lines.push_back(std::make_pair(newsbeuter::nonwrappable, separator));
+		lines.push_back(std::make_pair(LineType::nonwrappable, separator));
 	for (size_t row=0; row < rows; row++) {
 		// calc height of this row
 		size_t height = 0;
@@ -836,7 +836,7 @@ void htmlrenderer::render_table(
 			for (size_t cell=0; cell < table.rows[row].cells.size(); cell++) {
 				size_t cell_width = 0;
 				if (idx < table.rows[row].cells[cell].text.size()) {
-					LOG(LOG_DEBUG, "row = %d cell = %d text = %s", row, cell, table.rows[row].cells[cell].text[idx].c_str());
+					LOG(level::DEBUG, "row = %d cell = %d text = %s", row, cell, table.rows[row].cells[cell].text[idx].c_str());
 					cell_width = utils::strwidth_stfl(table.rows[row].cells[cell].text[idx]);
 					line += table.rows[row].cells[cell].text[idx];
 				}
@@ -845,7 +845,7 @@ void htmlrenderer::render_table(
 					for (size_t ic=cell+1; ic < cell + table.rows[row].cells[cell].span; ++ic)
 						reference_width += cell_widths[ic]+1;
 				}
-				LOG(LOG_DEBUG, "cell_width = %d reference_width = %d", cell_width, reference_width);
+				LOG(level::DEBUG, "cell_width = %d reference_width = %d", cell_width, reference_width);
 				if (cell_width < reference_width) // pad, if necessary
 					line += std::string(reference_width - cell_width, ' ');
 
@@ -854,10 +854,10 @@ void htmlrenderer::render_table(
 			}
 			if (table.border)
 				line += vsep;
-			lines.push_back(std::make_pair(newsbeuter::nonwrappable, line));
+			lines.push_back(std::make_pair(LineType::nonwrappable, line));
 		}
 		if (table.border)
-			lines.push_back(std::make_pair(newsbeuter::nonwrappable, separator));
+			lines.push_back(std::make_pair(LineType::nonwrappable, separator));
 	}
 }
 

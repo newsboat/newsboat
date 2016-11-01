@@ -25,7 +25,7 @@ select_formaction::~select_formaction() { }
 void select_formaction::handle_cmdline(const std::string& cmd) {
 	unsigned int idx = 0;
 	if (1==sscanf(cmd.c_str(),"%u",&idx)) {
-		if (idx > 0 && idx <= ((type == SELECTTAG) ? tags.size() : filters.size())) {
+		if (idx > 0 && idx <= ((type == selection_type::TAG) ? tags.size() : filters.size())) {
 			f->set("tagpos", utils::to_string<unsigned int>(idx - 1));
 		}
 	} else {
@@ -49,14 +49,14 @@ void select_formaction::process_operation(operation op, bool /* automatic */, st
 		unsigned int pos = utils::to_u(tagposname);
 		if (tagposname.length() > 0) {
 			switch (type) {
-			case SELECTTAG: {
+			case selection_type::TAG: {
 				if (pos < tags.size()) {
 					value = tags[pos];
 					quit = true;
 				}
 			}
 			break;
-			case SELECTFILTER: {
+			case selection_type::FILTER: {
 				if (pos < filters.size()) {
 					value = filters[pos].second;
 					quit = true;
@@ -87,14 +87,14 @@ void select_formaction::prepare() {
 		listformatter listfmt;
 		unsigned int i=0;
 		switch (type) {
-		case SELECTTAG:
+		case selection_type::TAG:
 			for (auto tag : tags) {
 				std::string tagstr = utils::strprintf("%4u  %s (%u)", i+1, tag.c_str(), v->get_ctrl()->get_feed_count_per_tag(tag));
 				listfmt.add_line(tagstr, i);
 				i++;
 			}
 			break;
-		case SELECTFILTER:
+		case selection_type::FILTER:
 			for (auto filter : filters) {
 				std::string tagstr = utils::strprintf("%4u  %s", i+1, filter.first.c_str());
 				listfmt.add_line(tagstr, i);
@@ -126,10 +126,10 @@ void select_formaction::init() {
 	fmt.register_fmt('V', PROGRAM_VERSION);
 
 	switch (type) {
-	case SELECTTAG:
+	case selection_type::TAG:
 		title = fmt.do_format(v->get_cfg()->get_configvalue("selecttag-title-format"), width);
 		break;
-	case SELECTFILTER:
+	case selection_type::FILTER:
 		title = fmt.do_format(v->get_cfg()->get_configvalue("selectfilter-title-format"), width);
 		break;
 	default:
@@ -150,9 +150,9 @@ keymap_hint_entry * select_formaction::get_keymap_hint() {
 		{ OP_NIL, nullptr }
 	};
 	switch (type) {
-	case SELECTTAG:
+	case selection_type::TAG:
 		return hints_tag;
-	case SELECTFILTER:
+	case selection_type::FILTER:
 		return hints_filter;
 	}
 	return nullptr;
@@ -160,9 +160,9 @@ keymap_hint_entry * select_formaction::get_keymap_hint() {
 
 std::string select_formaction::title() {
 	switch (type) {
-	case SELECTTAG:
+	case selection_type::TAG:
 		return _("Select Tag");
-	case SELECTFILTER:
+	case selection_type::FILTER:
 		return _("Select Filter");
 	default:
 		return "";

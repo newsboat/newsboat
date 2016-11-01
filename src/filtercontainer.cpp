@@ -16,13 +16,13 @@ void filtercontainer::handle_action(const std::string& action, const std::vector
 	 */
 	if (action == "define-filter") {
 		if (params.size() < 2)
-			throw confighandlerexception(AHS_TOO_FEW_PARAMS);
+			throw confighandlerexception(action_handler_status::TOO_FEW_PARAMS);
 		matcher m;
 		if (!m.parse(params[1]))
 			throw confighandlerexception(utils::strprintf(_("couldn't parse filter expression `%s': %s"), params[1].c_str(), m.get_parse_error().c_str()));
 		filters.push_back(filter_name_expr_pair(params[0],params[1]));
 	} else
-		throw confighandlerexception(AHS_INVALID_COMMAND);
+		throw confighandlerexception(action_handler_status::INVALID_COMMAND);
 }
 
 void filtercontainer::dump_config(std::vector<std::string>& config_output) {
