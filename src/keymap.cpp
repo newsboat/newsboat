@@ -23,27 +23,23 @@ static op_desc opdescs[] = {
 	{
 		OP_OPEN, "open", "ENTER",
 		_("Open feed/article"),
-		KM_FEEDLIST | KM_FILEBROWSER | KM_HELP | KM_ARTICLELIST | KM_TAGSELECT |
-			KM_FILTERSELECT | KM_URLVIEW | KM_PODBEUTER | KM_DIALOGS
+		KM_FEEDLIST | KM_FILEBROWSER | KM_ARTICLELIST | KM_TAGSELECT |
+			KM_FILTERSELECT | KM_URLVIEW | KM_DIALOGS
 	},
 	{
 		OP_QUIT, "quit", "q",
 		_("Return to previous dialog/Quit"),
-		KM_FEEDLIST | KM_FILEBROWSER | KM_HELP | KM_ARTICLELIST | KM_ARTICLE |
-			KM_TAGSELECT | KM_FILTERSELECT | KM_URLVIEW | KM_PODBEUTER |
-			KM_DIALOGS
+		KM_BOTH
 	},
 	{
 		OP_HARDQUIT, "hard-quit", "Q",
 		_("Quit program,  no confirmation"),
-		KM_FEEDLIST | KM_FILEBROWSER | KM_HELP | KM_ARTICLELIST | KM_ARTICLE |
-			KM_TAGSELECT | KM_FILTERSELECT | KM_URLVIEW | KM_PODBEUTER |
-			KM_DIALOGS
+		KM_BOTH
 	},
 	{
 		OP_RELOAD, "reload", "r",
 		_("Reload currently selected feed"),
-		KM_FEEDLIST
+		KM_FEEDLIST | KM_ARTICLELIST
 	},
 	{
 		OP_RELOADALL, "reload-all", "R",
@@ -272,11 +268,13 @@ static op_desc opdescs[] = {
 	},
 	{
 		OP_MACROPREFIX, "macro-prefix", ",",
-		_("Call a macro"), KM_NEWSBEUTER
+		_("Call a macro"),
+		KM_NEWSBEUTER
 	},
 	{
 		OP_DELETE, "delete-article", "D",
-		_("Delete article"), KM_ARTICLELIST | KM_ARTICLE
+		_("Delete article"),
+		KM_ARTICLELIST | KM_ARTICLE
 	},
 	{
 		OP_PURGE_DELETED, "purge-deleted", "$",
