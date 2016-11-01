@@ -12,6 +12,8 @@ prev:K:Jump to previous article.
 random-unread:^K:Jump to a random unread article.
 open-in-browser:o:Opens the URL associated with the current article.
 open-in-browser-and-mark-read:O:Opens the URL associated with the current article and marks the article as read.
+open-all-unread-in-browser:n/a:Opens all the unread URLs in the current feed.
+open-all-unread-in-browser-and-mark-read:n/a:Opens all the unread URLs in the current feed and marks them as read.
 help:?:Runs the help screen.
 toggle-source-view:^U:Toggles between the HTML view and the source view in the article view.
 toggle-article-read:N:Toggle the read flag for the currently selected article, and clears delete flag if set.

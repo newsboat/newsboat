@@ -1,7 +1,7 @@
 #ifndef NEWSBEUTER_ITEMLIST_FORMACTION__H
 #define NEWSBEUTER_ITEMLIST_FORMACTION__H
 
-#include <formaction.h>
+#include <list_formaction.h>
 #include <history.h>
 #include <regexmanager.h>
 #include <view.h>
@@ -14,7 +14,7 @@ typedef std::pair<std::shared_ptr<rss_item>, unsigned int> itemptr_pos_pair;
 
 enum class InvalidationMode {PARTIAL, COMPLETE};
 
-class itemlist_formaction : public formaction {
+class itemlist_formaction : public list_formaction {
 	public:
 		itemlist_formaction(view *, std::string formstr);
 		virtual ~itemlist_formaction();

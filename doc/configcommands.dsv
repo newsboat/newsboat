@@ -51,6 +51,7 @@ keep-articles-days|<days>|0|If set the a number greater than 0, only articles th
 macro|<macro key> <command list>|n/a|With this command, you can define a macro key and specify a list of commands that shall be executed when the macro prefix and the macro key are pressed.|macro k open ; reload ; quit
 mark-as-read-on-hover|[yes/no]|no|If set to yes, then all articles that get selected in the article list are marked as read.|mark-as-read-on-hover yes
 max-download-speed|<number>|0|If set to a number great than 0, the download speed per download is set to that limit (in kB).|max-download-speed 50
+max-browser-tabs|<number>|10|Set the maximum number of articles to open in a browser when using the open-all-unread-in-browser or open-all-unread-in-browser-and-mark-read commands.|max-browser-tabs 4
 max-items|<number>|0|Set the number of articles to maximally keep per feed. If the number is set to 0, then all articles are kept.|max-items 100
 newsblur-login|<login>|""|This variable sets your NewsBlur login for NewsBlur support.|newsblur-login "your-login"
 newsblur-min-items|<number>|20|This variable sets the number of articles that are loaded from NewsBlur per feed.|newsblur-min-items 100

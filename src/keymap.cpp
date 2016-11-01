@@ -35,6 +35,8 @@ static op_desc opdescs[] = {
 	{ OP_RANDOMUNREAD,		"random-unread",			"^K",	_("Go to a random unread article"),		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE },
 	{ OP_OPENBROWSER_AND_MARK, "open-in-browser-and-mark-read",                   "O",    _("Open article in browser and mark read"),           KM_ARTICLELIST },
 	{ OP_OPENINBROWSER,		"open-in-browser",			"o",	_("Open article in browser"),			KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE },
+	{ OP_OPENALLUNREADINBROWSER, "open-all-unread-in-browser", "",	_("Open all unread items of selected feed in browser"),		KM_FEEDLIST | KM_ARTICLELIST },
+	{ OP_OPENALLUNREADINBROWSER_AND_MARK, "open-all-unread-in-browser-and-mark-read", "", _("Open all unread items of selected feed in browser and mark read"),	KM_FEEDLIST | KM_ARTICLELIST },
 	{ OP_HELP,				"help",						"?",	_("Open help dialog"),					KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE | KM_PODBEUTER },
 	{ OP_TOGGLESOURCEVIEW,	"toggle-source-view",		"^U",	_("Toggle source view"),				KM_ARTICLE },
 	{ OP_TOGGLEITEMREAD,	"toggle-article-read",		"N",	_("Toggle read status for article"),	KM_ARTICLELIST | KM_ARTICLE },

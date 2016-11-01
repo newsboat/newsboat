@@ -65,6 +65,7 @@ configcontainer::configcontainer()
 		        "download", "display" })) },
 		{ "keep-articles-days", configdata("0", configdata::INT) },
 		{ "mark-as-read-on-hover", configdata("false", configdata::BOOL) },
+		{ "max-browser-tabs", configdata("10", configdata::INT) },
 		{ "markfeedread-jumps-to-next-unread",
 		    configdata("false", configdata::BOOL) },
 		{ "max-download-speed", configdata("0", configdata::INT) },

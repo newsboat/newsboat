@@ -1,7 +1,7 @@
 #ifndef NEWSBEUTER_FEEDLIST_FORMACTION__H
 #define NEWSBEUTER_FEEDLIST_FORMACTION__H
 
-#include <formaction.h>
+#include <list_formaction.h>
 #include <matcher.h>
 #include <history.h>
 #include <regexmanager.h>
@@ -11,7 +11,7 @@ namespace newsbeuter {
 
 typedef std::pair<std::shared_ptr<rss_feed>, unsigned int> feedptr_pos_pair;
 
-class feedlist_formaction : public formaction {
+class feedlist_formaction : public list_formaction {
 	public:
 		feedlist_formaction(view *, std::string formstr);
 		virtual ~feedlist_formaction();

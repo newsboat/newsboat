@@ -23,7 +23,7 @@
 namespace newsbeuter {
 
 feedlist_formaction::feedlist_formaction(view * vv, std::string formstr)
-	: formaction(vv,formstr), zero_feedpos(false), feeds_shown(0),
+	: list_formaction(vv,formstr), zero_feedpos(false), feeds_shown(0),
 	  quit(false), apply_filter(false), search_dummy_feed(new rss_feed(v->get_ctrl()->get_cache())),
 	  filterpos(0), set_filterpos(false), rxman(0), old_width(0) {
 	assert(true==m.parse(FILTER_UNREAD_FEEDS));
@@ -167,6 +167,27 @@ REDO:
 			}
 		} else {
 			v->show_error(_("No feed selected!"));
+		}
+		break;
+	case OP_OPENALLUNREADINBROWSER:
+		if (feeds_shown > 0 && feedpos.length() > 0) {
+			std::shared_ptr<rss_feed> feed = v->get_ctrl()->get_feed(pos);
+			if (feed) {
+				LOG(LOG_INFO, "feedlist_formaction: opening all unread items in feed at position `%s'", feedpos.c_str());
+				open_unread_items_in_browser(feed , false);
+			}
+		} else {
+			v->show_error(_("No feed selected!"));
+		}
+		break;
+	case OP_OPENALLUNREADINBROWSER_AND_MARK:
+		if (feeds_shown > 0 && feedpos.length() > 0) {
+			std::shared_ptr<rss_feed> feed = v->get_ctrl()->get_feed(pos);
+			if (feed) {
+				LOG(LOG_INFO, "feedlist_formaction: opening all unread items in feed at position `%s' and marking read", feedpos.c_str());
+				open_unread_items_in_browser(feed , true);
+				do_redraw = true;
+			}
 		}
 		break;
 	case OP_RELOADALL:

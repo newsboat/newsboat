@@ -17,7 +17,7 @@
 namespace newsbeuter {
 
 itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
-	: formaction(vv,formstr), apply_filter(false), show_searchresult(false),
+	: list_formaction(vv,formstr), apply_filter(false), show_searchresult(false),
 	  search_dummy_feed(new rss_feed(v->get_ctrl()->get_cache())),
 	  set_filterpos(false), filterpos(0), rxman(0), old_width(0),
 	  old_itempos(-1), old_sort_order(""), invalidated(false)
@@ -106,6 +106,23 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			}
 		} else {
 			v->show_error(_("No item selected!")); // should not happen
+		}
+	}
+	break;
+	case OP_OPENALLUNREADINBROWSER: {
+		if (feed)
+		{
+			LOG(LOG_INFO, "itemlist_formaction: opening all unread items in browser");
+			open_unread_items_in_browser(feed , false);
+		}
+	}
+	break;
+	case OP_OPENALLUNREADINBROWSER_AND_MARK:{
+		if (feed)
+		{
+			LOG(LOG_INFO, "itemlist_formaction: opening all unread items in browser and marking read");
+			open_unread_items_in_browser(feed , true);
+			invalidate(InvalidationMode::COMPLETE);
 		}
 	}
 	break;

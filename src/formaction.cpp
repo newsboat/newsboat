@@ -409,5 +409,4 @@ void formaction::save_histories(const std::string& searchfile, const std::string
 	cmdlinehistory.save_to_file(cmdlinefile, limit);
 }
 
-
 }

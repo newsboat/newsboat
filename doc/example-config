@@ -612,6 +612,18 @@
 #
 # mark-as-read-on-hover yes
 
+####  max-browser-tabs
+#
+# Set the maximum number of articles to open in a browser when using the 
+# open-all-unread-in-browser or open-all-unread-in-browser-and-mark-read
+# commands.
+#
+# Syntax: <number>
+#
+# Default value: 10
+#
+# max-browser-tabs 4
+
 ####  max-download-speed
 #
 # If set to a number great than 0, the download speed per download is set to

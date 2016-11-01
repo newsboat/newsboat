@@ -72,6 +72,7 @@ class formaction {
 
 
 		void start_bookmark_qna(const std::string& default_title, const std::string& default_url, const std::string& default_desc, const std::string& default_feed_title);
+		void open_unread_items_in_browser(std::shared_ptr<rss_feed> feed , bool markread);
 
 		view * v;
 		std::shared_ptr<stfl::form> f;
