@@ -730,7 +730,7 @@ std::string itemlist_formaction::item2formatted_line(
 	fmtstr_formatter fmt;
 	fmt.register_fmt('i', strprintf::fmt("%u",item.second + 1));
 	fmt.register_fmt('f', gen_flags(item.first));
-	fmt.register_fmt('D', gen_datestr(item.first->pubDate_timestamp(), datetime_format.c_str()));
+	fmt.register_fmt('D', gen_datestr(item.first->pubDate_timestamp(), datetime_format));
 	if (feed->rssurl() != item.first->feedurl() && item.first->get_feedptr() != nullptr) {
 		fmt.register_fmt('T', utils::replace_all(item.first->get_feedptr()->title(), "<", "<>"));
 	}
@@ -1012,10 +1012,10 @@ std::string itemlist_formaction::gen_flags(std::shared_ptr<rss_item> item) {
 	return flags;
 }
 
-std::string itemlist_formaction::gen_datestr(time_t t, const char * datetimeformat) {
+std::string itemlist_formaction::gen_datestr(time_t t, const std::string& datetimeformat) {
 	char datebuf[64];
 	struct tm * stm = localtime(&t);
-	strftime(datebuf,sizeof(datebuf), datetimeformat, stm);
+	strftime(datebuf, sizeof(datebuf), datetimeformat.c_str(), stm);
 	return datebuf;
 }
 

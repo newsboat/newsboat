@@ -26,9 +26,16 @@ static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp
 
 namespace rsspp {
 
-parser::parser(unsigned int timeout, const char * user_agent, const char * proxy, const char * proxy_auth, curl_proxytype proxy_type, const bool ssl_verify)
-	: to(timeout), ua(user_agent), prx(proxy), prxauth(proxy_auth), prxtype(proxy_type), verify_ssl(ssl_verify), doc(0), lm(0) {
-}
+parser::parser(
+		unsigned int timeout,
+		const std::string& user_agent,
+		const std::string& proxy,
+		const std::string& proxy_auth,
+		curl_proxytype proxy_type,
+		const bool ssl_verify)
+	: to(timeout), ua(user_agent), prx(proxy), prxauth(proxy_auth),
+	prxtype(proxy_type), verify_ssl(ssl_verify), doc(0), lm(0)
+{ }
 
 parser::~parser() {
 	if (doc)
@@ -83,8 +90,8 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 		}
 	}
 
-	if (ua) {
-		curl_easy_setopt(easyhandle, CURLOPT_USERAGENT, ua);
+	if (! ua.empty()) {
+		curl_easy_setopt(easyhandle, CURLOPT_USERAGENT, ua.c_str());
 	}
 
 	if (api) {
@@ -106,12 +113,12 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 	if (to != 0)
 		curl_easy_setopt(easyhandle, CURLOPT_TIMEOUT, to);
 
-	if (prx)
-		curl_easy_setopt(easyhandle, CURLOPT_PROXY, prx);
+	if (! prx.empty())
+		curl_easy_setopt(easyhandle, CURLOPT_PROXY, prx.c_str());
 
-	if (prxauth) {
+	if (! prxauth.empty()) {
 		curl_easy_setopt(easyhandle, CURLOPT_PROXYAUTH, CURLAUTH_ANY);
-		curl_easy_setopt(easyhandle, CURLOPT_PROXYUSERPWD, prxauth);
+		curl_easy_setopt(easyhandle, CURLOPT_PROXYUSERPWD, prxauth.c_str());
 	}
 
 	curl_easy_setopt(easyhandle, CURLOPT_PROXYTYPE, prxtype);
@@ -171,14 +178,19 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 
 	if (buf.length() > 0) {
 		LOG(level::DEBUG, "parser::parse_url: handing over data to parse_buffer()");
-		return parse_buffer(buf.c_str(), buf.length(), url.c_str());
+		return parse_buffer(buf, url);
 	}
 
 	return feed();
 }
 
-feed parser::parse_buffer(const char * buffer, size_t size, const char * url) {
-	doc = xmlReadMemory(buffer, size, url, nullptr, XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING);
+feed parser::parse_buffer(const std::string& buffer, const std::string& url) {
+	doc = xmlReadMemory(
+			buffer.c_str(),
+			buffer.length(),
+			url.c_str(),
+			nullptr,
+			XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING);
 	if (doc == nullptr) {
 		throw exception(_("could not parse buffer"));
 	}

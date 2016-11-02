@@ -16,7 +16,6 @@ namespace newsbeuter {
 ttrss_api::ttrss_api(configcontainer * c) : remote_api(c) {
 	single = (cfg->get_configvalue("ttrss-mode") == "single");
 	auth_info = strprintf::fmt("%s:%s", cfg->get_configvalue("ttrss-login"), cfg->get_configvalue("ttrss-password"));
-	auth_info_ptr = auth_info.c_str();
 	sid = "";
 }
 
@@ -81,7 +80,6 @@ std::string ttrss_api::retrieve_sid() {
 	args["user"] = single ? "admin" : user.c_str();
 	args["password"] = pass.c_str();
 	auth_info = strprintf::fmt("%s:%s", user, pass);
-	auth_info_ptr = auth_info.c_str();
 	json_object * content = run_op("login", args);
 
 	if (content == nullptr)
@@ -111,7 +109,7 @@ json_object* ttrss_api::run_op(const std::string& op,
 	}
 	req_data += "}";
 
-	std::string result = utils::retrieve_url(url, cfg, auth_info_ptr, &req_data);
+	std::string result = utils::retrieve_url(url, cfg, auth_info, &req_data);
 
 	LOG(level::DEBUG, "ttrss_api::run_op(%s,...): post=%s reply = %s", op, req_data, result);
 
@@ -428,11 +426,12 @@ bool ttrss_api::update_article(const std::string& guid, int field, int mode) {
 }
 
 std::string ttrss_api::url_to_id(const std::string& url) {
-	const char * uri = url.c_str();
-	const char * pound = strrchr(uri, '#');
-	if (!pound)
+	const std::string::size_type pound = url.find_first_of('#');
+	if (pound == std::string::npos) {
 		return "";
-	return std::string(pound+1);
+	} else {
+		return url.substr(pound+1);
+	}
 }
 
 

@@ -150,7 +150,7 @@ bool controller::setup_dirs_xdg(const char *env_home, bool silent) {
 	config_dir = xdg_config_dir;
 
 	// create data directory if it doesn't exist
-	utils::mkdir_parents(xdg_data_dir.c_str(), 0700);
+	utils::mkdir_parents(xdg_data_dir, 0700);
 
 	/* in config */
 	url_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + url_file;
@@ -354,7 +354,7 @@ void controller::run(int argc, char * argv[]) {
 		LOG(level::INFO,"Importing OPML file from %s",importfile);
 		urlcfg = new file_urlreader(url_file);
 		urlcfg->reload();
-		import_opml(importfile.c_str());
+		import_opml(importfile);
 		return;
 	}
 
@@ -1043,10 +1043,12 @@ void controller::usage(char * argv0) {
 	::exit(EXIT_FAILURE);
 }
 
-void controller::import_opml(const char * filename) {
-	xmlDoc * doc = xmlReadFile(filename, nullptr, 0);
+void controller::import_opml(const std::string& filename) {
+	xmlDoc * doc = xmlReadFile(filename.c_str(), nullptr, 0);
 	if (doc == nullptr) {
-		std::cout << strprintf::fmt(_("An error occurred while parsing %s."), filename) << std::endl;
+		std::cout
+			<< strprintf::fmt(_("An error occurred while parsing %s."), filename)
+			<< std::endl;
 		return;
 	}
 
@@ -1606,7 +1608,7 @@ void controller::update_config() {
 	}
 
 	if (cfg.get_configvalue("error-log").length() > 0) {
-		logger::getInstance().set_errorlogfile(cfg.get_configvalue("error-log").c_str());
+		logger::getInstance().set_errorlogfile(cfg.get_configvalue("error-log"));
 	}
 
 }

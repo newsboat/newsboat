@@ -26,7 +26,7 @@ class rss_parser {
 		void replace_newline_characters(std::string& str);
 		std::string render_xhtml_title(const std::string& title, const std::string& link);
 		time_t parse_date(const std::string& datestr);
-		void set_rtl(std::shared_ptr<rss_feed> feed, const char * lang);
+		void set_rtl(std::shared_ptr<rss_feed> feed, const std::string& lang);
 
 		void retrieve_uri(const std::string& uri);
 		void download_http(const std::string& uri);

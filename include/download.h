@@ -24,12 +24,12 @@ class download {
 		download(pb_controller * c = 0);
 		~download();
 		double percents_finished();
-		const char * status_text();
+		const std::string status_text();
 		inline dlstatus status() const {
 			return download_status;
 		}
-		const char * filename();
-		const char * url();
+		const std::string filename();
+		const std::string url();
 		void set_filename(const std::string& str);
 		void set_url(const std::string& url);
 		void set_progress(double cur, double max);

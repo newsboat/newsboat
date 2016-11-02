@@ -98,29 +98,4 @@ std::string stfl::form::dump(const std::string& name, const std::string& prefix,
 	return retval;
 }
 
-/*
-
-std::string stfl::form::lookup(const std::string& path, const std::string& newname) {
-	const char * text = stfl_ipool_fromwc(ipool, stfl_lookup(f, stfl_ipool_towc(ipool,path.c_str()), stfl_ipool_towc(ipool,newname.c_str())));
-	std::string retval;
-	if (text)
-		return retval = text;
-	stfl_ipool_flush(ipool);
-	return retval;
-}
-
-std::string stfl::error() {
-	stfl_ipool * ipool = stfl_ipool_create(nl_langinfo(CODESET));
-	std::string retval = stfl_ipool_fromwc(ipool,stfl_error());
-	stfl_ipool_destroy(ipool);
-	return retval;
-}
-
-void stfl::error_action(const std::string& mode) {
-	stfl_ipool * ipool = stfl_ipool_create(nl_langinfo(CODESET));
-	stfl_error_action(stfl_ipool_towc(ipool,mode.c_str()));
-	stfl_ipool_destroy(ipool);
-}
-*/
-
 }

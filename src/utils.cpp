@@ -257,11 +257,6 @@ bool utils::try_fs_lock(const std::string& lock_file, pid_t & pid) {
 	return false;
 }
 
-std::string utils::translit(const char* tocode, const std::string& fromcode)
-{
-	return translit(std::string(tocode), fromcode);
-}
-
 std::string utils::translit(const std::string& tocode, const std::string& fromcode)
 {
 	std::string tlit = "//TRANSLIT";
@@ -395,7 +390,12 @@ static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp
 	return size * nmemb;
 }
 
-std::string utils::retrieve_url(const std::string& url, configcontainer * cfgcont, const char * authinfo, const std::string* postdata) {
+std::string utils::retrieve_url(
+		const std::string& url,
+		configcontainer * cfgcont,
+		const std::string& authinfo,
+		const std::string* postdata)
+{
 	std::string buf;
 
 	CURL * easyhandle = curl_easy_init();
@@ -409,9 +409,10 @@ std::string utils::retrieve_url(const std::string& url, configcontainer * cfgcon
 		curl_easy_setopt(easyhandle, CURLOPT_POSTFIELDS, postdata->c_str());
 	}
 
-	if (authinfo) {
-		curl_easy_setopt(easyhandle, CURLOPT_HTTPAUTH, get_auth_method(cfgcont->get_configvalue("http-auth-method")));
-		curl_easy_setopt(easyhandle, CURLOPT_USERPWD, authinfo);
+	if (! authinfo.empty()) {
+		curl_easy_setopt(easyhandle, CURLOPT_HTTPAUTH,
+				get_auth_method(cfgcont->get_configvalue("http-auth-method")));
+		curl_easy_setopt(easyhandle, CURLOPT_USERPWD, authinfo.c_str());
 	}
 
 	curl_easy_perform(easyhandle);
@@ -914,22 +915,6 @@ std::string utils::get_content(xmlNode * node) {
 	return retval;
 }
 
-std::string utils::get_prop(xmlNode * node, const char * prop, const char * ns) {
-	std::string retval;
-	if (node) {
-		xmlChar * value;
-		if (ns)
-			value = xmlGetProp(node, (xmlChar *)prop);
-		else
-			value = xmlGetNsProp(node, (xmlChar *)prop, (xmlChar *)ns);
-		if (value) {
-			retval = (const char*)value;
-			xmlFree(value);
-		}
-	}
-	return retval;
-}
-
 unsigned long utils::get_auth_method(const std::string& type) {
 	if (type == "any")
 		return CURLAUTH_ANY;
@@ -999,12 +984,12 @@ unsigned int utils::gentabs(const std::string& str) {
 
 /* Like mkdir(), but creates ancestors (parent directories) if they don't
  * exist. */
-int utils::mkdir_parents(const char* p, mode_t mode) {
+int utils::mkdir_parents(const std::string& p, mode_t mode) {
 	int result;
 
 	/* Have to copy the path because we're going to modify it */
-	char* pathname = (char*)malloc(strlen(p) + 1);
-	strcpy(pathname, p);
+	char* pathname = (char*)malloc(p.length() + 1);
+	strcpy(pathname, p.c_str());
 	/* This pointer will run through the whole string looking for '/'.
 	 * We move it by one if path starts with slash because if we don't, the
 	 * first call to access() will fail (because of empty path) */
@@ -1024,7 +1009,7 @@ int utils::mkdir_parents(const char* p, mode_t mode) {
 		curr++;
 	}
 
-	if (result == 0) mkdir(p, mode);
+	if (result == 0) mkdir(p.c_str(), mode);
 
 	free(pathname);
 	return result;

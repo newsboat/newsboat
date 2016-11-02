@@ -18,12 +18,12 @@ download::download(pb_controller * c)
 download::~download() {
 }
 
-const char * download::filename() {
-	return fn.c_str();
+const std::string download::filename() {
+	return fn;
 }
 
-const char * download::url() {
-	return url_.c_str();
+const std::string download::url() {
+	return url_;
 }
 
 void download::set_filename(const std::string& str) {
@@ -38,28 +38,28 @@ double download::percents_finished() {
 	}
 }
 
-const char * download::status_text() {
+const std::string download::status_text() {
 	switch (download_status) {
 	case dlstatus::QUEUED:
-		return _("queued");
+		return _s("queued");
 	case dlstatus::DOWNLOADING:
-		return _("downloading");
+		return _s("downloading");
 	case dlstatus::CANCELLED:
-		return _("cancelled");
+		return _s("cancelled");
 	case dlstatus::DELETED:
-		return _("deleted");
+		return _s("deleted");
 	case dlstatus::FINISHED:
-		return _("finished");
+		return _s("finished");
 	case dlstatus::FAILED:
-		return _("failed");
+		return _s("failed");
 	case dlstatus::ALREADY_DOWNLOADED:
-		return _("incomplete");
+		return _s("incomplete");
 	case dlstatus::READY:
-		return _("ready");
+		return _s("ready");
 	case dlstatus::PLAYED:
-		return _("played");
+		return _s("played");
 	default:
-		return _("unknown (bug).");
+		return _s("unknown (bug).");
 	}
 }
 

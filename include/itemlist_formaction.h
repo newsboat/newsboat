@@ -82,7 +82,7 @@ class itemlist_formaction : public list_formaction {
 		void handle_cmdline_num(unsigned int idx);
 
 		std::string gen_flags(std::shared_ptr<rss_item> item);
-		std::string gen_datestr(time_t t, const char * datetimeformat);
+		std::string gen_datestr(time_t t, const std::string& datetimeformat);
 
 		void prepare_set_filterpos();
 

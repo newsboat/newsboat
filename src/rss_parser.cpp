@@ -89,10 +89,10 @@ std::string rss_parser::render_xhtml_title(const std::string& title, const std::
 	return "";
 }
 
-void rss_parser::set_rtl(std::shared_ptr<rss_feed> feed, const char * lang) {
+void rss_parser::set_rtl(std::shared_ptr<rss_feed> feed, const std::string& lang) {
 	// we implement right-to-left support for the languages listed in
 	// http://blogs.msdn.com/rssteam/archive/2007/05/17/reading-feeds-in-right-to-left-order.aspx
-	static const char * rtl_langprefix[] = {
+	static const std::unordered_set<std::string> rtl_langprefix {
 		"ar",  // Arabic
 		"fa",  // Farsi
 		"ur",  // Urdu
@@ -100,15 +100,14 @@ void rss_parser::set_rtl(std::shared_ptr<rss_feed> feed, const char * lang) {
 		"syr", // Syriac
 		"dv",  // Divehi
 		"he",  // Hebrew
-		"yi",  // Yiddish
-		nullptr
+		"yi"   // Yiddish
 	};
-	for (unsigned int i=0; rtl_langprefix[i]!=nullptr; ++i) {
-		if (strncmp(lang,rtl_langprefix[i],strlen(rtl_langprefix[i]))==0) {
-			LOG(level::DEBUG, "rss_parser::parse: detected right-to-left order, language code = %s", rtl_langprefix[i]);
-			feed->set_rtl(true);
-			break;
-		}
+	auto it = rtl_langprefix.find(lang);
+	if (it != rtl_langprefix.end()) {
+		LOG(level::DEBUG,
+				"rss_parser::parse: detected right-to-left order, language code = %s",
+				*it);
+		feed->set_rtl(true);
 	}
 }
 
@@ -120,10 +119,9 @@ void rss_parser::retrieve_uri(const std::string& uri) {
 	 *	- query: URLs are ignored
 	 */
 	if (is_ttrss) {
-		const char * uri = my_uri.c_str();
-		const char * pound = strrchr(uri, '#');
-		if (pound != nullptr) {
-			fetch_ttrss(pound+1);
+		std::string::size_type pound = uri.find_first_of('#');
+		if (pound != std::string::npos) {
+			fetch_ttrss(my_uri.substr(pound+1).c_str());
 		}
 	} else if (is_newsblur) {
 		fetch_newsblur(uri);
@@ -189,7 +187,7 @@ void rss_parser::get_execplugin(const std::string& plugin) {
 	is_valid = false;
 	try {
 		rsspp::parser p;
-		f = p.parse_buffer(buf.c_str(), buf.length());
+		f = p.parse_buffer(buf);
 		is_valid = true;
 	} catch (rsspp::exception& e) {
 		is_valid = false;
@@ -214,13 +212,18 @@ void rss_parser::parse_file(const std::string& file) {
 void rss_parser::download_filterplugin(const std::string& filter, const std::string& uri) {
 	std::string buf = utils::retrieve_url(uri, cfgcont);
 
-	char * argv[4] = { const_cast<char *>("/bin/sh"), const_cast<char *>("-c"), const_cast<char *>(filter.c_str()), nullptr };
+	char * argv[4] = {
+		const_cast<char *>("/bin/sh"),
+		const_cast<char *>("-c"),
+		const_cast<char *>(filter.c_str()),
+		nullptr
+	};
 	std::string result = utils::run_program(argv, buf);
 	LOG(level::DEBUG, "rss_parser::parse: output of `%s' is: %s", filter, result);
 	is_valid = false;
 	try {
 		rsspp::parser p;
-		f = p.parse_buffer(result.c_str(), result.length());
+		f = p.parse_buffer(result);
 		is_valid = true;
 	} catch (rsspp::exception& e) {
 		is_valid = false;
@@ -248,7 +251,7 @@ void rss_parser::fill_feed_fields(std::shared_ptr<rss_feed> feed) {
 	else
 		feed->set_pubDate(::time(nullptr));
 
-	set_rtl(feed, f.language.c_str());
+	set_rtl(feed, f.language);
 
 	LOG(level::DEBUG, "rss_parser::parse: feed title = `%s' link = `%s'", feed->title(), feed->link());
 }

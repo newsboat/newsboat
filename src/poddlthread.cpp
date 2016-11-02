@@ -38,7 +38,7 @@ void poddlthread::run() {
 	CURL * easyhandle = curl_easy_init();
 	utils::set_common_curl_options(easyhandle, cfg);
 
-	curl_easy_setopt(easyhandle, CURLOPT_URL, dl->url());
+	curl_easy_setopt(easyhandle, CURLOPT_URL, dl->url().c_str());
 	curl_easy_setopt(easyhandle, CURLOPT_TIMEOUT, 0);
 	// set up write functions:
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
@@ -57,10 +57,10 @@ void poddlthread::run() {
 
 	struct stat sb;
 
-	if (stat(dl->filename(), &sb) == -1) {
+	if (stat(dl->filename().c_str(), &sb) == -1) {
 		LOG(level::INFO, "poddlthread::run: stat failed: starting normal download");
-		mkdir_p(dl->filename());
-		f->open(dl->filename(), std::fstream::out);
+		utils::mkdir_parents(dl->filename());
+		f->open(dl->filename().c_str(), std::fstream::out);
 		dl->set_offset(0);
 		resumed_download = false;
 	} else {
@@ -86,11 +86,11 @@ void poddlthread::run() {
 		else if (dl->status() != dlstatus::CANCELLED) {
 			// attempt complete re-download
 			if (resumed_download) {
-				::unlink(dl->filename());
+				::unlink(dl->filename().c_str());
 				this->run();
 			} else {
 				dl->set_status(dlstatus::FAILED);
-				::unlink(dl->filename());
+				::unlink(dl->filename().c_str());
 			}
 		}
 	} else {
@@ -143,18 +143,6 @@ double poddlthread::compute_kbps() {
 	result = (bytecount / (t2 - t1))/1024;
 
 	return result;
-}
-
-void poddlthread::mkdir_p(const char * file) {
-	char path[2048];
-	snprintf(path, sizeof(path), "%s", file);
-	for (char * x = path; *x != '\0'; x++) {
-		if (*x == '/') {
-			*x = '\0';
-			mkdir(path, 0755);
-			*x = '/';
-		}
-	}
 }
 
 }

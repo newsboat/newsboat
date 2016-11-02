@@ -67,10 +67,12 @@ void filebrowser_formaction::process_operation(operation op, bool /* automatic *
 					std::string fn(cwdtmp);
 					fn.append(NEWSBEUTER_PATH_SEP);
 					std::string fnstr = f->get("filenametext");
-					const char * base = strrchr(fnstr.c_str(),'/');
-					if (!base)
-						base = fnstr.c_str();
-					fn.append(base);
+					std::string::size_type base = fnstr.find_first_of('/');
+					if (base == std::string::npos) {
+						fn.append(fnstr);
+					} else {
+						fn.append(fnstr, base, std::string::npos);
+					}
 					f->set("filenametext",fn);
 					do_redraw = true;
 				}

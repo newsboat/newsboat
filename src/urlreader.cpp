@@ -108,7 +108,7 @@ void opml_urlreader::reload() {
 
 	for (auto url : urls) {
 		LOG(level::DEBUG, "opml_urlreader::reload: downloading `%s'", url);
-		std::string urlcontent = utils::retrieve_url(url, cfg, this->get_auth());
+		std::string urlcontent = utils::retrieve_url(url, cfg);
 
 		xmlDoc * doc = xmlParseMemory(urlcontent.c_str(), urlcontent.length());
 
@@ -178,10 +178,6 @@ void opml_urlreader::rec_find_rss_outlines(xmlNode * node, std::string tag) {
 
 std::string opml_urlreader::get_source() {
 	return cfg->get_configvalue("opml-url");
-}
-
-const char * opml_urlreader::get_auth() {
-	return nullptr;
 }
 
 }

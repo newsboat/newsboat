@@ -49,7 +49,6 @@ class opml_urlreader : public urlreader {
 		virtual std::string get_source();
 	protected:
 		virtual void handle_node(xmlNode * node, const std::string& tag);
-		virtual const char * get_auth();
 		configcontainer * cfg;
 	private:
 		void rec_find_rss_outlines(xmlNode * node, std::string tag);

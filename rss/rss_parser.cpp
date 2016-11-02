@@ -51,16 +51,21 @@ std::string rss_parser::get_xml_content(xmlNode * node) {
 	return result;
 }
 
-std::string rss_parser::get_prop(xmlNode * node, const char * prop, const char * ns) {
+std::string rss_parser::get_prop(xmlNode * node, const std::string& prop, const std::string& ns) {
 	std::string retval;
 	if (node) {
-		xmlChar * value;
-		if (ns)
-			value = xmlGetProp(node, (xmlChar *)prop);
-		else
-			value = xmlGetNsProp(node, (xmlChar *)prop, (xmlChar *)ns);
+		xmlChar * value = nullptr;
+		if (ns.empty()) {
+			value = xmlGetProp(
+					node, reinterpret_cast<const xmlChar *>(prop.c_str()));
+		} else {
+			value = xmlGetNsProp(
+					node,
+					reinterpret_cast<const xmlChar *>(prop.c_str()),
+					reinterpret_cast<const xmlChar *>(ns.c_str()));
+		}
 		if (value) {
-			retval = (const char*)value;
+			retval = reinterpret_cast<const char*>(value);
 			xmlFree(value);
 		}
 	}
@@ -76,7 +81,6 @@ std::string rss_parser::__w3cdtf_to_rfc822(const std::string& w3cdtf) {
 	memset(&stm, 0, sizeof (stm));
 	stm.tm_mday = 1;
 
-	//ptr = strptime(w3cdtf.c_str(), "%Y-%m-%dT%H:%M:%S", &stm);
 	char * ptr = strptime(w3cdtf.c_str(), "%Y", &stm);
 
 	if (ptr != nullptr) {

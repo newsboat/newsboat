@@ -47,13 +47,16 @@ class utils {
 		static bool try_fs_lock(const std::string& lock_file, pid_t & pid);
 		static void remove_fs_lock(const std::string& lock_file);
 
-		static std::string translit(const char* tocode, const std::string& fromcode);
 		static std::string translit(const std::string& tocode, const std::string& fromcode);
 		static std::string convert_text(const std::string& text, const std::string& tocode, const std::string& fromcode);
 
 		static std::string get_command_output(const std::string& cmd);
 		static void extract_filter(const std::string& line, std::string& filter, std::string& url);
-		static std::string retrieve_url(const std::string& url, configcontainer * cfgcont = nullptr, const char * authinfo = nullptr, const std::string* postdata = nullptr);
+		static std::string retrieve_url(
+				const std::string& url,
+				configcontainer * cfgcont = nullptr,
+				const std::string& authinfo = "",
+				const std::string* postdata = nullptr);
 		static void run_command(const std::string& cmd, const std::string& param); // used for notifications only
 		static std::string run_program(char * argv[], const std::string& input);
 
@@ -120,7 +123,6 @@ class utils {
 		static bool is_http_url(const std::string& url);
 
 		static std::string get_content(xmlNode * node);
-		static std::string get_prop(xmlNode * node, const char * prop, const char * ns = nullptr);
 
 		static std::string escape_url(const std::string& url);
 		static std::string unescape_url(const std::string& url);
@@ -128,7 +130,8 @@ class utils {
 
 		static unsigned int gentabs(const std::string& str);
 
-		static int mkdir_parents(const char* pathname, mode_t mode);
+		static int mkdir_parents(
+				const std::string& pathname, mode_t mode = 0755);
 
 	private:
 		static void append_escapes(std::string& str, char c);

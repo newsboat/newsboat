@@ -30,7 +30,6 @@ class ttrss_api : public remote_api {
 		std::string retrieve_sid();
 		std::string sid;
 		std::string auth_info;
-		const char * auth_info_ptr;
 		bool single;
 		std::mutex auth_lock;
 };
