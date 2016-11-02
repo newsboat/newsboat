@@ -5,7 +5,7 @@
 
 using namespace newsbeuter;
 
-TEST_CASE("RegexManager behaves correctly") {
+TEST_CASE("RegexManager behaves correctly", "[regexmanager]") {
 	regexmanager rxman;
 	std::vector<std::string> params;
 	std::string input;
@@ -69,7 +69,7 @@ TEST_CASE("RegexManager behaves correctly") {
 	}
 }
 
-TEST_CASE("regexmanager: `highlight all` adds rules for all locations") {
+TEST_CASE("`highlight all` adds rules for all locations", "[regexmanager]") {
 	regexmanager rxman;
 	std::vector<std::string> params = {"all", "foo", "red"};
 	REQUIRE_NOTHROW(rxman.handle_action("highlight", params));

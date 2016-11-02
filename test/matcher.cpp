@@ -23,7 +23,7 @@ struct testmatchable : public matchable {
 	}
 };
 
-TEST_CASE("Matcher behaves correctly") {
+TEST_CASE("Matcher behaves correctly", "[matcher]") {
 	testmatchable mock;
 	matcher m;
 
@@ -211,7 +211,8 @@ TEST_CASE("Matcher behaves correctly") {
 	}
 }
 
-TEST_CASE("matcher::get_expression() returns previously parsed expression") {
+TEST_CASE("get_expression() returns previously parsed expression",
+          "[matcher]") {
 	matcher m2("AAAA between 1:30000");
 	REQUIRE(m2.get_expression() == "AAAA between 1:30000");
 }

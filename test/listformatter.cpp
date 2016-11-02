@@ -4,8 +4,8 @@
 
 using namespace newsbeuter;
 
-TEST_CASE("listformatter::add_line(), add_lines(), get_lines_count() and clear()")
-{
+TEST_CASE("add_line(), add_lines(), get_lines_count() and clear()",
+          "[listformatter]") {
 	listformatter fmt;
 
 	REQUIRE(fmt.get_lines_count() == 0);
@@ -29,8 +29,8 @@ TEST_CASE("listformatter::add_line(), add_lines(), get_lines_count() and clear()
 	}
 }
 
-TEST_CASE("listformatter::add_line() splits overly long sequences to fit width")
-{
+TEST_CASE("add_line() splits overly long sequences to fit width",
+          "[listformatter]") {
 	listformatter fmt;
 
 	SECTION("ordinary text") {
@@ -74,7 +74,7 @@ TEST_CASE("listformatter::add_line() splits overly long sequences to fit width")
 	}
 }
 
-TEST_CASE("listformatter::set_line() replaces the item in a list") {
+TEST_CASE("set_line() replaces the item in a list", "[listformatter]") {
 	listformatter fmt;
 
 	fmt.add_line("hello", 1, 5);
@@ -99,7 +99,8 @@ TEST_CASE("listformatter::set_line() replaces the item in a list") {
 	REQUIRE(fmt.format_list(nullptr, "") == expected);
 }
 
-TEST_CASE("listformatter::format_list() uses regex manager if one is passed") {
+TEST_CASE("format_list() uses regex manager if one is passed",
+          "[listformatter]") {
 	listformatter fmt;
 
 	fmt.add_line("Highlight me please!");

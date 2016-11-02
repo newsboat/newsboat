@@ -4,7 +4,7 @@
 
 using namespace newsbeuter;
 
-TEST_CASE("Tagsoup pull parser behaves properly") {
+TEST_CASE("Tagsoup pull parser behaves properly", "[tagsouppullparser]") {
 	std::istringstream input_stream(
 			"<test>"
 				"<foo quux='asdf' bar=\"qqq\">text</foo>"
@@ -76,7 +76,7 @@ TEST_CASE("Tagsoup pull parser behaves properly") {
 	REQUIRE(e == tagsouppullparser::event::END_DOCUMENT);
 }
 
-TEST_CASE("<br>, <br/> and <br /> behave the same way") {
+TEST_CASE("<br>, <br/> and <br /> behave the same way", "[tagsouppullparser]") {
 	std::istringstream input_stream;
 	tagsouppullparser parser;
 	tagsouppullparser::event event;

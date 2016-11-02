@@ -4,7 +4,7 @@
 
 using namespace newsbeuter;
 
-TEST_CASE("fmtstr_formatter::do_format()") {
+TEST_CASE("do_format replaces variables with values", "[fmtstr_formatter]") {
 	fmtstr_formatter fmt;
 
 	SECTION("One format variable") {

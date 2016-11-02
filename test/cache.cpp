@@ -7,7 +7,7 @@
 
 using namespace newsbeuter;
 
-TEST_CASE("cache behaves correctly") {
+TEST_CASE("cache behaves correctly", "[cache]") {
 	configcontainer cfg;
 	cache rsscache(":memory:", &cfg);
 	rss_parser parser("file://data/rss.xml", &rsscache, &cfg, nullptr);
@@ -37,7 +37,7 @@ TEST_CASE("cache behaves correctly") {
 	rsscache.cleanup_cache(feedv);
 }
 
-TEST_CASE("Cleaning old articles works") {
+TEST_CASE("Cleaning old articles works", "[cache]") {
 	TestHelpers::TempFile dbfile;
 	std::unique_ptr<configcontainer> cfg( new configcontainer() );
 	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), cfg.get()) );
@@ -76,7 +76,7 @@ TEST_CASE("Cleaning old articles works") {
 	REQUIRE(feed->items().size() == 1);
 }
 
-TEST_CASE("Last-Modified and ETag values are preserved correctly") {
+TEST_CASE("Last-Modified and ETag values are preserved correctly", "[cache]") {
 	configcontainer cfg;
 	cache rsscache(":memory:", &cfg);
 	const auto feedurl = "file://data/rss.xml";
@@ -113,7 +113,7 @@ TEST_CASE("Last-Modified and ETag values are preserved correctly") {
 	}
 }
 
-TEST_CASE("catchup_all marks all items read") {
+TEST_CASE("catchup_all marks all items read", "[cache]") {
 	std::shared_ptr<rss_feed> feed, test_feed;
 
 	rss_ignores ign;
@@ -194,7 +194,7 @@ TEST_CASE("catchup_all marks all items read") {
 	}
 }
 
-TEST_CASE("cleanup_cache behaves as expected") {
+TEST_CASE("cleanup_cache behaves as expected", "[cache]") {
 	TestHelpers::TempFile dbfile;
 
 	std::vector<std::string> feedurls = {
@@ -263,7 +263,7 @@ TEST_CASE("cleanup_cache behaves as expected") {
 	}
 }
 
-TEST_CASE("fetch_descriptions fills out feed item's descriptions") {
+TEST_CASE("fetch_descriptions fills out feed item's descriptions", "[cache]") {
 	configcontainer cfg;
 	cache rsscache(":memory:", &cfg);
 	const auto feedurl = "file://data/rss.xml";
@@ -283,7 +283,7 @@ TEST_CASE("fetch_descriptions fills out feed item's descriptions") {
 	}
 }
 
-TEST_CASE("get_unread_count returns number of yet unread articles") {
+TEST_CASE("get_unread_count returns number of yet unread articles", "[cache]") {
 	TestHelpers::TempFile dbfile;
 	configcontainer cfg;
 	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), &cfg) );
@@ -320,7 +320,8 @@ TEST_CASE("get_unread_count returns number of yet unread articles") {
 	REQUIRE(rsscache->get_unread_count() == 8);
 }
 
-TEST_CASE("get_read_item_guids returns GUIDs of items that are marked read") {
+TEST_CASE("get_read_item_guids returns GUIDs of items that are marked read",
+          "[cache]") {
 	TestHelpers::TempFile dbfile;
 	configcontainer cfg;
 	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), &cfg) );
@@ -385,7 +386,8 @@ TEST_CASE("get_read_item_guids returns GUIDs of items that are marked read") {
 	check(rsscache->get_read_item_guids());
 }
 
-TEST_CASE("mark_item_deleted changes \"deleted\" flag of item with given GUID ") {
+TEST_CASE("mark_item_deleted changes \"deleted\" flag of item with given GUID ",
+          "[cache]") {
 	TestHelpers::TempFile dbfile;
 	rss_ignores ign;
 	configcontainer cfg;
@@ -406,7 +408,8 @@ TEST_CASE("mark_item_deleted changes \"deleted\" flag of item with given GUID ")
 	REQUIRE(feed->total_item_count() == 7);
 }
 
-TEST_CASE("mark_items_read_by_guid marks items with given GUIDs as unread ") {
+TEST_CASE("mark_items_read_by_guid marks items with given GUIDs as unread ",
+          "[cache]") {
 	TestHelpers::TempFile dbfile;
 	rss_ignores ign;
 	configcontainer cfg;
@@ -440,7 +443,7 @@ TEST_CASE("mark_items_read_by_guid marks items with given GUIDs as unread ") {
 }
 
 TEST_CASE("remove_old_deleted_items removes deleted items with particular "
-          "feedurl if its GUID is not in the vector") {
+          "feedurl if its GUID is not in the vector", "[cache]") {
 	rss_ignores ign;
 	configcontainer cfg;
 	cache rsscache(":memory:", &cfg);
@@ -486,7 +489,8 @@ TEST_CASE("remove_old_deleted_items removes deleted items with particular "
 	REQUIRE(feed->total_item_count() == 6);
 }
 
-TEST_CASE("search_for_items finds all items with matching title or content") {
+TEST_CASE("search_for_items finds all items with matching title or content",
+          "[cache]") {
 	configcontainer cfg;
 	rss_ignores ign;
 	cache rsscache(":memory:", &cfg);
@@ -518,7 +522,8 @@ TEST_CASE("search_for_items finds all items with matching title or content") {
 	}
 }
 
-TEST_CASE("update_rssitem_flags dumps `rss_item` object's flags to DB") {
+TEST_CASE("update_rssitem_flags dumps `rss_item` object's flags to DB",
+          "[cache]") {
 	TestHelpers::TempFile dbfile;
 	configcontainer cfg;
 	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), &cfg) );
@@ -539,7 +544,7 @@ TEST_CASE("update_rssitem_flags dumps `rss_item` object's flags to DB") {
 }
 
 TEST_CASE("update_rssitem_unread_and_enqueued updates item's \"unread\" and "
-          "\"enqueued\" fields") {
+          "\"enqueued\" fields", "[cache]") {
 	TestHelpers::TempFile dbfile;
 	rss_ignores ign;
 	configcontainer cfg;
@@ -592,7 +597,8 @@ TEST_CASE("update_rssitem_unread_and_enqueued updates item's \"unread\" and "
 	}
 }
 
-TEST_CASE("{externalize,internalize}_rssfeed puts a feed into DB and gets it back") {
+TEST_CASE("{externalize,internalize}_rssfeed puts a feed into DB and gets it back",
+          "[cache]") {
 	auto feeds_are_the_same =
 		[](const std::shared_ptr<rss_feed>& feed1,
 		   const std::shared_ptr<rss_feed>& feed2)
@@ -672,7 +678,8 @@ TEST_CASE("{externalize,internalize}_rssfeed puts a feed into DB and gets it bac
 	}
 }
 
-TEST_CASE("externalize_rssfeed doesn't store more than `max-items` items") {
+TEST_CASE("externalize_rssfeed doesn't store more than `max-items` items",
+          "[cache]") {
 	TestHelpers::TempFile dbfile;
 	rss_ignores ign;
 	std::unique_ptr<configcontainer> cfg( new configcontainer() );
@@ -692,7 +699,7 @@ TEST_CASE("externalize_rssfeed doesn't store more than `max-items` items") {
 }
 
 TEST_CASE("internalize_rssfeed doesn't return more than `max-items` items, "
-          "not counting the flagged ones")
+          "not counting the flagged ones", "[cache]")
 {
 	TestHelpers::TempFile dbfile;
 	rss_ignores ign;
@@ -736,7 +743,8 @@ TEST_CASE("internalize_rssfeed doesn't return more than `max-items` items, "
 	}
 }
 
-TEST_CASE("internalize_rssfeed returns feed without items but specified RSS URL") {
+TEST_CASE("internalize_rssfeed returns feed without items but specified RSS URL",
+          "[cache]") {
 	rss_ignores ign;
 	configcontainer cfg;
 	cache rsscache(":memory:", &cfg);
@@ -747,7 +755,8 @@ TEST_CASE("internalize_rssfeed returns feed without items but specified RSS URL"
 	REQUIRE(feed->rssurl() == feedurl);
 }
 
-TEST_CASE("externalize_rssfeed resets \"unread\" field if item's content changed") {
+TEST_CASE("externalize_rssfeed resets \"unread\" field if item's content changed",
+          "[cache]") {
 	TestHelpers::TempFile dbfile;
 	rss_ignores ign;
 	configcontainer cfg;
@@ -780,7 +789,8 @@ TEST_CASE("externalize_rssfeed resets \"unread\" field if item's content changed
 	}
 }
 
-TEST_CASE("externalize_rssfeed only updates \"unread\" field if override_unread is set") {
+TEST_CASE("externalize_rssfeed only updates \"unread\" field if override_unread is set",
+          "[cache]") {
 	TestHelpers::TempFile dbfile;
 	rss_ignores ign;
 	configcontainer cfg;
@@ -812,7 +822,7 @@ TEST_CASE("externalize_rssfeed only updates \"unread\" field if override_unread 
 	}
 }
 
-TEST_CASE("do_vacuum doesn't throw an exception") {
+TEST_CASE("do_vacuum doesn't throw an exception", "[cache]") {
 	TestHelpers::TempFile dbfile;
 	configcontainer cfg;
 	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), &cfg) );

@@ -10,7 +10,7 @@
 
 using namespace newsbeuter;
 
-TEST_CASE("itemlist_formaction::process_op()") {
+TEST_CASE("process_op()", "[itemlist_formaction]") {
 	controller c;
 	newsbeuter::view v(&c);
 	TestHelpers::TempFile browserfile;

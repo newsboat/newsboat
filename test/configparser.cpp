@@ -4,7 +4,8 @@
 
 using namespace newsbeuter;
 
-TEST_CASE("configparser::evaluate_backticks()") {
+TEST_CASE("evaluate_backticks replaces command in backticks with its output",
+          "[configparser]") {
 	SECTION("substitutes command output") {
 		REQUIRE(configparser::evaluate_backticks("") == "");
 		REQUIRE(configparser::evaluate_backticks("hello world") == "hello world");

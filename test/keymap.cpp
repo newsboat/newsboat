@@ -5,7 +5,7 @@
 
 using namespace newsbeuter;
 
-TEST_CASE("keymap::get_operation()") {
+TEST_CASE("get_operation()", "[keymap]") {
 	keymap k(KM_NEWSBEUTER);
 
 	REQUIRE(k.get_operation("u", "article") == OP_SHOWURLS);
@@ -19,7 +19,7 @@ TEST_CASE("keymap::get_operation()") {
 	}
 }
 
-TEST_CASE("keymap::unset_key() and set_key()") {
+TEST_CASE("unset_key() and set_key()", "[keymap]") {
 	keymap k(KM_NEWSBEUTER);
 	REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
 	REQUIRE(k.getkey(OP_OPEN, "all") == "ENTER");
@@ -36,14 +36,14 @@ TEST_CASE("keymap::unset_key() and set_key()") {
 	}
 }
 
-TEST_CASE("keymap::get_opcode()") {
+TEST_CASE("get_opcode()", "[keymap]") {
 	keymap k(KM_NEWSBEUTER);
 
 	REQUIRE(k.get_opcode("open") == OP_OPEN);
 	REQUIRE(k.get_opcode("some-noexistent-operation") == OP_NIL);
 }
 
-TEST_CASE("keymap::getkey()") {
+TEST_CASE("getkey()", "[keymap]") {
 	keymap k(KM_NEWSBEUTER);
 
 	REQUIRE(k.getkey(OP_OPEN, "all") == "ENTER");
@@ -51,7 +51,7 @@ TEST_CASE("keymap::getkey()") {
 	REQUIRE(k.getkey(static_cast<operation>(30000), "all") == "<none>");
 }
 
-TEST_CASE("keymap::get_key()") {
+TEST_CASE("get_key()", "[keymap]") {
 	keymap k(KM_NEWSBEUTER);
 
 	REQUIRE(k.get_key(" ") == ' ');
@@ -63,7 +63,7 @@ TEST_CASE("keymap::get_key()") {
 	REQUIRE(k.get_key("^A") == '\001');
 }
 
-TEST_CASE("keymap::handle_action()") {
+TEST_CASE("handle_action()", "[keymap]") {
 	keymap k(KM_NEWSBEUTER);
 	std::vector<std::string> params;
 

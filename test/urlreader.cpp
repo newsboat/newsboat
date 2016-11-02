@@ -4,7 +4,7 @@
 
 using namespace newsbeuter;
 
-TEST_CASE("URL reader behaves correctly") {
+TEST_CASE("URL reader behaves correctly", "[file_urlreader]") {
 	file_urlreader u;
 	u.load_config("test-urls.txt");
 

@@ -6,7 +6,7 @@
 
 using namespace newsbeuter;
 
-TEST_CASE("ConfigContainer behaves correctly") {
+TEST_CASE("ConfigContainer behaves correctly", "[configcontainer]") {
 	configcontainer * cfg = new configcontainer();
 	configparser cfgparser;
 	cfg->register_commands(cfgparser);

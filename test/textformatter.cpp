@@ -4,7 +4,8 @@
 
 using namespace newsbeuter;
 
-TEST_CASE("textformatter: lines marked as `wrappable` are wrapped to fit width") {
+TEST_CASE("lines marked as `wrappable` are wrapped to fit width",
+          "[textformatter]") {
 	textformatter fmt;
 
 	fmt.add_lines(
@@ -41,7 +42,8 @@ TEST_CASE("textformatter: lines marked as `wrappable` are wrapped to fit width")
 	}
 }
 
-TEST_CASE("textformatter: regex manager is used by format_text_to_list if one is passed") {
+TEST_CASE("regex manager is used by format_text_to_list if one is passed",
+          "[textformatter]") {
 	textformatter fmt;
 
 	fmt.add_line(LineType::wrappable, "Highlight me please!");
@@ -59,7 +61,7 @@ TEST_CASE("textformatter: regex manager is used by format_text_to_list if one is
 	REQUIRE(fmt.format_text_to_list(&rxmgr, "article", 100) == expected);
 }
 
-TEST_CASE("textformatter: <hr> is rendered properly") {
+TEST_CASE("<hr> is rendered properly", "[textformatter]") {
 	textformatter fmt;
 
 	fmt.add_line(LineType::hr, "");
@@ -74,7 +76,8 @@ TEST_CASE("textformatter: <hr> is rendered properly") {
 	}
 }
 
-TEST_CASE("textformatter: wrappable sequences longer then format width are forced-wrapped") {
+TEST_CASE("wrappable sequences longer then format width are forced-wrapped",
+          "[textformatter]") {
 	textformatter fmt;
 	fmt.add_line(LineType::wrappable, "0123456789101112");
 	fmt.add_line(LineType::softwrappable, "0123456789101112");
@@ -105,7 +108,8 @@ TEST_CASE("textformatter: wrappable sequences longer then format width are force
  * second line and it would make the text look jagged with a bigger input. Thus
  * spaces at the beginning of lines after wrapping should be dropped.
  */
-TEST_CASE("textformatter: ignore whitespace that's going to be wrapped onto the next line") {
+TEST_CASE("textformatter: ignore whitespace that's going to be wrapped onto "
+          "the next line", "[textformatter]") {
 	textformatter fmt;
 	fmt.add_line(LineType::wrappable, "just a test");
 
@@ -116,7 +120,8 @@ TEST_CASE("textformatter: ignore whitespace that's going to be wrapped onto the 
 	REQUIRE(fmt.format_text_plain(4) == expected);
 }
 
-TEST_CASE("textformatter: softwrappable lines are wrapped by format_text_to_list if total_width != 0") {
+TEST_CASE("softwrappable lines are wrapped by format_text_to_list if "
+          "total_width != 0", "[textformatter]") {
 	textformatter fmt;
 	fmt.add_line(LineType::softwrappable, "just a test");
 	const size_t wrap_width = 100;
