@@ -1,6 +1,7 @@
 #include <logger.h>
 #include <colormanager.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <pb_view.h>
 
 #include <feedlist_formaction.h>
@@ -26,7 +27,7 @@ void colormanager::register_commands(configparser& cfgparser) {
 }
 
 void colormanager::handle_action(const std::string& action, const std::vector<std::string>& params) {
-	LOG(level::DEBUG, "colormanager::handle_action(%s,...) was called",action.c_str());
+	LOG(level::DEBUG, "colormanager::handle_action(%s,...) was called",action);
 	if (action == "color") {
 		if (params.size() < 3) {
 			throw confighandlerexception(action_handler_status::TOO_FEW_PARAMS);
@@ -41,14 +42,14 @@ void colormanager::handle_action(const std::string& action, const std::vector<st
 		std::string bgcolor = params[2];
 
 		if (!utils::is_valid_color(fgcolor))
-			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), fgcolor.c_str()));
+			throw confighandlerexception(strprintf::fmt(_("`%s' is not a valid color"), fgcolor));
 		if (!utils::is_valid_color(bgcolor))
-			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid color"), bgcolor.c_str()));
+			throw confighandlerexception(strprintf::fmt(_("`%s' is not a valid color"), bgcolor));
 
 		std::vector<std::string> attribs;
 		for (unsigned int i=3; i<params.size(); ++i) {
 			if (!utils::is_valid_attribute(params[i]))
-				throw confighandlerexception(utils::strprintf(_("`%s' is not a valid attribute"), params[i].c_str()));
+				throw confighandlerexception(strprintf::fmt(_("`%s' is not a valid attribute"), params[i]));
 			attribs.push_back(params[i]);
 		}
 
@@ -60,7 +61,7 @@ void colormanager::handle_action(const std::string& action, const std::vector<st
 			attributes[element] = attribs;
 			colors_loaded_ = true;
 		} else
-			throw confighandlerexception(utils::strprintf(_("`%s' is not a valid configuration element"), element.c_str()));
+			throw confighandlerexception(strprintf::fmt(_("`%s' is not a valid configuration element"), element));
 
 	} else
 		throw confighandlerexception(action_handler_status::INVALID_COMMAND);
@@ -68,7 +69,7 @@ void colormanager::handle_action(const std::string& action, const std::vector<st
 
 void colormanager::dump_config(std::vector<std::string>& config_output) {
 	for (auto color : fg_colors) {
-		std::string configline = utils::strprintf("color %s %s %s", color.first.c_str(), color.second.c_str(), bg_colors[color.first].c_str());
+		std::string configline = strprintf::fmt("color %s %s %s", color.first, color.second, bg_colors[color.first]);
 		for (auto attrib : attributes[color.first]) {
 			configline.append(" ");
 			configline.append(attrib);
@@ -105,7 +106,7 @@ void colormanager::set_pb_colors(podbeuter::pb_view * v) {
 			colorattr.append(attr);
 		}
 
-		LOG(level::DEBUG,"colormanager::set_pb_colors: %s %s\n",fgcit->first.c_str(), colorattr.c_str());
+		LOG(level::DEBUG,"colormanager::set_pb_colors: %s %s\n",fgcit->first, colorattr);
 
 		v->dllist_form.set(fgcit->first, colorattr);
 		v->help_form.set(fgcit->first, colorattr);

@@ -1,6 +1,7 @@
 #include <htmlrenderer.h>
 #include <tagsouppullparser.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <sstream>
 #include <cstdio>
 #include <iostream>
@@ -163,7 +164,7 @@ void htmlrenderer::render(
 					}
 					if (link.length() > 0) {
 						link_num = add_link(links,utils::censor_url(utils::absolute_url(url,link)), link_type::EMBED);
-						curline.append(utils::strprintf("[%s %u]", _("embedded flash:"), link_num));
+						curline.append(strprintf::fmt("[%s %u]", _("embedded flash:"), link_num));
 					}
 				}
 			}
@@ -205,9 +206,9 @@ void htmlrenderer::render(
 						link_num = add_link(links,utils::censor_url(utils::absolute_url(url,imgurl)), link_type::IMG);
 					}
 					if (imgtitle != "") {
-						curline.append(utils::strprintf("[%s %u: %s]", _("image"), link_num, imgtitle.c_str()));
+						curline.append(strprintf::fmt("[%s %u: %s]", _("image"), link_num, imgtitle));
 					} else {
-						curline.append(utils::strprintf("[%s %u]", _("image"), link_num));
+						curline.append(strprintf::fmt("[%s %u]", _("image"), link_num));
 					}
 					image_count++;
 				}
@@ -286,7 +287,7 @@ void htmlrenderer::render(
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);
 				indent_level+=2;
 				if (is_ol && ol_counts.size() != 0) {
-					curline.append(utils::strprintf("%s. ", format_ol_count(ol_counts[ol_counts.size()-1], ol_types[ol_types.size()-1]).c_str()));
+					curline.append(strprintf::fmt("%s. ", format_ol_count(ol_counts[ol_counts.size()-1], ol_types[ol_types.size()-1])));
 					++ol_counts[ol_counts.size()-1];
 				} else {
 					curline.append("  * ");
@@ -473,7 +474,7 @@ void htmlrenderer::render(
 				if (link_num != -1) {
 					if (!raw_)
 						curline.append("</>");
-					curline.append(utils::strprintf("[%d]", link_num));
+					curline.append(strprintf::fmt("[%d]", link_num));
 					link_num = -1;
 				}
 				break;
@@ -637,11 +638,11 @@ void htmlrenderer::render(
 		add_line("", tables, lines);
 		add_line(_("Links: "), tables, lines);
 		for (unsigned int i=0; i<links.size(); ++i) {
-			auto link_text = utils::strprintf(
+			auto link_text = strprintf::fmt(
 					"[%u]: %s (%s)",
 					i+1,
-					links[i].first.c_str(),
-					type2str(links[i].second).c_str());
+					links[i].first,
+					type2str(links[i].second));
 			add_line_softwrappable(link_text, lines);
 		}
 	}
@@ -836,7 +837,7 @@ void htmlrenderer::render_table(
 			for (size_t cell=0; cell < table.rows[row].cells.size(); cell++) {
 				size_t cell_width = 0;
 				if (idx < table.rows[row].cells[cell].text.size()) {
-					LOG(level::DEBUG, "row = %d cell = %d text = %s", row, cell, table.rows[row].cells[cell].text[idx].c_str());
+					LOG(level::DEBUG, "row = %d cell = %d text = %s", row, cell, table.rows[row].cells[cell].text[idx]);
 					cell_width = utils::strwidth_stfl(table.rows[row].cells[cell].text[idx]);
 					line += table.rows[row].cells[cell].text[idx];
 				}
@@ -904,7 +905,7 @@ std::string htmlrenderer::format_ol_count(unsigned int count, char type) {
 	}
 	case '1':
 	default:
-		return utils::strprintf("%2u", count);
+		return strprintf::fmt("%2u", count);
 	}
 }
 

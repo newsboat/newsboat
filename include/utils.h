@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <stdexcept>
+#include <memory>
 
 #include <logger.h>
 #include <curl/curl.h>
@@ -70,8 +71,6 @@ class utils {
 		static std::string to_string(T var);
 
 		static std::string absolute_url(const std::string& url, const std::string& link);
-
-		static std::string strprintf(const char * format, ...);
 
 		static std::string get_useragent(configcontainer * cfgcont);
 

@@ -3,6 +3,7 @@
 #include <view.h>
 #include <config.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <listformatter.h>
 
 #include <sstream>
@@ -90,7 +91,7 @@ void urlview_formaction::prepare() {
 		listformatter listfmt;
 		unsigned int i=0;
 		for (auto link : links) {
-			listfmt.add_line(utils::strprintf("%2u  %s",i+1,link.first.c_str()), i);
+			listfmt.add_line(strprintf::fmt("%2u  %s",i+1,link.first), i);
 			i++;
 		}
 		f->modify("urls","replace_inner", listfmt.format_list());

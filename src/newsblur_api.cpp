@@ -1,6 +1,7 @@
 #include <rsspp.h>
 #include <json.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <remote_api.h>
 #include <newsblur_api.h>
 #include <algorithm>
@@ -11,7 +12,7 @@
 namespace newsbeuter {
 
 newsblur_api::newsblur_api(configcontainer * c) : remote_api(c) {
-	auth_info = utils::strprintf("username=%s&password=%s", cfg->get_configvalue("newsblur-login").c_str(), cfg->get_configvalue("newsblur-password").c_str());
+	auth_info = strprintf::fmt("username=%s&password=%s", cfg->get_configvalue("newsblur-login"), cfg->get_configvalue("newsblur-password"));
 	api_location = cfg->get_configvalue("newsblur-url");
 	min_pages = (cfg->get_configvalue_as_int("newsblur-min-items") + (NEWSBLUR_ITEMS_PER_PAGE + 1)) / NEWSBLUR_ITEMS_PER_PAGE;
 
@@ -35,7 +36,7 @@ bool newsblur_api::authenticate() {
 	    level::INFO,
 	    "newsblur_api::authenticate: authentication resulted in %u, cached in %s",
 	    result,
-	    cfg->get_configvalue("cookie-cache").c_str());
+	    cfg->get_configvalue("cookie-cache"));
 
 	return result;
 }
@@ -124,7 +125,7 @@ bool request_successfull(json_object * payload) {
 }
 
 bool newsblur_api::mark_all_read(const std::string& feed_url) {
-	std::string post_data = utils::strprintf("feed_id=%s", feed_url.c_str());
+	std::string post_data = strprintf::fmt("feed_id=%s", feed_url);
 	json_object * query_result = query_api("/reader/mark_feed_as_read", &post_data);
 	return request_successfull(query_result);
 }
@@ -168,7 +169,7 @@ time_t parse_date(const char * raw) {
 rsspp::feed newsblur_api::fetch_feed(const std::string& id) {
 	rsspp::feed f = known_feeds[id];
 
-	LOG(level::INFO, "newsblur_api::fetch_feed: about to fetch %u pages of feed %s", min_pages, id.c_str());
+	LOG(level::INFO, "newsblur_api::fetch_feed: about to fetch %u pages of feed %s", min_pages, id);
 
 	for (unsigned int i = 1; i <= min_pages; i++) {
 
@@ -273,7 +274,7 @@ json_object * newsblur_api::query_api(const std::string& endpoint, const std::st
 
 	json_object * result =  json_tokener_parse(data.c_str());
 	if (!result)
-		LOG(level::WARN, "newsblur_api::query_api: request to %s failed", url.c_str());
+		LOG(level::WARN, "newsblur_api::query_api: request to %s failed", url);
 	return result;
 }
 

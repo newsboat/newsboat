@@ -45,66 +45,6 @@ void logger::set_loglevel(level l) {
 		f.close();
 }
 
-/* Be sure to update enum class level in include/logger.h if you change this
- * array. */
-const char * loglevel_str[] = {
-	"NONE",
-	"USERERROR",
-	"CRITICAL",
-	"ERROR",
-	"WARNING",
-	"INFO",
-	"DEBUG"
-};
-
-void logger::log(level l, const char * format, ...) {
-	/*
-	 * This function checks the loglevel, creates the error message, and then
-	 * writes it to the debug logfile and to the error logfile (if applicable).
-	 */
-	std::lock_guard<std::mutex> lock(logMutex);
-	if (l <= curlevel && curlevel > level::NONE && (f.is_open() || ef.is_open())) {
-		char * buf, * logmsgbuf;
-		char date[128];
-		time_t t = time(nullptr);
-		struct tm * stm = localtime(&t);
-		strftime(date,sizeof(date),"%Y-%m-%d %H:%M:%S",stm);
-		if (curlevel > level::DEBUG)
-			curlevel = level::DEBUG;
-
-		va_list ap;
-		va_start(ap, format);
-		unsigned int len = vsnprintf(nullptr,0,format,ap);
-		va_end(ap);
-
-		va_start(ap, format);
-		logmsgbuf = new char[len + 1];
-		vsnprintf(logmsgbuf, len + 1, format, ap);
-		va_end(ap);
-
-		len = snprintf(
-				nullptr, 0, "[%s] %s: %s",
-				date, loglevel_str[static_cast<int>(l)], logmsgbuf);
-		buf = new char[len + 1];
-		snprintf(
-				buf, len + 1, "[%s] %s: %s",
-				date, loglevel_str[static_cast<int>(l)], logmsgbuf);
-
-		if (f.is_open()) {
-			f << buf << std::endl;
-		}
-
-		if (level::USERERROR == l && ef.is_open()) {
-			snprintf(buf, len + 1, "[%s] %s", date, logmsgbuf);
-			ef << buf << std::endl;
-			ef.flush();
-		}
-
-		delete[] buf;
-		delete[] logmsgbuf;
-	}
-}
-
 logger &logger::getInstance() {
 	/*
 	 * This is the global logger that everyone uses

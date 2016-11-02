@@ -6,6 +6,7 @@
 #include <feedhq_api.h>
 #include <config.h>
 #include <utils.h>
+#include <strprintf.h>
 
 #include <unistd.h>
 
@@ -35,7 +36,7 @@ feedhq_api::~feedhq_api() {
 
 bool feedhq_api::authenticate() {
 	auth = retrieve_auth();
-	LOG(level::DEBUG, "feedhq_api::authenticate: Auth = %s", auth.c_str());
+	LOG(level::DEBUG, "feedhq_api::authenticate: Auth = %s", auth);
 	return auth != "";
 }
 
@@ -87,7 +88,7 @@ std::string feedhq_api::retrieve_auth() {
 	char * username = curl_easy_escape(handle, user.c_str(), 0);
 	char * password = curl_easy_escape(handle, pass.c_str(), 0);
 
-	std::string postcontent = utils::strprintf("service=reader&Email=%s&Passwd=%s&source=%s%2F%s&accountType=HOSTED_OR_GOOGLE&continue=http://www.google.com/",
+	std::string postcontent = strprintf::fmt("service=reader&Email=%s&Passwd=%s&source=%s%2F%s&accountType=HOSTED_OR_GOOGLE&continue=http://www.google.com/",
 	                          username, password, PROGRAM_NAME, PROGRAM_VERSION);
 
 	curl_free(username);
@@ -104,7 +105,7 @@ std::string feedhq_api::retrieve_auth() {
 	curl_easy_cleanup(handle);
 
 	for (const auto& line : utils::tokenize(result)) {
-		LOG(level::DEBUG, "feedhq_api::retrieve_auth: line = %s", line.c_str());
+		LOG(level::DEBUG, "feedhq_api::retrieve_auth: line = %s", line);
 		if (line.substr(0,5) == "Auth=") {
 			std::string auth = line.substr(5, line.length()-5);
 			return auth;
@@ -130,7 +131,7 @@ std::vector<tagged_feedurl> feedhq_api::get_subscribed_urls() {
 	curl_easy_perform(handle);
 	curl_easy_cleanup(handle);
 
-	LOG(level::DEBUG, "feedhq_api::get_subscribed_urls: document = %s", result.c_str());
+	LOG(level::DEBUG, "feedhq_api::get_subscribed_urls: document = %s", result);
 
 	// TODO: parse result
 
@@ -162,9 +163,9 @@ std::vector<tagged_feedurl> feedhq_api::get_subscribed_urls() {
 
 		char * escaped_id = curl_easy_escape(handle, id, 0);
 
-		auto url = utils::strprintf(
+		auto url = strprintf::fmt(
 		               "%s%s%s?n=%u",
-		               cfg->get_configvalue("feedhq-url").c_str(),
+		               cfg->get_configvalue("feedhq-url"),
 		               FEEDHQ_FEED_PREFIX,
 		               escaped_id,
 		               cfg->get_configvalue_as_int("feedhq-min-items"));
@@ -180,12 +181,12 @@ std::vector<tagged_feedurl> feedhq_api::get_subscribed_urls() {
 
 void feedhq_api::add_custom_headers(curl_slist** custom_headers) {
 	if (auth_header.empty()) {
-		auth_header = utils::strprintf(
-		                  "Authorization: GoogleLogin auth=%s", auth.c_str());
+		auth_header = strprintf::fmt(
+		                  "Authorization: GoogleLogin auth=%s", auth);
 	}
 	LOG(level::DEBUG,
 	    "feedhq_api::add_custom_headers header = %s",
-	    auth_header.c_str());
+	    auth_header);
 	*custom_headers = curl_slist_append(*custom_headers, auth_header.c_str());
 }
 
@@ -196,7 +197,7 @@ bool feedhq_api::mark_all_read(const std::string& feedurl) {
 	real_feedurl = utils::unescape_url(elems[0]);
 	std::string token = get_new_token();
 
-	std::string postcontent = utils::strprintf("s=%s&T=%s", real_feedurl.c_str(), token.c_str());
+	std::string postcontent = strprintf::fmt("s=%s&T=%s", real_feedurl, token);
 
 	std::string result = post_content(cfg->get_configvalue("feedhq-url") + FEEDHQ_API_MARK_ALL_READ_URL, postcontent);
 
@@ -212,14 +213,14 @@ bool feedhq_api::mark_article_read_with_token(const std::string& guid, bool read
 	std::string postcontent;
 
 	if (read) {
-		postcontent = utils::strprintf("i=%s&a=user/-/state/com.google/read&r=user/-/state/com.google/kept-unread&ac=edit&T=%s", guid.c_str(), token.c_str());
+		postcontent = strprintf::fmt("i=%s&a=user/-/state/com.google/read&r=user/-/state/com.google/kept-unread&ac=edit&T=%s", guid, token);
 	} else {
-		postcontent = utils::strprintf("i=%s&r=user/-/state/com.google/read&a=user/-/state/com.google/kept-unread&a=user/-/state/com.google/tracking-kept-unread&ac=edit&T=%s", guid.c_str(), token.c_str());
+		postcontent = strprintf::fmt("i=%s&r=user/-/state/com.google/read&a=user/-/state/com.google/kept-unread&a=user/-/state/com.google/tracking-kept-unread&ac=edit&T=%s", guid, token);
 	}
 
 	std::string result = post_content(cfg->get_configvalue("feedhq-url") + FEEDHQ_API_EDIT_TAG_URL, postcontent);
 
-	LOG(level::DEBUG, "feedhq_api::mark_article_read_with_token: postcontent = %s result = %s", postcontent.c_str(), result.c_str());
+	LOG(level::DEBUG, "feedhq_api::mark_article_read_with_token: postcontent = %s result = %s", postcontent, result);
 
 	return result == "OK";
 }
@@ -238,7 +239,7 @@ std::string feedhq_api::get_new_token() {
 	curl_easy_perform(handle);
 	curl_easy_cleanup(handle);
 
-	LOG(level::DEBUG, "feedhq_api::get_new_token: token = %s", result.c_str());
+	LOG(level::DEBUG, "feedhq_api::get_new_token: token = %s", result);
 
 	return result;
 }
@@ -272,9 +273,9 @@ bool feedhq_api::star_article(const std::string& guid, bool star) {
 	std::string postcontent;
 
 	if (star) {
-		postcontent = utils::strprintf("i=%s&a=user/-/state/com.google/starred&ac=edit&T=%s", guid.c_str(), token.c_str());
+		postcontent = strprintf::fmt("i=%s&a=user/-/state/com.google/starred&ac=edit&T=%s", guid, token);
 	} else {
-		postcontent = utils::strprintf("i=%s&r=user/-/state/com.google/starred&ac=edit&T=%s", guid.c_str(), token.c_str());
+		postcontent = strprintf::fmt("i=%s&r=user/-/state/com.google/starred&ac=edit&T=%s", guid, token);
 	}
 
 	std::string result = post_content(cfg->get_configvalue("feedhq-url") + FEEDHQ_API_EDIT_TAG_URL, postcontent);
@@ -287,9 +288,9 @@ bool feedhq_api::share_article(const std::string& guid, bool share) {
 	std::string postcontent;
 
 	if (share) {
-		postcontent = utils::strprintf("i=%s&a=user/-/state/com.google/broadcast&ac=edit&T=%s", guid.c_str(), token.c_str());
+		postcontent = strprintf::fmt("i=%s&a=user/-/state/com.google/broadcast&ac=edit&T=%s", guid, token);
 	} else {
-		postcontent = utils::strprintf("i=%s&r=user/-/state/com.google/broadcast&ac=edit&T=%s", guid.c_str(), token.c_str());
+		postcontent = strprintf::fmt("i=%s&r=user/-/state/com.google/broadcast&ac=edit&T=%s", guid, token);
 	}
 
 	std::string result = post_content(cfg->get_configvalue("feedhq-url") + FEEDHQ_API_EDIT_TAG_URL, postcontent);
@@ -312,7 +313,7 @@ std::string feedhq_api::post_content(const std::string& url, const std::string& 
 	curl_easy_perform(handle);
 	curl_easy_cleanup(handle);
 
-	LOG(level::DEBUG, "feedhq_api::post_content: url = %s postdata = %s result = %s", url.c_str(), postdata.c_str(), result.c_str());
+	LOG(level::DEBUG, "feedhq_api::post_content: url = %s postdata = %s result = %s", url, postdata, result);
 
 	return result;
 }

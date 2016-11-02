@@ -175,14 +175,6 @@ TEST_CASE("to_string()", "[utils]") {
 	REQUIRE(utils::to_string<unsigned int>(65537) == "65537");
 }
 
-TEST_CASE("strprintf()", "[utils]") {
-	REQUIRE(utils::strprintf(nullptr) == "");
-	REQUIRE(utils::strprintf("%s", "") == "");
-	REQUIRE(utils::strprintf("%u", 0) == "0");
-	REQUIRE(utils::strprintf("%s", nullptr) == "(null)");
-	REQUIRE(utils::strprintf("%u-%s-%c", 23, "hello world", 'X') == "23-hello world-X");
-}
-
 TEST_CASE("partition_index()", "[utils]") {
 	std::vector<std::pair<unsigned int, unsigned int>> partitions;
 

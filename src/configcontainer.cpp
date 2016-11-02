@@ -7,6 +7,7 @@
 #include <iostream>
 #include <algorithm>
 #include <utils.h>
+#include <strprintf.h>
 #include <cassert>
 
 #include <sys/types.h>
@@ -201,11 +202,11 @@ void configcontainer::handle_action(const std::string& action, const std::vector
 
 	// configdata_t::INVALID indicates that the action didn't exist, and that the returned object was created ad-hoc.
 	if (cfgdata.type == configdata_t::INVALID) {
-		LOG(level::WARN, "configcontainer::handler_action: unknown action %s", action.c_str());
+		LOG(level::WARN, "configcontainer::handler_action: unknown action %s", action);
 		throw confighandlerexception(action_handler_status::INVALID_COMMAND);
 	}
 
-	LOG(level::DEBUG, "configcontainer::handle_action: action = %s, type = %u", action.c_str(), cfgdata.type);
+	LOG(level::DEBUG, "configcontainer::handle_action: action = %s, type = %u", action, cfgdata.type);
 
 	if (params.size() < 1) {
 		throw confighandlerexception(action_handler_status::TOO_FEW_PARAMS);
@@ -214,19 +215,19 @@ void configcontainer::handle_action(const std::string& action, const std::vector
 	switch (cfgdata.type) {
 	case configdata_t::BOOL:
 		if (!is_bool(params[0]))
-			throw confighandlerexception(utils::strprintf(_("expected boolean value, found `%s' instead"), params[0].c_str()));
+			throw confighandlerexception(strprintf::fmt(_("expected boolean value, found `%s' instead"), params[0]));
 		cfgdata.value = params[0];
 		break;
 
 	case configdata_t::INT:
 		if (!is_int(params[0]))
-			throw confighandlerexception(utils::strprintf(_("expected integer value, found `%s' instead"), params[0].c_str()));
+			throw confighandlerexception(strprintf::fmt(_("expected integer value, found `%s' instead"), params[0]));
 		cfgdata.value = params[0];
 		break;
 
 	case configdata_t::ENUM:
 		if (cfgdata.enum_values.find(params[0]) == cfgdata.enum_values.end())
-			throw confighandlerexception(utils::strprintf(_("invalid configuration value `%s'"), params[0].c_str()));
+			throw confighandlerexception(strprintf::fmt(_("invalid configuration value `%s'"), params[0]));
 	// fall-through
 	case configdata_t::STR:
 	case configdata_t::PATH:
@@ -293,7 +294,7 @@ bool configcontainer::get_configvalue_as_bool(const std::string& key) {
 }
 
 void configcontainer::set_configvalue(const std::string& key, const std::string& value) {
-	LOG(level::DEBUG,"configcontainer::set_configvalue(%s [resolved: %s],%s) called", key.c_str(), lookup_alias(key).c_str(), value.c_str());
+	LOG(level::DEBUG,"configcontainer::set_configvalue(%s [resolved: %s],%s) called", key, lookup_alias(key), value);
 	config_data[lookup_alias(key)].value = value;
 }
 
@@ -318,7 +319,7 @@ void configcontainer::dump_config(std::vector<std::string>& config_output) {
 		case configdata_t::INT:
 			configline.append(cfg.second.value);
 			if (cfg.second.value != cfg.second.default_value)
-				configline.append(utils::strprintf(" # default: %s", cfg.second.default_value.c_str()));
+				configline.append(strprintf::fmt(" # default: %s", cfg.second.default_value));
 			break;
 		case configdata_t::ENUM:
 		case configdata_t::STR:
@@ -331,7 +332,7 @@ void configcontainer::dump_config(std::vector<std::string>& config_output) {
 			} else {
 				configline.append(utils::quote(cfg.second.value));
 				if (cfg.second.value != cfg.second.default_value) {
-					configline.append(utils::strprintf(" # default: %s", cfg.second.default_value.c_str()));
+					configline.append(strprintf::fmt(" # default: %s", cfg.second.default_value));
 				}
 			}
 			break;

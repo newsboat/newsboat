@@ -3,6 +3,7 @@
 #include <poddlthread.h>
 #include <config.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
@@ -79,11 +80,11 @@ bool pb_controller::setup_dirs_xdg(const char *env_home) {
 
 	if (!config_dir_exists) {
 		std::cerr
-		    << utils::strprintf(
+		    << strprintf::fmt(
 		           _("XDG: configuration directory '%s' not accessible, "
 		             "using '%s' instead."),
-		           xdg_config_dir.c_str(),
-		           config_dir.c_str())
+		           xdg_config_dir,
+		           config_dir)
 		    << std::endl;
 
 		return false;
@@ -107,8 +108,8 @@ bool pb_controller::setup_dirs_xdg(const char *env_home) {
 	cache_file = xdg_data_dir + std::string(NEWSBEUTER_PATH_SEP) + cache_file;
 	lock_file = cache_file + LOCK_SUFFIX;
 	queue_file = xdg_data_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
-	searchfile = utils::strprintf("%s%shistory.search", xdg_data_dir.c_str(), NEWSBEUTER_PATH_SEP);
-	cmdlinefile = utils::strprintf("%s%shistory.cmdline", xdg_data_dir.c_str(), NEWSBEUTER_PATH_SEP);
+	searchfile = strprintf::fmt("%s%shistory.search", xdg_data_dir, NEWSBEUTER_PATH_SEP);
+	cmdlinefile = strprintf::fmt("%s%shistory.cmdline", xdg_data_dir, NEWSBEUTER_PATH_SEP);
 
 	return true;
 }
@@ -121,7 +122,7 @@ pb_controller::pb_controller() : v(0), config_file("config"), queue_file("queue"
 			cfgdir = spw->pw_dir;
 		} else {
 			std::cout << _("Fatal error: couldn't determine home directory!") << std::endl;
-			std::cout << utils::strprintf(_("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid()) << std::endl;
+			std::cout << strprintf::fmt(_("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid()) << std::endl;
 			::exit(EXIT_FAILURE);
 		}
 	}
@@ -184,7 +185,7 @@ void pb_controller::run(int argc, char * argv[]) {
 			if (l > level::NONE && l <= level::DEBUG) {
 				logger::getInstance().set_loglevel(l);
 			} else {
-				std::cerr << utils::strprintf(_("%s: %d: invalid loglevel value"), argv[0], l) << std::endl;
+				std::cerr << strprintf::fmt(_("%s: %d: invalid loglevel value"), argv[0], l) << std::endl;
 				::std::exit(EXIT_FAILURE);
 			}
 			}
@@ -193,17 +194,17 @@ void pb_controller::run(int argc, char * argv[]) {
 			usage(argv[0]);
 			break;
 		default:
-			std::cout << utils::strprintf(_("%s: unknown option - %c"), argv[0], static_cast<char>(c)) << std::endl;
+			std::cout << strprintf::fmt(_("%s: unknown option - %c"), argv[0], static_cast<char>(c)) << std::endl;
 			usage(argv[0]);
 			break;
 		}
 	};
 
-	std::cout << utils::strprintf(_("Starting %s %s..."), "podbeuter", PROGRAM_VERSION) << std::endl;
+	std::cout << strprintf::fmt(_("Starting %s %s..."), "podbeuter", PROGRAM_VERSION) << std::endl;
 
 	pid_t pid;
 	if (!utils::try_fs_lock(lock_file, pid)) {
-		std::cout << utils::strprintf(_("Error: an instance of %s is already running (PID: %u)"), "podbeuter", pid) << std::endl;
+		std::cout << strprintf::fmt(_("Error: an instance of %s is already running (PID: %u)"), "podbeuter", pid) << std::endl;
 		return;
 	}
 
@@ -268,7 +269,7 @@ void pb_controller::run(int argc, char * argv[]) {
 
 void pb_controller::usage(const char * argv0) {
 	auto msg =
-	    utils::strprintf(_("%s %s\nusage %s [-C <file>] [-q <file>] [-h]\n"),
+	    strprintf::fmt(_("%s %s\nusage %s [-C <file>] [-q <file>] [-h]\n"),
 	    "podbeuter",
 	    PROGRAM_VERSION,
 	    argv0);
@@ -370,7 +371,7 @@ void pb_controller::play_file(const std::string& file) {
 	cmdline.append(utils::replace_all(file,"\"", "\\\""));
 	cmdline.append("\"");
 	stfl::reset();
-	LOG(level::DEBUG, "pb_controller::play_file: running `%s'", cmdline.c_str());
+	LOG(level::DEBUG, "pb_controller::play_file: running `%s'", cmdline);
 	::system(cmdline.c_str());
 }
 

@@ -6,6 +6,7 @@
 #include <reloadthread.h>
 #include <exceptions.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <formatstring.h>
 
 #include <listformatter.h>
@@ -90,7 +91,7 @@ REDO:
 			if (automatic && args->size() > 0) {
 				pos = utils::to_u((*args)[0]);
 			}
-			LOG(level::INFO, "feedlist_formaction: opening feed at position `%s'",feedpos.c_str());
+			LOG(level::INFO, "feedlist_formaction: opening feed at position `%s'",feedpos);
 			if (feeds_shown > 0 && feedpos.length() > 0) {
 				v->push_itemlist(pos);
 			} else {
@@ -100,7 +101,7 @@ REDO:
 	}
 	break;
 	case OP_RELOAD: {
-		LOG(level::INFO, "feedlist_formaction: reloading feed at position `%s'",feedpos.c_str());
+		LOG(level::INFO, "feedlist_formaction: reloading feed at position `%s'",feedpos);
 		if (feeds_shown > 0 && feedpos.length() > 0) {
 			v->get_ctrl()->reload(pos);
 		} else {
@@ -159,7 +160,7 @@ REDO:
 			std::shared_ptr<rss_feed> feed = v->get_ctrl()->get_feed(pos);
 			if (feed) {
 				if (feed->rssurl().substr(0,6) != "query:") {
-					LOG(level::INFO, "feedlist_formaction: opening feed at position `%s': %s", feedpos.c_str(), feed->link().c_str());
+					LOG(level::INFO, "feedlist_formaction: opening feed at position `%s': %s", feedpos, feed->link());
 					v->open_in_browser(feed->link());
 				} else {
 					v->show_error(_("Cannot open query feeds in the browser!"));
@@ -202,7 +203,7 @@ REDO:
 		}
 		break;
 	case OP_MARKFEEDREAD: {
-		LOG(level::INFO, "feedlist_formaction: marking feed read at position `%s'",feedpos.c_str());
+		LOG(level::INFO, "feedlist_formaction: marking feed read at position `%s'",feedpos);
 		if (feeds_shown > 0 && feedpos.length() > 0) {
 			v->set_status(_("Marking feed read..."));
 			try {
@@ -213,7 +214,7 @@ REDO:
 					f->set("feedpos", utils::to_string<unsigned int>(pos + 1));
 				}
 			} catch (const dbexception& e) {
-				v->show_error(utils::strprintf(_("Error: couldn't mark feed read: %s"), e.what()));
+				v->show_error(strprintf::fmt(_("Error: couldn't mark feed read: %s"), e.what()));
 			}
 		} else {
 			v->show_error(_("No feed selected!")); // should not happen
@@ -320,7 +321,7 @@ REDO:
 				filterhistory.add_line(newfilter);
 				if (newfilter.length() > 0) {
 					if (!m.parse(newfilter)) {
-						v->show_error(utils::strprintf(_("Error: couldn't parse filter command `%s': %s"), newfilter.c_str(), m.get_parse_error().c_str()));
+						v->show_error(strprintf::fmt(_("Error: couldn't parse filter command `%s': %s"), newfilter, m.get_parse_error()));
 						m.parse(FILTER_UNREAD_FEEDS);
 					} else {
 						save_filterpos();
@@ -498,7 +499,7 @@ bool feedlist_formaction::jump_to_previous_unread_feed(unsigned int& feedpos) {
 
 void feedlist_formaction::goto_feed(const std::string& str) {
 	unsigned int curpos = utils::to_u(f->get("feedpos"));
-	LOG(level::DEBUG, "feedlist_formaction::goto_feed: curpos = %u str = `%s'", curpos, str.c_str());
+	LOG(level::DEBUG, "feedlist_formaction::goto_feed: curpos = %u str = `%s'", curpos, str);
 	for (unsigned int i=curpos+1; i<visible_feeds.size(); ++i) {
 		if (strcasestr(visible_feeds[i].first->title().c_str(), str.c_str()) != nullptr) {
 			f->set("feedpos", utils::to_string<unsigned int>(i));
@@ -683,11 +684,11 @@ void feedlist_formaction::set_regexmanager(regexmanager * r) {
 	unsigned int i=0;
 	std::string attrstr;
 	for (auto attribute : attrs) {
-		attrstr.append(utils::strprintf("@style_%u_normal:%s ", i, attribute.c_str()));
-		attrstr.append(utils::strprintf("@style_%u_focus:%s ", i, attribute.c_str()));
+		attrstr.append(strprintf::fmt("@style_%u_normal:%s ", i, attribute));
+		attrstr.append(strprintf::fmt("@style_%u_focus:%s ", i, attribute));
 		i++;
 	}
-	std::string textview = utils::strprintf("{!list[feeds] .expand:vh style_normal[listnormal]: style_focus[listfocus]:fg=yellow,bg=blue,attr=bold pos_name[feedposname]: pos[feedpos]:0 %s richtext:1}", attrstr.c_str());
+	std::string textview = strprintf::fmt("{!list[feeds] .expand:vh style_normal[listnormal]: style_focus[listfocus]:fg=yellow,bg=blue,attr=bold pos_name[feedposname]: pos[feedpos]:0 %s richtext:1}", attrstr);
 	f->modify("feeds", "replace", textview);
 }
 
@@ -710,7 +711,7 @@ void feedlist_formaction::op_end_setfilter() {
 
 void feedlist_formaction::op_start_search() {
 	std::string searchphrase = qna_responses[0];
-	LOG(level::DEBUG, "feedlist_formaction::op_start_search: starting search for `%s'", searchphrase.c_str());
+	LOG(level::DEBUG, "feedlist_formaction::op_start_search: starting search for `%s'", searchphrase);
 	if (searchphrase.length() > 0) {
 		v->set_status(_("Searching..."));
 		searchhistory.add_line(searchphrase);
@@ -719,7 +720,7 @@ void feedlist_formaction::op_start_search() {
 			std::string utf8searchphrase = utils::convert_text(searchphrase, "utf-8", nl_langinfo(CODESET));
 			items = v->get_ctrl()->search_for_items(utf8searchphrase, nullptr);
 		} catch (const dbexception& e) {
-			v->show_error(utils::strprintf(_("Error while searching for `%s': %s"), searchphrase.c_str(), e.what()));
+			v->show_error(strprintf::fmt(_("Error while searching for `%s': %s"), searchphrase, e.what()));
 			return;
 		}
 		if (!items.empty()) {
@@ -779,8 +780,8 @@ std::string feedlist_formaction::format_line(const std::string& feedlist_format,
 	unsigned int unread_count = feed->unread_item_count();
 	std::string tmp_feedlist_format = feedlist_format;
 
-	fmt.register_fmt('i', utils::strprintf("%u", pos + 1));
-	fmt.register_fmt('u', utils::strprintf("(%u/%u)",unread_count,static_cast<unsigned int>(feed->total_item_count())));
+	fmt.register_fmt('i', strprintf::fmt("%u", pos + 1));
+	fmt.register_fmt('u', strprintf::fmt("(%u/%u)",unread_count,static_cast<unsigned int>(feed->total_item_count())));
 	fmt.register_fmt('U', utils::to_string(unread_count));
 	fmt.register_fmt('c', utils::to_string(feed->total_item_count()));
 	fmt.register_fmt('n', unread_count > 0 ? "N" : " ");
@@ -792,16 +793,16 @@ std::string feedlist_formaction::format_line(const std::string& feedlist_format,
 	fmt.register_fmt('d', feed->description());
 
 	if (unread_count > 0) {
-		tmp_feedlist_format = utils::strprintf(
+		tmp_feedlist_format = strprintf::fmt(
 		                          "<unread>%s</>",
-		                          feedlist_format.c_str());
+		                          feedlist_format);
 	}
 
 	return fmt.do_format(tmp_feedlist_format, width);
 }
 
 std::string feedlist_formaction::title() {
-	return utils::strprintf(_("Feed List - %u unread, %u total"), unread_feeds, total_feeds);
+	return strprintf::fmt(_("Feed List - %u unread, %u total"), unread_feeds, total_feeds);
 }
 
 }

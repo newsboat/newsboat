@@ -1,5 +1,6 @@
 #include <textformatter.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <htmlrenderer.h>
 #include <stflpp.h>
 #include <assert.h>
@@ -14,7 +15,7 @@ textformatter::~textformatter() { }
 void textformatter::add_line(LineType type, std::string line) {
 	LOG(level::DEBUG,
 		"textformatter::add_line: `%s' (line type %i)",
-		line.c_str(),
+		line,
 		type);
 
 	auto clean_line =
@@ -88,7 +89,7 @@ std::string format_text_plain_helper(
 	LOG(level::DEBUG,
 		"textformatter::format_text_plain: rxman = %p, location = `%s', "
 		"wrap_width = %zu, total_width = %zu, %u lines",
-		rxman, location.c_str(), wrap_width, total_width, lines.size());
+		rxman, location, wrap_width, total_width, lines.size());
 
 	std::string format_cache;
 	auto store_line =
@@ -98,7 +99,7 @@ std::string format_text_plain_helper(
 
 			LOG(level::DEBUG,
 				"textformatter::format_text_plain: stored `%s'",
-				line.c_str());
+				line);
 		};
 	for (auto line : lines) {
 		auto type = line.first;
@@ -106,7 +107,7 @@ std::string format_text_plain_helper(
 
 		LOG(level::DEBUG,
 			"textformatter::format_text_plain: got line `%s' type %u",
-			text.c_str(), type);
+			text, type);
 
 		if (rxman && type != LineType::hr) {
 			rxman->quote_and_highlight(text, location);
@@ -156,9 +157,9 @@ std::string textformatter::format_text_to_list(
 		if (line != "\n") {
 			utils::trim_end(line);
 			format_cache.append(
-					utils::strprintf(
+					strprintf::fmt(
 						"{listitem text:%s}",
-						stfl::quote(line).c_str()));
+						stfl::quote(line)));
 		}
 	}
 

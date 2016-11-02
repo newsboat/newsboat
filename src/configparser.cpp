@@ -2,6 +2,7 @@
 #include <tagsouppullparser.h>
 #include <exceptions.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <logger.h>
 #include <fstream>
 #include <config.h>
@@ -52,7 +53,7 @@ bool configparser::parse(const std::string& filename, bool double_include) {
 	 *   - if an error happens, react accordingly.
 	 */
 	if (!double_include && included_files.find(filename) != included_files.end()) {
-		LOG(level::WARN, "configparser::parse: file %s has already been included", filename.c_str());
+		LOG(level::WARN, "configparser::parse: file %s has already been included", filename);
 		return true;
 	}
 	included_files.insert(included_files.begin(), filename);
@@ -62,11 +63,11 @@ bool configparser::parse(const std::string& filename, bool double_include) {
 	std::string line;
 	getline(f,line);
 	if (!f.is_open()) {
-		LOG(level::WARN, "configparser::parse: file %s couldn't be opened", filename.c_str());
+		LOG(level::WARN, "configparser::parse: file %s couldn't be opened", filename);
 		return false;
 	}
 	while (f.is_open() && !f.eof()) {
-		LOG(level::DEBUG,"configparser::parse: tokenizing %s",line.c_str());
+		LOG(level::DEBUG,"configparser::parse: tokenizing %s",line);
 		std::vector<std::string> tokens = utils::tokenize_quoted(line);
 		if (!tokens.empty()) {
 			std::string cmd = tokens[0];
@@ -77,10 +78,10 @@ bool configparser::parse(const std::string& filename, bool double_include) {
 					evaluate_backticks(tokens);
 					handler->handle_action(cmd,tokens);
 				} catch (const confighandlerexception& e) {
-					throw configexception(utils::strprintf(_("Error while processing command `%s' (%s line %u): %s"), line.c_str(), filename.c_str(), linecounter, e.what()));
+					throw configexception(strprintf::fmt(_("Error while processing command `%s' (%s line %u): %s"), line, filename, linecounter, e.what()));
 				}
 			} else {
-				throw configexception(utils::strprintf(_("unknown command `%s'"), cmd.c_str()));
+				throw configexception(strprintf::fmt(_("unknown command `%s'"), cmd));
 			}
 		}
 		getline(f,line);

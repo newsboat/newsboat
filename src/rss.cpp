@@ -3,6 +3,7 @@
 #include <cache.h>
 #include <tagsouppullparser.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <logger.h>
 #include <exceptions.h>
 #include <sstream>
@@ -23,19 +24,15 @@
 namespace newsbeuter {
 
 rss_item::rss_item(cache * c) : pubDate_(0), unread_(true), ch(c), enqueued_(false), deleted_(0), idx(0), override_unread_(false), size_(0) {
-	// LOG(level::CRITICAL, "new rss_item");
 }
 
 rss_item::~rss_item() {
-	// LOG(level::CRITICAL, "delete rss_item");
 }
 
 rss_feed::rss_feed(cache * c) : ch(c), empty(true), is_rtl_(false), idx(0), status_(dl_status::SUCCESS) {
-	// LOG(level::CRITICAL, "new rss_feed");
 }
 
 rss_feed::~rss_feed() {
-	// LOG(level::CRITICAL, "delete rss_feed");
 	clear_items();
 }
 
@@ -69,11 +66,11 @@ std::string rss_item::length() const {
 	if (!l)
 		return "";
 	if (l < 1000)
-		return utils::strprintf("%u ", l);
+		return strprintf::fmt("%u ", l);
 	if (l < 1024*1000)
-		return utils::strprintf("%.1fK", l/1024.0);
+		return strprintf::fmt("%.1fK", l/1024.0);
 
-	return utils::strprintf("%.1fM", l/1024.0/1024.0);
+	return strprintf::fmt("%.1fM", l/1024.0/1024.0);
 }
 
 void rss_item::set_pubDate(time_t t) {
@@ -230,7 +227,6 @@ std::shared_ptr<rss_item> rss_feed::get_item_by_guid_unlocked(const std::string&
 }
 
 bool rss_item::has_attribute(const std::string& attribname) {
-	// LOG(level::DEBUG, "rss_item::has_attribute(%s) called", attribname.c_str());
 	if (attribname == "title" ||
 	        attribname == "link" ||
 	        attribname == "author" ||
@@ -364,7 +360,7 @@ void rss_ignores::handle_action(const std::string& action, const std::vector<std
 		std::string ignore_expr = params[1];
 		matcher m;
 		if (!m.parse(ignore_expr))
-			throw confighandlerexception(utils::strprintf(_("couldn't parse filter expression `%s': %s"), ignore_expr.c_str(), m.get_parse_error().c_str()));
+			throw confighandlerexception(strprintf::fmt(_("couldn't parse filter expression `%s': %s"), ignore_expr, m.get_parse_error()));
 		ignores.push_back(feedurl_expr_pair(ignore_rssurl, new matcher(ignore_expr)));
 	} else if (action == "always-download") {
 		for (auto param : params) {
@@ -390,10 +386,10 @@ void rss_ignores::dump_config(std::vector<std::string>& config_output) {
 		config_output.push_back(configline);
 	}
 	for (auto ign_lm : ignores_lastmodified) {
-		config_output.push_back(utils::strprintf("always-download %s", utils::quote(ign_lm).c_str()));
+		config_output.push_back(strprintf::fmt("always-download %s", utils::quote(ign_lm)));
 	}
 	for (auto rf : resetflag) {
-		config_output.push_back(utils::strprintf("reset-unread-on-update %s", utils::quote(rf).c_str()));
+		config_output.push_back(strprintf::fmt("reset-unread-on-update %s", utils::quote(rf)));
 	}
 }
 
@@ -405,7 +401,7 @@ rss_ignores::~rss_ignores() {
 
 bool rss_ignores::matches(rss_item* item) {
 	for (auto ign : ignores) {
-		LOG(level::DEBUG, "rss_ignores::matches: ign.first = `%s' item->feedurl = `%s'", ign.first.c_str(), item->feedurl().c_str());
+		LOG(level::DEBUG, "rss_ignores::matches: ign.first = `%s' item->feedurl = `%s'", ign.first, item->feedurl());
 		if (ign.first == "*" || item->feedurl() == ign.first) {
 			if (ign.second->matches(item)) {
 				LOG(level::DEBUG, "rss_ignores::matches: found match");
@@ -437,7 +433,7 @@ void rss_feed::update_items(std::vector<std::shared_ptr<rss_feed>> feeds) {
 	if (query.length() == 0)
 		return;
 
-	LOG(level::DEBUG, "rss_feed::update_items: query = `%s'", query.c_str());
+	LOG(level::DEBUG, "rss_feed::update_items: query = `%s'", query);
 
 
 	struct timeval tv1, tv2, tvx;
@@ -501,14 +497,14 @@ void rss_feed::set_rssurl(const std::string& u) {
 		// Have to check if the result is a valid query, just in case
 		matcher m;
 		if (!m.parse(query)) {
-			throw utils::strprintf(
-			    _("`%s' is not a valid filter expression"), query.c_str());
+			throw strprintf::fmt(
+			    _("`%s' is not a valid filter expression"), query);
 		}
 
 		LOG(level::DEBUG,
 		    "rss_feed::set_rssurl: query name = `%s' expr = `%s'",
-		    tokens[1].c_str(),
-		    query.c_str());
+		    tokens[1],
+		    query);
 
 		set_title(tokens[1]);
 		set_query(query);

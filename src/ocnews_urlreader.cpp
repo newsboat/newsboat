@@ -29,11 +29,11 @@ void ocnews_urlreader::reload() {
 	std::vector<tagged_feedurl> feedurls = api->get_subscribed_urls();
 
 	for (auto url : feedurls) {
-		LOG(level::INFO, "added %s to URL list", url.first.c_str());
+		LOG(level::INFO, "added %s to URL list", url.first);
 		urls.push_back(url.first);
 		tags[url.first] = url.second;
 		for (auto tag : url.second) {
-			LOG(level::DEBUG, "%s: added tag %s", url.first.c_str(), tag.c_str());
+			LOG(level::DEBUG, "%s: added tag %s", url.first, tag);
 			alltags.insert(tag);
 		}
 	}

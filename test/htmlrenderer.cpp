@@ -4,6 +4,7 @@
 
 #include <htmlrenderer.h>
 #include <utils.h>
+#include <strprintf.h>
 
 using namespace newsbeuter;
 
@@ -863,7 +864,7 @@ TEST_CASE("cells are separated by vertical bar if `border' is set (regardless "
 	std::vector<linkpair> links;
 
 	for (auto border_width = 1; border_width < 10; ++border_width) {
-		SECTION(utils::strprintf("`border' = %u", border_width)) {
+		SECTION(strprintf::fmt("`border' = %u", border_width)) {
 		const std::string input_template =
 			"<table border='%u'>"
 				"<tr>"
@@ -872,7 +873,7 @@ TEST_CASE("cells are separated by vertical bar if `border' is set (regardless "
 				"</tr>"
 			"</table>";
 		const std::string input =
-			utils::strprintf(input_template.c_str(), border_width);
+			strprintf::fmt(input_template, border_width);
 
 		REQUIRE_NOTHROW(r.render(input, lines, links, url));
 		REQUIRE(lines.size() == 3);

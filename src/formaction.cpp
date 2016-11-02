@@ -1,6 +1,7 @@
 #include <formaction.h>
 #include <view.h>
 #include <utils.h>
+#include <strprintf.h>
 #include <config.h>
 #include <logger.h>
 #include <cassert>
@@ -91,10 +92,10 @@ void formaction::process_op(operation op, bool automatic, std::vector<std::strin
 			std::string cmdline = "set ";
 			if (args) {
 				for (auto arg : *args) {
-					cmdline.append(utils::strprintf("%s ", stfl::quote(arg).c_str()));
+					cmdline.append(strprintf::fmt("%s ", stfl::quote(arg)));
 				}
 			}
-			LOG(level::DEBUG, "formaction::process_op: running commandline `%s'", cmdline.c_str());
+			LOG(level::DEBUG, "formaction::process_op: running commandline `%s'", cmdline);
 			this->handle_cmdline(cmdline);
 		} else {
 			LOG(level::WARN, "formaction::process_op: got OP_INT_SET, but not automatic");
@@ -141,11 +142,11 @@ void formaction::process_op(operation op, bool automatic, std::vector<std::strin
 }
 
 std::vector<std::string> formaction::get_suggestions(const std::string& fragment) {
-	LOG(level::DEBUG, "formaction::get_suggestions: fragment = %s", fragment.c_str());
+	LOG(level::DEBUG, "formaction::get_suggestions: fragment = %s", fragment);
 	std::vector<std::string> result;
 	// first check all formaction command suggestions
 	for (auto cmd : valid_cmds) {
-		LOG(level::DEBUG, "formaction::get_suggestions: extracted part: %s", cmd.substr(0, fragment.length()).c_str());
+		LOG(level::DEBUG, "formaction::get_suggestions: extracted part: %s", cmd.substr(0, fragment.length()));
 		if (cmd.substr(0, fragment.length()) == fragment) {
 			LOG(level::DEBUG, "...and it matches.");
 			result.push_back(cmd);
@@ -164,7 +165,7 @@ std::vector<std::string> formaction::get_suggestions(const std::string& fragment
 					for (auto suggestion : variable_suggestions) {
 						std::string line = fragment + suggestion.substr(variable_fragment.length(), suggestion.length()-variable_fragment.length());
 						result.push_back(line);
-						LOG(level::DEBUG, "formaction::get_suggestions: suggested %s", line.c_str());
+						LOG(level::DEBUG, "formaction::get_suggestions: suggested %s", line);
 					}
 				}
 			}
@@ -205,7 +206,7 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 						cfg->reset_to_default(var);
 						set_redraw(true);
 					}
-					v->set_status(utils::strprintf("  %s=%s", var.c_str(), utils::quote_if_necessary(cfg->get_configvalue(var)).c_str()));
+					v->set_status(strprintf::fmt("  %s=%s", var, utils::quote_if_necessary(cfg->get_configvalue(var))));
 				}
 			} else if (tokens.size()==2) {
 				std::string result = configparser::evaluate_backticks(tokens[1]);
@@ -237,12 +238,12 @@ void formaction::handle_cmdline(const std::string& cmdline) {
 				v->show_error(_("usage: dumpconfig <file>"));
 			} else {
 				v->get_ctrl()->dump_config(utils::resolve_tilde(tokens[0]));
-				v->show_error(utils::strprintf(_("Saved configuration to %s"), tokens[0].c_str()));
+				v->show_error(strprintf::fmt(_("Saved configuration to %s"), tokens[0]));
 			}
 		} else if (cmd == "dumpform") {
 			v->dump_current_form();
 		} else {
-			v->show_error(utils::strprintf(_("Not a command: %s"), cmdline.c_str()));
+			v->show_error(strprintf::fmt(_("Not a command: %s"), cmdline));
 		}
 	}
 }
@@ -287,7 +288,7 @@ void formaction::finished_qna(operation op) {
 			v->set_status(_("Saved bookmark."));
 		} else {
 			v->set_status(_s("Error while saving bookmark: ") + retval);
-			LOG(level::DEBUG, "formaction::finished_qna: error while saving bookmark, retval = `%s'", retval.c_str());
+			LOG(level::DEBUG, "formaction::finished_qna: error while saving bookmark, retval = `%s'", retval);
 		}
 	}
 	break;
@@ -295,7 +296,7 @@ void formaction::finished_qna(operation op) {
 		f->set_focus("feeds");
 		std::string cmdline = qna_responses[0];
 		formaction::cmdlinehistory.add_line(cmdline);
-		LOG(level::DEBUG,"formaction: commandline = `%s'", cmdline.c_str());
+		LOG(level::DEBUG,"formaction: commandline = `%s'", cmdline);
 		this->handle_cmdline(cmdline);
 	}
 	break;
@@ -315,10 +316,10 @@ void formaction::start_bookmark_qna(
 			"formaction::start_bookmark_qna: starting bookmark Q&A... "
 			"default_title = %s default_url = %s default_desc = %s "
 			"default_feed_title = %s",
-			default_title.c_str(),
-			default_url.c_str(),
-			default_desc.c_str(),
-			default_feed_title.c_str());
+			default_title,
+			default_url,
+			default_desc,
+			default_feed_title);
 	std::vector<qna_pair> prompts;
 
 	std::string new_title = "";
@@ -350,7 +351,7 @@ void formaction::start_bookmark_qna(
 				v->set_status(_("Saved bookmark."));
 			} else {
 				v->set_status(_s("Error while saving bookmark: ") + retval);
-				LOG(level::DEBUG, "formaction::finished_qna: error while saving bookmark, retval = `%s'", retval.c_str());
+				LOG(level::DEBUG, "formaction::finished_qna: error while saving bookmark, retval = `%s'", retval);
 			}
 		}
 	} else {
@@ -379,13 +380,11 @@ void formaction::start_next_question() {
 	 * If there is one more prompt to be presented to the user, set it up.
 	 */
 	if (qna_prompts.size() > 0) {
-		//LOG(level::DEBUG, "formaction::start_next_question: qna_prompts[0].first = %s qna_prompts[0].second = %s", qna_prompts[0].first.c_str(), qna_prompts[0].second.c_str());
 		std::string replacestr("{hbox[lastline] .expand:0 {label .expand:0 text:");
 		replacestr.append(stfl::quote(qna_prompts[0].first));
 		replacestr.append("}{input[qnainput] on_ESC:cancel-qna on_UP:qna-prev-history on_DOWN:qna-next-history on_ENTER:end-question modal:1 .expand:h @bind_home:** @bind_end:** text[qna_value]:");
 		replacestr.append(stfl::quote(qna_prompts[0].second));
 		replacestr.append(" pos[qna_value_pos]:0");
-		//replacestr.append(utils::to_string<unsigned int>(qna_prompts[0].second.length()));
 		replacestr.append("}}");
 		qna_prompts.erase(qna_prompts.begin());
 		f->modify("lastline", "replace", replacestr);

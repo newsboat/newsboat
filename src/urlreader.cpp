@@ -107,7 +107,7 @@ void opml_urlreader::reload() {
 	std::vector<std::string> urls = utils::tokenize_quoted(this->get_source(), " ");
 
 	for (auto url : urls) {
-		LOG(level::DEBUG, "opml_urlreader::reload: downloading `%s'", url.c_str());
+		LOG(level::DEBUG, "opml_urlreader::reload: downloading `%s'", url);
 		std::string urlcontent = utils::retrieve_url(url, cfg, this->get_auth());
 
 		xmlDoc * doc = xmlParseMemory(urlcontent.c_str(), urlcontent.length());
