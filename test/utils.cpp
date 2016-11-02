@@ -367,3 +367,69 @@ TEST_CASE("trim_end()", "[utils]") {
 	utils::trim_end(str);
 	REQUIRE(str == "quux");
 }
+
+TEST_CASE("utils::make_title extracts possible title from URL") {
+	SECTION("Uses last part of URL as title") {
+		auto input = "http://example.com/Item";
+		REQUIRE(utils::make_title(input) == "Item");
+	}
+
+	SECTION("Replaces dashes and underscores with spaces") {
+		std::string input;
+
+		SECTION("Dashes") {
+			input = "http://example.com/This-is-the-title";
+		}
+
+		SECTION("Underscores") {
+			input = "http://example.com/This_is_the_title";
+		}
+
+		SECTION("Mix of dashes and underscores") {
+			input = "http://example.com/This_is-the_title";
+		}
+
+		REQUIRE(utils::make_title(input) == "This is the title");
+	}
+
+	SECTION("Capitalizes first letter of extracted title") {
+		auto input = "http://example.com/this-is-the-title";
+		REQUIRE(utils::make_title(input) == "This is the title");
+	}
+
+	SECTION("Only cares about last component of the URL") {
+		auto input = "http://example.com/items/misc/this-is-the-title";
+		REQUIRE(utils::make_title(input) == "This is the title");
+	}
+
+	SECTION("Strips out trailing slashes") {
+		std::string input;
+
+		SECTION("One slash") {
+			input = "http://example.com/item/";
+		}
+
+		SECTION("Numerous slashes") {
+			input = "http://example.com/item/////////////";
+		}
+
+		REQUIRE(utils::make_title(input) == "Item");
+	}
+
+	SECTION("Doesn't mind invalid URL scheme") {
+		auto input = "blahscheme://example.com/this-is-the-title";
+		REQUIRE(utils::make_title(input) == "This is the title");
+	}
+
+	SECTION("Strips out URL query parameters") {
+		SECTION("Single parameter") {
+			auto input = "http://example.com/story/aug/title-with-dashes?a=b";
+			REQUIRE(utils::make_title(input) == "Title with dashes");
+		}
+
+		SECTION("Multiple parameters") {
+			auto input = "http://example.com/title-with-dashes?a=b&x=y&utf8=✓";
+			REQUIRE(utils::make_title(input) == "Title with dashes");
+		}
+	}
+}

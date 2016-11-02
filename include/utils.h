@@ -133,6 +133,8 @@ class utils {
 		static int mkdir_parents(
 				const std::string& pathname, mode_t mode = 0755);
 
+		static std::string make_title(const std::string& url);
+
 	private:
 		static void append_escapes(std::string& str, char c);
 

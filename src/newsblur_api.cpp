@@ -151,10 +151,11 @@ bool newsblur_api::mark_article_read(const std::string& guid, bool read) {
 	return request_successfull(query_result);
 }
 
-bool newsblur_api::update_article_flags(const std::string& oldflags, const std::string& newflags, const std::string& guid) {
-	(void)oldflags;
-	(void)newflags;
-	(void)guid;
+bool newsblur_api::update_article_flags(
+		const std::string& /* oldflags */,
+		const std::string& /* newflags */,
+		const std::string& /* guid */)
+{
 	return false;
 }
 

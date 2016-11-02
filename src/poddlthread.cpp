@@ -137,8 +137,8 @@ int poddlthread::progress(double dlnow, double dltotal) {
 double poddlthread::compute_kbps() {
 	double result = 0.0;
 
-	double t1 = tv1.tv_sec + (tv1.tv_usec/(double)1000000);
-	double t2 = tv2.tv_sec + (tv2.tv_usec/(double)1000000);
+	double t1 = tv1.tv_sec + (tv1.tv_usec/1000000.0);
+	double t2 = tv2.tv_sec + (tv2.tv_usec/1000000.0);
 
 	result = (bytecount / (t2 - t1))/1024;
 

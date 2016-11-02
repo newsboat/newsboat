@@ -6,7 +6,6 @@
 #include <logger.h>
 #include <cassert>
 #include <exceptions.h>
-#include <algorithm>
 
 namespace newsbeuter {
 
@@ -326,7 +325,7 @@ void formaction::start_bookmark_qna(
 	bool is_bm_autopilot = v->get_cfg()->get_configvalue_as_bool("bookmark-autopilot");
 	prompts.push_back(qna_pair(_("URL: "), default_url));
 	if (default_title.empty()) { // call the function to figure out title from url only if the default_title is no good
-		new_title = make_title(default_url);
+		new_title = utils::make_title(default_url);
 		prompts.push_back(qna_pair(_("Title: "), new_title));
 	} else {
 		prompts.push_back(qna_pair(_("Title: "), default_title));
@@ -336,7 +335,7 @@ void formaction::start_bookmark_qna(
 
 	if (is_bm_autopilot) {	//If bookmarking is set to autopilot don't prompt for url, title, desc
 		if (default_title.empty()) {
-			new_title = make_title(default_url); // try to make the title from url
+			new_title = utils::make_title(default_url); // try to make the title from url
 		} else {
 			new_title = default_title; // assignment just to make the call to bookmark() below easier
 		}
@@ -357,22 +356,6 @@ void formaction::start_bookmark_qna(
 	} else {
 		start_qna(prompts, OP_INT_BM_END);
 	}
-}
-
-std::string formaction::make_title(const std::string& const_url) {
-	/* Sometimes it is possible to construct the title from the URL
-	 * This attempts to do just that. eg: http://domain.com/story/yy/mm/dd/title-with-dashes?a=b
-	*/
-	std::string url = (std::string&) const_url;
-	std::string::size_type pos_of_slash = url.find_last_of('/', (int)url.length()-2); 		// get to the final part of the URI's path, catering for situation where last char is '/'
-	if (url[url.length()-1] == '/')
-		url.erase((int)url.length()-1);
-	std::string path=url.substr(pos_of_slash+1); 				// extract just the juicy part 'title-with-dashes?a=b'
-	std::string::size_type pos_of_qmrk = path.find_first_of('?'); 		// find where query part of URI starts
-	std::string title = path.substr(0,pos_of_qmrk); 			//throw away the query part 'title-with-dashes'
-	std::replace(title.begin(), title.end(), '-', ' ');			// 'title with dashes'
-	if (title.at(0)>= 'a' && title.at(0)<= 'z') title[0] -= 'a' - 'A';	//'Title with dashes'
-	return title;
 }
 
 void formaction::start_next_question() {

@@ -20,6 +20,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <cstdarg>
+#include <algorithm>
 
 #include <curl/curl.h>
 
@@ -1014,6 +1015,34 @@ int utils::mkdir_parents(const std::string& p, mode_t mode) {
 	free(pathname);
 	return result;
 }
+
+std::string utils::make_title(const std::string& const_url) {
+	/* Sometimes it is possible to construct the title from the URL
+	 * This attempts to do just that. eg: http://domain.com/story/yy/mm/dd/title-with-dashes?a=b
+	*/
+	std::string url = (std::string&) const_url;
+	// Strip out trailing slashes
+	while (url.length() > 0  &&  url.back() == '/') {
+		url.erase(url.length() - 1);
+	}
+	// get to the final part of the URI's path
+	std::string::size_type pos_of_slash = url.find_last_of('/');
+	// extract just the juicy part 'title-with-dashes?a=b'
+	std::string path = url.substr(pos_of_slash+1);
+	// find where query part of URI starts
+	std::string::size_type pos_of_qmrk = path.find_first_of('?');
+	//throw away the query part 'title-with-dashes'
+	std::string title = path.substr(0,pos_of_qmrk);
+	// 'title with dashes'
+	std::replace(title.begin(), title.end(), '-', ' ');
+	std::replace(title.begin(), title.end(), '_', ' ');
+	//'Title with dashes'
+	if (title.at(0)>= 'a' && title.at(0)<= 'z') {
+		title[0] -= 'a' - 'A';
+	}
+	return title;
+}
+
 
 /*
  * See http://curl.haxx.se/libcurl/c/libcurl-tutorial.html#Multi-threading for a reason why we do this.
