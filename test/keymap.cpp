@@ -21,6 +21,7 @@ TEST_CASE("get_operation()", "[keymap]") {
 
 TEST_CASE("unset_key() and set_key()", "[keymap]") {
 	keymap k(KM_NEWSBEUTER);
+
 	REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
 	REQUIRE(k.getkey(OP_OPEN, "all") == "ENTER");
 

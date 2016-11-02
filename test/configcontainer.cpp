@@ -7,9 +7,9 @@
 using namespace newsbeuter;
 
 TEST_CASE("ConfigContainer behaves correctly", "[configcontainer]") {
-	configcontainer * cfg = new configcontainer();
+	configcontainer cfg;
 	configparser cfgparser;
-	cfg->register_commands(cfgparser);
+	cfg.register_commands(cfgparser);
 	keymap k(KM_NEWSBEUTER);
 	cfgparser.register_handler("macro", &k);
 
@@ -17,25 +17,23 @@ TEST_CASE("ConfigContainer behaves correctly", "[configcontainer]") {
 		REQUIRE_NOTHROW(cfgparser.parse("test-config.txt"));
 
 		SECTION("bool value") {
-			REQUIRE(cfg->get_configvalue("show-read-feeds") == "no");
-			REQUIRE_FALSE(cfg->get_configvalue_as_bool("show-read-feeds"));
+			REQUIRE(cfg.get_configvalue("show-read-feeds") == "no");
+			REQUIRE_FALSE(cfg.get_configvalue_as_bool("show-read-feeds"));
 		}
 
 		SECTION("string value") {
-			REQUIRE(cfg->get_configvalue("browser") == "firefox");
+			REQUIRE(cfg.get_configvalue("browser") == "firefox");
 		}
 
 		SECTION("integer value") {
-			REQUIRE(cfg->get_configvalue("max-items") == "100");
-			REQUIRE(cfg->get_configvalue_as_int("max-items") == 100);
+			REQUIRE(cfg.get_configvalue("max-items") == "100");
+			REQUIRE(cfg.get_configvalue_as_int("max-items") == 100);
 		}
 
 		SECTION("Tilde is expanded correctly") {
 			std::string cachefilecomp = ::getenv("HOME");
 			cachefilecomp.append("/foo");
-			REQUIRE(cfg->get_configvalue("cache-file") == cachefilecomp);
+			REQUIRE(cfg.get_configvalue("cache-file") == cachefilecomp);
 		}
 	}
-
-	delete cfg;
 }
