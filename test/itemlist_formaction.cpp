@@ -53,13 +53,11 @@ TEST_CASE("process_op()", "[itemlist_formaction]") {
 			std::ifstream browserFileStream (browserfile.getPath());
 			openedItemsCount = 0;
 			if (browserFileStream.is_open()) {
-				for (int i = 0; i < maxItemsToOpen; i ++) {
-					if ( std::getline (browserFileStream,line) ) {
-						INFO("Each URL should be present exactly once. Erase urls after first match to fail if an item opens twice.")
-						REQUIRE(url_set.count(test_url + std::to_string(i)) == 1);
-						url_set.erase(url_set.find(test_url + std::to_string(i)));
-						openedItemsCount += 1;
-					}
+				while ( std::getline (browserFileStream,line) ) {
+					INFO("Each URL should be present exactly once. Erase urls after first match to fail if an item opens twice.")
+					REQUIRE(url_set.count(line) == 1);
+					url_set.erase(url_set.find(line));
+					openedItemsCount += 1;
 				}
 				browserFileStream.close();
 			}
@@ -75,13 +73,11 @@ TEST_CASE("process_op()", "[itemlist_formaction]") {
 
 			std::ifstream browserFileStream (browserfile.getPath());
 			if (browserFileStream.is_open()) {
-				for (int i = 0; i < itemCount; i ++) {
-					if ( std::getline (browserFileStream,line) ) {
-						INFO("Each URL should be present exactly once. Erase urls after first match to fail if an item opens twice.")
-						REQUIRE(url_set.count(test_url + std::to_string(i)) == 1);
-						url_set.erase(url_set.find(test_url + std::to_string(i)));
-						openedItemsCount += 1;
-					}
+				while ( std::getline (browserFileStream,line) ) {
+					INFO("Each URL should be present exactly once. Erase urls after first match to fail if an item opens twice.")
+					REQUIRE(url_set.count(line) == 1);
+					url_set.erase(url_set.find(line));
+					openedItemsCount += 1;
 				}
 				browserFileStream.close();
 			}
@@ -97,13 +93,11 @@ TEST_CASE("process_op()", "[itemlist_formaction]") {
 
 			std::ifstream browserFileStream (browserfile.getPath());
 			if (browserFileStream.is_open()) {
-				for (int i = 0; i < itemCount; i ++) {
-					if ( std::getline (browserFileStream,line) ) {
-						INFO("Each URL should be present exactly once. Erase urls after first match to fail if an item opens twice.")
-						REQUIRE(url_set.count(test_url + std::to_string(i)) == 1);
-						url_set.erase(url_set.find(test_url + std::to_string(i)));
-						openedItemsCount += 1;
-					}
+				while ( std::getline (browserFileStream,line) ) {
+					INFO("Each URL should be present exactly once. Erase urls after first match to fail if an item opens twice.")
+					REQUIRE(url_set.count(line) == 1);
+					url_set.erase(url_set.find(line));
+					openedItemsCount += 1;
 				}
 				browserFileStream.close();
 			}
@@ -120,13 +114,11 @@ TEST_CASE("process_op()", "[itemlist_formaction]") {
 
 			std::ifstream browserFileStream (browserfile.getPath());
 			if (browserFileStream.is_open()) {
-				for (int i = 0; i < itemCount; i ++) {
-					if ( std::getline (browserFileStream,line) ) {
-						INFO("Each URL should be present exactly once. Erase urls after first match to fail if an item opens twice.")
-						REQUIRE(url_set.count(test_url + std::to_string(i)) == 1);
-						url_set.erase(url_set.find(test_url + std::to_string(i)));
-						openedItemsCount += 1;
-					}
+				while ( std::getline (browserFileStream,line) ) {
+					INFO("Each URL should be present exactly once. Erase urls after first match to fail if an item opens twice.")
+					REQUIRE(url_set.count(line) == 1);
+					url_set.erase(url_set.find(line));
+					openedItemsCount += 1;
 				}
 				browserFileStream.close();
 			}
