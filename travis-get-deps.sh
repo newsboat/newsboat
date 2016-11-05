@@ -2,7 +2,7 @@
 
 case $TRAVIS_OS_NAME in
     "linux")
-        sudo apt-add-repository -y ppa:ondrej/php5
+        sudo apt-add-repository -y ppa:jbboehr/php
         sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
         sudo apt-get update
         sudo apt-get install libsqlite3-dev libcurl4-openssl-dev libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev bc asciidoc
