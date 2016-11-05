@@ -7,14 +7,16 @@ Introduction
 Newsbeuter is an RSS/Atom feedreader. RSS and Atom are a number of widely-used 
 XML formats to transmit, publish and syndicate articles, for example news or 
 blog articles.  Newsbeuter is designed to be used on text terminals on Unix or 
-Unix-like systems such as Linux, FreeBSD or Mac OS X.
+Unix-like systems such as GNU/Linux, FreeBSD or Mac OS X.
 
 Platforms
 ~~~~~~~~~
 
-Newsbeuter has been tested on Linux, FreeBSD and Mac OS X, and is available in 
-the form of pre-built packages for many popular Linux distributions. For a current 
-list of distributions with newsbeuter packages, consult http://www.newsbeuter.org/download.html[this list on the newsbeuter website].
+Newsbeuter has been tested on Linux (with glibc and musl-libc), FreeBSD and Mac
+OS X, and is available in the form of pre-built packages for many popular Linux
+distributions. For a current list of distributions with newsbeuter packages,
+consult http://www.newsbeuter.org/download.html[this list on the newsbeuter
+website].
 
 OpenBSD is currently unsupported, as it lacks even the most basic support for 
 internationalization and localization.

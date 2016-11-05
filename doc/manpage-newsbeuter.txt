@@ -18,7 +18,7 @@ DESCRIPTION
 'newsbeuter' is an RSS/Atom feed reader for text terminals. RSS and Atom are a 
 number of widely-used XML formats to transmit, publish and syndicate articles, 
 for example news or blog articles.  Newsbeuter is designed to be used on text 
-terminals on Unix or Unix-like systems such as Linux, BSD or Mac OS X.
+terminals on Unix or Unix-like systems such as GNU/Linux, BSD or Mac OS X.
 
 
 OPTIONS
