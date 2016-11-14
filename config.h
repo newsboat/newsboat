@@ -3,7 +3,14 @@
 
 #define PACKAGE				"newsbeuter"
 #define PROGRAM_NAME			PACKAGE
-#define PROGRAM_VERSION			"2.10"
+#define REAL_VERSION "2.10"
+
+#ifdef GIT_HASH
+#define PROGRAM_VERSION			REAL_VERSION "-" GIT_HASH
+#else
+#define PROGRAM_VERSION			REAL_VERSION
+#endif
+
 #define PROGRAM_URL			"http://www.newsbeuter.org/"
 
 #define NEWSBEUTER_PATH_SEP			"/"

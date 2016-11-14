@@ -10,6 +10,12 @@ CXX?=c++
 
 # compiler and linker flags
 DEFINES=-DLOCALEDIR=\"$(localedir)\"
+
+ifneq ($(wildcard .git/.),)
+GIT_HASH=$(shell git describe --abbrev=4 --dirty --always --tags)
+DEFINES+=-DGIT_HASH=\"$(GIT_HASH)\"
+endif
+
 WARNFLAGS=-Wall -Wextra -Wunreachable-code
 BARE_CXXFLAGS=-std=c++11 -ggdb -Iinclude -Istfl -Ifilter -I. -Irss
 CXXFLAGS+=$(BARE_CXXFLAGS) $(WARNFLAGS) $(DEFINES)
