@@ -1,5 +1,6 @@
 open:ENTER:Open the currently selected feed or article.
 quit:q:Quit the program or return to the previous dialog (depending on the context).
+hard-quit:Q:Quit the program without confirmation.
 reload:r:Reload the currently selected feed.
 reload-all:R:Reload all feeds.
 mark-feed-read:A:Mark all articles in the currently selected feed read.
