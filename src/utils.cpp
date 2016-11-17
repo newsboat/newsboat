@@ -193,10 +193,10 @@ std::vector<std::string> utils::tokenize_spaced(const std::string& str, std::str
 
 std::string utils::consolidate_whitespace(const std::string& str, std::string whitespace) {
 	std::string result;
-	std::string::size_type last_pos = str.find_first_not_of(whitespace, 0);
+	std::string::size_type last_pos = str.find_first_not_of(whitespace);
 	std::string::size_type pos = str.find_first_of(whitespace, last_pos);
 
-	if(last_pos != 0){
+	if (last_pos != 0) {
 		result.append(" ");
 	}
 

@@ -45,7 +45,7 @@ TEST_CASE("Tokenizers behave correctly", "[utils]") {
 		REQUIRE(tokens[0] == " ");
 		// second token is a
 		REQUIRE(tokens[1] == "a");
-		// third token is space
+		// third token is a tab followed by a space
 		REQUIRE(tokens[2] == "\t ");
 		// fourth token is b
 		REQUIRE(tokens[3] == "b");
@@ -123,7 +123,6 @@ TEST_CASE("utils::consolidate_whitespace bahaves correctly", "[utils]") {
 	std::string result = utils::consolidate_whitespace("    Lorem \t\tIpsum ");
 	REQUIRE(result == " Lorem Ipsum ");
 }
-
 
 TEST_CASE("String conversions behave correctly", "[utils]") {
 	SECTION("Conversion from wstring to string") {
