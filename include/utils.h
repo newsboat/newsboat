@@ -42,6 +42,8 @@ class utils {
 		static std::vector<std::string> tokenize_nl(const std::string& str, std::string delimiters = "\r\n");
 		static std::vector<std::string> tokenize_quoted(const std::string& str, std::string delimiters = " \r\n\t");
 
+		static std::string consolidate_whitespace(const std::string& str, std::string whitespace = " \r\n\t");
+
 		static std::vector<std::wstring> wtokenize(const std::wstring& str, std::wstring delimiters = L" \r\n\t");
 
 		static bool try_fs_lock(const std::string& lock_file, pid_t & pid);

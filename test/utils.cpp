@@ -46,7 +46,7 @@ TEST_CASE("Tokenizers behave correctly", "[utils]") {
 		// second token is a
 		REQUIRE(tokens[1] == "a");
 		// third token is space
-		REQUIRE(tokens[2] == " ");
+		REQUIRE(tokens[2] == "\t ");
 		// fourth token is b
 		REQUIRE(tokens[3] == "b");
 		// fifth token is space
@@ -118,6 +118,12 @@ TEST_CASE("Tokenizers behave correctly", "[utils]") {
 		}
 	}
 }
+
+TEST_CASE("utils::consolidate_whitespace bahaves correctly", "[utils]") {
+	std::string result = utils::consolidate_whitespace("    Lorem \t\tIpsum ");
+	REQUIRE(result == " Lorem Ipsum ");
+}
+
 
 TEST_CASE("String conversions behave correctly", "[utils]") {
 	SECTION("Conversion from wstring to string") {
