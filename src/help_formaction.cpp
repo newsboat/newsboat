@@ -165,6 +165,7 @@ keymap_hint_entry * help_formaction::get_keymap_hint() {
 }
 
 void help_formaction::finished_qna(operation op) {
+	v->inside_qna(false);
 	switch (op) {
 	case OP_INT_START_SEARCH:
 		searchphrase = qna_responses[0];
