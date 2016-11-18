@@ -119,9 +119,16 @@ TEST_CASE("Tokenizers behave correctly", "[utils]") {
 	}
 }
 
-TEST_CASE("utils::consolidate_whitespace bahaves correctly", "[utils]") {
-	std::string result = utils::consolidate_whitespace("    Lorem \t\tIpsum ");
-	REQUIRE(result == " Lorem Ipsum ");
+TEST_CASE("consolidate_whitespace replaces multiple consecutine"
+          "whitespace with a single space", "[utils]") {
+	REQUIRE(utils::consolidate_whitespace("LoremIpsum") == "LoremIpsum");
+	REQUIRE(utils::consolidate_whitespace("Lorem Ipsum") == "Lorem Ipsum");
+	REQUIRE(utils::consolidate_whitespace("    Lorem \t\tIpsum \t ") == " Lorem Ipsum ");
+	REQUIRE(utils::consolidate_whitespace("    Lorem \r\n\r\n\tIpsum") == " Lorem Ipsum");
+
+	REQUIRE(utils::consolidate_whitespace("") == " ");
+
+	REQUIRE(utils::consolidate_whitespace("  Lorem|||Ipsum||", "|") == "  Lorem Ipsum ");
 }
 
 TEST_CASE("String conversions behave correctly", "[utils]") {
