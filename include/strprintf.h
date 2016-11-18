@@ -12,7 +12,18 @@ class strprintf {
 			split_format(const std::string& printf_format);
 
 		static std::string fmt(const std::string& format) {
-			return format;
+			char buffer[1024];
+			std::string result;
+			unsigned int len = 1 + snprintf(
+					buffer, sizeof(buffer), format.c_str());
+			if (len <= sizeof(buffer)) {
+				result = buffer;
+			} else {
+				std::unique_ptr<char> buf(new char[len]);
+				snprintf(buf.get(), len, format.c_str());
+				result = *buf;
+			}
+			return result;
 		}
 
 		template<typename... Args>
