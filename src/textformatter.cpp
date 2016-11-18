@@ -77,7 +77,7 @@ std::vector<std::string> wrap_line(
 	return result;
 }
 
-std::string format_text_plain_helper(
+std::vector<std::string> format_text_plain_helper(
 		const std::vector<std::pair<LineType, std::string>>& lines,
 		regexmanager * rxman,
 		const std::string& location,
@@ -91,16 +91,18 @@ std::string format_text_plain_helper(
 		"wrap_width = %zu, total_width = %zu, %u lines",
 		rxman, location, wrap_width, total_width, lines.size());
 
-	std::string format_cache;
+	std::vector<std::string> format_cache;
+
 	auto store_line =
 		[&format_cache]
 		(std::string line) {
-			format_cache.append(line + "\n");
+			format_cache.push_back(line);
 
 			LOG(level::DEBUG,
 				"textformatter::format_text_plain: stored `%s'",
 				line);
 		};
+
 	for (auto line : lines) {
 		auto type = line.first;
 		auto text = line.second;
@@ -143,7 +145,8 @@ std::string format_text_plain_helper(
 	return format_cache;
 }
 
-std::string textformatter::format_text_to_list(
+std::pair<std::string, std::size_t>
+textformatter::format_text_to_list(
 		regexmanager * rxman,
 		const std::string& location,
 		const size_t wrap_width,
@@ -153,8 +156,8 @@ std::string textformatter::format_text_to_list(
 			lines, rxman, location, wrap_width, total_width);
 
 	auto format_cache = std::string("{list");
-	for (auto line : utils::tokenize_nl(formatted)) {
-		if (line != "\n") {
+	for (auto line : formatted) {
+		if (line != "") {
 			utils::trim_end(line);
 			format_cache.append(
 					strprintf::fmt(
@@ -162,14 +165,24 @@ std::string textformatter::format_text_to_list(
 						stfl::quote(line)));
 		}
 	}
-
 	format_cache.append(1, '}');
 
-	return format_cache;
+	auto line_count = formatted.size();
+
+	return { format_cache, line_count };
 }
 
-std::string textformatter::format_text_plain(const size_t width, const size_t total_width) {
-	return format_text_plain_helper(lines, nullptr, std::string(), width, total_width);
+std::string textformatter::format_text_plain(
+		const size_t width, const size_t total_width)
+{
+	std::string result;
+	auto formatted = format_text_plain_helper(
+			lines, nullptr, "", width, total_width);
+	for (const auto& line : formatted) {
+		result += line + "\n";
+	}
+
+	return result;
 }
 
 }

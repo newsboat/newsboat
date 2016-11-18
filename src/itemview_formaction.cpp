@@ -131,10 +131,10 @@ void itemview_formaction::prepare() {
 				textwidth -= 5;
 			}
 		}
-		auto formatted_text = textfmt.format_text_to_list(
-				rxman, "article", textwidth, window_width);
-		num_lines = formatted_text.size();
 
+		std::string formatted_text;
+		std::tie(formatted_text, num_lines) = textfmt.format_text_to_list(
+				rxman, "article", textwidth, window_width);
 		f->modify("article", "replace_inner", formatted_text);
 		f->set("articleoffset","0");
 

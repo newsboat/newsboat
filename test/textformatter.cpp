@@ -28,7 +28,7 @@ TEST_CASE("lines marked as `wrappable` are wrapped to fit width",
 	}
 
 	SECTION("formatting to list") {
-		const std::string expected =
+		const std::string expected_text =
 			"{list"
 				"{listitem text:\"this one \"}"
 				"{listitem text:\"is going \"}"
@@ -38,7 +38,12 @@ TEST_CASE("lines marked as `wrappable` are wrapped to fit width",
 				"{listitem text:\"window border\"}"
 				"{listitem text:\"this one is going to be preserved even though it's much longer\"}"
 			"}";
-		REQUIRE(fmt.format_text_to_list(nullptr, "", 10, 40) == expected);
+		const std::size_t expected_count = 7;
+
+		const auto result = fmt.format_text_to_list(nullptr, "", 10, 40);
+
+		REQUIRE(result.first == expected_text);
+		REQUIRE(result.second == expected_count);
 	}
 }
 
@@ -53,12 +58,16 @@ TEST_CASE("regex manager is used by format_text_to_list if one is passed",
 	// taste (or lack thereof) :)
 	rxmgr.handle_action("highlight", {"article", "please", "green", "default"});
 
-	const std::string expected =
+	const std::string expected_text =
 		"{list"
 			"{listitem text:\"Highlight me <0>please</>!\"}"
 		"}";
+	const std::size_t expected_count = 1;
 
-	REQUIRE(fmt.format_text_to_list(&rxmgr, "article", 100) == expected);
+	const auto result = fmt.format_text_to_list(&rxmgr, "article", 100);
+
+	REQUIRE(result.first == expected_text);
+	REQUIRE(result.second == expected_count);
 }
 
 TEST_CASE("<hr> is rendered properly", "[textformatter]") {
@@ -129,20 +138,30 @@ TEST_CASE("softwrappable lines are wrapped by format_text_to_list if "
 	const std::string location = "";
 
 	SECTION("total_width == 4") {
-		const std::string expected =
+		const std::string expected_text =
 			"{list"
 				"{listitem text:\"just\"}"
 				"{listitem text:\"a \"}"
 				"{listitem text:\"test\"}"
 			"}";
-		REQUIRE(fmt.format_text_to_list(rxman, location, wrap_width, 4) == expected);
+		const std::size_t expected_count = 3;
+
+		const auto result = fmt.format_text_to_list(rxman, location, wrap_width, 4);
+
+		REQUIRE(result.first == expected_text);
+		REQUIRE(result.second == expected_count);
 	}
 
 	SECTION("total_width == 0") {
-		const std::string expected =
+		const std::string expected_text =
 			"{list"
 				"{listitem text:\"just a test\"}"
 			"}";
-		REQUIRE(fmt.format_text_to_list(rxman, location, wrap_width, 0) == expected);
+		const std::size_t expected_count = 1;
+
+		const auto result = fmt.format_text_to_list(rxman, location, wrap_width, 0);
+
+		REQUIRE(result.first == expected_text);
+		REQUIRE(result.second == expected_count);
 	}
 }
