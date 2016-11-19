@@ -115,6 +115,10 @@ std::string format_text_plain_helper(
 
 		switch(type) {
 			case LineType::wrappable:
+				if(text == "") {
+					store_line(" ");
+					continue;
+				}
 				text = utils::consolidate_whitespace(text);
 				for (auto line : wrap_line(text, wrap_width)) {
 					store_line(line);
@@ -122,6 +126,10 @@ std::string format_text_plain_helper(
 				break;
 
 			case LineType::softwrappable:
+				if(text == "") {
+					store_line(" ");
+					continue;
+				}
 				if (total_width == 0) {
 					store_line(text);
 				} else {

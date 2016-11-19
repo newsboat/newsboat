@@ -126,7 +126,7 @@ TEST_CASE("consolidate_whitespace replaces multiple consecutine"
 	REQUIRE(utils::consolidate_whitespace("    Lorem \t\tIpsum \t ") == " Lorem Ipsum ");
 	REQUIRE(utils::consolidate_whitespace("    Lorem \r\n\r\n\tIpsum") == " Lorem Ipsum");
 
-	REQUIRE(utils::consolidate_whitespace("") == " ");
+	REQUIRE(utils::consolidate_whitespace("") == "");
 
 	REQUIRE(utils::consolidate_whitespace("  Lorem|||Ipsum||", "|") == "  Lorem Ipsum ");
 }
