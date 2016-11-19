@@ -19,7 +19,8 @@ namespace newsbeuter {
  */
 
 select_formaction::select_formaction(view * vv, std::string formstr)
-	: formaction(vv, formstr) { }
+	: formaction(vv, formstr), quit(false), type(selection_type::TAG)
+{ }
 
 select_formaction::~select_formaction() { }
 

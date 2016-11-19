@@ -18,10 +18,12 @@
 namespace newsbeuter {
 
 itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
-	: list_formaction(vv,formstr), apply_filter(false), show_searchresult(false),
+	: list_formaction(vv,formstr), pos(0), apply_filter(false),
+	  show_searchresult(false),
 	  search_dummy_feed(new rss_feed(v->get_ctrl()->get_cache())),
 	  set_filterpos(false), filterpos(0), rxman(0), old_width(0),
-	  old_itempos(-1), old_sort_order(""), invalidated(false)
+	  old_itempos(-1), old_sort_order(""), invalidated(false),
+	  invalidation_mode(InvalidationMode::COMPLETE)
 {
 	assert(true==m.parse(FILTER_UNREAD_ITEMS));
 }

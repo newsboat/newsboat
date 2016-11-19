@@ -30,7 +30,7 @@ class urlreader {
 
 class file_urlreader : public urlreader {
 	public:
-		file_urlreader(const std::string& file = "");
+		explicit file_urlreader(const std::string& file = "");
 		virtual ~file_urlreader();
 		virtual void write_config();
 		virtual void reload();
@@ -42,7 +42,7 @@ class file_urlreader : public urlreader {
 
 class opml_urlreader : public urlreader {
 	public:
-		opml_urlreader(configcontainer * c);
+		explicit opml_urlreader(configcontainer * c);
 		virtual ~opml_urlreader();
 		virtual void write_config();
 		virtual void reload();

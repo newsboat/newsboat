@@ -53,7 +53,7 @@ struct header_values {
 
 static size_t handle_headers(void * ptr, size_t size, size_t nmemb, void * data) {
 	char * header = new char[size*nmemb + 1];
-	header_values * values = (header_values *)data;
+	header_values * values = static_cast<header_values *>(data);
 
 	memcpy(header, ptr, size*nmemb);
 	header[size*nmemb] = '\0';

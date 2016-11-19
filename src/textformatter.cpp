@@ -25,7 +25,7 @@ void textformatter::add_line(LineType type, std::string line) {
 }
 
 void textformatter::add_lines(
-		const std::vector<std::pair<LineType, std::string>> lines)
+		const std::vector<std::pair<LineType, std::string>>& lines)
 {
 	for (auto line : lines) {
 		add_line(line.first,

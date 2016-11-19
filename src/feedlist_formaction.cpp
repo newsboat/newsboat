@@ -26,7 +26,8 @@ namespace newsbeuter {
 feedlist_formaction::feedlist_formaction(view * vv, std::string formstr)
 	: list_formaction(vv,formstr), zero_feedpos(false), feeds_shown(0),
 	  quit(false), apply_filter(false), search_dummy_feed(new rss_feed(v->get_ctrl()->get_cache())),
-	  filterpos(0), set_filterpos(false), rxman(0), old_width(0) {
+	  filterpos(0), set_filterpos(false), rxman(0), old_width(0),
+	  unread_feeds(0), total_feeds(0) {
 	assert(true==m.parse(FILTER_UNREAD_FEEDS));
 	valid_cmds.push_back("tag");
 	valid_cmds.push_back("goto");
@@ -427,8 +428,6 @@ void feedlist_formaction::set_feedlist(std::vector<std::shared_ptr<rss_feed>>& f
 	update_visible_feeds(feeds);
 
 	for (auto feed : visible_feeds) {
-		std::string title = get_title(feed.first);
-
 		if (feed.first->unread_item_count() > 0)
 			++unread_feeds;
 

@@ -457,8 +457,7 @@ void view::push_itemlist(unsigned int pos) {
 }
 
 void view::push_itemview(std::shared_ptr<rss_feed> f, const std::string& guid, const std::string& searchphrase) {
-	std::string pager;
-	if ((pager = cfg->get_configvalue("pager")) == "internal") {
+	if (cfg->get_configvalue("pager") == "internal") {
 		std::shared_ptr<itemlist_formaction> itemlist = std::dynamic_pointer_cast<itemlist_formaction, formaction>(get_current_formaction());
 		assert(itemlist != nullptr);
 		std::shared_ptr<itemview_formaction> itemview(new itemview_formaction(this, itemlist, itemview_str));

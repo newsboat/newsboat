@@ -13,7 +13,7 @@ namespace newsbeuter {
 
 class ocnews_api : public remote_api {
 	public:
-		ocnews_api (configcontainer *cfg);
+		explicit ocnews_api (configcontainer *cfg);
 		virtual ~ocnews_api();
 		virtual bool authenticate();
 		virtual std::vector<tagged_feedurl> get_subscribed_urls();

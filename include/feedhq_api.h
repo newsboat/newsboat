@@ -9,7 +9,7 @@ namespace newsbeuter {
 
 class feedhq_api : public remote_api {
 	public:
-		feedhq_api(configcontainer * c);
+		explicit feedhq_api(configcontainer * c);
 		virtual ~feedhq_api();
 		virtual bool authenticate();
 		virtual std::vector<tagged_feedurl> get_subscribed_urls();

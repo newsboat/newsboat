@@ -20,7 +20,7 @@ typedef std::pair<std::string,link_type> linkpair;
 
 class htmlrenderer {
 	public:
-		htmlrenderer(bool raw = false);
+		explicit htmlrenderer(bool raw = false);
 		void render(const std::string& source,
 				std::vector<std::pair<LineType, std::string>>& lines,
 				std::vector<linkpair>& links,
@@ -34,7 +34,7 @@ class htmlrenderer {
 		std::string format_ol_count(unsigned int count, char type);
 
 		struct TableCell {
-			TableCell(size_t s) : span(s) { }
+			explicit TableCell(size_t s) : span(s) { }
 			size_t span;
 			std::vector<std::string> text; // multiline cell text
 		};
@@ -51,7 +51,7 @@ class htmlrenderer {
 		};
 
 		struct Table {
-			Table(bool b) : inside(false), border(b) { }
+			explicit Table(bool b) : inside(false), border(b) { }
 
 			void add_text(const std::string& str);
 			void start_row();

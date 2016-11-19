@@ -10,7 +10,7 @@ namespace newsbeuter {
 
 class ttrss_api : public remote_api {
 	public:
-		ttrss_api(configcontainer * c);
+		explicit ttrss_api(configcontainer * c);
 		virtual ~ttrss_api();
 		virtual bool authenticate();
 		virtual struct json_object * run_op(const std::string& op, const std::map<std::string, std::string>& args,

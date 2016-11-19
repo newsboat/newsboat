@@ -23,7 +23,7 @@ namespace rsspp {
 
 struct rss_parser {
 		virtual void parse_feed(feed& f, xmlNode * rootNode) = 0;
-		rss_parser(xmlDocPtr d) : doc(d) { }
+		explicit rss_parser(xmlDocPtr d) : doc(d) { }
 		virtual ~rss_parser() { }
 		static std::string __w3cdtf_to_rfc822(const std::string& w3cdtf);
 	protected:
@@ -42,7 +42,7 @@ struct rss_parser {
 
 struct rss_09x_parser : public rss_parser {
 		virtual void parse_feed(feed& f, xmlNode * rootNode);
-		rss_09x_parser(xmlDocPtr doc) : rss_parser(doc), ns(nullptr) { }
+		explicit rss_09x_parser(xmlDocPtr doc) : rss_parser(doc), ns(nullptr) { }
 		virtual ~rss_09x_parser();
 	protected:
 		const char * ns;
@@ -51,21 +51,21 @@ struct rss_09x_parser : public rss_parser {
 };
 
 struct rss_20_parser : public rss_09x_parser {
-	rss_20_parser(xmlDocPtr doc) : rss_09x_parser(doc) { }
+	explicit rss_20_parser(xmlDocPtr doc) : rss_09x_parser(doc) { }
 	virtual void parse_feed(feed& f, xmlNode * rootNode);
 	virtual ~rss_20_parser() { }
 };
 
 struct rss_10_parser : public rss_parser {
 	virtual void parse_feed(feed& f, xmlNode * rootNode);
-	rss_10_parser(xmlDocPtr doc) : rss_parser(doc) { }
+	explicit rss_10_parser(xmlDocPtr doc) : rss_parser(doc) { }
 	virtual ~rss_10_parser() { }
 };
 
 
 struct atom_parser : public rss_parser {
 		virtual void parse_feed(feed& f, xmlNode * rootNode);
-		atom_parser(xmlDocPtr doc) : rss_parser(doc), ns(0) { }
+		explicit atom_parser(xmlDocPtr doc) : rss_parser(doc), ns(0) { }
 		virtual ~atom_parser() { }
 	private:
 		item parse_entry(xmlNode * itemNode);

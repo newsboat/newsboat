@@ -32,13 +32,12 @@ std::wstring fmtstr_formatter::do_wformat(const std::wstring& wfmt, unsigned int
 			if (i<(fmtlen-1)) {
 				if (wfmt[i+1] == L'-' || iswdigit(wfmt[i+1])) {
 					std::wstring number;
-					wchar_t c;
 					while ((wfmt[i+1] == L'-' || iswdigit(wfmt[i+1])) && i<(fmtlen-1)) {
 						number.append(1,wfmt[i+1]);
 						++i;
 					}
 					if (i<(fmtlen-1)) {
-						c = wfmt[i+1];
+						wchar_t c = wfmt[i+1];
 						++i;
 						std::wistringstream is(number);
 						int align;

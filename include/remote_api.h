@@ -13,7 +13,7 @@ typedef std::pair<std::string, std::vector<std::string>> tagged_feedurl;
 
 class remote_api {
 	public:
-		remote_api(configcontainer * c) : cfg(c) { }
+		explicit remote_api(configcontainer * c) : cfg(c) { }
 		virtual ~remote_api() { }
 		virtual bool authenticate() = 0;
 		virtual std::vector<tagged_feedurl> get_subscribed_urls() = 0;

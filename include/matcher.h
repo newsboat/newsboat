@@ -16,7 +16,7 @@ class matchable {
 class matcher {
 	public:
 		matcher();
-		matcher(const std::string& expr);
+		explicit matcher(const std::string& expr);
 		bool parse(const std::string& expr);
 		bool matches(matchable* item);
 		const std::string& get_parse_error();

@@ -35,7 +35,7 @@ class textformatter {
 		~textformatter();
 		void add_line(LineType type, std::string line);
 		void add_lines(
-				const std::vector<std::pair<LineType, std::string>> lines);
+				const std::vector<std::pair<LineType, std::string>>& lines);
 		std::pair<std::string, std::size_t> format_text_to_list(
 				regexmanager * r = nullptr,
 				const std::string& location = "",

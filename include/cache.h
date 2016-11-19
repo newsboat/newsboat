@@ -35,7 +35,7 @@ class cache {
 	private:
 		void populate_tables();
 		void set_pragmas();
-		void delete_item(const std::shared_ptr<rss_item> item);
+		void delete_item(const std::shared_ptr<rss_item>& item);
 		void clean_old_articles();
 		void update_rssitem_unlocked(std::shared_ptr<rss_item> item, const std::string& feedurl, bool reset_unread);
 

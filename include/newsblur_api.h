@@ -14,7 +14,7 @@ typedef std::map<std::string, rsspp::feed> feedmap;
 
 class newsblur_api : public remote_api {
 	public:
-		newsblur_api(configcontainer * c);
+		explicit newsblur_api(configcontainer * c);
 		virtual ~newsblur_api();
 		virtual bool authenticate();
 		virtual std::vector<tagged_feedurl> get_subscribed_urls();

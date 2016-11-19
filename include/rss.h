@@ -23,7 +23,7 @@ class rss_feed;
 
 class rss_item : public matchable {
 	public:
-		rss_item(cache * c);
+		explicit rss_item(cache * c);
 		~rss_item();
 
 		std::string title() const;
@@ -181,7 +181,7 @@ class rss_item : public matchable {
 
 class rss_feed : public matchable {
 	public:
-		rss_feed(cache * c);
+		explicit rss_feed(cache * c);
 		rss_feed();
 		~rss_feed();
 		std::string title_raw() const {

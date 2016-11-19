@@ -21,7 +21,7 @@ class pb_controller;
 
 class download {
 	public:
-		download(pb_controller * c = 0);
+		explicit download(pb_controller * c = 0);
 		~download();
 		double percents_finished();
 		const std::string status_text();

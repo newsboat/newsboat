@@ -20,7 +20,7 @@ namespace newsbeuter {
  */
 
 tagsouppullparser::tagsouppullparser()
-: inputstream(0), current_event(event::START_DOCUMENT)
+	: inputstream(0), current_event(event::START_DOCUMENT), c('\0')
 { }
 
 tagsouppullparser::~tagsouppullparser() {
@@ -145,7 +145,7 @@ std::string tagsouppullparser::decode_attribute(const std::string& s) {
 }
 
 std::string tagsouppullparser::decode_entities(const std::string& s) {
-	std::string result, current_entity;
+	std::string result;
 	std::istringstream sbuf(s);
 	std::string tmp;
 	getline(sbuf,tmp,'&');

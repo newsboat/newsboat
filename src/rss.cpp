@@ -29,7 +29,10 @@ rss_item::rss_item(cache * c) : pubDate_(0), unread_(true), ch(c), enqueued_(fal
 rss_item::~rss_item() {
 }
 
-rss_feed::rss_feed(cache * c) : ch(c), empty(true), is_rtl_(false), idx(0), status_(dl_status::SUCCESS) {
+rss_feed::rss_feed(cache * c)
+	: pubDate_(0), ch(c), empty(true), is_rtl_(false), idx(0), order(0),
+	  status_(dl_status::SUCCESS)
+{
 }
 
 rss_feed::~rss_feed() {
