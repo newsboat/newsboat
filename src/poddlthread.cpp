@@ -103,12 +103,12 @@ void poddlthread::run() {
 }
 
 static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp) {
-	poddlthread * thread = (poddlthread *)userp;
+	poddlthread * thread = static_cast<poddlthread *>(userp);
 	return thread->write_data(buffer, size, nmemb);
 }
 
 static int progress_callback(void *clientp, double dltotal, double dlnow, double /* ultotal */, double /*ulnow*/) {
-	poddlthread * thread = (poddlthread *)clientp;
+	poddlthread * thread = static_cast<poddlthread *>(clientp);
 	return thread->progress(dlnow, dltotal);
 }
 
@@ -137,12 +137,10 @@ int poddlthread::progress(double dlnow, double dltotal) {
 }
 
 double poddlthread::compute_kbps() {
-	double result = 0.0;
-
 	double t1 = tv1.tv_sec + (tv1.tv_usec/1000000.0);
 	double t2 = tv2.tv_sec + (tv2.tv_usec/1000000.0);
 
-	result = (bytecount / (t2 - t1))/1024;
+	double result = (bytecount / (t2 - t1))/1024;
 
 	return result;
 }

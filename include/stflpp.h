@@ -14,7 +14,7 @@ class stfl {
 
 		class form {
 			public:
-				form(const std::string& text);
+				explicit form(const std::string& text);
 				~form();
 
 				const char * run(int timeout);

@@ -15,7 +15,7 @@ struct keymap_hint_entry;
 
 class pb_view {
 	public:
-		pb_view(pb_controller * c = 0);
+		explicit pb_view(pb_controller * c = 0);
 		~pb_view();
 		void run(bool auto_download);
 		void set_keymap(newsbeuter::keymap * k) {

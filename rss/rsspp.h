@@ -64,7 +64,7 @@ struct feed {
 
 class exception : public std::exception {
 	public:
-		exception(const std::string& errmsg = "");
+		explicit exception(const std::string& errmsg = "");
 		~exception() throw();
 		virtual const char* what() const throw();
 	private:

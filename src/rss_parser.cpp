@@ -22,8 +22,16 @@
 
 namespace newsbeuter {
 
-rss_parser::rss_parser(const std::string& uri, cache * c, configcontainer * cfg, rss_ignores * ii, remote_api * a)
-	: my_uri(uri), ch(c), cfgcont(cfg), skip_parsing(false), is_valid(false), ign(ii), api(a), easyhandle(0) {
+rss_parser::rss_parser(
+		const std::string& uri,
+		cache * c,
+		configcontainer * cfg,
+		rss_ignores * ii,
+		remote_api * a
+	)
+	: my_uri(uri), ch(c), cfgcont(cfg), skip_parsing(false), is_valid(false),
+	  ign(ii), api(a), easyhandle(0)
+{
 	is_ttrss = cfgcont->get_configvalue("urls-source") == "ttrss";
 	is_newsblur = cfgcont->get_configvalue("urls-source") == "newsblur";
 	is_ocnews = cfgcont->get_configvalue("urls-source") == "ocnews";
@@ -176,7 +184,7 @@ void rss_parser::download_http(const std::string& uri) {
 			is_valid = true;
 		} catch (rsspp::exception& e) {
 			is_valid = false;
-			throw e;
+			throw;
 		}
 	}
 	LOG(level::DEBUG, "rss_parser::parse: http URL %s, is_valid = %s", uri, is_valid ? "true" : "false");
@@ -191,7 +199,7 @@ void rss_parser::get_execplugin(const std::string& plugin) {
 		is_valid = true;
 	} catch (rsspp::exception& e) {
 		is_valid = false;
-		throw e;
+		throw;
 	}
 	LOG(level::DEBUG, "rss_parser::parse: execplugin %s, is_valid = %s", plugin, is_valid ? "true" : "false");
 }
@@ -204,7 +212,7 @@ void rss_parser::parse_file(const std::string& file) {
 		is_valid = true;
 	} catch (rsspp::exception& e) {
 		is_valid = false;
-		throw e;
+		throw;
 	}
 	LOG(level::DEBUG, "rss_parser::parse: parsed file %s, is_valid = %s", file, is_valid ? "true" : "false");
 }
@@ -227,7 +235,7 @@ void rss_parser::download_filterplugin(const std::string& filter, const std::str
 		is_valid = true;
 	} catch (rsspp::exception& e) {
 		is_valid = false;
-		throw e;
+		throw;
 	}
 	LOG(level::DEBUG, "rss_parser::parse: filterplugin %s, is_valid = %s", filter, is_valid ? "true" : "false");
 }

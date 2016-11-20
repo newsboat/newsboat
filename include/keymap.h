@@ -155,7 +155,7 @@ struct macrocmd {
 
 class keymap : public config_action_handler {
 	public:
-		keymap(unsigned int flags);
+		explicit keymap(unsigned int flags);
 		~keymap();
 		void set_key(operation op, const std::string& key, const std::string& context);
 		void unset_key(const std::string& key, const std::string& context);

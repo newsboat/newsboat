@@ -102,8 +102,6 @@ void opml_urlreader::reload() {
 	tags.clear();
 	alltags.clear();
 
-	std::string user_agent = utils::get_useragent(cfg);
-
 	std::vector<std::string> urls = utils::tokenize_quoted(this->get_source(), " ");
 
 	for (auto url : urls) {

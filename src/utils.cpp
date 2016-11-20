@@ -385,8 +385,8 @@ std::string utils::convert_text(const std::string& text, const std::string& toco
 std::string utils::get_command_output(const std::string& cmd) {
 	FILE * f = popen(cmd.c_str(), "r");
 	std::string buf;
-	char cbuf[1024];
 	if (f) {
+		char cbuf[1024];
 		size_t s;
 		while ((s = fread(cbuf, 1, sizeof(cbuf), f)) > 0) {
 			buf.append(cbuf, s);
@@ -629,8 +629,9 @@ unsigned int utils::to_u(
 	return u;
 }
 
-scope_measure::scope_measure(const std::string& func, level ll) : lvl(ll) {
-	funcname = func;
+scope_measure::scope_measure(const std::string& func, level ll)
+	: funcname(func), lvl(ll)
+{
 	gettimeofday(&tv1, nullptr);
 }
 

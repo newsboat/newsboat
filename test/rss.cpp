@@ -2,6 +2,9 @@
 
 #include <rsspp.h>
 #include <rsspp_internal.h>
+#include <rss.h>
+#include <cache.h>
+#include <configcontainer.h>
 
 TEST_CASE("Throws exception if file doesn't exist", "[rsspp::parser]") {
 	rsspp::parser p;
@@ -226,4 +229,24 @@ TEST_CASE("W3C DTF to RFC 822 conversion behaves correctly with different "
 		unsetenv("TZ");
 	}
 	tzset();
+}
+
+namespace newsbeuter {
+
+TEST_CASE("set_rssurl checks if query feed has a valid query", "[rss]") {
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_feed f(&rsscache);
+
+	SECTION("invalid query results in exception") {
+		REQUIRE_THROWS(f.set_rssurl("query:a title:unread ="));
+		REQUIRE_THROWS(f.set_rssurl("query:a title:between 1:3"));
+	}
+
+	SECTION("valid query doesn't throw an exception") {
+		REQUIRE_NOTHROW(f.set_rssurl("query:a title:unread = \"yes\""));
+		REQUIRE_NOTHROW(f.set_rssurl("query:Title:unread = \"yes\" and age between 0:7"));
+	}
+}
+
 }

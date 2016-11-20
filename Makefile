@@ -5,6 +5,8 @@ datadir?=$(prefix)/share
 localedir?=$(datadir)/locale
 docdir?=$(datadir)/doc/$(PACKAGE)
 
+CPPCHECK_JOBS?=5
+
 # compiler
 CXX?=c++
 
@@ -17,7 +19,8 @@ DEFINES+=-DGIT_HASH=\"$(GIT_HASH)\"
 endif
 
 WARNFLAGS=-Wall -Wextra -Wunreachable-code
-BARE_CXXFLAGS=-std=c++11 -ggdb -Iinclude -Istfl -Ifilter -I. -Irss
+INCLUDES=-Iinclude -Istfl -Ifilter -I. -Irss
+BARE_CXXFLAGS=-std=c++11 -ggdb $(INCLUDES)
 CXXFLAGS+=$(BARE_CXXFLAGS) $(WARNFLAGS) $(DEFINES)
 LDFLAGS+=-L. -fprofile-arcs -ftest-coverage
 
@@ -163,6 +166,15 @@ doc/podbeuter.1: doc/manpage-podbeuter.txt doc/podbeuter-cfgcmds.txt
 fmt:
 	astyle --suffix=none --style=java --indent=tab --indent-classes *.cpp include/*.h src/*.cpp rss/*.{cpp,h} test/*.cpp
 
+cppcheck:
+	cppcheck -j$(CPPCHECK_JOBS) --force --enable=all --suppress=unusedFunction \
+		-DDEBUG=1 \
+		$(INCLUDES) $(DEFINES) \
+		include filter newsbeuter.cpp podbeuter.cpp rss src stfl \
+		test/*.cpp test/*.h \
+		2>cppcheck.log
+	@echo "Done! See cppcheck.log for details."
+
 install-newsbeuter: $(NEWSBEUTER)
 	$(MKDIR) $(DESTDIR)$(prefix)/bin
 	$(INSTALL) $(NEWSBEUTER) $(DESTDIR)$(prefix)/bin
@@ -195,7 +207,7 @@ uninstall: uninstall-mo
 
 .PHONY: doc clean distclean all test test-rss extract install uninstall regenerate-parser clean-newsbeuter \
 	clean-podbeuter clean-libbeuter clean-librsspp clean-libfilter clean-doc install-mo msgmerge clean-mo \
-	test-clean config
+	test-clean config cppcheck
 
 # the following targets are i18n/l10n-related:
 

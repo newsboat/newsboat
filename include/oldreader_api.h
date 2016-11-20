@@ -9,7 +9,7 @@ namespace newsbeuter {
 
 class oldreader_api : public remote_api {
 	public:
-		oldreader_api(configcontainer * c);
+		explicit oldreader_api(configcontainer * c);
 		virtual ~oldreader_api();
 		virtual bool authenticate();
 		virtual std::vector<tagged_feedurl> get_subscribed_urls();

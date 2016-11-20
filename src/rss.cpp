@@ -29,7 +29,10 @@ rss_item::rss_item(cache * c) : pubDate_(0), unread_(true), ch(c), enqueued_(fal
 rss_item::~rss_item() {
 }
 
-rss_feed::rss_feed(cache * c) : ch(c), empty(true), is_rtl_(false), idx(0), status_(dl_status::SUCCESS) {
+rss_feed::rss_feed(cache * c)
+	: pubDate_(0), ch(c), empty(true), is_rtl_(false), idx(0), order(0),
+	  status_(dl_status::SUCCESS)
+{
 }
 
 rss_feed::~rss_feed() {
@@ -473,13 +476,10 @@ void rss_feed::set_rssurl(const std::string& u) {
 	if (rssurl_.substr(0,6) == "query:") {
 		/* Query string looks like this:
 		 *
-		 * "query:Title:unread = \"yes\" and age between 0:7" tag1 "tag two"
+		 * query:Title:unread = "yes" and age between 0:7
 		 *
-		 * At this point, we're only interested in the first part enclosed in
-		 * the quotes. Thus, we first tokenize using space as delimiter... */
-		std::vector<std::string> tokens = utils::tokenize_quoted(u, " ");
-		// and then further split by colon, so as to extract title and query
-		tokens = utils::tokenize_quoted(u, ":");
+		 * So we split by colons to get title and the query itself. */
+		std::vector<std::string> tokens = utils::tokenize_quoted(u, ":");
 
 		if (tokens.size() < 3) {
 			throw _s("too few arguments");

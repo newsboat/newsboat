@@ -24,7 +24,7 @@ class itemview_formaction;
 
 class view {
 	public:
-		view(controller *);
+		explicit view(controller *);
 		~view();
 		void run();
 		std::string run_modal(std::shared_ptr<formaction> f, const std::string& value = "");

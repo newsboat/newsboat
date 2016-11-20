@@ -12,7 +12,7 @@ namespace newsbeuter {
 history formaction::searchhistory;
 history formaction::cmdlinehistory;
 
-formaction::formaction(view * vv, std::string formstr) : v(vv), f(new stfl::form(formstr)), do_redraw(true) {
+formaction::formaction(view * vv, std::string formstr) : v(vv), f(new stfl::form(formstr)), do_redraw(true), qna_history(nullptr) {
 	if (v) {
 		if (v->get_cfg()->get_configvalue_as_bool("show-keymap-hint") == false) {
 			f->set("showhint", "0");
