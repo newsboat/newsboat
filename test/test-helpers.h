@@ -55,12 +55,31 @@ namespace TestHelpers {
 					tempdir = "/tmp/";
 				}
 
-				tempdir += "/newsbeuter/";
+				tempdir += "/newsbeuter-tests/";
 
-				mode_t mode = S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH;
-				int status = mkdir(tempdir.c_str(), mode);
+				int status = mkdir(tempdir.c_str(), S_IRWXU);
 				if (status != 0) {
-					throw tempfileexception(strerror(errno));
+					// The directory already exists. That's fine, though, but
+					// only as long as it has all the properties we need.
+
+					int saved_errno = errno;
+					bool success = false;
+
+					if (saved_errno == EEXIST) {
+						struct stat buffer;
+						if (lstat(filepath.c_str(), &buffer) == 0) {
+							if (   buffer.st_mode & S_IRUSR
+								&& buffer.st_mode & S_IWUSR
+								&& buffer.st_mode & S_IXUSR)
+							{
+								success = true;
+							}
+						}
+					}
+
+					if (!success) {
+						throw tempfileexception(strerror(saved_errno));
+					}
 				}
 			};
 
@@ -86,7 +105,7 @@ namespace TestHelpers {
 				} while (!success && tries < 10);
 
 				if (!success) {
-					throw tempfileexception("couldn't find a non-existent filename");
+					throw tempfileexception("failed to generate unique filename");
 				}
 			}
 
