@@ -67,7 +67,7 @@ namespace TestHelpers {
 
 					if (saved_errno == EEXIST) {
 						struct stat buffer;
-						if (lstat(filepath.c_str(), &buffer) == 0) {
+						if (lstat(tempdir.c_str(), &buffer) == 0) {
 							if (   buffer.st_mode & S_IRUSR
 								&& buffer.st_mode & S_IWUSR
 								&& buffer.st_mode & S_IXUSR)
