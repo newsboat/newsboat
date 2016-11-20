@@ -66,5 +66,16 @@ TEST_CASE("strprintf::split_format()", "[strprintf]") {
 			REQUIRE(first == "%% ");
 			REQUIRE(rest  == "");
 		}
+
+		SECTION("consecutive escaped percent signs") {
+			const std::string input = "%3u %% %% %i";
+			std::tie(first, rest) = strprintf::split_format(input);
+			REQUIRE(first == "%3u ");
+			REQUIRE(rest  == "%% %% %i");
+
+			std::tie(first, rest) = strprintf::split_format(rest);
+			REQUIRE(first == "%% %% %i");
+			REQUIRE(rest  == "");
+		}
 	}
 }
