@@ -210,7 +210,7 @@ private:
 	int eofSym;
 	int noSym;
 	int maxT;
-	int charSetSize;
+	// int charSetSize;
 	StartStates start;
 	KeywordMap keywords;
 

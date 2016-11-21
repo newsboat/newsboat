@@ -18,7 +18,7 @@ GIT_HASH=$(shell git describe --abbrev=4 --dirty --always --tags)
 DEFINES+=-DGIT_HASH=\"$(GIT_HASH)\"
 endif
 
-WARNFLAGS=-Wall -Wextra -Wunreachable-code
+WARNFLAGS=-Werror -Wall -Wextra -Wunreachable-code
 INCLUDES=-Iinclude -Istfl -Ifilter -I. -Irss
 BARE_CXXFLAGS=-std=c++11 -ggdb $(INCLUDES)
 CXXFLAGS+=$(BARE_CXXFLAGS) $(WARNFLAGS) $(DEFINES)

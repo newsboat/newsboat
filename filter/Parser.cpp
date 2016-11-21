@@ -12,7 +12,7 @@ void Parser::SynErr(int n) {
 	errDist = 0;
 }
 
-void Parser::SemErr(const wchar_t* msg) {
+void Parser::SemErr(const wchar_t* /* msg */) {
 	if (errDist >= minErrDist) errors->Error();
 	errDist = 0;
 }
@@ -253,7 +253,7 @@ struct ParserDestroyExistsRecognizer {
 // Generic case of the ParserInitCaller, gets used if the Init method is missing
 template<typename T, bool = ParserInitExistsRecognizer<T>::InitExists>
 struct ParserInitCaller {
-	static void CallInit(T *t) {
+	static void CallInit(T* /* t */) {
 		// nothing to do
 	}
 };
@@ -269,7 +269,7 @@ struct ParserInitCaller<T, true> {
 // Generic case of the ParserDestroyCaller, gets used if the Destroy method is missing
 template<typename T, bool = ParserDestroyExistsRecognizer<T>::DestroyExists>
 struct ParserDestroyCaller {
-	static void CallDestroy(T *t) {
+	static void CallDestroy(T* /* t */) {
 		// nothing to do
 	}
 };
