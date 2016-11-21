@@ -52,6 +52,17 @@ Compiling and installing newsbeuter is as simple as:
 
 (And if you ever need to uninstall it, use `make uninstall`.)
 
+Tests
+-----
+
+If you're a developer, here's how you can run the test suite:
+
+	make -j5 PROFILE=1 all test
+	(cd test && TMPDIR=/dev/shm ./test --order rand)
+
+Note the use of ramdisk as `TMPDIR`: some of our tests require temporary files,
+which degrades the performance quite a bit if `TMPDIR` isn't in-memory.
+
 Contact
 -------
 Andreas Krennmair <ak@newsbeuter.org>
