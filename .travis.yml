@@ -2,7 +2,7 @@ language: cpp
 
 matrix:
   include:
-    - compiler: gcc
+    - compiler: gcc-4.9
       os: linux
       addons:
         apt:
@@ -13,7 +13,7 @@ matrix:
       env:
         - COMPILER=g++-4.9
         - GCOV=/usr/bin/gcov-4.9
-    - compiler: gcc
+    - compiler: gcc-5
       os: linux
       addons:
         apt:
@@ -24,7 +24,7 @@ matrix:
       env:
         - COMPILER=g++-5
         - GCOV=/usr/bin/gcov-5
-    - compiler: gcc
+    - compiler: gcc-6
       os: linux
       addons:
         apt:
@@ -35,7 +35,7 @@ matrix:
       env:
         - COMPILER=g++-6
         - GCOV=/usr/bin/gcov-6
-    - compiler: clang
+    - compiler: clang-3.6
       os: linux
       addons:
         apt:
@@ -47,7 +47,7 @@ matrix:
       env:
         - COMPILER=clang++-3.6
         - GCOV=/usr/bin/gcov
-    - compiler: clang
+    - compiler: clang-3.7
       os: linux
       addons:
         apt:
@@ -59,7 +59,7 @@ matrix:
       env:
         - COMPILER=clang++-3.7
         - GCOV=/usr/bin/gcov
-    - compiler: clang
+    - compiler: clang-3.8
       os: linux
       addons:
         apt:
@@ -71,7 +71,7 @@ matrix:
       env:
         - COMPILER=clang++-3.8
         - GCOV=/usr/bin/gcov
-    - compiler: clang
+    - compiler: clang-4.0
       os: linux
       addons:
         apt:
