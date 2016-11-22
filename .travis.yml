@@ -24,6 +24,17 @@ matrix:
       env:
         - COMPILER=g++-5
         - GCOV=/usr/bin/gcov-5
+    - compiler: gcc
+      os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+      env:
+        - COMPILER=g++-6
+        - GCOV=/usr/bin/gcov-6
     - compiler: clang
       os: linux
       addons:
