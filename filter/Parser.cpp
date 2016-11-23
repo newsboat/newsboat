@@ -154,7 +154,7 @@ void Parser::logop(int &lop) {
 }
 
 void Parser::matchexpr() {
-		char * name, * lit; int op; 
+		char * name, * lit; int op = 0; 
 		matchattrib(name);
 		matchop(op);
 		stringlit(lit);
