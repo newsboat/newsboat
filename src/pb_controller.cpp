@@ -371,8 +371,7 @@ void pb_controller::play_file(const std::string& file) {
 	cmdline.append(utils::replace_all(file,"\"", "\\\""));
 	cmdline.append("\"");
 	stfl::reset();
-	LOG(level::DEBUG, "pb_controller::play_file: running `%s'", cmdline);
-	::system(cmdline.c_str());
+	utils::run_interactively(cmdline, "pb_controller::play_file");
 }
 
 

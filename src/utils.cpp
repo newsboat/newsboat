@@ -11,6 +11,8 @@
 #include <pwd.h>
 #include <libgen.h>
 #include <sys/utsname.h>
+#include <unistd.h>
+#include <sys/param.h>
 
 #include <unordered_set>
 #include <unistd.h>
@@ -259,9 +261,11 @@ bool utils::try_fs_lock(const std::string& lock_file, pid_t & pid) {
 	if (lockf(fd, F_TLOCK, 0) == 0) {
 		std::string pidtext = utils::to_string<unsigned int>(getpid());
 		// locking successful -> truncate file and write own PID into it
-		ftruncate(fd, 0);
-		write(fd, pidtext.c_str(), pidtext.length());
-		return true;
+		int success = ftruncate(fd, 0);
+		if (success == 0) {
+			success = write(fd, pidtext.c_str(), pidtext.length());
+		}
+		return (success == 0);
 	}
 
 	// locking was not successful -> read PID of locking process from it
@@ -475,8 +479,12 @@ std::string utils::run_program(char * argv[], const std::string& input) {
 	std::string buf;
 	int ipipe[2];
 	int opipe[2];
-	pipe(ipipe);
-	pipe(opipe);
+	if (pipe(ipipe) != 0) {
+		return "";
+	}
+	if (pipe(opipe) != 0) {
+		return "";
+	}
 
 	int rc = fork();
 	switch (rc) {
@@ -498,12 +506,17 @@ std::string utils::run_program(char * argv[], const std::string& input) {
 	default: {
 		close(ipipe[0]);
 		close(opipe[1]);
-		write(ipipe[1], input.c_str(), input.length());
-		close(ipipe[1]);
-		char cbuf[1024];
-		int rc2;
-		while ((rc2 = read(opipe[0], cbuf, sizeof(cbuf))) > 0) {
-			buf.append(cbuf, rc2);
+		ssize_t written = 0;
+		written = write(ipipe[1], input.c_str(), input.length());
+		if (written != -1) {
+			close(ipipe[1]);
+			char cbuf[1024];
+			int rc2;
+			while ((rc2 = read(opipe[0], cbuf, sizeof(cbuf))) > 0) {
+				buf.append(cbuf, rc2);
+			}
+		} else {
+			close(ipipe[1]);
 		}
 		close(opipe[0]);
 	}
@@ -1007,7 +1020,7 @@ unsigned int utils::gentabs(const std::string& str) {
 /* Like mkdir(), but creates ancestors (parent directories) if they don't
  * exist. */
 int utils::mkdir_parents(const std::string& p, mode_t mode) {
-	int result;
+	int result = -1;
 
 	/* Have to copy the path because we're going to modify it */
 	char* pathname = (char*)malloc(p.length() + 1);
@@ -1062,6 +1075,32 @@ std::string utils::make_title(const std::string& const_url) {
 		title[0] -= 'a' - 'A';
 	}
 	return title;
+}
+
+int utils::run_interactively(
+		const std::string& command, const std::string& caller)
+{
+	LOG(level::DEBUG, "%s: running `%s'", caller, command);
+
+	int status = ::system(command.c_str());
+
+	if (status == -1) {
+		LOG(level::DEBUG, "%s: couldn't create a child process", caller);
+	} else if (status == 127) {
+		LOG(level::DEBUG, "%s: couldn't run shell", caller);
+	}
+
+	return status;
+}
+
+std::string utils::getcwd() {
+	char cwdtmp[MAXPATHLEN];
+
+	if (::getcwd(cwdtmp, sizeof(cwdtmp)) == NULL) {
+		strncpy(cwdtmp, strerror(errno), MAXPATHLEN);
+	}
+
+	return std::string(cwdtmp);
 }
 
 

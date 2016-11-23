@@ -15,7 +15,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
-#include <sys/param.h>
 #include <pwd.h>
 #include <grp.h>
 
@@ -60,11 +59,12 @@ void filebrowser_formaction::process_operation(operation op, bool /* automatic *
 					fmt.register_fmt('V', PROGRAM_VERSION);
 					fmt.register_fmt('f', filename);
 					f->set("head", fmt.do_format(v->get_cfg()->get_configvalue("filebrowser-title-format"), width));
-					::chdir(filename.c_str());
+					int status = ::chdir(filename.c_str());
+					LOG(level::DEBUG,
+							"filebrowser_formaction:OP_OPEN: chdir(%s) = %i",
+							filename, status);
 					f->set("listpos","0");
-					char cwdtmp[MAXPATHLEN];
-					::getcwd(cwdtmp,sizeof(cwdtmp));
-					std::string fn(cwdtmp);
+					std::string fn = utils::getcwd();
 					fn.append(NEWSBEUTER_PATH_SEP);
 					std::string fnstr = f->get("filenametext");
 					std::string::size_type base = fnstr.find_first_of('/');
@@ -78,9 +78,7 @@ void filebrowser_formaction::process_operation(operation op, bool /* automatic *
 				}
 				break;
 				case '-': {
-					char cwdtmp[MAXPATHLEN];
-					::getcwd(cwdtmp,sizeof(cwdtmp));
-					std::string fn(cwdtmp);
+					std::string fn = utils::getcwd();
 					fn.append(NEWSBEUTER_PATH_SEP);
 					fn.append(filename);
 					f->set("filenametext",fn);
@@ -136,11 +134,10 @@ void filebrowser_formaction::prepare() {
 	 * in the current directory.
 	 */
 	if (do_redraw) {
-		char cwdtmp[MAXPATHLEN];
+		auto cwdtmp = utils::getcwd();
 		std::string code = "{list";
-		::getcwd(cwdtmp,sizeof(cwdtmp));
 
-		DIR * dirp = ::opendir(cwdtmp);
+		DIR * dirp = ::opendir(cwdtmp.c_str());
 		if (dirp) {
 			struct dirent * de = ::readdir(dirp);
 			while (de) {
@@ -160,9 +157,6 @@ void filebrowser_formaction::prepare() {
 }
 
 void filebrowser_formaction::init() {
-	char cwdtmp[MAXPATHLEN];
-	::getcwd(cwdtmp,sizeof(cwdtmp));
-
 	set_keymap_hints();
 
 	f->set("fileprompt", _("File: "));
@@ -175,10 +169,10 @@ void filebrowser_formaction::init() {
 		dir = save_path;
 	}
 
-	LOG(level::DEBUG, "view::filebrowser: chdir(%s)", dir);
+	int status = ::chdir(dir.c_str());
+	LOG(level::DEBUG, "view::filebrowser: chdir(%s) = %i", dir, status);
 
-	::chdir(dir.c_str());
-	::getcwd(cwdtmp,sizeof(cwdtmp));
+	auto cwdtmp = utils::getcwd();
 
 	f->set("filenametext", default_filename);
 
@@ -262,9 +256,7 @@ std::string filebrowser_formaction::get_group(gid_t gid) {
 }
 
 std::string filebrowser_formaction::title() {
-	char cwdtmp[MAXPATHLEN];
-	::getcwd(cwdtmp,sizeof(cwdtmp));
-	return strprintf::fmt(_("Save File - %s"), cwdtmp);
+	return strprintf::fmt(_("Save File - %s"), utils::getcwd());
 }
 
 }

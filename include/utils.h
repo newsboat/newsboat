@@ -137,6 +137,11 @@ class utils {
 
 		static std::string make_title(const std::string& url);
 
+		static int run_interactively(
+				const std::string& command, const std::string& caller);
+
+		static std::string getcwd();
+
 	private:
 		static void append_escapes(std::string& str, char c);
 

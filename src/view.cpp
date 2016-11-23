@@ -331,8 +331,7 @@ void view::open_in_pager(const std::string& filename) {
 		cmdline.append(filename);
 	}
 	stfl::reset();
-	LOG(level::DEBUG, "view::open_in_pager: running `%s'", cmdline);
-	::system(cmdline.c_str());
+	utils::run_interactively(cmdline, "view::open_in_pager");
 	pop_current_formaction();
 }
 
@@ -359,8 +358,7 @@ void view::open_in_browser(const std::string& url) {
 		cmdline.append("'");
 	}
 	stfl::reset();
-	LOG(level::DEBUG, "view::open_in_browser: running `%s'", cmdline);
-	::system(cmdline.c_str());
+	utils::run_interactively(cmdline, "view::open_in_browser");
 	pop_current_formaction();
 }
 

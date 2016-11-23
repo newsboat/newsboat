@@ -1314,8 +1314,7 @@ void controller::edit_urls_file() {
 	v->push_empty_formaction();
 	stfl::reset();
 
-	LOG(level::DEBUG, "controller::edit_urls_file: running `%s'", cmdline);
-	::system(cmdline.c_str());
+	utils::run_interactively(cmdline, "controller::edit_urls_file");
 
 	v->pop_current_formaction();
 
@@ -1354,7 +1353,7 @@ std::string controller::bookmark(
 		if (is_interactive) {
 			v->push_empty_formaction();
 			stfl::reset();
-			::system(cmdline.c_str());
+			utils::run_interactively(cmdline, "controller::bookmark");
 			v->pop_current_formaction();
 			return "";
 		} else {
