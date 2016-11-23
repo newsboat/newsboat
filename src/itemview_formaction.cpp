@@ -61,6 +61,7 @@ void itemview_formaction::prepare() {
 		if (feedptr.get() != nullptr) {
 			if (feedptr->title().length() > 0) {
 				feedtitle = feedptr->title();
+				utils::remove_soft_hyphens(feedtitle);
 			} else if (feedptr->link().length() > 0) {
 				feedtitle = feedptr->link();
 			} else if (feedptr->rssurl().length() > 0) {
@@ -74,11 +75,13 @@ void itemview_formaction::prepare() {
 
 		if (item->title().length() > 0) {
 			std::string title = strprintf::fmt("%s%s", _("Title: "), item->title());
+			utils::remove_soft_hyphens(title);
 			textfmt.add_line(LineType::wrappable, title);
 		}
 
 		if (item->author().length() > 0) {
 			std::string author = strprintf::fmt("%s%s", _("Author: "), item->author());
+			utils::remove_soft_hyphens(author);
 			textfmt.add_line(LineType::wrappable, author);
 		}
 
@@ -417,8 +420,14 @@ void itemview_formaction::set_head(const std::string& s, const std::string& feed
 	fmtstr_formatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', PROGRAM_VERSION);
-	fmt.register_fmt('T', s);
-	fmt.register_fmt('F', feedtitle);
+
+	auto itemtitle = s;
+	utils::remove_soft_hyphens(itemtitle);
+	fmt.register_fmt('T', itemtitle);
+
+	auto clear_feedtitle = feedtitle;
+	utils::remove_soft_hyphens(clear_feedtitle);
+	fmt.register_fmt('F', clear_feedtitle);
 
 	fmt.register_fmt('u', utils::to_string(unread));
 	fmt.register_fmt('t', utils::to_string(total));
@@ -589,7 +598,9 @@ void itemview_formaction::update_percent() {
 
 std::string itemview_formaction::title() {
 	std::shared_ptr<rss_item> item = feed->get_item_by_guid(guid);
-	return strprintf::fmt(_("Article - %s"), item->title());
+	auto title = item->title();
+	utils::remove_soft_hyphens(title);
+	return strprintf::fmt(_("Article - %s"), title);
 }
 
 void itemview_formaction::set_highlightphrase(const std::string& text) {

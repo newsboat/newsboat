@@ -734,10 +734,19 @@ std::string itemlist_formaction::item2formatted_line(
 	fmt.register_fmt('f', gen_flags(item.first));
 	fmt.register_fmt('D', gen_datestr(item.first->pubDate_timestamp(), datetime_format));
 	if (feed->rssurl() != item.first->feedurl() && item.first->get_feedptr() != nullptr) {
-		fmt.register_fmt('T', utils::replace_all(item.first->get_feedptr()->title(), "<", "<>"));
+		auto feedtitle = utils::replace_all(item.first->get_feedptr()->title(), "<", "<>");
+		utils::remove_soft_hyphens(feedtitle);
+		fmt.register_fmt('T', feedtitle);
 	}
-	fmt.register_fmt('t', utils::replace_all(item.first->title(), "<", "<>"));
-	fmt.register_fmt('a', utils::replace_all(item.first->author(), "<", "<>"));
+
+	auto itemtitle = utils::replace_all(item.first->title(), "<", "<>");
+	utils::remove_soft_hyphens(itemtitle);
+	fmt.register_fmt('t', itemtitle);
+
+	auto itemauthor = utils::replace_all(item.first->author(), "<", "<>");
+	utils::remove_soft_hyphens(itemauthor);
+	fmt.register_fmt('a', itemauthor);
+
 	fmt.register_fmt('L', item.first->length());
 
 	if (rxman) {
@@ -782,7 +791,10 @@ void itemlist_formaction::set_head(const std::string& s, unsigned int unread, un
 	fmt.register_fmt('u', utils::to_string<unsigned int>(unread));
 	fmt.register_fmt('t', utils::to_string<unsigned int>(total));
 
-	fmt.register_fmt('T', s);
+	auto feedtitle = s;
+	utils::remove_soft_hyphens(feedtitle);
+	fmt.register_fmt('T', feedtitle);
+
 	fmt.register_fmt('U', utils::censor_url(url));
 
 	if (!show_searchresult) {
@@ -1050,8 +1062,11 @@ std::string itemlist_formaction::title() {
 	} else {
 		if (feed->rssurl().substr(0,6) == "query:")
 			return strprintf::fmt(_("Query Feed - %s"), feed->rssurl().substr(6,feed->rssurl().length()-6));
-		else
-			return strprintf::fmt(_("Article List - %s"), feed->title());
+		else {
+			auto feedtitle = feed->title();
+			utils::remove_soft_hyphens(feedtitle);
+			return strprintf::fmt(_("Article List - %s"), feedtitle);
+		}
 	}
 }
 

@@ -767,6 +767,7 @@ void feedlist_formaction::set_pos() {
 
 std::string feedlist_formaction::get_title(std::shared_ptr<rss_feed> feed) {
 	std::string title = feed->title();
+	utils::remove_soft_hyphens(title);
 	if (title.length()==0)
 		title = utils::censor_url(feed->rssurl());
 	if (title.length()==0)
