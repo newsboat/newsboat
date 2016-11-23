@@ -72,9 +72,6 @@ class utils {
 
 		static std::wstring utf8str2wstr(const std::string& utf8str);
 
-		template<class T>
-		static std::string to_string(T var);
-
 		static std::string absolute_url(const std::string& url, const std::string& link);
 
 		static std::string get_useragent(configcontainer * cfgcont);

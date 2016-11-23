@@ -109,14 +109,14 @@ void formaction::process_op(operation op, bool automatic, std::vector<std::strin
 		if (qna_history) {
 			std::string entry = qna_history->next();
 			f->set("qna_value", entry);
-			f->set("qna_value_pos", utils::to_string<unsigned int>(entry.length()));
+			f->set("qna_value_pos", std::to_string(entry.length()));
 		}
 		break;
 	case OP_INT_QNA_PREVHIST:
 		if (qna_history) {
 			std::string entry = qna_history->prev();
 			f->set("qna_value", entry);
-			f->set("qna_value_pos", utils::to_string<unsigned int>(entry.length()));
+			f->set("qna_value_pos", std::to_string(entry.length()));
 		}
 		break;
 	case OP_INT_END_QUESTION:

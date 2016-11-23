@@ -361,7 +361,7 @@ void ttrss_api::fetch_feeds_per_category(
 
 	std::map<std::string, std::string> args;
 	if (cat)
-		args["cat_id"] = utils::to_string<int>(cat_id);
+		args["cat_id"] = std::to_string(cat_id);
 	json_object* feed_list_obj = run_op("getFeeds", args);
 
 	if (!feed_list_obj)
@@ -414,8 +414,8 @@ bool ttrss_api::update_article(const std::string& guid, int field, int mode) {
 
 	std::map<std::string, std::string> args;
 	args["article_ids"] = guid;
-	args["field"] = utils::to_string<unsigned int>(field);
-	args["mode"] = utils::to_string<unsigned int>(mode);
+	args["field"] = std::to_string(field);
+	args["mode"] = std::to_string(mode);
 	json_object* content = run_op("updateArticle", args);
 
 	if (!content)

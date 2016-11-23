@@ -130,7 +130,7 @@ void urlview_formaction::handle_cmdline(const std::string& cmd) {
 		if (idx < 1 || idx > links.size()) {
 			v->show_error(_("Invalid position!"));
 		} else {
-			f->set("feedpos", utils::to_string<unsigned int>(idx-1));
+			f->set("feedpos", std::to_string(idx-1));
 		}
 	} else {
 		formaction::handle_cmdline(cmd);

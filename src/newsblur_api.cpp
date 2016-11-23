@@ -174,7 +174,7 @@ rsspp::feed newsblur_api::fetch_feed(const std::string& id) {
 
 	for (unsigned int i = 1; i <= min_pages; i++) {
 
-		std::string page = utils::to_string(i);
+		std::string page = std::to_string(i);
 
 		json_object * query_result = query_api("/reader/feed/" + id + "?page=" + page, nullptr);
 

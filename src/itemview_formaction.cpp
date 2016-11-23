@@ -32,7 +32,7 @@ void itemview_formaction::init() {
 	if (!v->get_cfg()->get_configvalue_as_bool("display-article-progress")) {
 		f->set("percentwidth", "0");
 	} else {
-		f->set("percentwidth", utils::to_string<unsigned int>(utils::max(6, utils::max(strlen(_("Top")), strlen(_("Bottom"))))));
+		f->set("percentwidth", std::to_string(utils::max(6, utils::max(strlen(_("Top")), strlen(_("Bottom"))))));
 		update_percent();
 	}
 	set_keymap_hints();
@@ -429,8 +429,8 @@ void itemview_formaction::set_head(const std::string& s, const std::string& feed
 	utils::remove_soft_hyphens(clear_feedtitle);
 	fmt.register_fmt('F', clear_feedtitle);
 
-	fmt.register_fmt('u', utils::to_string(unread));
-	fmt.register_fmt('t', utils::to_string(total));
+	fmt.register_fmt('u', std::to_string(unread));
+	fmt.register_fmt('t', std::to_string(total));
 
 	std::string listwidth = f->get("article:w");
 	unsigned int width = utils::to_u(listwidth);

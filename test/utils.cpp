@@ -181,10 +181,10 @@ TEST_CASE("replace_all()", "[utils]") {
 }
 
 TEST_CASE("to_string()", "[utils]") {
-	REQUIRE(utils::to_string<int>(0) == "0");
-	REQUIRE(utils::to_string<int>(100) == "100");
-	REQUIRE(utils::to_string<unsigned int>(65536) == "65536");
-	REQUIRE(utils::to_string<unsigned int>(65537) == "65537");
+	REQUIRE(std::to_string(0) == "0");
+	REQUIRE(std::to_string(100) == "100");
+	REQUIRE(std::to_string(65536) == "65536");
+	REQUIRE(std::to_string(65537) == "65537");
 }
 
 TEST_CASE("partition_index()", "[utils]") {

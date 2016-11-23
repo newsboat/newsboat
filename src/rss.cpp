@@ -274,9 +274,9 @@ std::string rss_item::get_attribute(const std::string& attribname) {
 	else if (attribname == "flags")
 		return flags();
 	else if (attribname == "age")
-		return utils::to_string<unsigned int>((time(nullptr) - pubDate_timestamp()) / 86400);
+		return std::to_string((time(nullptr) - pubDate_timestamp()) / 86400);
 	else if (attribname == "articleindex")
-		return utils::to_string<unsigned int>(idx);
+		return std::to_string(idx);
 
 	// if we have a feed, then forward the request
 	std::shared_ptr<rss_feed> feedptr = feedptr_.lock();
@@ -344,13 +344,13 @@ std::string rss_feed::get_attribute(const std::string& attribname) {
 	else if (attribname == "rssurl")
 		return rssurl();
 	else if (attribname == "unread_count") {
-		return utils::to_string<unsigned int>(unread_item_count());
+		return std::to_string(unread_item_count());
 	} else if (attribname == "total_count") {
-		return utils::to_string<unsigned int>(items_.size());
+		return std::to_string(items_.size());
 	} else if (attribname == "tags") {
 		return get_tags();
 	} else if (attribname == "feedindex") {
-		return utils::to_string<unsigned int>(idx);
+		return std::to_string(idx);
 	}
 	return "";
 }

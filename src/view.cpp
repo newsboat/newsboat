@@ -1016,7 +1016,7 @@ void view::clear_eol(std::shared_ptr<formaction> fa) {
 	std::string val = fa->get_form()->get("qna_value");
 	val.erase(pos, val.length());
 	fa->get_form()->set("qna_value", val);
-	fa->get_form()->set("qna_value_pos", utils::to_string<unsigned int>(val.length()));
+	fa->get_form()->set("qna_value_pos", std::to_string(val.length()));
 	LOG(level::DEBUG, "view::clear_eol: cleared to end of line");
 }
 
@@ -1045,7 +1045,7 @@ void view::delete_word(std::shared_ptr<formaction> fa) {
 	val.erase(firstpos, curpos - firstpos);
 	LOG(level::DEBUG, "view::delete_word: after val = %s", val);
 	fa->get_form()->set("qna_value", val);
-	fa->get_form()->set("qna_value_pos", utils::to_string<unsigned int>(firstpos));
+	fa->get_form()->set("qna_value_pos", std::to_string(firstpos));
 }
 
 void view::handle_cmdline_completion(std::shared_ptr<formaction> fa) {
@@ -1070,7 +1070,7 @@ void view::handle_cmdline_completion(std::shared_ptr<formaction> fa) {
 		break;
 	}
 	fa->get_form()->set("qna_value", suggestion);
-	fa->get_form()->set("qna_value_pos", utils::to_string<unsigned int>(suggestion.length()));
+	fa->get_form()->set("qna_value_pos", std::to_string(suggestion.length()));
 	last_fragment = suggestion;
 }
 
