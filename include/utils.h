@@ -142,6 +142,8 @@ class utils {
 
 		static std::string getcwd();
 
+		static void remove_soft_hyphens(std::string& text);
+
 	private:
 		static void append_escapes(std::string& str, char c);
 

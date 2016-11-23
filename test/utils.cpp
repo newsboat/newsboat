@@ -445,3 +445,37 @@ TEST_CASE("utils::make_title extracts possible title from URL") {
 		}
 	}
 }
+
+TEST_CASE("remove_soft_hyphens remove all U+00AD characters from a string",
+          "[utils]")
+{
+	SECTION("doesn't do anything if input has no soft hyphens in it") {
+		std::string data = "hello world!";
+		REQUIRE_NOTHROW(utils::remove_soft_hyphens(data));
+		REQUIRE(data == "hello world!");
+	}
+
+	SECTION("removes *all* soft hyphens") {
+		std::string data = "hy\u00ADphen\u00ADa\u00ADtion";
+		REQUIRE_NOTHROW(utils::remove_soft_hyphens(data));
+		REQUIRE(data == "hyphenation");
+	}
+
+	SECTION("removes consequtive soft hyphens") {
+		std::string data = "don't know why any\u00AD\u00ADone would do that";
+		REQUIRE_NOTHROW(utils::remove_soft_hyphens(data));
+		REQUIRE(data == "don't know why anyone would do that");
+	}
+
+	SECTION("removes soft hyphen at the beginning of the line") {
+		std::string data = "\u00ADtion";
+		REQUIRE_NOTHROW(utils::remove_soft_hyphens(data));
+		REQUIRE(data == "tion");
+	}
+
+	SECTION("removes soft hyphen at the end of the line") {
+		std::string data = "over\u00AD";
+		REQUIRE_NOTHROW(utils::remove_soft_hyphens(data));
+		REQUIRE(data == "over");
+	}
+}

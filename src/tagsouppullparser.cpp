@@ -558,8 +558,7 @@ void tagsouppullparser::handle_text() {
 	getline(*inputstream,tmp,'<');
 	text.append(tmp);
 	text = decode_entities(text);
-	/* Remove all soft-hyphens as they can behave unpredictable and inadvertently render as hyphens */
-	text.erase(std::remove(text.begin(), text.end(), 0xad), text.end());
+	utils::remove_soft_hyphens(text);
 	current_event = event::TEXT;
 }
 
