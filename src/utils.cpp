@@ -261,11 +261,14 @@ bool utils::try_fs_lock(const std::string& lock_file, pid_t & pid) {
 	if (lockf(fd, F_TLOCK, 0) == 0) {
 		std::string pidtext = utils::to_string<unsigned int>(getpid());
 		// locking successful -> truncate file and write own PID into it
-		int success = ftruncate(fd, 0);
-		if (success == 0) {
-			success = write(fd, pidtext.c_str(), pidtext.length());
+		ssize_t written = 0;
+		if (ftruncate(fd, 0) == 0) {
+			written = write(fd, pidtext.c_str(), pidtext.length());
 		}
-		return (success == 0);
+		bool success =
+			   (written != -1)
+			&& (static_cast<unsigned int>(written) == pidtext.length());
+		return success;
 	}
 
 	// locking was not successful -> read PID of locking process from it
