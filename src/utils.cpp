@@ -22,6 +22,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <cstdarg>
+#include <cstdio>
 #include <algorithm>
 
 #include <curl/curl.h>

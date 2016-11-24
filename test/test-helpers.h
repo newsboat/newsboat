@@ -6,6 +6,7 @@
 #include <cstring>
 #include <sys/stat.h>
 #include <string>
+#include <exception>
 
 namespace TestHelpers {
 

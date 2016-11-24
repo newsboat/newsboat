@@ -6,6 +6,8 @@
 #include <utils.h>
 #include <strprintf.h>
 
+#include <cstdio>
+
 namespace newsbeuter {
 
 dialogs_formaction::dialogs_formaction(view * vv, std::string formstr) : formaction(vv, formstr), update_list(true) {

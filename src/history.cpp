@@ -42,7 +42,7 @@ void history::load_from_file(const std::string& file) {
 	if (f.is_open()) {
 		std::string line;
 		do {
-			getline(f, line);
+			std::getline(f, line);
 			if (!f.eof() && line.length() > 0) {
 				add_line(line);
 			}

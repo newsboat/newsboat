@@ -6,6 +6,7 @@
 #include <newsblur_api.h>
 #include <algorithm>
 #include <string.h>
+#include <time.h>
 
 #define NEWSBLUR_ITEMS_PER_PAGE 6
 

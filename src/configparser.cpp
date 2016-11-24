@@ -61,7 +61,7 @@ bool configparser::parse(const std::string& filename, bool double_include) {
 	unsigned int linecounter = 1;
 	std::ifstream f(filename.c_str());
 	std::string line;
-	getline(f,line);
+	std::getline(f,line);
 	if (!f.is_open()) {
 		LOG(level::WARN, "configparser::parse: file %s couldn't be opened", filename);
 		return false;

@@ -9,6 +9,7 @@
 #include <fstream>
 #include <iostream>
 #include <cassert>
+#include <time.h>
 #include <rss.h>
 #include <logger.h>
 #include <config.h>

@@ -10,6 +10,7 @@
 
 #include <cassert>
 #include <sstream>
+#include <cstdio>
 
 #include <langinfo.h>
 

@@ -3,6 +3,7 @@
 #include <ttrss_api.h>
 #include <cstring>
 #include <algorithm>
+#include <time.h>
 
 #include <wordexp.h>
 #include <unistd.h>

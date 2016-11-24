@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <curl/curl.h>
 #include <sys/utsname.h>
+#include <time.h>
 #include <htmlrenderer.h>
 
 #include <langinfo.h>

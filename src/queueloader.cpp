@@ -51,7 +51,7 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 	if (f.is_open()) {
 		std::string line;
 		do {
-			getline(f, line);
+			std::getline(f, line);
 			if (!f.eof() && line.length() > 0) {
 				LOG(level::DEBUG, "queueloader::reload: loaded `%s' from queue file", line);
 				std::vector<std::string> fields = utils::tokenize_quoted(line);

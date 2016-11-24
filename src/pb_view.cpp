@@ -15,6 +15,7 @@
 #include <sstream>
 #include <iostream>
 #include <cstring>
+#include <cstdio>
 
 using namespace newsbeuter;
 

@@ -43,6 +43,7 @@
 #include <string.h>
 #include <ncurses.h>
 #include <curses.h>
+#include <time.h>
 
 
 extern "C" {
@@ -117,7 +118,7 @@ void view::set_bindings(std::shared_ptr<formaction> fa) {
 }
 
 std::shared_ptr<formaction> view::get_current_formaction() {
-	if (formaction_stack.size() > 0 && current_formaction < formaction_stack.size()) {
+	if (formaction_stack.size() > 0 && current_formaction < formaction_stack_size()) {
 		return formaction_stack[current_formaction];
 	}
 	return std::shared_ptr<formaction>();
@@ -149,7 +150,7 @@ void view::run() {
 	std::vector<macrocmd> macrocmds;
 
 	// create feedlist
-	std::shared_ptr<feedlist_formaction> feedlist(new feedlist_formaction(this, feedlist_str));
+	auto feedlist = std::make_shared<feedlist_formaction>(this, feedlist_str);
 	set_bindings(feedlist);
 	feedlist->set_regexmanager(rxman);
 	feedlist->set_tags(tags);
@@ -167,7 +168,7 @@ void view::run() {
 	 * This is the main "event" loop of newsbeuter.
 	 */
 
-	while (formaction_stack.size() > 0) {
+	while (formaction_stack_size() > 0) {
 		// first, we take the current formaction.
 		std::shared_ptr<formaction> fa = get_current_formaction();
 
@@ -1077,7 +1078,7 @@ void view::handle_cmdline_completion(std::shared_ptr<formaction> fa) {
 void view::dump_current_form() {
 	std::string formtext = formaction_stack[current_formaction]->get_form()->dump("", "", 0);
 	char fnbuf[128];
-	time_t t = ::time(nullptr);
+	time_t t = time(nullptr);
 	struct tm * stm = localtime(&t);
 	strftime(fnbuf, sizeof(fnbuf), "dumpform-%Y%m%d-%H%M%S.stfl", stm);
 	std::fstream f(fnbuf, std::ios_base::out);

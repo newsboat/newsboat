@@ -2,6 +2,7 @@
 #include <memory>
 #include <cstdio>
 #include <cstring>
+#include <time.h>
 
 #include <json-c/json.h>
 #include <curl/curl.h>

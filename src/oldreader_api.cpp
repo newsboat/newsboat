@@ -136,8 +136,6 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 
 	LOG(level::DEBUG, "oldreader_api::get_subscribed_urls: document = %s", result);
 
-	// TODO: parse result
-
 	json_object* reply = json_tokener_parse(result.c_str());
 	if (reply == nullptr) {
 		LOG(level::ERROR, "oldreader_api::get_subscribed_urls: failed to parse response as JSON.");
