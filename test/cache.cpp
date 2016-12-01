@@ -68,13 +68,14 @@ TEST_CASE("Cleaning old articles works", "[cache]") {
 	REQUIRE(feed->items().size() == 1);
 }
 
-TEST_CASE("Last-Modified and ETag values are preserved correctly", "[cache]") {
-	configcontainer cfg;
-	cache rsscache(":memory:", &cfg);
+TEST_CASE("Last-Modified and ETag values are persisted to DB", "[cache]") {
+	std::unique_ptr<configcontainer> cfg( new configcontainer() );
+	TestHelpers::TempFile dbfile;
+	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), cfg.get()) );
 	const auto feedurl = "file://data/rss.xml";
-	rss_parser parser(feedurl, &rsscache, &cfg, nullptr);
+	rss_parser parser(feedurl, rsscache.get(), cfg.get(), nullptr);
 	std::shared_ptr<rss_feed> feed = parser.parse();
-	rsscache.externalize_rssfeed(feed, false);
+	rsscache->externalize_rssfeed(feed, false);
 
 	/* We will run this lambda on different inputs to check different
 	 * situations. */
@@ -82,11 +83,15 @@ TEST_CASE("Last-Modified and ETag values are preserved correctly", "[cache]") {
 		time_t last_modified = lm_value;
 		std::string etag = etag_value;
 
-		rsscache.update_lastmodified(feedurl, last_modified, etag);
+		rsscache->update_lastmodified(feedurl, last_modified, etag);
+
+		cfg.reset( new configcontainer() );
+		rsscache.reset( new cache(dbfile.getPath(), cfg.get()) );
+
 		/* Scrambling the value to make sure the following call changes it. */
 		last_modified = 42;
 		etag = "42";
-		rsscache.fetch_lastmodified(feedurl, last_modified, etag);
+		rsscache->fetch_lastmodified(feedurl, last_modified, etag);
 
 		REQUIRE(last_modified == lm_value);
 		REQUIRE(etag == etag_value);
