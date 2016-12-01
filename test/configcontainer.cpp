@@ -14,7 +14,7 @@ TEST_CASE("ConfigContainer behaves correctly", "[configcontainer]") {
 	cfgparser.register_handler("macro", &k);
 
 	SECTION("Parses test config without exceptions") {
-		REQUIRE_NOTHROW(cfgparser.parse("test-config.txt"));
+		REQUIRE_NOTHROW(cfgparser.parse("data/test-config.txt"));
 
 		SECTION("bool value") {
 			REQUIRE(cfg.get_configvalue("show-read-feeds") == "no");

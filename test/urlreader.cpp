@@ -6,7 +6,7 @@ using namespace newsbeuter;
 
 TEST_CASE("URL reader behaves correctly", "[file_urlreader]") {
 	file_urlreader u;
-	u.load_config("test-urls.txt");
+	u.load_config("data/test-urls.txt");
 
 	REQUIRE(u.get_urls().size() == 3);
 	REQUIRE(u.get_urls()[0] == "http://test1.url.cc/feed.xml");
