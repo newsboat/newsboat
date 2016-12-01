@@ -312,7 +312,7 @@ void rss_item::sort_flags() {
 	for (unsigned int i=0; i<flags_.size(); ++i) {
 		if (i < (flags_.size()-1)) {
 			if (flags_[i] == flags_[i+1]) {
-				flags_.erase(i+1,i+1);
+				flags_.erase(i+1,1);
 				--i;
 			}
 		}
