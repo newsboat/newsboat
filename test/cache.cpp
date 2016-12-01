@@ -7,7 +7,7 @@
 
 using namespace newsbeuter;
 
-TEST_CASE("cache behaves correctly", "[cache]") {
+TEST_CASE("items in search result can be marked read", "[cache]") {
 	configcontainer cfg;
 	cache rsscache(":memory:", &cfg);
 	rss_parser parser("file://data/rss.xml", &rsscache, &cfg, nullptr);
@@ -15,26 +15,18 @@ TEST_CASE("cache behaves correctly", "[cache]") {
 	REQUIRE(feed->total_item_count() == 8);
 	rsscache.externalize_rssfeed(feed, false);
 
-	SECTION("items in search result are marked as read") {
-		auto search_items = rsscache.search_for_items("Botox", "");
-		REQUIRE(search_items.size() == 1);
-		auto item = search_items.front();
-		REQUIRE(item->unread());
+	auto search_items = rsscache.search_for_items("Botox", "");
+	REQUIRE(search_items.size() == 1);
+	auto item = search_items.front();
+	REQUIRE(item->unread());
 
-		item->set_unread(false);
-		search_items.clear();
+	item->set_unread(false);
+	search_items.clear();
 
-		search_items = rsscache.search_for_items("Botox", "");
-		REQUIRE(search_items.size() == 1);
-		auto updatedItem = search_items.front();
-		REQUIRE_FALSE(updatedItem->unread());
-	}
-
-	std::vector<std::shared_ptr<rss_feed>> feedv;
-	feedv.push_back(feed);
-
-	cfg.set_configvalue("cleanup-on-quit", "true");
-	rsscache.cleanup_cache(feedv);
+	search_items = rsscache.search_for_items("Botox", "");
+	REQUIRE(search_items.size() == 1);
+	auto updatedItem = search_items.front();
+	REQUIRE_FALSE(updatedItem->unread());
 }
 
 TEST_CASE("Cleaning old articles works", "[cache]") {
@@ -755,8 +747,8 @@ TEST_CASE("internalize_rssfeed returns feed without items but specified RSS URL"
 	REQUIRE(feed->rssurl() == feedurl);
 }
 
-TEST_CASE("externalize_rssfeed resets \"unread\" field if item's content changed",
-          "[cache]") {
+TEST_CASE("externalize_rssfeed resets \"unread\" field if item's content "
+          "changed and reset_unread = \"yes\"", "[cache]") {
 	TestHelpers::TempFile dbfile;
 	rss_ignores ign;
 	configcontainer cfg;
