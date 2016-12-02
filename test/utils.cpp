@@ -144,24 +144,6 @@ TEST_CASE("consolidate_whitespace replaces multiple consecutive"
 	REQUIRE(utils::consolidate_whitespace("  Lorem|||Ipsum||", "|") == "  Lorem Ipsum ");
 }
 
-TEST_CASE("String conversions behave correctly", "[utils]") {
-	SECTION("Conversion from wstring to string") {
-		std::string s1 = utils::wstr2str(L"This is a simple string. Let's have a look at the outcome...");
-		REQUIRE(s1 == "This is a simple string. Let's have a look at the outcome...");
-
-		std::string s2 = utils::wstr2str(L"");
-		REQUIRE(s2 == "");
-	}
-
-	SECTION("Conversion from string to wstring") {
-		std::wstring w1 = utils::str2wstr("And that's another simple string.");
-		REQUIRE(w1 == L"And that's another simple string.");
-
-		std::wstring w2 = utils::str2wstr("");
-		REQUIRE(w2 == L"");
-	}
-}
-
 TEST_CASE("get_command_output()", "[utils]") {
 	REQUIRE(utils::get_command_output("ls /dev/null") == "/dev/null\n");
 }
