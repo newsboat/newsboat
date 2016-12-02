@@ -70,10 +70,20 @@ TEST_CASE("regex manager is used by format_text_to_list if one is passed",
 	REQUIRE(result.second == expected_count);
 }
 
-TEST_CASE("<hr> is rendered properly", "[textformatter]") {
+TEST_CASE("<hr> is rendered as a string of dashes framed with newlines",
+          "[textformatter]") {
 	textformatter fmt;
 
 	fmt.add_line(LineType::hr, "");
+
+	SECTION("width = 3") {
+		const std::string expected =
+			"\n"
+			" - "
+			"\n"
+			"\n";
+		REQUIRE(fmt.format_text_plain(3) == expected);
+	}
 
 	SECTION("width = 10") {
 		const std::string expected =
@@ -82,6 +92,15 @@ TEST_CASE("<hr> is rendered properly", "[textformatter]") {
 			"\n"
 			"\n";
 		REQUIRE(fmt.format_text_plain(10) == expected);
+	}
+
+	SECTION("width = 72") {
+		const std::string expected =
+			"\n"
+			" ---------------------------------------------------------------------- "
+			"\n"
+			"\n";
+		REQUIRE(fmt.format_text_plain(72) == expected);
 	}
 }
 

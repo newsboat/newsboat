@@ -1064,24 +1064,3 @@ TEST_CASE("text within <ituneshack> is to be treated specially",
 				"puts plain text into <>summary> tag."));
 	REQUIRE(links.size() == 0);
 }
-
-TEST_CASE("<hr> is rendered as a string of dashes framed with newlines",
-          "[htmlrenderer]") {
-	htmlrenderer r;
-	std::string result;
-
-	SECTION("width = 3") {
-			REQUIRE_NOTHROW(result = r.render_hr(3));
-			REQUIRE(result == "\n - \n");
-	}
-
-	SECTION("width = 10") {
-			REQUIRE_NOTHROW(result = r.render_hr(10));
-			REQUIRE(result == "\n -------- \n");
-	}
-
-	SECTION("width = 72") {
-			REQUIRE_NOTHROW(result = r.render_hr(72));
-			REQUIRE(result == "\n ---------------------------------------------------------------------- \n");
-	}
-}
