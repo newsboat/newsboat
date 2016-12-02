@@ -249,4 +249,23 @@ TEST_CASE("set_rssurl checks if query feed has a valid query", "[rss]") {
 	}
 }
 
+TEST_CASE("rss_item::sort_flags() cleans up flags", "[rss]") {
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_item item(&rsscache);
+
+	SECTION("Repeated letters do not erase other letters"){
+		std::string inputflags = "Abcdecf";
+		std::string result = "Abcdef";
+		item.set_flags(inputflags);
+		REQUIRE(result == item.flags());
+	}
+
+	SECTION("Non alpha characters in input flags are ignored"){
+		std::string inputflags = "Abcd";
+		item.set_flags(inputflags + "1234568790^\"#'é(£");
+		REQUIRE(inputflags == item.flags());
+	}
+}
+
 }

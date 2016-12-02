@@ -302,17 +302,19 @@ void rss_item::set_flags(const std::string& ff) {
 void rss_item::sort_flags() {
 	std::sort(flags_.begin(), flags_.end());
 
-	for (auto it=flags_.begin(); flags_.size() > 0 && it!=flags_.end(); ++it) {
+	auto it=flags_.begin();
+	while (it!=flags_.end()) {
 		if (!isalpha(*it)) {
 			flags_.erase(it);
-			it = flags_.begin();
+		} else {
+			it += 1;
 		}
 	}
 
 	for (unsigned int i=0; i<flags_.size(); ++i) {
 		if (i < (flags_.size()-1)) {
 			if (flags_[i] == flags_[i+1]) {
-				flags_.erase(i+1,i+1);
+				flags_.erase(i+1,1);
 				--i;
 			}
 		}
