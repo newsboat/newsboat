@@ -462,7 +462,9 @@ TEST_CASE("<blockquote> is indented and is separated by empty lines",
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("<dl>, <dt> and <dd> are rendered properly", "[htmlrenderer]") {
+TEST_CASE("<dl>, <dt> and <dd> are rendered as a set of paragraphs with term "
+          "descriptions indented to the right", "[htmlrenderer]")
+{
 	htmlrenderer r;
 
 	const std::string input =
