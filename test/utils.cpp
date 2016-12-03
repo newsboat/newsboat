@@ -187,113 +187,73 @@ TEST_CASE("partition_index()", "[utils]") {
 
 	SECTION("[0, 9] into 2") {
 		partitions = utils::partition_indexes(0, 9, 2);
-		// partitioning of [0,9] in 2 parts produced 2 parts
 		REQUIRE(partitions.size() == 2);
-		// first partition start is 0
 		REQUIRE(partitions[0].first == 0);
-		// first partition end is 4
 		REQUIRE(partitions[0].second == 4);
-		// second partition start is 5
 		REQUIRE(partitions[1].first == 5);
-		// second partition end is 9
 		REQUIRE(partitions[1].second == 9);
 	}
 
 	SECTION("[0, 10] into 3") {
 		partitions = utils::partition_indexes(0, 10, 3);
-		// partitioning of [0,10] in 3 parts produced 3 parts
 		REQUIRE(partitions.size() == 3);
-		// first partition start is 0
 		REQUIRE(partitions[0].first == 0);
-		// first partition end is 2
 		REQUIRE(partitions[0].second == 2);
-		// second partition start is 3
 		REQUIRE(partitions[1].first == 3);
-		// second partition end is 5
 		REQUIRE(partitions[1].second == 5);
-		// third partition start is 6
 		REQUIRE(partitions[2].first == 6);
-		// third partition end is 10
 		REQUIRE(partitions[2].second == 10);
 	}
 
 	SECTION("[0, 11] into 3") {
 		partitions = utils::partition_indexes(0, 11, 3);
-		// partitioning of [0,11] in 3 parts produced 3 parts
 		REQUIRE(partitions.size() == 3);
-		// first partition start is 0
 		REQUIRE(partitions[0].first == 0);
-		// first partition end is 3
 		REQUIRE(partitions[0].second == 3);
-		// second partition start is 4
 		REQUIRE(partitions[1].first == 4);
-		// second partition end is 7
 		REQUIRE(partitions[1].second == 7);
-		// third partition start is 8
 		REQUIRE(partitions[2].first == 8);
-		// third partition end is 11
 		REQUIRE(partitions[2].second == 11);
 	}
 
 	SECTION("[0, 199] into 200") {
 		partitions = utils::partition_indexes(0, 199, 200);
-		// partitioning of [0,199] in 200 parts produced 200 parts
 		REQUIRE(partitions.size() == 200);
 	}
 
 	SECTION("[0, 103] into 1") {
 		partitions = utils::partition_indexes(0, 103, 1);
-		// partitioning of [0,103] in 1 partition produced 1 partition
 		REQUIRE(partitions.size() == 1);
-		// first partition start is 0
 		REQUIRE(partitions[0].first == 0);
-		// first partition end is 103
 		REQUIRE(partitions[0].second == 103);
 	}
 }
 
 TEST_CASE("censor_url()", "[utils]") {
-	// censor empty string
 	REQUIRE(utils::censor_url("") == "");
-	// censor foobar
 	REQUIRE(utils::censor_url("foobar") == "foobar");
-	// censor foobar: url with no authinfo
 	REQUIRE(utils::censor_url("foobar://xyz/") == "foobar://xyz/");
 
-	// censor http url with no authinfo
 	REQUIRE(utils::censor_url("http://newsbeuter.org/") == "http://newsbeuter.org/");
-	// censor https url with no authinfo
 	REQUIRE(utils::censor_url("https://newsbeuter.org/") == "https://newsbeuter.org/");
 
-	// censor http url with empty authinfo
 	REQUIRE(utils::censor_url("http://@newsbeuter.org/") == "http://*:*@newsbeuter.org/");
-	// censor https url with empty authinfo
 	REQUIRE(utils::censor_url("https://@newsbeuter.org/") == "https://*:*@newsbeuter.org/");
 
-	// censor http url with authinfo
 	REQUIRE(utils::censor_url("http://foo:bar@newsbeuter.org/") == "http://*:*@newsbeuter.org/");
-	// censor https url with authinfo
 	REQUIRE(utils::censor_url("https://foo:bar@newsbeuter.org/") == "https://*:*@newsbeuter.org/");
 
-	// censor http url with username-only authinfo
 	REQUIRE(utils::censor_url("http://aschas@newsbeuter.org/") == "http://*:*@newsbeuter.org/");
-	// censor https url with username-only authinfo
 	REQUIRE(utils::censor_url("https://aschas@newsbeuter.org/") == "https://*:*@newsbeuter.org/");
 
-	// censor xxx url with username-only authinfo
 	REQUIRE(utils::censor_url("xxx://aschas@newsbeuter.org/") == "xxx://*:*@newsbeuter.org/");
 
-	// censor http url with no authinfo and no trailing slash
 	REQUIRE(utils::censor_url("http://foobar") == "http://foobar");
-	// censor https url with no authinfo and no trailing slash
 	REQUIRE(utils::censor_url("https://foobar") == "https://foobar");
 
-	// censor http url with username-only authinfo and no trailing slash
 	REQUIRE(utils::censor_url("http://aschas@host") == "http://*:*@host");
-	// censor http url with username-only authinfo and no trailing slash
 	REQUIRE(utils::censor_url("https://aschas@host") == "https://*:*@host");
 
-	// censor query feed
 	REQUIRE(utils::censor_url("query:name:age between 1:10") == "query:name:age between 1:10");
 }
 
@@ -323,13 +283,10 @@ TEST_CASE("to_u()", "[utils]") {
 }
 
 TEST_CASE("strwidth()", "[utils]") {
-	// empty string is 0 colums wide
 	REQUIRE(utils::strwidth("") == 0);
 
-	// xx is 2 columns wide
 	REQUIRE(utils::strwidth("xx") == 2);
 
-	// character U+F91F is 2 columns wide
 	REQUIRE(utils::strwidth(utils::wstr2str(L"\uF91F")) == 2);
 }
 
