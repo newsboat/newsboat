@@ -67,54 +67,70 @@ namespace Catch {
 	};
 }
 
-TEST_CASE("HTMLRenderer behaves correctly", "[htmlrenderer]") {
+TEST_CASE("Links are rendered as underlined text with reference number in "
+          "square brackets", "[htmlrenderer]")
+{
 	htmlrenderer rnd;
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
-	SECTION("link rendering") {
-		rnd.render("<a href=\"http://slashdot.org/\">slashdot</a>", lines, links, "");
+	rnd.render("<a href=\"http://slashdot.org/\">slashdot</a>", lines, links, "");
 
-		REQUIRE(lines.size() == 4);
+	REQUIRE(lines.size() == 4);
 
-		REQUIRE(lines[0] == p(LineType::wrappable, "<u>slashdot</>[1]"));
-		REQUIRE(lines[1] == p(LineType::wrappable, ""));
-		REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-		REQUIRE(lines[3] == p(LineType::softwrappable, "[1]: http://slashdot.org/ (link)"));
+	REQUIRE(lines[0] == p(LineType::wrappable, "<u>slashdot</>[1]"));
+	REQUIRE(lines[1] == p(LineType::wrappable, ""));
+	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
+	REQUIRE(lines[3] == p(LineType::softwrappable, "[1]: http://slashdot.org/ (link)"));
 
-		REQUIRE(links[0].first == "http://slashdot.org/");
-		REQUIRE(links[0].second == link_type::HREF);
+	REQUIRE(links[0].first == "http://slashdot.org/");
+	REQUIRE(links[0].second == link_type::HREF);
+}
 
-	}
+TEST_CASE("<br>, <br/> and <br /> result in a line break", "[htmlrenderer]") {
+	htmlrenderer rnd;
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<linkpair> links;
 
-	SECTION("line break rendering") {
-		for (std::string tag : {"<br>", "<br/>", "<br />"}) {
-			SECTION(tag) {
-				rnd.render("hello" + tag + "world!", lines, links, "");
-				REQUIRE(lines.size() == 2);
-				REQUIRE(lines[0] == p(LineType::wrappable, "hello"));
-				REQUIRE(lines[1] == p(LineType::wrappable, "world!"));
-			}
+	for (std::string tag : {"<br>", "<br/>", "<br />"}) {
+		SECTION(tag) {
+			auto input = "hello" + tag + "world!";
+			rnd.render(input, lines, links, "");
+			REQUIRE(lines.size() == 2);
+			REQUIRE(lines[0] == p(LineType::wrappable, "hello"));
+			REQUIRE(lines[1] == p(LineType::wrappable, "world!"));
 		}
 	}
+}
 
-	SECTION("superscript rendering") {
-		rnd.render("3<sup>10</sup>", lines, links, "");
-		REQUIRE(lines.size() == 1);
-		REQUIRE(lines[0] == p(LineType::wrappable, "3^10"));
-	}
+TEST_CASE("Superscript is rendered with caret symbol", "[htmlrenderer]") {
+	htmlrenderer rnd;
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<linkpair> links;
 
-	SECTION("subscript rendering") {
-		rnd.render("A<sub>i</sub>", lines, links, "");
-		REQUIRE(lines.size() == 1);
-		REQUIRE(lines[0] == p(LineType::wrappable, "A[i]"));
-	}
+	rnd.render("3<sup>10</sup>", lines, links, "");
+	REQUIRE(lines.size() == 1);
+	REQUIRE(lines[0] == p(LineType::wrappable, "3^10"));
+}
 
-	SECTION("scripts are ignored") {
-		rnd.render("abc<script></script>", lines, links, "");
-		REQUIRE(lines.size() == 1);
-		REQUIRE(lines[0] == p(LineType::wrappable, "abc"));
-	}
+TEST_CASE("Subscript is rendered with square brackets", "[htmlrenderer]") {
+	htmlrenderer rnd;
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<linkpair> links;
+
+	rnd.render("A<sub>i</sub>", lines, links, "");
+	REQUIRE(lines.size() == 1);
+	REQUIRE(lines[0] == p(LineType::wrappable, "A[i]"));
+}
+
+TEST_CASE("Script tags are ignored", "[htmlrenderer]") {
+	htmlrenderer rnd;
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<linkpair> links;
+
+	rnd.render("abc<script></script>", lines, links, "");
+	REQUIRE(lines.size() == 1);
+	REQUIRE(lines[0] == p(LineType::wrappable, "abc"));
 }
 
 TEST_CASE("format_ol_count formats list count in specified format",
@@ -446,7 +462,9 @@ TEST_CASE("<blockquote> is indented and is separated by empty lines",
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE("<dl>, <dt> and <dd> are rendered properly", "[htmlrenderer]") {
+TEST_CASE("<dl>, <dt> and <dd> are rendered as a set of paragraphs with term "
+          "descriptions indented to the right", "[htmlrenderer]")
+{
 	htmlrenderer r;
 
 	const std::string input =
@@ -1047,24 +1065,4 @@ TEST_CASE("text within <ituneshack> is to be treated specially",
 			p(LineType::wrappable, "I'm a description from an iTunes feed. Apple just "
 				"puts plain text into <>summary> tag."));
 	REQUIRE(links.size() == 0);
-}
-
-TEST_CASE("<hr> is rendered correctly", "[htmlrenderer]") {
-	htmlrenderer r;
-	std::string result;
-
-	SECTION("width = 3") {
-			REQUIRE_NOTHROW(result = r.render_hr(3));
-			REQUIRE(result == "\n - \n");
-	}
-
-	SECTION("width = 10") {
-			REQUIRE_NOTHROW(result = r.render_hr(10));
-			REQUIRE(result == "\n -------- \n");
-	}
-
-	SECTION("width = 72") {
-			REQUIRE_NOTHROW(result = r.render_hr(72));
-			REQUIRE(result == "\n ---------------------------------------------------------------------- \n");
-	}
 }
