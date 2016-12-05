@@ -84,7 +84,7 @@ ssl-verify|[yes/no]|yes|If no, skip SSL certificate validation.|ssl-verify no
 proxy-auth-method|<method>|any|Set proxy authentication method. Allowed values: any, basic, digest, digest_ie (only available with libcurl 7.19.3 and newer), gssnegotiate, ntlm, anysafe.|proxy-auth-method ntlm
 proxy-auth|<auth>|n/a|Set the proxy authentication string.|proxy-auth user:password
 proxy-type|<type>|http|Set proxy type. Allowed values: http, socks4, socks4a, socks5.|proxy-type socks5
-proxy|<server:port>|n/a|Set the proxy to use for downloading RSS feeds.|proxy localhost:3128
+proxy|<server:port>|n/a|Set the proxy to use for downloading RSS feeds. (Don't forget to actually enable the proxy with `use-proxy yes`.)|proxy localhost:3128
 refresh-on-startup|[yes/no]|no|If yes, then all feeds will be reloaded when newsbeuter starts up. This is equivalent to the -r commandline option.|refresh-on-startup yes
 reload-only-visible-feeds|[yes/no]|no|If yes, then manually reloading all feeds will only reload the currently visible feeds, e.g. if a filter or a tag is set.|reload-only-visible-feeds yes
 reload-threads|<number>|1|The number of parallel reload threads that shall be started when all feeds are reloaded.|reload-threads 3

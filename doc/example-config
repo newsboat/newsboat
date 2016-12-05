@@ -993,7 +993,8 @@
 
 ####  proxy
 #
-# Set the proxy to use for downloading RSS feeds.
+# Set the proxy to use for downloading RSS feeds. (Don't forget to actually
+# enable the proxy with `use-proxy yes`.)
 #
 # Syntax: <server:port>
 #
