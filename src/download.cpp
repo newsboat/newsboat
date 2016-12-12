@@ -67,11 +67,11 @@ void download::set_url(const std::string& u) {
 	url_ = u;
 }
 
-void download::set_progress(double cur, double max) {
-	if (cur > cursize)
+void download::set_progress(double downloaded, double total) {
+	if (downloaded > cursize)
 		ctrl->set_view_update_necessary(true);
-	cursize = cur;
-	totalsize = max;
+	cursize = downloaded;
+	totalsize = total;
 }
 
 void download::set_status(dlstatus dls) {

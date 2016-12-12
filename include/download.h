@@ -32,7 +32,7 @@ class download {
 		const std::string url();
 		void set_filename(const std::string& str);
 		void set_url(const std::string& url);
-		void set_progress(double cur, double max);
+		void set_progress(double downloaded, double total);
 		void set_status(dlstatus dls);
 		void set_kbps(double kbps);
 		double kbps();
