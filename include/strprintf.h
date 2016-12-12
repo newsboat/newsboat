@@ -30,7 +30,7 @@ class strprintf {
 			} else {
 				std::unique_ptr<char> buf(new char[len]);
 				snprintf(buf.get(), len, format.c_str(), "");
-				result = *buf;
+				result = buf.get();
 			}
 			return result;
 		}
@@ -58,7 +58,7 @@ class strprintf {
 			} else {
 				std::unique_ptr<char> buf(new char[len]);
 				snprintf(buf.get(), len, local_format.c_str(), argument);
-				result = *buf;
+				result = buf.get();
 			}
 
 			return result + fmt(remaining_format, args...);
