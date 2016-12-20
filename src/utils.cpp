@@ -975,6 +975,8 @@ curl_proxytype utils::get_proxy_type(const std::string& type) {
 		return CURLPROXY_SOCKS4;
 	if (type == "socks5")
 		return CURLPROXY_SOCKS5;
+	if (type == "socks5h")
+		return CURLPROXY_SOCKS5_HOSTNAME;
 #ifdef CURLPROXY_SOCKS4A
 	if (type == "socks4a")
 		return CURLPROXY_SOCKS4A;
