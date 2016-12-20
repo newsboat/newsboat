@@ -983,7 +983,7 @@
 
 ####  proxy-type
 #
-# Set proxy type. Allowed values: http, socks4, socks4a, socks5.
+# Set proxy type. Allowed values: http, socks4, socks4a, socks5, socks5h.
 #
 # Syntax: <type>
 #

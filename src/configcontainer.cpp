@@ -111,7 +111,7 @@ configcontainer::configcontainer()
 		        "anysafe" })) },
 		{ "proxy-type",
 		    configdata("http", std::unordered_set<std::string>({
-		        "http", "socks4", "socks4a", "socks5" })) },
+		        "http", "socks4", "socks4a", "socks5", "socks5h" })) },
 		{ "refresh-on-startup", configdata("no", configdata_t::BOOL) },
 		{ "reload-only-visible-feeds", configdata("false", configdata_t::BOOL) },
 		{ "reload-threads", configdata("1", configdata_t::INT) },
