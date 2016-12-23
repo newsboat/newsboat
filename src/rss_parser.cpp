@@ -350,10 +350,15 @@ void rss_parser::fill_feed_items(std::shared_ptr<rss_feed> feed) {
 }
 
 void rss_parser::set_item_title(std::shared_ptr<rss_feed> feed, std::shared_ptr<rss_item> x, rsspp::item& item) {
+	std::string title = item.title;
+
+	if (item.title.empty()) {
+		title = utils::make_title(item.link);
+	}
+
 	if (is_html_type(item.title_type)) {
-		x->set_title(render_xhtml_title(item.title, feed->link()));
+		x->set_title(render_xhtml_title(title, feed->link()));
 	} else {
-		std::string title = item.title;
 		replace_newline_characters(title);
 		x->set_title(title);
 	}
