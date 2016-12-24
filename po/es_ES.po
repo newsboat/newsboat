@@ -1,11 +1,6 @@
-# translation of es_ES.po to es-ES
-# translation of es_ES.po to
-# Copyright (C) 2009 THE es_ES'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the es_ES package.
-# ROOT <epsilon@correoe.no-ip.org>, 2008.
-# ROOT <epsilon@correoe.no-ip.org>, 2009.
-# ROOT <epsilon@correoe.no-ip.org>, 2010.
-#
+# Copyright (C) Newsbeuter contributors
+# This file is distributed under the same license as the newsbeuter package.
+# ROOT <epsilon@correoe.no-ip.org>, 2008-2010
 #
 msgid ""
 msgstr ""

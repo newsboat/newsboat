@@ -1,5 +1,4 @@
-# Polish translation of newsbeuter.
-# Copyright (C) 2008 Maciej Delmanowski
+# Copyright (C) Newsbeuter contributors
 # This file is distributed under the same license as the newsbeuter package.
 # Maciej Delmanowski <maciej.delmanowski@harnir.net>, 2008.
 # Michal Siemek <carnophage@dobramama.pl>, 2012.

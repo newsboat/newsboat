@@ -1,8 +1,8 @@
-# translation of pt_BR.po to Português do Brasil
-# translation of new.po to
-# translation of pt_BR.po to
+# Copyright (C) Newsbeuter contributors
+# This file is distributed under the same license as the newsbeuter package.
 # Adiel Mittmann <adiel@inf.ufsc.br>, 2007, 2008, 2009, 2010.
-#  <>, 2011.
+# Alexandre Erwin Ittner <alexandre@ittner.com.br>, 2011.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: pt_BR\n"

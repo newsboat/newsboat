@@ -1,5 +1,4 @@
-# Norwegian bokmål translation for newsbeuter.
-# Copyright (C) 2012
+# Copyright (C) Newsbeuter contributors
 # This file is distributed under the same license as the newsbeuter package.
 # Daniel Aleksandersen <code@daniel.priv.no>, 2012.
 #

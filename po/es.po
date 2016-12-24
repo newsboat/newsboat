@@ -1,7 +1,7 @@
-# Spanish translation of newsbeuter
-# Copyright (C) 2013
+# Copyright (C) Newsbeuter contributors
 # This file is distributed under the same license as the newsbeuter package.
 # OmeGa <omega@mailoo.org>, 2013.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 2.5\n"

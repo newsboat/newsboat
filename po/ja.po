@@ -1,7 +1,7 @@
-# Japanese Localization File for Newsbeuter
-# Copyright (C) 2015
+# Copyright (C) Newsbeuter contributors
 # This file is distributed under the same license as the newsbeuter package.
 # Grady Martin <GradyMartin@gmail.com>, 2015
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 2.9\n"

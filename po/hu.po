@@ -1,5 +1,4 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2008-2009.
+# Copyright (C) Newsbeuter contributors
 # This file is distributed under the same license as the newsbeuter package.
 # Zsolt Udvari <udvzsolt@gmail.com>, 2008-2009.
 #

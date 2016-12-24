@@ -1,6 +1,4 @@
-#
-# Italian translation for newsbeuter.
-# Copyright (C) Claudio M. Alessi
+# Copyright (C) Newsbeuter contributors
 # This file is distributed under the same license as the newsbeuter package.
 # Claudio M. Alessi <smoppy@gmail.com>, 2009
 #

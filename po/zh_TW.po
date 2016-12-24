@@ -1,5 +1,4 @@
-# Traditional Chinese translation for newsbeuter
-# Copyright (C) 2008
+# Copyright (C) Newsbeuter contributors
 # This file is distributed under the same license as the newsbeuter package
 # aeglos  <aeglos.lin@gmail.com>, 2008.
 #

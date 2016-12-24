@@ -1,9 +1,7 @@
-# Chinese translation for newsbeuter
-# Copyright (C) 2007
+# Copyright (C) Newsbeuter contributors
 # This file is distributed under the same license as the newsbeuter package
 # joshyu  <joshyupeng@gmail.com>, 2007.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 0.7\n"

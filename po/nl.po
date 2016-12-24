@@ -1,5 +1,4 @@
-# Dutch translation for newsbeuter
-# Copyright (C) 2009-2013
+# Copyright (C) Newsbeuter contributors
 # This file is distributed under the same license as the newsbeuter package
 # Bart Van Loon <bart@inGen.be>, 2009.
 # Erwin Poeze <donnut@outlook.com>, 2013.
