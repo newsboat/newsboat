@@ -353,6 +353,22 @@ TEST_CASE("utils::make_title extracts possible title from URL") {
 			input = "http://example.com/This_is-the_title";
 		}
 
+		SECTION("Eliminate .php extension") {
+			input = "http://example.com/This_is-the_title.php";
+		}
+
+		SECTION("Eliminate .html extension") {
+			input = "http://example.com/This_is-the_title.html";
+		}
+
+		SECTION("Eliminate .htm extension") {
+			input = "http://example.com/This_is-the_title.htm";
+		}
+
+		SECTION("Eliminate .aspx extension") {
+			input = "http://example.com/This_is-the_title.aspx";
+		}
+
 		REQUIRE(utils::make_title(input) == "This is the title");
 	}
 

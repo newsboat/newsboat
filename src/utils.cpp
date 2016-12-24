@@ -24,6 +24,7 @@
 #include <cstdarg>
 #include <cstdio>
 #include <algorithm>
+#include <regex>
 
 #include <curl/curl.h>
 
@@ -1062,6 +1063,9 @@ std::string utils::make_title(const std::string& const_url) {
 	std::string::size_type pos_of_qmrk = path.find_first_of('?');
 	//throw away the query part 'title-with-dashes'
 	std::string title = path.substr(0,pos_of_qmrk);
+	//Throw away common webpage suffixes: .html, .php, .aspx, .htm
+	std::regex rx("\\.html$|\\.htm$|\\.php$|\\.aspx$");
+	title = std::regex_replace(title,rx,"");
 	// 'title with dashes'
 	std::replace(title.begin(), title.end(), '-', ' ');
 	std::replace(title.begin(), title.end(), '_', ' ');
@@ -1069,11 +1073,6 @@ std::string utils::make_title(const std::string& const_url) {
 	if (title.at(0)>= 'a' && title.at(0)<= 'z') {
 		title[0] -= 'a' - 'A';
 	}
-	//strip .htm or .html from title
-	size_t pos = title.find(".html",0);
-	if (pos != std::string::npos) title.erase(pos,5);
-	pos = title.find(".htm",0);
-	if (pos != std::string::npos) title.erase(pos,4);
 	return title;
 }
 
