@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.7\n"
+"Project-Id-Version: newsbeuter 0.7\n"
 "Report-Msgid-Bugs-To: https://github.com/akrennmair/newsbeuter/issues\n"
 "POT-Creation-Date: 2016-12-25 00:59+0300\n"
 "PO-Revision-Date: 2008-01-28 10:00+0100\n"

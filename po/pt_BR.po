@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: pt_BR\n"
+"Project-Id-Version: newsbeuter 2.8\n"
 "Report-Msgid-Bugs-To: https://github.com/akrennmair/newsbeuter/issues\n"
 "POT-Creation-Date: 2016-12-25 00:59+0300\n"
-"PO-Revision-Date: 2011-01-01 06:56-0200\n"
+"PO-Revision-Date: 2014-04-13 16:40-0300\n"
 "Last-Translator: Alexandre Erwin Ittner <alexandre@ittner.com.br>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
