@@ -13,7 +13,7 @@ msgstr ""
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: src/colormanager.cpp:45 src/colormanager.cpp:47 src/regexmanager.cpp:55
 #: src/regexmanager.cpp:64 src/regexmanager.cpp:113 src/regexmanager.cpp:121

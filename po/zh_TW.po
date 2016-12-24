@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Traditional Chinese\n"
+"X-Poedit-Language: Chinese (traditional)\n"
 "X-Poedit-Country: Taiwan\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
