@@ -26,7 +26,7 @@ LDFLAGS+=-L. -fprofile-arcs -ftest-coverage
 
 PACKAGE=newsbeuter
 
-ifneq (distclean, $(MAKECMDGOALS))
+ifeq (, $(filter $(MAKECMDGOALS),distclean run-i18nspector))
 include config.mk
 endif
 
@@ -211,6 +211,9 @@ uninstall: uninstall-mo
 
 # the following targets are i18n/l10n-related:
 
+run-i18nspector: $(POFILES)
+	i18nspector $^
+
 mo-files: $(MOFILES)
 
 extract:
@@ -221,7 +224,7 @@ msgmerge:
 	for f in $(POFILES) ; do msgmerge -U $$f $(POTFILE) ; done
 
 %.mo: %.po
-	$(MSGFMT) --statistics -o $@ $<
+	$(MSGFMT) --check --statistics -o $@ $<
 
 clean-mo:
 	$(RM) $(MOFILES) po/*~

@@ -102,11 +102,19 @@ matrix:
         # a2x will run xmllint on generated files, so we have to pass the path
         # to AsciiDoc's catalog files
         - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
+    - dist: trusty
+      sudo: false
+      addons:
+        apt:
+          packages:
+            - i18nspector
+      env:
+        - CHECKS=1
 
 install:
   - export CXX=$COMPILER
   - cd ${TRAVIS_BUILD_DIR}
-  - ./travis-get-deps.sh
+  - if [ -z "$CHECKS" ]; then   ./travis-get-deps.sh   ; fi
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
@@ -114,11 +122,12 @@ script:
   # possible. --keep-going is used to process the maximum number of the files
   # before failing; this will help with debugging build fails that happen on
   # platforms that the developer doesn't have access to.
-  - CXXFLAGS="-O3" make --keep-going all test
-  - make distclean
-  - make PROFILE=1 all test
-  - cd test && ./test --order rand
+  - if [ -z "$CHECKS" ]; then   CXXFLAGS="-O3" make --keep-going all test   ; fi
+  - if [ -z "$CHECKS" ]; then   make distclean   ; fi
+  - if [ -z "$CHECKS" ]; then   make PROFILE=1 all test   ; fi
+  - if [ -z "$CHECKS" ]; then   ( cd test && ./test --order rand )   ; fi
+  - if [ -n "$CHECKS" ]; then   make run-i18nspector | tee i18nspector.log && if `egrep '^(E|W):' i18nspector.log >/dev/null 2>&1` ; then false else true; fi   ; fi
 
 after_success:
   - cd ${TRAVIS_BUILD_DIR}
-  - ./submit-to-coveralls.sh
+  - if [ -z "$CHECKS" ]; then   ./submit-to-coveralls.sh   ; fi
