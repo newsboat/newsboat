@@ -28,6 +28,8 @@ htmlrenderer::htmlrenderer(bool raw) : raw_(raw) {
 	tags["h2"] = htmltag::H2;
 	tags["h3"] = htmltag::H3;
 	tags["h4"] = htmltag::H4;
+	tags["h5"] = htmltag::H5;
+	tags["h6"] = htmltag::H6;
 	tags["ol"] = htmltag::OL;
 	tags["ul"] = htmltag::UL;
 	tags["li"] = htmltag::LI;
@@ -226,6 +228,8 @@ void htmlrenderer::render(
 			case htmltag::H2:
 			case htmltag::H3:
 			case htmltag::H4:
+			case htmltag::H5:
+			case htmltag::H6:
 			case htmltag::P:
 				{
 				add_nonempty_line(curline, tables, lines);
@@ -451,6 +455,8 @@ void htmlrenderer::render(
 			case htmltag::H2:
 			case htmltag::H3:
 			case htmltag::H4:
+			case htmltag::H5:
+			case htmltag::H6:
 			case htmltag::P:
 				add_nonempty_line(curline, tables, lines);
 				prepare_new_line(curline,  tables.size() ? 0 : indent_level);

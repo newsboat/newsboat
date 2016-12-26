@@ -11,9 +11,9 @@ namespace newsbeuter {
 
 enum class link_type { HREF, IMG, EMBED };
 enum class htmltag {
-	A = 1, EMBED, BR, PRE, ITUNESHACK, IMG, BLOCKQUOTE, H1, H2, H3, H4, P, OL,
-	UL, LI, DT, DD, DL, SUP, SUB, HR, STRONG, UNDERLINE, QUOTATION, SCRIPT,
-	STYLE, TABLE, TH, TR, TD
+	A = 1, EMBED, BR, PRE, ITUNESHACK, IMG, BLOCKQUOTE, H1, H2, H3, H4, H5, H6,
+	P, OL, UL, LI, DT, DD, DL, SUP, SUB, HR, STRONG, UNDERLINE, QUOTATION,
+	SCRIPT, STYLE, TABLE, TH, TR, TD
 };
 
 typedef std::pair<std::string,link_type> linkpair;
