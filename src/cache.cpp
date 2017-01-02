@@ -703,37 +703,16 @@ void cache::catchup_all(const std::string& feedurl) {
 	run_sql(query);
 }
 
-void cache::update_rssitem_unread_and_enqueued(rss_item* item, const std::string& feedurl) {
+void cache::update_rssitem_unread_and_enqueued(rss_item* item, const std::string& /* feedurl */) {
 	std::lock_guard<std::mutex> lock(mtx);
 
-	std::string query = prepare_query(
-			"SELECT count(*) FROM rss_item WHERE guid = '%q';",
+	auto query = prepare_query(
+			"UPDATE rss_item "
+			"SET unread = '%d', enqueued = '%d' "
+			"WHERE guid = '%q'",
+			item->unread()?1:0,
+			item->enqueued()?1:0,
 			item->guid());
-	cb_handler count_cbh;
-	run_sql(query, count_callback, &count_cbh);
-
-	if (count_cbh.count() > 0) {
-		query = prepare_query(
-				"UPDATE rss_item "
-				"SET unread = '%d', enqueued = '%d' "
-				"WHERE guid = '%q'",
-				item->unread()?1:0,
-				item->enqueued()?1:0,
-				item->guid());
-	} else {
-		query = prepare_query(
-				"INSERT INTO rss_item (guid, title, author, url, feedurl, "
-				        "pubDate, content, unread, enclosure_url, "
-				        "enclosure_type, enqueued, flags, base) "
-				"VALUES ('%q','%q','%q','%q','%q','%u','%q','%d','%q','%q',%d, "
-				        "'%q', '%q')",
-				item->guid(), item->title_raw(), item->author_raw(),
-				item->link(), feedurl, item->pubDate_timestamp(),
-				item->description_raw(), item->unread() ? 1 : 0,
-				item->enclosure_url(), item->enclosure_type(),
-				item->enqueued() ? 1 : 0, item->flags(), item->get_base());
-	}
-
 	run_sql(query);
 }
 
