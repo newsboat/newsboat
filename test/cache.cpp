@@ -119,19 +119,21 @@ TEST_CASE("catchup_all marks all items read", "[cache]") {
 
 	test_feed = std::make_shared<rss_feed>(&rsscache);
 	test_feed->set_title("Test feed");
-	test_feed->set_link("http://example.com/atom.xml");
+	auto test_feed_url = "http://example.com/atom.xml";
+	test_feed->set_link(test_feed_url);
 
-	std::vector<std::string> feeds = {
+	std::vector<std::pair<std::string, unsigned int>> feeds = {
 		// { feed's URL, number of items in the feed }
-		"file://data/rss.xml",
-		"file://data/atom10_1.xml"
+		{ "file://data/rss.xml", 8 },
+		{ "file://data/atom10_1.xml", 3 }
 	};
 
 	/* Ensure that the feeds contain expected number of items, then externalize
 	 * them (put into cache). */
-	for (const auto& feedurl : feeds) {
-		rss_parser parser(feedurl, &rsscache, &cfg, nullptr);
+	for (const auto& feed_data : feeds) {
+		rss_parser parser(feed_data.first, &rsscache, &cfg, nullptr);
 		feed = parser.parse();
+		REQUIRE(feed->total_item_count() == feed_data.second);
 
 		test_feed->add_item(feed->items()[0]);
 
@@ -142,8 +144,8 @@ TEST_CASE("catchup_all marks all items read", "[cache]") {
 		INFO("All items should be marked as read.");
 		rsscache.catchup_all();
 
-		for (const auto& feedurl : feeds) {
-			feed = rsscache.internalize_rssfeed(feedurl, &ign);
+		for (const auto& feed_data : feeds) {
+			feed = rsscache.internalize_rssfeed(feed_data.first, &ign);
 			for (const auto& item : feed->items()) {
 				REQUIRE_FALSE(item->unread());
 			}
@@ -152,16 +154,16 @@ TEST_CASE("catchup_all marks all items read", "[cache]") {
 
 	SECTION("non-empty feedurl") {
 		INFO("All items with particular feedurl should be marked as read");
-		rsscache.catchup_all(feeds[0]);
+		rsscache.catchup_all(feeds[0].first);
 
 		INFO("First feed should all be marked read");
-		feed = rsscache.internalize_rssfeed(feeds[0], &ign);
+		feed = rsscache.internalize_rssfeed(feeds[0].first, &ign);
 		for (const auto& item : feed->items()) {
 			REQUIRE_FALSE(item->unread());
 		}
 
 		INFO("Second feed should all be marked unread");
-		feed = rsscache.internalize_rssfeed(feeds[1], &ign);
+		feed = rsscache.internalize_rssfeed(feeds[1].first, &ign);
 		for (const auto& item : feed->items()) {
 			REQUIRE(item->unread());
 		}
@@ -169,6 +171,7 @@ TEST_CASE("catchup_all marks all items read", "[cache]") {
 
 	SECTION("actual feed") {
 		INFO("All items that are in the specific feed should be marked as read");
+		rsscache.externalize_rssfeed(test_feed, false);
 		rsscache.catchup_all(test_feed);
 
 		/* Since test_feed contains the first item of each feed, only these two
@@ -176,18 +179,30 @@ TEST_CASE("catchup_all marks all items read", "[cache]") {
 		auto unread_items_count = [](std::shared_ptr<rss_feed>& feed) {
 			unsigned int count = 0;
 			for (const auto& item : feed->items()) {
-				if (! item->unread()) {
+				if (item->unread()) {
 					count++;
 				}
 			}
 			return count;
 		};
 
-		feed = rsscache.internalize_rssfeed(feeds[0], &ign);
-		REQUIRE(unread_items_count(feed) == 1);
+		{
+			feed = rsscache.internalize_rssfeed(test_feed_url, &ign);
+			INFO("Test feed should all be marked read");
+			REQUIRE(unread_items_count(feed) == 0);
+		}
 
-		feed = rsscache.internalize_rssfeed(feeds[1], &ign);
-		REQUIRE(unread_items_count(feed) == 1);
+		{
+			feed = rsscache.internalize_rssfeed(feeds[0].first, &ign);
+			INFO("First feed should have just one item read");
+			REQUIRE(unread_items_count(feed) == (feeds[0].second - 1));
+		}
+
+		{
+			feed = rsscache.internalize_rssfeed(feeds[1].first, &ign);
+			INFO("Second feed should have just one item read");
+			REQUIRE(unread_items_count(feed) == (feeds[1].second - 1));
+		}
 	}
 }
 
