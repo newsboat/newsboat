@@ -133,6 +133,7 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 	curl_easy_setopt(handle, CURLOPT_URL, OLDREADER_SUBSCRIPTION_LIST);
 	curl_easy_perform(handle);
 	curl_easy_cleanup(handle);
+	curl_slist_free_all(custom_headers);
 
 	LOG(level::DEBUG, "oldreader_api::get_subscribed_urls: document = %s", result);
 
@@ -246,6 +247,7 @@ std::string oldreader_api::get_new_token() {
 	curl_easy_setopt(handle, CURLOPT_URL, OLDREADER_API_TOKEN_URL);
 	curl_easy_perform(handle);
 	curl_easy_cleanup(handle);
+	curl_slist_free_all(custom_headers);
 
 	LOG(level::DEBUG, "oldreader_api::get_new_token: token = %s", result);
 
@@ -320,6 +322,7 @@ std::string oldreader_api::post_content(const std::string& url, const std::strin
 	curl_easy_setopt(handle, CURLOPT_URL, url.c_str());
 	curl_easy_perform(handle);
 	curl_easy_cleanup(handle);
+	curl_slist_free_all(custom_headers);
 
 	LOG(level::DEBUG, "oldreader_api::post_content: url = %s postdata = %s result = %s", url, postdata, result);
 

@@ -130,6 +130,7 @@ std::vector<tagged_feedurl> feedhq_api::get_subscribed_urls() {
 	curl_easy_setopt(handle, CURLOPT_URL, (cfg->get_configvalue("feedhq-url") + FEEDHQ_SUBSCRIPTION_LIST).c_str());
 	curl_easy_perform(handle);
 	curl_easy_cleanup(handle);
+	curl_slist_free_all(custom_headers);
 
 	LOG(level::DEBUG, "feedhq_api::get_subscribed_urls: document = %s", result);
 
@@ -238,6 +239,7 @@ std::string feedhq_api::get_new_token() {
 	curl_easy_setopt(handle, CURLOPT_URL, (cfg->get_configvalue("feedhq-url") + FEEDHQ_API_TOKEN_URL).c_str());
 	curl_easy_perform(handle);
 	curl_easy_cleanup(handle);
+	curl_slist_free_all(custom_headers);
 
 	LOG(level::DEBUG, "feedhq_api::get_new_token: token = %s", result);
 
@@ -312,6 +314,7 @@ std::string feedhq_api::post_content(const std::string& url, const std::string& 
 	curl_easy_setopt(handle, CURLOPT_URL, url.c_str());
 	curl_easy_perform(handle);
 	curl_easy_cleanup(handle);
+	curl_slist_free_all(custom_headers);
 
 	LOG(level::DEBUG, "feedhq_api::post_content: url = %s postdata = %s result = %s", url, postdata, result);
 
