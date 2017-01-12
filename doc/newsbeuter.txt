@@ -18,9 +18,6 @@ distributions. For a current list of distributions with newsbeuter packages,
 consult http://www.newsbeuter.org/download.html[this list on the newsbeuter
 website].
 
-OpenBSD is currently unsupported, as it lacks even the most basic support for 
-internationalization and localization.
-
 NetBSD is currently not supported, due to technical limitations in the iconv() 
 implementation.
 
