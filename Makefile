@@ -69,6 +69,7 @@ A2X=a2x
 MSGFMT=msgfmt
 RANLIB=ranlib
 AR=ar
+CHMOD=chmod
 
 STFLHDRS:=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
 POFILES:=$(wildcard po/*.po)
@@ -143,10 +144,12 @@ doc: doc/xhtml/newsbeuter.html doc/xhtml/faq.html doc/newsbeuter.1 doc/podbeuter
 doc/xhtml/newsbeuter.html: doc/newsbeuter.txt
 	$(MKDIR) doc/xhtml
 	$(A2X) -f xhtml -D doc/xhtml doc/newsbeuter.txt
+	$(CHMOD) u+w doc/xhtml/docbook-xsl.css
 
 doc/xhtml/faq.html: doc/faq.txt
 	$(MKDIR) doc/xhtml
 	$(A2X) -f xhtml -D doc/xhtml doc/faq.txt
+	$(CHMOD) u+w doc/xhtml/docbook-xsl.css
 
 doc/newsbeuter-cfgcmds.txt: doc/generate.pl doc/configcommands.dsv
 	doc/generate.pl doc/configcommands.dsv > doc/newsbeuter-cfgcmds.txt
