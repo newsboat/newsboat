@@ -453,9 +453,12 @@ Query feeds are a mechanism of newsbeuter to define custom "meta feeds" by using
 newsbeuter's built-in filter language. A query feed is a feed that is aggregated
 from all currently downloaded articles of all feeds. To narrow down the set of
 articles, the user has to specify a filter. Only articles that match this filter
-are added to the query feed. A query feed is updated whenever it is entered in
-the feed list. When you change the unread flag of an article, this is reflected
-in the feed where the article was originally fetched.
+are added to the query feed.
+
+A query feed is updated whenever it is entered in the feed list. When you
+change the unread flag of an article, this is reflected in the feed where the
+article was originally fetched. If you want query feeds to be updated at
+startup, set `prepopulate-query-feeds` to `yes`.
 
 To define a query feed, the user has to add a line to the file
 ~/.newsbeuter/urls in the following format:
