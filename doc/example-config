@@ -447,10 +447,9 @@
 
 ####  goto-next-feed
 #
-# If set to yes, then the next-unread and prev-unread keys will search in other
-# feeds for unread articles if all articles in the current feed are read. If
-# set to no, then the next-unread and prev-unread keys will stop in the current
-# feed.
+# If set to yes, then the next-unread, prev-unread and random-unread keys will
+# search in other feeds for unread articles if all articles in the current feed
+# are read. If set to no, then these keys will stop in the current feed.
 #
 # Syntax: [yes/no]
 #
