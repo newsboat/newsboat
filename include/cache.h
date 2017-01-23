@@ -21,8 +21,8 @@ class cache {
 		void cleanup_cache(std::vector<std::shared_ptr<rss_feed>>& feeds);
 		void do_vacuum();
 		std::vector<std::shared_ptr<rss_item>> search_for_items(const std::string& querystr, const std::string& feedurl);
-		void catchup_all(const std::string& feedurl = "");
-		void catchup_all(std::shared_ptr<rss_feed> feed);
+		void mark_all_read(const std::string& feedurl = "");
+		void mark_all_read(std::shared_ptr<rss_feed> feed);
 		void update_rssitem_flags(rss_item* item);
 		void fetch_lastmodified(const std::string& uri, time_t& t, std::string& etag);
 		void update_lastmodified(const std::string& uri, time_t t, const std::string& etag);

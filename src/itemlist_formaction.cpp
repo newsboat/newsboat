@@ -351,7 +351,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 						item->set_unread_nowrite_notify(false, true); // TODO: do we need to call mark_article_read here, too?
 					}
 				}
-				v->get_ctrl()->catchup_all(feed);
+				v->get_ctrl()->mark_all_read(feed);
 			}
 			if (v->get_cfg()->get_configvalue_as_bool("markfeedread-jumps-to-next-unread"))
 				process_operation(OP_NEXTUNREAD);

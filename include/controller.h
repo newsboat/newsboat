@@ -53,9 +53,9 @@ class controller {
 		void update_visible_feeds();
 		void mark_all_read(unsigned int pos);
 		void mark_article_read(const std::string& guid, bool read);
-		void catchup_all(const std::string& feedurl);
-		inline void catchup_all(std::shared_ptr<rss_feed> feed) {
-			rsscache->catchup_all(feed);
+		void mark_all_read(const std::string& feedurl);
+		inline void mark_all_read(std::shared_ptr<rss_feed> feed) {
+			rsscache->mark_all_read(feed);
 		}
 		inline bool get_refresh_on_start() const {
 			return refresh_on_start;

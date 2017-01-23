@@ -279,13 +279,13 @@ REDO:
 		LOG(level::INFO, "feedlist_formaction: marking all feeds read");
 		v->set_status(_("Marking all feeds read..."));
 		if (tag == "") {
-			v->get_ctrl()->catchup_all("");
+			v->get_ctrl()->mark_all_read("");
 		} else {
 			// we're in tag view, so let's only touch feeds that are visible
 			for (const auto& feedptr_pos_pair : visible_feeds) {
 				auto rss_feed_ptr = feedptr_pos_pair.first;
 				auto feedurl = rss_feed_ptr->rssurl();
-				v->get_ctrl()->catchup_all(feedurl);
+				v->get_ctrl()->mark_all_read(feedurl);
 			}
 		}
 		v->set_status("");

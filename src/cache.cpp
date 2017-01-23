@@ -668,7 +668,7 @@ void cache::update_rssitem_unlocked(
 	}
 }
 
-void cache::catchup_all(std::shared_ptr<rss_feed> feed) {
+void cache::mark_all_read(std::shared_ptr<rss_feed> feed) {
 	std::lock_guard<std::mutex> lock(mtx);
 	std::lock_guard<std::mutex> itemlock(feed->item_mutex);
 	std::string query =
@@ -683,7 +683,7 @@ void cache::catchup_all(std::shared_ptr<rss_feed> feed) {
 }
 
 /* this function marks all rss_items (optionally of a certain feed url) as read */
-void cache::catchup_all(const std::string& feedurl) {
+void cache::mark_all_read(const std::string& feedurl) {
 	std::lock_guard<std::mutex> lock(mtx);
 
 	std::string query;

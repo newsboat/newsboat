@@ -654,9 +654,9 @@ void controller::update_visible_feeds() {
 	v->update_visible_feeds(feeds);
 }
 
-void controller::catchup_all(const std::string& feedurl) {
+void controller::mark_all_read(const std::string& feedurl) {
 	try {
-		rsscache->catchup_all(feedurl);
+		rsscache->mark_all_read(feedurl);
 	} catch (const dbexception& e) {
 		v->show_error(strprintf::fmt(_("Error: couldn't mark all feeds read: %s"), e.what()));
 		return;
@@ -695,14 +695,14 @@ void controller::mark_all_read(unsigned int pos) {
 		std::lock_guard<std::mutex> feedslock(feeds_mutex);
 		std::shared_ptr<rss_feed> feed = feeds[pos];
 		if (feed->rssurl().substr(0,6) == "query:") {
-			rsscache->catchup_all(feed);
+			rsscache->mark_all_read(feed);
 		} else {
-			rsscache->catchup_all(feed->rssurl());
+			rsscache->mark_all_read(feed->rssurl());
 			if (api) {
 				api->mark_all_read(feed->rssurl());
 			}
 		}
-		m.stopover("after rsscache->catchup_all, before iteration over items");
+		m.stopover("after rsscache->mark_all_read, before iteration over items");
 		std::lock_guard<std::mutex> lock(feed->item_mutex);
 		std::vector<std::shared_ptr<rss_item>>& items = feed->items();
 		if (items.size() > 0) {

@@ -110,7 +110,7 @@ TEST_CASE("Last-Modified and ETag values are persisted to DB", "[cache]") {
 	}
 }
 
-TEST_CASE("catchup_all marks all items read", "[cache]") {
+TEST_CASE("mark_all_read marks all items in the feed read", "[cache]") {
 	std::shared_ptr<rss_feed> feed, test_feed;
 
 	rss_ignores ign;
@@ -142,7 +142,7 @@ TEST_CASE("catchup_all marks all items read", "[cache]") {
 
 	SECTION("empty feedurl") {
 		INFO("All items should be marked as read.");
-		rsscache.catchup_all();
+		rsscache.mark_all_read();
 
 		for (const auto& feed_data : feeds) {
 			feed = rsscache.internalize_rssfeed(feed_data.first, &ign);
@@ -154,7 +154,7 @@ TEST_CASE("catchup_all marks all items read", "[cache]") {
 
 	SECTION("non-empty feedurl") {
 		INFO("All items with particular feedurl should be marked as read");
-		rsscache.catchup_all(feeds[0].first);
+		rsscache.mark_all_read(feeds[0].first);
 
 		INFO("First feed should all be marked read");
 		feed = rsscache.internalize_rssfeed(feeds[0].first, &ign);
@@ -172,7 +172,7 @@ TEST_CASE("catchup_all marks all items read", "[cache]") {
 	SECTION("actual feed") {
 		INFO("All items that are in the specific feed should be marked as read");
 		rsscache.externalize_rssfeed(test_feed, false);
-		rsscache.catchup_all(test_feed);
+		rsscache.mark_all_read(test_feed);
 
 		/* Since test_feed contains the first item of each feed, only these two
 		 * items should be marked read. */
