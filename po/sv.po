@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter-1.4\n"
 "Report-Msgid-Bugs-To: https://github.com/akrennmair/newsbeuter/issues\n"
-"POT-Creation-Date: 2016-12-25 00:59+0300\n"
+"POT-Creation-Date: 2017-01-23 20:19+0300\n"
 "PO-Revision-Date: 2009-03-16 21:29+0100\n"
 "Last-Translator: Niklas Grahn <terra.unknown@yahoo.com>\n"
 "Language-Team: \n"
@@ -665,9 +665,9 @@ msgstr "Läs om alla"
 msgid "Mark Read"
 msgstr "Markera som läst"
 
-#: src/feedlist_formaction.cpp:466
-msgid "Catchup All"
-msgstr "Catchup All"
+#: src/feedlist_formaction.cpp:466 src/itemlist_formaction.cpp:908
+msgid "Mark All Read"
+msgstr "Markera alla som läst"
 
 #: src/feedlist_formaction.cpp:467 src/help_formaction.cpp:160
 #: src/itemlist_formaction.cpp:909
@@ -808,27 +808,27 @@ msgstr "Lösgör funktioner:"
 msgid "Clear"
 msgstr "Töm"
 
-#: src/htmlrenderer.cpp:167
+#: src/htmlrenderer.cpp:169
 msgid "embedded flash:"
 msgstr "inbäddat flash:"
 
-#: src/htmlrenderer.cpp:209 src/htmlrenderer.cpp:211 src/htmlrenderer.cpp:664
+#: src/htmlrenderer.cpp:211 src/htmlrenderer.cpp:213 src/htmlrenderer.cpp:670
 msgid "image"
 msgstr "bild"
 
-#: src/htmlrenderer.cpp:639
+#: src/htmlrenderer.cpp:645
 msgid "Links: "
 msgstr "Länkar:"
 
-#: src/htmlrenderer.cpp:662
+#: src/htmlrenderer.cpp:668
 msgid "link"
 msgstr "länk"
 
-#: src/htmlrenderer.cpp:666
+#: src/htmlrenderer.cpp:672
 msgid "embedded flash"
 msgstr "inbäddat flash"
 
-#: src/htmlrenderer.cpp:668
+#: src/htmlrenderer.cpp:674
 msgid "unknown (bug)"
 msgstr "okänt (fel)"
 
@@ -906,10 +906,6 @@ msgstr "Flaggor uppdaterade."
 #, c-format
 msgid "Error: applying the filter failed: %s"
 msgstr "Fel: verkställande av filtret misslyckades: %s"
-
-#: src/itemlist_formaction.cpp:908
-msgid "Mark All Read"
-msgstr "Markera alla som läst"
 
 #: src/itemlist_formaction.cpp:980 src/itemview_formaction.cpp:200
 #: src/itemview_formaction.cpp:470

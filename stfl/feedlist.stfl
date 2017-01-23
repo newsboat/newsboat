@@ -23,7 +23,7 @@ vbox
     .expand:0
     .display[showhint]:1
     label#info
-      text[help]:"q:Quit ENTER:Open r:Reload R:Reload All A:Mark All Read C:Catchup All"
+      text[help]:"q:Quit ENTER:Open r:Reload R:Reload All A:Mark Read C:Mark All Read"
       .expand:h
   hbox[lastline]
     .expand:0

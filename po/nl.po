@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/akrennmair/newsbeuter/issues\n"
-"POT-Creation-Date: 2016-12-25 00:59+0300\n"
+"POT-Creation-Date: 2017-01-23 20:19+0300\n"
 "PO-Revision-Date: 2013-10-26 22:20+0100\n"
 "Last-Translator: Erwin Poeze <donnut@outlook.com>\n"
 "Language-Team: Dutch <vertalen@vrijschrift.org>\n"
@@ -662,9 +662,9 @@ msgstr "alles vernieuwen"
 msgid "Mark Read"
 msgstr "gelezen"
 
-#: src/feedlist_formaction.cpp:466
-msgid "Catchup All"
-msgstr "alles gelezen"
+#: src/feedlist_formaction.cpp:466 src/itemlist_formaction.cpp:908
+msgid "Mark All Read"
+msgstr "alles gelezen markeren"
 
 #: src/feedlist_formaction.cpp:467 src/help_formaction.cpp:160
 #: src/itemlist_formaction.cpp:909
@@ -804,27 +804,27 @@ msgstr "Ongekoppelde functies"
 msgid "Clear"
 msgstr "Wissen"
 
-#: src/htmlrenderer.cpp:167
+#: src/htmlrenderer.cpp:169
 msgid "embedded flash:"
 msgstr "ingebedde flash"
 
-#: src/htmlrenderer.cpp:209 src/htmlrenderer.cpp:211 src/htmlrenderer.cpp:664
+#: src/htmlrenderer.cpp:211 src/htmlrenderer.cpp:213 src/htmlrenderer.cpp:670
 msgid "image"
 msgstr "afbeelding"
 
-#: src/htmlrenderer.cpp:639
+#: src/htmlrenderer.cpp:645
 msgid "Links: "
 msgstr "Koppelingen: "
 
-#: src/htmlrenderer.cpp:662
+#: src/htmlrenderer.cpp:668
 msgid "link"
 msgstr "koppeling"
 
-#: src/htmlrenderer.cpp:666
+#: src/htmlrenderer.cpp:672
 msgid "embedded flash"
 msgstr "ingebedde flash"
 
-#: src/htmlrenderer.cpp:668
+#: src/htmlrenderer.cpp:674
 msgid "unknown (bug)"
 msgstr "onbekend (bug)"
 
@@ -901,10 +901,6 @@ msgstr "Vlaggen zijn bijgewerkt."
 #, c-format
 msgid "Error: applying the filter failed: %s"
 msgstr "Fout: toepassen van filter is mislukt: %s"
-
-#: src/itemlist_formaction.cpp:908
-msgid "Mark All Read"
-msgstr "alles gelezen markeren"
 
 #: src/itemlist_formaction.cpp:980 src/itemview_formaction.cpp:200
 #: src/itemview_formaction.cpp:470

@@ -463,7 +463,7 @@ keymap_hint_entry * feedlist_formaction::get_keymap_hint() {
 		{ OP_RELOAD, _("Reload") },
 		{ OP_RELOADALL, _("Reload All") },
 		{ OP_MARKFEEDREAD, _("Mark Read") },
-		{ OP_MARKALLFEEDSREAD, _("Catchup All") },
+		{ OP_MARKALLFEEDSREAD, _("Mark All Read") },
 		{ OP_SEARCH, _("Search") },
 		{ OP_HELP, _("Help") },
 		{ OP_NIL, nullptr }

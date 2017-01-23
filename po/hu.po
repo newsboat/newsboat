@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 0.7\n"
 "Report-Msgid-Bugs-To: https://github.com/akrennmair/newsbeuter/issues\n"
-"POT-Creation-Date: 2016-12-25 00:59+0300\n"
+"POT-Creation-Date: 2017-01-23 20:19+0300\n"
 "PO-Revision-Date: 2008-01-28 10:00+0100\n"
 "Last-Translator: Zsolt Udvari <udvzsolt@gmail.com>\n"
 "Language-Team: \n"
@@ -661,9 +661,9 @@ msgstr "Mind újratölt"
 msgid "Mark Read"
 msgstr "Olvasottnak megjelöl"
 
-#: src/feedlist_formaction.cpp:466
-msgid "Catchup All"
-msgstr "Mind elkapása"
+#: src/feedlist_formaction.cpp:466 src/itemlist_formaction.cpp:908
+msgid "Mark All Read"
+msgstr "Mindet olvasottnak"
 
 #: src/feedlist_formaction.cpp:467 src/help_formaction.cpp:160
 #: src/itemlist_formaction.cpp:909
@@ -804,27 +804,27 @@ msgstr "Kötetlen funkciók:"
 msgid "Clear"
 msgstr "Vissza"
 
-#: src/htmlrenderer.cpp:167
+#: src/htmlrenderer.cpp:169
 msgid "embedded flash:"
 msgstr "beágyazott flash: "
 
-#: src/htmlrenderer.cpp:209 src/htmlrenderer.cpp:211 src/htmlrenderer.cpp:664
+#: src/htmlrenderer.cpp:211 src/htmlrenderer.cpp:213 src/htmlrenderer.cpp:670
 msgid "image"
 msgstr "kép"
 
-#: src/htmlrenderer.cpp:639
+#: src/htmlrenderer.cpp:645
 msgid "Links: "
 msgstr "Linkek: "
 
-#: src/htmlrenderer.cpp:662
+#: src/htmlrenderer.cpp:668
 msgid "link"
 msgstr "link"
 
-#: src/htmlrenderer.cpp:666
+#: src/htmlrenderer.cpp:672
 msgid "embedded flash"
 msgstr "beágyazott flash"
 
-#: src/htmlrenderer.cpp:668
+#: src/htmlrenderer.cpp:674
 msgid "unknown (bug)"
 msgstr "ismeretlen (bug)"
 
@@ -902,10 +902,6 @@ msgstr "Jelzők frissítve."
 #, c-format
 msgid "Error: applying the filter failed: %s"
 msgstr "Hiba: szűrő alkalmazása nem sikerült: %s"
-
-#: src/itemlist_formaction.cpp:908
-msgid "Mark All Read"
-msgstr "Mindet olvasottnak"
 
 #: src/itemlist_formaction.cpp:980 src/itemview_formaction.cpp:200
 #: src/itemview_formaction.cpp:470

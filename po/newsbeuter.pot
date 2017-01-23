@@ -1,4 +1,5 @@
-# Copyright (C) Newsbeuter contributors
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -7,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/akrennmair/newsbeuter/issues\n"
-"POT-Creation-Date: 2016-12-25 00:59+0300\n"
+"POT-Creation-Date: 2017-01-23 20:19+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -633,8 +634,8 @@ msgstr ""
 msgid "Mark Read"
 msgstr ""
 
-#: src/feedlist_formaction.cpp:466
-msgid "Catchup All"
+#: src/feedlist_formaction.cpp:466 src/itemlist_formaction.cpp:908
+msgid "Mark All Read"
 msgstr ""
 
 #: src/feedlist_formaction.cpp:467 src/help_formaction.cpp:160
@@ -774,27 +775,27 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
-#: src/htmlrenderer.cpp:167
+#: src/htmlrenderer.cpp:169
 msgid "embedded flash:"
 msgstr ""
 
-#: src/htmlrenderer.cpp:209 src/htmlrenderer.cpp:211 src/htmlrenderer.cpp:664
+#: src/htmlrenderer.cpp:211 src/htmlrenderer.cpp:213 src/htmlrenderer.cpp:670
 msgid "image"
 msgstr ""
 
-#: src/htmlrenderer.cpp:639
+#: src/htmlrenderer.cpp:645
 msgid "Links: "
 msgstr ""
 
-#: src/htmlrenderer.cpp:662
+#: src/htmlrenderer.cpp:668
 msgid "link"
 msgstr ""
 
-#: src/htmlrenderer.cpp:666
+#: src/htmlrenderer.cpp:672
 msgid "embedded flash"
 msgstr ""
 
-#: src/htmlrenderer.cpp:668
+#: src/htmlrenderer.cpp:674
 msgid "unknown (bug)"
 msgstr ""
 
@@ -870,10 +871,6 @@ msgstr ""
 #: src/itemlist_formaction.cpp:670 src/view.cpp:374 src/view.cpp:394
 #, c-format
 msgid "Error: applying the filter failed: %s"
-msgstr ""
-
-#: src/itemlist_formaction.cpp:908
-msgid "Mark All Read"
 msgstr ""
 
 #: src/itemlist_formaction.cpp:980 src/itemview_formaction.cpp:200

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsbeuter 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/akrennmair/newsbeuter/issues\n"
-"POT-Creation-Date: 2016-12-25 00:59+0300\n"
+"POT-Creation-Date: 2017-01-23 20:19+0300\n"
 "PO-Revision-Date: 2007-02-21 13:03+0100\n"
 "Last-Translator: Simon Nagl <simonnagl@aim.com>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
@@ -660,9 +660,9 @@ msgstr "alle neu laden"
 msgid "Mark Read"
 msgstr "gelesen markieren"
 
-#: src/feedlist_formaction.cpp:466
-msgid "Catchup All"
-msgstr "alle aufholen"
+#: src/feedlist_formaction.cpp:466 src/itemlist_formaction.cpp:908
+msgid "Mark All Read"
+msgstr "alle gelesen markieren"
 
 #: src/feedlist_formaction.cpp:467 src/help_formaction.cpp:160
 #: src/itemlist_formaction.cpp:909
@@ -802,27 +802,27 @@ msgstr "Unbelegte Funktionen:"
 msgid "Clear"
 msgstr "Löschen"
 
-#: src/htmlrenderer.cpp:167
+#: src/htmlrenderer.cpp:169
 msgid "embedded flash:"
 msgstr "Eingebettetes Flash: "
 
-#: src/htmlrenderer.cpp:209 src/htmlrenderer.cpp:211 src/htmlrenderer.cpp:664
+#: src/htmlrenderer.cpp:211 src/htmlrenderer.cpp:213 src/htmlrenderer.cpp:670
 msgid "image"
 msgstr "Bild"
 
-#: src/htmlrenderer.cpp:639
+#: src/htmlrenderer.cpp:645
 msgid "Links: "
 msgstr "Links: "
 
-#: src/htmlrenderer.cpp:662
+#: src/htmlrenderer.cpp:668
 msgid "link"
 msgstr "Link"
 
-#: src/htmlrenderer.cpp:666
+#: src/htmlrenderer.cpp:672
 msgid "embedded flash"
 msgstr "eingebettetes Flash"
 
-#: src/htmlrenderer.cpp:668
+#: src/htmlrenderer.cpp:674
 msgid "unknown (bug)"
 msgstr "unbekannt (Bug)"
 
@@ -900,10 +900,6 @@ msgstr "Flags aktualisiert."
 #, c-format
 msgid "Error: applying the filter failed: %s"
 msgstr "Fehler: Anwenden des Filters fehlgeschlagen: %s"
-
-#: src/itemlist_formaction.cpp:908
-msgid "Mark All Read"
-msgstr "alle gelesen markieren"
 
 #: src/itemlist_formaction.cpp:980 src/itemview_formaction.cpp:200
 #: src/itemview_formaction.cpp:470
