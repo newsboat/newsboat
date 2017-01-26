@@ -15,6 +15,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/colormanager.cpp:45 src/colormanager.cpp:47 src/regexmanager.cpp:55
 #: src/regexmanager.cpp:64 src/regexmanager.cpp:113 src/regexmanager.cpp:121
@@ -198,7 +199,7 @@ msgid ""
 "It looks like you haven't configured any feeds in your Tiny Tiny RSS "
 "account. Please do so, and try again."
 msgstr ""
-"Es sieht so aus als hätten Sie keine Feeds in Ihrem Tiny Tiny RSS Account "
+"Es sieht so aus als hätten Sie keine Feeds in Ihrem Tiny-Tiny-RSS-Account "
 "konfiguriert. Bitte tun Sie das, und probieren Sie es erneut."
 
 #: src/controller.cpp:511
@@ -249,7 +250,7 @@ msgstr "Fehlgeschlagen: "
 #: src/controller.cpp:661
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
-msgstr "Fehler: Konnte nicht alle Feeds gelesen markieren: %s"
+msgstr "Fehler: Konnte nicht alle Feeds als gelesen markieren: %s"
 
 #: src/controller.cpp:724
 #, c-format
@@ -342,7 +343,7 @@ msgstr "<kommando>..."
 
 #: src/controller.cpp:1021
 msgid "execute list of commands"
-msgstr "führe eine Liste von Befehlen aus"
+msgstr "Liste von Befehlen ausführen"
 
 #: src/controller.cpp:1022
 msgid "quiet startup"
@@ -428,7 +429,7 @@ msgstr "Link: "
 
 #: src/controller.cpp:1432 src/itemview_formaction.cpp:102
 msgid "Podcast Download URL: "
-msgstr "Podcast Download URL: "
+msgstr "Podcast-Download-URL: "
 
 #: src/controller.cpp:1619
 #, c-format
@@ -513,7 +514,7 @@ msgstr "Attribut `%s' ist nicht verfügbar."
 #: src/exception.cpp:27
 #, c-format
 msgid "regular expression '%s' is invalid: %s"
-msgstr "Regulärer Ausdrück '%s' ist ungültig: %s"
+msgstr "Regulärer Ausdruck '%s' ist ungültig: %s"
 
 #: src/exception.cpp:40
 msgid "invalid parameters."
@@ -584,7 +585,7 @@ msgstr "Markiere Feed als gelesen..."
 #: src/feedlist_formaction.cpp:218 src/itemlist_formaction.cpp:361
 #, c-format
 msgid "Error: couldn't mark feed read: %s"
-msgstr "Fehler: Konnte Feed nicht gelesen markieren: %s"
+msgstr "Fehler: Konnte Feed nicht als gelesen markieren: %s"
 
 #: src/feedlist_formaction.cpp:242 src/feedlist_formaction.cpp:250
 #: src/feedlist_formaction.cpp:274
@@ -833,7 +834,7 @@ msgstr "Schalte Gelesen-Flag für Artikel um..."
 #: src/itemlist_formaction.cpp:158
 #, c-format
 msgid "Error while toggling read flag: %s"
-msgstr "Fehler beim Umschalten des Gelesen-Flag: %s"
+msgstr "Fehler beim Umschalten des Gelesen-Flags: %s"
 
 #: src/itemlist_formaction.cpp:183 src/itemview_formaction.cpp:277
 msgid "URL list empty."
@@ -950,7 +951,7 @@ msgstr "Typ: "
 #: src/itemview_formaction.cpp:172
 #, c-format
 msgid "Error while marking article as read: %s"
-msgstr "Fehler beim als gelesen markieren des Artikels: %s"
+msgstr "Fehler beim Markieren des Artikels als gelesen: %s"
 
 #: src/itemview_formaction.cpp:184
 #, c-format
@@ -981,7 +982,7 @@ msgstr "Starte Browser..."
 #: src/itemview_formaction.cpp:343
 #, c-format
 msgid "Error while marking article as unread: %s"
-msgstr "Fehler beim als ungelesen markieren des Artikels: %s"
+msgstr "Fehler beim Markieren des Artikels als ungelesen: %s"
 
 #: src/itemview_formaction.cpp:387 src/keymap.cpp:157
 msgid "Goto URL #"
@@ -1054,7 +1055,7 @@ msgstr "zum vorhergehenden ungelesenen Artikel gehen"
 
 #: src/keymap.cpp:87
 msgid "Go to a random unread article"
-msgstr "zum einem zufälligen ungelesenen Artikel gehen"
+msgstr "zu einem zufälligen, ungelesenen Artikel gehen"
 
 #: src/keymap.cpp:92
 msgid "Open article in browser and mark read"
@@ -1216,7 +1217,7 @@ msgstr "aktuell ausgewählten Feed schließen"
 
 #: src/keymap.cpp:297
 msgid "View list of open dialogs"
-msgstr "liste von offenen Dialogen ansehen"
+msgstr "Liste von offenen Dialogen ansehen"
 
 #: src/keymap.cpp:302
 msgid "Go to next dialog"
@@ -1452,7 +1453,7 @@ msgstr "Keine Tags definiert."
 
 #: src/view.cpp:811
 msgid "Updating query feed..."
-msgstr "Update Query-Feed..."
+msgstr "Aktualisiere Query-Feed..."
 
 #: rss/atom_parser.cpp:16 rss/parser.cpp:290 rss/rss_09x_parser.cpp:17
 #: rss/rss_09x_parser.cpp:31 rss/rss_10_parser.cpp:15
