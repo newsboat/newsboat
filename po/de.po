@@ -590,7 +590,7 @@ msgstr "Fehler: Konnte Feed nicht als gelesen markieren: %s"
 #: src/feedlist_formaction.cpp:242 src/feedlist_formaction.cpp:250
 #: src/feedlist_formaction.cpp:274
 msgid "No feeds with unread items."
-msgstr "Keine Feeds mit ungelesenen Elementen."
+msgstr "Keine Feeds mit ungelesenen Artikeln."
 
 #: src/feedlist_formaction.cpp:258 src/itemlist_formaction.cpp:332
 msgid "Already on last feed."
@@ -648,7 +648,7 @@ msgstr "Öffnen"
 #: src/feedlist_formaction.cpp:462 src/itemlist_formaction.cpp:907
 #: src/itemview_formaction.cpp:410
 msgid "Next Unread"
-msgstr "nächstes Ungelesenes"
+msgstr "nächster Ungelesener"
 
 #: src/feedlist_formaction.cpp:463 src/itemlist_formaction.cpp:906
 msgid "Reload"
@@ -847,7 +847,7 @@ msgstr "Flags: "
 
 #: src/itemlist_formaction.cpp:252 src/itemlist_formaction.cpp:945
 msgid "Error: no item selected!"
-msgstr "Fehler: Kein Element ausgewählt!"
+msgstr "Fehler: Keinen Artikel ausgewählt!"
 
 #: src/itemlist_formaction.cpp:265
 msgid "Error: you can't reload search results."
@@ -858,7 +858,7 @@ msgstr "Fehler: Sie können Suchergebnisse nicht neu laden."
 #: src/itemview_formaction.cpp:306 src/itemview_formaction.cpp:333
 #: src/view.cpp:635 src/view.cpp:696
 msgid "No unread items."
-msgstr "Keine ungelesenen Elemente."
+msgstr "Keine ungelesenen Artikel."
 
 #: src/itemlist_formaction.cpp:301 src/itemview_formaction.cpp:315
 #: src/view.cpp:760
