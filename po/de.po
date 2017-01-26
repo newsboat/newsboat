@@ -1133,7 +1133,7 @@ msgstr "fertige und gelöschte Downloads aus Warteschlange aufräumen"
 
 #: src/keymap.cpp:192
 msgid "Toggle automatic download on/off"
-msgstr "automatischen Download ein/ausschalten"
+msgstr "automatisches Herunterladen ein-/ausschalten"
 
 #: src/keymap.cpp:197
 msgid "Start player with currently selected download"
@@ -1365,7 +1365,7 @@ msgstr "Fehler: Kann Vorgang nicht durchführen: Download(s) im Gange."
 
 #: src/pb_view.cpp:310
 msgid "Download"
-msgstr "Download"
+msgstr "Herunterladen"
 
 #: src/pb_view.cpp:312
 msgid "Delete"
@@ -1377,7 +1377,7 @@ msgstr "fertige aufräumen"
 
 #: src/pb_view.cpp:314
 msgid "Toggle Automatic Download"
-msgstr "automatischen Download umschalten"
+msgstr "automatisches Herunterladen umschalten"
 
 #: src/pb_view.cpp:315
 msgid "Play"
