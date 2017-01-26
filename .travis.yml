@@ -80,7 +80,7 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - sourceline: "deb http://apt.llvm.org/precise/ llvm-toolchain-precise-4.0 main",
+            - sourceline: "deb http://apt.llvm.org/precise/ llvm-toolchain-precise-4.0 main"
               key_url: "http://apt.llvm.org/llvm-snapshot.gpg.key"
           packages:
             - clang-4.0
