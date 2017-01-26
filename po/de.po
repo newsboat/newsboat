@@ -289,7 +289,8 @@ msgid ""
 "[-h]\n"
 msgstr ""
 "%s %s\n"
-"Verwendung: %s [-i <datei>|-e] [-u <urldatei>] [-c <cachedatei>] [-h]\n"
+"Verwendung: %s [-i <datei>|-e] [-u <urldatei>] [-c <cachedatei>] [-x "
+"<kommando> ...] [-h]\n"
 
 #: src/controller.cpp:1014
 msgid "export OPML feed to stdout"
@@ -574,7 +575,7 @@ msgstr ""
 
 #: src/feedlist_formaction.cpp:167
 msgid "Cannot open query feeds in the browser!"
-msgstr ""
+msgstr "Query-Feeds können nicht im Browser geöffnet werden!"
 
 #: src/feedlist_formaction.cpp:209 src/itemlist_formaction.cpp:342
 msgid "Marking feed read..."
@@ -782,9 +783,8 @@ msgid "Description: "
 msgstr "Beschreibung: "
 
 #: src/formaction.cpp:334
-#, fuzzy
 msgid "Feed title: "
-msgstr "Datei: "
+msgstr "Feed-Titel: "
 
 #: src/formaction.cpp:347
 msgid "Saving bookmark on autopilot..."
@@ -1062,12 +1062,13 @@ msgstr "Artikel im Browser öffnen and als gelesen markieren"
 
 #: src/keymap.cpp:97
 msgid "Open all unread items of selected feed in browser"
-msgstr ""
+msgstr "Alle ungelesenen Artikel des gewählten Feeds im Browser öffnen"
 
 #: src/keymap.cpp:102
-#, fuzzy
 msgid "Open all unread items of selected feed in browser and mark read"
-msgstr "Artikel im Browser öffnen and als gelesen markieren"
+msgstr ""
+"Alle ungelesenen Artikel des gewählten Feeds im Browser öffnen and als "
+"gelesen markieren"
 
 #: src/keymap.cpp:107
 msgid "Open article in browser"
@@ -1316,27 +1317,25 @@ msgid "Cleaning up queue..."
 msgstr "Bereinige Warteschlange..."
 
 #: src/pb_controller.cpp:272
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage %s [-C <file>] [-q <file>] [-h]\n"
 msgstr ""
 "%s %s\n"
-"Verwendung: %s [-i <datei>|-e] [-u <urldatei>] [-c <cachedatei>] [-h]\n"
+"Verwendung: %s [-C <configdatei>] [-q <warteschlangendatei>] [-h]\n"
 
 #: src/pb_controller.cpp:287
-#, fuzzy
 msgid "<queuefile>"
-msgstr "<datei>"
+msgstr "<warteschlangendatei>"
 
 #: src/pb_controller.cpp:287
-#, fuzzy
 msgid "use <queuefile> as queue file"
-msgstr "<cachedatei> als Zwischenspeicherdatei verwenden"
+msgstr "<warteschlangendatei> als Warteschlangendatei verwenden"
 
 #: src/pb_controller.cpp:288
 msgid "start download on startup"
-msgstr ""
+msgstr "beim Programmstart automatisch herunterladen"
 
 #: src/pb_view.cpp:47
 #, c-format
@@ -1406,9 +1405,9 @@ msgid "too few arguments"
 msgstr "zu wenige Parameter"
 
 #: src/rss.cpp:504
-#, fuzzy, c-format
+#, c-format
 msgid "`%s' is not a valid filter expression"
-msgstr "`%s' is kein gültiger regulärer Ausdruck: %s"
+msgstr "`%s' ist kein gültiger Filterausdruck"
 
 #: src/rss_parser.cpp:151
 #, c-format
@@ -1468,7 +1467,7 @@ msgstr "konnte libcurl nicht initialisieren"
 #, c-format
 msgid "Error: trying to download feed `%s' returned HTTP status code %ld."
 msgstr ""
-"Fehler: der Versuch den Feed  `%s' herunzuladen wurde der HTTP-Status-Code "
+"Fehler: beim Versuch den Feed `%s' herunterzuladen, wurde der HTTP-Status-Code "
 "%ld zurückgeliefert."
 
 #: rss/parser.cpp:195
