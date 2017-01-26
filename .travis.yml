@@ -80,7 +80,7 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise
+            - llvm-toolchain-precise-4.0
           packages:
             - clang-4.0
       env:
