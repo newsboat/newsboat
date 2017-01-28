@@ -7,14 +7,15 @@ msgstr ""
 "Project-Id-Version: newsbeuter 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/akrennmair/newsbeuter/issues\n"
 "POT-Creation-Date: 2017-01-23 20:19+0300\n"
-"PO-Revision-Date: 2007-02-21 13:03+0100\n"
-"Last-Translator: Simon Nagl <simonnagl@aim.com>\n"
+"PO-Revision-Date: 2017-01-27 01:10+0100\n"
+"Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
-"<simonnagl@aim.com>\n"
+"<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/colormanager.cpp:45 src/colormanager.cpp:47 src/regexmanager.cpp:55
 #: src/regexmanager.cpp:64 src/regexmanager.cpp:113 src/regexmanager.cpp:121
@@ -198,7 +199,7 @@ msgid ""
 "It looks like you haven't configured any feeds in your Tiny Tiny RSS "
 "account. Please do so, and try again."
 msgstr ""
-"Es sieht so aus als hätten Sie keine Feeds in Ihrem Tiny Tiny RSS Account "
+"Es sieht so aus als hätten Sie keine Feeds in Ihrem Tiny-Tiny-RSS-Account "
 "konfiguriert. Bitte tun Sie das, und probieren Sie es erneut."
 
 #: src/controller.cpp:511
@@ -249,7 +250,7 @@ msgstr "Fehlgeschlagen: "
 #: src/controller.cpp:661
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
-msgstr "Fehler: Konnte nicht alle Feeds gelesen markieren: %s"
+msgstr "Fehler: Konnte nicht alle Feeds als gelesen markieren: %s"
 
 #: src/controller.cpp:724
 #, c-format
@@ -289,7 +290,8 @@ msgid ""
 "[-h]\n"
 msgstr ""
 "%s %s\n"
-"Verwendung: %s [-i <datei>|-e] [-u <urldatei>] [-c <cachedatei>] [-h]\n"
+"Verwendung: %s [-i <datei>|-e] [-u <urldatei>] [-c <cachedatei>] [-x "
+"<kommando> ...] [-h]\n"
 
 #: src/controller.cpp:1014
 msgid "export OPML feed to stdout"
@@ -341,7 +343,7 @@ msgstr "<kommando>..."
 
 #: src/controller.cpp:1021
 msgid "execute list of commands"
-msgstr "führe eine Liste von Befehlen aus"
+msgstr "Liste von Befehlen ausführen"
 
 #: src/controller.cpp:1022
 msgid "quiet startup"
@@ -427,7 +429,7 @@ msgstr "Link: "
 
 #: src/controller.cpp:1432 src/itemview_formaction.cpp:102
 msgid "Podcast Download URL: "
-msgstr "Podcast Download URL: "
+msgstr "Podcast-Download-URL: "
 
 #: src/controller.cpp:1619
 #, c-format
@@ -512,7 +514,7 @@ msgstr "Attribut `%s' ist nicht verfügbar."
 #: src/exception.cpp:27
 #, c-format
 msgid "regular expression '%s' is invalid: %s"
-msgstr "Regulärer Ausdrück '%s' ist ungültig: %s"
+msgstr "Regulärer Ausdruck '%s' ist ungültig: %s"
 
 #: src/exception.cpp:40
 msgid "invalid parameters."
@@ -574,7 +576,7 @@ msgstr ""
 
 #: src/feedlist_formaction.cpp:167
 msgid "Cannot open query feeds in the browser!"
-msgstr ""
+msgstr "Query-Feeds können nicht im Browser geöffnet werden!"
 
 #: src/feedlist_formaction.cpp:209 src/itemlist_formaction.cpp:342
 msgid "Marking feed read..."
@@ -583,12 +585,12 @@ msgstr "Markiere Feed als gelesen..."
 #: src/feedlist_formaction.cpp:218 src/itemlist_formaction.cpp:361
 #, c-format
 msgid "Error: couldn't mark feed read: %s"
-msgstr "Fehler: Konnte Feed nicht gelesen markieren: %s"
+msgstr "Fehler: Konnte Feed nicht als gelesen markieren: %s"
 
 #: src/feedlist_formaction.cpp:242 src/feedlist_formaction.cpp:250
 #: src/feedlist_formaction.cpp:274
 msgid "No feeds with unread items."
-msgstr "Keine Feeds mit ungelesenen Elementen."
+msgstr "Keine Feeds mit ungelesenen Artikeln."
 
 #: src/feedlist_formaction.cpp:258 src/itemlist_formaction.cpp:332
 msgid "Already on last feed."
@@ -646,7 +648,7 @@ msgstr "Öffnen"
 #: src/feedlist_formaction.cpp:462 src/itemlist_formaction.cpp:907
 #: src/itemview_formaction.cpp:410
 msgid "Next Unread"
-msgstr "nächstes Ungelesenes"
+msgstr "nächster Ungelesener"
 
 #: src/feedlist_formaction.cpp:463 src/itemlist_formaction.cpp:906
 msgid "Reload"
@@ -782,9 +784,8 @@ msgid "Description: "
 msgstr "Beschreibung: "
 
 #: src/formaction.cpp:334
-#, fuzzy
 msgid "Feed title: "
-msgstr "Datei: "
+msgstr "Feed-Titel: "
 
 #: src/formaction.cpp:347
 msgid "Saving bookmark on autopilot..."
@@ -833,7 +834,7 @@ msgstr "Schalte Gelesen-Flag für Artikel um..."
 #: src/itemlist_formaction.cpp:158
 #, c-format
 msgid "Error while toggling read flag: %s"
-msgstr "Fehler beim Umschalten des Gelesen-Flag: %s"
+msgstr "Fehler beim Umschalten des Gelesen-Flags: %s"
 
 #: src/itemlist_formaction.cpp:183 src/itemview_formaction.cpp:277
 msgid "URL list empty."
@@ -846,7 +847,7 @@ msgstr "Flags: "
 
 #: src/itemlist_formaction.cpp:252 src/itemlist_formaction.cpp:945
 msgid "Error: no item selected!"
-msgstr "Fehler: Kein Element ausgewählt!"
+msgstr "Fehler: Keinen Artikel ausgewählt!"
 
 #: src/itemlist_formaction.cpp:265
 msgid "Error: you can't reload search results."
@@ -857,7 +858,7 @@ msgstr "Fehler: Sie können Suchergebnisse nicht neu laden."
 #: src/itemview_formaction.cpp:306 src/itemview_formaction.cpp:333
 #: src/view.cpp:635 src/view.cpp:696
 msgid "No unread items."
-msgstr "Keine ungelesenen Elemente."
+msgstr "Keine ungelesenen Artikel."
 
 #: src/itemlist_formaction.cpp:301 src/itemview_formaction.cpp:315
 #: src/view.cpp:760
@@ -950,7 +951,7 @@ msgstr "Typ: "
 #: src/itemview_formaction.cpp:172
 #, c-format
 msgid "Error while marking article as read: %s"
-msgstr "Fehler beim als gelesen markieren des Artikels: %s"
+msgstr "Fehler beim Markieren des Artikels als gelesen: %s"
 
 #: src/itemview_formaction.cpp:184
 #, c-format
@@ -981,7 +982,7 @@ msgstr "Starte Browser..."
 #: src/itemview_formaction.cpp:343
 #, c-format
 msgid "Error while marking article as unread: %s"
-msgstr "Fehler beim als ungelesen markieren des Artikels: %s"
+msgstr "Fehler beim Markieren des Artikels als ungelesen: %s"
 
 #: src/itemview_formaction.cpp:387 src/keymap.cpp:157
 msgid "Goto URL #"
@@ -1054,7 +1055,7 @@ msgstr "zum vorhergehenden ungelesenen Artikel gehen"
 
 #: src/keymap.cpp:87
 msgid "Go to a random unread article"
-msgstr "zum einem zufälligen ungelesenen Artikel gehen"
+msgstr "zu einem zufälligen, ungelesenen Artikel gehen"
 
 #: src/keymap.cpp:92
 msgid "Open article in browser and mark read"
@@ -1062,12 +1063,13 @@ msgstr "Artikel im Browser öffnen and als gelesen markieren"
 
 #: src/keymap.cpp:97
 msgid "Open all unread items of selected feed in browser"
-msgstr ""
+msgstr "Alle ungelesenen Artikel des gewählten Feeds im Browser öffnen"
 
 #: src/keymap.cpp:102
-#, fuzzy
 msgid "Open all unread items of selected feed in browser and mark read"
-msgstr "Artikel im Browser öffnen and als gelesen markieren"
+msgstr ""
+"Alle ungelesenen Artikel des gewählten Feeds im Browser öffnen and als "
+"gelesen markieren"
 
 #: src/keymap.cpp:107
 msgid "Open article in browser"
@@ -1131,7 +1133,7 @@ msgstr "fertige und gelöschte Downloads aus Warteschlange aufräumen"
 
 #: src/keymap.cpp:192
 msgid "Toggle automatic download on/off"
-msgstr "automatischen Download ein/ausschalten"
+msgstr "automatisches Herunterladen ein-/ausschalten"
 
 #: src/keymap.cpp:197
 msgid "Start player with currently selected download"
@@ -1215,7 +1217,7 @@ msgstr "aktuell ausgewählten Feed schließen"
 
 #: src/keymap.cpp:297
 msgid "View list of open dialogs"
-msgstr "liste von offenen Dialogen ansehen"
+msgstr "Liste von offenen Dialogen ansehen"
 
 #: src/keymap.cpp:302
 msgid "Go to next dialog"
@@ -1316,27 +1318,25 @@ msgid "Cleaning up queue..."
 msgstr "Bereinige Warteschlange..."
 
 #: src/pb_controller.cpp:272
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage %s [-C <file>] [-q <file>] [-h]\n"
 msgstr ""
 "%s %s\n"
-"Verwendung: %s [-i <datei>|-e] [-u <urldatei>] [-c <cachedatei>] [-h]\n"
+"Verwendung: %s [-C <configdatei>] [-q <warteschlangendatei>] [-h]\n"
 
 #: src/pb_controller.cpp:287
-#, fuzzy
 msgid "<queuefile>"
-msgstr "<datei>"
+msgstr "<warteschlangendatei>"
 
 #: src/pb_controller.cpp:287
-#, fuzzy
 msgid "use <queuefile> as queue file"
-msgstr "<cachedatei> als Zwischenspeicherdatei verwenden"
+msgstr "<warteschlangendatei> als Warteschlangendatei verwenden"
 
 #: src/pb_controller.cpp:288
 msgid "start download on startup"
-msgstr ""
+msgstr "beim Programmstart automatisch herunterladen"
 
 #: src/pb_view.cpp:47
 #, c-format
@@ -1365,7 +1365,7 @@ msgstr "Fehler: Kann Vorgang nicht durchführen: Download(s) im Gange."
 
 #: src/pb_view.cpp:310
 msgid "Download"
-msgstr "Download"
+msgstr "Herunterladen"
 
 #: src/pb_view.cpp:312
 msgid "Delete"
@@ -1377,7 +1377,7 @@ msgstr "fertige aufräumen"
 
 #: src/pb_view.cpp:314
 msgid "Toggle Automatic Download"
-msgstr "automatischen Download umschalten"
+msgstr "automatisches Herunterladen umschalten"
 
 #: src/pb_view.cpp:315
 msgid "Play"
@@ -1406,9 +1406,9 @@ msgid "too few arguments"
 msgstr "zu wenige Parameter"
 
 #: src/rss.cpp:504
-#, fuzzy, c-format
+#, c-format
 msgid "`%s' is not a valid filter expression"
-msgstr "`%s' is kein gültiger regulärer Ausdruck: %s"
+msgstr "`%s' ist kein gültiger Filterausdruck"
 
 #: src/rss_parser.cpp:151
 #, c-format
@@ -1453,7 +1453,7 @@ msgstr "Keine Tags definiert."
 
 #: src/view.cpp:811
 msgid "Updating query feed..."
-msgstr "Update Query-Feed..."
+msgstr "Aktualisiere Query-Feed..."
 
 #: rss/atom_parser.cpp:16 rss/parser.cpp:290 rss/rss_09x_parser.cpp:17
 #: rss/rss_09x_parser.cpp:31 rss/rss_10_parser.cpp:15
@@ -1468,7 +1468,7 @@ msgstr "konnte libcurl nicht initialisieren"
 #, c-format
 msgid "Error: trying to download feed `%s' returned HTTP status code %ld."
 msgstr ""
-"Fehler: der Versuch den Feed  `%s' herunzuladen wurde der HTTP-Status-Code "
+"Fehler: beim Versuch den Feed `%s' herunterzuladen, wurde der HTTP-Status-Code "
 "%ld zurückgeliefert."
 
 #: rss/parser.cpp:195
