@@ -58,15 +58,16 @@ bool configparser::parse(const std::string& filename, bool double_include) {
 	}
 	included_files.insert(included_files.begin(), filename);
 
-	unsigned int linecounter = 1;
+	unsigned int linecounter = 0;
 	std::ifstream f(filename.c_str());
 	std::string line;
-	std::getline(f,line);
 	if (!f.is_open()) {
 		LOG(level::WARN, "configparser::parse: file %s couldn't be opened", filename);
 		return false;
 	}
 	while (f.is_open() && !f.eof()) {
+		getline(f,line);
+		++linecounter;
 		LOG(level::DEBUG,"configparser::parse: tokenizing %s",line);
 		std::vector<std::string> tokens = utils::tokenize_quoted(line);
 		if (!tokens.empty()) {
@@ -84,8 +85,6 @@ bool configparser::parse(const std::string& filename, bool double_include) {
 				throw configexception(strprintf::fmt(_("unknown command `%s'"), cmd));
 			}
 		}
-		getline(f,line);
-		++linecounter;
 	}
 	return true;
 }

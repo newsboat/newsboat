@@ -1,0 +1,2 @@
+browser "firefox"
+download-path "whatever"

@@ -37,3 +37,21 @@ TEST_CASE("ConfigContainer parses test config without exceptions",
 		REQUIRE(cfg.get_configvalue("cache-file") == cachefilecomp);
 	}
 }
+
+TEST_CASE("ConfigContainer parses test config correctly, even if there's no \\n at the end line.",
+          "[configcontainer]")
+{
+	configcontainer cfg;
+	configparser cfgparser;
+	cfg.register_commands(cfgparser);
+
+	REQUIRE_NOTHROW(cfgparser.parse("data/test-config-without-newline-at-the-end.txt"));
+
+	SECTION("first line") {
+		REQUIRE(cfg.get_configvalue("browser") == "firefox");
+	}
+
+	SECTION("last line") {
+		REQUIRE(cfg.get_configvalue("download-path") == "whatever");
+	}
+}
