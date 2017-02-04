@@ -1020,7 +1020,7 @@ void controller::usage(char * argv0) {
 		{ 'u', "url-file"        , _s("<urlfile>")   , _s("read RSS feed URLs from <urlfile>") }                                          ,
 		{ 'c', "cache-file"      , _s("<cachefile>") , _s("use <cachefile> as cache file") }                                              ,
 		{ 'C', "config-file"     , _s("<configfile>"), _s("read configuration from <configfile>") }                                       ,
-		{ 'X', "vacuum"          , ""                , _s("clean up cache thoroughly") }                                                  ,
+		{ 'X', "vacuum"          , ""                , _s("compact the cache") }                                                  ,
 		{ 'x', "execute"         , _s("<command>..."), _s("execute list of commands") }                                                   ,
 		{ 'q', "quiet"           , ""                , _s("quiet startup") }                                                              ,
 		{ 'v', "version"         , ""                , _s("get version information") }                                                    ,

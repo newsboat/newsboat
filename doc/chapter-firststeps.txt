@@ -11,7 +11,7 @@ After you've installed newsbeuter, you can run it for the first time by typing
 		-u, --url-file=<urlfile>        read RSS feed URLs from <urlfile>
 		-c, --cache-file=<cachefile>    use <cachefile> as cache file
 		-C, --config-file=<configfile>  read configuration from <configfile>
-		-X, --vacuum                    clean up cache thoroughly
+		-X, --vacuum                    compact the cache
 		-x, --execute=<command>...      execute list of commands
 		-q, --quiet                     quiet startup
 		-v, --version                   get version information

@@ -33,7 +33,11 @@ OPTIONS
         Export feeds as OPML to stdout
 
 -X, --vacuum::
-        Clean up cache thoroughly (i.e. reduce it in size if possible)
+        Compact the cache by: 1) reclaiming the space that was left empty when
+        data was deleted; and 2) defragmenting the entries in the cache. This
+        *doesn't* delete the entries; for that, see 'cleanup-on-quit',
+        'delete-read-articles-on-quit', 'keep-articles-days', and 'max-items'
+        settings.
 
 -v, -V, --version::
         Get version information about newsbeuter and the libraries it uses
