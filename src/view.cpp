@@ -472,8 +472,18 @@ void view::push_itemview(std::shared_ptr<rss_feed> f, const std::string& guid, c
 		formaction_stack.push_back(itemview);
 		current_formaction = formaction_stack_size() - 1;
 	} else {
-		std::string filename = get_ctrl()->write_temporary_item(f->get_item_by_guid(guid));
+		std::shared_ptr<rss_item> item = f->get_item_by_guid(guid);
+		std::string filename = get_ctrl()->write_temporary_item(item);
 		open_in_pager(filename);
+		try {
+			bool old_unread = item->unread();
+			item->set_unread(false);
+			if (old_unread) {
+				get_ctrl()->mark_article_read(item->guid(), true);
+			}
+		} catch (const dbexception& e) {
+			show_error(strprintf::fmt(_("Error while marking article as read: %s"), e.what()));
+		}
 		::unlink(filename.c_str());
 	}
 }
