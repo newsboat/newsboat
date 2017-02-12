@@ -1073,6 +1073,11 @@ std::string utils::make_title(const std::string& const_url) {
 	if (title.at(0)>= 'a' && title.at(0)<= 'z') {
 		title[0] -= 'a' - 'A';
 	}
+	// Un-escape any percent-encoding, e.g. "It%27s%202017%21" -> "It's 2017!"
+	char* result = xmlURIUnescapeString(title.c_str(), 0, nullptr);
+	if (result) {
+		title = result;
+	}
 	return title;
 }
 

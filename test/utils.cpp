@@ -412,6 +412,11 @@ TEST_CASE("utils::make_title extracts possible title from URL") {
 			REQUIRE(utils::make_title(input) == "Title with dashes");
 		}
 	}
+
+	SECTION("Decodes percent-encoded characters") {
+		auto input = "https://example.com/It%27s%202017%21";
+		REQUIRE(utils::make_title(input) == "It's 2017!");
+	}
 }
 
 TEST_CASE("remove_soft_hyphens remove all U+00AD characters from a string",
