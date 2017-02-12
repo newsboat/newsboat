@@ -353,6 +353,22 @@ TEST_CASE("utils::make_title extracts possible title from URL") {
 			input = "http://example.com/This_is-the_title";
 		}
 
+		SECTION("Eliminate .php extension") {
+			input = "http://example.com/This_is-the_title.php";
+		}
+
+		SECTION("Eliminate .html extension") {
+			input = "http://example.com/This_is-the_title.html";
+		}
+
+		SECTION("Eliminate .htm extension") {
+			input = "http://example.com/This_is-the_title.htm";
+		}
+
+		SECTION("Eliminate .aspx extension") {
+			input = "http://example.com/This_is-the_title.aspx";
+		}
+
 		REQUIRE(utils::make_title(input) == "This is the title");
 	}
 
@@ -395,6 +411,11 @@ TEST_CASE("utils::make_title extracts possible title from URL") {
 			auto input = "http://example.com/title-with-dashes?a=b&x=y&utf8=✓";
 			REQUIRE(utils::make_title(input) == "Title with dashes");
 		}
+	}
+
+	SECTION("Decodes percent-encoded characters") {
+		auto input = "https://example.com/It%27s%202017%21";
+		REQUIRE(utils::make_title(input) == "It's 2017!");
 	}
 }
 

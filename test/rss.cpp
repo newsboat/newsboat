@@ -3,6 +3,7 @@
 #include <rsspp.h>
 #include <rsspp_internal.h>
 #include <rss.h>
+#include <rss_parser.h>
 #include <cache.h>
 #include <configcontainer.h>
 
@@ -277,6 +278,26 @@ TEST_CASE("rss_item::sort_flags() cleans up flags", "[rss]") {
 		item.set_flags(inputflags + "1234568790^\"#'é(£");
 		REQUIRE(inputflags == item.flags());
 	}
+}
+
+TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
+          "[rss::rss_parser]")
+{
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_parser p(
+			"file://data/items_without_titles.xml",
+			&rsscache,
+			&cfg,
+			nullptr,
+			nullptr);
+	auto feed = p.parse();
+
+	REQUIRE(feed->items()[0]->title() == "A gentle introduction to testing");
+	REQUIRE(feed->items()[1]->title() == "A missing rel attribute");
+	REQUIRE(feed->items()[2]->title() == "Alternate link isnt first");
+	REQUIRE(feed->items()[3]->title() == "A test for htm extension");
+	REQUIRE(feed->items()[4]->title() == "Alternate link isn't first");
 }
 
 }

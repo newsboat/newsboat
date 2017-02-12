@@ -24,6 +24,7 @@
 #include <cstdarg>
 #include <cstdio>
 #include <algorithm>
+#include <regex>
 
 #include <curl/curl.h>
 
@@ -1062,12 +1063,20 @@ std::string utils::make_title(const std::string& const_url) {
 	std::string::size_type pos_of_qmrk = path.find_first_of('?');
 	//throw away the query part 'title-with-dashes'
 	std::string title = path.substr(0,pos_of_qmrk);
+	//Throw away common webpage suffixes: .html, .php, .aspx, .htm
+	std::regex rx("\\.html$|\\.htm$|\\.php$|\\.aspx$");
+	title = std::regex_replace(title,rx,"");
 	// 'title with dashes'
 	std::replace(title.begin(), title.end(), '-', ' ');
 	std::replace(title.begin(), title.end(), '_', ' ');
 	//'Title with dashes'
 	if (title.at(0)>= 'a' && title.at(0)<= 'z') {
 		title[0] -= 'a' - 'A';
+	}
+	// Un-escape any percent-encoding, e.g. "It%27s%202017%21" -> "It's 2017!"
+	char* result = xmlURIUnescapeString(title.c_str(), 0, nullptr);
+	if (result) {
+		title = result;
 	}
 	return title;
 }
