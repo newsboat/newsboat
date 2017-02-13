@@ -14,7 +14,7 @@ CXX?=c++
 DEFINES=-DLOCALEDIR=\"$(localedir)\"
 
 ifneq ($(wildcard .git/.),)
-GIT_HASH=$(shell git describe --abbrev=4 --dirty --always --tags)
+GIT_HASH:=$(shell git describe --abbrev=4 --dirty --always --tags)
 DEFINES+=-DGIT_HASH=\"$(GIT_HASH)\"
 endif
 
