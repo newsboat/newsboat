@@ -68,12 +68,12 @@ tagsouppullparser::event tagsouppullparser::next() {
 		skip_whitespace();
 		if (inputstream->eof()) {
 			current_event = event::END_DOCUMENT;
-			break;
-		}
-		if (c != '<') {
+		} else if (c != '<') {
 			handle_text();
-			break;
+		} else {
+			handle_tag();
 		}
+		break;
 	case event::TEXT:
 		handle_tag();
 		break;

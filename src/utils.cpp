@@ -1066,6 +1066,9 @@ std::string utils::make_title(const std::string& const_url) {
 	//Throw away common webpage suffixes: .html, .php, .aspx, .htm
 	std::regex rx("\\.html$|\\.htm$|\\.php$|\\.aspx$");
 	title = std::regex_replace(title,rx,"");
+	// if there is nothing left, just give up
+	if (title.empty())
+		return title;
 	// 'title with dashes'
 	std::replace(title.begin(), title.end(), '-', ' ');
 	std::replace(title.begin(), title.end(), '_', ' ');
@@ -1074,9 +1077,10 @@ std::string utils::make_title(const std::string& const_url) {
 		title[0] -= 'a' - 'A';
 	}
 	// Un-escape any percent-encoding, e.g. "It%27s%202017%21" -> "It's 2017!"
-	char* result = xmlURIUnescapeString(title.c_str(), 0, nullptr);
+	auto const result = xmlURIUnescapeString(title.c_str(), 0, nullptr);
 	if (result) {
 		title = result;
+		xmlFree(result);
 	}
 	return title;
 }
