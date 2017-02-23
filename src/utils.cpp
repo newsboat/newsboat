@@ -1066,6 +1066,9 @@ std::string utils::make_title(const std::string& const_url) {
 	//Throw away common webpage suffixes: .html, .php, .aspx, .htm
 	std::regex rx("\\.html$|\\.htm$|\\.php$|\\.aspx$");
 	title = std::regex_replace(title,rx,"");
+	// if there is nothing left, just give up
+	if (title.empty())
+		return title;
 	// 'title with dashes'
 	std::replace(title.begin(), title.end(), '-', ' ');
 	std::replace(title.begin(), title.end(), '_', ' ');
