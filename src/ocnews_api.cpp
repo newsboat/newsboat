@@ -18,12 +18,9 @@ typedef std::unique_ptr<json_object, decltype(*json_object_put)> json_uptr;
 typedef std::unique_ptr<CURL, decltype(*curl_easy_cleanup)> curl_uptr;
 
 ocnews_api::ocnews_api(configcontainer* c) : remote_api(c) {
-	auth = cfg->get_configvalue("ocnews-login")+":"+cfg->get_configvalue("ocnews-password");
 	server = cfg->get_configvalue("ocnews-url");
 	verifyhost = cfg->get_configvalue_as_bool("ocnews-verifyhost");
 
-	if (cfg->get_configvalue("ocnews-login").empty() || cfg->get_configvalue("ocnews-password").empty())
-		LOG(level::CRITICAL, "ocnews_api::ocnews_api: No user and/or password set");
 	if (server.empty())
 		LOG(level::CRITICAL, "ocnews_api::ocnews_api: No owncloud server set");
 }
@@ -32,7 +29,20 @@ ocnews_api::~ocnews_api() {
 }
 
 bool ocnews_api::authenticate() {
+	auth = retrieve_auth();
+	if (auth.empty()) {
+		return false;
+	}
 	return query("status");
+}
+
+std::string ocnews_api::retrieve_auth() {
+	credentials cred = get_credentials("ocnews", "ocNews");
+	if (cred.user.empty() || cred.pass.empty()) {
+		LOG(level::CRITICAL, "ocnews_api::retrieve_auth: No user and/or password set");
+		return "";
+	}
+	return cred.user+":"+cred.pass;
 }
 
 std::vector<tagged_feedurl> ocnews_api::get_subscribed_urls() {

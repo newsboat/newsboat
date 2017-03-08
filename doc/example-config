@@ -382,11 +382,23 @@
 # A more secure alternative to the above, by storing your password elsewhere in
 # your system.
 #
-# Syntax: <path-to-file
+# Syntax: <path-to-file>
 #
 # Default value: ""
 #
 # feedhq-passwordfile "path-to-file"
+
+####  feedhq-passwordeval
+#
+# Another secure alternative, is providing your password from an external
+# command that is evaluated during login. This can be used to read your
+# password from a gpg encrypted file or your system keyring.
+#
+# Syntax: <command>
+#
+# Default value: ""
+#
+# feedhq-passwordeval "command some-parameter"
 
 ####  feedhq-show-special-feeds
 #
@@ -677,6 +689,29 @@
 #
 # newsblur-password "here_goesAquote:{backslash}""
 
+####  newsblur-passwordfile
+#
+# A more secure alternative to the above, by storing your password elsewhere in
+# your system.
+#
+# Syntax: <path-to-file>
+#
+# Default value: ""
+#
+# newsblur-passwordfile "path-to-file"
+
+####  newsblur-passwordeval
+#
+# Another secure alternative, is providing your password from an external
+# command that is evaluated during login. This can be used to read your
+# password from a gpg encrypted file or your system keyring.
+#
+# Syntax: <command>
+#
+# Default value: ""
+#
+# newsblur-passwordeval "command some-parameter"
+
 #### newsblur-url
 #
 # Configures the URL where the newsblur instance resides.
@@ -786,6 +821,29 @@
 #
 # ocnews-password "here_goesAquote:{backslash}""
 
+####  ocnews-passwordfile
+#
+# A more secure alternative to the above, by storing your password elsewhere in
+# your system.
+#
+# Syntax: <path-to-file>
+#
+# Default value: ""
+#
+# ocnews-passwordfile "path-to-file"
+
+####  ocnews-passwordeval
+#
+# Another secure alternative, is providing your password from an external
+# command that is evaluated during login. This can be used to read your
+# password from a gpg encrypted file or your system keyring.
+#
+# Syntax: <command>
+#
+# Default value: ""
+#
+# ocnews-passwordeval "command some-parameter"
+
 ####  ocnews-url
 #
 # Configures the URL where the ownCloud instance resides.
@@ -869,11 +927,23 @@
 # A more secure alternative to the above, by storing your password elsewhere in
 # your system.
 #
-# Syntax: <path-to-file
+# Syntax: <path-to-file>
 #
 # Default value: ""
 #
 # oldreader-passwordfile "path-to-file"
+
+####  oldreader-passwordeval
+#
+# Another secure alternative, is providing your password from an external
+# command that is evaluated during login. This can be used to read your
+# password from a gpg encrypted file or your system keyring.
+#
+# Syntax: <command>
+#
+# Default value: ""
+#
+# oldreader-passwordeval "command some-parameter"
 
 ####  oldreader-show-special-feeds
 #
@@ -1252,11 +1322,23 @@
 # A more secure alternative to the above, by storing your password elsewhere in
 # your system.
 #
-# Syntax: <path-to-file
+# Syntax: <path-to-file>
 #
 # Default value: ""
 #
 # ttrss-passwordfile "path-to-file"
+
+####  ttrss-passwordeval
+#
+# Another secure alternative, is providing your password from an external
+# command that is evaluated during login. This can be used to read your
+# password from a gpg encrypted file or your system keyring.
+#
+# Syntax: <command>
+#
+# Default value: ""
+#
+# ttrss-passwordeval "command some-parameter"
 
 ####  ttrss-url
 #

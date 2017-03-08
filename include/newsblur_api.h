@@ -25,9 +25,9 @@ class newsblur_api : public remote_api {
 		rsspp::feed fetch_feed(const std::string& id);
 		// TODO
 	private:
+		std::string retrieve_auth();
 		json_object * query_api(const std::string& url, const std::string* postdata);
 		std::map<std::string, std::vector<std::string>> mk_feeds_to_tags(json_object *);
-		std::string auth_info;
 		std::string api_location;
 		feedmap known_feeds;
 		unsigned int min_pages;
