@@ -58,21 +58,21 @@ credentials remote_api::get_credentials(const std::string& scope, const std::str
 	if (pass.empty()) {
 		if (!pass_file.empty()) {
 			pass = read_password(pass_file);
-			if (pass.empty()) return { "", "" };
 		} else if (!pass_eval.empty()) {
 			pass = eval_password(pass_eval);
-			if (pass.empty()) return { "", "" };
+		} else {
+			if (!flushed) {
+				std::cout << std::endl;
+				std::cout.flush();
+			}
+			// Find a way to do this in C++ by removing cin echoing.
+			std::string pass_prompt = "Password for "+name+": ";
+			pass = std::string(getpass(pass_prompt.c_str()));
 		}
-	}
 
-	if (pass.empty()) {
-		if (!flushed) {
-			std::cout << std::endl;
-			std::cout.flush();
-  		}
-		// Find a way to do this in C++ by removing cin echoing.
-		std::string pass_prompt = "Password for "+name+": ";
-		pass = std::string(getpass(pass_prompt.c_str()));
+		if (pass.empty()) {
+			return { "", "" };
+		}
 	}
 
 	return { user, pass };

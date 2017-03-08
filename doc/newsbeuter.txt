@@ -528,6 +528,8 @@ so that it can authenticate with The Old Reader:
 (Note that double quotes should be escaped, i.e. you should write +{backslash}"+ 
 instead of +"+.)
 
+See also <<_passwords_for_external_apis,oldreader-passwordfile and oldreader-passwordeval>>.
+
 After setting these configuration values, you can start newsbeuter, it will 
 authenticate with The Old Reader and download your subscription list. If you use 
 "folders" in The Old Reader to organize your feeds, newsbeuter will regard them 
@@ -584,6 +586,8 @@ Then, configure your NewsBlur credentials:
 (Note that double quotes should be escaped, i.e. you should write +{backslash}"+ 
 instead of +"+.)
 
+See also <<_passwords_for_external_apis,newsblur-passwordfile and newsblur-passwordeval>>.
+
 When you start newsbeuter, it will download the feeds that you configured
 in NewsBlur. Please take a closer look at the configuration commands for what 
 you can configure in newsbeuter regarding NewsBlur.
@@ -608,6 +612,8 @@ Then, configure your FeedHQ credentials:
 
 (Note that double quotes should be escaped, i.e. you should write +{backslash}"+ 
 instead of +"+.)
+
+See also <<_passwords_for_external_apis,feedhq-passwordfile and feedhq-passwordeval>>.
 
 When you start newsbeuter, it will download the feeds that you configured
 in FeedHQ. Please take a closer look at the configuration commands for what 
@@ -649,6 +655,8 @@ In addition, it requires username and password for authentication:
 
 (Note that double quotes should be escaped, i.e. you should write +{backslash}"+ 
 instead of +"+.)
+
+See also <<_passwords_for_external_apis,ttrss-passwordfile and ttrss-passwordeval>>.
 
 Tiny Tiny RSS provides two modes of usage, single-user mode and multi-user 
 mode. newsbeuter needs to know about this, too: In single-user mode, 
@@ -692,6 +700,8 @@ Username and password are required:
 
 	ocnews-login "user"
 	ocnews-password "password"
+
+See also <<_passwords_for_external_apis,ocnews-passwordfile and ocnews-passwordeval>>.
 
 ownCloud News API uses HTTP basic auth, therefore running ownCloud with SSL is highly
 recommended.
@@ -1164,6 +1174,11 @@ That's it. newsbeuter (well, its db) now marks articles as unread when their
 title changes. And nicely enough this works all inside newsbeuter, no need to
 restart it so that it rereads the cache, that magically modifies itself. It
 just works.
+
+Passwords for external APIs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+include::chapter-password.txt[]
 
 Feedback
 --------
