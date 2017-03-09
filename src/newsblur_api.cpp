@@ -69,13 +69,19 @@ std::vector<tagged_feedurl> newsblur_api::get_subscribed_urls() {
 		json_object_object_get_ex(feed_json, "feed_title", &node);
 		current_feed.title = json_object_get_string(node);
 		json_object_object_get_ex(feed_json, "feed_link", &node);
-		current_feed.link = json_object_get_string(node);
+		if (node) {
+			current_feed.link = json_object_get_string(node);
 
-		known_feeds[feed_id] = current_feed;
-
-		std::string std_feed_id(feed_id);
-		std::vector<std::string> tags = feeds_to_tags[std_feed_id];
-		result.push_back(tagged_feedurl(std_feed_id, tags));
+			known_feeds[feed_id] = current_feed;
+			std::string std_feed_id(feed_id);
+			std::vector<std::string> tags = feeds_to_tags[std_feed_id];
+			result.push_back(tagged_feedurl(std_feed_id, tags));
+		} else {
+			LOG(
+			  	level::ERROR,
+			  	"newsblur_api::get_subscribed_urls: feed fetch for %s failed, please check in NewsBlur",
+			  	current_feed.title);
+		}
 
 		json_object_iter_next(&it);
 	}
