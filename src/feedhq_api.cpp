@@ -1,14 +1,10 @@
 #include <vector>
 #include <cstring>
-#include <iostream>
-#include <wordexp.h>
 
 #include <feedhq_api.h>
 #include <config.h>
 #include <utils.h>
 #include <strprintf.h>
-
-#include <unistd.h>
 
 #include <curl/curl.h>
 #include <json.h>
@@ -48,45 +44,13 @@ static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp
 
 std::string feedhq_api::retrieve_auth() {
 	CURL * handle = curl_easy_init();
-	std::string user = cfg->get_configvalue("feedhq-login");
-	bool flushed = false;
-
-	if (user == "") {
-		std::cout << std::endl;
-		std::cout.flush();
-		flushed = true;
-		std::cout << "Username for FeedHQ: ";
-		std::cin >> user;
-		if (user == "") {
-			return "";
-		}
+	credentials cred = get_credentials("feedhq", "FeedHQ");
+	if (cred.user.empty() || cred.pass.empty()) {
+		return "";
 	}
 
-	std::string pass = cfg->get_configvalue("feedhq-password");
-	if ( pass == "" ) {
-		wordexp_t exp;
-		std::ifstream ifs;
-		wordexp(cfg->get_configvalue("feedhq-passwordfile").c_str(),&exp,0);
-		if (exp.we_wordc > 0) {
-			ifs.open(exp.we_wordv[0]);
-		}
-		wordfree(&exp);
-		if (!ifs.is_open()) {
-			if (!flushed) {
-				std::cout << std::endl;
-				std::cout.flush();
-			}
-			// Find a way to do this in C++ by removing cin echoing.
-			pass = std::string( getpass("Password for FeedHQ: ") );
-		} else {
-			ifs >> pass;
-			if (pass == "") {
-				return "";
-			}
-		}
-	}
-	char * username = curl_easy_escape(handle, user.c_str(), 0);
-	char * password = curl_easy_escape(handle, pass.c_str(), 0);
+	char * username = curl_easy_escape(handle, cred.user.c_str(), 0);
+	char * password = curl_easy_escape(handle, cred.pass.c_str(), 0);
 
 	std::string postcontent = strprintf::fmt("service=reader&Email=%s&Passwd=%s&source=%s%2F%s&accountType=HOSTED_OR_GOOGLE&continue=http://www.google.com/",
 	                          username, password, PROGRAM_NAME, PROGRAM_VERSION);

@@ -146,6 +146,8 @@ TEST_CASE("consolidate_whitespace replaces multiple consecutive"
 
 TEST_CASE("get_command_output()", "[utils]") {
 	REQUIRE(utils::get_command_output("ls /dev/null") == "/dev/null\n");
+	REQUIRE_NOTHROW(utils::get_command_output("a-program-that-is-guaranteed-to-not-exists"));
+	REQUIRE(utils::get_command_output("a-program-that-is-guaranteed-to-not-exists") == "");
 }
 
 TEST_CASE("run_program()", "[utils]") {

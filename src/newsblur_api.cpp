@@ -1,10 +1,11 @@
+#include <algorithm>
+
 #include <rsspp.h>
 #include <json.h>
 #include <utils.h>
 #include <strprintf.h>
 #include <remote_api.h>
 #include <newsblur_api.h>
-#include <algorithm>
 #include <string.h>
 #include <time.h>
 
@@ -13,7 +14,6 @@
 namespace newsbeuter {
 
 newsblur_api::newsblur_api(configcontainer * c) : remote_api(c) {
-	auth_info = strprintf::fmt("username=%s&password=%s", cfg->get_configvalue("newsblur-login"), cfg->get_configvalue("newsblur-password"));
 	api_location = cfg->get_configvalue("newsblur-url");
 	min_pages = (cfg->get_configvalue_as_int("newsblur-min-items") + (NEWSBLUR_ITEMS_PER_PAGE + 1)) / NEWSBLUR_ITEMS_PER_PAGE;
 
@@ -29,7 +29,12 @@ bool newsblur_api::authenticate() {
 	json_object * response {};
 	json_object * status {};
 
-	response = newsblur_api::query_api("/api/login", &auth_info);
+	std::string auth = retrieve_auth();
+	if (auth.empty()) {
+		return false;
+	}
+
+	response = newsblur_api::query_api("/api/login", &auth);
 	json_object_object_get_ex(response, "authenticated", &status);
 	bool result = json_object_get_boolean(status);
 
@@ -40,6 +45,16 @@ bool newsblur_api::authenticate() {
 	    cfg->get_configvalue("cookie-cache"));
 
 	return result;
+}
+
+std::string newsblur_api::retrieve_auth() {
+	credentials cred = get_credentials("newsblur", "Newsblur");
+	if (cred.user.empty() || cred.pass.empty()) {
+		LOG(level::CRITICAL, "newsblur_api::retrieve_auth: No user and/or password set");
+		return "";
+	}
+
+	return strprintf::fmt("username=%s&password=%s", cred.user, cred.pass);
 }
 
 std::vector<tagged_feedurl> newsblur_api::get_subscribed_urls() {

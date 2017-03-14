@@ -252,6 +252,9 @@ src/reloadthread.o: src/reloadthread.cpp include/reloadthread.h \
  filter/FilterParser.h include/utils.h include/logger.h config.h \
  include/strprintf.h include/cache.h include/filtercontainer.h \
  include/colormanager.h include/regexmanager.h include/remote_api.h
+src/remote_api.o: src/remote_api.cpp include/remote_api.h \
+ include/configcontainer.h include/configparser.h include/utils.h \
+ include/logger.h config.h include/strprintf.h
 src/rss.o: src/rss.cpp include/rss.h include/configcontainer.h \
  include/configparser.h include/matcher.h filter/FilterParser.h \
  include/utils.h include/logger.h config.h include/strprintf.h \
@@ -368,6 +371,8 @@ test/matcher.o: test/matcher.cpp test/catch.hpp include/matcher.h \
 test/regexmanager.o: test/regexmanager.cpp test/catch.hpp \
  include/regexmanager.h include/configparser.h include/matcher.h \
  filter/FilterParser.h include/exceptions.h
+test/remote_api.o: test/remote_api.cpp test/catch.hpp \
+ include/remote_api.h include/configcontainer.h include/configparser.h
 test/rss.o: test/rss.cpp test/catch.hpp rss/rsspp.h include/remote_api.h \
  include/configcontainer.h include/configparser.h rss/rsspp_internal.h \
  include/rss.h include/matcher.h filter/FilterParser.h include/utils.h \

@@ -24,6 +24,7 @@ class ocnews_api : public remote_api {
 		rsspp::feed fetch_feed(const std::string& feed_id);
 	private:
 		typedef std::map<std::string, std::pair<rsspp::feed, long>> feedmap;
+		std::string retrieve_auth();
 		bool query(const std::string& query, json_object** result = nullptr, const std::string& post = "");
 		std::string md5(const std::string& str);
 		std::string auth;

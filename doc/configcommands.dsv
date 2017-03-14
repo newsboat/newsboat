@@ -30,7 +30,8 @@ feedhq-flag-star|<flag>|""|If this is set and FeedHQ support is used, then all a
 feedhq-login|<login>|""|This variable sets your FeedHQ login for FeedHQ support.|feedhq-login "your-login"
 feedhq-min-items|<number>|20|This variable sets the number of articles that are loaded from FeedHQ per feed.|feedhq-min-items 100
 feedhq-password|<password>|""|This variable sets your FeedHQ password for FeedHQ support. Double quotes should be escaped, i.e. you should write +{backslash}"+ instead of +"+.|feedhq-password "here_goesAquote:{backslash}""
-feedhq-passwordfile|<path-to-file|""|A more secure alternative to the above, by storing your password elsewhere in your system.|feedhq-passwordfile "path-to-file"
+feedhq-passwordfile|<path-to-file>|""|A more secure alternative to the above, by storing your password elsewhere in your system.|feedhq-passwordfile "path-to-file"
+feedhq-passwordeval|<command>|""|Another secure alternative, is providing your password from an external command that is evaluated during login. This can be used to read your password from a gpg encrypted file or your system keyring.|feedhq-passwordeval "command some-parameter"
 feedhq-show-special-feeds|[yes/no]|yes|If this is set, then "special feeds" like "People you follow" (articles shared by people you follow), "Starred items" (your starred articles) and "Shared items" (your shared articles) appear in your subscription list.|feedhq-show-special-feeds "no"
 feedlist-format|<format>|"%4i %n %11u %t"|This variable defines the format of entries in the feed list. See the respective section in the documentation for more information on format strings.|feedlist-format " %n %4i - %11u -%> %t"
 feedlist-title-format|<format>|"N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"|Format of the title in feed list. See "Format Strings" section of Newsbeuter manual for details on available formats.|feedlist-title-format "Feeds (%u unread, %t total)"
@@ -56,6 +57,8 @@ max-items|<number>|0|Set the number of articles to maximally keep per feed. If t
 newsblur-login|<login>|""|This variable sets your NewsBlur login for NewsBlur support.|newsblur-login "your-login"
 newsblur-min-items|<number>|20|This variable sets the number of articles that are loaded from NewsBlur per feed.|newsblur-min-items 100
 newsblur-password|<password>|""|This variable sets your NewsBlur password for Newsblur support. Double quotes should be escaped, i.e. you should write +{backslash}"+ instead of +"+.|newsblur-password "here_goesAquote:{backslash}""
+newsblur-passwordfile|<path-to-file>|""|A more secure alternative to the above, by storing your password elsewhere in your system.|newsblur-passwordfile "path-to-file"
+newsblur-passwordeval|<command>|""|Another secure alternative, is providing your password from an external command that is evaluated during login. This can be used to read your password from a gpg encrypted file or your system keyring.|newsblur-passwordeval "command some-parameter"
 newsblur-url|<url>|"https://newsblur.com"|Configures the URL where the newsblur instance resides.|newsblur-url "https://localhost"
 notify-always|[yes/no]|no|If no, notifications will only be made when there are new feeds or articles. If yes, notifications will be made regardless.|notify-always yes
 notify-beep|[yes/no]|no|If yes, then the speaker beep on new articles.|notify-beep yes
@@ -66,6 +69,8 @@ notify-xterm|[yes/no]|no|If yes, then the xterm window title will be set to a no
 ocnews-flag-star|<character>|""|If this is set and ownCloud News support is used, then all articles that are flagged with the specified flag are being "starred" in ownCloud News.|ocnews-flag-star "s"
 ocnews-login|<username>|""|Sets the username to use with the ownCloud instance.|ocnews-login "user"
 ocnews-password|<password>|""|Configures the password to use with the ownCloud instance. Double quotes should be escaped, i.e. you should write +{backslash}"+ instead of +"+.|ocnews-password "here_goesAquote:{backslash}""
+ocnews-passwordfile|<path-to-file>|""|A more secure alternative to the above, by storing your password elsewhere in your system.|ocnews-passwordfile "path-to-file"
+ocnews-passwordeval|<command>|""|Another secure alternative, is providing your password from an external command that is evaluated during login. This can be used to read your password from a gpg encrypted file or your system keyring.|ocnews-passwordeval "command some-parameter"
 ocnews-url|<url>|""|Configures the URL where the ownCloud instance resides.|ocnews-url "https://localhost/owncloud"
 ocnews-verifyhost|[yes/no]|yes|If this is set to no, the connection the ownCloud instance will not verify the certificate's name against the host's name.|ocnews-verifyhost no
 oldreader-flag-share|<flag>|""|If this is set and The Old Reader support is used, then all articles that are flagged with the specified flag are being "shared" in The Old Reader so that people that follow you can see it.|oldreader-flag-share "a"
@@ -73,7 +78,8 @@ oldreader-flag-star|<flag>|""|If this is set and The Old Reader support is used,
 oldreader-login|<login>|""|This variable sets your The Old Reader login for The Older Reader support.|oldreader-login "your-login"
 oldreader-min-items|<number>|20|This variable sets the number of articles that are loaded from The Old Reader per feed.|oldreader-min-items 100
 oldreader-password|<password>|""|This variable sets your The Old Reader password for The Old Reader support. Double quotes should be escaped, i.e. you should write +{backslash}"+ instead of +"+.|oldreader-password "here_goesAquote:{backslash}""
-oldreader-passwordfile|<path-to-file|""|A more secure alternative to the above, by storing your password elsewhere in your system.|oldreader-passwordfile "path-to-file"
+oldreader-passwordfile|<path-to-file>|""|A more secure alternative to the above, by storing your password elsewhere in your system.|oldreader-passwordfile "path-to-file"
+oldreader-passwordeval|<command>|""|Another secure alternative, is providing your password from an external command that is evaluated during login. This can be used to read your password from a gpg encrypted file or your system keyring.|oldreader-passwordeval "command some-parameter"
 oldreader-show-special-feeds|[yes/no]|yes|If this is set, then "special feeds" like "People you follow" (articles shared by people you follow), "Starred items" (your starred articles) and "Shared items" (your shared articles) appear in your subscription list.|oldreader-show-special-feeds "no"
 openbrowser-and-mark-jumps-to-next-unread|[yes/no]|no|If set to yes, jump to the next unread item when an item is opened in the browser and marked as read.|openbrowser-and-mark-jumps-to-next-unread yes
 opml-url|<url> ...|""|If the OPML online subscription mode is enabled, then the list of feeds will be taken from the OPML file found on this location. Optionally, you can specify more than one URL. All the listed OPML URLs will then be taken into account when loading the feed list.|opml-url "http://host.domain.tld/blogroll.opml" "http://example.com/anotheropmlfile.opml"
@@ -107,7 +113,8 @@ ttrss-flag-star|<character>|""|If this is set and Tiny Tiny RSS support is used,
 ttrss-login|<username>|""|Sets the username for use with Tiny Tiny RSS.|ttrss-login "admin"
 ttrss-mode|[multi/single]|multi|Configures the mode in which Tiny Tiny RSS is used. In single-user mode, login and password are used for HTTP authentication, while in multi-user mode, they are used for authenticating with Tiny Tiny RSS.|ttrss-mode "single"
 ttrss-password|<password>|""|Configures the password for use with Tiny Tiny RSS. Double quotes should be escaped, i.e. you should write +{backslash}"+ instead of +"+.|ttrss-password "here_goesAquote:{backslash}""
-ttrss-passwordfile|<path-to-file|""|A more secure alternative to the above, by storing your password elsewhere in your system.|ttrss-passwordfile "path-to-file"
+ttrss-passwordfile|<path-to-file>|""|A more secure alternative to the above, by storing your password elsewhere in your system.|ttrss-passwordfile "path-to-file"
+ttrss-passwordeval|<command>|""|Another secure alternative, is providing your password from an external command that is evaluated during login. This can be used to read your password from a gpg encrypted file or your system keyring.|ttrss-passwordeval "command some-parameter"
 ttrss-url|<url>|""|Configures the URL where the Tiny Tiny RSS installation you want to use resides.|ttrss-url "http://example.com/ttrss/"
 unbind-key|<key> [<dialog>]|n/a|Unbind key <key>. This means that no operation is called when <key> is pressed. Optionally, you can specify a dialog (for a list of available dialogs, see "bind-key" above). If you specify one, the key binding will only be unbound for the specified dialog.|unbind-key R
 urls-source|<source>|"local"|This configuration command sets the source where URLs shall be retrieved from. By default, this is ~/.newsbeuter/urls. Alternatively, you can set it to "opml", which enables newsbeuter's OPML online subscription mode, to "ttrss" which enables newsbeuter's Tiny Tiny RSS support, to "oldreader", which enables newsbeuter's The Old Reader support, to "newsblur", which enables NewsBlur support, or "feedhq" for FeedHQ support, or "ocnews" for ownCloud News support. Query feed specifications will be read from the local urls file regardless of this setting.|urls-source "oldreader"
