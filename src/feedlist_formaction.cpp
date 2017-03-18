@@ -778,10 +778,11 @@ std::string feedlist_formaction::get_title(std::shared_ptr<rss_feed> feed) {
 std::string feedlist_formaction::format_line(const std::string& feedlist_format, std::shared_ptr<rss_feed> feed, unsigned int pos, unsigned int width) {
 	fmtstr_formatter fmt;
 	unsigned int unread_count = feed->unread_item_count();
-	std::string tmp_feedlist_format = feedlist_format;
 
 	fmt.register_fmt('i', strprintf::fmt("%u", pos + 1));
-	fmt.register_fmt('u', strprintf::fmt("(%u/%u)",unread_count,static_cast<unsigned int>(feed->total_item_count())));
+	fmt.register_fmt('u', strprintf::fmt("(%u/%u)",
+				unread_count,
+				static_cast<unsigned int>(feed->total_item_count())));
 	fmt.register_fmt('U', std::to_string(unread_count));
 	fmt.register_fmt('c', std::to_string(feed->total_item_count()));
 	fmt.register_fmt('n', unread_count > 0 ? "N" : " ");
@@ -792,13 +793,12 @@ std::string feedlist_formaction::format_line(const std::string& feedlist_format,
 	fmt.register_fmt('L', utils::censor_url(feed->rssurl()));
 	fmt.register_fmt('d', feed->description());
 
+	auto formattedLine = fmt.do_format(feedlist_format, width);
 	if (unread_count > 0) {
-		tmp_feedlist_format = strprintf::fmt(
-		                          "<unread>%s</>",
-		                          feedlist_format);
+		formattedLine = strprintf::fmt("<unread>%s</>", formattedLine);
 	}
 
-	return fmt.do_format(tmp_feedlist_format, width);
+	return formattedLine;
 }
 
 std::string feedlist_formaction::title() {

@@ -729,7 +729,6 @@ std::string itemlist_formaction::item2formatted_line(
     const itemptr_pos_pair& item, const unsigned int width,
     const std::string& itemlist_format, const std::string& datetime_format)
 {
-	std::string tmp_itemlist_format = itemlist_format;
 	fmtstr_formatter fmt;
 	fmt.register_fmt('i', strprintf::fmt("%u",item.second + 1));
 	fmt.register_fmt('f', gen_flags(item.first));
@@ -750,20 +749,20 @@ std::string itemlist_formaction::item2formatted_line(
 
 	fmt.register_fmt('L', item.first->length());
 
+	auto formattedLine = fmt.do_format(itemlist_format, width);
+
 	if (rxman) {
 		int id;
 		if ((id = rxman->article_matches(item.first.get())) != -1) {
-			tmp_itemlist_format = strprintf::fmt(
-				"<%d>%s</>", id, tmp_itemlist_format);
+			formattedLine = strprintf::fmt("<%d>%s</>", id, formattedLine);
 		}
 	}
 
 	if (item.first->unread()) {
-		tmp_itemlist_format = strprintf::fmt(
-			"<unread>%s</>", tmp_itemlist_format);
+		formattedLine = strprintf::fmt("<unread>%s</>", formattedLine);
 	}
 
-	return fmt.do_format(tmp_itemlist_format, width);
+	return formattedLine;
 }
 
 void itemlist_formaction::init() {
