@@ -40,7 +40,7 @@
 GCRY_THREAD_OPTION_PTHREAD_IMPL;
 #endif
 
-#if HAVE_OPENSSL
+#if HAVE_OPENSSL && OPENSSL_VERSION_NUMBER < 0x01010000fL
 #include <openssl/crypto.h>
 #endif
 
@@ -1126,9 +1126,12 @@ void utils::remove_soft_hyphens(std::string& text) {
 
 /*
  * See http://curl.haxx.se/libcurl/c/libcurl-tutorial.html#Multi-threading for a reason why we do this.
+ *
+ * These callbacks are deprecated as of OpenSSL 1.1.0; see the changelog:
+ * https://www.openssl.org/news/changelog.html#x6
  */
 
-#if HAVE_OPENSSL
+#if HAVE_OPENSSL && OPENSSL_VERSION_NUMBER < 0x01010000fL
 static std::mutex * openssl_mutexes = nullptr;
 static int openssl_mutexes_size = 0;
 
@@ -1152,7 +1155,7 @@ static unsigned long openssl_mth_id_function(void) {
 #endif
 
 void utils::initialize_ssl_implementation(void) {
-#if HAVE_OPENSSL
+#if HAVE_OPENSSL && OPENSSL_VERSION_NUMBER < 0x01010000fL
 	openssl_mutexes_size = CRYPTO_num_locks();
 	openssl_mutexes = new std::mutex[openssl_mutexes_size];
 	CRYPTO_set_id_callback(openssl_mth_id_function);
