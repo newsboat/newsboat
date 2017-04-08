@@ -1,5 +1,7 @@
 #include "catch.hpp"
 
+#include <memory>
+
 #include <remote_api.h>
 
 using namespace newsbeuter;
