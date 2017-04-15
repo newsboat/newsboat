@@ -19,7 +19,6 @@ typedef std::unique_ptr<CURL, decltype(*curl_easy_cleanup)> curl_uptr;
 
 ocnews_api::ocnews_api(configcontainer* c) : remote_api(c) {
 	server = cfg->get_configvalue("ocnews-url");
-	verifyhost = cfg->get_configvalue_as_bool("ocnews-verifyhost");
 
 	if (server.empty())
 		LOG(level::CRITICAL, "ocnews_api::ocnews_api: No owncloud server set");
@@ -258,9 +257,6 @@ bool ocnews_api::query(const std::string& query, json_object** result, const std
 	std::string buff;
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, *write_fn);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &buff);
-
-	if (!verifyhost)
-		curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 0);
 
 	if (!post.empty()) {
 		curl_easy_setopt(handle, CURLOPT_POST, 1);
