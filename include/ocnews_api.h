@@ -29,7 +29,6 @@ class ocnews_api : public remote_api {
 		std::string md5(const std::string& str);
 		std::string auth;
 		std::string server;
-		bool verifyhost;
 		feedmap known_feeds;
 };
 

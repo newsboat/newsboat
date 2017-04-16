@@ -106,7 +106,8 @@ configcontainer::configcontainer()
 		{ "player", configdata("", configdata_t::PATH) },
 		{ "podcast-auto-enqueue", configdata("no", configdata_t::BOOL) },
 		{ "prepopulate-query-feeds", configdata("false", configdata_t::BOOL) },
-		{ "ssl-verify", configdata("true", configdata_t::BOOL) },
+		{ "ssl-verifyhost", configdata("true", configdata_t::BOOL) },
+		{ "ssl-verifypeer", configdata("true", configdata_t::BOOL) },
 		{ "proxy", configdata("", configdata_t::STR) },
 		{ "proxy-auth", configdata("", configdata_t::STR) },
 		{ "proxy-auth-method",
@@ -147,8 +148,6 @@ configcontainer::configcontainer()
 		{ "ocnews-passwordeval", configdata("", configdata_t::STR) },
 		{ "ocnews-flag-star", configdata("", configdata_t::STR) },
 		{ "ocnews-url", configdata("", configdata_t::STR) },
-		{ "ocnews-verifyhost",
-		    configdata("yes", configdata_t::BOOL) },
 		{ "urls-source",
 		    configdata("local", std::unordered_set<std::string>({
 		        "local", "opml", "oldreader", "ttrss", "newsblur",

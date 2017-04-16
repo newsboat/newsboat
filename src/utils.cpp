@@ -904,7 +904,8 @@ void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
 		cookie_cache = cfg->get_configvalue("cookie-cache");
 	}
 
-	curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, cfg->get_configvalue_as_bool("ssl-verify"));
+	curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, cfg->get_configvalue_as_bool("ssl-verifyhost") ? 2 : 0);
+	curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, cfg->get_configvalue_as_bool("ssl-verifypeer"));
 	curl_easy_setopt(handle, CURLOPT_NOSIGNAL, 1);
 	curl_easy_setopt(handle, CURLOPT_ENCODING, "gzip, deflate");
 	curl_easy_setopt(handle, CURLOPT_TIMEOUT, dl_timeout);
