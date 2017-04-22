@@ -782,7 +782,7 @@ msgstr "URL: "
 
 #: src/formaction.cpp:333
 msgid "Description: "
-msgstr "Descrizione:"
+msgstr "Descrizione: "
 
 #: src/formaction.cpp:334
 #, fuzzy
@@ -816,7 +816,7 @@ msgstr "immagine"
 
 #: src/htmlrenderer.cpp:645
 msgid "Links: "
-msgstr "Collegamenti:"
+msgstr "Collegamenti: "
 
 #: src/htmlrenderer.cpp:668
 msgid "link"

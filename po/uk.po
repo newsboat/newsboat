@@ -220,7 +220,7 @@ msgstr "Ретельне очищення кешу..."
 
 #: src/controller.cpp:546
 msgid "Error while loading feeds from database: "
-msgstr "Помилка при завантаженні тем з бази даних:"
+msgstr "Помилка при завантаженні тем з бази даних: "
 
 #: src/controller.cpp:550
 #, c-format

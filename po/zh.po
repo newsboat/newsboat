@@ -210,7 +210,7 @@ msgstr "彻底清除缓存"
 
 #: src/controller.cpp:546
 msgid "Error while loading feeds from database: "
-msgstr "当从数据库中加载种子的时候出错:"
+msgstr "当从数据库中加载种子的时候出错: "
 
 #: src/controller.cpp:550
 #, fuzzy, c-format
@@ -759,7 +759,7 @@ msgstr "已保存的书签."
 
 #: src/formaction.cpp:289 src/formaction.cpp:352
 msgid "Error while saving bookmark: "
-msgstr "当保存书签时出错:"
+msgstr "当保存书签时出错: "
 
 #: src/formaction.cpp:326
 msgid "URL: "

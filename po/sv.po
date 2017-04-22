@@ -223,7 +223,7 @@ msgstr "Tömmer noggrant cache..."
 
 #: src/controller.cpp:546
 msgid "Error while loading feeds from database: "
-msgstr "Fel inträffade vid inläsning av webbkanaler i databasen:"
+msgstr "Fel inträffade vid inläsning av webbkanaler i databasen: "
 
 #: src/controller.cpp:550
 #, fuzzy, c-format
@@ -248,7 +248,7 @@ msgstr "Tömmer cache..."
 
 #: src/controller.cpp:640
 msgid "failed: "
-msgstr "misslyckades:"
+msgstr "misslyckades: "
 
 #: src/controller.cpp:661
 #, c-format
@@ -414,23 +414,23 @@ msgstr "okänt kommando `%s'"
 #: src/controller.cpp:1415 src/formaction.cpp:329 src/formaction.cpp:331
 #: src/itemview_formaction.cpp:77
 msgid "Title: "
-msgstr "Titel:"
+msgstr "Titel: "
 
 #: src/controller.cpp:1419 src/itemview_formaction.cpp:83
 msgid "Author: "
-msgstr "Författare:"
+msgstr "Författare: "
 
 #: src/controller.cpp:1423 src/itemview_formaction.cpp:93
 msgid "Date: "
-msgstr "Datum:"
+msgstr "Datum: "
 
 #: src/controller.cpp:1427 src/itemview_formaction.cpp:89
 msgid "Link: "
-msgstr "Länk:"
+msgstr "Länk: "
 
 #: src/controller.cpp:1432 src/itemview_formaction.cpp:102
 msgid "Podcast Download URL: "
-msgstr "Hämtningsurl för podsändning:"
+msgstr "Hämtningsurl för podsändning: "
 
 #: src/controller.cpp:1619
 #, c-format
@@ -619,7 +619,7 @@ msgstr "Inga filter definierade."
 #: src/feedlist_formaction.cpp:348 src/help_formaction.cpp:31
 #: src/itemlist_formaction.cpp:403 src/itemview_formaction.cpp:238
 msgid "Search for: "
-msgstr "Sök efter:"
+msgstr "Sök efter: "
 
 #: src/feedlist_formaction.cpp:365 src/itemlist_formaction.cpp:448
 msgid "Filter: "
@@ -717,7 +717,7 @@ msgstr "n"
 
 #: src/filebrowser_formaction.cpp:162
 msgid "File: "
-msgstr "Fil:"
+msgstr "Fil: "
 
 #: src/filebrowser_formaction.cpp:179
 #, c-format
@@ -776,20 +776,20 @@ msgstr "Sparade bokmärke."
 
 #: src/formaction.cpp:289 src/formaction.cpp:352
 msgid "Error while saving bookmark: "
-msgstr "Fel vid sparande av bokmärke:"
+msgstr "Fel vid sparande av bokmärke: "
 
 #: src/formaction.cpp:326
 msgid "URL: "
-msgstr "Url:"
+msgstr "Url: "
 
 #: src/formaction.cpp:333
 msgid "Description: "
-msgstr "Beskrivning:"
+msgstr "Beskrivning: "
 
 #: src/formaction.cpp:334
 #, fuzzy
 msgid "Feed title: "
-msgstr "Fil:"
+msgstr "Fil: "
 
 #: src/formaction.cpp:347
 #, fuzzy
@@ -818,7 +818,7 @@ msgstr "bild"
 
 #: src/htmlrenderer.cpp:645
 msgid "Links: "
-msgstr "Länkar:"
+msgstr "Länkar: "
 
 #: src/htmlrenderer.cpp:668
 msgid "link"
@@ -848,7 +848,7 @@ msgstr "Url-lista tom."
 #: src/itemlist_formaction.cpp:230 src/itemview_formaction.cpp:97
 #: src/itemview_formaction.cpp:266
 msgid "Flags: "
-msgstr "Flaggor:"
+msgstr "Flaggor: "
 
 #: src/itemlist_formaction.cpp:252 src/itemlist_formaction.cpp:945
 msgid "Error: no item selected!"
@@ -881,7 +881,7 @@ msgstr "Inga olästa webbkanaler."
 
 #: src/itemlist_formaction.cpp:387 src/itemview_formaction.cpp:252
 msgid "Pipe article to command: "
-msgstr "Överför artikel till kommando:"
+msgstr "Överför artikel till kommando: "
 
 #. / This string is related to the letters in parentheses in the
 #. / "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..." messages
@@ -947,11 +947,11 @@ msgstr "Nederkant"
 
 #: src/itemview_formaction.cpp:72
 msgid "Feed: "
-msgstr "Webbkanal:"
+msgstr "Webbkanal: "
 
 #: src/itemview_formaction.cpp:104
 msgid "type: "
-msgstr "typ:"
+msgstr "typ: "
 
 #: src/itemview_formaction.cpp:172
 #, c-format

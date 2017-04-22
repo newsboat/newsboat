@@ -221,7 +221,7 @@ msgstr "Limpiando el cache totalmente..."
 #: src/controller.cpp:546
 msgid "Error while loading feeds from database: "
 msgstr ""
-"Se produjo un error mientras se cargaban los feeds desde la base de datos:"
+"Se produjo un error mientras se cargaban los feeds desde la base de datos: "
 
 #: src/controller.cpp:550
 #, c-format

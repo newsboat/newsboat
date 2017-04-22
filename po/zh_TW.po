@@ -212,7 +212,7 @@ msgstr "徹底清空快取"
 
 #: src/controller.cpp:546
 msgid "Error while loading feeds from database: "
-msgstr "從資料庫中載入來源時發生錯誤:"
+msgstr "從資料庫中載入來源時發生錯誤: "
 
 #: src/controller.cpp:550
 #, c-format
@@ -756,7 +756,7 @@ msgstr "已儲存的書籤."
 
 #: src/formaction.cpp:289 src/formaction.cpp:352
 msgid "Error while saving bookmark: "
-msgstr "在儲存書籤時發生錯誤:"
+msgstr "在儲存書籤時發生錯誤: "
 
 #: src/formaction.cpp:326
 msgid "URL: "
