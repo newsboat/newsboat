@@ -220,7 +220,7 @@ msgstr "Vidage minutieux du cache..."
 
 #: src/controller.cpp:546
 msgid "Error while loading feeds from database: "
-msgstr "Erreur lors du chargement des fils depuis la base de données: "
+msgstr "Erreur lors du chargement des fils depuis la base de données : "
 
 #: src/controller.cpp:550
 #, c-format
@@ -794,11 +794,11 @@ msgstr "Enregistrement du marque-page..."
 
 #: src/help_formaction.cpp:132
 msgid "Generic bindings:"
-msgstr "Touches génériques:"
+msgstr "Touches génériques : "
 
 #: src/help_formaction.cpp:139
 msgid "Unbound functions:"
-msgstr "Fonctions non configurées:"
+msgstr "Fonctions non configurées : "
 
 #: src/help_formaction.cpp:161
 msgid "Clear"
@@ -814,7 +814,7 @@ msgstr "image"
 
 #: src/htmlrenderer.cpp:645
 msgid "Links: "
-msgstr "Liens: "
+msgstr "Liens : "
 
 #: src/htmlrenderer.cpp:668
 msgid "link"
@@ -877,7 +877,7 @@ msgstr "Aucun fil non-lu."
 
 #: src/itemlist_formaction.cpp:387 src/itemview_formaction.cpp:252
 msgid "Pipe article to command: "
-msgstr "Passer l'article à la commande: "
+msgstr "Passer l'article à la commande : "
 
 #. / This string is related to the letters in parentheses in the
 #. / "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..." messages
