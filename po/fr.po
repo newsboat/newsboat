@@ -664,7 +664,7 @@ msgstr "Notez Lu"
 
 #: src/feedlist_formaction.cpp:466 src/itemlist_formaction.cpp:908
 msgid "Mark All Read"
-msgstr "Notez Tous Non-Lus"
+msgstr "Notez Tous Lus"
 
 #: src/feedlist_formaction.cpp:467 src/help_formaction.cpp:160
 #: src/itemlist_formaction.cpp:909
