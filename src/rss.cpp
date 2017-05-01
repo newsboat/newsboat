@@ -24,7 +24,7 @@
 
 namespace newsbeuter {
 
-rss_item::rss_item(cache * c) : pubDate_(0), unread_(true), ch(c), enqueued_(false), deleted_(0), idx(0), override_unread_(false), size_(0) {
+rss_item::rss_item(cache * c) : ch(c), idx(0), size_(0), pubDate_(0), unread_(true), enqueued_(false), deleted_(0), override_unread_(false) {
 }
 
 rss_item::~rss_item() {

@@ -161,22 +161,22 @@ class rss_item : public matchable {
 		std::string link_;
 		std::string author_;
 		std::string description_;
-		time_t pubDate_;
 		std::string guid_;
 		std::string feedurl_;
-		bool unread_;
 		cache * ch;
 		std::string enclosure_url_;
 		std::string enclosure_type_;
-		bool enqueued_;
 		std::string flags_;
 		std::string oldflags_;
 		std::weak_ptr<rss_feed> feedptr_;
-		bool deleted_;
-		unsigned int idx;
 		std::string base;
-		bool override_unread_;
+		unsigned int idx;
 		unsigned int size_;
+		time_t pubDate_;
+		bool unread_;
+		bool enqueued_;
+		bool deleted_;
+		bool override_unread_;
 };
 
 class rss_feed : public matchable {
