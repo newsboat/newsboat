@@ -56,29 +56,27 @@ void pb_view::run(bool auto_download) {
 
 			LOG(level::DEBUG, "pb_view::run: updating view... downloads().size() = %u", ctrl->downloads().size());
 
-			if (ctrl->downloads().size() > 0) {
-				std::string code = "{list";
+			std::string code = "{list";
 
-				unsigned int i = 0;
-				for (auto dl : ctrl->downloads()) {
-					auto lbuf = strprintf::fmt(
-							" %4u [%6.1fMB/%6.1fMB] [%5.1f %%] [%7.2f kb/s] %-20s %s -> %s",
-							i+1,
-							dl.current_size()/(1024*1024),
-							dl.total_size()/(1024*1024),
-							dl.percents_finished(),
-							dl.kbps(),
-							dl.status_text(),
-							dl.url(),
-							dl.filename());
-					code.append(strprintf::fmt("{listitem[%u] text:%s}", i, stfl::quote(lbuf)));
-					i++;
-				}
-
-				code.append("}");
-
-				dllist_form.modify("dls", "replace_inner", code);
+			unsigned int i = 0;
+			for (auto dl : ctrl->downloads()) {
+				auto lbuf = strprintf::fmt(
+						" %4u [%6.1fMB/%6.1fMB] [%5.1f %%] [%7.2f kb/s] %-20s %s -> %s",
+						i+1,
+						dl.current_size()/(1024*1024),
+						dl.total_size()/(1024*1024),
+						dl.percents_finished(),
+						dl.kbps(),
+						dl.status_text(),
+						dl.url(),
+						dl.filename());
+				code.append(strprintf::fmt("{listitem[%u] text:%s}", i, stfl::quote(lbuf)));
+				i++;
 			}
+
+			code.append("}");
+
+			dllist_form.modify("dls", "replace_inner", code);
 
 			ctrl->set_view_update_necessary(false);
 		}
