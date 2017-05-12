@@ -615,6 +615,10 @@ instead of +"+.)
 
 See also <<_passwords_for_external_apis,feedhq-passwordfile and feedhq-passwordeval>>.
 
+if you're using a standalone instance, you should add one more setting:
+
+    feedhq-url "https://the.url.of/your/feedhq/instance"
+
 When you start newsbeuter, it will download the feeds that you configured
 in FeedHQ. Please take a closer look at the configuration commands for what 
 you can configure in newsbeuter regarding FeedHQ.

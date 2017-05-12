@@ -412,6 +412,16 @@
 #
 # feedhq-show-special-feeds "no"
 
+####  feedhq-url
+#
+# Configures the URL where your FeedHQ instance resides.
+#
+# Syntax: <url>
+#
+# Default value: "https://feedhq.org/"
+#
+# feedhq-url "https://feedhq.example.com/"
+
 ####  feedlist-format
 #
 # This variable defines the format of entries in the feed list. See the
