@@ -243,6 +243,7 @@ Buffer::Buffer(const unsigned char* buf, int len) {
 	fileLen = len;
 	bufPos = 0;
 	stream = NULL;
+	isUserStream = false;
 }
 
 Buffer::~Buffer() {
