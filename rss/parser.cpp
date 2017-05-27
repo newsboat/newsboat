@@ -229,6 +229,7 @@ feed parser::parse_file(const std::string& filename) {
 
 feed parser::parse_xmlnode(xmlNode* node) {
 	feed f;
+	f.rss_version = UNKNOWN;
 
 	if (node) {
 		if (node->name && node->type == XML_ELEMENT_NODE) {
