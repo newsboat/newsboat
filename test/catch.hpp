@@ -1,6 +1,6 @@
 /*
- *  Catch v1.9.1
- *  Generated: 2017-04-09 21:21:06.285364
+ *  Catch v1.9.4
+ *  Generated: 2017-05-16 13:51:55.506519
  *  ----------------------------------------------------------
  *  This file has been merged from multiple headers. Please don't edit it directly
  *  Copyright (c) 2012 Two Blue Cubes Ltd. All rights reserved.
@@ -136,12 +136,18 @@
 #endif // __clang__
 
 ////////////////////////////////////////////////////////////////////////////////
-// Cygwin
-#ifdef __CYGWIN__
+// We know some environments not to support full POSIX signals
+#if defined(__CYGWIN__) || defined(__QNX__)
 
 #   if !defined(CATCH_CONFIG_POSIX_SIGNALS)
 #       define CATCH_INTERNAL_CONFIG_NO_POSIX_SIGNALS
 #   endif
+
+#endif
+
+////////////////////////////////////////////////////////////////////////////////
+// Cygwin
+#ifdef __CYGWIN__
 
 // Required for some versions of Cygwin to declare gettimeofday
 // see: http://stackoverflow.com/questions/36901803/gettimeofday-not-declared-in-this-scope-cygwin
@@ -2266,7 +2272,7 @@ namespace Catch {
             INTERNAL_CATCH_REACT( __catchResult ) \
         } while( Catch::alwaysFalse() )
 #else
-    #define INTERNAL_CATCH_MSG( messageType, resultDisposition, macroName, log ) \
+    #define INTERNAL_CATCH_MSG( macroName, messageType, resultDisposition, log ) \
         do { \
             Catch::ResultBuilder __catchResult( macroName, CATCH_INTERNAL_LINEINFO, "", resultDisposition ); \
             __catchResult << log + ::Catch::StreamEndStop(); \
@@ -2397,14 +2403,19 @@ namespace Catch {
 // #included from: catch_timer.h
 #define TWOBLUECUBES_CATCH_TIMER_H_INCLUDED
 
-#ifdef CATCH_PLATFORM_WINDOWS
-typedef unsigned long long uint64_t;
+#ifdef _MSC_VER
+
+namespace Catch {
+    typedef unsigned long long UInt64;
+}
 #else
 #include <stdint.h>
+namespace Catch {
+    typedef uint64_t UInt64;
+}
 #endif
 
 namespace Catch {
-
     class Timer {
     public:
         Timer() : m_ticks( 0 ) {}
@@ -2414,7 +2425,7 @@ namespace Catch {
         double getElapsedSeconds() const;
 
     private:
-        uint64_t m_ticks;
+        UInt64 m_ticks;
     };
 
 } // namespace Catch
@@ -2769,15 +2780,16 @@ namespace Detail {
             return Approx( 0 );
         }
 
-        Approx operator()( double value ) {
-            Approx approx( value );
+#if defined(CATCH_CONFIG_CPP11_TYPE_TRAITS)
+
+        template <typename T, typename = typename std::enable_if<std::is_constructible<double, T>::value>::type>
+        Approx operator()( T value ) {
+            Approx approx( static_cast<double>(value) );
             approx.epsilon( m_epsilon );
             approx.margin( m_margin );
             approx.scale( m_scale );
             return approx;
         }
-
-#if defined(CATCH_CONFIG_CPP11_TYPE_TRAITS)
 
         template <typename T, typename = typename std::enable_if<std::is_constructible<double, T>::value>::type>
         explicit Approx( T value ): Approx(static_cast<double>(value))
@@ -2828,7 +2840,35 @@ namespace Detail {
         friend bool operator >= ( Approx const& lhs, T rhs ) {
             return lhs.m_value > double(rhs) || lhs == rhs;
         }
+
+        template <typename T, typename = typename std::enable_if<std::is_constructible<double, T>::value>::type>
+        Approx& epsilon( T newEpsilon ) {
+            m_epsilon = double(newEpsilon);
+            return *this;
+        }
+
+        template <typename T, typename = typename std::enable_if<std::is_constructible<double, T>::value>::type>
+        Approx& margin( T newMargin ) {
+            m_margin = double(newMargin);
+            return *this;
+        }
+
+        template <typename T, typename = typename std::enable_if<std::is_constructible<double, T>::value>::type>
+        Approx& scale( T newScale ) {
+            m_scale = double(newScale);
+            return *this;
+        }
+
 #else
+
+        Approx operator()( double value ) {
+            Approx approx( value );
+            approx.epsilon( m_epsilon );
+            approx.margin( m_margin );
+            approx.scale( m_scale );
+            return approx;
+        }
+
         friend bool operator == ( double lhs, Approx const& rhs ) {
             // Thanks to Richard Harris for his help refining this formula
             bool relativeOK = std::fabs( lhs - rhs.m_value ) < rhs.m_epsilon * (rhs.m_scale + (std::max)( std::fabs(lhs), std::fabs(rhs.m_value) ) );
@@ -2865,7 +2905,6 @@ namespace Detail {
         friend bool operator >= ( Approx const& lhs, double rhs ) {
             return lhs.m_value > rhs || lhs == rhs;
         }
-#endif
 
         Approx& epsilon( double newEpsilon ) {
             m_epsilon = newEpsilon;
@@ -2881,6 +2920,7 @@ namespace Detail {
             m_scale = newScale;
             return *this;
         }
+#endif
 
         std::string toString() const {
             std::ostringstream oss;
@@ -3133,8 +3173,18 @@ namespace Catch {
         }
 
     private:
-        T* nullableValue;
-        char storage[sizeof(T)];
+        T *nullableValue;
+        union {
+            char storage[sizeof(T)];
+
+            // These are here to force alignment for the storage
+            long double dummy1;
+            void (*dummy2)();
+            long double dummy3;
+#ifdef CATCH_CONFIG_CPP11_LONG_LONG
+            long long dummy4;
+#endif
+        };
     };
 
 } // end namespace Catch
@@ -6592,8 +6642,9 @@ namespace Catch {
                 m_totals.assertions.failed++;
             }
 
-            if( m_reporter->assertionEnded( AssertionStats( result, m_messages, m_totals ) ) )
-                m_messages.clear();
+            // We have no use for the return value (whether messages should be cleared), because messages were made scoped
+            // and should be let to clear themselves out.
+            static_cast<void>(m_reporter->assertionEnded(AssertionStats(result, m_messages, m_totals)));
 
             // Reset working state
             m_lastAssertionInfo = AssertionInfo( std::string(), m_lastAssertionInfo.lineInfo, "{Unknown expression after the reported line}" , m_lastAssertionInfo.resultDisposition );
@@ -7001,6 +7052,32 @@ namespace Catch {
                 returnCode = run();
             return returnCode;
         }
+
+    #if defined(WIN32) && defined(UNICODE)
+        int run( int argc, wchar_t const* const* const argv ) {
+
+            char **utf8Argv = new char *[ argc ];
+
+            for ( int i = 0; i < argc; ++i ) {
+                int bufSize = WideCharToMultiByte( CP_UTF8, 0, argv[i], -1, NULL, 0, NULL, NULL );
+
+                utf8Argv[ i ] = new char[ bufSize ];
+
+                WideCharToMultiByte( CP_UTF8, 0, argv[i], -1, utf8Argv[i], bufSize, NULL, NULL );
+            }
+
+            int returnCode = applyCommandLine( argc, utf8Argv );
+            if( returnCode == 0 )
+                returnCode = run();
+
+            for ( int i = 0; i < argc; ++i )
+                delete [] utf8Argv[ i ];
+
+            delete [] utf8Argv;
+
+            return returnCode;
+        }
+    #endif
 
         int run() {
             if( m_configData.showHelp )
@@ -8232,7 +8309,7 @@ namespace Catch {
     }
 
     inline Version libraryVersion() {
-        static Version version( 1, 9, 1, "", 0 );
+        static Version version( 1, 9, 4, "", 0 );
         return version;
     }
 
@@ -8418,21 +8495,21 @@ namespace Catch {
 
     namespace {
 #ifdef CATCH_PLATFORM_WINDOWS
-        uint64_t getCurrentTicks() {
-            static uint64_t hz=0, hzo=0;
+        UInt64 getCurrentTicks() {
+            static UInt64 hz=0, hzo=0;
             if (!hz) {
                 QueryPerformanceFrequency( reinterpret_cast<LARGE_INTEGER*>( &hz ) );
                 QueryPerformanceCounter( reinterpret_cast<LARGE_INTEGER*>( &hzo ) );
             }
-            uint64_t t;
+            UInt64 t;
             QueryPerformanceCounter( reinterpret_cast<LARGE_INTEGER*>( &t ) );
             return ((t-hzo)*1000000)/hz;
         }
 #else
-        uint64_t getCurrentTicks() {
+        UInt64 getCurrentTicks() {
             timeval t;
             gettimeofday(&t,CATCH_NULL);
-            return static_cast<uint64_t>( t.tv_sec ) * 1000000ull + static_cast<uint64_t>( t.tv_usec );
+            return static_cast<UInt64>( t.tv_sec ) * 1000000ull + static_cast<UInt64>( t.tv_usec );
         }
 #endif
     }
@@ -10218,7 +10295,8 @@ namespace Catch {
     public:
         JunitReporter( ReporterConfig const& _config )
         :   CumulativeReporterBase( _config ),
-            xml( _config.stream() )
+            xml( _config.stream() ),
+            m_okToFail( false )
         {
             m_reporterPrefs.shouldRedirectStdOut = true;
         }
@@ -10244,8 +10322,11 @@ namespace Catch {
             CumulativeReporterBase::testGroupStarting( groupInfo );
         }
 
+        virtual void testCaseStarting( TestCaseInfo const& testCaseInfo ) CATCH_OVERRIDE {
+            m_okToFail = testCaseInfo.okToFail();
+        }
         virtual bool assertionEnded( AssertionStats const& assertionStats ) CATCH_OVERRIDE {
-            if( assertionStats.assertionResult.getResultType() == ResultWas::ThrewException )
+            if( assertionStats.assertionResult.getResultType() == ResultWas::ThrewException && !m_okToFail )
                 unexpectedExceptions++;
             return CumulativeReporterBase::assertionEnded( assertionStats );
         }
@@ -10410,6 +10491,7 @@ namespace Catch {
         std::ostringstream stdOutForSuite;
         std::ostringstream stdErrForSuite;
         unsigned int unexpectedExceptions;
+        bool m_okToFail;
     };
 
     INTERNAL_CATCH_REGISTER_REPORTER( "junit", JunitReporter )
@@ -11213,8 +11295,14 @@ namespace Catch {
 
 #ifndef __OBJC__
 
+#if defined(WIN32) && defined(_UNICODE) && !defined(DO_NOT_USE_WMAIN)
+// Standard C/C++ Win32 Unicode wmain entry point
+extern "C" int wmain (int argc, wchar_t * argv[], wchar_t * []) {
+#else
 // Standard C/C++ main entry point
 int main (int argc, char * argv[]) {
+#endif
+
 	int result = Catch::Session().run( argc, argv );
     return ( result < 0xff ? result : 0xff );
 }
@@ -11294,7 +11382,7 @@ int main (int argc, char * const argv[]) {
     #define CATCH_METHOD_AS_TEST_CASE( method, ... ) INTERNAL_CATCH_METHOD_AS_TEST_CASE( method, __VA_ARGS__ )
     #define CATCH_REGISTER_TEST_CASE( Function, ... ) INTERNAL_CATCH_REGISTER_TESTCASE( Function, __VA_ARGS__ )
     #define CATCH_SECTION( ... ) INTERNAL_CATCH_SECTION( __VA_ARGS__ )
-    #define CATCH_FAIL( ... ) INTERNAL_CATCH_MSG( Catch::ResultWas::ExplicitFailure, Catch::ResultDisposition::Normal, "CATCH_FAIL", __VA_ARGS__ )
+    #define CATCH_FAIL( ... ) INTERNAL_CATCH_MSG( "CATCH_FAIL", Catch::ResultWas::ExplicitFailure, Catch::ResultDisposition::Normal, __VA_ARGS__ )
     #define CATCH_FAIL_CHECK( ... ) INTERNAL_CATCH_MSG( "CATCH_FAIL_CHECK", Catch::ResultWas::ExplicitFailure, Catch::ResultDisposition::ContinueOnFailure, __VA_ARGS__ )
     #define CATCH_SUCCEED( ... ) INTERNAL_CATCH_MSG( "CATCH_SUCCEED", Catch::ResultWas::Ok, Catch::ResultDisposition::ContinueOnFailure, __VA_ARGS__ )
 #else
