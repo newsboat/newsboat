@@ -139,7 +139,7 @@ static op_desc opdescs[] = {
 	},
 	{
 		OP_SETTAG, "set-tag", "t",
-		_("Set tag"),
+		_("Select tag"),
 		KM_FEEDLIST
 	},
 	{

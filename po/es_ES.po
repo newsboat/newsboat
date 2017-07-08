@@ -1102,11 +1102,7 @@ msgstr "Mostrar URLs en el articulo actual"
 msgid "Clear current tag"
 msgstr "Borrar etiqueta actual"
 
-#: src/keymap.cpp:142
-msgid "Set tag"
-msgstr "Seleccionar etiqueta"
-
-#: src/keymap.cpp:147
+#: src/keymap.cpp:142 src/keymap.cpp:147
 msgid "Select tag"
 msgstr "Seleccionar etiqueta"
 

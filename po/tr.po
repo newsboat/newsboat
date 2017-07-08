@@ -1098,11 +1098,7 @@ msgstr "Adresleri mevcut yazı içinde göster"
 msgid "Clear current tag"
 msgstr "Mevcut etiketi temizle"
 
-#: src/keymap.cpp:142
-msgid "Set tag"
-msgstr "Etiket seç"
-
-#: src/keymap.cpp:147
+#: src/keymap.cpp:142 src/keymap.cpp:147
 msgid "Select tag"
 msgstr "Etiket seç"
 

@@ -1106,11 +1106,7 @@ msgstr "Visa url:er i nuvarande artikel"
 msgid "Clear current tag"
 msgstr "Töm nuvarande tagg"
 
-#: src/keymap.cpp:142
-msgid "Set tag"
-msgstr "Markera tagg"
-
-#: src/keymap.cpp:147
+#: src/keymap.cpp:142 src/keymap.cpp:147
 msgid "Select tag"
 msgstr "Markera tagg"
 

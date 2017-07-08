@@ -1102,13 +1102,9 @@ msgstr "Afficher les liens contenus dans l'article actuel"
 msgid "Clear current tag"
 msgstr "Retirer l'étiquette"
 
-#: src/keymap.cpp:142
-msgid "Set tag"
-msgstr "Appliquer une étiquette"
-
-#: src/keymap.cpp:147
+#: src/keymap.cpp:142 src/keymap:147
 msgid "Select tag"
-msgstr "Choisir une étiquette"
+msgstr "Appliquer une étiquette"
 
 #: src/keymap.cpp:152
 msgid "Open search dialog"

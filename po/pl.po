@@ -1104,11 +1104,7 @@ msgstr "Pokaż odnośniki w aktualnym artykule"
 msgid "Clear current tag"
 msgstr "Wyczyść aktualny tag"
 
-#: src/keymap.cpp:142
-msgid "Set tag"
-msgstr "Wybierz tag"
-
-#: src/keymap.cpp:147
+#: src/keymap.cpp:142 src/keymap.cpp:147
 msgid "Select tag"
 msgstr "Wybierz tag"
 

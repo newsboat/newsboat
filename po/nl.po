@@ -1098,11 +1098,7 @@ msgstr "URLs in huidige artikelen tonen"
 msgid "Clear current tag"
 msgstr "huidige tag wissen"
 
-#: src/keymap.cpp:142
-msgid "Set tag"
-msgstr "tag selecteren"
-
-#: src/keymap.cpp:147
+#: src/keymap.cpp:142 src/keymap.cpp:147
 msgid "Select tag"
 msgstr "tag selecteren"
 
