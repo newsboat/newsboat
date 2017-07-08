@@ -1020,7 +1020,7 @@ msgid "Return to previous dialog/Quit"
 msgstr "Vend tilbake til forrige dialog/avslutt"
 
 #: src/keymap.cpp:37
-msgid "Quit program,  no confirmation"
+msgid "Quit program, no confirmation"
 msgstr "Avslutt programmet uten bekreftelse"
 
 #: src/keymap.cpp:42

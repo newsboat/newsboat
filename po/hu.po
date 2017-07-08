@@ -1015,7 +1015,7 @@ msgid "Return to previous dialog/Quit"
 msgstr "Vissza az előzőhöz/Kilépés"
 
 #: src/keymap.cpp:37
-msgid "Quit program,  no confirmation"
+msgid "Quit program, no confirmation"
 msgstr "Kilépés a programból, megerősítés nélkül"
 
 #: src/keymap.cpp:42

@@ -1019,7 +1019,7 @@ msgid "Return to previous dialog/Quit"
 msgstr "Återvänd till föregående dialogruta/Avsluta"
 
 #: src/keymap.cpp:37
-msgid "Quit program,  no confirmation"
+msgid "Quit program, no confirmation"
 msgstr ""
 
 #: src/keymap.cpp:42
