@@ -1098,7 +1098,11 @@ msgstr "Показывать ссылки в текущей заметке"
 msgid "Clear current tag"
 msgstr "Очистить текущую метку"
 
-#: src/keymap.cpp:142 src/keymap.cpp:147
+#: src/keymap.cpp:142
+msgid "Set tag"
+msgstr "Выбрать метку"
+
+#: src/keymap.cpp:147
 msgid "Select tag"
 msgstr "Выбрать метку"
 

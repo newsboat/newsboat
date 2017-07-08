@@ -1069,6 +1069,10 @@ msgid "Clear current tag"
 msgstr ""
 
 #: src/keymap.cpp:142 src/keymap.cpp:147
+msgid "Set tag"
+msgstr ""
+
+#: src/keymap.cpp:147
 msgid "Select tag"
 msgstr ""
 

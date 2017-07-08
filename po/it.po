@@ -1105,7 +1105,11 @@ msgstr "Mostra gli URL nell'articolo corrente"
 msgid "Clear current tag"
 msgstr "Pulisci il tag corrente"
 
-#: src/keymap.cpp:142 src/keymap.cpp:147
+#: src/keymap.cpp:142
+msgid "Set tag"
+msgstr "Seleziona tag"
+
+#: src/keymap.cpp:147
 msgid "Select tag"
 msgstr "Seleziona tag"
 

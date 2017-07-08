@@ -1104,7 +1104,11 @@ msgstr "Vis artikkelens URLer"
 msgid "Clear current tag"
 msgstr "Tøm valgte etikett"
 
-#: src/keymap.cpp:142 src/keymap.cpp:147
+#: src/keymap.cpp:142
+msgid "Set tag"
+msgstr "Velg etikett"
+
+#: src/keymap.cpp:147
 msgid "Select tag"
 msgstr "Velg etikett"
 

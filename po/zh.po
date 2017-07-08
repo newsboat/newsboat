@@ -1091,7 +1091,11 @@ msgstr "列出当前文章里的所有链接"
 msgid "Clear current tag"
 msgstr "清除当前标签"
 
-#: src/keymap.cpp:142 src/keymap.cpp:147
+#: src/keymap.cpp:142
+msgid "Set tag"
+msgstr "选择标签"
+
+#: src/keymap.cpp:147
 msgid "Select tag"
 msgstr "选择标签"
 

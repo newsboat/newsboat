@@ -1102,7 +1102,11 @@ msgstr "URL-ek az aktuális cikkben"
 msgid "Clear current tag"
 msgstr "Aktuális cimke törlése"
 
-#: src/keymap.cpp:142 src/keymap.cpp:147
+#: src/keymap.cpp:142
+msgid "Set tag"
+msgstr "Cimke kijelölése"
+
+#: src/keymap.cpp:147
 msgid "Select tag"
 msgstr "Cimke kijelölése"
 

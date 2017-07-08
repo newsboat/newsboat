@@ -1104,7 +1104,11 @@ msgstr "Показати URLs в поточній статті"
 msgid "Clear current tag"
 msgstr "Очистити поточну мітку"
 
-#: src/keymap.cpp:142 src/keymap.cpp:147
+#: src/keymap.cpp:142
+msgid "Set tag"
+msgstr "Вибрати мітку"
+
+#: src/keymap.cpp:147
 msgid "Select tag"
 msgstr "Вибрати мітку"
 

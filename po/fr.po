@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: newsbeuter 2.6\n"
 "Report-Msgid-Bugs-To: https://github.com/akrennmair/newsbeuter/issues\n"
 "POT-Creation-Date: 2017-01-23 20:19+0300\n"
-"PO-Revision-Date: 2017-07-08 14:12+0200\n"
+"PO-Revision-Date: 2017-07-08 15:51+0200\n"
 "Last-Translator: rugie <fliehen@posteo.net>\n"
 "Language-Team: Nicolas Martyanoff <khaelin@gmail.com>\n"
 "Language: fr\n"
@@ -164,7 +164,7 @@ msgstr "Ouverture du cache..."
 #: src/controller.cpp:448
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
-msgstr "Erreur : échec lors de l'ouverture du fichier de cache`%s': %s"
+msgstr "Erreur : l'ouverture du fichier de cache `%s' a échoué : %s"
 
 #: src/controller.cpp:484
 #, c-format
@@ -316,7 +316,7 @@ msgstr "<fichier_url>"
 
 #: src/controller.cpp:1017
 msgid "read RSS feed URLs from <urlfile>"
-msgstr "lire les liens vers fils RSS depuis le fichier <fichier_url>"
+msgstr "lire les liens des fils RSS depuis le fichier <fichier_url>"
 
 #: src/controller.cpp:1018
 msgid "<cachefile>"
@@ -1102,13 +1102,17 @@ msgstr "Afficher les liens contenus dans l'article actuel"
 msgid "Clear current tag"
 msgstr "Retirer l'étiquette"
 
-#: src/keymap.cpp:142 src/keymap.cpp:147
-msgid "Select tag"
+#: src/keymap.cpp:142
+msgid "Set tag"
 msgstr "Appliquer une étiquette"
+
+#: src/keymap.cpp:147
+msgid "Select tag"
+msgstr "Choisir une étiquette"
 
 #: src/keymap.cpp:152
 msgid "Open search dialog"
-msgstr "Ouvrir la vue de recherche"
+msgstr "Lancer une recherche"
 
 #: src/keymap.cpp:162
 msgid "Add download to queue"
@@ -1116,7 +1120,7 @@ msgstr "Ajouter un téléchargement à la file d'attente"
 
 #: src/keymap.cpp:167
 msgid "Reload the list of URLs from the configuration"
-msgstr "Recharger les liens à partir la configuration"
+msgstr "Recharger les liens depuis la configuration"
 
 #: src/keymap.cpp:172
 msgid "Download file"
@@ -1140,7 +1144,7 @@ msgstr "Intervertir le mode de téléchargement automatique"
 
 #: src/keymap.cpp:197
 msgid "Start player with currently selected download"
-msgstr "Lancer le lecteur à partir du fichier téléchargé"
+msgstr "Lancer la lecture du téléchargement actuel"
 
 #: src/keymap.cpp:202
 msgid "Mark file as finished (not played)"
