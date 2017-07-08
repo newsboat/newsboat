@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: newsbeuter 2.6\n"
 "Report-Msgid-Bugs-To: https://github.com/akrennmair/newsbeuter/issues\n"
 "POT-Creation-Date: 2017-01-23 20:19+0300\n"
-"PO-Revision-Date: 2017-07-08 13:14+0200\n"
+"PO-Revision-Date: 2017-07-08 14:12+0200\n"
 "Last-Translator: rugie <fliehen@posteo.net>\n"
 "Language-Team: Nicolas Martyanoff <khaelin@gmail.com>\n"
 "Language: fr\n"
@@ -444,7 +444,7 @@ msgstr "Fermer"
 
 #: src/dialogs_formaction.cpp:50
 msgid "Goto Dialog"
-msgstr "Aller à la vue"
+msgstr "Passer à la vue"
 
 #: src/dialogs_formaction.cpp:51
 msgid "Close Dialog"
@@ -565,8 +565,8 @@ msgstr "ptnia"
 #: src/feedlist_formaction.cpp:123
 msgid "Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)one?"
 msgstr ""
-"Trier par (p)remière étiquette/(t)itre/(n)ombre d'articles/nombre "
-"d'articlesà l(i)re/(a)ucun ?"
+"Trier par (p)remière étiquette/(t)itre/(n)ombre d'articles/nombre d'articles "
+"à l(i)re/(a)ucun ?"
 
 #: src/feedlist_formaction.cpp:142
 msgid ""
@@ -605,7 +605,7 @@ msgstr "Vous êtes déjà au premier fil."
 
 #: src/feedlist_formaction.cpp:280
 msgid "Marking all feeds read..."
-msgstr "Tous les fils sont marqués comme lu..."
+msgstr "Tous les fils sont marqués comme lus..."
 
 #: src/feedlist_formaction.cpp:325 src/itemlist_formaction.cpp:425
 #, c-format
@@ -1018,11 +1018,11 @@ msgstr "Retourner à la vue précédente/Quitter"
 
 #: src/keymap.cpp:37
 msgid "Quit program,  no confirmation"
-msgstr "Quitter le programme, sans confirmation"
+msgstr "Quitter le programme immédiatement"
 
 #: src/keymap.cpp:42
 msgid "Reload currently selected feed"
-msgstr "Recharger le fil actuel"
+msgstr "Recharger le fil"
 
 #: src/keymap.cpp:47
 msgid "Reload all feeds"
@@ -1034,7 +1034,7 @@ msgstr "Marquer le fil comme étant lu"
 
 #: src/keymap.cpp:57
 msgid "Mark all feeds read"
-msgstr "Marquer tous les fils comme lus"
+msgstr "Marquer tous les fils comme étant lus"
 
 #: src/keymap.cpp:62
 msgid "Save article"
@@ -1042,19 +1042,19 @@ msgstr "Enregistrer article"
 
 #: src/keymap.cpp:67
 msgid "Go to next article"
-msgstr "Aller à l'article suivant"
+msgstr "Passer à l'article suivant"
 
 #: src/keymap.cpp:72
 msgid "Go to previous article"
-msgstr "Aller à l'article précédent"
+msgstr "Passer à l'article précédent"
 
 #: src/keymap.cpp:77
 msgid "Go to next unread article"
-msgstr "Aller au prochain article à lire"
+msgstr "Passer au prochain article à lire"
 
 #: src/keymap.cpp:82
 msgid "Go to previous unread article"
-msgstr "Aller au précédent article à lire"
+msgstr "Passer au précédent article à lire"
 
 #: src/keymap.cpp:87
 msgid "Go to a random unread article"
@@ -1092,7 +1092,7 @@ msgstr "Intervertir l'état de lecture de l'article"
 
 #: src/keymap.cpp:127
 msgid "Toggle show read feeds/articles"
-msgstr "Intervertir l'affichage des fils et articles déjà lus"
+msgstr "Intervertir l'affichage exclusif des fils/articles déjà lus"
 
 #: src/keymap.cpp:132
 msgid "Show URLs in current article"
@@ -1100,11 +1100,11 @@ msgstr "Afficher les liens contenus dans l'article actuel"
 
 #: src/keymap.cpp:137
 msgid "Clear current tag"
-msgstr "Effacer l'étiquette actuelle"
+msgstr "Retirer l'étiquette"
 
 #: src/keymap.cpp:142 src/keymap.cpp:147
 msgid "Select tag"
-msgstr "Choisir une étiquette"
+msgstr "Appliquer une étiquette"
 
 #: src/keymap.cpp:152
 msgid "Open search dialog"
@@ -1116,7 +1116,7 @@ msgstr "Ajouter un téléchargement à la file d'attente"
 
 #: src/keymap.cpp:167
 msgid "Reload the list of URLs from the configuration"
-msgstr "Recharger les liens depuis la configuration"
+msgstr "Recharger les liens à partir la configuration"
 
 #: src/keymap.cpp:172
 msgid "Download file"
@@ -1172,7 +1172,7 @@ msgstr "Choisir un filtre prédéfini"
 
 #: src/keymap.cpp:237
 msgid "Clear currently set filter"
-msgstr "Retirer le filtre actuellement appliqué"
+msgstr "Retirer le filtre"
 
 #: src/keymap.cpp:242
 msgid "Bookmark current link/article"
@@ -1200,7 +1200,7 @@ msgstr "Passer au fil à lire précédent"
 
 #: src/keymap.cpp:272
 msgid "Call a macro"
-msgstr "Appeler une macro"
+msgstr "Lancer une macro-commande"
 
 #: src/keymap.cpp:277
 msgid "Delete article"
@@ -1212,7 +1212,7 @@ msgstr "Retirer les articles supprimés"
 
 #: src/keymap.cpp:287
 msgid "Edit subscribed URLs"
-msgstr "Modifier les liens d'abonnement"
+msgstr "Modifier les abonnements"
 
 #: src/keymap.cpp:292
 msgid "Close currently selected dialog"
@@ -1220,7 +1220,7 @@ msgstr "Fermer la vue sélectionnée"
 
 #: src/keymap.cpp:297
 msgid "View list of open dialogs"
-msgstr "Afficher la liste des vues ouvertes"
+msgstr "Afficher la liste des vues actives"
 
 #: src/keymap.cpp:302
 msgid "Go to next dialog"
