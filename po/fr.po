@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: newsbeuter 2.6\n"
 "Report-Msgid-Bugs-To: https://github.com/akrennmair/newsbeuter/issues\n"
 "POT-Creation-Date: 2017-01-23 20:19+0300\n"
-"PO-Revision-Date: 2017-07-07 19:51+0200\n"
+"PO-Revision-Date: 2017-07-08 13:14+0200\n"
 "Last-Translator: rugie <fliehen@posteo.net>\n"
 "Language-Team: Nicolas Martyanoff <khaelin@gmail.com>\n"
 "Language: fr\n"
@@ -186,7 +186,7 @@ msgid ""
 "with feeds, and try again."
 msgstr ""
 "Il semble que le fichier OPML que vous avez ajouté ne contient aucun fil. "
-"Ajoutez-en puis puis réessayez."
+"Ajoutez-en puis réessayez."
 
 #: src/controller.cpp:507
 msgid ""
@@ -194,7 +194,7 @@ msgid ""
 "account. Please do so, and try again."
 msgstr ""
 "Il semble qu'aucun fil ne soit configuré dans votre compte The Old Reader. "
-"Ajoutez-en puis puis réessayez."
+"Ajoutez-en puis réessayez."
 
 #: src/controller.cpp:509
 msgid ""
@@ -202,7 +202,7 @@ msgid ""
 "account. Please do so, and try again."
 msgstr ""
 "Il semble qu'aucun fil ne soit configuré dans votre compte Tiny Tiny RSS. "
-"Ajoutez-en puis puis réessayez."
+"Ajoutez-en puis réessayez."
 
 #: src/controller.cpp:511
 msgid ""
@@ -210,7 +210,7 @@ msgid ""
 "Please do so, and try again."
 msgstr ""
 "Il semble qu'aucun fil ne soit configuré dans votre compte NewsBlur. Ajoutez-"
-"en puis puis réessayez."
+"en puis réessayez."
 
 #: src/controller.cpp:520
 msgid "Loading articles from cache..."
@@ -400,7 +400,7 @@ msgid ""
 "`bookmark-cmd' accordingly."
 msgstr ""
 "Le support des signets n'est pas configuré. Veuillez éditer la variable de "
-"configuration 'bookmark-cmd' puis essayer à nouveau."
+"configuration 'bookmark-cmd' puis réessayer."
 
 #: src/controller.cpp:1381
 #, c-format
@@ -461,7 +461,7 @@ msgstr "Aucun élément sélectionné !"
 
 #: src/dialogs_formaction.cpp:76
 msgid "Error: you can't remove the feed list!"
-msgstr "Erreur : vous ne pouvez pas supprimer la liste de fils !"
+msgstr "Erreur : la liste de fils ne peut être supprimée !"
 
 #: src/dialogs_formaction.cpp:101 src/feedlist_formaction.cpp:746
 #: src/itemlist_formaction.cpp:925 src/urlview_formaction.cpp:131
@@ -704,12 +704,12 @@ msgstr "Position non visible !"
 #: src/feedlist_formaction.cpp:805
 #, c-format
 msgid "Feed List - %u unread, %u total"
-msgstr "Liste de fils - %u non lus, %u total"
+msgstr "Liste de fils - %u à lire, %u total"
 
 #: src/filebrowser_formaction.cpp:102
 #, c-format
 msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
-msgstr "Souhaitez-vous réellement écraser `%s' (y:Oui n:No)? "
+msgstr "Souhaitez-vous réellement écraser `%s' (y : Oui n : No)? "
 
 #: src/filebrowser_formaction.cpp:102
 msgid "n"
@@ -1176,7 +1176,7 @@ msgstr "Retirer le filtre actuellement appliqué"
 
 #: src/keymap.cpp:242
 msgid "Bookmark current link/article"
-msgstr "Créer un signet à partir du lien/article courant"
+msgstr "Créer un signet à partir du lien/article actuel"
 
 #: src/keymap.cpp:247
 msgid "Edit flags"
