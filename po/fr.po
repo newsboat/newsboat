@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: newsbeuter 2.6\n"
 "Report-Msgid-Bugs-To: https://github.com/akrennmair/newsbeuter/issues\n"
 "POT-Creation-Date: 2017-01-23 20:19+0300\n"
-"PO-Revision-Date: 2017-07-08 17:37+0200\n"
+"PO-Revision-Date: 2017-07-11 10:22+0200\n"
 "Last-Translator: rugie <fliehen@posteo.net>\n"
 "Language-Team: Nicolas Martyanoff <khaelin@gmail.com>\n"
 "Language: fr\n"
@@ -51,7 +51,7 @@ msgstr "%N %V - Vues"
 
 #: src/configcontainer.cpp:161
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
-msgstr "%N %V - Vos fils (%u à lire, %t total)%?T? - étiquette `%T'&?"
+msgstr "%N %V - Vos fils (%u à lire, %t au total)%?T? - étiquette `%T'&?"
 
 #: src/configcontainer.cpp:165
 msgid "%N %V - %?O?Open File&Save File? - %f"
@@ -63,11 +63,11 @@ msgstr "%N %V - Aide"
 
 #: src/configcontainer.cpp:171
 msgid "%N %V - Article '%T' (%u unread, %t total)"
-msgstr "%N %V - Article '%T' (%u à lire, %t total) - %U"
+msgstr "%N %V - Article '%T' (%u à lire, %t au total) - %U"
 
 #: src/configcontainer.cpp:175
 msgid "%N %V - Search result (%u unread, %t total)"
-msgstr "%N %V - Résultat de la recherche (%u à lire, %t total)"
+msgstr "%N %V - Résultat de la recherche (%u à lire, %t au total)"
 
 #: src/configcontainer.cpp:178
 msgid "%N %V - Select Filter"
@@ -139,7 +139,7 @@ msgstr "%s : option inconnue - %c"
 #: src/controller.cpp:367 src/pb_controller.cpp:203
 #, c-format
 msgid "Starting %s %s..."
-msgstr "Démarrage %s %s..."
+msgstr "Démarrage de %s %s..."
 
 #: src/controller.cpp:377 src/controller.cpp:436 src/pb_controller.cpp:207
 #, c-format
@@ -262,7 +262,7 @@ msgstr "%sChargement de %s..."
 #: src/controller.cpp:759 src/controller.cpp:761 src/controller.cpp:763
 #, c-format
 msgid "Error while retrieving %s: %s"
-msgstr "Erreur lors de la récupération de %s: %s"
+msgstr "Erreur lors de la récupération de %s : %s"
 
 #: src/controller.cpp:771
 msgid "Error: invalid feed!"
@@ -691,7 +691,7 @@ msgstr "Recherche en cours..."
 #: src/feedlist_formaction.cpp:722 src/itemlist_formaction.cpp:607
 #, c-format
 msgid "Error while searching for `%s': %s"
-msgstr "Erreur lors de la recherche de '%s': %s"
+msgstr "Erreur lors de la recherche de '%s' : %s"
 
 #: src/feedlist_formaction.cpp:732 src/itemlist_formaction.cpp:612
 msgid "No results."
@@ -704,7 +704,7 @@ msgstr "Position non visible !"
 #: src/feedlist_formaction.cpp:805
 #, c-format
 msgid "Feed List - %u unread, %u total"
-msgstr "Liste de fils - %u à lire, %u total"
+msgstr "Liste de fils - %u à lire, %u au total"
 
 #: src/filebrowser_formaction.cpp:102
 #, c-format
@@ -1080,7 +1080,7 @@ msgstr "Ouvrir l'article dans le navigateur"
 
 #: src/keymap.cpp:112
 msgid "Open help dialog"
-msgstr "Ouvrir l'aide"
+msgstr "Ouvrir cette aide"
 
 #: src/keymap.cpp:117
 msgid "Toggle source view"
