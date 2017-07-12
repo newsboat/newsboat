@@ -191,7 +191,7 @@ msgid ""
 "It looks like you haven't configured any feeds in your The Old Reader "
 "account. Please do so, and try again."
 msgstr ""
-"Parece que no has configurado ninguna fuente en tu cuenta de Google Reader. "
+"Parece que no has configurado ninguna fuente en tu cuenta de The Old Reader. "
 "Por favor hazlo e inténtalo de nuevo."
 
 #: src/controller.cpp:509
@@ -200,7 +200,7 @@ msgid ""
 "It looks like you haven't configured any feeds in your Tiny Tiny RSS "
 "account. Please do so, and try again."
 msgstr ""
-"Parece que no has configurado ninguna fuente en tu cuenta de Google Reader. "
+"Parece que no has configurado ninguna fuente en tu cuenta de Tiny Tiny RSS. "
 "Por favor hazlo e inténtalo de nuevo."
 
 #: src/controller.cpp:511
@@ -209,7 +209,7 @@ msgid ""
 "It looks like you haven't configured any feeds in your NewsBlur account. "
 "Please do so, and try again."
 msgstr ""
-"Parece que no has configurado ninguna fuente en tu cuenta de Google Reader. "
+"Parece que no has configurado ninguna fuente en tu cuenta de NewsBlur. "
 "Por favor hazlo e inténtalo de nuevo."
 
 #: src/controller.cpp:520
