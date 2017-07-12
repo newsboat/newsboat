@@ -998,7 +998,7 @@ msgid "Return to previous dialog/Quit"
 msgstr "返回到前一個對話框/退出"
 
 #: src/keymap.cpp:37
-msgid "Quit program,  no confirmation"
+msgid "Quit program, no confirmation"
 msgstr "不經確認，直接離開程式"
 
 #: src/keymap.cpp:42

@@ -1015,7 +1015,7 @@ msgid "Return to previous dialog/Quit"
 msgstr "Volver/Salir"
 
 #: src/keymap.cpp:37
-msgid "Quit program,  no confirmation"
+msgid "Quit program, no confirmation"
 msgstr "Salir del programa sin confirmación"
 
 #: src/keymap.cpp:42

@@ -34,7 +34,7 @@ static op_desc opdescs[] = {
 	},
 	{
 		OP_HARDQUIT, "hard-quit", "Q",
-		_("Quit program,  no confirmation"),
+		_("Quit program, no confirmation"),
 		KM_BOTH
 	},
 	{

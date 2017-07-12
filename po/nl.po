@@ -1014,7 +1014,7 @@ msgid "Return to previous dialog/Quit"
 msgstr "naar vorige dialoogvenster terugkeren/afsluiten"
 
 #: src/keymap.cpp:37
-msgid "Quit program,  no confirmation"
+msgid "Quit program, no confirmation"
 msgstr "programma afsluiten zonder bevestiging"
 
 #: src/keymap.cpp:42

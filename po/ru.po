@@ -1014,7 +1014,7 @@ msgid "Return to previous dialog/Quit"
 msgstr "Вернуться в предыдущий диалог/Выйти"
 
 #: src/keymap.cpp:37
-msgid "Quit program,  no confirmation"
+msgid "Quit program, no confirmation"
 msgstr "Закрыть программу без подтверждения"
 
 #: src/keymap.cpp:42
