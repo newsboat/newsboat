@@ -868,6 +868,9 @@ unsigned int utils::get_random_value(unsigned int max) {
 		initialized = true;
 		srand(~(time(nullptr) ^ getpid() ^ getppid()));
 	}
+	// OpenBSD will warn you that rand() can be deterministic. We don't care,
+	// because this function is only used for simple things like selecting
+	// a random unread item.
 	return static_cast<unsigned int>(rand() % max);
 }
 
