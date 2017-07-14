@@ -1,7 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <unistd.h>
-#include <wordexp.h>
+#include <glob.h>
 
 #include <remote_api.h>
 #include <utils.h>
@@ -9,15 +9,15 @@
 namespace newsbeuter {
 
 const std::string remote_api::read_password(const std::string& file) {
-	wordexp_t exp;
+	glob_t exp;
 	std::ifstream ifs;
 	std::string pass = "";
 
-	wordexp(file.c_str(), &exp, 0);
-	if (exp.we_wordc > 0) {
-		ifs.open(exp.we_wordv[0]);
+	int res = glob(file.c_str(), GLOB_ERR, nullptr, &exp);
+	if (! res && exp.gl_pathc == 1 && exp.gl_pathv) {
+		ifs.open(exp.gl_pathv[0]);
 	}
-	wordfree(&exp);
+	globfree(&exp);
 	if (ifs.is_open()) {
 		std::getline(ifs, pass);
 	}
