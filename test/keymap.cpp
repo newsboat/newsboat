@@ -47,9 +47,18 @@ TEST_CASE("get_opcode()", "[keymap]") {
 TEST_CASE("getkey()", "[keymap]") {
 	keymap k(KM_NEWSBEUTER);
 
-	REQUIRE(k.getkey(OP_OPEN, "all") == "ENTER");
-	REQUIRE(k.getkey(OP_TOGGLEITEMREAD, "all") == "N");
-	REQUIRE(k.getkey(static_cast<operation>(30000), "all") == "<none>");
+	SECTION("Retrieves general bindings") {
+		REQUIRE(k.getkey(OP_OPEN, "all") == "ENTER");
+		REQUIRE(k.getkey(OP_TOGGLEITEMREAD, "all") == "N");
+		REQUIRE(k.getkey(static_cast<operation>(30000), "all") == "<none>");
+	}
+
+	SECTION("Returns context-specific bindings only in that context") {
+		k.unset_key("q", "article");
+		k.set_key(OP_QUIT, "O", "article");
+		REQUIRE(k.getkey(OP_QUIT, "article") == "O");
+		REQUIRE(k.getkey(OP_QUIT, "all") == "q");
+	}
 }
 
 TEST_CASE("get_key()", "[keymap]") {
