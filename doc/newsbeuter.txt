@@ -669,6 +669,14 @@ authentication is done against Tiny Tiny RSS itself.
 
 	ttrss-mode "single"		# "multi" is default
 
+If Tiny Tiny RSS is configured in multi-user mode and still deployed behind 
+an additional HTTP-BasicAuth, the required username and password (which may 
+deviate from ttrss-login and ttrss-password) can be specified in the user-part 
+of the url like this:
+
+    ttrss-url "http://htuser:htpasswd@example.com/ttrss/"
+
+
 With these settings, newsbeuter should be able to connect to Tiny Tiny RSS and 
 download your subscribed feeds. Articles or even complete feeds that you marked 
 as read are synchronized directly to Tiny Tiny RSS.
