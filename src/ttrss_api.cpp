@@ -12,7 +12,11 @@ namespace newsbeuter {
 
 ttrss_api::ttrss_api(configcontainer * c) : remote_api(c) {
 	single = (cfg->get_configvalue("ttrss-mode") == "single");
-	auth_info = strprintf::fmt("%s:%s", cfg->get_configvalue("ttrss-login"), cfg->get_configvalue("ttrss-password"));
+	if (single) {
+		auth_info = strprintf::fmt("%s:%s", cfg->get_configvalue("ttrss-login"), cfg->get_configvalue("ttrss-password"));
+	} else {
+		auth_info = "";
+	}
 	sid = "";
 }
 
@@ -42,7 +46,11 @@ std::string ttrss_api::retrieve_sid() {
 
 	args["user"] = single ? "admin" : cred.user.c_str();
 	args["password"] = cred.pass.c_str();
-	auth_info = strprintf::fmt("%s:%s", cred.user, cred.pass);
+	if (single) {
+		auth_info = strprintf::fmt("%s:%s", cred.user, cred.pass);
+	} else {
+		auth_info = "";
+	}
 	json_object * content = run_op("login", args);
 
 	if (content == nullptr)
