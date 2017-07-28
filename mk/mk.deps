@@ -207,11 +207,6 @@ src/listformatter.o: src/listformatter.cpp include/listformatter.h \
  include/strprintf.h include/configcontainer.h include/stflpp.h
 src/logger.o: src/logger.cpp include/logger.h config.h \
  include/strprintf.h include/exception.h
-src/markreadthread.o: src/markreadthread.cpp include/markreadthread.h \
- include/ttrss_api.h rss/rsspp.h include/remote_api.h \
- include/configcontainer.h include/configparser.h include/urlreader.h \
- include/cache.h include/rss.h include/matcher.h filter/FilterParser.h \
- include/utils.h include/logger.h config.h include/strprintf.h
 src/matcher.o: src/matcher.cpp include/matcher.h filter/FilterParser.h \
  include/logger.h config.h include/strprintf.h include/utils.h \
  include/configcontainer.h include/configparser.h include/exceptions.h
@@ -313,7 +308,7 @@ src/ttrss_api.o: src/ttrss_api.cpp include/remote_api.h \
  include/configcontainer.h include/configparser.h include/ttrss_api.h \
  rss/rsspp.h include/urlreader.h include/cache.h include/rss.h \
  include/matcher.h filter/FilterParser.h include/utils.h include/logger.h \
- config.h include/strprintf.h include/markreadthread.h
+ config.h include/strprintf.h
 src/ttrss_urlreader.o: src/ttrss_urlreader.cpp include/ttrss_api.h \
  rss/rsspp.h include/remote_api.h include/configcontainer.h \
  include/configparser.h include/urlreader.h include/cache.h include/rss.h \

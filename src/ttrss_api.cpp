@@ -4,8 +4,8 @@
 #include <cstring>
 #include <algorithm>
 #include <time.h>
+#include <thread>
 
-#include <markreadthread.h>
 #include <strprintf.h>
 
 namespace newsboat {
@@ -201,13 +201,16 @@ bool ttrss_api::mark_all_read(const std::string& feed_url) {
 }
 
 bool ttrss_api::mark_article_read(const std::string& guid, bool read) {
-
 	// Do this in a thread, as we don't care about the result enough to wait for
 	// it.
-	std::thread t {markreadthread(this, guid, read)};
+	std::thread t {[=](){
+		LOG(level::DEBUG, "ttrss_api::mark_article_read: inside thread, marking thread as read...");
+
+		// Call the ttrss_api's update_article function as a thread.
+		this->update_article(guid, 2, read ? 0 : 1 );
+	}};
 	t.detach();
 	return true;
-
 }
 
 bool ttrss_api::update_article_flags(const std::string& oldflags, const std::string& newflags, const std::string& guid) {
