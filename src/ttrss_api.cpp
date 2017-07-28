@@ -73,12 +73,41 @@ json_object* ttrss_api::run_op(const std::string& op,
 {
 	std::string url = strprintf::fmt("%s/api/", cfg->get_configvalue("ttrss-url"));
 
-	std::string req_data = "{\"op\":\"" + op + "\",\"sid\":\"" + sid + "\"";
+	// First build the request payload
+	std::string req_data;
+	{
+		std::map<std::string, std::string> effectiveargs;
 
-	for (auto arg : args) {
-		req_data += ",\"" + arg.first + "\":\"" + arg.second + "\"";
+		// Copy args and add "op" and "sid" members
+		effectiveargs.insert(args.begin(), args.end());
+		effectiveargs["op"]  = op;
+		if (!sid.empty()) {
+			effectiveargs["sid"] = sid;
+		}
+
+		json_object* jrequestparam = json_object_new_object();
+		if (jrequestparam == nullptr) {
+			LOG(level::DEBUG, "ttrss_api::run_op(%s,...): Failed to allocate request object", op);
+			return nullptr;
+		}
+
+		// Note: We are violating the upstream-api's types here by packing all information
+		//       into strings. If things start to break, this would be a good place to start.
+		for (auto arg : effectiveargs) {
+			json_object* jstring = json_object_new_string(arg.second.c_str());
+			if (jstring == nullptr) {
+				LOG(level::DEBUG, "ttrss_api::run_op(%s,...): Failed to allocate string object for %s", op, arg.second);
+				json_object_put(jrequestparam);
+				return nullptr;
+			}
+
+			// There seems to be no way to errorcheck json_object_object_add, assuming nothrow
+			json_object_object_add(jrequestparam, arg.first.c_str(), jstring);
+		}
+
+		req_data = json_object_to_json_string(jrequestparam);
+		json_object_put(jrequestparam);
 	}
-	req_data += "}";
 
 	std::string result = utils::retrieve_url(url, cfg, auth_info, &req_data);
 
