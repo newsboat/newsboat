@@ -583,7 +583,7 @@ void cache::cleanup_cache(std::vector<std::shared_ptr<rss_feed>>& feeds) {
 		cleanup_rss_items_statement.append(1,';');
 
 		std::string cleanup_read_items_statement(
-				"DELETE FROM rss_item WHERE unread = 0");
+				"UPDATE rss_item SET deleted = 1 WHERE unread = 0");
 
 		run_sql(cleanup_rss_feeds_statement);
 		run_sql(cleanup_rss_items_statement);
