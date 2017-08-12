@@ -105,7 +105,7 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 	curl_easy_setopt(easyhandle, CURLOPT_FOLLOWLOCATION, 1);
 	curl_easy_setopt(easyhandle, CURLOPT_MAXREDIRS, 10);
 	curl_easy_setopt(easyhandle, CURLOPT_FAILONERROR, 1);
-	curl_easy_setopt(easyhandle, CURLOPT_ENCODING, "gzip, deflate");
+	curl_easy_setopt(easyhandle, CURLOPT_ACCEPT_ENCODING, "gzip, deflate");
 	if (cookie_cache != "") {
 		curl_easy_setopt(easyhandle, CURLOPT_COOKIEFILE, cookie_cache.c_str());
 		curl_easy_setopt(easyhandle, CURLOPT_COOKIEJAR, cookie_cache.c_str());
