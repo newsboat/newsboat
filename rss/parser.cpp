@@ -158,11 +158,7 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 	LOG(level::DEBUG, "rsspp::parser::parse_url: ret = %d", ret);
 
 	long status;
-	curl_easy_getinfo(easyhandle, CURLINFO_HTTP_CONNECTCODE, &status);
-
-	if (status >= 400) {
-		LOG(level::USERERROR, _("Error: trying to download feed `%s' returned HTTP status code %ld."), url, status);
-	}
+	CURLcode infoOk = curl_easy_getinfo(easyhandle, CURLINFO_RESPONSE_CODE, &status);
 
 	curl_easy_reset(easyhandle);
 
@@ -171,7 +167,13 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 
 	if (ret != 0) {
 		LOG(level::ERROR, "rsspp::parser::parse_url: curl_easy_perform returned err %d: %s", ret, curl_easy_strerror(ret));
-		throw exception(curl_easy_strerror(ret));
+		std::string msg;
+		if (ret == CURLE_HTTP_RETURNED_ERROR && infoOk == CURLE_OK) {
+			msg = strprintf::fmt("%s %li", curl_easy_strerror(ret), status);
+		} else {
+			msg = curl_easy_strerror(ret);
+		}
+		throw exception(msg);
 	}
 
 	LOG(level::INFO, "parser::parse_url: retrieved data for %s: %s", url, buf);
