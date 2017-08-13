@@ -1344,12 +1344,12 @@ std::string controller::bookmark(
 	std::string bookmark_cmd = cfg.get_configvalue("bookmark-cmd");
 	bool is_interactive = cfg.get_configvalue_as_bool("bookmark-interactive");
 	if (bookmark_cmd.length() > 0) {
-		std::string cmdline = strprintf::fmt("%s '%s' %s %s %s",
+		std::string cmdline = strprintf::fmt("%s '%s' '%s' '%s' '%s'",
 		                                       bookmark_cmd,
 		                                       utils::replace_all(url,"'", "%27"),
-		                                       quote_empty(stfl::quote(title)),
-		                                       quote_empty(stfl::quote(description)),
-		                                       quote_empty(stfl::quote(feed_title)));
+		                                       utils::replace_all(title,"'", "%27"),
+		                                       utils::replace_all(description,"'", "%27"),
+		                                       utils::replace_all(feed_title,"'", "%27"));
 
 		LOG(level::DEBUG, "controller::bookmark: cmd = %s", cmdline);
 
