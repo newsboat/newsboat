@@ -336,7 +336,7 @@ void view::open_in_pager(const std::string& filename) {
 	pop_current_formaction();
 }
 
-void view::open_in_browser(const std::string& url) {
+bool view::open_in_browser(const std::string& url) {
 	formaction_stack.push_back(std::shared_ptr<formaction>());
 	current_formaction = formaction_stack_size() - 1;
 	std::string cmdline;
@@ -359,8 +359,14 @@ void view::open_in_browser(const std::string& url) {
 		cmdline.append("'");
 	}
 	stfl::reset();
-	utils::run_interactively(cmdline, "view::open_in_browser");
+	int browser_exit_code = utils::run_interactively(cmdline, "view::open_in_browser");
+	if (browser_exit_code != 0) {
+		LOG(level::DEBUG, "utils::run_interactively: "
+			"Starting the browser failed with error code %d - command was %s", browser_exit_code, cmdline);
+	}
 	pop_current_formaction();
+
+	return browser_exit_code == 0;
 }
 
 void view::update_visible_feeds(std::vector<std::shared_ptr<rss_feed>> feeds) {

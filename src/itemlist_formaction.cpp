@@ -84,9 +84,16 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		LOG(level::INFO, "itemlist_formaction: opening item at pos `%s'", itemposname);
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
+
+				bool browser_success = v->open_in_browser(visible_items[itempos].first->link());
+				if (!browser_success) {
+					v->show_error(_("Browser failed to open the link!"));
+					break;
+				}
+
 				visible_items[itempos].first->set_unread(false);
 				v->get_ctrl()->mark_article_read(visible_items[itempos].first->guid(), true);
-				v->open_in_browser(visible_items[itempos].first->link());
+
 				if (!v->get_cfg()->get_configvalue_as_bool("openbrowser-and-mark-jumps-to-next-unread")) {
 					if (itempos < visible_items.size()-1) {
 						f->set("itempos", strprintf::fmt("%u", itempos + 1));
