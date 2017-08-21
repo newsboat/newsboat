@@ -311,7 +311,7 @@ void view::push_empty_formaction() {
 	current_formaction = formaction_stack_size() - 1;
 }
 
-void view::open_in_pager(const std::string& filename) {
+bool view::open_in_pager(const std::string& filename) {
 	formaction_stack.push_back(std::shared_ptr<formaction>());
 	current_formaction = formaction_stack_size() - 1;
 	std::string cmdline;
@@ -332,8 +332,13 @@ void view::open_in_pager(const std::string& filename) {
 		cmdline.append(filename);
 	}
 	stfl::reset();
-	utils::run_interactively(cmdline, "view::open_in_pager");
+	int pager_exit_code = utils::run_interactively(cmdline, "view::open_in_pager");
+	if (pager_exit_code != 0) {
+		LOG(level::DEBUG, "utils::run_interactively: "
+			"Starting the pager failed with error code %d - command was %s", pager_exit_code, cmdline);
+	}
 	pop_current_formaction();
+	return pager_exit_code == 0;
 }
 
 bool view::open_in_browser(const std::string& url) {
@@ -480,7 +485,10 @@ void view::push_itemview(std::shared_ptr<rss_feed> f, const std::string& guid, c
 	} else {
 		std::shared_ptr<rss_item> item = f->get_item_by_guid(guid);
 		std::string filename = get_ctrl()->write_temporary_item(item);
-		open_in_pager(filename);
+		if (!open_in_pager(filename)) {
+			show_error(_("Pager failed to show the item!"));
+			return;
+		}
 		try {
 			bool old_unread = item->unread();
 			item->set_unread(false);

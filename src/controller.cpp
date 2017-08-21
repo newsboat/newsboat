@@ -1317,9 +1317,17 @@ void controller::edit_urls_file() {
 	v->push_empty_formaction();
 	stfl::reset();
 
-	utils::run_interactively(cmdline, "controller::edit_urls_file");
+	int editor_exit_code = utils::run_interactively(cmdline, "controller::edit_urls_file");
+	if (editor_exit_code != 0) {
+		LOG(level::DEBUG, "utils::run_interactively: "
+			"The editor failed with error code %d - command was %s", editor_exit_code, cmdline);
+	}
 
 	v->pop_current_formaction();
+
+	if (editor_exit_code != 0) {
+		v->show_error(_("Editor failed to open url file!"));
+	}
 
 	reload_urls_file();
 }

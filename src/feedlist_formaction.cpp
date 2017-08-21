@@ -162,7 +162,9 @@ REDO:
 			if (feed) {
 				if (feed->rssurl().substr(0,6) != "query:") {
 					LOG(level::INFO, "feedlist_formaction: opening feed at position `%s': %s", feedpos, feed->link());
-					v->open_in_browser(feed->link());
+					if (!v->open_in_browser(feed->link()))
+						v->show_error(_("Browser failed to open the link!"));
+
 				} else {
 					v->show_error(_("Cannot open query feeds in the browser!"));
 				}
