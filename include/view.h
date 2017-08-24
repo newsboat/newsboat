@@ -67,8 +67,8 @@ class view {
 		std::string select_tag();
 		std::string select_filter(const std::vector<filter_name_expr_pair>& filters);
 
-		bool open_in_browser(const std::string& url);
-		bool open_in_pager(const std::string& filename);
+		bool open_in_browser(const std::string& url) __attribute__ ((warn_unused_result));;
+		bool open_in_pager(const std::string& filename) __attribute__ ((warn_unused_result));
 
 		std::string get_filename_suggestion(const std::string& s);
 

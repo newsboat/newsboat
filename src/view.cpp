@@ -333,10 +333,6 @@ bool view::open_in_pager(const std::string& filename) {
 	}
 	stfl::reset();
 	int pager_exit_code = utils::run_interactively(cmdline, "view::open_in_pager");
-	if (pager_exit_code != 0) {
-		LOG(level::DEBUG, "utils::run_interactively: "
-			"Starting the pager failed with error code %d - command was %s", pager_exit_code, cmdline);
-	}
 	pop_current_formaction();
 	return pager_exit_code == 0;
 }
@@ -365,10 +361,6 @@ bool view::open_in_browser(const std::string& url) {
 	}
 	stfl::reset();
 	int browser_exit_code = utils::run_interactively(cmdline, "view::open_in_browser");
-	if (browser_exit_code != 0) {
-		LOG(level::DEBUG, "utils::run_interactively: "
-			"Starting the browser failed with error code %d - command was %s", browser_exit_code, cmdline);
-	}
 	pop_current_formaction();
 
 	return browser_exit_code == 0;

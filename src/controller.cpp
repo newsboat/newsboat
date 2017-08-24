@@ -1317,17 +1317,16 @@ void controller::edit_urls_file() {
 	v->push_empty_formaction();
 	stfl::reset();
 
-	int editor_exit_code = utils::run_interactively(cmdline, "controller::edit_urls_file");
-	if (editor_exit_code != 0) {
-		LOG(level::DEBUG, "utils::run_interactively: "
-			"The editor failed with error code %d - command was %s", editor_exit_code, cmdline);
-	}
+	/* We should not check this particular exit code.
+	 * Editors usually fail when closing+saving (and stay open).
+	 * (tested with vim, nano, gedit, geany)
+	 * (texmaker 5.0.1 and notepadqq 1.0.1 close without neither showing an
+	 * error nor saving but despite return 0)
+	 */
+	int unused __attribute__((unused));
+	unused = utils::run_interactively(cmdline, "controller::edit_urls_file");
 
 	v->pop_current_formaction();
-
-	if (editor_exit_code != 0) {
-		v->show_error(_("Editor failed to open url file!"));
-	}
 
 	reload_urls_file();
 }
@@ -1364,7 +1363,10 @@ std::string controller::bookmark(
 		if (is_interactive) {
 			v->push_empty_formaction();
 			stfl::reset();
-			utils::run_interactively(cmdline, "controller::bookmark");
+			int bookmark_cmd_exit_code = utils::run_interactively(cmdline, "controller::bookmark");
+			if (bookmark_cmd_exit_code != 0) {
+				return "The bookmark command failed!";
+			}
 			v->pop_current_formaction();
 			return "";
 		} else {
