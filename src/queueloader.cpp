@@ -130,7 +130,7 @@ std::string queueloader::get_filename(const std::string& str) {
 		strftime(lbuf, sizeof(lbuf), "%Y-%b-%d-%H%M%S.unknown", localtime(&t));
 		fn.append(lbuf);
 	} else {
-		fn.append(base);
+		fn.append(utils::replace_all(base, "'", "%27"));
 	}
 	return fn;
 }
