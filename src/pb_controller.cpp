@@ -371,9 +371,10 @@ void pb_controller::play_file(const std::string& file) {
 	cmdline.append(utils::replace_all(file,"\"", "\\\""));
 	cmdline.append("\"");
 	stfl::reset();
-	// Is the following exit code important?
-	int unused __attribute__((unused));
-	unused = utils::run_interactively(cmdline, "pb_controller::play_file");
+	int player_exit_code = utils::run_interactively(cmdline, "pb_controller::play_file");
+	if (player_exit_code != 0) {
+		v->dllist_form.set("msg", _("The player failed!"));
+	}
 }
 
 
