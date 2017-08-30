@@ -23,6 +23,9 @@ class pb_view {
 			set_bindings();
 		}
 
+		void show_error (const std::string& msg) {
+			this->dllist_form.set("msg", msg);
+		}
 	private:
 
 		friend class newsbeuter::colormanager;
@@ -40,7 +43,6 @@ class pb_view {
 		std::string prepare_keymaphint(keymap_hint_entry * hints);
 		pb_controller * ctrl;
 		newsbeuter::stfl::form dllist_form;
-		friend class pb_controller; // to use newsbeuter::stfl::form::set()
 
 		newsbeuter::stfl::form help_form;
 		newsbeuter::keymap * keys;

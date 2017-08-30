@@ -136,8 +136,9 @@ void pb_view::run(bool auto_download) {
 			if (idx != -1) {
 				dlstatus status = ctrl->downloads()[idx].status();
 				if (status == dlstatus::FINISHED || status == dlstatus::PLAYED || status == dlstatus::READY) {
-					ctrl->play_file(ctrl->downloads()[idx].filename());
-					ctrl->downloads()[idx].set_status(dlstatus::PLAYED);
+					if (ctrl->play_file(ctrl->downloads()[idx].filename())) {
+						ctrl->downloads()[idx].set_status(dlstatus::PLAYED);
+					}
 				} else {
 					dllist_form.set("msg", _("Error: download needs to be finished before the file can be played."));
 				}

@@ -361,11 +361,13 @@ void pb_controller::decrease_parallel_downloads() {
 		--max_dls;
 }
 
-void pb_controller::play_file(const std::string& file) {
+bool pb_controller::play_file(const std::string& file) {
 	std::string cmdline;
 	std::string player = cfg->get_configvalue("player");
-	if (player == "")
-		return;
+	if (player == "") {
+		v->show_error(_("No player is set!"));
+		return false;
+	}
 	cmdline.append(player);
 	cmdline.append(" \"");
 	cmdline.append(utils::replace_all(file,"\"", "\\\""));
@@ -373,8 +375,10 @@ void pb_controller::play_file(const std::string& file) {
 	stfl::reset();
 	int player_exit_code = utils::run_interactively(cmdline, "pb_controller::play_file");
 	if (player_exit_code != 0) {
-		v->dllist_form.set("msg", _("The player failed!"));
+		v->show_error(_("The player failed to play the file!"));
+		return false;
 	}
+	return true;
 }
 
 

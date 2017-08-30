@@ -47,7 +47,7 @@ class pb_controller {
 
 		double get_total_kbps();
 
-		void play_file(const std::string& str);
+		bool play_file(const std::string& str) __attribute__((warn_unused_result));
 
 		inline newsbeuter::configcontainer * get_cfgcont() {
 			return cfg;
