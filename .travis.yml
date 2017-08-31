@@ -118,6 +118,19 @@ matrix:
       env:
         - COMPILER=clang++-4.0
         - GCOV=/usr/bin/gcov
+    - compiler: clang-5.0
+      os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-5.0
+          packages:
+            - clang-5.0
+            - *global_deps
+      env:
+        - COMPILER=clang++-5.0
+        - GCOV=/usr/bin/gcov
     - compiler: gcc
       os: osx
       env:
