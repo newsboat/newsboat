@@ -1,6 +1,16 @@
 language: cpp
 dist: trusty
 sudo: false
+addons:
+  apt:
+    packages: &global_deps
+    - libsqlite3-dev
+    - libcurl4-openssl-dev
+    - libxml2-dev
+    - libstfl-dev
+    - libjson-c-dev
+    - libncursesw5-dev
+    - asciidoc
 
 matrix:
   fast_finish: true
@@ -15,6 +25,7 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-4.9
+            - *global_deps
       env:
         - COMPILER=g++-4.9
         - GCOV=/usr/bin/gcov-4.9
@@ -26,6 +37,7 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-5
+            - *global_deps
       env:
         - COMPILER=g++-5
         - GCOV=/usr/bin/gcov-5
@@ -37,6 +49,7 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-6
+            - *global_deps
       env:
         - COMPILER=g++-6
         - GCOV=/usr/bin/gcov-6
@@ -49,6 +62,7 @@ matrix:
             - llvm-toolchain-precise-3.6
           packages:
             - clang-3.6
+            - *global_deps
       env:
         - COMPILER=clang++-3.6
         - GCOV=/usr/bin/gcov
@@ -61,6 +75,7 @@ matrix:
             - llvm-toolchain-precise-3.7
           packages:
             - clang-3.7
+            - *global_deps
       env:
         - COMPILER=clang++-3.7
         - GCOV=/usr/bin/gcov
@@ -73,6 +88,7 @@ matrix:
             - llvm-toolchain-precise-3.8
           packages:
             - clang-3.8
+            - *global_deps
       env:
         - COMPILER=clang++-3.8
         - GCOV=/usr/bin/gcov
@@ -86,6 +102,7 @@ matrix:
               key_url: "http://apt.llvm.org/llvm-snapshot.gpg.key"
           packages:
             - clang-4.0
+            - *global_deps
       env:
         - COMPILER=clang++-4.0
         - GCOV=/usr/bin/gcov
