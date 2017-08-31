@@ -11,6 +11,10 @@ addons:
     - libjson-c-dev
     - libncursesw5-dev
     - asciidoc
+addons:
+  apt:
+    packages: &clang_deps
+    - *global_deps
     - g++-4.9 # required for someniceties in C++ standard library
 
 matrix:
@@ -23,6 +27,7 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
+            - g++-4.9
             - *global_deps
       env:
         - COMPILER=g++-4.9
@@ -63,44 +68,16 @@ matrix:
       env:
         - COMPILER=g++-7
         - GCOV=/usr/bin/gcov-7
-    - compiler: clang-3.6
+    - compiler: clang
       os: linux
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.6
           packages:
-            - clang-3.6
-            - *global_deps
+            - *clang_deps
       env:
-        - COMPILER=clang++-3.6
-        - GCOV=/usr/bin/gcov
-    - compiler: clang-3.7
-      os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.7
-          packages:
-            - clang-3.7
-            - *global_deps
-      env:
-        - COMPILER=clang++-3.7
-        - GCOV=/usr/bin/gcov
-    - compiler: clang-3.8
-      os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.8
-          packages:
-            - clang-3.8
-            - *global_deps
-      env:
-        - COMPILER=clang++-3.8
+        - COMPILER=clang++
         - GCOV=/usr/bin/gcov
     - compiler: clang-4.0
       os: linux
@@ -108,11 +85,10 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - sourceline: "deb http://apt.llvm.org/precise/ llvm-toolchain-precise-4.0 main"
-              key_url: "http://apt.llvm.org/llvm-snapshot.gpg.key"
+            - llvm-toolchain-trusty-4.0
           packages:
             - clang-4.0
-            - *global_deps
+            - *clang_deps
       env:
         - COMPILER=clang++-4.0
         - GCOV=/usr/bin/gcov
@@ -125,7 +101,7 @@ matrix:
             - llvm-toolchain-trusty-5.0
           packages:
             - clang-5.0
-            - *global_deps
+            - *clang_deps
       env:
         - COMPILER=clang++-5.0
         - GCOV=/usr/bin/gcov
