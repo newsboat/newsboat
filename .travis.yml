@@ -1,4 +1,6 @@
 language: cpp
+dist: trusty
+sudo: false
 
 matrix:
   fast_finish: true
@@ -103,9 +105,7 @@ matrix:
         # a2x will run xmllint on generated files, so we have to pass the path
         # to AsciiDoc's catalog files
         - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
-    - dist: trusty
-      sudo: false
-      addons:
+    - addons:
         apt:
           packages:
             - i18nspector
