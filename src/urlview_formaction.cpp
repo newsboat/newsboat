@@ -30,8 +30,9 @@ void urlview_formaction::process_operation(operation op, bool /* automatic */, s
 		if (posstr.length() > 0) {
 			unsigned int idx = utils::to_u(posstr, 0);
 			v->set_status(_("Starting browser..."));
-			v->open_in_browser(links[idx].first);
-			v->set_status("");
+			if (!v->open_in_browser(links[idx].first)) {
+				v->show_error(_("Browser failed to open the link!"));
+			}
 		} else {
 			v->show_error(_("No link selected!"));
 		}
@@ -63,8 +64,9 @@ void urlview_formaction::process_operation(operation op, bool /* automatic */, s
 
 		if (idx < links.size()) {
 			v->set_status(_("Starting browser..."));
-			v->open_in_browser(links[idx].first);
-			v->set_status("");
+			if (!v->open_in_browser(links[idx].first)) {
+				v->show_error(_("Browser failed to open the link!"));
+			}
 		}
 	}
 	break;

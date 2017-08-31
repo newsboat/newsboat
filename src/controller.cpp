@@ -1317,7 +1317,15 @@ void controller::edit_urls_file() {
 	v->push_empty_formaction();
 	stfl::reset();
 
-	utils::run_interactively(cmdline, "controller::edit_urls_file");
+	 /* Most editors check for unsaved changes when attempting to exit and
+	 * prompt to either save or discard them. If save was choosen without
+	 * having write permissions a proper code will fail and stay open
+	 * (like vim, nano, gedit, geany). However other editors (texmaker
+	 * 5.0.1 and notepadqq 1.0.1) close (obviously without saving) but
+	 * despite return 0. So we should not check this particular exit code.
+	 */
+	int unused __attribute__((unused));
+	unused = utils::run_interactively(cmdline, "controller::edit_urls_file");
 
 	v->pop_current_formaction();
 
@@ -1356,7 +1364,10 @@ std::string controller::bookmark(
 		if (is_interactive) {
 			v->push_empty_formaction();
 			stfl::reset();
-			utils::run_interactively(cmdline, "controller::bookmark");
+			int bookmark_cmd_exit_code = utils::run_interactively(cmdline, "controller::bookmark");
+			if (bookmark_cmd_exit_code != 0) {
+				return "The bookmark command failed!";
+			}
 			v->pop_current_formaction();
 			return "";
 		} else {

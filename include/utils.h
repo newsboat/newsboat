@@ -135,7 +135,8 @@ class utils {
 		static std::string make_title(const std::string& url);
 
 		static int run_interactively(
-				const std::string& command, const std::string& caller);
+				const std::string& command, const std::string& caller)
+				__attribute__ ((warn_unused_result));
 
 		static std::string getcwd();
 
