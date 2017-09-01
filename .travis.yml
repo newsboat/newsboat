@@ -11,6 +11,7 @@ addons:
     - libjson-c-dev
     - libncursesw5-dev
     - asciidoc
+    - g++-4.9 # required for someniceties in C++ standard library
 
 matrix:
   fast_finish: true
@@ -24,7 +25,6 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-4.9
             - *global_deps
       env:
         - COMPILER=g++-4.9
