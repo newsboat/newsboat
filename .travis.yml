@@ -17,6 +17,20 @@ addons:
     - *global_deps
     - g++-4.9 # required for someniceties in C++ standard library
 
+newsbeuter_brew_commands: &osx_deps
+  - brew outdated "pkg-config" || brew upgrade "pkg-config"
+  - brew install "gettext" && brew link --force "gettext"
+  - brew outdated "sqlite" || brew upgrade "sqlite"
+  - brew outdated "curl" || brew upgrade "curl"
+  - brew install "libstfl"
+  - brew outdated "json-c" || brew upgrade "json-c"
+  - brew install "asciidoc"
+  - brew outdated "python" || brew upgrade "python"
+  - brew install "pyenv" || brew upgrade "pyenv"
+  - eval "$(pyenv init -)"
+  - pip2 install cpp-coveralls
+  - pyenv rehash
+
 matrix:
   fast_finish: true
   include:
@@ -113,6 +127,8 @@ matrix:
         # a2x will run xmllint on generated files, so we have to pass the path
         # to AsciiDoc's catalog files
         - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
+      before_install:
+        *osx_deps
     - compiler: clang
       os: osx
       env:
@@ -121,6 +137,8 @@ matrix:
         # a2x will run xmllint on generated files, so we have to pass the path
         # to AsciiDoc's catalog files
         - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
+      before_install:
+        *osx_deps
     - addons:
         apt:
           packages:
@@ -131,7 +149,6 @@ matrix:
 install:
   - export CXX=$COMPILER
   - cd ${TRAVIS_BUILD_DIR}
-  - if [ -z "$CHECKS" ]; then   ./travis-get-deps.sh   ; fi
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
