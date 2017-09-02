@@ -1,9 +1,37 @@
 language: cpp
 
+addons:
+  apt:
+    packages: &global_deps
+    - libsqlite3-dev
+    - libcurl4-openssl-dev
+    - libxml2-dev
+    - libstfl-dev
+    - libjson-c-dev
+    - libncursesw5-dev
+    - asciidoc
+addons:
+  apt:
+    packages: &clang_deps
+    - *global_deps
+    - g++-4.9 # required for someniceties in C++ standard library
+
+newsbeuter_brew_commands: &osx_deps
+  - brew outdated "pkg-config" || brew upgrade "pkg-config"
+  - brew install "gettext" && brew link --force "gettext"
+  - brew outdated "sqlite" || brew upgrade "sqlite"
+  - brew outdated "curl" || brew upgrade "curl"
+  - brew install "libstfl"
+  - brew outdated "json-c" || brew upgrade "json-c"
+  - brew install "asciidoc"
+  - brew outdated "python" || brew upgrade "python"
+  - brew install "pyenv" || brew upgrade "pyenv"
+  - eval "$(pyenv init -)"
+  - pip2 install cpp-coveralls
+  - pyenv rehash
+
 matrix:
   fast_finish: true
-  allow_failures:
-    - compiler: clang-4.0
   include:
     - compiler: gcc-4.9
       os: linux
@@ -13,6 +41,7 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-4.9
+            - *global_deps
       env:
         - COMPILER=g++-4.9
         - GCOV=/usr/bin/gcov-4.9
@@ -24,6 +53,7 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-5
+            - *global_deps
       env:
         - COMPILER=g++-5
         - GCOV=/usr/bin/gcov-5
@@ -35,44 +65,32 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-6
+            - *global_deps
       env:
         - COMPILER=g++-6
         - GCOV=/usr/bin/gcov-6
-    - compiler: clang-3.6
+    - compiler: gcc-7
       os: linux
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.6
           packages:
-            - clang-3.6
+            - g++-7
+            - *global_deps
       env:
-        - COMPILER=clang++-3.6
-        - GCOV=/usr/bin/gcov
-    - compiler: clang-3.7
+        - COMPILER=g++-7
+        - GCOV=/usr/bin/gcov-7
+    - compiler: clang
       os: linux
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.7
           packages:
-            - clang-3.7
+            - *clang_deps
       env:
-        - COMPILER=clang++-3.7
-        - GCOV=/usr/bin/gcov
-    - compiler: clang-3.8
-      os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.8
-          packages:
-            - clang-3.8
-      env:
-        - COMPILER=clang++-3.8
+        - COMPILER=clang++
         - GCOV=/usr/bin/gcov
     - compiler: clang-4.0
       os: linux
@@ -80,12 +98,25 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - sourceline: "deb http://apt.llvm.org/precise/ llvm-toolchain-precise-4.0 main"
-              key_url: "http://apt.llvm.org/llvm-snapshot.gpg.key"
+            - llvm-toolchain-trusty-4.0
           packages:
             - clang-4.0
+            - *clang_deps
       env:
         - COMPILER=clang++-4.0
+        - GCOV=/usr/bin/gcov
+    - compiler: clang-5.0
+      os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-5.0
+          packages:
+            - clang-5.0
+            - *clang_deps
+      env:
+        - COMPILER=clang++-5.0
         - GCOV=/usr/bin/gcov
     - compiler: gcc
       os: osx
@@ -95,6 +126,8 @@ matrix:
         # a2x will run xmllint on generated files, so we have to pass the path
         # to AsciiDoc's catalog files
         - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
+      before_install:
+        *osx_deps
     - compiler: clang
       os: osx
       env:
@@ -103,9 +136,9 @@ matrix:
         # a2x will run xmllint on generated files, so we have to pass the path
         # to AsciiDoc's catalog files
         - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
-    - dist: trusty
-      sudo: false
-      addons:
+      before_install:
+        *osx_deps
+    - addons:
         apt:
           packages:
             - i18nspector
@@ -115,7 +148,6 @@ matrix:
 install:
   - export CXX=$COMPILER
   - cd ${TRAVIS_BUILD_DIR}
-  - if [ -z "$CHECKS" ]; then   ./travis-get-deps.sh   ; fi
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
