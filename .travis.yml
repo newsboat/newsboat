@@ -1,6 +1,5 @@
 language: cpp
-dist: trusty
-sudo: false
+
 addons:
   apt:
     packages: &global_deps
