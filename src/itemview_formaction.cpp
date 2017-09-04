@@ -211,9 +211,8 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 	case OP_OPENINBROWSER:
 		LOG(level::INFO, "view::run_itemview: starting browser");
 		v->set_status(_("Starting browser..."));
-		if (!v->open_in_browser(item->link())) {
+		if (!v->open_in_browser(item->link()))
 			v->show_error(_("Browser failed to open the link!"));
-		}
 		v->set_status("");
 		break;
 	case OP_BOOKMARK:
@@ -372,9 +371,8 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 		LOG(level::DEBUG, "itemview::run: OP_1 = %d op = %d idx = %u", OP_1, op, idx);
 		if (idx < links.size()) {
 			v->set_status(_("Starting browser..."));
-			if (!v->open_in_browser(links[idx].first)) {
+			if (!v->open_in_browser(links[idx].first))
 				v->show_error(_("Browser failed to open the link!"));
-			}
 			v->set_status("");
 		}
 	}
@@ -522,9 +520,8 @@ void itemview_formaction::finished_qna(operation op) {
 		sscanf(qna_responses[0].c_str(),"%u",&idx);
 		if (idx && idx-1 < links.size()) {
 			v->set_status(_("Starting browser..."));
-			if (!v->open_in_browser(links[idx-1].first)) {
+			if (!v->open_in_browser(links[idx-1].first))
 				v->show_error(_("Browser failed to open the link!"));
-			}
 			v->set_status("");
 		}
 	}

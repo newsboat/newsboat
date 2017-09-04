@@ -1102,11 +1102,6 @@ int utils::run_interactively(
 	} else if (status == 127) {
 		LOG(level::DEBUG, "%s: couldn't run shell", caller);
 	}
-	if (status != 0) {
-		LOG(level::DEBUG, "utils::run_interactively: "
-			"%s: cmd = %s, returned %d", caller, command, status);
-	}
-
 
 	return status;
 }
