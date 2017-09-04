@@ -85,7 +85,8 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
 
-				if (!v->open_in_browser(visible_items[itempos].first->link())) {
+				bool browser_success = v->open_in_browser(visible_items[itempos].first->link());
+				if (!browser_success) {
 					v->show_error(_("Browser failed to open the link!"));
 					break;
 				}
@@ -111,9 +112,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		LOG(level::INFO, "itemlist_formaction: opening item at pos `%s'", itemposname);
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
-				if (!v->open_in_browser(visible_items[itempos].first->link()))
-					v->show_error(_("Browser failed to open the link!"));
-
+				v->open_in_browser(visible_items[itempos].first->link());
 				invalidate(itempos);
 			}
 		} else {

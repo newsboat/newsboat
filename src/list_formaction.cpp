@@ -12,12 +12,9 @@ void list_formaction::open_unread_items_in_browser(std::shared_ptr<rss_feed> fee
 	for (auto item : feed->items()) {
 		if (tabcount < v->get_cfg()->get_configvalue_as_int("max-browser-tabs")) {
 			if (item->unread()) {
-				if (v->open_in_browser(item->link())) {
-					tabcount += 1;
-					item->set_unread(!markread);
-				} else {
-					v->show_error(_("Browser failed to open the link!"));
-				}
+				v->open_in_browser(item->link());
+				tabcount += 1;
+				item->set_unread(!markread);
 			}
 		} else {
 			break;
