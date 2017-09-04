@@ -1101,9 +1101,12 @@ int utils::run_interactively(
 		LOG(level::DEBUG, "%s: couldn't create a child process", caller);
 	} else if (status == 127) {
 		LOG(level::DEBUG, "%s: couldn't run shell", caller);
-	} else if (status != 0) {
-		LOG(level::DEBUG, "%s: cmd = %s, returned %d", caller, command, status);
 	}
+	if (status != 0) {
+		LOG(level::DEBUG, "utils::run_interactively: "
+			"%s: cmd = %s, returned %d", caller, command, status);
+	}
+
 
 	return status;
 }

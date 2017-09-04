@@ -1317,12 +1317,11 @@ void controller::edit_urls_file() {
 	v->push_empty_formaction();
 	stfl::reset();
 
-	 /* Most editors check for unsaved changes when attempting to exit and
-	 * prompt to either save or discard them. If save was choosen without
-	 * having write permissions a properly codd will fail and stay open
-	 * (like vim, nano, gedit, geany). However other editors (texmaker
-	 * 5.0.1 and notepadqq 1.0.1) close but despite return 0.
-	 * So we should not check this particular exit code.
+	/* We should not check this particular exit code.
+	 * Editors usually fail when closing+saving (and stay open).
+	 * (tested with vim, nano, gedit, geany)
+	 * (texmaker 5.0.1 and notepadqq 1.0.1 close without neither showing an
+	 * error nor saving but despite return 0)
 	 */
 	int unused __attribute__((unused));
 	unused = utils::run_interactively(cmdline, "controller::edit_urls_file");
