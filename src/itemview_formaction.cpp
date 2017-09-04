@@ -213,8 +213,6 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 		v->set_status(_("Starting browser..."));
 		if (!v->open_in_browser(item->link())) {
 			v->show_error(_("Browser failed to open the link!"));
-		} else {
-			v->set_status("");
 		}
 		break;
 	case OP_BOOKMARK:
@@ -375,8 +373,6 @@ void itemview_formaction::process_operation(operation op, bool automatic, std::v
 			v->set_status(_("Starting browser..."));
 			if (!v->open_in_browser(links[idx].first)) {
 				v->show_error(_("Browser failed to open the link!"));
-			} else {
-				v->set_status("");
 			}
 		}
 	}
@@ -526,8 +522,6 @@ void itemview_formaction::finished_qna(operation op) {
 			v->set_status(_("Starting browser..."));
 			if (!v->open_in_browser(links[idx-1].first)) {
 				v->show_error(_("Browser failed to open the link!"));
-			} else {
-				v->set_status("");
 			}
 		}
 	}

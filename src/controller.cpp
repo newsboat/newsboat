@@ -1319,10 +1319,10 @@ void controller::edit_urls_file() {
 
 	 /* Most editors check for unsaved changes when attempting to exit and
 	 * prompt to either save or discard them. If save was choosen without
-	 * having write permissions a proper code will fail and stay open
+	 * having write permissions a properly codd will fail and stay open
 	 * (like vim, nano, gedit, geany). However other editors (texmaker
-	 * 5.0.1 and notepadqq 1.0.1) close (obviously without saving) but
-	 * despite return 0. So we should not check this particular exit code.
+	 * 5.0.1 and notepadqq 1.0.1) close but despite return 0.
+	 * So we should not check this particular exit code.
 	 */
 	int unused __attribute__((unused));
 	unused = utils::run_interactively(cmdline, "controller::edit_urls_file");
