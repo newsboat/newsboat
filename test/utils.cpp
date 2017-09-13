@@ -136,12 +136,16 @@ TEST_CASE("consolidate_whitespace replaces multiple consecutive"
           "whitespace with a single space", "[utils]") {
 	REQUIRE(utils::consolidate_whitespace("LoremIpsum") == "LoremIpsum");
 	REQUIRE(utils::consolidate_whitespace("Lorem Ipsum") == "Lorem Ipsum");
-	REQUIRE(utils::consolidate_whitespace("    Lorem \t\tIpsum \t ") == " Lorem Ipsum ");
-	REQUIRE(utils::consolidate_whitespace("    Lorem \r\n\r\n\tIpsum") == " Lorem Ipsum");
+	REQUIRE(utils::consolidate_whitespace(" Lorem \t\tIpsum \t ") == " Lorem Ipsum ");
+	REQUIRE(utils::consolidate_whitespace(" Lorem \r\n\r\n\tIpsum") == " Lorem Ipsum");
 
 	REQUIRE(utils::consolidate_whitespace("") == "");
 
-	REQUIRE(utils::consolidate_whitespace("  Lorem|||Ipsum||", "|") == "  Lorem Ipsum ");
+}
+
+TEST_CASE("consolidate_whitespace preserves leading whitespace", "[utils]") {
+	REQUIRE(utils::consolidate_whitespace("    Lorem \t\tIpsum \t ") == "    Lorem Ipsum ");
+	REQUIRE(utils::consolidate_whitespace("   Lorem \r\n\r\n\tIpsum") == "   Lorem Ipsum");
 }
 
 TEST_CASE("get_command_output()", "[utils]") {

@@ -201,7 +201,7 @@ std::string utils::consolidate_whitespace(const std::string& str, std::string wh
 	std::string::size_type pos = str.find_first_of(whitespace, last_pos);
 
 	if (last_pos != 0 && str != "") {
-		result.append(" ");
+		result.append(str.substr(0, last_pos));
 	}
 
 	while (std::string::npos != pos || std::string::npos != last_pos) {
