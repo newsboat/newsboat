@@ -5,6 +5,7 @@
 #include <stflpp.h>
 #include <assert.h>
 #include <limits.h>
+#include <algorithm>
 
 namespace newsbeuter {
 
@@ -37,11 +38,29 @@ std::vector<std::string> wrap_line(
 		const std::string& line,
 		const size_t width)
 {
+	if (line.empty()) {
+		return { "" };
+	}
+
 	std::vector<std::string> result;
 	std::vector<std::string> words = utils::tokenize_spaced(line);
+
+	std::string prefix;
+	auto iswhitespace =
+		[](const std::string& input)
+		{
+			return std::all_of(
+					input.cbegin(),
+					input.cend(),
+					[](std::string::value_type c) { return std::isspace(c); });
+		};
+	if (iswhitespace(words[0])) {
+		prefix = words[0];
+	}
+
 	std::string curline = "";
 
-	for (auto word : words){
+	for (auto word : words) {
 		size_t word_length = utils::strwidth_stfl(word);
 		size_t curline_length = utils::strwidth_stfl(curline);
 
@@ -52,7 +71,7 @@ std::vector<std::string> wrap_line(
 			curline.append(word.substr(0, space_left));
 			word.erase(0, space_left);
 			result.push_back(curline);
-			curline = "";
+			curline = prefix;
 
 			word_length = utils::strwidth_stfl(word);
 			curline_length = utils::strwidth_stfl(curline);
@@ -60,10 +79,10 @@ std::vector<std::string> wrap_line(
 
 		if ((curline_length + word_length) > width) {
 			result.push_back(curline);
-			if (word == " ") {
-				curline = "";
+			if (iswhitespace(word)) {
+				curline = prefix;
 			} else {
-				curline = word;
+				curline = prefix + word;
 			}
 		} else {
 			curline.append(word);
