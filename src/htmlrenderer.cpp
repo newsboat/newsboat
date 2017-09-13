@@ -720,7 +720,7 @@ void htmlrenderer::prepare_new_line(std::string& line, int indent_level) {
 
 bool htmlrenderer::line_is_nonempty(const std::string& line) {
 	for (std::string::size_type i=0; i<line.length(); ++i) {
-		if (!isblank(line[i]) && line[i] != '\n' && line[i] && '\r')
+		if (!isblank(line[i]) && line[i] != '\n' && line[i] != '\r')
 			return true;
 	}
 	return false;
