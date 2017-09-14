@@ -5,6 +5,7 @@
 #include <rss.h>
 #include <configcontainer.h>
 #include <mutex>
+#include <unordered_set>
 
 namespace newsbeuter {
 
@@ -21,6 +22,7 @@ class cache {
 		void cleanup_cache(std::vector<std::shared_ptr<rss_feed>>& feeds);
 		void do_vacuum();
 		std::vector<std::shared_ptr<rss_item>> search_for_items(const std::string& querystr, const std::string& feedurl);
+		std::unordered_set<std::string> search_in_items(const std::string& querystr, const std::unordered_set<std::string>& guids);
 		void mark_all_read(const std::string& feedurl = "");
 		void mark_all_read(std::shared_ptr<rss_feed> feed);
 		void update_rssitem_flags(rss_item* item);

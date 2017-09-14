@@ -203,6 +203,12 @@ static int search_item_callback(void * myfeed, int argc, char ** argv, char ** /
 	return 0;
 }
 
+static int guid_callback(void * myguids, int argc, char ** argv, char ** /* azColName */) {
+	auto* guids = static_cast<std::unordered_set<std::string> *>(myguids);
+	assert (argc == 1);
+	guids->emplace(argv[0]);
+	return 0;
+}
 
 
 cache::cache(const std::string& cachefile, configcontainer * c) : db(0),cfg(c) {
@@ -531,6 +537,31 @@ std::vector<std::shared_ptr<rss_item>> cache::search_for_items(
 		item->set_cache(this);
 	}
 
+	return items;
+}
+
+std::unordered_set<std::string> cache::search_in_items(
+		const std::string& querystr, const std::unordered_set<std::string>& guids)
+{
+	std::string list = "(";
+
+	for (const auto& guid : guids) {
+		list.append(prepare_query("%Q, ", guid));
+	}
+	list.append("'')");
+
+	std::string query = prepare_query(
+			"SELECT guid "
+			"FROM rss_item "
+			"WHERE (title LIKE '%%%q%%' OR content LIKE '%%%q%%') "
+			  "AND guid IN %s;",
+			querystr,
+			querystr,
+			list);
+
+	std::unordered_set<std::string> items;
+	std::lock_guard<std::mutex> lock(mtx);
+	run_sql(query, guid_callback, &items);
 	return items;
 }
 
