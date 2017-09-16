@@ -66,6 +66,8 @@
 ### Fixed
 - (CVE-2017-12904) Sanitize parameters that are passed to bookmark-cmd (#591)
     (Jeriko One, Alexander Batischev)
+- (CVE pending) Sanitize podcast filenames when playing the file via Podbeuter
+    (#598) (Simon Schuster)
 - Translations: German (Simon Nagl, Lysander Trischler), Russian (kstn), French
     (esteban123456789, rugie), Spanish (Alejandro Gallo)
 - Format errors in Brazilian Portuguese, Ukrainian and Chinese localization
