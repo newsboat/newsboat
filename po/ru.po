@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: newsbeuter 1.3\n"
-"Report-Msgid-Bugs-To: https://github.com/akrennmair/newsbeuter/issues\n"
+"Project-Id-Version: newsboat 1.3\n"
+"Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2017-01-23 20:19+0300\n"
 "PO-Revision-Date: 2016-11-19 13:00+0300\n"
 "Last-Translator: Konstantin Shakhnov <kastian@mail.ru>\n"
@@ -36,9 +36,9 @@ msgstr "элемента конфигурации `%s' не существует
 
 #: src/configcontainer.cpp:84
 #, c-format
-msgid "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
+msgid "newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
-"newsbeuter: обновление завершено, %f не прочитанных лент (всего %n заметок "
+"newsboat: обновление завершено, %f не прочитанных лент (всего %n заметок "
 "не прочитано)"
 
 #: src/configcontainer.cpp:155
@@ -271,7 +271,7 @@ msgstr "неверный индекс ленты (сбой)"
 
 #: src/controller.cpp:976
 msgid ""
-"newsbeuter is free software and licensed under the MIT/X Consortium License."
+"newsboat is free software and licensed under the MIT/X Consortium License."
 msgstr ""
 
 #: src/controller.cpp:977

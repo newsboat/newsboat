@@ -200,11 +200,11 @@ void pb_controller::run(int argc, char * argv[]) {
 		}
 	};
 
-	std::cout << strprintf::fmt(_("Starting %s %s..."), "podbeuter", PROGRAM_VERSION) << std::endl;
+	std::cout << strprintf::fmt(_("Starting %s %s..."), "podboat", PROGRAM_VERSION) << std::endl;
 
 	pid_t pid;
 	if (!utils::try_fs_lock(lock_file, pid)) {
-		std::cout << strprintf::fmt(_("Error: an instance of %s is already running (PID: %u)"), "podbeuter", pid) << std::endl;
+		std::cout << strprintf::fmt(_("Error: an instance of %s is already running (PID: %u)"), "podboat", pid) << std::endl;
 		return;
 	}
 
@@ -231,7 +231,7 @@ void pb_controller::run(int argc, char * argv[]) {
 	cfgparser.register_handler("reset-unread-on-update", &null_cah);
 
 	try {
-		cfgparser.parse("/etc/newsbeuter/config");
+		cfgparser.parse("/etc/newsboat/config");
 		cfgparser.parse(config_file);
 	} catch (const configexception& ex) {
 		std::cout << ex.what() << std::endl;
@@ -270,7 +270,7 @@ void pb_controller::run(int argc, char * argv[]) {
 void pb_controller::usage(const char * argv0) {
 	auto msg =
 	    strprintf::fmt(_("%s %s\nusage %s [-C <file>] [-q <file>] [-h]\n"),
-	    "podbeuter",
+	    "podboat",
 	    PROGRAM_VERSION,
 	    argv0);
 	std::cout << msg;

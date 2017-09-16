@@ -43,7 +43,7 @@ TEST_CASE("Cleaning old articles works", "[cache]") {
 	item->set_title("Test item");
 	item->set_link("http://example.com/item");
 	item->set_guid("http://example.com/item");
-	item->set_author("Newsbeuter Testsuite");
+	item->set_author("Newsboat Testsuite");
 	item->set_description("");
 	item->set_pubDate(time(nullptr)); // current time
 	item->set_unread(true);
@@ -51,7 +51,7 @@ TEST_CASE("Cleaning old articles works", "[cache]") {
 
 	rsscache->externalize_rssfeed(feed, false);
 
-	/* Simulating a restart of Newsbeuter. */
+	/* Simulating a restart of Newsboat. */
 
 	/* Setting "keep-articles-days" to non-zero value to trigger
 	 * cache::clean_old_articles().

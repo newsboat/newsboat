@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: newsbeuter 0.9\n"
-"Report-Msgid-Bugs-To: https://github.com/akrennmair/newsbeuter/issues\n"
+"Project-Id-Version: newsboat 0.9\n"
+"Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2017-01-23 20:19+0300\n"
 "PO-Revision-Date: 2008-08-02 15:32+0400\n"
 "Last-Translator: Ivan Kovnatsky <sevenfourk@gmail.com>\n"
@@ -33,9 +33,9 @@ msgstr "`%s' недійсний елемент конфігурації"
 
 #: src/configcontainer.cpp:84
 #, c-format
-msgid "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
+msgid "newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
-"newsbeuter: завантаження завершено, %f непрочитаних тем (%n всього "
+"newsboat: завантаження завершено, %f непрочитаних тем (%n всього "
 "непрочитаних статей)"
 
 #: src/configcontainer.cpp:155
@@ -272,9 +272,9 @@ msgstr "непрацездатний індекс теми (помилка)"
 
 #: src/controller.cpp:976
 msgid ""
-"newsbeuter is free software and licensed under the MIT/X Consortium License."
+"newsboat is free software and licensed under the MIT/X Consortium License."
 msgstr ""
-"newsbeuter - це вільне програмне забезпечення, що ліцензоване під MIT/X "
+"newsboat - це вільне програмне забезпечення, що ліцензоване під MIT/X "
 "Consortium License."
 
 #: src/controller.cpp:977

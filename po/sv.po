@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: newsbeuter-1.4\n"
-"Report-Msgid-Bugs-To: https://github.com/akrennmair/newsbeuter/issues\n"
+"Project-Id-Version: newsboat-1.4\n"
+"Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2017-01-23 20:19+0300\n"
 "PO-Revision-Date: 2009-03-16 21:29+0100\n"
 "Last-Translator: Niklas Grahn <terra.unknown@yahoo.com>\n"
@@ -35,9 +35,9 @@ msgstr "`%s' är inte ett giltigt konfigurationselement"
 
 #: src/configcontainer.cpp:84
 #, c-format
-msgid "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
+msgid "newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
-"newsbeuter: omläsning färdig, %f olästa webbkanaler (%n olästa artiklar "
+"newsboat: omläsning färdig, %f olästa webbkanaler (%n olästa artiklar "
 "totalt)"
 
 #: src/configcontainer.cpp:155
@@ -275,9 +275,9 @@ msgstr "ogiltigt webbkanalsindex (fel)"
 
 #: src/controller.cpp:976
 msgid ""
-"newsbeuter is free software and licensed under the MIT/X Consortium License."
+"newsboat is free software and licensed under the MIT/X Consortium License."
 msgstr ""
-"newsbeuter är fri programvara och licenserat under MIT/X Consortium-licensen."
+"newsboat är fri programvara och licenserat under MIT/X Consortium-licensen."
 
 #: src/controller.cpp:977
 #, c-format

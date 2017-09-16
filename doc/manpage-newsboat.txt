@@ -1,23 +1,23 @@
-NEWSBEUTER(1)
+NEWSBOAT(1)
 ===========
-Andreas Krennmair <ak@newsbeuter.org>
+Alexander Batischev <eual.jp@gmail.com>
 
 
 NAME
 ----
-newsbeuter - an RSS/Atom feed reader for text terminals
+newsboat - an RSS/Atom feed reader for text terminals
 
 
 SYNOPSIS
 --------
-'newsbeuter' [-r] [-e] [-i opmlfile] [-u urlfile] [-c cachefile] [-C configfile] [-X] [-o] [-x <command> ...] [-h]
+'newsboat' [-r] [-e] [-i opmlfile] [-u urlfile] [-c cachefile] [-C configfile] [-X] [-o] [-x <command> ...] [-h]
 
 
 DESCRIPTION
 -----------
-'newsbeuter' is an RSS/Atom feed reader for text terminals. RSS and Atom are a 
+'newsboat' is an RSS/Atom feed reader for text terminals. RSS and Atom are a 
 number of widely-used XML formats to transmit, publish and syndicate articles, 
-for example news or blog articles.  Newsbeuter is designed to be used on text 
+for example news or blog articles.  Newsboat is designed to be used on text 
 terminals on Unix or Unix-like systems such as GNU/Linux, BSD or Mac OS X.
 
 
@@ -40,7 +40,7 @@ OPTIONS
         settings.
 
 -v, -V, --version::
-        Get version information about newsbeuter and the libraries it uses
+        Get version information about newsboat and the libraries it uses
 
 -i opmlfile, --import-from-opml=opmlfile::
        Import an OPML file
@@ -55,7 +55,7 @@ OPTIONS
        Use an alternative configuration file
 
 -x command ..., --execute=command...::
-       Execute one or more commands to run newsbeuter unattended. Currently available
+       Execute one or more commands to run newsboat unattended. Currently available
        commands are "reload" and "print-unread".
 
 -l loglevel, --log-level=loglevel::
@@ -109,7 +109,7 @@ COMMAND LINE
 include::chapter-cmdline.txt[]
 
 'quit'::
-        Quit newsbeuter
+        Quit newsboat
 
 'save' <filename>::
         Save current article to <filename>
@@ -136,37 +136,36 @@ include::chapter-cmdline.txt[]
 XDG Base Directory Support
 --------------------------
 
-Newsbeuter defaults to storing everything in '$HOME/.newsbeuter' directory. If
-you prefer XDG, create '$HOME/.config/newsbeuter' and
-'$HOME/.local/share/newsbeuter' directories, and Newsbeuter will use them
+Newsboat defaults to storing everything in '$HOME/.newsboat' directory. If
+you prefer XDG, create '$HOME/.config/newsboat' and
+'$HOME/.local/share/newsboat' directories, and Newsboat will use them
 from there on.
 
-If you already have some files in '$HOME/.newsbeuter/', move them as follows:
+If you already have some files in '$HOME/.newsboat/', move them as follows:
 
 'config', 'urls'::
-        to '$HOME/.config/newsbeuter/'
+        to '$HOME/.config/newsboat/'
 
 'cache.db', 'history.search', 'history.cmdline'::
-        to '$HOME/.local/share/newsbeuter/'
+        to '$HOME/.local/share/newsboat/'
 
-See also a corresponding section in podbeuter(1).
+See also a corresponding section in podboat(1).
 
 
 FILES
 -----
 
 dotfiles::
-        '$HOME/.newsbeuter/config'
+        '$HOME/.newsboat/config'
         +
-        '$HOME/.newsbeuter/urls'
+        '$HOME/.newsboat/urls'
 
 XDG::
-        '$HOME/.config/newsbeuter/config'
+        '$HOME/.config/newsboat/config'
         +
-        '$HOME/.config/newsbeuter/urls'
+        '$HOME/.config/newsboat/urls'
 
 
 SEE ALSO
 --------
-podbeuter(1). The documentation that comes with newsbeuter is a good
-source about the general use and configuration of newsbeuter.
+podboat(1)

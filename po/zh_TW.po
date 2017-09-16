@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: newsbeuter 1.0\n"
-"Report-Msgid-Bugs-To: https://github.com/akrennmair/newsbeuter/issues\n"
+"Project-Id-Version: newsboat 1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2017-01-23 20:19+0300\n"
 "PO-Revision-Date: 2010-03-03 16:55+0800\n"
 "Last-Translator: Aeglos <aeglos.lin@gmail.com>\n"
@@ -36,8 +36,8 @@ msgstr "`%s'不是一個有效的組態項目"
 
 #: src/configcontainer.cpp:84
 #, c-format
-msgid "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
-msgstr "newsbeuter:重新載入完成, %f個來源含未讀文章(共有 %n 篇未讀文章)"
+msgid "newsboat: finished reload, %f unread feeds (%n unread articles total)"
+msgstr "newsboat:重新載入完成, %f個來源含未讀文章(共有 %n 篇未讀文章)"
 
 #: src/configcontainer.cpp:155
 msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
@@ -264,8 +264,8 @@ msgstr "無效的來源索引(bug）"
 
 #: src/controller.cpp:976
 msgid ""
-"newsbeuter is free software and licensed under the MIT/X Consortium License."
-msgstr "newsbeuter是基於MIT/X Consortium License發佈的自由軟體"
+"newsboat is free software and licensed under the MIT/X Consortium License."
+msgstr "newsboat是基於MIT/X Consortium License發佈的自由軟體"
 
 #: src/controller.cpp:977
 #, c-format

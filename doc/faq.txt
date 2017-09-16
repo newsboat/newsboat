@@ -1,9 +1,9 @@
-Newsbeuter FAQ
-==============
+Newsboat FAQ
+============
 
 I get errors like "`color01' is not a valid color"
 --------------------------------------------------
-Numbers that start with zero are treated as octal; starting with newsbeuter
+Numbers that start with zero are treated as octal; starting with newsboat
 2.10, these are not allowed since
 https://github.com/akrennmair/newsbeuter/issues/186[they only add confusion].
 Use decimal numbers instead.
@@ -11,6 +11,6 @@ Use decimal numbers instead.
 I want to have a feed that contains all unread articles of all feeds
 --------------------------------------------------------------------
 This is supported since newsbeuter 0.7. All you need to do is to add the
-following line to your +~/.newsbeuter/urls+ file:
+following line to your +~/.newsboat/urls+ file:
 
 	"query:Unread Articles:unread = \"yes\""

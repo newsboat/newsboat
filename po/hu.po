@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: newsbeuter 0.7\n"
-"Report-Msgid-Bugs-To: https://github.com/akrennmair/newsbeuter/issues\n"
+"Project-Id-Version: newsboat 0.7\n"
+"Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2017-01-23 20:19+0300\n"
 "PO-Revision-Date: 2008-01-28 10:00+0100\n"
 "Last-Translator: Zsolt Udvari <udvzsolt@gmail.com>\n"
@@ -33,9 +33,9 @@ msgstr "`%s' nem érvényes konfigurációs elem"
 
 #: src/configcontainer.cpp:84
 #, c-format
-msgid "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
+msgid "newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
-"newsbeuter: újratöltés befejezve, %f olvasatlan üzenet (%n olvasatlan "
+"newsboat: újratöltés befejezve, %f olvasatlan üzenet (%n olvasatlan "
 "összesen)"
 
 #: src/configcontainer.cpp:155
@@ -272,9 +272,9 @@ msgstr "érvénytelen hírforrás index (bug)"
 
 #: src/controller.cpp:976
 msgid ""
-"newsbeuter is free software and licensed under the MIT/X Consortium License."
+"newsboat is free software and licensed under the MIT/X Consortium License."
 msgstr ""
-"newsbeuter egy ingyenes szoftver és MIT/X Consortium License-szel "
+"newsboat egy ingyenes szoftver és MIT/X Consortium License-szel "
 "rendelkezik."
 
 #: src/controller.cpp:977

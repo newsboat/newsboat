@@ -79,7 +79,7 @@ void colormanager::dump_config(std::vector<std::string>& config_output) {
 }
 
 /*
- * this is podbeuter-specific color management
+ * this is podboat-specific color management
  * TODO: refactor this
  */
 void colormanager::set_pb_colors(podbeuter::pb_view * v) {

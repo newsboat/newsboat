@@ -6,7 +6,7 @@
 namespace podbeuter {
 
 /*
- * the download class represents a single download entry in podbeuter.
+ * the download class represents a single download entry in podboat.
  * It manages the filename, the URL, the current state, the progress, etc.
  */
 

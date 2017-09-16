@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: newsbeuter 0.3\n"
-"Report-Msgid-Bugs-To: https://github.com/akrennmair/newsbeuter/issues\n"
+"Project-Id-Version: newsboat 0.3\n"
+"Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2017-01-23 20:19+0300\n"
 "PO-Revision-Date: 2017-01-27 01:10+0100\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -35,9 +35,9 @@ msgstr "`%s' ist kein gültiges Konfigurationselement"
 
 #: src/configcontainer.cpp:84
 #, c-format
-msgid "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
+msgid "newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
-"newsbeuter: Neuladen beendet, %f ungelesene Feeds (%n ungelesene Artikel "
+"newsboat: Neuladen beendet, %f ungelesene Feeds (%n ungelesene Artikel "
 "insgesamt)"
 
 #: src/configcontainer.cpp:155
@@ -272,9 +272,9 @@ msgstr "ungültiger Feed-Index (Bug)"
 
 #: src/controller.cpp:976
 msgid ""
-"newsbeuter is free software and licensed under the MIT/X Consortium License."
+"newsboat is free software and licensed under the MIT/X Consortium License."
 msgstr ""
-"newsbeuter ist Freie Software und unter der MIT/X Consortium License "
+"newsboat ist Freie Software und unter der MIT/X Consortium License "
 "lizenziert."
 
 #: src/controller.cpp:977

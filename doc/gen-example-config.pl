@@ -3,9 +3,9 @@
 use warnings;
 use strict;
 
-print "####################################\n";
-print "# newsbeuter example configuration #\n";
-print "####################################\n\n";
+print "##################################\n";
+print "# Newsboat example configuration #\n";
+print "##################################\n\n";
 
 while (my $line = <STDIN>) {
 	my ($option,$syntax,$defaultparam,$desc,$example) = split(/\|/, $line);

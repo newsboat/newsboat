@@ -974,9 +974,10 @@ void controller::version_information(const char * argv0, unsigned int level) {
 		std::cout << "Copyright (C) 2006-2015 Andreas Krennmair" << std::endl;
 		std::cout << "Copyright (C) 2015-2017 Alexander Batischev" << std::endl;
 		std::cout << "Copyright (C) 2006-2017 Newsbeuter contributors" << std::endl;
+		std::cout << "Copyright (C) 2017 Newsboat contributors" << std::endl;
 		std::cout << std::endl;
 
-		std::cout << _("newsbeuter is free software and licensed under the MIT/X Consortium License.") << std::endl;
+		std::cout << _("newsboat is free software and licensed under the MIT/X Consortium License.") << std::endl;
 		std::cout << strprintf::fmt(_("Type `%s -vv' for more information."), argv0) << std::endl << std::endl;
 
 		struct utsname xuts;
@@ -1373,7 +1374,7 @@ void controller::execute_commands(char ** argv, unsigned int i) {
 
 std::string controller::write_temporary_item(std::shared_ptr<rss_item> item) {
 	char filename[_POSIX_PATH_MAX];
-	snprintf(filename, sizeof(filename), "/tmp/newsbeuter-article.XXXXXX");
+	snprintf(filename, sizeof(filename), "/tmp/newsboat-article.XXXXXX");
 	int fd = mkstemp(filename);
 	if (fd != -1) {
 		write_item(item, filename);

@@ -84,7 +84,7 @@ configcontainer::configcontainer()
 		{ "notify-beep", configdata("no", configdata_t::BOOL) },
 		{ "notify-format",
 		    configdata(
-		        _("newsbeuter: finished reload, %f unread "
+		        _("newsboat: finished reload, %f unread "
 		            "feeds (%n unread articles total)"),
 		        configdata_t::STR) },
 		{ "notify-program", configdata("", configdata_t::PATH) },

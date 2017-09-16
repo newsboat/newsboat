@@ -1,64 +1,63 @@
-The Newsbeuter RSS Feedreader
-=============================
-Andreas Krennmair <ak@newsbeuter.org>
+The Newsboat RSS Feedreader
+===========================
 
 Introduction
 ------------
-Newsbeuter is an RSS/Atom feedreader. RSS and Atom are a number of widely-used 
+Newsboat is an RSS/Atom feedreader. RSS and Atom are a number of widely-used 
 XML formats to transmit, publish and syndicate articles, for example news or 
-blog articles.  Newsbeuter is designed to be used on text terminals on Unix or 
+blog articles.  Newsboat is designed to be used on text terminals on Unix or 
 Unix-like systems such as GNU/Linux, FreeBSD or Mac OS X.
 
 Platforms
 ~~~~~~~~~
 
-Newsbeuter has been tested on Linux (with glibc and musl-libc), FreeBSD and Mac
-OS X, and is available in the form of pre-built packages for many popular Linux
-distributions. For a current list of distributions with newsbeuter packages,
-consult http://www.newsbeuter.org/download.html[this list on the newsbeuter
-website].
+Newsboat has been tested on Linux (with glibc and musl-libc), FreeBSD and Mac
+OS X.
 
 NetBSD is currently not supported, due to technical limitations in the iconv() 
 implementation.
 
-Why "Newsbeuter"?
-~~~~~~~~~~~~~~~~
-"Newsbeuter" is a pun on the German word "Wildbeuter", which means
-"hunter-gatherer". During the stone age, people hunted and gathered their food,
-and these days, they hunt and gather news and information. Credits for this
-idea goes to Clifford Wolf, who submitted it to a little competition that was
-started when I got aware that the original name would violate French and
-European registered trademarks.
+Why "Newsboat"?
+~~~~~~~~~~~~~~~
+"Newsboat" is a play on the name of its ancestor, "Newsbeuter". They're spelled
+quite differently, but sound similar. ("Newsbeuter" is a pun on German word
+"wildbeuter"; "newsboat" is an English word.)
+
+Newsboats were the vessels that collected and delivered news shuffling between
+boats in the port. Newsboat the program will collect the news for you, just
+like its namesakes did back in the day.
 
 Installation
 ------------
-This chapter describes how to compile and install newsbeuter from source.
+This chapter describes how to compile and install newsboat from source.
 
-Downloading Newsbeuter
+Downloading Newsboat
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Newsbeuter is available as source package. Simply go to
-http://www.newsbeuter.org/[] and download the latest source package, which is
+Newsboat is available as source package. Simply go to
+https://newsboat.org/[] and download the latest source package, which is
 usually in the .tar.gz file format. Alternatively, you can check out the latest
-development source tree from the newsbeuter Git repository (hosted on GitHub)
+development source tree from the newsboat Git repository 
 by running the following command on the commandline:
 
-	git clone git://github.com/akrennmair/newsbeuter.git
+	git clone git://github.com/newsboat/newsboat.git
 
 Dependencies
 ~~~~~~~~~~~~
-Newsbeuter depends on a number of libraries to function correctly. This table
+Newsboat depends on a number of libraries to function correctly. This table
 lists these dependencies. Please be aware that the list libraries may
 themselves depend on other libraries. These dependencies are not listed here.
-Please also be aware that you need a recent C++ compiler. Currently, newsbeuter
-has only been tested with GCC.
+Please also be aware that you need a recent C++ compiler.
 
-- STFL (version 0.21 or newer): http://www.clifford.at/stfl/[]
-- SQLite 3 (version 3.5 or newer): http://www.sqlite.org/[]
-- libcurl: http://curl.haxx.se/download.html[]
-- GNU gettext (on systems that don't provide gettext in the libc): ftp://ftp.gnu.org/gnu/gettext/[]
-- pkg-config: http://pkg-config.freedesktop.org/wiki/[]
-- libxml2: http://xmlsoft.org/[]
+- GCC 4.9 or newer, or Clang 3.6 or newer
+- [STFL (version 0.21 or newer)](http://www.clifford.at/stfl/)
+- [SQLite3 (version 3.5 or newer)](http://www.sqlite.org/download.html)
+- [libcurl (version 7.18.0 or newer)](http://curl.haxx.se/download.html)
+- GNU gettext (on systems that don't provide gettext in the libc):
+  ftp://ftp.gnu.org/gnu/gettext/
+- [pkg-config](http://pkg-config.freedesktop.org/wiki/)
+- [libxml2](http://xmlsoft.org/downloads.html)
+- [json-c (version 0.11 or newer)](https://github.com/json-c/json-c/wiki)
 
 If you intend to modify and regenerate the filter language parser, you will also
 need Coco/R for C++, which you can download from
@@ -71,13 +70,13 @@ files.
 Compiling and Installing
 ~~~~~~~~~~~~~~~~~~~~~~~~
 After you've downloaded and installed the dependencies mentioned above, you can
-start compiling and installing newsbeuter. To compile newsbeuter, simply run
+start compiling and installing newsboat. To compile newsboat, simply run
 "make" in the source tree. After a short time, this should complete
 successfully, and you can go on with installation by running "make install". By
-default, this will install the "newsbeuter" binary to the /usr/local/bin
+default, this will install the "newsboat" binary to the /usr/local/bin
 directory. You can provide an alternative installation path using the prefix
-parameter, e.g. running "make install prefix=/opt/newsbeuter" will install the
-binary to the directory /opt/newsbeuter/bin.
+parameter, e.g. running "make install prefix=/opt/newsboat" will install the
+binary to the directory /opt/newsboat/bin.
 
 
 First Steps
@@ -137,7 +136,7 @@ Example Configuration
 Configuring Colors
 ~~~~~~~~~~~~~~~~~~
 
-It is possible to configure custom color settings in newsbeuter. The basic configuration 
+It is possible to configure custom color settings in newsboat. The basic configuration 
 syntax is:
 
 	color <element> <foreground color> <background color> [<attribute> ...]
@@ -160,7 +159,7 @@ supported:
 The "default" color means that the terminal's default color will be used. The
 "color<n>" color name (where "n" is a decimal number *not* starting with zero)
 can be used if your terminal support 256 colors (e.g. gnome-terminal, xterm
-with $TERM set to xterm-256color). Newsbeuter contains support for 256 color
+with $TERM set to xterm-256color). Newsboat contains support for 256 color
 terminals since version 2.1. For a complete chart of colors and their
 corresponding numbers, please see
 http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html[].
@@ -187,7 +186,7 @@ Currently, the following elements are supported:
 - *background*: the application background
 - *article*: the article text
 
-The default color configuration of newsbeuter looks like this:
+The default color configuration of newsboat looks like this:
 
 	color background          white   black
 	color listnormal          white   black
@@ -202,7 +201,7 @@ Migrating from other RSS Feed Readers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 It is very likely that you have used other RSS feed readers before. In this
-case, it is practical to migrate the previous configuration to newsbeuter. The
+case, it is practical to migrate the previous configuration to newsboat. The
 vast amount of RSS feed readers allows the export of subscriptions via OPML
 files. OPML is an XML file format that was designed to save outlines, and has
 found its primary use in the import and export of feed subscriptions between
@@ -224,19 +223,19 @@ following command is necessary:
 	raggle --export-opml ~/blogroll.opml
 
 When you have exported the subscriptions from your old RSS feed reader, you can
-import them into newsbeuter:
+import them into newsboat:
 
-	newsbeuter -i ~/blogroll.opml
+	newsboat -i ~/blogroll.opml
 
-Don't worry, newsbeuter won't destroy your existing configuration, or add
+Don't worry, newsboat won't destroy your existing configuration, or add
 subscriptions more than once: every URL that is added to the subscription list
 is checked before whether it is already in the list, and is only added if not.
 This makes it possible to merge several OPML files into your subscription list.
 
 If your old RSS feed reader was able to structure your subscriptions in 
-hierarchies, and reflected this structure in the exported OPML file, newsbeuter
+hierarchies, and reflected this structure in the exported OPML file, newsboat
 doesn't throw away this information (although it doesn't support hierarchies), but
-generates tags from it. Tags are newsbeuter's way of organizing subscriptions
+generates tags from it. Tags are newsboat's way of organizing subscriptions
 in a non-hierarchical way. More information on the use of tags can be found below.
 
 Imagine the following folder hierarchy:
@@ -257,7 +256,7 @@ Subscriptions found in the folder "Private" will be tagged with "Private",
 subscriptions in the folder "International" will be tagged with "News" and
 "News/International", subscriptions in the folder "Erlang" will be tagged ith
 "IT", "IT/Programming" and "IT/Programming/Erlang", and so on. This means that
-when you select the tag "Programming" in newsbeuter, you will see all
+when you select the tag "Programming" in newsboat, you will see all
 subscriptions that were in the "Programming" folder or one of its subfolders
 before. This means that you will lose virtually nothing of your previously
 configured structure.
@@ -280,7 +279,7 @@ include::chapter-snownews.txt[]
 Bookmarking
 ~~~~~~~~~~~
 
-Since version 0.7, newsbeuter contains a plugin-based bookmarking system. When a user bookmarks a link (possible
+Newsboat contains a plugin-based bookmarking system. When a user bookmarks a link (possible
 in the article list, in the article view, and in the URL view), he is asked for the URL to bookmark (already
 preset with the URL of the current selection), the bookmark title (in most cases preset with the 
 title of the current selection), the bookmark description and (since 2.10) the
@@ -289,9 +288,9 @@ an external program, configured via the configuration command "bookmark-cmd", is
 parameters. The plugin itself implements the actual bookmark saving (e.g. writing the bookmark to an
 external file, or storing it to a del.icio.us account). If everything went OK, the plugin simply exits.
 In case something goes wrong while saving the bookmark, it writes out an error message as a single line.
-This error message is then presented to the user from within newsbeuter.
+This error message is then presented to the user from within newsboat.
 
-Newsbeuter comes with an example plugin, which implements a simple tab-separated bookmark file. This
+Newsboat comes with an example plugin, which implements a simple tab-separated bookmark file. This
 example can be found in the "doc" subdirectory.
 
 
@@ -305,13 +304,13 @@ include::chapter-cmdline.txt[]
 `20`20`40`20~~~~~~~~~~~~~~~~~~~
 Command:Syntax:Description:Example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-quit:quit:Quit newsbeuter.:quit
+quit:quit:Quit newsboat.:quit
 save:save <filename>:Save the currently select article to disk. This works in the article list and in the article view.:save ~/important.txt
 set:set <variable>[=<value>|&|!]:Set configuration variable <variable> to <value>. If no value is specified, the current value is printed out. Specifying a '!' after the name of boolean configuration variables toggles their values, a '&' directly after the name of a configuration variable of any type resets its value to the documented default value.:set reload-time=15
 tag:tag <tagname>:Only display feeds with the tag <tagname>.:tag news
 goto:goto <case-insensitive substring>:Go to the next feed whose name contains the case-insensitive substring.:goto foo
-source:source <filename> [...]:Load the specified configuration files. This allows it to load alternative configuration files or reload already loaded configuration files on-the-fly from the filesystem.:source ~/.newsbeuter/colors
-dumpconfig:dumpconfig <filename>:Save current internal state of configuration to file, so that it can be instantly reused as configuration file.:dumpconfig ~/.newsbeuter/config.saved
+source:source <filename> [...]:Load the specified configuration files. This allows it to load alternative configuration files or reload already loaded configuration files on-the-fly from the filesystem.:source ~/.newsboat/colors
+dumpconfig:dumpconfig <filename>:Save current internal state of configuration to file, so that it can be instantly reused as configuration file.:dumpconfig ~/.newsboat/config.saved
 dumpform:dumpform:Dump current dialog to text file. This is meant for debugging purposes only.:dumpform
 n/a:<number>:Jump to the entry with the index <number> (usually seen at the left side of the list). This currently works for the feed list and the article list.:30
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -320,7 +319,7 @@ n/a:<number>:Jump to the entry with the index <number> (usually seen at the left
 Filter Language
 ~~~~~~~~~~~~~~~
 
-Newsbeuter provides a powerful filter language that enables the user to
+Newsboat provides a powerful filter language that enables the user to
 filter the content of many dialogs, such as the feed list or the article
 list. The basic concept is that every feed and every article has a
 number of attributes which can then be compared with user-supplied
@@ -411,21 +410,21 @@ traditionally called a "killfile", i.e. based on the content of this "killfile",
 articles that match certain conditions do not get displayed and are not presented
 to the user at all.
 
-In newsbeuter, such a "killfile" can be implemented on a per-article basis via
+In newsboat, such a "killfile" can be implemented on a per-article basis via
 the configuration file. The most important configuration command for this
 is "ignore-article":
 
 	ignore-article "*" "title =~ \"Gentoo\""
-	ignore-article "http://synflood.at/blog/index.php?/feeds/index.rss2" "title =~ \"newsbeuter\""
+	ignore-article "http://synflood.at/blog/index.php?/feeds/index.rss2" "title =~ \"newsboat\""
 
 The basic format is that the user specifies an RSS feed for which the ignore
 shall be applied ("*" matches all RSS feeds), and then a filter expression (see
-previous section). If newsbeuter hits an article in the specified RSS feed that
+previous section). If newsboat hits an article in the specified RSS feed that
 matches the specified filter expression, then this article is ignored and never
 presented to the user. The configuration itself can contain as many
 ignore-article commands as desired.
 
-Since newsbeuter 2.2, you can specify the way an article is ignored. There are
+You can also specify the way an article is ignored. There are
 two ways available:
 
  - During download: articles are ignored when a feed is downloaded and parsed,
@@ -449,8 +448,8 @@ configuration file:
 Query Feeds
 ~~~~~~~~~~~
 
-Query feeds are a mechanism of newsbeuter to define custom "meta feeds" by using 
-newsbeuter's built-in filter language. A query feed is a feed that is aggregated
+Query feeds are a mechanism of newsboat to define custom "meta feeds" by using 
+newsboat's built-in filter language. A query feed is a feed that is aggregated
 from all currently downloaded articles of all feeds. To narrow down the set of
 articles, the user has to specify a filter. Only articles that match this filter
 are added to the query feed.
@@ -461,11 +460,11 @@ article was originally fetched. If you want query feeds to be updated at
 startup, set `prepopulate-query-feeds` to `yes`.
 
 To define a query feed, the user has to add a line to the file
-~/.newsbeuter/urls in the following format:
+~/.newsboat/urls in the following format:
 
 	query:<name of feed>:<filter expression> [<tag> ...]
 
-The "query:" in the beginning tells newsbeuter that it's a query feed, "<name of
+The "query:" in the beginning tells newsboat that it's a query feed, "<name of
 feed>" specifies the name under which the query feed shall be displayed in the
 feed list, and "<filter expression>" is the filter expression that shall be
 used. Like every other feed, a query feed can be tagged to organize it like
@@ -496,21 +495,13 @@ Basically, the possibility of what can be realized with query feeds is only
 limited by what can be queried from articles and feeds with the filter language
 and by your creativity.
 
-Google Reader Support
-~~~~~~~~~~~~~~~~~~~~~
-
-Since version 2.2, newsbeuter contained support for Google Reader. After Google 
-Reader was discontinued by Google, Google Reader support was subsequently 
-removed from newsbeuter and replaced with support for alternatives such as The 
-Old Reader, NewsBlur and FeedHQ.
-
 The Old Reader Support
 ~~~~~~~~~~~~~~~~~~~~~
 
 http://theoldreader.com/[The Old Reader] is a successor to Google Reader.
-Newsbeuter provides functionality to use The Old Reader as its 
+Newsboat provides functionality to use The Old Reader as its 
 backend: people can use The Old Reader to manage their subscriptions, and in 
-addition, use newsbeuter to download and read articles. Newsbeuter will keep 
+addition, use newsboat to download and read articles. Newsboat will keep 
 the information which articles have already been read synchronized with The Old 
 Reader, so that users usually won't see articles more than once. In addition, it 
 will only ever download unread articles from The Old Reader.
@@ -519,7 +510,7 @@ In order to use The Old Reader support, you first need to configure the proper U
 
 	urls-source "oldreader"
 
-In addition, newsbeuter needs to know your The Old Reader username and password 
+In addition, newsboat needs to know your The Old Reader username and password 
 so that it can authenticate with The Old Reader:
 
 	oldreader-login "your-oldreader-account"
@@ -530,20 +521,20 @@ instead of +"+.)
 
 See also <<_passwords_for_external_apis,oldreader-passwordfile and oldreader-passwordeval>>.
 
-After setting these configuration values, you can start newsbeuter, it will 
+After setting these configuration values, you can start newsboat, it will 
 authenticate with The Old Reader and download your subscription list. If you use 
-"folders" in The Old Reader to organize your feeds, newsbeuter will regard them 
+"folders" in The Old Reader to organize your feeds, newsboat will regard them 
 and make them available via its "tags" capability: each feed is tagged with the 
 name of the folder in which it resides.
 
-When you mark single items or complete feeds as read, newsbeuter will 
+When you mark single items or complete feeds as read, newsboat will 
 synchronize this information directly to The Old Reader. This, of course, 
 includes opening articles. Toggling read articles back to "unread" is also 
 communicated to The Old Reader.
 
 In addition, The Old Reader provides the ability to "star" and to "share"
 articles. Starred articles are basically bookmarks, while shared articles are
-shown to people that follow your The Old Reader account. Newsbeuter allows the
+shown to people that follow your The Old Reader account. Newsboat allows the
 use of this feature by mapping its powerful "flags" to the "star"/"unstar"
 resp. "share"/"unshare" operations.
 
@@ -556,7 +547,7 @@ that shall be used:
 After that, use these flags when you edit flags for an article, and these
 articles will be starred resp. shared.
 
-By default, newsbeuter also shows The Old Reader "special feeds":
+By default, newsboat also shows The Old Reader "special feeds":
 - People you follow: articles shared by people that you follow.
 - Starred items: articles that you starred.
 - Shared items: articles that you shared.
@@ -565,13 +556,13 @@ You can disable these feeds by setting the following configuration variable:
 
 	oldreader-show-special-feeds no
 
-The Old Reader's folders are converted into Newsbeuter tags. You can select and
+The Old Reader's folders are converted into Newsboat tags. You can select and
 filter feeds by tags; see "Tagging" and "Filter Language" sections for details.
 
 NewsBlur Support
 ~~~~~~~~~~~~~~~~
 
-Newsbeuter also supports NewsBlur, another alternative to Google Reader. 
+Newsboat also supports NewsBlur, another alternative to Google Reader. 
 Configuration basically works the same as with The Old Reader.
 
 First, set your urls-source:
@@ -588,17 +579,17 @@ instead of +"+.)
 
 See also <<_passwords_for_external_apis,newsblur-passwordfile and newsblur-passwordeval>>.
 
-When you start newsbeuter, it will download the feeds that you configured
+When you start newsboat, it will download the feeds that you configured
 in NewsBlur. Please take a closer look at the configuration commands for what 
-you can configure in newsbeuter regarding NewsBlur.
+you can configure in newsboat regarding NewsBlur.
 
-NewsBlur's folders are converted into Newsbeuter tags. You can select and
+NewsBlur's folders are converted into Newsboat tags. You can select and
 filter feeds by tags; see "Tagging" and "Filter Language" sections for details.
 
 FeedHQ Support
 ~~~~~~~~~~~~~~
 
-Newsbeuter also supports FeedHQ, another alternative to Google Reader. 
+Newsboat also supports FeedHQ, another alternative to Google Reader. 
 Configuration basically works the same as with The Old Reader.
 
 First, set your urls-source:
@@ -619,34 +610,27 @@ if you're using a standalone instance, you should add one more setting:
 
     feedhq-url "https://the.url.of/your/feedhq/instance"
 
-When you start newsbeuter, it will download the feeds that you configured
+When you start newsboat, it will download the feeds that you configured
 in FeedHQ. Please take a closer look at the configuration commands for what 
-you can configure in newsbeuter regarding FeedHQ.
+you can configure in newsboat regarding FeedHQ.
 
-FeedHQ's folders are converted into Newsbeuter tags. You can select and filter
+FeedHQ's folders are converted into Newsboat tags. You can select and filter
 feeds by tags; see "Tagging" and "Filter Language" sections for details.
-
-Bloglines Synchronization
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Up to and including version 2.3, newsbeuter contained support for synchronization
-with Bloglines. On October 1, 2010, Bloglines was discontinued, and newsbeuter's
-support for Bloglines was subsequently removed.
 
 Tiny Tiny RSS Synchronization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Since version 2.5, newsbeuter can be used to synchronize with Tiny Tiny RSS 
+Newsboat can be used to synchronize with Tiny Tiny RSS 
 installations. Tiny Tiny RSS is a web-based and (optionally) multi-user feed 
 reader. By providing the ability to use Tiny Tiny RSS as its backend, it's 
 possible for users to manage their subscriptions centrally within Tiny Tiny RSS 
-while reading them wherever they are using newsbeuter.
+while reading them wherever they are using newsboat.
 
 If you want to use Tiny Tiny RSS support, don't forget to activate the external 
 API support in your preferences.
 
 To use Tiny Tiny RSS support, you need to configure a few things. First of all, 
-newsbeuter needs to know that you want to use Tiny Tiny RSS and which 
+newsboat needs to know that you want to use Tiny Tiny RSS and which 
 installation exactly:
 
 	urls-source "ttrss"
@@ -663,7 +647,7 @@ instead of +"+.)
 See also <<_passwords_for_external_apis,ttrss-passwordfile and ttrss-passwordeval>>.
 
 Tiny Tiny RSS provides two modes of usage, single-user mode and multi-user 
-mode. newsbeuter needs to know about this, too: In single-user mode, 
+mode. newsboat needs to know about this, too: In single-user mode, 
 authentication is done via Basic HTTP authentication, while in multi-user mode, 
 authentication is done against Tiny Tiny RSS itself.
 
@@ -677,13 +661,13 @@ of the url like this:
     ttrss-url "http://htuser:htpasswd@example.com/ttrss/"
 
 
-With these settings, newsbeuter should be able to connect to Tiny Tiny RSS and 
+With these settings, newsboat should be able to connect to Tiny Tiny RSS and 
 download your subscribed feeds. Articles or even complete feeds that you marked 
 as read are synchronized directly to Tiny Tiny RSS.
 
 Tiny Tiny RSS provides the ability to "star" and to "publish" articles. Starred 
 articles are basically bookmarks, while published articles can be retrieved via 
-a public RSS feed. Newsbeuter allows the use of these features by mapping its
+a public RSS feed. Newsboat allows the use of these features by mapping its
 flags to the "star" and "publish" operations.
 
 In order to use this mapping, you need to configure the flags that shall be used:
@@ -694,7 +678,7 @@ In order to use this mapping, you need to configure the flags that shall be used
 After that, use these flags when you edit flags for an article, and these articles
 will be starred resp. published.
 
-TT-RSS folders are converted into Newsbeuter tags. You can select and filter
+TT-RSS folders are converted into Newsboat tags. You can select and filter
 feeds by tags; see "Tagging" and "Filter Language" sections for details.
 
 ownCloud News Synchronization
@@ -702,7 +686,7 @@ ownCloud News Synchronization
 
 To use ownCloud News support you need to configure a few things.
 
-First, set your +urls-source+ to +ocnews+ and tell Newsbeuter where to find
+First, set your +urls-source+ to +ocnews+ and tell Newsboat where to find
 your ownCloud instance:
 
 	urls-source "ocnews"
@@ -719,20 +703,20 @@ ownCloud News API uses HTTP basic auth, therefore running ownCloud with SSL is h
 recommended.
 
 ownCloud News provides the ability to "star" articless; starred articles are basically
-bookmarks. Newsbeuter allows the use of this feature by mapping user-specified
+bookmarks. Newsboat allows the use of this feature by mapping user-specified
 flag to the "star" operation.
 
 In order to use this mapping, you need to configure the flag that shall be used:
 
 	ocnews-flag-star "s"
 
-If for any reason you don't want Newsbeuter to verify the hostname of your
+If for any reason you don't want Newsboat to verify the hostname of your
 instance against the hostname specified in the SSL certificate you're using,
 just say so:
 
 	ocnews-verifyhost "no"
 
-OwnCloud News' folders are converted into Newsbeuter tags. You can select and
+OwnCloud News' folders are converted into Newsboat tags. You can select and
 filter feeds by tags; see "Tagging" and "Filter Language" sections for details.
 
 OPML Online Subscription Mode
@@ -775,7 +759,7 @@ article list. In the article view, all flags (if available) are listed.
 Macro Support
 ~~~~~~~~~~~~~
 
-In newsbeuter, it's possible to define macros to execute more than one command
+In newsboat, it's possible to define macros to execute more than one command
 at once. A macro is configured using the "macro" configuration command. The
 first parameter to "macro" is the key, all parameters afterwards are operations
 (as listed in the "Available Operations" table above), optionally with
@@ -795,21 +779,21 @@ something else, such as running an image viewer from the URLs view:
 	macro i set browser "feh %u"; open-in-browser ; set browser "elinks %u"
 
 You can even use this feature to enqueue any of the URLs from the URLs view to
-podbeuter's download queue:
+podboat's download queue:
 
-	macro E set browser "echo %u >> ~/.newsbeuter/queue" ; open-in-browser ; set browser "elinks %u"
+	macro E set browser "echo %u >> ~/.newsboat/queue" ; open-in-browser ; set browser "elinks %u"
 
 Commandline Commands
 ~~~~~~~~~~~~~~~~~~~~
 
-Newsbeuter comes with a -x option that indicates that commands added as arguments
+Newsboat comes with a -x option that indicates that commands added as arguments
 to the command line shall be executed. Currently, the following commands are
 available:
 
-- reload: this option reloads all feeds, and quits newsbeuter without printing any output. 
+- reload: this option reloads all feeds, and quits newsboat without printing any output. 
   This is useful if a user wants to periodically reload all feeds without always having
-  a running newsbeuter instance, e.g. from cron.
-- print-unread: this option prints the number of unread articles and quits newsbeuter.
+  a running newsboat instance, e.g. from cron.
+- print-unread: this option prints the number of unread articles and quits newsboat.
   This is useful for users who want to integrate this number into some kind of monitoring
   system.
 
@@ -817,7 +801,7 @@ available:
 Format Strings
 ~~~~~~~~~~~~~~
 
-Newsbeuter contains a powerful format string system to make it possible for the
+Newsboat contains a powerful format string system to make it possible for the
 user to configure the format of various aspects of the application, such as 
 the format of entries in the feed list or in the article list.
 
@@ -829,7 +813,7 @@ that is specified by the number, while negative number specify left padding.
 Followed by the padding indication comes the actual sequence identifier, which
 is usually a single letter. 
 
-In addition, newsbeuter provides other, more powerful sequences, such as
+In addition, newsboat provides other, more powerful sequences, such as
 "%>[char]", which indicates that the text right to the sequence will be aligned
 right on the screen, and characters between the text on the left and the text
 on the right will be filled by "[char]". Another powerful format is the
@@ -900,11 +884,11 @@ Examples:
 Dialog Titles
 ^^^^^^^^^^^^^
 
-Starting with newsbeuter 2.0, it is now officially supported to customize
+You can customize
 the title format of all available dialogs. Here is a list of dialogs with their
 respective title format configuration variables, and a list of available formats
 and their meaning. Please note that the title formats are localized, so if you
-work on a different locale that is supported by newsbeuter, the actually displayed
+work on a different locale that is supported by newsboat, the actually displayed
 title text may vary unless you customize it.
 
 .Dialog Title Formats
@@ -929,7 +913,7 @@ Dialog List:dialogs-title-format:%N %V - Dialogs
 `30`60~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Identifier:Meaning
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-N:Name of the program, i.e. "newsbeuter"
+N:Name of the program, i.e. "newsboat"
 V:Program version
 u:Number of unread articles (if applicable)
 t:Number of total articles (if applicable)
@@ -973,7 +957,7 @@ F:Feed title
 Highlighting Text
 ~~~~~~~~~~~~~~~~~
 
-Since version 1.0, newsbeuter supports the highlighting of text in the feed
+Newsboat supports the highlighting of text in the feed
 list, the article list and the article view, using regular expressions to
 describe patterns to be highlighted. The command syntax goes like this:
 
@@ -989,7 +973,7 @@ section.
 
 Examples for possible highlighting configurations are:
 
-	highlight all "newsbeuter" red
+	highlight all "newsboat" red
 	highlight article "^(Feed|Title|Author|Link|Date):" default default underline
 	highlight feedlist "https?://[^ ]+" yellow red bold
 
@@ -1016,7 +1000,7 @@ Example:
 Advanced Dialog Management
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Since version 2.0, newsbeuter supports an advanced concept of dialogs.
+Newsboat supports an advanced concept of dialogs.
 Previously, all dialogs (feed list, article list, article view) were internally
 laid out as a pure stack. In 2.0, this changed: all dialogs are managed in a
 list, and the user can jump to another, previously opened dialog from
@@ -1032,26 +1016,26 @@ open dialogs by selecting them and pressing Ctrl-X.
 XDG Base Directory Support
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Newsbeuter implements limited support for the
+Newsboat implements limited support for the
 http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html[XDG Base
 Directory Specification]. It needs to be set up manually by creating the
 following directories:
 
-	'~/.local/share/newsbeuter/'
-	'~/.config/newsbeuter/'
+	'~/.local/share/newsboat/'
+	'~/.config/newsboat/'
 
 If these directories exist or the environment variables `$XDG_CONFIG_HOME` and
-`$XDG_DATA_HOME` are set, newsbeuter will use these directories, otherwise it
-will default to '~/.newsbeuter' as its configuration directory.
+`$XDG_DATA_HOME` are set, newsboat will use these directories, otherwise it
+will default to '~/.newsboat' as its configuration directory.
 
-If you're currently using '~/.newsbeuter/' but wish to migrate to XDG
+If you're currently using '~/.newsboat/' but wish to migrate to XDG
 directories, you should move the files as follows:
 
 'config', 'urls'::
-        to '$HOME/.config/newsbeuter/'
+        to '$HOME/.config/newsboat/'
 
 'cache.db', 'history.search', 'history.cmdline', 'queue'::
-        to '$HOME/.local/share/newsbeuter/'
+        to '$HOME/.local/share/newsboat/'
 
 
 Podcast Support
@@ -1059,7 +1043,7 @@ Podcast Support
 
 include::chapter-podcasts.txt[]
 
-.Podbeuter Configuration Commands
+.Podboat Configuration Commands
 [frame="all", grid="all",format="dsv",separator="|"]
 `10`15`15`40`20~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Configuration Command|Argument(s)|Default|Description|Example
@@ -1067,7 +1051,7 @@ Configuration Command|Argument(s)|Default|Description|Example
 include::podbeuter-cmds.dsv[]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.Available Operations in Podbeuter
+.Available Operations in Podboat
 [frame="all", grid="all", format="dsv"]
 `20`20`60~~~~~~~~~~~~~~~~~~~~~~~~
 Operation:Default key:Description
@@ -1083,41 +1067,41 @@ pb-increase-max-dls:+:Increase the "max-downloads" option by 1.
 pb-decrease-max-dls:-:Decrease the "max-downloads" option by 1. If the option is already 1, no further decrease is possible.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A usual "use case" is to configure newsbeuter to automatically enqueue newly
+A usual "use case" is to configure newsboat to automatically enqueue newly
 found podcast download URLs. Then, the user reloads the podcast RSS feeds in
-newsbeuter, and after that, he/she uses podbeuter to view the current queue, and
+newsboat, and after that, he/she uses podboat to view the current queue, and
 either selectively download certain files or automatically download them all
-together by pressing "a" within podbeuter.
+together by pressing "a" within podboat.
 
-Running multiple copies of Newsbeuter simultaneously
+Running multiple copies of Newsboat simultaneously
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 During development and testing, you might want to run a second copy of
-Newsbeuter, operating with different config, URLs list or cache file. This can
+Newsboat, operating with different config, URLs list or cache file. This can
 be achieved by creative use of XDG environment variables. This approach is not
 beautiful, but it works.
 
 First of all, you will need to create a directory to store the data. Let's call
 it +test+:
 
-	$ mkdir -p test/newsbeuter
+	$ mkdir -p test/newsboat
 
-Note that we also create a subdirectory called +newsbeuter+; this is required
+Note that we also create a subdirectory called +newsboat+; this is required
 to satisfy XDG specification. **ATTENTION**: if this subdirectory is absent,
-Newsbeuter will attempt to run on your live data!
+Newsboat will attempt to run on your live data!
 
-You can now create +config+ and +urls+ files inside +test/newsbeuter+; you can
+You can now create +config+ and +urls+ files inside +test/newsboat+; you can
 also copy +cache.db+ if you don't want to start with a fresh one.
 
-When the files are ready, you can invoke Newsbeuter as follows:
+When the files are ready, you can invoke Newsboat as follows:
 
-	$ XDG_CONFIG_HOME=test XDG_DATA_HOME=test newsbeuter
+	$ XDG_CONFIG_HOME=test XDG_DATA_HOME=test newsboat
 
-(This will look +newsbeuter+ binary up in your +PATH+; if you've just built
-your own, use +./newsbeuter+ instead, or provide a full path.)
+(This will look +newsboat+ binary up in your +PATH+; if you've just built
+your own, use +./newsboat+ instead, or provide a full path.)
 
-By modifying the environment in which Newsbeuter runs you also modify
-environments of all the programs that Newsbeuter starts; that includes filters
+By modifying the environment in which Newsboat runs you also modify
+environments of all the programs that Newsboat starts; that includes filters
 and external HTML renderers. If they rely on +XDG_*+ variables, they will look
 for things in +test+ directory and might fail.
 
@@ -1131,20 +1115,21 @@ environment, e.g.:
 
 As already said: not beautiful, but gets the job done.
 
-Using SQLite Triggers with newsbeuter
+Using SQLite Triggers with newsboat
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This section was kindly provided by mailto:elrond+newsbeuter(at)samba-tng.org[Elrond].
+This section was written by mailto:elrond+newsbeuter(at)samba-tng.org[Elrond],
+originally for Newsbeuter.
 
-SQLite, the db used by newsbeuter, supports triggers. These are small
+SQLite, the db used by newsboat, supports triggers. These are small
 snippets of SQL that get executed inside the database by the database
 engine. They're stored inside the db and the normal user (including
-newsbeuter itself) doesn't see them. Just the db seems to do some magic:
+newsboat itself) doesn't see them. Just the db seems to do some magic:
 Like changing some values when you change another value.
 
-So what is this good for when looking at newsbeuter? Well, first off, it's a
+So what is this good for when looking at newsboat? Well, first off, it's a
 hack. The real answer should be to use application logic (do it inside
-newsbeuter, not in the db). So: Don't use this, unless you know, what you're
+newsboat, not in the db). So: Don't use this, unless you know, what you're
 doing, and unless you have some sort of backup.
 
 Example
@@ -1156,18 +1141,18 @@ Suppose you have a strange feed where the articles become "new" by just
 changing their subject, and nothing else changes. The body is just empty, and
 the URL keeps the same. This feed really exists. It's the "updated software rss
 feed" of some major company and the title just contains the name of the driver
-and version number. And the URL points to the download page. newsbeuter
+and version number. And the URL points to the download page. newsboat
 considers articles only as new, when they have a new UniqueID (this is good).
 So those articles are never marked as new (unread) ever again.
 
-So what can we do? We do some magic: We let the db test if newsbeuter
+So what can we do? We do some magic: We let the db test if newsboat
 changes the subject and then let itself mark the article again as unread.
 
 1. You need the sqlite3 command line tool (available via apt-get install sqlite3 on Debian) or some other tool to do direct sql on the sqlite database.
 
-2. Start sqlite3 with the newsbeuter db:
+2. Start sqlite3 with the newsboat db:
 
-	 Rivendell:~/.newsbeuter% sqlite3 cache.db
+	 Rivendell:~/.newsboat% sqlite3 cache.db
 	 SQLite version 3.4.2
 	 Enter ".help" for instructions
 	 sqlite>
@@ -1182,8 +1167,8 @@ changes the subject and then let itself mark the article again as unread.
 
 4. Leave sqlite3 with <Ctrl-D> or .quit.
 
-That's it. newsbeuter (well, its db) now marks articles as unread when their
-title changes. And nicely enough this works all inside newsbeuter, no need to
+That's it. newsboat (well, its db) now marks articles as unread when their
+title changes. And nicely enough this works all inside newsboat, no need to
 restart it so that it rereads the cache, that magically modifies itself. It
 just works.
 
@@ -1195,35 +1180,38 @@ include::chapter-password.txt[]
 Feedback
 --------
 
-If you want to tell us something related to newsbeuter, don't hesitate to send
-an email: ak@newsbeuter.org
+If you want to tell us something related to newsboat, don't hesitate to send
+an email to our mailing list: newsboat@googlegroups.com
 
-Alternatively, you can reach the newsbeuter developers on IRC: channel
-#newsbeuter on irc.freenode.net.
+Alternatively, you can reach the newsboat developers on IRC: channel
+#newsboat on irc.freenode.net.
 
-If you want to report newsbeuter bugs, please use this issue tracker:
-https://github.com/akrennmair/newsbeuter/issues/[]
+If you want to report newsboat bugs, please use this issue tracker:
+https://github.com/newsboat/newsboat/issues/[]
 
 License
 -------
 MIT/X Consortium License
 
-(C)opyright 2006-2011 Andreas Krennmair <ak@newsbeuter.org>
+Copyright 2006-2015 Andreas Krennmair <ak@newsbeuter.org>
+Copyright 2015-2017 Alexander Batischev <eual.jp@gmail.com>
+Copyright 2006-2017 Newsbeuter contributors
+Copyright 2017 Newsboat contributors
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.

@@ -165,7 +165,7 @@ void view::run() {
 	curs_set(0);
 
 	/*
-	 * This is the main "event" loop of newsbeuter.
+	 * This is the main "event" loop of newsboat.
 	 */
 
 	while (formaction_stack_size() > 0) {

@@ -57,7 +57,7 @@ namespace TestHelpers {
 					tempdir = "/tmp/";
 				}
 
-				tempdir += "/newsbeuter-tests/";
+				tempdir += "/newsboat-tests/";
 
 				int status = mkdir(tempdir.c_str(), S_IRWXU);
 				if (status != 0) {

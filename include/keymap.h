@@ -31,7 +31,7 @@ enum {
 namespace newsbeuter {
 
 enum operation {	OP_NIL = 0,
-                    // general and newsbeuter-specific operations:
+                    // general and newsboat-specific operations:
                     OP_NB_MIN,
                     OP_QUIT,
                     OP_HARDQUIT,

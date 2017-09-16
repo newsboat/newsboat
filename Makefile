@@ -24,7 +24,7 @@ BARE_CXXFLAGS=-std=c++11 -ggdb $(INCLUDES)
 CXXFLAGS+=$(BARE_CXXFLAGS) $(WARNFLAGS) $(DEFINES)
 LDFLAGS+=-L. -fprofile-arcs -ftest-coverage
 
-PACKAGE=newsbeuter
+PACKAGE=newsboat
 
 ifeq (, $(filter $(MAKECMDGOALS),distclean run-i18nspector))
 include config.mk
@@ -42,7 +42,7 @@ FILTERLIB_SOURCES=filter/Scanner.cpp filter/Parser.cpp filter/FilterParser.cpp
 FILTERLIB_OBJS:=$(patsubst %.cpp,%.o,$(FILTERLIB_SOURCES))
 FILTERLIB_OUTPUT=libfilter.a
 
-NEWSBEUTER=newsbeuter
+NEWSBEUTER=newsboat
 NEWSBEUTER_SOURCES:=$(shell cat mk/newsbeuter.deps)
 NEWSBEUTER_OBJS:=$(patsubst %.cpp,%.o,$(NEWSBEUTER_SOURCES))
 NEWSBEUTER_LIBS=-lbeuter -lfilter -lpthread -lrsspp
@@ -52,7 +52,7 @@ RSSPPLIB_OBJS=$(patsubst rss/%.cpp,rss/%.o,$(RSSPPLIB_SOURCES))
 RSSPPLIB_OUTPUT=librsspp.a
 
 
-PODBEUTER=podbeuter
+PODBEUTER=podboat
 PODBEUTER_SOURCES:=$(shell cat mk/podbeuter.deps)
 PODBEUTER_OBJS:=$(patsubst %.cpp,%.o,$(PODBEUTER_SOURCES))
 PODBEUTER_LIBS=-lbeuter -lpthread
@@ -139,11 +139,11 @@ clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-do
 distclean: clean clean-mo test-clean profclean
 	$(RM) core *.core core.* config.mk
 
-doc: doc/xhtml/newsbeuter.html doc/xhtml/faq.html doc/newsbeuter.1 doc/podbeuter.1
+doc: doc/xhtml/newsboat.html doc/xhtml/faq.html doc/newsboat.1 doc/podboat.1
 
-doc/xhtml/newsbeuter.html: doc/newsbeuter.txt
+doc/xhtml/newsboat.html: doc/newsboat.txt
 	$(MKDIR) doc/xhtml
-	$(A2X) -f xhtml -D doc/xhtml doc/newsbeuter.txt
+	$(A2X) -f xhtml -D doc/xhtml doc/newsboat.txt
 	$(CHMOD) u+w doc/xhtml/docbook-xsl.css
 
 doc/xhtml/faq.html: doc/faq.txt
@@ -157,14 +157,14 @@ doc/newsbeuter-cfgcmds.txt: doc/generate.pl doc/configcommands.dsv
 doc/newsbeuter-keycmds.txt: doc/generate2.pl doc/keycmds.dsv
 	doc/generate2.pl doc/keycmds.dsv > doc/newsbeuter-keycmds.txt
 
-doc/newsbeuter.1: doc/manpage-newsbeuter.txt doc/newsbeuter-cfgcmds.txt doc/newsbeuter-keycmds.txt
-	$(A2X) -f manpage doc/manpage-newsbeuter.txt
+doc/newsboat.1: doc/manpage-newsboat.txt doc/newsbeuter-cfgcmds.txt doc/newsbeuter-keycmds.txt
+	$(A2X) -f manpage doc/manpage-newsboat.txt
 
 doc/podbeuter-cfgcmds.txt: doc/generate.pl doc/podbeuter-cmds.dsv
 	doc/generate.pl doc/podbeuter-cmds.dsv > doc/podbeuter-cfgcmds.txt
 
-doc/podbeuter.1: doc/manpage-podbeuter.txt doc/podbeuter-cfgcmds.txt
-	$(A2X) -f manpage doc/manpage-podbeuter.txt
+doc/podboat.1: doc/manpage-podboat.txt doc/podbeuter-cfgcmds.txt
+	$(A2X) -f manpage doc/manpage-podboat.txt
 
 fmt:
 	astyle --suffix=none --style=java --indent=tab --indent-classes *.cpp include/*.h src/*.cpp rss/*.{cpp,h} test/*.cpp

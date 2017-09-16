@@ -1,5 +1,5 @@
 #
-# Newsbeuter's example config
+# Newsboat's example config
 #
 
 ####  always-display-description
@@ -55,7 +55,7 @@
 ####  articlelist-title-format
 #
 # Format of the title in article list. See "Format Strings" section of
-# Newsbeuter manual for details on available formats.
+# Newsboat manual for details on available formats.
 #
 # Syntax: <format>
 #
@@ -144,7 +144,7 @@
 #
 # Syntax: <path>
 #
-# Default value: "~/.newsbeuter/cache.db"
+# Default value: "~/.newsboat/cache.db"
 #
 # cache-file "/tmp/testcache.db"
 
@@ -173,8 +173,8 @@
 
 ####  confirm-exit
 #
-# If set to yes, then newsbeuter will ask for confirmation whether the user
-# really wants to quit newsbeuter.
+# If set to yes, then newsboat will ask for confirmation whether the user
+# really wants to quit newsboat.
 #
 # Syntax: [yes/no]
 #
@@ -191,7 +191,7 @@
 #
 # Default value: ""
 #
-# cookie-cache "~/.newsbeuter/cookies.txt"
+# cookie-cache "~/.newsboat/cookies.txt"
 
 ####  datetime-format
 #
@@ -221,7 +221,7 @@
 ####  delete-read-articles-on-quit
 #
 # If set to "yes", then all read articles will be deleted when you quit
-# newsbeuter.
+# newsboat.
 #
 # Syntax: [yes/no]
 #
@@ -232,7 +232,7 @@
 ####  dialogs-title-format
 #
 # Format of the title in dialog list. See "Format Strings" section of
-# Newsbeuter manual for details on available formats.
+# Newsboat manual for details on available formats.
 #
 # Syntax: <format>
 #
@@ -265,7 +265,7 @@
 
 ####  download-retries
 #
-# How many times newsbeuter shall try to successfully download a feed before
+# How many times newsboat shall try to successfully download a feed before
 # giving up. This is an option to improve the success of downloads on slow and
 # shaky connections such as via a TOR proxy.
 #
@@ -277,7 +277,7 @@
 
 ####  download-timeout
 #
-# The number of seconds newsbeuter shall wait when downloading a feed before
+# The number of seconds newsboat shall wait when downloading a feed before
 # giving up. This is an option to improve the success of downloads on slow and
 # shaky connections such as via a TOR proxy.
 #
@@ -296,7 +296,7 @@
 #
 # Default value: ""
 #
-# error-log "~/.newsbeuter/error.log"
+# error-log "~/.newsboat/error.log"
 
 ####  external-url-viewer
 #
@@ -436,7 +436,7 @@
 
 ####  feedlist-title-format
 #
-# Format of the title in feed list. See "Format Strings" section of Newsbeuter
+# Format of the title in feed list. See "Format Strings" section of Newsboat
 # manual for details on available formats.
 #
 # Syntax: <format>
@@ -448,7 +448,7 @@
 ####  filebrowser-title-format
 #
 # Format of the title in file browser. See "Format Strings" section of
-# Newsbeuter manual for details on available formats.
+# Newsboat manual for details on available formats.
 #
 # Syntax: <format>
 #
@@ -482,7 +482,7 @@
 ####  help-title-format
 #
 # Format of the title in help window. See "Format Strings" section of
-# Newsbeuter manual for details on available formats.
+# Newsboat manual for details on available formats.
 #
 # Syntax: <format>
 #
@@ -500,7 +500,7 @@
 #
 # Default value: n/a
 #
-# highlight all "newsbeuter" red
+# highlight all "newsboat" red
 
 ####  highlight-article
 #
@@ -586,12 +586,12 @@
 #
 # Default value: n/a
 #
-# include "~/.newsbeuter/colors"
+# include "~/.newsboat/colors"
 
 ####  itemview-title-format
 #
 # Format of the title in article view. See "Format Strings" section of
-# Newsbeuter manual for details on available formats.
+# Newsboat manual for details on available formats.
 #
 # Syntax: <format>
 #
@@ -760,7 +760,7 @@
 #
 # Syntax: <string>
 #
-# Default value: "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
+# Default value: "newsboat: finished reload, %f unread feeds (%n unread articles total)"
 #
 # notify-format "%d new articles (%n unread articles, %f unread feeds)"
 
@@ -999,7 +999,7 @@
 #
 # If yes, then all podcast URLs that are found in articles are added to the
 # podcast download queue. See the respective section in the documentation for
-# more information on podcast support in newsbeuter.
+# more information on podcast support in newsboat.
 #
 # Syntax: [yes/no]
 #
@@ -1082,7 +1082,7 @@
 
 ####  refresh-on-startup
 #
-# If yes, then all feeds will be reloaded when newsbeuter starts up. This is
+# If yes, then all feeds will be reloaded when newsboat starts up. This is
 # equivalent to the -r commandline option.
 #
 # Syntax: [yes/no]
@@ -1162,7 +1162,7 @@
 ####  searchresult-title-format
 #
 # Format of the title in search result. See "Format Strings" section of
-# Newsbeuter manual for details on available formats.
+# Newsboat manual for details on available formats.
 #
 # Syntax: <format>
 #
@@ -1173,7 +1173,7 @@
 ####  selectfilter-title-format
 #
 # Format of the title in filter selection dialog. See "Format Strings" section
-# of Newsbeuter manual for details on available formats.
+# of Newsboat manual for details on available formats.
 #
 # Syntax: <format>
 #
@@ -1184,7 +1184,7 @@
 ####  selecttag-title-format
 #
 # Format of the title in tag selection dialog. See "Format Strings" section of
-# Newsbeuter manual for details on available formats.
+# Newsboat manual for details on available formats.
 #
 # Syntax: <format>
 #
@@ -1376,10 +1376,10 @@
 ####  urls-source
 #
 # This configuration command sets the source where URLs shall be retrieved
-# from. By default, this is ~/.newsbeuter/urls. Alternatively, you can set it
-# to "opml", which enables newsbeuter's OPML online subscription mode, to
-# "ttrss" which enables newsbeuter's Tiny Tiny RSS support, to "oldreader",
-# which enables newsbeuter's The Old Reader support, to "newsblur", which
+# from. By default, this is ~/.newsboat/urls. Alternatively, you can set it
+# to "opml", which enables newsboat's OPML online subscription mode, to
+# "ttrss" which enables newsboat's Tiny Tiny RSS support, to "oldreader",
+# which enables newsboat's The Old Reader support, to "newsblur", which
 # enables NewsBlur support, or "feedhq" for FeedHQ support, or "ocnews" for
 # ownCloud News support. Query feed specifications will be read from the local
 # urls file regardless of this setting.
@@ -1392,7 +1392,7 @@
 
 ####  urlview-title-format
 #
-# Format of the title in URL view. See "Format Strings" section of Newsbeuter
+# Format of the title in URL view. See "Format Strings" section of Newsboat
 # manual for details on available formats.
 #
 # Syntax: <format>

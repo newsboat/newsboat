@@ -7,7 +7,7 @@ using namespace newsbeuter;
 
 FilterParser::FilterParser() : root(0), curpos(0), next_must_descend_right(false) { }
 
-FilterParser::~FilterParser() { 
+FilterParser::~FilterParser() {
 	cleanup();
 }
 
@@ -25,7 +25,7 @@ FilterParser& FilterParser::operator=(FilterParser& p) {
 	return *this;
 }
 
-void FilterParser::add_logop(int op) { 
+void FilterParser::add_logop(int op) {
 	//fprintf(stderr,"add_logop: op = %d\n", op);
 	expression * expr = new expression(op);
 	if (!root) {
@@ -42,10 +42,10 @@ void FilterParser::add_logop(int op) {
 			curpos = root = expr;
 		}
 	}
-	// printf("logop: %d\n", op); 
+	// printf("logop: %d\n", op);
 }
 
-void FilterParser::add_matchexpr(char * name, int op, char * lit) { 
+void FilterParser::add_matchexpr(char * name, int op, char * lit) {
 	//fprintf(stderr,"add_matchexpr: name = %s op = %d lit = %s\n", name, op, lit);
 	expression * expr = new expression(name, lit, op);
 	if (next_must_descend_right) {
@@ -67,15 +67,15 @@ void FilterParser::add_matchexpr(char * name, int op, char * lit) {
 	}
 	coco_string_delete(name);
 	coco_string_delete(lit);
-	// printf("matchexpr: %ls lit = %ls op = %d\n", name, lit, op); 
+	// printf("matchexpr: %ls lit = %ls op = %d\n", name, lit, op);
 }
 
-void FilterParser::open_block() { 
+void FilterParser::open_block() {
 	//fprintf(stderr,"open_block\n");
 	next_must_descend_right = true;
 }
 
-void FilterParser::close_block() { 
+void FilterParser::close_block() {
 	//fprintf(stderr,"close_block\n");
 	if (curpos != root) {
 		curpos = curpos->parent;
@@ -118,7 +118,7 @@ expression::expression(const std::string& n, const std::string& lit, int o) : na
 	}
 }
 
-expression::expression(int o) : op(o), l(NULL), r(NULL), parent(NULL), regex(NULL) { 
+expression::expression(int o) : op(o), l(NULL), r(NULL), parent(NULL), regex(NULL) {
 }
 
 expression::~expression() {

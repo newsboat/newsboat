@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: newsbeuter 2.9\n"
-"Report-Msgid-Bugs-To: https://github.com/akrennmair/newsbeuter/issues\n"
+"Project-Id-Version: newsboat 2.9\n"
+"Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2017-01-23 20:19+0300\n"
 "PO-Revision-Date: 2015-04-26 05:55+0900\n"
 "Last-Translator: Grady Martin <GradyMartin@gmail.com>\n"
@@ -33,8 +33,8 @@ msgstr ""
 
 #: src/configcontainer.cpp:84
 #, c-format
-msgid "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
-msgstr "newsbeuter: 同期完了 更新されたフィード%f部 新規記事%n件"
+msgid "newsboat: finished reload, %f unread feeds (%n unread articles total)"
+msgstr "newsboat: 同期完了 更新されたフィード%f部 新規記事%n件"
 
 #: src/configcontainer.cpp:155
 msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
@@ -254,9 +254,9 @@ msgstr ""
 
 #: src/controller.cpp:976
 msgid ""
-"newsbeuter is free software and licensed under the MIT/X Consortium License."
+"newsboat is free software and licensed under the MIT/X Consortium License."
 msgstr ""
-"newsbeuterはフリーソフトウェアでありMITあるいはXライセンスの下でご利用いただ"
+"newsboatはフリーソフトウェアでありMITあるいはXライセンスの下でご利用いただ"
 "けます。"
 
 #: src/controller.cpp:977
