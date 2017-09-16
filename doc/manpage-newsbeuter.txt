@@ -170,10 +170,3 @@ SEE ALSO
 --------
 podbeuter(1). The documentation that comes with newsbeuter is a good
 source about the general use and configuration of newsbeuter.
-
-
-AUTHORS
--------
-Andreas Krennmair <ak@newsbeuter.org>, for contributors see AUTHORS file.
-
-

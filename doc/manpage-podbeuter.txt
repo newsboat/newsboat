@@ -87,10 +87,3 @@ SEE ALSO
 newsbeuter(1). The documentation that comes with newsbeuter is a good
 source about the general use and configuration of newsbeuter's podcast
 support.
-
-
-AUTHORS
--------
-Andreas Krennmair <ak@newsbeuter.org>, for contributors see AUTHORS file.
-
-
