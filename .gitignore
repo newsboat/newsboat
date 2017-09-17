@@ -2,8 +2,8 @@
 config.mk
 po/*.mo
 stfl/*.h
-newsbeuter
-podbeuter
+newsboat
+podboat
 test/test
 test/test-rss
 test/testlog.txt
