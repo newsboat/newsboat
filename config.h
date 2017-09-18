@@ -14,8 +14,10 @@
 #define PROGRAM_URL			"https://newsboat.org/"
 
 #define NEWSBEUTER_PATH_SEP			"/"
-#define NEWSBEUTER_CONFIG_SUBDIR	".newsboat"
-#define NEWSBEUTER_SUBDIR_XDG		"newsboat"
+#define NEWSBEUTER_CONFIG_SUBDIR	".newsbeuter"
+#define NEWSBEUTER_SUBDIR_XDG		"newsbeuter"
+#define NEWSBOAT_CONFIG_SUBDIR	".newsboat"
+#define NEWSBOAT_SUBDIR_XDG		"newsboat"
 
 #include <libintl.h>
 #include <locale.h>

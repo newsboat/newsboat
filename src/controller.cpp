@@ -121,10 +121,10 @@ bool controller::setup_dirs_xdg(const char *env_home, bool silent) {
 	}
 
 	xdg_config_dir.append(NEWSBEUTER_PATH_SEP);
-	xdg_config_dir.append(NEWSBEUTER_SUBDIR_XDG);
+	xdg_config_dir.append(NEWSBOAT_SUBDIR_XDG);
 
 	xdg_data_dir.append(NEWSBEUTER_PATH_SEP);
-	xdg_data_dir.append(NEWSBEUTER_SUBDIR_XDG);
+	xdg_data_dir.append(NEWSBOAT_SUBDIR_XDG);
 
 	bool config_dir_exists = 0 == access(xdg_config_dir.c_str(), R_OK | X_OK);
 
@@ -181,7 +181,7 @@ void controller::setup_dirs(bool silent) {
 
 	config_dir = env_home;
 	config_dir.append(NEWSBEUTER_PATH_SEP);
-	config_dir.append(NEWSBEUTER_CONFIG_SUBDIR);
+	config_dir.append(NEWSBOAT_CONFIG_SUBDIR);
 
 	if (setup_dirs_xdg(env_home, silent))
 		return;

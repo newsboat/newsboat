@@ -71,10 +71,10 @@ bool pb_controller::setup_dirs_xdg(const char *env_home) {
 	}
 
 	xdg_config_dir.append(NEWSBEUTER_PATH_SEP);
-	xdg_config_dir.append(NEWSBEUTER_SUBDIR_XDG);
+	xdg_config_dir.append(NEWSBOAT_SUBDIR_XDG);
 
 	xdg_data_dir.append(NEWSBEUTER_PATH_SEP);
-	xdg_data_dir.append(NEWSBEUTER_SUBDIR_XDG);
+	xdg_data_dir.append(NEWSBOAT_SUBDIR_XDG);
 
 	bool config_dir_exists = 0 == access(xdg_config_dir.c_str(), R_OK | X_OK);
 
@@ -132,7 +132,7 @@ pb_controller::pb_controller() : v(0), config_file("config"), queue_file("queue"
 		return;
 
 	config_dir.append(NEWSBEUTER_PATH_SEP);
-	config_dir.append(NEWSBEUTER_CONFIG_SUBDIR);
+	config_dir.append(NEWSBOAT_CONFIG_SUBDIR);
 	::mkdir(config_dir.c_str(),0700); // create configuration directory if it doesn't exist
 
 	config_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
