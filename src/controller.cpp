@@ -523,10 +523,10 @@ void controller::run(int argc, char * argv[]) {
 
 	if ((! using_nonstandard_configs) && (0 != access(url_file.c_str(), F_OK))) {
 		migrate_data_from_newsbeuter(silent);
-	} else {
-		utils::mkdir_parents(config_dir.c_str(), 0700);
-		utils::mkdir_parents(data_dir.c_str(), 0700);
 	}
+
+	utils::mkdir_parents(config_dir.c_str(), 0700);
+	utils::mkdir_parents(data_dir.c_str(), 0700);
 
 	if (!do_export) {
 
