@@ -105,7 +105,7 @@ class controller {
 	private:
 		void usage(char * argv0);
 		bool setup_dirs_xdg(const char *env_home, bool silent);
-		bool setup_dirs(bool silent);
+		void setup_dirs(bool silent);
 		void migrate_data_from_newsbeuter(bool silent);
 		bool migrate_data_from_newsbeuter_xdg(const char* env_home, bool silent);
 		void migrate_data_from_newsbeuter_simple(const char* env_home, bool silent);

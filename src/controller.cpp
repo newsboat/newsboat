@@ -163,7 +163,7 @@ bool controller::setup_dirs_xdg(const char *env_home, bool silent) {
 	return true;
 }
 
-bool controller::setup_dirs(bool silent) {
+void controller::setup_dirs(bool silent) {
 	const char * env_home;
 	if (!(env_home = ::getenv("HOME"))) {
 		struct passwd * spw = ::getpwuid(::getuid());
@@ -181,9 +181,7 @@ bool controller::setup_dirs(bool silent) {
 	config_dir.append(NEWSBOAT_CONFIG_SUBDIR);
 
 	if (setup_dirs_xdg(env_home, silent))
-		return false;
-
-	bool first_run = ! (0 == access(config_dir.c_str(), R_OK | X_OK));
+		return;
 
 	url_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + url_file;
 	cache_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + cache_file;
@@ -193,8 +191,6 @@ bool controller::setup_dirs(bool silent) {
 
 	searchfile = strprintf::fmt("%s%shistory.search", config_dir, NEWSBEUTER_PATH_SEP);
 	cmdlinefile = strprintf::fmt("%s%shistory.cmdline", config_dir, NEWSBEUTER_PATH_SEP);
-
-	return first_run;
 }
 
 void copy_file(
@@ -487,7 +483,7 @@ void controller::run(int argc, char * argv[]) {
 
 	LOG(level::INFO, "nl_langinfo(CODESET): %s", nl_langinfo(CODESET));
 
-	if ((! using_nonstandard_configs) && (0 != access(url_file.c_str(), R_OK))) {
+	if ((! using_nonstandard_configs) && (0 != access(url_file.c_str(), F_OK))) {
 		migrate_data_from_newsbeuter(silent);
 	} else {
 		utils::mkdir_parents(config_dir.c_str(), 0700);
