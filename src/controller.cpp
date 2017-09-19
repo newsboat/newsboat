@@ -231,12 +231,35 @@ bool controller::migrate_data_from_newsbeuter_xdg(const char* env_home, bool sil
 		return false;
 	}
 
-	utils::mkdir_parents(newsboat_config_dir, 0700);
-	utils::mkdir_parents(newsboat_data_dir, 0700);
-
 	if (! silent) {
 		std::cerr << "Migrating configs and data from Newsbeuter..." << std::endl;
 	}
+
+
+	bool newsboat_config_dir_exists = 0 == access(newsboat_config_dir.c_str(), F_OK);
+	if (newsboat_config_dir_exists) {
+		if (! silent) {
+			std::cerr
+				<< newsboat_config_dir
+				<< " already exists, aborting XDG migration."
+				<< std::endl;
+		}
+		return false;
+	}
+
+	bool newsboat_data_dir_exists = 0 == access(newsboat_data_dir.c_str(), F_OK);
+	if (newsboat_data_dir_exists) {
+		if (! silent) {
+			std::cerr
+				<< newsboat_data_dir
+				<< " already exists, aborting XDG migration."
+				<< std::endl;
+		}
+		return false;
+	}
+
+	utils::mkdir_parents(newsboat_config_dir, 0700);
+	utils::mkdir_parents(newsboat_data_dir, 0700);
 
 	/* in config */
 	copy_file(newsbeuter_config_dir + "urls", newsboat_config_dir + "urls");
@@ -257,7 +280,8 @@ void controller::migrate_data_from_newsbeuter_simple(const char* env_home, bool 
 	newsbeuter_dir += NEWSBEUTER_CONFIG_SUBDIR;
 	newsbeuter_dir += NEWSBEUTER_PATH_SEP;
 
-	if (0 != access(newsbeuter_dir.c_str(), R_OK | X_OK)) {
+	bool newsbeuter_dir_exists = 0 == access(newsbeuter_dir.c_str(), R_OK | X_OK);
+	if (! newsbeuter_dir_exists) {
 		return;
 	}
 
@@ -269,6 +293,17 @@ void controller::migrate_data_from_newsbeuter_simple(const char* env_home, bool 
 	newsboat_dir += NEWSBEUTER_PATH_SEP;
 	newsboat_dir += NEWSBOAT_CONFIG_SUBDIR;
 	newsboat_dir += NEWSBEUTER_PATH_SEP;
+
+	bool newsboat_dir_exists = 0 == access(newsboat_dir.c_str(), F_OK);
+	if (newsboat_dir_exists) {
+		if (! silent) {
+			std::cerr
+				<< newsboat_dir
+				<< " already exists, aborting migration."
+				<< std::endl;
+		}
+		return;
+	}
 
 	::mkdir(newsboat_dir.c_str(),0700); // create configuration directory if it doesn't exist
 
