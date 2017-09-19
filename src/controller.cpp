@@ -94,7 +94,7 @@ controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache
  *
  * returns false, if that fails
  */
-bool controller::setup_dirs_xdg(const char *env_home, bool silent) {
+bool controller::setup_dirs_xdg(const char *env_home) {
 	const char *env_xdg_config;
 	const char *env_xdg_data;
 	std::string xdg_config_dir;
@@ -129,16 +129,6 @@ bool controller::setup_dirs_xdg(const char *env_home, bool silent) {
 	bool config_dir_exists = 0 == access(xdg_config_dir.c_str(), R_OK | X_OK);
 
 	if (!config_dir_exists) {
-		if (!silent) {
-			std::cerr
-				<< strprintf::fmt(
-					   _("XDG: configuration directory '%s' not accessible, "
-						 "using '%s' instead."),
-					   xdg_config_dir,
-					   config_dir)
-				<< std::endl;
-		}
-
 		return false;
 	}
 
@@ -163,7 +153,7 @@ bool controller::setup_dirs_xdg(const char *env_home, bool silent) {
 	return true;
 }
 
-void controller::setup_dirs(bool silent) {
+void controller::setup_dirs() {
 	const char * env_home;
 	if (!(env_home = ::getenv("HOME"))) {
 		struct passwd * spw = ::getpwuid(::getuid());
@@ -180,7 +170,7 @@ void controller::setup_dirs(bool silent) {
 	config_dir.append(NEWSBEUTER_PATH_SEP);
 	config_dir.append(NEWSBOAT_CONFIG_SUBDIR);
 
-	if (setup_dirs_xdg(env_home, silent))
+	if (setup_dirs_xdg(env_home))
 		return;
 
 	url_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + url_file;
@@ -309,7 +299,7 @@ void controller::migrate_data_from_newsbeuter(bool silent) {
 		cache_file = "cache.db";
 		config_file = "config";
 		queue_file = "queue";
-		setup_dirs(silent);
+		setup_dirs();
 	} else {
 		migrate_data_from_newsbeuter_simple(env_home, silent);
 	}
@@ -378,7 +368,7 @@ void controller::run(int argc, char * argv[]) {
 		}
 	}
 
-	setup_dirs(silent);
+	setup_dirs();
 
 	bool using_nonstandard_configs = false;
 

@@ -104,8 +104,8 @@ class controller {
 		unsigned int get_feed_count_per_tag(const std::string& tag);
 	private:
 		void usage(char * argv0);
-		bool setup_dirs_xdg(const char *env_home, bool silent);
-		void setup_dirs(bool silent);
+		bool setup_dirs_xdg(const char *env_home);
+		void setup_dirs();
 		void migrate_data_from_newsbeuter(bool silent);
 		bool migrate_data_from_newsbeuter_xdg(const char* env_home, bool silent);
 		void migrate_data_from_newsbeuter_simple(const char* env_home, bool silent);
