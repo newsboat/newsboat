@@ -280,7 +280,7 @@ bool controller::migrate_data_from_newsbeuter_xdg(const char* env_home, bool sil
 	return true;
 }
 
-void controller::migrate_data_from_newsbeuter_simple(const char* env_home, bool silent) {
+bool controller::migrate_data_from_newsbeuter_simple(const char* env_home, bool silent) {
 	std::string newsbeuter_dir = env_home;
 	newsbeuter_dir += NEWSBEUTER_PATH_SEP;
 	newsbeuter_dir += NEWSBEUTER_CONFIG_SUBDIR;
@@ -288,7 +288,7 @@ void controller::migrate_data_from_newsbeuter_simple(const char* env_home, bool 
 
 	bool newsbeuter_dir_exists = 0 == access(newsbeuter_dir.c_str(), R_OK | X_OK);
 	if (! newsbeuter_dir_exists) {
-		return;
+		return false;
 	}
 
 	std::string newsboat_dir = env_home;
@@ -299,7 +299,7 @@ void controller::migrate_data_from_newsbeuter_simple(const char* env_home, bool 
 	bool newsboat_dir_exists = 0 == access(newsboat_dir.c_str(), F_OK);
 	if (newsboat_dir_exists) {
 		LOG(level::DEBUG, "%s already exists, aborting migration.", newsboat_dir);
-		return;
+		return false;
 	}
 
 	if (! silent) {
@@ -317,7 +317,7 @@ void controller::migrate_data_from_newsbeuter_simple(const char* env_home, bool 
 				<< strerror(errno)
 				<< std::endl;
 		}
-		return;
+		return false;
 	}
 
 	copy_file(newsbeuter_dir + "urls", newsboat_dir + "urls");
@@ -326,6 +326,8 @@ void controller::migrate_data_from_newsbeuter_simple(const char* env_home, bool 
 	copy_file(newsbeuter_dir + "queue", newsboat_dir + "queue");
 	copy_file(newsbeuter_dir + "history.search", newsboat_dir + "history.search");
 	copy_file(newsbeuter_dir + "history.cmdline", newsboat_dir + "history.cmdline");
+
+	return true;
 }
 
 void controller::migrate_data_from_newsbeuter(bool silent) {
@@ -341,7 +343,9 @@ void controller::migrate_data_from_newsbeuter(bool silent) {
 		}
 	}
 
-	if (migrate_data_from_newsbeuter_xdg(env_home, silent)) {
+	bool migrated = migrate_data_from_newsbeuter_xdg(env_home, silent);
+
+	if (migrated) {
 		// Re-running to pick up XDG dirs
 		url_file = "urls";
 		cache_file = "cache.db";
@@ -349,7 +353,12 @@ void controller::migrate_data_from_newsbeuter(bool silent) {
 		queue_file = "queue";
 		setup_dirs();
 	} else {
-		migrate_data_from_newsbeuter_simple(env_home, silent);
+		migrated = migrate_data_from_newsbeuter_simple(env_home, silent);
+	}
+
+	if (migrated) {
+		std::cerr << "\nATTENTION! Only default files were migrated. Please check the result "
+			"before deleting the originals.\n\n";
 	}
 }
 
