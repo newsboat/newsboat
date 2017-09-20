@@ -94,7 +94,7 @@ controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache
  *
  * returns false, if that fails
  */
-bool controller::setup_dirs_xdg(const char *env_home, bool silent) {
+bool controller::setup_dirs_xdg(const char *env_home) {
 	const char *env_xdg_config;
 	const char *env_xdg_data;
 	std::string xdg_config_dir;
@@ -129,16 +129,6 @@ bool controller::setup_dirs_xdg(const char *env_home, bool silent) {
 	bool config_dir_exists = 0 == access(xdg_config_dir.c_str(), R_OK | X_OK);
 
 	if (!config_dir_exists) {
-		if (!silent) {
-			std::cerr
-				<< strprintf::fmt(
-					   _("XDG: configuration directory '%s' not accessible, "
-						 "using '%s' instead."),
-					   xdg_config_dir,
-					   config_dir)
-				<< std::endl;
-		}
-
 		return false;
 	}
 
@@ -148,9 +138,6 @@ bool controller::setup_dirs_xdg(const char *env_home, bool silent) {
 	 * data dir exists, because if it doesn't we'll create it. */
 
 	config_dir = xdg_config_dir;
-
-	// create data directory if it doesn't exist
-	utils::mkdir_parents(xdg_data_dir, 0700);
 
 	/* in config */
 	url_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + url_file;
@@ -166,7 +153,7 @@ bool controller::setup_dirs_xdg(const char *env_home, bool silent) {
 	return true;
 }
 
-void controller::setup_dirs(bool silent) {
+void controller::setup_dirs() {
 	const char * env_home;
 	if (!(env_home = ::getenv("HOME"))) {
 		struct passwd * spw = ::getpwuid(::getuid());
@@ -183,10 +170,8 @@ void controller::setup_dirs(bool silent) {
 	config_dir.append(NEWSBEUTER_PATH_SEP);
 	config_dir.append(NEWSBOAT_CONFIG_SUBDIR);
 
-	if (setup_dirs_xdg(env_home, silent))
+	if (setup_dirs_xdg(env_home))
 		return;
-
-	mkdir(config_dir.c_str(),0700); // create configuration directory if it doesn't exist
 
 	url_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + url_file;
 	cache_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + cache_file;
@@ -196,6 +181,187 @@ void controller::setup_dirs(bool silent) {
 
 	searchfile = strprintf::fmt("%s%shistory.search", config_dir, NEWSBEUTER_PATH_SEP);
 	cmdlinefile = strprintf::fmt("%s%shistory.cmdline", config_dir, NEWSBEUTER_PATH_SEP);
+}
+
+void copy_file(
+		const std::string& input_filepath,
+		const std::string& output_filepath)
+{
+	std::cerr << input_filepath << "  ->  " << output_filepath << '\n';
+
+	std::ifstream src(input_filepath, std::ios_base::binary);
+	std::ofstream dst(output_filepath, std::ios_base::binary);
+	dst << src.rdbuf();
+}
+
+bool controller::migrate_data_from_newsbeuter_xdg(const char* env_home, bool silent) {
+	const char* env_xdg_config = ::getenv("XDG_CONFIG_HOME");
+	std::string xdg_config_dir;
+	if (env_xdg_config) {
+		xdg_config_dir = env_xdg_config;
+	} else {
+		xdg_config_dir = env_home;
+		xdg_config_dir.append(NEWSBEUTER_PATH_SEP);
+		xdg_config_dir.append(".config");
+	}
+
+	const char* env_xdg_data = ::getenv("XDG_DATA_HOME");
+	std::string xdg_data_dir;
+	if (env_xdg_data) {
+		xdg_data_dir = env_xdg_data;
+	} else {
+		xdg_data_dir = env_home;
+		xdg_data_dir.append(NEWSBEUTER_PATH_SEP);
+		xdg_data_dir.append(".local");
+		xdg_data_dir.append(NEWSBEUTER_PATH_SEP);
+		xdg_data_dir.append("share");
+	}
+
+	const auto newsbeuter_config_dir
+		= xdg_config_dir + NEWSBEUTER_PATH_SEP + NEWSBEUTER_SUBDIR_XDG + NEWSBEUTER_PATH_SEP;
+	const auto newsbeuter_data_dir
+		= xdg_data_dir + NEWSBEUTER_PATH_SEP + NEWSBEUTER_SUBDIR_XDG + NEWSBEUTER_PATH_SEP;
+
+	const auto newsboat_config_dir
+		= xdg_config_dir + NEWSBEUTER_PATH_SEP + NEWSBOAT_SUBDIR_XDG + NEWSBEUTER_PATH_SEP;
+	const auto newsboat_data_dir
+		= xdg_data_dir + NEWSBEUTER_PATH_SEP + NEWSBOAT_SUBDIR_XDG + NEWSBEUTER_PATH_SEP;
+
+	bool newsbeuter_config_dir_exists = 0 == access(newsbeuter_config_dir.c_str(), R_OK | X_OK);
+
+	if (! newsbeuter_config_dir_exists) {
+		return false;
+	}
+
+	auto exists = [silent](const std::string& dir) -> bool {
+		bool dir_exists = 0 == access(dir.c_str(), F_OK);
+		if (dir_exists) {
+			LOG(level::DEBUG, "%s already exists, aborting XDG migration.", dir);
+		}
+		return dir_exists;
+	};
+	if (exists(newsboat_config_dir)) {
+		return false;
+	}
+	if (exists(newsboat_data_dir)) {
+		return false;
+	}
+
+	if (! silent) {
+		std::cerr
+			<< "Migrating configs and data from Newsbeuter's XDG dirs..."
+			<< std::endl;
+	}
+
+	auto try_mkdir = [silent](const std::string& dir) -> bool{
+		bool result = 0 == utils::mkdir_parents(dir, 0700);
+		if (! result) {
+			LOG(level::DEBUG,
+					"Aborting XDG migration because mkdir on %s failed: %s",
+					dir, strerror(errno));
+		}
+		return result;
+	};
+	if (! try_mkdir(newsboat_config_dir)) {
+		return false;
+	}
+	if (! try_mkdir(newsboat_data_dir)) {
+		return false;
+	}
+
+	/* in config */
+	copy_file(newsbeuter_config_dir + "urls", newsboat_config_dir + "urls");
+	copy_file(newsbeuter_config_dir + "config", newsboat_config_dir + "config");
+
+	/* in data */
+	copy_file(newsbeuter_data_dir + "cache.db", newsboat_data_dir + "cache.db");
+	copy_file(newsbeuter_data_dir + "queue", newsboat_data_dir + "queue");
+	copy_file(newsbeuter_data_dir + "history.search", newsboat_data_dir + "history.search");
+	copy_file(newsbeuter_data_dir + "history.cmdline", newsboat_data_dir + "history.cmdline");
+
+	return true;
+}
+
+bool controller::migrate_data_from_newsbeuter_simple(const char* env_home, bool silent) {
+	std::string newsbeuter_dir = env_home;
+	newsbeuter_dir += NEWSBEUTER_PATH_SEP;
+	newsbeuter_dir += NEWSBEUTER_CONFIG_SUBDIR;
+	newsbeuter_dir += NEWSBEUTER_PATH_SEP;
+
+	bool newsbeuter_dir_exists = 0 == access(newsbeuter_dir.c_str(), R_OK | X_OK);
+	if (! newsbeuter_dir_exists) {
+		return false;
+	}
+
+	std::string newsboat_dir = env_home;
+	newsboat_dir += NEWSBEUTER_PATH_SEP;
+	newsboat_dir += NEWSBOAT_CONFIG_SUBDIR;
+	newsboat_dir += NEWSBEUTER_PATH_SEP;
+
+	bool newsboat_dir_exists = 0 == access(newsboat_dir.c_str(), F_OK);
+	if (newsboat_dir_exists) {
+		LOG(level::DEBUG, "%s already exists, aborting migration.", newsboat_dir);
+		return false;
+	}
+
+	if (! silent) {
+		std::cerr
+			<< "Migrating configs and data from Newsbeuter's dotdir..."
+			<< std::endl;
+	}
+
+	if (0 != ::mkdir(newsboat_dir.c_str(), 0700)) {
+		if (! silent) {
+			std::cerr
+				<< "Aborting migration because mkdir on "
+				<< newsboat_dir
+				<< " failed: "
+				<< strerror(errno)
+				<< std::endl;
+		}
+		return false;
+	}
+
+	copy_file(newsbeuter_dir + "urls", newsboat_dir + "urls");
+	copy_file(newsbeuter_dir + "cache.db", newsboat_dir + "cache.db");
+	copy_file(newsbeuter_dir + "config", newsboat_dir + "config");
+	copy_file(newsbeuter_dir + "queue", newsboat_dir + "queue");
+	copy_file(newsbeuter_dir + "history.search", newsboat_dir + "history.search");
+	copy_file(newsbeuter_dir + "history.cmdline", newsboat_dir + "history.cmdline");
+
+	return true;
+}
+
+void controller::migrate_data_from_newsbeuter(bool silent) {
+	const char * env_home;
+	if (!(env_home = ::getenv("HOME"))) {
+		struct passwd * spw = ::getpwuid(::getuid());
+		if (spw) {
+			env_home = spw->pw_dir;
+		} else {
+			std::cerr << _("Fatal error: couldn't determine home directory!") << std::endl;
+			std::cerr << strprintf::fmt(_("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid()) << std::endl;
+			::exit(EXIT_FAILURE);
+		}
+	}
+
+	bool migrated = migrate_data_from_newsbeuter_xdg(env_home, silent);
+
+	if (migrated) {
+		// Re-running to pick up XDG dirs
+		url_file = "urls";
+		cache_file = "cache.db";
+		config_file = "config";
+		queue_file = "queue";
+		setup_dirs();
+	} else {
+		migrated = migrate_data_from_newsbeuter_simple(env_home, silent);
+	}
+
+	if (migrated) {
+		std::cerr << "\nATTENTION! Only default files were migrated. Please check the result "
+			"before deleting the originals.\n\n";
+	}
 }
 
 controller::~controller() {
@@ -261,7 +427,9 @@ void controller::run(int argc, char * argv[]) {
 		}
 	}
 
-	setup_dirs(silent);
+	setup_dirs();
+
+	bool using_nonstandard_configs = false;
 
 	/* Now that silencing's set up, let's rewind to the beginning of argv and
 	 * process the options */
@@ -292,14 +460,17 @@ void controller::run(int argc, char * argv[]) {
 			break;
 		case 'u':
 			url_file = optarg;
+			using_nonstandard_configs = true;
 			break;
 		case 'c':
 			cache_file = optarg;
 			lock_file = std::string(cache_file) + LOCK_SUFFIX;
 			cachefile_given_on_cmdline = true;
+			using_nonstandard_configs = true;
 			break;
 		case 'C':
 			config_file = optarg;
+			using_nonstandard_configs = true;
 			break;
 		case 'X':
 			do_vacuum = true;
@@ -360,6 +531,13 @@ void controller::run(int argc, char * argv[]) {
 
 
 	LOG(level::INFO, "nl_langinfo(CODESET): %s", nl_langinfo(CODESET));
+
+	if ((! using_nonstandard_configs) && (0 != access(url_file.c_str(), F_OK))) {
+		migrate_data_from_newsbeuter(silent);
+	}
+
+	utils::mkdir_parents(config_dir.c_str(), 0700);
+	utils::mkdir_parents(data_dir.c_str(), 0700);
 
 	if (!do_export) {
 
