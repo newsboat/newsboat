@@ -187,6 +187,8 @@ void copy_file(
 		const std::string& input_filepath,
 		const std::string& output_filepath)
 {
+	std::cerr << input_filepath << "  ->  " << output_filepath << '\n';
+
 	std::ifstream src(input_filepath, std::ios_base::binary);
 	std::ofstream dst(output_filepath, std::ios_base::binary);
 	dst << src.rdbuf();
