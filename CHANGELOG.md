@@ -1,6 +1,6 @@
 # Changes for Newsboat
 
-## 2.10 - Unreleased
+## 2.10 - 2017-09-20
 
 This is what Newsbeuter 2.10 should have been. Newsboat continues Newsbeuter's
 version numbering to show that we are a spiritual continuation, not a separate
@@ -35,6 +35,7 @@ project.
     SSL certificates (Xu Fasheng)
 - Documentation for `feedhq-url` setting
 - Reproducible builds (Bernhard M. Wiedemann)
+- Migration of Newsbeuter configs and data
 
 ### Changed
 - Items fetched via TT-RSS now contain item's author (John W. O'Neill)
