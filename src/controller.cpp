@@ -125,6 +125,7 @@ bool controller::setup_dirs_xdg(const char *env_home) {
 
 	xdg_data_dir.append(NEWSBEUTER_PATH_SEP);
 	xdg_data_dir.append(NEWSBOAT_SUBDIR_XDG);
+	data_dir = xdg_data_dir;
 
 	bool config_dir_exists = 0 == access(xdg_config_dir.c_str(), R_OK | X_OK);
 
@@ -226,6 +227,7 @@ bool controller::migrate_data_from_newsbeuter_xdg(const char* env_home, bool sil
 		= xdg_config_dir + NEWSBEUTER_PATH_SEP + NEWSBOAT_SUBDIR_XDG + NEWSBEUTER_PATH_SEP;
 	const auto newsboat_data_dir
 		= xdg_data_dir + NEWSBEUTER_PATH_SEP + NEWSBOAT_SUBDIR_XDG + NEWSBEUTER_PATH_SEP;
+	data_dir = newsboat_data_dir;
 
 	bool newsbeuter_config_dir_exists = 0 == access(newsbeuter_config_dir.c_str(), R_OK | X_OK);
 
