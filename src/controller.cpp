@@ -359,8 +359,8 @@ void controller::migrate_data_from_newsbeuter(bool silent) {
 	}
 
 	if (migrated) {
-		std::cerr << "\nATTENTION! Only default files were migrated. Please check the result "
-			"before deleting the originals.\n\n";
+		std::cerr << "\nPlease check the results and press Enter to continue.";
+		std::cin.ignore();
 	}
 }
 
