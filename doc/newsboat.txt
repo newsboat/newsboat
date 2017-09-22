@@ -199,10 +199,58 @@ The default color configuration of newsboat looks like this:
 
 Migrating from other RSS Feed Readers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 It is very likely that you have used other RSS feed readers before. In this
-case, it is practical to migrate the previous configuration to newsboat. The
-vast amount of RSS feed readers allows the export of subscriptions via OPML
+case, it is practical to migrate the previous configuration to newsboat.
+
+Newsbeuter (automatic migration)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Newsboat is a fork of Newsbeuter, so the migration from the latter is partially
+automated. Simple enough configurations will be transferred without any user
+intervention, while more complicated ones might require a little tweaking
+afterwards.
+
+To prevent data loss, please check the results before deleting your old
+configuration. Pay extra attention to files that you `include` in your
+configuration--you'd probably want to manually copy them over to Newsboat
+directories, and possibly update the include paths.
+
+Migration from Newsbeuter is attempted on startup if the following conditions
+are met:
+
+* none of `-u`, `-c`, `-C` options were specified; and
+
+* the urls file doesn't exist (neither ~/.newsboat/urls nor
+  $XDG_CONFIG_DIR/newsboat/urls).
+
+Newsboat first tries to migrate an XDG configuration, and if that fails, it
+tries the dotdir one. If that fails as well, Newsboat proceeds with the startup
+as usual.
+
+XDG migration checks that:
+
+* $XDG_CONFIG_DIR/newsbeuter/ is readable and executable; and
+
+* neither $XDG_CONFIG_DIR/newsboat/ nor $XDG_DATA_DIR/newsboat/ exist.
+
+If both conditions are met, Newsboat tries to create its XDG dirs (aborting the
+migration if that fails), then copies the following files: urls and config from
+config dir; cache.db, queue, history.search, history.cmdline from data dir.
+
+Dotdir migration checks that \~/.newsbeuter/ is readable and executable, and
+\~/.newsboat/ doesn't exist. If those conditions are met, it tries to create
+~/.newsboat/ (aborting the migration if that fails), then copies the following
+files: urls, cache.db, config, queue, history.search, history.cmdline.
+
+There's one scenario where the process breaks: if you have an XDG configuration
+for Newsbeuter, \~/.newsboat/ exists and ~/.newsboat/urls doesn't exist, then
+Newsboat will migrate XDG files and proceed, ignoring the dotdir. Please don't
+confuse the poor program like that!
+
+Other readers (via OPML)
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+The vast amount of RSS feed readers allows the export of subscriptions via OPML
 files. OPML is an XML file format that was designed to save outlines, and has
 found its primary use in the import and export of feed subscriptions between
 different RSS feed readers.
