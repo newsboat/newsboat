@@ -1,5 +1,15 @@
 # Changes for Newsboat
 
+## 2.10.1 - 2017-09-22
+
+### Added
+
+- Documentation for automatic migration from Newsbeuter
+
+### Fixed
+
+- XDG data dir is created if XDG config dir exists (regression happened in 2.10)
+
 ## 2.10 - 2017-09-20
 
 This is what Newsbeuter 2.10 should have been. Newsboat continues Newsbeuter's
