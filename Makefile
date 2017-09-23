@@ -76,7 +76,7 @@ POFILES:=$(wildcard po/*.po)
 MOFILES:=$(patsubst %.po,%.mo,$(POFILES))
 POTFILE=po/newsbeuter.pot
 
-TEXTCONV=./txt2h.pl
+TEXTCONV=./txt2h
 RM=rm -f
 
 all: $(NEWSBEUTER) $(PODBEUTER) mo-files
