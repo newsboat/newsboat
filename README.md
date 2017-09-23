@@ -1,8 +1,9 @@
 Newsboat
 ========
 
-Newsboat is an actively maintained fork of Newsbeuter, an RSS/Atom feed reader
-for the text console.
+Newsboat is a fork of Newsbeuter, an RSS/Atom feed reader for the text console.
+The only difference is that Newsboat is actively maintained while Newsbeuter
+isn't.
 
 Downloading
 -----------
