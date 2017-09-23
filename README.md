@@ -1,4 +1,4 @@
-Newsboat
+Newsboat [![Build Status](https://travis-ci.org/newsboat/newsboat.svg?branch=master)](https://travis-ci.org/newsboat/newsboat) [![Coverage Status](https://coveralls.io/repos/github/newsboat/newsboat/badge.svg?branch=master)](https://coveralls.io/github/newsboat/newsboat?branch=master)
 ========
 
 Newsboat is a fork of Newsbeuter, an RSS/Atom feed reader for the text console.
