@@ -1,5 +1,16 @@
 # Changes for Newsboat
 
+## Unreleased
+
+### Added
+### Changed
+### Deprecated
+### Removed
+
+- Build dependency on Perl (#6)
+
+### Fixed
+
 ## 2.10.1 - 2017-09-22
 
 ### Added
