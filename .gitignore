@@ -12,9 +12,9 @@ html/*
 *.info
 doc/newsbeuter-cfgcmds.txt
 doc/newsbeuter-keycmds.txt
-doc/newsbeuter.1
+doc/newsboat.1
 doc/podbeuter-cfgcmds.txt
-doc/podbeuter.1
+doc/podboat.1
 doc/xhtml/*
 *.gcov
 *.gcno
