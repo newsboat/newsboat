@@ -235,7 +235,7 @@ bool controller::migrate_data_from_newsbeuter_xdg(const char* env_home, bool sil
 		return false;
 	}
 
-	auto exists = [silent](const std::string& dir) -> bool {
+	auto exists = [](const std::string& dir) -> bool {
 		bool dir_exists = 0 == access(dir.c_str(), F_OK);
 		if (dir_exists) {
 			LOG(level::DEBUG, "%s already exists, aborting XDG migration.", dir);
@@ -255,7 +255,7 @@ bool controller::migrate_data_from_newsbeuter_xdg(const char* env_home, bool sil
 			<< std::endl;
 	}
 
-	auto try_mkdir = [silent](const std::string& dir) -> bool{
+	auto try_mkdir = [](const std::string& dir) -> bool {
 		bool result = 0 == utils::mkdir_parents(dir, 0700);
 		if (! result) {
 			LOG(level::DEBUG,
