@@ -14,7 +14,7 @@ addons:
   apt:
     packages: &clang_deps
     - *global_deps
-    - g++-4.9 # required for someniceties in C++ standard library
+    - g++-4.9 # required for some niceties in C++ standard library
 
 newsbeuter_brew_commands: &osx_deps
   - brew outdated "pkg-config" || brew upgrade "pkg-config"
