@@ -190,11 +190,11 @@ install-podbeuter: $(PODBEUTER)
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
 	$(INSTALL) doc/$(PODBEUTER).1 $(DESTDIR)$(mandir)/man1 || true
 
-install-docs:
+install-docs: doc
 	$(MKDIR) $(DESTDIR)$(docdir)
 	$(INSTALL) -m 644 doc/xhtml/* $(DESTDIR)$(docdir) || true
 
-install-examples:
+install-examples: doc/example-config
 	$(MKDIR) $(DESTDIR)$(docdir)/examples
 	$(INSTALL) -m 644 doc/example-config $(DESTDIR)$(docdir)/examples/config || true
 
