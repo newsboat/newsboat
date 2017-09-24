@@ -132,7 +132,7 @@ clean-libfilter:
 clean-doc:
 	$(RM) -r doc/xhtml 
 	$(RM) doc/*.xml doc/*.1 doc/newsbeuter-cfgcmds.txt doc/podbeuter-cfgcmds.txt \
-		doc/newsbeuter-keycmds.txt doc/gen-example-config doc/generate2
+		doc/newsbeuter-keycmds.txt doc/gen-example-config doc/generate doc/generate2
 
 clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-doc clean-librsspp
 	$(RM) $(STFLHDRS) xlicense.h
@@ -152,8 +152,11 @@ doc/xhtml/faq.html: doc/faq.txt
 	$(A2X) -f xhtml -D doc/xhtml doc/faq.txt
 	$(CHMOD) u+w doc/xhtml/docbook-xsl.css
 
-doc/newsbeuter-cfgcmds.txt: doc/generate.pl doc/configcommands.dsv
-	doc/generate.pl doc/configcommands.dsv > doc/newsbeuter-cfgcmds.txt
+doc/generate: doc/generate.cpp
+	$(CXX) $(CXXFLAGS) -o doc/generate doc/generate.cpp
+
+doc/newsbeuter-cfgcmds.txt: doc/generate doc/configcommands.dsv
+	doc/generate doc/configcommands.dsv > doc/newsbeuter-cfgcmds.txt
 
 doc/generate2: doc/generate2.cpp
 	$(CXX) $(CXXFLAGS) -o doc/generate2 doc/generate2.cpp
@@ -164,8 +167,8 @@ doc/newsbeuter-keycmds.txt: doc/generate2 doc/keycmds.dsv
 doc/newsboat.1: doc/manpage-newsboat.txt doc/newsbeuter-cfgcmds.txt doc/newsbeuter-keycmds.txt
 	$(A2X) -f manpage doc/manpage-newsboat.txt
 
-doc/podbeuter-cfgcmds.txt: doc/generate.pl doc/podbeuter-cmds.dsv
-	doc/generate.pl doc/podbeuter-cmds.dsv > doc/podbeuter-cfgcmds.txt
+doc/podbeuter-cfgcmds.txt: doc/generate doc/podbeuter-cmds.dsv
+	doc/generate doc/podbeuter-cmds.dsv > doc/podbeuter-cfgcmds.txt
 
 doc/podboat.1: doc/manpage-podboat.txt doc/podbeuter-cfgcmds.txt
 	$(A2X) -f manpage doc/manpage-podboat.txt
