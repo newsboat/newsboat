@@ -17,6 +17,7 @@ doc/podbeuter-cfgcmds.txt
 doc/podboat.1
 doc/xhtml/*
 doc/example-config
+doc/gen-example-config
 *.gcov
 *.gcno
 *.gcda

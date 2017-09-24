@@ -131,7 +131,8 @@ clean-libfilter:
 
 clean-doc:
 	$(RM) -r doc/xhtml 
-	$(RM) doc/*.xml doc/*.1 doc/newsbeuter-cfgcmds.txt doc/podbeuter-cfgcmds.txt doc/newsbeuter-keycmds.txt
+	$(RM) doc/*.xml doc/*.1 doc/newsbeuter-cfgcmds.txt doc/podbeuter-cfgcmds.txt \
+		doc/newsbeuter-keycmds.txt doc/gen-example-config
 
 clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-doc clean-librsspp
 	$(RM) $(STFLHDRS) xlicense.h
@@ -166,8 +167,11 @@ doc/podbeuter-cfgcmds.txt: doc/generate.pl doc/podbeuter-cmds.dsv
 doc/podboat.1: doc/manpage-podboat.txt doc/podbeuter-cfgcmds.txt
 	$(A2X) -f manpage doc/manpage-podboat.txt
 
-doc/example-config: doc/gen-example-config.pl doc/configcommands.dsv
-	cat doc/configcommands.dsv | doc/gen-example-config.pl > doc/example-config
+doc/gen-example-config: doc/gen-example-config.cpp
+	$(CXX) $(CXXFLAGS) -o doc/gen-example-config doc/gen-example-config.cpp
+
+doc/example-config: doc/gen-example-config doc/configcommands.dsv
+	cat doc/configcommands.dsv | doc/gen-example-config > doc/example-config
 
 fmt:
 	astyle --suffix=none --style=java --indent=tab --indent-classes *.cpp include/*.h src/*.cpp rss/*.{cpp,h} test/*.cpp
