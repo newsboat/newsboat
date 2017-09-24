@@ -132,7 +132,7 @@ clean-libfilter:
 clean-doc:
 	$(RM) -r doc/xhtml 
 	$(RM) doc/*.xml doc/*.1 doc/newsbeuter-cfgcmds.txt doc/podbeuter-cfgcmds.txt \
-		doc/newsbeuter-keycmds.txt doc/gen-example-config
+		doc/newsbeuter-keycmds.txt doc/gen-example-config doc/generate2
 
 clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-doc clean-librsspp
 	$(RM) $(STFLHDRS) xlicense.h
@@ -155,8 +155,11 @@ doc/xhtml/faq.html: doc/faq.txt
 doc/newsbeuter-cfgcmds.txt: doc/generate.pl doc/configcommands.dsv
 	doc/generate.pl doc/configcommands.dsv > doc/newsbeuter-cfgcmds.txt
 
-doc/newsbeuter-keycmds.txt: doc/generate2.pl doc/keycmds.dsv
-	doc/generate2.pl doc/keycmds.dsv > doc/newsbeuter-keycmds.txt
+doc/generate2: doc/generate2.cpp
+	$(CXX) $(CXXFLAGS) -o doc/generate2 doc/generate2.cpp
+
+doc/newsbeuter-keycmds.txt: doc/generate2 doc/keycmds.dsv
+	doc/generate2 doc/keycmds.dsv > doc/newsbeuter-keycmds.txt
 
 doc/newsboat.1: doc/manpage-newsboat.txt doc/newsbeuter-cfgcmds.txt doc/newsbeuter-keycmds.txt
 	$(A2X) -f manpage doc/manpage-newsboat.txt
