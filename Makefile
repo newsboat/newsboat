@@ -76,7 +76,7 @@ POFILES:=$(wildcard po/*.po)
 MOFILES:=$(patsubst %.po,%.mo,$(POFILES))
 POTFILE=po/newsbeuter.pot
 
-TEXTCONV=./txt2h.pl
+TEXTCONV=./txt2h
 RM=rm -f
 
 all: $(NEWSBEUTER) $(PODBEUTER) mo-files
@@ -131,7 +131,8 @@ clean-libfilter:
 
 clean-doc:
 	$(RM) -r doc/xhtml 
-	$(RM) doc/*.xml doc/*.1 doc/newsbeuter-cfgcmds.txt doc/podbeuter-cfgcmds.txt doc/newsbeuter-keycmds.txt
+	$(RM) doc/*.xml doc/*.1 doc/newsbeuter-cfgcmds.txt doc/podbeuter-cfgcmds.txt \
+		doc/newsbeuter-keycmds.txt doc/gen-example-config doc/generate doc/generate2
 
 clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-doc clean-librsspp
 	$(RM) $(STFLHDRS) xlicense.h
@@ -151,20 +152,32 @@ doc/xhtml/faq.html: doc/faq.txt
 	$(A2X) -f xhtml -D doc/xhtml doc/faq.txt
 	$(CHMOD) u+w doc/xhtml/docbook-xsl.css
 
-doc/newsbeuter-cfgcmds.txt: doc/generate.pl doc/configcommands.dsv
-	doc/generate.pl doc/configcommands.dsv > doc/newsbeuter-cfgcmds.txt
+doc/generate: doc/generate.cpp
+	$(CXX) $(CXXFLAGS) -o doc/generate doc/generate.cpp
 
-doc/newsbeuter-keycmds.txt: doc/generate2.pl doc/keycmds.dsv
-	doc/generate2.pl doc/keycmds.dsv > doc/newsbeuter-keycmds.txt
+doc/newsbeuter-cfgcmds.txt: doc/generate doc/configcommands.dsv
+	doc/generate doc/configcommands.dsv > doc/newsbeuter-cfgcmds.txt
+
+doc/generate2: doc/generate2.cpp
+	$(CXX) $(CXXFLAGS) -o doc/generate2 doc/generate2.cpp
+
+doc/newsbeuter-keycmds.txt: doc/generate2 doc/keycmds.dsv
+	doc/generate2 doc/keycmds.dsv > doc/newsbeuter-keycmds.txt
 
 doc/newsboat.1: doc/manpage-newsboat.txt doc/newsbeuter-cfgcmds.txt doc/newsbeuter-keycmds.txt
 	$(A2X) -f manpage doc/manpage-newsboat.txt
 
-doc/podbeuter-cfgcmds.txt: doc/generate.pl doc/podbeuter-cmds.dsv
-	doc/generate.pl doc/podbeuter-cmds.dsv > doc/podbeuter-cfgcmds.txt
+doc/podbeuter-cfgcmds.txt: doc/generate doc/podbeuter-cmds.dsv
+	doc/generate doc/podbeuter-cmds.dsv > doc/podbeuter-cfgcmds.txt
 
 doc/podboat.1: doc/manpage-podboat.txt doc/podbeuter-cfgcmds.txt
 	$(A2X) -f manpage doc/manpage-podboat.txt
+
+doc/gen-example-config: doc/gen-example-config.cpp
+	$(CXX) $(CXXFLAGS) -o doc/gen-example-config doc/gen-example-config.cpp
+
+doc/example-config: doc/gen-example-config doc/configcommands.dsv
+	cat doc/configcommands.dsv | doc/gen-example-config > doc/example-config
 
 fmt:
 	astyle --suffix=none --style=java --indent=tab --indent-classes *.cpp include/*.h src/*.cpp rss/*.{cpp,h} test/*.cpp
@@ -190,11 +203,11 @@ install-podbeuter: $(PODBEUTER)
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
 	$(INSTALL) doc/$(PODBEUTER).1 $(DESTDIR)$(mandir)/man1 || true
 
-install-docs:
+install-docs: doc
 	$(MKDIR) $(DESTDIR)$(docdir)
 	$(INSTALL) -m 644 doc/xhtml/* $(DESTDIR)$(docdir) || true
 
-install-examples:
+install-examples: doc/example-config
 	$(MKDIR) $(DESTDIR)$(docdir)/examples
 	$(INSTALL) -m 644 doc/example-config $(DESTDIR)$(docdir)/examples/config || true
 

@@ -1,0 +1,23 @@
+#!/bin/sh
+
+set -e
+
+if [ "$#" -lt 1 ]
+then
+  echo "usage: $0 <stflfile> [<extension>]"
+  exit 1
+fi
+
+filename="$1"
+extension="$2"
+id="`basename \"$filename\" \"$extension\"`"
+
+printf "#ifndef ${id}__h_included\n"
+printf "#define ${id}__h_included\n"
+printf "\n"
+printf "static char ${id}_str[] = \"\" "
+
+cat "$filename" | sed -e 's/"/\\"/g; s/\(.*\)/"\1\\n"/'
+
+printf ";\n"
+printf "#endif\n"
