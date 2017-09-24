@@ -166,6 +166,9 @@ doc/podbeuter-cfgcmds.txt: doc/generate.pl doc/podbeuter-cmds.dsv
 doc/podboat.1: doc/manpage-podboat.txt doc/podbeuter-cfgcmds.txt
 	$(A2X) -f manpage doc/manpage-podboat.txt
 
+doc/example-config: doc/gen-example-config.pl doc/configcommands.dsv
+	cat doc/configcommands.dsv | doc/gen-example-config.pl > doc/example-config
+
 fmt:
 	astyle --suffix=none --style=java --indent=tab --indent-classes *.cpp include/*.h src/*.cpp rss/*.{cpp,h} test/*.cpp
 
