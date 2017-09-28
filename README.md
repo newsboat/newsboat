@@ -31,12 +31,13 @@ newsboat can be compiled.
 - [libxml2](http://xmlsoft.org/downloads.html)
 - [json-c (version 0.11 or newer)](https://github.com/json-c/json-c/wiki)
 
-Debian unstable comes with ready-to-use packages for these dependencies.
-
 Installation
 ------------
 
-Compiling and installing newsboat is as simple as:
+First, you'll have to get the dependencies. Make sure to install the header
+files for the libraries (on Debian and derivatives, headers are in `-dev`
+packages, e.g. `libsqlite3-dev`.) After that, compiling and installing newsboat
+is as simple as:
 
 	make
 	make install
