@@ -33,6 +33,10 @@ newsboat can be compiled.
 
 Debian unstable comes with ready-to-use packages for these dependencies.
 
+Ubuntu can install the dependecies with:
+
+    apt install libsqlite3-dev libcurl4-openssl-dev libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev libkrb5-dev
+
 Installation
 ------------
 
