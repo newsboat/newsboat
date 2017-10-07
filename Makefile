@@ -143,13 +143,14 @@ distclean: clean clean-mo test-clean profclean
 
 doc: doc/xhtml/newsboat.html doc/xhtml/faq.html doc/newsboat.1 doc/podboat.1
 
-doc/xhtml/newsboat.html: doc/newsboat.txt doc/configcommands-linked.dsv
+doc/xhtml/newsboat.html: doc/newsboat.txt doc/configcommands-linked.dsv doc/podboat-cmds-linked.dsv
 	$(MKDIR) doc/xhtml
 	$(A2X) -f xhtml -D doc/xhtml doc/newsboat.txt
 	$(CHMOD) u+w doc/xhtml/docbook-xsl.css
 	echo "/* AsciiDoc's new tables have <p> inside <td> which wastes vertical space, so fix it */" >> doc/xhtml/docbook-xsl.css
 	echo "td > p { margin: 0; }" >> doc/xhtml/docbook-xsl.css
 	echo "td > p + p { margin-top: 0.5em; }" >> doc/xhtml/docbook-xsl.css
+	echo "td > pre { margin: 0; white-space: pre-wrap; }" >> doc/xhtml/docbook-xsl.css
 
 doc/xhtml/faq.html: doc/faq.txt
 	$(MKDIR) doc/xhtml
@@ -158,8 +159,9 @@ doc/xhtml/faq.html: doc/faq.txt
 	echo "/* AsciiDoc's new tables have <p> inside <td> which wastes vertical space, so fix it */" >> doc/xhtml/docbook-xsl.css
 	echo "td > p { margin: 0; }" >> doc/xhtml/docbook-xsl.css
 	echo "td > p + p { margin-top: 0.5em; }" >> doc/xhtml/docbook-xsl.css
+	echo "td > pre { margin: 0; white-space: pre-wrap; }" >> doc/xhtml/docbook-xsl.css
 
-doc/generate: doc/generate.cpp
+doc/generate: doc/generate.cpp doc/split.h
 	$(CXX) $(CXXFLAGS) -o doc/generate doc/generate.cpp
 
 doc/newsboat-cfgcmds.txt: doc/generate doc/configcommands.dsv
@@ -180,7 +182,7 @@ doc/podboat-cfgcmds.txt: doc/generate doc/podboat-cmds.dsv
 doc/podboat.1: doc/manpage-podboat.txt doc/podboat-cfgcmds.txt
 	$(A2X) -f manpage doc/manpage-podboat.txt
 
-doc/gen-example-config: doc/gen-example-config.cpp
+doc/gen-example-config: doc/gen-example-config.cpp doc/split.h
 	$(CXX) $(CXXFLAGS) -o doc/gen-example-config doc/gen-example-config.cpp
 
 doc/example-config: doc/gen-example-config doc/configcommands.dsv
@@ -188,7 +190,11 @@ doc/example-config: doc/gen-example-config doc/configcommands.dsv
 
 # add hyperlinks for every configuration command
 doc/configcommands-linked.dsv: doc/configcommands.dsv
-	sed -e 's/^\([^|]\+\)/[[\1,\1]]<<\1>>/' doc/configcommands.dsv > doc/configcommands-linked.dsv
+	sed -e 's/^\([^|]\+\)/[[\1]]<<\1,`\1`>>/' doc/configcommands.dsv > doc/configcommands-linked.dsv
+
+# add hyperlinks for every configuration command
+doc/podboat-cmds-linked.dsv: doc/podboat-cmds.dsv
+	sed -e 's/^\([^|]\+\)/[[\1]]<<\1,`\1`>>/' doc/podboat-cmds.dsv > doc/podboat-cmds-linked.dsv
 
 fmt:
 	astyle --suffix=none --style=java --indent=tab --indent-classes *.cpp include/*.h src/*.cpp rss/*.{cpp,h} test/*.cpp

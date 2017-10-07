@@ -21,6 +21,7 @@ doc/gen-example-config
 doc/generate
 doc/generate2
 doc/configcommands-linked.dsv
+doc/podboat-cmds-linked.dsv
 *.gcov
 *.gcno
 *.gcda

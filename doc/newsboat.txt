@@ -87,11 +87,11 @@ include::chapter-firststeps.txt[]
 
 
 .Configuration Commands
-[frame="all", grid="all", format="dsv", separator="\||\n", options="header", cols="10,15,15,40,20"]
-|==================================================================================================
-Configuration Command|Argument(s)|Default|Description|Example
+[frame="all", grid="all", format="dsv", separator="\|\||\n", options="header", cols="10,15,15l,40,20l"]
+|======================================================================================================
+Configuration Command||Argument(s)||Default||Description||Example
 include::configcommands-linked.dsv[]
-|==================================================================================================
+|======================================================================================================
 
 .Available Operations
 [frame="all", grid="all", format="dsv", options="header", cols="20,20,60"]
@@ -1078,11 +1078,11 @@ Podcast Support
 include::chapter-podcasts.txt[]
 
 .Podboat Configuration Commands
-[frame="all", grid="all", format="dsv", separator="\||\n", options="header", cols="10,15,15,40,20"]
-|==================================================================================================
-Configuration Command|Argument(s)|Default|Description|Example
-include::podboat-cmds.dsv[]
-|==================================================================================================
+[frame="all", grid="all", format="dsv", separator="\|\||\n", options="header", cols="10,15,15l,40,20l"]
+|======================================================================================================
+Configuration Command||Argument(s)||Default||Description||Example
+include::podboat-cmds-linked.dsv[]
+|======================================================================================================
 
 .Available Operations in Podboat
 [frame="all", grid="all", format="dsv", options="header", cols="20,20,60"]
