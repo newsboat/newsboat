@@ -147,11 +147,17 @@ doc/xhtml/newsboat.html: doc/newsboat.txt doc/configcommands-linked.dsv
 	$(MKDIR) doc/xhtml
 	$(A2X) -f xhtml -D doc/xhtml doc/newsboat.txt
 	$(CHMOD) u+w doc/xhtml/docbook-xsl.css
+	echo "/* AsciiDoc's new tables have <p> inside <td> which wastes vertical space, so fix it */" >> doc/xhtml/docbook-xsl.css
+	echo "td > p { margin: 0; }" >> doc/xhtml/docbook-xsl.css
+	echo "td > p + p { margin-top: 0.5em; }" >> doc/xhtml/docbook-xsl.css
 
 doc/xhtml/faq.html: doc/faq.txt
 	$(MKDIR) doc/xhtml
 	$(A2X) -f xhtml -D doc/xhtml doc/faq.txt
 	$(CHMOD) u+w doc/xhtml/docbook-xsl.css
+	echo "/* AsciiDoc's new tables have <p> inside <td> which wastes vertical space, so fix it */" >> doc/xhtml/docbook-xsl.css
+	echo "td > p { margin: 0; }" >> doc/xhtml/docbook-xsl.css
+	echo "td > p + p { margin-top: 0.5em; }" >> doc/xhtml/docbook-xsl.css
 
 doc/generate: doc/generate.cpp
 	$(CXX) $(CXXFLAGS) -o doc/generate doc/generate.cpp

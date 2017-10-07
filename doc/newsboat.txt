@@ -87,20 +87,18 @@ include::chapter-firststeps.txt[]
 
 
 .Configuration Commands
-[frame="all", grid="all",format="dsv",separator="|"]
-`10`15`15`40`20~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[frame="all", grid="all", format="dsv", separator="\||\n", options="header", cols="10,15,15,40,20"]
+|==================================================================================================
 Configuration Command|Argument(s)|Default|Description|Example
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 include::configcommands-linked.dsv[]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|==================================================================================================
 
 .Available Operations
-[frame="all", grid="all", format="dsv",separator=":"]
-`20`20`60~~~~~~~~~~~~~~~~~~~~~~~~
+[frame="all", grid="all", format="dsv", options="header", cols="20,20,60"]
+|=========================================================================
 Operation:Default key:Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 include::keycmds.dsv[]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|=========================================================================
 
 Keys, as used in the bind-key configuration command, use a special syntax.
 Lowercase keys, uppercase keys and special characters are written literally.
@@ -348,10 +346,9 @@ Command Line
 include::chapter-cmdline.txt[]
 
 .Available Commandline Commands
-[frame="all", grid="all", format="dsv"]
-`20`20`40`20~~~~~~~~~~~~~~~~~~~
+[frame="all", grid="all", format="dsv", options="header", cols="20,20,40,20"]
+|============================================================================
 Command:Syntax:Description:Example
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 quit:quit:Quit newsboat.:quit
 save:save <filename>:Save the currently select article to disk. This works in the article list and in the article view.:save ~/important.txt
 set:set <variable>[=<value>|&|!]:Set configuration variable <variable> to <value>. If no value is specified, the current value is printed out. Specifying a '!' after the name of boolean configuration variables toggles their values, a '&' directly after the name of a configuration variable of any type resets its value to the documented default value.:set reload-time=15
@@ -361,7 +358,7 @@ source:source <filename> [...]:Load the specified configuration files. This allo
 dumpconfig:dumpconfig <filename>:Save current internal state of configuration to file, so that it can be instantly reused as configuration file.:dumpconfig ~/.newsboat/config.saved
 dumpform:dumpform:Dump current dialog to text file. This is meant for debugging purposes only.:dumpform
 n/a:<number>:Jump to the entry with the index <number> (usually seen at the left side of the list). This currently works for the feed list and the article list.:30
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|============================================================================
 
 
 Filter Language
@@ -398,28 +395,26 @@ in the feed list, while an attribute that belongs to an article can only be matc
 article list.
 
 .Available Comparison Operators
-[frame="all", grid="all", format="dsv"]
-`30`70~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
+|======================================================================
 Operator:Meaning
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 =:test for equality ("==" works, too)
 !=:test for inequality; logical negation of = operator
 =~:test whether regular expression matches
 !~:logical negation of the =~ operator
 <:less than
 >:greater than
-<=:less than or equal
+\<=:less than or equal
 >=:greater than or equal
 between:within a range of integer values, where the two integer values are separated by a colon (see above for an example)
 #:contains; this operator matches if a word is contained in a list of space-separated words (useful for matching tags, see below)
 !#:contains not; the negation of the # operator
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|======================================================================
 
 .Available Attributes
-[frame="all", grid="all", format="dsv"]
-`30`30`40~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[frame="all", grid="all", format="dsv", options="header", cols="30,30,40"]
+|=========================================================================
 Attribute:Context:Meaning
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 title:article:article title
 link:article:article link
 author:article:article author
@@ -441,7 +436,7 @@ unread_count:feed, article:number of unread articles in the feed
 total_count:feed, article:total number of articles in the feed
 tags:feed, article:all tags that are associated with the feed
 feedindex:feed, article:Index of a feed in the feed list
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|=========================================================================
 
 Note that it's also possible to filter for feed attributes when you query for
 article attributes. This is because every article is internally linked to the
@@ -875,10 +870,9 @@ The following tables show what sequence identifiers are available for which
 format:
 
 .Available Identifiers for feedlist-format
-[frame="all", grid="all", format="dsv"]
-`30`60~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
+|======================================================================
 Identifier:Meaning
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 d:Feed description
 i:Feed index
 l:Feed link
@@ -890,7 +884,7 @@ T:First tag of a feed in the URLs file
 u:"unread/total" field
 U:"unread" field
 c:"total" field
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|======================================================================
 
 While a reload-all operation is running, the download status indicates the 
 download status of a feed, which can be "to be downloaded" (indicated by "_"), 
@@ -898,10 +892,9 @@ download status of a feed, which can be "to be downloaded" (indicated by "_"),
 by " ") and "download error" (indicated by "x").
 
 .Available Identifiers for articlelist-format
-[frame="all", grid="all", format="dsv"]
-`30`60~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
+|======================================================================
 Identifier:Meaning
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 a:Article author
 D:Publication date
 f:Article flags
@@ -909,18 +902,17 @@ i:Article index
 t:Article title
 T:If the article list displays articles from different feeds, then this identifier contains the title of the feed to which the article belongs.
 L:Article length
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|======================================================================
 
 .Available Identifiers for notify-format
-[frame="all", grid="all", format="dsv"]
-`30`60~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
+|======================================================================
 Identifier:Meaning
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 n:Number of unread articles
 f:Number of unread feeds
 d:Number of new unread articles (i.e. that were added through the last reload)
 D:Number of new unread feeds (i.e. that were added through the last reload)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|======================================================================
 
 Examples:
 
@@ -940,10 +932,9 @@ work on a different locale that is supported by newsboat, the actually displayed
 title text may vary unless you customize it.
 
 .Dialog Title Formats
-[frame="all", grid="all", format="dsv"]
-`20`30`50~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[frame="all", grid="all", format="dsv", options="header", cols="20,30,50"]
+|=========================================================================
 Dialog:Configuration Variable:Default Value
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Feed List:feedlist-title-format:%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?
 Article List:articlelist-title-format:%N %V - Articles in feed '%T' (%u unread, %t total) - %U
 Search Result:searchresult-title-format:%N %V - Search result (%u unread, %t total)
@@ -954,53 +945,48 @@ Select Filter Dialog:selectfilter-title-format:%N %V - Select Filter
 Article View:itemview-title-format:%N %V - Article '%T' (%u unread, %t total)
 URL View:urlview-title-format:%N %V - URLs
 Dialog List:dialogs-title-format:%N %V - Dialogs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|=========================================================================
 
 .Common Title Format Identifiers
-[frame="all", grid="all", format="dsv"]
-`30`60~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
+|======================================================================
 Identifier:Meaning
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 N:Name of the program, i.e. "newsboat"
 V:Program version
 u:Number of unread articles (if applicable)
 t:Number of total articles (if applicable)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|======================================================================
 
 .Feed List Title Format Identifiers
-[frame="all", grid="all", format="dsv"]
-`30`60~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
+|======================================================================
 Identifier:Meaning
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 T:Currently selected tag (empty if none selected)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|======================================================================
 
 .Article List Title Format Identifiers
-[frame="all", grid="all", format="dsv"]
-`30`60~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
+|======================================================================
 Identifier:Meaning
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 T:Feed title
 U:Feed URL
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|======================================================================
 
 .File Browser Title Format Identifiers
-[frame="all", grid="all", format="dsv"]
-`30`60~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
+|======================================================================
 Identifier:Meaning
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 f:Filename
 O:Non-empty if file browser is in open mode, empty if in save mode
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|======================================================================
 
 .Article View Title Format Identifiers
-[frame="all", grid="all", format="dsv"]
-`30`60~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
+|======================================================================
 Identifier:Meaning
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 T:Article title
 F:Feed title
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|======================================================================
 
 Highlighting Text
 ~~~~~~~~~~~~~~~~~
@@ -1092,18 +1078,16 @@ Podcast Support
 include::chapter-podcasts.txt[]
 
 .Podboat Configuration Commands
-[frame="all", grid="all",format="dsv",separator="|"]
-`10`15`15`40`20~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[frame="all", grid="all", format="dsv", separator="\||\n", options="header", cols="10,15,15,40,20"]
+|==================================================================================================
 Configuration Command|Argument(s)|Default|Description|Example
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 include::podboat-cmds.dsv[]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|==================================================================================================
 
 .Available Operations in Podboat
-[frame="all", grid="all", format="dsv"]
-`20`20`60~~~~~~~~~~~~~~~~~~~~~~~~
+[frame="all", grid="all", format="dsv", options="header", cols="20,20,60"]
+|=========================================================================
 Operation:Default key:Description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 quit:q:Quit the program.
 pb-download:d:Download the currently selected URL.
 pb-cancel:c:Cancel the currently selected download.
@@ -1113,7 +1097,7 @@ pb-purge:P:Remove all finished and deleted downloads from the queue and load URL
 pb-toggle-download-all:a:Toggle the "automatic download" feature where all queued URLs are downloaded one after the other. The "max-downloads" configuration option controls how many downloads are done in parallel.
 pb-increase-max-dls:+:Increase the "max-downloads" option by 1.
 pb-decrease-max-dls:-:Decrease the "max-downloads" option by 1. If the option is already 1, no further decrease is possible.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|=========================================================================
 
 A usual "use case" is to configure newsboat to automatically enqueue newly
 found podcast download URLs. Then, the user reloads the podcast RSS feeds in
