@@ -91,7 +91,7 @@ include::chapter-firststeps.txt[]
 `10`15`15`40`20~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Configuration Command|Argument(s)|Default|Description|Example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-include::configcommands.dsv[]
+include::configcommands-linked.dsv[]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .Available Operations
