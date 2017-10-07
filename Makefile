@@ -133,6 +133,7 @@ clean-doc:
 	$(RM) -r doc/xhtml 
 	$(RM) doc/*.xml doc/*.1 doc/newsboat-cfgcmds.txt doc/podboat-cfgcmds.txt \
 		doc/newsboat-keycmds.txt doc/configcommands-linked.dsv \
+		doc/podboat-cmds-linked.dsv doc/keycmds-linked.dsv \
 		doc/gen-example-config doc/generate doc/generate2
 
 clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clean-librsspp
@@ -143,7 +144,7 @@ distclean: clean clean-mo test-clean profclean
 
 doc: doc/xhtml/newsboat.html doc/xhtml/faq.html doc/newsboat.1 doc/podboat.1
 
-doc/xhtml/newsboat.html: doc/newsboat.txt doc/configcommands-linked.dsv doc/podboat-cmds-linked.dsv
+doc/xhtml/newsboat.html: doc/newsboat.txt doc/configcommands-linked.dsv doc/podboat-cmds-linked.dsv doc/keycmds-linked.dsv
 	$(MKDIR) doc/xhtml
 	$(A2X) -f xhtml -D doc/xhtml doc/newsboat.txt
 	$(CHMOD) u+w doc/xhtml/docbook-xsl.css
@@ -195,6 +196,9 @@ doc/configcommands-linked.dsv: doc/configcommands.dsv
 # add hyperlinks for every configuration command
 doc/podboat-cmds-linked.dsv: doc/podboat-cmds.dsv
 	sed -e 's/^\([^|]\+\)/[[\1]]<<\1,`\1`>>/' doc/podboat-cmds.dsv > doc/podboat-cmds-linked.dsv
+
+doc/keycmds-linked.dsv: doc/keycmds.dsv
+	sed -e 's/^\([^:]\+\)/[[\1]]<<\1,`\1`>>/' doc/keycmds.dsv > doc/keycmds-linked.dsv
 
 fmt:
 	astyle --suffix=none --style=java --indent=tab --indent-classes *.cpp include/*.h src/*.cpp rss/*.{cpp,h} test/*.cpp

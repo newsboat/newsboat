@@ -97,7 +97,7 @@ include::configcommands-linked.dsv[]
 [frame="all", grid="all", format="dsv", options="header", cols="20,20,60"]
 |=========================================================================
 Operation:Default key:Description
-include::keycmds.dsv[]
+include::keycmds-linked.dsv[]
 |=========================================================================
 
 Keys, as used in the bind-key configuration command, use a special syntax.
@@ -346,19 +346,19 @@ Command Line
 include::chapter-cmdline.txt[]
 
 .Available Commandline Commands
-[frame="all", grid="all", format="dsv", options="header", cols="20,20,40,20"]
-|============================================================================
+[frame="all", grid="all", format="dsv", options="header", cols="20,20,40,20l"]
+|=============================================================================
 Command:Syntax:Description:Example
-quit:quit:Quit newsboat.:quit
-save:save <filename>:Save the currently select article to disk. This works in the article list and in the article view.:save ~/important.txt
-set:set <variable>[=<value>|&|!]:Set configuration variable <variable> to <value>. If no value is specified, the current value is printed out. Specifying a '!' after the name of boolean configuration variables toggles their values, a '&' directly after the name of a configuration variable of any type resets its value to the documented default value.:set reload-time=15
-tag:tag <tagname>:Only display feeds with the tag <tagname>.:tag news
-goto:goto <case-insensitive substring>:Go to the next feed whose name contains the case-insensitive substring.:goto foo
-source:source <filename> [...]:Load the specified configuration files. This allows it to load alternative configuration files or reload already loaded configuration files on-the-fly from the filesystem.:source ~/.newsboat/colors
-dumpconfig:dumpconfig <filename>:Save current internal state of configuration to file, so that it can be instantly reused as configuration file.:dumpconfig ~/.newsboat/config.saved
-dumpform:dumpform:Dump current dialog to text file. This is meant for debugging purposes only.:dumpform
-n/a:<number>:Jump to the entry with the index <number> (usually seen at the left side of the list). This currently works for the feed list and the article list.:30
-|============================================================================
+[[cmd-quit]]<<cmd-quit,+quit+>>:quit:Quit newsboat.:quit
+[[cmd-save]]<<cmd-save,+save+>>:save <filename>:Save the currently select article to disk. This works in the article list and in the article view.:save ~/important.txt
+[[cmd-set]]<<cmd-set,+set+>>:set <variable>[=<value>|&|!]:Set configuration variable <variable> to <value>. If no value is specified, the current value is printed out. Specifying a '!' after the name of boolean configuration variables toggles their values, a '&' directly after the name of a configuration variable of any type resets its value to the documented default value.:set reload-time=15
+[[cmd-tag]]<<cmd-tag,+tag+>>:tag <tagname>:Only display feeds with the tag <tagname>.:tag news
+[[cmd-goto]]<<cmd-goto,+goto+>>:goto <case-insensitive substring>:Go to the next feed whose name contains the case-insensitive substring.:goto foo
+[[cmd-source]]<<cmd-source,+source+>>:source <filename> [...]:Load the specified configuration files. This allows it to load alternative configuration files or reload already loaded configuration files on-the-fly from the filesystem.:source ~/.newsboat/colors
+[[cmd-dumpconfig]]<<cmd-dumpconfig,+dumpconfig+>>:dumpconfig <filename>:Save current internal state of configuration to file, so that it can be instantly reused as configuration file.:dumpconfig ~/.newsboat/config.saved
+[[cmd-dumpform]]<<cmd-dumpform,+dumpform+>>:dumpform:Dump current dialog to text file. This is meant for debugging purposes only.:dumpform
+[[cmd-number]]<<cmd-number,n/a>>:<number>:Jump to the entry with the index <number> (usually seen at the left side of the list). This currently works for the feed list and the article list.:30
+|=============================================================================
 
 
 Filter Language
@@ -394,48 +394,48 @@ attributes and their context, i.e. an attribute that belongs to a feed can only 
 in the feed list, while an attribute that belongs to an article can only be matched in the 
 article list.
 
-.Available Comparison Operators
+.[[available-comparison-operators]]<<available-comparison-operators,Available Comparison Operators>>
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
 |======================================================================
 Operator:Meaning
-=:test for equality ("==" works, too)
-!=:test for inequality; logical negation of = operator
-=~:test whether regular expression matches
-!~:logical negation of the =~ operator
-<:less than
->:greater than
-\<=:less than or equal
->=:greater than or equal
-between:within a range of integer values, where the two integer values are separated by a colon (see above for an example)
-#:contains; this operator matches if a word is contained in a list of space-separated words (useful for matching tags, see below)
-!#:contains not; the negation of the # operator
++=+ / +==+:test for equality
++!=+:test for inequality; logical negation of the +=+ operator
++=~+:test whether regular expression matches
++!~+:logical negation of the +=~+ operator
++<+:less than
++>+:greater than
++\<=+:less than or equal
++>=+:greater than or equal
++between+:within a range of integer values, where the two integer values are separated by a colon (see above for an example)
++#+:contains; this operator matches if a word is contained in a list of space-separated words (useful for matching tags, see below)
++!#+:contains not; the negation of the +#+ operator
 |======================================================================
 
 .Available Attributes
 [frame="all", grid="all", format="dsv", options="header", cols="30,30,40"]
 |=========================================================================
 Attribute:Context:Meaning
-title:article:article title
-link:article:article link
-author:article:article author
-content:article:article body
-date:article:publication date of the article
-guid:article:a unique identifier of the article
-unread:article:indicates whether the article has been read
-enclosure_url:article:the URL of a possible enclosure (e.g. podcast file)
-enclosure_type:article:the MIME type of the enclosure URL
-flags:article:The set of flags of the article
-age:article:Age of an article (in days)
-articleindex:article:Index of an article in an article list
-feedtitle:feed, article:title of the feed
-description:feed, article:feed description
-feedlink:feed, article:link to the feed
-feeddate:feed, article:publication date of the feed
-rssurl:feed, article:RSS URL of the feed
-unread_count:feed, article:number of unread articles in the feed
-total_count:feed, article:total number of articles in the feed
-tags:feed, article:all tags that are associated with the feed
-feedindex:feed, article:Index of a feed in the feed list
+[[attr-title]]<<attr-title,+title+>>:article:article title
+[[attr-link]]<<attr-link,+link+>>:article:article link
+[[attr-author]]<<attr-author,+author+>>:article:article author
+[[attr-content]]<<attr-content,+content+>>:article:article body
+[[attr-date]]<<attr-date,+date+>>:article:publication date of the article
+[[attr-guid]]<<attr-guid,+guid+>>:article:a unique identifier of the article
+[[attr-unread]]<<attr-unread,+unread+>>:article:indicates whether the article has been read
+[[attr-enclosure_url]]<<attr-enclosure_url,+enclosure_url+>>:article:the URL of a possible enclosure (e.g. podcast file)
+[[attr-enclosure_type]]<<attr-enclosure_type,+enclosure_type+>>:article:the MIME type of the enclosure URL
+[[attr-flags]]<<attr-flags,+flags+>>:article:The set of flags of the article
+[[attr-age]]<<attr-age,+age+>>:article:Age of an article (in days)
+[[attr-articleindex]]<<attr-articleindex,+articleindex+>>:article:Index of an article in an article list
+[[attr-feedtitle]]<<attr-feedtitle,+feedtitle+>>:feed, article:title of the feed
+[[attr-description]]<<attr-description,+description+>>:feed, article:feed description
+[[attr-feedlink]]<<attr-feedlink,+feedlink+>>:feed, article:link to the feed
+[[attr-feeddate]]<<attr-feeddate,+feeddate+>>:feed, article:publication date of the feed
+[[attr-rssurl]]<<attr-rssurl,+rssurl+>>:feed, article:RSS URL of the feed
+[[attr-unread_count]]<<attr-unread_count,+unread_count+>>:feed, article:number of unread articles in the feed
+[[attr-total_count]]<<attr-total_count,+total_count+>>:feed, article:total number of articles in the feed
+[[attr-tags]]<<attr-tags,+tags+>>:feed, article:all tags that are associated with the feed
+[[attr-feedindex]]<<attr-feedindex,+feedindex+>>:feed, article:Index of a feed in the feed list
 |=========================================================================
 
 Note that it's also possible to filter for feed attributes when you query for
@@ -873,17 +873,17 @@ format:
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
 |======================================================================
 Identifier:Meaning
-d:Feed description
-i:Feed index
-l:Feed link
-L:Feed RSS URL
-n:"unread" flag field
-S:download status
-t:Feed title
-T:First tag of a feed in the URLs file
-u:"unread/total" field
-U:"unread" field
-c:"total" field
+[[feedlist-format-d]]<<feedlist-format-d,+d+>>:Feed description
+[[feedlist-format-i]]<<feedlist-format-i,+i+>>:Feed index
+[[feedlist-format-l]]<<feedlist-format-l,+l+>>:Feed link
+[[feedlist-format-L]]<<feedlist-format-L,+L+>>:Feed RSS URL
+[[feedlist-format-n]]<<feedlist-format-n,+n+>>:"unread" flag field
+[[feedlist-format-S]]<<feedlist-format-S,+S+>>:download status
+[[feedlist-format-t]]<<feedlist-format-t,+t+>>:Feed title
+[[feedlist-format-T]]<<feedlist-format-T,+T+>>:First tag of a feed in the URLs file
+[[feedlist-format-u]]<<feedlist-format-u,+u+>>:"unread/total" field
+[[feedlist-format-U]]<<feedlist-format-U,+U+>>:"unread" field
+[[feedlist-format-c]]<<feedlist-format-c,+c+>>:"total" field
 |======================================================================
 
 While a reload-all operation is running, the download status indicates the 
@@ -895,23 +895,23 @@ by " ") and "download error" (indicated by "x").
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
 |======================================================================
 Identifier:Meaning
-a:Article author
-D:Publication date
-f:Article flags
-i:Article index
-t:Article title
-T:If the article list displays articles from different feeds, then this identifier contains the title of the feed to which the article belongs.
-L:Article length
+[[articlelist-format-a]]<<articlelist-format-a,+a+>>:Article author
+[[articlelist-format-D]]<<articlelist-format-D,+D+>>:Publication date
+[[articlelist-format-f]]<<articlelist-format-f,+f+>>:Article flags
+[[articlelist-format-i]]<<articlelist-format-i,+i+>>:Article index
+[[articlelist-format-t]]<<articlelist-format-t,+t+>>:Article title
+[[articlelist-format-T]]<<articlelist-format-T,+T+>>:If the article list displays articles from different feeds, then this identifier contains the title of the feed to which the article belongs.
+[[articlelist-format-L]]<<articlelist-format-L,+L+>>:Article length
 |======================================================================
 
 .Available Identifiers for notify-format
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
 |======================================================================
 Identifier:Meaning
-n:Number of unread articles
-f:Number of unread feeds
-d:Number of new unread articles (i.e. that were added through the last reload)
-D:Number of new unread feeds (i.e. that were added through the last reload)
+[[notify-format-n]]<<notify-format-n,+n+>>:Number of unread articles
+[[notify-format-f]]<<notify-format-f,+f+>>:Number of unread feeds
+[[notify-format-d]]<<notify-format-d,+d+>>:Number of new unread articles (i.e. that were added through the last reload)
+[[notify-format-D]]<<notify-format-D,+D+>>:Number of new unread feeds (i.e. that were added through the last reload)
 |======================================================================
 
 Examples:
@@ -932,60 +932,60 @@ work on a different locale that is supported by newsboat, the actually displayed
 title text may vary unless you customize it.
 
 .Dialog Title Formats
-[frame="all", grid="all", format="dsv", options="header", cols="20,30,50"]
-|=========================================================================
+[frame="all", grid="all", format="dsv", options="header", cols="20,30,50l"]
+|==========================================================================
 Dialog:Configuration Variable:Default Value
-Feed List:feedlist-title-format:%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?
-Article List:articlelist-title-format:%N %V - Articles in feed '%T' (%u unread, %t total) - %U
-Search Result:searchresult-title-format:%N %V - Search result (%u unread, %t total)
-File Browser:filebrowser-title-format:%N %V - %?O?Open File&Save File? - %f
-Help:help-title-format:%N %V - Help
-Select Tag Dialog:selecttag-title-format:%N %V - Select Tag
-Select Filter Dialog:selectfilter-title-format:%N %V - Select Filter
-Article View:itemview-title-format:%N %V - Article '%T' (%u unread, %t total)
-URL View:urlview-title-format:%N %V - URLs
-Dialog List:dialogs-title-format:%N %V - Dialogs
-|=========================================================================
+Feed List:<<feedlist-title-format,+feedlist-title-format+>>:%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?
+Article List:<<articlelist-title-format,+articlelist-title-format+>>:%N %V - Articles in feed '%T' (%u unread, %t total) - %U
+Search Result:<<searchresult-title-format,+searchresult-title-format+>>:%N %V - Search result (%u unread, %t total)
+File Browser:<<filebrowser-title-format,+filebrowser-title-format+>>:%N %V - %?O?Open File&Save File? - %f
+Help:<<help-title-format,+help-title-format+>>:%N %V - Help
+Select Tag Dialog:<<selecttag-title-format,+selecttag-title-format+>>:%N %V - Select Tag
+Select Filter Dialog:<<selectfilter-title-format,+selectfilter-title-format+>>:%N %V - Select Filter
+Article View:<<itemview-title-format,+itemview-title-format+>>:%N %V - Article '%T' (%u unread, %t total)
+URL View:<<urlview-title-format,+urlview-title-format+>>:%N %V - URLs
+Dialog List:<<dialogs-title-format,+dialogs-title-format+>>:%N %V - Dialogs
+|==========================================================================
 
 .Common Title Format Identifiers
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
 |======================================================================
 Identifier:Meaning
-N:Name of the program, i.e. "newsboat"
-V:Program version
-u:Number of unread articles (if applicable)
-t:Number of total articles (if applicable)
+[[common-title-format-N]]<<common-title-format-N,+N+>>:Name of the program, i.e. "newsboat"
+[[common-title-format-V]]<<common-title-format-V,+V+>>:Program version
+[[common-title-format-u]]<<common-title-format-u,+u+>>:Number of unread articles (if applicable)
+[[common-title-format-t]]<<common-title-format-t,+t+>>:Number of total articles (if applicable)
 |======================================================================
 
 .Feed List Title Format Identifiers
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
 |======================================================================
 Identifier:Meaning
-T:Currently selected tag (empty if none selected)
+[[feedlist-title-format-T]]<<feedlist-title-format-T,+T+>>:Currently selected tag (empty if none selected)
 |======================================================================
 
 .Article List Title Format Identifiers
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
 |======================================================================
 Identifier:Meaning
-T:Feed title
-U:Feed URL
+[[articlelist-title-format-T]]<<articlelist-title-format-T,+T+>>:Feed title
+[[articlelist-title-format-U]]<<articlelist-title-format-U,+U+>>:Feed URL
 |======================================================================
 
 .File Browser Title Format Identifiers
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
 |======================================================================
 Identifier:Meaning
-f:Filename
-O:Non-empty if file browser is in open mode, empty if in save mode
+[[filebrowser-title-format-f]]<<filebrowser-title-format-f,+f+>>:Filename
+[[filebrowser-title-format-O]]<<filebrowser-title-format-O,+O+>>:Non-empty if file browser is in open mode, empty if in save mode
 |======================================================================
 
 .Article View Title Format Identifiers
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
 |======================================================================
 Identifier:Meaning
-T:Article title
-F:Feed title
+[[articleview-title-format-T]]<<articleview-title-format-T,+T+>>:Article title
+[[articleview-title-format-F]]<<articleview-title-format-F,+F+>>:Feed title
 |======================================================================
 
 Highlighting Text
@@ -1088,15 +1088,15 @@ include::podboat-cmds-linked.dsv[]
 [frame="all", grid="all", format="dsv", options="header", cols="20,20,60"]
 |=========================================================================
 Operation:Default key:Description
-quit:q:Quit the program.
-pb-download:d:Download the currently selected URL.
-pb-cancel:c:Cancel the currently selected download.
-pb-play:p:Start player with currently selected download.
-pb-delete:D:Delete the currently selected URL from the queue.
-pb-purge:P:Remove all finished and deleted downloads from the queue and load URLs that were newly added to the queue.
-pb-toggle-download-all:a:Toggle the "automatic download" feature where all queued URLs are downloaded one after the other. The "max-downloads" configuration option controls how many downloads are done in parallel.
-pb-increase-max-dls:+:Increase the "max-downloads" option by 1.
-pb-decrease-max-dls:-:Decrease the "max-downloads" option by 1. If the option is already 1, no further decrease is possible.
+[[pb-quit]]<<pb-quit,+quit+>>:q:Quit the program.
+[[pb-download]]<<pb-download,+pb-download+>>:d:Download the currently selected URL.
+[[pb-cancel]]<<pb-cancel,+pb-cancel+>>:c:Cancel the currently selected download.
+[[pb-play]]<<pb-play,+pb-play+>>:p:Start player with currently selected download.
+[[pb-delete]]<<pb-delete,+pb-delete+>>:D:Delete the currently selected URL from the queue.
+[[pb-purge]]<<pb-purge,+pb-purge+>>:P:Remove all finished and deleted downloads from the queue and load URLs that were newly added to the queue.
+[[pb-toggle-download-all]]<<pb-toggle-download-all,+pb-toggle-download-all+>>:a:Toggle the "automatic download" feature where all queued URLs are downloaded one after the other. The "max-downloads" configuration option controls how many downloads are done in parallel.
+[[pb-increase-max-dls]]<<pb-increase-max-dls,+pb-increase-max-dls+>>:+:Increase the "max-downloads" option by 1.
+[[pb-decrease-max-dls]]<<pb-decrease-max-dls,+pb-decrease-max-dls+>>:-:Decrease the "max-downloads" option by 1. If the option is already 1, no further decrease is possible.
 |=========================================================================
 
 A usual "use case" is to configure newsboat to automatically enqueue newly
