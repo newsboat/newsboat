@@ -11,6 +11,9 @@
 
 ### Fixed
 
+- When used with Newsblur, Newsboat will check on startup if cookie-cache exists
+  or can be created, because integration doesn't work without cookies (#13)
+
 ## 2.10.1 - 2017-09-22
 
 ### Added
