@@ -649,6 +649,15 @@ void controller::run(int argc, char * argv[]) {
 		api = new ttrss_api(&cfg);
 		urlcfg = new ttrss_urlreader(url_file, api);
 	} else if (type == "newsblur") {
+		auto cookies = cfg.get_configvalue("cookie-cache");
+		std::ofstream check(cookies);
+		if (! check.is_open()) {
+			std::cout << strprintf::fmt(
+					_("%s is inaccessible and can't be created\n"), cookies);
+			utils::remove_fs_lock(lock_file);
+			::exit(EXIT_FAILURE);
+		}
+
 		api = new newsblur_api(&cfg);
 		urlcfg = new newsblur_urlreader(url_file, api);
 	} else if (type == "feedhq") {
