@@ -30,6 +30,7 @@ newsboat can be compiled.
 - [pkg-config](http://pkg-config.freedesktop.org/wiki/)
 - [libxml2](http://xmlsoft.org/downloads.html)
 - [json-c (version 0.11 or newer)](https://github.com/json-c/json-c/wiki)
+- [asciidoc](http://www.methods.co.nz/asciidoc/INSTALL.html)
 
 Installation
 ------------
