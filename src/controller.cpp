@@ -94,7 +94,7 @@ controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache
  *
  * returns false, if that fails
  */
-bool controller::setup_dirs_xdg(const char *env_home) {
+bool controller::setup_dirs_xdg(const std::string& env_home) {
 	const char *env_xdg_config;
 	const char *env_xdg_data;
 	std::string xdg_config_dir;
@@ -154,19 +154,7 @@ bool controller::setup_dirs_xdg(const char *env_home) {
 	return true;
 }
 
-void controller::setup_dirs() {
-	const char * env_home;
-	if (!(env_home = ::getenv("HOME"))) {
-		struct passwd * spw = ::getpwuid(::getuid());
-		if (spw) {
-			env_home = spw->pw_dir;
-		} else {
-			std::cerr << _("Fatal error: couldn't determine home directory!") << std::endl;
-			std::cerr << strprintf::fmt(_("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid()) << std::endl;
-			::exit(EXIT_FAILURE);
-		}
-	}
-
+void controller::setup_dirs(const std::string& env_home) {
 	config_dir = env_home;
 	config_dir.append(NEWSBEUTER_PATH_SEP);
 	config_dir.append(NEWSBOAT_CONFIG_SUBDIR);
@@ -195,7 +183,10 @@ void copy_file(
 	dst << src.rdbuf();
 }
 
-bool controller::migrate_data_from_newsbeuter_xdg(const char* env_home, bool silent) {
+bool controller::migrate_data_from_newsbeuter_xdg(
+		const std::string& env_home,
+		bool silent)
+{
 	const char* env_xdg_config = ::getenv("XDG_CONFIG_HOME");
 	std::string xdg_config_dir;
 	if (env_xdg_config) {
@@ -285,7 +276,10 @@ bool controller::migrate_data_from_newsbeuter_xdg(const char* env_home, bool sil
 	return true;
 }
 
-bool controller::migrate_data_from_newsbeuter_simple(const char* env_home, bool silent) {
+bool controller::migrate_data_from_newsbeuter_simple(
+		const std::string& env_home,
+		bool silent)
+{
 	std::string newsbeuter_dir = env_home;
 	newsbeuter_dir += NEWSBEUTER_PATH_SEP;
 	newsbeuter_dir += NEWSBEUTER_CONFIG_SUBDIR;
@@ -335,19 +329,10 @@ bool controller::migrate_data_from_newsbeuter_simple(const char* env_home, bool 
 	return true;
 }
 
-void controller::migrate_data_from_newsbeuter(bool silent) {
-	const char * env_home;
-	if (!(env_home = ::getenv("HOME"))) {
-		struct passwd * spw = ::getpwuid(::getuid());
-		if (spw) {
-			env_home = spw->pw_dir;
-		} else {
-			std::cerr << _("Fatal error: couldn't determine home directory!") << std::endl;
-			std::cerr << strprintf::fmt(_("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid()) << std::endl;
-			::exit(EXIT_FAILURE);
-		}
-	}
-
+void controller::migrate_data_from_newsbeuter(
+		const std::string& env_home,
+		bool silent)
+{
 	bool migrated = migrate_data_from_newsbeuter_xdg(env_home, silent);
 
 	if (migrated) {
@@ -356,7 +341,7 @@ void controller::migrate_data_from_newsbeuter(bool silent) {
 		cache_file = "cache.db";
 		config_file = "config";
 		queue_file = "queue";
-		setup_dirs();
+		setup_dirs(env_home);
 	} else {
 		migrated = migrate_data_from_newsbeuter_simple(env_home, silent);
 	}
@@ -430,7 +415,19 @@ void controller::run(int argc, char * argv[]) {
 		}
 	}
 
-	setup_dirs();
+	const char * env_home;
+	if (!(env_home = ::getenv("HOME"))) {
+		struct passwd * spw = ::getpwuid(::getuid());
+		if (spw) {
+			env_home = spw->pw_dir;
+		} else {
+			std::cerr << _("Fatal error: couldn't determine home directory!") << std::endl;
+			std::cerr << strprintf::fmt(_("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid()) << std::endl;
+			::exit(EXIT_FAILURE);
+		}
+	}
+
+	setup_dirs(env_home);
 
 	bool using_nonstandard_configs = false;
 
@@ -536,7 +533,7 @@ void controller::run(int argc, char * argv[]) {
 	LOG(level::INFO, "nl_langinfo(CODESET): %s", nl_langinfo(CODESET));
 
 	if ((! using_nonstandard_configs) && (0 != access(url_file.c_str(), F_OK))) {
-		migrate_data_from_newsbeuter(silent);
+		migrate_data_from_newsbeuter(env_home, silent);
 	}
 
 	utils::mkdir_parents(config_dir.c_str(), 0700);
