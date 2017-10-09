@@ -63,15 +63,16 @@ std::string lock_file;
 
 int ctrl_c_hit = 0;
 
-void ctrl_c_action(int sig) {
-	LOG(level::DEBUG,"caught signal %d",sig);
-	if (SIGINT == sig) {
-		ctrl_c_hit = 1;
-	} else {
-		stfl::reset();
-		utils::remove_fs_lock(lock_file);
-		::exit(EXIT_FAILURE);
-	}
+void ctrl_c_action(int /* sig */) {
+	LOG(level::DEBUG, "caught SIGINT");
+	ctrl_c_hit = 1;
+}
+
+void sighup_action(int /* sig */) {
+	LOG(level::DEBUG, "caught SIGHUP");
+	stfl::reset();
+	utils::remove_fs_lock(lock_file);
+	::exit(EXIT_FAILURE);
 }
 
 void ignore_signal(int sig) {
@@ -374,7 +375,7 @@ void controller::run(int argc, char * argv[]) {
 
 	::signal(SIGINT, ctrl_c_action);
 	::signal(SIGPIPE, ignore_signal);
-	::signal(SIGHUP, ctrl_c_action);
+	::signal(SIGHUP, sighup_action);
 	::signal(SIGCHLD, omg_a_child_died);
 
 	bool do_import = false, do_export = false, cachefile_given_on_cmdline = false, do_vacuum = false;
