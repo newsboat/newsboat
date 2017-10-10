@@ -120,18 +120,23 @@ void view::set_bindings(std::shared_ptr<formaction> fa) {
 std::shared_ptr<formaction> view::get_current_formaction() {
 	if (formaction_stack.size() > 0 && current_formaction < formaction_stack_size()) {
 		return formaction_stack[current_formaction];
+	} else {
+		return {};
 	}
-	return std::shared_ptr<formaction>();
 }
 
 void view::set_status_unlocked(const std::string& msg) {
-	if (formaction_stack.size() > 0 && get_current_formaction() != nullptr) {
-		std::shared_ptr<stfl::form> form = get_current_formaction()->get_form();
-		if (form != nullptr) {
+	auto fa = get_current_formaction();
+	if (fa) {
+		std::shared_ptr<stfl::form> form = fa->get_form();
+		if (form) {
 			form->set("msg",msg);
 			form->run(-1);
 		} else {
-			LOG(level::ERROR, "view::set_status_unlocked: form for formaction of type %s is nullptr!", get_current_formaction()->id());
+			LOG(level::ERROR,
+					"view::set_status_unlocked: "
+					"form for formaction of type %s is nullptr!",
+					fa->id());
 		}
 	}
 }
@@ -457,14 +462,16 @@ void view::push_itemlist(unsigned int pos) {
 
 void view::push_itemview(std::shared_ptr<rss_feed> f, const std::string& guid, const std::string& searchphrase) {
 	if (cfg->get_configvalue("pager") == "internal") {
-		std::shared_ptr<itemlist_formaction> itemlist = std::dynamic_pointer_cast<itemlist_formaction, formaction>(get_current_formaction());
+		auto fa = get_current_formaction();
+
+		std::shared_ptr<itemlist_formaction> itemlist = std::dynamic_pointer_cast<itemlist_formaction, formaction>(fa);
 		assert(itemlist != nullptr);
 		std::shared_ptr<itemview_formaction> itemview(new itemview_formaction(this, itemlist, itemview_str));
 		set_bindings(itemview);
 		itemview->set_regexmanager(rxman);
 		itemview->set_feed(f);
 		itemview->set_guid(guid);
-		itemview->set_parent_formaction(get_current_formaction());
+		itemview->set_parent_formaction(fa);
 		if (searchphrase.length() > 0)
 			itemview->set_highlightphrase(searchphrase);
 		apply_colors(itemview);
@@ -489,9 +496,10 @@ void view::push_itemview(std::shared_ptr<rss_feed> f, const std::string& guid, c
 }
 
 void view::view_dialogs() {
-	if (get_current_formaction() != nullptr && get_current_formaction()->id() != "dialogs") {
+	auto fa = get_current_formaction();
+	if (fa != nullptr && fa->id() != "dialogs") {
 		std::shared_ptr<dialogs_formaction> dialogs(new dialogs_formaction(this, dialogs_str));
-		dialogs->set_parent_formaction(get_current_formaction());
+		dialogs->set_parent_formaction(fa);
 		apply_colors(dialogs);
 		dialogs->init();
 		formaction_stack.push_back(dialogs);
@@ -500,11 +508,13 @@ void view::view_dialogs() {
 }
 
 void view::push_help() {
+	auto fa = get_current_formaction();
+
 	std::shared_ptr<help_formaction> helpview(new help_formaction(this, help_str));
 	set_bindings(helpview);
 	apply_colors(helpview);
-	helpview->set_context(get_current_formaction()->id());
-	helpview->set_parent_formaction(get_current_formaction());
+	helpview->set_context(fa->id());
+	helpview->set_parent_formaction(fa);
 	helpview->init();
 	formaction_stack.push_back(helpview);
 	current_formaction = formaction_stack_size() - 1;
