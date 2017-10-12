@@ -103,7 +103,7 @@ class controller {
 
 		unsigned int get_feed_count_per_tag(const std::string& tag);
 	private:
-		void usage(char * argv0);
+		int usage(char * argv0);
 		bool setup_dirs_xdg(const std::string& env_home);
 		void setup_dirs(const std::string& env_home);
 		void migrate_data_from_newsbeuter(
@@ -112,12 +112,12 @@ class controller {
 				const std::string& env_home, bool silent);
 		bool migrate_data_from_newsbeuter_simple(
 				const std::string& env_home, bool silent);
-		void version_information(const char * argv0, unsigned int level);
+		int version_information(const char * argv0, unsigned int level);
 		void import_opml(const std::string& filename);
 		void export_opml();
 		void rec_find_rss_outlines(xmlNode * node, std::string tag);
 		void compute_unread_numbers(unsigned int&, unsigned int& );
-		void execute_commands(char ** argv, unsigned int i);
+		int execute_commands(char ** argv, unsigned int i);
 
 		std::string prepare_message(unsigned int pos, unsigned int max);
 		void save_feed(std::shared_ptr<rss_feed> feed, unsigned int pos);

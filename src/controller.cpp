@@ -424,7 +424,7 @@ int controller::run(int argc, char * argv[]) {
 		} else {
 			std::cerr << _("Fatal error: couldn't determine home directory!") << std::endl;
 			std::cerr << strprintf::fmt(_("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid()) << std::endl;
-			::exit(EXIT_FAILURE);
+			return EXIT_FAILURE;
 		}
 	}
 
@@ -494,7 +494,7 @@ int controller::run(int argc, char * argv[]) {
 				logger::getInstance().set_loglevel(l);
 			} else {
 				std::cerr << strprintf::fmt(_("%s: %d: invalid loglevel value"), argv[0], l) << std::endl;
-				::std::exit(EXIT_FAILURE);
+				return EXIT_FAILURE;
 			}
 		}
 		break;
@@ -519,7 +519,7 @@ int controller::run(int argc, char * argv[]) {
 
 
 	if (show_version) {
-		version_information(argv[0], show_version);
+		return version_information(argv[0], show_version);
 	}
 
 	if (do_import) {
@@ -626,7 +626,7 @@ int controller::run(int argc, char * argv[]) {
 	} catch (const dbexception& e) {
 		std::cerr << strprintf::fmt(_("Error: opening the cache file `%s' failed: %s"), cache_file, e.what()) << std::endl;
 		utils::remove_fs_lock(lock_file);
-		::exit(EXIT_FAILURE);
+		return EXIT_FAILURE;
 	}
 
 	if (!silent) {
@@ -653,7 +653,7 @@ int controller::run(int argc, char * argv[]) {
 			std::cout << strprintf::fmt(
 					_("%s is inaccessible and can't be created\n"), cookies);
 			utils::remove_fs_lock(lock_file);
-			::exit(EXIT_FAILURE);
+			return EXIT_FAILURE;
 		}
 
 		api = new newsblur_api(&cfg);
@@ -701,7 +701,7 @@ int controller::run(int argc, char * argv[]) {
 			assert(0); // shouldn't happen
 		}
 		std::cout << msg << std::endl << std::endl;
-		usage(argv[0]);
+		return usage(argv[0]);
 	}
 
 	if (!do_export && !do_vacuum && !silent)
@@ -1157,7 +1157,7 @@ void controller::start_reload_all_thread(std::vector<int> * indexes) {
 	t.detach();
 }
 
-void controller::version_information(const char * argv0, unsigned int level) {
+int controller::version_information(const char * argv0, unsigned int level) {
 	if (level<=1) {
 		std::cout << PROGRAM_NAME << " " << PROGRAM_VERSION << " - " << PROGRAM_URL << std::endl;
 		std::cout << "Copyright (C) 2006-2015 Andreas Krennmair" << std::endl;
@@ -1184,10 +1184,10 @@ void controller::version_information(const char * argv0, unsigned int level) {
 		std::cout << LICENSE_str << std::endl;
 	}
 
-	::exit(EXIT_SUCCESS);
+	return EXIT_SUCCESS;
 }
 
-void controller::usage(char * argv0) {
+int controller::usage(char * argv0) {
 	auto msg =
 	    strprintf::fmt(_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] "
 	    "[-c <cachefile>] [-x <command> ...] [-h]\n"),
@@ -1233,7 +1233,7 @@ void controller::usage(char * argv0) {
 		std::cout << a.desc << std::endl;
 	}
 
-	::exit(EXIT_FAILURE);
+	return EXIT_FAILURE;
 }
 
 void controller::import_opml(const std::string& filename) {
@@ -1544,7 +1544,7 @@ std::string controller::bookmark(
 	}
 }
 
-void controller::execute_commands(char ** argv, unsigned int i) {
+int controller::execute_commands(char ** argv, unsigned int i) {
 	if (v->formaction_stack_size() > 0)
 		v->pop_current_formaction();
 	for (; argv[i]; ++i) {
@@ -1556,9 +1556,11 @@ void controller::execute_commands(char ** argv, unsigned int i) {
 			std::cout << strprintf::fmt(_("%u unread articles"), rsscache->get_unread_count()) << std::endl;
 		} else {
 			std::cerr << strprintf::fmt(_("%s: %s: unknown command"), argv[0], argv[i]) << std::endl;
-			::std::exit(EXIT_FAILURE);
+			return EXIT_FAILURE;
 		}
 	}
+
+	return EXIT_SUCCESS;
 }
 
 std::string controller::write_temporary_item(std::shared_ptr<rss_item> item) {
