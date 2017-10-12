@@ -8,18 +8,18 @@ namespace newsbeuter {
 class dialogs_formaction : public formaction {
 	public:
 		dialogs_formaction(view *, std::string formstr);
-		virtual ~dialogs_formaction();
-		virtual void prepare();
-		virtual void init();
-		virtual keymap_hint_entry * get_keymap_hint();
-		virtual std::string id() const {
+		~dialogs_formaction() override;
+		void prepare() override;
+		void init() override;
+		keymap_hint_entry * get_keymap_hint() override;
+		std::string id() const override {
 			return "dialogs";
 		}
-		virtual std::string title();
-		virtual void handle_cmdline(const std::string& cmd);
+		std::string title() override;
+		void handle_cmdline(const std::string& cmd) override;
 
 	private:
-		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr);
+		void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr) override;
 		bool update_list;
 };
 

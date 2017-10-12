@@ -11,10 +11,10 @@ class select_formaction : public formaction {
 		enum class selection_type { TAG, FILTER };
 
 		select_formaction(view *, std::string formstr);
-		virtual ~select_formaction();
-		virtual void prepare();
-		virtual void init();
-		virtual keymap_hint_entry * get_keymap_hint();
+		~select_formaction() override;
+		void prepare() override;
+		void init() override;
+		keymap_hint_entry * get_keymap_hint() override;
 		inline std::string get_selected_value() {
 			return value;
 		}
@@ -27,13 +27,13 @@ class select_formaction : public formaction {
 		void set_type(selection_type t) {
 			type = t;
 		}
-		virtual void handle_cmdline(const std::string& cmd);
-		virtual std::string id() const {
+		void handle_cmdline(const std::string& cmd) override;
+		std::string id() const override {
 			return (type == selection_type::TAG) ? "tagselection" : "filterselection";
 		}
-		virtual std::string title();
+		std::string title() override;
 	private:
-		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr);
+		void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr) override;
 		bool quit;
 		selection_type type;
 		std::string value;

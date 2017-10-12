@@ -71,8 +71,8 @@ class feed {
 class exception : public std::exception {
 	public:
 		explicit exception(const std::string& errmsg = "");
-		~exception() throw();
-		virtual const char* what() const throw();
+		~exception() throw() override;
+		const char* what() const throw() override;
 	private:
 		std::string emsg;
 };

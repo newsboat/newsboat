@@ -14,24 +14,24 @@ typedef std::pair<std::shared_ptr<rss_feed>, unsigned int> feedptr_pos_pair;
 class feedlist_formaction : public list_formaction {
 	public:
 		feedlist_formaction(view *, std::string formstr);
-		virtual ~feedlist_formaction();
-		virtual void prepare();
-		virtual void init();
+		~feedlist_formaction() override;
+		void prepare() override;
+		void init() override;
 		void set_feedlist(std::vector<std::shared_ptr<rss_feed>>& feeds);
 		void update_visible_feeds(std::vector<std::shared_ptr<rss_feed>>& feeds);
 		void set_tags(const std::vector<std::string>& t);
-		virtual keymap_hint_entry * get_keymap_hint();
+		keymap_hint_entry * get_keymap_hint() override;
 		std::shared_ptr<rss_feed> get_feed();
 
-		virtual void set_redraw(bool b) {
+		void set_redraw(bool b) override {
 			formaction::set_redraw(b);
 			apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-feeds"));
 		}
 
-		virtual std::string id() const {
+		std::string id() const override {
 			return "feedlist";
 		}
-		virtual std::string title();
+		std::string title() override;
 
 		bool jump_to_next_unread_feed(unsigned int& feedpos);
 		bool jump_to_previous_unread_feed(unsigned int& feedpos);
@@ -39,9 +39,9 @@ class feedlist_formaction : public list_formaction {
 		bool jump_to_previous_feed(unsigned int& feedpos);
 		bool jump_to_random_unread_feed(unsigned int& feedpos);
 
-		virtual void handle_cmdline(const std::string& cmd);
+		void handle_cmdline(const std::string& cmd) override;
 
-		virtual void finished_qna(operation op);
+		void finished_qna(operation op) override;
 
 		void mark_pos_if_visible(unsigned int pos);
 
@@ -50,7 +50,7 @@ class feedlist_formaction : public list_formaction {
 	private:
 
 		int get_pos(unsigned int realidx);
-		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr);
+		void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr) override;
 
 		void goto_feed(const std::string& str);
 

@@ -8,10 +8,10 @@ namespace newsbeuter {
 class filebrowser_formaction : public formaction {
 	public:
 		filebrowser_formaction(view *, std::string formstr);
-		virtual ~filebrowser_formaction();
-		virtual void prepare();
-		virtual void init();
-		virtual keymap_hint_entry * get_keymap_hint();
+		~filebrowser_formaction() override;
+		void prepare() override;
+		void init() override;
+		keymap_hint_entry * get_keymap_hint() override;
 
 		inline void set_dir(const std::string& d) {
 			dir = d;
@@ -20,13 +20,13 @@ class filebrowser_formaction : public formaction {
 			default_filename = fn;
 		}
 
-		virtual std::string id() const {
+		std::string id() const override {
 			return "filebrowser";
 		}
-		virtual std::string title();
+		std::string title() override;
 
 	private:
-		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr);
+		void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr) override;
 
 		std::string add_file(std::string filename);
 		std::string get_filename_suggestion(const std::string& s);

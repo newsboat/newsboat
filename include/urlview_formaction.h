@@ -9,20 +9,20 @@ namespace newsbeuter {
 class urlview_formaction : public formaction {
 	public:
 		urlview_formaction(view *, std::shared_ptr<rss_feed>& feed, std::string formstr);
-		virtual ~urlview_formaction();
-		virtual void prepare();
-		virtual void init();
-		virtual keymap_hint_entry * get_keymap_hint();
+		~urlview_formaction() override;
+		void prepare() override;
+		void init() override;
+		keymap_hint_entry * get_keymap_hint() override;
 		inline void set_links(const std::vector<linkpair>& l) {
 			links = l;
 		}
-		virtual std::string id() const {
+		std::string id() const override {
 			return "urlview";
 		}
-		virtual std::string title();
-		virtual void handle_cmdline(const std::string& cmd);
+		std::string title() override;
+		void handle_cmdline(const std::string& cmd) override;
 	private:
-		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr);
+		void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr) override;
 		std::vector<linkpair> links;
 		bool quit;
 		std::shared_ptr<rss_feed> feed;

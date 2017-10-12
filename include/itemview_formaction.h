@@ -14,9 +14,9 @@ class itemlist_formaction;
 class itemview_formaction : public formaction {
 	public:
 		itemview_formaction(view *, std::shared_ptr<itemlist_formaction> il, std::string formstr);
-		virtual ~itemview_formaction();
-		virtual void prepare();
-		virtual void init();
+		~itemview_formaction() override;
+		void prepare() override;
+		void init() override;
 		inline void set_guid(const std::string& guid_) {
 			guid = guid_;
 		}
@@ -24,15 +24,15 @@ class itemview_formaction : public formaction {
 			feed = fd;
 		}
 		void set_highlightphrase(const std::string& text);
-		keymap_hint_entry * get_keymap_hint();
-		virtual void handle_cmdline(const std::string& cmd);
+		keymap_hint_entry * get_keymap_hint() override;
+		void handle_cmdline(const std::string& cmd) override;
 
-		virtual std::string id() const {
+		std::string id() const override {
 			return "article";
 		}
-		virtual std::string title();
+		std::string title() override;
 
-		virtual void finished_qna(operation op);
+		void finished_qna(operation op) override;
 
 		std::vector<std::pair<LineType, std::string>>
 			render_html(
@@ -45,7 +45,7 @@ class itemview_formaction : public formaction {
 		void update_percent();
 
 	private:
-		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr);
+		void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr) override;
 		void set_head(const std::string& s, const std::string& feedtitle, unsigned int unread, unsigned int total);
 		void highlight_text(const std::string& searchphrase);
 

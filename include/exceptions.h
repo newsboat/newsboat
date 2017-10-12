@@ -12,8 +12,8 @@ namespace newsbeuter {
 class xmlexception : public std::exception {
 	public:
 		explicit xmlexception(const std::string& errmsg) : msg(errmsg) { }
-		virtual ~xmlexception() throw() { }
-		virtual const char * what() const throw() {
+		~xmlexception() throw() override { }
+		const char * what() const throw() override {
 			return msg.c_str();
 		}
 	private:
@@ -23,8 +23,8 @@ class xmlexception : public std::exception {
 class configexception : public std::exception {
 	public:
 		explicit configexception(const std::string& errmsg) : msg(errmsg) { }
-		virtual ~configexception() throw() { }
-		virtual const char * what() const throw() {
+		~configexception() throw() override { }
+		const char * what() const throw() override {
 			return msg.c_str();
 		}
 	private:
@@ -35,8 +35,8 @@ class confighandlerexception : public std::exception {
 	public:
 		explicit confighandlerexception(const std::string& emsg) : msg(emsg) { }
 		explicit confighandlerexception(action_handler_status e);
-		virtual ~confighandlerexception() throw() { }
-		virtual const char * what() const throw() {
+		~confighandlerexception() throw() override { }
+		const char * what() const throw() override {
 			return msg.c_str();
 		}
 		int status() {
@@ -50,8 +50,8 @@ class confighandlerexception : public std::exception {
 class dbexception : public std::exception {
 	public:
 		explicit dbexception(sqlite3 * h) : msg(sqlite3_errmsg(h)) { }
-		virtual ~dbexception() throw() { }
-		virtual const char * what() const throw() {
+		~dbexception() throw() override { }
+		const char * what() const throw() override {
 			return msg.c_str();
 		}
 	private:
@@ -69,8 +69,8 @@ class matcherexception : public std::exception {
 		: type_(et), addinfo(info), addinfo2(info2)
 		{ }
 
-		virtual ~matcherexception() throw() { }
-		virtual const char * what() const throw();
+		~matcherexception() throw() override { }
+		const char * what() const throw() override;
 	private:
 		type type_;
 		std::string addinfo;

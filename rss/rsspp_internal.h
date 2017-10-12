@@ -41,9 +41,9 @@ struct rss_parser {
 };
 
 struct rss_09x_parser : public rss_parser {
-		virtual void parse_feed(feed& f, xmlNode * rootNode);
+		void parse_feed(feed& f, xmlNode * rootNode) override;
 		explicit rss_09x_parser(xmlDocPtr doc) : rss_parser(doc), ns(nullptr) { }
-		virtual ~rss_09x_parser();
+		~rss_09x_parser() override;
 	protected:
 		const char * ns;
 	private:
@@ -52,21 +52,21 @@ struct rss_09x_parser : public rss_parser {
 
 struct rss_20_parser : public rss_09x_parser {
 	explicit rss_20_parser(xmlDocPtr doc) : rss_09x_parser(doc) { }
-	virtual void parse_feed(feed& f, xmlNode * rootNode);
-	virtual ~rss_20_parser() { }
+	void parse_feed(feed& f, xmlNode * rootNode) override;
+	~rss_20_parser() override { }
 };
 
 struct rss_10_parser : public rss_parser {
-	virtual void parse_feed(feed& f, xmlNode * rootNode);
+	void parse_feed(feed& f, xmlNode * rootNode) override;
 	explicit rss_10_parser(xmlDocPtr doc) : rss_parser(doc) { }
-	virtual ~rss_10_parser() { }
+	~rss_10_parser() override { }
 };
 
 
 struct atom_parser : public rss_parser {
-		virtual void parse_feed(feed& f, xmlNode * rootNode);
+		void parse_feed(feed& f, xmlNode * rootNode) override;
 		explicit atom_parser(xmlDocPtr doc) : rss_parser(doc), ns(0) { }
-		virtual ~atom_parser() { }
+		~atom_parser() override { }
 	private:
 		item parse_entry(xmlNode * itemNode);
 		const char * ns;

@@ -10,13 +10,13 @@ namespace newsbeuter {
 class oldreader_api : public remote_api {
 	public:
 		explicit oldreader_api(configcontainer * c);
-		virtual ~oldreader_api();
-		virtual bool authenticate();
-		virtual std::vector<tagged_feedurl> get_subscribed_urls();
-		virtual void add_custom_headers(curl_slist** custom_headers);
-		virtual bool mark_all_read(const std::string& feedurl);
-		virtual bool mark_article_read(const std::string& guid, bool read);
-		virtual bool update_article_flags(const std::string& oldflags, const std::string& newflags, const std::string& guid);
+		~oldreader_api() override;
+		bool authenticate() override;
+		std::vector<tagged_feedurl> get_subscribed_urls() override;
+		void add_custom_headers(curl_slist** custom_headers) override;
+		bool mark_all_read(const std::string& feedurl) override;
+		bool mark_article_read(const std::string& guid, bool read) override;
+		bool update_article_flags(const std::string& oldflags, const std::string& newflags, const std::string& guid) override;
 	private:
 		std::vector<std::string> get_tags(xmlNode * node);
 		std::string get_new_token();
@@ -32,10 +32,10 @@ class oldreader_api : public remote_api {
 class oldreader_urlreader : public urlreader {
 	public:
 		oldreader_urlreader(configcontainer * c, const std::string& url_file, remote_api * a);
-		virtual ~oldreader_urlreader();
-		virtual void write_config();
-		virtual void reload();
-		virtual std::string get_source();
+		~oldreader_urlreader() override;
+		void write_config() override;
+		void reload() override;
+		std::string get_source() override;
 	private:
 		configcontainer * cfg;
 		std::string file;

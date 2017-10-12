@@ -26,11 +26,11 @@ struct config_action_handler {
 class configparser : public config_action_handler {
 	public:
 		configparser();
-		virtual ~configparser();
+		~configparser() override;
 		void register_handler(const std::string& cmd, config_action_handler * handler);
 		void unregister_handler(const std::string& cmd);
-		virtual void handle_action(const std::string& action, const std::vector<std::string>& params);
-		virtual void dump_config(std::vector<std::string>& ) {
+		void handle_action(const std::string& action, const std::vector<std::string>& params) override;
+		void dump_config(std::vector<std::string>& ) override {
 			/* nothing because configparser itself only handles include */
 		}
 		bool parse(const std::string& filename, bool double_include = true);
@@ -46,9 +46,9 @@ class configparser : public config_action_handler {
 class null_config_action_handler : public config_action_handler {
 	public:
 		null_config_action_handler() { }
-		virtual ~null_config_action_handler() { }
-		virtual void handle_action(const std::string& , const std::vector<std::string>& ) { }
-		virtual void dump_config(std::vector<std::string>& ) { }
+		~null_config_action_handler() override { }
+		void handle_action(const std::string& , const std::vector<std::string>& ) override { }
+		void dump_config(std::vector<std::string>& ) override { }
 };
 
 }
