@@ -20,7 +20,7 @@ class pb_controller {
 		inline void set_view(pb_view * vv) {
 			v = vv;
 		}
-		void run(int argc, char * argv[] = 0);
+		int run(int argc, char * argv[] = 0);
 
 		inline bool view_update_necessary() const {
 			return view_update_;
@@ -32,7 +32,7 @@ class pb_controller {
 			return downloads_;
 		}
 
-		void usage(const char * argv0);
+		int usage(const char * argv0);
 
 		std::string get_dlpath();
 

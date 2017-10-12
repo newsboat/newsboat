@@ -23,7 +23,5 @@ int main(int argc, char * argv[]) {
 	podbeuter::pb_view v(&c);
 	c.set_view(&v);
 
-	c.run(argc, argv);
-
-	return 0;
+	return c.run(argc, argv);
 }

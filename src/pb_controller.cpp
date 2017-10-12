@@ -144,7 +144,7 @@ pb_controller::~pb_controller() {
 	delete cfg;
 }
 
-void pb_controller::run(int argc, char * argv[]) {
+int pb_controller::run(int argc, char * argv[]) {
 	int c;
 	bool automatic_dl = false;
 
@@ -186,7 +186,7 @@ void pb_controller::run(int argc, char * argv[]) {
 				logger::getInstance().set_loglevel(l);
 			} else {
 				std::cerr << strprintf::fmt(_("%s: %d: invalid loglevel value"), argv[0], l) << std::endl;
-				::std::exit(EXIT_FAILURE);
+				return EXIT_FAILURE;
 			}
 			}
 			break;
@@ -205,7 +205,7 @@ void pb_controller::run(int argc, char * argv[]) {
 	pid_t pid;
 	if (!utils::try_fs_lock(lock_file, pid)) {
 		std::cout << strprintf::fmt(_("Error: an instance of %s is already running (PID: %u)"), "podboat", pid) << std::endl;
-		return;
+		return EXIT_FAILURE;
 	}
 
 	std::cout << _("Loading configuration...");
@@ -236,7 +236,7 @@ void pb_controller::run(int argc, char * argv[]) {
 	} catch (const configexception& ex) {
 		std::cout << ex.what() << std::endl;
 		delete colorman;
-		return;
+		return EXIT_FAILURE;
 	}
 
 	if (colorman->colors_loaded())
@@ -265,9 +265,10 @@ void pb_controller::run(int argc, char * argv[]) {
 	std::cout << _("done.") << std::endl;
 
 	utils::remove_fs_lock(lock_file);
+	return EXIT_SUCCESS;
 }
 
-void pb_controller::usage(const char * argv0) {
+int pb_controller::usage(const char * argv0) {
 	auto msg =
 	    strprintf::fmt(_("%s %s\nusage %s [-C <file>] [-q <file>] [-h]\n"),
 	    "podboat",
@@ -303,7 +304,7 @@ void pb_controller::usage(const char * argv0) {
 		std::cout << a.desc << std::endl;
 	}
 
-	::exit(EXIT_FAILURE);
+	return EXIT_FAILURE;
 }
 
 std::string pb_controller::get_dlpath() {
