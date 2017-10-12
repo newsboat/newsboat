@@ -370,7 +370,7 @@ void controller::set_view(view * vv) {
 	v = vv;
 }
 
-void controller::run(int argc, char * argv[]) {
+int controller::run(int argc, char * argv[]) {
 	int c;
 
 	::signal(SIGINT, ctrl_c_action);
@@ -527,7 +527,7 @@ void controller::run(int argc, char * argv[]) {
 		urlcfg = new file_urlreader(url_file);
 		urlcfg->reload();
 		import_opml(importfile);
-		return;
+		return EXIT_SUCCESS;
 	}
 
 
@@ -555,7 +555,7 @@ void controller::run(int argc, char * argv[]) {
 			if (!execute_cmds) {
 				std::cout << strprintf::fmt(_("Error: an instance of %s is already running (PID: %u)"), PROGRAM_NAME, pid) << std::endl;
 			}
-			return;
+			return EXIT_FAILURE;
 		}
 	}
 
@@ -586,7 +586,7 @@ void controller::run(int argc, char * argv[]) {
 		LOG(level::ERROR,"an exception occurred while parsing the configuration file: %s",ex.what());
 		std::cout << ex.what() << std::endl;
 		utils::remove_fs_lock(lock_file);
-		return;
+		return EXIT_FAILURE;
 	}
 
 	update_config();
@@ -613,7 +613,7 @@ void controller::run(int argc, char * argv[]) {
 				LOG(level::ERROR,"something went wrong with the lock: %s", strerror(errno));
 			}
 			std::cout << strprintf::fmt(_("Error: an instance of %s is already running (PID: %u)"), PROGRAM_NAME, pid) << std::endl;
-			return;
+			return EXIT_FAILURE;
 		}
 	}
 
@@ -676,7 +676,7 @@ void controller::run(int argc, char * argv[]) {
 		if (!api->authenticate()) {
 			std::cout << "Authentication failed." << std::endl;
 			utils::remove_fs_lock(lock_file);
-			return;
+			return EXIT_FAILURE;
 		}
 	}
 	urlcfg->reload();
@@ -718,7 +718,7 @@ void controller::run(int argc, char * argv[]) {
 		rsscache->do_vacuum();
 		std::cout << _("done.") << std::endl;
 		utils::remove_fs_lock(lock_file);
-		return;
+		return EXIT_SUCCESS;
 	}
 
 	unsigned int i=0;
@@ -733,11 +733,11 @@ void controller::run(int argc, char * argv[]) {
 		} catch(const dbexception& e) {
 			std::cout << _("Error while loading feeds from database: ") << e.what() << std::endl;
 			utils::remove_fs_lock(lock_file);
-			return;
+			return EXIT_FAILURE;
 		} catch(const std::string& str) {
 			std::cout << strprintf::fmt(_("Error while loading feed '%s': %s"), url, str) << std::endl;
 			utils::remove_fs_lock(lock_file);
-			return;
+			return EXIT_FAILURE;
 		}
 		i++;
 	}
@@ -765,7 +765,7 @@ void controller::run(int argc, char * argv[]) {
 	if (do_export) {
 		export_opml();
 		utils::remove_fs_lock(lock_file);
-		return;
+		return EXIT_SUCCESS;
 	}
 
 	if (do_read_import) {
@@ -774,7 +774,7 @@ void controller::run(int argc, char * argv[]) {
 		std::cout.flush();
 		import_read_information(readinfofile);
 		std::cout << _("done.") << std::endl;
-		return;
+		return EXIT_SUCCESS;
 	}
 
 	if (do_read_export) {
@@ -783,7 +783,7 @@ void controller::run(int argc, char * argv[]) {
 		std::cout.flush();
 		export_read_information(readinfofile);
 		std::cout << _("done.") << std::endl;
-		return;
+		return EXIT_SUCCESS;
 	}
 
 	// hand over the important objects to the view
@@ -794,7 +794,7 @@ void controller::run(int argc, char * argv[]) {
 	if (execute_cmds) {
 		execute_commands(argv, optind);
 		utils::remove_fs_lock(lock_file);
-		return;
+		return EXIT_SUCCESS;
 	}
 
 	// if the user wants to refresh on startup via configuration file, then do so,
@@ -830,6 +830,7 @@ void controller::run(int argc, char * argv[]) {
 	}
 
 	utils::remove_fs_lock(lock_file);
+	return EXIT_SUCCESS;
 }
 
 void controller::update_feedlist() {

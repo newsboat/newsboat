@@ -27,9 +27,9 @@ int main(int argc, char * argv[]) {
 	newsbeuter::view v(&c);
 	c.set_view(&v);
 
-	c.run(argc,argv);
+	int ret = c.run(argc,argv);
 
 	rsspp::parser::global_cleanup();
 
-	return 0;
+	return ret;
 }

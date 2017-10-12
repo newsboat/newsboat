@@ -28,7 +28,7 @@ class controller {
 		view * get_view() {
 			return v;
 		}
-		void run(int argc = 0, char * argv[] = nullptr);
+		int run(int argc = 0, char * argv[] = nullptr);
 
 		void reload(unsigned int pos, unsigned int max = 0, bool unattended = false, curl_handle *easyhandle = 0);
 
