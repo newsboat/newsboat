@@ -4,6 +4,10 @@
 
 ### Added
 ### Changed
+
+- `text-width` doesn't apply if it's bigger than terminal width
+    (https://github.com/akrennmair/newsbeuter/issues/602)
+
 ### Deprecated
 ### Removed
 
