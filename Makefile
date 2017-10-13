@@ -144,7 +144,10 @@ distclean: clean clean-mo test-clean profclean
 
 doc: doc/xhtml/newsboat.html doc/xhtml/faq.html doc/newsboat.1 doc/podboat.1
 
-doc/xhtml/newsboat.html: doc/newsboat.txt doc/configcommands-linked.dsv doc/podboat-cmds-linked.dsv doc/keycmds-linked.dsv
+doc/xhtml/newsboat.html: doc/newsboat.txt doc/chapter-firststeps.txt doc/configcommands-linked.dsv \
+		doc/keycmds-linked.dsv doc/chapter-tagging.txt doc/chapter-snownews.txt \
+		doc/chapter-cmdline.txt doc/chapter-podcasts.txt doc/podboat-cmds-linked.dsv \
+		doc/chapter-password.txt
 	$(MKDIR) doc/xhtml
 	$(A2X) -f xhtml -D doc/xhtml doc/newsboat.txt
 	$(CHMOD) u+w doc/xhtml/docbook-xsl.css
@@ -174,13 +177,15 @@ doc/generate2: doc/generate2.cpp
 doc/newsboat-keycmds.txt: doc/generate2 doc/keycmds.dsv
 	doc/generate2 doc/keycmds.dsv > doc/newsboat-keycmds.txt
 
-doc/newsboat.1: doc/manpage-newsboat.txt doc/newsboat-cfgcmds.txt doc/newsboat-keycmds.txt
+doc/newsboat.1: doc/manpage-newsboat.txt doc/chapter-firststeps.txt doc/newsboat-cfgcmds.txt \
+		doc/newsboat-keycmds.txt doc/chapter-tagging.txt doc/chapter-snownews.txt \
+		doc/chapter-cmdline.txt
 	$(A2X) -f manpage doc/manpage-newsboat.txt
 
 doc/podboat-cfgcmds.txt: doc/generate doc/podboat-cmds.dsv
 	doc/generate doc/podboat-cmds.dsv > doc/podboat-cfgcmds.txt
 
-doc/podboat.1: doc/manpage-podboat.txt doc/podboat-cfgcmds.txt
+doc/podboat.1: doc/manpage-podboat.txt doc/chapter-podcasts.txt doc/podboat-cfgcmds.txt
 	$(A2X) -f manpage doc/manpage-podboat.txt
 
 doc/gen-example-config: doc/gen-example-config.cpp doc/split.h
