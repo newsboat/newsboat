@@ -34,32 +34,32 @@ ifeq ($(PROFILE),1)
 CXXFLAGS+=-fprofile-arcs -ftest-coverage
 endif
 
-LIB_SOURCES:=$(shell cat mk/libbeuter.deps)
+LIB_SOURCES:=$(shell cat mk/libboat.deps)
 LIB_OBJS:=$(patsubst %.cpp,%.o,$(LIB_SOURCES))
-LIB_OUTPUT=libbeuter.a
+LIB_OUTPUT=libboat.a
 
 FILTERLIB_SOURCES=filter/Scanner.cpp filter/Parser.cpp filter/FilterParser.cpp
 FILTERLIB_OBJS:=$(patsubst %.cpp,%.o,$(FILTERLIB_SOURCES))
 FILTERLIB_OUTPUT=libfilter.a
 
-NEWSBEUTER=newsboat
-NEWSBEUTER_SOURCES:=$(shell cat mk/newsbeuter.deps)
-NEWSBEUTER_OBJS:=$(patsubst %.cpp,%.o,$(NEWSBEUTER_SOURCES))
-NEWSBEUTER_LIBS=-lbeuter -lfilter -lpthread -lrsspp
+NEWSBOAT=newsboat
+NEWSBOAT_SOURCES:=$(shell cat mk/newsboat.deps)
+NEWSBOAT_OBJS:=$(patsubst %.cpp,%.o,$(NEWSBOAT_SOURCES))
+NEWSBOAT_LIBS=-lboat -lfilter -lpthread -lrsspp
 
 RSSPPLIB_SOURCES=$(sort $(wildcard rss/*.cpp))
 RSSPPLIB_OBJS=$(patsubst rss/%.cpp,rss/%.o,$(RSSPPLIB_SOURCES))
 RSSPPLIB_OUTPUT=librsspp.a
 
 
-PODBEUTER=podboat
-PODBEUTER_SOURCES:=$(shell cat mk/podbeuter.deps)
-PODBEUTER_OBJS:=$(patsubst %.cpp,%.o,$(PODBEUTER_SOURCES))
-PODBEUTER_LIBS=-lbeuter -lpthread
+PODBOAT=podboat
+PODBOAT_SOURCES:=$(shell cat mk/podboat.deps)
+PODBOAT_OBJS:=$(patsubst %.cpp,%.o,$(PODBOAT_SOURCES))
+PODBOAT_LIBS=-lboat -lpthread
 
 ifeq (, $(filter Linux GNU GNU/%, $(shell uname -s)))
-NEWSBEUTER_LIBS+=-liconv -lintl
-PODBEUTER_LIBS+=-liconv -lintl
+NEWSBOAT_LIBS+=-liconv -lintl
+PODBOAT_LIBS+=-liconv -lintl
 endif
 
 # additional commands
@@ -74,20 +74,20 @@ CHMOD=chmod
 STFLHDRS:=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
 POFILES:=$(wildcard po/*.po)
 MOFILES:=$(patsubst %.po,%.mo,$(POFILES))
-POTFILE=po/newsbeuter.pot
+POTFILE=po/newsboat.pot
 
 TEXTCONV=./txt2h
 RM=rm -f
 
-all: $(NEWSBEUTER) $(PODBEUTER) mo-files
+all: $(NEWSBOAT) $(PODBOAT) mo-files
 
-NB_DEPS=$(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBEUTER_OBJS) $(RSSPPLIB_OUTPUT)
+NB_DEPS=$(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBOAT_OBJS) $(RSSPPLIB_OUTPUT)
 
-$(NEWSBEUTER): $(NB_DEPS)
-	$(CXX) $(CXXFLAGS) -o $(NEWSBEUTER) $(NEWSBEUTER_OBJS) $(NEWSBEUTER_LIBS) $(LDFLAGS)
+$(NEWSBOAT): $(NB_DEPS)
+	$(CXX) $(CXXFLAGS) -o $(NEWSBOAT) $(NEWSBOAT_OBJS) $(NEWSBOAT_LIBS) $(LDFLAGS)
 
-$(PODBEUTER): $(LIB_OUTPUT) $(PODBEUTER_OBJS)
-	$(CXX) $(CXXFLAGS) -o $(PODBEUTER) $(PODBEUTER_OBJS) $(PODBEUTER_LIBS) $(LDFLAGS)
+$(PODBOAT): $(LIB_OUTPUT) $(PODBOAT_OBJS)
+	$(CXX) $(CXXFLAGS) -o $(PODBOAT) $(PODBOAT_OBJS) $(PODBOAT_LIBS) $(LDFLAGS)
 
 $(LIB_OUTPUT): $(LIB_OBJS)
 	$(RM) $@
@@ -114,13 +114,13 @@ regenerate-parser:
 %.h: %.stfl
 	$(TEXTCONV) $< .stfl > $@
 
-clean-newsbeuter:
-	$(RM) $(NEWSBEUTER) $(NEWSBEUTER_OBJS)
+clean-newsboat:
+	$(RM) $(NEWSBOAT) $(NEWSBOAT_OBJS)
 
-clean-podbeuter:
-	$(RM) $(PODBEUTER) $(PODBEUTER_OBJS)
+clean-podboat:
+	$(RM) $(PODBOAT) $(PODBOAT_OBJS)
 
-clean-libbeuter:
+clean-libboat:
 	$(RM) $(LIB_OUTPUT) $(LIB_OBJS)
 
 clean-librsspp:
@@ -131,10 +131,10 @@ clean-libfilter:
 
 clean-doc:
 	$(RM) -r doc/xhtml 
-	$(RM) doc/*.xml doc/*.1 doc/newsbeuter-cfgcmds.txt doc/podbeuter-cfgcmds.txt \
-		doc/newsbeuter-keycmds.txt doc/gen-example-config doc/generate doc/generate2
+	$(RM) doc/*.xml doc/*.1 doc/newsboat-cfgcmds.txt doc/podboat-cfgcmds.txt \
+		doc/newsboat-keycmds.txt doc/gen-example-config doc/generate doc/generate2
 
-clean: clean-newsbeuter clean-podbeuter clean-libbeuter clean-libfilter clean-doc clean-librsspp
+clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clean-librsspp
 	$(RM) $(STFLHDRS) xlicense.h
 
 distclean: clean clean-mo test-clean profclean
@@ -155,22 +155,22 @@ doc/xhtml/faq.html: doc/faq.txt
 doc/generate: doc/generate.cpp
 	$(CXX) $(CXXFLAGS) -o doc/generate doc/generate.cpp
 
-doc/newsbeuter-cfgcmds.txt: doc/generate doc/configcommands.dsv
-	doc/generate doc/configcommands.dsv > doc/newsbeuter-cfgcmds.txt
+doc/newsboat-cfgcmds.txt: doc/generate doc/configcommands.dsv
+	doc/generate doc/configcommands.dsv > doc/newsboat-cfgcmds.txt
 
 doc/generate2: doc/generate2.cpp
 	$(CXX) $(CXXFLAGS) -o doc/generate2 doc/generate2.cpp
 
-doc/newsbeuter-keycmds.txt: doc/generate2 doc/keycmds.dsv
-	doc/generate2 doc/keycmds.dsv > doc/newsbeuter-keycmds.txt
+doc/newsboat-keycmds.txt: doc/generate2 doc/keycmds.dsv
+	doc/generate2 doc/keycmds.dsv > doc/newsboat-keycmds.txt
 
-doc/newsboat.1: doc/manpage-newsboat.txt doc/newsbeuter-cfgcmds.txt doc/newsbeuter-keycmds.txt
+doc/newsboat.1: doc/manpage-newsboat.txt doc/newsboat-cfgcmds.txt doc/newsboat-keycmds.txt
 	$(A2X) -f manpage doc/manpage-newsboat.txt
 
-doc/podbeuter-cfgcmds.txt: doc/generate doc/podbeuter-cmds.dsv
-	doc/generate doc/podbeuter-cmds.dsv > doc/podbeuter-cfgcmds.txt
+doc/podboat-cfgcmds.txt: doc/generate doc/podboat-cmds.dsv
+	doc/generate doc/podboat-cmds.dsv > doc/podboat-cfgcmds.txt
 
-doc/podboat.1: doc/manpage-podboat.txt doc/podbeuter-cfgcmds.txt
+doc/podboat.1: doc/manpage-podboat.txt doc/podboat-cfgcmds.txt
 	$(A2X) -f manpage doc/manpage-podboat.txt
 
 doc/gen-example-config: doc/gen-example-config.cpp
@@ -186,22 +186,22 @@ cppcheck:
 	cppcheck -j$(CPPCHECK_JOBS) --force --enable=all --suppress=unusedFunction \
 		-DDEBUG=1 \
 		$(INCLUDES) $(DEFINES) \
-		include filter newsboat.cpp podbeuter.cpp rss src stfl \
+		include filter newsboat.cpp podboat.cpp rss src stfl \
 		test/*.cpp test/*.h \
 		2>cppcheck.log
 	@echo "Done! See cppcheck.log for details."
 
-install-newsbeuter: $(NEWSBEUTER)
+install-newsboat: $(NEWSBOAT)
 	$(MKDIR) $(DESTDIR)$(prefix)/bin
-	$(INSTALL) $(NEWSBEUTER) $(DESTDIR)$(prefix)/bin
+	$(INSTALL) $(NEWSBOAT) $(DESTDIR)$(prefix)/bin
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
-	$(INSTALL) doc/$(NEWSBEUTER).1 $(DESTDIR)$(mandir)/man1 || true
+	$(INSTALL) doc/$(NEWSBOAT).1 $(DESTDIR)$(mandir)/man1 || true
 
-install-podbeuter: $(PODBEUTER)
+install-podboat: $(PODBOAT)
 	$(MKDIR) $(DESTDIR)$(prefix)/bin
-	$(INSTALL) $(PODBEUTER) $(DESTDIR)$(prefix)/bin
+	$(INSTALL) $(PODBOAT) $(DESTDIR)$(prefix)/bin
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
-	$(INSTALL) doc/$(PODBEUTER).1 $(DESTDIR)$(mandir)/man1 || true
+	$(INSTALL) doc/$(PODBOAT).1 $(DESTDIR)$(mandir)/man1 || true
 
 install-docs: doc
 	$(MKDIR) $(DESTDIR)$(docdir)
@@ -211,18 +211,18 @@ install-examples: doc/example-config
 	$(MKDIR) $(DESTDIR)$(docdir)/examples
 	$(INSTALL) -m 644 doc/example-config $(DESTDIR)$(docdir)/examples/config || true
 
-install: install-newsbeuter install-podbeuter install-docs install-examples install-mo
+install: install-newsboat install-podboat install-docs install-examples install-mo
 
 uninstall: uninstall-mo
-	$(RM) $(DESTDIR)$(prefix)/bin/$(NEWSBEUTER)
-	$(RM) $(DESTDIR)$(prefix)/bin/$(PODBEUTER)
-	$(RM) $(DESTDIR)$(mandir)/man1/$(NEWSBEUTER).1
-	$(RM) $(DESTDIR)$(mandir)/man1/$(PODBEUTER).1
+	$(RM) $(DESTDIR)$(prefix)/bin/$(NEWSBOAT)
+	$(RM) $(DESTDIR)$(prefix)/bin/$(PODBOAT)
+	$(RM) $(DESTDIR)$(mandir)/man1/$(NEWSBOAT).1
+	$(RM) $(DESTDIR)$(mandir)/man1/$(PODBOAT).1
 	$(RM) -rf $(DESTDIR)$(docdir)
 	$(RM) -r $(DESTDIR)$(docdir)
 
-.PHONY: doc clean distclean all test test-rss extract install uninstall regenerate-parser clean-newsbeuter \
-	clean-podbeuter clean-libbeuter clean-librsspp clean-libfilter clean-doc install-mo msgmerge clean-mo \
+.PHONY: doc clean distclean all test test-rss extract install uninstall regenerate-parser clean-newsboat \
+	clean-podboat clean-libboat clean-librsspp clean-libfilter clean-doc install-mo msgmerge clean-mo \
 	test-clean config cppcheck
 
 # the following targets are i18n/l10n-related:
@@ -271,8 +271,8 @@ test: test/test
 
 TEST_SRCS:=$(shell ls test/*.cpp)
 TEST_OBJS:=$(patsubst %.cpp,%.o,$(TEST_SRCS))
-test/test: $(LIB_OUTPUT) $(NEWSBEUTER_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) $(TEST_OBJS) test/test-helpers.h
-	$(CXX) $(CXXFLAGS) -o test/test $(TEST_OBJS) src/*.o $(NEWSBEUTER_LIBS) $(LDFLAGS)
+test/test: $(LIB_OUTPUT) $(NEWSBOAT_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) $(TEST_OBJS) test/test-helpers.h
+	$(CXX) $(CXXFLAGS) -o test/test $(TEST_OBJS) src/*.o $(NEWSBOAT_LIBS) $(LDFLAGS)
 
 test-clean:
 	$(RM) test/test test/*.o

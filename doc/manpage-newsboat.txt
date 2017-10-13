@@ -82,13 +82,13 @@ include::chapter-firststeps.txt[]
 CONFIGURATION COMMANDS
 ----------------------
 
-include::newsbeuter-cfgcmds.txt[]
+include::newsboat-cfgcmds.txt[]
 
 
 AVAILABLE OPERATIONS
 ----------------------
 
-include::newsbeuter-keycmds.txt[]
+include::newsboat-keycmds.txt[]
 
 
 TAGGING

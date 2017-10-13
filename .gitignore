@@ -10,10 +10,10 @@ test/testlog.txt
 xlicense.h
 html/*
 *.info
-doc/newsbeuter-cfgcmds.txt
-doc/newsbeuter-keycmds.txt
+doc/newsboat-cfgcmds.txt
+doc/newsboat-keycmds.txt
 doc/newsboat.1
-doc/podbeuter-cfgcmds.txt
+doc/podboat-cfgcmds.txt
 doc/podboat.1
 doc/xhtml/*
 doc/example-config

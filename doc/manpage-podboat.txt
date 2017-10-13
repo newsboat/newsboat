@@ -51,7 +51,7 @@ include::chapter-podcasts.txt[]
 CONFIGURATION COMMANDS
 ----------------------
 
-include::podbeuter-cfgcmds.txt[]
+include::podboat-cfgcmds.txt[]
 
 
 XDG Base Directory Support
