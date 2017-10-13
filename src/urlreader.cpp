@@ -7,7 +7,7 @@
 #include <sys/utsname.h>
 #include <config.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 urlreader::urlreader() { }
 urlreader::~urlreader() { }

@@ -14,9 +14,9 @@
 #include <exceptions.h>
 #include <config.h>
 
-using namespace podbeuter;
+using namespace podboat;
 
-namespace newsbeuter {
+namespace newsboat {
 
 colormanager::colormanager() : colors_loaded_(false) { }
 
@@ -82,7 +82,7 @@ void colormanager::dump_config(std::vector<std::string>& config_output) {
  * this is podboat-specific color management
  * TODO: refactor this
  */
-void colormanager::set_pb_colors(podbeuter::pb_view * v) {
+void colormanager::set_pb_colors(podboat::pb_view * v) {
 	auto fgcit = fg_colors.begin();
 	auto bgcit = bg_colors.begin();
 	auto attit = attributes.begin();

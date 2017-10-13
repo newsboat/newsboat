@@ -19,7 +19,7 @@
 #include <grp.h>
 
 
-namespace newsbeuter {
+namespace newsboat {
 
 filebrowser_formaction::filebrowser_formaction(view * vv, std::string formstr)
 	: formaction(vv,formstr), quit(false)

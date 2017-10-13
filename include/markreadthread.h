@@ -1,10 +1,10 @@
-#ifndef MARKREADTHREAD_H_
-#define MARKREADTHREAD_H_
+#ifndef NEWSBOAT_MARKREADTHREAD_H_
+#define NEWSBOAT_MARKREADTHREAD_H_
 
 #include <thread>
 #include <ttrss_api.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class controller;
 
@@ -21,4 +21,4 @@ class markreadthread {
 
 }
 
-#endif /*MARKREADTHREAD_H_*/
+#endif /* NEWSBOAT_MARKREADTHREAD_H_ */

@@ -22,7 +22,7 @@
 
 // for reference, see https://github.com/theoldreader/api
 
-namespace newsbeuter {
+namespace newsboat {
 
 oldreader_api::oldreader_api(configcontainer * c) : remote_api(c) {
 	// TODO

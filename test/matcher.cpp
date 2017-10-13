@@ -3,7 +3,7 @@
 #include <matcher.h>
 #include <exceptions.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 struct testmatchable : public matchable {
 	virtual bool has_attribute(const std::string& attribname) {

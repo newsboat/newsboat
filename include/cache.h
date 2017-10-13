@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_CACHE__H
-#define NEWSBEUTER_CACHE__H
+#ifndef NEWSBOAT_CACHE_H_
+#define NEWSBOAT_CACHE_H_
 
 #include <sqlite3.h>
 #include <rss.h>
@@ -7,7 +7,7 @@
 #include <mutex>
 #include <unordered_set>
 
-namespace newsbeuter {
+namespace newsboat {
 
 typedef std::vector<std::string> schema_queries_list;
 
@@ -70,5 +70,4 @@ class cache {
 
 }
 
-
-#endif
+#endif /* NEWSBOAT_CACHE_H_ */

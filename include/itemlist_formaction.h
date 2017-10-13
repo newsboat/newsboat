@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_ITEMLIST_FORMACTION__H
-#define NEWSBEUTER_ITEMLIST_FORMACTION__H
+#ifndef NEWSBOAT_ITEMLIST_FORMACTION_H_
+#define NEWSBOAT_ITEMLIST_FORMACTION_H_
 
 #include <list_formaction.h>
 #include <history.h>
@@ -8,7 +8,7 @@
 #include <assert.h>
 #include <listformatter.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 typedef std::pair<std::shared_ptr<rss_item>, unsigned int> itemptr_pos_pair;
 
@@ -138,4 +138,4 @@ class itemlist_formaction : public list_formaction {
 
 }
 
-#endif
+#endif /* NEWSBOAT_ITEMLIST_FORMACTION_H_ */

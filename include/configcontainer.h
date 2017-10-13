@@ -1,11 +1,11 @@
-#ifndef CONFIGCONTAINER_H_
-#define CONFIGCONTAINER_H_
+#ifndef NEWSBOAT_CONFIGCONTAINER_H_
+#define NEWSBOAT_CONFIGCONTAINER_H_
 
 #include <configparser.h>
 
 #include <unordered_set>
 
-namespace newsbeuter {
+namespace newsboat {
 
 
 enum class configdata_t { INVALID, BOOL, INT, STR, PATH, ALIAS, ENUM };
@@ -57,4 +57,4 @@ class configcontainer : public config_action_handler {
 
 }
 
-#endif /*CONFIGCONTAINER_H_*/
+#endif /* NEWSBOAT_CONFIGCONTAINER_H_ */

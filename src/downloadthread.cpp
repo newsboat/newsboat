@@ -1,7 +1,7 @@
 #include <downloadthread.h>
 #include <logger.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 downloadthread::downloadthread(controller * c, std::vector<int> * idxs) : ctrl(c) {
 	if (idxs)

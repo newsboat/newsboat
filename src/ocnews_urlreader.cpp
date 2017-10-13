@@ -1,7 +1,7 @@
 #include <ocnews_api.h>
 #include <logger.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 ocnews_urlreader::ocnews_urlreader(const std::string& url_file, remote_api * a) : file(url_file), api(a) { }
 

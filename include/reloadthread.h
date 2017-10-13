@@ -1,11 +1,11 @@
-#ifndef RELOADTHREAD_H_
-#define RELOADTHREAD_H_
+#ifndef NEWSBOAT_RELOADTHREAD_H_
+#define NEWSBOAT_RELOADTHREAD_H_
 
 #include <thread>
 #include <controller.h>
 #include <configcontainer.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class reloadthread {
 	public:
@@ -22,4 +22,4 @@ class reloadthread {
 
 }
 
-#endif
+#endif /* NEWSBOAT_RELOADTHREAD_H_ */

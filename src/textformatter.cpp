@@ -7,7 +7,7 @@
 #include <limits.h>
 #include <algorithm>
 
-namespace newsbeuter {
+namespace newsboat {
 
 textformatter::textformatter() { }
 

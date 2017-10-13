@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_RSS__H
-#define NEWSBEUTER_RSS__H
+#ifndef NEWSBOAT_RSS_H_
+#define NEWSBOAT_RSS_H_
 
 #include <string>
 #include <vector>
@@ -12,7 +12,7 @@
 #include <memory>
 #include <unordered_map>
 
-namespace newsbeuter {
+namespace newsboat {
 
 typedef std::pair<std::string, matcher *> feedurl_expr_pair;
 
@@ -367,5 +367,4 @@ class rss_ignores : public config_action_handler {
 
 }
 
-
-#endif
+#endif /* NEWSBOAT_RSS_H_ */

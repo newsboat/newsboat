@@ -1,11 +1,11 @@
-#ifndef PODBEUTER_QUEUELOADER__H
-#define PODBEUTER_QUEUELOADER__H
+#ifndef PODBOAT_QUEUELOADER_H_
+#define PODBOAT_QUEUELOADER_H_
 
 #include <vector>
 #include <download.h>
 #include <pb_controller.h>
 
-namespace podbeuter {
+namespace podboat {
 
 class queueloader {
 	public:
@@ -19,4 +19,4 @@ class queueloader {
 
 }
 
-#endif
+#endif /* PODBOAT_QUEUELOADER_H_ */

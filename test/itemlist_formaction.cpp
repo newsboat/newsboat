@@ -11,12 +11,12 @@
 
 #include <unistd.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 
 TEST_CASE("OP_OPEN displays article using an external pager", "[itemlist_formaction]") {
 	controller c;
-	newsbeuter::view v(&c);
+	newsboat::view v(&c);
 	TestHelpers::TempFile pagerfile;
 
 	std::string test_url = "http://test_url";
@@ -56,7 +56,7 @@ TEST_CASE("OP_OPEN displays article using an external pager", "[itemlist_formact
 
 TEST_CASE("OP_PURGE_DELETED purges previously deleted items", "[itemlist_formaction]") {
 	controller c;
-	newsbeuter::view v(&c);
+	newsboat::view v(&c);
 	configcontainer cfg;
 	cache rsscache(":memory:", &cfg);
 	std::shared_ptr<rss_feed> feed = std::make_shared<rss_feed>(&rsscache);
@@ -83,7 +83,7 @@ TEST_CASE("OP_PURGE_DELETED purges previously deleted items", "[itemlist_formact
 
 TEST_CASE("OP_OPENBROWSER_AND_MARK passes the url to the browser and marks read", "[itemlist_formaction]") {
 	controller c;
-	newsbeuter::view v(&c);
+	newsboat::view v(&c);
 	TestHelpers::TempFile browserfile;
 
 	std::string test_url = "http://test_url";
@@ -116,7 +116,7 @@ TEST_CASE("OP_OPENBROWSER_AND_MARK passes the url to the browser and marks read"
 
 TEST_CASE("OP_OPENINBROWSER passes the url to the browser", "[itemlist_formaction]") {
 	controller c;
-	newsbeuter::view v(&c);
+	newsboat::view v(&c);
 	TestHelpers::TempFile browserfile;
 	std::string test_url = "http://test_url";
 	std::string line;
@@ -145,7 +145,7 @@ TEST_CASE("OP_OPENINBROWSER passes the url to the browser", "[itemlist_formactio
 
 TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser", "[itemlist_formaction]"){
 	controller c;
-	newsbeuter::view v(&c);
+	newsboat::view v(&c);
 	TestHelpers::TempFile browserfile;
 	std::unordered_set<std::string> url_set;
 	std::string test_url = "http://test_url";
@@ -215,7 +215,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser", "[item
 
 TEST_CASE("OP_OPENALLUNREADINBROWSER_AND_MARK passes the url list to the browser and marks them read", "[itemlist_formaction]"){
 	controller c;
-	newsbeuter::view v(&c);
+	newsboat::view v(&c);
 	TestHelpers::TempFile browserfile;
 	std::unordered_set<std::string> url_set;
 	std::string test_url = "http://test_url";
@@ -286,7 +286,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER_AND_MARK passes the url list to the browser
 
 TEST_CASE("OP_SHOWURLS shows the article's properties", "[itemlist_formaction]") {
 	controller c;
-	newsbeuter::view v(&c);
+	newsboat::view v(&c);
 	configcontainer cfg;
 	cache rsscache(":memory:", &cfg);
 	TestHelpers::TempFile urlFile;
@@ -338,7 +338,7 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[itemlist_formaction]")
 
 TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command", "[itemlist_formaction]") {
 	controller c;
-	newsbeuter::view v(&c);
+	newsboat::view v(&c);
 	configcontainer * cfg = c.get_cfg();
 	cache rsscache(":memory:", cfg);
 	TestHelpers::TempFile bookmarkFile;
@@ -380,7 +380,7 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command", "[item
 
 TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags", "[itemlist_formaction]") {
 	controller c;
-	newsbeuter::view v(&c);
+	newsboat::view v(&c);
 	configcontainer * cfg = c.get_cfg();
 	cache rsscache(":memory:", cfg);
 
@@ -456,7 +456,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags", "[itemlist_form
 
 TEST_CASE("OP_SAVE writes an article's attributes to the specified file", "[itemlist_formaction]") {
 	controller c;
-	newsbeuter::view v(&c);
+	newsboat::view v(&c);
 	TestHelpers::TempFile saveFile;
 	configcontainer * cfg = c.get_cfg();
 	cache rsscache(":memory:", cfg);
@@ -497,11 +497,11 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file", "[item
 TEST_CASE("OP_HELP command is processed", "[itemlist_formaction]") {
 	controller c;
 	regexmanager regman;
-	newsbeuter::view v(&c);
+	newsboat::view v(&c);
 	configcontainer * cfg = c.get_cfg();
 	cache rsscache(":memory:", cfg);
 
-	keymap k(KM_NEWSBEUTER);
+	keymap k(KM_NEWSBOAT);
 	v.set_keymap(&k);
 
 	v.set_regexmanager(&regman);
@@ -523,11 +523,11 @@ TEST_CASE("OP_HELP command is processed", "[itemlist_formaction]") {
 TEST_CASE("OP_HARDQUIT command is processed", "[itemlist_formaction]") {
 	controller c;
 	regexmanager regman;
-	newsbeuter::view v(&c);
+	newsboat::view v(&c);
 	configcontainer * cfg = c.get_cfg();
 	cache rsscache(":memory:", cfg);
 
-	keymap k(KM_NEWSBEUTER);
+	keymap k(KM_NEWSBOAT);
 	v.set_keymap(&k);
 
 	v.set_regexmanager(&regman);
@@ -550,7 +550,7 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREVIOUS", "[itemlist_fo
 	controller c;
 	TestHelpers::TempFile articleFile;
 	regexmanager regman;
-	newsbeuter::view v(&c);
+	newsboat::view v(&c);
 	configcontainer * cfg = c.get_cfg();
 	cfg->set_configvalue("external-url-viewer", "tee > " + articleFile.getPath());
 	cache rsscache(":memory:", cfg);
@@ -560,7 +560,7 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREVIOUS", "[itemlist_fo
 	std::string second_article_title = "Second_Article";
 	std::string prefix_title = "Title: ";
 
-	keymap k(KM_NEWSBEUTER);
+	keymap k(KM_NEWSBOAT);
 	v.set_keymap(&k);
 
 	v.set_regexmanager(&regman);
@@ -600,11 +600,11 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREVIOUS", "[itemlist_fo
 TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles", "[itemlist_formaction]") {
 	controller c;
 	regexmanager regman;
-	newsbeuter::view v(&c);
+	newsboat::view v(&c);
 	configcontainer * cfg = c.get_cfg();
 	cache rsscache(":memory:", cfg);
 
-	keymap k(KM_NEWSBEUTER);
+	keymap k(KM_NEWSBOAT);
 	v.set_keymap(&k);
 
 	v.set_regexmanager(&regman);
@@ -634,7 +634,7 @@ TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles", "[itemli
 
 TEST_CASE("OP_PIPE_TO pipes an article's content to an external command", "[itemlist_formaction]") {
 	controller c;
-	newsbeuter::view v(&c);
+	newsboat::view v(&c);
 	TestHelpers::TempFile articleFile;
 	configcontainer * cfg = c.get_cfg();
 	cache rsscache(":memory:", cfg);

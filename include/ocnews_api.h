@@ -1,5 +1,5 @@
-#ifndef OCNEWS_API_H
-#define OCNEWS_API_H
+#ifndef NEWSBOAT_OCNEWS_API_H_
+#define NEWSBOAT_OCNEWS_API_H_
 
 #include <map>
 
@@ -9,7 +9,7 @@
 #include <urlreader.h>
 #include <rsspp.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class ocnews_api : public remote_api {
 	public:
@@ -46,4 +46,4 @@ class ocnews_urlreader : public urlreader {
 
 }
 
-#endif // OCNEWS_API_H
+#endif /* NEWSBOAT_OCNEWS_API_H_ */

@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_FEEDLIST_FORMACTION__H
-#define NEWSBEUTER_FEEDLIST_FORMACTION__H
+#ifndef NEWSBOAT_FEEDLIST_FORMACTION_H_
+#define NEWSBOAT_FEEDLIST_FORMACTION_H_
 
 #include <list_formaction.h>
 #include <matcher.h>
@@ -7,7 +7,7 @@
 #include <regexmanager.h>
 #include <view.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 typedef std::pair<std::shared_ptr<rss_feed>, unsigned int> feedptr_pos_pair;
 
@@ -96,5 +96,4 @@ class feedlist_formaction : public list_formaction {
 
 }
 
-
-#endif
+#endif /* NEWSBOAT_FEEDLIST_FORMACTION_H_ */

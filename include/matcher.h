@@ -1,9 +1,9 @@
-#ifndef NEWSBEUTER_MATCHER__H
-#define NEWSBEUTER_MATCHER__H
+#ifndef NEWSBOAT_MATCHER_H_
+#define NEWSBOAT_MATCHER_H_
 
 #include <FilterParser.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class matchable {
 	public:
@@ -38,4 +38,4 @@ class matcher {
 
 }
 
-#endif
+#endif /* NEWSBOAT_MATCHER_H_ */

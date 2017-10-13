@@ -1,10 +1,10 @@
-#ifndef NEWSBEUTER_select_formaction__H
-#define NEWSBEUTER_select_formaction__H
+#ifndef NEWSBOAT_SELECT_FORMACTION_H_
+#define NEWSBOAT_SELECT_FORMACTION_H_
 
 #include <formaction.h>
 #include <filtercontainer.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class select_formaction : public formaction {
 	public:
@@ -43,4 +43,4 @@ class select_formaction : public formaction {
 
 }
 
-#endif
+#endif /* NEWSBOAT_SELECT_FORMACTION_H_ */

@@ -1,5 +1,5 @@
-#ifndef REGEXMANAGER__H
-#define REGEXMANAGER__H
+#ifndef NEWSBOAT_REGEXMANAGER_H_
+#define NEWSBOAT_REGEXMANAGER_H_
 
 #include <configparser.h>
 #include <vector>
@@ -9,7 +9,7 @@
 #include <utility>
 #include <memory>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class regexmanager : public config_action_handler {
 	public:
@@ -37,4 +37,4 @@ class regexmanager : public config_action_handler {
 
 }
 
-#endif
+#endif /* NEWSBOAT_REGEXMANAGER_H_ */

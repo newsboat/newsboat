@@ -1,5 +1,3 @@
-# Copyright (C) Newsbeuter contributors
-# This file is distributed under the same license as the newsbeuter package
 # joshyu  <joshyupeng@gmail.com>, 2007.
 #
 msgid ""

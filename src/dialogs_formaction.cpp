@@ -8,7 +8,7 @@
 
 #include <cstdio>
 
-namespace newsbeuter {
+namespace newsboat {
 
 dialogs_formaction::dialogs_formaction(view * vv, std::string formstr) : formaction(vv, formstr), update_list(true) {
 }

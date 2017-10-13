@@ -1,9 +1,9 @@
-#ifndef NEWSBEUTER_FILEBROWSER_FORMACTION__H
-#define NEWSBEUTER_FILEBROWSER_FORMACTION__H
+#ifndef NEWSBOAT_FILEBROWSER_FORMACTION_H_
+#define NEWSBOAT_FILEBROWSER_FORMACTION_H_
 
 #include <formaction.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class filebrowser_formaction : public formaction {
 	public:
@@ -44,5 +44,4 @@ class filebrowser_formaction : public formaction {
 
 }
 
-
-#endif
+#endif /* NEWSBOAT_FILEBROWSER_FORMACTION_H_ */

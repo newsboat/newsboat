@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_HTMLRENDERER__H
-#define NEWSBEUTER_HTMLRENDERER__H
+#ifndef NEWSBOAT_HTMLRENDERER_H_
+#define NEWSBOAT_HTMLRENDERER_H_
 
 #include <textformatter.h>
 #include <vector>
@@ -7,7 +7,7 @@
 #include <istream>
 #include <map>
 
-namespace newsbeuter {
+namespace newsboat {
 
 enum class link_type { HREF, IMG, EMBED };
 enum class htmltag {
@@ -97,4 +97,4 @@ class htmlrenderer {
 
 }
 
-#endif
+#endif /* NEWSBOAT_HTMLRENDERER_H_ */

@@ -3,7 +3,7 @@
 #include <regexmanager.h>
 #include <exceptions.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 TEST_CASE("RegexManager throws on invalid `highlight' definition",
           "[regexmanager]")

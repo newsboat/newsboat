@@ -1,10 +1,5 @@
-/* rsspp - Copyright (C) 2008-2012 Andreas Krennmair <ak@newsbeuter.org>
- * Licensed under the MIT/X Consortium License. See file LICENSE
- * for more information.
- */
-
-#ifndef RSSPP_H
-#define RSSPP_H
+#ifndef NEWSBOAT_RSSPP_H_
+#define NEWSBOAT_RSSPP_H_
 
 #include <string>
 #include <vector>
@@ -87,7 +82,7 @@ class parser {
 				curl_proxytype proxy_type = CURLPROXY_HTTP,
 				const bool ssl_verify = true);
 		~parser();
-		feed parse_url(const std::string& url, time_t lastmodified = 0, const std::string& etag = "", newsbeuter::remote_api * api = 0, const std::string& cookie_cache = "", CURL *ehandle = 0);
+		feed parse_url(const std::string& url, time_t lastmodified = 0, const std::string& etag = "", newsboat::remote_api * api = 0, const std::string& cookie_cache = "", CURL *ehandle = 0);
 		feed parse_buffer(const std::string& buffer, const std::string& url = "");
 		feed parse_file(const std::string& filename);
 		time_t get_last_modified() {
@@ -115,5 +110,4 @@ class parser {
 
 }
 
-
-#endif
+#endif /* NEWSBOAT_RSSPP_H_ */

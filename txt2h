@@ -11,13 +11,15 @@ fi
 filename="$1"
 extension="$2"
 id="`basename \"$filename\" \"$extension\"`"
+uppercase_id="`echo \"${id}\" | tr 'a-z' 'A-Z'`"
+define="NEWSBOAT_${uppercase_id}_H_"
 
-printf "#ifndef ${id}__h_included\n"
-printf "#define ${id}__h_included\n"
+printf "#ifndef ${define}\n"
+printf "#define ${define}\n"
 printf "\n"
 printf "static char ${id}_str[] = \"\" "
 
 cat "$filename" | sed -e 's/"/\\"/g; s/\(.*\)/"\1\\n"/'
 
-printf ";\n"
-printf "#endif\n"
+printf ";\n\n"
+printf "#endif /* ${define} */\n"

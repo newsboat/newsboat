@@ -1,10 +1,10 @@
-#ifndef NEWSBEUTER_HISTORY__H
-#define NEWSBEUTER_HISTORY__H
+#ifndef NEWSBOAT_HISTORY_H_
+#define NEWSBOAT_HISTORY_H_
 
 #include <vector>
 #include <string>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class history {
 	public:
@@ -22,4 +22,4 @@ class history {
 
 }
 
-#endif
+#endif /* NEWSBOAT_HISTORY_H_ */

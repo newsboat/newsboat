@@ -1,7 +1,7 @@
 #include <list_formaction.h>
 #include <view.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 list_formaction::list_formaction(view * v, std::string formstr)
 :formaction(v, formstr)

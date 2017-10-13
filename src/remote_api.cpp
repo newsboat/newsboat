@@ -6,7 +6,7 @@
 #include <remote_api.h>
 #include <utils.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 const std::string remote_api::read_password(const std::string& file) {
 	glob_t exp;

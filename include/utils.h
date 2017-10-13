@@ -1,5 +1,5 @@
-#ifndef UTIL_H_
-#define UTIL_H_
+#ifndef NEWSBOAT_UTIL_H_
+#define NEWSBOAT_UTIL_H_
 
 #include <vector>
 #include <string>
@@ -11,7 +11,7 @@
 #include <configcontainer.h>
 #include <libxml/parser.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 // wrapped curl handle for exception safety and so on
 // see also: https://github.com/gsauthof/ccurl
@@ -159,4 +159,4 @@ class scope_measure {
 
 }
 
-#endif /*UTIL_H_*/
+#endif /* NEWSBOAT_UTIL_H_ */

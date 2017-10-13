@@ -1,11 +1,11 @@
-#ifndef NEWSBEUTER_FEEDHQ_API__H
-#define NEWSBEUTER_FEEDHQ_API__H
+#ifndef NEWSBOAT_FEEDHQ_API_H_
+#define NEWSBOAT_FEEDHQ_API_H_
 
 #include <remote_api.h>
 #include <urlreader.h>
 #include <cache.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class feedhq_api : public remote_api {
 	public:
@@ -45,4 +45,4 @@ class feedhq_urlreader : public urlreader {
 
 }
 
-#endif
+#endif /* NEWSBOAT_FEEDHQ_API_H_ */

@@ -24,7 +24,7 @@
 #include <queueloader.h>
 #include <logger.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 static std::string lock_file = "pb-lock.pid";
 
@@ -35,7 +35,7 @@ static void ctrl_c_action(int sig) {
 	::exit(EXIT_FAILURE);
 }
 
-namespace podbeuter {
+namespace podboat {
 
 #define LOCK_SUFFIX ".lock"
 
@@ -217,7 +217,7 @@ int pb_controller::run(int argc, char * argv[]) {
 	colormanager * colorman = new colormanager();
 	colorman->register_commands(cfgparser);
 
-	keymap keys(KM_PODBEUTER);
+	keymap keys(KM_PODBOAT);
 	cfgparser.register_handler("bind-key", &keys);
 	cfgparser.register_handler("unbind-key", &keys);
 

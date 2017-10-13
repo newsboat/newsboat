@@ -8,7 +8,7 @@
 #include <markreadthread.h>
 #include <strprintf.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 ttrss_api::ttrss_api(configcontainer * c) : remote_api(c) {
 	single = (cfg->get_configvalue("ttrss-mode") == "single");

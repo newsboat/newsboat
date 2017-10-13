@@ -2,7 +2,7 @@
 
 #include <history.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 TEST_CASE("History can be iterated on in any direction", "[history]") {
 	history h;

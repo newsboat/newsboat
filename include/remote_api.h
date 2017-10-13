@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_REMOTE_API__H
-#define NEWSBEUTER_REMOTE_API__H
+#ifndef NEWSBOAT_REMOTE_API_H_
+#define NEWSBOAT_REMOTE_API_H_
 
 #include <configcontainer.h>
 #include <string>
@@ -7,7 +7,7 @@
 #include <vector>
 #include <curl/curl.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 typedef std::pair<std::string, std::vector<std::string>> tagged_feedurl;
 
@@ -36,4 +36,4 @@ class remote_api {
 
 }
 
-#endif
+#endif /* NEWSBOAT_REMOTE_API_H_ */

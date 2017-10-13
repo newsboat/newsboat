@@ -56,7 +56,7 @@ extern "C" {
 #include <cstring>
 #include <cstdio>
 
-namespace newsbeuter {
+namespace newsboat {
 
 view::view(controller * c) : ctrl(c), cfg(0), keys(0), current_formaction(0), is_inside_qna(false), is_inside_cmdline(false), tab_count(0) {
 	if (getenv("ESCDELAY") == nullptr) {

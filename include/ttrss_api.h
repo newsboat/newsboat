@@ -1,12 +1,12 @@
-#ifndef NEWSBEUTER_TTRSS_API__H
-#define NEWSBEUTER_TTRSS_API__H
+#ifndef NEWSBOAT_TTRSS_API_H_
+#define NEWSBOAT_TTRSS_API_H_
 
 #include <rsspp.h>
 #include <remote_api.h>
 #include <urlreader.h>
 #include <cache.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class ttrss_api : public remote_api {
 	public:
@@ -48,4 +48,4 @@ class ttrss_urlreader : public urlreader {
 
 }
 
-#endif
+#endif /* NEWSBOAT_TTRSS_API_H_ */

@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_ITEMVIEW_FORMACTION__H
-#define NEWSBEUTER_ITEMVIEW_FORMACTION__H
+#ifndef NEWSBOAT_ITEMVIEW_FORMACTION_H_
+#define NEWSBOAT_ITEMVIEW_FORMACTION_H_
 
 #include <formaction.h>
 #include <htmlrenderer.h>
@@ -7,7 +7,7 @@
 #include <regexmanager.h>
 #include <rss.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class itemlist_formaction;
 
@@ -68,4 +68,4 @@ class itemview_formaction : public formaction {
 
 }
 
-#endif
+#endif /* NEWSBOAT_ITEMVIEW_FORMACTION_H_ */

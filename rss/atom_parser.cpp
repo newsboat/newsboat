@@ -1,8 +1,3 @@
-/* rsspp - Copyright (C) 2008-2012 Andreas Krennmair <ak@newsbeuter.org>
- * Licensed under the MIT/X Consortium License. See file LICENSE
- * for more information.
- */
-
 #include <config.h>
 #include <rsspp_internal.h>
 #include <utils.h>
@@ -44,7 +39,7 @@ void atom_parser::parse_feed(feed& f, xmlNode * rootNode) {
 		} else if (node_is(node, "link", ns)) {
 			std::string rel = get_prop(node, "rel");
 			if (rel == "alternate") {
-				f.link = newsbeuter::utils::absolute_url(globalbase, get_prop(node, "href"));
+				f.link = newsboat::utils::absolute_url(globalbase, get_prop(node, "href"));
 			}
 		} else if (node_is(node, "updated", ns)) {
 			f.pubDate = w3cdtf_to_rfc822(get_content(node));
@@ -105,7 +100,7 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 		} else if (node_is(node, "link", ns)) {
 			std::string rel = get_prop(node, "rel");
 			if (rel == "" || rel == "alternate") {
-				it.link = newsbeuter::utils::absolute_url(base, get_prop(node, "href"));
+				it.link = newsboat::utils::absolute_url(base, get_prop(node, "href"));
 			} else if (rel == "enclosure") {
 				it.enclosure_url = get_prop(node, "href");
 				it.enclosure_type = get_prop(node, "type");

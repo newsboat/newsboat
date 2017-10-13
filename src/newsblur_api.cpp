@@ -11,7 +11,7 @@
 
 #define NEWSBLUR_ITEMS_PER_PAGE 6
 
-namespace newsbeuter {
+namespace newsboat {
 
 newsblur_api::newsblur_api(configcontainer * c) : remote_api(c) {
 	api_location = cfg->get_configvalue("newsblur-url");

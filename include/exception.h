@@ -1,9 +1,9 @@
-#ifndef AK_EXCEPTION__H
-#define AK_EXCEPTION__H
+#ifndef NEWSBOAT_EXCEPTION_H_
+#define NEWSBOAT_EXCEPTION_H_
 
 #include <exception>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class exception : public std::exception {
 	public:
@@ -16,5 +16,4 @@ class exception : public std::exception {
 
 }
 
-
-#endif
+#endif /* NEWSBOAT_EXCEPTION_H_ */

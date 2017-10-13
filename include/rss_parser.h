@@ -1,5 +1,5 @@
-#ifndef RSS_PARSER__H
-#define RSS_PARSER__H
+#ifndef NEWSBOAT_RSS_PARSER_H_
+#define NEWSBOAT_RSS_PARSER_H_
 
 #include <string>
 
@@ -7,7 +7,7 @@
 #include <rsspp.h>
 #include <remote_api.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class configcontainer;
 class cache;
@@ -69,4 +69,4 @@ class rss_parser {
 
 }
 
-#endif
+#endif /* NEWSBOAT_RSS_PARSER_H_ */

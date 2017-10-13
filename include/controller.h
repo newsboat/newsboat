@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_CONTROLLER__H
-#define NEWSBEUTER_CONTROLLER__H
+#ifndef NEWSBOAT_CONTROLLER_H_
+#define NEWSBOAT_CONTROLLER_H_
 
 #include <urlreader.h>
 #include <rss.h>
@@ -11,7 +11,7 @@
 #include <remote_api.h>
 #include <libxml/tree.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 extern int ctrl_c_hit;
 extern std::string lock_file;
@@ -156,5 +156,4 @@ class controller {
 
 }
 
-
-#endif
+#endif /* NEWSBOAT_CONTROLLER_H_ */

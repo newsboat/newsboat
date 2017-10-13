@@ -1,5 +1,5 @@
-#ifndef TEXTFORMATTER__H
-#define TEXTFORMATTER__H
+#ifndef NEWSBOAT_TEXTFORMATTER_H_
+#define NEWSBOAT_TEXTFORMATTER_H_
 
 #include <climits>
 #include <vector>
@@ -7,7 +7,7 @@
 #include <utility>
 #include <regexmanager.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 /*
  * LineType specifies the way wrapping should be handled.
@@ -52,4 +52,4 @@ class textformatter {
 
 }
 
-#endif
+#endif /* NEWSBOAT_TEXTFORMATTER_H_ */

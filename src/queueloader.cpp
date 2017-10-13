@@ -10,9 +10,9 @@
 
 #include <unistd.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
-namespace podbeuter {
+namespace podboat {
 
 queueloader::queueloader(const std::string& file, pb_controller * c) : queuefile(file), ctrl(c) {
 }

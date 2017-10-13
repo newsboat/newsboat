@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_CONFIGREADER__H
-#define NEWSBEUTER_CONFIGREADER__H
+#ifndef NEWSBOAT_CONFIGREADER_H_
+#define NEWSBOAT_CONFIGREADER_H_
 
 #include <vector>
 #include <map>
@@ -10,7 +10,7 @@
 
 #include <libxml/tree.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class urlreader {
 	public:
@@ -56,5 +56,4 @@ class opml_urlreader : public urlreader {
 
 }
 
-
-#endif
+#endif /* NEWSBOAT_CONFIGREADER_H_ */

@@ -8,7 +8,7 @@
 
 #include <sstream>
 
-namespace newsbeuter {
+namespace newsboat {
 
 /*
  * The urlview_formaction is probably the simplest dialog of all. It

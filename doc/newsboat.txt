@@ -1096,7 +1096,7 @@ include::chapter-podcasts.txt[]
 `10`15`15`40`20~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Configuration Command|Argument(s)|Default|Description|Example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-include::podbeuter-cmds.dsv[]
+include::podboat-cmds.dsv[]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .Available Operations in Podboat

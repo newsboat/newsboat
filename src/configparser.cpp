@@ -16,7 +16,7 @@
 #include <cstdlib>
 
 
-namespace newsbeuter {
+namespace newsboat {
 
 configparser::configparser() {
 	register_handler("include", this);

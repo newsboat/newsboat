@@ -1,9 +1,9 @@
-#ifndef PODBEUTER_DOWNLOAD__H
-#define PODBEUTER_DOWNLOAD__H
+#ifndef PODBOAT_DOWNLOAD_H_
+#define PODBOAT_DOWNLOAD_H_
 
 #include <string>
 
-namespace podbeuter {
+namespace podboat {
 
 enum class dlstatus {
 	QUEUED = 0,
@@ -58,4 +58,4 @@ class download {
 
 }
 
-#endif
+#endif /* PODBOAT_DOWNLOAD_H_ */

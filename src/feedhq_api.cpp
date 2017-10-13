@@ -20,7 +20,7 @@
 #define FEEDHQ_API_EDIT_TAG_URL		FEEDHQ_API_PREFIX "edit-tag"
 #define FEEDHQ_API_TOKEN_URL			FEEDHQ_API_PREFIX "token"
 
-namespace newsbeuter {
+namespace newsboat {
 
 feedhq_api::feedhq_api(configcontainer * c) : remote_api(c) {
 	// TODO

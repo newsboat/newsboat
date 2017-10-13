@@ -2,7 +2,7 @@
 
 #include <textformatter.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 TEST_CASE("lines marked as `wrappable` are wrapped to fit width",
           "[textformatter]") {

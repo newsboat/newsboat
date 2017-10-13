@@ -1,17 +1,17 @@
-#ifndef COLORMANAGER_H_
-#define COLORMANAGER_H_
+#ifndef NEWSBOAT_COLORMANAGER_H_
+#define NEWSBOAT_COLORMANAGER_H_
 
 #include <configparser.h>
 #include <vector>
 #include <map>
 
-namespace podbeuter {
+namespace podboat {
 class pb_view;
 }
 
 class view;
 
-namespace newsbeuter {
+namespace newsboat {
 
 
 class colormanager : public config_action_handler {
@@ -24,7 +24,7 @@ class colormanager : public config_action_handler {
 		inline bool colors_loaded() {
 			return colors_loaded_;
 		}
-		void set_pb_colors(podbeuter::pb_view * v);
+		void set_pb_colors(podboat::pb_view * v);
 		inline std::map<std::string,std::string>& get_fgcolors() {
 			return fg_colors;
 		}
@@ -44,4 +44,4 @@ class colormanager : public config_action_handler {
 
 }
 
-#endif
+#endif /* NEWSBOAT_COLORMANAGER_H_ */

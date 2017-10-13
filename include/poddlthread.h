@@ -1,5 +1,5 @@
-#ifndef PODBEUTER_PODDLTHREAD__H
-#define PODBEUTER_PODDLTHREAD__H
+#ifndef PODBOAT_PODDLTHREAD_H_
+#define PODBOAT_PODDLTHREAD_H_
 
 #include <thread>
 #include <download.h>
@@ -11,11 +11,11 @@
 
 #include <configcontainer.h>
 
-namespace podbeuter {
+namespace podboat {
 
 class poddlthread {
 	public:
-		poddlthread(download * dl_, newsbeuter::configcontainer *);
+		poddlthread(download * dl_, newsboat::configcontainer *);
 		virtual ~poddlthread();
 		size_t write_data(void * buffer, size_t size, size_t nmemb);
 		int progress(double dlnow, double dltotal);
@@ -29,10 +29,9 @@ class poddlthread {
 		timeval tv1;
 		timeval tv2;
 		size_t bytecount;
-		newsbeuter::configcontainer * cfg;
+		newsboat::configcontainer * cfg;
 };
 
 }
 
-
-#endif
+#endif /* PODBOAT_PODDLTHREAD_H_ */

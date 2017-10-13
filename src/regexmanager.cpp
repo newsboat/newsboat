@@ -6,7 +6,7 @@
 #include <exceptions.h>
 #include <config.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 regexmanager::regexmanager() {
 	// this creates the entries in the map. we need them there to have the "all" location work.

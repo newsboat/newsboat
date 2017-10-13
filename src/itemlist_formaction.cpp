@@ -16,7 +16,7 @@
 
 #define FILTER_UNREAD_ITEMS "unread != \"no\""
 
-namespace newsbeuter {
+namespace newsboat {
 
 itemlist_formaction::itemlist_formaction(view * vv, std::string formstr)
 	: list_formaction(vv,formstr), pos(0), apply_filter(false),

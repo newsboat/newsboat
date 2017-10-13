@@ -1,7 +1,7 @@
 #include <fstream>
 #include <history.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 history::history() : idx(0) { }
 

@@ -5,7 +5,7 @@
 #include <strprintf.h>
 #include <config.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 filtercontainer::~filtercontainer() { }
 

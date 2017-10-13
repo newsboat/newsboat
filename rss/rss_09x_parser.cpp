@@ -1,14 +1,9 @@
-/* rsspp - Copyright (C) 2008-2012 Andreas Krennmair <ak@newsbeuter.org>
- * Licensed under the MIT/X Consortium License. See file LICENSE
- * for more information.
- */
-
 #include <config.h>
 #include <rsspp_internal.h>
 #include <utils.h>
 #include <cstring>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 namespace rsspp {
 

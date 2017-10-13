@@ -11,7 +11,7 @@
 
 #include <config.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 /*
  * This method implements an "XML" pull parser. In reality, it's more liberal

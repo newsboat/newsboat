@@ -3,7 +3,7 @@
 #include <config.h>
 #include <string>
 
-namespace podbeuter {
+namespace podboat {
 
 /*
  * the download class represents a single download entry in podboat.

@@ -5,7 +5,7 @@
 #include <configcontainer.h>
 #include <rss_parser.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 TEST_CASE("items in search result can be marked read", "[cache]") {
 	configcontainer cfg;

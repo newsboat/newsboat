@@ -1,5 +1,5 @@
-#ifndef PODBEUTER_CONTROLLER__H
-#define PODBEUTER_CONTROLLER__H
+#ifndef PODBOAT_CONTROLLER_H_
+#define PODBOAT_CONTROLLER_H_
 
 #include <string>
 #include <configcontainer.h>
@@ -7,7 +7,7 @@
 #include <queueloader.h>
 #include <vector>
 
-namespace podbeuter {
+namespace podboat {
 
 class pb_view;
 
@@ -49,7 +49,7 @@ class pb_controller {
 
 		void play_file(const std::string& str);
 
-		inline newsbeuter::configcontainer * get_cfgcont() {
+		inline newsboat::configcontainer * get_cfgcont() {
 			return cfg;
 		}
 
@@ -59,7 +59,7 @@ class pb_controller {
 		pb_view * v;
 		std::string config_file;
 		std::string queue_file;
-		newsbeuter::configcontainer * cfg;
+		newsboat::configcontainer * cfg;
 		bool view_update_;
 		std::vector<download> downloads_;
 
@@ -76,4 +76,4 @@ class pb_controller {
 
 }
 
-#endif
+#endif /* PODBOAT_CONTROLLER_H_ */
