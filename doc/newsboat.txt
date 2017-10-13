@@ -50,14 +50,14 @@ themselves depend on other libraries. These dependencies are not listed here.
 Please also be aware that you need a recent C++ compiler.
 
 - GCC 4.9 or newer, or Clang 3.6 or newer
-- [STFL (version 0.21 or newer)](http://www.clifford.at/stfl/)
-- [SQLite3 (version 3.5 or newer)](http://www.sqlite.org/download.html)
-- [libcurl (version 7.18.0 or newer)](http://curl.haxx.se/download.html)
-- GNU gettext (on systems that don't provide gettext in the libc):
-  ftp://ftp.gnu.org/gnu/gettext/
-- [pkg-config](http://pkg-config.freedesktop.org/wiki/)
-- [libxml2](http://xmlsoft.org/downloads.html)
-- [json-c (version 0.11 or newer)](https://github.com/json-c/json-c/wiki)
+- http://www.clifford.at/stfl/[STFL (version 0.21 or newer)]
+- http://www.sqlite.org/download.html[SQLite3 (version 3.5 or newer)]
+- http://curl.haxx.se/download.html[libcurl (version 7.18.0 or newer)]
+- ftp://ftp.gnu.org/gnu/gettext/[GNU gettext (on systems that don't provide
+  gettext in the libc)]
+- http://pkg-config.freedesktop.org/wiki/[pkg-config]
+- http://xmlsoft.org/downloads.html[libxml2]
+- https://github.com/json-c/json-c/wiki[json-c (version 0.11 or newer)]
 
 If you intend to modify and regenerate the filter language parser, you will also
 need Coco/R for C++, which you can download from
