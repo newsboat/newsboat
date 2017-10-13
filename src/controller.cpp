@@ -568,7 +568,7 @@ void controller::run(int argc, char * argv[]) {
 	cfg.register_commands(cfgparser);
 	colorman.register_commands(cfgparser);
 
-	keymap keys(KM_NEWSBEUTER);
+	keymap keys(KM_NEWSBOAT);
 	cfgparser.register_handler("bind-key",&keys);
 	cfgparser.register_handler("unbind-key",&keys);
 	cfgparser.register_handler("macro", &keys);

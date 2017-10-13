@@ -110,7 +110,7 @@ static op_desc opdescs[] = {
 	{
 		OP_HELP, "help", "?",
 		_("Open help dialog"),
-		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE | KM_PODBEUTER
+		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE | KM_PODBOAT
 	},
 	{
 		OP_TOGGLESOURCEVIEW, "toggle-source-view", "^U",
@@ -170,47 +170,47 @@ static op_desc opdescs[] = {
 	{
 		OP_PB_DOWNLOAD, "pb-download", "d",
 		_("Download file"),
-		KM_PODBEUTER
+		KM_PODBOAT
 	},
 	{
 		OP_PB_CANCEL, "pb-cancel", "c",
 		_("Cancel download"),
-		KM_PODBEUTER
+		KM_PODBOAT
 	},
 	{
 		OP_PB_DELETE, "pb-delete", "D",
 		_("Mark download as deleted"),
-		KM_PODBEUTER
+		KM_PODBOAT
 	},
 	{
 		OP_PB_PURGE, "pb-purge", "P",
 		_("Purge finished and deleted downloads from queue"),
-		KM_PODBEUTER
+		KM_PODBOAT
 	},
 	{
 		OP_PB_TOGGLE_DLALL, "pb-toggle-download-all", "a",
 		_("Toggle automatic download on/off"),
-		KM_PODBEUTER
+		KM_PODBOAT
 	},
 	{
 		OP_PB_PLAY, "pb-play", "p",
 		_("Start player with currently selected download"),
-		KM_PODBEUTER
+		KM_PODBOAT
 	},
 	{
 		OP_PB_MARK_FINISHED, "pb-mark-as-finished", "m",
 		_("Mark file as finished (not played)"),
-		KM_PODBEUTER
+		KM_PODBOAT
 	},
 	{
 		OP_PB_MOREDL, "pb-increase-max-dls", "+",
 		_("Increase the number of concurrent downloads"),
-		KM_PODBEUTER
+		KM_PODBOAT
 	},
 	{
 		OP_PB_LESSDL, "pb-decreate-max-dls", "-",
 		_("Decrease the number of concurrent downloads"),
-		KM_PODBEUTER
+		KM_PODBOAT
 	},
 	{
 		OP_REDRAW, "redraw", "^L",
@@ -220,7 +220,7 @@ static op_desc opdescs[] = {
 	{
 		OP_CMDLINE, "cmdline", ":",
 		_("Open the commandline"),
-		KM_NEWSBEUTER
+		KM_NEWSBOAT
 	},
 	{
 		OP_SETFILTER, "set-filter", "F",
@@ -270,7 +270,7 @@ static op_desc opdescs[] = {
 	{
 		OP_MACROPREFIX, "macro-prefix", ",",
 		_("Call a macro"),
-		KM_NEWSBEUTER
+		KM_NEWSBOAT
 	},
 	{
 		OP_DELETE, "delete-article", "D",
@@ -295,17 +295,17 @@ static op_desc opdescs[] = {
 	{
 		OP_VIEWDIALOGS, "view-dialogs", "v",
 		_("View list of open dialogs"),
-		KM_NEWSBEUTER
+		KM_NEWSBOAT
 	},
 	{
 		OP_NEXTDIALOG, "next-dialog", "^V",
 		_("Go to next dialog"),
-		KM_NEWSBEUTER
+		KM_NEWSBOAT
 	},
 	{
 		OP_PREVDIALOG, "prev-dialog", "^G",
 		_("Go to previous dialog"),
-		KM_NEWSBEUTER
+		KM_NEWSBOAT
 	},
 	{
 		OP_PIPE_TO, "pipe-to", "|",
@@ -473,9 +473,9 @@ void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned s
 	for (unsigned int i=1; contexts[i]!=nullptr; i++) {
 		std::string ctx(contexts[i]);
 
-		if (flags & KM_PODBEUTER && ctx != "podbeuter") {
+		if (flags & KM_PODBOAT && ctx != "podbeuter") {
 			continue;
-		} else if (flags & KM_NEWSBEUTER && ctx == "podbeuter") {
+		} else if (flags & KM_NEWSBOAT && ctx == "podbeuter") {
 			continue;
 		}
 

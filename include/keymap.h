@@ -19,12 +19,12 @@ enum {
 	KM_TAGSELECT	= 1<<5,
 	KM_FILTERSELECT	= 1<<6,
 	KM_URLVIEW		= 1<<7,
-	KM_PODBEUTER	= 1<<8,
+	KM_PODBOAT		= 1<<8,
 	KM_SYSKEYS		= 1<<9,
 	KM_INTERNAL		= 1<<10,
 	KM_DIALOGS		= 1<<11,
-	KM_NEWSBEUTER	= KM_FEEDLIST | KM_FILEBROWSER | KM_HELP | KM_ARTICLELIST | KM_ARTICLE | KM_TAGSELECT | KM_FILTERSELECT | KM_URLVIEW | KM_DIALOGS,
-	KM_BOTH			= KM_NEWSBEUTER | KM_PODBEUTER
+	KM_NEWSBOAT 	= KM_FEEDLIST | KM_FILEBROWSER | KM_HELP | KM_ARTICLELIST | KM_ARTICLE | KM_TAGSELECT | KM_FILTERSELECT | KM_URLVIEW | KM_DIALOGS,
+	KM_BOTH			= KM_NEWSBOAT | KM_PODBOAT
 };
 
 namespace newsboat {
@@ -84,7 +84,7 @@ enum operation {	OP_NIL = 0,
                     OP_REVSORT,
                     OP_NB_MAX,
 
-                    // podbeuter-specific operations:
+                    // podboat-specific operations:
                     OP_PB_MIN = 1000,
                     OP_PB_DOWNLOAD,
                     OP_PB_CANCEL,

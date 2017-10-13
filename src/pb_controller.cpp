@@ -217,7 +217,7 @@ void pb_controller::run(int argc, char * argv[]) {
 	colormanager * colorman = new colormanager();
 	colorman->register_commands(cfgparser);
 
-	keymap keys(KM_PODBEUTER);
+	keymap keys(KM_PODBOAT);
 	cfgparser.register_handler("bind-key", &keys);
 	cfgparser.register_handler("unbind-key", &keys);
 

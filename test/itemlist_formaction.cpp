@@ -501,7 +501,7 @@ TEST_CASE("OP_HELP command is processed", "[itemlist_formaction]") {
 	configcontainer * cfg = c.get_cfg();
 	cache rsscache(":memory:", cfg);
 
-	keymap k(KM_NEWSBEUTER);
+	keymap k(KM_NEWSBOAT);
 	v.set_keymap(&k);
 
 	v.set_regexmanager(&regman);
@@ -527,7 +527,7 @@ TEST_CASE("OP_HARDQUIT command is processed", "[itemlist_formaction]") {
 	configcontainer * cfg = c.get_cfg();
 	cache rsscache(":memory:", cfg);
 
-	keymap k(KM_NEWSBEUTER);
+	keymap k(KM_NEWSBOAT);
 	v.set_keymap(&k);
 
 	v.set_regexmanager(&regman);
@@ -560,7 +560,7 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREVIOUS", "[itemlist_fo
 	std::string second_article_title = "Second_Article";
 	std::string prefix_title = "Title: ";
 
-	keymap k(KM_NEWSBEUTER);
+	keymap k(KM_NEWSBOAT);
 	v.set_keymap(&k);
 
 	v.set_regexmanager(&regman);
@@ -604,7 +604,7 @@ TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles", "[itemli
 	configcontainer * cfg = c.get_cfg();
 	cache rsscache(":memory:", cfg);
 
-	keymap k(KM_NEWSBEUTER);
+	keymap k(KM_NEWSBOAT);
 	v.set_keymap(&k);
 
 	v.set_regexmanager(&regman);

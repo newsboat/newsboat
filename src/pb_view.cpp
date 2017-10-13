@@ -239,7 +239,7 @@ void pb_view::run_help() {
 	help_form.set("head",_("Help"));
 
 	std::vector<keymap_desc> descs;
-	keys->get_keymap_descriptions(descs, KM_PODBEUTER);
+	keys->get_keymap_descriptions(descs, KM_PODBOAT);
 
 	std::string code = "{list";
 
