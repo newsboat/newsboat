@@ -1,5 +1,3 @@
-# Copyright (C) Newsbeuter contributors
-# This file is distributed under the same license as the newsbeuter package.
 # Ivan Kovnatsky <sevenfourk@gmail.com>, 2010.
 #
 msgid ""
