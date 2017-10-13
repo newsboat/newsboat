@@ -63,15 +63,16 @@ std::string lock_file;
 
 int ctrl_c_hit = 0;
 
-void ctrl_c_action(int sig) {
-	LOG(level::DEBUG,"caught signal %d",sig);
-	if (SIGINT == sig) {
-		ctrl_c_hit = 1;
-	} else {
-		stfl::reset();
-		utils::remove_fs_lock(lock_file);
-		::exit(EXIT_FAILURE);
-	}
+void ctrl_c_action(int /* sig */) {
+	LOG(level::DEBUG, "caught SIGINT");
+	ctrl_c_hit = 1;
+}
+
+void sighup_action(int /* sig */) {
+	LOG(level::DEBUG, "caught SIGHUP");
+	stfl::reset();
+	utils::remove_fs_lock(lock_file);
+	::exit(EXIT_FAILURE);
 }
 
 void ignore_signal(int sig) {
@@ -94,7 +95,7 @@ controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache
  *
  * returns false, if that fails
  */
-bool controller::setup_dirs_xdg(const char *env_home) {
+bool controller::setup_dirs_xdg(const std::string& env_home) {
 	const char *env_xdg_config;
 	const char *env_xdg_data;
 	std::string xdg_config_dir;
@@ -154,19 +155,7 @@ bool controller::setup_dirs_xdg(const char *env_home) {
 	return true;
 }
 
-void controller::setup_dirs() {
-	const char * env_home;
-	if (!(env_home = ::getenv("HOME"))) {
-		struct passwd * spw = ::getpwuid(::getuid());
-		if (spw) {
-			env_home = spw->pw_dir;
-		} else {
-			std::cerr << _("Fatal error: couldn't determine home directory!") << std::endl;
-			std::cerr << strprintf::fmt(_("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid()) << std::endl;
-			::exit(EXIT_FAILURE);
-		}
-	}
-
+void controller::setup_dirs(const std::string& env_home) {
 	config_dir = env_home;
 	config_dir.append(NEWSBEUTER_PATH_SEP);
 	config_dir.append(NEWSBOAT_CONFIG_SUBDIR);
@@ -195,7 +184,10 @@ void copy_file(
 	dst << src.rdbuf();
 }
 
-bool controller::migrate_data_from_newsbeuter_xdg(const char* env_home, bool silent) {
+bool controller::migrate_data_from_newsbeuter_xdg(
+		const std::string& env_home,
+		bool silent)
+{
 	const char* env_xdg_config = ::getenv("XDG_CONFIG_HOME");
 	std::string xdg_config_dir;
 	if (env_xdg_config) {
@@ -285,7 +277,10 @@ bool controller::migrate_data_from_newsbeuter_xdg(const char* env_home, bool sil
 	return true;
 }
 
-bool controller::migrate_data_from_newsbeuter_simple(const char* env_home, bool silent) {
+bool controller::migrate_data_from_newsbeuter_simple(
+		const std::string& env_home,
+		bool silent)
+{
 	std::string newsbeuter_dir = env_home;
 	newsbeuter_dir += NEWSBEUTER_PATH_SEP;
 	newsbeuter_dir += NEWSBEUTER_CONFIG_SUBDIR;
@@ -335,19 +330,10 @@ bool controller::migrate_data_from_newsbeuter_simple(const char* env_home, bool 
 	return true;
 }
 
-void controller::migrate_data_from_newsbeuter(bool silent) {
-	const char * env_home;
-	if (!(env_home = ::getenv("HOME"))) {
-		struct passwd * spw = ::getpwuid(::getuid());
-		if (spw) {
-			env_home = spw->pw_dir;
-		} else {
-			std::cerr << _("Fatal error: couldn't determine home directory!") << std::endl;
-			std::cerr << strprintf::fmt(_("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid()) << std::endl;
-			::exit(EXIT_FAILURE);
-		}
-	}
-
+void controller::migrate_data_from_newsbeuter(
+		const std::string& env_home,
+		bool silent)
+{
 	bool migrated = migrate_data_from_newsbeuter_xdg(env_home, silent);
 
 	if (migrated) {
@@ -356,7 +342,7 @@ void controller::migrate_data_from_newsbeuter(bool silent) {
 		cache_file = "cache.db";
 		config_file = "config";
 		queue_file = "queue";
-		setup_dirs();
+		setup_dirs(env_home);
 	} else {
 		migrated = migrate_data_from_newsbeuter_simple(env_home, silent);
 	}
@@ -384,12 +370,12 @@ void controller::set_view(view * vv) {
 	v = vv;
 }
 
-void controller::run(int argc, char * argv[]) {
+int controller::run(int argc, char * argv[]) {
 	int c;
 
 	::signal(SIGINT, ctrl_c_action);
 	::signal(SIGPIPE, ignore_signal);
-	::signal(SIGHUP, ctrl_c_action);
+	::signal(SIGHUP, sighup_action);
 	::signal(SIGCHLD, omg_a_child_died);
 
 	bool do_import = false, do_export = false, cachefile_given_on_cmdline = false, do_vacuum = false;
@@ -430,7 +416,19 @@ void controller::run(int argc, char * argv[]) {
 		}
 	}
 
-	setup_dirs();
+	const char * env_home;
+	if (!(env_home = ::getenv("HOME"))) {
+		struct passwd * spw = ::getpwuid(::getuid());
+		if (spw) {
+			env_home = spw->pw_dir;
+		} else {
+			std::cerr << _("Fatal error: couldn't determine home directory!") << std::endl;
+			std::cerr << strprintf::fmt(_("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid()) << std::endl;
+			return EXIT_FAILURE;
+		}
+	}
+
+	setup_dirs(env_home);
 
 	bool using_nonstandard_configs = false;
 
@@ -496,7 +494,7 @@ void controller::run(int argc, char * argv[]) {
 				logger::getInstance().set_loglevel(l);
 			} else {
 				std::cerr << strprintf::fmt(_("%s: %d: invalid loglevel value"), argv[0], l) << std::endl;
-				::std::exit(EXIT_FAILURE);
+				return EXIT_FAILURE;
 			}
 		}
 		break;
@@ -521,7 +519,7 @@ void controller::run(int argc, char * argv[]) {
 
 
 	if (show_version) {
-		version_information(argv[0], show_version);
+		return version_information(argv[0], show_version);
 	}
 
 	if (do_import) {
@@ -529,14 +527,14 @@ void controller::run(int argc, char * argv[]) {
 		urlcfg = new file_urlreader(url_file);
 		urlcfg->reload();
 		import_opml(importfile);
-		return;
+		return EXIT_SUCCESS;
 	}
 
 
 	LOG(level::INFO, "nl_langinfo(CODESET): %s", nl_langinfo(CODESET));
 
 	if ((! using_nonstandard_configs) && (0 != access(url_file.c_str(), F_OK))) {
-		migrate_data_from_newsbeuter(silent);
+		migrate_data_from_newsbeuter(env_home, silent);
 	}
 
 	utils::mkdir_parents(config_dir.c_str(), 0700);
@@ -557,7 +555,7 @@ void controller::run(int argc, char * argv[]) {
 			if (!execute_cmds) {
 				std::cout << strprintf::fmt(_("Error: an instance of %s is already running (PID: %u)"), PROGRAM_NAME, pid) << std::endl;
 			}
-			return;
+			return EXIT_FAILURE;
 		}
 	}
 
@@ -588,7 +586,7 @@ void controller::run(int argc, char * argv[]) {
 		LOG(level::ERROR,"an exception occurred while parsing the configuration file: %s",ex.what());
 		std::cout << ex.what() << std::endl;
 		utils::remove_fs_lock(lock_file);
-		return;
+		return EXIT_FAILURE;
 	}
 
 	update_config();
@@ -615,7 +613,7 @@ void controller::run(int argc, char * argv[]) {
 				LOG(level::ERROR,"something went wrong with the lock: %s", strerror(errno));
 			}
 			std::cout << strprintf::fmt(_("Error: an instance of %s is already running (PID: %u)"), PROGRAM_NAME, pid) << std::endl;
-			return;
+			return EXIT_FAILURE;
 		}
 	}
 
@@ -628,7 +626,7 @@ void controller::run(int argc, char * argv[]) {
 	} catch (const dbexception& e) {
 		std::cerr << strprintf::fmt(_("Error: opening the cache file `%s' failed: %s"), cache_file, e.what()) << std::endl;
 		utils::remove_fs_lock(lock_file);
-		::exit(EXIT_FAILURE);
+		return EXIT_FAILURE;
 	}
 
 	if (!silent) {
@@ -655,7 +653,7 @@ void controller::run(int argc, char * argv[]) {
 			std::cout << strprintf::fmt(
 					_("%s is inaccessible and can't be created\n"), cookies);
 			utils::remove_fs_lock(lock_file);
-			::exit(EXIT_FAILURE);
+			return EXIT_FAILURE;
 		}
 
 		api = new newsblur_api(&cfg);
@@ -678,7 +676,7 @@ void controller::run(int argc, char * argv[]) {
 		if (!api->authenticate()) {
 			std::cout << "Authentication failed." << std::endl;
 			utils::remove_fs_lock(lock_file);
-			return;
+			return EXIT_FAILURE;
 		}
 	}
 	urlcfg->reload();
@@ -703,7 +701,7 @@ void controller::run(int argc, char * argv[]) {
 			assert(0); // shouldn't happen
 		}
 		std::cout << msg << std::endl << std::endl;
-		usage(argv[0]);
+		return usage(argv[0]);
 	}
 
 	if (!do_export && !do_vacuum && !silent)
@@ -720,7 +718,7 @@ void controller::run(int argc, char * argv[]) {
 		rsscache->do_vacuum();
 		std::cout << _("done.") << std::endl;
 		utils::remove_fs_lock(lock_file);
-		return;
+		return EXIT_SUCCESS;
 	}
 
 	unsigned int i=0;
@@ -735,11 +733,11 @@ void controller::run(int argc, char * argv[]) {
 		} catch(const dbexception& e) {
 			std::cout << _("Error while loading feeds from database: ") << e.what() << std::endl;
 			utils::remove_fs_lock(lock_file);
-			return;
+			return EXIT_FAILURE;
 		} catch(const std::string& str) {
 			std::cout << strprintf::fmt(_("Error while loading feed '%s': %s"), url, str) << std::endl;
 			utils::remove_fs_lock(lock_file);
-			return;
+			return EXIT_FAILURE;
 		}
 		i++;
 	}
@@ -767,7 +765,7 @@ void controller::run(int argc, char * argv[]) {
 	if (do_export) {
 		export_opml();
 		utils::remove_fs_lock(lock_file);
-		return;
+		return EXIT_SUCCESS;
 	}
 
 	if (do_read_import) {
@@ -776,7 +774,7 @@ void controller::run(int argc, char * argv[]) {
 		std::cout.flush();
 		import_read_information(readinfofile);
 		std::cout << _("done.") << std::endl;
-		return;
+		return EXIT_SUCCESS;
 	}
 
 	if (do_read_export) {
@@ -785,7 +783,7 @@ void controller::run(int argc, char * argv[]) {
 		std::cout.flush();
 		export_read_information(readinfofile);
 		std::cout << _("done.") << std::endl;
-		return;
+		return EXIT_SUCCESS;
 	}
 
 	// hand over the important objects to the view
@@ -796,7 +794,7 @@ void controller::run(int argc, char * argv[]) {
 	if (execute_cmds) {
 		execute_commands(argv, optind);
 		utils::remove_fs_lock(lock_file);
-		return;
+		return EXIT_SUCCESS;
 	}
 
 	// if the user wants to refresh on startup via configuration file, then do so,
@@ -808,7 +806,7 @@ void controller::run(int argc, char * argv[]) {
 	formaction::load_histories(searchfile, cmdlinefile);
 
 	// run the view
-	v->run();
+	int ret = v->run();
 
 	unsigned int history_limit = cfg.get_configvalue_as_int("history-limit");
 	LOG(level::DEBUG, "controller::run: history-limit = %u", history_limit);
@@ -828,10 +826,12 @@ void controller::run(int argc, char * argv[]) {
 		LOG(level::USERERROR, "Cleaning up cache failed: %s", e.what());
 		if (!silent) {
 			std::cout << _("failed: ") << e.what() << std::endl;
+			ret = EXIT_FAILURE;
 		}
 	}
 
 	utils::remove_fs_lock(lock_file);
+	return ret;
 }
 
 void controller::update_feedlist() {
@@ -1158,7 +1158,7 @@ void controller::start_reload_all_thread(std::vector<int> * indexes) {
 	t.detach();
 }
 
-void controller::version_information(const char * argv0, unsigned int level) {
+int controller::version_information(const char * argv0, unsigned int level) {
 	if (level<=1) {
 		std::cout << PROGRAM_NAME << " " << PROGRAM_VERSION << " - " << PROGRAM_URL << std::endl;
 		std::cout << "Copyright (C) 2006-2015 Andreas Krennmair" << std::endl;
@@ -1185,10 +1185,10 @@ void controller::version_information(const char * argv0, unsigned int level) {
 		std::cout << LICENSE_str << std::endl;
 	}
 
-	::exit(EXIT_SUCCESS);
+	return EXIT_SUCCESS;
 }
 
-void controller::usage(char * argv0) {
+int controller::usage(char * argv0) {
 	auto msg =
 	    strprintf::fmt(_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] "
 	    "[-c <cachefile>] [-x <command> ...] [-h]\n"),
@@ -1234,7 +1234,7 @@ void controller::usage(char * argv0) {
 		std::cout << a.desc << std::endl;
 	}
 
-	::exit(EXIT_FAILURE);
+	return EXIT_FAILURE;
 }
 
 void controller::import_opml(const std::string& filename) {
@@ -1545,7 +1545,7 @@ std::string controller::bookmark(
 	}
 }
 
-void controller::execute_commands(char ** argv, unsigned int i) {
+int controller::execute_commands(char ** argv, unsigned int i) {
 	if (v->formaction_stack_size() > 0)
 		v->pop_current_formaction();
 	for (; argv[i]; ++i) {
@@ -1557,9 +1557,11 @@ void controller::execute_commands(char ** argv, unsigned int i) {
 			std::cout << strprintf::fmt(_("%u unread articles"), rsscache->get_unread_count()) << std::endl;
 		} else {
 			std::cerr << strprintf::fmt(_("%s: %s: unknown command"), argv[0], argv[i]) << std::endl;
-			::std::exit(EXIT_FAILURE);
+			return EXIT_FAILURE;
 		}
 	}
+
+	return EXIT_SUCCESS;
 }
 
 std::string controller::write_temporary_item(std::shared_ptr<rss_item> item) {
