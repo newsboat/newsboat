@@ -7,7 +7,7 @@
 #include <queueloader.h>
 #include <vector>
 
-namespace podbeuter {
+namespace podboat {
 
 class pb_view;
 

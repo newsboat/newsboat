@@ -19,7 +19,7 @@
 
 using namespace newsboat;
 
-namespace podbeuter {
+namespace podboat {
 
 pb_view::pb_view(pb_controller * c) : ctrl(c), dllist_form(dllist_str), help_form(help_str), keys(0) {
 	if (getenv("ESCDELAY") == nullptr) {

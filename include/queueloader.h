@@ -5,7 +5,7 @@
 #include <download.h>
 #include <pb_controller.h>
 
-namespace podbeuter {
+namespace podboat {
 
 class queueloader {
 	public:

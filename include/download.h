@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace podbeuter {
+namespace podboat {
 
 enum class dlstatus {
 	QUEUED = 0,

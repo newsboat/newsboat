@@ -7,7 +7,7 @@
 #include <errno.h>
 #include <utils.h>
 
-using namespace podbeuter;
+using namespace podboat;
 
 int main(int argc, char * argv[]) {
 	utils::initialize_ssl_implementation();
@@ -20,7 +20,7 @@ int main(int argc, char * argv[]) {
 	textdomain (PACKAGE);
 
 	pb_controller c;
-	podbeuter::pb_view v(&c);
+	podboat::pb_view v(&c);
 	c.set_view(&v);
 
 	c.run(argc, argv);

@@ -11,7 +11,7 @@
 
 #include <configcontainer.h>
 
-namespace podbeuter {
+namespace podboat {
 
 class poddlthread {
 	public:

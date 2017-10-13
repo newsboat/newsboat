@@ -35,7 +35,7 @@ static void ctrl_c_action(int sig) {
 	::exit(EXIT_FAILURE);
 }
 
-namespace podbeuter {
+namespace podboat {
 
 #define LOCK_SUFFIX ".lock"
 

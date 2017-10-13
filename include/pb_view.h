@@ -7,7 +7,7 @@
 
 using namespace newsboat;
 
-namespace podbeuter {
+namespace podboat {
 
 class pb_controller;
 

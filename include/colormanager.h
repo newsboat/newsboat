@@ -5,7 +5,7 @@
 #include <vector>
 #include <map>
 
-namespace podbeuter {
+namespace podboat {
 class pb_view;
 }
 
@@ -24,7 +24,7 @@ class colormanager : public config_action_handler {
 		inline bool colors_loaded() {
 			return colors_loaded_;
 		}
-		void set_pb_colors(podbeuter::pb_view * v);
+		void set_pb_colors(podboat::pb_view * v);
 		inline std::map<std::string,std::string>& get_fgcolors() {
 			return fg_colors;
 		}
