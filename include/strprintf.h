@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class strprintf {
 	public:

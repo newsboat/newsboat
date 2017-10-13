@@ -49,7 +49,7 @@ class pb_controller {
 
 		void play_file(const std::string& str);
 
-		inline newsbeuter::configcontainer * get_cfgcont() {
+		inline newsboat::configcontainer * get_cfgcont() {
 			return cfg;
 		}
 
@@ -59,7 +59,7 @@ class pb_controller {
 		pb_view * v;
 		std::string config_file;
 		std::string queue_file;
-		newsbeuter::configcontainer * cfg;
+		newsboat::configcontainer * cfg;
 		bool view_update_;
 		std::vector<download> downloads_;
 

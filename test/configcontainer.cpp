@@ -4,7 +4,7 @@
 #include <configparser.h>
 #include <keymap.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 TEST_CASE("ConfigContainer parses test config without exceptions",
           "[configcontainer]")

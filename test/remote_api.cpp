@@ -4,7 +4,7 @@
 
 #include <remote_api.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 /*
  * Mock class to be able to access `user` and `pass` after running

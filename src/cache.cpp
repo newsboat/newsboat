@@ -17,7 +17,7 @@
 #include <utils.h>
 #include <strprintf.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 inline void cache::run_sql_impl(
 		const std::string& query,

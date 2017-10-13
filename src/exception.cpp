@@ -6,7 +6,7 @@
 #include <utils.h>
 #include <strprintf.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 exception::exception(unsigned int error_code) : ecode(error_code) { }
 

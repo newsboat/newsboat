@@ -12,7 +12,7 @@
 #include <sstream>
 #include <algorithm>
 
-namespace newsbeuter {
+namespace newsboat {
 
 itemview_formaction::itemview_formaction(view * vv, std::shared_ptr<itemlist_formaction> il, std::string formstr)
 	: formaction(vv,formstr), show_source(false), quit(false), rxman(0), num_lines(0), itemlist(il), in_search(false) {

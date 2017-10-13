@@ -2,7 +2,7 @@
 #include <logger.h>
 #include <unistd.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 reloadthread::reloadthread(controller * c, configcontainer * cf) : ctrl(c), oldtime(0), waittime_sec(0), suppressed_first(false), cfg(cf) {
 	LOG(level::INFO,"reloadthread: waiting %u seconds between reloads",waittime_sec);

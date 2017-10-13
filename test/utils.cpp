@@ -2,7 +2,7 @@
 
 #include <utils.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 TEST_CASE("tokenize() extracts tokens separated by given delimiters",
           "[utils]")

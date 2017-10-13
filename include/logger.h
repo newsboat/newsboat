@@ -7,7 +7,7 @@
 
 #include <strprintf.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 /* Be sure to update loglevel_str array in src/logger.cpp if you change this
  * enum. */

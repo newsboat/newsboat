@@ -12,7 +12,7 @@
 #include <memory>
 #include <unordered_map>
 
-namespace newsbeuter {
+namespace newsboat {
 
 typedef std::pair<std::string, matcher *> feedurl_expr_pair;
 

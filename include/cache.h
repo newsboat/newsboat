@@ -7,7 +7,7 @@
 #include <mutex>
 #include <unordered_set>
 
-namespace newsbeuter {
+namespace newsboat {
 
 typedef std::vector<std::string> schema_queries_list;
 

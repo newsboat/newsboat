@@ -11,7 +11,7 @@
 #include <remote_api.h>
 #include <libxml/tree.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 extern int ctrl_c_hit;
 extern std::string lock_file;

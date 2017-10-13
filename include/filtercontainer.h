@@ -3,7 +3,7 @@
 
 #include <configparser.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 typedef std::pair<std::string, std::string> filter_name_expr_pair;
 

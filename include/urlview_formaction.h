@@ -4,7 +4,7 @@
 #include <formaction.h>
 #include <htmlrenderer.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class urlview_formaction : public formaction {
 	public:

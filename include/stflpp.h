@@ -7,7 +7,7 @@ extern "C" {
 
 #include <string>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class stfl {
 	public:

@@ -16,7 +16,7 @@
 #include <stflpp.h>
 #include <filebrowser_formaction.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class formaction;
 class itemlist_formaction;

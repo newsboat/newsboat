@@ -9,7 +9,7 @@
 #include <sstream>
 #include <cassert>
 
-namespace newsbeuter {
+namespace newsboat {
 
 /*
  * The select_formaction is used both for the "select tag" dialog

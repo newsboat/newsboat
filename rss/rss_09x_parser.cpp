@@ -8,7 +8,7 @@
 #include <utils.h>
 #include <cstring>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 namespace rsspp {
 

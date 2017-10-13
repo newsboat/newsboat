@@ -16,7 +16,7 @@
 
 using namespace podbeuter;
 
-namespace newsbeuter {
+namespace newsboat {
 
 colormanager::colormanager() : colors_loaded_(false) { }
 

@@ -7,7 +7,7 @@
 #include <utility>
 #include <regexmanager.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 /*
  * LineType specifies the way wrapping should be handled.

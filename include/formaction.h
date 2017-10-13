@@ -9,7 +9,7 @@
 #include <vector>
 #include <string>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class view;
 

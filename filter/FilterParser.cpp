@@ -3,7 +3,7 @@
 #include "Parser.h"
 #include <utils.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 FilterParser::FilterParser() : root(0), curpos(0), next_must_descend_right(false) { }
 

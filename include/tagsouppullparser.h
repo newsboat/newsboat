@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class tagsouppullparser {
 	public:

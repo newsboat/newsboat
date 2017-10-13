@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class fmtstr_formatter {
 	public:

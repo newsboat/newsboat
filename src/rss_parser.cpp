@@ -20,7 +20,7 @@
 #include <sstream>
 #include <algorithm>
 
-namespace newsbeuter {
+namespace newsboat {
 
 rss_parser::rss_parser(
 		const std::string& uri,

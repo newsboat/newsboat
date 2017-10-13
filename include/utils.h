@@ -11,7 +11,7 @@
 #include <configcontainer.h>
 #include <libxml/parser.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 // wrapped curl handle for exception safety and so on
 // see also: https://github.com/gsauthof/ccurl

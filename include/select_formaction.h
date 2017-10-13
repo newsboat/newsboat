@@ -4,7 +4,7 @@
 #include <formaction.h>
 #include <filtercontainer.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class select_formaction : public formaction {
 	public:

@@ -17,7 +17,7 @@
 #include <cstring>
 #include <cstdio>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 namespace podbeuter {
 

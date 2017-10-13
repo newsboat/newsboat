@@ -24,7 +24,7 @@
 #include <queueloader.h>
 #include <logger.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 static std::string lock_file = "pb-lock.pid";
 

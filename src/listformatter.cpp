@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <limits.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 listformatter::listformatter() { }
 

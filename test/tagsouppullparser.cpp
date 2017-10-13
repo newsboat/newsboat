@@ -2,7 +2,7 @@
 
 #include <tagsouppullparser.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 TEST_CASE("Tagsoup pull parser turns document into a stream of events",
           "[tagsouppullparser]")

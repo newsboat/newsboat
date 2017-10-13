@@ -10,7 +10,7 @@
 #include <sstream>
 #include <vector>
 
-namespace newsbeuter {
+namespace newsboat {
 
 matchable::matchable() { }
 matchable::~matchable() { }

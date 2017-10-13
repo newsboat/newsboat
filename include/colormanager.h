@@ -11,7 +11,7 @@ class pb_view;
 
 class view;
 
-namespace newsbeuter {
+namespace newsboat {
 
 
 class colormanager : public config_action_handler {

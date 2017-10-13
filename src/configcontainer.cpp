@@ -14,7 +14,7 @@
 #include <pwd.h>
 
 
-namespace newsbeuter {
+namespace newsboat {
 
 configcontainer::configcontainer()
 	// create the config options and set their resp. default value and type

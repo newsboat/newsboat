@@ -10,7 +10,7 @@
 
 #include <libxml/tree.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class urlreader {
 	public:

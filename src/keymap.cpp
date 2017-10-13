@@ -7,7 +7,7 @@
 #include <utils.h>
 #include <strprintf.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 struct op_desc {
 	operation op;

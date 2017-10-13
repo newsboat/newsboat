@@ -21,7 +21,7 @@
 
 #define FILTER_UNREAD_FEEDS "unread_count != \"0\""
 
-namespace newsbeuter {
+namespace newsboat {
 
 feedlist_formaction::feedlist_formaction(view * vv, std::string formstr)
 	: list_formaction(vv,formstr), zero_feedpos(false), feeds_shown(0),

@@ -9,7 +9,7 @@
 #include <urlreader.h>
 #include <rsspp.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class ocnews_api : public remote_api {
 	public:

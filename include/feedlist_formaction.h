@@ -7,7 +7,7 @@
 #include <regexmanager.h>
 #include <view.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 typedef std::pair<std::shared_ptr<rss_feed>, unsigned int> feedptr_pos_pair;
 

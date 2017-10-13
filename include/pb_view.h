@@ -5,7 +5,7 @@
 #include <stflpp.h>
 #include <colormanager.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 namespace podbeuter {
 
@@ -18,14 +18,14 @@ class pb_view {
 		explicit pb_view(pb_controller * c = 0);
 		~pb_view();
 		void run(bool auto_download);
-		void set_keymap(newsbeuter::keymap * k) {
+		void set_keymap(newsboat::keymap * k) {
 			keys = k;
 			set_bindings();
 		}
 
 	private:
 
-		friend class newsbeuter::colormanager;
+		friend class newsboat::colormanager;
 
 		struct keymap_hint_entry {
 			operation op;
@@ -39,9 +39,9 @@ class pb_view {
 
 		std::string prepare_keymaphint(keymap_hint_entry * hints);
 		pb_controller * ctrl;
-		newsbeuter::stfl::form dllist_form;
-		newsbeuter::stfl::form help_form;
-		newsbeuter::keymap * keys;
+		newsboat::stfl::form dllist_form;
+		newsboat::stfl::form help_form;
+		newsboat::keymap * keys;
 };
 
 }

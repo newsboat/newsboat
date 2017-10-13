@@ -10,7 +10,7 @@
 
 #include <unistd.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 namespace podbeuter {
 

@@ -2,7 +2,7 @@
 
 #include <listformatter.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 TEST_CASE("add_line(), add_lines(), get_lines_count() and clear()",
           "[listformatter]") {

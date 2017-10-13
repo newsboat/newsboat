@@ -15,7 +15,7 @@ namespace podbeuter {
 
 class poddlthread {
 	public:
-		poddlthread(download * dl_, newsbeuter::configcontainer *);
+		poddlthread(download * dl_, newsboat::configcontainer *);
 		virtual ~poddlthread();
 		size_t write_data(void * buffer, size_t size, size_t nmemb);
 		int progress(double dlnow, double dltotal);
@@ -29,7 +29,7 @@ class poddlthread {
 		timeval tv1;
 		timeval tv2;
 		size_t bytecount;
-		newsbeuter::configcontainer * cfg;
+		newsboat::configcontainer * cfg;
 };
 
 }

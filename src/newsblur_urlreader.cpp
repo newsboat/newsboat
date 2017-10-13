@@ -1,7 +1,7 @@
 #include <newsblur_api.h>
 #include <logger.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 newsblur_urlreader::newsblur_urlreader(const std::string& url_file, remote_api * a) : file(url_file), api(a) { }
 

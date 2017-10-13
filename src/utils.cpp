@@ -44,7 +44,7 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 #include <openssl/crypto.h>
 #endif
 
-namespace newsbeuter {
+namespace newsboat {
 
 std::vector<std::string> utils::tokenize_quoted(const std::string& str, std::string delimiters) {
 	/*

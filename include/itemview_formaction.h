@@ -7,7 +7,7 @@
 #include <regexmanager.h>
 #include <rss.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class itemlist_formaction;
 

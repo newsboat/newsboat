@@ -7,7 +7,7 @@
 #include <rsspp.h>
 #include <remote_api.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class configcontainer;
 class cache;

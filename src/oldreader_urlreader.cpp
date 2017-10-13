@@ -1,7 +1,7 @@
 #include <oldreader_api.h>
 #include <logger.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 oldreader_urlreader::oldreader_urlreader(configcontainer * c, const std::string& url_file, remote_api * a) : cfg(c), file(url_file), api(a) { }
 

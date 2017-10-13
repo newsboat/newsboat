@@ -4,7 +4,7 @@
 #include <thread>
 #include <controller.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class controller;
 

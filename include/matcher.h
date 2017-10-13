@@ -3,7 +3,7 @@
 
 #include <FilterParser.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class matchable {
 	public:

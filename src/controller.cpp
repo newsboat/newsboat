@@ -55,7 +55,7 @@
 #include <libxml/uri.h>
 #include <curl/curl.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 #define LOCK_SUFFIX ".lock"
 

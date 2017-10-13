@@ -8,7 +8,7 @@
 
 #define ID_SEPARATOR "/////"
 
-namespace newsbeuter {
+namespace newsboat {
 
 typedef std::map<std::string, rsspp::feed> feedmap;
 

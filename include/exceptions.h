@@ -7,7 +7,7 @@
 
 #include <sqlite3.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class xmlexception : public std::exception {
 	public:

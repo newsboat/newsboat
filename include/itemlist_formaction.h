@@ -8,7 +8,7 @@
 #include <assert.h>
 #include <listformatter.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 typedef std::pair<std::shared_ptr<rss_item>, unsigned int> itemptr_pos_pair;
 

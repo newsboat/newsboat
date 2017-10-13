@@ -7,7 +7,7 @@
 #include <utility>
 #include <regexmanager.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 
 class listformatter {

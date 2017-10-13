@@ -16,7 +16,7 @@
 #include <strprintf.h>
 #include <remote_api.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 static size_t my_write_data(void *buffer, size_t size, size_t nmemb, void *userp) {
 	std::string * pbuf = static_cast<std::string *>(userp);
@@ -77,7 +77,7 @@ static size_t handle_headers(void * ptr, size_t size, size_t nmemb, void * data)
 	return size * nmemb;
 }
 
-feed parser::parse_url(const std::string& url, time_t lastmodified, const std::string& etag, newsbeuter::remote_api * api, const std::string& cookie_cache, CURL *ehandle) {
+feed parser::parse_url(const std::string& url, time_t lastmodified, const std::string& etag, newsboat::remote_api * api, const std::string& cookie_cache, CURL *ehandle) {
 	std::string buf;
 	CURLcode ret;
 	curl_slist* custom_headers {};

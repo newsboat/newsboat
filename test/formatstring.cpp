@@ -2,7 +2,7 @@
 
 #include <formatstring.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 TEST_CASE("do_format replaces variables with values", "[fmtstr_formatter]") {
 	fmtstr_formatter fmt;

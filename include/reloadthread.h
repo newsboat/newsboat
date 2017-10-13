@@ -5,7 +5,7 @@
 #include <controller.h>
 #include <configcontainer.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class reloadthread {
 	public:

@@ -6,7 +6,7 @@
 #include <utils.h>
 #include <strprintf.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 const std::string url = "http://example.com/feed.rss";
 
@@ -18,13 +18,13 @@ const std::string url = "http://example.com/feed.rss";
  * we don't have to wrap string literals in std::string() calls (we don't
  * support C++14 yet so can't use their fancy string literal operators.)
  */
-std::pair<newsbeuter::LineType, std::string>
-p(newsbeuter::LineType type, const char* str) {
+std::pair<newsboat::LineType, std::string>
+p(newsboat::LineType type, const char* str) {
 	return std::make_pair(type, std::string(str));
 }
 
 namespace Catch {
-	/* Catch doesn't know how to print out newsbeuter::LineType values, so
+	/* Catch doesn't know how to print out newsboat::LineType values, so
 	 * let's teach it!
 	 *
 	 * Technically, any one of the following two definitions shouls be enough,
@@ -32,7 +32,7 @@ namespace Catch {
 	 * StringMaker is required for simple things like REQUIRE(LineType::hr ==
 	 * LineType::hr). Weird, but at least this works.
 	 */
-	std::string toString(newsbeuter::LineType const& value) {
+	std::string toString(newsboat::LineType const& value) {
 		switch(value) {
 			case LineType::wrappable:
 				return "wrappable";
@@ -47,15 +47,15 @@ namespace Catch {
 		}
 	}
 
-	template<> struct StringMaker<newsbeuter::LineType> {
-		static std::string convert(newsbeuter::LineType const& value) {
+	template<> struct StringMaker<newsboat::LineType> {
+		static std::string convert(newsboat::LineType const& value) {
 			return toString(value);
 		}
 	};
 
 	// Catch also doesn't know about std::pair
-	template<> struct StringMaker<std::pair<newsbeuter::LineType, std::string>> {
-		static std::string convert(std::pair<newsbeuter::LineType, std::string> const& value ) {
+	template<> struct StringMaker<std::pair<newsboat::LineType, std::string>> {
+		static std::string convert(std::pair<newsboat::LineType, std::string> const& value ) {
 			std::ostringstream o;
 			o << "(";
 			o << toString(value.first);

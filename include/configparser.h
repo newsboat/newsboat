@@ -6,7 +6,7 @@
 #include <map>
 #include <set>
 
-namespace newsbeuter {
+namespace newsboat {
 
 enum class action_handler_status {
 	OK = 0,

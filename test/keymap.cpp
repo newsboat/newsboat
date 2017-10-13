@@ -3,7 +3,7 @@
 #include <keymap.h>
 #include <exceptions.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 TEST_CASE("get_operation()", "[keymap]") {
 	keymap k(KM_NEWSBEUTER);

@@ -2,7 +2,7 @@
 
 #include <urlreader.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 TEST_CASE("URL reader extracts all URLs from the file", "[file_urlreader]") {
 	file_urlreader u;

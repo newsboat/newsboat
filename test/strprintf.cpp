@@ -2,7 +2,7 @@
 
 #include <strprintf.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 TEST_CASE("strprintf::fmt()", "[strprintf]") {
 	REQUIRE(strprintf::fmt("") == "");

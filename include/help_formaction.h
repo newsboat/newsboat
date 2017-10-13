@@ -3,7 +3,7 @@
 
 #include <formaction.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class help_formaction : public formaction {
 	public:

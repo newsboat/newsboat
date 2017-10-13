@@ -243,7 +243,7 @@ TEST_CASE("W3C DTF to RFC 822 conversion does not take into account the local "
 	tzset();
 }
 
-namespace newsbeuter {
+namespace newsboat {
 
 TEST_CASE("set_rssurl checks if query feed has a valid query", "[rss]") {
 	configcontainer cfg;

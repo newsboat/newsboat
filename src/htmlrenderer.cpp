@@ -12,7 +12,7 @@
 #include <libgen.h>
 #include <config.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 htmlrenderer::htmlrenderer(bool raw) : raw_(raw) {
 	tags["a"] = htmltag::A;

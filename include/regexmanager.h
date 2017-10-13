@@ -9,7 +9,7 @@
 #include <utility>
 #include <memory>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class regexmanager : public config_action_handler {
 	public:

@@ -4,7 +4,7 @@
 #include <thread>
 #include <ttrss_api.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class controller;
 

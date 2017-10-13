@@ -5,7 +5,7 @@
 #include <urlreader.h>
 #include <cache.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class oldreader_api : public remote_api {
 	public:

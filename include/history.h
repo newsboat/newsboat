@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-namespace newsbeuter {
+namespace newsboat {
 
 class history {
 	public:

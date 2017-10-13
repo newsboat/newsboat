@@ -7,7 +7,7 @@
 #include <cassert>
 #include <exceptions.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 history formaction::searchhistory;
 history formaction::cmdlinehistory;

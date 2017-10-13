@@ -7,7 +7,7 @@
 #include <cstdlib>
 
 
-namespace newsbeuter {
+namespace newsboat {
 
 void fmtstr_formatter::register_fmt(char f, const std::string& value) {
 	fmts[f] = utils::str2wstr(value);

@@ -7,7 +7,7 @@
 #include <vector>
 #include <curl/curl.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 typedef std::pair<std::string, std::vector<std::string>> tagged_feedurl;
 

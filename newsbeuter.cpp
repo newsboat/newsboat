@@ -9,7 +9,7 @@
 #include <errno.h>
 #include <cstring>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 int main(int argc, char * argv[]) {
 	utils::initialize_ssl_implementation();
@@ -24,7 +24,7 @@ int main(int argc, char * argv[]) {
 	rsspp::parser::global_init();
 
 	controller c;
-	newsbeuter::view v(&c);
+	newsboat::view v(&c);
 	c.set_view(&v);
 
 	c.run(argc,argv);

@@ -6,7 +6,7 @@
 #include <langinfo.h>
 #include <utils.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 /*
  * This is a wrapper around the low-level C functions of STFL.

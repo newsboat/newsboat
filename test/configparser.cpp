@@ -2,7 +2,7 @@
 
 #include <configparser.h>
 
-using namespace newsbeuter;
+using namespace newsboat;
 
 TEST_CASE("evaluate_backticks replaces command in backticks with its output",
           "[configparser]") {

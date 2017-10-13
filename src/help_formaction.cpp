@@ -9,7 +9,7 @@
 #include <keymap.h>
 #include <cstring>
 
-namespace newsbeuter {
+namespace newsboat {
 
 help_formaction::help_formaction(view * vv, std::string formstr)
 	: formaction(vv, formstr), quit(false), apply_search(false) {

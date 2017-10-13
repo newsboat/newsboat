@@ -7,7 +7,7 @@
 #include <istream>
 #include <map>
 
-namespace newsbeuter {
+namespace newsboat {
 
 enum class link_type { HREF, IMG, EMBED };
 enum class htmltag {

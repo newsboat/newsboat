@@ -12,7 +12,7 @@
 
 #define OCNEWS_API "/index.php/apps/news/api/v1-2/"
 
-namespace newsbeuter {
+namespace newsboat {
 
 typedef std::unique_ptr<json_object, decltype(*json_object_put)> json_uptr;
 typedef std::unique_ptr<CURL, decltype(*curl_easy_cleanup)> curl_uptr;

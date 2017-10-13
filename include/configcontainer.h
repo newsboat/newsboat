@@ -5,7 +5,7 @@
 
 #include <unordered_set>
 
-namespace newsbeuter {
+namespace newsboat {
 
 
 enum class configdata_t { INVALID, BOOL, INT, STR, PATH, ALIAS, ENUM };

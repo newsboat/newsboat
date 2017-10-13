@@ -22,7 +22,7 @@
 
 #include <functional>
 
-namespace newsbeuter {
+namespace newsboat {
 
 rss_item::rss_item(cache * c) : ch(c), idx(0), size_(0), pubDate_(0), unread_(true), enqueued_(false), deleted_(0), override_unread_(false) {
 }

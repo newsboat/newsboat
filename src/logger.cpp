@@ -4,7 +4,7 @@
 #include <cerrno>
 
 
-namespace newsbeuter {
+namespace newsboat {
 std::mutex logger::instanceMutex;
 
 logger::logger() : curlevel(level::NONE) { }

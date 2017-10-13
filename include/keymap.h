@@ -28,7 +28,7 @@ enum {
 	KM_BOTH			= KM_NEWSBEUTER | KM_PODBEUTER
 };
 
-namespace newsbeuter {
+namespace newsboat {
 
 enum operation {	OP_NIL = 0,
                     // general and newsboat-specific operations:

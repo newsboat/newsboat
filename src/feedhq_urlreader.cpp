@@ -1,7 +1,7 @@
 #include <feedhq_api.h>
 #include <logger.h>
 
-namespace newsbeuter {
+namespace newsboat {
 
 feedhq_urlreader::feedhq_urlreader(configcontainer * c, const std::string& url_file, remote_api * a) : cfg(c), file(url_file), api(a) { }
 
