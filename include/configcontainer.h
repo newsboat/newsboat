@@ -1,5 +1,5 @@
-#ifndef CONFIGCONTAINER_H_
-#define CONFIGCONTAINER_H_
+#ifndef NEWSBOAT_CONFIGCONTAINER_H_
+#define NEWSBOAT_CONFIGCONTAINER_H_
 
 #include <configparser.h>
 
@@ -57,4 +57,4 @@ class configcontainer : public config_action_handler {
 
 }
 
-#endif /*CONFIGCONTAINER_H_*/
+#endif /* NEWSBOAT_CONFIGCONTAINER_H_ */

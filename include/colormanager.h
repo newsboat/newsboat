@@ -1,5 +1,5 @@
-#ifndef COLORMANAGER_H_
-#define COLORMANAGER_H_
+#ifndef NEWSBOAT_COLORMANAGER_H_
+#define NEWSBOAT_COLORMANAGER_H_
 
 #include <configparser.h>
 #include <vector>
@@ -44,4 +44,4 @@ class colormanager : public config_action_handler {
 
 }
 
-#endif
+#endif /* NEWSBOAT_COLORMANAGER_H_ */

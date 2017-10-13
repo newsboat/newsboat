@@ -1,5 +1,5 @@
-#ifndef DOWNLOADTHREAD_H_
-#define DOWNLOADTHREAD_H_
+#ifndef NEWSBOAT_DOWNLOADTHREAD_H_
+#define NEWSBOAT_DOWNLOADTHREAD_H_
 
 #include <thread>
 #include <controller.h>
@@ -30,4 +30,4 @@ class reloadrangethread {
 
 }
 
-#endif /*DOWNLOADTHREAD_H_*/
+#endif /* NEWSBOAT_DOWNLOADTHREAD_H_ */

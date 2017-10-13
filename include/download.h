@@ -1,5 +1,5 @@
-#ifndef PODBEUTER_DOWNLOAD__H
-#define PODBEUTER_DOWNLOAD__H
+#ifndef PODBOAT_DOWNLOAD_H_
+#define PODBOAT_DOWNLOAD_H_
 
 #include <string>
 
@@ -58,4 +58,4 @@ class download {
 
 }
 
-#endif
+#endif /* PODBOAT_DOWNLOAD_H_ */

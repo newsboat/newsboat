@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_NEWSBLUR_API__H
-#define NEWSBEUTER_NEWSBLUR_API__H
+#ifndef NEWSBOAT_NEWSBLUR_API_H_
+#define NEWSBOAT_NEWSBLUR_API_H_
 
 #include <remote_api.h>
 #include <urlreader.h>
@@ -48,4 +48,4 @@ class newsblur_urlreader : public urlreader {
 
 }
 
-#endif
+#endif /* NEWSBOAT_NEWSBLUR_API_H_ */

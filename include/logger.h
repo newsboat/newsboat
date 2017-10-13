@@ -1,5 +1,5 @@
-#ifndef LOGGER__H
-#define LOGGER__H
+#ifndef NEWSBOAT_LOGGER_H_
+#define NEWSBOAT_LOGGER_H_
 
 #include <fstream>
 #include <mutex>
@@ -87,4 +87,4 @@ class logger {
 #define LOG(x, ...) do { logger::getInstance().log(x, __VA_ARGS__); } while(0)
 #endif
 
-#endif
+#endif /* NEWSBOAT_LOGGER_H_ */

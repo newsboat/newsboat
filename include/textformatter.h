@@ -1,5 +1,5 @@
-#ifndef TEXTFORMATTER__H
-#define TEXTFORMATTER__H
+#ifndef NEWSBOAT_TEXTFORMATTER_H_
+#define NEWSBOAT_TEXTFORMATTER_H_
 
 #include <climits>
 #include <vector>
@@ -52,4 +52,4 @@ class textformatter {
 
 }
 
-#endif
+#endif /* NEWSBOAT_TEXTFORMATTER_H_ */

@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_DIALOGS_FORMACTION__H
-#define NEWSBEUTER_DIALOGS_FORMACTION__H
+#ifndef NEWSBOAT_DIALOGS_FORMACTION_H_
+#define NEWSBOAT_DIALOGS_FORMACTION_H_
 
 #include <formaction.h>
 
@@ -25,4 +25,4 @@ class dialogs_formaction : public formaction {
 
 }
 
-#endif
+#endif /* NEWSBOAT_DIALOGS_FORMACTION_H_ */

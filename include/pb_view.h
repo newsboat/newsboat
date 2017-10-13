@@ -1,5 +1,5 @@
-#ifndef PODBEUTER_VIEW__H
-#define PODBEUTER_VIEW__H
+#ifndef PODBOAT_VIEW_H_
+#define PODBOAT_VIEW_H_
 
 #include <keymap.h>
 #include <stflpp.h>
@@ -46,4 +46,4 @@ class pb_view {
 
 }
 
-#endif
+#endif /* PODBOAT_VIEW_H_ */

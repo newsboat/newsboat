@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_STRPRINTF_H_
-#define NEWSBEUTER_STRPRINTF_H_
+#ifndef NEWSBOAT_STRPRINTF_H_
+#define NEWSBOAT_STRPRINTF_H_
 
 #include <memory>
 #include <string>
@@ -67,4 +67,4 @@ class strprintf {
 
 }
 
-#endif /* NEWSBEUTER_STRPRINTF_H_ */
+#endif /* NEWSBOAT_STRPRINTF_H_ */

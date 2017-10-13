@@ -1,5 +1,5 @@
-#ifndef PODBEUTER_CONTROLLER__H
-#define PODBEUTER_CONTROLLER__H
+#ifndef PODBOAT_CONTROLLER_H_
+#define PODBOAT_CONTROLLER_H_
 
 #include <string>
 #include <configcontainer.h>
@@ -76,4 +76,4 @@ class pb_controller {
 
 }
 
-#endif
+#endif /* PODBOAT_CONTROLLER_H_ */

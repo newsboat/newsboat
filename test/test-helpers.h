@@ -1,5 +1,5 @@
-#ifndef TEST_HELPERS_H_
-#define TEST_HELPERS_H_
+#ifndef NEWSBOAT_TEST_HELPERS_H_
+#define NEWSBOAT_TEST_HELPERS_H_
 
 #include <unistd.h>
 #include <cstdlib>
@@ -152,4 +152,4 @@ namespace TestHelpers {
 	};
 }
 
-#endif /* TEST_HELPERS_H_ */
+#endif /* NEWSBOAT_TEST_HELPERS_H_ */

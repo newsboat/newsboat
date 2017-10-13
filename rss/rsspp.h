@@ -1,10 +1,5 @@
-/* rsspp - Copyright (C) 2008-2012 Andreas Krennmair <ak@newsbeuter.org>
- * Licensed under the MIT/X Consortium License. See file LICENSE
- * for more information.
- */
-
-#ifndef RSSPP_H
-#define RSSPP_H
+#ifndef NEWSBOAT_RSSPP_H_
+#define NEWSBOAT_RSSPP_H_
 
 #include <string>
 #include <vector>
@@ -115,5 +110,4 @@ class parser {
 
 }
 
-
-#endif
+#endif /* NEWSBOAT_RSSPP_H_ */

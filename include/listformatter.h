@@ -1,5 +1,5 @@
-#ifndef LISTFORMATTER__H
-#define LISTFORMATTER__H
+#ifndef NEWSBOAT_LISTFORMATTER_H_
+#define NEWSBOAT_LISTFORMATTER_H_
 
 #include <climits>
 #include <vector>
@@ -36,4 +36,4 @@ class listformatter {
 
 }
 
-#endif
+#endif /* NEWSBOAT_LISTFORMATTER_H_ */

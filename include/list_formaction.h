@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_LIST_FORMACTION__H
-#define NEWSBEUTER_LIST_FORMACTION__H
+#ifndef NEWSBOAT_LIST_FORMACTION_H_
+#define NEWSBOAT_LIST_FORMACTION_H_
 
 #include "formaction.h"
 
@@ -16,4 +16,4 @@ class list_formaction : public formaction {
 
 }
 
-#endif
+#endif /* NEWSBOAT_LIST_FORMACTION_H_ */

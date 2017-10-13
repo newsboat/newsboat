@@ -1,5 +1,5 @@
-#ifndef FILTER_PARSER__H
-#define FILTER_PARSER__H
+#ifndef NEWSBOAT_FILTER_PARSER_H_
+#define NEWSBOAT_FILTER_PARSER_H_
 
 #include <string>
 #include <sys/types.h>
@@ -51,4 +51,4 @@ class FilterParser {
 };
 
 
-#endif
+#endif /* NEWSBOAT_FILTER_PARSER_H_ */

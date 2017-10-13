@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_FEEDLIST_FORMACTION__H
-#define NEWSBEUTER_FEEDLIST_FORMACTION__H
+#ifndef NEWSBOAT_FEEDLIST_FORMACTION_H_
+#define NEWSBOAT_FEEDLIST_FORMACTION_H_
 
 #include <list_formaction.h>
 #include <matcher.h>
@@ -96,5 +96,4 @@ class feedlist_formaction : public list_formaction {
 
 }
 
-
-#endif
+#endif /* NEWSBOAT_FEEDLIST_FORMACTION_H_ */

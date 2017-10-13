@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_HELP_FORMACTION__H
-#define NEWSBEUTER_HELP_FORMACTION__H
+#ifndef NEWSBOAT_HELP_FORMACTION_H_
+#define NEWSBOAT_HELP_FORMACTION_H_
 
 #include <formaction.h>
 
@@ -31,4 +31,4 @@ class help_formaction : public formaction {
 
 }
 
-#endif
+#endif /* NEWSBOAT_HELP_FORMACTION_H_ */

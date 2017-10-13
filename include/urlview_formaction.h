@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_URLVIEW_FORMACTION__H
-#define NEWSBEUTER_URLVIEW_FORMACTION__H
+#ifndef NEWSBOAT_URLVIEW_FORMACTION_H_
+#define NEWSBOAT_URLVIEW_FORMACTION_H_
 
 #include <formaction.h>
 #include <htmlrenderer.h>
@@ -30,4 +30,4 @@ class urlview_formaction : public formaction {
 
 }
 
-#endif
+#endif /* NEWSBOAT_URLVIEW_FORMACTION_H_ */

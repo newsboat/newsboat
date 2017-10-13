@@ -1,5 +1,5 @@
-#ifndef STFLPP__H
-#define STFLPP__H
+#ifndef NEWSBOAT_STFLPP_H_
+#define NEWSBOAT_STFLPP_H_
 
 extern "C" {
 #include <stfl.h>
@@ -43,5 +43,4 @@ class stfl {
 
 }
 
-
-#endif
+#endif /* NEWSBOAT_STFLPP_H_ */

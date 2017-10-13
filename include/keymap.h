@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_KEYMAP__H
-#define NEWSBEUTER_KEYMAP__H
+#ifndef NEWSBOAT_KEYMAP_H_
+#define NEWSBOAT_KEYMAP_H_
 
 #include <string>
 #include <map>
@@ -9,7 +9,6 @@
 #include <configparser.h>
 
 // in configuration: bind-key <key> <operation>
-
 
 enum {
 	KM_FEEDLIST		= 1<<0,
@@ -177,5 +176,4 @@ class keymap : public config_action_handler {
 
 }
 
-
-#endif
+#endif /* NEWSBOAT_KEYMAP_H_ */

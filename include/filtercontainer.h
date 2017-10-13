@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_FILTERCONTAINER__H
-#define NEWSBEUTER_FILTERCONTAINER__H
+#ifndef NEWSBOAT_FILTERCONTAINER_H_
+#define NEWSBOAT_FILTERCONTAINER_H_
 
 #include <configparser.h>
 
@@ -27,5 +27,4 @@ class filtercontainer : public config_action_handler {
 
 }
 
-
-#endif
+#endif /* NEWSBOAT_FILTERCONTAINER_H_ */

@@ -1,5 +1,5 @@
-#ifndef UTIL_H_
-#define UTIL_H_
+#ifndef NEWSBOAT_UTIL_H_
+#define NEWSBOAT_UTIL_H_
 
 #include <vector>
 #include <string>
@@ -159,4 +159,4 @@ class scope_measure {
 
 }
 
-#endif /*UTIL_H_*/
+#endif /* NEWSBOAT_UTIL_H_ */

@@ -1,5 +1,5 @@
-#ifndef PODBEUTER_PODDLTHREAD__H
-#define PODBEUTER_PODDLTHREAD__H
+#ifndef PODBOAT_PODDLTHREAD_H_
+#define PODBOAT_PODDLTHREAD_H_
 
 #include <thread>
 #include <download.h>
@@ -34,5 +34,4 @@ class poddlthread {
 
 }
 
-
-#endif
+#endif /* PODBOAT_PODDLTHREAD_H_ */

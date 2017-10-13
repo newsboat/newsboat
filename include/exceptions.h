@@ -1,5 +1,5 @@
-#ifndef EXCEPTIONS_H_
-#define EXCEPTIONS_H_
+#ifndef NEWSBOAT_EXCEPTIONS_H_
+#define NEWSBOAT_EXCEPTIONS_H_
 
 #include <stdexcept>
 #include <string>
@@ -79,4 +79,4 @@ class matcherexception : public std::exception {
 
 }
 
-#endif /*EXCEPTIONS_H_*/
+#endif /* NEWSBOAT_EXCEPTIONS_H_ */

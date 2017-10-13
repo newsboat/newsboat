@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_REMOTE_API__H
-#define NEWSBEUTER_REMOTE_API__H
+#ifndef NEWSBOAT_REMOTE_API_H_
+#define NEWSBOAT_REMOTE_API_H_
 
 #include <configcontainer.h>
 #include <string>
@@ -36,4 +36,4 @@ class remote_api {
 
 }
 
-#endif
+#endif /* NEWSBOAT_REMOTE_API_H_ */

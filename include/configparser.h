@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_CONFIGPARSER__H
-#define NEWSBEUTER_CONFIGPARSER__H
+#ifndef NEWSBOAT_CONFIGPARSER_H_
+#define NEWSBOAT_CONFIGPARSER_H_
 
 #include <vector>
 #include <string>
@@ -53,4 +53,4 @@ class null_config_action_handler : public config_action_handler {
 
 }
 
-#endif
+#endif /* NEWSBOAT_CONFIGPARSER_H_ */

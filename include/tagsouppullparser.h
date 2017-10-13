@@ -1,5 +1,5 @@
-#ifndef tagsouppullparser_H_
-#define tagsouppullparser_H_
+#ifndef NEWSBOAT_TAGSOUPPULLPARSER_H_
+#define NEWSBOAT_TAGSOUPPULLPARSER_H_
 
 #include <string>
 #include <utility>
@@ -45,4 +45,4 @@ class tagsouppullparser {
 
 }
 
-#endif /*tagsouppullparser_H_*/
+#endif /* NEWSBOAT_TAGSOUPPULLPARSER_H_ */

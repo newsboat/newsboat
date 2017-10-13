@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_TTRSS_API__H
-#define NEWSBEUTER_TTRSS_API__H
+#ifndef NEWSBOAT_TTRSS_API_H_
+#define NEWSBOAT_TTRSS_API_H_
 
 #include <rsspp.h>
 #include <remote_api.h>
@@ -48,4 +48,4 @@ class ttrss_urlreader : public urlreader {
 
 }
 
-#endif
+#endif /* NEWSBOAT_TTRSS_API_H_ */

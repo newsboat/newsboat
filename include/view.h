@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_VIEW__H
-#define NEWSBEUTER_VIEW__H
+#ifndef NEWSBOAT_VIEW_H_
+#define NEWSBOAT_VIEW_H_
 
 #include <controller.h>
 #include <configcontainer.h>
@@ -155,4 +155,4 @@ class view {
 
 }
 
-#endif
+#endif /* NEWSBOAT_VIEW_H_ */

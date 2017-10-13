@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_GOOGLE_API__H
-#define NEWSBEUTER_GOOGLE_API__H
+#ifndef NEWSBOAT_GOOGLE_API_H_
+#define NEWSBOAT_GOOGLE_API_H_
 
 #include <remote_api.h>
 #include <urlreader.h>
@@ -45,4 +45,4 @@ class oldreader_urlreader : public urlreader {
 
 }
 
-#endif
+#endif /* NEWSBOAT_GOOGLE_API_H_ */

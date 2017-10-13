@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_CONTROLLER__H
-#define NEWSBEUTER_CONTROLLER__H
+#ifndef NEWSBOAT_CONTROLLER_H_
+#define NEWSBOAT_CONTROLLER_H_
 
 #include <urlreader.h>
 #include <rss.h>
@@ -153,5 +153,4 @@ class controller {
 
 }
 
-
-#endif
+#endif /* NEWSBOAT_CONTROLLER_H_ */

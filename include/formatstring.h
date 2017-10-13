@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_FORMATSTRING__H
-#define NEWSBEUTER_FORMATSTRING__H
+#ifndef NEWSBOAT_FORMATSTRING_H_
+#define NEWSBOAT_FORMATSTRING_H_
 
 #include <map>
 #include <string>
@@ -19,4 +19,4 @@ class fmtstr_formatter {
 
 }
 
-#endif
+#endif /* NEWSBOAT_FORMATSTRING_H_ */

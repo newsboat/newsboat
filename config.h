@@ -1,5 +1,5 @@
-#ifndef NEWSBEUTER_CONFIG__H
-#define NEWSBEUTER_CONFIG__H
+#ifndef NEWSBOAT_CONFIG_H_
+#define NEWSBOAT_CONFIG_H_
 
 #define PACKAGE				"newsboat"
 #define PROGRAM_NAME			PACKAGE
@@ -36,4 +36,4 @@
 
 /* #define NDEBUG */ // only enable this #define if you want to disable all debug logging.
 
-#endif
+#endif /* NEWSBOAT_CONFIG_H_ */
