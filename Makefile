@@ -186,7 +186,7 @@ cppcheck:
 	cppcheck -j$(CPPCHECK_JOBS) --force --enable=all --suppress=unusedFunction \
 		-DDEBUG=1 \
 		$(INCLUDES) $(DEFINES) \
-		include filter newsbeuter.cpp podbeuter.cpp rss src stfl \
+		include filter newsboat.cpp podbeuter.cpp rss src stfl \
 		test/*.cpp test/*.h \
 		2>cppcheck.log
 	@echo "Done! See cppcheck.log for details."
