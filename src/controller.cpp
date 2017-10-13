@@ -806,7 +806,7 @@ int controller::run(int argc, char * argv[]) {
 	formaction::load_histories(searchfile, cmdlinefile);
 
 	// run the view
-	v->run();
+	int ret = v->run();
 
 	unsigned int history_limit = cfg.get_configvalue_as_int("history-limit");
 	LOG(level::DEBUG, "controller::run: history-limit = %u", history_limit);
@@ -826,11 +826,12 @@ int controller::run(int argc, char * argv[]) {
 		LOG(level::USERERROR, "Cleaning up cache failed: %s", e.what());
 		if (!silent) {
 			std::cout << _("failed: ") << e.what() << std::endl;
+			ret = EXIT_FAILURE;
 		}
 	}
 
 	utils::remove_fs_lock(lock_file);
-	return EXIT_SUCCESS;
+	return ret;
 }
 
 void controller::update_feedlist() {

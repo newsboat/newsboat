@@ -145,7 +145,7 @@ void view::show_error(const std::string& msg) {
 	set_status(msg);
 }
 
-void view::run() {
+int view::run() {
 	bool have_macroprefix = false;
 	std::vector<macrocmd> macrocmds;
 
@@ -194,7 +194,7 @@ void view::run() {
 				if (!get_cfg()->get_configvalue_as_bool("confirm-exit") || confirm(_("Do you really want to quit (y:Yes n:No)? "), _("yn")) == *_("y")) {
 					stfl::reset();
 					utils::remove_fs_lock(lock_file);
-					::exit(EXIT_FAILURE);
+					return EXIT_FAILURE;
 				}
 			}
 
@@ -252,6 +252,7 @@ void view::run() {
 	}
 
 	stfl::reset();
+	return EXIT_SUCCESS;
 }
 
 std::string view::run_modal(std::shared_ptr<formaction> f, const std::string& value) {

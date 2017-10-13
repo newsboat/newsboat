@@ -26,7 +26,7 @@ class view {
 	public:
 		explicit view(controller *);
 		~view();
-		void run();
+		int run();
 		std::string run_modal(std::shared_ptr<formaction> f, const std::string& value = "");
 
 		void set_feedlist(std::vector<std::shared_ptr<rss_feed>> feeds);
