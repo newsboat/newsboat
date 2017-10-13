@@ -8,19 +8,19 @@ namespace newsbeuter {
 class help_formaction : public formaction {
 	public:
 		help_formaction(view *, std::string formstr);
-		virtual ~help_formaction();
-		virtual void prepare();
-		virtual void init();
-		virtual keymap_hint_entry * get_keymap_hint();
-		virtual std::string id() const {
+		~help_formaction() override;
+		void prepare() override;
+		void init() override;
+		keymap_hint_entry * get_keymap_hint() override;
+		std::string id() const override {
 			return "help";
 		}
-		virtual std::string title();
+		std::string title() override;
 
-		virtual void finished_qna(operation op);
+		void finished_qna(operation op) override;
 		void set_context(const std::string& ctx);
 	private:
-		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr);
+		void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr) override;
 		std::string make_colorstring(const std::vector<std::string>& colors);
 		bool quit;
 		bool apply_search;

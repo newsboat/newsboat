@@ -24,7 +24,7 @@ class rss_feed;
 class rss_item : public matchable {
 	public:
 		explicit rss_item(cache * c);
-		~rss_item();
+		~rss_item() override;
 
 		std::string title() const;
 		std::string title_raw() const {
@@ -116,8 +116,8 @@ class rss_item : public matchable {
 		void update_flags();
 		void sort_flags();
 
-		virtual bool has_attribute(const std::string& attribname);
-		virtual std::string get_attribute(const std::string& attribname);
+		bool has_attribute(const std::string& attribname) override;
+		std::string get_attribute(const std::string& attribname) override;
 
 		void set_feedptr(std::shared_ptr<rss_feed> ptr);
 		inline std::shared_ptr<rss_feed> get_feedptr() {
@@ -183,7 +183,7 @@ class rss_feed : public matchable {
 	public:
 		explicit rss_feed(cache * c);
 		rss_feed();
-		~rss_feed();
+		~rss_feed() override;
 		std::string title_raw() const {
 			return title_;
 		}
@@ -270,8 +270,8 @@ class rss_feed : public matchable {
 		std::string get_tags();
 		std::string get_firsttag();
 
-		virtual bool has_attribute(const std::string& attribname);
-		virtual std::string get_attribute(const std::string& attribname);
+		bool has_attribute(const std::string& attribname) override;
+		std::string get_attribute(const std::string& attribname) override;
 
 		void update_items(std::vector<std::shared_ptr<rss_feed>> feeds);
 
@@ -353,9 +353,9 @@ class rss_feed : public matchable {
 class rss_ignores : public config_action_handler {
 	public:
 		rss_ignores() { }
-		virtual ~rss_ignores();
-		virtual void handle_action(const std::string& action, const std::vector<std::string>& params);
-		virtual void dump_config(std::vector<std::string>& config_output);
+		~rss_ignores() override;
+		void handle_action(const std::string& action, const std::vector<std::string>& params) override;
+		void dump_config(std::vector<std::string>& config_output) override;
 		bool matches(rss_item * item);
 		bool matches_lastmodified(const std::string& url);
 		bool matches_resetunread(const std::string& url);

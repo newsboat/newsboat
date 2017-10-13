@@ -17,11 +17,11 @@ enum class InvalidationMode {PARTIAL, COMPLETE};
 class itemlist_formaction : public list_formaction {
 	public:
 		itemlist_formaction(view *, std::string formstr);
-		virtual ~itemlist_formaction();
-		virtual void prepare();
-		virtual void init();
+		~itemlist_formaction() override;
+		void prepare() override;
+		void init() override;
 
-		virtual void set_redraw(bool b) {
+		void set_redraw(bool b) override {
 			formaction::set_redraw(b);
 			apply_filter = !(v->get_cfg()->get_configvalue_as_bool("show-read-articles"));
 			invalidate(InvalidationMode::COMPLETE);
@@ -29,10 +29,10 @@ class itemlist_formaction : public list_formaction {
 
 		void set_feed(std::shared_ptr<rss_feed> fd);
 
-		virtual std::string id() const {
+		std::string id() const override {
 			return "articlelist";
 		}
-		virtual std::string title();
+		std::string title() override;
 
 		inline std::shared_ptr<rss_feed> get_feed() {
 			return feed;
@@ -41,7 +41,7 @@ class itemlist_formaction : public list_formaction {
 			pos = p;
 		}
 		std::string get_guid();
-		virtual keymap_hint_entry * get_keymap_hint();
+		keymap_hint_entry * get_keymap_hint() override;
 
 		bool jump_to_next_unread_item(bool start_with_first);
 		bool jump_to_previous_unread_item(bool start_with_last);
@@ -49,11 +49,11 @@ class itemlist_formaction : public list_formaction {
 		bool jump_to_previous_item(bool start_with_last);
 		bool jump_to_random_unread_item();
 
-		virtual void handle_cmdline(const std::string& cmd);
+		void handle_cmdline(const std::string& cmd) override;
 
 		void do_update_visible_items();
 
-		virtual void finished_qna(operation op);
+		void finished_qna(operation op) override;
 
 		inline void set_show_searchresult(bool b) {
 			show_searchresult = b;
@@ -62,12 +62,12 @@ class itemlist_formaction : public list_formaction {
 			searchphrase = s;
 		}
 
-		virtual void recalculate_form();
+		void recalculate_form() override;
 
 		void set_regexmanager(regexmanager * r);
 
 	private:
-		virtual void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr);
+		void process_operation(operation op, bool automatic = false, std::vector<std::string> * args = nullptr) override;
 		void set_head(const std::string& s, unsigned int unread, unsigned int total, const std::string &url);
 		int get_pos(unsigned int idx);
 

@@ -156,7 +156,7 @@ struct macrocmd {
 class keymap : public config_action_handler {
 	public:
 		explicit keymap(unsigned int flags);
-		~keymap();
+		~keymap() override;
 		void set_key(operation op, const std::string& key, const std::string& context);
 		void unset_key(const std::string& key, const std::string& context);
 		operation get_opcode(const std::string& opstr);
@@ -164,8 +164,8 @@ class keymap : public config_action_handler {
 		std::vector<macrocmd> get_macro(const std::string& key);
 		char get_key(const std::string& keycode);
 		std::string getkey(operation op, const std::string& context);
-		virtual void handle_action(const std::string& action, const std::vector<std::string>& params);
-		virtual void dump_config(std::vector<std::string>& config_output);
+		void handle_action(const std::string& action, const std::vector<std::string>& params) override;
+		void dump_config(std::vector<std::string>& config_output) override;
 		void get_keymap_descriptions(std::vector<keymap_desc>& descs, unsigned short flags);
 		unsigned short get_flag_from_context(const std::string& context);
 	private:

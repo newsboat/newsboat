@@ -31,11 +31,11 @@ class urlreader {
 class file_urlreader : public urlreader {
 	public:
 		explicit file_urlreader(const std::string& file = "");
-		virtual ~file_urlreader();
-		virtual void write_config();
-		virtual void reload();
+		~file_urlreader() override;
+		void write_config() override;
+		void reload() override;
 		void load_config(const std::string& file);
-		virtual std::string get_source();
+		std::string get_source() override;
 	private:
 		std::string filename;
 };
@@ -43,10 +43,10 @@ class file_urlreader : public urlreader {
 class opml_urlreader : public urlreader {
 	public:
 		explicit opml_urlreader(configcontainer * c);
-		virtual ~opml_urlreader();
-		virtual void write_config();
-		virtual void reload();
-		virtual std::string get_source();
+		~opml_urlreader() override;
+		void write_config() override;
+		void reload() override;
+		std::string get_source() override;
 	protected:
 		virtual void handle_node(xmlNode * node, const std::string& tag);
 		configcontainer * cfg;

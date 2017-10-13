@@ -35,10 +35,10 @@ struct configdata {
 class configcontainer : public config_action_handler {
 	public:
 		configcontainer();
-		virtual ~configcontainer();
+		~configcontainer() override;
 		void register_commands(configparser& cfgparser);
-		virtual void handle_action(const std::string& action, const std::vector<std::string>& params);
-		virtual void dump_config(std::vector<std::string>& config_output);
+		void handle_action(const std::string& action, const std::vector<std::string>& params) override;
+		void dump_config(std::vector<std::string>& config_output) override;
 
 		bool get_configvalue_as_bool(const std::string& key);
 		int get_configvalue_as_int(const std::string& key);
