@@ -19,7 +19,7 @@ addons:
 install_coveralls_commands: &install_coveralls
   - pip install --user cpp-coveralls
 
-newsbeuter_brew_commands: &osx_deps
+newsboat_brew_commands: &osx_deps
   - brew update
   - brew outdated "pkg-config" || brew upgrade "pkg-config"
   - brew install "gettext" && brew link --force "gettext"
