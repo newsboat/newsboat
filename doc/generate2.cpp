@@ -5,7 +5,7 @@
 int main(int argc, char *argv[])
 {
 	if (argc < 2) {
-		std::cerr << "usage: " << argv[0] << " <dsv-file>\n";
+		std::cerr << "usage: " << argv[0] << " <dsv-file> [<link-prefix>]\n";
 		return 1;
 	}
 

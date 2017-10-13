@@ -183,7 +183,7 @@ doc/newsboat.1: doc/manpage-newsboat.txt doc/chapter-firststeps.txt doc/newsboat
 	$(A2X) -f manpage doc/manpage-newsboat.txt
 
 doc/podboat-cfgcmds.txt: doc/generate doc/podboat-cmds.dsv
-	doc/generate doc/podboat-cmds.dsv > doc/podboat-cfgcmds.txt
+	doc/generate doc/podboat-cmds.dsv 'pb-' > doc/podboat-cfgcmds.txt
 
 doc/podboat.1: doc/manpage-podboat.txt doc/chapter-podcasts.txt doc/podboat-cfgcmds.txt
 	$(A2X) -f manpage doc/manpage-podboat.txt

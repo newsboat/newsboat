@@ -5,7 +5,7 @@
 int main(int argc, char *argv[])
 {
 	if (argc < 2) {
-		std::cerr << "usage: " << argv[0] << " <dsv-file>\n";
+		std::cerr << "usage: " << argv[0] << " <dsv-file> [<link-prefix>]\n";
 		return 1;
 	}
 
@@ -14,6 +14,8 @@ int main(int argc, char *argv[])
 		std::cerr << "couldn't open " << argv[1] << '\n';
 		return 1;
 	}
+
+	const std::string linkprefix = argc == 3 ? argv[2] : "";
 
 	for (std::string line; std::getline(input, line); ) {
 		const std::vector<std::string> matches = split(line, "||");
@@ -24,7 +26,7 @@ int main(int argc, char *argv[])
 			const std::string desc = matches[3];
 			const std::string example = matches[4];
 
-			std::cout << "'" << option << "' ";
+			std::cout << "[[" << linkprefix << option << "]] '" << option << "' ";
 			std::cout << "(parameters: " << syntax << "; ";
 			std::cout << "default value: '" << defaultparam << "')::\n";
 			std::cout << "         " << desc;
