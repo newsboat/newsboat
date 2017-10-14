@@ -8,6 +8,7 @@
 #include <colormanager.h>
 #include <logger.h>
 #include <utils.h>
+#include <fslock.h>
 #include <strprintf.h>
 #include <stflpp.h>
 #include <exception.h>
@@ -60,6 +61,7 @@ namespace newsboat {
 const std::string controller::LOCK_SUFFIX = ".lock";
 
 std::string lock_file;
+std::unique_ptr<FSLock> fslock;
 
 int ctrl_c_hit = 0;
 
@@ -71,7 +73,6 @@ void ctrl_c_action(int /* sig */) {
 void sighup_action(int /* sig */) {
 	LOG(level::DEBUG, "caught SIGHUP");
 	stfl::reset();
-	utils::remove_fs_lock(lock_file);
 	::exit(EXIT_FAILURE);
 }
 
@@ -545,13 +546,9 @@ int controller::run(int argc, char * argv[]) {
 		if (!silent)
 			std::cout << strprintf::fmt(_("Starting %s %s..."), PROGRAM_NAME, PROGRAM_VERSION) << std::endl;
 
+		fslock = std::unique_ptr<FSLock>(new FSLock());
 		pid_t pid;
-		if (!utils::try_fs_lock(lock_file, pid)) {
-			if (pid > 0) {
-				LOG(level::ERROR,"an instance is already running: pid = %u",pid);
-			} else {
-				LOG(level::ERROR,"something went wrong with the lock: %s", strerror(errno));
-			}
+		if (! fslock->try_lock(lock_file, pid)) {
 			if (!execute_cmds) {
 				std::cout << strprintf::fmt(_("Error: an instance of %s is already running (PID: %u)"), PROGRAM_NAME, pid) << std::endl;
 			}
@@ -585,7 +582,6 @@ int controller::run(int argc, char * argv[]) {
 	} catch (const configexception& ex) {
 		LOG(level::ERROR,"an exception occurred while parsing the configuration file: %s",ex.what());
 		std::cout << ex.what() << std::endl;
-		utils::remove_fs_lock(lock_file);
 		return EXIT_FAILURE;
 	}
 
@@ -599,19 +595,10 @@ int controller::run(int argc, char * argv[]) {
 	if (cachefilepath.length() > 0 && !cachefile_given_on_cmdline) {
 		cache_file = cachefilepath.c_str();
 
-		// ok, we got another cache file path via the configuration
-		// that means we need to remove the old lock file, assemble
-		// the new lock file's name, and then try to lock it.
-		utils::remove_fs_lock(lock_file);
 		lock_file = std::string(cache_file) + LOCK_SUFFIX;
-
+		fslock = std::unique_ptr<FSLock>(new FSLock());
 		pid_t pid;
-		if (!utils::try_fs_lock(lock_file, pid)) {
-			if (pid > 0) {
-				LOG(level::ERROR,"an instance is already running: pid = %u",pid);
-			} else {
-				LOG(level::ERROR,"something went wrong with the lock: %s", strerror(errno));
-			}
+		if (! fslock->try_lock(lock_file, pid)) {
 			std::cout << strprintf::fmt(_("Error: an instance of %s is already running (PID: %u)"), PROGRAM_NAME, pid) << std::endl;
 			return EXIT_FAILURE;
 		}
@@ -625,7 +612,6 @@ int controller::run(int argc, char * argv[]) {
 		rsscache = new cache(cache_file,&cfg);
 	} catch (const dbexception& e) {
 		std::cerr << strprintf::fmt(_("Error: opening the cache file `%s' failed: %s"), cache_file, e.what()) << std::endl;
-		utils::remove_fs_lock(lock_file);
 		return EXIT_FAILURE;
 	}
 
@@ -652,7 +638,6 @@ int controller::run(int argc, char * argv[]) {
 		if (! check.is_open()) {
 			std::cout << strprintf::fmt(
 					_("%s is inaccessible and can't be created\n"), cookies);
-			utils::remove_fs_lock(lock_file);
 			return EXIT_FAILURE;
 		}
 
@@ -675,7 +660,6 @@ int controller::run(int argc, char * argv[]) {
 	if (api) {
 		if (!api->authenticate()) {
 			std::cout << "Authentication failed." << std::endl;
-			utils::remove_fs_lock(lock_file);
 			return EXIT_FAILURE;
 		}
 	}
@@ -717,7 +701,6 @@ int controller::run(int argc, char * argv[]) {
 		std::cout.flush();
 		rsscache->do_vacuum();
 		std::cout << _("done.") << std::endl;
-		utils::remove_fs_lock(lock_file);
 		return EXIT_SUCCESS;
 	}
 
@@ -732,11 +715,9 @@ int controller::run(int argc, char * argv[]) {
 			feeds.push_back(feed);
 		} catch(const dbexception& e) {
 			std::cout << _("Error while loading feeds from database: ") << e.what() << std::endl;
-			utils::remove_fs_lock(lock_file);
 			return EXIT_FAILURE;
 		} catch(const std::string& str) {
 			std::cout << strprintf::fmt(_("Error while loading feed '%s': %s"), url, str) << std::endl;
-			utils::remove_fs_lock(lock_file);
 			return EXIT_FAILURE;
 		}
 		i++;
@@ -764,7 +745,6 @@ int controller::run(int argc, char * argv[]) {
 
 	if (do_export) {
 		export_opml();
-		utils::remove_fs_lock(lock_file);
 		return EXIT_SUCCESS;
 	}
 
@@ -793,7 +773,6 @@ int controller::run(int argc, char * argv[]) {
 
 	if (execute_cmds) {
 		execute_commands(argv, optind);
-		utils::remove_fs_lock(lock_file);
 		return EXIT_SUCCESS;
 	}
 
@@ -830,7 +809,6 @@ int controller::run(int argc, char * argv[]) {
 		}
 	}
 
-	utils::remove_fs_lock(lock_file);
 	return ret;
 }
 

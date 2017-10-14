@@ -3,6 +3,7 @@
 #include <poddlthread.h>
 #include <config.h>
 #include <utils.h>
+#include <fslock.h>
 #include <strprintf.h>
 #include <iostream>
 #include <cstdio>
@@ -27,11 +28,11 @@
 using namespace newsboat;
 
 static std::string lock_file = "pb-lock.pid";
+std::unique_ptr<FSLock> fslock;
 
 static void ctrl_c_action(int sig) {
 	LOG(level::DEBUG,"caugh signal %d",sig);
 	stfl::reset();
-	utils::remove_fs_lock(lock_file);
 	::exit(EXIT_FAILURE);
 }
 
@@ -202,8 +203,9 @@ int pb_controller::run(int argc, char * argv[]) {
 
 	std::cout << strprintf::fmt(_("Starting %s %s..."), "podboat", PROGRAM_VERSION) << std::endl;
 
+	fslock = std::unique_ptr<FSLock>(new FSLock());
 	pid_t pid;
-	if (!utils::try_fs_lock(lock_file, pid)) {
+	if (! fslock->try_lock(lock_file, pid)) {
 		std::cout << strprintf::fmt(_("Error: an instance of %s is already running (PID: %u)"), "podboat", pid) << std::endl;
 		return EXIT_FAILURE;
 	}
@@ -264,7 +266,6 @@ int pb_controller::run(int argc, char * argv[]) {
 
 	std::cout << _("done.") << std::endl;
 
-	utils::remove_fs_lock(lock_file);
 	return EXIT_SUCCESS;
 }
 

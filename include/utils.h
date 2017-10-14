@@ -46,9 +46,6 @@ class utils {
 
 		static std::vector<std::wstring> wtokenize(const std::wstring& str, std::wstring delimiters = L" \r\n\t");
 
-		static bool try_fs_lock(const std::string& lock_file, pid_t & pid);
-		static void remove_fs_lock(const std::string& lock_file);
-
 		static std::string translit(const std::string& tocode, const std::string& fromcode);
 		static std::string convert_text(const std::string& text, const std::string& tocode, const std::string& fromcode);
 

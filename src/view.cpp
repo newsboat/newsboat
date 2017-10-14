@@ -198,7 +198,6 @@ int view::run() {
 				cancel_input(fa);
 				if (!get_cfg()->get_configvalue_as_bool("confirm-exit") || confirm(_("Do you really want to quit (y:Yes n:No)? "), _("yn")) == *_("y")) {
 					stfl::reset();
-					utils::remove_fs_lock(lock_file);
 					return EXIT_FAILURE;
 				}
 			}

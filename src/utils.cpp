@@ -11,7 +11,6 @@
 #include <pwd.h>
 #include <libgen.h>
 #include <sys/utsname.h>
-#include <unistd.h>
 #include <sys/param.h>
 
 #include <unordered_set>
@@ -240,51 +239,6 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str, std::string 
 	}
 
 	return tokens;
-}
-
-void utils::remove_fs_lock(const std::string& lock_file) {
-	LOG(level::DEBUG, "utils::remove_fs_lock: removed lockfile %s", lock_file);
-	::unlink(lock_file.c_str());
-}
-
-bool utils::try_fs_lock(const std::string& lock_file, pid_t & pid) {
-	int fd;
-	// pid == 0 indicates that something went majorly wrong during locking
-	pid = 0;
-
-	LOG(level::DEBUG, "utils::try_fs_lock: trying to lock %s", lock_file);
-
-	// first, we open (and possibly create) the lock file
-	fd = ::open(lock_file.c_str(), O_RDWR | O_CREAT, 0600);
-	if (fd < 0)
-		return false;
-
-	// then we lock it (T_LOCK returns immediately if locking is not possible)
-	if (lockf(fd, F_TLOCK, 0) == 0) {
-		std::string pidtext = std::to_string(getpid());
-		// locking successful -> truncate file and write own PID into it
-		ssize_t written = 0;
-		if (ftruncate(fd, 0) == 0) {
-			written = write(fd, pidtext.c_str(), pidtext.length());
-		}
-		bool success =
-			   (written != -1)
-			&& (static_cast<unsigned int>(written) == pidtext.length());
-		return success;
-	}
-
-	// locking was not successful -> read PID of locking process from it
-	fd = ::open(lock_file.c_str(), O_RDONLY);
-	if (fd >= 0) {
-		char buf[32];
-		int len = read(fd, buf, sizeof(buf)-1);
-		unsigned int upid = 0;
-		buf[len] = '\0';
-		sscanf(buf, "%u", &upid);
-		pid = upid;
-		close(fd);
-	}
-	return false;
 }
 
 std::string utils::translit(const std::string& tocode, const std::string& fromcode)
