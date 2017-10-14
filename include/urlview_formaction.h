@@ -13,7 +13,7 @@ class urlview_formaction : public formaction {
 		void prepare() override;
 		void init() override;
 		keymap_hint_entry * get_keymap_hint() override;
-		inline void set_links(const std::vector<linkpair>& l) {
+		void set_links(const std::vector<linkpair>& l) {
 			links = l;
 		}
 		std::string id() const override {

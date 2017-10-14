@@ -36,13 +36,13 @@ class view {
 		void show_error(const std::string& msg);
 		void set_status(const std::string& msg);
 		void set_status_unlocked(const std::string& msg);
-		inline controller * get_ctrl() {
+		controller * get_ctrl() {
 			return ctrl;
 		}
-		inline configcontainer * get_cfg() {
+		configcontainer * get_cfg() {
 			return cfg;
 		}
-		inline keymap * get_keys() {
+		keymap * get_keys() {
 			return keys;
 		}
 		void set_tags(const std::vector<std::string>& t);
@@ -50,7 +50,7 @@ class view {
 		void pop_current_formaction();
 		void remove_formaction(unsigned int pos);
 		void set_current_formaction(unsigned int pos);
-		inline unsigned int formaction_stack_size() {
+		unsigned int formaction_stack_size() {
 			return formaction_stack.size();
 		}
 		char confirm(const std::string& prompt, const std::string& charset);

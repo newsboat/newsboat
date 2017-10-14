@@ -17,10 +17,10 @@ class itemview_formaction : public formaction {
 		~itemview_formaction() override;
 		void prepare() override;
 		void init() override;
-		inline void set_guid(const std::string& guid_) {
+		void set_guid(const std::string& guid_) {
 			guid = guid_;
 		}
-		inline void set_feed(std::shared_ptr<rss_feed> fd) {
+		void set_feed(std::shared_ptr<rss_feed> fd) {
 			feed = fd;
 		}
 		void set_highlightphrase(const std::string& text);

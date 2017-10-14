@@ -32,7 +32,7 @@ class rss_item : public matchable {
 		}
 		void set_title(const std::string& t);
 
-		inline const std::string& link() const {
+		const std::string& link() const {
 			return link_;
 		}
 		void set_link(const std::string& l);
@@ -49,7 +49,7 @@ class rss_item : public matchable {
 		}
 		void set_description(const std::string& d);
 
-		inline unsigned int size() const {
+		unsigned int size() const {
 			return size_;
 		}
 		void set_size(unsigned int size);
@@ -57,7 +57,7 @@ class rss_item : public matchable {
 		std::string length() const;
 		std::string pubDate() const;
 
-		inline time_t pubDate_timestamp() const {
+		time_t pubDate_timestamp() const {
 			return pubDate_;
 		}
 		void set_pubDate(time_t t);
@@ -66,50 +66,50 @@ class rss_item : public matchable {
 			return item.pubDate_ < this->pubDate_;    // new items come first
 		}
 
-		inline const std::string& guid() const {
+		const std::string& guid() const {
 			return guid_;
 		}
 		void set_guid(const std::string& g);
 
-		inline bool unread() const {
+		bool unread() const {
 			return unread_;
 		}
 		void set_unread(bool u);
 		void set_unread_nowrite(bool u);
 		void set_unread_nowrite_notify(bool u, bool notify);
 
-		inline void set_cache(cache * c) {
+		void set_cache(cache * c) {
 			ch = c;
 		}
-		inline void set_feedurl(const std::string& f) {
+		void set_feedurl(const std::string& f) {
 			feedurl_ = f;
 		}
 
-		inline const std::string& feedurl() const {
+		const std::string& feedurl() const {
 			return feedurl_;
 		}
 
-		inline const std::string& enclosure_url() const {
+		const std::string& enclosure_url() const {
 			return enclosure_url_;
 		}
-		inline const std::string& enclosure_type() const {
+		const std::string& enclosure_type() const {
 			return enclosure_type_;
 		}
 
 		void set_enclosure_url(const std::string& url);
 		void set_enclosure_type(const std::string& type);
 
-		inline bool enqueued() {
+		bool enqueued() {
 			return enqueued_;
 		}
-		inline void set_enqueued(bool v) {
+		void set_enqueued(bool v) {
 			enqueued_ = v;
 		}
 
-		inline const std::string& flags() const {
+		const std::string& flags() const {
 			return flags_;
 		}
-		inline const std::string& oldflags() const {
+		const std::string& oldflags() const {
 			return oldflags_;
 		}
 		void set_flags(const std::string& ff);
@@ -120,39 +120,39 @@ class rss_item : public matchable {
 		std::string get_attribute(const std::string& attribname) override;
 
 		void set_feedptr(std::shared_ptr<rss_feed> ptr);
-		inline std::shared_ptr<rss_feed> get_feedptr() {
+		std::shared_ptr<rss_feed> get_feedptr() {
 			return feedptr_.lock();
 		}
 
-		inline bool deleted() const {
+		bool deleted() const {
 			return deleted_;
 		}
-		inline void set_deleted(bool b) {
+		void set_deleted(bool b) {
 			deleted_ = b;
 		}
 
-		inline void set_index(unsigned int i) {
+		void set_index(unsigned int i) {
 			idx = i;
 		}
-		inline unsigned int get_index() {
+		unsigned int get_index() {
 			return idx;
 		}
 
-		inline void set_base(const std::string& b) {
+		void set_base(const std::string& b) {
 			base = b;
 		}
-		inline const std::string& get_base() {
+		const std::string& get_base() {
 			return base;
 		}
 
-		inline void set_override_unread(bool b) {
+		void set_override_unread(bool b) {
 			override_unread_ = b;
 		}
-		inline bool override_unread() {
+		bool override_unread() {
 			return override_unread_;
 		}
 
-		inline void unload() {
+		void unload() {
 			description_.clear();
 		}
 
@@ -188,7 +188,7 @@ class rss_feed : public matchable {
 			return title_;
 		}
 		std::string title() const;
-		inline void set_title(const std::string& t) {
+		void set_title(const std::string& t) {
 			title_ = t;
 			utils::trim(title_);
 		}
@@ -197,57 +197,57 @@ class rss_feed : public matchable {
 			return description_;
 		}
 		std::string description() const;
-		inline void set_description(const std::string& d) {
+		void set_description(const std::string& d) {
 			description_ = d;
 		}
 
-		inline const std::string& link() const {
+		const std::string& link() const {
 			return link_;
 		}
-		inline void set_link(const std::string& l) {
+		void set_link(const std::string& l) {
 			link_ = l;
 		}
 
-		inline std::string pubDate() const {
+		std::string pubDate() const {
 			return "TODO";
 		}
-		inline void set_pubDate(time_t t) {
+		void set_pubDate(time_t t) {
 			pubDate_ = t;
 		}
 
 		bool hidden() const;
 
-		inline std::vector<std::shared_ptr<rss_item>>& items() {
+		std::vector<std::shared_ptr<rss_item>>& items() {
 			return items_;
 		}
-		inline void add_item(std::shared_ptr<rss_item> item) {
+		void add_item(std::shared_ptr<rss_item> item) {
 			items_.push_back(item);
 			items_guid_map[item->guid()] = item;
 		}
-		inline void add_items(const std::vector<std::shared_ptr<rss_item>>& items) {
+		void add_items(const std::vector<std::shared_ptr<rss_item>>& items) {
 			for (const auto& item : items) {
 				items_.push_back(item);
 				items_guid_map[item->guid()] = item;
 			}
 		}
-		inline void set_items(std::vector<std::shared_ptr<rss_item>>& items) {
+		void set_items(std::vector<std::shared_ptr<rss_item>>& items) {
 			erase_items(items_.begin(), items_.end());
 			add_items(items);
 		}
 
-		inline void clear_items() {
+		void clear_items() {
 			LOG(level::DEBUG, "rss_feed: clearing items");
 			items_.clear();
 			items_guid_map.clear();
 		}
 
-		inline void erase_items(std::vector<std::shared_ptr<rss_item>>::iterator begin, std::vector<std::shared_ptr<rss_item>>::iterator end) {
+		void erase_items(std::vector<std::shared_ptr<rss_item>>::iterator begin, std::vector<std::shared_ptr<rss_item>>::iterator end) {
 			for (auto it=begin; it!=end; ++it) {
 				items_guid_map.erase((*it)->guid());
 			}
 			items_.erase(begin, end);
 		}
-		inline void erase_item(std::vector<std::shared_ptr<rss_item>>::iterator pos) {
+		void erase_item(std::vector<std::shared_ptr<rss_item>>::iterator pos) {
 			items_guid_map.erase((*pos)->guid());
 			items_.erase(pos);
 		}
@@ -255,13 +255,13 @@ class rss_feed : public matchable {
 		std::shared_ptr<rss_item> get_item_by_guid(const std::string& guid);
 		std::shared_ptr<rss_item> get_item_by_guid_unlocked(const std::string& guid);
 
-		inline const std::string& rssurl() const {
+		const std::string& rssurl() const {
 			return rssurl_;
 		}
 		void set_rssurl(const std::string& u);
 
 		unsigned int unread_item_count();
-		inline unsigned int total_item_count() const {
+		unsigned int total_item_count() const {
 			return items_.size();
 		}
 
@@ -275,7 +275,7 @@ class rss_feed : public matchable {
 
 		void update_items(std::vector<std::shared_ptr<rss_feed>> feeds);
 
-		inline void set_query(const std::string& s) {
+		void set_query(const std::string& s) {
 			query = s;
 		}
 
@@ -293,24 +293,24 @@ class rss_feed : public matchable {
 
 		void purge_deleted_items();
 
-		inline void set_rtl(bool b) {
+		void set_rtl(bool b) {
 			is_rtl_ = b;
 		}
-		inline bool is_rtl() {
+		bool is_rtl() {
 			return is_rtl_;
 		}
 
-		inline void set_index(unsigned int i) {
+		void set_index(unsigned int i) {
 			idx = i;
 		}
-		inline unsigned int get_index() {
+		unsigned int get_index() {
 			return idx;
 		}
 
-		inline void set_order(unsigned int x) {
+		void set_order(unsigned int x) {
 			order = x;
 		}
-		inline unsigned int get_order() {
+		unsigned int get_order() {
 			return order;
 		}
 
@@ -318,10 +318,10 @@ class rss_feed : public matchable {
 
 		std::string get_status();
 
-		inline void reset_status() {
+		void reset_status() {
 			status_ = dl_status::TO_BE_DOWNLOADED;
 		}
-		inline void set_status(dl_status st) {
+		void set_status(dl_status st) {
 			status_ = st;
 		}
 

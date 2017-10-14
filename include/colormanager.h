@@ -21,17 +21,17 @@ class colormanager : public config_action_handler {
 		void register_commands(configparser& cfgparser);
 		void handle_action(const std::string& action, const std::vector<std::string>& params) override;
 		void dump_config(std::vector<std::string>& config_output) override;
-		inline bool colors_loaded() {
+		bool colors_loaded() {
 			return colors_loaded_;
 		}
 		void set_pb_colors(podboat::pb_view * v);
-		inline std::map<std::string,std::string>& get_fgcolors() {
+		std::map<std::string,std::string>& get_fgcolors() {
 			return fg_colors;
 		}
-		inline std::map<std::string,std::string>& get_bgcolors() {
+		std::map<std::string,std::string>& get_bgcolors() {
 			return bg_colors;
 		}
-		inline std::map<std::string,std::vector<std::string>>& get_attributes() {
+		std::map<std::string,std::vector<std::string>>& get_attributes() {
 			return attributes;
 		}
 	private:

@@ -27,10 +27,10 @@ class regexmanager : public config_action_handler {
 		std::vector<std::pair<std::shared_ptr<matcher>, int>> matchers;
 		std::string extract_initial_marker(const std::string& str);
 	public:
-		inline std::vector<std::string>& get_attrs(const std::string& loc) {
+		std::vector<std::string>& get_attrs(const std::string& loc) {
 			return locations[loc].second;
 		}
-		inline std::vector<regex_t *>& get_regexes(const std::string& loc) {
+		std::vector<regex_t *>& get_regexes(const std::string& loc) {
 			return locations[loc].first;
 		}
 };

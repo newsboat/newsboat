@@ -77,11 +77,11 @@ class utils {
 		static size_t strwidth_stfl(const std::string& str);
 		static size_t wcswidth_stfl(const std::wstring& str, size_t size);
 
-		static inline unsigned int max(unsigned int a, unsigned int b) {
+		static unsigned int max(unsigned int a, unsigned int b) {
 			return (a > b) ? a : b;
 		}
 
-		static inline unsigned int to_u(const std::string& str) {
+		static unsigned int to_u(const std::string& str) {
 			return to_u(str, 0);
 		}
 		static unsigned int to_u(

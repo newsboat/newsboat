@@ -34,10 +34,10 @@ class itemlist_formaction : public list_formaction {
 		}
 		std::string title() override;
 
-		inline std::shared_ptr<rss_feed> get_feed() {
+		std::shared_ptr<rss_feed> get_feed() {
 			return feed;
 		}
-		inline void set_pos(unsigned int p) {
+		void set_pos(unsigned int p) {
 			pos = p;
 		}
 		std::string get_guid();
@@ -55,10 +55,10 @@ class itemlist_formaction : public list_formaction {
 
 		void finished_qna(operation op) override;
 
-		inline void set_show_searchresult(bool b) {
+		void set_show_searchresult(bool b) {
 			show_searchresult = b;
 		}
-		inline void set_searchphrase(const std::string& s) {
+		void set_searchphrase(const std::string& s) {
 			searchphrase = s;
 		}
 
@@ -86,14 +86,14 @@ class itemlist_formaction : public list_formaction {
 
 		void prepare_set_filterpos();
 
-		inline void invalidate(InvalidationMode m) {
+		void invalidate(InvalidationMode m) {
 			assert(m == InvalidationMode::COMPLETE);
 
 			invalidated = true;
 			invalidation_mode = InvalidationMode::COMPLETE;
 		}
 
-		inline void invalidate(const unsigned int pos) {
+		void invalidate(const unsigned int pos) {
 			if (invalidated == true && invalidation_mode == InvalidationMode::COMPLETE)
 				return;
 

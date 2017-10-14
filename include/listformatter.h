@@ -23,10 +23,10 @@ class listformatter {
 		    unsigned int width = 0);
 		void set_line(const unsigned int itempos, const std::string& text,
 		    unsigned int id = UINT_MAX, unsigned int width = 0);
-		inline void clear() { lines.clear(); }
+		void clear() { lines.clear(); }
 		std::string format_list(regexmanager * r = nullptr,
 		    const std::string& location = "");
-		inline unsigned int get_lines_count() {
+		unsigned int get_lines_count() {
 			return lines.size();
 		}
 	private:

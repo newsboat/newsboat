@@ -47,15 +47,15 @@ class formaction {
 
 		virtual void recalculate_form();
 
-		inline std::string get_qna_response(unsigned int i) {
+		std::string get_qna_response(unsigned int i) {
 			return (qna_responses.size() >= (i + 1)) ? qna_responses[i] : "";
 		}
 		void start_qna(const std::vector<qna_pair>& prompts, operation finish_op, history * h = nullptr);
 
-		inline void set_parent_formaction(std::shared_ptr<formaction> fa) {
+		void set_parent_formaction(std::shared_ptr<formaction> fa) {
 			parent_formaction = fa;
 		}
-		inline std::shared_ptr<formaction> get_parent_formaction() const {
+		std::shared_ptr<formaction> get_parent_formaction() const {
 			return parent_formaction;
 		}
 

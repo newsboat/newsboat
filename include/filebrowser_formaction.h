@@ -13,10 +13,10 @@ class filebrowser_formaction : public formaction {
 		void init() override;
 		keymap_hint_entry * get_keymap_hint() override;
 
-		inline void set_dir(const std::string& d) {
+		void set_dir(const std::string& d) {
 			dir = d;
 		}
-		inline void set_default_filename(const std::string& fn) {
+		void set_default_filename(const std::string& fn) {
 			default_filename = fn;
 		}
 

@@ -41,11 +41,11 @@ class controller {
 		std::shared_ptr<rss_feed> get_feed(unsigned int pos);
 		std::shared_ptr<rss_feed> get_feed_by_url(const std::string& feedurl);
 		std::vector<std::shared_ptr<rss_item>> search_for_items(const std::string& query, std::shared_ptr<rss_feed> feed);
-		inline unsigned int get_feedcount() {
+		unsigned int get_feedcount() {
 			return feeds.size();
 		}
 
-		inline void unlock_reload_mutex() {
+		void unlock_reload_mutex() {
 			reload_mutex.unlock();
 		}
 		bool trylock_reload_mutex();
@@ -55,10 +55,10 @@ class controller {
 		void mark_all_read(unsigned int pos);
 		void mark_article_read(const std::string& guid, bool read);
 		void mark_all_read(const std::string& feedurl);
-		inline void mark_all_read(std::shared_ptr<rss_feed> feed) {
+		void mark_all_read(std::shared_ptr<rss_feed> feed) {
 			rsscache->mark_all_read(feed);
 		}
-		inline bool get_refresh_on_start() const {
+		bool get_refresh_on_start() const {
 			return refresh_on_start;
 		}
 		bool is_valid_podcast_type(const std::string& mimetype);
@@ -72,17 +72,17 @@ class controller {
 		std::vector<std::shared_ptr<rss_feed>> get_all_feeds();
 		std::vector<std::shared_ptr<rss_feed>> get_all_feeds_unlocked();
 
-		inline filtercontainer& get_filters() {
+		filtercontainer& get_filters() {
 			return filters;
 		}
 
 		std::string bookmark(const std::string& url, const std::string& title, const std::string& description, const std::string& feed_title);
 
-		inline cache * get_cache() {
+		cache * get_cache() {
 			return rsscache;
 		}
 
-		inline configcontainer * get_cfg() {
+		configcontainer * get_cfg() {
 			return &cfg;
 		}
 

@@ -43,7 +43,7 @@ class textformatter {
 				const size_t total_width = 0);
 		std::string format_text_plain(const size_t width = 80, const size_t total_width = 0);
 
-		inline void clear() {
+		void clear() {
 			lines.clear();
 		}
 	private:

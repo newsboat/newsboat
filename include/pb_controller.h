@@ -19,15 +19,15 @@ class pb_controller {
 	public:
 		pb_controller();
 		~pb_controller();
-		inline void set_view(pb_view * vv) {
+		void set_view(pb_view * vv) {
 			v = vv;
 		}
 		int run(int argc, char * argv[] = 0);
 
-		inline bool view_update_necessary() const {
+		bool view_update_necessary() const {
 			return view_update_;
 		}
-		inline void set_view_update_necessary(bool b) {
+		void set_view_update_necessary(bool b) {
 			view_update_ = b;
 		}
 		std::vector<download>& downloads() {
@@ -51,7 +51,7 @@ class pb_controller {
 
 		void play_file(const std::string& str);
 
-		inline newsboat::configcontainer * get_cfgcont() {
+		newsboat::configcontainer * get_cfgcont() {
 			return cfg;
 		}
 
