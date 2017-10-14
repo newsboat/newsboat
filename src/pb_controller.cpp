@@ -3,7 +3,6 @@
 #include <poddlthread.h>
 #include <config.h>
 #include <utils.h>
-#include <fslock.h>
 #include <strprintf.h>
 #include <iostream>
 #include <cstdio>
@@ -26,9 +25,6 @@
 #include <logger.h>
 
 using namespace newsboat;
-
-static std::string lock_file = "pb-lock.pid";
-std::unique_ptr<FSLock> fslock;
 
 static void ctrl_c_action(int sig) {
 	LOG(level::DEBUG,"caugh signal %d",sig);
@@ -115,7 +111,16 @@ bool pb_controller::setup_dirs_xdg(const char *env_home) {
 	return true;
 }
 
-pb_controller::pb_controller() : v(0), config_file("config"), queue_file("queue"), cfg(0), view_update_(true),  max_dls(1), ql(0) {
+pb_controller::pb_controller()
+	:	v(0),
+		config_file("config"),
+		queue_file("queue"),
+		cfg(0),
+		view_update_(true),
+		max_dls(1),
+		ql(0),
+		lock_file("pb-lock.pid")
+{
 	char * cfgdir;
 	if (!(cfgdir = ::getenv("HOME"))) {
 		struct passwd * spw = ::getpwuid(::getuid());

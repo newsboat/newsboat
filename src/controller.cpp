@@ -8,7 +8,6 @@
 #include <colormanager.h>
 #include <logger.h>
 #include <utils.h>
-#include <fslock.h>
 #include <strprintf.h>
 #include <stflpp.h>
 #include <exception.h>
@@ -59,9 +58,6 @@
 namespace newsboat {
 
 const std::string controller::LOCK_SUFFIX = ".lock";
-
-std::string lock_file;
-std::unique_ptr<FSLock> fslock;
 
 int ctrl_c_hit = 0;
 
