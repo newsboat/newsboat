@@ -152,6 +152,8 @@ class controller {
 		regexmanager rxman;
 		remote_api * api;
 		std::mutex feeds_mutex;
+
+		static const std::string LOCK_SUFFIX;
 };
 
 }

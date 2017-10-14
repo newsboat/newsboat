@@ -72,6 +72,8 @@ class pb_controller {
 		unsigned int max_dls;
 
 		queueloader * ql;
+
+		static const std::string LOCK_SUFFIX;
 };
 
 }

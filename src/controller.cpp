@@ -57,7 +57,7 @@
 
 namespace newsboat {
 
-#define LOCK_SUFFIX ".lock"
+const std::string controller::LOCK_SUFFIX = ".lock";
 
 std::string lock_file;
 

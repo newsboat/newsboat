@@ -37,7 +37,7 @@ static void ctrl_c_action(int sig) {
 
 namespace podboat {
 
-#define LOCK_SUFFIX ".lock"
+const std::string pb_controller::LOCK_SUFFIX = ".lock";
 
 /**
  * \brief Try to setup XDG style dirs.
