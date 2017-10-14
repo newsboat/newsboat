@@ -6,7 +6,7 @@
 #define REAL_VERSION "2.10.1"
 
 #ifdef GIT_HASH
-#define PROGRAM_VERSION			REAL_VERSION "-" GIT_HASH
+#define PROGRAM_VERSION			GIT_HASH
 #else
 #define PROGRAM_VERSION			REAL_VERSION
 #endif
