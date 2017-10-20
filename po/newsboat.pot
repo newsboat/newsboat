@@ -191,7 +191,13 @@ msgid ""
 "Please do so, and try again."
 msgstr ""
 
-#: src/controller.cpp:520
+#: src/controller.cpp:685
+msgid ""
+"It looks like you haven't configured any feeds in your Inoreader account. "
+"Please do so, and try again."
+msgstr ""
+
+#: src/controller.cpp:694
 msgid "Loading articles from cache..."
 msgstr ""
 
@@ -794,6 +800,18 @@ msgstr ""
 
 #: src/htmlrenderer.cpp:674
 msgid "unknown (bug)"
+msgstr ""
+
+#: src/inoreader_urlreader.cpp:34
+msgid "Broadcast items"
+msgstr ""
+
+#: src/inoreader_urlreader.cpp:35
+msgid "Liked items"
+msgstr ""
+
+#: src/inoreader_urlreader.cpp:36
+msgid "Saved web pages"
 msgstr ""
 
 #: src/itemlist_formaction.cpp:136 src/itemview_formaction.cpp:338

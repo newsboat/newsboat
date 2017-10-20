@@ -64,7 +64,8 @@ src/controller.o: src/controller.cpp config.h include/view.h \
  include/exceptions.h include/downloadthread.h include/exception.h \
  include/formatstring.h include/rss_parser.h rss/rsspp.h \
  include/oldreader_api.h include/feedhq_api.h include/ttrss_api.h \
- include/newsblur_api.h include/ocnews_api.h xlicense.h
+ include/newsblur_api.h include/ocnews_api.h include/inoreader_api.h \
+ xlicense.h
 src/dialogs_formaction.o: src/dialogs_formaction.cpp config.h \
  include/view.h include/controller.h include/urlreader.h \
  include/configcontainer.h include/configparser.h include/rss.h \
@@ -155,6 +156,16 @@ src/htmlrenderer.o: src/htmlrenderer.cpp include/htmlrenderer.h \
  include/matcher.h filter/FilterParser.h include/tagsouppullparser.h \
  include/utils.h include/logger.h config.h include/strprintf.h \
  include/configcontainer.h
+src/inoreader_api.o: src/inoreader_api.cpp include/inoreader_api.h \
+ include/remote_api.h include/configcontainer.h include/configparser.h \
+ include/urlreader.h include/cache.h include/rss.h include/matcher.h \
+ filter/FilterParser.h include/utils.h include/logger.h config.h \
+ include/strprintf.h
+src/inoreader_urlreader.o: src/inoreader_urlreader.cpp \
+ include/inoreader_api.h include/remote_api.h include/configcontainer.h \
+ include/configparser.h include/urlreader.h include/cache.h include/rss.h \
+ include/matcher.h filter/FilterParser.h include/utils.h include/logger.h \
+ config.h include/strprintf.h
 src/itemlist_formaction.o: src/itemlist_formaction.cpp \
  include/controller.h include/urlreader.h include/configcontainer.h \
  include/configparser.h include/rss.h include/matcher.h \

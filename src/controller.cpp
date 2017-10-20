@@ -20,6 +20,7 @@
 #include <ttrss_api.h>
 #include <newsblur_api.h>
 #include <ocnews_api.h>
+#include <inoreader_api.h>
 #include <xlicense.h>
 
 #include <cstdlib>
@@ -645,6 +646,9 @@ int controller::run(int argc, char * argv[]) {
 	} else if (type == "ocnews") {
 		api = new ocnews_api(&cfg);
 		urlcfg = new ocnews_urlreader(url_file, api);
+	} else if (type == "inoreader") {
+		api = new inoreader_api(&cfg);
+		urlcfg = new inoreader_urlreader(&cfg, url_file, api);
 	} else {
 		LOG(level::ERROR,"unknown urls-source `%s'", urlcfg->get_source());
 	}
@@ -677,6 +681,8 @@ int controller::run(int argc, char * argv[]) {
 			msg = strprintf::fmt(_("It looks like you haven't configured any feeds in your Tiny Tiny RSS account. Please do so, and try again."));
 		} else if (type == "newsblur") {
 			msg = strprintf::fmt(_("It looks like you haven't configured any feeds in your NewsBlur account. Please do so, and try again."));
+		} else if (type == "inoreader") {
+			msg = strprintf::fmt(_("It looks like you haven't configured any feeds in your Inoreader account. Please do so, and try again."));
 		} else {
 			assert(0); // shouldn't happen
 		}

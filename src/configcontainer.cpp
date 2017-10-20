@@ -65,6 +65,14 @@ configcontainer::configcontainer()
 		{ "ignore-mode",
 		    configdata("download", std::unordered_set<std::string>({
 		        "download", "display" })) },
+		{ "inoreader-login", configdata("", configdata_t::STR) },
+		{ "inoreader-password", configdata("", configdata_t::STR) },
+		{ "inoreader-passwordfile", configdata("", configdata_t::PATH) },
+		{ "inoreader-passwordeval", configdata("", configdata_t::STR) },
+		{ "inoreader-show-special-feeds", configdata("true", configdata_t::BOOL) },
+		{ "inoreader-flag-share", configdata("", configdata_t::STR) },
+		{ "inoreader-flag-star", configdata("", configdata_t::STR) },
+		{ "inoreader-min-items", configdata("20", configdata_t::INT) },
 		{ "keep-articles-days", configdata("0", configdata_t::INT) },
 		{ "mark-as-read-on-hover", configdata("false", configdata_t::BOOL) },
 		{ "max-browser-tabs", configdata("10", configdata_t::INT) },
@@ -151,7 +159,7 @@ configcontainer::configcontainer()
 		{ "urls-source",
 		    configdata("local", std::unordered_set<std::string>({
 		        "local", "opml", "oldreader", "ttrss", "newsblur",
-		        "feedhq", "ocnews" })) },
+		        "feedhq", "ocnews", "inoreader" })) },
 		{ "use-proxy", configdata("no", configdata_t::BOOL) },
 		{ "user-agent", configdata("", configdata_t::STR) },
 

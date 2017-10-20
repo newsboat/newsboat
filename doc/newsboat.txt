@@ -790,6 +790,72 @@ To enable this mode, the following configuration needs to be done:
 `"opml"` must be specified as source for the feed URLs, and the URLs of the OPML
 file needs to be specified, too.
 
+Inoreader Support
+~~~~~~~~~~~~~~~~~
+
+http://inoreader.com/[Inoreader] is another successor to Google Reader.
+Newsboat provides functionality to use Inoreader as its backend:
+people can use Inoreader to manage their subscriptions, and in
+addition, use newsboat to download and read articles. Newsboat will keep
+the information which articles have already been read synchronized with
+Inoreader, so that users usually won't see articles more than once. In addition, it
+will only ever download unread articles from Inoreader.
+
+In order to use Inoreader support, you first need to configure the proper URL source:
+
+	urls-source "inoreader"
+
+In addition, newsboat needs to know your Inoreader username and password
+so that it can authenticate with Inoreader.
+Note that this is NOT your login with your Google or Facebook account. If you
+use one of those to login to Inoreader, you have to create a username and
+password in Inoreader _Preferences > Profile_
+
+	inoreader-login "your-inoreader-account"
+	inoreader-password "your-password"
+
+(Note that double quotes should be escaped, i.e. you should write +{backslash}"+
+instead of +"+.)
+
+See also <<_passwords_for_external_apis,inoreader-passwordfile and inoreader-passwordeval>>.
+
+After setting these configuration values, you can start newsboat, it will
+authenticate with Inoreader and download your subscription list. If you use
+"folders" in Inoreader to organize your feeds, newsboat will regard them
+and make them available via its "tags" capability: each feed is tagged with the
+name of the folder in which it resides. You can select and filter feeds by tags;
+see <<_tagging>> and <<_filter_language>> sections for details.
+
+When you mark single items or complete feeds as read, newsboat will
+synchronize this information directly to Inoreader. This, of course,
+includes opening articles. Toggling read articles back to "unread" is also
+communicated to Inoreader.
+
+In addition, Inoreader provides the ability to "star" and to "share"
+articles. Starred articles are basically bookmarks, while shared articles are
+shown to people that follow your Inoreader account. Newsboat allows the
+use of this feature by mapping its powerful "flags" to the "star"/"unstar"
+resp. "share"/"unshare" operations.
+
+In order to use this mapping, all you need to do is to configure the flags
+that shall be used:
+
+	inoreader-flag-share "a"
+	inoreader-flag-star "b"
+
+After that, use these flags when you edit flags for an article, and these
+articles will be starred resp. shared.
+
+By default, newsboat also shows Inoreader "special feeds":
+
+ - Starred items
+ - Shared items
+ - Liked items
+ - Saved web pages
+
+You can disable these feeds by setting the following configuration variable:
+
+	inoreader-show-special-feeds no
 
 Flagging Articles
 ~~~~~~~~~~~~~~~~~
