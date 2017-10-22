@@ -20,7 +20,7 @@ TEST_CASE("evaluate_backticks replaces command in backticks with its output",
 				== "hello world");
 		REQUIRE(configparser::evaluate_backticks("xxx`echo yyy`zzz")
 				== "xxxyyyzzz");
-		REQUIRE(configparser::evaluate_backticks("`echo 3 \\* 4 | bc`") == "12");
+		REQUIRE(configparser::evaluate_backticks("`seq 10 | tail -1`") == "10");
 	}
 
 	SECTION("backticks can be escaped with backslash") {
