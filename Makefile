@@ -191,13 +191,13 @@ cppcheck:
 		2>cppcheck.log
 	@echo "Done! See cppcheck.log for details."
 
-install-newsboat: $(NEWSBOAT)
+install-newsboat: $(NEWSBOAT) doc/$(NEWSBOAT).1
 	$(MKDIR) $(DESTDIR)$(prefix)/bin
 	$(INSTALL) $(NEWSBOAT) $(DESTDIR)$(prefix)/bin
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
 	$(INSTALL) doc/$(NEWSBOAT).1 $(DESTDIR)$(mandir)/man1 || true
 
-install-podboat: $(PODBOAT)
+install-podboat: $(PODBOAT) doc/$(PODBOAT).1
 	$(MKDIR) $(DESTDIR)$(prefix)/bin
 	$(INSTALL) $(PODBOAT) $(DESTDIR)$(prefix)/bin
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
