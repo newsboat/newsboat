@@ -1,6 +1,6 @@
 #include <iostream>
-#include <regex>
 #include <sstream>
+#include "split.h"
 
 std::string to80Columns(std::string input) {
 	std::istringstream s(input);
@@ -31,38 +31,24 @@ int main()
 	std::cout << "#\n\n";
 
 	for (std::string line; std::getline(std::cin, line); ) {
-		const std::regex rgx(
-				"([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)\\|(.*)",
-				std::regex_constants::awk);
-		std::smatch matches;
-		if (std::regex_match(line, matches, rgx)) {
-			if (matches.size() == 6) {
-				const std::string option = matches[1].str();
-				const std::string syntax = matches[2].str();
-				std::string defaultparam = matches[3].str();
-				std::string desc = matches[4].str();
-				const std::string example = matches[5].str();
+		const std::vector<std::string> matches = split(line, "||");
+		if (matches.size() == 5) {
+			const std::string option = matches[0];
+			const std::string syntax = matches[1];
+			const std::string defaultparam = matches[2];
+			const std::string desc = matches[3];
+			const std::string example = matches[4];
 
-				const std::regex limitation("limitation in AsciiDoc");
-				if (std::regex_search(desc, limitation)) {
-					const std::regex parens(" \\([^)]*\\)\\.$");
-					desc = std::regex_replace(desc, parens, ".");
-
-					defaultparam = std::regex_replace(
-							defaultparam, std::regex(";"), "|");
-				}
-
-				std::cout << "####  " << option << '\n';
-				std::cout << "#\n";
-				std::cout << to80Columns(std::move(desc));
-				std::cout << "#\n";
-				std::cout << "# Syntax: " << syntax << '\n';
-				std::cout << "#\n";
-				std::cout << "# Default value: " << defaultparam << '\n';
-				std::cout << "#\n";
-				std::cout << "# " << example << '\n';
-				std::cout << '\n';
-			}
+			std::cout << "####  " << option << '\n';
+			std::cout << "#\n";
+			std::cout << to80Columns(std::move(desc));
+			std::cout << "#\n";
+			std::cout << "# Syntax: " << syntax << '\n';
+			std::cout << "#\n";
+			std::cout << "# Default value: " << defaultparam << '\n';
+			std::cout << "#\n";
+			std::cout << "# " << example << '\n';
+			std::cout << '\n';
 		}
 	}
 

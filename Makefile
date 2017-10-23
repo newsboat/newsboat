@@ -132,7 +132,9 @@ clean-libfilter:
 clean-doc:
 	$(RM) -r doc/xhtml 
 	$(RM) doc/*.xml doc/*.1 doc/newsboat-cfgcmds.txt doc/podboat-cfgcmds.txt \
-		doc/newsboat-keycmds.txt doc/gen-example-config doc/generate doc/generate2
+		doc/newsboat-keycmds.txt doc/configcommands-linked.dsv \
+		doc/podboat-cmds-linked.dsv doc/keycmds-linked.dsv \
+		doc/gen-example-config doc/generate doc/generate2
 
 clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clean-librsspp
 	$(RM) $(STFLHDRS) xlicense.h
@@ -142,17 +144,28 @@ distclean: clean clean-mo test-clean profclean
 
 doc: doc/xhtml/newsboat.html doc/xhtml/faq.html doc/newsboat.1 doc/podboat.1
 
-doc/xhtml/newsboat.html: doc/newsboat.txt
+doc/xhtml/newsboat.html: doc/newsboat.txt doc/chapter-firststeps.txt doc/configcommands-linked.dsv \
+		doc/keycmds-linked.dsv doc/chapter-tagging.txt doc/chapter-snownews.txt \
+		doc/chapter-cmdline.txt doc/chapter-podcasts.txt doc/podboat-cmds-linked.dsv \
+		doc/chapter-password.txt
 	$(MKDIR) doc/xhtml
 	$(A2X) -f xhtml -D doc/xhtml doc/newsboat.txt
 	$(CHMOD) u+w doc/xhtml/docbook-xsl.css
+	echo "/* AsciiDoc's new tables have <p> inside <td> which wastes vertical space, so fix it */" >> doc/xhtml/docbook-xsl.css
+	echo "td > p { margin: 0; }" >> doc/xhtml/docbook-xsl.css
+	echo "td > p + p { margin-top: 0.5em; }" >> doc/xhtml/docbook-xsl.css
+	echo "td > pre { margin: 0; white-space: pre-wrap; }" >> doc/xhtml/docbook-xsl.css
 
 doc/xhtml/faq.html: doc/faq.txt
 	$(MKDIR) doc/xhtml
 	$(A2X) -f xhtml -D doc/xhtml doc/faq.txt
 	$(CHMOD) u+w doc/xhtml/docbook-xsl.css
+	echo "/* AsciiDoc's new tables have <p> inside <td> which wastes vertical space, so fix it */" >> doc/xhtml/docbook-xsl.css
+	echo "td > p { margin: 0; }" >> doc/xhtml/docbook-xsl.css
+	echo "td > p + p { margin-top: 0.5em; }" >> doc/xhtml/docbook-xsl.css
+	echo "td > pre { margin: 0; white-space: pre-wrap; }" >> doc/xhtml/docbook-xsl.css
 
-doc/generate: doc/generate.cpp
+doc/generate: doc/generate.cpp doc/split.h
 	$(CXX) $(CXXFLAGS) -o doc/generate doc/generate.cpp
 
 doc/newsboat-cfgcmds.txt: doc/generate doc/configcommands.dsv
@@ -164,20 +177,33 @@ doc/generate2: doc/generate2.cpp
 doc/newsboat-keycmds.txt: doc/generate2 doc/keycmds.dsv
 	doc/generate2 doc/keycmds.dsv > doc/newsboat-keycmds.txt
 
-doc/newsboat.1: doc/manpage-newsboat.txt doc/newsboat-cfgcmds.txt doc/newsboat-keycmds.txt
+doc/newsboat.1: doc/manpage-newsboat.txt doc/chapter-firststeps.txt doc/newsboat-cfgcmds.txt \
+		doc/newsboat-keycmds.txt doc/chapter-tagging.txt doc/chapter-snownews.txt \
+		doc/chapter-cmdline.txt
 	$(A2X) -f manpage doc/manpage-newsboat.txt
 
 doc/podboat-cfgcmds.txt: doc/generate doc/podboat-cmds.dsv
-	doc/generate doc/podboat-cmds.dsv > doc/podboat-cfgcmds.txt
+	doc/generate doc/podboat-cmds.dsv 'pb-' > doc/podboat-cfgcmds.txt
 
-doc/podboat.1: doc/manpage-podboat.txt doc/podboat-cfgcmds.txt
+doc/podboat.1: doc/manpage-podboat.txt doc/chapter-podcasts.txt doc/podboat-cfgcmds.txt
 	$(A2X) -f manpage doc/manpage-podboat.txt
 
-doc/gen-example-config: doc/gen-example-config.cpp
+doc/gen-example-config: doc/gen-example-config.cpp doc/split.h
 	$(CXX) $(CXXFLAGS) -o doc/gen-example-config doc/gen-example-config.cpp
 
 doc/example-config: doc/gen-example-config doc/configcommands.dsv
 	cat doc/configcommands.dsv | doc/gen-example-config > doc/example-config
+
+# add hyperlinks for every configuration command
+doc/configcommands-linked.dsv: doc/configcommands.dsv
+	sed -e 's/^\([^|]\+\)/[[\1]]<<\1,`\1`>>/' doc/configcommands.dsv > doc/configcommands-linked.dsv
+
+# add hyperlinks for every configuration command
+doc/podboat-cmds-linked.dsv: doc/podboat-cmds.dsv
+	sed -e 's/^\([^|]\+\)/[[\1]]<<\1,`\1`>>/' doc/podboat-cmds.dsv > doc/podboat-cmds-linked.dsv
+
+doc/keycmds-linked.dsv: doc/keycmds.dsv
+	sed -e 's/^\([^:]\+\)/[[\1]]<<\1,`\1`>>/' doc/keycmds.dsv > doc/keycmds-linked.dsv
 
 fmt:
 	astyle --suffix=none --style=java --indent=tab --indent-classes *.cpp include/*.h src/*.cpp rss/*.{cpp,h} test/*.cpp
