@@ -51,3 +51,5 @@ up:UP:Goes up one item in the list.
 down:DOWN:Goes down one item in the list.
 pageup:PPAGE:Goes up one page in the list.
 pagedown:NPAGE:Goes down one page in the list.
+home:HOME:Goes to the first item in the list.
+end:END:Goes to the last item in the list.
