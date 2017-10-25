@@ -18,8 +18,8 @@
 #define INOREADER_API_EDIT_TAG_URL		INOREADER_API_PREFIX "edit-tag"
 #define INOREADER_API_TOKEN_URL			INOREADER_API_PREFIX "token"
 
-#define INOREADER_APP_ID	"AppId: 1000000588"
-#define INOREADER_APP_KEY	"AppKey: qRf9ZewWGwe630w61borYEtraeZMsMyS"
+#define INOREADER_APP_ID	"AppId: 1000000394"
+#define INOREADER_APP_KEY	"AppKey: CWcdJdSDcuxHYoqGa3RsPh7X2DZ2MmO7"
 
 // for reference, see https://inoreader.com/developers
 
