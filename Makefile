@@ -196,14 +196,14 @@ doc/example-config: doc/gen-example-config doc/configcommands.dsv
 
 # add hyperlinks for every configuration command
 doc/configcommands-linked.dsv: doc/configcommands.dsv
-	sed -e 's/^\([^|]\+\)/[[\1]]<<\1,`\1`>>/' doc/configcommands.dsv > doc/configcommands-linked.dsv
+	sed -r 's/^([^|]+)/[[\1]]<<\1,`\1`>>/' doc/configcommands.dsv > doc/configcommands-linked.dsv
 
 # add hyperlinks for every configuration command
 doc/podboat-cmds-linked.dsv: doc/podboat-cmds.dsv
-	sed -e 's/^\([^|]\+\)/[[\1]]<<\1,`\1`>>/' doc/podboat-cmds.dsv > doc/podboat-cmds-linked.dsv
+	sed -r 's/^([^|]+)/[[\1]]<<\1,`\1`>>/' doc/podboat-cmds.dsv > doc/podboat-cmds-linked.dsv
 
 doc/keycmds-linked.dsv: doc/keycmds.dsv
-	sed -e 's/^\([^:]\+\)/[[\1]]<<\1,`\1`>>/' doc/keycmds.dsv > doc/keycmds-linked.dsv
+	sed -r 's/^([^:]+)/[[\1]]<<\1,`\1`>>/' doc/keycmds.dsv > doc/keycmds-linked.dsv
 
 fmt:
 	astyle --suffix=none --style=java --indent=tab --indent-classes *.cpp include/*.h src/*.cpp rss/*.{cpp,h} test/*.cpp
