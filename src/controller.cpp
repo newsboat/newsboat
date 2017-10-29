@@ -1383,10 +1383,6 @@ std::shared_ptr<rss_feed> controller::get_feed_by_url(const std::string& feedurl
 	return std::shared_ptr<rss_feed>();
 }
 
-bool controller::is_valid_podcast_type(const std::string& /* mimetype */) {
-	return true;
-}
-
 void controller::enqueue_url(const std::string& url, std::shared_ptr<rss_feed> feed) {
 	bool url_found = false;
 	std::fstream f;
@@ -1646,7 +1642,7 @@ void controller::enqueue_items(std::shared_ptr<rss_feed> feed) {
 	for (auto item : feed->items()) {
 		if (!item->enqueued() && item->enclosure_url().length() > 0) {
 			LOG(level::DEBUG, "controller::enqueue_items: enclosure_url = `%s' enclosure_type = `%s'", item->enclosure_url(), item->enclosure_type());
-			if (is_valid_podcast_type(item->enclosure_type()) && utils::is_http_url(item->enclosure_url())) {
+			if (utils::is_http_url(item->enclosure_url())) {
 				LOG(level::INFO, "controller::enqueue_items: enqueuing `%s'", item->enclosure_url());
 				enqueue_url(item->enclosure_url(), feed);
 				item->set_enqueued(true);
