@@ -103,16 +103,25 @@ item rss_09x_parser::parse_item(xmlNode * itemNode) {
 		} else if (node_is(node, "creator", DC_URI)) {
 			author = get_content(node);
 		} else if (node_is(node, "enclosure", ns)) {
-			it.enclosure_url = get_prop(node, "url");
-			it.enclosure_type = get_prop(node, "type");
+			const std::string type = get_prop(node, "type");
+			if (utils::is_valid_podcast_type(type)) {
+				it.enclosure_url = get_prop(node, "url");
+				it.enclosure_type = std::move(type);
+			}
 		} else if (node_is(node, "content", MEDIA_RSS_URI)) {
-			it.enclosure_url = get_prop(node, "url");
-			it.enclosure_type = get_prop(node, "type");
+			const std::string type = get_prop(node, "type");
+			if (utils::is_valid_podcast_type(type)) {
+				it.enclosure_url = get_prop(node, "url");
+				it.enclosure_type = std::move(type);
+			}
 		} else if (node_is(node, "group", MEDIA_RSS_URI)) {
 			for (xmlNode * mnode = node->children; mnode != nullptr; mnode = mnode->next) {
 				if (node_is(mnode, "content", MEDIA_RSS_URI)) {
-					it.enclosure_url = get_prop(mnode, "url");
-					it.enclosure_type = get_prop(mnode, "type");
+					const std::string type = get_prop(mnode, "type");
+					if (utils::is_valid_podcast_type(type)) {
+						it.enclosure_url = get_prop(mnode, "url");
+						it.enclosure_type = std::move(type);
+					}
 				}
 			}
 		}

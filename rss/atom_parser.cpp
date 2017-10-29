@@ -102,8 +102,11 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 			if (rel == "" || rel == "alternate") {
 				it.link = newsboat::utils::absolute_url(base, get_prop(node, "href"));
 			} else if (rel == "enclosure") {
-				it.enclosure_url = get_prop(node, "href");
-				it.enclosure_type = get_prop(node, "type");
+				const std::string type = get_prop(node, "type");
+				if (utils::is_valid_podcast_type(type)) {
+					it.enclosure_url = get_prop(node, "href");
+					it.enclosure_type = std::move(type);
+				}
 			}
 		} else if (node_is(node, "summary", ns)) {
 			std::string mode = get_prop(node, "mode");

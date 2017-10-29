@@ -138,6 +138,8 @@ class utils {
 
 		static void remove_soft_hyphens(std::string& text);
 
+		static bool is_valid_podcast_type(const std::string& mimetype);
+
 	private:
 		static void append_escapes(std::string& str, char c);
 

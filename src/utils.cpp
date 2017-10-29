@@ -1082,6 +1082,17 @@ void utils::remove_soft_hyphens(std::string& text) {
 	}
 }
 
+bool utils::is_valid_podcast_type(const std::string& mimetype) {
+	const std::unordered_set<std::string> acceptable = {
+		"audio/mpeg",
+		"audio/mp3",
+		"audio/x-mp3",
+		"audio/ogg",
+		"application/ogg"
+	};
+	return acceptable.find(mimetype) != acceptable.end();
+}
+
 
 /*
  * See http://curl.haxx.se/libcurl/c/libcurl-tutorial.html#Multi-threading for a reason why we do this.
