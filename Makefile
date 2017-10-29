@@ -22,7 +22,7 @@ WARNFLAGS=-Werror -Wall -Wextra -Wunreachable-code
 INCLUDES=-Iinclude -Istfl -Ifilter -I. -Irss
 BARE_CXXFLAGS=-std=c++11 -ggdb $(INCLUDES)
 CXXFLAGS+=$(BARE_CXXFLAGS) $(WARNFLAGS) $(DEFINES)
-LDFLAGS+=-L. -fprofile-arcs -ftest-coverage
+LDFLAGS+=-L.
 
 PACKAGE=newsboat
 
@@ -32,6 +32,7 @@ endif
 
 ifeq ($(PROFILE),1)
 CXXFLAGS+=-fprofile-arcs -ftest-coverage
+LDFLAGS+=-fprofile-arcs -ftest-coverage
 endif
 
 LIB_SOURCES:=$(shell cat mk/libboat.deps)
