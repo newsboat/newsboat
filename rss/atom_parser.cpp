@@ -103,7 +103,7 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 				it.link = newsboat::utils::absolute_url(base, get_prop(node, "href"));
 			} else if (rel == "enclosure") {
 				const std::string type = get_prop(node, "type");
-				if (utils::is_valid_podcast_type(type)) {
+				if (newsboat::utils::is_valid_podcast_type(type)) {
 					it.enclosure_url = get_prop(node, "href");
 					it.enclosure_type = std::move(type);
 				}
