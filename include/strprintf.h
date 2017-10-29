@@ -42,6 +42,13 @@ class strprintf {
 			return fmt(format, argument.c_str(), args...);
 		}
 
+		template<typename... Args>
+		static std::string fmt(
+				const std::string& format, const std::string* argument, Args... args)
+		{
+			return fmt(format, *argument, args...);
+		}
+
 		template<typename T, typename... Args>
 		static std::string fmt(
 				const std::string& format, const T& argument, Args... args)
