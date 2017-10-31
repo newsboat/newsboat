@@ -405,15 +405,6 @@ int controller::run(int argc, char * argv[]) {
 		{0                 , 0                , 0,  0 }
 	};
 
-	/* First of all, let's check for options that imply silencing of the
-	 * output: import, export, command execution and, well, quiet mode */
-	while ((c = ::getopt_long(argc, argv, getopt_str, longopts, nullptr)) != -1) {
-		if (strchr("iexq", c) != nullptr) {
-			silent = true;
-			break;
-		}
-	}
-
 	const char * env_home;
 	if (!(env_home = ::getenv("HOME"))) {
 		struct passwd * spw = ::getpwuid(::getuid());
@@ -452,6 +443,9 @@ int controller::run(int argc, char * argv[]) {
 			refresh_on_start = true;
 			break;
 		case 'e':
+			// disable logging of newsboat's startup progress to stdout, because the
+			// OPML export will be printed to stdout
+			silent = true;
 			if (do_import) {
 				print_usage(argv[0]);
 				return EXIT_FAILURE;
@@ -483,9 +477,13 @@ int controller::run(int argc, char * argv[]) {
 			show_version++;
 			break;
 		case 'x':
+			// disable logging of newsboat's startup progress to stdout, because the
+			// command execution result will be printed to stdout
+			silent = true;
 			execute_cmds = true;
 			break;
 		case 'q':
+			silent = true;
 			break;
 		case 'd':
 			logger::getInstance().set_logfile(optarg);
