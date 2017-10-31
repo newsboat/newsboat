@@ -438,11 +438,13 @@ int controller::run(int argc, char * argv[]) {
 		switch (c) {
 		case ':': /* fall-through */
 		case '?': /* missing option */
-			usage(argv[0]);
-			break;
+			print_usage(argv[0]);
+			return EXIT_FAILURE;
 		case 'i':
-			if (do_export)
-				usage(argv[0]);
+			if (do_export) {
+				print_usage(argv[0]);
+				return EXIT_FAILURE;
+			}
 			do_import = true;
 			importfile = optarg;
 			break;
@@ -450,13 +452,15 @@ int controller::run(int argc, char * argv[]) {
 			refresh_on_start = true;
 			break;
 		case 'e':
-			if (do_import)
-				usage(argv[0]);
+			if (do_import) {
+				print_usage(argv[0]);
+				return EXIT_FAILURE;
+			}
 			do_export = true;
 			break;
 		case 'h':
-			usage(argv[0]);
-			break;
+			print_usage(argv[0]);
+			return EXIT_SUCCESS;
 		case 'u':
 			url_file = optarg;
 			using_nonstandard_configs = true;
@@ -497,27 +501,32 @@ int controller::run(int argc, char * argv[]) {
 		}
 		break;
 		case 'I':
-			if (do_read_export)
-				usage(argv[0]);
+			if (do_read_export) {
+				print_usage(argv[0]);
+				return EXIT_FAILURE;
+			}
 			do_read_import = true;
 			readinfofile = optarg;
 			break;
 		case 'E':
-			if (do_read_import)
-				usage(argv[0]);
+			if (do_read_import) {
+				print_usage(argv[0]);
+				return EXIT_FAILURE;
+			}
 			do_read_export = true;
 			readinfofile = optarg;
 			break;
 		default:
 			std::cout << strprintf::fmt(_("%s: unknown option - %c"), argv[0], static_cast<char>(c)) << std::endl;
-			usage(argv[0]);
-			break;
+			print_usage(argv[0]);
+			return EXIT_FAILURE;
 		}
 	};
 
 
 	if (show_version) {
-		return version_information(argv[0], show_version);
+		print_version_information(argv[0], show_version);
+		return EXIT_SUCCESS;
 	}
 
 	if (do_import) {
@@ -687,7 +696,8 @@ int controller::run(int argc, char * argv[]) {
 			assert(0); // shouldn't happen
 		}
 		std::cout << msg << std::endl << std::endl;
-		return usage(argv[0]);
+		print_usage(argv[0]);
+		return EXIT_FAILURE;
 	}
 
 	if (!do_export && !do_vacuum && !silent)
@@ -1138,7 +1148,7 @@ void controller::start_reload_all_thread(std::vector<int> * indexes) {
 	t.detach();
 }
 
-int controller::version_information(const char * argv0, unsigned int level) {
+void controller::print_version_information(const char * argv0, unsigned int level) {
 	if (level<=1) {
 		std::cout << PROGRAM_NAME << " " << PROGRAM_VERSION << " - " << PROGRAM_URL << std::endl;
 		std::cout << "Copyright (C) 2006-2015 Andreas Krennmair" << std::endl;
@@ -1164,11 +1174,9 @@ int controller::version_information(const char * argv0, unsigned int level) {
 	} else {
 		std::cout << LICENSE_str << std::endl;
 	}
-
-	return EXIT_SUCCESS;
 }
 
-int controller::usage(char * argv0) {
+void controller::print_usage(char * argv0) {
 	auto msg =
 	    strprintf::fmt(_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] "
 	    "[-c <cachefile>] [-x <command> ...] [-h]\n"),
@@ -1213,8 +1221,6 @@ int controller::usage(char * argv0) {
 		}
 		std::cout << a.desc << std::endl;
 	}
-
-	return EXIT_FAILURE;
 }
 
 void controller::import_opml(const std::string& filename) {
