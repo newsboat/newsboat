@@ -17,7 +17,9 @@ int main(int argc, char *argv[])
 
 	const std::string linkprefix = argc == 3 ? argv[2] : "";
 
+	int lineno = 0;
 	for (std::string line; std::getline(input, line); ) {
+		++lineno;
 		const std::vector<std::string> matches = split(line, "||");
 		if (matches.size() == 5) {
 			const std::string option = matches[0];
@@ -31,6 +33,10 @@ int main(int argc, char *argv[])
 			std::cout << "default value: '" << defaultparam << "')::\n";
 			std::cout << "         " << desc;
 			std::cout << " (example: " << example <<  ")\n\n";
+		} else {
+			std::cerr << "expected exactly 5 cells in " << argv[1] << ":" << lineno;
+			std::cerr << ", but got " << matches.size() << " instead\n";
+			return 1;
 		}
 	}
 
