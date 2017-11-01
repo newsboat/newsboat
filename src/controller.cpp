@@ -1147,7 +1147,7 @@ int controller::version_information(const char * argv0, unsigned int level) {
 		std::cout << "Copyright (C) 2017 Newsboat contributors" << std::endl;
 		std::cout << std::endl;
 
-		std::cout << _("newsboat is free software and licensed under the MIT/X Consortium License.") << std::endl;
+		std::cout << _("newsboat is free software and licensed under the MIT License.") << std::endl;
 		std::cout << strprintf::fmt(_("Type `%s -vv' for more information."), argv0) << std::endl << std::endl;
 
 		struct utsname xuts;

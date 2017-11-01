@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
-"Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2017-01-23 20:19+0300\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-01 21:24+0300\n"
 "PO-Revision-Date: 2012-08-08 20:07+0100\n"
 "Last-Translator: Daniel Aleksandersen <code@daniel.priv.no>\n"
 "Language-Team: \n"
@@ -31,92 +31,87 @@ msgstr "`%s' er ikke en gyldig attributt"
 msgid "`%s' is not a valid configuration element"
 msgstr "`%s' er ikke et gyldig oppsettselement"
 
-#: src/configcontainer.cpp:84
+#: src/configcontainer.cpp:95
 #, c-format
 msgid "newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
 "newsboat: fullførte oppdateringen, %f uleste nyhetsstrømmer (totalt %n "
 "uleste artikler)"
 
-#: src/configcontainer.cpp:155
+#: src/configcontainer.cpp:169
 msgid "%N %V - Articles in feed '%T' (%u unread, %t total) - %U"
 msgstr ""
 "%N %V - Artikler i nyhetsnyhetsstrømmen '%T' (%u ulest, %t totalt) - %U"
 
-#: src/configcontainer.cpp:158
+#: src/configcontainer.cpp:172
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Dialoger"
 
-#: src/configcontainer.cpp:161
+#: src/configcontainer.cpp:175
 msgid "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
 msgstr ""
 "%N %V - Nyhetsstrømmene dine (%u uleste, %t totalt)%?T? - etikett `%T'&?"
 
-#: src/configcontainer.cpp:165
+#: src/configcontainer.cpp:179
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Åpne fil&Lagre fil? - %f"
 
-#: src/configcontainer.cpp:168
+#: src/configcontainer.cpp:182
 msgid "%N %V - Help"
 msgstr "%N %V - Hjelp"
 
-#: src/configcontainer.cpp:171
+#: src/configcontainer.cpp:185
 #, fuzzy
 msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr ""
 "%N %V - Artikler i nyhetsnyhetsstrømmen '%T' (%u ulest, %t totalt) - %U"
 
-#: src/configcontainer.cpp:175
+#: src/configcontainer.cpp:189
 msgid "%N %V - Search result (%u unread, %t total)"
 msgstr "%N %V - Søkeresultater (%u ulest, %t totalt)"
 
-#: src/configcontainer.cpp:178
+#: src/configcontainer.cpp:192
 msgid "%N %V - Select Filter"
 msgstr "%N %V - Velg filter"
 
-#: src/configcontainer.cpp:180
+#: src/configcontainer.cpp:194
 msgid "%N %V - Select Tag"
 msgstr "%N %V - Velg etikett"
 
-#: src/configcontainer.cpp:182
+#: src/configcontainer.cpp:196
 msgid "%N %V - URLs"
 msgstr "%N %V - URLer"
 
-#: src/configcontainer.cpp:218
+#: src/configcontainer.cpp:232
 #, c-format
 msgid "expected boolean value, found `%s' instead"
 msgstr "forventet en boolsk verdi, fant `%s' istedenfor"
 
-#: src/configcontainer.cpp:224
+#: src/configcontainer.cpp:238
 #, c-format
 msgid "expected integer value, found `%s' instead"
 msgstr "forventet en heltallsverdi, fant `%s' i stedet"
 
-#: src/configcontainer.cpp:230
+#: src/configcontainer.cpp:244
 #, c-format
 msgid "invalid configuration value `%s'"
 msgstr "ugyldig oppsettsverdi `%s'"
 
-#: src/configparser.cpp:81
+#: src/configparser.cpp:82
 #, c-format
 msgid "Error while processing command `%s' (%s line %u): %s"
 msgstr "Feil under behandling av kommandoen `%s' (%s linje %u): %s"
 
-#: src/configparser.cpp:84
+#: src/configparser.cpp:85
 #, c-format
 msgid "unknown command `%s'"
 msgstr "ukjent kommando `%s'"
 
-#: src/controller.cpp:135 src/pb_controller.cpp:84
-#, c-format
-msgid "XDG: configuration directory '%s' not accessible, using '%s' instead."
-msgstr ""
-
-#: src/controller.cpp:176 src/pb_controller.cpp:124
+#: src/controller.cpp:423 src/pb_controller.cpp:130
 msgid "Fatal error: couldn't determine home directory!"
 msgstr "Kraftig feil: kunne ikke finne hjemmemappen!"
 
-#: src/controller.cpp:177 src/pb_controller.cpp:125
+#: src/controller.cpp:424 src/pb_controller.cpp:131
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
@@ -124,52 +119,57 @@ msgstr ""
 "Vennligst sett miljøvariablen HOME eller legg til en gyldig bruker for UID "
 "%u!"
 
-#: src/controller.cpp:324 src/pb_controller.cpp:188
+#: src/controller.cpp:494 src/pb_controller.cpp:194
 #, c-format
 msgid "%s: %d: invalid loglevel value"
 msgstr ""
 
-#: src/controller.cpp:342 src/pb_controller.cpp:197
+#: src/controller.cpp:512 src/pb_controller.cpp:203
 #, c-format
 msgid "%s: unknown option - %c"
 msgstr "%s: ukjent valg - %c"
 
-#: src/controller.cpp:367 src/pb_controller.cpp:203
+#: src/controller.cpp:544 src/pb_controller.cpp:209
 #, c-format
 msgid "Starting %s %s..."
 msgstr "Starter %s %s..."
 
-#: src/controller.cpp:377 src/controller.cpp:436 src/pb_controller.cpp:207
+#: src/controller.cpp:550 src/controller.cpp:599 src/pb_controller.cpp:214
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "Feil: en annen instans av %s kjører allerede (PID: %u)"
 
-#: src/controller.cpp:384 src/pb_controller.cpp:211
+#: src/controller.cpp:557 src/pb_controller.cpp:218
 msgid "Loading configuration..."
 msgstr "Leser oppsett..."
 
-#: src/controller.cpp:416 src/controller.cpp:454 src/controller.cpp:496
-#: src/controller.cpp:527 src/controller.cpp:531 src/controller.cpp:560
-#: src/controller.cpp:572 src/controller.cpp:588 src/controller.cpp:597
-#: src/controller.cpp:635 src/pb_controller.cpp:248 src/pb_controller.cpp:265
+#: src/controller.cpp:588 src/controller.cpp:616 src/controller.cpp:668
+#: src/controller.cpp:701 src/controller.cpp:705 src/controller.cpp:731
+#: src/controller.cpp:743 src/controller.cpp:758 src/controller.cpp:767
+#: src/controller.cpp:804 src/pb_controller.cpp:255 src/pb_controller.cpp:272
 msgid "done."
 msgstr "utført."
 
-#: src/controller.cpp:442 src/controller.cpp:522
+#: src/controller.cpp:605 src/controller.cpp:696
 msgid "Opening cache..."
 msgstr "Åpner mellomlager..."
 
-#: src/controller.cpp:448
+#: src/controller.cpp:611
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Feil: åpning av mellomlagerfilen `%s' feilet: %s"
 
-#: src/controller.cpp:484
+#: src/controller.cpp:637
+#, c-format
+msgid "%s is inaccessible and can't be created\n"
+msgstr ""
+
+#: src/controller.cpp:657
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "Laster inn URLer fra %s..."
 
-#: src/controller.cpp:503
+#: src/controller.cpp:675
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
@@ -178,7 +178,7 @@ msgstr ""
 "Feil: ingen URLer er satt opp. Vennligst fyll inn filen %s med RSS "
 "nyhetsstrømmer, eller importer fra en OPML-fil."
 
-#: src/controller.cpp:505
+#: src/controller.cpp:677
 msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
@@ -187,7 +187,7 @@ msgstr ""
 "nyhetsstrømmer. Vennligst sørg for at den inneholder noen nyhetsstrømmer og "
 "prøv igjen."
 
-#: src/controller.cpp:507
+#: src/controller.cpp:679
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your The Old Reader "
@@ -196,7 +196,7 @@ msgstr ""
 "Det ser ikke ut til at du har satt opp noen nyhetsstrømmer i din Google "
 "Reader-konto. Vennligst sørg for å gjøre det og prøv igjen."
 
-#: src/controller.cpp:509
+#: src/controller.cpp:681
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Tiny Tiny RSS "
@@ -205,7 +205,7 @@ msgstr ""
 "Det ser ikke ut til at du har satt opp noen nyhetsstrømmer i din Google "
 "Reader-konto. Vennligst sørg for å gjøre det og prøv igjen."
 
-#: src/controller.cpp:511
+#: src/controller.cpp:683
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your NewsBlur account. "
@@ -214,78 +214,86 @@ msgstr ""
 "Det ser ikke ut til at du har satt opp noen nyhetsstrømmer i din Google "
 "Reader-konto. Vennligst sørg for å gjøre det og prøv igjen."
 
-#: src/controller.cpp:520
+#: src/controller.cpp:685
+#, fuzzy
+msgid ""
+"It looks like you haven't configured any feeds in your Inoreader account. "
+"Please do so, and try again."
+msgstr ""
+"Det ser ikke ut til at du har satt opp noen nyhetsstrømmer i din Google "
+"Reader-konto. Vennligst sørg for å gjøre det og prøv igjen."
+
+#: src/controller.cpp:694
 msgid "Loading articles from cache..."
 msgstr "Leser artikler fra mellomlageret..."
 
-#: src/controller.cpp:528
+#: src/controller.cpp:702
 msgid "Cleaning up cache thoroughly..."
 msgstr "Rydder grundig opp i mellomlageret..."
 
-#: src/controller.cpp:546
+#: src/controller.cpp:719
 msgid "Error while loading feeds from database: "
 msgstr "Feil under innlesing av nyhetsstrømmer fra databasen: "
 
-#: src/controller.cpp:550
+#: src/controller.cpp:722
 #, c-format
 msgid "Error while loading feed '%s': %s"
 msgstr "Feil under innlastning av nyhetsstrømmen '%s': %s"
 
-#: src/controller.cpp:564
+#: src/controller.cpp:735
 msgid "Prepopulating query feeds..."
 msgstr "Forhåndsutfyller spørringsstrømmer..."
 
-#: src/controller.cpp:585
+#: src/controller.cpp:755
 msgid "Importing list of read articles..."
 msgstr "Importerer liste over leste artikler..."
 
-#: src/controller.cpp:594
+#: src/controller.cpp:764
 msgid "Exporting list of read articles..."
 msgstr "Eksporterer liste over leste artikler..."
 
-#: src/controller.cpp:628
+#: src/controller.cpp:797
 msgid "Cleaning up cache..."
 msgstr "Rydder opp i mellomlageret..."
 
-#: src/controller.cpp:640
+#: src/controller.cpp:809
 msgid "failed: "
 msgstr "feilet: "
 
-#: src/controller.cpp:661
+#: src/controller.cpp:831
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "Feil: kunne ikke markere alle nyhetsstrømmene som lest: %s"
 
-#: src/controller.cpp:724
+#: src/controller.cpp:894
 #, c-format
 msgid "%sLoading %s..."
 msgstr "%sInnlasting%s..."
 
-#: src/controller.cpp:759 src/controller.cpp:761 src/controller.cpp:763
+#: src/controller.cpp:929 src/controller.cpp:931 src/controller.cpp:933
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr "Feil under innhenting av %s: %s"
 
-#: src/controller.cpp:771
+#: src/controller.cpp:941
 msgid "Error: invalid feed!"
 msgstr "Feil: ugyldig nyhetsstrøm!"
 
-#: src/controller.cpp:778
+#: src/controller.cpp:948
 msgid "invalid feed index (bug)"
 msgstr "ugyldig strøminndeks (programfeil)"
 
-#: src/controller.cpp:976
-msgid ""
-"newsboat is free software and licensed under the MIT/X Consortium License."
-msgstr ""
-"newsboat er fri programvare lisensiert under MIT/X Consortium License."
+#: src/controller.cpp:1150
+#, fuzzy
+msgid "newsboat is free software and licensed under the MIT License."
+msgstr "newsboat er fri programvare lisensiert under MIT/X Consortium License."
 
-#: src/controller.cpp:977
+#: src/controller.cpp:1151
 #, c-format
 msgid "Type `%s -vv' for more information."
 msgstr "Skriv `%s -vv' for mer informasjon."
 
-#: src/controller.cpp:999
+#: src/controller.cpp:1173
 #, c-format
 msgid ""
 "%s %s\n"
@@ -296,105 +304,105 @@ msgstr ""
 "bruk: %s [-i <fil>|-e] [-u <URL fil>] [-c <mellomlagerfil>] [-x "
 "<kommando> ...] [-h]\n"
 
-#: src/controller.cpp:1014
+#: src/controller.cpp:1188
 msgid "export OPML feed to stdout"
 msgstr "eksporter OPML strømmer til stdout"
 
-#: src/controller.cpp:1015
+#: src/controller.cpp:1189
 msgid "refresh feeds on start"
 msgstr "oppdater nyhetsstrømmer under oppstart"
 
-#: src/controller.cpp:1016 src/controller.cpp:1026 src/controller.cpp:1027
+#: src/controller.cpp:1190 src/controller.cpp:1200 src/controller.cpp:1201
 msgid "<file>"
 msgstr "<fil>"
 
-#: src/controller.cpp:1016
+#: src/controller.cpp:1190
 msgid "import OPML file"
 msgstr "importer OPML-fil"
 
-#: src/controller.cpp:1017
+#: src/controller.cpp:1191
 msgid "<urlfile>"
 msgstr "<URL fil>"
 
-#: src/controller.cpp:1017
+#: src/controller.cpp:1191
 msgid "read RSS feed URLs from <urlfile>"
 msgstr "les RSS-strømmer fra <URL-fil>"
 
-#: src/controller.cpp:1018
+#: src/controller.cpp:1192
 msgid "<cachefile>"
 msgstr "<mellomlagerfil>"
 
-#: src/controller.cpp:1018
+#: src/controller.cpp:1192
 msgid "use <cachefile> as cache file"
 msgstr "bruk <mellomlagerfil> som mellomlagerfil"
 
-#: src/controller.cpp:1019 src/pb_controller.cpp:286
+#: src/controller.cpp:1193 src/pb_controller.cpp:293
 msgid "<configfile>"
 msgstr "<oppsettsfil>"
 
-#: src/controller.cpp:1019 src/pb_controller.cpp:286
+#: src/controller.cpp:1193 src/pb_controller.cpp:293
 msgid "read configuration from <configfile>"
 msgstr "les oppsettsfilen fra <oppsettsfil>"
 
-#: src/controller.cpp:1020
-msgid "clean up cache thoroughly"
-msgstr "grunndig opprydding av mellomlagret"
+#: src/controller.cpp:1194
+msgid "compact the cache"
+msgstr ""
 
-#: src/controller.cpp:1021
+#: src/controller.cpp:1195
 msgid "<command>..."
 msgstr "<kommando>..."
 
-#: src/controller.cpp:1021
+#: src/controller.cpp:1195
 msgid "execute list of commands"
 msgstr "utfør kommandoliste"
 
-#: src/controller.cpp:1022
+#: src/controller.cpp:1196
 msgid "quiet startup"
 msgstr "stille oppstart"
 
-#: src/controller.cpp:1023
+#: src/controller.cpp:1197
 msgid "get version information"
 msgstr "få versjonsinformasjon"
 
-#: src/controller.cpp:1024 src/pb_controller.cpp:289
+#: src/controller.cpp:1198 src/pb_controller.cpp:296
 msgid "<loglevel>"
 msgstr "<loggnivå>"
 
-#: src/controller.cpp:1024 src/pb_controller.cpp:289
+#: src/controller.cpp:1198 src/pb_controller.cpp:296
 msgid "write a log with a certain loglevel (valid values: 1 to 6)"
 msgstr "skriv en logg med angitt loggskrivningsnivå mellom 1 og 6"
 
-#: src/controller.cpp:1025 src/pb_controller.cpp:290
+#: src/controller.cpp:1199 src/pb_controller.cpp:297
 msgid "<logfile>"
 msgstr "<loggfil>"
 
-#: src/controller.cpp:1025 src/pb_controller.cpp:290
+#: src/controller.cpp:1199 src/pb_controller.cpp:297
 msgid "use <logfile> as output log file"
 msgstr "bruk <loggfil> som loggfil"
 
-#: src/controller.cpp:1026
+#: src/controller.cpp:1200
 msgid "export list of read articles to <file>"
 msgstr "eksporterer en liste med leste artikler til <fil>"
 
-#: src/controller.cpp:1027
+#: src/controller.cpp:1201
 msgid "import list of read articles from <file>"
 msgstr "importer en liste med leste artikler fra <fil>"
 
-#: src/controller.cpp:1028 src/pb_controller.cpp:291
+#: src/controller.cpp:1202 src/pb_controller.cpp:298
 msgid "this help"
 msgstr "denne hjelpen"
 
-#: src/controller.cpp:1050
+#: src/controller.cpp:1224
 #, c-format
 msgid "An error occurred while parsing %s."
 msgstr "En feil oppsto under tolkningen av %s"
 
-#: src/controller.cpp:1066
+#: src/controller.cpp:1240
 #, c-format
 msgid "Import of %s finished."
 msgstr "Fullførte importeringen av %s."
 
-#: src/controller.cpp:1368
+#: src/controller.cpp:1520
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -402,38 +410,38 @@ msgstr ""
 "bokmerkestøtte er ikke satt opp. Vennligst sett valgvariabelen `bookmark-"
 "cmd' etter ønske."
 
-#: src/controller.cpp:1381
+#: src/controller.cpp:1533
 #, c-format
 msgid "%u unread articles"
 msgstr "%u uleste artikler"
 
-#: src/controller.cpp:1383
+#: src/controller.cpp:1535
 #, fuzzy, c-format
 msgid "%s: %s: unknown command"
 msgstr "ukjent kommando `%s'"
 
-#: src/controller.cpp:1415 src/formaction.cpp:329 src/formaction.cpp:331
+#: src/controller.cpp:1569 src/formaction.cpp:329 src/formaction.cpp:331
 #: src/itemview_formaction.cpp:77
 msgid "Title: "
 msgstr "Tittel: "
 
-#: src/controller.cpp:1419 src/itemview_formaction.cpp:83
+#: src/controller.cpp:1573 src/itemview_formaction.cpp:83
 msgid "Author: "
 msgstr "Forfatter: "
 
-#: src/controller.cpp:1423 src/itemview_formaction.cpp:93
+#: src/controller.cpp:1577 src/itemview_formaction.cpp:93
 msgid "Date: "
 msgstr "Dato: "
 
-#: src/controller.cpp:1427 src/itemview_formaction.cpp:89
+#: src/controller.cpp:1581 src/itemview_formaction.cpp:89
 msgid "Link: "
 msgstr "Lenke: "
 
-#: src/controller.cpp:1432 src/itemview_formaction.cpp:102
+#: src/controller.cpp:1586 src/itemview_formaction.cpp:102
 msgid "Podcast Download URL: "
 msgstr "Podkastnedlastings-URL: "
 
-#: src/controller.cpp:1619
+#: src/controller.cpp:1773
 #, c-format
 msgid "Error: couldn't open configuration file `%s'!"
 msgstr "Feil: kunne ikke åpne oppsettsfilen `%s'!"
@@ -464,7 +472,7 @@ msgid "Error: you can't remove the feed list!"
 msgstr "Feil: du kan ikke fjerne nyhetsstrømlisten!"
 
 #: src/dialogs_formaction.cpp:101 src/feedlist_formaction.cpp:746
-#: src/itemlist_formaction.cpp:925 src/urlview_formaction.cpp:131
+#: src/itemlist_formaction.cpp:924 src/urlview_formaction.cpp:131
 msgid "Invalid position!"
 msgstr "ugyldig posisjon!"
 
@@ -542,7 +550,8 @@ msgstr "ukjent feil (programfeil)."
 msgid "People you follow"
 msgstr "Folk du følger"
 
-#: src/feedhq_urlreader.cpp:34 src/oldreader_urlreader.cpp:34
+#: src/feedhq_urlreader.cpp:34 src/inoreader_urlreader.cpp:33
+#: src/oldreader_urlreader.cpp:34
 msgid "Starred items"
 msgstr "Favorittinnlegg"
 
@@ -624,35 +633,35 @@ msgstr "Søk etter: "
 msgid "Filter: "
 msgstr "Filter: "
 
-#: src/feedlist_formaction.cpp:378 src/view.cpp:194
+#: src/feedlist_formaction.cpp:378 src/view.cpp:199
 msgid "Do you really want to quit (y:Yes n:No)? "
 msgstr "Vil du virkelig avslutte (j:Ja n:Nei)? "
 
 #: src/feedlist_formaction.cpp:378 src/filebrowser_formaction.cpp:102
-#: src/view.cpp:194
+#: src/view.cpp:199
 msgid "yn"
 msgstr "jn"
 
-#: src/feedlist_formaction.cpp:378 src/view.cpp:194
+#: src/feedlist_formaction.cpp:378 src/view.cpp:199
 msgid "y"
 msgstr "j"
 
 #: src/feedlist_formaction.cpp:460 src/help_formaction.cpp:159
-#: src/itemlist_formaction.cpp:903 src/itemview_formaction.cpp:408
-#: src/pb_view.cpp:300 src/pb_view.cpp:309 src/urlview_formaction.cpp:119
+#: src/itemlist_formaction.cpp:902 src/itemview_formaction.cpp:408
+#: src/pb_view.cpp:298 src/pb_view.cpp:307 src/urlview_formaction.cpp:119
 msgid "Quit"
 msgstr "Avslutt"
 
-#: src/feedlist_formaction.cpp:461 src/itemlist_formaction.cpp:904
+#: src/feedlist_formaction.cpp:461 src/itemlist_formaction.cpp:903
 msgid "Open"
 msgstr "Åpne"
 
-#: src/feedlist_formaction.cpp:462 src/itemlist_formaction.cpp:907
+#: src/feedlist_formaction.cpp:462 src/itemlist_formaction.cpp:906
 #: src/itemview_formaction.cpp:410
 msgid "Next Unread"
 msgstr "Neste uleste"
 
-#: src/feedlist_formaction.cpp:463 src/itemlist_formaction.cpp:906
+#: src/feedlist_formaction.cpp:463 src/itemlist_formaction.cpp:905
 msgid "Reload"
 msgstr "Oppdater"
 
@@ -664,18 +673,18 @@ msgstr "Oppdater alle"
 msgid "Mark Read"
 msgstr "Merk som lest"
 
-#: src/feedlist_formaction.cpp:466 src/itemlist_formaction.cpp:908
+#: src/feedlist_formaction.cpp:466 src/itemlist_formaction.cpp:907
 msgid "Mark All Read"
 msgstr "Marker alle som lest"
 
 #: src/feedlist_formaction.cpp:467 src/help_formaction.cpp:160
-#: src/itemlist_formaction.cpp:909
+#: src/itemlist_formaction.cpp:908
 msgid "Search"
 msgstr "Søk"
 
 #: src/feedlist_formaction.cpp:468 src/help_formaction.cpp:188
-#: src/itemlist_formaction.cpp:910 src/itemview_formaction.cpp:413
-#: src/pb_view.cpp:241 src/pb_view.cpp:317
+#: src/itemlist_formaction.cpp:909 src/itemview_formaction.cpp:413
+#: src/pb_view.cpp:239 src/pb_view.cpp:315
 msgid "Help"
 msgstr "Hjelp"
 
@@ -696,7 +705,7 @@ msgstr "Feil under søket etter `%s': %s"
 msgid "No results."
 msgstr "Ingen resultater."
 
-#: src/feedlist_formaction.cpp:741 src/itemlist_formaction.cpp:920
+#: src/feedlist_formaction.cpp:741 src/itemlist_formaction.cpp:919
 msgid "Position not visible!"
 msgstr "Posisjonen er ikke synlig!"
 
@@ -723,12 +732,12 @@ msgstr "Fil: "
 msgid "%s %s - Save File - %s"
 msgstr "%s %s - Lagre fil - %s"
 
-#: src/filebrowser_formaction.cpp:184 src/pb_view.cpp:311
+#: src/filebrowser_formaction.cpp:184 src/pb_view.cpp:309
 #: src/select_formaction.cpp:145 src/select_formaction.cpp:150
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: src/filebrowser_formaction.cpp:185 src/itemlist_formaction.cpp:905
+#: src/filebrowser_formaction.cpp:185 src/itemlist_formaction.cpp:904
 #: src/itemview_formaction.cpp:409
 msgid "Save"
 msgstr "Lagre"
@@ -831,6 +840,20 @@ msgstr "innbakt Flash-tillegg"
 msgid "unknown (bug)"
 msgstr "ukjent (programfeil)"
 
+#: src/inoreader_urlreader.cpp:34
+#, fuzzy
+msgid "Broadcast items"
+msgstr "Allerede på siste innlegg."
+
+#: src/inoreader_urlreader.cpp:35
+#, fuzzy
+msgid "Liked items"
+msgstr "Delte innlegg"
+
+#: src/inoreader_urlreader.cpp:36
+msgid "Saved web pages"
+msgstr ""
+
 #: src/itemlist_formaction.cpp:136 src/itemview_formaction.cpp:338
 msgid "Toggling read flag for article..."
 msgstr "Setter lestflagg for artikkelen..."
@@ -849,7 +872,7 @@ msgstr "URL-listen er tom."
 msgid "Flags: "
 msgstr "Flagg: "
 
-#: src/itemlist_formaction.cpp:252 src/itemlist_formaction.cpp:945
+#: src/itemlist_formaction.cpp:252 src/itemlist_formaction.cpp:944
 msgid "Error: no item selected!"
 msgstr "Feil: ingen markerte innlegg!"
 
@@ -860,17 +883,17 @@ msgstr "Feil: du kan ikke oppdatere søkeresultater."
 #: src/itemlist_formaction.cpp:285 src/itemlist_formaction.cpp:293
 #: src/itemlist_formaction.cpp:316 src/itemview_formaction.cpp:297
 #: src/itemview_formaction.cpp:306 src/itemview_formaction.cpp:333
-#: src/view.cpp:635 src/view.cpp:696
+#: src/view.cpp:655 src/view.cpp:716
 msgid "No unread items."
 msgstr "Ingen uleste innlegg."
 
 #: src/itemlist_formaction.cpp:301 src/itemview_formaction.cpp:315
-#: src/view.cpp:760
+#: src/view.cpp:780
 msgid "Already on last item."
 msgstr "Allerede på siste innlegg."
 
 #: src/itemlist_formaction.cpp:309 src/itemview_formaction.cpp:324
-#: src/view.cpp:728
+#: src/view.cpp:748
 msgid "Already on first item."
 msgstr "Allerede på første innlegg."
 
@@ -901,37 +924,37 @@ msgstr ""
 msgid "Flags updated."
 msgstr "Flagg oppdatert."
 
-#: src/itemlist_formaction.cpp:670 src/view.cpp:374 src/view.cpp:394
+#: src/itemlist_formaction.cpp:670 src/view.cpp:379 src/view.cpp:399
 #, c-format
 msgid "Error: applying the filter failed: %s"
 msgstr "Feil: bruk av filteret feilet: %s"
 
-#: src/itemlist_formaction.cpp:980 src/itemview_formaction.cpp:200
+#: src/itemlist_formaction.cpp:979 src/itemview_formaction.cpp:200
 #: src/itemview_formaction.cpp:470
 msgid "Aborted saving."
 msgstr "Avbrøt lagringen."
 
-#: src/itemlist_formaction.cpp:984 src/itemview_formaction.cpp:474
+#: src/itemlist_formaction.cpp:983 src/itemview_formaction.cpp:474
 #, c-format
 msgid "Saved article to %s"
 msgstr "Lagret artikkelen til %s"
 
-#: src/itemlist_formaction.cpp:986 src/itemview_formaction.cpp:476
+#: src/itemlist_formaction.cpp:985 src/itemview_formaction.cpp:476
 #, c-format
 msgid "Error: couldn't save article to %s"
 msgstr "Feil: kunne ikke lagre artikkelen til %s"
 
-#: src/itemlist_formaction.cpp:1062
+#: src/itemlist_formaction.cpp:1061
 #, c-format
 msgid "Search Result - '%s'"
 msgstr "Søkeresultater - '%s'"
 
-#: src/itemlist_formaction.cpp:1065
+#: src/itemlist_formaction.cpp:1064
 #, c-format
 msgid "Query Feed - %s"
 msgstr "Spørringsstrøm - %s"
 
-#: src/itemlist_formaction.cpp:1069
+#: src/itemlist_formaction.cpp:1068
 #, c-format
 msgid "Article List - %s"
 msgstr "Artikkelliste - %s"
@@ -952,7 +975,7 @@ msgstr "Strøm: "
 msgid "type: "
 msgstr "slag: "
 
-#: src/itemview_formaction.cpp:172
+#: src/itemview_formaction.cpp:172 src/view.cpp:492
 #, c-format
 msgid "Error while marking article as read: %s"
 msgstr "Feil mens artikkelen ble markert som lest: %s"
@@ -1316,11 +1339,16 @@ msgstr "`%s' er ikke en gyldig kontekst"
 msgid "`%s' is not a valid key command"
 msgstr "`%s' er en ugyldig nøkkelkommando"
 
-#: src/pb_controller.cpp:259
+#: src/pb_controller.cpp:81
+#, c-format
+msgid "XDG: configuration directory '%s' not accessible, using '%s' instead."
+msgstr ""
+
+#: src/pb_controller.cpp:266
 msgid "Cleaning up queue..."
 msgstr "Rydder opp i køen..."
 
-#: src/pb_controller.cpp:272
+#: src/pb_controller.cpp:279
 #, fuzzy, c-format
 msgid ""
 "%s %s\n"
@@ -1330,17 +1358,17 @@ msgstr ""
 "bruk: %s [-i <fil>|-e] [-u <URL fil>] [-c <mellomlagerfil>] [-x "
 "<kommando> ...] [-h]\n"
 
-#: src/pb_controller.cpp:287
+#: src/pb_controller.cpp:294
 #, fuzzy
 msgid "<queuefile>"
 msgstr "<fil>"
 
-#: src/pb_controller.cpp:287
+#: src/pb_controller.cpp:294
 #, fuzzy
 msgid "use <queuefile> as queue file"
 msgstr "bruk <mellomlagerfil> som mellomlagerfil"
 
-#: src/pb_controller.cpp:288
+#: src/pb_controller.cpp:295
 msgid "start download on startup"
 msgstr ""
 
@@ -1354,39 +1382,39 @@ msgstr " - %u samtidige nedlastinger"
 msgid "Queue (%u downloads in progress, %u total) - %.2f kb/s total%s"
 msgstr "Kø (%u nedlastinger pågår, %u totalt) - %.2f kb/s totalt%s"
 
-#: src/pb_view.cpp:110
+#: src/pb_view.cpp:108
 msgid "Error: can't quit: download(s) in progress."
 msgstr "Feil: kan ikke avslutte: nedlasting(er) pågår."
 
-#: src/pb_view.cpp:144
+#: src/pb_view.cpp:142
 msgid "Error: download needs to be finished before the file can be played."
 msgstr "Feil: nedlastinger må fullføres før filen kan spilles av."
 
-#: src/pb_view.cpp:185
+#: src/pb_view.cpp:183
 msgid "Error: unable to perform operation: download(s) in progress."
 msgstr "Feil: klarte ikke å utføre oppgaven: nedlasting(er) pågår."
 
-#: src/pb_view.cpp:310
+#: src/pb_view.cpp:308
 msgid "Download"
 msgstr "Last ned"
 
-#: src/pb_view.cpp:312
+#: src/pb_view.cpp:310
 msgid "Delete"
 msgstr "Slett"
 
-#: src/pb_view.cpp:313
+#: src/pb_view.cpp:311
 msgid "Purge Finished"
 msgstr "Fjern fullførte"
 
-#: src/pb_view.cpp:314
+#: src/pb_view.cpp:312
 msgid "Toggle Automatic Download"
 msgstr "Automatisk nedlasting [av/på]"
 
-#: src/pb_view.cpp:315
+#: src/pb_view.cpp:313
 msgid "Play"
 msgstr "Spill av"
 
-#: src/pb_view.cpp:316
+#: src/pb_view.cpp:314
 #, fuzzy
 msgid "Mark as Finished"
 msgstr "Fjern fullførte"
@@ -1447,61 +1475,62 @@ msgstr "Lagre bokmerke"
 msgid "URLs"
 msgstr "URLer"
 
-#: src/view.cpp:420 src/view.cpp:444
+#: src/view.cpp:425 src/view.cpp:449
 msgid "Error: feed contains no items!"
 msgstr "Feil: nyhetsstrømmen inneholder ingen innlegg!"
 
-#: src/view.cpp:527
+#: src/view.cpp:547
 msgid "No tags defined."
 msgstr "Ingen etiketter angitt."
 
-#: src/view.cpp:811
+#: src/view.cpp:831
 msgid "Updating query feed..."
 msgstr "Frisker opp spørringsstrømmen..."
 
-#: rss/atom_parser.cpp:16 rss/parser.cpp:290 rss/rss_09x_parser.cpp:17
-#: rss/rss_09x_parser.cpp:31 rss/rss_10_parser.cpp:15
+#: rss/atom_parser.cpp:11 rss/parser.cpp:287 rss/rss_09x_parser.cpp:12
+#: rss/rss_09x_parser.cpp:26 rss/rss_10_parser.cpp:11
 msgid "XML root node is NULL"
 msgstr "XML-rotelementet er NULL"
 
-#: rss/parser.cpp:89
+#: rss/parser.cpp:84
 msgid "couldn't initialize libcurl"
 msgstr "kunne ikke initialisere libcurl"
 
-#: rss/parser.cpp:164
-#, c-format
-msgid "Error: trying to download feed `%s' returned HTTP status code %ld."
-msgstr ""
-"Feil: forsøket på å laste ned nyhetsstrømmen `%s' ga HTTP-feilkoden %ld."
-
-#: rss/parser.cpp:195
+#: rss/parser.cpp:192
 msgid "could not parse buffer"
 msgstr "kunne ikke tolke bufferen"
 
-#: rss/parser.cpp:216
+#: rss/parser.cpp:213
 msgid "could not parse file"
 msgstr "kunne ikke tolke filen"
 
-#: rss/parser.cpp:238
+#: rss/parser.cpp:235
 msgid "no RSS version"
 msgstr "ingen RSS-versjon"
 
-#: rss/parser.cpp:252
+#: rss/parser.cpp:249
 msgid "invalid RSS version"
 msgstr "ugyldig RSS-versjon"
 
-#: rss/parser.cpp:266 rss/parser.cpp:273
+#: rss/parser.cpp:263 rss/parser.cpp:270
 msgid "invalid Atom version"
 msgstr "ugyldig Atom-versjon"
 
-#: rss/parser.cpp:277
+#: rss/parser.cpp:274
 msgid "no Atom version"
 msgstr "ingen Atom-versjon"
 
-#: rss/parser_factory.cpp:27
+#: rss/parser_factory.cpp:22
 msgid "unsupported feed format"
 msgstr "strømformatet støttes ikke"
 
-#: rss/rss_09x_parser.cpp:40
+#: rss/rss_09x_parser.cpp:35
 msgid "no RSS channel found"
 msgstr "fant ingen RSS-kanal"
+
+#~ msgid "clean up cache thoroughly"
+#~ msgstr "grunndig opprydding av mellomlagret"
+
+#~ msgid "Error: trying to download feed `%s' returned HTTP status code %ld."
+#~ msgstr ""
+#~ "Feil: forsøket på å laste ned nyhetsstrømmen `%s' ga HTTP-feilkoden %ld."

@@ -68,5 +68,6 @@ Support
 
 License
 -------
-Newsboat is licensed under the MIT/X Consortium License. See the file LICENSE
-for further details.
+
+Newsboat is licensed under [the MIT
+license](https://opensource.org/licenses/MIT); see the LICENSE file.

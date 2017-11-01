@@ -1299,7 +1299,7 @@ https://github.com/newsboat/newsboat/issues/[]
 
 License
 -------
-MIT/X Consortium License
+MIT License
 
 Copyright 2006-2015 Andreas Krennmair <ak@newsbeuter.org>
 Copyright 2015-2017 Alexander Batischev <eual.jp@gmail.com>
