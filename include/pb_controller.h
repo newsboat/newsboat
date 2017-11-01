@@ -34,8 +34,6 @@ class pb_controller {
 			return downloads_;
 		}
 
-		int usage(const char * argv0);
-
 		std::string get_dlpath();
 
 		unsigned int downloads_in_progress();
@@ -56,6 +54,7 @@ class pb_controller {
 		}
 
 	private:
+		void print_usage(const char * argv0);
 		bool setup_dirs_xdg(const char *env_home);
 
 		pb_view * v;

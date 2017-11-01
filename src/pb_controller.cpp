@@ -172,8 +172,8 @@ int pb_controller::run(int argc, char * argv[]) {
 		switch (c) {
 		case ':':
 		case '?':
-			usage(argv[0]);
-			break;
+			print_usage(argv[0]);
+			return EXIT_FAILURE;
 		case 'C':
 			config_file = optarg;
 			break;
@@ -197,12 +197,12 @@ int pb_controller::run(int argc, char * argv[]) {
 			}
 			break;
 		case 'h':
-			usage(argv[0]);
-			break;
+			print_usage(argv[0]);
+			return EXIT_SUCCESS;
 		default:
 			std::cout << strprintf::fmt(_("%s: unknown option - %c"), argv[0], static_cast<char>(c)) << std::endl;
-			usage(argv[0]);
-			break;
+			print_usage(argv[0]);
+			return EXIT_FAILURE;
 		}
 	};
 
@@ -274,7 +274,7 @@ int pb_controller::run(int argc, char * argv[]) {
 	return EXIT_SUCCESS;
 }
 
-int pb_controller::usage(const char * argv0) {
+void pb_controller::print_usage(const char * argv0) {
 	auto msg =
 	    strprintf::fmt(_("%s %s\nusage %s [-C <file>] [-q <file>] [-h]\n"),
 	    "podboat",
@@ -309,8 +309,6 @@ int pb_controller::usage(const char * argv0) {
 		}
 		std::cout << a.desc << std::endl;
 	}
-
-	return EXIT_FAILURE;
 }
 
 std::string pb_controller::get_dlpath() {
