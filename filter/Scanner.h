@@ -222,7 +222,7 @@ private:
 	Token *tokens;    // list of tokens already peeked (first token is a dummy)
 	Token *pt;        // current peek token
 
-	int ch;           // current input character
+	wchar_t ch;       // current input character
 
 	int pos;          // byte position of current character
 	int charPos;      // position by unicode characters starting with 0
