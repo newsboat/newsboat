@@ -1,6 +1,6 @@
 #include <iostream>
-#include <regex>
 #include <fstream>
+#include "split.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,21 +15,22 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
+	int lineno = 0;
 	for (std::string line; std::getline(input, line); ) {
-		const std::regex rgx(
-				"([^:]*):([^:]*):(.*)",
-				std::regex_constants::awk);
-		std::smatch matches;
-		if (std::regex_match(line, matches, rgx)) {
-			if (matches.size() == 4) {
-				const std::string cmd = matches[1].str();
-				const std::string key = matches[2].str();
-				const std::string desc = matches[3].str();
+		++lineno;
+		const std::vector<std::string> matches = split(line, "||");
+		if (matches.size() == 3) {
+			const std::string cmd = matches[0];
+			const std::string key = matches[1];
+			const std::string desc = matches[2];
 
-				std::cout <<  "'" << cmd << "' ";
-				std::cout << "(default key: '" << key << "')::\n";
-				std::cout << "         " << desc << "\n\n";
-			}
+			std::cout << "'" << cmd << "' ";
+			std::cout << "(default key: '" << key << "')::\n";
+			std::cout << "         " << desc << "\n\n";
+		} else {
+			std::cerr << "expected exactly 3 cells in " << argv[1] << ":" << lineno;
+			std::cerr << ", but got " << matches.size() << " instead\n";
+			return 1;
 		}
 	}
 

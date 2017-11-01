@@ -94,9 +94,9 @@ include::configcommands-linked.dsv[]
 |======================================================================================================
 
 .[[available-operations,Available Operations]]<<available-operations>>
-[frame="all", grid="all", format="dsv", options="header", cols="20,20,60"]
+[frame="all", grid="all", format="dsv", separator="\|\||\n", options="header", cols="20,20,60"]
 |=========================================================================
-Operation:Default key:Description
+Operation||Default key||Description
 include::keycmds-linked.dsv[]
 |=========================================================================
 

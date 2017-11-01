@@ -143,7 +143,7 @@ clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clea
 distclean: clean clean-mo test-clean profclean
 	$(RM) core *.core core.* config.mk
 
-doc: doc/xhtml/newsboat.html doc/xhtml/faq.html doc/newsboat.1 doc/podboat.1
+doc: doc/newsboat.1 doc/podboat.1 doc/xhtml/newsboat.html doc/xhtml/faq.html
 
 doc/xhtml/newsboat.html: doc/newsboat.txt doc/chapter-firststeps.txt doc/configcommands-linked.dsv \
 		doc/keycmds-linked.dsv doc/chapter-tagging.txt doc/chapter-snownews.txt \
@@ -204,7 +204,7 @@ doc/podboat-cmds-linked.dsv: doc/podboat-cmds.dsv
 	sed -r 's/^([^|]+)/[[\1]]<<\1,`\1`>>/' doc/podboat-cmds.dsv > doc/podboat-cmds-linked.dsv
 
 doc/keycmds-linked.dsv: doc/keycmds.dsv
-	sed -r 's/^([^:]+)/[[\1]]<<\1,`\1`>>/' doc/keycmds.dsv > doc/keycmds-linked.dsv
+	sed -r 's/^([^|]+)/[[\1]]<<\1,`\1`>>/' doc/keycmds.dsv > doc/keycmds-linked.dsv
 
 fmt:
 	astyle --suffix=none --style=java --indent=tab --indent-classes *.cpp include/*.h src/*.cpp rss/*.{cpp,h} test/*.cpp
