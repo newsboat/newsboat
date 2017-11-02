@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 1.3\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2017-11-01 21:24+0300\n"
 "PO-Revision-Date: 2016-11-19 13:00+0300\n"
 "Last-Translator: Konstantin Shakhnov <kastian@mail.ru>\n"
