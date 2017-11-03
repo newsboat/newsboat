@@ -121,7 +121,7 @@ msgstr ""
 #: src/controller.cpp:494 src/pb_controller.cpp:194
 #, c-format
 msgid "%s: %d: invalid loglevel value"
-msgstr ""
+msgstr "%s: %d: некорректный уровень логирования"
 
 #: src/controller.cpp:512 src/pb_controller.cpp:203
 #, c-format
@@ -161,7 +161,7 @@ msgstr "Ошибка: попытка открыть файл кэша `%s' за�
 #: src/controller.cpp:637
 #, c-format
 msgid "%s is inaccessible and can't be created\n"
-msgstr ""
+msgstr "%s недоступен и не может быть создан\n"
 
 #: src/controller.cpp:657
 #, c-format
@@ -279,12 +279,12 @@ msgstr "неверный индекс ленты (сбой)"
 
 #: src/controller.cpp:1150
 msgid "newsboat is free software and licensed under the MIT License."
-msgstr ""
+msgstr "Newsboat является свободным программным обеспечением под лицензией MIT."
 
 #: src/controller.cpp:1151
 #, c-format
 msgid "Type `%s -vv' for more information."
-msgstr ""
+msgstr "За подробностями набирайте `%s -vv`."
 
 #: src/controller.cpp:1173
 #, c-format
@@ -339,7 +339,7 @@ msgstr "считать настройки из <файла настроек>"
 
 #: src/controller.cpp:1194
 msgid "compact the cache"
-msgstr ""
+msgstr "уплотнить кэш"
 
 #: src/controller.cpp:1195
 msgid "<command>..."
@@ -487,7 +487,7 @@ msgstr "удалено"
 
 #: src/download.cpp:52
 msgid "finished"
-msgstr "закончено"
+msgstr "завершено"
 
 #: src/download.cpp:54
 msgid "failed"
@@ -499,7 +499,7 @@ msgstr "не полностью"
 
 #: src/download.cpp:58
 msgid "ready"
-msgstr ""
+msgstr "готово"
 
 #: src/download.cpp:60
 msgid "played"
@@ -541,7 +541,7 @@ msgstr "неизвестная ошибка (сбой)."
 
 #: src/feedhq_urlreader.cpp:33 src/oldreader_urlreader.cpp:33
 msgid "People you follow"
-msgstr ""
+msgstr "Люди, которых Вы читаете"
 
 #: src/feedhq_urlreader.cpp:34 src/inoreader_urlreader.cpp:33
 #: src/oldreader_urlreader.cpp:34
@@ -562,7 +562,7 @@ msgstr "Не выбрано ни одной ленты!"
 #. / "Sort by (f)irsttag/..." and "Reverse Sort by (f)irsttag/..." messages
 #: src/feedlist_formaction.cpp:122 src/feedlist_formaction.cpp:141
 msgid "ftaun"
-msgstr ""
+msgstr "ftaun"
 
 #: src/feedlist_formaction.cpp:123
 msgid "Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(n)one?"
@@ -580,7 +580,7 @@ msgstr ""
 
 #: src/feedlist_formaction.cpp:167
 msgid "Cannot open query feeds in the browser!"
-msgstr ""
+msgstr "Динамические ленты нельзя открывать в браузере!"
 
 #: src/feedlist_formaction.cpp:209 src/itemlist_formaction.cpp:342
 msgid "Marking feed read..."
@@ -841,7 +841,7 @@ msgstr "Понравившиеся статьи"
 
 #: src/inoreader_urlreader.cpp:36
 msgid "Saved web pages"
-msgstr ""
+msgstr "Сохранённые веб-страницы"
 
 #: src/itemlist_formaction.cpp:136 src/itemview_formaction.cpp:338
 msgid "Toggling read flag for article..."
@@ -944,7 +944,7 @@ msgstr "Результат поиска - '%s'"
 #: src/itemlist_formaction.cpp:1064
 #, c-format
 msgid "Query Feed - %s"
-msgstr "Лента по запросу - %s"
+msgstr "Динамическая лента - %s"
 
 #: src/itemlist_formaction.cpp:1068
 #, c-format
@@ -1082,7 +1082,7 @@ msgstr "Открыть заметку в браузере и отметить к
 
 #: src/keymap.cpp:97
 msgid "Open all unread items of selected feed in browser"
-msgstr ""
+msgstr "Открыть все непрочитанные статьи из выбранной ленты в браузере"
 
 #: src/keymap.cpp:102
 msgid "Open all unread items of selected feed in browser and mark read"
@@ -1158,7 +1158,7 @@ msgstr "Запустить проигрыватель с текущей выбр
 
 #: src/keymap.cpp:202
 msgid "Mark file as finished (not played)"
-msgstr ""
+msgstr "Отметить файл как завершённый (не проигрывался)"
 
 #: src/keymap.cpp:207
 msgid "Increase the number of concurrent downloads"
@@ -1333,7 +1333,7 @@ msgstr "команда `%s' не поддерживается"
 #: src/pb_controller.cpp:81
 #, c-format
 msgid "XDG: configuration directory '%s' not accessible, using '%s' instead."
-msgstr ""
+msgstr "XDG: конфигурационная директория '%s' недоступна, используем '%s'."
 
 #: src/pb_controller.cpp:266
 msgid "Cleaning up queue..."
@@ -1419,7 +1419,7 @@ msgstr "`%s' — неверное регулярное выражение:%s"
 
 #: src/rss.cpp:121
 msgid "%a, %d %b %Y %T %z"
-msgstr ""
+msgstr "%a, %d %b %Y %T %z"
 
 #: src/rss.cpp:488
 msgid "too few arguments"
@@ -1473,7 +1473,7 @@ msgstr "Не определено ни одной метки."
 
 #: src/view.cpp:831
 msgid "Updating query feed..."
-msgstr "Обновляю ленту очереди..."
+msgstr "Обновляю динамическую ленту..."
 
 #: rss/atom_parser.cpp:11 rss/parser.cpp:287 rss/rss_09x_parser.cpp:12
 #: rss/rss_09x_parser.cpp:26 rss/rss_10_parser.cpp:11
