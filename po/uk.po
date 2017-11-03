@@ -59,9 +59,8 @@ msgid "%N %V - Help"
 msgstr "%N %V - Довідка"
 
 #: src/configcontainer.cpp:185
-#, fuzzy
 msgid "%N %V - Article '%T' (%u unread, %t total)"
-msgstr "%N %V - '%T' Статей у темі (%u непрочитано, всього %t) - %U"
+msgstr "%N %V - Стаття '%T' (%u непрочитано, всього %t)"
 
 #: src/configcontainer.cpp:189
 msgid "%N %V - Search result (%u unread, %t total)"
@@ -184,39 +183,35 @@ msgstr ""
 "заповніть її темами та спробуйте знову."
 
 #: src/controller.cpp:679
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your The Old Reader "
 "account. Please do so, and try again."
 msgstr ""
-"Схоже не те, що ви не налаштували ні одної теми у аккаунті Google Reader."
+"Схоже не те, що ви не налаштували ні одної теми у аккаунті The Old Reader."
 "Будь ласка, зробіть це і спробуйте знову."
 
 #: src/controller.cpp:681
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Tiny Tiny RSS "
 "account. Please do so, and try again."
 msgstr ""
-"Схоже не те, що ви не налаштували ні одної теми у аккаунті Google Reader."
+"Схоже не те, що ви не налаштували ні одної теми у аккаунті Tiny Tiny RSS."
 "Будь ласка, зробіть це і спробуйте знову."
 
 #: src/controller.cpp:683
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your NewsBlur account. "
 "Please do so, and try again."
 msgstr ""
-"Схоже не те, що ви не налаштували ні одної теми у аккаунті Google Reader."
+"Схоже не те, що ви не налаштували ні одної теми у аккаунті Newsblur."
 "Будь ласка, зробіть це і спробуйте знову."
 
 #: src/controller.cpp:685
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Inoreader account. "
 "Please do so, and try again."
 msgstr ""
-"Схоже не те, що ви не налаштували ні одної теми у аккаунті Google Reader."
+"Схоже не те, що ви не налаштували ні одної теми у аккаунті Inoreader."
 "Будь ласка, зробіть це і спробуйте знову."
 
 #: src/controller.cpp:694
@@ -280,11 +275,9 @@ msgid "invalid feed index (bug)"
 msgstr "непрацездатний індекс теми (помилка)"
 
 #: src/controller.cpp:1150
-#, fuzzy
 msgid "newsboat is free software and licensed under the MIT License."
 msgstr ""
-"newsboat - це вільне програмне забезпечення, що ліцензоване під MIT/X "
-"Consortium License."
+"Newsboat є вільним програмним забезпеченням за ліцензією MIT."
 
 #: src/controller.cpp:1151
 #, c-format
@@ -414,9 +407,9 @@ msgid "%u unread articles"
 msgstr "%u непрочитаних статей"
 
 #: src/controller.cpp:1535
-#, fuzzy, c-format
+#, c-format
 msgid "%s: %s: unknown command"
-msgstr "невідома команда `%s'"
+msgstr "%s: %s: невідома команда"
 
 #: src/controller.cpp:1569 src/formaction.cpp:329 src/formaction.cpp:331
 #: src/itemview_formaction.cpp:77
@@ -793,14 +786,12 @@ msgid "Description: "
 msgstr "Опис: "
 
 #: src/formaction.cpp:334
-#, fuzzy
 msgid "Feed title: "
-msgstr "Файл: "
+msgstr "Назва теми: "
 
 #: src/formaction.cpp:347
-#, fuzzy
 msgid "Saving bookmark on autopilot..."
-msgstr "Зберігаю закладки..."
+msgstr "Зберігаю закладку на автоматі..."
 
 #: src/help_formaction.cpp:132
 msgid "Generic bindings:"
@@ -843,9 +834,8 @@ msgid "Broadcast items"
 msgstr ""
 
 #: src/inoreader_urlreader.cpp:35
-#, fuzzy
 msgid "Liked items"
-msgstr "Загальні статті."
+msgstr "Вподобані статті."
 
 #: src/inoreader_urlreader.cpp:36
 msgid "Saved web pages"
@@ -1064,14 +1054,12 @@ msgid "Save article"
 msgstr "Зберегти статтю"
 
 #: src/keymap.cpp:67
-#, fuzzy
 msgid "Go to next article"
-msgstr "Йти до наступної непрочитаної статті"
+msgstr "Перейти до наступної статті"
 
 #: src/keymap.cpp:72
-#, fuzzy
 msgid "Go to previous article"
-msgstr "Йти до попередньої непрочитаної статті"
+msgstr "Перейти до попередньої статті"
 
 #: src/keymap.cpp:77
 msgid "Go to next unread article"
@@ -1086,18 +1074,16 @@ msgid "Go to a random unread article"
 msgstr "Йти до будь-якої непрочитаної статті"
 
 #: src/keymap.cpp:92
-#, fuzzy
 msgid "Open article in browser and mark read"
-msgstr "Відкрити статтю у браузері"
+msgstr "Відкрити статтю у браузері і позначити прочитаною"
 
 #: src/keymap.cpp:97
 msgid "Open all unread items of selected feed in browser"
 msgstr ""
 
 #: src/keymap.cpp:102
-#, fuzzy
 msgid "Open all unread items of selected feed in browser and mark read"
-msgstr "Відкрити статтю у браузері"
+msgstr "Відкрити усі непрочитані статті обраної теми в браузері і позначити прочитаними"
 
 #: src/keymap.cpp:107
 msgid "Open article in browser"
@@ -1208,14 +1194,12 @@ msgid "Edit flags"
 msgstr "Редагувати флаги"
 
 #: src/keymap.cpp:252
-#, fuzzy
 msgid "Go to next feed"
-msgstr "Йти до наступної непрочитаної теми"
+msgstr "Перейти до наступної теми"
 
 #: src/keymap.cpp:257
-#, fuzzy
 msgid "Go to previous feed"
-msgstr "Йти до попередньої непрочитаної теми"
+msgstr "Перейти до попередньої теми"
 
 #: src/keymap.cpp:262
 msgid "Go to next unread feed"
@@ -1353,24 +1337,21 @@ msgid "Cleaning up queue..."
 msgstr "Очищую чергу..."
 
 #: src/pb_controller.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage %s [-C <file>] [-q <file>] [-h]\n"
 msgstr ""
 "%s %s\n"
-"використання: %s [-i <файл>|-e] [-u <файлпосилання>] [-c <файлкешу>] [-x "
-"<команда> ...] [-h]\n"
+"використання: %s [-C <файл>] [-q <файл>|-e] [-h]\n"
 
 #: src/pb_controller.cpp:294
-#, fuzzy
 msgid "<queuefile>"
-msgstr "<файл>"
+msgstr "<файл черги>"
 
 #: src/pb_controller.cpp:294
-#, fuzzy
 msgid "use <queuefile> as queue file"
-msgstr "використайте <файлкешу> як файл кешу"
+msgstr "використовувати <файл черги> як файл черги"
 
 #: src/pb_controller.cpp:295
 msgid "start download on startup"
@@ -1420,9 +1401,8 @@ msgid "Play"
 msgstr "Програти"
 
 #: src/pb_view.cpp:314
-#, fuzzy
 msgid "Mark as Finished"
-msgstr "Очищення закінчено"
+msgstr "Позначити як завершене"
 
 #: src/regexmanager.cpp:41
 #, c-format
@@ -1443,9 +1423,9 @@ msgid "too few arguments"
 msgstr "замало параметрів"
 
 #: src/rss.cpp:504
-#, fuzzy, c-format
+#, c-format
 msgid "`%s' is not a valid filter expression"
-msgstr "`%s' не є правильним регулярним виразом: %s"
+msgstr "`%s' не є правильним фільтром"
 
 #: src/rss_parser.cpp:151
 #, c-format
