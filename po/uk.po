@@ -1512,10 +1512,3 @@ msgstr "формат теми не підтримується"
 #: rss/rss_09x_parser.cpp:35
 msgid "no RSS channel found"
 msgstr "не знайдено каналу RSS"
-
-#~ msgid "clean up cache thoroughly"
-#~ msgstr "ретельно очищистити кеш"
-
-#~ msgid "Error: trying to download feed `%s' returned HTTP status code %ld."
-#~ msgstr ""
-#~ "Помилка: намагаюсь завантажити тему `%s' оновленого статус коду HTTP %ld"
