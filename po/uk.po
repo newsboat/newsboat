@@ -1,13 +1,15 @@
 # Ivan Kovnatsky <sevenfourk@gmail.com>, 2010.
+# Alexander Batischev <eual.jp@gmail.com>, 2017.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: newsboat 0.9\n"
+"Project-Id-Version: newsboat 2.10.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2017-11-01 21:24+0300\n"
-"PO-Revision-Date: 2008-08-02 15:32+0400\n"
-"Last-Translator: Ivan Kovnatsky <sevenfourk@gmail.com>\n"
-"Language-Team: Uk <sevenfourk@gmail.com>\n"
+"PO-Revision-Date: 2017-11-03 22:32+0300\n"
+"Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
+"Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, "
+"Alexander Batischev <eual.jp@gmail.com>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -111,7 +113,7 @@ msgstr "Критична помилка: неможливо визначити �
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
-"Будь-ласка налашуйте змінну HOME, або додайте користувача, що відповідає UID "
+"Будь ласка, налаштуйте змінну HOME, або додайте користувача, що відповідає UID "
 "%u!"
 
 #: src/controller.cpp:494 src/pb_controller.cpp:194
@@ -170,16 +172,16 @@ msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
 "import an OPML file."
 msgstr ""
-"Помилка: не вказано URLs. Будь-ласка, додайте RSS URLs у файл %s "
-"чиімпортуйте файл OPML."
+"Помилка: не вказано URLs. Будь ласка, додайте RSS URLs у файл %s "
+"чи імпортуйте файл OPML."
 
 #: src/controller.cpp:677
 msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
 msgstr ""
-"Схоже на те, що OPML тема, на яку ви підписалися не містить тем. Будь-ласка, "
-"заповніть її темами, та спробуйте знову."
+"Схоже на те, що OPML тема, на яку ви підписалися не містить тем. Будь ласка, "
+"заповніть її темами та спробуйте знову."
 
 #: src/controller.cpp:679
 #, fuzzy
@@ -188,7 +190,7 @@ msgid ""
 "account. Please do so, and try again."
 msgstr ""
 "Схоже не те, що ви не налаштували ні одної теми у аккаунті Google Reader."
-"Будь-ласка зробіть це, і спробуйте знову."
+"Будь ласка, зробіть це і спробуйте знову."
 
 #: src/controller.cpp:681
 #, fuzzy
@@ -197,7 +199,7 @@ msgid ""
 "account. Please do so, and try again."
 msgstr ""
 "Схоже не те, що ви не налаштували ні одної теми у аккаунті Google Reader."
-"Будь-ласка зробіть це, і спробуйте знову."
+"Будь ласка, зробіть це і спробуйте знову."
 
 #: src/controller.cpp:683
 #, fuzzy
@@ -206,7 +208,7 @@ msgid ""
 "Please do so, and try again."
 msgstr ""
 "Схоже не те, що ви не налаштували ні одної теми у аккаунті Google Reader."
-"Будь-ласка зробіть це, і спробуйте знову."
+"Будь ласка, зробіть це і спробуйте знову."
 
 #: src/controller.cpp:685
 #, fuzzy
@@ -215,7 +217,7 @@ msgid ""
 "Please do so, and try again."
 msgstr ""
 "Схоже не те, що ви не налаштували ні одної теми у аккаунті Google Reader."
-"Будь-ласка зробіть це, і спробуйте знову."
+"Будь ласка, зробіть це і спробуйте знову."
 
 #: src/controller.cpp:694
 msgid "Loading articles from cache..."
@@ -403,7 +405,7 @@ msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
 msgstr ""
-"підтримка закладок не налаштована. Будь-ласка встановіть змінну `bookmark-"
+"підтримка закладок не налаштована. Будь ласка, встановіть змінну `bookmark-"
 "cmd' відповідно."
 
 #: src/controller.cpp:1533
