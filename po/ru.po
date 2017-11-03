@@ -1515,9 +1515,3 @@ msgstr "неизвестный тип ленты"
 #: rss/rss_09x_parser.cpp:35
 msgid "no RSS channel found"
 msgstr "RSS-лента не найдена"
-
-#~ msgid "clean up cache thoroughly"
-#~ msgstr "тщательно очищаю кэш..."
-
-#~ msgid "Error: trying to download feed `%s' returned HTTP status code %ld."
-#~ msgstr "Ошибка: при загрузке ленты `%s' получен HTTP-код %ld."
