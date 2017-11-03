@@ -96,7 +96,7 @@ msgstr "ungültiger Konfigurationswert `%s'"
 #: src/configparser.cpp:82
 #, c-format
 msgid "Error while processing command `%s' (%s line %u): %s"
-msgstr "Fehler beim Bearbeiten von Befehl `%s' (%s Zeile %u): %s"
+msgstr "Fehler beim Verarbeiten von Befehl `%s' (%s Zeile %u): %s"
 
 #: src/configparser.cpp:85
 #, c-format
@@ -292,7 +292,7 @@ msgid ""
 msgstr ""
 "%s %s\n"
 "Verwendung: %s [-i <datei>|-e] [-u <urldatei>] [-c <cachedatei>] [-x "
-"<kommando> ...] [-h]\n"
+"<befehl> ...] [-h]\n"
 
 #: src/controller.cpp:1188
 msgid "export OPML feed to stdout"
@@ -341,7 +341,7 @@ msgstr "Zwischenspeicherdatei kompaktifizieren"
 
 #: src/controller.cpp:1195
 msgid "<command>..."
-msgstr "<kommando>..."
+msgstr "<befehl>..."
 
 #: src/controller.cpp:1195
 msgid "execute list of commands"
