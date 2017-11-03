@@ -1063,15 +1063,15 @@ msgstr "Перейти до попередньої статті"
 
 #: src/keymap.cpp:77
 msgid "Go to next unread article"
-msgstr "Йти до наступної непрочитаної статті"
+msgstr "Перейти до наступної непрочитаної статті"
 
 #: src/keymap.cpp:82
 msgid "Go to previous unread article"
-msgstr "Йти до попередньої непрочитаної статті"
+msgstr "Перейти до попередньої непрочитаної статті"
 
 #: src/keymap.cpp:87
 msgid "Go to a random unread article"
-msgstr "Йти до будь-якої непрочитаної статті"
+msgstr "Перейти до будь-якої непрочитаної статті"
 
 #: src/keymap.cpp:92
 msgid "Open article in browser and mark read"
@@ -1203,11 +1203,11 @@ msgstr "Перейти до попередньої теми"
 
 #: src/keymap.cpp:262
 msgid "Go to next unread feed"
-msgstr "Йти до наступної непрочитаної теми"
+msgstr "Перейти до наступної непрочитаної теми"
 
 #: src/keymap.cpp:267
 msgid "Go to previous unread feed"
-msgstr "Йти до попередньої непрочитаної теми"
+msgstr "Перейти до попередньої непрочитаної теми"
 
 #: src/keymap.cpp:272
 msgid "Call a macro"
@@ -1235,7 +1235,7 @@ msgstr "Дивитись список відкритих меню"
 
 #: src/keymap.cpp:302
 msgid "Go to next dialog"
-msgstr "Йти до наступного меню"
+msgstr "Перейти до наступного меню"
 
 #: src/keymap.cpp:307
 msgid "Go to previous dialog"
@@ -1295,7 +1295,7 @@ msgstr "Відкрити URL 9"
 
 #: src/keymap.cpp:379
 msgid "Move to the previous entry"
-msgstr "Йти до попереднього рядка"
+msgstr "Перейти до попереднього рядка"
 
 #: src/keymap.cpp:384
 msgid "Move to the next entry"
@@ -1470,7 +1470,7 @@ msgstr "Не визначено жодної мітки."
 
 #: src/view.cpp:831
 msgid "Updating query feed..."
-msgstr "Поновлюю дану тему..."
+msgstr "Оновлюю динамічну тему..."
 
 #: rss/atom_parser.cpp:11 rss/parser.cpp:287 rss/rss_09x_parser.cpp:12
 #: rss/rss_09x_parser.cpp:26 rss/rss_10_parser.cpp:11
