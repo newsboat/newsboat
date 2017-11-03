@@ -68,8 +68,8 @@ MKDIR=mkdir -p
 INSTALL=install
 A2X=a2x
 MSGFMT=msgfmt
-RANLIB=ranlib
-AR=ar
+RANLIB?=ranlib
+AR?=ar
 CHMOD=chmod
 
 STFLHDRS:=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
