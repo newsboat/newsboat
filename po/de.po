@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2017-11-01 21:24+0300\n"
-"PO-Revision-Date: 2017-01-27 01:10+0100\n"
+"PO-Revision-Date: 2017-11-03 14:49+0100\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -96,7 +96,7 @@ msgstr "ungültiger Konfigurationswert `%s'"
 #: src/configparser.cpp:82
 #, c-format
 msgid "Error while processing command `%s' (%s line %u): %s"
-msgstr "Fehler beim Bearbeiten von Befehl `%s' (%s Zeile %u): %s"
+msgstr "Fehler beim Verarbeiten von Befehl `%s' (%s Zeile %u): %s"
 
 #: src/configparser.cpp:85
 #, c-format
@@ -158,7 +158,7 @@ msgstr "Fehler: Das Öffnen der Zwischenspeicherdatei `%s' schlug fehl: %s"
 #: src/controller.cpp:637
 #, c-format
 msgid "%s is inaccessible and can't be created\n"
-msgstr ""
+msgstr "Die Datei %s kann weder gelesen noch erstellt werden\n"
 
 #: src/controller.cpp:657
 #, c-format
@@ -207,12 +207,11 @@ msgstr ""
 "konfiguriert. Bitte tun Sie das, und probieren Sie es erneut."
 
 #: src/controller.cpp:685
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Inoreader account. "
 "Please do so, and try again."
 msgstr ""
-"Es sieht so aus als hätten Sie keine Feeds in Ihrem The-Old-Reader-Account "
+"Es sieht so aus als hätten Sie keine Feeds in Ihrem Inoreader-Account "
 "konfiguriert. Bitte tun Sie das, und probieren Sie es erneut."
 
 #: src/controller.cpp:694
@@ -230,7 +229,7 @@ msgstr "Fehler beim Laden der Feeds aus der Datenbank: "
 #: src/controller.cpp:722
 #, c-format
 msgid "Error while loading feed '%s': %s"
-msgstr "Fehler beim Laden von Feed`%s': %s"
+msgstr "Fehler beim Laden von Feed `%s': %s"
 
 #: src/controller.cpp:735
 msgid "Prepopulating query feeds..."
@@ -276,11 +275,8 @@ msgid "invalid feed index (bug)"
 msgstr "ungültiger Feed-Index (Bug)"
 
 #: src/controller.cpp:1150
-#, fuzzy
 msgid "newsboat is free software and licensed under the MIT License."
-msgstr ""
-"newsboat ist Freie Software und unter der MIT/X Consortium License "
-"lizenziert."
+msgstr "newsboat ist Freie Software und steht unter der MIT-Lizenz."
 
 #: src/controller.cpp:1151
 #, c-format
@@ -296,11 +292,11 @@ msgid ""
 msgstr ""
 "%s %s\n"
 "Verwendung: %s [-i <datei>|-e] [-u <urldatei>] [-c <cachedatei>] [-x "
-"<kommando> ...] [-h]\n"
+"<befehl> ...] [-h]\n"
 
 #: src/controller.cpp:1188
 msgid "export OPML feed to stdout"
-msgstr "exportiere OPML-Feed auf die Standardausgabe"
+msgstr "OPML-Feed auf die Standardausgabe exportieren"
 
 #: src/controller.cpp:1189
 msgid "refresh feeds on start"
@@ -320,7 +316,7 @@ msgstr "<urldatei>"
 
 #: src/controller.cpp:1191
 msgid "read RSS feed URLs from <urlfile>"
-msgstr "RSS-Feed URLs aus <urldatei> lesen"
+msgstr "RSS-Feed-URLs aus <urldatei> lesen"
 
 #: src/controller.cpp:1192
 msgid "<cachefile>"
@@ -338,13 +334,14 @@ msgstr "<configdatei>"
 msgid "read configuration from <configfile>"
 msgstr "Konfiguration aus <configdatei> lesen"
 
+# Es wird ein SQLite-VACUUM-Befehl ausgeführt.
 #: src/controller.cpp:1194
 msgid "compact the cache"
-msgstr ""
+msgstr "Zwischenspeicherdatei kompaktifizieren"
 
 #: src/controller.cpp:1195
 msgid "<command>..."
-msgstr "<kommando>..."
+msgstr "<befehl>..."
 
 #: src/controller.cpp:1195
 msgid "execute list of commands"
@@ -364,8 +361,7 @@ msgstr "<loglevel>"
 
 #: src/controller.cpp:1198 src/pb_controller.cpp:296
 msgid "write a log with a certain loglevel (valid values: 1 to 6)"
-msgstr ""
-"Schreibe eine Logdatei mit einem bestimmten Loglevel (gültige Werte: 1 bis 6)"
+msgstr "Logdatei mit einem bestimmten Loglevel (gültige Werte: 1 bis 6) schreiben"
 
 #: src/controller.cpp:1199 src/pb_controller.cpp:297
 msgid "<logfile>"
@@ -373,19 +369,19 @@ msgstr "<logdatei>"
 
 #: src/controller.cpp:1199 src/pb_controller.cpp:297
 msgid "use <logfile> as output log file"
-msgstr "Verwende <logdatei> als Ausgabe-Logdatei"
+msgstr "Logs nach <logdatei> schreiben"
 
 #: src/controller.cpp:1200
 msgid "export list of read articles to <file>"
-msgstr "exportiere Liste von gelesenen Artikeln nach <datei>"
+msgstr "Liste von gelesenen Artikeln nach <datei> exportieren"
 
 #: src/controller.cpp:1201
 msgid "import list of read articles from <file>"
-msgstr "importiere Liste von gelesenen Artikeln aus <datei>"
+msgstr "Liste von gelesenen Artikeln aus <datei> importieren"
 
 #: src/controller.cpp:1202 src/pb_controller.cpp:298
 msgid "this help"
-msgstr "diese Hilfe"
+msgstr "diese Hilfe anzeigen"
 
 #: src/controller.cpp:1224
 #, c-format
@@ -834,18 +830,16 @@ msgid "unknown (bug)"
 msgstr "unbekannt (Bug)"
 
 #: src/inoreader_urlreader.cpp:34
-#, fuzzy
 msgid "Broadcast items"
-msgstr "Bereits beim letzten Artikel."
+msgstr "geteilte Artikel"
 
 #: src/inoreader_urlreader.cpp:35
-#, fuzzy
 msgid "Liked items"
-msgstr "empfohlene Artikel"
+msgstr "für gut befundene Artikel"
 
 #: src/inoreader_urlreader.cpp:36
 msgid "Saved web pages"
-msgstr ""
+msgstr "gespeicherte Webseiten"
 
 #: src/itemlist_formaction.cpp:136 src/itemview_formaction.cpp:338
 msgid "Toggling read flag for article..."
@@ -1522,11 +1516,3 @@ msgstr "nicht unterstütztes Feed-Format"
 #: rss/rss_09x_parser.cpp:35
 msgid "no RSS channel found"
 msgstr "kein RSS-Channel gefunden"
-
-#~ msgid "clean up cache thoroughly"
-#~ msgstr "Zwischenspeicher gründlich aufräumen"
-
-#~ msgid "Error: trying to download feed `%s' returned HTTP status code %ld."
-#~ msgstr ""
-#~ "Fehler: beim Versuch den Feed `%s' herunterzuladen, wurde der HTTP-Status-"
-#~ "Code %ld zurückgeliefert."
