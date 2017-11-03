@@ -158,7 +158,7 @@ msgstr "Fehler: Das Öffnen der Zwischenspeicherdatei `%s' schlug fehl: %s"
 #: src/controller.cpp:637
 #, c-format
 msgid "%s is inaccessible and can't be created\n"
-msgstr ""
+msgstr "Die Datei %s kann weder gelesen noch erstellt werden\n"
 
 #: src/controller.cpp:657
 #, c-format
@@ -207,12 +207,11 @@ msgstr ""
 "konfiguriert. Bitte tun Sie das, und probieren Sie es erneut."
 
 #: src/controller.cpp:685
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Inoreader account. "
 "Please do so, and try again."
 msgstr ""
-"Es sieht so aus als hätten Sie keine Feeds in Ihrem The-Old-Reader-Account "
+"Es sieht so aus als hätten Sie keine Feeds in Ihrem Inoreader-Account "
 "konfiguriert. Bitte tun Sie das, und probieren Sie es erneut."
 
 #: src/controller.cpp:694
@@ -276,11 +275,8 @@ msgid "invalid feed index (bug)"
 msgstr "ungültiger Feed-Index (Bug)"
 
 #: src/controller.cpp:1150
-#, fuzzy
 msgid "newsboat is free software and licensed under the MIT License."
-msgstr ""
-"newsboat ist Freie Software und unter der MIT/X Consortium License "
-"lizenziert."
+msgstr "newsboat ist Freie Software und steht unter der MIT-Lizenz."
 
 #: src/controller.cpp:1151
 #, c-format
@@ -338,9 +334,10 @@ msgstr "<configdatei>"
 msgid "read configuration from <configfile>"
 msgstr "Konfiguration aus <configdatei> lesen"
 
+# Es wird ein SQLite-VACUUM-Befehl ausgeführt.
 #: src/controller.cpp:1194
 msgid "compact the cache"
-msgstr ""
+msgstr "Zwischenspeicherdatei kompaktifizieren"
 
 #: src/controller.cpp:1195
 msgid "<command>..."
@@ -834,18 +831,16 @@ msgid "unknown (bug)"
 msgstr "unbekannt (Bug)"
 
 #: src/inoreader_urlreader.cpp:34
-#, fuzzy
 msgid "Broadcast items"
-msgstr "Bereits beim letzten Artikel."
+msgstr "geteilte Artikel"
 
 #: src/inoreader_urlreader.cpp:35
-#, fuzzy
 msgid "Liked items"
-msgstr "empfohlene Artikel"
+msgstr "für gut befundene Artikel"
 
 #: src/inoreader_urlreader.cpp:36
 msgid "Saved web pages"
-msgstr ""
+msgstr "gespeicherte Webseiten"
 
 #: src/itemlist_formaction.cpp:136 src/itemview_formaction.cpp:338
 msgid "Toggling read flag for article..."
@@ -1522,11 +1517,3 @@ msgstr "nicht unterstütztes Feed-Format"
 #: rss/rss_09x_parser.cpp:35
 msgid "no RSS channel found"
 msgstr "kein RSS-Channel gefunden"
-
-#~ msgid "clean up cache thoroughly"
-#~ msgstr "Zwischenspeicher gründlich aufräumen"
-
-#~ msgid "Error: trying to download feed `%s' returned HTTP status code %ld."
-#~ msgstr ""
-#~ "Fehler: beim Versuch den Feed `%s' herunterzuladen, wurde der HTTP-Status-"
-#~ "Code %ld zurückgeliefert."
