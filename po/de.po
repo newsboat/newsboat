@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2017-11-01 21:24+0300\n"
-"PO-Revision-Date: 2017-01-27 01:10+0100\n"
+"PO-Revision-Date: 2017-11-03 14:49+0100\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -229,7 +229,7 @@ msgstr "Fehler beim Laden der Feeds aus der Datenbank: "
 #: src/controller.cpp:722
 #, c-format
 msgid "Error while loading feed '%s': %s"
-msgstr "Fehler beim Laden von Feed`%s': %s"
+msgstr "Fehler beim Laden von Feed `%s': %s"
 
 #: src/controller.cpp:735
 msgid "Prepopulating query feeds..."
@@ -296,7 +296,7 @@ msgstr ""
 
 #: src/controller.cpp:1188
 msgid "export OPML feed to stdout"
-msgstr "exportiere OPML-Feed auf die Standardausgabe"
+msgstr "OPML-Feed auf die Standardausgabe exportieren"
 
 #: src/controller.cpp:1189
 msgid "refresh feeds on start"
@@ -316,7 +316,7 @@ msgstr "<urldatei>"
 
 #: src/controller.cpp:1191
 msgid "read RSS feed URLs from <urlfile>"
-msgstr "RSS-Feed URLs aus <urldatei> lesen"
+msgstr "RSS-Feed-URLs aus <urldatei> lesen"
 
 #: src/controller.cpp:1192
 msgid "<cachefile>"
@@ -361,8 +361,7 @@ msgstr "<loglevel>"
 
 #: src/controller.cpp:1198 src/pb_controller.cpp:296
 msgid "write a log with a certain loglevel (valid values: 1 to 6)"
-msgstr ""
-"Schreibe eine Logdatei mit einem bestimmten Loglevel (gültige Werte: 1 bis 6)"
+msgstr "Logdatei mit einem bestimmten Loglevel (gültige Werte: 1 bis 6) schreiben"
 
 #: src/controller.cpp:1199 src/pb_controller.cpp:297
 msgid "<logfile>"
@@ -370,19 +369,19 @@ msgstr "<logdatei>"
 
 #: src/controller.cpp:1199 src/pb_controller.cpp:297
 msgid "use <logfile> as output log file"
-msgstr "Verwende <logdatei> als Ausgabe-Logdatei"
+msgstr "Logs nach <logdatei> schreiben"
 
 #: src/controller.cpp:1200
 msgid "export list of read articles to <file>"
-msgstr "exportiere Liste von gelesenen Artikeln nach <datei>"
+msgstr "Liste von gelesenen Artikeln nach <datei> exportieren"
 
 #: src/controller.cpp:1201
 msgid "import list of read articles from <file>"
-msgstr "importiere Liste von gelesenen Artikeln aus <datei>"
+msgstr "Liste von gelesenen Artikeln aus <datei> importieren"
 
 #: src/controller.cpp:1202 src/pb_controller.cpp:298
 msgid "this help"
-msgstr "diese Hilfe"
+msgstr "diese Hilfe anzeigen"
 
 #: src/controller.cpp:1224
 #, c-format
