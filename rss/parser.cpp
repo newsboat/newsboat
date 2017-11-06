@@ -156,6 +156,9 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 	CURLcode infoOk = curl_easy_getinfo(easyhandle, CURLINFO_RESPONSE_CODE, &status);
 
 	curl_easy_reset(easyhandle);
+	if (cookie_cache != "") {
+		curl_easy_setopt(easyhandle, CURLOPT_COOKIEJAR, cookie_cache.c_str());
+	}
 
 	if (!ehandle)
 		curl_easy_cleanup(easyhandle);
