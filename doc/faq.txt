@@ -7,8 +7,9 @@ I get errors like "`color01' is not a valid color"
 Numbers that start with zero are treated as octal; starting with newsboat
 2.10, these are not allowed since
 https://github.com/akrennmair/newsbeuter/issues/186[they only add confusion].
-Simply remove leading zeros and use `color1` instead of `color01` or `color001`
-and so on.
+
+Convert octal numbers to decimal, and drop the leading zero. For example,
+`color01` should be replaced with `color1`, `color016` eith `color14` etc.
 
 I want to have a feed that contains all unread articles of all feeds
 --------------------------------------------------------------------
@@ -18,8 +19,8 @@ line to your +~/.newsboat/urls+ file:
 
 	"query:Unread Articles:unread = \"yes\""
 
-For details, refer to link:newsboat.html#_query_feeds[documentation on query
-feeds].
+For details, refer to the link:newsboat.html#_query_feeds[documentation on
+query feeds].
 
 After I open a link in the browser, Newsboat stays unresponsive until the browser is closed
 -------------------------------------------------------------------------------------------
@@ -31,14 +32,14 @@ the way, otherwise people won't be able to see their browsers.
 If you're using a GUI browser like Firefox, you can do one of two things:
 
 1. Start your browser beforehand. This way, Newsboat will only wait a fraction
-   of a second (while new tab is being opened).
+   of a second (while a new tab is being opened).
 
 2. Wrap your browser in a script and use the script as Newsboat's browser.
 +
 Put this in `~/bin/newsboat-browser.sh`:
 +
     #/bin/sh
-    /usr/bin/firefox $@ &
+    /usr/bin/firefox "$@" &
 +
 Make it executable:
 +
