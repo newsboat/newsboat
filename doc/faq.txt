@@ -9,7 +9,7 @@ Numbers that start with zero are treated as octal; starting with newsboat
 https://github.com/akrennmair/newsbeuter/issues/186[they only add confusion].
 
 Convert octal numbers to decimal, and drop the leading zero. For example,
-`color01` should be replaced with `color1`, `color016` eith `color14` etc.
+`color01` should be replaced with `color1`, `color016` with `color14` etc.
 
 I want to have a feed that contains all unread articles of all feeds
 --------------------------------------------------------------------
