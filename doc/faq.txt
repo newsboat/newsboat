@@ -20,3 +20,30 @@ line to your +~/.newsboat/urls+ file:
 
 For details, refer to link:newsboat.html#_query_feeds[documentation on query
 feeds].
+
+After I open a link in the browser, Newsboat stays unresponsive until the browser is closed
+-------------------------------------------------------------------------------------------
+
+Newsboat has to behave like that in order to accomodate users of text-based
+browsers like lynx and w3c. It has to relinquish the terminal and stay out of
+the way, otherwise people won't be able to see their browsers.
+
+If you're using a GUI browser like Firefox, you can do one of two things:
+
+1. Start your browser beforehand. This way, Newsboat will only wait a fraction
+   of a second (while new tab is being opened).
+
+2. Wrap your browser in a script and use the script as Newsboat's browser.
++
+Put this in `~/bin/newsboat-browser.sh`:
++
+    #/bin/sh
+    /usr/bin/firefox $@ &
++
+Make it executable:
++
+    $ chmod +x ~/bin/newsboat-browser.sh
++
+Then add the following line to your Newsboat's config:
++
+    browser "~/bin/newsboat-browser.sh"
