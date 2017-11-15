@@ -28,9 +28,11 @@ newsboat can be compiled.
 - GNU gettext (on systems that don't provide gettext in the libc):
   ftp://ftp.gnu.org/gnu/gettext/
 - [pkg-config](http://pkg-config.freedesktop.org/wiki/)
-- [libxml2](http://xmlsoft.org/downloads.html)
+- [libxml2, xmllint, and xsltproc](http://xmlsoft.org/downloads.html)
 - [json-c (version 0.11 or newer)](https://github.com/json-c/json-c/wiki)
 - [asciidoc](http://www.methods.co.nz/asciidoc/INSTALL.html)
+- DocBook XML
+- DocBook XSL
 
 Installation
 ------------

@@ -80,7 +80,7 @@ POTFILE=po/newsboat.pot
 TEXTCONV=./txt2h
 RM=rm -f
 
-all: $(NEWSBOAT) $(PODBOAT) mo-files
+all: doc $(NEWSBOAT) $(PODBOAT) mo-files
 
 NB_DEPS=$(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBOAT_OBJS) $(RSSPPLIB_OUTPUT)
 
