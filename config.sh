@@ -108,7 +108,8 @@ if [ `uname -s` = "Darwin" ]; then
 	check_custom "ncurses5.4" "ncurses5.4-config" || fail "ncurses5.4"
 elif [ `uname -s` != "OpenBSD" ]; then
 	check_pkg "ncursesw" || \
-	check_custom "ncursesw5" "ncursesw5-config" ||  fail "ncursesw"
+	check_custom "ncursesw5" "ncursesw5-config" || \
+		check_custom "ncursesw6" "ncursesw6-config" || fail "ncursesw"
 fi
 check_ssl_implementation
 all_aboard_the_fail_boat
