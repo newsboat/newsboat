@@ -47,6 +47,40 @@ TEST_CASE("lines marked as `wrappable` are wrapped to fit width",
 	}
 }
 
+TEST_CASE("line wrapping works for non-space-separeted text",
+          "[textformatter]") {
+
+	textformatter fmt;
+
+	fmt.add_lines(
+		{
+			std::make_pair(LineType::wrappable,
+					"    つれづれなるままに、ひぐらしすずりにむかいて、")
+		});
+
+
+	SECTION("preserve indent and doesn't return broken UTF-8") {
+		const std::string expected = (
+				"    つれづれなるまま\n"
+				"    に、ひぐらしすず\n"
+				"    りにむかいて、\n");
+		REQUIRE(fmt.format_text_plain(20) == expected);
+		// +1 is not enough to store single wide-width char
+		REQUIRE(fmt.format_text_plain(20+1) == expected);
+	}
+
+	SECTION("truncate indent if given window width is too narrow") {
+		REQUIRE(fmt.format_text_plain(1) == (" \n \n"));
+		REQUIRE(fmt.format_text_plain(2) == ("  \n  \n"));
+		REQUIRE(fmt.format_text_plain(3) == ("   \n   \n"));
+	}
+
+	SECTION("discard a current word if no enough space to put single char is available") {
+		REQUIRE(fmt.format_text_plain(4) == ("    \n    \n"));
+		REQUIRE(fmt.format_text_plain(5) == ("    \n    \n"));
+	}
+}
+
 TEST_CASE("regex manager is used by format_text_to_list if one is passed",
           "[textformatter]") {
 	textformatter fmt;

@@ -19,6 +19,7 @@
 
 - When used with Newsblur, Newsboat will check on startup if cookie-cache exists
   or can be created, because integration doesn't work without cookies (#13)
+- CJK text is wrapped at correct code-point boundaries (#71)
 
 ## 2.10.1 - 2017-09-22
 

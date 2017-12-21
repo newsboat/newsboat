@@ -463,3 +463,47 @@ TEST_CASE("remove_soft_hyphens remove all U+00AD characters from a string",
 		REQUIRE(data == "over");
 	}
 }
+
+TEST_CASE("substr_with_width() returns a longest substring fits to the given width",
+		"[utils]")
+{
+	REQUIRE(utils::substr_with_width("a", 1) == "a");
+	REQUIRE(utils::substr_with_width("a", 2) == "a");
+	REQUIRE(utils::substr_with_width("ab", 1) == "a");
+	REQUIRE(utils::substr_with_width("abc", 1) == "a");
+	REQUIRE(utils::substr_with_width("A\u3042B\u3044C\u3046", 5) == "A\u3042B");
+
+	SECTION("returns an empty string if the given string is empty") {
+		REQUIRE(utils::substr_with_width("", 0).empty());
+		REQUIRE(utils::substr_with_width("", 1).empty());
+	}
+
+	SECTION("returns an empty string if the given width is zero") {
+		REQUIRE(utils::substr_with_width("world", 0).empty());
+		REQUIRE(utils::substr_with_width("", 0).empty());
+	}
+
+	SECTION("doesn't split single codepoint in two") {
+		std::string data = "\u3042\u3044\u3046";
+		REQUIRE(utils::substr_with_width(data, 1) == "");
+		REQUIRE(utils::substr_with_width(data, 3) == "\u3042");
+		REQUIRE(utils::substr_with_width(data, 5) == "\u3042\u3044");
+	}
+
+	SECTION("doesn't count a width of STFL tag") {
+		REQUIRE(utils::substr_with_width("ＡＢＣ<b>ＤＥ</b>Ｆ", 9) == "ＡＢＣ<b>Ｄ");
+		REQUIRE(utils::substr_with_width("<foobar>ＡＢＣ", 4) == "<foobar>ＡＢ");
+		REQUIRE(utils::substr_with_width("a<<xyz>>bcd", 3) == "a<<xyz>>b");  // tag: "<<xyz>"
+		REQUIRE(utils::substr_with_width("ＡＢＣ<b>ＤＥ", 10) == "ＡＢＣ<b>ＤＥ");
+		REQUIRE(utils::substr_with_width("a</>b</>c</>", 2) == "a</>b</>");
+	}
+
+	SECTION("count a width of escaped less-than mark") {
+		REQUIRE(utils::substr_with_width("<><><>", 2) == "<><>");
+		REQUIRE(utils::substr_with_width("a<>b<>c", 3) == "a<>b");
+	}
+
+	SECTION("treat non-printable has zero width") {
+		REQUIRE(utils::substr_with_width("\x01\x02""abc", 1) == "\x01\x02""a");
+	}
+}

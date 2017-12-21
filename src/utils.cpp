@@ -22,6 +22,7 @@
 #include <cstdlib>
 #include <cstdarg>
 #include <cstdio>
+#include <cmath>
 #include <algorithm>
 #include <regex>
 
@@ -736,6 +737,64 @@ size_t utils::wcswidth_stfl(const std::wstring& str, size_t size) {
 	}
 
 	return width - reduce_count;
+}
+
+std::string utils::substr_with_width(
+		const std::string& str,
+		const size_t max_width)
+{
+	// Returns a longest substring fits to the given width.
+	// Returns an empty string if `str` is an empty string or `max_width` is zero,
+	//
+	// Each chararacter width is calculated with wcwidth(3). If wcwidth() returns < 1,
+	// the character width is treated as 0. A STFL tag (e.g. `<b>`, `<foobar>`, `</>`)
+	// width is treated as 0, but escaped less-than (`<>`) width is treated as 1.
+
+	if (str.empty() || max_width == 0) {
+		return std::string("");
+	}
+
+	const std::wstring wstr = utils::str2wstr(str);
+	size_t total_width = 0;
+	bool in_bracket = false;
+	std::wstring result;
+	std::wstring tagbuf;
+
+	for (auto wc : wstr) {
+		if (in_bracket) {
+			tagbuf += wc;
+			if (wc == L'>') {  // tagbuf is escaped less-than or tag
+				in_bracket = false;
+				if (tagbuf == L"<>") {
+					if (total_width + 1 > max_width) {
+						break;
+					}
+					result += L"<>";  // escaped less-than
+					tagbuf.clear();
+					total_width++;
+				} else {
+					result += tagbuf;
+					tagbuf.clear();
+				}
+			}
+		} else {
+			if (wc == L'<') {
+				in_bracket = true;
+				tagbuf += wc;
+			} else {
+				int w = wcwidth(wc);
+				if (w < 1) {
+					w = 0;
+				}
+				if (total_width + w > max_width) {
+					break;
+				}
+				total_width += w;
+				result += wc;
+			}
+		}
+	}
+	return utils::wstr2str(result);
 }
 
 std::string utils::join(const std::vector<std::string>& strings, const std::string& separator) {
