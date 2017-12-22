@@ -1120,13 +1120,20 @@ int utils::run_interactively(
 }
 
 std::string utils::getcwd() {
-	char cwdtmp[MAXPATHLEN];
+	// Linux seem to have its MAX_PATH set somewhere around this value, so
+	// should be a nice default
+	std::vector<char> result(4096, '\0');
 
-	if (::getcwd(cwdtmp, sizeof(cwdtmp)) == nullptr) {
-		strncpy(cwdtmp, strerror(errno), MAXPATHLEN);
+	while (true) {
+		char* ret = ::getcwd(result.data(), result.size());
+		if (ret == nullptr && errno == ERANGE) {
+			result.resize(result.size() * 2);
+		} else {
+			break;
+		}
 	}
 
-	return std::string(cwdtmp);
+	return std::string(result.data());
 }
 
 void utils::remove_soft_hyphens(std::string& text) {

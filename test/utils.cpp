@@ -525,6 +525,9 @@ TEST_CASE("getcwd() returns current directory of the process", "[utils]") {
 		REQUIRE(0 == ::chdir(".."));
 		const std::string backdir = utils::getcwd();
 
+		INFO("maindir = " << maindir);
+		INFO("backdir = " << backdir);
+
 		REQUIRE(maindir == backdir);
 		REQUIRE_FALSE(maindir == datadir);
 
