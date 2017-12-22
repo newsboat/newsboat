@@ -6,13 +6,12 @@ Introduction
 Newsboat is an RSS/Atom feedreader. RSS and Atom are a number of widely-used 
 XML formats to transmit, publish and syndicate articles, for example news or 
 blog articles.  Newsboat is designed to be used on text terminals on Unix or 
-Unix-like systems such as GNU/Linux, FreeBSD or Mac OS X.
+Unix-like systems such as GNU/Linux, FreeBSD or macOS.
 
 Platforms
 ~~~~~~~~~
 
-Newsboat has been tested on Linux (with glibc and musl-libc), FreeBSD and Mac
-OS X.
+Newsboat has been tested on Linux (with glibc and musl-libc), FreeBSD and macOS.
 
 NetBSD is currently not supported, due to technical limitations in the `iconv()`
 implementation.
@@ -326,7 +325,7 @@ Bookmarking
 ~~~~~~~~~~~
 
 Newsboat contains a plugin-based bookmarking system. When a user bookmarks a link (possible
-in the article list, in the article view, and in the URL view), he is asked for the URL to bookmark (already
+in the article list, in the article view, and in the URL view), they are asked for the URL to bookmark (already
 preset with the URL of the current selection), the bookmark title (in most cases preset with the 
 title of the current selection), the bookmark description and (since 2.10) the
 title of the feed the user is currently in. After the question for the description,
@@ -446,12 +445,11 @@ feed from which it was downloaded.
 Killfiles
 ~~~~~~~~~
 
-Sometimes, a user is confronted with certain content he doesn't want to read,
-e.g. on topics the user is not interested in or articles from certain people he
-doesn't want to read. In Usenet, such functionality within software is
-traditionally called a "killfile", i.e. based on the content of this "killfile", 
-articles that match certain conditions do not get displayed and are not presented
-to the user at all.
+Sometimes, a user is confronted with certain content they don't want to read,
+e.g. on topics the user is not interested in or articles written by certain people.
+In Usenet, such functionality within software is traditionally called a "killfile",
+i.e. based on the content of this "killfile", articles that match certain conditions
+do not get displayed and are not presented to the user at all.
 
 In newsboat, such a "killfile" can be implemented on a per-article basis via
 the configuration file. The most important configuration command for this
@@ -756,7 +754,7 @@ See also <<ocnews-passwordfile,`ocnews-passwordfile`>>,
 ownCloud News API uses HTTP basic auth, therefore running ownCloud with SSL is highly
 recommended.
 
-ownCloud News provides the ability to "star" articless; starred articles are basically
+ownCloud News provides the ability to "star" articles; starred articles are basically
 bookmarks. Newsboat allows the use of this feature by mapping user-specified
 flag to the "star" operation.
 
