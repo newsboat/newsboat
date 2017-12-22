@@ -1,5 +1,7 @@
 #include "catch.hpp"
 
+#include <unistd.h> // chdir()
+
 #include <utils.h>
 
 using namespace newsboat;
@@ -505,5 +507,30 @@ TEST_CASE("substr_with_width() returns a longest substring fits to the given wid
 
 	SECTION("treat non-printable has zero width") {
 		REQUIRE(utils::substr_with_width("\x01\x02""abc", 1) == "\x01\x02""a");
+	}
+}
+
+TEST_CASE("getcwd() returns current directory of the process", "[utils]") {
+	SECTION("Returns non-empty string") {
+		REQUIRE(utils::getcwd().length() > 0);
+	}
+
+	SECTION("Value depends on current directory") {
+		const std::string maindir = utils::getcwd();
+		// Other tests already rely on the presense of "data" directory next to
+		// the executable, so it's okay to use that dependency here, too
+		const std::string subdir = "data";
+		REQUIRE(0 == ::chdir(subdir.c_str()));
+		const std::string datadir = utils::getcwd();
+		REQUIRE(0 == ::chdir(".."));
+		const std::string backdir = utils::getcwd();
+
+		REQUIRE(maindir == backdir);
+		REQUIRE_FALSE(maindir == datadir);
+
+		// Datadir path starts with path to maindir
+		REQUIRE(datadir.find(maindir) == 0);
+		// Datadir path ends with "data" string
+		REQUIRE(datadir.substr(datadir.length() - subdir.length()) == subdir);
 	}
 }
