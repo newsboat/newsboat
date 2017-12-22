@@ -1175,7 +1175,7 @@ Operation:Default key:Description
 
 A usual "use case" is to configure newsboat to automatically enqueue newly
 found podcast download URLs. Then, the user reloads the podcast RSS feeds in
-newsboat, and after that, he/she uses podboat to view the current queue, and
+newsboat, and after that, uses podboat to view the current queue, and
 either selectively download certain files or automatically download them all
 together by pressing "a" within podboat.
 
