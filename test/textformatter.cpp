@@ -156,6 +156,22 @@ TEST_CASE("wrappable sequences longer then format width are forced-wrapped",
 	REQUIRE(fmt.format_text_plain(5, 10) == expected);
 }
 
+TEST_CASE("Lines marked as non-wrappable are always returned verbatim",
+		"[textformatter]")
+{
+	textformatter fmt;
+	fmt.add_line(LineType::wrappable, " 0123456789101112");
+	fmt.add_line(LineType::softwrappable, " 0123456789101112");
+	fmt.add_line(LineType::nonwrappable, " 0123456789101112");
+
+	const std::string expected =
+		" \n"
+		" \n"
+		" 0123456789101112\n";
+	REQUIRE(fmt.format_text_plain(1, 1) == expected);
+
+}
+
 /*
  * A simple wrapping function would simply split the line at the wrapping width.
  * This, while it technically works, misaligns the text if the line is split
@@ -170,8 +186,9 @@ TEST_CASE("wrappable sequences longer then format width are forced-wrapped",
  * second line and it would make the text look jagged with a bigger input. Thus
  * spaces at the beginning of lines after wrapping should be dropped.
  */
-TEST_CASE("textformatter: ignore whitespace that's going to be wrapped onto "
-          "the next line", "[textformatter]") {
+TEST_CASE("ignore whitespace that's going to be wrapped onto the next line",
+		"[textformatter]")
+{
 	textformatter fmt;
 	fmt.add_line(LineType::wrappable, "just a test");
 
