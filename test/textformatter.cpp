@@ -70,14 +70,14 @@ TEST_CASE("line wrapping works for non-space-separeted text",
 	}
 
 	SECTION("truncate indent if given window width is too narrow") {
-		REQUIRE(fmt.format_text_plain(1) == (" \n \n"));
-		REQUIRE(fmt.format_text_plain(2) == ("  \n  \n"));
-		REQUIRE(fmt.format_text_plain(3) == ("   \n   \n"));
+		REQUIRE(fmt.format_text_plain(1) == (" \n"));
+		REQUIRE(fmt.format_text_plain(2) == ("  \n"));
+		REQUIRE(fmt.format_text_plain(3) == ("   \n"));
 	}
 
-	SECTION("discard a current word if no enough space to put single char is available") {
-		REQUIRE(fmt.format_text_plain(4) == ("    \n    \n"));
-		REQUIRE(fmt.format_text_plain(5) == ("    \n    \n"));
+	SECTION("discard current word if there's not enough space to put single char") {
+		REQUIRE(fmt.format_text_plain(4) == ("    \n"));
+		REQUIRE(fmt.format_text_plain(5) == ("    \n"));
 	}
 }
 

@@ -95,7 +95,7 @@ std::vector<std::string> wrap_line(
 		}
 	}
 
-	if (curline.length() > 0) {
+	if (curline != prefix) {
 		result.push_back(curline);
 	}
 
