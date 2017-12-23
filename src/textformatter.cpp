@@ -46,6 +46,7 @@ std::vector<std::string> wrap_line(
 	std::vector<std::string> words = utils::tokenize_spaced(line);
 
 	std::string prefix;
+	size_t prefix_width = 0;
 	auto iswhitespace =
 		[](const std::string& input)
 		{
@@ -56,17 +57,18 @@ std::vector<std::string> wrap_line(
 		};
 	if (iswhitespace(words[0])) {
 		prefix = utils::substr_with_width(words[0], width);
-		words[0] = prefix;
+		prefix_width = utils::strwidth_stfl(prefix);
+		words.erase(words.cbegin());
 	}
 
-	std::string curline = "";
+	std::string curline = prefix;
 
 	for (auto word : words) {
 		size_t word_width = utils::strwidth_stfl(word);
 		size_t curline_width = utils::strwidth_stfl(curline);
 
 		// for languages (e.g., CJK) don't use a space as a word boundary
-		while (word_width > width) {
+		while (word_width > (width - prefix_width)) {
 			size_t space_left = width - curline_width;
 			std::string part = utils::substr_with_width(word, space_left);
 			curline.append(part);
