@@ -72,6 +72,10 @@ std::string rss_parser::w3cdtf_to_rfc822(const std::string& w3cdtf) {
 }
 
 std::string rss_parser::__w3cdtf_to_rfc822(const std::string& w3cdtf) {
+	if (w3cdtf.empty()) {
+		return "";
+	}
+
 	struct tm stm;
 	memset(&stm, 0, sizeof (stm));
 	stm.tm_mday = 1;
