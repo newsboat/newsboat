@@ -1765,7 +1765,14 @@ void controller::update_config() {
 	}
 
 	if (cfg.get_configvalue("error-log").length() > 0) {
-		logger::getInstance().set_errorlogfile(cfg.get_configvalue("error-log"));
+		try {
+			logger::getInstance().set_errorlogfile(cfg.get_configvalue("error-log"));
+		} catch (const exception& e) {
+			v->show_error(strprintf::fmt(
+						"Couldn't open %s: %s",
+						cfg.get_configvalue("error-log"),
+						e.what()));
+		}
 	}
 
 }
