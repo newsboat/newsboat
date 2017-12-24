@@ -1768,7 +1768,10 @@ void controller::update_config() {
 		try {
 			logger::getInstance().set_errorlogfile(cfg.get_configvalue("error-log"));
 		} catch (const exception& e) {
-			v->show_error(strprintf::fmt(_("Error: failed to set error logfile: %s"), e.what()));
+			v->show_error(strprintf::fmt(
+						"Couldn't open %s: %s",
+						cfg.get_configvalue("error-log"),
+						e.what()));
 		}
 	}
 
