@@ -3,7 +3,9 @@
 ## Unreleased
 
 ### Added
+
 - Support for inoreader
+- Slovak translation (František Hájik)
 
 ### Changed
 
