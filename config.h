@@ -3,7 +3,7 @@
 
 #define PACKAGE				"newsboat"
 #define PROGRAM_NAME			PACKAGE
-#define REAL_VERSION "2.10.1"
+#define REAL_VERSION "2.10.2"
 
 #ifdef GIT_HASH
 #define PROGRAM_VERSION			GIT_HASH
