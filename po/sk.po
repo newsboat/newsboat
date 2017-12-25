@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Poedit 2.0.3\n"
 "Last-Translator: František Hájik <ferko.hajik@gmail.com>\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"Language: sk_SK\n"
+"Language: sk\n"
 
 #: src/colormanager.cpp:45 src/colormanager.cpp:47 src/regexmanager.cpp:55
 #: src/regexmanager.cpp:64 src/regexmanager.cpp:113 src/regexmanager.cpp:121
