@@ -1768,10 +1768,12 @@ void controller::update_config() {
 		try {
 			logger::getInstance().set_errorlogfile(cfg.get_configvalue("error-log"));
 		} catch (const exception& e) {
-			v->show_error(strprintf::fmt(
+			const std::string msg = strprintf::fmt(
 						"Couldn't open %s: %s",
 						cfg.get_configvalue("error-log"),
-						e.what()));
+						e.what());
+			v->show_error(msg);
+			std::cerr << msg << std::endl;
 		}
 	}
 
