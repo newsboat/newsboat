@@ -1,27 +1,48 @@
 # Changes for Newsboat
 
-## Unreleased
+## 2.10.2 - 2017-12-25
+
+Lists below only mention user-visible changes, but I would also like to
+acknowledge contributions from the following people: Alok Singh, Carno, Jonas
+Karlsson, Kamil Wsół, Mike Crute, Niels Kobschätzki, and maiki.
 
 ### Added
 
-- Support for inoreader
+- HTML anchors for all config commands in docs. You can now link to each command
+    separately (#10) (Lysander Trischler)
+- Support for Inoreader (Bart Libert)
 - Slovak translation (František Hájik)
 
 ### Changed
 
+- Enqueue *last* audio enclosure
+    (https://github.com/akrennmair/newsbeuter/issues/604)
 - `text-width` doesn't apply if it's bigger than terminal width
     (https://github.com/akrennmair/newsbeuter/issues/602)
+- Translations: German (Lysander Trischler), Russian, Ukrainian
+    (Alexander Batischev)
 
-### Deprecated
 ### Removed
 
 - Build dependency on Perl (#6)
+- Test dependency on bc (Nikos Tsipinakis)
 
 ### Fixed
 
-- When used with Newsblur, Newsboat will check on startup if cookie-cache exists
-  or can be created, because integration doesn't work without cookies (#13)
-- CJK text is wrapped at correct code-point boundaries (#71)
+- Do not create XDG data dir if not using XDG (#8)
+- When used with Newsblur, check on startup if cookie-cache exists or can be
+    created, because integration doesn't work without cookies (#13)
+- Builds on AARCH64 and ARMHF (#43)
+- Only show an error message once when unknown option is supplied
+    (Lysander Trischler)
+- License header used to say it's MIT/X Consortium License, whereas in reality
+    it's a MIT License (discovered by Nikos Tsipinakis)
+- Cross-compilation made possible by conditionally assigning to RANLIB and AR in
+    Makefile (Fredrik Fornwall)
+- Cookies actually get persisted (Simon Schuster, reported and tested by Håkan
+    Jerning)
+- CJK text is wrapped at correct code-point boundaries (#71) (nmtake)
+- Don't segfault if `error-log` points to non-existent file (Simon Schuster)
 - Spanish translation (José Manuel García-Patos)
 
 ## 2.10.1 - 2017-09-22
