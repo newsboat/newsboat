@@ -51,7 +51,7 @@ bool FSLock::try_lock(const std::string& new_lock_filepath, pid_t& pid)
 		bool success =
 			   (written != -1)
 			&& (static_cast<unsigned int>(written) == pidtext.length());
-		LOG(level::DEBUG, "FSLock: PID written successfuly: %i", success);
+		LOG(level::DEBUG, "FSLock: PID written successfully: %i", success);
 		if (success) {
 			if (locked) {
 				remove_lock(lock_filepath);
