@@ -135,7 +135,7 @@ clean-doc:
 	$(RM) doc/*.xml doc/*.1 doc/newsboat-cfgcmds.txt doc/podboat-cfgcmds.txt \
 		doc/newsboat-keycmds.txt doc/configcommands-linked.dsv \
 		doc/podboat-cmds-linked.dsv doc/keycmds-linked.dsv \
-		doc/gen-example-config doc/generate doc/generate2
+		doc/gen-example-config doc/example-config doc/generate doc/generate2
 
 clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clean-librsspp
 	$(RM) $(STFLHDRS) xlicense.h
