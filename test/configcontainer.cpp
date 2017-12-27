@@ -3,6 +3,7 @@
 #include <configcontainer.h>
 #include <configparser.h>
 #include <keymap.h>
+#include <exceptions.h>
 
 using namespace newsboat;
 
@@ -52,5 +53,45 @@ TEST_CASE("Parses test config correctly, even if there's no \\n at the end line.
 
 	SECTION("last line") {
 		REQUIRE(cfg.get_configvalue("download-path") == "whatever");
+	}
+}
+
+TEST_CASE("Throws if invalid command is encountered", "[configcontainer]") {
+	configcontainer cfg;
+
+	CHECK_THROWS_AS(
+			cfg.handle_action(
+				"command-that-surely-does-not-exist",
+				{ "and", "its", "arguments" }),
+			confighandlerexception);
+}
+
+TEST_CASE("Throws if there are no arguments", "[configcontainer]") {
+	configcontainer cfg;
+
+	CHECK_THROWS_AS(
+			cfg.handle_action("auto-reload", {}),
+			confighandlerexception);
+}
+
+TEST_CASE("Throws if command argument has invalid type", "[configcontainer]") {
+	configcontainer cfg;
+
+	SECTION("bool") {
+		CHECK_THROWS_AS(
+				cfg.handle_action("always-display-description", { "whatever" }),
+				confighandlerexception);
+	}
+
+	SECTION("int") {
+		CHECK_THROWS_AS(
+				cfg.handle_action("download-retries", { "whatever" }),
+				confighandlerexception);
+	}
+
+	SECTION("enum") {
+		CHECK_THROWS_AS(
+				cfg.handle_action("proxy-type", { "whatever" }),
+				confighandlerexception);
 	}
 }
