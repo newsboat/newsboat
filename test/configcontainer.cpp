@@ -6,8 +6,7 @@
 
 using namespace newsboat;
 
-TEST_CASE("ConfigContainer parses test config without exceptions",
-          "[configcontainer]")
+TEST_CASE("Parses test config without exceptions", "[configcontainer]")
 {
 	configcontainer cfg;
 	configparser cfgparser;
@@ -38,7 +37,7 @@ TEST_CASE("ConfigContainer parses test config without exceptions",
 	}
 }
 
-TEST_CASE("ConfigContainer parses test config correctly, even if there's no \\n at the end line.",
+TEST_CASE("Parses test config correctly, even if there's no \\n at the end line.",
           "[configcontainer]")
 {
 	configcontainer cfg;
