@@ -222,13 +222,13 @@ install-newsboat: $(NEWSBOAT) doc/$(NEWSBOAT).1
 	$(MKDIR) $(DESTDIR)$(prefix)/bin
 	$(INSTALL) $(NEWSBOAT) $(DESTDIR)$(prefix)/bin
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
-	$(INSTALL) doc/$(NEWSBOAT).1 $(DESTDIR)$(mandir)/man1 || true
+	$(INSTALL) -m 644 doc/$(NEWSBOAT).1 $(DESTDIR)$(mandir)/man1 || true
 
 install-podboat: $(PODBOAT) doc/$(PODBOAT).1
 	$(MKDIR) $(DESTDIR)$(prefix)/bin
 	$(INSTALL) $(PODBOAT) $(DESTDIR)$(prefix)/bin
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
-	$(INSTALL) doc/$(PODBOAT).1 $(DESTDIR)$(mandir)/man1 || true
+	$(INSTALL) -m 644 doc/$(PODBOAT).1 $(DESTDIR)$(mandir)/man1 || true
 
 install-docs: doc
 	$(MKDIR) $(DESTDIR)$(docdir)
