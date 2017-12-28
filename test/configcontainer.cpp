@@ -116,3 +116,40 @@ TEST_CASE("reset_to_default changes setting to its default value",
 		REQUIRE(cfg.get_configvalue(key) == default_value);
 	}
 }
+
+TEST_CASE("toggle() inverts the value of a boolean setting",
+		"[configcontainer]")
+{
+	configcontainer cfg;
+
+	const std::string key("always-display-description");
+	SECTION("\"true\" becomes \"false\"") {
+		cfg.set_configvalue(key, "true");
+		REQUIRE_NOTHROW(cfg.toggle(key));
+		REQUIRE(cfg.get_configvalue_as_bool(key) == false);
+	}
+
+	SECTION("\"false\" becomes \"true\"") {
+		cfg.set_configvalue(key, "false");
+		REQUIRE_NOTHROW(cfg.toggle(key));
+		REQUIRE(cfg.get_configvalue_as_bool(key) == true);
+	}
+}
+
+TEST_CASE("toggle() does nothing if setting is non-boolean",
+		"[configcontainer]")
+{
+	configcontainer cfg;
+
+	const std::vector<std::string> tests {
+		"articlelist-title-format", "cache-file", "http-auth-method",
+		"inoreader-passwordeval", "notify-program", "ocnews-passwordfile",
+		"oldreader-min-items", "save-path"
+	};
+
+	for (const std::string& key : tests) {
+		const std::string expected = cfg.get_configvalue(key);
+		REQUIRE_NOTHROW(cfg.toggle(key));
+		REQUIRE(cfg.get_configvalue(key) == expected);
+	}
+}
