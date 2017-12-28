@@ -95,3 +95,24 @@ TEST_CASE("Throws if command argument has invalid type", "[configcontainer]") {
 				confighandlerexception);
 	}
 }
+
+TEST_CASE("reset_to_default changes setting to its default value",
+		"[configcontainer]")
+{
+	configcontainer cfg;
+
+	const std::string default_value = "any";
+	const std::vector<std::string> tests {
+		"any", "basic", "digest", "digest_ie", "gssnegotiate", "ntlm",
+		"anysafe" };
+	const std::string key("http-auth-method");
+
+	REQUIRE(cfg.get_configvalue(key) == default_value);
+
+	for (const std::string& test_value : tests) {
+		cfg.set_configvalue(key, test_value);
+		REQUIRE(cfg.get_configvalue(key) == test_value);
+		REQUIRE_NOTHROW(cfg.reset_to_default(key));
+		REQUIRE(cfg.get_configvalue(key) == default_value);
+	}
+}
