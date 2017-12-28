@@ -14,6 +14,5 @@ lcov --base-directory . --directory . --output-file $APPTOTAL_INFO \
     --add-tracefile $APPBASE_INFO --add-tracefile $APPTEST_INFO
 lcov --remove $APPTOTAL_INFO '/usr/*' --output-file $APPTOTAL_INFO
 lcov --remove $APPTOTAL_INFO 'newsboat/test/*' --output-file $APPTOTAL_INFO
-rm -rf html
 genhtml -o html $APPTOTAL_INFO
 echo "The coverage report can be found at file://`pwd`/html/index.html"
