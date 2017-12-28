@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 APPBASE_INFO=appbase.info
 APPTEST_INFO=apptest.info
 APPTOTAL_INFO=apptotal.info
