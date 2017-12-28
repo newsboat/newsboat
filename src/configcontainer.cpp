@@ -249,9 +249,9 @@ void configcontainer::handle_action(const std::string& action, const std::vector
 			cfgdata.value = params[0];
 		break;
 
-	default:
-		// should not happen
-		throw confighandlerexception(action_handler_status::INVALID_COMMAND);
+	case configdata_t::INVALID:
+		// we already handled this at the beginning of the function
+		break;
 	}
 }
 
