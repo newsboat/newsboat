@@ -153,3 +153,62 @@ TEST_CASE("toggle() does nothing if setting is non-boolean",
 		REQUIRE(cfg.get_configvalue(key) == expected);
 	}
 }
+
+TEST_CASE("dump_config turns current state into text and saves it "
+		"into the supplyed vector", "[configcontainer]")
+{
+	configcontainer cfg;
+
+	auto all_values_found =
+		[]
+		(std::unordered_set<std::string>& expected,
+		 const std::vector<std::string>& result)
+		{
+			for (const auto& line : result) {
+				auto it = expected.find(line);
+				if (it != expected.end()) {
+					expected.erase(it);
+				}
+			}
+
+			return expected.empty();
+		};
+
+	std::vector<std::string> result;
+
+	SECTION("By default, simply enumerates all settings") {
+		std::unordered_set<std::string> expected {
+			"always-display-description false",
+			"download-timeout 30",
+			"ignore-mode \"download\"",
+			"newsblur-min-items 20",
+			"oldreader-password \"\"",
+			"proxy-type \"http\"",
+			"ttrss-mode \"multi\""
+		};
+
+		REQUIRE_NOTHROW(cfg.dump_config(result));
+		{
+		INFO("Checking that all the expected values were found");
+		REQUIRE(all_values_found(expected, result));
+		}
+	}
+
+	SECTION("If setting was changed, dump_config() will mention "
+			"its default value")
+	{
+		cfg.set_configvalue("download-timeout", "100");
+		cfg.set_configvalue("http-auth-method", "digest");
+
+		std::unordered_set<std::string> expected {
+			"download-timeout 100 # default: 30",
+			"http-auth-method \"digest\" # default: any",
+		};
+
+		REQUIRE_NOTHROW(cfg.dump_config(result));
+		{
+		INFO("Checking that all the expected values were found");
+		REQUIRE(all_values_found(expected, result));
+		}
+	}
+}
