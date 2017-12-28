@@ -210,9 +210,7 @@ void configcontainer::register_commands(configparser& cfgparser) {
 }
 
 void configcontainer::handle_action(const std::string& action, const std::vector<std::string>& params) {
-	std::string resolved_action = lookup_alias(action);
-
-	configdata& cfgdata = config_data[resolved_action];
+	configdata& cfgdata = config_data[action];
 
 	// configdata_t::INVALID indicates that the action didn't exist, and that the returned object was created ad-hoc.
 	if (cfgdata.type == configdata_t::INVALID) {
@@ -266,15 +264,6 @@ bool configcontainer::is_bool(const std::string& s) {
 	return false;
 }
 
-std::string configcontainer::lookup_alias(const std::string& s) {
-	// this assumes that the config_data table is consistent.
-	std::string alias = s;
-	while (alias != "" && config_data[alias].type == configdata_t::ALIAS) {
-		alias = config_data[alias].default_value;
-	}
-	return alias;
-}
-
 bool configcontainer::is_int(const std::string& s) {
 	const char * s1 = s.c_str();
 	for (; *s1; s1++) {
@@ -285,7 +274,7 @@ bool configcontainer::is_int(const std::string& s) {
 }
 
 std::string configcontainer::get_configvalue(const std::string& key) {
-	std::string retval = config_data[lookup_alias(key)].value;
+	std::string retval = config_data[key].value;
 	if (config_data[key].type == configdata_t::PATH) {
 		retval = utils::resolve_tilde(retval);
 	}
@@ -294,33 +283,31 @@ std::string configcontainer::get_configvalue(const std::string& key) {
 }
 
 int configcontainer::get_configvalue_as_int(const std::string& key) {
-	std::istringstream is(config_data[lookup_alias(key)].value);
+	std::istringstream is(config_data[key].value);
 	int i;
 	is >> i;
 	return i;
 }
 
 bool configcontainer::get_configvalue_as_bool(const std::string& key) {
-	std::string value = config_data[lookup_alias(key)].value;
+	std::string value = config_data[key].value;
 	if (value == "true" || value == "yes")
 		return true;
 	return false;
 }
 
 void configcontainer::set_configvalue(const std::string& key, const std::string& value) {
-	LOG(level::DEBUG,"configcontainer::set_configvalue(%s [resolved: %s],%s) called", key, lookup_alias(key), value);
-	config_data[lookup_alias(key)].value = value;
+	LOG(level::DEBUG,"configcontainer::set_configvalue(%s, %s) called", key, value);
+	config_data[key].value = value;
 }
 
 void configcontainer::reset_to_default(const std::string& key) {
-	std::string resolved_key = lookup_alias(key);
-	config_data[resolved_key].value = config_data[resolved_key].default_value;
+	config_data[key].value = config_data[key].default_value;
 }
 
 void configcontainer::toggle(const std::string& key) {
-	std::string resolved_key = lookup_alias(key);
-	if (config_data[resolved_key].type == configdata_t::BOOL) {
-		set_configvalue(resolved_key, std::string(get_configvalue_as_bool(resolved_key) ? "false" : "true"));
+	if (config_data[key].type == configdata_t::BOOL) {
+		set_configvalue(key, std::string(get_configvalue_as_bool(key) ? "false" : "true"));
 	}
 }
 
@@ -350,9 +337,6 @@ void configcontainer::dump_config(std::vector<std::string>& config_output) {
 				}
 			}
 			break;
-		case configdata_t::ALIAS:
-			// skip entry, generate no output
-			continue;
 		case configdata_t::INVALID:
 		default:
 			assert(0);
