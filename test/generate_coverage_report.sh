@@ -4,7 +4,6 @@ APPBASE_INFO=appbase.info
 APPTEST_INFO=apptest.info
 APPTOTAL_INFO=apptotal.info
 
-make distclean
 rm -rf $APPBASE_INFO $APPTEST_INFO html
 make -j 5 PROFILE=1 all test
 lcov --capture --initial --base-directory . --directory . --output-file $APPBASE_INFO
