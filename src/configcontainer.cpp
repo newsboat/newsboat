@@ -338,8 +338,7 @@ void configcontainer::dump_config(std::vector<std::string>& config_output) {
 			}
 			break;
 		case configdata_t::INVALID:
-		default:
-			assert(0);
+			// can't happen because we already checked this case before the `switch`
 			break;
 		}
 		config_output.push_back(configline);
