@@ -13,3 +13,6 @@ macro l ; ; ;
 macro m quit ;
 
 # and here's one more comment
+
+# A so-called multioption command:
+search-highlight-colors white red bold

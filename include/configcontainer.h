@@ -8,7 +8,7 @@
 namespace newsboat {
 
 
-enum class configdata_t { INVALID, BOOL, INT, STR, PATH, ALIAS, ENUM };
+enum class configdata_t { INVALID, BOOL, INT, STR, PATH, ENUM };
 
 struct configdata {
 	configdata(
@@ -52,7 +52,6 @@ class configcontainer : public config_action_handler {
 
 		bool is_bool(const std::string& s);
 		bool is_int(const std::string& s);
-		std::string lookup_alias(const std::string& s);
 };
 
 }
