@@ -212,3 +212,66 @@ TEST_CASE("dump_config turns current state into text and saves it "
 		}
 	}
 }
+
+TEST_CASE("get_suggestions() returns all settings whose names begin "
+		"with a given string", "[configcontainer]")
+{
+	configcontainer cfg;
+
+	const std::string key1("d");
+	const std::unordered_set<std::string> expected1 {
+		"datetime-format",
+		"delete-read-articles-on-quit",
+		"dialogs-title-format",
+		"display-article-progress",
+		"download-full-page",
+		"download-path",
+		"download-retries",
+		"download-timeout",
+	};
+	std::vector<std::string> results = cfg.get_suggestions(key1);
+	const std::unordered_set<std::string>
+		results_set1(results.begin(), results.end());
+	REQUIRE(results_set1 == expected1);
+
+	const std::string key2("feed");
+	const std::unordered_set<std::string> expected2 {
+		"feed-sort-order",
+		"feedhq-flag-share",
+		"feedhq-flag-star",
+		"feedhq-login",
+		"feedhq-min-items",
+		"feedhq-password",
+		"feedhq-passwordeval",
+		"feedhq-passwordfile",
+		"feedhq-show-special-feeds",
+		"feedhq-url",
+		"feedlist-format",
+		"feedlist-title-format",
+	};
+	results = cfg.get_suggestions(key2);
+	const std::unordered_set<std::string>
+		results_set2(results.begin(), results.end());
+	REQUIRE(results_set2 == expected2);
+}
+
+TEST_CASE("get_suggestions() returns results in alphabetical order",
+		"[configcontainer]")
+{
+	configcontainer cfg;
+
+	const std::vector<std::string> keys {
+		"dow", "rel", "us", "d"
+	};
+	for (const auto& key : keys) {
+		const std::vector<std::string> results = cfg.get_suggestions(key);
+		for (auto one = results.begin(), two = one+1;
+			two != results.end();
+			one = two, ++two)
+		{
+			INFO("Previous: " << *one);
+			INFO("Current:  " << *two);
+			REQUIRE(*one <= *two);
+		}
+	}
+}
