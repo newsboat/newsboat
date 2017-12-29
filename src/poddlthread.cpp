@@ -60,8 +60,13 @@ void poddlthread::run() {
 	if (stat(dl->filename().c_str(), &sb) == -1) {
 		LOG(level::INFO, "poddlthread::run: stat failed: starting normal download");
 		std::string filename = dl->filename();
+
+		// Have to copy the string into a vector in order to be able to get
+		// a char* pointer. std::string::c_str() won't do because it returns
+		// const char*, whereas ::dirname() needs non-const.
 		std::vector<char> directory(filename.begin(), filename.end());
 		utils::mkdir_parents(dirname(&directory[0]));
+
 		f->open(dl->filename().c_str(), std::fstream::out);
 		dl->set_offset(0);
 		resumed_download = false;
