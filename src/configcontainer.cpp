@@ -214,7 +214,7 @@ void configcontainer::handle_action(const std::string& action, const std::vector
 
 	// configdata_t::INVALID indicates that the action didn't exist, and that the returned object was created ad-hoc.
 	if (cfgdata.type == configdata_t::INVALID) {
-		LOG(level::WARN, "configcontainer::handler_action: unknown action %s", action);
+		LOG(level::WARN, "configcontainer::handle_action: unknown action %s", action);
 		throw confighandlerexception(action_handler_status::INVALID_COMMAND);
 	}
 
