@@ -211,7 +211,8 @@ TEST_CASE("mark_all_read marks all items in the feed read", "[cache]") {
 	}
 }
 
-TEST_CASE("cleanup_cache behaves as expected", "[cache]") {
+TEST_CASE("cleanup_cache is controlled by `cleanup-on-quit` "
+		"and `delete-read-articles-on-quit` settings", "[cache]") {
 	TestHelpers::TempFile dbfile;
 
 	std::vector<std::string> feedurls = {
