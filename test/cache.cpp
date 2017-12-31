@@ -61,8 +61,7 @@ TEST_CASE("Cleaning old articles works", "[cache]") {
 	cfg.reset( new configcontainer() );
 	cfg->set_configvalue("keep-articles-days", "42");
 	rsscache.reset( new cache(dbfile.getPath(), cfg.get()) );
-	rss_ignores ign;
-	feed = rsscache->internalize_rssfeed("file://data/rss.xml", &ign);
+	feed = rsscache->internalize_rssfeed("file://data/rss.xml", nullptr);
 
 	/* The important part: old articles should be gone, new one remains. */
 	REQUIRE(feed->items().size() == 1);
@@ -118,7 +117,6 @@ TEST_CASE("Last-Modified and ETag values are persisted to DB", "[cache]") {
 TEST_CASE("mark_all_read marks all items in the feed read", "[cache]") {
 	std::shared_ptr<rss_feed> feed, test_feed;
 
-	rss_ignores ign;
 	configcontainer cfg;
 	cache rsscache(":memory:", &cfg);
 
@@ -150,7 +148,7 @@ TEST_CASE("mark_all_read marks all items in the feed read", "[cache]") {
 		rsscache.mark_all_read();
 
 		for (const auto& feed_data : feeds) {
-			feed = rsscache.internalize_rssfeed(feed_data.first, &ign);
+			feed = rsscache.internalize_rssfeed(feed_data.first, nullptr);
 			for (const auto& item : feed->items()) {
 				REQUIRE_FALSE(item->unread());
 			}
@@ -162,13 +160,13 @@ TEST_CASE("mark_all_read marks all items in the feed read", "[cache]") {
 		rsscache.mark_all_read(feeds[0].first);
 
 		INFO("First feed should all be marked read");
-		feed = rsscache.internalize_rssfeed(feeds[0].first, &ign);
+		feed = rsscache.internalize_rssfeed(feeds[0].first, nullptr);
 		for (const auto& item : feed->items()) {
 			REQUIRE_FALSE(item->unread());
 		}
 
 		INFO("Second feed should all be marked unread");
-		feed = rsscache.internalize_rssfeed(feeds[1].first, &ign);
+		feed = rsscache.internalize_rssfeed(feeds[1].first, nullptr);
 		for (const auto& item : feed->items()) {
 			REQUIRE(item->unread());
 		}
@@ -192,19 +190,19 @@ TEST_CASE("mark_all_read marks all items in the feed read", "[cache]") {
 		};
 
 		{
-			feed = rsscache.internalize_rssfeed(test_feed_url, &ign);
+			feed = rsscache.internalize_rssfeed(test_feed_url, nullptr);
 			INFO("Test feed should all be marked read");
 			REQUIRE(unread_items_count(feed) == 0);
 		}
 
 		{
-			feed = rsscache.internalize_rssfeed(feeds[0].first, &ign);
+			feed = rsscache.internalize_rssfeed(feeds[0].first, nullptr);
 			INFO("First feed should have just one item read");
 			REQUIRE(unread_items_count(feed) == (feeds[0].second - 1));
 		}
 
 		{
-			feed = rsscache.internalize_rssfeed(feeds[1].first, &ign);
+			feed = rsscache.internalize_rssfeed(feeds[1].first, nullptr);
 			INFO("Second feed should have just one item read");
 			REQUIRE(unread_items_count(feed) == (feeds[1].second - 1));
 		}
@@ -221,7 +219,6 @@ TEST_CASE("cleanup_cache is controlled by `cleanup-on-quit` "
 	};
 
 	std::vector<std::shared_ptr<rss_feed>> feeds;
-	rss_ignores ign;
 	std::unique_ptr<configcontainer> cfg( new configcontainer() );
 	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), cfg.get()) );
 	for (const auto& url : feedurls) {
@@ -240,7 +237,7 @@ TEST_CASE("cleanup_cache is controlled by `cleanup-on-quit` "
 
 		for (const auto& url : feedurls) {
 			std::shared_ptr<rss_feed> feed =
-				rsscache->internalize_rssfeed(url, &ign);
+				rsscache->internalize_rssfeed(url, nullptr);
 			REQUIRE(feed->total_item_count() != 0);
 		}
 	}
@@ -257,9 +254,9 @@ TEST_CASE("cleanup_cache is controlled by `cleanup-on-quit` "
 			rsscache.reset( new cache(dbfile.getPath(), cfg.get()) );
 
 			std::shared_ptr<rss_feed> feed =
-				rsscache->internalize_rssfeed(feedurls[0], &ign);
+				rsscache->internalize_rssfeed(feedurls[0], nullptr);
 			REQUIRE(feed->total_item_count() == 0);
-			feed = rsscache->internalize_rssfeed(feedurls[1], &ign);
+			feed = rsscache->internalize_rssfeed(feedurls[1], nullptr);
 			REQUIRE(feed->total_item_count() != 0);
 		}
 
@@ -275,7 +272,7 @@ TEST_CASE("cleanup_cache is controlled by `cleanup-on-quit` "
 			rsscache.reset( new cache(dbfile.getPath(), cfg.get()) );
 
 			std::shared_ptr<rss_feed> feed =
-				rsscache->internalize_rssfeed(feedurls[0], &ign);
+				rsscache->internalize_rssfeed(feedurls[0], nullptr);
 			REQUIRE(feed->total_item_count() == 6);
 		}
 	}
@@ -407,7 +404,6 @@ TEST_CASE("get_read_item_guids returns GUIDs of items that are marked read",
 TEST_CASE("mark_item_deleted changes \"deleted\" flag of item with given GUID ",
           "[cache]") {
 	TestHelpers::TempFile dbfile;
-	rss_ignores ign;
 	configcontainer cfg;
 	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), &cfg) );
 	auto feedurl = "file://data/rss.xml";
@@ -421,7 +417,7 @@ TEST_CASE("mark_item_deleted changes \"deleted\" flag of item with given GUID ",
 	rsscache->mark_item_deleted(guid, true);
 
 	rsscache.reset( new cache(dbfile.getPath(), &cfg) );
-	feed = rsscache->internalize_rssfeed(feedurl, &ign);
+	feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 	// One item was deleted, so shouldn't have been loaded
 	REQUIRE(feed->total_item_count() == 7);
 }
@@ -429,7 +425,6 @@ TEST_CASE("mark_item_deleted changes \"deleted\" flag of item with given GUID ",
 TEST_CASE("mark_items_read_by_guid marks items with given GUIDs as unread ",
           "[cache]") {
 	TestHelpers::TempFile dbfile;
-	rss_ignores ign;
 	configcontainer cfg;
 	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), &cfg) );
 	auto feedurl = "file://data/rss.xml";
@@ -444,7 +439,7 @@ TEST_CASE("mark_items_read_by_guid marks items with given GUIDs as unread ",
 		REQUIRE_NOTHROW(rsscache->mark_items_read_by_guid({}));
 
 		rsscache.reset( new cache(dbfile.getPath(), &cfg) );
-		feed = rsscache->internalize_rssfeed(feedurl, &ign);
+		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 		REQUIRE(feed->unread_item_count() == 8);
 	}
 
@@ -455,14 +450,13 @@ TEST_CASE("mark_items_read_by_guid marks items with given GUIDs as unread ",
 		REQUIRE_NOTHROW(rsscache->mark_items_read_by_guid(guids));
 
 		rsscache.reset( new cache(dbfile.getPath(), &cfg) );
-		feed = rsscache->internalize_rssfeed(feedurl, &ign);
+		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 		REQUIRE(feed->unread_item_count() == 6);
 	}
 }
 
 TEST_CASE("remove_old_deleted_items removes deleted items with particular "
           "feedurl if its GUID is not in the vector", "[cache]") {
-	rss_ignores ign;
 	configcontainer cfg;
 	cache rsscache(":memory:", &cfg);
 	auto feedurl = "file://data/rss.xml";
@@ -502,7 +496,7 @@ TEST_CASE("remove_old_deleted_items removes deleted items with particular "
 		rsscache.mark_item_deleted(guid, false);
 	}
 
-	feed = rsscache.internalize_rssfeed(feedurl, &ign);
+	feed = rsscache.internalize_rssfeed(feedurl, nullptr);
 	// Two items should've been removed by remove_old_deleted_items
 	REQUIRE(feed->total_item_count() == 6);
 }
@@ -510,7 +504,6 @@ TEST_CASE("remove_old_deleted_items removes deleted items with particular "
 TEST_CASE("search_for_items finds all items with matching title or content",
           "[cache]") {
 	configcontainer cfg;
-	rss_ignores ign;
 	cache rsscache(":memory:", &cfg);
 	std::vector<std::string> feedurls = {
 		"file://data/atom10_1.xml",
@@ -555,8 +548,7 @@ TEST_CASE("update_rssitem_flags dumps `rss_item` object's flags to DB",
 	REQUIRE_NOTHROW(rsscache->update_rssitem_flags(item.get()));
 
 	rsscache.reset( new cache(dbfile.getPath(), &cfg) );
-	rss_ignores ign;
-	feed = rsscache->internalize_rssfeed("file://data/rss.xml", &ign);
+	feed = rsscache->internalize_rssfeed("file://data/rss.xml", nullptr);
 
 	REQUIRE(feed->items()[0]->flags() == "abc");
 }
@@ -564,7 +556,6 @@ TEST_CASE("update_rssitem_flags dumps `rss_item` object's flags to DB",
 TEST_CASE("update_rssitem_unread_and_enqueued updates item's \"unread\" and "
           "\"enqueued\" fields", "[cache]") {
 	TestHelpers::TempFile dbfile;
-	rss_ignores ign;
 	configcontainer cfg;
 	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), &cfg) );
 	const auto feedurl = "file://data/rss.xml";
@@ -582,7 +573,7 @@ TEST_CASE("update_rssitem_unread_and_enqueued updates item's \"unread\" and "
 		REQUIRE_NOTHROW(
 				rsscache->update_rssitem_unread_and_enqueued(item, feedurl));
 		rsscache.reset( new cache(dbfile.getPath(), &cfg) );
-		feed = rsscache->internalize_rssfeed(feedurl, &ign);
+		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 
 		REQUIRE_FALSE(feed->items()[0]->unread());
 	}
@@ -594,7 +585,7 @@ TEST_CASE("update_rssitem_unread_and_enqueued updates item's \"unread\" and "
 		REQUIRE_NOTHROW(
 				rsscache->update_rssitem_unread_and_enqueued(item, feedurl));
 		rsscache.reset( new cache(dbfile.getPath(), &cfg) );
-		feed = rsscache->internalize_rssfeed(feedurl, &ign);
+		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 
 		REQUIRE(feed->items()[0]->enqueued());
 	}
@@ -608,7 +599,7 @@ TEST_CASE("update_rssitem_unread_and_enqueued updates item's \"unread\" and "
 		REQUIRE_NOTHROW(
 				rsscache->update_rssitem_unread_and_enqueued(item, feedurl));
 		rsscache.reset( new cache(dbfile.getPath(), &cfg) );
-		feed = rsscache->internalize_rssfeed(feedurl, &ign);
+		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 
 		REQUIRE_FALSE(feed->items()[0]->unread());
 		REQUIRE(feed->items()[0]->enqueued());
@@ -664,7 +655,6 @@ TEST_CASE("{externalize,internalize}_rssfeed puts a feed into DB and gets it bac
 		};
 
 	TestHelpers::TempFile dbfile;
-	rss_ignores ign;
 	configcontainer cfg;
 	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), &cfg) );
 	const auto feedurl = "file://data/rss.xml";
@@ -678,7 +668,7 @@ TEST_CASE("{externalize,internalize}_rssfeed puts a feed into DB and gets it bac
 		rsscache->externalize_rssfeed(initial_feed, false);
 
 		rsscache.reset( new cache(dbfile.getPath(), &cfg) );
-		auto new_feed = rsscache->internalize_rssfeed(feedurl, &ign);
+		auto new_feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 		new_feed->load();
 
 		feeds_are_the_same(initial_feed, new_feed);
@@ -689,7 +679,7 @@ TEST_CASE("{externalize,internalize}_rssfeed puts a feed into DB and gets it bac
 		rsscache->externalize_rssfeed(initial_feed, false);
 
 		rsscache.reset( new cache(dbfile.getPath(), &cfg) );
-		auto new_feed = rsscache->internalize_rssfeed(feedurl, &ign);
+		auto new_feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 		new_feed->load();
 
 		feeds_are_the_same(initial_feed, new_feed);
@@ -699,7 +689,6 @@ TEST_CASE("{externalize,internalize}_rssfeed puts a feed into DB and gets it bac
 TEST_CASE("externalize_rssfeed doesn't store more than `max-items` items",
           "[cache]") {
 	TestHelpers::TempFile dbfile;
-	rss_ignores ign;
 	std::unique_ptr<configcontainer> cfg( new configcontainer() );
 	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), cfg.get()) );
 
@@ -712,15 +701,20 @@ TEST_CASE("externalize_rssfeed doesn't store more than `max-items` items",
 
 	cfg.reset( new configcontainer() );
 	rsscache.reset( new cache(dbfile.getPath(), cfg.get()) );
-	feed = rsscache->internalize_rssfeed(feedurl, &ign);
+	feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 	REQUIRE(feed->total_item_count() == 3);
+}
+
+TEST_CASE("externalize_rssfeed does nothing if it's passed a query feed",
+		"[cache]")
+{
+
 }
 
 TEST_CASE("internalize_rssfeed doesn't return more than `max-items` items, "
           "not counting the flagged ones", "[cache]")
 {
 	TestHelpers::TempFile dbfile;
-	rss_ignores ign;
 	std::unique_ptr<configcontainer> cfg( new configcontainer() );
 	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), cfg.get()) );
 
@@ -735,7 +729,7 @@ TEST_CASE("internalize_rssfeed doesn't return more than `max-items` items, "
 		cfg.reset( new configcontainer() );
 		cfg->set_configvalue("max-items", "3");
 		rsscache.reset( new cache(dbfile.getPath(), cfg.get()) );
-		feed = rsscache->internalize_rssfeed(feedurl, &ign);
+		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 		REQUIRE(feed->total_item_count() == 3);
 	}
 
@@ -749,7 +743,7 @@ TEST_CASE("internalize_rssfeed doesn't return more than `max-items` items, "
 		cfg.reset( new configcontainer() );
 		cfg->set_configvalue("max-items", "1");
 		rsscache.reset( new cache(dbfile.getPath(), cfg.get()) );
-		feed = rsscache->internalize_rssfeed(feedurl, &ign);
+		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 		// All flagged items should be present no matter what
 		unsigned int flagged_count = 0;
 		for (const auto& item : feed->items()) {
@@ -763,11 +757,10 @@ TEST_CASE("internalize_rssfeed doesn't return more than `max-items` items, "
 
 TEST_CASE("internalize_rssfeed returns feed without items but specified RSS URL",
           "[cache]") {
-	rss_ignores ign;
 	configcontainer cfg;
 	cache rsscache(":memory:", &cfg);
 	auto feedurl = "query:misc:age between 0:10";
-	auto feed = rsscache.internalize_rssfeed(feedurl, &ign);
+	auto feed = rsscache.internalize_rssfeed(feedurl, nullptr);
 
 	REQUIRE(feed->total_item_count() == 0);
 	REQUIRE(feed->rssurl() == feedurl);
@@ -776,7 +769,6 @@ TEST_CASE("internalize_rssfeed returns feed without items but specified RSS URL"
 TEST_CASE("externalize_rssfeed resets \"unread\" field if item's content "
           "changed and reset_unread = \"yes\"", "[cache]") {
 	TestHelpers::TempFile dbfile;
-	rss_ignores ign;
 	configcontainer cfg;
 	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), &cfg) );
 	auto feedurl = "file://data/rss.xml";
@@ -786,7 +778,7 @@ TEST_CASE("externalize_rssfeed resets \"unread\" field if item's content "
 	rsscache->externalize_rssfeed(feed, false);
 
 	rsscache.reset( new cache(dbfile.getPath(), &cfg) );
-	feed = rsscache->internalize_rssfeed(feedurl, &ign);
+	feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 	feed->load();
 	REQUIRE_FALSE(feed->items()[0]->unread());
 	feed->items()[0]->set_unread_nowrite(true);
@@ -795,14 +787,14 @@ TEST_CASE("externalize_rssfeed resets \"unread\" field if item's content "
 	SECTION("reset_unread = false; item remains read") {
 		rsscache->externalize_rssfeed(feed, false);
 		rsscache.reset( new cache(dbfile.getPath(), &cfg) );
-		feed = rsscache->internalize_rssfeed(feedurl, &ign);
+		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 		REQUIRE_FALSE(feed->items()[0]->unread());
 	}
 
 	SECTION("reset_unread = true; item becomes unread") {
 		rsscache->externalize_rssfeed(feed, true);
 		rsscache.reset( new cache(dbfile.getPath(), &cfg) );
-		feed = rsscache->internalize_rssfeed(feedurl, &ign);
+		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 		REQUIRE(feed->items()[0]->unread());
 	}
 }
@@ -810,7 +802,6 @@ TEST_CASE("externalize_rssfeed resets \"unread\" field if item's content "
 TEST_CASE("externalize_rssfeed only updates \"unread\" field if override_unread is set",
           "[cache]") {
 	TestHelpers::TempFile dbfile;
-	rss_ignores ign;
 	configcontainer cfg;
 	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), &cfg) );
 	auto feedurl = "file://data/rss.xml";
@@ -820,14 +811,14 @@ TEST_CASE("externalize_rssfeed only updates \"unread\" field if override_unread 
 	rsscache->externalize_rssfeed(feed, false);
 
 	rsscache.reset( new cache(dbfile.getPath(), &cfg) );
-	feed = rsscache->internalize_rssfeed(feedurl, &ign);
+	feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 	auto item = feed->items()[0];
 	item->set_unread_nowrite(true);
 
 	SECTION("override_unread not set; item remains read") {
 		rsscache->externalize_rssfeed(feed, false);
 		rsscache.reset( new cache(dbfile.getPath(), &cfg) );
-		feed = rsscache->internalize_rssfeed(feedurl, &ign);
+		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 		REQUIRE_FALSE(feed->items()[0]->unread());
 	}
 
@@ -835,7 +826,7 @@ TEST_CASE("externalize_rssfeed only updates \"unread\" field if override_unread 
 		item->set_override_unread(true);
 		rsscache->externalize_rssfeed(feed, false);
 		rsscache.reset( new cache(dbfile.getPath(), &cfg) );
-		feed = rsscache->internalize_rssfeed(feedurl, &ign);
+		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 		REQUIRE(feed->items()[0]->unread());
 	}
 }
