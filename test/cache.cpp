@@ -831,6 +831,65 @@ TEST_CASE("externalize_rssfeed only updates \"unread\" field if override_unread 
 	}
 }
 
+TEST_CASE("externalize_rssfeed does not create an entry in rss_feed table "
+		"when passed a query feed", "[cache]")
+{
+	TestHelpers::TempFile dbfile;
+	configcontainer cfg;
+	std::unique_ptr<cache> rsscache( new cache(dbfile.getPath(), &cfg) );
+
+	auto feed = std::make_shared<rss_feed>(rsscache.get());
+	feed->set_query("unread = \"yes\"");
+	feed->set_rssurl("query:All unread:unread = \"yes\"");
+
+	REQUIRE_NOTHROW(rsscache->externalize_rssfeed(feed, false));
+
+	// Getting rid of `cache` instance to make sure it doesn't hold the
+	// database anymore and did everything it wanted to
+	rsscache.release();
+
+	// This struct is a bit of machinery that'll ensure that we let go of
+	// SQLite3 handle even if the test fails
+	struct sqlite_deleter {
+		void operator()(sqlite3* db) {
+			sqlite3_close(db);
+		}
+	};
+	std::unique_ptr<sqlite3, sqlite_deleter> db;
+
+	// Open the database and manuever the pointer into our unique_ptr (which
+	// can't be done by direct assignment because sqlite3_open doesn't return
+	// that pointer)
+	sqlite3* dbptr = nullptr;
+	int error = sqlite3_open(dbfile.getPath().c_str(), &dbptr);
+	REQUIRE(error == SQLITE_OK);
+	db.reset(dbptr);
+	dbptr = nullptr;
+
+	auto count_callback =
+		[]
+		(void * data, int argc, char ** argv, char ** /* azColName */)
+		-> int
+		{
+			int* count = static_cast<int*>(data);
+			if (argc>0) {
+				std::istringstream is(argv[0]);
+				is >> *count;
+			}
+			return 0;
+		};
+
+	const std::string query("SELECT count(*) FROM rss_feed");
+	int count = -42;
+	char* errors = nullptr;
+	int rc = sqlite3_exec(
+			db.get(), query.c_str(), count_callback, &count, &errors);
+	REQUIRE(rc == SQLITE_OK);
+
+	INFO("There should be no feeds in the cache");
+	REQUIRE(count == 0);
+}
+
 TEST_CASE("do_vacuum doesn't throw an exception", "[cache]") {
 	TestHelpers::TempFile dbfile;
 	configcontainer cfg;
