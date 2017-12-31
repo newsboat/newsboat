@@ -903,3 +903,55 @@ TEST_CASE("do_vacuum doesn't throw an exception", "[cache]") {
 	// Checking that cache can still be opened
 	REQUIRE_NOTHROW(rsscache.reset( new cache(dbfile.getPath(), &cfg) ));
 }
+
+TEST_CASE("search_in_items returns items that contain given substring",
+		"[cache]")
+{
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_parser parser("file://data/rss.xml", &rsscache, &cfg, nullptr);
+	std::shared_ptr<rss_feed> feed = parser.parse();
+	REQUIRE(feed->total_item_count() == 8);
+	rsscache.externalize_rssfeed(feed, false);
+
+	using guids = std::unordered_set<std::string>;
+
+	const guids matching_guids {
+		"http://www.blogger.com/feeds/33750310/posts/full/115822000722667899",
+	};
+	const guids non_matching_guids {
+		"http://www.blogger.com/feeds/33750310/posts/full/115720132609158191",
+		"http://www.blogger.com/feeds/33750310/posts/full/115868412707787974",
+		"http://www.blogger.com/feeds/33750310/posts/full/115902176438316101",
+		"http://www.blogger.com/feeds/33750310/posts/full/115934092675971946",
+		"http://www.blogger.com/feeds/33750310/posts/full/115954641079726548",
+		"http://www.blogger.com/feeds/33750310/posts/full/116026794030557608",
+		"http://www.blogger.com/feeds/33750310/posts/full/116665092831467603",
+	};
+
+	guids guids_from_feed;
+	for (const auto& item : feed->items()) {
+		guids_from_feed.insert(item->guid());
+	}
+
+	const guids with_botox
+		= rsscache.search_in_items("Botox", guids_from_feed);
+	for (const auto& guid : with_botox) {
+		INFO("Checking GUID " << guid);
+		REQUIRE_FALSE(matching_guids.find(guid) == matching_guids.end());
+		REQUIRE(non_matching_guids.find(guid) == non_matching_guids.end());
+	}
+}
+
+TEST_CASE("search_in_items returns empty set if input set is empty", "[cache]") {
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_parser parser("file://data/rss.xml", &rsscache, &cfg, nullptr);
+	std::shared_ptr<rss_feed> feed = parser.parse();
+	rsscache.externalize_rssfeed(feed, false);
+
+	using guids = std::unordered_set<std::string>;
+	std::unordered_set<std::string> empty;
+	const guids result = rsscache.search_in_items("Botox", empty);
+	REQUIRE(result.empty());
+}
