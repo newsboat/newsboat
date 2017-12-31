@@ -83,7 +83,8 @@ TEST_CASE("Last-Modified and ETag values are persisted to DB", "[cache]") {
 		time_t last_modified = lm_value;
 		std::string etag = etag_value;
 
-		rsscache->update_lastmodified(feedurl, last_modified, etag);
+		REQUIRE_NOTHROW(
+				rsscache->update_lastmodified(feedurl, last_modified, etag));
 
 		cfg.reset( new configcontainer() );
 		rsscache.reset( new cache(dbfile.getPath(), cfg.get()) );
@@ -107,6 +108,10 @@ TEST_CASE("Last-Modified and ETag values are persisted to DB", "[cache]") {
 
 	SECTION("Both Last-Modified and ETag headers were returned") {
 		test(1476382350, "1234567890");
+	}
+
+	SECTION("Neither Last-Modified nor ETag headers were returned") {
+		test(0, "");
 	}
 }
 
