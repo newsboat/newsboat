@@ -766,6 +766,27 @@ TEST_CASE("internalize_rssfeed returns feed without items but specified RSS URL"
 	REQUIRE(feed->rssurl() == feedurl);
 }
 
+TEST_CASE("internalize_rssfeed doesn't return items that are ignored",
+		"[cache]")
+{
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+
+	const std::string feedurl("file://data/rss092_1.xml");
+	rss_parser parser(feedurl, &rsscache, &cfg, nullptr);
+	auto feed = parser.parse();
+	REQUIRE(feed->total_item_count() == 3);
+	rsscache.externalize_rssfeed(feed, false);
+
+	rss_ignores ign;
+	ign.handle_action("ignore-article", {"*", "title =~ \"third\""});
+
+	feed = rsscache.internalize_rssfeed(feedurl, nullptr);
+	REQUIRE(feed->total_item_count() == 3);
+	feed = rsscache.internalize_rssfeed(feedurl, &ign);
+	REQUIRE(feed->total_item_count() == 2);
+}
+
 TEST_CASE("externalize_rssfeed resets \"unread\" field if item's content "
           "changed and reset_unread = \"yes\"", "[cache]") {
 	TestHelpers::TempFile dbfile;
