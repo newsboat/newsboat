@@ -1150,9 +1150,9 @@ void controller::print_version_information(const char * argv0, unsigned int leve
 	if (level<=1) {
 		std::cout << PROGRAM_NAME << " " << PROGRAM_VERSION << " - " << PROGRAM_URL << std::endl;
 		std::cout << "Copyright (C) 2006-2015 Andreas Krennmair" << std::endl;
-		std::cout << "Copyright (C) 2015-2017 Alexander Batischev" << std::endl;
+		std::cout << "Copyright (C) 2015-2018 Alexander Batischev" << std::endl;
 		std::cout << "Copyright (C) 2006-2017 Newsbeuter contributors" << std::endl;
-		std::cout << "Copyright (C) 2017 Newsboat contributors" << std::endl;
+		std::cout << "Copyright (C) 2017-2018 Newsboat contributors" << std::endl;
 		std::cout << std::endl;
 
 		std::cout << _("newsboat is free software and licensed under the MIT License.") << std::endl;
