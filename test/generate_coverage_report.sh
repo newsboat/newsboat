@@ -10,7 +10,7 @@ rm -rf $APPBASE_INFO $APPTEST_INFO html
 find -name '*.gcda' -print0 | xargs -0 rm --force
 make -j 5 PROFILE=1 all test
 lcov --capture --initial --base-directory . --directory . --output-file $APPBASE_INFO
-( cd test && ./test )
+( cd test && ./test "$@" )
 lcov --capture --base-directory . --directory . --output-file $APPTEST_INFO
 lcov --base-directory . --directory . --output-file $APPTOTAL_INFO \
     --add-tracefile $APPBASE_INFO --add-tracefile $APPTEST_INFO
