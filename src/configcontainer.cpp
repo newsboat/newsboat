@@ -13,8 +13,9 @@
 #include <sys/types.h>
 #include <pwd.h>
 
-
 namespace newsboat {
+
+const std::string configcontainer::PARTIAL_FILE_SUFFIX = ".part";
 
 configcontainer::configcontainer()
 	// create the config options and set their resp. default value and type
