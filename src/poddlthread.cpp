@@ -56,10 +56,11 @@ void poddlthread::run() {
 	}
 
 	struct stat sb;
+	std::string filename = dl->filename()
+		+ newsboat::configcontainer::PARTIAL_FILE_SUFFIX;
 
-	if (stat(dl->filename().c_str(), &sb) == -1) {
+	if (stat(filename.c_str(), &sb) == -1) {
 		LOG(level::INFO, "poddlthread::run: stat failed: starting normal download");
-		std::string filename = dl->filename();
 
 		// Have to copy the string into a vector in order to be able to get
 		// a char* pointer. std::string::c_str() won't do because it returns
@@ -67,14 +68,14 @@ void poddlthread::run() {
 		std::vector<char> directory(filename.begin(), filename.end());
 		utils::mkdir_parents(dirname(&directory[0]));
 
-		f->open(dl->filename().c_str(), std::fstream::out);
+		f->open(filename, std::fstream::out);
 		dl->set_offset(0);
 		resumed_download = false;
 	} else {
 		LOG(level::INFO, "poddlthread::run: stat ok: starting download from %u", sb.st_size);
 		curl_easy_setopt(easyhandle, CURLOPT_RESUME_FROM, sb.st_size);
 		dl->set_offset(sb.st_size);
-		f->open(dl->filename(), std::fstream::out | std::fstream::app);
+		f->open(filename, std::fstream::out | std::fstream::app);
 		resumed_download = true;
 	}
 
@@ -88,16 +89,18 @@ void poddlthread::run() {
 
 		LOG(level::INFO,"poddlthread::run: curl_easy_perform rc = %u (%s)", success, curl_easy_strerror(success));
 
-		if (0 == success)
+		if (0 == success) {
+			LOG(level::DEBUG, "poddlthread::run: download complete, deleting temporary suffix");
+			rename(filename.c_str(), dl->filename().c_str());
 			dl->set_status(dlstatus::READY);
-		else if (dl->status() != dlstatus::CANCELLED) {
+		} else if (dl->status() != dlstatus::CANCELLED) {
 			// attempt complete re-download
 			if (resumed_download) {
-				::unlink(dl->filename().c_str());
+				::unlink(filename.c_str());
 				this->run();
 			} else {
 				dl->set_status(dlstatus::FAILED);
-				::unlink(dl->filename().c_str());
+				::unlink(filename.c_str());
 			}
 		}
 	} else {

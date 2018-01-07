@@ -47,6 +47,8 @@ class configcontainer : public config_action_handler {
 		void reset_to_default(const std::string& key);
 		void toggle(const std::string& key);
 		std::vector<std::string> get_suggestions(const std::string& fragment);
+
+		static const std::string PARTIAL_FILE_SUFFIX = ".part";
 	private:
 		std::map<std::string,configdata> config_data;
 

@@ -7,6 +7,7 @@
 #include <cstring>
 #include <config.h>
 #include <libgen.h>
+#include <configcontainer.h>
 
 #include <unistd.h>
 
@@ -91,7 +92,11 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 								d.set_status(dlstatus::PLAYED);
 						} else
 							d.set_status(dlstatus::ALREADY_DOWNLOADED); // TODO: scrap dlstatus::ALREADY_DOWNLOADED state
+					} else if (access((fn + configcontainer::PARTIAL_FILE_SUFFIX).c_str(), F_OK) == 0) {
+						LOG(level::INFO, "queueloader::reload: found `%s' on file system -> mark as partially downloaded", fn + configcontainer::PARTIAL_FILE_SUFFIX);
+						d.set_status(dlstatus::ALREADY_DOWNLOADED);
 					}
+
 					d.set_url(fields[0]);
 					dltemp.push_back(d);
 				}
