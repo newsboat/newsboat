@@ -134,7 +134,11 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls() {
 
 			json_object_object_get_ex(sub, "categories", &node);
 			struct array_list * categories = json_object_get_array(node);
-			for (int i = 0; i < array_list_length(categories); i++) {
+#if JSON_C_MAJOR_VERSION == 0 && JSON_C_MINOR_VERSION < 13
+		for (int i = 0; i < array_list_length(categories); i++) {
+#else
+		for (size_t i = 0; i < array_list_length(categories); i++) {
+#endif
 				json_object* cat = json_object_array_get_idx(node, i);
 				json_object* label_node {};
 				json_object_object_get_ex(cat, "label", &label_node);
