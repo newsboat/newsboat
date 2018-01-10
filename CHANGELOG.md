@@ -4,6 +4,9 @@
 
 ### Added
 
+- Podboat adds ".part" suffix to filenames for the duration of the download
+    (José Manuel García-Patos)
+
 ### Changed
 
 ### Removed
