@@ -161,6 +161,35 @@ json ttrss_api::run_op(const std::string& op,
 	return content;
 }
 
+tagged_feedurl ttrss_api::feed_from_json(const json& jfeed, std::function<std::vector<std::string>(const json&)> tagger) {
+	const int feed_id            = jfeed["id"];
+	const std::string feed_title = jfeed["title"];
+	const std::string feed_url   = jfeed["feed_url"];
+
+	std::vector<std::string> tags;
+	tags.push_back(std::string("~") + feed_title);
+
+	for(auto& tag : tagger(jfeed)) {
+		tags.push_back(tag);
+	}
+
+	auto url = strprintf::fmt("%s#%d", feed_url, feed_id);
+	return tagged_feedurl(url, tags);
+	// TODO: cache feed_id -> feed_url (or feed_url -> feed_id ?)
+}
+
+int ttrss_api::parse_category_id(const json& jcatid) {
+	int cat_id;
+	// TTRSS (commit "b0113adac42383b8039eb92ccf3ee2ec0ee70346") returns a string
+	// for regular items and an integer for predefined categories (like -1)
+	if (jcatid.is_string()) {
+		cat_id = std::stoi(jcatid.get<std::string>());
+	} else {
+		cat_id = jcatid;
+	}
+	return cat_id;
+}
+
 std::vector<tagged_feedurl> ttrss_api::get_subscribed_urls() {
 	std::vector<tagged_feedurl> feeds;
 
@@ -171,14 +200,7 @@ std::vector<tagged_feedurl> ttrss_api::get_subscribed_urls() {
 		std::map<int, std::string> category_names;
 		for(auto& cat : categories) {
 			std::string cat_name = cat["title"];
-			int cat_id;
-			// TTRSS (commit "b0113adac42383b8039eb92ccf3ee2ec0ee70346") returns a string
-			// for regular items and an integer for predefined categories (like -1)
-			if (cat["id"].is_string()) {
-				cat_id = std::stoi(cat["id"].get<std::string>());
-			} else {
-				cat_id = cat["id"];
-			}
+			int cat_id = parse_category_id(cat["id"]);
 			category_names[cat_id] = cat_name;
 		}
 
@@ -192,21 +214,13 @@ std::vector<tagged_feedurl> ttrss_api::get_subscribed_urls() {
 		}
 
 		for (json& feed : feedlist) {
-			const int feed_id            = feed["id"];
-			const std::string feed_title = feed["title"];
-			const std::string feed_url   = feed["feed_url"];
-			const int cat_id             = feed["cat_id"];
-
-			std::vector<std::string> tags;
-			tags.push_back(std::string("~") + feed_title);
-
-			if (cat_id > 0) {
-				tags.push_back(category_names[cat_id]);
-			}
-
-			auto url = strprintf::fmt("%s#%d", feed_url, feed_id);
-			feeds.push_back(tagged_feedurl(url, tags));
-			// TODO: cache feed_id -> feed_url (or feed_url -> feed_id ?)
+			feeds.push_back(feed_from_json(feed, [&](const json& f){
+					const int cat_id = f["cat_id"];
+					std::vector<std::string> tags;
+					if (cat_id > 0)
+						tags.push_back(category_names[cat_id]);
+					return tags;
+				}));
 		}
 
 	} else {
@@ -403,21 +417,13 @@ void ttrss_api::fetch_feeds_per_category(
 		return;
 
 	for (json& feed : feed_list_obj) {
-		const int feed_id            = feed["id"];
-		const std::string feed_title = feed["title"];
-		const std::string feed_url   = feed["feed_url"];
-
-		std::vector<std::string> tags;
-		tags.push_back(std::string("~") + feed_title);
-
-		if (!cat_name.is_null()) {
-			tags.push_back(cat_name.get<std::string>());
-		}
-
-		auto url = strprintf::fmt("%s#%d", feed_url, feed_id);
-		feeds.push_back(tagged_feedurl(url, tags));
-
-		// TODO: cache feed_id -> feed_url (or feed_url -> feed_id ?)
+		feeds.push_back(feed_from_json(feed, [&](const json&){
+				std::vector<std::string> tags;
+				if (!cat_name.is_null()) {
+					tags.push_back(cat_name.get<std::string>());
+				}
+				return tags;
+			}));
 	}
 }
 
