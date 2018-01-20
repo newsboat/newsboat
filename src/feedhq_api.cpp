@@ -159,7 +159,12 @@ bool feedhq_api::mark_all_read(const std::string& feedurl) {
 	std::string prefix = cfg->get_configvalue("feedhq-url") + FEEDHQ_FEED_PREFIX;
 	std::string real_feedurl = feedurl.substr(prefix.length(), feedurl.length() - prefix.length());
 	std::vector<std::string> elems = utils::tokenize(real_feedurl, "?");
-	real_feedurl = utils::unescape_url(elems[0]);
+	try {
+		real_feedurl = utils::unescape_url(elems[0]);
+	} catch (const std::runtime_error& e) {
+		LOG(level::DEBUG, "feedhq_api::mark_all_read: Failed to unescape_url(%s): %s", elems[0], e.what());
+		return false;
+	}
 	std::string token = get_new_token();
 
 	std::string postcontent = strprintf::fmt("s=%s&T=%s", real_feedurl, token);
