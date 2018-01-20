@@ -26,12 +26,14 @@ class ttrss_api : public remote_api {
 		void fetch_feeds_per_category(struct json_object * cat, std::vector<tagged_feedurl>& feeds);
 		bool star_article(const std::string& guid, bool star);
 		bool publish_article(const std::string& guid, bool publish);
+		unsigned int query_api_level();
 		std::string url_to_id(const std::string& url);
 		std::string retrieve_sid();
 		std::string sid;
 		std::string auth_info;
 		bool single;
 		std::mutex auth_lock;
+		int api_level = -1;
 };
 
 class ttrss_urlreader : public urlreader {

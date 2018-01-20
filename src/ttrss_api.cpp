@@ -60,11 +60,37 @@ std::string ttrss_api::retrieve_sid() {
 	json_object_object_get_ex(content, "session_id", &session_id);
 	std::string sid = json_object_get_string(session_id);
 
+	json_object * level {};
+	if (json_object_object_get_ex(content, "api_level", &level) == TRUE) {
+		// Since 5ba4ebc65e13ef78f1f7b0528681195d0fd88476, TTRSS returns api_level with logins
+		api_level = json_object_get_int(level);
+	}
+
 	json_object_put(content);
 
 	LOG(level::DEBUG, "ttrss_api::retrieve_sid: sid = '%s'", sid);
 
 	return sid;
+}
+
+unsigned int ttrss_api::query_api_level()
+{
+	if (api_level == -1) {
+		// api level was never queried. Do it now.
+		std::map<std::string, std::string> args;
+		json_object *content = run_op("getApiLevel", args);
+
+		json_object* level {};
+		if (content == nullptr || json_object_object_get_ex(content, "level", &level) == TRUE) {
+			// From https://git.tt-rss.org/git/tt-rss/wiki/ApiReference
+			// "Whether tt-rss returns error for this method (e.g.
+			//  version:1.5.7 and below) client should assume API level 0."
+			api_level = 0;
+		} else {
+			api_level = json_object_get_int(level);
+		}
+	}
+	return api_level;
 }
 
 json_object* ttrss_api::run_op(const std::string& op,
