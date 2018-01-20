@@ -164,23 +164,66 @@ json ttrss_api::run_op(const std::string& op,
 std::vector<tagged_feedurl> ttrss_api::get_subscribed_urls() {
 	std::vector<tagged_feedurl> feeds;
 
+	json categories = run_op("getCategories", std::map<std::string, std::string>());
 
-	json content = run_op("getCategories", std::map<std::string, std::string>());
-
-	try {
-		// first fetch feeds within no category
-		fetch_feeds_per_category(json(nullptr), feeds);
-
-		// then fetch the feeds of all categories
-		for (auto& i : content) {
-			fetch_feeds_per_category(i, feeds);
+	if (query_api_level() >= 2) {
+		// getFeeds with cat_id -3 since 1.5.0, so at least since api-level 2
+		std::map<int, std::string> category_names;
+		for(auto& cat : categories) {
+			std::string cat_name = cat["title"];
+			int cat_id;
+			// TTRSS (commit "b0113adac42383b8039eb92ccf3ee2ec0ee70346") returns a string
+			// for regular items and an integer for predefined categories (like -1)
+			if (cat["id"].is_string()) {
+				cat_id = std::stoi(cat["id"].get<std::string>());
+			} else {
+				cat_id = cat["id"];
+			}
+			category_names[cat_id] = cat_name;
 		}
-	} catch (json::exception& e) {
-		LOG(level::ERROR, "ttrss_api::get_subscribed_urls:"
-		                  " Failed to determine subscribed urls: %s", e.what());
-		return std::vector<tagged_feedurl>();
-	}
 
+		std::map<std::string, std::string> args;
+		args["cat_id"] = "-3"; // All feeds, excluding virtual feeds (e.g. Labels and such)
+		json feedlist = run_op("getFeeds", args);
+
+		if (feedlist.is_null()) {
+			LOG(level::ERROR, "ttrss_api::get_subscribed_urls: Failed to retrieve feedlist");
+			return feeds;
+		}
+
+		for (json& feed : feedlist) {
+			const int feed_id            = feed["id"];
+			const std::string feed_title = feed["title"];
+			const std::string feed_url   = feed["feed_url"];
+			const int cat_id             = feed["cat_id"];
+
+			std::vector<std::string> tags;
+			tags.push_back(std::string("~") + feed_title);
+
+			if (cat_id > 0) {
+				tags.push_back(category_names[cat_id]);
+			}
+
+			auto url = strprintf::fmt("%s#%d", feed_url, feed_id);
+			feeds.push_back(tagged_feedurl(url, tags));
+			// TODO: cache feed_id -> feed_url (or feed_url -> feed_id ?)
+		}
+
+	} else {
+		try {
+			// first fetch feeds within no category
+			fetch_feeds_per_category(json(nullptr), feeds);
+
+			// then fetch the feeds of all categories
+			for (auto& i : categories) {
+				fetch_feeds_per_category(i, feeds);
+			}
+		} catch (json::exception& e) {
+			LOG(level::ERROR, "ttrss_api::get_subscribed_urls:"
+							  " Failed to determine subscribed urls: %s", e.what());
+			return std::vector<tagged_feedurl>();
+		}
+	}
 
 	return feeds;
 }
