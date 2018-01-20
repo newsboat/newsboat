@@ -1012,11 +1012,29 @@ curl_proxytype utils::get_proxy_type(const std::string& type) {
 }
 
 std::string utils::escape_url(const std::string& url) {
-	return replace_all(replace_all(url,"?","%3F"), "&", "%26");
+	CURL * easyhandle = curl_easy_init();
+	char *output = curl_easy_escape(easyhandle, url.c_str(), 0);
+	if (!output) {
+		LOG(level::DEBUG, "Libcurl failed to escape url: %s", url);
+		throw std::runtime_error("escaping url failed");
+	}
+	std::string s = output;
+	curl_free(output);
+	curl_easy_cleanup(easyhandle);
+	return s;
 }
 
 std::string utils::unescape_url(const std::string& url) {
-	return replace_all(replace_all(url,"%3F","?"), "%26", "&");
+	CURL * easyhandle = curl_easy_init();
+	char *output = curl_easy_unescape(easyhandle, url.c_str(), 0, NULL);
+	if (!output) {
+		LOG(level::DEBUG, "Libcurl failed to escape url: %s", url);
+		throw std::runtime_error("escaping url failed");
+	}
+	std::string s = output;
+	curl_free(output);
+	curl_easy_cleanup(easyhandle);
+	return s;
 }
 
 std::wstring utils::clean_nonprintable_characters(std::wstring text) {
