@@ -118,8 +118,10 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 
 	curl_easy_setopt(easyhandle, CURLOPT_PROXYTYPE, prxtype);
 
-	if (getenv ("CURL_CA_BUNDLE") != NULL)
-		curl_easy_setopt(easyhandle, CURLOPT_CAINFO, getenv("CURL_CA_BUNDLE"));
+	const char* curl_ca_bundle = ::getenv("CURL_CA_BUNDLE");
+	if (curl_ca_bundle != nullptr) {
+		curl_easy_setopt(easyhandle, CURLOPT_CAINFO, curl_ca_bundle);
+	}
 
 	header_values hdrs;
 	curl_easy_setopt(easyhandle, CURLOPT_HEADERDATA, &hdrs);
