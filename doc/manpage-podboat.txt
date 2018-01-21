@@ -82,6 +82,12 @@ XDG::
         '$HOME/.local/share/newsboat/queue'
 
 
+ENVIRONMENT
+-----------
+
+include::chapter-environment-variables.txt[]
+
+
 SEE ALSO
 --------
 newsboat(1)

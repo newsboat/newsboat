@@ -1283,6 +1283,11 @@ Passwords for external APIs
 
 include::chapter-password.txt[]
 
+Environment variables
+~~~~~~~~~~~~~~~~~~~~~
+
+include::chapter-environment-variables.txt[]
+
 Feedback
 --------
 

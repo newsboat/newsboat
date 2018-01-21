@@ -6,6 +6,8 @@
 
 - Podboat adds ".part" suffix to filenames for the duration of the download
     (José Manuel García-Patos)
+- Support for `CURL_CA_BUNDLE` environment variable (Marius Bakke, Alexander
+    Batischev)
 
 ### Changed
 

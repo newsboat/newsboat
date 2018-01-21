@@ -166,6 +166,12 @@ XDG::
         '$HOME/.config/newsboat/urls'
 
 
+ENVIRONMENT
+-----------
+
+include::chapter-environment-variables.txt[]
+
+
 SEE ALSO
 --------
 podboat(1)
