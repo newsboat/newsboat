@@ -4,6 +4,9 @@
 
 ### Added
 
+- Support for `CURL_CA_BUNDLE` environment variable (Marius Bakke, Alexander
+    Batischev)
+
 ### Changed
 
 ### Removed
