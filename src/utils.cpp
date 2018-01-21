@@ -947,6 +947,11 @@ void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
 		curl_easy_setopt(handle, CURLOPT_COOKIEFILE, cookie_cache.c_str());
 		curl_easy_setopt(handle, CURLOPT_COOKIEJAR, cookie_cache.c_str());
 	}
+
+	const char* curl_ca_bundle = ::getenv("CURL_CA_BUNDLE");
+	if (curl_ca_bundle != nullptr) {
+		curl_easy_setopt(handle, CURLOPT_CAINFO, curl_ca_bundle);
+	}
 }
 
 std::string utils::get_content(xmlNode * node) {
