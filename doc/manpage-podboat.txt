@@ -74,12 +74,12 @@ FILES
 dotfiles::
         '$HOME/.newsboat/config'
         +
-        '$HOME/.newsboat/urls'
+        '$HOME/.newsboat/queue'
 
 XDG::
         '$HOME/.config/newsboat/config'
         +
-        '$HOME/.config/newsboat/urls'
+        '$HOME/.local/share/newsboat/queue'
 
 
 SEE ALSO
