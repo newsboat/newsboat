@@ -740,15 +740,20 @@ int controller::run(int argc, char * argv[]) {
 
 	// if configured, we fill all query feeds with some data; no need to sort it, it will be refilled when actually opening it.
 	if (cfg.get_configvalue_as_bool("prepopulate-query-feeds")) {
-		std::cout << _("Prepopulating query feeds...");
-		std::cout.flush();
+		if (! do_export && ! silent) {
+			std::cout << _("Prepopulating query feeds...");
+			std::cout.flush();
+		}
 		std::lock_guard<std::mutex> feedslock(feeds_mutex);
 		for (auto feed : feeds) {
 			if (feed->rssurl().substr(0,6) == "query:") {
 				feed->update_items(get_all_feeds_unlocked());
 			}
 		}
-		std::cout << _("done.") << std::endl;
+
+		if (!do_export && ! silent) {
+			std::cout << _("done.") << std::endl;
+		}
 	}
 
 	sort_feeds();
