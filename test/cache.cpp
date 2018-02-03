@@ -1,6 +1,8 @@
 #include "catch.hpp"
 #include "test-helpers.h"
 
+#include <sstream>
+
 #include <cache.h>
 #include <configcontainer.h>
 #include <rss_parser.h>

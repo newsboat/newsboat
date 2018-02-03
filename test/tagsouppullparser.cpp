@@ -1,5 +1,7 @@
 #include "catch.hpp"
 
+#include <sstream>
+
 #include <tagsouppullparser.h>
 
 using namespace newsboat;
