@@ -48,6 +48,7 @@ master repository and shell access to newsboat.org.
             * Update current release version
             * Update current release date
             * Update current release links
+            * Update the year in the page copyright if necessary
             * Gzip the result: `gzip --best --keep --force newsboat/index.html`
         * Edit `news.atom`
             * Update `<updated>` field of the channel
