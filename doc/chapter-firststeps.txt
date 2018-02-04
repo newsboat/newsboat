@@ -55,14 +55,19 @@ list of the URLs that you configured previously. You can now start downloading
 the feeds, either by pressing "R" to download all feeds, or by pressing "r" to
 download the currently selected feed. You can then select a feed you want to
 read, and by pressing "Enter", you can go to the article list for this feed.
-This works even while the downloading is still in progress.  You can now see
-the list of available articles by their title. A "N" on the left indicates that
-an article wasn't read yet. Pressing "Enter" brings you to the content of the
-article. You can scroll through this text, and also run a browser (default:
-lynx) to view the complete article if the content is empty or just an abstract
-or a short description. Pressing "q" brings you back to the article list, and
-pressing "q" again brings you back to the feed list. Pressing "q" a third time
-then closes newsboat.
+This works even while the downloading is still in progress.
+
+You can now see the list of available articles by their title. A "N" on the
+left indicates that an article wasn't read yet. Pressing "Enter" brings you to
+the content of the article. You can scroll through this text, and also run
+a browser (default: lynx) to view the complete article if the content is empty
+or just an abstract or a short description. Each URL in the article has
+a number next to it; to open it, type `#` and then the number, then press
+"Enter". For single-digit links, like 3, you can just press that number on the
+keyboard.
+
+Pressing "q" brings you back to the article list, and pressing "q" again brings
+you back to the feed list. Pressing "q" a third time then closes newsboat.
 
 Newsboat caches the article that it downloads. This means that when you start
 newsboat again and reload a feed, the old articles can still be read even if
