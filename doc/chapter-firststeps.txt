@@ -36,11 +36,14 @@ provide the username/password in the following way:
 	http://username:password@hostname.domain.tld/feed.rss
 
 In order to protect username and password, make sure that
-'$HOME/.newsboat/urls' has the appropriate permissions. Newsboat also makes
-sure that usernames and passwords within URLs aren't displayed in its user
-interface. In case there is a '@' in the username, you need to write it as 
-'%40' instead so that it can be distinguished from the '@' that separates the 
-username/password part from the hostname part.
+'$HOME/.newsboat/urls' is only readable by you and, optionally, your group:
+
+    $ chmod u=rw,g=r,o= ~/.newsboat/urls
+
+Newsboat also makes sure that usernames and passwords within URLs aren't
+displayed in its user interface. In case there is a '@' in the username, you
+need to write it as '%40' instead so that it can be distinguished from the '@'
+that separates the username/password part from the hostname part.
 
 You can also configure local files as feeds, by prefixing the local path with
 `file://` and adding it to the '$HOME/.newsboat/urls' file:
