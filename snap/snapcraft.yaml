@@ -38,6 +38,7 @@ parts:
       - libjson-c-dev
       - libncursesw5-dev
       - asciidoc
+      - libxml2-utils
       - libssl-dev
       - gettext
     stage-packages:
