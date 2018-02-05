@@ -537,3 +537,18 @@ TEST_CASE("getcwd() returns current directory of the process", "[utils]") {
 		REQUIRE(datadir.substr(datadir.length() - subdir.length()) == subdir);
 	}
 }
+
+TEST_CASE("is_valid_podcast_type() returns true if supplied MIME type "
+		"is audio or a container", "[utils]")
+{
+	REQUIRE(utils::is_valid_podcast_type("audio/mpeg"));
+	REQUIRE(utils::is_valid_podcast_type("audio/mp3"));
+	REQUIRE(utils::is_valid_podcast_type("audio/x-mp3"));
+	REQUIRE(utils::is_valid_podcast_type("audio/ogg"));
+	REQUIRE(utils::is_valid_podcast_type("application/ogg"));
+
+	REQUIRE_FALSE(utils::is_valid_podcast_type("image/jpeg"));
+	REQUIRE_FALSE(utils::is_valid_podcast_type("image/png"));
+	REQUIRE_FALSE(utils::is_valid_podcast_type("text/plain"));
+	REQUIRE_FALSE(utils::is_valid_podcast_type("application/zip"));
+}

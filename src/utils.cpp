@@ -1154,14 +1154,18 @@ void utils::remove_soft_hyphens(std::string& text) {
 }
 
 bool utils::is_valid_podcast_type(const std::string& mimetype) {
+	const std::regex acceptable_rx {
+		"(audio|video)/.*",
+		std::regex_constants::ECMAScript | std::regex_constants::optimize };
+
 	const std::unordered_set<std::string> acceptable = {
-		"audio/mpeg",
-		"audio/mp3",
-		"audio/x-mp3",
-		"audio/ogg",
 		"application/ogg"
 	};
-	return acceptable.find(mimetype) != acceptable.end();
+
+	const bool found = acceptable.find(mimetype) != acceptable.end();
+	const bool matches = std::regex_match(mimetype, acceptable_rx);
+
+	return found || matches;
 }
 
 
