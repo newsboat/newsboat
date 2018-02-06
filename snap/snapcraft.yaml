@@ -39,6 +39,9 @@ parts:
       - libncursesw5-dev
       - asciidoc
       - libxml2-utils
+      - xsltproc
+      - docbook-xml
+      - docbook-xsl
       - libssl-dev
       - gettext
     stage-packages:
