@@ -427,11 +427,13 @@ void ttrss_api::fetch_feeds_per_category(
 	if (feed_list_obj.is_null())
 		return;
 
+	// Automatically provide the category as a tag
+	std::vector<std::string> tags;
+	if (!cat_name.is_null()) {
+		tags.push_back(cat_name.get<std::string>());
+	}
+
 	for (json& feed : feed_list_obj) {
-		std::vector<std::string> tags;
-		if (!cat_name.is_null()) {
-			tags.push_back(cat_name.get<std::string>());
-		}
 		feeds.push_back(feed_from_json(feed, tags));
 	}
 }
