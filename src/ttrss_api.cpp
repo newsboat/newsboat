@@ -15,7 +15,9 @@ namespace newsboat {
 ttrss_api::ttrss_api(configcontainer * c) : remote_api(c) {
 	single = (cfg->get_configvalue("ttrss-mode") == "single");
 	if (single) {
-		auth_info = strprintf::fmt("%s:%s", cfg->get_configvalue("ttrss-login"), cfg->get_configvalue("ttrss-password"));
+		auth_info = strprintf::fmt( "%s:%s"
+		                          , cfg->get_configvalue("ttrss-login")
+								  , cfg->get_configvalue("ttrss-password"));
 	} else {
 		auth_info = "";
 	}
@@ -161,7 +163,10 @@ json ttrss_api::run_op(const std::string& op,
 	return content;
 }
 
-tagged_feedurl ttrss_api::feed_from_json(const json& jfeed, std::function<std::vector<std::string>(const json&)> tagger) {
+tagged_feedurl ttrss_api::feed_from_json(
+		const json& jfeed,
+		std::function<std::vector<std::string>(const json&)> tagger)
+{
 	const int feed_id            = jfeed["id"];
 	const std::string feed_title = jfeed["title"];
 	const std::string feed_url   = jfeed["feed_url"];
@@ -271,23 +276,30 @@ bool ttrss_api::mark_article_read(const std::string& guid, bool read) {
 	return true;
 }
 
-bool ttrss_api::update_article_flags(const std::string& oldflags, const std::string& newflags, const std::string& guid) {
+bool ttrss_api::update_article_flags(
+		const std::string& oldflags, const std::string& newflags,
+		const std::string& guid)
+{
 	std::string star_flag = cfg->get_configvalue("ttrss-flag-star");
 	std::string publish_flag = cfg->get_configvalue("ttrss-flag-publish");
 	bool success = true;
 
 	if (star_flag.length() > 0) {
-		if (strchr(oldflags.c_str(), star_flag[0])==nullptr && strchr(newflags.c_str(), star_flag[0])!=nullptr) {
+		if (strchr(oldflags.c_str(), star_flag[0])==nullptr
+				&& strchr(newflags.c_str(), star_flag[0])!=nullptr) {
 			success = star_article(guid, true);
-		} else if (strchr(oldflags.c_str(), star_flag[0])!=nullptr && strchr(newflags.c_str(), star_flag[0])==nullptr) {
+		} else if (strchr(oldflags.c_str(), star_flag[0])!=nullptr
+				&& strchr(newflags.c_str(), star_flag[0])==nullptr) {
 			success = star_article(guid, false);
 		}
 	}
 
 	if (publish_flag.length() > 0) {
-		if (strchr(oldflags.c_str(), publish_flag[0])==nullptr && strchr(newflags.c_str(), publish_flag[0])!=nullptr) {
+		if (strchr(oldflags.c_str(), publish_flag[0])==nullptr
+				&& strchr(newflags.c_str(), publish_flag[0])!=nullptr) {
 			success = publish_article(guid, true);
-		} else if (strchr(oldflags.c_str(), publish_flag[0])!=nullptr && strchr(newflags.c_str(), publish_flag[0])==nullptr) {
+		} else if (strchr(oldflags.c_str(), publish_flag[0])!=nullptr
+				&& strchr(newflags.c_str(), publish_flag[0])==nullptr) {
 			success = publish_article(guid, false);
 		}
 	}
@@ -362,7 +374,8 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 			int updated_time = item_obj["updated"];
 			time_t updated = static_cast<time_t>(updated_time);
 			char rfc822_date[128];
-			strftime(rfc822_date, sizeof(rfc822_date), "%a, %d %b %Y %H:%M:%S %z", gmtime(&updated));
+			strftime(rfc822_date, sizeof(rfc822_date),
+					"%a, %d %b %Y %H:%M:%S %z", gmtime(&updated));
 			item.pubDate = rfc822_date;
 			item.pubDate_ts = updated;
 
