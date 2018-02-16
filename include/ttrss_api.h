@@ -32,8 +32,7 @@ class ttrss_api : public remote_api {
 		bool star_article(const std::string& guid, bool star);
 		bool publish_article(const std::string& guid, bool publish);
 		tagged_feedurl feed_from_json(
-				const nlohmann::json& jfeed,
-				std::function<std::vector<std::string>(const nlohmann::json&)> tagger);
+				const nlohmann::json& jfeed, const std::vector<std::string>& tags);
 		int parse_category_id(const nlohmann::json& jcatid);
 		unsigned int query_api_level();
 		std::string url_to_id(const std::string& url);
