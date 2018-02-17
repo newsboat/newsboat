@@ -155,7 +155,9 @@ feed parser::parse_url(const std::string& url, time_t lastmodified, const std::s
 		curl_slist_free_all(custom_headers);
 	}
 
-	LOG(level::DEBUG, "rsspp::parser::parse_url: ret = %d", ret);
+	LOG(level::DEBUG,
+			"rsspp::parser::parse_url: ret = %d (%s)",
+			ret, curl_easy_strerror(ret));
 
 	long status;
 	CURLcode infoOk = curl_easy_getinfo(easyhandle, CURLINFO_RESPONSE_CODE, &status);

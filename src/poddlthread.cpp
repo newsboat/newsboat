@@ -87,7 +87,9 @@ void poddlthread::run() {
 
 		f->close();
 
-		LOG(level::INFO,"poddlthread::run: curl_easy_perform rc = %u (%s)", success, curl_easy_strerror(success));
+		LOG(level::INFO,
+				"poddlthread::run: curl_easy_perform rc = %u (%s)",
+				success, curl_easy_strerror(success));
 
 		if (0 == success) {
 			LOG(level::DEBUG, "poddlthread::run: download complete, deleting temporary suffix");

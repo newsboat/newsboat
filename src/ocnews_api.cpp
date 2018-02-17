@@ -270,9 +270,9 @@ bool ocnews_api::query(const std::string& query, json_object** result, const std
 	CURLcode res = curl_easy_perform(handle);
 
 	if (res != CURLE_OK && res != CURLE_HTTP_RETURNED_ERROR) {
-		std::string msg = "ocnews_api::query: connection error code ";
-		msg += std::to_string(res);
-		LOG(level::CRITICAL, msg);
+		LOG(level::CRITICAL,
+				"ocnews_api::query: connection error code %i (%s)",
+				res, curl_easy_strerror(res));
 		return false;
 	}
 
