@@ -6,11 +6,13 @@
 #include <utils.h>
 #include <strprintf.h>
 
+#include <algorithm>
 #include <iostream>
 #include <iomanip>
 #include <sstream>
 #include <cstring>
 
+#include <curses.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -104,14 +106,17 @@ void filebrowser_formaction::process_operation(operation op, bool /* automatic *
 					}
 					f->set_focus("filenametext");
 				}
-				if (do_pop)
+				if (do_pop) {
+					curs_set(0);
 					v->pop_current_formaction();
+				}
 			}
 		}
 	}
 	break;
 	case OP_QUIT:
 		LOG(level::DEBUG,"view::filebrowser: quitting");
+		curs_set(0);
 		v->pop_current_formaction();
 		f->set("filenametext", "");
 		break;
@@ -127,6 +132,31 @@ void filebrowser_formaction::process_operation(operation op, bool /* automatic *
 	}
 }
 
+std::vector<std::string> get_sorted_filelist() {
+
+	std::vector<std::string> ret;
+
+	auto cwdtmp = utils::getcwd();
+
+	DIR * dirp = ::opendir(cwdtmp.c_str());
+	if (dirp) {
+		struct dirent * de = ::readdir(dirp);
+		while (de) {
+			if (strcmp(de->d_name,".") != 0 && strcmp(de->d_name,"..") != 0)
+				ret.push_back(de->d_name);
+			de = ::readdir(dirp);
+		}
+		::closedir(dirp);
+	}
+
+	std::sort(ret.begin(), ret.end());
+
+	if (cwdtmp != "/")
+		ret.insert(ret.begin(), "..");
+
+	return ret;
+}
+
 void filebrowser_formaction::prepare() {
 	/*
 	 * prepare is always called before an operation is processed,
@@ -134,24 +164,26 @@ void filebrowser_formaction::prepare() {
 	 * in the current directory.
 	 */
 	if (do_redraw) {
-		auto cwdtmp = utils::getcwd();
+		std::vector<std::string> files = get_sorted_filelist();
+
 		std::string code = "{list";
 
-		DIR * dirp = ::opendir(cwdtmp.c_str());
-		if (dirp) {
-			struct dirent * de = ::readdir(dirp);
-			while (de) {
-				if (strcmp(de->d_name,".")!=0)
-					code.append(add_file(de->d_name));
-				de = ::readdir(dirp);
-			}
-			::closedir(dirp);
+		for (std::string filename : files) {
+			code.append(add_file(filename));
 		}
 
 		code.append("}");
 
 		f->modify("files", "replace_inner", code);
 		do_redraw = false;
+	}
+
+
+	std::string focus = f->get_focus();
+	if (focus == "files") {
+		curs_set(0);
+	} else {
+		curs_set(1);
 	}
 
 }
@@ -175,6 +207,10 @@ void filebrowser_formaction::init() {
 	auto cwdtmp = utils::getcwd();
 
 	f->set("filenametext", default_filename);
+
+	// Set position to 0 and back to ensure that the text is visible
+	f->run(-1);
+	f->set("filenametext_pos", std::to_string(default_filename.length()));
 
 	f->set("head", strprintf::fmt(_("%s %s - Save File - %s"), PROGRAM_NAME, PROGRAM_VERSION, cwdtmp));
 }
