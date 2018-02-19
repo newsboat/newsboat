@@ -11,6 +11,7 @@
 #include <sstream>
 #include <cstring>
 
+#include <curses.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -104,14 +105,17 @@ void filebrowser_formaction::process_operation(operation op, bool /* automatic *
 					}
 					f->set_focus("filenametext");
 				}
-				if (do_pop)
+				if (do_pop) {
+					curs_set(0);
 					v->pop_current_formaction();
+				}
 			}
 		}
 	}
 	break;
 	case OP_QUIT:
 		LOG(level::DEBUG,"view::filebrowser: quitting");
+		curs_set(0);
 		v->pop_current_formaction();
 		f->set("filenametext", "");
 		break;
@@ -152,6 +156,13 @@ void filebrowser_formaction::prepare() {
 
 		f->modify("files", "replace_inner", code);
 		do_redraw = false;
+	}
+
+	std::string focus = f->get_focus();
+	if (focus == "files") {
+		curs_set(0);
+	} else {
+		curs_set(1);
 	}
 
 }
