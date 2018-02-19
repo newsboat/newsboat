@@ -69,9 +69,9 @@ std::string formaction::get_value(const std::string& value) {
 }
 
 
-void formaction::start_cmdline() {
+void formaction::start_cmdline(std::string default_value) {
 	std::vector<qna_pair> qna;
-	qna.push_back(qna_pair(":", ""));
+	qna.push_back(qna_pair(":", default_value));
 	v->inside_cmdline(true);
 	this->start_qna(qna, OP_INT_END_CMDLINE, &formaction::cmdlinehistory);
 }

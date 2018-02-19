@@ -43,7 +43,7 @@ class formaction {
 
 		virtual void finished_qna(operation op);
 
-		void start_cmdline();
+		void start_cmdline(std::string default_value = "");
 
 		virtual void recalculate_form();
 
