@@ -6,6 +6,7 @@
 #include <utils.h>
 #include <strprintf.h>
 
+#include <algorithm>
 #include <iostream>
 #include <iomanip>
 #include <sstream>
@@ -131,6 +132,31 @@ void filebrowser_formaction::process_operation(operation op, bool /* automatic *
 	}
 }
 
+std::vector<std::string> get_sorted_filelist() {
+
+	std::vector<std::string> ret;
+
+	auto cwdtmp = utils::getcwd();
+
+	DIR * dirp = ::opendir(cwdtmp.c_str());
+	if (dirp) {
+		struct dirent * de = ::readdir(dirp);
+		while (de) {
+			if (strcmp(de->d_name,".") != 0 && strcmp(de->d_name,"..") != 0)
+				ret.push_back(de->d_name);
+			de = ::readdir(dirp);
+		}
+		::closedir(dirp);
+	}
+
+	std::sort(ret.begin(), ret.end());
+
+	if (cwdtmp != "/")
+		ret.insert(ret.begin(), "..");
+
+	return ret;
+}
+
 void filebrowser_formaction::prepare() {
 	/*
 	 * prepare is always called before an operation is processed,
@@ -138,18 +164,12 @@ void filebrowser_formaction::prepare() {
 	 * in the current directory.
 	 */
 	if (do_redraw) {
-		auto cwdtmp = utils::getcwd();
+		std::vector<std::string> files = get_sorted_filelist();
+
 		std::string code = "{list";
 
-		DIR * dirp = ::opendir(cwdtmp.c_str());
-		if (dirp) {
-			struct dirent * de = ::readdir(dirp);
-			while (de) {
-				if (strcmp(de->d_name,".")!=0)
-					code.append(add_file(de->d_name));
-				de = ::readdir(dirp);
-			}
-			::closedir(dirp);
+		for (std::string filename : files) {
+			code.append(add_file(filename));
 		}
 
 		code.append("}");
