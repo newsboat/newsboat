@@ -369,9 +369,14 @@ void formaction::start_next_question() {
 		replacestr.append(stfl::quote(qna_prompts[0].second));
 		replacestr.append(" pos[qna_value_pos]:0");
 		replacestr.append("}}");
-		qna_prompts.erase(qna_prompts.begin());
 		f->modify("lastline", "replace", replacestr);
 		f->set_focus("qnainput");
+
+		// Set position to 0 and back to ensure that the text is visible
+		f->run(-1);
+		f->set("qna_value_pos", std::to_string(qna_prompts[0].second.length()));
+
+		qna_prompts.erase(qna_prompts.begin());
 	} else {
 		/*
 		 * If there are no more prompts, restore the last line with the usual label, and signal the end of the "Q&A" to the finished_qna() method.

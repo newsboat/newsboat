@@ -158,6 +158,7 @@ void filebrowser_formaction::prepare() {
 		do_redraw = false;
 	}
 
+
 	std::string focus = f->get_focus();
 	if (focus == "files") {
 		curs_set(0);
@@ -186,6 +187,10 @@ void filebrowser_formaction::init() {
 	auto cwdtmp = utils::getcwd();
 
 	f->set("filenametext", default_filename);
+
+	// Set position to 0 and back to ensure that the text is visible
+	f->run(-1);
+	f->set("filenametext_pos", std::to_string(default_filename.length()));
 
 	f->set("head", strprintf::fmt(_("%s %s - Save File - %s"), PROGRAM_NAME, PROGRAM_VERSION, cwdtmp));
 }

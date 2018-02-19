@@ -25,6 +25,7 @@ vbox
     !input[filename]
       .expand:h
       text[filenametext]:""
+      pos[filenametext_pos]:0
   vbox
     .expand:0
     .display[showhint]:1
