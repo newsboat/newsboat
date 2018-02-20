@@ -55,7 +55,8 @@ class utils {
 				const std::string& url,
 				configcontainer * cfgcont = nullptr,
 				const std::string& authinfo = "",
-				const std::string* postdata = nullptr);
+				const std::string* postdata = nullptr,
+				CURL* easyhandle = nullptr);
 		static void run_command(const std::string& cmd, const std::string& param); // used for notifications only
 		static std::string run_program(char * argv[], const std::string& input);
 
