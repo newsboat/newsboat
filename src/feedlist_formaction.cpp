@@ -387,6 +387,7 @@ REDO:
 		v->push_help();
 		break;
 	default:
+		list_formaction::process_operation(op, automatic, args);
 		break;
 	}
 	if (quit) {

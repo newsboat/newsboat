@@ -502,6 +502,7 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 		invalidate(InvalidationMode::COMPLETE);
 		break;
 	default:
+		list_formaction::process_operation(op, automatic, args);
 		break;
 	}
 	if (hardquit) {
