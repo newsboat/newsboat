@@ -16,7 +16,7 @@ class ttrss_api : public remote_api {
 		bool authenticate() override;
 		virtual nlohmann::json run_op(
 				const std::string& op, const std::map<std::string,
-				std::string>& args, bool try_login = true);
+				std::string>& args, bool try_login = true, CURL *cached_handle = nullptr);
 		std::vector<tagged_feedurl> get_subscribed_urls() override;
 		void add_custom_headers(curl_slist** custom_headers) override;
 		bool mark_all_read(const std::string& feedurl) override;
@@ -24,7 +24,7 @@ class ttrss_api : public remote_api {
 		bool update_article_flags(
 				const std::string& oldflags, const std::string& newflags,
 				const std::string& guid) override;
-		rsspp::feed fetch_feed(const std::string& id);
+		rsspp::feed fetch_feed(const std::string& id, CURL* cached_handle);
 		bool update_article(const std::string& guid, int mode, int field);
 	private:
 		void fetch_feeds_per_category(

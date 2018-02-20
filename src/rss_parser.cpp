@@ -471,7 +471,7 @@ bool rss_parser::is_html_type(const std::string& type) {
 void rss_parser::fetch_ttrss(const std::string& feed_id) {
 	ttrss_api * tapi = dynamic_cast<ttrss_api *>(api);
 	if (tapi) {
-		f = tapi->fetch_feed(feed_id);
+		f = tapi->fetch_feed(feed_id, easyhandle ? easyhandle->ptr() : nullptr);
 		is_valid = true;
 	}
 	LOG(level::DEBUG, "rss_parser::fetch_ttrss: f.items.size = %u", f.items.size());

@@ -97,7 +97,8 @@ unsigned int ttrss_api::query_api_level()
 
 json ttrss_api::run_op(const std::string& op,
                        const std::map<std::string, std::string >& args,
-                       bool try_login)
+                       bool try_login,     /* = true */
+                       CURL *cached_handle /* = nullptr */)
 {
 	std::string url = strprintf::fmt("%s/api/", cfg->get_configvalue("ttrss-url"));
 
@@ -120,7 +121,7 @@ json ttrss_api::run_op(const std::string& op,
 		req_data = requestparam.dump();
 	}
 
-	std::string result = utils::retrieve_url(url, cfg, auth_info, &req_data);
+	std::string result = utils::retrieve_url(url, cfg, auth_info, &req_data, cached_handle);
 
 	LOG(level::DEBUG, "ttrss_api::run_op(%s,...): post=%s reply = %s", op, req_data, result);
 
@@ -143,7 +144,7 @@ json ttrss_api::run_op(const std::string& op,
 	if (status != 0) {
 		if (reply["error"] == "NOT_LOGGED_IN" && try_login) {
 			if (authenticate())
-				return run_op(op, args, false);
+				return run_op(op, args, false, cached_handle);
 			else
 				return json(nullptr);
 		} else {
@@ -305,7 +306,7 @@ bool ttrss_api::update_article_flags(
 	return success;
 }
 
-rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
+rsspp::feed ttrss_api::fetch_feed(const std::string& id, CURL* cached_handle) {
 	rsspp::feed f;
 
 	f.rss_version = rsspp::TTRSS_JSON;
@@ -314,7 +315,7 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id) {
 	args["feed_id"] = id;
 	args["show_content"] = "1";
 	args["include_attachments"] = "1";
-	json content = run_op("getHeadlines", args);
+	json content = run_op("getHeadlines", args, true, cached_handle);
 
 	if (content.is_null())
 		return f;
