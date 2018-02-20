@@ -379,11 +379,17 @@ std::string utils::retrieve_url(
 		const std::string& url,
 		configcontainer * cfgcont,
 		const std::string& authinfo,
-		const std::string* postdata)
+		const std::string* postdata,
+		CURL* cached_handle)
 {
 	std::string buf;
 
-	CURL * easyhandle = curl_easy_init();
+	CURL* easyhandle;
+	if (cached_handle) {
+		easyhandle = cached_handle;
+	} else {
+		easyhandle = curl_easy_init();
+	}
 	set_common_curl_options(easyhandle, cfgcont);
 	curl_easy_setopt(easyhandle, CURLOPT_URL, url.c_str());
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
@@ -401,7 +407,9 @@ std::string utils::retrieve_url(
 	}
 
 	curl_easy_perform(easyhandle);
-	curl_easy_cleanup(easyhandle);
+	if (!cached_handle) {
+		curl_easy_cleanup(easyhandle);
+	}
 
 	if (postdata != nullptr) {
 		LOG(level::DEBUG, "utils::retrieve_url(%s)[%s]: %s", url, postdata, buf);
