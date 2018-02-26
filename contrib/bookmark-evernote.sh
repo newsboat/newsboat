@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #basic newsboat bookmark plugin for evernote using geeknote: https://github.com/pipakin/geeknote
 
 url="$1"
