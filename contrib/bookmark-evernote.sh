@@ -6,6 +6,6 @@ title="$2"
 description="$3"
 feed_title="$4"
 
-content="${url}"$'\n'"${description}"$'\n'${feed_title}
+content="${url}"$'\n'"${description}"$'\n'$"{feed_title}"
 
 geeknote create --title "${title}" --content "${content}"
