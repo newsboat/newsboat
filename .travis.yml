@@ -36,7 +36,7 @@ newsboat_brew_commands: &osx_deps
   - brew outdated "python" || brew upgrade "python"
   - brew install "pyenv" || brew upgrade "pyenv"
   - eval "$(pyenv init -)"
-  - pip2 install cpp-coveralls
+  - pip3 install cpp-coveralls
   - pyenv rehash
 
 matrix:
