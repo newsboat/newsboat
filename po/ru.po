@@ -278,18 +278,20 @@ msgid "invalid feed index (bug)"
 msgstr "неверный индекс ленты (сбой)"
 
 #: src/controller.cpp:1164
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Newsboat is free software licensed under the MIT License. (Type `%s -vv' to "
 "see the full text.)"
 msgstr ""
-"Newsboat является свободным программным обеспечением под лицензией MIT."
+"Newsboat является свободным программным обеспечением под лицензией MIT. "
+"(Для просмотра полного текста наберите `%s -vv')."
 
 #: src/controller.cpp:1166
 msgid ""
 "It bundles JSON for Modern C++ library, licensed under the MIT License: "
 "https://github.com/nlohmann/json"
-msgstr ""
+msgstr "Программа включает в себя библиотеку «JSON for Modern C++» под лицензией MIT: "
+"https://github.com/nlohmann/json"
 
 #: src/controller.cpp:1187
 #, c-format
