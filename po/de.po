@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2018-03-03 19:02+0300\n"
-"PO-Revision-Date: 2017-11-03 14:49+0100\n"
+"PO-Revision-Date: 2018-03-03 21:09+0100\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -275,17 +275,21 @@ msgid "invalid feed index (bug)"
 msgstr "ungültiger Feed-Index (Bug)"
 
 #: src/controller.cpp:1164
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Newsboat is free software licensed under the MIT License. (Type `%s -vv' to "
 "see the full text.)"
-msgstr "newsboat ist Freie Software und steht unter der MIT-Lizenz."
+msgstr ""
+"newsboat ist Freie Software und steht unter der MIT-Lizenz. („%s -vv“ zeigt "
+"den vollständigen Lizenztext an.) "
 
 #: src/controller.cpp:1166
 msgid ""
 "It bundles JSON for Modern C++ library, licensed under the MIT License: "
 "https://github.com/nlohmann/json"
 msgstr ""
+"Es wird die unter der MIT-Lizenz stehende Bibliothek JSON für Modernes C++ "
+"verwendet: https://github.com/nlohmann/json"
 
 #: src/controller.cpp:1187
 #, c-format
