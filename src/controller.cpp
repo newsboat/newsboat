@@ -1160,8 +1160,11 @@ void controller::print_version_information(const char * argv0, unsigned int leve
 		std::cout << "Copyright (C) 2017-2018 Newsboat contributors" << std::endl;
 		std::cout << std::endl;
 
-		std::cout << _("newsboat is free software and licensed under the MIT License.") << std::endl;
-		std::cout << strprintf::fmt(_("Type `%s -vv' for more information."), argv0) << std::endl << std::endl;
+		std::cout << strprintf::fmt(
+				_("Newsboat is free software licensed under the MIT License. (Type `%s -vv' to see the full text.)"),
+				argv0) << std::endl;
+		std::cout << _("It bundles JSON for Modern C++ library, licensed under the MIT License: https://github.com/nlohmann/json") << std::endl;
+		std::cout << std::endl;
 
 		struct utsname xuts;
 		uname(&xuts);
