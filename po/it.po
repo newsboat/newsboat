@@ -280,7 +280,7 @@ msgid ""
 "see the full text.)"
 msgstr ""
 "Newsboat è software libero sotto Licenza MIT. (Premi `%s -vv' per "
-"leggere il testo integrale.)
+"leggere il testo integrale.)"
 
 #: src/controller.cpp:1166
 msgid ""
