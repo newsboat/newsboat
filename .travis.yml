@@ -174,11 +174,10 @@ install:
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
-  # Compiling with optimizations enabled to get as accurate warnings as
-  # possible. --keep-going is used to process the maximum number of the files
+  # --keep-going is used to process the maximum number of the files
   # before failing; this will help with debugging build fails that happen on
   # platforms that the developer doesn't have access to.
-  - if [ -z "$CHECKS" ]; then   CXXFLAGS="-O3" make --keep-going all test   ; fi
+  - if [ -z "$CHECKS" ]; then   make --keep-going all test   ; fi
   - if [ -z "$CHECKS" ]; then   make distclean   ; fi
   - if [ -z "$CHECKS" ]; then   make PROFILE=1 all test   ; fi
   - if [ -z "$CHECKS" ]; then   ( cd test && ./test --order rand )   ; fi

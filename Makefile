@@ -20,8 +20,7 @@ endif
 
 WARNFLAGS=-Werror -Wall -Wextra -Wunreachable-code
 INCLUDES=-Iinclude -Istfl -Ifilter -I. -Irss
-BARE_CXXFLAGS=-std=c++11 -ggdb $(INCLUDES)
-CXXFLAGS+=$(BARE_CXXFLAGS) $(WARNFLAGS) $(DEFINES)
+BARE_CXXFLAGS=-std=c++11 -O2 -ggdb $(INCLUDES)
 LDFLAGS+=-L.
 
 PACKAGE=newsboat
@@ -31,9 +30,11 @@ include config.mk
 endif
 
 ifeq ($(PROFILE),1)
-CXXFLAGS+=-fprofile-arcs -ftest-coverage
+BARE_CXXFLAGS+=-O0 -fprofile-arcs -ftest-coverage
 LDFLAGS+=-fprofile-arcs -ftest-coverage
 endif
+
+CXXFLAGS:=$(BARE_CXXFLAGS) $(WARNFLAGS) $(DEFINES) $(CXXFLAGS)
 
 LIB_SOURCES:=$(shell cat mk/libboat.deps)
 LIB_OBJS:=$(patsubst %.cpp,%.o,$(LIB_SOURCES))
