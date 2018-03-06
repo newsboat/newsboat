@@ -288,7 +288,7 @@ msgstr ""
 msgid ""
 "It bundles JSON for Modern C++ library, licensed under the MIT License: "
 "https://github.com/nlohmann/json"
-msgstr "Il contient la librairie JSON for Modern C++, publiée sous la licence MIT/X Consortium"
+msgstr "Il contient la bibliothèque JSON for Modern C++, publiée sous la licence MIT/X Consortium"
 "https://github.com/nlohmann/json"
 
 #: src/controller.cpp:1187
