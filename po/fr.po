@@ -159,7 +159,7 @@ msgstr "Erreur : l'ouverture du fichier de cache `%s' a échoué : %s"
 #: src/controller.cpp:644
 #, c-format
 msgid "%s is inaccessible and can't be created\n"
-msgstr ""
+msgstr "%s est inaccessible et ne peut être créé\n"
 
 #: src/controller.cpp:664
 #, c-format
@@ -208,12 +208,11 @@ msgstr ""
 "en puis réessayez."
 
 #: src/controller.cpp:692
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Inoreader account. "
 "Please do so, and try again."
 msgstr ""
-"Il semble qu'aucun fil ne soit configuré dans votre compte The Old Reader. "
+"Il semble qu'aucun fil ne soit configuré dans votre compte Inoreader. "
 "Ajoutez-en puis réessayez."
 
 #: src/controller.cpp:702
@@ -277,18 +276,20 @@ msgid "invalid feed index (bug)"
 msgstr "Index de fil invalide (bug)"
 
 #: src/controller.cpp:1164
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Newsboat is free software licensed under the MIT License. (Type `%s -vv' to "
 "see the full text.)"
 msgstr ""
-"newsboat est un logiciel libre, publié sous la licence MIT/X Consortium."
+"newsboat est un logiciel libre, publié sous la licence MIT/X Consortium. (Tapez `%s -vv'"
+" pour voir le reste du texte.)"
 
 #: src/controller.cpp:1166
 msgid ""
 "It bundles JSON for Modern C++ library, licensed under the MIT License: "
 "https://github.com/nlohmann/json"
-msgstr ""
+msgstr "Il contient la bibliothèque JSON for Modern C++, publiée sous la licence MIT/X Consortium"
+"https://github.com/nlohmann/json"
 
 #: src/controller.cpp:1187
 #, c-format
@@ -343,7 +344,7 @@ msgstr "lire la configuration depuis <fichier_configuration>"
 
 #: src/controller.cpp:1208
 msgid "compact the cache"
-msgstr ""
+msgstr "compresse le cache"
 
 #: src/controller.cpp:1209
 msgid "<command>..."
@@ -839,18 +840,16 @@ msgid "unknown (bug)"
 msgstr "inconnu (bug)"
 
 #: src/inoreader_urlreader.cpp:34
-#, fuzzy
 msgid "Broadcast items"
-msgstr "Déjà au dernier élément."
+msgstr "Éléments partagés"
 
 #: src/inoreader_urlreader.cpp:35
-#, fuzzy
 msgid "Liked items"
-msgstr "Éléments partagés"
+msgstr "Éléments favoris"
 
 #: src/inoreader_urlreader.cpp:36
 msgid "Saved web pages"
-msgstr ""
+msgstr "Pages web sauvegardées"
 
 #: src/itemlist_formaction.cpp:136 src/itemview_formaction.cpp:338
 msgid "Toggling read flag for article..."
