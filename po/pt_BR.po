@@ -6,16 +6,14 @@ msgstr ""
 "Project-Id-Version: newsboat 2.8\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2018-03-03 19:02+0300\n"
-"PO-Revision-Date: 2014-04-13 16:40-0300\n"
+"PO-Revision-Date: 2018-03-06 20:35-0300\n"
 "Last-Translator: Alexandre Erwin Ittner <alexandre@ittner.com.br>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Portuguese\n"
-"X-Poedit-Country: BRAZIL\n"
-"X-Generator: Lokalize 0.3\n"
+"X-Generator: Poedit 2.0.6\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 
 #: src/colormanager.cpp:45 src/colormanager.cpp:47 src/regexmanager.cpp:55
@@ -161,7 +159,7 @@ msgstr "Erro: falha ao abrir o arquivo de cache '%s': %s"
 #: src/controller.cpp:644
 #, c-format
 msgid "%s is inaccessible and can't be created\n"
-msgstr ""
+msgstr "%s não está acessível e não pode ser criado\n"
 
 #: src/controller.cpp:664
 #, c-format
@@ -190,15 +188,15 @@ msgid ""
 "It looks like you haven't configured any feeds in your The Old Reader "
 "account. Please do so, and try again."
 msgstr ""
-"Parece que você não configurou nenhuma fonte não sua conta em The Old "
-"Reader. Faça isso, e tente novamente."
+"Parece que você não configurou nenhuma fonte na sua conta em The Old Reader. "
+"Faça isso, e tente novamente."
 
 #: src/controller.cpp:688
 msgid ""
 "It looks like you haven't configured any feeds in your Tiny Tiny RSS "
 "account. Please do so, and try again."
 msgstr ""
-"Parece que você não configurou nenhuma fonte não sua conta do Tiny Tiny RSS."
+"Parece que você não configurou nenhuma fonte na sua conta do Tiny Tiny RSS."
 "Faça isso, e tente novamente."
 
 #: src/controller.cpp:690
@@ -206,17 +204,16 @@ msgid ""
 "It looks like you haven't configured any feeds in your NewsBlur account. "
 "Please do so, and try again."
 msgstr ""
-"Parece que você não configurou nenhuma fonte não sua conta do NewsBlur. Faça "
+"Parece que você não configurou nenhuma fonte na sua conta do NewsBlur. Faça "
 "isso, e tente novamente."
 
 #: src/controller.cpp:692
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Inoreader account. "
 "Please do so, and try again."
 msgstr ""
-"Parece que você não configurou nenhuma fonte não sua conta em The Old "
-"Reader. Faça isso, e tente novamente."
+"Parece que você não configurou nenhuma fonte na sua conta em Inoreader. Faça "
+"isso, e tente novamente."
 
 #: src/controller.cpp:702
 msgid "Loading articles from cache..."
@@ -279,19 +276,21 @@ msgid "invalid feed index (bug)"
 msgstr "índice de fonte inválido (erro de software)"
 
 #: src/controller.cpp:1164
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Newsboat is free software licensed under the MIT License. (Type `%s -vv' to "
 "see the full text.)"
 msgstr ""
-"O newsboat é um software livre e está licenciado sob a MIT/X Consortium "
-"License."
+"O Newsboat é um software livre e está licenciado sob a MIT/X Consortium "
+"License. (Digite `%s -vv' para ver o texto completo.)"
 
 #: src/controller.cpp:1166
 msgid ""
 "It bundles JSON for Modern C++ library, licensed under the MIT License: "
 "https://github.com/nlohmann/json"
 msgstr ""
+"Ele inclui a biblioteca JSON for Modern C++, licenciada sob a MIT License: "
+"https://github.com/nlohmann/json"
 
 #: src/controller.cpp:1187
 #, c-format
@@ -346,7 +345,7 @@ msgstr "ler configurações de <arquivoconfig>"
 
 #: src/controller.cpp:1208
 msgid "compact the cache"
-msgstr ""
+msgstr "compactar o cache"
 
 #: src/controller.cpp:1209
 msgid "<command>..."
@@ -589,7 +588,7 @@ msgstr ""
 
 #: src/feedlist_formaction.cpp:167
 msgid "Cannot open query feeds in the browser!"
-msgstr ""
+msgstr "Não é possível abrir fontes de consulta no navegador!"
 
 #: src/feedlist_formaction.cpp:209 src/itemlist_formaction.cpp:342
 msgid "Marking feed read..."
@@ -797,9 +796,8 @@ msgid "Description: "
 msgstr "Descrição: "
 
 #: src/formaction.cpp:334
-#, fuzzy
 msgid "Feed title: "
-msgstr "Arquivo: "
+msgstr "Título da fonte: "
 
 #: src/formaction.cpp:347
 msgid "Saving bookmark on autopilot..."
@@ -842,18 +840,16 @@ msgid "unknown (bug)"
 msgstr "desconhecido (erro de software)"
 
 #: src/inoreader_urlreader.cpp:34
-#, fuzzy
 msgid "Broadcast items"
-msgstr "Já no último item"
+msgstr "Itens divulgados"
 
 #: src/inoreader_urlreader.cpp:35
-#, fuzzy
 msgid "Liked items"
-msgstr "Itens compartilhados"
+msgstr "Itens gostados"
 
 #: src/inoreader_urlreader.cpp:36
 msgid "Saved web pages"
-msgstr ""
+msgstr "Páginas web salvas"
 
 #: src/itemlist_formaction.cpp:136 src/itemview_formaction.cpp:338
 msgid "Toggling read flag for article..."
@@ -1092,12 +1088,13 @@ msgstr "Abrir artigo no navegador e marca-o como lido"
 
 #: src/keymap.cpp:97
 msgid "Open all unread items of selected feed in browser"
-msgstr ""
+msgstr "Abrir todos os itens não lidos da fonte selecionada no navegador"
 
 #: src/keymap.cpp:102
-#, fuzzy
 msgid "Open all unread items of selected feed in browser and mark read"
-msgstr "Abrir artigo no navegador e marca-o como lido"
+msgstr ""
+"Abrir todos os itens não lidos da fonte selecionada no navegador e marcar "
+"como lidos"
 
 #: src/keymap.cpp:107
 msgid "Open article in browser"
@@ -1351,28 +1348,25 @@ msgid "Cleaning up queue..."
 msgstr "Limpando fila..."
 
 #: src/pb_controller.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s\n"
 "usage %s [-C <file>] [-q <file>] [-h]\n"
 msgstr ""
 "%s %s\n"
-"uso: %s [-i <arquivo>|-e] [-u <arquivourl>] [-c <arquivocache>] [-x "
-"<comando> ...] [-h]\n"
+"uso: %s [-C <arquivo>] [-q <arquivo>] [-h]\n"
 
 #: src/pb_controller.cpp:294
-#, fuzzy
 msgid "<queuefile>"
-msgstr "<arquivo>"
+msgstr "<arquivofila>"
 
 #: src/pb_controller.cpp:294
-#, fuzzy
 msgid "use <queuefile> as queue file"
-msgstr "usar <arquivocache> como arquivo de cache"
+msgstr "usar <arquivofila> como arquivo de fila"
 
 #: src/pb_controller.cpp:295
 msgid "start download on startup"
-msgstr ""
+msgstr "iniciar download ao abrir"
 
 #: src/pb_view.cpp:47
 #, c-format
@@ -1441,9 +1435,9 @@ msgid "too few arguments"
 msgstr "poucos parâmetros"
 
 #: src/rss.cpp:504
-#, fuzzy, c-format
+#, c-format
 msgid "`%s' is not a valid filter expression"
-msgstr "'%s' não é uma expressão regular válida: %s"
+msgstr "`%s' não é uma expressão de filtro válida"
 
 #: src/rss_parser.cpp:151
 #, c-format
