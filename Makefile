@@ -34,6 +34,10 @@ BARE_CXXFLAGS+=-O0 -fprofile-arcs -ftest-coverage
 LDFLAGS+=-fprofile-arcs -ftest-coverage
 endif
 
+ifeq ($(DEBUG),1)
+BARE_CXXFLAGS+=-O0 -ggdb
+endif
+
 CXXFLAGS:=$(BARE_CXXFLAGS) $(WARNFLAGS) $(DEFINES) $(CXXFLAGS)
 
 LIB_SOURCES:=$(shell cat mk/libboat.deps)
@@ -140,6 +144,9 @@ clean-doc:
 
 clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clean-librsspp
 	$(RM) $(STFLHDRS) xlicense.h
+
+debug:
+	$(MAKE) DEBUG=1
 
 distclean: clean clean-mo test-clean profclean
 	$(RM) core *.core core.* config.mk
