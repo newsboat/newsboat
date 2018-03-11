@@ -3,7 +3,9 @@ config.mk
 po/*.mo
 stfl/*.h
 newsboat
+newsboat-dbg
 podboat
+podboat-dbg
 test/test
 test/test-rss
 test/testlog.txt
@@ -27,3 +29,5 @@ doc/keycmds-linked.dsv
 *.gcno
 *.gcda
 *.sw?
+build
+build-dbg
