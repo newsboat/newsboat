@@ -58,6 +58,11 @@ static op_desc opdescs[] = {
 		KM_FEEDLIST
 	},
 	{
+		OP_MARKFEEDREAD_UNTIL_ARTICLE, "mark-feed-read-until-article", "a",
+		_("Mark feed read until current article"),
+		KM_ARTICLELIST
+	},
+	{
 		OP_SAVE, "save", "s",
 		_("Save article"),
 		KM_ARTICLELIST | KM_ARTICLE
