@@ -307,6 +307,341 @@ before. This means that you will lose virtually nothing of your previously
 configured structure.
 
 
+Newsboat as a Client for Newsreading Services
+---------------------------------------------
+
+Newsboat is a perfectly capable feedreader in its own right, but it can’t cover
+_all_ the use-cases. For example, you might want to synchronize your news
+between devices, or you don’t have a computer that’s running 24/7 to fetch your
+feeds. In such cases, you might register with some online feedreader, and use
+Newsboat as a client. The next few sections provide configuration instructions
+for each supported service.
+
+The Old Reader
+~~~~~~~~~~~~~~
+
+http://theoldreader.com/[The Old Reader] is a successor to Google Reader.
+Newsboat provides functionality to use The Old Reader as its 
+backend: people can use The Old Reader to manage their subscriptions, and in 
+addition, use newsboat to download and read articles. Newsboat will keep 
+the information which articles have already been read synchronized with The Old 
+Reader, so that users usually won't see articles more than once. In addition, it 
+will only ever download unread articles from The Old Reader.
+
+In order to use The Old Reader support, you first need to configure the proper URL source:
+
+	urls-source "oldreader"
+
+In addition, newsboat needs to know your The Old Reader username and password 
+so that it can authenticate with The Old Reader:
+
+	oldreader-login "your-oldreader-account"
+	oldreader-password "your-password"
+
+Note that double quotes should be escaped, i.e. you should write `\"`
+instead of `"`.
+
+See also <<oldreader-passwordfile,`oldreaader-passwordfile`>>,
+<<oldreader-passwordeval,`oldreader-passwordeval`>> and
+<<_passwords_for_external_apis>>.
+
+After setting these configuration values, you can start newsboat, it will 
+authenticate with The Old Reader and download your subscription list. If you use 
+"folders" in The Old Reader to organize your feeds, newsboat will regard them 
+and make them available via its "tags" capability: each feed is tagged with the 
+name of the folder in which it resides.
+
+When you mark single items or complete feeds as read, newsboat will 
+synchronize this information directly to The Old Reader. This, of course, 
+includes opening articles. Toggling read articles back to "unread" is also 
+communicated to The Old Reader.
+
+In addition, The Old Reader provides the ability to "star" and to "share"
+articles. Starred articles are basically bookmarks, while shared articles are
+shown to people that follow your The Old Reader account. Newsboat allows the
+use of this feature by mapping its powerful "flags" to the "star"/"unstar"
+resp. "share"/"unshare" operations.
+
+In order to use this mapping, all you need to do is to configure the flags
+that shall be used:
+
+	oldreader-flag-share "a"
+	oldreader-flag-star "b"
+
+After that, use these flags when you edit flags for an article, and these
+articles will be starred resp. shared.
+
+By default, newsboat also shows The Old Reader "special feeds":
+
+- People you follow: articles shared by people that you follow.
+- Starred items: articles that you starred.
+- Shared items: articles that you shared.
+
+You can disable these feeds by setting the following configuration variable:
+
+	oldreader-show-special-feeds no
+
+The Old Reader's folders are converted into Newsboat tags. You can select and
+filter feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
+
+NewsBlur
+~~~~~~~~
+
+Newsboat also supports NewsBlur, another alternative to Google Reader. 
+Configuration basically works the same as with <<_the_old_reader,The Old Reader>>.
+
+First, set your <<urls-source,`urls-source`>>:
+
+	urls-source "newsblur"
+
+Then, configure your NewsBlur credentials:
+
+	newsblur-login "your-newsblur-account"
+	newsblur-password "your-password"
+
+Note that double quotes should be escaped, i.e. you should write `\"`
+instead of `"`.
+
+See also <<newsblur-passwordfile,`newsblur-passwordfile`>>,
+<<newsblur-passwordeval,`newsblur-passwordeval`>> and
+<<_passwords_for_external_apis>>.
+
+When you start newsboat, it will download the feeds that you configured
+in NewsBlur. Please take a closer look at the
+<<newsblur-login,configuration commands>> for what
+you can configure in newsboat regarding NewsBlur.
+
+NewsBlur's folders are converted into Newsboat tags. You can select and
+filter feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
+
+FeedHQ
+~~~~~~
+
+Newsboat also supports FeedHQ, another alternative to Google Reader. 
+Configuration basically works the same as with <<_the_old_reader,The Old Reader>>.
+
+First, set your <<urls-source,`urls-source`>>:
+
+	urls-source "feedhq"
+
+Then, configure your FeedHQ credentials:
+
+	feedhq-login "your-feedhq-account"
+	feedhq-password "your-password"
+
+Note that double quotes should be escaped, i.e. you should write `\"`
+instead of `"`.
+
+See also <<feedhq-passwordfile,`feedhq-passwordfile`>>,
+<<feedhq-passwordeval,`feedhq-passwordeval`>> and
+<<_passwords_for_external_apis>>.
+
+if you're using a standalone instance, you should add one more setting:
+
+    feedhq-url "https://the.url.of/your/feedhq/instance"
+
+When you start newsboat, it will download the feeds that you configured
+in FeedHQ. Please take a closer look at the
+<<feedhq-flag-share,configuration commands>> for what
+you can configure in newsboat regarding FeedHQ.
+
+FeedHQ's folders are converted into Newsboat tags. You can select and filter
+feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
+
+Tiny Tiny RSS
+~~~~~~~~~~~~~
+
+Newsboat can be used to synchronize with Tiny Tiny RSS 
+installations. Tiny Tiny RSS is a web-based and (optionally) multi-user feed 
+reader. By providing the ability to use Tiny Tiny RSS as its backend, it's 
+possible for users to manage their subscriptions centrally within Tiny Tiny RSS 
+while reading them wherever they are using newsboat.
+
+If you want to use Tiny Tiny RSS support, don't forget to activate the external 
+API support in your preferences.
+
+To use Tiny Tiny RSS support, you need to configure a few things. First of all, 
+newsboat needs to know that you want to use Tiny Tiny RSS and which 
+installation exactly:
+
+	urls-source "ttrss"
+	ttrss-url "http://example.com/ttrss/"
+
+In addition, it requires username and password for authentication:
+
+	ttrss-login "myusername"
+	ttrss-password "mypassword"
+
+Note that double quotes should be escaped, i.e. you should write `\"`
+instead of `"`.
+
+See also <<ttrss-passwordfile,`ttrss-passwordfile`>>,
+<<ttrss-passwordeval,`ttrss-passwordeval`>> and
+<<_passwords_for_external_apis>>.
+
+Tiny Tiny RSS provides two modes of usage, single-user mode and multi-user 
+mode. newsboat needs to know about this, too: In single-user mode, 
+authentication is done via Basic HTTP authentication, while in multi-user mode, 
+authentication is done against Tiny Tiny RSS itself.
+
+	ttrss-mode "single"		# "multi" is default
+
+If Tiny Tiny RSS is configured in multi-user mode and still deployed behind 
+an additional HTTP-BasicAuth, the required username and password (which may 
+deviate from <<ttrss-login,`ttrss-login`>> and <<ttrss-password,`ttrss-password`>>) can be specified in the user-part
+of the url like this:
+
+    ttrss-url "http://htuser:htpasswd@example.com/ttrss/"
+
+With these settings, newsboat should be able to connect to Tiny Tiny RSS and 
+download your subscribed feeds. Articles or even complete feeds that you marked 
+as read are synchronized directly to Tiny Tiny RSS.
+
+Tiny Tiny RSS provides the ability to "star" and to "publish" articles. Starred 
+articles are basically bookmarks, while published articles can be retrieved via 
+a public RSS feed. Newsboat allows the use of these features by mapping its
+flags to the "star" and "publish" operations.
+
+In order to use this mapping, you need to configure the flags that shall be used:
+
+	ttrss-flag-star "s"
+	ttrss-flag-publish "p"
+
+After that, use these flags when you edit flags for an article, and these articles
+will be starred resp. published.
+
+TT-RSS folders are converted into Newsboat tags. You can select and filter
+feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
+
+ownCloud News
+~~~~~~~~~~~~~
+
+To use ownCloud News support you need to configure a few things.
+
+First, set your <<urls-source,`urls-source`>> to `ocnews` and tell Newsboat where to find
+your ownCloud instance:
+
+	urls-source "ocnews"
+	ocnews-url "https://localhost/owncloud"
+
+Username and password are required:
+
+	ocnews-login "user"
+	ocnews-password "password"
+
+See also <<ocnews-passwordfile,`ocnews-passwordfile`>>,
+<<ocnews-passwordeval,`ocnews-passwordeval`>> and <<_passwords_for_external_apis>>.
+
+ownCloud News API uses HTTP basic auth, therefore running ownCloud with SSL is highly
+recommended.
+
+ownCloud News provides the ability to "star" articles; starred articles are basically
+bookmarks. Newsboat allows the use of this feature by mapping user-specified
+flag to the "star" operation.
+
+In order to use this mapping, you need to configure the flag that shall be used:
+
+	ocnews-flag-star "s"
+
+If for any reason you don't want Newsboat to verify the hostname of your
+instance against the hostname specified in the SSL certificate you're using,
+just say so:
+
+	ocnews-verifyhost "no"
+
+OwnCloud News' folders are converted into Newsboat tags. You can select and
+filter feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
+
+Inoreader
+~~~~~~~~~
+
+http://inoreader.com/[Inoreader] is another successor to Google Reader.
+Newsboat provides functionality to use Inoreader as its backend:
+people can use Inoreader to manage their subscriptions, and in
+addition, use newsboat to download and read articles. Newsboat will keep
+the information which articles have already been read synchronized with
+Inoreader, so that users usually won't see articles more than once. In addition, it
+will only ever download unread articles from Inoreader.
+
+In order to use Inoreader support, you first need to configure the proper URL source:
+
+	urls-source "inoreader"
+
+In addition, newsboat needs to know your Inoreader username and password
+so that it can authenticate with Inoreader.
+Note that this is NOT your login with your Google or Facebook account. If you
+use one of those to login to Inoreader, you have to create a username and
+password in Inoreader _Preferences > Profile_
+
+	inoreader-login "your-inoreader-account"
+	inoreader-password "your-password"
+
+(Note that double quotes should be escaped, i.e. you should write +{backslash}"+
+instead of +"+.)
+
+See also <<_passwords_for_external_apis,inoreader-passwordfile and inoreader-passwordeval>>.
+
+After setting these configuration values, you can start newsboat, it will
+authenticate with Inoreader and download your subscription list. If you use
+"folders" in Inoreader to organize your feeds, newsboat will regard them
+and make them available via its "tags" capability: each feed is tagged with the
+name of the folder in which it resides. You can select and filter feeds by tags;
+see <<_tagging>> and <<_filter_language>> sections for details.
+
+When you mark single items or complete feeds as read, newsboat will
+synchronize this information directly to Inoreader. This, of course,
+includes opening articles. Toggling read articles back to "unread" is also
+communicated to Inoreader.
+
+In addition, Inoreader provides the ability to "star" and to "share"
+articles. Starred articles are basically bookmarks, while shared articles are
+shown to people that follow your Inoreader account. Newsboat allows the
+use of this feature by mapping its powerful "flags" to the "star"/"unstar"
+resp. "share"/"unshare" operations.
+
+In order to use this mapping, all you need to do is to configure the flags
+that shall be used:
+
+	inoreader-flag-share "a"
+	inoreader-flag-star "b"
+
+After that, use these flags when you edit flags for an article, and these
+articles will be starred resp. shared.
+
+By default, newsboat also shows Inoreader "special feeds":
+
+ - Starred items
+ - Shared items
+ - Liked items
+ - Saved web pages
+
+You can disable these feeds by setting the following configuration variable:
+
+	inoreader-show-special-feeds no
+
+OPML Online Subscription Mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The OPML online subscription mode works similar to the Google Reader
+synchronization mode, except that no information about read articles is
+synchronized back. When enabled, all feeds that are listed in the feed list
+will be taken from one or more OPML files that are downloaded from a freely
+configurable URL.
+
+To enable this mode, the following configuration needs to be done:
+
+	urls-source "opml"
+	opml-url "<opml url>" ["<opml url>" ...]
+
+`"opml"` must be specified as source for the feed URLs, and the URLs of the OPML
+file needs to be specified, too.
+
+Passwords for external APIs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+include::chapter-password.txt[]
+
+
 Advanced Features
 -----------------
 
@@ -534,326 +869,6 @@ Articles", but the feed http://domain3.tld/feeds.rss is not.
 Basically, the possibility of what can be realized with query feeds is only
 limited by what can be queried from articles and feeds with the filter language
 and by your creativity.
-
-The Old Reader Support
-~~~~~~~~~~~~~~~~~~~~~
-
-http://theoldreader.com/[The Old Reader] is a successor to Google Reader.
-Newsboat provides functionality to use The Old Reader as its 
-backend: people can use The Old Reader to manage their subscriptions, and in 
-addition, use newsboat to download and read articles. Newsboat will keep 
-the information which articles have already been read synchronized with The Old 
-Reader, so that users usually won't see articles more than once. In addition, it 
-will only ever download unread articles from The Old Reader.
-
-In order to use The Old Reader support, you first need to configure the proper URL source:
-
-	urls-source "oldreader"
-
-In addition, newsboat needs to know your The Old Reader username and password 
-so that it can authenticate with The Old Reader:
-
-	oldreader-login "your-oldreader-account"
-	oldreader-password "your-password"
-
-Note that double quotes should be escaped, i.e. you should write `\"`
-instead of `"`.
-
-See also <<oldreader-passwordfile,`oldreaader-passwordfile`>>,
-<<oldreader-passwordeval,`oldreader-passwordeval`>> and
-<<_passwords_for_external_apis>>.
-
-After setting these configuration values, you can start newsboat, it will 
-authenticate with The Old Reader and download your subscription list. If you use 
-"folders" in The Old Reader to organize your feeds, newsboat will regard them 
-and make them available via its "tags" capability: each feed is tagged with the 
-name of the folder in which it resides.
-
-When you mark single items or complete feeds as read, newsboat will 
-synchronize this information directly to The Old Reader. This, of course, 
-includes opening articles. Toggling read articles back to "unread" is also 
-communicated to The Old Reader.
-
-In addition, The Old Reader provides the ability to "star" and to "share"
-articles. Starred articles are basically bookmarks, while shared articles are
-shown to people that follow your The Old Reader account. Newsboat allows the
-use of this feature by mapping its powerful "flags" to the "star"/"unstar"
-resp. "share"/"unshare" operations.
-
-In order to use this mapping, all you need to do is to configure the flags
-that shall be used:
-
-	oldreader-flag-share "a"
-	oldreader-flag-star "b"
-
-After that, use these flags when you edit flags for an article, and these
-articles will be starred resp. shared.
-
-By default, newsboat also shows The Old Reader "special feeds":
-
-- People you follow: articles shared by people that you follow.
-- Starred items: articles that you starred.
-- Shared items: articles that you shared.
-
-You can disable these feeds by setting the following configuration variable:
-
-	oldreader-show-special-feeds no
-
-The Old Reader's folders are converted into Newsboat tags. You can select and
-filter feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
-
-NewsBlur Support
-~~~~~~~~~~~~~~~~
-
-Newsboat also supports NewsBlur, another alternative to Google Reader. 
-Configuration basically works the same as with <<_the_old_reader_support,The Old Reader>>.
-
-First, set your <<urls-source,`urls-source`>>:
-
-	urls-source "newsblur"
-
-Then, configure your NewsBlur credentials:
-
-	newsblur-login "your-newsblur-account"
-	newsblur-password "your-password"
-
-Note that double quotes should be escaped, i.e. you should write `\"`
-instead of `"`.
-
-See also <<newsblur-passwordfile,`newsblur-passwordfile`>>,
-<<newsblur-passwordeval,`newsblur-passwordeval`>> and
-<<_passwords_for_external_apis>>.
-
-When you start newsboat, it will download the feeds that you configured
-in NewsBlur. Please take a closer look at the
-<<newsblur-login,configuration commands>> for what
-you can configure in newsboat regarding NewsBlur.
-
-NewsBlur's folders are converted into Newsboat tags. You can select and
-filter feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
-
-FeedHQ Support
-~~~~~~~~~~~~~~
-
-Newsboat also supports FeedHQ, another alternative to Google Reader. 
-Configuration basically works the same as with <<_the_old_reader_support,The Old Reader>>.
-
-First, set your <<urls-source,`urls-source`>>:
-
-	urls-source "feedhq"
-
-Then, configure your FeedHQ credentials:
-
-	feedhq-login "your-feedhq-account"
-	feedhq-password "your-password"
-
-Note that double quotes should be escaped, i.e. you should write `\"`
-instead of `"`.
-
-See also <<feedhq-passwordfile,`feedhq-passwordfile`>>,
-<<feedhq-passwordeval,`feedhq-passwordeval`>> and
-<<_passwords_for_external_apis>>.
-
-if you're using a standalone instance, you should add one more setting:
-
-    feedhq-url "https://the.url.of/your/feedhq/instance"
-
-When you start newsboat, it will download the feeds that you configured
-in FeedHQ. Please take a closer look at the
-<<feedhq-flag-share,configuration commands>> for what
-you can configure in newsboat regarding FeedHQ.
-
-FeedHQ's folders are converted into Newsboat tags. You can select and filter
-feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
-
-Tiny Tiny RSS Synchronization
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Newsboat can be used to synchronize with Tiny Tiny RSS 
-installations. Tiny Tiny RSS is a web-based and (optionally) multi-user feed 
-reader. By providing the ability to use Tiny Tiny RSS as its backend, it's 
-possible for users to manage their subscriptions centrally within Tiny Tiny RSS 
-while reading them wherever they are using newsboat.
-
-If you want to use Tiny Tiny RSS support, don't forget to activate the external 
-API support in your preferences.
-
-To use Tiny Tiny RSS support, you need to configure a few things. First of all, 
-newsboat needs to know that you want to use Tiny Tiny RSS and which 
-installation exactly:
-
-	urls-source "ttrss"
-	ttrss-url "http://example.com/ttrss/"
-
-In addition, it requires username and password for authentication:
-
-	ttrss-login "myusername"
-	ttrss-password "mypassword"
-
-Note that double quotes should be escaped, i.e. you should write `\"`
-instead of `"`.
-
-See also <<ttrss-passwordfile,`ttrss-passwordfile`>>,
-<<ttrss-passwordeval,`ttrss-passwordeval`>> and
-<<_passwords_for_external_apis>>.
-
-Tiny Tiny RSS provides two modes of usage, single-user mode and multi-user 
-mode. newsboat needs to know about this, too: In single-user mode, 
-authentication is done via Basic HTTP authentication, while in multi-user mode, 
-authentication is done against Tiny Tiny RSS itself.
-
-	ttrss-mode "single"		# "multi" is default
-
-If Tiny Tiny RSS is configured in multi-user mode and still deployed behind 
-an additional HTTP-BasicAuth, the required username and password (which may 
-deviate from <<ttrss-login,`ttrss-login`>> and <<ttrss-password,`ttrss-password`>>) can be specified in the user-part
-of the url like this:
-
-    ttrss-url "http://htuser:htpasswd@example.com/ttrss/"
-
-
-With these settings, newsboat should be able to connect to Tiny Tiny RSS and 
-download your subscribed feeds. Articles or even complete feeds that you marked 
-as read are synchronized directly to Tiny Tiny RSS.
-
-Tiny Tiny RSS provides the ability to "star" and to "publish" articles. Starred 
-articles are basically bookmarks, while published articles can be retrieved via 
-a public RSS feed. Newsboat allows the use of these features by mapping its
-flags to the "star" and "publish" operations.
-
-In order to use this mapping, you need to configure the flags that shall be used:
-
-	ttrss-flag-star "s"
-	ttrss-flag-publish "p"
-
-After that, use these flags when you edit flags for an article, and these articles
-will be starred resp. published.
-
-TT-RSS folders are converted into Newsboat tags. You can select and filter
-feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
-
-ownCloud News Synchronization
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-To use ownCloud News support you need to configure a few things.
-
-First, set your <<urls-source,`urls-source`>> to `ocnews` and tell Newsboat where to find
-your ownCloud instance:
-
-	urls-source "ocnews"
-	ocnews-url "https://localhost/owncloud"
-
-Username and password are required:
-
-	ocnews-login "user"
-	ocnews-password "password"
-
-See also <<ocnews-passwordfile,`ocnews-passwordfile`>>,
-<<ocnews-passwordeval,`ocnews-passwordeval`>> and <<_passwords_for_external_apis>>.
-
-ownCloud News API uses HTTP basic auth, therefore running ownCloud with SSL is highly
-recommended.
-
-ownCloud News provides the ability to "star" articles; starred articles are basically
-bookmarks. Newsboat allows the use of this feature by mapping user-specified
-flag to the "star" operation.
-
-In order to use this mapping, you need to configure the flag that shall be used:
-
-	ocnews-flag-star "s"
-
-If for any reason you don't want Newsboat to verify the hostname of your
-instance against the hostname specified in the SSL certificate you're using,
-just say so:
-
-	ocnews-verifyhost "no"
-
-OwnCloud News' folders are converted into Newsboat tags. You can select and
-filter feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
-
-OPML Online Subscription Mode
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The OPML online subscription mode works similar to the Google Reader
-synchronization mode, except that no information about read articles is
-synchronized back. When enabled, all feeds that are listed in the feed list
-will be taken from one or more OPML files that are downloaded from a freely
-configurable URL.
-
-To enable this mode, the following configuration needs to be done:
-
-	urls-source "opml"
-	opml-url "<opml url>" ["<opml url>" ...]
-
-`"opml"` must be specified as source for the feed URLs, and the URLs of the OPML
-file needs to be specified, too.
-
-Inoreader Support
-~~~~~~~~~~~~~~~~~
-
-http://inoreader.com/[Inoreader] is another successor to Google Reader.
-Newsboat provides functionality to use Inoreader as its backend:
-people can use Inoreader to manage their subscriptions, and in
-addition, use newsboat to download and read articles. Newsboat will keep
-the information which articles have already been read synchronized with
-Inoreader, so that users usually won't see articles more than once. In addition, it
-will only ever download unread articles from Inoreader.
-
-In order to use Inoreader support, you first need to configure the proper URL source:
-
-	urls-source "inoreader"
-
-In addition, newsboat needs to know your Inoreader username and password
-so that it can authenticate with Inoreader.
-Note that this is NOT your login with your Google or Facebook account. If you
-use one of those to login to Inoreader, you have to create a username and
-password in Inoreader _Preferences > Profile_
-
-	inoreader-login "your-inoreader-account"
-	inoreader-password "your-password"
-
-(Note that double quotes should be escaped, i.e. you should write +{backslash}"+
-instead of +"+.)
-
-See also <<_passwords_for_external_apis,inoreader-passwordfile and inoreader-passwordeval>>.
-
-After setting these configuration values, you can start newsboat, it will
-authenticate with Inoreader and download your subscription list. If you use
-"folders" in Inoreader to organize your feeds, newsboat will regard them
-and make them available via its "tags" capability: each feed is tagged with the
-name of the folder in which it resides. You can select and filter feeds by tags;
-see <<_tagging>> and <<_filter_language>> sections for details.
-
-When you mark single items or complete feeds as read, newsboat will
-synchronize this information directly to Inoreader. This, of course,
-includes opening articles. Toggling read articles back to "unread" is also
-communicated to Inoreader.
-
-In addition, Inoreader provides the ability to "star" and to "share"
-articles. Starred articles are basically bookmarks, while shared articles are
-shown to people that follow your Inoreader account. Newsboat allows the
-use of this feature by mapping its powerful "flags" to the "star"/"unstar"
-resp. "share"/"unshare" operations.
-
-In order to use this mapping, all you need to do is to configure the flags
-that shall be used:
-
-	inoreader-flag-share "a"
-	inoreader-flag-star "b"
-
-After that, use these flags when you edit flags for an article, and these
-articles will be starred resp. shared.
-
-By default, newsboat also shows Inoreader "special feeds":
-
- - Starred items
- - Shared items
- - Liked items
- - Saved web pages
-
-You can disable these feeds by setting the following configuration variable:
-
-	inoreader-show-special-feeds no
 
 Flagging Articles
 ~~~~~~~~~~~~~~~~~
@@ -1277,11 +1292,6 @@ That's it. newsboat (well, its db) now marks articles as unread when their
 title changes. And nicely enough this works all inside newsboat, no need to
 restart it so that it rereads the cache, that magically modifies itself. It
 just works.
-
-Passwords for external APIs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-include::chapter-password.txt[]
 
 Environment variables
 ~~~~~~~~~~~~~~~~~~~~~
