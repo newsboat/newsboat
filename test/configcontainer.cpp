@@ -1,4 +1,4 @@
-#include "catch.hpp"
+#include "3rd-party/catch.hpp"
 
 #include <configcontainer.h>
 #include <configparser.h>

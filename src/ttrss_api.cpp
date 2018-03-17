@@ -1,4 +1,4 @@
-#include <json.hpp>
+#include <3rd-party/json.hpp>
 #include <remote_api.h>
 #include <ttrss_api.h>
 #include <cstring>

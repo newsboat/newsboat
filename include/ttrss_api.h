@@ -5,7 +5,7 @@
 #include <remote_api.h>
 #include <urlreader.h>
 #include <cache.h>
-#include <json.hpp>
+#include <3rd-party/json.hpp>
 
 namespace newsboat {
 
