@@ -9,7 +9,26 @@
 
 namespace newsboat {
 
-typedef std::vector<std::string> schema_queries_list;
+struct schema_version {
+	unsigned int major, minor;
+
+	friend bool operator<(const schema_version& l, const schema_version& r) {
+		return std::tie(l.major, l.minor) < std::tie(r.major, r.minor);
+	}
+	friend bool operator>(const schema_version& l, const schema_version& r) {
+		return r < l;
+	}
+	friend bool operator<=(const schema_version& l, const schema_version& r) {
+		return !(l > r);
+	}
+	friend bool operator>=(const schema_version& l, const schema_version& r) {
+		return !(l < r);
+	}
+};
+
+const schema_version unknown_version = { 0, 0 };
+
+using schema_patches = std::map<schema_version, std::vector<std::string>>;
 
 class cache {
 	public:
@@ -35,6 +54,7 @@ class cache {
 		std::vector<std::string> get_read_item_guids();
 		void fetch_descriptions(rss_feed * feed);
 	private:
+		schema_version get_schema_version();
 		void populate_tables();
 		void set_pragmas();
 		void delete_item(const std::shared_ptr<rss_item>& item);

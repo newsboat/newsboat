@@ -241,66 +241,101 @@ void cache::set_pragmas() {
 	run_sql("PRAGMA case_sensitive_like=OFF;");
 }
 
-static const schema_queries_list schemaQueries {
-	"CREATE TABLE rss_feed ( "
-	" rssurl VARCHAR(1024) PRIMARY KEY NOT NULL, "
-	" url VARCHAR(1024) NOT NULL, "
-	" title VARCHAR(1024) NOT NULL ); ",
+static const schema_patches schemaPatches {
+	{
+		{ 2, 10 },
+		{
+			"CREATE TABLE rss_feed ( "
+			" rssurl VARCHAR(1024) PRIMARY KEY NOT NULL, "
+			" url VARCHAR(1024) NOT NULL, "
+			" title VARCHAR(1024) NOT NULL ); ",
 
-	"CREATE TABLE rss_item ( "
-	" id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-	" guid VARCHAR(64) NOT NULL, "
-	" title VARCHAR(1024) NOT NULL, "
-	" author VARCHAR(1024) NOT NULL, "
-	" url VARCHAR(1024) NOT NULL, "
-	" feedurl VARCHAR(1024) NOT NULL, "
-	" pubDate INTEGER NOT NULL, "
-	" content VARCHAR(65535) NOT NULL,"
-	" unread INTEGER(1) NOT NULL );",
+			"CREATE TABLE rss_item ( "
+			" id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+			" guid VARCHAR(64) NOT NULL, "
+			" title VARCHAR(1024) NOT NULL, "
+			" author VARCHAR(1024) NOT NULL, "
+			" url VARCHAR(1024) NOT NULL, "
+			" feedurl VARCHAR(1024) NOT NULL, "
+			" pubDate INTEGER NOT NULL, "
+			" content VARCHAR(65535) NOT NULL,"
+			" unread INTEGER(1) NOT NULL );",
 
-	 "CREATE TABLE google_replay ( "
-	" id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-	" guid VARCHAR(64) NOT NULL, "
-	" state INTEGER NOT NULL, "
-	" ts INTEGER NOT NULL );",
+			"CREATE TABLE google_replay ( "
+			" id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+			" guid VARCHAR(64) NOT NULL, "
+			" state INTEGER NOT NULL, "
+			" ts INTEGER NOT NULL );",
 
-	/* we need to do these ALTER TABLE statements because we need to store
-	 * additional data for the podcast support */
-	"ALTER TABLE rss_item ADD enclosure_url VARCHAR(1024);",
+			/* we need to do these ALTER TABLE statements because we need to store
+			 * additional data for the podcast support */
+			"ALTER TABLE rss_item ADD enclosure_url VARCHAR(1024);",
 
-	"ALTER TABLE rss_item ADD enclosure_type VARCHAR(1024);",
+			"ALTER TABLE rss_item ADD enclosure_type VARCHAR(1024);",
 
-	"ALTER TABLE rss_item ADD enqueued INTEGER(1) NOT NULL DEFAULT 0;",
+			"ALTER TABLE rss_item ADD enqueued INTEGER(1) NOT NULL DEFAULT 0;",
 
-	"ALTER TABLE rss_item ADD flags VARCHAR(52);",
+			"ALTER TABLE rss_item ADD flags VARCHAR(52);",
 
-	/* create indexes to speed up certain queries */
-	"CREATE INDEX IF NOT EXISTS idx_rssurl ON rss_feed(rssurl);",
+			/* create indexes to speed up certain queries */
+			"CREATE INDEX IF NOT EXISTS idx_rssurl ON rss_feed(rssurl);",
 
-	"CREATE INDEX IF NOT EXISTS idx_guid ON rss_item(guid);",
+			"CREATE INDEX IF NOT EXISTS idx_guid ON rss_item(guid);",
 
-	"CREATE INDEX IF NOT EXISTS idx_feedurl ON rss_item(feedurl);",
-	/* we analyse the indices for better statistics */
-	"ANALYZE;",
+			"CREATE INDEX IF NOT EXISTS idx_feedurl ON rss_item(feedurl);",
+			/* we analyse the indices for better statistics */
+			"ANALYZE;",
 
-	"ALTER TABLE rss_feed ADD lastmodified INTEGER(11) NOT NULL DEFAULT 0;",
+			"ALTER TABLE rss_feed ADD lastmodified INTEGER(11) NOT NULL DEFAULT 0;",
 
-	"CREATE INDEX IF NOT EXISTS idx_lastmodified ON rss_feed(lastmodified);",
+			"CREATE INDEX IF NOT EXISTS idx_lastmodified ON rss_feed(lastmodified);",
 
-	"ALTER TABLE rss_item ADD deleted INTEGER(1) NOT NULL DEFAULT 0;",
+			"ALTER TABLE rss_item ADD deleted INTEGER(1) NOT NULL DEFAULT 0;",
 
-	"CREATE INDEX IF NOT EXISTS idx_deleted ON rss_item(deleted);",
+			"CREATE INDEX IF NOT EXISTS idx_deleted ON rss_item(deleted);",
 
-	"ALTER TABLE rss_feed ADD is_rtl INTEGER(1) NOT NULL DEFAULT 0;",
+			"ALTER TABLE rss_feed ADD is_rtl INTEGER(1) NOT NULL DEFAULT 0;",
 
-	"ALTER TABLE rss_feed ADD etag VARCHAR(128) NOT NULL DEFAULT \"\";",
+			"ALTER TABLE rss_feed ADD etag VARCHAR(128) NOT NULL DEFAULT \"\";",
 
-	"ALTER TABLE rss_item ADD base VARCHAR(128) NOT NULL DEFAULT \"\";",
+			"ALTER TABLE rss_item ADD base VARCHAR(128) NOT NULL DEFAULT \"\";",
+		}
+	},
+	{
+		{ 2, 11 },
+		{
+			"CREATE TABLE metadata ( "
+			" db_schema_version_major INTEGER NOT NULL, "
+			" db_schema_version_minor INTEGER NOT NULL );"
+
+			"INSERT INTO metadata VALUES ( 2, 11 );"
+		}
+	}
 };
 
 void cache::populate_tables() {
-	for (const auto& query : schemaQueries) {
-		run_sql_nothrow(query);
+   const schema_version version = get_schema_version();
+   LOG(level::INFO, "cache::populate_tables: DB schema version %u.%u",
+		   version.major, version.minor);
+
+   auto patches_it = schemaPatches.cbegin();
+
+   // rewind to the first patch that should be applied
+   while (patches_it != schemaPatches.cend()
+		   && patches_it->first <= version)
+   {
+	   ++patches_it;
+   }
+
+   for (; patches_it != schemaPatches.cend(); ++patches_it) {
+	   const schema_version patch_version = patches_it->first;
+	   LOG(level::INFO,
+			   "cache::populate_tables: applying DB schema patches "
+			   "for version %u.%u",
+			   patch_version.major, patch_version.minor);
+	   for (const auto& query : patches_it->second) {
+		   run_sql_nothrow(query);
+	   }
 	}
 }
 
@@ -889,6 +924,43 @@ void cache::fetch_descriptions(rss_feed * feed) {
 			in_clause);
 
 	run_sql(query, fill_content_callback, feed);
+}
+
+schema_version cache::get_schema_version() {
+	sqlite3_stmt* stmt {};
+	schema_version result;
+
+	int rc = sqlite3_prepare_v2(
+			db,
+			"SELECT db_schema_version_major, db_schema_version_minor "
+			"FROM metadata",
+			-1,
+			&stmt,
+			nullptr);
+
+	if (rc != SQLITE_OK) {
+		// I'm pretty sure the query above is correct, and the only way
+		// it can fail is when metadata table is not present in the DB.
+		// That means we're dealing with an empty cache file, or one
+		// that was created by an older version of Newsboat.
+		result = unknown_version;
+	} else {
+		rc = sqlite3_step(stmt);
+		if (rc != SQLITE_ROW) {
+			// table is empty. Technically, this is impossible, but
+			// is easy enough to fix - just re-create the db
+			result = unknown_version;
+		} else {
+			// row is available, let's grab it!
+			result.major = sqlite3_column_int(stmt, 0);
+			result.minor = sqlite3_column_int(stmt, 1);
+
+			assert(sqlite3_step(stmt) == SQLITE_DONE);
+		}
+	}
+
+	sqlite3_finalize(stmt);
+	return result;
 }
 
 }
