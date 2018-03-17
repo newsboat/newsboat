@@ -1,4 +1,4 @@
-#include "catch.hpp"
+#include "3rd-party/catch.hpp"
 
 #include <rsspp.h>
 #include <rsspp_internal.h>
