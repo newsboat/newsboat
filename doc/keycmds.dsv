@@ -5,6 +5,7 @@ reload||r||Reload the currently selected feed.
 reload-all||R||Reload all feeds.
 mark-feed-read||A||Mark all articles in the currently selected feed read.
 mark-all-feeds-read||C||Mark articles in all feeds read.
+mark-all-above-as-read||n/a||Mark all above as read.
 save||s||Save the currently selected article to a file.
 next-unread||n||Jump to the next unread article.
 prev-unread||p||Jump to the previous unread article.

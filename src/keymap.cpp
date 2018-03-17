@@ -58,6 +58,11 @@ static op_desc opdescs[] = {
 		KM_FEEDLIST
 	},
 	{
+		OP_MARKALLABOVEASREAD, "mark-all-above-as-read", "",
+		_("Mark all above as read"),
+		KM_ARTICLELIST
+	},
+	{
 		OP_SAVE, "save", "s",
 		_("Save article"),
 		KM_ARTICLELIST | KM_ARTICLE
