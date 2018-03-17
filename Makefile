@@ -22,6 +22,7 @@ WARNFLAGS=-Werror -Wall -Wextra -Wunreachable-code
 INCLUDES=-Iinclude -Istfl -Ifilter -I. -Irss
 BARE_CXXFLAGS=-std=c++11 -O2 -ggdb $(INCLUDES)
 LDFLAGS+=-L.
+OBJDIR=./build
 
 PACKAGE=newsboat
 
@@ -34,30 +35,42 @@ BARE_CXXFLAGS+=-O0 -fprofile-arcs -ftest-coverage
 LDFLAGS+=-fprofile-arcs -ftest-coverage
 endif
 
+OBJDIR_DBG=./build-dbg
+ifeq ($(DEBUG),1)
+BARE_CXXFLAGS+=-O0 -ggdb
+OBJDIR=$(OBJDIR_DBG)
+endif
+
 CXXFLAGS:=$(BARE_CXXFLAGS) $(WARNFLAGS) $(DEFINES) $(CXXFLAGS)
 
 LIB_SOURCES:=$(shell cat mk/libboat.deps)
-LIB_OBJS:=$(patsubst %.cpp,%.o,$(LIB_SOURCES))
-LIB_OUTPUT=libboat.a
+LIB_OBJS:=$(patsubst %.cpp,$(OBJDIR)/%.o,$(LIB_SOURCES))
+LIB_OUTPUT=$(OBJDIR)/libboat.a
 
 FILTERLIB_SOURCES=filter/Scanner.cpp filter/Parser.cpp filter/FilterParser.cpp
-FILTERLIB_OBJS:=$(patsubst %.cpp,%.o,$(FILTERLIB_SOURCES))
-FILTERLIB_OUTPUT=libfilter.a
+FILTERLIB_OBJS:=$(patsubst %.cpp,$(OBJDIR)/%.o,$(FILTERLIB_SOURCES))
+FILTERLIB_OUTPUT=$(OBJDIR)/libfilter.a
 
 NEWSBOAT=newsboat
 NEWSBOAT_SOURCES:=$(shell cat mk/newsboat.deps)
-NEWSBOAT_OBJS:=$(patsubst %.cpp,%.o,$(NEWSBOAT_SOURCES))
-NEWSBOAT_LIBS=-lboat -lfilter -lpthread -lrsspp
+NEWSBOAT_OBJS:=$(patsubst %.cpp,$(OBJDIR)/%.o,$(NEWSBOAT_SOURCES))
+NEWSBOAT_LIBS=-L"$(OBJDIR)" -lboat -lfilter -lpthread -lrsspp
 
 RSSPPLIB_SOURCES=$(sort $(wildcard rss/*.cpp))
-RSSPPLIB_OBJS=$(patsubst rss/%.cpp,rss/%.o,$(RSSPPLIB_SOURCES))
-RSSPPLIB_OUTPUT=librsspp.a
+RSSPPLIB_OBJS=$(patsubst rss/%.cpp,$(OBJDIR)/rss/%.o,$(RSSPPLIB_SOURCES))
+RSSPPLIB_OUTPUT=$(OBJDIR)/librsspp.a
 
 
 PODBOAT=podboat
 PODBOAT_SOURCES:=$(shell cat mk/podboat.deps)
-PODBOAT_OBJS:=$(patsubst %.cpp,%.o,$(PODBOAT_SOURCES))
-PODBOAT_LIBS=-lboat -lpthread
+PODBOAT_OBJS:=$(patsubst %.cpp,$(OBJDIR)/%.o,$(PODBOAT_SOURCES))
+PODBOAT_LIBS=-L"$(OBJDIR)" -lboat -lpthread
+
+ifeq ($(DEBUG),1)
+NEWSBOAT=newsboat-dbg
+PODBOAT=podboat-dbg
+endif
+
 
 ifeq (, $(filter Linux GNU GNU/%, $(shell uname -s)))
 NEWSBOAT_LIBS+=-liconv -lintl
@@ -110,7 +123,8 @@ regenerate-parser:
 	$(RM) filter/Scanner.cpp filter/Parser.cpp filter/Scanner.h filter/Parser.h
 	cococpp -frames filter filter/filter.atg
 
-%.o: %.cpp
+$(OBJDIR)/%.o: %.cpp
+	@$(MKDIR) "$(dir $@)"
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 %.h: %.stfl
@@ -132,14 +146,18 @@ clean-libfilter:
 	$(RM) $(FILTERLIB_OUTPUT) $(FILTERLIB_OBJS)
 
 clean-doc:
-	$(RM) -r doc/xhtml 
+	$(RM) -r doc/xhtml
 	$(RM) doc/*.xml doc/*.1 doc/newsboat-cfgcmds.txt doc/podboat-cfgcmds.txt \
 		doc/newsboat-keycmds.txt doc/configcommands-linked.dsv \
 		doc/podboat-cmds-linked.dsv doc/keycmds-linked.dsv \
 		doc/gen-example-config doc/example-config doc/generate doc/generate2
 
 clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clean-librsspp
+	$(RM) -r "$(OBJDIR)"
 	$(RM) $(STFLHDRS) xlicense.h
+
+debug:
+	$(MAKE) DEBUG=1
 
 distclean: clean clean-mo test-clean profclean
 	$(RM) core *.core core.* config.mk
@@ -299,9 +317,9 @@ uninstall-mo:
 test: test/test
 
 TEST_SRCS:=$(shell ls test/*.cpp)
-TEST_OBJS:=$(patsubst %.cpp,%.o,$(TEST_SRCS))
+TEST_OBJS:=$(patsubst %.cpp,$(OBJDIR)/%.o,$(TEST_SRCS))
 test/test: $(LIB_OUTPUT) $(NEWSBOAT_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) $(TEST_OBJS) test/test-helpers.h
-	$(CXX) $(CXXFLAGS) -o test/test $(TEST_OBJS) src/*.o $(NEWSBOAT_LIBS) $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o test/test $(TEST_OBJS) $(OBJDIR)/src/*.o $(NEWSBOAT_LIBS) $(LDFLAGS)
 
 test-clean:
 	$(RM) test/test test/*.o
@@ -324,12 +342,14 @@ ALL_SRCS:=$(shell ls filter/*.cpp rss/*.cpp src/*.cpp test/*.cpp)
 ALL_HDRS:=$(shell ls filter/*.h rss/*.h test/*.h test/*.hpp) $(STFLHDRS) xlicense.h
 depslist: $(ALL_SRCS) $(ALL_HDRS)
 	> mk/mk.deps
-	for dir in filter rss src test ; do \
-		for file in $$dir/*.cpp ; do \
-			target=`echo $$file | sed 's/cpp$$/o/'`; \
-			$(CXX) $(BARE_CXXFLAGS) -MM -MG -MQ $$target $$file >> mk/mk.deps ; \
-			echo $$file ; \
-		done; \
+	for builddir in "$(OBJDIR)" "$(OBJDIR_DBG)"; do \
+		for dir in filter rss src test ; do \
+			for file in "$$dir"/*.cpp ; do \
+				target=`echo "$$builddir/$$file" | sed 's/cpp$$/o/'`; \
+				$(CXX) $(BARE_CXXFLAGS) -MM -MG -MQ "$$target" "$$file" >> mk/mk.deps ; \
+				echo "$$file" ; \
+			done; \
+		done \
 	done
 
 include mk/mk.deps
