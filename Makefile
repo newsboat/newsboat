@@ -321,7 +321,7 @@ xlicense.h: LICENSE
 	$(TEXTCONV) $< > $@
 
 ALL_SRCS:=$(shell ls filter/*.cpp rss/*.cpp src/*.cpp test/*.cpp)
-ALL_HDRS:=$(shell ls filter/*.h rss/*.h test/*.h test/*.hpp) $(STFLHDRS) xlicense.h
+ALL_HDRS:=$(shell ls filter/*.h rss/*.h test/*.h 3rd-party/*.hpp) $(STFLHDRS) xlicense.h
 depslist: $(ALL_SRCS) $(ALL_HDRS)
 	> mk/mk.deps
 	for dir in filter rss src test ; do \
