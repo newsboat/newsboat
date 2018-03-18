@@ -318,6 +318,13 @@ void cache::populate_tables() {
    LOG(level::INFO, "cache::populate_tables: DB schema version %u.%u",
 		   version.major, version.minor);
 
+   if (version.major > NEWSBOAT_VERSION_MAJOR) {
+	   const std::string msg =
+		   "Database schema isn't supported because it's too new";
+	   LOG(level::ERROR, msg);
+	   throw std::runtime_error(msg);
+   }
+
    auto patches_it = schemaPatches.cbegin();
 
    // rewind to the first patch that should be applied

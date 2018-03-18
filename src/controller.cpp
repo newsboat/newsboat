@@ -617,6 +617,9 @@ int controller::run(int argc, char * argv[]) {
 	} catch (const dbexception& e) {
 		std::cerr << strprintf::fmt(_("Error: opening the cache file `%s' failed: %s"), cache_file, e.what()) << std::endl;
 		return EXIT_FAILURE;
+	} catch (const std::runtime_error& e) {
+		std::cerr << strprintf::fmt(_("Error: %s"), e.what()) << std::endl;
+		return EXIT_FAILURE;
 	}
 
 	if (!silent) {
