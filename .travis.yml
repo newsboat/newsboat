@@ -108,7 +108,7 @@ matrix:
             - *clang_deps
       env:
         - COMPILER=clang++
-        - GCOV=/usr/bin/gcov
+        - GCOV="llvm-cov gcov"
       before_install:
         *install_coveralls
     - compiler: clang-4.0
@@ -120,10 +120,11 @@ matrix:
             - llvm-toolchain-trusty-4.0
           packages:
             - clang-4.0
+            - llvm-4.0
             - *clang_deps
       env:
         - COMPILER=clang++-4.0
-        - GCOV=/usr/bin/gcov
+        - GCOV="llvm-cov-4.0 gcov"
       before_install:
         *install_coveralls
     - compiler: clang-5.0
@@ -135,10 +136,11 @@ matrix:
             - llvm-toolchain-trusty-5.0
           packages:
             - clang-5.0
+            - llvm-5.0
             - *clang_deps
       env:
         - COMPILER=clang++-5.0
-        - GCOV=/usr/bin/gcov
+        - GCOV="llvm-cov-5.0 gcov"
       before_install:
         *install_coveralls
     - compiler: clang-6.0
@@ -150,10 +152,11 @@ matrix:
             - llvm-toolchain-trusty-6.0
           packages:
             - clang-6.0
+            - llvm-6.0
             - *clang_deps
       env:
         - COMPILER=clang++-6.0
-        - GCOV=/usr/bin/gcov
+        - GCOV="llvm-cov-6.0 gcov"
       before_install:
         *install_coveralls
     - compiler: gcc

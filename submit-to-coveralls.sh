@@ -5,4 +5,4 @@ then
     eval "$(pyenv init -)"
 fi
 
-coveralls --exclude 'test' --exclude 'usr' --gcov $GCOV --gcov-options '\-lp'
+coveralls --exclude 'test' --exclude 'usr' --gcov "$GCOV" --gcov-options '\-lp'
