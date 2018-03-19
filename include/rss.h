@@ -354,7 +354,9 @@ class rss_ignores : public config_action_handler {
 	public:
 		rss_ignores() { }
 		~rss_ignores() override;
-		void handle_action(const std::string& action, const std::vector<std::string>& params) override;
+		void handle_action(
+				const std::string& action,
+				const std::vector<std::string>& params) override;
 		void dump_config(std::vector<std::string>& config_output) override;
 		bool matches(rss_item * item);
 		bool matches_lastmodified(const std::string& url);

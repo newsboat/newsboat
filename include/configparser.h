@@ -17,7 +17,9 @@ enum class action_handler_status {
 };
 
 struct config_action_handler {
-	virtual void handle_action(const std::string& action, const std::vector<std::string>& params) = 0;
+	virtual void handle_action(
+			const std::string& action,
+			const std::vector<std::string>& params) = 0;
 	virtual void dump_config(std::vector<std::string>& config_output) = 0;
 	config_action_handler() { }
 	virtual ~config_action_handler() { }
@@ -27,9 +29,13 @@ class configparser : public config_action_handler {
 	public:
 		configparser();
 		~configparser() override;
-		void register_handler(const std::string& cmd, config_action_handler * handler);
+		void register_handler(
+				const std::string& cmd,
+				config_action_handler * handler);
 		void unregister_handler(const std::string& cmd);
-		void handle_action(const std::string& action, const std::vector<std::string>& params) override;
+		void handle_action(
+				const std::string& action,
+				const std::vector<std::string>& params) override;
 		void dump_config(std::vector<std::string>& ) override {
 			/* nothing because configparser itself only handles include */
 		}
@@ -47,7 +53,9 @@ class null_config_action_handler : public config_action_handler {
 	public:
 		null_config_action_handler() { }
 		~null_config_action_handler() override { }
-		void handle_action(const std::string& , const std::vector<std::string>& ) override { }
+		void handle_action(
+				const std::string& ,
+				const std::vector<std::string>& ) override { }
 		void dump_config(std::vector<std::string>& ) override { }
 };
 
