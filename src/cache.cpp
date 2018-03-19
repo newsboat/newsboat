@@ -443,11 +443,9 @@ void cache::externalize_rssfeed(std::shared_ptr<rss_feed> feed, bool reset_unrea
 			feed->total_item_count());
 
 	if (max_items > 0 && feed->total_item_count() > max_items) {
-		auto it=feed->items().begin();
-		for (unsigned int i=0; i<max_items; ++i)
-			++it;
-		if (it != feed->items().end())
-			feed->erase_items(it, feed->items().end()); // delete entries that are too much
+		feed->erase_items(
+				feed->items().begin() + max_items,
+				feed->items().end());
 	}
 
 	unsigned int days = cfg->get_configvalue_as_int("keep-articles-days");
@@ -521,9 +519,6 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl, rss_ign
 
 	if (max_items > 0 && feed->total_item_count() > max_items) {
 		std::vector<std::shared_ptr<rss_item>> flagged_items;
-		auto it=feed->items().begin();
-		for (unsigned int j=0; j<max_items; ++j)
-			++it;
 		for (unsigned int j=max_items; j<feed->total_item_count(); ++j) {
 			if (feed->items()[j]->flags().length() == 0) {
 				delete_item(feed->items()[j]);
@@ -531,6 +526,8 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl, rss_ign
 				flagged_items.push_back(feed->items()[j]);
 			}
 		}
+
+		auto it = feed->items().begin() + max_items;
 		feed->erase_items(it, feed->items().end()); // delete old entries
 
 		// if some flagged articles were saved, append them
