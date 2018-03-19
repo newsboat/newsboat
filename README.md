@@ -66,7 +66,8 @@ Support
 * Drop us a line at
   [newsboat mailing list](http://groups.google.com/group/newsboat)
 * Chat with developers and fellow users on #newsboat at
-  [Freenode](https://freenode.net)
+  [Freenode](https://freenode.net) ([webchat
+  available!](https://webchat.freenode.net/?channels=newsboat))
 
 License
 -------
