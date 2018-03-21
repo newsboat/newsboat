@@ -206,6 +206,21 @@ rsspp::feed ocnews_api::fetch_feed(const std::string& feed_id) {
 		json_object_object_get_ex(item_j, "body", &node);
 		item.content_encoded = json_object_get_string(node);
 
+		{
+			json_object* type_obj;
+
+			json_object_object_get_ex(item_j, "enclosureMime", &type_obj);
+			json_object_object_get_ex(item_j, "enclosureLink", &node);
+
+			if (type_obj && node) {
+				const std::string type = json_object_get_string(type_obj);
+				if (utils::is_valid_podcast_type(type)) {
+					item.enclosure_url = json_object_get_string(node);
+					item.enclosure_type = std::move(type);
+				}
+			}
+		}
+
 		json_object_object_get_ex(item_j, "id", &node);
 		long id = json_object_get_int(node);
 
