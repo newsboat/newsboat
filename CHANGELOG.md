@@ -1,19 +1,45 @@
 # Changes for Newsboat
 
-## Unreleased
+## 2.11 - 2018-03-25
+
+Lists below only mention user-visible changes, but I would also like to
+acknowledge contributions from the following people: Avindra Goolcharan, David
+Pedersen, and Kaligule.
 
 ### Added
 
-- Podboat adds ".part" suffix to filenames for the duration of the download
-    (José Manuel García-Patos)
+- Podboat adds ".part" suffix of the files it currently downloads (José Manuel
+    García-Patos)
 - Support for `CURL_CA_BUNDLE` environment variable (Marius Bakke, Alexander
     Batischev)
+- Snapcraft package (Alan Pope)
+- Dependency on hlohman/json (which is now used in TT-RSS interface instead of
+    json-c)
+- CURL error codes are converted to strings in logs (Alexander Batischev)
+- Open command line when a number key is pressed in a list (e.g. feedlist or
+    itemlist) (Nikos Tsipinakis)
+- Basic Evernote bookmark plugin (see contrib/) (Royce)
+- New command: `mark-all-above-as-read` (Roman Vasin)
+- Supprot for RSS media enclosures in ownCloud News (dirb)
 
 ### Changed
 
-### Removed
+- Valid podcast MIME types are "audio/*", "video/*", and "application/ogg"
+    (#105) (Alexander Batischev)
+- Use just two queries to fetch items from TT-RSS (only works with API level ≥2)
+    (Simon Schuster)
+- Make the cursor visible in filebrowser, and put it at the end of the line
+    (Nikos Tsipinakis)
+- Sort the file list in filebrowser (Nikos Tsipinakis)
+- Translations: Russian, Ukrainian (Alexander Batischev), German (Lysander
+    Trischler), Italian (Francesco Ariis), French (tkerdonc), Brazilian
+    Portuguese (Adiel Mittmann)
+- Compile with optimizations (`-O2`) by default (Alexander Batischev, Nikos
+    Tsipinakis)
 
 ### Fixed
+
+- Unwanted logging to stdout on `--export-to-opml` (#104) (Alexander Batischev)
 
 ## 2.10.2 - 2017-12-25
 
