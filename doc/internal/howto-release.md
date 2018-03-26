@@ -42,15 +42,15 @@ master repository and shell access to newsboat.org.
         * Prepare docs:
             `gzip --keep --best docbook-xsl.css faq.html newsboat.html`
         * Move docs:
-            `mv docbook-xsl.css* faq.html* newsboat.html* newsboat/releases/2.10.2/docs/`
-        * Edit `index.html`
+            `mv docbook-xsl.css* faq.html* newsboat.html* newsboat/releases/VERSION/docs/`
+        * Edit `newsboat/index.html`
             * Move current release to the list of previous releases
             * Update current release version
             * Update current release date
             * Update current release links
             * Update the year in the page copyright if necessary
             * Gzip the result: `gzip --best --keep --force newsboat/index.html`
-        * Edit `news.atom`
+        * Edit `newsboat/news.atom`
             * Update `<updated>` field of the channel
             * Use the same date-time for `<published>` and `<updated>` in new
                 `<entry>`
