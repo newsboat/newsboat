@@ -1,5 +1,14 @@
 # Changes for Newsboat
 
+## Unreleased
+
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
 ## 2.11 - 2018-03-25
 
 Lists below only mention user-visible changes, but I would also like to
