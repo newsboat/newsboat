@@ -13,7 +13,7 @@ Pedersen, and Kaligule.
 - Support for `CURL_CA_BUNDLE` environment variable (Marius Bakke, Alexander
     Batischev)
 - Snapcraft package (Alan Pope)
-- Dependency on hlohman/json (which is now used in TT-RSS interface instead of
+- Dependency on nlohmann/json (which is now used in TT-RSS interface instead of
     json-c)
 - CURL error codes are converted to strings in logs (Alexander Batischev)
 - Open command line when a number key is pressed in a list (e.g. feedlist or
