@@ -381,7 +381,7 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id, CURL* cached_handle) {
 			f.items.push_back(item);
 		}
 	} catch (json::exception& e) {
-		LOG(level::ERROR, "Exception occured while parsing feeed: ", e.what());
+		LOG(level::ERROR, "Exception occurred while parsing feeed: ", e.what());
 	}
 
 	std::sort(f.items.begin(), f.items.end(), [](const rsspp::item& a, const rsspp::item& b) {
