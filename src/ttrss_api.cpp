@@ -63,11 +63,15 @@ std::string ttrss_api::retrieve_sid() {
 	std::string sid;
 	try {
 		sid = content["session_id"];
-	} catch (json::exception& e) {}
+	} catch (json::exception& e) {
+		LOG(level::ERROR, "ttrss_api::retrieve_sid: %s", e.what());
+	}
 
 	try {
 		api_level = content["api_level"];
-	} catch (json::exception& e) {};
+	} catch (json::exception& e) {
+		LOG(level::ERROR, "ttrss_api::retrieve_sid: %s", e.what());
+	}
 
 	LOG(level::DEBUG, "ttrss_api::retrieve_sid: sid = '%s'", sid);
 
