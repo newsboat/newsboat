@@ -869,7 +869,7 @@ TEST_CASE("externalize_rssfeed does not create an entry in rss_feed table "
 
 	// Getting rid of `cache` instance to make sure it doesn't hold the
 	// database anymore and did everything it wanted to
-	rsscache.release();
+	rsscache.reset();
 
 	// This struct is a bit of machinery that'll ensure that we let go of
 	// SQLite3 handle even if the test fails
