@@ -1,29 +1,30 @@
 #!/bin/sh
 
 FAILSTATUS=""
+PKG_CONFIG=${PKG_CONFIG:-pkg-config}
 
 check_pkg() {
 	pkgname=$1
 	add_define=$2
 	atleast_version=$3
 	printf "Checking for package ${pkgname}... "
-	if pkg-config --silence-errors "${pkgname}" ; then
+	if $PKG_CONFIG --silence-errors "${pkgname}" ; then
 		echo "found"
 		if [ -n "$atleast_version" ] ; then
-			if ! pkg-config --atleast-version=$atleast_version ${pkgname} ; then
+			if ! $PKG_CONFIG --atleast-version=$atleast_version ${pkgname} ; then
 				echo "at least ${pkgname} $atleast_version required."
 				return 1
 			fi
 		fi
 		echo "# configuration for package ${pkgname}" >> config.mk
-		result=`pkg-config --cflags ${pkgname}`
+		result=`$PKG_CONFIG --cflags ${pkgname}`
 		if [ -n "$result" ] ; then
 			echo "DEFINES+=$result" >> config.mk
 		fi
 		if [ -n "$add_define" ] ; then
 			echo "DEFINES+=${add_define}" >> config.mk
 		fi
-		echo "LDFLAGS+=`pkg-config --libs ${pkgname}`" >> config.mk
+		echo "LDFLAGS+=`$PKG_CONFIG --libs ${pkgname}`" >> config.mk
 		echo "" >> config.mk
 	else
 		echo "not found"
