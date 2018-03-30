@@ -1,13 +1,12 @@
 # Changes for Newsboat
 
-## Unreleased
+## 2.11.1 - 2018-03-30
 
-### Added
-### Changed
-### Deprecated
-### Removed
 ### Fixed
-### Security
+
+- If built from the tarball, Newsboat 2.11 reported its version as 2.10.2. My
+    bad. Kudos to Haudegen, Ryan Mulligan and Robert Schütz for catching that
+    one. (Alexander Batischev)
 
 ## 2.11 - 2018-03-25
 
