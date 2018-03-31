@@ -94,12 +94,8 @@ controller::controller() : v(0), urlcfg(0), rsscache(0), url_file("urls"), cache
  * returns false, if that fails
  */
 bool controller::setup_dirs_xdg(const std::string& env_home) {
-	const char *env_xdg_config;
-	const char *env_xdg_data;
 	std::string xdg_config_dir;
-	std::string xdg_data_dir;
-
-	env_xdg_config = ::getenv("XDG_CONFIG_HOME");
+	const char* env_xdg_config = ::getenv("XDG_CONFIG_HOME");
 	if (env_xdg_config) {
 		xdg_config_dir = env_xdg_config;
 	} else {
@@ -108,7 +104,8 @@ bool controller::setup_dirs_xdg(const std::string& env_home) {
 		xdg_config_dir.append(".config");
 	}
 
-	env_xdg_data = ::getenv("XDG_DATA_HOME");
+	std::string xdg_data_dir;
+	const char* env_xdg_data = ::getenv("XDG_DATA_HOME");
 	if (env_xdg_data) {
 		xdg_data_dir = env_xdg_data;
 	} else {
@@ -138,18 +135,6 @@ bool controller::setup_dirs_xdg(const std::string& env_home) {
 
 	config_dir = xdg_config_dir;
 	data_dir = xdg_data_dir;
-
-	/* in config */
-	url_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + url_file;
-	config_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
-
-	/* in data */
-	cache_file = xdg_data_dir + std::string(NEWSBEUTER_PATH_SEP) + cache_file;
-	lock_file = cache_file + LOCK_SUFFIX;
-	queue_file = xdg_data_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
-	searchfile = strprintf::fmt("%s%shistory.search", xdg_data_dir, NEWSBEUTER_PATH_SEP);
-	cmdlinefile = strprintf::fmt("%s%shistory.cmdline", xdg_data_dir, NEWSBEUTER_PATH_SEP);
-
 	return true;
 }
 
@@ -158,17 +143,24 @@ void controller::setup_dirs(const std::string& env_home) {
 	config_dir.append(NEWSBEUTER_PATH_SEP);
 	config_dir.append(NEWSBOAT_CONFIG_SUBDIR);
 
-	if (setup_dirs_xdg(env_home))
-		return;
+	data_dir = config_dir;
 
-	url_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + url_file;
-	cache_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + cache_file;
+	/* Will change config_dir and data_dir to point to XDG if XDG directories
+	 * are available. */
+	setup_dirs_xdg(env_home);
+
+	/* in config */
+	const std::string cfg = config_dir + std::string(NEWSBEUTER_PATH_SEP);
+	url_file = cfg + url_file;
+	config_file = cfg + config_file;
+
+	/* in data */
+	const std::string data = data_dir + std::string(NEWSBEUTER_PATH_SEP);
+	cache_file = data + cache_file;
 	lock_file = cache_file + LOCK_SUFFIX;
-	config_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
-	queue_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
-
-	searchfile = strprintf::fmt("%s%shistory.search", config_dir, NEWSBEUTER_PATH_SEP);
-	cmdlinefile = strprintf::fmt("%s%shistory.cmdline", config_dir, NEWSBEUTER_PATH_SEP);
+	queue_file = data + queue_file;
+	searchfile = data + std::string("history.search");
+	cmdlinefile = data + std::string("history.cmdline");
 }
 
 void copy_file(
