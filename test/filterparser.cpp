@@ -50,3 +50,11 @@ TEST_CASE("FilterParser doesn't raise errors on valid queries",
 		REQUIRE(fp.parse_string("( a = \"b\") and ( b = \"c\" ) or ( ( c != \"d\" ) and ( c !~ \"asdf\" )) or c != \"xx\""));
 	}
 }
+
+TEST_CASE("Both = and == are accepted", "[FilterParser]")
+{
+	FilterParser fp;
+
+	REQUIRE(fp.parse_string("a = \"abc\""));
+	REQUIRE(fp.parse_string("a == \"abc\""));
+}
