@@ -2,11 +2,13 @@
 # more on inkpot: http://www.vim.org/scripts/script.php?script_id=1143
 
 # colors
-color background   color229   default
-color listnormal   color229   default
-color listfocus    color229   color61 bold
-color info         color247   color235
-color article      color229   default
+color background          color229   default
+color listnormal          color229   default
+color listnormal_unread   color229   default
+color listfocus           color229   color61 bold
+color listfocus_unread    color229   color61 bold
+color info                color247   color235
+color article             color229   default
 
 # highlights
 highlight article "^(Feed|Link):.*$" color46 default bold

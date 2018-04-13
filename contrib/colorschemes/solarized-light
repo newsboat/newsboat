@@ -5,11 +5,13 @@
 # your terminal emulator to use the Solarized palette.
 # See <http://ethanschoonover.com/solarized/> for more information.
 
-color background   default   default
-color listnormal   default   default
-color listfocus    white     yellow
-color info         default   white
-color article      default   default
+color background         default   default
+color listnormal         default   default
+color listnormal_unread  default   default
+color listfocus          white     yellow
+color listfocus_unread   white     yellow
+color info               default   white
+color article            default   default
 
 # highlights
 highlight article "^(Title):.*$" blue default

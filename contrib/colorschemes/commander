@@ -1,7 +1,9 @@
 # newsbeuter color scheme that somehow resembles the infamous N*rt*n Commander.
 
-color listnormal yellow blue bold
-color listfocus  black cyan bold
-color info       black cyan bold
-color background yellow blue bold
-color article    yellow blue bold
+color listnormal        yellow blue bold
+color listnormal_unread yellow blue bold
+color listfocus         black cyan bold
+color listfocus_unread  black cyan bold
+color info              black cyan bold
+color background        yellow blue bold
+color article           yellow blue bold
