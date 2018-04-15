@@ -19,9 +19,7 @@ master repository and shell access to newsboat.org.
     * Description: copy of changelog entry
         * Don't use "###" style for headers because they'll be stripped ("#" is
             a shell comment). Use "===" style instead
-4. Prepare the repo for the next release
-    * Add "Unreleased" section to CHANGELOG
-5. Prepare the tarball
+4. Prepare the tarball
     * Clone your local clone somewhere else
     * In that new clone, `rm -rf .git`
     * Rename that clone to newsboat-VERSION
@@ -30,10 +28,10 @@ master repository and shell access to newsboat.org.
     * Sign the tarball:
         `gpg2 --sign-with 'newsboat@googlegroups.com' --detach-sign --armour newsboat-VERSION.tar.xz`
     * Upload both files to newsboat.org staging area
-6. Prepare the docs
+5. Prepare the docs
     * In your local clone: `make -j5 doc`
     * Upload contents of `doc/xhtml/` to newsboat.org staging area
-7. Publish the release
+6. Publish the release
     * Prepare the directory on the server
         * `cp -rfv /usr/local/www/newsboat.org/www/ newsboat`
         * Prepare directories: `mkdir -p newsboat/releases/VERSION/docs`
@@ -63,6 +61,16 @@ master repository and shell access to newsboat.org.
     * Deploy the directory on the server:
         `sudo cp -rv newsboat/ /usr/local/www/newsboat.org/www/ && sudo chmod -R a+r /usr/local/www/newsboat.org/www/`
     * Push the code: `git push && git push --tags`
-8. Tell the world about it
+7. Tell the world about it
     * Send an email to the mailing list
     * Change the topic on #newsboat at Freenode
+8. Prepare the repo for the next release
+    * Add "Unreleased" section to CHANGELOG
+9. Release the snap
+    * Go to https://dashboard.snapcraft.io/ and log in
+    * Go to https://dashboard.snapcraft.io/snaps/newsboat/revisions/ and for
+        each revision that corresponds to the release:
+        * Click on the revision number
+        * In "Channels" row, click "Release"
+        * Tick all checkboxes ("stable", "candidate", "beta", and "edge")
+        * Click "Release"
