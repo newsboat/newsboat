@@ -6,7 +6,6 @@
 #include <feedlist_formaction.h>
 #include <keymap.h>
 #include <itemlist.h>
-#include <feedlist.h>
 #include <regexmanager.h>
 
 #include <unistd.h>
