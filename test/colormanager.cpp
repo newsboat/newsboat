@@ -117,3 +117,71 @@ TEST_CASE("handle_action() throws confighandlerexception if there aren't "
 			c.handle_action("color", { "one", "two" }),
 			confighandlerexception);
 }
+
+TEST_CASE("handle_action() throws confighandlerexception if foreground color "
+		"is invalid", "[colormanager]")
+{
+	colormanager c;
+
+	const std::vector<std::string> non_colors
+		{ { "awesome", "but", "nonexistent", "colors" } };
+	for (const auto& color : non_colors) {
+		CHECK_THROWS_AS(
+				c.handle_action("color", { "listfocus", color, "default" }),
+				confighandlerexception);
+	}
+}
+
+TEST_CASE("handle_action() throws confighandlerexception if background color "
+		"is invalid", "[colormanager]")
+{
+	colormanager c;
+
+	const std::vector<std::string> non_colors
+		{ { "awesome", "but", "nonexistent", "colors" } };
+	for (const auto& color : non_colors) {
+		CHECK_THROWS_AS(
+				c.handle_action("color", { "listfocus", "default", color }),
+				confighandlerexception);
+	}
+}
+
+TEST_CASE("handle_action() throws confighandlerexception if color attribute "
+		"is invalid", "[colormanager]")
+{
+	colormanager c;
+
+	const std::vector<std::string> non_attributes
+		{ { "awesome", "but", "nonexistent", "attributes" } };
+	for (const auto& attr : non_attributes) {
+		CHECK_THROWS_AS(
+				c.handle_action("color", { "listfocus", "red", "red", attr }),
+				confighandlerexception);
+	}
+}
+
+TEST_CASE("handle_action() throws confighandlerexception if color is applied "
+		"to non-existent element", "[colormanager]")
+{
+	colormanager c;
+
+	const std::vector<std::string> non_elements
+		{ { "awesome", "but", "nonexistent", "elements" } };
+	for (const auto& element : non_elements) {
+		CHECK_THROWS_AS(
+				c.handle_action("color", { element, "red", "green" }),
+				confighandlerexception);
+	}
+}
+
+TEST_CASE("handle_action() throws confighandlerexception if it's passed a "
+		"command other than \"color\"", "[colormanager]")
+{
+	colormanager c;
+
+	const std::vector<std::string> other_commands
+		{ { "browser", "include", "auto-reload", "ocnews-flag-star" } };
+	for (const auto& command : other_commands) {
+		CHECK_THROWS_AS(c.handle_action(command, {}), confighandlerexception);
+	}
+}
