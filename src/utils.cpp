@@ -664,7 +664,19 @@ bool utils::is_valid_color(const std::string& color) {
 			// is it a valid decimal number?
 			const std::string number = color.substr(5, color.size()-5);
 			size_t pos {};
-			int n = std::stoi(number, &pos);
+			int n;
+			try {
+				n = std::stoi(number, &pos);
+			} catch (const std::invalid_argument& e) {
+				// What came after "color" wasn't a number, hence the input
+				// string is not a valid color.
+				return false;
+			} catch (const std::out_of_range& e) {
+				// What came after "color" couldn't fit into an int, whereas
+				// valid values all fit into a byte. Thus, the input string is
+				// not a valid color.
+				return false;
+			}
 
 			// remainder should not contain any trailing characters
 			if (number.size() != pos) return false;

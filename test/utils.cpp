@@ -552,3 +552,13 @@ TEST_CASE("is_valid_podcast_type() returns true if supplied MIME type "
 	REQUIRE_FALSE(utils::is_valid_podcast_type("text/plain"));
 	REQUIRE_FALSE(utils::is_valid_podcast_type("application/zip"));
 }
+
+TEST_CASE("is_valid_color() returns false for things that aren't valid STFL "
+		"colors", "[utils]")
+{
+	const std::vector<std::string> non_colors
+		{ "awesome", "list", "of", "things", "that", "aren't", "colors" };
+	for (const auto& input : non_colors) {
+		REQUIRE_FALSE(utils::is_valid_color(input));
+	}
+}
