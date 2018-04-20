@@ -694,11 +694,7 @@ bool utils::is_valid_attribute(const std::string& attrib) {
 		"standout", "underline", "reverse", "blink",
 		"dim", "bold", "protect", "invis", "default"
 	};
-	if (attribs.find(attrib) != attribs.end()) {
-		return true;
-	} else {
-		return false;
-	}
+	return attribs.find(attrib) != attribs.end();
 }
 
 std::vector<std::pair<unsigned int, unsigned int>> utils::partition_indexes(unsigned int start, unsigned int end, unsigned int parts) {
