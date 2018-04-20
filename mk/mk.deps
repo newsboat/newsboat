@@ -352,6 +352,8 @@ test/cache.o: test/cache.cpp 3rd-party/catch.hpp test/test-helpers.h \
  include/configparser.h include/matcher.h filter/FilterParser.h \
  include/utils.h include/logger.h config.h include/strprintf.h \
  include/rss_parser.h rss/rsspp.h include/remote_api.h
+test/colormanager.o: test/colormanager.cpp 3rd-party/catch.hpp \
+ include/colormanager.h include/configparser.h include/exceptions.h
 test/configcontainer.o: test/configcontainer.cpp 3rd-party/catch.hpp \
  include/configcontainer.h include/configparser.h include/keymap.h \
  include/exceptions.h
@@ -378,8 +380,7 @@ test/itemlist_formaction.o: test/itemlist_formaction.cpp \
  include/colormanager.h include/remote_api.h include/fslock.h \
  include/htmlrenderer.h include/textformatter.h \
  include/filebrowser_formaction.h include/formaction.h \
- include/listformatter.h include/feedlist_formaction.h stfl/itemlist.h \
- stfl/feedlist.h
+ include/listformatter.h include/feedlist_formaction.h stfl/itemlist.h
 test/keymap.o: test/keymap.cpp 3rd-party/catch.hpp include/keymap.h \
  include/configparser.h include/exceptions.h
 test/listformatter.o: test/listformatter.cpp 3rd-party/catch.hpp \

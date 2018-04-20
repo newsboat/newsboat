@@ -1,6 +1,7 @@
 #include "3rd-party/catch.hpp"
 
 #include "colormanager.h"
+#include "exceptions.h"
 
 using namespace newsboat;
 
@@ -88,4 +89,31 @@ TEST_CASE("get_bgcolors() returns foreground colors for each element that "
 		expected.emplace("background", "green");
 		REQUIRE(c.get_bgcolors() == expected);
 	}
+}
+
+TEST_CASE("register_commands() registers colormanager with configparser",
+		"[colormanager]")
+{
+	configparser cfg;
+	colormanager clr;
+
+	REQUIRE_NOTHROW(clr.register_commands(cfg));
+
+	REQUIRE_FALSE(clr.colors_loaded());
+	cfg.parse("data/config-with-colors");
+	REQUIRE(clr.colors_loaded());
+}
+
+TEST_CASE("handle_action() throws confighandlerexception if there aren't "
+		"enough parameters", "[colormanager]")
+{
+	colormanager c;
+
+	CHECK_THROWS_AS(c.handle_action("color", {}), confighandlerexception);
+	CHECK_THROWS_AS(
+			c.handle_action("color", { "one" }),
+			confighandlerexception);
+	CHECK_THROWS_AS(
+			c.handle_action("color", { "one", "two" }),
+			confighandlerexception);
 }
