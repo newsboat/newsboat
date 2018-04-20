@@ -1,5 +1,9 @@
 #include "3rd-party/catch.hpp"
 
+#include <string>
+#include <unordered_set>
+#include <vector>
+
 #include "colormanager.h"
 #include "exceptions.h"
 
@@ -184,4 +188,59 @@ TEST_CASE("handle_action() throws confighandlerexception if it's passed a "
 	for (const auto& command : other_commands) {
 		CHECK_THROWS_AS(c.handle_action(command, {}), confighandlerexception);
 	}
+}
+
+TEST_CASE("dump_config() returns everything we put into colormanager",
+		"[colormanager]")
+{
+	colormanager c;
+
+	std::unordered_set<std::string> expected;
+	std::vector<std::string> config;
+
+	// Checks that `expected` contains the same lines as `config` contains, and
+	// nothing more.
+	auto equivalent =
+		[&]() -> bool
+		{
+			std::size_t found = 0;
+			for (const auto& line : config) {
+				if (expected.find(line) == expected.end())
+					return false;
+
+				found++;
+			}
+
+			return found == expected.size();
+		};
+
+	{
+		INFO("Empty colormanager outputs nothing");
+		c.dump_config(config);
+		REQUIRE(config.empty());
+		REQUIRE(equivalent());
+	}
+
+	expected.emplace("color listfocus default red");
+	c.handle_action("color", { "listfocus", "default", "red" });
+	config.clear();
+	c.dump_config(config);
+	REQUIRE(config.size() == 1);
+	REQUIRE(equivalent());
+
+	expected.emplace("color background green cyan bold");
+	c.handle_action("color", { "background", "green", "cyan", "bold" });
+	config.clear();
+	c.dump_config(config);
+	REQUIRE(config.size() == 2);
+	REQUIRE(equivalent());
+
+	expected.emplace("color listnormal black yellow underline standout");
+	c.handle_action(
+			"color",
+			{ "listnormal", "black", "yellow", "underline", "standout" });
+	config.clear();
+	c.dump_config(config);
+	REQUIRE(config.size() == 3);
+	REQUIRE(equivalent());
 }
