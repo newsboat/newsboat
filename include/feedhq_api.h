@@ -1,9 +1,9 @@
 #ifndef NEWSBOAT_FEEDHQ_API_H_
 #define NEWSBOAT_FEEDHQ_API_H_
 
-#include <remote_api.h>
-#include <urlreader.h>
-#include <cache.h>
+#include "remote_api.h"
+#include "urlreader.h"
+#include "cache.h"
 
 namespace newsboat {
 

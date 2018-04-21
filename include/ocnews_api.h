@@ -2,12 +2,11 @@
 #define NEWSBOAT_OCNEWS_API_H_
 
 #include <map>
-
 #include <json-c/json.h>
 
-#include <remote_api.h>
-#include <urlreader.h>
-#include <rsspp.h>
+#include "remote_api.h"
+#include "urlreader.h"
+#include "rsspp.h"
 
 namespace newsboat {
 

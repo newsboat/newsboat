@@ -1,11 +1,11 @@
 #ifndef NEWSBOAT_TTRSS_API_H_
 #define NEWSBOAT_TTRSS_API_H_
 
-#include <rsspp.h>
-#include <remote_api.h>
-#include <urlreader.h>
-#include <cache.h>
-#include <3rd-party/json.hpp>
+#include "rsspp.h"
+#include "remote_api.h"
+#include "urlreader.h"
+#include "cache.h"
+#include "3rd-party/json.hpp"
 
 namespace newsboat {
 

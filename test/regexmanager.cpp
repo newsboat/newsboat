@@ -1,7 +1,7 @@
-#include "3rd-party/catch.hpp"
+#include "regexmanager.h"
 
-#include <regexmanager.h>
-#include <exceptions.h>
+#include "3rd-party/catch.hpp"
+#include "exceptions.h"
 
 using namespace newsboat;
 

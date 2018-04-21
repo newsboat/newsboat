@@ -1,5 +1,6 @@
+#include "history.h"
+
 #include <fstream>
-#include <history.h>
 
 namespace newsboat {
 

@@ -1,7 +1,8 @@
-#include "logger.h"
 #include "FilterParser.h"
+
+#include "logger.h"
 #include "Parser.h"
-#include <utils.h>
+#include "utils.h"
 
 using namespace newsboat;
 

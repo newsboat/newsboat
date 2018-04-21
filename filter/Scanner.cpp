@@ -1,11 +1,7 @@
-
+#include "Scanner.h"
 
 #include <memory.h>
 #include <string.h>
-#include "Scanner.h"
-
-
-
 
 // string handling, wide character
 
@@ -216,7 +212,7 @@ Buffer::Buffer(FILE* s, bool isUserStream) {
 		fileLen = bufLen = bufStart = 0;
 	}
 	bufCapacity = (bufLen>0) ? bufLen : COCO_MIN_BUFFER_LENGTH;
-	buf = new unsigned char[bufCapacity];	
+	buf = new unsigned char[bufCapacity];
 	if (fileLen > 0) SetPos(0);          // setup  buffer to position 0 (start)
 	else bufPos = 0; // index 0 is already after the file, thus Pos = 0 is invalid
 	if (bufLen == fileLen && CanSeek()) Close();
@@ -247,7 +243,7 @@ Buffer::Buffer(const unsigned char* buf, int len) {
 }
 
 Buffer::~Buffer() {
-	Close(); 
+	Close();
 	if (buf != NULL) {
 		delete [] buf;
 		buf = NULL;

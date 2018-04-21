@@ -1,5 +1,6 @@
-#include <ttrss_api.h>
-#include <logger.h>
+#include "ttrss_api.h"
+
+#include "logger.h"
 
 namespace newsboat {
 

@@ -1,8 +1,8 @@
 #ifndef NEWSBOAT_URLVIEW_FORMACTION_H_
 #define NEWSBOAT_URLVIEW_FORMACTION_H_
 
-#include <formaction.h>
-#include <htmlrenderer.h>
+#include "formaction.h"
+#include "htmlrenderer.h"
 
 namespace newsboat {
 

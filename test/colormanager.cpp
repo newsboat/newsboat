@@ -1,10 +1,10 @@
-#include "3rd-party/catch.hpp"
+#include "colormanager.h"
 
 #include <string>
 #include <unordered_set>
 #include <vector>
 
-#include "colormanager.h"
+#include "3rd-party/catch.hpp"
 #include "exceptions.h"
 
 using namespace newsboat;

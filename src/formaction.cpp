@@ -1,11 +1,13 @@
-#include <formaction.h>
-#include <view.h>
-#include <utils.h>
-#include <strprintf.h>
-#include <config.h>
-#include <logger.h>
+#include "formaction.h"
+
 #include <cassert>
-#include <exceptions.h>
+
+#include "view.h"
+#include "utils.h"
+#include "strprintf.h"
+#include "config.h"
+#include "logger.h"
+#include "exceptions.h"
 
 namespace newsboat {
 

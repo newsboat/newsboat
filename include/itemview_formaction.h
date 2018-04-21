@@ -1,11 +1,11 @@
 #ifndef NEWSBOAT_ITEMVIEW_FORMACTION_H_
 #define NEWSBOAT_ITEMVIEW_FORMACTION_H_
 
-#include <formaction.h>
-#include <htmlrenderer.h>
-#include <textformatter.h>
-#include <regexmanager.h>
-#include <rss.h>
+#include "formaction.h"
+#include "htmlrenderer.h"
+#include "textformatter.h"
+#include "regexmanager.h"
+#include "rss.h"
 
 namespace newsboat {
 

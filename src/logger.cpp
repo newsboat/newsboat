@@ -1,8 +1,9 @@
-#include <logger.h>
+#include "logger.h"
+
 #include <stdarg.h>
-#include <exception.h>
 #include <cerrno>
 
+#include "exception.h"
 
 namespace newsboat {
 std::mutex logger::instanceMutex;

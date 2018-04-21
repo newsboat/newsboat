@@ -1,10 +1,12 @@
-#include <exception.h>
-#include <exceptions.h>
-#include <config.h>
+#include "exception.h"
+
 #include <cerrno>
 #include <cstring>
-#include <utils.h>
-#include <strprintf.h>
+
+#include "exceptions.h"
+#include "config.h"
+#include "utils.h"
+#include "strprintf.h"
 
 namespace newsboat {
 

@@ -1,7 +1,5 @@
-#include <tagsouppullparser.h>
-#include <exceptions.h>
-#include <utils.h>
-#include <logger.h>
+#include "tagsouppullparser.h"
+
 #include <stdexcept>
 #include <istream>
 #include <sstream>
@@ -9,7 +7,10 @@
 #include <cstdlib>
 #include <algorithm>
 
-#include <config.h>
+#include "exceptions.h"
+#include "utils.h"
+#include "logger.h"
+#include "config.h"
 
 namespace newsboat {
 

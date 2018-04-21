@@ -6,7 +6,8 @@
 #include <exception>
 #include <libxml/parser.h>
 #include <curl/curl.h>
-#include <remote_api.h>
+
+#include "remote_api.h"
 
 namespace rsspp {
 

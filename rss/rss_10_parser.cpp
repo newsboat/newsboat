@@ -1,6 +1,8 @@
-#include <config.h>
-#include <rsspp_internal.h>
+#include "rsspp_internal.h"
+
 #include <cstring>
+
+#include "config.h"
 
 #define RSS_1_0_NS "http://purl.org/rss/1.0/"
 

@@ -2,14 +2,13 @@
 #define PODBOAT_PODDLTHREAD_H_
 
 #include <thread>
-#include <download.h>
 #include <fstream>
-
 #include <sys/time.h>
 #include <time.h>
 #include <memory>
 
-#include <configcontainer.h>
+#include "download.h"
+#include "configcontainer.h"
 
 namespace podboat {
 

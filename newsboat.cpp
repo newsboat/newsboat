@@ -1,15 +1,15 @@
 #include <iostream>
-
-#include <rss.h>
-#include <view.h>
-#include <controller.h>
-#include <cache.h>
-#include <config.h>
-#include <rsspp.h>
 #include <errno.h>
 #include <cstring>
 #include <exceptions.h>
 #include <exception.h>
+
+#include "rss.h"
+#include "view.h"
+#include "controller.h"
+#include "cache.h"
+#include "config.h"
+#include "rsspp.h"
 
 using namespace newsboat;
 

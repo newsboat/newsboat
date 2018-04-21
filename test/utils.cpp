@@ -1,8 +1,8 @@
-#include "3rd-party/catch.hpp"
+#include "utils.h"
 
 #include <unistd.h> // chdir()
 
-#include <utils.h>
+#include "3rd-party/catch.hpp"
 
 using namespace newsboat;
 

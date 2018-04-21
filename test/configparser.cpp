@@ -1,6 +1,6 @@
-#include "3rd-party/catch.hpp"
+#include "configparser.h"
 
-#include <configparser.h>
+#include "3rd-party/catch.hpp"
 
 using namespace newsboat;
 

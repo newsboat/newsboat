@@ -1,6 +1,6 @@
-#include "3rd-party/catch.hpp"
+#include "textformatter.h"
 
-#include <textformatter.h>
+#include "3rd-party/catch.hpp"
 
 using namespace newsboat;
 

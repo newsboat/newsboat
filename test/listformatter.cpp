@@ -1,6 +1,6 @@
-#include "3rd-party/catch.hpp"
+#include "listformatter.h"
 
-#include <listformatter.h>
+#include "3rd-party/catch.hpp"
 
 using namespace newsboat;
 

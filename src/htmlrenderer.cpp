@@ -1,16 +1,18 @@
-#include <htmlrenderer.h>
-#include <tagsouppullparser.h>
-#include <utils.h>
-#include <strprintf.h>
+#include "htmlrenderer.h"
+
 #include <sstream>
 #include <cstdio>
 #include <iostream>
 #include <cstring>
 #include <stdexcept>
 #include <algorithm>
-#include <logger.h>
 #include <libgen.h>
-#include <config.h>
+
+#include "tagsouppullparser.h"
+#include "utils.h"
+#include "strprintf.h"
+#include "logger.h"
+#include "config.h"
 
 namespace newsboat {
 

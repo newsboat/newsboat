@@ -1,23 +1,21 @@
-#include <feedlist_formaction.h>
-#include <view.h>
-#include <config.h>
+#include "feedlist_formaction.h"
+
 #include <cassert>
-#include <logger.h>
-#include <reloadthread.h>
-#include <exceptions.h>
-#include <utils.h>
-#include <strprintf.h>
-#include <formatstring.h>
-
-#include <listformatter.h>
-
 #include <sstream>
 #include <string>
 #include <algorithm>
-
 #include <cstring>
-
 #include <langinfo.h>
+
+#include "view.h"
+#include "config.h"
+#include "logger.h"
+#include "reloadthread.h"
+#include "exceptions.h"
+#include "utils.h"
+#include "strprintf.h"
+#include "formatstring.h"
+#include "listformatter.h"
 
 #define FILTER_UNREAD_FEEDS "unread_count != \"0\""
 

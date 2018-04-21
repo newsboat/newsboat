@@ -2,10 +2,11 @@
 #define NEWSBOAT_CACHE_H_
 
 #include <sqlite3.h>
-#include <rss.h>
-#include <configcontainer.h>
 #include <mutex>
 #include <unordered_set>
+
+#include "rss.h"
+#include "configcontainer.h"
 
 namespace newsboat {
 

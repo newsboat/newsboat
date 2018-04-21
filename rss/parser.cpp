@@ -1,15 +1,16 @@
-#include <config.h>
-#include <rsspp.h>
-#include <rsspp_internal.h>
+#include "rsspp.h"
+
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <curl/curl.h>
-#include <logger.h>
-#include <utils.h>
 #include <cstring>
-#include <utils.h>
-#include <strprintf.h>
-#include <remote_api.h>
+
+#include "config.h"
+#include "rsspp_internal.h"
+#include "logger.h"
+#include "utils.h"
+#include "strprintf.h"
+#include "remote_api.h"
 
 using namespace newsboat;
 

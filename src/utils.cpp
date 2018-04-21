@@ -1,7 +1,4 @@
-#include <utils.h>
-#include <strprintf.h>
-#include <logger.h>
-#include <config.h>
+#include "utils.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -12,7 +9,6 @@
 #include <libgen.h>
 #include <sys/utsname.h>
 #include <sys/param.h>
-
 #include <unordered_set>
 #include <unistd.h>
 #include <sstream>
@@ -25,12 +21,14 @@
 #include <cmath>
 #include <algorithm>
 #include <regex>
-
 #include <curl/curl.h>
-
 #include <langinfo.h>
 #include <stfl.h>
 #include <libxml/uri.h>
+
+#include "strprintf.h"
+#include "logger.h"
+#include "config.h"
 
 #if HAVE_GCRYPT
 #include <gnutls/gnutls.h>

@@ -1,12 +1,13 @@
 #ifndef NEWSBOAT_ITEMLIST_FORMACTION_H_
 #define NEWSBOAT_ITEMLIST_FORMACTION_H_
 
-#include <list_formaction.h>
-#include <history.h>
-#include <regexmanager.h>
-#include <view.h>
 #include <assert.h>
-#include <listformatter.h>
+
+#include "list_formaction.h"
+#include "history.h"
+#include "regexmanager.h"
+#include "view.h"
+#include "listformatter.h"
 
 namespace newsboat {
 

@@ -6,7 +6,7 @@
 #include <utility>
 #include <vector>
 
-#include <configparser.h>
+#include "configparser.h"
 
 // in configuration: bind-key <key> <operation>
 

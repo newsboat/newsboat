@@ -1,15 +1,16 @@
-#include <poddlthread.h>
+#include "poddlthread.h"
+
 #include <curl/curl.h>
 #include <iostream>
-#include <logger.h>
-#include <config.h>
-#include <utils.h>
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/utsname.h>
 #include <unistd.h>
 #include <libgen.h>
+
+#include "logger.h"
+#include "config.h"
+#include "utils.h"
 
 using namespace newsboat;
 

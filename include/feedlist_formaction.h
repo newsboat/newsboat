@@ -1,11 +1,11 @@
 #ifndef NEWSBOAT_FEEDLIST_FORMACTION_H_
 #define NEWSBOAT_FEEDLIST_FORMACTION_H_
 
-#include <list_formaction.h>
-#include <matcher.h>
-#include <history.h>
-#include <regexmanager.h>
-#include <view.h>
+#include "list_formaction.h"
+#include "matcher.h"
+#include "history.h"
+#include "regexmanager.h"
+#include "view.h"
 
 namespace newsboat {
 

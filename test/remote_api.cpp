@@ -1,8 +1,8 @@
-#include "3rd-party/catch.hpp"
+#include "remote_api.h"
 
 #include <memory>
 
-#include <remote_api.h>
+#include "3rd-party/catch.hpp"
 
 using namespace newsboat;
 

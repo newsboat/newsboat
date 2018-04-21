@@ -1,15 +1,16 @@
-#include <stflpp.h>
-#include <utils.h>
-#include <queueloader.h>
+#include "queueloader.h"
+
 #include <cstdlib>
-#include <logger.h>
 #include <fstream>
 #include <cstring>
-#include <config.h>
 #include <libgen.h>
-#include <configcontainer.h>
-
 #include <unistd.h>
+
+#include "stflpp.h"
+#include "utils.h"
+#include "logger.h"
+#include "config.h"
+#include "configcontainer.h"
 
 using namespace newsboat;
 

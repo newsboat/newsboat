@@ -1,21 +1,20 @@
-#include <pb_view.h>
-#include <pb_controller.h>
-#include <poddlthread.h>
-#include <download.h>
-#include <config.h>
-#include <logger.h>
-
-#include <dllist.h>
-#include <help.h>
-#include <utils.h>
-#include <strprintf.h>
+#include "pb_view.h"
 
 #include <curses.h>
-
 #include <sstream>
 #include <iostream>
 #include <cstring>
 #include <cstdio>
+
+#include "pb_controller.h"
+#include "poddlthread.h"
+#include "download.h"
+#include "config.h"
+#include "logger.h"
+#include "dllist.h"
+#include "help.h"
+#include "utils.h"
+#include "strprintf.h"
 
 using namespace newsboat;
 

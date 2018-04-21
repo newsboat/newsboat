@@ -1,8 +1,8 @@
-#include "3rd-party/catch.hpp"
+#include "tagsouppullparser.h"
 
 #include <sstream>
 
-#include <tagsouppullparser.h>
+#include "3rd-party/catch.hpp"
 
 using namespace newsboat;
 

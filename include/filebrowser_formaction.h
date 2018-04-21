@@ -1,7 +1,7 @@
 #ifndef NEWSBOAT_FILEBROWSER_FORMACTION_H_
 #define NEWSBOAT_FILEBROWSER_FORMACTION_H_
 
-#include <formaction.h>
+#include "formaction.h"
 
 namespace newsboat {
 

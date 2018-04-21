@@ -1,5 +1,6 @@
-#include <newsblur_api.h>
-#include <logger.h>
+#include "newsblur_api.h"
+
+#include "logger.h"
 
 namespace newsboat {
 

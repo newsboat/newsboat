@@ -1,11 +1,11 @@
-#include "3rd-party/catch.hpp"
+#include "rss.h"
+#include "rsspp.h"
 
-#include <rsspp.h>
-#include <rsspp_internal.h>
-#include <rss.h>
-#include <rss_parser.h>
-#include <cache.h>
-#include <configcontainer.h>
+#include "3rd-party/catch.hpp"
+#include "rsspp_internal.h"
+#include "rss_parser.h"
+#include "cache.h"
+#include "configcontainer.h"
 
 TEST_CASE("Throws exception if file doesn't exist", "[rsspp::parser]") {
 	rsspp::parser p;

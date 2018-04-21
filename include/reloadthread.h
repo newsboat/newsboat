@@ -2,8 +2,9 @@
 #define NEWSBOAT_RELOADTHREAD_H_
 
 #include <thread>
-#include <controller.h>
-#include <configcontainer.h>
+
+#include "controller.h"
+#include "configcontainer.h"
 
 namespace newsboat {
 

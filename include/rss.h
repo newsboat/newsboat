@@ -3,14 +3,13 @@
 
 #include <string>
 #include <vector>
-
-#include <configcontainer.h>
-#include <matcher.h>
 #include <mutex>
-#include <utils.h>
-
 #include <memory>
 #include <unordered_map>
+
+#include "configcontainer.h"
+#include "matcher.h"
+#include "utils.h"
 
 namespace newsboat {
 

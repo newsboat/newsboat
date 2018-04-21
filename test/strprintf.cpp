@@ -1,6 +1,6 @@
-#include "3rd-party/catch.hpp"
+#include "strprintf.h"
 
-#include <strprintf.h>
+#include "3rd-party/catch.hpp"
 
 using namespace newsboat;
 

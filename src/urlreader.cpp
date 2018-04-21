@@ -1,11 +1,12 @@
+#include "urlreader.h"
+
 #include <fstream>
 #include <cstring>
-
-#include <urlreader.h>
-#include <utils.h>
-#include <logger.h>
 #include <sys/utsname.h>
-#include <config.h>
+
+#include "utils.h"
+#include "logger.h"
+#include "config.h"
 
 namespace newsboat {
 

@@ -1,10 +1,10 @@
-#include "3rd-party/catch.hpp"
+#include "htmlrenderer.h"
 
 #include <sstream>
 
-#include <htmlrenderer.h>
-#include <utils.h>
-#include <strprintf.h>
+#include "3rd-party/catch.hpp"
+#include "utils.h"
+#include "strprintf.h"
 
 using namespace newsboat;
 

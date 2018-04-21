@@ -1,5 +1,6 @@
-#include <oldreader_api.h>
-#include <logger.h>
+#include "oldreader_api.h"
+
+#include "logger.h"
 
 namespace newsboat {
 

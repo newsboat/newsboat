@@ -1,13 +1,15 @@
+#include "help_formaction.h"
+
 #include <sstream>
-#include <config.h>
-#include <help_formaction.h>
-#include <formatstring.h>
-#include <view.h>
-#include <listformatter.h>
-#include <utils.h>
-#include <strprintf.h>
-#include <keymap.h>
 #include <cstring>
+
+#include "config.h"
+#include "formatstring.h"
+#include "view.h"
+#include "listformatter.h"
+#include "utils.h"
+#include "strprintf.h"
+#include "keymap.h"
 
 namespace newsboat {
 

@@ -1,9 +1,10 @@
-#include <filtercontainer.h>
-#include <exceptions.h>
-#include <matcher.h>
-#include <utils.h>
-#include <strprintf.h>
-#include <config.h>
+#include "filtercontainer.h"
+
+#include "exceptions.h"
+#include "matcher.h"
+#include "utils.h"
+#include "strprintf.h"
+#include "config.h"
 
 namespace newsboat {
 

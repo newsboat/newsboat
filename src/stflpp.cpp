@@ -1,10 +1,11 @@
-#include <stflpp.h>
-#include <logger.h>
-#include <exception.h>
-#include <cerrno>
+#include "stflpp.h"
 
+#include <cerrno>
 #include <langinfo.h>
-#include <utils.h>
+
+#include "logger.h"
+#include "exception.h"
+#include "utils.h"
 
 namespace newsboat {
 

@@ -1,6 +1,6 @@
-#include "3rd-party/catch.hpp"
+#include "history.h"
 
-#include <history.h>
+#include "3rd-party/catch.hpp"
 
 using namespace newsboat;
 

@@ -1,7 +1,9 @@
-#include <config.h>
-#include <rsspp_internal.h>
-#include <utils.h>
+#include "rsspp_internal.h"
+
 #include <cstring>
+
+#include "config.h"
+#include "utils.h"
 
 namespace rsspp {
 

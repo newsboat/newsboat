@@ -1,7 +1,7 @@
 #ifndef NEWSBOAT_MATCHER_H_
 #define NEWSBOAT_MATCHER_H_
 
-#include <FilterParser.h>
+#include "FilterParser.h"
 
 namespace newsboat {
 

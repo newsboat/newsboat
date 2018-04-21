@@ -1,7 +1,4 @@
-#include <matcher.h>
-#include <logger.h>
-#include <utils.h>
-#include <exceptions.h>
+#include "matcher.h"
 
 #include <sys/time.h>
 #include <regex.h>
@@ -9,6 +6,10 @@
 #include <cassert>
 #include <sstream>
 #include <vector>
+
+#include "logger.h"
+#include "utils.h"
+#include "exceptions.h"
 
 namespace newsboat {
 

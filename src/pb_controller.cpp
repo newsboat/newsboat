@@ -1,13 +1,8 @@
-#include <pb_controller.h>
-#include <pb_view.h>
-#include <poddlthread.h>
-#include <config.h>
-#include <utils.h>
-#include <strprintf.h>
+#include "pb_controller.h"
+
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
-
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <pwd.h>
@@ -18,12 +13,17 @@
 #include <getopt.h>
 #include <cstring>
 
-#include <keymap.h>
-#include <configcontainer.h>
-#include <colormanager.h>
-#include <exceptions.h>
-#include <queueloader.h>
-#include <logger.h>
+#include "pb_view.h"
+#include "poddlthread.h"
+#include "config.h"
+#include "utils.h"
+#include "strprintf.h"
+#include "keymap.h"
+#include "configcontainer.h"
+#include "colormanager.h"
+#include "exceptions.h"
+#include "queueloader.h"
+#include "logger.h"
 
 using namespace newsboat;
 

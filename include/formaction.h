@@ -1,13 +1,13 @@
 #ifndef NEWSBOAT_FORMACTION_H_
 #define NEWSBOAT_FORMACTION_H_
 
-#include <stflpp.h>
-#include <keymap.h>
-#include <rss.h>
-#include <history.h>
-
 #include <vector>
 #include <string>
+
+#include "stflpp.h"
+#include "keymap.h"
+#include "rss.h"
+#include "history.h"
 
 namespace newsboat {
 

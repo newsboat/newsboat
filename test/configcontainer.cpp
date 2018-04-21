@@ -1,9 +1,9 @@
-#include "3rd-party/catch.hpp"
+#include "configcontainer.h"
 
-#include <configcontainer.h>
-#include <configparser.h>
-#include <keymap.h>
-#include <exceptions.h>
+#include "3rd-party/catch.hpp"
+#include "configparser.h"
+#include "keymap.h"
+#include "exceptions.h"
 
 using namespace newsboat;
 

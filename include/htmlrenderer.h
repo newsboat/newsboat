@@ -1,11 +1,12 @@
 #ifndef NEWSBOAT_HTMLRENDERER_H_
 #define NEWSBOAT_HTMLRENDERER_H_
 
-#include <textformatter.h>
 #include <vector>
 #include <string>
 #include <istream>
 #include <map>
+
+#include "textformatter.h"
 
 namespace newsboat {
 

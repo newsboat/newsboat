@@ -5,11 +5,11 @@
 #include <string>
 #include <stdexcept>
 #include <memory>
-
-#include <logger.h>
 #include <curl/curl.h>
-#include <configcontainer.h>
 #include <libxml/parser.h>
+
+#include "logger.h"
+#include "configcontainer.h"
 
 namespace newsboat {
 

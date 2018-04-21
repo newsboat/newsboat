@@ -1,20 +1,20 @@
 #ifndef NEWSBOAT_VIEW_H_
 #define NEWSBOAT_VIEW_H_
 
-#include <controller.h>
-#include <configcontainer.h>
 #include <vector>
 #include <list>
 #include <string>
-#include <rss.h>
-#include <keymap.h>
 #include <mutex>
-#include <htmlrenderer.h>
-#include <colormanager.h>
-#include <regexmanager.h>
 
-#include <stflpp.h>
-#include <filebrowser_formaction.h>
+#include "controller.h"
+#include "configcontainer.h"
+#include "rss.h"
+#include "keymap.h"
+#include "htmlrenderer.h"
+#include "colormanager.h"
+#include "regexmanager.h"
+#include "stflpp.h"
+#include "filebrowser_formaction.h"
 
 namespace newsboat {
 

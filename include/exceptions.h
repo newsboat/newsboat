@@ -3,9 +3,9 @@
 
 #include <stdexcept>
 #include <string>
-#include <configparser.h>
-
 #include <sqlite3.h>
+
+#include "configparser.h"
 
 namespace newsboat {
 

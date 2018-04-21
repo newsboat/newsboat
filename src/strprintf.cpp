@@ -1,4 +1,4 @@
-#include <strprintf.h>
+#include "strprintf.h"
 
 using namespace newsboat;
 

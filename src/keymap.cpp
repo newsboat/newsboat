@@ -1,11 +1,13 @@
-#include <keymap.h>
-#include <logger.h>
+#include "keymap.h"
+
 #include <vector>
 #include <iostream>
-#include <config.h>
-#include <exceptions.h>
-#include <utils.h>
-#include <strprintf.h>
+
+#include "logger.h"
+#include "config.h"
+#include "exceptions.h"
+#include "utils.h"
+#include "strprintf.h"
 
 namespace newsboat {
 

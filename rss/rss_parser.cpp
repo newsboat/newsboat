@@ -1,4 +1,5 @@
-#include <rsspp_internal.h>
+#include "rsspp_internal.h"
+
 #include <cstring>
 #include <libxml/tree.h>
 

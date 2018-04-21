@@ -1,5 +1,6 @@
-#include <list_formaction.h>
-#include <view.h>
+#include "list_formaction.h"
+
+#include "view.h"
 
 namespace newsboat {
 

@@ -5,7 +5,8 @@
 #include <vector>
 #include <string>
 #include <utility>
-#include <regexmanager.h>
+
+#include "regexmanager.h"
 
 namespace newsboat {
 

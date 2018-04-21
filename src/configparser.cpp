@@ -1,20 +1,19 @@
-#include <configparser.h>
-#include <tagsouppullparser.h>
-#include <exceptions.h>
-#include <utils.h>
-#include <strprintf.h>
-#include <logger.h>
+#include "configparser.h"
+
 #include <fstream>
-#include <config.h>
 #include <cstdlib>
 #include <cstring>
-
 #include <sys/types.h>
 #include <pwd.h>
-
 #include <cstring>
 #include <cstdlib>
 
+#include "tagsouppullparser.h"
+#include "exceptions.h"
+#include "utils.h"
+#include "strprintf.h"
+#include "logger.h"
+#include "config.h"
 
 namespace newsboat {
 

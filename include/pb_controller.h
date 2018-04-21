@@ -2,12 +2,13 @@
 #define PODBOAT_CONTROLLER_H_
 
 #include <string>
-#include <configcontainer.h>
-#include <download.h>
-#include <queueloader.h>
 #include <vector>
-#include <fslock.h>
 #include <memory>
+
+#include "configcontainer.h"
+#include "download.h"
+#include "queueloader.h"
+#include "fslock.h"
 
 namespace podboat {
 

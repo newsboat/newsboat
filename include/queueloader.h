@@ -2,8 +2,9 @@
 #define PODBOAT_QUEUELOADER_H_
 
 #include <vector>
-#include <download.h>
-#include <pb_controller.h>
+
+#include "download.h"
+#include "pb_controller.h"
 
 namespace podboat {
 

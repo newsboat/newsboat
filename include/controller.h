@@ -1,16 +1,17 @@
 #ifndef NEWSBOAT_CONTROLLER_H_
 #define NEWSBOAT_CONTROLLER_H_
 
-#include <urlreader.h>
-#include <rss.h>
-#include <cache.h>
-#include <configcontainer.h>
-#include <filtercontainer.h>
-#include <colormanager.h>
-#include <regexmanager.h>
-#include <remote_api.h>
 #include <libxml/tree.h>
-#include <fslock.h>
+
+#include "urlreader.h"
+#include "rss.h"
+#include "cache.h"
+#include "configcontainer.h"
+#include "filtercontainer.h"
+#include "colormanager.h"
+#include "regexmanager.h"
+#include "remote_api.h"
+#include "fslock.h"
 
 namespace newsboat {
 

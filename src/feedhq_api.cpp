@@ -1,13 +1,13 @@
+#include "feedhq_api.h"
+
 #include <vector>
 #include <cstring>
-
-#include <feedhq_api.h>
-#include <config.h>
-#include <utils.h>
-#include <strprintf.h>
-
 #include <curl/curl.h>
 #include <json.h>
+
+#include "config.h"
+#include "utils.h"
+#include "strprintf.h"
 
 #define FEEDHQ_LOGIN					"/accounts/ClientLogin"
 #define FEEDHQ_API_PREFIX				"/reader/api/0/"

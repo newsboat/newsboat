@@ -1,17 +1,16 @@
-#include "3rd-party/catch.hpp"
-#include "test-helpers.h"
-
-#include <cache.h>
-#include <itemlist_formaction.h>
-#include <feedlist_formaction.h>
-#include <keymap.h>
-#include <itemlist.h>
-#include <regexmanager.h>
+#include "itemlist_formaction.h"
 
 #include <unistd.h>
 
-using namespace newsboat;
+#include "3rd-party/catch.hpp"
+#include "test-helpers.h"
+#include "cache.h"
+#include "feedlist_formaction.h"
+#include "keymap.h"
+#include "itemlist.h"
+#include "regexmanager.h"
 
+using namespace newsboat;
 
 TEST_CASE("OP_OPEN displays article using an external pager", "[itemlist_formaction]") {
 	controller c;

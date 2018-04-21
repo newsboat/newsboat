@@ -1,11 +1,13 @@
-#include <textformatter.h>
-#include <utils.h>
-#include <strprintf.h>
-#include <htmlrenderer.h>
-#include <stflpp.h>
+#include "textformatter.h"
+
 #include <assert.h>
 #include <limits.h>
 #include <algorithm>
+
+#include "utils.h"
+#include "strprintf.h"
+#include "htmlrenderer.h"
+#include "stflpp.h"
 
 namespace newsboat {
 

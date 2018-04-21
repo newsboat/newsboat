@@ -1,18 +1,18 @@
-#include <controller.h>
 #include <itemlist_formaction.h>
-#include <view.h>
-#include <config.h>
-#include <logger.h>
-#include <exceptions.h>
-#include <utils.h>
-#include <strprintf.h>
-#include <formatstring.h>
 
 #include <cassert>
 #include <sstream>
 #include <cstdio>
-
 #include <langinfo.h>
+
+#include "controller.h"
+#include "view.h"
+#include "config.h"
+#include "logger.h"
+#include "exceptions.h"
+#include "utils.h"
+#include "strprintf.h"
+#include "formatstring.h"
 
 #define FILTER_UNREAD_ITEMS "unread != \"no\""
 
@@ -361,16 +361,16 @@ void itemlist_formaction::process_operation(operation op, bool automatic, std::v
 			v->show_error(strprintf::fmt(_("Error: couldn't mark feed read: %s"), e.what()));
 		}
 		break;
-	case OP_MARKALLABOVEASREAD: 
+	case OP_MARKALLABOVEASREAD:
 		LOG(level::INFO, "itemlist_formaction: marking all above as read");
-		v->set_status(_("Marking all above as read..."));   
+		v->set_status(_("Marking all above as read..."));
 		if (itemposname.length() > 0 && itempos < visible_items.size()) {
 			for (unsigned int i=0; i<itempos; ++i) {
 				if (visible_items[i].first->unread()) {
 					visible_items[i].first->set_unread(false);
 					v->get_ctrl()->mark_article_read(visible_items[i].first->guid(), true);
 				}
-			}  
+			}
 			if (!v->get_cfg()->get_configvalue_as_bool("show-read-articles")) {
 				f->set("itempos","0");
 			}

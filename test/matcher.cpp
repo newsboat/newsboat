@@ -1,7 +1,8 @@
+#include "matcher.h"
+
 #include "3rd-party/catch.hpp"
 
-#include <matcher.h>
-#include <exceptions.h>
+#include "exceptions.h"
 
 using namespace newsboat;
 

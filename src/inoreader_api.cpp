@@ -1,13 +1,13 @@
+#include "inoreader_api.h"
+
 #include <vector>
 #include <cstring>
-
-#include <inoreader_api.h>
-#include <config.h>
-#include <utils.h>
-#include <strprintf.h>
-
 #include <curl/curl.h>
 #include <json.h>
+
+#include "config.h"
+#include "utils.h"
+#include "strprintf.h"
 
 #define INOREADER_LOGIN					"https://inoreader.com/accounts/ClientLogin"
 #define INOREADER_API_PREFIX				"https://inoreader.com/reader/api/0/"

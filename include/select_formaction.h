@@ -1,8 +1,8 @@
 #ifndef NEWSBOAT_SELECT_FORMACTION_H_
 #define NEWSBOAT_SELECT_FORMACTION_H_
 
-#include <formaction.h>
-#include <filtercontainer.h>
+#include "formaction.h"
+#include "filtercontainer.h"
 
 namespace newsboat {
 

@@ -1,13 +1,13 @@
+#include "oldreader_api.h"
+
 #include <vector>
 #include <cstring>
-
-#include <oldreader_api.h>
-#include <config.h>
-#include <utils.h>
-#include <strprintf.h>
-
 #include <curl/curl.h>
 #include <json.h>
+
+#include "config.h"
+#include "utils.h"
+#include "strprintf.h"
 
 #define OLDREADER_LOGIN					"https://theoldreader.com/accounts/ClientLogin"
 #define OLDREADER_API_PREFIX				"http://theoldreader.com/reader/api/0/"

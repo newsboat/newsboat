@@ -1,5 +1,6 @@
-#include <feedhq_api.h>
-#include <logger.h>
+#include "feedhq_api.h"
+
+#include "logger.h"
 
 namespace newsboat {
 

@@ -1,27 +1,4 @@
-#include <config.h>
-#include <view.h>
-#include <controller.h>
-#include <configparser.h>
-#include <configcontainer.h>
-#include <exceptions.h>
-#include <downloadthread.h>
-#include <colormanager.h>
-#include <logger.h>
-#include <utils.h>
-#include <strprintf.h>
-#include <stflpp.h>
-#include <exception.h>
-#include <formatstring.h>
-#include <regexmanager.h>
-#include <rss_parser.h>
-#include <remote_api.h>
-#include <oldreader_api.h>
-#include <feedhq_api.h>
-#include <ttrss_api.h>
-#include <newsblur_api.h>
-#include <ocnews_api.h>
-#include <inoreader_api.h>
-#include <xlicense.h>
+#include "controller.h"
 
 #include <cstdlib>
 #include <cstring>
@@ -31,7 +8,6 @@
 #include <algorithm>
 #include <functional>
 #include <mutex>
-
 #include <sys/time.h>
 #include <ctime>
 #include <cassert>
@@ -41,20 +17,41 @@
 #include <sys/utsname.h>
 #include <langinfo.h>
 #include <libgen.h>
-
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <pwd.h>
-
 #include <ncurses.h>
-
 #include <libxml/xmlversion.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <libxml/xmlsave.h>
 #include <libxml/uri.h>
 #include <curl/curl.h>
+
+#include "config.h"
+#include "view.h"
+#include "configparser.h"
+#include "configcontainer.h"
+#include "exceptions.h"
+#include "downloadthread.h"
+#include "colormanager.h"
+#include "logger.h"
+#include "utils.h"
+#include "strprintf.h"
+#include "stflpp.h"
+#include "exception.h"
+#include "formatstring.h"
+#include "regexmanager.h"
+#include "rss_parser.h"
+#include "remote_api.h"
+#include "oldreader_api.h"
+#include "feedhq_api.h"
+#include "ttrss_api.h"
+#include "newsblur_api.h"
+#include "ocnews_api.h"
+#include "inoreader_api.h"
+#include "xlicense.h"
 
 namespace newsboat {
 

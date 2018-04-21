@@ -3,9 +3,9 @@
 
 #include <fstream>
 #include <mutex>
-#include <config.h>
 
-#include <strprintf.h>
+#include "config.h"
+#include "strprintf.h"
 
 namespace newsboat {
 

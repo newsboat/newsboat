@@ -1,18 +1,18 @@
-#include <logger.h>
-#include <colormanager.h>
-#include <utils.h>
-#include <strprintf.h>
-#include <pb_view.h>
+#include "colormanager.h"
 
-#include <feedlist_formaction.h>
-#include <itemlist_formaction.h>
-#include <itemview_formaction.h>
-#include <help_formaction.h>
-#include <filebrowser_formaction.h>
-#include <urlview_formaction.h>
-#include <select_formaction.h>
-#include <exceptions.h>
-#include <config.h>
+#include "logger.h"
+#include "utils.h"
+#include "strprintf.h"
+#include "pb_view.h"
+#include "feedlist_formaction.h"
+#include "itemlist_formaction.h"
+#include "itemview_formaction.h"
+#include "help_formaction.h"
+#include "filebrowser_formaction.h"
+#include "urlview_formaction.h"
+#include "select_formaction.h"
+#include "exceptions.h"
+#include "config.h"
 
 using namespace podboat;
 

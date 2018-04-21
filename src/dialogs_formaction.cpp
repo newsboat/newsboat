@@ -1,12 +1,13 @@
-#include <config.h>
-#include <view.h>
-#include <dialogs_formaction.h>
-#include <listformatter.h>
-#include <formatstring.h>
-#include <utils.h>
-#include <strprintf.h>
+#include "dialogs_formaction.h"
 
 #include <cstdio>
+
+#include "config.h"
+#include "view.h"
+#include "listformatter.h"
+#include "formatstring.h"
+#include "utils.h"
+#include "strprintf.h"
 
 namespace newsboat {
 

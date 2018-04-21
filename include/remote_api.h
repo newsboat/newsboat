@@ -1,11 +1,12 @@
 #ifndef NEWSBOAT_REMOTE_API_H_
 #define NEWSBOAT_REMOTE_API_H_
 
-#include <configcontainer.h>
 #include <string>
 #include <utility>
 #include <vector>
 #include <curl/curl.h>
+
+#include "configcontainer.h"
 
 namespace newsboat {
 

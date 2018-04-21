@@ -1,36 +1,9 @@
-#include <itemlist.h>
-#include <itemview.h>
-#include <help.h>
-#include <filebrowser.h>
-#include <urlview.h>
-#include <selecttag.h>
-#include <feedlist.h>
-#include <dialogs.h>
-#include <formatstring.h>
-
-#include <formaction.h>
-#include <feedlist_formaction.h>
-#include <itemlist_formaction.h>
-#include <itemview_formaction.h>
-#include <help_formaction.h>
-#include <urlview_formaction.h>
-#include <select_formaction.h>
-#include <dialogs_formaction.h>
-
-#include <logger.h>
-#include <reloadthread.h>
-#include <exception.h>
-#include <exceptions.h>
-#include <keymap.h>
-#include <utils.h>
-#include <strprintf.h>
-#include <regexmanager.h>
+#include "view.h"
 
 #include <iostream>
 #include <iomanip>
 #include <fstream>
 #include <cerrno>
-
 #include <assert.h>
 #include <libgen.h>
 #include <sys/types.h>
@@ -38,23 +11,46 @@
 #include <grp.h>
 #include <pwd.h>
 #include <unistd.h>
-#include <config.h>
 #include <sys/param.h>
 #include <string.h>
 #include <ncurses.h>
 #include <curses.h>
 #include <time.h>
-
+#include <cstring>
+#include <cstdio>
 
 extern "C" {
 #include <stfl.h>
 }
 
-#include <view.h>
-#include <rss.h>
-#include <htmlrenderer.h>
-#include <cstring>
-#include <cstdio>
+#include "itemlist.h"
+#include "itemview.h"
+#include "help.h"
+#include "filebrowser.h"
+#include "urlview.h"
+#include "selecttag.h"
+#include "feedlist.h"
+#include "dialogs.h"
+#include "formatstring.h"
+#include "formaction.h"
+#include "feedlist_formaction.h"
+#include "itemlist_formaction.h"
+#include "itemview_formaction.h"
+#include "help_formaction.h"
+#include "urlview_formaction.h"
+#include "select_formaction.h"
+#include "dialogs_formaction.h"
+#include "logger.h"
+#include "reloadthread.h"
+#include "exception.h"
+#include "exceptions.h"
+#include "keymap.h"
+#include "utils.h"
+#include "strprintf.h"
+#include "regexmanager.h"
+#include "config.h"
+#include "rss.h"
+#include "htmlrenderer.h"
 
 namespace newsboat {
 

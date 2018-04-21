@@ -1,6 +1,8 @@
-#include <reloadthread.h>
-#include <logger.h>
+#include "reloadthread.h"
+
 #include <unistd.h>
+
+#include "logger.h"
 
 namespace newsboat {
 

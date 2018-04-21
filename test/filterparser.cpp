@@ -1,6 +1,6 @@
-#include "3rd-party/catch.hpp"
+#include "FilterParser.h"
 
-#include <FilterParser.h>
+#include "3rd-party/catch.hpp"
 
 TEST_CASE("FilterParser doesn't crash parsing expression with invalid character "
           "in operator", "[FilterParser]") {

@@ -1,5 +1,6 @@
-#include <downloadthread.h>
-#include <logger.h>
+#include "downloadthread.h"
+
+#include "logger.h"
 
 namespace newsboat {
 

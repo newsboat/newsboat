@@ -1,7 +1,7 @@
 #ifndef NEWSBOAT_FILTERCONTAINER_H_
 #define NEWSBOAT_FILTERCONTAINER_H_
 
-#include <configparser.h>
+#include "configparser.h"
 
 namespace newsboat {
 

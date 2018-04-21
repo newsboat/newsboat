@@ -1,17 +1,18 @@
-#include <config.h>
-#include <configcontainer.h>
-#include <configparser.h>
-#include <exceptions.h>
-#include <logger.h>
+#include "configcontainer.h"
+
 #include <sstream>
 #include <iostream>
 #include <algorithm>
-#include <utils.h>
-#include <strprintf.h>
 #include <cassert>
-
 #include <sys/types.h>
 #include <pwd.h>
+
+#include "config.h"
+#include "configparser.h"
+#include "exceptions.h"
+#include "logger.h"
+#include "utils.h"
+#include "strprintf.h"
 
 namespace newsboat {
 

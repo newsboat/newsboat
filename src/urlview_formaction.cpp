@@ -1,12 +1,13 @@
-#include <urlview_formaction.h>
-#include <formatstring.h>
-#include <view.h>
-#include <config.h>
-#include <utils.h>
-#include <strprintf.h>
-#include <listformatter.h>
+#include "urlview_formaction.h"
 
 #include <sstream>
+
+#include "formatstring.h"
+#include "view.h"
+#include "config.h"
+#include "utils.h"
+#include "strprintf.h"
+#include "listformatter.h"
 
 namespace newsboat {
 

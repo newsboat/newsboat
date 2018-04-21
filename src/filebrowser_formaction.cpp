@@ -1,17 +1,10 @@
-#include <filebrowser_formaction.h>
-#include <formatstring.h>
-#include <logger.h>
-#include <config.h>
-#include <view.h>
-#include <utils.h>
-#include <strprintf.h>
+#include "filebrowser_formaction.h"
 
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
 #include <sstream>
 #include <cstring>
-
 #include <curses.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -20,6 +13,12 @@
 #include <pwd.h>
 #include <grp.h>
 
+#include "formatstring.h"
+#include "logger.h"
+#include "config.h"
+#include "view.h"
+#include "utils.h"
+#include "strprintf.h"
 
 namespace newsboat {
 

@@ -1,9 +1,10 @@
 #ifndef NEWSBOAT_COLORMANAGER_H_
 #define NEWSBOAT_COLORMANAGER_H_
 
-#include <configparser.h>
 #include <vector>
 #include <map>
+
+#include "configparser.h"
 
 namespace podboat {
 class pb_view;

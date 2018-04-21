@@ -1,13 +1,14 @@
 #ifndef NEWSBOAT_REGEXMANAGER_H_
 #define NEWSBOAT_REGEXMANAGER_H_
 
-#include <configparser.h>
 #include <vector>
 #include <sys/types.h>
 #include <regex.h>
-#include <matcher.h>
 #include <utility>
 #include <memory>
+
+#include "configparser.h"
+#include "matcher.h"
 
 namespace newsboat {
 

@@ -1,10 +1,11 @@
 #ifndef NEWSBOAT_NEWSBLUR_API_H_
 #define NEWSBOAT_NEWSBLUR_API_H_
 
-#include <remote_api.h>
-#include <urlreader.h>
-#include <rsspp.h>
 #include <json.h>
+
+#include "remote_api.h"
+#include "urlreader.h"
+#include "rsspp.h"
 
 #define ID_SEPARATOR "/////"
 

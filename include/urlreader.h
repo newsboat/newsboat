@@ -5,10 +5,9 @@
 #include <map>
 #include <set>
 #include <string>
-
-#include <configcontainer.h>
-
 #include <libxml/tree.h>
+
+#include "configcontainer.h"
 
 namespace newsboat {
 

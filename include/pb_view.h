@@ -1,9 +1,9 @@
 #ifndef PODBOAT_VIEW_H_
 #define PODBOAT_VIEW_H_
 
-#include <keymap.h>
-#include <stflpp.h>
-#include <colormanager.h>
+#include "keymap.h"
+#include "stflpp.h"
+#include "colormanager.h"
 
 using namespace newsboat;
 

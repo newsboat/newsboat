@@ -2,7 +2,8 @@
 #define NEWSBOAT_DOWNLOADTHREAD_H_
 
 #include <thread>
-#include <controller.h>
+
+#include "controller.h"
 
 namespace newsboat {
 

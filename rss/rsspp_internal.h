@@ -1,8 +1,9 @@
 #ifndef NEWSBOAT_RSSPP_INTERNAL_H_
 #define NEWSBOAT_RSSPP_INTERNAL_H_
 
-#include <rsspp.h>
 #include <memory>
+
+#include "rsspp.h"
 
 #define CONTENT_URI		"http://purl.org/rss/1.0/modules/content/"
 #define RDF_URI			"http://www.w3.org/1999/02/22-rdf-syntax-ns#"

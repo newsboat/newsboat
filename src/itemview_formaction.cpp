@@ -1,16 +1,17 @@
-#include <itemview_formaction.h>
-#include <view.h>
-#include <config.h>
-#include <logger.h>
-#include <exceptions.h>
-#include <utils.h>
-#include <strprintf.h>
-#include <formatstring.h>
-#include <textformatter.h>
-#include <cstring>
+#include "itemview_formaction.h"
 
+#include <cstring>
 #include <sstream>
 #include <algorithm>
+
+#include "view.h"
+#include "config.h"
+#include "logger.h"
+#include "exceptions.h"
+#include "utils.h"
+#include "strprintf.h"
+#include "formatstring.h"
+#include "textformatter.h"
 
 namespace newsboat {
 

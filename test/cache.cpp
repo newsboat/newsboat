@@ -1,11 +1,11 @@
-#include "3rd-party/catch.hpp"
-#include "test-helpers.h"
+#include "cache.h"
 
 #include <sstream>
 
-#include <cache.h>
-#include <configcontainer.h>
-#include <rss_parser.h>
+#include "3rd-party/catch.hpp"
+#include "test-helpers.h"
+#include "configcontainer.h"
+#include "rss_parser.h"
 
 using namespace newsboat;
 

@@ -1,11 +1,11 @@
-#include <formatstring.h>
-#include <utils.h>
-#include <logger.h>
+#include "formatstring.h"
 
 #include <sstream>
 #include <vector>
 #include <cstdlib>
 
+#include "utils.h"
+#include "logger.h"
 
 namespace newsboat {
 

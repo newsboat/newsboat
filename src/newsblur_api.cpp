@@ -1,13 +1,14 @@
-#include <algorithm>
+#include "newsblur_api.h"
 
-#include <rsspp.h>
-#include <json.h>
-#include <utils.h>
-#include <strprintf.h>
-#include <remote_api.h>
-#include <newsblur_api.h>
+#include <algorithm>
 #include <string.h>
 #include <time.h>
+
+#include "rsspp.h"
+#include "json.h"
+#include "utils.h"
+#include "strprintf.h"
+#include "remote_api.h"
 
 #define NEWSBLUR_ITEMS_PER_PAGE 6
 

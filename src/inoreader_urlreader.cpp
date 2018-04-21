@@ -1,5 +1,6 @@
-#include <inoreader_api.h>
-#include <logger.h>
+#include "inoreader_api.h"
+
+#include "logger.h"
 
 namespace newsboat {
 

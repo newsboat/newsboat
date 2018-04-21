@@ -3,9 +3,9 @@
 
 #include <string>
 
-#include <rss.h>
-#include <rsspp.h>
-#include <remote_api.h>
+#include "rss.h"
+#include "rsspp.h"
+#include "remote_api.h"
 
 namespace newsboat {
 

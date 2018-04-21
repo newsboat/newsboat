@@ -1,7 +1,8 @@
+#include "keymap.h"
+
 #include "3rd-party/catch.hpp"
 
-#include <keymap.h>
-#include <exceptions.h>
+#include "exceptions.h"
 
 using namespace newsboat;
 

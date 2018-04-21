@@ -1,10 +1,11 @@
+#include "remote_api.h"
+
 #include <fstream>
 #include <iostream>
 #include <unistd.h>
 #include <glob.h>
 
-#include <remote_api.h>
-#include <utils.h>
+#include "utils.h"
 
 namespace newsboat {
 

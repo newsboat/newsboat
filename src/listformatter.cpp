@@ -1,9 +1,11 @@
-#include <listformatter.h>
-#include <utils.h>
-#include <strprintf.h>
-#include <stflpp.h>
+#include "listformatter.h"
+
 #include <assert.h>
 #include <limits.h>
+
+#include "utils.h"
+#include "strprintf.h"
+#include "stflpp.h"
 
 namespace newsboat {
 

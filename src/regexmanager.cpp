@@ -1,10 +1,12 @@
-#include <regexmanager.h>
-#include <logger.h>
-#include <utils.h>
-#include <strprintf.h>
+#include "regexmanager.h"
+
 #include <cstring>
-#include <exceptions.h>
-#include <config.h>
+
+#include "logger.h"
+#include "utils.h"
+#include "strprintf.h"
+#include "exceptions.h"
+#include "config.h"
 
 namespace newsboat {
 

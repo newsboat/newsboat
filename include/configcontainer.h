@@ -1,9 +1,9 @@
 #ifndef NEWSBOAT_CONFIGCONTAINER_H_
 #define NEWSBOAT_CONFIGCONTAINER_H_
 
-#include <configparser.h>
-
 #include <unordered_set>
+
+#include "configparser.h"
 
 namespace newsboat {
 
