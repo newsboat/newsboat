@@ -4,15 +4,21 @@
 
 namespace newsboat {
 
-ttrss_urlreader::ttrss_urlreader(const std::string& url_file, remote_api * a) : file(url_file), api(a) { }
+ttrss_urlreader::ttrss_urlreader(const std::string& url_file, remote_api* a)
+	: file(url_file)
+	, api(a)
+{
+}
 
-ttrss_urlreader::~ttrss_urlreader() { }
+ttrss_urlreader::~ttrss_urlreader() {}
 
-void ttrss_urlreader::write_config() {
+void ttrss_urlreader::write_config()
+{
 	// NOTHING
 }
 
-void ttrss_urlreader::reload() {
+void ttrss_urlreader::reload()
+{
 	urls.clear();
 	tags.clear();
 	alltags.clear();
@@ -20,10 +26,10 @@ void ttrss_urlreader::reload() {
 	file_urlreader ur(file);
 	ur.reload();
 
-	//std::vector<std::string>& file_urls(ur.get_urls());
+	// std::vector<std::string>& file_urls(ur.get_urls());
 	auto& file_urls(ur.get_urls());
 	for (auto url : file_urls) {
-		if (url.substr(0,6) == "query:") {
+		if (url.substr(0, 6) == "query:") {
 			urls.push_back(url);
 			std::vector<std::string>& file_tags(ur.get_tags(url));
 			tags[url] = ur.get_tags(url);
@@ -46,9 +52,10 @@ void ttrss_urlreader::reload() {
 	}
 }
 
-std::string ttrss_urlreader::get_source() {
+std::string ttrss_urlreader::get_source()
+{
 	return "Tiny Tiny RSS";
 }
 // TODO
 
-}
+} // namespace newsboat

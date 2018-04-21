@@ -4,15 +4,21 @@
 
 namespace newsboat {
 
-ocnews_urlreader::ocnews_urlreader(const std::string& url_file, remote_api * a) : file(url_file), api(a) { }
+ocnews_urlreader::ocnews_urlreader(const std::string& url_file, remote_api* a)
+	: file(url_file)
+	, api(a)
+{
+}
 
-ocnews_urlreader::~ocnews_urlreader() { }
+ocnews_urlreader::~ocnews_urlreader() {}
 
-void ocnews_urlreader::write_config() {
+void ocnews_urlreader::write_config()
+{
 	// NOTHING
 }
 
-void ocnews_urlreader::reload() {
+void ocnews_urlreader::reload()
+{
 	urls.clear();
 	tags.clear();
 	alltags.clear();
@@ -22,7 +28,7 @@ void ocnews_urlreader::reload() {
 
 	std::vector<std::string>& file_urls(ur.get_urls());
 	for (auto url : file_urls) {
-		if (url.substr(0,6) == "query:") {
+		if (url.substr(0, 6) == "query:") {
 			urls.push_back(url);
 		}
 	}
@@ -40,8 +46,9 @@ void ocnews_urlreader::reload() {
 	}
 }
 
-std::string ocnews_urlreader::get_source() {
+std::string ocnews_urlreader::get_source()
+{
 	return "ownCloud News";
 }
 
-}
+} // namespace newsboat

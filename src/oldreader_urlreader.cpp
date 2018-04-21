@@ -4,35 +4,55 @@
 
 namespace newsboat {
 
-oldreader_urlreader::oldreader_urlreader(configcontainer * c, const std::string& url_file, remote_api * a) : cfg(c), file(url_file), api(a) { }
+oldreader_urlreader::oldreader_urlreader(
+	configcontainer* c,
+	const std::string& url_file,
+	remote_api* a)
+	: cfg(c)
+	, file(url_file)
+	, api(a)
+{
+}
 
-oldreader_urlreader::~oldreader_urlreader() { }
+oldreader_urlreader::~oldreader_urlreader() {}
 
-void oldreader_urlreader::write_config() {
+void oldreader_urlreader::write_config()
+{
 	// NOTHING
 }
 
-#define BROADCAST_FRIENDS_URL "http://theoldreader.com/reader/atom/user/-/state/com.google/broadcast-friends"
-#define STARRED_ITEMS_URL "http://theoldreader.com/reader/atom/user/-/state/com.google/starred"
-#define SHARED_ITEMS_URL "http://theoldreader.com/reader/atom/user/-/state/com.google/broadcast"
-#define POPULAR_ITEMS_URL "http://theoldreader.com/reader/public/atom/pop%2Ftopic%2Ftop%2Flanguage%2Fen"
+#define BROADCAST_FRIENDS_URL                                          \
+	"http://theoldreader.com/reader/atom/user/-/state/com.google/" \
+	"broadcast-friends"
+#define STARRED_ITEMS_URL \
+	"http://theoldreader.com/reader/atom/user/-/state/com.google/starred"
+#define SHARED_ITEMS_URL                                               \
+	"http://theoldreader.com/reader/atom/user/-/state/com.google/" \
+	"broadcast"
+#define POPULAR_ITEMS_URL                             \
+	"http://theoldreader.com/reader/public/atom/" \
+	"pop%2Ftopic%2Ftop%2Flanguage%2Fen"
 
-#define ADD_URL(url,caption) do { \
-		tmptags.clear(); \
-		urls.push_back((url)); \
+#define ADD_URL(url, caption)                 \
+	do {                                  \
+		tmptags.clear();              \
+		urls.push_back((url));        \
 		tmptags.push_back((caption)); \
-		tags[(url)] = tmptags; } while(0)
+		tags[(url)] = tmptags;        \
+	} while (0)
 
-
-void oldreader_urlreader::reload() {
+void oldreader_urlreader::reload()
+{
 	urls.clear();
 	tags.clear();
 	alltags.clear();
 
 	if (cfg->get_configvalue_as_bool("oldreader-show-special-feeds")) {
 		std::vector<std::string> tmptags;
-		ADD_URL(BROADCAST_FRIENDS_URL, std::string("~") + _("People you follow"));
-		ADD_URL(STARRED_ITEMS_URL, std::string("~") + _("Starred items"));
+		ADD_URL(BROADCAST_FRIENDS_URL,
+			std::string("~") + _("People you follow"));
+		ADD_URL(STARRED_ITEMS_URL,
+			std::string("~") + _("Starred items"));
 		ADD_URL(SHARED_ITEMS_URL, std::string("~") + _("Shared items"));
 	}
 
@@ -41,7 +61,7 @@ void oldreader_urlreader::reload() {
 
 	std::vector<std::string>& file_urls(ur.get_urls());
 	for (auto url : file_urls) {
-		if (url.substr(0,6) == "query:") {
+		if (url.substr(0, 6) == "query:") {
 			urls.push_back(url);
 			std::vector<std::string>& file_tags(ur.get_tags(url));
 			tags[url] = ur.get_tags(url);
@@ -63,8 +83,9 @@ void oldreader_urlreader::reload() {
 	}
 }
 
-std::string oldreader_urlreader::get_source() {
+std::string oldreader_urlreader::get_source()
+{
 	return "The Old Reader";
 }
 
-}
+} // namespace newsboat

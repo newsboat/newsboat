@@ -4,7 +4,8 @@
 
 using namespace newsboat;
 
-TEST_CASE("URL reader extracts all URLs from the file", "[file_urlreader]") {
+TEST_CASE("URL reader extracts all URLs from the file", "[file_urlreader]")
+{
 	file_urlreader u;
 	u.load_config("data/test-urls.txt");
 
@@ -14,7 +15,8 @@ TEST_CASE("URL reader extracts all URLs from the file", "[file_urlreader]") {
 	REQUIRE(u.get_urls()[2] == "http://onemorefeed.at/feed/");
 }
 
-TEST_CASE("URL reader extracts feeds' tags", "[file_urlreader]") {
+TEST_CASE("URL reader extracts feeds' tags", "[file_urlreader]")
+{
 	file_urlreader u;
 	u.load_config("data/test-urls.txt");
 
@@ -26,7 +28,8 @@ TEST_CASE("URL reader extracts feeds' tags", "[file_urlreader]") {
 	REQUIRE(u.get_tags("http://onemorefeed.at/feed/").size() == 2);
 }
 
-TEST_CASE("URL reader keeps track of unique tags", "[file_urlreader]") {
+TEST_CASE("URL reader keeps track of unique tags", "[file_urlreader]")
+{
 	file_urlreader u;
 	u.load_config("data/test-urls.txt");
 

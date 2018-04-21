@@ -7,8 +7,8 @@
 
 namespace rsspp {
 
-
-void atom_parser::parse_feed(feed& f, xmlNode * rootNode) {
+void atom_parser::parse_feed(feed& f, xmlNode* rootNode)
+{
 	if (!rootNode)
 		throw exception(_("XML root node is NULL"));
 
@@ -30,7 +30,8 @@ void atom_parser::parse_feed(feed& f, xmlNode * rootNode) {
 	f.language = get_prop(rootNode, "lang");
 	globalbase = get_prop(rootNode, "base", XML_URI);
 
-	for (xmlNode * node = rootNode->children; node != nullptr; node = node->next) {
+	for (xmlNode* node = rootNode->children; node != nullptr;
+	     node = node->next) {
 		if (node_is(node, "title", ns)) {
 			f.title = get_content(node);
 			f.title_type = get_prop(node, "type");
@@ -41,7 +42,8 @@ void atom_parser::parse_feed(feed& f, xmlNode * rootNode) {
 		} else if (node_is(node, "link", ns)) {
 			std::string rel = get_prop(node, "rel");
 			if (rel == "alternate") {
-				f.link = newsboat::utils::absolute_url(globalbase, get_prop(node, "href"));
+				f.link = newsboat::utils::absolute_url(
+					globalbase, get_prop(node, "href"));
 			}
 		} else if (node_is(node, "updated", ns)) {
 			f.pubDate = w3cdtf_to_rfc822(get_content(node));
@@ -49,10 +51,10 @@ void atom_parser::parse_feed(feed& f, xmlNode * rootNode) {
 			f.items.push_back(parse_entry(node));
 		}
 	}
-
 }
 
-item atom_parser::parse_entry(xmlNode * entryNode) {
+item atom_parser::parse_entry(xmlNode* entryNode)
+{
 	item it;
 	std::string summary;
 	std::string summary_type;
@@ -62,9 +64,12 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 	if (base == "")
 		base = globalbase;
 
-	for (xmlNode * node = entryNode->children; node != nullptr; node = node->next) {
+	for (xmlNode* node = entryNode->children; node != nullptr;
+	     node = node->next) {
 		if (node_is(node, "author", ns)) {
-			for (xmlNode * authornode = node->children; authornode != nullptr; authornode = authornode->next) {
+			for (xmlNode* authornode = node->children;
+			     authornode != nullptr;
+			     authornode = authornode->next) {
 				if (node_is(authornode, "name", ns)) {
 					it.author = get_content(authornode);
 				} // TODO: is there more?
@@ -102,11 +107,14 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 		} else if (node_is(node, "link", ns)) {
 			std::string rel = get_prop(node, "rel");
 			if (rel == "" || rel == "alternate") {
-				it.link = newsboat::utils::absolute_url(base, get_prop(node, "href"));
+				it.link = newsboat::utils::absolute_url(
+					base, get_prop(node, "href"));
 			} else if (rel == "enclosure") {
 				const std::string type = get_prop(node, "type");
-				if (newsboat::utils::is_valid_podcast_type(type)) {
-					it.enclosure_url = get_prop(node, "href");
+				if (newsboat::utils::is_valid_podcast_type(
+					    type)) {
+					it.enclosure_url =
+						get_prop(node, "href");
 					it.enclosure_type = std::move(type);
 				}
 			}
@@ -114,7 +122,8 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 			std::string mode = get_prop(node, "mode");
 			summary_type = get_prop(node, "type");
 			if (mode == "xml" || mode == "") {
-				if (summary_type == "html" || summary_type == "text") {
+				if (summary_type == "html"
+				    || summary_type == "text") {
 					summary = get_content(node);
 				} else {
 					summary = get_xml_content(node);
@@ -124,7 +133,10 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 			}
 			if (summary_type == "")
 				summary_type = "text";
-		} else if (node_is(node, "category", ns) && get_prop(node, "scheme")=="http://www.google.com/reader/") {
+		} else if (
+			node_is(node, "category", ns)
+			&& get_prop(node, "scheme")
+				   == "http://www.google.com/reader/") {
 			it.labels.push_back(get_prop(node, "label"));
 		}
 	} // for
@@ -141,4 +153,4 @@ item atom_parser::parse_entry(xmlNode * entryNode) {
 	return it;
 }
 
-}
+} // namespace rsspp

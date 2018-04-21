@@ -4,35 +4,54 @@
 
 namespace newsboat {
 
-feedhq_urlreader::feedhq_urlreader(configcontainer * c, const std::string& url_file, remote_api * a) : cfg(c), file(url_file), api(a) { }
+feedhq_urlreader::feedhq_urlreader(
+	configcontainer* c,
+	const std::string& url_file,
+	remote_api* a)
+	: cfg(c)
+	, file(url_file)
+	, api(a)
+{
+}
 
-feedhq_urlreader::~feedhq_urlreader() { }
+feedhq_urlreader::~feedhq_urlreader() {}
 
-void feedhq_urlreader::write_config() {
+void feedhq_urlreader::write_config()
+{
 	// NOTHING
 }
 
-#define BROADCAST_FRIENDS_URL "http://feedhq.org/reader/atom/user/-/state/com.google/broadcast-friends"
-#define STARRED_ITEMS_URL "http://feedhq.org/reader/atom/user/-/state/com.google/starred"
-#define SHARED_ITEMS_URL "http://feedhq.org/reader/atom/user/-/state/com.google/broadcast"
-#define POPULAR_ITEMS_URL "http://feedhq.org/reader/public/atom/pop%2Ftopic%2Ftop%2Flanguage%2Fen"
+#define BROADCAST_FRIENDS_URL                                    \
+	"http://feedhq.org/reader/atom/user/-/state/com.google/" \
+	"broadcast-friends"
+#define STARRED_ITEMS_URL \
+	"http://feedhq.org/reader/atom/user/-/state/com.google/starred"
+#define SHARED_ITEMS_URL \
+	"http://feedhq.org/reader/atom/user/-/state/com.google/broadcast"
+#define POPULAR_ITEMS_URL                       \
+	"http://feedhq.org/reader/public/atom/" \
+	"pop%2Ftopic%2Ftop%2Flanguage%2Fen"
 
-#define ADD_URL(url,caption) do { \
-		tmptags.clear(); \
-		urls.push_back((url)); \
+#define ADD_URL(url, caption)                 \
+	do {                                  \
+		tmptags.clear();              \
+		urls.push_back((url));        \
 		tmptags.push_back((caption)); \
-		tags[(url)] = tmptags; } while(0)
+		tags[(url)] = tmptags;        \
+	} while (0)
 
-
-void feedhq_urlreader::reload() {
+void feedhq_urlreader::reload()
+{
 	urls.clear();
 	tags.clear();
 	alltags.clear();
 
 	if (cfg->get_configvalue_as_bool("feedhq-show-special-feeds")) {
 		std::vector<std::string> tmptags;
-		ADD_URL(BROADCAST_FRIENDS_URL, std::string("~") + _("People you follow"));
-		ADD_URL(STARRED_ITEMS_URL, std::string("~") + _("Starred items"));
+		ADD_URL(BROADCAST_FRIENDS_URL,
+			std::string("~") + _("People you follow"));
+		ADD_URL(STARRED_ITEMS_URL,
+			std::string("~") + _("Starred items"));
 		ADD_URL(SHARED_ITEMS_URL, std::string("~") + _("Shared items"));
 	}
 
@@ -40,7 +59,7 @@ void feedhq_urlreader::reload() {
 	ur.reload();
 
 	for (const auto& url : ur.get_urls()) {
-		if (url.substr(0,6) == "query:") {
+		if (url.substr(0, 6) == "query:") {
 			urls.push_back(url);
 
 			auto url_tags = ur.get_tags(url);
@@ -66,8 +85,9 @@ void feedhq_urlreader::reload() {
 	}
 }
 
-std::string feedhq_urlreader::get_source() {
+std::string feedhq_urlreader::get_source()
+{
 	return "FeedHQ";
 }
 
-}
+} // namespace newsboat

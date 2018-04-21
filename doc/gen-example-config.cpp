@@ -3,9 +3,10 @@
 
 #include "split.h"
 
-std::string to80Columns(std::string input) {
+std::string to80Columns(std::string input)
+{
 	std::istringstream s(input);
-	const std::string prefix  = "#";
+	const std::string prefix = "#";
 	const int limit = 80;
 	std::string result;
 	std::string curline = prefix;
@@ -31,7 +32,7 @@ int main()
 	std::cout << "# Newsboat's example config\n";
 	std::cout << "#\n\n";
 
-	for (std::string line; std::getline(std::cin, line); ) {
+	for (std::string line; std::getline(std::cin, line);) {
 		const std::vector<std::string> matches = split(line, "||");
 		if (matches.size() == 5) {
 			const std::string option = matches[0];
@@ -46,7 +47,8 @@ int main()
 			std::cout << "#\n";
 			std::cout << "# Syntax: " << syntax << '\n';
 			std::cout << "#\n";
-			std::cout << "# Default value: " << defaultparam << '\n';
+			std::cout << "# Default value: " << defaultparam
+				  << '\n';
 			std::cout << "#\n";
 			std::cout << "# " << example << '\n';
 			std::cout << '\n';

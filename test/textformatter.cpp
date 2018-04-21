@@ -4,18 +4,26 @@
 
 using namespace newsboat;
 
-TEST_CASE("lines marked as `wrappable` are wrapped to fit width",
-          "[textformatter]") {
+TEST_CASE(
+	"lines marked as `wrappable` are wrapped to fit width",
+	"[textformatter]")
+{
 	textformatter fmt;
 
-	fmt.add_lines(
-		{
-			std::make_pair(LineType::wrappable, "this one is going to be wrapped"),
-			std::make_pair(LineType::softwrappable, "this one is going to be wrapped at the window border"),
-			std::make_pair(LineType::nonwrappable, "this one is going to be preserved even though it's much longer")
-		});
+	fmt.add_lines({std::make_pair(
+			       LineType::wrappable,
+			       "this one is going to be wrapped"),
+		       std::make_pair(
+			       LineType::softwrappable,
+			       "this one is going to be wrapped at the window "
+			       "border"),
+		       std::make_pair(
+			       LineType::nonwrappable,
+			       "this one is going to be preserved even though "
+			       "it's much longer")});
 
-	SECTION("formatting to plain text") {
+	SECTION("formatting to plain text")
+	{
 		const std::string expected =
 			"this one \n"
 			"is going \n"
@@ -23,78 +31,86 @@ TEST_CASE("lines marked as `wrappable` are wrapped to fit width",
 			"wrapped\n"
 			"this one is going to be wrapped at the \n"
 			"window border\n"
-			"this one is going to be preserved even though it's much longer\n";
+			"this one is going to be preserved even though it's "
+			"much longer\n";
 		REQUIRE(fmt.format_text_plain(10, 40) == expected);
 	}
 
-	SECTION("formatting to list") {
+	SECTION("formatting to list")
+	{
 		const std::string expected_text =
 			"{list"
-				"{listitem text:\"this one \"}"
-				"{listitem text:\"is going \"}"
-				"{listitem text:\"to be \"}"
-				"{listitem text:\"wrapped\"}"
-				"{listitem text:\"this one is going to be wrapped at the \"}"
-				"{listitem text:\"window border\"}"
-				"{listitem text:\"this one is going to be preserved even though it's much longer\"}"
+			"{listitem text:\"this one \"}"
+			"{listitem text:\"is going \"}"
+			"{listitem text:\"to be \"}"
+			"{listitem text:\"wrapped\"}"
+			"{listitem text:\"this one is going to be wrapped at "
+			"the \"}"
+			"{listitem text:\"window border\"}"
+			"{listitem text:\"this one is going to be preserved "
+			"even though it's much longer\"}"
 			"}";
 		const std::size_t expected_count = 7;
 
-		const auto result = fmt.format_text_to_list(nullptr, "", 10, 40);
+		const auto result =
+			fmt.format_text_to_list(nullptr, "", 10, 40);
 
 		REQUIRE(result.first == expected_text);
 		REQUIRE(result.second == expected_count);
 	}
 }
 
-TEST_CASE("line wrapping works for non-space-separeted text",
-          "[textformatter]") {
-
+TEST_CASE("line wrapping works for non-space-separeted text", "[textformatter]")
+{
 	textformatter fmt;
 
-	fmt.add_lines(
-		{
-			std::make_pair(LineType::wrappable,
-					"    つれづれなるままに、ひぐらしすずりにむかいて、")
-		});
+	fmt.add_lines({std::make_pair(
+		LineType::wrappable,
+		"    つれづれなるままに、ひぐらしすずりにむかいて、")});
 
-
-	SECTION("preserve indent and doesn't return broken UTF-8") {
-		const std::string expected = (
-				"    つれづれなるまま\n"
-				"    に、ひぐらしすず\n"
-				"    りにむかいて、\n");
+	SECTION("preserve indent and doesn't return broken UTF-8")
+	{
+		const std::string expected =
+			("    つれづれなるまま\n"
+			 "    に、ひぐらしすず\n"
+			 "    りにむかいて、\n");
 		REQUIRE(fmt.format_text_plain(20) == expected);
 		// +1 is not enough to store single wide-width char
-		REQUIRE(fmt.format_text_plain(20+1) == expected);
+		REQUIRE(fmt.format_text_plain(20 + 1) == expected);
 	}
 
-	SECTION("truncate indent if given window width is too narrow") {
+	SECTION("truncate indent if given window width is too narrow")
+	{
 		REQUIRE(fmt.format_text_plain(1) == (" \n"));
 		REQUIRE(fmt.format_text_plain(2) == ("  \n"));
 		REQUIRE(fmt.format_text_plain(3) == ("   \n"));
 	}
 
-	SECTION("discard current word if there's not enough space to put single char") {
+	SECTION("discard current word if there's not enough space to put "
+		"single char")
+	{
 		REQUIRE(fmt.format_text_plain(4) == ("    \n"));
 		REQUIRE(fmt.format_text_plain(5) == ("    \n"));
 	}
 }
 
-TEST_CASE("regex manager is used by format_text_to_list if one is passed",
-          "[textformatter]") {
+TEST_CASE(
+	"regex manager is used by format_text_to_list if one is passed",
+	"[textformatter]")
+{
 	textformatter fmt;
 
 	fmt.add_line(LineType::wrappable, "Highlight me please!");
 
 	regexmanager rxmgr;
-	// the choice of green text on red background does not reflect my personal
-	// taste (or lack thereof) :)
-	rxmgr.handle_action("highlight", {"article", "please", "green", "default"});
+	// the choice of green text on red background does not reflect my
+	// personal taste (or lack thereof) :)
+	rxmgr.handle_action(
+		"highlight", {"article", "please", "green", "default"});
 
 	const std::string expected_text =
 		"{list"
-			"{listitem text:\"Highlight me <0>please</>!\"}"
+		"{listitem text:\"Highlight me <0>please</>!\"}"
 		"}";
 	const std::size_t expected_count = 1;
 
@@ -104,13 +120,16 @@ TEST_CASE("regex manager is used by format_text_to_list if one is passed",
 	REQUIRE(result.second == expected_count);
 }
 
-TEST_CASE("<hr> is rendered as a string of dashes framed with newlines",
-          "[textformatter]") {
+TEST_CASE(
+	"<hr> is rendered as a string of dashes framed with newlines",
+	"[textformatter]")
+{
 	textformatter fmt;
 
 	fmt.add_line(LineType::hr, "");
 
-	SECTION("width = 3") {
+	SECTION("width = 3")
+	{
 		const std::string expected =
 			"\n"
 			" - "
@@ -119,7 +138,8 @@ TEST_CASE("<hr> is rendered as a string of dashes framed with newlines",
 		REQUIRE(fmt.format_text_plain(3) == expected);
 	}
 
-	SECTION("width = 10") {
+	SECTION("width = 10")
+	{
 		const std::string expected =
 			"\n"
 			" -------- "
@@ -128,18 +148,22 @@ TEST_CASE("<hr> is rendered as a string of dashes framed with newlines",
 		REQUIRE(fmt.format_text_plain(10) == expected);
 	}
 
-	SECTION("width = 72") {
+	SECTION("width = 72")
+	{
 		const std::string expected =
 			"\n"
-			" ---------------------------------------------------------------------- "
+			" -----------------------------------------------------"
+			"----------------- "
 			"\n"
 			"\n";
 		REQUIRE(fmt.format_text_plain(72) == expected);
 	}
 }
 
-TEST_CASE("wrappable sequences longer then format width are forced-wrapped",
-          "[textformatter]") {
+TEST_CASE(
+	"wrappable sequences longer then format width are forced-wrapped",
+	"[textformatter]")
+{
 	textformatter fmt;
 	fmt.add_line(LineType::wrappable, "0123456789101112");
 	fmt.add_line(LineType::softwrappable, "0123456789101112");
@@ -156,8 +180,9 @@ TEST_CASE("wrappable sequences longer then format width are forced-wrapped",
 	REQUIRE(fmt.format_text_plain(5, 10) == expected);
 }
 
-TEST_CASE("Lines marked as non-wrappable are always returned verbatim",
-		"[textformatter]")
+TEST_CASE(
+	"Lines marked as non-wrappable are always returned verbatim",
+	"[textformatter]")
 {
 	textformatter fmt;
 	fmt.add_line(LineType::wrappable, " 0123456789101112");
@@ -169,7 +194,6 @@ TEST_CASE("Lines marked as non-wrappable are always returned verbatim",
 		" \n"
 		" 0123456789101112\n";
 	REQUIRE(fmt.format_text_plain(1, 1) == expected);
-
 }
 
 /*
@@ -186,8 +210,9 @@ TEST_CASE("Lines marked as non-wrappable are always returned verbatim",
  * second line and it would make the text look jagged with a bigger input. Thus
  * spaces at the beginning of lines after wrapping should be dropped.
  */
-TEST_CASE("ignore whitespace that's going to be wrapped onto the next line",
-		"[textformatter]")
+TEST_CASE(
+	"ignore whitespace that's going to be wrapped onto the next line",
+	"[textformatter]")
 {
 	textformatter fmt;
 	fmt.add_line(LineType::wrappable, "just a test");
@@ -199,37 +224,44 @@ TEST_CASE("ignore whitespace that's going to be wrapped onto the next line",
 	REQUIRE(fmt.format_text_plain(4) == expected);
 }
 
-TEST_CASE("softwrappable lines are wrapped by format_text_to_list if "
-          "total_width != 0", "[textformatter]") {
+TEST_CASE(
+	"softwrappable lines are wrapped by format_text_to_list if "
+	"total_width != 0",
+	"[textformatter]")
+{
 	textformatter fmt;
 	fmt.add_line(LineType::softwrappable, "just a test");
 	const size_t wrap_width = 100;
-	regexmanager * rxman = nullptr;
+	regexmanager* rxman = nullptr;
 	const std::string location = "";
 
-	SECTION("total_width == 4") {
+	SECTION("total_width == 4")
+	{
 		const std::string expected_text =
 			"{list"
-				"{listitem text:\"just\"}"
-				"{listitem text:\"a \"}"
-				"{listitem text:\"test\"}"
+			"{listitem text:\"just\"}"
+			"{listitem text:\"a \"}"
+			"{listitem text:\"test\"}"
 			"}";
 		const std::size_t expected_count = 3;
 
-		const auto result = fmt.format_text_to_list(rxman, location, wrap_width, 4);
+		const auto result =
+			fmt.format_text_to_list(rxman, location, wrap_width, 4);
 
 		REQUIRE(result.first == expected_text);
 		REQUIRE(result.second == expected_count);
 	}
 
-	SECTION("total_width == 0") {
+	SECTION("total_width == 0")
+	{
 		const std::string expected_text =
 			"{list"
-				"{listitem text:\"just a test\"}"
+			"{listitem text:\"just a test\"}"
 			"}";
 		const std::size_t expected_count = 1;
 
-		const auto result = fmt.format_text_to_list(rxman, location, wrap_width, 0);
+		const auto result =
+			fmt.format_text_to_list(rxman, location, wrap_width, 0);
 
 		REQUIRE(result.first == expected_text);
 		REQUIRE(result.second == expected_count);

@@ -1,32 +1,36 @@
 #include "matcher.h"
 
-#include <sys/time.h>
-#include <regex.h>
-#include <ctime>
 #include <cassert>
+#include <ctime>
+#include <regex.h>
 #include <sstream>
+#include <sys/time.h>
 #include <vector>
 
+#include "exceptions.h"
 #include "logger.h"
 #include "utils.h"
-#include "exceptions.h"
 
 namespace newsboat {
 
-matchable::matchable() { }
-matchable::~matchable() { }
+matchable::matchable() {}
+matchable::~matchable() {}
 
-matcher::matcher() { }
+matcher::matcher() {}
 
-matcher::matcher(const std::string& expr) : exp(expr) {
+matcher::matcher(const std::string& expr)
+	: exp(expr)
+{
 	parse(expr);
 }
 
-const std::string& matcher::get_expression() {
+const std::string& matcher::get_expression()
+{
 	return exp;
 }
 
-bool matcher::parse(const std::string& expr) {
+bool matcher::parse(const std::string& expr)
+{
 	struct timeval tv1, tv2;
 	gettimeofday(&tv1, nullptr);
 
@@ -39,13 +43,20 @@ bool matcher::parse(const std::string& expr) {
 	}
 
 	gettimeofday(&tv2, nullptr);
-	unsigned long diff = (((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) - tv1.tv_usec;
-	LOG(level::DEBUG, "matcher::parse: parsing `%s' took %lu µs (success = %d)", expr, diff, b ? 1 : 0);
+	unsigned long diff =
+		(((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec)
+		- tv1.tv_usec;
+	LOG(level::DEBUG,
+	    "matcher::parse: parsing `%s' took %lu µs (success = %d)",
+	    expr,
+	    diff,
+	    b ? 1 : 0);
 
 	return b;
 }
 
-bool matcher::matches(matchable* item) {
+bool matcher::matches(matchable* item)
+{
 	/*
 	 * with this method, every class that is derived from matchable can be
 	 * matched against a filter expression that was previously passed to the
@@ -53,12 +64,14 @@ bool matcher::matches(matchable* item) {
 	 *
 	 * This makes it easy to use the matcher virtually everywhere, since C++
 	 * allows multiple inheritance (i.e. deriving from matchable can even be
-	 * used in class hierarchies), and deriving from matchable means that you
-	 * only have to implement two methods has_attribute() and get_attribute().
+	 * used in class hierarchies), and deriving from matchable means that
+	 * you only have to implement two methods has_attribute() and
+	 * get_attribute().
 	 *
-	 * The whole matching code is speed-critical, as the matching happens on a
-	 * lot of different occassions, and slow matching can be easily measured
-	 * (and felt by the user) on slow computers with a lot of items to match.
+	 * The whole matching code is speed-critical, as the matching happens on
+	 * a lot of different occassions, and slow matching can be easily
+	 * measured (and felt by the user) on slow computers with a lot of items
+	 * to match.
 	 */
 	bool retval = false;
 	if (item) {
@@ -68,9 +81,11 @@ bool matcher::matches(matchable* item) {
 	return retval;
 }
 
-bool matcher::matchop_lt(expression * e, matchable * item) {
+bool matcher::matchop_lt(expression* e, matchable* item)
+{
 	if (!item->has_attribute(e->name))
-		throw matcherexception(matcherexception::type::ATTRIB_UNAVAIL, e->name);
+		throw matcherexception(
+			matcherexception::type::ATTRIB_UNAVAIL, e->name);
 	std::istringstream islit(e->literal);
 	std::istringstream isatt(item->get_attribute(e->name));
 	int ilit, iatt;
@@ -79,9 +94,11 @@ bool matcher::matchop_lt(expression * e, matchable * item) {
 	return iatt < ilit;
 }
 
-bool matcher::matchop_between(expression * e, matchable * item) {
+bool matcher::matchop_between(expression* e, matchable* item)
+{
 	if (!item->has_attribute(e->name))
-		throw matcherexception(matcherexception::type::ATTRIB_UNAVAIL, e->name);
+		throw matcherexception(
+			matcherexception::type::ATTRIB_UNAVAIL, e->name);
 	std::vector<std::string> lit = utils::tokenize(e->literal, ":");
 	std::istringstream isatt(item->get_attribute(e->name));
 	int att;
@@ -100,9 +117,11 @@ bool matcher::matchop_between(expression * e, matchable * item) {
 	return (att >= i1 && att <= i2);
 }
 
-bool matcher::matchop_gt(expression * e, matchable * item) {
+bool matcher::matchop_gt(expression* e, matchable* item)
+{
 	if (!item->has_attribute(e->name))
-		throw matcherexception(matcherexception::type::ATTRIB_UNAVAIL, e->name);
+		throw matcherexception(
+			matcherexception::type::ATTRIB_UNAVAIL, e->name);
 	std::istringstream islit(e->literal);
 	std::istringstream isatt(item->get_attribute(e->name));
 	int ilit, iatt;
@@ -111,27 +130,44 @@ bool matcher::matchop_gt(expression * e, matchable * item) {
 	return iatt > ilit;
 }
 
-bool matcher::matchop_rxeq(expression * e, matchable * item) {
+bool matcher::matchop_rxeq(expression* e, matchable* item)
+{
 	if (!item->has_attribute(e->name))
-		throw matcherexception(matcherexception::type::ATTRIB_UNAVAIL, e->name);
+		throw matcherexception(
+			matcherexception::type::ATTRIB_UNAVAIL, e->name);
 	if (!e->regex) {
 		e->regex = new regex_t;
 		int err;
-		if ((err = regcomp(e->regex, e->literal.c_str(), REG_EXTENDED | REG_ICASE | REG_NOSUB)) != 0) {
+		if ((err =
+			     regcomp(e->regex,
+				     e->literal.c_str(),
+				     REG_EXTENDED | REG_ICASE | REG_NOSUB))
+		    != 0) {
 			char buf[1024];
 			regerror(err, e->regex, buf, sizeof(buf));
-			throw matcherexception(matcherexception::type::INVALID_REGEX, e->literal, buf);
+			throw matcherexception(
+				matcherexception::type::INVALID_REGEX,
+				e->literal,
+				buf);
 		}
 	}
-	if (regexec(e->regex, item->get_attribute(e->name).c_str(), 0, nullptr, 0)==0)
+	if (regexec(e->regex,
+		    item->get_attribute(e->name).c_str(),
+		    0,
+		    nullptr,
+		    0)
+	    == 0)
 		return true;
 	return false;
 }
 
-bool matcher::matchop_cont(expression * e, matchable * item) {
+bool matcher::matchop_cont(expression* e, matchable* item)
+{
 	if (!item->has_attribute(e->name))
-		throw matcherexception(matcherexception::type::ATTRIB_UNAVAIL, e->name);
-	std::vector<std::string> elements = utils::tokenize(item->get_attribute(e->name), " ");
+		throw matcherexception(
+			matcherexception::type::ATTRIB_UNAVAIL, e->name);
+	std::vector<std::string> elements =
+		utils::tokenize(item->get_attribute(e->name), " ");
 	std::string literal = e->literal;
 	for (auto elem : elements) {
 		if (literal == elem) {
@@ -141,23 +177,35 @@ bool matcher::matchop_cont(expression * e, matchable * item) {
 	return false;
 }
 
-bool matcher::matchop_eq(expression * e, matchable * item) {
+bool matcher::matchop_eq(expression* e, matchable* item)
+{
 	if (!item->has_attribute(e->name)) {
-		LOG(level::WARN, "matcher::matches_r: attribute %s not available", e->name);
-		throw matcherexception(matcherexception::type::ATTRIB_UNAVAIL, e->name);
+		LOG(level::WARN,
+		    "matcher::matches_r: attribute %s not available",
+		    e->name);
+		throw matcherexception(
+			matcherexception::type::ATTRIB_UNAVAIL, e->name);
 	}
-	return (item->get_attribute(e->name)==e->literal);
+	return (item->get_attribute(e->name) == e->literal);
 }
 
-bool matcher::matches_r(expression * e, matchable * item) {
+bool matcher::matches_r(expression* e, matchable* item)
+{
 	if (e) {
 		switch (e->op) {
-		/* the operator "and" and "or" simply connect two different subexpressions */
+		/* the operator "and" and "or" simply connect two different
+		 * subexpressions */
 		case LOGOP_AND:
-			return matches_r(e->l, item) && matches_r(e->r, item); // short-circuit evaulation in C -> short circuit evaluation in the filter language
+			return matches_r(e->l, item)
+			       && matches_r(e->r, item); // short-circuit
+							 // evaulation in C ->
+							 // short circuit
+							 // evaluation in the
+							 // filter language
 
 		case LOGOP_OR:
-			return matches_r(e->l, item) || matches_r(e->r, item); // same here
+			return matches_r(e->l, item)
+			       || matches_r(e->r, item); // same here
 
 		/* while the other operator connect an attribute with a value */
 		case MATCHOP_EQ:
@@ -192,7 +240,6 @@ bool matcher::matches_r(expression * e, matchable * item) {
 
 		case MATCHOP_CONTAINSNOT:
 			return !matchop_cont(e, item);
-
 		}
 		return false;
 	} else {
@@ -200,8 +247,9 @@ bool matcher::matches_r(expression * e, matchable * item) {
 	}
 }
 
-const std::string& matcher::get_parse_error() {
+const std::string& matcher::get_parse_error()
+{
 	return errmsg;
 }
 
-}
+} // namespace newsboat

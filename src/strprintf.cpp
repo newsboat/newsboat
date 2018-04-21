@@ -10,7 +10,8 @@ using namespace newsboat;
  * "a 100%% rel%iable e%xamp%le"  =>  { "a 100%% rel%iable e", "%xamp%le" }
  */
 std::pair<std::string, std::string>
-strprintf::split_format(const std::string& printf_format) {
+strprintf::split_format(const std::string& printf_format)
+{
 	std::string first_format, rest;
 
 	std::string::size_type startpos = 0, next_sign_pos = 0;
@@ -19,10 +20,10 @@ strprintf::split_format(const std::string& printf_format) {
 		found_escaped_percent_sign = false;
 
 		startpos = printf_format.find_first_of('%', startpos);
-		next_sign_pos = printf_format.find_first_of('%', startpos+1);
+		next_sign_pos = printf_format.find_first_of('%', startpos + 1);
 		if (next_sign_pos - startpos == 1) {
 			found_escaped_percent_sign = true;
-			startpos = next_sign_pos+1;
+			startpos = next_sign_pos + 1;
 		}
 	} while (found_escaped_percent_sign);
 
@@ -32,5 +33,5 @@ strprintf::split_format(const std::string& printf_format) {
 		rest = printf_format.substr(next_sign_pos);
 	}
 
-	return { first_format, rest };
+	return {first_format, rest};
 }

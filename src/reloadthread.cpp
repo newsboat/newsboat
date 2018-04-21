@@ -6,16 +6,25 @@
 
 namespace newsboat {
 
-reloadthread::reloadthread(controller * c, configcontainer * cf) : ctrl(c), oldtime(0), waittime_sec(0), suppressed_first(false), cfg(cf) {
-	LOG(level::INFO,"reloadthread: waiting %u seconds between reloads",waittime_sec);
+reloadthread::reloadthread(controller* c, configcontainer* cf)
+	: ctrl(c)
+	, oldtime(0)
+	, waittime_sec(0)
+	, suppressed_first(false)
+	, cfg(cf)
+{
+	LOG(level::INFO,
+	    "reloadthread: waiting %u seconds between reloads",
+	    waittime_sec);
 }
 
-reloadthread::~reloadthread() { }
+reloadthread::~reloadthread() {}
 
-void reloadthread::operator()() {
+void reloadthread::operator()()
+{
 	for (;;) {
 		oldtime = time(nullptr);
-		LOG(level::INFO,"reloadthread: starting reload");
+		LOG(level::INFO, "reloadthread: starting reload");
 
 		waittime_sec = 60 * cfg->get_configvalue_as_int("reload-time");
 		if (waittime_sec == 0)
@@ -26,17 +35,21 @@ void reloadthread::operator()() {
 				ctrl->start_reload_all_thread();
 			} else {
 				suppressed_first = true;
-				if (!cfg->get_configvalue_as_bool("suppress-first-reload")) {
+				if (!cfg->get_configvalue_as_bool(
+					    "suppress-first-reload")) {
 					ctrl->start_reload_all_thread();
 				}
 			}
 		} else {
-			waittime_sec = 60; // if auto-reload is disabled, we poll every 60 seconds whether it changed.
+			waittime_sec = 60; // if auto-reload is disabled, we
+					   // poll every 60 seconds whether it
+					   // changed.
 		}
 
 		time_t seconds_to_wait = 0;
 		if ((oldtime + waittime_sec) > time(nullptr))
-			seconds_to_wait = oldtime + waittime_sec - time(nullptr);
+			seconds_to_wait =
+				oldtime + waittime_sec - time(nullptr);
 
 		while (seconds_to_wait > 0) {
 			seconds_to_wait = ::sleep(seconds_to_wait);
@@ -44,4 +57,4 @@ void reloadthread::operator()() {
 	}
 }
 
-}
+} // namespace newsboat

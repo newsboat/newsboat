@@ -5,7 +5,8 @@ These are guidelines, not laws. You are free to deviate, but make sure you have
 a good argument for doing so.
 
 Guidelines that could be easily automated have been automated. Please install
-[EditorConfig plugin][editorconfig].
+[EditorConfig plugin][editorconfig], and also get into habit of running `make
+fmt` before commits.
 
 [editorconfig]: http://editorconfig.org/ "EditorConfig"
 

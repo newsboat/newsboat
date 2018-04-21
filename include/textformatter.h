@@ -2,9 +2,9 @@
 #define NEWSBOAT_TEXTFORMATTER_H_
 
 #include <climits>
-#include <vector>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "regexmanager.h"
 
@@ -22,35 +22,33 @@ namespace newsboat {
  *               insufficient window width will be ignored.
  */
 
-enum class LineType {
-	wrappable = 1,
-	softwrappable,
-	nonwrappable,
-	hr
-};
+enum class LineType { wrappable = 1, softwrappable, nonwrappable, hr };
 
 class textformatter {
+public:
+	textformatter();
+	~textformatter();
+	void add_line(LineType type, std::string line);
+	void
+	add_lines(const std::vector<std::pair<LineType, std::string>>& lines);
+	std::pair<std::string, std::size_t> format_text_to_list(
+		regexmanager* r = nullptr,
+		const std::string& location = "",
+		const size_t wrap_width = 80,
+		const size_t total_width = 0);
+	std::string format_text_plain(
+		const size_t width = 80,
+		const size_t total_width = 0);
 
-	public:
-		textformatter();
-		~textformatter();
-		void add_line(LineType type, std::string line);
-		void add_lines(
-				const std::vector<std::pair<LineType, std::string>>& lines);
-		std::pair<std::string, std::size_t> format_text_to_list(
-				regexmanager * r = nullptr,
-				const std::string& location = "",
-				const size_t wrap_width = 80,
-				const size_t total_width = 0);
-		std::string format_text_plain(const size_t width = 80, const size_t total_width = 0);
+	void clear()
+	{
+		lines.clear();
+	}
 
-		void clear() {
-			lines.clear();
-		}
-	private:
-		std::vector<std::pair<LineType, std::string>> lines;
+private:
+	std::vector<std::pair<LineType, std::string>> lines;
 };
 
-}
+} // namespace newsboat
 
 #endif /* NEWSBOAT_TEXTFORMATTER_H_ */

@@ -9,8 +9,9 @@
 
 using namespace newsboat;
 
-TEST_CASE("colors_loaded() signals if any \"color\" actions have been processed",
-		"[colormanager]")
+TEST_CASE(
+	"colors_loaded() signals if any \"color\" actions have been processed",
+	"[colormanager]")
 {
 	colormanager c;
 
@@ -23,22 +24,26 @@ TEST_CASE("colors_loaded() signals if any \"color\" actions have been processed"
 	{
 		INFO("Processing \"color\" action makes it return `true`");
 
-		c.handle_action("color", { "listnormal", "default", "default" });
+		c.handle_action("color", {"listnormal", "default", "default"});
 		REQUIRE(c.colors_loaded());
 	}
 
 	{
-		INFO("Processing more \"color\" actions doesn't affect the return value");
+		INFO("Processing more \"color\" actions doesn't affect the "
+		     "return value");
 
-		c.handle_action("color", { "listfocus", "default", "default" });
+		c.handle_action("color", {"listfocus", "default", "default"});
 		REQUIRE(c.colors_loaded());
-		c.handle_action("color", { "listfocus_unread", "default", "cyan" });
+		c.handle_action(
+			"color", {"listfocus_unread", "default", "cyan"});
 		REQUIRE(c.colors_loaded());
 	}
 }
 
-TEST_CASE("get_fgcolors() returns foreground colors for each element that "
-		"was processed", "[colormanager]")
+TEST_CASE(
+	"get_fgcolors() returns foreground colors for each element that "
+	"was processed",
+	"[colormanager]")
 {
 	using results = std::map<std::string, std::string>;
 
@@ -50,24 +55,27 @@ TEST_CASE("get_fgcolors() returns foreground colors for each element that "
 	}
 
 	{
-		INFO("Each processed action adds corresponding entry to return value");
+		INFO("Each processed action adds corresponding entry to return "
+		     "value");
 
-		c.handle_action("color", { "listnormal", "default", "default" });
-		results expected { { "listnormal", "default" } };
+		c.handle_action("color", {"listnormal", "default", "default"});
+		results expected{{"listnormal", "default"}};
 		REQUIRE(c.get_fgcolors() == expected);
 
-		c.handle_action("color", { "listfocus", "cyan", "default" });
+		c.handle_action("color", {"listfocus", "cyan", "default"});
 		expected.emplace("listfocus", "cyan");
 		REQUIRE(c.get_fgcolors() == expected);
 
-		c.handle_action("color", { "background", "red", "default" });
+		c.handle_action("color", {"background", "red", "default"});
 		expected.emplace("background", "red");
 		REQUIRE(c.get_fgcolors() == expected);
 	}
 }
 
-TEST_CASE("get_bgcolors() returns foreground colors for each element that "
-		"was processed", "[colormanager]")
+TEST_CASE(
+	"get_bgcolors() returns foreground colors for each element that "
+	"was processed",
+	"[colormanager]")
 {
 	using results = std::map<std::string, std::string>;
 
@@ -79,24 +87,26 @@ TEST_CASE("get_bgcolors() returns foreground colors for each element that "
 	}
 
 	{
-		INFO("Each processed action adds corresponding entry to return value");
+		INFO("Each processed action adds corresponding entry to return "
+		     "value");
 
-		c.handle_action("color", { "listnormal", "default", "default" });
-		results expected { { "listnormal", "default" } };
+		c.handle_action("color", {"listnormal", "default", "default"});
+		results expected{{"listnormal", "default"}};
 		REQUIRE(c.get_bgcolors() == expected);
 
-		c.handle_action("color", { "listfocus", "cyan", "yellow" });
+		c.handle_action("color", {"listfocus", "cyan", "yellow"});
 		expected.emplace("listfocus", "yellow");
 		REQUIRE(c.get_bgcolors() == expected);
 
-		c.handle_action("color", { "background", "red", "green" });
+		c.handle_action("color", {"background", "red", "green"});
 		expected.emplace("background", "green");
 		REQUIRE(c.get_bgcolors() == expected);
 	}
 }
 
-TEST_CASE("register_commands() registers colormanager with configparser",
-		"[colormanager]")
+TEST_CASE(
+	"register_commands() registers colormanager with configparser",
+	"[colormanager]")
 {
 	configparser cfg;
 	colormanager clr;
@@ -108,111 +118,125 @@ TEST_CASE("register_commands() registers colormanager with configparser",
 	REQUIRE(clr.colors_loaded());
 }
 
-TEST_CASE("handle_action() throws confighandlerexception if there aren't "
-		"enough parameters", "[colormanager]")
+TEST_CASE(
+	"handle_action() throws confighandlerexception if there aren't "
+	"enough parameters",
+	"[colormanager]")
 {
 	colormanager c;
 
 	CHECK_THROWS_AS(c.handle_action("color", {}), confighandlerexception);
 	CHECK_THROWS_AS(
-			c.handle_action("color", { "one" }),
-			confighandlerexception);
+		c.handle_action("color", {"one"}), confighandlerexception);
 	CHECK_THROWS_AS(
-			c.handle_action("color", { "one", "two" }),
+		c.handle_action("color", {"one", "two"}),
+		confighandlerexception);
+}
+
+TEST_CASE(
+	"handle_action() throws confighandlerexception if foreground color "
+	"is invalid",
+	"[colormanager]")
+{
+	colormanager c;
+
+	const std::vector<std::string> non_colors{
+		{"awesome", "but", "nonexistent", "colors"}};
+	for (const auto& color : non_colors) {
+		CHECK_THROWS_AS(
+			c.handle_action(
+				"color", {"listfocus", color, "default"}),
 			confighandlerexception);
-}
-
-TEST_CASE("handle_action() throws confighandlerexception if foreground color "
-		"is invalid", "[colormanager]")
-{
-	colormanager c;
-
-	const std::vector<std::string> non_colors
-		{ { "awesome", "but", "nonexistent", "colors" } };
-	for (const auto& color : non_colors) {
-		CHECK_THROWS_AS(
-				c.handle_action("color", { "listfocus", color, "default" }),
-				confighandlerexception);
 	}
 }
 
-TEST_CASE("handle_action() throws confighandlerexception if background color "
-		"is invalid", "[colormanager]")
+TEST_CASE(
+	"handle_action() throws confighandlerexception if background color "
+	"is invalid",
+	"[colormanager]")
 {
 	colormanager c;
 
-	const std::vector<std::string> non_colors
-		{ { "awesome", "but", "nonexistent", "colors" } };
+	const std::vector<std::string> non_colors{
+		{"awesome", "but", "nonexistent", "colors"}};
 	for (const auto& color : non_colors) {
 		CHECK_THROWS_AS(
-				c.handle_action("color", { "listfocus", "default", color }),
-				confighandlerexception);
+			c.handle_action(
+				"color", {"listfocus", "default", color}),
+			confighandlerexception);
 	}
 }
 
-TEST_CASE("handle_action() throws confighandlerexception if color attribute "
-		"is invalid", "[colormanager]")
+TEST_CASE(
+	"handle_action() throws confighandlerexception if color attribute "
+	"is invalid",
+	"[colormanager]")
 {
 	colormanager c;
 
-	const std::vector<std::string> non_attributes
-		{ { "awesome", "but", "nonexistent", "attributes" } };
+	const std::vector<std::string> non_attributes{
+		{"awesome", "but", "nonexistent", "attributes"}};
 	for (const auto& attr : non_attributes) {
 		CHECK_THROWS_AS(
-				c.handle_action("color", { "listfocus", "red", "red", attr }),
-				confighandlerexception);
+			c.handle_action(
+				"color", {"listfocus", "red", "red", attr}),
+			confighandlerexception);
 	}
 }
 
-TEST_CASE("handle_action() throws confighandlerexception if color is applied "
-		"to non-existent element", "[colormanager]")
+TEST_CASE(
+	"handle_action() throws confighandlerexception if color is applied "
+	"to non-existent element",
+	"[colormanager]")
 {
 	colormanager c;
 
-	const std::vector<std::string> non_elements
-		{ { "awesome", "but", "nonexistent", "elements" } };
+	const std::vector<std::string> non_elements{
+		{"awesome", "but", "nonexistent", "elements"}};
 	for (const auto& element : non_elements) {
 		CHECK_THROWS_AS(
-				c.handle_action("color", { element, "red", "green" }),
-				confighandlerexception);
+			c.handle_action("color", {element, "red", "green"}),
+			confighandlerexception);
 	}
 }
 
-TEST_CASE("handle_action() throws confighandlerexception if it's passed a "
-		"command other than \"color\"", "[colormanager]")
+TEST_CASE(
+	"handle_action() throws confighandlerexception if it's passed a "
+	"command other than \"color\"",
+	"[colormanager]")
 {
 	colormanager c;
 
-	const std::vector<std::string> other_commands
-		{ { "browser", "include", "auto-reload", "ocnews-flag-star" } };
+	const std::vector<std::string> other_commands{
+		{"browser", "include", "auto-reload", "ocnews-flag-star"}};
 	for (const auto& command : other_commands) {
-		CHECK_THROWS_AS(c.handle_action(command, {}), confighandlerexception);
+		CHECK_THROWS_AS(
+			c.handle_action(command, {}), confighandlerexception);
 	}
 }
 
-TEST_CASE("dump_config() returns everything we put into colormanager",
-		"[colormanager]")
+TEST_CASE(
+	"dump_config() returns everything we put into colormanager",
+	"[colormanager]")
 {
 	colormanager c;
 
 	std::unordered_set<std::string> expected;
 	std::vector<std::string> config;
 
-	// Checks that `expected` contains the same lines as `config` contains, and
-	// nothing more.
-	auto equivalent =
-		[&]() -> bool
-		{
-			std::size_t found = 0;
-			for (const auto& line : config) {
-				if (expected.find(line) == expected.end())
-					return false;
+	// Checks that `expected` contains the same lines as `config` contains,
+	// and nothing more.
+	auto equivalent = [&]() -> bool {
+		std::size_t found = 0;
+		for (const auto& line : config) {
+			if (expected.find(line) == expected.end())
+				return false;
 
-				found++;
-			}
+			found++;
+		}
 
-			return found == expected.size();
-		};
+		return found == expected.size();
+	};
 
 	{
 		INFO("Empty colormanager outputs nothing");
@@ -222,14 +246,14 @@ TEST_CASE("dump_config() returns everything we put into colormanager",
 	}
 
 	expected.emplace("color listfocus default red");
-	c.handle_action("color", { "listfocus", "default", "red" });
+	c.handle_action("color", {"listfocus", "default", "red"});
 	config.clear();
 	c.dump_config(config);
 	REQUIRE(config.size() == 1);
 	REQUIRE(equivalent());
 
 	expected.emplace("color background green cyan bold");
-	c.handle_action("color", { "background", "green", "cyan", "bold" });
+	c.handle_action("color", {"background", "green", "cyan", "bold"});
 	config.clear();
 	c.dump_config(config);
 	REQUIRE(config.size() == 2);
@@ -237,8 +261,8 @@ TEST_CASE("dump_config() returns everything we put into colormanager",
 
 	expected.emplace("color listnormal black yellow underline standout");
 	c.handle_action(
-			"color",
-			{ "listnormal", "black", "yellow", "underline", "standout" });
+		"color",
+		{"listnormal", "black", "yellow", "underline", "standout"});
 	config.clear();
 	c.dump_config(config);
 	REQUIRE(config.size() == 3);

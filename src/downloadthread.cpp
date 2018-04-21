@@ -4,21 +4,25 @@
 
 namespace newsboat {
 
-downloadthread::downloadthread(controller * c, std::vector<int> * idxs) : ctrl(c) {
+downloadthread::downloadthread(controller* c, std::vector<int>* idxs)
+	: ctrl(c)
+{
 	if (idxs)
 		indexes = *idxs;
 }
 
-downloadthread::~downloadthread() {
-}
+downloadthread::~downloadthread() {}
 
-void downloadthread::operator()() {
+void downloadthread::operator()()
+{
 	/*
 	 * the downloadthread class drives the reload-all process.
-	 * A downloadthread is spawned whenever "reload all" is invoked, and whenever an auto-reload
-	 * comes up.
+	 * A downloadthread is spawned whenever "reload all" is invoked, and
+	 * whenever an auto-reload comes up.
 	 */
-	LOG(level::DEBUG, "downloadthread::run: inside downloadthread, reloading all feeds...");
+	LOG(level::DEBUG,
+	    "downloadthread::run: inside downloadthread, reloading all "
+	    "feeds...");
 	if (ctrl->trylock_reload_mutex()) {
 		if (indexes.size() == 0) {
 			ctrl->reload_all();
@@ -29,11 +33,23 @@ void downloadthread::operator()() {
 	}
 }
 
-reloadrangethread::reloadrangethread(controller * c, unsigned int start, unsigned int end, unsigned int size, bool unattended) : ctrl(c), s(start), e(end), ss(size), u(unattended) {
+reloadrangethread::reloadrangethread(
+	controller* c,
+	unsigned int start,
+	unsigned int end,
+	unsigned int size,
+	bool unattended)
+	: ctrl(c)
+	, s(start)
+	, e(end)
+	, ss(size)
+	, u(unattended)
+{
 }
 
-void reloadrangethread::operator()() {
+void reloadrangethread::operator()()
+{
 	ctrl->reload_range(s, e, ss, u);
 }
 
-}
+} // namespace newsboat

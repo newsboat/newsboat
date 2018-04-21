@@ -3,16 +3,19 @@
 #include <unistd.h>
 
 #include "3rd-party/catch.hpp"
-#include "test-helpers.h"
 #include "cache.h"
 #include "feedlist_formaction.h"
-#include "keymap.h"
 #include "itemlist.h"
+#include "keymap.h"
 #include "regexmanager.h"
+#include "test-helpers.h"
 
 using namespace newsboat;
 
-TEST_CASE("OP_OPEN displays article using an external pager", "[itemlist_formaction]") {
+TEST_CASE(
+	"OP_OPEN displays article using an external pager",
+	"[itemlist_formaction]")
+{
 	controller c;
 	newsboat::view v(&c);
 	TestHelpers::TempFile pagerfile;
@@ -23,7 +26,11 @@ TEST_CASE("OP_OPEN displays article using an external pager", "[itemlist_formact
 	std::string test_description = "Article Description";
 	time_t test_pubDate = 42;
 	char test_pubDate_str[128];
-	strftime(test_pubDate_str, sizeof(test_pubDate_str), "%a, %d %b %Y %H:%M:%S %z", localtime(&test_pubDate));
+	strftime(
+		test_pubDate_str,
+		sizeof(test_pubDate_str),
+		"%a, %d %b %Y %H:%M:%S %z",
+		localtime(&test_pubDate));
 
 	configcontainer cfg;
 
@@ -49,10 +56,19 @@ TEST_CASE("OP_OPEN displays article using an external pager", "[itemlist_formact
 
 	REQUIRE_NOTHROW(itemlist.process_op(OP_OPEN));
 
-	TestHelpers::AssertArticleFileContent(pagerfile.getPath(), test_title, test_author, test_pubDate_str, test_url, test_description);
+	TestHelpers::AssertArticleFileContent(
+		pagerfile.getPath(),
+		test_title,
+		test_author,
+		test_pubDate_str,
+		test_url,
+		test_description);
 }
 
-TEST_CASE("OP_PURGE_DELETED purges previously deleted items", "[itemlist_formaction]") {
+TEST_CASE(
+	"OP_PURGE_DELETED purges previously deleted items",
+	"[itemlist_formaction]")
+{
 	controller c;
 	newsboat::view v(&c);
 	configcontainer cfg;
@@ -67,19 +83,24 @@ TEST_CASE("OP_PURGE_DELETED purges previously deleted items", "[itemlist_formact
 	itemlist_formaction itemlist(&v, itemlist_str);
 	itemlist.set_feed(feed);
 
-	SECTION("No items to purge") {
+	SECTION("No items to purge")
+	{
 		REQUIRE_NOTHROW(itemlist.process_op(OP_PURGE_DELETED));
 		REQUIRE(feed->total_item_count() == 1);
 	}
 
-	SECTION("Deleted items are purged") {
+	SECTION("Deleted items are purged")
+	{
 		item->set_deleted(true);
 		REQUIRE_NOTHROW(itemlist.process_op(OP_PURGE_DELETED));
 		REQUIRE(feed->total_item_count() == 0);
 	}
 }
 
-TEST_CASE("OP_OPENBROWSER_AND_MARK passes the url to the browser and marks read", "[itemlist_formaction]") {
+TEST_CASE(
+	"OP_OPENBROWSER_AND_MARK passes the url to the browser and marks read",
+	"[itemlist_formaction]")
+{
 	controller c;
 	newsboat::view v(&c);
 	TestHelpers::TempFile browserfile;
@@ -104,15 +125,18 @@ TEST_CASE("OP_OPENBROWSER_AND_MARK passes the url to the browser and marks read"
 	itemlist_formaction itemlist(&v, itemlist_str);
 	itemlist.set_feed(feed);
 	itemlist.process_op(OP_OPENBROWSER_AND_MARK);
-	std::ifstream browserFileStream (browserfile.getPath());
+	std::ifstream browserFileStream(browserfile.getPath());
 
-	REQUIRE(std::getline (browserFileStream,line));
+	REQUIRE(std::getline(browserFileStream, line));
 	REQUIRE(line == test_url);
 
 	REQUIRE(feed->unread_item_count() == 0);
 }
 
-TEST_CASE("OP_OPENINBROWSER passes the url to the browser", "[itemlist_formaction]") {
+TEST_CASE(
+	"OP_OPENINBROWSER passes the url to the browser",
+	"[itemlist_formaction]")
+{
 	controller c;
 	newsboat::view v(&c);
 	TestHelpers::TempFile browserfile;
@@ -135,13 +159,16 @@ TEST_CASE("OP_OPENINBROWSER passes the url to the browser", "[itemlist_formactio
 	itemlist_formaction itemlist(&v, itemlist_str);
 	itemlist.set_feed(feed);
 	itemlist.process_op(OP_OPENINBROWSER);
-	std::ifstream browserFileStream (browserfile.getPath());
+	std::ifstream browserFileStream(browserfile.getPath());
 
-	REQUIRE(std::getline (browserFileStream,line));
+	REQUIRE(std::getline(browserFileStream, line));
 	REQUIRE(line == test_url);
 }
 
-TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser", "[itemlist_formaction]"){
+TEST_CASE(
+	"OP_OPENALLUNREADINBROWSER passes the url list to the browser",
+	"[itemlist_formaction]")
+{
 	controller c;
 	newsboat::view v(&c);
 	TestHelpers::TempFile browserfile;
@@ -158,7 +185,8 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser", "[item
 	std::shared_ptr<rss_feed> feed = std::make_shared<rss_feed>(&rsscache);
 
 	for (int i = 0; i < itemCount; i++) {
-		std::shared_ptr<rss_item> item = std::make_shared<rss_item>(&rsscache);
+		std::shared_ptr<rss_item> item =
+			std::make_shared<rss_item>(&rsscache);
 		item->set_link(test_url + std::to_string(i));
 		url_set.insert(test_url + std::to_string(i));
 		item->set_unread(true);
@@ -171,18 +199,22 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser", "[item
 	itemlist_formaction itemlist(&v, itemlist_str);
 	itemlist.set_feed(feed);
 
-	SECTION("unread >= max-browser-tabs"){
+	SECTION("unread >= max-browser-tabs")
+	{
 		int maxItemsToOpen = 4;
 		int openedItemsCount = 0;
-		cfg.set_configvalue("max-browser-tabs", std::to_string(maxItemsToOpen));
+		cfg.set_configvalue(
+			"max-browser-tabs", std::to_string(maxItemsToOpen));
 
 		itemlist.process_op(OP_OPENALLUNREADINBROWSER);
 
-		std::ifstream browserFileStream (browserfile.getPath());
+		std::ifstream browserFileStream(browserfile.getPath());
 		openedItemsCount = 0;
 		if (browserFileStream.is_open()) {
-			while ( std::getline (browserFileStream,line) ) {
-				INFO("Each URL should be present exactly once. Erase urls after first match to fail if an item opens twice.")
+			while (std::getline(browserFileStream, line)) {
+				INFO("Each URL should be present exactly once. "
+				     "Erase urls after first match to fail if "
+				     "an item opens twice.")
 				REQUIRE(url_set.count(line) == 1);
 				url_set.erase(url_set.find(line));
 				openedItemsCount += 1;
@@ -191,17 +223,21 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser", "[item
 		REQUIRE(openedItemsCount == maxItemsToOpen);
 	}
 
-	SECTION("unread < max-browser-tabs"){
+	SECTION("unread < max-browser-tabs")
+	{
 		int maxItemsToOpen = 9;
 		int openedItemsCount = 0;
-		cfg.set_configvalue("max-browser-tabs", std::to_string(maxItemsToOpen));
+		cfg.set_configvalue(
+			"max-browser-tabs", std::to_string(maxItemsToOpen));
 
 		itemlist.process_op(OP_OPENALLUNREADINBROWSER);
 
-		std::ifstream browserFileStream (browserfile.getPath());
+		std::ifstream browserFileStream(browserfile.getPath());
 		if (browserFileStream.is_open()) {
-			while ( std::getline (browserFileStream,line) ) {
-				INFO("Each URL should be present exactly once. Erase urls after first match to fail if an item opens twice.")
+			while (std::getline(browserFileStream, line)) {
+				INFO("Each URL should be present exactly once. "
+				     "Erase urls after first match to fail if "
+				     "an item opens twice.")
 				REQUIRE(url_set.count(line) == 1);
 				url_set.erase(url_set.find(line));
 				openedItemsCount += 1;
@@ -211,7 +247,11 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser", "[item
 	}
 }
 
-TEST_CASE("OP_OPENALLUNREADINBROWSER_AND_MARK passes the url list to the browser and marks them read", "[itemlist_formaction]"){
+TEST_CASE(
+	"OP_OPENALLUNREADINBROWSER_AND_MARK passes the url list to the browser "
+	"and marks them read",
+	"[itemlist_formaction]")
+{
 	controller c;
 	newsboat::view v(&c);
 	TestHelpers::TempFile browserfile;
@@ -228,7 +268,8 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER_AND_MARK passes the url list to the browser
 	std::shared_ptr<rss_feed> feed = std::make_shared<rss_feed>(&rsscache);
 
 	for (int i = 0; i < itemCount; i++) {
-		std::shared_ptr<rss_item> item = std::make_shared<rss_item>(&rsscache);
+		std::shared_ptr<rss_item> item =
+			std::make_shared<rss_item>(&rsscache);
 		item->set_link(test_url + std::to_string(i));
 		url_set.insert(test_url + std::to_string(i));
 		item->set_unread(true);
@@ -241,37 +282,46 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER_AND_MARK passes the url list to the browser
 	itemlist_formaction itemlist(&v, itemlist_str);
 	itemlist.set_feed(feed);
 
-	SECTION("unread >= max-browser-tabs"){
+	SECTION("unread >= max-browser-tabs")
+	{
 		int maxItemsToOpen = 4;
 		int openedItemsCount = 0;
-		cfg.set_configvalue("max-browser-tabs", std::to_string(maxItemsToOpen));
+		cfg.set_configvalue(
+			"max-browser-tabs", std::to_string(maxItemsToOpen));
 
 		itemlist.process_op(OP_OPENALLUNREADINBROWSER_AND_MARK);
 
-		std::ifstream browserFileStream (browserfile.getPath());
+		std::ifstream browserFileStream(browserfile.getPath());
 		if (browserFileStream.is_open()) {
-			while ( std::getline (browserFileStream,line) ) {
-				INFO("Each URL should be present exactly once. Erase urls after first match to fail if an item opens twice.")
+			while (std::getline(browserFileStream, line)) {
+				INFO("Each URL should be present exactly once. "
+				     "Erase urls after first match to fail if "
+				     "an item opens twice.")
 				REQUIRE(url_set.count(line) == 1);
 				url_set.erase(url_set.find(line));
 				openedItemsCount += 1;
 			}
 		}
 		REQUIRE(openedItemsCount == maxItemsToOpen);
-		REQUIRE(feed->unread_item_count() == itemCount - maxItemsToOpen);
+		REQUIRE(feed->unread_item_count()
+			== itemCount - maxItemsToOpen);
 	}
 
-	SECTION("unread < max-browser-tabs"){
+	SECTION("unread < max-browser-tabs")
+	{
 		int maxItemsToOpen = 9;
 		int openedItemsCount = 0;
-		cfg.set_configvalue("max-browser-tabs", std::to_string(maxItemsToOpen));
+		cfg.set_configvalue(
+			"max-browser-tabs", std::to_string(maxItemsToOpen));
 
 		itemlist.process_op(OP_OPENALLUNREADINBROWSER_AND_MARK);
 
-		std::ifstream browserFileStream (browserfile.getPath());
+		std::ifstream browserFileStream(browserfile.getPath());
 		if (browserFileStream.is_open()) {
-			while ( std::getline (browserFileStream,line) ) {
-				INFO("Each URL should be present exactly once. Erase urls after first match to fail if an item opens twice.")
+			while (std::getline(browserFileStream, line)) {
+				INFO("Each URL should be present exactly once. "
+				     "Erase urls after first match to fail if "
+				     "an item opens twice.")
 				REQUIRE(url_set.count(line) == 1);
 				url_set.erase(url_set.find(line));
 				openedItemsCount += 1;
@@ -282,7 +332,8 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER_AND_MARK passes the url list to the browser
 	}
 }
 
-TEST_CASE("OP_SHOWURLS shows the article's properties", "[itemlist_formaction]") {
+TEST_CASE("OP_SHOWURLS shows the article's properties", "[itemlist_formaction]")
+{
 	controller c;
 	newsboat::view v(&c);
 	configcontainer cfg;
@@ -295,11 +346,14 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[itemlist_formaction]")
 	std::string test_description = "Article Description";
 	time_t test_pubDate = 42;
 	char test_pubDate_str[128];
-	strftime(test_pubDate_str, sizeof(test_pubDate_str), "%a, %d %b %Y %H:%M:%S %z", localtime(&test_pubDate));
+	strftime(
+		test_pubDate_str,
+		sizeof(test_pubDate_str),
+		"%a, %d %b %Y %H:%M:%S %z",
+		localtime(&test_pubDate));
 
 	v.set_config_container(&cfg);
 	c.set_view(&v);
-
 
 	std::shared_ptr<rss_feed> feed = std::make_shared<rss_feed>(&rsscache);
 	std::shared_ptr<rss_item> item = std::make_shared<rss_item>(&rsscache);
@@ -311,33 +365,44 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[itemlist_formaction]")
 	item->set_pubDate(test_pubDate);
 	itemlist_formaction itemlist(&v, itemlist_str);
 
-
-	SECTION("with external-url-viewer"){
+	SECTION("with external-url-viewer")
+	{
 		feed->add_item(item);
 		itemlist.set_feed(feed);
-		cfg.set_configvalue("external-url-viewer", "tee > " + urlFile.getPath());
+		cfg.set_configvalue(
+			"external-url-viewer", "tee > " + urlFile.getPath());
 
 		REQUIRE_NOTHROW(itemlist.process_op(OP_SHOWURLS));
 
-		TestHelpers::AssertArticleFileContent(urlFile.getPath(), test_title, test_author, test_pubDate_str, test_url, test_description);
+		TestHelpers::AssertArticleFileContent(
+			urlFile.getPath(),
+			test_title,
+			test_author,
+			test_pubDate_str,
+			test_url,
+			test_description);
 	}
 
-	SECTION("internal url viewer"){
+	SECTION("internal url viewer")
+	{
 		feed->add_item(item);
 		itemlist.set_feed(feed);
 		REQUIRE_NOTHROW(itemlist.process_op(OP_SHOWURLS));
 	}
 
-	SECTION("no feed in formaction"){
+	SECTION("no feed in formaction")
+	{
 		REQUIRE_NOTHROW(itemlist.process_op(OP_SHOWURLS));
 	}
-
 }
 
-TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command", "[itemlist_formaction]") {
+TEST_CASE(
+	"OP_BOOKMARK pipes articles url and title to bookmark-command",
+	"[itemlist_formaction]")
+{
 	controller c;
 	newsboat::view v(&c);
-	configcontainer * cfg = c.get_cfg();
+	configcontainer* cfg = c.get_cfg();
 	cache rsscache(":memory:", cfg);
 	TestHelpers::TempFile bookmarkFile;
 	std::string line;
@@ -364,22 +429,27 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command", "[item
 	feed->add_item(item);
 	itemlist.set_feed(feed);
 
-	cfg->set_configvalue("bookmark-cmd", "echo > "+ bookmarkFile.getPath());
+	cfg->set_configvalue(
+		"bookmark-cmd", "echo > " + bookmarkFile.getPath());
 
 	bookmark_args.push_back(extra_arg);
-	REQUIRE_NOTHROW(itemlist.process_op(OP_BOOKMARK, true,  &bookmark_args));
+	REQUIRE_NOTHROW(itemlist.process_op(OP_BOOKMARK, true, &bookmark_args));
 
-	std::ifstream browserFileStream (bookmarkFile.getPath());
+	std::ifstream browserFileStream(bookmarkFile.getPath());
 
-	REQUIRE(std::getline (browserFileStream,line));
-	REQUIRE(line == test_url + separator + test_title + separator + extra_arg + separator + feed_title);
-
+	REQUIRE(std::getline(browserFileStream, line));
+	REQUIRE(line
+		== test_url + separator + test_title + separator + extra_arg
+			   + separator + feed_title);
 }
 
-TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags", "[itemlist_formaction]") {
+TEST_CASE(
+	"OP_EDITFLAGS arguments are added to an item's flags",
+	"[itemlist_formaction]")
+{
 	controller c;
 	newsboat::view v(&c);
-	configcontainer * cfg = c.get_cfg();
+	configcontainer* cfg = c.get_cfg();
 	cache rsscache(":memory:", cfg);
 
 	std::vector<std::string> op_args;
@@ -395,68 +465,88 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags", "[itemlist_form
 	feed->add_item(item);
 	itemlist.set_feed(feed);
 
-	SECTION("Single flag"){
+	SECTION("Single flag")
+	{
 		std::string flags = "G";
 		op_args.push_back(flags);
 
-		REQUIRE_NOTHROW(itemlist.process_op(OP_EDITFLAGS, true, &op_args));
+		REQUIRE_NOTHROW(
+			itemlist.process_op(OP_EDITFLAGS, true, &op_args));
 		REQUIRE(item->flags() == flags);
 	}
 
-	SECTION("Unordered flags"){
+	SECTION("Unordered flags")
+	{
 		std::string flags = "abdefc";
 		std::string ordered_flags = "abcdef";
 		op_args.push_back(flags);
 
-		REQUIRE_NOTHROW(itemlist.process_op(OP_EDITFLAGS, true, &op_args));
+		REQUIRE_NOTHROW(
+			itemlist.process_op(OP_EDITFLAGS, true, &op_args));
 		REQUIRE(item->flags() == ordered_flags);
 	}
 
-	SECTION("Duplicate flag in argument"){
+	SECTION("Duplicate flag in argument")
+	{
 		std::string flags = "Abd";
 		op_args.push_back(flags + "ddd");
 
-		REQUIRE_NOTHROW(itemlist.process_op(OP_EDITFLAGS, true, &op_args));
+		REQUIRE_NOTHROW(
+			itemlist.process_op(OP_EDITFLAGS, true, &op_args));
 		REQUIRE(item->flags() == flags);
 	}
 
-	SECTION("Unauthorized values in arguments"){
+	SECTION("Unauthorized values in arguments")
+	{
 		std::string flags = "Abd";
-		SECTION("Numbers"){
+		SECTION("Numbers")
+		{
 			op_args.push_back(flags + "1236");
 
-			REQUIRE_NOTHROW(itemlist.process_op(OP_EDITFLAGS, true, &op_args));
+			REQUIRE_NOTHROW(itemlist.process_op(
+				OP_EDITFLAGS, true, &op_args));
 			REQUIRE(item->flags() == flags);
 		}
-		SECTION("Symbols"){
-			op_args.push_back(flags + "%^\\*;\'\"&~#{([-|`_/@)]=}$£€µ,;:!?./§");
+		SECTION("Symbols")
+		{
+			op_args.push_back(
+				flags
+				+ "%^\\*;\'\"&~#{([-|`_/@)]=}$£€µ,;:!?./§");
 
-			REQUIRE_NOTHROW(itemlist.process_op(OP_EDITFLAGS, true, &op_args));
+			REQUIRE_NOTHROW(itemlist.process_op(
+				OP_EDITFLAGS, true, &op_args));
 			REQUIRE(item->flags() == flags);
 		}
-		SECTION("Accents"){
+		SECTION("Accents")
+		{
 			op_args.push_back(flags + "¨^");
 
-			REQUIRE_NOTHROW(itemlist.process_op(OP_EDITFLAGS, true, &op_args));
+			REQUIRE_NOTHROW(itemlist.process_op(
+				OP_EDITFLAGS, true, &op_args));
 			REQUIRE(item->flags() == flags);
 		}
 	}
 
-	SECTION("All possible flags at once"){
-		std::string flags = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	SECTION("All possible flags at once")
+	{
+		std::string flags =
+			"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 		op_args.push_back(flags);
 
-		REQUIRE_NOTHROW(itemlist.process_op(OP_EDITFLAGS, true, &op_args));
+		REQUIRE_NOTHROW(
+			itemlist.process_op(OP_EDITFLAGS, true, &op_args));
 		REQUIRE(item->flags() == flags);
 	}
-
 }
 
-TEST_CASE("OP_SAVE writes an article's attributes to the specified file", "[itemlist_formaction]") {
+TEST_CASE(
+	"OP_SAVE writes an article's attributes to the specified file",
+	"[itemlist_formaction]")
+{
 	controller c;
 	newsboat::view v(&c);
 	TestHelpers::TempFile saveFile;
-	configcontainer * cfg = c.get_cfg();
+	configcontainer* cfg = c.get_cfg();
 	cache rsscache(":memory:", cfg);
 
 	std::vector<std::string> op_args;
@@ -468,7 +558,11 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file", "[item
 	std::string test_description = "Article Description";
 	time_t test_pubDate = 42;
 	char test_pubDate_str[128];
-	strftime(test_pubDate_str, sizeof(test_pubDate_str), "%a, %d %b %Y %H:%M:%S %z", localtime(&test_pubDate));
+	strftime(
+		test_pubDate_str,
+		sizeof(test_pubDate_str),
+		"%a, %d %b %Y %H:%M:%S %z",
+		localtime(&test_pubDate));
 
 	v.set_config_container(cfg);
 	c.set_view(&v);
@@ -489,14 +583,21 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file", "[item
 
 	REQUIRE_NOTHROW(itemlist.process_op(OP_SAVE, true, &op_args));
 
-	TestHelpers::AssertArticleFileContent(saveFile.getPath(), test_title, test_author, test_pubDate_str, test_url, test_description);
+	TestHelpers::AssertArticleFileContent(
+		saveFile.getPath(),
+		test_title,
+		test_author,
+		test_pubDate_str,
+		test_url,
+		test_description);
 }
 
-TEST_CASE("OP_HELP command is processed", "[itemlist_formaction]") {
+TEST_CASE("OP_HELP command is processed", "[itemlist_formaction]")
+{
 	controller c;
 	regexmanager regman;
 	newsboat::view v(&c);
-	configcontainer * cfg = c.get_cfg();
+	configcontainer* cfg = c.get_cfg();
 	cache rsscache(":memory:", cfg);
 
 	keymap k(KM_NEWSBOAT);
@@ -518,11 +619,12 @@ TEST_CASE("OP_HELP command is processed", "[itemlist_formaction]") {
 	REQUIRE_NOTHROW(itemlist.process_op(OP_HELP));
 }
 
-TEST_CASE("OP_HARDQUIT command is processed", "[itemlist_formaction]") {
+TEST_CASE("OP_HARDQUIT command is processed", "[itemlist_formaction]")
+{
 	controller c;
 	regexmanager regman;
 	newsboat::view v(&c);
-	configcontainer * cfg = c.get_cfg();
+	configcontainer* cfg = c.get_cfg();
 	cache rsscache(":memory:", cfg);
 
 	keymap k(KM_NEWSBOAT);
@@ -542,15 +644,20 @@ TEST_CASE("OP_HARDQUIT command is processed", "[itemlist_formaction]") {
 	REQUIRE_NOTHROW(itemlist.process_op(OP_HARDQUIT));
 }
 
-TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREVIOUS", "[itemlist_formaction]") {
-	// We are using the OP_SHOWURLS command to print the current article'attibutes
-	// to a file, and assert the position was indeed updated.
+TEST_CASE(
+	"Navigate back and forth using OP_NEXT and OP_PREVIOUS",
+	"[itemlist_formaction]")
+{
+	// We are using the OP_SHOWURLS command to print the current
+	// article'attibutes to a file, and assert the position was indeed
+	// updated.
 	controller c;
 	TestHelpers::TempFile articleFile;
 	regexmanager regman;
 	newsboat::view v(&c);
-	configcontainer * cfg = c.get_cfg();
-	cfg->set_configvalue("external-url-viewer", "tee > " + articleFile.getPath());
+	configcontainer* cfg = c.get_cfg();
+	cfg->set_configvalue(
+		"external-url-viewer", "tee > " + articleFile.getPath());
 	cache rsscache(":memory:", cfg);
 	std::string line;
 
@@ -583,23 +690,26 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREVIOUS", "[itemlist_fo
 	REQUIRE_NOTHROW(itemlist.process_op(OP_NEXT));
 	itemlist.process_op(OP_SHOWURLS);
 
-	std::ifstream fileStream (articleFile.getPath());
-	std::getline (fileStream,line);
+	std::ifstream fileStream(articleFile.getPath());
+	std::getline(fileStream, line);
 	REQUIRE(line == prefix_title + second_article_title);
 
 	REQUIRE_NOTHROW(itemlist.process_op(OP_PREV));
 	itemlist.process_op(OP_SHOWURLS);
 
 	fileStream.seekg(0);
-	std::getline (fileStream,line);
+	std::getline(fileStream, line);
 	REQUIRE(line == prefix_title + first_article_title);
 }
 
-TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles", "[itemlist_formaction]") {
+TEST_CASE(
+	"OP_TOGGLESHOWREAD switches the value of show-read-articles",
+	"[itemlist_formaction]")
+{
 	controller c;
 	regexmanager regman;
 	newsboat::view v(&c);
-	configcontainer * cfg = c.get_cfg();
+	configcontainer* cfg = c.get_cfg();
 	cache rsscache(":memory:", cfg);
 
 	keymap k(KM_NEWSBOAT);
@@ -618,23 +728,30 @@ TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles", "[itemli
 	itemlist.set_feed(feed);
 	v.push_itemlist(feed);
 
-	SECTION("True to False"){
+	SECTION("True to False")
+	{
 		v.get_cfg()->set_configvalue("show-read-articles", "yes");
 		REQUIRE_NOTHROW(itemlist.process_op(OP_TOGGLESHOWREAD));
-		REQUIRE_FALSE(v.get_cfg()->get_configvalue_as_bool("show-read-articles"));
+		REQUIRE_FALSE(v.get_cfg()->get_configvalue_as_bool(
+			"show-read-articles"));
 	}
-	SECTION("False to True"){
+	SECTION("False to True")
+	{
 		v.get_cfg()->set_configvalue("show-read-articles", "no");
 		REQUIRE_NOTHROW(itemlist.process_op(OP_TOGGLESHOWREAD));
-		REQUIRE(v.get_cfg()->get_configvalue_as_bool("show-read-articles"));
+		REQUIRE(v.get_cfg()->get_configvalue_as_bool(
+			"show-read-articles"));
 	}
 }
 
-TEST_CASE("OP_PIPE_TO pipes an article's content to an external command", "[itemlist_formaction]") {
+TEST_CASE(
+	"OP_PIPE_TO pipes an article's content to an external command",
+	"[itemlist_formaction]")
+{
 	controller c;
 	newsboat::view v(&c);
 	TestHelpers::TempFile articleFile;
-	configcontainer * cfg = c.get_cfg();
+	configcontainer* cfg = c.get_cfg();
 	cache rsscache(":memory:", cfg);
 
 	std::vector<std::string> op_args;
@@ -646,7 +763,11 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command", "[item
 	std::string test_description = "Article Description";
 	time_t test_pubDate = 42;
 	char test_pubDate_str[128];
-	strftime(test_pubDate_str, sizeof(test_pubDate_str), "%a, %d %b %Y %H:%M:%S %z", localtime(&test_pubDate));
+	strftime(
+		test_pubDate_str,
+		sizeof(test_pubDate_str),
+		"%a, %d %b %Y %H:%M:%S %z",
+		localtime(&test_pubDate));
 
 	v.set_config_container(cfg);
 	c.set_view(&v);
@@ -667,6 +788,11 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command", "[item
 
 	REQUIRE_NOTHROW(itemlist.process_op(OP_PIPE_TO, true, &op_args));
 
-	TestHelpers::AssertArticleFileContent(articleFile.getPath(), test_title, test_author, test_pubDate_str, test_url, test_description);
+	TestHelpers::AssertArticleFileContent(
+		articleFile.getPath(),
+		test_title,
+		test_author,
+		test_pubDate_str,
+		test_url,
+		test_description);
 }
-

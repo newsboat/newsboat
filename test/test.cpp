@@ -3,7 +3,7 @@
 
 #include "logger.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
 	setlocale(LC_CTYPE, "");
 
@@ -11,4 +11,3 @@ int main(int argc, char *argv[])
 
 	return Catch::Session().run(argc, argv);
 }
-

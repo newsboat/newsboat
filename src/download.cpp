@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "pb_controller.h"
 #include "config.h"
+#include "pb_controller.h"
 
 namespace podboat {
 
@@ -12,35 +12,44 @@ namespace podboat {
  * It manages the filename, the URL, the current state, the progress, etc.
  */
 
-download::download(pb_controller * c)
-: download_status(dlstatus::QUEUED), cursize(0.0), totalsize(0.0), curkbps(0.0),
-	offs(0), ctrl(c)
-{ }
-
-download::~download() {
+download::download(pb_controller* c)
+	: download_status(dlstatus::QUEUED)
+	, cursize(0.0)
+	, totalsize(0.0)
+	, curkbps(0.0)
+	, offs(0)
+	, ctrl(c)
+{
 }
 
-const std::string download::filename() {
+download::~download() {}
+
+const std::string download::filename()
+{
 	return fn;
 }
 
-const std::string download::url() {
+const std::string download::url()
+{
 	return url_;
 }
 
-void download::set_filename(const std::string& str) {
+void download::set_filename(const std::string& str)
+{
 	fn = str;
 }
 
-double download::percents_finished() {
+double download::percents_finished()
+{
 	if (totalsize < 1) {
 		return 0.0;
 	} else {
-		return (100*(offs + cursize))/(offs + totalsize);
+		return (100 * (offs + cursize)) / (offs + totalsize);
 	}
 }
 
-const std::string download::status_text() {
+const std::string download::status_text()
+{
 	switch (download_status) {
 	case dlstatus::QUEUED:
 		return _s("queued");
@@ -65,34 +74,40 @@ const std::string download::status_text() {
 	}
 }
 
-void download::set_url(const std::string& u) {
+void download::set_url(const std::string& u)
+{
 	url_ = u;
 }
 
-void download::set_progress(double downloaded, double total) {
+void download::set_progress(double downloaded, double total)
+{
 	if (downloaded > cursize)
 		ctrl->set_view_update_necessary(true);
 	cursize = downloaded;
 	totalsize = total;
 }
 
-void download::set_status(dlstatus dls) {
+void download::set_status(dlstatus dls)
+{
 	if (download_status != dls) {
 		ctrl->set_view_update_necessary(true);
 	}
 	download_status = dls;
 }
 
-void download::set_kbps(double k) {
+void download::set_kbps(double k)
+{
 	curkbps = k;
 }
 
-double download::kbps() {
+double download::kbps()
+{
 	return curkbps;
 }
 
-void download::set_offset(unsigned long offset) {
+void download::set_offset(unsigned long offset)
+{
 	offs = offset;
 }
 
-}
+} // namespace podboat

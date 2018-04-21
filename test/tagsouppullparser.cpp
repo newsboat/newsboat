@@ -6,16 +6,17 @@
 
 using namespace newsboat;
 
-TEST_CASE("Tagsoup pull parser turns document into a stream of events",
-          "[tagsouppullparser]")
+TEST_CASE(
+	"Tagsoup pull parser turns document into a stream of events",
+	"[tagsouppullparser]")
 {
 	std::istringstream input_stream(
-			"<test>"
-				"<foo quux='asdf' bar=\"qqq\">text</foo>"
-				"more text"
-				"<more>&quot;&#33;&#x40;</more>"
-				"<xxx foo=bar baz=\"qu ux\" hi='ho ho ho'></xxx>"
-			"</test>");
+		"<test>"
+		"<foo quux='asdf' bar=\"qqq\">text</foo>"
+		"more text"
+		"<more>&quot;&#33;&#x40;</more>"
+		"<xxx foo=bar baz=\"qu ux\" hi='ho ho ho'></xxx>"
+		"</test>");
 
 	tagsouppullparser xpp;
 	tagsouppullparser::event e;
@@ -80,25 +81,29 @@ TEST_CASE("Tagsoup pull parser turns document into a stream of events",
 	REQUIRE(e == tagsouppullparser::event::END_DOCUMENT);
 }
 
-TEST_CASE("<br>, <br/> and <br /> behave the same way", "[tagsouppullparser]") {
+TEST_CASE("<br>, <br/> and <br /> behave the same way", "[tagsouppullparser]")
+{
 	std::istringstream input_stream;
 	tagsouppullparser parser;
 	tagsouppullparser::event event;
 
 	for (auto input : {"<br>", "<br/>", "<br />"}) {
-		SECTION(input) {
+		SECTION(input)
+		{
 			input_stream.str(input);
 			parser.set_input(input_stream);
 
 			event = parser.get_event_type();
-			REQUIRE(event == tagsouppullparser::event::START_DOCUMENT);
+			REQUIRE(event
+				== tagsouppullparser::event::START_DOCUMENT);
 
 			event = parser.next();
 			REQUIRE(event == tagsouppullparser::event::START_TAG);
 			REQUIRE(parser.get_text() == "br");
 
 			event = parser.next();
-			REQUIRE(event == tagsouppullparser::event::END_DOCUMENT);
+			REQUIRE(event
+				== tagsouppullparser::event::END_DOCUMENT);
 		}
 	}
 }
