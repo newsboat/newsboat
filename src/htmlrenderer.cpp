@@ -343,14 +343,14 @@ void htmlrenderer::render(
 				add_nonempty_line(curline, tables, lines);
 				prepare_new_line(curline, 0); // no indent in tables
 
-				bool border = false;
+				bool has_border = false;
 				try {
 					std::string b = xpp.get_attribute_value("border");
-					border = (utils::to_u(b, 0) > 0);
+					has_border = (utils::to_u(b, 0) > 0);
 				} catch (const std::invalid_argument& ) {
 					// is ok, no border then
 				}
-				tables.push_back(Table(border));
+				tables.push_back(Table(has_border));
 				break;
 			}
 
@@ -817,18 +817,18 @@ void htmlrenderer::render_table(
 
 	// create a row separator
 	std::string separator;
-	if (table.border)
+	if (table.has_border)
 		separator += hvsep;
 	for (size_t cell=0; cell < cells; cell++) {
 		separator += std::string(cell_widths[cell], hsep);
 		separator += hvsep;
 	}
 
-	if (!table.border)
+	if (!table.has_border)
 		vsep = ' ';
 
 	// render the table
-	if (table.border)
+	if (table.has_border)
 		lines.push_back(std::make_pair(LineType::nonwrappable, separator));
 	for (size_t row=0; row < rows; row++) {
 		// calc height of this row
@@ -838,7 +838,7 @@ void htmlrenderer::render_table(
 
 		for (size_t idx=0; idx < height; ++idx) {
 			std::string line;
-			if (table.border)
+			if (table.has_border)
 				line += vsep;
 			for (size_t cell=0; cell < table.rows[row].cells.size(); cell++) {
 				size_t cell_width = 0;
@@ -859,11 +859,11 @@ void htmlrenderer::render_table(
 				if (cell < table.rows[row].cells.size()-1)
 					line += vsep;
 			}
-			if (table.border)
+			if (table.has_border)
 				line += vsep;
 			lines.push_back(std::make_pair(LineType::nonwrappable, line));
 		}
-		if (table.border)
+		if (table.has_border)
 			lines.push_back(std::make_pair(LineType::nonwrappable, separator));
 	}
 }

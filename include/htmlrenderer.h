@@ -51,7 +51,7 @@ class htmlrenderer {
 		};
 
 		struct Table {
-			explicit Table(bool b) : inside(false), border(b) { }
+			explicit Table(bool b) : inside(false), has_border(b) { }
 
 			void add_text(const std::string& str);
 			void start_row();
@@ -60,7 +60,7 @@ class htmlrenderer {
 			void complete_cell();
 
 			bool inside;    // inside a row
-			bool border;
+			bool has_border;
 			std::vector<TableRow> rows;
 		};
 
