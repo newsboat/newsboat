@@ -70,10 +70,12 @@ bool FSLock::try_lock(const std::string& new_lock_filepath, pid_t& pid)
 	if (fd >= 0) {
 		char buf[32];
 		int len = read(fd, buf, sizeof(buf)-1);
-		unsigned int upid = 0;
-		buf[len] = '\0';
-		sscanf(buf, "%u", &upid);
-		pid = upid;
+		if (len > 0) {
+			buf[len] = '\0';
+			unsigned int upid = 0;
+			sscanf(buf, "%u", &upid);
+			pid = upid;
+		}
 		close(fd);
 	}
 	LOG(level::DEBUG, "FSLock: locking failed, already locked by %u", pid);
