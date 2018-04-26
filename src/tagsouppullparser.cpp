@@ -481,8 +481,11 @@ std::string tagsouppullparser::decode_entity(std::string s) {
 			if (s == entity_table[i].entity) {
 				char mbc[MB_CUR_MAX];
 				int pos = wctomb(mbc, entity_table[i].value);
-				mbc[pos] = '\0';
-				return std::string(mbc);
+				if (pos == -1) {
+					return std::string();
+				} else {
+					return std::string(mbc, pos);
+				}
 			}
 		}
 	}
