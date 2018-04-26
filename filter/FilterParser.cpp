@@ -30,6 +30,7 @@ void FilterParser::add_logop(int op) {
 	expression * expr = new expression(op);
 	if (!root) {
 		printf("error: there can't be a logical expression w/o a prior expression!");
+		delete expr;
 		// TODO: add proper error handling
 	} else {
 		if (curpos != root) {
