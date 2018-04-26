@@ -78,7 +78,6 @@ std::vector<std::string> wrap_line(
 			if (part.empty()) {
 				// discard the current word
 				word.clear();
-				word_width = 0;
 			}
 
 			word_width = utils::strwidth_stfl(word);
