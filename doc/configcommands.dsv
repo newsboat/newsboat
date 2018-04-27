@@ -11,7 +11,7 @@ bookmark-interactive||[yes/no]||no||If set to yes, then the configured bookmark 
 browser||<command>||lynx||Set the browser command to use when opening an article in the browser. If <command> contains %u, it will be used as complete commandline and %u will be replaced with the URL that shall be opened.||browser "w3m %u"
 cache-file||<path>||"~/.newsboat/cache.db"||This configuration option sets the cache file. This is especially useful if the filesystem of your home directory doesn't support proper locking (e.g. NFS).||cache-file "/tmp/testcache.db"
 cleanup-on-quit||[yes/no]||yes||If yes, then the cache gets locked and superfluous feeds and items are removed, such as feeds that can't be found in the urls configuration file anymore.||cleanup-on-quit no
-color||<element> <fgcolor> <bgcolor> [<attribute> ...]||n/a||Set the foreground color, background color and optional attributes for a certain element||color background white black
+color||<element> <fgcolor> <bgcolor> [<attribute> ...]||n/a||Set the foreground color, background color and optional attributes for a certain element.||color background white black
 confirm-exit||[yes/no]||no||If set to yes, then newsboat will ask for confirmation whether the user really wants to quit newsboat.||confirm-exit yes
 cookie-cache||<path>||""||Set a cookie cache. If set, then cookies will be cached (i.e. read from and written to) in this file.||cookie-cache "~/.newsboat/cookies.txt"
 datetime-format||<date/time format>||%b %d||This format specifies the date/time format in the article list. For a detailed documentation on the allowed formats, consult the manpage of strftime(3).||datetime-format "%D, %R"
