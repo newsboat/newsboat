@@ -117,6 +117,32 @@ TEST_CASE("reset_to_default changes setting to its default value",
 	}
 }
 
+TEST_CASE("get_configvalue_as_bool() recognizes several boolean formats",
+		"[configcontainer]")
+{
+	configcontainer cfg;
+	cfg.set_configvalue("cleanup-on-quit", "yes");
+	cfg.set_configvalue("auto-reload", "true");
+	cfg.set_configvalue("show-read-feeds", "no");
+	cfg.set_configvalue("bookmark-interactive", "false");
+
+	SECTION("\"yes\" and \"true\"") {
+		REQUIRE(cfg.get_configvalue("cleanup-on-quit") == "yes");
+		REQUIRE(cfg.get_configvalue_as_bool("cleanup-on-quit"));
+
+		REQUIRE(cfg.get_configvalue("auto-reload") == "true");
+		REQUIRE(cfg.get_configvalue_as_bool("auto-reload"));
+	}
+
+	SECTION("\"no\" and \"false\"") {
+		REQUIRE(cfg.get_configvalue("show-read-feeds") == "no");
+		REQUIRE_FALSE(cfg.get_configvalue_as_bool("show-read-feeds"));
+
+		REQUIRE(cfg.get_configvalue("bookmark-interactive") == "false");
+		REQUIRE_FALSE(cfg.get_configvalue_as_bool("bookmark-interactive"));
+	}
+}
+
 TEST_CASE("toggle() inverts the value of a boolean setting",
 		"[configcontainer]")
 {

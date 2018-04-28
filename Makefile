@@ -195,7 +195,7 @@ doc/gen-example-config: doc/gen-example-config.cpp doc/split.h
 	$(CXX) $(CXXFLAGS) -o doc/gen-example-config doc/gen-example-config.cpp
 
 doc/example-config: doc/gen-example-config doc/configcommands.dsv
-	cat doc/configcommands.dsv | doc/gen-example-config > doc/example-config
+	sed 's/+{backslash}"+/`\\"`/g' doc/configcommands.dsv | doc/gen-example-config > doc/example-config
 
 # add hyperlinks for every configuration command
 doc/configcommands-linked.dsv: doc/configcommands.dsv
