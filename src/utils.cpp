@@ -916,53 +916,48 @@ std::string utils::quote_if_necessary(const std::string& str) {
 }
 
 void utils::set_common_curl_options(CURL * handle, configcontainer * cfg) {
-	std::string proxy;
-	std::string proxyauth;
-	std::string proxyauthmethod;
-	std::string proxytype;
-	std::string useragent;
-	std::string cookie_cache;
-	unsigned int dl_timeout = 0;
-
 	if (cfg) {
 		if (cfg->get_configvalue_as_bool("use-proxy")) {
-			proxy = cfg->get_configvalue("proxy");
-			proxyauth = cfg->get_configvalue("proxy-auth");
-			proxyauthmethod = cfg->get_configvalue("proxy-auth-method");
-			proxytype = cfg->get_configvalue("proxy-type");
+			const std::string proxy = cfg->get_configvalue("proxy");
+			if (proxy != "")
+				curl_easy_setopt(handle, CURLOPT_PROXY, proxy.c_str());
+
+			const std::string proxyauth = cfg->get_configvalue("proxy-auth");
+			const std::string proxyauthmethod = cfg->get_configvalue("proxy-auth-method");
+			if (proxyauth != "") {
+				curl_easy_setopt(handle, CURLOPT_PROXYAUTH, get_auth_method(proxyauthmethod));
+				curl_easy_setopt(handle, CURLOPT_PROXYUSERPWD, proxyauth.c_str());
+			}
+
+			const std::string proxytype = cfg->get_configvalue("proxy-type");
+			if (proxytype != "") {
+				LOG(level::DEBUG, "utils::set_common_curl_options: proxytype = %s", proxytype);
+				curl_easy_setopt(handle, CURLOPT_PROXYTYPE, get_proxy_type(proxytype));
+			}
 		}
-		useragent = utils::get_useragent(cfg);
-		dl_timeout = cfg->get_configvalue_as_int("download-timeout");
-		cookie_cache = cfg->get_configvalue("cookie-cache");
+
+		const std::string useragent = utils::get_useragent(cfg);
+		curl_easy_setopt(handle, CURLOPT_USERAGENT, useragent.c_str());
+
+		const unsigned int dl_timeout = cfg->get_configvalue_as_int("download-timeout");
+		curl_easy_setopt(handle, CURLOPT_TIMEOUT, dl_timeout);
+
+		const std::string cookie_cache = cfg->get_configvalue("cookie-cache");
+		if (cookie_cache != "") {
+			curl_easy_setopt(handle, CURLOPT_COOKIEFILE, cookie_cache.c_str());
+			curl_easy_setopt(handle, CURLOPT_COOKIEJAR, cookie_cache.c_str());
+		}
+
+		curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, cfg->get_configvalue_as_bool("ssl-verifyhost") ? 2 : 0);
+		curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, cfg->get_configvalue_as_bool("ssl-verifypeer"));
 	}
 
-	curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, cfg->get_configvalue_as_bool("ssl-verifyhost") ? 2 : 0);
-	curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, cfg->get_configvalue_as_bool("ssl-verifypeer"));
 	curl_easy_setopt(handle, CURLOPT_NOSIGNAL, 1);
 	curl_easy_setopt(handle, CURLOPT_ENCODING, "gzip, deflate");
-	curl_easy_setopt(handle, CURLOPT_TIMEOUT, dl_timeout);
-
-	if (proxy != "")
-		curl_easy_setopt(handle, CURLOPT_PROXY, proxy.c_str());
-	if (proxyauth != "") {
-		curl_easy_setopt(handle, CURLOPT_PROXYAUTH, get_auth_method(proxyauthmethod));
-		curl_easy_setopt(handle, CURLOPT_PROXYUSERPWD, proxyauth.c_str());
-	}
-	if (proxytype != "") {
-		LOG(level::DEBUG, "utils::set_common_curl_options: proxytype = %s", proxytype);
-		curl_easy_setopt(handle, CURLOPT_PROXYTYPE, get_proxy_type(proxytype));
-	}
-
-	curl_easy_setopt(handle, CURLOPT_USERAGENT, useragent.c_str());
 
 	curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1);
 	curl_easy_setopt(handle, CURLOPT_MAXREDIRS, 10);
 	curl_easy_setopt(handle, CURLOPT_FAILONERROR, 1);
-
-	if (cookie_cache != "") {
-		curl_easy_setopt(handle, CURLOPT_COOKIEFILE, cookie_cache.c_str());
-		curl_easy_setopt(handle, CURLOPT_COOKIEJAR, cookie_cache.c_str());
-	}
 
 	const char* curl_ca_bundle = ::getenv("CURL_CA_BUNDLE");
 	if (curl_ca_bundle != nullptr) {
