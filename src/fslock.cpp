@@ -65,8 +65,7 @@ bool FSLock::try_lock(const std::string& new_lock_filepath, pid_t& pid)
 				strerror(errno));
 	}
 
-	// locking was not successful -> read PID of locking process from it
-	fd = ::open(new_lock_filepath.c_str(), O_RDONLY);
+	// locking was not successful -> read PID of locking process from the file
 	if (fd >= 0) {
 		char buf[32];
 		int len = read(fd, buf, sizeof(buf)-1);
