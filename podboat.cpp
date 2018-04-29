@@ -6,6 +6,7 @@
 #include <pb_view.h>
 #include <errno.h>
 #include <utils.h>
+#include <exception.h>
 
 using namespace podboat;
 
@@ -22,5 +23,16 @@ int main(int argc, char * argv[]) {
 	podboat::pb_view v(&c);
 	c.set_view(&v);
 
-	return c.run(argc, argv);
+	int ret;
+	try {
+		ret = c.run(argc, argv);
+	} catch (const newsboat::exception& e) {
+		std::cerr
+			<< strprintf::fmt(
+					_("Caught newsboat::exception with message: %s"), e.what())
+			<< std::endl;
+		::exit(EXIT_FAILURE);
+	}
+
+	return ret;
 }
