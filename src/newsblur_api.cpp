@@ -249,7 +249,7 @@ rsspp::feed newsblur_api::fetch_feed(const std::string& id) {
 			if (json_object_object_get_ex(item_obj, "id", &node) == TRUE) {
 				article_id = json_object_get_string(node);
 			}
-			item.guid = id + ID_SEPARATOR + article_id;
+			item.guid = id + ID_SEPARATOR + (article_id ? article_id : "");
 
 			if (json_object_object_get_ex(item_obj, "read_status", &node)
 					== TRUE)
