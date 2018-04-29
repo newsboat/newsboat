@@ -427,6 +427,14 @@ void utils::run_command(const std::string& cmd, const std::string& input) {
 		break;
 	case 0: { // child:
 		int fd = ::open("/dev/null", O_RDWR);
+		if (fd == -1) {
+			LOG(
+					level::DEBUG,
+					"utils::run_command: error opening /dev/null: (%i) %s",
+					errno,
+					strerror(errno));
+			exit(1);
+		}
 		close(0);
 		close(1);
 		close(2);
