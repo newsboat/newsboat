@@ -16,6 +16,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <getopt.h>
+#include <cstring>
 
 #include <keymap.h>
 #include <configcontainer.h>
@@ -139,7 +140,19 @@ pb_controller::pb_controller()
 
 	config_dir.append(NEWSBEUTER_PATH_SEP);
 	config_dir.append(NEWSBOAT_CONFIG_SUBDIR);
-	::mkdir(config_dir.c_str(),0700); // create configuration directory if it doesn't exist
+
+	// create configuration directory if it doesn't exist
+	int ret = ::mkdir(config_dir.c_str(), 0700);
+	if (ret && errno != EEXIST) {
+		std::cerr
+			<< strprintf::fmt(
+				_("Fatal error: couldn't create configuration directory `%s': (%i) %s"),
+				config_dir,
+				errno,
+				std::strerror(errno))
+			<< std::endl;
+		::exit(EXIT_FAILURE);
+	}
 
 	config_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
 	queue_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
