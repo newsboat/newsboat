@@ -1092,7 +1092,9 @@ int utils::mkdir_parents(const std::string& p, mode_t mode) {
 		curr++;
 	}
 
-	if (result == 0) mkdir(p.c_str(), mode);
+	if (result == 0) {
+		result = mkdir(p.c_str(), mode);
+	}
 
 	free(pathname);
 	return result;
