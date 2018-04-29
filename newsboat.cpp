@@ -8,6 +8,7 @@
 #include <rsspp.h>
 #include <errno.h>
 #include <cstring>
+#include <exceptions.h>
 
 using namespace newsboat;
 
@@ -26,7 +27,16 @@ int main(int argc, char * argv[]) {
 	newsboat::view v(&c);
 	c.set_view(&v);
 
-	int ret = c.run(argc,argv);
+	int ret;
+	try {
+		ret = c.run(argc, argv);
+	} catch (const newsboat::dbexception& e) {
+		std::cerr
+			<< strprintf::fmt(
+					_("Caught newsboat::dbexception with message: %s"), e.what())
+			<< std::endl;
+		::exit(EXIT_FAILURE);
+	}
 
 	rsspp::parser::global_cleanup();
 
