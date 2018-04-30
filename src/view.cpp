@@ -58,7 +58,7 @@ extern "C" {
 
 namespace newsboat {
 
-view::view(controller * c) : ctrl(c), cfg(0), keys(0), current_formaction(0), is_inside_qna(false), is_inside_cmdline(false), tab_count(0) {
+view::view(controller * c) : ctrl(c), cfg(0), keys(0), current_formaction(0), rxman(nullptr), is_inside_qna(false), is_inside_cmdline(false), tab_count(0) {
 	if (getenv("ESCDELAY") == nullptr) {
 		set_escdelay(25);
 	}
