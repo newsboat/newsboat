@@ -298,7 +298,7 @@ bool controller::migrate_data_from_newsbeuter_simple(
 			<< std::endl;
 	}
 
-	if (0 != ::mkdir(newsboat_dir.c_str(), 0700)) {
+	if (0 != ::mkdir(newsboat_dir.c_str(), 0700) && errno != EEXIST) {
 		if (! silent) {
 			std::cerr
 				<< "Aborting migration because mkdir on "
