@@ -19,6 +19,7 @@ FSLock::~FSLock()
 {
 	if (locked) {
 		remove_lock(lock_filepath);
+		::close(fd);
 	}
 }
 
@@ -34,7 +35,7 @@ bool FSLock::try_lock(const std::string& new_lock_filepath, pid_t& pid)
 	LOG(level::DEBUG, "FSLock: trying to lock `%s'", new_lock_filepath);
 
 	// first, we open (and possibly create) the lock file
-	int fd = ::open(new_lock_filepath.c_str(), O_RDWR | O_CREAT, 0600);
+	fd = ::open(new_lock_filepath.c_str(), O_RDWR | O_CREAT, 0600);
 	if (fd < 0) {
 		return false;
 	}
@@ -58,6 +59,8 @@ bool FSLock::try_lock(const std::string& new_lock_filepath, pid_t& pid)
 			}
 			locked = success;
 			lock_filepath = new_lock_filepath;
+		} else {
+			::close(fd);
 		}
 		return success;
 	} else {

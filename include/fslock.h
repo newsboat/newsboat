@@ -14,8 +14,9 @@ class FSLock {
 		bool try_lock(const std::string& lock_file, pid_t & pid);
 
 	private:
-		bool locked = { false };
 		std::string lock_filepath;
+		int fd = -1;
+		bool locked = false;
 };
 
 }
