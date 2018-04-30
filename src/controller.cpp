@@ -534,8 +534,8 @@ int controller::run(int argc, char * argv[]) {
 		migrate_data_from_newsbeuter(env_home, silent);
 	}
 
-	utils::mkdir_parents(config_dir.c_str(), 0700);
-	utils::mkdir_parents(data_dir.c_str(), 0700);
+	utils::mkdir_parents(config_dir, 0700);
+	utils::mkdir_parents(data_dir, 0700);
 
 	if (!do_export) {
 
