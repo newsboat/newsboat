@@ -1092,7 +1092,7 @@ int utils::mkdir_parents(const std::string& p, mode_t mode) {
 			result = access(pathname, F_OK);
 			if (result == -1) {
 				result = mkdir(pathname, mode);
-				if (result != 0)
+				if (result != 0 && errno != EEXIST)
 					break;
 			}
 			*curr = '/';
