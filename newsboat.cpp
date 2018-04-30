@@ -36,6 +36,12 @@ int main(int argc, char * argv[]) {
 					_("Caught newsboat::dbexception with message: %s"), e.what())
 			<< std::endl;
 		::exit(EXIT_FAILURE);
+	} catch (const newsboat::matcherexception& e) {
+		std::cerr
+			<< strprintf::fmt(
+					_("Caught newsboat::matcherexception with message: %s"), e.what())
+			<< std::endl;
+		::exit(EXIT_FAILURE);
 	}
 
 	rsspp::parser::global_cleanup();
