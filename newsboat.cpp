@@ -9,6 +9,7 @@
 #include <errno.h>
 #include <cstring>
 #include <exceptions.h>
+#include <exception.h>
 
 using namespace newsboat;
 
