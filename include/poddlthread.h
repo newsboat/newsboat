@@ -26,8 +26,8 @@ class poddlthread {
 		void run();
 		download * dl;
 		std::shared_ptr<std::ofstream> f;
-		timeval tv1 = {};
-		timeval tv2 = {};
+		timeval tv1;
+		timeval tv2;
 		size_t bytecount;
 		newsboat::configcontainer * cfg;
 };
