@@ -534,8 +534,9 @@ int controller::run(int argc, char * argv[]) {
 		migrate_data_from_newsbeuter(env_home, silent);
 	}
 
-	utils::mkdir_parents(config_dir, 0700);
-	utils::mkdir_parents(data_dir, 0700);
+	if (!create_dirs()) {
+		return EXIT_FAILURE;
+	}
 
 	if (!do_export) {
 
@@ -1850,6 +1851,22 @@ unsigned int controller::get_feed_count_per_tag(const std::string& tag) {
 	}
 
 	return count;
+}
+
+bool controller::create_dirs() const {
+	auto try_mkdir = [](const std::string& dir) -> bool {
+		const bool result = 0 == utils::mkdir_parents(dir, 0700);
+		if (! result) {
+			LOG(level::CRITICAL,
+					"Couldn't create `%s': (%i) %s",
+					dir,
+					errno,
+					strerror(errno));
+		}
+		return result;
+	};
+
+	return try_mkdir(config_dir) && try_mkdir(data_dir);
 }
 
 }
