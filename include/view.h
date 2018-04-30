@@ -137,7 +137,6 @@ class view {
 		unsigned int current_formaction;
 
 		std::vector<std::string> tags;
-		unsigned int feeds_shown;
 
 		regexmanager * rxman;
 
