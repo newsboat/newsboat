@@ -20,11 +20,12 @@ int main(int argc, char * argv[]) {
 	textdomain (PACKAGE);
 
 	pb_controller c;
-	podboat::pb_view v(&c);
-	c.set_view(&v);
 
 	int ret;
 	try {
+		podboat::pb_view v(&c);
+		c.set_view(&v);
+
 		ret = c.run(argc, argv);
 	} catch (const newsboat::exception& e) {
 		std::cerr
