@@ -1856,14 +1856,16 @@ unsigned int controller::get_feed_count_per_tag(const std::string& tag) {
 bool controller::create_dirs() const {
 	auto try_mkdir = [](const std::string& dir) -> bool {
 		const bool result = 0 == utils::mkdir_parents(dir, 0700);
-		if (! result) {
+		if (! result && errno != EEXIST) {
 			LOG(level::CRITICAL,
 					"Couldn't create `%s': (%i) %s",
 					dir,
 					errno,
 					strerror(errno));
+			return false;
+		} else {
+			return true;
 		}
-		return result;
 	};
 
 	return try_mkdir(config_dir) && try_mkdir(data_dir);
