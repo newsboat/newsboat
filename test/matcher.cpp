@@ -9,8 +9,8 @@ using namespace newsboat;
 struct testmatchable : public matchable {
 	virtual bool has_attribute(const std::string& attribname)
 	{
-		if (attribname == "abcd" || attribname == "AAAA"
-		    || attribname == "tags")
+		if (attribname == "abcd" || attribname == "AAAA" ||
+			attribname == "tags")
 			return true;
 		return false;
 	}
@@ -96,8 +96,7 @@ TEST_CASE("Matcher throws if expression contains undefined fields", "[matcher]")
 	REQUIRE_THROWS_AS(m.matches(&mock), matcherexception);
 }
 
-TEST_CASE(
-	"Matcher throws if regex passed to `=~` or `!~` is invalid",
+TEST_CASE("Matcher throws if regex passed to `=~` or `!~` is invalid",
 	"[matcher]")
 {
 	testmatchable mock;
@@ -110,8 +109,7 @@ TEST_CASE(
 	REQUIRE_THROWS_AS(m.matches(&mock), matcherexception);
 }
 
-TEST_CASE(
-	"Operator `!~` checks if field doesn't match given regex",
+TEST_CASE("Operator `!~` checks if field doesn't match given regex",
 	"[matcher]")
 {
 	testmatchable mock;
@@ -133,8 +131,7 @@ TEST_CASE(
 	REQUIRE_FALSE(m.matches(&mock));
 }
 
-TEST_CASE(
-	"Operator `#` checks if \"tags\" field contains given value",
+TEST_CASE("Operator `#` checks if \"tags\" field contains given value",
 	"[matcher]")
 {
 	testmatchable mock;
@@ -165,8 +162,7 @@ TEST_CASE(
 	REQUIRE(m.matches(&mock));
 }
 
-TEST_CASE(
-	"Operator `!#` checks if \"tags\" field doesn't contain given value",
+TEST_CASE("Operator `!#` checks if \"tags\" field doesn't contain given value",
 	"[matcher]")
 {
 	testmatchable mock;
@@ -203,8 +199,7 @@ TEST_CASE(
 	REQUIRE(m.matches(&mock));
 }
 
-TEST_CASE(
-	"Operator `between` checks if field's value is in given range",
+TEST_CASE("Operator `between` checks if field's value is in given range",
 	"[matcher]")
 {
 	testmatchable mock;

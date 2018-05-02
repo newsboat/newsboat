@@ -21,8 +21,8 @@ void downloadthread::operator()()
 	 * whenever an auto-reload comes up.
 	 */
 	LOG(level::DEBUG,
-	    "downloadthread::run: inside downloadthread, reloading all "
-	    "feeds...");
+		"downloadthread::run: inside downloadthread, reloading all "
+		"feeds...");
 	if (ctrl->trylock_reload_mutex()) {
 		if (indexes.size() == 0) {
 			ctrl->reload_all();
@@ -33,8 +33,7 @@ void downloadthread::operator()()
 	}
 }
 
-reloadrangethread::reloadrangethread(
-	controller* c,
+reloadrangethread::reloadrangethread(controller* c,
 	unsigned int start,
 	unsigned int end,
 	unsigned int size,

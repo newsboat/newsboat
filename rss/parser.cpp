@@ -24,8 +24,7 @@ my_write_data(void* buffer, size_t size, size_t nmemb, void* userp)
 
 namespace rsspp {
 
-parser::parser(
-	unsigned int timeout,
+parser::parser(unsigned int timeout,
 	const std::string& user_agent,
 	const std::string& proxy,
 	const std::string& proxy_auth,
@@ -70,16 +69,17 @@ static size_t handle_headers(void* ptr, size_t size, size_t nmemb, void* data)
 		time_t r = curl_getdate(header + 14, nullptr);
 		if (r == -1) {
 			LOG(level::DEBUG,
-			    "handle_headers: last-modified %s (curl_getdate "
-			    "FAILED)",
-			    header + 14);
+				"handle_headers: last-modified %s "
+				"(curl_getdate "
+				"FAILED)",
+				header + 14);
 		} else {
 			values->lastmodified =
 				curl_getdate(header + 14, nullptr);
 			LOG(level::DEBUG,
-			    "handle_headers: got last-modified %s (%d)",
-			    header + 14,
-			    values->lastmodified);
+				"handle_headers: got last-modified %s (%d)",
+				header + 14,
+				values->lastmodified);
 		}
 	} else if (!strncasecmp("ETag:", header, 5)) {
 		values->etag = std::string(header + 5);
@@ -92,8 +92,7 @@ static size_t handle_headers(void* ptr, size_t size, size_t nmemb, void* data)
 	return size * nmemb;
 }
 
-feed parser::parse_url(
-	const std::string& url,
+feed parser::parse_url(const std::string& url,
 	time_t lastmodified,
 	const std::string& etag,
 	newsboat::remote_api* api,
@@ -158,8 +157,7 @@ feed parser::parse_url(
 	curl_easy_setopt(easyhandle, CURLOPT_HEADERFUNCTION, handle_headers);
 
 	if (lastmodified != 0) {
-		curl_easy_setopt(
-			easyhandle,
+		curl_easy_setopt(easyhandle,
 			CURLOPT_TIMECONDITION,
 			CURL_TIMECOND_IFMODSINCE);
 		curl_easy_setopt(easyhandle, CURLOPT_TIMEVALUE, lastmodified);
@@ -192,9 +190,9 @@ feed parser::parse_url(
 	}
 
 	LOG(level::DEBUG,
-	    "rsspp::parser::parse_url: ret = %d (%s)",
-	    ret,
-	    curl_easy_strerror(ret));
+		"rsspp::parser::parse_url: ret = %d (%s)",
+		ret,
+		curl_easy_strerror(ret));
 
 	long status;
 	CURLcode infoOk =
@@ -211,10 +209,11 @@ feed parser::parse_url(
 
 	if (ret != 0) {
 		LOG(level::ERROR,
-		    "rsspp::parser::parse_url: curl_easy_perform returned err "
-		    "%d: %s",
-		    ret,
-		    curl_easy_strerror(ret));
+			"rsspp::parser::parse_url: curl_easy_perform returned "
+			"err "
+			"%d: %s",
+			ret,
+			curl_easy_strerror(ret));
 		std::string msg;
 		if (ret == CURLE_HTTP_RETURNED_ERROR && infoOk == CURLE_OK) {
 			msg = strprintf::fmt(
@@ -226,13 +225,14 @@ feed parser::parse_url(
 	}
 
 	LOG(level::INFO,
-	    "parser::parse_url: retrieved data for %s: %s",
-	    url,
-	    buf);
+		"parser::parse_url: retrieved data for %s: %s",
+		url,
+		buf);
 
 	if (buf.length() > 0) {
 		LOG(level::DEBUG,
-		    "parser::parse_url: handing over data to parse_buffer()");
+			"parser::parse_url: handing over data to "
+			"parse_buffer()");
 		return parse_buffer(buf, url);
 	}
 
@@ -241,8 +241,7 @@ feed parser::parse_url(
 
 feed parser::parse_buffer(const std::string& buffer, const std::string& url)
 {
-	doc = xmlReadMemory(
-		buffer.c_str(),
+	doc = xmlReadMemory(buffer.c_str(),
 		buffer.length(),
 		url.c_str(),
 		nullptr,
@@ -266,8 +265,7 @@ feed parser::parse_buffer(const std::string& buffer, const std::string& url)
 
 feed parser::parse_file(const std::string& filename)
 {
-	doc = xmlReadFile(
-		filename.c_str(),
+	doc = xmlReadFile(filename.c_str(),
 		nullptr,
 		XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING);
 	xmlNode* root_element = xmlDocGetRootElement(doc);
@@ -305,9 +303,8 @@ feed parser::parse_xmlnode(xmlNode* node)
 					f.rss_version = RSS_0_92;
 				else if (strcmp(version, "0.94") == 0)
 					f.rss_version = RSS_0_94;
-				else if (
-					strcmp(version, "2.0") == 0
-					|| strcmp(version, "2") == 0)
+				else if (strcmp(version, "2.0") == 0 ||
+					strcmp(version, "2") == 0)
 					f.rss_version = RSS_2_0;
 				else if (strcmp(version, "1.0") == 0)
 					f.rss_version = RSS_0_91;
@@ -317,21 +314,18 @@ feed parser::parse_xmlnode(xmlNode* node)
 						_("invalid RSS version"));
 				}
 				xmlFree((void*)version);
-			} else if (
-				strcmp((const char*)node->name, "RDF") == 0) {
+			} else if (strcmp((const char*)node->name, "RDF") ==
+				0) {
 				f.rss_version = RSS_1_0;
-			} else if (
-				strcmp((const char*)node->name, "feed") == 0) {
+			} else if (strcmp((const char*)node->name, "feed") ==
+				0) {
 				if (node->ns && node->ns->href) {
 					if (strcmp((const char*)node->ns->href,
-						   ATOM_0_3_URI)
-					    == 0) {
+						    ATOM_0_3_URI) == 0) {
 						f.rss_version = ATOM_0_3;
-					} else if (
-						strcmp((const char*)
-							       node->ns->href,
-						       ATOM_1_0_URI)
-						== 0) {
+					} else if (strcmp((const char*)node->ns
+								   ->href,
+							   ATOM_1_0_URI) == 0) {
 						f.rss_version = ATOM_1_0;
 					} else {
 						const char * version = (const char *)xmlGetProp(node, (const xmlChar *)"version");
@@ -340,8 +334,8 @@ feed parser::parse_xmlnode(xmlNode* node)
 								"invalid Atom "
 								"version"));
 						}
-						if (strcmp(version, "0.3")
-						    == 0) {
+						if (strcmp(version, "0.3") ==
+							0) {
 							xmlFree((void*)version);
 							f.rss_version =
 								ATOM_0_3_NONS;

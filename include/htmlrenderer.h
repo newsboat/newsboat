@@ -51,16 +51,14 @@ typedef std::pair<std::string, link_type> linkpair;
 class htmlrenderer {
 public:
 	explicit htmlrenderer(bool raw = false);
-	void
-	render(const std::string& source,
-	       std::vector<std::pair<LineType, std::string>>& lines,
-	       std::vector<linkpair>& links,
-	       const std::string& url);
-	void
-	render(std::istream& input,
-	       std::vector<std::pair<LineType, std::string>>& lines,
-	       std::vector<linkpair>& links,
-	       const std::string& url);
+	void render(const std::string& source,
+		std::vector<std::pair<LineType, std::string>>& lines,
+		std::vector<linkpair>& links,
+		const std::string& url);
+	void render(std::istream& input,
+		std::vector<std::pair<LineType, std::string>>& lines,
+		std::vector<linkpair>& links,
+		const std::string& url);
 	static std::string render_hr(const unsigned int width);
 	// only public for unit testing purposes:
 	std::string format_ol_count(unsigned int count, char type);
@@ -109,31 +107,25 @@ public:
 private:
 	void prepare_new_line(std::string& line, int indent_level);
 	bool line_is_nonempty(const std::string& line);
-	unsigned int add_link(
-		std::vector<linkpair>& links,
+	unsigned int add_link(std::vector<linkpair>& links,
 		const std::string& link,
 		link_type type);
 	std::string quote_for_stfl(std::string str);
-	std::string
-	absolute_url(const std::string& url, const std::string& link);
+	std::string absolute_url(const std::string& url,
+		const std::string& link);
 	std::string type2str(link_type type);
 	std::map<std::string, htmltag> tags;
-	void render_table(
-		const Table& table,
+	void render_table(const Table& table,
 		std::vector<std::pair<LineType, std::string>>& lines);
-	void add_nonempty_line(
-		const std::string& curline,
+	void add_nonempty_line(const std::string& curline,
 		std::vector<Table>& tables,
 		std::vector<std::pair<LineType, std::string>>& lines);
-	void add_line(
-		const std::string& curline,
+	void add_line(const std::string& curline,
 		std::vector<Table>& tables,
 		std::vector<std::pair<LineType, std::string>>& lines);
-	void add_line_softwrappable(
-		const std::string& line,
+	void add_line_softwrappable(const std::string& line,
 		std::vector<std::pair<LineType, std::string>>& lines);
-	void add_line_nonwrappable(
-		const std::string& line,
+	void add_line_nonwrappable(const std::string& line,
 		std::vector<std::pair<LineType, std::string>>& lines);
 	void add_hr(std::vector<std::pair<LineType, std::string>>& lines);
 	std::string get_char_numbering(unsigned int count);

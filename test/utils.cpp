@@ -95,8 +95,7 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE(
-	"tokenize_quoted() implicitly closes quotes at the end of the string",
+TEST_CASE("tokenize_quoted() implicitly closes quotes at the end of the string",
 	"[utils]")
 {
 	std::vector<std::string> tokens;
@@ -154,20 +153,20 @@ TEST_CASE(
 {
 	REQUIRE(utils::consolidate_whitespace("LoremIpsum") == "LoremIpsum");
 	REQUIRE(utils::consolidate_whitespace("Lorem Ipsum") == "Lorem Ipsum");
-	REQUIRE(utils::consolidate_whitespace(" Lorem \t\tIpsum \t ")
-		== " Lorem Ipsum ");
-	REQUIRE(utils::consolidate_whitespace(" Lorem \r\n\r\n\tIpsum")
-		== " Lorem Ipsum");
+	REQUIRE(utils::consolidate_whitespace(" Lorem \t\tIpsum \t ") ==
+		" Lorem Ipsum ");
+	REQUIRE(utils::consolidate_whitespace(" Lorem \r\n\r\n\tIpsum") ==
+		" Lorem Ipsum");
 
 	REQUIRE(utils::consolidate_whitespace("") == "");
 }
 
 TEST_CASE("consolidate_whitespace preserves leading whitespace", "[utils]")
 {
-	REQUIRE(utils::consolidate_whitespace("    Lorem \t\tIpsum \t ")
-		== "    Lorem Ipsum ");
-	REQUIRE(utils::consolidate_whitespace("   Lorem \r\n\r\n\tIpsum")
-		== "   Lorem Ipsum");
+	REQUIRE(utils::consolidate_whitespace("    Lorem \t\tIpsum \t ") ==
+		"    Lorem Ipsum ");
+	REQUIRE(utils::consolidate_whitespace("   Lorem \r\n\r\n\tIpsum") ==
+		"   Lorem Ipsum");
 }
 
 TEST_CASE("get_command_output()", "[utils]")
@@ -176,8 +175,7 @@ TEST_CASE("get_command_output()", "[utils]")
 	REQUIRE_NOTHROW(utils::get_command_output(
 		"a-program-that-is-guaranteed-to-not-exists"));
 	REQUIRE(utils::get_command_output(
-			"a-program-that-is-guaranteed-to-not-exists")
-		== "");
+			"a-program-that-is-guaranteed-to-not-exists") == "");
 }
 
 TEST_CASE("run_program()", "[utils]")
@@ -186,8 +184,9 @@ TEST_CASE("run_program()", "[utils]")
 	char cat[] = "cat";
 	argv[0] = cat;
 	argv[1] = nullptr;
-	REQUIRE(utils::run_program(argv, "this is a multine-line\ntest string")
-		== "this is a multine-line\ntest string");
+	REQUIRE(utils::run_program(
+			argv, "this is a multine-line\ntest string") ==
+		"this is a multine-line\ntest string");
 
 	char echo[] = "echo";
 	char dashn[] = "-n";
@@ -206,8 +205,8 @@ TEST_CASE("replace_all()", "[utils]")
 	REQUIRE(utils::replace_all("aaaaaa", "aa", "ba") == "bababa");
 	REQUIRE(utils::replace_all("", "a", "b") == "");
 	REQUIRE(utils::replace_all("aaaa", "b", "c") == "aaaa");
-	REQUIRE(utils::replace_all("this is a normal test text", " t", " T")
-		== "this is a normal Test Text");
+	REQUIRE(utils::replace_all("this is a normal test text", " t", " T") ==
+		"this is a normal Test Text");
 	REQUIRE(utils::replace_all("o o o", "o", "<o>") == "<o> <o> <o>");
 }
 
@@ -278,28 +277,28 @@ TEST_CASE("censor_url()", "[utils]")
 	REQUIRE(utils::censor_url("foobar") == "foobar");
 	REQUIRE(utils::censor_url("foobar://xyz/") == "foobar://xyz/");
 
-	REQUIRE(utils::censor_url("http://newsbeuter.org/")
-		== "http://newsbeuter.org/");
-	REQUIRE(utils::censor_url("https://newsbeuter.org/")
-		== "https://newsbeuter.org/");
+	REQUIRE(utils::censor_url("http://newsbeuter.org/") ==
+		"http://newsbeuter.org/");
+	REQUIRE(utils::censor_url("https://newsbeuter.org/") ==
+		"https://newsbeuter.org/");
 
-	REQUIRE(utils::censor_url("http://@newsbeuter.org/")
-		== "http://*:*@newsbeuter.org/");
-	REQUIRE(utils::censor_url("https://@newsbeuter.org/")
-		== "https://*:*@newsbeuter.org/");
+	REQUIRE(utils::censor_url("http://@newsbeuter.org/") ==
+		"http://*:*@newsbeuter.org/");
+	REQUIRE(utils::censor_url("https://@newsbeuter.org/") ==
+		"https://*:*@newsbeuter.org/");
 
-	REQUIRE(utils::censor_url("http://foo:bar@newsbeuter.org/")
-		== "http://*:*@newsbeuter.org/");
-	REQUIRE(utils::censor_url("https://foo:bar@newsbeuter.org/")
-		== "https://*:*@newsbeuter.org/");
+	REQUIRE(utils::censor_url("http://foo:bar@newsbeuter.org/") ==
+		"http://*:*@newsbeuter.org/");
+	REQUIRE(utils::censor_url("https://foo:bar@newsbeuter.org/") ==
+		"https://*:*@newsbeuter.org/");
 
-	REQUIRE(utils::censor_url("http://aschas@newsbeuter.org/")
-		== "http://*:*@newsbeuter.org/");
-	REQUIRE(utils::censor_url("https://aschas@newsbeuter.org/")
-		== "https://*:*@newsbeuter.org/");
+	REQUIRE(utils::censor_url("http://aschas@newsbeuter.org/") ==
+		"http://*:*@newsbeuter.org/");
+	REQUIRE(utils::censor_url("https://aschas@newsbeuter.org/") ==
+		"https://*:*@newsbeuter.org/");
 
-	REQUIRE(utils::censor_url("xxx://aschas@newsbeuter.org/")
-		== "xxx://*:*@newsbeuter.org/");
+	REQUIRE(utils::censor_url("xxx://aschas@newsbeuter.org/") ==
+		"xxx://*:*@newsbeuter.org/");
 
 	REQUIRE(utils::censor_url("http://foobar") == "http://foobar");
 	REQUIRE(utils::censor_url("https://foobar") == "https://foobar");
@@ -307,23 +306,22 @@ TEST_CASE("censor_url()", "[utils]")
 	REQUIRE(utils::censor_url("http://aschas@host") == "http://*:*@host");
 	REQUIRE(utils::censor_url("https://aschas@host") == "https://*:*@host");
 
-	REQUIRE(utils::censor_url("query:name:age between 1:10")
-		== "query:name:age between 1:10");
+	REQUIRE(utils::censor_url("query:name:age between 1:10") ==
+		"query:name:age between 1:10");
 }
 
 TEST_CASE("absolute_url()", "[utils]")
 {
-	REQUIRE(utils::absolute_url("http://foobar/hello/crook/", "bar.html")
-		== "http://foobar/hello/crook/bar.html");
-	REQUIRE(utils::absolute_url("https://foobar/foo/", "/bar.html")
-		== "https://foobar/bar.html");
-	REQUIRE(utils::absolute_url(
-			"https://foobar/foo/", "http://quux/bar.html")
-		== "http://quux/bar.html");
-	REQUIRE(utils::absolute_url("http://foobar", "bla.html")
-		== "http://foobar/bla.html");
-	REQUIRE(utils::absolute_url("http://test:test@foobar:33", "bla2.html")
-		== "http://test:test@foobar:33/bla2.html");
+	REQUIRE(utils::absolute_url("http://foobar/hello/crook/", "bar.html") ==
+		"http://foobar/hello/crook/bar.html");
+	REQUIRE(utils::absolute_url("https://foobar/foo/", "/bar.html") ==
+		"https://foobar/bar.html");
+	REQUIRE(utils::absolute_url("https://foobar/foo/",
+			"http://quux/bar.html") == "http://quux/bar.html");
+	REQUIRE(utils::absolute_url("http://foobar", "bla.html") ==
+		"http://foobar/bla.html");
+	REQUIRE(utils::absolute_url("http://test:test@foobar:33",
+			"bla2.html") == "http://test:test@foobar:33/bla2.html");
 }
 
 TEST_CASE("quote()", "[utils]")
@@ -488,8 +486,8 @@ TEST_CASE("utils::make_title extracts possible title from URL")
 			auto input =
 				"http://example.com/story/aug/"
 				"title-with-dashes?a=b";
-			REQUIRE(utils::make_title(input)
-				== "Title with dashes");
+			REQUIRE(utils::make_title(input) ==
+				"Title with dashes");
 		}
 
 		SECTION("Multiple parameters")
@@ -497,8 +495,8 @@ TEST_CASE("utils::make_title extracts possible title from URL")
 			auto input =
 				"http://example.com/"
 				"title-with-dashes?a=b&x=y&utf8=✓";
-			REQUIRE(utils::make_title(input)
-				== "Title with dashes");
+			REQUIRE(utils::make_title(input) ==
+				"Title with dashes");
 		}
 	}
 
@@ -515,8 +513,7 @@ TEST_CASE("utils::make_title extracts possible title from URL")
 	}
 }
 
-TEST_CASE(
-	"remove_soft_hyphens remove all U+00AD characters from a string",
+TEST_CASE("remove_soft_hyphens remove all U+00AD characters from a string",
 	"[utils]")
 {
 	SECTION("doesn't do anything if input has no soft hyphens in it")
@@ -565,8 +562,8 @@ TEST_CASE(
 	REQUIRE(utils::substr_with_width("a", 2) == "a");
 	REQUIRE(utils::substr_with_width("ab", 1) == "a");
 	REQUIRE(utils::substr_with_width("abc", 1) == "a");
-	REQUIRE(utils::substr_with_width("A\u3042B\u3044C\u3046", 5)
-		== "A\u3042B");
+	REQUIRE(utils::substr_with_width("A\u3042B\u3044C\u3046", 5) ==
+		"A\u3042B");
 
 	SECTION("returns an empty string if the given string is empty")
 	{
@@ -590,16 +587,16 @@ TEST_CASE(
 
 	SECTION("doesn't count a width of STFL tag")
 	{
-		REQUIRE(utils::substr_with_width("ＡＢＣ<b>ＤＥ</b>Ｆ", 9)
-			== "ＡＢＣ<b>Ｄ");
-		REQUIRE(utils::substr_with_width("<foobar>ＡＢＣ", 4)
-			== "<foobar>ＡＢ");
-		REQUIRE(utils::substr_with_width("a<<xyz>>bcd", 3)
-			== "a<<xyz>>b"); // tag: "<<xyz>"
-		REQUIRE(utils::substr_with_width("ＡＢＣ<b>ＤＥ", 10)
-			== "ＡＢＣ<b>ＤＥ");
-		REQUIRE(utils::substr_with_width("a</>b</>c</>", 2)
-			== "a</>b</>");
+		REQUIRE(utils::substr_with_width("ＡＢＣ<b>ＤＥ</b>Ｆ", 9) ==
+			"ＡＢＣ<b>Ｄ");
+		REQUIRE(utils::substr_with_width("<foobar>ＡＢＣ", 4) ==
+			"<foobar>ＡＢ");
+		REQUIRE(utils::substr_with_width("a<<xyz>>bcd", 3) ==
+			"a<<xyz>>b"); // tag: "<<xyz>"
+		REQUIRE(utils::substr_with_width("ＡＢＣ<b>ＤＥ", 10) ==
+			"ＡＢＣ<b>ＤＥ");
+		REQUIRE(utils::substr_with_width("a</>b</>c</>", 2) ==
+			"a</>b</>");
 	}
 
 	SECTION("count a width of escaped less-than mark")
@@ -610,7 +607,11 @@ TEST_CASE(
 
 	SECTION("treat non-printable has zero width")
 	{
-		REQUIRE(utils::substr_with_width("\x01\x02""abc", 1) == "\x01\x02""a");
+		REQUIRE(utils::substr_with_width("\x01\x02"
+						 "abc",
+				1) ==
+			"\x01\x02"
+			"a");
 	}
 }
 
@@ -642,8 +643,8 @@ TEST_CASE("getcwd() returns current directory of the process", "[utils]")
 		// Datadir path starts with path to maindir
 		REQUIRE(datadir.find(maindir) == 0);
 		// Datadir path ends with "data" string
-		REQUIRE(datadir.substr(datadir.length() - subdir.length())
-			== subdir);
+		REQUIRE(datadir.substr(datadir.length() - subdir.length()) ==
+			subdir);
 	}
 }
 

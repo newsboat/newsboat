@@ -41,51 +41,42 @@ public:
 
 class utils {
 public:
-	static std::vector<std::string>
-	tokenize(const std::string& str, std::string delimiters = " \r\n\t");
-	static std::vector<std::string> tokenize_spaced(
-		const std::string& str,
+	static std::vector<std::string> tokenize(const std::string& str,
 		std::string delimiters = " \r\n\t");
-	static std::vector<std::string>
-	tokenize_nl(const std::string& str, std::string delimiters = "\r\n");
-	static std::vector<std::string> tokenize_quoted(
-		const std::string& str,
+	static std::vector<std::string> tokenize_spaced(const std::string& str,
+		std::string delimiters = " \r\n\t");
+	static std::vector<std::string> tokenize_nl(const std::string& str,
+		std::string delimiters = "\r\n");
+	static std::vector<std::string> tokenize_quoted(const std::string& str,
 		std::string delimiters = " \r\n\t");
 
-	static std::string consolidate_whitespace(
-		const std::string& str,
+	static std::string consolidate_whitespace(const std::string& str,
 		std::string whitespace = " \r\n\t");
 
-	static std::vector<std::wstring> wtokenize(
-		const std::wstring& str,
+	static std::vector<std::wstring> wtokenize(const std::wstring& str,
 		std::wstring delimiters = L" \r\n\t");
 
-	static std::string
-	translit(const std::string& tocode, const std::string& fromcode);
-	static std::string convert_text(
-		const std::string& text,
+	static std::string translit(const std::string& tocode,
+		const std::string& fromcode);
+	static std::string convert_text(const std::string& text,
 		const std::string& tocode,
 		const std::string& fromcode);
 
 	static std::string get_command_output(const std::string& cmd);
-	static void extract_filter(
-		const std::string& line,
+	static void extract_filter(const std::string& line,
 		std::string& filter,
 		std::string& url);
-	static std::string retrieve_url(
-		const std::string& url,
+	static std::string retrieve_url(const std::string& url,
 		configcontainer* cfgcont = nullptr,
 		const std::string& authinfo = "",
 		const std::string* postdata = nullptr,
 		CURL* easyhandle = nullptr);
-	static void run_command(
-		const std::string& cmd,
+	static void run_command(const std::string& cmd,
 		const std::string& param); // used for notifications only
 	static std::string run_program(char* argv[], const std::string& input);
 
 	static std::string resolve_tilde(const std::string&);
-	static std::string replace_all(
-		std::string str,
+	static std::string replace_all(std::string str,
 		const std::string& from,
 		const std::string& to);
 
@@ -96,8 +87,8 @@ public:
 
 	static std::wstring utf8str2wstr(const std::string& utf8str);
 
-	static std::string
-	absolute_url(const std::string& url, const std::string& link);
+	static std::string absolute_url(const std::string& url,
+		const std::string& link);
 
 	static std::string get_useragent(configcontainer* cfgcont);
 
@@ -105,8 +96,8 @@ public:
 	static size_t strwidth_stfl(const std::string& str);
 	static size_t wcswidth_stfl(const std::wstring& str, size_t size);
 
-	static std::string
-	substr_with_width(const std::string& str, const size_t max_width);
+	static std::string substr_with_width(const std::string& str,
+		const size_t max_width);
 
 	static unsigned int max(unsigned int a, unsigned int b)
 	{
@@ -117,21 +108,19 @@ public:
 	{
 		return to_u(str, 0);
 	}
-	static unsigned int
-	to_u(const std::string& str, const unsigned int default_value);
+	static unsigned int to_u(const std::string& str,
+		const unsigned int default_value);
 
 	static bool is_valid_color(const std::string& color);
 	static bool is_valid_attribute(const std::string& attrib);
 
 	static std::vector<std::pair<unsigned int, unsigned int>>
-	partition_indexes(
-		unsigned int start,
+	partition_indexes(unsigned int start,
 		unsigned int end,
 		unsigned int parts);
 
-	static std::string
-	join(const std::vector<std::string>& strings,
-	     const std::string& separator);
+	static std::string join(const std::vector<std::string>& strings,
+		const std::string& separator);
 
 	static std::string censor_url(const std::string& url);
 
@@ -164,13 +153,12 @@ public:
 
 	static unsigned int gentabs(const std::string& str);
 
-	static int
-	mkdir_parents(const std::string& pathname, mode_t mode = 0755);
+	static int mkdir_parents(const std::string& pathname,
+		mode_t mode = 0755);
 
 	static std::string make_title(const std::string& url);
 
-	static int run_interactively(
-		const std::string& command,
+	static int run_interactively(const std::string& command,
 		const std::string& caller);
 
 	static std::string getcwd();

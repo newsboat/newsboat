@@ -4,8 +4,7 @@
 
 namespace newsboat {
 
-feedhq_urlreader::feedhq_urlreader(
-	configcontainer* c,
+feedhq_urlreader::feedhq_urlreader(configcontainer* c,
 	const std::string& url_file,
 	remote_api* a)
 	: cfg(c)

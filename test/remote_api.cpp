@@ -44,8 +44,7 @@ public:
 	{
 		throw 0;
 	}
-	bool update_article_flags(
-		const std::string&,
+	bool update_article_flags(const std::string&,
 		const std::string&,
 		const std::string&)
 	{
@@ -53,8 +52,7 @@ public:
 	}
 };
 
-TEST_CASE(
-	"get_credentials() returns the users name and password",
+TEST_CASE("get_credentials() returns the users name and password",
 	"[remote_api]")
 {
 	configcontainer cfg;
@@ -83,16 +81,15 @@ TEST_CASE("read_password() returns the first line of the file", "[remote_api]")
 	REQUIRE_NOTHROW(remote_api::read_password(
 		"a-passwordfile-that-is-guaranteed-to-not-exist.txt"));
 	REQUIRE(remote_api::read_password(
-			"a-passwordfile-that-is-guaranteed-to-not-exist.txt")
-		== "");
-	REQUIRE(remote_api::read_password("data/single-line-string.txt")
-		== "single line with spaces");
-	REQUIRE(remote_api::read_password("data/multi-line-string.txt")
-		== "string with spaces");
+			"a-passwordfile-that-is-guaranteed-to-not-exist.txt") ==
+		"");
+	REQUIRE(remote_api::read_password("data/single-line-string.txt") ==
+		"single line with spaces");
+	REQUIRE(remote_api::read_password("data/multi-line-string.txt") ==
+		"string with spaces");
 }
 
-TEST_CASE(
-	"eval_password() returns the first line of command's output",
+TEST_CASE("eval_password() returns the first line of command's output",
 	"[remote_api]")
 {
 	REQUIRE(remote_api::eval_password("echo ''") == "");
@@ -105,12 +102,11 @@ TEST_CASE(
 	REQUIRE_NOTHROW(remote_api::eval_password(
 		"a-program-that-is-guaranteed-to-not-exists"));
 	REQUIRE(remote_api::eval_password(
-			"a-program-that-is-guaranteed-to-not-exists")
-		== "");
+			"a-program-that-is-guaranteed-to-not-exists") == "");
 	REQUIRE_NOTHROW(
 		remote_api::eval_password("printf 'string with no newline'"));
-	REQUIRE(remote_api::eval_password("printf 'string with no newline'")
-		== "string with no newline");
+	REQUIRE(remote_api::eval_password("printf 'string with no newline'") ==
+		"string with no newline");
 	REQUIRE(remote_api::eval_password("echo 'a'; exit 1;") == "a");
 	REQUIRE_NOTHROW(remote_api::eval_password("echo 'a'; exit 1;"));
 	REQUIRE(remote_api::eval_password("(>&2 echo 'b'); echo 'a'") == "a");

@@ -44,13 +44,13 @@ bool matcher::parse(const std::string& expr)
 
 	gettimeofday(&tv2, nullptr);
 	unsigned long diff =
-		(((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec)
-		- tv1.tv_usec;
+		(((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) -
+		tv1.tv_usec;
 	LOG(level::DEBUG,
-	    "matcher::parse: parsing `%s' took %lu µs (success = %d)",
-	    expr,
-	    diff,
-	    b ? 1 : 0);
+		"matcher::parse: parsing `%s' took %lu µs (success = %d)",
+		expr,
+		diff,
+		b ? 1 : 0);
 
 	return b;
 }
@@ -138,11 +138,9 @@ bool matcher::matchop_rxeq(expression* e, matchable* item)
 	if (!e->regex) {
 		e->regex = new regex_t;
 		int err;
-		if ((err =
-			     regcomp(e->regex,
-				     e->literal.c_str(),
-				     REG_EXTENDED | REG_ICASE | REG_NOSUB))
-		    != 0) {
+		if ((err = regcomp(e->regex,
+			     e->literal.c_str(),
+			     REG_EXTENDED | REG_ICASE | REG_NOSUB)) != 0) {
 			char buf[1024];
 			regerror(err, e->regex, buf, sizeof(buf));
 			throw matcherexception(
@@ -155,8 +153,7 @@ bool matcher::matchop_rxeq(expression* e, matchable* item)
 		    item->get_attribute(e->name).c_str(),
 		    0,
 		    nullptr,
-		    0)
-	    == 0)
+		    0) == 0)
 		return true;
 	return false;
 }
@@ -181,8 +178,8 @@ bool matcher::matchop_eq(expression* e, matchable* item)
 {
 	if (!item->has_attribute(e->name)) {
 		LOG(level::WARN,
-		    "matcher::matches_r: attribute %s not available",
-		    e->name);
+			"matcher::matches_r: attribute %s not available",
+			e->name);
 		throw matcherexception(
 			matcherexception::type::ATTRIB_UNAVAIL, e->name);
 	}
@@ -196,16 +193,16 @@ bool matcher::matches_r(expression* e, matchable* item)
 		/* the operator "and" and "or" simply connect two different
 		 * subexpressions */
 		case LOGOP_AND:
-			return matches_r(e->l, item)
-			       && matches_r(e->r, item); // short-circuit
-							 // evaulation in C ->
-							 // short circuit
-							 // evaluation in the
-							 // filter language
+			return matches_r(e->l, item) &&
+				matches_r(e->r, item); // short-circuit
+						       // evaulation in C ->
+						       // short circuit
+						       // evaluation in the
+						       // filter language
 
 		case LOGOP_OR:
-			return matches_r(e->l, item)
-			       || matches_r(e->r, item); // same here
+			return matches_r(e->l, item) ||
+				matches_r(e->r, item); // same here
 
 		/* while the other operator connect an attribute with a value */
 		case MATCHOP_EQ:

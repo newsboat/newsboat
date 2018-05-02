@@ -15,8 +15,7 @@
 
 namespace newsboat {
 
-itemview_formaction::itemview_formaction(
-	view* vv,
+itemview_formaction::itemview_formaction(view* vv,
 	std::shared_ptr<itemlist_formaction> il,
 	std::string formstr)
 	: formaction(vv, formstr)
@@ -45,11 +44,9 @@ void itemview_formaction::init()
 		f->set("percentwidth", "0");
 	} else {
 		f->set("percentwidth",
-		       std::to_string(utils::max(
-			       6,
-			       utils::max(
-				       strlen(_("Top")),
-				       strlen(_("Bottom"))))));
+			std::to_string(utils::max(6,
+				utils::max(strlen(_("Top")),
+					strlen(_("Bottom"))))));
 		update_percent();
 	}
 	set_keymap_hints();
@@ -107,8 +104,7 @@ void itemview_formaction::prepare()
 		}
 
 		if (item->link().length() > 0) {
-			std::string link = strprintf::fmt(
-				"%s%s",
+			std::string link = strprintf::fmt("%s%s",
 				_("Link: "),
 				utils::censor_url(item->link()));
 			textfmt.add_line(LineType::softwrappable, link);
@@ -125,13 +121,11 @@ void itemview_formaction::prepare()
 		}
 
 		if (item->enclosure_url().length() > 0) {
-			std::string enc_url = strprintf::fmt(
-				"%s%s",
+			std::string enc_url = strprintf::fmt("%s%s",
 				_("Podcast Download URL: "),
 				utils::censor_url(item->enclosure_url()));
 			if (item->enclosure_type() != "") {
-				enc_url.append(strprintf::fmt(
-					" (%s%s)",
+				enc_url.append(strprintf::fmt(" (%s%s)",
 					_("type: "),
 					item->enclosure_type()));
 			}
@@ -145,21 +139,19 @@ void itemview_formaction::prepare()
 		// as read
 		if (item->unread())
 			unread_item_count--;
-		set_head(
-			item->title(),
+		set_head(item->title(),
 			feedtitle,
 			unread_item_count,
 			feed->total_item_count());
 
 		std::vector<std::pair<LineType, std::string>> lines;
 		if (show_source) {
-			render_source(
-				lines,
+			render_source(lines,
 				utils::quote_for_stfl(item->description()));
 		} else {
 			std::string baseurl = item->get_base() != ""
-						      ? item->get_base()
-						      : item->feedurl();
+				? item->get_base()
+				: item->feedurl();
 			lines = render_html(
 				item->description(), links, baseurl);
 		}
@@ -194,8 +186,7 @@ void itemview_formaction::prepare()
 	}
 }
 
-void itemview_formaction::process_operation(
-	operation op,
+void itemview_formaction::process_operation(operation op,
 	bool automatic,
 	std::vector<std::string>* args)
 {
@@ -228,12 +219,12 @@ void itemview_formaction::process_operation(
 		do_redraw = true;
 		break;
 	case OP_ENQUEUE: {
-		if (item->enclosure_url().length() > 0
-		    && utils::is_http_url(item->enclosure_url())) {
+		if (item->enclosure_url().length() > 0 &&
+			utils::is_http_url(item->enclosure_url())) {
 			v->get_ctrl()->enqueue_url(item->enclosure_url(), feed);
-			v->set_status(strprintf::fmt(
-				_("Added %s to download queue."),
-				item->enclosure_url()));
+			v->set_status(
+				strprintf::fmt(_("Added %s to download queue."),
+					item->enclosure_url()));
 		} else {
 			v->set_status(strprintf::fmt(
 				_("Invalid URL: '%s'"), item->enclosure_url()));
@@ -342,13 +333,13 @@ void itemview_formaction::process_operation(
 	} break;
 	case OP_DELETE:
 		LOG(level::INFO,
-		    "view::run_itemview: deleting current article");
+			"view::run_itemview: deleting current article");
 		item->set_deleted(true);
 		v->get_ctrl()->mark_deleted(guid, true);
 	/* fall-through! */
 	case OP_NEXTUNREAD:
 		LOG(level::INFO,
-		    "view::run_itemview: jumping to next unread article");
+			"view::run_itemview: jumping to next unread article");
 		if (v->get_next_unread(itemlist.get(), this)) {
 			do_redraw = true;
 		} else {
@@ -358,7 +349,8 @@ void itemview_formaction::process_operation(
 		break;
 	case OP_PREVUNREAD:
 		LOG(level::INFO,
-		    "view::run_itemview: jumping to previous unread article");
+			"view::run_itemview: jumping to previous unread "
+			"article");
 		if (v->get_previous_unread(itemlist.get(), this)) {
 			do_redraw = true;
 		} else {
@@ -377,7 +369,7 @@ void itemview_formaction::process_operation(
 		break;
 	case OP_PREV:
 		LOG(level::INFO,
-		    "view::run_itemview: jumping to previous article");
+			"view::run_itemview: jumping to previous article");
 		if (v->get_previous(itemlist.get(), this)) {
 			do_redraw = true;
 		} else {
@@ -387,7 +379,7 @@ void itemview_formaction::process_operation(
 		break;
 	case OP_RANDOMUNREAD:
 		LOG(level::INFO,
-		    "view::run_itemview: jumping to random unread article");
+			"view::run_itemview: jumping to random unread article");
 		if (v->get_random_unread(itemlist.get(), this)) {
 			do_redraw = true;
 		} else {
@@ -397,7 +389,7 @@ void itemview_formaction::process_operation(
 		break;
 	case OP_TOGGLEITEMREAD:
 		LOG(level::INFO,
-		    "view::run_itemview: setting unread and quitting");
+			"view::run_itemview: setting unread and quitting");
 		v->set_status(_("Toggling read flag for article..."));
 		try {
 			item->set_unread(true);
@@ -433,10 +425,10 @@ void itemview_formaction::process_operation(
 	case OP_0: {
 		unsigned int idx = op - OP_1;
 		LOG(level::DEBUG,
-		    "itemview::run: OP_1 = %d op = %d idx = %u",
-		    OP_1,
-		    op,
-		    idx);
+			"itemview::run: OP_1 = %d op = %d idx = %u",
+			OP_1,
+			op,
+			idx);
 		if (idx < links.size()) {
 			v->set_status(_("Starting browser..."));
 			v->open_in_browser(links[idx].first);
@@ -471,8 +463,7 @@ void itemview_formaction::process_operation(
 
 keymap_hint_entry* itemview_formaction::get_keymap_hint()
 {
-	static keymap_hint_entry hints[] = {
-		{OP_QUIT, _("Quit")},
+	static keymap_hint_entry hints[] = {{OP_QUIT, _("Quit")},
 		{OP_SAVE, _("Save")},
 		{OP_NEXTUNREAD, _("Next Unread")},
 		{OP_OPENINBROWSER, _("Open in Browser")},
@@ -482,8 +473,7 @@ keymap_hint_entry* itemview_formaction::get_keymap_hint()
 	return hints;
 }
 
-void itemview_formaction::set_head(
-	const std::string& s,
+void itemview_formaction::set_head(const std::string& s,
 	const std::string& feedtitle,
 	unsigned int unread,
 	unsigned int total)
@@ -507,9 +497,9 @@ void itemview_formaction::set_head(
 	unsigned int width = utils::to_u(listwidth);
 
 	f->set("head",
-	       fmt.do_format(
-		       v->get_cfg()->get_configvalue("itemview-title-format"),
-		       width));
+		fmt.do_format(
+			v->get_cfg()->get_configvalue("itemview-title-format"),
+			width));
 }
 
 void itemview_formaction::render_source(
@@ -626,19 +616,18 @@ std::vector<std::pair<LineType, std::string>> itemview_formaction::render_html(
 		argv[2] = const_cast<char*>(renderer.c_str());
 		argv[3] = nullptr;
 		LOG(level::DEBUG,
-		    "itemview_formaction::render_html: source = %s",
-		    source);
+			"itemview_formaction::render_html: source = %s",
+			source);
 		LOG(level::DEBUG,
-		    "itemview_formaction::render_html: html-renderer = %s",
-		    argv[2]);
+			"itemview_formaction::render_html: html-renderer = %s",
+			argv[2]);
 
 		std::string output = utils::run_program(argv, source);
 		std::istringstream is(output);
 		std::string line;
 		getline(is, line);
 		while (!is.eof()) {
-			result.push_back(std::make_pair(
-				LineType::softwrappable,
+			result.push_back(std::make_pair(LineType::softwrappable,
 				utils::quote_for_stfl(line)));
 			getline(is, line);
 		}
@@ -680,11 +669,11 @@ void itemview_formaction::update_percent()
 			percent = 0;
 
 		LOG(level::DEBUG,
-		    "itemview_formaction::update_percent: offset = %u "
-		    "num_lines = %u percent = %u",
-		    offset,
-		    num_lines,
-		    percent);
+			"itemview_formaction::update_percent: offset = %u "
+			"num_lines = %u percent = %u",
+			offset,
+			num_lines,
+			percent);
 
 		if (offset == 0 || percent == 0) {
 			f->set("percent", _("Top"));
@@ -718,8 +707,8 @@ void itemview_formaction::do_search()
 	searchhistory.add_line(searchphrase);
 
 	LOG(level::DEBUG,
-	    "itemview_formaction::do_search: searchphrase = %s",
-	    searchphrase);
+		"itemview_formaction::do_search: searchphrase = %s",
+		searchphrase);
 
 	highlight_text(searchphrase);
 }
@@ -738,8 +727,8 @@ void itemview_formaction::highlight_text(const std::string& searchphrase)
 		rxman->handle_action("highlight", params);
 
 		LOG(level::DEBUG,
-		    "itemview_formaction::highlight_text: configuration "
-		    "manipulation was successful");
+			"itemview_formaction::highlight_text: configuration "
+			"manipulation was successful");
 
 		set_regexmanager(rxman);
 
@@ -747,9 +736,9 @@ void itemview_formaction::highlight_text(const std::string& searchphrase)
 		do_redraw = true;
 	} catch (const confighandlerexception& e) {
 		LOG(level::ERROR,
-		    "itemview_formaction::highlight_text: handle_action "
-		    "failed, error = %s",
-		    e.what());
+			"itemview_formaction::highlight_text: handle_action "
+			"failed, error = %s",
+			e.what());
 		v->show_error(_("Error: invalid regular expression!"));
 	}
 }

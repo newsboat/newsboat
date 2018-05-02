@@ -12,8 +12,7 @@
 
 using namespace newsboat;
 
-TEST_CASE(
-	"OP_OPEN displays article using an external pager",
+TEST_CASE("OP_OPEN displays article using an external pager",
 	"[itemlist_formaction]")
 {
 	controller c;
@@ -26,8 +25,7 @@ TEST_CASE(
 	std::string test_description = "Article Description";
 	time_t test_pubDate = 42;
 	char test_pubDate_str[128];
-	strftime(
-		test_pubDate_str,
+	strftime(test_pubDate_str,
 		sizeof(test_pubDate_str),
 		"%a, %d %b %Y %H:%M:%S %z",
 		localtime(&test_pubDate));
@@ -56,8 +54,7 @@ TEST_CASE(
 
 	REQUIRE_NOTHROW(itemlist.process_op(OP_OPEN));
 
-	TestHelpers::AssertArticleFileContent(
-		pagerfile.getPath(),
+	TestHelpers::AssertArticleFileContent(pagerfile.getPath(),
 		test_title,
 		test_author,
 		test_pubDate_str,
@@ -65,8 +62,7 @@ TEST_CASE(
 		test_description);
 }
 
-TEST_CASE(
-	"OP_PURGE_DELETED purges previously deleted items",
+TEST_CASE("OP_PURGE_DELETED purges previously deleted items",
 	"[itemlist_formaction]")
 {
 	controller c;
@@ -133,8 +129,7 @@ TEST_CASE(
 	REQUIRE(feed->unread_item_count() == 0);
 }
 
-TEST_CASE(
-	"OP_OPENINBROWSER passes the url to the browser",
+TEST_CASE("OP_OPENINBROWSER passes the url to the browser",
 	"[itemlist_formaction]")
 {
 	controller c;
@@ -165,8 +160,7 @@ TEST_CASE(
 	REQUIRE(line == test_url);
 }
 
-TEST_CASE(
-	"OP_OPENALLUNREADINBROWSER passes the url list to the browser",
+TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 	"[itemlist_formaction]")
 {
 	controller c;
@@ -303,8 +297,8 @@ TEST_CASE(
 			}
 		}
 		REQUIRE(openedItemsCount == maxItemsToOpen);
-		REQUIRE(feed->unread_item_count()
-			== itemCount - maxItemsToOpen);
+		REQUIRE(feed->unread_item_count() ==
+			itemCount - maxItemsToOpen);
 	}
 
 	SECTION("unread < max-browser-tabs")
@@ -346,8 +340,7 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[itemlist_formaction]")
 	std::string test_description = "Article Description";
 	time_t test_pubDate = 42;
 	char test_pubDate_str[128];
-	strftime(
-		test_pubDate_str,
+	strftime(test_pubDate_str,
 		sizeof(test_pubDate_str),
 		"%a, %d %b %Y %H:%M:%S %z",
 		localtime(&test_pubDate));
@@ -374,8 +367,7 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[itemlist_formaction]")
 
 		REQUIRE_NOTHROW(itemlist.process_op(OP_SHOWURLS));
 
-		TestHelpers::AssertArticleFileContent(
-			urlFile.getPath(),
+		TestHelpers::AssertArticleFileContent(urlFile.getPath(),
 			test_title,
 			test_author,
 			test_pubDate_str,
@@ -396,8 +388,7 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[itemlist_formaction]")
 	}
 }
 
-TEST_CASE(
-	"OP_BOOKMARK pipes articles url and title to bookmark-command",
+TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 	"[itemlist_formaction]")
 {
 	controller c;
@@ -438,13 +429,12 @@ TEST_CASE(
 	std::ifstream browserFileStream(bookmarkFile.getPath());
 
 	REQUIRE(std::getline(browserFileStream, line));
-	REQUIRE(line
-		== test_url + separator + test_title + separator + extra_arg
-			   + separator + feed_title);
+	REQUIRE(line ==
+		test_url + separator + test_title + separator + extra_arg +
+			separator + feed_title);
 }
 
-TEST_CASE(
-	"OP_EDITFLAGS arguments are added to an item's flags",
+TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 	"[itemlist_formaction]")
 {
 	controller c;
@@ -509,9 +499,8 @@ TEST_CASE(
 		}
 		SECTION("Symbols")
 		{
-			op_args.push_back(
-				flags
-				+ "%^\\*;\'\"&~#{([-|`_/@)]=}$£€µ,;:!?./§");
+			op_args.push_back(flags +
+				"%^\\*;\'\"&~#{([-|`_/@)]=}$£€µ,;:!?./§");
 
 			REQUIRE_NOTHROW(itemlist.process_op(
 				OP_EDITFLAGS, true, &op_args));
@@ -539,8 +528,7 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE(
-	"OP_SAVE writes an article's attributes to the specified file",
+TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 	"[itemlist_formaction]")
 {
 	controller c;
@@ -558,8 +546,7 @@ TEST_CASE(
 	std::string test_description = "Article Description";
 	time_t test_pubDate = 42;
 	char test_pubDate_str[128];
-	strftime(
-		test_pubDate_str,
+	strftime(test_pubDate_str,
 		sizeof(test_pubDate_str),
 		"%a, %d %b %Y %H:%M:%S %z",
 		localtime(&test_pubDate));
@@ -583,8 +570,7 @@ TEST_CASE(
 
 	REQUIRE_NOTHROW(itemlist.process_op(OP_SAVE, true, &op_args));
 
-	TestHelpers::AssertArticleFileContent(
-		saveFile.getPath(),
+	TestHelpers::AssertArticleFileContent(saveFile.getPath(),
 		test_title,
 		test_author,
 		test_pubDate_str,
@@ -644,8 +630,7 @@ TEST_CASE("OP_HARDQUIT command is processed", "[itemlist_formaction]")
 	REQUIRE_NOTHROW(itemlist.process_op(OP_HARDQUIT));
 }
 
-TEST_CASE(
-	"Navigate back and forth using OP_NEXT and OP_PREVIOUS",
+TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREVIOUS",
 	"[itemlist_formaction]")
 {
 	// We are using the OP_SHOWURLS command to print the current
@@ -702,8 +687,7 @@ TEST_CASE(
 	REQUIRE(line == prefix_title + first_article_title);
 }
 
-TEST_CASE(
-	"OP_TOGGLESHOWREAD switches the value of show-read-articles",
+TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles",
 	"[itemlist_formaction]")
 {
 	controller c;
@@ -744,8 +728,7 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE(
-	"OP_PIPE_TO pipes an article's content to an external command",
+TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 	"[itemlist_formaction]")
 {
 	controller c;
@@ -763,8 +746,7 @@ TEST_CASE(
 	std::string test_description = "Article Description";
 	time_t test_pubDate = 42;
 	char test_pubDate_str[128];
-	strftime(
-		test_pubDate_str,
+	strftime(test_pubDate_str,
 		sizeof(test_pubDate_str),
 		"%a, %d %b %Y %H:%M:%S %z",
 		localtime(&test_pubDate));
@@ -788,8 +770,7 @@ TEST_CASE(
 
 	REQUIRE_NOTHROW(itemlist.process_op(OP_PIPE_TO, true, &op_args));
 
-	TestHelpers::AssertArticleFileContent(
-		articleFile.getPath(),
+	TestHelpers::AssertArticleFileContent(articleFile.getPath(),
 		test_title,
 		test_author,
 		test_pubDate_str,

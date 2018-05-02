@@ -10,8 +10,7 @@ namespace newsboat {
 enum class configdata_t { INVALID, BOOL, INT, STR, PATH, ENUM };
 
 struct configdata {
-	configdata(
-		const std::string& v = "",
+	configdata(const std::string& v = "",
 		configdata_t t = configdata_t::INVALID,
 		bool m = false)
 		: value(v)
@@ -22,8 +21,7 @@ struct configdata {
 	{
 	}
 
-	configdata(
-		const std::string& v,
+	configdata(const std::string& v,
 		const std::unordered_set<std::string>& values)
 		: value(v)
 		, default_value(v)
@@ -45,8 +43,7 @@ public:
 	configcontainer();
 	~configcontainer() override;
 	void register_commands(configparser& cfgparser);
-	void handle_action(
-		const std::string& action,
+	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) override;
 

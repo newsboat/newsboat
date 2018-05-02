@@ -22,8 +22,7 @@ private:
 
 class reloadrangethread {
 public:
-	reloadrangethread(
-		controller* c,
+	reloadrangethread(controller* c,
 		unsigned int start,
 		unsigned int end,
 		unsigned int size,

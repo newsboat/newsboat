@@ -18,8 +18,7 @@ public:
 	std::vector<tagged_feedurl> get_subscribed_urls() override;
 	bool mark_all_read(const std::string& feedurl) override;
 	bool mark_article_read(const std::string& guid, bool read) override;
-	bool update_article_flags(
-		const std::string& oldflags,
+	bool update_article_flags(const std::string& oldflags,
 		const std::string& newflags,
 		const std::string& guid) override;
 	void add_custom_headers(curl_slist**) override;
@@ -28,10 +27,9 @@ public:
 private:
 	typedef std::map<std::string, std::pair<rsspp::feed, long>> feedmap;
 	std::string retrieve_auth();
-	bool
-	query(const std::string& query,
-	      json_object** result = nullptr,
-	      const std::string& post = "");
+	bool query(const std::string& query,
+		json_object** result = nullptr,
+		const std::string& post = "");
 	std::string md5(const std::string& str);
 	std::string auth;
 	std::string server;

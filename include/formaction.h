@@ -40,8 +40,7 @@ public:
 
 	virtual void handle_cmdline(const std::string& cmd);
 
-	void process_op(
-		operation op,
+	void process_op(operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr);
 
@@ -56,8 +55,7 @@ public:
 		return (qna_responses.size() >= (i + 1)) ? qna_responses[i]
 							 : "";
 	}
-	void start_qna(
-		const std::vector<qna_pair>& prompts,
+	void start_qna(const std::vector<qna_pair>& prompts,
 		operation finish_op,
 		history* h = nullptr);
 
@@ -72,31 +70,26 @@ public:
 
 	virtual std::string title() = 0;
 
-	virtual std::vector<std::string>
-	get_suggestions(const std::string& fragment);
+	virtual std::vector<std::string> get_suggestions(
+		const std::string& fragment);
 
-	static void load_histories(
-		const std::string& searchfile,
+	static void load_histories(const std::string& searchfile,
 		const std::string& cmdlinefile);
-	static void save_histories(
-		const std::string& searchfile,
+	static void save_histories(const std::string& searchfile,
 		const std::string& cmdlinefile,
 		unsigned int limit);
 
 protected:
-	virtual void process_operation(
-		operation op,
+	virtual void process_operation(operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) = 0;
 	virtual void set_keymap_hints();
 
-	void start_bookmark_qna(
-		const std::string& default_title,
+	void start_bookmark_qna(const std::string& default_title,
 		const std::string& default_url,
 		const std::string& default_desc,
 		const std::string& default_feed_title);
-	void open_unread_items_in_browser(
-		std::shared_ptr<rss_feed> feed,
+	void open_unread_items_in_browser(std::shared_ptr<rss_feed> feed,
 		bool markread);
 
 	view* v;

@@ -31,7 +31,7 @@ void atom_parser::parse_feed(feed& f, xmlNode* rootNode)
 	globalbase = get_prop(rootNode, "base", XML_URI);
 
 	for (xmlNode* node = rootNode->children; node != nullptr;
-	     node = node->next) {
+		node = node->next) {
 		if (node_is(node, "title", ns)) {
 			f.title = get_content(node);
 			f.title_type = get_prop(node, "type");
@@ -65,11 +65,11 @@ item atom_parser::parse_entry(xmlNode* entryNode)
 		base = globalbase;
 
 	for (xmlNode* node = entryNode->children; node != nullptr;
-	     node = node->next) {
+		node = node->next) {
 		if (node_is(node, "author", ns)) {
 			for (xmlNode* authornode = node->children;
-			     authornode != nullptr;
-			     authornode = authornode->next) {
+				authornode != nullptr;
+				authornode = authornode->next) {
 				if (node_is(authornode, "name", ns)) {
 					it.author = get_content(authornode);
 				} // TODO: is there more?
@@ -122,8 +122,8 @@ item atom_parser::parse_entry(xmlNode* entryNode)
 			std::string mode = get_prop(node, "mode");
 			summary_type = get_prop(node, "type");
 			if (mode == "xml" || mode == "") {
-				if (summary_type == "html"
-				    || summary_type == "text") {
+				if (summary_type == "html" ||
+					summary_type == "text") {
 					summary = get_content(node);
 				} else {
 					summary = get_xml_content(node);
@@ -133,10 +133,9 @@ item atom_parser::parse_entry(xmlNode* entryNode)
 			}
 			if (summary_type == "")
 				summary_type = "text";
-		} else if (
-			node_is(node, "category", ns)
-			&& get_prop(node, "scheme")
-				   == "http://www.google.com/reader/") {
+		} else if (node_is(node, "category", ns) &&
+			get_prop(node, "scheme") ==
+				"http://www.google.com/reader/") {
 			it.labels.push_back(get_prop(node, "label"));
 		}
 	} // for

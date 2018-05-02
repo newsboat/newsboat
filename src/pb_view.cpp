@@ -48,16 +48,14 @@ void pb_view::run(bool auto_download)
 
 			char parbuf[128] = "";
 			if (ctrl->get_maxdownloads() > 1) {
-				snprintf(
-					parbuf,
+				snprintf(parbuf,
 					sizeof(parbuf),
 					_(" - %u parallel downloads"),
 					ctrl->get_maxdownloads());
 			}
 
 			char buf[1024];
-			snprintf(
-				buf,
+			snprintf(buf,
 				sizeof(buf),
 				_("Queue (%u downloads in progress, %u total) "
 				  "- %.2f kb/s total%s"),
@@ -71,9 +69,10 @@ void pb_view::run(bool auto_download)
 			dllist_form.set("head", buf);
 
 			LOG(level::DEBUG,
-			    "pb_view::run: updating view... downloads().size() "
-			    "= %u",
-			    ctrl->downloads().size());
+				"pb_view::run: updating view... "
+				"downloads().size() "
+				"= %u",
+				ctrl->downloads().size());
 
 			std::string code = "{list";
 
@@ -90,10 +89,10 @@ void pb_view::run(bool auto_download)
 					dl.status_text(),
 					dl.url(),
 					dl.filename());
-				code.append(strprintf::fmt(
-					"{listitem[%u] text:%s}",
-					i,
-					stfl::quote(lbuf)));
+				code.append(
+					strprintf::fmt("{listitem[%u] text:%s}",
+						i,
+						stfl::quote(lbuf)));
 				i++;
 			}
 
@@ -107,8 +106,8 @@ void pb_view::run(bool auto_download)
 		const char* event = dllist_form.run(500);
 
 		if (auto_download) {
-			if (ctrl->get_maxdownloads()
-			    > ctrl->downloads_in_progress()) {
+			if (ctrl->get_maxdownloads() >
+				ctrl->downloads_in_progress()) {
 				ctrl->start_downloads();
 			}
 		}
@@ -130,8 +129,7 @@ void pb_view::run(bool auto_download)
 		case OP_HARDQUIT:
 		case OP_QUIT:
 			if (ctrl->downloads_in_progress() > 0) {
-				dllist_form.set(
-					"msg",
+				dllist_form.set("msg",
 					_("Error: can't quit: download(s) in "
 					  "progress."));
 				ctrl->set_view_update_necessary(true);
@@ -150,8 +148,8 @@ void pb_view::run(bool auto_download)
 			int idx = -1;
 			os >> idx;
 			if (idx != -1) {
-				if (ctrl->downloads()[idx].status()
-				    != dlstatus::DOWNLOADING) {
+				if (ctrl->downloads()[idx].status() !=
+					dlstatus::DOWNLOADING) {
 					std::thread t{poddlthread(
 						&ctrl->downloads()[idx],
 						ctrl->get_cfgcont())};
@@ -166,16 +164,15 @@ void pb_view::run(bool auto_download)
 			if (idx != -1) {
 				dlstatus status =
 					ctrl->downloads()[idx].status();
-				if (status == dlstatus::FINISHED
-				    || status == dlstatus::PLAYED
-				    || status == dlstatus::READY) {
+				if (status == dlstatus::FINISHED ||
+					status == dlstatus::PLAYED ||
+					status == dlstatus::READY) {
 					ctrl->play_file(ctrl->downloads()[idx]
 								.filename());
 					ctrl->downloads()[idx].set_status(
 						dlstatus::PLAYED);
 				} else {
-					dllist_form.set(
-						"msg",
+					dllist_form.set("msg",
 						_("Error: download needs to be "
 						  "finished before the file "
 						  "can be played."));
@@ -200,8 +197,8 @@ void pb_view::run(bool auto_download)
 			int idx = -1;
 			os >> idx;
 			if (idx != -1) {
-				if (ctrl->downloads()[idx].status()
-				    == dlstatus::DOWNLOADING) {
+				if (ctrl->downloads()[idx].status() ==
+					dlstatus::DOWNLOADING) {
 					ctrl->downloads()[idx].set_status(
 						dlstatus::CANCELLED);
 				}
@@ -212,8 +209,8 @@ void pb_view::run(bool auto_download)
 			int idx = -1;
 			os >> idx;
 			if (idx != -1) {
-				if (ctrl->downloads()[idx].status()
-				    != dlstatus::DOWNLOADING) {
+				if (ctrl->downloads()[idx].status() !=
+					dlstatus::DOWNLOADING) {
 					ctrl->downloads()[idx].set_status(
 						dlstatus::DELETED);
 				}
@@ -221,8 +218,7 @@ void pb_view::run(bool auto_download)
 		} break;
 		case OP_PB_PURGE:
 			if (ctrl->downloads_in_progress() > 0) {
-				dllist_form.set(
-					"msg",
+				dllist_form.set("msg",
 					_("Error: unable to perform operation: "
 					  "download(s) in progress."));
 			} else {
@@ -344,8 +340,7 @@ void pb_view::set_help_keymap_hint()
 
 void pb_view::set_dllist_keymap_hint()
 {
-	keymap_hint_entry hints[] = {
-		{OP_QUIT, _("Quit")},
+	keymap_hint_entry hints[] = {{OP_QUIT, _("Quit")},
 		{OP_PB_DOWNLOAD, _("Download")},
 		{OP_PB_CANCEL, _("Cancel")},
 		{OP_PB_DELETE, _("Delete")},

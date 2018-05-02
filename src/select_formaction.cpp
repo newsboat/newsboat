@@ -32,10 +32,10 @@ void select_formaction::handle_cmdline(const std::string& cmd)
 {
 	unsigned int idx = 0;
 	if (1 == sscanf(cmd.c_str(), "%u", &idx)) {
-		if (idx > 0
-		    && idx <= ((type == selection_type::TAG)
-				       ? tags.size()
-				       : filters.size())) {
+		if (idx > 0 &&
+			idx <= ((type == selection_type::TAG)
+					       ? tags.size()
+					       : filters.size())) {
 			f->set("tagpos", std::to_string(idx - 1));
 		}
 	} else {
@@ -43,8 +43,7 @@ void select_formaction::handle_cmdline(const std::string& cmd)
 	}
 }
 
-void select_formaction::process_operation(
-	operation op,
+void select_formaction::process_operation(operation op,
 	bool /* automatic */,
 	std::vector<std::string>* /* args */)
 {
@@ -151,9 +150,8 @@ void select_formaction::init()
 			width);
 		break;
 	case selection_type::FILTER:
-		title = fmt.do_format(
-			v->get_cfg()->get_configvalue(
-				"selectfilter-title-format"),
+		title = fmt.do_format(v->get_cfg()->get_configvalue(
+					      "selectfilter-title-format"),
 			width);
 		break;
 	default:
@@ -165,10 +163,9 @@ void select_formaction::init()
 keymap_hint_entry* select_formaction::get_keymap_hint()
 {
 	static keymap_hint_entry hints_tag[] = {{OP_QUIT, _("Cancel")},
-						{OP_OPEN, _("Select Tag")},
-						{OP_NIL, nullptr}};
-	static keymap_hint_entry hints_filter[] = {
-		{OP_QUIT, _("Cancel")},
+		{OP_OPEN, _("Select Tag")},
+		{OP_NIL, nullptr}};
+	static keymap_hint_entry hints_filter[] = {{OP_QUIT, _("Cancel")},
 		{OP_OPEN, _("Select Filter")},
 		{OP_NIL, nullptr}};
 	switch (type) {

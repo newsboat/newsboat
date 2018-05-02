@@ -29,8 +29,7 @@ public:
 	std::string title() override;
 
 private:
-	void process_operation(
-		operation op,
+	void process_operation(operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
 

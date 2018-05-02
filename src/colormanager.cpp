@@ -30,13 +30,12 @@ void colormanager::register_commands(configparser& cfgparser)
 	cfgparser.register_handler("color", this);
 }
 
-void colormanager::handle_action(
-	const std::string& action,
+void colormanager::handle_action(const std::string& action,
 	const std::vector<std::string>& params)
 {
 	LOG(level::DEBUG,
-	    "colormanager::handle_action(%s,...) was called",
-	    action);
+		"colormanager::handle_action(%s,...) was called",
+		action);
 	if (action == "color") {
 		if (params.size() < 3) {
 			throw confighandlerexception(
@@ -69,10 +68,10 @@ void colormanager::handle_action(
 
 		/* we only allow certain elements to be configured, also to
 		 * indicate the user possible mis-spellings */
-		if (element == "listnormal" || element == "listfocus"
-		    || element == "listnormal_unread"
-		    || element == "listfocus_unread" || element == "info"
-		    || element == "background" || element == "article") {
+		if (element == "listnormal" || element == "listfocus" ||
+			element == "listnormal_unread" ||
+			element == "listfocus_unread" || element == "info" ||
+			element == "background" || element == "article") {
 			fg_colors[element] = fgcolor;
 			bg_colors[element] = bgcolor;
 			attributes[element] = attribs;
@@ -90,8 +89,7 @@ void colormanager::handle_action(
 void colormanager::dump_config(std::vector<std::string>& config_output)
 {
 	for (auto color : fg_colors) {
-		std::string configline = strprintf::fmt(
-			"color %s %s %s",
+		std::string configline = strprintf::fmt("color %s %s %s",
 			color.first,
 			color.second,
 			bg_colors[color.first]);
@@ -133,9 +131,9 @@ void colormanager::set_pb_colors(podboat::pb_view* v)
 		}
 
 		LOG(level::DEBUG,
-		    "colormanager::set_pb_colors: %s %s\n",
-		    fgcit->first,
-		    colorattr);
+			"colormanager::set_pb_colors: %s %s\n",
+			fgcit->first,
+			colorattr);
 
 		v->dllist_form.set(fgcit->first, colorattr);
 		v->help_form.set(fgcit->first, colorattr);

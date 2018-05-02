@@ -281,8 +281,7 @@ public:
 		items_guid_map.clear();
 	}
 
-	void erase_items(
-		std::vector<std::shared_ptr<rss_item>>::iterator begin,
+	void erase_items(std::vector<std::shared_ptr<rss_item>>::iterator begin,
 		std::vector<std::shared_ptr<rss_item>>::iterator end)
 	{
 		for (auto it = begin; it != end; ++it) {
@@ -297,8 +296,8 @@ public:
 	}
 
 	std::shared_ptr<rss_item> get_item_by_guid(const std::string& guid);
-	std::shared_ptr<rss_item>
-	get_item_by_guid_unlocked(const std::string& guid);
+	std::shared_ptr<rss_item> get_item_by_guid_unlocked(
+		const std::string& guid);
 
 	const std::string& rssurl() const
 	{
@@ -414,8 +413,7 @@ class rss_ignores : public config_action_handler {
 public:
 	rss_ignores() {}
 	~rss_ignores() override;
-	void handle_action(
-		const std::string& action,
+	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) override;
 	bool matches(rss_item* item);

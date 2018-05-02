@@ -40,15 +40,14 @@ void dialogs_formaction::prepare()
 		unsigned int i = 1;
 		for (auto fa : v->get_formaction_names()) {
 			LOG(level::DEBUG,
-			    "dialogs_formaction::prepare: p1 = %p p2 = %p",
-			    v->get_formaction(fa.first).get(),
-			    get_parent_formaction().get());
+				"dialogs_formaction::prepare: p1 = %p p2 = %p",
+				v->get_formaction(fa.first).get(),
+				get_parent_formaction().get());
 			listfmt.add_line(
-				strprintf::fmt(
-					"%4u %s %s",
+				strprintf::fmt("%4u %s %s",
 					i,
-					(v->get_formaction(fa.first).get()
-					 == get_parent_formaction().get())
+					(v->get_formaction(fa.first).get() ==
+						get_parent_formaction().get())
 						? "*"
 						: " ",
 					fa.second),
@@ -65,14 +64,13 @@ void dialogs_formaction::prepare()
 keymap_hint_entry* dialogs_formaction::get_keymap_hint()
 {
 	static keymap_hint_entry hints[] = {{OP_QUIT, _("Close")},
-					    {OP_OPEN, _("Goto Dialog")},
-					    {OP_CLOSEDIALOG, _("Close Dialog")},
-					    {OP_NIL, nullptr}};
+		{OP_OPEN, _("Goto Dialog")},
+		{OP_CLOSEDIALOG, _("Close Dialog")},
+		{OP_NIL, nullptr}};
 	return hints;
 }
 
-void dialogs_formaction::process_operation(
-	operation op,
+void dialogs_formaction::process_operation(operation op,
 	bool /* automatic */,
 	std::vector<std::string>* /* args */)
 {

@@ -4,8 +4,7 @@
 
 using namespace newsboat;
 
-TEST_CASE(
-	"add_line(), add_lines(), get_lines_count() and clear()",
+TEST_CASE("add_line(), add_lines(), get_lines_count() and clear()",
 	"[listformatter]")
 {
 	listformatter fmt;
@@ -34,8 +33,7 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE(
-	"add_line() splits overly long sequences to fit width",
+TEST_CASE("add_line() splits overly long sequences to fit width",
 	"[listformatter]")
 {
 	listformatter fmt;
@@ -44,8 +42,7 @@ TEST_CASE(
 	{
 		fmt.add_line("123456789_", UINT_MAX, 10);
 		fmt.add_line("_987654321", UINT_MAX, 10);
-		fmt.add_line(
-			"listformatter doesn't care about word boundaries",
+		fmt.add_line("listformatter doesn't care about word boundaries",
 			UINT_MAX,
 			10);
 		std::string expected =
@@ -65,8 +62,7 @@ TEST_CASE(
 	{
 		fmt.add_line("123456789_", 1, 10);
 		fmt.add_line("_987654321", 2, 10);
-		fmt.add_line(
-			"listformatter doesn't care about word boundaries",
+		fmt.add_line("listformatter doesn't care about word boundaries",
 			3,
 			10);
 		std::string expected =
@@ -109,8 +105,7 @@ TEST_CASE("set_line() replaces the item in a list", "[listformatter]")
 	REQUIRE(fmt.format_list(nullptr, "") == expected);
 }
 
-TEST_CASE(
-	"format_list() uses regex manager if one is passed",
+TEST_CASE("format_list() uses regex manager if one is passed",
 	"[listformatter]")
 {
 	listformatter fmt;

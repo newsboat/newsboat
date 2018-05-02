@@ -47,9 +47,8 @@ int main(int argc, char* argv[])
 			  << std::endl;
 		::exit(EXIT_FAILURE);
 	} catch (const newsboat::exception& e) {
-		std::cerr << strprintf::fmt(
-				     _("Caught newsboat::exception with "
-				       "message: %s"),
+		std::cerr << strprintf::fmt(_("Caught newsboat::exception with "
+					      "message: %s"),
 				     e.what())
 			  << std::endl;
 		::exit(EXIT_FAILURE);

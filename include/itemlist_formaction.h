@@ -75,19 +75,16 @@ public:
 	void set_regexmanager(regexmanager* r);
 
 private:
-	void process_operation(
-		operation op,
+	void process_operation(operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
-	void set_head(
-		const std::string& s,
+	void set_head(const std::string& s,
 		unsigned int unread,
 		unsigned int total,
 		const std::string& url);
 	int get_pos(unsigned int idx);
 
-	void save_article(
-		const std::string& filename,
+	void save_article(const std::string& filename,
 		std::shared_ptr<rss_item> item);
 
 	void save_filterpos();
@@ -113,8 +110,8 @@ private:
 
 	void invalidate(const unsigned int pos)
 	{
-		if (invalidated == true
-		    && invalidation_mode == InvalidationMode::COMPLETE)
+		if (invalidated == true &&
+			invalidation_mode == InvalidationMode::COMPLETE)
 			return;
 
 		invalidated = true;
@@ -122,8 +119,7 @@ private:
 		invalidated_itempos.push_back(pos);
 	}
 
-	std::string item2formatted_line(
-		const itemptr_pos_pair& item,
+	std::string item2formatted_line(const itemptr_pos_pair& item,
 		const unsigned int width,
 		const std::string& itemlist_format,
 		const std::string& datetime_format);

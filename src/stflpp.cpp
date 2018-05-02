@@ -57,8 +57,7 @@ std::string stfl::form::get(const std::string& name)
 
 void stfl::form::set(const std::string& name, const std::string& value)
 {
-	stfl_set(
-		f,
+	stfl_set(f,
 		stfl_ipool_towc(ipool, name.c_str()),
 		stfl_ipool_towc(ipool, value.c_str()));
 	stfl_ipool_flush(ipool);
@@ -80,8 +79,7 @@ void stfl::form::set_focus(const std::string& name)
 	LOG(level::DEBUG, "stfl::form::set_focus: %s", name);
 }
 
-void stfl::form::modify(
-	const std::string& name,
+void stfl::form::modify(const std::string& name,
 	const std::string& mode,
 	const std::string& text)
 {
@@ -114,10 +112,8 @@ std::string stfl::quote(const std::string& text)
 std::string
 stfl::form::dump(const std::string& name, const std::string& prefix, int focus)
 {
-	const char* text = stfl_ipool_fromwc(
-		ipool,
-		stfl_dump(
-			f,
+	const char* text = stfl_ipool_fromwc(ipool,
+		stfl_dump(f,
 			stfl_ipool_towc(ipool, name.c_str()),
 			stfl_ipool_towc(ipool, prefix.c_str()),
 			focus));

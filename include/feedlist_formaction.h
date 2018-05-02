@@ -18,8 +18,8 @@ public:
 	void prepare() override;
 	void init() override;
 	void set_feedlist(std::vector<std::shared_ptr<rss_feed>>& feeds);
-	void
-	update_visible_feeds(std::vector<std::shared_ptr<rss_feed>>& feeds);
+	void update_visible_feeds(
+		std::vector<std::shared_ptr<rss_feed>>& feeds);
 	void set_tags(const std::vector<std::string>& t);
 	keymap_hint_entry* get_keymap_hint() override;
 	std::shared_ptr<rss_feed> get_feed();
@@ -53,8 +53,7 @@ public:
 
 private:
 	int get_pos(unsigned int realidx);
-	void process_operation(
-		operation op,
+	void process_operation(operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
 
@@ -71,8 +70,7 @@ private:
 
 	std::string get_title(std::shared_ptr<rss_feed> feed);
 
-	std::string format_line(
-		const std::string& feedlist_format,
+	std::string format_line(const std::string& feedlist_format,
 		std::shared_ptr<rss_feed> feed,
 		unsigned int pos,
 		unsigned int width);

@@ -100,10 +100,10 @@ bool pb_controller::setup_dirs_xdg(const char* env_home)
 	// create data directory if it doesn't exist
 	if (0 != utils::mkdir_parents(xdg_data_dir, 0700)) {
 		LOG(level::CRITICAL,
-		    "Couldn't create `%s': (%i) %s",
-		    xdg_data_dir,
-		    errno,
-		    strerror(errno));
+			"Couldn't create `%s': (%i) %s",
+			xdg_data_dir,
+			errno,
+			strerror(errno));
 		::exit(EXIT_FAILURE);
 	}
 
@@ -204,8 +204,8 @@ int pb_controller::run(int argc, char* argv[])
 		{"version", no_argument, 0, 'v'},
 		{0, 0, 0, 0}};
 
-	while ((c = ::getopt_long(argc, argv, getopt_str, longopts, nullptr))
-	       != -1) {
+	while ((c = ::getopt_long(argc, argv, getopt_str, longopts, nullptr)) !=
+		-1) {
 		switch (c) {
 		case ':':
 		case '?':
@@ -228,9 +228,8 @@ int pb_controller::run(int argc, char* argv[])
 			if (l > level::NONE && l <= level::DEBUG) {
 				logger::getInstance().set_loglevel(l);
 			} else {
-				std::cerr << strprintf::fmt(
-						     _("%s: %d: invalid "
-						       "loglevel value"),
+				std::cerr << strprintf::fmt(_("%s: %d: invalid "
+							      "loglevel value"),
 						     argv[0],
 						     l)
 					  << std::endl;
@@ -241,11 +240,11 @@ int pb_controller::run(int argc, char* argv[])
 			print_usage(argv[0]);
 			return EXIT_SUCCESS;
 		default:
-			std::cout << strprintf::fmt(
-					     _("%s: unknown option - %c"),
-					     argv[0],
-					     static_cast<char>(c))
-				  << std::endl;
+			std::cout
+				<< strprintf::fmt(_("%s: unknown option - %c"),
+					   argv[0],
+					   static_cast<char>(c))
+				<< std::endl;
 			print_usage(argv[0]);
 			return EXIT_FAILURE;
 		}
@@ -344,23 +343,24 @@ void pb_controller::print_usage(const char* argv0)
 
 	static const std::vector<arg> args = {
 		{'C',
-		 "config-file",
-		 _s("<configfile>"),
-		 _s("read configuration from <configfile>")},
+			"config-file",
+			_s("<configfile>"),
+			_s("read configuration from <configfile>")},
 		{'q',
-		 "queue-file",
-		 _s("<queuefile>"),
-		 _s("use <queuefile> as queue file")},
+			"queue-file",
+			_s("<queuefile>"),
+			_s("use <queuefile> as queue file")},
 		{'a', "autodownload", "", _s("start download on startup")},
 		{'l',
-		 "log-level",
-		 _s("<loglevel>"),
-		 _s("write a log with a certain loglevel (valid values: 1 to "
-		    "6)")},
+			"log-level",
+			_s("<loglevel>"),
+			_s("write a log with a certain loglevel (valid values: "
+			   "1 to "
+			   "6)")},
 		{'d',
-		 "log-file",
-		 _s("<logfile>"),
-		 _s("use <logfile> as output log file")},
+			"log-file",
+			_s("<logfile>"),
+			_s("use <logfile> as output log file")},
 		{'h', "help", "", _s("this help")}};
 
 	for (const auto& a : args) {

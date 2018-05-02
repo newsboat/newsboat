@@ -18,8 +18,7 @@ ttrss_api::ttrss_api(configcontainer* c)
 {
 	single = (cfg->get_configvalue("ttrss-mode") == "single");
 	if (single) {
-		auth_info = strprintf::fmt(
-			"%s:%s",
+		auth_info = strprintf::fmt("%s:%s",
 			cfg->get_configvalue("ttrss-login"),
 			cfg->get_configvalue("ttrss-password"));
 	} else {
@@ -70,17 +69,18 @@ std::string ttrss_api::retrieve_sid()
 		sid = content["session_id"];
 	} catch (json::exception& e) {
 		LOG(level::INFO,
-		    "ttrss_api::retrieve_sid: couldn't extract session_id: %s",
-		    e.what());
+			"ttrss_api::retrieve_sid: couldn't extract session_id: "
+			"%s",
+			e.what());
 	}
 
 	try {
 		api_level = content["api_level"];
 	} catch (json::exception& e) {
 		LOG(level::INFO,
-		    "ttrss_api::retrieve_sid: couldn't determine api_level "
-		    "from response: %s",
-		    e.what());
+			"ttrss_api::retrieve_sid: couldn't determine api_level "
+			"from response: %s",
+			e.what());
 	}
 
 	LOG(level::DEBUG, "ttrss_api::retrieve_sid: sid = '%s'", sid);
@@ -98,8 +98,9 @@ unsigned int ttrss_api::query_api_level()
 		try {
 			api_level = content["level"];
 			LOG(level::DEBUG,
-			    "ttrss_api::query_api_level: determined level: %d",
-			    api_level);
+				"ttrss_api::query_api_level: determined level: "
+				"%d",
+				api_level);
 		} catch (json::exception& e) {
 			// From
 			// https://git.tt-rss.org/git/tt-rss/wiki/ApiReference
@@ -107,16 +108,16 @@ unsigned int ttrss_api::query_api_level()
 			//  version:1.5.7 and below) client should assume API
 			//  level 0."
 			LOG(level::DEBUG,
-			    "ttrss_api::query_api_level: failed to determine "
-			    "level, assuming 0");
+				"ttrss_api::query_api_level: failed to "
+				"determine "
+				"level, assuming 0");
 			api_level = 0;
 		}
 	}
 	return api_level;
 }
 
-json ttrss_api::run_op(
-	const std::string& op,
+json ttrss_api::run_op(const std::string& op,
 	const std::map<std::string, std::string>& args,
 	bool try_login, /* = true */
 	CURL* cached_handle /* = nullptr */)
@@ -149,18 +150,18 @@ json ttrss_api::run_op(
 		url, cfg, auth_info, &req_data, cached_handle);
 
 	LOG(level::DEBUG,
-	    "ttrss_api::run_op(%s,...): post=%s reply = %s",
-	    op,
-	    req_data,
-	    result);
+		"ttrss_api::run_op(%s,...): post=%s reply = %s",
+		op,
+		req_data,
+		result);
 
 	json reply;
 	try {
 		reply = json::parse(result);
 	} catch (json::parse_error& e) {
 		LOG(level::ERROR,
-		    "ttrss_api::run_op: reply failed to parse: %s",
-		    result);
+			"ttrss_api::run_op: reply failed to parse: %s",
+			result);
 		return json(nullptr);
 	}
 
@@ -169,8 +170,8 @@ json ttrss_api::run_op(
 		status = reply.at("status");
 	} catch (json::exception& e) {
 		LOG(level::ERROR,
-		    "ttrss_api::run_op: no status code: %s",
-		    e.what());
+			"ttrss_api::run_op: no status code: %s",
+			e.what());
 		return json(nullptr);
 	}
 
@@ -179,7 +180,8 @@ json ttrss_api::run_op(
 		content = reply.at("content");
 	} catch (json::exception& e) {
 		LOG(level::ERROR,
-		    "ttrss_api::run_op: no content part in answer from server");
+			"ttrss_api::run_op: no content part in answer from "
+			"server");
 		return json(nullptr);
 	}
 
@@ -191,9 +193,9 @@ json ttrss_api::run_op(
 				return json(nullptr);
 		} else {
 			LOG(level::ERROR,
-			    "ttrss_api::run_op: status: %d, error: '%s'",
-			    status,
-			    content["error"].dump());
+				"ttrss_api::run_op: status: %d, error: '%s'",
+				status,
+				content["error"].dump());
 			return json(nullptr);
 		}
 	}
@@ -201,8 +203,7 @@ json ttrss_api::run_op(
 	return content;
 }
 
-tagged_feedurl ttrss_api::feed_from_json(
-	const json& jfeed,
+tagged_feedurl ttrss_api::feed_from_json(const json& jfeed,
 	const std::vector<std::string>& addtags)
 {
 	const int feed_id = jfeed["id"];
@@ -259,8 +260,8 @@ std::vector<tagged_feedurl> ttrss_api::get_subscribed_urls()
 
 		if (feedlist.is_null()) {
 			LOG(level::ERROR,
-			    "ttrss_api::get_subscribed_urls: Failed to "
-			    "retrieve feedlist");
+				"ttrss_api::get_subscribed_urls: Failed to "
+				"retrieve feedlist");
 			return feeds;
 		}
 
@@ -284,9 +285,9 @@ std::vector<tagged_feedurl> ttrss_api::get_subscribed_urls()
 			}
 		} catch (json::exception& e) {
 			LOG(level::ERROR,
-			    "ttrss_api::get_subscribed_urls:"
-			    " Failed to determine subscribed urls: %s",
-			    e.what());
+				"ttrss_api::get_subscribed_urls:"
+				" Failed to determine subscribed urls: %s",
+				e.what());
 			return std::vector<tagged_feedurl>();
 		}
 	}
@@ -317,8 +318,8 @@ bool ttrss_api::mark_article_read(const std::string& guid, bool read)
 	// for it.
 	std::thread t{[=]() {
 		LOG(level::DEBUG,
-		    "ttrss_api::mark_article_read: inside thread, marking "
-		    "thread as read...");
+			"ttrss_api::mark_article_read: inside thread, marking "
+			"thread as read...");
 
 		// Call the ttrss_api's update_article function as a thread.
 		this->update_article(guid, 2, read ? 0 : 1);
@@ -327,8 +328,7 @@ bool ttrss_api::mark_article_read(const std::string& guid, bool read)
 	return true;
 }
 
-bool ttrss_api::update_article_flags(
-	const std::string& oldflags,
+bool ttrss_api::update_article_flags(const std::string& oldflags,
 	const std::string& newflags,
 	const std::string& guid)
 {
@@ -337,24 +337,22 @@ bool ttrss_api::update_article_flags(
 	bool success = true;
 
 	if (star_flag.length() > 0) {
-		if (strchr(oldflags.c_str(), star_flag[0]) == nullptr
-		    && strchr(newflags.c_str(), star_flag[0]) != nullptr) {
+		if (strchr(oldflags.c_str(), star_flag[0]) == nullptr &&
+			strchr(newflags.c_str(), star_flag[0]) != nullptr) {
 			success = star_article(guid, true);
-		} else if (
-			strchr(oldflags.c_str(), star_flag[0]) != nullptr
-			&& strchr(newflags.c_str(), star_flag[0]) == nullptr) {
+		} else if (strchr(oldflags.c_str(), star_flag[0]) != nullptr &&
+			strchr(newflags.c_str(), star_flag[0]) == nullptr) {
 			success = star_article(guid, false);
 		}
 	}
 
 	if (publish_flag.length() > 0) {
-		if (strchr(oldflags.c_str(), publish_flag[0]) == nullptr
-		    && strchr(newflags.c_str(), publish_flag[0]) != nullptr) {
+		if (strchr(oldflags.c_str(), publish_flag[0]) == nullptr &&
+			strchr(newflags.c_str(), publish_flag[0]) != nullptr) {
 			success = publish_article(guid, true);
-		} else if (
-			strchr(oldflags.c_str(), publish_flag[0]) != nullptr
-			&& strchr(newflags.c_str(), publish_flag[0])
-				   == nullptr) {
+		} else if (strchr(oldflags.c_str(), publish_flag[0]) !=
+				nullptr &&
+			strchr(newflags.c_str(), publish_flag[0]) == nullptr) {
 			success = publish_article(guid, false);
 		}
 	}
@@ -379,7 +377,7 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id, CURL* cached_handle)
 
 	if (!content.is_array()) {
 		LOG(level::ERROR,
-		    "ttrss_api::fetch_feed: content is not an array");
+			"ttrss_api::fetch_feed: content is not an array");
 		return f;
 	}
 
@@ -433,8 +431,7 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id, CURL* cached_handle)
 			int updated_time = item_obj["updated"];
 			time_t updated = static_cast<time_t>(updated_time);
 			char rfc822_date[128];
-			strftime(
-				rfc822_date,
+			strftime(rfc822_date,
 				sizeof(rfc822_date),
 				"%a, %d %b %Y %H:%M:%S %z",
 				gmtime(&updated));
@@ -445,12 +442,11 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id, CURL* cached_handle)
 		}
 	} catch (json::exception& e) {
 		LOG(level::ERROR,
-		    "Exception occurred while parsing feeed: ",
-		    e.what());
+			"Exception occurred while parsing feeed: ",
+			e.what());
 	}
 
-	std::sort(
-		f.items.begin(),
+	std::sort(f.items.begin(),
 		f.items.end(),
 		[](const rsspp::item& a, const rsspp::item& b) {
 			return a.pubDate_ts > b.pubDate_ts;
@@ -459,8 +455,7 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id, CURL* cached_handle)
 	return f;
 }
 
-void ttrss_api::fetch_feeds_per_category(
-	const json& cat,
+void ttrss_api::fetch_feeds_per_category(const json& cat,
 	std::vector<tagged_feedurl>& feeds)
 {
 	json cat_name;
@@ -489,9 +484,10 @@ void ttrss_api::fetch_feeds_per_category(
 
 	cat_name = cat["title"];
 	LOG(level::DEBUG,
-	    "ttrss_api::fetch_feeds_per_category: fetching id = %s title = %s",
-	    cat_id,
-	    cat_name.is_null() ? "<null>" : cat_name.get<std::string>());
+		"ttrss_api::fetch_feeds_per_category: fetching id = %s title = "
+		"%s",
+		cat_id,
+		cat_name.is_null() ? "<null>" : cat_name.get<std::string>());
 
 	std::map<std::string, std::string> args;
 	args["cat_id"] = cat_id;

@@ -30,8 +30,7 @@ protected:
 	std::string get_content(xmlNode* node);
 	std::string get_xml_content(xmlNode* node);
 	void cleanup_namespaces(xmlNodePtr node);
-	std::string get_prop(
-		xmlNode* node,
+	std::string get_prop(xmlNode* node,
 		const std::string& prop,
 		const std::string& ns = "");
 	std::string w3cdtf_to_rfc822(const std::string& w3cdtf);

@@ -6,8 +6,7 @@
 
 using namespace newsboat;
 
-TEST_CASE(
-	"Tagsoup pull parser turns document into a stream of events",
+TEST_CASE("Tagsoup pull parser turns document into a stream of events",
 	"[tagsouppullparser]")
 {
 	std::istringstream input_stream(
@@ -94,16 +93,16 @@ TEST_CASE("<br>, <br/> and <br /> behave the same way", "[tagsouppullparser]")
 			parser.set_input(input_stream);
 
 			event = parser.get_event_type();
-			REQUIRE(event
-				== tagsouppullparser::event::START_DOCUMENT);
+			REQUIRE(event ==
+				tagsouppullparser::event::START_DOCUMENT);
 
 			event = parser.next();
 			REQUIRE(event == tagsouppullparser::event::START_TAG);
 			REQUIRE(parser.get_text() == "br");
 
 			event = parser.next();
-			REQUIRE(event
-				== tagsouppullparser::event::END_DOCUMENT);
+			REQUIRE(event ==
+				tagsouppullparser::event::END_DOCUMENT);
 		}
 	}
 }

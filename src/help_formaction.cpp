@@ -22,8 +22,7 @@ help_formaction::help_formaction(view* vv, std::string formstr)
 
 help_formaction::~help_formaction() {}
 
-void help_formaction::process_operation(
-	operation op,
+void help_formaction::process_operation(operation op,
 	bool /* automatic */,
 	std::vector<std::string>* /* args */)
 {
@@ -66,10 +65,9 @@ void help_formaction::prepare()
 		fmt.register_fmt('N', PROGRAM_NAME);
 		fmt.register_fmt('V', PROGRAM_VERSION);
 		f->set("head",
-		       fmt.do_format(
-			       v->get_cfg()->get_configvalue(
-				       "help-title-format"),
-			       width));
+			fmt.do_format(v->get_cfg()->get_configvalue(
+					      "help-title-format"),
+				width));
 
 		std::vector<keymap_desc> descs;
 		v->get_keys()->get_keymap_descriptions(
@@ -77,10 +75,10 @@ void help_formaction::prepare()
 
 		std::string highlighted_searchphrase =
 			strprintf::fmt("<hl>%s</>", searchphrase);
-		std::vector<std::string> colors = utils::tokenize(
-			v->get_cfg()->get_configvalue(
-				"search-highlight-colors"),
-			" ");
+		std::vector<std::string> colors =
+			utils::tokenize(v->get_cfg()->get_configvalue(
+						"search-highlight-colors"),
+				" ");
 		f->set("highlight", make_colorstring(colors));
 		listformatter listfmt;
 
@@ -92,9 +90,8 @@ void help_formaction::prepare()
 				bool condition;
 				switch (i) {
 				case 0:
-					condition =
-						(desc.key.length() == 0
-						 || desc.flags & KM_SYSKEYS);
+					condition = (desc.key.length() == 0 ||
+						desc.flags & KM_SYSKEYS);
 					if (desc.key.length() == 0)
 						unbound_count++;
 					if (desc.flags & KM_SYSKEYS)
@@ -104,37 +101,33 @@ void help_formaction::prepare()
 					condition = !(desc.flags & KM_SYSKEYS);
 					break;
 				case 2:
-					condition =
-						(desc.key.length() > 0
-						 || desc.flags & KM_SYSKEYS);
+					condition = (desc.key.length() > 0 ||
+						desc.flags & KM_SYSKEYS);
 					break;
 				default:
 					condition = true;
 					break;
 				}
-				if (context.length() > 0
-				    && (desc.ctx != context || condition))
+				if (context.length() > 0 &&
+					(desc.ctx != context || condition))
 					continue;
-				if (!apply_search
-				    || strcasestr(
-					       desc.key.c_str(),
-					       searchphrase.c_str())
-					       != nullptr
-				    || strcasestr(
-					       desc.cmd.c_str(),
-					       searchphrase.c_str())
-					       != nullptr
-				    || strcasestr(
-					       desc.desc.c_str(),
-					       searchphrase.c_str())
-					       != nullptr) {
+				if (!apply_search ||
+					strcasestr(desc.key.c_str(),
+						searchphrase.c_str()) !=
+						nullptr ||
+					strcasestr(desc.cmd.c_str(),
+						searchphrase.c_str()) !=
+						nullptr ||
+					strcasestr(desc.desc.c_str(),
+						searchphrase.c_str()) !=
+						nullptr) {
 					char tabs_1[] = "                ";
 					char tabs_2[] =
 						"                        ";
-					int how_often_1 = strlen(tabs_1)
-							  - desc.key.length();
-					int how_often_2 = strlen(tabs_2)
-							  - desc.cmd.length();
+					int how_often_1 = strlen(tabs_1) -
+						desc.key.length();
+					int how_often_2 = strlen(tabs_2) -
+						desc.cmd.length();
 					if (how_often_1 <= 0)
 						how_often_1 = 1;
 					if (how_often_2 <= 0)
@@ -163,24 +156,26 @@ void help_formaction::prepare()
 						break;
 					}
 					LOG(level::DEBUG,
-					    "help_formaction::prepare: step 1 "
-					    "- line = %s",
-					    line);
+						"help_formaction::prepare: "
+						"step 1 "
+						"- line = %s",
+						line);
 					line = utils::quote_for_stfl(line);
 					LOG(level::DEBUG,
-					    "help_formaction::prepare: step 2 "
-					    "- line = %s",
-					    line);
-					if (apply_search
-					    && searchphrase.length() > 0) {
-						line = utils::replace_all(
-							line,
+						"help_formaction::prepare: "
+						"step 2 "
+						"- line = %s",
+						line);
+					if (apply_search &&
+						searchphrase.length() > 0) {
+						line = utils::replace_all(line,
 							searchphrase,
 							highlighted_searchphrase);
 						LOG(level::DEBUG,
-						    "help_formaction::prepare: "
-						    "step 3 - line = %s",
-						    line);
+							"help_formaction::"
+							"prepare: "
+							"step 3 - line = %s",
+							line);
 					}
 					listfmt.add_line(line);
 				}
@@ -220,9 +215,9 @@ void help_formaction::init()
 keymap_hint_entry* help_formaction::get_keymap_hint()
 {
 	static keymap_hint_entry hints[] = {{OP_QUIT, _("Quit")},
-					    {OP_SEARCH, _("Search")},
-					    {OP_CLEARFILTER, _("Clear")},
-					    {OP_NIL, nullptr}};
+		{OP_SEARCH, _("Search")},
+		{OP_CLEARFILTER, _("Clear")},
+		{OP_NIL, nullptr}};
 	return hints;
 }
 
@@ -253,8 +248,8 @@ std::string help_formaction::title()
 	return _("Help");
 }
 
-std::string
-help_formaction::make_colorstring(const std::vector<std::string>& colors)
+std::string help_formaction::make_colorstring(
+	const std::vector<std::string>& colors)
 {
 	std::string result;
 	if (colors.size() > 0) {

@@ -35,8 +35,7 @@ filebrowser_formaction::filebrowser_formaction(view* vv, std::string formstr)
 
 filebrowser_formaction::~filebrowser_formaction() {}
 
-void filebrowser_formaction::process_operation(
-	operation op,
+void filebrowser_formaction::process_operation(operation op,
 	bool /* automatic */,
 	std::vector<std::string>* /* args */)
 {
@@ -70,21 +69,23 @@ void filebrowser_formaction::process_operation(
 					fmt.register_fmt('V', PROGRAM_VERSION);
 					fmt.register_fmt('f', filename);
 					f->set("head",
-					       fmt.do_format(
-						       v->get_cfg()
-							       ->get_configvalue(
-								       "filebro"
-								       "wser-"
-								       "title-"
-								       "forma"
-								       "t"),
-						       width));
+						fmt.do_format(
+							v->get_cfg()
+								->get_configvalue(
+									"filebr"
+									"o"
+									"wser-"
+									"title-"
+									"forma"
+									"t"),
+							width));
 					int status = ::chdir(filename.c_str());
 					LOG(level::DEBUG,
-					    "filebrowser_formaction:OP_OPEN: "
-					    "chdir(%s) = %i",
-					    filename,
-					    status);
+						"filebrowser_formaction:OP_"
+						"OPEN: "
+						"chdir(%s) = %i",
+						filename,
+						status);
 					f->set("listpos", "0");
 					std::string fn = utils::getcwd();
 					fn.append(NEWSBEUTER_PATH_SEP);
@@ -95,8 +96,7 @@ void filebrowser_formaction::process_operation(
 					if (base == std::string::npos) {
 						fn.append(fnstr);
 					} else {
-						fn.append(
-							fnstr,
+						fn.append(fnstr,
 							base,
 							std::string::npos);
 					}
@@ -132,8 +132,7 @@ void filebrowser_formaction::process_operation(
 							      "overwrite `%s' "
 							      "(y:Yes n:No)? "),
 							    fn),
-						    _("yn"))
-					    == *_("n")) {
+						    _("yn")) == *_("n")) {
 						do_pop = false;
 					}
 					f->set_focus("filenametext");
@@ -173,8 +172,8 @@ std::vector<std::string> get_sorted_filelist()
 	if (dirp) {
 		struct dirent* de = ::readdir(dirp);
 		while (de) {
-			if (strcmp(de->d_name, ".") != 0
-			    && strcmp(de->d_name, "..") != 0)
+			if (strcmp(de->d_name, ".") != 0 &&
+				strcmp(de->d_name, "..") != 0)
 				ret.push_back(de->d_name);
 			de = ::readdir(dirp);
 		}
@@ -230,8 +229,8 @@ void filebrowser_formaction::init()
 			v->get_cfg()->get_configvalue("save-path");
 
 		LOG(level::DEBUG,
-		    "view::filebrowser: save-path is '%s'",
-		    save_path);
+			"view::filebrowser: save-path is '%s'",
+			save_path);
 
 		dir = save_path;
 	}
@@ -248,18 +247,17 @@ void filebrowser_formaction::init()
 	f->set("filenametext_pos", std::to_string(default_filename.length()));
 
 	f->set("head",
-	       strprintf::fmt(
-		       _("%s %s - Save File - %s"),
-		       PROGRAM_NAME,
-		       PROGRAM_VERSION,
-		       cwdtmp));
+		strprintf::fmt(_("%s %s - Save File - %s"),
+			PROGRAM_NAME,
+			PROGRAM_VERSION,
+			cwdtmp));
 }
 
 keymap_hint_entry* filebrowser_formaction::get_keymap_hint()
 {
 	static keymap_hint_entry hints[] = {{OP_QUIT, _("Cancel")},
-					    {OP_OPEN, _("Save")},
-					    {OP_NIL, nullptr}};
+		{OP_OPEN, _("Save")},
+		{OP_NIL, nullptr}};
 	return hints;
 }
 
@@ -277,16 +275,14 @@ std::string filebrowser_formaction::add_file(std::string filename)
 			get_formatted_filename(filename, ftype, sb.st_mode);
 
 		std::string sizestr = strprintf::fmt("%12u", sb.st_size);
-		std::string line = strprintf::fmt(
-			"%c%s %s %s %s %s",
+		std::string line = strprintf::fmt("%c%s %s %s %s %s",
 			ftype,
 			rwxbits,
 			owner,
 			group,
 			sizestr,
 			formattedfilename);
-		retval = strprintf::fmt(
-			"{listitem[%c%s] text:%s}",
+		retval = strprintf::fmt("{listitem[%c%s] text:%s}",
 			ftype,
 			stfl::quote(filename),
 			stfl::quote(line));
@@ -294,8 +290,7 @@ std::string filebrowser_formaction::add_file(std::string filename)
 	return retval;
 }
 
-std::string filebrowser_formaction::get_formatted_filename(
-	std::string filename,
+std::string filebrowser_formaction::get_formatted_filename(std::string filename,
 	char ftype,
 	mode_t mode)
 {
@@ -341,13 +336,13 @@ char filebrowser_formaction::get_filetype(mode_t mode)
 		mode_t flag;
 		char ftype;
 	} flags[] = {{S_IFREG, '-'},
-		     {S_IFDIR, 'd'},
-		     {S_IFBLK, 'b'},
-		     {S_IFCHR, 'c'},
-		     {S_IFIFO, 'p'},
-		     {S_IFLNK, 'l'},
-		     {S_IFSOCK, 's'},
-		     {0, 0}};
+		{S_IFDIR, 'd'},
+		{S_IFBLK, 'b'},
+		{S_IFCHR, 'c'},
+		{S_IFIFO, 'p'},
+		{S_IFLNK, 'l'},
+		{S_IFSOCK, 's'},
+		{0, 0}};
 	for (unsigned int i = 0; flags[i].flag != 0; i++) {
 		if ((mode & S_IFMT) == flags[i].flag)
 			return flags[i].ftype;

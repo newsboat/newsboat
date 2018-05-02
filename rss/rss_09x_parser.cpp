@@ -39,7 +39,7 @@ void rss_09x_parser::parse_feed(feed& f, xmlNode* rootNode)
 		throw exception(_("no RSS channel found"));
 
 	for (xmlNode* node = channel->children; node != nullptr;
-	     node = node->next) {
+		node = node->next) {
 		if (node_is(node, "title", ns)) {
 			f.title = get_content(node);
 			f.title_type = "text";
@@ -69,7 +69,7 @@ item rss_09x_parser::parse_item(xmlNode* itemNode)
 		base = globalbase;
 
 	for (xmlNode* node = itemNode->children; node != nullptr;
-	     node = node->next) {
+		node = node->next) {
 		if (node_is(node, "title", ns)) {
 			it.title = get_content(node);
 			it.title_type = "text";
@@ -104,8 +104,8 @@ item rss_09x_parser::parse_item(xmlNode* itemNode)
 				unsigned int start, end;
 				end = authorfield.length() - 2;
 				for (start = end;
-				     start > 0 && authorfield[start] != '(';
-				     start--) {
+					start > 0 && authorfield[start] != '(';
+					start--) {
 				}
 				it.author = authorfield.substr(
 					start + 1, end - start);
@@ -129,7 +129,7 @@ item rss_09x_parser::parse_item(xmlNode* itemNode)
 			}
 		} else if (node_is(node, "group", MEDIA_RSS_URI)) {
 			for (xmlNode* mnode = node->children; mnode != nullptr;
-			     mnode = mnode->next) {
+				mnode = mnode->next) {
 				if (node_is(mnode, "content", MEDIA_RSS_URI)) {
 					const std::string type =
 						get_prop(mnode, "type");

@@ -14,10 +14,10 @@ void rss_10_parser::parse_feed(feed& f, xmlNode* rootNode)
 		throw exception(_("XML root node is NULL"));
 
 	for (xmlNode* node = rootNode->children; node != nullptr;
-	     node = node->next) {
+		node = node->next) {
 		if (node_is(node, "channel", RSS_1_0_NS)) {
 			for (xmlNode* cnode = node->children; cnode != nullptr;
-			     cnode = cnode->next) {
+				cnode = cnode->next) {
 				if (node_is(cnode, "title", RSS_1_0_NS)) {
 					f.title = get_content(cnode);
 					f.title_type = "text";
@@ -38,8 +38,8 @@ void rss_10_parser::parse_feed(feed& f, xmlNode* rootNode)
 			item it;
 			it.guid = get_prop(node, "about", RDF_URI);
 			for (xmlNode* itnode = node->children;
-			     itnode != nullptr;
-			     itnode = itnode->next) {
+				itnode != nullptr;
+				itnode = itnode->next) {
 				if (node_is(itnode, "title", RSS_1_0_NS)) {
 					it.title = get_content(itnode);
 					it.title_type = "text";

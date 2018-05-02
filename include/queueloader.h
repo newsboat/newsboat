@@ -11,8 +11,8 @@ namespace podboat {
 class queueloader {
 public:
 	queueloader(const std::string& file, pb_controller* c = 0);
-	void
-	reload(std::vector<download>& downloads, bool remove_unplayed = false);
+	void reload(std::vector<download>& downloads,
+		bool remove_unplayed = false);
 
 private:
 	std::string get_filename(const std::string& str);

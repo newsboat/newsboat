@@ -37,8 +37,7 @@ void regexmanager::dump_config(std::vector<std::string>& config_output)
 	}
 }
 
-void regexmanager::handle_action(
-	const std::string& action,
+void regexmanager::handle_action(const std::string& action,
 	const std::vector<std::string>& params)
 {
 	if (action == "highlight") {
@@ -47,16 +46,16 @@ void regexmanager::handle_action(
 				action_handler_status::TOO_FEW_PARAMS);
 
 		std::string location = params[0];
-		if (location != "all" && location != "article"
-		    && location != "articlelist" && location != "feedlist")
+		if (location != "all" && location != "article" &&
+			location != "articlelist" && location != "feedlist")
 			throw confighandlerexception(strprintf::fmt(
 				_("`%s' is an invalid dialog type"), location));
 
 		regex_t* rx = new regex_t;
 		int err;
-		if ((err = regcomp(
-			     rx, params[1].c_str(), REG_EXTENDED | REG_ICASE))
-		    != 0) {
+		if ((err = regcomp(rx,
+			     params[1].c_str(),
+			     REG_EXTENDED | REG_ICASE)) != 0) {
 			char buf[1024];
 			regerror(err, rx, buf, sizeof(buf));
 			delete rx;
@@ -106,22 +105,23 @@ void regexmanager::handle_action(
 		}
 		if (location != "all") {
 			LOG(level::DEBUG,
-			    "regexmanager::handle_action: adding rx = %s "
-			    "colorstr = %s to location %s",
-			    params[1],
-			    colorstr,
-			    location);
+				"regexmanager::handle_action: adding rx = %s "
+				"colorstr = %s to location %s",
+				params[1],
+				colorstr,
+				location);
 			locations[location].first.push_back(rx);
 			locations[location].second.push_back(colorstr);
 		} else {
 			delete rx;
 			for (auto& location : locations) {
 				LOG(level::DEBUG,
-				    "regexmanager::handle_action: adding rx = "
-				    "%s colorstr = %s to location %s",
-				    params[1],
-				    colorstr,
-				    location.first);
+					"regexmanager::handle_action: adding "
+					"rx = "
+					"%s colorstr = %s to location %s",
+					params[1],
+					colorstr,
+					location.first);
 				rx = new regex_t;
 				// we need to create a new one for each
 				// push_back, otherwise we'd have double frees.
@@ -236,8 +236,7 @@ std::string regexmanager::extract_initial_marker(const std::string& str)
 	return "";
 }
 
-void regexmanager::quote_and_highlight(
-	std::string& str,
+void regexmanager::quote_and_highlight(std::string& str,
 	const std::string& location)
 {
 	std::vector<regex_t*>& regexes = locations[location].first;
@@ -252,12 +251,11 @@ void regexmanager::quote_and_highlight(
 		int err = regexec(regex, str.c_str(), 1, &pmatch, 0);
 		while (err == 0) {
 			std::string marker = strprintf::fmt("<%u>", i);
-			str.insert(
-				offset + pmatch.rm_eo,
+			str.insert(offset + pmatch.rm_eo,
 				std::string("</>") + initial_marker);
 			str.insert(offset + pmatch.rm_so, marker);
-			offset += pmatch.rm_eo + marker.length() + strlen("</>")
-				  + initial_marker.length();
+			offset += pmatch.rm_eo + marker.length() +
+				strlen("</>") + initial_marker.length();
 			err = regexec(
 				regex, str.c_str() + offset, 1, &pmatch, 0);
 		}

@@ -33,18 +33,15 @@ public:
 	}
 	int run(int argc = 0, char* argv[] = nullptr);
 
-	void
-	reload(unsigned int pos,
-	       unsigned int max = 0,
-	       bool unattended = false,
-	       curl_handle* easyhandle = 0);
+	void reload(unsigned int pos,
+		unsigned int max = 0,
+		bool unattended = false,
+		curl_handle* easyhandle = 0);
 
 	void reload_all(bool unattended = false);
-	void reload_indexes(
-		const std::vector<int>& indexes,
+	void reload_indexes(const std::vector<int>& indexes,
 		bool unattended = false);
-	void reload_range(
-		unsigned int start,
+	void reload_range(unsigned int start,
 		unsigned int end,
 		unsigned int size,
 		bool unattended = false);
@@ -79,8 +76,8 @@ public:
 	{
 		return refresh_on_start;
 	}
-	void
-	enqueue_url(const std::string& url, std::shared_ptr<rss_feed> feed);
+	void enqueue_url(const std::string& url,
+		std::shared_ptr<rss_feed> feed);
 	void notify(const std::string& msg);
 	unsigned int get_pos_of_next_unread(unsigned int pos);
 
@@ -95,8 +92,7 @@ public:
 		return filters;
 	}
 
-	std::string bookmark(
-		const std::string& url,
+	std::string bookmark(const std::string& url,
 		const std::string& title,
 		const std::string& description,
 		const std::string& feed_title);
@@ -111,8 +107,8 @@ public:
 		return &cfg;
 	}
 
-	void
-	write_item(std::shared_ptr<rss_item> item, const std::string& filename);
+	void write_item(std::shared_ptr<rss_item> item,
+		const std::string& filename);
 	void write_item(std::shared_ptr<rss_item> item, std::ostream& ostr);
 	std::string write_temporary_item(std::shared_ptr<rss_item> item);
 
@@ -134,13 +130,11 @@ private:
 	void print_usage(char* argv0);
 	bool setup_dirs_xdg(const std::string& env_home);
 	void setup_dirs(const std::string& env_home);
-	void
-	migrate_data_from_newsbeuter(const std::string& env_home, bool silent);
-	bool migrate_data_from_newsbeuter_xdg(
-		const std::string& env_home,
+	void migrate_data_from_newsbeuter(const std::string& env_home,
 		bool silent);
-	bool migrate_data_from_newsbeuter_simple(
-		const std::string& env_home,
+	bool migrate_data_from_newsbeuter_xdg(const std::string& env_home,
+		bool silent);
+	bool migrate_data_from_newsbeuter_simple(const std::string& env_home,
 		bool silent);
 	void print_version_information(const char* argv0, unsigned int level);
 	void import_opml(const std::string& filename);
@@ -153,8 +147,7 @@ private:
 	void save_feed(std::shared_ptr<rss_feed> feed, unsigned int pos);
 	void enqueue_items(std::shared_ptr<rss_feed> feed);
 
-	std::string generate_enqueue_filename(
-		const std::string& url,
+	std::string generate_enqueue_filename(const std::string& url,
 		std::shared_ptr<rss_feed> feed);
 	std::string get_hostname_from_url(const std::string& url);
 

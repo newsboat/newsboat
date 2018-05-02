@@ -83,8 +83,7 @@ class matcherexception : public std::exception {
 public:
 	enum class type { ATTRIB_UNAVAIL, INVALID_REGEX };
 
-	matcherexception(
-		type et,
+	matcherexception(type et,
 		const std::string& info,
 		const std::string& info2 = "")
 		: type_(et)

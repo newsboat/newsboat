@@ -97,21 +97,20 @@ private:
 class parser {
 public:
 	parser(unsigned int timeout = 30,
-	       const std::string& user_agent = "",
-	       const std::string& proxy = "",
-	       const std::string& proxy_auth = "",
-	       curl_proxytype proxy_type = CURLPROXY_HTTP,
-	       const bool ssl_verify = true);
+		const std::string& user_agent = "",
+		const std::string& proxy = "",
+		const std::string& proxy_auth = "",
+		curl_proxytype proxy_type = CURLPROXY_HTTP,
+		const bool ssl_verify = true);
 	~parser();
-	feed parse_url(
-		const std::string& url,
+	feed parse_url(const std::string& url,
 		time_t lastmodified = 0,
 		const std::string& etag = "",
 		newsboat::remote_api* api = 0,
 		const std::string& cookie_cache = "",
 		CURL* ehandle = 0);
-	feed
-	parse_buffer(const std::string& buffer, const std::string& url = "");
+	feed parse_buffer(const std::string& buffer,
+		const std::string& url = "");
 	feed parse_file(const std::string& filename);
 	time_t get_last_modified()
 	{

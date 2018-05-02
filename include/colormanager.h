@@ -19,8 +19,7 @@ public:
 	colormanager();
 	~colormanager() override;
 	void register_commands(configparser& cfgparser);
-	void handle_action(
-		const std::string& action,
+	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) override;
 	bool colors_loaded()

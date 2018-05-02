@@ -8,8 +8,7 @@ namespace newsboat {
 
 class urlview_formaction : public formaction {
 public:
-	urlview_formaction(
-		view*,
+	urlview_formaction(view*,
 		std::shared_ptr<rss_feed>& feed,
 		std::string formstr);
 	~urlview_formaction() override;
@@ -28,8 +27,7 @@ public:
 	void handle_cmdline(const std::string& cmd) override;
 
 private:
-	void process_operation(
-		operation op,
+	void process_operation(operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
 	std::vector<linkpair> links;

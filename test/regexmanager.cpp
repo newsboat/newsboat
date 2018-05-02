@@ -5,8 +5,7 @@
 
 using namespace newsboat;
 
-TEST_CASE(
-	"RegexManager throws on invalid `highlight' definition",
+TEST_CASE("RegexManager throws on invalid `highlight' definition",
 	"[regexmanager]")
 {
 	regexmanager rxman;
@@ -14,24 +13,21 @@ TEST_CASE(
 
 	SECTION("on `highlight' without parameters")
 	{
-		REQUIRE_THROWS_AS(
-			rxman.handle_action("highlight", params),
+		REQUIRE_THROWS_AS(rxman.handle_action("highlight", params),
 			confighandlerexception);
 	}
 
 	SECTION("on invalid location")
 	{
 		params = {"invalidloc", "foo", "blue", "red"};
-		REQUIRE_THROWS_AS(
-			rxman.handle_action("highlight", params),
+		REQUIRE_THROWS_AS(rxman.handle_action("highlight", params),
 			confighandlerexception);
 	}
 
 	SECTION("on invalid regex")
 	{
 		params = {"feedlist", "*", "blue", "red"};
-		REQUIRE_THROWS_AS(
-			rxman.handle_action("highlight", params),
+		REQUIRE_THROWS_AS(rxman.handle_action("highlight", params),
 			confighandlerexception);
 	}
 
@@ -43,8 +39,7 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE(
-	"RegexManager doesn't throw on valid `highlight' definition",
+TEST_CASE("RegexManager doesn't throw on valid `highlight' definition",
 	"[regexmanager]")
 {
 	regexmanager rxman;
@@ -79,8 +74,7 @@ TEST_CASE("RegexManager highlights according to definition", "[regexmanager]")
 	REQUIRE(input == "y<0>foo</>y");
 }
 
-TEST_CASE(
-	"RegexManager preserves text when there's nothing to highlight",
+TEST_CASE("RegexManager preserves text when there's nothing to highlight",
 	"[regexmanager]")
 {
 	regexmanager rxman;

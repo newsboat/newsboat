@@ -217,16 +217,16 @@ TEST_CASE("mark_all_read marks all items in the feed read", "[cache]")
 			feed = rsscache.internalize_rssfeed(
 				feeds[0].first, nullptr);
 			INFO("First feed should have just one item read");
-			REQUIRE(unread_items_count(feed)
-				== (feeds[0].second - 1));
+			REQUIRE(unread_items_count(feed) ==
+				(feeds[0].second - 1));
 		}
 
 		{
 			feed = rsscache.internalize_rssfeed(
 				feeds[1].first, nullptr);
 			INFO("Second feed should have just one item read");
-			REQUIRE(unread_items_count(feed)
-				== (feeds[1].second - 1));
+			REQUIRE(unread_items_count(feed) ==
+				(feeds[1].second - 1));
 		}
 	}
 }
@@ -238,8 +238,8 @@ TEST_CASE(
 {
 	TestHelpers::TempFile dbfile;
 
-	std::vector<std::string> feedurls = {"file://data/rss.xml",
-					     "file://data/atom10_1.xml"};
+	std::vector<std::string> feedurls = {
+		"file://data/rss.xml", "file://data/atom10_1.xml"};
 
 	std::vector<std::shared_ptr<rss_feed>> feeds;
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
@@ -362,8 +362,7 @@ TEST_CASE("get_unread_count returns number of yet unread articles", "[cache]")
 	REQUIRE(rsscache->get_unread_count() == 8);
 }
 
-TEST_CASE(
-	"get_read_item_guids returns GUIDs of items that are marked read",
+TEST_CASE("get_read_item_guids returns GUIDs of items that are marked read",
 	"[cache]")
 {
 	TestHelpers::TempFile dbfile;
@@ -423,8 +422,7 @@ TEST_CASE(
 	check(rsscache->get_read_item_guids());
 }
 
-TEST_CASE(
-	"mark_item_deleted changes \"deleted\" flag of item with given GUID ",
+TEST_CASE("mark_item_deleted changes \"deleted\" flag of item with given GUID ",
 	"[cache]")
 {
 	TestHelpers::TempFile dbfile;
@@ -446,8 +444,7 @@ TEST_CASE(
 	REQUIRE(feed->total_item_count() == 7);
 }
 
-TEST_CASE(
-	"mark_items_read_by_guid marks items with given GUIDs as unread ",
+TEST_CASE("mark_items_read_by_guid marks items with given GUIDs as unread ",
 	"[cache]")
 {
 	TestHelpers::TempFile dbfile;
@@ -472,8 +469,8 @@ TEST_CASE(
 
 	SECTION("Marking two items read")
 	{
-		auto guids = {feed->items()[0]->guid(),
-			      feed->items()[2]->guid()};
+		auto guids = {
+			feed->items()[0]->guid(), feed->items()[2]->guid()};
 		rsscache->externalize_rssfeed(feed, false);
 
 		REQUIRE_NOTHROW(rsscache->mark_items_read_by_guid(guids));
@@ -497,10 +494,10 @@ TEST_CASE(
 
 	REQUIRE(feed->total_item_count() == 8);
 
-	std::vector<std::string> should_be_absent = {feed->items()[0]->guid(),
-						     feed->items()[3]->guid()};
-	std::vector<std::string> should_be_present = {feed->items()[2]->guid(),
-						      feed->items()[5]->guid()};
+	std::vector<std::string> should_be_absent = {
+		feed->items()[0]->guid(), feed->items()[3]->guid()};
+	std::vector<std::string> should_be_present = {
+		feed->items()[2]->guid(), feed->items()[5]->guid()};
 
 	rsscache.externalize_rssfeed(feed, false);
 
@@ -527,14 +524,13 @@ TEST_CASE(
 	REQUIRE(feed->total_item_count() == 6);
 }
 
-TEST_CASE(
-	"search_for_items finds all items with matching title or content",
+TEST_CASE("search_for_items finds all items with matching title or content",
 	"[cache]")
 {
 	configcontainer cfg;
 	cache rsscache(":memory:", &cfg);
-	std::vector<std::string> feedurls = {"file://data/atom10_1.xml",
-					     "file://data/rss20_1.xml"};
+	std::vector<std::string> feedurls = {
+		"file://data/atom10_1.xml", "file://data/rss20_1.xml"};
 	for (const auto& url : feedurls) {
 		rss_parser parser(url, &rsscache, &cfg, nullptr);
 		std::shared_ptr<rss_feed> feed = parser.parse();
@@ -563,8 +559,7 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE(
-	"update_rssitem_flags dumps `rss_item` object's flags to DB",
+TEST_CASE("update_rssitem_flags dumps `rss_item` object's flags to DB",
 	"[cache]")
 {
 	TestHelpers::TempFile dbfile;
@@ -650,15 +645,16 @@ TEST_CASE(
 	"[cache]")
 {
 	auto feeds_are_the_same = [](const std::shared_ptr<rss_feed>& feed1,
-				     const std::shared_ptr<rss_feed>& feed2) {
+					  const std::shared_ptr<rss_feed>&
+						  feed2) {
 		REQUIRE(feed1->title_raw() == feed2->title_raw());
 		REQUIRE(feed1->title() == feed2->title());
 		REQUIRE(feed1->description_raw() == feed2->description_raw());
 		REQUIRE(feed1->description() == feed2->description());
 		REQUIRE(feed1->link() == feed2->link());
 		REQUIRE(feed1->rssurl() == feed2->rssurl());
-		REQUIRE(feed1->unread_item_count()
-			== feed2->unread_item_count());
+		REQUIRE(feed1->unread_item_count() ==
+			feed2->unread_item_count());
 		REQUIRE(feed1->total_item_count() == feed2->total_item_count());
 		REQUIRE(feed1->is_rtl() == feed2->is_rtl());
 
@@ -668,30 +664,30 @@ TEST_CASE(
 		auto snd_end = feed2->items().cend();
 
 		for (; fst_it != fst_end && snd_it != snd_end;
-		     ++fst_it, ++snd_it) {
+			++fst_it, ++snd_it) {
 			REQUIRE((*fst_it)->guid() == (*snd_it)->guid());
 			REQUIRE((*fst_it)->title() == (*snd_it)->title());
-			REQUIRE((*fst_it)->title_raw()
-				== (*snd_it)->title_raw());
+			REQUIRE((*fst_it)->title_raw() ==
+				(*snd_it)->title_raw());
 			REQUIRE((*fst_it)->link() == (*snd_it)->link());
 			REQUIRE((*fst_it)->author() == (*snd_it)->author());
-			REQUIRE((*fst_it)->author_raw()
-				== (*snd_it)->author_raw());
-			REQUIRE((*fst_it)->description()
-				== (*snd_it)->description());
-			REQUIRE((*fst_it)->description_raw()
-				== (*snd_it)->description_raw());
+			REQUIRE((*fst_it)->author_raw() ==
+				(*snd_it)->author_raw());
+			REQUIRE((*fst_it)->description() ==
+				(*snd_it)->description());
+			REQUIRE((*fst_it)->description_raw() ==
+				(*snd_it)->description_raw());
 			REQUIRE((*fst_it)->size() == (*snd_it)->size());
 			REQUIRE((*fst_it)->length() == (*snd_it)->length());
 			REQUIRE((*fst_it)->pubDate() == (*snd_it)->pubDate());
-			REQUIRE((*fst_it)->pubDate_timestamp()
-				== (*snd_it)->pubDate_timestamp());
+			REQUIRE((*fst_it)->pubDate_timestamp() ==
+				(*snd_it)->pubDate_timestamp());
 			REQUIRE((*fst_it)->unread() == (*snd_it)->unread());
 			REQUIRE((*fst_it)->feedurl() == (*snd_it)->feedurl());
-			REQUIRE((*fst_it)->enclosure_url()
-				== (*snd_it)->enclosure_url());
-			REQUIRE((*fst_it)->enclosure_type()
-				== (*snd_it)->enclosure_type());
+			REQUIRE((*fst_it)->enclosure_url() ==
+				(*snd_it)->enclosure_url());
+			REQUIRE((*fst_it)->enclosure_type() ==
+				(*snd_it)->enclosure_type());
 			REQUIRE((*fst_it)->enqueued() == (*snd_it)->enqueued());
 			REQUIRE((*fst_it)->flags() == (*snd_it)->flags());
 			REQUIRE((*fst_it)->deleted() == (*snd_it)->deleted());
@@ -733,8 +729,7 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE(
-	"externalize_rssfeed doesn't store more than `max-items` items",
+TEST_CASE("externalize_rssfeed doesn't store more than `max-items` items",
 	"[cache]")
 {
 	TestHelpers::TempFile dbfile;
@@ -754,8 +749,7 @@ TEST_CASE(
 	REQUIRE(feed->total_item_count() == 3);
 }
 
-TEST_CASE(
-	"externalize_rssfeed does nothing if it's passed a query feed",
+TEST_CASE("externalize_rssfeed does nothing if it's passed a query feed",
 	"[cache]")
 {
 }
@@ -821,8 +815,7 @@ TEST_CASE(
 	REQUIRE(feed->rssurl() == feedurl);
 }
 
-TEST_CASE(
-	"internalize_rssfeed doesn't return items that are ignored",
+TEST_CASE("internalize_rssfeed doesn't return items that are ignored",
 	"[cache]")
 {
 	configcontainer cfg;
@@ -956,10 +949,8 @@ TEST_CASE(
 	db.reset(dbptr);
 	dbptr = nullptr;
 
-	auto count_callback = [](void* data,
-				 int argc,
-				 char** argv,
-				 char* * /* azColName */) -> int {
+	auto count_callback = [](void* data, int argc, char** argv, char* *
+				      /* azColName */) -> int {
 		int* count = static_cast<int*>(data);
 		if (argc > 0) {
 			std::istringstream is(argv[0]);
@@ -994,8 +985,7 @@ TEST_CASE("do_vacuum doesn't throw an exception", "[cache]")
 	REQUIRE_NOTHROW(rsscache.reset(new cache(dbfile.getPath(), &cfg)));
 }
 
-TEST_CASE(
-	"search_in_items returns items that contain given substring",
+TEST_CASE("search_in_items returns items that contain given substring",
 	"[cache]")
 {
 	configcontainer cfg;
@@ -1039,8 +1029,8 @@ TEST_CASE(
 		INFO("Checking GUID " << guid);
 		REQUIRE_FALSE(
 			matching_guids.find(guid) == matching_guids.end());
-		REQUIRE(non_matching_guids.find(guid)
-			== non_matching_guids.end());
+		REQUIRE(non_matching_guids.find(guid) ==
+			non_matching_guids.end());
 	}
 }
 

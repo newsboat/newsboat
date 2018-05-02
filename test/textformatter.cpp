@@ -4,23 +4,19 @@
 
 using namespace newsboat;
 
-TEST_CASE(
-	"lines marked as `wrappable` are wrapped to fit width",
+TEST_CASE("lines marked as `wrappable` are wrapped to fit width",
 	"[textformatter]")
 {
 	textformatter fmt;
 
-	fmt.add_lines({std::make_pair(
-			       LineType::wrappable,
+	fmt.add_lines({std::make_pair(LineType::wrappable,
 			       "this one is going to be wrapped"),
-		       std::make_pair(
-			       LineType::softwrappable,
-			       "this one is going to be wrapped at the window "
-			       "border"),
-		       std::make_pair(
-			       LineType::nonwrappable,
-			       "this one is going to be preserved even though "
-			       "it's much longer")});
+		std::make_pair(LineType::softwrappable,
+			"this one is going to be wrapped at the window "
+			"border"),
+		std::make_pair(LineType::nonwrappable,
+			"this one is going to be preserved even though "
+			"it's much longer")});
 
 	SECTION("formatting to plain text")
 	{
@@ -64,8 +60,7 @@ TEST_CASE("line wrapping works for non-space-separeted text", "[textformatter]")
 {
 	textformatter fmt;
 
-	fmt.add_lines({std::make_pair(
-		LineType::wrappable,
+	fmt.add_lines({std::make_pair(LineType::wrappable,
 		"    つれづれなるままに、ひぐらしすずりにむかいて、")});
 
 	SECTION("preserve indent and doesn't return broken UTF-8")
@@ -94,8 +89,7 @@ TEST_CASE("line wrapping works for non-space-separeted text", "[textformatter]")
 	}
 }
 
-TEST_CASE(
-	"regex manager is used by format_text_to_list if one is passed",
+TEST_CASE("regex manager is used by format_text_to_list if one is passed",
 	"[textformatter]")
 {
 	textformatter fmt;
@@ -120,8 +114,7 @@ TEST_CASE(
 	REQUIRE(result.second == expected_count);
 }
 
-TEST_CASE(
-	"<hr> is rendered as a string of dashes framed with newlines",
+TEST_CASE("<hr> is rendered as a string of dashes framed with newlines",
 	"[textformatter]")
 {
 	textformatter fmt;
@@ -160,8 +153,7 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE(
-	"wrappable sequences longer then format width are forced-wrapped",
+TEST_CASE("wrappable sequences longer then format width are forced-wrapped",
 	"[textformatter]")
 {
 	textformatter fmt;
@@ -180,8 +172,7 @@ TEST_CASE(
 	REQUIRE(fmt.format_text_plain(5, 10) == expected);
 }
 
-TEST_CASE(
-	"Lines marked as non-wrappable are always returned verbatim",
+TEST_CASE("Lines marked as non-wrappable are always returned verbatim",
 	"[textformatter]")
 {
 	textformatter fmt;
@@ -210,8 +201,7 @@ TEST_CASE(
  * second line and it would make the text look jagged with a bigger input. Thus
  * spaces at the beginning of lines after wrapping should be dropped.
  */
-TEST_CASE(
-	"ignore whitespace that's going to be wrapped onto the next line",
+TEST_CASE("ignore whitespace that's going to be wrapped onto the next line",
 	"[textformatter]")
 {
 	textformatter fmt;

@@ -17,8 +17,7 @@ namespace newsboat {
  * in a browser or to bookmark them.
  */
 
-urlview_formaction::urlview_formaction(
-	view* vv,
+urlview_formaction::urlview_formaction(view* vv,
 	std::shared_ptr<rss_feed>& feed,
 	std::string formstr)
 	: formaction(vv, formstr)
@@ -29,8 +28,7 @@ urlview_formaction::urlview_formaction(
 
 urlview_formaction::~urlview_formaction() {}
 
-void urlview_formaction::process_operation(
-	operation op,
+void urlview_formaction::process_operation(operation op,
 	bool /* automatic */,
 	std::vector<std::string>* /* args */)
 {
@@ -123,9 +121,9 @@ void urlview_formaction::init()
 	fmt.register_fmt('V', PROGRAM_VERSION);
 
 	f->set("head",
-	       fmt.do_format(
-		       v->get_cfg()->get_configvalue("urlview-title-format"),
-		       width));
+		fmt.do_format(
+			v->get_cfg()->get_configvalue("urlview-title-format"),
+			width));
 	do_redraw = true;
 	quit = false;
 	set_keymap_hints();
@@ -134,9 +132,9 @@ void urlview_formaction::init()
 keymap_hint_entry* urlview_formaction::get_keymap_hint()
 {
 	static keymap_hint_entry hints[] = {{OP_QUIT, _("Quit")},
-					    {OP_OPEN, _("Open in Browser")},
-					    {OP_BOOKMARK, _("Save Bookmark")},
-					    {OP_NIL, nullptr}};
+		{OP_OPEN, _("Open in Browser")},
+		{OP_BOOKMARK, _("Save Bookmark")},
+		{OP_NIL, nullptr}};
 	return hints;
 }
 

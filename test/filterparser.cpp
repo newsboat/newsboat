@@ -37,8 +37,7 @@ TEST_CASE("FilterParser raises errors on invalid queries", "[FilterParser]")
 	}
 }
 
-TEST_CASE(
-	"FilterParser doesn't raise errors on valid queries",
+TEST_CASE("FilterParser doesn't raise errors on valid queries",
 	"[FilterParser]")
 {
 	FilterParser fp;

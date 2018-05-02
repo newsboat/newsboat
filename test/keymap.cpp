@@ -59,8 +59,8 @@ TEST_CASE("getkey()", "[keymap]")
 	{
 		REQUIRE(k.getkey(OP_OPEN, "all") == "ENTER");
 		REQUIRE(k.getkey(OP_TOGGLEITEMREAD, "all") == "N");
-		REQUIRE(k.getkey(static_cast<operation>(30000), "all")
-			== "<none>");
+		REQUIRE(k.getkey(static_cast<operation>(30000), "all") ==
+			"<none>");
 	}
 
 	SECTION("Returns context-specific bindings only in that context")
@@ -92,14 +92,11 @@ TEST_CASE("handle_action()", "[keymap]")
 
 	SECTION("without parameters")
 	{
-		REQUIRE_THROWS_AS(
-			k.handle_action("bind-key", params),
+		REQUIRE_THROWS_AS(k.handle_action("bind-key", params),
 			confighandlerexception);
-		REQUIRE_THROWS_AS(
-			k.handle_action("unbind-key", params),
+		REQUIRE_THROWS_AS(k.handle_action("unbind-key", params),
 			confighandlerexception);
-		REQUIRE_THROWS_AS(
-			k.handle_action("macro", params),
+		REQUIRE_THROWS_AS(k.handle_action("macro", params),
 			confighandlerexception);
 	}
 
@@ -107,8 +104,7 @@ TEST_CASE("handle_action()", "[keymap]")
 	{
 		params.push_back("r");
 
-		REQUIRE_THROWS_AS(
-			k.handle_action("bind-key", params),
+		REQUIRE_THROWS_AS(k.handle_action("bind-key", params),
 			confighandlerexception);
 		REQUIRE_NOTHROW(k.handle_action("unbind-key", params));
 	}
@@ -118,8 +114,7 @@ TEST_CASE("handle_action()", "[keymap]")
 		params.push_back("r");
 		params.push_back("open");
 		REQUIRE_NOTHROW(k.handle_action("bind-key", params));
-		REQUIRE_THROWS_AS(
-			k.handle_action("an-invalid-action", params),
+		REQUIRE_THROWS_AS(k.handle_action("an-invalid-action", params),
 			confighandlerexception);
 	}
 }

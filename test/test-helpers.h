@@ -77,9 +77,9 @@ private:
 			if (saved_errno == EEXIST) {
 				struct stat buffer;
 				if (lstat(tempdir.c_str(), &buffer) == 0) {
-					if (buffer.st_mode & S_IRUSR
-					    && buffer.st_mode & S_IWUSR
-					    && buffer.st_mode & S_IXUSR) {
+					if (buffer.st_mode & S_IRUSR &&
+						buffer.st_mode & S_IWUSR &&
+						buffer.st_mode & S_IXUSR) {
 						success = true;
 					}
 				}
@@ -130,8 +130,7 @@ private:
  * appropriate "pager" config value ) and checks its content according
  * to the expected values passed as parameters.
  */
-inline void AssertArticleFileContent(
-	const std::string& path,
+inline void AssertArticleFileContent(const std::string& path,
 	const std::string& title,
 	const std::string& author,
 	const std::string& date,

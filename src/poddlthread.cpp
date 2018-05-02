@@ -18,8 +18,7 @@ namespace podboat {
 
 static size_t
 my_write_data(void* buffer, size_t size, size_t nmemb, void* userp);
-static int progress_callback(
-	void* clientp,
+static int progress_callback(void* clientp,
 	double dltotal,
 	double dlnow,
 	double ultotal,
@@ -69,8 +68,7 @@ void poddlthread::run()
 	// set up max download speed
 	int max_dl_speed = cfg->get_configvalue_as_int("max-download-speed");
 	if (max_dl_speed > 0) {
-		curl_easy_setopt(
-			easyhandle,
+		curl_easy_setopt(easyhandle,
 			CURLOPT_MAX_RECV_SPEED_LARGE,
 			(curl_off_t)(max_dl_speed * 1024));
 	}
@@ -81,7 +79,8 @@ void poddlthread::run()
 
 	if (stat(filename.c_str(), &sb) == -1) {
 		LOG(level::INFO,
-		    "poddlthread::run: stat failed: starting normal download");
+			"poddlthread::run: stat failed: starting normal "
+			"download");
 
 		// Have to copy the string into a vector in order to be able to
 		// get a char* pointer. std::string::c_str() won't do because it
@@ -94,8 +93,8 @@ void poddlthread::run()
 		resumed_download = false;
 	} else {
 		LOG(level::INFO,
-		    "poddlthread::run: stat ok: starting download from %u",
-		    sb.st_size);
+			"poddlthread::run: stat ok: starting download from %u",
+			sb.st_size);
 		curl_easy_setopt(easyhandle, CURLOPT_RESUME_FROM, sb.st_size);
 		dl->set_offset(sb.st_size);
 		f->open(filename, std::fstream::out | std::fstream::app);
@@ -110,14 +109,14 @@ void poddlthread::run()
 		f->close();
 
 		LOG(level::INFO,
-		    "poddlthread::run: curl_easy_perform rc = %u (%s)",
-		    success,
-		    curl_easy_strerror(success));
+			"poddlthread::run: curl_easy_perform rc = %u (%s)",
+			success,
+			curl_easy_strerror(success));
 
 		if (0 == success) {
 			LOG(level::DEBUG,
-			    "poddlthread::run: download complete, deleting "
-			    "temporary suffix");
+				"poddlthread::run: download complete, deleting "
+				"temporary suffix");
 			rename(filename.c_str(), dl->filename().c_str());
 			dl->set_status(dlstatus::READY);
 		} else if (dl->status() != dlstatus::CANCELLED) {
@@ -144,8 +143,7 @@ my_write_data(void* buffer, size_t size, size_t nmemb, void* userp)
 	return thread->write_data(buffer, size, nmemb);
 }
 
-static int progress_callback(
-	void* clientp,
+static int progress_callback(void* clientp,
 	double dltotal,
 	double dlnow,
 	double /* ultotal */,
@@ -162,9 +160,9 @@ size_t poddlthread::write_data(void* buffer, size_t size, size_t nmemb)
 	f->write(static_cast<char*>(buffer), size * nmemb);
 	bytecount += (size * nmemb);
 	LOG(level::DEBUG,
-	    "poddlthread::write_data: bad = %u size = %u",
-	    f->bad(),
-	    size * nmemb);
+		"poddlthread::write_data: bad = %u size = %u",
+		f->bad(),
+		size * nmemb);
 	return f->bad() ? 0 : size * nmemb;
 }
 

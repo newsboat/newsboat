@@ -1,11 +1,11 @@
 ---
 Language:        Cpp
 AccessModifierOffset: -8
-AlignAfterOpenBracket: AlwaysBreak
+AlignAfterOpenBracket: DontAlign
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
 AlignEscapedNewlines: Left
-AlignOperands:   true
+AlignOperands:   false
 AlignTrailingComments: true
 AllowAllParametersOfDeclarationOnNextLine: false
 AllowShortBlocksOnASingleLine: false
@@ -34,7 +34,7 @@ BraceWrapping:
   SplitEmptyFunction: true
   SplitEmptyRecord: false
   SplitEmptyNamespace: true
-BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeBinaryOperators: None
 BreakBeforeBraces: Custom
 BreakBeforeInheritanceComma: false
 BreakBeforeTernaryOperators: true
@@ -100,6 +100,6 @@ SpacesInParentheses: false
 SpacesInSquareBrackets: false
 Standard:        Cpp11
 TabWidth:        8
-UseTab:          Always
+UseTab:          ForContinuationAndIndentation
 ...
 

@@ -8,8 +8,8 @@ namespace newsboat {
 
 class strprintf {
 public:
-	static std::pair<std::string, std::string>
-	split_format(const std::string& printf_format);
+	static std::pair<std::string, std::string> split_format(
+		const std::string& printf_format);
 
 	static std::string fmt(const std::string& format)
 	{
@@ -25,9 +25,8 @@ public:
 		// we're calling snprintf at all is to process these escaped
 		// percent signs, if any. So we don't need additional
 		// parameters.
-		unsigned int len =
-			1
-			+ snprintf(buffer, sizeof(buffer), format.c_str(), "");
+		unsigned int len = 1 +
+			snprintf(buffer, sizeof(buffer), format.c_str(), "");
 		if (len <= sizeof(buffer)) {
 			result = buffer;
 		} else {
@@ -39,19 +38,17 @@ public:
 	}
 
 	template<typename... Args>
-	static std::string
-	fmt(const std::string& format,
-	    const std::string& argument,
-	    Args... args)
+	static std::string fmt(const std::string& format,
+		const std::string& argument,
+		Args... args)
 	{
 		return fmt(format, argument.c_str(), args...);
 	}
 
 	template<typename... Args>
-	static std::string
-	fmt(const std::string& format,
-	    const std::string* argument,
-	    Args... args)
+	static std::string fmt(const std::string& format,
+		const std::string* argument,
+		Args... args)
 	{
 		return fmt(format, *argument, args...);
 	}
@@ -65,12 +62,11 @@ public:
 
 		char buffer[1024];
 		std::string result;
-		unsigned int len = 1
-				   + snprintf(
-					     buffer,
-					     sizeof(buffer),
-					     local_format.c_str(),
-					     argument);
+		unsigned int len = 1 +
+			snprintf(buffer,
+				sizeof(buffer),
+				local_format.c_str(),
+				argument);
 		if (len <= sizeof(buffer)) {
 			result = buffer;
 		} else {

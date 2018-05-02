@@ -39,8 +39,8 @@ const std::string remote_api::eval_password(const std::string& cmd)
 	return pass;
 }
 
-credentials
-remote_api::get_credentials(const std::string& scope, const std::string& name)
+credentials remote_api::get_credentials(const std::string& scope,
+	const std::string& name)
 {
 	std::string user = cfg->get_configvalue(scope + "-login");
 	std::string pass = cfg->get_configvalue(scope + "-password");

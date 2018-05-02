@@ -86,8 +86,8 @@ std::string oldreader_api::retrieve_auth()
 	std::vector<std::string> lines = utils::tokenize(result);
 	for (auto line : lines) {
 		LOG(level::DEBUG,
-		    "oldreader_api::retrieve_auth: line = %s",
-		    line);
+			"oldreader_api::retrieve_auth: line = %s",
+			line);
 		if (line.substr(0, 5) == "Auth=") {
 			std::string auth = line.substr(5, line.length() - 5);
 			return auth;
@@ -116,14 +116,14 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls()
 	curl_slist_free_all(custom_headers);
 
 	LOG(level::DEBUG,
-	    "oldreader_api::get_subscribed_urls: document = %s",
-	    result);
+		"oldreader_api::get_subscribed_urls: document = %s",
+		result);
 
 	json_object* reply = json_tokener_parse(result.c_str());
 	if (reply == nullptr) {
 		LOG(level::ERROR,
-		    "oldreader_api::get_subscribed_urls: failed to parse "
-		    "response as JSON.");
+			"oldreader_api::get_subscribed_urls: failed to parse "
+			"response as JSON.");
 		return urls;
 	}
 
@@ -158,10 +158,10 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls()
 				json_object_get_array(node);
 #if JSON_C_MAJOR_VERSION == 0 && JSON_C_MINOR_VERSION < 13
 			for (int i = 0; i < array_list_length(categories);
-			     i++) {
+				i++) {
 #else
 			for (size_t i = 0; i < array_list_length(categories);
-			     i++) {
+				i++) {
 #endif
 				json_object* cat =
 					json_object_array_get_idx(node, i);
@@ -173,8 +173,7 @@ std::vector<tagged_feedurl> oldreader_api::get_subscribed_urls()
 				tags.push_back(std::string(label));
 			}
 
-			auto url = strprintf::fmt(
-				"%s%s?n=%u",
+			auto url = strprintf::fmt("%s%s?n=%u",
 				OLDREADER_FEED_PREFIX,
 				id,
 				cfg->get_configvalue_as_int(
@@ -195,26 +194,26 @@ void oldreader_api::add_custom_headers(curl_slist** custom_headers)
 			"Authorization: GoogleLogin auth=%s", auth);
 	}
 	LOG(level::DEBUG,
-	    "oldreader_api::add_custom_headers header = %s",
-	    auth_header);
+		"oldreader_api::add_custom_headers header = %s",
+		auth_header);
 	*custom_headers =
 		curl_slist_append(*custom_headers, auth_header.c_str());
 }
 
 bool oldreader_api::mark_all_read(const std::string& feedurl)
 {
-	std::string real_feedurl = feedurl.substr(
-		strlen(OLDREADER_FEED_PREFIX),
+	std::string real_feedurl = feedurl.substr(strlen(OLDREADER_FEED_PREFIX),
 		feedurl.length() - strlen(OLDREADER_FEED_PREFIX));
 	std::vector<std::string> elems = utils::tokenize(real_feedurl, "?");
 	try {
 		real_feedurl = utils::unescape_url(elems[0]);
 	} catch (const std::runtime_error& e) {
 		LOG(level::DEBUG,
-		    "oldreader_api::mark_all_read: Failed to unescape_url(%s): "
-		    "%s",
-		    elems[0],
-		    e.what());
+			"oldreader_api::mark_all_read: Failed to "
+			"unescape_url(%s): "
+			"%s",
+			elems[0],
+			e.what());
 		return false;
 	}
 	std::string token = get_new_token();
@@ -234,8 +233,7 @@ bool oldreader_api::mark_article_read(const std::string& guid, bool read)
 	return mark_article_read_with_token(guid, read, token);
 }
 
-bool oldreader_api::mark_article_read_with_token(
-	const std::string& guid,
+bool oldreader_api::mark_article_read_with_token(const std::string& guid,
 	bool read,
 	const std::string& token)
 {
@@ -260,10 +258,10 @@ bool oldreader_api::mark_article_read_with_token(
 		post_content(OLDREADER_API_EDIT_TAG_URL, postcontent);
 
 	LOG(level::DEBUG,
-	    "oldreader_api::mark_article_read_with_token: postcontent = %s "
-	    "result = %s",
-	    postcontent,
-	    result);
+		"oldreader_api::mark_article_read_with_token: postcontent = %s "
+		"result = %s",
+		postcontent,
+		result);
 
 	return result == "OK";
 }
@@ -289,8 +287,7 @@ std::string oldreader_api::get_new_token()
 	return result;
 }
 
-bool oldreader_api::update_article_flags(
-	const std::string& oldflags,
+bool oldreader_api::update_article_flags(const std::string& oldflags,
 	const std::string& newflags,
 	const std::string& guid)
 {
@@ -299,23 +296,21 @@ bool oldreader_api::update_article_flags(
 	bool success = true;
 
 	if (star_flag.length() > 0) {
-		if (strchr(oldflags.c_str(), star_flag[0]) == nullptr
-		    && strchr(newflags.c_str(), star_flag[0]) != nullptr) {
+		if (strchr(oldflags.c_str(), star_flag[0]) == nullptr &&
+			strchr(newflags.c_str(), star_flag[0]) != nullptr) {
 			success = star_article(guid, true);
-		} else if (
-			strchr(oldflags.c_str(), star_flag[0]) != nullptr
-			&& strchr(newflags.c_str(), star_flag[0]) == nullptr) {
+		} else if (strchr(oldflags.c_str(), star_flag[0]) != nullptr &&
+			strchr(newflags.c_str(), star_flag[0]) == nullptr) {
 			success = star_article(guid, false);
 		}
 	}
 
 	if (share_flag.length() > 0) {
-		if (strchr(oldflags.c_str(), share_flag[0]) == nullptr
-		    && strchr(newflags.c_str(), share_flag[0]) != nullptr) {
+		if (strchr(oldflags.c_str(), share_flag[0]) == nullptr &&
+			strchr(newflags.c_str(), share_flag[0]) != nullptr) {
 			success = share_article(guid, true);
-		} else if (
-			strchr(oldflags.c_str(), share_flag[0]) != nullptr
-			&& strchr(newflags.c_str(), share_flag[0]) == nullptr) {
+		} else if (strchr(oldflags.c_str(), share_flag[0]) != nullptr &&
+			strchr(newflags.c_str(), share_flag[0]) == nullptr) {
 			success = share_article(guid, false);
 		}
 	}
@@ -369,8 +364,8 @@ bool oldreader_api::share_article(const std::string& guid, bool share)
 	return result == "OK";
 }
 
-std::string
-oldreader_api::post_content(const std::string& url, const std::string& postdata)
+std::string oldreader_api::post_content(const std::string& url,
+	const std::string& postdata)
 {
 	std::string result;
 	curl_slist* custom_headers{};
@@ -388,10 +383,11 @@ oldreader_api::post_content(const std::string& url, const std::string& postdata)
 	curl_slist_free_all(custom_headers);
 
 	LOG(level::DEBUG,
-	    "oldreader_api::post_content: url = %s postdata = %s result = %s",
-	    url,
-	    postdata,
-	    result);
+		"oldreader_api::post_content: url = %s postdata = %s result = "
+		"%s",
+		url,
+		postdata,
+		result);
 
 	return result;
 }

@@ -4,8 +4,7 @@
 
 namespace newsboat {
 
-inoreader_urlreader::inoreader_urlreader(
-	configcontainer* c,
+inoreader_urlreader::inoreader_urlreader(configcontainer* c,
 	const std::string& url_file,
 	remote_api* a)
 	: cfg(c)

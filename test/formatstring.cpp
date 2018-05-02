@@ -24,8 +24,8 @@ TEST_CASE("do_format replaces variables with values", "[fmtstr_formatter]")
 			fmt.register_fmt('b', "BBB");
 
 			REQUIRE(fmt.do_format(
-					"asdf | %a | %?c?%a%b&%b%a? | qwert")
-				== "asdf | AAA | BBBAAA | qwert");
+					"asdf | %a | %?c?%a%b&%b%a? | qwert") ==
+				"asdf | AAA | BBBAAA | qwert");
 			REQUIRE(fmt.do_format("%?c?asdf?") == "");
 
 			SECTION("Three format variables")
@@ -38,49 +38,53 @@ TEST_CASE("do_format replaces variables with values", "[fmtstr_formatter]")
 					// illegal single %
 					REQUIRE(fmt.do_format("%") == "");
 					REQUIRE(fmt.do_format("%%") == "%");
-					REQUIRE(fmt.do_format("%a%b%c")
-						== "AAABBBCCC");
-					REQUIRE(fmt.do_format("%%%a%%%b%%%c%%")
-						== "%AAA%BBB%CCC%");
+					REQUIRE(fmt.do_format("%a%b%c") ==
+						"AAABBBCCC");
+					REQUIRE(fmt.do_format(
+							"%%%a%%%b%%%c%%") ==
+						"%AAA%BBB%CCC%");
 				}
 
 				SECTION("Alignment")
 				{
 					REQUIRE(fmt.do_format("%4a") == " AAA");
-					REQUIRE(fmt.do_format("%-4a")
-						== "AAA ");
+					REQUIRE(fmt.do_format("%-4a") ==
+						"AAA ");
 
 					SECTION("Alignment limits")
 					{
-						REQUIRE(fmt.do_format("%2a")
-							== "AA");
-						REQUIRE(fmt.do_format("%-2a")
-							== "AA");
+						REQUIRE(fmt.do_format("%2a") ==
+							"AA");
+						REQUIRE(fmt.do_format("%-2a") ==
+							"AA");
 					}
 				}
 
 				SECTION("Complex format string")
 				{
-					REQUIRE(fmt.do_format(
-							"<%a> <%5b> | %-5c%%")
-						== "<AAA> <  BBB> | CCC  %");
-					REQUIRE(fmt.do_format("asdf | %a | %?c?%a%b&%b%a? | qwert") == "asdf | AAA | AAABBB | qwert");
+					REQUIRE(fmt.do_format("<%a> <%5b> | "
+							      "%-5c%%") ==
+						"<AAA> <  BBB> | CCC  %");
+					REQUIRE(fmt.do_format("asdf | %a | "
+							      "%?c?%a%b&%b%a? "
+							      "| qwert") ==
+						"asdf | AAA | AAABBB | qwert");
 				}
 
 				SECTION("Format string fillers")
 				{
-					REQUIRE(fmt.do_format("%>X", 3)
-						== "XXX");
-					REQUIRE(fmt.do_format("%a%> %b", 10)
-						== "AAA    BBB");
-					REQUIRE(fmt.do_format("%a%> %b", 0)
-						== "AAA BBB");
+					REQUIRE(fmt.do_format("%>X", 3) ==
+						"XXX");
+					REQUIRE(fmt.do_format("%a%> %b", 10) ==
+						"AAA    BBB");
+					REQUIRE(fmt.do_format("%a%> %b", 0) ==
+						"AAA BBB");
 				}
 
 				SECTION("Conditional format string")
 				{
-					REQUIRE(fmt.do_format("%?c?asdf?")
-						== "asdf");
+					REQUIRE(fmt.do_format("%?c?asdf?") ==
+						"asdf");
 				}
 			}
 		}

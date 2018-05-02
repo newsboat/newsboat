@@ -104,8 +104,7 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE(
-	"register_commands() registers colormanager with configparser",
+TEST_CASE("register_commands() registers colormanager with configparser",
 	"[colormanager]")
 {
 	configparser cfg;
@@ -128,8 +127,7 @@ TEST_CASE(
 	CHECK_THROWS_AS(c.handle_action("color", {}), confighandlerexception);
 	CHECK_THROWS_AS(
 		c.handle_action("color", {"one"}), confighandlerexception);
-	CHECK_THROWS_AS(
-		c.handle_action("color", {"one", "two"}),
+	CHECK_THROWS_AS(c.handle_action("color", {"one", "two"}),
 		confighandlerexception);
 }
 
@@ -143,9 +141,8 @@ TEST_CASE(
 	const std::vector<std::string> non_colors{
 		{"awesome", "but", "nonexistent", "colors"}};
 	for (const auto& color : non_colors) {
-		CHECK_THROWS_AS(
-			c.handle_action(
-				"color", {"listfocus", color, "default"}),
+		CHECK_THROWS_AS(c.handle_action("color",
+					{"listfocus", color, "default"}),
 			confighandlerexception);
 	}
 }
@@ -160,9 +157,8 @@ TEST_CASE(
 	const std::vector<std::string> non_colors{
 		{"awesome", "but", "nonexistent", "colors"}};
 	for (const auto& color : non_colors) {
-		CHECK_THROWS_AS(
-			c.handle_action(
-				"color", {"listfocus", "default", color}),
+		CHECK_THROWS_AS(c.handle_action("color",
+					{"listfocus", "default", color}),
 			confighandlerexception);
 	}
 }
@@ -177,9 +173,8 @@ TEST_CASE(
 	const std::vector<std::string> non_attributes{
 		{"awesome", "but", "nonexistent", "attributes"}};
 	for (const auto& attr : non_attributes) {
-		CHECK_THROWS_AS(
-			c.handle_action(
-				"color", {"listfocus", "red", "red", attr}),
+		CHECK_THROWS_AS(c.handle_action("color",
+					{"listfocus", "red", "red", attr}),
 			confighandlerexception);
 	}
 }
@@ -215,8 +210,7 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE(
-	"dump_config() returns everything we put into colormanager",
+TEST_CASE("dump_config() returns everything we put into colormanager",
 	"[colormanager]")
 {
 	colormanager c;
@@ -260,8 +254,7 @@ TEST_CASE(
 	REQUIRE(equivalent());
 
 	expected.emplace("color listnormal black yellow underline standout");
-	c.handle_action(
-		"color",
+	c.handle_action("color",
 		{"listnormal", "black", "yellow", "underline", "standout"});
 	config.clear();
 	c.dump_config(config);

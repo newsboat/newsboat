@@ -86,8 +86,8 @@ std::string inoreader_api::retrieve_auth()
 	std::vector<std::string> lines = utils::tokenize(result);
 	for (const auto& line : lines) {
 		LOG(level::DEBUG,
-		    "inoreader_api::retrieve_auth: line = %s",
-		    line);
+			"inoreader_api::retrieve_auth: line = %s",
+			line);
 		const std::string auth_string = "Auth=";
 		if (line.compare(0, auth_string.length(), auth_string) == 0) {
 			std::string auth = line.substr(auth_string.length());
@@ -117,14 +117,14 @@ std::vector<tagged_feedurl> inoreader_api::get_subscribed_urls()
 	curl_slist_free_all(custom_headers);
 
 	LOG(level::DEBUG,
-	    "inoreader_api::get_subscribed_urls: document = %s",
-	    result);
+		"inoreader_api::get_subscribed_urls: document = %s",
+		result);
 
 	json_object* reply = json_tokener_parse(result.c_str());
 	if (reply == nullptr) {
 		LOG(level::ERROR,
-		    "inoreader_api::get_subscribed_urls: failed to parse "
-		    "response as JSON.");
+			"inoreader_api::get_subscribed_urls: failed to parse "
+			"response as JSON.");
 		return urls;
 	}
 
@@ -165,8 +165,7 @@ std::vector<tagged_feedurl> inoreader_api::get_subscribed_urls()
 			tags.push_back(std::string(label));
 		}
 
-		auto url = strprintf::fmt(
-			"%s%s?n=%u",
+		auto url = strprintf::fmt("%s%s?n=%u",
 			INOREADER_FEED_PREFIX,
 			id,
 			cfg->get_configvalue_as_int("inoreader-min-items"));
@@ -185,8 +184,8 @@ void inoreader_api::add_custom_headers(curl_slist** custom_headers)
 			"Authorization: GoogleLogin auth=%s", auth);
 	}
 	LOG(level::DEBUG,
-	    "inoreader_api::add_custom_headers header = %s",
-	    auth_header);
+		"inoreader_api::add_custom_headers header = %s",
+		auth_header);
 	*custom_headers =
 		curl_slist_append(*custom_headers, auth_header.c_str());
 	*custom_headers = curl_slist_append(*custom_headers, INOREADER_APP_ID);
@@ -216,8 +215,7 @@ bool inoreader_api::mark_article_read(const std::string& guid, bool read)
 	return mark_article_read_with_token(guid, read, token);
 }
 
-bool inoreader_api::mark_article_read_with_token(
-	const std::string& guid,
+bool inoreader_api::mark_article_read_with_token(const std::string& guid,
 	bool read,
 	const std::string& token)
 {
@@ -242,10 +240,10 @@ bool inoreader_api::mark_article_read_with_token(
 		post_content(INOREADER_API_EDIT_TAG_URL, postcontent);
 
 	LOG(level::DEBUG,
-	    "inoreader_api::mark_article_read_with_token: postcontent = %s "
-	    "result = %s",
-	    postcontent,
-	    result);
+		"inoreader_api::mark_article_read_with_token: postcontent = %s "
+		"result = %s",
+		postcontent,
+		result);
 
 	return result == "OK";
 }
@@ -271,8 +269,7 @@ std::string inoreader_api::get_new_token()
 	return result;
 }
 
-bool inoreader_api::update_article_flags(
-	const std::string& inoflags,
+bool inoreader_api::update_article_flags(const std::string& inoflags,
 	const std::string& newflags,
 	const std::string& guid)
 {
@@ -281,23 +278,21 @@ bool inoreader_api::update_article_flags(
 	bool success = true;
 
 	if (star_flag.length() > 0) {
-		if (strchr(inoflags.c_str(), star_flag[0]) == nullptr
-		    && strchr(newflags.c_str(), star_flag[0]) != nullptr) {
+		if (strchr(inoflags.c_str(), star_flag[0]) == nullptr &&
+			strchr(newflags.c_str(), star_flag[0]) != nullptr) {
 			success = star_article(guid, true);
-		} else if (
-			strchr(inoflags.c_str(), star_flag[0]) != nullptr
-			&& strchr(newflags.c_str(), star_flag[0]) == nullptr) {
+		} else if (strchr(inoflags.c_str(), star_flag[0]) != nullptr &&
+			strchr(newflags.c_str(), star_flag[0]) == nullptr) {
 			success = star_article(guid, false);
 		}
 	}
 
 	if (share_flag.length() > 0) {
-		if (strchr(inoflags.c_str(), share_flag[0]) == nullptr
-		    && strchr(newflags.c_str(), share_flag[0]) != nullptr) {
+		if (strchr(inoflags.c_str(), share_flag[0]) == nullptr &&
+			strchr(newflags.c_str(), share_flag[0]) != nullptr) {
 			success = share_article(guid, true);
-		} else if (
-			strchr(inoflags.c_str(), share_flag[0]) != nullptr
-			&& strchr(newflags.c_str(), share_flag[0]) == nullptr) {
+		} else if (strchr(inoflags.c_str(), share_flag[0]) != nullptr &&
+			strchr(newflags.c_str(), share_flag[0]) == nullptr) {
 			success = share_article(guid, false);
 		}
 	}
@@ -351,8 +346,8 @@ bool inoreader_api::share_article(const std::string& guid, bool share)
 	return result == "OK";
 }
 
-std::string
-inoreader_api::post_content(const std::string& url, const std::string& postdata)
+std::string inoreader_api::post_content(const std::string& url,
+	const std::string& postdata)
 {
 	std::string result;
 	curl_slist* custom_headers{};
@@ -370,10 +365,11 @@ inoreader_api::post_content(const std::string& url, const std::string& postdata)
 	curl_slist_free_all(custom_headers);
 
 	LOG(level::DEBUG,
-	    "inoreader_api::post_content: url = %s postdata = %s result = %s",
-	    url,
-	    postdata,
-	    result);
+		"inoreader_api::post_content: url = %s postdata = %s result = "
+		"%s",
+		url,
+		postdata,
+		result);
 
 	return result;
 }

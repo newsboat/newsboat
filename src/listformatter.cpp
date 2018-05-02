@@ -13,8 +13,7 @@ listformatter::listformatter() {}
 
 listformatter::~listformatter() {}
 
-void listformatter::add_line(
-	const std::string& text,
+void listformatter::add_line(const std::string& text,
 	unsigned int id,
 	unsigned int width)
 {
@@ -22,8 +21,7 @@ void listformatter::add_line(
 	LOG(level::DEBUG, "listformatter::add_line: `%s'", text);
 }
 
-void listformatter::set_line(
-	const unsigned int itempos,
+void listformatter::set_line(const unsigned int itempos,
 	const std::string& text,
 	unsigned int id,
 	unsigned int width)
@@ -38,10 +36,9 @@ void listformatter::set_line(
 			size_t size = mytext.length();
 			size_t w = utils::wcswidth_stfl(mytext, size);
 			if (w > width) {
-				while (size
-				       && (w = utils::wcswidth_stfl(
-						   mytext, size))
-						  > width) {
+				while (size &&
+					(w = utils::wcswidth_stfl(
+						 mytext, size)) > width) {
 					size--;
 				}
 			}
@@ -57,8 +54,7 @@ void listformatter::set_line(
 	}
 
 	if (itempos == UINT_MAX) {
-		lines.insert(
-			lines.cend(),
+		lines.insert(lines.cend(),
 			formatted_text.cbegin(),
 			formatted_text.cend());
 	} else {
@@ -66,20 +62,18 @@ void listformatter::set_line(
 	}
 }
 
-void listformatter::add_lines(
-	const std::vector<std::string>& thelines,
+void listformatter::add_lines(const std::vector<std::string>& thelines,
 	unsigned int width)
 {
 	for (auto line : thelines) {
-		add_line(
-			utils::replace_all(line, "\t", "        "),
+		add_line(utils::replace_all(line, "\t", "        "),
 			UINT_MAX,
 			width);
 	}
 }
 
-std::string
-listformatter::format_list(regexmanager* rxman, const std::string& location)
+std::string listformatter::format_list(regexmanager* rxman,
+	const std::string& location)
 {
 	format_cache = "{list";
 	for (auto line : lines) {
@@ -90,10 +84,10 @@ listformatter::format_list(regexmanager* rxman, const std::string& location)
 			format_cache.append(strprintf::fmt(
 				"{listitem text:%s}", stfl::quote(str)));
 		} else {
-			format_cache.append(strprintf::fmt(
-				"{listitem[%u] text:%s}",
-				line.second,
-				stfl::quote(str)));
+			format_cache.append(
+				strprintf::fmt("{listitem[%u] text:%s}",
+					line.second,
+					stfl::quote(str)));
 		}
 	}
 	format_cache.append(1, '}');

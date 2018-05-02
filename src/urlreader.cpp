@@ -120,8 +120,8 @@ void opml_urlreader::reload()
 
 	for (auto url : urls) {
 		LOG(level::DEBUG,
-		    "opml_urlreader::reload: downloading `%s'",
-		    url);
+			"opml_urlreader::reload: downloading `%s'",
+			url);
 		std::string urlcontent = utils::retrieve_url(url, cfg);
 
 		xmlDoc* doc =
@@ -129,7 +129,8 @@ void opml_urlreader::reload()
 
 		if (doc == nullptr) {
 			LOG(level::ERROR,
-			    "opml_urlreader::reload: parsing XML file failed");
+				"opml_urlreader::reload: parsing XML file "
+				"failed");
 			continue;
 		}
 
@@ -137,12 +138,12 @@ void opml_urlreader::reload()
 
 		if (root) {
 			for (xmlNode* node = root->children; node != nullptr;
-			     node = node->next) {
-				if (strcmp((const char*)node->name, "body")
-				    == 0) {
+				node = node->next) {
+				if (strcmp((const char*)node->name, "body") ==
+					0) {
 					LOG(level::DEBUG,
-					    "opml_urlreader::reload: found "
-					    "body");
+						"opml_urlreader::reload: found "
+						"body");
 					rec_find_rss_outlines(
 						node->children, "");
 				}

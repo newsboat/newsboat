@@ -13,8 +13,7 @@ class itemlist_formaction;
 
 class itemview_formaction : public formaction {
 public:
-	itemview_formaction(
-		view*,
+	itemview_formaction(view*,
 		std::shared_ptr<itemlist_formaction> il,
 		std::string formstr);
 	~itemview_formaction() override;
@@ -50,19 +49,16 @@ public:
 	void update_percent();
 
 private:
-	void process_operation(
-		operation op,
+	void process_operation(operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
-	void set_head(
-		const std::string& s,
+	void set_head(const std::string& s,
 		const std::string& feedtitle,
 		unsigned int unread,
 		unsigned int total);
 	void highlight_text(const std::string& searchphrase);
 
-	void render_source(
-		std::vector<std::pair<LineType, std::string>>& lines,
+	void render_source(std::vector<std::pair<LineType, std::string>>& lines,
 		std::string source);
 
 	void do_search();

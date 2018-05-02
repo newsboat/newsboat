@@ -18,8 +18,8 @@ const std::string url = "http://example.com/feed.rss";
  * we don't have to wrap string literals in std::string() calls (we don't
  * support C++14 yet so can't use their fancy string literal operators.)
  */
-std::pair<newsboat::LineType, std::string>
-p(newsboat::LineType type, const char* str)
+std::pair<newsboat::LineType, std::string> p(newsboat::LineType type,
+	const char* str)
 {
 	return std::make_pair(type, std::string(str));
 }
@@ -60,8 +60,8 @@ struct StringMaker<newsboat::LineType> {
 // Catch also doesn't know about std::pair
 template<>
 struct StringMaker<std::pair<newsboat::LineType, std::string>> {
-	static std::string
-	convert(std::pair<newsboat::LineType, std::string> const& value)
+	static std::string convert(
+		std::pair<newsboat::LineType, std::string> const& value)
 	{
 		std::ostringstream o;
 		o << "(";
@@ -83,8 +83,7 @@ TEST_CASE(
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links;
 
-	rnd.render(
-		"<a href=\"http://slashdot.org/\">slashdot</a>",
+	rnd.render("<a href=\"http://slashdot.org/\">slashdot</a>",
 		lines,
 		links,
 		"");
@@ -94,9 +93,8 @@ TEST_CASE(
 	REQUIRE(lines[0] == p(LineType::wrappable, "<u>slashdot</>[1]"));
 	REQUIRE(lines[1] == p(LineType::wrappable, ""));
 	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3]
-		== p(LineType::softwrappable,
-		     "[1]: http://slashdot.org/ (link)"));
+	REQUIRE(lines[3] ==
+		p(LineType::softwrappable, "[1]: http://slashdot.org/ (link)"));
 
 	REQUIRE(links[0].first == "http://slashdot.org/");
 	REQUIRE(links[0].second == link_type::HREF);
@@ -153,8 +151,7 @@ TEST_CASE("Script tags are ignored", "[htmlrenderer]")
 	REQUIRE(lines[0] == p(LineType::wrappable, "abc"));
 }
 
-TEST_CASE(
-	"format_ol_count formats list count in specified format",
+TEST_CASE("format_ol_count formats list count in specified format",
 	"[htmlrenderer]")
 {
 	htmlrenderer r;
@@ -169,8 +166,8 @@ TEST_CASE(
 	{
 		REQUIRE(r.format_ol_count(3, 'a') == "c");
 		REQUIRE(r.format_ol_count(26 + 3, 'a') == "ac");
-		REQUIRE(r.format_ol_count(3 * 26 * 26 + 5 * 26 + 2, 'a')
-			== "ceb");
+		REQUIRE(r.format_ol_count(3 * 26 * 26 + 5 * 26 + 2, 'a') ==
+			"ceb");
 	}
 
 	SECTION("format to alphabetic uppercase")
@@ -180,8 +177,8 @@ TEST_CASE(
 		REQUIRE(r.format_ol_count(27, 'A') == "AA");
 		REQUIRE(r.format_ol_count(26, 'A') == "Z");
 		REQUIRE(r.format_ol_count(26 * 26 + 26, 'A') == "ZZ");
-		REQUIRE(r.format_ol_count(25 * 26 * 26 + 26 * 26 + 26, 'A')
-			== "YZZ");
+		REQUIRE(r.format_ol_count(25 * 26 * 26 + 26 * 26 + 26, 'A') ==
+			"YZZ");
 	}
 
 	SECTION("format to roman numerals")
@@ -203,8 +200,7 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE(
-	"links with same URL are coalesced under one number",
+TEST_CASE("links with same URL are coalesced under one number",
 	"[htmlrenderer]")
 {
 	htmlrenderer r;
@@ -239,8 +235,7 @@ TEST_CASE("links with different URLs have different numbers", "[htmlrenderer]")
 	REQUIRE(links[1].second == link_type::HREF);
 }
 
-TEST_CASE(
-	"link without `href' is neither highlighted nor added to links list",
+TEST_CASE("link without `href' is neither highlighted nor added to links list",
 	"[htmlrenderer]")
 {
 	htmlrenderer r;
@@ -326,9 +321,9 @@ TEST_CASE("Flash <embed>s are added to links if `src' is set", "[htmlrenderer]")
 	REQUIRE(lines[0] == p(LineType::wrappable, "[embedded flash: 1]"));
 	REQUIRE(lines[1] == p(LineType::wrappable, ""));
 	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3]
-		== p(LineType::softwrappable,
-		     "[1]: http://example.com/game.swf (embedded flash)"));
+	REQUIRE(lines[3] ==
+		p(LineType::softwrappable,
+			"[1]: http://example.com/game.swf (embedded flash)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "http://example.com/game.swf");
 	REQUIRE(links[0].second == link_type::EMBED);
@@ -391,8 +386,8 @@ TEST_CASE("spaces and line breaks are preserved inside <pre>", "[htmlrenderer]")
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 2);
 	REQUIRE(lines[0] == p(LineType::softwrappable, "oh cool"));
-	REQUIRE(lines[1]
-		== p(LineType::softwrappable, "  check this\tstuff  out!"));
+	REQUIRE(lines[1] ==
+		p(LineType::softwrappable, "  check this\tstuff  out!"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -410,9 +405,9 @@ TEST_CASE("tags still work inside <pre>", "[htmlrenderer]")
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
-	REQUIRE(lines[0]
-		== p(LineType::softwrappable,
-		     "<b>bold text</><u>underlined text</>"));
+	REQUIRE(lines[0] ==
+		p(LineType::softwrappable,
+			"<b>bold text</><u>underlined text</>"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -430,9 +425,9 @@ TEST_CASE("<img> results in a placeholder and a link", "[htmlrenderer]")
 	REQUIRE(lines[0] == p(LineType::wrappable, "[image 1]"));
 	REQUIRE(lines[1] == p(LineType::wrappable, ""));
 	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3]
-		== p(LineType::softwrappable,
-		     "[1]: http://example.com/image.png (image)"));
+	REQUIRE(lines[3] ==
+		p(LineType::softwrappable,
+			"[1]: http://example.com/image.png (image)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "http://example.com/image.png");
 	REQUIRE(links[0].second == link_type::IMG);
@@ -451,8 +446,7 @@ TEST_CASE("<img>s without `src' are ignored", "[htmlrenderer]")
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE(
-	"title is mentioned in placeholder if <img> has `title'",
+TEST_CASE("title is mentioned in placeholder if <img> has `title'",
 	"[htmlrenderer]")
 {
 	htmlrenderer r;
@@ -465,13 +459,13 @@ TEST_CASE(
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
-	REQUIRE(lines[0]
-		== p(LineType::wrappable, "[image 1: Just a test image]"));
+	REQUIRE(lines[0] ==
+		p(LineType::wrappable, "[image 1: Just a test image]"));
 	REQUIRE(lines[1] == p(LineType::wrappable, ""));
 	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3]
-		== p(LineType::softwrappable,
-		     "[1]: http://example.com/image.png (image)"));
+	REQUIRE(lines[3] ==
+		p(LineType::softwrappable,
+			"[1]: http://example.com/image.png (image)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "http://example.com/image.png");
 	REQUIRE(links[0].second == link_type::IMG);
@@ -496,15 +490,14 @@ TEST_CASE(
 	REQUIRE(lines[0] == p(LineType::wrappable, "[image 1]"));
 	REQUIRE(lines[1] == p(LineType::wrappable, ""));
 	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3]
-		== p(LineType::softwrappable, "[1]: inline image (image)"));
+	REQUIRE(lines[3] ==
+		p(LineType::softwrappable, "[1]: inline image (image)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "inline image");
 	REQUIRE(links[0].second == link_type::IMG);
 }
 
-TEST_CASE(
-	"<blockquote> is indented and is separated by empty lines",
+TEST_CASE("<blockquote> is indented and is separated by empty lines",
 	"[htmlrenderer]")
 {
 	htmlrenderer r;
@@ -521,10 +514,10 @@ TEST_CASE(
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 3);
 	REQUIRE(lines[0] == p(LineType::wrappable, ""));
-	REQUIRE(lines[1]
-		== p(LineType::wrappable,
-		     "  Experience is what you get when you didn't get "
-		     "what you wanted. —Randy Pausch"));
+	REQUIRE(lines[1] ==
+		p(LineType::wrappable,
+			"  Experience is what you get when you didn't get "
+			"what you wanted. —Randy Pausch"));
 	REQUIRE(lines[2] == p(LineType::wrappable, ""));
 	REQUIRE(links.size() == 0);
 }
@@ -579,8 +572,8 @@ TEST_CASE("<h[2-6]> and <p>", "[htmlrenderer]")
 	}
 
 	for (auto tag : {"<h2>", "<h3>", "<h4>", "<h5>", "<h6>", "<p>"}) {
-		SECTION(std::string("When alone, ") + tag
-			+ " generates only one line")
+		SECTION(std::string("When alone, ") + tag +
+			" generates only one line")
 		{
 			std::string closing_tag = tag;
 			closing_tag.insert(1, "/");
@@ -589,8 +582,8 @@ TEST_CASE("<h[2-6]> and <p>", "[htmlrenderer]")
 				tag + std::string("hello world") + closing_tag;
 			REQUIRE_NOTHROW(r.render(input, lines, links, url));
 			REQUIRE(lines.size() == 1);
-			REQUIRE(lines[0]
-				== p(LineType::wrappable, "hello world"));
+			REQUIRE(lines[0] ==
+				p(LineType::wrappable, "hello world"));
 			REQUIRE(links.size() == 0);
 		}
 	}
@@ -609,15 +602,15 @@ TEST_CASE("<h[2-6]> and <p>", "[htmlrenderer]")
 		}
 
 		for (auto tag :
-		     {"<h2>", "<h3>", "<h4>", "<h5>", "<h6>", "<p>"}) {
+			{"<h2>", "<h3>", "<h4>", "<h5>", "<h6>", "<p>"}) {
 			SECTION(tag)
 			{
 				std::string closing_tag = tag;
 				closing_tag.insert(1, "/");
 
-				const std::string input =
-					tag + std::string("header")
-					+ closing_tag + "<p>paragraph</p>";
+				const std::string input = tag +
+					std::string("header") + closing_tag +
+					"<p>paragraph</p>";
 
 				REQUIRE_NOTHROW(
 					r.render(input, lines, links, url));
@@ -651,8 +644,7 @@ TEST_CASE("<h[2-6]> and <p>", "[htmlrenderer]")
 	}
 }
 
-TEST_CASE(
-	"whitespace is erased at the beginning of the paragraph",
+TEST_CASE("whitespace is erased at the beginning of the paragraph",
 	"[htmlrenderer]")
 {
 	htmlrenderer r;
@@ -682,9 +674,9 @@ TEST_CASE("newlines are replaced with space", "[htmlrenderer]")
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
-	REQUIRE(lines[0]
-		== p(LineType::wrappable,
-		     "newlines should be replaced with a space character."));
+	REQUIRE(lines[0] ==
+		p(LineType::wrappable,
+			"newlines should be replaced with a space character."));
 	REQUIRE(links.size() == 0);
 }
 
@@ -702,10 +694,10 @@ TEST_CASE("paragraph is just a long line of text", "[htmlrenderer]")
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
-	REQUIRE(lines[0]
-		== p(LineType::wrappable,
-		     "here comes a long, boring chunk text "
-		     "that we have to fit to width"));
+	REQUIRE(lines[0] ==
+		p(LineType::wrappable,
+			"here comes a long, boring chunk text "
+			"that we have to fit to width"));
 	REQUIRE(links.size() == 0);
 }
 
@@ -801,8 +793,7 @@ TEST_CASE("type='1' for <ol> means Arabic numbering", "[htmlrenderer]")
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE(
-	"type='a' for <ol> means lowercase alphabetic numbering",
+TEST_CASE("type='a' for <ol> means lowercase alphabetic numbering",
 	"[htmlrenderer]")
 {
 	htmlrenderer r;
@@ -821,8 +812,7 @@ TEST_CASE(
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE(
-	"type='A' for <ol> means uppercase alphabetic numbering",
+TEST_CASE("type='A' for <ol> means uppercase alphabetic numbering",
 	"[htmlrenderer]")
 {
 	htmlrenderer r;
@@ -877,8 +867,7 @@ TEST_CASE("type='I' for <ol> means uppercase Roman numbering", "[htmlrenderer]")
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE(
-	"every next <li> implicitly closes the previous one",
+TEST_CASE("every next <li> implicitly closes the previous one",
 	"[htmlrenderer]")
 {
 	htmlrenderer r;
@@ -963,15 +952,14 @@ TEST_CASE("header rows of tables are in bold", "[htmlrenderer]")
 
 		REQUIRE_NOTHROW(r.render(input, lines, links, url));
 		REQUIRE(lines.size() == 1);
-		REQUIRE(lines[0]
-			== p(LineType::nonwrappable,
-			     "<b>another</> <b>header</>"));
+		REQUIRE(lines[0] ==
+			p(LineType::nonwrappable,
+				"<b>another</> <b>header</>"));
 		REQUIRE(links.size() == 0);
 	}
 }
 
-TEST_CASE(
-	"cells are separated by space if `border' is not set",
+TEST_CASE("cells are separated by space if `border' is not set",
 	"[htmlrenderer]")
 {
 	htmlrenderer r;
@@ -1016,8 +1004,8 @@ TEST_CASE(
 
 			REQUIRE_NOTHROW(r.render(input, lines, links, url));
 			REQUIRE(lines.size() == 3);
-			REQUIRE(lines[1]
-				== p(LineType::nonwrappable, "|hello|world|"));
+			REQUIRE(lines[1] ==
+				p(LineType::nonwrappable, "|hello|world|"));
 			REQUIRE(links.size() == 0);
 		}
 	}
@@ -1045,8 +1033,7 @@ TEST_CASE("tables with `border' have borders", "[htmlrenderer]")
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE(
-	"if document ends before </table> is found, table is rendered anyway",
+TEST_CASE("if document ends before </table> is found, table is rendered anyway",
 	"[htmlrenderer]")
 {
 	htmlrenderer r;
@@ -1095,20 +1082,20 @@ TEST_CASE("tables can be nested", "[htmlrenderer]")
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 7);
-	REQUIRE(lines[0]
-		== p(LineType::nonwrappable, "+---------------+-----------+"));
-	REQUIRE(lines[1]
-		== p(LineType::nonwrappable, "|+-------+-----+|lonely cell|"));
-	REQUIRE(lines[2]
-		== p(LineType::nonwrappable, "||hello  |world||           |"));
-	REQUIRE(lines[3]
-		== p(LineType::nonwrappable, "|+-------+-----+|           |"));
-	REQUIRE(lines[4]
-		== p(LineType::nonwrappable, "||another|row  ||           |"));
-	REQUIRE(lines[5]
-		== p(LineType::nonwrappable, "|+-------+-----+|           |"));
-	REQUIRE(lines[6]
-		== p(LineType::nonwrappable, "+---------------+-----------+"));
+	REQUIRE(lines[0] ==
+		p(LineType::nonwrappable, "+---------------+-----------+"));
+	REQUIRE(lines[1] ==
+		p(LineType::nonwrappable, "|+-------+-----+|lonely cell|"));
+	REQUIRE(lines[2] ==
+		p(LineType::nonwrappable, "||hello  |world||           |"));
+	REQUIRE(lines[3] ==
+		p(LineType::nonwrappable, "|+-------+-----+|           |"));
+	REQUIRE(lines[4] ==
+		p(LineType::nonwrappable, "||another|row  ||           |"));
+	REQUIRE(lines[5] ==
+		p(LineType::nonwrappable, "|+-------+-----+|           |"));
+	REQUIRE(lines[6] ==
+		p(LineType::nonwrappable, "+---------------+-----------+"));
 
 	REQUIRE(links.size() == 0);
 }
@@ -1137,8 +1124,7 @@ TEST_CASE(
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE(
-	"previous row is implicitly closed when <tr> is found",
+TEST_CASE("previous row is implicitly closed when <tr> is found",
 	"[htmlrenderer]")
 {
 	htmlrenderer r;
@@ -1185,8 +1171,7 @@ TEST_CASE(
 	REQUIRE(links.size() == 0);
 }
 
-TEST_CASE(
-	"text within <ituneshack> is to be treated specially",
+TEST_CASE("text within <ituneshack> is to be treated specially",
 	"[htmlrenderer]")
 {
 	htmlrenderer r;
@@ -1203,9 +1188,9 @@ TEST_CASE(
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 2);
 	REQUIRE(lines[0] == p(LineType::wrappable, "hello world!"));
-	REQUIRE(lines[1]
-		== p(LineType::wrappable,
-		     "I'm a description from an iTunes feed. Apple just "
-		     "puts plain text into <>summary> tag."));
+	REQUIRE(lines[1] ==
+		p(LineType::wrappable,
+			"I'm a description from an iTunes feed. Apple just "
+			"puts plain text into <>summary> tag."));
 	REQUIRE(links.size() == 0);
 }

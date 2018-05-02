@@ -16,8 +16,7 @@ class regexmanager : public config_action_handler {
 public:
 	regexmanager();
 	~regexmanager() override;
-	void handle_action(
-		const std::string& action,
+	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) override;
 	void quote_and_highlight(std::string& str, const std::string& location);

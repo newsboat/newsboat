@@ -22,8 +22,7 @@ configparser::configparser()
 
 configparser::~configparser() {}
 
-void configparser::handle_action(
-	const std::string& action,
+void configparser::handle_action(const std::string& action,
 	const std::vector<std::string>& params)
 {
 	/*
@@ -60,11 +59,12 @@ bool configparser::parse(const std::string& filename, bool double_include)
 	 *   - hand over the tokenize results to the config_action_handler
 	 *   - if an error happens, react accordingly.
 	 */
-	if (!double_include
-	    && included_files.find(filename) != included_files.end()) {
+	if (!double_include &&
+		included_files.find(filename) != included_files.end()) {
 		LOG(level::WARN,
-		    "configparser::parse: file %s has already been included",
-		    filename);
+			"configparser::parse: file %s has already been "
+			"included",
+			filename);
 		return true;
 	}
 	included_files.insert(included_files.begin(), filename);
@@ -74,8 +74,8 @@ bool configparser::parse(const std::string& filename, bool double_include)
 	std::string line;
 	if (!f.is_open()) {
 		LOG(level::WARN,
-		    "configparser::parse: file %s couldn't be opened",
-		    filename);
+			"configparser::parse: file %s couldn't be opened",
+			filename);
 		return false;
 	}
 	while (f.is_open() && !f.eof()) {
@@ -111,8 +111,7 @@ bool configparser::parse(const std::string& filename, bool double_include)
 	return true;
 }
 
-void configparser::register_handler(
-	const std::string& cmd,
+void configparser::register_handler(const std::string& cmd,
 	config_action_handler* handler)
 {
 	action_handlers[cmd] = handler;
@@ -133,8 +132,7 @@ void configparser::evaluate_backticks(std::vector<std::string>& tokens)
 /* Note that this function not only finds next backtick that isn't prefixed
  * with a backslash, but also un-escapes all the escaped backticks it finds in
  * the process */
-std::string::size_type find_non_escaped_backtick(
-	std::string& input,
+std::string::size_type find_non_escaped_backtick(std::string& input,
 	const std::string::size_type startpos)
 {
 	if (startpos == std::string::npos)
@@ -143,8 +141,8 @@ std::string::size_type find_non_escaped_backtick(
 	std::string::size_type result = startpos;
 	result = input.find_first_of("`", result);
 
-	while (result != std::string::npos && result > 0
-	       && input[result - 1] == '\\') {
+	while (result != std::string::npos && result > 0 &&
+		input[result - 1] == '\\') {
 		// remove the backslash
 		input.erase(result - 1, 1);
 

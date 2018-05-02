@@ -146,8 +146,7 @@ void rss_item::set_unread(bool u)
 std::string rss_item::pubDate() const
 {
 	char text[1024];
-	strftime(
-		text,
+	strftime(text,
 		sizeof(text),
 		_("%a, %d %b %Y %T %z"),
 		localtime(&pubDate_));
@@ -241,9 +240,9 @@ std::string rss_feed::title() const
 			break;
 		}
 	}
-	return found_title ? alt_title
-			   : utils::convert_text(
-				     title_, nl_langinfo(CODESET), "utf-8");
+	return found_title
+		? alt_title
+		: utils::convert_text(title_, nl_langinfo(CODESET), "utf-8");
 }
 
 std::string rss_feed::description() const
@@ -267,18 +266,18 @@ std::shared_ptr<rss_item> rss_feed::get_item_by_guid(const std::string& guid)
 	return get_item_by_guid_unlocked(guid);
 }
 
-std::shared_ptr<rss_item>
-rss_feed::get_item_by_guid_unlocked(const std::string& guid)
+std::shared_ptr<rss_item> rss_feed::get_item_by_guid_unlocked(
+	const std::string& guid)
 {
 	auto it = items_guid_map.find(guid);
 	if (it != items_guid_map.end()) {
 		return it->second;
 	}
 	LOG(level::DEBUG,
-	    "rss_feed::get_item_by_guid_unlocked: hit dummy item!");
+		"rss_feed::get_item_by_guid_unlocked: hit dummy item!");
 	LOG(level::DEBUG,
-	    "rss_feed::get_item_by_guid_unlocked: items_guid_map.size = %d",
-	    items_guid_map.size());
+		"rss_feed::get_item_by_guid_unlocked: items_guid_map.size = %d",
+		items_guid_map.size());
 	// abort();
 	return std::shared_ptr<rss_item>(
 		new rss_item(ch)); // should never happen!
@@ -286,12 +285,12 @@ rss_feed::get_item_by_guid_unlocked(const std::string& guid)
 
 bool rss_item::has_attribute(const std::string& attribname)
 {
-	if (attribname == "title" || attribname == "link"
-	    || attribname == "author" || attribname == "content"
-	    || attribname == "date" || attribname == "guid"
-	    || attribname == "unread" || attribname == "enclosure_url"
-	    || attribname == "enclosure_type" || attribname == "flags"
-	    || attribname == "age" || attribname == "articleindex")
+	if (attribname == "title" || attribname == "link" ||
+		attribname == "author" || attribname == "content" ||
+		attribname == "date" || attribname == "guid" ||
+		attribname == "unread" || attribname == "enclosure_url" ||
+		attribname == "enclosure_type" || attribname == "flags" ||
+		attribname == "age" || attribname == "articleindex")
 		return true;
 
 	// if we have a feed, then forward the request
@@ -377,11 +376,11 @@ void rss_item::sort_flags()
 
 bool rss_feed::has_attribute(const std::string& attribname)
 {
-	if (attribname == "feedtitle" || attribname == "description"
-	    || attribname == "feedlink" || attribname == "feeddate"
-	    || attribname == "rssurl" || attribname == "unread_count"
-	    || attribname == "total_count" || attribname == "tags"
-	    || attribname == "feedindex")
+	if (attribname == "feedtitle" || attribname == "description" ||
+		attribname == "feedlink" || attribname == "feeddate" ||
+		attribname == "rssurl" || attribname == "unread_count" ||
+		attribname == "total_count" || attribname == "tags" ||
+		attribname == "feedindex")
 		return true;
 	return false;
 }
@@ -410,8 +409,7 @@ std::string rss_feed::get_attribute(const std::string& attribname)
 	return "";
 }
 
-void rss_ignores::handle_action(
-	const std::string& action,
+void rss_ignores::handle_action(const std::string& action,
 	const std::vector<std::string>& params)
 {
 	if (action == "ignore-article") {
@@ -474,14 +472,15 @@ bool rss_ignores::matches(rss_item* item)
 {
 	for (auto ign : ignores) {
 		LOG(level::DEBUG,
-		    "rss_ignores::matches: ign.first = `%s' item->feedurl = "
-		    "`%s'",
-		    ign.first,
-		    item->feedurl());
+			"rss_ignores::matches: ign.first = `%s' item->feedurl "
+			"= "
+			"`%s'",
+			ign.first,
+			item->feedurl());
 		if (ign.first == "*" || item->feedurl() == ign.first) {
 			if (ign.second->matches(item)) {
 				LOG(level::DEBUG,
-				    "rss_ignores::matches: found match");
+					"rss_ignores::matches: found match");
 				return true;
 			}
 		}
@@ -524,13 +523,14 @@ void rss_feed::update_items(std::vector<std::shared_ptr<rss_feed>> feeds)
 	items_guid_map.clear();
 
 	for (auto feed : feeds) {
-		if (feed->rssurl().substr(0, 6)
-		    != "query:") { // don't fetch items from other query feeds!
+		if (feed->rssurl().substr(0, 6) !=
+			"query:") { // don't fetch items from other query feeds!
 			for (auto item : feed->items()) {
 				if (m.matches(item.get())) {
 					LOG(level::DEBUG,
-					    "rss_feed::update_items: matcher "
-					    "matches!");
+						"rss_feed::update_items: "
+						"matcher "
+						"matches!");
 					item->set_feedptr(feed);
 					items_.push_back(item);
 					items_guid_map[item->guid()] = item;
@@ -545,19 +545,19 @@ void rss_feed::update_items(std::vector<std::shared_ptr<rss_feed>> feeds)
 
 	gettimeofday(&tv2, nullptr);
 	unsigned long diff =
-		(((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec)
-		- tv1.tv_usec;
+		(((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) -
+		tv1.tv_usec;
 	unsigned long diffx =
-		(((tv2.tv_sec - tvx.tv_sec) * 1000000) + tv2.tv_usec)
-		- tvx.tv_usec;
+		(((tv2.tv_sec - tvx.tv_sec) * 1000000) + tv2.tv_usec) -
+		tvx.tv_usec;
 	LOG(level::DEBUG,
-	    "rss_feed::update_items matching took %lu.%06lu s",
-	    diff / 1000000,
-	    diff % 1000000);
+		"rss_feed::update_items matching took %lu.%06lu s",
+		diff / 1000000,
+		diff % 1000000);
 	LOG(level::DEBUG,
-	    "rss_feed::update_items sorting took %lu.%06lu s",
-	    diffx / 1000000,
-	    diffx % 1000000);
+		"rss_feed::update_items sorting took %lu.%06lu s",
+		diffx / 1000000,
+		diffx % 1000000);
 }
 
 void rss_feed::set_rssurl(const std::string& u)
@@ -593,9 +593,9 @@ void rss_feed::set_rssurl(const std::string& u)
 		}
 
 		LOG(level::DEBUG,
-		    "rss_feed::set_rssurl: query name = `%s' expr = `%s'",
-		    tokens[1],
-		    query);
+			"rss_feed::set_rssurl: query name = `%s' expr = `%s'",
+			tokens[1],
+			query);
 
 		set_title(tokens[1]);
 		set_query(query);
@@ -613,8 +613,8 @@ void rss_feed::sort_unlocked(const std::string& method)
 	std::vector<std::string> methods = utils::tokenize(method, "-");
 	bool reverse = false;
 
-	if (!methods.empty()
-	    && methods[0] == "date") { // date is descending by default
+	if (!methods.empty() &&
+		methods[0] == "date") { // date is descending by default
 		if (methods.size() > 1 && methods[1] == "asc") {
 			reverse = true;
 		}
@@ -626,102 +626,84 @@ void rss_feed::sort_unlocked(const std::string& method)
 
 	if (!methods.empty()) {
 		if (methods[0] == "title") {
-			std::stable_sort(
-				items_.begin(),
+			std::stable_sort(items_.begin(),
 				items_.end(),
 				[&](std::shared_ptr<rss_item> a,
-				    std::shared_ptr<rss_item> b) {
-					return reverse ? (strcasecmp(
-								  a->title()
-									  .c_str(),
-								  b->title()
-									  .c_str())
-							  > 0)
-						       : (strcasecmp(
-								  a->title()
-									  .c_str(),
-								  b->title()
-									  .c_str())
-							  < 0);
+					std::shared_ptr<rss_item> b) {
+					return reverse
+						? (strcasecmp(
+							   a->title().c_str(),
+							   b->title().c_str()) >
+							  0)
+						: (strcasecmp(
+							   a->title().c_str(),
+							   b->title().c_str()) <
+							  0);
 				});
 		} else if (methods[0] == "flags") {
-			std::stable_sort(
-				items_.begin(),
+			std::stable_sort(items_.begin(),
 				items_.end(),
 				[&](std::shared_ptr<rss_item> a,
-				    std::shared_ptr<rss_item> b) {
-					return reverse ? (strcmp(a->flags()
-									 .c_str(),
-								 b->flags()
-									 .c_str())
-							  > 0)
-						       : (strcmp(a->flags()
-									 .c_str(),
-								 b->flags()
-									 .c_str())
-							  < 0);
+					std::shared_ptr<rss_item> b) {
+					return reverse
+						? (strcmp(a->flags().c_str(),
+							   b->flags().c_str()) >
+							  0)
+						: (strcmp(a->flags().c_str(),
+							   b->flags().c_str()) <
+							  0);
 				});
 		} else if (methods[0] == "author") {
-			std::stable_sort(
-				items_.begin(),
+			std::stable_sort(items_.begin(),
 				items_.end(),
 				[&](std::shared_ptr<rss_item> a,
-				    std::shared_ptr<rss_item> b) {
-					return reverse ? (strcmp(a->author()
-									 .c_str(),
-								 b->author()
-									 .c_str())
-							  > 0)
-						       : (strcmp(a->author()
-									 .c_str(),
-								 b->author()
-									 .c_str())
-							  < 0);
+					std::shared_ptr<rss_item> b) {
+					return reverse
+						? (strcmp(a->author().c_str(),
+							   b->author()
+								   .c_str()) >
+							  0)
+						: (strcmp(a->author().c_str(),
+							   b->author()
+								   .c_str()) <
+							  0);
 				});
 		} else if (methods[0] == "link") {
-			std::stable_sort(
-				items_.begin(),
+			std::stable_sort(items_.begin(),
 				items_.end(),
 				[&](std::shared_ptr<rss_item> a,
-				    std::shared_ptr<rss_item> b) {
-					return reverse ? (strcmp(a->link()
-									 .c_str(),
-								 b->link()
-									 .c_str())
-							  > 0)
-						       : (strcmp(a->link()
-									 .c_str(),
-								 b->link()
-									 .c_str())
-							  < 0);
+					std::shared_ptr<rss_item> b) {
+					return reverse
+						? (strcmp(a->link().c_str(),
+							   b->link().c_str()) >
+							  0)
+						: (strcmp(a->link().c_str(),
+							   b->link().c_str()) <
+							  0);
 				});
 		} else if (methods[0] == "guid") {
-			std::stable_sort(
-				items_.begin(),
+			std::stable_sort(items_.begin(),
 				items_.end(),
 				[&](std::shared_ptr<rss_item> a,
-				    std::shared_ptr<rss_item> b) {
-					return reverse ? (strcmp(a->guid()
-									 .c_str(),
-								 b->guid()
-									 .c_str())
-							  > 0)
-						       : (strcmp(a->guid()
-									 .c_str(),
-								 b->guid()
-									 .c_str())
-							  < 0);
+					std::shared_ptr<rss_item> b) {
+					return reverse
+						? (strcmp(a->guid().c_str(),
+							   b->guid().c_str()) >
+							  0)
+						: (strcmp(a->guid().c_str(),
+							   b->guid().c_str()) <
+							  0);
 				});
 		} else if (methods[0] == "date") {
-			std::stable_sort(
-				items_.begin(),
+			std::stable_sort(items_.begin(),
 				items_.end(),
 				[&](std::shared_ptr<rss_item> a,
-				    std::shared_ptr<rss_item> b) {
-					return reverse ? (a->pubDate_timestamp()
-							  > b->pubDate_timestamp())
-						       : (a->pubDate_timestamp()
-							  < b->pubDate_timestamp());
+					std::shared_ptr<rss_item> b) {
+					return reverse
+						? (a->pubDate_timestamp() >
+							  b->pubDate_timestamp())
+						: (a->pubDate_timestamp() <
+							  b->pubDate_timestamp());
 				});
 		}
 	}

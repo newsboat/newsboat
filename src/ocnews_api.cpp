@@ -24,7 +24,7 @@ ocnews_api::ocnews_api(configcontainer* c)
 
 	if (server.empty())
 		LOG(level::CRITICAL,
-		    "ocnews_api::ocnews_api: No owncloud server set");
+			"ocnews_api::ocnews_api: No owncloud server set");
 }
 
 ocnews_api::~ocnews_api() {}
@@ -43,7 +43,8 @@ std::string ocnews_api::retrieve_auth()
 	credentials cred = get_credentials("ocnews", "ocNews");
 	if (cred.user.empty() || cred.pass.empty()) {
 		LOG(level::CRITICAL,
-		    "ocnews_api::retrieve_auth: No user and/or password set");
+			"ocnews_api::retrieve_auth: No user and/or password "
+			"set");
 		return "";
 	}
 	return cred.user + ":" + cred.pass;
@@ -113,8 +114,8 @@ std::vector<tagged_feedurl> ocnews_api::get_subscribed_urls()
 		json_object_object_get_ex(feed, "url", &node);
 		current_feed.link = json_object_get_string(node);
 
-		while (known_feeds.find(current_feed.title)
-		       != known_feeds.end())
+		while (known_feeds.find(current_feed.title) !=
+			known_feeds.end())
 			current_feed.title += "*";
 		known_feeds[current_feed.title] =
 			std::make_pair(current_feed, feed_id);
@@ -129,8 +130,7 @@ std::vector<tagged_feedurl> ocnews_api::get_subscribed_urls()
 		result.push_back(tagged_feedurl(current_feed.title, tags));
 	}
 
-	std::sort(
-		++begin(result),
+	std::sort(++begin(result),
 		end(result),
 		[](const tagged_feedurl& a, const tagged_feedurl& b) {
 			return a.first < b.first;
@@ -163,8 +163,7 @@ bool ocnews_api::mark_article_read(const std::string& guid, bool read)
 	return this->query(query, nullptr, "{}");
 }
 
-bool ocnews_api::update_article_flags(
-	const std::string& oldflags,
+bool ocnews_api::update_article_flags(const std::string& oldflags,
 	const std::string& newflags,
 	const std::string& guid)
 {
@@ -173,12 +172,11 @@ bool ocnews_api::update_article_flags(
 	query += guid.substr(guid.find_first_of(":") + 1);
 
 	if (star_flag.length() > 0) {
-		if (strchr(oldflags.c_str(), star_flag[0]) == nullptr
-		    && strchr(newflags.c_str(), star_flag[0]) != nullptr) {
+		if (strchr(oldflags.c_str(), star_flag[0]) == nullptr &&
+			strchr(newflags.c_str(), star_flag[0]) != nullptr) {
 			query += "/star";
-		} else if (
-			strchr(oldflags.c_str(), star_flag[0]) != nullptr
-			&& strchr(newflags.c_str(), star_flag[0]) == nullptr) {
+		} else if (strchr(oldflags.c_str(), star_flag[0]) != nullptr &&
+			strchr(newflags.c_str(), star_flag[0]) == nullptr) {
 			query += "/unstar";
 		}
 	}
@@ -192,8 +190,8 @@ rsspp::feed ocnews_api::fetch_feed(const std::string& feed_id)
 	rsspp::feed feed = known_feeds[feed_id].first;
 
 	std::string query = "items?";
-	query += "type="
-		 + std::to_string(known_feeds[feed_id].second != 0 ? 0 : 2);
+	query += "type=" +
+		std::to_string(known_feeds[feed_id].second != 0 ? 0 : 2);
 	query += "&id=" + std::to_string(known_feeds[feed_id].second);
 
 	json_object* response;
@@ -205,7 +203,7 @@ rsspp::feed ocnews_api::fetch_feed(const std::string& feed_id)
 	json_object_object_get_ex(response, "items", &items);
 	if (json_object_get_type(items) != json_type_array) {
 		LOG(level::ERROR,
-		    "ocnews_api::fetch_feed: items is not an array");
+			"ocnews_api::fetch_feed: items is not an array");
 		return feed;
 	}
 
@@ -257,8 +255,8 @@ rsspp::feed ocnews_api::fetch_feed(const std::string& feed_id)
 		long f_id = json_object_get_int(node);
 
 		json_object_object_get_ex(item_j, "guid", &node);
-		item.guid = std::to_string(id) + ":" + std::to_string(f_id)
-			    + "/" + json_object_get_string(node);
+		item.guid = std::to_string(id) + ":" + std::to_string(f_id) +
+			"/" + json_object_get_string(node);
 
 		json_object_object_get_ex(item_j, "unread", &node);
 		bool unread = json_object_get_boolean(node);
@@ -271,8 +269,7 @@ rsspp::feed ocnews_api::fetch_feed(const std::string& feed_id)
 		json_object_object_get_ex(item_j, "pubDate", &node);
 		time_t updated = (time_t)json_object_get_int(node);
 		char rfc822_date[128];
-		strftime(
-			rfc822_date,
+		strftime(rfc822_date,
 			sizeof(rfc822_date),
 			"%a, %d %b %Y %H:%M:%S %z",
 			gmtime(&updated));
@@ -289,8 +286,7 @@ void ocnews_api::add_custom_headers(curl_slist** /* custom_headers */)
 	// nothing required
 }
 
-bool ocnews_api::query(
-	const std::string& query,
+bool ocnews_api::query(const std::string& query,
 	json_object** result,
 	const std::string& post)
 {
@@ -302,14 +298,13 @@ bool ocnews_api::query(
 
 	utils::set_common_curl_options(handle, cfg);
 
-	static auto write_fn = [](void* buffer,
-				  size_t size,
-				  size_t nmemb,
-				  void* userp) {
-		std::string* pbuf = static_cast<std::string*>(userp);
-		pbuf->append(static_cast<const char*>(buffer), size * nmemb);
-		return size * nmemb;
-	};
+	static auto write_fn =
+		[](void* buffer, size_t size, size_t nmemb, void* userp) {
+			std::string* pbuf = static_cast<std::string*>(userp);
+			pbuf->append(
+				static_cast<const char*>(buffer), size * nmemb);
+			return size * nmemb;
+		};
 	std::string buff;
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, *write_fn);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &buff);
@@ -327,9 +322,9 @@ bool ocnews_api::query(
 
 	if (res != CURLE_OK && res != CURLE_HTTP_RETURNED_ERROR) {
 		LOG(level::CRITICAL,
-		    "ocnews_api::query: connection error code %i (%s)",
-		    res,
-		    curl_easy_strerror(res));
+			"ocnews_api::query: connection error code %i (%s)",
+			res,
+			curl_easy_strerror(res));
 		return false;
 	}
 
@@ -338,7 +333,7 @@ bool ocnews_api::query(
 	if (response_code != 200) {
 		if (response_code == 401)
 			LOG(level::CRITICAL,
-			    "ocnews_api::query: authentication error");
+				"ocnews_api::query: authentication error");
 		else {
 			std::string msg = "ocnews_api::query: error ";
 			msg += response_code;

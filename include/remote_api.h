@@ -29,8 +29,7 @@ public:
 	virtual void add_custom_headers(curl_slist** custom_headers) = 0;
 	virtual bool mark_all_read(const std::string& feedurl) = 0;
 	virtual bool mark_article_read(const std::string& guid, bool read) = 0;
-	virtual bool update_article_flags(
-		const std::string& oldflags,
+	virtual bool update_article_flags(const std::string& oldflags,
 		const std::string& newflags,
 		const std::string& guid) = 0;
 	static const std::string read_password(const std::string& file);
@@ -38,8 +37,8 @@ public:
 	// TODO
 protected:
 	configcontainer* cfg;
-	credentials
-	get_credentials(const std::string& scope, const std::string& name);
+	credentials get_credentials(const std::string& scope,
+		const std::string& name);
 };
 
 } // namespace newsboat

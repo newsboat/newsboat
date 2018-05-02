@@ -10,13 +10,13 @@ TEST_CASE("strprintf::fmt()", "[strprintf]")
 	REQUIRE(strprintf::fmt("%s", "") == "");
 	REQUIRE(strprintf::fmt("%u", 0) == "0");
 	REQUIRE(strprintf::fmt("%s", nullptr) == "(null)");
-	REQUIRE(strprintf::fmt("%u-%s-%c", 23, "hello world", 'X')
-		== "23-hello world-X");
+	REQUIRE(strprintf::fmt("%u-%s-%c", 23, "hello world", 'X') ==
+		"23-hello world-X");
 	REQUIRE(strprintf::fmt("%%") == "%");
 
 	std::string long_input_without_formats(240000, 'x');
-	REQUIRE(strprintf::fmt(long_input_without_formats)
-		== long_input_without_formats);
+	REQUIRE(strprintf::fmt(long_input_without_formats) ==
+		long_input_without_formats);
 }
 
 TEST_CASE("strprintf::split_format()", "[strprintf]")

@@ -35,7 +35,7 @@ std::string rss_parser::get_xml_content(xmlNode* node)
 
 	if (node->children) {
 		for (xmlNodePtr ptr = node->children; ptr != nullptr;
-		     ptr = ptr->next) {
+			ptr = ptr->next) {
 			if (xmlNodeDump(buf, doc, ptr, 0, 0) >= 0) {
 				result.append(
 					(const char*)xmlBufferContent(buf));
@@ -52,8 +52,7 @@ std::string rss_parser::get_xml_content(xmlNode* node)
 	return result;
 }
 
-std::string rss_parser::get_prop(
-	xmlNode* node,
+std::string rss_parser::get_prop(xmlNode* node,
 	const std::string& prop,
 	const std::string& ns)
 {
@@ -61,12 +60,10 @@ std::string rss_parser::get_prop(
 	if (node) {
 		xmlChar* value = nullptr;
 		if (ns.empty()) {
-			value = xmlGetProp(
-				node,
+			value = xmlGetProp(node,
 				reinterpret_cast<const xmlChar*>(prop.c_str()));
 		} else {
-			value = xmlGetNsProp(
-				node,
+			value = xmlGetNsProp(node,
 				reinterpret_cast<const xmlChar*>(prop.c_str()),
 				reinterpret_cast<const xmlChar*>(ns.c_str()));
 		}
@@ -135,8 +132,7 @@ std::string rss_parser::__w3cdtf_to_rfc822(const std::string& w3cdtf)
 	stm.tm_isdst = -1;
 	time_t gmttime = mktime(&stm) + offs;
 	char datebuf[256];
-	strftime(
-		datebuf,
+	strftime(datebuf,
 		sizeof(datebuf),
 		"%a, %d %b %Y %H:%M:%S +0000",
 		localtime(&gmttime));
@@ -151,8 +147,8 @@ bool rss_parser::node_is(xmlNode* node, const char* name, const char* ns_uri)
 	if (strcmp((const char*)node->name, name) == 0) {
 		if (!ns_uri && !node->ns)
 			return true;
-		if (ns_uri && node->ns && node->ns->href
-		    && strcmp((const char*)node->ns->href, ns_uri) == 0)
+		if (ns_uri && node->ns && node->ns->href &&
+			strcmp((const char*)node->ns->href, ns_uri) == 0)
 			return true;
 	}
 	return false;

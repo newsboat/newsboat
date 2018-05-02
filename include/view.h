@@ -27,8 +27,8 @@ public:
 	explicit view(controller*);
 	~view();
 	int run();
-	std::string
-	run_modal(std::shared_ptr<formaction> f, const std::string& value = "");
+	std::string run_modal(std::shared_ptr<formaction> f,
+		const std::string& value = "");
 
 	void set_feedlist(std::vector<std::shared_ptr<rss_feed>> feeds);
 	void update_visible_feeds(std::vector<std::shared_ptr<rss_feed>> feeds);
@@ -62,45 +62,36 @@ public:
 
 	void push_itemlist(unsigned int pos);
 	void push_itemlist(std::shared_ptr<rss_feed> feed);
-	void push_itemview(
-		std::shared_ptr<rss_feed> f,
+	void push_itemview(std::shared_ptr<rss_feed> f,
 		const std::string& guid,
 		const std::string& searchphrase = "");
 	void push_help();
-	void push_urlview(
-		const std::vector<linkpair>& links,
+	void push_urlview(const std::vector<linkpair>& links,
 		std::shared_ptr<rss_feed>& feed);
-	void push_searchresult(
-		std::shared_ptr<rss_feed> feed,
+	void push_searchresult(std::shared_ptr<rss_feed> feed,
 		const std::string& phrase = "");
 	void view_dialogs();
 
-	std::string run_filebrowser(
-		const std::string& default_filename = "",
+	std::string run_filebrowser(const std::string& default_filename = "",
 		const std::string& dir = "");
 	std::string select_tag();
-	std::string
-	select_filter(const std::vector<filter_name_expr_pair>& filters);
+	std::string select_filter(
+		const std::vector<filter_name_expr_pair>& filters);
 
 	void open_in_browser(const std::string& url);
 	void open_in_pager(const std::string& filename);
 
 	std::string get_filename_suggestion(const std::string& s);
 
-	bool get_next_unread(
-		itemlist_formaction* itemlist,
+	bool get_next_unread(itemlist_formaction* itemlist,
 		itemview_formaction* itemview = nullptr);
-	bool get_previous_unread(
-		itemlist_formaction* itemlist,
+	bool get_previous_unread(itemlist_formaction* itemlist,
 		itemview_formaction* itemview = nullptr);
-	bool get_next(
-		itemlist_formaction* itemlist,
+	bool get_next(itemlist_formaction* itemlist,
 		itemview_formaction* itemview = nullptr);
-	bool get_previous(
-		itemlist_formaction* itemlist,
+	bool get_previous(itemlist_formaction* itemlist,
 		itemview_formaction* itemview = nullptr);
-	bool get_random_unread(
-		itemlist_formaction* itemlist,
+	bool get_random_unread(itemlist_formaction* itemlist,
 		itemview_formaction* itemview = nullptr);
 
 	bool get_next_unread_feed(itemlist_formaction* itemlist);
@@ -112,8 +103,7 @@ public:
 
 	void force_redraw();
 
-	void set_colors(
-		std::map<std::string, std::string>& fg_colors,
+	void set_colors(std::map<std::string, std::string>& fg_colors,
 		std::map<std::string, std::string>& bg_colors,
 		std::map<std::string, std::vector<std::string>>& attributes);
 

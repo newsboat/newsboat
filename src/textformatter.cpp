@@ -18,9 +18,9 @@ textformatter::~textformatter() {}
 void textformatter::add_line(LineType type, std::string line)
 {
 	LOG(level::DEBUG,
-	    "textformatter::add_line: `%s' (line type %i)",
-	    line,
-	    type);
+		"textformatter::add_line: `%s' (line type %i)",
+		line,
+		type);
 
 	auto clean_line = utils::wstr2str(
 		utils::clean_nonprintable_characters(utils::str2wstr(line)));
@@ -31,8 +31,7 @@ void textformatter::add_lines(
 	const std::vector<std::pair<LineType, std::string>>& lines)
 {
 	for (auto line : lines) {
-		add_line(
-			line.first,
+		add_line(line.first,
 			utils::replace_all(line.second, "\t", "        "));
 	}
 }
@@ -49,8 +48,7 @@ std::vector<std::string> wrap_line(const std::string& line, const size_t width)
 	std::string prefix;
 	size_t prefix_width = 0;
 	auto iswhitespace = [](const std::string& input) {
-		return std::all_of(
-			input.cbegin(),
+		return std::all_of(input.cbegin(),
 			input.cend(),
 			[](std::string::value_type c) {
 				return std::isspace(c);
@@ -116,13 +114,14 @@ std::vector<std::string> format_text_plain_helper(
 	const size_t total_width)
 {
 	LOG(level::DEBUG,
-	    "textformatter::format_text_plain: rxman = %p, location = `%s', "
-	    "wrap_width = %zu, total_width = %zu, %u lines",
-	    rxman,
-	    location,
-	    wrap_width,
-	    total_width,
-	    lines.size());
+		"textformatter::format_text_plain: rxman = %p, location = "
+		"`%s', "
+		"wrap_width = %zu, total_width = %zu, %u lines",
+		rxman,
+		location,
+		wrap_width,
+		total_width,
+		lines.size());
 
 	std::vector<std::string> format_cache;
 
@@ -130,8 +129,8 @@ std::vector<std::string> format_text_plain_helper(
 		format_cache.push_back(line);
 
 		LOG(level::DEBUG,
-		    "textformatter::format_text_plain: stored `%s'",
-		    line);
+			"textformatter::format_text_plain: stored `%s'",
+			line);
 	};
 
 	for (auto line : lines) {
@@ -139,9 +138,10 @@ std::vector<std::string> format_text_plain_helper(
 		auto text = line.second;
 
 		LOG(level::DEBUG,
-		    "textformatter::format_text_plain: got line `%s' type %u",
-		    text,
-		    type);
+			"textformatter::format_text_plain: got line `%s' type "
+			"%u",
+			text,
+			type);
 
 		if (rxman && type != LineType::hr) {
 			rxman->quote_and_highlight(text, location);
@@ -210,8 +210,8 @@ std::pair<std::string, std::size_t> textformatter::format_text_to_list(
 	return {format_cache, line_count};
 }
 
-std::string
-textformatter::format_text_plain(const size_t width, const size_t total_width)
+std::string textformatter::format_text_plain(const size_t width,
+	const size_t total_width)
 {
 	std::string result;
 	auto formatted = format_text_plain_helper(

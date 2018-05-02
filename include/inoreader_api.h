@@ -16,8 +16,7 @@ public:
 	virtual void add_custom_headers(curl_slist** custom_headers);
 	virtual bool mark_all_read(const std::string& feedurl);
 	virtual bool mark_article_read(const std::string& guid, bool read);
-	virtual bool update_article_flags(
-		const std::string& inoflags,
+	virtual bool update_article_flags(const std::string& inoflags,
 		const std::string& newflags,
 		const std::string& guid);
 
@@ -25,12 +24,11 @@ private:
 	std::vector<std::string> get_tags(xmlNode* node);
 	std::string get_new_token();
 	std::string retrieve_auth();
-	std::string
-	post_content(const std::string& url, const std::string& postdata);
+	std::string post_content(const std::string& url,
+		const std::string& postdata);
 	bool star_article(const std::string& guid, bool star);
 	bool share_article(const std::string& guid, bool share);
-	bool mark_article_read_with_token(
-		const std::string& guid,
+	bool mark_article_read_with_token(const std::string& guid,
 		bool read,
 		const std::string& token);
 	std::string auth;
@@ -39,8 +37,7 @@ private:
 
 class inoreader_urlreader : public urlreader {
 public:
-	inoreader_urlreader(
-		configcontainer* c,
+	inoreader_urlreader(configcontainer* c,
 		const std::string& url_file,
 		remote_api* a);
 	virtual ~inoreader_urlreader();

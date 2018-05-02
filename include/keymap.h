@@ -11,21 +11,21 @@
 // in configuration: bind-key <key> <operation>
 
 enum { KM_FEEDLIST = 1 << 0,
-       KM_FILEBROWSER = 1 << 1,
-       KM_HELP = 1 << 2,
-       KM_ARTICLELIST = 1 << 3,
-       KM_ARTICLE = 1 << 4,
-       KM_TAGSELECT = 1 << 5,
-       KM_FILTERSELECT = 1 << 6,
-       KM_URLVIEW = 1 << 7,
-       KM_PODBOAT = 1 << 8,
-       KM_SYSKEYS = 1 << 9,
-       KM_INTERNAL = 1 << 10,
-       KM_DIALOGS = 1 << 11,
-       KM_NEWSBOAT = KM_FEEDLIST | KM_FILEBROWSER | KM_HELP | KM_ARTICLELIST
-		     | KM_ARTICLE | KM_TAGSELECT | KM_FILTERSELECT | KM_URLVIEW
-		     | KM_DIALOGS,
-       KM_BOTH = KM_NEWSBOAT | KM_PODBOAT };
+	KM_FILEBROWSER = 1 << 1,
+	KM_HELP = 1 << 2,
+	KM_ARTICLELIST = 1 << 3,
+	KM_ARTICLE = 1 << 4,
+	KM_TAGSELECT = 1 << 5,
+	KM_FILTERSELECT = 1 << 6,
+	KM_URLVIEW = 1 << 7,
+	KM_PODBOAT = 1 << 8,
+	KM_SYSKEYS = 1 << 9,
+	KM_INTERNAL = 1 << 10,
+	KM_DIALOGS = 1 << 11,
+	KM_NEWSBOAT = KM_FEEDLIST | KM_FILEBROWSER | KM_HELP | KM_ARTICLELIST |
+		KM_ARTICLE | KM_TAGSELECT | KM_FILTERSELECT | KM_URLVIEW |
+		KM_DIALOGS,
+	KM_BOTH = KM_NEWSBOAT | KM_PODBOAT };
 
 namespace newsboat {
 
@@ -158,23 +158,20 @@ class keymap : public config_action_handler {
 public:
 	explicit keymap(unsigned int flags);
 	~keymap() override;
-	void
-	set_key(operation op,
+	void set_key(operation op,
 		const std::string& key,
 		const std::string& context);
 	void unset_key(const std::string& key, const std::string& context);
 	operation get_opcode(const std::string& opstr);
-	operation
-	get_operation(const std::string& keycode, const std::string& context);
+	operation get_operation(const std::string& keycode,
+		const std::string& context);
 	std::vector<macrocmd> get_macro(const std::string& key);
 	char get_key(const std::string& keycode);
 	std::string getkey(operation op, const std::string& context);
-	void handle_action(
-		const std::string& action,
+	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) override;
-	void get_keymap_descriptions(
-		std::vector<keymap_desc>& descs,
+	void get_keymap_descriptions(std::vector<keymap_desc>& descs,
 		unsigned short flags);
 	unsigned short get_flag_from_context(const std::string& context);
 

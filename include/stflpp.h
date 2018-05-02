@@ -24,14 +24,12 @@ public:
 		std::string get_focus();
 		void set_focus(const std::string& name);
 
-		std::string
-		dump(const std::string& name,
-		     const std::string& prefix,
-		     int focus);
-		void
-		modify(const std::string& name,
-		       const std::string& mode,
-		       const std::string& text);
+		std::string dump(const std::string& name,
+			const std::string& prefix,
+			int focus);
+		void modify(const std::string& name,
+			const std::string& mode,
+			const std::string& text);
 		// std::string lookup(const std::string& path, const
 		// std::string& newname);
 

@@ -14,8 +14,8 @@ reloadthread::reloadthread(controller* c, configcontainer* cf)
 	, cfg(cf)
 {
 	LOG(level::INFO,
-	    "reloadthread: waiting %u seconds between reloads",
-	    waittime_sec);
+		"reloadthread: waiting %u seconds between reloads",
+		waittime_sec);
 }
 
 reloadthread::~reloadthread() {}

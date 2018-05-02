@@ -68,10 +68,8 @@ TEST_CASE("Throws if invalid command is encountered", "[configcontainer]")
 {
 	configcontainer cfg;
 
-	CHECK_THROWS_AS(
-		cfg.handle_action(
-			"command-that-surely-does-not-exist",
-			{"and", "its", "arguments"}),
+	CHECK_THROWS_AS(cfg.handle_action("command-that-surely-does-not-exist",
+				{"and", "its", "arguments"}),
 		confighandlerexception);
 }
 
@@ -89,9 +87,8 @@ TEST_CASE("Throws if command argument has invalid type", "[configcontainer]")
 
 	SECTION("bool")
 	{
-		CHECK_THROWS_AS(
-			cfg.handle_action(
-				"always-display-description", {"whatever"}),
+		CHECK_THROWS_AS(cfg.handle_action("always-display-description",
+					{"whatever"}),
 			confighandlerexception);
 	}
 
@@ -104,26 +101,24 @@ TEST_CASE("Throws if command argument has invalid type", "[configcontainer]")
 
 	SECTION("enum")
 	{
-		CHECK_THROWS_AS(
-			cfg.handle_action("proxy-type", {"whatever"}),
+		CHECK_THROWS_AS(cfg.handle_action("proxy-type", {"whatever"}),
 			confighandlerexception);
 	}
 }
 
-TEST_CASE(
-	"reset_to_default changes setting to its default value",
+TEST_CASE("reset_to_default changes setting to its default value",
 	"[configcontainer]")
 {
 	configcontainer cfg;
 
 	const std::string default_value = "any";
 	const std::vector<std::string> tests{"any",
-					     "basic",
-					     "digest",
-					     "digest_ie",
-					     "gssnegotiate",
-					     "ntlm",
-					     "anysafe"};
+		"basic",
+		"digest",
+		"digest_ie",
+		"gssnegotiate",
+		"ntlm",
+		"anysafe"};
 	const std::string key("http-auth-method");
 
 	REQUIRE(cfg.get_configvalue(key) == default_value);
@@ -136,8 +131,7 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE(
-	"get_configvalue_as_bool() recognizes several boolean formats",
+TEST_CASE("get_configvalue_as_bool() recognizes several boolean formats",
 	"[configcontainer]")
 {
 	configcontainer cfg;
@@ -166,8 +160,7 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE(
-	"toggle() inverts the value of a boolean setting",
+TEST_CASE("toggle() inverts the value of a boolean setting",
 	"[configcontainer]")
 {
 	configcontainer cfg;
@@ -188,20 +181,19 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE(
-	"toggle() does nothing if setting is non-boolean",
+TEST_CASE("toggle() does nothing if setting is non-boolean",
 	"[configcontainer]")
 {
 	configcontainer cfg;
 
 	const std::vector<std::string> tests{"articlelist-title-format",
-					     "cache-file",
-					     "http-auth-method",
-					     "inoreader-passwordeval",
-					     "notify-program",
-					     "ocnews-passwordfile",
-					     "oldreader-min-items",
-					     "save-path"};
+		"cache-file",
+		"http-auth-method",
+		"inoreader-passwordeval",
+		"notify-program",
+		"ocnews-passwordfile",
+		"oldreader-min-items",
+		"save-path"};
 
 	for (const std::string& key : tests) {
 		const std::string expected = cfg.get_configvalue(key);
@@ -217,17 +209,18 @@ TEST_CASE(
 {
 	configcontainer cfg;
 
-	auto all_values_found = [](std::unordered_set<std::string>& expected,
-				   const std::vector<std::string>& result) {
-		for (const auto& line : result) {
-			auto it = expected.find(line);
-			if (it != expected.end()) {
-				expected.erase(it);
+	auto all_values_found =
+		[](std::unordered_set<std::string>& expected,
+			const std::vector<std::string>& result) {
+			for (const auto& line : result) {
+				auto it = expected.find(line);
+				if (it != expected.end()) {
+					expected.erase(it);
+				}
 			}
-		}
 
-		return expected.empty();
-	};
+			return expected.empty();
+		};
 
 	std::vector<std::string> result;
 
@@ -314,8 +307,7 @@ TEST_CASE(
 	REQUIRE(results_set2 == expected2);
 }
 
-TEST_CASE(
-	"get_suggestions() returns results in alphabetical order",
+TEST_CASE("get_suggestions() returns results in alphabetical order",
 	"[configcontainer]")
 {
 	configcontainer cfg;
@@ -325,8 +317,8 @@ TEST_CASE(
 		const std::vector<std::string> results =
 			cfg.get_suggestions(key);
 		for (auto one = results.begin(), two = one + 1;
-		     two != results.end();
-		     one = two, ++two) {
+			two != results.end();
+			one = two, ++two) {
 			INFO("Previous: " << *one);
 			INFO("Current:  " << *two);
 			REQUIRE(*one <= *two);

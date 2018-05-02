@@ -38,8 +38,7 @@ itemlist_formaction::itemlist_formaction(view* vv, std::string formstr)
 
 itemlist_formaction::~itemlist_formaction() {}
 
-void itemlist_formaction::process_operation(
-	operation op,
+void itemlist_formaction::process_operation(operation op,
 	bool automatic,
 	std::vector<std::string>* args)
 {
@@ -58,14 +57,13 @@ void itemlist_formaction::process_operation(
 	switch (op) {
 	case OP_OPEN: {
 		LOG(level::INFO,
-		    "itemlist_formaction: opening item at pos `%s'",
-		    itemposname);
+			"itemlist_formaction: opening item at pos `%s'",
+			itemposname);
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			// no need to mark item as read, the itemview already do
 			// that
 			old_itempos = itempos;
-			v->push_itemview(
-				feed,
+			v->push_itemview(feed,
 				visible_items[itempos].first->guid(),
 				show_searchresult ? searchphrase : "");
 			invalidate(itempos);
@@ -89,7 +87,7 @@ void itemlist_formaction::process_operation(
 				visible_items[itempos].first->deleted());
 			if (itempos < visible_items.size() - 1)
 				f->set("itempos",
-				       strprintf::fmt("%u", itempos + 1));
+					strprintf::fmt("%u", itempos + 1));
 			invalidate(itempos);
 		} else {
 			v->show_error(
@@ -103,8 +101,8 @@ void itemlist_formaction::process_operation(
 	} break;
 	case OP_OPENBROWSER_AND_MARK: {
 		LOG(level::INFO,
-		    "itemlist_formaction: opening item at pos `%s'",
-		    itemposname);
+			"itemlist_formaction: opening item at pos `%s'",
+			itemposname);
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
 				visible_items[itempos].first->set_unread(false);
@@ -116,12 +114,11 @@ void itemlist_formaction::process_operation(
 				if (!v->get_cfg()->get_configvalue_as_bool(
 					    "openbrowser-and-mark-jumps-to-"
 					    "next-unread")) {
-					if (itempos
-					    < visible_items.size() - 1) {
+					if (itempos <
+						visible_items.size() - 1) {
 						f->set("itempos",
-						       strprintf::fmt(
-							       "%u",
-							       itempos + 1));
+							strprintf::fmt("%u",
+								itempos + 1));
 					}
 				} else {
 					process_operation(OP_NEXTUNREAD);
@@ -135,8 +132,8 @@ void itemlist_formaction::process_operation(
 	} break;
 	case OP_OPENINBROWSER: {
 		LOG(level::INFO,
-		    "itemlist_formaction: opening item at pos `%s'",
-		    itemposname);
+			"itemlist_formaction: opening item at pos `%s'",
+			itemposname);
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
 				v->open_in_browser(
@@ -151,24 +148,26 @@ void itemlist_formaction::process_operation(
 	case OP_OPENALLUNREADINBROWSER: {
 		if (feed) {
 			LOG(level::INFO,
-			    "itemlist_formaction: opening all unread items in "
-			    "browser");
+				"itemlist_formaction: opening all unread items "
+				"in "
+				"browser");
 			open_unread_items_in_browser(feed, false);
 		}
 	} break;
 	case OP_OPENALLUNREADINBROWSER_AND_MARK: {
 		if (feed) {
 			LOG(level::INFO,
-			    "itemlist_formaction: opening all unread items in "
-			    "browser and marking read");
+				"itemlist_formaction: opening all unread items "
+				"in "
+				"browser and marking read");
 			open_unread_items_in_browser(feed, true);
 			invalidate(InvalidationMode::COMPLETE);
 		}
 	} break;
 	case OP_TOGGLEITEMREAD: {
 		LOG(level::INFO,
-		    "itemlist_formaction: toggling item read at pos `%s'",
-		    itemposname);
+			"itemlist_formaction: toggling item read at pos `%s'",
+			itemposname);
 		if (itemposname.length() > 0) {
 			v->set_status(_("Toggling read flag for article..."));
 			try {
@@ -219,8 +218,8 @@ void itemlist_formaction::process_operation(
 				    "toggleitemread-jumps-to-next-unread")) {
 				if (itempos < visible_items.size() - 1)
 					f->set("itempos",
-					       strprintf::fmt(
-						       "%u", itempos + 1));
+						strprintf::fmt(
+							"%u", itempos + 1));
 			} else {
 				process_operation(OP_NEXTUNREAD);
 			}
@@ -235,21 +234,19 @@ void itemlist_formaction::process_operation(
 						"external-url-viewer");
 				if (urlviewer == "") {
 					std::vector<linkpair> links;
-					std::vector<std::pair<
-						LineType,
+					std::vector<std::pair<LineType,
 						std::string>>
 						lines;
 					htmlrenderer rnd;
 					std::string baseurl =
-						visible_items[itempos].first
-									->get_base()
-								!= ""
-							? visible_items[itempos]
-								  .first
-								  ->get_base()
-							: visible_items[itempos]
-								  .first
-								  ->feedurl();
+						visible_items[itempos]
+								.first
+								->get_base() !=
+							""
+						? visible_items[itempos]
+							  .first->get_base()
+						: visible_items[itempos]
+							  .first->feedurl();
 					rnd.render(
 						visible_items[itempos]
 							.first->description(),
@@ -275,8 +272,8 @@ void itemlist_formaction::process_operation(
 		break;
 	case OP_BOOKMARK: {
 		LOG(level::INFO,
-		    "itemlist_formaction: bookmarking item at pos `%s'",
-		    itemposname);
+			"itemlist_formaction: bookmarking item at pos `%s'",
+			itemposname);
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
 				if (automatic) {
@@ -287,9 +284,9 @@ void itemlist_formaction::process_operation(
 					qna_responses.push_back(
 						visible_items[itempos]
 							.first->title());
-					qna_responses.push_back(
-						args->size() > 0 ? (*args)[0]
-								 : "");
+					qna_responses.push_back(args->size() > 0
+							? (*args)[0]
+							: "");
 					qna_responses.push_back(feed->title());
 					this->finished_qna(OP_INT_BM_END);
 				} else {
@@ -320,8 +317,7 @@ void itemlist_formaction::process_operation(
 					}
 				} else {
 					std::vector<qna_pair> qna;
-					qna.push_back(qna_pair(
-						_("Flags: "),
+					qna.push_back(qna_pair(_("Flags: "),
 						visible_items[itempos]
 							.first->flags()));
 					this->start_qna(
@@ -335,8 +331,8 @@ void itemlist_formaction::process_operation(
 	} break;
 	case OP_SAVE: {
 		LOG(level::INFO,
-		    "itemlist_formaction: saving item at pos `%s'",
-		    itemposname);
+			"itemlist_formaction: saving item at pos `%s'",
+			itemposname);
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			std::string filename;
 			if (automatic) {
@@ -360,7 +356,7 @@ void itemlist_formaction::process_operation(
 	case OP_RELOAD:
 		if (!show_searchresult) {
 			LOG(level::INFO,
-			    "itemlist_formaction: reloading current feed");
+				"itemlist_formaction: reloading current feed");
 			v->get_ctrl()->reload(pos);
 			invalidate(InvalidationMode::COMPLETE);
 		} else {
@@ -383,7 +379,7 @@ void itemlist_formaction::process_operation(
 		break;
 	case OP_NEXTUNREAD:
 		LOG(level::INFO,
-		    "itemlist_formaction: jumping to next unread item");
+			"itemlist_formaction: jumping to next unread item");
 		if (!jump_to_next_unread_item(false)) {
 			if (!v->get_next_unread(this)) {
 				v->show_error(_("No unread items."));
@@ -392,7 +388,7 @@ void itemlist_formaction::process_operation(
 		break;
 	case OP_PREVUNREAD:
 		LOG(level::INFO,
-		    "itemlist_formaction: jumping to previous unread item");
+			"itemlist_formaction: jumping to previous unread item");
 		if (!jump_to_previous_unread_item(false)) {
 			if (!v->get_previous_unread(this)) {
 				v->show_error(_("No unread items."));
@@ -409,7 +405,7 @@ void itemlist_formaction::process_operation(
 		break;
 	case OP_PREV:
 		LOG(level::INFO,
-		    "itemlist_formaction: jumping to previous item");
+			"itemlist_formaction: jumping to previous item");
 		if (!jump_to_previous_item(false)) {
 			if (!v->get_previous(this)) {
 				v->show_error(_("Already on first item."));
@@ -454,9 +450,11 @@ void itemlist_formaction::process_operation(
 					std::lock_guard<std::mutex> lock(
 						feed->item_mutex);
 					LOG(level::DEBUG,
-					    "itemlist_formaction: oh, it looks "
-					    "like I'm in a pseudo-feed (search "
-					    "result, query feed)");
+						"itemlist_formaction: oh, it "
+						"looks "
+						"like I'm in a pseudo-feed "
+						"(search "
+						"result, query feed)");
 					for (auto item : feed->items()) {
 						item->set_unread_nowrite_notify(
 							false,
@@ -481,10 +479,10 @@ void itemlist_formaction::process_operation(
 		break;
 	case OP_MARKALLABOVEASREAD:
 		LOG(level::INFO,
-		    "itemlist_formaction: marking all above as read");
+			"itemlist_formaction: marking all above as read");
 		v->set_status(_("Marking all above as read..."));
-		if (itemposname.length() > 0
-		    && itempos < visible_items.size()) {
+		if (itemposname.length() > 0 &&
+			itempos < visible_items.size()) {
 			for (unsigned int i = 0; i < itempos; ++i) {
 				if (visible_items[i].first->unread()) {
 					visible_items[i].first->set_unread(
@@ -505,7 +503,7 @@ void itemlist_formaction::process_operation(
 	case OP_TOGGLESHOWREAD:
 		m.parse(FILTER_UNREAD_ITEMS);
 		LOG(level::DEBUG,
-		    "itemlist_formaction: toggling show-read-articles");
+			"itemlist_formaction: toggling show-read-articles");
 		if (v->get_cfg()->get_configvalue_as_bool(
 			    "show-read-articles")) {
 			v->get_cfg()->set_configvalue(
@@ -567,8 +565,9 @@ void itemlist_formaction::process_operation(
 						->get_filters()
 						.get_filters());
 				LOG(level::DEBUG,
-				    "itemlist_formaction::run: newfilters = %s",
-				    newfilter);
+					"itemlist_formaction::run: newfilters "
+					"= %s",
+					newfilter);
 			}
 			if (newfilter != "") {
 				filterhistory.add_line(newfilter);
@@ -584,7 +583,7 @@ void itemlist_formaction::process_operation(
 					} else {
 						apply_filter = true;
 						invalidate(InvalidationMode::
-								   COMPLETE);
+								COMPLETE);
 						save_filterpos();
 					}
 				}
@@ -768,7 +767,7 @@ void itemlist_formaction::qna_end_editflags()
 		v->get_ctrl()->update_flags(visible_items[itempos].first);
 		v->set_status(_("Flags updated."));
 		LOG(level::DEBUG,
-		    "itemlist_formaction::finished_qna: updated flags");
+			"itemlist_formaction::finished_qna: updated flags");
 		invalidate(itempos);
 	}
 }
@@ -793,10 +792,10 @@ void itemlist_formaction::qna_start_search()
 				utf8searchphrase, feed);
 		}
 	} catch (const dbexception& e) {
-		v->show_error(strprintf::fmt(
-			_("Error while searching for `%s': %s"),
-			searchphrase,
-			e.what()));
+		v->show_error(
+			strprintf::fmt(_("Error while searching for `%s': %s"),
+				searchphrase,
+				e.what()));
 		return;
 	}
 
@@ -843,8 +842,8 @@ void itemlist_formaction::do_update_visible_items()
 	}
 
 	LOG(level::DEBUG,
-	    "itemlist_formaction::do_update_visible_items: size = %u",
-	    visible_items.size());
+		"itemlist_formaction::do_update_visible_items: size = %u",
+		visible_items.size());
 
 	visible_items = new_visible_items;
 }
@@ -903,8 +902,7 @@ void itemlist_formaction::prepare()
 			listfmt.clear();
 
 			for (auto item : visible_items) {
-				auto line = item2formatted_line(
-					item,
+				auto line = item2formatted_line(item,
 					width,
 					itemlist_format,
 					datetime_format);
@@ -913,8 +911,7 @@ void itemlist_formaction::prepare()
 		} else if (invalidation_mode == InvalidationMode::PARTIAL) {
 			for (auto itempos : invalidated_itempos) {
 				auto item = visible_items[itempos];
-				auto line = item2formatted_line(
-					item,
+				auto line = item2formatted_line(item,
 					width,
 					itemlist_format,
 					datetime_format);
@@ -923,20 +920,18 @@ void itemlist_formaction::prepare()
 			invalidated_itempos.clear();
 		} else {
 			LOG(level::ERROR,
-			    "invalidation_mode is neither COMPLETE nor "
-			    "PARTIAL");
+				"invalidation_mode is neither COMPLETE nor "
+				"PARTIAL");
 		}
 
-		f->modify(
-			"items",
+		f->modify("items",
 			"replace_inner",
 			listfmt.format_list(rxman, "articlelist"));
 	}
 
 	invalidated = false;
 
-	set_head(
-		feed->title(),
+	set_head(feed->title(),
 		feed->unread_item_count(),
 		feed->total_item_count(),
 		feed->rssurl());
@@ -953,11 +948,10 @@ std::string itemlist_formaction::item2formatted_line(
 	fmtstr_formatter fmt;
 	fmt.register_fmt('i', strprintf::fmt("%u", item.second + 1));
 	fmt.register_fmt('f', gen_flags(item.first));
-	fmt.register_fmt(
-		'D',
+	fmt.register_fmt('D',
 		gen_datestr(item.first->pubDate_timestamp(), datetime_format));
-	if (feed->rssurl() != item.first->feedurl()
-	    && item.first->get_feedptr() != nullptr) {
+	if (feed->rssurl() != item.first->feedurl() &&
+		item.first->get_feedptr() != nullptr) {
 		auto feedtitle = utils::replace_all(
 			item.first->get_feedptr()->title(), "<", "<>");
 		utils::remove_soft_hyphens(feedtitle);
@@ -1006,8 +1000,7 @@ void itemlist_formaction::init()
 	f->run(-3); // FRUN - compute all widget dimensions
 }
 
-void itemlist_formaction::set_head(
-	const std::string& s,
+void itemlist_formaction::set_head(const std::string& s,
 	unsigned int unread,
 	unsigned int total,
 	const std::string& url)
@@ -1048,10 +1041,10 @@ bool itemlist_formaction::jump_to_previous_unread_item(bool start_with_last)
 	is >> itempos;
 	for (int i = (start_with_last ? itempos : (itempos - 1)); i >= 0; --i) {
 		LOG(level::DEBUG,
-		    "itemlist_formaction::jump_to_previous_unread_item: "
-		    "visible_items[%u] unread = %s",
-		    i,
-		    visible_items[i].first->unread() ? "true" : "false");
+			"itemlist_formaction::jump_to_previous_unread_item: "
+			"visible_items[%u] unread = %s",
+			i,
+			visible_items[i].first->unread() ? "true" : "false");
 		if (visible_items[i].first->unread()) {
 			f->set("itempos", std::to_string(i));
 			return true;
@@ -1092,26 +1085,26 @@ bool itemlist_formaction::jump_to_next_unread_item(bool start_with_first)
 {
 	unsigned int itempos = utils::to_u(f->get("itempos"));
 	LOG(level::DEBUG,
-	    "itemlist_formaction::jump_to_next_unread_item: itempos = %u "
-	    "visible_items.size = %u",
-	    itempos,
-	    visible_items.size());
+		"itemlist_formaction::jump_to_next_unread_item: itempos = %u "
+		"visible_items.size = %u",
+		itempos,
+		visible_items.size());
 	for (unsigned int i = (start_with_first ? itempos : (itempos + 1));
-	     i < visible_items.size();
-	     ++i) {
+		i < visible_items.size();
+		++i) {
 		LOG(level::DEBUG,
-		    "itemlist_formaction::jump_to_next_unread_item: i = %u",
-		    i);
+			"itemlist_formaction::jump_to_next_unread_item: i = %u",
+			i);
 		if (visible_items[i].first->unread()) {
 			f->set("itempos", std::to_string(i));
 			return true;
 		}
 	}
 	for (unsigned int i = 0; i <= itempos && i < visible_items.size();
-	     ++i) {
+		++i) {
 		LOG(level::DEBUG,
-		    "itemlist_formaction::jump_to_next_unread_item: i = %u",
-		    i);
+			"itemlist_formaction::jump_to_next_unread_item: i = %u",
+			i);
 		if (visible_items[i].first->unread()) {
 			f->set("itempos", std::to_string(i));
 			return true;
@@ -1129,9 +1122,9 @@ bool itemlist_formaction::jump_to_previous_item(bool start_with_last)
 	int i = (start_with_last ? itempos : (itempos - 1));
 	if (i >= 0) {
 		LOG(level::DEBUG,
-		    "itemlist_formaction::jump_to_previous_item: "
-		    "visible_items[%u]",
-		    i);
+			"itemlist_formaction::jump_to_previous_item: "
+			"visible_items[%u]",
+			i);
 		f->set("itempos", std::to_string(i));
 		return true;
 	}
@@ -1142,15 +1135,15 @@ bool itemlist_formaction::jump_to_next_item(bool start_with_first)
 {
 	unsigned int itempos = utils::to_u(f->get("itempos"));
 	LOG(level::DEBUG,
-	    "itemlist_formaction::jump_to_next_item: itempos = %u "
-	    "visible_items.size = %u",
-	    itempos,
-	    visible_items.size());
+		"itemlist_formaction::jump_to_next_item: itempos = %u "
+		"visible_items.size = %u",
+		itempos,
+		visible_items.size());
 	unsigned int i = (start_with_first ? itempos : (itempos + 1));
 	if (i < visible_items.size()) {
 		LOG(level::DEBUG,
-		    "itemlist_formaction::jump_to_next_item: i = %u",
-		    i);
+			"itemlist_formaction::jump_to_next_item: i = %u",
+			i);
 		f->set("itempos", std::to_string(i));
 		return true;
 	}
@@ -1165,8 +1158,7 @@ std::string itemlist_formaction::get_guid()
 
 keymap_hint_entry* itemlist_formaction::get_keymap_hint()
 {
-	static keymap_hint_entry hints[] = {
-		{OP_QUIT, _("Quit")},
+	static keymap_hint_entry hints[] = {{OP_QUIT, _("Quit")},
 		{OP_OPEN, _("Open")},
 		{OP_SAVE, _("Save")},
 		{OP_RELOAD, _("Reload")},
@@ -1180,8 +1172,8 @@ keymap_hint_entry* itemlist_formaction::get_keymap_hint()
 
 void itemlist_formaction::handle_cmdline_num(unsigned int idx)
 {
-	if (idx > 0
-	    && idx <= visible_items[visible_items.size() - 1].second + 1) {
+	if (idx > 0 &&
+		idx <= visible_items[visible_items.size() - 1].second + 1) {
 		int i = get_pos(idx - 1);
 		if (i == -1) {
 			v->show_error(_("Position not visible!"));
@@ -1206,10 +1198,11 @@ void itemlist_formaction::handle_cmdline(const std::string& cmd)
 			std::string filename = utils::resolve_tilde(tokens[1]);
 			std::string itemposname = f->get("itempos");
 			LOG(level::INFO,
-			    "itemlist_formaction::handle_cmdline: saving item "
-			    "at pos `%s' to `%s'",
-			    itemposname,
-			    filename);
+				"itemlist_formaction::handle_cmdline: saving "
+				"item "
+				"at pos `%s' to `%s'",
+				itemposname,
+				filename);
 			if (itemposname.length() > 0) {
 				unsigned int itempos = utils::to_u(itemposname);
 				save_article(
@@ -1244,15 +1237,14 @@ void itemlist_formaction::recalculate_form()
 	// for the feed's itempos Correct the problem when you open itemview and
 	// jump to next then exit to itemlist and the itempos is wrong This only
 	// applies when "show-read-articles" is set to false
-	if ((old_itempos != -1) && itempos > (unsigned int)old_itempos
-	    && !v->get_cfg()->get_configvalue_as_bool("show-read-articles")) {
+	if ((old_itempos != -1) && itempos > (unsigned int)old_itempos &&
+		!v->get_cfg()->get_configvalue_as_bool("show-read-articles")) {
 		f->set("itempos", strprintf::fmt("%u", old_itempos));
 		old_itempos = -1; // Reset
 	}
 }
 
-void itemlist_formaction::save_article(
-	const std::string& filename,
+void itemlist_formaction::save_article(const std::string& filename,
 	std::shared_ptr<rss_item> item)
 {
 	if (filename == "") {
@@ -1318,8 +1310,8 @@ std::string itemlist_formaction::gen_flags(std::shared_ptr<rss_item> item)
 	return flags;
 }
 
-std::string
-itemlist_formaction::gen_datestr(time_t t, const std::string& datetimeformat)
+std::string itemlist_formaction::gen_datestr(time_t t,
+	const std::string& datetimeformat)
 {
 	char datebuf[64];
 	struct tm* stm = localtime(&t);
@@ -1346,9 +1338,9 @@ void itemlist_formaction::prepare_set_filterpos()
 void itemlist_formaction::set_feed(std::shared_ptr<rss_feed> fd)
 {
 	LOG(level::DEBUG,
-	    "itemlist_formaction::set_feed: fd pointer = %p title = `%s'",
-	    fd.get(),
-	    fd->title());
+		"itemlist_formaction::set_feed: fd pointer = %p title = `%s'",
+		fd.get(),
+		fd->title());
 	feed = fd;
 	feed->load();
 	invalidate(InvalidationMode::COMPLETE);
@@ -1361,8 +1353,7 @@ std::string itemlist_formaction::title()
 		return strprintf::fmt(_("Search Result - '%s'"), searchphrase);
 	} else {
 		if (feed->rssurl().substr(0, 6) == "query:")
-			return strprintf::fmt(
-				_("Query Feed - %s"),
+			return strprintf::fmt(_("Query Feed - %s"),
 				feed->rssurl().substr(
 					6, feed->rssurl().length() - 6));
 		else {
