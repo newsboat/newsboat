@@ -360,8 +360,8 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id, CURL* cached_handle) {
 
 			if (!item_obj["attachments"].is_null())
 			{
-				if (item_obj["attachements"].size() >= 1) {
-					json a = item_obj["attachements"].front();
+				if (item_obj["attachments"].size() >= 1) {
+					json a = item_obj["attachments"].front();
 					if (!a["content_url"].is_null()) {
 						item.enclosure_url = a["content_url"];
 					}
