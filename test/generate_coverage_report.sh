@@ -30,6 +30,8 @@ lcov --remove $APPTOTAL_INFO '*/newsboat/test/*' --output-file $APPTOTAL_INFO
 # Removing info about Newsboat's docs
 lcov --remove $APPTOTAL_INFO 'newsboat/doc/*' --output-file $APPTOTAL_INFO
 lcov --remove $APPTOTAL_INFO '*/newsboat/doc/*' --output-file $APPTOTAL_INFO
+# Removing info about third-party libraries
+lcov --remove $APPTOTAL_INFO '*/newsboat/3rd-party/*' --output-file $APPTOTAL_INFO
 
 genhtml -o html $APPTOTAL_INFO
 echo "The coverage report can be found at file://`pwd`/html/index.html"
