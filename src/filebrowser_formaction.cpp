@@ -233,12 +233,37 @@ std::string filebrowser_formaction::add_file(std::string filename) {
 		std::string rwxbits = get_rwx(sb.st_mode & 0777);
 		std::string owner = get_owner(sb.st_uid);
 		std::string group = get_group(sb.st_gid);
+		std::string formattedfilename = get_formatted_filename(filename, ftype, sb.st_mode);
 
 		std::string sizestr = strprintf::fmt("%12u", sb.st_size);
-		std::string line = strprintf::fmt("%c%s %s %s %s %s", ftype, rwxbits, owner, group, sizestr, filename);
+		std::string line = strprintf::fmt("%c%s %s %s %s %s", ftype, rwxbits, owner, group, sizestr, formattedfilename);
 		retval = strprintf::fmt("{listitem[%c%s] text:%s}", ftype, stfl::quote(filename), stfl::quote(line));
 	}
 	return retval;
+}
+
+std::string filebrowser_formaction::get_formatted_filename(std::string filename, char ftype, mode_t mode) {
+	char suffix = 0;
+
+	switch(ftype) {
+	case 'd':
+		suffix = '/';
+		break;
+	case 'l':
+		suffix = '@';
+		break;
+	case 's':
+		suffix = '=';
+		break;
+	case 'p':
+		suffix = '|';
+		break;
+	default:
+		if(mode & S_IXUSR)
+		        suffix = '*';
+	}
+
+	return strprintf::fmt("%s%c", filename, suffix);
 }
 
 std::string filebrowser_formaction::get_rwx(unsigned short val) {
