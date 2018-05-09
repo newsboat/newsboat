@@ -227,7 +227,7 @@ keymap_hint_entry * filebrowser_formaction::get_keymap_hint() {
 std::string filebrowser_formaction::add_file(std::string filename) {
 	std::string retval;
 	struct stat sb;
-	if (::stat(filename.c_str(),&sb)==0) {
+	if (::lstat(filename.c_str(),&sb)==0) {
 		char ftype = get_filetype(sb.st_mode);
 
 		std::string rwxbits = get_rwx(sb.st_mode & 0777);
@@ -261,7 +261,7 @@ char filebrowser_formaction::get_filetype(mode_t mode) {
 		{ S_IFIFO, 'p' }, { S_IFLNK, 'l' }, { 0      ,  0  }
 	};
 	for (unsigned int i=0; flags[i].flag != 0; i++) {
-		if (mode & flags[i].flag)
+		if ((mode & S_IFMT) == flags[i].flag)
 			return flags[i].ftype;
 	}
 	return '?';
