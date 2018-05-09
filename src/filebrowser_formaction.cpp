@@ -258,7 +258,7 @@ char filebrowser_formaction::get_filetype(mode_t mode) {
 		char ftype;
 	} flags[] = {
 		{ S_IFREG, '-' }, { S_IFDIR, 'd' }, { S_IFBLK, 'b' }, { S_IFCHR, 'c' },
-		{ S_IFIFO, 'p' }, { S_IFLNK, 'l' }, { 0      ,  0  }
+		{ S_IFIFO, 'p' }, { S_IFLNK, 'l' }, { S_IFSOCK, 's' }, { 0      ,  0  }
 	};
 	for (unsigned int i=0; flags[i].flag != 0; i++) {
 		if ((mode & S_IFMT) == flags[i].flag)
