@@ -152,24 +152,24 @@ json ttrss_api::run_op(const std::string& op,
 		return json(nullptr);
 	}
 
-	if (status != 0) {
-		if (reply["error"] == "NOT_LOGGED_IN" && try_login) {
-			if (authenticate())
-				return run_op(op, args, false, cached_handle);
-			else
-				return json(nullptr);
-		} else {
-			LOG(level::ERROR, "ttrss_api::run_op: status: %d, error: '%s'", status, reply["error"].dump());
-			return json(nullptr);
-		}
-	}
-
 	json content;
 	try {
 		content = reply.at("content");
 	} catch (json::exception& e) {
 		LOG(level::ERROR, "ttrss_api::run_op: no content part in answer from server");
 		return json(nullptr);
+	}
+
+	if (status != 0) {
+		if (content["error"] == "NOT_LOGGED_IN" && try_login) {
+			if (authenticate())
+				return run_op(op, args, false, cached_handle);
+			else
+				return json(nullptr);
+		} else {
+			LOG(level::ERROR, "ttrss_api::run_op: status: %d, error: '%s'", status, content["error"].dump());
+			return json(nullptr);
+		}
 	}
 
 	return content;
