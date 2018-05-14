@@ -1753,6 +1753,16 @@ void controller::sort_feeds() {
 		std::stable_sort(feeds.begin(), feeds.end(), [](std::shared_ptr<rss_feed> a, std::shared_ptr<rss_feed> b) {
 			return a->unread_item_count() < b->unread_item_count();
 		});
+	} else if (sortmethod == "recent") {
+		std::stable_sort(feeds.begin(), feeds.end(), [](std::shared_ptr<rss_feed> a, std::shared_ptr<rss_feed> b) {
+			if (a->items().size() == 0 || b->items().size() == 0) {
+				return a->items().size() > b->items().size();
+			}
+			auto cmp = [](std::shared_ptr<rss_item> a, std::shared_ptr<rss_item> b) { return *a < *b; };
+			auto& a_item = *std::min_element(a->items().begin(), a->items().end(), cmp);
+			auto& b_item = *std::min_element(b->items().begin(), b->items().end(), cmp);
+			return cmp(a_item, b_item);
+		});
 	}
 	if (direction == "asc") {
 		std::reverse(feeds.begin(), feeds.end());
