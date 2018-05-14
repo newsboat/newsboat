@@ -120,7 +120,7 @@ REDO:
 		/// This string is related to the letters in parentheses in the
 		/// "Sort by (f)irsttag/..." and "Reverse Sort by (f)irsttag/..." messages
 		std::string input_options = _("ftaurn");
-		char c = v->confirm(_("Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(r)ecent/(n)one?"), input_options);
+		char c = v->confirm(_("Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(r)ecency/(n)one?"), input_options);
 		if (!c) break;
 		unsigned int n_options = ((std::string) "ftaun").length();
 		if (input_options.length() < n_options) break;
@@ -133,7 +133,7 @@ REDO:
 		} else if (c == input_options.at(3)) {
 			v->get_cfg()->set_configvalue("feed-sort-order", "unreadarticlecount-desc");
 		} else if (c == input_options.at(4)) {
-			v->get_cfg()->set_configvalue("feed-sort-order", "recent-desc");
+			v->get_cfg()->set_configvalue("feed-sort-order", "recency-desc");
 		} else if (c == input_options.at(5)) {
 			v->get_cfg()->set_configvalue("feed-sort-order", "none-desc");
 		}
@@ -141,7 +141,7 @@ REDO:
 	break;
 	case OP_REVSORT: {
 		std::string input_options = _("ftaurn");
-		char c = v->confirm(_("Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(r)ecent/(n)one?"), input_options);
+		char c = v->confirm(_("Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(r)ecency/(n)one?"), input_options);
 		if (!c) break;
 		unsigned int n_options = ((std::string) "ftaun").length();
 		if (input_options.length() < n_options) break;
@@ -154,7 +154,7 @@ REDO:
 		} else if (c == input_options.at(3)) {
 			v->get_cfg()->set_configvalue("feed-sort-order", "unreadarticlecount-asc");
 		} else if (c == input_options.at(4)) {
-			v->get_cfg()->set_configvalue("feed-sort-order", "recent-asc");
+			v->get_cfg()->set_configvalue("feed-sort-order", "recency-asc");
 		} else if (c == input_options.at(5)) {
 			v->get_cfg()->set_configvalue("feed-sort-order", "none-asc");
 		}
