@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=Newsboat
+Exec=newsboat
+Icon=${SNAP}/meta/gui/newsboat.png
+Type=Application
+Terminal=true
+Categories=Network;
+NoDisplay=true
