@@ -1753,7 +1753,7 @@ void controller::sort_feeds() {
 		std::stable_sort(feeds.begin(), feeds.end(), [](std::shared_ptr<rss_feed> a, std::shared_ptr<rss_feed> b) {
 			return a->unread_item_count() < b->unread_item_count();
 		});
-	} else if (sortmethod == "recency") {
+	} else if (sortmethod == "lastupdated") {
 		std::stable_sort(feeds.begin(), feeds.end(), [](std::shared_ptr<rss_feed> a, std::shared_ptr<rss_feed> b) {
 			if (a->items().size() == 0 || b->items().size() == 0) {
 				return a->items().size() > b->items().size();
