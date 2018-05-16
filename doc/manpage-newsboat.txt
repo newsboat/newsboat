@@ -110,6 +110,8 @@ include::chapter-cmdline.txt[]
 
 'quit'::
         Quit newsboat
+'q'::
+        Alias for 'quit'
 
 'save' <filename>::
         Save current article to <filename>
