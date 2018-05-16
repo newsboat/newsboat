@@ -233,6 +233,12 @@ rsspp::feed newsblur_api::fetch_feed(const std::string& id) {
 				item.title = json_object_get_string(node);
 			}
 
+			if (json_object_object_get_ex(item_obj, "story_authors", &node)
+					== TRUE)
+			{
+				item.author = json_object_get_string(node);
+			}
+
 			if (json_object_object_get_ex(item_obj, "story_permalink", &node)
 					== TRUE)
 			{
