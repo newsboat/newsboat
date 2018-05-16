@@ -25,6 +25,7 @@ urlview_formaction::~urlview_formaction() {
 void urlview_formaction::process_operation(operation op, bool /* automatic */, std::vector<std::string> * /* args */) {
 	bool hardquit = false;
 	switch (op) {
+	case OP_OPENINBROWSER:
 	case OP_OPEN: {
 		std::string posstr = f->get("feedpos");
 		if (posstr.length() > 0) {
