@@ -1,11 +1,11 @@
-#include <fslock.h>
+#include "fslock.h"
 
-#include <unistd.h>
-#include <sys/stat.h>
 #include <fcntl.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
-#include <logger.h>
+#include "logger.h"
 
 namespace newsboat {
 
@@ -42,17 +42,21 @@ bool FSLock::try_lock(const std::string& new_lock_filepath, pid_t& pid)
 
 	// then we lock it (returns immediately if locking is not possible)
 	if (lockf(fd, F_TLOCK, 0) == 0) {
-		LOG(level::DEBUG, "FSLock: locked `%s', writing PID...", new_lock_filepath);
+		LOG(level::DEBUG,
+			"FSLock: locked `%s', writing PID...",
+			new_lock_filepath);
 		std::string pidtext = std::to_string(getpid());
 		// locking successful -> truncate file and write own PID into it
 		ssize_t written = 0;
 		if (ftruncate(fd, 0) == 0) {
 			written = write(fd, pidtext.c_str(), pidtext.length());
 		}
-		bool success =
-			   (written != -1)
-			&& (static_cast<unsigned int>(written) == pidtext.length());
-		LOG(level::DEBUG, "FSLock: PID written successfully: %i", success);
+		bool success = (written != -1) &&
+			(static_cast<unsigned int>(written) ==
+				pidtext.length());
+		LOG(level::DEBUG,
+			"FSLock: PID written successfully: %i",
+			success);
 		if (success) {
 			if (locked) {
 				remove_lock(lock_filepath);
@@ -64,14 +68,16 @@ bool FSLock::try_lock(const std::string& new_lock_filepath, pid_t& pid)
 		}
 		return success;
 	} else {
-		LOG(level::ERROR, "FSLock: something went wrong during locking: %s",
-				strerror(errno));
+		LOG(level::ERROR,
+			"FSLock: something went wrong during locking: %s",
+			strerror(errno));
 	}
 
-	// locking was not successful -> read PID of locking process from the file
+	// locking was not successful -> read PID of locking process from the
+	// file
 	if (fd >= 0) {
 		char buf[32];
-		int len = read(fd, buf, sizeof(buf)-1);
+		int len = read(fd, buf, sizeof(buf) - 1);
 		if (len > 0) {
 			buf[len] = '\0';
 			unsigned int upid = 0;
@@ -84,4 +90,4 @@ bool FSLock::try_lock(const std::string& new_lock_filepath, pid_t& pid)
 	return false;
 }
 
-}
+} // namespace newsboat

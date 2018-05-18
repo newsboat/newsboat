@@ -1,9 +1,12 @@
-#include <config.h>
-#include <rsspp_internal.h>
+#include "rsspp_internal.h"
+
+#include "config.h"
 
 namespace rsspp {
 
-std::shared_ptr<rss_parser> rss_parser_factory::get_object(feed& f, xmlDocPtr doc) {
+std::shared_ptr<rss_parser> rss_parser_factory::get_object(feed& f,
+	xmlDocPtr doc)
+{
 	switch (f.rss_version) {
 	case RSS_0_91:
 	case RSS_0_92:
@@ -23,4 +26,4 @@ std::shared_ptr<rss_parser> rss_parser_factory::get_object(feed& f, xmlDocPtr do
 	}
 }
 
-}
+} // namespace rsspp

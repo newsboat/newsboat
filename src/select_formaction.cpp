@@ -1,13 +1,14 @@
-#include <select_formaction.h>
-#include <formatstring.h>
-#include <view.h>
-#include <config.h>
-#include <utils.h>
-#include <strprintf.h>
-#include <listformatter.h>
+#include "select_formaction.h"
 
-#include <sstream>
 #include <cassert>
+#include <sstream>
+
+#include "config.h"
+#include "formatstring.h"
+#include "listformatter.h"
+#include "strprintf.h"
+#include "utils.h"
+#include "view.h"
 
 namespace newsboat {
 
@@ -18,16 +19,23 @@ namespace newsboat {
  * a few places.
  */
 
-select_formaction::select_formaction(view * vv, std::string formstr)
-	: formaction(vv, formstr), quit(false), type(selection_type::TAG)
-{ }
+select_formaction::select_formaction(view* vv, std::string formstr)
+	: formaction(vv, formstr)
+	, quit(false)
+	, type(selection_type::TAG)
+{
+}
 
-select_formaction::~select_formaction() { }
+select_formaction::~select_formaction() {}
 
-void select_formaction::handle_cmdline(const std::string& cmd) {
+void select_formaction::handle_cmdline(const std::string& cmd)
+{
 	unsigned int idx = 0;
-	if (1==sscanf(cmd.c_str(),"%u",&idx)) {
-		if (idx > 0 && idx <= ((type == selection_type::TAG) ? tags.size() : filters.size())) {
+	if (1 == sscanf(cmd.c_str(), "%u", &idx)) {
+		if (idx > 0 &&
+			idx <= ((type == selection_type::TAG)
+					       ? tags.size()
+					       : filters.size())) {
 			f->set("tagpos", std::to_string(idx - 1));
 		}
 	} else {
@@ -35,7 +43,10 @@ void select_formaction::handle_cmdline(const std::string& cmd) {
 	}
 }
 
-void select_formaction::process_operation(operation op, bool /* automatic */, std::vector<std::string> * /* args */) {
+void select_formaction::process_operation(operation op,
+	bool /* automatic */,
+	std::vector<std::string>* /* args */)
+{
 	bool hardquit = false;
 	switch (op) {
 	case OP_QUIT:
@@ -56,21 +67,18 @@ void select_formaction::process_operation(operation op, bool /* automatic */, st
 					value = tags[pos];
 					quit = true;
 				}
-			}
-			break;
+			} break;
 			case selection_type::FILTER: {
 				if (pos < filters.size()) {
 					value = filters[pos].second;
 					quit = true;
 				}
-			}
-			break;
+			} break;
 			default:
 				assert(0); // should never happen
 			}
 		}
-	}
-	break;
+	} break;
 	default:
 		break;
 	}
@@ -84,21 +92,28 @@ void select_formaction::process_operation(operation op, bool /* automatic */, st
 	}
 }
 
-void select_formaction::prepare() {
+void select_formaction::prepare()
+{
 	if (do_redraw) {
 		listformatter listfmt;
-		unsigned int i=0;
+		unsigned int i = 0;
 		switch (type) {
 		case selection_type::TAG:
 			for (auto tag : tags) {
-				std::string tagstr = strprintf::fmt("%4u  %s (%u)", i+1, tag, v->get_ctrl()->get_feed_count_per_tag(tag));
+				std::string tagstr = strprintf::fmt(
+					"%4u  %s (%u)",
+					i + 1,
+					tag,
+					v->get_ctrl()->get_feed_count_per_tag(
+						tag));
 				listfmt.add_line(tagstr, i);
 				i++;
 			}
 			break;
 		case selection_type::FILTER:
 			for (auto filter : filters) {
-				std::string tagstr = strprintf::fmt("%4u  %s", i+1, filter.first);
+				std::string tagstr = strprintf::fmt(
+					"%4u  %s", i + 1, filter.first);
 				listfmt.add_line(tagstr, i);
 				i++;
 			}
@@ -112,7 +127,8 @@ void select_formaction::prepare() {
 	}
 }
 
-void select_formaction::init() {
+void select_formaction::init()
+{
 	std::string title;
 	do_redraw = true;
 	quit = false;
@@ -129,10 +145,14 @@ void select_formaction::init() {
 
 	switch (type) {
 	case selection_type::TAG:
-		title = fmt.do_format(v->get_cfg()->get_configvalue("selecttag-title-format"), width);
+		title = fmt.do_format(
+			v->get_cfg()->get_configvalue("selecttag-title-format"),
+			width);
 		break;
 	case selection_type::FILTER:
-		title = fmt.do_format(v->get_cfg()->get_configvalue("selectfilter-title-format"), width);
+		title = fmt.do_format(v->get_cfg()->get_configvalue(
+					      "selectfilter-title-format"),
+			width);
 		break;
 	default:
 		assert(0); // should never happen
@@ -140,17 +160,14 @@ void select_formaction::init() {
 	f->set("head", title);
 }
 
-keymap_hint_entry * select_formaction::get_keymap_hint() {
-	static keymap_hint_entry hints_tag[] = {
-		{ OP_QUIT, _("Cancel") },
-		{ OP_OPEN, _("Select Tag") },
-		{ OP_NIL, nullptr }
-	};
-	static keymap_hint_entry hints_filter[] = {
-		{ OP_QUIT, _("Cancel") },
-		{ OP_OPEN, _("Select Filter") },
-		{ OP_NIL, nullptr }
-	};
+keymap_hint_entry* select_formaction::get_keymap_hint()
+{
+	static keymap_hint_entry hints_tag[] = {{OP_QUIT, _("Cancel")},
+		{OP_OPEN, _("Select Tag")},
+		{OP_NIL, nullptr}};
+	static keymap_hint_entry hints_filter[] = {{OP_QUIT, _("Cancel")},
+		{OP_OPEN, _("Select Filter")},
+		{OP_NIL, nullptr}};
 	switch (type) {
 	case selection_type::TAG:
 		return hints_tag;
@@ -160,7 +177,8 @@ keymap_hint_entry * select_formaction::get_keymap_hint() {
 	return nullptr;
 }
 
-std::string select_formaction::title() {
+std::string select_formaction::title()
+{
 	switch (type) {
 	case selection_type::TAG:
 		return _("Select Tag");
@@ -171,5 +189,4 @@ std::string select_formaction::title() {
 	}
 }
 
-
-}
+} // namespace newsboat

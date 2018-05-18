@@ -1,11 +1,8 @@
-
+#include "Parser.h"
 
 #include <wchar.h>
-#include "Parser.h"
+
 #include "Scanner.h"
-
-
-
 
 void Parser::SynErr(int n) {
 	if (errDist >= minErrDist) errors->SynErr(n);
@@ -69,74 +66,74 @@ void Parser::stringlit(char* &lit) {
 		} else if (la->kind == _rangeliteral) {
 			Get();
 		} else SynErr(22);
-		lit = coco_string_create_char(t->val); 
+		lit = coco_string_create_char(t->val);
 }
 
 void Parser::matchattrib(char* &name) {
 		Expect(_ident);
-		name = coco_string_create_char(t->val); 
+		name = coco_string_create_char(t->val);
 }
 
 void Parser::matchop(int &op) {
 		switch (la->kind) {
 		case 7 /* "==" */: {
 			Get();
-			op = MATCHOP_EQ; 
+			op = MATCHOP_EQ;
 			break;
 		}
 		case 8 /* "=" */: {
 			Get();
-			op = MATCHOP_EQ; 
+			op = MATCHOP_EQ;
 			break;
 		}
 		case 9 /* "!=" */: {
 			Get();
-			op = MATCHOP_NE; 
+			op = MATCHOP_NE;
 			break;
 		}
 		case 10 /* "=~" */: {
 			Get();
-			op = MATCHOP_RXEQ; 
+			op = MATCHOP_RXEQ;
 			break;
 		}
 		case 11 /* "!~" */: {
 			Get();
-			op = MATCHOP_RXNE; 
+			op = MATCHOP_RXNE;
 			break;
 		}
 		case 12 /* "<" */: {
 			Get();
-			op = MATCHOP_LT; 
+			op = MATCHOP_LT;
 			break;
 		}
 		case 13 /* ">" */: {
 			Get();
-			op = MATCHOP_GT; 
+			op = MATCHOP_GT;
 			break;
 		}
 		case 14 /* "<=" */: {
 			Get();
-			op = MATCHOP_LE; 
+			op = MATCHOP_LE;
 			break;
 		}
 		case 15 /* ">=" */: {
 			Get();
-			op = MATCHOP_GE; 
+			op = MATCHOP_GE;
 			break;
 		}
 		case 16 /* "#" */: {
 			Get();
-			op = MATCHOP_CONTAINS; 
+			op = MATCHOP_CONTAINS;
 			break;
 		}
 		case 17 /* "!#" */: {
 			Get();
-			op = MATCHOP_CONTAINSNOT; 
+			op = MATCHOP_CONTAINSNOT;
 			break;
 		}
 		case 18 /* "between" */: {
 			Get();
-			op = MATCHOP_BETWEEN; 
+			op = MATCHOP_BETWEEN;
 			break;
 		}
 		default: SynErr(23); break;
@@ -146,31 +143,31 @@ void Parser::matchop(int &op) {
 void Parser::logop(int &lop) {
 		if (la->kind == 19 /* "and" */) {
 			Get();
-			lop = LOGOP_AND; 
+			lop = LOGOP_AND;
 		} else if (la->kind == 20 /* "or" */) {
 			Get();
-			lop = LOGOP_OR; 
+			lop = LOGOP_OR;
 		} else SynErr(24);
 }
 
 void Parser::matchexpr() {
-		char * name, * lit; int op = 0; 
+		char * name, * lit; int op = 0;
 		matchattrib(name);
 		matchop(op);
 		stringlit(lit);
-		gen->add_matchexpr(name, op, lit); 
+		gen->add_matchexpr(name, op, lit);
 }
 
 void Parser::blockexpr() {
 		Expect(_openblock);
-		gen->open_block(); 
+		gen->open_block();
 		expr();
 		Expect(_closeblock);
-		gen->close_block(); 
+		gen->close_block();
 }
 
 void Parser::expr() {
-		int lop; 
+		int lop;
 		if (la->kind == _ident) {
 			matchexpr();
 		} else if (la->kind == _openblock) {
@@ -178,7 +175,7 @@ void Parser::expr() {
 		} else SynErr(25);
 		while (la->kind == 19 /* "and" */ || la->kind == 20 /* "or" */) {
 			logop(lop);
-			gen->add_logop(lop); 
+			gen->add_logop(lop);
 			if (la->kind == _ident) {
 				matchexpr();
 			} else if (la->kind == _openblock) {
@@ -208,7 +205,7 @@ struct ParserInitExistsRecognizer {
 	struct InitIsMissingType {
 		char dummy1;
 	};
-	
+
 	struct InitExistsType {
 		char dummy1; char dummy2;
 	};
@@ -232,7 +229,7 @@ struct ParserDestroyExistsRecognizer {
 	struct DestroyIsMissingType {
 		char dummy1;
 	};
-	
+
 	struct DestroyExistsType {
 		char dummy1; char dummy2;
 	};

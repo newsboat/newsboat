@@ -1,18 +1,22 @@
+#include "matcher.h"
+
 #include "3rd-party/catch.hpp"
 
-#include <matcher.h>
-#include <exceptions.h>
+#include "exceptions.h"
 
 using namespace newsboat;
 
 struct testmatchable : public matchable {
-	virtual bool has_attribute(const std::string& attribname) {
-		if (attribname == "abcd" || attribname == "AAAA" || attribname == "tags")
+	virtual bool has_attribute(const std::string& attribname)
+	{
+		if (attribname == "abcd" || attribname == "AAAA" ||
+			attribname == "tags")
 			return true;
 		return false;
 	}
 
-	virtual std::string get_attribute(const std::string& attribname) {
+	virtual std::string get_attribute(const std::string& attribname)
+	{
 		if (attribname == "abcd")
 			return "xyz";
 		if (attribname == "AAAA")
@@ -23,7 +27,8 @@ struct testmatchable : public matchable {
 	}
 };
 
-TEST_CASE("Operator `=` checks if field has given value", "[matcher]") {
+TEST_CASE("Operator `=` checks if field has given value", "[matcher]")
+{
 	testmatchable mock;
 	matcher m;
 
@@ -34,8 +39,7 @@ TEST_CASE("Operator `=` checks if field has given value", "[matcher]") {
 	REQUIRE_FALSE(m.matches(&mock));
 }
 
-TEST_CASE("Operator `!=` checks if field doesn't have given value",
-          "[matcher]")
+TEST_CASE("Operator `!=` checks if field doesn't have given value", "[matcher]")
 {
 	testmatchable mock;
 	matcher m;
@@ -47,7 +51,8 @@ TEST_CASE("Operator `!=` checks if field doesn't have given value",
 	REQUIRE_FALSE(m.matches(&mock));
 }
 
-TEST_CASE("Operator `=~` checks if field matches given regex", "[matcher]") {
+TEST_CASE("Operator `=~` checks if field matches given regex", "[matcher]")
+{
 	testmatchable mock;
 	matcher m;
 
@@ -70,7 +75,8 @@ TEST_CASE("Operator `=~` checks if field matches given regex", "[matcher]") {
 	REQUIRE_FALSE(m.matches(&mock));
 }
 
-TEST_CASE("Matcher throws if expression contains undefined fields", "[matcher]") {
+TEST_CASE("Matcher throws if expression contains undefined fields", "[matcher]")
+{
 	testmatchable mock;
 	matcher m;
 
@@ -88,11 +94,10 @@ TEST_CASE("Matcher throws if expression contains undefined fields", "[matcher]")
 
 	m.parse("BBBB between 1:23");
 	REQUIRE_THROWS_AS(m.matches(&mock), matcherexception);
-
 }
 
 TEST_CASE("Matcher throws if regex passed to `=~` or `!~` is invalid",
-          "[matcher]")
+	"[matcher]")
 {
 	testmatchable mock;
 	matcher m;
@@ -105,7 +110,7 @@ TEST_CASE("Matcher throws if regex passed to `=~` or `!~` is invalid",
 }
 
 TEST_CASE("Operator `!~` checks if field doesn't match given regex",
-          "[matcher]")
+	"[matcher]")
 {
 	testmatchable mock;
 	matcher m;
@@ -127,7 +132,7 @@ TEST_CASE("Operator `!~` checks if field doesn't match given regex",
 }
 
 TEST_CASE("Operator `#` checks if \"tags\" field contains given value",
-          "[matcher]")
+	"[matcher]")
 {
 	testmatchable mock;
 	matcher m;
@@ -158,7 +163,7 @@ TEST_CASE("Operator `#` checks if \"tags\" field contains given value",
 }
 
 TEST_CASE("Operator `!#` checks if \"tags\" field doesn't contain given value",
-          "[matcher]")
+	"[matcher]")
 {
 	testmatchable mock;
 	matcher m;
@@ -170,8 +175,10 @@ TEST_CASE("Operator `!#` checks if \"tags\" field doesn't contain given value",
 	REQUIRE_FALSE(m.matches(&mock));
 }
 
-TEST_CASE("Operators `>`, `>=`, `<` and `<=` comparee field's value to given "
-          "value", "[matcher]")
+TEST_CASE(
+	"Operators `>`, `>=`, `<` and `<=` comparee field's value to given "
+	"value",
+	"[matcher]")
 {
 	testmatchable mock;
 	matcher m;
@@ -193,7 +200,7 @@ TEST_CASE("Operators `>`, `>=`, `<` and `<=` comparee field's value to given "
 }
 
 TEST_CASE("Operator `between` checks if field's value is in given range",
-          "[matcher]")
+	"[matcher]")
 {
 	testmatchable mock;
 	matcher m;
@@ -215,15 +222,15 @@ TEST_CASE("Operator `between` checks if field's value is in given range",
 	REQUIRE(m.matches(&mock));
 }
 
-TEST_CASE("Invalid expression results in parsing error", "[matcher]") {
+TEST_CASE("Invalid expression results in parsing error", "[matcher]")
+{
 	matcher m;
 
 	REQUIRE_FALSE(m.parse("AAAA between 0:15:30"));
 	REQUIRE(m.get_parse_error() != "");
 }
 
-TEST_CASE("get_expression() returns previously parsed expression",
-          "[matcher]")
+TEST_CASE("get_expression() returns previously parsed expression", "[matcher]")
 {
 	matcher m2("AAAA between 1:30000");
 	REQUIRE(m2.get_expression() == "AAAA between 1:30000");

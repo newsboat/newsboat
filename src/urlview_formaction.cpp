@@ -1,12 +1,13 @@
-#include <urlview_formaction.h>
-#include <formatstring.h>
-#include <view.h>
-#include <config.h>
-#include <utils.h>
-#include <strprintf.h>
-#include <listformatter.h>
+#include "urlview_formaction.h"
 
 #include <sstream>
+
+#include "config.h"
+#include "formatstring.h"
+#include "listformatter.h"
+#include "strprintf.h"
+#include "utils.h"
+#include "view.h"
 
 namespace newsboat {
 
@@ -16,13 +17,21 @@ namespace newsboat {
  * in a browser or to bookmark them.
  */
 
-urlview_formaction::urlview_formaction(view * vv, std::shared_ptr<rss_feed>& feed, std::string formstr)
-	: formaction(vv, formstr), quit(false), feed(feed) { }
-
-urlview_formaction::~urlview_formaction() {
+urlview_formaction::urlview_formaction(view* vv,
+	std::shared_ptr<rss_feed>& feed,
+	std::string formstr)
+	: formaction(vv, formstr)
+	, quit(false)
+	, feed(feed)
+{
 }
 
-void urlview_formaction::process_operation(operation op, bool /* automatic */, std::vector<std::string> * /* args */) {
+urlview_formaction::~urlview_formaction() {}
+
+void urlview_formaction::process_operation(operation op,
+	bool /* automatic */,
+	std::vector<std::string>* /* args */)
+{
 	bool hardquit = false;
 	switch (op) {
 	case OP_OPENINBROWSER:
@@ -36,20 +45,19 @@ void urlview_formaction::process_operation(operation op, bool /* automatic */, s
 		} else {
 			v->show_error(_("No link selected!"));
 		}
-	}
-	break;
+	} break;
 	case OP_BOOKMARK: {
 		std::string posstr = f->get("feedpos");
 		if (posstr.length() > 0) {
 			unsigned int idx = utils::to_u(posstr, 0);
 
-			this->start_bookmark_qna("", links[idx].first, "", feed->title());
+			this->start_bookmark_qna(
+				"", links[idx].first, "", feed->title());
 
 		} else {
 			v->show_error(_("No link selected!"));
 		}
-	}
-	break;
+	} break;
 	case OP_1:
 	case OP_2:
 	case OP_3:
@@ -67,8 +75,7 @@ void urlview_formaction::process_operation(operation op, bool /* automatic */, s
 			v->open_in_browser(links[idx].first);
 			v->set_status("");
 		}
-	}
-	break;
+	} break;
 	case OP_QUIT:
 		quit = true;
 		break;
@@ -87,19 +94,23 @@ void urlview_formaction::process_operation(operation op, bool /* automatic */, s
 	}
 }
 
-void urlview_formaction::prepare() {
+void urlview_formaction::prepare()
+{
 	if (do_redraw) {
 		listformatter listfmt;
-		unsigned int i=0;
+		unsigned int i = 0;
 		for (auto link : links) {
-			listfmt.add_line(strprintf::fmt("%2u  %s",i+1,link.first), i);
+			listfmt.add_line(
+				strprintf::fmt("%2u  %s", i + 1, link.first),
+				i);
 			i++;
 		}
-		f->modify("urls","replace_inner", listfmt.format_list());
+		f->modify("urls", "replace_inner", listfmt.format_list());
 	}
 }
 
-void urlview_formaction::init() {
+void urlview_formaction::init()
+{
 	v->set_status("");
 
 	std::string viewwidth = f->get("urls:w");
@@ -109,37 +120,41 @@ void urlview_formaction::init() {
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', PROGRAM_VERSION);
 
-	f->set("head", fmt.do_format(v->get_cfg()->get_configvalue("urlview-title-format"), width));
+	f->set("head",
+		fmt.do_format(
+			v->get_cfg()->get_configvalue("urlview-title-format"),
+			width));
 	do_redraw = true;
 	quit = false;
 	set_keymap_hints();
 }
 
-keymap_hint_entry * urlview_formaction::get_keymap_hint() {
-	static keymap_hint_entry hints[] = {
-		{ OP_QUIT, _("Quit") },
-		{ OP_OPEN, _("Open in Browser") },
-		{ OP_BOOKMARK, _("Save Bookmark") },
-		{ OP_NIL, nullptr }
-	};
+keymap_hint_entry* urlview_formaction::get_keymap_hint()
+{
+	static keymap_hint_entry hints[] = {{OP_QUIT, _("Quit")},
+		{OP_OPEN, _("Open in Browser")},
+		{OP_BOOKMARK, _("Save Bookmark")},
+		{OP_NIL, nullptr}};
 	return hints;
 }
 
-void urlview_formaction::handle_cmdline(const std::string& cmd) {
+void urlview_formaction::handle_cmdline(const std::string& cmd)
+{
 	unsigned int idx = 0;
-	if (1==sscanf(cmd.c_str(),"%u",&idx)) {
+	if (1 == sscanf(cmd.c_str(), "%u", &idx)) {
 		if (idx < 1 || idx > links.size()) {
 			v->show_error(_("Invalid position!"));
 		} else {
-			f->set("feedpos", std::to_string(idx-1));
+			f->set("feedpos", std::to_string(idx - 1));
 		}
 	} else {
 		formaction::handle_cmdline(cmd);
 	}
 }
 
-std::string urlview_formaction::title() {
+std::string urlview_formaction::title()
+{
 	return _("URLs");
 }
 
-}
+} // namespace newsboat

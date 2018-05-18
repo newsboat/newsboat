@@ -1,34 +1,34 @@
-#include <pb_controller.h>
-#include <pb_view.h>
-#include <poddlthread.h>
-#include <config.h>
-#include <utils.h>
-#include <strprintf.h>
-#include <iostream>
+#include "pb_controller.h"
+
 #include <cstdio>
 #include <cstdlib>
-
+#include <cstring>
+#include <getopt.h>
+#include <iostream>
+#include <pwd.h>
+#include <signal.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <pwd.h>
-#include <cstdlib>
 #include <thread>
-#include <signal.h>
 #include <unistd.h>
-#include <getopt.h>
-#include <cstring>
 
-#include <keymap.h>
-#include <configcontainer.h>
-#include <colormanager.h>
-#include <exceptions.h>
-#include <queueloader.h>
-#include <logger.h>
+#include "colormanager.h"
+#include "config.h"
+#include "configcontainer.h"
+#include "exceptions.h"
+#include "keymap.h"
+#include "logger.h"
+#include "pb_view.h"
+#include "poddlthread.h"
+#include "queueloader.h"
+#include "strprintf.h"
+#include "utils.h"
 
 using namespace newsboat;
 
-static void ctrl_c_action(int sig) {
-	LOG(level::DEBUG,"caugh signal %d",sig);
+static void ctrl_c_action(int sig)
+{
+	LOG(level::DEBUG, "caugh signal %d", sig);
 	stfl::reset();
 	::exit(EXIT_FAILURE);
 }
@@ -42,9 +42,10 @@ const std::string pb_controller::LOCK_SUFFIX = ".lock";
  *
  * returns false, if that fails
  */
-bool pb_controller::setup_dirs_xdg(const char *env_home) {
-	const char *env_xdg_config;
-	const char *env_xdg_data;
+bool pb_controller::setup_dirs_xdg(const char* env_home)
+{
+	const char* env_xdg_config;
+	const char* env_xdg_data;
 	std::string xdg_config_dir;
 	std::string xdg_data_dir;
 
@@ -74,16 +75,17 @@ bool pb_controller::setup_dirs_xdg(const char *env_home) {
 	xdg_data_dir.append(NEWSBEUTER_PATH_SEP);
 	xdg_data_dir.append(NEWSBOAT_SUBDIR_XDG);
 
-	bool config_dir_exists = 0 == access(xdg_config_dir.c_str(), R_OK | X_OK);
+	bool config_dir_exists =
+		0 == access(xdg_config_dir.c_str(), R_OK | X_OK);
 
 	if (!config_dir_exists) {
-		std::cerr
-		    << strprintf::fmt(
-		           _("XDG: configuration directory '%s' not accessible, "
-		             "using '%s' instead."),
-		           xdg_config_dir,
-		           config_dir)
-		    << std::endl;
+		std::cerr << strprintf::fmt(
+				     _("XDG: configuration directory '%s' not "
+				       "accessible, "
+				       "using '%s' instead."),
+				     xdg_config_dir,
+				     config_dir)
+			  << std::endl;
 
 		return false;
 	}
@@ -98,45 +100,57 @@ bool pb_controller::setup_dirs_xdg(const char *env_home) {
 	// create data directory if it doesn't exist
 	if (0 != utils::mkdir_parents(xdg_data_dir, 0700)) {
 		LOG(level::CRITICAL,
-				"Couldn't create `%s': (%i) %s",
-				xdg_data_dir,
-				errno,
-				strerror(errno));
+			"Couldn't create `%s': (%i) %s",
+			xdg_data_dir,
+			errno,
+			strerror(errno));
 		::exit(EXIT_FAILURE);
 	}
 
 	/* in config */
 	url_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + url_file;
-	config_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
+	config_file =
+		config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
 
 	/* in data */
-	cache_file = xdg_data_dir + std::string(NEWSBEUTER_PATH_SEP) + cache_file;
+	cache_file =
+		xdg_data_dir + std::string(NEWSBEUTER_PATH_SEP) + cache_file;
 	lock_file = cache_file + LOCK_SUFFIX;
-	queue_file = xdg_data_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
-	searchfile = strprintf::fmt("%s%shistory.search", xdg_data_dir, NEWSBEUTER_PATH_SEP);
-	cmdlinefile = strprintf::fmt("%s%shistory.cmdline", xdg_data_dir, NEWSBEUTER_PATH_SEP);
+	queue_file =
+		xdg_data_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
+	searchfile = strprintf::fmt(
+		"%s%shistory.search", xdg_data_dir, NEWSBEUTER_PATH_SEP);
+	cmdlinefile = strprintf::fmt(
+		"%s%shistory.cmdline", xdg_data_dir, NEWSBEUTER_PATH_SEP);
 
 	return true;
 }
 
 pb_controller::pb_controller()
-	:	v(0),
-		config_file("config"),
-		queue_file("queue"),
-		cfg(0),
-		view_update_(true),
-		max_dls(1),
-		ql(0),
-		lock_file("pb-lock.pid")
+	: v(0)
+	, config_file("config")
+	, queue_file("queue")
+	, cfg(0)
+	, view_update_(true)
+	, max_dls(1)
+	, ql(0)
+	, lock_file("pb-lock.pid")
 {
-	char * cfgdir;
+	char* cfgdir;
 	if (!(cfgdir = ::getenv("HOME"))) {
-		struct passwd * spw = ::getpwuid(::getuid());
+		struct passwd* spw = ::getpwuid(::getuid());
 		if (spw) {
 			cfgdir = spw->pw_dir;
 		} else {
-			std::cout << _("Fatal error: couldn't determine home directory!") << std::endl;
-			std::cout << strprintf::fmt(_("Please set the HOME environment variable or add a valid user for UID %u!"), ::getuid()) << std::endl;
+			std::cout << _("Fatal error: couldn't determine home "
+				       "directory!")
+				  << std::endl;
+			std::cout << strprintf::fmt(
+					     _("Please set the HOME "
+					       "environment variable or add a "
+					       "valid user for UID %u!"),
+					     ::getuid())
+				  << std::endl;
 			::exit(EXIT_FAILURE);
 		}
 	}
@@ -151,26 +165,29 @@ pb_controller::pb_controller()
 	// create configuration directory if it doesn't exist
 	int ret = ::mkdir(config_dir.c_str(), 0700);
 	if (ret && errno != EEXIST) {
-		std::cerr
-			<< strprintf::fmt(
-				_("Fatal error: couldn't create configuration directory `%s': (%i) %s"),
-				config_dir,
-				errno,
-				std::strerror(errno))
-			<< std::endl;
+		std::cerr << strprintf::fmt(
+				     _("Fatal error: couldn't create "
+				       "configuration directory `%s': (%i) %s"),
+				     config_dir,
+				     errno,
+				     std::strerror(errno))
+			  << std::endl;
 		::exit(EXIT_FAILURE);
 	}
 
-	config_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
+	config_file =
+		config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
 	queue_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
 	lock_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + lock_file;
 }
 
-pb_controller::~pb_controller() {
+pb_controller::~pb_controller()
+{
 	delete cfg;
 }
 
-int pb_controller::run(int argc, char * argv[]) {
+int pb_controller::run(int argc, char* argv[])
+{
 	int c;
 	bool automatic_dl = false;
 
@@ -178,17 +195,17 @@ int pb_controller::run(int argc, char * argv[]) {
 
 	static const char getopt_str[] = "C:q:d:l:havV";
 	static const struct option longopts[] = {
-		{"config-file"     , required_argument, 0, 'C'},
-		{"queue-file"      , required_argument, 0, 'q'},
-		{"log-file"        , required_argument, 0, 'd'},
-		{"log-level"       , required_argument, 0, 'l'},
-		{"help"            , no_argument      , 0, 'h'},
-		{"autodownload"    , no_argument      , 0, 'a'},
-		{"version"         , no_argument      , 0, 'v'},
-		{0                 , 0                , 0,  0 }
-	};
+		{"config-file", required_argument, 0, 'C'},
+		{"queue-file", required_argument, 0, 'q'},
+		{"log-file", required_argument, 0, 'd'},
+		{"log-level", required_argument, 0, 'l'},
+		{"help", no_argument, 0, 'h'},
+		{"autodownload", no_argument, 0, 'a'},
+		{"version", no_argument, 0, 'v'},
+		{0, 0, 0, 0}};
 
-	while ((c = ::getopt_long(argc, argv, getopt_str, longopts, nullptr)) != -1) {
+	while ((c = ::getopt_long(argc, argv, getopt_str, longopts, nullptr)) !=
+		-1) {
 		switch (c) {
 		case ':':
 		case '?':
@@ -211,27 +228,41 @@ int pb_controller::run(int argc, char * argv[]) {
 			if (l > level::NONE && l <= level::DEBUG) {
 				logger::getInstance().set_loglevel(l);
 			} else {
-				std::cerr << strprintf::fmt(_("%s: %d: invalid loglevel value"), argv[0], l) << std::endl;
+				std::cerr << strprintf::fmt(_("%s: %d: invalid "
+							      "loglevel value"),
+						     argv[0],
+						     l)
+					  << std::endl;
 				return EXIT_FAILURE;
 			}
-			}
-			break;
+		} break;
 		case 'h':
 			print_usage(argv[0]);
 			return EXIT_SUCCESS;
 		default:
-			std::cout << strprintf::fmt(_("%s: unknown option - %c"), argv[0], static_cast<char>(c)) << std::endl;
+			std::cout
+				<< strprintf::fmt(_("%s: unknown option - %c"),
+					   argv[0],
+					   static_cast<char>(c))
+				<< std::endl;
 			print_usage(argv[0]);
 			return EXIT_FAILURE;
 		}
 	};
 
-	std::cout << strprintf::fmt(_("Starting %s %s..."), "podboat", PROGRAM_VERSION) << std::endl;
+	std::cout << strprintf::fmt(
+			     _("Starting %s %s..."), "podboat", PROGRAM_VERSION)
+		  << std::endl;
 
 	fslock = std::unique_ptr<FSLock>(new FSLock());
 	pid_t pid;
-	if (! fslock->try_lock(lock_file, pid)) {
-		std::cout << strprintf::fmt(_("Error: an instance of %s is already running (PID: %u)"), "podboat", pid) << std::endl;
+	if (!fslock->try_lock(lock_file, pid)) {
+		std::cout << strprintf::fmt(
+				     _("Error: an instance of %s is already "
+				       "running (PID: %u)"),
+				     "podboat",
+				     pid)
+			  << std::endl;
 		return EXIT_FAILURE;
 	}
 
@@ -241,7 +272,7 @@ int pb_controller::run(int argc, char * argv[]) {
 	configparser cfgparser;
 	cfg = new configcontainer();
 	cfg->register_commands(cfgparser);
-	colormanager * colorman = new colormanager();
+	colormanager* colorman = new colormanager();
 	colorman->register_commands(cfgparser);
 
 	keymap keys(KM_PODBOAT);
@@ -283,7 +314,7 @@ int pb_controller::run(int argc, char * argv[]) {
 
 	stfl::reset();
 
-	std::cout <<  _("Cleaning up queue...");
+	std::cout << _("Cleaning up queue...");
 	std::cout.flush();
 
 	ql->reload(downloads_);
@@ -294,12 +325,13 @@ int pb_controller::run(int argc, char * argv[]) {
 	return EXIT_SUCCESS;
 }
 
-void pb_controller::print_usage(const char * argv0) {
-	auto msg =
-	    strprintf::fmt(_("%s %s\nusage %s [-C <file>] [-q <file>] [-h]\n"),
-	    "podboat",
-	    PROGRAM_VERSION,
-	    argv0);
+void pb_controller::print_usage(const char* argv0)
+{
+	auto msg = strprintf::fmt(
+		_("%s %s\nusage %s [-C <file>] [-q <file>] [-h]\n"),
+		"podboat",
+		PROGRAM_VERSION,
+		argv0);
 	std::cout << msg;
 
 	struct arg {
@@ -310,15 +342,28 @@ void pb_controller::print_usage(const char * argv0) {
 	};
 
 	static const std::vector<arg> args = {
-		{ 'C', "config-file" , _s("<configfile>"), _s("read configuration from <configfile>") }                      ,
-		{ 'q', "queue-file"  , _s("<queuefile>") , _s("use <queuefile> as queue file") }                             ,
-		{ 'a', "autodownload", ""                , _s("start download on startup") }                                 ,
-		{ 'l', "log-level"   , _s("<loglevel>")  , _s("write a log with a certain loglevel (valid values: 1 to 6)") },
-		{ 'd', "log-file"    , _s("<logfile>")   , _s("use <logfile> as output log file") }                          ,
-		{ 'h', "help"        , ""                , _s("this help") }
-	};
+		{'C',
+			"config-file",
+			_s("<configfile>"),
+			_s("read configuration from <configfile>")},
+		{'q',
+			"queue-file",
+			_s("<queuefile>"),
+			_s("use <queuefile> as queue file")},
+		{'a', "autodownload", "", _s("start download on startup")},
+		{'l',
+			"log-level",
+			_s("<loglevel>"),
+			_s("write a log with a certain loglevel (valid values: "
+			   "1 to "
+			   "6)")},
+		{'d',
+			"log-file",
+			_s("<logfile>"),
+			_s("use <logfile> as output log file")},
+		{'h', "help", "", _s("this help")}};
 
-	for (const auto & a : args) {
+	for (const auto& a : args) {
 		std::string longcolumn("-");
 		longcolumn += a.name;
 		longcolumn += ", --" + a.longname;
@@ -331,11 +376,13 @@ void pb_controller::print_usage(const char * argv0) {
 	}
 }
 
-std::string pb_controller::get_dlpath() {
+std::string pb_controller::get_dlpath()
+{
 	return cfg->get_configvalue("download-path");
 }
 
-unsigned int pb_controller::downloads_in_progress() {
+unsigned int pb_controller::downloads_in_progress()
+{
 	unsigned int count = 0;
 	for (auto dl : downloads_) {
 		if (dl.status() == dlstatus::DOWNLOADING)
@@ -344,17 +391,20 @@ unsigned int pb_controller::downloads_in_progress() {
 	return count;
 }
 
-unsigned int pb_controller::get_maxdownloads() {
+unsigned int pb_controller::get_maxdownloads()
+{
 	return max_dls;
 }
 
-void pb_controller::reload_queue(bool remove_unplayed) {
+void pb_controller::reload_queue(bool remove_unplayed)
+{
 	if (ql) {
 		ql->reload(downloads_, remove_unplayed);
 	}
 }
 
-double pb_controller::get_total_kbps() {
+double pb_controller::get_total_kbps()
+{
 	double result = 0.0;
 	for (auto dl : downloads_) {
 		if (dl.status() == dlstatus::DOWNLOADING) {
@@ -364,40 +414,44 @@ double pb_controller::get_total_kbps() {
 	return result;
 }
 
-void pb_controller::start_downloads() {
+void pb_controller::start_downloads()
+{
 	int dl2start = get_maxdownloads() - downloads_in_progress();
 	for (auto& download : downloads_) {
-		if (dl2start == 0) break;
+		if (dl2start == 0)
+			break;
 
 		if (download.status() == dlstatus::QUEUED) {
-			std::thread t {poddlthread(&download, cfg)};
+			std::thread t{poddlthread(&download, cfg)};
 			--dl2start;
 			t.detach();
 		}
 	}
 }
 
-void pb_controller::increase_parallel_downloads() {
+void pb_controller::increase_parallel_downloads()
+{
 	++max_dls;
 }
 
-void pb_controller::decrease_parallel_downloads() {
+void pb_controller::decrease_parallel_downloads()
+{
 	if (max_dls > 1)
 		--max_dls;
 }
 
-void pb_controller::play_file(const std::string& file) {
+void pb_controller::play_file(const std::string& file)
+{
 	std::string cmdline;
 	std::string player = cfg->get_configvalue("player");
 	if (player == "")
 		return;
 	cmdline.append(player);
 	cmdline.append(" '");
-	cmdline.append(utils::replace_all(file,"'", "%27"));
+	cmdline.append(utils::replace_all(file, "'", "%27"));
 	cmdline.append("'");
 	stfl::reset();
 	utils::run_interactively(cmdline, "pb_controller::play_file");
 }
 
-
-} // namespace
+} // namespace podboat
