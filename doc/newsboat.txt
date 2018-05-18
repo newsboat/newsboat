@@ -777,11 +777,12 @@ is <<ignore-article,`ignore-article`>>:
 	ignore-article "*" "title =~ \"Gentoo\""
 	ignore-article "http://synflood.at/blog/index.php?/feeds/index.rss2" "title =~ \"newsboat\""
 
-The basic format is that the user specifies an RSS feed for which the ignore
-shall be applied (`"*"` matches all RSS feeds), and then a filter expression (see
-previous section). If newsboat hits an article in the specified RSS feed that
-matches the specified filter expression, then this article is ignored and never
-presented to the user. The configuration itself can contain as many
+It takes two parameters. The first one is either a URL of a feed, or `"*"` to
+match any feed (asterisk is _not_ a pattern, glob or regex—we simply reserve it
+to mean "all feeds").  The second argument is <<_filter_language,a filter
+expression>> for an article. If newsboat hits an article in the specified RSS
+feed that matches the specified filter expression, then this article is ignored
+and never presented to the user. The configuration itself can contain as many
 <<ignore-article,`ignore-article`>> commands as desired.
 
 You can also specify the way an article is ignored. There are
