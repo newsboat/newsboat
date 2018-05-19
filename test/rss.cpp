@@ -6,27 +6,28 @@
 #include "configcontainer.h"
 #include "rss_parser.h"
 #include "rsspp_internal.h"
+#include "test-helpers.h"
 
 TEST_CASE("Throws exception if file doesn't exist", "[rsspp::parser]")
 {
+	using TestHelpers::ExceptionWithMsg;
+
 	rsspp::parser p;
 
-	try {
-		rsspp::feed f = p.parse_file("data/non-existent.xml");
-	} catch (rsspp::exception e) {
-		REQUIRE(e.what() == std::string("could not parse file"));
-	}
+	REQUIRE_THROWS_MATCHES(p.parse_file("data/non-existent.xml"),
+		rsspp::exception,
+		ExceptionWithMsg<rsspp::exception>("could not parse file"));
 }
 
 TEST_CASE("Throws exception if file can't be parsed", "[rsspp::parser]")
 {
+	using TestHelpers::ExceptionWithMsg;
+
 	rsspp::parser p;
 
-	try {
-		rsspp::feed f = p.parse_file("data/empty.xml");
-	} catch (rsspp::exception e) {
-		REQUIRE(e.what() == std::string("could not parse file"));
-	}
+	REQUIRE_THROWS_MATCHES(p.parse_file("data/empty.xml"),
+		rsspp::exception,
+		ExceptionWithMsg<rsspp::exception>("could not parse file"));
 }
 
 TEST_CASE("Extracts data from RSS 0.91", "[rsspp::parser]")
