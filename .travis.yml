@@ -192,9 +192,10 @@ install:
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
-  # --keep-going is used to process the maximum number of the files
-  # before failing; this will help with debugging build fails that happen on
-  # platforms that the developer doesn't have access to.
+  # CI builds take a while to provision, install dependencies and compile our
+  # stuff. To maximize the benefits, we ask Make to process as many rules as
+  # possible before failing. This enables developers to fix more errors before
+  # re-submitting the code to CI, which should increase throughput.
   - if [ -z "$CHECKS" ]; then   make --keep-going all test   ; fi
   - if [ -z "$CHECKS" ]; then   make distclean   ; fi
   - if [ -z "$CHECKS" ]; then   make PROFILE=1 all test   ; fi
