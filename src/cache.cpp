@@ -29,8 +29,8 @@ inline void cache::run_sql_impl(const std::string& query,
 	int rc = sqlite3_exec(
 		db, query.c_str(), callback, callback_argument, nullptr);
 	if (rc != SQLITE_OK) {
-		std::string message = "query \"%s\" failed: error = %d";
-		LOG(level::CRITICAL, message, query, rc);
+		const std::string message = "query \"%s\" failed: (%d) %s";
+		LOG(level::CRITICAL, message, query, rc, sqlite3_errstr(rc));
 		if (do_throw) {
 			throw dbexception(db);
 		}
