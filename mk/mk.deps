@@ -75,7 +75,7 @@ src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  3rd-party/json.hpp include/utils.h include/view.h \
  include/filebrowser_formaction.h include/formaction.h include/history.h \
  include/keymap.h include/stflpp.h include/htmlrenderer.h \
- include/textformatter.h xlicense.h
+ include/textformatter.h xlicense.h include/globals.h
 src/dialogs_formaction.o: src/dialogs_formaction.cpp \
  include/dialogs_formaction.h include/formaction.h include/history.h \
  include/keymap.h include/configparser.h include/rss.h \
@@ -271,7 +271,7 @@ src/pb_controller.o: src/pb_controller.cpp include/pb_controller.h \
  include/strprintf.h include/pb_view.h include/colormanager.h \
  include/keymap.h include/stflpp.h include/poddlthread.h \
  include/queueloader.h include/strprintf.h include/utils.h \
- include/logger.h
+ include/logger.h include/globals.h
 src/pb_view.o: src/pb_view.cpp include/pb_view.h include/colormanager.h \
  include/configparser.h include/keymap.h include/stflpp.h config.h \
  stfl/dllist.h include/download.h stfl/help.h include/logger.h \

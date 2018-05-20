@@ -23,6 +23,7 @@
 #include "queueloader.h"
 #include "strprintf.h"
 #include "utils.h"
+#include "globals.h"
 
 using namespace newsboat;
 
@@ -34,8 +35,6 @@ static void ctrl_c_action(int sig)
 }
 
 namespace podboat {
-
-const std::string pb_controller::LOCK_SUFFIX = ".lock";
 
 /**
  * \brief Try to setup XDG style dirs.

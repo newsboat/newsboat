@@ -52,10 +52,9 @@
 #include "utils.h"
 #include "view.h"
 #include "xlicense.h"
+#include "globals.h"
 
 namespace newsboat {
-
-const std::string controller::LOCK_SUFFIX = ".lock";
 
 int ctrl_c_hit = 0;
 
