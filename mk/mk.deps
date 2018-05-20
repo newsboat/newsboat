@@ -34,6 +34,9 @@ src/cache.o: src/cache.cpp include/cache.h include/configcontainer.h \
  include/fslock.h include/regexmanager.h include/remote_api.h \
  include/urlreader.h include/exceptions.h include/logger.h include/rss.h \
  include/strprintf.h include/utils.h
+src/cliargsparser.o: src/cliargsparser.cpp include/cliargsparser.h \
+ include/logger.h config.h include/strprintf.h include/globals.h \
+ include/strprintf.h
 src/colormanager.o: src/colormanager.cpp include/colormanager.h \
  include/configparser.h config.h include/exceptions.h \
  include/feedlist_formaction.h include/history.h \
@@ -64,15 +67,15 @@ src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  include/matcher.h filter/FilterParser.h include/utils.h include/logger.h \
  config.h include/strprintf.h include/colormanager.h \
  include/filtercontainer.h include/fslock.h include/regexmanager.h \
- include/remote_api.h include/urlreader.h include/colormanager.h \
- include/configcontainer.h include/configparser.h \
+ include/remote_api.h include/urlreader.h include/cliargsparser.h \
+ include/colormanager.h include/configcontainer.h include/configparser.h \
  include/downloadthread.h include/controller.h include/exception.h \
  include/exceptions.h include/feedhq_api.h include/formatstring.h \
- include/inoreader_api.h include/logger.h include/newsblur_api.h \
- rss/rsspp.h include/remote_api.h include/ocnews_api.h \
- include/oldreader_api.h include/regexmanager.h include/rss_parser.h \
- include/stflpp.h include/strprintf.h include/ttrss_api.h \
- 3rd-party/json.hpp include/utils.h include/view.h \
+ include/globals.h include/inoreader_api.h include/logger.h \
+ include/newsblur_api.h rss/rsspp.h include/remote_api.h \
+ include/ocnews_api.h include/oldreader_api.h include/regexmanager.h \
+ include/rss_parser.h include/stflpp.h include/strprintf.h \
+ include/ttrss_api.h 3rd-party/json.hpp include/utils.h include/view.h \
  include/filebrowser_formaction.h include/formaction.h include/history.h \
  include/keymap.h include/stflpp.h include/htmlrenderer.h \
  include/textformatter.h xlicense.h
@@ -267,7 +270,7 @@ src/pb_controller.o: src/pb_controller.cpp include/pb_controller.h \
  include/configcontainer.h include/configparser.h include/download.h \
  include/fslock.h include/queueloader.h include/pb_controller.h \
  include/colormanager.h config.h include/configcontainer.h \
- include/exceptions.h include/keymap.h include/logger.h \
+ include/exceptions.h include/globals.h include/keymap.h include/logger.h \
  include/strprintf.h include/pb_view.h include/colormanager.h \
  include/keymap.h include/stflpp.h include/poddlthread.h \
  include/queueloader.h include/strprintf.h include/utils.h \
@@ -398,6 +401,8 @@ test/cache.o: test/cache.cpp include/cache.h include/configcontainer.h \
  include/strprintf.h 3rd-party/catch.hpp include/configcontainer.h \
  include/rss_parser.h include/remote_api.h rss/rsspp.h \
  include/remote_api.h test/test-helpers.h
+test/cliargsparser.o: test/cliargsparser.cpp 3rd-party/catch.hpp \
+ include/cliargsparser.h include/logger.h config.h include/strprintf.h
 test/colormanager.o: test/colormanager.cpp include/colormanager.h \
  include/configparser.h 3rd-party/catch.hpp include/exceptions.h
 test/configcontainer.o: test/configcontainer.cpp \

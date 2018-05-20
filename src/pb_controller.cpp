@@ -16,6 +16,7 @@
 #include "config.h"
 #include "configcontainer.h"
 #include "exceptions.h"
+#include "globals.h"
 #include "keymap.h"
 #include "logger.h"
 #include "pb_view.h"
@@ -34,8 +35,6 @@ static void ctrl_c_action(int sig)
 }
 
 namespace podboat {
-
-const std::string pb_controller::LOCK_SUFFIX = ".lock";
 
 /**
  * \brief Try to setup XDG style dirs.
@@ -239,14 +238,6 @@ int pb_controller::run(int argc, char* argv[])
 		case 'h':
 			print_usage(argv[0]);
 			return EXIT_SUCCESS;
-		default:
-			std::cout
-				<< strprintf::fmt(_("%s: unknown option - %c"),
-					   argv[0],
-					   static_cast<char>(c))
-				<< std::endl;
-			print_usage(argv[0]);
-			return EXIT_FAILURE;
 		}
 	};
 
