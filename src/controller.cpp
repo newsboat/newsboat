@@ -548,14 +548,6 @@ int controller::run(int argc, char* argv[])
 			do_read_export = true;
 			readinfofile = optarg;
 			break;
-		default:
-			std::cout
-				<< strprintf::fmt(_("%s: unknown option - %c"),
-					   argv[0],
-					   static_cast<char>(c))
-				<< std::endl;
-			print_usage(argv[0]);
-			return EXIT_FAILURE;
 		}
 	};
 

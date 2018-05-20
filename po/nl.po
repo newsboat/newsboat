@@ -120,11 +120,6 @@ msgstr ""
 msgid "%s: %d: invalid loglevel value"
 msgstr "%s: %d: logniveau is ongeldig"
 
-#: src/controller.cpp:518 src/pb_controller.cpp:203
-#, c-format
-msgid "%s: unknown option - %c"
-msgstr "%s: onbekende optie - %c"
-
 #: src/controller.cpp:551 src/pb_controller.cpp:209
 #, c-format
 msgid "Starting %s %s..."
