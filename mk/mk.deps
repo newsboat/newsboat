@@ -401,6 +401,8 @@ test/cache.o: test/cache.cpp include/cache.h include/configcontainer.h \
  include/strprintf.h 3rd-party/catch.hpp include/configcontainer.h \
  include/rss_parser.h include/remote_api.h rss/rsspp.h \
  include/remote_api.h test/test-helpers.h
+test/cliargsparser.o: test/cliargsparser.cpp 3rd-party/catch.hpp \
+ include/cliargsparser.h include/logger.h config.h include/strprintf.h
 test/colormanager.o: test/colormanager.cpp include/colormanager.h \
  include/configparser.h 3rd-party/catch.hpp include/exceptions.h
 test/configcontainer.o: test/configcontainer.cpp \
