@@ -9,7 +9,6 @@
 #include <curl/curl.h>
 #include <fstream>
 #include <functional>
-#include <getopt.h>
 #include <iostream>
 #include <langinfo.h>
 #include <libgen.h>
@@ -29,6 +28,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#include "cliargsparser.h"
 #include "colormanager.h"
 #include "config.h"
 #include "configcontainer.h"
@@ -38,6 +38,7 @@
 #include "exceptions.h"
 #include "feedhq_api.h"
 #include "formatstring.h"
+#include "globals.h"
 #include "inoreader_api.h"
 #include "logger.h"
 #include "newsblur_api.h"
@@ -52,7 +53,6 @@
 #include "utils.h"
 #include "view.h"
 #include "xlicense.h"
-#include "globals.h"
 
 namespace newsboat {
 
@@ -389,41 +389,10 @@ void controller::set_view(view* vv)
 
 int controller::run(int argc, char* argv[])
 {
-	int c;
-
 	::signal(SIGINT, ctrl_c_action);
 	::signal(SIGPIPE, ignore_signal);
 	::signal(SIGHUP, sighup_action);
 	::signal(SIGCHLD, omg_a_child_died);
-
-	bool do_import = false, do_export = false,
-	     cachefile_given_on_cmdline = false, do_vacuum = false;
-	std::string importfile;
-	bool do_read_import = false, do_read_export = false;
-	std::string readinfofile;
-	unsigned int show_version = 0;
-
-	bool silent = false;
-	bool execute_cmds = false;
-
-	static const char getopt_str[] = "i:erhqu:c:C:d:l:vVoxXI:E:";
-	static const struct option longopts[] = {
-		{"cache-file", required_argument, 0, 'c'},
-		{"config-file", required_argument, 0, 'C'},
-		{"execute", required_argument, 0, 'x'},
-		{"export-to-file", required_argument, 0, 'E'},
-		{"export-to-opml", no_argument, 0, 'e'},
-		{"help", no_argument, 0, 'h'},
-		{"import-from-file", required_argument, 0, 'I'},
-		{"import-from-opml", required_argument, 0, 'i'},
-		{"log-file", required_argument, 0, 'd'},
-		{"log-level", required_argument, 0, 'l'},
-		{"quiet", no_argument, 0, 'q'},
-		{"refresh-on-start", no_argument, 0, 'r'},
-		{"url-file", required_argument, 0, 'u'},
-		{"vacuum", no_argument, 0, 'X'},
-		{"version", no_argument, 0, 'v'},
-		{0, 0, 0, 0}};
 
 	const char* env_home;
 	if (!(env_home = ::getenv("HOME"))) {
@@ -446,136 +415,74 @@ int controller::run(int argc, char* argv[])
 
 	setup_dirs(env_home);
 
-	bool using_nonstandard_configs = false;
+	CLIArgsParser args(argc, argv);
 
-	/* Now that silencing's set up, let's rewind to the beginning of argv
-	 * and process the options */
-	optind = 1;
+	refresh_on_start = args.refresh_on_start;
 
-	while ((c = ::getopt_long(argc, argv, getopt_str, longopts, nullptr)) !=
-		-1) {
-		switch (c) {
-		case ':': /* fall-through */
-		case '?': /* missing option */
-			print_usage(argv[0]);
-			return EXIT_FAILURE;
-		case 'i':
-			if (do_export) {
-				print_usage(argv[0]);
-				return EXIT_FAILURE;
-			}
-			do_import = true;
-			importfile = optarg;
-			break;
-		case 'r':
-			refresh_on_start = true;
-			break;
-		case 'e':
-			// disable logging of newsboat's startup progress to
-			// stdout, because the OPML export will be printed to
-			// stdout
-			silent = true;
-			if (do_import) {
-				print_usage(argv[0]);
-				return EXIT_FAILURE;
-			}
-			do_export = true;
-			break;
-		case 'h':
-			print_usage(argv[0]);
-			return EXIT_SUCCESS;
-		case 'u':
-			url_file = optarg;
-			using_nonstandard_configs = true;
-			break;
-		case 'c':
-			cache_file = optarg;
-			lock_file = std::string(cache_file) + LOCK_SUFFIX;
-			cachefile_given_on_cmdline = true;
-			using_nonstandard_configs = true;
-			break;
-		case 'C':
-			config_file = optarg;
-			using_nonstandard_configs = true;
-			break;
-		case 'X':
-			do_vacuum = true;
-			break;
-		case 'v':
-		case 'V':
-			show_version++;
-			break;
-		case 'x':
-			// disable logging of newsboat's startup progress to
-			// stdout, because the command execution result will be
-			// printed to stdout
-			silent = true;
-			execute_cmds = true;
-			break;
-		case 'q':
-			silent = true;
-			break;
-		case 'd':
-			logger::getInstance().set_logfile(optarg);
-			break;
-		case 'l': {
-			level l = static_cast<level>(atoi(optarg));
-			if (l > level::NONE && l <= level::DEBUG) {
-				logger::getInstance().set_loglevel(l);
-			} else {
-				std::cerr << strprintf::fmt(_("%s: %d: invalid "
-							      "loglevel value"),
-						     argv[0],
-						     l)
-					  << std::endl;
-				return EXIT_FAILURE;
-			}
-		} break;
-		case 'I':
-			if (do_read_export) {
-				print_usage(argv[0]);
-				return EXIT_FAILURE;
-			}
-			do_read_import = true;
-			readinfofile = optarg;
-			break;
-		case 'E':
-			if (do_read_import) {
-				print_usage(argv[0]);
-				return EXIT_FAILURE;
-			}
-			do_read_export = true;
-			readinfofile = optarg;
-			break;
-		}
-	};
+	if (args.set_log_file) {
+		logger::getInstance().set_logfile(args.log_file);
+	}
 
-	if (show_version) {
-		print_version_information(argv[0], show_version);
+	if (args.set_log_level) {
+		logger::getInstance().set_loglevel(args.log_level);
+	}
+
+	if (args.set_url_file) {
+		url_file = args.url_file;
+	}
+
+	if (args.set_cache_file) {
+		cache_file = args.cache_file;
+	}
+
+	if (args.set_lock_file) {
+		lock_file = args.lock_file;
+	}
+
+	if (args.set_config_file) {
+		config_file = args.config_file;
+	}
+
+	if (!args.display_msg.empty()) {
+		std::cerr << args.display_msg << std::endl;
+	}
+
+	if (args.should_print_usage) {
+		print_usage(argv[0]);
+	}
+
+	if (args.should_return) {
+		return args.return_code;
+	}
+
+	if (args.show_version) {
+		print_version_information(argv[0], args.show_version);
 		return EXIT_SUCCESS;
 	}
 
-	if (do_import) {
-		LOG(level::INFO, "Importing OPML file from %s", importfile);
+	if (args.do_import) {
+		LOG(level::INFO,
+			"Importing OPML file from %s",
+			args.importfile);
 		urlcfg = new file_urlreader(url_file);
 		urlcfg->reload();
-		import_opml(importfile);
+		import_opml(args.importfile);
 		return EXIT_SUCCESS;
 	}
 
 	LOG(level::INFO, "nl_langinfo(CODESET): %s", nl_langinfo(CODESET));
 
-	if ((!using_nonstandard_configs) &&
+	if ((!args.using_nonstandard_configs) &&
 		(0 != access(url_file.c_str(), F_OK))) {
-		migrate_data_from_newsbeuter(env_home, silent);
+		migrate_data_from_newsbeuter(env_home, args.silent);
 	}
 
 	if (!create_dirs()) {
 		return EXIT_FAILURE;
 	}
 
-	if (!do_export) {
-		if (!silent)
+	if (!args.do_export) {
+		if (!args.silent)
 			std::cout << strprintf::fmt(_("Starting %s %s..."),
 					     PROGRAM_NAME,
 					     PROGRAM_VERSION)
@@ -584,7 +491,7 @@ int controller::run(int argc, char* argv[])
 		fslock = std::unique_ptr<FSLock>(new FSLock());
 		pid_t pid;
 		if (!fslock->try_lock(lock_file, pid)) {
-			if (!execute_cmds) {
+			if (!args.execute_cmds) {
 				std::cout << strprintf::fmt(
 						     _("Error: an instance of "
 						       "%s is already running "
@@ -597,7 +504,7 @@ int controller::run(int argc, char* argv[])
 		}
 	}
 
-	if (!silent)
+	if (!args.silent)
 		std::cout << _("Loading configuration...");
 	std::cout.flush();
 
@@ -631,12 +538,12 @@ int controller::run(int argc, char* argv[])
 
 	update_config();
 
-	if (!silent)
+	if (!args.silent)
 		std::cout << _("done.") << std::endl;
 
 	// create cache object
 	std::string cachefilepath = cfg.get_configvalue("cache-file");
-	if (cachefilepath.length() > 0 && !cachefile_given_on_cmdline) {
+	if (cachefilepath.length() > 0 && !args.set_cache_file) {
 		cache_file = cachefilepath.c_str();
 
 		lock_file = std::string(cache_file) + LOCK_SUFFIX;
@@ -653,7 +560,7 @@ int controller::run(int argc, char* argv[])
 		}
 	}
 
-	if (!silent) {
+	if (!args.silent) {
 		std::cout << _("Opening cache...");
 		std::cout.flush();
 	}
@@ -673,7 +580,7 @@ int controller::run(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-	if (!silent) {
+	if (!args.silent) {
 		std::cout << _("done.") << std::endl;
 	}
 
@@ -715,7 +622,7 @@ int controller::run(int argc, char* argv[])
 			urlcfg->get_source());
 	}
 
-	if (!do_export && !silent) {
+	if (!args.do_export && !args.silent) {
 		std::cout << strprintf::fmt(
 			_("Loading URLs from %s..."), urlcfg->get_source());
 		std::cout.flush();
@@ -727,7 +634,7 @@ int controller::run(int argc, char* argv[])
 		}
 	}
 	urlcfg->reload();
-	if (!do_export && !silent) {
+	if (!args.do_export && !args.silent) {
 		std::cout << _("done.") << std::endl;
 	}
 
@@ -773,13 +680,13 @@ int controller::run(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-	if (!do_export && !do_vacuum && !silent)
+	if (!args.do_export && !args.do_vacuum && !args.silent)
 		std::cout << _("Loading articles from cache...");
-	if (do_vacuum)
+	if (args.do_vacuum)
 		std::cout << _("Opening cache...");
 	std::cout.flush();
 
-	if (do_vacuum) {
+	if (args.do_vacuum) {
 		std::cout << _("done.") << std::endl;
 		std::cout << _("Cleaning up cache thoroughly...");
 		std::cout.flush();
@@ -820,13 +727,13 @@ int controller::run(int argc, char* argv[])
 
 	std::vector<std::string> tags = urlcfg->get_alltags();
 
-	if (!do_export && !silent)
+	if (!args.do_export && !args.silent)
 		std::cout << _("done.") << std::endl;
 
 	// if configured, we fill all query feeds with some data; no need to
 	// sort it, it will be refilled when actually opening it.
 	if (cfg.get_configvalue_as_bool("prepopulate-query-feeds")) {
-		if (!do_export && !silent) {
+		if (!args.do_export && !args.silent) {
 			std::cout << _("Prepopulating query feeds...");
 			std::cout.flush();
 		}
@@ -837,36 +744,36 @@ int controller::run(int argc, char* argv[])
 			}
 		}
 
-		if (!do_export && !silent) {
+		if (!args.do_export && !args.silent) {
 			std::cout << _("done.") << std::endl;
 		}
 	}
 
 	sort_feeds();
 
-	if (do_export) {
+	if (args.do_export) {
 		export_opml();
 		return EXIT_SUCCESS;
 	}
 
-	if (do_read_import) {
+	if (args.do_read_import) {
 		LOG(level::INFO,
 			"Importing read information file from %s",
-			readinfofile);
+			args.readinfofile);
 		std::cout << _("Importing list of read articles...");
 		std::cout.flush();
-		import_read_information(readinfofile);
+		import_read_information(args.readinfofile);
 		std::cout << _("done.") << std::endl;
 		return EXIT_SUCCESS;
 	}
 
-	if (do_read_export) {
+	if (args.do_read_export) {
 		LOG(level::INFO,
 			"Exporting read information file to %s",
-			readinfofile);
+			args.readinfofile);
 		std::cout << _("Exporting list of read articles...");
 		std::cout.flush();
-		export_read_information(readinfofile);
+		export_read_information(args.readinfofile);
 		std::cout << _("done.") << std::endl;
 		return EXIT_SUCCESS;
 	}
@@ -876,7 +783,7 @@ int controller::run(int argc, char* argv[])
 	v->set_keymap(&keys);
 	v->set_tags(tags);
 
-	if (execute_cmds) {
+	if (args.execute_cmds) {
 		execute_commands(argv, optind);
 		return EXIT_SUCCESS;
 	}
@@ -898,19 +805,19 @@ int controller::run(int argc, char* argv[])
 	LOG(level::DEBUG, "controller::run: history-limit = %u", history_limit);
 	formaction::save_histories(searchfile, cmdlinefile, history_limit);
 
-	if (!silent) {
+	if (!args.silent) {
 		std::cout << _("Cleaning up cache...");
 		std::cout.flush();
 	}
 	try {
 		std::lock_guard<std::mutex> feedslock(feeds_mutex);
 		rsscache->cleanup_cache(feeds);
-		if (!silent) {
+		if (!args.silent) {
 			std::cout << _("done.") << std::endl;
 		}
 	} catch (const dbexception& e) {
 		LOG(level::USERERROR, "Cleaning up cache failed: %s", e.what());
-		if (!silent) {
+		if (!args.silent) {
 			std::cout << _("failed: ") << e.what() << std::endl;
 			ret = EXIT_FAILURE;
 		}

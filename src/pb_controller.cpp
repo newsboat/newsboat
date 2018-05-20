@@ -16,6 +16,7 @@
 #include "config.h"
 #include "configcontainer.h"
 #include "exceptions.h"
+#include "globals.h"
 #include "keymap.h"
 #include "logger.h"
 #include "pb_view.h"
@@ -23,7 +24,6 @@
 #include "queueloader.h"
 #include "strprintf.h"
 #include "utils.h"
-#include "globals.h"
 
 using namespace newsboat;
 
