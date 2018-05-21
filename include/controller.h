@@ -6,6 +6,7 @@
 #include "cache.h"
 #include "colormanager.h"
 #include "configcontainer.h"
+#include "configpaths.h"
 #include "filtercontainer.h"
 #include "fslock.h"
 #include "regexmanager.h"
@@ -16,7 +17,6 @@
 namespace newsboat {
 
 extern int ctrl_c_hit;
-extern std::string lock_file;
 
 class view;
 
@@ -128,14 +128,6 @@ public:
 
 private:
 	void print_usage(char* argv0);
-	bool setup_dirs_xdg(const std::string& env_home);
-	void setup_dirs(const std::string& env_home);
-	void migrate_data_from_newsbeuter(const std::string& env_home,
-		bool silent);
-	bool migrate_data_from_newsbeuter_xdg(const std::string& env_home,
-		bool silent);
-	bool migrate_data_from_newsbeuter_simple(const std::string& env_home,
-		bool silent);
 	void print_version_information(const char* argv0, unsigned int level);
 	void import_opml(const std::string& filename);
 	void export_opml();
@@ -160,14 +152,6 @@ private:
 	urlreader* urlcfg;
 	cache* rsscache;
 	std::vector<std::shared_ptr<rss_feed>> feeds;
-	std::string config_dir;
-	std::string data_dir;
-	std::string url_file;
-	std::string cache_file;
-	std::string config_file;
-	std::string queue_file;
-	std::string searchfile;
-	std::string cmdlinefile;
 	bool refresh_on_start;
 	configcontainer cfg;
 	rss_ignores ign;
@@ -180,8 +164,9 @@ private:
 	remote_api* api;
 	std::mutex feeds_mutex;
 
-	std::string lock_file;
 	std::unique_ptr<FSLock> fslock;
+
+	ConfigPaths configpaths;
 };
 
 } // namespace newsboat
