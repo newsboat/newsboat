@@ -570,6 +570,13 @@ void keymap::handle_action(const std::string& action,
 			throw confighandlerexception(strprintf::fmt(
 				_("`%s' is not a valid context"), context));
 		operation op = get_opcode(params[1]);
+		if (op == OP_NIL) {
+			throw confighandlerexception(
+				strprintf::fmt(
+					_("'%s' is not a valid "
+					  "key command"),
+					params[1]));
+		}
 		if (op > OP_SK_MIN && op < OP_SK_MAX)
 			unset_key(getkey(op, context), context);
 		set_key(op, params[0], context);
