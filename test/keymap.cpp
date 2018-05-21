@@ -123,7 +123,9 @@ TEST_CASE("handle_action()", "[keymap]")
 		params.push_back("I");
 		params.push_back("invalid-op");
 
-		REQUIRE_THROWS_AS(k.handle_action("bind-key", params), confighandlerexception);
-		REQUIRE_THROWS_AS(k.handle_action("macro", params), confighandlerexception);
+		REQUIRE_THROWS_AS(k.handle_action("bind-key", params),
+			confighandlerexception);
+		REQUIRE_THROWS_AS(k.handle_action("macro", params),
+			confighandlerexception);
 	}
 }
