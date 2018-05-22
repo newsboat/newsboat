@@ -154,7 +154,7 @@ int controller::run(int argc, char* argv[])
 		return EXIT_SUCCESS;
 	}
 
-	configpaths.processArgs(args);
+	configpaths.process_args(args);
 
 	if (args.do_import) {
 		LOG(level::INFO,
@@ -168,7 +168,7 @@ int controller::run(int argc, char* argv[])
 
 	LOG(level::INFO, "nl_langinfo(CODESET): %s", nl_langinfo(CODESET));
 
-	if (!configpaths.createDirs()) {
+	if (!configpaths.setup_dirs()) {
 		return EXIT_FAILURE;
 	}
 

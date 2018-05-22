@@ -24,8 +24,8 @@ class ConfigPaths {
 	bool m_silent = false;
 	bool m_using_nonstandard_configs = false;
 
-	bool setup_dirs_xdg();
-	void setup_dirs();
+	bool find_dirs_xdg();
+	void find_dirs();
 
 	bool migrate_data_from_newsbeuter_xdg();
 
@@ -51,11 +51,11 @@ public:
 	std::string error_message() const;
 
 	/// Initializes paths to config, cache etc. from CLI arguments.
-	void processArgs(const CLIArgsParser& args);
+	void process_args(const CLIArgsParser& args);
 
 	/// Ensures all directories exist (migrating them from Newsbeuter if
 	/// possible).
-	bool createDirs();
+	bool setup_dirs();
 
 	/// Path to the URLs file.
 	std::string url_file() const

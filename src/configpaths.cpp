@@ -38,7 +38,7 @@ ConfigPaths::ConfigPaths()
 		m_env_home = env_home;
 	}
 
-	setup_dirs();
+	find_dirs();
 }
 
 bool ConfigPaths::initialized() const
@@ -51,7 +51,7 @@ std::string ConfigPaths::error_message() const
 	return m_error_message;
 }
 
-void ConfigPaths::setup_dirs()
+void ConfigPaths::find_dirs()
 {
 	m_config_dir = m_env_home;
 	m_config_dir.append(NEWSBEUTER_PATH_SEP);
@@ -61,7 +61,7 @@ void ConfigPaths::setup_dirs()
 
 	/* Will change config_dir and data_dir to point to XDG if XDG
 	 * directories are available. */
-	setup_dirs_xdg();
+	find_dirs_xdg();
 
 	/* in config */
 	const std::string cfg = m_config_dir + std::string(NEWSBEUTER_PATH_SEP);
@@ -82,7 +82,7 @@ void ConfigPaths::setup_dirs()
  *
  * returns false, if that fails
  */
-bool ConfigPaths::setup_dirs_xdg()
+bool ConfigPaths::find_dirs_xdg()
 {
 	std::string xdg_config_dir;
 	const char* env_xdg_config = ::getenv("XDG_CONFIG_HOME");
@@ -129,7 +129,7 @@ bool ConfigPaths::setup_dirs_xdg()
 	return true;
 }
 
-void ConfigPaths::processArgs(const CLIArgsParser& args)
+void ConfigPaths::process_args(const CLIArgsParser& args)
 {
 	if (args.set_url_file) {
 		m_url_file = args.url_file;
@@ -151,7 +151,7 @@ void ConfigPaths::processArgs(const CLIArgsParser& args)
 	m_using_nonstandard_configs = args.using_nonstandard_configs;
 }
 
-bool ConfigPaths::createDirs()
+bool ConfigPaths::setup_dirs()
 {
 	if ((!m_using_nonstandard_configs) &&
 		(0 != access(m_url_file.c_str(), F_OK))) {
@@ -336,7 +336,7 @@ void ConfigPaths::migrate_data_from_newsbeuter()
 		m_cache_file = "cache.db";
 		m_config_file = "config";
 		m_queue_file = "queue";
-		setup_dirs();
+		find_dirs();
 	} else {
 		migrated = migrate_data_from_newsbeuter_simple();
 	}
