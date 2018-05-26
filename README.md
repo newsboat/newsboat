@@ -61,6 +61,9 @@ slows them down if `TMPDIR` is on HDD or even SSD.
 Support
 -------
 
+* Check out our
+  [documentation](https://newsboat.org/releases/2.11.1/docs/newsboat.html) and
+  [FAQ](https://newsboat.org/releases/2.11.1/docs/faq.html)
 * Bugs and whatnot should be reported to the
   [issue tracker](https://github.com/newsboat/newsboat/issues)
 * Drop us a line at
