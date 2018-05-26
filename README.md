@@ -47,17 +47,6 @@ is as simple as:
 
 (And if you ever need to uninstall it, use `make uninstall`.)
 
-Tests
------
-
-If you're a developer, here's how you can run the test suite:
-
-	make -j5 PROFILE=1 all test
-	(cd test && TMPDIR=/dev/shm ./test --order rand)
-
-Note the use of ramdisk as `TMPDIR`: some tests create temporary files, which
-slows them down if `TMPDIR` is on HDD or even SSD.
-
 Support
 -------
 
@@ -71,6 +60,20 @@ Support
 * Chat with developers and fellow users on #newsboat at
   [Freenode](https://freenode.net) ([webchat
   available!](https://webchat.freenode.net/?channels=newsboat))
+
+Development
+-----------
+
+Decided to work on an issue, fix a bug or add a feature? Great! Be sure to
+check out [our style guide](doc/code-style.markdown).
+
+You'll probably want to run the tests; here's how:
+
+	make -j5 PROFILE=1 all test
+	(cd test && TMPDIR=/dev/shm ./test --order rand)
+
+Note the use of ramdisk as `TMPDIR`: some tests create temporary files, which
+slows them down if `TMPDIR` is on HDD or even SSD.
 
 License
 -------
