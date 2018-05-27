@@ -641,7 +641,7 @@ void itemview_formaction::set_regexmanager(regexmanager* r)
 	std::vector<std::string>& attrs = r->get_attrs("article");
 	unsigned int i = 0;
 	std::string attrstr;
-	for (auto attribute : attrs) {
+	for (const auto& attribute : attrs) {
 		attrstr.append(
 			strprintf::fmt("@style_%u_normal:%s ", i, attribute));
 		i++;

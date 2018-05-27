@@ -28,12 +28,12 @@ void ttrss_urlreader::reload()
 
 	// std::vector<std::string>& file_urls(ur.get_urls());
 	auto& file_urls(ur.get_urls());
-	for (auto url : file_urls) {
+	for (const auto& url : file_urls) {
 		if (url.substr(0, 6) == "query:") {
 			urls.push_back(url);
 			std::vector<std::string>& file_tags(ur.get_tags(url));
 			tags[url] = ur.get_tags(url);
-			for (auto tag : file_tags) {
+			for (const auto& tag : file_tags) {
 				alltags.insert(tag);
 			}
 		}
@@ -41,11 +41,11 @@ void ttrss_urlreader::reload()
 
 	auto feedurls = api->get_subscribed_urls();
 
-	for (auto url : feedurls) {
+	for (const auto& url : feedurls) {
 		LOG(level::DEBUG, "added %s to URL list", url.first);
 		urls.push_back(url.first);
 		tags[url.first] = url.second;
-		for (auto tag : url.second) {
+		for (const auto& tag : url.second) {
 			LOG(level::DEBUG, "%s: added tag %s", url.first, tag);
 			alltags.insert(tag);
 		}

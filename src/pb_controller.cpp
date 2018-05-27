@@ -375,7 +375,7 @@ std::string pb_controller::get_dlpath()
 unsigned int pb_controller::downloads_in_progress()
 {
 	unsigned int count = 0;
-	for (auto dl : downloads_) {
+	for (const auto& dl : downloads_) {
 		if (dl.status() == dlstatus::DOWNLOADING)
 			++count;
 	}
@@ -397,7 +397,7 @@ void pb_controller::reload_queue(bool remove_unplayed)
 double pb_controller::get_total_kbps()
 {
 	double result = 0.0;
-	for (auto dl : downloads_) {
+	for (auto& dl : downloads_) {
 		if (dl.status() == dlstatus::DOWNLOADING) {
 			result += dl.kbps();
 		}

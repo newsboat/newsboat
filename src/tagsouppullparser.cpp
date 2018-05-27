@@ -38,7 +38,7 @@ void tagsouppullparser::set_input(std::istream& is)
 std::string tagsouppullparser::get_attribute_value(
 	const std::string& name) const
 {
-	for (auto attr : attributes) {
+	for (const auto& attr : attributes) {
 		if (attr.first == name) {
 			return attr.second;
 		}

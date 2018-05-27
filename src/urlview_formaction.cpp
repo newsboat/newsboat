@@ -99,7 +99,7 @@ void urlview_formaction::prepare()
 	if (do_redraw) {
 		listformatter listfmt;
 		unsigned int i = 0;
-		for (auto link : links) {
+		for (const auto& link : links) {
 			listfmt.add_line(
 				strprintf::fmt("%2u  %s", i + 1, link.first),
 				i);

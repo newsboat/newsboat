@@ -139,7 +139,7 @@ json ttrss_api::run_op(const std::string& op,
 		// packing all information
 		//       into strings. If things start to break, this would be a
 		//       good place to start.
-		for (auto arg : args) {
+		for (const auto& arg : args) {
 			requestparam[arg.first] = arg.second;
 		}
 
@@ -247,7 +247,7 @@ std::vector<tagged_feedurl> ttrss_api::get_subscribed_urls()
 		// getFeeds with cat_id -3 since 1.5.0, so at least since
 		// api-level 2
 		std::map<int, std::string> category_names;
-		for (auto& cat : categories) {
+		for (const auto& cat : categories) {
 			std::string cat_name = cat["title"];
 			int cat_id = parse_category_id(cat["id"]);
 			category_names[cat_id] = cat_name;
@@ -280,7 +280,7 @@ std::vector<tagged_feedurl> ttrss_api::get_subscribed_urls()
 			fetch_feeds_per_category(json(nullptr), feeds);
 
 			// then fetch the feeds of all categories
-			for (auto& i : categories) {
+			for (const auto& i : categories) {
 				fetch_feeds_per_category(i, feeds);
 			}
 		} catch (json::exception& e) {
@@ -384,7 +384,7 @@ rsspp::feed ttrss_api::fetch_feed(const std::string& id, CURL* cached_handle)
 	LOG(level::DEBUG, "ttrss_api::fetch_feed: %d items", content.size());
 
 	try {
-		for (auto& item_obj : content) {
+		for (const auto& item_obj : content) {
 			rsspp::item item;
 
 			if (!item_obj["title"].is_null()) {

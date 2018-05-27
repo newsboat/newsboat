@@ -352,7 +352,7 @@ void rss_parser::fill_feed_items(std::shared_ptr<rss_feed> feed)
 	 * each item, and fill it with the appropriate values from the data
 	 * structure.
 	 */
-	for (auto item : f.items) {
+	for (auto& item : f.items) {
 		std::shared_ptr<rss_item> x(new rss_item(ch));
 
 		set_item_title(feed, x, item);

@@ -30,7 +30,7 @@ void textformatter::add_line(LineType type, std::string line)
 void textformatter::add_lines(
 	const std::vector<std::pair<LineType, std::string>>& lines)
 {
-	for (auto line : lines) {
+	for (const auto& line : lines) {
 		add_line(line.first,
 			utils::replace_all(line.second, "\t", "        "));
 	}
@@ -62,7 +62,7 @@ std::vector<std::string> wrap_line(const std::string& line, const size_t width)
 
 	std::string curline = prefix;
 
-	for (auto word : words) {
+	for (auto& word : words) {
 		size_t word_width = utils::strwidth_stfl(word);
 		size_t curline_width = utils::strwidth_stfl(curline);
 
@@ -133,7 +133,7 @@ std::vector<std::string> format_text_plain_helper(
 			line);
 	};
 
-	for (auto line : lines) {
+	for (const auto& line : lines) {
 		auto type = line.first;
 		auto text = line.second;
 
@@ -154,7 +154,7 @@ std::vector<std::string> format_text_plain_helper(
 				continue;
 			}
 			text = utils::consolidate_whitespace(text);
-			for (auto line : wrap_line(text, wrap_width)) {
+			for (const auto& line : wrap_line(text, wrap_width)) {
 				store_line(line);
 			}
 			break;
@@ -167,7 +167,7 @@ std::vector<std::string> format_text_plain_helper(
 			if (total_width == 0) {
 				store_line(text);
 			} else {
-				for (auto line : wrap_line(text, total_width)) {
+				for (const auto& line : wrap_line(text, total_width)) {
 					store_line(line);
 				}
 			}
@@ -196,7 +196,7 @@ std::pair<std::string, std::size_t> textformatter::format_text_to_list(
 		lines, rxman, location, wrap_width, total_width);
 
 	auto format_cache = std::string("{list");
-	for (auto line : formatted) {
+	for (auto& line : formatted) {
 		if (line != "") {
 			utils::trim_end(line);
 			format_cache.append(strprintf::fmt(

@@ -27,7 +27,7 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 	std::vector<download> dltemp;
 	std::fstream f;
 
-	for (auto dl : downloads) {
+	for (auto& dl : downloads) {
 		if (dl.status() == dlstatus::DOWNLOADING) { // we are not
 							    // allowed to reload
 							    // if a download is
@@ -78,7 +78,7 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 					utils::tokenize_quoted(line);
 				bool url_found = false;
 
-				for (auto dl : dltemp) {
+				for (auto& dl : dltemp) {
 					if (fields[0] == dl.url()) {
 						LOG(level::INFO,
 							"queueloader::reload: "
@@ -90,7 +90,7 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 					}
 				}
 
-				for (auto dl : downloads) {
+				for (auto& dl : downloads) {
 					if (fields[0] == dl.url()) {
 						LOG(level::INFO,
 							"queueloader::reload: "
@@ -167,7 +167,7 @@ void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 
 	f.open(queuefile.c_str(), std::fstream::out);
 	if (f.is_open()) {
-		for (auto dl : dltemp) {
+		for (auto& dl : dltemp) {
 			f << dl.url() << " " << stfl::quote(dl.filename());
 			if (dl.status() == dlstatus::READY)
 				f << " downloaded";

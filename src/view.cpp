@@ -86,7 +86,7 @@ void view::set_keymap(keymap* k)
 
 void view::update_bindings()
 {
-	for (auto& form : formaction_stack) {
+	for (const auto& form : formaction_stack) {
 		if (form) {
 			set_bindings(form);
 		}
@@ -436,7 +436,7 @@ void view::set_feedlist(std::vector<std::shared_ptr<rss_feed>> feeds)
 	try {
 		std::lock_guard<std::mutex> lock(mtx);
 
-		for (auto feed : feeds) {
+		for (const auto& feed : feeds) {
 			if (feed->rssurl().substr(0, 6) != "query:") {
 				feed->set_feedptrs(feed);
 			}
@@ -694,7 +694,7 @@ char view::confirm(const std::string& prompt, const std::string& charset)
 
 void view::notify_itemlist_change(std::shared_ptr<rss_feed> feed)
 {
-	for (auto& form : formaction_stack) {
+	for (const auto& form : formaction_stack) {
 		if (form != nullptr && form->id() == "articlelist") {
 			std::shared_ptr<itemlist_formaction> itemlist =
 				std::dynamic_pointer_cast<itemlist_formaction,
@@ -1009,7 +1009,7 @@ void view::pop_current_formaction()
 	} else if (formaction_stack.size() > 0) {
 		// first, we set back the parent formactions of those who
 		// reference the formaction we just removed
-		for (auto& form : formaction_stack) {
+		for (const auto& form : formaction_stack) {
 			if (form->get_parent_formaction() == f) {
 				form->set_parent_formaction(
 					formaction_stack[0]);
@@ -1018,7 +1018,7 @@ void view::pop_current_formaction()
 		// we set the new formaction based on the removed formaction's
 		// parent.
 		unsigned int i = 0;
-		for (auto& form : formaction_stack) {
+		for (const auto& form : formaction_stack) {
 			if (form == f->get_parent_formaction()) {
 				current_formaction = i;
 				break;
@@ -1051,7 +1051,7 @@ void view::remove_formaction(unsigned int pos)
 	if (f != nullptr && formaction_stack.size() > 0) {
 		// we set back the parent formactions of those who reference the
 		// formaction we just removed
-		for (auto& form : formaction_stack) {
+		for (const auto& form : formaction_stack) {
 			if (form->get_parent_formaction() == f) {
 				form->set_parent_formaction(
 					formaction_stack[0]);
@@ -1071,7 +1071,7 @@ void view::set_colors(std::map<std::string, std::string>& fgc,
 
 void view::apply_colors_to_all_formactions()
 {
-	for (auto& form : formaction_stack) {
+	for (const auto& form : formaction_stack) {
 		apply_colors(form);
 	}
 	if (formaction_stack.size() > 0 &&
@@ -1102,7 +1102,7 @@ void view::apply_colors(std::shared_ptr<formaction> fa)
 			colorattr.append("bg=");
 			colorattr.append(bgcit->second);
 		}
-		for (auto attr : attit->second) {
+		for (const auto& attr : attit->second) {
 			if (colorattr.length() > 0)
 				colorattr.append(",");
 			colorattr.append("attr=");
@@ -1170,7 +1170,7 @@ std::vector<std::pair<unsigned int, std::string>> view::get_formaction_names()
 {
 	std::vector<std::pair<unsigned int, std::string>> formaction_names;
 	unsigned int i = 0;
-	for (auto& form : formaction_stack) {
+	for (const auto& form : formaction_stack) {
 		if (form && form->id() != "dialogs") {
 			formaction_names.push_back(
 				std::pair<unsigned int, std::string>(

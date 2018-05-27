@@ -157,7 +157,7 @@ unsigned int rss_feed::unread_item_count()
 {
 	std::lock_guard<std::mutex> lock(item_mutex);
 	unsigned int count = 0;
-	for (auto item : items_) {
+	for (const auto& item : items_) {
 		if (item->unread())
 			++count;
 	}
@@ -166,7 +166,7 @@ unsigned int rss_feed::unread_item_count()
 
 bool rss_feed::matches_tag(const std::string& tag)
 {
-	for (auto t : tags_) {
+	for (const auto& t : tags_) {
 		if (tag == t)
 			return true;
 	}
@@ -183,7 +183,7 @@ std::string rss_feed::get_firsttag()
 std::string rss_feed::get_tags()
 {
 	std::string tags;
-	for (auto t : tags_) {
+	for (const auto& t : tags_) {
 		if (t.substr(0, 1) != "~" && t.substr(0, 1) != "!") {
 			tags.append(t);
 			tags.append(" ");
@@ -195,7 +195,7 @@ std::string rss_feed::get_tags()
 void rss_feed::set_tags(const std::vector<std::string>& tags)
 {
 	tags_.clear();
-	for (auto tag : tags) {
+	for (const auto& tag : tags) {
 		tags_.push_back(tag);
 	}
 }
@@ -233,7 +233,7 @@ std::string rss_feed::title() const
 {
 	bool found_title = false;
 	std::string alt_title;
-	for (auto tag : tags_) {
+	for (const auto& tag : tags_) {
 		if (tag.substr(0, 1) == "~" || tag.substr(0, 1) == "!") {
 			found_title = true;
 			alt_title = tag.substr(1, tag.length() - 1);
@@ -252,7 +252,7 @@ std::string rss_feed::description() const
 
 bool rss_feed::hidden() const
 {
-	for (auto tag : tags_) {
+	for (const auto& tag : tags_) {
 		if (tag.substr(0, 1) == "!") {
 			return true;
 		}
@@ -427,11 +427,11 @@ void rss_ignores::handle_action(const std::string& action,
 		ignores.push_back(feedurl_expr_pair(
 			ignore_rssurl, new matcher(ignore_expr)));
 	} else if (action == "always-download") {
-		for (auto param : params) {
+		for (const auto& param : params) {
 			ignores_lastmodified.push_back(param);
 		}
 	} else if (action == "reset-unread-on-update") {
-		for (auto param : params) {
+		for (const auto& param : params) {
 			resetflag.push_back(param);
 		}
 	} else
@@ -441,7 +441,7 @@ void rss_ignores::handle_action(const std::string& action,
 
 void rss_ignores::dump_config(std::vector<std::string>& config_output)
 {
-	for (auto ign : ignores) {
+	for (const auto& ign : ignores) {
 		std::string configline = "ignore-article ";
 		if (ign.first == "*")
 			configline.append("*");
@@ -451,11 +451,11 @@ void rss_ignores::dump_config(std::vector<std::string>& config_output)
 		configline.append(utils::quote(ign.second->get_expression()));
 		config_output.push_back(configline);
 	}
-	for (auto ign_lm : ignores_lastmodified) {
+	for (const auto& ign_lm : ignores_lastmodified) {
 		config_output.push_back(strprintf::fmt(
 			"always-download %s", utils::quote(ign_lm)));
 	}
-	for (auto rf : resetflag) {
+	for (const auto& rf : resetflag) {
 		config_output.push_back(strprintf::fmt(
 			"reset-unread-on-update %s", utils::quote(rf)));
 	}
@@ -463,14 +463,14 @@ void rss_ignores::dump_config(std::vector<std::string>& config_output)
 
 rss_ignores::~rss_ignores()
 {
-	for (auto ign : ignores) {
+	for (const auto& ign : ignores) {
 		delete ign.second;
 	}
 }
 
 bool rss_ignores::matches(rss_item* item)
 {
-	for (auto ign : ignores) {
+	for (const auto& ign : ignores) {
 		LOG(level::DEBUG,
 			"rss_ignores::matches: ign.first = `%s' item->feedurl "
 			"= "
@@ -490,7 +490,7 @@ bool rss_ignores::matches(rss_item* item)
 
 bool rss_ignores::matches_lastmodified(const std::string& url)
 {
-	for (auto ignore_url : ignores_lastmodified) {
+	for (const auto& ignore_url : ignores_lastmodified) {
 		if (url == ignore_url)
 			return true;
 	}
@@ -499,7 +499,7 @@ bool rss_ignores::matches_lastmodified(const std::string& url)
 
 bool rss_ignores::matches_resetunread(const std::string& url)
 {
-	for (auto rf : resetflag) {
+	for (const auto& rf : resetflag) {
 		if (url == rf)
 			return true;
 	}
@@ -522,10 +522,10 @@ void rss_feed::update_items(std::vector<std::shared_ptr<rss_feed>> feeds)
 	items_.clear();
 	items_guid_map.clear();
 
-	for (auto feed : feeds) {
+	for (const auto& feed : feeds) {
 		if (feed->rssurl().substr(0, 6) !=
 			"query:") { // don't fetch items from other query feeds!
-			for (auto item : feed->items()) {
+			for (const auto& item : feed->items()) {
 				if (m.matches(item.get())) {
 					LOG(level::DEBUG,
 						"rss_feed::update_items: "
@@ -713,7 +713,7 @@ void rss_feed::remove_old_deleted_items()
 {
 	std::lock_guard<std::mutex> lock(item_mutex);
 	std::vector<std::string> guids;
-	for (auto item : items_) {
+	for (const auto& item : items_) {
 		guids.push_back(item->guid());
 	}
 	ch->remove_old_deleted_items(rssurl_, guids);
@@ -743,7 +743,7 @@ void rss_feed::purge_deleted_items()
 void rss_feed::set_feedptrs(std::shared_ptr<rss_feed> self)
 {
 	std::lock_guard<std::mutex> lock(item_mutex);
-	for (auto item : items_) {
+	for (const auto& item : items_) {
 		item->set_feedptr(self);
 	}
 }
@@ -771,7 +771,7 @@ std::string rss_feed::get_status()
 void rss_feed::unload()
 {
 	std::lock_guard<std::mutex> lock(item_mutex);
-	for (auto item : items_) {
+	for (const auto& item : items_) {
 		item->unload();
 	}
 }

@@ -166,7 +166,7 @@ bool matcher::matchop_cont(expression* e, matchable* item)
 	std::vector<std::string> elements =
 		utils::tokenize(item->get_attribute(e->name), " ");
 	std::string literal = e->literal;
-	for (auto elem : elements) {
+	for (const auto& elem : elements) {
 		if (literal == elem) {
 			return true;
 		}

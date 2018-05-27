@@ -26,7 +26,7 @@ std::vector<std::string>& urlreader::get_tags(const std::string& url)
 std::vector<std::string> urlreader::get_alltags()
 {
 	std::vector<std::string> tmptags;
-	for (auto t : alltags) {
+	for (const auto& t : alltags) {
 		if (t.substr(0, 1) != "~")
 			tmptags.push_back(t);
 	}
@@ -65,7 +65,7 @@ void file_urlreader::reload()
 					tokens.erase(tokens.begin());
 					if (!tokens.empty()) {
 						tags[url] = tokens;
-						for (auto token : tokens) {
+						for (const auto& token : tokens) {
 							alltags.insert(token);
 						}
 					}
@@ -86,10 +86,10 @@ void file_urlreader::write_config()
 	std::fstream f;
 	f.open(filename.c_str(), std::fstream::out);
 	if (f.is_open()) {
-		for (auto url : urls) {
+		for (const auto& url : urls) {
 			f << url;
 			if (tags[url].size() > 0) {
-				for (auto tag : tags[url]) {
+				for (const auto& tag : tags[url]) {
 					f << " \"" << tag << "\"";
 				}
 			}
@@ -118,7 +118,7 @@ void opml_urlreader::reload()
 	std::vector<std::string> urls =
 		utils::tokenize_quoted(this->get_source(), " ");
 
-	for (auto url : urls) {
+	for (const auto& url : urls) {
 		LOG(level::DEBUG,
 			"opml_urlreader::reload: downloading `%s'",
 			url);

@@ -28,7 +28,7 @@ void newsblur_urlreader::reload()
 	ur.reload();
 
 	std::vector<std::string>& file_urls(ur.get_urls());
-	for (auto url : file_urls) {
+	for (const auto& url : file_urls) {
 		if (url.substr(0, 6) == "query:") {
 			urls.push_back(url);
 		}
@@ -36,11 +36,11 @@ void newsblur_urlreader::reload()
 
 	std::vector<tagged_feedurl> feedurls = api->get_subscribed_urls();
 
-	for (auto url : feedurls) {
+	for (const auto& url : feedurls) {
 		LOG(level::INFO, "added %s to URL list", url.first);
 		urls.push_back(url.first);
 		tags[url.first] = url.second;
-		for (auto tag : url.second) {
+		for (const auto& tag : url.second) {
 			LOG(level::DEBUG, "%s: added tag %s", url.first, tag);
 			alltags.insert(tag);
 		}

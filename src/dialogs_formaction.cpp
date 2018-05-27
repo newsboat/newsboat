@@ -38,7 +38,7 @@ void dialogs_formaction::prepare()
 		listformatter listfmt;
 
 		unsigned int i = 1;
-		for (auto fa : v->get_formaction_names()) {
+		for (const auto& fa : v->get_formaction_names()) {
 			LOG(level::DEBUG,
 				"dialogs_formaction::prepare: p1 = %p p2 = %p",
 				v->get_formaction(fa.first).get(),

@@ -88,12 +88,12 @@ void colormanager::handle_action(const std::string& action,
 
 void colormanager::dump_config(std::vector<std::string>& config_output)
 {
-	for (auto color : fg_colors) {
+	for (const auto& color : fg_colors) {
 		std::string configline = strprintf::fmt("color %s %s %s",
 			color.first,
 			color.second,
 			bg_colors[color.first]);
-		for (auto attrib : attributes[color.first]) {
+		for (const auto& attrib : attributes[color.first]) {
 			configline.append(" ");
 			configline.append(attrib);
 		}
@@ -123,7 +123,7 @@ void colormanager::set_pb_colors(podboat::pb_view* v)
 			colorattr.append("bg=");
 			colorattr.append(bgcit->second);
 		}
-		for (auto attr : attit->second) {
+		for (const auto& attr : attit->second) {
 			if (colorattr.length() > 0)
 				colorattr.append(",");
 			colorattr.append("attr=");

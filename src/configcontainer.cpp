@@ -252,7 +252,7 @@ void configcontainer::register_commands(configparser& cfgparser)
 	// parser
 	// -> if the resp. config option is encountered, it is passed to the
 	// configcontainer
-	for (auto cfg : config_data) {
+	for (const auto& cfg : config_data) {
 		cfgparser.register_handler(cfg.first, this);
 	}
 }
@@ -392,7 +392,7 @@ void configcontainer::toggle(const std::string& key)
 
 void configcontainer::dump_config(std::vector<std::string>& config_output)
 {
-	for (auto cfg : config_data) {
+	for (const auto& cfg : config_data) {
 		std::string configline = cfg.first + " ";
 		assert(cfg.second.type != configdata_t::INVALID);
 		switch (cfg.second.type) {
@@ -410,7 +410,7 @@ void configcontainer::dump_config(std::vector<std::string>& config_output)
 			if (cfg.second.multi_option) {
 				std::vector<std::string> tokens =
 					utils::tokenize(cfg.second.value, " ");
-				for (auto token : tokens) {
+				for (const auto& token : tokens) {
 					configline.append(
 						utils::quote(token) + " ");
 				}
@@ -438,7 +438,7 @@ std::vector<std::string> configcontainer::get_suggestions(
 	const std::string& fragment)
 {
 	std::vector<std::string> result;
-	for (auto cfg : config_data) {
+	for (const auto& cfg : config_data) {
 		if (cfg.first.substr(0, fragment.length()) == fragment)
 			result.push_back(cfg.first);
 	}

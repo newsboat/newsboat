@@ -51,7 +51,7 @@ void list_formaction::open_unread_items_in_browser(
 	bool markread)
 {
 	int tabcount = 0;
-	for (auto item : feed->items()) {
+	for (const auto& item : feed->items()) {
 		if (tabcount < v->get_cfg()->get_configvalue_as_int(
 				       "max-browser-tabs")) {
 			if (item->unread()) {
