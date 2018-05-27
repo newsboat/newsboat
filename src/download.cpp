@@ -24,12 +24,12 @@ download::download(pb_controller* c)
 
 download::~download() {}
 
-const std::string download::filename()
+const std::string download::filename() const
 {
 	return fn;
 }
 
-const std::string download::url()
+const std::string download::url() const
 {
 	return url_;
 }
@@ -39,7 +39,7 @@ void download::set_filename(const std::string& str)
 	fn = str;
 }
 
-double download::percents_finished()
+double download::percents_finished() const
 {
 	if (totalsize < 1) {
 		return 0.0;
@@ -48,7 +48,7 @@ double download::percents_finished()
 	}
 }
 
-const std::string download::status_text()
+const std::string download::status_text() const
 {
 	switch (download_status) {
 	case dlstatus::QUEUED:
@@ -100,7 +100,7 @@ void download::set_kbps(double k)
 	curkbps = k;
 }
 
-double download::kbps()
+double download::kbps() const
 {
 	return curkbps;
 }
