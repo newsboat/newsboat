@@ -97,7 +97,8 @@ bool pb_controller::setup_dirs_xdg(const char* env_home)
 	config_dir = xdg_config_dir;
 
 	// create data directory if it doesn't exist
-	if (0 != utils::mkdir_parents(xdg_data_dir, 0700)) {
+	int ret = utils::mkdir_parents(xdg_data_dir, 0700);
+	if (ret && errno != EEXIST) {
 		LOG(level::CRITICAL,
 			"Couldn't create `%s': (%i) %s",
 			xdg_data_dir,
