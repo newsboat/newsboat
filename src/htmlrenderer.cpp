@@ -742,7 +742,7 @@ void htmlrenderer::render(std::istream& input,
 				// strip leading whitespace
 				bool had_whitespace = false;
 				while (text.length() > 0 &&
-					(text[0] == '\n' || text[0] == ' ')) {
+					::isspace(text[0])) {
 					text.erase(0, 1);
 					had_whitespace = true;
 				}

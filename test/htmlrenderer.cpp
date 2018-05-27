@@ -1194,3 +1194,28 @@ TEST_CASE("text within <ituneshack> is to be treated specially",
 			"puts plain text into <>summary> tag."));
 	REQUIRE(links.size() == 0);
 }
+
+TEST_CASE("When rendeing text, htmlrenderer strips leading whitespace",
+	"[htmlrenderer][issue204]")
+{
+	htmlrenderer r;
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<linkpair> links;
+
+	const std::string input =
+		"		<br />\n"
+		"		\n" // tabs
+		"       \n"         // spaces
+		"		\n" // tabs
+		"       \n"         // spaces
+		"		\n" // tabs
+		"		\n" // tabs
+		"		Text preceded by whitespace.";
+
+	REQUIRE_NOTHROW(r.render(input, lines, links, url));
+	REQUIRE(lines.size() == 2);
+	REQUIRE(lines[0] == p(LineType::wrappable, ""));
+	REQUIRE(lines[1] ==
+		p(LineType::wrappable, "Text preceded by whitespace."));
+	REQUIRE(links.size() == 0);
+}
