@@ -397,7 +397,7 @@ void pb_controller::reload_queue(bool remove_unplayed)
 double pb_controller::get_total_kbps()
 {
 	double result = 0.0;
-	for (auto& dl : downloads_) {
+	for (const auto& dl : downloads_) {
 		if (dl.status() == dlstatus::DOWNLOADING) {
 			result += dl.kbps();
 		}
