@@ -406,6 +406,80 @@ TEST_CASE("Sets `execute_cmds` if -x/--execute is provided", "[cliargsparser]")
 	}
 }
 
+TEST_CASE(
+	"Sets cmds_to_execute size if -x/--execute is provided",
+	"[cliargsparser]")
+{
+	auto check = [](Opts opts, const size_t size) {
+		CLIArgsParser args(opts.argc(), opts.argv());
+
+		REQUIRE(args.cmds_to_execute.size() == size);
+	};
+
+	SECTION("-x reload means size 1")
+	{
+		check({"newsboat", "-x", "reload"}, 1);
+	}
+
+	SECTION("--execute reload means size 1")
+	{
+		check({"newsboat", "--execute", "reload"}, 1);
+	}
+
+	SECTION("-x reload print-unread means size 2")
+	{
+		check({"newsboat", "-x", "reload", "print-unread"}, 2);
+	}
+
+	SECTION("-execute reload print-unread means size 2")
+	{
+		check({"newsboat", "--execute", "reload", "print-unread"}, 2);
+	}
+}
+
+TEST_CASE(
+	"Inserts commands to cmds_to_execute if -x/--execute is provided",
+	"[cliargsparser]")
+{
+	auto check = [](Opts opts, const size_t i, const std::string& arg) {
+		CLIArgsParser args(opts.argc(), opts.argv());
+
+		REQUIRE(args.cmds_to_execute.at(i) == arg);
+	};
+
+	SECTION("-x reload")
+	{
+		check({"newsboat", "-x", "reload"}, 0, "reload");
+	}
+
+	SECTION("--execute reload")
+	{
+		check({"newsboat", "--execute", "reload"}, 0, "reload");
+	}
+
+	SECTION("-x print-unread")
+	{
+		check({"newsboat", "-x", "print-unread"}, 0, "print-unread");
+	}
+
+	SECTION("--execute print-unread")
+	{
+		check({"newsboat", "--execute", "print-unread"}, 0, "print-unread");
+	}
+
+	SECTION("-x reload print-unread")
+	{
+		check({"newsboat", "-x", "reload", "print-unread"}, 0, "reload");
+		check({"newsboat", "-x", "reload", "print-unread"}, 1, "print-unread");
+	}
+
+	SECTION("--execute reload print-unread")
+	{
+		check({"newsboat", "--execute", "reload", "print-unread"}, 0, "reload");
+		check({"newsboat", "--execute", "reload", "print-unread"}, 1, "print-unread");
+	}
+}
+
 TEST_CASE("Requests silent mode if -q/--quiet is provided", "[cliargsparser]")
 {
 	auto check = [](Opts opts) {
