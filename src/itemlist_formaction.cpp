@@ -455,7 +455,7 @@ void itemlist_formaction::process_operation(operation op,
 						"like I'm in a pseudo-feed "
 						"(search "
 						"result, query feed)");
-					for (auto item : feed->items()) {
+					for (const auto& item : feed->items()) {
 						item->set_unread_nowrite_notify(
 							false,
 							true); // TODO: do we
@@ -833,7 +833,7 @@ void itemlist_formaction::do_update_visible_items()
 	 */
 
 	unsigned int i = 0;
-	for (auto item : items) {
+	for (const auto& item : items) {
 		item->set_index(i + 1);
 		if (!apply_filter || m.matches(item.get())) {
 			new_visible_items.push_back(itemptr_pos_pair(item, i));
@@ -901,7 +901,7 @@ void itemlist_formaction::prepare()
 		if (invalidation_mode == InvalidationMode::COMPLETE) {
 			listfmt.clear();
 
-			for (auto item : visible_items) {
+			for (const auto& item : visible_items) {
 				auto line = item2formatted_line(item,
 					width,
 					itemlist_format,
@@ -909,7 +909,7 @@ void itemlist_formaction::prepare()
 				listfmt.add_line(line, item.second);
 			}
 		} else if (invalidation_mode == InvalidationMode::PARTIAL) {
-			for (auto itempos : invalidated_itempos) {
+			for (const auto& itempos : invalidated_itempos) {
 				auto item = visible_items[itempos];
 				auto line = item2formatted_line(item,
 					width,
@@ -1277,7 +1277,7 @@ void itemlist_formaction::set_regexmanager(regexmanager* r)
 	std::vector<std::string>& attrs = r->get_attrs("articlelist");
 	unsigned int i = 0;
 	std::string attrstr;
-	for (auto attribute : attrs) {
+	for (const auto& attribute : attrs) {
 		attrstr.append(
 			strprintf::fmt("@style_%u_normal:%s ", i, attribute));
 		attrstr.append(
@@ -1324,7 +1324,7 @@ void itemlist_formaction::prepare_set_filterpos()
 	if (set_filterpos) {
 		set_filterpos = false;
 		unsigned int i = 0;
-		for (auto item : visible_items) {
+		for (const auto& item : visible_items) {
 			if (item.second == filterpos) {
 				f->set("itempos", std::to_string(i));
 				return;

@@ -267,7 +267,7 @@ REDO:
 				v->get_cfg()->get_configvalue_as_bool(
 					"reload-only-visible-feeds");
 			std::vector<int> idxs;
-			for (auto feed : visible_feeds) {
+			for (const auto& feed : visible_feeds) {
 				idxs.push_back(feed.second);
 			}
 			v->get_ctrl()->start_reload_all_thread(
@@ -499,7 +499,7 @@ void feedlist_formaction::update_visible_feeds(
 
 	unsigned int i = 0;
 
-	for (auto feed : feeds) {
+	for (const auto& feed : feeds) {
 		feed->set_index(i + 1);
 		if ((tag == "" || feed->matches_tag(tag)) &&
 			(!apply_filter || m.matches(feed.get())) &&
@@ -529,7 +529,7 @@ void feedlist_formaction::set_feedlist(
 
 	update_visible_feeds(feeds);
 
-	for (auto feed : visible_feeds) {
+	for (const auto& feed : visible_feeds) {
 		if (feed.first->unread_item_count() > 0)
 			++unread_feeds;
 
@@ -816,7 +816,7 @@ void feedlist_formaction::mark_pos_if_visible(unsigned int pos)
 	scope_measure m1("feedlist_formaction::mark_pos_if_visible");
 	unsigned int vpos = 0;
 	v->get_ctrl()->update_visible_feeds();
-	for (auto feed : visible_feeds) {
+	for (const auto& feed : visible_feeds) {
 		if (feed.second == pos) {
 			LOG(level::DEBUG,
 				"feedlist_formaction::mark_pos_if_visible: "
@@ -830,7 +830,7 @@ void feedlist_formaction::mark_pos_if_visible(unsigned int pos)
 	}
 	vpos = 0;
 	pos = v->get_ctrl()->get_pos_of_next_unread(pos);
-	for (auto feed : visible_feeds) {
+	for (const auto& feed : visible_feeds) {
 		if (feed.second == pos) {
 			LOG(level::DEBUG,
 				"feedlist_formaction::mark_pos_if_visible: "
@@ -859,7 +859,7 @@ void feedlist_formaction::set_regexmanager(regexmanager* r)
 	std::vector<std::string>& attrs = r->get_attrs("feedlist");
 	unsigned int i = 0;
 	std::string attrstr;
-	for (auto attribute : attrs) {
+	for (const auto& attribute : attrs) {
 		attrstr.append(
 			strprintf::fmt("@style_%u_normal:%s ", i, attribute));
 		attrstr.append(
@@ -946,7 +946,7 @@ void feedlist_formaction::set_pos()
 	if (set_filterpos) {
 		set_filterpos = false;
 		unsigned int i = 0;
-		for (auto feed : visible_feeds) {
+		for (const auto& feed : visible_feeds) {
 			if (feed.second == filterpos) {
 				f->set("feedpos", std::to_string(i));
 				return;

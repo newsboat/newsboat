@@ -65,7 +65,7 @@ void listformatter::set_line(const unsigned int itempos,
 void listformatter::add_lines(const std::vector<std::string>& thelines,
 	unsigned int width)
 {
-	for (auto line : thelines) {
+	for (const auto& line : thelines) {
 		add_line(utils::replace_all(line, "\t", "        "),
 			UINT_MAX,
 			width);
@@ -76,7 +76,7 @@ std::string listformatter::format_list(regexmanager* rxman,
 	const std::string& location)
 {
 	format_cache = "{list";
-	for (auto line : lines) {
+	for (const auto& line : lines) {
 		std::string str = line.first;
 		if (rxman)
 			rxman->quote_and_highlight(str, location);

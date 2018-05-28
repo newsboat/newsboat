@@ -47,19 +47,22 @@ private:
 
 	void set_item_title(std::shared_ptr<rss_feed> feed,
 		std::shared_ptr<rss_item> x,
-		rsspp::item& item);
-	void set_item_author(std::shared_ptr<rss_item> x, rsspp::item& item);
-	void set_item_content(std::shared_ptr<rss_item> x, rsspp::item& item);
-	void set_item_enclosure(std::shared_ptr<rss_item> x, rsspp::item& item);
-	std::string get_guid(rsspp::item& item);
+		const rsspp::item& item);
+	void set_item_author(std::shared_ptr<rss_item> x,
+		const rsspp::item& item);
+	void set_item_content(std::shared_ptr<rss_item> x,
+		const rsspp::item& item);
+	void set_item_enclosure(std::shared_ptr<rss_item> x,
+		const rsspp::item& item);
+	std::string get_guid(const rsspp::item& item) const;
 
 	void add_item_to_feed(std::shared_ptr<rss_feed> feed,
 		std::shared_ptr<rss_item> item);
 
 	void handle_content_encoded(std::shared_ptr<rss_item> x,
-		rsspp::item& item);
+		const rsspp::item& item) const;
 	void handle_itunes_summary(std::shared_ptr<rss_item> x,
-		rsspp::item& item);
+		const rsspp::item& item);
 	bool is_html_type(const std::string& type);
 	void fetch_ttrss(const std::string& feed_id);
 	void fetch_newsblur(const std::string& feed_id);

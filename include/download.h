@@ -23,20 +23,20 @@ class download {
 public:
 	explicit download(pb_controller* c = 0);
 	~download();
-	double percents_finished();
-	const std::string status_text();
+	double percents_finished() const;
+	const std::string status_text() const;
 	dlstatus status() const
 	{
 		return download_status;
 	}
-	const std::string filename();
-	const std::string url();
+	const std::string filename() const;
+	const std::string url() const;
 	void set_filename(const std::string& str);
 	void set_url(const std::string& url);
 	void set_progress(double downloaded, double total);
 	void set_status(dlstatus dls);
 	void set_kbps(double kbps);
-	double kbps();
+	double kbps() const;
 	void set_offset(unsigned long offset);
 
 	double current_size() const

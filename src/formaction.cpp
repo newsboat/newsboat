@@ -108,7 +108,7 @@ void formaction::process_op(operation op,
 		if (automatic) {
 			std::string cmdline = "set ";
 			if (args) {
-				for (auto arg : *args) {
+				for (const auto& arg : *args) {
 					cmdline.append(strprintf::fmt(
 						"%s ", stfl::quote(arg)));
 				}
@@ -177,7 +177,7 @@ std::vector<std::string> formaction::get_suggestions(
 		fragment);
 	std::vector<std::string> result;
 	// first check all formaction command suggestions
-	for (auto cmd : valid_cmds) {
+	for (const auto& cmd : valid_cmds) {
 		LOG(level::DEBUG,
 			"formaction::get_suggestions: extracted part: %s",
 			cmd.substr(0, fragment.length()));
@@ -200,7 +200,7 @@ std::vector<std::string> formaction::get_suggestions(
 					variable_suggestions =
 						v->get_cfg()->get_suggestions(
 							variable_fragment);
-					for (auto suggestion :
+					for (const auto& suggestion :
 						variable_suggestions) {
 						std::string line = fragment +
 							suggestion.substr(
@@ -288,7 +288,7 @@ void formaction::handle_cmdline(const std::string& cmdline)
 			if (tokens.empty()) {
 				v->show_error(_("usage: source <file> [...]"));
 			} else {
-				for (auto token : tokens) {
+				for (const auto& token : tokens) {
 					try {
 						v->get_ctrl()->load_configfile(
 							utils::resolve_tilde(

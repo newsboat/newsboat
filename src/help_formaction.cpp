@@ -86,7 +86,7 @@ void help_formaction::prepare()
 		unsigned int syskey_count = 0;
 
 		for (unsigned int i = 0; i < 3; i++) {
-			for (auto desc : descs) {
+			for (const auto& desc : descs) {
 				bool condition;
 				switch (i) {
 				case 0:

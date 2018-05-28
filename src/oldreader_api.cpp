@@ -84,7 +84,7 @@ std::string oldreader_api::retrieve_auth()
 	curl_easy_cleanup(handle);
 
 	std::vector<std::string> lines = utils::tokenize(result);
-	for (auto line : lines) {
+	for (const auto& line : lines) {
 		LOG(level::DEBUG,
 			"oldreader_api::retrieve_auth: line = %s",
 			line);

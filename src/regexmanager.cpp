@@ -21,9 +21,9 @@ regexmanager::regexmanager()
 
 regexmanager::~regexmanager()
 {
-	for (auto location : locations) {
+	for (const auto& location : locations) {
 		if (location.second.first.size() > 0) {
-			for (auto regex : location.second.first) {
+			for (const auto& regex : location.second.first) {
 				delete regex;
 			}
 		}
@@ -32,7 +32,7 @@ regexmanager::~regexmanager()
 
 void regexmanager::dump_config(std::vector<std::string>& config_output)
 {
-	for (auto foo : cheat_store_for_dump_config) {
+	for (const auto& foo : cheat_store_for_dump_config) {
 		config_output.push_back(foo);
 	}
 }
@@ -205,7 +205,7 @@ void regexmanager::handle_action(const std::string& action,
 
 int regexmanager::article_matches(matchable* item)
 {
-	for (auto matcher : matchers) {
+	for (const auto& matcher : matchers) {
 		if (matcher.first->matches(item)) {
 			return matcher.second;
 		}
@@ -242,7 +242,7 @@ void regexmanager::quote_and_highlight(std::string& str,
 	std::vector<regex_t*>& regexes = locations[location].first;
 
 	unsigned int i = 0;
-	for (auto regex : regexes) {
+	for (const auto& regex : regexes) {
 		if (!regex)
 			continue;
 		std::string initial_marker = extract_initial_marker(str);

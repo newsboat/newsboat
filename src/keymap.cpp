@@ -391,7 +391,7 @@ void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs,
 
 		for (unsigned int j = 0; opdescs[j].op != OP_NIL; ++j) {
 			bool already_added = false;
-			for (auto keymap : keymap_[ctx]) {
+			for (const auto& keymap : keymap_[ctx]) {
 				operation op = keymap.second;
 				if (op != OP_NIL) {
 					if (opdescs[j].op == op &&
@@ -512,7 +512,7 @@ void keymap::dump_config(std::vector<std::string>& config_output)
 	for (unsigned int i = 1; contexts[i] != nullptr;
 		i++) { // TODO: optimize
 		std::map<std::string, operation>& x = keymap_[contexts[i]];
-		for (auto keymap : x) {
+		for (const auto& keymap : x) {
 			if (keymap.second < OP_INT_MIN) {
 				std::string configline = "bind-key ";
 				configline.append(utils::quote(keymap.first));
@@ -524,14 +524,14 @@ void keymap::dump_config(std::vector<std::string>& config_output)
 			}
 		}
 	}
-	for (auto macro : macros_) {
+	for (const auto& macro : macros_) {
 		std::string configline = "macro ";
 		configline.append(macro.first);
 		configline.append(" ");
 		unsigned int i = 0;
-		for (auto cmd : macro.second) {
+		for (const auto& cmd : macro.second) {
 			configline.append(getopname(cmd.op));
-			for (auto arg : cmd.args) {
+			for (const auto& arg : cmd.args) {
 				configline.append(" ");
 				configline.append(utils::quote(arg));
 			}
@@ -646,13 +646,13 @@ std::string keymap::getkey(operation op, const std::string& context)
 	if (context == "all") {
 		for (unsigned int i = 0; contexts[i] != nullptr; i++) {
 			std::string ctx(contexts[i]);
-			for (auto keymap : keymap_[ctx]) {
+			for (const auto& keymap : keymap_[ctx]) {
 				if (keymap.second == op)
 					return keymap.first;
 			}
 		}
 	} else {
-		for (auto keymap : keymap_[context]) {
+		for (const auto& keymap : keymap_[context]) {
 			if (keymap.second == op)
 				return keymap.first;
 		}
@@ -662,7 +662,7 @@ std::string keymap::getkey(operation op, const std::string& context)
 
 std::vector<macrocmd> keymap::get_macro(const std::string& key)
 {
-	for (auto macro : macros_) {
+	for (const auto& macro : macros_) {
 		if (macro.first == key) {
 			return macro.second;
 		}

@@ -915,7 +915,7 @@ std::string utils::substr_with_width(const std::string& str,
 	std::wstring result;
 	std::wstring tagbuf;
 
-	for (auto wc : wstr) {
+	for (const auto& wc : wstr) {
 		if (in_bracket) {
 			tagbuf += wc;
 			if (wc == L'>') { // tagbuf is escaped less-than or tag
@@ -957,7 +957,7 @@ std::string utils::join(const std::vector<std::string>& strings,
 {
 	std::string result;
 
-	for (auto str : strings) {
+	for (const auto& str : strings) {
 		result.append(str);
 		result.append(separator);
 	}

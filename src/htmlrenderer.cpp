@@ -70,7 +70,7 @@ unsigned int htmlrenderer::add_link(std::vector<linkpair>& links,
 {
 	bool found = false;
 	unsigned int i = 1;
-	for (auto l : links) {
+	for (const auto& l : links) {
 		if (l.first == link) {
 			found = true;
 			break;
@@ -710,7 +710,7 @@ void htmlrenderer::render(std::istream& input,
 			if (itunes_hack) {
 				std::vector<std::string> paragraphs =
 					utils::tokenize_nl(text);
-				for (auto paragraph : paragraphs) {
+				for (const auto& paragraph : paragraphs) {
 					if (paragraph != "\n") {
 						add_nonempty_line(
 							curline, tables, lines);
@@ -724,7 +724,7 @@ void htmlrenderer::render(std::istream& input,
 			} else if (inside_pre) {
 				std::vector<std::string> paragraphs =
 					utils::tokenize_nl(text);
-				for (auto paragraph : paragraphs) {
+				for (const auto& paragraph : paragraphs) {
 					if (paragraph == "\n") {
 						add_line_softwrappable(
 							curline, lines);

@@ -577,7 +577,7 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl,
 	run_sql(query, rssitem_callback, &feed);
 
 	std::vector<std::shared_ptr<rss_item>> filtered_items;
-	for (auto item : feed->items()) {
+	for (const auto& item : feed->items()) {
 		try {
 			if (!ign || !ign->matches(item.get())) {
 				item->set_cache(this);
@@ -654,7 +654,7 @@ cache::search_for_items(const std::string& querystr, const std::string& feedurl)
 	}
 
 	run_sql(query, search_item_callback, &items);
-	for (auto item : items) {
+	for (const auto& item : items) {
 		item->set_cache(this);
 	}
 
@@ -721,7 +721,7 @@ void cache::cleanup_cache(std::vector<std::shared_ptr<rss_feed>>& feeds)
 		LOG(level::DEBUG, "cache::cleanup_cache: cleaning up cache...");
 		std::string list = "(";
 
-		for (auto feed : feeds) {
+		for (const auto& feed : feeds) {
 			std::string name =
 				prepare_query("'%q'", feed->rssurl());
 			list.append(name);
@@ -862,7 +862,7 @@ void cache::mark_all_read(std::shared_ptr<rss_feed> feed)
 		"UPDATE rss_item SET unread = '0' WHERE unread != '0' AND guid "
 		"IN (";
 
-	for (auto item : feed->items()) {
+	for (const auto& item : feed->items()) {
 		query.append(prepare_query("'%q',", item->guid()));
 	}
 	query.append("'');");
@@ -972,7 +972,7 @@ void cache::remove_old_deleted_items(const std::string& rssurl,
 		return;
 	}
 	std::string guidset = "(";
-	for (auto guid : guids) {
+	for (const auto& guid : guids) {
 		guidset.append(prepare_query("'%q', ", guid));
 	}
 	guidset.append("'')");
@@ -1004,7 +1004,7 @@ void cache::mark_items_read_by_guid(const std::vector<std::string>& guids)
 {
 	scope_measure m1("cache::mark_items_read_by_guid");
 	std::string guidset("(");
-	for (auto guid : guids) {
+	for (const auto& guid : guids) {
 		guidset.append(prepare_query("'%q', ", guid));
 	}
 	guidset.append("'')");
@@ -1054,7 +1054,7 @@ void cache::clean_old_articles()
 void cache::fetch_descriptions(rss_feed* feed)
 {
 	std::vector<std::string> guids;
-	for (auto item : feed->items()) {
+	for (const auto& item : feed->items()) {
 		guids.push_back(prepare_query("'%q'", item->guid()));
 	}
 	std::string in_clause = utils::join(guids, ", ");

@@ -99,7 +99,7 @@ void select_formaction::prepare()
 		unsigned int i = 0;
 		switch (type) {
 		case selection_type::TAG:
-			for (auto tag : tags) {
+			for (const auto& tag : tags) {
 				std::string tagstr = strprintf::fmt(
 					"%4u  %s (%u)",
 					i + 1,
@@ -111,7 +111,7 @@ void select_formaction::prepare()
 			}
 			break;
 		case selection_type::FILTER:
-			for (auto filter : filters) {
+			for (const auto& filter : filters) {
 				std::string tagstr = strprintf::fmt(
 					"%4u  %s", i + 1, filter.first);
 				listfmt.add_line(tagstr, i);

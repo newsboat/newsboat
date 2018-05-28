@@ -352,7 +352,7 @@ void rss_parser::fill_feed_items(std::shared_ptr<rss_feed> feed)
 	 * each item, and fill it with the appropriate values from the data
 	 * structure.
 	 */
-	for (auto item : f.items) {
+	for (const auto& item : f.items) {
 		std::shared_ptr<rss_item> x(new rss_item(ch));
 
 		set_item_title(feed, x, item);
@@ -450,7 +450,7 @@ void rss_parser::fill_feed_items(std::shared_ptr<rss_feed> feed)
 
 void rss_parser::set_item_title(std::shared_ptr<rss_feed> feed,
 	std::shared_ptr<rss_item> x,
-	rsspp::item& item)
+	const rsspp::item& item)
 {
 	std::string title = item.title;
 
@@ -466,7 +466,8 @@ void rss_parser::set_item_title(std::shared_ptr<rss_feed> feed,
 	}
 }
 
-void rss_parser::set_item_author(std::shared_ptr<rss_item> x, rsspp::item& item)
+void rss_parser::set_item_author(std::shared_ptr<rss_item> x,
+	const rsspp::item& item)
 {
 	/*
 	 * some feeds only have a feed-wide managingEditor, which we use as an
@@ -484,7 +485,7 @@ void rss_parser::set_item_author(std::shared_ptr<rss_item> x, rsspp::item& item)
 }
 
 void rss_parser::set_item_content(std::shared_ptr<rss_item> x,
-	rsspp::item& item)
+	const rsspp::item& item)
 {
 	handle_content_encoded(x, item);
 
@@ -513,7 +514,7 @@ void rss_parser::set_item_content(std::shared_ptr<rss_item> x,
 		x->description());
 }
 
-std::string rss_parser::get_guid(rsspp::item& item)
+std::string rss_parser::get_guid(const rsspp::item& item) const
 {
 	/*
 	 * We try to find a GUID (some unique identifier) for an item. If the
@@ -535,7 +536,7 @@ std::string rss_parser::get_guid(rsspp::item& item)
 }
 
 void rss_parser::set_item_enclosure(std::shared_ptr<rss_item> x,
-	rsspp::item& item)
+	const rsspp::item& item)
 {
 	x->set_enclosure_url(item.enclosure_url);
 	x->set_enclosure_type(item.enclosure_type);
@@ -572,7 +573,7 @@ void rss_parser::add_item_to_feed(std::shared_ptr<rss_feed> feed,
 }
 
 void rss_parser::handle_content_encoded(std::shared_ptr<rss_item> x,
-	rsspp::item& item)
+	const rsspp::item& item) const
 {
 	if (x->description() != "")
 		return;
@@ -588,7 +589,7 @@ void rss_parser::handle_content_encoded(std::shared_ptr<rss_item> x,
 }
 
 void rss_parser::handle_itunes_summary(std::shared_ptr<rss_item> x,
-	rsspp::item& item)
+	const rsspp::item& item)
 {
 	if (x->description() != "")
 		return;

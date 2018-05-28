@@ -77,7 +77,7 @@ void pb_view::run(bool auto_download)
 			std::string code = "{list";
 
 			unsigned int i = 0;
-			for (auto dl : ctrl->downloads()) {
+			for (const auto& dl : ctrl->downloads()) {
 				auto lbuf = strprintf::fmt(
 					" %4u [%6.1fMB/%6.1fMB] [%5.1f %%] "
 					"[%7.2f kb/s] %-20s %s -> %s",
@@ -279,7 +279,7 @@ void pb_view::run_help()
 
 	std::string code = "{list";
 
-	for (auto desc : descs) {
+	for (const auto& desc : descs) {
 		std::string line = "{listitem text:";
 
 		std::string descline;
