@@ -65,7 +65,8 @@ void file_urlreader::reload()
 					tokens.erase(tokens.begin());
 					if (!tokens.empty()) {
 						tags[url] = tokens;
-						for (const auto& token : tokens) {
+						for (const auto& token :
+							tokens) {
 							alltags.insert(token);
 						}
 					}

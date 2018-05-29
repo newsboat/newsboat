@@ -69,8 +69,9 @@ CLIArgsParser::CLIArgsParser(int argc, char* argv[])
 			refresh_on_start = true;
 			break;
 		case 'e':
-			// disable logging of newsboat's startup progress to stdout,
-			// because the OPML export will be printed to stdout.
+			// disable logging of newsboat's startup progress to
+			// stdout, because the OPML export will be printed to
+			// stdout.
 			silent = true;
 			if (do_import) {
 				should_print_usage = true;
@@ -114,8 +115,9 @@ CLIArgsParser::CLIArgsParser(int argc, char* argv[])
 			show_version++;
 			break;
 		case 'x':
-			// disable logging of newsboat's startup progress to stdout,
-			// because the command execution result will be printed to stdout
+			// disable logging of newsboat's startup progress to
+			// stdout, because the command execution result will be
+			// printed to stdout
 			silent = true;
 
 			execute_cmds = true;

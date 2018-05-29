@@ -1189,7 +1189,8 @@ void controller::rec_find_rss_outlines(xmlNode* node, std::string tag)
 					"OPML import: size = %u",
 					urlcfg->get_urls().size());
 				if (urlcfg->get_urls().size() > 0) {
-					for (const auto& u : urlcfg->get_urls()) {
+					for (const auto& u :
+						urlcfg->get_urls()) {
 						if (u == url) {
 							found = true;
 						}
@@ -1454,8 +1455,8 @@ int controller::execute_commands(const std::vector<std::string>& cmds)
 		} else {
 			std::cerr
 				<< strprintf::fmt(_("%s: %s: unknown command"),
-								"newsboat",
-								cmd)
+					   "newsboat",
+					   cmd)
 				<< std::endl;
 			return EXIT_FAILURE;
 		}
