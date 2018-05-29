@@ -409,18 +409,10 @@ TEST_CASE("Sets `execute_cmds` if -x/--execute is provided", "[cliargsparser]")
 TEST_CASE("Inserts commands to cmds_to_execute if -x/--execute is provided",
 	"[cliargsparser]")
 {
-	auto check = [](Opts opts, std::initializer_list<std::string> cmds) {
+	auto check = [](Opts opts, const std::vector<std::string>& cmds) {
 		CLIArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.cmds_to_execute.size() == cmds.size());
-
-		for (const auto& cmd : cmds) {
-			const bool found =
-				std::find(args.cmds_to_execute.begin(),
-					args.cmds_to_execute.end(),
-					cmd) != args.cmds_to_execute.end();
-			REQUIRE(found);
-		}
+		REQUIRE(args.cmds_to_execute == cmds);
 	};
 
 	SECTION("-x reload")
