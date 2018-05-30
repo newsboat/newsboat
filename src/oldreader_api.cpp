@@ -10,8 +10,8 @@
 #include "utils.h"
 
 #define OLDREADER_LOGIN "https://theoldreader.com/accounts/ClientLogin"
-#define OLDREADER_API_PREFIX "http://theoldreader.com/reader/api/0/"
-#define OLDREADER_FEED_PREFIX "http://theoldreader.com/reader/atom/"
+#define OLDREADER_API_PREFIX "https://theoldreader.com/reader/api/0/"
+#define OLDREADER_FEED_PREFIX "https://theoldreader.com/reader/atom/"
 
 #define OLDREADER_OUTPUT_SUFFIX "?output=json"
 
