@@ -21,15 +21,15 @@ void oldreader_urlreader::write_config()
 }
 
 #define BROADCAST_FRIENDS_URL                                          \
-	"http://theoldreader.com/reader/atom/user/-/state/com.google/" \
+	"https://theoldreader.com/reader/atom/user/-/state/com.google/" \
 	"broadcast-friends"
 #define STARRED_ITEMS_URL \
-	"http://theoldreader.com/reader/atom/user/-/state/com.google/starred"
+	"https://theoldreader.com/reader/atom/user/-/state/com.google/starred"
 #define SHARED_ITEMS_URL                                               \
-	"http://theoldreader.com/reader/atom/user/-/state/com.google/" \
+	"https://theoldreader.com/reader/atom/user/-/state/com.google/" \
 	"broadcast"
 #define POPULAR_ITEMS_URL                             \
-	"http://theoldreader.com/reader/public/atom/" \
+	"https://theoldreader.com/reader/public/atom/" \
 	"pop%2Ftopic%2Ftop%2Flanguage%2Fen"
 
 #define ADD_URL(url, caption)                 \
