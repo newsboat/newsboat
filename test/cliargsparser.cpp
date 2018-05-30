@@ -406,6 +406,38 @@ TEST_CASE("Sets `execute_cmds` if -x/--execute is provided", "[cliargsparser]")
 	}
 }
 
+TEST_CASE("Inserts commands to cmds_to_execute if -x/--execute is provided",
+	"[cliargsparser]")
+{
+	auto check = [](Opts opts, const std::vector<std::string>& cmds) {
+		CLIArgsParser args(opts.argc(), opts.argv());
+
+		REQUIRE(args.cmds_to_execute == cmds);
+	};
+
+	SECTION("-x reload")
+	{
+		check({"newsboat", "-x", "reload"}, {"reload"});
+	}
+
+	SECTION("--execute reload")
+	{
+		check({"newsboat", "--execute", "reload"}, {"reload"});
+	}
+
+	SECTION("-x reload print-unread")
+	{
+		check({"newsboat", "-x", "reload", "print-unread"},
+			{"reload", "print-unread"});
+	}
+
+	SECTION("--execute reload print-unread")
+	{
+		check({"newsboat", "--execute", "reload", "print-unread"},
+			{"reload", "print-unread"});
+	}
+}
+
 TEST_CASE("Requests silent mode if -q/--quiet is provided", "[cliargsparser]")
 {
 	auto check = [](Opts opts) {

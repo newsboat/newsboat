@@ -476,7 +476,7 @@ int controller::run(int argc, char* argv[])
 	v->set_tags(tags);
 
 	if (args.execute_cmds) {
-		execute_commands(argv, optind);
+		execute_commands(args.cmds_to_execute);
 		return EXIT_SUCCESS;
 	}
 
@@ -1189,7 +1189,8 @@ void controller::rec_find_rss_outlines(xmlNode* node, std::string tag)
 					"OPML import: size = %u",
 					urlcfg->get_urls().size());
 				if (urlcfg->get_urls().size() > 0) {
-					for (const auto& u : urlcfg->get_urls()) {
+					for (const auto& u :
+						urlcfg->get_urls()) {
 						if (u == url) {
 							found = true;
 						}
@@ -1437,15 +1438,14 @@ std::string controller::bookmark(const std::string& url,
 	}
 }
 
-int controller::execute_commands(char** argv, unsigned int i)
+int controller::execute_commands(const std::vector<std::string>& cmds)
 {
 	if (v->formaction_stack_size() > 0)
 		v->pop_current_formaction();
-	for (; argv[i]; ++i) {
+	for (const auto& cmd : cmds) {
 		LOG(level::DEBUG,
 			"controller::execute_commands: executing `%s'",
-			argv[i]);
-		std::string cmd(argv[i]);
+			cmd);
 		if (cmd == "reload") {
 			reload_all(true);
 		} else if (cmd == "print-unread") {
@@ -1455,13 +1455,12 @@ int controller::execute_commands(char** argv, unsigned int i)
 		} else {
 			std::cerr
 				<< strprintf::fmt(_("%s: %s: unknown command"),
-					   argv[0],
-					   argv[i])
+					   "newsboat",
+					   cmd)
 				<< std::endl;
 			return EXIT_FAILURE;
 		}
 	}
-
 	return EXIT_SUCCESS;
 }
 

@@ -2,6 +2,7 @@
 #define NEWSBOAT_CLIARGSPARSER_H_
 
 #include <string>
+#include <vector>
 
 #include "logger.h"
 
@@ -19,7 +20,6 @@ public:
 	std::string readinfofile;
 	unsigned int show_version = 0;
 	bool silent = false;
-	bool execute_cmds = false;
 	bool using_nonstandard_configs = false;
 
 	/// If `should_return` is `true`, the creator of `CLIArgsParser` object
@@ -67,6 +67,14 @@ public:
 	// TODO: replace this with std::optional once we upgraded to C++17.
 	bool set_config_file = false;
 	std::string config_file;
+
+	/// If 'execute_cmds' is true, the 'CLIArgsParser' object holds commands
+	/// that should be executed in cmds_to_execute vector.
+	///
+	/// \note The parser does not check if the passed commands are valid.
+	// TODO: replace this with std::optional once we upgraded to C++17.
+	bool execute_cmds = false;
+	std::vector<std::string> cmds_to_execute;
 
 	/// The value of `log_file` should only be used if `set_log_file` is
 	/// `true`.

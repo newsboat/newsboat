@@ -167,7 +167,8 @@ std::vector<std::string> format_text_plain_helper(
 			if (total_width == 0) {
 				store_line(text);
 			} else {
-				for (const auto& line : wrap_line(text, total_width)) {
+				for (const auto& line :
+					wrap_line(text, total_width)) {
 					store_line(line);
 				}
 			}
