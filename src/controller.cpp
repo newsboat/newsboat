@@ -1715,16 +1715,6 @@ void controller::dump_config(const std::string& filename)
 	}
 }
 
-unsigned int controller::get_pos_of_next_unread(unsigned int pos)
-{
-	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	for (pos++; pos < feedhandler.feeds.size(); pos++) {
-		if (feedhandler.feeds[pos]->unread_item_count() > 0)
-			break;
-	}
-	return pos;
-}
-
 void controller::update_flags(std::shared_ptr<rss_item> item)
 {
 	if (api) {

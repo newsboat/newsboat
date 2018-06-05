@@ -48,7 +48,6 @@ public:
 		bool unattended = false);
 	void start_reload_all_thread(std::vector<int>* indexes = 0);
 
-	std::shared_ptr<rss_feed> get_feed_by_url(const std::string& feedurl);
 	std::vector<std::shared_ptr<rss_item>> search_for_items(
 		const std::string& query,
 		std::shared_ptr<rss_feed> feed);
@@ -75,7 +74,6 @@ public:
 	void enqueue_url(const std::string& url,
 		std::shared_ptr<rss_feed> feed);
 	void notify(const std::string& msg);
-	unsigned int get_pos_of_next_unread(unsigned int pos);
 
 	void reload_urls_file();
 	void edit_urls_file();

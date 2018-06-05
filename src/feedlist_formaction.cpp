@@ -832,7 +832,7 @@ void feedlist_formaction::mark_pos_if_visible(unsigned int pos)
 		vpos++;
 	}
 	vpos = 0;
-	pos = v->get_ctrl()->get_pos_of_next_unread(pos);
+	pos = v->get_ctrl()->get_feedhandler()->get_pos_of_next_unread(pos);
 	for (const auto& feed : visible_feeds) {
 		if (feed.second == pos) {
 			LOG(level::DEBUG,
