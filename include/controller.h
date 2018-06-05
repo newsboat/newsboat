@@ -48,7 +48,6 @@ public:
 		bool unattended = false);
 	void start_reload_all_thread(std::vector<int>* indexes = 0);
 
-	std::shared_ptr<rss_feed> get_feed(unsigned int pos);
 	std::shared_ptr<rss_feed> get_feed_by_url(const std::string& feedurl);
 	std::vector<std::shared_ptr<rss_item>> search_for_items(
 		const std::string& query,
@@ -122,8 +121,6 @@ public:
 	void dump_config(const std::string& filename);
 
 	void update_flags(std::shared_ptr<rss_item> item);
-
-	unsigned int get_feed_count_per_tag(const std::string& tag);
 
 private:
 	void print_usage(char* argv0);

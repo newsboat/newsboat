@@ -692,16 +692,6 @@ void controller::reload(unsigned int pos,
 	}
 }
 
-std::shared_ptr<rss_feed> controller::get_feed(unsigned int pos)
-{
-	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	if (pos >= feedhandler.feeds.size()) {
-		throw std::out_of_range(_("invalid feed index (bug)"));
-	}
-	std::shared_ptr<rss_feed> feed = feedhandler.feeds[pos];
-	return feed;
-}
-
 void controller::reload_indexes(const std::vector<int>& indexes,
 	bool unattended)
 {
@@ -1268,21 +1258,10 @@ std::vector<std::shared_ptr<rss_item>> controller::search_for_items(
 		items = rsscache->search_for_items(
 			query, (feed != nullptr ? feed->rssurl() : ""));
 		for (const auto& item : items) {
-			item->set_feedptr(get_feed_by_url(item->feedurl()));
+			item->set_feedptr(feedhandler.get_feed_by_url(item->feedurl()));
 		}
 	}
 	return items;
-}
-
-std::shared_ptr<rss_feed> controller::get_feed_by_url(
-	const std::string& feedurl)
-{
-	for (const auto& feed : feedhandler.feeds) {
-		if (feedurl == feed->rssurl())
-			return feed;
-	}
-	LOG(level::ERROR, "controller:get_feed_by_url failed for %s", feedurl);
-	return std::shared_ptr<rss_feed>();
 }
 
 void controller::enqueue_url(const std::string& url,
@@ -1763,19 +1742,6 @@ std::vector<std::shared_ptr<rss_feed>> controller::get_all_feeds()
 		tmpfeeds = feedhandler.feeds;
 	}
 	return tmpfeeds;
-}
-
-unsigned int controller::get_feed_count_per_tag(const std::string& tag)
-{
-	unsigned int count = 0;
-	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	for (const auto& feed : feedhandler.feeds) {
-		if (feed->matches_tag(tag)) {
-			count++;
-		}
-	}
-
-	return count;
 }
 
 } // namespace newsboat

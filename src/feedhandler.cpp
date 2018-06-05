@@ -90,4 +90,38 @@ void FeedHandler::sort_feeds(const std::vector<std::string>& sortmethod_info)
 	}
 }
 
+std::shared_ptr<rss_feed> FeedHandler::get_feed(const unsigned int pos)
+{
+	std::lock_guard<std::mutex> feedslock(feeds_mutex);
+	if (pos >= feeds.size()) {
+		throw std::out_of_range(_("invalid feed index (bug)"));
+	}
+	std::shared_ptr<rss_feed> feed = feeds[pos];
+	return feed;
+}
+
+unsigned int FeedHandler::get_feed_count_per_tag(const std::string& tag)
+{
+	unsigned int count = 0;
+	std::lock_guard<std::mutex> feedslock(feeds_mutex);
+	for (const auto& feed : feeds) {
+		if (feed->matches_tag(tag)) {
+			count++;
+		}
+	}
+
+	return count;
+}
+
+std::shared_ptr<rss_feed> FeedHandler::get_feed_by_url(
+	const std::string& feedurl)
+{
+	for (const auto& feed : feeds) {
+		if (feedurl == feed->rssurl())
+			return feed;
+	}
+	LOG(level::ERROR, "controller:get_feed_by_url failed for %s", feedurl);
+	return std::shared_ptr<rss_feed>();
+}
+
 } // namespace newsboat

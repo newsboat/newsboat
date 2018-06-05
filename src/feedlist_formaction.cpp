@@ -211,7 +211,7 @@ REDO:
 	case OP_OPENINBROWSER:
 		if (feeds_shown > 0 && feedpos.length() > 0) {
 			std::shared_ptr<rss_feed> feed =
-				v->get_ctrl()->get_feed(pos);
+				v->get_ctrl()->get_feedhandler()->get_feed(pos);
 			if (feed) {
 				if (feed->rssurl().substr(0, 6) != "query:") {
 					LOG(level::INFO,
@@ -234,7 +234,7 @@ REDO:
 	case OP_OPENALLUNREADINBROWSER:
 		if (feeds_shown > 0 && feedpos.length() > 0) {
 			std::shared_ptr<rss_feed> feed =
-				v->get_ctrl()->get_feed(pos);
+				v->get_ctrl()->get_feedhandler()->get_feed(pos);
 			if (feed) {
 				LOG(level::INFO,
 					"feedlist_formaction: opening all "
@@ -250,7 +250,7 @@ REDO:
 	case OP_OPENALLUNREADINBROWSER_AND_MARK:
 		if (feeds_shown > 0 && feedpos.length() > 0) {
 			std::shared_ptr<rss_feed> feed =
-				v->get_ctrl()->get_feed(pos);
+				v->get_ctrl()->get_feedhandler()->get_feed(pos);
 			if (feed) {
 				LOG(level::INFO,
 					"feedlist_formaction: opening all "

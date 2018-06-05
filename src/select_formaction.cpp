@@ -104,7 +104,7 @@ void select_formaction::prepare()
 					"%4u  %s (%u)",
 					i + 1,
 					tag,
-					v->get_ctrl()->get_feed_count_per_tag(
+					v->get_ctrl()->get_feedhandler()->get_feed_count_per_tag(
 						tag));
 				listfmt.add_line(tagstr, i);
 				i++;

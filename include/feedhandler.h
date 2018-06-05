@@ -13,6 +13,9 @@ public:
 	FeedHandler();
 
 	void sort_feeds(const std::vector<std::string>& sortmethod_info);
+	std::shared_ptr<rss_feed> get_feed(const unsigned int pos);
+	unsigned int get_feed_count_per_tag(const std::string& tag);
+	std::shared_ptr<rss_feed> get_feed_by_url(const std::string& feedurl);
 
 	std::vector<std::shared_ptr<rss_feed>> feeds;
 
