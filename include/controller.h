@@ -82,7 +82,6 @@ public:
 	void edit_urls_file();
 
 	std::vector<std::shared_ptr<rss_feed>> get_all_feeds();
-	std::vector<std::shared_ptr<rss_feed>> get_all_feeds_unlocked();
 
 	filtercontainer& get_filters()
 	{
@@ -104,6 +103,11 @@ public:
 		return &cfg;
 	}
 
+	FeedHandler* get_feedhandler()
+	{
+		return &feedhandler;
+	}
+
 	void write_item(std::shared_ptr<rss_item> item,
 		const std::string& filename);
 	void write_item(std::shared_ptr<rss_item> item, std::ostream& ostr);
@@ -116,8 +120,6 @@ public:
 	void load_configfile(const std::string& filename);
 
 	void dump_config(const std::string& filename);
-
-	void sort_feeds();
 
 	void update_flags(std::shared_ptr<rss_item> item);
 
