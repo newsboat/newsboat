@@ -5,10 +5,14 @@
 #include <string>
 #include <vector>
 
+#include "rss.h"
+
 namespace newsboat {
 class FeedHandler {
 public:
 	FeedHandler();
+
+	std::vector<std::shared_ptr<rss_feed>> feeds;
 };
 } // namespace newsboat
 

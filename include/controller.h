@@ -7,6 +7,7 @@
 #include "colormanager.h"
 #include "configcontainer.h"
 #include "configpaths.h"
+#include "feedhandler.h"
 #include "filtercontainer.h"
 #include "fslock.h"
 #include "regexmanager.h"
@@ -145,10 +146,10 @@ private:
 	view* v;
 	urlreader* urlcfg;
 	cache* rsscache;
-	std::vector<std::shared_ptr<rss_feed>> feeds;
 	bool refresh_on_start;
 	configcontainer cfg;
 	rss_ignores ign;
+	FeedHandler feedhandler;
 	filtercontainer filters;
 
 	std::mutex reload_mutex;
