@@ -52,10 +52,6 @@ public:
 	std::vector<std::shared_ptr<rss_item>> search_for_items(
 		const std::string& query,
 		std::shared_ptr<rss_feed> feed);
-	unsigned int get_feedcount()
-	{
-		return feeds.size();
-	}
 
 	void unlock_reload_mutex()
 	{
