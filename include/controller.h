@@ -78,8 +78,6 @@ public:
 	void reload_urls_file();
 	void edit_urls_file();
 
-	std::vector<std::shared_ptr<rss_feed>> get_all_feeds();
-
 	filtercontainer& get_filters()
 	{
 		return filters;

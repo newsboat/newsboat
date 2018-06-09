@@ -186,4 +186,14 @@ void FeedHandler::set_feeds(const std::vector<std::shared_ptr<rss_feed>> new_fee
 	feeds = new_feeds;
 }
 
+std::vector<std::shared_ptr<rss_feed>> FeedHandler::get_all_feeds()
+{
+	std::vector<std::shared_ptr<rss_feed>> tmpfeeds;
+	{
+		std::lock_guard<std::mutex> feedslock(feeds_mutex);
+		tmpfeeds = feeds;
+	}
+	return tmpfeeds;
+}
+
 } // namespace newsboat
