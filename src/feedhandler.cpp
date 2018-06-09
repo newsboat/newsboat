@@ -100,6 +100,38 @@ std::shared_ptr<rss_feed> FeedHandler::get_feed(const unsigned int pos)
 	return feed;
 }
 
+void FeedHandler::mark_all_feed_items_read(const unsigned int feed_pos)
+{
+	const auto feed = get_feed(feed_pos);
+	std::lock_guard<std::mutex> lock(feed->item_mutex);
+	std::vector<std::shared_ptr<rss_item>>& items = feed->items();
+	if (items.size() > 0) {
+		bool notify = items[0]->feedurl() != feed->rssurl();
+		LOG(level::DEBUG,
+				"controller::mark_all_read: notify = %s",
+				notify ? "yes" : "no");
+		for (const auto& item : items) {
+			item->set_unread_nowrite_notify(false, notify);
+		}
+	}
+}
+
+void FeedHandler::add_feed(const std::shared_ptr<rss_feed> feed)
+{
+	std::lock_guard<std::mutex> feedslock(feeds_mutex);
+	feeds.push_back(feed);
+}
+
+void FeedHandler::populate_query_feeds()
+{
+	std::lock_guard<std::mutex> feedslock(feeds_mutex);
+	for (const auto& feed : feeds) {
+		if (feed->rssurl().substr(0, 6) == "query:") {
+			feed->update_items(feeds);
+		}
+	}
+}
+
 unsigned int FeedHandler::get_feed_count_per_tag(const std::string& tag)
 {
 	unsigned int count = 0;
@@ -132,6 +164,26 @@ unsigned int FeedHandler::get_pos_of_next_unread(unsigned int pos)
 			break;
 	}
 	return pos;
+}
+
+unsigned int FeedHandler::feeds_size()
+{
+	std::lock_guard<std::mutex> feedslock(feeds_mutex);
+	return feeds.size();
+}
+
+void FeedHandler::reset_feeds_status()
+{
+	std::lock_guard<std::mutex> feedlock(feeds_mutex);
+	for (const auto& feed : feeds) {
+		feed->reset_status();
+	}
+}
+
+void FeedHandler::set_feeds(const std::vector<std::shared_ptr<rss_feed>> new_feeds)
+{
+	std::lock_guard<std::mutex> feedslock(feeds_mutex);
+	feeds = new_feeds;
 }
 
 } // namespace newsboat

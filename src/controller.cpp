@@ -398,8 +398,7 @@ int controller::run(int argc, char* argv[])
 					url, ignore_disp ? &ign : nullptr);
 			feed->set_tags(urlcfg->get_tags(url));
 			feed->set_order(i);
-			std::lock_guard<std::mutex> feedslock(feeds_mutex);
-			feedhandler.feeds.push_back(feed);
+			feedhandler.add_feed(feed);
 		} catch (const dbexception& e) {
 			std::cout << _("Error while loading feeds from "
 				       "database: ")
@@ -429,12 +428,8 @@ int controller::run(int argc, char* argv[])
 			std::cout << _("Prepopulating query feeds...");
 			std::cout.flush();
 		}
-		std::lock_guard<std::mutex> feedslock(feeds_mutex);
-		for (const auto& feed : feedhandler.feeds) {
-			if (feed->rssurl().substr(0, 6) == "query:") {
-				feed->update_items(feedhandler.feeds);
-			}
-		}
+
+		feedhandler.populate_query_feeds();
 
 		if (!args.do_export && !args.silent) {
 			std::cout << _("done.") << std::endl;
@@ -581,7 +576,7 @@ void controller::mark_all_read(unsigned int pos)
 	if (pos < feedhandler.feeds.size()) {
 		scope_measure m("controller::mark_all_read");
 		std::lock_guard<std::mutex> feedslock(feeds_mutex);
-		std::shared_ptr<rss_feed> feed = feedhandler.feeds[pos];
+		const auto feed = feedhandler.get_feed(pos);
 		if (feed->rssurl().substr(0, 6) == "query:") {
 			rsscache->mark_all_read(feed);
 		} else {
@@ -593,17 +588,8 @@ void controller::mark_all_read(unsigned int pos)
 		m.stopover(
 			"after rsscache->mark_all_read, before iteration over "
 			"items");
-		std::lock_guard<std::mutex> lock(feed->item_mutex);
-		std::vector<std::shared_ptr<rss_item>>& items = feed->items();
-		if (items.size() > 0) {
-			bool notify = items[0]->feedurl() != feed->rssurl();
-			LOG(level::DEBUG,
-				"controller::mark_all_read: notify = %s",
-				notify ? "yes" : "no");
-			for (const auto& item : items) {
-				item->set_unread_nowrite_notify(false, notify);
-			}
-		}
+
+		feedhandler.mark_all_feed_items_read(pos);
 	}
 }
 
@@ -699,11 +685,7 @@ void controller::reload_indexes(const std::vector<int>& indexes,
 	unsigned int unread_feeds, unread_articles;
 	compute_unread_numbers(unread_feeds, unread_articles);
 
-	unsigned long size;
-	{
-		std::lock_guard<std::mutex> feedslock(feeds_mutex);
-		size = feedhandler.feeds.size();
-	}
+	const auto size = feedhandler.feeds_size();
 
 	for (const auto& idx : indexes) {
 		this->reload(idx, size, unattended);
@@ -771,22 +753,14 @@ void controller::reload_all(bool unattended)
 	unsigned int num_threads = cfg.get_configvalue_as_int("reload-threads");
 	time_t t1, t2, dt;
 
-	unsigned int size;
-
-	{
-		std::lock_guard<std::mutex> feedlock(feeds_mutex);
-		for (const auto& feed : feedhandler.feeds) {
-			feed->reset_status();
-		}
-		size = feedhandler.feeds.size();
-	}
+	feedhandler.reset_feeds_status();
+	const auto size = feedhandler.feeds_size();
 
 	if (num_threads < 1)
 		num_threads = 1;
 
-	if (num_threads > size) {
+	if (num_threads > size)
 		num_threads = size;
-	}
 
 	t1 = time(nullptr);
 
@@ -1335,10 +1309,7 @@ void controller::reload_urls_file()
 
 	v->set_tags(urlcfg->get_alltags());
 
-	{
-		std::lock_guard<std::mutex> feedslock(feeds_mutex);
-		feedhandler.feeds = new_feeds;
-	}
+	feedhandler.set_feeds(new_feeds);
 
 	feedhandler.sort_feeds(utils::tokenize(
 				cfg.get_configvalue("feed-sort-order"),
