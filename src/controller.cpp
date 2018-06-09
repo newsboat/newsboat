@@ -432,9 +432,8 @@ int controller::run(int argc, char* argv[])
 		}
 	}
 
-	feedhandler.sort_feeds(utils::tokenize(
-				cfg.get_configvalue("feed-sort-order"),
-				"-"));
+	feedhandler.sort_feeds(
+		utils::tokenize(cfg.get_configvalue("feed-sort-order"), "-"));
 
 	if (args.do_export) {
 		export_opml();
@@ -638,7 +637,8 @@ void controller::reload(unsigned int pos,
 
 				oldfeed->clear_items();
 
-				v->notify_itemlist_change(feedhandler.feeds[pos]);
+				v->notify_itemlist_change(
+					feedhandler.feeds[pos]);
 				if (!unattended) {
 					v->set_feedlist(feedhandler.feeds);
 				}
@@ -797,9 +797,8 @@ void controller::reload_all(bool unattended)
 	}
 	v->force_redraw();
 
-	feedhandler.sort_feeds(utils::tokenize(
-				cfg.get_configvalue("feed-sort-order"),
-				"-"));
+	feedhandler.sort_feeds(
+		utils::tokenize(cfg.get_configvalue("feed-sort-order"), "-"));
 	update_feedlist();
 
 	t2 = time(nullptr);
@@ -1228,7 +1227,8 @@ std::vector<std::shared_ptr<rss_item>> controller::search_for_items(
 		items = rsscache->search_for_items(
 			query, (feed != nullptr ? feed->rssurl() : ""));
 		for (const auto& item : items) {
-			item->set_feedptr(feedhandler.get_feed_by_url(item->feedurl()));
+			item->set_feedptr(
+				feedhandler.get_feed_by_url(item->feedurl()));
 		}
 	}
 	return items;
@@ -1307,9 +1307,8 @@ void controller::reload_urls_file()
 
 	feedhandler.set_feeds(new_feeds);
 
-	feedhandler.sort_feeds(utils::tokenize(
-				cfg.get_configvalue("feed-sort-order"),
-				"-"));
+	feedhandler.sort_feeds(
+		utils::tokenize(cfg.get_configvalue("feed-sort-order"), "-"));
 
 	update_feedlist();
 }
@@ -1512,7 +1511,8 @@ void controller::save_feed(std::shared_ptr<rss_feed> feed, unsigned int pos)
 			"controller::save_feed: after internalize_rssfeed");
 		feed->set_tags(urlcfg->get_tags(feed->rssurl()));
 		{
-			unsigned int order = feedhandler.feeds[pos]->get_order();
+			unsigned int order =
+				feedhandler.feeds[pos]->get_order();
 			std::lock_guard<std::mutex> itemlock(
 				feedhandler.feeds[pos]->item_mutex);
 			feedhandler.feeds[pos]->clear_items();

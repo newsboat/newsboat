@@ -5,8 +5,7 @@
 
 namespace newsboat {
 
-FeedHandler::FeedHandler()
-{}
+FeedHandler::FeedHandler() {}
 
 void FeedHandler::sort_feeds(const std::vector<std::string>& sortmethod_info)
 {
@@ -108,8 +107,8 @@ void FeedHandler::mark_all_feed_items_read(const unsigned int feed_pos)
 	if (items.size() > 0) {
 		bool notify = items[0]->feedurl() != feed->rssurl();
 		LOG(level::DEBUG,
-				"controller::mark_all_read: notify = %s",
-				notify ? "yes" : "no");
+			"controller::mark_all_read: notify = %s",
+			notify ? "yes" : "no");
 		for (const auto& item : items) {
 			item->set_unread_nowrite_notify(false, notify);
 		}
@@ -180,7 +179,8 @@ void FeedHandler::reset_feeds_status()
 	}
 }
 
-void FeedHandler::set_feeds(const std::vector<std::shared_ptr<rss_feed>> new_feeds)
+void FeedHandler::set_feeds(
+	const std::vector<std::shared_ptr<rss_feed>> new_feeds)
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
 	feeds = new_feeds;
