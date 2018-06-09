@@ -424,6 +424,9 @@ test/configcontainer.o: test/configcontainer.cpp \
  include/configparser.h include/exceptions.h include/keymap.h
 test/configparser.o: test/configparser.cpp include/configparser.h \
  3rd-party/catch.hpp
+test/feedhandler.o: test/feedhandler.cpp include/feedhandler.h \
+ 3rd-party/catch.hpp include/cache.h include/configcontainer.h \
+ include/rss.h test/test-helpers.h
 test/filterparser.o: test/filterparser.cpp filter/FilterParser.h \
  3rd-party/catch.hpp
 test/formatstring.o: test/formatstring.cpp include/formatstring.h \
