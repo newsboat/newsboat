@@ -100,11 +100,7 @@ controller::~controller()
 	delete urlcfg;
 	delete api;
 
-	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	for (const auto& feed : feedhandler.feeds) {
-		std::lock_guard<std::mutex> lock(feed->item_mutex);
-		feed->clear_items();
-	}
+	feedhandler.clear_feeds_items();
 	feedhandler.feeds.clear();
 }
 

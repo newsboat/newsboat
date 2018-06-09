@@ -196,4 +196,13 @@ std::vector<std::shared_ptr<rss_feed>> FeedHandler::get_all_feeds()
 	return tmpfeeds;
 }
 
+void FeedHandler::clear_feeds_items()
+{
+	std::lock_guard<std::mutex> feedslock(feeds_mutex);
+	for (const auto& feed : feeds) {
+		std::lock_guard<std::mutex> lock(feed->item_mutex);
+		feed->clear_items();
+	}
+}
+
 } // namespace newsboat
