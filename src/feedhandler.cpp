@@ -107,7 +107,7 @@ void FeedHandler::mark_all_feed_items_read(const unsigned int feed_pos)
 	if (items.size() > 0) {
 		bool notify = items[0]->feedurl() != feed->rssurl();
 		LOG(level::DEBUG,
-			"controller::mark_all_read: notify = %s",
+			"FeedHandler::mark_all_read: notify = %s",
 			notify ? "yes" : "no");
 		for (const auto& item : items) {
 			item->set_unread_nowrite_notify(false, notify);
@@ -151,7 +151,7 @@ std::shared_ptr<rss_feed> FeedHandler::get_feed_by_url(
 		if (feedurl == feed->rssurl())
 			return feed;
 	}
-	LOG(level::ERROR, "controller:get_feed_by_url failed for %s", feedurl);
+	LOG(level::ERROR, "FeedHandler:get_feed_by_url failed for %s", feedurl);
 	return std::shared_ptr<rss_feed>();
 }
 
