@@ -5,8 +5,6 @@
 
 namespace newsboat {
 
-FeedHandler::FeedHandler() {}
-
 void FeedHandler::sort_feeds(const std::vector<std::string>& sortmethod_info)
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);

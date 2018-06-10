@@ -10,7 +10,7 @@
 namespace newsboat {
 class FeedHandler {
 public:
-	FeedHandler();
+	FeedHandler() = default;
 
 	void sort_feeds(const std::vector<std::string>& sortmethod_info);
 	std::shared_ptr<rss_feed> get_feed(const unsigned int pos);
