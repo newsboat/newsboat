@@ -12,13 +12,11 @@ using namespace newsboat;
 
 namespace {
 
-std::vector<std::shared_ptr<rss_feed>> get_five_empty_feeds()
+std::vector<std::shared_ptr<rss_feed>> get_five_empty_feeds(cache* rsscache)
 {
 	std::vector<std::shared_ptr<rss_feed>> feeds;
-	std::unique_ptr<configcontainer> cfg(new configcontainer());
-	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
 	for (int i = 0; i < 5; ++i) {
-		const auto feed = std::make_shared<rss_feed>(rsscache.get());
+		const auto feed = std::make_shared<rss_feed>(rsscache);
 		feeds.push_back(feed);
 	}
 	return feeds;
@@ -29,7 +27,9 @@ std::vector<std::shared_ptr<rss_feed>> get_five_empty_feeds()
 TEST_CASE("get_feed() returns feed by its position number", "[feedhandler]")
 {
 	FeedHandler feedhandler;
-	const auto feeds = get_five_empty_feeds();
+	std::unique_ptr<configcontainer> cfg(new configcontainer());
+	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
+	const auto feeds = get_five_empty_feeds(rsscache.get());
 	int i = 0;
 	for (const auto& feed : feeds) {
 		feed->set_title(std::to_string(i));
@@ -48,7 +48,9 @@ TEST_CASE("get_feed() returns feed by its position number", "[feedhandler]")
 TEST_CASE("get_feed_by_url() returns feed by its URL", "[feedhandler]")
 {
 	FeedHandler feedhandler;
-	const auto feeds = get_five_empty_feeds();
+	std::unique_ptr<configcontainer> cfg(new configcontainer());
+	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
+	const auto feeds = get_five_empty_feeds(rsscache.get());
 	int i = 0;
 	for (const auto& feed : feeds) {
 		feed->set_title(std::to_string(i));
@@ -67,7 +69,9 @@ TEST_CASE("get_feed_by_url() returns feed by its URL", "[feedhandler]")
 TEST_CASE("Throws on get_feed() with pos out of range", "[feedhandler]")
 {
 	FeedHandler feedhandler;
-	feedhandler.set_feeds(get_five_empty_feeds());
+	std::unique_ptr<configcontainer> cfg(new configcontainer());
+	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
+	feedhandler.set_feeds(get_five_empty_feeds(rsscache.get()));
 
 	REQUIRE_NOTHROW(feedhandler.get_feed(4));
 	CHECK_THROWS_AS(feedhandler.get_feed(5), std::out_of_range);
@@ -77,7 +81,9 @@ TEST_CASE("Throws on get_feed() with pos out of range", "[feedhandler]")
 TEST_CASE("Returns correct number using get_feed_count_by_tag()", "[feedhandler]")
 {
 	FeedHandler feedhandler;
-	feedhandler.set_feeds(get_five_empty_feeds());
+	std::unique_ptr<configcontainer> cfg(new configcontainer());
+	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
+	feedhandler.set_feeds(get_five_empty_feeds(rsscache.get()));
 	feedhandler.get_feed(0)->set_tags({"Chicken", "Horse"});
 	feedhandler.get_feed(1)->set_tags({"Horse", "Duck"});
 	feedhandler.get_feed(2)->set_tags({"Duck", "Frog"});
@@ -92,7 +98,9 @@ TEST_CASE("Returns correct number using get_feed_count_by_tag()", "[feedhandler]
 TEST_CASE("Correctly returns pos of next unread item", "[feedhandler]")
 {
 	FeedHandler feedhandler;
-	const auto feeds = get_five_empty_feeds();
+	std::unique_ptr<configcontainer> cfg(new configcontainer());
+	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
+	const auto feeds = get_five_empty_feeds(rsscache.get());
 	int i = 0;
 	for (const auto& feed : feeds) {
 		const auto item = std::make_shared<rss_item>(nullptr);
