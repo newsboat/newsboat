@@ -27,7 +27,7 @@ std::vector<std::shared_ptr<rss_feed>> get_five_empty_feeds()
 
 } // anonymous namespace
 
-TEST_CASE("Correctly returns desired feed")
+TEST_CASE("Correctly returns desired feed", "[feedhandler]")
 {
 	FeedHandler feedhandler;
 	const auto feeds = get_five_empty_feeds();
@@ -58,7 +58,7 @@ TEST_CASE("Correctly returns desired feed")
 	}
 }
 
-TEST_CASE("Throws on get_feed() with pos out of range")
+TEST_CASE("Throws on get_feed() with pos out of range", "[feedhandler]")
 {
 	FeedHandler feedhandler;
 	feedhandler.set_feeds(get_five_empty_feeds());
@@ -68,7 +68,7 @@ TEST_CASE("Throws on get_feed() with pos out of range")
 	CHECK_THROWS_AS(feedhandler.get_feed(-1), std::out_of_range);
 }
 
-TEST_CASE("Returns correct number using get_feed_count_by_tag()")
+TEST_CASE("Returns correct number using get_feed_count_by_tag()", "[feedhandler]")
 {
 	FeedHandler feedhandler;
 	feedhandler.set_feeds(get_five_empty_feeds());
@@ -83,7 +83,7 @@ TEST_CASE("Returns correct number using get_feed_count_by_tag()")
 	REQUIRE(feedhandler.get_feed_count_per_tag("Duck") == 3);
 }
 
-TEST_CASE("Correctly returns pos of next unread item")
+TEST_CASE("Correctly returns pos of next unread item", "[feedhandler]")
 {
 	FeedHandler feedhandler;
 	const auto feeds = get_five_empty_feeds();
@@ -103,7 +103,7 @@ TEST_CASE("Correctly returns pos of next unread item")
 	REQUIRE(feedhandler.get_pos_of_next_unread(2) == 4);
 }
 
-TEST_CASE("Correctly sorts feeds")
+TEST_CASE("Correctly sorts feeds", "[feedhandler]")
 {
 	SECTION("by none asc")
 	{
