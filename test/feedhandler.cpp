@@ -15,9 +15,8 @@ namespace {
 std::vector<std::shared_ptr<rss_feed>> get_five_empty_feeds()
 {
 	std::vector<std::shared_ptr<rss_feed>> feeds;
-	TestHelpers::TempFile dbfile;
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
-	std::unique_ptr<cache> rsscache(new cache(dbfile.getPath(), cfg.get()));
+	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
 	for (int i = 0; i < 5; ++i) {
 		const auto feed = std::make_shared<rss_feed>(rsscache.get());
 		feeds.push_back(feed);
