@@ -1,12 +1,12 @@
 # Sergey Dryabzhinsky <sergey.dryabzhinsky@gmail.com>, 2008.
-# Alexander Batischev <eual.jp@gmail.com>, 2017.
+# Alexander Batischev <eual.jp@gmail.com>, 2017–2018.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: newsboat 2.10.1\n"
+"Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2018-06-10 21:48+0300\n"
-"PO-Revision-Date: 2018-03-03 19:04+0300\n"
+"PO-Revision-Date: 2018-06-10 21:50+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -21,17 +21,17 @@ msgstr ""
 #: newsboat.cpp:37
 #, c-format
 msgid "Caught newsboat::dbexception with message: %s"
-msgstr ""
+msgstr "Поймали newsboat::dbexception с сообщением: %s"
 
 #: newsboat.cpp:44
 #, c-format
 msgid "Caught newsboat::matcherexception with message: %s"
-msgstr ""
+msgstr "Поймали newsboat::matcherexception с сообщением: %s"
 
 #: newsboat.cpp:50 podboat.cpp:32
 #, c-format
 msgid "Caught newsboat::exception with message: %s"
-msgstr ""
+msgstr "Поймали newsboat::exception с сообщением: %s"
 
 #: src/cliargsparser.cpp:144 src/pb_controller.cpp:231
 #, c-format
@@ -127,11 +127,12 @@ msgid "unknown command `%s'"
 msgstr "неизвестная команда `%s'"
 
 #: src/configpaths.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Fatal error: couldn't determine home directory!\n"
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
+"Фатальная ошибка: не удалось определить домашнюю директорию!\n"
 "Пожалуйста, задайте значение переменной окружения HOME или добавьте "
 "подходящего пользователя для UID %u!"
 
@@ -577,27 +578,24 @@ msgstr "Не выбрано ни одной ленты!"
 #. / "Sort by (f)irsttag/..." and "Reverse Sort by
 #. / (f)irsttag/..." messages
 #: src/feedlist_formaction.cpp:145 src/feedlist_formaction.cpp:177
-#, fuzzy
 msgid "ftauln"
-msgstr "ftaun"
+msgstr "ftauln"
 
 #: src/feedlist_formaction.cpp:147
-#, fuzzy
 msgid ""
 "Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(l)astupdated/"
 "(n)one?"
 msgstr ""
 "Сортировать по первой метке (f)/заголовку (t)/количеству записей (a)/"
-"непрочитанным (u)/никак (n)?"
+"непрочитанным (u)/времени последнего обновления (l)/никак (n)?"
 
 #: src/feedlist_formaction.cpp:179
-#, fuzzy
 msgid ""
 "Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/"
 "(l)astupdated/(n)one?"
 msgstr ""
 "Сортировать в обратном порядке по первой метке (f)/заголовку (t)/количеству "
-"записей (a)/непрочитанным (u)/никак (n)?"
+"записей (a)/непрочитанным (u)/времени последнего обновления (l)/никак (n)?"
 
 #: src/feedlist_formaction.cpp:223
 msgid "Cannot open query feeds in the browser!"
@@ -912,9 +910,8 @@ msgid "No unread feeds."
 msgstr "Непрочитанных лент нет."
 
 #: src/itemlist_formaction.cpp:483
-#, fuzzy
 msgid "Marking all above as read..."
-msgstr "Отмечаю все ленты как прочитанные..."
+msgstr "Отмечаю все, что выше, как прочитанные..."
 
 #: src/itemlist_formaction.cpp:531 src/itemview_formaction.cpp:301
 msgid "Pipe article to command: "
@@ -1080,9 +1077,8 @@ msgid "Mark all feeds read"
 msgstr "Отметить все ленты как прочитанные"
 
 #: src/keymap.cpp:58
-#, fuzzy
 msgid "Mark all above as read"
-msgstr "Отметить все ленты как прочитанные"
+msgstr "Отметить все, что выше, как прочитанные"
 
 #: src/keymap.cpp:60
 msgid "Save article"
@@ -1382,9 +1378,9 @@ msgstr ""
 "подходящего пользователя для UID %u!"
 
 #: src/pb_controller.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "Fatal error: couldn't create configuration directory `%s': (%i) %s"
-msgstr "Ошибка: невозможно открыть конфигурационный файл `%s'!"
+msgstr "Ошибка: невозможно создать конфигурационную директорию `%s': (%i) %s"
 
 #: src/pb_controller.cpp:309
 msgid "Cleaning up queue..."
@@ -1566,10 +1562,3 @@ msgstr "неизвестный тип ленты"
 #: rss/rss_09x_parser.cpp:39
 msgid "no RSS channel found"
 msgstr "RSS-лента не найдена"
-
-#, fuzzy
-#~ msgid "'%s' is not a valid key command"
-#~ msgstr "команда `%s' не поддерживается"
-
-#~ msgid "Type `%s -vv' for more information."
-#~ msgstr "За подробностями набирайте `%s -vv`."
