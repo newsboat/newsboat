@@ -752,11 +752,13 @@ void controller::reload_all(bool unattended)
 	feedhandler.reset_feeds_status();
 	const auto size = feedhandler.feeds_size();
 
-	if (num_threads < 1)
+	if (num_threads < 1) {
 		num_threads = 1;
+	}
 
-	if (num_threads > size)
+	if (num_threads > size) {
 		num_threads = size;
+	}
 
 	t1 = time(nullptr);
 
