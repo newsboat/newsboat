@@ -298,7 +298,7 @@ uninstall-mo:
 
 test: test/test
 
-TEST_SRCS:=$(shell ls test/*.cpp)
+TEST_SRCS:=$(wildcard test/*.cpp)
 TEST_OBJS:=$(patsubst %.cpp,%.o,$(TEST_SRCS))
 test/test: $(LIB_OUTPUT) $(NEWSBOAT_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) $(TEST_OBJS) test/test-helpers.h
 	$(CXX) $(CXXFLAGS) -o test/test $(TEST_OBJS) src/*.o $(NEWSBOAT_LIBS) $(LDFLAGS)
@@ -320,8 +320,8 @@ config.mk:
 xlicense.h: LICENSE
 	$(TEXTCONV) $< > $@
 
-ALL_SRCS:=$(shell ls filter/*.cpp rss/*.cpp src/*.cpp test/*.cpp)
-ALL_HDRS:=$(shell ls filter/*.h rss/*.h test/*.h 3rd-party/*.hpp) $(STFLHDRS) xlicense.h
+ALL_SRCS:=$(wildcard filter/*.cpp rss/*.cpp src/*.cpp test/*.cpp)
+ALL_HDRS:=$(wildcard filter/*.h rss/*.h test/*.h 3rd-party/*.hpp) $(STFLHDRS) xlicense.h
 depslist: $(ALL_SRCS) $(ALL_HDRS)
 	> mk/mk.deps
 	for dir in filter rss src test ; do \
