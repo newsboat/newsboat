@@ -5,9 +5,11 @@
 
 namespace newsboat {
 
-void FeedHandler::sort_feeds(const std::vector<std::string>& sortmethod_info)
+void FeedHandler::sort_feeds(configcontainer* cfg)
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
+	const auto sortmethod_info =
+		utils::tokenize(cfg->get_configvalue("feed-sort-order"), "-");
 	std::string sortmethod = sortmethod_info[0];
 	std::string direction = "desc";
 	if (sortmethod_info.size() > 1)

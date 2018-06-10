@@ -432,8 +432,7 @@ int controller::run(int argc, char* argv[])
 		}
 	}
 
-	feedhandler.sort_feeds(
-		utils::tokenize(cfg.get_configvalue("feed-sort-order"), "-"));
+	feedhandler.sort_feeds(&cfg);
 
 	if (args.do_export) {
 		export_opml();
@@ -799,8 +798,7 @@ void controller::reload_all(bool unattended)
 	}
 	v->force_redraw();
 
-	feedhandler.sort_feeds(
-		utils::tokenize(cfg.get_configvalue("feed-sort-order"), "-"));
+	feedhandler.sort_feeds(&cfg);
 	update_feedlist();
 
 	t2 = time(nullptr);
@@ -1308,10 +1306,7 @@ void controller::reload_urls_file()
 	v->set_tags(urlcfg->get_alltags());
 
 	feedhandler.set_feeds(new_feeds);
-
-	feedhandler.sort_feeds(
-		utils::tokenize(cfg.get_configvalue("feed-sort-order"), "-"));
-
+	feedhandler.sort_feeds(&cfg);
 	update_feedlist();
 }
 

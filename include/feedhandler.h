@@ -12,7 +12,7 @@ class FeedHandler {
 public:
 	FeedHandler() = default;
 
-	void sort_feeds(const std::vector<std::string>& sortmethod_info);
+	void sort_feeds(configcontainer* cfg);
 	std::shared_ptr<rss_feed> get_feed(const unsigned int pos);
 	void add_feed(const std::shared_ptr<rss_feed> feed);
 	void mark_all_feed_items_read(const unsigned int feed_pos);
