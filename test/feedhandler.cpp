@@ -27,7 +27,7 @@ std::vector<std::shared_ptr<rss_feed>> get_five_empty_feeds()
 
 } // anonymous namespace
 
-TEST_CASE("Correctly returns desired feed", "[feedhandler]")
+TEST_CASE("get_feed() returns feed by its position number", "[feedhandler]")
 {
 	FeedHandler feedhandler;
 	const auto feeds = get_five_empty_feeds();
@@ -39,23 +39,30 @@ TEST_CASE("Correctly returns desired feed", "[feedhandler]")
 	}
 	feedhandler.set_feeds(feeds);
 
-	SECTION("By pos")
-	{
-		auto feed = feedhandler.get_feed(0);
-		REQUIRE(feed->title_raw() == "0");
+	auto feed = feedhandler.get_feed(0);
+	REQUIRE(feed->title_raw() == "0");
 
-		feed = feedhandler.get_feed(4);
-		REQUIRE(feed->title_raw() == "4");
+	feed = feedhandler.get_feed(4);
+	REQUIRE(feed->title_raw() == "4");
+}
+
+TEST_CASE("get_feed_by_url() returns feed by its URL", "[feedhandler]")
+{
+	FeedHandler feedhandler;
+	const auto feeds = get_five_empty_feeds();
+	int i = 0;
+	for (const auto& feed : feeds) {
+		feed->set_title(std::to_string(i));
+		feed->set_rssurl("url/" + std::to_string(i));
+		i++;
 	}
+	feedhandler.set_feeds(feeds);
 
-	SECTION("By rssurl")
-	{
-		auto feed = feedhandler.get_feed_by_url("url/1");
-		REQUIRE(feed->title_raw() == "1");
+	auto feed = feedhandler.get_feed_by_url("url/1");
+	REQUIRE(feed->title_raw() == "1");
 
-		feed = feedhandler.get_feed_by_url("url/4");
-		REQUIRE(feed->title_raw() == "4");
-	}
+	feed = feedhandler.get_feed_by_url("url/4");
+	REQUIRE(feed->title_raw() == "4");
 }
 
 TEST_CASE("Throws on get_feed() with pos out of range", "[feedhandler]")
