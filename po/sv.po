@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat-1.4\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2018-03-03 19:02+0300\n"
+"POT-Creation-Date: 2018-06-10 21:42+0300\n"
 "PO-Revision-Date: 2009-03-16 21:29+0100\n"
 "Last-Translator: Niklas Grahn <terra.unknown@yahoo.com>\n"
 "Language-Team: \n"
@@ -30,7 +30,7 @@ msgstr ""
 msgid "Caught newsboat::exception with message: %s"
 msgstr ""
 
-#: src/cliargsparser.cpp:138 src/pb_controller.cpp:231
+#: src/cliargsparser.cpp:144 src/pb_controller.cpp:231
 #, c-format
 msgid "%s: %d: invalid loglevel value"
 msgstr ""
@@ -98,17 +98,17 @@ msgstr "%N %V - Markera tagg"
 msgid "%N %V - URLs"
 msgstr "%N %V - Url:er"
 
-#: src/configcontainer.cpp:289
+#: src/configcontainer.cpp:288
 #, c-format
 msgid "expected boolean value, found `%s' instead"
 msgstr "boolean-värde förväntades, hittade `%s' istället"
 
-#: src/configcontainer.cpp:297
+#: src/configcontainer.cpp:296
 #, c-format
 msgid "expected integer value, found `%s' instead"
 msgstr "integer-värde förväntades, hittade `%s' istället"
 
-#: src/configcontainer.cpp:306
+#: src/configcontainer.cpp:305
 #, fuzzy, c-format
 msgid "invalid configuration value `%s'"
 msgstr "Sparade konfiguration till %s"
@@ -414,7 +414,7 @@ msgstr "Ett fel inträffade vid tolkning av %s."
 msgid "Import of %s finished."
 msgstr "Importering av %s färdig"
 
-#: src/controller.cpp:1435
+#: src/controller.cpp:1436
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -432,28 +432,28 @@ msgstr "%u olästa artiklar"
 msgid "%s: %s: unknown command"
 msgstr "okänt kommando `%s'"
 
-#: src/controller.cpp:1498 src/formaction.cpp:417 src/formaction.cpp:419
+#: src/controller.cpp:1497 src/formaction.cpp:417 src/formaction.cpp:419
 #: src/itemview_formaction.cpp:94
 msgid "Title: "
 msgstr "Titel: "
 
-#: src/controller.cpp:1502 src/itemview_formaction.cpp:101
+#: src/controller.cpp:1501 src/itemview_formaction.cpp:101
 msgid "Author: "
 msgstr "Författare: "
 
-#: src/controller.cpp:1506 src/itemview_formaction.cpp:114
+#: src/controller.cpp:1505 src/itemview_formaction.cpp:114
 msgid "Date: "
 msgstr "Datum: "
 
-#: src/controller.cpp:1510 src/itemview_formaction.cpp:108
+#: src/controller.cpp:1509 src/itemview_formaction.cpp:108
 msgid "Link: "
 msgstr "Länk: "
 
-#: src/controller.cpp:1515 src/itemview_formaction.cpp:125
+#: src/controller.cpp:1514 src/itemview_formaction.cpp:125
 msgid "Podcast Download URL: "
 msgstr "Hämtningsurl för podsändning: "
 
-#: src/controller.cpp:1793
+#: src/controller.cpp:1792
 #, c-format
 msgid "Error: couldn't open configuration file `%s'!"
 msgstr "Fel: kunde inte öppna konfigurationsfil `%s'!"
@@ -558,17 +558,17 @@ msgstr "fil kunde inte öppnas."
 msgid "unknown error (bug)."
 msgstr "okänt fel (fel)."
 
-#: src/feedhq_urlreader.cpp:51 src/oldreader_urlreader.cpp:52
+#: src/feedhq_urlreader.cpp:48 src/oldreader_urlreader.cpp:49
 msgid "People you follow"
 msgstr ""
 
-#: src/feedhq_urlreader.cpp:53 src/inoreader_urlreader.cpp:50
-#: src/oldreader_urlreader.cpp:54
+#: src/feedhq_urlreader.cpp:50 src/inoreader_urlreader.cpp:50
+#: src/oldreader_urlreader.cpp:51
 #, fuzzy
 msgid "Starred items"
 msgstr "Inga olästa poster."
 
-#: src/feedhq_urlreader.cpp:54 src/oldreader_urlreader.cpp:55
+#: src/feedhq_urlreader.cpp:51 src/oldreader_urlreader.cpp:52
 #, fuzzy
 msgid "Shared items"
 msgstr "Inga olästa poster."
@@ -1371,12 +1371,7 @@ msgstr "Flytta till nästa sida"
 msgid "`%s' is not a valid context"
 msgstr "`%s' är inte ett giltigt innehåll"
 
-#: src/keymap.cpp:575
-#, fuzzy, c-format
-msgid "'%s' is not a valid key command"
-msgstr "`%s' är inte ett giltigt tangentkommando"
-
-#: src/keymap.cpp:614
+#: src/keymap.cpp:575 src/keymap.cpp:614
 #, c-format
 msgid "`%s' is not a valid key command"
 msgstr "`%s' är inte ett giltigt tangentkommando"
@@ -1587,6 +1582,10 @@ msgstr "webbkanalsformat stöds inte"
 #: rss/rss_09x_parser.cpp:39
 msgid "no RSS channel found"
 msgstr "ingen RSS-kanal hittades"
+
+#, fuzzy
+#~ msgid "'%s' is not a valid key command"
+#~ msgstr "`%s' är inte ett giltigt tangentkommando"
 
 #~ msgid "Type `%s -vv' for more information."
 #~ msgstr "Skriv `%s -vv' för mer information."

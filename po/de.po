@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2018-03-03 19:02+0300\n"
+"POT-Creation-Date: 2018-06-10 21:42+0300\n"
 "PO-Revision-Date: 2018-03-03 21:09+0100\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
@@ -30,7 +30,7 @@ msgstr ""
 msgid "Caught newsboat::exception with message: %s"
 msgstr ""
 
-#: src/cliargsparser.cpp:138 src/pb_controller.cpp:231
+#: src/cliargsparser.cpp:144 src/pb_controller.cpp:231
 #, c-format
 msgid "%s: %d: invalid loglevel value"
 msgstr "%s: %d: ungültiger Loglevel-Wert"
@@ -98,17 +98,17 @@ msgstr "%N %V - Tag auswählen"
 msgid "%N %V - URLs"
 msgstr "%N %V - URLs"
 
-#: src/configcontainer.cpp:289
+#: src/configcontainer.cpp:288
 #, c-format
 msgid "expected boolean value, found `%s' instead"
 msgstr "erwartete Wahrheitswert, fand stattdessen `%s'"
 
-#: src/configcontainer.cpp:297
+#: src/configcontainer.cpp:296
 #, c-format
 msgid "expected integer value, found `%s' instead"
 msgstr "erwartete Ganzzahl, fand stattdessen `%s'"
 
-#: src/configcontainer.cpp:306
+#: src/configcontainer.cpp:305
 #, c-format
 msgid "invalid configuration value `%s'"
 msgstr "ungültiger Konfigurationswert `%s'"
@@ -414,7 +414,7 @@ msgstr "Ein Fehler ist beim Parsen von %s aufgetreten."
 msgid "Import of %s finished."
 msgstr "Import von %s fertig."
 
-#: src/controller.cpp:1435
+#: src/controller.cpp:1436
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -432,28 +432,28 @@ msgstr "%u ungelesene Artikel"
 msgid "%s: %s: unknown command"
 msgstr "%s: %s: unbekannter Befehl"
 
-#: src/controller.cpp:1498 src/formaction.cpp:417 src/formaction.cpp:419
+#: src/controller.cpp:1497 src/formaction.cpp:417 src/formaction.cpp:419
 #: src/itemview_formaction.cpp:94
 msgid "Title: "
 msgstr "Titel: "
 
-#: src/controller.cpp:1502 src/itemview_formaction.cpp:101
+#: src/controller.cpp:1501 src/itemview_formaction.cpp:101
 msgid "Author: "
 msgstr "Autor: "
 
-#: src/controller.cpp:1506 src/itemview_formaction.cpp:114
+#: src/controller.cpp:1505 src/itemview_formaction.cpp:114
 msgid "Date: "
 msgstr "Datum: "
 
-#: src/controller.cpp:1510 src/itemview_formaction.cpp:108
+#: src/controller.cpp:1509 src/itemview_formaction.cpp:108
 msgid "Link: "
 msgstr "Link: "
 
-#: src/controller.cpp:1515 src/itemview_formaction.cpp:125
+#: src/controller.cpp:1514 src/itemview_formaction.cpp:125
 msgid "Podcast Download URL: "
 msgstr "Podcast-Download-URL: "
 
-#: src/controller.cpp:1793
+#: src/controller.cpp:1792
 #, c-format
 msgid "Error: couldn't open configuration file `%s'!"
 msgstr "Fehler: Konnte Konfigurationsdatei `%s' nicht öffnen!"
@@ -558,16 +558,16 @@ msgstr "Datei konnte nicht geöffnet werden."
 msgid "unknown error (bug)."
 msgstr "Unbekannter Fehler (Bug)."
 
-#: src/feedhq_urlreader.cpp:51 src/oldreader_urlreader.cpp:52
+#: src/feedhq_urlreader.cpp:48 src/oldreader_urlreader.cpp:49
 msgid "People you follow"
 msgstr "Personen, deren regelmäßiger Leser Sie sind"
 
-#: src/feedhq_urlreader.cpp:53 src/inoreader_urlreader.cpp:50
-#: src/oldreader_urlreader.cpp:54
+#: src/feedhq_urlreader.cpp:50 src/inoreader_urlreader.cpp:50
+#: src/oldreader_urlreader.cpp:51
 msgid "Starred items"
 msgstr "markierte Artikel"
 
-#: src/feedhq_urlreader.cpp:54 src/oldreader_urlreader.cpp:55
+#: src/feedhq_urlreader.cpp:51 src/oldreader_urlreader.cpp:52
 msgid "Shared items"
 msgstr "empfohlene Artikel"
 
@@ -1360,12 +1360,7 @@ msgstr "zum Ende der Seite/Liste gehen"
 msgid "`%s' is not a valid context"
 msgstr "`%s' ist kein gültiger Kontext"
 
-#: src/keymap.cpp:575
-#, fuzzy, c-format
-msgid "'%s' is not a valid key command"
-msgstr "`%s' ist kein gültiges Tastenkommando"
-
-#: src/keymap.cpp:614
+#: src/keymap.cpp:575 src/keymap.cpp:614
 #, c-format
 msgid "`%s' is not a valid key command"
 msgstr "`%s' ist kein gültiges Tastenkommando"
@@ -1576,6 +1571,10 @@ msgstr "nicht unterstütztes Feed-Format"
 #: rss/rss_09x_parser.cpp:39
 msgid "no RSS channel found"
 msgstr "kein RSS-Channel gefunden"
+
+#, fuzzy
+#~ msgid "'%s' is not a valid key command"
+#~ msgstr "`%s' ist kein gültiges Tastenkommando"
 
 #~ msgid "Type `%s -vv' for more information."
 #~ msgstr "Für mehr Information `%s -vv' eingeben."

@@ -572,7 +572,7 @@ void keymap::handle_action(const std::string& action,
 		operation op = get_opcode(params[1]);
 		if (op == OP_NIL) {
 			throw confighandlerexception(
-				strprintf::fmt(_("'%s' is not a valid "
+				strprintf::fmt(_("`%s' is not a valid "
 						 "key command"),
 					params[1]));
 		}
