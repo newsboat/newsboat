@@ -196,14 +196,8 @@ TEST_CASE("reset_feeds_status() resets status of all feeds", "[feedhandler]")
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
 	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
 	const auto feeds = get_five_empty_feeds(rsscache.get());
-	int i = 0;
 	for (const auto& feed : feeds) {
-		if ((i % 2) == 0) {
-			feed->set_status(dl_status::DL_ERROR);
-		} else {
-			feed->set_status(dl_status::DURING_DOWNLOAD);
-		}
-		i++;
+		feed->set_status(dl_status::DL_ERROR);
 	}
 	feedhandler.set_feeds(feeds);
 
