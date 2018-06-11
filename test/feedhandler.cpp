@@ -189,3 +189,27 @@ TEST_CASE("mark_all_feed_items_read() marks all of feed's items as read", "[feed
 		REQUIRE(item->unread() == false);
 	}
 }
+
+TEST_CASE("reset_feeds_status() resets status of all feeds", "[feedhandler]")
+{
+	FeedHandler feedhandler;
+	std::unique_ptr<configcontainer> cfg(new configcontainer());
+	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
+	const auto feeds = get_five_empty_feeds(rsscache.get());
+	int i = 0;
+	for (const auto& feed : feeds) {
+		if ((i % 2) == 0) {
+			feed->set_status(dl_status::DL_ERROR);
+		} else {
+			feed->set_status(dl_status::DURING_DOWNLOAD);
+		}
+		i++;
+	}
+	feedhandler.set_feeds(feeds);
+
+	feedhandler.reset_feeds_status();
+
+	for (const auto& feed : feeds) {
+		REQUIRE(feed->get_status() == "_");
+	}
+}
