@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2018-06-10 21:48+0300\n"
-"PO-Revision-Date: 2018-03-03 19:10+0200\n"
+"PO-Revision-Date: 2018-06-11 14:47+0200\n"
 "Last-Translator: Francesco Ariis <fa-ml@ariis.it>\n"
 "Language-Team: Claudio M. Alessi <somppy@gmail.com>\n"
 "Language: it\n"
@@ -18,17 +18,17 @@ msgstr ""
 #: newsboat.cpp:37
 #, c-format
 msgid "Caught newsboat::dbexception with message: %s"
-msgstr ""
+msgstr "Ricevuto newsboat::dbexception con messaggio: %s"
 
 #: newsboat.cpp:44
 #, c-format
 msgid "Caught newsboat::matcherexception with message: %s"
-msgstr ""
+msgstr "Ricevuto newsboat::matcherexception con messaggio: %s"
 
 #: newsboat.cpp:50 podboat.cpp:32
 #, c-format
 msgid "Caught newsboat::exception with message: %s"
-msgstr ""
+msgstr "Ricevuto newsboat::exception con messaggio: %s"
 
 #: src/cliargsparser.cpp:144 src/pb_controller.cpp:231
 #, c-format
@@ -124,11 +124,12 @@ msgid "unknown command `%s'"
 msgstr "comando sconosciuto `%s'"
 
 #: src/configpaths.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Fatal error: couldn't determine home directory!\n"
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
+"Errore fatale: impossibile stabilire la directory home!\n"
 "Per favore, imposta la variabile d'ambiente HOME o aggiungi un utente valido "
 "per l'UID %u!"
 
@@ -574,27 +575,24 @@ msgstr "Nessun feed selezionato!"
 #. / "Sort by (f)irsttag/..." and "Reverse Sort by
 #. / (f)irsttag/..." messages
 #: src/feedlist_formaction.cpp:145 src/feedlist_formaction.cpp:177
-#, fuzzy
 msgid "ftauln"
-msgstr "ptumn"
+msgstr "ptuman"
 
 #: src/feedlist_formaction.cpp:147
-#, fuzzy
 msgid ""
 "Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(l)astupdated/"
 "(n)one?"
 msgstr ""
 "Ordina per (p)rimotag/(t)itolo/n(u)meroarticolo/nu(m)eroarticolononletto/"
-"(n)iente?"
+"ultimo(a)ggiornamento/(n)iente?"
 
 #: src/feedlist_formaction.cpp:179
-#, fuzzy
 msgid ""
 "Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/"
 "(l)astupdated/(n)one?"
 msgstr ""
 "Ordina al contrario per (p)rimotag/(t)itolo/n(u)meroarticolo/"
-"nu(m)eroarticolononletto/(n)iente?"
+"nu(m)eroarticolononletto/ultimo(a)ggiornamento/(n)iente?"
 
 #: src/feedlist_formaction.cpp:223
 msgid "Cannot open query feeds in the browser!"
@@ -909,9 +907,8 @@ msgid "No unread feeds."
 msgstr "Nessun feed non letto."
 
 #: src/itemlist_formaction.cpp:483
-#, fuzzy
 msgid "Marking all above as read..."
-msgstr "Sto segnando tutti i feed come letti..."
+msgstr "Contrassegno i feed al di sopra come letti..."
 
 #: src/itemlist_formaction.cpp:531 src/itemview_formaction.cpp:301
 msgid "Pipe article to command: "
@@ -1075,9 +1072,8 @@ msgid "Mark all feeds read"
 msgstr "Segna tutti i feed come letti"
 
 #: src/keymap.cpp:58
-#, fuzzy
 msgid "Mark all above as read"
-msgstr "Segna tutti i feed come letti"
+msgstr "Contrassegna i feed al di sopra come letti"
 
 #: src/keymap.cpp:60
 msgid "Save article"
@@ -1376,9 +1372,10 @@ msgstr ""
 "per l'UID %u!"
 
 #: src/pb_controller.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "Fatal error: couldn't create configuration directory `%s': (%i) %s"
-msgstr "Errore: impossibile aprire il file di configurazione `%s'!"
+msgstr "Errore fatale: impossibile creare la directory di "
+"configurazione `%s': (%i) %s"
 
 #: src/pb_controller.cpp:309
 msgid "Cleaning up queue..."
