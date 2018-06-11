@@ -1,12 +1,12 @@
 # Ivan Kovnatsky <sevenfourk@gmail.com>, 2010.
-# Alexander Batischev <eual.jp@gmail.com>, 2017.
+# Alexander Batischev <eual.jp@gmail.com>, 2017–2018.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: newsboat 2.10.1\n"
+"Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2018-06-10 21:48+0300\n"
-"PO-Revision-Date: 2018-03-03 19:04+0300\n"
+"PO-Revision-Date: 2018-06-11 15:02+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -18,17 +18,17 @@ msgstr ""
 #: newsboat.cpp:37
 #, c-format
 msgid "Caught newsboat::dbexception with message: %s"
-msgstr ""
+msgstr "Впіймали newsboat::dbexception із повідомленням: %s"
 
 #: newsboat.cpp:44
 #, c-format
 msgid "Caught newsboat::matcherexception with message: %s"
-msgstr ""
+msgstr "Впіймали newsboat::matcherexception із повідомленням: %s"
 
 #: newsboat.cpp:50 podboat.cpp:32
 #, c-format
 msgid "Caught newsboat::exception with message: %s"
-msgstr ""
+msgstr "Впіймали newsboat::exception із повідомленням: %s"
 
 #: src/cliargsparser.cpp:144 src/pb_controller.cpp:231
 #, c-format
@@ -124,11 +124,12 @@ msgid "unknown command `%s'"
 msgstr "невідома команда `%s'"
 
 #: src/configpaths.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Fatal error: couldn't determine home directory!\n"
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
+"Фатальна помилка: не вдалося визначити домашню директорію!\n"
 "Будь ласка, налаштуйте змінну HOME, або додайте користувача, що відповідає "
 "UID %u!"
 
@@ -574,27 +575,24 @@ msgstr "Не вибрано тем!"
 #. / "Sort by (f)irsttag/..." and "Reverse Sort by
 #. / (f)irsttag/..." messages
 #: src/feedlist_formaction.cpp:145 src/feedlist_formaction.cpp:177
-#, fuzzy
 msgid "ftauln"
-msgstr "ftaun"
+msgstr "ftauln"
 
 #: src/feedlist_formaction.cpp:147
-#, fuzzy
 msgid ""
 "Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(l)astupdated/"
 "(n)one?"
 msgstr ""
 "Сортувати за (f)першимТаґом/(t)назвою/(a)кількістьСтатей/"
-"(u)кількістьНепрочитанихСтатей/(n)ніяк?"
+"(u)кількістьНепрочитанихСтатей/(l)останнімОновленням/(n)ніяк?"
 
 #: src/feedlist_formaction.cpp:179
-#, fuzzy
 msgid ""
 "Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/"
 "(l)astupdated/(n)one?"
 msgstr ""
 "Сортувати реверсно за (f)першимТаґом/(t)назвою/(a)кількістьСтатей/"
-"(u)кількістьНепрочитанихСтатей/(n)ніяк?"
+"(u)кількістьНепрочитанихСтатей/(l)останнімОновленням/(n)ніяк?"
 
 #: src/feedlist_formaction.cpp:223
 msgid "Cannot open query feeds in the browser!"
@@ -909,9 +907,8 @@ msgid "No unread feeds."
 msgstr "Немає непрочитаних тем."
 
 #: src/itemlist_formaction.cpp:483
-#, fuzzy
 msgid "Marking all above as read..."
-msgstr "Позначаю всі теми як прочитані..."
+msgstr "Позначаю все, що вище, як прочитані..."
 
 #: src/itemlist_formaction.cpp:531 src/itemview_formaction.cpp:301
 msgid "Pipe article to command: "
@@ -1076,9 +1073,8 @@ msgid "Mark all feeds read"
 msgstr "Позначити усі теми як прочитані"
 
 #: src/keymap.cpp:58
-#, fuzzy
 msgid "Mark all above as read"
-msgstr "Позначити усі теми як прочитані"
+msgstr "Позначити усе, що вище, як прочитані"
 
 #: src/keymap.cpp:60
 msgid "Save article"
@@ -1378,9 +1374,9 @@ msgstr ""
 "UID %u!"
 
 #: src/pb_controller.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "Fatal error: couldn't create configuration directory `%s': (%i) %s"
-msgstr "Помилка: не можу відкрити файл конфігурації `%s'!"
+msgstr "Помилка: не можу створити конфігураційну директорію `%s': (%i) %s"
 
 #: src/pb_controller.cpp:309
 msgid "Cleaning up queue..."
@@ -1562,10 +1558,3 @@ msgstr "формат теми не підтримується"
 #: rss/rss_09x_parser.cpp:39
 msgid "no RSS channel found"
 msgstr "не знайдено каналу RSS"
-
-#, fuzzy
-#~ msgid "'%s' is not a valid key command"
-#~ msgstr "`%s' недійсна ключова команда"
-
-#~ msgid "Type `%s -vv' for more information."
-#~ msgstr "Тип `%s -vv' для додаткової інформації."
