@@ -207,3 +207,18 @@ TEST_CASE("reset_feeds_status() resets status of all feeds", "[feedhandler]")
 		REQUIRE(feed->get_status() == "_");
 	}
 }
+
+TEST_CASE("clear_feeds_items() clears all of feed's items", "[feedhandler]")
+{
+	FeedHandler feedhandler;
+	feedhandler.set_feeds({});
+	const auto feed = std::make_shared<rss_feed>(nullptr);
+	for (int j = 0; j < 5; ++j) {
+		feed->add_item(std::make_shared<rss_item>(nullptr));
+	}
+	feedhandler.add_feed(feed);
+
+	REQUIRE(feed->items().size() == 5);
+	feedhandler.clear_feeds_items();
+	REQUIRE(feed->items().size() == 0);
+}
