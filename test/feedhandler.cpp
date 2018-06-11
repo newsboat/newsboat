@@ -171,7 +171,6 @@ TEST_CASE("Correctly sorts feeds", "[feedhandler]")
 TEST_CASE("mark_all_feed_items_read() marks all of feed's items as read", "[feedhandler]")
 {
 	FeedHandler feedhandler;
-	feedhandler.set_feeds({});
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
 	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
 	const auto feeds = get_five_empty_feeds(rsscache.get());
