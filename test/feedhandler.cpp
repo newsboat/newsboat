@@ -167,3 +167,25 @@ TEST_CASE("Correctly sorts feeds", "[feedhandler]")
 	{
 	}
 }
+
+TEST_CASE("mark_all_feed_items_read() marks all of feed's items as read", "[feedhandler]")
+{
+	FeedHandler feedhandler;
+	feedhandler.set_feeds({});
+	std::unique_ptr<configcontainer> cfg(new configcontainer());
+	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
+	const auto feeds = get_five_empty_feeds(rsscache.get());
+	const auto feed = feeds.at(0);
+	for (int j = 0; j < 5; ++j) {
+		const auto item = std::make_shared<rss_item>(nullptr);
+		item->set_unread_nowrite(true);
+		feed->add_item(item);
+	}
+	feedhandler.set_feeds(feeds);
+
+	feedhandler.mark_all_feed_items_read(0);
+
+	for (const auto& item : feed->items()) {
+		REQUIRE(item->unread() == false);
+	}
+}
