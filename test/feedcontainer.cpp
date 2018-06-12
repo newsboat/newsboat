@@ -4,7 +4,7 @@
 
 #include "cache.h"
 #include "configcontainer.h"
-#include "feedhandler.h"
+#include "feedcontainer.h"
 #include "rss.h"
 #include "test-helpers.h"
 
@@ -24,9 +24,9 @@ std::vector<std::shared_ptr<rss_feed>> get_five_empty_feeds(cache* rsscache)
 
 } // anonymous namespace
 
-TEST_CASE("get_feed() returns feed by its position number", "[feedhandler]")
+TEST_CASE("get_feed() returns feed by its position number", "[feedcontainer]")
 {
-	FeedHandler feedhandler;
+	FeedContainer feedcontainer;
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
 	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
 	const auto feeds = get_five_empty_feeds(rsscache.get());
@@ -36,57 +36,57 @@ TEST_CASE("get_feed() returns feed by its position number", "[feedhandler]")
 		feed->set_rssurl("url/" + std::to_string(i));
 		i++;
 	}
-	feedhandler.set_feeds(feeds);
+	feedcontainer.set_feeds(feeds);
 
-	auto feed = feedhandler.get_feed(0);
+	auto feed = feedcontainer.get_feed(0);
 	REQUIRE(feed->title_raw() == "0");
 
-	feed = feedhandler.get_feed(4);
+	feed = feedcontainer.get_feed(4);
 	REQUIRE(feed->title_raw() == "4");
 }
 
-TEST_CASE("get_all_feeds() returns copy of FeedHandler's feed vector",
-	"[feedhandler]")
+TEST_CASE("get_all_feeds() returns copy of FeedContainer's feed vector",
+	"[feedcontainer]")
 {
-	FeedHandler feedhandler;
+	FeedContainer feedcontainer;
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
 	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
 	const auto feeds = get_five_empty_feeds(rsscache.get());
-	feedhandler.set_feeds(feeds);
+	feedcontainer.set_feeds(feeds);
 
-	REQUIRE(feedhandler.get_all_feeds() == feeds);
+	REQUIRE(feedcontainer.get_all_feeds() == feeds);
 }
 
-TEST_CASE("add_feed() adds specific feed to its \"feeds\" vector", "[feedhandler]")
+TEST_CASE("add_feed() adds specific feed to its \"feeds\" vector", "[feedcontainer]")
 {
-	FeedHandler feedhandler;
+	FeedContainer feedcontainer;
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
 	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
-	feedhandler.set_feeds({});
+	feedcontainer.set_feeds({});
 	const auto feed = std::make_shared<rss_feed>(rsscache.get());
 	feed->set_title("Example feed");
 
-	feedhandler.add_feed(feed);
+	feedcontainer.add_feed(feed);
 
-	REQUIRE(feedhandler.get_feed(0)->title_raw() == "Example feed");
+	REQUIRE(feedcontainer.get_feed(0)->title_raw() == "Example feed");
 }
 
-TEST_CASE("set_feeds() sets FeedHandler's feed vector to the given one",
-	"[feedhandler]")
+TEST_CASE("set_feeds() sets FeedContainer's feed vector to the given one",
+	"[feedcontainer]")
 {
-	FeedHandler feedhandler;
+	FeedContainer feedcontainer;
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
 	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
 	const auto feeds = get_five_empty_feeds(rsscache.get());
 
-	feedhandler.set_feeds(feeds);
+	feedcontainer.set_feeds(feeds);
 
-	REQUIRE(feedhandler.feeds == feeds);
+	REQUIRE(feedcontainer.feeds == feeds);
 }
 
-TEST_CASE("get_feed_by_url() returns feed by its URL", "[feedhandler]")
+TEST_CASE("get_feed_by_url() returns feed by its URL", "[feedcontainer]")
 {
-	FeedHandler feedhandler;
+	FeedContainer feedcontainer;
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
 	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
 	const auto feeds = get_five_empty_feeds(rsscache.get());
@@ -96,48 +96,48 @@ TEST_CASE("get_feed_by_url() returns feed by its URL", "[feedhandler]")
 		feed->set_rssurl("url/" + std::to_string(i));
 		i++;
 	}
-	feedhandler.set_feeds(feeds);
+	feedcontainer.set_feeds(feeds);
 
-	auto feed = feedhandler.get_feed_by_url("url/1");
+	auto feed = feedcontainer.get_feed_by_url("url/1");
 	REQUIRE(feed->title_raw() == "1");
 
-	feed = feedhandler.get_feed_by_url("url/4");
+	feed = feedcontainer.get_feed_by_url("url/4");
 	REQUIRE(feed->title_raw() == "4");
 }
 
-TEST_CASE("Throws on get_feed() with pos out of range", "[feedhandler]")
+TEST_CASE("Throws on get_feed() with pos out of range", "[feedcontainer]")
 {
-	FeedHandler feedhandler;
+	FeedContainer feedcontainer;
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
 	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
-	feedhandler.set_feeds(get_five_empty_feeds(rsscache.get()));
+	feedcontainer.set_feeds(get_five_empty_feeds(rsscache.get()));
 
-	REQUIRE_NOTHROW(feedhandler.get_feed(4));
-	CHECK_THROWS_AS(feedhandler.get_feed(5), std::out_of_range);
-	CHECK_THROWS_AS(feedhandler.get_feed(-1), std::out_of_range);
+	REQUIRE_NOTHROW(feedcontainer.get_feed(4));
+	CHECK_THROWS_AS(feedcontainer.get_feed(5), std::out_of_range);
+	CHECK_THROWS_AS(feedcontainer.get_feed(-1), std::out_of_range);
 }
 
 TEST_CASE("Returns correct number using get_feed_count_by_tag()",
-	"[feedhandler]")
+	"[feedcontainer]")
 {
-	FeedHandler feedhandler;
+	FeedContainer feedcontainer;
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
 	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
-	feedhandler.set_feeds(get_five_empty_feeds(rsscache.get()));
-	feedhandler.get_feed(0)->set_tags({"Chicken", "Horse"});
-	feedhandler.get_feed(1)->set_tags({"Horse", "Duck"});
-	feedhandler.get_feed(2)->set_tags({"Duck", "Frog"});
-	feedhandler.get_feed(3)->set_tags({"Duck", "Hawk"});
+	feedcontainer.set_feeds(get_five_empty_feeds(rsscache.get()));
+	feedcontainer.get_feed(0)->set_tags({"Chicken", "Horse"});
+	feedcontainer.get_feed(1)->set_tags({"Horse", "Duck"});
+	feedcontainer.get_feed(2)->set_tags({"Duck", "Frog"});
+	feedcontainer.get_feed(3)->set_tags({"Duck", "Hawk"});
 
-	REQUIRE(feedhandler.get_feed_count_per_tag("Ice Cream") == 0);
-	REQUIRE(feedhandler.get_feed_count_per_tag("Chicken") == 1);
-	REQUIRE(feedhandler.get_feed_count_per_tag("Horse") == 2);
-	REQUIRE(feedhandler.get_feed_count_per_tag("Duck") == 3);
+	REQUIRE(feedcontainer.get_feed_count_per_tag("Ice Cream") == 0);
+	REQUIRE(feedcontainer.get_feed_count_per_tag("Chicken") == 1);
+	REQUIRE(feedcontainer.get_feed_count_per_tag("Horse") == 2);
+	REQUIRE(feedcontainer.get_feed_count_per_tag("Duck") == 3);
 }
 
-TEST_CASE("Correctly returns pos of next unread item", "[feedhandler]")
+TEST_CASE("Correctly returns pos of next unread item", "[feedcontainer]")
 {
-	FeedHandler feedhandler;
+	FeedContainer feedcontainer;
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
 	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
 	const auto feeds = get_five_empty_feeds(rsscache.get());
@@ -151,25 +151,25 @@ TEST_CASE("Correctly returns pos of next unread item", "[feedhandler]")
 		feed->add_item(item);
 		i++;
 	}
-	feedhandler.set_feeds(feeds);
+	feedcontainer.set_feeds(feeds);
 
-	REQUIRE(feedhandler.get_pos_of_next_unread(0) == 2);
-	REQUIRE(feedhandler.get_pos_of_next_unread(2) == 4);
+	REQUIRE(feedcontainer.get_pos_of_next_unread(0) == 2);
+	REQUIRE(feedcontainer.get_pos_of_next_unread(2) == 4);
 }
 
-TEST_CASE("feeds_size() returns FeedHandler's current feed vector size",
-	"[feedhandler]")
+TEST_CASE("feeds_size() returns FeedContainer's current feed vector size",
+	"[feedcontainer]")
 {
-	FeedHandler feedhandler;
+	FeedContainer feedcontainer;
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
 	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
 	const auto feeds = get_five_empty_feeds(rsscache.get());
-	feedhandler.set_feeds(feeds);
+	feedcontainer.set_feeds(feeds);
 
-	REQUIRE(feedhandler.feeds_size() == feeds.size());
+	REQUIRE(feedcontainer.feeds_size() == feeds.size());
 }
 
-TEST_CASE("Correctly sorts feeds", "[feedhandler]")
+TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 {
 	SECTION("by none asc")
 	{
@@ -221,9 +221,9 @@ TEST_CASE("Correctly sorts feeds", "[feedhandler]")
 }
 
 TEST_CASE("mark_all_feed_items_read() marks all of feed's items as read",
-	"[feedhandler]")
+	"[feedcontainer]")
 {
-	FeedHandler feedhandler;
+	FeedContainer feedcontainer;
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
 	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
 	const auto feeds = get_five_empty_feeds(rsscache.get());
@@ -233,9 +233,9 @@ TEST_CASE("mark_all_feed_items_read() marks all of feed's items as read",
 		item->set_unread_nowrite(true);
 		feed->add_item(item);
 	}
-	feedhandler.set_feeds(feeds);
+	feedcontainer.set_feeds(feeds);
 
-	feedhandler.mark_all_feed_items_read(0);
+	feedcontainer.mark_all_feed_items_read(0);
 
 	for (const auto& item : feed->items()) {
 		REQUIRE(item->unread() == false);
@@ -245,9 +245,9 @@ TEST_CASE("mark_all_feed_items_read() marks all of feed's items as read",
 TEST_CASE(
 	"reset_feeds_status() changes status of all feeds to \"to be "
 	"downloaded\"",
-	"[feedhandler]")
+	"[feedcontainer]")
 {
-	FeedHandler feedhandler;
+	FeedContainer feedcontainer;
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
 	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
 	const auto feeds = get_five_empty_feeds(rsscache.get());
@@ -255,28 +255,28 @@ TEST_CASE(
 	feeds[1]->set_status(dl_status::TO_BE_DOWNLOADED);
 	feeds[2]->set_status(dl_status::DURING_DOWNLOAD);
 	feeds[3]->set_status(dl_status::DL_ERROR);
-	feedhandler.set_feeds(feeds);
+	feedcontainer.set_feeds(feeds);
 
-	feedhandler.reset_feeds_status();
+	feedcontainer.reset_feeds_status();
 
 	for (const auto& feed : feeds) {
 		REQUIRE(feed->get_status() == "_");
 	}
 }
 
-TEST_CASE("clear_feeds_items() clears all of feed's items", "[feedhandler]")
+TEST_CASE("clear_feeds_items() clears all of feed's items", "[feedcontainer]")
 {
-	FeedHandler feedhandler;
+	FeedContainer feedcontainer;
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
 	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
-	feedhandler.set_feeds({});
+	feedcontainer.set_feeds({});
 	const auto feed = std::make_shared<rss_feed>(rsscache.get());
 	for (int j = 0; j < 5; ++j) {
 		feed->add_item(std::make_shared<rss_item>(rsscache.get()));
 	}
-	feedhandler.add_feed(feed);
+	feedcontainer.add_feed(feed);
 
 	REQUIRE(feed->items().size() == 5);
-	feedhandler.clear_feeds_items();
+	feedcontainer.clear_feeds_items();
 	REQUIRE(feed->items().size() == 0);
 }
