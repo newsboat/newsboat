@@ -78,7 +78,8 @@ TEST_CASE("Throws on get_feed() with pos out of range", "[feedhandler]")
 	CHECK_THROWS_AS(feedhandler.get_feed(-1), std::out_of_range);
 }
 
-TEST_CASE("Returns correct number using get_feed_count_by_tag()", "[feedhandler]")
+TEST_CASE("Returns correct number using get_feed_count_by_tag()",
+	"[feedhandler]")
 {
 	FeedHandler feedhandler;
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
@@ -168,7 +169,8 @@ TEST_CASE("Correctly sorts feeds", "[feedhandler]")
 	}
 }
 
-TEST_CASE("mark_all_feed_items_read() marks all of feed's items as read", "[feedhandler]")
+TEST_CASE("mark_all_feed_items_read() marks all of feed's items as read",
+	"[feedhandler]")
 {
 	FeedHandler feedhandler;
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
@@ -189,7 +191,10 @@ TEST_CASE("mark_all_feed_items_read() marks all of feed's items as read", "[feed
 	}
 }
 
-TEST_CASE("reset_feeds_status() resets status of all feeds", "[feedhandler]")
+TEST_CASE(
+	"reset_feeds_status() changes status of all feeds to \"to be "
+	"downloaded\"",
+	"[feedhandler]")
 {
 	FeedHandler feedhandler;
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
