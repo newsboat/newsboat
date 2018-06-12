@@ -200,9 +200,10 @@ TEST_CASE(
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
 	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
 	const auto feeds = get_five_empty_feeds(rsscache.get());
-	for (const auto& feed : feeds) {
-		feed->set_status(dl_status::DL_ERROR);
-	}
+	feeds[0]->set_status(dl_status::SUCCESS);
+	feeds[1]->set_status(dl_status::TO_BE_DOWNLOADED);
+	feeds[2]->set_status(dl_status::DURING_DOWNLOAD);
+	feeds[3]->set_status(dl_status::DL_ERROR);
 	feedhandler.set_feeds(feeds);
 
 	feedhandler.reset_feeds_status();
