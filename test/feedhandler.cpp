@@ -45,6 +45,18 @@ TEST_CASE("get_feed() returns feed by its position number", "[feedhandler]")
 	REQUIRE(feed->title_raw() == "4");
 }
 
+TEST_CASE("get_all_feeds() returns copy of FeedHandler's feed vector",
+	"[feedhandler]")
+{
+	FeedHandler feedhandler;
+	std::unique_ptr<configcontainer> cfg(new configcontainer());
+	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
+	const auto feeds = get_five_empty_feeds(rsscache.get());
+	feedhandler.set_feeds(feeds);
+
+	REQUIRE(feedhandler.get_all_feeds() == feeds);
+}
+
 TEST_CASE("add_feed() adds specific feed to its \"feeds\" vector", "[feedhandler]")
 {
 	FeedHandler feedhandler;
