@@ -157,6 +157,18 @@ TEST_CASE("Correctly returns pos of next unread item", "[feedhandler]")
 	REQUIRE(feedhandler.get_pos_of_next_unread(2) == 4);
 }
 
+TEST_CASE("feeds_size() returns FeedHandler's current feed vector size",
+	"[feedhandler]")
+{
+	FeedHandler feedhandler;
+	std::unique_ptr<configcontainer> cfg(new configcontainer());
+	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
+	const auto feeds = get_five_empty_feeds(rsscache.get());
+	feedhandler.set_feeds(feeds);
+
+	REQUIRE(feedhandler.feeds_size() == feeds.size());
+}
+
 TEST_CASE("Correctly sorts feeds", "[feedhandler]")
 {
 	SECTION("by none asc")
