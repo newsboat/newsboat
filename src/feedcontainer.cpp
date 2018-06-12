@@ -1,11 +1,11 @@
-#include "feedhandler.h"
+#include "feedcontainer.h"
 
 #include <algorithm> // stable_sort
 #include <strings.h> // strcasecmp
 
 namespace newsboat {
 
-void FeedHandler::sort_feeds(configcontainer* cfg)
+void FeedContainer::sort_feeds(configcontainer* cfg)
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
 	const auto sortmethod_info =
@@ -89,7 +89,7 @@ void FeedHandler::sort_feeds(configcontainer* cfg)
 	}
 }
 
-std::shared_ptr<rss_feed> FeedHandler::get_feed(const unsigned int pos)
+std::shared_ptr<rss_feed> FeedContainer::get_feed(const unsigned int pos)
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
 	if (pos >= feeds.size()) {
@@ -99,7 +99,7 @@ std::shared_ptr<rss_feed> FeedHandler::get_feed(const unsigned int pos)
 	return feed;
 }
 
-void FeedHandler::mark_all_feed_items_read(const unsigned int feed_pos)
+void FeedContainer::mark_all_feed_items_read(const unsigned int feed_pos)
 {
 	const auto feed = get_feed(feed_pos);
 	std::lock_guard<std::mutex> lock(feed->item_mutex);
@@ -107,7 +107,7 @@ void FeedHandler::mark_all_feed_items_read(const unsigned int feed_pos)
 	if (items.size() > 0) {
 		bool notify = items[0]->feedurl() != feed->rssurl();
 		LOG(level::DEBUG,
-			"FeedHandler::mark_all_read: notify = %s",
+			"FeedContainer::mark_all_read: notify = %s",
 			notify ? "yes" : "no");
 		for (const auto& item : items) {
 			item->set_unread_nowrite_notify(false, notify);
@@ -115,13 +115,13 @@ void FeedHandler::mark_all_feed_items_read(const unsigned int feed_pos)
 	}
 }
 
-void FeedHandler::add_feed(const std::shared_ptr<rss_feed> feed)
+void FeedContainer::add_feed(const std::shared_ptr<rss_feed> feed)
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
 	feeds.push_back(feed);
 }
 
-void FeedHandler::populate_query_feeds()
+void FeedContainer::populate_query_feeds()
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
 	for (const auto& feed : feeds) {
@@ -131,7 +131,7 @@ void FeedHandler::populate_query_feeds()
 	}
 }
 
-unsigned int FeedHandler::get_feed_count_per_tag(const std::string& tag)
+unsigned int FeedContainer::get_feed_count_per_tag(const std::string& tag)
 {
 	unsigned int count = 0;
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
@@ -144,18 +144,18 @@ unsigned int FeedHandler::get_feed_count_per_tag(const std::string& tag)
 	return count;
 }
 
-std::shared_ptr<rss_feed> FeedHandler::get_feed_by_url(
+std::shared_ptr<rss_feed> FeedContainer::get_feed_by_url(
 	const std::string& feedurl)
 {
 	for (const auto& feed : feeds) {
 		if (feedurl == feed->rssurl())
 			return feed;
 	}
-	LOG(level::ERROR, "FeedHandler:get_feed_by_url failed for %s", feedurl);
+	LOG(level::ERROR, "FeedContainer:get_feed_by_url failed for %s", feedurl);
 	return std::shared_ptr<rss_feed>();
 }
 
-unsigned int FeedHandler::get_pos_of_next_unread(unsigned int pos)
+unsigned int FeedContainer::get_pos_of_next_unread(unsigned int pos)
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
 	for (pos++; pos < feeds.size(); pos++) {
@@ -165,13 +165,13 @@ unsigned int FeedHandler::get_pos_of_next_unread(unsigned int pos)
 	return pos;
 }
 
-unsigned int FeedHandler::feeds_size()
+unsigned int FeedContainer::feeds_size()
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
 	return feeds.size();
 }
 
-void FeedHandler::reset_feeds_status()
+void FeedContainer::reset_feeds_status()
 {
 	std::lock_guard<std::mutex> feedlock(feeds_mutex);
 	for (const auto& feed : feeds) {
@@ -179,14 +179,14 @@ void FeedHandler::reset_feeds_status()
 	}
 }
 
-void FeedHandler::set_feeds(
+void FeedContainer::set_feeds(
 	const std::vector<std::shared_ptr<rss_feed>> new_feeds)
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
 	feeds = new_feeds;
 }
 
-std::vector<std::shared_ptr<rss_feed>> FeedHandler::get_all_feeds()
+std::vector<std::shared_ptr<rss_feed>> FeedContainer::get_all_feeds()
 {
 	std::vector<std::shared_ptr<rss_feed>> tmpfeeds;
 	{
@@ -196,7 +196,7 @@ std::vector<std::shared_ptr<rss_feed>> FeedHandler::get_all_feeds()
 	return tmpfeeds;
 }
 
-void FeedHandler::clear_feeds_items()
+void FeedContainer::clear_feeds_items()
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
 	for (const auto& feed : feeds) {

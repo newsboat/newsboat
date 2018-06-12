@@ -105,7 +105,7 @@ void select_formaction::prepare()
 					i + 1,
 					tag,
 					v->get_ctrl()
-						->get_feedhandler()
+						->get_feedcontainer()
 						->get_feed_count_per_tag(tag));
 				listfmt.add_line(tagstr, i);
 				i++;

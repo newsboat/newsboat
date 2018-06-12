@@ -100,8 +100,8 @@ controller::~controller()
 	delete urlcfg;
 	delete api;
 
-	feedhandler.clear_feeds_items();
-	feedhandler.feeds.clear();
+	feedcontainer.clear_feeds_items();
+	feedcontainer.feeds.clear();
 }
 
 void controller::set_view(view* vv)
@@ -394,7 +394,7 @@ int controller::run(int argc, char* argv[])
 					url, ignore_disp ? &ign : nullptr);
 			feed->set_tags(urlcfg->get_tags(url));
 			feed->set_order(i);
-			feedhandler.add_feed(feed);
+			feedcontainer.add_feed(feed);
 		} catch (const dbexception& e) {
 			std::cout << _("Error while loading feeds from "
 				       "database: ")
@@ -425,14 +425,14 @@ int controller::run(int argc, char* argv[])
 			std::cout.flush();
 		}
 
-		feedhandler.populate_query_feeds();
+		feedcontainer.populate_query_feeds();
 
 		if (!args.do_export && !args.silent) {
 			std::cout << _("done.") << std::endl;
 		}
 	}
 
-	feedhandler.sort_feeds(&cfg);
+	feedcontainer.sort_feeds(&cfg);
 
 	if (args.do_export) {
 		export_opml();
@@ -497,7 +497,7 @@ int controller::run(int argc, char* argv[])
 	}
 	try {
 		std::lock_guard<std::mutex> feedslock(feeds_mutex);
-		rsscache->cleanup_cache(feedhandler.feeds);
+		rsscache->cleanup_cache(feedcontainer.feeds);
 		if (!args.silent) {
 			std::cout << _("done.") << std::endl;
 		}
@@ -515,13 +515,13 @@ int controller::run(int argc, char* argv[])
 void controller::update_feedlist()
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	v->set_feedlist(feedhandler.feeds);
+	v->set_feedlist(feedcontainer.feeds);
 }
 
 void controller::update_visible_feeds()
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	v->update_visible_feeds(feedhandler.feeds);
+	v->update_visible_feeds(feedcontainer.feeds);
 }
 
 void controller::mark_all_read(const std::string& feedurl)
@@ -536,7 +536,7 @@ void controller::mark_all_read(const std::string& feedurl)
 	}
 
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	for (const auto& feed : feedhandler.feeds) {
+	for (const auto& feed : feedcontainer.feeds) {
 		std::lock_guard<std::mutex> lock(feed->item_mutex);
 
 		if (feedurl.length() > 0 && feed->rssurl() != feedurl)
@@ -567,10 +567,10 @@ void controller::mark_article_read(const std::string& guid, bool read)
 
 void controller::mark_all_read(unsigned int pos)
 {
-	if (pos < feedhandler.feeds.size()) {
+	if (pos < feedcontainer.feeds.size()) {
 		scope_measure m("controller::mark_all_read");
 		std::lock_guard<std::mutex> feedslock(feeds_mutex);
-		const auto feed = feedhandler.get_feed(pos);
+		const auto feed = feedcontainer.get_feed(pos);
 		if (feed->rssurl().substr(0, 6) == "query:") {
 			rsscache->mark_all_read(feed);
 		} else {
@@ -583,7 +583,7 @@ void controller::mark_all_read(unsigned int pos)
 			"after rsscache->mark_all_read, before iteration over "
 			"items");
 
-		feedhandler.mark_all_feed_items_read(pos);
+		feedcontainer.mark_all_feed_items_read(pos);
 	}
 }
 
@@ -593,8 +593,8 @@ void controller::reload(unsigned int pos,
 	curl_handle* easyhandle)
 {
 	LOG(level::DEBUG, "controller::reload: pos = %u max = %u", pos, max);
-	if (pos < feedhandler.feeds.size()) {
-		std::shared_ptr<rss_feed> oldfeed = feedhandler.feeds[pos];
+	if (pos < feedcontainer.feeds.size()) {
+		std::shared_ptr<rss_feed> oldfeed = feedcontainer.feeds[pos];
 		std::string errmsg;
 		if (!unattended)
 			v->set_status(strprintf::fmt(_("%sLoading %s..."),
@@ -631,15 +631,15 @@ void controller::reload(unsigned int pos,
 				feed->set_tags(
 					urlcfg->get_tags(oldfeed->rssurl()));
 				feed->set_order(oldfeed->get_order());
-				feedhandler.feeds[pos] = feed;
+				feedcontainer.feeds[pos] = feed;
 				enqueue_items(feed);
 
 				oldfeed->clear_items();
 
 				v->notify_itemlist_change(
-					feedhandler.feeds[pos]);
+					feedcontainer.feeds[pos]);
 				if (!unattended) {
-					v->set_feedlist(feedhandler.feeds);
+					v->set_feedlist(feedcontainer.feeds);
 				}
 			} else {
 				LOG(level::DEBUG,
@@ -680,7 +680,7 @@ void controller::reload_indexes(const std::vector<int>& indexes,
 	unsigned int unread_feeds, unread_articles;
 	compute_unread_numbers(unread_feeds, unread_articles);
 
-	const auto size = feedhandler.feeds_size();
+	const auto size = feedcontainer.feeds_size();
 
 	for (const auto& idx : indexes) {
 		this->reload(idx, size, unattended);
@@ -724,8 +724,8 @@ void controller::reload_range(unsigned int start,
 
 	std::sort(v.begin(), v.end(), [&](unsigned int a, unsigned int b) {
 		std::string domain1, domain2;
-		extract(domain1, feedhandler.feeds[a]->rssurl());
-		extract(domain2, feedhandler.feeds[b]->rssurl());
+		extract(domain1, feedcontainer.feeds[a]->rssurl());
+		extract(domain2, feedcontainer.feeds[b]->rssurl());
 		std::reverse(domain1.begin(), domain1.end());
 		std::reverse(domain2.begin(), domain2.end());
 		return domain1 < domain2;
@@ -748,8 +748,8 @@ void controller::reload_all(bool unattended)
 	unsigned int num_threads = cfg.get_configvalue_as_int("reload-threads");
 	time_t t1, t2, dt;
 
-	feedhandler.reset_feeds_status();
-	const auto size = feedhandler.feeds_size();
+	feedcontainer.reset_feeds_status();
+	const auto size = feedcontainer.feeds_size();
 
 	if (num_threads < 1) {
 		num_threads = 1;
@@ -793,12 +793,12 @@ void controller::reload_all(bool unattended)
 
 	// refresh query feeds (update and sort)
 	LOG(level::DEBUG, "controller::reload_all: refresh query feeds");
-	for (const auto& feed : feedhandler.feeds) {
+	for (const auto& feed : feedcontainer.feeds) {
 		v->prepare_query_feed(feed);
 	}
 	v->force_redraw();
 
-	feedhandler.sort_feeds(&cfg);
+	feedcontainer.sort_feeds(&cfg);
 	update_feedlist();
 
 	t2 = time(nullptr);
@@ -858,7 +858,7 @@ void controller::compute_unread_numbers(unsigned int& unread_feeds,
 {
 	unread_feeds = 0;
 	unread_articles = 0;
-	for (const auto& feed : feedhandler.feeds) {
+	for (const auto& feed : feedcontainer.feeds) {
 		unsigned int items = feed->unread_item_count();
 		if (items > 0) {
 			++unread_feeds;
@@ -1054,7 +1054,7 @@ void controller::export_opml()
 	xmlNodePtr body = xmlNewTextChild(
 		opml_node, nullptr, (const xmlChar*)"body", nullptr);
 
-	for (const auto& feed : feedhandler.feeds) {
+	for (const auto& feed : feedcontainer.feeds) {
 		if (!utils::is_special_url(feed->rssurl())) {
 			std::string rssurl = feed->rssurl();
 			std::string link = feed->link();
@@ -1228,7 +1228,7 @@ std::vector<std::shared_ptr<rss_item>> controller::search_for_items(
 			query, (feed != nullptr ? feed->rssurl() : ""));
 		for (const auto& item : items) {
 			item->set_feedptr(
-				feedhandler.get_feed_by_url(item->feedurl()));
+				feedcontainer.get_feed_by_url(item->feedurl()));
 		}
 	}
 	return items;
@@ -1272,7 +1272,7 @@ void controller::reload_urls_file()
 
 	for (const auto& url : urlcfg->get_urls()) {
 		bool found = false;
-		for (const auto& feed : feedhandler.feeds) {
+		for (const auto& feed : feedcontainer.feeds) {
 			if (url == feed->rssurl()) {
 				found = true;
 				feed->set_tags(urlcfg->get_tags(url));
@@ -1305,8 +1305,8 @@ void controller::reload_urls_file()
 
 	v->set_tags(urlcfg->get_alltags());
 
-	feedhandler.set_feeds(new_feeds);
-	feedhandler.sort_feeds(&cfg);
+	feedcontainer.set_feeds(new_feeds);
+	feedcontainer.sort_feeds(&cfg);
 	update_feedlist();
 }
 
@@ -1509,14 +1509,14 @@ void controller::save_feed(std::shared_ptr<rss_feed> feed, unsigned int pos)
 		feed->set_tags(urlcfg->get_tags(feed->rssurl()));
 		{
 			unsigned int order =
-				feedhandler.feeds[pos]->get_order();
+				feedcontainer.feeds[pos]->get_order();
 			std::lock_guard<std::mutex> itemlock(
-				feedhandler.feeds[pos]->item_mutex);
-			feedhandler.feeds[pos]->clear_items();
+				feedcontainer.feeds[pos]->item_mutex);
+			feedcontainer.feeds[pos]->clear_items();
 			feed->set_order(order);
 		}
-		feedhandler.feeds[pos] = feed;
-		v->notify_itemlist_change(feedhandler.feeds[pos]);
+		feedcontainer.feeds[pos] = feed;
+		v->notify_itemlist_change(feedcontainer.feeds[pos]);
 	} else {
 		LOG(level::DEBUG,
 			"controller::save_feed: feed is empty, not saving");

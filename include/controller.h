@@ -7,7 +7,7 @@
 #include "colormanager.h"
 #include "configcontainer.h"
 #include "configpaths.h"
-#include "feedhandler.h"
+#include "feedcontainer.h"
 #include "filtercontainer.h"
 #include "fslock.h"
 #include "regexmanager.h"
@@ -98,9 +98,9 @@ public:
 		return &cfg;
 	}
 
-	FeedHandler* get_feedhandler()
+	FeedContainer* get_feedcontainer()
 	{
-		return &feedhandler;
+		return &feedcontainer;
 	}
 
 	void write_item(std::shared_ptr<rss_item> item,
@@ -144,7 +144,7 @@ private:
 	bool refresh_on_start;
 	configcontainer cfg;
 	rss_ignores ign;
-	FeedHandler feedhandler;
+	FeedContainer feedcontainer;
 	filtercontainer filters;
 
 	std::mutex reload_mutex;

@@ -510,7 +510,7 @@ void view::push_itemlist(std::shared_ptr<rss_feed> feed)
 
 void view::push_itemlist(unsigned int pos)
 {
-	std::shared_ptr<rss_feed> feed = ctrl->get_feedhandler()->get_feed(pos);
+	std::shared_ptr<rss_feed> feed = ctrl->get_feedcontainer()->get_feed(pos);
 	LOG(level::DEBUG,
 		"view::push_itemlist: retrieved feed at position %d",
 		pos);
@@ -976,7 +976,7 @@ void view::prepare_query_feed(std::shared_ptr<rss_feed> feed)
 			feed->rssurl());
 
 		set_status(_("Updating query feed..."));
-		feed->update_items(ctrl->get_feedhandler()->get_all_feeds());
+		feed->update_items(ctrl->get_feedcontainer()->get_all_feeds());
 		feed->sort(cfg->get_configvalue("article-sort-order"));
 		notify_itemlist_change(feed);
 		set_status("");

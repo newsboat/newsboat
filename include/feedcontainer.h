@@ -1,5 +1,5 @@
-#ifndef NEWSBOAT_FEEDHANDLER_H_
-#define NEWSBOAT_FEEDHANDLER_H_
+#ifndef NEWSBOAT_FEEDCONTAINER_H_
+#define NEWSBOAT_FEEDCONTAINER_H_
 
 #include <memory>
 #include <string>
@@ -8,9 +8,9 @@
 #include "rss.h"
 
 namespace newsboat {
-class FeedHandler {
+class FeedContainer {
 public:
-	FeedHandler() = default;
+	FeedContainer() = default;
 
 	void sort_feeds(configcontainer* cfg);
 	std::shared_ptr<rss_feed> get_feed(const unsigned int pos);
@@ -33,4 +33,4 @@ private:
 };
 } // namespace newsboat
 
-#endif /* NEWSBOAT_FEEDHANDLER_H_ */
+#endif /* NEWSBOAT_FEEDCONTAINER_H_ */
