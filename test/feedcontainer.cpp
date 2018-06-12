@@ -105,6 +105,26 @@ TEST_CASE("get_feed_by_url() returns feed by its URL", "[feedcontainer]")
 	REQUIRE(feed->title_raw() == "4");
 }
 
+TEST_CASE(
+	"get_feed_by_url() returns nullptr when it cannot find feed with "
+	"given URL",
+	"[feedcontainer]")
+{
+	FeedContainer feedcontainer;
+	std::unique_ptr<configcontainer> cfg(new configcontainer());
+	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
+	const auto feeds = get_five_empty_feeds(rsscache.get());
+	int i = 0;
+	for (const auto& feed : feeds) {
+		feed->set_rssurl("url/" + std::to_string(i));
+		i++;
+	}
+	feedcontainer.set_feeds(feeds);
+
+	auto feed = feedcontainer.get_feed_by_url("Wrong URL");
+	REQUIRE(feed == nullptr);
+}
+
 TEST_CASE("Throws on get_feed() with pos out of range", "[feedcontainer]")
 {
 	FeedContainer feedcontainer;
