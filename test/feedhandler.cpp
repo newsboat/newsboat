@@ -103,7 +103,7 @@ TEST_CASE("Correctly returns pos of next unread item", "[feedhandler]")
 	const auto feeds = get_five_empty_feeds(rsscache.get());
 	int i = 0;
 	for (const auto& feed : feeds) {
-		const auto item = std::make_shared<rss_item>(nullptr);
+		const auto item = std::make_shared<rss_item>(rsscache.get());
 		if ((i % 2) == 0)
 			item->set_unread_nowrite(true);
 		else
@@ -176,7 +176,7 @@ TEST_CASE("mark_all_feed_items_read() marks all of feed's items as read", "[feed
 	const auto feeds = get_five_empty_feeds(rsscache.get());
 	const auto feed = feeds.at(0);
 	for (int j = 0; j < 5; ++j) {
-		const auto item = std::make_shared<rss_item>(nullptr);
+		const auto item = std::make_shared<rss_item>(rsscache.get());
 		item->set_unread_nowrite(true);
 		feed->add_item(item);
 	}
@@ -210,10 +210,12 @@ TEST_CASE("reset_feeds_status() resets status of all feeds", "[feedhandler]")
 TEST_CASE("clear_feeds_items() clears all of feed's items", "[feedhandler]")
 {
 	FeedHandler feedhandler;
+	std::unique_ptr<configcontainer> cfg(new configcontainer());
+	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
 	feedhandler.set_feeds({});
-	const auto feed = std::make_shared<rss_feed>(nullptr);
+	const auto feed = std::make_shared<rss_feed>(rsscache.get());
 	for (int j = 0; j < 5; ++j) {
-		feed->add_item(std::make_shared<rss_item>(nullptr));
+		feed->add_item(std::make_shared<rss_item>(rsscache.get()));
 	}
 	feedhandler.add_feed(feed);
 
