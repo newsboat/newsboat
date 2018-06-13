@@ -205,4 +205,13 @@ void FeedContainer::clear_feeds_items()
 	}
 }
 
+unsigned int FeedContainer::unread_feed_count()
+{
+	return std::count_if(feeds.begin(),
+		feeds.end(),
+		[](const std::shared_ptr<rss_feed> feed) {
+			return feed->unread_item_count() > 0;
+		});
+}
+
 } // namespace newsboat

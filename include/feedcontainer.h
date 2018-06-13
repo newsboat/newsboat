@@ -25,6 +25,7 @@ public:
 	void set_feeds(const std::vector<std::shared_ptr<rss_feed>> new_feeds);
 	std::vector<std::shared_ptr<rss_feed>> get_all_feeds();
 	void clear_feeds_items();
+	unsigned int unread_feed_count();
 
 	std::vector<std::shared_ptr<rss_feed>> feeds;
 
