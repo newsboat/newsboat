@@ -214,4 +214,13 @@ unsigned int FeedContainer::unread_feed_count()
 		});
 }
 
+unsigned int FeedContainer::unread_item_count()
+{
+	unsigned int unread_items = 0;
+	for (const auto& feed : feeds) {
+		unread_items += feed->unread_item_count();
+	}
+	return unread_items;
+}
+
 } // namespace newsboat
