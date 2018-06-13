@@ -325,3 +325,25 @@ TEST_CASE(
 
 	REQUIRE(feedcontainer.unread_feed_count() == 2);
 }
+
+TEST_CASE("unread_item_count() returns number of unread items in all feeds",
+	"[feedcontainer]")
+{
+	FeedContainer feedcontainer;
+	std::unique_ptr<configcontainer> cfg(new configcontainer());
+	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
+	const auto feeds = get_five_empty_feeds(rsscache.get());
+	for (int j = 0; j < 5; ++j) {
+		const auto item = std::make_shared<rss_item>(rsscache.get());
+		const auto item2 = std::make_shared<rss_item>(rsscache.get());
+		if ((j % 2) == 0) {
+			item->set_unread_nowrite(false);
+			item2->set_unread_nowrite(false);
+		}
+		feeds[j]->add_item(item);
+		feeds[j]->add_item(item2);
+	}
+	feedcontainer.set_feeds(feeds);
+
+	REQUIRE(feedcontainer.unread_item_count() == 4);
+}
