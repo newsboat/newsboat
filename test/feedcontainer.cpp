@@ -300,3 +300,28 @@ TEST_CASE("clear_feeds_items() clears all of feed's items", "[feedcontainer]")
 	feedcontainer.clear_feeds_items();
 	REQUIRE(feed->items().size() == 0);
 }
+
+TEST_CASE(
+	"unread_feed_count() returns number of feeds that have unread items in "
+	"them",
+	"[feedcontainer]")
+{
+	FeedContainer feedcontainer;
+	std::unique_ptr<configcontainer> cfg(new configcontainer());
+	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
+	const auto feeds = get_five_empty_feeds(rsscache.get());
+	for (int j = 0; j < 5; ++j) {
+		// Make sure that number of unread items in feed doesn't matter
+		const auto item = std::make_shared<rss_item>(rsscache.get());
+		const auto item2 = std::make_shared<rss_item>(rsscache.get());
+		if ((j % 2) == 0) {
+			item->set_unread_nowrite(false);
+			item2->set_unread_nowrite(false);
+		}
+		feeds[j]->add_item(item);
+		feeds[j]->add_item(item2);
+	}
+	feedcontainer.set_feeds(feeds);
+
+	REQUIRE(feedcontainer.unread_feed_count() == 2);
+}
