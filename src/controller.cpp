@@ -677,17 +677,16 @@ void controller::reload_indexes(const std::vector<int>& indexes,
 	bool unattended)
 {
 	scope_measure m1("controller::reload_indexes");
-	unsigned int unread_feeds, unread_articles;
-	compute_unread_numbers(unread_feeds, unread_articles);
-
+	const auto unread_feeds = feedcontainer.unread_feed_count();
+	const auto unread_articles = feedcontainer.unread_item_count();
 	const auto size = feedcontainer.feeds_size();
 
 	for (const auto& idx : indexes) {
 		this->reload(idx, size, unattended);
 	}
 
-	unsigned int unread_feeds2, unread_articles2;
-	compute_unread_numbers(unread_feeds2, unread_articles2);
+	const auto unread_feeds2 = feedcontainer.unread_feed_count();
+	const auto unread_articles2 = feedcontainer.unread_item_count();
 	bool notify_always = cfg.get_configvalue_as_bool("notify-always");
 	if (notify_always || unread_feeds2 != unread_feeds ||
 		unread_articles2 != unread_articles) {
@@ -743,8 +742,8 @@ void controller::reload_range(unsigned int start,
 
 void controller::reload_all(bool unattended)
 {
-	unsigned int unread_feeds, unread_articles;
-	compute_unread_numbers(unread_feeds, unread_articles);
+	const auto unread_feeds = feedcontainer.unread_feed_count();
+	const auto unread_articles = feedcontainer.unread_item_count();
 	unsigned int num_threads = cfg.get_configvalue_as_int("reload-threads");
 	time_t t1, t2, dt;
 
@@ -805,8 +804,8 @@ void controller::reload_all(bool unattended)
 	dt = t2 - t1;
 	LOG(level::INFO, "controller::reload_all: reload took %d seconds", dt);
 
-	unsigned int unread_feeds2, unread_articles2;
-	compute_unread_numbers(unread_feeds2, unread_articles2);
+	const auto unread_feeds2 = feedcontainer.unread_feed_count();
+	const auto unread_articles2 = feedcontainer.unread_item_count();
 	bool notify_always = cfg.get_configvalue_as_bool("notify-always");
 	if (notify_always || unread_feeds2 > unread_feeds ||
 		unread_articles2 > unread_articles) {
@@ -850,20 +849,6 @@ void controller::notify(const std::string& msg)
 			"controller:notify: notifying external program `%s'",
 			prog);
 		utils::run_command(prog, msg);
-	}
-}
-
-void controller::compute_unread_numbers(unsigned int& unread_feeds,
-	unsigned int& unread_articles)
-{
-	unread_feeds = 0;
-	unread_articles = 0;
-	for (const auto& feed : feedcontainer.feeds) {
-		unsigned int items = feed->unread_item_count();
-		if (items > 0) {
-			++unread_feeds;
-			unread_articles += items;
-		}
 	}
 }
 

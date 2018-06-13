@@ -124,7 +124,6 @@ private:
 	void import_opml(const std::string& filename);
 	void export_opml();
 	void rec_find_rss_outlines(xmlNode* node, std::string tag);
-	void compute_unread_numbers(unsigned int&, unsigned int&);
 	int execute_commands(const std::vector<std::string>& cmds);
 
 	std::string prepare_message(unsigned int pos, unsigned int max);
