@@ -257,12 +257,34 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 		REQUIRE(sorted_feeds[4]->get_firsttag() == "Zaza");
 	}
 
+	feeds[0]->set_title({"aa"});
+	feeds[1]->set_title({"Taggy"});
+	feeds[2]->set_title({"Zaza"});
+	feeds[3]->set_title({"taggy"});
+	feeds[4]->set_title({"aaa"});
+
 	SECTION("by title asc")
 	{
+		cfg->set_configvalue("feed-sort-order", "title-asc");
+		feedcontainer.sort_feeds(cfg.get());
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+		REQUIRE(sorted_feeds[0]->title() == "Zaza");
+		REQUIRE(sorted_feeds[1]->title() == "taggy");
+		REQUIRE(sorted_feeds[2]->title() == "Taggy");
+		REQUIRE(sorted_feeds[3]->title() == "aaa");
+		REQUIRE(sorted_feeds[4]->title() == "aa");
 	}
 
 	SECTION("by title desc")
 	{
+		cfg->set_configvalue("feed-sort-order", "title-desc");
+		feedcontainer.sort_feeds(cfg.get());
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+		REQUIRE(sorted_feeds[0]->title() == "aa");
+		REQUIRE(sorted_feeds[1]->title() == "aaa");
+		REQUIRE(sorted_feeds[2]->title() == "Taggy");
+		REQUIRE(sorted_feeds[3]->title() == "taggy");
+		REQUIRE(sorted_feeds[4]->title() == "Zaza");
 	}
 
 	SECTION("by articlecount asc")
