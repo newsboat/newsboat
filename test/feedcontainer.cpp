@@ -257,11 +257,11 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 		REQUIRE(sorted_feeds[4]->get_firsttag() == "Zaza");
 	}
 
-	feeds[0]->set_title({"aa"});
-	feeds[1]->set_title({"Taggy"});
-	feeds[2]->set_title({"Zaza"});
-	feeds[3]->set_title({"taggy"});
-	feeds[4]->set_title({"aaa"});
+	feeds[0]->set_title("aa");
+	feeds[1]->set_title("Taggy");
+	feeds[2]->set_title("Zaza");
+	feeds[3]->set_title("taggy");
+	feeds[4]->set_title("aaa");
 
 	SECTION("by title asc")
 	{
