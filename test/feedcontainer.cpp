@@ -287,12 +287,36 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 		REQUIRE(sorted_feeds[4]->title() == "Zaza");
 	}
 
+	feeds[0]->add_item(std::make_shared<rss_item>(rsscache.get()));
+	feeds[0]->add_item(std::make_shared<rss_item>(rsscache.get()));
+	feeds[1]->add_item(std::make_shared<rss_item>(rsscache.get()));
+	feeds[1]->add_item(std::make_shared<rss_item>(rsscache.get()));
+	feeds[1]->add_item(std::make_shared<rss_item>(rsscache.get()));
+	feeds[2]->add_item(std::make_shared<rss_item>(rsscache.get()));
+	feeds[3]->add_item(std::make_shared<rss_item>(rsscache.get()));
+
 	SECTION("by articlecount asc")
 	{
+		cfg->set_configvalue("feed-sort-order", "articlecount-asc");
+		feedcontainer.sort_feeds(cfg.get());
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+		REQUIRE(sorted_feeds[0]->total_item_count() == 3);
+		REQUIRE(sorted_feeds[1]->total_item_count() == 2);
+		REQUIRE(sorted_feeds[2]->total_item_count() == 1);
+		REQUIRE(sorted_feeds[3]->total_item_count() == 1);
+		REQUIRE(sorted_feeds[4]->total_item_count() == 0);
 	}
 
 	SECTION("by articlecount desc")
 	{
+		cfg->set_configvalue("feed-sort-order", "articlecount-desc");
+		feedcontainer.sort_feeds(cfg.get());
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+		REQUIRE(sorted_feeds[0]->total_item_count() == 0);
+		REQUIRE(sorted_feeds[1]->total_item_count() == 1);
+		REQUIRE(sorted_feeds[2]->total_item_count() == 1);
+		REQUIRE(sorted_feeds[3]->total_item_count() == 2);
+		REQUIRE(sorted_feeds[4]->total_item_count() == 3);
 	}
 
 	SECTION("by unreadarticlecount asc")
