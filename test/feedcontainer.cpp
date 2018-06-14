@@ -197,12 +197,34 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 	const auto feeds = get_five_empty_feeds(rsscache.get());
 	feedcontainer.set_feeds(feeds);
 
+	feeds[0]->set_order(4);
+	feeds[1]->set_order(5);
+	feeds[2]->set_order(1);
+	feeds[3]->set_order(33);
+	feeds[4]->set_order(10);
+
 	SECTION("by none asc")
 	{
+		cfg->set_configvalue("feed-sort-order", "none-asc");
+		feedcontainer.sort_feeds(cfg.get());
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+		REQUIRE(sorted_feeds[0]->get_order() == 33);
+		REQUIRE(sorted_feeds[1]->get_order() == 10);
+		REQUIRE(sorted_feeds[2]->get_order() == 5);
+		REQUIRE(sorted_feeds[3]->get_order() == 4);
+		REQUIRE(sorted_feeds[4]->get_order() == 1);
 	}
 
 	SECTION("by none desc")
 	{
+		cfg->set_configvalue("feed-sort-order", "none-desc");
+		feedcontainer.sort_feeds(cfg.get());
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+		REQUIRE(sorted_feeds[0]->get_order() == 1);
+		REQUIRE(sorted_feeds[1]->get_order() == 4);
+		REQUIRE(sorted_feeds[2]->get_order() == 5);
+		REQUIRE(sorted_feeds[3]->get_order() == 10);
+		REQUIRE(sorted_feeds[4]->get_order() == 33);
 	}
 
 	feeds[0]->set_tags({"aa"});
