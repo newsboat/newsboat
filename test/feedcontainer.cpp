@@ -191,6 +191,12 @@ TEST_CASE("feeds_size() returns FeedContainer's current feed vector size",
 
 TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 {
+	FeedContainer feedcontainer;
+	std::unique_ptr<configcontainer> cfg(new configcontainer());
+	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
+	const auto feeds = get_five_empty_feeds(rsscache.get());
+	feedcontainer.set_feeds(feeds);
+
 	SECTION("by none asc")
 	{
 	}
@@ -199,12 +205,34 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 	{
 	}
 
+	feeds[0]->set_tags({"aa"});
+	feeds[1]->set_tags({"Taggy"});
+	feeds[2]->set_tags({"Zaza"});
+	feeds[3]->set_tags({"taggy"});
+	feeds[4]->set_tags({"aaa"});
+
 	SECTION("by firsttag asc")
 	{
+		cfg->set_configvalue("feed-sort-order", "firsttag-asc");
+		feedcontainer.sort_feeds(cfg.get());
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+		REQUIRE(sorted_feeds[0]->get_firsttag() == "Zaza");
+		REQUIRE(sorted_feeds[1]->get_firsttag() == "taggy");
+		REQUIRE(sorted_feeds[2]->get_firsttag() == "Taggy");
+		REQUIRE(sorted_feeds[3]->get_firsttag() == "aaa");
+		REQUIRE(sorted_feeds[4]->get_firsttag() == "aa");
 	}
 
 	SECTION("by firsttag desc")
 	{
+		cfg->set_configvalue("feed-sort-order", "firsttag-desc");
+		feedcontainer.sort_feeds(cfg.get());
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+		REQUIRE(sorted_feeds[0]->get_firsttag() == "aa");
+		REQUIRE(sorted_feeds[1]->get_firsttag() == "aaa");
+		REQUIRE(sorted_feeds[2]->get_firsttag() == "Taggy");
+		REQUIRE(sorted_feeds[3]->get_firsttag() == "taggy");
+		REQUIRE(sorted_feeds[4]->get_firsttag() == "Zaza");
 	}
 
 	SECTION("by title asc")
