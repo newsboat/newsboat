@@ -319,12 +319,37 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 		REQUIRE(sorted_feeds[4]->total_item_count() == 3);
 	}
 
+	auto item = std::make_shared<rss_item>(rsscache.get());
+	item->set_unread_nowrite(false);
+	feeds[1]->add_item(item);
+	item = std::make_shared<rss_item>(rsscache.get());
+	feeds[2]->add_item(item);
+	item = std::make_shared<rss_item>(rsscache.get());
+	item->set_unread_nowrite(false);
+	feeds[4]->add_item(item);
+
 	SECTION("by unreadarticlecount asc")
 	{
+		cfg->set_configvalue("feed-sort-order", "unreadarticlecount-asc");
+		feedcontainer.sort_feeds(cfg.get());
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+		REQUIRE(sorted_feeds[0]->unread_item_count() == 3);
+		REQUIRE(sorted_feeds[1]->unread_item_count() == 2);
+		REQUIRE(sorted_feeds[2]->unread_item_count() == 2);
+		REQUIRE(sorted_feeds[3]->unread_item_count() == 1);
+		REQUIRE(sorted_feeds[4]->unread_item_count() == 0);
 	}
 
 	SECTION("by unreadarticlecount desc")
 	{
+		cfg->set_configvalue("feed-sort-order", "unreadarticlecount-desc");
+		feedcontainer.sort_feeds(cfg.get());
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+		REQUIRE(sorted_feeds[0]->unread_item_count() == 0);
+		REQUIRE(sorted_feeds[1]->unread_item_count() == 1);
+		REQUIRE(sorted_feeds[2]->unread_item_count() == 2);
+		REQUIRE(sorted_feeds[3]->unread_item_count() == 2);
+		REQUIRE(sorted_feeds[4]->unread_item_count() == 3);
 	}
 
 	SECTION("by lastupdated asc")
