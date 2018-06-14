@@ -352,12 +352,44 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 		REQUIRE(sorted_feeds[4]->unread_item_count() == 3);
 	}
 
+	item = std::make_shared<rss_item>(rsscache.get());
+	item->set_pubDate(93);
+	feeds[0]->add_item(item);
+
+	item = std::make_shared<rss_item>(rsscache.get());
+	item->set_pubDate(42);
+	feeds[1]->add_item(item);
+
+	item = std::make_shared<rss_item>(rsscache.get());
+	item->set_pubDate(69);
+	feeds[2]->add_item(item);
+
+	item = std::make_shared<rss_item>(rsscache.get());
+	item->set_pubDate(23);
+	feeds[3]->add_item(item);
+
 	SECTION("by lastupdated asc")
 	{
+		cfg->set_configvalue("feed-sort-order", "lastupdated-asc");
+		feedcontainer.sort_feeds(cfg.get());
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+		REQUIRE(sorted_feeds[0] == feeds[4]);
+		REQUIRE(sorted_feeds[1] == feeds[3]);
+		REQUIRE(sorted_feeds[2] == feeds[1]);
+		REQUIRE(sorted_feeds[3] == feeds[2]);
+		REQUIRE(sorted_feeds[4] == feeds[0]);
 	}
 
 	SECTION("by lastupdated desc")
 	{
+		cfg->set_configvalue("feed-sort-order", "lastupdated-desc");
+		feedcontainer.sort_feeds(cfg.get());
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+		REQUIRE(sorted_feeds[0] == feeds[0]);
+		REQUIRE(sorted_feeds[1] == feeds[2]);
+		REQUIRE(sorted_feeds[2] == feeds[1]);
+		REQUIRE(sorted_feeds[3] == feeds[3]);
+		REQUIRE(sorted_feeds[4] == feeds[4]);
 	}
 }
 
