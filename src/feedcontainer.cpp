@@ -205,7 +205,7 @@ void FeedContainer::clear_feeds_items()
 	}
 }
 
-unsigned int FeedContainer::unread_feed_count()
+unsigned int FeedContainer::unread_feed_count() const
 {
 	return std::count_if(feeds.begin(),
 		feeds.end(),
@@ -214,7 +214,7 @@ unsigned int FeedContainer::unread_feed_count()
 		});
 }
 
-unsigned int FeedContainer::unread_item_count()
+unsigned int FeedContainer::unread_item_count() const
 {
 	unsigned int unread_items = 0;
 	for (const auto& feed : feeds) {
