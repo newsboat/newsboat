@@ -71,6 +71,29 @@ TEST_CASE("add_feed() adds specific feed to its \"feeds\" vector", "[feedcontain
 	REQUIRE(feedcontainer.get_feed(0)->title_raw() == "Example feed");
 }
 
+TEST_CASE("populate_query_feeds() populates query feeds",
+	"[feedcontainer]")
+{
+	FeedContainer feedcontainer;
+	std::unique_ptr<configcontainer> cfg(new configcontainer());
+	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
+	auto feeds = get_five_empty_feeds(rsscache.get());
+	for (int j = 0; j < 5; ++j) {
+		const auto item = std::make_shared<rss_item>(rsscache.get());
+		item->set_unread_nowrite(true);
+		feeds[j]->add_item(item);
+	}
+
+	const auto feed = std::make_shared<rss_feed>(rsscache.get());
+	feed->set_rssurl("query:a title:unread = \"yes\"");
+	feeds.push_back(feed);
+
+	feedcontainer.set_feeds(feeds);
+	feedcontainer.populate_query_feeds();
+
+	REQUIRE(feeds[5]->total_item_count() == 5);
+}
+
 TEST_CASE("set_feeds() sets FeedContainer's feed vector to the given one",
 	"[feedcontainer]")
 {
