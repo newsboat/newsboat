@@ -2,6 +2,7 @@
 
 #include <algorithm> // stable_sort
 #include <strings.h> // strcasecmp
+#include <numeric> // accumulate
 
 namespace newsboat {
 
@@ -216,11 +217,12 @@ unsigned int FeedContainer::unread_feed_count() const
 
 unsigned int FeedContainer::unread_item_count() const
 {
-	unsigned int unread_items = 0;
-	for (const auto& feed : feeds) {
-		unread_items += feed->unread_item_count();
-	}
-	return unread_items;
+	return std::accumulate(feeds.begin(),
+		feeds.end(),
+		0,
+		[](unsigned int sum, const std::shared_ptr<rss_feed> feed) {
+			return sum += feed->unread_item_count();
+		});
 }
 
 } // namespace newsboat
