@@ -7,6 +7,7 @@
 #include "colormanager.h"
 #include "configcontainer.h"
 #include "configpaths.h"
+#include "feedcontainer.h"
 #include "filtercontainer.h"
 #include "fslock.h"
 #include "regexmanager.h"
@@ -47,15 +48,9 @@ public:
 		bool unattended = false);
 	void start_reload_all_thread(std::vector<int>* indexes = 0);
 
-	std::shared_ptr<rss_feed> get_feed(unsigned int pos);
-	std::shared_ptr<rss_feed> get_feed_by_url(const std::string& feedurl);
 	std::vector<std::shared_ptr<rss_item>> search_for_items(
 		const std::string& query,
 		std::shared_ptr<rss_feed> feed);
-	unsigned int get_feedcount()
-	{
-		return feeds.size();
-	}
 
 	void unlock_reload_mutex()
 	{
@@ -79,13 +74,9 @@ public:
 	void enqueue_url(const std::string& url,
 		std::shared_ptr<rss_feed> feed);
 	void notify(const std::string& msg);
-	unsigned int get_pos_of_next_unread(unsigned int pos);
 
 	void reload_urls_file();
 	void edit_urls_file();
-
-	std::vector<std::shared_ptr<rss_feed>> get_all_feeds();
-	std::vector<std::shared_ptr<rss_feed>> get_all_feeds_unlocked();
 
 	filtercontainer& get_filters()
 	{
@@ -107,6 +98,11 @@ public:
 		return &cfg;
 	}
 
+	FeedContainer* get_feedcontainer()
+	{
+		return &feedcontainer;
+	}
+
 	void write_item(std::shared_ptr<rss_item> item,
 		const std::string& filename);
 	void write_item(std::shared_ptr<rss_item> item, std::ostream& ostr);
@@ -120,11 +116,7 @@ public:
 
 	void dump_config(const std::string& filename);
 
-	void sort_feeds();
-
 	void update_flags(std::shared_ptr<rss_item> item);
-
-	unsigned int get_feed_count_per_tag(const std::string& tag);
 
 private:
 	void print_usage(char* argv0);
@@ -132,7 +124,6 @@ private:
 	void import_opml(const std::string& filename);
 	void export_opml();
 	void rec_find_rss_outlines(xmlNode* node, std::string tag);
-	void compute_unread_numbers(unsigned int&, unsigned int&);
 	int execute_commands(const std::vector<std::string>& cmds);
 
 	std::string prepare_message(unsigned int pos, unsigned int max);
@@ -149,10 +140,10 @@ private:
 	view* v;
 	urlreader* urlcfg;
 	cache* rsscache;
-	std::vector<std::shared_ptr<rss_feed>> feeds;
 	bool refresh_on_start;
 	configcontainer cfg;
 	rss_ignores ign;
+	FeedContainer feedcontainer;
 	filtercontainer filters;
 
 	std::mutex reload_mutex;

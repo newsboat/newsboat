@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "exceptions.h"
+#include "feedcontainer.h"
 #include "formatstring.h"
 #include "listformatter.h"
 #include "logger.h"
@@ -82,7 +83,7 @@ void feedlist_formaction::prepare()
 	std::string sort_order =
 		v->get_cfg()->get_configvalue("feed-sort-order");
 	if (sort_order != old_sort_order) {
-		v->get_ctrl()->sort_feeds();
+		v->get_ctrl()->get_feedcontainer()->sort_feeds(v->get_cfg());
 		old_sort_order = sort_order;
 		do_redraw = true;
 	}
@@ -208,7 +209,7 @@ REDO:
 	case OP_OPENINBROWSER:
 		if (feeds_shown > 0 && feedpos.length() > 0) {
 			std::shared_ptr<rss_feed> feed =
-				v->get_ctrl()->get_feed(pos);
+				v->get_ctrl()->get_feedcontainer()->get_feed(pos);
 			if (feed) {
 				if (feed->rssurl().substr(0, 6) != "query:") {
 					LOG(level::INFO,
@@ -231,7 +232,7 @@ REDO:
 	case OP_OPENALLUNREADINBROWSER:
 		if (feeds_shown > 0 && feedpos.length() > 0) {
 			std::shared_ptr<rss_feed> feed =
-				v->get_ctrl()->get_feed(pos);
+				v->get_ctrl()->get_feedcontainer()->get_feed(pos);
 			if (feed) {
 				LOG(level::INFO,
 					"feedlist_formaction: opening all "
@@ -247,7 +248,7 @@ REDO:
 	case OP_OPENALLUNREADINBROWSER_AND_MARK:
 		if (feeds_shown > 0 && feedpos.length() > 0) {
 			std::shared_ptr<rss_feed> feed =
-				v->get_ctrl()->get_feed(pos);
+				v->get_ctrl()->get_feedcontainer()->get_feed(pos);
 			if (feed) {
 				LOG(level::INFO,
 					"feedlist_formaction: opening all "
@@ -829,7 +830,7 @@ void feedlist_formaction::mark_pos_if_visible(unsigned int pos)
 		vpos++;
 	}
 	vpos = 0;
-	pos = v->get_ctrl()->get_pos_of_next_unread(pos);
+	pos = v->get_ctrl()->get_feedcontainer()->get_pos_of_next_unread(pos);
 	for (const auto& feed : visible_feeds) {
 		if (feed.second == pos) {
 			LOG(level::DEBUG,

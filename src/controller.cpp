@@ -100,12 +100,8 @@ controller::~controller()
 	delete urlcfg;
 	delete api;
 
-	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	for (const auto& feed : feeds) {
-		std::lock_guard<std::mutex> lock(feed->item_mutex);
-		feed->clear_items();
-	}
-	feeds.clear();
+	feedcontainer.clear_feeds_items();
+	feedcontainer.feeds.clear();
 }
 
 void controller::set_view(view* vv)
@@ -402,8 +398,7 @@ int controller::run(int argc, char* argv[])
 					url, ignore_disp ? &ign : nullptr);
 			feed->set_tags(urlcfg->get_tags(url));
 			feed->set_order(i);
-			std::lock_guard<std::mutex> feedslock(feeds_mutex);
-			feeds.push_back(feed);
+			feedcontainer.add_feed(feed);
 		} catch (const dbexception& e) {
 			std::cout << _("Error while loading feeds from "
 				       "database: ")
@@ -433,19 +428,15 @@ int controller::run(int argc, char* argv[])
 			std::cout << _("Prepopulating query feeds...");
 			std::cout.flush();
 		}
-		std::lock_guard<std::mutex> feedslock(feeds_mutex);
-		for (const auto& feed : feeds) {
-			if (feed->rssurl().substr(0, 6) == "query:") {
-				feed->update_items(get_all_feeds_unlocked());
-			}
-		}
+
+		feedcontainer.populate_query_feeds();
 
 		if (!args.do_export && !args.silent) {
 			std::cout << _("done.") << std::endl;
 		}
 	}
 
-	sort_feeds();
+	feedcontainer.sort_feeds(&cfg);
 
 	if (args.do_export) {
 		export_opml();
@@ -510,7 +501,7 @@ int controller::run(int argc, char* argv[])
 	}
 	try {
 		std::lock_guard<std::mutex> feedslock(feeds_mutex);
-		rsscache->cleanup_cache(feeds);
+		rsscache->cleanup_cache(feedcontainer.feeds);
 		if (!args.silent) {
 			std::cout << _("done.") << std::endl;
 		}
@@ -528,13 +519,13 @@ int controller::run(int argc, char* argv[])
 void controller::update_feedlist()
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	v->set_feedlist(feeds);
+	v->set_feedlist(feedcontainer.feeds);
 }
 
 void controller::update_visible_feeds()
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	v->update_visible_feeds(feeds);
+	v->update_visible_feeds(feedcontainer.feeds);
 }
 
 void controller::mark_all_read(const std::string& feedurl)
@@ -549,7 +540,7 @@ void controller::mark_all_read(const std::string& feedurl)
 	}
 
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	for (const auto& feed : feeds) {
+	for (const auto& feed : feedcontainer.feeds) {
 		std::lock_guard<std::mutex> lock(feed->item_mutex);
 
 		if (feedurl.length() > 0 && feed->rssurl() != feedurl)
@@ -580,10 +571,10 @@ void controller::mark_article_read(const std::string& guid, bool read)
 
 void controller::mark_all_read(unsigned int pos)
 {
-	if (pos < feeds.size()) {
+	if (pos < feedcontainer.feeds.size()) {
 		scope_measure m("controller::mark_all_read");
 		std::lock_guard<std::mutex> feedslock(feeds_mutex);
-		std::shared_ptr<rss_feed> feed = feeds[pos];
+		const auto feed = feedcontainer.get_feed(pos);
 		if (feed->rssurl().substr(0, 6) == "query:") {
 			rsscache->mark_all_read(feed);
 		} else {
@@ -595,17 +586,8 @@ void controller::mark_all_read(unsigned int pos)
 		m.stopover(
 			"after rsscache->mark_all_read, before iteration over "
 			"items");
-		std::lock_guard<std::mutex> lock(feed->item_mutex);
-		std::vector<std::shared_ptr<rss_item>>& items = feed->items();
-		if (items.size() > 0) {
-			bool notify = items[0]->feedurl() != feed->rssurl();
-			LOG(level::DEBUG,
-				"controller::mark_all_read: notify = %s",
-				notify ? "yes" : "no");
-			for (const auto& item : items) {
-				item->set_unread_nowrite_notify(false, notify);
-			}
-		}
+
+		feedcontainer.mark_all_feed_items_read(pos);
 	}
 }
 
@@ -615,8 +597,8 @@ void controller::reload(unsigned int pos,
 	curl_handle* easyhandle)
 {
 	LOG(level::DEBUG, "controller::reload: pos = %u max = %u", pos, max);
-	if (pos < feeds.size()) {
-		std::shared_ptr<rss_feed> oldfeed = feeds[pos];
+	if (pos < feedcontainer.feeds.size()) {
+		std::shared_ptr<rss_feed> oldfeed = feedcontainer.feeds[pos];
 		std::string errmsg;
 		if (!unattended)
 			v->set_status(strprintf::fmt(_("%sLoading %s..."),
@@ -653,14 +635,15 @@ void controller::reload(unsigned int pos,
 				feed->set_tags(
 					urlcfg->get_tags(oldfeed->rssurl()));
 				feed->set_order(oldfeed->get_order());
-				feeds[pos] = feed;
+				feedcontainer.feeds[pos] = feed;
 				enqueue_items(feed);
 
 				oldfeed->clear_items();
 
-				v->notify_itemlist_change(feeds[pos]);
+				v->notify_itemlist_change(
+					feedcontainer.feeds[pos]);
 				if (!unattended) {
-					v->set_feedlist(feeds);
+					v->set_feedlist(feedcontainer.feeds);
 				}
 			} else {
 				LOG(level::DEBUG,
@@ -694,35 +677,20 @@ void controller::reload(unsigned int pos,
 	}
 }
 
-std::shared_ptr<rss_feed> controller::get_feed(unsigned int pos)
-{
-	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	if (pos >= feeds.size()) {
-		throw std::out_of_range(_("invalid feed index (bug)"));
-	}
-	std::shared_ptr<rss_feed> feed = feeds[pos];
-	return feed;
-}
-
 void controller::reload_indexes(const std::vector<int>& indexes,
 	bool unattended)
 {
 	scope_measure m1("controller::reload_indexes");
-	unsigned int unread_feeds, unread_articles;
-	compute_unread_numbers(unread_feeds, unread_articles);
-
-	unsigned long size;
-	{
-		std::lock_guard<std::mutex> feedslock(feeds_mutex);
-		size = feeds.size();
-	}
+	const auto unread_feeds = feedcontainer.unread_feed_count();
+	const auto unread_articles = feedcontainer.unread_item_count();
+	const auto size = feedcontainer.feeds_size();
 
 	for (const auto& idx : indexes) {
 		this->reload(idx, size, unattended);
 	}
 
-	unsigned int unread_feeds2, unread_articles2;
-	compute_unread_numbers(unread_feeds2, unread_articles2);
+	const auto unread_feeds2 = feedcontainer.unread_feed_count();
+	const auto unread_articles2 = feedcontainer.unread_item_count();
 	bool notify_always = cfg.get_configvalue_as_bool("notify-always");
 	if (notify_always || unread_feeds2 != unread_feeds ||
 		unread_articles2 != unread_articles) {
@@ -759,8 +727,8 @@ void controller::reload_range(unsigned int start,
 
 	std::sort(v.begin(), v.end(), [&](unsigned int a, unsigned int b) {
 		std::string domain1, domain2;
-		extract(domain1, feeds[a]->rssurl());
-		extract(domain2, feeds[b]->rssurl());
+		extract(domain1, feedcontainer.feeds[a]->rssurl());
+		extract(domain2, feedcontainer.feeds[b]->rssurl());
 		std::reverse(domain1.begin(), domain1.end());
 		std::reverse(domain2.begin(), domain2.end());
 		return domain1 < domain2;
@@ -778,23 +746,17 @@ void controller::reload_range(unsigned int start,
 
 void controller::reload_all(bool unattended)
 {
-	unsigned int unread_feeds, unread_articles;
-	compute_unread_numbers(unread_feeds, unread_articles);
+	const auto unread_feeds = feedcontainer.unread_feed_count();
+	const auto unread_articles = feedcontainer.unread_item_count();
 	unsigned int num_threads = cfg.get_configvalue_as_int("reload-threads");
 	time_t t1, t2, dt;
 
-	unsigned int size;
+	feedcontainer.reset_feeds_status();
+	const auto size = feedcontainer.feeds_size();
 
-	{
-		std::lock_guard<std::mutex> feedlock(feeds_mutex);
-		for (const auto& feed : feeds) {
-			feed->reset_status();
-		}
-		size = feeds.size();
-	}
-
-	if (num_threads < 1)
+	if (num_threads < 1) {
 		num_threads = 1;
+	}
 
 	if (num_threads > size) {
 		num_threads = size;
@@ -834,20 +796,20 @@ void controller::reload_all(bool unattended)
 
 	// refresh query feeds (update and sort)
 	LOG(level::DEBUG, "controller::reload_all: refresh query feeds");
-	for (const auto& feed : feeds) {
+	for (const auto& feed : feedcontainer.feeds) {
 		v->prepare_query_feed(feed);
 	}
 	v->force_redraw();
 
-	sort_feeds();
+	feedcontainer.sort_feeds(&cfg);
 	update_feedlist();
 
 	t2 = time(nullptr);
 	dt = t2 - t1;
 	LOG(level::INFO, "controller::reload_all: reload took %d seconds", dt);
 
-	unsigned int unread_feeds2, unread_articles2;
-	compute_unread_numbers(unread_feeds2, unread_articles2);
+	const auto unread_feeds2 = feedcontainer.unread_feed_count();
+	const auto unread_articles2 = feedcontainer.unread_item_count();
 	bool notify_always = cfg.get_configvalue_as_bool("notify-always");
 	if (notify_always || unread_feeds2 > unread_feeds ||
 		unread_articles2 > unread_articles) {
@@ -891,20 +853,6 @@ void controller::notify(const std::string& msg)
 			"controller:notify: notifying external program `%s'",
 			prog);
 		utils::run_command(prog, msg);
-	}
-}
-
-void controller::compute_unread_numbers(unsigned int& unread_feeds,
-	unsigned int& unread_articles)
-{
-	unread_feeds = 0;
-	unread_articles = 0;
-	for (const auto& feed : feeds) {
-		unsigned int items = feed->unread_item_count();
-		if (items > 0) {
-			++unread_feeds;
-			unread_articles += items;
-		}
 	}
 }
 
@@ -1095,7 +1043,7 @@ void controller::export_opml()
 	xmlNodePtr body = xmlNewTextChild(
 		opml_node, nullptr, (const xmlChar*)"body", nullptr);
 
-	for (const auto& feed : feeds) {
+	for (const auto& feed : feedcontainer.feeds) {
 		if (!utils::is_special_url(feed->rssurl())) {
 			std::string rssurl = feed->rssurl();
 			std::string link = feed->link();
@@ -1268,21 +1216,11 @@ std::vector<std::shared_ptr<rss_item>> controller::search_for_items(
 		items = rsscache->search_for_items(
 			query, (feed != nullptr ? feed->rssurl() : ""));
 		for (const auto& item : items) {
-			item->set_feedptr(get_feed_by_url(item->feedurl()));
+			item->set_feedptr(
+				feedcontainer.get_feed_by_url(item->feedurl()));
 		}
 	}
 	return items;
-}
-
-std::shared_ptr<rss_feed> controller::get_feed_by_url(
-	const std::string& feedurl)
-{
-	for (const auto& feed : feeds) {
-		if (feedurl == feed->rssurl())
-			return feed;
-	}
-	LOG(level::ERROR, "controller:get_feed_by_url failed for %s", feedurl);
-	return std::shared_ptr<rss_feed>();
 }
 
 void controller::enqueue_url(const std::string& url,
@@ -1323,7 +1261,7 @@ void controller::reload_urls_file()
 
 	for (const auto& url : urlcfg->get_urls()) {
 		bool found = false;
-		for (const auto& feed : feeds) {
+		for (const auto& feed : feedcontainer.feeds) {
 			if (url == feed->rssurl()) {
 				found = true;
 				feed->set_tags(urlcfg->get_tags(url));
@@ -1356,13 +1294,8 @@ void controller::reload_urls_file()
 
 	v->set_tags(urlcfg->get_alltags());
 
-	{
-		std::lock_guard<std::mutex> feedslock(feeds_mutex);
-		feeds = new_feeds;
-	}
-
-	sort_feeds();
-
+	feedcontainer.set_feeds(new_feeds);
+	feedcontainer.sort_feeds(&cfg);
 	update_feedlist();
 }
 
@@ -1564,14 +1497,15 @@ void controller::save_feed(std::shared_ptr<rss_feed> feed, unsigned int pos)
 			"controller::save_feed: after internalize_rssfeed");
 		feed->set_tags(urlcfg->get_tags(feed->rssurl()));
 		{
-			unsigned int order = feeds[pos]->get_order();
+			unsigned int order =
+				feedcontainer.feeds[pos]->get_order();
 			std::lock_guard<std::mutex> itemlock(
-				feeds[pos]->item_mutex);
-			feeds[pos]->clear_items();
+				feedcontainer.feeds[pos]->item_mutex);
+			feedcontainer.feeds[pos]->clear_items();
 			feed->set_order(order);
 		}
-		feeds[pos] = feed;
-		v->notify_itemlist_change(feeds[pos]);
+		feedcontainer.feeds[pos] = feed;
+		v->notify_itemlist_change(feedcontainer.feeds[pos]);
 	} else {
 		LOG(level::DEBUG,
 			"controller::save_feed: feed is empty, not saving");
@@ -1676,90 +1610,6 @@ void controller::export_read_information(const std::string& readinfofile)
 	}
 }
 
-void controller::sort_feeds()
-{
-	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	std::vector<std::string> sortmethod_info =
-		utils::tokenize(cfg.get_configvalue("feed-sort-order"), "-");
-	std::string sortmethod = sortmethod_info[0];
-	std::string direction = "desc";
-	if (sortmethod_info.size() > 1)
-		direction = sortmethod_info[1];
-	if (sortmethod == "none") {
-		std::stable_sort(feeds.begin(),
-			feeds.end(),
-			[](std::shared_ptr<rss_feed> a,
-				std::shared_ptr<rss_feed> b) {
-				return a->get_order() < b->get_order();
-			});
-	} else if (sortmethod == "firsttag") {
-		std::stable_sort(feeds.begin(),
-			feeds.end(),
-			[](std::shared_ptr<rss_feed> a,
-				std::shared_ptr<rss_feed> b) {
-				if (a->get_firsttag().length() == 0 ||
-					b->get_firsttag().length() == 0) {
-					return a->get_firsttag().length() >
-						b->get_firsttag().length();
-				}
-				return strcasecmp(a->get_firsttag().c_str(),
-					       b->get_firsttag().c_str()) < 0;
-			});
-	} else if (sortmethod == "title") {
-		std::stable_sort(feeds.begin(),
-			feeds.end(),
-			[](std::shared_ptr<rss_feed> a,
-				std::shared_ptr<rss_feed> b) {
-				return strcasecmp(a->title().c_str(),
-					       b->title().c_str()) < 0;
-			});
-	} else if (sortmethod == "articlecount") {
-		std::stable_sort(feeds.begin(),
-			feeds.end(),
-			[](std::shared_ptr<rss_feed> a,
-				std::shared_ptr<rss_feed> b) {
-				return a->total_item_count() <
-					b->total_item_count();
-			});
-	} else if (sortmethod == "unreadarticlecount") {
-		std::stable_sort(feeds.begin(),
-			feeds.end(),
-			[](std::shared_ptr<rss_feed> a,
-				std::shared_ptr<rss_feed> b) {
-				return a->unread_item_count() <
-					b->unread_item_count();
-			});
-	} else if (sortmethod == "lastupdated") {
-		std::stable_sort(feeds.begin(),
-			feeds.end(),
-			[](std::shared_ptr<rss_feed> a,
-				std::shared_ptr<rss_feed> b) {
-				if (a->items().size() == 0 ||
-					b->items().size() == 0) {
-					return a->items().size() >
-						b->items().size();
-				}
-				auto cmp =
-					[](std::shared_ptr<rss_item> a,
-						std::shared_ptr<rss_item> b) {
-						return *a < *b;
-					};
-				auto& a_item =
-					*std::min_element(a->items().begin(),
-						a->items().end(),
-						cmp);
-				auto& b_item =
-					*std::min_element(b->items().begin(),
-						b->items().end(),
-						cmp);
-				return cmp(a_item, b_item);
-			});
-	}
-	if (direction == "asc") {
-		std::reverse(feeds.begin(), feeds.end());
-	}
-}
-
 void controller::update_config()
 {
 	v->set_regexmanager(&rxman);
@@ -1818,16 +1668,6 @@ void controller::dump_config(const std::string& filename)
 	}
 }
 
-unsigned int controller::get_pos_of_next_unread(unsigned int pos)
-{
-	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	for (pos++; pos < feeds.size(); pos++) {
-		if (feeds[pos]->unread_item_count() > 0)
-			break;
-	}
-	return pos;
-}
-
 void controller::update_flags(std::shared_ptr<rss_item> item)
 {
 	if (api) {
@@ -1835,35 +1675,6 @@ void controller::update_flags(std::shared_ptr<rss_item> item)
 			item->oldflags(), item->flags(), item->guid());
 	}
 	item->update_flags();
-}
-
-std::vector<std::shared_ptr<rss_feed>> controller::get_all_feeds()
-{
-	std::vector<std::shared_ptr<rss_feed>> tmpfeeds;
-	{
-		std::lock_guard<std::mutex> feedslock(feeds_mutex);
-		tmpfeeds = feeds;
-	}
-	return tmpfeeds;
-}
-
-std::vector<std::shared_ptr<rss_feed>> controller::get_all_feeds_unlocked()
-{
-	return feeds;
-}
-
-unsigned int controller::get_feed_count_per_tag(const std::string& tag)
-{
-	unsigned int count = 0;
-	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-
-	for (const auto& feed : feeds) {
-		if (feed->matches_tag(tag)) {
-			count++;
-		}
-	}
-
-	return count;
 }
 
 } // namespace newsboat
