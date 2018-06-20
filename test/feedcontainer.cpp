@@ -57,7 +57,8 @@ TEST_CASE("get_all_feeds() returns copy of FeedContainer's feed vector",
 	REQUIRE(feedcontainer.get_all_feeds() == feeds);
 }
 
-TEST_CASE("add_feed() adds specific feed to its \"feeds\" vector", "[feedcontainer]")
+TEST_CASE("add_feed() adds specific feed to its \"feeds\" vector",
+	"[feedcontainer]")
 {
 	FeedContainer feedcontainer;
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
@@ -71,8 +72,7 @@ TEST_CASE("add_feed() adds specific feed to its \"feeds\" vector", "[feedcontain
 	REQUIRE(feedcontainer.get_feed(0)->title_raw() == "Example feed");
 }
 
-TEST_CASE("populate_query_feeds() populates query feeds",
-	"[feedcontainer]")
+TEST_CASE("populate_query_feeds() populates query feeds", "[feedcontainer]")
 {
 	FeedContainer feedcontainer;
 	std::unique_ptr<configcontainer> cfg(new configcontainer());
@@ -353,7 +353,8 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 
 	SECTION("by unreadarticlecount asc")
 	{
-		cfg->set_configvalue("feed-sort-order", "unreadarticlecount-asc");
+		cfg->set_configvalue(
+			"feed-sort-order", "unreadarticlecount-asc");
 		feedcontainer.sort_feeds(cfg.get());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->unread_item_count() == 3);
@@ -365,7 +366,8 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 
 	SECTION("by unreadarticlecount desc")
 	{
-		cfg->set_configvalue("feed-sort-order", "unreadarticlecount-desc");
+		cfg->set_configvalue(
+			"feed-sort-order", "unreadarticlecount-desc");
 		feedcontainer.sort_feeds(cfg.get());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->unread_item_count() == 0);

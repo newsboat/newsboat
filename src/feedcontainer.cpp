@@ -1,8 +1,8 @@
 #include "feedcontainer.h"
 
 #include <algorithm> // stable_sort
+#include <numeric>   // accumulate
 #include <strings.h> // strcasecmp
-#include <numeric> // accumulate
 
 namespace newsboat {
 
@@ -152,7 +152,9 @@ std::shared_ptr<rss_feed> FeedContainer::get_feed_by_url(
 		if (feedurl == feed->rssurl())
 			return feed;
 	}
-	LOG(level::ERROR, "FeedContainer:get_feed_by_url failed for %s", feedurl);
+	LOG(level::ERROR,
+		"FeedContainer:get_feed_by_url failed for %s",
+		feedurl);
 	return std::shared_ptr<rss_feed>();
 }
 
