@@ -75,3 +75,6 @@ master repository and shell access to newsboat.org.
         * In "Channels" row, click "Release"
         * Tick all checkboxes ("stable", "candidate", "beta", and "edge")
         * Click "Release"
+11. Manage milestones https://github.com/newsboat/newsboat/milestones?with_issues=no
+    * Close the current one
+    * Create a new one with a date set to 25-ish of March/June/September/December
