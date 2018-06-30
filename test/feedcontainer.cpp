@@ -229,7 +229,7 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 	SECTION("by none asc")
 	{
 		cfg->set_configvalue("feed-sort-order", "none-asc");
-		feedcontainer.sort_feeds(cfg.get());
+		feedcontainer.sort_feeds(cfg->get_current_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->get_order() == 33);
 		REQUIRE(sorted_feeds[1]->get_order() == 10);
@@ -241,7 +241,7 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 	SECTION("by none desc")
 	{
 		cfg->set_configvalue("feed-sort-order", "none-desc");
-		feedcontainer.sort_feeds(cfg.get());
+		feedcontainer.sort_feeds(cfg->get_current_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->get_order() == 1);
 		REQUIRE(sorted_feeds[1]->get_order() == 4);
@@ -259,7 +259,7 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 	SECTION("by firsttag asc")
 	{
 		cfg->set_configvalue("feed-sort-order", "firsttag-asc");
-		feedcontainer.sort_feeds(cfg.get());
+		feedcontainer.sort_feeds(cfg->get_current_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->get_firsttag() == "Zaza");
 		REQUIRE(sorted_feeds[1]->get_firsttag() == "taggy");
@@ -271,7 +271,7 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 	SECTION("by firsttag desc")
 	{
 		cfg->set_configvalue("feed-sort-order", "firsttag-desc");
-		feedcontainer.sort_feeds(cfg.get());
+		feedcontainer.sort_feeds(cfg->get_current_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->get_firsttag() == "aa");
 		REQUIRE(sorted_feeds[1]->get_firsttag() == "aaa");
@@ -289,7 +289,7 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 	SECTION("by title asc")
 	{
 		cfg->set_configvalue("feed-sort-order", "title-asc");
-		feedcontainer.sort_feeds(cfg.get());
+		feedcontainer.sort_feeds(cfg->get_current_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->title() == "Zaza");
 		REQUIRE(sorted_feeds[1]->title() == "taggy");
@@ -301,7 +301,7 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 	SECTION("by title desc")
 	{
 		cfg->set_configvalue("feed-sort-order", "title-desc");
-		feedcontainer.sort_feeds(cfg.get());
+		feedcontainer.sort_feeds(cfg->get_current_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->title() == "aa");
 		REQUIRE(sorted_feeds[1]->title() == "aaa");
@@ -321,7 +321,7 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 	SECTION("by articlecount asc")
 	{
 		cfg->set_configvalue("feed-sort-order", "articlecount-asc");
-		feedcontainer.sort_feeds(cfg.get());
+		feedcontainer.sort_feeds(cfg->get_current_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->total_item_count() == 3);
 		REQUIRE(sorted_feeds[1]->total_item_count() == 2);
@@ -333,7 +333,7 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 	SECTION("by articlecount desc")
 	{
 		cfg->set_configvalue("feed-sort-order", "articlecount-desc");
-		feedcontainer.sort_feeds(cfg.get());
+		feedcontainer.sort_feeds(cfg->get_current_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->total_item_count() == 0);
 		REQUIRE(sorted_feeds[1]->total_item_count() == 1);
@@ -354,7 +354,7 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 	SECTION("by unreadarticlecount asc")
 	{
 		cfg->set_configvalue("feed-sort-order", "unreadarticlecount-asc");
-		feedcontainer.sort_feeds(cfg.get());
+		feedcontainer.sort_feeds(cfg->get_current_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->unread_item_count() == 3);
 		REQUIRE(sorted_feeds[1]->unread_item_count() == 2);
@@ -366,7 +366,7 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 	SECTION("by unreadarticlecount desc")
 	{
 		cfg->set_configvalue("feed-sort-order", "unreadarticlecount-desc");
-		feedcontainer.sort_feeds(cfg.get());
+		feedcontainer.sort_feeds(cfg->get_current_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->unread_item_count() == 0);
 		REQUIRE(sorted_feeds[1]->unread_item_count() == 1);
@@ -394,7 +394,7 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 	SECTION("by lastupdated asc")
 	{
 		cfg->set_configvalue("feed-sort-order", "lastupdated-asc");
-		feedcontainer.sort_feeds(cfg.get());
+		feedcontainer.sort_feeds(cfg->get_current_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0] == feeds[4]);
 		REQUIRE(sorted_feeds[1] == feeds[3]);
@@ -406,7 +406,7 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 	SECTION("by lastupdated desc")
 	{
 		cfg->set_configvalue("feed-sort-order", "lastupdated-desc");
-		feedcontainer.sort_feeds(cfg.get());
+		feedcontainer.sort_feeds(cfg->get_current_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0] == feeds[0]);
 		REQUIRE(sorted_feeds[1] == feeds[2]);

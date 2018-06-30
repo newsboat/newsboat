@@ -6,23 +6,20 @@
 
 namespace newsboat {
 
-void FeedContainer::sort_feeds(configcontainer* cfg)
+void FeedContainer::sort_feeds(const SortStrategy& sort_strategy)
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	const auto sortmethod_info =
-		utils::tokenize(cfg->get_configvalue("feed-sort-order"), "-");
-	std::string sortmethod = sortmethod_info[0];
-	std::string direction = "desc";
-	if (sortmethod_info.size() > 1)
-		direction = sortmethod_info[1];
-	if (sortmethod == "none") {
+
+	switch (sort_strategy.sm) {
+	case sort_method_t::NONE:
 		std::stable_sort(feeds.begin(),
 			feeds.end(),
 			[](std::shared_ptr<rss_feed> a,
 				std::shared_ptr<rss_feed> b) {
 				return a->get_order() < b->get_order();
 			});
-	} else if (sortmethod == "firsttag") {
+		break;
+	case sort_method_t::FIRST_TAG:
 		std::stable_sort(feeds.begin(),
 			feeds.end(),
 			[](std::shared_ptr<rss_feed> a,
@@ -35,7 +32,8 @@ void FeedContainer::sort_feeds(configcontainer* cfg)
 				return strcasecmp(a->get_firsttag().c_str(),
 					       b->get_firsttag().c_str()) < 0;
 			});
-	} else if (sortmethod == "title") {
+		break;
+	case sort_method_t::TITLE:
 		std::stable_sort(feeds.begin(),
 			feeds.end(),
 			[](std::shared_ptr<rss_feed> a,
@@ -43,7 +41,8 @@ void FeedContainer::sort_feeds(configcontainer* cfg)
 				return strcasecmp(a->title().c_str(),
 					       b->title().c_str()) < 0;
 			});
-	} else if (sortmethod == "articlecount") {
+		break;
+	case sort_method_t::ARTICLE_COUNT:
 		std::stable_sort(feeds.begin(),
 			feeds.end(),
 			[](std::shared_ptr<rss_feed> a,
@@ -51,7 +50,8 @@ void FeedContainer::sort_feeds(configcontainer* cfg)
 				return a->total_item_count() <
 					b->total_item_count();
 			});
-	} else if (sortmethod == "unreadarticlecount") {
+		break;
+	case sort_method_t::UNREAD_ARTICLE_COUNT:
 		std::stable_sort(feeds.begin(),
 			feeds.end(),
 			[](std::shared_ptr<rss_feed> a,
@@ -59,7 +59,8 @@ void FeedContainer::sort_feeds(configcontainer* cfg)
 				return a->unread_item_count() <
 					b->unread_item_count();
 			});
-	} else if (sortmethod == "lastupdated") {
+		break;
+	case sort_method_t::LAST_UPDATED:
 		std::stable_sort(feeds.begin(),
 			feeds.end(),
 			[](std::shared_ptr<rss_feed> a,
@@ -84,9 +85,15 @@ void FeedContainer::sort_feeds(configcontainer* cfg)
 						cmp);
 				return cmp(a_item, b_item);
 			});
+		break;
 	}
-	if (direction == "asc") {
+
+	switch (sort_strategy.sd) {
+	case sort_direction_t::ASC:
 		std::reverse(feeds.begin(), feeds.end());
+		break;
+	case sort_direction_t::DESC:
+		break;
 	}
 }
 

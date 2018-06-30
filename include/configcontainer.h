@@ -9,6 +9,22 @@ namespace newsboat {
 
 enum class configdata_t { INVALID, BOOL, INT, STR, PATH, ENUM };
 
+enum class sort_method_t {
+	NONE,
+	FIRST_TAG,
+	TITLE,
+	ARTICLE_COUNT,
+	UNREAD_ARTICLE_COUNT,
+	LAST_UPDATED
+};
+
+enum class sort_direction_t { ASC, DESC };
+
+struct SortStrategy {
+	sort_method_t sm;
+	sort_direction_t sd;
+};
+
 struct configdata {
 	configdata(const std::string& v = "",
 		configdata_t t = configdata_t::INVALID,
@@ -54,6 +70,7 @@ public:
 	void reset_to_default(const std::string& key);
 	void toggle(const std::string& key);
 	std::vector<std::string> get_suggestions(const std::string& fragment);
+	SortStrategy get_current_sort_strategy();
 
 	static const std::string PARTIAL_FILE_SUFFIX;
 

@@ -446,4 +446,39 @@ std::vector<std::string> configcontainer::get_suggestions(
 	return result;
 }
 
+SortStrategy configcontainer::get_current_sort_strategy()
+{
+	SortStrategy ss;
+	const auto sortmethod_info =
+		utils::tokenize(get_configvalue("feed-sort-order"), "-");
+	const std::string sortmethod = sortmethod_info[0];
+
+	std::string direction = "desc";
+	if (sortmethod_info.size() > 1) {
+		direction = sortmethod_info[1];
+	}
+
+	if (sortmethod == "none") {
+		ss.sm = sort_method_t::NONE;
+	} else if (sortmethod == "firsttag") {
+		ss.sm = sort_method_t::FIRST_TAG;
+	} else if (sortmethod == "title") {
+		ss.sm = sort_method_t::TITLE;
+	} else if (sortmethod == "articlecount") {
+		ss.sm = sort_method_t::ARTICLE_COUNT;
+	} else if (sortmethod == "unreadarticlecount") {
+		ss.sm = sort_method_t::UNREAD_ARTICLE_COUNT;
+	} else if (sortmethod == "lastupdated") {
+		ss.sm = sort_method_t::LAST_UPDATED;
+	}
+
+	if (direction == "asc") {
+		ss.sd = sort_direction_t::ASC;
+	} else if (direction == "desc") {
+		ss.sd = sort_direction_t::DESC;
+	}
+
+	return ss;
+}
+
 } // namespace newsboat
