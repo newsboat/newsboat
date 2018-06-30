@@ -9,6 +9,50 @@
 ### Fixed
 ### Security
 
+## 2.12 - 2018-06-24
+
+Lists below only mention user-visible changes, but I would also like to
+acknowledge contributions from the following people: Kamil Wsół and Simon
+Schuster.
+
+### Added
+- Ability to override path to `pkg-config` (Ali Lown)
+- Socket support in filebrowser (Sebastian Rakel)
+- `ls --classify`-like formatting for filenames in filebrowser (Sebastian Rakel)
+- Ability to sort feedlist by last update (TwilightSpectre) (#191)
+- `:q` as alternative to `:quit` (Franz König)
+- Support for `open-in-browser` in URL dialog, thus fixing many user macros in
+    that dialog (Felix Viernickel) (#194)
+- "Author" field for items fetched from Newsblur (Chris Nehren)
+- Coding style, mostly enforced through `clang-format`. Non-enforceable things
+    are documented in docs/code-style.markdown (Alexander Batischev)
+- A check in `bind-key` that will now throw an error on binding to
+    a non-existent operation (Nikos Tsipinakis)
+
+### Changed
+- The markup in docs, to be consistent throughout (Lysander Trischler)
+- HTTP to HTTPS in communication with The Old Reader (Richard Quirk)
+- Translations: Russian, Ukrainian (Alexander Batischev), Italian (Francesco
+    Ariis)
+
+### Fixed
+- `setlocale()` no longer fails on MacOS (Jacob Wahlgren, Alexander Batischev)
+    (#156)
+- Colors for unread items in all contributed colorschemes (@sandersantema)
+    (#163)
+- Segfaults in dialogs view when `swap-title-and-hints` is enabled (Alexander
+    Batischev) (#168)
+- Typo in JSON field name in TT-RSS API (Sebastian Rakel) (#177)
+- Filebrowser displaying "d" filetype for everything but regular files
+    (Sebastian Rakel) (#184)
+- TT-RSS relogin (Sebastian Rakel)
+- Internal HTML renderer not stripping whitespace in front of text (Alexander
+    Batischev) (#204)
+- Podboat breaking if XDG data dir already exists (Alexander Batischev)
+- Makefile failing if user overrode `ls` somehow (Alexander Batischev)
+- Various problems found by clang-analyzer and Coverity Scan (Alexander
+    Batischev)
+
 ## 2.11.1 - 2018-03-30
 
 ### Fixed

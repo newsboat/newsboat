@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.10.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2018-03-03 19:02+0300\n"
+"POT-Creation-Date: 2018-06-10 21:48+0300\n"
 "PO-Revision-Date: 2017-12-25 00:38+0100\n"
 "Last-Translator: František Hájik <ferko.hajik@gmail.com>\n"
 "Language-Team: František Hájik <ferko.hajik@gmail.com>\n"
@@ -32,7 +32,7 @@ msgstr ""
 msgid "Caught newsboat::exception with message: %s"
 msgstr ""
 
-#: src/cliargsparser.cpp:138 src/pb_controller.cpp:231
+#: src/cliargsparser.cpp:144 src/pb_controller.cpp:231
 #, c-format
 msgid "%s: %d: invalid loglevel value"
 msgstr "%s: %d: \"loglevel\" hodnota je neplatná"
@@ -101,17 +101,17 @@ msgstr "%N %V - Vybraný Tag"
 msgid "%N %V - URLs"
 msgstr "%N %V - URLs"
 
-#: src/configcontainer.cpp:289
+#: src/configcontainer.cpp:288
 #, c-format
 msgid "expected boolean value, found `%s' instead"
 msgstr "očakávaná bolean hodnota, namiesto toho nájdené `%s"
 
-#: src/configcontainer.cpp:297
+#: src/configcontainer.cpp:296
 #, c-format
 msgid "expected integer value, found `%s' instead"
 msgstr "očakávaná \"integer\" hodnota, namiesto toho nájdené `%s"
 
-#: src/configcontainer.cpp:306
+#: src/configcontainer.cpp:305
 #, c-format
 msgid "invalid configuration value `%s'"
 msgstr "`%s' nie je platný prvok konfigurácie'"
@@ -149,38 +149,33 @@ msgstr "Chyba: program %s už beží (PID: %u)"
 msgid "Loading configuration..."
 msgstr "Načítanie konfigurácie..."
 
-#: src/controller.cpp:233 src/controller.cpp:273 src/controller.cpp:330
-#: src/controller.cpp:382 src/controller.cpp:386 src/controller.cpp:423
-#: src/controller.cpp:440 src/controller.cpp:458 src/controller.cpp:469
-#: src/controller.cpp:511 src/pb_controller.cpp:298 src/pb_controller.cpp:315
+#: src/controller.cpp:233 src/controller.cpp:277 src/controller.cpp:334
+#: src/controller.cpp:386 src/controller.cpp:390 src/controller.cpp:427
+#: src/controller.cpp:444 src/controller.cpp:462 src/controller.cpp:473
+#: src/controller.cpp:515 src/pb_controller.cpp:298 src/pb_controller.cpp:315
 msgid "done."
 msgstr "hotovo."
 
-#: src/controller.cpp:253 src/controller.cpp:378
+#: src/controller.cpp:253 src/controller.cpp:382
 msgid "Opening cache..."
 msgstr "Otvorenie vyrovnávacej pamäte..."
 
-#: src/controller.cpp:260
+#: src/controller.cpp:260 src/controller.cpp:268
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Chyba: otvorenie \"cache\" súboru `%s' zlyhalo: %s"
 
-#: src/controller.cpp:267
-#, c-format
-msgid "Error: %s"
-msgstr ""
-
-#: src/controller.cpp:293
+#: src/controller.cpp:297
 #, c-format
 msgid "%s is inaccessible and can't be created\n"
 msgstr "%s je nedostupný a nemôže byť vytvorený\n"
 
-#: src/controller.cpp:319
+#: src/controller.cpp:323
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "Načítanie adries URL z %s..."
 
-#: src/controller.cpp:338
+#: src/controller.cpp:342
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
@@ -189,7 +184,7 @@ msgstr ""
 "Chyba: nenakonfigurované žiadne URL adresy. Prosím vyplňte súbor% s pomocou "
 "URL adries RSS alebo importujte súbor OPML."
 
-#: src/controller.cpp:344
+#: src/controller.cpp:348
 msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
@@ -197,7 +192,7 @@ msgstr ""
 "Vyzerá to tak, že OPML zdroj, neobsahuje žiadne kanály. Vyplňte ho kanálmi a "
 "skúste to znova."
 
-#: src/controller.cpp:349
+#: src/controller.cpp:353
 msgid ""
 "It looks like you haven't configured any feeds in your The Old Reader "
 "account. Please do so, and try again."
@@ -205,7 +200,7 @@ msgstr ""
 "Vyzerá to tak, že ste nenakonfigurovali žiadne kanály v účte The Old Reader. "
 "Urobte tak, a skúste to znova."
 
-#: src/controller.cpp:354
+#: src/controller.cpp:358
 msgid ""
 "It looks like you haven't configured any feeds in your Tiny Tiny RSS "
 "account. Please do so, and try again."
@@ -213,7 +208,7 @@ msgstr ""
 "Vyzerá to tak, že ste nenakonfigurovali žiadne kanály v účte Tiny Tiny RSS. "
 "Urobte tak, a skúste to znova."
 
-#: src/controller.cpp:359
+#: src/controller.cpp:363
 msgid ""
 "It looks like you haven't configured any feeds in your NewsBlur account. "
 "Please do so, and try again."
@@ -221,7 +216,7 @@ msgstr ""
 "Vyzerá to tak, že ste nenakonfigurovali žiadne kanály v účte NewsBlur. "
 "Urobte tak, a skúste to znova."
 
-#: src/controller.cpp:364
+#: src/controller.cpp:368
 msgid ""
 "It looks like you haven't configured any feeds in your Inoreader account. "
 "Please do so, and try again."
@@ -229,80 +224,80 @@ msgstr ""
 "Vyzerá to tak, že ste nenakonfigurovali žiadne kanály v účte Inoreader. "
 "Urobte tak, a skúste to znova."
 
-#: src/controller.cpp:376
+#: src/controller.cpp:380
 msgid "Loading articles from cache..."
 msgstr "Načítanie článkov zo súboru \"cache\"..."
 
-#: src/controller.cpp:383
+#: src/controller.cpp:387
 msgid "Cleaning up cache thoroughly..."
 msgstr "Dokladné vyčistenie \"cahce\"..."
 
-#: src/controller.cpp:404
+#: src/controller.cpp:408
 msgid "Error while loading feeds from database: "
 msgstr "Chyba pri načítavaní informačných kanálov z databázy: "
 
-#: src/controller.cpp:410
+#: src/controller.cpp:414
 #, c-format
 msgid "Error while loading feed '%s': %s"
 msgstr "Chyba pri načítaní informačného kanálu '%s': %s"
 
-#: src/controller.cpp:429
+#: src/controller.cpp:433
 msgid "Prepopulating query feeds..."
 msgstr "Predvolené dopyty kanálov..."
 
-#: src/controller.cpp:455
+#: src/controller.cpp:459
 msgid "Importing list of read articles..."
 msgstr "Importovať zoznam čítaných článkov..."
 
-#: src/controller.cpp:466
+#: src/controller.cpp:470
 msgid "Exporting list of read articles..."
 msgstr "Exportovať zoznam čítaných článkov..."
 
-#: src/controller.cpp:504
+#: src/controller.cpp:508
 msgid "Cleaning up cache..."
 msgstr "Vyčistenie \"cache\"..."
 
-#: src/controller.cpp:516
+#: src/controller.cpp:520
 msgid "failed: "
 msgstr "zlyhalo: "
 
-#: src/controller.cpp:542
+#: src/controller.cpp:546
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "Chyba: nemožno označiť všetky prečítané informačné kanály: %s"
 
-#: src/controller.cpp:618
+#: src/controller.cpp:622
 #, c-format
 msgid "%sLoading %s..."
 msgstr "%sNačítanie %s..."
 
-#: src/controller.cpp:669 src/controller.cpp:674 src/controller.cpp:679
+#: src/controller.cpp:673 src/controller.cpp:678 src/controller.cpp:683
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr "Chyba pri načítaní %s: %s"
 
-#: src/controller.cpp:689
+#: src/controller.cpp:693
 msgid "Error: invalid feed!"
 msgstr "Chyba: vadný kanál!"
 
-#: src/controller.cpp:697
+#: src/controller.cpp:701
 msgid "invalid feed index (bug)"
 msgstr "neplatný index kanála (bug)"
 
-#: src/controller.cpp:941
+#: src/controller.cpp:945
 #, fuzzy, c-format
 msgid ""
 "Newsboat is free software licensed under the MIT License. (Type `%s -vv' to "
 "see the full text.)"
 msgstr "newsboat je slobodný softvér a licencovaný pod licenciou MIT."
 
-#: src/controller.cpp:946
+#: src/controller.cpp:950
 msgid ""
 "It bundles JSON for Modern C++ library, licensed under the MIT License: "
 "https://github.com/nlohmann/json"
 msgstr ""
 
-#: src/controller.cpp:980
+#: src/controller.cpp:984
 #, c-format
 msgid ""
 "%s %s\n"
@@ -313,105 +308,105 @@ msgstr ""
 "usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] "
 "[-h]\n"
 
-#: src/controller.cpp:995
+#: src/controller.cpp:999
 msgid "export OPML feed to stdout"
 msgstr "export OPML kanálov do stdout"
 
-#: src/controller.cpp:996
+#: src/controller.cpp:1000
 msgid "refresh feeds on start"
 msgstr "obnoviť kanály pri štarte"
 
-#: src/controller.cpp:997 src/controller.cpp:1029 src/controller.cpp:1033
+#: src/controller.cpp:1001 src/controller.cpp:1033 src/controller.cpp:1037
 msgid "<file>"
 msgstr "<súbor>"
 
-#: src/controller.cpp:997
+#: src/controller.cpp:1001
 msgid "import OPML file"
 msgstr "import OPML súboru"
 
-#: src/controller.cpp:1000
+#: src/controller.cpp:1004
 msgid "<urlfile>"
 msgstr "<urlfile>"
 
-#: src/controller.cpp:1001
+#: src/controller.cpp:1005
 msgid "read RSS feed URLs from <urlfile>"
 msgstr "načítať URL adresy RSS kanálov z <urlfile>"
 
-#: src/controller.cpp:1004
+#: src/controller.cpp:1008
 msgid "<cachefile>"
 msgstr "<cachefile>"
 
-#: src/controller.cpp:1005
+#: src/controller.cpp:1009
 msgid "use <cachefile> as cache file"
 msgstr "použiť <cachefile> ako cache súbor"
 
-#: src/controller.cpp:1008 src/pb_controller.cpp:339
+#: src/controller.cpp:1012 src/pb_controller.cpp:339
 msgid "<configfile>"
 msgstr "<configfile>"
 
-#: src/controller.cpp:1009 src/pb_controller.cpp:340
+#: src/controller.cpp:1013 src/pb_controller.cpp:340
 msgid "read configuration from <configfile>"
 msgstr "načítať konfiguráciu z <configfile>"
 
-#: src/controller.cpp:1010
+#: src/controller.cpp:1014
 msgid "compact the cache"
 msgstr "stlačiť cache"
 
-#: src/controller.cpp:1013
+#: src/controller.cpp:1017
 msgid "<command>..."
 msgstr "<command>..."
 
-#: src/controller.cpp:1014
+#: src/controller.cpp:1018
 msgid "execute list of commands"
 msgstr "vykonať zoznam príkazov"
 
-#: src/controller.cpp:1015
+#: src/controller.cpp:1019
 msgid "quiet startup"
 msgstr "tichý startup"
 
-#: src/controller.cpp:1016
+#: src/controller.cpp:1020
 msgid "get version information"
 msgstr "získať informácie o verzii"
 
-#: src/controller.cpp:1019 src/pb_controller.cpp:348
+#: src/controller.cpp:1023 src/pb_controller.cpp:348
 msgid "<loglevel>"
 msgstr "<loglevel>"
 
-#: src/controller.cpp:1020 src/pb_controller.cpp:349
+#: src/controller.cpp:1024 src/pb_controller.cpp:349
 msgid "write a log with a certain loglevel (valid values: 1 to 6)"
 msgstr "napísať protokol (log) s určitým loglevelom (platné hodnoty: 1 až 6)"
 
-#: src/controller.cpp:1025 src/pb_controller.cpp:354
+#: src/controller.cpp:1029 src/pb_controller.cpp:354
 msgid "<logfile>"
 msgstr "<logfile>"
 
-#: src/controller.cpp:1026 src/pb_controller.cpp:355
+#: src/controller.cpp:1030 src/pb_controller.cpp:355
 msgid "use <logfile> as output log file"
 msgstr "použitie <logfile> ako výstupného log súboru"
 
-#: src/controller.cpp:1030
+#: src/controller.cpp:1034
 msgid "export list of read articles to <file>"
 msgstr "export zoznamu čítaných článkov do súboru <file>"
 
-#: src/controller.cpp:1034
+#: src/controller.cpp:1038
 msgid "import list of read articles from <file>"
 msgstr "import zoznamu čítaných článkov zo súboru <file>"
 
-#: src/controller.cpp:1035 src/pb_controller.cpp:356
+#: src/controller.cpp:1039 src/pb_controller.cpp:356
 msgid "this help"
 msgstr "tento pomocník"
 
-#: src/controller.cpp:1055
+#: src/controller.cpp:1059
 #, c-format
 msgid "An error occurred while parsing %s."
 msgstr "Vyskytla sa chyba počas \"parsingu\" %s."
 
-#: src/controller.cpp:1073
+#: src/controller.cpp:1077
 #, c-format
 msgid "Import of %s finished."
 msgstr "Import %s ukončený."
 
-#: src/controller.cpp:1435
+#: src/controller.cpp:1440
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -419,38 +414,38 @@ msgstr ""
 "podpora záložiek nie je nakonfigurovaná. Nastavte prosím adekvátne premennú "
 "`bookmark-cmd' v konfigurácii."
 
-#: src/controller.cpp:1452
+#: src/controller.cpp:1456
 #, c-format
 msgid "%u unread articles"
 msgstr "%u neprečítaných článkov"
 
-#: src/controller.cpp:1457
+#: src/controller.cpp:1461
 #, c-format
 msgid "%s: %s: unknown command"
 msgstr "%s: %s: neznámy príkaz"
 
-#: src/controller.cpp:1498 src/formaction.cpp:417 src/formaction.cpp:419
+#: src/controller.cpp:1501 src/formaction.cpp:417 src/formaction.cpp:419
 #: src/itemview_formaction.cpp:94
 msgid "Title: "
 msgstr "Titulok: "
 
-#: src/controller.cpp:1502 src/itemview_formaction.cpp:101
+#: src/controller.cpp:1505 src/itemview_formaction.cpp:101
 msgid "Author: "
 msgstr "Autor: "
 
-#: src/controller.cpp:1506 src/itemview_formaction.cpp:114
+#: src/controller.cpp:1509 src/itemview_formaction.cpp:114
 msgid "Date: "
 msgstr "Dátum: "
 
-#: src/controller.cpp:1510 src/itemview_formaction.cpp:108
+#: src/controller.cpp:1513 src/itemview_formaction.cpp:108
 msgid "Link: "
 msgstr "Odkaz: "
 
-#: src/controller.cpp:1515 src/itemview_formaction.cpp:125
+#: src/controller.cpp:1518 src/itemview_formaction.cpp:125
 msgid "Podcast Download URL: "
 msgstr "Podcast Download URL: "
 
-#: src/controller.cpp:1793
+#: src/controller.cpp:1796
 #, c-format
 msgid "Error: couldn't open configuration file `%s'!"
 msgstr "Chyba: nemožno otvoriť konfiguračný súbor `%s'!"
@@ -555,16 +550,16 @@ msgstr "súbor nemôže byť otvorený."
 msgid "unknown error (bug)."
 msgstr "neznáma chyba (bug)."
 
-#: src/feedhq_urlreader.cpp:51 src/oldreader_urlreader.cpp:52
+#: src/feedhq_urlreader.cpp:48 src/oldreader_urlreader.cpp:49
 msgid "People you follow"
 msgstr "Ľudia, ktorých sledujete"
 
-#: src/feedhq_urlreader.cpp:53 src/inoreader_urlreader.cpp:50
-#: src/oldreader_urlreader.cpp:54
+#: src/feedhq_urlreader.cpp:50 src/inoreader_urlreader.cpp:50
+#: src/oldreader_urlreader.cpp:51
 msgid "Starred items"
 msgstr "Položky označené hviezdičkou"
 
-#: src/feedhq_urlreader.cpp:54 src/oldreader_urlreader.cpp:55
+#: src/feedhq_urlreader.cpp:51 src/oldreader_urlreader.cpp:52
 msgid "Shared items"
 msgstr "Zdieľané položky"
 
@@ -1362,12 +1357,7 @@ msgstr "Prejsť na koniec stránky/zoznamu"
 msgid "`%s' is not a valid context"
 msgstr "`%s' nie je platný kontext"
 
-#: src/keymap.cpp:575
-#, fuzzy, c-format
-msgid "'%s' is not a valid key command"
-msgstr "`%s' nie je platný príkaz kľúča"
-
-#: src/keymap.cpp:614
+#: src/keymap.cpp:575 src/keymap.cpp:614
 #, c-format
 msgid "`%s' is not a valid key command"
 msgstr "`%s' nie je platný príkaz kľúča"
@@ -1575,6 +1565,10 @@ msgstr "nepodporovaný \"feed\" formát"
 #: rss/rss_09x_parser.cpp:39
 msgid "no RSS channel found"
 msgstr "žiadny RSS kanál sa nenašiel"
+
+#, fuzzy
+#~ msgid "'%s' is not a valid key command"
+#~ msgstr "`%s' nie je platný príkaz kľúča"
 
 #~ msgid "Type `%s -vv' for more information."
 #~ msgstr "Zadajte `%s -vv' pre viac informácií."

@@ -322,22 +322,14 @@ void configcontainer::handle_action(const std::string& action,
 
 bool configcontainer::is_bool(const std::string& s)
 {
-	const char* bool_values[] = {"yes", "no", "true", "false", 0};
-	for (int i = 0; bool_values[i]; ++i) {
-		if (s == bool_values[i])
-			return true;
-	}
-	return false;
+	const auto bool_values = {"yes", "no", "true", "false"};
+	return (std::find(bool_values.begin(), bool_values.end(), s) !=
+		bool_values.end());
 }
 
 bool configcontainer::is_int(const std::string& s)
 {
-	const char* s1 = s.c_str();
-	for (; *s1; s1++) {
-		if (!isdigit(*s1))
-			return false;
-	}
-	return true;
+	return std::all_of(s.begin(), s.end(), ::isdigit);
 }
 
 std::string configcontainer::get_configvalue(const std::string& key)
@@ -346,7 +338,6 @@ std::string configcontainer::get_configvalue(const std::string& key)
 	if (config_data[key].type == configdata_t::PATH) {
 		retval = utils::resolve_tilde(retval);
 	}
-
 	return retval;
 }
 
@@ -361,9 +352,7 @@ int configcontainer::get_configvalue_as_int(const std::string& key)
 bool configcontainer::get_configvalue_as_bool(const std::string& key)
 {
 	std::string value = config_data[key].value;
-	if (value == "true" || value == "yes")
-		return true;
-	return false;
+	return (value == "true" || value == "yes");
 }
 
 void configcontainer::set_configvalue(const std::string& key,

@@ -20,12 +20,12 @@ void oldreader_urlreader::write_config()
 	// NOTHING
 }
 
-#define BROADCAST_FRIENDS_URL                                          \
+#define BROADCAST_FRIENDS_URL                                           \
 	"https://theoldreader.com/reader/atom/user/-/state/com.google/" \
 	"broadcast-friends"
 #define STARRED_ITEMS_URL \
 	"https://theoldreader.com/reader/atom/user/-/state/com.google/starred"
-#define SHARED_ITEMS_URL                                               \
+#define SHARED_ITEMS_URL                                                \
 	"https://theoldreader.com/reader/atom/user/-/state/com.google/" \
 	"broadcast"
 

@@ -510,7 +510,8 @@ void view::push_itemlist(std::shared_ptr<rss_feed> feed)
 
 void view::push_itemlist(unsigned int pos)
 {
-	std::shared_ptr<rss_feed> feed = ctrl->get_feedcontainer()->get_feed(pos);
+	std::shared_ptr<rss_feed> feed =
+		ctrl->get_feedcontainer()->get_feed(pos);
 	LOG(level::DEBUG,
 		"view::push_itemlist: retrieved feed at position %d",
 		pos);

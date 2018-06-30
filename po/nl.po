@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2018-03-03 19:02+0300\n"
+"POT-Creation-Date: 2018-06-10 21:48+0300\n"
 "PO-Revision-Date: 2013-10-26 22:20+0100\n"
 "Last-Translator: Erwin Poeze <donnut@outlook.com>\n"
 "Language-Team: Dutch <vertalen@vrijschrift.org>\n"
@@ -30,7 +30,7 @@ msgstr ""
 msgid "Caught newsboat::exception with message: %s"
 msgstr ""
 
-#: src/cliargsparser.cpp:138 src/pb_controller.cpp:231
+#: src/cliargsparser.cpp:144 src/pb_controller.cpp:231
 #, c-format
 msgid "%s: %d: invalid loglevel value"
 msgstr "%s: %d: logniveau is ongeldig"
@@ -98,17 +98,17 @@ msgstr "%N %V - Tag selecteren"
 msgid "%N %V - URLs"
 msgstr "%N %V - URLs"
 
-#: src/configcontainer.cpp:289
+#: src/configcontainer.cpp:288
 #, c-format
 msgid "expected boolean value, found `%s' instead"
 msgstr "verwachtte boolaanse waarden, maar ontving ‘%s'"
 
-#: src/configcontainer.cpp:297
+#: src/configcontainer.cpp:296
 #, c-format
 msgid "expected integer value, found `%s' instead"
 msgstr "verwachtte geheel getal, maar ontving ‘%s'"
 
-#: src/configcontainer.cpp:306
+#: src/configcontainer.cpp:305
 #, c-format
 msgid "invalid configuration value `%s'"
 msgstr "Configuratiewaarde ‘%s’ is ongeldig"
@@ -146,38 +146,33 @@ msgstr "Fout: er draait al een instantie van %s (PID: %u)"
 msgid "Loading configuration..."
 msgstr "Laden van de configuratie…"
 
-#: src/controller.cpp:233 src/controller.cpp:273 src/controller.cpp:330
-#: src/controller.cpp:382 src/controller.cpp:386 src/controller.cpp:423
-#: src/controller.cpp:440 src/controller.cpp:458 src/controller.cpp:469
-#: src/controller.cpp:511 src/pb_controller.cpp:298 src/pb_controller.cpp:315
+#: src/controller.cpp:233 src/controller.cpp:277 src/controller.cpp:334
+#: src/controller.cpp:386 src/controller.cpp:390 src/controller.cpp:427
+#: src/controller.cpp:444 src/controller.cpp:462 src/controller.cpp:473
+#: src/controller.cpp:515 src/pb_controller.cpp:298 src/pb_controller.cpp:315
 msgid "done."
 msgstr " klaar"
 
-#: src/controller.cpp:253 src/controller.cpp:378
+#: src/controller.cpp:253 src/controller.cpp:382
 msgid "Opening cache..."
 msgstr "Openen van de cache…"
 
-#: src/controller.cpp:260
+#: src/controller.cpp:260 src/controller.cpp:268
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Fout: openen van het cachebestand ‘%s’ is mislukt: %s"
 
-#: src/controller.cpp:267
-#, c-format
-msgid "Error: %s"
-msgstr ""
-
-#: src/controller.cpp:293
+#: src/controller.cpp:297
 #, c-format
 msgid "%s is inaccessible and can't be created\n"
 msgstr ""
 
-#: src/controller.cpp:319
+#: src/controller.cpp:323
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "URLs laden uit %s…"
 
-#: src/controller.cpp:338
+#: src/controller.cpp:342
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
@@ -186,7 +181,7 @@ msgstr ""
 "Fout: geen URLs geconfigureerd. Plaats URLs RSS-feed in het bestand %s of "
 "importeer een OPML-bestand."
 
-#: src/controller.cpp:344
+#: src/controller.cpp:348
 msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
@@ -194,7 +189,7 @@ msgstr ""
 "Blijkbaar bevat de OPML-feed waar uw zich op heeft geabonneerd geen feeds. "
 "Vul het met feeds en probeer het dan opnieuw."
 
-#: src/controller.cpp:349
+#: src/controller.cpp:353
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your The Old Reader "
@@ -203,7 +198,7 @@ msgstr ""
 "Blijkbaar hebt u nog geen feeds geconfigureerd in uw Google Reader-account. "
 "Configureer enkele feeds en probeer dan opnieuw."
 
-#: src/controller.cpp:354
+#: src/controller.cpp:358
 msgid ""
 "It looks like you haven't configured any feeds in your Tiny Tiny RSS "
 "account. Please do so, and try again."
@@ -211,7 +206,7 @@ msgstr ""
 "Blijkbaar hebt u nog geen feeds geconfigureerd in uw Tiny Tiny RSS-account. "
 "Configureer enkele feeds en probeer dan opnieuw."
 
-#: src/controller.cpp:359
+#: src/controller.cpp:363
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your NewsBlur account. "
@@ -220,7 +215,7 @@ msgstr ""
 "Blijkbaar hebt u nog geen feeds geconfigureerd in uw Google Reader-account. "
 "Configureer enkele feeds en probeer dan opnieuw."
 
-#: src/controller.cpp:364
+#: src/controller.cpp:368
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Inoreader account. "
@@ -229,67 +224,67 @@ msgstr ""
 "Blijkbaar hebt u nog geen feeds geconfigureerd in uw Google Reader-account. "
 "Configureer enkele feeds en probeer dan opnieuw."
 
-#: src/controller.cpp:376
+#: src/controller.cpp:380
 msgid "Loading articles from cache..."
 msgstr "Laden van artikelen uit de cache…"
 
-#: src/controller.cpp:383
+#: src/controller.cpp:387
 msgid "Cleaning up cache thoroughly..."
 msgstr "Grondig opruimen van de cache…"
 
-#: src/controller.cpp:404
+#: src/controller.cpp:408
 msgid "Error while loading feeds from database: "
 msgstr "Fout bij het laden van feeds uit de database: "
 
-#: src/controller.cpp:410
+#: src/controller.cpp:414
 #, c-format
 msgid "Error while loading feed '%s': %s"
 msgstr "Fout tijdens het laden van ‘%s’: %s"
 
-#: src/controller.cpp:429
+#: src/controller.cpp:433
 msgid "Prepopulating query feeds..."
 msgstr "Feedzoekopdrachten voorinvullen…"
 
-#: src/controller.cpp:455
+#: src/controller.cpp:459
 msgid "Importing list of read articles..."
 msgstr "Importeren van lijst van gelezen artikelen…"
 
-#: src/controller.cpp:466
+#: src/controller.cpp:470
 msgid "Exporting list of read articles..."
 msgstr "Exporteren van lijst van gelezen artikelen…"
 
-#: src/controller.cpp:504
+#: src/controller.cpp:508
 msgid "Cleaning up cache..."
 msgstr "Opruimen van de cache…"
 
-#: src/controller.cpp:516
+#: src/controller.cpp:520
 msgid "failed: "
 msgstr "mislukt: "
 
-#: src/controller.cpp:542
+#: src/controller.cpp:546
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "Fout: alle feeds als gelezen markeren is mislukt: %s"
 
-#: src/controller.cpp:618
+#: src/controller.cpp:622
 #, c-format
 msgid "%sLoading %s..."
 msgstr "%sLaden van %s…"
 
-#: src/controller.cpp:669 src/controller.cpp:674 src/controller.cpp:679
+#: src/controller.cpp:673 src/controller.cpp:678 src/controller.cpp:683
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr "Ophalen van ‘%s’ is mislukt: %s"
 
-#: src/controller.cpp:689
+#: src/controller.cpp:693
 msgid "Error: invalid feed!"
 msgstr "Fout: ongeldige feed!"
 
-#: src/controller.cpp:697
+#: src/controller.cpp:701
 msgid "invalid feed index (bug)"
 msgstr "ongeldige feed-index (bug)"
 
-#: src/controller.cpp:941
+#: src/controller.cpp:945
 #, fuzzy, c-format
 msgid ""
 "Newsboat is free software licensed under the MIT License. (Type `%s -vv' to "
@@ -297,13 +292,13 @@ msgid ""
 msgstr ""
 "newsboat is vrije software en gelicenseerd onder de MIT/X Consortium License."
 
-#: src/controller.cpp:946
+#: src/controller.cpp:950
 msgid ""
 "It bundles JSON for Modern C++ library, licensed under the MIT License: "
 "https://github.com/nlohmann/json"
 msgstr ""
 
-#: src/controller.cpp:980
+#: src/controller.cpp:984
 #, c-format
 msgid ""
 "%s %s\n"
@@ -314,105 +309,105 @@ msgstr ""
 "gebruik: %s [-i <bestand>|-e] [-u <urlbestand>] [-c <cachebestand>] [-x "
 "<opdracht> …] [-h]\n"
 
-#: src/controller.cpp:995
+#: src/controller.cpp:999
 msgid "export OPML feed to stdout"
 msgstr "OPML-feed naar stdout exporteren"
 
-#: src/controller.cpp:996
+#: src/controller.cpp:1000
 msgid "refresh feeds on start"
 msgstr "feeds bij opstarten vernieuwen"
 
-#: src/controller.cpp:997 src/controller.cpp:1029 src/controller.cpp:1033
+#: src/controller.cpp:1001 src/controller.cpp:1033 src/controller.cpp:1037
 msgid "<file>"
 msgstr "<bestand>"
 
-#: src/controller.cpp:997
+#: src/controller.cpp:1001
 msgid "import OPML file"
 msgstr "OPML-bestand importeren"
 
-#: src/controller.cpp:1000
+#: src/controller.cpp:1004
 msgid "<urlfile>"
 msgstr "<bestand>"
 
-#: src/controller.cpp:1001
+#: src/controller.cpp:1005
 msgid "read RSS feed URLs from <urlfile>"
 msgstr "URLs van RSS-feed uit <bestand> lezen"
 
-#: src/controller.cpp:1004
+#: src/controller.cpp:1008
 msgid "<cachefile>"
 msgstr "<bestand>"
 
-#: src/controller.cpp:1005
+#: src/controller.cpp:1009
 msgid "use <cachefile> as cache file"
 msgstr "<bestand> als cachebestand gebruiken"
 
-#: src/controller.cpp:1008 src/pb_controller.cpp:339
+#: src/controller.cpp:1012 src/pb_controller.cpp:339
 msgid "<configfile>"
 msgstr "<bestand>"
 
-#: src/controller.cpp:1009 src/pb_controller.cpp:340
+#: src/controller.cpp:1013 src/pb_controller.cpp:340
 msgid "read configuration from <configfile>"
 msgstr "configuratie uit <bestand> lezen"
 
-#: src/controller.cpp:1010
+#: src/controller.cpp:1014
 msgid "compact the cache"
 msgstr ""
 
-#: src/controller.cpp:1013
+#: src/controller.cpp:1017
 msgid "<command>..."
 msgstr "<opdracht>…"
 
-#: src/controller.cpp:1014
+#: src/controller.cpp:1018
 msgid "execute list of commands"
 msgstr "lijst van opdrachten uitvoeren"
 
-#: src/controller.cpp:1015
+#: src/controller.cpp:1019
 msgid "quiet startup"
 msgstr "opstarten zonder opdrachtregeluitvoer"
 
-#: src/controller.cpp:1016
+#: src/controller.cpp:1020
 msgid "get version information"
 msgstr "versie-informatie tonen"
 
-#: src/controller.cpp:1019 src/pb_controller.cpp:348
+#: src/controller.cpp:1023 src/pb_controller.cpp:348
 msgid "<loglevel>"
 msgstr "<niveau>"
 
-#: src/controller.cpp:1020 src/pb_controller.cpp:349
+#: src/controller.cpp:1024 src/pb_controller.cpp:349
 msgid "write a log with a certain loglevel (valid values: 1 to 6)"
 msgstr "log op <niveau> wegschrijven (geldige waarden: 1 tot 6)"
 
-#: src/controller.cpp:1025 src/pb_controller.cpp:354
+#: src/controller.cpp:1029 src/pb_controller.cpp:354
 msgid "<logfile>"
 msgstr "<bestand>"
 
-#: src/controller.cpp:1026 src/pb_controller.cpp:355
+#: src/controller.cpp:1030 src/pb_controller.cpp:355
 msgid "use <logfile> as output log file"
 msgstr "<bestand> als logbestand gebruiken"
 
-#: src/controller.cpp:1030
+#: src/controller.cpp:1034
 msgid "export list of read articles to <file>"
 msgstr "exporteren lijst van gelezen artikelen naar <bestand>"
 
-#: src/controller.cpp:1034
+#: src/controller.cpp:1038
 msgid "import list of read articles from <file>"
 msgstr "importeren lijst van gelezen artikelen uit <bestand>"
 
-#: src/controller.cpp:1035 src/pb_controller.cpp:356
+#: src/controller.cpp:1039 src/pb_controller.cpp:356
 msgid "this help"
 msgstr "deze hulptekst"
 
-#: src/controller.cpp:1055
+#: src/controller.cpp:1059
 #, c-format
 msgid "An error occurred while parsing %s."
 msgstr "Het ontleden van %s is mislukt."
 
-#: src/controller.cpp:1073
+#: src/controller.cpp:1077
 #, c-format
 msgid "Import of %s finished."
 msgstr "Klaar met importeren van %s."
 
-#: src/controller.cpp:1435
+#: src/controller.cpp:1440
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -420,38 +415,38 @@ msgstr ""
 "bladwijzerondersteuning is niet geconfigureerd. Corrigeer de waarde van de "
 "configuratievariabele ‘bookmark-cmd’."
 
-#: src/controller.cpp:1452
+#: src/controller.cpp:1456
 #, c-format
 msgid "%u unread articles"
 msgstr "%u ongelezen artikelen"
 
-#: src/controller.cpp:1457
+#: src/controller.cpp:1461
 #, c-format
 msgid "%s: %s: unknown command"
 msgstr "%s: %s: onbekende opdracht"
 
-#: src/controller.cpp:1498 src/formaction.cpp:417 src/formaction.cpp:419
+#: src/controller.cpp:1501 src/formaction.cpp:417 src/formaction.cpp:419
 #: src/itemview_formaction.cpp:94
 msgid "Title: "
 msgstr "Titel: "
 
-#: src/controller.cpp:1502 src/itemview_formaction.cpp:101
+#: src/controller.cpp:1505 src/itemview_formaction.cpp:101
 msgid "Author: "
 msgstr "Auteur: "
 
-#: src/controller.cpp:1506 src/itemview_formaction.cpp:114
+#: src/controller.cpp:1509 src/itemview_formaction.cpp:114
 msgid "Date: "
 msgstr "Datum: "
 
-#: src/controller.cpp:1510 src/itemview_formaction.cpp:108
+#: src/controller.cpp:1513 src/itemview_formaction.cpp:108
 msgid "Link: "
 msgstr "Koppeling: "
 
-#: src/controller.cpp:1515 src/itemview_formaction.cpp:125
+#: src/controller.cpp:1518 src/itemview_formaction.cpp:125
 msgid "Podcast Download URL: "
 msgstr "Download-URL podcast: "
 
-#: src/controller.cpp:1793
+#: src/controller.cpp:1796
 #, c-format
 msgid "Error: couldn't open configuration file `%s'!"
 msgstr "Fout: configuratiebestand ‘%s’ openen is mislukt!"
@@ -556,16 +551,16 @@ msgstr "bestand openen is mislukt."
 msgid "unknown error (bug)."
 msgstr "onbekende fout (bug)."
 
-#: src/feedhq_urlreader.cpp:51 src/oldreader_urlreader.cpp:52
+#: src/feedhq_urlreader.cpp:48 src/oldreader_urlreader.cpp:49
 msgid "People you follow"
 msgstr "Mensen die u volgt"
 
-#: src/feedhq_urlreader.cpp:53 src/inoreader_urlreader.cpp:50
-#: src/oldreader_urlreader.cpp:54
+#: src/feedhq_urlreader.cpp:50 src/inoreader_urlreader.cpp:50
+#: src/oldreader_urlreader.cpp:51
 msgid "Starred items"
 msgstr "Favoriete items"
 
-#: src/feedhq_urlreader.cpp:54 src/oldreader_urlreader.cpp:55
+#: src/feedhq_urlreader.cpp:51 src/oldreader_urlreader.cpp:52
 msgid "Shared items"
 msgstr "Gedeelde items"
 
@@ -1359,12 +1354,7 @@ msgstr "naar einde van pagina/lijst"
 msgid "`%s' is not a valid context"
 msgstr "‘%s’ is een ongeldige context"
 
-#: src/keymap.cpp:575
-#, fuzzy, c-format
-msgid "'%s' is not a valid key command"
-msgstr "‘%s’ is een ongeldige toetsopdracht"
-
-#: src/keymap.cpp:614
+#: src/keymap.cpp:575 src/keymap.cpp:614
 #, c-format
 msgid "`%s' is not a valid key command"
 msgstr "‘%s’ is een ongeldige toetsopdracht"
@@ -1575,6 +1565,10 @@ msgstr "feed-type wordt niet ondersteund"
 #: rss/rss_09x_parser.cpp:39
 msgid "no RSS channel found"
 msgstr "RSS-kanaal niet gevonden"
+
+#, fuzzy
+#~ msgid "'%s' is not a valid key command"
+#~ msgstr "‘%s’ is een ongeldige toetsopdracht"
 
 #~ msgid "Type `%s -vv' for more information."
 #~ msgstr "Typ ‘%s -vv’ voor meer informatie"
