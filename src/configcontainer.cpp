@@ -435,7 +435,7 @@ std::vector<std::string> configcontainer::get_suggestions(
 	return result;
 }
 
-SortStrategy configcontainer::get_current_sort_strategy()
+SortStrategy configcontainer::get_feed_sort_strategy()
 {
 	SortStrategy ss;
 	const auto sortmethod_info =

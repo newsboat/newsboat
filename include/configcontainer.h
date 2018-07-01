@@ -70,7 +70,7 @@ public:
 	void reset_to_default(const std::string& key);
 	void toggle(const std::string& key);
 	std::vector<std::string> get_suggestions(const std::string& fragment);
-	SortStrategy get_current_sort_strategy();
+	SortStrategy get_feed_sort_strategy();
 
 	static const std::string PARTIAL_FILE_SUFFIX;
 

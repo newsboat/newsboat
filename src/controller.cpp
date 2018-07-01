@@ -436,7 +436,7 @@ int controller::run(int argc, char* argv[])
 		}
 	}
 
-	feedcontainer.sort_feeds(cfg.get_current_sort_strategy());
+	feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 
 	if (args.do_export) {
 		export_opml();
@@ -801,7 +801,7 @@ void controller::reload_all(bool unattended)
 	}
 	v->force_redraw();
 
-	feedcontainer.sort_feeds(cfg.get_current_sort_strategy());
+	feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 	update_feedlist();
 
 	t2 = time(nullptr);
@@ -1295,7 +1295,7 @@ void controller::reload_urls_file()
 	v->set_tags(urlcfg->get_alltags());
 
 	feedcontainer.set_feeds(new_feeds);
-	feedcontainer.sort_feeds(cfg.get_current_sort_strategy());
+	feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 	update_feedlist();
 }
 
