@@ -9,7 +9,7 @@ namespace newsboat {
 
 enum class configdata_t { INVALID, BOOL, INT, STR, PATH, ENUM };
 
-enum class sort_method_t {
+enum class feed_sort_method_t {
 	NONE,
 	FIRST_TAG,
 	TITLE,
@@ -29,8 +29,8 @@ enum class art_sort_method_t {
 
 enum class sort_direction_t { ASC, DESC };
 
-struct SortStrategy {
-	sort_method_t sm;
+struct FeedSortStrategy {
+	feed_sort_method_t sm;
 	sort_direction_t sd;
 };
 
@@ -94,7 +94,7 @@ public:
 	void reset_to_default(const std::string& key);
 	void toggle(const std::string& key);
 	std::vector<std::string> get_suggestions(const std::string& fragment);
-	SortStrategy get_feed_sort_strategy();
+	FeedSortStrategy get_feed_sort_strategy();
 	ArticleSortStrategy get_article_sort_strategy();
 
 	static const std::string PARTIAL_FILE_SUFFIX;

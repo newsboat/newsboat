@@ -6,12 +6,12 @@
 
 namespace newsboat {
 
-void FeedContainer::sort_feeds(const SortStrategy& sort_strategy)
+void FeedContainer::sort_feeds(const FeedSortStrategy& sort_strategy)
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
 
 	switch (sort_strategy.sm) {
-	case sort_method_t::NONE:
+	case feed_sort_method_t::NONE:
 		std::stable_sort(feeds.begin(),
 			feeds.end(),
 			[](std::shared_ptr<rss_feed> a,
@@ -19,7 +19,7 @@ void FeedContainer::sort_feeds(const SortStrategy& sort_strategy)
 				return a->get_order() < b->get_order();
 			});
 		break;
-	case sort_method_t::FIRST_TAG:
+	case feed_sort_method_t::FIRST_TAG:
 		std::stable_sort(feeds.begin(),
 			feeds.end(),
 			[](std::shared_ptr<rss_feed> a,
@@ -33,7 +33,7 @@ void FeedContainer::sort_feeds(const SortStrategy& sort_strategy)
 					       b->get_firsttag().c_str()) < 0;
 			});
 		break;
-	case sort_method_t::TITLE:
+	case feed_sort_method_t::TITLE:
 		std::stable_sort(feeds.begin(),
 			feeds.end(),
 			[](std::shared_ptr<rss_feed> a,
@@ -42,7 +42,7 @@ void FeedContainer::sort_feeds(const SortStrategy& sort_strategy)
 					       b->title().c_str()) < 0;
 			});
 		break;
-	case sort_method_t::ARTICLE_COUNT:
+	case feed_sort_method_t::ARTICLE_COUNT:
 		std::stable_sort(feeds.begin(),
 			feeds.end(),
 			[](std::shared_ptr<rss_feed> a,
@@ -51,7 +51,7 @@ void FeedContainer::sort_feeds(const SortStrategy& sort_strategy)
 					b->total_item_count();
 			});
 		break;
-	case sort_method_t::UNREAD_ARTICLE_COUNT:
+	case feed_sort_method_t::UNREAD_ARTICLE_COUNT:
 		std::stable_sort(feeds.begin(),
 			feeds.end(),
 			[](std::shared_ptr<rss_feed> a,
@@ -60,7 +60,7 @@ void FeedContainer::sort_feeds(const SortStrategy& sort_strategy)
 					b->unread_item_count();
 			});
 		break;
-	case sort_method_t::LAST_UPDATED:
+	case feed_sort_method_t::LAST_UPDATED:
 		std::stable_sort(feeds.begin(),
 			feeds.end(),
 			[](std::shared_ptr<rss_feed> a,

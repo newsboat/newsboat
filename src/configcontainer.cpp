@@ -435,9 +435,9 @@ std::vector<std::string> configcontainer::get_suggestions(
 	return result;
 }
 
-SortStrategy configcontainer::get_feed_sort_strategy()
+FeedSortStrategy configcontainer::get_feed_sort_strategy()
 {
-	SortStrategy ss;
+	FeedSortStrategy ss;
 	const auto sortmethod_info =
 		utils::tokenize(get_configvalue("feed-sort-order"), "-");
 	const std::string sortmethod = sortmethod_info[0];
@@ -448,17 +448,17 @@ SortStrategy configcontainer::get_feed_sort_strategy()
 	}
 
 	if (sortmethod == "none") {
-		ss.sm = sort_method_t::NONE;
+		ss.sm = feed_sort_method_t::NONE;
 	} else if (sortmethod == "firsttag") {
-		ss.sm = sort_method_t::FIRST_TAG;
+		ss.sm = feed_sort_method_t::FIRST_TAG;
 	} else if (sortmethod == "title") {
-		ss.sm = sort_method_t::TITLE;
+		ss.sm = feed_sort_method_t::TITLE;
 	} else if (sortmethod == "articlecount") {
-		ss.sm = sort_method_t::ARTICLE_COUNT;
+		ss.sm = feed_sort_method_t::ARTICLE_COUNT;
 	} else if (sortmethod == "unreadarticlecount") {
-		ss.sm = sort_method_t::UNREAD_ARTICLE_COUNT;
+		ss.sm = feed_sort_method_t::UNREAD_ARTICLE_COUNT;
 	} else if (sortmethod == "lastupdated") {
-		ss.sm = sort_method_t::LAST_UPDATED;
+		ss.sm = feed_sort_method_t::LAST_UPDATED;
 	}
 
 	if (direction == "asc") {

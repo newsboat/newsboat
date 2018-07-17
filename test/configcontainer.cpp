@@ -326,27 +326,27 @@ TEST_CASE("get_suggestions() returns results in alphabetical order",
 	}
 }
 
-TEST_CASE("get_feed_sort_strategy() returns correctly filled SortStrategy struct",
+TEST_CASE("get_feed_sort_strategy() returns correctly filled FeedSortStrategy struct",
 	"[configcontainer]")
 {
 	configcontainer cfg;
-	SortStrategy sort_strategy;
+	FeedSortStrategy sort_strategy;
 
 	SECTION("none")
 	{
 		cfg.set_configvalue("feed-sort-order", "none");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == sort_method_t::NONE);
+		REQUIRE(sort_strategy.sm == feed_sort_method_t::NONE);
 		REQUIRE(sort_strategy.sd == sort_direction_t::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "none-desc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == sort_method_t::NONE);
+		REQUIRE(sort_strategy.sm == feed_sort_method_t::NONE);
 		REQUIRE(sort_strategy.sd == sort_direction_t::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "none-asc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == sort_method_t::NONE);
+		REQUIRE(sort_strategy.sm == feed_sort_method_t::NONE);
 		REQUIRE(sort_strategy.sd == sort_direction_t::ASC);
 	}
 
@@ -354,17 +354,17 @@ TEST_CASE("get_feed_sort_strategy() returns correctly filled SortStrategy struct
 	{
 		cfg.set_configvalue("feed-sort-order", "firsttag");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == sort_method_t::FIRST_TAG);
+		REQUIRE(sort_strategy.sm == feed_sort_method_t::FIRST_TAG);
 		REQUIRE(sort_strategy.sd == sort_direction_t::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "firsttag-desc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == sort_method_t::FIRST_TAG);
+		REQUIRE(sort_strategy.sm == feed_sort_method_t::FIRST_TAG);
 		REQUIRE(sort_strategy.sd == sort_direction_t::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "firsttag-asc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == sort_method_t::FIRST_TAG);
+		REQUIRE(sort_strategy.sm == feed_sort_method_t::FIRST_TAG);
 		REQUIRE(sort_strategy.sd == sort_direction_t::ASC);
 	}
 
@@ -372,17 +372,17 @@ TEST_CASE("get_feed_sort_strategy() returns correctly filled SortStrategy struct
 	{
 		cfg.set_configvalue("feed-sort-order", "title");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == sort_method_t::TITLE);
+		REQUIRE(sort_strategy.sm == feed_sort_method_t::TITLE);
 		REQUIRE(sort_strategy.sd == sort_direction_t::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "title-desc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == sort_method_t::TITLE);
+		REQUIRE(sort_strategy.sm == feed_sort_method_t::TITLE);
 		REQUIRE(sort_strategy.sd == sort_direction_t::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "title-asc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == sort_method_t::TITLE);
+		REQUIRE(sort_strategy.sm == feed_sort_method_t::TITLE);
 		REQUIRE(sort_strategy.sd == sort_direction_t::ASC);
 	}
 
@@ -390,17 +390,17 @@ TEST_CASE("get_feed_sort_strategy() returns correctly filled SortStrategy struct
 	{
 		cfg.set_configvalue("feed-sort-order", "articlecount");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == sort_method_t::ARTICLE_COUNT);
+		REQUIRE(sort_strategy.sm == feed_sort_method_t::ARTICLE_COUNT);
 		REQUIRE(sort_strategy.sd == sort_direction_t::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "articlecount-desc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == sort_method_t::ARTICLE_COUNT);
+		REQUIRE(sort_strategy.sm == feed_sort_method_t::ARTICLE_COUNT);
 		REQUIRE(sort_strategy.sd == sort_direction_t::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "articlecount-asc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == sort_method_t::ARTICLE_COUNT);
+		REQUIRE(sort_strategy.sm == feed_sort_method_t::ARTICLE_COUNT);
 		REQUIRE(sort_strategy.sd == sort_direction_t::ASC);
 	}
 
@@ -408,17 +408,17 @@ TEST_CASE("get_feed_sort_strategy() returns correctly filled SortStrategy struct
 	{
 		cfg.set_configvalue("feed-sort-order", "unreadarticlecount");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == sort_method_t::UNREAD_ARTICLE_COUNT);
+		REQUIRE(sort_strategy.sm == feed_sort_method_t::UNREAD_ARTICLE_COUNT);
 		REQUIRE(sort_strategy.sd == sort_direction_t::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "unreadarticlecount-desc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == sort_method_t::UNREAD_ARTICLE_COUNT);
+		REQUIRE(sort_strategy.sm == feed_sort_method_t::UNREAD_ARTICLE_COUNT);
 		REQUIRE(sort_strategy.sd == sort_direction_t::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "unreadarticlecount-asc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == sort_method_t::UNREAD_ARTICLE_COUNT);
+		REQUIRE(sort_strategy.sm == feed_sort_method_t::UNREAD_ARTICLE_COUNT);
 		REQUIRE(sort_strategy.sd == sort_direction_t::ASC);
 	}
 
@@ -426,17 +426,17 @@ TEST_CASE("get_feed_sort_strategy() returns correctly filled SortStrategy struct
 	{
 		cfg.set_configvalue("feed-sort-order", "lastupdated");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == sort_method_t::LAST_UPDATED);
+		REQUIRE(sort_strategy.sm == feed_sort_method_t::LAST_UPDATED);
 		REQUIRE(sort_strategy.sd == sort_direction_t::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "lastupdated-desc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == sort_method_t::LAST_UPDATED);
+		REQUIRE(sort_strategy.sm == feed_sort_method_t::LAST_UPDATED);
 		REQUIRE(sort_strategy.sd == sort_direction_t::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "lastupdated-asc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == sort_method_t::LAST_UPDATED);
+		REQUIRE(sort_strategy.sm == feed_sort_method_t::LAST_UPDATED);
 		REQUIRE(sort_strategy.sd == sort_direction_t::ASC);
 	}
 }
