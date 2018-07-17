@@ -29,7 +29,7 @@ itemlist_formaction::itemlist_formaction(view* vv, std::string formstr)
 	, rxman(0)
 	, old_width(0)
 	, old_itempos(-1)
-	, old_sort_strategy({})
+	, old_sort_strategy({art_sort_method_t::TITLE, sort_direction_t::DESC})
 	, invalidated(false)
 	, invalidation_mode(InvalidationMode::COMPLETE)
 {
