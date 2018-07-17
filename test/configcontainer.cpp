@@ -368,7 +368,7 @@ TEST_CASE("get_feed_sort_strategy() returns correctly filled FeedSortStrategy st
 		REQUIRE(sort_strategy.sd == sort_direction_t::ASC);
 	}
 
-	SECTION("firsttag")
+	SECTION("title")
 	{
 		cfg.set_configvalue("feed-sort-order", "title");
 		sort_strategy = cfg.get_feed_sort_strategy();
