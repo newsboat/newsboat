@@ -32,8 +32,7 @@ rss_item::rss_item(cache* c)
 	, enqueued_(false)
 	, deleted_(0)
 	, override_unread_(false)
-{
-}
+{}
 
 rss_item::~rss_item() {}
 
@@ -45,8 +44,7 @@ rss_feed::rss_feed(cache* c)
 	, idx(0)
 	, order(0)
 	, status_(dl_status::SUCCESS)
-{
-}
+{}
 
 rss_feed::~rss_feed()
 {
@@ -602,110 +600,93 @@ void rss_feed::set_rssurl(const std::string& u)
 	}
 }
 
-void rss_feed::sort(const std::string& method)
+void rss_feed::sort(const ArticleSortStrategy& sort_strategy)
 {
 	std::lock_guard<std::mutex> lock(item_mutex);
-	sort_unlocked(method);
+	sort_unlocked(sort_strategy);
 }
 
-void rss_feed::sort_unlocked(const std::string& method)
+void rss_feed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 {
-	std::vector<std::string> methods = utils::tokenize(method, "-");
-	bool reverse = false;
-
-	if (!methods.empty() &&
-		methods[0] == "date") { // date is descending by default
-		if (methods.size() > 1 && methods[1] == "asc") {
-			reverse = true;
-		}
-	} else { // all other sort methods are ascending by default
-		if (methods.size() > 1 && methods[1] == "desc") {
-			reverse = true;
-		}
-	}
-
-	if (!methods.empty()) {
-		if (methods[0] == "title") {
-			std::stable_sort(items_.begin(),
-				items_.end(),
-				[&](std::shared_ptr<rss_item> a,
-					std::shared_ptr<rss_item> b) {
-					return reverse
-						? (strcasecmp(
-							   a->title().c_str(),
-							   b->title().c_str()) >
-							  0)
-						: (strcasecmp(
-							   a->title().c_str(),
-							   b->title().c_str()) <
-							  0);
-				});
-		} else if (methods[0] == "flags") {
-			std::stable_sort(items_.begin(),
-				items_.end(),
-				[&](std::shared_ptr<rss_item> a,
-					std::shared_ptr<rss_item> b) {
-					return reverse
-						? (strcmp(a->flags().c_str(),
-							   b->flags().c_str()) >
-							  0)
-						: (strcmp(a->flags().c_str(),
-							   b->flags().c_str()) <
-							  0);
-				});
-		} else if (methods[0] == "author") {
-			std::stable_sort(items_.begin(),
-				items_.end(),
-				[&](std::shared_ptr<rss_item> a,
-					std::shared_ptr<rss_item> b) {
-					return reverse
-						? (strcmp(a->author().c_str(),
-							   b->author()
-								   .c_str()) >
-							  0)
-						: (strcmp(a->author().c_str(),
-							   b->author()
-								   .c_str()) <
-							  0);
-				});
-		} else if (methods[0] == "link") {
-			std::stable_sort(items_.begin(),
-				items_.end(),
-				[&](std::shared_ptr<rss_item> a,
-					std::shared_ptr<rss_item> b) {
-					return reverse
-						? (strcmp(a->link().c_str(),
-							   b->link().c_str()) >
-							  0)
-						: (strcmp(a->link().c_str(),
-							   b->link().c_str()) <
-							  0);
-				});
-		} else if (methods[0] == "guid") {
-			std::stable_sort(items_.begin(),
-				items_.end(),
-				[&](std::shared_ptr<rss_item> a,
-					std::shared_ptr<rss_item> b) {
-					return reverse
-						? (strcmp(a->guid().c_str(),
-							   b->guid().c_str()) >
-							  0)
-						: (strcmp(a->guid().c_str(),
-							   b->guid().c_str()) <
-							  0);
-				});
-		} else if (methods[0] == "date") {
-			std::stable_sort(items_.begin(),
-				items_.end(),
-				[&](std::shared_ptr<rss_item> a,
-					std::shared_ptr<rss_item> b) {
-					return reverse
-						? (a->pubDate_timestamp() >
-							  b->pubDate_timestamp())
-						: (a->pubDate_timestamp() <
-							  b->pubDate_timestamp());
-				});
-		}
+	switch (sort_strategy.sm) {
+	case art_sort_method_t::TITLE:
+		std::stable_sort(items_.begin(),
+			items_.end(),
+			[&](std::shared_ptr<rss_item> a,
+				std::shared_ptr<rss_item> b) {
+				return sort_strategy.sd ==
+						sort_direction_t::DESC
+					? (strcasecmp(a->title().c_str(),
+						   b->title().c_str()) > 0)
+					: (strcasecmp(a->title().c_str(),
+						   b->title().c_str()) < 0);
+			});
+		break;
+	case art_sort_method_t::FLAGS:
+		std::stable_sort(items_.begin(),
+			items_.end(),
+			[&](std::shared_ptr<rss_item> a,
+				std::shared_ptr<rss_item> b) {
+				return sort_strategy.sd ==
+						sort_direction_t::DESC
+					? (strcmp(a->flags().c_str(),
+						   b->flags().c_str()) > 0)
+					: (strcmp(a->flags().c_str(),
+						   b->flags().c_str()) < 0);
+			});
+		break;
+	case art_sort_method_t::AUTHOR:
+		std::stable_sort(items_.begin(),
+			items_.end(),
+			[&](std::shared_ptr<rss_item> a,
+				std::shared_ptr<rss_item> b) {
+				return sort_strategy.sd ==
+						sort_direction_t::DESC
+					? (strcmp(a->author().c_str(),
+						   b->author().c_str()) > 0)
+					: (strcmp(a->author().c_str(),
+						   b->author().c_str()) < 0);
+			});
+		break;
+	case art_sort_method_t::LINK:
+		std::stable_sort(items_.begin(),
+			items_.end(),
+			[&](std::shared_ptr<rss_item> a,
+				std::shared_ptr<rss_item> b) {
+				return sort_strategy.sd ==
+						sort_direction_t::DESC
+					? (strcmp(a->link().c_str(),
+						   b->link().c_str()) > 0)
+					: (strcmp(a->link().c_str(),
+						   b->link().c_str()) < 0);
+			});
+		break;
+	case art_sort_method_t::GUID:
+		std::stable_sort(items_.begin(),
+			items_.end(),
+			[&](std::shared_ptr<rss_item> a,
+				std::shared_ptr<rss_item> b) {
+				return sort_strategy.sd ==
+						sort_direction_t::DESC
+					? (strcmp(a->guid().c_str(),
+						   b->guid().c_str()) > 0)
+					: (strcmp(a->guid().c_str(),
+						   b->guid().c_str()) < 0);
+			});
+		break;
+	case art_sort_method_t::DATE:
+		std::stable_sort(items_.begin(),
+			items_.end(),
+			[&](std::shared_ptr<rss_item> a,
+				std::shared_ptr<rss_item> b) {
+				// date is descending by default
+				return sort_strategy.sd == sort_direction_t::ASC
+					? (a->pubDate_timestamp() >
+						  b->pubDate_timestamp())
+					: (a->pubDate_timestamp() <
+						  b->pubDate_timestamp());
+			});
+		break;
 	}
 }
 

@@ -335,8 +335,8 @@ public:
 		empty = t;
 	}
 
-	void sort(const std::string& method);
-	void sort_unlocked(const std::string& method);
+	void sort(const ArticleSortStrategy& sort_strategy);
+	void sort_unlocked(const ArticleSortStrategy& sort_strategy);
 
 	void remove_old_deleted_items();
 

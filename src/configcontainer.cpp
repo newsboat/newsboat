@@ -470,4 +470,41 @@ SortStrategy configcontainer::get_feed_sort_strategy()
 	return ss;
 }
 
+ArticleSortStrategy configcontainer::get_article_sort_strategy()
+{
+	ArticleSortStrategy ss;
+	const auto methods =
+		utils::tokenize(get_configvalue("article-sort-order"), "-");
+
+	if (!methods.empty() &&
+		methods[0] == "date") { // date is descending by default
+		ss.sm = art_sort_method_t::DATE;
+		ss.sd = sort_direction_t::DESC;
+		if (methods.size() > 1 && methods[1] == "asc") {
+			ss.sd = sort_direction_t::ASC;
+		}
+	} else { // all other sort methods are ascending by default
+		ss.sd = sort_direction_t::ASC;
+		if (methods.size() > 1 && methods[1] == "desc") {
+			ss.sd = sort_direction_t::DESC;
+		}
+	}
+
+	if (!methods.empty()) {
+		if (methods[0] == "title") {
+			ss.sm = art_sort_method_t::TITLE;
+		} else if (methods[0] == "flags") {
+			ss.sm = art_sort_method_t::FLAGS;
+		} else if (methods[0] == "author") {
+			ss.sm = art_sort_method_t::AUTHOR;
+		} else if (methods[0] == "link") {
+			ss.sm = art_sort_method_t::LINK;
+		} else if (methods[0] == "guid") {
+			ss.sm = art_sort_method_t::GUID;
+		}
+	}
+
+	return ss;
+}
+
 } // namespace newsboat

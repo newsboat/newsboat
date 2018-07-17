@@ -18,11 +18,35 @@ enum class sort_method_t {
 	LAST_UPDATED
 };
 
+enum class art_sort_method_t {
+	TITLE,
+	FLAGS,
+	AUTHOR,
+	LINK,
+	GUID,
+	DATE
+};
+
 enum class sort_direction_t { ASC, DESC };
 
 struct SortStrategy {
 	sort_method_t sm;
 	sort_direction_t sd;
+};
+
+struct ArticleSortStrategy {
+	art_sort_method_t sm;
+	sort_direction_t sd;
+
+	bool operator==(const ArticleSortStrategy& other) const
+	{
+		return sm == other.sm && sd == other.sd;
+	}
+
+	bool operator!=(const ArticleSortStrategy& other) const
+	{
+		return !(*this == other);
+	}
 };
 
 struct configdata {
@@ -71,6 +95,7 @@ public:
 	void toggle(const std::string& key);
 	std::vector<std::string> get_suggestions(const std::string& fragment);
 	SortStrategy get_feed_sort_strategy();
+	ArticleSortStrategy get_article_sort_strategy();
 
 	static const std::string PARTIAL_FILE_SUFFIX;
 
