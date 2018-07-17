@@ -337,11 +337,11 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 	SECTION("title")
 	{
 		auto articles = f.items();
-		articles[0]->set_title("Article you must read");
-		articles[1]->set_title("Another great article");
+		articles[0]->set_title("Read me");
+		articles[1]->set_title("Wow tests are great");
 		articles[2]->set_title("A boring article");
-		articles[3]->set_title("Read me");
-		articles[4]->set_title("Wow tests are great");
+		articles[3]->set_title("Another great article");
+		articles[4]->set_title("Article you must read");
 
 		ArticleSortStrategy ss;
 		ss.sm = art_sort_method_t::TITLE;
