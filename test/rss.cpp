@@ -343,7 +343,10 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		articles[3]->set_title("Read me");
 		articles[4]->set_title("Wow tests are great");
 
-		f.sort("title-asc");
+		ArticleSortStrategy ss;
+		ss.sm = art_sort_method_t::TITLE;
+		ss.sd = sort_direction_t::ASC;
+		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->title_raw() == "A boring article");
 		REQUIRE(articles[1]->title_raw() == "Another great article");
@@ -351,7 +354,8 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		REQUIRE(articles[3]->title_raw() == "Read me");
 		REQUIRE(articles[4]->title_raw() == "Wow tests are great");
 
-		f.sort("title-desc");
+		ss.sd = sort_direction_t::DESC;
+		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->title_raw() == "Wow tests are great");
 		REQUIRE(articles[1]->title_raw() == "Read me");
@@ -369,7 +373,10 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		articles[3]->set_flags("Efgpu");
 		articles[4]->set_flags("Ceimu");
 
-		f.sort("flags");
+		ArticleSortStrategy ss;
+		ss.sm = art_sort_method_t::FLAGS;
+		ss.sd = sort_direction_t::ASC;
+		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->flags() == "Aabde");
 		REQUIRE(articles[1]->flags() == "Ceimu");
@@ -377,7 +384,8 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		REQUIRE(articles[3]->flags() == "Ksuy");
 		REQUIRE(articles[4]->flags() == "Zadel");
 
-		f.sort("flags-desc");
+		ss.sd = sort_direction_t::DESC;
+		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->flags() == "Zadel");
 		REQUIRE(articles[1]->flags() == "Ksuy");
@@ -395,7 +403,10 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		articles[3]->set_author("Spinoza");
 		articles[4]->set_author("Sartre");
 
-		f.sort("author");
+		ArticleSortStrategy ss;
+		ss.sm = art_sort_method_t::AUTHOR;
+		ss.sd = sort_direction_t::ASC;
+		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->author() == "Anonymous");
 		REQUIRE(articles[1]->author() == "Platon");
@@ -403,7 +414,8 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		REQUIRE(articles[3]->author() == "Socrates");
 		REQUIRE(articles[4]->author() == "Spinoza");
 
-		f.sort("author-desc");
+		ss.sd = sort_direction_t::DESC;
+		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->author() == "Spinoza");
 		REQUIRE(articles[1]->author() == "Socrates");
@@ -421,7 +433,10 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		articles[3]->set_link("www.test.org");
 		articles[4]->set_link("withoutwww.org");
 
-		f.sort("link");
+		ArticleSortStrategy ss;
+		ss.sm = art_sort_method_t::LINK;
+		ss.sd = sort_direction_t::ASC;
+		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->link() == "withoutwww.org");
 		REQUIRE(articles[1]->link() == "www.anotherexample.org");
@@ -429,7 +444,8 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		REQUIRE(articles[3]->link() == "www.example.org");
 		REQUIRE(articles[4]->link() == "www.test.org");
 
-		f.sort("link-desc");
+		ss.sd = sort_direction_t::DESC;
+		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->link() == "www.test.org");
 		REQUIRE(articles[1]->link() == "www.example.org");
@@ -440,7 +456,10 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 
 	SECTION("guid")
 	{
-		f.sort("guid");
+		ArticleSortStrategy ss;
+		ss.sm = art_sort_method_t::GUID;
+		ss.sd = sort_direction_t::ASC;
+		f.sort(ss);
 		auto articles = f.items();
 		REQUIRE(articles[0]->guid() == "0");
 		REQUIRE(articles[1]->guid() == "1");
@@ -448,7 +467,8 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		REQUIRE(articles[3]->guid() == "3");
 		REQUIRE(articles[4]->guid() == "4");
 
-		f.sort("guid-desc");
+		ss.sd = sort_direction_t::DESC;
+		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->guid() == "4");
 		REQUIRE(articles[1]->guid() == "3");
@@ -466,7 +486,10 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		articles[3]->set_pubDate(23);
 		articles[4]->set_pubDate(7);
 
-		f.sort("date");
+		ArticleSortStrategy ss;
+		ss.sm = art_sort_method_t::DATE;
+		ss.sd = sort_direction_t::DESC;
+		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->pubDate_timestamp() == 7);
 		REQUIRE(articles[1]->pubDate_timestamp() == 23);
@@ -474,7 +497,8 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		REQUIRE(articles[3]->pubDate_timestamp() == 69);
 		REQUIRE(articles[4]->pubDate_timestamp() == 93);
 
-		f.sort("date-asc");
+		ss.sd = sort_direction_t::ASC;
+		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->pubDate_timestamp() == 93);
 		REQUIRE(articles[1]->pubDate_timestamp() == 69);
