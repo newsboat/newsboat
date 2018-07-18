@@ -29,7 +29,7 @@ itemlist_formaction::itemlist_formaction(view* vv, std::string formstr)
 	, rxman(0)
 	, old_width(0)
 	, old_itempos(-1)
-	, old_sort_order("")
+	, old_sort_strategy({art_sort_method_t::TITLE, sort_direction_t::DESC})
 	, invalidated(false)
 	, invalidation_mode(InvalidationMode::COMPLETE)
 {
@@ -852,11 +852,10 @@ void itemlist_formaction::prepare()
 {
 	std::lock_guard<std::mutex> mtx(redraw_mtx);
 
-	std::string sort_order =
-		v->get_cfg()->get_configvalue("article-sort-order");
-	if (sort_order != old_sort_order) {
-		feed->sort(sort_order);
-		old_sort_order = sort_order;
+	const auto sort_strategy = v->get_cfg()->get_article_sort_strategy();
+	if (sort_strategy != old_sort_strategy) {
+		feed->sort(sort_strategy);
+		old_sort_strategy = sort_strategy;
 		invalidate(InvalidationMode::COMPLETE);
 	}
 

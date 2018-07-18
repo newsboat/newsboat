@@ -9,6 +9,46 @@ namespace newsboat {
 
 enum class configdata_t { INVALID, BOOL, INT, STR, PATH, ENUM };
 
+enum class feed_sort_method_t {
+	NONE,
+	FIRST_TAG,
+	TITLE,
+	ARTICLE_COUNT,
+	UNREAD_ARTICLE_COUNT,
+	LAST_UPDATED
+};
+
+enum class art_sort_method_t {
+	TITLE,
+	FLAGS,
+	AUTHOR,
+	LINK,
+	GUID,
+	DATE
+};
+
+enum class sort_direction_t { ASC, DESC };
+
+struct FeedSortStrategy {
+	feed_sort_method_t sm;
+	sort_direction_t sd;
+};
+
+struct ArticleSortStrategy {
+	art_sort_method_t sm;
+	sort_direction_t sd;
+
+	bool operator==(const ArticleSortStrategy& other) const
+	{
+		return sm == other.sm && sd == other.sd;
+	}
+
+	bool operator!=(const ArticleSortStrategy& other) const
+	{
+		return !(*this == other);
+	}
+};
+
 struct configdata {
 	configdata(const std::string& v = "",
 		configdata_t t = configdata_t::INVALID,
@@ -54,6 +94,8 @@ public:
 	void reset_to_default(const std::string& key);
 	void toggle(const std::string& key);
 	std::vector<std::string> get_suggestions(const std::string& fragment);
+	FeedSortStrategy get_feed_sort_strategy();
+	ArticleSortStrategy get_article_sort_strategy();
 
 	static const std::string PARTIAL_FILE_SUFFIX;
 

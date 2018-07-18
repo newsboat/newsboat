@@ -83,7 +83,7 @@ void feedlist_formaction::prepare()
 	std::string sort_order =
 		v->get_cfg()->get_configvalue("feed-sort-order");
 	if (sort_order != old_sort_order) {
-		v->get_ctrl()->get_feedcontainer()->sort_feeds(v->get_cfg());
+		v->get_ctrl()->get_feedcontainer()->sort_feeds(v->get_cfg()->get_feed_sort_strategy());
 		old_sort_order = sort_order;
 		do_redraw = true;
 	}

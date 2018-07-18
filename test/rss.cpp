@@ -323,6 +323,191 @@ TEST_CASE("rss_item::sort_flags() cleans up flags", "[rss]")
 	}
 }
 
+TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
+{
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_feed f(&rsscache);
+	for (int i = 0; i < 5; ++i) {
+		const auto item = std::make_shared<rss_item>(&rsscache);
+		item->set_guid(std::to_string(i));
+		f.add_item(item);
+	}
+
+	SECTION("title")
+	{
+		auto articles = f.items();
+		articles[0]->set_title("Read me");
+		articles[1]->set_title("Wow tests are great");
+		articles[2]->set_title("A boring article");
+		articles[3]->set_title("Another great article");
+		articles[4]->set_title("Article you must read");
+
+		ArticleSortStrategy ss;
+		ss.sm = art_sort_method_t::TITLE;
+		ss.sd = sort_direction_t::ASC;
+		f.sort(ss);
+		articles = f.items();
+		REQUIRE(articles[0]->title_raw() == "A boring article");
+		REQUIRE(articles[1]->title_raw() == "Another great article");
+		REQUIRE(articles[2]->title_raw() == "Article you must read");
+		REQUIRE(articles[3]->title_raw() == "Read me");
+		REQUIRE(articles[4]->title_raw() == "Wow tests are great");
+
+		ss.sd = sort_direction_t::DESC;
+		f.sort(ss);
+		articles = f.items();
+		REQUIRE(articles[0]->title_raw() == "Wow tests are great");
+		REQUIRE(articles[1]->title_raw() == "Read me");
+		REQUIRE(articles[2]->title_raw() == "Article you must read");
+		REQUIRE(articles[3]->title_raw() == "Another great article");
+		REQUIRE(articles[4]->title_raw() == "A boring article");
+	}
+
+	SECTION("flags")
+	{
+		auto articles = f.items();
+		articles[0]->set_flags("Aabde");
+		articles[1]->set_flags("Zadel");
+		articles[2]->set_flags("Ksuy");
+		articles[3]->set_flags("Efgpu");
+		articles[4]->set_flags("Ceimu");
+
+		ArticleSortStrategy ss;
+		ss.sm = art_sort_method_t::FLAGS;
+		ss.sd = sort_direction_t::ASC;
+		f.sort(ss);
+		articles = f.items();
+		REQUIRE(articles[0]->flags() == "Aabde");
+		REQUIRE(articles[1]->flags() == "Ceimu");
+		REQUIRE(articles[2]->flags() == "Efgpu");
+		REQUIRE(articles[3]->flags() == "Ksuy");
+		REQUIRE(articles[4]->flags() == "Zadel");
+
+		ss.sd = sort_direction_t::DESC;
+		f.sort(ss);
+		articles = f.items();
+		REQUIRE(articles[0]->flags() == "Zadel");
+		REQUIRE(articles[1]->flags() == "Ksuy");
+		REQUIRE(articles[2]->flags() == "Efgpu");
+		REQUIRE(articles[3]->flags() == "Ceimu");
+		REQUIRE(articles[4]->flags() == "Aabde");
+	}
+
+	SECTION("author")
+	{
+		auto articles = f.items();
+		articles[0]->set_author("Anonymous");
+		articles[1]->set_author("Socrates");
+		articles[2]->set_author("Platon");
+		articles[3]->set_author("Spinoza");
+		articles[4]->set_author("Sartre");
+
+		ArticleSortStrategy ss;
+		ss.sm = art_sort_method_t::AUTHOR;
+		ss.sd = sort_direction_t::ASC;
+		f.sort(ss);
+		articles = f.items();
+		REQUIRE(articles[0]->author() == "Anonymous");
+		REQUIRE(articles[1]->author() == "Platon");
+		REQUIRE(articles[2]->author() == "Sartre");
+		REQUIRE(articles[3]->author() == "Socrates");
+		REQUIRE(articles[4]->author() == "Spinoza");
+
+		ss.sd = sort_direction_t::DESC;
+		f.sort(ss);
+		articles = f.items();
+		REQUIRE(articles[0]->author() == "Spinoza");
+		REQUIRE(articles[1]->author() == "Socrates");
+		REQUIRE(articles[2]->author() == "Sartre");
+		REQUIRE(articles[3]->author() == "Platon");
+		REQUIRE(articles[4]->author() == "Anonymous");
+	}
+
+	SECTION("link")
+	{
+		auto articles = f.items();
+		articles[0]->set_link("www.example.com");
+		articles[1]->set_link("www.anotherexample.org");
+		articles[2]->set_link("www.example.org");
+		articles[3]->set_link("www.test.org");
+		articles[4]->set_link("withoutwww.org");
+
+		ArticleSortStrategy ss;
+		ss.sm = art_sort_method_t::LINK;
+		ss.sd = sort_direction_t::ASC;
+		f.sort(ss);
+		articles = f.items();
+		REQUIRE(articles[0]->link() == "withoutwww.org");
+		REQUIRE(articles[1]->link() == "www.anotherexample.org");
+		REQUIRE(articles[2]->link() == "www.example.com");
+		REQUIRE(articles[3]->link() == "www.example.org");
+		REQUIRE(articles[4]->link() == "www.test.org");
+
+		ss.sd = sort_direction_t::DESC;
+		f.sort(ss);
+		articles = f.items();
+		REQUIRE(articles[0]->link() == "www.test.org");
+		REQUIRE(articles[1]->link() == "www.example.org");
+		REQUIRE(articles[2]->link() == "www.example.com");
+		REQUIRE(articles[3]->link() == "www.anotherexample.org");
+		REQUIRE(articles[4]->link() == "withoutwww.org");
+	}
+
+	SECTION("guid")
+	{
+		ArticleSortStrategy ss;
+		ss.sm = art_sort_method_t::GUID;
+		ss.sd = sort_direction_t::ASC;
+		f.sort(ss);
+		auto articles = f.items();
+		REQUIRE(articles[0]->guid() == "0");
+		REQUIRE(articles[1]->guid() == "1");
+		REQUIRE(articles[2]->guid() == "2");
+		REQUIRE(articles[3]->guid() == "3");
+		REQUIRE(articles[4]->guid() == "4");
+
+		ss.sd = sort_direction_t::DESC;
+		f.sort(ss);
+		articles = f.items();
+		REQUIRE(articles[0]->guid() == "4");
+		REQUIRE(articles[1]->guid() == "3");
+		REQUIRE(articles[2]->guid() == "2");
+		REQUIRE(articles[3]->guid() == "1");
+		REQUIRE(articles[4]->guid() == "0");
+	}
+
+	SECTION("date")
+	{
+		auto articles = f.items();
+		articles[0]->set_pubDate(93);
+		articles[1]->set_pubDate(42);
+		articles[2]->set_pubDate(69);
+		articles[3]->set_pubDate(23);
+		articles[4]->set_pubDate(7);
+
+		ArticleSortStrategy ss;
+		ss.sm = art_sort_method_t::DATE;
+		ss.sd = sort_direction_t::DESC;
+		f.sort(ss);
+		articles = f.items();
+		REQUIRE(articles[0]->pubDate_timestamp() == 7);
+		REQUIRE(articles[1]->pubDate_timestamp() == 23);
+		REQUIRE(articles[2]->pubDate_timestamp() == 42);
+		REQUIRE(articles[3]->pubDate_timestamp() == 69);
+		REQUIRE(articles[4]->pubDate_timestamp() == 93);
+
+		ss.sd = sort_direction_t::ASC;
+		f.sort(ss);
+		articles = f.items();
+		REQUIRE(articles[0]->pubDate_timestamp() == 93);
+		REQUIRE(articles[1]->pubDate_timestamp() == 69);
+		REQUIRE(articles[2]->pubDate_timestamp() == 42);
+		REQUIRE(articles[3]->pubDate_timestamp() == 23);
+		REQUIRE(articles[4]->pubDate_timestamp() == 7);
+	}
+}
+
 TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
 	"[rss::rss_parser]")
 {

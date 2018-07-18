@@ -145,7 +145,7 @@ private:
 
 	unsigned int old_width;
 	int old_itempos;
-	std::string old_sort_order;
+	ArticleSortStrategy old_sort_strategy;
 
 	bool invalidated;
 	InvalidationMode invalidation_mode;

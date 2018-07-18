@@ -435,4 +435,76 @@ std::vector<std::string> configcontainer::get_suggestions(
 	return result;
 }
 
+FeedSortStrategy configcontainer::get_feed_sort_strategy()
+{
+	FeedSortStrategy ss;
+	const auto sortmethod_info =
+		utils::tokenize(get_configvalue("feed-sort-order"), "-");
+	const std::string sortmethod = sortmethod_info[0];
+
+	std::string direction = "desc";
+	if (sortmethod_info.size() > 1) {
+		direction = sortmethod_info[1];
+	}
+
+	if (sortmethod == "none") {
+		ss.sm = feed_sort_method_t::NONE;
+	} else if (sortmethod == "firsttag") {
+		ss.sm = feed_sort_method_t::FIRST_TAG;
+	} else if (sortmethod == "title") {
+		ss.sm = feed_sort_method_t::TITLE;
+	} else if (sortmethod == "articlecount") {
+		ss.sm = feed_sort_method_t::ARTICLE_COUNT;
+	} else if (sortmethod == "unreadarticlecount") {
+		ss.sm = feed_sort_method_t::UNREAD_ARTICLE_COUNT;
+	} else if (sortmethod == "lastupdated") {
+		ss.sm = feed_sort_method_t::LAST_UPDATED;
+	}
+
+	if (direction == "asc") {
+		ss.sd = sort_direction_t::ASC;
+	} else if (direction == "desc") {
+		ss.sd = sort_direction_t::DESC;
+	}
+
+	return ss;
+}
+
+ArticleSortStrategy configcontainer::get_article_sort_strategy()
+{
+	ArticleSortStrategy ss;
+	const auto methods =
+		utils::tokenize(get_configvalue("article-sort-order"), "-");
+
+	if (!methods.empty() &&
+		methods[0] == "date") { // date is descending by default
+		ss.sm = art_sort_method_t::DATE;
+		ss.sd = sort_direction_t::DESC;
+		if (methods.size() > 1 && methods[1] == "asc") {
+			ss.sd = sort_direction_t::ASC;
+		}
+	} else { // all other sort methods are ascending by default
+		ss.sd = sort_direction_t::ASC;
+		if (methods.size() > 1 && methods[1] == "desc") {
+			ss.sd = sort_direction_t::DESC;
+		}
+	}
+
+	if (!methods.empty()) {
+		if (methods[0] == "title") {
+			ss.sm = art_sort_method_t::TITLE;
+		} else if (methods[0] == "flags") {
+			ss.sm = art_sort_method_t::FLAGS;
+		} else if (methods[0] == "author") {
+			ss.sm = art_sort_method_t::AUTHOR;
+		} else if (methods[0] == "link") {
+			ss.sm = art_sort_method_t::LINK;
+		} else if (methods[0] == "guid") {
+			ss.sm = art_sort_method_t::GUID;
+		}
+	}
+
+	return ss;
+}
+
 } // namespace newsboat

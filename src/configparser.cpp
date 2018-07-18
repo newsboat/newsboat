@@ -26,7 +26,7 @@ void configparser::handle_action(const std::string& action,
 	const std::vector<std::string>& params)
 {
 	/*
-	 * configparser also acts as config_action_handler to implement to
+	 * configparser also acts as config_action_handler to implement
 	 * recursive "include" command.
 	 */
 	if (action == "include") {
@@ -51,10 +51,10 @@ bool configparser::parse(const std::string& filename, bool double_include)
 	 * First, it checks whether this file has already been included, and if
 	 * not, it does the following:
 	 *   - open the file
-	 *   - read if line by line
+	 *   - read it line by line
 	 *   - tokenize every line
 	 *   - if there is at least one token, look up a registered
-	 * config_action_handler to handle to command (which is specified in the
+	 * config_action_handler to handle the command (which is specified in the
 	 * first token)
 	 *   - hand over the tokenize results to the config_action_handler
 	 *   - if an error happens, react accordingly.

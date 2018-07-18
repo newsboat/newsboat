@@ -54,8 +54,7 @@ void cache::run_sql_nothrow(const std::string& query,
 struct cb_handler {
 	cb_handler()
 		: c(-1)
-	{
-	}
+	{}
 	void set_count(int i)
 	{
 		c = i;
@@ -613,7 +612,7 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl,
 		// if some flagged articles were saved, append them
 		feed->add_items(flagged_items);
 	}
-	feed->sort_unlocked(cfg->get_configvalue("article-sort-order"));
+	feed->sort_unlocked(cfg->get_article_sort_strategy());
 	return feed;
 }
 
