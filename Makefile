@@ -209,7 +209,7 @@ doc/keycmds-linked.dsv: doc/keycmds.dsv
 	sed -E 's/^([^|]+)/[[\1]]<<\1,`\1`>>/' doc/keycmds.dsv > doc/keycmds-linked.dsv
 
 fmt:
-	clang-format --style=file -i *.cpp doc/*.cpp include/*.h rss/*.h rss/*.cpp src/*.cpp test/*.h test/*.cpp
+	./format.sh
 
 cppcheck:
 	cppcheck -j$(CPPCHECK_JOBS) --force --enable=all --suppress=unusedFunction \
