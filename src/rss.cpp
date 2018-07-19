@@ -156,12 +156,11 @@ std::string rss_item::pubDate() const
 unsigned int rss_feed::unread_item_count()
 {
 	std::lock_guard<std::mutex> lock(item_mutex);
-	unsigned int count = 0;
-	for (const auto& item : items_) {
-		if (item->unread())
-			++count;
-	}
-	return count;
+	return std::count_if(items_.begin(),
+		items_.end(),
+		[](const std::shared_ptr<rss_item>& item) {
+			return item->unread();
+		});
 }
 
 bool rss_feed::matches_tag(const std::string& tag)
