@@ -540,6 +540,25 @@ TEST_CASE(
 	REQUIRE(f.unread_item_count() == 0);
 }
 
+TEST_CASE(
+	"rss_feed::matches_tag() correctly tells if article has a specified "
+	"tag",
+	"[rss]")
+{
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_feed f(&rsscache);
+	const std::vector<std::string> tags = {"One", "Two", "Three", "Four"};
+	f.set_tags(tags);
+
+	REQUIRE(f.matches_tag("Zero") == false);
+	REQUIRE(f.matches_tag("One"));
+	REQUIRE(f.matches_tag("Two"));
+	REQUIRE(f.matches_tag("Three"));
+	REQUIRE(f.matches_tag("Four"));
+	REQUIRE(f.matches_tag("Five") == false);
+}
+
 TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
 	"[rss::rss_parser]")
 {
