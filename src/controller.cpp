@@ -763,7 +763,7 @@ void controller::reload_all(bool unattended)
 
 	LOG(level::DEBUG,
 		"controller::reload_all: starting with reload all...");
-	if (num_threads <= 1) {
+	if (num_threads == 1) {
 		this->reload_range(0, num_feeds - 1, num_feeds, unattended);
 	} else {
 		std::vector<std::pair<unsigned int, unsigned int>> partitions =
