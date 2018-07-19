@@ -752,14 +752,14 @@ void controller::reload_all(bool unattended)
 	time_t t1, t2, dt;
 
 	feedcontainer.reset_feeds_status();
-	const auto size = feedcontainer.feeds_size();
+	const auto num_feeds = feedcontainer.feeds_size();
 
 	if (num_threads < 1) {
 		num_threads = 1;
 	}
 
-	if (num_threads > size) {
-		num_threads = size;
+	if (num_threads > num_feeds) {
+		num_threads = num_feeds;
 	}
 
 	t1 = time(nullptr);
@@ -767,10 +767,10 @@ void controller::reload_all(bool unattended)
 	LOG(level::DEBUG,
 		"controller::reload_all: starting with reload all...");
 	if (num_threads <= 1) {
-		this->reload_range(0, size - 1, size, unattended);
+		this->reload_range(0, num_feeds - 1, num_feeds, unattended);
 	} else {
 		std::vector<std::pair<unsigned int, unsigned int>> partitions =
-			utils::partition_indexes(0, size - 1, num_threads);
+			utils::partition_indexes(0, num_feeds - 1, num_threads);
 		std::vector<std::thread> threads;
 		LOG(level::DEBUG,
 			"controller::reload_all: starting reload threads...");
@@ -778,14 +778,14 @@ void controller::reload_all(bool unattended)
 			threads.push_back(std::thread(reloadrangethread(this,
 				partitions[i].first,
 				partitions[i].second,
-				size,
+				num_feeds,
 				unattended)));
 		}
 		LOG(level::DEBUG,
 			"controller::reload_all: starting my own reload...");
 		this->reload_range(partitions[num_threads - 1].first,
 			partitions[num_threads - 1].second,
-			size,
+			num_feeds,
 			unattended);
 		LOG(level::DEBUG,
 			"controller::reload_all: joining other threads...");
