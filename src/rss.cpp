@@ -165,11 +165,10 @@ unsigned int rss_feed::unread_item_count()
 
 bool rss_feed::matches_tag(const std::string& tag)
 {
-	for (const auto& t : tags_) {
-		if (tag == t)
-			return true;
-	}
-	return false;
+	return std::find_if(
+		       tags_.begin(), tags_.end(), [&](const std::string& t) {
+			       return tag == t;
+		       }) != tags_.end();
 }
 
 std::string rss_feed::get_firsttag()
