@@ -1,12 +1,18 @@
 #!/bin/sh
 
 pattern="*.cpp doc/*.cpp include/*.h rss/*.h rss/*.cpp src/*.cpp test/*.h test/*.cpp"
-fifo=$(mktemp -d)
-fifo="${fifo}/fifo"
+
+dir=$(mktemp -d)
+fifo="${dir}/fifo"
+
 mkfifo "$fifo"
 eval "cat $pattern >$fifo &"
 eval "clang-format --style=file $pattern" | diff "$fifo" - >/dev/null
-if [ $? -ne 0 ]
+res=$?
+
+rm -rf "$dir"
+
+if [ $res -ne 0 ]
 then
     1>&2
     echo "Some code formatting violates our code style: https://github.com/newsboat/newsboat/blob/master/doc/code-style.markdown"
