@@ -4,9 +4,16 @@ Newsboat Code Style Guide
 These are guidelines, not laws. You are free to deviate, but make sure you have
 a good argument for doing so.
 
-Guidelines that could be easily automated have been automated. Please install
-[EditorConfig plugin][editorconfig], and also get into habit of running `make
-fmt` before commits.
+Guidelines that could be easily automated, have been. Please install:
+- [EditorConfig plugin][editorconfig], so your editor can apply some of the
+  formatting right as you type;
+- `clang-format` (part of `clang` package in most Linux distributions);
+- our pre-commit hook, which runs `clang-format` on each commit you make. Just
+  run:
+
+    ```shell
+    $ ln -s ../../git-hooks/pre-commit .git/hooks/pre-commit
+    ```
 
 [editorconfig]: http://editorconfig.org/ "EditorConfig"
 
