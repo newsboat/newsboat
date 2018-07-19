@@ -12,8 +12,10 @@ Guidelines that could be easily automated, have been. Please install:
   run:
 
     ```shell
-    $ ln --recursive --symbolic git-hooks/pre-commit .git/hooks/pre-commit
+    $ ln -s ../../git-hooks/pre-commit .git/hooks/pre-commit
     ```
+
+    Note: `../..` is *not* a mistake.
 
 [editorconfig]: http://editorconfig.org/ "EditorConfig"
 
