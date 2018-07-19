@@ -748,19 +748,16 @@ void controller::reload_all(bool unattended)
 {
 	const auto unread_feeds = feedcontainer.unread_feed_count();
 	const auto unread_articles = feedcontainer.unread_item_count();
-	unsigned int num_threads = cfg.get_configvalue_as_int("reload-threads");
+	int num_threads = cfg.get_configvalue_as_int("reload-threads");
 	time_t t1, t2, dt;
 
 	feedcontainer.reset_feeds_status();
 	const auto num_feeds = feedcontainer.feeds_size();
 
-	if (num_threads < 1) {
-		num_threads = 1;
-	}
-
-	if (num_threads > num_feeds) {
-		num_threads = num_feeds;
-	}
+	// TODO: change to std::clamp in C++17
+	const int min_threads = 1;
+	const int max_threads = num_feeds;
+	num_threads = std::max(min_threads, std::min(num_threads, max_threads));
 
 	t1 = time(nullptr);
 
@@ -774,7 +771,7 @@ void controller::reload_all(bool unattended)
 		std::vector<std::thread> threads;
 		LOG(level::DEBUG,
 			"controller::reload_all: starting reload threads...");
-		for (unsigned int i = 0; i < num_threads - 1; i++) {
+		for (int i = 0; i < num_threads - 1; i++) {
 			threads.push_back(std::thread(reloadrangethread(this,
 				partitions[i].first,
 				partitions[i].second,
