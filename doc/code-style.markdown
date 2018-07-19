@@ -15,6 +15,8 @@ Guidelines that could be easily automated, have been. Please install:
     $ ln -s ../../git-hooks/pre-commit .git/hooks/pre-commit
     ```
 
+    Note: `../..` is *not* a mistake.
+
 [editorconfig]: http://editorconfig.org/ "EditorConfig"
 
 ## The Boy Scout Rule
