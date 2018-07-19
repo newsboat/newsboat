@@ -353,7 +353,8 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 
 	SECTION("by unreadarticlecount asc")
 	{
-		cfg->set_configvalue("feed-sort-order", "unreadarticlecount-asc");
+		cfg->set_configvalue(
+			"feed-sort-order", "unreadarticlecount-asc");
 		feedcontainer.sort_feeds(cfg->get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->unread_item_count() == 3);
@@ -365,7 +366,8 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 
 	SECTION("by unreadarticlecount desc")
 	{
-		cfg->set_configvalue("feed-sort-order", "unreadarticlecount-desc");
+		cfg->set_configvalue(
+			"feed-sort-order", "unreadarticlecount-desc");
 		feedcontainer.sort_feeds(cfg->get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->unread_item_count() == 0);

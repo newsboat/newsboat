@@ -54,8 +54,8 @@ bool configparser::parse(const std::string& filename, bool double_include)
 	 *   - read it line by line
 	 *   - tokenize every line
 	 *   - if there is at least one token, look up a registered
-	 * config_action_handler to handle the command (which is specified in the
-	 * first token)
+	 * config_action_handler to handle the command (which is specified in
+	 * the first token)
 	 *   - hand over the tokenize results to the config_action_handler
 	 *   - if an error happens, react accordingly.
 	 */

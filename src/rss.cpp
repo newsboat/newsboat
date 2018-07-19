@@ -32,7 +32,8 @@ rss_item::rss_item(cache* c)
 	, enqueued_(false)
 	, deleted_(0)
 	, override_unread_(false)
-{}
+{
+}
 
 rss_item::~rss_item() {}
 
@@ -44,7 +45,8 @@ rss_feed::rss_feed(cache* c)
 	, idx(0)
 	, order(0)
 	, status_(dl_status::SUCCESS)
-{}
+{
+}
 
 rss_feed::~rss_feed()
 {
