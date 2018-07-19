@@ -508,6 +508,38 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 	}
 }
 
+TEST_CASE(
+	"rss_feed::unread_item_count() correctly returns number of unread "
+	"articles",
+	"[rss]")
+{
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_feed f(&rsscache);
+	for (int i = 0; i < 5; ++i) {
+		const auto item = std::make_shared<rss_item>(&rsscache);
+		item->set_guid(std::to_string(i));
+		f.add_item(item);
+	}
+
+	REQUIRE(f.unread_item_count() == 5);
+
+	f.get_item_by_guid("0")->set_unread_nowrite(false);
+	REQUIRE(f.unread_item_count() == 4);
+
+	f.get_item_by_guid("1")->set_unread_nowrite(false);
+	REQUIRE(f.unread_item_count() == 3);
+
+	f.get_item_by_guid("2")->set_unread_nowrite(false);
+	REQUIRE(f.unread_item_count() == 2);
+
+	f.get_item_by_guid("3")->set_unread_nowrite(false);
+	REQUIRE(f.unread_item_count() == 1);
+
+	f.get_item_by_guid("4")->set_unread_nowrite(false);
+	REQUIRE(f.unread_item_count() == 0);
+}
+
 TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
 	"[rss::rss_parser]")
 {
