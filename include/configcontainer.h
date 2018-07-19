@@ -18,14 +18,7 @@ enum class feed_sort_method_t {
 	LAST_UPDATED
 };
 
-enum class art_sort_method_t {
-	TITLE,
-	FLAGS,
-	AUTHOR,
-	LINK,
-	GUID,
-	DATE
-};
+enum class art_sort_method_t { TITLE, FLAGS, AUTHOR, LINK, GUID, DATE };
 
 enum class sort_direction_t { ASC, DESC };
 

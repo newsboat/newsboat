@@ -326,7 +326,9 @@ TEST_CASE("get_suggestions() returns results in alphabetical order",
 	}
 }
 
-TEST_CASE("get_feed_sort_strategy() returns correctly filled FeedSortStrategy struct",
+TEST_CASE(
+	"get_feed_sort_strategy() returns correctly filled FeedSortStrategy "
+	"struct",
 	"[configcontainer]")
 {
 	configcontainer cfg;
@@ -408,17 +410,22 @@ TEST_CASE("get_feed_sort_strategy() returns correctly filled FeedSortStrategy st
 	{
 		cfg.set_configvalue("feed-sort-order", "unreadarticlecount");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == feed_sort_method_t::UNREAD_ARTICLE_COUNT);
+		REQUIRE(sort_strategy.sm ==
+			feed_sort_method_t::UNREAD_ARTICLE_COUNT);
 		REQUIRE(sort_strategy.sd == sort_direction_t::DESC);
 
-		cfg.set_configvalue("feed-sort-order", "unreadarticlecount-desc");
+		cfg.set_configvalue(
+			"feed-sort-order", "unreadarticlecount-desc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == feed_sort_method_t::UNREAD_ARTICLE_COUNT);
+		REQUIRE(sort_strategy.sm ==
+			feed_sort_method_t::UNREAD_ARTICLE_COUNT);
 		REQUIRE(sort_strategy.sd == sort_direction_t::DESC);
 
-		cfg.set_configvalue("feed-sort-order", "unreadarticlecount-asc");
+		cfg.set_configvalue(
+			"feed-sort-order", "unreadarticlecount-asc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == feed_sort_method_t::UNREAD_ARTICLE_COUNT);
+		REQUIRE(sort_strategy.sm ==
+			feed_sort_method_t::UNREAD_ARTICLE_COUNT);
 		REQUIRE(sort_strategy.sd == sort_direction_t::ASC);
 	}
 
