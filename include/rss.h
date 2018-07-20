@@ -385,6 +385,8 @@ public:
 	void unload();
 	void load();
 
+	void mark_all_items_read();
+
 	std::mutex item_mutex; // this is ugly, but makes it possible to lock
 			       // items use e.g. from the cache class
 private:

@@ -758,4 +758,12 @@ void rss_feed::load()
 	ch->fetch_descriptions(this);
 }
 
+void rss_feed::mark_all_items_read()
+{
+	std::lock_guard<std::mutex> lock(item_mutex);
+	for (const auto& item : items_) {
+		item->set_unread_nowrite(false);
+	}
+}
+
 } // namespace newsboat
