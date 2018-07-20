@@ -173,9 +173,7 @@ bool rss_feed::matches_tag(const std::string& tag)
 
 std::string rss_feed::get_firsttag()
 {
-	if (tags_.size() == 0)
-		return "";
-	return tags_[0];
+	return tags_.empty() ? "" : tags_.front();
 }
 
 std::string rss_feed::get_tags()
