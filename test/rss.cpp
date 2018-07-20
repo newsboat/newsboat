@@ -567,6 +567,8 @@ TEST_CASE(
 	cache rsscache(":memory:", &cfg);
 	rss_feed f(&rsscache);
 
+	REQUIRE(f.get_firsttag() == "");
+
 	std::vector<std::string> tags = {"One", "Two", "Three", "Four"};
 	f.set_tags(tags);
 	REQUIRE(f.get_firsttag() == "One");
