@@ -559,6 +559,31 @@ TEST_CASE(
 	REQUIRE(f.matches_tag("Five") == false);
 }
 
+TEST_CASE(
+	"rss_feed::get_firsttag() returns first tag",
+	"[rss]")
+{
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_feed f(&rsscache);
+
+	std::vector<std::string> tags = {"One", "Two", "Three", "Four"};
+	f.set_tags(tags);
+	REQUIRE(f.get_firsttag() == "One");
+
+	tags = {"Five", "Six", "Seven", "Eight"};
+	f.set_tags(tags);
+	REQUIRE(f.get_firsttag() == "Five");
+
+	tags = {"Nine", "Ten", "Eleven", "Twelve"};
+	f.set_tags(tags);
+	REQUIRE(f.get_firsttag() == "Nine");
+
+	tags = {"Orange", "Apple", "Kiwi", "Banana"};
+	f.set_tags(tags);
+	REQUIRE(f.get_firsttag() == "Orange");
+}
+
 TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
 	"[rss::rss_parser]")
 {
