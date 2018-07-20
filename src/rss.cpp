@@ -248,12 +248,9 @@ std::string rss_feed::description() const
 
 bool rss_feed::hidden() const
 {
-	for (const auto& tag : tags_) {
-		if (tag.substr(0, 1) == "!") {
-			return true;
-		}
-	}
-	return false;
+	return std::any_of(tags_.begin(),
+		tags_.end(),
+		[](const std::string& tag) { return tag.substr(0, 1) == "!"; });
 }
 
 std::shared_ptr<rss_item> rss_feed::get_item_by_guid(const std::string& guid)
