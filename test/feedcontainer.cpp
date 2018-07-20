@@ -440,6 +440,32 @@ TEST_CASE("mark_all_feed_items_read() marks all of feed's items as read",
 	}
 }
 
+TEST_CASE("mark_all_feeds_read() marks all items in all articles as read",
+	"[feedcontainer]")
+{
+	FeedContainer feedcontainer;
+	std::unique_ptr<configcontainer> cfg(new configcontainer());
+	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
+	const auto feeds = get_five_empty_feeds(rsscache.get());
+
+	for (const auto& feed : feeds) {
+		for (int j = 0; j < 3; ++j) {
+			const auto item = std::make_shared<rss_item>(rsscache.get());
+			item->set_unread_nowrite(true);
+			feed->add_item(item);
+		}
+	}
+	feedcontainer.set_feeds(feeds);
+
+	feedcontainer.mark_all_feeds_read();
+
+	for (const auto& feed : feeds) {
+		for (const auto& item : feed->items()) {
+			REQUIRE(item->unread() == false);
+		}
+	}
+}
+
 TEST_CASE(
 	"reset_feeds_status() changes status of all feeds to \"to be "
 	"downloaded\"",
