@@ -586,6 +586,29 @@ TEST_CASE(
 	REQUIRE(f.get_firsttag() == "Orange");
 }
 
+TEST_CASE(
+	"rss_feed::hidden() returns true if feed has tag starting with \"!\"",
+	"[rss]")
+{
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_feed f(&rsscache);
+
+	REQUIRE(f.hidden() == false);
+
+	std::vector<std::string> tags = { "One", "Two", "!Three" };
+	f.set_tags(tags);
+	REQUIRE(f.hidden());
+
+	tags = { "One" };
+	f.set_tags(tags);
+	REQUIRE(f.hidden() == false);
+
+	tags = { "One", "!" };
+	f.set_tags(tags);
+	REQUIRE(f.hidden());
+}
+
 TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
 	"[rss::rss_parser]")
 {
