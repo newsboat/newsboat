@@ -587,7 +587,7 @@ TEST_CASE(
 }
 
 TEST_CASE(
-	"rss_feed::hidden() returns true if feed has tag starting with \"!\"",
+	"rss_feed::hidden() returns true if feed has a tag starting with \"!\"",
 	"[rss]")
 {
 	configcontainer cfg;
@@ -607,6 +607,26 @@ TEST_CASE(
 	tags = { "One", "!" };
 	f.set_tags(tags);
 	REQUIRE(f.hidden());
+}
+
+TEST_CASE(
+	"rss_feed::mark_all_items_read() marks all items within a feed as read",
+	"[rss]")
+{
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_feed f(&rsscache);
+	for (int i = 0; i < 5; ++i) {
+		const auto item = std::make_shared<rss_item>(&rsscache);
+		REQUIRE(item->unread() == true);
+		f.add_item(item);
+	}
+
+	f.mark_all_items_read();
+
+	for (const auto& item : f.items()) {
+		REQUIRE(item->unread() == false);
+	}
 }
 
 TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
