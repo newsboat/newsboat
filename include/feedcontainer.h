@@ -16,6 +16,7 @@ public:
 	std::shared_ptr<rss_feed> get_feed(const unsigned int pos);
 	void add_feed(const std::shared_ptr<rss_feed> feed);
 	void mark_all_feed_items_read(const unsigned int feed_pos);
+	void mark_all_feeds_read();
 	unsigned int get_feed_count_per_tag(const std::string& tag);
 	std::shared_ptr<rss_feed> get_feed_by_url(const std::string& feedurl);
 	void populate_query_feeds();

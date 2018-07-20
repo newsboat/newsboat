@@ -123,6 +123,14 @@ void FeedContainer::mark_all_feed_items_read(const unsigned int feed_pos)
 	}
 }
 
+void FeedContainer::mark_all_feeds_read()
+{
+	std::lock_guard<std::mutex> feedslock(feeds_mutex);
+	for (const auto& feed : feeds) {
+		feed->mark_all_items_read();
+	}
+}
+
 void FeedContainer::add_feed(const std::shared_ptr<rss_feed> feed)
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
