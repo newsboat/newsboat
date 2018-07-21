@@ -32,8 +32,7 @@ rss_item::rss_item(cache* c)
 	, enqueued_(false)
 	, deleted_(0)
 	, override_unread_(false)
-{
-}
+{}
 
 rss_item::~rss_item() {}
 
@@ -45,8 +44,7 @@ rss_feed::rss_feed(cache* c)
 	, idx(0)
 	, order(0)
 	, status_(dl_status::SUCCESS)
-{
-}
+{}
 
 rss_feed::~rss_feed()
 {
@@ -345,23 +343,14 @@ void rss_item::sort_flags()
 {
 	std::sort(flags_.begin(), flags_.end());
 
-	auto it = flags_.begin();
-	while (it != flags_.end()) {
-		if (!isalpha(*it)) {
-			flags_.erase(it);
-		} else {
-			it += 1;
-		}
-	}
+	// Erase non-alpha characters
+	flags_.erase(std::remove_if(flags_.begin(),
+			     flags_.end(),
+			     [](const char c) { return !isalpha(c); }),
+		flags_.end());
 
-	for (unsigned int i = 0; i < flags_.size(); ++i) {
-		if (i < (flags_.size() - 1)) {
-			if (flags_[i] == flags_[i + 1]) {
-				flags_.erase(i + 1, 1);
-				--i;
-			}
-		}
-	}
+	// Erase doubled characters
+	flags_.erase(std::unique(flags_.begin(), flags_.end()), flags_.end());
 }
 
 bool rss_feed::has_attribute(const std::string& attribname)
