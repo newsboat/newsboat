@@ -645,6 +645,26 @@ TEST_CASE(
 	REQUIRE(f.get_tags() == "One Three ");
 }
 
+TEST_CASE(
+	"rss_feed::purge_deleted_items() deletes all items that have "
+	"\"deleted\" property set up",
+	"[rss]")
+{
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_feed f(&rsscache);
+	for (int i = 0; i < 5; ++i) {
+		const auto item = std::make_shared<rss_item>(&rsscache);
+		if (i % 2) {
+			item->set_deleted(true);
+		}
+		f.add_item(item);
+	}
+
+	f.purge_deleted_items();
+	REQUIRE(f.total_item_count() == 3);
+}
+
 TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
 	"[rss::rss_parser]")
 {
