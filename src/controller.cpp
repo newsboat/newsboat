@@ -539,26 +539,25 @@ void controller::mark_all_read(const std::string& feedurl)
 		return;
 	}
 
-	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	for (const auto& feed : feedcontainer.feeds) {
-		std::lock_guard<std::mutex> lock(feed->item_mutex);
-
-		if (feedurl.length() > 0 && feed->rssurl() != feedurl)
-			continue;
-
-		if (feed->total_item_count() > 0) {
-			if (api) {
+	if (feedurl.empty()) { // Mark all feeds as read
+		if (api) {
+			for (const auto& feed : feedcontainer.feeds) {
 				api->mark_all_read(feed->rssurl());
 			}
-			for (const auto& item : feed->items()) {
-				item->set_unread_nowrite(false);
-			}
+		}
+		feedcontainer.mark_all_feeds_read();
+	} else { // Mark a specific feed as read
+		std::lock_guard<std::mutex> feedslock(feeds_mutex);
+		const auto feed = feedcontainer.get_feed_by_url(feedurl);
+		if (!feed.get()) {
+			return;
 		}
 
-		// no point in going on - there is only one feed with a given
-		// URL
-		if (feedurl.length() > 0)
-			break;
+		if (api) {
+			api->mark_all_read(feed->rssurl());
+		}
+
+		feed->mark_all_items_read();
 	}
 }
 
