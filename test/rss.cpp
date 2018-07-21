@@ -559,9 +559,7 @@ TEST_CASE(
 	REQUIRE(f.matches_tag("Five") == false);
 }
 
-TEST_CASE(
-	"rss_feed::get_firsttag() returns first tag",
-	"[rss]")
+TEST_CASE("rss_feed::get_firsttag() returns first tag", "[rss]")
 {
 	configcontainer cfg;
 	cache rsscache(":memory:", &cfg);
@@ -596,15 +594,15 @@ TEST_CASE(
 
 	REQUIRE(f.hidden() == false);
 
-	std::vector<std::string> tags = { "One", "Two", "!Three" };
+	std::vector<std::string> tags = {"One", "Two", "!Three"};
 	f.set_tags(tags);
 	REQUIRE(f.hidden());
 
-	tags = { "One" };
+	tags = {"One"};
 	f.set_tags(tags);
 	REQUIRE(f.hidden() == false);
 
-	tags = { "One", "!" };
+	tags = {"One", "!"};
 	f.set_tags(tags);
 	REQUIRE(f.hidden());
 }
@@ -629,17 +627,15 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE(
-	"rss_feed::set_tags() sets tags for a feed",
-	"[rss]")
+TEST_CASE("rss_feed::set_tags() sets tags for a feed", "[rss]")
 {
 	configcontainer cfg;
 	cache rsscache(":memory:", &cfg);
 	rss_feed f(&rsscache);
 
-	std::vector<std::string> tags = { "One", "Two" };
+	std::vector<std::string> tags = {"One", "Two"};
 	f.set_tags(tags);
-	tags = { "One", "Three"};
+	tags = {"One", "Three"};
 	REQUIRE(f.get_tags() == "One Two ");
 	f.set_tags(tags);
 	REQUIRE(f.get_tags() == "One Three ");
