@@ -685,21 +685,23 @@ void rss_feed::purge_deleted_items()
 {
 	std::lock_guard<std::mutex> lock(item_mutex);
 	scope_measure m1("rss_feed::purge_deleted_items");
-	auto it = items_.begin();
-	while (it != items_.end()) {
-		if ((*it)->deleted()) {
-			{
-				std::lock_guard<std::mutex> lock2(
-					items_guid_map_mutex);
-				items_guid_map.erase((*it)->guid());
+
+	// Purge in items_guid_map
+	{
+		std::lock_guard<std::mutex> lock2(items_guid_map_mutex);
+		for (const auto& item : items_) {
+			if (item->deleted()) {
+				items_guid_map.erase(item->guid());
 			}
-			items_.erase(it);
-			it = items_.begin(); // items_ modified -> iterator
-					     // invalidated
-		} else {
-			++it;
 		}
 	}
+
+	items_.erase(std::remove_if(items_.begin(),
+			     items_.end(),
+			     [](const std::shared_ptr<rss_item> item) {
+				     return item->deleted();
+			     }),
+		items_.end());
 }
 
 void rss_feed::set_feedptrs(std::shared_ptr<rss_feed> self)
