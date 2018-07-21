@@ -440,7 +440,7 @@ TEST_CASE("mark_all_feed_items_read() marks all of feed's items as read",
 	}
 }
 
-TEST_CASE("mark_all_feeds_read() marks all items in all articles as read",
+TEST_CASE("mark_all_feeds_read() marks all items in all feeds as read",
 	"[feedcontainer]")
 {
 	FeedContainer feedcontainer;
