@@ -190,10 +190,7 @@ std::string rss_feed::get_tags()
 
 void rss_feed::set_tags(const std::vector<std::string>& tags)
 {
-	tags_.clear();
-	for (const auto& tag : tags) {
-		tags_.push_back(tag);
-	}
+	tags_ = tags;
 }
 
 void rss_item::set_enclosure_url(const std::string& url)
