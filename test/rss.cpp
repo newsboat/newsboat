@@ -629,6 +629,22 @@ TEST_CASE(
 	}
 }
 
+TEST_CASE(
+	"rss_feed::set_tags() sets tags for a feed",
+	"[rss]")
+{
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_feed f(&rsscache);
+
+	std::vector<std::string> tags = { "One", "Two" };
+	f.set_tags(tags);
+	tags = { "One", "Three"};
+	REQUIRE(f.get_tags() == "One Two ");
+	f.set_tags(tags);
+	REQUIRE(f.get_tags() == "One Three ");
+}
+
 TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
 	"[rss::rss_parser]")
 {
