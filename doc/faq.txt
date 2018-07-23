@@ -26,7 +26,7 @@ After I open a link in the browser, Newsboat stays unresponsive until the browse
 -------------------------------------------------------------------------------------------
 
 Newsboat has to behave like that in order to accomodate users of text-based
-browsers like lynx and w3c. It has to relinquish the terminal and stay out of
+browsers like lynx and w3m. It has to relinquish the terminal and stay out of
 the way, otherwise people won't be able to see their browsers.
 
 If you're using a GUI browser like Firefox, you can do one of two things:
