@@ -117,6 +117,11 @@ public:
 		return &reloader;
 	}
 
+	void replace_feed(std::shared_ptr<rss_feed> oldfeed,
+		std::shared_ptr<rss_feed> newfeed,
+		unsigned int pos,
+		bool unattended);
+
 private:
 	void print_usage(char* argv0);
 	void print_version_information(const char* argv0, unsigned int level);

@@ -592,6 +592,38 @@ void controller::mark_all_read(unsigned int pos)
 	}
 }
 
+void controller::replace_feed(std::shared_ptr<rss_feed> oldfeed,
+	std::shared_ptr<rss_feed> newfeed,
+	unsigned int pos,
+	bool unattended)
+{
+	std::lock_guard<std::mutex> feedslock(feeds_mutex);
+
+	LOG(level::DEBUG, "controller::replace_feed: feed is nonempty, saving");
+	rsscache->externalize_rssfeed(
+		newfeed, ign.matches_resetunread(newfeed->rssurl()));
+	LOG(level::DEBUG,
+		"controller::replace_feed: after externalize_rssfeed");
+
+	bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
+	std::shared_ptr<rss_feed> feed = rsscache->internalize_rssfeed(
+		oldfeed->rssurl(), ignore_disp ? &ign : nullptr);
+	LOG(level::DEBUG,
+		"controller::replace_feed: after internalize_rssfeed");
+
+	feed->set_tags(urlcfg->get_tags(oldfeed->rssurl()));
+	feed->set_order(oldfeed->get_order());
+	feedcontainer.feeds[pos] = feed;
+	enqueue_items(feed);
+
+	oldfeed->clear_items();
+
+	v->notify_itemlist_change(feedcontainer.feeds[pos]);
+	if (!unattended) {
+		v->set_feedlist(feedcontainer.feeds);
+	}
+}
+
 void controller::reload(unsigned int pos,
 	unsigned int max,
 	bool unattended,
@@ -620,43 +652,7 @@ void controller::reload(unsigned int pos,
 			oldfeed->set_status(dl_status::DURING_DOWNLOAD);
 			std::shared_ptr<rss_feed> newfeed = parser.parse();
 			if (newfeed->total_item_count() > 0) {
-				std::lock_guard<std::mutex> feedslock(
-					feeds_mutex);
-
-				LOG(level::DEBUG,
-					"controller::reload: feed is nonempty, "
-					"saving");
-				rsscache->externalize_rssfeed(newfeed,
-					ign.matches_resetunread(
-						newfeed->rssurl()));
-				LOG(level::DEBUG,
-					"controller::reload: after "
-					"externalize_rssfeed");
-
-				bool ignore_disp =
-					(cfg.get_configvalue("ignore-mode") ==
-						"display");
-				std::shared_ptr<rss_feed> feed =
-					rsscache->internalize_rssfeed(
-						oldfeed->rssurl(),
-						ignore_disp ? &ign : nullptr);
-				LOG(level::DEBUG,
-					"controller::reload: after "
-					"internalize_rssfeed");
-
-				feed->set_tags(
-					urlcfg->get_tags(oldfeed->rssurl()));
-				feed->set_order(oldfeed->get_order());
-				feedcontainer.feeds[pos] = feed;
-				enqueue_items(feed);
-
-				oldfeed->clear_items();
-
-				v->notify_itemlist_change(
-					feedcontainer.feeds[pos]);
-				if (!unattended) {
-					v->set_feedlist(feedcontainer.feeds);
-				}
+				replace_feed(oldfeed, newfeed, pos, unattended);
 			} else {
 				LOG(level::DEBUG,
 					"controller::reload: feed is empty");
