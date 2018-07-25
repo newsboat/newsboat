@@ -52,12 +52,6 @@ public:
 		const std::string& query,
 		std::shared_ptr<rss_feed> feed);
 
-	void unlock_reload_mutex()
-	{
-		reload_mutex.unlock();
-	}
-	bool trylock_reload_mutex();
-
 	void update_feedlist();
 	void update_visible_feeds();
 	void mark_all_read(unsigned int pos);
@@ -151,7 +145,6 @@ private:
 	FeedContainer feedcontainer;
 	filtercontainer filters;
 
-	std::mutex reload_mutex;
 	configparser cfgparser;
 	colormanager colorman;
 	regexmanager rxman;

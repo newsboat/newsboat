@@ -26,4 +26,14 @@ void Reloader::start_reload_all_thread(std::vector<int>* indexes)
 	t.detach();
 }
 
+bool Reloader::trylock_reload_mutex()
+{
+	if (reload_mutex.try_lock()) {
+		LOG(level::DEBUG, "Reloader::trylock_reload_mutex succeeded");
+		return true;
+	}
+	LOG(level::DEBUG, "Reloader::trylock_reload_mutex failed");
+	return false;
+}
+
 } // namespace newsboat

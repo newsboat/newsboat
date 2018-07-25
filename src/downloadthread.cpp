@@ -23,13 +23,13 @@ void downloadthread::operator()()
 	LOG(level::DEBUG,
 		"downloadthread::run: inside downloadthread, reloading all "
 		"feeds...");
-	if (ctrl->trylock_reload_mutex()) {
+	if (ctrl->get_reloader()->trylock_reload_mutex()) {
 		if (indexes.size() == 0) {
 			ctrl->reload_all();
 		} else {
 			ctrl->reload_indexes(indexes);
 		}
-		ctrl->unlock_reload_mutex();
+		ctrl->get_reloader()->unlock_reload_mutex();
 	}
 }
 
