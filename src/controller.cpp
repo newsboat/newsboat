@@ -622,9 +622,16 @@ void controller::reload(unsigned int pos,
 			if (newfeed->total_item_count() > 0) {
 				std::lock_guard<std::mutex> feedslock(
 					feeds_mutex);
-				save_feed(newfeed, pos);
 
-				newfeed->clear_items();
+				LOG(level::DEBUG,
+					"controller::reload: feed is nonempty, "
+					"saving");
+				rsscache->externalize_rssfeed(newfeed,
+					ign.matches_resetunread(
+						newfeed->rssurl()));
+				LOG(level::DEBUG,
+					"controller::reload: after "
+					"externalize_rssfeed");
 
 				bool ignore_disp =
 					(cfg.get_configvalue("ignore-mode") ==
@@ -633,6 +640,10 @@ void controller::reload(unsigned int pos,
 					rsscache->internalize_rssfeed(
 						oldfeed->rssurl(),
 						ignore_disp ? &ign : nullptr);
+				LOG(level::DEBUG,
+					"controller::reload: after "
+					"internalize_rssfeed");
+
 				feed->set_tags(
 					urlcfg->get_tags(oldfeed->rssurl()));
 				feed->set_order(oldfeed->get_order());
@@ -1458,39 +1469,6 @@ std::string controller::prepare_message(unsigned int pos, unsigned int max)
 		return strprintf::fmt("(%u/%u) ", pos, max);
 	}
 	return "";
-}
-
-void controller::save_feed(std::shared_ptr<rss_feed> feed, unsigned int pos)
-{
-	if (!feed->is_empty()) {
-		LOG(level::DEBUG,
-			"controller::save_feed: feed is nonempty, saving");
-		rsscache->externalize_rssfeed(
-			feed, ign.matches_resetunread(feed->rssurl()));
-		LOG(level::DEBUG,
-			"controller::save_feed: after externalize_rssfeed");
-
-		bool ignore_disp =
-			(cfg.get_configvalue("ignore-mode") == "display");
-		feed = rsscache->internalize_rssfeed(
-			feed->rssurl(), ignore_disp ? &ign : nullptr);
-		LOG(level::DEBUG,
-			"controller::save_feed: after internalize_rssfeed");
-		feed->set_tags(urlcfg->get_tags(feed->rssurl()));
-		{
-			unsigned int order =
-				feedcontainer.feeds[pos]->get_order();
-			std::lock_guard<std::mutex> itemlock(
-				feedcontainer.feeds[pos]->item_mutex);
-			feedcontainer.feeds[pos]->clear_items();
-			feed->set_order(order);
-		}
-		feedcontainer.feeds[pos] = feed;
-		v->notify_itemlist_change(feedcontainer.feeds[pos]);
-	} else {
-		LOG(level::DEBUG,
-			"controller::save_feed: feed is empty, not saving");
-	}
 }
 
 void controller::enqueue_items(std::shared_ptr<rss_feed> feed)
