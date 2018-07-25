@@ -854,16 +854,6 @@ void controller::notify(const std::string& msg)
 	}
 }
 
-bool controller::trylock_reload_mutex()
-{
-	if (reload_mutex.try_lock()) {
-		LOG(level::DEBUG, "controller::trylock_reload_mutex succeeded");
-		return true;
-	}
-	LOG(level::DEBUG, "controller::trylock_reload_mutex failed");
-	return false;
-}
-
 void controller::print_version_information(const char* argv0,
 	unsigned int level)
 {
