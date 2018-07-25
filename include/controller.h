@@ -11,6 +11,7 @@
 #include "filtercontainer.h"
 #include "fslock.h"
 #include "regexmanager.h"
+#include "reloader.h"
 #include "remote_api.h"
 #include "rss.h"
 #include "urlreader.h"
@@ -156,6 +157,8 @@ private:
 	std::unique_ptr<FSLock> fslock;
 
 	ConfigPaths configpaths;
+
+	Reloader reloader;
 };
 
 } // namespace newsboat
