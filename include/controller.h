@@ -119,6 +119,11 @@ public:
 
 	void update_flags(std::shared_ptr<rss_item> item);
 
+	Reloader* get_reloader()
+	{
+		return &reloader;
+	}
+
 private:
 	void print_usage(char* argv0);
 	void print_version_information(const char* argv0, unsigned int level);

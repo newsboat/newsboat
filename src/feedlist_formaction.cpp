@@ -13,7 +13,7 @@
 #include "formatstring.h"
 #include "listformatter.h"
 #include "logger.h"
-#include "reloadthread.h"
+#include "reloader.h"
 #include "strprintf.h"
 #include "utils.h"
 #include "view.h"
@@ -60,8 +60,7 @@ void feedlist_formaction::init()
 	 * reloadthread, which is responsible for regularly spawning
 	 * downloadthreads.
 	 */
-	std::thread t{reloadthread(v->get_ctrl(), v->get_cfg())};
-	t.detach();
+	v->get_ctrl()->get_reloader()->spawn_reloadthread();
 
 	apply_filter =
 		!(v->get_cfg()->get_configvalue_as_bool("show-read-feeds"));
