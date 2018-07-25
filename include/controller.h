@@ -35,11 +35,6 @@ public:
 	}
 	int run(int argc = 0, char* argv[] = nullptr);
 
-	void reload(unsigned int pos,
-		unsigned int max = 0,
-		bool unattended = false,
-		curl_handle* easyhandle = 0);
-
 	void reload_all(bool unattended = false);
 	void reload_indexes(const std::vector<int>& indexes,
 		bool unattended = false);
@@ -122,6 +117,16 @@ public:
 		unsigned int pos,
 		bool unattended);
 
+	rss_ignores* get_ignores()
+	{
+		return &ign;
+	}
+
+	remote_api* get_api()
+	{
+		return api;
+	}
+
 private:
 	void print_usage(char* argv0);
 	void print_version_information(const char* argv0, unsigned int level);
@@ -130,7 +135,6 @@ private:
 	void rec_find_rss_outlines(xmlNode* node, std::string tag);
 	int execute_commands(const std::vector<std::string>& cmds);
 
-	std::string prepare_message(unsigned int pos, unsigned int max);
 	void enqueue_items(std::shared_ptr<rss_feed> feed);
 
 	std::string generate_enqueue_filename(const std::string& url,

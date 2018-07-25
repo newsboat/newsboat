@@ -624,67 +624,6 @@ void controller::replace_feed(std::shared_ptr<rss_feed> oldfeed,
 	}
 }
 
-void controller::reload(unsigned int pos,
-	unsigned int max,
-	bool unattended,
-	curl_handle* easyhandle)
-{
-	LOG(level::DEBUG, "controller::reload: pos = %u max = %u", pos, max);
-	if (pos < feedcontainer.feeds.size()) {
-		std::shared_ptr<rss_feed> oldfeed = feedcontainer.feeds[pos];
-		std::string errmsg;
-		if (!unattended)
-			v->set_status(strprintf::fmt(_("%sLoading %s..."),
-				prepare_message(pos + 1, max),
-				utils::censor_url(oldfeed->rssurl())));
-
-		bool ignore_dl =
-			(cfg.get_configvalue("ignore-mode") == "download");
-
-		rss_parser parser(oldfeed->rssurl(),
-			rsscache,
-			&cfg,
-			ignore_dl ? &ign : nullptr,
-			api);
-		parser.set_easyhandle(easyhandle);
-		LOG(level::DEBUG, "controller::reload: created parser");
-		try {
-			oldfeed->set_status(dl_status::DURING_DOWNLOAD);
-			std::shared_ptr<rss_feed> newfeed = parser.parse();
-			if (newfeed->total_item_count() > 0) {
-				replace_feed(oldfeed, newfeed, pos, unattended);
-			} else {
-				LOG(level::DEBUG,
-					"controller::reload: feed is empty");
-			}
-			oldfeed->set_status(dl_status::SUCCESS);
-			v->set_status("");
-		} catch (const dbexception& e) {
-			errmsg = strprintf::fmt(
-				_("Error while retrieving %s: %s"),
-				utils::censor_url(oldfeed->rssurl()),
-				e.what());
-		} catch (const std::string& emsg) {
-			errmsg = strprintf::fmt(
-				_("Error while retrieving %s: %s"),
-				utils::censor_url(oldfeed->rssurl()),
-				emsg);
-		} catch (rsspp::exception& e) {
-			errmsg = strprintf::fmt(
-				_("Error while retrieving %s: %s"),
-				utils::censor_url(oldfeed->rssurl()),
-				e.what());
-		}
-		if (errmsg != "") {
-			oldfeed->set_status(dl_status::DL_ERROR);
-			v->set_status(errmsg);
-			LOG(level::USERERROR, "%s", errmsg);
-		}
-	} else {
-		v->show_error(_("Error: invalid feed!"));
-	}
-}
-
 void controller::reload_indexes(const std::vector<int>& indexes,
 	bool unattended)
 {
@@ -694,7 +633,7 @@ void controller::reload_indexes(const std::vector<int>& indexes,
 	const auto size = feedcontainer.feeds_size();
 
 	for (const auto& idx : indexes) {
-		this->reload(idx, size, unattended);
+		reloader.reload(idx, size, unattended);
 	}
 
 	const auto unread_feeds2 = feedcontainer.unread_feed_count();
@@ -748,7 +687,7 @@ void controller::reload_range(unsigned int start,
 		LOG(level::DEBUG,
 			"controller::reload_range: reloading feed #%u",
 			i);
-		this->reload(i, size, unattended, &easyhandle);
+		reloader.reload(i, size, unattended, &easyhandle);
 	}
 }
 
@@ -1457,14 +1396,6 @@ void controller::write_item(std::shared_ptr<rss_item> item, std::ostream& ostr)
 void controller::mark_deleted(const std::string& guid, bool b)
 {
 	rsscache->mark_item_deleted(guid, b);
-}
-
-std::string controller::prepare_message(unsigned int pos, unsigned int max)
-{
-	if (max > 0) {
-		return strprintf::fmt("(%u/%u) ", pos, max);
-	}
-	return "";
 }
 
 void controller::enqueue_items(std::shared_ptr<rss_feed> feed)

@@ -127,7 +127,7 @@ REDO:
 			"feedlist_formaction: reloading feed at position `%s'",
 			feedpos);
 		if (feeds_shown > 0 && feedpos.length() > 0) {
-			v->get_ctrl()->reload(pos);
+			v->get_ctrl()->get_reloader()->reload(pos);
 		} else {
 			v->show_error(
 				_("No feed selected!")); // should not happen
