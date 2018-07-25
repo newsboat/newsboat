@@ -691,90 +691,6 @@ void controller::reload_range(unsigned int start,
 	}
 }
 
-void controller::reload_all(bool unattended)
-{
-	const auto unread_feeds = feedcontainer.unread_feed_count();
-	const auto unread_articles = feedcontainer.unread_item_count();
-	int num_threads = cfg.get_configvalue_as_int("reload-threads");
-	time_t t1, t2, dt;
-
-	feedcontainer.reset_feeds_status();
-	const auto num_feeds = feedcontainer.feeds_size();
-
-	// TODO: change to std::clamp in C++17
-	const int min_threads = 1;
-	const int max_threads = num_feeds;
-	num_threads = std::max(min_threads, std::min(num_threads, max_threads));
-
-	t1 = time(nullptr);
-
-	LOG(level::DEBUG,
-		"controller::reload_all: starting with reload all...");
-	if (num_threads == 1) {
-		this->reload_range(0, num_feeds - 1, num_feeds, unattended);
-	} else {
-		std::vector<std::pair<unsigned int, unsigned int>> partitions =
-			utils::partition_indexes(0, num_feeds - 1, num_threads);
-		std::vector<std::thread> threads;
-		LOG(level::DEBUG,
-			"controller::reload_all: starting reload threads...");
-		for (int i = 0; i < num_threads - 1; i++) {
-			threads.push_back(std::thread(reloadrangethread(this,
-				partitions[i].first,
-				partitions[i].second,
-				num_feeds,
-				unattended)));
-		}
-		LOG(level::DEBUG,
-			"controller::reload_all: starting my own reload...");
-		this->reload_range(partitions[num_threads - 1].first,
-			partitions[num_threads - 1].second,
-			num_feeds,
-			unattended);
-		LOG(level::DEBUG,
-			"controller::reload_all: joining other threads...");
-		for (size_t i = 0; i < threads.size(); i++) {
-			threads[i].join();
-		}
-	}
-
-	// refresh query feeds (update and sort)
-	LOG(level::DEBUG, "controller::reload_all: refresh query feeds");
-	for (const auto& feed : feedcontainer.feeds) {
-		v->prepare_query_feed(feed);
-	}
-	v->force_redraw();
-
-	feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
-	update_feedlist();
-
-	t2 = time(nullptr);
-	dt = t2 - t1;
-	LOG(level::INFO, "controller::reload_all: reload took %d seconds", dt);
-
-	const auto unread_feeds2 = feedcontainer.unread_feed_count();
-	const auto unread_articles2 = feedcontainer.unread_item_count();
-	bool notify_always = cfg.get_configvalue_as_bool("notify-always");
-	if (notify_always || unread_feeds2 > unread_feeds ||
-		unread_articles2 > unread_articles) {
-		int article_count = unread_articles2 - unread_articles;
-		int feed_count = unread_feeds2 - unread_feeds;
-
-		LOG(level::DEBUG, "unread article count: %d", article_count);
-		LOG(level::DEBUG, "unread feed count: %d", feed_count);
-
-		fmtstr_formatter fmt;
-		fmt.register_fmt('f', std::to_string(unread_feeds2));
-		fmt.register_fmt('n', std::to_string(unread_articles2));
-		fmt.register_fmt('d',
-			std::to_string(article_count >= 0 ? article_count : 0));
-		fmt.register_fmt(
-			'D', std::to_string(feed_count >= 0 ? feed_count : 0));
-		this->notify(
-			fmt.do_format(cfg.get_configvalue("notify-format")));
-	}
-}
-
 void controller::notify(const std::string& msg)
 {
 	if (cfg.get_configvalue_as_bool("notify-screen")) {
@@ -1311,7 +1227,7 @@ int controller::execute_commands(const std::vector<std::string>& cmds)
 			"controller::execute_commands: executing `%s'",
 			cmd);
 		if (cmd == "reload") {
-			reload_all(true);
+			reloader.reload_all(true);
 		} else if (cmd == "print-unread") {
 			std::cout << strprintf::fmt(_("%u unread articles"),
 					     rsscache->get_unread_count())

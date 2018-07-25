@@ -333,7 +333,7 @@ src/reloader.o: src/reloader.cpp include/reloader.h include/controller.h \
  include/rss_parser.h rss/rsspp.h include/utils.h include/view.h \
  include/filebrowser_formaction.h include/formaction.h include/history.h \
  include/keymap.h include/stflpp.h include/htmlrenderer.h \
- include/textformatter.h
+ include/textformatter.h include/formatstring.h
 src/reloadthread.o: src/reloadthread.cpp include/reloadthread.h \
  include/configcontainer.h include/configparser.h include/controller.h \
  include/cache.h include/rss.h include/matcher.h filter/FilterParser.h \

@@ -5,6 +5,7 @@
 #include "controller.h"
 #include "downloadthread.h"
 #include "exceptions.h"
+#include "formatstring.h"
 #include "reloadthread.h"
 #include "rss/rsspp.h"
 #include "rss_parser.h"
@@ -111,6 +112,96 @@ std::string Reloader::prepare_message(unsigned int pos, unsigned int max)
 		return strprintf::fmt("(%u/%u) ", pos, max);
 	}
 	return "";
+}
+
+void Reloader::reload_all(bool unattended)
+{
+	const auto unread_feeds =
+		ctrl->get_feedcontainer()->unread_feed_count();
+	const auto unread_articles =
+		ctrl->get_feedcontainer()->unread_item_count();
+	int num_threads =
+		ctrl->get_cfg()->get_configvalue_as_int("reload-threads");
+	time_t t1, t2, dt;
+
+	ctrl->get_feedcontainer()->reset_feeds_status();
+	const auto num_feeds = ctrl->get_feedcontainer()->feeds_size();
+
+	// TODO: change to std::clamp in C++17
+	const int min_threads = 1;
+	const int max_threads = num_feeds;
+	num_threads = std::max(min_threads, std::min(num_threads, max_threads));
+
+	t1 = time(nullptr);
+
+	LOG(level::DEBUG, "Reloader::reload_all: starting with reload all...");
+	if (num_threads == 1) {
+		ctrl->reload_range(0, num_feeds - 1, num_feeds, unattended);
+	} else {
+		std::vector<std::pair<unsigned int, unsigned int>> partitions =
+			utils::partition_indexes(0, num_feeds - 1, num_threads);
+		std::vector<std::thread> threads;
+		LOG(level::DEBUG,
+			"Reloader::reload_all: starting reload threads...");
+		for (int i = 0; i < num_threads - 1; i++) {
+			threads.push_back(std::thread(reloadrangethread(ctrl,
+				partitions[i].first,
+				partitions[i].second,
+				num_feeds,
+				unattended)));
+		}
+		LOG(level::DEBUG,
+			"Reloader::reload_all: starting my own reload...");
+		ctrl->reload_range(partitions[num_threads - 1].first,
+			partitions[num_threads - 1].second,
+			num_feeds,
+			unattended);
+		LOG(level::DEBUG,
+			"Reloader::reload_all: joining other threads...");
+		for (size_t i = 0; i < threads.size(); i++) {
+			threads[i].join();
+		}
+	}
+
+	// refresh query feeds (update and sort)
+	LOG(level::DEBUG, "Reloader::reload_all: refresh query feeds");
+	for (const auto& feed : ctrl->get_feedcontainer()->feeds) {
+		ctrl->get_view()->prepare_query_feed(feed);
+	}
+	ctrl->get_view()->force_redraw();
+
+	ctrl->get_feedcontainer()->sort_feeds(
+		ctrl->get_cfg()->get_feed_sort_strategy());
+	ctrl->update_feedlist();
+
+	t2 = time(nullptr);
+	dt = t2 - t1;
+	LOG(level::INFO, "Reloader::reload_all: reload took %d seconds", dt);
+
+	const auto unread_feeds2 =
+		ctrl->get_feedcontainer()->unread_feed_count();
+	const auto unread_articles2 =
+		ctrl->get_feedcontainer()->unread_item_count();
+	bool notify_always =
+		ctrl->get_cfg()->get_configvalue_as_bool("notify-always");
+	if (notify_always || unread_feeds2 > unread_feeds ||
+		unread_articles2 > unread_articles) {
+		int article_count = unread_articles2 - unread_articles;
+		int feed_count = unread_feeds2 - unread_feeds;
+
+		LOG(level::DEBUG, "unread article count: %d", article_count);
+		LOG(level::DEBUG, "unread feed count: %d", feed_count);
+
+		fmtstr_formatter fmt;
+		fmt.register_fmt('f', std::to_string(unread_feeds2));
+		fmt.register_fmt('n', std::to_string(unread_articles2));
+		fmt.register_fmt('d',
+			std::to_string(article_count >= 0 ? article_count : 0));
+		fmt.register_fmt(
+			'D', std::to_string(feed_count >= 0 ? feed_count : 0));
+		ctrl->notify(fmt.do_format(
+			ctrl->get_cfg()->get_configvalue("notify-format")));
+	}
 }
 
 } // namespace newsboat

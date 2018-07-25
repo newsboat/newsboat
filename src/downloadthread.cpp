@@ -25,7 +25,7 @@ void downloadthread::operator()()
 		"feeds...");
 	if (ctrl->get_reloader()->trylock_reload_mutex()) {
 		if (indexes.size() == 0) {
-			ctrl->reload_all();
+			ctrl->get_reloader()->reload_all();
 		} else {
 			ctrl->reload_indexes(indexes);
 		}

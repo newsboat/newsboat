@@ -50,6 +50,13 @@ public:
 		unsigned int max = 0,
 		bool unattended = false,
 		curl_handle* easyhandle = nullptr);
+
+	/// \brief Reloads all feeds, spawning threads as necessary.
+	///
+	/// Only updates status bar if \a unattended is false. The number of
+	/// threads spawned is controlled by the user via reload-threads
+	/// setting.
+	void reload_all(bool unattended = false);
 };
 
 } // namespace newsboat
