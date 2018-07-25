@@ -328,7 +328,12 @@ src/reloader.o: src/reloader.cpp include/reloader.h include/controller.h \
  include/configpaths.h include/cliargsparser.h include/feedcontainer.h \
  include/filtercontainer.h include/fslock.h include/regexmanager.h \
  include/reloader.h include/remote_api.h include/urlreader.h \
- include/downloadthread.h include/controller.h include/reloadthread.h
+ include/downloadthread.h include/controller.h include/exceptions.h \
+ include/reloadthread.h rss/rsspp.h include/remote_api.h \
+ include/rss_parser.h rss/rsspp.h include/utils.h include/view.h \
+ include/filebrowser_formaction.h include/formaction.h include/history.h \
+ include/keymap.h include/stflpp.h include/htmlrenderer.h \
+ include/textformatter.h
 src/reloadthread.o: src/reloadthread.cpp include/reloadthread.h \
  include/configcontainer.h include/configparser.h include/controller.h \
  include/cache.h include/rss.h include/matcher.h filter/FilterParser.h \
