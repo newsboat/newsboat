@@ -50,7 +50,7 @@ void feedlist_formaction::init()
 	f->run(-3); // compute all widget dimensions
 
 	if (v->get_ctrl()->get_refresh_on_start()) {
-		v->get_ctrl()->start_reload_all_thread();
+		v->get_ctrl()->get_reloader()->start_reload_all_thread();
 	}
 	v->get_ctrl()->update_feedlist();
 
@@ -274,7 +274,7 @@ REDO:
 			for (const auto& feed : visible_feeds) {
 				idxs.push_back(feed.second);
 			}
-			v->get_ctrl()->start_reload_all_thread(
+			v->get_ctrl()->get_reloader()->start_reload_all_thread(
 				reload_only_visible_feeds ? &idxs : nullptr);
 		}
 		break;
