@@ -126,7 +126,6 @@ private:
 	int execute_commands(const std::vector<std::string>& cmds);
 
 	std::string prepare_message(unsigned int pos, unsigned int max);
-	void save_feed(std::shared_ptr<rss_feed> feed, unsigned int pos);
 	void enqueue_items(std::shared_ptr<rss_feed> feed);
 
 	std::string generate_enqueue_filename(const std::string& url,
