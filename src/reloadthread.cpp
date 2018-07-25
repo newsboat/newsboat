@@ -32,12 +32,13 @@ void reloadthread::operator()()
 
 		if (cfg->get_configvalue_as_bool("auto-reload")) {
 			if (suppressed_first) {
-				ctrl->start_reload_all_thread();
+				ctrl->get_reloader()->start_reload_all_thread();
 			} else {
 				suppressed_first = true;
 				if (!cfg->get_configvalue_as_bool(
 					    "suppress-first-reload")) {
-					ctrl->start_reload_all_thread();
+					ctrl->get_reloader()
+						->start_reload_all_thread();
 				}
 			}
 		} else {

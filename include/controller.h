@@ -47,7 +47,6 @@ public:
 		unsigned int end,
 		unsigned int size,
 		bool unattended = false);
-	void start_reload_all_thread(std::vector<int>* indexes = 0);
 
 	std::vector<std::shared_ptr<rss_item>> search_for_items(
 		const std::string& query,
