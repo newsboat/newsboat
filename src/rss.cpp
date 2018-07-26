@@ -477,11 +477,10 @@ bool rss_ignores::matches_lastmodified(const std::string& url)
 
 bool rss_ignores::matches_resetunread(const std::string& url)
 {
-	for (const auto& rf : resetflag) {
-		if (url == rf)
-			return true;
-	}
-	return false;
+	return std::find_if(resetflag.begin(),
+		       resetflag.end(),
+		       [&](const std::string& u) { return u == url; }) !=
+		resetflag.end();
 }
 
 void rss_feed::update_items(std::vector<std::shared_ptr<rss_feed>> feeds)
