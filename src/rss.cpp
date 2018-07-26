@@ -469,11 +469,10 @@ bool rss_ignores::matches(rss_item* item)
 
 bool rss_ignores::matches_lastmodified(const std::string& url)
 {
-	for (const auto& ignore_url : ignores_lastmodified) {
-		if (url == ignore_url)
-			return true;
-	}
-	return false;
+	return std::find_if(ignores_lastmodified.begin(),
+		       ignores_lastmodified.end(),
+		       [&](const std::string& u) { return u == url; }) !=
+		ignores_lastmodified.end();
 }
 
 bool rss_ignores::matches_resetunread(const std::string& url)
