@@ -678,6 +678,23 @@ TEST_CASE(
 	REQUIRE(ignores.matches_lastmodified("www.smth.com") == false);
 }
 
+TEST_CASE(
+	"rss_ignores::matches_resetunread() returns true if given url "
+	"will always have its unread flag reset on update",
+	"[rss]")
+{
+	rss_ignores ignores;
+	ignores.handle_action("reset-unread-on-update",
+		{"http://newsboat.org",
+			"www.cool-website.com",
+			"www.example.com"});
+
+	REQUIRE(ignores.matches_resetunread("www.example.com"));
+	REQUIRE(ignores.matches_resetunread("http://newsboat.org"));
+	REQUIRE(ignores.matches_resetunread("www.cool-website.com"));
+	REQUIRE(ignores.matches_resetunread("www.smth.com") == false);
+}
+
 TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
 	"[rss::rss_parser]")
 {
