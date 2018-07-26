@@ -661,6 +661,23 @@ TEST_CASE(
 	REQUIRE(f.total_item_count() == 3);
 }
 
+TEST_CASE(
+	"rss_ignores::matches_lastmodified() returns true if given url "
+	"has to always be downloaded",
+	"[rss]")
+{
+	rss_ignores ignores;
+	ignores.handle_action("always-download",
+		{"http://newsboat.org",
+			"www.cool-website.com",
+			"www.example.com"});
+
+	REQUIRE(ignores.matches_lastmodified("www.example.com"));
+	REQUIRE(ignores.matches_lastmodified("http://newsboat.org"));
+	REQUIRE(ignores.matches_lastmodified("www.cool-website.com"));
+	REQUIRE(ignores.matches_lastmodified("www.smth.com") == false);
+}
+
 TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
 	"[rss::rss_parser]")
 {
