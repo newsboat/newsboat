@@ -450,7 +450,8 @@ TEST_CASE("mark_all_feeds_read() marks all items in all feeds as read",
 
 	for (const auto& feed : feeds) {
 		for (int j = 0; j < 3; ++j) {
-			const auto item = std::make_shared<rss_item>(rsscache.get());
+			const auto item =
+				std::make_shared<rss_item>(rsscache.get());
 			item->set_unread_nowrite(true);
 			feed->add_item(item);
 		}
