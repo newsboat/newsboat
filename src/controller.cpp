@@ -540,6 +540,7 @@ void controller::mark_all_read(const std::string& feedurl)
 
 	if (feedurl.empty()) { // Mark all feeds as read
 		if (api) {
+			std::lock_guard<std::mutex> feedslock(feeds_mutex);
 			for (const auto& feed : feedcontainer.feeds) {
 				api->mark_all_read(feed->rssurl());
 			}
