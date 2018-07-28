@@ -614,7 +614,7 @@ TEST_CASE(
 	rss_feed f(&rsscache);
 	for (int i = 0; i < 5; ++i) {
 		const auto item = std::make_shared<rss_item>(&rsscache);
-		REQUIRE(item->unread() == true);
+		REQUIRE(item->unread());
 		f.add_item(item);
 	}
 
