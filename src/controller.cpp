@@ -548,7 +548,7 @@ void controller::mark_all_read(const std::string& feedurl)
 	} else { // Mark a specific feed as read
 		std::lock_guard<std::mutex> feedslock(feeds_mutex);
 		const auto feed = feedcontainer.get_feed_by_url(feedurl);
-		if (!feed.get()) {
+		if (!feed) {
 			return;
 		}
 
