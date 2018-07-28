@@ -508,9 +508,7 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 	}
 }
 
-TEST_CASE(
-	"rss_feed::unread_item_count() correctly returns number of unread "
-	"articles",
+TEST_CASE("rss_feed::unread_item_count() returns number of unread articles",
 	"[rss]")
 {
 	configcontainer cfg;
