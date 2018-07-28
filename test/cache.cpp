@@ -751,8 +751,7 @@ TEST_CASE("externalize_rssfeed doesn't store more than `max-items` items",
 
 TEST_CASE("externalize_rssfeed does nothing if it's passed a query feed",
 	"[cache]")
-{
-}
+{}
 
 TEST_CASE(
 	"internalize_rssfeed doesn't return more than `max-items` items, "

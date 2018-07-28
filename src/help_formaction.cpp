@@ -17,8 +17,7 @@ help_formaction::help_formaction(view* vv, std::string formstr)
 	: formaction(vv, formstr)
 	, quit(false)
 	, apply_search(false)
-{
-}
+{}
 
 help_formaction::~help_formaction() {}
 

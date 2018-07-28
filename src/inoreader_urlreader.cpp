@@ -10,8 +10,7 @@ inoreader_urlreader::inoreader_urlreader(configcontainer* c,
 	: cfg(c)
 	, file(url_file)
 	, api(a)
-{
-}
+{}
 
 inoreader_urlreader::~inoreader_urlreader() {}
 

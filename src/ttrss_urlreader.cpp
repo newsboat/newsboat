@@ -7,8 +7,7 @@ namespace newsboat {
 ttrss_urlreader::ttrss_urlreader(const std::string& url_file, remote_api* a)
 	: file(url_file)
 	, api(a)
-{
-}
+{}
 
 ttrss_urlreader::~ttrss_urlreader() {}
 

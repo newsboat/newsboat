@@ -43,8 +43,7 @@ reloadrangethread::reloadrangethread(controller* c,
 	, e(end)
 	, ss(size)
 	, u(unattended)
-{
-}
+{}
 
 void reloadrangethread::operator()()
 {

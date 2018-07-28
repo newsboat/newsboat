@@ -19,8 +19,7 @@ download::download(pb_controller* c)
 	, curkbps(0.0)
 	, offs(0)
 	, ctrl(c)
-{
-}
+{}
 
 download::~download() {}
 

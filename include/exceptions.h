@@ -13,8 +13,7 @@ class xmlexception : public std::exception {
 public:
 	explicit xmlexception(const std::string& errmsg)
 		: msg(errmsg)
-	{
-	}
+	{}
 	~xmlexception() throw() override {}
 	const char* what() const throw() override
 	{
@@ -29,8 +28,7 @@ class configexception : public std::exception {
 public:
 	explicit configexception(const std::string& errmsg)
 		: msg(errmsg)
-	{
-	}
+	{}
 	~configexception() throw() override {}
 	const char* what() const throw() override
 	{
@@ -45,8 +43,7 @@ class confighandlerexception : public std::exception {
 public:
 	explicit confighandlerexception(const std::string& emsg)
 		: msg(emsg)
-	{
-	}
+	{}
 	explicit confighandlerexception(action_handler_status e);
 	~confighandlerexception() throw() override {}
 	const char* what() const throw() override
@@ -67,8 +64,7 @@ class dbexception : public std::exception {
 public:
 	explicit dbexception(sqlite3* h)
 		: msg(sqlite3_errmsg(h))
-	{
-	}
+	{}
 	~dbexception() throw() override {}
 	const char* what() const throw() override
 	{
@@ -89,8 +85,7 @@ public:
 		: type_(et)
 		, addinfo(info)
 		, addinfo2(info2)
-	{
-	}
+	{}
 
 	~matcherexception() throw() override {}
 	const char* what() const throw() override;

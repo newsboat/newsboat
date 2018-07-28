@@ -21,8 +21,7 @@ class remote_api {
 public:
 	explicit remote_api(configcontainer* c)
 		: cfg(c)
-	{
-	}
+	{}
 	virtual ~remote_api() {}
 	virtual bool authenticate() = 0;
 	virtual std::vector<tagged_feedurl> get_subscribed_urls() = 0;
