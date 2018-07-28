@@ -538,9 +538,7 @@ TEST_CASE("rss_feed::unread_item_count() returns number of unread articles",
 	REQUIRE(f.unread_item_count() == 0);
 }
 
-TEST_CASE(
-	"rss_feed::matches_tag() correctly tells if article has a specified "
-	"tag",
+TEST_CASE("rss_feed::matches_tag() returns true if article has a specified tag",
 	"[rss]")
 {
 	configcontainer cfg;
