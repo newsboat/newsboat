@@ -549,12 +549,12 @@ TEST_CASE(
 	const std::vector<std::string> tags = {"One", "Two", "Three", "Four"};
 	f.set_tags(tags);
 
-	REQUIRE(f.matches_tag("Zero") == false);
+	REQUIRE_FALSE(f.matches_tag("Zero"));
 	REQUIRE(f.matches_tag("One"));
 	REQUIRE(f.matches_tag("Two"));
 	REQUIRE(f.matches_tag("Three"));
 	REQUIRE(f.matches_tag("Four"));
-	REQUIRE(f.matches_tag("Five") == false);
+	REQUIRE_FALSE(f.matches_tag("Five"));
 }
 
 TEST_CASE("rss_feed::get_firsttag() returns first tag", "[rss]")
@@ -590,7 +590,7 @@ TEST_CASE(
 	cache rsscache(":memory:", &cfg);
 	rss_feed f(&rsscache);
 
-	REQUIRE(f.hidden() == false);
+	REQUIRE_FALSE(f.hidden());
 
 	std::vector<std::string> tags = {"One", "Two", "!Three"};
 	f.set_tags(tags);
@@ -598,7 +598,7 @@ TEST_CASE(
 
 	tags = {"One"};
 	f.set_tags(tags);
-	REQUIRE(f.hidden() == false);
+	REQUIRE_FALSE(f.hidden());
 
 	tags = {"One", "!"};
 	f.set_tags(tags);
@@ -621,7 +621,7 @@ TEST_CASE(
 	f.mark_all_items_read();
 
 	for (const auto& item : f.items()) {
-		REQUIRE(item->unread() == false);
+		REQUIRE_FALSE(item->unread());
 	}
 }
 
@@ -673,7 +673,7 @@ TEST_CASE(
 	REQUIRE(ignores.matches_lastmodified("www.example.com"));
 	REQUIRE(ignores.matches_lastmodified("http://newsboat.org"));
 	REQUIRE(ignores.matches_lastmodified("www.cool-website.com"));
-	REQUIRE(ignores.matches_lastmodified("www.smth.com") == false);
+	REQUIRE_FALSE(ignores.matches_lastmodified("www.smth.com"));
 }
 
 TEST_CASE(
@@ -690,7 +690,7 @@ TEST_CASE(
 	REQUIRE(ignores.matches_resetunread("www.example.com"));
 	REQUIRE(ignores.matches_resetunread("http://newsboat.org"));
 	REQUIRE(ignores.matches_resetunread("www.cool-website.com"));
-	REQUIRE(ignores.matches_resetunread("www.smth.com") == false);
+	REQUIRE_FALSE(ignores.matches_resetunread("www.smth.com"));
 }
 
 TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
