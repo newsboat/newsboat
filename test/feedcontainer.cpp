@@ -27,9 +27,9 @@ std::vector<std::shared_ptr<rss_feed>> get_five_empty_feeds(cache* rsscache)
 TEST_CASE("get_feed() returns feed by its position number", "[feedcontainer]")
 {
 	FeedContainer feedcontainer;
-	std::unique_ptr<configcontainer> cfg(new configcontainer());
-	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
-	const auto feeds = get_five_empty_feeds(rsscache.get());
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
 	int i = 0;
 	for (const auto& feed : feeds) {
 		feed->set_title(std::to_string(i));
@@ -49,9 +49,9 @@ TEST_CASE("get_all_feeds() returns copy of FeedContainer's feed vector",
 	"[feedcontainer]")
 {
 	FeedContainer feedcontainer;
-	std::unique_ptr<configcontainer> cfg(new configcontainer());
-	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
-	const auto feeds = get_five_empty_feeds(rsscache.get());
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
 	feedcontainer.set_feeds(feeds);
 
 	REQUIRE(feedcontainer.get_all_feeds() == feeds);
@@ -61,10 +61,10 @@ TEST_CASE("add_feed() adds specific feed to its \"feeds\" vector",
 	"[feedcontainer]")
 {
 	FeedContainer feedcontainer;
-	std::unique_ptr<configcontainer> cfg(new configcontainer());
-	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
 	feedcontainer.set_feeds({});
-	const auto feed = std::make_shared<rss_feed>(rsscache.get());
+	const auto feed = std::make_shared<rss_feed>(&rsscache);
 	feed->set_title("Example feed");
 
 	feedcontainer.add_feed(feed);
@@ -75,16 +75,16 @@ TEST_CASE("add_feed() adds specific feed to its \"feeds\" vector",
 TEST_CASE("populate_query_feeds() populates query feeds", "[feedcontainer]")
 {
 	FeedContainer feedcontainer;
-	std::unique_ptr<configcontainer> cfg(new configcontainer());
-	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
-	auto feeds = get_five_empty_feeds(rsscache.get());
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	auto feeds = get_five_empty_feeds(&rsscache);
 	for (int j = 0; j < 5; ++j) {
-		const auto item = std::make_shared<rss_item>(rsscache.get());
+		const auto item = std::make_shared<rss_item>(&rsscache);
 		item->set_unread_nowrite(true);
 		feeds[j]->add_item(item);
 	}
 
-	const auto feed = std::make_shared<rss_feed>(rsscache.get());
+	const auto feed = std::make_shared<rss_feed>(&rsscache);
 	feed->set_rssurl("query:a title:unread = \"yes\"");
 	feeds.push_back(feed);
 
@@ -98,9 +98,9 @@ TEST_CASE("set_feeds() sets FeedContainer's feed vector to the given one",
 	"[feedcontainer]")
 {
 	FeedContainer feedcontainer;
-	std::unique_ptr<configcontainer> cfg(new configcontainer());
-	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
-	const auto feeds = get_five_empty_feeds(rsscache.get());
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
 
 	feedcontainer.set_feeds(feeds);
 
@@ -110,9 +110,9 @@ TEST_CASE("set_feeds() sets FeedContainer's feed vector to the given one",
 TEST_CASE("get_feed_by_url() returns feed by its URL", "[feedcontainer]")
 {
 	FeedContainer feedcontainer;
-	std::unique_ptr<configcontainer> cfg(new configcontainer());
-	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
-	const auto feeds = get_five_empty_feeds(rsscache.get());
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
 	int i = 0;
 	for (const auto& feed : feeds) {
 		feed->set_title(std::to_string(i));
@@ -134,9 +134,9 @@ TEST_CASE(
 	"[feedcontainer]")
 {
 	FeedContainer feedcontainer;
-	std::unique_ptr<configcontainer> cfg(new configcontainer());
-	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
-	const auto feeds = get_five_empty_feeds(rsscache.get());
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
 	int i = 0;
 	for (const auto& feed : feeds) {
 		feed->set_rssurl("url/" + std::to_string(i));
@@ -151,9 +151,9 @@ TEST_CASE(
 TEST_CASE("Throws on get_feed() with pos out of range", "[feedcontainer]")
 {
 	FeedContainer feedcontainer;
-	std::unique_ptr<configcontainer> cfg(new configcontainer());
-	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
-	feedcontainer.set_feeds(get_five_empty_feeds(rsscache.get()));
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	feedcontainer.set_feeds(get_five_empty_feeds(&rsscache));
 
 	REQUIRE_NOTHROW(feedcontainer.get_feed(4));
 	CHECK_THROWS_AS(feedcontainer.get_feed(5), std::out_of_range);
@@ -164,9 +164,9 @@ TEST_CASE("Returns correct number using get_feed_count_by_tag()",
 	"[feedcontainer]")
 {
 	FeedContainer feedcontainer;
-	std::unique_ptr<configcontainer> cfg(new configcontainer());
-	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
-	feedcontainer.set_feeds(get_five_empty_feeds(rsscache.get()));
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	feedcontainer.set_feeds(get_five_empty_feeds(&rsscache));
 	feedcontainer.get_feed(0)->set_tags({"Chicken", "Horse"});
 	feedcontainer.get_feed(1)->set_tags({"Horse", "Duck"});
 	feedcontainer.get_feed(2)->set_tags({"Duck", "Frog"});
@@ -181,12 +181,12 @@ TEST_CASE("Returns correct number using get_feed_count_by_tag()",
 TEST_CASE("Correctly returns pos of next unread item", "[feedcontainer]")
 {
 	FeedContainer feedcontainer;
-	std::unique_ptr<configcontainer> cfg(new configcontainer());
-	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
-	const auto feeds = get_five_empty_feeds(rsscache.get());
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
 	int i = 0;
 	for (const auto& feed : feeds) {
-		const auto item = std::make_shared<rss_item>(rsscache.get());
+		const auto item = std::make_shared<rss_item>(&rsscache);
 		if ((i % 2) == 0)
 			item->set_unread_nowrite(true);
 		else
@@ -204,9 +204,9 @@ TEST_CASE("feeds_size() returns FeedContainer's current feed vector size",
 	"[feedcontainer]")
 {
 	FeedContainer feedcontainer;
-	std::unique_ptr<configcontainer> cfg(new configcontainer());
-	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
-	const auto feeds = get_five_empty_feeds(rsscache.get());
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
 	feedcontainer.set_feeds(feeds);
 
 	REQUIRE(feedcontainer.feeds_size() == feeds.size());
@@ -215,9 +215,9 @@ TEST_CASE("feeds_size() returns FeedContainer's current feed vector size",
 TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 {
 	FeedContainer feedcontainer;
-	std::unique_ptr<configcontainer> cfg(new configcontainer());
-	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
-	const auto feeds = get_five_empty_feeds(rsscache.get());
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
 	feedcontainer.set_feeds(feeds);
 
 	feeds[0]->set_order(4);
@@ -228,8 +228,8 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 
 	SECTION("by none asc")
 	{
-		cfg->set_configvalue("feed-sort-order", "none-asc");
-		feedcontainer.sort_feeds(cfg->get_feed_sort_strategy());
+		cfg.set_configvalue("feed-sort-order", "none-asc");
+		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->get_order() == 33);
 		REQUIRE(sorted_feeds[1]->get_order() == 10);
@@ -240,8 +240,8 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 
 	SECTION("by none desc")
 	{
-		cfg->set_configvalue("feed-sort-order", "none-desc");
-		feedcontainer.sort_feeds(cfg->get_feed_sort_strategy());
+		cfg.set_configvalue("feed-sort-order", "none-desc");
+		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->get_order() == 1);
 		REQUIRE(sorted_feeds[1]->get_order() == 4);
@@ -258,8 +258,8 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 
 	SECTION("by firsttag asc")
 	{
-		cfg->set_configvalue("feed-sort-order", "firsttag-asc");
-		feedcontainer.sort_feeds(cfg->get_feed_sort_strategy());
+		cfg.set_configvalue("feed-sort-order", "firsttag-asc");
+		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->get_firsttag() == "Zaza");
 		REQUIRE(sorted_feeds[1]->get_firsttag() == "taggy");
@@ -270,8 +270,8 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 
 	SECTION("by firsttag desc")
 	{
-		cfg->set_configvalue("feed-sort-order", "firsttag-desc");
-		feedcontainer.sort_feeds(cfg->get_feed_sort_strategy());
+		cfg.set_configvalue("feed-sort-order", "firsttag-desc");
+		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->get_firsttag() == "aa");
 		REQUIRE(sorted_feeds[1]->get_firsttag() == "aaa");
@@ -288,8 +288,8 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 
 	SECTION("by title asc")
 	{
-		cfg->set_configvalue("feed-sort-order", "title-asc");
-		feedcontainer.sort_feeds(cfg->get_feed_sort_strategy());
+		cfg.set_configvalue("feed-sort-order", "title-asc");
+		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->title() == "Zaza");
 		REQUIRE(sorted_feeds[1]->title() == "taggy");
@@ -300,8 +300,8 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 
 	SECTION("by title desc")
 	{
-		cfg->set_configvalue("feed-sort-order", "title-desc");
-		feedcontainer.sort_feeds(cfg->get_feed_sort_strategy());
+		cfg.set_configvalue("feed-sort-order", "title-desc");
+		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->title() == "aa");
 		REQUIRE(sorted_feeds[1]->title() == "aaa");
@@ -310,18 +310,18 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 		REQUIRE(sorted_feeds[4]->title() == "Zaza");
 	}
 
-	feeds[0]->add_item(std::make_shared<rss_item>(rsscache.get()));
-	feeds[0]->add_item(std::make_shared<rss_item>(rsscache.get()));
-	feeds[1]->add_item(std::make_shared<rss_item>(rsscache.get()));
-	feeds[1]->add_item(std::make_shared<rss_item>(rsscache.get()));
-	feeds[1]->add_item(std::make_shared<rss_item>(rsscache.get()));
-	feeds[2]->add_item(std::make_shared<rss_item>(rsscache.get()));
-	feeds[3]->add_item(std::make_shared<rss_item>(rsscache.get()));
+	feeds[0]->add_item(std::make_shared<rss_item>(&rsscache));
+	feeds[0]->add_item(std::make_shared<rss_item>(&rsscache));
+	feeds[1]->add_item(std::make_shared<rss_item>(&rsscache));
+	feeds[1]->add_item(std::make_shared<rss_item>(&rsscache));
+	feeds[1]->add_item(std::make_shared<rss_item>(&rsscache));
+	feeds[2]->add_item(std::make_shared<rss_item>(&rsscache));
+	feeds[3]->add_item(std::make_shared<rss_item>(&rsscache));
 
 	SECTION("by articlecount asc")
 	{
-		cfg->set_configvalue("feed-sort-order", "articlecount-asc");
-		feedcontainer.sort_feeds(cfg->get_feed_sort_strategy());
+		cfg.set_configvalue("feed-sort-order", "articlecount-asc");
+		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->total_item_count() == 3);
 		REQUIRE(sorted_feeds[1]->total_item_count() == 2);
@@ -332,8 +332,8 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 
 	SECTION("by articlecount desc")
 	{
-		cfg->set_configvalue("feed-sort-order", "articlecount-desc");
-		feedcontainer.sort_feeds(cfg->get_feed_sort_strategy());
+		cfg.set_configvalue("feed-sort-order", "articlecount-desc");
+		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->total_item_count() == 0);
 		REQUIRE(sorted_feeds[1]->total_item_count() == 1);
@@ -342,20 +342,20 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 		REQUIRE(sorted_feeds[4]->total_item_count() == 3);
 	}
 
-	auto item = std::make_shared<rss_item>(rsscache.get());
+	auto item = std::make_shared<rss_item>(&rsscache);
 	item->set_unread_nowrite(false);
 	feeds[1]->add_item(item);
-	item = std::make_shared<rss_item>(rsscache.get());
+	item = std::make_shared<rss_item>(&rsscache);
 	feeds[2]->add_item(item);
-	item = std::make_shared<rss_item>(rsscache.get());
+	item = std::make_shared<rss_item>(&rsscache);
 	item->set_unread_nowrite(false);
 	feeds[4]->add_item(item);
 
 	SECTION("by unreadarticlecount asc")
 	{
-		cfg->set_configvalue(
+		cfg.set_configvalue(
 			"feed-sort-order", "unreadarticlecount-asc");
-		feedcontainer.sort_feeds(cfg->get_feed_sort_strategy());
+		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->unread_item_count() == 3);
 		REQUIRE(sorted_feeds[1]->unread_item_count() == 2);
@@ -366,9 +366,9 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 
 	SECTION("by unreadarticlecount desc")
 	{
-		cfg->set_configvalue(
+		cfg.set_configvalue(
 			"feed-sort-order", "unreadarticlecount-desc");
-		feedcontainer.sort_feeds(cfg->get_feed_sort_strategy());
+		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->unread_item_count() == 0);
 		REQUIRE(sorted_feeds[1]->unread_item_count() == 1);
@@ -377,26 +377,26 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 		REQUIRE(sorted_feeds[4]->unread_item_count() == 3);
 	}
 
-	item = std::make_shared<rss_item>(rsscache.get());
+	item = std::make_shared<rss_item>(&rsscache);
 	item->set_pubDate(93);
 	feeds[0]->add_item(item);
 
-	item = std::make_shared<rss_item>(rsscache.get());
+	item = std::make_shared<rss_item>(&rsscache);
 	item->set_pubDate(42);
 	feeds[1]->add_item(item);
 
-	item = std::make_shared<rss_item>(rsscache.get());
+	item = std::make_shared<rss_item>(&rsscache);
 	item->set_pubDate(69);
 	feeds[2]->add_item(item);
 
-	item = std::make_shared<rss_item>(rsscache.get());
+	item = std::make_shared<rss_item>(&rsscache);
 	item->set_pubDate(23);
 	feeds[3]->add_item(item);
 
 	SECTION("by lastupdated asc")
 	{
-		cfg->set_configvalue("feed-sort-order", "lastupdated-asc");
-		feedcontainer.sort_feeds(cfg->get_feed_sort_strategy());
+		cfg.set_configvalue("feed-sort-order", "lastupdated-asc");
+		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0] == feeds[4]);
 		REQUIRE(sorted_feeds[1] == feeds[3]);
@@ -407,8 +407,8 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 
 	SECTION("by lastupdated desc")
 	{
-		cfg->set_configvalue("feed-sort-order", "lastupdated-desc");
-		feedcontainer.sort_feeds(cfg->get_feed_sort_strategy());
+		cfg.set_configvalue("feed-sort-order", "lastupdated-desc");
+		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0] == feeds[0]);
 		REQUIRE(sorted_feeds[1] == feeds[2]);
@@ -422,12 +422,12 @@ TEST_CASE("mark_all_feed_items_read() marks all of feed's items as read",
 	"[feedcontainer]")
 {
 	FeedContainer feedcontainer;
-	std::unique_ptr<configcontainer> cfg(new configcontainer());
-	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
-	const auto feeds = get_five_empty_feeds(rsscache.get());
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
 	const auto feed = feeds.at(0);
 	for (int j = 0; j < 5; ++j) {
-		const auto item = std::make_shared<rss_item>(rsscache.get());
+		const auto item = std::make_shared<rss_item>(&rsscache);
 		item->set_unread_nowrite(true);
 		feed->add_item(item);
 	}
@@ -444,14 +444,13 @@ TEST_CASE("mark_all_feeds_read() marks all items in all feeds as read",
 	"[feedcontainer]")
 {
 	FeedContainer feedcontainer;
-	std::unique_ptr<configcontainer> cfg(new configcontainer());
-	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
-	const auto feeds = get_five_empty_feeds(rsscache.get());
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
 
 	for (const auto& feed : feeds) {
 		for (int j = 0; j < 3; ++j) {
-			const auto item =
-				std::make_shared<rss_item>(rsscache.get());
+			const auto item = std::make_shared<rss_item>(&rsscache);
 			item->set_unread_nowrite(true);
 			feed->add_item(item);
 		}
@@ -473,9 +472,9 @@ TEST_CASE(
 	"[feedcontainer]")
 {
 	FeedContainer feedcontainer;
-	std::unique_ptr<configcontainer> cfg(new configcontainer());
-	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
-	const auto feeds = get_five_empty_feeds(rsscache.get());
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
 	feeds[0]->set_status(dl_status::SUCCESS);
 	feeds[1]->set_status(dl_status::TO_BE_DOWNLOADED);
 	feeds[2]->set_status(dl_status::DURING_DOWNLOAD);
@@ -492,12 +491,12 @@ TEST_CASE(
 TEST_CASE("clear_feeds_items() clears all of feed's items", "[feedcontainer]")
 {
 	FeedContainer feedcontainer;
-	std::unique_ptr<configcontainer> cfg(new configcontainer());
-	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
 	feedcontainer.set_feeds({});
-	const auto feed = std::make_shared<rss_feed>(rsscache.get());
+	const auto feed = std::make_shared<rss_feed>(&rsscache);
 	for (int j = 0; j < 5; ++j) {
-		feed->add_item(std::make_shared<rss_item>(rsscache.get()));
+		feed->add_item(std::make_shared<rss_item>(&rsscache));
 	}
 	feedcontainer.add_feed(feed);
 
@@ -512,13 +511,13 @@ TEST_CASE(
 	"[feedcontainer]")
 {
 	FeedContainer feedcontainer;
-	std::unique_ptr<configcontainer> cfg(new configcontainer());
-	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
-	const auto feeds = get_five_empty_feeds(rsscache.get());
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
 	for (int j = 0; j < 5; ++j) {
 		// Make sure that number of unread items in feed doesn't matter
-		const auto item = std::make_shared<rss_item>(rsscache.get());
-		const auto item2 = std::make_shared<rss_item>(rsscache.get());
+		const auto item = std::make_shared<rss_item>(&rsscache);
+		const auto item2 = std::make_shared<rss_item>(&rsscache);
 		if ((j % 2) == 0) {
 			item->set_unread_nowrite(false);
 			item2->set_unread_nowrite(false);
@@ -535,12 +534,12 @@ TEST_CASE("unread_item_count() returns number of unread items in all feeds",
 	"[feedcontainer]")
 {
 	FeedContainer feedcontainer;
-	std::unique_ptr<configcontainer> cfg(new configcontainer());
-	std::unique_ptr<cache> rsscache(new cache(":memory:", cfg.get()));
-	const auto feeds = get_five_empty_feeds(rsscache.get());
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
 	for (int j = 0; j < 5; ++j) {
-		const auto item = std::make_shared<rss_item>(rsscache.get());
-		const auto item2 = std::make_shared<rss_item>(rsscache.get());
+		const auto item = std::make_shared<rss_item>(&rsscache);
+		const auto item2 = std::make_shared<rss_item>(&rsscache);
 		if ((j % 2) == 0) {
 			item->set_unread_nowrite(false);
 			item2->set_unread_nowrite(false);
