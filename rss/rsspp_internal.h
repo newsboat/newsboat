@@ -21,8 +21,7 @@ struct rss_parser {
 	virtual void parse_feed(feed& f, xmlNode* rootNode) = 0;
 	explicit rss_parser(xmlDocPtr d)
 		: doc(d)
-	{
-	}
+	{}
 	virtual ~rss_parser() {}
 	static std::string __w3cdtf_to_rfc822(const std::string& w3cdtf);
 
@@ -45,8 +44,7 @@ struct rss_09x_parser : public rss_parser {
 	explicit rss_09x_parser(xmlDocPtr doc)
 		: rss_parser(doc)
 		, ns(nullptr)
-	{
-	}
+	{}
 	~rss_09x_parser() override;
 
 protected:
@@ -59,8 +57,7 @@ private:
 struct rss_20_parser : public rss_09x_parser {
 	explicit rss_20_parser(xmlDocPtr doc)
 		: rss_09x_parser(doc)
-	{
-	}
+	{}
 	void parse_feed(feed& f, xmlNode* rootNode) override;
 	~rss_20_parser() override {}
 };
@@ -69,8 +66,7 @@ struct rss_10_parser : public rss_parser {
 	void parse_feed(feed& f, xmlNode* rootNode) override;
 	explicit rss_10_parser(xmlDocPtr doc)
 		: rss_parser(doc)
-	{
-	}
+	{}
 	~rss_10_parser() override {}
 };
 
@@ -79,8 +75,7 @@ struct atom_parser : public rss_parser {
 	explicit atom_parser(xmlDocPtr doc)
 		: rss_parser(doc)
 		, ns(0)
-	{
-	}
+	{}
 	~atom_parser() override {}
 
 private:

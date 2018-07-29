@@ -54,8 +54,7 @@ void cache::run_sql_nothrow(const std::string& query,
 struct cb_handler {
 	cb_handler()
 		: c(-1)
-	{
-	}
+	{}
 	void set_count(int i)
 	{
 		c = i;

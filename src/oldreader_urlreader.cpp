@@ -10,8 +10,7 @@ oldreader_urlreader::oldreader_urlreader(configcontainer* c,
 	: cfg(c)
 	, file(url_file)
 	, api(a)
-{
-}
+{}
 
 oldreader_urlreader::~oldreader_urlreader() {}
 

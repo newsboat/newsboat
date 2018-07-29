@@ -38,8 +38,7 @@ parser::parser(unsigned int timeout,
 	, verify_ssl(ssl_verify)
 	, doc(0)
 	, lm(0)
-{
-}
+{}
 
 parser::~parser()
 {
@@ -53,8 +52,7 @@ struct header_values {
 
 	header_values()
 		: lastmodified(0)
-	{
-	}
+	{}
 };
 
 static size_t handle_headers(void* ptr, size_t size, size_t nmemb, void* data)

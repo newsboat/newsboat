@@ -10,8 +10,7 @@ std::mutex logger::instanceMutex;
 
 logger::logger()
 	: curlevel(level::NONE)
-{
-}
+{}
 
 void logger::set_logfile(const std::string& logfile)
 {

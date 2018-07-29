@@ -23,8 +23,7 @@ urlview_formaction::urlview_formaction(view* vv,
 	: formaction(vv, formstr)
 	, quit(false)
 	, feed(feed)
-{
-}
+{}
 
 urlview_formaction::~urlview_formaction() {}
 

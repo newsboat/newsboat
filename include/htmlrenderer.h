@@ -66,8 +66,7 @@ public:
 	struct TableCell {
 		explicit TableCell(size_t s)
 			: span(s)
-		{
-		}
+		{}
 		size_t span;
 		std::vector<std::string> text; // multiline cell text
 	};
@@ -75,8 +74,7 @@ public:
 	struct TableRow {
 		TableRow()
 			: inside(false)
-		{
-		}
+		{}
 
 		void add_text(const std::string& str);
 		void start_cell(size_t span);
@@ -90,8 +88,7 @@ public:
 		explicit Table(bool b)
 			: inside(false)
 			, has_border(b)
-		{
-		}
+		{}
 
 		void add_text(const std::string& str);
 		void start_row();

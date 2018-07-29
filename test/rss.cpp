@@ -508,6 +508,189 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 	}
 }
 
+TEST_CASE("rss_feed::unread_item_count() returns number of unread articles",
+	"[rss]")
+{
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_feed f(&rsscache);
+	for (int i = 0; i < 5; ++i) {
+		const auto item = std::make_shared<rss_item>(&rsscache);
+		item->set_guid(std::to_string(i));
+		f.add_item(item);
+	}
+
+	REQUIRE(f.unread_item_count() == 5);
+
+	f.get_item_by_guid("0")->set_unread_nowrite(false);
+	REQUIRE(f.unread_item_count() == 4);
+
+	f.get_item_by_guid("1")->set_unread_nowrite(false);
+	REQUIRE(f.unread_item_count() == 3);
+
+	f.get_item_by_guid("2")->set_unread_nowrite(false);
+	REQUIRE(f.unread_item_count() == 2);
+
+	f.get_item_by_guid("3")->set_unread_nowrite(false);
+	REQUIRE(f.unread_item_count() == 1);
+
+	f.get_item_by_guid("4")->set_unread_nowrite(false);
+	REQUIRE(f.unread_item_count() == 0);
+}
+
+TEST_CASE("rss_feed::matches_tag() returns true if article has a specified tag",
+	"[rss]")
+{
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_feed f(&rsscache);
+	const std::vector<std::string> tags = {"One", "Two", "Three", "Four"};
+	f.set_tags(tags);
+
+	REQUIRE_FALSE(f.matches_tag("Zero"));
+	REQUIRE(f.matches_tag("One"));
+	REQUIRE(f.matches_tag("Two"));
+	REQUIRE(f.matches_tag("Three"));
+	REQUIRE(f.matches_tag("Four"));
+	REQUIRE_FALSE(f.matches_tag("Five"));
+}
+
+TEST_CASE("rss_feed::get_firsttag() returns first tag", "[rss]")
+{
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_feed f(&rsscache);
+
+	REQUIRE(f.get_firsttag() == "");
+
+	std::vector<std::string> tags = {"One", "Two", "Three", "Four"};
+	f.set_tags(tags);
+	REQUIRE(f.get_firsttag() == "One");
+
+	tags = {"Five", "Six", "Seven", "Eight"};
+	f.set_tags(tags);
+	REQUIRE(f.get_firsttag() == "Five");
+
+	tags = {"Nine", "Ten", "Eleven", "Twelve"};
+	f.set_tags(tags);
+	REQUIRE(f.get_firsttag() == "Nine");
+
+	tags = {"Orange", "Apple", "Kiwi", "Banana"};
+	f.set_tags(tags);
+	REQUIRE(f.get_firsttag() == "Orange");
+}
+
+TEST_CASE(
+	"rss_feed::hidden() returns true if feed has a tag starting with \"!\"",
+	"[rss]")
+{
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_feed f(&rsscache);
+
+	REQUIRE_FALSE(f.hidden());
+
+	std::vector<std::string> tags = {"One", "Two", "!Three"};
+	f.set_tags(tags);
+	REQUIRE(f.hidden());
+
+	tags = {"One"};
+	f.set_tags(tags);
+	REQUIRE_FALSE(f.hidden());
+
+	tags = {"One", "!"};
+	f.set_tags(tags);
+	REQUIRE(f.hidden());
+}
+
+TEST_CASE(
+	"rss_feed::mark_all_items_read() marks all items within a feed as read",
+	"[rss]")
+{
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_feed f(&rsscache);
+	for (int i = 0; i < 5; ++i) {
+		const auto item = std::make_shared<rss_item>(&rsscache);
+		REQUIRE(item->unread());
+		f.add_item(item);
+	}
+
+	f.mark_all_items_read();
+
+	for (const auto& item : f.items()) {
+		REQUIRE_FALSE(item->unread());
+	}
+}
+
+TEST_CASE("rss_feed::set_tags() sets tags for a feed", "[rss]")
+{
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_feed f(&rsscache);
+
+	std::vector<std::string> tags = {"One", "Two"};
+	f.set_tags(tags);
+	tags = {"One", "Three"};
+	REQUIRE(f.get_tags() == "One Two ");
+	f.set_tags(tags);
+	REQUIRE(f.get_tags() == "One Three ");
+}
+
+TEST_CASE(
+	"rss_feed::purge_deleted_items() deletes all items that have "
+	"\"deleted\" property set up",
+	"[rss]")
+{
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_feed f(&rsscache);
+	for (int i = 0; i < 5; ++i) {
+		const auto item = std::make_shared<rss_item>(&rsscache);
+		if (i % 2) {
+			item->set_deleted(true);
+		}
+		f.add_item(item);
+	}
+
+	f.purge_deleted_items();
+	REQUIRE(f.total_item_count() == 3);
+}
+
+TEST_CASE(
+	"rss_ignores::matches_lastmodified() returns true if given url "
+	"has to always be downloaded",
+	"[rss]")
+{
+	rss_ignores ignores;
+	ignores.handle_action("always-download",
+		{"http://newsboat.org",
+			"www.cool-website.com",
+			"www.example.com"});
+
+	REQUIRE(ignores.matches_lastmodified("www.example.com"));
+	REQUIRE(ignores.matches_lastmodified("http://newsboat.org"));
+	REQUIRE(ignores.matches_lastmodified("www.cool-website.com"));
+	REQUIRE_FALSE(ignores.matches_lastmodified("www.smth.com"));
+}
+
+TEST_CASE(
+	"rss_ignores::matches_resetunread() returns true if given url "
+	"will always have its unread flag reset on update",
+	"[rss]")
+{
+	rss_ignores ignores;
+	ignores.handle_action("reset-unread-on-update",
+		{"http://newsboat.org",
+			"www.cool-website.com",
+			"www.example.com"});
+
+	REQUIRE(ignores.matches_resetunread("www.example.com"));
+	REQUIRE(ignores.matches_resetunread("http://newsboat.org"));
+	REQUIRE(ignores.matches_resetunread("www.cool-website.com"));
+	REQUIRE_FALSE(ignores.matches_resetunread("www.smth.com"));
+}
+
 TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
 	"[rss::rss_parser]")
 {

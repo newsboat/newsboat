@@ -32,8 +32,7 @@ rss_item::rss_item(cache* c)
 	, enqueued_(false)
 	, deleted_(0)
 	, override_unread_(false)
-{
-}
+{}
 
 rss_item::~rss_item() {}
 
@@ -45,8 +44,7 @@ rss_feed::rss_feed(cache* c)
 	, idx(0)
 	, order(0)
 	, status_(dl_status::SUCCESS)
-{
-}
+{}
 
 rss_feed::~rss_feed()
 {
@@ -156,28 +154,24 @@ std::string rss_item::pubDate() const
 unsigned int rss_feed::unread_item_count()
 {
 	std::lock_guard<std::mutex> lock(item_mutex);
-	unsigned int count = 0;
-	for (const auto& item : items_) {
-		if (item->unread())
-			++count;
-	}
-	return count;
+	return std::count_if(items_.begin(),
+		items_.end(),
+		[](const std::shared_ptr<rss_item>& item) {
+			return item->unread();
+		});
 }
 
 bool rss_feed::matches_tag(const std::string& tag)
 {
-	for (const auto& t : tags_) {
-		if (tag == t)
-			return true;
-	}
-	return false;
+	return std::find_if(
+		       tags_.begin(), tags_.end(), [&](const std::string& t) {
+			       return tag == t;
+		       }) != tags_.end();
 }
 
 std::string rss_feed::get_firsttag()
 {
-	if (tags_.size() == 0)
-		return "";
-	return tags_[0];
+	return tags_.empty() ? "" : tags_.front();
 }
 
 std::string rss_feed::get_tags()
@@ -194,10 +188,7 @@ std::string rss_feed::get_tags()
 
 void rss_feed::set_tags(const std::vector<std::string>& tags)
 {
-	tags_.clear();
-	for (const auto& tag : tags) {
-		tags_.push_back(tag);
-	}
+	tags_ = tags;
 }
 
 void rss_item::set_enclosure_url(const std::string& url)
@@ -252,12 +243,9 @@ std::string rss_feed::description() const
 
 bool rss_feed::hidden() const
 {
-	for (const auto& tag : tags_) {
-		if (tag.substr(0, 1) == "!") {
-			return true;
-		}
-	}
-	return false;
+	return std::any_of(tags_.begin(),
+		tags_.end(),
+		[](const std::string& tag) { return tag.substr(0, 1) == "!"; });
 }
 
 std::shared_ptr<rss_item> rss_feed::get_item_by_guid(const std::string& guid)
@@ -355,23 +343,14 @@ void rss_item::sort_flags()
 {
 	std::sort(flags_.begin(), flags_.end());
 
-	auto it = flags_.begin();
-	while (it != flags_.end()) {
-		if (!isalpha(*it)) {
-			flags_.erase(it);
-		} else {
-			it += 1;
-		}
-	}
+	// Erase non-alpha characters
+	flags_.erase(std::remove_if(flags_.begin(),
+			     flags_.end(),
+			     [](const char c) { return !isalpha(c); }),
+		flags_.end());
 
-	for (unsigned int i = 0; i < flags_.size(); ++i) {
-		if (i < (flags_.size() - 1)) {
-			if (flags_[i] == flags_[i + 1]) {
-				flags_.erase(i + 1, 1);
-				--i;
-			}
-		}
-	}
+	// Erase doubled characters
+	flags_.erase(std::unique(flags_.begin(), flags_.end()), flags_.end());
 }
 
 bool rss_feed::has_attribute(const std::string& attribname)
@@ -490,20 +469,18 @@ bool rss_ignores::matches(rss_item* item)
 
 bool rss_ignores::matches_lastmodified(const std::string& url)
 {
-	for (const auto& ignore_url : ignores_lastmodified) {
-		if (url == ignore_url)
-			return true;
-	}
-	return false;
+	return std::find_if(ignores_lastmodified.begin(),
+		       ignores_lastmodified.end(),
+		       [&](const std::string& u) { return u == url; }) !=
+		ignores_lastmodified.end();
 }
 
 bool rss_ignores::matches_resetunread(const std::string& url)
 {
-	for (const auto& rf : resetflag) {
-		if (url == rf)
-			return true;
-	}
-	return false;
+	return std::find_if(resetflag.begin(),
+		       resetflag.end(),
+		       [&](const std::string& u) { return u == url; }) !=
+		resetflag.end();
 }
 
 void rss_feed::update_items(std::vector<std::shared_ptr<rss_feed>> feeds)
@@ -706,21 +683,23 @@ void rss_feed::purge_deleted_items()
 {
 	std::lock_guard<std::mutex> lock(item_mutex);
 	scope_measure m1("rss_feed::purge_deleted_items");
-	auto it = items_.begin();
-	while (it != items_.end()) {
-		if ((*it)->deleted()) {
-			{
-				std::lock_guard<std::mutex> lock2(
-					items_guid_map_mutex);
-				items_guid_map.erase((*it)->guid());
+
+	// Purge in items_guid_map
+	{
+		std::lock_guard<std::mutex> lock2(items_guid_map_mutex);
+		for (const auto& item : items_) {
+			if (item->deleted()) {
+				items_guid_map.erase(item->guid());
 			}
-			items_.erase(it);
-			it = items_.begin(); // items_ modified -> iterator
-					     // invalidated
-		} else {
-			++it;
 		}
 	}
+
+	items_.erase(std::remove_if(items_.begin(),
+			     items_.end(),
+			     [](const std::shared_ptr<rss_item> item) {
+				     return item->deleted();
+			     }),
+		items_.end());
 }
 
 void rss_feed::set_feedptrs(std::shared_ptr<rss_feed> self)
@@ -763,6 +742,14 @@ void rss_feed::load()
 {
 	std::lock_guard<std::mutex> lock(item_mutex);
 	ch->fetch_descriptions(this);
+}
+
+void rss_feed::mark_all_items_read()
+{
+	std::lock_guard<std::mutex> lock(item_mutex);
+	for (const auto& item : items_) {
+		item->set_unread_nowrite(false);
+	}
 }
 
 } // namespace newsboat
