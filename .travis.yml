@@ -215,7 +215,6 @@ script:
   - if [ -z "$CHECKS" ]; then   make PROFILE=1 all test   ; fi
   - if [ -z "$CHECKS" ]; then   ( cd test && ./test --order rand )   ; fi
   - if [ -n "$CHECKS" ]; then   make run-i18nspector | tee i18nspector.log && if `egrep '^(E|W):' i18nspector.log >/dev/null 2>&1` ; then false else true; fi   ; fi
-  - if [ -n "$CHECKS" ]; then   ./format.sh && git diff --exit-code >/dev/null ; fi
 
 after_success:
   - cd ${TRAVIS_BUILD_DIR}
