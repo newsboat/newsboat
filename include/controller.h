@@ -35,8 +35,6 @@ public:
 	}
 	int run(int argc = 0, char* argv[] = nullptr);
 
-	void reload_indexes(const std::vector<int>& indexes,
-		bool unattended = false);
 	void reload_range(unsigned int start,
 		unsigned int end,
 		unsigned int size,

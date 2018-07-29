@@ -57,6 +57,12 @@ public:
 	/// threads spawned is controlled by the user via reload-threads
 	/// setting.
 	void reload_all(bool unattended = false);
+
+	/// \brief Reloads all feeds with given indexes in feedlist.
+	///
+	/// Only updates status bar if \a unattended is false.
+	void reload_indexes(const std::vector<int>& indexes,
+		bool unattended = false);
 };
 
 } // namespace newsboat

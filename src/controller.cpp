@@ -624,37 +624,6 @@ void controller::replace_feed(std::shared_ptr<rss_feed> oldfeed,
 	}
 }
 
-void controller::reload_indexes(const std::vector<int>& indexes,
-	bool unattended)
-{
-	scope_measure m1("controller::reload_indexes");
-	const auto unread_feeds = feedcontainer.unread_feed_count();
-	const auto unread_articles = feedcontainer.unread_item_count();
-	const auto size = feedcontainer.feeds_size();
-
-	for (const auto& idx : indexes) {
-		reloader.reload(idx, size, unattended);
-	}
-
-	const auto unread_feeds2 = feedcontainer.unread_feed_count();
-	const auto unread_articles2 = feedcontainer.unread_item_count();
-	bool notify_always = cfg.get_configvalue_as_bool("notify-always");
-	if (notify_always || unread_feeds2 != unread_feeds ||
-		unread_articles2 != unread_articles) {
-		fmtstr_formatter fmt;
-		fmt.register_fmt('f', std::to_string(unread_feeds2));
-		fmt.register_fmt('n', std::to_string(unread_articles2));
-		fmt.register_fmt('d',
-			std::to_string(unread_articles2 - unread_articles));
-		fmt.register_fmt(
-			'D', std::to_string(unread_feeds2 - unread_feeds));
-		this->notify(
-			fmt.do_format(cfg.get_configvalue("notify-format")));
-	}
-	if (!unattended)
-		v->set_status("");
-}
-
 void controller::reload_range(unsigned int start,
 	unsigned int end,
 	unsigned int size,
