@@ -436,7 +436,7 @@ TEST_CASE("mark_all_feed_items_read() marks all of feed's items as read",
 	feedcontainer.mark_all_feed_items_read(0);
 
 	for (const auto& item : feed->items()) {
-		REQUIRE(item->unread() == false);
+		REQUIRE_FALSE(item->unread());
 	}
 }
 
