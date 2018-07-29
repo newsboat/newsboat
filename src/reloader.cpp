@@ -204,4 +204,39 @@ void Reloader::reload_all(bool unattended)
 	}
 }
 
+void Reloader::reload_indexes(const std::vector<int>& indexes, bool unattended)
+{
+	scope_measure m1("Reloader::reload_indexes");
+	const auto unread_feeds =
+		ctrl->get_feedcontainer()->unread_feed_count();
+	const auto unread_articles =
+		ctrl->get_feedcontainer()->unread_item_count();
+	const auto size = ctrl->get_feedcontainer()->feeds_size();
+
+	for (const auto& idx : indexes) {
+		reload(idx, size, unattended);
+	}
+
+	const auto unread_feeds2 =
+		ctrl->get_feedcontainer()->unread_feed_count();
+	const auto unread_articles2 =
+		ctrl->get_feedcontainer()->unread_item_count();
+	bool notify_always =
+		ctrl->get_cfg()->get_configvalue_as_bool("notify-always");
+	if (notify_always || unread_feeds2 != unread_feeds ||
+		unread_articles2 != unread_articles) {
+		fmtstr_formatter fmt;
+		fmt.register_fmt('f', std::to_string(unread_feeds2));
+		fmt.register_fmt('n', std::to_string(unread_articles2));
+		fmt.register_fmt('d',
+			std::to_string(unread_articles2 - unread_articles));
+		fmt.register_fmt(
+			'D', std::to_string(unread_feeds2 - unread_feeds));
+		ctrl->notify(fmt.do_format(
+			ctrl->get_cfg()->get_configvalue("notify-format")));
+	}
+	if (!unattended)
+		ctrl->get_view()->set_status("");
+}
+
 } // namespace newsboat

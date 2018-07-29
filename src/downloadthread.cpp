@@ -27,7 +27,7 @@ void downloadthread::operator()()
 		if (indexes.size() == 0) {
 			ctrl->get_reloader()->reload_all();
 		} else {
-			ctrl->reload_indexes(indexes);
+			ctrl->get_reloader()->reload_indexes(indexes);
 		}
 		ctrl->get_reloader()->unlock_reload_mutex();
 	}
