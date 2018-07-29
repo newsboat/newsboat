@@ -20,7 +20,8 @@ namespace newsboat {
 
 colormanager::colormanager()
 	: colors_loaded_(false)
-{}
+{
+}
 
 colormanager::~colormanager() {}
 

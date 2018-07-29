@@ -186,11 +186,13 @@ class ExceptionWithMsg : public Catch::MatcherBase<Exception> {
 public:
 	explicit ExceptionWithMsg(std::string&& msg)
 		: expected_msg(std::move(msg))
-	{}
+	{
+	}
 
 	explicit ExceptionWithMsg(const std::string& msg)
 		: expected_msg(msg)
-	{}
+	{
+	}
 
 	bool match(const Exception& e) const override
 	{

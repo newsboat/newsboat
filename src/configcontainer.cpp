@@ -241,7 +241,8 @@ configcontainer::configcontainer()
 				  configdata_t::STR)},
 		  {"urlview-title-format",
 			  configdata(_("%N %V - URLs"), configdata_t::STR)}}
-{}
+{
+}
 
 configcontainer::~configcontainer() {}
 

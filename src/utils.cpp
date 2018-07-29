@@ -1397,14 +1397,14 @@ bool utils::is_valid_podcast_type(const std::string& mimetype)
 	return found || matches;
 }
 
-/*
- * See
- * http://curl.haxx.se/libcurl/c/libcurl-tutorial.html#Multi-threading
- * for a reason why we do this.
- *
- * These callbacks are deprecated as of OpenSSL 1.1.0; see the
- * changelog: https://www.openssl.org/news/changelog.html#x6
- */
+	/*
+	 * See
+	 * http://curl.haxx.se/libcurl/c/libcurl-tutorial.html#Multi-threading
+	 * for a reason why we do this.
+	 *
+	 * These callbacks are deprecated as of OpenSSL 1.1.0; see the
+	 * changelog: https://www.openssl.org/news/changelog.html#x6
+	 */
 
 #if HAVE_OPENSSL && OPENSSL_VERSION_NUMBER < 0x01010000fL
 static std::mutex* openssl_mutexes = nullptr;

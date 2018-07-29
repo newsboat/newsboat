@@ -35,7 +35,8 @@ std::vector<std::string> urlreader::get_alltags()
 
 file_urlreader::file_urlreader(const std::string& file)
 	: filename(file)
-{}
+{
+}
 file_urlreader::~file_urlreader() {}
 
 std::string file_urlreader::get_source()
@@ -100,7 +101,8 @@ void file_urlreader::write_config()
 
 opml_urlreader::opml_urlreader(configcontainer* c)
 	: cfg(c)
-{}
+{
+}
 opml_urlreader::~opml_urlreader() {}
 
 void opml_urlreader::write_config()

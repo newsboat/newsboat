@@ -91,7 +91,8 @@ controller::controller()
 	, rsscache(0)
 	, refresh_on_start(false)
 	, api(0)
-{}
+{
+}
 
 controller::~controller()
 {

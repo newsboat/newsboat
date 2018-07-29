@@ -51,7 +51,8 @@ struct configdata {
 		, type(t)
 		, enum_values()
 		, multi_option(m)
-	{}
+	{
+	}
 
 	configdata(const std::string& v,
 		const std::unordered_set<std::string>& values)
@@ -60,7 +61,8 @@ struct configdata {
 		, type(configdata_t::ENUM)
 		, enum_values(values)
 		, multi_option(false)
-	{}
+	{
+	}
 
 	std::string value;
 	std::string default_value;

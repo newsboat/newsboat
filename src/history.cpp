@@ -6,7 +6,8 @@ namespace newsboat {
 
 history::history()
 	: idx(0)
-{}
+{
+}
 
 history::~history() {}
 

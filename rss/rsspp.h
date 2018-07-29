@@ -31,7 +31,8 @@ public:
 	item()
 		: guid_isPermaLink(false)
 		, pubDate_ts(0)
-	{}
+	{
+	}
 
 	std::string title;
 	std::string title_type;
@@ -65,7 +66,8 @@ class feed {
 public:
 	feed()
 		: rss_version(UNKNOWN)
-	{}
+	{
+	}
 
 	std::string encoding;
 

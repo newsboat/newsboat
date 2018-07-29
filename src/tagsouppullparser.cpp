@@ -24,7 +24,8 @@ tagsouppullparser::tagsouppullparser()
 	: inputstream(0)
 	, current_event(event::START_DOCUMENT)
 	, c('\0')
-{}
+{
+}
 
 tagsouppullparser::~tagsouppullparser() {}
 

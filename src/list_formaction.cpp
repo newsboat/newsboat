@@ -6,7 +6,8 @@ namespace newsboat {
 
 list_formaction::list_formaction(view* v, std::string formstr)
 	: formaction(v, formstr)
-{}
+{
+}
 
 void list_formaction::process_operation(operation op,
 	bool,

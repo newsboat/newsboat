@@ -19,7 +19,8 @@ namespace podboat {
 queueloader::queueloader(const std::string& file, pb_controller* c)
 	: queuefile(file)
 	, ctrl(c)
-{}
+{
+}
 
 void queueloader::reload(std::vector<download>& downloads, bool remove_unplayed)
 {

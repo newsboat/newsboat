@@ -54,7 +54,8 @@ public:
 	~null_config_action_handler() override {}
 	void handle_action(const std::string&,
 		const std::vector<std::string>&) override
-	{}
+	{
+	}
 	void dump_config(std::vector<std::string>&) override {}
 };
 

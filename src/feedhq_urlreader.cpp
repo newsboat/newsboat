@@ -10,7 +10,8 @@ feedhq_urlreader::feedhq_urlreader(configcontainer* c,
 	: cfg(c)
 	, file(url_file)
 	, api(a)
-{}
+{
+}
 
 feedhq_urlreader::~feedhq_urlreader() {}
 
