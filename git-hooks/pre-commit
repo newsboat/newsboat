@@ -1,23 +1,4 @@
 #!/bin/sh
 
-pattern="*.cpp doc/*.cpp include/*.h rss/*.h rss/*.cpp src/*.cpp test/*.h test/*.cpp"
-
-dir=$(mktemp -d)
-fifo="${dir}/fifo"
-
-mkfifo "$fifo"
-eval "cat $pattern >$fifo &"
-eval "clang-format --style=file $pattern" | diff "$fifo" - >/dev/null
-res=$?
-
-rm -rf "$dir"
-
-if [ $res -ne 0 ]
-then
-    1>&2
-    echo "Some code formatting violates our code style: https://github.com/newsboat/newsboat/blob/master/doc/code-style.markdown"
-    echo "Please run \`make fmt\` to fix that."
-    exit 1
-else
-    exit 0
-fi
+# Do nothing. See #198 for details.
+exit 0
