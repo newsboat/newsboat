@@ -2,6 +2,7 @@
 #include <errno.h>
 #include <iostream>
 #include <ncurses.h>
+#include <sstream>
 #include <sys/utsname.h>
 
 #include "cache.h"
@@ -78,66 +79,70 @@ void print_usage(const char* argv0)
 			_s("import list of read articles from <file>")},
 		{'h', "help", "", _s("this help")}};
 
+	std::stringstream ss;
 	for (const auto& a : args) {
 		std::string longcolumn("-");
 		longcolumn += a.name;
 		longcolumn += ", --" + a.longname;
 		longcolumn += a.params.size() > 0 ? "=" + a.params : "";
-		std::cout << "\t" << longcolumn;
+		ss << "\t" << longcolumn;
 		for (unsigned int j = 0; j < utils::gentabs(longcolumn); j++) {
-			std::cout << "\t";
+			ss << "\t";
 		}
-		std::cout << a.desc << std::endl;
+		ss << a.desc << std::endl;
 	}
+	std::cout << ss.str();
 }
 
 void print_version_information(const char* argv0, unsigned int level)
 {
 	if (level <= 1) {
-		std::cout << PROGRAM_NAME << " " << PROGRAM_VERSION << " - "
+		std::stringstream ss;
+		ss << PROGRAM_NAME << " " << PROGRAM_VERSION << " - "
 			  << PROGRAM_URL << std::endl;
-		std::cout << "Copyright (C) 2006-2015 Andreas Krennmair"
+		ss << "Copyright (C) 2006-2015 Andreas Krennmair"
 			  << std::endl;
-		std::cout << "Copyright (C) 2015-2018 Alexander Batischev"
+		ss << "Copyright (C) 2015-2018 Alexander Batischev"
 			  << std::endl;
-		std::cout << "Copyright (C) 2006-2017 Newsbeuter contributors"
+		ss << "Copyright (C) 2006-2017 Newsbeuter contributors"
 			  << std::endl;
-		std::cout << "Copyright (C) 2017-2018 Newsboat contributors"
+		ss << "Copyright (C) 2017-2018 Newsboat contributors"
 			  << std::endl;
-		std::cout << std::endl;
+		ss << std::endl;
 
-		std::cout << strprintf::fmt(
+		ss << strprintf::fmt(
 				     _("Newsboat is free software licensed "
 				       "under the MIT License. (Type `%s -vv' "
 				       "to see the full text.)"),
 				     argv0)
 			  << std::endl;
-		std::cout << _("It bundles JSON for Modern C++ library, "
+		ss << _("It bundles JSON for Modern C++ library, "
 			       "licensed under the MIT License: "
 			       "https://github.com/nlohmann/json")
 			  << std::endl;
-		std::cout << std::endl;
+		ss << std::endl;
 
 		struct utsname xuts;
 		uname(&xuts);
-		std::cout << PROGRAM_NAME << " " << PROGRAM_VERSION
+		ss << PROGRAM_NAME << " " << PROGRAM_VERSION
 			  << std::endl;
-		std::cout << "System: " << xuts.sysname << " " << xuts.release
+		ss << "System: " << xuts.sysname << " " << xuts.release
 			  << " (" << xuts.machine << ")" << std::endl;
 #if defined(__GNUC__) && defined(__VERSION__)
-		std::cout << "Compiler: g++ " << __VERSION__ << std::endl;
+		ss << "Compiler: g++ " << __VERSION__ << std::endl;
 #endif
-		std::cout << "ncurses: " << curses_version()
+		ss << "ncurses: " << curses_version()
 			  << " (compiled with " << NCURSES_VERSION << ")"
 			  << std::endl;
-		std::cout << "libcurl: " << curl_version() << " (compiled with "
+		ss << "libcurl: " << curl_version() << " (compiled with "
 			  << LIBCURL_VERSION << ")" << std::endl;
-		std::cout << "SQLite: " << sqlite3_libversion()
+		ss << "SQLite: " << sqlite3_libversion()
 			  << " (compiled with " << SQLITE_VERSION << ")"
 			  << std::endl;
-		std::cout << "libxml2: compiled with " << LIBXML_DOTTED_VERSION
+		ss << "libxml2: compiled with " << LIBXML_DOTTED_VERSION
 			  << std::endl
 			  << std::endl;
+		std::cout << ss.str();
 	} else {
 		std::cout << LICENSE_str << std::endl;
 	}
