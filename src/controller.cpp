@@ -923,7 +923,7 @@ void controller::print_version_information(const char* argv0,
 	}
 }
 
-void controller::print_usage(char* argv0)
+void controller::print_usage(const char* argv0)
 {
 	auto msg = strprintf::fmt(
 		_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] "
