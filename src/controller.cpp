@@ -109,7 +109,7 @@ void controller::set_view(view* vv)
 	v = vv;
 }
 
-int controller::run(int argc, char* argv[])
+int controller::run(const CLIArgsParser& args)
 {
 	::signal(SIGINT, ctrl_c_action);
 	::signal(SIGPIPE, ignore_signal);
@@ -120,8 +120,6 @@ int controller::run(int argc, char* argv[])
 		std::cerr << configpaths.error_message() << std::endl;
 		return EXIT_FAILURE;
 	}
-
-	CLIArgsParser args(argc, argv);
 
 	refresh_on_start = args.refresh_on_start;
 

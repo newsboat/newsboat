@@ -32,7 +32,7 @@ public:
 	{
 		return v;
 	}
-	int run(int argc = 0, char* argv[] = nullptr);
+	int run(const CLIArgsParser& args);
 
 	void reload(unsigned int pos,
 		unsigned int max = 0,

@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "cache.h"
+#include "cliargsparser.h"
 #include "config.h"
 #include "controller.h"
 #include "exception.h"
@@ -28,10 +29,11 @@ int main(int argc, char* argv[])
 	controller c;
 	newsboat::view v(&c);
 	c.set_view(&v);
+	CLIArgsParser args(argc, argv);
 
 	int ret;
 	try {
-		ret = c.run(argc, argv);
+		ret = c.run(args);
 	} catch (const newsboat::dbexception& e) {
 		std::cerr << strprintf::fmt(
 				     _("Caught newsboat::dbexception with "
