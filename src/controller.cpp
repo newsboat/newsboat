@@ -138,7 +138,7 @@ int controller::run(int argc, char* argv[])
 	}
 
 	if (args.should_print_usage) {
-		print_usage(argv[0]);
+		print_usage(args.program_name.c_str());
 	}
 
 	if (args.should_return) {
@@ -146,7 +146,8 @@ int controller::run(int argc, char* argv[])
 	}
 
 	if (args.show_version) {
-		print_version_information(argv[0], args.show_version);
+		print_version_information(
+			args.program_name.c_str(), args.show_version);
 		return EXIT_SUCCESS;
 	}
 
@@ -368,7 +369,7 @@ int controller::run(int argc, char* argv[])
 			assert(0); // shouldn't happen
 		}
 		std::cout << msg << std::endl << std::endl;
-		print_usage(argv[0]);
+		print_usage(args.program_name.c_str());
 		return EXIT_FAILURE;
 	}
 
