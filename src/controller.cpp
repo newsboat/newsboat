@@ -24,7 +24,6 @@
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <sys/utsname.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -52,7 +51,6 @@
 #include "ttrss_api.h"
 #include "utils.h"
 #include "view.h"
-#include "xlicense.h"
 
 namespace newsboat {
 
@@ -137,12 +135,6 @@ int controller::run(const CLIArgsParser& args)
 
 	if (args.should_return) {
 		return args.return_code;
-	}
-
-	if (args.show_version) {
-		print_version_information(
-			args.program_name.c_str(), args.show_version);
-		return EXIT_SUCCESS;
 	}
 
 	configpaths.process_args(args);
@@ -862,59 +854,6 @@ void controller::start_reload_all_thread(std::vector<int>* indexes)
 	LOG(level::INFO, "starting reload all thread");
 	std::thread t(downloadthread(this, indexes));
 	t.detach();
-}
-
-void controller::print_version_information(const char* argv0,
-	unsigned int level)
-{
-	if (level <= 1) {
-		std::cout << PROGRAM_NAME << " " << PROGRAM_VERSION << " - "
-			  << PROGRAM_URL << std::endl;
-		std::cout << "Copyright (C) 2006-2015 Andreas Krennmair"
-			  << std::endl;
-		std::cout << "Copyright (C) 2015-2018 Alexander Batischev"
-			  << std::endl;
-		std::cout << "Copyright (C) 2006-2017 Newsbeuter contributors"
-			  << std::endl;
-		std::cout << "Copyright (C) 2017-2018 Newsboat contributors"
-			  << std::endl;
-		std::cout << std::endl;
-
-		std::cout << strprintf::fmt(
-				     _("Newsboat is free software licensed "
-				       "under the MIT License. (Type `%s -vv' "
-				       "to see the full text.)"),
-				     argv0)
-			  << std::endl;
-		std::cout << _("It bundles JSON for Modern C++ library, "
-			       "licensed under the MIT License: "
-			       "https://github.com/nlohmann/json")
-			  << std::endl;
-		std::cout << std::endl;
-
-		struct utsname xuts;
-		uname(&xuts);
-		std::cout << PROGRAM_NAME << " " << PROGRAM_VERSION
-			  << std::endl;
-		std::cout << "System: " << xuts.sysname << " " << xuts.release
-			  << " (" << xuts.machine << ")" << std::endl;
-#if defined(__GNUC__) && defined(__VERSION__)
-		std::cout << "Compiler: g++ " << __VERSION__ << std::endl;
-#endif
-		std::cout << "ncurses: " << curses_version()
-			  << " (compiled with " << NCURSES_VERSION << ")"
-			  << std::endl;
-		std::cout << "libcurl: " << curl_version() << " (compiled with "
-			  << LIBCURL_VERSION << ")" << std::endl;
-		std::cout << "SQLite: " << sqlite3_libversion()
-			  << " (compiled with " << SQLITE_VERSION << ")"
-			  << std::endl;
-		std::cout << "libxml2: compiled with " << LIBXML_DOTTED_VERSION
-			  << std::endl
-			  << std::endl;
-	} else {
-		std::cout << LICENSE_str << std::endl;
-	}
 }
 
 void controller::import_opml(const std::string& filename)

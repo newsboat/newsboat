@@ -119,7 +119,6 @@ public:
 	void update_flags(std::shared_ptr<rss_item> item);
 
 private:
-	void print_version_information(const char* argv0, unsigned int level);
 	void import_opml(const std::string& filename);
 	void export_opml();
 	void rec_find_rss_outlines(xmlNode* node, std::string tag);
