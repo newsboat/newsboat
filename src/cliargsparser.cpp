@@ -87,10 +87,6 @@ CLIArgsParser::CLIArgsParser(int argc, char* argv[])
 			break;
 		case 'h':
 			should_print_usage = true;
-
-			should_return = true;
-			return_code = EXIT_SUCCESS;
-
 			break;
 		case 'u':
 			set_url_file = true;
