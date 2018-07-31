@@ -17,6 +17,7 @@ public:
 	std::string importfile;
 	bool do_read_import = false;
 	bool do_read_export = false;
+	std::string program_name;
 	std::string readinfofile;
 	unsigned int show_version = 0;
 	bool silent = false;
