@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2018-08-01 22:33+0300\n"
-"PO-Revision-Date: 2018-06-11 15:02+0300\n"
+"PO-Revision-Date: 2018-08-01 22:39+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -165,7 +165,7 @@ msgstr "Помилка: при відкритті файлу кеша `%s' ви�
 
 #: src/controller.cpp:292
 msgid "ERROR: You must set `cookie-cache` to use Newsblur.\n"
-msgstr ""
+msgstr "Помилка: для выкористання Newsblur потрібно налаштувати `cookie-cache`.\n"
 
 #: src/controller.cpp:300
 #, c-format
