@@ -286,7 +286,14 @@ int controller::run(int argc, char* argv[])
 		api = new ttrss_api(&cfg);
 		urlcfg = new ttrss_urlreader(configpaths.url_file(), api);
 	} else if (type == "newsblur") {
-		auto cookies = cfg.get_configvalue("cookie-cache");
+		const auto cookies = cfg.get_configvalue("cookie-cache");
+		if (cookies.empty()) {
+			std::cout << strprintf::fmt(
+				_("ERROR: You must set `cookie-cache` to use "
+				  "Newsblur.\n"));
+			return EXIT_FAILURE;
+		}
+
 		std::ofstream check(cookies);
 		if (!check.is_open()) {
 			std::cout << strprintf::fmt(
