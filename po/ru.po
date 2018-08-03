@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2018-08-01 22:33+0300\n"
-"PO-Revision-Date: 2018-08-01 22:37+0300\n"
+"PO-Revision-Date: 2018-08-03 22:54+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -194,7 +194,7 @@ msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
 msgstr ""
-"Похоже что лента OPML, на которую вы подписались не содержит лент новостей."
+"Похоже что лента OPML, на которую вы подписались, не содержит лент новостей."
 "Пожалуйста заполните её лентами и попробуйте еще раз."
 
 #: src/controller.cpp:356
@@ -283,7 +283,7 @@ msgstr "Ошибка во время получения %s: %s"
 
 #: src/controller.cpp:683
 msgid "Error: invalid feed!"
-msgstr "Ошибка: неправильная лента!"
+msgstr "Ошибка: некорректная лента!"
 
 #: src/controller.cpp:897
 #, c-format
@@ -310,7 +310,7 @@ msgid ""
 "[-h]\n"
 msgstr ""
 "%s %s\n"
-"Использование: %s [-i <файл>|-e] [-u <файл с cсылками>] [-c <файл кэша>] [-x "
+"Использование: %s [-i <файл>|-e] [-u <файл со cсылками>] [-c <файл кэша>] [-x "
 "<команда> ...] [-h]\n"
 
 #: src/controller.cpp:951
@@ -331,7 +331,7 @@ msgstr "импортировать файл OPML"
 
 #: src/controller.cpp:956
 msgid "<urlfile>"
-msgstr "<файл с ссылками>"
+msgstr "<файл со ссылками>"
 
 #: src/controller.cpp:957
 msgid "read RSS feed URLs from <urlfile>"
@@ -416,8 +416,8 @@ msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
 msgstr ""
-"поддержка закладок не настроена. Пожалуйста установите в настройках верное "
-"значение переменной `bookmark-cmd'."
+"поддержка закладок не настроена. Пожалуйста, настройте переменную "
+"`bookmark-cmd'."
 
 #: src/controller.cpp:1393
 #, c-format
