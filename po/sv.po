@@ -1257,7 +1257,7 @@ msgstr "Gå till föregående olästa webbkanal"
 
 #: src/keymap.cpp:227
 msgid "Call a macro"
-msgstr "Anropa en makrot"
+msgstr "Anropa ett makro"
 
 #: src/keymap.cpp:231
 msgid "Delete article"
