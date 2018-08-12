@@ -1409,10 +1409,9 @@ std::string controller::write_temporary_item(std::shared_ptr<rss_item> item)
 {
 	char filename[_POSIX_PATH_MAX];
 	char *tmpdir = getenv("TMPDIR");
-	if (tmpdir != NULL) {
+	if (tmpdir != nullptr) {
 	  snprintf(filename, sizeof(filename), "%s/newsboat-article.XXXXXX", tmpdir);
-	}
-	else {
+	} else {
 	  snprintf(filename, sizeof(filename), "/tmp/newsboat-article.XXXXXX");
 	}
 	int fd = mkstemp(filename);
