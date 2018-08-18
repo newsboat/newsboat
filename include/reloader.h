@@ -63,6 +63,15 @@ public:
 	/// Only updates status bar if \a unattended is false.
 	void reload_indexes(const std::vector<int>& indexes,
 		bool unattended = false);
+
+	/// \brief Reloads feeds occupying positions from \a start to \a end in
+	/// feedlist.
+	///
+	/// Only updates status bar if \a unattended is false.
+	void reload_range(unsigned int start,
+		unsigned int end,
+		unsigned int size,
+		bool unattended = false);
 };
 
 } // namespace newsboat
