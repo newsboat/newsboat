@@ -33,12 +33,12 @@ void downloadthread::operator()()
 	}
 }
 
-reloadrangethread::reloadrangethread(controller* c,
+reloadrangethread::reloadrangethread(Reloader* r,
 	unsigned int start,
 	unsigned int end,
 	unsigned int size,
 	bool unattended)
-	: ctrl(c)
+	: reloader(r)
 	, s(start)
 	, e(end)
 	, ss(size)
@@ -48,7 +48,7 @@ reloadrangethread::reloadrangethread(controller* c,
 
 void reloadrangethread::operator()()
 {
-	ctrl->get_reloader()->reload_range(s, e, ss, u);
+	reloader->reload_range(s, e, ss, u);
 }
 
 } // namespace newsboat
