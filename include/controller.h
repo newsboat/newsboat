@@ -35,11 +35,6 @@ public:
 	}
 	int run(int argc = 0, char* argv[] = nullptr);
 
-	void reload_range(unsigned int start,
-		unsigned int end,
-		unsigned int size,
-		bool unattended = false);
-
 	std::vector<std::shared_ptr<rss_item>> search_for_items(
 		const std::string& query,
 		std::shared_ptr<rss_feed> feed);

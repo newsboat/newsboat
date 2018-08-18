@@ -48,7 +48,7 @@ reloadrangethread::reloadrangethread(controller* c,
 
 void reloadrangethread::operator()()
 {
-	ctrl->reload_range(s, e, ss, u);
+	ctrl->get_reloader()->reload_range(s, e, ss, u);
 }
 
 } // namespace newsboat

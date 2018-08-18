@@ -1,5 +1,6 @@
 #include "reloader.h"
 
+#include <algorithm>
 #include <thread>
 
 #include "controller.h"
@@ -136,7 +137,7 @@ void Reloader::reload_all(bool unattended)
 
 	LOG(level::DEBUG, "Reloader::reload_all: starting with reload all...");
 	if (num_threads == 1) {
-		ctrl->reload_range(0, num_feeds - 1, num_feeds, unattended);
+		reload_range(0, num_feeds - 1, num_feeds, unattended);
 	} else {
 		std::vector<std::pair<unsigned int, unsigned int>> partitions =
 			utils::partition_indexes(0, num_feeds - 1, num_threads);
@@ -152,7 +153,7 @@ void Reloader::reload_all(bool unattended)
 		}
 		LOG(level::DEBUG,
 			"Reloader::reload_all: starting my own reload...");
-		ctrl->reload_range(partitions[num_threads - 1].first,
+		reload_range(partitions[num_threads - 1].first,
 			partitions[num_threads - 1].second,
 			num_feeds,
 			unattended);
@@ -237,6 +238,42 @@ void Reloader::reload_indexes(const std::vector<int>& indexes, bool unattended)
 	}
 	if (!unattended)
 		ctrl->get_view()->set_status("");
+}
+
+void Reloader::reload_range(unsigned int start,
+	unsigned int end,
+	unsigned int size,
+	bool unattended)
+{
+	std::vector<unsigned int> v;
+	for (unsigned int i = start; i <= end; ++i)
+		v.push_back(i);
+
+	auto extract = [](std::string& s, const std::string& url) {
+		size_t p = url.find("//");
+		p = (p == std::string::npos) ? 0 : p + 2;
+		std::string suff(url.substr(p));
+		p = suff.find('/');
+		s = suff.substr(0, p);
+	};
+
+	std::sort(v.begin(), v.end(), [&](unsigned int a, unsigned int b) {
+		std::string domain1, domain2;
+		extract(domain1, ctrl->get_feedcontainer()->feeds[a]->rssurl());
+		extract(domain2, ctrl->get_feedcontainer()->feeds[b]->rssurl());
+		std::reverse(domain1.begin(), domain1.end());
+		std::reverse(domain2.begin(), domain2.end());
+		return domain1 < domain2;
+	});
+
+	curl_handle easyhandle;
+
+	for (const auto& i : v) {
+		LOG(level::DEBUG,
+			"Reloader::reload_range: reloading feed #%u",
+			i);
+		reload(i, size, unattended, &easyhandle);
+	}
 }
 
 } // namespace newsboat
