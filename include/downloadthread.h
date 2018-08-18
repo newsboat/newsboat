@@ -3,7 +3,6 @@
 
 #include <thread>
 
-#include "controller.h"
 #include "reloader.h"
 
 namespace newsboat {
@@ -21,7 +20,7 @@ private:
 
 class reloadrangethread {
 public:
-	reloadrangethread(controller* c,
+	reloadrangethread(Reloader* r,
 		unsigned int start,
 		unsigned int end,
 		unsigned int size,
@@ -29,7 +28,7 @@ public:
 	void operator()();
 
 private:
-	controller* ctrl;
+	Reloader* reloader;
 	unsigned int s, e, ss;
 	bool u;
 };
