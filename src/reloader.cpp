@@ -54,11 +54,12 @@ void Reloader::reload(unsigned int pos,
 		std::shared_ptr<rss_feed> oldfeed =
 			ctrl->get_feedcontainer()->feeds[pos];
 		std::string errmsg;
-		if (!unattended)
+		if (!unattended) {
 			ctrl->get_view()->set_status(
 				strprintf::fmt(_("%sLoading %s..."),
 					prepare_message(pos + 1, max),
 					utils::censor_url(oldfeed->rssurl())));
+		}
 
 		bool ignore_dl = (ctrl->get_cfg()->get_configvalue(
 					  "ignore-mode") == "download");
@@ -237,8 +238,9 @@ void Reloader::reload_indexes(const std::vector<int>& indexes, bool unattended)
 		ctrl->notify(fmt.do_format(
 			ctrl->get_cfg()->get_configvalue("notify-format")));
 	}
-	if (!unattended)
+	if (!unattended) {
 		ctrl->get_view()->set_status("");
+	}
 }
 
 void Reloader::reload_range(unsigned int start,
@@ -247,8 +249,9 @@ void Reloader::reload_range(unsigned int start,
 	bool unattended)
 {
 	std::vector<unsigned int> v;
-	for (unsigned int i = start; i <= end; ++i)
+	for (unsigned int i = start; i <= end; ++i) {
 		v.push_back(i);
+	}
 
 	auto extract = [](std::string& s, const std::string& url) {
 		size_t p = url.find("//");
