@@ -7,8 +7,9 @@ namespace newsboat {
 downloadthread::downloadthread(Reloader& r, std::vector<int>* idxs)
 	: reloader(r)
 {
-	if (idxs)
+	if (idxs) {
 		indexes = *idxs;
+	}
 }
 
 downloadthread::~downloadthread() {}
