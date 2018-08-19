@@ -7,6 +7,7 @@
 #include "downloadthread.h"
 #include "exceptions.h"
 #include "formatstring.h"
+#include "reloadrangethread.h"
 #include "reloadthread.h"
 #include "rss/rsspp.h"
 #include "rss_parser.h"
