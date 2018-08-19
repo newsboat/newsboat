@@ -9,7 +9,7 @@ namespace newsboat {
 
 class reloadrangethread {
 public:
-	reloadrangethread(Reloader* r,
+	reloadrangethread(Reloader& r,
 		unsigned int start,
 		unsigned int end,
 		unsigned int size,
@@ -17,7 +17,7 @@ public:
 	void operator()();
 
 private:
-	Reloader* reloader;
+	Reloader& reloader;
 	unsigned int start, end, size;
 	bool unattended;
 };
