@@ -4,7 +4,7 @@
 
 namespace newsboat {
 
-downloadthread::downloadthread(Reloader* r, std::vector<int>* idxs)
+downloadthread::downloadthread(Reloader& r, std::vector<int>* idxs)
 	: reloader(r)
 {
 	if (idxs)
@@ -23,13 +23,13 @@ void downloadthread::operator()()
 	LOG(level::DEBUG,
 		"downloadthread::run: inside downloadthread, reloading all "
 		"feeds...");
-	if (reloader->trylock_reload_mutex()) {
+	if (reloader.trylock_reload_mutex()) {
 		if (indexes.size() == 0) {
-			reloader->reload_all();
+			reloader.reload_all();
 		} else {
-			reloader->reload_indexes(indexes);
+			reloader.reload_indexes(indexes);
 		}
-		reloader->unlock_reload_mutex();
+		reloader.unlock_reload_mutex();
 	}
 }
 

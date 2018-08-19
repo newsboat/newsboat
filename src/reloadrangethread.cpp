@@ -2,7 +2,7 @@
 
 namespace newsboat {
 
-reloadrangethread::reloadrangethread(Reloader* r,
+reloadrangethread::reloadrangethread(Reloader& r,
 	unsigned int s,
 	unsigned int e,
 	unsigned int ss,
@@ -17,7 +17,7 @@ reloadrangethread::reloadrangethread(Reloader* r,
 
 void reloadrangethread::operator()()
 {
-	reloader->reload_range(start, end, size, unattended);
+	reloader.reload_range(start, end, size, unattended);
 }
 
 } // namespace newsboat

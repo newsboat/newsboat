@@ -30,7 +30,7 @@ void Reloader::spawn_reloadthread()
 void Reloader::start_reload_all_thread(std::vector<int>* indexes)
 {
 	LOG(level::INFO, "starting reload all thread");
-	std::thread t(downloadthread(this, indexes));
+	std::thread t(downloadthread(*this, indexes));
 	t.detach();
 }
 
@@ -146,7 +146,7 @@ void Reloader::reload_all(bool unattended)
 		LOG(level::DEBUG,
 			"Reloader::reload_all: starting reload threads...");
 		for (int i = 0; i < num_threads - 1; i++) {
-			threads.push_back(std::thread(reloadrangethread(this,
+			threads.push_back(std::thread(reloadrangethread(*this,
 				partitions[i].first,
 				partitions[i].second,
 				num_feeds,

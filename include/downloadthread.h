@@ -9,12 +9,12 @@ namespace newsboat {
 
 class downloadthread {
 public:
-	downloadthread(Reloader* r, std::vector<int>* idxs = 0);
+	downloadthread(Reloader& r, std::vector<int>* idxs = 0);
 	virtual ~downloadthread();
 	void operator()();
 
 private:
-	Reloader* reloader;
+	Reloader& reloader;
 	std::vector<int> indexes;
 };
 
