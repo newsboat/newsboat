@@ -39,7 +39,7 @@ public:
 	/// Reloads the feed at position \a pos in the feeds list (as kept by
 	/// feedscontainer). \a max is a total amount of feeds (used when
 	/// preparing messages to the user). Only updates status (at the bottom
-	/// of the screen) if \a unattended is falce. All network requests are
+	/// of the screen) if \a unattended is false. All network requests are
 	/// made through \a easyhandle, unless it's nullptr, in which case
 	/// method creates a temporary handle that is destroyed when method
 	/// completes.
