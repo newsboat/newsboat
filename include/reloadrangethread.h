@@ -18,8 +18,8 @@ public:
 
 private:
 	Reloader* reloader;
-	unsigned int s, e, ss;
-	bool u;
+	unsigned int start, end, size;
+	bool unattended;
 };
 
 } // namespace newsboat
