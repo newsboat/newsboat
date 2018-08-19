@@ -11,6 +11,7 @@
 #include "filtercontainer.h"
 #include "fslock.h"
 #include "regexmanager.h"
+#include "reloader.h"
 #include "remote_api.h"
 #include "rss.h"
 #include "urlreader.h"
@@ -34,29 +35,9 @@ public:
 	}
 	int run(int argc = 0, char* argv[] = nullptr);
 
-	void reload(unsigned int pos,
-		unsigned int max = 0,
-		bool unattended = false,
-		curl_handle* easyhandle = 0);
-
-	void reload_all(bool unattended = false);
-	void reload_indexes(const std::vector<int>& indexes,
-		bool unattended = false);
-	void reload_range(unsigned int start,
-		unsigned int end,
-		unsigned int size,
-		bool unattended = false);
-	void start_reload_all_thread(std::vector<int>* indexes = 0);
-
 	std::vector<std::shared_ptr<rss_item>> search_for_items(
 		const std::string& query,
 		std::shared_ptr<rss_feed> feed);
-
-	void unlock_reload_mutex()
-	{
-		reload_mutex.unlock();
-	}
-	bool trylock_reload_mutex();
 
 	void update_feedlist();
 	void update_visible_feeds();
@@ -118,6 +99,26 @@ public:
 
 	void update_flags(std::shared_ptr<rss_item> item);
 
+	Reloader* get_reloader()
+	{
+		return &reloader;
+	}
+
+	void replace_feed(std::shared_ptr<rss_feed> oldfeed,
+		std::shared_ptr<rss_feed> newfeed,
+		unsigned int pos,
+		bool unattended);
+
+	rss_ignores* get_ignores()
+	{
+		return &ign;
+	}
+
+	remote_api* get_api()
+	{
+		return api;
+	}
+
 private:
 	void print_usage(char* argv0);
 	void print_version_information(const char* argv0, unsigned int level);
@@ -126,8 +127,6 @@ private:
 	void rec_find_rss_outlines(xmlNode* node, std::string tag);
 	int execute_commands(const std::vector<std::string>& cmds);
 
-	std::string prepare_message(unsigned int pos, unsigned int max);
-	void save_feed(std::shared_ptr<rss_feed> feed, unsigned int pos);
 	void enqueue_items(std::shared_ptr<rss_feed> feed);
 
 	std::string generate_enqueue_filename(const std::string& url,
@@ -146,7 +145,6 @@ private:
 	FeedContainer feedcontainer;
 	filtercontainer filters;
 
-	std::mutex reload_mutex;
 	configparser cfgparser;
 	colormanager colorman;
 	regexmanager rxman;
@@ -156,6 +154,8 @@ private:
 	std::unique_ptr<FSLock> fslock;
 
 	ConfigPaths configpaths;
+
+	Reloader reloader;
 };
 
 } // namespace newsboat

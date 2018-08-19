@@ -357,7 +357,7 @@ void itemlist_formaction::process_operation(operation op,
 		if (!show_searchresult) {
 			LOG(level::INFO,
 				"itemlist_formaction: reloading current feed");
-			v->get_ctrl()->reload(pos);
+			v->get_ctrl()->get_reloader()->reload(pos);
 			invalidate(InvalidationMode::COMPLETE);
 		} else {
 			v->show_error(
