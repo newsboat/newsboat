@@ -3,21 +3,21 @@
 namespace newsboat {
 
 reloadrangethread::reloadrangethread(Reloader* r,
-	unsigned int start,
-	unsigned int end,
-	unsigned int size,
-	bool unattended)
+	unsigned int s,
+	unsigned int e,
+	unsigned int ss,
+	bool u)
 	: reloader(r)
-	, s(start)
-	, e(end)
-	, ss(size)
-	, u(unattended)
+	, start(s)
+	, end(e)
+	, size(ss)
+	, unattended(u)
 {
 }
 
 void reloadrangethread::operator()()
 {
-	reloader->reload_range(s, e, ss, u);
+	reloader->reload_range(start, end, size, unattended);
 }
 
 } // namespace newsboat
