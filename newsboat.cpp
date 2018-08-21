@@ -19,7 +19,7 @@
 
 using namespace newsboat;
 
-void print_usage(const char* argv0)
+void print_usage(const std::string& argv0)
 {
 	auto msg = strprintf::fmt(
 		_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] "
@@ -94,7 +94,7 @@ void print_usage(const char* argv0)
 	std::cout << ss.str();
 }
 
-void print_version_information(const char* argv0, unsigned int level)
+void print_version_information(const std::string& argv0, unsigned int level)
 {
 	if (level <= 1) {
 		std::stringstream ss;
@@ -166,11 +166,11 @@ int main(int argc, char* argv[])
 	CLIArgsParser args(argc, argv);
 
 	if (args.should_print_usage) {
-		print_usage(args.program_name.c_str());
+		print_usage(args.program_name);
 		return EXIT_SUCCESS;
 	} else if (args.show_version) {
 		print_version_information(
-			args.program_name.c_str(), args.show_version);
+			args.program_name, args.show_version);
 		return EXIT_SUCCESS;
 	}
 
