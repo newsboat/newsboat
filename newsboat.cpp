@@ -167,7 +167,9 @@ int main(int argc, char* argv[])
 
 	if (args.should_print_usage) {
 		print_usage(args.program_name);
-		return EXIT_SUCCESS;
+		if (args.should_return) {
+			return args.return_code;
+		}
 	} else if (args.show_version) {
 		print_version_information(
 			args.program_name, args.show_version);

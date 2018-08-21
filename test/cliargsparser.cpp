@@ -207,6 +207,7 @@ TEST_CASE("Asks to print usage and exit with success if -h/--help is provided",
 		CLIArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.should_print_usage);
+		REQUIRE(args.should_return);
 	};
 
 	SECTION("-h")
