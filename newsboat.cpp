@@ -6,7 +6,6 @@
 #include <sys/utsname.h>
 
 #include "cache.h"
-#include "config.h"
 #include "cliargsparser.h"
 #include "config.h"
 #include "controller.h"
