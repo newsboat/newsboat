@@ -94,7 +94,7 @@ void print_usage(const std::string& argv0)
 	std::cout << ss.str();
 }
 
-void print_version_information(const std::string& argv0, unsigned int level)
+void print_version(const std::string& argv0, unsigned int level)
 {
 	if (level <= 1) {
 		std::stringstream ss;
@@ -171,8 +171,7 @@ int main(int argc, char* argv[])
 			return args.return_code;
 		}
 	} else if (args.show_version) {
-		print_version_information(
-			args.program_name, args.show_version);
+		print_version(args.program_name, args.show_version);
 		return EXIT_SUCCESS;
 	}
 
