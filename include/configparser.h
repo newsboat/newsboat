@@ -9,7 +9,7 @@
 namespace newsboat {
 
 enum class action_handler_status {
-	OK = 0,
+	VALID = 0,
 	INVALID_PARAMS,
 	TOO_FEW_PARAMS,
 	INVALID_COMMAND,

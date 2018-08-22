@@ -11,6 +11,8 @@ CLIArgsParser::CLIArgsParser(int argc, char* argv[])
 {
 	int c;
 
+	program_name = argv[0];
+
 	static const char getopt_str[] = "i:erhqu:c:C:d:l:vVx:XI:E:";
 	static const struct option longopts[] = {
 		{"cache-file", required_argument, 0, 'c'},
@@ -85,10 +87,8 @@ CLIArgsParser::CLIArgsParser(int argc, char* argv[])
 			break;
 		case 'h':
 			should_print_usage = true;
-
 			should_return = true;
 			return_code = EXIT_SUCCESS;
-
 			break;
 		case 'u':
 			set_url_file = true;

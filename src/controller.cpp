@@ -24,7 +24,6 @@
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <sys/utsname.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -52,7 +51,6 @@
 #include "ttrss_api.h"
 #include "utils.h"
 #include "view.h"
-#include "xlicense.h"
 
 namespace newsboat {
 
@@ -109,7 +107,7 @@ void controller::set_view(view* vv)
 	v = vv;
 }
 
-int controller::run(int argc, char* argv[])
+int controller::run(const CLIArgsParser& args)
 {
 	::signal(SIGINT, ctrl_c_action);
 	::signal(SIGPIPE, ignore_signal);
@@ -120,8 +118,6 @@ int controller::run(int argc, char* argv[])
 		std::cerr << configpaths.error_message() << std::endl;
 		return EXIT_FAILURE;
 	}
-
-	CLIArgsParser args(argc, argv);
 
 	refresh_on_start = args.refresh_on_start;
 
@@ -137,17 +133,8 @@ int controller::run(int argc, char* argv[])
 		std::cerr << args.display_msg << std::endl;
 	}
 
-	if (args.should_print_usage) {
-		print_usage(argv[0]);
-	}
-
 	if (args.should_return) {
 		return args.return_code;
-	}
-
-	if (args.show_version) {
-		print_version_information(argv[0], args.show_version);
-		return EXIT_SUCCESS;
 	}
 
 	configpaths.process_args(args);
@@ -375,7 +362,6 @@ int controller::run(int argc, char* argv[])
 			assert(0); // shouldn't happen
 		}
 		std::cout << msg << std::endl << std::endl;
-		print_usage(argv[0]);
 		return EXIT_FAILURE;
 	}
 
@@ -875,132 +861,6 @@ void controller::start_reload_all_thread(std::vector<int>* indexes)
 	LOG(level::INFO, "starting reload all thread");
 	std::thread t(downloadthread(this, indexes));
 	t.detach();
-}
-
-void controller::print_version_information(const char* argv0,
-	unsigned int level)
-{
-	if (level <= 1) {
-		std::cout << PROGRAM_NAME << " " << PROGRAM_VERSION << " - "
-			  << PROGRAM_URL << std::endl;
-		std::cout << "Copyright (C) 2006-2015 Andreas Krennmair"
-			  << std::endl;
-		std::cout << "Copyright (C) 2015-2018 Alexander Batischev"
-			  << std::endl;
-		std::cout << "Copyright (C) 2006-2017 Newsbeuter contributors"
-			  << std::endl;
-		std::cout << "Copyright (C) 2017-2018 Newsboat contributors"
-			  << std::endl;
-		std::cout << std::endl;
-
-		std::cout << strprintf::fmt(
-				     _("Newsboat is free software licensed "
-				       "under the MIT License. (Type `%s -vv' "
-				       "to see the full text.)"),
-				     argv0)
-			  << std::endl;
-		std::cout << _("It bundles JSON for Modern C++ library, "
-			       "licensed under the MIT License: "
-			       "https://github.com/nlohmann/json")
-			  << std::endl;
-		std::cout << std::endl;
-
-		struct utsname xuts;
-		uname(&xuts);
-		std::cout << PROGRAM_NAME << " " << PROGRAM_VERSION
-			  << std::endl;
-		std::cout << "System: " << xuts.sysname << " " << xuts.release
-			  << " (" << xuts.machine << ")" << std::endl;
-#if defined(__GNUC__) && defined(__VERSION__)
-		std::cout << "Compiler: g++ " << __VERSION__ << std::endl;
-#endif
-		std::cout << "ncurses: " << curses_version()
-			  << " (compiled with " << NCURSES_VERSION << ")"
-			  << std::endl;
-		std::cout << "libcurl: " << curl_version() << " (compiled with "
-			  << LIBCURL_VERSION << ")" << std::endl;
-		std::cout << "SQLite: " << sqlite3_libversion()
-			  << " (compiled with " << SQLITE_VERSION << ")"
-			  << std::endl;
-		std::cout << "libxml2: compiled with " << LIBXML_DOTTED_VERSION
-			  << std::endl
-			  << std::endl;
-	} else {
-		std::cout << LICENSE_str << std::endl;
-	}
-}
-
-void controller::print_usage(char* argv0)
-{
-	auto msg = strprintf::fmt(
-		_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] "
-		  "[-c <cachefile>] [-x <command> ...] [-h]\n"),
-		PROGRAM_NAME,
-		PROGRAM_VERSION,
-		argv0);
-	std::cout << msg;
-
-	struct arg {
-		const char name;
-		const std::string longname;
-		const std::string params;
-		const std::string desc;
-	};
-
-	static const std::vector<arg> args = {
-		{'e', "export-to-opml", "", _s("export OPML feed to stdout")},
-		{'r', "refresh-on-start", "", _s("refresh feeds on start")},
-		{'i', "import-from-opml", _s("<file>"), _s("import OPML file")},
-		{'u',
-			"url-file",
-			_s("<urlfile>"),
-			_s("read RSS feed URLs from <urlfile>")},
-		{'c',
-			"cache-file",
-			_s("<cachefile>"),
-			_s("use <cachefile> as cache file")},
-		{'C',
-			"config-file",
-			_s("<configfile>"),
-			_s("read configuration from <configfile>")},
-		{'X', "vacuum", "", _s("compact the cache")},
-		{'x',
-			"execute",
-			_s("<command>..."),
-			_s("execute list of commands")},
-		{'q', "quiet", "", _s("quiet startup")},
-		{'v', "version", "", _s("get version information")},
-		{'l',
-			"log-level",
-			_s("<loglevel>"),
-			_s("write a log with a certain loglevel (valid values: "
-			   "1 to "
-			   "6)")},
-		{'d',
-			"log-file",
-			_s("<logfile>"),
-			_s("use <logfile> as output log file")},
-		{'E',
-			"export-to-file",
-			_s("<file>"),
-			_s("export list of read articles to <file>")},
-		{'I',
-			"import-from-file",
-			_s("<file>"),
-			_s("import list of read articles from <file>")},
-		{'h', "help", "", _s("this help")}};
-
-	for (const auto& a : args) {
-		std::string longcolumn("-");
-		longcolumn += a.name;
-		longcolumn += ", --" + a.longname;
-		longcolumn += a.params.size() > 0 ? "=" + a.params : "";
-		std::cout << "\t" << longcolumn;
-		for (unsigned int j = 0; j < utils::gentabs(longcolumn); j++) {
-			std::cout << "\t";
-		}
-		std::cout << a.desc << std::endl;
-	}
 }
 
 void controller::import_opml(const std::string& filename)
