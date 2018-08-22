@@ -208,6 +208,7 @@ TEST_CASE("Asks to print usage and exit with success if -h/--help is provided",
 
 		REQUIRE(args.should_print_usage);
 		REQUIRE(args.should_return);
+		REQUIRE(args.return_code == EXIT_SUCCESS);
 	};
 
 	SECTION("-h")
