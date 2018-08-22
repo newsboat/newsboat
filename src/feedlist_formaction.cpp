@@ -13,7 +13,7 @@
 #include "formatstring.h"
 #include "listformatter.h"
 #include "logger.h"
-#include "reloadthread.h"
+#include "reloader.h"
 #include "strprintf.h"
 #include "utils.h"
 #include "view.h"
@@ -50,7 +50,7 @@ void feedlist_formaction::init()
 	f->run(-3); // compute all widget dimensions
 
 	if (v->get_ctrl()->get_refresh_on_start()) {
-		v->get_ctrl()->start_reload_all_thread();
+		v->get_ctrl()->get_reloader()->start_reload_all_thread();
 	}
 	v->get_ctrl()->update_feedlist();
 
@@ -60,8 +60,7 @@ void feedlist_formaction::init()
 	 * reloadthread, which is responsible for regularly spawning
 	 * downloadthreads.
 	 */
-	std::thread t{reloadthread(v->get_ctrl(), v->get_cfg())};
-	t.detach();
+	v->get_ctrl()->get_reloader()->spawn_reloadthread();
 
 	apply_filter =
 		!(v->get_cfg()->get_configvalue_as_bool("show-read-feeds"));
@@ -128,7 +127,7 @@ REDO:
 			"feedlist_formaction: reloading feed at position `%s'",
 			feedpos);
 		if (feeds_shown > 0 && feedpos.length() > 0) {
-			v->get_ctrl()->reload(pos);
+			v->get_ctrl()->get_reloader()->reload(pos);
 		} else {
 			v->show_error(
 				_("No feed selected!")); // should not happen
@@ -275,7 +274,7 @@ REDO:
 			for (const auto& feed : visible_feeds) {
 				idxs.push_back(feed.second);
 			}
-			v->get_ctrl()->start_reload_all_thread(
+			v->get_ctrl()->get_reloader()->start_reload_all_thread(
 				reload_only_visible_feeds ? &idxs : nullptr);
 		}
 		break;
