@@ -17,7 +17,6 @@ apps:
       - network
   podboat:
     command: usr/local/bin/podboat
-    aliases: [podboat]
     environment:
       LOCPATH: "$SNAP/usr/lib/locale"
     plugs:
