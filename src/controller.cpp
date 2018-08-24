@@ -965,18 +965,6 @@ void controller::edit_urls_file()
 	reload_urls_file();
 }
 
-/* When passing an argument to a shell script, empty string should be
- * represented as '' (two quote marks), otherwise shell won't be able to tell
- * that the parameter is empty */
-std::string quote_empty(const std::string& input)
-{
-	if (input.empty()) {
-		return "''";
-	} else {
-		return input;
-	}
-}
-
 std::string controller::bookmark(const std::string& url,
 	const std::string& title,
 	const std::string& description,
