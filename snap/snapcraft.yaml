@@ -6,7 +6,7 @@ description: |
   console. The only difference is that Newsboat is actively maintained 
   while Newsbeuter isn't.
 grade: stable
-confinement: strict
+confinement: classic
 
 apps:
   newsboat:
@@ -15,7 +15,6 @@ apps:
       LOCPATH: "$SNAP/usr/lib/locale"
     plugs:
       - network
-      - home
   podboat:
     command: usr/local/bin/podboat
     aliases: [podboat]
@@ -23,13 +22,12 @@ apps:
       LOCPATH: "$SNAP/usr/lib/locale"
     plugs:
       - network
-      - home
 
 parts:
   newsboat:
     plugin: make
     source: .
-    build-packages: 
+    build-packages:
       - pkg-config
       - libsqlite3-dev
       - libcurl4-openssl-dev
