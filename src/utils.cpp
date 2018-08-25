@@ -1264,6 +1264,10 @@ int utils::mkdir_parents(const std::string& p, mode_t mode)
 	/* Have to copy the path because we're going to modify it */
 	const size_t length = p.length() + 1;
 	char* pathname = (char*)malloc(length);
+	if (pathname == nullptr) {
+		// errno is already set by malloc(), so simply return with an error
+		return -1;
+	}
 	strncpy(pathname, p.c_str(), length);
 	/* This pointer will run through the whole string looking for '/'.
 	 * We move it by one if path starts with slash because if we don't, the
