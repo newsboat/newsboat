@@ -982,8 +982,8 @@ bool utils::is_http_url(const std::string& url)
 
 std::string utils::censor_url(const std::string& url)
 {
-	std::string rv;
-	if (url.length() > 0 && !utils::is_special_url(url)) {
+	std::string rv(url);
+	if (!url.empty() && !utils::is_special_url(url)) {
 		const char* myuri = url.c_str();
 		xmlURIPtr uri = xmlParseURI(myuri);
 		if (uri) {
@@ -997,10 +997,7 @@ std::string utils::censor_url(const std::string& url)
 			rv = (const char*)uristr;
 			xmlFree(uristr);
 			xmlFreeURI(uri);
-		} else
-			return url;
-	} else {
-		rv = url;
+		}
 	}
 	return rv;
 }
