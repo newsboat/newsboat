@@ -866,6 +866,8 @@ std::vector<std::shared_ptr<rss_item>> controller::search_for_items(
 }
 
 void controller::enqueue_url(const std::string& url,
+	const std::string& title,
+	const std::string& pubDate,
 	std::shared_ptr<rss_feed> feed)
 {
 	bool url_found = false;
@@ -889,7 +891,7 @@ void controller::enqueue_url(const std::string& url,
 	if (!url_found) {
 		f.open(configpaths.queue_file().c_str(),
 			std::fstream::app | std::fstream::out);
-		std::string filename = generate_enqueue_filename(url, feed);
+		std::string filename = generate_enqueue_filename(url, title, pubDate, feed);
 		f << url << " " << stfl::quote(filename) << std::endl;
 		f.close();
 	}
@@ -1125,7 +1127,7 @@ void controller::enqueue_items(std::shared_ptr<rss_feed> feed)
 					"controller::enqueue_items: enqueuing "
 					"`%s'",
 					item->enclosure_url());
-				enqueue_url(item->enclosure_url(), feed);
+				enqueue_url(item->enclosure_url(), item->title(), item->pubDate(), feed);
 				item->set_enqueued(true);
 				rsscache->update_rssitem_unread_and_enqueued(
 					item, feed->rssurl());
@@ -1135,31 +1137,40 @@ void controller::enqueue_items(std::shared_ptr<rss_feed> feed)
 }
 
 std::string controller::generate_enqueue_filename(const std::string& url,
+	const std::string& title,
+	const std::string& pubDate,
 	std::shared_ptr<rss_feed> feed)
 {
 	std::string dlformat = cfg.get_configvalue("download-path");
 	if (dlformat[dlformat.length() - 1] != NEWSBEUTER_PATH_SEP[0])
 		dlformat.append(NEWSBEUTER_PATH_SEP);
 
+	std::string filemask = cfg.get_configvalue("file-mask");
+	dlformat.append(filemask);
+
 	fmtstr_formatter fmt;
 	fmt.register_fmt('n', feed->title());
 	fmt.register_fmt('h', get_hostname_from_url(url));
+	fmt.register_fmt('d', pubDate);
+	fmt.register_fmt('t', title);
 
 	std::string dlpath = fmt.do_format(dlformat);
 
-	char buf[2048];
-	snprintf(buf, sizeof(buf), "%s", url.c_str());
-	char* base = basename(buf);
-	if (!base || strlen(base) == 0) {
-		char lbuf[128];
-		time_t t = time(nullptr);
-		strftime(lbuf,
-			sizeof(lbuf),
-			"%Y-%b-%d-%H%M%S.unknown",
-			localtime(&t));
-		dlpath.append(lbuf);
-	} else {
-		dlpath.append(base);
+	if (filemask.length() == 0) {
+		char buf[2048];
+		snprintf(buf, sizeof(buf), "%s", url.c_str());
+		char* base = basename(buf);
+		if (!base || strlen(base) == 0) {
+			char lbuf[128];
+			time_t t = time(nullptr);
+			strftime(lbuf,
+					sizeof(lbuf),
+					"%Y-%b-%d-%H%M%S.unknown",
+					localtime(&t));
+			dlpath.append(lbuf);
+		} else {
+			dlpath.append(base);
+		}
 	}
 	return dlpath;
 }

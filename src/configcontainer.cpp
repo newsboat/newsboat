@@ -65,6 +65,7 @@ configcontainer::configcontainer()
 			  configdata("https://feedhq.org/", configdata_t::STR)},
 		  {"feedlist-format",
 			  configdata("%4i %n %11u %t", configdata_t::STR)},
+		  {"file-mask", configdata("", configdata_t::STR)},
 		  {"goto-first-unread", configdata("true", configdata_t::BOOL)},
 		  {"goto-next-feed", configdata("yes", configdata_t::BOOL)},
 		  {"history-limit", configdata("100", configdata_t::INT)},
