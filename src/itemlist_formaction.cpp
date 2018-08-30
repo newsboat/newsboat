@@ -82,7 +82,7 @@ void itemlist_formaction::process_operation(operation op,
 			// mark as deleted
 			visible_items[itempos].first->set_deleted(
 				!visible_items[itempos].first->deleted());
-			v->get_ctrl()->mark_deleted(
+			v->get_ctrl()->get_cache()->mark_item_deleted(
 				visible_items[itempos].first->guid(),
 				visible_items[itempos].first->deleted());
 			if (itempos < visible_items.size() - 1)
@@ -194,10 +194,12 @@ void itemlist_formaction::process_operation(operation op,
 					// mark as undeleted
 					visible_items[itempos]
 						.first->set_deleted(false);
-					v->get_ctrl()->mark_deleted(
-						visible_items[itempos]
-							.first->guid(),
-						false);
+					v->get_ctrl()
+						->get_cache()
+						->mark_item_deleted(
+							visible_items[itempos]
+								.first->guid(),
+							false);
 					// toggle read
 					bool unread = visible_items[itempos]
 							      .first->unread();
