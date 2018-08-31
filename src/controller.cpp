@@ -1102,11 +1102,6 @@ void controller::write_item(std::shared_ptr<rss_item> item, std::ostream& ostr)
 	ostr << txtfmt.format_text_plain(width) << std::endl;
 }
 
-void controller::mark_deleted(const std::string& guid, bool b)
-{
-	rsscache->mark_item_deleted(guid, b);
-}
-
 void controller::enqueue_items(std::shared_ptr<rss_feed> feed)
 {
 	if (!cfg.get_configvalue_as_bool("podcast-auto-enqueue"))

@@ -335,7 +335,7 @@ void itemview_formaction::process_operation(operation op,
 		LOG(level::INFO,
 			"view::run_itemview: deleting current article");
 		item->set_deleted(true);
-		v->get_ctrl()->mark_deleted(guid, true);
+		v->get_ctrl()->get_cache()->mark_item_deleted(guid, true);
 	/* fall-through! */
 	case OP_NEXTUNREAD:
 		LOG(level::INFO,

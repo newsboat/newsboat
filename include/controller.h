@@ -89,8 +89,6 @@ public:
 	void write_item(std::shared_ptr<rss_item> item, std::ostream& ostr);
 	std::string write_temporary_item(std::shared_ptr<rss_item> item);
 
-	void mark_deleted(const std::string& guid, bool b);
-
 	void update_config();
 
 	void load_configfile(const std::string& filename);
