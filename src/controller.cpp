@@ -1145,7 +1145,7 @@ std::string controller::generate_enqueue_filename(const std::string& url,
 	if (dlformat[dlformat.length() - 1] != NEWSBEUTER_PATH_SEP[0])
 		dlformat.append(NEWSBEUTER_PATH_SEP);
 
-	std::string filemask = cfg.get_configvalue("file-mask");
+	std::string filemask = cfg.get_configvalue("download-filename");
 	dlformat.append(filemask);
 
 	fmtstr_formatter fmt;
