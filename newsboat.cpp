@@ -119,6 +119,10 @@ void print_version(const std::string& argv0, unsigned int level)
 			       "licensed under the MIT License: "
 			       "https://github.com/nlohmann/json")
 			  << std::endl;
+		ss << _("It bundles an alphanum algorithm implementation "
+			"licensed under the MIT license:"
+			"http://www.davekoelle.com/alphanum.html")
+			<< std::endl;
 		ss << std::endl;
 
 		struct utsname xuts;
