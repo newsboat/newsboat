@@ -120,7 +120,7 @@ void print_version(const std::string& argv0, unsigned int level)
 			       "https://github.com/nlohmann/json")
 			  << std::endl;
 		ss << _("It bundles an alphanum algorithm implementation "
-			"licensed under the MIT license:"
+			"licensed under the MIT license: "
 			"http://www.davekoelle.com/alphanum.html")
 			<< std::endl;
 		ss << std::endl;

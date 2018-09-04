@@ -250,22 +250,22 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 		REQUIRE(sorted_feeds[4]->get_order() == 33);
 	}
 
-	feeds[0]->set_tags({"aa"});
+	feeds[0]->set_tags({"tag1"});
 	feeds[1]->set_tags({"Taggy"});
-	feeds[2]->set_tags({"Zaza"});
+	feeds[2]->set_tags({"tag10"});
 	feeds[3]->set_tags({"taggy"});
-	feeds[4]->set_tags({"aaa"});
+	feeds[4]->set_tags({"tag2"});
 
 	SECTION("by firsttag asc")
 	{
 		cfg.set_configvalue("feed-sort-order", "firsttag-asc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
-		REQUIRE(sorted_feeds[0]->get_firsttag() == "Zaza");
-		REQUIRE(sorted_feeds[1]->get_firsttag() == "taggy");
-		REQUIRE(sorted_feeds[2]->get_firsttag() == "Taggy");
-		REQUIRE(sorted_feeds[3]->get_firsttag() == "aaa");
-		REQUIRE(sorted_feeds[4]->get_firsttag() == "aa");
+		REQUIRE(sorted_feeds[0]->get_firsttag() == "taggy");
+		REQUIRE(sorted_feeds[1]->get_firsttag() == "tag10");
+		REQUIRE(sorted_feeds[2]->get_firsttag() == "tag2");
+		REQUIRE(sorted_feeds[3]->get_firsttag() == "tag1");
+		REQUIRE(sorted_feeds[4]->get_firsttag() == "Taggy");
 	}
 
 	SECTION("by firsttag desc")
@@ -273,29 +273,29 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 		cfg.set_configvalue("feed-sort-order", "firsttag-desc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
-		REQUIRE(sorted_feeds[0]->get_firsttag() == "aa");
-		REQUIRE(sorted_feeds[1]->get_firsttag() == "aaa");
-		REQUIRE(sorted_feeds[2]->get_firsttag() == "Taggy");
-		REQUIRE(sorted_feeds[3]->get_firsttag() == "taggy");
-		REQUIRE(sorted_feeds[4]->get_firsttag() == "Zaza");
+		REQUIRE(sorted_feeds[0]->get_firsttag() == "Taggy");
+		REQUIRE(sorted_feeds[1]->get_firsttag() == "tag1");
+		REQUIRE(sorted_feeds[2]->get_firsttag() == "tag2");
+		REQUIRE(sorted_feeds[3]->get_firsttag() == "tag10");
+		REQUIRE(sorted_feeds[4]->get_firsttag() == "taggy");
 	}
 
-	feeds[0]->set_title("aa");
+	feeds[0]->set_title("tag1");
 	feeds[1]->set_title("Taggy");
-	feeds[2]->set_title("Zaza");
+	feeds[2]->set_title("tag10");
 	feeds[3]->set_title("taggy");
-	feeds[4]->set_title("aaa");
+	feeds[4]->set_title("tag2");
 
 	SECTION("by title asc")
 	{
 		cfg.set_configvalue("feed-sort-order", "title-asc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
-		REQUIRE(sorted_feeds[0]->title() == "Zaza");
-		REQUIRE(sorted_feeds[1]->title() == "taggy");
-		REQUIRE(sorted_feeds[2]->title() == "Taggy");
-		REQUIRE(sorted_feeds[3]->title() == "aaa");
-		REQUIRE(sorted_feeds[4]->title() == "aa");
+		REQUIRE(sorted_feeds[0]->title() == "taggy");
+		REQUIRE(sorted_feeds[1]->title() == "tag10");
+		REQUIRE(sorted_feeds[2]->title() == "tag2");
+		REQUIRE(sorted_feeds[3]->title() == "tag1");
+		REQUIRE(sorted_feeds[4]->title() == "Taggy");
 	}
 
 	SECTION("by title desc")
@@ -303,11 +303,11 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 		cfg.set_configvalue("feed-sort-order", "title-desc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
-		REQUIRE(sorted_feeds[0]->title() == "aa");
-		REQUIRE(sorted_feeds[1]->title() == "aaa");
-		REQUIRE(sorted_feeds[2]->title() == "Taggy");
-		REQUIRE(sorted_feeds[3]->title() == "taggy");
-		REQUIRE(sorted_feeds[4]->title() == "Zaza");
+		REQUIRE(sorted_feeds[0]->title() == "Taggy");
+		REQUIRE(sorted_feeds[1]->title() == "tag1");
+		REQUIRE(sorted_feeds[2]->title() == "tag2");
+		REQUIRE(sorted_feeds[3]->title() == "tag10");
+		REQUIRE(sorted_feeds[4]->title() == "taggy");
 	}
 
 	feeds[0]->add_item(std::make_shared<rss_item>(&rsscache));

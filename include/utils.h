@@ -163,6 +163,8 @@ public:
 
 	static std::string getcwd();
 
+	static int strnaturalcmp(const std::string& a, const std::string& b);
+
 	static void remove_soft_hyphens(std::string& text);
 
 	static bool is_valid_podcast_type(const std::string& mimetype);

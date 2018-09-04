@@ -648,6 +648,37 @@ TEST_CASE("getcwd() returns current directory of the process", "[utils]")
 	}
 }
 
+TEST_CASE("strnaturalcmp() compares strings using natural numeric ordering",
+	  "[utils]")
+{
+	// Tests copied over from 3rd-party/alphanum.hpp
+	REQUIRE(utils::strnaturalcmp("","") == 0);
+	REQUIRE(utils::strnaturalcmp("","a") < 0);
+	REQUIRE(utils::strnaturalcmp("a","") > 0);
+	REQUIRE(utils::strnaturalcmp("a","a") == 0);
+	REQUIRE(utils::strnaturalcmp("","9") < 0);
+	REQUIRE(utils::strnaturalcmp("9","") > 0);
+	REQUIRE(utils::strnaturalcmp("1","1") == 0);
+	REQUIRE(utils::strnaturalcmp("1","2") < 0);
+	REQUIRE(utils::strnaturalcmp("3","2") > 0);
+	REQUIRE(utils::strnaturalcmp("a1","a1") == 0);
+	REQUIRE(utils::strnaturalcmp("a1","a2") < 0);
+	REQUIRE(utils::strnaturalcmp("a2","a1") > 0);
+	REQUIRE(utils::strnaturalcmp("a1a2","a1a3") < 0);
+	REQUIRE(utils::strnaturalcmp("a1a2","a1a0") > 0);
+	REQUIRE(utils::strnaturalcmp("134","122") > 0);
+	REQUIRE(utils::strnaturalcmp("12a3","12a3") == 0);
+	REQUIRE(utils::strnaturalcmp("12a1","12a0") > 0);
+	REQUIRE(utils::strnaturalcmp("12a1","12a2") < 0);
+	REQUIRE(utils::strnaturalcmp("a","aa") < 0);
+	REQUIRE(utils::strnaturalcmp("aaa","aa") > 0);
+	REQUIRE(utils::strnaturalcmp("Alpha 2","Alpha 2") == 0);
+	REQUIRE(utils::strnaturalcmp("Alpha 2","Alpha 2A") < 0);
+	REQUIRE(utils::strnaturalcmp("Alpha 2 B","Alpha 2") > 0);
+
+	REQUIRE(utils::strnaturalcmp("aa10", "aa2") > 0);
+}
+
 TEST_CASE(
 	"is_valid_podcast_type() returns true if supplied MIME type "
 	"is audio or a container",

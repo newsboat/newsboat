@@ -9,6 +9,7 @@
 #include <langinfo.h>
 #include <sstream>
 #include <sys/utsname.h>
+#include <string.h>
 #include <time.h>
 
 #include "cache.h"
@@ -597,9 +598,9 @@ void rss_feed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 				std::shared_ptr<rss_item> b) {
 				return sort_strategy.sd ==
 						sort_direction_t::DESC
-					? (strcasecmp(a->title().c_str(),
+					? (utils::strnaturalcmp(a->title().c_str(),
 						   b->title().c_str()) > 0)
-					: (strcasecmp(a->title().c_str(),
+					: (utils::strnaturalcmp(a->title().c_str(),
 						   b->title().c_str()) < 0);
 			});
 		break;

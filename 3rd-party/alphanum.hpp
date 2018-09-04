@@ -1,6 +1,8 @@
 #ifndef ALPHANUM__HPP
 #define ALPHANUM__HPP
 
+#define ALPHANUM_LOCALE
+
 /*
  Released under the MIT License - https://opensource.org/licenses/MIT
 
