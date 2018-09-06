@@ -1,8 +1,20 @@
 #include "urlreader.h"
 
 #include "3rd-party/catch.hpp"
+#include "test-helpers.h"
 
 using namespace newsboat;
+
+TEST_CASE("URL reader remembers the file name from which it read the URLs",
+		"[file_urlreader]")
+{
+	const std::string url("data/test-urls.txt");
+
+	file_urlreader u;
+	REQUIRE(u.get_source() != url);
+	u.load_config(url);
+	REQUIRE(u.get_source() == url);
+}
 
 TEST_CASE("URL reader extracts all URLs from the file", "[file_urlreader]")
 {
@@ -34,4 +46,49 @@ TEST_CASE("URL reader keeps track of unique tags", "[file_urlreader]")
 	u.load_config("data/test-urls.txt");
 
 	REQUIRE(u.get_alltags().size() == 3);
+}
+
+TEST_CASE("URL reader writes files that it can understand later",
+		"[file_urlreader]")
+{
+	const std::string testDataPath("data/test-urls.txt");
+
+	TestHelpers::TempFile urlsFile;
+
+	std::ofstream urlsFileStream;
+	urlsFileStream.open(urlsFile.getPath());
+	REQUIRE(urlsFileStream.is_open());
+
+	std::ifstream testData;
+	testData.open(testDataPath);
+	REQUIRE(testData.is_open());
+
+	for (std::string line; std::getline(testData, line); ) {
+		urlsFileStream << line << '\n';
+	}
+
+	urlsFileStream.close();
+	testData.close();
+
+	file_urlreader u(urlsFile.getPath());
+	u.reload();
+	REQUIRE_FALSE(u.get_urls().empty());
+	REQUIRE_FALSE(u.get_alltags().empty());
+
+	urlsFileStream.open(urlsFile.getPath());
+	REQUIRE(urlsFileStream.is_open());
+	urlsFileStream << std::string();
+	urlsFileStream.close();
+
+	u.write_config();
+
+	file_urlreader u2(urlsFile.getPath());
+	u2.reload();
+	REQUIRE_FALSE(u2.get_urls().empty());
+	REQUIRE_FALSE(u2.get_alltags().empty());
+	REQUIRE(u.get_alltags() == u2.get_alltags());
+	REQUIRE(u.get_urls() == u2.get_urls());
+	for (const auto& url : u.get_urls()) {
+		REQUIRE(u.get_tags(url) == u2.get_tags(url));
+	}
 }
