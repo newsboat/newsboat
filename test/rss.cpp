@@ -339,18 +339,18 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		auto articles = f.items();
 		articles[0]->set_title("Read me");
 		articles[1]->set_title("Wow tests are great");
-		articles[2]->set_title("A boring article");
-		articles[3]->set_title("Another great article");
-		articles[4]->set_title("Article you must read");
+		articles[2]->set_title("Article 1: A boring article");
+		articles[3]->set_title("Article 10: Another great article");
+		articles[4]->set_title("Article 2: Article you must read");
 
 		ArticleSortStrategy ss;
 		ss.sm = art_sort_method_t::TITLE;
 		ss.sd = sort_direction_t::ASC;
 		f.sort(ss);
 		articles = f.items();
-		REQUIRE(articles[0]->title_raw() == "A boring article");
-		REQUIRE(articles[1]->title_raw() == "Another great article");
-		REQUIRE(articles[2]->title_raw() == "Article you must read");
+		REQUIRE(articles[0]->title_raw() == "Article 1: A boring article");
+		REQUIRE(articles[1]->title_raw() == "Article 2: Article you must read");
+		REQUIRE(articles[2]->title_raw() == "Article 10: Another great article");
 		REQUIRE(articles[3]->title_raw() == "Read me");
 		REQUIRE(articles[4]->title_raw() == "Wow tests are great");
 
@@ -359,9 +359,9 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		articles = f.items();
 		REQUIRE(articles[0]->title_raw() == "Wow tests are great");
 		REQUIRE(articles[1]->title_raw() == "Read me");
-		REQUIRE(articles[2]->title_raw() == "Article you must read");
-		REQUIRE(articles[3]->title_raw() == "Another great article");
-		REQUIRE(articles[4]->title_raw() == "A boring article");
+		REQUIRE(articles[2]->title_raw() == "Article 10: Another great article");
+		REQUIRE(articles[3]->title_raw() == "Article 2: Article you must read");
+		REQUIRE(articles[4]->title_raw() == "Article 1: A boring article");
 	}
 
 	SECTION("flags")
