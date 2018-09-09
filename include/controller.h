@@ -15,6 +15,7 @@
 #include "remote_api.h"
 #include "rss.h"
 #include "urlreader.h"
+#include "opml.h"
 
 namespace newsboat {
 
