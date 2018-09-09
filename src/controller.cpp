@@ -680,7 +680,7 @@ void controller::export_opml()
 	xmlSaveDoc(savectx, root);
 	xmlSaveClose(savectx);
 
-	xmlFreeNode(opml_node);
+	xmlFreeDoc(root);
 }
 
 void controller::rec_find_rss_outlines(xmlNode* node, std::string tag)
