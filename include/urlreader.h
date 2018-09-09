@@ -31,7 +31,6 @@ protected:
 class file_urlreader : public urlreader {
 public:
 	explicit file_urlreader(const std::string& file = "");
-	~file_urlreader() override;
 	void write_config() override;
 	void reload() override;
 	void load_config(const std::string& file);
@@ -44,7 +43,6 @@ private:
 class opml_urlreader : public urlreader {
 public:
 	explicit opml_urlreader(configcontainer* c);
-	~opml_urlreader() override;
 	void write_config() override;
 	void reload() override;
 	std::string get_source() override;
