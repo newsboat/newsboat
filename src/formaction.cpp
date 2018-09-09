@@ -531,13 +531,13 @@ std::string formaction::bookmark(const std::string& url,
 			utils::replace_all(description, "'", "%27"),
 			utils::replace_all(feed_title, "'", "%27"));
 
-		LOG(level::DEBUG, "controller::bookmark: cmd = %s", cmdline);
+		LOG(level::DEBUG, "formaction::bookmark: cmd = %s", cmdline);
 
 		if (is_interactive) {
 			v->push_empty_formaction();
 			stfl::reset();
 			utils::run_interactively(
-				cmdline, "controller::bookmark");
+				cmdline, "formaction::bookmark");
 			v->pop_current_formaction();
 			return "";
 		} else {
