@@ -10,9 +10,6 @@
 
 namespace newsboat {
 
-urlreader::urlreader() {}
-urlreader::~urlreader() {}
-
 std::vector<std::string>& urlreader::get_urls()
 {
 	return urls;
