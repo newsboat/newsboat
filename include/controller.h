@@ -18,8 +18,6 @@
 
 namespace newsboat {
 
-extern int ctrl_c_hit;
-
 class view;
 
 class curl_handle;

@@ -53,14 +53,6 @@
 
 namespace newsboat {
 
-int ctrl_c_hit = 0;
-
-void ctrl_c_action(int /* sig */)
-{
-	LOG(level::DEBUG, "caught SIGINT");
-	ctrl_c_hit = 1;
-}
-
 void sighup_action(int /* sig */)
 {
 	LOG(level::DEBUG, "caught SIGHUP");
@@ -109,7 +101,7 @@ void controller::set_view(view* vv)
 
 int controller::run(const CLIArgsParser& args)
 {
-	::signal(SIGINT, ctrl_c_action);
+	::signal(SIGINT, view::ctrl_c_action);
 	::signal(SIGPIPE, ignore_signal);
 	::signal(SIGHUP, sighup_action);
 	::signal(SIGCHLD, omg_a_child_died);

@@ -52,6 +52,10 @@ extern "C" {
 #include "urlview_formaction.h"
 #include "utils.h"
 
+namespace {
+int ctrl_c_hit = 0;
+}
+
 namespace newsboat {
 
 view::view(controller* c)
@@ -1309,6 +1313,12 @@ void view::dump_current_form()
 	f << formtext;
 	f.close();
 	set_status(strprintf::fmt("Dumped current form to file %s", fnbuf));
+}
+
+void view::ctrl_c_action(int /* sig */)
+{
+	LOG(level::DEBUG, "caught SIGINT");
+	ctrl_c_hit = 1;
 }
 
 } // namespace newsboat
