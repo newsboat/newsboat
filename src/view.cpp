@@ -53,7 +53,7 @@ extern "C" {
 #include "utils.h"
 
 namespace {
-int ctrl_c_hit = 0;
+bool ctrl_c_hit = false;
 }
 
 namespace newsboat {
@@ -219,7 +219,7 @@ int view::run()
 			const char* event = fa->get_form()->run(60000);
 
 			if (ctrl_c_hit) {
-				ctrl_c_hit = 0;
+				ctrl_c_hit = false;
 				cancel_input(fa);
 				if (!get_cfg()->get_configvalue_as_bool(
 					    "confirm-exit") ||
@@ -1318,7 +1318,7 @@ void view::dump_current_form()
 void view::ctrl_c_action(int /* sig */)
 {
 	LOG(level::DEBUG, "caught SIGINT");
-	ctrl_c_hit = 1;
+	ctrl_c_hit = true;
 }
 
 } // namespace newsboat
