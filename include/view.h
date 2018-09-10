@@ -135,6 +135,8 @@ public:
 
 	void dump_current_form();
 
+	static void ctrl_c_action(int sig);
+
 protected:
 	void set_bindings(std::shared_ptr<formaction> fa);
 	void apply_colors(std::shared_ptr<formaction> fa);

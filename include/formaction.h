@@ -79,6 +79,11 @@ public:
 		const std::string& cmdlinefile,
 		unsigned int limit);
 
+	std::string bookmark(const std::string& url,
+		const std::string& title,
+		const std::string& description,
+		const std::string& feed_title);
+
 protected:
 	virtual void process_operation(operation op,
 		bool automatic = false,

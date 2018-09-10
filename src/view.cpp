@@ -52,6 +52,10 @@ extern "C" {
 #include "urlview_formaction.h"
 #include "utils.h"
 
+namespace {
+bool ctrl_c_hit = false;
+}
+
 namespace newsboat {
 
 view::view(controller* c)
@@ -215,7 +219,7 @@ int view::run()
 			const char* event = fa->get_form()->run(60000);
 
 			if (ctrl_c_hit) {
-				ctrl_c_hit = 0;
+				ctrl_c_hit = false;
 				cancel_input(fa);
 				if (!get_cfg()->get_configvalue_as_bool(
 					    "confirm-exit") ||
@@ -1309,6 +1313,12 @@ void view::dump_current_form()
 	f << formtext;
 	f.close();
 	set_status(strprintf::fmt("Dumped current form to file %s", fnbuf));
+}
+
+void view::ctrl_c_action(int /* sig */)
+{
+	LOG(level::DEBUG, "caught SIGINT");
+	ctrl_c_hit = true;
 }
 
 } // namespace newsboat

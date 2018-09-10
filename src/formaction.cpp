@@ -364,7 +364,7 @@ void formaction::finished_qna(operation op)
 		assert(qna_responses.size() == 4 &&
 			qna_prompts.size() == 0); // everything must be answered
 		v->set_status(_("Saving bookmark..."));
-		std::string retval = v->get_ctrl()->bookmark(qna_responses[0],
+		std::string retval = bookmark(qna_responses[0],
 			qna_responses[1],
 			qna_responses[2],
 			qna_responses[3]);
@@ -438,11 +438,10 @@ void formaction::start_bookmark_qna(const std::string& default_title,
 			start_qna(prompts, OP_INT_BM_END);
 		} else {
 			v->set_status(_("Saving bookmark on autopilot..."));
-			std::string retval =
-				v->get_ctrl()->bookmark(default_url,
-					new_title,
-					default_desc,
-					default_feed_title);
+			std::string retval = bookmark(default_url,
+				new_title,
+				default_desc,
+				default_feed_title);
 			if (retval.length() == 0) {
 				v->set_status(_("Saved bookmark."));
 			} else {
@@ -513,6 +512,47 @@ void formaction::save_histories(const std::string& searchfile,
 {
 	searchhistory.save_to_file(searchfile, limit);
 	cmdlinehistory.save_to_file(cmdlinefile, limit);
+}
+
+std::string formaction::bookmark(const std::string& url,
+	const std::string& title,
+	const std::string& description,
+	const std::string& feed_title)
+{
+	std::string bookmark_cmd =
+		v->get_cfg()->get_configvalue("bookmark-cmd");
+	bool is_interactive =
+		v->get_cfg()->get_configvalue_as_bool("bookmark-interactive");
+	if (bookmark_cmd.length() > 0) {
+		std::string cmdline = strprintf::fmt("%s '%s' '%s' '%s' '%s'",
+			bookmark_cmd,
+			utils::replace_all(url, "'", "%27"),
+			utils::replace_all(title, "'", "%27"),
+			utils::replace_all(description, "'", "%27"),
+			utils::replace_all(feed_title, "'", "%27"));
+
+		LOG(level::DEBUG, "formaction::bookmark: cmd = %s", cmdline);
+
+		if (is_interactive) {
+			v->push_empty_formaction();
+			stfl::reset();
+			utils::run_interactively(
+				cmdline, "formaction::bookmark");
+			v->pop_current_formaction();
+			return "";
+		} else {
+			char* my_argv[4];
+			my_argv[0] = const_cast<char*>("/bin/sh");
+			my_argv[1] = const_cast<char*>("-c");
+			my_argv[2] = const_cast<char*>(cmdline.c_str());
+			my_argv[3] = nullptr;
+			return utils::run_program(my_argv, "");
+		}
+	} else {
+		return _(
+			"bookmarking support is not configured. Please set the "
+			"configuration variable `bookmark-cmd' accordingly.");
+	}
 }
 
 } // namespace newsboat
