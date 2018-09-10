@@ -1,6 +1,8 @@
 #include "reloader.h"
 
 #include <algorithm>
+#include <iostream>
+#include <ncurses.h>
 #include <thread>
 
 #include "controller.h"
@@ -202,7 +204,7 @@ void Reloader::reload_all(bool unattended)
 			std::to_string(article_count >= 0 ? article_count : 0));
 		fmt.register_fmt(
 			'D', std::to_string(feed_count >= 0 ? feed_count : 0));
-		ctrl->notify(fmt.do_format(
+		notify(fmt.do_format(
 			ctrl->get_cfg()->get_configvalue("notify-format")));
 	}
 }
@@ -235,7 +237,7 @@ void Reloader::reload_indexes(const std::vector<int>& indexes, bool unattended)
 			std::to_string(unread_articles2 - unread_articles));
 		fmt.register_fmt(
 			'D', std::to_string(unread_feeds2 - unread_feeds));
-		ctrl->notify(fmt.do_format(
+		notify(fmt.do_format(
 			ctrl->get_cfg()->get_configvalue("notify-format")));
 	}
 	if (!unattended) {
@@ -277,6 +279,33 @@ void Reloader::reload_range(unsigned int start,
 			"Reloader::reload_range: reloading feed #%u",
 			i);
 		reload(i, size, unattended, &easyhandle);
+	}
+}
+
+void Reloader::notify(const std::string& msg)
+{
+	const auto cfg = ctrl->get_cfg();
+
+	if (cfg->get_configvalue_as_bool("notify-screen")) {
+		LOG(level::DEBUG, "reloader:notify: notifying screen");
+		std::cout << "\033^" << msg << "\033\\";
+		std::cout.flush();
+	}
+	if (cfg->get_configvalue_as_bool("notify-xterm")) {
+		LOG(level::DEBUG, "reloader:notify: notifying xterm");
+		std::cout << "\033]2;" << msg << "\033\\";
+		std::cout.flush();
+	}
+	if (cfg->get_configvalue_as_bool("notify-beep")) {
+		LOG(level::DEBUG, "reloader:notify: notifying beep");
+		::beep();
+	}
+	if (cfg->get_configvalue("notify-program").length() > 0) {
+		std::string prog = cfg->get_configvalue("notify-program");
+		LOG(level::DEBUG,
+			"reloader:notify: notifying external program `%s'",
+			prog);
+		utils::run_command(prog, msg);
 	}
 }
 

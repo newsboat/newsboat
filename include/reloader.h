@@ -72,6 +72,8 @@ public:
 		unsigned int end,
 		unsigned int size,
 		bool unattended = false);
+
+	void notify(const std::string& msg);
 };
 
 } // namespace newsboat
