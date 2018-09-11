@@ -52,7 +52,6 @@ public:
 	}
 	void enqueue_url(const std::string& url,
 		std::shared_ptr<rss_feed> feed);
-	void notify(const std::string& msg);
 
 	void reload_urls_file();
 	void edit_urls_file();
