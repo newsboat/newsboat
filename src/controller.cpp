@@ -868,17 +868,12 @@ void controller::reload_urls_file()
 	unsigned int i = 0;
 
 	for (const auto& url : urlcfg->get_urls()) {
-		bool found = false;
-		for (const auto& feed : feedcontainer.feeds) {
-			if (url == feed->rssurl()) {
-				found = true;
-				feed->set_tags(urlcfg->get_tags(url));
-				feed->set_order(i);
-				new_feeds.push_back(feed);
-				break;
-			}
-		}
-		if (!found) {
+		const auto feed = feedcontainer.get_feed_by_url(url);
+		if (feed) {
+			feed->set_tags(urlcfg->get_tags(url));
+			feed->set_order(i);
+			new_feeds.push_back(feed);
+		} else {
 			try {
 				bool ignore_disp =
 					(cfg.get_configvalue("ignore-mode") ==
