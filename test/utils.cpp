@@ -729,3 +729,14 @@ TEST_CASE(
 	REQUIRE_FALSE(utils::is_filter_url("filter"));
 	REQUIRE_FALSE(utils::is_filter_url("   filter:"));
 }
+
+TEST_CASE(
+	"is_exec_url() return true if given URL is a exec URL, i.e. it "
+	"starts with \"exec:\" string",
+	"[utils]")
+{
+	REQUIRE(utils::is_exec_url("exec:"));
+	REQUIRE(utils::is_exec_url("exec: example"));
+	REQUIRE_FALSE(utils::is_exec_url("exec"));
+	REQUIRE_FALSE(utils::is_exec_url("   exec:"));
+}
