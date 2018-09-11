@@ -718,3 +718,14 @@ TEST_CASE(
 	REQUIRE_FALSE(utils::is_query_url("query"));
 	REQUIRE_FALSE(utils::is_query_url("   query:"));
 }
+
+TEST_CASE(
+	"is_filter_url() return true if given URL is a filter URL, i.e. it "
+	"starts with \"filter:\" string",
+	"[utils]")
+{
+	REQUIRE(utils::is_filter_url("filter:"));
+	REQUIRE(utils::is_filter_url("filter: example"));
+	REQUIRE_FALSE(utils::is_filter_url("filter"));
+	REQUIRE_FALSE(utils::is_filter_url("   filter:"));
+}
