@@ -991,6 +991,11 @@ bool utils::is_filter_url(const std::string& url)
 	return url.substr(0, 7) == "filter:";
 }
 
+bool utils::is_exec_url(const std::string& url)
+{
+	return url.substr(0, 5) == "exec:";
+}
+
 std::string utils::censor_url(const std::string& url)
 {
 	std::string rv(url);

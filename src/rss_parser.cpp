@@ -160,7 +160,7 @@ void rss_parser::retrieve_uri(const std::string& uri)
 		fetch_ocnews(uri);
 	} else if (utils::is_http_url(uri)) {
 		download_http(uri);
-	} else if (uri.substr(0, 5) == "exec:") {
+	} else if (utils::is_exec_url(uri)) {
 		get_execplugin(uri.substr(5, uri.length() - 5));
 	} else if (utils::is_filter_url(uri)) {
 		std::string filter, url;
