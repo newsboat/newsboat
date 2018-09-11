@@ -142,13 +142,9 @@ public:
 	static unsigned long get_auth_method(const std::string& type);
 
 	static bool is_special_url(const std::string& url);
-
 	static bool is_http_url(const std::string& url);
-
 	static bool is_query_url(const std::string& url);
-
 	static bool is_filter_url(const std::string& url);
-
 	static bool is_exec_url(const std::string& url);
 
 	static std::string get_content(xmlNode* node);
