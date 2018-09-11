@@ -709,7 +709,7 @@ TEST_CASE(
 }
 
 TEST_CASE(
-	"is_query_url() return true if given URL is a query URL, i.e. it "
+	"is_query_url() returns true if given URL is a query URL, i.e. it "
 	"starts with \"query:\" string",
 	"[utils]")
 {
@@ -720,7 +720,7 @@ TEST_CASE(
 }
 
 TEST_CASE(
-	"is_filter_url() return true if given URL is a filter URL, i.e. it "
+	"is_filter_url() returns true if given URL is a filter URL, i.e. it "
 	"starts with \"filter:\" string",
 	"[utils]")
 {
@@ -731,7 +731,7 @@ TEST_CASE(
 }
 
 TEST_CASE(
-	"is_exec_url() return true if given URL is a exec URL, i.e. it "
+	"is_exec_url() returns true if given URL is a exec URL, i.e. it "
 	"starts with \"exec:\" string",
 	"[utils]")
 {
