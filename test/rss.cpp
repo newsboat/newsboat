@@ -711,4 +711,21 @@ TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
 	REQUIRE(feed->items()[4]->title() == "Alternate link isn't first");
 }
 
+TEST_CASE("rss_feed::is_query_feed()", "[rss]")
+{
+	configcontainer cfg;
+	cache rsscache(":memory:", &cfg);
+	rss_feed f(&rsscache);
+
+	f.set_rssurl("query... no wait");
+	REQUIRE_FALSE(f.is_query_feed());
+	f.set_rssurl("  query:");
+	REQUIRE_FALSE(f.is_query_feed());
+
+	f.set_rssurl("query:a title:unread = \"yes\"");
+	REQUIRE(f.is_query_feed());
+	f.set_rssurl("query:Title:unread = \"yes\" and age between 0:7");
+	REQUIRE(f.is_query_feed());
+}
+
 } // namespace newsboat
