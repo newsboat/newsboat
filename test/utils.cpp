@@ -740,3 +740,25 @@ TEST_CASE(
 	REQUIRE_FALSE(utils::is_exec_url("exec"));
 	REQUIRE_FALSE(utils::is_exec_url("   exec:"));
 }
+
+TEST_CASE(
+	"is_special_url() return true if given URL is a query, filter or exec "
+	"URL, i.e. it "
+	"starts with \"query:\", \"filter:\" or \"exec:\" string",
+	"[utils]")
+{
+	REQUIRE(utils::is_special_url("query:"));
+	REQUIRE(utils::is_special_url("query: example"));
+	REQUIRE_FALSE(utils::is_special_url("query"));
+	REQUIRE_FALSE(utils::is_special_url("   query:"));
+
+	REQUIRE(utils::is_special_url("filter:"));
+	REQUIRE(utils::is_special_url("filter: example"));
+	REQUIRE_FALSE(utils::is_special_url("filter"));
+	REQUIRE_FALSE(utils::is_special_url("   filter:"));
+
+	REQUIRE(utils::is_special_url("exec:"));
+	REQUIRE(utils::is_special_url("exec: example"));
+	REQUIRE_FALSE(utils::is_special_url("exec"));
+	REQUIRE_FALSE(utils::is_special_url("   exec:"));
+}
