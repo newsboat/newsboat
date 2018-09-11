@@ -158,8 +158,7 @@ void rss_parser::retrieve_uri(const std::string& uri)
 		fetch_newsblur(uri);
 	} else if (is_ocnews) {
 		fetch_ocnews(uri);
-	} else if (uri.substr(0, 5) == "http:" ||
-		uri.substr(0, 6) == "https:") {
+	} else if (utils::is_http_url(uri)) {
 		download_http(uri);
 	} else if (uri.substr(0, 5) == "exec:") {
 		get_execplugin(uri.substr(5, uri.length() - 5));
@@ -167,7 +166,7 @@ void rss_parser::retrieve_uri(const std::string& uri)
 		std::string filter, url;
 		utils::extract_filter(uri, filter, url);
 		download_filterplugin(filter, url);
-	} else if (my_uri.substr(0, 6) == "query:") {
+	} else if (utils::is_query_url(my_uri)) {
 		skip_parsing = true;
 	} else if (my_uri.substr(0, 7) == "file://") {
 		parse_file(my_uri.substr(7, my_uri.length() - 7));

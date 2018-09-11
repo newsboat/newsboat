@@ -264,7 +264,8 @@ src/newsblur_api.o: src/newsblur_api.cpp include/newsblur_api.h \
 src/newsblur_urlreader.o: src/newsblur_urlreader.cpp \
  include/newsblur_api.h include/remote_api.h include/configcontainer.h \
  include/configparser.h rss/rsspp.h include/remote_api.h \
- include/urlreader.h include/logger.h config.h include/strprintf.h
+ include/urlreader.h include/logger.h config.h include/strprintf.h \
+ include/utils.h
 src/ocnews_api.o: src/ocnews_api.cpp include/ocnews_api.h \
  include/remote_api.h include/configcontainer.h include/configparser.h \
  rss/rsspp.h include/remote_api.h include/urlreader.h include/utils.h \
@@ -272,7 +273,7 @@ src/ocnews_api.o: src/ocnews_api.cpp include/ocnews_api.h \
 src/ocnews_urlreader.o: src/ocnews_urlreader.cpp include/ocnews_api.h \
  include/remote_api.h include/configcontainer.h include/configparser.h \
  rss/rsspp.h include/remote_api.h include/urlreader.h include/logger.h \
- config.h include/strprintf.h
+ config.h include/strprintf.h include/utils.h
 src/oldreader_api.o: src/oldreader_api.cpp include/oldreader_api.h \
  include/cache.h include/configcontainer.h include/configparser.h \
  include/rss.h include/matcher.h filter/FilterParser.h include/utils.h \

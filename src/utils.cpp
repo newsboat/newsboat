@@ -981,6 +981,11 @@ bool utils::is_http_url(const std::string& url)
 	return url.substr(0, 7) == "http://" || url.substr(0, 8) == "https://";
 }
 
+bool utils::is_query_url(const std::string& url)
+{
+	return url.substr(0, 6) == "query:";
+}
+
 std::string utils::censor_url(const std::string& url)
 {
 	std::string rv(url);

@@ -57,7 +57,7 @@ void oldreader_urlreader::reload()
 
 	std::vector<std::string>& file_urls(ur.get_urls());
 	for (const auto& url : file_urls) {
-		if (url.substr(0, 6) == "query:") {
+		if (utils::is_query_url(url)) {
 			urls.push_back(url);
 			std::vector<std::string>& file_tags(ur.get_tags(url));
 			tags[url] = ur.get_tags(url);

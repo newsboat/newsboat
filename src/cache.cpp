@@ -543,8 +543,9 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl,
 	std::shared_ptr<rss_feed> feed(new rss_feed(this));
 	feed->set_rssurl(rssurl);
 
-	if (rssurl.substr(0, 6) == "query:")
+	if (utils::is_query_url(rssurl)) {
 		return feed;
+	}
 
 	std::lock_guard<std::mutex> lock(mtx);
 	std::lock_guard<std::mutex> feedlock(feed->item_mutex);
@@ -621,7 +622,7 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl,
 std::vector<std::shared_ptr<rss_item>>
 cache::search_for_items(const std::string& querystr, const std::string& feedurl)
 {
-	assert(feedurl.substr(0, 6) != "query:");
+	assert(!utils::is_query_url(feedurl));
 	std::string query;
 	std::vector<std::shared_ptr<rss_item>> items;
 
