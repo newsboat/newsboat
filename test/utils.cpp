@@ -708,7 +708,10 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE("is_query_url()", "[utils]")
+TEST_CASE(
+	"is_query_url() return true if given URL is a query URL, i.e. it "
+	"starts with \"query:\" string",
+	"[utils]")
 {
 	REQUIRE(utils::is_query_url("query:"));
 	REQUIRE(utils::is_query_url("query: example"));

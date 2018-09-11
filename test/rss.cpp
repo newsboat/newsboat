@@ -711,7 +711,10 @@ TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
 	REQUIRE(feed->items()[4]->title() == "Alternate link isn't first");
 }
 
-TEST_CASE("rss_feed::is_query_feed()", "[rss]")
+TEST_CASE(
+	"rss_feed::is_query_feed() return true if feed is a query feed, i.e. "
+	"its \"rssurl\" starts with \"query:\" string",
+	"[rss]")
 {
 	configcontainer cfg;
 	cache rsscache(":memory:", &cfg);
