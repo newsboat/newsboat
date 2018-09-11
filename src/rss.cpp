@@ -503,8 +503,7 @@ void rss_feed::update_items(std::vector<std::shared_ptr<rss_feed>> feeds)
 	items_guid_map.clear();
 
 	for (const auto& feed : feeds) {
-		if (feed->rssurl().substr(0, 6) !=
-			"query:") { // don't fetch items from other query feeds!
+		if (!feed->is_query_feed()) { // don't fetch items from other query feeds!
 			for (const auto& item : feed->items()) {
 				if (m.matches(item.get())) {
 					LOG(level::DEBUG,

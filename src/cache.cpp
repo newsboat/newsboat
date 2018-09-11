@@ -464,8 +464,9 @@ void cache::externalize_rssfeed(std::shared_ptr<rss_feed> feed,
 	bool reset_unread)
 {
 	scope_measure m1("cache::externalize_feed");
-	if (feed->rssurl().substr(0, 6) == "query:")
+	if (feed->is_query_feed()) {
 		return;
+	}
 
 	std::lock_guard<std::mutex> lock(mtx);
 	std::lock_guard<std::mutex> feedlock(feed->item_mutex);

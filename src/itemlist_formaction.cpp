@@ -1353,11 +1353,11 @@ std::string itemlist_formaction::title()
 	if (feed->rssurl() == "") {
 		return strprintf::fmt(_("Search Result - '%s'"), searchphrase);
 	} else {
-		if (feed->rssurl().substr(0, 6) == "query:")
+		if (feed->is_query_feed()) {
 			return strprintf::fmt(_("Query Feed - %s"),
 				feed->rssurl().substr(
 					6, feed->rssurl().length() - 6));
-		else {
+		} else {
 			auto feedtitle = feed->title();
 			utils::remove_soft_hyphens(feedtitle);
 			return strprintf::fmt(
