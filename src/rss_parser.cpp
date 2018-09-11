@@ -162,7 +162,7 @@ void rss_parser::retrieve_uri(const std::string& uri)
 		download_http(uri);
 	} else if (uri.substr(0, 5) == "exec:") {
 		get_execplugin(uri.substr(5, uri.length() - 5));
-	} else if (uri.substr(0, 7) == "filter:") {
+	} else if (utils::is_filter_url(uri)) {
 		std::string filter, url;
 		utils::extract_filter(uri, filter, url);
 		download_filterplugin(filter, url);

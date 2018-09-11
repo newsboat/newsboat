@@ -986,6 +986,11 @@ bool utils::is_query_url(const std::string& url)
 	return url.substr(0, 6) == "query:";
 }
 
+bool utils::is_filter_url(const std::string& url)
+{
+	return url.substr(0, 7) == "filter:";
+}
+
 std::string utils::censor_url(const std::string& url)
 {
 	std::string rv(url);
