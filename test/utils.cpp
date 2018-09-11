@@ -707,3 +707,11 @@ TEST_CASE(
 		REQUIRE_FALSE(utils::is_valid_color(input));
 	}
 }
+
+TEST_CASE("is_query_url()", "[utils]")
+{
+	REQUIRE(utils::is_query_url("query:"));
+	REQUIRE(utils::is_query_url("query: example"));
+	REQUIRE_FALSE(utils::is_query_url("query"));
+	REQUIRE_FALSE(utils::is_query_url("   query:"));
+}
