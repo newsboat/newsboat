@@ -142,7 +142,7 @@ void FeedContainer::populate_query_feeds()
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
 	for (const auto& feed : feeds) {
-		if (feed->rssurl().substr(0, 6) == "query:") {
+		if (feed->is_query_feed()) {
 			feed->update_items(feeds);
 		}
 	}

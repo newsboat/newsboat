@@ -503,8 +503,7 @@ void rss_feed::update_items(std::vector<std::shared_ptr<rss_feed>> feeds)
 	items_guid_map.clear();
 
 	for (const auto& feed : feeds) {
-		if (feed->rssurl().substr(0, 6) !=
-			"query:") { // don't fetch items from other query feeds!
+		if (!feed->is_query_feed()) { // don't fetch items from other query feeds!
 			for (const auto& item : feed->items()) {
 				if (m.matches(item.get())) {
 					LOG(level::DEBUG,
@@ -543,7 +542,7 @@ void rss_feed::update_items(std::vector<std::shared_ptr<rss_feed>> feeds)
 void rss_feed::set_rssurl(const std::string& u)
 {
 	rssurl_ = u;
-	if (rssurl_.substr(0, 6) == "query:") {
+	if (utils::is_query_url(u)) {
 		/* Query string looks like this:
 		 *
 		 * query:Title:unread = "yes" and age between 0:7

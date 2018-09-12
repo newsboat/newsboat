@@ -212,7 +212,7 @@ REDO:
 				v->get_ctrl()->get_feedcontainer()->get_feed(
 					pos);
 			if (feed) {
-				if (feed->rssurl().substr(0, 6) != "query:") {
+				if (!feed->is_query_feed()) {
 					LOG(level::INFO,
 						"feedlist_formaction: opening "
 						"feed "

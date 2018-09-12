@@ -55,7 +55,7 @@ void feedhq_urlreader::reload()
 	ur.reload();
 
 	for (const auto& url : ur.get_urls()) {
-		if (url.substr(0, 6) == "query:") {
+		if (utils::is_query_url(url)) {
 			urls.push_back(url);
 
 			auto url_tags = ur.get_tags(url);

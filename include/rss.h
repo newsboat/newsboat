@@ -335,6 +335,11 @@ public:
 		empty = t;
 	}
 
+	bool is_query_feed() const
+	{
+		return rssurl_.substr(0, 6) == "query:";
+	}
+
 	void sort(const ArticleSortStrategy& sort_strategy);
 	void sort_unlocked(const ArticleSortStrategy& sort_strategy);
 

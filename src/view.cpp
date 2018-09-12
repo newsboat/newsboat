@@ -441,7 +441,7 @@ void view::set_feedlist(std::vector<std::shared_ptr<rss_feed>> feeds)
 		std::lock_guard<std::mutex> lock(mtx);
 
 		for (const auto& feed : feeds) {
-			if (feed->rssurl().substr(0, 6) != "query:") {
+			if (!feed->is_query_feed()) {
 				feed->set_feedptrs(feed);
 			}
 		}
@@ -975,7 +975,7 @@ bool view::get_prev_feed(itemlist_formaction* itemlist)
 
 void view::prepare_query_feed(std::shared_ptr<rss_feed> feed)
 {
-	if (feed->rssurl().substr(0, 6) == "query:") {
+	if (feed->is_query_feed()) {
 		LOG(level::DEBUG,
 			"view::prepare_query_feed: %s",
 			feed->rssurl());

@@ -559,7 +559,7 @@ void controller::mark_all_read(unsigned int pos)
 		scope_measure m("controller::mark_all_read");
 		std::lock_guard<std::mutex> feedslock(feeds_mutex);
 		const auto feed = feedcontainer.get_feed(pos);
-		if (feed->rssurl().substr(0, 6) == "query:") {
+		if (feed->is_query_feed()) {
 			rsscache->mark_all_read(feed);
 		} else {
 			rsscache->mark_all_read(feed->rssurl());
@@ -807,7 +807,7 @@ std::vector<std::shared_ptr<rss_item>> controller::search_for_items(
 	std::shared_ptr<rss_feed> feed)
 {
 	std::vector<std::shared_ptr<rss_item>> items;
-	if (feed != nullptr && feed->rssurl().substr(0, 6) == "query:") {
+	if (feed && feed->is_query_feed()) {
 		std::unordered_set<std::string> guids;
 		for (const auto& item : feed->items()) {
 			if (!item->deleted()) {
