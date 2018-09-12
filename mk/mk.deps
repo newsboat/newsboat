@@ -289,7 +289,7 @@ src/oldreader_urlreader.o: src/oldreader_urlreader.cpp \
 src/opml.o: src/opml.cpp include/opml.h include/feedcontainer.h \
  include/rss.h include/configcontainer.h include/configparser.h \
  include/matcher.h filter/FilterParser.h include/utils.h include/logger.h \
- config.h include/strprintf.h
+ config.h include/strprintf.h include/urlreader.h
 src/pb_controller.o: src/pb_controller.cpp include/pb_controller.h \
  include/configcontainer.h include/configparser.h include/download.h \
  include/fslock.h include/queueloader.h include/pb_controller.h \
@@ -496,7 +496,8 @@ test/matcher.o: test/matcher.cpp include/matcher.h filter/FilterParser.h \
 test/opml.o: test/opml.cpp include/opml.h include/feedcontainer.h \
  include/rss.h include/configcontainer.h include/configparser.h \
  include/matcher.h filter/FilterParser.h include/utils.h include/logger.h \
- config.h include/strprintf.h include/cache.h 3rd-party/catch.hpp
+ config.h include/strprintf.h include/urlreader.h include/cache.h \
+ 3rd-party/catch.hpp test/test-helpers.h
 test/regexmanager.o: test/regexmanager.cpp include/regexmanager.h \
  include/configparser.h include/matcher.h filter/FilterParser.h \
  3rd-party/catch.hpp include/exceptions.h

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+    <head>
+        <title>Example OPML that has URLs with pipe symbols in it</title>
+    </head>
+
+    <body>
+        <outline title="tag1">
+            <outline title="tag2">
+                <outline type="rss" title="CC Test" xmlUrl="http://test1.url.cc/feed.xml" />
+            </outline>
+        </outline>
+        <outline xmlUrl="http://anotherfeed.com/" title="Anotherfeed" type="rss" />
+        <outline title="tag1">
+            <outline title="tag3">
+                <outline xmlUrl="http://onemorefeed.at/feed/" title="One more feed" type="rss" />
+            </outline>
+        </outline>
+        <outline xmlUrl="https://example.com/another_feed.atom" type="rss" title="example.com website (Atom feed)" />
+    </body>
+</opml>
+
