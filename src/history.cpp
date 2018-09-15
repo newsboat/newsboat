@@ -60,6 +60,9 @@ void history::load_from_file(const std::string& file)
 
 void history::save_to_file(const std::string& file, unsigned int limit)
 {
+	if (limit == 0)
+		return;
+
 	std::fstream f;
 	f.open(file.c_str(), std::fstream::out | std::fstream::trunc);
 	if (f.is_open()) {
