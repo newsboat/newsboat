@@ -459,6 +459,15 @@ void cache::mark_item_deleted(const std::string& guid, bool b)
 	run_sql_nothrow(query);
 }
 
+void cache::mark_feed_items_deleted(const std::string& feedurl)
+{
+	std::lock_guard<std::mutex> lock(mtx);
+	std::string query = prepare_query(
+		"UPDATE rss_item SET deleted = 1 WHERE feedurl = '%s';",
+		feedurl);
+	run_sql_nothrow(query);
+}
+
 // this function writes an rss_feed including all rss_items to the database
 void cache::externalize_rssfeed(std::shared_ptr<rss_feed> feed,
 	bool reset_unread)
