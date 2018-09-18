@@ -66,6 +66,7 @@ public:
 		const std::string& etag);
 	unsigned int get_unread_count();
 	void mark_item_deleted(const std::string& guid, bool b);
+	void mark_feed_items_deleted(const std::string& feedurl);
 	void remove_old_deleted_items(const std::string& rssurl,
 		const std::vector<std::string>& guids);
 	void mark_items_read_by_guid(const std::vector<std::string>& guids);

@@ -94,6 +94,18 @@ void itemlist_formaction::process_operation(operation op,
 				_("No item selected!")); // should not happen
 		}
 	} break;
+	case OP_DELETE_ALL: {
+		scope_measure m1("OP_DELETE_ALL");
+		if (visible_items.size() > 0) {
+			v->get_ctrl()->mark_all_read(pos);
+			for (const auto& pair : visible_items) {
+				pair.first->set_deleted(true);
+			}
+			v->get_ctrl()->get_cache()->mark_feed_items_deleted(
+				feed->rssurl());
+			invalidate(InvalidationMode::COMPLETE);
+		}
+	} break;
 	case OP_PURGE_DELETED: {
 		scope_measure m1("OP_PURGE_DELETED");
 		feed->purge_deleted_items();
