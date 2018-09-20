@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2018-08-01 22:33+0300\n"
-"PO-Revision-Date: 2018-03-03 21:09+0100\n"
+"PO-Revision-Date: 2018-09-20 19:55+0200\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -18,17 +18,17 @@ msgstr ""
 #: newsboat.cpp:37
 #, c-format
 msgid "Caught newsboat::dbexception with message: %s"
-msgstr ""
+msgstr "newsboat::dbexception gefangen mit Nachricht: %s"
 
 #: newsboat.cpp:44
 #, c-format
 msgid "Caught newsboat::matcherexception with message: %s"
-msgstr ""
+msgstr "newsboat::matcherexception gefangen mit Nachricht: %s"
 
 #: newsboat.cpp:50 podboat.cpp:32
 #, c-format
 msgid "Caught newsboat::exception with message: %s"
-msgstr ""
+msgstr "newsboat::exception gefangen mit Nachricht: %s"
 
 #: src/cliargsparser.cpp:144 src/pb_controller.cpp:231
 #, c-format
@@ -124,11 +124,12 @@ msgid "unknown command `%s'"
 msgstr "unbekannter Befehl `%s'"
 
 #: src/configpaths.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Fatal error: couldn't determine home directory!\n"
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
+"Fataler Fehler: Das Heimatverzeichnis konnte nicht ermittelt werden!\n"
 "Bitte setzen Sie die Umgebungsvariable HOME oder fügen Sie einen gültigen "
 "Benutzer für UID %u hinzu!"
 
@@ -165,6 +166,7 @@ msgstr "Fehler: Das Öffnen der Zwischenspeicherdatei `%s' schlug fehl: %s"
 #: src/controller.cpp:292
 msgid "ERROR: You must set `cookie-cache` to use Newsblur.\n"
 msgstr ""
+"Fehler: Sie müssen „cookie-cache“ setzen, um Newsblur verwenden zu können.\n"
 
 #: src/controller.cpp:300
 #, c-format
@@ -580,27 +582,24 @@ msgstr "Kein Feed ausgewählt!"
 #. / "Sort by (f)irsttag/..." and "Reverse Sort by
 #. / (f)irsttag/..." messages
 #: src/feedlist_formaction.cpp:147 src/feedlist_formaction.cpp:179
-#, fuzzy
 msgid "ftauln"
-msgstr "etaun"
+msgstr "etauzn"
 
 #: src/feedlist_formaction.cpp:149
-#, fuzzy
 msgid ""
 "Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(l)astupdated/"
 "(n)one?"
 msgstr ""
 "Sortieren nach (e)rstemtag/(t)itel/(a)rtikelzahl/(u)ngeleseneartikel/"
-"(n)ichts?"
+"(z)uletztaktualisiert/(n)ichts?"
 
 #: src/feedlist_formaction.cpp:181
-#, fuzzy
 msgid ""
 "Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/"
 "(l)astupdated/(n)one?"
 msgstr ""
 "Umgekehrt sortieren nach (e)rstemtag/(t)itel/(a)rtikelzahl/"
-"(u)ngeleseneartikel/(n)ichts?"
+"(u)ngeleseneartikel/(z)uletztaktualisiert/(n)ichts?"
 
 #: src/feedlist_formaction.cpp:226
 msgid "Cannot open query feeds in the browser!"
@@ -915,9 +914,8 @@ msgid "No unread feeds."
 msgstr "Keine ungelesenen Feeds."
 
 #: src/itemlist_formaction.cpp:483
-#, fuzzy
 msgid "Marking all above as read..."
-msgstr "Markiere alle Feeds als gelesen..."
+msgstr "Markiere alle obenstehenden Artikel als gelesen..."
 
 #: src/itemlist_formaction.cpp:531 src/itemview_formaction.cpp:301
 msgid "Pipe article to command: "
@@ -1080,9 +1078,8 @@ msgid "Mark all feeds read"
 msgstr "alle Feeds als gelesen markieren"
 
 #: src/keymap.cpp:58
-#, fuzzy
 msgid "Mark all above as read"
-msgstr "alle Feeds als gelesen markieren"
+msgstr "alle obenstehenden Artikel als gelesen markieren"
 
 #: src/keymap.cpp:60
 msgid "Save article"
@@ -1384,9 +1381,10 @@ msgstr ""
 "Benutzer für UID %u hinzu!"
 
 #: src/pb_controller.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "Fatal error: couldn't create configuration directory `%s': (%i) %s"
-msgstr "Fehler: Konnte Konfigurationsdatei `%s' nicht öffnen!"
+msgstr ""
+"Fataler Fehler: Konnte Konfigurationsverzeichnis „%s“ nicht anlegen: (%i) %s"
 
 #: src/pb_controller.cpp:309
 msgid "Cleaning up queue..."
@@ -1571,7 +1569,6 @@ msgstr "nicht unterstütztes Feed-Format"
 msgid "no RSS channel found"
 msgstr "kein RSS-Channel gefunden"
 
-#, fuzzy
 #~ msgid "'%s' is not a valid key command"
 #~ msgstr "`%s' ist kein gültiges Tastenkommando"
 
