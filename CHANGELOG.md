@@ -1,13 +1,27 @@
 # Changes for Newsboat
 
-## Unreleased
+## 2.13 - 2018-09-22
+
+Lists below only mention user-visible changes, but I would also like to
+acknowledge contributions from the following people: Anatoly Kalin, Eduardo
+Sanchez, Friedrich von Never, Kamil Wsół, glacambre.
 
 ### Added
+- Respect TMPDIR environment variable when writing temporary files (ಚಿರಾಗ್ ನಟರಾಜ್)
+    (#250)
+- `delete-all-articles` operation that marks all articles in the feed as deleted
+    (Kamil Wsół)
+
 ### Changed
-### Deprecated
-### Removed
+- Require `cookie-cache` setting if Newsblur API is used (Alexander Batischev)
+- Translations: Russian, Ukraininan (Alexander Batischev), Swedish (Dennis
+    Öberg), German (Lysander Trischler)
+- json.hpp updated to version 3.2.0
+- Natural sort order for article titles, so numbers are put in the expected
+    order (e.g. 1, 2, 5, 10, 11 rather than 1, 10, 11, 2, 5) (Nikos Tsipinakis)
+
 ### Fixed
-### Security
+- Do not create empty files if history is disabled (Nikos Tsipinakis)
 
 ## 2.12 - 2018-06-24
 
