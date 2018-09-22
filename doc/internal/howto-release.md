@@ -67,6 +67,7 @@ master repository and shell access to newsboat.org.
     * Change the topic on #newsboat at Freenode
 9. Prepare the repo for the next release
     * Add "Unreleased" section to CHANGELOG
+    * Push it: `git push`
 10. Release the snap
     * Go to https://dashboard.snapcraft.io/ and log in
     * Go to https://dashboard.snapcraft.io/snaps/newsboat/revisions/ and for
