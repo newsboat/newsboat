@@ -762,3 +762,29 @@ TEST_CASE(
 	REQUIRE_FALSE(utils::is_special_url("exec"));
 	REQUIRE_FALSE(utils::is_special_url("   exec:"));
 }
+
+TEST_CASE(
+	"get_default_browser() returns BROWSER environment variable or "
+	"\"lynx\" if the variable is not set",
+	"[utils]")
+{
+	// Remember current BROWSER env variable
+	const char* original = getenv("BROWSER");
+
+	// If BROWSER is not set, default browser is lynx(1)
+	unsetenv("BROWSER");
+	REQUIRE(utils::get_default_browser() == "lynx");
+
+	setenv("BROWSER", "firefox", 1);
+	REQUIRE(utils::get_default_browser() == "firefox");
+
+	setenv("BROWSER", "opera", 1);
+	REQUIRE(utils::get_default_browser() == "opera");
+
+	// Restore BROWSER env variable
+	if (original) {
+		setenv("BROWSER", original, 1);
+	} else {
+		unsetenv("BROWSER");
+	}
+}
