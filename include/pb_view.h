@@ -10,6 +10,7 @@ using namespace newsboat;
 namespace podboat {
 
 class pb_controller;
+class download;
 
 struct keymap_hint_entry;
 
@@ -38,6 +39,10 @@ private:
 	void set_bindings();
 
 	std::string prepare_keymaphint(keymap_hint_entry* hints);
+	std::string format_line(const std::string& podlist_format,
+			const download* dl,
+			unsigned int pos,
+			unsigned int width);
 	pb_controller* ctrl;
 	newsboat::stfl::form dllist_form;
 	newsboat::stfl::form help_form;

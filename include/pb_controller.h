@@ -40,6 +40,7 @@ public:
 	}
 
 	std::string get_dlpath();
+	std::string get_formatstr();
 
 	unsigned int downloads_in_progress();
 	void reload_queue(bool remove_unplayed = false);
@@ -75,6 +76,7 @@ private:
 	std::string cache_file;
 	std::string searchfile;
 	std::string cmdlinefile;
+	std::string formatstr;
 
 	unsigned int max_dls;
 
