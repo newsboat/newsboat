@@ -1,3 +1,8 @@
+BROWSER::
+        Tells Newsboat what browser to use if there is no "browser" setting in
+        the config file. If this variable doesn't exist, a default of lynx(1)
+        will be used.
+
 CURL_CA_BUNDLE::
         Tells Newsboat to use the specified certificate file to verify the peer.
         The file may contain multiple certificates. The certificate(s) must be
@@ -9,7 +14,3 @@ CURL_CA_BUNDLE::
 TMPDIR::
         Tells Newsboat to use the specified directory for storing temporary files.
         If this variable doesn't exist, a default of /tmp will be used.
-
-BROWSER::
-        Tells Newsboat which browser to use when opening an article in the browser.
-        If this variable doesn't exist, a default of lynx(1) will be used.
