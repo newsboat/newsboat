@@ -171,6 +171,8 @@ public:
 
 	static bool is_valid_podcast_type(const std::string& mimetype);
 
+	static std::string get_default_browser();
+
 private:
 	static void append_escapes(std::string& str, char c);
 };
