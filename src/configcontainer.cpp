@@ -136,7 +136,7 @@ configcontainer::configcontainer()
 		  {"podcast-auto-enqueue",
 			  configdata("no", configdata_t::BOOL)},
 		  {"podlist-format",
-			  configdata("%4i %n %11u %t", configdata_t::STR)},
+			  configdata( "%4i [%6.1dMB/%6.1tMB] [%5.1p %%] [%7.1k kb/s] %-20S %u -> %F", configdata_t::STR)},
 		  {"prepopulate-query-feeds",
 			  configdata("false", configdata_t::BOOL)},
 		  {"ssl-verifyhost", configdata("true", configdata_t::BOOL)},

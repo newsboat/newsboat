@@ -1,3 +1,4 @@
 download-path||<path>||~/||Specifies the directory where podboat shall download the files to. Optionally, the placeholders "%n" (for the podcast feed's name) and "%h" (for the podcast feed's hostname) can be used to place downloads in a directory structure.||download-path "~/Downloads/%h/%n"
 max-downloads||<number>||1||Specifies the maximum number of parallel downloads when automatic download is enabled.||max-downloads 3
 player||<player command>||""||Specifies the player that shall be used for playback of downloaded files.||player "mp3blaster"
+podlist-format||<format>||"%4i [%dMB/%tMB] [%p %%] [%k kb/s] %S %u -> %F"||This variable defines the format of entries in podboat's download list. See the respective section in the documentation for more information on format strings.||podlist-format "%i %u %-20S %F"

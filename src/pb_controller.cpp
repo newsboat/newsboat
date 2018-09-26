@@ -375,7 +375,7 @@ std::string pb_controller::get_dlpath()
 
 std::string pb_controller::get_formatstr()
 {
-  return cfg->get_configvalue("podlist-format");
+	return cfg->get_configvalue("podlist-format");
 }
 
 unsigned int pb_controller::downloads_in_progress()
