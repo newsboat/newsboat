@@ -54,7 +54,7 @@ public:
 	}
 	void enqueue_url(const std::string& url,
         const std::string& title,
-        const time_t& pubDate,
+        const time_t pubDate,
 		std::shared_ptr<rss_feed> feed);
 	void notify(const std::string& msg);
 
@@ -130,8 +130,8 @@ private:
 	void enqueue_items(std::shared_ptr<rss_feed> feed);
 
 	std::string generate_enqueue_filename(const std::string& url,
-        const std::string& title,
-        const time_t& pubDate,
+		const std::string& title,
+		const time_t pubDate,
 		std::shared_ptr<rss_feed> feed);
 	std::string get_hostname_from_url(const std::string& url);
 

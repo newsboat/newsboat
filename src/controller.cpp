@@ -867,7 +867,7 @@ std::vector<std::shared_ptr<rss_item>> controller::search_for_items(
 
 void controller::enqueue_url(const std::string& url,
 	const std::string& title,
-	const time_t& pubDate,
+	const time_t pubDate,
 	std::shared_ptr<rss_feed> feed)
 {
 	bool url_found = false;
@@ -1138,7 +1138,7 @@ void controller::enqueue_items(std::shared_ptr<rss_feed> feed)
 
 std::string controller::generate_enqueue_filename(const std::string& url,
 	const std::string& title,
-	const time_t& pubDate,
+	const time_t pubDate,
 	std::shared_ptr<rss_feed> feed)
 {
 	std::string dlformat = cfg.get_configvalue("download-path");
