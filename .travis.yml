@@ -210,9 +210,9 @@ script:
   # stuff. To maximize the benefits, we ask Make to process as many rules as
   # possible before failing. This enables developers to fix more errors before
   # re-submitting the code to CI, which should increase throughput.
-  - if [ -z "$CHECKS" ]; then   make --keep-going all test   ; fi
+  - if [ -z "$CHECKS" ]; then   make -j2 --keep-going all test   ; fi
   - if [ -z "$CHECKS" ]; then   make distclean   ; fi
-  - if [ -z "$CHECKS" ]; then   make PROFILE=1 all test   ; fi
+  - if [ -z "$CHECKS" ]; then   make -j2 PROFILE=1 all test   ; fi
   - if [ -z "$CHECKS" ]; then   ( cd test && ./test --order rand )   ; fi
   - if [ -n "$CHECKS" ]; then   make run-i18nspector | tee i18nspector.log && if `egrep '^(E|W):' i18nspector.log >/dev/null 2>&1` ; then false else true; fi   ; fi
 
