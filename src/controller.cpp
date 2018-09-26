@@ -867,7 +867,7 @@ std::vector<std::shared_ptr<rss_item>> controller::search_for_items(
 
 void controller::enqueue_url(const std::string& url,
 	const std::string& title,
-	const std::string& pubDate,
+	const time_t& pubDate,
 	std::shared_ptr<rss_feed> feed)
 {
 	bool url_found = false;
@@ -1127,7 +1127,7 @@ void controller::enqueue_items(std::shared_ptr<rss_feed> feed)
 					"controller::enqueue_items: enqueuing "
 					"`%s'",
 					item->enclosure_url());
-				enqueue_url(item->enclosure_url(), item->title(), item->pubDate(), feed);
+				enqueue_url(item->enclosure_url(), item->title(), item->pubDate_timestamp(), feed);
 				item->set_enqueued(true);
 				rsscache->update_rssitem_unread_and_enqueued(
 					item, feed->rssurl());
@@ -1138,7 +1138,7 @@ void controller::enqueue_items(std::shared_ptr<rss_feed> feed)
 
 std::string controller::generate_enqueue_filename(const std::string& url,
 	const std::string& title,
-	const std::string& pubDate,
+	const time_t& pubDate,
 	std::shared_ptr<rss_feed> feed)
 {
 	std::string dlformat = cfg.get_configvalue("download-path");
@@ -1148,10 +1148,17 @@ std::string controller::generate_enqueue_filename(const std::string& url,
 	std::string filemask = cfg.get_configvalue("download-filename");
 	dlformat.append(filemask);
 
+	char pubDate_formatted[1024];
+	strftime(pubDate_formatted,
+			sizeof(pubDate_formatted),
+			_("%F"),
+			localtime(&pubDate));
+
+
 	fmtstr_formatter fmt;
 	fmt.register_fmt('n', feed->title());
 	fmt.register_fmt('h', get_hostname_from_url(url));
-	fmt.register_fmt('d', pubDate);
+	fmt.register_fmt('d', pubDate_formatted);
 	fmt.register_fmt('t', title);
 
 	std::string dlpath = fmt.do_format(dlformat);
