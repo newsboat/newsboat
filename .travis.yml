@@ -1,4 +1,6 @@
-language: cpp
+language: rust
+
+rust: stable
 
 addons:
   apt:
