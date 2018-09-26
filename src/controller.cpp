@@ -1163,10 +1163,10 @@ std::string controller::generate_enqueue_filename(const std::string& url,
 
 	std::string dlpath = fmt.do_format(dlformat);
 
+	char buf[2048];
+	snprintf(buf, sizeof(buf), "%s", url.c_str());
+	char* base = basename(buf);
 	if (filemask.length() == 0) {
-		char buf[2048];
-		snprintf(buf, sizeof(buf), "%s", url.c_str());
-		char* base = basename(buf);
 		if (!base || strlen(base) == 0) {
 			char lbuf[128];
 			time_t t = time(nullptr);
@@ -1178,6 +1178,11 @@ std::string controller::generate_enqueue_filename(const std::string& url,
 		} else {
 			dlpath.append(base);
 		}
+	} else {
+		std::string base_s (base);
+		std::size_t pos = base_s.rfind('.');
+		if (pos != std::string::npos)
+			dlpath.append(base_s.substr(pos));
 	}
 	return dlpath;
 }
