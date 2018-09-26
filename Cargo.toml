@@ -1,0 +1,11 @@
+[package]
+name = "newsboat"
+version = "2.14.0"
+authors = ["Alexander Batischev <eual.jp@gmail.com>"]
+
+[dependencies]
+libc = "0.2"
+
+[lib]
+name = "newsboat"
+crate-type = ["staticlib"]
