@@ -1148,17 +1148,26 @@ std::string controller::generate_enqueue_filename(const std::string& url,
 	std::string filemask = cfg.get_configvalue("download-filename");
 	dlformat.append(filemask);
 
-	char pubDate_formatted[1024];
-	strftime(pubDate_formatted,
-			sizeof(pubDate_formatted),
-			_("%F"),
-			localtime(&pubDate));
-
+	auto time_formatter = [&pubDate](const char* format) {
+		char pubDate_formatted[1024];
+		strftime(pubDate_formatted,
+				sizeof(pubDate_formatted),
+				format,
+				localtime(&pubDate));
+		return  std::string(pubDate_formatted);
+	};
 
 	fmtstr_formatter fmt;
 	fmt.register_fmt('n', feed->title());
 	fmt.register_fmt('h', get_hostname_from_url(url));
-	fmt.register_fmt('d', pubDate_formatted);
+	fmt.register_fmt('F', time_formatter(_("%F")));
+	fmt.register_fmt('m', time_formatter(_("%m")));
+	fmt.register_fmt('d', time_formatter(_("%d")));
+	fmt.register_fmt('H', time_formatter(_("%H")));
+	fmt.register_fmt('M', time_formatter(_("%M")));
+	fmt.register_fmt('S', time_formatter(_("%S")));
+	fmt.register_fmt('y', time_formatter(_("%y")));
+	fmt.register_fmt('Y', time_formatter(_("%Y")));
 	fmt.register_fmt('t', title);
 
 	std::string dlpath = fmt.do_format(dlformat);

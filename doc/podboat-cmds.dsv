@@ -1,4 +1,4 @@
 download-path||<path>||~/||Specifies the directory where podboat shall download the files to. Optionally, the placeholders "%n" (for the podcast feed's name) and "%h" (for the podcast feed's hostname) can be used to place downloads in a directory structure.||download-path "~/Downloads/%h/%n"
-download-filename||<string>||""||Specifies the format of the downloaded file. Use the placeholders "%d" (for the podcast episode's publication date) and "%t" (for the podcast episode's title).||download-filename "%d-%t"
+download-filename||<string>||""||Specifies the format of the downloaded file. Use the placeholder "%t" (for the podcast episode's title). For date/time formats, consult the manpage of strftime(3). Supported options are "%F", "%m", "%d", "%H", "%M", "%S", "%y" and "%Y".||download-filename "%F-%t"
 max-downloads||<number>||1||Specifies the maximum number of parallel downloads when automatic download is enabled.||max-downloads 3
 player||<player command>||""||Specifies the player that shall be used for playback of downloaded files.||player "mp3blaster"
