@@ -76,7 +76,6 @@ private:
 	std::string cache_file;
 	std::string searchfile;
 	std::string cmdlinefile;
-	std::string formatstr;
 
 	unsigned int max_dls;
 
