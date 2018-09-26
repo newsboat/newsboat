@@ -1157,11 +1157,24 @@ std::string controller::generate_enqueue_filename(const std::string& url,
 		return  std::string(pubDate_formatted);
 	};
 
+	char buf[2048];
+	snprintf(buf, sizeof(buf), "%s", url.c_str());
+	char* base = basename(buf);
+	std::string extension;
+	if (base) {
+		std::string base_s (base);
+		std::size_t pos = base_s.rfind('.');
+		if (pos != std::string::npos)
+			extension.append(base_s.substr(pos+1));
+	}
+
 	fmtstr_formatter fmt;
 	fmt.register_fmt('n', feed->title());
 	fmt.register_fmt('h', get_hostname_from_url(url));
+	fmt.register_fmt('u', base);
 	fmt.register_fmt('F', time_formatter(_("%F")));
 	fmt.register_fmt('m', time_formatter(_("%m")));
+	fmt.register_fmt('b', time_formatter(_("%b")));
 	fmt.register_fmt('d', time_formatter(_("%d")));
 	fmt.register_fmt('H', time_formatter(_("%H")));
 	fmt.register_fmt('M', time_formatter(_("%M")));
@@ -1169,30 +1182,9 @@ std::string controller::generate_enqueue_filename(const std::string& url,
 	fmt.register_fmt('y', time_formatter(_("%y")));
 	fmt.register_fmt('Y', time_formatter(_("%Y")));
 	fmt.register_fmt('t', title);
+	fmt.register_fmt('e', extension);
 
 	std::string dlpath = fmt.do_format(dlformat);
-
-	char buf[2048];
-	snprintf(buf, sizeof(buf), "%s", url.c_str());
-	char* base = basename(buf);
-	if (filemask.length() == 0) {
-		if (!base || strlen(base) == 0) {
-			char lbuf[128];
-			time_t t = time(nullptr);
-			strftime(lbuf,
-					sizeof(lbuf),
-					"%Y-%b-%d-%H%M%S.unknown",
-					localtime(&t));
-			dlpath.append(lbuf);
-		} else {
-			dlpath.append(base);
-		}
-	} else {
-		std::string base_s (base);
-		std::size_t pos = base_s.rfind('.');
-		if (pos != std::string::npos)
-			dlpath.append(base_s.substr(pos));
-	}
 	return dlpath;
 }
 
