@@ -43,7 +43,7 @@ configcontainer::configcontainer()
 			  configdata("false", configdata_t::BOOL)},
 		  {"display-article-progress",
 			  configdata("yes", configdata_t::BOOL)},
-		  {"download-filename",
+		  {"download-filename-format",
 			  configdata("%?u?%u&%Y-%b-%d-%H%M%S.unknown?",
 				  configdata_t::STR)},
 		  {"download-full-page",

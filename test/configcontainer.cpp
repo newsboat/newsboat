@@ -277,7 +277,7 @@ TEST_CASE(
 		"dialogs-title-format",
 		"display-article-progress",
 		"download-full-page",
-		"download-filename",
+		"download-filename-format",
 		"download-path",
 		"download-retries",
 		"download-timeout",

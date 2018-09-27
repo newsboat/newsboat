@@ -1003,21 +1003,21 @@ Identifier:Meaning
 [[download-path-h]]<<download-path-h,+h+>>:Name of the podcast feed's hostname
 |======================================================================
 
-.Available Identifiers for download-filename
+.Available Identifiers for download-filename-format
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
 |======================================================================
 Identifier:Meaning
-[[download-filename-t]]<<download-filename-t,+t+>>:Title of the podcast
-[[download-filename-e]]<<download-filename-e,+e+>>:Extension of the podcast episode
-[[download-filename-F]]<<download-filename-F,+F+>>:Publication date of the podcast episode formatted as yyyy-mm-dd
-[[download-filename-m]]<<download-filename-m,+m+>>:Month when podcast episode was published
-[[download-filename-b]]<<download-filename-b,+b+>>:Abbreviated month name when podcast episode was published
-[[download-filename-d]]<<download-filename-d,+d+>>:Day when podcast episode was published
-[[download-filename-H]]<<download-filename-H,+H+>>:Hour when podcast episode was published
-[[download-filename-M]]<<download-filename-M,+M+>>:Minute when podcast episode was published
-[[download-filename-S]]<<download-filename-S,+S+>>:Second when podcast episode was published
-[[download-filename-y]]<<download-filename-y,+y+>>:Year when podcast episode was published formatted as yy
-[[download-filename-Y]]<<download-filename-Y,+Y+>>:Year when podcast episode was published formatted as yyyy
+[[download-filename-format-t]]<<download-filename-format-t,+t+>>:Title of the podcast
+[[download-filename-format-e]]<<download-filename-format-e,+e+>>:Extension of the podcast episode
+[[download-filename-format-F]]<<download-filename-format-F,+F+>>:Publication date of the podcast episode formatted as yyyy-mm-dd
+[[download-filename-format-m]]<<download-filename-format-m,+m+>>:Month when podcast episode was published
+[[download-filename-format-b]]<<download-filename-format-b,+b+>>:Abbreviated month name when podcast episode was published
+[[download-filename-format-d]]<<download-filename-format-d,+d+>>:Day when podcast episode was published
+[[download-filename-format-H]]<<download-filename-format-H,+H+>>:Hour when podcast episode was published
+[[download-filename-format-M]]<<download-filename-format-M,+M+>>:Minute when podcast episode was published
+[[download-filename-format-S]]<<download-filename-format-S,+S+>>:Second when podcast episode was published
+[[download-filename-format-y]]<<download-filename-format-y,+y+>>:Year when podcast episode was published formatted as yy
+[[download-filename-format-Y]]<<download-filename-format-Y,+Y+>>:Year when podcast episode was published formatted as yyyy
 |======================================================================
 
 Dialog Titles
