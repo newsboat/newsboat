@@ -10,7 +10,7 @@ pub extern "C" fn rs_replace_all(
     input: *const c_char,
     from: *const c_char,
     to: *const c_char)
-    -> *const c_char
+    -> *mut c_char
 {
     let rs_input = unsafe { CStr::from_ptr(input) };
     let rs_input = rs_input.to_string_lossy().into_owned();
@@ -31,7 +31,13 @@ pub extern "C" fn rs_replace_all(
     // 3. neither `input` nor `to` could contain null bytes because they're null-terminated
     //    strings we got from C.
     let result = CString::new(result).unwrap();
-    let result_ptr = result.as_ptr();
-    std::mem::forget(result);
-    result_ptr
+    result.into_raw()
+}
+
+#[no_mangle]
+pub extern "C" fn rs_cstring_free(string: *mut c_char) {
+    unsafe {
+        if string.is_null() { return }
+        CString::from_raw(string);
+    };
 }
