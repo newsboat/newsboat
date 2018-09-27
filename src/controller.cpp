@@ -1177,15 +1177,15 @@ std::string controller::generate_enqueue_filename(const std::string& url,
 	fmt.register_fmt('n', feed->title());
 	fmt.register_fmt('h', get_hostname_from_url(url));
 	fmt.register_fmt('u', base);
-	fmt.register_fmt('F', time_formatter(_("%F")));
-	fmt.register_fmt('m', time_formatter(_("%m")));
-	fmt.register_fmt('b', time_formatter(_("%b")));
-	fmt.register_fmt('d', time_formatter(_("%d")));
-	fmt.register_fmt('H', time_formatter(_("%H")));
-	fmt.register_fmt('M', time_formatter(_("%M")));
-	fmt.register_fmt('S', time_formatter(_("%S")));
-	fmt.register_fmt('y', time_formatter(_("%y")));
-	fmt.register_fmt('Y', time_formatter(_("%Y")));
+	fmt.register_fmt('F', time_formatter("%F"));
+	fmt.register_fmt('m', time_formatter("%m"));
+	fmt.register_fmt('b', time_formatter("%b"));
+	fmt.register_fmt('d', time_formatter("%d"));
+	fmt.register_fmt('H', time_formatter("%H"));
+	fmt.register_fmt('M', time_formatter("%M"));
+	fmt.register_fmt('S', time_formatter("%S"));
+	fmt.register_fmt('y', time_formatter("%y"));
+	fmt.register_fmt('Y', time_formatter("%Y"));
 	fmt.register_fmt('t', title);
 	fmt.register_fmt('e', extension);
 
