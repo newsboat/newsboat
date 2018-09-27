@@ -53,8 +53,8 @@ public:
 		return refresh_on_start;
 	}
 	void enqueue_url(const std::string& url,
-        const std::string& title,
-        const time_t pubDate,
+		const std::string& title,
+		const time_t pubDate,
 		std::shared_ptr<rss_feed> feed);
 	void notify(const std::string& msg);
 

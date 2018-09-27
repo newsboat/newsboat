@@ -891,7 +891,8 @@ void controller::enqueue_url(const std::string& url,
 	if (!url_found) {
 		f.open(configpaths.queue_file().c_str(),
 			std::fstream::app | std::fstream::out);
-		std::string filename = generate_enqueue_filename(url, title, pubDate, feed);
+		std::string filename =
+			generate_enqueue_filename(url, title, pubDate, feed);
 		f << url << " " << stfl::quote(filename) << std::endl;
 		f.close();
 	}
@@ -1127,7 +1128,10 @@ void controller::enqueue_items(std::shared_ptr<rss_feed> feed)
 					"controller::enqueue_items: enqueuing "
 					"`%s'",
 					item->enclosure_url());
-				enqueue_url(item->enclosure_url(), item->title(), item->pubDate_timestamp(), feed);
+				enqueue_url(item->enclosure_url(),
+					item->title(),
+					item->pubDate_timestamp(),
+					feed);
 				item->set_enqueued(true);
 				rsscache->update_rssitem_unread_and_enqueued(
 					item, feed->rssurl());
@@ -1151,10 +1155,10 @@ std::string controller::generate_enqueue_filename(const std::string& url,
 	auto time_formatter = [&pubDate](const char* format) {
 		char pubDate_formatted[1024];
 		strftime(pubDate_formatted,
-				sizeof(pubDate_formatted),
-				format,
-				localtime(&pubDate));
-		return  std::string(pubDate_formatted);
+			sizeof(pubDate_formatted),
+			format,
+			localtime(&pubDate));
+		return std::string(pubDate_formatted);
 	};
 
 	char buf[2048];
@@ -1162,10 +1166,11 @@ std::string controller::generate_enqueue_filename(const std::string& url,
 	char* base = basename(buf);
 	std::string extension;
 	if (base) {
-		std::string base_s (base);
+		std::string base_s(base);
 		std::size_t pos = base_s.rfind('.');
-		if (pos != std::string::npos)
-			extension.append(base_s.substr(pos+1));
+		if (pos != std::string::npos) {
+			extension.append(base_s.substr(pos + 1));
+		}
 	}
 
 	fmtstr_formatter fmt;
