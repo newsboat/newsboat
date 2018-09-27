@@ -215,7 +215,7 @@ script:
   - if [ -z "$CHECKS" ]; then   make --keep-going all test   ; fi
   - if [ -z "$CHECKS" ]; then   make distclean   ; fi
   - if [ -z "$CHECKS" ]; then   make PROFILE=1 all test   ; fi
-  - if [ -z "$CHECKS" ]; then   ( cd test && ./test --order rand )   ; fi
+  - if [ -z "$CHECKS" ]; then   ( cd test && ./test --order rand ) ; cargo test   ; fi
   - if [ -n "$CHECKS" ]; then   make run-i18nspector | tee i18nspector.log && if `egrep '^(E|W):' i18nspector.log >/dev/null 2>&1` ; then false else true; fi   ; fi
 
 after_success:
