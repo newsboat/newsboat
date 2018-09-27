@@ -995,6 +995,30 @@ Examples:
 	articlelist-format  "%4i %f %D   %?T?|%-17T|  ?%t"
 	notify-format       "%d new articles (%n unread articles, %f unread feeds)"
 
+.Available Identifiers for download-path
+[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
+|======================================================================
+Identifier:Meaning
+[[download-path-n]]<<download-path-n,+n+>>:Name of the podcast feed
+[[download-path-h]]<<download-path-h,+h+>>:Name of the podcast feed's hostname
+|======================================================================
+
+.Available Identifiers for download-filename
+[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
+|======================================================================
+Identifier:Meaning
+[[download-filename-t]]<<download-filename-t,+t+>>:Title of the podcast
+[[download-filename-e]]<<download-filename-e,+e+>>:Extension of the podcast episode
+[[download-filename-F]]<<download-filename-F,+F+>>:Publication date of the podcast episode formatted as yyyy-mm-dd
+[[download-filename-m]]<<download-filename-m,+m+>>:Month when podcast episode was published
+[[download-filename-b]]<<download-filename-b,+b+>>:Abbreviated month name when podcast episode was published
+[[download-filename-d]]<<download-filename-d,+d+>>:Day when podcast episode was published
+[[download-filename-H]]<<download-filename-H,+H+>>:Hour when podcast episode was published
+[[download-filename-M]]<<download-filename-M,+M+>>:Minute when podcast episode was published
+[[download-filename-S]]<<download-filename-S,+S+>>:Second when podcast episode was published
+[[download-filename-y]]<<download-filename-y,+y+>>:Year when podcast episode was published formatted as yy
+[[download-filename-Y]]<<download-filename-Y,+Y+>>:Year when podcast episode was published formatted as yyyy
+|======================================================================
 
 Dialog Titles
 ^^^^^^^^^^^^^
