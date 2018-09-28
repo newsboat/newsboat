@@ -1,4 +1,4 @@
-#include "urlreader.h"
+#include "opml_urlreader.h"
 
 #include <unistd.h>
 #include <map>

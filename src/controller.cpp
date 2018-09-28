@@ -41,6 +41,7 @@
 #include "newsblur_api.h"
 #include "ocnews_api.h"
 #include "oldreader_api.h"
+#include "opml_urlreader.h"
 #include "regexmanager.h"
 #include "remote_api.h"
 #include "rss_parser.h"
