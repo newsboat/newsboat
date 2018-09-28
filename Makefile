@@ -53,6 +53,16 @@ RSSPPLIB_SOURCES=$(sort $(wildcard rss/*.cpp))
 RSSPPLIB_OBJS=$(patsubst rss/%.cpp,rss/%.o,$(RSSPPLIB_SOURCES))
 RSSPPLIB_OUTPUT=librsspp.a
 
+CARGO_FLAGS+=--verbose
+ifeq ($(PROFILE),1)
+NEWSBOATLIB_OUTPUT=target/debug/libnewsboat.a
+LDFLAGS+=-L./target/debug
+else
+NEWSBOATLIB_OUTPUT=target/release/libnewsboat.a
+LDFLAGS+=-L./target/release
+CARGO_FLAGS+=--release
+endif
+LDFLAGS+=-lnewsboat -lpthread -ldl
 
 PODBOAT=podboat
 PODBOAT_SOURCES:=$(shell cat mk/podboat.deps)
@@ -83,12 +93,15 @@ RM=rm -f
 
 all: doc $(NEWSBOAT) $(PODBOAT) mo-files
 
-NB_DEPS=xlicense.h $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBOAT_OBJS) $(RSSPPLIB_OUTPUT)
+NB_DEPS=xlicense.h $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBOAT_OBJS) $(RSSPPLIB_OUTPUT) $(NEWSBOATLIB_OUTPUT)
+
+$(NEWSBOATLIB_OUTPUT): .FORCE
+	cargo build $(CARGO_FLAGS)
 
 $(NEWSBOAT): $(NB_DEPS)
 	$(CXX) $(CXXFLAGS) -o $(NEWSBOAT) $(NEWSBOAT_OBJS) $(NEWSBOAT_LIBS) $(LDFLAGS)
 
-$(PODBOAT): $(LIB_OUTPUT) $(PODBOAT_OBJS)
+$(PODBOAT): $(LIB_OUTPUT) $(NEWSBOATLIB_OUTPUT) $(PODBOAT_OBJS)
 	$(CXX) $(CXXFLAGS) -o $(PODBOAT) $(PODBOAT_OBJS) $(PODBOAT_LIBS) $(LDFLAGS)
 
 $(LIB_OUTPUT): $(LIB_OBJS)
@@ -131,6 +144,9 @@ clean-librsspp:
 clean-libfilter:
 	$(RM) $(FILTERLIB_OUTPUT) $(FILTERLIB_OBJS)
 
+clean-libnewsboat:
+	cargo clean
+
 clean-doc:
 	$(RM) -r doc/xhtml 
 	$(RM) doc/*.xml doc/*.1 doc/newsboat-cfgcmds.txt doc/podboat-cfgcmds.txt \
@@ -138,7 +154,7 @@ clean-doc:
 		doc/podboat-cmds-linked.dsv doc/keycmds-linked.dsv \
 		doc/gen-example-config doc/example-config doc/generate doc/generate2
 
-clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clean-librsspp
+clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clean-librsspp clean-libnewsboat
 	$(RM) $(STFLHDRS) xlicense.h
 
 distclean: clean clean-mo test-clean profclean
@@ -300,7 +316,7 @@ test: test/test
 
 TEST_SRCS:=$(wildcard test/*.cpp)
 TEST_OBJS:=$(patsubst %.cpp,%.o,$(TEST_SRCS))
-test/test: xlicense.h $(LIB_OUTPUT) $(NEWSBOAT_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) $(TEST_OBJS) test/test-helpers.h
+test/test: xlicense.h $(LIB_OUTPUT) $(NEWSBOATLIB_OUTPUT) $(NEWSBOAT_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) $(TEST_OBJS) test/test-helpers.h
 	$(CXX) $(CXXFLAGS) -o test/test $(TEST_OBJS) src/*.o $(NEWSBOAT_LIBS) $(LDFLAGS)
 
 test-clean:
@@ -331,5 +347,7 @@ depslist: $(ALL_SRCS) $(ALL_HDRS)
 			echo $$file ; \
 		done; \
 	done
+
+.FORCE:
 
 include mk/mk.deps

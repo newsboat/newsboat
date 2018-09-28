@@ -43,6 +43,8 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 #include <openssl/crypto.h>
 #endif
 
+#include "rs_utils.h"
+
 namespace newsboat {
 
 std::vector<std::string> utils::tokenize_quoted(const std::string& str,
@@ -604,12 +606,10 @@ std::string utils::replace_all(std::string str,
 	const std::string& from,
 	const std::string& to)
 {
-	std::string::size_type s = str.find(from);
-	while (s != std::string::npos) {
-		str.replace(s, from.length(), to);
-		s = str.find(from, s + to.length());
-	}
-	return str;
+	char* ptr = rs_replace_all(str.c_str(), from.c_str(), to.c_str());
+	const auto result = std::string(ptr);
+	rs_cstring_free(ptr);
+	return result;
 }
 
 std::wstring utils::utf8str2wstr(const std::string& utf8str)

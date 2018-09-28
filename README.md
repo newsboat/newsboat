@@ -22,6 +22,9 @@ Newsboat depends on a number of libraries, which need to be installed before
 newsboat can be compiled.
 
 - GCC 4.9 or newer, or Clang 3.6 or newer
+- Stable [Rust](https://www.rust-lang.org/en-US/) (no guarantees on the lowest
+    version yet. CI tests each commit with current stable, which at the time of
+    writing is 1.29)
 - [STFL (version 0.21 or newer)](http://www.clifford.at/stfl/)
 - [SQLite3 (version 3.5 or newer)](http://www.sqlite.org/download.html)
 - [libcurl (version 7.18.0 or newer)](http://curl.haxx.se/download.html)
@@ -71,7 +74,7 @@ hook.
 You'll probably want to run the tests; here's how:
 
 	make -j5 PROFILE=1 all test
-	(cd test && TMPDIR=/dev/shm ./test --order rand)
+	(cd test && TMPDIR=/dev/shm ./test --order rand) && cargo test
 
 Note the use of ramdisk as `TMPDIR`: some tests create temporary files, which
 slows them down if `TMPDIR` is on HDD or even SSD.
