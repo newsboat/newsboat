@@ -1079,7 +1079,20 @@ std::string controller::generate_enqueue_filename(const std::string& url,
 
 	char buf[2048];
 	snprintf(buf, sizeof(buf), "%s", url.c_str());
-	char* base = basename(buf);
+	char* base = NULL;
+	xmlURIPtr uri = xmlParseURI(buf);
+	if (uri) {
+		if (uri->path) {
+			base = basename(uri->path);
+			if (base) {
+				// check for empty path
+				if (base[0] == '/') {
+					base = NULL;
+				}
+			}
+		}
+		xmlFreeURI(uri);
+	}
 	std::string extension;
 	if (base) {
 		std::string base_s(base);
