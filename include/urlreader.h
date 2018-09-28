@@ -1,5 +1,5 @@
-#ifndef NEWSBOAT_CONFIGREADER_H_
-#define NEWSBOAT_CONFIGREADER_H_
+#ifndef NEWSBOAT_URLREADER_H_
+#define NEWSBOAT_URLREADER_H_
 
 #include <libxml/tree.h>
 #include <map>
@@ -57,4 +57,4 @@ private:
 
 } // namespace newsboat
 
-#endif /* NEWSBOAT_CONFIGREADER_H_ */
+#endif /* NEWSBOAT_URLREADER_H_ */
