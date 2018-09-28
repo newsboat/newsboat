@@ -995,18 +995,12 @@ Examples:
 	articlelist-format  "%4i %f %D   %?T?|%-17T|  ?%t"
 	notify-format       "%d new articles (%n unread articles, %f unread feeds)"
 
-.Available Identifiers for download-path
+.Available Identifiers for download-path and download-filename-format
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
 |======================================================================
 Identifier:Meaning
-[[download-path-n]]<<download-path-n,+n+>>:Name of the podcast feed
-[[download-path-h]]<<download-path-h,+h+>>:Name of the podcast feed's hostname
-|======================================================================
-
-.Available Identifiers for download-filename-format
-[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
-|======================================================================
-Identifier:Meaning
+[[download-filename-format-n]]<<download-filename-format-n,+n+>>:Name of the podcast feed
+[[download-filename-format-h]]<<download-filename-format-h,+h+>>:Name of the podcast feed's hostname
 [[download-filename-format-t]]<<download-filename-format-t,+t+>>:Title of the podcast
 [[download-filename-format-e]]<<download-filename-format-e,+e+>>:Extension of the podcast episode
 [[download-filename-format-F]]<<download-filename-format-F,+F+>>:Publication date of the podcast episode formatted as yyyy-mm-dd
