@@ -28,18 +28,6 @@ protected:
 	std::set<std::string> alltags;
 };
 
-class file_urlreader : public urlreader {
-public:
-	explicit file_urlreader(const std::string& file = "");
-	void write_config() override;
-	void reload() override;
-	void load_config(const std::string& file);
-	std::string get_source() override;
-
-private:
-	std::string filename;
-};
-
 class opml_urlreader : public urlreader {
 public:
 	explicit opml_urlreader(configcontainer* c);

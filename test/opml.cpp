@@ -2,6 +2,7 @@
 
 #include <libxml/xmlsave.h>
 #include "cache.h"
+#include "file_urlreader.h"
 
 #include "3rd-party/catch.hpp"
 #include "test-helpers.h"

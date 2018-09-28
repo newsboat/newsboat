@@ -33,6 +33,7 @@
 #include "exception.h"
 #include "exceptions.h"
 #include "feedhq_api.h"
+#include "file_urlreader.h"
 #include "formatstring.h"
 #include "globals.h"
 #include "inoreader_api.h"

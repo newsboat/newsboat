@@ -1,5 +1,6 @@
 #include "ocnews_api.h"
 
+#include "file_urlreader.h"
 #include "logger.h"
 #include "utils.h"
 
