@@ -832,6 +832,8 @@ std::vector<std::shared_ptr<rss_item>> controller::search_for_items(
 }
 
 void controller::enqueue_url(const std::string& url,
+	const std::string& title,
+	const time_t pubDate,
 	std::shared_ptr<rss_feed> feed)
 {
 	bool url_found = false;
@@ -855,7 +857,8 @@ void controller::enqueue_url(const std::string& url,
 	if (!url_found) {
 		f.open(configpaths.queue_file().c_str(),
 			std::fstream::app | std::fstream::out);
-		std::string filename = generate_enqueue_filename(url, feed);
+		std::string filename =
+			generate_enqueue_filename(url, title, pubDate, feed);
 		f << url << " " << stfl::quote(filename) << std::endl;
 		f.close();
 	}
@@ -1041,7 +1044,10 @@ void controller::enqueue_items(std::shared_ptr<rss_feed> feed)
 					"controller::enqueue_items: enqueuing "
 					"`%s'",
 					item->enclosure_url());
-				enqueue_url(item->enclosure_url(), feed);
+				enqueue_url(item->enclosure_url(),
+					item->title(),
+					item->pubDate_timestamp(),
+					feed);
 				item->set_enqueued(true);
 				rsscache->update_rssitem_unread_and_enqueued(
 					item, feed->rssurl());
@@ -1051,32 +1057,55 @@ void controller::enqueue_items(std::shared_ptr<rss_feed> feed)
 }
 
 std::string controller::generate_enqueue_filename(const std::string& url,
+	const std::string& title,
+	const time_t pubDate,
 	std::shared_ptr<rss_feed> feed)
 {
 	std::string dlformat = cfg.get_configvalue("download-path");
 	if (dlformat[dlformat.length() - 1] != NEWSBEUTER_PATH_SEP[0])
 		dlformat.append(NEWSBEUTER_PATH_SEP);
 
-	fmtstr_formatter fmt;
-	fmt.register_fmt('n', feed->title());
-	fmt.register_fmt('h', get_hostname_from_url(url));
+	std::string filemask = cfg.get_configvalue("download-filename-format");
+	dlformat.append(filemask);
 
-	std::string dlpath = fmt.do_format(dlformat);
+	auto time_formatter = [&pubDate](const char* format) {
+		char pubDate_formatted[1024];
+		strftime(pubDate_formatted,
+			sizeof(pubDate_formatted),
+			format,
+			localtime(&pubDate));
+		return std::string(pubDate_formatted);
+	};
 
 	char buf[2048];
 	snprintf(buf, sizeof(buf), "%s", url.c_str());
 	char* base = basename(buf);
-	if (!base || strlen(base) == 0) {
-		char lbuf[128];
-		time_t t = time(nullptr);
-		strftime(lbuf,
-			sizeof(lbuf),
-			"%Y-%b-%d-%H%M%S.unknown",
-			localtime(&t));
-		dlpath.append(lbuf);
-	} else {
-		dlpath.append(base);
+	std::string extension;
+	if (base) {
+		std::string base_s(base);
+		std::size_t pos = base_s.rfind('.');
+		if (pos != std::string::npos) {
+			extension.append(base_s.substr(pos + 1));
+		}
 	}
+
+	fmtstr_formatter fmt;
+	fmt.register_fmt('n', feed->title());
+	fmt.register_fmt('h', get_hostname_from_url(url));
+	fmt.register_fmt('u', base);
+	fmt.register_fmt('F', time_formatter("%F"));
+	fmt.register_fmt('m', time_formatter("%m"));
+	fmt.register_fmt('b', time_formatter("%b"));
+	fmt.register_fmt('d', time_formatter("%d"));
+	fmt.register_fmt('H', time_formatter("%H"));
+	fmt.register_fmt('M', time_formatter("%M"));
+	fmt.register_fmt('S', time_formatter("%S"));
+	fmt.register_fmt('y', time_formatter("%y"));
+	fmt.register_fmt('Y', time_formatter("%Y"));
+	fmt.register_fmt('t', title);
+	fmt.register_fmt('e', extension);
+
+	std::string dlpath = fmt.do_format(dlformat);
 	return dlpath;
 }
 
