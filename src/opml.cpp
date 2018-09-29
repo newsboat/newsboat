@@ -156,9 +156,10 @@ void rec_find_rss_outlines(
 			} else {
 				char* text = (char*)xmlGetProp(
 					node, (const xmlChar*)"text");
-				if (!text)
+				if (!text) {
 					text = (char*)xmlGetProp(
 						node, (const xmlChar*)"title");
+				}
 				if (text) {
 					if (newtag.length() > 0) {
 						newtag.append("/");
