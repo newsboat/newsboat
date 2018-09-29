@@ -7,8 +7,10 @@
 #include <sstream>
 
 #include "config.h"
+#include "configcontainer.h"
 #include "dllist.h"
 #include "download.h"
+#include "formatstring.h"
 #include "help.h"
 #include "logger.h"
 #include "pb_controller.h"
@@ -75,20 +77,13 @@ void pb_view::run(bool auto_download)
 				ctrl->downloads().size());
 
 			std::string code = "{list";
+			std::string formatstring = ctrl->get_formatstr();
+
+			unsigned int width = utils::to_u(dllist_form.get("feeds:w"));
 
 			unsigned int i = 0;
 			for (const auto& dl : ctrl->downloads()) {
-				auto lbuf = strprintf::fmt(
-					" %4u [%6.1fMB/%6.1fMB] [%5.1f %%] "
-					"[%7.2f kb/s] %-20s %s -> %s",
-					i + 1,
-					dl.current_size() / (1024 * 1024),
-					dl.total_size() / (1024 * 1024),
-					dl.percents_finished(),
-					dl.kbps(),
-					dl.status_text(),
-					dl.url(),
-					dl.filename());
+				auto lbuf = format_line(formatstring, dl, i, width);
 				code.append(
 					strprintf::fmt("{listitem[%u] text:%s}",
 						i,
@@ -353,6 +348,28 @@ void pb_view::set_dllist_keymap_hint()
 
 	std::string keymap_hint = prepare_keymaphint(hints);
 	dllist_form.set("help", keymap_hint);
+}
+
+std::string pb_view::format_line(const std::string& podlist_format,
+	const download& dl,
+	unsigned int pos,
+	unsigned int width)
+{
+	fmtstr_formatter fmt;
+
+	fmt.register_fmt('i', strprintf::fmt("%u", pos + 1));
+	fmt.register_fmt('d',
+		strprintf::fmt("%.1f", dl.current_size() / (1024 * 1024)));
+	fmt.register_fmt(
+		't', strprintf::fmt("%.1f", dl.total_size() / (1024 * 1024)));
+	fmt.register_fmt('p', strprintf::fmt("%.1f", dl.percents_finished()));
+	fmt.register_fmt('k', strprintf::fmt("%.2f", dl.kbps()));
+	fmt.register_fmt('S', strprintf::fmt("%s", dl.status_text()));
+	fmt.register_fmt('u', strprintf::fmt("%s", dl.url()));
+	fmt.register_fmt('F', strprintf::fmt("%s", dl.filename()));
+
+	auto formattedLine = fmt.do_format(podlist_format, width);
+	return formattedLine;
 }
 
 } // namespace podboat

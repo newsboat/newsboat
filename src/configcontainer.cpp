@@ -140,6 +140,8 @@ configcontainer::configcontainer()
 		  {"player", configdata("", configdata_t::PATH)},
 		  {"podcast-auto-enqueue",
 			  configdata("no", configdata_t::BOOL)},
+		  {"podlist-format",
+			  configdata( "%4i [%6dMB/%6tMB] [%5p %%] [%7k kb/s] %-20S %u -> %F", configdata_t::STR)},
 		  {"prepopulate-query-feeds",
 			  configdata("false", configdata_t::BOOL)},
 		  {"ssl-verifyhost", configdata("true", configdata_t::BOOL)},

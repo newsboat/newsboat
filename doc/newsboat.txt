@@ -989,11 +989,26 @@ Identifier:Meaning
 [[notify-format-D]]<<notify-format-D,+D+>>:Number of new unread feeds (i.e. that were added through the last reload)
 |======================================================================
 
+.Available Identifiers for podlist-format
+[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
+|======================================================================
+Identifier:Meaning
+[[podlist-format-i]]<<podlist-format-i,+i+>>:Dowload index
+[[podlist-format-d]]<<podlist-format-d,+d+>>:Currently downloaded size in megabytes, displays one digit of precision
+[[podlist-format-t]]<<podlist-format-t,+t+>>:Total dowload size in megabytes, displays one digit of precision
+[[podlist-format-p]]<<podlist-format-p,+p+>>:Dowloaded precentage, displays one digit of precision
+[[podlist-format-k]]<<podlist-format-k,+k+>>:Dowload speed, displays two digit of precision
+[[podlist-format-S]]<<podlist-format-S,+S+>>:Status of download, displays one of the folowing; "queued", "downloading", "ready", "canceled", "deleted", "incomplete", "played", "finished" or "failed"
+[[podlist-format-u]]<<podlist-format-u,+u+>>:Url of the download
+[[podlist-format-F]]<<podlist-format-F,+F+>>:Filename of the download
+|======================================================================
+
 Examples:
 
 	feedlist-format     "%4i %n %11u %t"
 	articlelist-format  "%4i %f %D   %?T?|%-17T|  ?%t"
 	notify-format       "%d new articles (%n unread articles, %f unread feeds)"
+	podlist-format      "%4i [%-5p %%] %-12S %F"
 
 .Available Identifiers for download-path and download-filename-format
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
