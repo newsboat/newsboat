@@ -139,6 +139,8 @@ msgid ""
 "It bundles an alphanum algorithm implementation licensed under the MIT "
 "license: http://www.davekoelle.com/alphanum.html"
 msgstr ""
+"Программа включает в себя реализацию алгоритма alphanum под лицензией "
+"MIT: http://www.davekoelle.com/alphanum.html"
 
 #: newsboat.cpp:186
 #, c-format
@@ -1247,9 +1249,8 @@ msgid "Delete article"
 msgstr "Удалить заметку"
 
 #: src/keymap.cpp:236
-#, fuzzy
 msgid "Delete all articles"
-msgstr "Удалить заметку"
+msgstr "Удалить все заметки"
 
 #: src/keymap.cpp:241
 msgid "Purge deleted articles"
