@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+    <head>
+        <title>Second example OPML file for Newsboat tests</title>
+    </head>
+
+    <body>
+        <outline type="rss" xmlUrl="https://one.example.com/file.xml" title="To rule them all" />
+        <outline type="rss" title="Another file" xmlUrl="https://to.example.com/elves/tidings.rss" />
+        <outline title="Rant boards">
+            <outline title="humans">
+                <outline xmlUrl="https://third.example.com/~of/internet.rss" title="Really?" type="rss" />
+            </outline>
+            <outline xmlUrl="https://four.example.com/~john/posts.rss" title="and another" type="rss" />
+        </outline>
+        <outline xmlUrl="https://example.com/five.atom" type="rss" title="another title" />
+        <outline title="eloquent">
+            <outline title="freddie rite about fings" xmlUrl="https://freddie.example.com/ritin/index.pl?format=rss" type="rss" />
+        </outline>
+        <outline title="an outdated feed" type="rss" xmlUrl="https://example.com/feed2.rss09" />
+    </body>
+</opml>

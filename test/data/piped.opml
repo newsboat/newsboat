@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+    <head>
+        <title>Example OPML that has URLs with pipe symbols in it</title>
+    </head>
+
+    <body>
+        <outline type="rss" title="Birdsite search" xmlUrl="|~/fetch_tweets.py" />
+        <outline title="tagged">
+            <outline xmlUrl="https://example.com/feed.atom" type="rss" title="example.com website (Atom feed)" />
+        </outline>
+    </body>
+</opml>

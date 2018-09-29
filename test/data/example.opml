@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+    <head>
+        <title>Example OPML file for Newsboat tests</title>
+    </head>
+
+    <body>
+        <outline type="rss" xmlUrl="https://example.com/feed.xml" title="example.com website" />
+        <outline type="rss" title="Distrowatch mirror" xmlUrl="https://example.com/mirrors/distrowatch.rss" />
+        <outline xmlUrl="https://example.com/feed.atom" type="rss" title="example.com website (Atom feed)" />
+        <outline title="example.com website (RSS 0.9 feed)" type="rss" xmlUrl="https://example.com/feed.rss09" />
+        <outline title="Blogs">
+            <outline xmlUrl="https://blogs.example.com/~john/posts.rss" title="John's musings" type="rss" />
+            <outline title="friends">
+                <outline xmlUrl="https://blogs.example.com/~mike/.rss" title="Notes by Mike" type="rss" />
+            </outline>
+        </outline>
+        <outline title="eloquent">
+            <outline title="Fred on everything" xmlUrl="https://fred.example.com/writing/index.php?type=rss" type="rss" />
+        </outline>
+    </body>
+</opml>

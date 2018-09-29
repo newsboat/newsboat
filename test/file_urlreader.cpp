@@ -1,4 +1,7 @@
-#include "urlreader.h"
+#include "file_urlreader.h"
+
+#include <unistd.h>
+#include <map>
 
 #include "3rd-party/catch.hpp"
 #include "test-helpers.h"
