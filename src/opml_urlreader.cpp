@@ -76,8 +76,9 @@ void opml_urlreader::handle_node(xmlNode* node, const std::string& tag)
 				alltags.insert(tag);
 			}
 		}
-		if (rssurl)
+		if (rssurl) {
 			xmlFree(rssurl);
+		}
 	}
 }
 
