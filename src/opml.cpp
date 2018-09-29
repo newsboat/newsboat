@@ -5,7 +5,7 @@
 
 namespace newsboat {
 
-xmlDocPtr OPML::prepare_opml(const FeedContainer& feedcontainer)
+xmlDocPtr OPML::generate_opml(const FeedContainer& feedcontainer)
 {
 	xmlDocPtr root = xmlNewDoc((const xmlChar*)"1.0");
 	xmlNodePtr opml_node =
