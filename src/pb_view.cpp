@@ -83,8 +83,7 @@ void pb_view::run(bool auto_download)
 
 			unsigned int i = 0;
 			for (const auto& dl : ctrl->downloads()) {
-				auto lbuf = strprintf::fmt(
-					format_line(formatstring, &dl, i, width));
+				auto lbuf = format_line(formatstring, dl, i, width);
 				code.append(
 					strprintf::fmt("{listitem[%u] text:%s}",
 						i,
@@ -352,7 +351,7 @@ void pb_view::set_dllist_keymap_hint()
 }
 
 std::string pb_view::format_line(const std::string& podlist_format,
-	const download* dl,
+	const download& dl,
 	unsigned int pos,
 	unsigned int width)
 {
@@ -360,14 +359,14 @@ std::string pb_view::format_line(const std::string& podlist_format,
 
 	fmt.register_fmt('i', strprintf::fmt("%u", pos + 1));
 	fmt.register_fmt('d',
-		strprintf::fmt("%.1f", dl->current_size() / (1024 * 1024)));
+		strprintf::fmt("%.1f", dl.current_size() / (1024 * 1024)));
 	fmt.register_fmt(
-		't', strprintf::fmt("%.1f", dl->total_size() / (1024 * 1024)));
-	fmt.register_fmt('p', strprintf::fmt("%.1f", dl->percents_finished()));
-	fmt.register_fmt('k', strprintf::fmt("%.1f", dl->kbps()));
-	fmt.register_fmt('S', strprintf::fmt("%s", dl->status_text()));
-	fmt.register_fmt('u', strprintf::fmt("%s", dl->url()));
-	fmt.register_fmt('F', strprintf::fmt("%s", dl->filename()));
+		't', strprintf::fmt("%.1f", dl.total_size() / (1024 * 1024)));
+	fmt.register_fmt('p', strprintf::fmt("%.1f", dl.percents_finished()));
+	fmt.register_fmt('k', strprintf::fmt("%.2f", dl.kbps()));
+	fmt.register_fmt('S', strprintf::fmt("%s", dl.status_text()));
+	fmt.register_fmt('u', strprintf::fmt("%s", dl.url()));
+	fmt.register_fmt('F', strprintf::fmt("%s", dl.filename()));
 
 	auto formattedLine = fmt.do_format(podlist_format, width);
 	return formattedLine;

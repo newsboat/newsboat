@@ -40,7 +40,7 @@ private:
 
 	std::string prepare_keymaphint(keymap_hint_entry* hints);
 	std::string format_line(const std::string& podlist_format,
-			const download* dl,
+			const download& dl,
 			unsigned int pos,
 			unsigned int width);
 	pb_controller* ctrl;
