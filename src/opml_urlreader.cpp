@@ -36,8 +36,8 @@ void opml_urlreader::reload()
 
 		if (doc == nullptr) {
 			LOG(level::ERROR,
-				"opml_urlreader::reload: parsing XML file "
-				"failed");
+				"opml_urlreader::reload: parsing XML file `%s'"
+				"failed", url);
 			continue;
 		}
 
