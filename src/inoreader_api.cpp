@@ -144,6 +144,7 @@ std::vector<tagged_feedurl> inoreader_api::get_subscribed_urls()
 
 		json_object_object_get_ex(sub, "id", &node);
 		const char* id = json_object_get_string(node);
+		char* id_uenc = curl_easy_escape(handle, id, 0);
 
 		json_object_object_get_ex(sub, "title", &node);
 		const char* title = json_object_get_string(node);
@@ -167,9 +168,11 @@ std::vector<tagged_feedurl> inoreader_api::get_subscribed_urls()
 
 		auto url = strprintf::fmt("%s%s?n=%u",
 			INOREADER_FEED_PREFIX,
-			id,
+			id_uenc,
 			cfg->get_configvalue_as_int("inoreader-min-items"));
 		urls.push_back(tagged_feedurl(url, tags));
+
+		curl_free(id_uenc);
 	}
 
 	json_object_put(reply);
