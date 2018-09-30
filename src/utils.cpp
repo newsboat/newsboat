@@ -1168,6 +1168,29 @@ std::string utils::get_content(xmlNode* node)
 	return retval;
 }
 
+std::string utils::get_basename(const std::string& url)
+{
+	std::string retval;
+	char buf[2048];
+	snprintf(buf, sizeof(buf), "%s", url.c_str());
+	char* base = NULL;
+	xmlURIPtr uri = xmlParseURI(buf);
+	if (uri && uri->path) {
+		base = basename(uri->path);
+		if (base) {
+			// check for empty path
+			if (base[0] == '/') {
+				base = NULL;
+			}
+		}
+		xmlFreeURI(uri);
+	}
+	if (base) {
+		retval = std::string(base);
+	}
+	return retval;
+}
+
 unsigned long utils::get_auth_method(const std::string& type)
 {
 	if (type == "any")
