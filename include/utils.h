@@ -148,6 +148,7 @@ public:
 	static bool is_exec_url(const std::string& url);
 
 	static std::string get_content(xmlNode* node);
+	static std::string get_basename(const std::string& url);
 
 	static std::string escape_url(const std::string& url);
 	static std::string unescape_url(const std::string& url);

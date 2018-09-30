@@ -908,16 +908,11 @@ std::string controller::generate_enqueue_filename(const std::string& url,
 		return std::string(pubDate_formatted);
 	};
 
-	char buf[2048];
-	snprintf(buf, sizeof(buf), "%s", url.c_str());
-	char* base = basename(buf);
+	std::string base = utils::get_basename(url);
 	std::string extension;
-	if (base) {
-		std::string base_s(base);
-		std::size_t pos = base_s.rfind('.');
-		if (pos != std::string::npos) {
-			extension.append(base_s.substr(pos + 1));
-		}
+	std::size_t pos = base.rfind('.');
+	if (pos != std::string::npos) {
+		extension.append(base.substr(pos + 1));
 	}
 
 	fmtstr_formatter fmt;
