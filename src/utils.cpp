@@ -1176,17 +1176,20 @@ std::string utils::get_basename(const std::string& url)
 	char* base = NULL;
 	xmlURIPtr uri = xmlParseURI(buf);
 	if (uri && uri->path) {
-		base = basename(uri->path);
-		if (base) {
-			// check for empty path
-			if (base[0] == '/') {
-				base = NULL;
+		std::string path(uri->path);
+		// check for path ending with an empty filename
+		if (path[path.length() - 1] != '/') {
+			base = basename(uri->path);
+			if (base) {
+				// check for empty path
+				if (base[0] == '/') {
+					base = NULL;
+				} else {
+					retval = std::string(base);
+				}
 			}
 		}
 		xmlFreeURI(uri);
-	}
-	if (base) {
-		retval = std::string(base);
 	}
 	return retval;
 }
