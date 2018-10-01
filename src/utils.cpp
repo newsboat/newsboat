@@ -1191,7 +1191,7 @@ std::string Utils::get_basename(const std::string& url)
 	return retval;
 }
 
-unsigned long utils::get_auth_method(const std::string& type)
+unsigned long Utils::get_auth_method(const std::string& type)
 {
 	if (type == "any")
 		return CURLAUTH_ANY;

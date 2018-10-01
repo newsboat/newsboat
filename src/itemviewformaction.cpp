@@ -147,7 +147,7 @@ void ItemViewFormaction::prepare()
 		std::vector<std::pair<LineType, std::string>> lines;
 		if (show_source) {
 			render_source(lines,
-				Utils::quote_for_Stfl(item->description()));
+				Utils::quote_for_stfl(item->description()));
 		} else {
 			std::string baseurl = item->get_base() != ""
 				? item->get_base()
@@ -631,7 +631,7 @@ std::vector<std::pair<LineType, std::string>> ItemViewFormaction::render_html(
 		getline(is, line);
 		while (!is.eof()) {
 			result.push_back(std::make_pair(LineType::softwrappable,
-				Utils::quote_for_Stfl(line)));
+				Utils::quote_for_stfl(line)));
 			getline(is, line);
 		}
 	}

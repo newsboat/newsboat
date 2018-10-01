@@ -160,7 +160,7 @@ void HelpFormaction::prepare()
 						"step 1 "
 						"- line = %s",
 						line);
-					line = Utils::quote_for_Stfl(line);
+					line = Utils::quote_for_stfl(line);
 					LOG(Level::DEBUG,
 						"HelpFormaction::prepare: "
 						"step 2 "

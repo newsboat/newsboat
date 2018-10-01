@@ -93,8 +93,8 @@ public:
 	static std::string get_useragent(ConfigContainer* cfgcont);
 
 	static size_t strwidth(const std::string& s);
-	static size_t strwidth_Stfl(const std::string& str);
-	static size_t wcswidth_Stfl(const std::wstring& str, size_t size);
+	static size_t strwidth_stfl(const std::string& str);
+	static size_t wcswidth_stfl(const std::wstring& str, size_t size);
 
 	static std::string substr_with_width(const std::string& str,
 		const size_t max_width);
@@ -124,7 +124,7 @@ public:
 
 	static std::string censor_url(const std::string& url);
 
-	static std::string quote_for_Stfl(std::string str);
+	static std::string quote_for_stfl(std::string str);
 
 	static void trim_end(std::string& str);
 

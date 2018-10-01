@@ -545,7 +545,7 @@ void HtmlRenderer::render(std::istream& input,
 				if (line_is_nonempty(curline)) {
 					add_line(curline, tables, lines);
 					size_t llen =
-						Utils::strwidth_Stfl(curline);
+						Utils::strwidth_stfl(curline);
 					prepare_new_line(curline,
 						tables.size() ? 0
 							      : indent_level);
@@ -706,7 +706,7 @@ void HtmlRenderer::render(std::istream& input,
 			break;
 
 		case TagSoupPullParser::Event::TEXT: {
-			auto text = Utils::quote_for_Stfl(xpp.get_text());
+			auto text = Utils::quote_for_stfl(xpp.get_text());
 			if (itunes_hack) {
 				std::vector<std::string> paragraphs =
 					Utils::tokenize_nl(text);
@@ -948,7 +948,7 @@ void HtmlRenderer::render_table(const HtmlRenderer::Table& table,
 					table.rows[row].cells[cell].text.size();
 					idx++)
 					width = std::max(width,
-						Utils::strwidth_Stfl(
+						Utils::strwidth_stfl(
 							table.rows[row]
 								.cells[cell]
 								.text[idx]));
@@ -1011,7 +1011,7 @@ void HtmlRenderer::render_table(const HtmlRenderer::Table& table,
 						table.rows[row]
 							.cells[cell]
 							.text[idx]);
-					cell_width = Utils::strwidth_Stfl(
+					cell_width = Utils::strwidth_stfl(
 						table.rows[row]
 							.cells[cell]
 							.text[idx]);

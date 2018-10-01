@@ -908,7 +908,7 @@ std::string Controller::generate_enqueue_filename(const std::string& url,
 		return std::string(pubDate_formatted);
 	};
 
-	std::string base = utils::get_basename(url);
+	std::string base = Utils::get_basename(url);
 	std::string extension;
 	std::size_t pos = base.rfind('.');
 	if (pos != std::string::npos) {

@@ -34,10 +34,10 @@ void ListFormatter::set_line(const unsigned int itempos,
 
 		while (mytext.length() > 0) {
 			size_t size = mytext.length();
-			size_t w = Utils::wcswidth_Stfl(mytext, size);
+			size_t w = Utils::wcswidth_stfl(mytext, size);
 			if (w > width) {
 				while (size &&
-					(w = Utils::wcswidth_Stfl(
+					(w = Utils::wcswidth_stfl(
 						 mytext, size)) > width) {
 					size--;
 				}
