@@ -6,14 +6,14 @@
 
 using namespace newsboat;
 
-/// Helper class to create argc and argv arguments for CLIArgsParser
+/// Helper class to create argc and argv arguments for CliArgsParser
 ///
-/// When testing CLIArgsParser, resource management turned out to be a problem:
-/// CLIArgsParser requires char** pointing to arguments, but such a pointer
+/// When testing CliArgsParser, resource management turned out to be a problem:
+/// CliArgsParser requires char** pointing to arguments, but such a pointer
 /// can't be easily obtained from any of standard containers. To overcome that,
 /// I wrote Opts, which simply copies elements of initializer_list into
 /// separate unique_ptr<char>, and presents useful accessors argc() and argv()
-/// whose results can be passed right into CLIArgsParser. Problem solved!
+/// whose results can be passed right into CliArgsParser. Problem solved!
 class Opts {
 	/// Individual elements of argv.
 	std::vector<std::unique_ptr<char[]>> m_opts;
@@ -70,7 +70,7 @@ TEST_CASE(
 	"[cliargsparser]")
 {
 	auto check = [](Opts opts) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.should_print_usage);
 		REQUIRE(args.should_return);
@@ -106,7 +106,7 @@ TEST_CASE(
 	const std::string filename("blogroll.opml");
 
 	auto check = [&filename](Opts opts) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.do_import);
 		REQUIRE(args.importfile == filename);
@@ -132,7 +132,7 @@ TEST_CASE(
 	const std::string exportf("export.opml");
 
 	auto check = [](Opts opts) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.should_print_usage);
 		REQUIRE(args.should_return);
@@ -154,7 +154,7 @@ TEST_CASE("Sets `refresh_on_start` if -r/--refresh-on-start is provided",
 	"[cliargsparser]")
 {
 	auto check = [](Opts opts) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.refresh_on_start);
 	};
@@ -175,7 +175,7 @@ TEST_CASE("Requests silent mode if -e/--export-to-opml is provided",
 {
 	const Opts opts{"newsboat", "-e"};
 
-	CLIArgsParser args(opts.argc(), opts.argv());
+	CliArgsParser args(opts.argc(), opts.argv());
 
 	REQUIRE(args.silent);
 }
@@ -184,7 +184,7 @@ TEST_CASE("Sets `do_export` if -e/--export-to-opml is provided",
 	"[cliargsparser]")
 {
 	auto check = [](Opts opts) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.do_export);
 	};
@@ -204,7 +204,7 @@ TEST_CASE("Asks to print usage and exit with success if -h/--help is provided",
 	"[cliargsparser]")
 {
 	auto check = [](Opts opts) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.should_print_usage);
 		REQUIRE(args.should_return);
@@ -230,7 +230,7 @@ TEST_CASE(
 	const std::string filename("urlfile");
 
 	auto check = [&filename](Opts opts) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.set_url_file);
 		REQUIRE(args.url_file == filename);
@@ -257,7 +257,7 @@ TEST_CASE(
 	const std::string filename("cache.db");
 
 	auto check = [&filename](Opts opts) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.set_cache_file);
 		REQUIRE(args.cache_file == filename);
@@ -286,7 +286,7 @@ TEST_CASE(
 	const std::string filename("config file");
 
 	auto check = [&filename](Opts opts) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.set_config_file);
 		REQUIRE(args.config_file == filename);
@@ -307,7 +307,7 @@ TEST_CASE(
 TEST_CASE("Sets `do_vacuum` if -X/--vacuum is provided", "[cliargsparser]")
 {
 	auto check = [](Opts opts) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.do_vacuum);
 	};
@@ -327,7 +327,7 @@ TEST_CASE("Increases `show_version` with each -v/-V/--version provided",
 	"[cliargsparser]")
 {
 	auto check = [](Opts opts, int expected_version) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.show_version == expected_version);
 	};
@@ -371,7 +371,7 @@ TEST_CASE("Increases `show_version` with each -v/-V/--version provided",
 TEST_CASE("Requests silent mode if -x/--execute is provided", "[cliargsparser]")
 {
 	auto check = [](Opts opts) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.silent);
 	};
@@ -390,7 +390,7 @@ TEST_CASE("Requests silent mode if -x/--execute is provided", "[cliargsparser]")
 TEST_CASE("Sets `execute_cmds` if -x/--execute is provided", "[cliargsparser]")
 {
 	auto check = [](Opts opts) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.execute_cmds);
 	};
@@ -410,7 +410,7 @@ TEST_CASE("Inserts commands to cmds_to_execute if -x/--execute is provided",
 	"[cliargsparser]")
 {
 	auto check = [](Opts opts, const std::vector<std::string>& cmds) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.cmds_to_execute == cmds);
 	};
@@ -441,7 +441,7 @@ TEST_CASE("Inserts commands to cmds_to_execute if -x/--execute is provided",
 TEST_CASE("Requests silent mode if -q/--quiet is provided", "[cliargsparser]")
 {
 	auto check = [](Opts opts) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.silent);
 	};
@@ -465,7 +465,7 @@ TEST_CASE(
 	const std::string filename("filename");
 
 	auto check = [&filename](Opts opts) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.do_read_import);
 		REQUIRE(args.readinfofile == filename);
@@ -490,7 +490,7 @@ TEST_CASE(
 	const std::string filename("filename");
 
 	auto check = [&filename](Opts opts) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.do_read_export);
 		REQUIRE(args.readinfofile == filename);
@@ -516,7 +516,7 @@ TEST_CASE(
 	const std::string exportf("export.opml");
 
 	auto check = [](Opts opts) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.should_print_usage);
 		REQUIRE(args.should_return);
@@ -540,7 +540,7 @@ TEST_CASE("Sets `set_log_file` and `log_file` if -d/--log-file is provided",
 	const std::string filename("log file.txt");
 
 	auto check = [&filename](Opts opts) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.set_log_file);
 		REQUIRE(args.log_file == filename);
@@ -562,8 +562,8 @@ TEST_CASE(
 	"-l/--log-level is in range of [1; 6]",
 	"[cliargsparser]")
 {
-	auto check = [](Opts opts, level expected) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+	auto check = [](Opts opts, Level expected) {
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.set_log_level);
 		REQUIRE(args.log_level == expected);
@@ -571,32 +571,32 @@ TEST_CASE(
 
 	SECTION("--log-level=1 means USERERROR")
 	{
-		check({"newsboat", "--log-level=1"}, level::USERERROR);
+		check({"newsboat", "--log-level=1"}, Level::USERERROR);
 	}
 
 	SECTION("--log-level=2 means CRITICAL")
 	{
-		check({"newsboat", "--log-level=2"}, level::CRITICAL);
+		check({"newsboat", "--log-level=2"}, Level::CRITICAL);
 	}
 
 	SECTION("-l3 means ERROR")
 	{
-		check({"newsboat", "-l3"}, level::ERROR);
+		check({"newsboat", "-l3"}, Level::ERROR);
 	}
 
 	SECTION("--log-level=4 means WARN")
 	{
-		check({"newsboat", "--log-level=4"}, level::WARN);
+		check({"newsboat", "--log-level=4"}, Level::WARN);
 	}
 
 	SECTION("-l5 means INFO")
 	{
-		check({"newsboat", "-l5"}, level::INFO);
+		check({"newsboat", "-l5"}, Level::INFO);
 	}
 
 	SECTION("-l6 means DEBUG")
 	{
-		check({"newsboat", "-l6"}, level::DEBUG);
+		check({"newsboat", "-l6"}, Level::DEBUG);
 	}
 }
 
@@ -606,7 +606,7 @@ TEST_CASE(
 	"[cliargsparser]")
 {
 	auto check = [](Opts opts) {
-		CLIArgsParser args(opts.argc(), opts.argv());
+		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE_FALSE(args.display_msg.empty());
 		REQUIRE(args.should_return);

@@ -5,10 +5,10 @@
 
 namespace newsboat {
 
-class exception : public std::exception {
+class Exception : public std::exception {
 public:
-	explicit exception(unsigned int error_code = 0);
-	~exception() throw() override;
+	explicit Exception(unsigned int error_code = 0);
+	~Exception() throw() override;
 	const char* what() const throw() override;
 
 private:

@@ -6,10 +6,10 @@
 
 namespace newsboat {
 
-class history {
+class History {
 public:
-	history();
-	~history();
+	History();
+	~History();
 	void add_line(const std::string& line);
 	std::string prev();
 	std::string next();

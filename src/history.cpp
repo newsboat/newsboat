@@ -4,14 +4,14 @@
 
 namespace newsboat {
 
-history::history()
+History::History()
 	: idx(0)
 {
 }
 
-history::~history() {}
+History::~History() {}
 
-void history::add_line(const std::string& line)
+void History::add_line(const std::string& line)
 {
 	/*
 	 * When a line is added, we need to do so and
@@ -24,7 +24,7 @@ void history::add_line(const std::string& line)
 	idx = 0;
 }
 
-std::string history::prev()
+std::string History::prev()
 {
 	if (idx < lines.size()) {
 		return lines[idx++];
@@ -35,7 +35,7 @@ std::string history::prev()
 	return lines[idx - 1];
 }
 
-std::string history::next()
+std::string History::next()
 {
 	if (idx > 0) {
 		return lines[--idx];
@@ -43,7 +43,7 @@ std::string history::next()
 	return "";
 }
 
-void history::load_from_file(const std::string& file)
+void History::load_from_file(const std::string& file)
 {
 	std::fstream f;
 	f.open(file.c_str(), std::fstream::in);
@@ -58,7 +58,7 @@ void history::load_from_file(const std::string& file)
 	}
 }
 
-void history::save_to_file(const std::string& file, unsigned int limit)
+void History::save_to_file(const std::string& file, unsigned int limit)
 {
 	if (limit == 0) {
 		return;

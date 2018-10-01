@@ -7,9 +7,9 @@
 
 namespace newsboat {
 
-class tagsouppullparser {
+class TagSoupPullParser {
 public:
-	enum class event {
+	enum class Event {
 		START_DOCUMENT,
 		END_DOCUMENT,
 		START_TAG,
@@ -17,25 +17,25 @@ public:
 		TEXT
 	};
 
-	tagsouppullparser();
-	virtual ~tagsouppullparser();
+	TagSoupPullParser();
+	virtual ~TagSoupPullParser();
 	void set_input(std::istream& is);
 	std::string get_attribute_value(const std::string& name) const;
-	event get_event_type() const;
+	Event get_event_type() const;
 	std::string get_text() const;
-	event next();
+	Event next();
 
 private:
 	typedef std::pair<std::string, std::string> attribute;
 	std::vector<attribute> attributes;
 	std::string text;
 	std::istream* inputstream;
-	event current_event;
+	Event current_event;
 
 	void skip_whitespace();
 	void add_attribute(std::string s);
 	std::string read_tag();
-	event determine_tag_type();
+	Event determine_tag_type();
 	std::string decode_attribute(const std::string& s);
 	std::string decode_entities(const std::string& s);
 	std::string decode_entity(std::string s);

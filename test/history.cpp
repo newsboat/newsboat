@@ -4,18 +4,18 @@
 
 using namespace newsboat;
 
-TEST_CASE("History can be iterated on in any direction", "[history]")
+TEST_CASE("History can be iterated on in any direction", "[History]")
 {
-	history h;
+	History h;
 
-	SECTION("Empty history returns nothing")
+	SECTION("Empty History returns nothing")
 	{
 		REQUIRE(h.prev() == "");
 		REQUIRE(h.prev() == "");
 		REQUIRE(h.next() == "");
 		REQUIRE(h.next() == "");
 
-		SECTION("One line in history")
+		SECTION("One line in History")
 		{
 			h.add_line("testline");
 			REQUIRE(h.prev() == "testline");
@@ -23,7 +23,7 @@ TEST_CASE("History can be iterated on in any direction", "[history]")
 			REQUIRE(h.next() == "testline");
 			REQUIRE(h.next() == "");
 
-			SECTION("Two lines in history")
+			SECTION("Two lines in History")
 			{
 				h.add_line("foobar");
 				REQUIRE(h.prev() == "foobar");

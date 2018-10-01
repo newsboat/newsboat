@@ -6,18 +6,18 @@
 
 namespace newsboat {
 
-class controller;
-class curl_handle;
+class Controller;
+class CurlHandle;
 
-/// \brief Updates feeds (fetches, parses, puts results into controller).
+/// \brief Updates feeds (fetches, parses, puts results into Controller).
 class Reloader {
-	controller* ctrl;
+	Controller* ctrl;
 	std::mutex reload_mutex;
 
 	std::string prepare_message(unsigned int pos, unsigned int max);
 
 public:
-	Reloader(controller* c);
+	Reloader(Controller* c);
 
 	/// \brief Creates detached thread that runs periodic updates.
 	void spawn_reloadthread();
@@ -49,7 +49,7 @@ public:
 	void reload(unsigned int pos,
 		unsigned int max = 0,
 		bool unattended = false,
-		curl_handle* easyhandle = nullptr);
+		CurlHandle* easyhandle = nullptr);
 
 	/// \brief Reloads all feeds, spawning threads as necessary.
 	///
