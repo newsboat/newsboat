@@ -9,7 +9,7 @@
 
 namespace newsboat {
 
-const std::string remote_api::read_password(const std::string& file)
+const std::string RemoteApi::read_password(const std::string& file)
 {
 	glob_t exp;
 	std::ifstream ifs;
@@ -27,9 +27,9 @@ const std::string remote_api::read_password(const std::string& file)
 	return pass;
 }
 
-const std::string remote_api::eval_password(const std::string& cmd)
+const std::string RemoteApi::eval_password(const std::string& cmd)
 {
-	std::string pass = utils::get_command_output(cmd);
+	std::string pass = Utils::get_command_output(cmd);
 	std::string::size_type pos = pass.find_first_of("\n\r");
 
 	if (pos != std::string::npos) {
@@ -39,7 +39,7 @@ const std::string remote_api::eval_password(const std::string& cmd)
 	return pass;
 }
 
-credentials remote_api::get_credentials(const std::string& scope,
+credentials RemoteApi::get_credentials(const std::string& scope,
 	const std::string& name)
 {
 	std::string user = cfg->get_configvalue(scope + "-login");

@@ -12,23 +12,23 @@
 namespace newsboat {
 
 /*
- * The urlview_formaction is probably the simplest dialog of all. It
+ * The UrlViewFormaction is probably the simplest dialog of all. It
  * displays a list of URLs, and makes it possible to open the URLs
  * in a browser or to bookmark them.
  */
 
-urlview_formaction::urlview_formaction(view* vv,
-	std::shared_ptr<rss_feed>& feed,
+UrlViewFormaction::UrlViewFormaction(View* vv,
+	std::shared_ptr<RssFeed>& feed,
 	std::string formstr)
-	: formaction(vv, formstr)
+	: Formaction(vv, formstr)
 	, quit(false)
 	, feed(feed)
 {
 }
 
-urlview_formaction::~urlview_formaction() {}
+UrlViewFormaction::~UrlViewFormaction() {}
 
-void urlview_formaction::process_operation(operation op,
+void UrlViewFormaction::process_operation(operation op,
 	bool /* automatic */,
 	std::vector<std::string>* /* args */)
 {
@@ -38,7 +38,7 @@ void urlview_formaction::process_operation(operation op,
 	case OP_OPEN: {
 		std::string posstr = f->get("feedpos");
 		if (posstr.length() > 0) {
-			unsigned int idx = utils::to_u(posstr, 0);
+			unsigned int idx = Utils::to_u(posstr, 0);
 			v->set_status(_("Starting browser..."));
 			v->open_in_browser(links[idx].first);
 			v->set_status("");
@@ -49,7 +49,7 @@ void urlview_formaction::process_operation(operation op,
 	case OP_BOOKMARK: {
 		std::string posstr = f->get("feedpos");
 		if (posstr.length() > 0) {
-			unsigned int idx = utils::to_u(posstr, 0);
+			unsigned int idx = Utils::to_u(posstr, 0);
 
 			this->start_bookmark_qna(
 				"", links[idx].first, "", feed->title());
@@ -86,7 +86,7 @@ void urlview_formaction::process_operation(operation op,
 		break;
 	}
 	if (hardquit) {
-		while (v->formaction_stack_size() > 0) {
+		while (v->Formaction_stack_size() > 0) {
 			v->pop_current_formaction();
 		}
 	} else if (quit) {
@@ -94,14 +94,14 @@ void urlview_formaction::process_operation(operation op,
 	}
 }
 
-void urlview_formaction::prepare()
+void UrlViewFormaction::prepare()
 {
 	if (do_redraw) {
-		listformatter listfmt;
+		ListFormatter listfmt;
 		unsigned int i = 0;
 		for (const auto& link : links) {
 			listfmt.add_line(
-				strprintf::fmt("%2u  %s", i + 1, link.first),
+				StrPrintf::fmt("%2u  %s", i + 1, link.first),
 				i);
 			i++;
 		}
@@ -109,27 +109,27 @@ void urlview_formaction::prepare()
 	}
 }
 
-void urlview_formaction::init()
+void UrlViewFormaction::init()
 {
 	v->set_status("");
 
-	std::string viewwidth = f->get("urls:w");
-	unsigned int width = utils::to_u(viewwidth, 80);
+	std::string Viewwidth = f->get("urls:w");
+	unsigned int width = Utils::to_u(Viewwidth, 80);
 
-	fmtstr_formatter fmt;
+	FmtStrFormatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', PROGRAM_VERSION);
 
 	f->set("head",
 		fmt.do_format(
-			v->get_cfg()->get_configvalue("urlview-title-format"),
+			v->get_cfg()->get_configvalue("urlView-title-Format"),
 			width));
 	do_redraw = true;
 	quit = false;
 	set_keymap_hints();
 }
 
-keymap_hint_entry* urlview_formaction::get_keymap_hint()
+keymap_hint_entry* UrlViewFormaction::get_keymap_hint()
 {
 	static keymap_hint_entry hints[] = {{OP_QUIT, _("Quit")},
 		{OP_OPEN, _("Open in Browser")},
@@ -138,7 +138,7 @@ keymap_hint_entry* urlview_formaction::get_keymap_hint()
 	return hints;
 }
 
-void urlview_formaction::handle_cmdline(const std::string& cmd)
+void UrlViewFormaction::handle_cmdline(const std::string& cmd)
 {
 	unsigned int idx = 0;
 	if (1 == sscanf(cmd.c_str(), "%u", &idx)) {
@@ -148,11 +148,11 @@ void urlview_formaction::handle_cmdline(const std::string& cmd)
 			f->set("feedpos", std::to_string(idx - 1));
 		}
 	} else {
-		formaction::handle_cmdline(cmd);
+		Formaction::handle_cmdline(cmd);
 	}
 }
 
-std::string urlview_formaction::title()
+std::string UrlViewFormaction::title()
 {
 	return _("URLs");
 }

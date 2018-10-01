@@ -9,24 +9,24 @@ using namespace newsboat;
 
 namespace podboat {
 
-class pb_controller;
-class download;
+class PbController;
+class Download;
 
 struct keymap_hint_entry;
 
-class pb_view {
+class PbView {
 public:
-	explicit pb_view(pb_controller* c = 0);
-	~pb_view();
-	void run(bool auto_download);
-	void set_keymap(newsboat::keymap* k)
+	explicit PbView(PbController* c = 0);
+	~PbView();
+	void run(bool auto_Download);
+	void set_Keymap(newsboat::Keymap* k)
 	{
 		keys = k;
 		set_bindings();
 	}
 
 private:
-	friend class newsboat::colormanager;
+	friend class newsboat::ColorManager;
 
 	struct keymap_hint_entry {
 		operation op;
@@ -39,14 +39,14 @@ private:
 	void set_bindings();
 
 	std::string prepare_keymaphint(keymap_hint_entry* hints);
-	std::string format_line(const std::string& podlist_format,
-			const download& dl,
+	std::string Format_line(const std::string& podlist_format,
+			const Download& dl,
 			unsigned int pos,
 			unsigned int width);
-	pb_controller* ctrl;
-	newsboat::stfl::form dllist_form;
-	newsboat::stfl::form help_form;
-	newsboat::keymap* keys;
+	PbController* ctrl;
+	newsboat::Stfl::Form dllist_form;
+	newsboat::Stfl::Form help_form;
+	newsboat::Keymap* keys;
 };
 
 } // namespace podboat

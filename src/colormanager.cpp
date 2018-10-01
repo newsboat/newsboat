@@ -18,28 +18,28 @@ using namespace podboat;
 
 namespace newsboat {
 
-colormanager::colormanager()
+ColorManager::ColorManager()
 	: colors_loaded_(false)
 {
 }
 
-colormanager::~colormanager() {}
+ColorManager::~ColorManager() {}
 
-void colormanager::register_commands(configparser& cfgparser)
+void ColorManager::register_commands(ConfigParser& cfgparser)
 {
 	cfgparser.register_handler("color", this);
 }
 
-void colormanager::handle_action(const std::string& action,
+void ColorManager::handle_action(const std::string& action,
 	const std::vector<std::string>& params)
 {
-	LOG(level::DEBUG,
-		"colormanager::handle_action(%s,...) was called",
+	LOG(Level::DEBUG,
+		"ColorManager::handle_action(%s,...) was called",
 		action);
 	if (action == "color") {
 		if (params.size() < 3) {
-			throw confighandlerexception(
-				action_handler_status::TOO_FEW_PARAMS);
+			throw ConfigHandlerException(
+				ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
 
 		/*
@@ -50,17 +50,17 @@ void colormanager::handle_action(const std::string& action,
 		std::string fgcolor = params[1];
 		std::string bgcolor = params[2];
 
-		if (!utils::is_valid_color(fgcolor))
-			throw confighandlerexception(strprintf::fmt(
+		if (!Utils::is_valid_color(fgcolor))
+			throw ConfigHandlerException(StrPrintf::fmt(
 				_("`%s' is not a valid color"), fgcolor));
-		if (!utils::is_valid_color(bgcolor))
-			throw confighandlerexception(strprintf::fmt(
+		if (!Utils::is_valid_color(bgcolor))
+			throw ConfigHandlerException(StrPrintf::fmt(
 				_("`%s' is not a valid color"), bgcolor));
 
 		std::vector<std::string> attribs;
 		for (unsigned int i = 3; i < params.size(); ++i) {
-			if (!utils::is_valid_attribute(params[i]))
-				throw confighandlerexception(strprintf::fmt(
+			if (!Utils::is_valid_attribute(params[i]))
+				throw ConfigHandlerException(StrPrintf::fmt(
 					_("`%s' is not a valid attribute"),
 					params[i]));
 			attribs.push_back(params[i]);
@@ -77,19 +77,19 @@ void colormanager::handle_action(const std::string& action,
 			attributes[element] = attribs;
 			colors_loaded_ = true;
 		} else
-			throw confighandlerexception(strprintf::fmt(
+			throw ConfigHandlerException(StrPrintf::fmt(
 				_("`%s' is not a valid configuration element"),
 				element));
 
 	} else
-		throw confighandlerexception(
-			action_handler_status::INVALID_COMMAND);
+		throw ConfigHandlerException(
+			ActionHandlerStatus::INVALID_COMMAND);
 }
 
-void colormanager::dump_config(std::vector<std::string>& config_output)
+void ColorManager::dump_config(std::vector<std::string>& config_output)
 {
 	for (const auto& color : fg_colors) {
-		std::string configline = strprintf::fmt("color %s %s %s",
+		std::string configline = StrPrintf::fmt("color %s %s %s",
 			color.first,
 			color.second,
 			bg_colors[color.first]);
@@ -105,7 +105,7 @@ void colormanager::dump_config(std::vector<std::string>& config_output)
  * this is podboat-specific color management
  * TODO: refactor this
  */
-void colormanager::set_pb_colors(podboat::pb_view* v)
+void ColorManager::set_pb_colors(podboat::PbView* v)
 {
 	auto fgcit = fg_colors.begin();
 	auto bgcit = bg_colors.begin();
@@ -130,8 +130,8 @@ void colormanager::set_pb_colors(podboat::pb_view* v)
 			colorattr.append(attr);
 		}
 
-		LOG(level::DEBUG,
-			"colormanager::set_pb_colors: %s %s\n",
+		LOG(Level::DEBUG,
+			"ColorManager::set_pb_colors: %s %s\n",
 			fgcit->first,
 			colorattr);
 

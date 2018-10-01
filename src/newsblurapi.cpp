@@ -14,24 +14,24 @@
 
 namespace newsboat {
 
-newsblur_api::newsblur_api(configcontainer* c)
-	: remote_api(c)
+NewsBlurApi::NewsBlurApi(ConfigContainer* c)
+	: RemoteApi(c)
 {
-	api_location = cfg->get_configvalue("newsblur-url");
-	min_pages = (cfg->get_configvalue_as_int("newsblur-min-items") +
+	api_location = cfg->get_configvalue("NewsBlur-url");
+	min_pages = (cfg->get_configvalue_as_int("NewsBlur-min-items") +
 			    (NEWSBLUR_ITEMS_PER_PAGE + 1)) /
 		NEWSBLUR_ITEMS_PER_PAGE;
 
-	if (cfg->get_configvalue("cookie-cache").empty()) {
-		LOG(level::CRITICAL,
-			"newsblur_api::newsblur_api: No cookie-cache has been "
+	if (cfg->get_configvalue("cookie-Cache").empty()) {
+		LOG(Level::CRITICAL,
+			"NewsBlurApi::NewsBlurApi: No cookie-Cache has been "
 			"configured the login won't work.");
 	}
 }
 
-newsblur_api::~newsblur_api() {}
+NewsBlurApi::~NewsBlurApi() {}
 
-bool newsblur_api::authenticate()
+bool NewsBlurApi::authenticate()
 {
 	json_object* response{};
 	json_object* status{};
@@ -41,34 +41,34 @@ bool newsblur_api::authenticate()
 		return false;
 	}
 
-	response = newsblur_api::query_api("/api/login", &auth);
+	response = NewsBlurApi::query_api("/api/login", &auth);
 	json_object_object_get_ex(response, "authenticated", &status);
 	bool result = json_object_get_boolean(status);
 
-	LOG(level::INFO,
-		"newsblur_api::authenticate: authentication resulted in %u, "
-		"cached "
+	LOG(Level::INFO,
+		"NewsBlurApi::authenticate: authentication resulted in %u, "
+		"Cached "
 		"in %s",
 		result,
-		cfg->get_configvalue("cookie-cache"));
+		cfg->get_configvalue("cookie-Cache"));
 
 	return result;
 }
 
-std::string newsblur_api::retrieve_auth()
+std::string NewsBlurApi::retrieve_auth()
 {
-	credentials cred = get_credentials("newsblur", "Newsblur");
+	credentials cred = get_credentials("NewsBlur", "Newsblur");
 	if (cred.user.empty() || cred.pass.empty()) {
-		LOG(level::CRITICAL,
-			"newsblur_api::retrieve_auth: No user and/or password "
+		LOG(Level::CRITICAL,
+			"NewsBlurApi::retrieve_auth: No user and/or password "
 			"set");
 		return "";
 	}
 
-	return strprintf::fmt("username=%s&password=%s", cred.user, cred.pass);
+	return StrPrintf::fmt("username=%s&password=%s", cred.user, cred.pass);
 }
 
-std::vector<tagged_feedurl> newsblur_api::get_subscribed_urls()
+std::vector<tagged_feedurl> NewsBlurApi::get_subscribed_urls()
 {
 	std::vector<tagged_feedurl> result;
 
@@ -106,8 +106,8 @@ std::vector<tagged_feedurl> newsblur_api::get_subscribed_urls()
 				feeds_to_tags[std_feed_id];
 			result.push_back(tagged_feedurl(std_feed_id, tags));
 		} else {
-			LOG(level::ERROR,
-				"newsblur_api::get_subscribed_urls: feed fetch "
+			LOG(Level::ERROR,
+				"NewsBlurApi::get_subscribed_urls: feed fetch "
 				"for "
 				"%s failed, please check in NewsBlur",
 				current_feed.title);
@@ -119,7 +119,7 @@ std::vector<tagged_feedurl> newsblur_api::get_subscribed_urls()
 	return result;
 }
 
-std::map<std::string, std::vector<std::string>> newsblur_api::mk_feeds_to_tags(
+std::map<std::string, std::vector<std::string>> NewsBlurApi::mk_feeds_to_tags(
 	json_object* folders)
 {
 	std::map<std::string, std::vector<std::string>> result;
@@ -157,7 +157,7 @@ std::map<std::string, std::vector<std::string>> newsblur_api::mk_feeds_to_tags(
 	return result;
 }
 
-void newsblur_api::add_custom_headers(curl_slist** /* custom_headers */)
+void NewsBlurApi::add_custom_headers(curl_slist** /* custom_headers */)
 {
 	// nothing required
 }
@@ -172,15 +172,15 @@ bool request_successfull(json_object* payload)
 	}
 }
 
-bool newsblur_api::mark_all_read(const std::string& feed_url)
+bool NewsBlurApi::mark_all_read(const std::string& feed_url)
 {
-	std::string post_data = strprintf::fmt("feed_id=%s", feed_url);
+	std::string post_data = StrPrintf::fmt("feed_id=%s", feed_url);
 	json_object* query_result =
 		query_api("/reader/mark_feed_as_read", &post_data);
 	return request_successfull(query_result);
 }
 
-bool newsblur_api::mark_article_read(const std::string& guid, bool read)
+bool NewsBlurApi::mark_article_read(const std::string& guid, bool read)
 {
 	// handle dummy articles
 	if (guid.empty()) {
@@ -204,7 +204,7 @@ bool newsblur_api::mark_article_read(const std::string& guid, bool read)
 	return request_successfull(query_result);
 }
 
-bool newsblur_api::update_article_flags(const std::string& /* oldflags */,
+bool NewsBlurApi::update_article_flags(const std::string& /* oldflags */,
 	const std::string& /* newflags */,
 	const std::string& /* guid */)
 {
@@ -220,12 +220,12 @@ time_t parse_date(const char* raw)
 	return mktime(&tm);
 }
 
-rsspp::feed newsblur_api::fetch_feed(const std::string& id)
+rsspp::feed NewsBlurApi::fetch_feed(const std::string& id)
 {
 	rsspp::feed f = known_feeds[id];
 
-	LOG(level::INFO,
-		"newsblur_api::fetch_feed: about to fetch %u pages of feed %s",
+	LOG(Level::INFO,
+		"NewsBlurApi::fetch_feed: about to fetch %u pages of feed %s",
 		min_pages,
 		id);
 
@@ -241,23 +241,23 @@ rsspp::feed newsblur_api::fetch_feed(const std::string& id)
 		json_object* stories{};
 		if (json_object_object_get_ex(
 			    query_result, "stories", &stories) == FALSE) {
-			LOG(level::ERROR,
-				"newsblur_api::fetch_feed: request returned no "
+			LOG(Level::ERROR,
+				"NewsBlurApi::fetch_feed: request returned no "
 				"stories");
 			return f;
 		}
 
 		if (json_object_get_type(stories) != json_type_array) {
-			LOG(level::ERROR,
-				"newsblur_api::fetch_feed: content is not an "
+			LOG(Level::ERROR,
+				"NewsBlurApi::fetch_feed: content is not an "
 				"array");
 			return f;
 		}
 
 		struct array_list* items = json_object_get_array(stories);
 		int items_size = array_list_length(items);
-		LOG(level::DEBUG,
-			"newsblur_api::fetch_feed: %d items",
+		LOG(Level::DEBUG,
+			"NewsBlurApi::fetch_feed: %d items",
 			items_size);
 
 		for (int i = 0; i < items_size; i++) {
@@ -303,9 +303,9 @@ rsspp::feed newsblur_api::fetch_feed(const std::string& id)
 				if (!static_cast<bool>(
 					    json_object_get_int(node))) {
 					item.labels.push_back(
-						"newsblur:unread");
+						"NewsBlur:unread");
 				} else {
-					item.labels.push_back("newsblur:read");
+					item.labels.push_back("NewsBlur:read");
 				}
 			}
 
@@ -336,16 +336,16 @@ rsspp::feed newsblur_api::fetch_feed(const std::string& id)
 	return f;
 }
 
-json_object* newsblur_api::query_api(const std::string& endpoint,
+json_object* NewsBlurApi::query_api(const std::string& endpoint,
 	const std::string* postdata)
 {
 	std::string url = api_location + endpoint;
-	std::string data = utils::retrieve_url(url, cfg, "", postdata);
+	std::string data = Utils::retrieve_url(url, cfg, "", postdata);
 
 	json_object* result = json_tokener_parse(data.c_str());
 	if (!result)
-		LOG(level::WARN,
-			"newsblur_api::query_api: request to %s failed",
+		LOG(Level::WARN,
+			"NewsBlurApi::query_api: request to %s failed",
 			url);
 	return result;
 }

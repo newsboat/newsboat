@@ -6,17 +6,17 @@
 
 namespace newsboat {
 
-file_urlreader::file_urlreader(const std::string& file)
+FileUrlReader::FileUrlReader(const std::string& file)
 	: filename(file)
 {
 }
 
-std::string file_urlreader::get_source()
+std::string FileUrlReader::get_source()
 {
 	return filename;
 }
 
-void file_urlreader::reload()
+void FileUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
@@ -30,7 +30,7 @@ void file_urlreader::reload()
 			std::getline(f, line);
 			if (line.length() > 0 && line[0] != '#') {
 				std::vector<std::string> tokens =
-					utils::tokenize_quoted(line);
+					Utils::tokenize_quoted(line);
 				if (!tokens.empty()) {
 					std::string url = tokens[0];
 					urls.push_back(url);
@@ -48,13 +48,13 @@ void file_urlreader::reload()
 	}
 }
 
-void file_urlreader::load_config(const std::string& file)
+void FileUrlReader::load_config(const std::string& file)
 {
 	filename = file;
 	reload();
 }
 
-void file_urlreader::write_config()
+void FileUrlReader::write_config()
 {
 	std::fstream f;
 	f.open(filename.c_str(), std::fstream::out);

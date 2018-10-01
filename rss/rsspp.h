@@ -106,7 +106,7 @@ public:
 	feed parse_url(const std::string& url,
 		time_t lastmodified = 0,
 		const std::string& etag = "",
-		newsboat::remote_api* api = 0,
+		newsboat::RemoteApi* api = 0,
 		const std::string& cookie_cache = "",
 		CURL* ehandle = 0);
 	feed parse_buffer(const std::string& buffer,

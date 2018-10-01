@@ -8,12 +8,12 @@
 namespace podboat {
 
 /*
- * the download class represents a single download entry in podboat.
+ * the Download class represents a single Download entry in podboat.
  * It manages the filename, the URL, the current state, the progress, etc.
  */
 
-download::download(pb_controller* c)
-	: download_status(dlstatus::QUEUED)
+Download::Download(PbController* c)
+	: Download_status(DlStatus::QUEUED)
 	, cursize(0.0)
 	, totalsize(0.0)
 	, curkbps(0.0)
@@ -22,24 +22,24 @@ download::download(pb_controller* c)
 {
 }
 
-download::~download() {}
+Download::~Download() {}
 
-const std::string download::filename() const
+const std::string Download::filename() const
 {
 	return fn;
 }
 
-const std::string download::url() const
+const std::string Download::url() const
 {
 	return url_;
 }
 
-void download::set_filename(const std::string& str)
+void Download::set_filename(const std::string& str)
 {
 	fn = str;
 }
 
-double download::percents_finished() const
+double Download::percents_finished() const
 {
 	if (totalsize < 1) {
 		return 0.0;
@@ -48,64 +48,64 @@ double download::percents_finished() const
 	}
 }
 
-const std::string download::status_text() const
+const std::string Download::status_text() const
 {
-	switch (download_status) {
-	case dlstatus::QUEUED:
+	switch (Download_status) {
+	case DlStatus::QUEUED:
 		return _s("queued");
-	case dlstatus::DOWNLOADING:
-		return _s("downloading");
-	case dlstatus::CANCELLED:
+	case DlStatus::DOWNLOADING:
+		return _s("Downloading");
+	case DlStatus::CANCELLED:
 		return _s("cancelled");
-	case dlstatus::DELETED:
+	case DlStatus::DELETED:
 		return _s("deleted");
-	case dlstatus::FINISHED:
+	case DlStatus::FINISHED:
 		return _s("finished");
-	case dlstatus::FAILED:
+	case DlStatus::FAILED:
 		return _s("failed");
-	case dlstatus::ALREADY_DOWNLOADED:
+	case DlStatus::ALREADY_DOWNLOADED:
 		return _s("incomplete");
-	case dlstatus::READY:
+	case DlStatus::READY:
 		return _s("ready");
-	case dlstatus::PLAYED:
+	case DlStatus::PLAYED:
 		return _s("played");
 	default:
 		return _s("unknown (bug).");
 	}
 }
 
-void download::set_url(const std::string& u)
+void Download::set_url(const std::string& u)
 {
 	url_ = u;
 }
 
-void download::set_progress(double downloaded, double total)
+void Download::set_progress(double Downloaded, double total)
 {
-	if (downloaded > cursize)
+	if (Downloaded > cursize)
 		ctrl->set_view_update_necessary(true);
-	cursize = downloaded;
+	cursize = Downloaded;
 	totalsize = total;
 }
 
-void download::set_status(dlstatus dls)
+void Download::set_status(DlStatus dls)
 {
-	if (download_status != dls) {
+	if (Download_status != dls) {
 		ctrl->set_view_update_necessary(true);
 	}
-	download_status = dls;
+	Download_status = dls;
 }
 
-void download::set_kbps(double k)
+void Download::set_kbps(double k)
 {
 	curkbps = k;
 }
 
-double download::kbps() const
+double Download::kbps() const
 {
 	return curkbps;
 }
 
-void download::set_offset(unsigned long offset)
+void Download::set_offset(unsigned long offset)
 {
 	offs = offset;
 }

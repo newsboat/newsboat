@@ -6,12 +6,12 @@
 
 namespace newsboat {
 
-class urlview_formaction : public formaction {
+class UrlViewFormaction : public Formaction {
 public:
-	urlview_formaction(view*,
-		std::shared_ptr<rss_feed>& feed,
+	UrlViewFormaction(View*,
+		std::shared_ptr<RssFeed>& feed,
 		std::string formstr);
-	~urlview_formaction() override;
+	~UrlViewFormaction() override;
 	void prepare() override;
 	void init() override;
 	keymap_hint_entry* get_keymap_hint() override;
@@ -21,7 +21,7 @@ public:
 	}
 	std::string id() const override
 	{
-		return "urlview";
+		return "urlView";
 	}
 	std::string title() override;
 	void handle_cmdline(const std::string& cmd) override;
@@ -32,7 +32,7 @@ private:
 		std::vector<std::string>* args = nullptr) override;
 	std::vector<linkpair> links;
 	bool quit;
-	std::shared_ptr<rss_feed> feed;
+	std::shared_ptr<RssFeed> feed;
 };
 
 } // namespace newsboat

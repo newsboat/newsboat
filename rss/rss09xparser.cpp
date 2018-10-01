@@ -44,7 +44,7 @@ void rss_09x_parser::parse_feed(feed& f, xmlNode* rootNode)
 			f.title = get_content(node);
 			f.title_type = "text";
 		} else if (node_is(node, "link", ns)) {
-			f.link = utils::absolute_url(
+			f.link = Utils::absolute_url(
 				globalbase, get_content(node));
 		} else if (node_is(node, "description", ns)) {
 			f.description = get_content(node);
@@ -74,7 +74,7 @@ item rss_09x_parser::parse_item(xmlNode* itemNode)
 			it.title = get_content(node);
 			it.title_type = "text";
 		} else if (node_is(node, "link", ns)) {
-			it.link = utils::absolute_url(base, get_content(node));
+			it.link = Utils::absolute_url(base, get_content(node));
 		} else if (node_is(node, "description", ns)) {
 			it.base = get_prop(node, "base", XML_URI);
 			if (it.base.empty())
@@ -90,7 +90,7 @@ item rss_09x_parser::parse_item(xmlNode* itemNode)
 				it.guid_isPermaLink = false;
 			} else {
 				it.guid_isPermaLink = true;
-				it.guid = utils::absolute_url(base, it.guid);
+				it.guid = Utils::absolute_url(base, it.guid);
 			}
 		} else if (node_is(node, "pubDate", ns)) {
 			it.pubDate = get_content(node);
@@ -100,7 +100,7 @@ item rss_09x_parser::parse_item(xmlNode* itemNode)
 			std::string authorfield = get_content(node);
 			if (authorfield[authorfield.length() - 1] == ')') {
 				it.author_email =
-					utils::tokenize(authorfield, " ")[0];
+					Utils::tokenize(authorfield, " ")[0];
 				unsigned int start, end;
 				end = authorfield.length() - 2;
 				for (start = end;
@@ -117,13 +117,13 @@ item rss_09x_parser::parse_item(xmlNode* itemNode)
 			author = get_content(node);
 		} else if (node_is(node, "enclosure", ns)) {
 			const std::string type = get_prop(node, "type");
-			if (utils::is_valid_podcast_type(type)) {
+			if (Utils::is_valid_podcast_type(type)) {
 				it.enclosure_url = get_prop(node, "url");
 				it.enclosure_type = std::move(type);
 			}
 		} else if (node_is(node, "content", MEDIA_RSS_URI)) {
 			const std::string type = get_prop(node, "type");
-			if (utils::is_valid_podcast_type(type)) {
+			if (Utils::is_valid_podcast_type(type)) {
 				it.enclosure_url = get_prop(node, "url");
 				it.enclosure_type = std::move(type);
 			}
@@ -133,7 +133,7 @@ item rss_09x_parser::parse_item(xmlNode* itemNode)
 				if (node_is(mnode, "content", MEDIA_RSS_URI)) {
 					const std::string type =
 						get_prop(mnode, "type");
-					if (utils::is_valid_podcast_type(
+					if (Utils::is_valid_podcast_type(
 						    type)) {
 						it.enclosure_url =
 							get_prop(mnode, "url");

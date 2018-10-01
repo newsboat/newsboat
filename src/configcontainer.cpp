@@ -16,15 +16,15 @@
 
 namespace newsboat {
 
-const std::string configcontainer::PARTIAL_FILE_SUFFIX = ".part";
+const std::string ConfigContainer::PARTIAL_FILE_SUFFIX = ".part";
 
-configcontainer::configcontainer()
+ConfigContainer::ConfigContainer()
 	// create the config options and set their resp. default value and type
 	: config_data{{"always-display-description",
 			      configdata("false", configdata_t::BOOL)},
 		  {"article-sort-order",
 			  configdata("date-asc", configdata_t::STR)},
-		  {"articlelist-format",
+		  {"articlelist-Format",
 			  configdata("%4i %f %D %6L  %?T?|%-17T|  &?%t",
 				  configdata_t::STR)},
 		  {"auto-reload", configdata("no", configdata_t::BOOL)},
@@ -34,27 +34,27 @@ configcontainer::configcontainer()
 		  {"bookmark-interactive",
 			  configdata("false", configdata_t::BOOL)},
 		  {"browser",
-			  configdata(utils::get_default_browser(),
+			  configdata(Utils::get_default_browser(),
 				  configdata_t::PATH)},
-		  {"cache-file", configdata("", configdata_t::PATH)},
+		  {"Cache-file", configdata("", configdata_t::PATH)},
 		  {"cleanup-on-quit", configdata("yes", configdata_t::BOOL)},
 		  {"confirm-exit", configdata("no", configdata_t::BOOL)},
-		  {"cookie-cache", configdata("", configdata_t::PATH)},
-		  {"datetime-format", configdata("%b %d", configdata_t::STR)},
+		  {"cookie-Cache", configdata("", configdata_t::PATH)},
+		  {"datetime-Format", configdata("%b %d", configdata_t::STR)},
 		  {"delete-read-articles-on-quit",
 			  configdata("false", configdata_t::BOOL)},
 		  {"display-article-progress",
 			  configdata("yes", configdata_t::BOOL)},
-		  {"download-filename-format",
+		  {"Download-filename-Format",
 			  configdata("%?u?%u&%Y-%b-%d-%H%M%S.unknown?",
 				  configdata_t::STR)},
-		  {"download-full-page",
+		  {"Download-full-page",
 			  configdata("false", configdata_t::BOOL)},
-		  {"download-path", configdata("~/", configdata_t::PATH)},
-		  {"download-retries", configdata("1", configdata_t::INT)},
-		  {"download-timeout", configdata("30", configdata_t::INT)},
+		  {"Download-path", configdata("~/", configdata_t::PATH)},
+		  {"Download-retries", configdata("1", configdata_t::INT)},
+		  {"Download-timeout", configdata("30", configdata_t::INT)},
 		  {"error-log", configdata("", configdata_t::PATH)},
-		  {"external-url-viewer", configdata("", configdata_t::PATH)},
+		  {"external-url-Viewer", configdata("", configdata_t::PATH)},
 		  {"feed-sort-order",
 			  configdata("none-desc", configdata_t::STR)},
 		  {"feedhq-flag-share", configdata("", configdata_t::STR)},
@@ -68,11 +68,11 @@ configcontainer::configcontainer()
 			  configdata("true", configdata_t::BOOL)},
 		  {"feedhq-url",
 			  configdata("https://feedhq.org/", configdata_t::STR)},
-		  {"feedlist-format",
+		  {"feedlist-Format",
 			  configdata("%4i %n %11u %t", configdata_t::STR)},
 		  {"goto-first-unread", configdata("true", configdata_t::BOOL)},
 		  {"goto-next-feed", configdata("yes", configdata_t::BOOL)},
-		  {"history-limit", configdata("100", configdata_t::INT)},
+		  {"History-limit", configdata("100", configdata_t::INT)},
 		  {"html-renderer", configdata("internal", configdata_t::PATH)},
 		  {"http-auth-method",
 			  configdata("any",
@@ -84,9 +84,9 @@ configcontainer::configcontainer()
 					  "ntlm",
 					  "anysafe"}))},
 		  {"ignore-mode",
-			  configdata("download",
+			  configdata("Download",
 				  std::unordered_set<std::string>(
-					  {"download", "display"}))},
+					  {"Download", "display"}))},
 		  {"inoreader-login", configdata("", configdata_t::STR)},
 		  {"inoreader-password", configdata("", configdata_t::STR)},
 		  {"inoreader-passwordfile",
@@ -103,20 +103,20 @@ configcontainer::configcontainer()
 		  {"max-browser-tabs", configdata("10", configdata_t::INT)},
 		  {"markfeedread-jumps-to-next-unread",
 			  configdata("false", configdata_t::BOOL)},
-		  {"max-download-speed", configdata("0", configdata_t::INT)},
+		  {"max-Download-speed", configdata("0", configdata_t::INT)},
 		  {"max-downloads", configdata("1", configdata_t::INT)},
 		  {"max-items", configdata("0", configdata_t::INT)},
-		  {"newsblur-login", configdata("", configdata_t::STR)},
-		  {"newsblur-min-items", configdata("20", configdata_t::INT)},
-		  {"newsblur-password", configdata("", configdata_t::STR)},
-		  {"newsblur-passwordfile", configdata("", configdata_t::PATH)},
-		  {"newsblur-passwordeval", configdata("", configdata_t::STR)},
-		  {"newsblur-url",
-			  configdata("https://newsblur.com",
+		  {"NewsBlur-login", configdata("", configdata_t::STR)},
+		  {"NewsBlur-min-items", configdata("20", configdata_t::INT)},
+		  {"NewsBlur-password", configdata("", configdata_t::STR)},
+		  {"NewsBlur-passwordfile", configdata("", configdata_t::PATH)},
+		  {"NewsBlur-passwordeval", configdata("", configdata_t::STR)},
+		  {"NewsBlur-url",
+			  configdata("https://NewsBlur.com",
 				  configdata_t::STR)},
 		  {"notify-always", configdata("no", configdata_t::BOOL)},
 		  {"notify-beep", configdata("no", configdata_t::BOOL)},
-		  {"notify-format",
+		  {"notify-Format",
 			  configdata(_("newsboat: finished reload, %f unread "
 				       "feeds (%n unread articles total)"),
 				  configdata_t::STR)},
@@ -140,7 +140,7 @@ configcontainer::configcontainer()
 		  {"player", configdata("", configdata_t::PATH)},
 		  {"podcast-auto-enqueue",
 			  configdata("no", configdata_t::BOOL)},
-		  {"podlist-format",
+		  {"podlist-Format",
 			  configdata( "%4i [%6dMB/%6tMB] [%5p %%] [%7k kb/s] %-20S %u -> %F", configdata_t::STR)},
 		  {"prepopulate-query-feeds",
 			  configdata("false", configdata_t::BOOL)},
@@ -174,7 +174,7 @@ configcontainer::configcontainer()
 			  configdata("black yellow bold",
 				  configdata_t::STR,
 				  true)},
-		  {"show-keymap-hint", configdata("yes", configdata_t::BOOL)},
+		  {"show-Keymap-hint", configdata("yes", configdata_t::BOOL)},
 		  {"show-read-articles", configdata("yes", configdata_t::BOOL)},
 		  {"show-read-feeds", configdata("yes", configdata_t::BOOL)},
 		  {"suppress-first-reload",
@@ -207,64 +207,64 @@ configcontainer::configcontainer()
 					  "opml",
 					  "oldreader",
 					  "ttrss",
-					  "newsblur",
+					  "NewsBlur",
 					  "feedhq",
 					  "ocnews",
 					  "inoreader"}))},
 		  {"use-proxy", configdata("no", configdata_t::BOOL)},
 		  {"user-agent", configdata("", configdata_t::STR)},
 
-		  /* title formats: */
-		  {"articlelist-title-format",
+		  /* title Formats: */
+		  {"articlelist-title-Format",
 			  configdata(_("%N %V - Articles in feed '%T' (%u "
 				       "unread, %t "
 				       "total) - %U"),
 				  configdata_t::STR)},
-		  {"dialogs-title-format",
+		  {"dialogs-title-Format",
 			  configdata(_("%N %V - Dialogs"), configdata_t::STR)},
-		  {"feedlist-title-format",
+		  {"feedlist-title-Format",
 			  configdata(_("%N %V - Your feeds (%u unread, %t "
 				       "total)%?T? - "
 				       "tag `%T'&?"),
 				  configdata_t::STR)},
-		  {"filebrowser-title-format",
+		  {"filebrowser-title-Format",
 			  configdata(_("%N %V - %?O?Open File&Save File? - %f"),
 				  configdata_t::STR)},
-		  {"help-title-format",
+		  {"help-title-Format",
 			  configdata(_("%N %V - Help"), configdata_t::STR)},
-		  {"itemview-title-format",
+		  {"itemView-title-Format",
 			  configdata(_("%N %V - Article '%T' (%u unread, %t "
 				       "total)"),
 				  configdata_t::STR)},
-		  {"searchresult-title-format",
+		  {"searchresult-title-Format",
 			  configdata(_("%N %V - Search result (%u unread, %t "
 				       "total)"),
 				  configdata_t::STR)},
-		  {"selectfilter-title-format",
+		  {"selectfilter-title-Format",
 			  configdata(_("%N %V - Select Filter"),
 				  configdata_t::STR)},
-		  {"selecttag-title-format",
+		  {"selecttag-title-Format",
 			  configdata(_("%N %V - Select Tag"),
 				  configdata_t::STR)},
-		  {"urlview-title-format",
+		  {"urlView-title-Format",
 			  configdata(_("%N %V - URLs"), configdata_t::STR)}}
 {
 }
 
-configcontainer::~configcontainer() {}
+ConfigContainer::~ConfigContainer() {}
 
-void configcontainer::register_commands(configparser& cfgparser)
+void ConfigContainer::register_commands(ConfigParser& cfgparser)
 {
 	// this registers the config options defined above in the configuration
 	// parser
 	// -> if the resp. config option is encountered, it is passed to the
-	// configcontainer
+	// ConfigContainer
 	for (const auto& cfg : config_data) {
 		cfgparser.register_handler(cfg.first, this);
 	}
 }
 
-void configcontainer::handle_action(const std::string& action,
+void ConfigContainer::handle_action(const std::string& action,
 	const std::vector<std::string>& params)
 {
 	configdata& cfgdata = config_data[action];
@@ -272,27 +272,27 @@ void configcontainer::handle_action(const std::string& action,
 	// configdata_t::INVALID indicates that the action didn't exist, and
 	// that the returned object was created ad-hoc.
 	if (cfgdata.type == configdata_t::INVALID) {
-		LOG(level::WARN,
-			"configcontainer::handle_action: unknown action %s",
+		LOG(Level::WARN,
+			"ConfigContainer::handle_action: unknown action %s",
 			action);
-		throw confighandlerexception(
-			action_handler_status::INVALID_COMMAND);
+		throw ConfigHandlerException(
+			ActionHandlerStatus::INVALID_COMMAND);
 	}
 
-	LOG(level::DEBUG,
-		"configcontainer::handle_action: action = %s, type = %u",
+	LOG(Level::DEBUG,
+		"ConfigContainer::handle_action: action = %s, type = %u",
 		action,
 		cfgdata.type);
 
 	if (params.size() < 1) {
-		throw confighandlerexception(
-			action_handler_status::TOO_FEW_PARAMS);
+		throw ConfigHandlerException(
+			ActionHandlerStatus::TOO_FEW_PARAMS);
 	}
 
 	switch (cfgdata.type) {
 	case configdata_t::BOOL:
 		if (!is_bool(params[0]))
-			throw confighandlerexception(strprintf::fmt(
+			throw ConfigHandlerException(StrPrintf::fmt(
 				_("expected boolean value, found `%s' instead"),
 				params[0]));
 		cfgdata.value = params[0];
@@ -300,7 +300,7 @@ void configcontainer::handle_action(const std::string& action,
 
 	case configdata_t::INT:
 		if (!is_int(params[0]))
-			throw confighandlerexception(strprintf::fmt(
+			throw ConfigHandlerException(StrPrintf::fmt(
 				_("expected integer value, found `%s' instead"),
 				params[0]));
 		cfgdata.value = params[0];
@@ -309,14 +309,14 @@ void configcontainer::handle_action(const std::string& action,
 	case configdata_t::ENUM:
 		if (cfgdata.enum_values.find(params[0]) ==
 			cfgdata.enum_values.end())
-			throw confighandlerexception(strprintf::fmt(
+			throw ConfigHandlerException(StrPrintf::fmt(
 				_("invalid configuration value `%s'"),
 				params[0]));
 	// fall-through
 	case configdata_t::STR:
 	case configdata_t::PATH:
 		if (cfgdata.multi_option)
-			cfgdata.value = utils::join(params, " ");
+			cfgdata.value = Utils::join(params, " ");
 		else
 			cfgdata.value = params[0];
 		break;
@@ -327,28 +327,28 @@ void configcontainer::handle_action(const std::string& action,
 	}
 }
 
-bool configcontainer::is_bool(const std::string& s)
+bool ConfigContainer::is_bool(const std::string& s)
 {
 	const auto bool_values = {"yes", "no", "true", "false"};
 	return (std::find(bool_values.begin(), bool_values.end(), s) !=
 		bool_values.end());
 }
 
-bool configcontainer::is_int(const std::string& s)
+bool ConfigContainer::is_int(const std::string& s)
 {
 	return std::all_of(s.begin(), s.end(), ::isdigit);
 }
 
-std::string configcontainer::get_configvalue(const std::string& key)
+std::string ConfigContainer::get_configvalue(const std::string& key)
 {
 	std::string retval = config_data[key].value;
 	if (config_data[key].type == configdata_t::PATH) {
-		retval = utils::resolve_tilde(retval);
+		retval = Utils::resolve_tilde(retval);
 	}
 	return retval;
 }
 
-int configcontainer::get_configvalue_as_int(const std::string& key)
+int ConfigContainer::get_configvalue_as_int(const std::string& key)
 {
 	std::istringstream is(config_data[key].value);
 	int i;
@@ -356,28 +356,28 @@ int configcontainer::get_configvalue_as_int(const std::string& key)
 	return i;
 }
 
-bool configcontainer::get_configvalue_as_bool(const std::string& key)
+bool ConfigContainer::get_configvalue_as_bool(const std::string& key)
 {
 	std::string value = config_data[key].value;
 	return (value == "true" || value == "yes");
 }
 
-void configcontainer::set_configvalue(const std::string& key,
+void ConfigContainer::set_configvalue(const std::string& key,
 	const std::string& value)
 {
-	LOG(level::DEBUG,
-		"configcontainer::set_configvalue(%s, %s) called",
+	LOG(Level::DEBUG,
+		"ConfigContainer::set_configvalue(%s, %s) called",
 		key,
 		value);
 	config_data[key].value = value;
 }
 
-void configcontainer::reset_to_default(const std::string& key)
+void ConfigContainer::reset_to_default(const std::string& key)
 {
 	config_data[key].value = config_data[key].default_value;
 }
 
-void configcontainer::toggle(const std::string& key)
+void ConfigContainer::toggle(const std::string& key)
 {
 	if (config_data[key].type == configdata_t::BOOL) {
 		set_configvalue(key,
@@ -386,7 +386,7 @@ void configcontainer::toggle(const std::string& key)
 	}
 }
 
-void configcontainer::dump_config(std::vector<std::string>& config_output)
+void ConfigContainer::dump_config(std::vector<std::string>& config_output)
 {
 	for (const auto& cfg : config_data) {
 		std::string configline = cfg.first + " ";
@@ -397,7 +397,7 @@ void configcontainer::dump_config(std::vector<std::string>& config_output)
 			configline.append(cfg.second.value);
 			if (cfg.second.value != cfg.second.default_value)
 				configline.append(
-					strprintf::fmt(" # default: %s",
+					StrPrintf::fmt(" # default: %s",
 						cfg.second.default_value));
 			break;
 		case configdata_t::ENUM:
@@ -405,17 +405,17 @@ void configcontainer::dump_config(std::vector<std::string>& config_output)
 		case configdata_t::PATH:
 			if (cfg.second.multi_option) {
 				std::vector<std::string> tokens =
-					utils::tokenize(cfg.second.value, " ");
+					Utils::tokenize(cfg.second.value, " ");
 				for (const auto& token : tokens) {
 					configline.append(
-						utils::quote(token) + " ");
+						Utils::quote(token) + " ");
 				}
 			} else {
 				configline.append(
-					utils::quote(cfg.second.value));
+					Utils::quote(cfg.second.value));
 				if (cfg.second.value !=
 					cfg.second.default_value) {
-					configline.append(strprintf::fmt(
+					configline.append(StrPrintf::fmt(
 						" # default: %s",
 						cfg.second.default_value));
 				}
@@ -430,7 +430,7 @@ void configcontainer::dump_config(std::vector<std::string>& config_output)
 	}
 }
 
-std::vector<std::string> configcontainer::get_suggestions(
+std::vector<std::string> ConfigContainer::get_suggestions(
 	const std::string& fragment)
 {
 	std::vector<std::string> result;
@@ -442,11 +442,11 @@ std::vector<std::string> configcontainer::get_suggestions(
 	return result;
 }
 
-FeedSortStrategy configcontainer::get_feed_sort_strategy()
+FeedSortStrategy ConfigContainer::get_feed_sort_strategy()
 {
 	FeedSortStrategy ss;
 	const auto sortmethod_info =
-		utils::tokenize(get_configvalue("feed-sort-order"), "-");
+		Utils::tokenize(get_configvalue("feed-sort-order"), "-");
 	const std::string sortmethod = sortmethod_info[0];
 
 	std::string direction = "desc";
@@ -477,11 +477,11 @@ FeedSortStrategy configcontainer::get_feed_sort_strategy()
 	return ss;
 }
 
-ArticleSortStrategy configcontainer::get_article_sort_strategy()
+ArticleSortStrategy ConfigContainer::get_article_sort_strategy()
 {
 	ArticleSortStrategy ss;
 	const auto methods =
-		utils::tokenize(get_configvalue("article-sort-order"), "-");
+		Utils::tokenize(get_configvalue("article-sort-order"), "-");
 
 	if (!methods.empty() &&
 		methods[0] == "date") { // date is descending by default

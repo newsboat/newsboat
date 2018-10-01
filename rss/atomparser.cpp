@@ -42,7 +42,7 @@ void atom_parser::parse_feed(feed& f, xmlNode* rootNode)
 		} else if (node_is(node, "link", ns)) {
 			std::string rel = get_prop(node, "rel");
 			if (rel == "alternate") {
-				f.link = newsboat::utils::absolute_url(
+				f.link = newsboat::Utils::absolute_url(
 					globalbase, get_prop(node, "href"));
 			}
 		} else if (node_is(node, "updated", ns)) {
@@ -107,11 +107,11 @@ item atom_parser::parse_entry(xmlNode* entryNode)
 		} else if (node_is(node, "link", ns)) {
 			std::string rel = get_prop(node, "rel");
 			if (rel == "" || rel == "alternate") {
-				it.link = newsboat::utils::absolute_url(
+				it.link = newsboat::Utils::absolute_url(
 					base, get_prop(node, "href"));
 			} else if (rel == "enclosure") {
 				const std::string type = get_prop(node, "type");
-				if (newsboat::utils::is_valid_podcast_type(
+				if (newsboat::Utils::is_valid_podcast_type(
 					    type)) {
 					it.enclosure_url =
 						get_prop(node, "href");

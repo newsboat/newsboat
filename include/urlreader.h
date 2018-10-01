@@ -8,10 +8,10 @@
 
 namespace newsboat {
 
-class urlreader {
+class UrlReader {
 public:
-	urlreader() = default;
-	virtual ~urlreader() = default;
+	UrlReader() = default;
+	virtual ~UrlReader() = default;
 	virtual void write_config() = 0;
 	virtual void reload() = 0;
 	virtual std::string get_source() = 0;

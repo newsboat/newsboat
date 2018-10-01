@@ -4,7 +4,7 @@
 
 namespace newsboat {
 
-downloadthread::downloadthread(Reloader& r, std::vector<int>* idxs)
+Downloadthread::Downloadthread(Reloader& r, std::vector<int>* idxs)
 	: reloader(r)
 {
 	if (idxs) {
@@ -12,17 +12,17 @@ downloadthread::downloadthread(Reloader& r, std::vector<int>* idxs)
 	}
 }
 
-downloadthread::~downloadthread() {}
+Downloadthread::~Downloadthread() {}
 
-void downloadthread::operator()()
+void Downloadthread::operator()()
 {
 	/*
-	 * the downloadthread class drives the reload-all process.
-	 * A downloadthread is spawned whenever "reload all" is invoked, and
+	 * the Downloadthread class drives the reload-all process.
+	 * A Downloadthread is spawned whenever "reload all" is invoked, and
 	 * whenever an auto-reload comes up.
 	 */
-	LOG(level::DEBUG,
-		"downloadthread::run: inside downloadthread, reloading all "
+	LOG(Level::DEBUG,
+		"Downloadthread::run: inside Downloadthread, reloading all "
 		"feeds...");
 	if (reloader.trylock_reload_mutex()) {
 		if (indexes.size() == 0) {

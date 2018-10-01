@@ -7,10 +7,10 @@
 
 namespace newsboat {
 
-class downloadthread {
+class Downloadthread {
 public:
-	downloadthread(Reloader& r, std::vector<int>* idxs = 0);
-	virtual ~downloadthread();
+	Downloadthread(Reloader& r, std::vector<int>* idxs = 0);
+	virtual ~Downloadthread();
 	void operator()();
 
 private:

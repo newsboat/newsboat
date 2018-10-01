@@ -22,11 +22,11 @@
 
 namespace newsboat {
 
-rss_parser::rss_parser(const std::string& uri,
-	cache* c,
-	configcontainer* cfg,
-	rss_ignores* ii,
-	remote_api* a)
+RssParser::RssParser(const std::string& uri,
+	Cache* c,
+	ConfigContainer* cfg,
+	RssIgnores* ii,
+	RemoteApi* a)
 	: my_uri(uri)
 	, ch(c)
 	, cfgcont(cfg)
@@ -37,15 +37,15 @@ rss_parser::rss_parser(const std::string& uri,
 	, easyhandle(0)
 {
 	is_ttrss = cfgcont->get_configvalue("urls-source") == "ttrss";
-	is_newsblur = cfgcont->get_configvalue("urls-source") == "newsblur";
+	is_NewsBlur = cfgcont->get_configvalue("urls-source") == "NewsBlur";
 	is_ocnews = cfgcont->get_configvalue("urls-source") == "ocnews";
 }
 
-rss_parser::~rss_parser() {}
+RssParser::~RssParser() {}
 
-std::shared_ptr<rss_feed> rss_parser::parse()
+std::shared_ptr<RssFeed> RssParser::parse()
 {
-	std::shared_ptr<rss_feed> feed(new rss_feed(ch));
+	std::shared_ptr<RssFeed> feed(new RssFeed(ch));
 
 	feed->set_rssurl(my_uri);
 
@@ -73,21 +73,21 @@ std::shared_ptr<rss_feed> rss_parser::parse()
 	return feed;
 }
 
-time_t rss_parser::parse_date(const std::string& datestr)
+time_t RssParser::parse_date(const std::string& datestr)
 {
 	time_t t = curl_getdate(datestr.c_str(), nullptr);
 	if (t == -1) {
-		LOG(level::INFO,
-			"rss_parser::parse_date: encountered t == -1, trying "
+		LOG(Level::INFO,
+			"RssParser::parse_date: encountered t == -1, trying "
 			"out "
 			"W3CDTF parser...");
 		t = curl_getdate(
-			rsspp::rss_parser::__w3cdtf_to_rfc822(datestr).c_str(),
+			rsspp::RssParser::__w3cdtf_to_rfc822(datestr).c_str(),
 			nullptr);
 	}
 	if (t == -1) {
-		LOG(level::INFO,
-			"rss_parser::parse_date: still t == -1, setting to "
+		LOG(Level::INFO,
+			"RssParser::parse_date: still t == -1, setting to "
 			"current "
 			"time");
 		t = ::time(nullptr);
@@ -95,17 +95,17 @@ time_t rss_parser::parse_date(const std::string& datestr)
 	return t;
 }
 
-void rss_parser::replace_newline_characters(std::string& str)
+void RssParser::replace_newline_characters(std::string& str)
 {
-	str = utils::replace_all(str, "\r", " ");
-	str = utils::replace_all(str, "\n", " ");
-	utils::trim(str);
+	str = Utils::replace_all(str, "\r", " ");
+	str = Utils::replace_all(str, "\n", " ");
+	Utils::trim(str);
 }
 
-std::string rss_parser::render_xhtml_title(const std::string& title,
+std::string RssParser::render_xhtml_title(const std::string& title,
 	const std::string& link)
 {
-	htmlrenderer rnd(true);
+	HtmlRenderer rnd(true);
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<linkpair> links; // not needed
 	rnd.render(title, lines, links, link);
@@ -114,7 +114,7 @@ std::string rss_parser::render_xhtml_title(const std::string& title,
 	return "";
 }
 
-void rss_parser::set_rtl(std::shared_ptr<rss_feed> feed,
+void RssParser::set_rtl(std::shared_ptr<RssFeed> feed,
 	const std::string& lang)
 {
 	// we implement right-to-left support for the languages listed in
@@ -131,8 +131,8 @@ void rss_parser::set_rtl(std::shared_ptr<rss_feed> feed,
 	};
 	auto it = rtl_langprefix.find(lang);
 	if (it != rtl_langprefix.end()) {
-		LOG(level::DEBUG,
-			"rss_parser::parse: detected right-to-left order, "
+		LOG(Level::DEBUG,
+			"RssParser::parse: detected right-to-left order, "
 			"language "
 			"code = %s",
 			*it);
@@ -140,12 +140,12 @@ void rss_parser::set_rtl(std::shared_ptr<rss_feed> feed,
 	}
 }
 
-void rss_parser::retrieve_uri(const std::string& uri)
+void RssParser::retrieve_uri(const std::string& uri)
 {
 	/*
-	 *	- http:// and https:// URLs are downloaded and parsed regularly
+	 *	- http:// and https:// URLs are Downloaded and parsed regularly
 	 *	- exec: URLs are executed and their output is parsed
-	 *	- filter: URLs are downloaded, executed, and their output is
+	 *	- filter: URLs are Downloaded, executed, and their output is
 	 *parsed
 	 *	- query: URLs are ignored
 	 */
@@ -154,30 +154,30 @@ void rss_parser::retrieve_uri(const std::string& uri)
 		if (pound != std::string::npos) {
 			fetch_ttrss(my_uri.substr(pound + 1).c_str());
 		}
-	} else if (is_newsblur) {
-		fetch_newsblur(uri);
+	} else if (is_NewsBlur) {
+		fetch_NewsBlur(uri);
 	} else if (is_ocnews) {
 		fetch_ocnews(uri);
-	} else if (utils::is_http_url(uri)) {
-		download_http(uri);
-	} else if (utils::is_exec_url(uri)) {
+	} else if (Utils::is_http_url(uri)) {
+		Download_http(uri);
+	} else if (Utils::is_exec_url(uri)) {
 		get_execplugin(uri.substr(5, uri.length() - 5));
-	} else if (utils::is_filter_url(uri)) {
+	} else if (Utils::is_filter_url(uri)) {
 		std::string filter, url;
-		utils::extract_filter(uri, filter, url);
-		download_filterplugin(filter, url);
-	} else if (utils::is_query_url(my_uri)) {
+		Utils::extract_filter(uri, filter, url);
+		Download_filterplugin(filter, url);
+	} else if (Utils::is_query_url(my_uri)) {
 		skip_parsing = true;
 	} else if (my_uri.substr(0, 7) == "file://") {
 		parse_file(my_uri.substr(7, my_uri.length() - 7));
 	} else
-		throw strprintf::fmt(_("Error: unsupported URL: %s"), my_uri);
+		throw StrPrintf::fmt(_("Error: unsupported URL: %s"), my_uri);
 }
 
-void rss_parser::download_http(const std::string& uri)
+void RssParser::Download_http(const std::string& uri)
 {
 	unsigned int retrycount =
-		cfgcont->get_configvalue_as_int("download-retries");
+		cfgcont->get_configvalue_as_int("Download-retries");
 	std::string proxy;
 	std::string proxy_auth;
 	std::string proxy_type;
@@ -191,16 +191,16 @@ void rss_parser::download_http(const std::string& uri)
 
 	for (unsigned int i = 0; i < retrycount && !is_valid; i++) {
 		try {
-			std::string useragent = utils::get_useragent(cfgcont);
-			LOG(level::DEBUG,
-				"rss_parser::download_http: user-agent = %s",
+			std::string useragent = Utils::get_useragent(cfgcont);
+			LOG(Level::DEBUG,
+				"RssParser::Download_http: user-agent = %s",
 				useragent);
 			rsspp::parser p(cfgcont->get_configvalue_as_int(
-						"download-timeout"),
+						"Download-timeout"),
 				useragent.c_str(),
 				proxy.c_str(),
 				proxy_auth.c_str(),
-				utils::get_proxy_type(proxy_type),
+				Utils::get_proxy_type(proxy_type),
 				cfgcont->get_configvalue_as_bool(
 					"ssl-verifypeer"));
 			time_t lm = 0;
@@ -212,22 +212,22 @@ void rss_parser::download_http(const std::string& uri)
 				lm,
 				etag,
 				api,
-				cfgcont->get_configvalue("cookie-cache"),
+				cfgcont->get_configvalue("cookie-Cache"),
 				easyhandle ? easyhandle->ptr() : 0);
-			LOG(level::DEBUG,
-				"rss_parser::download_http: lm = %d etag = %s",
+			LOG(Level::DEBUG,
+				"RssParser::Download_http: lm = %d etag = %s",
 				p.get_last_modified(),
 				p.get_etag());
 			if (p.get_last_modified() != 0 ||
 				p.get_etag().length() > 0) {
-				LOG(level::DEBUG,
-					"rss_parser::download_http: "
+				LOG(Level::DEBUG,
+					"RssParser::Download_http: "
 					"lastmodified "
 					"old: %d new: %d",
 					lm,
 					p.get_last_modified());
-				LOG(level::DEBUG,
-					"rss_parser::download_http: etag old: "
+				LOG(Level::DEBUG,
+					"RssParser::Download_http: etag old: "
 					"%s "
 					"new %s",
 					etag,
@@ -245,15 +245,15 @@ void rss_parser::download_http(const std::string& uri)
 			throw;
 		}
 	}
-	LOG(level::DEBUG,
-		"rss_parser::parse: http URL %s, is_valid = %s",
+	LOG(Level::DEBUG,
+		"RssParser::parse: http URL %s, is_valid = %s",
 		uri,
 		is_valid ? "true" : "false");
 }
 
-void rss_parser::get_execplugin(const std::string& plugin)
+void RssParser::get_execplugin(const std::string& plugin)
 {
-	std::string buf = utils::get_command_output(plugin);
+	std::string buf = Utils::get_command_output(plugin);
 	is_valid = false;
 	try {
 		rsspp::parser p;
@@ -263,13 +263,13 @@ void rss_parser::get_execplugin(const std::string& plugin)
 		is_valid = false;
 		throw;
 	}
-	LOG(level::DEBUG,
-		"rss_parser::parse: execplugin %s, is_valid = %s",
+	LOG(Level::DEBUG,
+		"RssParser::parse: execplugin %s, is_valid = %s",
 		plugin,
 		is_valid ? "true" : "false");
 }
 
-void rss_parser::parse_file(const std::string& file)
+void RssParser::parse_file(const std::string& file)
 {
 	is_valid = false;
 	try {
@@ -280,24 +280,24 @@ void rss_parser::parse_file(const std::string& file)
 		is_valid = false;
 		throw;
 	}
-	LOG(level::DEBUG,
-		"rss_parser::parse: parsed file %s, is_valid = %s",
+	LOG(Level::DEBUG,
+		"RssParser::parse: parsed file %s, is_valid = %s",
 		file,
 		is_valid ? "true" : "false");
 }
 
-void rss_parser::download_filterplugin(const std::string& filter,
+void RssParser::Download_filterplugin(const std::string& filter,
 	const std::string& uri)
 {
-	std::string buf = utils::retrieve_url(uri, cfgcont);
+	std::string buf = Utils::retrieve_url(uri, cfgcont);
 
 	char* argv[4] = {const_cast<char*>("/bin/sh"),
 		const_cast<char*>("-c"),
 		const_cast<char*>(filter.c_str()),
 		nullptr};
-	std::string result = utils::run_program(argv, buf);
-	LOG(level::DEBUG,
-		"rss_parser::parse: output of `%s' is: %s",
+	std::string result = Utils::run_program(argv, buf);
+	LOG(Level::DEBUG,
+		"RssParser::parse: output of `%s' is: %s",
 		filter,
 		result);
 	is_valid = false;
@@ -309,13 +309,13 @@ void rss_parser::download_filterplugin(const std::string& filter,
 		is_valid = false;
 		throw;
 	}
-	LOG(level::DEBUG,
-		"rss_parser::parse: filterplugin %s, is_valid = %s",
+	LOG(Level::DEBUG,
+		"RssParser::parse: filterplugin %s, is_valid = %s",
 		filter,
 		is_valid ? "true" : "false");
 }
 
-void rss_parser::fill_feed_fields(std::shared_ptr<rss_feed> feed)
+void RssParser::fill_feed_fields(std::shared_ptr<RssFeed> feed)
 {
 	/*
 	 * we fill all the feed members with the appropriate values from the
@@ -329,7 +329,7 @@ void rss_parser::fill_feed_fields(std::shared_ptr<rss_feed> feed)
 
 	feed->set_description(f.description);
 
-	feed->set_link(utils::absolute_url(my_uri, f.link));
+	feed->set_link(Utils::absolute_url(my_uri, f.link));
 
 	if (f.pubDate != "")
 		feed->set_pubDate(parse_date(f.pubDate));
@@ -338,27 +338,27 @@ void rss_parser::fill_feed_fields(std::shared_ptr<rss_feed> feed)
 
 	set_rtl(feed, f.language);
 
-	LOG(level::DEBUG,
-		"rss_parser::parse: feed title = `%s' link = `%s'",
+	LOG(Level::DEBUG,
+		"RssParser::parse: feed title = `%s' link = `%s'",
 		feed->title(),
 		feed->link());
 }
 
-void rss_parser::fill_feed_items(std::shared_ptr<rss_feed> feed)
+void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed)
 {
 	/*
-	 * we iterate over all items of a feed, create an rss_item object for
+	 * we iterate over all items of a feed, create an RssItem object for
 	 * each item, and fill it with the appropriate values from the data
 	 * structure.
 	 */
 	for (const auto& item : f.items) {
-		std::shared_ptr<rss_item> x(new rss_item(ch));
+		std::shared_ptr<RssItem> x(new RssItem(ch));
 
 		set_item_title(feed, x, item);
 
 		if (item.link != "") {
 			x->set_link(
-				utils::absolute_url(feed->link(), item.link));
+				Utils::absolute_url(feed->link(), item.link));
 		}
 
 		if (x->link().empty() && item.guid_isPermaLink) {
@@ -399,12 +399,12 @@ void rss_parser::fill_feed_items(std::shared_ptr<rss_feed> feed)
 				x->set_unread_nowrite(false);
 				x->set_override_unread(true);
 			}
-			if (std::find(start, finish, "newsblur:unread") !=
+			if (std::find(start, finish, "NewsBlur:unread") !=
 				finish) {
 				x->set_unread_nowrite(true);
 				x->set_override_unread(true);
 			}
-			if (std::find(start, finish, "newsblur:read") !=
+			if (std::find(start, finish, "NewsBlur:read") !=
 				finish) {
 				x->set_unread_nowrite(false);
 				x->set_override_unread(true);
@@ -433,8 +433,8 @@ void rss_parser::fill_feed_items(std::shared_ptr<rss_feed> feed)
 
 		set_item_enclosure(x, item);
 
-		LOG(level::DEBUG,
-			"rss_parser::parse: item title = `%s' link = `%s' "
+		LOG(Level::DEBUG,
+			"RssParser::parse: item title = `%s' link = `%s' "
 			"pubDate "
 			"= `%s' (%d) description = `%s'",
 			x->title(),
@@ -447,14 +447,14 @@ void rss_parser::fill_feed_items(std::shared_ptr<rss_feed> feed)
 	}
 }
 
-void rss_parser::set_item_title(std::shared_ptr<rss_feed> feed,
-	std::shared_ptr<rss_item> x,
+void RssParser::set_item_title(std::shared_ptr<RssFeed> feed,
+	std::shared_ptr<RssItem> x,
 	const rsspp::item& item)
 {
 	std::string title = item.title;
 
 	if (item.title.empty()) {
-		title = utils::make_title(item.link);
+		title = Utils::make_title(item.link);
 	}
 
 	if (is_html_type(item.title_type)) {
@@ -465,7 +465,7 @@ void rss_parser::set_item_title(std::shared_ptr<rss_feed> feed,
 	}
 }
 
-void rss_parser::set_item_author(std::shared_ptr<rss_item> x,
+void RssParser::set_item_author(std::shared_ptr<RssItem> x,
 	const rsspp::item& item)
 {
 	/*
@@ -483,7 +483,7 @@ void rss_parser::set_item_author(std::shared_ptr<rss_item> x,
 	}
 }
 
-void rss_parser::set_item_content(std::shared_ptr<rss_item> x,
+void RssParser::set_item_content(std::shared_ptr<RssItem> x,
 	const rsspp::item& item)
 {
 	handle_content_encoded(x, item);
@@ -500,20 +500,20 @@ void rss_parser::set_item_content(std::shared_ptr<rss_item> x,
 				x->description() + "<hr>" + item.description);
 	}
 
-	/* if it's still empty and we shall download the full page, then we do
+	/* if it's still empty and we shall Download the full page, then we do
 	 * so. */
 	if (x->description() == "" &&
-		cfgcont->get_configvalue_as_bool("download-full-page") &&
+		cfgcont->get_configvalue_as_bool("Download-full-page") &&
 		x->link() != "") {
-		x->set_description(utils::retrieve_url(x->link(), cfgcont));
+		x->set_description(Utils::retrieve_url(x->link(), cfgcont));
 	}
 
-	LOG(level::DEBUG,
-		"rss_parser::set_item_content: content = %s",
+	LOG(Level::DEBUG,
+		"RssParser::set_item_content: content = %s",
 		x->description());
 }
 
-std::string rss_parser::get_guid(const rsspp::item& item) const
+std::string RssParser::get_guid(const rsspp::item& item) const
 {
 	/*
 	 * We try to find a GUID (some unique identifier) for an item. If the
@@ -534,36 +534,36 @@ std::string rss_parser::get_guid(const rsspp::item& item) const
 		return ""; // too bad.
 }
 
-void rss_parser::set_item_enclosure(std::shared_ptr<rss_item> x,
+void RssParser::set_item_enclosure(std::shared_ptr<RssItem> x,
 	const rsspp::item& item)
 {
 	x->set_enclosure_url(item.enclosure_url);
 	x->set_enclosure_type(item.enclosure_type);
-	LOG(level::DEBUG,
-		"rss_parser::parse: found enclosure_url: %s",
+	LOG(Level::DEBUG,
+		"RssParser::parse: found enclosure_url: %s",
 		item.enclosure_url);
-	LOG(level::DEBUG,
-		"rss_parser::parse: found enclosure_type: %s",
+	LOG(Level::DEBUG,
+		"RssParser::parse: found enclosure_type: %s",
 		item.enclosure_type);
 }
 
-void rss_parser::add_item_to_feed(std::shared_ptr<rss_feed> feed,
-	std::shared_ptr<rss_item> item)
+void RssParser::add_item_to_feed(std::shared_ptr<RssFeed> feed,
+	std::shared_ptr<RssItem> item)
 {
 	// only add item to feed if it isn't on the ignore list or if there is
 	// no ignore list
 	if (!ign || !ign->matches(item.get())) {
 		feed->add_item(item);
-		LOG(level::INFO,
-			"rss_parser::parse: added article title = `%s' link = "
+		LOG(Level::INFO,
+			"RssParser::parse: added article title = `%s' link = "
 			"`%s' "
 			"ign = %p",
 			item->title(),
 			item->link(),
 			ign);
 	} else {
-		LOG(level::INFO,
-			"rss_parser::parse: ignored article title = `%s' link "
+		LOG(Level::INFO,
+			"RssParser::parse: ignored article title = `%s' link "
 			"= "
 			"`%s'",
 			item->title(),
@@ -571,7 +571,7 @@ void rss_parser::add_item_to_feed(std::shared_ptr<rss_feed> feed,
 	}
 }
 
-void rss_parser::handle_content_encoded(std::shared_ptr<rss_item> x,
+void RssParser::handle_content_encoded(std::shared_ptr<RssItem> x,
 	const rsspp::item& item) const
 {
 	if (x->description() != "")
@@ -582,12 +582,12 @@ void rss_parser::handle_content_encoded(std::shared_ptr<rss_item> x,
 	if (item.content_encoded != "") {
 		x->set_description(item.content_encoded);
 	} else {
-		LOG(level::DEBUG,
-			"rss_parser::parse: found no content:encoded");
+		LOG(Level::DEBUG,
+			"RssParser::parse: found no content:encoded");
 	}
 }
 
-void rss_parser::handle_itunes_summary(std::shared_ptr<rss_item> x,
+void RssParser::handle_itunes_summary(std::shared_ptr<RssItem> x,
 	const rsspp::item& item)
 {
 	if (x->description() != "")
@@ -602,46 +602,46 @@ void rss_parser::handle_itunes_summary(std::shared_ptr<rss_item> x,
 	}
 }
 
-bool rss_parser::is_html_type(const std::string& type)
+bool RssParser::is_html_type(const std::string& type)
 {
 	return (type == "html" || type == "xhtml" ||
 		type == "application/xhtml+xml");
 }
 
-void rss_parser::fetch_ttrss(const std::string& feed_id)
+void RssParser::fetch_ttrss(const std::string& feed_id)
 {
-	ttrss_api* tapi = dynamic_cast<ttrss_api*>(api);
+	TtrssApi* tapi = dynamic_cast<TtrssApi*>(api);
 	if (tapi) {
 		f = tapi->fetch_feed(
 			feed_id, easyhandle ? easyhandle->ptr() : nullptr);
 		is_valid = true;
 	}
-	LOG(level::DEBUG,
-		"rss_parser::fetch_ttrss: f.items.size = %u",
+	LOG(Level::DEBUG,
+		"RssParser::fetch_ttrss: f.items.size = %u",
 		f.items.size());
 }
 
-void rss_parser::fetch_newsblur(const std::string& feed_id)
+void RssParser::fetch_NewsBlur(const std::string& feed_id)
 {
-	newsblur_api* napi = dynamic_cast<newsblur_api*>(api);
+	NewsBlurApi* napi = dynamic_cast<NewsBlurApi*>(api);
 	if (napi) {
 		f = napi->fetch_feed(feed_id);
 		is_valid = true;
 	}
-	LOG(level::INFO,
-		"rss_parser::fetch_newsblur: f.items.size = %u",
+	LOG(Level::INFO,
+		"RssParser::fetch_NewsBlur: f.items.size = %u",
 		f.items.size());
 }
 
-void rss_parser::fetch_ocnews(const std::string& feed_id)
+void RssParser::fetch_ocnews(const std::string& feed_id)
 {
-	ocnews_api* napi = dynamic_cast<ocnews_api*>(api);
+	OcNewsApi* napi = dynamic_cast<OcNewsApi*>(api);
 	if (napi) {
 		f = napi->fetch_feed(feed_id);
 		is_valid = true;
 	}
-	LOG(level::INFO,
-		"rss_parser::fetch_ocnews: f.items.size = %u",
+	LOG(Level::INFO,
+		"RssParser::fetch_ocnews: f.items.size = %u",
 		f.items.size());
 }
 

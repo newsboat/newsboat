@@ -7,9 +7,9 @@
 #include "logger.h"
 
 namespace newsboat {
-class CLIArgsParser {
+class CliArgsParser {
 public:
-	CLIArgsParser(int argc, char* argv[]);
+	CliArgsParser(int argc, char* argv[]);
 
 	bool do_import = false;
 	bool do_export = false;
@@ -23,20 +23,20 @@ public:
 	bool silent = false;
 	bool using_nonstandard_configs = false;
 
-	/// If `should_return` is `true`, the creator of `CLIArgsParser` object
+	/// If `should_return` is `true`, the creator of `CliArgsParser` object
 	/// should call `exit(return_code)`.
 	// TODO: replace this with std::optional once we upgraded to C++17.
 	bool should_return = false;
 	int return_code = 0;
 
-	/// If `display_msg` is not empty, the creator of `CLIArgsParser` should
+	/// If `display_msg` is not empty, the creator of `CliArgsParser` should
 	/// print its contents to stderr.
 	///
 	/// \note The contents of this string should be checked before
 	/// processing `should_return`.
 	std::string display_msg;
 
-	/// If `should_print_usage` is `true`, the creator of `CLIArgsParser`
+	/// If `should_print_usage` is `true`, the creator of `CliArgsParser`
 	/// object should print usage information.
 	///
 	/// \note This field should be checked before processing
@@ -69,7 +69,7 @@ public:
 	bool set_config_file = false;
 	std::string config_file;
 
-	/// If 'execute_cmds' is true, the 'CLIArgsParser' object holds commands
+	/// If 'execute_cmds' is true, the 'CliArgsParser' object holds commands
 	/// that should be executed in cmds_to_execute vector.
 	///
 	/// \note The parser does not check if the passed commands are valid.
@@ -87,7 +87,7 @@ public:
 	/// `true`.
 	// TODO: replace this with std::optional once we upgraded to C++17.
 	bool set_log_level = false;
-	level log_level = level::NONE;
+	Level log_level = Level::NONE;
 };
 } // namespace newsboat
 

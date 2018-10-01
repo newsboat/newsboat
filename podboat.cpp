@@ -12,7 +12,7 @@ using namespace podboat;
 
 int main(int argc, char* argv[])
 {
-	utils::initialize_ssl_implementation();
+	Utils::initialize_ssl_implementation();
 
 	setlocale(LC_CTYPE, "");
 	setlocale(LC_MESSAGES, "");
@@ -20,16 +20,16 @@ int main(int argc, char* argv[])
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
 
-	pb_controller c;
+	PbController c;
 
 	int ret;
 	try {
-		podboat::pb_view v(&c);
+		podboat::PbView v(&c);
 		c.set_view(&v);
 
 		ret = c.run(argc, argv);
-	} catch (const newsboat::exception& e) {
-		std::cerr << strprintf::fmt(_("Caught newsboat::exception with "
+	} catch (const newsboat::Exception& e) {
+		std::cerr << StrPrintf::fmt(_("Caught newsboat::exception with "
 					      "message: %s"),
 				     e.what())
 			  << std::endl;

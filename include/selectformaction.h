@@ -6,12 +6,12 @@
 
 namespace newsboat {
 
-class select_formaction : public formaction {
+class SelectFormaction : public Formaction {
 public:
-	enum class selection_type { TAG, FILTER };
+	enum class SelectionType { TAG, FILTER };
 
-	select_formaction(view*, std::string formstr);
-	~select_formaction() override;
+	SelectFormaction(View*, std::string formstr);
+	~SelectFormaction() override;
 	void prepare() override;
 	void init() override;
 	keymap_hint_entry* get_keymap_hint() override;
@@ -27,14 +27,14 @@ public:
 	{
 		filters = ff;
 	}
-	void set_type(selection_type t)
+	void set_type(SelectionType t)
 	{
 		type = t;
 	}
 	void handle_cmdline(const std::string& cmd) override;
 	std::string id() const override
 	{
-		return (type == selection_type::TAG) ? "tagselection"
+		return (type == SelectionType::TAG) ? "tagselection"
 						     : "filterselection";
 	}
 	std::string title() override;
@@ -44,7 +44,7 @@ private:
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
 	bool quit;
-	selection_type type;
+	SelectionType type;
 	std::string value;
 	std::vector<std::string> tags;
 	std::vector<filter_name_expr_pair> filters;

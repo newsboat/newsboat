@@ -13,23 +13,23 @@
 
 namespace newsboat {
 
-// wrapped curl handle for exception safety and so on
+// wrapped curl handle for Exception safety and so on
 // see also: https://github.com/gsauthof/ccurl
-class curl_handle {
+class CurlHandle {
 private:
 	CURL* h;
-	curl_handle(const curl_handle&);
-	curl_handle& operator=(const curl_handle&);
+	CurlHandle(const CurlHandle&);
+	CurlHandle& operator=(const CurlHandle&);
 
 public:
-	curl_handle()
+	CurlHandle()
 		: h(0)
 	{
 		h = curl_easy_init();
 		if (!h)
 			throw std::runtime_error("Can't obtain curl handle");
 	}
-	~curl_handle()
+	~CurlHandle()
 	{
 		curl_easy_cleanup(h);
 	}
@@ -39,7 +39,7 @@ public:
 	}
 };
 
-class utils {
+class Utils {
 public:
 	static std::vector<std::string> tokenize(const std::string& str,
 		std::string delimiters = " \r\n\t");
@@ -67,7 +67,7 @@ public:
 		std::string& filter,
 		std::string& url);
 	static std::string retrieve_url(const std::string& url,
-		configcontainer* cfgcont = nullptr,
+		ConfigContainer* cfgcont = nullptr,
 		const std::string& authinfo = "",
 		const std::string* postdata = nullptr,
 		CURL* easyhandle = nullptr);
@@ -90,11 +90,11 @@ public:
 	static std::string absolute_url(const std::string& url,
 		const std::string& link);
 
-	static std::string get_useragent(configcontainer* cfgcont);
+	static std::string get_useragent(ConfigContainer* cfgcont);
 
 	static size_t strwidth(const std::string& s);
-	static size_t strwidth_stfl(const std::string& str);
-	static size_t wcswidth_stfl(const std::wstring& str, size_t size);
+	static size_t strwidth_Stfl(const std::string& str);
+	static size_t wcswidth_Stfl(const std::wstring& str, size_t size);
 
 	static std::string substr_with_width(const std::string& str,
 		const size_t max_width);
@@ -124,7 +124,7 @@ public:
 
 	static std::string censor_url(const std::string& url);
 
-	static std::string quote_for_stfl(std::string str);
+	static std::string quote_for_Stfl(std::string str);
 
 	static void trim_end(std::string& str);
 
@@ -136,7 +136,7 @@ public:
 
 	static std::string quote_if_necessary(const std::string& str);
 
-	static void set_common_curl_options(CURL* handle, configcontainer* cfg);
+	static void set_common_curl_options(CURL* handle, ConfigContainer* cfg);
 
 	static curl_proxytype get_proxy_type(const std::string& type);
 	static unsigned long get_auth_method(const std::string& type);
@@ -177,16 +177,16 @@ private:
 	static void append_escapes(std::string& str, char c);
 };
 
-class scope_measure {
+class ScopeMeasure {
 public:
-	scope_measure(const std::string& func, level ll = level::DEBUG);
-	~scope_measure();
+	ScopeMeasure(const std::string& func, Level ll = Level::DEBUG);
+	~ScopeMeasure();
 	void stopover(const std::string& son = "");
 
 private:
 	struct timeval tv1, tv2;
 	std::string funcname;
-	level lvl;
+	Level lvl;
 };
 
 } // namespace newsboat

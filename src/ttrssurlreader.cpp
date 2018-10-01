@@ -5,32 +5,32 @@
 
 namespace newsboat {
 
-ttrss_urlreader::ttrss_urlreader(const std::string& url_file, remote_api* a)
+TtrssUrlReader::TtrssUrlReader(const std::string& url_file, RemoteApi* a)
 	: file(url_file)
 	, api(a)
 {
 }
 
-ttrss_urlreader::~ttrss_urlreader() {}
+TtrssUrlReader::~TtrssUrlReader() {}
 
-void ttrss_urlreader::write_config()
+void TtrssUrlReader::write_config()
 {
 	// NOTHING
 }
 
-void ttrss_urlreader::reload()
+void TtrssUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
 	alltags.clear();
 
-	file_urlreader ur(file);
+	FileUrlReader ur(file);
 	ur.reload();
 
 	// std::vector<std::string>& file_urls(ur.get_urls());
 	auto& file_urls(ur.get_urls());
 	for (const auto& url : file_urls) {
-		if (utils::is_query_url(url)) {
+		if (Utils::is_query_url(url)) {
 			urls.push_back(url);
 			std::vector<std::string>& file_tags(ur.get_tags(url));
 			tags[url] = ur.get_tags(url);
@@ -43,17 +43,17 @@ void ttrss_urlreader::reload()
 	auto feedurls = api->get_subscribed_urls();
 
 	for (const auto& url : feedurls) {
-		LOG(level::DEBUG, "added %s to URL list", url.first);
+		LOG(Level::DEBUG, "added %s to URL list", url.first);
 		urls.push_back(url.first);
 		tags[url.first] = url.second;
 		for (const auto& tag : url.second) {
-			LOG(level::DEBUG, "%s: added tag %s", url.first, tag);
+			LOG(Level::DEBUG, "%s: added tag %s", url.first, tag);
 			alltags.insert(tag);
 		}
 	}
 }
 
-std::string ttrss_urlreader::get_source()
+std::string TtrssUrlReader::get_source()
 {
 	return "Tiny Tiny RSS";
 }

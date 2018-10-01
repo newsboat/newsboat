@@ -5,10 +5,10 @@
 
 namespace newsboat {
 
-class filebrowser_formaction : public formaction {
+class FileBrowserFormaction : public Formaction {
 public:
-	filebrowser_formaction(view*, std::string formstr);
-	~filebrowser_formaction() override;
+	FileBrowserFormaction(View*, std::string formstr);
+	~FileBrowserFormaction() override;
 	void prepare() override;
 	void init() override;
 	keymap_hint_entry* get_keymap_hint() override;

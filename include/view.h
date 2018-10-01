@@ -18,34 +18,34 @@
 
 namespace newsboat {
 
-class formaction;
-class itemlist_formaction;
-class itemview_formaction;
+class Formaction;
+class ItemListFormaction;
+class ItemViewFormaction;
 
-class view {
+class View {
 public:
-	explicit view(controller*);
-	~view();
+	explicit View(Controller*);
+	~View();
 	int run();
-	std::string run_modal(std::shared_ptr<formaction> f,
+	std::string run_modal(std::shared_ptr<Formaction> f,
 		const std::string& value = "");
 
-	void set_feedlist(std::vector<std::shared_ptr<rss_feed>> feeds);
-	void update_visible_feeds(std::vector<std::shared_ptr<rss_feed>> feeds);
-	void set_keymap(keymap* k);
-	void set_config_container(configcontainer* cfgcontainer);
+	void set_feedlist(std::vector<std::shared_ptr<RssFeed>> feeds);
+	void update_visible_feeds(std::vector<std::shared_ptr<RssFeed>> feeds);
+	void set_Keymap(Keymap* k);
+	void set_config_container(ConfigContainer* cfgcontainer);
 	void show_error(const std::string& msg);
 	void set_status(const std::string& msg);
 	void set_status_unlocked(const std::string& msg);
-	controller* get_ctrl()
+	Controller* get_ctrl()
 	{
 		return ctrl;
 	}
-	configcontainer* get_cfg()
+	ConfigContainer* get_cfg()
 	{
 		return cfg;
 	}
-	keymap* get_keys()
+	Keymap* get_keys()
 	{
 		return keys;
 	}
@@ -54,23 +54,23 @@ public:
 	void pop_current_formaction();
 	void remove_formaction(unsigned int pos);
 	void set_current_formaction(unsigned int pos);
-	unsigned int formaction_stack_size()
+	unsigned int Formaction_stack_size()
 	{
-		return formaction_stack.size();
+		return Formaction_stack.size();
 	}
 	char confirm(const std::string& prompt, const std::string& charset);
 
 	void push_itemlist(unsigned int pos);
-	void push_itemlist(std::shared_ptr<rss_feed> feed);
-	void push_itemview(std::shared_ptr<rss_feed> f,
+	void push_itemlist(std::shared_ptr<RssFeed> feed);
+	void push_itemView(std::shared_ptr<RssFeed> f,
 		const std::string& guid,
 		const std::string& searchphrase = "");
 	void push_help();
-	void push_urlview(const std::vector<linkpair>& links,
-		std::shared_ptr<rss_feed>& feed);
-	void push_searchresult(std::shared_ptr<rss_feed> feed,
+	void push_urlView(const std::vector<linkpair>& links,
+		std::shared_ptr<RssFeed>& feed);
+	void push_searchresult(std::shared_ptr<RssFeed> feed,
 		const std::string& phrase = "");
-	void view_dialogs();
+	void View_dialogs();
 
 	std::string run_filebrowser(const std::string& default_filename = "",
 		const std::string& dir = "");
@@ -83,23 +83,23 @@ public:
 
 	std::string get_filename_suggestion(const std::string& s);
 
-	bool get_next_unread(itemlist_formaction* itemlist,
-		itemview_formaction* itemview = nullptr);
-	bool get_previous_unread(itemlist_formaction* itemlist,
-		itemview_formaction* itemview = nullptr);
-	bool get_next(itemlist_formaction* itemlist,
-		itemview_formaction* itemview = nullptr);
-	bool get_previous(itemlist_formaction* itemlist,
-		itemview_formaction* itemview = nullptr);
-	bool get_random_unread(itemlist_formaction* itemlist,
-		itemview_formaction* itemview = nullptr);
+	bool get_next_unread(ItemListFormaction* itemlist,
+		ItemViewFormaction* itemView = nullptr);
+	bool get_previous_unread(ItemListFormaction* itemlist,
+		ItemViewFormaction* itemView = nullptr);
+	bool get_next(ItemListFormaction* itemlist,
+		ItemViewFormaction* itemView = nullptr);
+	bool get_previous(ItemListFormaction* itemlist,
+		ItemViewFormaction* itemView = nullptr);
+	bool get_random_unread(ItemListFormaction* itemlist,
+		ItemViewFormaction* itemView = nullptr);
 
-	bool get_next_unread_feed(itemlist_formaction* itemlist);
-	bool get_prev_unread_feed(itemlist_formaction* itemlist);
-	bool get_next_feed(itemlist_formaction* itemlist);
-	bool get_prev_feed(itemlist_formaction* itemlist);
+	bool get_next_unread_feed(ItemListFormaction* itemlist);
+	bool get_prev_unread_feed(ItemListFormaction* itemlist);
+	bool get_next_feed(ItemListFormaction* itemlist);
+	bool get_prev_feed(ItemListFormaction* itemlist);
 
-	void prepare_query_feed(std::shared_ptr<rss_feed> feed);
+	void prepare_query_feed(std::shared_ptr<RssFeed> feed);
 
 	void force_redraw();
 
@@ -107,20 +107,20 @@ public:
 		std::map<std::string, std::string>& bg_colors,
 		std::map<std::string, std::vector<std::string>>& attributes);
 
-	void notify_itemlist_change(std::shared_ptr<rss_feed> feed);
+	void notify_itemlist_change(std::shared_ptr<RssFeed> feed);
 
 	void feedlist_mark_pos_if_visible(unsigned int pos);
 
-	void set_regexmanager(regexmanager* r);
+	void set_RegexManager(RegexManager* r);
 
 	std::vector<std::pair<unsigned int, std::string>>
 	get_formaction_names();
 
-	std::shared_ptr<formaction> get_current_formaction();
+	std::shared_ptr<Formaction> get_current_formaction();
 
-	std::shared_ptr<formaction> get_formaction(unsigned int idx) const
+	std::shared_ptr<Formaction> get_formaction(unsigned int idx) const
 	{
-		return formaction_stack[idx];
+		return Formaction_stack[idx];
 	}
 
 	void goto_next_dialog();
@@ -138,29 +138,29 @@ public:
 	static void ctrl_c_action(int sig);
 
 protected:
-	void set_bindings(std::shared_ptr<formaction> fa);
-	void apply_colors(std::shared_ptr<formaction> fa);
+	void set_bindings(std::shared_ptr<Formaction> fa);
+	void apply_colors(std::shared_ptr<Formaction> fa);
 
-	void handle_cmdline_completion(std::shared_ptr<formaction> fa);
-	void clear_line(std::shared_ptr<formaction> fa);
-	void clear_eol(std::shared_ptr<formaction> fa);
-	void cancel_input(std::shared_ptr<formaction> fa);
-	void delete_word(std::shared_ptr<formaction> fa);
+	void handle_cmdline_completion(std::shared_ptr<Formaction> fa);
+	void clear_line(std::shared_ptr<Formaction> fa);
+	void clear_eol(std::shared_ptr<Formaction> fa);
+	void cancel_input(std::shared_ptr<Formaction> fa);
+	void delete_word(std::shared_ptr<Formaction> fa);
 
-	controller* ctrl;
+	Controller* ctrl;
 
-	configcontainer* cfg;
-	keymap* keys;
+	ConfigContainer* cfg;
+	Keymap* keys;
 	std::mutex mtx;
 
-	friend class colormanager;
+	friend class ColorManager;
 
-	std::vector<std::shared_ptr<formaction>> formaction_stack;
+	std::vector<std::shared_ptr<Formaction>> Formaction_stack;
 	unsigned int current_formaction;
 
 	std::vector<std::string> tags;
 
-	regexmanager* rxman;
+	RegexManager* rxman;
 
 	std::map<std::string, std::string> fg_colors;
 	std::map<std::string, std::string> bg_colors;

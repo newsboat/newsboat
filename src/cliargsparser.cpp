@@ -7,7 +7,7 @@
 
 namespace newsboat {
 
-CLIArgsParser::CLIArgsParser(int argc, char* argv[])
+CliArgsParser::CliArgsParser(int argc, char* argv[])
 {
 	int c;
 
@@ -15,7 +15,7 @@ CLIArgsParser::CLIArgsParser(int argc, char* argv[])
 
 	static const char getopt_str[] = "i:erhqu:c:C:d:l:vVx:XI:E:";
 	static const struct option longopts[] = {
-		{"cache-file", required_argument, 0, 'c'},
+		{"Cache-file", required_argument, 0, 'c'},
 		{"config-file", required_argument, 0, 'C'},
 		{"execute", required_argument, 0, 'x'},
 		{"export-to-file", required_argument, 0, 'E'},
@@ -24,7 +24,7 @@ CLIArgsParser::CLIArgsParser(int argc, char* argv[])
 		{"import-from-file", required_argument, 0, 'I'},
 		{"import-from-opml", required_argument, 0, 'i'},
 		{"log-file", required_argument, 0, 'd'},
-		{"log-level", required_argument, 0, 'l'},
+		{"log-Level", required_argument, 0, 'l'},
 		{"quiet", no_argument, 0, 'q'},
 		{"refresh-on-start", no_argument, 0, 'r'},
 		{"url-file", required_argument, 0, 'u'},
@@ -35,7 +35,7 @@ CLIArgsParser::CLIArgsParser(int argc, char* argv[])
 	// Ask getopt to re-initialize itself.
 	//
 	// This isn't necessary for real-world use, because we parse arguments
-	// only once; but this is *very* important in tests, where CLIArgsParser
+	// only once; but this is *very* important in tests, where CliArgsParser
 	// is ran dozens of times.
 	//
 	// Note we use 0, not 1. getopt(3) says that the value of 0 forces
@@ -135,13 +135,13 @@ CLIArgsParser::CLIArgsParser(int argc, char* argv[])
 			log_file = optarg;
 			break;
 		case 'l': {
-			level l = static_cast<level>(atoi(optarg));
-			if (l > level::NONE && l <= level::DEBUG) {
+			Level l = static_cast<Level>(atoi(optarg));
+			if (l > Level::NONE && l <= Level::DEBUG) {
 				set_log_level = true;
 				log_level = l;
 			} else {
 				display_msg =
-					strprintf::fmt(_("%s: %d: invalid "
+					StrPrintf::fmt(_("%s: %d: invalid "
 							 "loglevel value"),
 						argv[0],
 						l);

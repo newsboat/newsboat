@@ -13,10 +13,10 @@ namespace newsboat {
 
 typedef std::map<std::string, rsspp::feed> feedmap;
 
-class newsblur_api : public remote_api {
+class NewsBlurApi : public RemoteApi {
 public:
-	explicit newsblur_api(configcontainer* c);
-	~newsblur_api() override;
+	explicit NewsBlurApi(ConfigContainer* c);
+	~NewsBlurApi() override;
 	bool authenticate() override;
 	std::vector<tagged_feedurl> get_subscribed_urls() override;
 	void add_custom_headers(curl_slist** custom_headers) override;
@@ -38,17 +38,17 @@ private:
 	unsigned int min_pages;
 };
 
-class newsblur_urlreader : public urlreader {
+class NewsBlurUrlReader : public UrlReader {
 public:
-	newsblur_urlreader(const std::string& url_file, remote_api* a);
-	~newsblur_urlreader() override;
+	NewsBlurUrlReader(const std::string& url_file, RemoteApi* a);
+	~NewsBlurUrlReader() override;
 	void write_config() override;
 	void reload() override;
 	std::string get_source() override;
 
 private:
 	std::string file;
-	remote_api* api;
+	RemoteApi* api;
 };
 
 } // namespace newsboat

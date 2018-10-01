@@ -6,7 +6,7 @@
 
 namespace newsboat {
 
-class strprintf {
+class StrPrintf {
 public:
 	static std::pair<std::string, std::string> split_format(
 		const std::string& printf_format);

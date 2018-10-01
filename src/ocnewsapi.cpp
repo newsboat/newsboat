@@ -17,19 +17,19 @@ namespace newsboat {
 typedef std::unique_ptr<json_object, decltype(*json_object_put)> json_uptr;
 typedef std::unique_ptr<CURL, decltype(*curl_easy_cleanup)> curl_uptr;
 
-ocnews_api::ocnews_api(configcontainer* c)
-	: remote_api(c)
+OcNewsApi::OcNewsApi(ConfigContainer* c)
+	: RemoteApi(c)
 {
 	server = cfg->get_configvalue("ocnews-url");
 
 	if (server.empty())
-		LOG(level::CRITICAL,
-			"ocnews_api::ocnews_api: No owncloud server set");
+		LOG(Level::CRITICAL,
+			"OcNewsApi::OcNewsApi: No owncloud server set");
 }
 
-ocnews_api::~ocnews_api() {}
+OcNewsApi::~OcNewsApi() {}
 
-bool ocnews_api::authenticate()
+bool OcNewsApi::authenticate()
 {
 	auth = retrieve_auth();
 	if (auth.empty()) {
@@ -38,19 +38,19 @@ bool ocnews_api::authenticate()
 	return query("status");
 }
 
-std::string ocnews_api::retrieve_auth()
+std::string OcNewsApi::retrieve_auth()
 {
 	credentials cred = get_credentials("ocnews", "ocNews");
 	if (cred.user.empty() || cred.pass.empty()) {
-		LOG(level::CRITICAL,
-			"ocnews_api::retrieve_auth: No user and/or password "
+		LOG(Level::CRITICAL,
+			"OcNewsApi::retrieve_auth: No user and/or password "
 			"set");
 		return "";
 	}
 	return cred.user + ":" + cred.pass;
 }
 
-std::vector<tagged_feedurl> ocnews_api::get_subscribed_urls()
+std::vector<tagged_feedurl> OcNewsApi::get_subscribed_urls()
 {
 	std::vector<tagged_feedurl> result;
 	std::map<long, std::string> folders_map;
@@ -139,7 +139,7 @@ std::vector<tagged_feedurl> ocnews_api::get_subscribed_urls()
 	return result;
 }
 
-bool ocnews_api::mark_all_read(const std::string& feedurl)
+bool OcNewsApi::mark_all_read(const std::string& feedurl)
 {
 	long id = known_feeds[feedurl].second;
 
@@ -150,7 +150,7 @@ bool ocnews_api::mark_all_read(const std::string& feedurl)
 	return this->query(query, nullptr, "{}");
 }
 
-bool ocnews_api::mark_article_read(const std::string& guid, bool read)
+bool OcNewsApi::mark_article_read(const std::string& guid, bool read)
 {
 	std::string query = "items/";
 	query += guid.substr(0, guid.find_first_of(":"));
@@ -163,7 +163,7 @@ bool ocnews_api::mark_article_read(const std::string& guid, bool read)
 	return this->query(query, nullptr, "{}");
 }
 
-bool ocnews_api::update_article_flags(const std::string& oldflags,
+bool OcNewsApi::update_article_flags(const std::string& oldflags,
 	const std::string& newflags,
 	const std::string& guid)
 {
@@ -185,7 +185,7 @@ bool ocnews_api::update_article_flags(const std::string& oldflags,
 	;
 }
 
-rsspp::feed ocnews_api::fetch_feed(const std::string& feed_id)
+rsspp::feed OcNewsApi::fetch_feed(const std::string& feed_id)
 {
 	rsspp::feed feed = known_feeds[feed_id].first;
 
@@ -202,8 +202,8 @@ rsspp::feed ocnews_api::fetch_feed(const std::string& feed_id)
 	json_object* items;
 	json_object_object_get_ex(response, "items", &items);
 	if (json_object_get_type(items) != json_type_array) {
-		LOG(level::ERROR,
-			"ocnews_api::fetch_feed: items is not an array");
+		LOG(Level::ERROR,
+			"OcNewsApi::fetch_feed: items is not an array");
 		return feed;
 	}
 
@@ -240,7 +240,7 @@ rsspp::feed ocnews_api::fetch_feed(const std::string& feed_id)
 			if (type_obj && node) {
 				const std::string type =
 					json_object_get_string(type_obj);
-				if (utils::is_valid_podcast_type(type)) {
+				if (Utils::is_valid_podcast_type(type)) {
 					item.enclosure_url =
 						json_object_get_string(node);
 					item.enclosure_type = std::move(type);
@@ -281,12 +281,12 @@ rsspp::feed ocnews_api::fetch_feed(const std::string& feed_id)
 	return feed;
 }
 
-void ocnews_api::add_custom_headers(curl_slist** /* custom_headers */)
+void OcNewsApi::add_custom_headers(curl_slist** /* custom_headers */)
 {
 	// nothing required
 }
 
-bool ocnews_api::query(const std::string& query,
+bool OcNewsApi::query(const std::string& query,
 	json_object** result,
 	const std::string& post)
 {
@@ -296,7 +296,7 @@ bool ocnews_api::query(const std::string& query,
 	std::string url = server + OCNEWS_API + query;
 	curl_easy_setopt(handle, CURLOPT_URL, url.c_str());
 
-	utils::set_common_curl_options(handle, cfg);
+	Utils::set_common_curl_options(handle, cfg);
 
 	static auto write_fn =
 		[](void* buffer, size_t size, size_t nmemb, void* userp) {
@@ -321,8 +321,8 @@ bool ocnews_api::query(const std::string& query,
 	CURLcode res = curl_easy_perform(handle);
 
 	if (res != CURLE_OK && res != CURLE_HTTP_RETURNED_ERROR) {
-		LOG(level::CRITICAL,
-			"ocnews_api::query: connection error code %i (%s)",
+		LOG(Level::CRITICAL,
+			"OcNewsApi::query: connection error code %i (%s)",
 			res,
 			curl_easy_strerror(res));
 		return false;
@@ -332,12 +332,12 @@ bool ocnews_api::query(const std::string& query,
 	curl_easy_getinfo(handle, CURLINFO_RESPONSE_CODE, &response_code);
 	if (response_code != 200) {
 		if (response_code == 401)
-			LOG(level::CRITICAL,
-				"ocnews_api::query: authentication error");
+			LOG(Level::CRITICAL,
+				"OcNewsApi::query: authentication error");
 		else {
-			std::string msg = "ocnews_api::query: error ";
+			std::string msg = "OcNewsApi::query: error ";
 			msg += response_code;
-			LOG(level::CRITICAL, msg);
+			LOG(Level::CRITICAL, msg);
 		}
 		return false;
 	}

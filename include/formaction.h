@@ -11,7 +11,7 @@
 
 namespace newsboat {
 
-class view;
+class View;
 
 struct keymap_hint_entry {
 	operation op;
@@ -20,13 +20,13 @@ struct keymap_hint_entry {
 
 typedef std::pair<std::string, std::string> qna_pair;
 
-class formaction {
+class Formaction {
 public:
-	formaction(view*, std::string formstr);
-	virtual ~formaction();
+	Formaction(View*, std::string formstr);
+	virtual ~Formaction();
 	virtual void prepare() = 0;
 	virtual void init() = 0;
-	std::shared_ptr<stfl::form> get_form();
+	std::shared_ptr<Stfl::Form> get_form();
 	virtual void set_redraw(bool b)
 	{
 		do_redraw = b;
@@ -57,13 +57,13 @@ public:
 	}
 	void start_qna(const std::vector<qna_pair>& prompts,
 		operation finish_op,
-		history* h = nullptr);
+		History* h = nullptr);
 
-	void set_parent_formaction(std::shared_ptr<formaction> fa)
+	void set_parent_formaction(std::shared_ptr<Formaction> fa)
 	{
 		parent_formaction = fa;
 	}
-	std::shared_ptr<formaction> get_parent_formaction() const
+	std::shared_ptr<Formaction> get_parent_formaction() const
 	{
 		return parent_formaction;
 	}
@@ -94,17 +94,17 @@ protected:
 		const std::string& default_url,
 		const std::string& default_desc,
 		const std::string& default_feed_title);
-	void open_unread_items_in_browser(std::shared_ptr<rss_feed> feed,
+	void open_unread_items_in_browser(std::shared_ptr<RssFeed> feed,
 		bool markread);
 
-	view* v;
-	std::shared_ptr<stfl::form> f;
+	View* v;
+	std::shared_ptr<Stfl::Form> f;
 	bool do_redraw;
 
 	std::vector<std::string> qna_responses;
 
-	static history searchhistory;
-	static history cmdlinehistory;
+	static History searchhistory;
+	static History cmdlinehistory;
 
 	std::vector<std::string> valid_cmds;
 
@@ -114,8 +114,8 @@ private:
 
 	std::vector<qna_pair> qna_prompts;
 	operation finish_operation;
-	history* qna_history;
-	std::shared_ptr<formaction> parent_formaction;
+	History* qna_history;
+	std::shared_ptr<Formaction> parent_formaction;
 };
 
 } // namespace newsboat

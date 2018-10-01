@@ -17,13 +17,13 @@ typedef struct {
 	std::string pass;
 } credentials;
 
-class remote_api {
+class RemoteApi {
 public:
-	explicit remote_api(configcontainer* c)
+	explicit RemoteApi(ConfigContainer* c)
 		: cfg(c)
 	{
 	}
-	virtual ~remote_api() {}
+	virtual ~RemoteApi() {}
 	virtual bool authenticate() = 0;
 	virtual std::vector<tagged_feedurl> get_subscribed_urls() = 0;
 	virtual void add_custom_headers(curl_slist** custom_headers) = 0;
@@ -36,7 +36,7 @@ public:
 	static const std::string eval_password(const std::string& cmd);
 	// TODO
 protected:
-	configcontainer* cfg;
+	ConfigContainer* cfg;
 	credentials get_credentials(const std::string& scope,
 		const std::string& name);
 };

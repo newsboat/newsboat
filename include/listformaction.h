@@ -5,15 +5,15 @@
 
 namespace newsboat {
 
-class list_formaction : public formaction {
+class ListFormaction : public Formaction {
 public:
-	list_formaction(view*, std::string formstr);
+	ListFormaction(View*, std::string formstr);
 
 protected:
 	void process_operation(operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
-	void open_unread_items_in_browser(std::shared_ptr<rss_feed> feed,
+	void open_unread_items_in_browser(std::shared_ptr<RssFeed> feed,
 		bool markread);
 };
 

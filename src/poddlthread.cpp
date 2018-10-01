@@ -24,7 +24,7 @@ static int progress_callback(void* clientp,
 	double ultotal,
 	double ulnow);
 
-poddlthread::poddlthread(download* dl_, newsboat::configcontainer* c)
+PoddlThread::PoddlThread(Download* dl_, newsboat::ConfigContainer* c)
 	: dl(dl_)
 	, f(new std::ofstream())
 	, bytecount(0)
@@ -35,23 +35,23 @@ poddlthread::poddlthread(download* dl_, newsboat::configcontainer* c)
 	tv2 = zero;
 }
 
-poddlthread::~poddlthread() {}
+PoddlThread::~PoddlThread() {}
 
-void poddlthread::operator()()
+void PoddlThread::operator()()
 {
 	run();
 }
 
-void poddlthread::run()
+void PoddlThread::run()
 {
-	// are we resuming previous download?
-	bool resumed_download = false;
+	// are we resuming previous Download?
+	bool resumed_Download = false;
 
 	gettimeofday(&tv1, nullptr);
 	++bytecount;
 
 	CURL* easyhandle = curl_easy_init();
-	utils::set_common_curl_options(easyhandle, cfg);
+	Utils::set_common_curl_options(easyhandle, cfg);
 
 	curl_easy_setopt(easyhandle, CURLOPT_URL, dl->url().c_str());
 	curl_easy_setopt(easyhandle, CURLOPT_TIMEOUT, 0);
@@ -65,8 +65,8 @@ void poddlthread::run()
 		easyhandle, CURLOPT_PROGRESSFUNCTION, progress_callback);
 	curl_easy_setopt(easyhandle, CURLOPT_PROGRESSDATA, this);
 
-	// set up max download speed
-	int max_dl_speed = cfg->get_configvalue_as_int("max-download-speed");
+	// set up max Download speed
+	int max_dl_speed = cfg->get_configvalue_as_int("max-Download-speed");
 	if (max_dl_speed > 0) {
 		curl_easy_setopt(easyhandle,
 			CURLOPT_MAX_RECV_SPEED_LARGE,
@@ -75,62 +75,62 @@ void poddlthread::run()
 
 	struct stat sb;
 	std::string filename =
-		dl->filename() + newsboat::configcontainer::PARTIAL_FILE_SUFFIX;
+		dl->filename() + newsboat::ConfigContainer::PARTIAL_FILE_SUFFIX;
 
 	if (stat(filename.c_str(), &sb) == -1) {
-		LOG(level::INFO,
-			"poddlthread::run: stat failed: starting normal "
-			"download");
+		LOG(Level::INFO,
+			"PoddlThread::run: stat failed: starting normal "
+			"Download");
 
 		// Have to copy the string into a vector in order to be able to
 		// get a char* pointer. std::string::c_str() won't do because it
 		// returns const char*, whereas ::dirname() needs non-const.
 		std::vector<char> directory(filename.begin(), filename.end());
-		utils::mkdir_parents(dirname(&directory[0]));
+		Utils::mkdir_parents(dirname(&directory[0]));
 
 		f->open(filename, std::fstream::out);
 		dl->set_offset(0);
-		resumed_download = false;
+		resumed_Download = false;
 	} else {
-		LOG(level::INFO,
-			"poddlthread::run: stat ok: starting download from %u",
+		LOG(Level::INFO,
+			"PoddlThread::run: stat ok: starting Download from %u",
 			sb.st_size);
 		curl_easy_setopt(easyhandle, CURLOPT_RESUME_FROM, sb.st_size);
 		dl->set_offset(sb.st_size);
 		f->open(filename, std::fstream::out | std::fstream::app);
-		resumed_download = true;
+		resumed_Download = true;
 	}
 
 	if (f->is_open()) {
-		dl->set_status(dlstatus::DOWNLOADING);
+		dl->set_status(DlStatus::DOWNLOADING);
 
 		CURLcode success = curl_easy_perform(easyhandle);
 
 		f->close();
 
-		LOG(level::INFO,
-			"poddlthread::run: curl_easy_perform rc = %u (%s)",
+		LOG(Level::INFO,
+			"PoddlThread::run: curl_easy_perform rc = %u (%s)",
 			success,
 			curl_easy_strerror(success));
 
 		if (0 == success) {
-			LOG(level::DEBUG,
-				"poddlthread::run: download complete, deleting "
+			LOG(Level::DEBUG,
+				"PoddlThread::run: Download complete, deleting "
 				"temporary suffix");
 			rename(filename.c_str(), dl->filename().c_str());
-			dl->set_status(dlstatus::READY);
-		} else if (dl->status() != dlstatus::CANCELLED) {
-			// attempt complete re-download
-			if (resumed_download) {
+			dl->set_status(DlStatus::READY);
+		} else if (dl->status() != DlStatus::CANCELLED) {
+			// attempt complete re-Download
+			if (resumed_Download) {
 				::unlink(filename.c_str());
 				this->run();
 			} else {
-				dl->set_status(dlstatus::FAILED);
+				dl->set_status(DlStatus::FAILED);
 				::unlink(filename.c_str());
 			}
 		}
 	} else {
-		dl->set_status(dlstatus::FAILED);
+		dl->set_status(DlStatus::FAILED);
 	}
 
 	curl_easy_cleanup(easyhandle);
@@ -139,7 +139,7 @@ void poddlthread::run()
 static size_t
 my_write_data(void* buffer, size_t size, size_t nmemb, void* userp)
 {
-	poddlthread* thread = static_cast<poddlthread*>(userp);
+	PoddlThread* thread = static_cast<PoddlThread*>(userp);
 	return thread->write_data(buffer, size, nmemb);
 }
 
@@ -149,26 +149,26 @@ static int progress_callback(void* clientp,
 	double /* ultotal */,
 	double /*ulnow*/)
 {
-	poddlthread* thread = static_cast<poddlthread*>(clientp);
+	PoddlThread* thread = static_cast<PoddlThread*>(clientp);
 	return thread->progress(dlnow, dltotal);
 }
 
-size_t poddlthread::write_data(void* buffer, size_t size, size_t nmemb)
+size_t PoddlThread::write_data(void* buffer, size_t size, size_t nmemb)
 {
-	if (dl->status() == dlstatus::CANCELLED)
+	if (dl->status() == DlStatus::CANCELLED)
 		return 0;
 	f->write(static_cast<char*>(buffer), size * nmemb);
 	bytecount += (size * nmemb);
-	LOG(level::DEBUG,
-		"poddlthread::write_data: bad = %u size = %u",
+	LOG(Level::DEBUG,
+		"PoddlThread::write_data: bad = %u size = %u",
 		f->bad(),
 		size * nmemb);
 	return f->bad() ? 0 : size * nmemb;
 }
 
-int poddlthread::progress(double dlnow, double dltotal)
+int PoddlThread::progress(double dlnow, double dltotal)
 {
-	if (dl->status() == dlstatus::CANCELLED)
+	if (dl->status() == DlStatus::CANCELLED)
 		return -1;
 	gettimeofday(&tv2, nullptr);
 	double kbps = compute_kbps();
@@ -182,7 +182,7 @@ int poddlthread::progress(double dlnow, double dltotal)
 	return 0;
 }
 
-double poddlthread::compute_kbps()
+double PoddlThread::compute_kbps()
 {
 	double t1 = tv1.tv_sec + (tv1.tv_usec / 1000000.0);
 	double t2 = tv2.tv_sec + (tv2.tv_usec / 1000000.0);

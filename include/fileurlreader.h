@@ -7,9 +7,9 @@
 
 namespace newsboat {
 
-class file_urlreader : public urlreader {
+class FileUrlReader : public UrlReader {
 public:
-	explicit file_urlreader(const std::string& file = "");
+	explicit FileUrlReader(const std::string& file = "");
 	void write_config() override;
 	void reload() override;
 	void load_config(const std::string& file);

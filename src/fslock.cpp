@@ -12,7 +12,7 @@ namespace newsboat {
 void remove_lock(const std::string& lock_filepath)
 {
 	::unlink(lock_filepath.c_str());
-	LOG(level::DEBUG, "FSLock: removed lockfile %s", lock_filepath);
+	LOG(Level::DEBUG, "FSLock: removed lockfile %s", lock_filepath);
 }
 
 FSLock::~FSLock()
@@ -32,7 +32,7 @@ bool FSLock::try_lock(const std::string& new_lock_filepath, pid_t& pid)
 	// pid == 0 indicates that something went majorly wrong during locking
 	pid = 0;
 
-	LOG(level::DEBUG, "FSLock: trying to lock `%s'", new_lock_filepath);
+	LOG(Level::DEBUG, "FSLock: trying to lock `%s'", new_lock_filepath);
 
 	// first, we open (and possibly create) the lock file
 	fd = ::open(new_lock_filepath.c_str(), O_RDWR | O_CREAT, 0600);
@@ -42,7 +42,7 @@ bool FSLock::try_lock(const std::string& new_lock_filepath, pid_t& pid)
 
 	// then we lock it (returns immediately if locking is not possible)
 	if (lockf(fd, F_TLOCK, 0) == 0) {
-		LOG(level::DEBUG,
+		LOG(Level::DEBUG,
 			"FSLock: locked `%s', writing PID...",
 			new_lock_filepath);
 		std::string pidtext = std::to_string(getpid());
@@ -54,7 +54,7 @@ bool FSLock::try_lock(const std::string& new_lock_filepath, pid_t& pid)
 		bool success = (written != -1) &&
 			(static_cast<unsigned int>(written) ==
 				pidtext.length());
-		LOG(level::DEBUG,
+		LOG(Level::DEBUG,
 			"FSLock: PID written successfully: %i",
 			success);
 		if (success) {
@@ -68,7 +68,7 @@ bool FSLock::try_lock(const std::string& new_lock_filepath, pid_t& pid)
 		}
 		return success;
 	} else {
-		LOG(level::ERROR,
+		LOG(Level::ERROR,
 			"FSLock: something went wrong during locking: %s",
 			strerror(errno));
 	}
@@ -86,7 +86,7 @@ bool FSLock::try_lock(const std::string& new_lock_filepath, pid_t& pid)
 		}
 		close(fd);
 	}
-	LOG(level::DEBUG, "FSLock: locking failed, already locked by %u", pid);
+	LOG(Level::DEBUG, "FSLock: locking failed, already locked by %u", pid);
 	return false;
 }
 

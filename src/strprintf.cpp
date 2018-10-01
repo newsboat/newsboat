@@ -2,14 +2,14 @@
 
 using namespace newsboat;
 
-/* Splits a printf-like format string into two parts, where first part contains
- * at most one format while the second part contains the rest of the input
+/* Splits a printf-like Format string into two parts, where first part contains
+ * at most one Format while the second part contains the rest of the input
  * string:
  *
  * "hello %i world %s haha"       =>  { "hello %i world ", "%s haha" }
  * "a 100%% rel%iable e%xamp%le"  =>  { "a 100%% rel%iable e", "%xamp%le" }
  */
-std::pair<std::string, std::string> strprintf::split_format(
+std::pair<std::string, std::string> StrPrintf::split_format(
 	const std::string& printf_format)
 {
 	std::string first_format, rest;

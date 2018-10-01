@@ -71,11 +71,11 @@ struct configdata {
 	bool multi_option;
 };
 
-class configcontainer : public config_action_handler {
+class ConfigContainer : public ConfigActionHandler {
 public:
-	configcontainer();
-	~configcontainer() override;
-	void register_commands(configparser& cfgparser);
+	ConfigContainer();
+	~ConfigContainer() override;
+	void register_commands(ConfigParser& cfgparser);
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) override;

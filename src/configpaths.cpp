@@ -16,7 +16,7 @@ namespace newsboat {
 
 ConfigPaths::ConfigPaths()
 	: m_url_file("urls")
-	, m_cache_file("cache.db")
+	, m_cache_file("Cache.db")
 	, m_config_file("config")
 	, m_queue_file("queue")
 {
@@ -26,7 +26,7 @@ ConfigPaths::ConfigPaths()
 		if (spw) {
 			env_home = spw->pw_dir;
 		} else {
-			m_error_message = strprintf::fmt(
+			m_error_message = StrPrintf::fmt(
 				_("Fatal error: couldn't determine home "
 				  "directory!\nPlease set the HOME environment "
 				  "variable or add a valid user for UID %u!"),
@@ -73,8 +73,8 @@ void ConfigPaths::find_dirs()
 	m_cache_file = data + m_cache_file;
 	m_lock_file = m_cache_file + LOCK_SUFFIX;
 	m_queue_file = data + m_queue_file;
-	m_search_file = data + std::string("history.search");
-	m_cmdline_file = data + std::string("history.cmdline");
+	m_search_file = data + std::string("History.search");
+	m_cmdline_file = data + std::string("History.cmdline");
 }
 
 /**
@@ -129,7 +129,7 @@ bool ConfigPaths::find_dirs_xdg()
 	return true;
 }
 
-void ConfigPaths::process_args(const CLIArgsParser& args)
+void ConfigPaths::process_args(const CliArgsParser& args)
 {
 	if (args.set_url_file) {
 		m_url_file = args.url_file;
@@ -216,7 +216,7 @@ bool ConfigPaths::migrate_data_from_newsbeuter_xdg()
 	auto exists = [](const std::string& dir) -> bool {
 		bool dir_exists = 0 == access(dir.c_str(), F_OK);
 		if (dir_exists) {
-			LOG(level::DEBUG,
+			LOG(Level::DEBUG,
 				"%s already exists, aborting XDG migration.",
 				dir);
 		}
@@ -238,11 +238,11 @@ bool ConfigPaths::migrate_data_from_newsbeuter_xdg()
 	}
 
 	auto try_mkdir = [](const std::string& dir) -> bool {
-		bool result = 0 == utils::mkdir_parents(dir, 0700);
+		bool result = 0 == Utils::mkdir_parents(dir, 0700);
 		// If dir already exists, it's an error, so we won't check the
 		// errno (unlike in many other places in the code)
 		if (!result) {
-			LOG(level::DEBUG,
+			LOG(Level::DEBUG,
 				"Aborting XDG migration because mkdir on %s "
 				"failed: %s",
 				dir,
@@ -263,13 +263,13 @@ bool ConfigPaths::migrate_data_from_newsbeuter_xdg()
 		newsboat_config_dir + "config");
 
 	/* in data */
-	copy_file(newsbeuter_data_dir + "cache.db",
-		newsboat_data_dir + "cache.db");
+	copy_file(newsbeuter_data_dir + "Cache.db",
+		newsboat_data_dir + "Cache.db");
 	copy_file(newsbeuter_data_dir + "queue", newsboat_data_dir + "queue");
-	copy_file(newsbeuter_data_dir + "history.search",
-		newsboat_data_dir + "history.search");
-	copy_file(newsbeuter_data_dir + "history.cmdline",
-		newsboat_data_dir + "history.cmdline");
+	copy_file(newsbeuter_data_dir + "History.search",
+		newsboat_data_dir + "History.search");
+	copy_file(newsbeuter_data_dir + "History.cmdline",
+		newsboat_data_dir + "History.cmdline");
 
 	return true;
 }
@@ -294,7 +294,7 @@ bool ConfigPaths::migrate_data_from_newsbeuter_simple()
 
 	bool newsboat_dir_exists = 0 == access(newsboat_dir.c_str(), F_OK);
 	if (newsboat_dir_exists) {
-		LOG(level::DEBUG,
+		LOG(Level::DEBUG,
 			"%s already exists, aborting migration.",
 			newsboat_dir);
 		return false;
@@ -317,13 +317,13 @@ bool ConfigPaths::migrate_data_from_newsbeuter_simple()
 	}
 
 	copy_file(newsbeuter_dir + "urls", newsboat_dir + "urls");
-	copy_file(newsbeuter_dir + "cache.db", newsboat_dir + "cache.db");
+	copy_file(newsbeuter_dir + "Cache.db", newsboat_dir + "Cache.db");
 	copy_file(newsbeuter_dir + "config", newsboat_dir + "config");
 	copy_file(newsbeuter_dir + "queue", newsboat_dir + "queue");
-	copy_file(newsbeuter_dir + "history.search",
-		newsboat_dir + "history.search");
-	copy_file(newsbeuter_dir + "history.cmdline",
-		newsboat_dir + "history.cmdline");
+	copy_file(newsbeuter_dir + "History.search",
+		newsboat_dir + "History.search");
+	copy_file(newsbeuter_dir + "History.cmdline",
+		newsboat_dir + "History.cmdline");
 
 	return true;
 }
@@ -335,7 +335,7 @@ void ConfigPaths::migrate_data_from_newsbeuter()
 	if (migrated) {
 		// Re-running to pick up XDG dirs
 		m_url_file = "urls";
-		m_cache_file = "cache.db";
+		m_cache_file = "Cache.db";
 		m_config_file = "config";
 		m_queue_file = "queue";
 		find_dirs();
@@ -353,9 +353,9 @@ void ConfigPaths::migrate_data_from_newsbeuter()
 bool ConfigPaths::create_dirs() const
 {
 	auto try_mkdir = [](const std::string& dir) -> bool {
-		const bool result = 0 == utils::mkdir_parents(dir, 0700);
+		const bool result = 0 == Utils::mkdir_parents(dir, 0700);
 		if (!result && errno != EEXIST) {
-			LOG(level::CRITICAL,
+			LOG(Level::CRITICAL,
 				"Couldn't create `%s': (%i) %s",
 				dir,
 				errno,

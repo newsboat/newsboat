@@ -5,7 +5,7 @@
 
 namespace rsspp {
 
-std::string rss_parser::get_content(xmlNode* node)
+std::string RssParser::get_content(xmlNode* node)
 {
 	std::string retval;
 	if (node) {
@@ -18,7 +18,7 @@ std::string rss_parser::get_content(xmlNode* node)
 	return retval;
 }
 
-void rss_parser::cleanup_namespaces(xmlNodePtr node)
+void RssParser::cleanup_namespaces(xmlNodePtr node)
 {
 	node->ns = nullptr;
 	for (auto ptr = node->children; ptr != nullptr; ptr = ptr->next) {
@@ -26,7 +26,7 @@ void rss_parser::cleanup_namespaces(xmlNodePtr node)
 	}
 }
 
-std::string rss_parser::get_xml_content(xmlNode* node)
+std::string RssParser::get_xml_content(xmlNode* node)
 {
 	xmlBufferPtr buf = xmlBufferCreate();
 	std::string result;
@@ -52,7 +52,7 @@ std::string rss_parser::get_xml_content(xmlNode* node)
 	return result;
 }
 
-std::string rss_parser::get_prop(xmlNode* node,
+std::string RssParser::get_prop(xmlNode* node,
 	const std::string& prop,
 	const std::string& ns)
 {
@@ -75,12 +75,12 @@ std::string rss_parser::get_prop(xmlNode* node,
 	return retval;
 }
 
-std::string rss_parser::w3cdtf_to_rfc822(const std::string& w3cdtf)
+std::string RssParser::w3cdtf_to_rfc822(const std::string& w3cdtf)
 {
 	return __w3cdtf_to_rfc822(w3cdtf);
 }
 
-std::string rss_parser::__w3cdtf_to_rfc822(const std::string& w3cdtf)
+std::string RssParser::__w3cdtf_to_rfc822(const std::string& w3cdtf)
 {
 	if (w3cdtf.empty()) {
 		return "";
@@ -139,7 +139,7 @@ std::string rss_parser::__w3cdtf_to_rfc822(const std::string& w3cdtf)
 	return datebuf;
 }
 
-bool rss_parser::node_is(xmlNode* node, const char* name, const char* ns_uri)
+bool RssParser::node_is(xmlNode* node, const char* name, const char* ns_uri)
 {
 	if (!node || !name || !node->name)
 		return false;

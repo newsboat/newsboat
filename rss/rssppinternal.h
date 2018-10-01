@@ -17,13 +17,13 @@
 
 namespace rsspp {
 
-struct rss_parser {
+struct RssParser {
 	virtual void parse_feed(feed& f, xmlNode* rootNode) = 0;
-	explicit rss_parser(xmlDocPtr d)
+	explicit RssParser(xmlDocPtr d)
 		: doc(d)
 	{
 	}
-	virtual ~rss_parser() {}
+	virtual ~RssParser() {}
 	static std::string __w3cdtf_to_rfc822(const std::string& w3cdtf);
 
 protected:
@@ -40,10 +40,10 @@ protected:
 	std::string globalbase;
 };
 
-struct rss_09x_parser : public rss_parser {
+struct rss_09x_parser : public RssParser {
 	void parse_feed(feed& f, xmlNode* rootNode) override;
 	explicit rss_09x_parser(xmlDocPtr doc)
-		: rss_parser(doc)
+		: RssParser(doc)
 		, ns(nullptr)
 	{
 	}
@@ -65,19 +65,19 @@ struct rss_20_parser : public rss_09x_parser {
 	~rss_20_parser() override {}
 };
 
-struct rss_10_parser : public rss_parser {
+struct rss_10_parser : public RssParser {
 	void parse_feed(feed& f, xmlNode* rootNode) override;
 	explicit rss_10_parser(xmlDocPtr doc)
-		: rss_parser(doc)
+		: RssParser(doc)
 	{
 	}
 	~rss_10_parser() override {}
 };
 
-struct atom_parser : public rss_parser {
+struct atom_parser : public RssParser {
 	void parse_feed(feed& f, xmlNode* rootNode) override;
 	explicit atom_parser(xmlDocPtr doc)
-		: rss_parser(doc)
+		: RssParser(doc)
 		, ns(0)
 	{
 	}
@@ -88,8 +88,8 @@ private:
 	const char* ns;
 };
 
-struct rss_parser_factory {
-	static std::shared_ptr<rss_parser> get_object(feed& f, xmlDocPtr doc);
+struct RssParser_factory {
+	static std::shared_ptr<RssParser> get_object(feed& f, xmlDocPtr doc);
 };
 
 } // namespace rsspp

@@ -5,18 +5,18 @@
 
 namespace newsboat {
 
-inoreader_urlreader::inoreader_urlreader(configcontainer* c,
+InoReaderUrlReader::InoReaderUrlReader(ConfigContainer* c,
 	const std::string& url_file,
-	remote_api* a)
+	RemoteApi* a)
 	: cfg(c)
 	, file(url_file)
 	, api(a)
 {
 }
 
-inoreader_urlreader::~inoreader_urlreader() {}
+InoReaderUrlReader::~InoReaderUrlReader() {}
 
-void inoreader_urlreader::write_config()
+void InoReaderUrlReader::write_config()
 {
 	// NOTHING
 }
@@ -39,7 +39,7 @@ void inoreader_urlreader::write_config()
 		tags[(url)] = tmptags;        \
 	} while (0)
 
-void inoreader_urlreader::reload()
+void InoReaderUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
@@ -56,12 +56,12 @@ void inoreader_urlreader::reload()
 			std::string("~") + _("Saved web pages"));
 	}
 
-	file_urlreader ur(file);
+	FileUrlReader ur(file);
 	ur.reload();
 
 	std::vector<std::string>& file_urls(ur.get_urls());
 	for (const auto& url : file_urls) {
-		if (utils::is_query_url(url)) {
+		if (Utils::is_query_url(url)) {
 			urls.push_back(url);
 			std::vector<std::string>& file_tags(ur.get_tags(url));
 			tags[url] = ur.get_tags(url);
@@ -73,17 +73,17 @@ void inoreader_urlreader::reload()
 
 	std::vector<tagged_feedurl> feedurls = api->get_subscribed_urls();
 	for (const auto& url : feedurls) {
-		LOG(level::DEBUG, "added %s to URL list", url.first);
+		LOG(Level::DEBUG, "added %s to URL list", url.first);
 		urls.push_back(url.first);
 		tags[url.first] = url.second;
 		for (const auto& tag : url.second) {
-			LOG(level::DEBUG, "%s: added tag %s", url.first, tag);
+			LOG(Level::DEBUG, "%s: added tag %s", url.first, tag);
 			alltags.insert(tag);
 		}
 	}
 }
 
-std::string inoreader_urlreader::get_source()
+std::string InoReaderUrlReader::get_source()
 {
 	return "inoreader";
 }

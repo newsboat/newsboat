@@ -22,7 +22,7 @@ using namespace newsboat;
 
 namespace podboat {
 
-pb_view::pb_view(pb_controller* c)
+PbView::PbView(PbController* c)
 	: ctrl(c)
 	, dllist_form(dllist_str)
 	, help_form(help_str)
@@ -33,19 +33,19 @@ pb_view::pb_view(pb_controller* c)
 	}
 }
 
-pb_view::~pb_view()
+PbView::~PbView()
 {
-	stfl::reset();
+	Stfl::reset();
 }
 
-void pb_view::run(bool auto_download)
+void PbView::run(bool auto_Download)
 {
 	bool quit = false;
 
 	set_dllist_keymap_hint();
 
 	do {
-		if (ctrl->view_update_necessary()) {
+		if (ctrl->View_update_necessary()) {
 			double total_kbps = ctrl->get_total_kbps();
 
 			char parbuf[128] = "";
@@ -70,24 +70,24 @@ void pb_view::run(bool auto_download)
 
 			dllist_form.set("head", buf);
 
-			LOG(level::DEBUG,
-				"pb_view::run: updating view... "
+			LOG(Level::DEBUG,
+				"PbView::run: updating View... "
 				"downloads().size() "
 				"= %u",
 				ctrl->downloads().size());
 
 			std::string code = "{list";
-			std::string formatstring = ctrl->get_formatstr();
+			std::string Formatstring = ctrl->get_formatstr();
 
-			unsigned int width = utils::to_u(dllist_form.get("feeds:w"));
+			unsigned int width = Utils::to_u(dllist_form.get("feeds:w"));
 
 			unsigned int i = 0;
 			for (const auto& dl : ctrl->downloads()) {
-				auto lbuf = format_line(formatstring, dl, i, width);
+				auto lbuf = Format_line(Formatstring, dl, i, width);
 				code.append(
-					strprintf::fmt("{listitem[%u] text:%s}",
+					StrPrintf::fmt("{listitem[%u] text:%s}",
 						i,
-						stfl::quote(lbuf)));
+						Stfl::quote(lbuf)));
 				i++;
 			}
 
@@ -98,19 +98,19 @@ void pb_view::run(bool auto_download)
 			ctrl->set_view_update_necessary(false);
 		}
 
-		const char* event = dllist_form.run(500);
+		const char* Event = dllist_form.run(500);
 
-		if (auto_download) {
+		if (auto_Download) {
 			if (ctrl->get_maxdownloads() >
 				ctrl->downloads_in_progress()) {
 				ctrl->start_downloads();
 			}
 		}
 
-		if (!event || strcmp(event, "TIMEOUT") == 0)
+		if (!Event || strcmp(Event, "TIMEOUT") == 0)
 			continue;
 
-		operation op = keys->get_operation(event, "podbeuter");
+		operation op = keys->get_operation(Event, "podbeuter");
 
 		if (dllist_form.get("msg").length() > 0) {
 			dllist_form.set("msg", "");
@@ -119,13 +119,13 @@ void pb_view::run(bool auto_download)
 
 		switch (op) {
 		case OP_PB_TOGGLE_DLALL:
-			auto_download = !auto_download;
+			auto_Download = !auto_Download;
 			break;
 		case OP_HARDQUIT:
 		case OP_QUIT:
 			if (ctrl->downloads_in_progress() > 0) {
 				dllist_form.set("msg",
-					_("Error: can't quit: download(s) in "
+					_("Error: can't quit: Download(s) in "
 					  "progress."));
 				ctrl->set_view_update_necessary(true);
 			} else {
@@ -144,8 +144,8 @@ void pb_view::run(bool auto_download)
 			os >> idx;
 			if (idx != -1) {
 				if (ctrl->downloads()[idx].status() !=
-					dlstatus::DOWNLOADING) {
-					std::thread t{poddlthread(
+					DlStatus::DOWNLOADING) {
+					std::thread t{PoddlThread(
 						&ctrl->downloads()[idx],
 						ctrl->get_cfgcont())};
 					t.detach();
@@ -157,18 +157,18 @@ void pb_view::run(bool auto_download)
 			int idx = -1;
 			os >> idx;
 			if (idx != -1) {
-				dlstatus status =
+				DlStatus status =
 					ctrl->downloads()[idx].status();
-				if (status == dlstatus::FINISHED ||
-					status == dlstatus::PLAYED ||
-					status == dlstatus::READY) {
+				if (status == DlStatus::FINISHED ||
+					status == DlStatus::PLAYED ||
+					status == DlStatus::READY) {
 					ctrl->play_file(ctrl->downloads()[idx]
 								.filename());
 					ctrl->downloads()[idx].set_status(
-						dlstatus::PLAYED);
+						DlStatus::PLAYED);
 				} else {
 					dllist_form.set("msg",
-						_("Error: download needs to be "
+						_("Error: Download needs to be "
 						  "finished before the file "
 						  "can be played."));
 				}
@@ -179,11 +179,11 @@ void pb_view::run(bool auto_download)
 			int idx = -1;
 			os >> idx;
 			if (idx != -1) {
-				dlstatus status =
+				DlStatus status =
 					ctrl->downloads()[idx].status();
-				if (status == dlstatus::PLAYED) {
+				if (status == DlStatus::PLAYED) {
 					ctrl->downloads()[idx].set_status(
-						dlstatus::FINISHED);
+						DlStatus::FINISHED);
 				}
 			}
 		} break;
@@ -193,9 +193,9 @@ void pb_view::run(bool auto_download)
 			os >> idx;
 			if (idx != -1) {
 				if (ctrl->downloads()[idx].status() ==
-					dlstatus::DOWNLOADING) {
+					DlStatus::DOWNLOADING) {
 					ctrl->downloads()[idx].set_status(
-						dlstatus::CANCELLED);
+						DlStatus::CANCELLED);
 				}
 			}
 		} break;
@@ -205,9 +205,9 @@ void pb_view::run(bool auto_download)
 			os >> idx;
 			if (idx != -1) {
 				if (ctrl->downloads()[idx].status() !=
-					dlstatus::DOWNLOADING) {
+					DlStatus::DOWNLOADING) {
 					ctrl->downloads()[idx].set_status(
-						dlstatus::DELETED);
+						DlStatus::DELETED);
 				}
 			}
 		} break;
@@ -215,7 +215,7 @@ void pb_view::run(bool auto_download)
 			if (ctrl->downloads_in_progress() > 0) {
 				dllist_form.set("msg",
 					_("Error: unable to perform operation: "
-					  "download(s) in progress."));
+					  "Download(s) in progress."));
 			} else {
 				ctrl->reload_queue(true);
 			}
@@ -231,7 +231,7 @@ void pb_view::run(bool auto_download)
 	} while (!quit);
 }
 
-void pb_view::set_bindings()
+void PbView::set_bindings()
 {
 	if (keys) {
 		std::string upkey("** ");
@@ -263,7 +263,7 @@ void pb_view::set_bindings()
 	}
 }
 
-void pb_view::run_help()
+void PbView::run_help()
 {
 	set_help_keymap_hint();
 
@@ -283,7 +283,7 @@ void pb_view::run_help()
 		descline.append(desc.cmd);
 		descline.append(24 - desc.cmd.length(), ' ');
 		descline.append(desc.desc);
-		line.append(stfl::quote(descline));
+		line.append(Stfl::quote(descline));
 
 		line.append("}");
 
@@ -297,11 +297,11 @@ void pb_view::run_help()
 	bool quit = false;
 
 	do {
-		const char* event = help_form.run(0);
-		if (!event)
+		const char* Event = help_form.run(0);
+		if (!Event)
 			continue;
 
-		operation op = keys->get_operation(event, "help");
+		operation op = keys->get_operation(Event, "help");
 
 		switch (op) {
 		case OP_HARDQUIT:
@@ -314,7 +314,7 @@ void pb_view::run_help()
 	} while (!quit);
 }
 
-std::string pb_view::prepare_keymaphint(keymap_hint_entry* hints)
+std::string PbView::prepare_keymaphint(keymap_hint_entry* hints)
 {
 	std::string keymap_hint;
 	for (int i = 0; hints[i].op != OP_NIL; ++i) {
@@ -326,14 +326,14 @@ std::string pb_view::prepare_keymaphint(keymap_hint_entry* hints)
 	return keymap_hint;
 }
 
-void pb_view::set_help_keymap_hint()
+void PbView::set_help_keymap_hint()
 {
 	keymap_hint_entry hints[] = {{OP_QUIT, _("Quit")}, {OP_NIL, nullptr}};
 	std::string keymap_hint = prepare_keymaphint(hints);
 	help_form.set("help", keymap_hint);
 }
 
-void pb_view::set_dllist_keymap_hint()
+void PbView::set_dllist_keymap_hint()
 {
 	keymap_hint_entry hints[] = {{OP_QUIT, _("Quit")},
 		{OP_PB_DOWNLOAD, _("Download")},
@@ -350,26 +350,26 @@ void pb_view::set_dllist_keymap_hint()
 	dllist_form.set("help", keymap_hint);
 }
 
-std::string pb_view::format_line(const std::string& podlist_format,
-	const download& dl,
+std::string PbView::Format_line(const std::string& podlist_format,
+	const Download& dl,
 	unsigned int pos,
 	unsigned int width)
 {
-	fmtstr_formatter fmt;
+	FmtStrFormatter fmt;
 
-	fmt.register_fmt('i', strprintf::fmt("%u", pos + 1));
+	fmt.register_fmt('i', StrPrintf::fmt("%u", pos + 1));
 	fmt.register_fmt('d',
-		strprintf::fmt("%.1f", dl.current_size() / (1024 * 1024)));
+		StrPrintf::fmt("%.1f", dl.current_size() / (1024 * 1024)));
 	fmt.register_fmt(
-		't', strprintf::fmt("%.1f", dl.total_size() / (1024 * 1024)));
-	fmt.register_fmt('p', strprintf::fmt("%.1f", dl.percents_finished()));
-	fmt.register_fmt('k', strprintf::fmt("%.2f", dl.kbps()));
-	fmt.register_fmt('S', strprintf::fmt("%s", dl.status_text()));
-	fmt.register_fmt('u', strprintf::fmt("%s", dl.url()));
-	fmt.register_fmt('F', strprintf::fmt("%s", dl.filename()));
+		't', StrPrintf::fmt("%.1f", dl.total_size() / (1024 * 1024)));
+	fmt.register_fmt('p', StrPrintf::fmt("%.1f", dl.percents_finished()));
+	fmt.register_fmt('k', StrPrintf::fmt("%.2f", dl.kbps()));
+	fmt.register_fmt('S', StrPrintf::fmt("%s", dl.status_text()));
+	fmt.register_fmt('u', StrPrintf::fmt("%s", dl.url()));
+	fmt.register_fmt('F', StrPrintf::fmt("%s", dl.filename()));
 
-	auto formattedLine = fmt.do_format(podlist_format, width);
-	return formattedLine;
+	auto FormattedLine = fmt.do_format(podlist_format, width);
+	return FormattedLine;
 }
 
 } // namespace podboat

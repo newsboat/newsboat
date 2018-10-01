@@ -9,15 +9,15 @@
 
 namespace newsboat {
 
-class ttrss_api : public remote_api {
+class TtrssApi : public RemoteApi {
 public:
-	explicit ttrss_api(configcontainer* c);
-	~ttrss_api() override;
+	explicit TtrssApi(ConfigContainer* c);
+	~TtrssApi() override;
 	bool authenticate() override;
 	virtual nlohmann::json run_op(const std::string& op,
 		const std::map<std::string, std::string>& args,
 		bool try_login = true,
-		CURL* cached_handle = nullptr);
+		CURL* Cached_handle = nullptr);
 	std::vector<tagged_feedurl> get_subscribed_urls() override;
 	void add_custom_headers(curl_slist** custom_headers) override;
 	bool mark_all_read(const std::string& feedurl) override;
@@ -25,7 +25,7 @@ public:
 	bool update_article_flags(const std::string& oldflags,
 		const std::string& newflags,
 		const std::string& guid) override;
-	rsspp::feed fetch_feed(const std::string& id, CURL* cached_handle);
+	rsspp::feed fetch_feed(const std::string& id, CURL* Cached_handle);
 	bool update_article(const std::string& guid, int mode, int field);
 
 private:
@@ -36,27 +36,27 @@ private:
 	tagged_feedurl feed_from_json(const nlohmann::json& jfeed,
 		const std::vector<std::string>& tags);
 	int parse_category_id(const nlohmann::json& jcatid);
-	unsigned int query_api_level();
+	unsigned int query_api_Level();
 	std::string url_to_id(const std::string& url);
 	std::string retrieve_sid();
 	std::string sid;
 	std::string auth_info;
 	bool single;
 	std::mutex auth_lock;
-	int api_level = -1;
+	int api_Level = -1;
 };
 
-class ttrss_urlreader : public urlreader {
+class TtrssUrlReader : public UrlReader {
 public:
-	ttrss_urlreader(const std::string& url_file, remote_api* a);
-	~ttrss_urlreader() override;
+	TtrssUrlReader(const std::string& url_file, RemoteApi* a);
+	~TtrssUrlReader() override;
 	void write_config() override;
 	void reload() override;
 	std::string get_source() override;
 
 private:
 	std::string file;
-	remote_api* api;
+	RemoteApi* api;
 };
 
 } // namespace newsboat

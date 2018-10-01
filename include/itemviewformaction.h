@@ -9,21 +9,21 @@
 
 namespace newsboat {
 
-class itemlist_formaction;
+class ItemListFormaction;
 
-class itemview_formaction : public formaction {
+class ItemViewFormaction : public Formaction {
 public:
-	itemview_formaction(view*,
-		std::shared_ptr<itemlist_formaction> il,
+	ItemViewFormaction(View*,
+		std::shared_ptr<ItemListFormaction> il,
 		std::string formstr);
-	~itemview_formaction() override;
+	~ItemViewFormaction() override;
 	void prepare() override;
 	void init() override;
 	void set_guid(const std::string& guid_)
 	{
 		guid = guid_;
 	}
-	void set_feed(std::shared_ptr<rss_feed> fd)
+	void set_feed(std::shared_ptr<RssFeed> fd)
 	{
 		feed = fd;
 	}
@@ -44,7 +44,7 @@ public:
 		std::vector<linkpair>& thelinks,
 		const std::string& url);
 
-	void set_regexmanager(regexmanager* r);
+	void set_RegexManager(RegexManager* r);
 
 	void update_percent();
 
@@ -64,13 +64,13 @@ private:
 	void do_search();
 
 	std::string guid;
-	std::shared_ptr<rss_feed> feed;
+	std::shared_ptr<RssFeed> feed;
 	bool show_source;
 	std::vector<linkpair> links;
 	bool quit;
-	regexmanager* rxman;
+	RegexManager* rxman;
 	unsigned int num_lines;
-	std::shared_ptr<itemlist_formaction> itemlist;
+	std::shared_ptr<ItemListFormaction> itemlist;
 	bool in_search;
 };
 

@@ -13,17 +13,17 @@
 
 namespace newsboat {
 
-typedef std::pair<std::string, matcher*> feedurl_expr_pair;
+typedef std::pair<std::string, Matcher*> feedurl_expr_pair;
 
-enum class dl_status { SUCCESS, TO_BE_DOWNLOADED, DURING_DOWNLOAD, DL_ERROR };
+enum class DlStatus { SUCCESS, TO_BE_DOWNLOADED, DURING_DOWNLOAD, DL_ERROR };
 
-class cache;
-class rss_feed;
+class Cache;
+class RssFeed;
 
-class rss_item : public matchable {
+class RssItem : public Matchable {
 public:
-	explicit rss_item(cache* c);
-	~rss_item() override;
+	explicit RssItem(Cache* c);
+	~RssItem() override;
 
 	std::string title() const;
 	std::string title_raw() const
@@ -67,7 +67,7 @@ public:
 	}
 	void set_pubDate(time_t t);
 
-	bool operator<(const rss_item& item) const
+	bool operator<(const RssItem& item) const
 	{
 		return item.pubDate_ < this->pubDate_; // new items come first
 	}
@@ -86,7 +86,7 @@ public:
 	void set_unread_nowrite(bool u);
 	void set_unread_nowrite_notify(bool u, bool notify);
 
-	void set_cache(cache* c)
+	void set_cache(Cache* c)
 	{
 		ch = c;
 	}
@@ -136,8 +136,8 @@ public:
 	bool has_attribute(const std::string& attribname) override;
 	std::string get_attribute(const std::string& attribname) override;
 
-	void set_feedptr(std::shared_ptr<rss_feed> ptr);
-	std::shared_ptr<rss_feed> get_feedptr()
+	void set_feedptr(std::shared_ptr<RssFeed> ptr);
+	std::shared_ptr<RssFeed> get_feedptr()
 	{
 		return feedptr_.lock();
 	}
@@ -190,12 +190,12 @@ private:
 	std::string description_;
 	std::string guid_;
 	std::string feedurl_;
-	cache* ch;
+	Cache* ch;
 	std::string enclosure_url_;
 	std::string enclosure_type_;
 	std::string flags_;
 	std::string oldflags_;
-	std::weak_ptr<rss_feed> feedptr_;
+	std::weak_ptr<RssFeed> feedptr_;
 	std::string base;
 	unsigned int idx;
 	unsigned int size_;
@@ -206,11 +206,11 @@ private:
 	bool override_unread_;
 };
 
-class rss_feed : public matchable {
+class RssFeed : public Matchable {
 public:
-	explicit rss_feed(cache* c);
-	rss_feed();
-	~rss_feed() override;
+	explicit RssFeed(Cache* c);
+	RssFeed();
+	~RssFeed() override;
 	std::string title_raw() const
 	{
 		return title_;
@@ -219,7 +219,7 @@ public:
 	void set_title(const std::string& t)
 	{
 		title_ = t;
-		utils::trim(title_);
+		Utils::trim(title_);
 	}
 
 	std::string description_raw() const
@@ -252,23 +252,23 @@ public:
 
 	bool hidden() const;
 
-	std::vector<std::shared_ptr<rss_item>>& items()
+	std::vector<std::shared_ptr<RssItem>>& items()
 	{
 		return items_;
 	}
-	void add_item(std::shared_ptr<rss_item> item)
+	void add_item(std::shared_ptr<RssItem> item)
 	{
 		items_.push_back(item);
 		items_guid_map[item->guid()] = item;
 	}
-	void add_items(const std::vector<std::shared_ptr<rss_item>>& items)
+	void add_items(const std::vector<std::shared_ptr<RssItem>>& items)
 	{
 		for (const auto& item : items) {
 			items_.push_back(item);
 			items_guid_map[item->guid()] = item;
 		}
 	}
-	void set_items(std::vector<std::shared_ptr<rss_item>>& items)
+	void set_items(std::vector<std::shared_ptr<RssItem>>& items)
 	{
 		erase_items(items_.begin(), items_.end());
 		add_items(items);
@@ -276,27 +276,27 @@ public:
 
 	void clear_items()
 	{
-		LOG(level::DEBUG, "rss_feed: clearing items");
+		LOG(Level::DEBUG, "RssFeed: clearing items");
 		items_.clear();
 		items_guid_map.clear();
 	}
 
-	void erase_items(std::vector<std::shared_ptr<rss_item>>::iterator begin,
-		std::vector<std::shared_ptr<rss_item>>::iterator end)
+	void erase_items(std::vector<std::shared_ptr<RssItem>>::iterator begin,
+		std::vector<std::shared_ptr<RssItem>>::iterator end)
 	{
 		for (auto it = begin; it != end; ++it) {
 			items_guid_map.erase((*it)->guid());
 		}
 		items_.erase(begin, end);
 	}
-	void erase_item(std::vector<std::shared_ptr<rss_item>>::iterator pos)
+	void erase_item(std::vector<std::shared_ptr<RssItem>>::iterator pos)
 	{
 		items_guid_map.erase((*pos)->guid());
 		items_.erase(pos);
 	}
 
-	std::shared_ptr<rss_item> get_item_by_guid(const std::string& guid);
-	std::shared_ptr<rss_item> get_item_by_guid_unlocked(
+	std::shared_ptr<RssItem> get_item_by_guid(const std::string& guid);
+	std::shared_ptr<RssItem> get_item_by_guid_unlocked(
 		const std::string& guid);
 
 	const std::string& rssurl() const
@@ -319,7 +319,7 @@ public:
 	bool has_attribute(const std::string& attribname) override;
 	std::string get_attribute(const std::string& attribname) override;
 
-	void update_items(std::vector<std::shared_ptr<rss_feed>> feeds);
+	void update_items(std::vector<std::shared_ptr<RssFeed>> feeds);
 
 	void set_query(const std::string& s)
 	{
@@ -374,15 +374,15 @@ public:
 		return order;
 	}
 
-	void set_feedptrs(std::shared_ptr<rss_feed> self);
+	void set_feedptrs(std::shared_ptr<RssFeed> self);
 
 	std::string get_status();
 
 	void reset_status()
 	{
-		status_ = dl_status::TO_BE_DOWNLOADED;
+		status_ = DlStatus::TO_BE_DOWNLOADED;
 	}
-	void set_status(dl_status st)
+	void set_status(DlStatus st)
 	{
 		status_ = st;
 	}
@@ -393,37 +393,37 @@ public:
 	void mark_all_items_read();
 
 	std::mutex item_mutex; // this is ugly, but makes it possible to lock
-			       // items use e.g. from the cache class
+			       // items use e.g. from the Cache class
 private:
 	std::string title_;
 	std::string description_;
 	std::string link_;
 	time_t pubDate_;
 	std::string rssurl_;
-	std::vector<std::shared_ptr<rss_item>> items_;
-	std::unordered_map<std::string, std::shared_ptr<rss_item>>
+	std::vector<std::shared_ptr<RssItem>> items_;
+	std::unordered_map<std::string, std::shared_ptr<RssItem>>
 		items_guid_map;
 	std::vector<std::string> tags_;
 	std::string query;
 
-	cache* ch;
+	Cache* ch;
 
 	bool empty;
 	bool is_rtl_;
 	unsigned int idx;
 	unsigned int order;
-	dl_status status_;
+	DlStatus status_;
 	std::mutex items_guid_map_mutex;
 };
 
-class rss_ignores : public config_action_handler {
+class RssIgnores : public ConfigActionHandler {
 public:
-	rss_ignores() {}
-	~rss_ignores() override;
+	RssIgnores() {}
+	~RssIgnores() override;
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) override;
-	bool matches(rss_item* item);
+	bool matches(RssItem* item);
 	bool matches_lastmodified(const std::string& url);
 	bool matches_resetunread(const std::string& url);
 

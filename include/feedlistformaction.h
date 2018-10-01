@@ -9,24 +9,24 @@
 
 namespace newsboat {
 
-typedef std::pair<std::shared_ptr<rss_feed>, unsigned int> feedptr_pos_pair;
+typedef std::pair<std::shared_ptr<RssFeed>, unsigned int> feedptr_pos_pair;
 
-class feedlist_formaction : public list_formaction {
+class FeedListFormaction : public ListFormaction {
 public:
-	feedlist_formaction(view*, std::string formstr);
-	~feedlist_formaction() override;
+	FeedListFormaction(View*, std::string formstr);
+	~FeedListFormaction() override;
 	void prepare() override;
 	void init() override;
-	void set_feedlist(std::vector<std::shared_ptr<rss_feed>>& feeds);
+	void set_feedlist(std::vector<std::shared_ptr<RssFeed>>& feeds);
 	void update_visible_feeds(
-		std::vector<std::shared_ptr<rss_feed>>& feeds);
+		std::vector<std::shared_ptr<RssFeed>>& feeds);
 	void set_tags(const std::vector<std::string>& t);
 	keymap_hint_entry* get_keymap_hint() override;
-	std::shared_ptr<rss_feed> get_feed();
+	std::shared_ptr<RssFeed> get_feed();
 
 	void set_redraw(bool b) override
 	{
-		formaction::set_redraw(b);
+		Formaction::set_redraw(b);
 		apply_filter = !(v->get_cfg()->get_configvalue_as_bool(
 			"show-read-feeds"));
 	}
@@ -49,7 +49,7 @@ public:
 
 	void mark_pos_if_visible(unsigned int pos);
 
-	void set_regexmanager(regexmanager* r);
+	void set_RegexManager(RegexManager* r);
 
 private:
 	int get_pos(unsigned int realidx);
@@ -68,10 +68,10 @@ private:
 
 	void set_pos();
 
-	std::string get_title(std::shared_ptr<rss_feed> feed);
+	std::string get_title(std::shared_ptr<RssFeed> feed);
 
-	std::string format_line(const std::string& feedlist_format,
-		std::shared_ptr<rss_feed> feed,
+	std::string Format_line(const std::string& feedlist_format,
+		std::shared_ptr<RssFeed> feed,
 		unsigned int pos,
 		unsigned int width);
 
@@ -82,17 +82,17 @@ private:
 	std::string tag;
 	std::vector<std::string> tags;
 
-	matcher m;
+	Matcher m;
 	bool apply_filter;
 
-	history filterhistory;
+	History filterhistory;
 
-	std::shared_ptr<rss_feed> search_dummy_feed;
+	std::shared_ptr<RssFeed> search_dummy_feed;
 
 	unsigned int filterpos;
 	bool set_filterpos;
 
-	regexmanager* rxman;
+	RegexManager* rxman;
 
 	unsigned int old_width;
 
