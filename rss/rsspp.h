@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-#include "remote_api.h"
+#include "remoteapi.h"
 
 namespace rsspp {
 

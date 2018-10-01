@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "download.h"
-#include "pb_controller.h"
+#include "pbcontroller.h"
 
 namespace podboat {
 

@@ -12,7 +12,7 @@
 #include "reloadrangethread.h"
 #include "reloadthread.h"
 #include "rss/rsspp.h"
-#include "rss_parser.h"
+#include "rssparser.h"
 #include "utils.h"
 #include "view.h"
 

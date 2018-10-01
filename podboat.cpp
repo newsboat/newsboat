@@ -4,8 +4,8 @@
 
 #include "config.h"
 #include "exception.h"
-#include "pb_controller.h"
-#include "pb_view.h"
+#include "pbcontroller.h"
+#include "pbview.h"
 #include "utils.h"
 
 using namespace podboat;

@@ -12,7 +12,7 @@
 #include "fslock.h"
 #include "regexmanager.h"
 #include "reloader.h"
-#include "remote_api.h"
+#include "remoteapi.h"
 #include "rss.h"
 #include "urlreader.h"
 #include "opml.h"

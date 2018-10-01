@@ -7,8 +7,8 @@
 
 #include "config.h"
 #include "logger.h"
-#include "remote_api.h"
-#include "rsspp_internal.h"
+#include "remoteapi.h"
+#include "rssppinternal.h"
 #include "strprintf.h"
 #include "utils.h"
 

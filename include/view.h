@@ -9,7 +9,7 @@
 #include "colormanager.h"
 #include "configcontainer.h"
 #include "controller.h"
-#include "filebrowser_formaction.h"
+#include "filebrowserformaction.h"
 #include "htmlrenderer.h"
 #include "keymap.h"
 #include "regexmanager.h"

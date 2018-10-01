@@ -1,1 +1,1 @@
-podboat.cpp src/pb_controller.cpp src/pb_view.cpp src/download.cpp src/queueloader.cpp src/poddlthread.cpp
+podboat.cpp src/pbcontroller.cpp src/pbview.cpp src/download.cpp src/queueloader.cpp src/poddlthread.cpp
