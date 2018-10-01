@@ -788,3 +788,24 @@ TEST_CASE(
 		unsetenv("BROWSER");
 	}
 }
+
+TEST_CASE(
+	"get_basename() returns basename from a URL if available, if not"
+	" then an empty string",
+	"[utils]")
+{
+	SECTION("return basename in the presence of GET parameters")
+	{
+		REQUIRE(utils::get_basename("https://example.org/path/to/file.mp3?param=value#fragment")
+			== "file.mp3");
+		REQUIRE(utils::get_basename("https://example.org/file.mp3") == "file.mp3");
+	}
+
+	SECTION("return empty string when basename is unavailable")
+	{
+		REQUIRE(utils::get_basename("https://example.org/?param=value#fragment")
+				== "");
+		REQUIRE(utils::get_basename("https://example.org/path/to/?param=value#fragment")
+				== "");
+	}
+}

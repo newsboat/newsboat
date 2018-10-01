@@ -342,7 +342,7 @@ std::string Utils::convert_text(const std::string& text,
 
 	/*
 	 * of all the Unix-like systems around there, only Linux/glibc seems to
-	 * come with a SuSv3-conForming iconv implementation.
+	 * come with a SuSv3-conforming iconv implementation.
 	 */
 #if !defined(__linux__) && !defined(__GLIBC__) && !defined(__APPLE__) && \
 	!defined(__OpenBSD__) && !defined(__FreeBSD__) &&                \
@@ -437,13 +437,13 @@ std::string Utils::retrieve_url(const std::string& url,
 	ConfigContainer* cfgcont,
 	const std::string& authinfo,
 	const std::string* postdata,
-	CURL* Cached_handle)
+	CURL* cached_handle)
 {
 	std::string buf;
 
 	CURL* easyhandle;
-	if (Cached_handle) {
-		easyhandle = Cached_handle;
+	if (cached_handle) {
+		easyhandle = cached_handle;
 	} else {
 		easyhandle = curl_easy_init();
 	}
@@ -467,7 +467,7 @@ std::string Utils::retrieve_url(const std::string& url,
 	}
 
 	curl_easy_perform(easyhandle);
-	if (!Cached_handle) {
+	if (!cached_handle) {
 		curl_easy_cleanup(easyhandle);
 	}
 
@@ -856,7 +856,7 @@ size_t Utils::strwidth(const std::string& str)
 	return width;                 // exact width
 }
 
-size_t Utils::strwidth_Stfl(const std::string& str)
+size_t Utils::strwidth_stfl(const std::string& str)
 {
 	size_t reduce_count = 0;
 	size_t len = str.length();
@@ -872,7 +872,7 @@ size_t Utils::strwidth_Stfl(const std::string& str)
 	return strwidth(str) - reduce_count;
 }
 
-size_t Utils::wcswidth_Stfl(const std::wstring& str, size_t size)
+size_t Utils::wcswidth_stfl(const std::wstring& str, size_t size)
 {
 	size_t reduce_count = 0;
 	size_t len = std::min(str.length(), size);
@@ -1017,7 +1017,7 @@ std::string Utils::censor_url(const std::string& url)
 	return rv;
 }
 
-std::string Utils::quote_for_Stfl(std::string str)
+std::string Utils::quote_for_stfl(std::string str)
 {
 	unsigned int len = str.length();
 	for (unsigned int i = 0; i < len; ++i) {
@@ -1168,7 +1168,30 @@ std::string Utils::get_content(xmlNode* node)
 	return retval;
 }
 
-unsigned long Utils::get_auth_method(const std::string& type)
+std::string Utils::get_basename(const std::string& url)
+{
+	std::string retval;
+	char buf[2048];
+	snprintf(buf, sizeof(buf), "%s", url.c_str());
+	xmlURIPtr uri = xmlParseURI(buf);
+	if (uri && uri->path) {
+		std::string path(uri->path);
+		// check for path ending with an empty filename
+		if (path[path.length() - 1] != '/') {
+			char* base = basename(uri->path);
+			if (base) {
+				// check for empty path
+				if (base[0] != '/') {
+					retval = std::string(base);
+				}
+			}
+		}
+		xmlFreeURI(uri);
+	}
+	return retval;
+}
+
+unsigned long utils::get_auth_method(const std::string& type)
 {
 	if (type == "any")
 		return CURLAUTH_ANY;
