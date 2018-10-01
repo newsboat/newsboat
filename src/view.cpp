@@ -83,7 +83,7 @@ void View::set_config_container(ConfigContainer* cfgcontainer)
 	cfg = cfgcontainer;
 }
 
-void View::set_Keymap(Keymap* k)
+void View::set_keymap(Keymap* k)
 {
 	keys = k;
 }

@@ -30,7 +30,7 @@ FileBrowserFormaction::FileBrowserFormaction(View* vv, std::string formstr)
 	// possibly use 'q' key to exit the dialog
 	Keymap* keys = vv->get_keys();
 	keys->set_key(OP_QUIT, "ESC", id());
-	vv->set_Keymap(keys);
+	vv->set_keymap(keys);
 }
 
 FileBrowserFormaction::~FileBrowserFormaction() {}

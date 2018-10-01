@@ -19,7 +19,7 @@ public:
 	explicit PbView(PbController* c = 0);
 	~PbView();
 	void run(bool auto_Download);
-	void set_Keymap(newsboat::Keymap* k)
+	void set_keymap(newsboat::Keymap* k)
 	{
 		keys = k;
 		set_bindings();

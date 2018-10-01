@@ -21,7 +21,7 @@ public:
 	virtual ~TagSoupPullParser();
 	void set_input(std::istream& is);
 	std::string get_attribute_value(const std::string& name) const;
-	Event get_Event_type() const;
+	Event get_event_type() const;
 	std::string get_text() const;
 	Event next();
 
@@ -30,7 +30,7 @@ private:
 	std::vector<attribute> attributes;
 	std::string text;
 	std::istream* inputstream;
-	Event current_Event;
+	Event current_event;
 
 	void skip_whitespace();
 	void add_attribute(std::string s);

@@ -7,12 +7,12 @@
 
 using namespace newsboat;
 
-TEST_CASE("Parses test config without exceptions", "[configcontainer]")
+TEST_CASE("Parses test config without exceptions", "[ConfigContainer]")
 {
-	configcontainer cfg;
-	configparser cfgparser;
+	ConfigContainer cfg;
+	ConfigParser cfgparser;
 	cfg.register_commands(cfgparser);
-	keymap k(KM_NEWSBOAT);
+	Keymap k(KM_NEWSBOAT);
 	cfgparser.register_handler("macro", &k);
 
 	REQUIRE_NOTHROW(cfgparser.parse("data/test-config.txt"));
@@ -44,10 +44,10 @@ TEST_CASE("Parses test config without exceptions", "[configcontainer]")
 
 TEST_CASE(
 	"Parses test config correctly, even if there's no \\n at the end line.",
-	"[configcontainer]")
+	"[ConfigContainer]")
 {
-	configcontainer cfg;
-	configparser cfgparser;
+	ConfigContainer cfg;
+	ConfigParser cfgparser;
 	cfg.register_commands(cfgparser);
 
 	REQUIRE_NOTHROW(cfgparser.parse(
@@ -64,52 +64,52 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE("Throws if invalid command is encountered", "[configcontainer]")
+TEST_CASE("Throws if invalid command is encountered", "[ConfigContainer]")
 {
-	configcontainer cfg;
+	ConfigContainer cfg;
 
 	CHECK_THROWS_AS(cfg.handle_action("command-that-surely-does-not-exist",
 				{"and", "its", "arguments"}),
-		confighandlerexception);
+		ConfigHandlerException);
 }
 
-TEST_CASE("Throws if there are no arguments", "[configcontainer]")
+TEST_CASE("Throws if there are no arguments", "[ConfigContainer]")
 {
-	configcontainer cfg;
+	ConfigContainer cfg;
 
 	CHECK_THROWS_AS(
-		cfg.handle_action("auto-reload", {}), confighandlerexception);
+		cfg.handle_action("auto-reload", {}), ConfigHandlerException);
 }
 
-TEST_CASE("Throws if command argument has invalid type", "[configcontainer]")
+TEST_CASE("Throws if command argument has invalid type", "[ConfigContainer]")
 {
-	configcontainer cfg;
+	ConfigContainer cfg;
 
 	SECTION("bool")
 	{
 		CHECK_THROWS_AS(cfg.handle_action("always-display-description",
 					{"whatever"}),
-			confighandlerexception);
+			ConfigHandlerException);
 	}
 
 	SECTION("int")
 	{
 		CHECK_THROWS_AS(
 			cfg.handle_action("download-retries", {"whatever"}),
-			confighandlerexception);
+			ConfigHandlerException);
 	}
 
 	SECTION("enum")
 	{
 		CHECK_THROWS_AS(cfg.handle_action("proxy-type", {"whatever"}),
-			confighandlerexception);
+			ConfigHandlerException);
 	}
 }
 
 TEST_CASE("reset_to_default changes setting to its default value",
-	"[configcontainer]")
+	"[ConfigContainer]")
 {
-	configcontainer cfg;
+	ConfigContainer cfg;
 
 	const std::string default_value = "any";
 	const std::vector<std::string> tests{"any",
@@ -132,9 +132,9 @@ TEST_CASE("reset_to_default changes setting to its default value",
 }
 
 TEST_CASE("get_configvalue_as_bool() recognizes several boolean formats",
-	"[configcontainer]")
+	"[ConfigContainer]")
 {
-	configcontainer cfg;
+	ConfigContainer cfg;
 	cfg.set_configvalue("cleanup-on-quit", "yes");
 	cfg.set_configvalue("auto-reload", "true");
 	cfg.set_configvalue("show-read-feeds", "no");
@@ -161,9 +161,9 @@ TEST_CASE("get_configvalue_as_bool() recognizes several boolean formats",
 }
 
 TEST_CASE("toggle() inverts the value of a boolean setting",
-	"[configcontainer]")
+	"[ConfigContainer]")
 {
-	configcontainer cfg;
+	ConfigContainer cfg;
 
 	const std::string key("always-display-description");
 	SECTION("\"true\" becomes \"false\"")
@@ -182,9 +182,9 @@ TEST_CASE("toggle() inverts the value of a boolean setting",
 }
 
 TEST_CASE("toggle() does nothing if setting is non-boolean",
-	"[configcontainer]")
+	"[ConfigContainer]")
 {
-	configcontainer cfg;
+	ConfigContainer cfg;
 
 	const std::vector<std::string> tests{"articlelist-title-format",
 		"cache-file",
@@ -205,9 +205,9 @@ TEST_CASE("toggle() does nothing if setting is non-boolean",
 TEST_CASE(
 	"dump_config turns current state into text and saves it "
 	"into the supplyed vector",
-	"[configcontainer]")
+	"[ConfigContainer]")
 {
-	configcontainer cfg;
+	ConfigContainer cfg;
 
 	auto all_values_found =
 		[](std::unordered_set<std::string>& expected,
@@ -266,9 +266,9 @@ TEST_CASE(
 TEST_CASE(
 	"get_suggestions() returns all settings whose names begin "
 	"with a given string",
-	"[configcontainer]")
+	"[ConfigContainer]")
 {
-	configcontainer cfg;
+	ConfigContainer cfg;
 
 	const std::string key1("d");
 	const std::unordered_set<std::string> expected1{
@@ -309,9 +309,9 @@ TEST_CASE(
 }
 
 TEST_CASE("get_suggestions() returns results in alphabetical order",
-	"[configcontainer]")
+	"[ConfigContainer]")
 {
-	configcontainer cfg;
+	ConfigContainer cfg;
 
 	const std::vector<std::string> keys{"dow", "rel", "us", "d"};
 	for (const auto& key : keys) {
@@ -330,9 +330,9 @@ TEST_CASE("get_suggestions() returns results in alphabetical order",
 TEST_CASE(
 	"get_feed_sort_strategy() returns correctly filled FeedSortStrategy "
 	"struct",
-	"[configcontainer]")
+	"[ConfigContainer]")
 {
-	configcontainer cfg;
+	ConfigContainer cfg;
 	FeedSortStrategy sort_strategy;
 
 	SECTION("none")
@@ -452,9 +452,9 @@ TEST_CASE(
 TEST_CASE(
 	"get_article_sort_strategy() returns correctly filled "
 	"ArticleSortStrategy struct",
-	"[configcontainer]")
+	"[ConfigContainer]")
 {
-	configcontainer cfg;
+	ConfigContainer cfg;
 	ArticleSortStrategy sort_strategy;
 
 	SECTION("title")

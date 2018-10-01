@@ -243,10 +243,10 @@ void ItemListFormaction::process_operation(operation op,
 	case OP_SHOWURLS:
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
-				std::string urlViewer =
+				std::string urlviewer =
 					v->get_cfg()->get_configvalue(
-						"external-url-Viewer");
-				if (urlViewer == "") {
+						"external-url-viewer");
+				if (urlviewer == "") {
 					std::vector<linkpair> links;
 					std::vector<std::pair<LineType,
 						std::string>>
@@ -275,7 +275,7 @@ void ItemListFormaction::process_operation(operation op,
 					}
 				} else {
 					qna_responses.clear();
-					qna_responses.push_back(urlViewer);
+					qna_responses.push_back(urlviewer);
 					this->finished_qna(OP_PIPE_TO);
 				}
 			}

@@ -66,7 +66,7 @@ void PoddlThread::run()
 	curl_easy_setopt(easyhandle, CURLOPT_PROGRESSDATA, this);
 
 	// set up max Download speed
-	int max_dl_speed = cfg->get_configvalue_as_int("max-Download-speed");
+	int max_dl_speed = cfg->get_configvalue_as_int("max-download-speed");
 	if (max_dl_speed > 0) {
 		curl_easy_setopt(easyhandle,
 			CURLOPT_MAX_RECV_SPEED_LARGE,

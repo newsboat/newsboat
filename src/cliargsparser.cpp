@@ -15,7 +15,7 @@ CliArgsParser::CliArgsParser(int argc, char* argv[])
 
 	static const char getopt_str[] = "i:erhqu:c:C:d:l:vVx:XI:E:";
 	static const struct option longopts[] = {
-		{"Cache-file", required_argument, 0, 'c'},
+		{"cache-file", required_argument, 0, 'c'},
 		{"config-file", required_argument, 0, 'C'},
 		{"execute", required_argument, 0, 'x'},
 		{"export-to-file", required_argument, 0, 'E'},
@@ -24,7 +24,7 @@ CliArgsParser::CliArgsParser(int argc, char* argv[])
 		{"import-from-file", required_argument, 0, 'I'},
 		{"import-from-opml", required_argument, 0, 'i'},
 		{"log-file", required_argument, 0, 'd'},
-		{"log-Level", required_argument, 0, 'l'},
+		{"log-level", required_argument, 0, 'l'},
 		{"quiet", no_argument, 0, 'q'},
 		{"refresh-on-start", no_argument, 0, 'r'},
 		{"url-file", required_argument, 0, 'u'},

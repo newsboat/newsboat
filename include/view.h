@@ -32,7 +32,7 @@ public:
 
 	void set_feedlist(std::vector<std::shared_ptr<RssFeed>> feeds);
 	void update_visible_feeds(std::vector<std::shared_ptr<RssFeed>> feeds);
-	void set_Keymap(Keymap* k);
+	void set_keymap(Keymap* k);
 	void set_config_container(ConfigContainer* cfgcontainer);
 	void show_error(const std::string& msg);
 	void set_status(const std::string& msg);

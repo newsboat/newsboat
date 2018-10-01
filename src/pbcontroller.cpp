@@ -274,7 +274,7 @@ int PbController::run(int argc, char* argv[])
 	NullConfigActionHandler null_cah;
 	cfgparser.register_handler("macro", &null_cah);
 	cfgparser.register_handler("ignore-article", &null_cah);
-	cfgparser.register_handler("always-Download", &null_cah);
+	cfgparser.register_handler("always-download", &null_cah);
 	cfgparser.register_handler("define-filter", &null_cah);
 	cfgparser.register_handler("highlight", &null_cah);
 	cfgparser.register_handler("highlight-article", &null_cah);
@@ -300,7 +300,7 @@ int PbController::run(int argc, char* argv[])
 	ql = new QueueLoader(queue_file, this);
 	ql->reload(downloads_);
 
-	v->set_Keymap(&keys);
+	v->set_keymap(&keys);
 
 	v->run(automatic_dl);
 
@@ -342,7 +342,7 @@ void PbController::print_usage(const char* argv0)
 			"queue-file",
 			_s("<queuefile>"),
 			_s("use <queuefile> as queue file")},
-		{'a', "autoDownload", "", _s("start Download on startup")},
+		{'a', "autoDownload", "", _s("start download on startup")},
 		{'l',
 			"log-Level",
 			_s("<loglevel>"),
@@ -370,7 +370,7 @@ void PbController::print_usage(const char* argv0)
 
 std::string PbController::get_dlpath()
 {
-	return cfg->get_configvalue("Download-path");
+	return cfg->get_configvalue("download-path");
 }
 
 std::string PbController::get_formatstr()

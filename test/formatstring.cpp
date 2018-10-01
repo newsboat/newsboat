@@ -4,9 +4,9 @@
 
 using namespace newsboat;
 
-TEST_CASE("do_format replaces variables with values", "[fmtstr_formatter]")
+TEST_CASE("do_format replaces variables with values", "[FmtStrFormatter]")
 {
-	fmtstr_formatter fmt;
+	FmtStrFormatter fmt;
 
 	SECTION("One format variable")
 	{

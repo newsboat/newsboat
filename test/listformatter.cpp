@@ -5,9 +5,9 @@
 using namespace newsboat;
 
 TEST_CASE("add_line(), add_lines(), get_lines_count() and clear()",
-	"[listformatter]")
+	"[ListFormatter]")
 {
-	listformatter fmt;
+	ListFormatter fmt;
 
 	REQUIRE(fmt.get_lines_count() == 0);
 
@@ -34,9 +34,9 @@ TEST_CASE("add_line(), add_lines(), get_lines_count() and clear()",
 }
 
 TEST_CASE("add_line() splits overly long sequences to fit width",
-	"[listformatter]")
+	"[ListFormatter]")
 {
-	listformatter fmt;
+	ListFormatter fmt;
 
 	SECTION("ordinary text")
 	{
@@ -81,7 +81,7 @@ TEST_CASE("add_line() splits overly long sequences to fit width",
 
 TEST_CASE("set_line() replaces the item in a list", "[listformatter]")
 {
-	listformatter fmt;
+	ListFormatter fmt;
 
 	fmt.add_line("hello", 1, 5);
 	fmt.add_line("goodbye", 2, 5);
@@ -106,13 +106,13 @@ TEST_CASE("set_line() replaces the item in a list", "[listformatter]")
 }
 
 TEST_CASE("format_list() uses regex manager if one is passed",
-	"[listformatter]")
+	"[ListFormatter]")
 {
-	listformatter fmt;
+	ListFormatter fmt;
 
 	fmt.add_line("Highlight me please!");
 
-	regexmanager rxmgr;
+	RegexManager rxmgr;
 	// the choice of green text on red background does not reflect my
 	// personal taste (or lack thereof) :)
 	rxmgr.handle_action(

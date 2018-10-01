@@ -104,7 +104,7 @@ std::vector<std::string> wrap_line(const std::string& line, const size_t width)
 	return result;
 }
 
-std::vector<std::string> Format_text_plain_helper(
+std::vector<std::string> format_text_plain_helper(
 	const std::vector<std::pair<LineType, std::string>>& lines,
 	RegexManager* rxman,
 	const std::string& location,
@@ -114,7 +114,7 @@ std::vector<std::string> Format_text_plain_helper(
 	const size_t total_width)
 {
 	LOG(Level::DEBUG,
-		"TextFormatter::Format_text_plain: rxman = %p, location = "
+		"TextFormatter::format_text_plain: rxman = %p, location = "
 		"`%s', "
 		"wrap_width = %zu, total_width = %zu, %u lines",
 		rxman,
@@ -129,7 +129,7 @@ std::vector<std::string> Format_text_plain_helper(
 		format_cache.push_back(line);
 
 		LOG(Level::DEBUG,
-			"TextFormatter::Format_text_plain: stored `%s'",
+			"TextFormatter::format_text_plain: stored `%s'",
 			line);
 	};
 
@@ -138,7 +138,7 @@ std::vector<std::string> Format_text_plain_helper(
 		auto text = line.second;
 
 		LOG(Level::DEBUG,
-			"TextFormatter::Format_text_plain: got line `%s' type "
+			"TextFormatter::format_text_plain: got line `%s' type "
 			"%u",
 			text,
 			type);
@@ -187,13 +187,13 @@ std::vector<std::string> Format_text_plain_helper(
 	return format_cache;
 }
 
-std::pair<std::string, std::size_t> TextFormatter::Format_text_to_list(
+std::pair<std::string, std::size_t> TextFormatter::format_text_to_list(
 	RegexManager* rxman,
 	const std::string& location,
 	const size_t wrap_width,
 	const size_t total_width)
 {
-	auto Formatted = Format_text_plain_helper(
+	auto Formatted = format_text_plain_helper(
 		lines, rxman, location, wrap_width, total_width);
 
 	auto format_cache = std::string("{list");
@@ -211,11 +211,11 @@ std::pair<std::string, std::size_t> TextFormatter::Format_text_to_list(
 	return {format_cache, line_count};
 }
 
-std::string TextFormatter::Format_text_plain(const size_t width,
+std::string TextFormatter::format_text_plain(const size_t width,
 	const size_t total_width)
 {
 	std::string result;
-	auto Formatted = Format_text_plain_helper(
+	auto Formatted = format_text_plain_helper(
 		lines, nullptr, "", width, total_width);
 	for (const auto& line : Formatted) {
 		result += line + "\n";

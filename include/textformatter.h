@@ -31,12 +31,12 @@ public:
 	void add_line(LineType type, std::string line);
 	void add_lines(
 		const std::vector<std::pair<LineType, std::string>>& lines);
-	std::pair<std::string, std::size_t> Format_text_to_list(
+	std::pair<std::string, std::size_t> format_text_to_list(
 		RegexManager* r = nullptr,
 		const std::string& location = "",
 		const size_t wrap_width = 80,
 		const size_t total_width = 0);
-	std::string Format_text_plain(const size_t width = 80,
+	std::string format_text_plain(const size_t width = 80,
 		const size_t total_width = 0);
 
 	void clear()

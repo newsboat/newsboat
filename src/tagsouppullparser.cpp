@@ -22,7 +22,7 @@ namespace newsboat {
 
 TagSoupPullParser::TagSoupPullParser()
 	: inputstream(0)
-	, current_Event(Event::START_DOCUMENT)
+	, current_event(Event::START_DOCUMENT)
 	, c('\0')
 {
 }
@@ -32,7 +32,7 @@ TagSoupPullParser::~TagSoupPullParser() {}
 void TagSoupPullParser::set_input(std::istream& is)
 {
 	inputstream = &is;
-	current_Event = Event::START_DOCUMENT;
+	current_event = Event::START_DOCUMENT;
 }
 
 std::string TagSoupPullParser::get_attribute_value(
@@ -46,9 +46,9 @@ std::string TagSoupPullParser::get_attribute_value(
 	throw std::invalid_argument(_("attribute not found"));
 }
 
-TagSoupPullParser::Event TagSoupPullParser::get_Event_type() const
+TagSoupPullParser::Event TagSoupPullParser::get_event_type() const
 {
-	return current_Event;
+	return current_event;
 }
 
 std::string TagSoupPullParser::get_text() const
@@ -67,16 +67,16 @@ TagSoupPullParser::Event TagSoupPullParser::next()
 	text = "";
 
 	if (inputstream->eof()) {
-		current_Event = Event::END_DOCUMENT;
+		current_event = Event::END_DOCUMENT;
 	}
 
-	switch (current_Event) {
+	switch (current_event) {
 	case Event::START_DOCUMENT:
 	case Event::START_TAG:
 	case Event::END_TAG:
 		skip_whitespace();
 		if (inputstream->eof()) {
-			current_Event = Event::END_DOCUMENT;
+			current_event = Event::END_DOCUMENT;
 		} else if (c != '<') {
 			handle_text();
 		} else {
@@ -89,7 +89,7 @@ TagSoupPullParser::Event TagSoupPullParser::next()
 	case Event::END_DOCUMENT:
 		break;
 	}
-	return get_Event_type();
+	return get_event_type();
 }
 
 void TagSoupPullParser::skip_whitespace()
@@ -602,16 +602,16 @@ void TagSoupPullParser::handle_tag()
 	try {
 		s = read_tag();
 	} catch (const XmlException&) {
-		current_Event = Event::END_DOCUMENT;
+		current_event = Event::END_DOCUMENT;
 		return;
 	}
 	parse_tag(s);
-	current_Event = determine_tag_type();
+	current_event = determine_tag_type();
 }
 
 void TagSoupPullParser::handle_text()
 {
-	if (current_Event != Event::START_DOCUMENT)
+	if (current_event != Event::START_DOCUMENT)
 		text.append(ws);
 	text.append(1, c);
 	std::string tmp;
@@ -619,7 +619,7 @@ void TagSoupPullParser::handle_text()
 	text.append(tmp);
 	text = decode_entities(text);
 	Utils::remove_soft_hyphens(text);
-	current_Event = Event::TEXT;
+	current_event = Event::TEXT;
 }
 
 } // namespace newsboat

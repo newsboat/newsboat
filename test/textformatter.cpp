@@ -5,9 +5,9 @@
 using namespace newsboat;
 
 TEST_CASE("lines marked as `wrappable` are wrapped to fit width",
-	"[textformatter]")
+	"[TextFormatter]")
 {
-	textformatter fmt;
+	TextFormatter fmt;
 
 	fmt.add_lines({std::make_pair(LineType::wrappable,
 			       "this one is going to be wrapped"),
@@ -56,9 +56,9 @@ TEST_CASE("lines marked as `wrappable` are wrapped to fit width",
 	}
 }
 
-TEST_CASE("line wrapping works for non-space-separeted text", "[textformatter]")
+TEST_CASE("line wrapping works for non-space-separeted text", "[TextFormatter]")
 {
-	textformatter fmt;
+	TextFormatter fmt;
 
 	fmt.add_lines({std::make_pair(LineType::wrappable,
 		"    つれづれなるままに、ひぐらしすずりにむかいて、")});
@@ -90,13 +90,13 @@ TEST_CASE("line wrapping works for non-space-separeted text", "[textformatter]")
 }
 
 TEST_CASE("regex manager is used by format_text_to_list if one is passed",
-	"[textformatter]")
+	"[TextFormatter]")
 {
-	textformatter fmt;
+	TextFormatter fmt;
 
 	fmt.add_line(LineType::wrappable, "Highlight me please!");
 
-	regexmanager rxmgr;
+	RegexManager rxmgr;
 	// the choice of green text on red background does not reflect my
 	// personal taste (or lack thereof) :)
 	rxmgr.handle_action(
@@ -115,9 +115,9 @@ TEST_CASE("regex manager is used by format_text_to_list if one is passed",
 }
 
 TEST_CASE("<hr> is rendered as a string of dashes framed with newlines",
-	"[textformatter]")
+	"[TextFormatter]")
 {
-	textformatter fmt;
+	TextFormatter fmt;
 
 	fmt.add_line(LineType::hr, "");
 
@@ -154,9 +154,9 @@ TEST_CASE("<hr> is rendered as a string of dashes framed with newlines",
 }
 
 TEST_CASE("wrappable sequences longer then format width are forced-wrapped",
-	"[textformatter]")
+	"[TextFormatter]")
 {
-	textformatter fmt;
+	TextFormatter fmt;
 	fmt.add_line(LineType::wrappable, "0123456789101112");
 	fmt.add_line(LineType::softwrappable, "0123456789101112");
 	fmt.add_line(LineType::nonwrappable, "0123456789101112");
@@ -173,9 +173,9 @@ TEST_CASE("wrappable sequences longer then format width are forced-wrapped",
 }
 
 TEST_CASE("Lines marked as non-wrappable are always returned verbatim",
-	"[textformatter]")
+	"[TextFormatter]")
 {
-	textformatter fmt;
+	TextFormatter fmt;
 	fmt.add_line(LineType::wrappable, " 0123456789101112");
 	fmt.add_line(LineType::softwrappable, " 0123456789101112");
 	fmt.add_line(LineType::nonwrappable, " 0123456789101112");
@@ -202,9 +202,9 @@ TEST_CASE("Lines marked as non-wrappable are always returned verbatim",
  * spaces at the beginning of lines after wrapping should be dropped.
  */
 TEST_CASE("ignore whitespace that's going to be wrapped onto the next line",
-	"[textformatter]")
+	"[TextFormatter]")
 {
-	textformatter fmt;
+	TextFormatter fmt;
 	fmt.add_line(LineType::wrappable, "just a test");
 
 	const std::string expected =
@@ -217,12 +217,12 @@ TEST_CASE("ignore whitespace that's going to be wrapped onto the next line",
 TEST_CASE(
 	"softwrappable lines are wrapped by format_text_to_list if "
 	"total_width != 0",
-	"[textformatter]")
+	"[TextFormatter]")
 {
-	textformatter fmt;
+	TextFormatter fmt;
 	fmt.add_line(LineType::softwrappable, "just a test");
 	const size_t wrap_width = 100;
-	regexmanager* rxman = nullptr;
+	RegexManager* rxman = nullptr;
 	const std::string location = "";
 
 	SECTION("total_width == 4")

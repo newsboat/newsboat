@@ -172,7 +172,7 @@ void ItemViewFormaction::prepare()
 
 		std::string Formatted_text;
 		std::tie(Formatted_text, num_lines) =
-			textfmt.Format_text_to_list(
+			textfmt.format_text_to_list(
 				rxman, "article", textwidth, window_width);
 		f->modify("article", "replace_inner", Formatted_text);
 		f->set("articleoffset", "0");

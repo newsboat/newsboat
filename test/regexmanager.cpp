@@ -6,43 +6,43 @@
 using namespace newsboat;
 
 TEST_CASE("RegexManager throws on invalid `highlight' definition",
-	"[regexmanager]")
+	"[RegexManager]")
 {
-	regexmanager rxman;
+	RegexManager rxman;
 	std::vector<std::string> params;
 
 	SECTION("on `highlight' without parameters")
 	{
 		REQUIRE_THROWS_AS(rxman.handle_action("highlight", params),
-			confighandlerexception);
+			ConfigHandlerException);
 	}
 
 	SECTION("on invalid location")
 	{
 		params = {"invalidloc", "foo", "blue", "red"};
 		REQUIRE_THROWS_AS(rxman.handle_action("highlight", params),
-			confighandlerexception);
+			ConfigHandlerException);
 	}
 
 	SECTION("on invalid regex")
 	{
 		params = {"feedlist", "*", "blue", "red"};
 		REQUIRE_THROWS_AS(rxman.handle_action("highlight", params),
-			confighandlerexception);
+			ConfigHandlerException);
 	}
 
 	SECTION("on invalid command")
 	{
 		REQUIRE_THROWS_AS(
 			rxman.handle_action("an-invalid-command", params),
-			confighandlerexception);
+			ConfigHandlerException);
 	}
 }
 
 TEST_CASE("RegexManager doesn't throw on valid `highlight' definition",
-	"[regexmanager]")
+	"[RegexManager]")
 {
-	regexmanager rxman;
+	RegexManager rxman;
 	std::vector<std::string> params;
 
 	params = {"articlelist", "foo", "blue", "red"};
@@ -58,9 +58,9 @@ TEST_CASE("RegexManager doesn't throw on valid `highlight' definition",
 	REQUIRE_NOTHROW(rxman.handle_action("highlight", params));
 }
 
-TEST_CASE("RegexManager highlights according to definition", "[regexmanager]")
+TEST_CASE("RegexManager highlights according to definition", "[RegexManager]")
 {
-	regexmanager rxman;
+	RegexManager rxman;
 	std::string input;
 
 	rxman.handle_action("highlight", {"articlelist", "foo", "blue", "red"});
@@ -75,9 +75,9 @@ TEST_CASE("RegexManager highlights according to definition", "[regexmanager]")
 }
 
 TEST_CASE("RegexManager preserves text when there's nothing to highlight",
-	"[regexmanager]")
+	"[RegexManager]")
 {
-	regexmanager rxman;
+	RegexManager rxman;
 	std::string input = "xbarx";
 	rxman.quote_and_highlight(input, "feedlist");
 	REQUIRE(input == "xbarx");
@@ -91,9 +91,9 @@ TEST_CASE("RegexManager preserves text when there's nothing to highlight",
 	REQUIRE(input == "a<b>");
 }
 
-TEST_CASE("`highlight all` adds rules for all locations", "[regexmanager]")
+TEST_CASE("`highlight all` adds rules for all locations", "[RegexManager]")
 {
-	regexmanager rxman;
+	RegexManager rxman;
 	std::vector<std::string> params = {"all", "foo", "red"};
 	REQUIRE_NOTHROW(rxman.handle_action("highlight", params));
 	std::string input = "xxfooyy";

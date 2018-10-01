@@ -408,7 +408,7 @@ void RssIgnores::handle_action(const std::string& action,
 				m.get_parse_error()));
 		ignores.push_back(feedurl_expr_pair(
 			ignore_rssurl, new Matcher(ignore_expr)));
-	} else if (action == "always-Download") {
+	} else if (action == "always-download") {
 		for (const auto& param : params) {
 			ignores_lastmodified.push_back(param);
 		}
@@ -435,7 +435,7 @@ void RssIgnores::dump_config(std::vector<std::string>& config_output)
 	}
 	for (const auto& ign_lm : ignores_lastmodified) {
 		config_output.push_back(StrPrintf::fmt(
-			"always-Download %s", Utils::quote(ign_lm)));
+			"always-download %s", Utils::quote(ign_lm)));
 	}
 	for (const auto& rf : resetflag) {
 		config_output.push_back(StrPrintf::fmt(

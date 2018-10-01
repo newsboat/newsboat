@@ -11,9 +11,9 @@ using namespace newsboat;
 
 TEST_CASE(
 	"colors_loaded() signals if any \"color\" actions have been processed",
-	"[colormanager]")
+	"[ColorManager]")
 {
-	colormanager c;
+	ColorManager c;
 
 	{
 		INFO("By default, no colors are loaded");
@@ -43,11 +43,11 @@ TEST_CASE(
 TEST_CASE(
 	"get_fgcolors() returns foreground colors for each element that "
 	"was processed",
-	"[colormanager]")
+	"[ColorManager]")
 {
 	using results = std::map<std::string, std::string>;
 
-	colormanager c;
+	ColorManager c;
 
 	{
 		INFO("By default, the list is empty");
@@ -75,11 +75,11 @@ TEST_CASE(
 TEST_CASE(
 	"get_bgcolors() returns foreground colors for each element that "
 	"was processed",
-	"[colormanager]")
+	"[ColorManager]")
 {
 	using results = std::map<std::string, std::string>;
 
-	colormanager c;
+	ColorManager c;
 
 	{
 		INFO("By default, the list is empty");
@@ -104,11 +104,11 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE("register_commands() registers colormanager with configparser",
-	"[colormanager]")
+TEST_CASE("register_commands() registers ColorManager with ConfigParser",
+	"[ColorManager]")
 {
-	configparser cfg;
-	colormanager clr;
+	ConfigParser cfg;
+	ColorManager clr;
 
 	REQUIRE_NOTHROW(clr.register_commands(cfg));
 
@@ -118,102 +118,102 @@ TEST_CASE("register_commands() registers colormanager with configparser",
 }
 
 TEST_CASE(
-	"handle_action() throws confighandlerexception if there aren't "
+	"handle_action() throws ConfigHandlerException if there aren't "
 	"enough parameters",
-	"[colormanager]")
+	"[ColorManager]")
 {
-	colormanager c;
+	ColorManager c;
 
-	CHECK_THROWS_AS(c.handle_action("color", {}), confighandlerexception);
+	CHECK_THROWS_AS(c.handle_action("color", {}), ConfigHandlerException);
 	CHECK_THROWS_AS(
-		c.handle_action("color", {"one"}), confighandlerexception);
+		c.handle_action("color", {"one"}), ConfigHandlerException);
 	CHECK_THROWS_AS(c.handle_action("color", {"one", "two"}),
-		confighandlerexception);
+		ConfigHandlerException);
 }
 
 TEST_CASE(
-	"handle_action() throws confighandlerexception if foreground color "
+	"handle_action() throws ConfigHandlerException if foreground color "
 	"is invalid",
-	"[colormanager]")
+	"[ColorManager]")
 {
-	colormanager c;
+	ColorManager c;
 
 	const std::vector<std::string> non_colors{
 		{"awesome", "but", "nonexistent", "colors"}};
 	for (const auto& color : non_colors) {
 		CHECK_THROWS_AS(c.handle_action("color",
 					{"listfocus", color, "default"}),
-			confighandlerexception);
+			ConfigHandlerException);
 	}
 }
 
 TEST_CASE(
-	"handle_action() throws confighandlerexception if background color "
+	"handle_action() throws ConfigHandlerException if background color "
 	"is invalid",
-	"[colormanager]")
+	"[ColorManager]")
 {
-	colormanager c;
+	ColorManager c;
 
 	const std::vector<std::string> non_colors{
 		{"awesome", "but", "nonexistent", "colors"}};
 	for (const auto& color : non_colors) {
 		CHECK_THROWS_AS(c.handle_action("color",
 					{"listfocus", "default", color}),
-			confighandlerexception);
+			ConfigHandlerException);
 	}
 }
 
 TEST_CASE(
-	"handle_action() throws confighandlerexception if color attribute "
+	"handle_action() throws ConfigHandlerException if color attribute "
 	"is invalid",
-	"[colormanager]")
+	"[ColorManager]")
 {
-	colormanager c;
+	ColorManager c;
 
 	const std::vector<std::string> non_attributes{
 		{"awesome", "but", "nonexistent", "attributes"}};
 	for (const auto& attr : non_attributes) {
 		CHECK_THROWS_AS(c.handle_action("color",
 					{"listfocus", "red", "red", attr}),
-			confighandlerexception);
+			ConfigHandlerException);
 	}
 }
 
 TEST_CASE(
-	"handle_action() throws confighandlerexception if color is applied "
+	"handle_action() throws ConfigHandlerException if color is applied "
 	"to non-existent element",
-	"[colormanager]")
+	"[ColorManager]")
 {
-	colormanager c;
+	ColorManager c;
 
 	const std::vector<std::string> non_elements{
 		{"awesome", "but", "nonexistent", "elements"}};
 	for (const auto& element : non_elements) {
 		CHECK_THROWS_AS(
 			c.handle_action("color", {element, "red", "green"}),
-			confighandlerexception);
+			ConfigHandlerException);
 	}
 }
 
 TEST_CASE(
-	"handle_action() throws confighandlerexception if it's passed a "
+	"handle_action() throws ConfigHandlerException if it's passed a "
 	"command other than \"color\"",
-	"[colormanager]")
+	"[ColorManager]")
 {
-	colormanager c;
+	ColorManager c;
 
 	const std::vector<std::string> other_commands{
 		{"browser", "include", "auto-reload", "ocnews-flag-star"}};
 	for (const auto& command : other_commands) {
 		CHECK_THROWS_AS(
-			c.handle_action(command, {}), confighandlerexception);
+			c.handle_action(command, {}), ConfigHandlerException);
 	}
 }
 
-TEST_CASE("dump_config() returns everything we put into colormanager",
-	"[colormanager]")
+TEST_CASE("dump_config() returns everything we put into ColorManager",
+	"[ColorManager]")
 {
-	colormanager c;
+	ColorManager c;
 
 	std::unordered_set<std::string> expected;
 	std::vector<std::string> config;
@@ -233,7 +233,7 @@ TEST_CASE("dump_config() returns everything we put into colormanager",
 	};
 
 	{
-		INFO("Empty colormanager outputs nothing");
+		INFO("Empty ColorManager outputs nothing");
 		c.dump_config(config);
 		REQUIRE(config.empty());
 		REQUIRE(equivalent());

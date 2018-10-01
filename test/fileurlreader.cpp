@@ -1,4 +1,4 @@
-#include "file_urlreader.h"
+#include "fileurlreader.h"
 
 #include <unistd.h>
 #include <map>
@@ -9,19 +9,19 @@
 using namespace newsboat;
 
 TEST_CASE("URL reader remembers the file name from which it read the URLs",
-		"[file_urlreader]")
+		"[FileUrlReader]")
 {
 	const std::string url("data/test-urls.txt");
 
-	file_urlreader u;
+	FileUrlReader u;
 	REQUIRE(u.get_source() != url);
 	u.load_config(url);
 	REQUIRE(u.get_source() == url);
 }
 
-TEST_CASE("URL reader extracts all URLs from the file", "[file_urlreader]")
+TEST_CASE("URL reader extracts all URLs from the file", "[FileUrlReader]")
 {
-	file_urlreader u;
+	FileUrlReader u;
 	u.load_config("data/test-urls.txt");
 
 	REQUIRE(u.get_urls().size() == 3);
@@ -30,9 +30,9 @@ TEST_CASE("URL reader extracts all URLs from the file", "[file_urlreader]")
 	REQUIRE(u.get_urls()[2] == "http://onemorefeed.at/feed/");
 }
 
-TEST_CASE("URL reader extracts feeds' tags", "[file_urlreader]")
+TEST_CASE("URL reader extracts feeds' tags", "[FileUrlReader]")
 {
-	file_urlreader u;
+	FileUrlReader u;
 	u.load_config("data/test-urls.txt");
 
 	REQUIRE(u.get_tags("http://test1.url.cc/feed.xml").size() == 2);
@@ -43,16 +43,16 @@ TEST_CASE("URL reader extracts feeds' tags", "[file_urlreader]")
 	REQUIRE(u.get_tags("http://onemorefeed.at/feed/").size() == 2);
 }
 
-TEST_CASE("URL reader keeps track of unique tags", "[file_urlreader]")
+TEST_CASE("URL reader keeps track of unique tags", "[FileUrlReader]")
 {
-	file_urlreader u;
+	FileUrlReader u;
 	u.load_config("data/test-urls.txt");
 
 	REQUIRE(u.get_alltags().size() == 3);
 }
 
 TEST_CASE("URL reader writes files that it can understand later",
-		"[file_urlreader]")
+		"[FileUrlReader]")
 {
 	const std::string testDataPath("data/test-urls.txt");
 
@@ -73,7 +73,7 @@ TEST_CASE("URL reader writes files that it can understand later",
 	urlsFileStream.close();
 	testData.close();
 
-	file_urlreader u(urlsFile.getPath());
+	FileUrlReader u(urlsFile.getPath());
 	u.reload();
 	REQUIRE_FALSE(u.get_urls().empty());
 	REQUIRE_FALSE(u.get_alltags().empty());
@@ -85,7 +85,7 @@ TEST_CASE("URL reader writes files that it can understand later",
 
 	u.write_config();
 
-	file_urlreader u2(urlsFile.getPath());
+	FileUrlReader u2(urlsFile.getPath());
 	u2.reload();
 	REQUIRE_FALSE(u2.get_urls().empty());
 	REQUIRE_FALSE(u2.get_alltags().empty());

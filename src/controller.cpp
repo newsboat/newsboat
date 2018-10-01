@@ -452,7 +452,7 @@ int Controller::run(const CliArgsParser& args)
 
 	// hand over the important objects to the View
 	v->set_config_container(&cfg);
-	v->set_Keymap(&keys);
+	v->set_keymap(&keys);
 	v->set_tags(tags);
 
 	if (args.execute_cmds) {
@@ -854,7 +854,7 @@ void Controller::write_item(std::shared_ptr<RssItem> item, std::ostream& ostr)
 	unsigned int width = cfg.get_configvalue_as_int("text-width");
 	if (width == 0)
 		width = 80;
-	ostr << txtfmt.Format_text_plain(width) << std::endl;
+	ostr << txtfmt.format_text_plain(width) << std::endl;
 }
 
 void Controller::enqueue_items(std::shared_ptr<RssFeed> feed)
@@ -892,18 +892,18 @@ std::string Controller::generate_enqueue_filename(const std::string& url,
 	const time_t pubDate,
 	std::shared_ptr<RssFeed> feed)
 {
-	std::string dlformat = cfg.get_configvalue("Download-path");
+	std::string dlformat = cfg.get_configvalue("download-path");
 	if (dlformat[dlformat.length() - 1] != NEWSBEUTER_PATH_SEP[0])
 		dlformat.append(NEWSBEUTER_PATH_SEP);
 
-	std::string filemask = cfg.get_configvalue("Download-filename-Format");
+	std::string filemask = cfg.get_configvalue("download-filename-format");
 	dlformat.append(filemask);
 
-	auto time_formatter = [&pubDate](const char* Format) {
+	auto time_formatter = [&pubDate](const char* format) {
 		char pubDate_formatted[1024];
 		strftime(pubDate_formatted,
 			sizeof(pubDate_formatted),
-			Format,
+			format,
 			localtime(&pubDate));
 		return std::string(pubDate_formatted);
 	};
