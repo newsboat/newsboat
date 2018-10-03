@@ -266,7 +266,7 @@ public:
 	void set(std::string new_value) const
 	{
 		const auto overwrite = true;
-		::setenv(name.c_str(), new_value.c_str(), (int)overwrite);
+		::setenv(name.c_str(), new_value.c_str(), overwrite);
 		if (on_change_fn) {
 			on_change_fn();
 		}
