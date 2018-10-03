@@ -15,7 +15,8 @@ class itemview_formaction : public formaction {
 public:
 	itemview_formaction(view*,
 		std::shared_ptr<itemlist_formaction> il,
-		std::string formstr);
+		std::string formstr,
+		cache* cc);
 	~itemview_formaction() override;
 	void prepare() override;
 	void init() override;
@@ -72,6 +73,7 @@ private:
 	unsigned int num_lines;
 	std::shared_ptr<itemlist_formaction> itemlist;
 	bool in_search;
+	cache* rsscache;
 };
 
 } // namespace newsboat

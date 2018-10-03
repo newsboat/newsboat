@@ -6,6 +6,7 @@
 
 namespace newsboat {
 
+class cache;
 class controller;
 class curl_handle;
 
@@ -17,7 +18,7 @@ class Reloader {
 	std::string prepare_message(unsigned int pos, unsigned int max);
 
 public:
-	Reloader(controller* c);
+	Reloader(controller* ctrl, cache* cc);
 
 	/// \brief Creates detached thread that runs periodic updates.
 	void spawn_reloadthread();
@@ -83,6 +84,8 @@ public:
 	/// If "notify-screen", "notify-xterm" or "notify-program" is chosen, the
 	/// notification will contain \a msg passed.
 	void notify(const std::string& msg);
+
+	cache* rsscache;
 };
 
 } // namespace newsboat

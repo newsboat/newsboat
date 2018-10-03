@@ -112,6 +112,7 @@ public:
 	void feedlist_mark_pos_if_visible(unsigned int pos);
 
 	void set_regexmanager(regexmanager* r);
+	void set_cache(cache* c);
 
 	std::vector<std::pair<unsigned int, std::string>>
 	get_formaction_names();
@@ -146,6 +147,8 @@ protected:
 	void clear_eol(std::shared_ptr<formaction> fa);
 	void cancel_input(std::shared_ptr<formaction> fa);
 	void delete_word(std::shared_ptr<formaction> fa);
+
+	cache* rsscache;
 
 	controller* ctrl;
 

@@ -18,8 +18,9 @@
 
 namespace newsboat {
 
-Reloader::Reloader(controller* c)
-	: ctrl(c)
+Reloader::Reloader(controller* ctrl, cache* cc)
+	: ctrl(ctrl)
+	, rsscache(cc)
 {
 }
 
@@ -67,7 +68,7 @@ void Reloader::reload(unsigned int pos,
 					  "ignore-mode") == "download");
 
 		rss_parser parser(oldfeed->rssurl(),
-			ctrl->get_cache(),
+			rsscache,
 			ctrl->get_cfg(),
 			ignore_dl ? ctrl->get_ignores() : nullptr,
 			ctrl->get_api());

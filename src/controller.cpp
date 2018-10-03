@@ -80,7 +80,6 @@ controller::controller()
 	, rsscache(0)
 	, refresh_on_start(false)
 	, api(0)
-	, reloader(this)
 {
 }
 
@@ -247,6 +246,8 @@ int controller::run(const CLIArgsParser& args)
 			  << std::endl;
 		return EXIT_FAILURE;
 	}
+
+	reloader = std::unique_ptr<Reloader>(new Reloader(this, rsscache));
 
 	if (!args.silent) {
 		std::cout << _("done.") << std::endl;
@@ -454,6 +455,7 @@ int controller::run(const CLIArgsParser& args)
 	v->set_config_container(&cfg);
 	v->set_keymap(&keys);
 	v->set_tags(tags);
+	v->set_cache(rsscache);
 
 	if (args.execute_cmds) {
 		execute_commands(args.cmds_to_execute);
@@ -769,7 +771,7 @@ int controller::execute_commands(const std::vector<std::string>& cmds)
 			"controller::execute_commands: executing `%s'",
 			cmd);
 		if (cmd == "reload") {
-			reloader.reload_all(true);
+			reloader->reload_all(true);
 		} else if (cmd == "print-unread") {
 			std::cout << strprintf::fmt(_("%u unread articles"),
 					     rsscache->get_unread_count())
