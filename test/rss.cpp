@@ -224,29 +224,22 @@ TEST_CASE(
 	auto input = "2008-12-30T10:03:15-08:00";
 	auto expected = "Tue, 30 Dec 2008 18:03:15 +0000";
 
-	char* tz = getenv("TZ");
-	std::string tz_saved_value;
-	if (tz) {
-		// tz can be null, and buffer may be reused.  Save it if it
-		// exists.
-		tz_saved_value = tz;
-	}
+	TestHelpers::EnvVar tzEnv("TZ");
+	tzEnv.on_change([](){ ::tzset(); });
 
 	// US/Pacific and Australia/Sydney have pretty much opposite DST
 	// schedules, so for any given moment in time one of the following two
 	// sections will be observing DST while other won't
 	SECTION("Timezone Pacific")
 	{
-		setenv("TZ", "US/Pacific", 1);
-		tzset();
+		tzEnv.set("US/Pacific");
 		REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822(input) ==
 			expected);
 	}
 
 	SECTION("Timezone Australia")
 	{
-		setenv("TZ", "Australia/Sydney", 1);
-		tzset();
+		tzEnv.set("Australia/Sydney");
 		REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822(input) ==
 			expected);
 	}
@@ -256,27 +249,17 @@ TEST_CASE(
 	// tests will cover October
 	SECTION("Timezone Arizona")
 	{
-		setenv("TZ", "US/Arizona", 1);
-		tzset();
+		tzEnv.set("US/Arizona");
 		REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822(input) ==
 			expected);
 	}
 
 	SECTION("Timezone UTC")
 	{
-		setenv("TZ", "UTC", 1);
-		tzset();
+		tzEnv.set("UTC");
 		REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822(input) ==
 			expected);
 	}
-
-	// Reset back to original value
-	if (tz) {
-		setenv("TZ", tz_saved_value.c_str(), 1);
-	} else {
-		unsetenv("TZ");
-	}
-	tzset();
 }
 
 namespace newsboat {

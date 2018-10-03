@@ -3,6 +3,7 @@
 #include <unistd.h> // chdir()
 
 #include "3rd-party/catch.hpp"
+#include "test-helpers.h"
 
 using namespace newsboat;
 
@@ -768,25 +769,17 @@ TEST_CASE(
 	"\"lynx\" if the variable is not set",
 	"[utils]")
 {
-	// Remember current BROWSER env variable
-	const char* original = getenv("BROWSER");
+	TestHelpers::EnvVar browserEnv("BROWSER");
 
 	// If BROWSER is not set, default browser is lynx(1)
-	unsetenv("BROWSER");
+	browserEnv.unset();
 	REQUIRE(utils::get_default_browser() == "lynx");
 
-	setenv("BROWSER", "firefox", 1);
+	browserEnv.set("firefox");
 	REQUIRE(utils::get_default_browser() == "firefox");
 
-	setenv("BROWSER", "opera", 1);
+	browserEnv.set("opera");
 	REQUIRE(utils::get_default_browser() == "opera");
-
-	// Restore BROWSER env variable
-	if (original) {
-		setenv("BROWSER", original, 1);
-	} else {
-		unsetenv("BROWSER");
-	}
 }
 
 TEST_CASE(
