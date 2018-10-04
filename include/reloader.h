@@ -13,6 +13,7 @@ class curl_handle;
 /// \brief Updates feeds (fetches, parses, puts results into controller).
 class Reloader {
 	controller* ctrl;
+	cache* rsscache;
 	std::mutex reload_mutex;
 
 	std::string prepare_message(unsigned int pos, unsigned int max);
@@ -85,7 +86,6 @@ public:
 	/// notification will contain \a msg passed.
 	void notify(const std::string& msg);
 
-	cache* rsscache;
 };
 
 } // namespace newsboat
