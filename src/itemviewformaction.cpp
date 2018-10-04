@@ -75,59 +75,59 @@ void ItemViewFormAction::prepare()
 
 		std::shared_ptr<RssFeed> feedptr = item->get_feedptr();
 
-		std::string feedtitle, feedheader;
-		if (feedptr.get() != nullptr) {
-			if (feedptr->title().length() > 0) {
+		std::string feedtitle;
+		if (feedptr) {
+			if (!feedptr->title().empty()) {
 				feedtitle = feedptr->title();
 				Utils::remove_soft_hyphens(feedtitle);
-			} else if (feedptr->link().length() > 0) {
+			} else if (!feedptr->link().empty()) {
 				feedtitle = feedptr->link();
-			} else if (feedptr->rssurl().length() > 0) {
+			} else if (!feedptr->rssurl().empty()) {
 				feedtitle = feedptr->rssurl();
 			}
 		}
-		if (feedtitle.length() > 0) {
-			feedheader =
+		if (!feedtitle.empty()) {
+			const auto feedheader =
 				StrPrintf::fmt("%s%s", _("Feed: "), feedtitle);
 			textfmt.add_line(LineType::wrappable, feedheader);
 		}
 
-		if (item->title().length() > 0) {
-			std::string title = StrPrintf::fmt(
+		if (!item->title().empty()) {
+			auto title = StrPrintf::fmt(
 				"%s%s", _("Title: "), item->title());
 			Utils::remove_soft_hyphens(title);
 			textfmt.add_line(LineType::wrappable, title);
 		}
 
-		if (item->author().length() > 0) {
-			std::string author = StrPrintf::fmt(
+		if (!item->author().empty()) {
+			auto author = StrPrintf::fmt(
 				"%s%s", _("Author: "), item->author());
 			Utils::remove_soft_hyphens(author);
 			textfmt.add_line(LineType::wrappable, author);
 		}
 
-		if (item->link().length() > 0) {
-			std::string link = StrPrintf::fmt("%s%s",
+		if (!item->link().empty()) {
+			const auto link = StrPrintf::fmt("%s%s",
 				_("Link: "),
 				Utils::censor_url(item->link()));
 			textfmt.add_line(LineType::softwrappable, link);
 		}
 
-		std::string date =
+		const auto date =
 			StrPrintf::fmt("%s%s", _("Date: "), item->pubDate());
 		textfmt.add_line(LineType::wrappable, date);
 
-		if (item->flags().length() > 0) {
-			std::string flags = StrPrintf::fmt(
+		if (!item->flags().empty()) {
+			const auto flags = StrPrintf::fmt(
 				"%s%s", _("Flags: "), item->flags());
 			textfmt.add_line(LineType::wrappable, flags);
 		}
 
-		if (item->enclosure_url().length() > 0) {
+		if (!item->enclosure_url().empty()) {
 			std::string enc_url = StrPrintf::fmt("%s%s",
 				_("Podcast Download URL: "),
 				Utils::censor_url(item->enclosure_url()));
-			if (item->enclosure_type() != "") {
+			if (!item->enclosure_type().empty()) {
 				enc_url.append(StrPrintf::fmt(" (%s%s)",
 					_("type: "),
 					item->enclosure_type()));
@@ -140,8 +140,9 @@ void ItemViewFormAction::prepare()
 		unsigned int unread_item_count = feed->unread_item_count();
 		// we need to subtract because the current item isn't yet marked
 		// as read
-		if (item->unread())
+		if (item->unread()) {
 			unread_item_count--;
+		}
 		set_head(item->title(),
 			feedtitle,
 			unread_item_count,
@@ -152,17 +153,20 @@ void ItemViewFormAction::prepare()
 			render_source(lines,
 				Utils::quote_for_stfl(item->description()));
 		} else {
-			std::string baseurl = item->get_base() != ""
-				? item->get_base()
-				: item->feedurl();
-			lines = render_html(
-				item->description(), links, baseurl);
+			std::string baseurl;
+			if (!item->get_base().empty()) {
+				baseurl = item->get_base();
+			} else {
+				baseurl = item->feedurl();
+			}
+
+			lines = render_html(item->description(), links, baseurl);
 		}
 
 		textfmt.add_lines(lines);
 
 		std::string widthstr = f->get("article:w");
-		unsigned int window_width = Utils::to_u(widthstr, 0);
+		const unsigned int window_width = Utils::to_u(widthstr, 0);
 
 		unsigned int textwidth =
 			cfg->get_configvalue_as_int("text-width");
