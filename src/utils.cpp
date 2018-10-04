@@ -1171,9 +1171,7 @@ std::string utils::get_content(xmlNode* node)
 std::string utils::get_basename(const std::string& url)
 {
 	std::string retval;
-	char buf[2048];
-	snprintf(buf, sizeof(buf), "%s", url.c_str());
-	xmlURIPtr uri = xmlParseURI(buf);
+	xmlURIPtr uri = xmlParseURI(url.c_str());
 	if (uri && uri->path) {
 		std::string path(uri->path);
 		// check for path ending with an empty filename
