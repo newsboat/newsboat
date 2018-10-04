@@ -24,15 +24,15 @@ namespace newsboat {
 
 enum class LineType { wrappable = 1, softwrappable, nonwrappable, hr };
 
-class textformatter {
+class TextFormatter {
 public:
-	textformatter();
-	~textformatter();
+	TextFormatter();
+	~TextFormatter();
 	void add_line(LineType type, std::string line);
 	void add_lines(
 		const std::vector<std::pair<LineType, std::string>>& lines);
 	std::pair<std::string, std::size_t> format_text_to_list(
-		regexmanager* r = nullptr,
+		RegexManager* r = nullptr,
 		const std::string& location = "",
 		const size_t wrap_width = 80,
 		const size_t total_width = 0);

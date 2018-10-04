@@ -9,13 +9,13 @@
 
 namespace newsboat {
 
-class xmlexception : public std::exception {
+class XmlException : public std::exception {
 public:
-	explicit xmlexception(const std::string& errmsg)
+	explicit XmlException(const std::string& errmsg)
 		: msg(errmsg)
 	{
 	}
-	~xmlexception() throw() override {}
+	~XmlException() throw() override {}
 	const char* what() const throw() override
 	{
 		return msg.c_str();
@@ -25,13 +25,13 @@ private:
 	std::string msg;
 };
 
-class configexception : public std::exception {
+class ConfigException : public std::exception {
 public:
-	explicit configexception(const std::string& errmsg)
+	explicit ConfigException(const std::string& errmsg)
 		: msg(errmsg)
 	{
 	}
-	~configexception() throw() override {}
+	~ConfigException() throw() override {}
 	const char* what() const throw() override
 	{
 		return msg.c_str();
@@ -41,14 +41,14 @@ private:
 	std::string msg;
 };
 
-class confighandlerexception : public std::exception {
+class ConfigHandlerException : public std::exception {
 public:
-	explicit confighandlerexception(const std::string& emsg)
+	explicit ConfigHandlerException(const std::string& emsg)
 		: msg(emsg)
 	{
 	}
-	explicit confighandlerexception(action_handler_status e);
-	~confighandlerexception() throw() override {}
+	explicit ConfigHandlerException(ActionHandlerStatus e);
+	~ConfigHandlerException() throw() override {}
 	const char* what() const throw() override
 	{
 		return msg.c_str();
@@ -59,17 +59,17 @@ public:
 	}
 
 private:
-	const char* get_errmsg(action_handler_status e);
+	const char* get_errmsg(ActionHandlerStatus e);
 	std::string msg;
 };
 
-class dbexception : public std::exception {
+class DbException : public std::exception {
 public:
-	explicit dbexception(sqlite3* h)
+	explicit DbException(sqlite3* h)
 		: msg(sqlite3_errmsg(h))
 	{
 	}
-	~dbexception() throw() override {}
+	~DbException() throw() override {}
 	const char* what() const throw() override
 	{
 		return msg.c_str();
@@ -79,11 +79,11 @@ private:
 	std::string msg;
 };
 
-class matcherexception : public std::exception {
+class MatcherException : public std::exception {
 public:
-	enum class type { ATTRIB_UNAVAIL, INVALID_REGEX };
+	enum class Type { ATTRIB_UNAVAIL, INVALID_REGEX };
 
-	matcherexception(type et,
+	MatcherException(Type et,
 		const std::string& info,
 		const std::string& info2 = "")
 		: type_(et)
@@ -92,11 +92,11 @@ public:
 	{
 	}
 
-	~matcherexception() throw() override {}
+	~MatcherException() throw() override {}
 	const char* what() const throw() override;
 
 private:
-	type type_;
+	Type type_;
 	std::string addinfo;
 	std::string addinfo2;
 };

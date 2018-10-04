@@ -7,9 +7,9 @@
 
 namespace newsboat {
 
-class reloadrangethread {
+class ReloadRangeThread {
 public:
-	reloadrangethread(Reloader& r,
+	ReloadRangeThread(Reloader& r,
 		unsigned int start,
 		unsigned int end,
 		unsigned int size,

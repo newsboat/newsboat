@@ -8,7 +8,7 @@
 
 namespace newsboat {
 
-enum class action_handler_status {
+enum class ActionHandlerStatus {
 	VALID = 0,
 	INVALID_PARAMS,
 	TOO_FEW_PARAMS,
@@ -16,26 +16,26 @@ enum class action_handler_status {
 	FILENOTFOUND
 };
 
-struct config_action_handler {
+struct ConfigActionHandler {
 	virtual void handle_action(const std::string& action,
 		const std::vector<std::string>& params) = 0;
 	virtual void dump_config(std::vector<std::string>& config_output) = 0;
-	config_action_handler() {}
-	virtual ~config_action_handler() {}
+	ConfigActionHandler() {}
+	virtual ~ConfigActionHandler() {}
 };
 
-class configparser : public config_action_handler {
+class ConfigParser : public ConfigActionHandler {
 public:
-	configparser();
-	~configparser() override;
+	ConfigParser();
+	~ConfigParser() override;
 	void register_handler(const std::string& cmd,
-		config_action_handler* handler);
+		ConfigActionHandler* handler);
 	void unregister_handler(const std::string& cmd);
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>&) override
 	{
-		/* nothing because configparser itself only handles include */
+		/* nothing because ConfigParser itself only handles include */
 	}
 	bool parse(const std::string& filename, bool double_include = true);
 	static std::string evaluate_backticks(std::string token);
@@ -44,14 +44,14 @@ private:
 	void evaluate_backticks(std::vector<std::string>& tokens);
 	static std::string evaluate_cmd(const std::string& cmd);
 	std::vector<std::vector<std::string>> parsed_content;
-	std::map<std::string, config_action_handler*> action_handlers;
+	std::map<std::string, ConfigActionHandler*> action_handlers;
 	std::set<std::string> included_files;
 };
 
-class null_config_action_handler : public config_action_handler {
+class NullConfigActionHandler : public ConfigActionHandler {
 public:
-	null_config_action_handler() {}
-	~null_config_action_handler() override {}
+	NullConfigActionHandler() {}
+	~NullConfigActionHandler() override {}
 	void handle_action(const std::string&,
 		const std::vector<std::string>&) override
 	{

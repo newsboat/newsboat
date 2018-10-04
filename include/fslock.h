@@ -6,10 +6,10 @@
 
 namespace newsboat {
 
-class FSLock {
+class FsLock {
 public:
-	FSLock() = default;
-	~FSLock();
+	FsLock() = default;
+	~FsLock();
 
 	bool try_lock(const std::string& lock_file, pid_t& pid);
 

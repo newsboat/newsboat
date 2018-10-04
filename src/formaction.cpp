@@ -11,12 +11,12 @@
 
 namespace newsboat {
 
-history formaction::searchhistory;
-history formaction::cmdlinehistory;
+History FormAction::searchhistory;
+History FormAction::cmdlinehistory;
 
-formaction::formaction(view* vv, std::string formstr)
+FormAction::FormAction(View* vv, std::string formstr)
 	: v(vv)
-	, f(new stfl::form(formstr))
+	, f(new Stfl::Form(formstr))
 	, do_redraw(true)
 	, finish_operation(OP_NIL)
 	, qna_history(nullptr)
@@ -43,24 +43,24 @@ formaction::formaction(view* vv, std::string formstr)
 	valid_cmds.push_back("dumpform");
 }
 
-void formaction::set_keymap_hints()
+void FormAction::set_keymap_hints()
 {
 	f->set("help", prepare_keymap_hint(this->get_keymap_hint()));
 }
 
-void formaction::recalculate_form()
+void FormAction::recalculate_form()
 {
 	f->run(-3);
 }
 
-formaction::~formaction() {}
+FormAction::~FormAction() {}
 
-std::shared_ptr<stfl::form> formaction::get_form()
+std::shared_ptr<Stfl::Form> FormAction::get_form()
 {
 	return f;
 }
 
-std::string formaction::prepare_keymap_hint(keymap_hint_entry* hints)
+std::string FormAction::prepare_keymap_hint(KeymapHintEntry* hints)
 {
 	/*
 	 * This function generates the "keymap hint" line by putting
@@ -79,27 +79,27 @@ std::string formaction::prepare_keymap_hint(keymap_hint_entry* hints)
 	return keymap_hint;
 }
 
-std::string formaction::get_value(const std::string& value)
+std::string FormAction::get_value(const std::string& value)
 {
 	return f->get(value);
 }
 
-void formaction::start_cmdline(std::string default_value)
+void FormAction::start_cmdline(std::string default_value)
 {
 	std::vector<qna_pair> qna;
 	qna.push_back(qna_pair(":", default_value));
 	v->inside_cmdline(true);
-	this->start_qna(qna, OP_INT_END_CMDLINE, &formaction::cmdlinehistory);
+	this->start_qna(qna, OP_INT_END_CMDLINE, &FormAction::cmdlinehistory);
 }
 
-void formaction::process_op(operation op,
+void FormAction::process_op(Operation op,
 	bool automatic,
 	std::vector<std::string>* args)
 {
 	switch (op) {
 	case OP_REDRAW:
-		LOG(level::DEBUG, "formaction::process_op: redrawing screen");
-		stfl::reset();
+		LOG(Level::DEBUG, "FormAction::process_op: redrawing screen");
+		Stfl::reset();
 		break;
 	case OP_CMDLINE:
 		start_cmdline();
@@ -109,18 +109,18 @@ void formaction::process_op(operation op,
 			std::string cmdline = "set ";
 			if (args) {
 				for (const auto& arg : *args) {
-					cmdline.append(strprintf::fmt(
-						"%s ", stfl::quote(arg)));
+					cmdline.append(StrPrintf::fmt(
+						"%s ", Stfl::quote(arg)));
 				}
 			}
-			LOG(level::DEBUG,
-				"formaction::process_op: running commandline "
+			LOG(Level::DEBUG,
+				"FormAction::process_op: running commandline "
 				"`%s'",
 				cmdline);
 			this->handle_cmdline(cmdline);
 		} else {
-			LOG(level::WARN,
-				"formaction::process_op: got OP_INT_SET, but "
+			LOG(Level::WARN,
+				"FormAction::process_op: got OP_INT_SET, but "
 				"not "
 				"automatic");
 		}
@@ -169,26 +169,26 @@ void formaction::process_op(operation op,
 	}
 }
 
-std::vector<std::string> formaction::get_suggestions(
+std::vector<std::string> FormAction::get_suggestions(
 	const std::string& fragment)
 {
-	LOG(level::DEBUG,
-		"formaction::get_suggestions: fragment = %s",
+	LOG(Level::DEBUG,
+		"FormAction::get_suggestions: fragment = %s",
 		fragment);
 	std::vector<std::string> result;
 	// first check all formaction command suggestions
 	for (const auto& cmd : valid_cmds) {
-		LOG(level::DEBUG,
-			"formaction::get_suggestions: extracted part: %s",
+		LOG(Level::DEBUG,
+			"FormAction::get_suggestions: extracted part: %s",
 			cmd.substr(0, fragment.length()));
 		if (cmd.substr(0, fragment.length()) == fragment) {
-			LOG(level::DEBUG, "...and it matches.");
+			LOG(Level::DEBUG, "...and it matches.");
 			result.push_back(cmd);
 		}
 	}
 	if (result.empty()) {
 		std::vector<std::string> tokens =
-			utils::tokenize_quoted(fragment, " \t=");
+			Utils::tokenize_quoted(fragment, " \t=");
 		if (tokens.size() >= 1) {
 			if (tokens[0] == "set") {
 				if (tokens.size() < 3) {
@@ -210,8 +210,8 @@ std::vector<std::string> formaction::get_suggestions(
 									variable_fragment
 										.length());
 						result.push_back(line);
-						LOG(level::DEBUG,
-							"formaction::get_"
+						LOG(Level::DEBUG,
+							"FormAction::get_"
 							"suggestions: "
 							"suggested %s",
 							line);
@@ -220,13 +220,13 @@ std::vector<std::string> formaction::get_suggestions(
 			}
 		}
 	}
-	LOG(level::DEBUG,
-		"formaction::get_suggestions: %u suggestions",
+	LOG(Level::DEBUG,
+		"FormAction::get_suggestions: %u suggestions",
 		result.size());
 	return result;
 }
 
-void formaction::handle_cmdline(const std::string& cmdline)
+void FormAction::handle_cmdline(const std::string& cmdline)
 {
 	/*
 	 * this is the command line handling that is available on all dialogs.
@@ -238,8 +238,8 @@ void formaction::handle_cmdline(const std::string& cmdline)
 	 * is tokenized, and then the tokens are looked at.
 	 */
 	std::vector<std::string> tokens =
-		utils::tokenize_quoted(cmdline, " \t=");
-	configcontainer* cfg = v->get_cfg();
+		Utils::tokenize_quoted(cmdline, " \t=");
+	ConfigContainer* cfg = v->get_cfg();
 	assert(cfg != nullptr);
 	if (!tokens.empty()) {
 		std::string cmd = tokens[0];
@@ -261,17 +261,17 @@ void formaction::handle_cmdline(const std::string& cmdline)
 						cfg->reset_to_default(var);
 						set_redraw(true);
 					}
-					v->set_status(strprintf::fmt("  %s=%s",
+					v->set_status(StrPrintf::fmt("  %s=%s",
 						var,
-						utils::quote_if_necessary(
+						Utils::quote_if_necessary(
 							cfg->get_configvalue(
 								var))));
 				}
 			} else if (tokens.size() == 2) {
 				std::string result =
-					configparser::evaluate_backticks(
+					ConfigParser::evaluate_backticks(
 						tokens[1]);
-				utils::trim_end(result);
+				Utils::trim_end(result);
 				cfg->set_configvalue(tokens[0], result);
 				set_redraw(true); // because some configuration
 						  // value might have changed
@@ -291,9 +291,9 @@ void formaction::handle_cmdline(const std::string& cmdline)
 				for (const auto& token : tokens) {
 					try {
 						v->get_ctrl()->load_configfile(
-							utils::resolve_tilde(
+							Utils::resolve_tilde(
 								token));
-					} catch (const configexception& ex) {
+					} catch (const ConfigException& ex) {
 						v->show_error(ex.what());
 						break;
 					}
@@ -304,23 +304,23 @@ void formaction::handle_cmdline(const std::string& cmdline)
 				v->show_error(_("usage: dumpconfig <file>"));
 			} else {
 				v->get_ctrl()->dump_config(
-					utils::resolve_tilde(tokens[0]));
-				v->show_error(strprintf::fmt(
+					Utils::resolve_tilde(tokens[0]));
+				v->show_error(StrPrintf::fmt(
 					_("Saved configuration to %s"),
 					tokens[0]));
 			}
 		} else if (cmd == "dumpform") {
 			v->dump_current_form();
 		} else {
-			v->show_error(strprintf::fmt(
+			v->show_error(StrPrintf::fmt(
 				_("Not a command: %s"), cmdline));
 		}
 	}
 }
 
-void formaction::start_qna(const std::vector<qna_pair>& prompts,
-	operation finish_op,
-	history* h)
+void FormAction::start_qna(const std::vector<qna_pair>& prompts,
+	Operation finish_op,
+	History* h)
 {
 	/*
 	 * the formaction base class contains a "Q&A" mechanism that makes it
@@ -345,7 +345,7 @@ void formaction::start_qna(const std::vector<qna_pair>& prompts,
 	start_next_question();
 }
 
-void formaction::finished_qna(operation op)
+void FormAction::finished_qna(Operation op)
 {
 	v->inside_qna(false);
 	v->inside_cmdline(false);
@@ -373,8 +373,8 @@ void formaction::finished_qna(operation op)
 		} else {
 			v->set_status(
 				_s("Error while saving bookmark: ") + retval);
-			LOG(level::DEBUG,
-				"formaction::finished_qna: error while saving "
+			LOG(Level::DEBUG,
+				"FormAction::finished_qna: error while saving "
 				"bookmark, retval = `%s'",
 				retval);
 		}
@@ -382,8 +382,8 @@ void formaction::finished_qna(operation op)
 	case OP_INT_END_CMDLINE: {
 		f->set_focus("feeds");
 		std::string cmdline = qna_responses[0];
-		formaction::cmdlinehistory.add_line(cmdline);
-		LOG(level::DEBUG, "formaction: commandline = `%s'", cmdline);
+		FormAction::cmdlinehistory.add_line(cmdline);
+		LOG(Level::DEBUG, "formaction: commandline = `%s'", cmdline);
 		this->handle_cmdline(cmdline);
 	} break;
 	default:
@@ -391,13 +391,13 @@ void formaction::finished_qna(operation op)
 	}
 }
 
-void formaction::start_bookmark_qna(const std::string& default_title,
+void FormAction::start_bookmark_qna(const std::string& default_title,
 	const std::string& default_url,
 	const std::string& default_desc,
 	const std::string& default_feed_title)
 {
-	LOG(level::DEBUG,
-		"formaction::start_bookmark_qna: starting bookmark Q&A... "
+	LOG(Level::DEBUG,
+		"FormAction::start_bookmark_qna: starting bookmark Q&A... "
 		"default_title = %s default_url = %s default_desc = %s "
 		"default_feed_title = %s",
 		default_title,
@@ -413,7 +413,7 @@ void formaction::start_bookmark_qna(const std::string& default_title,
 	if (default_title.empty()) { // call the function to figure out title
 				     // from url only if the default_title is no
 				     // good
-		new_title = utils::make_title(default_url);
+		new_title = Utils::make_title(default_url);
 		prompts.push_back(qna_pair(_("Title: "), new_title));
 	} else {
 		prompts.push_back(qna_pair(_("Title: "), default_title));
@@ -424,7 +424,7 @@ void formaction::start_bookmark_qna(const std::string& default_title,
 	if (is_bm_autopilot) { // If bookmarking is set to autopilot don't
 			       // prompt for url, title, desc
 		if (default_title.empty()) {
-			new_title = utils::make_title(
+			new_title = Utils::make_title(
 				default_url); // try to make the title from url
 		} else {
 			new_title = default_title; // assignment just to make
@@ -448,8 +448,8 @@ void formaction::start_bookmark_qna(const std::string& default_title,
 				v->set_status(
 					_s("Error while saving bookmark: ") +
 					retval);
-				LOG(level::DEBUG,
-					"formaction::finished_qna: error while "
+				LOG(Level::DEBUG,
+					"FormAction::finished_qna: error while "
 					"saving bookmark, retval = `%s'",
 					retval);
 			}
@@ -459,7 +459,7 @@ void formaction::start_bookmark_qna(const std::string& default_title,
 	}
 }
 
-void formaction::start_next_question()
+void FormAction::start_next_question()
 {
 	/*
 	 * If there is one more prompt to be presented to the user, set it up.
@@ -467,13 +467,13 @@ void formaction::start_next_question()
 	if (qna_prompts.size() > 0) {
 		std::string replacestr(
 			"{hbox[lastline] .expand:0 {label .expand:0 text:");
-		replacestr.append(stfl::quote(qna_prompts[0].first));
+		replacestr.append(Stfl::quote(qna_prompts[0].first));
 		replacestr.append(
 			"}{input[qnainput] on_ESC:cancel-qna "
 			"on_UP:qna-prev-history on_DOWN:qna-next-history "
 			"on_ENTER:end-question modal:1 .expand:h @bind_home:** "
 			"@bind_end:** text[qna_value]:");
-		replacestr.append(stfl::quote(qna_prompts[0].second));
+		replacestr.append(Stfl::quote(qna_prompts[0].second));
 		replacestr.append(" pos[qna_value_pos]:0");
 		replacestr.append("}}");
 		f->modify("lastline", "replace", replacestr);
@@ -499,14 +499,14 @@ void formaction::start_next_question()
 	}
 }
 
-void formaction::load_histories(const std::string& searchfile,
+void FormAction::load_histories(const std::string& searchfile,
 	const std::string& cmdlinefile)
 {
 	searchhistory.load_from_file(searchfile);
 	cmdlinehistory.load_from_file(cmdlinefile);
 }
 
-void formaction::save_histories(const std::string& searchfile,
+void FormAction::save_histories(const std::string& searchfile,
 	const std::string& cmdlinefile,
 	unsigned int limit)
 {
@@ -514,7 +514,7 @@ void formaction::save_histories(const std::string& searchfile,
 	cmdlinehistory.save_to_file(cmdlinefile, limit);
 }
 
-std::string formaction::bookmark(const std::string& url,
+std::string FormAction::bookmark(const std::string& url,
 	const std::string& title,
 	const std::string& description,
 	const std::string& feed_title)
@@ -524,20 +524,20 @@ std::string formaction::bookmark(const std::string& url,
 	bool is_interactive =
 		v->get_cfg()->get_configvalue_as_bool("bookmark-interactive");
 	if (bookmark_cmd.length() > 0) {
-		std::string cmdline = strprintf::fmt("%s '%s' '%s' '%s' '%s'",
+		std::string cmdline = StrPrintf::fmt("%s '%s' '%s' '%s' '%s'",
 			bookmark_cmd,
-			utils::replace_all(url, "'", "%27"),
-			utils::replace_all(title, "'", "%27"),
-			utils::replace_all(description, "'", "%27"),
-			utils::replace_all(feed_title, "'", "%27"));
+			Utils::replace_all(url, "'", "%27"),
+			Utils::replace_all(title, "'", "%27"),
+			Utils::replace_all(description, "'", "%27"),
+			Utils::replace_all(feed_title, "'", "%27"));
 
-		LOG(level::DEBUG, "formaction::bookmark: cmd = %s", cmdline);
+		LOG(Level::DEBUG, "FormAction::bookmark: cmd = %s", cmdline);
 
 		if (is_interactive) {
 			v->push_empty_formaction();
-			stfl::reset();
-			utils::run_interactively(
-				cmdline, "formaction::bookmark");
+			Stfl::reset();
+			Utils::run_interactively(
+				cmdline, "FormAction::bookmark");
 			v->pop_current_formaction();
 			return "";
 		} else {
@@ -546,7 +546,7 @@ std::string formaction::bookmark(const std::string& url,
 			my_argv[1] = const_cast<char*>("-c");
 			my_argv[2] = const_cast<char*>(cmdline.c_str());
 			my_argv[3] = nullptr;
-			return utils::run_program(my_argv, "");
+			return Utils::run_program(my_argv, "");
 		}
 	} else {
 		return _(

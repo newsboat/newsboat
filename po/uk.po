@@ -58,11 +58,11 @@ msgstr "<файлкешу>"
 msgid "use <cachefile> as cache file"
 msgstr "використайте <файлкешу> як файл кешу"
 
-#: newsboat.cpp:52 src/pb_controller.cpp:339
+#: newsboat.cpp:52 src/pbcontroller.cpp:339
 msgid "<configfile>"
 msgstr "<файлналаштування>"
 
-#: newsboat.cpp:53 src/pb_controller.cpp:340
+#: newsboat.cpp:53 src/pbcontroller.cpp:340
 msgid "read configuration from <configfile>"
 msgstr "читати налаштування з <файлналаштування>"
 
@@ -86,19 +86,19 @@ msgstr "мовчазний запуск"
 msgid "get version information"
 msgstr "отримати інформацію про версію"
 
-#: newsboat.cpp:63 src/pb_controller.cpp:348
+#: newsboat.cpp:63 src/pbcontroller.cpp:348
 msgid "<loglevel>"
 msgstr "<рівеньлогу>"
 
-#: newsboat.cpp:64 src/pb_controller.cpp:349
+#: newsboat.cpp:64 src/pbcontroller.cpp:349
 msgid "write a log with a certain loglevel (valid values: 1 to 6)"
 msgstr "записувати лог з визначеним рівнем (дійсні значення: від 1 до 6)"
 
-#: newsboat.cpp:69 src/pb_controller.cpp:354
+#: newsboat.cpp:69 src/pbcontroller.cpp:354
 msgid "<logfile>"
 msgstr "<файллогу>"
 
-#: newsboat.cpp:70 src/pb_controller.cpp:355
+#: newsboat.cpp:70 src/pbcontroller.cpp:355
 msgid "use <logfile> as output log file"
 msgstr "використовуйте <файллогу> як вихідний файл логу"
 
@@ -110,7 +110,7 @@ msgstr "експортувати список прочитаних статей 
 msgid "import list of read articles from <file>"
 msgstr "імпортувати список прочитаних статей з <файл>"
 
-#: newsboat.cpp:79 src/pb_controller.cpp:356
+#: newsboat.cpp:79 src/pbcontroller.cpp:356
 msgid "this help"
 msgstr "ця довідка"
 
@@ -151,10 +151,10 @@ msgstr "Впіймали newsboat::matcherexception із повідомленн�
 
 #: newsboat.cpp:199 podboat.cpp:32
 #, c-format
-msgid "Caught newsboat::exception with message: %s"
-msgstr "Впіймали newsboat::exception із повідомленням: %s"
+msgid "Caught newsboat::Exception with message: %s"
+msgstr "Впіймали newsboat::Exception із повідомленням: %s"
 
-#: src/cliargsparser.cpp:144 src/pb_controller.cpp:231
+#: src/cliargsparser.cpp:144 src/pbcontroller.cpp:231
 #, c-format
 msgid "%s: %d: invalid loglevel value"
 msgstr "%s: %d: неправильний рівень логування"
@@ -257,24 +257,24 @@ msgstr ""
 "Будь ласка, налаштуйте змінну HOME, або додайте користувача, що відповідає "
 "UID %u!"
 
-#: src/controller.cpp:152 src/pb_controller.cpp:246
+#: src/controller.cpp:152 src/pbcontroller.cpp:246
 #, c-format
 msgid "Starting %s %s..."
 msgstr "Запускаю %s %s..."
 
-#: src/controller.cpp:162 src/controller.cpp:218 src/pb_controller.cpp:253
+#: src/controller.cpp:162 src/controller.cpp:218 src/pbcontroller.cpp:253
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "Помилка: вже працює копія %s (PID: %u)"
 
-#: src/controller.cpp:174 src/pb_controller.cpp:261
+#: src/controller.cpp:174 src/pbcontroller.cpp:261
 msgid "Loading configuration..."
 msgstr "Завантаження налаштувань..."
 
 #: src/controller.cpp:208 src/controller.cpp:252 src/controller.cpp:316
 #: src/controller.cpp:367 src/controller.cpp:371 src/controller.cpp:407
 #: src/controller.cpp:420 src/controller.cpp:438 src/controller.cpp:449
-#: src/controller.cpp:491 src/pb_controller.cpp:298 src/pb_controller.cpp:315
+#: src/controller.cpp:491 src/pbcontroller.cpp:298 src/pbcontroller.cpp:315
 msgid "done."
 msgstr "готово."
 
@@ -414,23 +414,23 @@ msgid "%s: %s: unknown command"
 msgstr "%s: %s: невідома команда"
 
 #: src/controller.cpp:825 src/formaction.cpp:417 src/formaction.cpp:419
-#: src/itemview_formaction.cpp:94
+#: src/itemviewformaction.cpp:94
 msgid "Title: "
 msgstr "Назва: "
 
-#: src/controller.cpp:829 src/itemview_formaction.cpp:101
+#: src/controller.cpp:829 src/itemviewformaction.cpp:101
 msgid "Author: "
 msgstr "Автор: "
 
-#: src/controller.cpp:833 src/itemview_formaction.cpp:114
+#: src/controller.cpp:833 src/itemviewformaction.cpp:114
 msgid "Date: "
 msgstr "Дата: "
 
-#: src/controller.cpp:837 src/itemview_formaction.cpp:108
+#: src/controller.cpp:837 src/itemviewformaction.cpp:108
 msgid "Link: "
 msgstr "Посилання: "
 
-#: src/controller.cpp:842 src/itemview_formaction.cpp:125
+#: src/controller.cpp:842 src/itemviewformaction.cpp:125
 msgid "Podcast Download URL: "
 msgstr "Посилання на завантаження Podcast: "
 
@@ -439,33 +439,33 @@ msgstr "Посилання на завантаження Podcast: "
 msgid "Error: couldn't open configuration file `%s'!"
 msgstr "Помилка: не можу відкрити файл конфігурації `%s'!"
 
-#: src/dialogs_formaction.cpp:66
+#: src/dialogsformaction.cpp:66
 msgid "Close"
 msgstr "Закрити"
 
-#: src/dialogs_formaction.cpp:67
+#: src/dialogsformaction.cpp:67
 msgid "Goto Dialog"
 msgstr "Перейти до Діалогу"
 
-#: src/dialogs_formaction.cpp:68
+#: src/dialogsformaction.cpp:68
 msgid "Close Dialog"
 msgstr "Закрити Діалог"
 
-#: src/dialogs_formaction.cpp:83 src/dialogs_formaction.cpp:99
-#: src/itemlist_formaction.cpp:72 src/itemlist_formaction.cpp:94
-#: src/itemlist_formaction.cpp:142 src/itemlist_formaction.cpp:157
-#: src/itemlist_formaction.cpp:284 src/itemlist_formaction.cpp:318
-#: src/itemlist_formaction.cpp:343 src/itemlist_formaction.cpp:550
-#: src/itemlist_formaction.cpp:774
+#: src/dialogsformaction.cpp:83 src/dialogsformaction.cpp:99
+#: src/itemlistformaction.cpp:72 src/itemlistformaction.cpp:94
+#: src/itemlistformaction.cpp:142 src/itemlistformaction.cpp:157
+#: src/itemlistformaction.cpp:284 src/itemlistformaction.cpp:318
+#: src/itemlistformaction.cpp:343 src/itemlistformaction.cpp:550
+#: src/itemlistformaction.cpp:774
 msgid "No item selected!"
 msgstr "Не вибрано нічого!"
 
-#: src/dialogs_formaction.cpp:95
+#: src/dialogsformaction.cpp:95
 msgid "Error: you can't remove the feed list!"
 msgstr "Помилка: ви не можете видаляти список тем"
 
-#: src/dialogs_formaction.cpp:122 src/feedlist_formaction.cpp:944
-#: src/itemlist_formaction.cpp:1197 src/urlview_formaction.cpp:146
+#: src/dialogsformaction.cpp:122 src/feedlistformaction.cpp:944
+#: src/itemlistformaction.cpp:1197 src/urlviewformaction.cpp:146
 msgid "Invalid position!"
 msgstr "Непрацездатна позиція!"
 
@@ -543,33 +543,33 @@ msgstr "невідома помилка (помилка)."
 msgid "invalid feed index (bug)"
 msgstr "непрацездатний індекс теми (помилка)"
 
-#: src/feedhq_urlreader.cpp:49 src/oldreader_urlreader.cpp:50
+#: src/feedhqurlreader.cpp:49 src/oldreaderurlreader.cpp:50
 msgid "People you follow"
 msgstr "Люди, котрих ви читаєте"
 
-#: src/feedhq_urlreader.cpp:51 src/inoreader_urlreader.cpp:51
-#: src/oldreader_urlreader.cpp:52
+#: src/feedhqurlreader.cpp:51 src/inoreaderurlreader.cpp:51
+#: src/oldreaderurlreader.cpp:52
 msgid "Starred items"
 msgstr "Відмічені статті."
 
-#: src/feedhq_urlreader.cpp:52 src/oldreader_urlreader.cpp:53
+#: src/feedhqurlreader.cpp:52 src/oldreaderurlreader.cpp:53
 msgid "Shared items"
 msgstr "Загальні статті."
 
-#: src/feedlist_formaction.cpp:119 src/feedlist_formaction.cpp:133
-#: src/feedlist_formaction.cpp:230 src/feedlist_formaction.cpp:247
-#: src/feedlist_formaction.cpp:303
+#: src/feedlistformaction.cpp:119 src/feedlistformaction.cpp:133
+#: src/feedlistformaction.cpp:230 src/feedlistformaction.cpp:247
+#: src/feedlistformaction.cpp:303
 msgid "No feed selected!"
 msgstr "Не вибрано тем!"
 
 #. / This string is related to the letters in parentheses in the
 #. / "Sort by (f)irsttag/..." and "Reverse Sort by
 #. / (f)irsttag/..." messages
-#: src/feedlist_formaction.cpp:146 src/feedlist_formaction.cpp:178
+#: src/feedlistformaction.cpp:146 src/feedlistformaction.cpp:178
 msgid "ftauln"
 msgstr "ftauln"
 
-#: src/feedlist_formaction.cpp:148
+#: src/feedlistformaction.cpp:148
 msgid ""
 "Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(l)astupdated/"
 "(n)one?"
@@ -577,7 +577,7 @@ msgstr ""
 "Сортувати за (f)першимТаґом/(t)назвою/(a)кількістьСтатей/"
 "(u)кількістьНепрочитанихСтатей/(l)останнімОновленням/(n)ніяк?"
 
-#: src/feedlist_formaction.cpp:180
+#: src/feedlistformaction.cpp:180
 msgid ""
 "Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/"
 "(l)astupdated/(n)one?"
@@ -585,164 +585,164 @@ msgstr ""
 "Сортувати реверсно за (f)першимТаґом/(t)назвою/(a)кількістьСтатей/"
 "(u)кількістьНепрочитанихСтатей/(l)останнімОновленням/(n)ніяк?"
 
-#: src/feedlist_formaction.cpp:225
+#: src/feedlistformaction.cpp:225
 msgid "Cannot open query feeds in the browser!"
 msgstr "Динамічні теми не можна відкрити у браузері!"
 
-#: src/feedlist_formaction.cpp:287 src/itemlist_formaction.cpp:458
+#: src/feedlistformaction.cpp:287 src/itemlistformaction.cpp:458
 msgid "Marking feed read..."
 msgstr "Позначаю теми як прочитані..."
 
-#: src/feedlist_formaction.cpp:298 src/itemlist_formaction.cpp:490
+#: src/feedlistformaction.cpp:298 src/itemlistformaction.cpp:490
 #, c-format
 msgid "Error: couldn't mark feed read: %s"
 msgstr "Помилка: не можу позначити тему: %s як прочитану"
 
-#: src/feedlist_formaction.cpp:325 src/feedlist_formaction.cpp:333
-#: src/feedlist_formaction.cpp:356
+#: src/feedlistformaction.cpp:325 src/feedlistformaction.cpp:333
+#: src/feedlistformaction.cpp:356
 msgid "No feeds with unread items."
 msgstr "Немає тем з непрочитаними статтями."
 
-#: src/feedlist_formaction.cpp:340 src/itemlist_formaction.cpp:448
+#: src/feedlistformaction.cpp:340 src/itemlistformaction.cpp:448
 msgid "Already on last feed."
 msgstr "Вже на останній темі."
 
-#: src/feedlist_formaction.cpp:348 src/itemlist_formaction.cpp:453
+#: src/feedlistformaction.cpp:348 src/itemlistformaction.cpp:453
 msgid "Already on first feed."
 msgstr "Вже на першій темі."
 
-#: src/feedlist_formaction.cpp:361
+#: src/feedlistformaction.cpp:361
 msgid "Marking all feeds read..."
 msgstr "Позначаю всі теми як прочитані..."
 
-#: src/feedlist_formaction.cpp:410 src/itemlist_formaction.cpp:591
+#: src/feedlistformaction.cpp:410 src/itemlistformaction.cpp:591
 #, c-format
 msgid "Error: couldn't parse filter command `%s': %s"
 msgstr "Помилка: неможливо парсувати команду фільтра `%s': %s"
 
-#: src/feedlist_formaction.cpp:424 src/itemlist_formaction.cpp:606
+#: src/feedlistformaction.cpp:424 src/itemlistformaction.cpp:606
 msgid "No filters defined."
 msgstr "Не визначено фільтри."
 
-#: src/feedlist_formaction.cpp:438 src/help_formaction.cpp:39
-#: src/itemlist_formaction.cpp:562 src/itemview_formaction.cpp:289
+#: src/feedlistformaction.cpp:438 src/helpformaction.cpp:39
+#: src/itemlistformaction.cpp:562 src/itemviewformaction.cpp:289
 msgid "Search for: "
 msgstr "Шукати: "
 
-#: src/feedlist_formaction.cpp:457 src/itemlist_formaction.cpp:619
+#: src/feedlistformaction.cpp:457 src/itemlistformaction.cpp:619
 msgid "Filter: "
 msgstr "Фільтр: "
 
-#: src/feedlist_formaction.cpp:475 src/view.cpp:226
+#: src/feedlistformaction.cpp:475 src/view.cpp:226
 msgid "Do you really want to quit (y:Yes n:No)? "
 msgstr "Ви впевнені, що хочете вийти (y:Так n:Ні)?"
 
-#: src/feedlist_formaction.cpp:476 src/filebrowser_formaction.cpp:135
+#: src/feedlistformaction.cpp:476 src/filebrowserformaction.cpp:135
 #: src/view.cpp:228
 msgid "yn"
 msgstr "yn"
 
-#: src/feedlist_formaction.cpp:476 src/view.cpp:228
+#: src/feedlistformaction.cpp:476 src/view.cpp:228
 msgid "y"
 msgstr "y"
 
-#: src/feedlist_formaction.cpp:574 src/help_formaction.cpp:217
-#: src/itemlist_formaction.cpp:1174 src/itemview_formaction.cpp:469
-#: src/pb_view.cpp:336 src/pb_view.cpp:343 src/urlview_formaction.cpp:134
+#: src/feedlistformaction.cpp:574 src/helpformaction.cpp:217
+#: src/itemlistformaction.cpp:1174 src/itemviewformaction.cpp:469
+#: src/pbview.cpp:336 src/pbview.cpp:343 src/urlviewformaction.cpp:134
 msgid "Quit"
 msgstr "Вихід"
 
-#: src/feedlist_formaction.cpp:575 src/itemlist_formaction.cpp:1175
+#: src/feedlistformaction.cpp:575 src/itemlistformaction.cpp:1175
 msgid "Open"
 msgstr "Відкрити"
 
-#: src/feedlist_formaction.cpp:576 src/itemlist_formaction.cpp:1178
-#: src/itemview_formaction.cpp:471
+#: src/feedlistformaction.cpp:576 src/itemlistformaction.cpp:1178
+#: src/itemviewformaction.cpp:471
 msgid "Next Unread"
 msgstr "Наступна непрочитана"
 
-#: src/feedlist_formaction.cpp:577 src/itemlist_formaction.cpp:1177
+#: src/feedlistformaction.cpp:577 src/itemlistformaction.cpp:1177
 msgid "Reload"
 msgstr "Перезавантажити"
 
-#: src/feedlist_formaction.cpp:578
+#: src/feedlistformaction.cpp:578
 msgid "Reload All"
 msgstr "Перезавантажити усі"
 
-#: src/feedlist_formaction.cpp:579
+#: src/feedlistformaction.cpp:579
 msgid "Mark Read"
 msgstr "Позначити як прочитано"
 
-#: src/feedlist_formaction.cpp:580 src/itemlist_formaction.cpp:1179
+#: src/feedlistformaction.cpp:580 src/itemlistformaction.cpp:1179
 msgid "Mark All Read"
 msgstr "Позначити всі як прочитані"
 
-#: src/feedlist_formaction.cpp:581 src/help_formaction.cpp:218
-#: src/itemlist_formaction.cpp:1180
+#: src/feedlistformaction.cpp:581 src/helpformaction.cpp:218
+#: src/itemlistformaction.cpp:1180
 msgid "Search"
 msgstr "Пошук"
 
-#: src/feedlist_formaction.cpp:582 src/help_formaction.cpp:248
-#: src/itemlist_formaction.cpp:1181 src/itemview_formaction.cpp:474
-#: src/pb_view.cpp:275 src/pb_view.cpp:351
+#: src/feedlistformaction.cpp:582 src/helpformaction.cpp:248
+#: src/itemlistformaction.cpp:1181 src/itemviewformaction.cpp:474
+#: src/pbview.cpp:275 src/pbview.cpp:351
 msgid "Help"
 msgstr "Довідка"
 
-#: src/feedlist_formaction.cpp:888 src/itemlist_formaction.cpp:760
+#: src/feedlistformaction.cpp:888 src/itemlistformaction.cpp:760
 msgid "Error: couldn't parse filter command!"
 msgstr "Помилка: неможливо розібрати помилку фільтра!"
 
-#: src/feedlist_formaction.cpp:906 src/itemlist_formaction.cpp:795
+#: src/feedlistformaction.cpp:906 src/itemlistformaction.cpp:795
 msgid "Searching..."
 msgstr "Шукаю..."
 
-#: src/feedlist_formaction.cpp:916 src/itemlist_formaction.cpp:810
+#: src/feedlistformaction.cpp:916 src/itemlistformaction.cpp:810
 #, c-format
 msgid "Error while searching for `%s': %s"
 msgstr "Помилка при пошуку `%s': %s"
 
-#: src/feedlist_formaction.cpp:928 src/itemlist_formaction.cpp:817
+#: src/feedlistformaction.cpp:928 src/itemlistformaction.cpp:817
 msgid "No results."
 msgstr "Безрезультатно."
 
-#: src/feedlist_formaction.cpp:939 src/itemlist_formaction.cpp:1192
+#: src/feedlistformaction.cpp:939 src/itemlistformaction.cpp:1192
 msgid "Position not visible!"
 msgstr "Не видно позицію!"
 
-#: src/feedlist_formaction.cpp:1011
+#: src/feedlistformaction.cpp:1011
 #, c-format
 msgid "Feed List - %u unread, %u total"
 msgstr "Список Тем - %u непрочитано, загалом - %u"
 
-#: src/filebrowser_formaction.cpp:130
+#: src/filebrowserformaction.cpp:130
 #, c-format
 msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
 msgstr "Ви впевнені, що хочете перезаписати `%s' (y:Так n:Ні)?"
 
-#: src/filebrowser_formaction.cpp:135
+#: src/filebrowserformaction.cpp:135
 msgid "n"
 msgstr "n"
 
-#: src/filebrowser_formaction.cpp:225
+#: src/filebrowserformaction.cpp:225
 msgid "File: "
 msgstr "Файл: "
 
-#: src/filebrowser_formaction.cpp:250
+#: src/filebrowserformaction.cpp:250
 #, c-format
 msgid "%s %s - Save File - %s"
 msgstr "%s %s - Зберегти файл - %s"
 
-#: src/filebrowser_formaction.cpp:258 src/pb_view.cpp:345
-#: src/select_formaction.cpp:166 src/select_formaction.cpp:169
+#: src/filebrowserformaction.cpp:258 src/pbview.cpp:345
+#: src/selectformaction.cpp:166 src/selectformaction.cpp:169
 msgid "Cancel"
 msgstr "Відміна"
 
-#: src/filebrowser_formaction.cpp:259 src/itemlist_formaction.cpp:1176
-#: src/itemview_formaction.cpp:470
+#: src/filebrowserformaction.cpp:259 src/itemlistformaction.cpp:1176
+#: src/itemviewformaction.cpp:470
 msgid "Save"
 msgstr "Зберегти"
 
-#: src/filebrowser_formaction.cpp:381
+#: src/filebrowserformaction.cpp:381
 #, c-format
 msgid "Save File - %s"
 msgstr "Зберегти Файл - %s"
@@ -810,15 +810,15 @@ msgstr ""
 "підтримка закладок не налаштована. Будь ласка, встановіть змінну `bookmark-"
 "cmd' відповідно."
 
-#: src/help_formaction.cpp:188
+#: src/helpformaction.cpp:188
 msgid "Generic bindings:"
 msgstr "Загальні клавіші"
 
-#: src/help_formaction.cpp:196
+#: src/helpformaction.cpp:196
 msgid "Unbound functions:"
 msgstr "Незастосовані функції"
 
-#: src/help_formaction.cpp:219
+#: src/helpformaction.cpp:219
 msgid "Clear"
 msgstr "Очистити"
 
@@ -846,200 +846,200 @@ msgstr "вбудований флеш"
 msgid "unknown (bug)"
 msgstr "невідомо (помилка)"
 
-#: src/inoreader_urlreader.cpp:53
+#: src/inoreaderurlreader.cpp:53
 msgid "Broadcast items"
 msgstr "Розіслані статті"
 
-#: src/inoreader_urlreader.cpp:54
+#: src/inoreaderurlreader.cpp:54
 msgid "Liked items"
 msgstr "Вподобані статті"
 
-#: src/inoreader_urlreader.cpp:56
+#: src/inoreaderurlreader.cpp:56
 msgid "Saved web pages"
 msgstr "Збережені веб-сторінки"
 
-#: src/itemlist_formaction.cpp:184 src/itemview_formaction.cpp:396
+#: src/itemlistformaction.cpp:184 src/itemviewformaction.cpp:396
 msgid "Toggling read flag for article..."
 msgstr "Переключення флагу прочитано для статей..."
 
-#: src/itemlist_formaction.cpp:228
+#: src/itemlistformaction.cpp:228
 #, c-format
 msgid "Error while toggling read flag: %s"
 msgstr "Помилка при переключенні флагу прочитано: %s"
 
-#: src/itemlist_formaction.cpp:274 src/itemview_formaction.cpp:329
+#: src/itemlistformaction.cpp:274 src/itemviewformaction.cpp:329
 msgid "URL list empty."
 msgstr "Список URL пустий."
 
-#: src/itemlist_formaction.cpp:334 src/itemview_formaction.cpp:119
-#: src/itemview_formaction.cpp:317
+#: src/itemlistformaction.cpp:334 src/itemviewformaction.cpp:119
+#: src/itemviewformaction.cpp:317
 msgid "Flags: "
 msgstr "Флаги: "
 
-#: src/itemlist_formaction.cpp:364 src/itemlist_formaction.cpp:1224
+#: src/itemlistformaction.cpp:364 src/itemlistformaction.cpp:1224
 msgid "Error: no item selected!"
 msgstr "Помилка: нічого не вибрано!"
 
-#: src/itemlist_formaction.cpp:378
+#: src/itemlistformaction.cpp:378
 msgid "Error: you can't reload search results."
 msgstr "Помилка: ви не можете перезавантажувати результати пошуку"
 
-#: src/itemlist_formaction.cpp:399 src/itemlist_formaction.cpp:408
-#: src/itemlist_formaction.cpp:432 src/itemview_formaction.cpp:350
-#: src/itemview_formaction.cpp:361 src/itemview_formaction.cpp:390
+#: src/itemlistformaction.cpp:399 src/itemlistformaction.cpp:408
+#: src/itemlistformaction.cpp:432 src/itemviewformaction.cpp:350
+#: src/itemviewformaction.cpp:361 src/itemviewformaction.cpp:390
 #: src/view.cpp:773 src/view.cpp:849
 msgid "No unread items."
 msgstr "Немає непрочитаних статей."
 
-#: src/itemlist_formaction.cpp:416 src/itemview_formaction.cpp:370
+#: src/itemlistformaction.cpp:416 src/itemviewformaction.cpp:370
 #: src/view.cpp:923
 msgid "Already on last item."
 msgstr "Вже на останній статті."
 
-#: src/itemlist_formaction.cpp:425 src/itemview_formaction.cpp:380
+#: src/itemlistformaction.cpp:425 src/itemviewformaction.cpp:380
 #: src/view.cpp:887
 msgid "Already on first item."
 msgstr "Вже на першій статті."
 
-#: src/itemlist_formaction.cpp:438 src/itemlist_formaction.cpp:443
+#: src/itemlistformaction.cpp:438 src/itemlistformaction.cpp:443
 msgid "No unread feeds."
 msgstr "Немає непрочитаних тем."
 
-#: src/itemlist_formaction.cpp:497
+#: src/itemlistformaction.cpp:497
 msgid "Marking all above as read..."
 msgstr "Позначаю все, що вище, як прочитані..."
 
-#: src/itemlist_formaction.cpp:545 src/itemview_formaction.cpp:304
+#: src/itemlistformaction.cpp:545 src/itemviewformaction.cpp:304
 msgid "Pipe article to command: "
 msgstr "Пайпувати статтю до каманди: "
 
 #. / This string is related to the letters in parentheses in the
 #. / "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
 #. / messages
-#: src/itemlist_formaction.cpp:633 src/itemlist_formaction.cpp:664
+#: src/itemlistformaction.cpp:633 src/itemlistformaction.cpp:664
 msgid "dtfalg"
 msgstr "dtfalg"
 
-#: src/itemlist_formaction.cpp:635
+#: src/itemlistformaction.cpp:635
 msgid "Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"
 msgstr ""
 "Сортувати за (d)датою/(t)назвою/(f)флагами/(a)автором/(l)посиланням/(g)uid?"
 
-#: src/itemlist_formaction.cpp:666
+#: src/itemlistformaction.cpp:666
 msgid "Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"
 msgstr ""
 "Сортувати реверсно за (d)датою/(t)назвою/(f)флагами/(a)автором/(l)посиланням/"
 "(g)uid?"
 
-#: src/itemlist_formaction.cpp:782 src/itemview_formaction.cpp:571
+#: src/itemlistformaction.cpp:782 src/itemviewformaction.cpp:571
 msgid "Flags updated."
 msgstr "Флаги поновлено."
 
-#: src/itemlist_formaction.cpp:880 src/view.cpp:431 src/view.cpp:457
+#: src/itemlistformaction.cpp:880 src/view.cpp:431 src/view.cpp:457
 #, c-format
 msgid "Error: applying the filter failed: %s"
 msgstr "Помилка: примінення фільтру невдале: %s"
 
-#: src/itemlist_formaction.cpp:1264 src/itemview_formaction.cpp:247
-#: src/itemview_formaction.cpp:539
+#: src/itemlistformaction.cpp:1264 src/itemviewformaction.cpp:247
+#: src/itemviewformaction.cpp:539
 msgid "Aborted saving."
 msgstr "Збереження перервано."
 
-#: src/itemlist_formaction.cpp:1269 src/itemview_formaction.cpp:545
+#: src/itemlistformaction.cpp:1269 src/itemviewformaction.cpp:545
 #, c-format
 msgid "Saved article to %s"
 msgstr "Стаття збережена у %s"
 
-#: src/itemlist_formaction.cpp:1272 src/itemview_formaction.cpp:549
+#: src/itemlistformaction.cpp:1272 src/itemviewformaction.cpp:549
 #, c-format
 msgid "Error: couldn't save article to %s"
 msgstr "Помилка: не можу зберегти у %s"
 
-#: src/itemlist_formaction.cpp:1366
+#: src/itemlistformaction.cpp:1366
 #, c-format
 msgid "Search Result - '%s'"
 msgstr "Результати Пошуку - '%s'"
 
-#: src/itemlist_formaction.cpp:1369
+#: src/itemlistformaction.cpp:1369
 #, c-format
 msgid "Query Feed - %s"
 msgstr "Динамічна тема - %s"
 
-#: src/itemlist_formaction.cpp:1376
+#: src/itemlistformaction.cpp:1376
 #, c-format
 msgid "Article List - %s"
 msgstr "Список Статей - %s"
 
-#: src/itemview_formaction.cpp:48 src/itemview_formaction.cpp:682
+#: src/itemviewformaction.cpp:48 src/itemviewformaction.cpp:682
 msgid "Top"
 msgstr "Вершина"
 
-#: src/itemview_formaction.cpp:49 src/itemview_formaction.cpp:684
+#: src/itemviewformaction.cpp:49 src/itemviewformaction.cpp:684
 msgid "Bottom"
 msgstr "Низ"
 
-#: src/itemview_formaction.cpp:88
+#: src/itemviewformaction.cpp:88
 msgid "Feed: "
 msgstr "Тема: "
 
-#: src/itemview_formaction.cpp:129
+#: src/itemviewformaction.cpp:129
 msgid "type: "
 msgstr "тип: "
 
-#: src/itemview_formaction.cpp:211 src/view.cpp:568
+#: src/itemviewformaction.cpp:211 src/view.cpp:568
 #, c-format
 msgid "Error while marking article as read: %s"
 msgstr "Помилка при позначенні статті як прочитано: %s"
 
-#: src/itemview_formaction.cpp:229
+#: src/itemviewformaction.cpp:229
 #, c-format
 msgid "Added %s to download queue."
 msgstr "Додано %s до черги завантаження."
 
-#: src/itemview_formaction.cpp:233
+#: src/itemviewformaction.cpp:233
 #, c-format
 msgid "Invalid URL: '%s'"
 msgstr "Некоректний URL: '%s'"
 
-#: src/itemview_formaction.cpp:252
+#: src/itemviewformaction.cpp:252
 #, c-format
 msgid "Saved article to %s."
 msgstr "Збережено статтю у %s."
 
-#: src/itemview_formaction.cpp:255
+#: src/itemviewformaction.cpp:255
 #, c-format
 msgid "Error: couldn't write article to file %s"
 msgstr "Помилка: не можу записати статтю у файл %s"
 
-#: src/itemview_formaction.cpp:263 src/itemview_formaction.cpp:436
-#: src/itemview_formaction.cpp:595 src/urlview_formaction.cpp:42
-#: src/urlview_formaction.cpp:74
+#: src/itemviewformaction.cpp:263 src/itemviewformaction.cpp:436
+#: src/itemviewformaction.cpp:595 src/urlviewformaction.cpp:42
+#: src/urlviewformaction.cpp:74
 msgid "Starting browser..."
 msgstr "Запускаю браузер..."
 
-#: src/itemview_formaction.cpp:402
+#: src/itemviewformaction.cpp:402
 #, c-format
 msgid "Error while marking article as unread: %s"
 msgstr "Помилка при позначенні статті як непрочитано: %s"
 
-#: src/itemview_formaction.cpp:450 src/keymap.cpp:140
+#: src/itemviewformaction.cpp:450 src/keymap.cpp:140
 msgid "Goto URL #"
 msgstr "Перейти за посиланням №"
 
-#: src/itemview_formaction.cpp:472 src/urlview_formaction.cpp:135
+#: src/itemviewformaction.cpp:472 src/urlviewformaction.cpp:135
 msgid "Open in Browser"
 msgstr "Відкрити у браузері"
 
-#: src/itemview_formaction.cpp:473
+#: src/itemviewformaction.cpp:473
 msgid "Enqueue"
 msgstr "Поставити у чергу"
 
-#: src/itemview_formaction.cpp:696
+#: src/itemviewformaction.cpp:696
 #, c-format
 msgid "Article - %s"
 msgstr "Стаття - %s"
 
-#: src/itemview_formaction.cpp:745
+#: src/itemviewformaction.cpp:745
 msgid "Error: invalid regular expression!"
 msgstr "Помилка: неправильний вираз!"
 
@@ -1359,16 +1359,16 @@ msgstr "`%s' недійсний контекст"
 msgid "`%s' is not a valid key command"
 msgstr "`%s' недійсна ключова команда"
 
-#: src/pb_controller.cpp:82
+#: src/pbcontroller.cpp:82
 #, c-format
 msgid "XDG: configuration directory '%s' not accessible, using '%s' instead."
 msgstr "XDG: конфігураційна директорія '%s' недоступна, використовуємо '%s'."
 
-#: src/pb_controller.cpp:145
+#: src/pbcontroller.cpp:145
 msgid "Fatal error: couldn't determine home directory!"
 msgstr "Критична помилка: неможливо визначити домашню директорію!"
 
-#: src/pb_controller.cpp:149
+#: src/pbcontroller.cpp:149
 #, c-format
 msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
@@ -1376,16 +1376,16 @@ msgstr ""
 "Будь ласка, налаштуйте змінну HOME, або додайте користувача, що відповідає "
 "UID %u!"
 
-#: src/pb_controller.cpp:169
+#: src/pbcontroller.cpp:169
 #, c-format
 msgid "Fatal error: couldn't create configuration directory `%s': (%i) %s"
 msgstr "Помилка: не можу створити конфігураційну директорію `%s': (%i) %s"
 
-#: src/pb_controller.cpp:309
+#: src/pbcontroller.cpp:309
 msgid "Cleaning up queue..."
 msgstr "Очищую чергу..."
 
-#: src/pb_controller.cpp:323
+#: src/pbcontroller.cpp:323
 #, c-format
 msgid ""
 "%s %s\n"
@@ -1394,62 +1394,62 @@ msgstr ""
 "%s %s\n"
 "використання: %s [-C <файл>] [-q <файл>|-e] [-h]\n"
 
-#: src/pb_controller.cpp:343
+#: src/pbcontroller.cpp:343
 msgid "<queuefile>"
 msgstr "<файл черги>"
 
-#: src/pb_controller.cpp:344
+#: src/pbcontroller.cpp:344
 msgid "use <queuefile> as queue file"
 msgstr "використовувати <файл черги> як файл черги"
 
-#: src/pb_controller.cpp:345
+#: src/pbcontroller.cpp:345
 msgid "start download on startup"
 msgstr "починати завантаження при запуску"
 
-#: src/pb_view.cpp:53
+#: src/pbview.cpp:53
 #, c-format
 msgid " - %u parallel downloads"
 msgstr " - %u паралельних завантажень"
 
-#: src/pb_view.cpp:60
+#: src/pbview.cpp:60
 #, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f kb/s total%s"
 msgstr "Черга (%u активних завантажень, всього %u) - %.2f kb/s всього%s"
 
-#: src/pb_view.cpp:133
+#: src/pbview.cpp:133
 msgid "Error: can't quit: download(s) in progress."
 msgstr "Помилка: неможливо вийти: активне(і) завантаження"
 
-#: src/pb_view.cpp:176
+#: src/pbview.cpp:176
 msgid "Error: download needs to be finished before the file can be played."
 msgstr ""
 "Помилка: для того, щоб програти файл, завантаження повинні бути завершені."
 
-#: src/pb_view.cpp:222
+#: src/pbview.cpp:222
 msgid "Error: unable to perform operation: download(s) in progress."
 msgstr "Помилка: неможливо виконати операцію: активне(і) завантаження."
 
-#: src/pb_view.cpp:344
+#: src/pbview.cpp:344
 msgid "Download"
 msgstr "Завантаження"
 
-#: src/pb_view.cpp:346
+#: src/pbview.cpp:346
 msgid "Delete"
 msgstr "Видалити"
 
-#: src/pb_view.cpp:347
+#: src/pbview.cpp:347
 msgid "Purge Finished"
 msgstr "Очищення закінчено"
 
-#: src/pb_view.cpp:348
+#: src/pbview.cpp:348
 msgid "Toggle Automatic Download"
 msgstr "Увімкнути автоматичне завантаження"
 
-#: src/pb_view.cpp:349
+#: src/pbview.cpp:349
 msgid "Play"
 msgstr "Програти"
 
-#: src/pb_view.cpp:350
+#: src/pbview.cpp:350
 msgid "Mark as Finished"
 msgstr "Позначити як завершене"
 
@@ -1490,16 +1490,16 @@ msgstr "замало параметрів"
 msgid "`%s' is not a valid filter expression"
 msgstr "`%s' не є правильним фільтром"
 
-#: src/rss_parser.cpp:174
+#: src/rssparser.cpp:174
 #, c-format
 msgid "Error: unsupported URL: %s"
 msgstr "Помилка: посилання не підтримується: %s"
 
-#: src/select_formaction.cpp:167 src/select_formaction.cpp:185
+#: src/selectformaction.cpp:167 src/selectformaction.cpp:185
 msgid "Select Tag"
 msgstr "Виберіть мітку"
 
-#: src/select_formaction.cpp:170 src/select_formaction.cpp:187
+#: src/selectformaction.cpp:170 src/selectformaction.cpp:187
 msgid "Select Filter"
 msgstr "Виберіть фільтр"
 
@@ -1511,15 +1511,15 @@ msgstr "атрибут не знайдено"
 msgid "EOF found while reading XML tag"
 msgstr "При читанні мітки з XML був виявлений кінець файлу"
 
-#: src/urlview_formaction.cpp:46 src/urlview_formaction.cpp:58
+#: src/urlviewformaction.cpp:46 src/urlviewformaction.cpp:58
 msgid "No link selected!"
 msgstr "Не вибрано посилання!"
 
-#: src/urlview_formaction.cpp:136
+#: src/urlviewformaction.cpp:136
 msgid "Save Bookmark"
 msgstr "Зберегти закладку"
 
-#: src/urlview_formaction.cpp:157
+#: src/urlviewformaction.cpp:157
 msgid "URLs"
 msgstr "URLs: "
 
@@ -1535,8 +1535,8 @@ msgstr "Не визначено жодної мітки."
 msgid "Updating query feed..."
 msgstr "Оновлюю динамічну тему..."
 
-#: rss/atom_parser.cpp:13 rss/parser.cpp:364 rss/rss_09x_parser.cpp:15
-#: rss/rss_09x_parser.cpp:30 rss/rss_10_parser.cpp:14
+#: rss/atomparser.cpp:13 rss/parser.cpp:364 rss/rss09xparser.cpp:15
+#: rss/rss09xparser.cpp:30 rss/rss10parser.cpp:14
 msgid "XML root node is NULL"
 msgstr "XML root node is NULL"
 
@@ -1568,10 +1568,10 @@ msgstr "недійсна версія Atom"
 msgid "no Atom version"
 msgstr "нема версії Atom"
 
-#: rss/parser_factory.cpp:25
+#: rss/parserfactory.cpp:25
 msgid "unsupported feed format"
 msgstr "формат теми не підтримується"
 
-#: rss/rss_09x_parser.cpp:39
+#: rss/rss09xparser.cpp:39
 msgid "no RSS channel found"
 msgstr "не знайдено каналу RSS"

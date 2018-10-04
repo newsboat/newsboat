@@ -87,7 +87,7 @@ public:
 	/// `true`.
 	// TODO: replace this with std::optional once we upgraded to C++17.
 	bool set_log_level = false;
-	level log_level = level::NONE;
+	Level log_level = Level::NONE;
 };
 } // namespace newsboat
 

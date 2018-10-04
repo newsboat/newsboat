@@ -11,28 +11,28 @@
 
 namespace newsboat {
 
-class view;
+class View;
 
-struct keymap_hint_entry {
-	operation op;
+struct KeymapHintEntry {
+	Operation op;
 	char* text;
 };
 
 typedef std::pair<std::string, std::string> qna_pair;
 
-class formaction {
+class FormAction {
 public:
-	formaction(view*, std::string formstr);
-	virtual ~formaction();
+	FormAction(View*, std::string formstr);
+	virtual ~FormAction();
 	virtual void prepare() = 0;
 	virtual void init() = 0;
-	std::shared_ptr<stfl::form> get_form();
+	std::shared_ptr<Stfl::Form> get_form();
 	virtual void set_redraw(bool b)
 	{
 		do_redraw = b;
 	}
 
-	virtual keymap_hint_entry* get_keymap_hint() = 0;
+	virtual KeymapHintEntry* get_keymap_hint() = 0;
 
 	virtual std::string id() const = 0;
 
@@ -40,11 +40,11 @@ public:
 
 	virtual void handle_cmdline(const std::string& cmd);
 
-	void process_op(operation op,
+	void process_op(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr);
 
-	virtual void finished_qna(operation op);
+	virtual void finished_qna(Operation op);
 
 	void start_cmdline(std::string default_value = "");
 
@@ -56,14 +56,14 @@ public:
 							 : "";
 	}
 	void start_qna(const std::vector<qna_pair>& prompts,
-		operation finish_op,
-		history* h = nullptr);
+		Operation finish_op,
+		History* h = nullptr);
 
-	void set_parent_formaction(std::shared_ptr<formaction> fa)
+	void set_parent_formaction(std::shared_ptr<FormAction> fa)
 	{
 		parent_formaction = fa;
 	}
-	std::shared_ptr<formaction> get_parent_formaction() const
+	std::shared_ptr<FormAction> get_parent_formaction() const
 	{
 		return parent_formaction;
 	}
@@ -85,7 +85,7 @@ public:
 		const std::string& feed_title);
 
 protected:
-	virtual void process_operation(operation op,
+	virtual void process_operation(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) = 0;
 	virtual void set_keymap_hints();
@@ -94,28 +94,28 @@ protected:
 		const std::string& default_url,
 		const std::string& default_desc,
 		const std::string& default_feed_title);
-	void open_unread_items_in_browser(std::shared_ptr<rss_feed> feed,
+	void open_unread_items_in_browser(std::shared_ptr<RssFeed> feed,
 		bool markread);
 
-	view* v;
-	std::shared_ptr<stfl::form> f;
+	View* v;
+	std::shared_ptr<Stfl::Form> f;
 	bool do_redraw;
 
 	std::vector<std::string> qna_responses;
 
-	static history searchhistory;
-	static history cmdlinehistory;
+	static History searchhistory;
+	static History cmdlinehistory;
 
 	std::vector<std::string> valid_cmds;
 
 private:
-	std::string prepare_keymap_hint(keymap_hint_entry* hints);
+	std::string prepare_keymap_hint(KeymapHintEntry* hints);
 	void start_next_question();
 
 	std::vector<qna_pair> qna_prompts;
-	operation finish_operation;
-	history* qna_history;
-	std::shared_ptr<formaction> parent_formaction;
+	Operation finish_operation;
+	History* qna_history;
+	std::shared_ptr<FormAction> parent_formaction;
 };
 
 } // namespace newsboat

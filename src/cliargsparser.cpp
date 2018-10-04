@@ -135,13 +135,13 @@ CLIArgsParser::CLIArgsParser(int argc, char* argv[])
 			log_file = optarg;
 			break;
 		case 'l': {
-			level l = static_cast<level>(atoi(optarg));
-			if (l > level::NONE && l <= level::DEBUG) {
+			Level l = static_cast<Level>(atoi(optarg));
+			if (l > Level::NONE && l <= Level::DEBUG) {
 				set_log_level = true;
 				log_level = l;
 			} else {
 				display_msg =
-					strprintf::fmt(_("%s: %d: invalid "
+					StrPrintf::fmt(_("%s: %d: invalid "
 							 "loglevel value"),
 						argv[0],
 						l);

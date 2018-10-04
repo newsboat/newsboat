@@ -562,7 +562,7 @@ TEST_CASE(
 	"-l/--log-level is in range of [1; 6]",
 	"[cliargsparser]")
 {
-	auto check = [](Opts opts, level expected) {
+	auto check = [](Opts opts, Level expected) {
 		CLIArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.set_log_level);
@@ -571,32 +571,32 @@ TEST_CASE(
 
 	SECTION("--log-level=1 means USERERROR")
 	{
-		check({"newsboat", "--log-level=1"}, level::USERERROR);
+		check({"newsboat", "--log-level=1"}, Level::USERERROR);
 	}
 
 	SECTION("--log-level=2 means CRITICAL")
 	{
-		check({"newsboat", "--log-level=2"}, level::CRITICAL);
+		check({"newsboat", "--log-level=2"}, Level::CRITICAL);
 	}
 
 	SECTION("-l3 means ERROR")
 	{
-		check({"newsboat", "-l3"}, level::ERROR);
+		check({"newsboat", "-l3"}, Level::ERROR);
 	}
 
 	SECTION("--log-level=4 means WARN")
 	{
-		check({"newsboat", "--log-level=4"}, level::WARN);
+		check({"newsboat", "--log-level=4"}, Level::WARN);
 	}
 
 	SECTION("-l5 means INFO")
 	{
-		check({"newsboat", "-l5"}, level::INFO);
+		check({"newsboat", "-l5"}, Level::INFO);
 	}
 
 	SECTION("-l6 means DEBUG")
 	{
-		check({"newsboat", "-l6"}, level::DEBUG);
+		check({"newsboat", "-l6"}, Level::DEBUG);
 	}
 }
 

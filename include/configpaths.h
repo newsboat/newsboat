@@ -70,7 +70,7 @@ public:
 	}
 
 	/// Sets path to the cache file.
-	// FIXME: this is actually a kludge that lets controller change the path
+	// FIXME: this is actually a kludge that lets Controller change the path
 	// midway. That logic should be moved into ConfigPaths, and this method
 	// removed.
 	void set_cache_file(const std::string&);

@@ -4,36 +4,36 @@
 #include "3rd-party/catch.hpp"
 #include "cache.h"
 #include "configcontainer.h"
-#include "rss_parser.h"
-#include "rsspp_internal.h"
+#include "rssparser.h"
+#include "rssppinternal.h"
 #include "test-helpers.h"
 
-TEST_CASE("Throws exception if file doesn't exist", "[rsspp::parser]")
+TEST_CASE("Throws exception if file doesn't exist", "[rsspp::Parser]")
 {
 	using TestHelpers::ExceptionWithMsg;
 
-	rsspp::parser p;
+	rsspp::Parser p;
 
 	REQUIRE_THROWS_MATCHES(p.parse_file("data/non-existent.xml"),
-		rsspp::exception,
-		ExceptionWithMsg<rsspp::exception>("could not parse file"));
+		rsspp::Exception,
+		ExceptionWithMsg<rsspp::Exception>("could not parse file"));
 }
 
-TEST_CASE("Throws exception if file can't be parsed", "[rsspp::parser]")
+TEST_CASE("Throws exception if file can't be parsed", "[rsspp::Parser]")
 {
 	using TestHelpers::ExceptionWithMsg;
 
-	rsspp::parser p;
+	rsspp::Parser p;
 
 	REQUIRE_THROWS_MATCHES(p.parse_file("data/empty.xml"),
-		rsspp::exception,
-		ExceptionWithMsg<rsspp::exception>("could not parse file"));
+		rsspp::Exception,
+		ExceptionWithMsg<rsspp::Exception>("could not parse file"));
 }
 
-TEST_CASE("Extracts data from RSS 0.91", "[rsspp::parser]")
+TEST_CASE("Extracts data from RSS 0.91", "[rsspp::Parser]")
 {
-	rsspp::parser p;
-	rsspp::feed f;
+	rsspp::Parser p;
+	rsspp::Feed f;
 
 	REQUIRE_NOTHROW(f = p.parse_file("data/rss091_1.xml"));
 
@@ -53,10 +53,10 @@ TEST_CASE("Extracts data from RSS 0.91", "[rsspp::parser]")
 	REQUIRE(f.items[0].guid == "");
 }
 
-TEST_CASE("Extracts data from RSS 0.92", "[rsspp::parser]")
+TEST_CASE("Extracts data from RSS 0.92", "[rsspp::Parser]")
 {
-	rsspp::parser p;
-	rsspp::feed f;
+	rsspp::Parser p;
+	rsspp::Feed f;
 
 	REQUIRE_NOTHROW(f = p.parse_file("data/rss092_1.xml"));
 
@@ -85,10 +85,10 @@ TEST_CASE("Extracts data from RSS 0.92", "[rsspp::parser]")
 	REQUIRE(f.items[2].base == "http://example.com/desc/rss_testing.html");
 }
 
-TEST_CASE("Extracts data fro RSS 2.0", "[rsspp::parser]")
+TEST_CASE("Extracts data fro RSS 2.0", "[rsspp::Parser]")
 {
-	rsspp::parser p;
-	rsspp::feed f;
+	rsspp::Parser p;
+	rsspp::Feed f;
 
 	REQUIRE_NOTHROW(f = p.parse_file("data/rss20_1.xml"));
 
@@ -110,10 +110,10 @@ TEST_CASE("Extracts data fro RSS 2.0", "[rsspp::parser]")
 	REQUIRE_FALSE(f.items[0].guid_isPermaLink);
 }
 
-TEST_CASE("Extracts data from RSS 1.0", "[rsspp::parser]")
+TEST_CASE("Extracts data from RSS 1.0", "[rsspp::Parser]")
 {
-	rsspp::parser p;
-	rsspp::feed f;
+	rsspp::Parser p;
+	rsspp::Feed f;
 
 	REQUIRE_NOTHROW(f = p.parse_file("data/rss10_1.xml"));
 
@@ -132,10 +132,10 @@ TEST_CASE("Extracts data from RSS 1.0", "[rsspp::parser]")
 	REQUIRE(f.items[0].pubDate == "Tue, 30 Dec 2008 07:20:00 +0000");
 }
 
-TEST_CASE("Extracts data from Atom 1.0", "[rsspp::parser]")
+TEST_CASE("Extracts data from Atom 1.0", "[rsspp::Parser]")
 {
-	rsspp::parser p;
-	rsspp::feed f;
+	rsspp::Parser p;
+	rsspp::Feed f;
 
 	REQUIRE_NOTHROW(f = p.parse_file("data/atom10_1.xml"));
 
@@ -173,53 +173,53 @@ TEST_CASE("Extracts data from Atom 1.0", "[rsspp::parser]")
 }
 
 TEST_CASE("W3CDTF parser extracts date and time from any valid string",
-	"[rsspp::rss_parser]")
+	"[rsspp::RssParser]")
 {
 	SECTION("year only")
 	{
-		REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822("2008") ==
+		REQUIRE(rsspp::RssParser::__w3cdtf_to_rfc822("2008") ==
 			"Tue, 01 Jan 2008 00:00:00 +0000");
 	}
 
 	SECTION("year-month only")
 	{
-		REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12") ==
+		REQUIRE(rsspp::RssParser::__w3cdtf_to_rfc822("2008-12") ==
 			"Mon, 01 Dec 2008 00:00:00 +0000");
 	}
 
 	SECTION("year-month-day only")
 	{
-		REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822("2008-12-30") ==
+		REQUIRE(rsspp::RssParser::__w3cdtf_to_rfc822("2008-12-30") ==
 			"Tue, 30 Dec 2008 00:00:00 +0000");
 	}
 
 	SECTION("date and time with Z timezone")
 	{
-		REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822(
+		REQUIRE(rsspp::RssParser::__w3cdtf_to_rfc822(
 				"2008-12-30T13:03:15Z") ==
 			"Tue, 30 Dec 2008 13:03:15 +0000");
 	}
 
 	SECTION("date and time with -08:00 timezone")
 	{
-		REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822(
+		REQUIRE(rsspp::RssParser::__w3cdtf_to_rfc822(
 				"2008-12-30T10:03:15-08:00") ==
 			"Tue, 30 Dec 2008 18:03:15 +0000");
 	}
 }
 
 TEST_CASE("W3CDTF parser returns empty string on invalid input",
-	"[rsspp::rss_parser]")
+	"[rsspp::RssParser]")
 {
-	REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822("foobar") == "");
-	REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822("-3") == "");
-	REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822("") == "");
+	REQUIRE(rsspp::RssParser::__w3cdtf_to_rfc822("foobar") == "");
+	REQUIRE(rsspp::RssParser::__w3cdtf_to_rfc822("-3") == "");
+	REQUIRE(rsspp::RssParser::__w3cdtf_to_rfc822("") == "");
 }
 
 TEST_CASE(
 	"W3C DTF to RFC 822 conversion does not take into account the local "
 	"timezone (#369)",
-	"[rsspp::rss_parser]")
+	"[rsspp::RssParser]")
 {
 	auto input = "2008-12-30T10:03:15-08:00";
 	auto expected = "Tue, 30 Dec 2008 18:03:15 +0000";
@@ -233,14 +233,14 @@ TEST_CASE(
 	SECTION("Timezone Pacific")
 	{
 		tzEnv.set("US/Pacific");
-		REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822(input) ==
+		REQUIRE(rsspp::RssParser::__w3cdtf_to_rfc822(input) ==
 			expected);
 	}
 
 	SECTION("Timezone Australia")
 	{
 		tzEnv.set("Australia/Sydney");
-		REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822(input) ==
+		REQUIRE(rsspp::RssParser::__w3cdtf_to_rfc822(input) ==
 			expected);
 	}
 
@@ -250,14 +250,14 @@ TEST_CASE(
 	SECTION("Timezone Arizona")
 	{
 		tzEnv.set("US/Arizona");
-		REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822(input) ==
+		REQUIRE(rsspp::RssParser::__w3cdtf_to_rfc822(input) ==
 			expected);
 	}
 
 	SECTION("Timezone UTC")
 	{
 		tzEnv.set("UTC");
-		REQUIRE(rsspp::rss_parser::__w3cdtf_to_rfc822(input) ==
+		REQUIRE(rsspp::RssParser::__w3cdtf_to_rfc822(input) ==
 			expected);
 	}
 }
@@ -266,9 +266,9 @@ namespace newsboat {
 
 TEST_CASE("set_rssurl checks if query feed has a valid query", "[rss]")
 {
-	configcontainer cfg;
-	cache rsscache(":memory:", &cfg);
-	rss_feed f(&rsscache);
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	RssFeed f(&rsscache);
 
 	SECTION("invalid query results in exception")
 	{
@@ -284,11 +284,11 @@ TEST_CASE("set_rssurl checks if query feed has a valid query", "[rss]")
 	}
 }
 
-TEST_CASE("rss_item::sort_flags() cleans up flags", "[rss]")
+TEST_CASE("RssItem::sort_flags() cleans up flags", "[rss]")
 {
-	configcontainer cfg;
-	cache rsscache(":memory:", &cfg);
-	rss_item item(&rsscache);
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	RssItem item(&rsscache);
 
 	SECTION("Repeated letters do not erase other letters")
 	{
@@ -306,13 +306,13 @@ TEST_CASE("rss_item::sort_flags() cleans up flags", "[rss]")
 	}
 }
 
-TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
+TEST_CASE("RssFeed::sort() correctly sorts articles", "[rss]")
 {
-	configcontainer cfg;
-	cache rsscache(":memory:", &cfg);
-	rss_feed f(&rsscache);
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	RssFeed f(&rsscache);
 	for (int i = 0; i < 5; ++i) {
-		const auto item = std::make_shared<rss_item>(&rsscache);
+		const auto item = std::make_shared<RssItem>(&rsscache);
 		item->set_guid(std::to_string(i));
 		f.add_item(item);
 	}
@@ -327,8 +327,8 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		articles[4]->set_title("Article 2: Article you must read");
 
 		ArticleSortStrategy ss;
-		ss.sm = art_sort_method_t::TITLE;
-		ss.sd = sort_direction_t::ASC;
+		ss.sm = ArtSortMethod::TITLE;
+		ss.sd = SortDirection::ASC;
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->title_raw() == "Article 1: A boring article");
@@ -337,7 +337,7 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		REQUIRE(articles[3]->title_raw() == "Read me");
 		REQUIRE(articles[4]->title_raw() == "Wow tests are great");
 
-		ss.sd = sort_direction_t::DESC;
+		ss.sd = SortDirection::DESC;
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->title_raw() == "Wow tests are great");
@@ -357,8 +357,8 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		articles[4]->set_flags("Ceimu");
 
 		ArticleSortStrategy ss;
-		ss.sm = art_sort_method_t::FLAGS;
-		ss.sd = sort_direction_t::ASC;
+		ss.sm = ArtSortMethod::FLAGS;
+		ss.sd = SortDirection::ASC;
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->flags() == "Aabde");
@@ -367,7 +367,7 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		REQUIRE(articles[3]->flags() == "Ksuy");
 		REQUIRE(articles[4]->flags() == "Zadel");
 
-		ss.sd = sort_direction_t::DESC;
+		ss.sd = SortDirection::DESC;
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->flags() == "Zadel");
@@ -387,8 +387,8 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		articles[4]->set_author("Sartre");
 
 		ArticleSortStrategy ss;
-		ss.sm = art_sort_method_t::AUTHOR;
-		ss.sd = sort_direction_t::ASC;
+		ss.sm = ArtSortMethod::AUTHOR;
+		ss.sd = SortDirection::ASC;
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->author() == "Anonymous");
@@ -397,7 +397,7 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		REQUIRE(articles[3]->author() == "Socrates");
 		REQUIRE(articles[4]->author() == "Spinoza");
 
-		ss.sd = sort_direction_t::DESC;
+		ss.sd = SortDirection::DESC;
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->author() == "Spinoza");
@@ -417,8 +417,8 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		articles[4]->set_link("withoutwww.org");
 
 		ArticleSortStrategy ss;
-		ss.sm = art_sort_method_t::LINK;
-		ss.sd = sort_direction_t::ASC;
+		ss.sm = ArtSortMethod::LINK;
+		ss.sd = SortDirection::ASC;
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->link() == "withoutwww.org");
@@ -427,7 +427,7 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		REQUIRE(articles[3]->link() == "www.example.org");
 		REQUIRE(articles[4]->link() == "www.test.org");
 
-		ss.sd = sort_direction_t::DESC;
+		ss.sd = SortDirection::DESC;
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->link() == "www.test.org");
@@ -440,8 +440,8 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 	SECTION("guid")
 	{
 		ArticleSortStrategy ss;
-		ss.sm = art_sort_method_t::GUID;
-		ss.sd = sort_direction_t::ASC;
+		ss.sm = ArtSortMethod::GUID;
+		ss.sd = SortDirection::ASC;
 		f.sort(ss);
 		auto articles = f.items();
 		REQUIRE(articles[0]->guid() == "0");
@@ -450,7 +450,7 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		REQUIRE(articles[3]->guid() == "3");
 		REQUIRE(articles[4]->guid() == "4");
 
-		ss.sd = sort_direction_t::DESC;
+		ss.sd = SortDirection::DESC;
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->guid() == "4");
@@ -470,8 +470,8 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		articles[4]->set_pubDate(7);
 
 		ArticleSortStrategy ss;
-		ss.sm = art_sort_method_t::DATE;
-		ss.sd = sort_direction_t::DESC;
+		ss.sm = ArtSortMethod::DATE;
+		ss.sd = SortDirection::DESC;
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->pubDate_timestamp() == 7);
@@ -480,7 +480,7 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 		REQUIRE(articles[3]->pubDate_timestamp() == 69);
 		REQUIRE(articles[4]->pubDate_timestamp() == 93);
 
-		ss.sd = sort_direction_t::ASC;
+		ss.sd = SortDirection::ASC;
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->pubDate_timestamp() == 93);
@@ -491,14 +491,14 @@ TEST_CASE("rss_feed::sort() correctly sorts articles", "[rss]")
 	}
 }
 
-TEST_CASE("rss_feed::unread_item_count() returns number of unread articles",
+TEST_CASE("RssFeed::unread_item_count() returns number of unread articles",
 	"[rss]")
 {
-	configcontainer cfg;
-	cache rsscache(":memory:", &cfg);
-	rss_feed f(&rsscache);
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	RssFeed f(&rsscache);
 	for (int i = 0; i < 5; ++i) {
-		const auto item = std::make_shared<rss_item>(&rsscache);
+		const auto item = std::make_shared<RssItem>(&rsscache);
 		item->set_guid(std::to_string(i));
 		f.add_item(item);
 	}
@@ -521,12 +521,12 @@ TEST_CASE("rss_feed::unread_item_count() returns number of unread articles",
 	REQUIRE(f.unread_item_count() == 0);
 }
 
-TEST_CASE("rss_feed::matches_tag() returns true if article has a specified tag",
+TEST_CASE("RssFeed::matches_tag() returns true if article has a specified tag",
 	"[rss]")
 {
-	configcontainer cfg;
-	cache rsscache(":memory:", &cfg);
-	rss_feed f(&rsscache);
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	RssFeed f(&rsscache);
 	const std::vector<std::string> tags = {"One", "Two", "Three", "Four"};
 	f.set_tags(tags);
 
@@ -538,11 +538,11 @@ TEST_CASE("rss_feed::matches_tag() returns true if article has a specified tag",
 	REQUIRE_FALSE(f.matches_tag("Five"));
 }
 
-TEST_CASE("rss_feed::get_firsttag() returns first tag", "[rss]")
+TEST_CASE("RssFeed::get_firsttag() returns first tag", "[rss]")
 {
-	configcontainer cfg;
-	cache rsscache(":memory:", &cfg);
-	rss_feed f(&rsscache);
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	RssFeed f(&rsscache);
 
 	REQUIRE(f.get_firsttag() == "");
 
@@ -564,12 +564,12 @@ TEST_CASE("rss_feed::get_firsttag() returns first tag", "[rss]")
 }
 
 TEST_CASE(
-	"rss_feed::hidden() returns true if feed has a tag starting with \"!\"",
+	"RssFeed::hidden() returns true if feed has a tag starting with \"!\"",
 	"[rss]")
 {
-	configcontainer cfg;
-	cache rsscache(":memory:", &cfg);
-	rss_feed f(&rsscache);
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	RssFeed f(&rsscache);
 
 	REQUIRE_FALSE(f.hidden());
 
@@ -587,14 +587,14 @@ TEST_CASE(
 }
 
 TEST_CASE(
-	"rss_feed::mark_all_items_read() marks all items within a feed as read",
+	"RssFeed::mark_all_items_read() marks all items within a feed as read",
 	"[rss]")
 {
-	configcontainer cfg;
-	cache rsscache(":memory:", &cfg);
-	rss_feed f(&rsscache);
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	RssFeed f(&rsscache);
 	for (int i = 0; i < 5; ++i) {
-		const auto item = std::make_shared<rss_item>(&rsscache);
+		const auto item = std::make_shared<RssItem>(&rsscache);
 		REQUIRE(item->unread());
 		f.add_item(item);
 	}
@@ -606,11 +606,11 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE("rss_feed::set_tags() sets tags for a feed", "[rss]")
+TEST_CASE("RssFeed::set_tags() sets tags for a feed", "[rss]")
 {
-	configcontainer cfg;
-	cache rsscache(":memory:", &cfg);
-	rss_feed f(&rsscache);
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	RssFeed f(&rsscache);
 
 	std::vector<std::string> tags = {"One", "Two"};
 	f.set_tags(tags);
@@ -621,15 +621,15 @@ TEST_CASE("rss_feed::set_tags() sets tags for a feed", "[rss]")
 }
 
 TEST_CASE(
-	"rss_feed::purge_deleted_items() deletes all items that have "
+	"RssFeed::purge_deleted_items() deletes all items that have "
 	"\"deleted\" property set up",
 	"[rss]")
 {
-	configcontainer cfg;
-	cache rsscache(":memory:", &cfg);
-	rss_feed f(&rsscache);
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	RssFeed f(&rsscache);
 	for (int i = 0; i < 5; ++i) {
-		const auto item = std::make_shared<rss_item>(&rsscache);
+		const auto item = std::make_shared<RssItem>(&rsscache);
 		if (i % 2) {
 			item->set_deleted(true);
 		}
@@ -641,11 +641,11 @@ TEST_CASE(
 }
 
 TEST_CASE(
-	"rss_ignores::matches_lastmodified() returns true if given url "
+	"RssIgnores::matches_lastmodified() returns true if given url "
 	"has to always be downloaded",
 	"[rss]")
 {
-	rss_ignores ignores;
+	RssIgnores ignores;
 	ignores.handle_action("always-download",
 		{"http://newsboat.org",
 			"www.cool-website.com",
@@ -658,11 +658,11 @@ TEST_CASE(
 }
 
 TEST_CASE(
-	"rss_ignores::matches_resetunread() returns true if given url "
+	"RssIgnores::matches_resetunread() returns true if given url "
 	"will always have its unread flag reset on update",
 	"[rss]")
 {
-	rss_ignores ignores;
+	RssIgnores ignores;
 	ignores.handle_action("reset-unread-on-update",
 		{"http://newsboat.org",
 			"www.cool-website.com",
@@ -675,11 +675,11 @@ TEST_CASE(
 }
 
 TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
-	"[rss::rss_parser]")
+	"[rss::RssParser]")
 {
-	configcontainer cfg;
-	cache rsscache(":memory:", &cfg);
-	rss_parser p("file://data/items_without_titles.xml",
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	RssParser p("file://data/items_without_titles.xml",
 		&rsscache,
 		&cfg,
 		nullptr,
@@ -695,13 +695,13 @@ TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
 }
 
 TEST_CASE(
-	"rss_feed::is_query_feed() return true if feed is a query feed, i.e. "
+	"RssFeed::is_query_feed() return true if feed is a query feed, i.e. "
 	"its \"rssurl\" starts with \"query:\" string",
 	"[rss]")
 {
-	configcontainer cfg;
-	cache rsscache(":memory:", &cfg);
-	rss_feed f(&rsscache);
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	RssFeed f(&rsscache);
 
 	f.set_rssurl("query... no wait");
 	REQUIRE_FALSE(f.is_query_feed());

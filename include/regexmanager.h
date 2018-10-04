@@ -12,23 +12,23 @@
 
 namespace newsboat {
 
-class regexmanager : public config_action_handler {
+class RegexManager : public ConfigActionHandler {
 public:
-	regexmanager();
-	~regexmanager() override;
+	RegexManager();
+	~RegexManager() override;
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) override;
 	void quote_and_highlight(std::string& str, const std::string& location);
 	void remove_last_regex(const std::string& location);
-	int article_matches(matchable* item);
+	int article_matches(Matchable* item);
 
 private:
 	typedef std::pair<std::vector<regex_t*>, std::vector<std::string>>
 		rc_pair;
 	std::map<std::string, rc_pair> locations;
 	std::vector<std::string> cheat_store_for_dump_config;
-	std::vector<std::pair<std::shared_ptr<matcher>, int>> matchers;
+	std::vector<std::pair<std::shared_ptr<Matcher>, int>> matchers;
 	std::string extract_initial_marker(const std::string& str);
 
 public:
