@@ -67,6 +67,7 @@ view::view(controller* c)
 	, is_inside_qna(false)
 	, is_inside_cmdline(false)
 	, tab_count(0)
+	, rsscache(nullptr)
 {
 	if (getenv("ESCDELAY") == nullptr) {
 		set_escdelay(25);

@@ -148,8 +148,6 @@ protected:
 	void cancel_input(std::shared_ptr<formaction> fa);
 	void delete_word(std::shared_ptr<formaction> fa);
 
-	cache* rsscache;
-
 	controller* ctrl;
 
 	configcontainer* cfg;
@@ -174,6 +172,7 @@ protected:
 
 	std::string last_fragment;
 	unsigned int tab_count;
+	cache* rsscache;
 	std::vector<std::string> suggestions;
 };
 
