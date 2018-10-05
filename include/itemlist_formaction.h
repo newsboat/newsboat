@@ -17,7 +17,7 @@ enum class InvalidationMode { PARTIAL, COMPLETE };
 
 class itemlist_formaction : public list_formaction {
 public:
-	itemlist_formaction(view*, std::string formstr);
+	itemlist_formaction(view*, std::string formstr, cache* cc);
 	~itemlist_formaction() override;
 	void prepare() override;
 	void init() override;
@@ -152,6 +152,7 @@ private:
 	std::vector<unsigned int> invalidated_itempos;
 
 	listformatter listfmt;
+	cache* rsscache;
 };
 
 } // namespace newsboat

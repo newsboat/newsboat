@@ -64,11 +64,6 @@ public:
 		return filters;
 	}
 
-	cache* get_cache()
-	{
-		return rsscache;
-	}
-
 	configcontainer* get_cfg()
 	{
 		return &cfg;
@@ -94,7 +89,7 @@ public:
 
 	Reloader* get_reloader()
 	{
-		return &reloader;
+		return reloader.get();
 	}
 
 	void replace_feed(std::shared_ptr<rss_feed> oldfeed,
@@ -148,7 +143,7 @@ private:
 
 	ConfigPaths configpaths;
 
-	Reloader reloader;
+	std::unique_ptr<Reloader> reloader;
 };
 
 } // namespace newsboat

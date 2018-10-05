@@ -22,13 +22,13 @@
 
 namespace newsboat {
 
-feedlist_formaction::feedlist_formaction(view* vv, std::string formstr)
+feedlist_formaction::feedlist_formaction(view* vv, std::string formstr, cache* cc)
 	: list_formaction(vv, formstr)
 	, zero_feedpos(false)
 	, feeds_shown(0)
 	, quit(false)
 	, apply_filter(false)
-	, search_dummy_feed(new rss_feed(v->get_ctrl()->get_cache()))
+	, search_dummy_feed(new rss_feed(cc))
 	, filterpos(0)
 	, set_filterpos(false)
 	, rxman(0)

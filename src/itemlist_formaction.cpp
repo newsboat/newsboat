@@ -18,12 +18,12 @@
 
 namespace newsboat {
 
-itemlist_formaction::itemlist_formaction(view* vv, std::string formstr)
+itemlist_formaction::itemlist_formaction(view* vv, std::string formstr, cache* cc)
 	: list_formaction(vv, formstr)
 	, pos(0)
 	, apply_filter(false)
 	, show_searchresult(false)
-	, search_dummy_feed(new rss_feed(v->get_ctrl()->get_cache()))
+	, search_dummy_feed(new rss_feed(cc))
 	, set_filterpos(false)
 	, filterpos(0)
 	, rxman(0)
@@ -32,6 +32,7 @@ itemlist_formaction::itemlist_formaction(view* vv, std::string formstr)
 	, old_sort_strategy({art_sort_method_t::TITLE, sort_direction_t::DESC})
 	, invalidated(false)
 	, invalidation_mode(InvalidationMode::COMPLETE)
+	, rsscache(cc)
 {
 	assert(true == m.parse(FILTER_UNREAD_ITEMS));
 }
@@ -82,7 +83,7 @@ void itemlist_formaction::process_operation(operation op,
 			// mark as deleted
 			visible_items[itempos].first->set_deleted(
 				!visible_items[itempos].first->deleted());
-			v->get_ctrl()->get_cache()->mark_item_deleted(
+			rsscache->mark_item_deleted(
 				visible_items[itempos].first->guid(),
 				visible_items[itempos].first->deleted());
 			if (itempos < visible_items.size() - 1)
@@ -101,8 +102,7 @@ void itemlist_formaction::process_operation(operation op,
 			for (const auto& pair : visible_items) {
 				pair.first->set_deleted(true);
 			}
-			v->get_ctrl()->get_cache()->mark_feed_items_deleted(
-				feed->rssurl());
+			rsscache->mark_feed_items_deleted(feed->rssurl());
 			invalidate(InvalidationMode::COMPLETE);
 		}
 	} break;
@@ -206,9 +206,7 @@ void itemlist_formaction::process_operation(operation op,
 					// mark as undeleted
 					visible_items[itempos]
 						.first->set_deleted(false);
-					v->get_ctrl()
-						->get_cache()
-						->mark_item_deleted(
+					rsscache->mark_item_deleted(
 							visible_items[itempos]
 								.first->guid(),
 							false);

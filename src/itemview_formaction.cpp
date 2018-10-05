@@ -17,7 +17,8 @@ namespace newsboat {
 
 itemview_formaction::itemview_formaction(view* vv,
 	std::shared_ptr<itemlist_formaction> il,
-	std::string formstr)
+	std::string formstr,
+	cache* cc)
 	: formaction(vv, formstr)
 	, show_source(false)
 	, quit(false)
@@ -25,6 +26,7 @@ itemview_formaction::itemview_formaction(view* vv,
 	, num_lines(0)
 	, itemlist(il)
 	, in_search(false)
+	, rsscache(cc)
 {
 	valid_cmds.push_back("save");
 	std::sort(valid_cmds.begin(), valid_cmds.end());
@@ -338,7 +340,7 @@ void itemview_formaction::process_operation(operation op,
 		LOG(level::INFO,
 			"view::run_itemview: deleting current article");
 		item->set_deleted(true);
-		v->get_ctrl()->get_cache()->mark_item_deleted(guid, true);
+		rsscache->mark_item_deleted(guid, true);
 	/* fall-through! */
 	case OP_NEXTUNREAD:
 		LOG(level::INFO,

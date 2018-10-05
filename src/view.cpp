@@ -67,6 +67,7 @@ view::view(controller* c)
 	, is_inside_qna(false)
 	, is_inside_cmdline(false)
 	, tab_count(0)
+	, rsscache(nullptr)
 {
 	if (getenv("ESCDELAY") == nullptr) {
 		set_escdelay(25);
@@ -175,7 +176,7 @@ int view::run()
 
 	// create feedlist
 	auto feedlist =
-		std::make_shared<feedlist_formaction>(this, feedlist_str);
+		std::make_shared<feedlist_formaction>(this, feedlist_str, rsscache);
 	set_bindings(feedlist);
 	feedlist->set_regexmanager(rxman);
 	feedlist->set_tags(tags);
@@ -471,7 +472,7 @@ void view::push_searchresult(std::shared_ptr<rss_feed> feed,
 
 	if (feed->total_item_count() > 0) {
 		std::shared_ptr<itemlist_formaction> searchresult(
-			new itemlist_formaction(this, itemlist_str));
+			new itemlist_formaction(this, itemlist_str, rsscache));
 		set_bindings(searchresult);
 		searchresult->set_regexmanager(rxman);
 		searchresult->set_feed(feed);
@@ -497,7 +498,7 @@ void view::push_itemlist(std::shared_ptr<rss_feed> feed)
 
 	if (feed->total_item_count() > 0) {
 		std::shared_ptr<itemlist_formaction> itemlist(
-			new itemlist_formaction(this, itemlist_str));
+			new itemlist_formaction(this, itemlist_str, rsscache));
 		set_bindings(itemlist);
 		itemlist->set_regexmanager(rxman);
 		itemlist->set_feed(feed);
@@ -540,7 +541,7 @@ void view::push_itemview(std::shared_ptr<rss_feed> f,
 				formaction>(fa);
 		assert(itemlist != nullptr);
 		std::shared_ptr<itemview_formaction> itemview(
-			new itemview_formaction(this, itemlist, itemview_str));
+			new itemview_formaction(this, itemlist, itemview_str, rsscache));
 		set_bindings(itemview);
 		itemview->set_regexmanager(rxman);
 		itemview->set_feed(f);
@@ -1169,6 +1170,11 @@ void view::feedlist_mark_pos_if_visible(unsigned int pos)
 void view::set_regexmanager(regexmanager* r)
 {
 	rxman = r;
+}
+
+void view::set_cache(cache* c)
+{
+	rsscache = c;
 }
 
 std::vector<std::pair<unsigned int, std::string>> view::get_formaction_names()
