@@ -10,12 +10,12 @@ class ConfigContainer;
 class RssItem;
 
 class ItemRenderer {
-	ConfigContainer* cfg;
-
 public:
-	ItemRenderer(ConfigContainer* cfg);
+	ItemRenderer() = default;
 
-	std::string to_plain_text(std::shared_ptr<RssItem> item);
+	std::string to_plain_text(
+			ConfigContainer& cfg,
+			std::shared_ptr<RssItem> item);
 };
 
 } // namespace newsboat

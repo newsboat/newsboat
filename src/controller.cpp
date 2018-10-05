@@ -829,8 +829,8 @@ void Controller::write_item(std::shared_ptr<RssItem> item,
 
 void Controller::write_item(std::shared_ptr<RssItem> item, std::ostream& ostr)
 {
-	ItemRenderer renderer(&cfg);
-	ostr << renderer.to_plain_text(item) << std::endl;
+	ItemRenderer renderer;
+	ostr << renderer.to_plain_text(cfg, item) << std::endl;
 }
 
 void Controller::enqueue_items(std::shared_ptr<RssFeed> feed)

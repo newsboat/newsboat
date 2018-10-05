@@ -58,7 +58,7 @@ TEST_CASE("ItemRenderer::to_plain_text() produces a rendered representation "
 	cfg.set_configvalue("text-width", "80");
 
 	Cache rsscache(":memory:", &cfg);
-	ItemRenderer renderer(&cfg);
+	ItemRenderer renderer;
 
 	std::shared_ptr<RssItem> item;
 	std::shared_ptr<RssFeed> feed;
@@ -67,7 +67,7 @@ TEST_CASE("ItemRenderer::to_plain_text() produces a rendered representation "
 	SECTION("Item without an enclosure") {
 		item->set_description(ITEM_DESCRIPTON);
 
-		const auto result = renderer.to_plain_text(item);
+		const auto result = renderer.to_plain_text(cfg, item);
 
 		const auto expected = std::string() +
 			"Feed: " + FEED_TITLE + '\n' +
@@ -86,7 +86,7 @@ TEST_CASE("ItemRenderer::to_plain_text() produces a rendered representation "
 		item->set_description(ITEM_DESCRIPTON);
 		item->set_enclosure_url(ITEM_ENCLOSURE_URL);
 
-		const auto result = renderer.to_plain_text(item);
+		const auto result = renderer.to_plain_text(cfg, item);
 
 		const auto expected = std::string() +
 			"Feed: " + FEED_TITLE + '\n' +
@@ -107,7 +107,7 @@ TEST_CASE("ItemRenderer::to_plain_text() produces a rendered representation "
 				ITEM_DESCRIPTON +
 				"<p>See also <a href='https://example.com'>this site</a>.</p>");
 
-		const auto result = renderer.to_plain_text(item);
+		const auto result = renderer.to_plain_text(cfg, item);
 
 		const auto expected = std::string() +
 			"Feed: " + FEED_TITLE + '\n' +
@@ -138,7 +138,7 @@ TEST_CASE("ItemRenderer::to_plain_text() renders text to the width specified "
 	ConfigContainer cfg;
 
 	Cache rsscache(":memory:", &cfg);
-	ItemRenderer renderer(&cfg);
+	ItemRenderer renderer;
 
 	std::shared_ptr<RssItem> item;
 	std::shared_ptr<RssFeed> feed;
@@ -160,7 +160,7 @@ TEST_CASE("ItemRenderer::to_plain_text() renders text to the width specified "
 		" \n";
 
 	SECTION("If `text-width` is not set, text is rendered in 80 columns") {
-		const auto result = renderer.to_plain_text(item);
+		const auto result = renderer.to_plain_text(cfg, item);
 
 		const auto expected = header +
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl \n" +
@@ -173,7 +173,7 @@ TEST_CASE("ItemRenderer::to_plain_text() renders text to the width specified "
 	SECTION("If `text-width` is set to zero, text is rendered in 80 columns") {
 		cfg.set_configvalue("text-width", "0");
 
-		const auto result = renderer.to_plain_text(item);
+		const auto result = renderer.to_plain_text(cfg, item);
 
 		const auto expected = header +
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl \n" +
@@ -186,7 +186,7 @@ TEST_CASE("ItemRenderer::to_plain_text() renders text to the width specified "
 	SECTION("Text is rendered in 37 columns") {
 		cfg.set_configvalue("text-width", "37");
 
-		const auto result = renderer.to_plain_text(item);
+		const auto result = renderer.to_plain_text(cfg, item);
 
 		const auto expected = header +
 			"Lorem ipsum dolor sit amet, \n"
@@ -203,7 +203,7 @@ TEST_CASE("ItemRenderer::to_plain_text() renders text to the width specified "
 	SECTION("Text is rendered in 120 columns") {
 		cfg.set_configvalue("text-width", "120");
 
-		const auto result = renderer.to_plain_text(item);
+		const auto result = renderer.to_plain_text(cfg, item);
 
 		const auto expected = header +
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
@@ -227,7 +227,7 @@ TEST_CASE("Empty fields are not rendered", "[ItemRenderer]")
 	cfg.set_configvalue("text-width", "80");
 
 	Cache rsscache(":memory:", &cfg);
-	ItemRenderer renderer(&cfg);
+	ItemRenderer renderer;
 
 	std::shared_ptr<RssItem> item;
 	std::shared_ptr<RssFeed> feed;
@@ -236,7 +236,7 @@ TEST_CASE("Empty fields are not rendered", "[ItemRenderer]")
 	SECTION("Item without a feed title") {
 		item->get_feedptr()->set_title("");
 
-		const auto result = renderer.to_plain_text(item);
+		const auto result = renderer.to_plain_text(cfg, item);
 
 		const auto expected = std::string() +
 			"Title: " + ITEM_TITLE + '\n' +
@@ -252,7 +252,7 @@ TEST_CASE("Empty fields are not rendered", "[ItemRenderer]")
 	SECTION("Item without a title") {
 		item->set_title("");
 
-		const auto result = renderer.to_plain_text(item);
+		const auto result = renderer.to_plain_text(cfg, item);
 
 		const auto expected = std::string() +
 			"Feed: " + FEED_TITLE + '\n' +
@@ -268,7 +268,7 @@ TEST_CASE("Empty fields are not rendered", "[ItemRenderer]")
 	SECTION("Item without an author") {
 		item->set_author("");
 
-		const auto result = renderer.to_plain_text(item);
+		const auto result = renderer.to_plain_text(cfg, item);
 
 		const auto expected = std::string() +
 			"Feed: " + FEED_TITLE + '\n' +
@@ -284,7 +284,7 @@ TEST_CASE("Empty fields are not rendered", "[ItemRenderer]")
 	SECTION("Item without a link") {
 		item->set_link("");
 
-		const auto result = renderer.to_plain_text(item);
+		const auto result = renderer.to_plain_text(cfg, item);
 
 		const auto expected = std::string() +
 			"Feed: " + FEED_TITLE + '\n' +
@@ -300,7 +300,7 @@ TEST_CASE("Empty fields are not rendered", "[ItemRenderer]")
 	SECTION("Item without an enclosure") {
 		item->set_description(ITEM_DESCRIPTON);
 
-		const auto result = renderer.to_plain_text(item);
+		const auto result = renderer.to_plain_text(cfg, item);
 
 		const auto expected = std::string() +
 			"Feed: " + FEED_TITLE + '\n' +
@@ -318,7 +318,7 @@ TEST_CASE("Empty fields are not rendered", "[ItemRenderer]")
 	SECTION("Item without flags") {
 		item->set_flags("");
 
-		const auto result = renderer.to_plain_text(item);
+		const auto result = renderer.to_plain_text(cfg, item);
 
 		const auto expected = std::string() +
 			"Feed: " + FEED_TITLE + '\n' +

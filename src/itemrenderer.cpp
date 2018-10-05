@@ -7,10 +7,6 @@
 
 namespace newsboat {
 
-ItemRenderer::ItemRenderer(ConfigContainer* cfg_)
-	: cfg(cfg_)
-{}
-
 std::string get_feedtitle(std::shared_ptr<RssItem> item) {
 	std::shared_ptr<RssFeed> feedptr = item->get_feedptr();
 
@@ -29,8 +25,10 @@ std::string get_feedtitle(std::shared_ptr<RssItem> item) {
 	return feedtitle;
 }
 
-std::string ItemRenderer::to_plain_text(std::shared_ptr<RssItem> item) {
-
+std::string ItemRenderer::to_plain_text(
+		ConfigContainer& cfg,
+		std::shared_ptr<RssItem> item)
+{
 	std::vector<std::pair<LineType, std::string>> lines;
 
 	const auto feedtitle = get_feedtitle(item);
@@ -78,10 +76,11 @@ std::string ItemRenderer::to_plain_text(std::shared_ptr<RssItem> item) {
 	HtmlRenderer rnd(true);
 	std::vector<LinkPair> links; // not used
 	rnd.render(item->description(), lines, links, item->feedurl());
+
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);
 
-	unsigned int width = cfg->get_configvalue_as_int("text-width");
+	unsigned int width = cfg.get_configvalue_as_int("text-width");
 	if (width == 0) {
 		width = 80;
 	}
