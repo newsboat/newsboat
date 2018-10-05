@@ -26,6 +26,9 @@ static const auto ITEM_DESCRIPTON = std::string("<p>Hello, world!</p>");
 static const auto ITEM_DESCRIPTON_RENDERED = std::string("Hello, world!");
 static const auto ITEM_ENCLOSURE_URL =
 	std::string("https://example.com/see-more.mp3");
+static const auto ITEM_FLAGS = std::string("wasdhjkl");
+// Flags are sorted for rendering.
+static const auto ITEM_FLAGS_RENDERED = std::string("adhjklsw");
 std::pair<std::shared_ptr<RssItem>, std::shared_ptr<RssFeed>> test_item(Cache* c)
 {
 	auto feed = test_feed(c);
@@ -37,6 +40,7 @@ std::pair<std::shared_ptr<RssItem>, std::shared_ptr<RssFeed>> test_item(Cache* c
 	item->set_author(ITEM_AUTHOR);
 	item->set_pubDate(ITEM_PUBDATE);
 	item->set_link(ITEM_LINK);
+	item->set_flags(ITEM_FLAGS);
 
 	return {item, feed};
 }
@@ -71,6 +75,7 @@ TEST_CASE("ItemRenderer::to_plain_text() produces a rendered representation "
 			"Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 			"Link: " + ITEM_LINK + '\n' +
+			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
 			" \n" +
 			ITEM_DESCRIPTON_RENDERED + '\n';
 
@@ -89,6 +94,7 @@ TEST_CASE("ItemRenderer::to_plain_text() produces a rendered representation "
 			"Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 			"Link: " + ITEM_LINK + '\n' +
+			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
 			"Podcast Download URL: " + ITEM_ENCLOSURE_URL + '\n' +
 			" \n" +
 			ITEM_DESCRIPTON_RENDERED + '\n';
@@ -109,6 +115,7 @@ TEST_CASE("ItemRenderer::to_plain_text() produces a rendered representation "
 			"Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 			"Link: " + ITEM_LINK + '\n' +
+			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
 			" \n" +
 			ITEM_DESCRIPTON_RENDERED + '\n' +
 			" \n" +
@@ -149,6 +156,7 @@ TEST_CASE("ItemRenderer::to_plain_text() renders text to the width specified "
 		"Author: " + ITEM_AUTHOR + '\n' +
 		"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 		"Link: " + ITEM_LINK + '\n' +
+		"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
 		" \n";
 
 	SECTION("If `text-width` is not set, text is rendered in 80 columns") {
@@ -235,6 +243,7 @@ TEST_CASE("Empty fields are not rendered", "[ItemRenderer]")
 			"Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 			"Link: " + ITEM_LINK + '\n' +
+			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
 			" \n";
 
 		REQUIRE(result == expected);
@@ -250,6 +259,7 @@ TEST_CASE("Empty fields are not rendered", "[ItemRenderer]")
 			"Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 			"Link: " + ITEM_LINK + '\n' +
+			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
 			" \n";
 
 		REQUIRE(result == expected);
@@ -265,6 +275,7 @@ TEST_CASE("Empty fields are not rendered", "[ItemRenderer]")
 			"Title: " + ITEM_TITLE + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 			"Link: " + ITEM_LINK + '\n' +
+			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
 			" \n";
 
 		REQUIRE(result == expected);
@@ -280,6 +291,7 @@ TEST_CASE("Empty fields are not rendered", "[ItemRenderer]")
 			"Title: " + ITEM_TITLE + '\n' +
 			"Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
+			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
 			" \n";
 
 		REQUIRE(result == expected);
@@ -296,8 +308,25 @@ TEST_CASE("Empty fields are not rendered", "[ItemRenderer]")
 			"Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 			"Link: " + ITEM_LINK + '\n' +
+			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
 			" \n" +
 			ITEM_DESCRIPTON_RENDERED + '\n';
+
+		REQUIRE(result == expected);
+	}
+
+	SECTION("Item without flags") {
+		item->set_flags("");
+
+		const auto result = renderer.to_plain_text(item);
+
+		const auto expected = std::string() +
+			"Feed: " + FEED_TITLE + '\n' +
+			"Title: " + ITEM_TITLE + '\n' +
+			"Author: " + ITEM_AUTHOR + '\n' +
+			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
+			"Link: " + ITEM_LINK + '\n' +
+			" \n";
 
 		REQUIRE(result == expected);
 	}

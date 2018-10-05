@@ -62,6 +62,11 @@ std::string ItemRenderer::to_plain_text(std::shared_ptr<RssItem> item) {
 		lines.push_back(std::make_pair(LineType::softwrappable, link));
 	}
 
+	if (!item->flags().empty()) {
+		const auto flags = StrPrintf::fmt("%s%s", _("Flags: "), item->flags());
+		lines.push_back(std::make_pair(LineType::wrappable, flags));
+	}
+
 	if (!item->enclosure_url().empty()) {
 		std::string dlurl(_("Podcast Download URL: "));
 		dlurl.append(item->enclosure_url());
