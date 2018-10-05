@@ -419,7 +419,7 @@ void PbController::start_downloads()
 			break;
 
 		if (download.status() == DlStatus::QUEUED) {
-			std::thread t{PoddlThread(&download, cfg)};
+			std::thread t{PodDlThread(&download, cfg)};
 			--dl2start;
 			t.detach();
 		}

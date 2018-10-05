@@ -24,7 +24,7 @@ static int progress_callback(void* clientp,
 	double ultotal,
 	double ulnow);
 
-PoddlThread::PoddlThread(Download* dl_, newsboat::ConfigContainer* c)
+PodDlThread::PodDlThread(Download* dl_, newsboat::ConfigContainer* c)
 	: dl(dl_)
 	, f(new std::ofstream())
 	, bytecount(0)
@@ -35,14 +35,14 @@ PoddlThread::PoddlThread(Download* dl_, newsboat::ConfigContainer* c)
 	tv2 = zero;
 }
 
-PoddlThread::~PoddlThread() {}
+PodDlThread::~PodDlThread() {}
 
-void PoddlThread::operator()()
+void PodDlThread::operator()()
 {
 	run();
 }
 
-void PoddlThread::run()
+void PodDlThread::run()
 {
 	// are we resuming previous download?
 	bool resumed_download = false;
@@ -79,7 +79,7 @@ void PoddlThread::run()
 
 	if (stat(filename.c_str(), &sb) == -1) {
 		LOG(Level::INFO,
-			"PoddlThread::run: stat failed: starting normal "
+			"PodDlThread::run: stat failed: starting normal "
 			"download");
 
 		// Have to copy the string into a vector in order to be able to
@@ -93,7 +93,7 @@ void PoddlThread::run()
 		resumed_download = false;
 	} else {
 		LOG(Level::INFO,
-			"PoddlThread::run: stat ok: starting download from %u",
+			"PodDlThread::run: stat ok: starting download from %u",
 			sb.st_size);
 		curl_easy_setopt(easyhandle, CURLOPT_RESUME_FROM, sb.st_size);
 		dl->set_offset(sb.st_size);
@@ -109,13 +109,13 @@ void PoddlThread::run()
 		f->close();
 
 		LOG(Level::INFO,
-			"PoddlThread::run: curl_easy_perform rc = %u (%s)",
+			"PodDlThread::run: curl_easy_perform rc = %u (%s)",
 			success,
 			curl_easy_strerror(success));
 
 		if (0 == success) {
 			LOG(Level::DEBUG,
-				"PoddlThread::run: download complete, deleting "
+				"PodDlThread::run: download complete, deleting "
 				"temporary suffix");
 			rename(filename.c_str(), dl->filename().c_str());
 			dl->set_status(DlStatus::READY);
@@ -139,7 +139,7 @@ void PoddlThread::run()
 static size_t
 my_write_data(void* buffer, size_t size, size_t nmemb, void* userp)
 {
-	PoddlThread* thread = static_cast<PoddlThread*>(userp);
+	PodDlThread* thread = static_cast<PodDlThread*>(userp);
 	return thread->write_data(buffer, size, nmemb);
 }
 
@@ -149,24 +149,24 @@ static int progress_callback(void* clientp,
 	double /* ultotal */,
 	double /*ulnow*/)
 {
-	PoddlThread* thread = static_cast<PoddlThread*>(clientp);
+	PodDlThread* thread = static_cast<PodDlThread*>(clientp);
 	return thread->progress(dlnow, dltotal);
 }
 
-size_t PoddlThread::write_data(void* buffer, size_t size, size_t nmemb)
+size_t PodDlThread::write_data(void* buffer, size_t size, size_t nmemb)
 {
 	if (dl->status() == DlStatus::CANCELLED)
 		return 0;
 	f->write(static_cast<char*>(buffer), size * nmemb);
 	bytecount += (size * nmemb);
 	LOG(Level::DEBUG,
-		"PoddlThread::write_data: bad = %u size = %u",
+		"PodDlThread::write_data: bad = %u size = %u",
 		f->bad(),
 		size * nmemb);
 	return f->bad() ? 0 : size * nmemb;
 }
 
-int PoddlThread::progress(double dlnow, double dltotal)
+int PodDlThread::progress(double dlnow, double dltotal)
 {
 	if (dl->status() == DlStatus::CANCELLED)
 		return -1;
@@ -182,7 +182,7 @@ int PoddlThread::progress(double dlnow, double dltotal)
 	return 0;
 }
 
-double PoddlThread::compute_kbps()
+double PodDlThread::compute_kbps()
 {
 	double t1 = tv1.tv_sec + (tv1.tv_usec / 1000000.0);
 	double t2 = tv2.tv_sec + (tv2.tv_usec / 1000000.0);

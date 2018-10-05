@@ -12,10 +12,10 @@
 
 namespace podboat {
 
-class PoddlThread {
+class PodDlThread {
 public:
-	PoddlThread(Download* dl_, newsboat::ConfigContainer*);
-	virtual ~PoddlThread();
+	PodDlThread(Download* dl_, newsboat::ConfigContainer*);
+	virtual ~PodDlThread();
 	size_t write_data(void* buffer, size_t size, size_t nmemb);
 	int progress(double dlnow, double dltotal);
 	void operator()();

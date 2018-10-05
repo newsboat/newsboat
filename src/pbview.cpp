@@ -145,7 +145,7 @@ void PbView::run(bool auto_download)
 			if (idx != -1) {
 				if (ctrl->downloads()[idx].status() !=
 					DlStatus::DOWNLOADING) {
-					std::thread t{PoddlThread(
+					std::thread t{PodDlThread(
 						&ctrl->downloads()[idx],
 						ctrl->get_cfgcont())};
 					t.detach();
@@ -292,7 +292,7 @@ void PbView::run_help()
 
 	code.append("}");
 
-	help_form.modify("help_text", "replace_inner", code);
+	help_form.modify("helptext", "replace_inner", code);
 
 	bool quit = false;
 

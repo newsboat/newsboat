@@ -58,7 +58,7 @@ void HelpFormAction::process_operation(Operation op,
 void HelpFormAction::prepare()
 {
 	if (do_redraw) {
-		std::string listwidth = f->get("help_text:w");
+		std::string listwidth = f->get("helptext:w");
 		unsigned int width = Utils::to_u(listwidth);
 
 		FmtStrFormatter fmt;
@@ -200,7 +200,7 @@ void HelpFormAction::prepare()
 			}
 		}
 
-		f->modify("help_text", "replace_inner", listfmt.format_list());
+		f->modify("helptext", "replace_inner", listfmt.format_list());
 
 		do_redraw = false;
 	}
