@@ -7,6 +7,16 @@
 
 using namespace newsboat;
 
+static const auto FEED_TITLE = std::string("Funniest jokes ever");
+std::shared_ptr<RssFeed> test_feed(Cache* c)
+{
+	auto feed = std::make_shared<RssFeed>(c);
+
+	feed->set_title(FEED_TITLE);
+
+	return feed;
+}
+
 static const auto ITEM_TITLE = std::string("A frivolous test item");
 static const auto ITEM_AUTHOR = std::string("Johnny Doe Jr.");
 // Sun Sep 30 19:34:25 UTC 2018
@@ -16,16 +26,19 @@ static const auto ITEM_DESCRIPTON = std::string("<p>Hello, world!</p>");
 static const auto ITEM_DESCRIPTON_RENDERED = std::string("Hello, world!");
 static const auto ITEM_ENCLOSURE_URL =
 	std::string("https://example.com/see-more.mp3");
-std::shared_ptr<RssItem> test_item(Cache* c)
+std::pair<std::shared_ptr<RssItem>, std::shared_ptr<RssFeed>> test_item(Cache* c)
 {
+	auto feed = test_feed(c);
+
 	auto item = std::make_shared<RssItem>(c);
 
+	item->set_feedptr(feed);
 	item->set_title(ITEM_TITLE);
 	item->set_author(ITEM_AUTHOR);
 	item->set_pubDate(ITEM_PUBDATE);
 	item->set_link(ITEM_LINK);
 
-	return item;
+	return {item, feed};
 }
 
 TEST_CASE("ItemRenderer::to_plain_text() produces a rendered representation "
@@ -43,7 +56,9 @@ TEST_CASE("ItemRenderer::to_plain_text() produces a rendered representation "
 	Cache rsscache(":memory:", &cfg);
 	ItemRenderer renderer(&cfg);
 
-	auto item = test_item(&rsscache);
+	std::shared_ptr<RssItem> item;
+	std::shared_ptr<RssFeed> feed;
+	std::tie(item, feed) = test_item(&rsscache);
 
 	SECTION("Item without an enclosure") {
 		item->set_description(ITEM_DESCRIPTON);
@@ -51,6 +66,7 @@ TEST_CASE("ItemRenderer::to_plain_text() produces a rendered representation "
 		const auto result = renderer.to_plain_text(item);
 
 		const auto expected = std::string() +
+			"Feed: " + FEED_TITLE + '\n' +
 			"Title: " + ITEM_TITLE + '\n' +
 			"Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
@@ -68,6 +84,7 @@ TEST_CASE("ItemRenderer::to_plain_text() produces a rendered representation "
 		const auto result = renderer.to_plain_text(item);
 
 		const auto expected = std::string() +
+			"Feed: " + FEED_TITLE + '\n' +
 			"Title: " + ITEM_TITLE + '\n' +
 			"Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
@@ -87,6 +104,7 @@ TEST_CASE("ItemRenderer::to_plain_text() produces a rendered representation "
 		const auto result = renderer.to_plain_text(item);
 
 		const auto expected = std::string() +
+			"Feed: " + FEED_TITLE + '\n' +
 			"Title: " + ITEM_TITLE + '\n' +
 			"Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
@@ -115,7 +133,9 @@ TEST_CASE("ItemRenderer::to_plain_text() renders text to the width specified "
 	Cache rsscache(":memory:", &cfg);
 	ItemRenderer renderer(&cfg);
 
-	auto item = test_item(&rsscache);
+	std::shared_ptr<RssItem> item;
+	std::shared_ptr<RssFeed> feed;
+	std::tie(item, feed) = test_item(&rsscache);
 
 	item->set_description(
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
@@ -124,6 +144,7 @@ TEST_CASE("ItemRenderer::to_plain_text() renders text to the width specified "
 			"ultricies orci, nec lobortis.");
 
 	const auto header = std::string() +
+		"Feed: " + FEED_TITLE + '\n' +
 		"Title: " + ITEM_TITLE + '\n' +
 		"Author: " + ITEM_AUTHOR + '\n' +
 		"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
@@ -187,7 +208,8 @@ TEST_CASE("ItemRenderer::to_plain_text() renders text to the width specified "
 	}
 }
 
-TEST_CASE("Empty fields are not rendered", "[ItemRenderer]") {
+TEST_CASE("Empty fields are not rendered", "[ItemRenderer]")
+{
 	TestHelpers::EnvVar tzEnv("TZ");
 	tzEnv.set("UTC");
 
@@ -199,7 +221,24 @@ TEST_CASE("Empty fields are not rendered", "[ItemRenderer]") {
 	Cache rsscache(":memory:", &cfg);
 	ItemRenderer renderer(&cfg);
 
-	auto item = test_item(&rsscache);
+	std::shared_ptr<RssItem> item;
+	std::shared_ptr<RssFeed> feed;
+	std::tie(item, feed) = test_item(&rsscache);
+
+	SECTION("Item without a feed title") {
+		item->get_feedptr()->set_title("");
+
+		const auto result = renderer.to_plain_text(item);
+
+		const auto expected = std::string() +
+			"Title: " + ITEM_TITLE + '\n' +
+			"Author: " + ITEM_AUTHOR + '\n' +
+			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
+			"Link: " + ITEM_LINK + '\n' +
+			" \n";
+
+		REQUIRE(result == expected);
+	}
 
 	SECTION("Item without a title") {
 		item->set_title("");
@@ -207,6 +246,7 @@ TEST_CASE("Empty fields are not rendered", "[ItemRenderer]") {
 		const auto result = renderer.to_plain_text(item);
 
 		const auto expected = std::string() +
+			"Feed: " + FEED_TITLE + '\n' +
 			"Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 			"Link: " + ITEM_LINK + '\n' +
@@ -221,6 +261,7 @@ TEST_CASE("Empty fields are not rendered", "[ItemRenderer]") {
 		const auto result = renderer.to_plain_text(item);
 
 		const auto expected = std::string() +
+			"Feed: " + FEED_TITLE + '\n' +
 			"Title: " + ITEM_TITLE + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 			"Link: " + ITEM_LINK + '\n' +
@@ -235,6 +276,7 @@ TEST_CASE("Empty fields are not rendered", "[ItemRenderer]") {
 		const auto result = renderer.to_plain_text(item);
 
 		const auto expected = std::string() +
+			"Feed: " + FEED_TITLE + '\n' +
 			"Title: " + ITEM_TITLE + '\n' +
 			"Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
@@ -249,6 +291,7 @@ TEST_CASE("Empty fields are not rendered", "[ItemRenderer]") {
 		const auto result = renderer.to_plain_text(item);
 
 		const auto expected = std::string() +
+			"Feed: " + FEED_TITLE + '\n' +
 			"Title: " + ITEM_TITLE + '\n' +
 			"Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +

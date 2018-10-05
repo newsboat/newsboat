@@ -11,9 +11,34 @@ ItemRenderer::ItemRenderer(ConfigContainer* cfg_)
 	: cfg(cfg_)
 {}
 
+std::string get_feedtitle(std::shared_ptr<RssItem> item) {
+	std::shared_ptr<RssFeed> feedptr = item->get_feedptr();
+
+	std::string feedtitle;
+	if (feedptr) {
+		if (!feedptr->title().empty()) {
+			feedtitle = feedptr->title();
+			Utils::remove_soft_hyphens(feedtitle);
+		} else if (!feedptr->link().empty()) {
+			feedtitle = feedptr->link();
+		} else if (!feedptr->rssurl().empty()) {
+			feedtitle = feedptr->rssurl();
+		}
+	}
+
+	return feedtitle;
+}
+
 std::string ItemRenderer::to_plain_text(std::shared_ptr<RssItem> item) {
 
 	std::vector<std::pair<LineType, std::string>> lines;
+
+	const auto feedtitle = get_feedtitle(item);
+	if (!feedtitle.empty()) {
+		std::string title(_("Feed: "));
+		title.append(feedtitle);
+		lines.push_back(std::make_pair(LineType::wrappable, title));
+	}
 
 	if (!item->title().empty()) {
 		std::string title(_("Title: "));
