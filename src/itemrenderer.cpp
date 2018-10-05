@@ -25,12 +25,11 @@ std::string get_feedtitle(std::shared_ptr<RssItem> item) {
 	return feedtitle;
 }
 
-std::string ItemRenderer::to_plain_text(
-		ConfigContainer& cfg,
-		std::shared_ptr<RssItem> item)
+void prepare_header(
+	std::shared_ptr<RssItem> item,
+	std::vector<std::pair<LineType, std::string>>& lines,
+	std::vector<LinkPair>& /*links*/)
 {
-	std::vector<std::pair<LineType, std::string>> lines;
-
 	const auto feedtitle = get_feedtitle(item);
 	if (!feedtitle.empty()) {
 		std::string title(_("Feed: "));
@@ -72,9 +71,18 @@ std::string ItemRenderer::to_plain_text(
 	}
 
 	lines.push_back(std::make_pair(LineType::wrappable, std::string("")));
+}
+
+std::string ItemRenderer::to_plain_text(
+		ConfigContainer& cfg,
+		std::shared_ptr<RssItem> item)
+{
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	prepare_header(item, lines, links);
 
 	HtmlRenderer rnd(true);
-	std::vector<LinkPair> links; // not used
 	rnd.render(item->description(), lines, links, item->feedurl());
 
 	TextFormatter txtfmt;
