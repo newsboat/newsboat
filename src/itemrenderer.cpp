@@ -15,23 +15,29 @@ std::string ItemRenderer::to_plain_text(std::shared_ptr<RssItem> item) {
 
 	std::vector<std::pair<LineType, std::string>> lines;
 
-	std::string title(_("Title: "));
-	title.append(item->title());
-	lines.push_back(std::make_pair(LineType::wrappable, title));
+	if (!item->title().empty()) {
+		std::string title(_("Title: "));
+		title.append(item->title());
+		lines.push_back(std::make_pair(LineType::wrappable, title));
+	}
 
-	std::string author(_("Author: "));
-	author.append(item->author());
-	lines.push_back(std::make_pair(LineType::wrappable, author));
+	if (!item->author().empty()) {
+		std::string author(_("Author: "));
+		author.append(item->author());
+		lines.push_back(std::make_pair(LineType::wrappable, author));
+	}
 
 	std::string date(_("Date: "));
 	date.append(item->pubDate());
 	lines.push_back(std::make_pair(LineType::wrappable, date));
 
-	std::string link(_("Link: "));
-	link.append(item->link());
-	lines.push_back(std::make_pair(LineType::softwrappable, link));
+	if (!item->link().empty()) {
+		std::string link(_("Link: "));
+		link.append(item->link());
+		lines.push_back(std::make_pair(LineType::softwrappable, link));
+	}
 
-	if (item->enclosure_url() != "") {
+	if (!item->enclosure_url().empty()) {
 		std::string dlurl(_("Podcast Download URL: "));
 		dlurl.append(item->enclosure_url());
 		lines.push_back(std::make_pair(LineType::softwrappable, dlurl));

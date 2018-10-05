@@ -66,8 +66,8 @@ void ItemViewFormAction::prepare()
 	if (do_redraw) {
 		{
 			ScopeMeasure("itemview::prepare: rendering");
-			f->run(-3); // XXX HACK: render once so that we get a
-				    // proper widget width
+			// XXX HACK: render once so that we get a proper widget width
+			f->run(-3);
 		}
 
 		std::shared_ptr<RssItem> item = feed->get_item_by_guid(guid);

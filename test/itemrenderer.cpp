@@ -186,3 +186,76 @@ TEST_CASE("ItemRenderer::to_plain_text() renders text to the width specified "
 		REQUIRE(result == expected);
 	}
 }
+
+TEST_CASE("Empty fields are not rendered", "[ItemRenderer]") {
+	TestHelpers::EnvVar tzEnv("TZ");
+	tzEnv.set("UTC");
+
+	ConfigContainer cfg;
+	// ItemRenderer uses that setting, so let's fix its value to make the test
+	// reproducible
+	cfg.set_configvalue("text-width", "80");
+
+	Cache rsscache(":memory:", &cfg);
+	ItemRenderer renderer(&cfg);
+
+	auto item = test_item(&rsscache);
+
+	SECTION("Item without a title") {
+		item->set_title("");
+
+		const auto result = renderer.to_plain_text(item);
+
+		const auto expected = std::string() +
+			"Author: " + ITEM_AUTHOR + '\n' +
+			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
+			"Link: " + ITEM_LINK + '\n' +
+			" \n";
+
+		REQUIRE(result == expected);
+	}
+
+	SECTION("Item without an author") {
+		item->set_author("");
+
+		const auto result = renderer.to_plain_text(item);
+
+		const auto expected = std::string() +
+			"Title: " + ITEM_TITLE + '\n' +
+			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
+			"Link: " + ITEM_LINK + '\n' +
+			" \n";
+
+		REQUIRE(result == expected);
+	}
+
+	SECTION("Item without a link") {
+		item->set_link("");
+
+		const auto result = renderer.to_plain_text(item);
+
+		const auto expected = std::string() +
+			"Title: " + ITEM_TITLE + '\n' +
+			"Author: " + ITEM_AUTHOR + '\n' +
+			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
+			" \n";
+
+		REQUIRE(result == expected);
+	}
+
+	SECTION("Item without an enclosure") {
+		item->set_description(ITEM_DESCRIPTON);
+
+		const auto result = renderer.to_plain_text(item);
+
+		const auto expected = std::string() +
+			"Title: " + ITEM_TITLE + '\n' +
+			"Author: " + ITEM_AUTHOR + '\n' +
+			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
+			"Link: " + ITEM_LINK + '\n' +
+			" \n" +
+			ITEM_DESCRIPTON_RENDERED + '\n';
+
+		REQUIRE(result == expected);
+	}
+}
