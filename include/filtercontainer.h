@@ -5,7 +5,7 @@
 
 namespace newsboat {
 
-typedef std::pair<std::string, std::string> filter_name_expr_pair;
+typedef std::pair<std::string, std::string> FilterNameExprPair;
 
 class FilterContainer : public ConfigActionHandler {
 public:
@@ -14,7 +14,7 @@ public:
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) override;
-	std::vector<filter_name_expr_pair>& get_filters()
+	std::vector<FilterNameExprPair>& get_filters()
 	{
 		return filters;
 	}
@@ -24,7 +24,7 @@ public:
 	}
 
 private:
-	std::vector<filter_name_expr_pair> filters;
+	std::vector<FilterNameExprPair> filters;
 };
 
 } // namespace newsboat

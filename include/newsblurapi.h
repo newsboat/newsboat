@@ -11,14 +11,14 @@
 
 namespace newsboat {
 
-typedef std::map<std::string, rsspp::Feed> feedmap;
+typedef std::map<std::string, rsspp::Feed> FeedMap;
 
 class NewsBlurApi : public RemoteApi {
 public:
 	explicit NewsBlurApi(ConfigContainer* c);
 	~NewsBlurApi() override;
 	bool authenticate() override;
-	std::vector<tagged_feedurl> get_subscribed_urls() override;
+	std::vector<TaggedFeedUrl> get_subscribed_urls() override;
 	void add_custom_headers(curl_slist** custom_headers) override;
 	bool mark_all_read(const std::string& feedurl) override;
 	bool mark_article_read(const std::string& guid, bool read) override;
@@ -34,7 +34,7 @@ private:
 	std::map<std::string, std::vector<std::string>> mk_feeds_to_tags(
 		json_object*);
 	std::string api_location;
-	feedmap known_feeds;
+	FeedMap known_feeds;
 	unsigned int min_pages;
 };
 

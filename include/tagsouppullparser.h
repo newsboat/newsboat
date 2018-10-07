@@ -26,8 +26,8 @@ public:
 	Event next();
 
 private:
-	typedef std::pair<std::string, std::string> attribute;
-	std::vector<attribute> attributes;
+	typedef std::pair<std::string, std::string> Attribute;
+	std::vector<Attribute> attributes;
 	std::string text;
 	std::istream* inputstream;
 	Event current_event;

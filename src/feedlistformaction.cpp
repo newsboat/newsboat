@@ -434,8 +434,8 @@ REDO:
 			qna_responses.push_back((*args)[0]);
 			finished_qna(OP_INT_START_SEARCH);
 		} else {
-			std::vector<qna_pair> qna;
-			qna.push_back(qna_pair(_("Search for: "), ""));
+			std::vector<QnaPair> qna;
+			qna.push_back(QnaPair(_("Search for: "), ""));
 			this->start_qna(
 				qna, OP_INT_START_SEARCH, &searchhistory);
 		}
@@ -453,8 +453,8 @@ REDO:
 			qna_responses.push_back((*args)[0]);
 			finished_qna(OP_INT_END_SETFILTER);
 		} else {
-			std::vector<qna_pair> qna;
-			qna.push_back(qna_pair(_("Filter: "), ""));
+			std::vector<QnaPair> qna;
+			qna.push_back(QnaPair(_("Filter: "), ""));
 			this->start_qna(
 				qna, OP_INT_END_SETFILTER, &filterhistory);
 		}
@@ -508,7 +508,7 @@ void FeedListFormAction::update_visible_feeds(
 		if ((tag == "" || feed->matches_tag(tag)) &&
 			(!apply_filter || m.matches(feed.get())) &&
 			!feed->hidden()) {
-			visible_feeds.push_back(feedptr_pos_pair(feed, i));
+			visible_feeds.push_back(FeedPtrPosPair(feed, i));
 		}
 		i++;
 	}

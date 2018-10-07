@@ -46,18 +46,18 @@ enum class HtmlTag {
 	TD
 };
 
-typedef std::pair<std::string, LinkType> linkpair;
+typedef std::pair<std::string, LinkType> LinkPair;
 
 class HtmlRenderer {
 public:
 	explicit HtmlRenderer(bool raw = false);
 	void render(const std::string& source,
 		std::vector<std::pair<LineType, std::string>>& lines,
-		std::vector<linkpair>& links,
+		std::vector<LinkPair>& links,
 		const std::string& url);
 	void render(std::istream& input,
 		std::vector<std::pair<LineType, std::string>>& lines,
-		std::vector<linkpair>& links,
+		std::vector<LinkPair>& links,
 		const std::string& url);
 	static std::string render_hr(const unsigned int width);
 	// only public for unit testing purposes:
@@ -107,7 +107,7 @@ public:
 private:
 	void prepare_new_line(std::string& line, int indent_level);
 	bool line_is_nonempty(const std::string& line);
-	unsigned int add_link(std::vector<linkpair>& links,
+	unsigned int add_link(std::vector<LinkPair>& links,
 		const std::string& link,
 		LinkType type);
 	std::string quote_for_stfl(std::string str);

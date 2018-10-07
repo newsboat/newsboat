@@ -66,7 +66,7 @@ public:
 		const std::string& guid,
 		const std::string& searchphrase = "");
 	void push_help();
-	void push_urlview(const std::vector<linkpair>& links,
+	void push_urlview(const std::vector<LinkPair>& links,
 		std::shared_ptr<RssFeed>& feed);
 	void push_searchresult(std::shared_ptr<RssFeed> feed,
 		const std::string& phrase = "");
@@ -76,7 +76,7 @@ public:
 		const std::string& dir = "");
 	std::string select_tag();
 	std::string select_filter(
-		const std::vector<filter_name_expr_pair>& filters);
+		const std::vector<FilterNameExprPair>& filters);
 
 	void open_in_browser(const std::string& url);
 	void open_in_pager(const std::string& filename);

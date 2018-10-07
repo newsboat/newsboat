@@ -18,7 +18,7 @@ struct KeyMapHintEntry {
 	char* text;
 };
 
-typedef std::pair<std::string, std::string> qna_pair;
+typedef std::pair<std::string, std::string> QnaPair;
 
 class FormAction {
 public:
@@ -55,7 +55,7 @@ public:
 		return (qna_responses.size() >= (i + 1)) ? qna_responses[i]
 							 : "";
 	}
-	void start_qna(const std::vector<qna_pair>& prompts,
+	void start_qna(const std::vector<QnaPair>& prompts,
 		Operation finish_op,
 		History* h = nullptr);
 
@@ -112,7 +112,7 @@ private:
 	std::string prepare_keymap_hint(KeyMapHintEntry* hints);
 	void start_next_question();
 
-	std::vector<qna_pair> qna_prompts;
+	std::vector<QnaPair> qna_prompts;
 	Operation finish_operation;
 	History* qna_history;
 	std::shared_ptr<FormAction> parent_formaction;

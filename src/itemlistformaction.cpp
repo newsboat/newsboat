@@ -245,7 +245,7 @@ void ItemListFormAction::process_operation(Operation op,
 					v->get_cfg()->get_configvalue(
 						"external-url-viewer");
 				if (urlviewer == "") {
-					std::vector<linkpair> links;
+					std::vector<LinkPair> links;
 					std::vector<std::pair<LineType,
 						std::string>>
 						lines;
@@ -328,8 +328,8 @@ void ItemListFormAction::process_operation(Operation op,
 							OP_INT_EDITFLAGS_END);
 					}
 				} else {
-					std::vector<qna_pair> qna;
-					qna.push_back(qna_pair(_("Flags: "),
+					std::vector<QnaPair> qna;
+					qna.push_back(QnaPair(_("Flags: "),
 						visible_items[itempos]
 							.first->flags()));
 					this->start_qna(
@@ -531,7 +531,7 @@ void ItemListFormAction::process_operation(Operation op,
 		break;
 	case OP_PIPE_TO:
 		if (visible_items.size() != 0) {
-			std::vector<qna_pair> qna;
+			std::vector<QnaPair> qna;
 			if (automatic) {
 				if (args->size() > 0) {
 					qna_responses.clear();
@@ -539,7 +539,7 @@ void ItemListFormAction::process_operation(Operation op,
 					finished_qna(OP_PIPE_TO);
 				}
 			} else {
-				qna.push_back(qna_pair(
+				qna.push_back(QnaPair(
 					_("Pipe article to command: "), ""));
 				this->start_qna(
 					qna, OP_PIPE_TO, &cmdlinehistory);
@@ -549,7 +549,7 @@ void ItemListFormAction::process_operation(Operation op,
 		}
 		break;
 	case OP_SEARCH: {
-		std::vector<qna_pair> qna;
+		std::vector<QnaPair> qna;
 		if (automatic) {
 			if (args->size() > 0) {
 				qna_responses.clear();
@@ -557,7 +557,7 @@ void ItemListFormAction::process_operation(Operation op,
 				finished_qna(OP_INT_START_SEARCH);
 			}
 		} else {
-			qna.push_back(qna_pair(_("Search for: "), ""));
+			qna.push_back(QnaPair(_("Search for: "), ""));
 			this->start_qna(
 				qna, OP_INT_START_SEARCH, &searchhistory);
 		}
@@ -613,8 +613,8 @@ void ItemListFormAction::process_operation(Operation op,
 				this->finished_qna(OP_INT_END_SETFILTER);
 			}
 		} else {
-			std::vector<qna_pair> qna;
-			qna.push_back(qna_pair(_("Filter: "), ""));
+			std::vector<QnaPair> qna;
+			qna.push_back(QnaPair(_("Filter: "), ""));
 			this->start_qna(
 				qna, OP_INT_END_SETFILTER, &filterhistory);
 		}
@@ -836,7 +836,7 @@ void ItemListFormAction::do_update_visible_items()
 	std::lock_guard<std::mutex> lock(feed->item_mutex);
 	std::vector<std::shared_ptr<RssItem>>& items = feed->items();
 
-	std::vector<itemptr_pos_pair> new_visible_items;
+	std::vector<ItemPtrPosPair> new_visible_items;
 
 	/*
 	 * this method doesn't redraw, all it does is to go through all
@@ -848,7 +848,7 @@ void ItemListFormAction::do_update_visible_items()
 	for (const auto& item : items) {
 		item->set_index(i + 1);
 		if (!apply_filter || m.matches(item.get())) {
-			new_visible_items.push_back(itemptr_pos_pair(item, i));
+			new_visible_items.push_back(ItemPtrPosPair(item, i));
 		}
 		i++;
 	}
@@ -951,7 +951,7 @@ void ItemListFormAction::prepare()
 }
 
 std::string ItemListFormAction::item2formatted_line(
-	const itemptr_pos_pair& item,
+	const ItemPtrPosPair& item,
 	const unsigned int width,
 	const std::string& itemlist_format,
 	const std::string& datetime_format)

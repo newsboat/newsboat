@@ -406,7 +406,7 @@ void RssIgnores::handle_action(const std::string& action,
 				_("couldn't parse filter expression `%s': %s"),
 				ignore_expr,
 				m.get_parse_error()));
-		ignores.push_back(feedurl_expr_pair(
+		ignores.push_back(FeedUrlExprPair(
 			ignore_rssurl, new Matcher(ignore_expr)));
 	} else if (action == "always-download") {
 		for (const auto& param : params) {

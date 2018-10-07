@@ -29,7 +29,7 @@ void FilterContainer::handle_action(const std::string& action,
 				_("couldn't parse filter expression `%s': %s"),
 				params[1],
 				m.get_parse_error()));
-		filters.push_back(filter_name_expr_pair(params[0], params[1]));
+		filters.push_back(FilterNameExprPair(params[0], params[1]));
 	} else
 		throw ConfigHandlerException(
 			ActionHandlerStatus::INVALID_COMMAND);

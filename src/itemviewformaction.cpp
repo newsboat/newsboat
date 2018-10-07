@@ -280,7 +280,7 @@ void ItemViewFormAction::process_operation(Operation op,
 		}
 		break;
 	case OP_SEARCH: {
-		std::vector<qna_pair> qna;
+		std::vector<QnaPair> qna;
 		if (automatic) {
 			if (args->size() > 0) {
 				qna_responses.clear();
@@ -288,13 +288,13 @@ void ItemViewFormAction::process_operation(Operation op,
 				finished_qna(OP_INT_START_SEARCH);
 			}
 		} else {
-			qna.push_back(qna_pair(_("Search for: "), ""));
+			qna.push_back(QnaPair(_("Search for: "), ""));
 			this->start_qna(
 				qna, OP_INT_START_SEARCH, &searchhistory);
 		}
 	} break;
 	case OP_PIPE_TO: {
-		std::vector<qna_pair> qna;
+		std::vector<QnaPair> qna;
 		if (automatic) {
 			if (args->size() > 0) {
 				qna_responses.clear();
@@ -303,7 +303,7 @@ void ItemViewFormAction::process_operation(Operation op,
 			}
 		} else {
 			qna.push_back(
-				qna_pair(_("Pipe article to command: "), ""));
+				QnaPair(_("Pipe article to command: "), ""));
 			this->start_qna(qna, OP_PIPE_TO, &cmdlinehistory);
 		}
 	} break;
@@ -315,8 +315,8 @@ void ItemViewFormAction::process_operation(Operation op,
 				this->finished_qna(OP_INT_EDITFLAGS_END);
 			}
 		} else {
-			std::vector<qna_pair> qna;
-			qna.push_back(qna_pair(_("Flags: "), item->flags()));
+			std::vector<QnaPair> qna;
+			qna.push_back(QnaPair(_("Flags: "), item->flags()));
 			this->start_qna(qna, OP_INT_EDITFLAGS_END);
 		}
 		break;
@@ -441,7 +441,7 @@ void ItemViewFormAction::process_operation(Operation op,
 		}
 	} break;
 	case OP_GOTO_URL: {
-		std::vector<qna_pair> qna;
+		std::vector<QnaPair> qna;
 		if (automatic) {
 			if (args->size() > 0) {
 				qna_responses.clear();
@@ -449,7 +449,7 @@ void ItemViewFormAction::process_operation(Operation op,
 				finished_qna(OP_INT_GOTO_URL);
 			}
 		} else {
-			qna.push_back(qna_pair(_("Goto URL #"), ""));
+			qna.push_back(QnaPair(_("Goto URL #"), ""));
 			this->start_qna(qna, OP_INT_GOTO_URL);
 		}
 	} break;
@@ -606,7 +606,7 @@ void ItemViewFormAction::finished_qna(Operation op)
 
 std::vector<std::pair<LineType, std::string>> ItemViewFormAction::render_html(
 	const std::string& source,
-	std::vector<linkpair>& thelinks,
+	std::vector<LinkPair>& thelinks,
 	const std::string& url)
 {
 	std::vector<std::pair<LineType, std::string>> result;

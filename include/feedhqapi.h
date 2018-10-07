@@ -12,7 +12,7 @@ public:
 	explicit FeedHqApi(ConfigContainer* c);
 	~FeedHqApi() override;
 	bool authenticate() override;
-	std::vector<tagged_feedurl> get_subscribed_urls() override;
+	std::vector<TaggedFeedUrl> get_subscribed_urls() override;
 	void add_custom_headers(curl_slist** custom_headers) override;
 	bool mark_all_read(const std::string& feedurl) override;
 	bool mark_article_read(const std::string& guid, bool read) override;

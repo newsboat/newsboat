@@ -23,7 +23,7 @@ public:
 	{
 		tags = t;
 	}
-	void set_filters(const std::vector<filter_name_expr_pair>& ff)
+	void set_filters(const std::vector<FilterNameExprPair>& ff)
 	{
 		filters = ff;
 	}
@@ -47,7 +47,7 @@ private:
 	SelectionType type;
 	std::string value;
 	std::vector<std::string> tags;
-	std::vector<filter_name_expr_pair> filters;
+	std::vector<FilterNameExprPair> filters;
 };
 
 } // namespace newsboat

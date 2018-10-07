@@ -26,7 +26,7 @@ void ListFormatter::set_line(const unsigned int itempos,
 	unsigned int id,
 	unsigned int width)
 {
-	std::vector<line_id_pair> formatted_text;
+	std::vector<LineIdPair> formatted_text;
 
 	if (width > 0 && text.length() > 0) {
 		std::wstring mytext = Utils::clean_nonprintable_characters(
@@ -42,12 +42,12 @@ void ListFormatter::set_line(const unsigned int itempos,
 					size--;
 				}
 			}
-			formatted_text.push_back(line_id_pair(
+			formatted_text.push_back(LineIdPair(
 				Utils::wstr2str(mytext.substr(0, size)), id));
 			mytext.erase(0, size);
 		}
 	} else {
-		formatted_text.push_back(line_id_pair(
+		formatted_text.push_back(LineIdPair(
 			Utils::wstr2str(Utils::clean_nonprintable_characters(
 				Utils::str2wstr(text))),
 			id));

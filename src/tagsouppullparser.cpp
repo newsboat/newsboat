@@ -128,7 +128,7 @@ void TagSoupPullParser::add_attribute(std::string s)
 		attribname.end(),
 		attribname.begin(),
 		::tolower);
-	attributes.push_back(attribute(attribname, attribvalue));
+	attributes.push_back(Attribute(attribname, attribvalue));
 }
 
 std::string TagSoupPullParser::read_tag()

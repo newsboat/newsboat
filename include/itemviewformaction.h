@@ -42,7 +42,7 @@ public:
 
 	std::vector<std::pair<LineType, std::string>> render_html(
 		const std::string& source,
-		std::vector<linkpair>& thelinks,
+		std::vector<LinkPair>& thelinks,
 		const std::string& url);
 
 	void set_regexmanager(RegexManager* r);
@@ -67,7 +67,7 @@ private:
 	std::string guid;
 	std::shared_ptr<RssFeed> feed;
 	bool show_source;
-	std::vector<linkpair> links;
+	std::vector<LinkPair> links;
 	bool quit;
 	RegexManager* rxman;
 	unsigned int num_lines;

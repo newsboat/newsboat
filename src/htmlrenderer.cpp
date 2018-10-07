@@ -57,14 +57,14 @@ HtmlRenderer::HtmlRenderer(bool raw)
 
 void HtmlRenderer::render(const std::string& source,
 	std::vector<std::pair<LineType, std::string>>& lines,
-	std::vector<linkpair>& links,
+	std::vector<LinkPair>& links,
 	const std::string& url)
 {
 	std::istringstream input(source);
 	render(input, lines, links, url);
 }
 
-unsigned int HtmlRenderer::add_link(std::vector<linkpair>& links,
+unsigned int HtmlRenderer::add_link(std::vector<LinkPair>& links,
 	const std::string& link,
 	LinkType type)
 {
@@ -78,14 +78,14 @@ unsigned int HtmlRenderer::add_link(std::vector<linkpair>& links,
 		i++;
 	}
 	if (!found)
-		links.push_back(linkpair(link, type));
+		links.push_back(LinkPair(link, type));
 
 	return i;
 }
 
 void HtmlRenderer::render(std::istream& input,
 	std::vector<std::pair<LineType, std::string>>& lines,
-	std::vector<linkpair>& links,
+	std::vector<LinkPair>& links,
 	const std::string& url)
 {
 	unsigned int image_count = 0;

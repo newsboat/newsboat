@@ -107,7 +107,7 @@ std::string RssParser::render_xhtml_title(const std::string& title,
 {
 	HtmlRenderer rnd(true);
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<linkpair> links; // not needed
+	std::vector<LinkPair> links; // not needed
 	rnd.render(title, lines, links, link);
 	if (!lines.empty())
 		return lines[0].second;

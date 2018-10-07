@@ -9,7 +9,7 @@
 
 namespace newsboat {
 
-typedef std::pair<std::shared_ptr<RssFeed>, unsigned int> feedptr_pos_pair;
+typedef std::pair<std::shared_ptr<RssFeed>, unsigned int> FeedPtrPosPair;
 
 class FeedListFormAction : public ListFormAction {
 public:
@@ -78,7 +78,7 @@ private:
 	bool zero_feedpos;
 	unsigned int feeds_shown;
 	bool quit;
-	std::vector<feedptr_pos_pair> visible_feeds;
+	std::vector<FeedPtrPosPair> visible_feeds;
 	std::string tag;
 	std::vector<std::string> tags;
 

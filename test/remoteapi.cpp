@@ -28,7 +28,7 @@ public:
 	{
 		throw 0;
 	}
-	std::vector<tagged_feedurl> get_subscribed_urls()
+	std::vector<TaggedFeedUrl> get_subscribed_urls()
 	{
 		throw 0;
 	}

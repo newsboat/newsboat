@@ -94,9 +94,9 @@ std::string FeedHqApi::retrieve_auth()
 	return "";
 }
 
-std::vector<tagged_feedurl> FeedHqApi::get_subscribed_urls()
+std::vector<TaggedFeedUrl> FeedHqApi::get_subscribed_urls()
 {
-	std::vector<tagged_feedurl> urls;
+	std::vector<TaggedFeedUrl> urls;
 
 	CURL* handle = curl_easy_init();
 	std::string result;
@@ -158,7 +158,7 @@ std::vector<tagged_feedurl> FeedHqApi::get_subscribed_urls()
 			FEEDHQ_FEED_PREFIX,
 			escaped_id,
 			cfg->get_configvalue_as_int("feedhq-min-items"));
-		urls.push_back(tagged_feedurl(url, tags));
+		urls.push_back(TaggedFeedUrl(url, tags));
 
 		curl_free(escaped_id);
 	}

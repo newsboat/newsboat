@@ -67,7 +67,7 @@ void FeedHqUrlReader::reload()
 		}
 	}
 
-	std::vector<tagged_feedurl> feedurls = api->get_subscribed_urls();
+	std::vector<TaggedFeedUrl> feedurls = api->get_subscribed_urls();
 	for (const auto& tagged : feedurls) {
 		std::string url = tagged.first;
 		std::vector<std::string> url_tags = tagged.second;

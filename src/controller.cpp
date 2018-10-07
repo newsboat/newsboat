@@ -822,7 +822,7 @@ void Controller::write_item(std::shared_ptr<RssItem> item,
 void Controller::write_item(std::shared_ptr<RssItem> item, std::ostream& ostr)
 {
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<linkpair> links; // not used
+	std::vector<LinkPair> links; // not used
 
 	std::string title(_("Title: "));
 	title.append(item->title());

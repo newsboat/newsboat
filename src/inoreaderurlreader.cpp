@@ -71,7 +71,7 @@ void InoreaderUrlReader::reload()
 		}
 	}
 
-	std::vector<tagged_feedurl> feedurls = api->get_subscribed_urls();
+	std::vector<TaggedFeedUrl> feedurls = api->get_subscribed_urls();
 	for (const auto& url : feedurls) {
 		LOG(Level::DEBUG, "added %s to URL list", url.first);
 		urls.push_back(url.first);

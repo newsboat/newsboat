@@ -15,7 +15,7 @@ public:
 	void prepare() override;
 	void init() override;
 	KeyMapHintEntry* get_keymap_hint() override;
-	void set_links(const std::vector<linkpair>& l)
+	void set_links(const std::vector<LinkPair>& l)
 	{
 		links = l;
 	}
@@ -30,7 +30,7 @@ private:
 	void process_operation(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
-	std::vector<linkpair> links;
+	std::vector<LinkPair> links;
 	bool quit;
 	std::shared_ptr<RssFeed> feed;
 };

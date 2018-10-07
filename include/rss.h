@@ -13,7 +13,7 @@
 
 namespace newsboat {
 
-typedef std::pair<std::string, Matcher*> feedurl_expr_pair;
+typedef std::pair<std::string, Matcher*> FeedUrlExprPair;
 
 enum class DlStatus { SUCCESS, TO_BE_DOWNLOADED, DURING_DOWNLOAD, DL_ERROR };
 
@@ -428,7 +428,7 @@ public:
 	bool matches_resetunread(const std::string& url);
 
 private:
-	std::vector<feedurl_expr_pair> ignores;
+	std::vector<FeedUrlExprPair> ignores;
 	std::vector<std::string> ignores_lastmodified;
 	std::vector<std::string> resetflag;
 };

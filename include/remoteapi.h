@@ -10,7 +10,7 @@
 
 namespace newsboat {
 
-typedef std::pair<std::string, std::vector<std::string>> tagged_feedurl;
+typedef std::pair<std::string, std::vector<std::string>> TaggedFeedUrl;
 
 typedef struct {
 	std::string user;
@@ -25,7 +25,7 @@ public:
 	}
 	virtual ~RemoteApi() {}
 	virtual bool authenticate() = 0;
-	virtual std::vector<tagged_feedurl> get_subscribed_urls() = 0;
+	virtual std::vector<TaggedFeedUrl> get_subscribed_urls() = 0;
 	virtual void add_custom_headers(curl_slist** custom_headers) = 0;
 	virtual bool mark_all_read(const std::string& feedurl) = 0;
 	virtual bool mark_article_read(const std::string& guid, bool read) = 0;

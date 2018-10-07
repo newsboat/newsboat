@@ -97,9 +97,9 @@ std::string OldReaderApi::retrieve_auth()
 	return "";
 }
 
-std::vector<tagged_feedurl> OldReaderApi::get_subscribed_urls()
+std::vector<TaggedFeedUrl> OldReaderApi::get_subscribed_urls()
 {
-	std::vector<tagged_feedurl> urls;
+	std::vector<TaggedFeedUrl> urls;
 	curl_slist* custom_headers{};
 
 	CURL* handle = curl_easy_init();
@@ -179,7 +179,7 @@ std::vector<tagged_feedurl> OldReaderApi::get_subscribed_urls()
 				id_uenc,
 				cfg->get_configvalue_as_int(
 					"oldreader-min-items"));
-			urls.push_back(tagged_feedurl(url, tags));
+			urls.push_back(TaggedFeedUrl(url, tags));
 		}
 		curl_free(id_uenc);
 	}

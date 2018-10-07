@@ -68,9 +68,9 @@ std::string NewsBlurApi::retrieve_auth()
 	return StrPrintf::fmt("username=%s&password=%s", cred.user, cred.pass);
 }
 
-std::vector<tagged_feedurl> NewsBlurApi::get_subscribed_urls()
+std::vector<TaggedFeedUrl> NewsBlurApi::get_subscribed_urls()
 {
-	std::vector<tagged_feedurl> result;
+	std::vector<TaggedFeedUrl> result;
 
 	json_object* response = query_api("/reader/feeds/", nullptr);
 
@@ -104,7 +104,7 @@ std::vector<tagged_feedurl> NewsBlurApi::get_subscribed_urls()
 			std::string std_feed_id(feed_id);
 			std::vector<std::string> tags =
 				feeds_to_tags[std_feed_id];
-			result.push_back(tagged_feedurl(std_feed_id, tags));
+			result.push_back(TaggedFeedUrl(std_feed_id, tags));
 		} else {
 			LOG(Level::ERROR,
 				"NewsBlurApi::get_subscribed_urls: feed fetch "

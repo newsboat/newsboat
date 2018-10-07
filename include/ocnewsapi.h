@@ -15,7 +15,7 @@ public:
 	explicit OcNewsApi(ConfigContainer* cfg);
 	~OcNewsApi() override;
 	bool authenticate() override;
-	std::vector<tagged_feedurl> get_subscribed_urls() override;
+	std::vector<TaggedFeedUrl> get_subscribed_urls() override;
 	bool mark_all_read(const std::string& feedurl) override;
 	bool mark_article_read(const std::string& guid, bool read) override;
 	bool update_article_flags(const std::string& oldflags,
@@ -25,7 +25,7 @@ public:
 	rsspp::Feed fetch_feed(const std::string& feed_id);
 
 private:
-	typedef std::map<std::string, std::pair<rsspp::Feed, long>> feedmap;
+	typedef std::map<std::string, std::pair<rsspp::Feed, long>> FeedMap;
 	std::string retrieve_auth();
 	bool query(const std::string& query,
 		json_object** result = nullptr,
@@ -33,7 +33,7 @@ private:
 	std::string md5(const std::string& str);
 	std::string auth;
 	std::string server;
-	feedmap known_feeds;
+	FeedMap known_feeds;
 };
 
 class OcNewsUrlReader : public UrlReader {

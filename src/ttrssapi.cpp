@@ -203,7 +203,7 @@ json TtRssApi::run_op(const std::string& op,
 	return content;
 }
 
-tagged_feedurl TtRssApi::feed_from_json(const json& jfeed,
+TaggedFeedUrl TtRssApi::feed_from_json(const json& jfeed,
 	const std::vector<std::string>& addtags)
 {
 	const int feed_id = jfeed["id"];
@@ -218,7 +218,7 @@ tagged_feedurl TtRssApi::feed_from_json(const json& jfeed,
 	tags.insert(tags.end(), addtags.cbegin(), addtags.cend());
 
 	auto url = StrPrintf::fmt("%s#%d", feed_url, feed_id);
-	return tagged_feedurl(url, tags);
+	return TaggedFeedUrl(url, tags);
 	// TODO: cache feed_id -> feed_url (or feed_url -> feed_id ?)
 }
 
@@ -236,9 +236,9 @@ int TtRssApi::parse_category_id(const json& jcatid)
 	return cat_id;
 }
 
-std::vector<tagged_feedurl> TtRssApi::get_subscribed_urls()
+std::vector<TaggedFeedUrl> TtRssApi::get_subscribed_urls()
 {
-	std::vector<tagged_feedurl> feeds;
+	std::vector<TaggedFeedUrl> feeds;
 
 	json categories =
 		run_op("getCategories", std::map<std::string, std::string>());
@@ -288,7 +288,7 @@ std::vector<tagged_feedurl> TtRssApi::get_subscribed_urls()
 				"TtRssApi::get_subscribed_urls:"
 				" Failed to determine subscribed urls: %s",
 				e.what());
-			return std::vector<tagged_feedurl>();
+			return std::vector<TaggedFeedUrl>();
 		}
 	}
 
@@ -456,7 +456,7 @@ rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 }
 
 void TtRssApi::fetch_feeds_per_category(const json& cat,
-	std::vector<tagged_feedurl>& feeds)
+	std::vector<TaggedFeedUrl>& feeds)
 {
 	json cat_name;
 

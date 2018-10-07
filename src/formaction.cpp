@@ -86,8 +86,8 @@ std::string FormAction::get_value(const std::string& value)
 
 void FormAction::start_cmdline(std::string default_value)
 {
-	std::vector<qna_pair> qna;
-	qna.push_back(qna_pair(":", default_value));
+	std::vector<QnaPair> qna;
+	qna.push_back(QnaPair(":", default_value));
 	v->inside_cmdline(true);
 	this->start_qna(qna, OP_INT_END_CMDLINE, &FormAction::cmdlinehistory);
 }
@@ -318,7 +318,7 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 	}
 }
 
-void FormAction::start_qna(const std::vector<qna_pair>& prompts,
+void FormAction::start_qna(const std::vector<QnaPair>& prompts,
 	Operation finish_op,
 	History* h)
 {
@@ -404,22 +404,22 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 		default_url,
 		default_desc,
 		default_feed_title);
-	std::vector<qna_pair> prompts;
+	std::vector<QnaPair> prompts;
 
 	std::string new_title = "";
 	bool is_bm_autopilot =
 		v->get_cfg()->get_configvalue_as_bool("bookmark-autopilot");
-	prompts.push_back(qna_pair(_("URL: "), default_url));
+	prompts.push_back(QnaPair(_("URL: "), default_url));
 	if (default_title.empty()) { // call the function to figure out title
 				     // from url only if the default_title is no
 				     // good
 		new_title = Utils::make_title(default_url);
-		prompts.push_back(qna_pair(_("Title: "), new_title));
+		prompts.push_back(QnaPair(_("Title: "), new_title));
 	} else {
-		prompts.push_back(qna_pair(_("Title: "), default_title));
+		prompts.push_back(QnaPair(_("Title: "), default_title));
 	}
-	prompts.push_back(qna_pair(_("Description: "), default_desc));
-	prompts.push_back(qna_pair(_("Feed title: "), default_feed_title));
+	prompts.push_back(QnaPair(_("Description: "), default_desc));
+	prompts.push_back(QnaPair(_("Feed title: "), default_feed_title));
 
 	if (is_bm_autopilot) { // If bookmarking is set to autopilot don't
 			       // prompt for url, title, desc

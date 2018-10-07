@@ -25,8 +25,8 @@ public:
 
 private:
 	typedef std::pair<std::vector<regex_t*>, std::vector<std::string>>
-		rc_pair;
-	std::map<std::string, rc_pair> locations;
+		RcPair;
+	std::map<std::string, RcPair> locations;
 	std::vector<std::string> cheat_store_for_dump_config;
 	std::vector<std::pair<std::shared_ptr<Matcher>, int>> matchers;
 	std::string extract_initial_marker(const std::string& str);

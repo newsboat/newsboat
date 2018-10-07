@@ -11,7 +11,7 @@
 namespace newsboat {
 
 class ListFormatter {
-	typedef std::pair<std::string, unsigned int> line_id_pair;
+	typedef std::pair<std::string, unsigned int> LineIdPair;
 
 public:
 	ListFormatter();
@@ -37,7 +37,7 @@ public:
 	}
 
 private:
-	std::vector<line_id_pair> lines;
+	std::vector<LineIdPair> lines;
 	std::string format_cache;
 };
 

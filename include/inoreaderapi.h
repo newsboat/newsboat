@@ -12,7 +12,7 @@ public:
 	explicit InoreaderApi(ConfigContainer* c);
 	virtual ~InoreaderApi();
 	virtual bool authenticate();
-	virtual std::vector<tagged_feedurl> get_subscribed_urls();
+	virtual std::vector<TaggedFeedUrl> get_subscribed_urls();
 	virtual void add_custom_headers(curl_slist** custom_headers);
 	virtual bool mark_all_read(const std::string& feedurl);
 	virtual bool mark_article_read(const std::string& guid, bool read);

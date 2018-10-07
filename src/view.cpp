@@ -602,7 +602,7 @@ void View::push_help()
 	current_formaction = formaction_stack_size() - 1;
 }
 
-void View::push_urlview(const std::vector<linkpair>& links,
+void View::push_urlview(const std::vector<LinkPair>& links,
 	std::shared_ptr<RssFeed>& feed)
 {
 	std::shared_ptr<UrlViewFormAction> urlview(
@@ -647,7 +647,7 @@ std::string View::select_tag()
 }
 
 std::string View::select_filter(
-	const std::vector<filter_name_expr_pair>& filters)
+	const std::vector<FilterNameExprPair>& filters)
 {
 	std::shared_ptr<SelectFormAction> selecttag(
 		new SelectFormAction(this, selecttag_str));

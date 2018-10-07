@@ -11,7 +11,7 @@
 
 namespace newsboat {
 
-typedef std::pair<std::shared_ptr<RssItem>, unsigned int> itemptr_pos_pair;
+typedef std::pair<std::shared_ptr<RssItem>, unsigned int> ItemPtrPosPair;
 
 enum class InvalidationMode { PARTIAL, COMPLETE };
 
@@ -119,7 +119,7 @@ private:
 		invalidated_itempos.push_back(pos);
 	}
 
-	std::string item2formatted_line(const itemptr_pos_pair& item,
+	std::string item2formatted_line(const ItemPtrPosPair& item,
 		const unsigned int width,
 		const std::string& itemlist_format,
 		const std::string& datetime_format);
@@ -128,7 +128,7 @@ private:
 	std::shared_ptr<RssFeed> feed;
 	bool apply_filter;
 	Matcher m;
-	std::vector<itemptr_pos_pair> visible_items;
+	std::vector<ItemPtrPosPair> visible_items;
 	bool show_searchresult;
 	std::string searchphrase;
 

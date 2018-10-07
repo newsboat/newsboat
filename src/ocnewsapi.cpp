@@ -14,8 +14,8 @@
 
 namespace newsboat {
 
-typedef std::unique_ptr<json_object, decltype(*json_object_put)> json_uptr;
-typedef std::unique_ptr<CURL, decltype(*curl_easy_cleanup)> curl_uptr;
+typedef std::unique_ptr<json_object, decltype(*json_object_put)> JsonUptr;
+typedef std::unique_ptr<CURL, decltype(*curl_easy_cleanup)> CurlUptr;
 
 OcNewsApi::OcNewsApi(ConfigContainer* c)
 	: RemoteApi(c)
@@ -50,20 +50,20 @@ std::string OcNewsApi::retrieve_auth()
 	return cred.user + ":" + cred.pass;
 }
 
-std::vector<tagged_feedurl> OcNewsApi::get_subscribed_urls()
+std::vector<TaggedFeedUrl> OcNewsApi::get_subscribed_urls()
 {
-	std::vector<tagged_feedurl> result;
+	std::vector<TaggedFeedUrl> result;
 	std::map<long, std::string> folders_map;
 
 	json_object* feeds_query;
 	if (!query("feeds", &feeds_query))
 		return result;
-	json_uptr feeds_uptr(feeds_query, json_object_put);
+	JsonUptr feeds_uptr(feeds_query, json_object_put);
 
 	json_object* folders_query;
 	if (!query("folders", &folders_query))
 		return result;
-	json_uptr folders_uptr(folders_query, json_object_put);
+	JsonUptr folders_uptr(folders_query, json_object_put);
 
 	json_object* folders;
 	json_object_object_get_ex(folders_query, "folders", &folders);
@@ -89,7 +89,7 @@ std::vector<tagged_feedurl> OcNewsApi::get_subscribed_urls()
 	starred.rss_version = rsspp::OCNEWS_JSON;
 
 	known_feeds["Starred"] = std::make_pair(starred, 0);
-	result.push_back(tagged_feedurl("Starred", std::vector<std::string>()));
+	result.push_back(TaggedFeedUrl("Starred", std::vector<std::string>()));
 
 	json_object* feeds;
 	json_object_object_get_ex(feeds_query, "feeds", &feeds);
@@ -127,12 +127,12 @@ std::vector<tagged_feedurl> OcNewsApi::get_subscribed_urls()
 		if (folder_id != 0)
 			tags.push_back(folders_map[folder_id]);
 
-		result.push_back(tagged_feedurl(current_feed.title, tags));
+		result.push_back(TaggedFeedUrl(current_feed.title, tags));
 	}
 
 	std::sort(++begin(result),
 		end(result),
-		[](const tagged_feedurl& a, const tagged_feedurl& b) {
+		[](const TaggedFeedUrl& a, const TaggedFeedUrl& b) {
 			return a.first < b.first;
 		});
 
@@ -197,7 +197,7 @@ rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id)
 	json_object* response;
 	if (!this->query(query, &response))
 		return feed;
-	json_uptr response_uptr(response, json_object_put);
+	JsonUptr response_uptr(response, json_object_put);
 
 	json_object* items;
 	json_object_object_get_ex(response, "items", &items);
@@ -290,7 +290,7 @@ bool OcNewsApi::query(const std::string& query,
 	json_object** result,
 	const std::string& post)
 {
-	curl_uptr curlhandle(curl_easy_init(), curl_easy_cleanup);
+	CurlUptr curlhandle(curl_easy_init(), curl_easy_cleanup);
 	CURL* handle = curlhandle.get();
 
 	std::string url = server + OCNEWS_API + query;
