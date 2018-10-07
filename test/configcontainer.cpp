@@ -12,7 +12,7 @@ TEST_CASE("Parses test config without exceptions", "[ConfigContainer]")
 	ConfigContainer cfg;
 	ConfigParser cfgparser;
 	cfg.register_commands(cfgparser);
-	Keymap k(KM_NEWSBOAT);
+	KeyMap k(KM_NEWSBOAT);
 	cfgparser.register_handler("macro", &k);
 
 	REQUIRE_NOTHROW(cfgparser.parse("data/test-config.txt"));

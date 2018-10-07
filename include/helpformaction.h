@@ -11,7 +11,7 @@ public:
 	~HelpFormAction() override;
 	void prepare() override;
 	void init() override;
-	KeymapHintEntry* get_keymap_hint() override;
+	KeyMapHintEntry* get_keymap_hint() override;
 	std::string id() const override
 	{
 		return "help";

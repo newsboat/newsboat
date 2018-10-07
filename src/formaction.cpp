@@ -60,7 +60,7 @@ std::shared_ptr<Stfl::Form> FormAction::get_form()
 	return f;
 }
 
-std::string FormAction::prepare_keymap_hint(KeymapHintEntry* hints)
+std::string FormAction::prepare_keymap_hint(KeyMapHintEntry* hints)
 {
 	/*
 	 * This function generates the "keymap hint" line by putting

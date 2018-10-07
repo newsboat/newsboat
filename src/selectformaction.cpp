@@ -161,12 +161,12 @@ void SelectFormAction::init()
 	f->set("head", title);
 }
 
-KeymapHintEntry* SelectFormAction::get_keymap_hint()
+KeyMapHintEntry* SelectFormAction::get_keymap_hint()
 {
-	static KeymapHintEntry hints_tag[] = {{OP_QUIT, _("Cancel")},
+	static KeyMapHintEntry hints_tag[] = {{OP_QUIT, _("Cancel")},
 		{OP_OPEN, _("Select Tag")},
 		{OP_NIL, nullptr}};
-	static KeymapHintEntry hints_filter[] = {{OP_QUIT, _("Cancel")},
+	static KeyMapHintEntry hints_filter[] = {{OP_QUIT, _("Cancel")},
 		{OP_OPEN, _("Select Filter")},
 		{OP_NIL, nullptr}};
 	switch (type) {

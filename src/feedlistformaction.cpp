@@ -569,9 +569,9 @@ void FeedListFormAction::set_tags(const std::vector<std::string>& t)
 	tags = t;
 }
 
-KeymapHintEntry* FeedListFormAction::get_keymap_hint()
+KeyMapHintEntry* FeedListFormAction::get_keymap_hint()
 {
-	static KeymapHintEntry hints[] = {{OP_QUIT, _("Quit")},
+	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")},
 		{OP_OPEN, _("Open")},
 		{OP_NEXTUNREAD, _("Next Unread")},
 		{OP_RELOAD, _("Reload")},

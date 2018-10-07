@@ -7,7 +7,7 @@
 
 namespace newsboat {
 
-CLIArgsParser::CLIArgsParser(int argc, char* argv[])
+CliArgsParser::CliArgsParser(int argc, char* argv[])
 {
 	int c;
 
@@ -35,7 +35,7 @@ CLIArgsParser::CLIArgsParser(int argc, char* argv[])
 	// Ask getopt to re-initialize itself.
 	//
 	// This isn't necessary for real-world use, because we parse arguments
-	// only once; but this is *very* important in tests, where CLIArgsParser
+	// only once; but this is *very* important in tests, where CliArgsParser
 	// is ran dozens of times.
 	//
 	// Note we use 0, not 1. getopt(3) says that the value of 0 forces

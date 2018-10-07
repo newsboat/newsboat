@@ -1167,9 +1167,9 @@ std::string ItemListFormAction::get_guid()
 	return visible_items[itempos].first->guid();
 }
 
-KeymapHintEntry* ItemListFormAction::get_keymap_hint()
+KeyMapHintEntry* ItemListFormAction::get_keymap_hint()
 {
-	static KeymapHintEntry hints[] = {{OP_QUIT, _("Quit")},
+	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")},
 		{OP_OPEN, _("Open")},
 		{OP_SAVE, _("Save")},
 		{OP_RELOAD, _("Reload")},

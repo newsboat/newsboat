@@ -466,9 +466,9 @@ void ItemViewFormAction::process_operation(Operation op,
 	}
 }
 
-KeymapHintEntry* ItemViewFormAction::get_keymap_hint()
+KeyMapHintEntry* ItemViewFormAction::get_keymap_hint()
 {
-	static KeymapHintEntry hints[] = {{OP_QUIT, _("Quit")},
+	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")},
 		{OP_SAVE, _("Save")},
 		{OP_NEXTUNREAD, _("Next Unread")},
 		{OP_OPENINBROWSER, _("Open in Browser")},

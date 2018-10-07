@@ -426,7 +426,7 @@ src/urlviewformaction.o: src/urlviewformaction.cpp \
 src/utils.o: src/utils.cpp include/utils.h include/configcontainer.h \
  include/configparser.h include/logger.h config.h include/strprintf.h \
  3rd-party/alphanum.hpp include/logger.h include/strprintf.h \
- include/rsutils.h
+ include/rs_utils.h
 src/view.o: src/view.cpp include/view.h include/colormanager.h \
  include/configparser.h include/configcontainer.h include/controller.h \
  include/cache.h include/rss.h include/matcher.h filter/FilterParser.h \

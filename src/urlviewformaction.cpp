@@ -129,9 +129,9 @@ void UrlViewFormAction::init()
 	set_keymap_hints();
 }
 
-KeymapHintEntry* UrlViewFormAction::get_keymap_hint()
+KeyMapHintEntry* UrlViewFormAction::get_keymap_hint()
 {
-	static KeymapHintEntry hints[] = {{OP_QUIT, _("Quit")},
+	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")},
 		{OP_OPEN, _("Open in Browser")},
 		{OP_BOOKMARK, _("Save Bookmark")},
 		{OP_NIL, nullptr}};

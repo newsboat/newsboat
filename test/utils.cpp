@@ -7,7 +7,7 @@
 
 using namespace newsboat;
 
-TEST_CASE("tokenize() extracts tokens separated by given delimiters", "[utils]")
+TEST_CASE("tokenize() extracts tokens separated by given delimiters", "[Utils]")
 {
 	std::vector<std::string> tokens;
 
@@ -42,7 +42,7 @@ TEST_CASE("tokenize() extracts tokens separated by given delimiters", "[utils]")
 TEST_CASE(
 	"tokenize_spaced() splits string into runs of delimiter characters "
 	"interspersed with runs of non-delimiter chars",
-	"[utils]")
+	"[Utils]")
 {
 	std::vector<std::string> tokens;
 
@@ -76,7 +76,7 @@ TEST_CASE(
 TEST_CASE(
 	"tokenize_quoted() splits string on delimiters, treating strings "
 	"inside double quotes as single token",
-	"[utils]")
+	"[Utils]")
 {
 	std::vector<std::string> tokens;
 
@@ -97,7 +97,7 @@ TEST_CASE(
 }
 
 TEST_CASE("tokenize_quoted() implicitly closes quotes at the end of the string",
-	"[utils]")
+	"[Utils]")
 {
 	std::vector<std::string> tokens;
 
@@ -115,7 +115,7 @@ TEST_CASE("tokenize_quoted() implicitly closes quotes at the end of the string",
 TEST_CASE(
 	"tokenize_quoted() interprets \"\\\\\" as escaped backslash and puts "
 	"single backslash in output",
-	"[utils]")
+	"[Utils]")
 {
 	std::vector<std::string> tokens;
 
@@ -136,7 +136,7 @@ TEST_CASE(
 	REQUIRE(tokens[0] == "\\\\\\");
 }
 
-TEST_CASE("tokenize_quoted() doesn't un-escape escaped backticks", "[utils]")
+TEST_CASE("tokenize_quoted() doesn't un-escape escaped backticks", "[Utils]")
 {
 	std::vector<std::string> tokens;
 
@@ -150,7 +150,7 @@ TEST_CASE("tokenize_quoted() doesn't un-escape escaped backticks", "[utils]")
 TEST_CASE(
 	"consolidate_whitespace replaces multiple consecutive"
 	"whitespace with a single space",
-	"[utils]")
+	"[Utils]")
 {
 	REQUIRE(Utils::consolidate_whitespace("LoremIpsum") == "LoremIpsum");
 	REQUIRE(Utils::consolidate_whitespace("Lorem Ipsum") == "Lorem Ipsum");
@@ -162,7 +162,7 @@ TEST_CASE(
 	REQUIRE(Utils::consolidate_whitespace("") == "");
 }
 
-TEST_CASE("consolidate_whitespace preserves leading whitespace", "[utils]")
+TEST_CASE("consolidate_whitespace preserves leading whitespace", "[Utils]")
 {
 	REQUIRE(Utils::consolidate_whitespace("    Lorem \t\tIpsum \t ") ==
 		"    Lorem Ipsum ");
@@ -170,7 +170,7 @@ TEST_CASE("consolidate_whitespace preserves leading whitespace", "[utils]")
 		"   Lorem Ipsum");
 }
 
-TEST_CASE("get_command_output()", "[utils]")
+TEST_CASE("get_command_output()", "[Utils]")
 {
 	REQUIRE(Utils::get_command_output("ls /dev/null") == "/dev/null\n");
 	REQUIRE_NOTHROW(Utils::get_command_output(
@@ -179,7 +179,7 @@ TEST_CASE("get_command_output()", "[utils]")
 			"a-program-that-is-guaranteed-to-not-exists") == "");
 }
 
-TEST_CASE("run_program()", "[utils]")
+TEST_CASE("run_program()", "[Utils]")
 {
 	char* argv[4];
 	char cat[] = "cat";
@@ -199,7 +199,7 @@ TEST_CASE("run_program()", "[utils]")
 	REQUIRE(Utils::run_program(argv, "") == "hello world");
 }
 
-TEST_CASE("replace_all()", "[utils]")
+TEST_CASE("replace_all()", "[Utils]")
 {
 	REQUIRE(Utils::replace_all("aaa", "a", "b") == "bbb");
 	REQUIRE(Utils::replace_all("aaa", "aa", "ba") == "baa");
@@ -211,7 +211,7 @@ TEST_CASE("replace_all()", "[utils]")
 	REQUIRE(Utils::replace_all("o o o", "o", "<o>") == "<o> <o> <o>");
 }
 
-TEST_CASE("to_string()", "[utils]")
+TEST_CASE("to_string()", "[Utils]")
 {
 	REQUIRE(std::to_string(0) == "0");
 	REQUIRE(std::to_string(100) == "100");
@@ -219,7 +219,7 @@ TEST_CASE("to_string()", "[utils]")
 	REQUIRE(std::to_string(65537) == "65537");
 }
 
-TEST_CASE("partition_index()", "[utils]")
+TEST_CASE("partition_index()", "[Utils]")
 {
 	std::vector<std::pair<unsigned int, unsigned int>> partitions;
 
@@ -272,7 +272,7 @@ TEST_CASE("partition_index()", "[utils]")
 	}
 }
 
-TEST_CASE("censor_url()", "[utils]")
+TEST_CASE("censor_url()", "[Utils]")
 {
 	REQUIRE(Utils::censor_url("") == "");
 	REQUIRE(Utils::censor_url("foobar") == "foobar");
@@ -311,7 +311,7 @@ TEST_CASE("censor_url()", "[utils]")
 		"query:name:age between 1:10");
 }
 
-TEST_CASE("absolute_url()", "[utils]")
+TEST_CASE("absolute_url()", "[Utils]")
 {
 	REQUIRE(Utils::absolute_url("http://foobar/hello/crook/", "bar.html") ==
 		"http://foobar/hello/crook/bar.html");
@@ -325,21 +325,21 @@ TEST_CASE("absolute_url()", "[utils]")
 			"bla2.html") == "http://test:test@foobar:33/bla2.html");
 }
 
-TEST_CASE("quote()", "[utils]")
+TEST_CASE("quote()", "[Utils]")
 {
 	REQUIRE(Utils::quote("") == "\"\"");
 	REQUIRE(Utils::quote("hello world") == "\"hello world\"");
 	REQUIRE(Utils::quote("\"hello world\"") == "\"\\\"hello world\\\"\"");
 }
 
-TEST_CASE("to_u()", "[utils]")
+TEST_CASE("to_u()", "[Utils]")
 {
 	REQUIRE(Utils::to_u("0") == 0);
 	REQUIRE(Utils::to_u("23") == 23);
 	REQUIRE(Utils::to_u("") == 0);
 }
 
-TEST_CASE("strwidth()", "[utils]")
+TEST_CASE("strwidth()", "[Utils]")
 {
 	REQUIRE(Utils::strwidth("") == 0);
 
@@ -348,7 +348,7 @@ TEST_CASE("strwidth()", "[utils]")
 	REQUIRE(Utils::strwidth(Utils::wstr2str(L"\uF91F")) == 2);
 }
 
-TEST_CASE("join()", "[utils]")
+TEST_CASE("join()", "[Utils]")
 {
 	std::vector<std::string> str;
 	REQUIRE(Utils::join(str, "") == "");
@@ -369,7 +369,7 @@ TEST_CASE("join()", "[utils]")
 	}
 }
 
-TEST_CASE("trim()", "[utils]")
+TEST_CASE("trim()", "[Utils]")
 {
 	std::string str = "  xxx\r\n";
 	Utils::trim(str);
@@ -388,7 +388,7 @@ TEST_CASE("trim()", "[utils]")
 	REQUIRE(str == "");
 }
 
-TEST_CASE("trim_end()", "[utils]")
+TEST_CASE("trim_end()", "[Utils]")
 {
 	std::string str = "quux\n";
 	Utils::trim_end(str);
@@ -515,7 +515,7 @@ TEST_CASE("Utils::make_title extracts possible title from URL")
 }
 
 TEST_CASE("remove_soft_hyphens remove all U+00AD characters from a string",
-	"[utils]")
+	"[Utils]")
 {
 	SECTION("doesn't do anything if input has no soft hyphens in it")
 	{
@@ -557,7 +557,7 @@ TEST_CASE("remove_soft_hyphens remove all U+00AD characters from a string",
 TEST_CASE(
 	"substr_with_width() returns a longest substring fits to the given "
 	"width",
-	"[utils]")
+	"[Utils]")
 {
 	REQUIRE(Utils::substr_with_width("a", 1) == "a");
 	REQUIRE(Utils::substr_with_width("a", 2) == "a");
@@ -616,7 +616,7 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE("getcwd() returns current directory of the process", "[utils]")
+TEST_CASE("getcwd() returns current directory of the process", "[Utils]")
 {
 	SECTION("Returns non-empty string")
 	{
@@ -650,7 +650,7 @@ TEST_CASE("getcwd() returns current directory of the process", "[utils]")
 }
 
 TEST_CASE("strnaturalcmp() compares strings using natural numeric ordering",
-	  "[utils]")
+	  "[Utils]")
 {
 	// Tests copied over from 3rd-party/alphanum.hpp
 	REQUIRE(Utils::strnaturalcmp("","") == 0);
@@ -683,7 +683,7 @@ TEST_CASE("strnaturalcmp() compares strings using natural numeric ordering",
 TEST_CASE(
 	"is_valid_podcast_type() returns true if supplied MIME type "
 	"is audio or a container",
-	"[utils]")
+	"[Utils]")
 {
 	REQUIRE(Utils::is_valid_podcast_type("audio/mpeg"));
 	REQUIRE(Utils::is_valid_podcast_type("audio/mp3"));
@@ -700,7 +700,7 @@ TEST_CASE(
 TEST_CASE(
 	"is_valid_color() returns false for things that aren't valid STFL "
 	"colors",
-	"[utils]")
+	"[Utils]")
 {
 	const std::vector<std::string> non_colors{
 		"awesome", "list", "of", "things", "that", "aren't", "colors"};
@@ -712,7 +712,7 @@ TEST_CASE(
 TEST_CASE(
 	"is_query_url() returns true if given URL is a query URL, i.e. it "
 	"starts with \"query:\" string",
-	"[utils]")
+	"[Utils]")
 {
 	REQUIRE(Utils::is_query_url("query:"));
 	REQUIRE(Utils::is_query_url("query: example"));
@@ -723,7 +723,7 @@ TEST_CASE(
 TEST_CASE(
 	"is_filter_url() returns true if given URL is a filter URL, i.e. it "
 	"starts with \"filter:\" string",
-	"[utils]")
+	"[Utils]")
 {
 	REQUIRE(Utils::is_filter_url("filter:"));
 	REQUIRE(Utils::is_filter_url("filter: example"));
@@ -734,7 +734,7 @@ TEST_CASE(
 TEST_CASE(
 	"is_exec_url() returns true if given URL is a exec URL, i.e. it "
 	"starts with \"exec:\" string",
-	"[utils]")
+	"[Utils]")
 {
 	REQUIRE(Utils::is_exec_url("exec:"));
 	REQUIRE(Utils::is_exec_url("exec: example"));
@@ -746,7 +746,7 @@ TEST_CASE(
 	"is_special_url() return true if given URL is a query, filter or exec "
 	"URL, i.e. it "
 	"starts with \"query:\", \"filter:\" or \"exec:\" string",
-	"[utils]")
+	"[Utils]")
 {
 	REQUIRE(Utils::is_special_url("query:"));
 	REQUIRE(Utils::is_special_url("query: example"));
@@ -767,7 +767,7 @@ TEST_CASE(
 TEST_CASE(
 	"get_default_browser() returns BROWSER environment variable or "
 	"\"lynx\" if the variable is not set",
-	"[utils]")
+	"[Utils]")
 {
 	TestHelpers::EnvVar browserEnv("BROWSER");
 
@@ -785,7 +785,7 @@ TEST_CASE(
 TEST_CASE(
 	"get_basename() returns basename from a URL if available, if not"
 	" then an empty string",
-	"[utils]")
+	"[Utils]")
 {
 	SECTION("return basename in the presence of GET parameters")
 	{

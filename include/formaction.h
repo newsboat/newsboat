@@ -13,7 +13,7 @@ namespace newsboat {
 
 class View;
 
-struct KeymapHintEntry {
+struct KeyMapHintEntry {
 	Operation op;
 	char* text;
 };
@@ -32,7 +32,7 @@ public:
 		do_redraw = b;
 	}
 
-	virtual KeymapHintEntry* get_keymap_hint() = 0;
+	virtual KeyMapHintEntry* get_keymap_hint() = 0;
 
 	virtual std::string id() const = 0;
 
@@ -109,7 +109,7 @@ protected:
 	std::vector<std::string> valid_cmds;
 
 private:
-	std::string prepare_keymap_hint(KeymapHintEntry* hints);
+	std::string prepare_keymap_hint(KeyMapHintEntry* hints);
 	void start_next_question();
 
 	std::vector<qna_pair> qna_prompts;

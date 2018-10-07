@@ -7,10 +7,10 @@
 
 namespace newsboat {
 
-class InoReaderApi : public RemoteApi {
+class InoreaderApi : public RemoteApi {
 public:
-	explicit InoReaderApi(ConfigContainer* c);
-	virtual ~InoReaderApi();
+	explicit InoreaderApi(ConfigContainer* c);
+	virtual ~InoreaderApi();
 	virtual bool authenticate();
 	virtual std::vector<tagged_feedurl> get_subscribed_urls();
 	virtual void add_custom_headers(curl_slist** custom_headers);
@@ -35,12 +35,12 @@ private:
 	std::string auth_header;
 };
 
-class InoReaderUrlReader : public UrlReader {
+class InoreaderUrlReader : public UrlReader {
 public:
-	InoReaderUrlReader(ConfigContainer* c,
+	InoreaderUrlReader(ConfigContainer* c,
 		const std::string& url_file,
 		RemoteApi* a);
-	virtual ~InoReaderUrlReader();
+	virtual ~InoreaderUrlReader();
 	virtual void write_config();
 	virtual void reload();
 	virtual std::string get_source();

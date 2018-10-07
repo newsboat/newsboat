@@ -142,7 +142,7 @@ enum Operation {
 	OP_0
 };
 
-struct KeymapDesc {
+struct KeyMapDesc {
 	std::string key;
 	std::string cmd;
 	std::string desc;
@@ -155,10 +155,10 @@ struct MacroCmd {
 	std::vector<std::string> args;
 };
 
-class Keymap : public ConfigActionHandler {
+class KeyMap : public ConfigActionHandler {
 public:
-	explicit Keymap(unsigned int flags);
-	~Keymap() override;
+	explicit KeyMap(unsigned int flags);
+	~KeyMap() override;
 	void set_key(Operation op,
 		const std::string& key,
 		const std::string& context);
@@ -172,7 +172,7 @@ public:
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) override;
-	void get_keymap_descriptions(std::vector<KeymapDesc>& descs,
+	void get_keymap_descriptions(std::vector<KeyMapDesc>& descs,
 		unsigned short flags);
 	unsigned short get_flag_from_context(const std::string& context);
 

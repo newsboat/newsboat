@@ -51,7 +51,7 @@ public:
 	std::string error_message() const;
 
 	/// Initializes paths to config, cache etc. from CLI arguments.
-	void process_args(const CLIArgsParser& args);
+	void process_args(const CliArgsParser& args);
 
 	/// Ensures all directories exist (migrating them from Newsbeuter if
 	/// possible).

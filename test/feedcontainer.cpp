@@ -24,7 +24,7 @@ std::vector<std::shared_ptr<RssFeed>> get_five_empty_feeds(Cache* rsscache)
 
 } // anonymous namespace
 
-TEST_CASE("get_feed() returns feed by its position number", "[feedcontainer]")
+TEST_CASE("get_feed() returns feed by its position number", "[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -46,7 +46,7 @@ TEST_CASE("get_feed() returns feed by its position number", "[feedcontainer]")
 }
 
 TEST_CASE("get_all_feeds() returns copy of FeedContainer's feed vector",
-	"[feedcontainer]")
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -58,7 +58,7 @@ TEST_CASE("get_all_feeds() returns copy of FeedContainer's feed vector",
 }
 
 TEST_CASE("add_feed() adds specific feed to its \"feeds\" vector",
-	"[feedcontainer]")
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -72,7 +72,7 @@ TEST_CASE("add_feed() adds specific feed to its \"feeds\" vector",
 	REQUIRE(feedcontainer.get_feed(0)->title_raw() == "Example feed");
 }
 
-TEST_CASE("populate_query_feeds() populates query feeds", "[feedcontainer]")
+TEST_CASE("populate_query_feeds() populates query feeds", "[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -95,7 +95,7 @@ TEST_CASE("populate_query_feeds() populates query feeds", "[feedcontainer]")
 }
 
 TEST_CASE("set_feeds() sets FeedContainer's feed vector to the given one",
-	"[feedcontainer]")
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -107,7 +107,7 @@ TEST_CASE("set_feeds() sets FeedContainer's feed vector to the given one",
 	REQUIRE(feedcontainer.feeds == feeds);
 }
 
-TEST_CASE("get_feed_by_url() returns feed by its URL", "[feedcontainer]")
+TEST_CASE("get_feed_by_url() returns feed by its URL", "[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -131,7 +131,7 @@ TEST_CASE("get_feed_by_url() returns feed by its URL", "[feedcontainer]")
 TEST_CASE(
 	"get_feed_by_url() returns nullptr when it cannot find feed with "
 	"given URL",
-	"[feedcontainer]")
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -148,7 +148,7 @@ TEST_CASE(
 	REQUIRE(feed == nullptr);
 }
 
-TEST_CASE("Throws on get_feed() with pos out of range", "[feedcontainer]")
+TEST_CASE("Throws on get_feed() with pos out of range", "[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -161,7 +161,7 @@ TEST_CASE("Throws on get_feed() with pos out of range", "[feedcontainer]")
 }
 
 TEST_CASE("Returns correct number using get_feed_count_by_tag()",
-	"[feedcontainer]")
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -178,7 +178,7 @@ TEST_CASE("Returns correct number using get_feed_count_by_tag()",
 	REQUIRE(feedcontainer.get_feed_count_per_tag("Duck") == 3);
 }
 
-TEST_CASE("Correctly returns pos of next unread item", "[feedcontainer]")
+TEST_CASE("Correctly returns pos of next unread item", "[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -201,7 +201,7 @@ TEST_CASE("Correctly returns pos of next unread item", "[feedcontainer]")
 }
 
 TEST_CASE("feeds_size() returns FeedContainer's current feed vector size",
-	"[feedcontainer]")
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -212,7 +212,7 @@ TEST_CASE("feeds_size() returns FeedContainer's current feed vector size",
 	REQUIRE(feedcontainer.feeds_size() == feeds.size());
 }
 
-TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
+TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -419,7 +419,7 @@ TEST_CASE("Correctly sorts feeds", "[feedcontainer]")
 }
 
 TEST_CASE("mark_all_feed_items_read() marks all of feed's items as read",
-	"[feedcontainer]")
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -441,7 +441,7 @@ TEST_CASE("mark_all_feed_items_read() marks all of feed's items as read",
 }
 
 TEST_CASE("mark_all_feeds_read() marks all items in all feeds as read",
-	"[feedcontainer]")
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -469,7 +469,7 @@ TEST_CASE("mark_all_feeds_read() marks all items in all feeds as read",
 TEST_CASE(
 	"reset_feeds_status() changes status of all feeds to \"to be "
 	"downloaded\"",
-	"[feedcontainer]")
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -488,7 +488,7 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE("clear_feeds_items() clears all of feed's items", "[feedcontainer]")
+TEST_CASE("clear_feeds_items() clears all of feed's items", "[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -508,7 +508,7 @@ TEST_CASE("clear_feeds_items() clears all of feed's items", "[feedcontainer]")
 TEST_CASE(
 	"unread_feed_count() returns number of feeds that have unread items in "
 	"them",
-	"[feedcontainer]")
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -531,7 +531,7 @@ TEST_CASE(
 }
 
 TEST_CASE("unread_item_count() returns number of unread items in all feeds",
-	"[feedcontainer]")
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;

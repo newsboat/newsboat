@@ -5,7 +5,7 @@
 
 namespace newsboat {
 
-InoReaderUrlReader::InoReaderUrlReader(ConfigContainer* c,
+InoreaderUrlReader::InoreaderUrlReader(ConfigContainer* c,
 	const std::string& url_file,
 	RemoteApi* a)
 	: cfg(c)
@@ -14,9 +14,9 @@ InoReaderUrlReader::InoReaderUrlReader(ConfigContainer* c,
 {
 }
 
-InoReaderUrlReader::~InoReaderUrlReader() {}
+InoreaderUrlReader::~InoreaderUrlReader() {}
 
-void InoReaderUrlReader::write_config()
+void InoreaderUrlReader::write_config()
 {
 	// NOTHING
 }
@@ -39,7 +39,7 @@ void InoReaderUrlReader::write_config()
 		tags[(url)] = tmptags;        \
 	} while (0)
 
-void InoReaderUrlReader::reload()
+void InoreaderUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
@@ -83,7 +83,7 @@ void InoReaderUrlReader::reload()
 	}
 }
 
-std::string InoReaderUrlReader::get_source()
+std::string InoreaderUrlReader::get_source()
 {
 	return "inoreader";
 }

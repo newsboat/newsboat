@@ -25,21 +25,21 @@
 
 namespace newsboat {
 
-InoReaderApi::InoReaderApi(ConfigContainer* c)
+InoreaderApi::InoreaderApi(ConfigContainer* c)
 	: RemoteApi(c)
 {
 	// TODO
 }
 
-InoReaderApi::~InoReaderApi()
+InoreaderApi::~InoreaderApi()
 {
 	// TODO
 }
 
-bool InoReaderApi::authenticate()
+bool InoreaderApi::authenticate()
 {
 	auth = retrieve_auth();
-	LOG(Level::DEBUG, "InoReaderApi::authenticate: Auth = %s", auth);
+	LOG(Level::DEBUG, "InoreaderApi::authenticate: Auth = %s", auth);
 	return auth != "";
 }
 
@@ -51,7 +51,7 @@ my_write_data(void* buffer, size_t size, size_t nmemb, void* userp)
 	return size * nmemb;
 }
 
-std::string InoReaderApi::retrieve_auth()
+std::string InoreaderApi::retrieve_auth()
 {
 	CURL* handle = curl_easy_init();
 	Credentials cred = get_credentials("inoreader", "Inoreader");
@@ -86,7 +86,7 @@ std::string InoReaderApi::retrieve_auth()
 	std::vector<std::string> lines = Utils::tokenize(result);
 	for (const auto& line : lines) {
 		LOG(Level::DEBUG,
-			"InoReaderApi::retrieve_auth: line = %s",
+			"InoreaderApi::retrieve_auth: line = %s",
 			line);
 		const std::string auth_string = "Auth=";
 		if (line.compare(0, auth_string.length(), auth_string) == 0) {
@@ -98,7 +98,7 @@ std::string InoReaderApi::retrieve_auth()
 	return "";
 }
 
-std::vector<tagged_feedurl> InoReaderApi::get_subscribed_urls()
+std::vector<tagged_feedurl> InoreaderApi::get_subscribed_urls()
 {
 	std::vector<tagged_feedurl> urls;
 	curl_slist* custom_headers{};
@@ -117,13 +117,13 @@ std::vector<tagged_feedurl> InoReaderApi::get_subscribed_urls()
 	curl_slist_free_all(custom_headers);
 
 	LOG(Level::DEBUG,
-		"InoReaderApi::get_subscribed_urls: document = %s",
+		"InoreaderApi::get_subscribed_urls: document = %s",
 		result);
 
 	json_object* reply = json_tokener_parse(result.c_str());
 	if (reply == nullptr) {
 		LOG(Level::ERROR,
-			"InoReaderApi::get_subscribed_urls: failed to parse "
+			"InoreaderApi::get_subscribed_urls: failed to parse "
 			"response as JSON.");
 		return urls;
 	}
@@ -180,14 +180,14 @@ std::vector<tagged_feedurl> InoReaderApi::get_subscribed_urls()
 	return urls;
 }
 
-void InoReaderApi::add_custom_headers(curl_slist** custom_headers)
+void InoreaderApi::add_custom_headers(curl_slist** custom_headers)
 {
 	if (auth_header.empty()) {
 		auth_header = StrPrintf::fmt(
 			"Authorization: GoogleLogin auth=%s", auth);
 	}
 	LOG(Level::DEBUG,
-		"InoReaderApi::add_custom_headers header = %s",
+		"InoreaderApi::add_custom_headers header = %s",
 		auth_header);
 	*custom_headers =
 		curl_slist_append(*custom_headers, auth_header.c_str());
@@ -195,7 +195,7 @@ void InoReaderApi::add_custom_headers(curl_slist** custom_headers)
 	*custom_headers = curl_slist_append(*custom_headers, INOREADER_APP_KEY);
 }
 
-bool InoReaderApi::mark_all_read(const std::string& feedurl)
+bool InoreaderApi::mark_all_read(const std::string& feedurl)
 {
 	std::string real_feedurl =
 		feedurl.substr(strlen(INOREADER_FEED_PREFIX));
@@ -212,13 +212,13 @@ bool InoReaderApi::mark_all_read(const std::string& feedurl)
 	return result == "OK";
 }
 
-bool InoReaderApi::mark_article_read(const std::string& guid, bool read)
+bool InoreaderApi::mark_article_read(const std::string& guid, bool read)
 {
 	std::string token = get_new_token();
 	return mark_article_read_with_token(guid, read, token);
 }
 
-bool InoReaderApi::mark_article_read_with_token(const std::string& guid,
+bool InoreaderApi::mark_article_read_with_token(const std::string& guid,
 	bool read,
 	const std::string& token)
 {
@@ -243,7 +243,7 @@ bool InoReaderApi::mark_article_read_with_token(const std::string& guid,
 		post_content(INOREADER_API_EDIT_TAG_URL, postcontent);
 
 	LOG(Level::DEBUG,
-		"InoReaderApi::mark_article_read_with_token: postcontent = %s "
+		"InoreaderApi::mark_article_read_with_token: postcontent = %s "
 		"result = %s",
 		postcontent,
 		result);
@@ -251,7 +251,7 @@ bool InoReaderApi::mark_article_read_with_token(const std::string& guid,
 	return result == "OK";
 }
 
-std::string InoReaderApi::get_new_token()
+std::string InoreaderApi::get_new_token()
 {
 	CURL* handle = curl_easy_init();
 	std::string result;
@@ -267,12 +267,12 @@ std::string InoReaderApi::get_new_token()
 	curl_easy_cleanup(handle);
 	curl_slist_free_all(custom_headers);
 
-	LOG(Level::DEBUG, "InoReaderApi::get_new_token: token = %s", result);
+	LOG(Level::DEBUG, "InoreaderApi::get_new_token: token = %s", result);
 
 	return result;
 }
 
-bool InoReaderApi::update_article_flags(const std::string& inoflags,
+bool InoreaderApi::update_article_flags(const std::string& inoflags,
 	const std::string& newflags,
 	const std::string& guid)
 {
@@ -303,7 +303,7 @@ bool InoReaderApi::update_article_flags(const std::string& inoflags,
 	return success;
 }
 
-bool InoReaderApi::star_article(const std::string& guid, bool star)
+bool InoreaderApi::star_article(const std::string& guid, bool star)
 {
 	std::string token = get_new_token();
 	std::string postcontent;
@@ -326,7 +326,7 @@ bool InoReaderApi::star_article(const std::string& guid, bool star)
 	return result == "OK";
 }
 
-bool InoReaderApi::share_article(const std::string& guid, bool share)
+bool InoreaderApi::share_article(const std::string& guid, bool share)
 {
 	std::string token = get_new_token();
 	std::string postcontent;
@@ -349,7 +349,7 @@ bool InoReaderApi::share_article(const std::string& guid, bool share)
 	return result == "OK";
 }
 
-std::string InoReaderApi::post_content(const std::string& url,
+std::string InoreaderApi::post_content(const std::string& url,
 	const std::string& postdata)
 {
 	std::string result;
@@ -368,7 +368,7 @@ std::string InoReaderApi::post_content(const std::string& url,
 	curl_slist_free_all(custom_headers);
 
 	LOG(Level::DEBUG,
-		"InoReaderApi::post_content: url = %s postdata = %s result = "
+		"InoreaderApi::post_content: url = %s postdata = %s result = "
 		"%s",
 		url,
 		postdata,

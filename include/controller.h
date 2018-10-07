@@ -32,7 +32,7 @@ public:
 	{
 		return v;
 	}
-	int run(const CLIArgsParser& args);
+	int run(const CliArgsParser& args);
 
 	std::vector<std::shared_ptr<RssItem>> search_for_items(
 		const std::string& query,

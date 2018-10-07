@@ -166,7 +166,7 @@ int main(int argc, char* argv[])
 	Controller c;
 	newsboat::View v(&c);
 	c.set_view(&v);
-	CLIArgsParser args(argc, argv);
+	CliArgsParser args(argc, argv);
 
 	if (args.should_print_usage) {
 		print_usage(args.program_name);

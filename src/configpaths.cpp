@@ -129,7 +129,7 @@ bool ConfigPaths::find_dirs_xdg()
 	return true;
 }
 
-void ConfigPaths::process_args(const CLIArgsParser& args)
+void ConfigPaths::process_args(const CliArgsParser& args)
 {
 	if (args.set_url_file) {
 		m_url_file = args.url_file;

@@ -43,7 +43,7 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 #include <openssl/crypto.h>
 #endif
 
-#include "rsutils.h"
+#include "rs_utils.h"
 
 namespace newsboat {
 

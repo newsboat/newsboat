@@ -6,7 +6,7 @@
 using namespace newsboat;
 
 TEST_CASE("RegexManager throws on invalid `highlight' definition",
-	"[regexmanager]")
+	"[RegexManager]")
 {
 	RegexManager rxman;
 	std::vector<std::string> params;
@@ -40,7 +40,7 @@ TEST_CASE("RegexManager throws on invalid `highlight' definition",
 }
 
 TEST_CASE("RegexManager doesn't throw on valid `highlight' definition",
-	"[regexmanager]")
+	"[RegexManager]")
 {
 	RegexManager rxman;
 	std::vector<std::string> params;
@@ -58,7 +58,7 @@ TEST_CASE("RegexManager doesn't throw on valid `highlight' definition",
 	REQUIRE_NOTHROW(rxman.handle_action("highlight", params));
 }
 
-TEST_CASE("RegexManager highlights according to definition", "[regexmanager]")
+TEST_CASE("RegexManager highlights according to definition", "[RegexManager]")
 {
 	RegexManager rxman;
 	std::string input;
@@ -75,7 +75,7 @@ TEST_CASE("RegexManager highlights according to definition", "[regexmanager]")
 }
 
 TEST_CASE("RegexManager preserves text when there's nothing to highlight",
-	"[regexmanager]")
+	"[RegexManager]")
 {
 	RegexManager rxman;
 	std::string input = "xbarx";
@@ -91,7 +91,7 @@ TEST_CASE("RegexManager preserves text when there's nothing to highlight",
 	REQUIRE(input == "a<b>");
 }
 
-TEST_CASE("`highlight all` adds rules for all locations", "[regexmanager]")
+TEST_CASE("`highlight all` adds rules for all locations", "[RegexManager]")
 {
 	RegexManager rxman;
 	std::vector<std::string> params = {"all", "foo", "red"};

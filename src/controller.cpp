@@ -98,7 +98,7 @@ void Controller::set_view(View* vv)
 	v = vv;
 }
 
-int Controller::run(const CLIArgsParser& args)
+int Controller::run(const CliArgsParser& args)
 {
 	::signal(SIGINT, View::ctrl_c_action);
 	::signal(SIGPIPE, ignore_signal);
@@ -176,7 +176,7 @@ int Controller::run(const CLIArgsParser& args)
 	cfg.register_commands(cfgparser);
 	colorman.register_commands(cfgparser);
 
-	Keymap keys(KM_NEWSBOAT);
+	KeyMap keys(KM_NEWSBOAT);
 	cfgparser.register_handler("bind-key", &keys);
 	cfgparser.register_handler("unbind-key", &keys);
 	cfgparser.register_handler("macro", &keys);
@@ -292,8 +292,8 @@ int Controller::run(const CLIArgsParser& args)
 		api = new OcNewsApi(&cfg);
 		urlcfg = new OcNewsUrlReader(configpaths.url_file(), api);
 	} else if (type == "inoreader") {
-		api = new InoReaderApi(&cfg);
-		urlcfg = new InoReaderUrlReader(
+		api = new InoreaderApi(&cfg);
+		urlcfg = new InoreaderUrlReader(
 			&cfg, configpaths.url_file(), api);
 	} else {
 		LOG(Level::ERROR,

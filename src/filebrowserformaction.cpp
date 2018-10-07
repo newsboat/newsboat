@@ -28,7 +28,7 @@ FileBrowserFormAction::FileBrowserFormAction(View* vv, std::string formstr)
 {
 	// In filebrowser, keyboard focus is at the input field, so user can't
 	// possibly use 'q' key to exit the dialog
-	Keymap* keys = vv->get_keys();
+	KeyMap* keys = vv->get_keys();
 	keys->set_key(OP_QUIT, "ESC", id());
 	vv->set_keymap(keys);
 }
@@ -253,9 +253,9 @@ void FileBrowserFormAction::init()
 			cwdtmp));
 }
 
-KeymapHintEntry* FileBrowserFormAction::get_keymap_hint()
+KeyMapHintEntry* FileBrowserFormAction::get_keymap_hint()
 {
-	static KeymapHintEntry hints[] = {{OP_QUIT, _("Cancel")},
+	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Cancel")},
 		{OP_OPEN, _("Save")},
 		{OP_NIL, nullptr}};
 	return hints;

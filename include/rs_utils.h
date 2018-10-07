@@ -1,5 +1,5 @@
-#ifndef NEWSBOAT_RSUTILS_H_
-#define NEWSBOAT_RSUTILS_H_
+#ifndef NEWSBOAT_RS_UTILS_H_
+#define NEWSBOAT_RS_UTILS_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -16,4 +16,4 @@ void rs_cstring_free(char* str);
 }
 #endif
 
-#endif /* NEWSBOAT_RSUTILS_H_ */
+#endif /* NEWSBOAT_RS_UTILS_H_ */

@@ -61,9 +61,9 @@ void DialogsFormAction::prepare()
 	}
 }
 
-KeymapHintEntry* DialogsFormAction::get_keymap_hint()
+KeyMapHintEntry* DialogsFormAction::get_keymap_hint()
 {
-	static KeymapHintEntry hints[] = {{OP_QUIT, _("Close")},
+	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Close")},
 		{OP_OPEN, _("Goto Dialog")},
 		{OP_CLOSEDIALOG, _("Close Dialog")},
 		{OP_NIL, nullptr}};

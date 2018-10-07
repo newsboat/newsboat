@@ -69,7 +69,7 @@ void HelpFormAction::prepare()
 					      "help-title-format"),
 				width));
 
-		std::vector<KeymapDesc> descs;
+		std::vector<KeyMapDesc> descs;
 		v->get_keys()->get_keymap_descriptions(
 			descs, v->get_keys()->get_flag_from_context(context));
 
@@ -212,9 +212,9 @@ void HelpFormAction::init()
 	set_keymap_hints();
 }
 
-KeymapHintEntry* HelpFormAction::get_keymap_hint()
+KeyMapHintEntry* HelpFormAction::get_keymap_hint()
 {
-	static KeymapHintEntry hints[] = {{OP_QUIT, _("Quit")},
+	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")},
 		{OP_SEARCH, _("Search")},
 		{OP_CLEARFILTER, _("Clear")},
 		{OP_NIL, nullptr}};

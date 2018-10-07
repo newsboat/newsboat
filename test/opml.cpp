@@ -10,7 +10,7 @@
 using namespace newsboat;
 
 TEST_CASE("generate_opml creates an XML document with feed URLs in OPML format",
-		"[opml]")
+		"[Opml]")
 {
 	const auto check =
 		[]
@@ -85,7 +85,7 @@ TEST_CASE("generate_opml creates an XML document with feed URLs in OPML format",
 	}
 }
 
-TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[opml]")
+TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 {
 	TestHelpers::TempFile urlsFile;
 
@@ -160,7 +160,7 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[opml]")
 }
 
 TEST_CASE("import() turns URLs that start with a pipe symbol (\"|\") "
-		"into `exec:` URLs (Liferea convention)", "[opml]")
+		"into `exec:` URLs (Liferea convention)", "[Opml]")
 {
 	TestHelpers::TempFile urlsFile;
 
@@ -194,7 +194,7 @@ TEST_CASE("import() turns URLs that start with a pipe symbol (\"|\") "
 
 TEST_CASE("import() turns \"filtercmd\" attribute into a `filter:` URL "
 		"(appears to be Liferea convention)",
-		"[opml]")
+		"[Opml]")
 {
 	TestHelpers::TempFile urlsFile;
 
@@ -227,7 +227,7 @@ TEST_CASE("import() turns \"filtercmd\" attribute into a `filter:` URL "
 }
 
 TEST_CASE("import() skips URLs that are already present in UrlReader",
-		"[opml]")
+		"[Opml]")
 {
 	TestHelpers::TempFile urlsFile;
 

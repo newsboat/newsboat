@@ -21,7 +21,7 @@ public:
 	void update_visible_feeds(
 		std::vector<std::shared_ptr<RssFeed>>& feeds);
 	void set_tags(const std::vector<std::string>& t);
-	KeymapHintEntry* get_keymap_hint() override;
+	KeyMapHintEntry* get_keymap_hint() override;
 	std::shared_ptr<RssFeed> get_feed();
 
 	void set_redraw(bool b) override

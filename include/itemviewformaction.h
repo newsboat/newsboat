@@ -29,7 +29,7 @@ public:
 		feed = fd;
 	}
 	void set_highlightphrase(const std::string& text);
-	KeymapHintEntry* get_keymap_hint() override;
+	KeyMapHintEntry* get_keymap_hint() override;
 	void handle_cmdline(const std::string& cmd) override;
 
 	std::string id() const override
