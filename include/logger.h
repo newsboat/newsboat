@@ -11,18 +11,18 @@ namespace newsboat {
 
 /* Be sure to update loglevel_str array in src/logger.cpp if you change this
  * enum. */
-enum class level { NONE = 0, USERERROR, CRITICAL, ERROR, WARN, INFO, DEBUG };
+enum class Level { NONE = 0, USERERROR, CRITICAL, ERROR, WARN, INFO, DEBUG };
 
-class logger {
+class Logger {
 public:
-	static logger& getInstance();
+	static Logger& getInstance();
 
 	void set_logfile(const std::string& logfile);
 	void set_errorlogfile(const std::string& logfile);
-	void set_loglevel(level l);
+	void set_loglevel(Level l);
 
 	template<typename... Args>
-	void log(level l, const std::string& format, Args... args)
+	void log(Level l, const std::string& format, Args... args)
 	{
 		const char* loglevel_str[] = {"NONE",
 			"USERERROR",
@@ -37,18 +37,18 @@ public:
 		 * logfile (if applicable).
 		 */
 		std::lock_guard<std::mutex> lock(logMutex);
-		if (l <= curlevel && curlevel > level::NONE &&
+		if (l <= curlevel && curlevel > Level::NONE &&
 			(f.is_open() || ef.is_open())) {
-			if (curlevel > level::DEBUG)
-				curlevel = level::DEBUG;
+			if (curlevel > Level::DEBUG)
+				curlevel = Level::DEBUG;
 
 			char date[128];
 			time_t t = time(nullptr);
 			struct tm* stm = localtime(&t);
 			strftime(date, sizeof(date), "%Y-%m-%d %H:%M:%S", stm);
 
-			auto logmsgbuf = strprintf::fmt(format, args...);
-			auto buf = strprintf::fmt("[%s] %s: %s",
+			auto logmsgbuf = StrPrintf::fmt(format, args...);
+			auto buf = StrPrintf::fmt("[%s] %s: %s",
 				date,
 				loglevel_str[static_cast<int>(l)],
 				logmsgbuf);
@@ -57,8 +57,8 @@ public:
 				f << buf << std::endl;
 			}
 
-			if (level::USERERROR == l && ef.is_open()) {
-				buf = strprintf::fmt(
+			if (Level::USERERROR == l && ef.is_open()) {
+				buf = StrPrintf::fmt(
 					"[%s] %s", date, logmsgbuf);
 				ef << buf << std::endl;
 				ef.flush();
@@ -67,15 +67,15 @@ public:
 	}
 
 private:
-	logger();
-	logger(const logger&) {}
-	logger& operator=(const logger&)
+	Logger();
+	Logger(const Logger&) {}
+	Logger& operator=(const Logger&)
 	{
 		return *this;
 	}
-	~logger() {}
+	~Logger() {}
 
-	level curlevel;
+	Level curlevel;
 	std::mutex logMutex;
 	static std::mutex instanceMutex;
 	std::fstream f;
@@ -92,7 +92,7 @@ private:
 #else
 #define LOG(x, ...)                                        \
 	do {                                               \
-		logger::getInstance().log(x, __VA_ARGS__); \
+		Logger::getInstance().log(x, __VA_ARGS__); \
 	} while (0)
 #endif
 

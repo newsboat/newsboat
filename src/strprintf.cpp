@@ -9,7 +9,7 @@ using namespace newsboat;
  * "hello %i world %s haha"       =>  { "hello %i world ", "%s haha" }
  * "a 100%% rel%iable e%xamp%le"  =>  { "a 100%% rel%iable e", "%xamp%le" }
  */
-std::pair<std::string, std::string> strprintf::split_format(
+std::pair<std::string, std::string> StrPrintf::split_format(
 	const std::string& printf_format)
 {
 	std::string first_format, rest;

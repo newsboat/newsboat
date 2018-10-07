@@ -4,14 +4,14 @@
 
 namespace rsspp {
 
-exception::exception(const std::string& errmsg)
+Exception::Exception(const std::string& errmsg)
 	: emsg(errmsg)
 {
 }
 
-exception::~exception() throw() {}
+Exception::~Exception() throw() {}
 
-const char* exception::what() const throw()
+const char* Exception::what() const throw()
 {
 	return emsg.c_str();
 }

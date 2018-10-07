@@ -6,14 +6,14 @@
 #include "exception.h"
 
 namespace newsboat {
-std::mutex logger::instanceMutex;
+std::mutex Logger::instanceMutex;
 
-logger::logger()
-	: curlevel(level::NONE)
+Logger::Logger()
+	: curlevel(Level::NONE)
 {
 }
 
-void logger::set_logfile(const std::string& logfile)
+void Logger::set_logfile(const std::string& logfile)
 {
 	/*
 	 * This sets the filename of the debug logfile
@@ -23,12 +23,12 @@ void logger::set_logfile(const std::string& logfile)
 		f.close();
 	f.open(logfile, std::fstream::out);
 	if (!f.is_open()) {
-		throw exception(errno); // the question is whether f.open() sets
+		throw Exception(errno); // the question is whether f.open() sets
 					// errno...
 	}
 }
 
-void logger::set_errorlogfile(const std::string& logfile)
+void Logger::set_errorlogfile(const std::string& logfile)
 {
 	/*
 	 * This sets the filename of the error logfile, i.e. the one that can be
@@ -39,28 +39,28 @@ void logger::set_errorlogfile(const std::string& logfile)
 		ef.close();
 	ef.open(logfile, std::fstream::out);
 	if (!ef.is_open()) {
-		throw exception(errno);
+		throw Exception(errno);
 	}
-	if (level::NONE == curlevel) {
-		curlevel = level::USERERROR;
+	if (Level::NONE == curlevel) {
+		curlevel = Level::USERERROR;
 	}
 }
 
-void logger::set_loglevel(level l)
+void Logger::set_loglevel(Level l)
 {
 	std::lock_guard<std::mutex> lock(logMutex);
 	curlevel = l;
-	if (curlevel == level::NONE)
+	if (curlevel == Level::NONE)
 		f.close();
 }
 
-logger& logger::getInstance()
+Logger& Logger::getInstance()
 {
 	/*
 	 * This is the global logger that everyone uses
 	 */
 	std::lock_guard<std::mutex> lock(instanceMutex);
-	static logger theLogger;
+	static Logger theLogger;
 	return theLogger;
 }
 

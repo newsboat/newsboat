@@ -9,12 +9,12 @@ extern "C" {
 
 namespace newsboat {
 
-class stfl {
+class Stfl {
 public:
-	class form {
+	class Form {
 	public:
-		explicit form(const std::string& text);
-		~form();
+		explicit Form(const std::string& text);
+		~Form();
 
 		const char* run(int timeout);
 

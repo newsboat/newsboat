@@ -20,39 +20,39 @@
 
 namespace newsboat {
 
-inline void cache::run_sql_impl(const std::string& query,
+inline void Cache::run_sql_impl(const std::string& query,
 	int (*callback)(void*, int, char**, char**),
 	void* callback_argument,
 	bool do_throw)
 {
-	LOG(level::DEBUG, "running query: %s", query);
+	LOG(Level::DEBUG, "running query: %s", query);
 	int rc = sqlite3_exec(
 		db, query.c_str(), callback, callback_argument, nullptr);
 	if (rc != SQLITE_OK) {
 		const std::string message = "query \"%s\" failed: (%d) %s";
-		LOG(level::CRITICAL, message, query, rc, sqlite3_errstr(rc));
+		LOG(Level::CRITICAL, message, query, rc, sqlite3_errstr(rc));
 		if (do_throw) {
-			throw dbexception(db);
+			throw DbException(db);
 		}
 	}
 }
 
-void cache::run_sql(const std::string& query,
+void Cache::run_sql(const std::string& query,
 	int (*callback)(void*, int, char**, char**),
 	void* callback_argument)
 {
 	run_sql_impl(query, callback, callback_argument, true);
 }
 
-void cache::run_sql_nothrow(const std::string& query,
+void Cache::run_sql_nothrow(const std::string& query,
 	int (*callback)(void*, int, char**, char**),
 	void* callback_argument)
 {
 	run_sql_impl(query, callback, callback_argument, false);
 }
 
-struct cb_handler {
-	cb_handler()
+struct CbHandler {
+	CbHandler()
 		: c(-1)
 	{
 	}
@@ -69,7 +69,7 @@ private:
 	int c;
 };
 
-struct header_values {
+struct HeaderValues {
 	time_t lastmodified;
 	std::string etag;
 };
@@ -77,7 +77,7 @@ struct header_values {
 static int
 count_callback(void* handler, int argc, char** argv, char** /* azColName */)
 {
-	cb_handler* cbh = static_cast<cb_handler*>(handler);
+	CbHandler* cbh = static_cast<CbHandler*>(handler);
 
 	if (argc > 0) {
 		std::istringstream is(argv[0]);
@@ -104,8 +104,8 @@ static int single_string_callback(void* handler,
 static int
 rssfeed_callback(void* myfeed, int argc, char** argv, char** /* azColName */)
 {
-	std::shared_ptr<rss_feed>* feed =
-		static_cast<std::shared_ptr<rss_feed>*>(myfeed);
+	std::shared_ptr<RssFeed>* feed =
+		static_cast<std::shared_ptr<RssFeed>*>(myfeed);
 	// normaly, this shouldn't happen, but we keep the assert()s here
 	// nevertheless
 	assert(argc == 3);
@@ -115,7 +115,7 @@ rssfeed_callback(void* myfeed, int argc, char** argv, char** /* azColName */)
 	(*feed)->set_title(argv[0]);
 	(*feed)->set_link(argv[1]);
 	(*feed)->set_rtl(strcmp(argv[2], "1") == 0);
-	LOG(level::INFO,
+	LOG(Level::INFO,
 		"rssfeed_callback: title = %s link = %s is_rtl = %s",
 		argv[0],
 		argv[1],
@@ -128,7 +128,7 @@ static int lastmodified_callback(void* handler,
 	char** argv,
 	char** /* azColName */)
 {
-	header_values* result = static_cast<header_values*>(handler);
+	HeaderValues* result = static_cast<HeaderValues*>(handler);
 	assert(argc == 2);
 	assert(result != nullptr);
 	if (argv[0]) {
@@ -142,7 +142,7 @@ static int lastmodified_callback(void* handler,
 	} else {
 		result->etag = "";
 	}
-	LOG(level::INFO,
+	LOG(Level::INFO,
 		"lastmodified_callback: lastmodified = %d etag = %s",
 		result->lastmodified,
 		result->etag);
@@ -157,17 +157,17 @@ vectorofstring_callback(void* vp, int argc, char** argv, char** /* azColName */)
 	assert(argc == 1);
 	assert(argv[0] != nullptr);
 	vectorptr->push_back(std::string(argv[0]));
-	LOG(level::INFO, "vectorofstring_callback: element = %s", argv[0]);
+	LOG(Level::INFO, "vectorofstring_callback: element = %s", argv[0]);
 	return 0;
 }
 
 static int
 rssitem_callback(void* myfeed, int argc, char** argv, char** /* azColName */)
 {
-	std::shared_ptr<rss_feed>* feed =
-		static_cast<std::shared_ptr<rss_feed>*>(myfeed);
+	std::shared_ptr<RssFeed>* feed =
+		static_cast<std::shared_ptr<RssFeed>*>(myfeed);
 	assert(argc == 13);
-	std::shared_ptr<rss_item> item(new rss_item(nullptr));
+	std::shared_ptr<RssItem> item(new RssItem(nullptr));
 	item->set_guid(argv[0]);
 	item->set_title(argv[1]);
 	item->set_author(argv[2]);
@@ -178,7 +178,7 @@ rssitem_callback(void* myfeed, int argc, char** argv, char** /* azColName */)
 	is >> t;
 	item->set_pubDate(t);
 
-	item->set_size(utils::to_u(argv[5]));
+	item->set_size(Utils::to_u(argv[5]));
 	item->set_unread((std::string("1") == argv[6]));
 
 	item->set_feedurl(argv[7]);
@@ -199,10 +199,10 @@ static int fill_content_callback(void* myfeed,
 	char** argv,
 	char** /* azColName */)
 {
-	rss_feed* feed = static_cast<rss_feed*>(myfeed);
+	RssFeed* feed = static_cast<RssFeed*>(myfeed);
 	assert(argc == 2);
 	if (argv[0]) {
-		std::shared_ptr<rss_item> item =
+		std::shared_ptr<RssItem> item =
 			feed->get_item_by_guid_unlocked(argv[0]);
 		item->set_description(argv[1] ? argv[1] : "");
 	}
@@ -214,10 +214,10 @@ static int search_item_callback(void* myfeed,
 	char** argv,
 	char** /* azColName */)
 {
-	std::vector<std::shared_ptr<rss_item>>* items =
-		static_cast<std::vector<std::shared_ptr<rss_item>>*>(myfeed);
+	std::vector<std::shared_ptr<RssItem>>* items =
+		static_cast<std::vector<std::shared_ptr<RssItem>>*>(myfeed);
 	assert(argc == 13);
-	std::shared_ptr<rss_item> item(new rss_item(nullptr));
+	std::shared_ptr<RssItem> item(new RssItem(nullptr));
 	item->set_guid(argv[0]);
 	item->set_title(argv[1]);
 	item->set_author(argv[2]);
@@ -228,7 +228,7 @@ static int search_item_callback(void* myfeed,
 	is >> t;
 	item->set_pubDate(t);
 
-	item->set_size(utils::to_u(argv[5]));
+	item->set_size(Utils::to_u(argv[5]));
 	item->set_unread((std::string("1") == argv[6]));
 	item->set_feedurl(argv[7]);
 
@@ -251,17 +251,17 @@ guid_callback(void* myguids, int argc, char** argv, char** /* azColName */)
 	return 0;
 }
 
-cache::cache(const std::string& cachefile, configcontainer* c)
+Cache::Cache(const std::string& cachefile, ConfigContainer* c)
 	: db(0)
 	, cfg(c)
 {
 	int error = sqlite3_open(cachefile.c_str(), &db);
 	if (error != SQLITE_OK) {
-		LOG(level::ERROR,
+		LOG(Level::ERROR,
 			"couldn't sqlite3_open(%s): error = %d",
 			cachefile,
 			error);
-		throw dbexception(db);
+		throw DbException(db);
 	}
 
 	populate_tables();
@@ -273,12 +273,12 @@ cache::cache(const std::string& cachefile, configcontainer* c)
 	// explicit support for multithreading.
 }
 
-cache::~cache()
+Cache::~Cache()
 {
 	sqlite3_close(db);
 }
 
-void cache::set_pragmas()
+void Cache::set_pragmas()
 {
 	// first, we need to swithc off synchronous writing as it's slow as hell
 	run_sql("PRAGMA synchronous = OFF;");
@@ -371,18 +371,18 @@ static const schema_patches schemaPatches{
 
 		 "INSERT INTO metadata VALUES ( 2, 11 );"}}};
 
-void cache::populate_tables()
+void Cache::populate_tables()
 {
-	const schema_version version = get_schema_version();
-	LOG(level::INFO,
-		"cache::populate_tables: DB schema version %u.%u",
+	const SchemaVersion version = get_schema_version();
+	LOG(Level::INFO,
+		"Cache::populate_tables: DB schema version %u.%u",
 		version.major,
 		version.minor);
 
 	if (version.major > NEWSBOAT_VERSION_MAJOR) {
 		const std::string msg =
 			"Database schema isn't supported because it's too new";
-		LOG(level::ERROR, msg);
+		LOG(Level::ERROR, msg);
 		throw std::runtime_error(msg);
 	}
 
@@ -395,9 +395,9 @@ void cache::populate_tables()
 	}
 
 	for (; patches_it != schemaPatches.cend(); ++patches_it) {
-		const schema_version patch_version = patches_it->first;
-		LOG(level::INFO,
-			"cache::populate_tables: applying DB schema patches "
+		const SchemaVersion patch_version = patches_it->first;
+		LOG(Level::INFO,
+			"Cache::populate_tables: applying DB schema patches "
 			"for version %u.%u",
 			patch_version.major,
 			patch_version.minor);
@@ -407,7 +407,7 @@ void cache::populate_tables()
 	}
 }
 
-void cache::fetch_lastmodified(const std::string& feedurl,
+void Cache::fetch_lastmodified(const std::string& feedurl,
 	time_t& t,
 	std::string& etag)
 {
@@ -415,23 +415,23 @@ void cache::fetch_lastmodified(const std::string& feedurl,
 	std::string query = prepare_query(
 		"SELECT lastmodified, etag FROM rss_feed WHERE rssurl = '%q';",
 		feedurl);
-	header_values result = {0, ""};
+	HeaderValues result = {0, ""};
 	run_sql(query, lastmodified_callback, &result);
 	t = result.lastmodified;
 	etag = result.etag;
-	LOG(level::DEBUG,
-		"cache::fetch_lastmodified: t = %d etag = %s",
+	LOG(Level::DEBUG,
+		"Cache::fetch_lastmodified: t = %d etag = %s",
 		t,
 		etag);
 }
 
-void cache::update_lastmodified(const std::string& feedurl,
+void Cache::update_lastmodified(const std::string& feedurl,
 	time_t t,
 	const std::string& etag)
 {
 	if (t == 0 && etag.length() == 0) {
-		LOG(level::INFO,
-			"cache::update_lastmodified: both time and etag are "
+		LOG(Level::INFO,
+			"Cache::update_lastmodified: both time and etag are "
 			"empty, not updating anything");
 		return;
 	}
@@ -449,7 +449,7 @@ void cache::update_lastmodified(const std::string& feedurl,
 	run_sql_nothrow(query);
 }
 
-void cache::mark_item_deleted(const std::string& guid, bool b)
+void Cache::mark_item_deleted(const std::string& guid, bool b)
 {
 	std::lock_guard<std::mutex> lock(mtx);
 	std::string query = prepare_query(
@@ -459,7 +459,7 @@ void cache::mark_item_deleted(const std::string& guid, bool b)
 	run_sql_nothrow(query);
 }
 
-void cache::mark_feed_items_deleted(const std::string& feedurl)
+void Cache::mark_feed_items_deleted(const std::string& feedurl)
 {
 	std::lock_guard<std::mutex> lock(mtx);
 	std::string query = prepare_query(
@@ -468,11 +468,11 @@ void cache::mark_feed_items_deleted(const std::string& feedurl)
 	run_sql_nothrow(query);
 }
 
-// this function writes an rss_feed including all rss_items to the database
-void cache::externalize_rssfeed(std::shared_ptr<rss_feed> feed,
+// this function writes an RssFeed including all RssItems to the database
+void Cache::externalize_rssfeed(std::shared_ptr<RssFeed> feed,
 	bool reset_unread)
 {
-	scope_measure m1("cache::externalize_feed");
+	ScopeMeasure m1("Cache::externalize_feed");
 	if (feed->is_query_feed()) {
 		return;
 	}
@@ -481,15 +481,15 @@ void cache::externalize_rssfeed(std::shared_ptr<rss_feed> feed,
 	std::lock_guard<std::mutex> feedlock(feed->item_mutex);
 	// scope_transaction dbtrans(db);
 
-	cb_handler count_cbh;
+	CbHandler count_cbh;
 	auto query = prepare_query(
 		"SELECT count(*) FROM rss_feed WHERE rssurl = '%q';",
 		feed->rssurl());
 	run_sql(query, count_callback, &count_cbh);
 
 	int count = count_cbh.count();
-	LOG(level::DEBUG,
-		"cache::externalize_rss_feed: rss_feeds with rssurl = '%s': "
+	LOG(Level::DEBUG,
+		"Cache::externalize_rss_feed: rss_feeds with rssurl = '%s': "
 		"found "
 		"%d",
 		feed->rssurl(),
@@ -517,8 +517,8 @@ void cache::externalize_rssfeed(std::shared_ptr<rss_feed> feed,
 
 	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
 
-	LOG(level::INFO,
-		"cache::externalize_feed: max_items = %u "
+	LOG(Level::INFO,
+		"Cache::externalize_feed: max_items = %u "
 		"feed.total_item_count() = "
 		"%u",
 		max_items,
@@ -542,17 +542,17 @@ void cache::externalize_rssfeed(std::shared_ptr<rss_feed> feed,
 	}
 }
 
-// this function reads an rss_feed including all of its rss_items.
+// this function reads an RssFeed including all of its RssItems.
 // the feed parameter needs to have the rssurl member set.
-std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl,
-	rss_ignores* ign)
+std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
+	RssIgnores* ign)
 {
-	scope_measure m1("cache::internalize_rssfeed");
+	ScopeMeasure m1("Cache::internalize_rssfeed");
 
-	std::shared_ptr<rss_feed> feed(new rss_feed(this));
+	std::shared_ptr<RssFeed> feed(new RssFeed(this));
 	feed->set_rssurl(rssurl);
 
-	if (utils::is_query_url(rssurl)) {
+	if (Utils::is_query_url(rssurl)) {
 		return feed;
 	}
 
@@ -562,7 +562,7 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl,
 	/* first, we check whether the feed is there at all */
 	std::string query = prepare_query(
 		"SELECT count(*) FROM rss_feed WHERE rssurl = '%q';", rssurl);
-	cb_handler count_cbh;
+	CbHandler count_cbh;
 	run_sql(query, count_callback, &count_cbh);
 
 	if (count_cbh.count() == 0) {
@@ -587,7 +587,7 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl,
 		rssurl);
 	run_sql(query, rssitem_callback, &feed);
 
-	std::vector<std::shared_ptr<rss_item>> filtered_items;
+	std::vector<std::shared_ptr<RssItem>> filtered_items;
 	for (const auto& item : feed->items()) {
 		try {
 			if (!ign || !ign->matches(item.get())) {
@@ -596,9 +596,9 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl,
 				item->set_feedurl(feed->rssurl());
 				filtered_items.push_back(item);
 			}
-		} catch (const matcherexception& ex) {
-			LOG(level::DEBUG,
-				"oops, matcher exception: %s",
+		} catch (const MatcherException& ex) {
+			LOG(Level::DEBUG,
+				"oops, Matcher exception: %s",
 				ex.what());
 		}
 	}
@@ -607,7 +607,7 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl,
 	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
 
 	if (max_items > 0 && feed->total_item_count() > max_items) {
-		std::vector<std::shared_ptr<rss_item>> flagged_items;
+		std::vector<std::shared_ptr<RssItem>> flagged_items;
 		for (unsigned int j = max_items; j < feed->total_item_count();
 			++j) {
 			if (feed->items()[j]->flags().length() == 0) {
@@ -628,12 +628,12 @@ std::shared_ptr<rss_feed> cache::internalize_rssfeed(std::string rssurl,
 	return feed;
 }
 
-std::vector<std::shared_ptr<rss_item>>
-cache::search_for_items(const std::string& querystr, const std::string& feedurl)
+std::vector<std::shared_ptr<RssItem>>
+Cache::search_for_items(const std::string& querystr, const std::string& feedurl)
 {
-	assert(!utils::is_query_url(feedurl));
+	assert(!Utils::is_query_url(feedurl));
 	std::string query;
-	std::vector<std::shared_ptr<rss_item>> items;
+	std::vector<std::shared_ptr<RssItem>> items;
 
 	std::lock_guard<std::mutex> lock(mtx);
 	if (feedurl.length() > 0) {
@@ -672,7 +672,7 @@ cache::search_for_items(const std::string& querystr, const std::string& feedurl)
 	return items;
 }
 
-std::unordered_set<std::string> cache::search_in_items(
+std::unordered_set<std::string> Cache::search_in_items(
 	const std::string& querystr,
 	const std::unordered_set<std::string>& guids)
 {
@@ -698,27 +698,27 @@ std::unordered_set<std::string> cache::search_in_items(
 	return items;
 }
 
-void cache::delete_item(const std::shared_ptr<rss_item>& item)
+void Cache::delete_item(const std::shared_ptr<RssItem>& item)
 {
 	std::string query = prepare_query(
 		"DELETE FROM rss_item WHERE guid = '%q';", item->guid());
 	run_sql(query);
 }
 
-void cache::do_vacuum()
+void Cache::do_vacuum()
 {
 	std::lock_guard<std::mutex> lock(mtx);
 	run_sql("VACUUM;");
 }
 
-void cache::cleanup_cache(std::vector<std::shared_ptr<rss_feed>>& feeds)
+void Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>>& feeds)
 {
 	mtx.lock(); // we don't use the std::lock_guard<> here... see comments
 		    // below
 
 	/*
-	 * cache cleanup means that all entries in both the rss_feed and
-	 * rss_item tables that are associated with an RSS feed URL that is not
+	 * cache cleanup means that all entries in both the RssFeed and
+	 * RssItem tables that are associated with an RSS feed URL that is not
 	 * contained in the current configuration are deleted. Such entries are
 	 * the result when a user deletes one or more lines in the urls
 	 * configuration file. We then assume that the user isn't interested
@@ -729,7 +729,7 @@ void cache::cleanup_cache(std::vector<std::shared_ptr<rss_feed>>& feeds)
 	 * the configuration file.
 	 */
 	if (cfg->get_configvalue_as_bool("cleanup-on-quit")) {
-		LOG(level::DEBUG, "cache::cleanup_cache: cleaning up cache...");
+		LOG(Level::DEBUG, "Cache::cleanup_cache: cleaning up cache...");
 		std::string list = "(";
 
 		for (const auto& feed : feeds) {
@@ -764,19 +764,19 @@ void cache::cleanup_cache(std::vector<std::shared_ptr<rss_feed>>& feeds)
 		// PURPOSE! It's missing so that no database operation can occur
 		// after the cache cleanup! mtx->unlock();
 	} else {
-		LOG(level::DEBUG,
-			"cache::cleanup_cache: NOT cleaning up cache...");
+		LOG(Level::DEBUG,
+			"Cache::cleanup_cache: NOT cleaning up cache...");
 	}
 }
 
-void cache::update_rssitem_unlocked(std::shared_ptr<rss_item> item,
+void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 	const std::string& feedurl,
 	bool reset_unread)
 {
 	std::string query = prepare_query(
 		"SELECT count(*) FROM rss_item WHERE guid = '%q';",
 		item->guid());
-	cb_handler count_cbh;
+	CbHandler count_cbh;
 	run_sql(query, count_callback, &count_cbh);
 	if (count_cbh.count() > 0) {
 		if (reset_unread) {
@@ -787,8 +787,8 @@ void cache::update_rssitem_unlocked(std::shared_ptr<rss_item> item,
 				item->guid());
 			run_sql(query, single_string_callback, &content);
 			if (content != item->description_raw()) {
-				LOG(level::DEBUG,
-					"cache::update_rssitem_unlocked: '%s' "
+				LOG(Level::DEBUG,
+					"Cache::update_rssitem_unlocked: '%s' "
 					"is "
 					"different from '%s'",
 					content,
@@ -865,7 +865,7 @@ void cache::update_rssitem_unlocked(std::shared_ptr<rss_item> item,
 	}
 }
 
-void cache::mark_all_read(std::shared_ptr<rss_feed> feed)
+void Cache::mark_all_read(std::shared_ptr<RssFeed> feed)
 {
 	std::lock_guard<std::mutex> lock(mtx);
 	std::lock_guard<std::mutex> itemlock(feed->item_mutex);
@@ -881,9 +881,9 @@ void cache::mark_all_read(std::shared_ptr<rss_feed> feed)
 	run_sql(query);
 }
 
-/* this function marks all rss_items (optionally of a certain feed url) as read
+/* this function marks all RssItems (optionally of a certain feed url) as read
  */
-void cache::mark_all_read(const std::string& feedurl)
+void Cache::mark_all_read(const std::string& feedurl)
 {
 	std::lock_guard<std::mutex> lock(mtx);
 
@@ -904,7 +904,7 @@ void cache::mark_all_read(const std::string& feedurl)
 	run_sql(query);
 }
 
-void cache::update_rssitem_unread_and_enqueued(rss_item* item,
+void Cache::update_rssitem_unread_and_enqueued(RssItem* item,
 	const std::string& /* feedurl */)
 {
 	std::lock_guard<std::mutex> lock(mtx);
@@ -920,20 +920,20 @@ void cache::update_rssitem_unread_and_enqueued(rss_item* item,
 }
 
 /* this function updates the unread and enqueued flags */
-void cache::update_rssitem_unread_and_enqueued(std::shared_ptr<rss_item> item,
+void Cache::update_rssitem_unread_and_enqueued(std::shared_ptr<RssItem> item,
 	const std::string& feedurl)
 {
 	update_rssitem_unread_and_enqueued(item.get(), feedurl);
 }
 
 /* helper function to wrap std::string around the sqlite3_*mprintf function */
-std::string cache::prepare_query(const std::string& format)
+std::string Cache::prepare_query(const std::string& format)
 {
 	return format;
 }
 
 template<typename... Args>
-std::string cache::prepare_query(const std::string& format,
+std::string Cache::prepare_query(const std::string& format,
 	const std::string& argument,
 	Args... args)
 {
@@ -942,11 +942,11 @@ std::string cache::prepare_query(const std::string& format,
 
 template<typename T, typename... Args>
 std::string
-cache::prepare_query(const std::string& format, const T& argument, Args... args)
+Cache::prepare_query(const std::string& format, const T& argument, Args... args)
 {
 	std::string local_format, remaining_format;
 	std::tie(local_format, remaining_format) =
-		strprintf::split_format(format);
+		StrPrintf::split_format(format);
 
 	char* piece = sqlite3_mprintf(local_format.c_str(), argument);
 	std::string result;
@@ -958,7 +958,7 @@ cache::prepare_query(const std::string& format, const T& argument, Args... args)
 	return result + prepare_query(remaining_format, args...);
 }
 
-void cache::update_rssitem_flags(rss_item* item)
+void Cache::update_rssitem_flags(RssItem* item)
 {
 	std::lock_guard<std::mutex> lock(mtx);
 
@@ -970,13 +970,13 @@ void cache::update_rssitem_flags(rss_item* item)
 	run_sql(update);
 }
 
-void cache::remove_old_deleted_items(const std::string& rssurl,
+void Cache::remove_old_deleted_items(const std::string& rssurl,
 	const std::vector<std::string>& guids)
 {
-	scope_measure m1("cache::remove_old_deleted_items");
+	ScopeMeasure m1("Cache::remove_old_deleted_items");
 	if (guids.size() == 0) {
-		LOG(level::DEBUG,
-			"cache::remove_old_deleted_items: not cleaning up "
+		LOG(Level::DEBUG,
+			"Cache::remove_old_deleted_items: not cleaning up "
 			"anything because last reload brought no new items "
 			"(detected "
 			"no changes)");
@@ -998,22 +998,22 @@ void cache::remove_old_deleted_items(const std::string& rssurl,
 	run_sql(query);
 }
 
-unsigned int cache::get_unread_count()
+unsigned int Cache::get_unread_count()
 {
 	std::lock_guard<std::mutex> lock(mtx);
 
 	std::string countquery =
 		"SELECT count(id) FROM rss_item WHERE unread = 1;";
-	cb_handler count_cbh;
+	CbHandler count_cbh;
 	run_sql(countquery, count_callback, &count_cbh);
 	unsigned int count = static_cast<unsigned int>(count_cbh.count());
-	LOG(level::DEBUG, "cache::get_unread_count: count = %u", count);
+	LOG(Level::DEBUG, "Cache::get_unread_count: count = %u", count);
 	return count;
 }
 
-void cache::mark_items_read_by_guid(const std::vector<std::string>& guids)
+void Cache::mark_items_read_by_guid(const std::vector<std::string>& guids)
 {
-	scope_measure m1("cache::mark_items_read_by_guid");
+	ScopeMeasure m1("Cache::mark_items_read_by_guid");
 	std::string guidset("(");
 	for (const auto& guid : guids) {
 		guidset.append(prepare_query("'%q', ", guid));
@@ -1029,7 +1029,7 @@ void cache::mark_items_read_by_guid(const std::vector<std::string>& guids)
 	run_sql(updatequery);
 }
 
-std::vector<std::string> cache::get_read_item_guids()
+std::vector<std::string> Cache::get_read_item_guids()
 {
 	std::vector<std::string> guids;
 	std::string query = "SELECT guid FROM rss_item WHERE unread = 0;";
@@ -1040,7 +1040,7 @@ std::vector<std::string> cache::get_read_item_guids()
 	return guids;
 }
 
-void cache::clean_old_articles()
+void Cache::clean_old_articles()
 {
 	std::lock_guard<std::mutex> lock(mtx);
 
@@ -1050,25 +1050,25 @@ void cache::clean_old_articles()
 
 		std::string query(prepare_query(
 			"DELETE FROM rss_item WHERE pubDate < %d", old_date));
-		LOG(level::DEBUG,
-			"cache::clean_old_articles: about to delete articles "
+		LOG(Level::DEBUG,
+			"Cache::clean_old_articles: about to delete articles "
 			"with a pubDate older than %d",
 			old_date);
 		run_sql(query);
 	} else {
-		LOG(level::DEBUG,
-			"cache::clean_old_articles, days == 0, not cleaning up "
+		LOG(Level::DEBUG,
+			"Cache::clean_old_articles, days == 0, not cleaning up "
 			"anything");
 	}
 }
 
-void cache::fetch_descriptions(rss_feed* feed)
+void Cache::fetch_descriptions(RssFeed* feed)
 {
 	std::vector<std::string> guids;
 	for (const auto& item : feed->items()) {
 		guids.push_back(prepare_query("'%q'", item->guid()));
 	}
-	std::string in_clause = utils::join(guids, ", ");
+	std::string in_clause = Utils::join(guids, ", ");
 
 	std::string query = prepare_query(
 		"SELECT guid, content FROM rss_item WHERE guid IN (%s);",
@@ -1077,10 +1077,10 @@ void cache::fetch_descriptions(rss_feed* feed)
 	run_sql(query, fill_content_callback, feed);
 }
 
-schema_version cache::get_schema_version()
+SchemaVersion Cache::get_schema_version()
 {
 	sqlite3_stmt* stmt{};
-	schema_version result;
+	SchemaVersion result;
 
 	int rc = sqlite3_prepare_v2(db,
 		"SELECT db_schema_version_major, db_schema_version_minor "

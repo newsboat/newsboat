@@ -10,8 +10,8 @@
 
 namespace newsboat {
 
-enum class link_type { HREF, IMG, EMBED };
-enum class htmltag {
+enum class LinkType { HREF, IMG, EMBED };
+enum class HtmlTag {
 	A = 1,
 	EMBED,
 	BR,
@@ -46,18 +46,18 @@ enum class htmltag {
 	TD
 };
 
-typedef std::pair<std::string, link_type> linkpair;
+typedef std::pair<std::string, LinkType> LinkPair;
 
-class htmlrenderer {
+class HtmlRenderer {
 public:
-	explicit htmlrenderer(bool raw = false);
+	explicit HtmlRenderer(bool raw = false);
 	void render(const std::string& source,
 		std::vector<std::pair<LineType, std::string>>& lines,
-		std::vector<linkpair>& links,
+		std::vector<LinkPair>& links,
 		const std::string& url);
 	void render(std::istream& input,
 		std::vector<std::pair<LineType, std::string>>& lines,
-		std::vector<linkpair>& links,
+		std::vector<LinkPair>& links,
 		const std::string& url);
 	static std::string render_hr(const unsigned int width);
 	// only public for unit testing purposes:
@@ -107,14 +107,14 @@ public:
 private:
 	void prepare_new_line(std::string& line, int indent_level);
 	bool line_is_nonempty(const std::string& line);
-	unsigned int add_link(std::vector<linkpair>& links,
+	unsigned int add_link(std::vector<LinkPair>& links,
 		const std::string& link,
-		link_type type);
+		LinkType type);
 	std::string quote_for_stfl(std::string str);
 	std::string absolute_url(const std::string& url,
 		const std::string& link);
-	std::string type2str(link_type type);
-	std::map<std::string, htmltag> tags;
+	std::string type2str(LinkType type);
+	std::map<std::string, HtmlTag> tags;
 	void render_table(const Table& table,
 		std::vector<std::pair<LineType, std::string>>& lines);
 	void add_nonempty_line(const std::string& curline,

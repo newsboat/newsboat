@@ -9,24 +9,24 @@
 
 namespace newsboat {
 
-void fmtstr_formatter::register_fmt(char f, const std::string& value)
+void FmtStrFormatter::register_fmt(char f, const std::string& value)
 {
-	fmts[f] = utils::str2wstr(value);
+	fmts[f] = Utils::str2wstr(value);
 }
 
-std::string fmtstr_formatter::do_format(const std::string& fmt,
+std::string FmtStrFormatter::do_format(const std::string& fmt,
 	unsigned int width)
 {
 	std::string result;
 	if (fmt.length() > 0) {
-		std::wstring wfmt(utils::str2wstr(fmt));
+		std::wstring wfmt(Utils::str2wstr(fmt));
 		std::wstring w = do_wformat(wfmt, width);
-		result = utils::wstr2str(w);
+		result = Utils::wstr2str(w);
 	}
 	return result;
 }
 
-std::wstring fmtstr_formatter::do_wformat(const std::wstring& wfmt,
+std::wstring FmtStrFormatter::do_wformat(const std::wstring& wfmt,
 	unsigned int width)
 {
 	std::wstring result;
@@ -119,7 +119,7 @@ std::wstring fmtstr_formatter::do_wformat(const std::wstring& wfmt,
 									k - j - 1);
 							std::vector<
 								std::wstring>
-								pair = utils::wtokenize(
+								pair = Utils::wtokenize(
 									values,
 									L"&");
 							while (pair.size() < 2)

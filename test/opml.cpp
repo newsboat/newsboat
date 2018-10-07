@@ -2,7 +2,7 @@
 
 #include <libxml/xmlsave.h>
 #include "cache.h"
-#include "file_urlreader.h"
+#include "fileurlreader.h"
 
 #include "3rd-party/catch.hpp"
 #include "test-helpers.h"
@@ -10,7 +10,7 @@
 using namespace newsboat;
 
 TEST_CASE("generate_opml creates an XML document with feed URLs in OPML format",
-		"[opml]")
+		"[Opml]")
 {
 	const auto check =
 		[]
@@ -48,18 +48,18 @@ TEST_CASE("generate_opml creates an XML document with feed URLs in OPML format",
 	}
 
 	SECTION("A few feeds") {
-		configcontainer cfg;
-		cache rsscache(":memory:", &cfg);
+		ConfigContainer cfg;
+		Cache rsscache(":memory:", &cfg);
 		FeedContainer feeds;
 
-		std::shared_ptr<rss_feed> feed =
-			std::make_shared<rss_feed>(&rsscache);
+		std::shared_ptr<RssFeed> feed =
+			std::make_shared<RssFeed>(&rsscache);
 		feed->set_title("Feed 1");
 		feed->set_link("https://example.com/feed1/");
 		feed->set_rssurl("https://example.com/feed1.xml");
 		feeds.add_feed(std::move(feed));
 
-		feed = std::make_shared<rss_feed>(&rsscache);
+		feed = std::make_shared<RssFeed>(&rsscache);
 		feed->set_title("Feed 2");
 		feed->set_link("https://example.com/feed2/");
 		feed->set_rssurl("https://example.com/feed2.xml");
@@ -85,7 +85,7 @@ TEST_CASE("generate_opml creates an XML document with feed URLs in OPML format",
 	}
 }
 
-TEST_CASE("import() populates urlreader with URLs from the OPML file", "[opml]")
+TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 {
 	TestHelpers::TempFile urlsFile;
 
@@ -113,7 +113,7 @@ TEST_CASE("import() populates urlreader with URLs from the OPML file", "[opml]")
 		{"http://onemorefeed.at/feed/", {"tag1", "tag3"}}
 	};
 
-	file_urlreader urlcfg(urlsFile.getPath());
+	FileUrlReader urlcfg(urlsFile.getPath());
 	urlcfg.reload();
 
 	REQUIRE(urlcfg.get_urls().size() == testUrls.size());
@@ -160,11 +160,11 @@ TEST_CASE("import() populates urlreader with URLs from the OPML file", "[opml]")
 }
 
 TEST_CASE("import() turns URLs that start with a pipe symbol (\"|\") "
-		"into `exec:` URLs (Liferea convention)", "[opml]")
+		"into `exec:` URLs (Liferea convention)", "[Opml]")
 {
 	TestHelpers::TempFile urlsFile;
 
-	file_urlreader urlcfg(urlsFile.getPath());
+	FileUrlReader urlcfg(urlsFile.getPath());
 	urlcfg.reload();
 
 	const std::string cwd(::getcwd(nullptr, 0));
@@ -194,11 +194,11 @@ TEST_CASE("import() turns URLs that start with a pipe symbol (\"|\") "
 
 TEST_CASE("import() turns \"filtercmd\" attribute into a `filter:` URL "
 		"(appears to be Liferea convention)",
-		"[opml]")
+		"[Opml]")
 {
 	TestHelpers::TempFile urlsFile;
 
-	file_urlreader urlcfg(urlsFile.getPath());
+	FileUrlReader urlcfg(urlsFile.getPath());
 	urlcfg.reload();
 
 	const std::string cwd(::getcwd(nullptr, 0));
@@ -226,8 +226,8 @@ TEST_CASE("import() turns \"filtercmd\" attribute into a `filter:` URL "
 	}
 }
 
-TEST_CASE("import() skips URLs that are already present in urlreader",
-		"[opml]")
+TEST_CASE("import() skips URLs that are already present in UrlReader",
+		"[Opml]")
 {
 	TestHelpers::TempFile urlsFile;
 
@@ -255,7 +255,7 @@ TEST_CASE("import() skips URLs that are already present in urlreader",
 		{"http://onemorefeed.at/feed/", {"tag1", "tag3"}}
 	};
 
-	file_urlreader urlcfg(urlsFile.getPath());
+	FileUrlReader urlcfg(urlsFile.getPath());
 	urlcfg.reload();
 
 	REQUIRE(urlcfg.get_urls().size() == testUrls.size());

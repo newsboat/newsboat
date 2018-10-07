@@ -26,7 +26,7 @@ ConfigPaths::ConfigPaths()
 		if (spw) {
 			env_home = spw->pw_dir;
 		} else {
-			m_error_message = strprintf::fmt(
+			m_error_message = StrPrintf::fmt(
 				_("Fatal error: couldn't determine home "
 				  "directory!\nPlease set the HOME environment "
 				  "variable or add a valid user for UID %u!"),
@@ -129,7 +129,7 @@ bool ConfigPaths::find_dirs_xdg()
 	return true;
 }
 
-void ConfigPaths::process_args(const CLIArgsParser& args)
+void ConfigPaths::process_args(const CliArgsParser& args)
 {
 	if (args.set_url_file) {
 		m_url_file = args.url_file;
@@ -216,7 +216,7 @@ bool ConfigPaths::migrate_data_from_newsbeuter_xdg()
 	auto exists = [](const std::string& dir) -> bool {
 		bool dir_exists = 0 == access(dir.c_str(), F_OK);
 		if (dir_exists) {
-			LOG(level::DEBUG,
+			LOG(Level::DEBUG,
 				"%s already exists, aborting XDG migration.",
 				dir);
 		}
@@ -238,11 +238,11 @@ bool ConfigPaths::migrate_data_from_newsbeuter_xdg()
 	}
 
 	auto try_mkdir = [](const std::string& dir) -> bool {
-		bool result = 0 == utils::mkdir_parents(dir, 0700);
+		bool result = 0 == Utils::mkdir_parents(dir, 0700);
 		// If dir already exists, it's an error, so we won't check the
 		// errno (unlike in many other places in the code)
 		if (!result) {
-			LOG(level::DEBUG,
+			LOG(Level::DEBUG,
 				"Aborting XDG migration because mkdir on %s "
 				"failed: %s",
 				dir,
@@ -294,7 +294,7 @@ bool ConfigPaths::migrate_data_from_newsbeuter_simple()
 
 	bool newsboat_dir_exists = 0 == access(newsboat_dir.c_str(), F_OK);
 	if (newsboat_dir_exists) {
-		LOG(level::DEBUG,
+		LOG(Level::DEBUG,
 			"%s already exists, aborting migration.",
 			newsboat_dir);
 		return false;
@@ -353,9 +353,9 @@ void ConfigPaths::migrate_data_from_newsbeuter()
 bool ConfigPaths::create_dirs() const
 {
 	auto try_mkdir = [](const std::string& dir) -> bool {
-		const bool result = 0 == utils::mkdir_parents(dir, 0700);
+		const bool result = 0 == Utils::mkdir_parents(dir, 0700);
 		if (!result && errno != EEXIST) {
-			LOG(level::CRITICAL,
+			LOG(Level::CRITICAL,
 				"Couldn't create `%s': (%i) %s",
 				dir,
 				errno,

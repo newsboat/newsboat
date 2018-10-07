@@ -12,10 +12,10 @@
 
 namespace podboat {
 
-class poddlthread {
+class PodDlThread {
 public:
-	poddlthread(download* dl_, newsboat::configcontainer*);
-	virtual ~poddlthread();
+	PodDlThread(Download* dl_, newsboat::ConfigContainer*);
+	virtual ~PodDlThread();
 	size_t write_data(void* buffer, size_t size, size_t nmemb);
 	int progress(double dlnow, double dltotal);
 	void operator()();
@@ -25,12 +25,12 @@ protected:
 
 private:
 	void run();
-	download* dl;
+	Download* dl;
 	std::shared_ptr<std::ofstream> f;
 	timeval tv1;
 	timeval tv2;
 	size_t bytecount;
-	newsboat::configcontainer* cfg;
+	newsboat::ConfigContainer* cfg;
 };
 
 } // namespace podboat

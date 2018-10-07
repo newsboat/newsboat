@@ -11,8 +11,8 @@
 
 namespace newsboat {
 
-struct op_desc {
-	operation op;
+struct OpDesc {
+	Operation op;
 	const char* opstr;
 	const char* default_key;
 	const char* help_text;
@@ -23,7 +23,7 @@ struct op_desc {
  * This is the list of operations, defining operation, operation name (for
  * keybindings), default key, description, and where it's valid
  */
-static op_desc opdescs[] = {
+static OpDesc opdescs[] = {
 	{OP_OPEN,
 		"open",
 		"ENTER",
@@ -359,13 +359,13 @@ static const char* contexts[] = {"all",
 	"dialogs",
 	nullptr};
 
-keymap::keymap(unsigned flags)
+KeyMap::KeyMap(unsigned flags)
 {
 	/*
 	 * At startup, initialize the keymap with the default settings from the
 	 * list above.
 	 */
-	LOG(level::DEBUG, "keymap::keymap: flags = %x", flags);
+	LOG(Level::DEBUG, "KeyMap::KeyMap: flags = %x", flags);
 	for (unsigned int j = 1; contexts[j] != nullptr; j++) {
 		std::string ctx(contexts[j]);
 		for (int i = 0; opdescs[i].op != OP_NIL; ++i) {
@@ -378,7 +378,7 @@ keymap::keymap(unsigned flags)
 	}
 }
 
-void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs,
+void KeyMap::get_keymap_descriptions(std::vector<KeyMapDesc>& descs,
 	unsigned short flags)
 {
 	/*
@@ -397,11 +397,11 @@ void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs,
 		for (unsigned int j = 0; opdescs[j].op != OP_NIL; ++j) {
 			bool already_added = false;
 			for (const auto& keymap : keymap_[ctx]) {
-				operation op = keymap.second;
+				Operation op = keymap.second;
 				if (op != OP_NIL) {
 					if (opdescs[j].op == op &&
 						opdescs[j].flags & flags) {
-						keymap_desc desc;
+						KeyMapDesc desc;
 						desc.key = keymap.first;
 						desc.ctx = ctx;
 						if (!already_added) {
@@ -421,15 +421,15 @@ void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs,
 			}
 			if (!already_added) {
 				if (opdescs[j].flags & flags) {
-					LOG(level::DEBUG,
-						"keymap::get_keymap_"
+					LOG(Level::DEBUG,
+						"KeyMap::get_keymap_"
 						"descriptions: "
 						"found unbound function: %s "
 						"ctx = "
 						"%s",
 						opdescs[j].opstr,
 						ctx);
-					keymap_desc desc;
+					KeyMapDesc desc;
 					desc.ctx = ctx;
 					desc.cmd = opdescs[j].opstr;
 					if (opdescs[j].help_text)
@@ -443,13 +443,13 @@ void keymap::get_keymap_descriptions(std::vector<keymap_desc>& descs,
 	}
 }
 
-keymap::~keymap() {}
+KeyMap::~KeyMap() {}
 
-void keymap::set_key(operation op,
+void KeyMap::set_key(Operation op,
 	const std::string& key,
 	const std::string& context)
 {
-	LOG(level::DEBUG, "keymap::set_key(%d,%s) called", op, key);
+	LOG(Level::DEBUG, "KeyMap::set_key(%d,%s) called", op, key);
 	if (context == "all") {
 		for (unsigned int i = 0; contexts[i] != nullptr; i++) {
 			keymap_[contexts[i]][key] = op;
@@ -459,9 +459,9 @@ void keymap::set_key(operation op,
 	}
 }
 
-void keymap::unset_key(const std::string& key, const std::string& context)
+void KeyMap::unset_key(const std::string& key, const std::string& context)
 {
-	LOG(level::DEBUG, "keymap::unset_key(%s) called", key);
+	LOG(Level::DEBUG, "KeyMap::unset_key(%s) called", key);
 	if (context == "all") {
 		for (unsigned int i = 0; contexts[i] != nullptr; i++) {
 			keymap_[contexts[i]][key] = OP_NIL;
@@ -471,7 +471,7 @@ void keymap::unset_key(const std::string& key, const std::string& context)
 	}
 }
 
-operation keymap::get_opcode(const std::string& opstr)
+Operation KeyMap::get_opcode(const std::string& opstr)
 {
 	for (int i = 0; opdescs[i].opstr; ++i) {
 		if (opstr == opdescs[i].opstr) {
@@ -481,7 +481,7 @@ operation keymap::get_opcode(const std::string& opstr)
 	return OP_NIL;
 }
 
-char keymap::get_key(const std::string& keycode)
+char KeyMap::get_key(const std::string& keycode)
 {
 	if (keycode == "ENTER") {
 		return '\n';
@@ -496,12 +496,12 @@ char keymap::get_key(const std::string& keycode)
 	return 0;
 }
 
-operation keymap::get_operation(const std::string& keycode,
+Operation KeyMap::get_operation(const std::string& keycode,
 	const std::string& context)
 {
 	std::string key;
-	LOG(level::DEBUG,
-		"keymap::get_operation: keycode = %s context = %s",
+	LOG(Level::DEBUG,
+		"KeyMap::get_operation: keycode = %s context = %s",
 		keycode,
 		context);
 	if (keycode.length() > 0) {
@@ -512,15 +512,15 @@ operation keymap::get_operation(const std::string& keycode,
 	return keymap_[context][key];
 }
 
-void keymap::dump_config(std::vector<std::string>& config_output)
+void KeyMap::dump_config(std::vector<std::string>& config_output)
 {
 	for (unsigned int i = 1; contexts[i] != nullptr;
 		i++) { // TODO: optimize
-		std::map<std::string, operation>& x = keymap_[contexts[i]];
+		std::map<std::string, Operation>& x = keymap_[contexts[i]];
 		for (const auto& keymap : x) {
 			if (keymap.second < OP_INT_MIN) {
 				std::string configline = "bind-key ";
-				configline.append(utils::quote(keymap.first));
+				configline.append(Utils::quote(keymap.first));
 				configline.append(" ");
 				configline.append(getopname(keymap.second));
 				configline.append(" ");
@@ -538,7 +538,7 @@ void keymap::dump_config(std::vector<std::string>& config_output)
 			configline.append(getopname(cmd.op));
 			for (const auto& arg : cmd.args) {
 				configline.append(" ");
-				configline.append(utils::quote(arg));
+				configline.append(Utils::quote(arg));
 			}
 			if (i < (macro.second.size() - 1))
 				configline.append(" ; ");
@@ -547,7 +547,7 @@ void keymap::dump_config(std::vector<std::string>& config_output)
 	}
 }
 
-std::string keymap::getopname(operation op)
+std::string KeyMap::getopname(Operation op)
 {
 	for (unsigned int i = 0; opdescs[i].op != OP_NIL; i++) {
 		if (opdescs[i].op == op)
@@ -556,28 +556,28 @@ std::string keymap::getopname(operation op)
 	return "<none>";
 }
 
-void keymap::handle_action(const std::string& action,
+void KeyMap::handle_action(const std::string& action,
 	const std::vector<std::string>& params)
 {
 	/*
-	 * The keymap acts as config_action_handler so that all the key-related
+	 * The keymap acts as ConfigActionHandler so that all the key-related
 	 * configuration is immediately handed to it.
 	 */
-	LOG(level::DEBUG, "keymap::handle_action(%s, ...) called", action);
+	LOG(Level::DEBUG, "KeyMap::handle_action(%s, ...) called", action);
 	if (action == "bind-key") {
 		if (params.size() < 2)
-			throw confighandlerexception(
-				action_handler_status::TOO_FEW_PARAMS);
+			throw ConfigHandlerException(
+				ActionHandlerStatus::TOO_FEW_PARAMS);
 		std::string context = "all";
 		if (params.size() >= 3)
 			context = params[2];
 		if (!is_valid_context(context))
-			throw confighandlerexception(strprintf::fmt(
+			throw ConfigHandlerException(StrPrintf::fmt(
 				_("`%s' is not a valid context"), context));
-		operation op = get_opcode(params[1]);
+		Operation op = get_opcode(params[1]);
 		if (op == OP_NIL) {
-			throw confighandlerexception(
-				strprintf::fmt(_("`%s' is not a valid "
+			throw ConfigHandlerException(
+				StrPrintf::fmt(_("`%s' is not a valid "
 						 "key command"),
 					params[1]));
 		}
@@ -586,20 +586,20 @@ void keymap::handle_action(const std::string& action,
 		set_key(op, params[0], context);
 	} else if (action == "unbind-key") {
 		if (params.size() < 1)
-			throw confighandlerexception(
-				action_handler_status::TOO_FEW_PARAMS);
+			throw ConfigHandlerException(
+				ActionHandlerStatus::TOO_FEW_PARAMS);
 		std::string context = "all";
 		if (params.size() >= 2)
 			context = params[1];
 		unset_key(params[0], context);
 	} else if (action == "macro") {
 		if (params.size() < 1)
-			throw confighandlerexception(
-				action_handler_status::TOO_FEW_PARAMS);
+			throw ConfigHandlerException(
+				ActionHandlerStatus::TOO_FEW_PARAMS);
 		auto it = params.begin();
 		std::string macrokey = *it;
-		std::vector<macrocmd> cmds;
-		macrocmd tmpcmd;
+		std::vector<MacroCmd> cmds;
+		MacroCmd tmpcmd;
 		tmpcmd.op = OP_NIL;
 		bool first = true;
 		++it;
@@ -607,15 +607,15 @@ void keymap::handle_action(const std::string& action,
 		while (it != params.end()) {
 			if (first && *it != ";") {
 				tmpcmd.op = get_opcode(*it);
-				LOG(level::DEBUG,
-					"keymap::handle_action: new operation "
+				LOG(Level::DEBUG,
+					"KeyMap::handle_action: new operation "
 					"`%s' "
 					"(op = %u)",
 					it,
 					tmpcmd.op);
 				if (tmpcmd.op == OP_NIL)
-					throw confighandlerexception(
-						strprintf::fmt(
+					throw ConfigHandlerException(
+						StrPrintf::fmt(
 							_("`%s' is not a valid "
 							  "key command"),
 							*it));
@@ -628,8 +628,8 @@ void keymap::handle_action(const std::string& action,
 					tmpcmd.args.clear();
 					first = true;
 				} else {
-					LOG(level::DEBUG,
-						"keymap::handle_action: new "
+					LOG(Level::DEBUG,
+						"KeyMap::handle_action: new "
 						"parameter `%s' (op = %u)",
 						it);
 					tmpcmd.args.push_back(*it);
@@ -642,11 +642,11 @@ void keymap::handle_action(const std::string& action,
 
 		macros_[macrokey] = cmds;
 	} else
-		throw confighandlerexception(
-			action_handler_status::INVALID_PARAMS);
+		throw ConfigHandlerException(
+			ActionHandlerStatus::INVALID_PARAMS);
 }
 
-std::string keymap::getkey(operation op, const std::string& context)
+std::string KeyMap::getkey(Operation op, const std::string& context)
 {
 	if (context == "all") {
 		for (unsigned int i = 0; contexts[i] != nullptr; i++) {
@@ -665,18 +665,18 @@ std::string keymap::getkey(operation op, const std::string& context)
 	return "<none>";
 }
 
-std::vector<macrocmd> keymap::get_macro(const std::string& key)
+std::vector<MacroCmd> KeyMap::get_macro(const std::string& key)
 {
 	for (const auto& macro : macros_) {
 		if (macro.first == key) {
 			return macro.second;
 		}
 	}
-	std::vector<macrocmd> dummyvector;
+	std::vector<MacroCmd> dummyvector;
 	return dummyvector;
 }
 
-bool keymap::is_valid_context(const std::string& context)
+bool KeyMap::is_valid_context(const std::string& context)
 {
 	for (unsigned int i = 0; contexts[i] != nullptr; i++) {
 		if (context == contexts[i])
@@ -685,7 +685,7 @@ bool keymap::is_valid_context(const std::string& context)
 	return false;
 }
 
-unsigned short keymap::get_flag_from_context(const std::string& context)
+unsigned short KeyMap::get_flag_from_context(const std::string& context)
 {
 	for (unsigned int i = 1; contexts[i] != nullptr; i++) {
 		if (context == contexts[i])

@@ -20,7 +20,7 @@ using namespace newsboat;
 
 void print_usage(const std::string& argv0)
 {
-	auto msg = strprintf::fmt(
+	auto msg = StrPrintf::fmt(
 		_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] "
 		  "[-c <cachefile>] [-x <command> ...] [-h]\n"),
 		PROGRAM_NAME,
@@ -85,7 +85,7 @@ void print_usage(const std::string& argv0)
 		longcolumn += ", --" + a.longname;
 		longcolumn += a.params.size() > 0 ? "=" + a.params : "";
 		ss << "\t" << longcolumn;
-		for (unsigned int j = 0; j < utils::gentabs(longcolumn); j++) {
+		for (unsigned int j = 0; j < Utils::gentabs(longcolumn); j++) {
 			ss << "\t";
 		}
 		ss << a.desc << std::endl;
@@ -109,7 +109,7 @@ void print_version(const std::string& argv0, unsigned int level)
 			  << std::endl;
 		ss << std::endl;
 
-		ss << strprintf::fmt(
+		ss << StrPrintf::fmt(
 				     _("Newsboat is free software licensed "
 				       "under the MIT License. (Type `%s -vv' "
 				       "to see the full text.)"),
@@ -153,7 +153,7 @@ void print_version(const std::string& argv0, unsigned int level)
 
 int main(int argc, char* argv[])
 {
-	utils::initialize_ssl_implementation();
+	Utils::initialize_ssl_implementation();
 
 	setlocale(LC_CTYPE, "");
 	setlocale(LC_MESSAGES, "");
@@ -161,12 +161,12 @@ int main(int argc, char* argv[])
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
 
-	rsspp::parser::global_init();
+	rsspp::Parser::global_init();
 
-	controller c;
-	newsboat::view v(&c);
+	Controller c;
+	newsboat::View v(&c);
 	c.set_view(&v);
-	CLIArgsParser args(argc, argv);
+	CliArgsParser args(argc, argv);
 
 	if (args.should_print_usage) {
 		print_usage(args.program_name);
@@ -181,29 +181,29 @@ int main(int argc, char* argv[])
 	int ret;
 	try {
 		ret = c.run(args);
-	} catch (const newsboat::dbexception& e) {
-		std::cerr << strprintf::fmt(
-				     _("Caught newsboat::dbexception with "
+	} catch (const newsboat::DbException& e) {
+		std::cerr << StrPrintf::fmt(
+				     _("Caught newsboat::DbException with "
 				       "message: %s"),
 				     e.what())
 			  << std::endl;
 		::exit(EXIT_FAILURE);
-	} catch (const newsboat::matcherexception& e) {
-		std::cerr << strprintf::fmt(
-				     _("Caught newsboat::matcherexception with "
+	} catch (const newsboat::MatcherException& e) {
+		std::cerr << StrPrintf::fmt(
+				     _("Caught newsboat::MatcherException with "
 				       "message: %s"),
 				     e.what())
 			  << std::endl;
 		::exit(EXIT_FAILURE);
-	} catch (const newsboat::exception& e) {
-		std::cerr << strprintf::fmt(_("Caught newsboat::exception with "
+	} catch (const newsboat::Exception& e) {
+		std::cerr << StrPrintf::fmt(_("Caught newsboat::Exception with "
 					      "message: %s"),
 				     e.what())
 			  << std::endl;
 		::exit(EXIT_FAILURE);
 	}
 
-	rsspp::parser::global_cleanup();
+	rsspp::Parser::global_cleanup();
 
 	return ret;
 }

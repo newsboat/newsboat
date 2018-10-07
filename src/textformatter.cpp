@@ -11,28 +11,28 @@
 
 namespace newsboat {
 
-textformatter::textformatter() {}
+TextFormatter::TextFormatter() {}
 
-textformatter::~textformatter() {}
+TextFormatter::~TextFormatter() {}
 
-void textformatter::add_line(LineType type, std::string line)
+void TextFormatter::add_line(LineType type, std::string line)
 {
-	LOG(level::DEBUG,
-		"textformatter::add_line: `%s' (line type %i)",
+	LOG(Level::DEBUG,
+		"TextFormatter::add_line: `%s' (line type %i)",
 		line,
 		type);
 
-	auto clean_line = utils::wstr2str(
-		utils::clean_nonprintable_characters(utils::str2wstr(line)));
+	auto clean_line = Utils::wstr2str(
+		Utils::clean_nonprintable_characters(Utils::str2wstr(line)));
 	lines.push_back(std::make_pair(type, clean_line));
 }
 
-void textformatter::add_lines(
+void TextFormatter::add_lines(
 	const std::vector<std::pair<LineType, std::string>>& lines)
 {
 	for (const auto& line : lines) {
 		add_line(line.first,
-			utils::replace_all(line.second, "\t", "        "));
+			Utils::replace_all(line.second, "\t", "        "));
 	}
 }
 
@@ -43,7 +43,7 @@ std::vector<std::string> wrap_line(const std::string& line, const size_t width)
 	}
 
 	std::vector<std::string> result;
-	std::vector<std::string> words = utils::tokenize_spaced(line);
+	std::vector<std::string> words = Utils::tokenize_spaced(line);
 
 	std::string prefix;
 	size_t prefix_width = 0;
@@ -55,23 +55,23 @@ std::vector<std::string> wrap_line(const std::string& line, const size_t width)
 			});
 	};
 	if (iswhitespace(words[0])) {
-		prefix = utils::substr_with_width(words[0], width);
-		prefix_width = utils::strwidth_stfl(prefix);
+		prefix = Utils::substr_with_width(words[0], width);
+		prefix_width = Utils::strwidth_stfl(prefix);
 		words.erase(words.cbegin());
 	}
 
 	std::string curline = prefix;
 
 	for (auto& word : words) {
-		size_t word_width = utils::strwidth_stfl(word);
-		size_t curline_width = utils::strwidth_stfl(curline);
+		size_t word_width = Utils::strwidth_stfl(word);
+		size_t curline_width = Utils::strwidth_stfl(curline);
 
 		// for languages (e.g., CJK) don't use a space as a word
 		// boundary
 		while (word_width > (width - prefix_width)) {
 			size_t space_left = width - curline_width;
 			std::string part =
-				utils::substr_with_width(word, space_left);
+				Utils::substr_with_width(word, space_left);
 			curline.append(part);
 			word.erase(0, part.length());
 			result.push_back(curline);
@@ -81,8 +81,8 @@ std::vector<std::string> wrap_line(const std::string& line, const size_t width)
 				word.clear();
 			}
 
-			word_width = utils::strwidth_stfl(word);
-			curline_width = utils::strwidth_stfl(curline);
+			word_width = Utils::strwidth_stfl(word);
+			curline_width = Utils::strwidth_stfl(curline);
 		}
 
 		if ((curline_width + word_width) > width) {
@@ -106,15 +106,15 @@ std::vector<std::string> wrap_line(const std::string& line, const size_t width)
 
 std::vector<std::string> format_text_plain_helper(
 	const std::vector<std::pair<LineType, std::string>>& lines,
-	regexmanager* rxman,
+	RegexManager* rxman,
 	const std::string& location,
 	// wrappable lines are wrapped at this width
 	const size_t wrap_width,
 	// if non-zero, softwrappable lines are wrapped at this width
 	const size_t total_width)
 {
-	LOG(level::DEBUG,
-		"textformatter::format_text_plain: rxman = %p, location = "
+	LOG(Level::DEBUG,
+		"TextFormatter::format_text_plain: rxman = %p, location = "
 		"`%s', "
 		"wrap_width = %zu, total_width = %zu, %u lines",
 		rxman,
@@ -128,8 +128,8 @@ std::vector<std::string> format_text_plain_helper(
 	auto store_line = [&format_cache](std::string line) {
 		format_cache.push_back(line);
 
-		LOG(level::DEBUG,
-			"textformatter::format_text_plain: stored `%s'",
+		LOG(Level::DEBUG,
+			"TextFormatter::format_text_plain: stored `%s'",
 			line);
 	};
 
@@ -137,8 +137,8 @@ std::vector<std::string> format_text_plain_helper(
 		auto type = line.first;
 		auto text = line.second;
 
-		LOG(level::DEBUG,
-			"textformatter::format_text_plain: got line `%s' type "
+		LOG(Level::DEBUG,
+			"TextFormatter::format_text_plain: got line `%s' type "
 			"%u",
 			text,
 			type);
@@ -153,7 +153,7 @@ std::vector<std::string> format_text_plain_helper(
 				store_line(" ");
 				continue;
 			}
-			text = utils::consolidate_whitespace(text);
+			text = Utils::consolidate_whitespace(text);
 			for (const auto& line : wrap_line(text, wrap_width)) {
 				store_line(line);
 			}
@@ -179,7 +179,7 @@ std::vector<std::string> format_text_plain_helper(
 			break;
 
 		case LineType::hr:
-			store_line(htmlrenderer::render_hr(wrap_width));
+			store_line(HtmlRenderer::render_hr(wrap_width));
 			break;
 		}
 	}
@@ -187,8 +187,8 @@ std::vector<std::string> format_text_plain_helper(
 	return format_cache;
 }
 
-std::pair<std::string, std::size_t> textformatter::format_text_to_list(
-	regexmanager* rxman,
+std::pair<std::string, std::size_t> TextFormatter::format_text_to_list(
+	RegexManager* rxman,
 	const std::string& location,
 	const size_t wrap_width,
 	const size_t total_width)
@@ -199,9 +199,9 @@ std::pair<std::string, std::size_t> textformatter::format_text_to_list(
 	auto format_cache = std::string("{list");
 	for (auto& line : formatted) {
 		if (line != "") {
-			utils::trim_end(line);
-			format_cache.append(strprintf::fmt(
-				"{listitem text:%s}", stfl::quote(line)));
+			Utils::trim_end(line);
+			format_cache.append(StrPrintf::fmt(
+				"{listitem text:%s}", Stfl::quote(line)));
 		}
 	}
 	format_cache.append(1, '}');
@@ -211,7 +211,7 @@ std::pair<std::string, std::size_t> textformatter::format_text_to_list(
 	return {format_cache, line_count};
 }
 
-std::string textformatter::format_text_plain(const size_t width,
+std::string TextFormatter::format_text_plain(const size_t width,
 	const size_t total_width)
 {
 	std::string result;

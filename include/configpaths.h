@@ -51,7 +51,7 @@ public:
 	std::string error_message() const;
 
 	/// Initializes paths to config, cache etc. from CLI arguments.
-	void process_args(const CLIArgsParser& args);
+	void process_args(const CliArgsParser& args);
 
 	/// Ensures all directories exist (migrating them from Newsbeuter if
 	/// possible).
@@ -70,7 +70,7 @@ public:
 	}
 
 	/// Sets path to the cache file.
-	// FIXME: this is actually a kludge that lets controller change the path
+	// FIXME: this is actually a kludge that lets Controller change the path
 	// midway. That logic should be moved into ConfigPaths, and this method
 	// removed.
 	void set_cache_file(const std::string&);

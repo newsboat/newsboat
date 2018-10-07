@@ -13,12 +13,12 @@ FilterParser::~FilterParser() {
 }
 
 FilterParser::FilterParser(const FilterParser& p) {
-	LOG(level::DEBUG,"FilterParser: copy constructor called!");
+	LOG(Level::DEBUG,"FilterParser: copy constructor called!");
 	parse_string(p.strexpr);
 }
 
 FilterParser& FilterParser::operator=(FilterParser& p) {
-	LOG(level::DEBUG,"FilterParser: operator= called!");
+	LOG(Level::DEBUG,"FilterParser: operator= called!");
 	if (this != &p) {
 		cleanup();
 		parse_string(p.strexpr);
@@ -107,7 +107,7 @@ void FilterParser::cleanup() {
 
 void FilterParser::cleanup_r(expression * e) {
 	if (e) {
-		LOG(level::DEBUG,"cleanup_r: e = %p", e);
+		LOG(Level::DEBUG,"cleanup_r: e = %p", e);
 		cleanup_r(e->l);
 		cleanup_r(e->r);
 		delete e;

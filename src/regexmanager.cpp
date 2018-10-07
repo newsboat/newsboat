@@ -10,7 +10,7 @@
 
 namespace newsboat {
 
-regexmanager::regexmanager()
+RegexManager::RegexManager()
 {
 	// this creates the entries in the map. we need them there to have the
 	// "all" location work.
@@ -19,7 +19,7 @@ regexmanager::regexmanager()
 	locations["feedlist"];
 }
 
-regexmanager::~regexmanager()
+RegexManager::~RegexManager()
 {
 	for (const auto& location : locations) {
 		if (location.second.first.size() > 0) {
@@ -30,25 +30,25 @@ regexmanager::~regexmanager()
 	}
 }
 
-void regexmanager::dump_config(std::vector<std::string>& config_output)
+void RegexManager::dump_config(std::vector<std::string>& config_output)
 {
 	for (const auto& foo : cheat_store_for_dump_config) {
 		config_output.push_back(foo);
 	}
 }
 
-void regexmanager::handle_action(const std::string& action,
+void RegexManager::handle_action(const std::string& action,
 	const std::vector<std::string>& params)
 {
 	if (action == "highlight") {
 		if (params.size() < 3)
-			throw confighandlerexception(
-				action_handler_status::TOO_FEW_PARAMS);
+			throw ConfigHandlerException(
+				ActionHandlerStatus::TOO_FEW_PARAMS);
 
 		std::string location = params[0];
 		if (location != "all" && location != "article" &&
 			location != "articlelist" && location != "feedlist")
-			throw confighandlerexception(strprintf::fmt(
+			throw ConfigHandlerException(StrPrintf::fmt(
 				_("`%s' is an invalid dialog type"), location));
 
 		regex_t* rx = new regex_t;
@@ -59,7 +59,7 @@ void regexmanager::handle_action(const std::string& action,
 			char buf[1024];
 			regerror(err, rx, buf, sizeof(buf));
 			delete rx;
-			throw confighandlerexception(strprintf::fmt(
+			throw ConfigHandlerException(StrPrintf::fmt(
 				_("`%s' is not a valid regular expression: %s"),
 				params[1],
 				buf));
@@ -67,8 +67,8 @@ void regexmanager::handle_action(const std::string& action,
 		std::string colorstr;
 		if (params[2] != "default") {
 			colorstr.append("fg=");
-			if (!utils::is_valid_color(params[2]))
-				throw confighandlerexception(strprintf::fmt(
+			if (!Utils::is_valid_color(params[2]))
+				throw ConfigHandlerException(StrPrintf::fmt(
 					_("`%s' is not a valid color"),
 					params[2]));
 			colorstr.append(params[2]);
@@ -78,9 +78,9 @@ void regexmanager::handle_action(const std::string& action,
 				if (colorstr.length() > 0)
 					colorstr.append(",");
 				colorstr.append("bg=");
-				if (!utils::is_valid_color(params[3]))
-					throw confighandlerexception(
-						strprintf::fmt(
+				if (!Utils::is_valid_color(params[3]))
+					throw ConfigHandlerException(
+						StrPrintf::fmt(
 							_("`%s' is not a valid "
 							  "color"),
 							params[3]));
@@ -91,10 +91,10 @@ void regexmanager::handle_action(const std::string& action,
 					if (colorstr.length() > 0)
 						colorstr.append(",");
 					colorstr.append("attr=");
-					if (!utils::is_valid_attribute(
+					if (!Utils::is_valid_attribute(
 						    params[i]))
-						throw confighandlerexception(
-							strprintf::fmt(
+						throw ConfigHandlerException(
+							StrPrintf::fmt(
 								_("`%s' is not "
 								  "a valid "
 								  "attribute"),
@@ -104,8 +104,8 @@ void regexmanager::handle_action(const std::string& action,
 			}
 		}
 		if (location != "all") {
-			LOG(level::DEBUG,
-				"regexmanager::handle_action: adding rx = %s "
+			LOG(Level::DEBUG,
+				"RegexManager::handle_action: adding rx = %s "
 				"colorstr = %s to location %s",
 				params[1],
 				colorstr,
@@ -115,8 +115,8 @@ void regexmanager::handle_action(const std::string& action,
 		} else {
 			delete rx;
 			for (auto& location : locations) {
-				LOG(level::DEBUG,
-					"regexmanager::handle_action: adding "
+				LOG(Level::DEBUG,
+					"RegexManager::handle_action: adding "
 					"rx = "
 					"%s colorstr = %s to location %s",
 					params[1],
@@ -135,13 +135,13 @@ void regexmanager::handle_action(const std::string& action,
 		std::string line = "highlight";
 		for (const auto& param : params) {
 			line.append(" ");
-			line.append(utils::quote(param));
+			line.append(Utils::quote(param));
 		}
 		cheat_store_for_dump_config.push_back(line);
 	} else if (action == "highlight-article") {
 		if (params.size() < 3)
-			throw confighandlerexception(
-				action_handler_status::TOO_FEW_PARAMS);
+			throw ConfigHandlerException(
+				ActionHandlerStatus::TOO_FEW_PARAMS);
 
 		std::string expr = params[0];
 		std::string fgcolor = params[1];
@@ -150,8 +150,8 @@ void regexmanager::handle_action(const std::string& action,
 		std::string colorstr;
 		if (fgcolor != "default") {
 			colorstr.append("fg=");
-			if (!utils::is_valid_color(fgcolor))
-				throw confighandlerexception(strprintf::fmt(
+			if (!Utils::is_valid_color(fgcolor))
+				throw ConfigHandlerException(StrPrintf::fmt(
 					_("`%s' is not a valid color"),
 					fgcolor));
 			colorstr.append(fgcolor);
@@ -160,8 +160,8 @@ void regexmanager::handle_action(const std::string& action,
 			if (colorstr.length() > 0)
 				colorstr.append(",");
 			colorstr.append("bg=");
-			if (!utils::is_valid_color(bgcolor))
-				throw confighandlerexception(strprintf::fmt(
+			if (!Utils::is_valid_color(bgcolor))
+				throw ConfigHandlerException(StrPrintf::fmt(
 					_("`%s' is not a valid color"),
 					bgcolor));
 			colorstr.append(bgcolor);
@@ -172,9 +172,9 @@ void regexmanager::handle_action(const std::string& action,
 				if (colorstr.length() > 0)
 					colorstr.append(",");
 				colorstr.append("attr=");
-				if (!utils::is_valid_attribute(params[i]))
-					throw confighandlerexception(
-						strprintf::fmt(
+				if (!Utils::is_valid_attribute(params[i]))
+					throw ConfigHandlerException(
+						StrPrintf::fmt(
 							_("`%s' is not a valid "
 							  "attribute"),
 							params[i]));
@@ -182,9 +182,9 @@ void regexmanager::handle_action(const std::string& action,
 			}
 		}
 
-		std::shared_ptr<matcher> m(new matcher());
+		std::shared_ptr<Matcher> m(new Matcher());
 		if (!m->parse(params[0])) {
-			throw confighandlerexception(strprintf::fmt(
+			throw ConfigHandlerException(StrPrintf::fmt(
 				_("couldn't parse filter expression `%s': %s"),
 				params[0],
 				m->get_parse_error()));
@@ -196,24 +196,24 @@ void regexmanager::handle_action(const std::string& action,
 		locations["articlelist"].second.push_back(colorstr);
 
 		matchers.push_back(
-			std::pair<std::shared_ptr<matcher>, int>(m, pos));
+			std::pair<std::shared_ptr<Matcher>, int>(m, pos));
 
 	} else
-		throw confighandlerexception(
-			action_handler_status::INVALID_COMMAND);
+		throw ConfigHandlerException(
+			ActionHandlerStatus::INVALID_COMMAND);
 }
 
-int regexmanager::article_matches(matchable* item)
+int RegexManager::article_matches(Matchable* item)
 {
-	for (const auto& matcher : matchers) {
-		if (matcher.first->matches(item)) {
-			return matcher.second;
+	for (const auto& Matcher : matchers) {
+		if (Matcher.first->matches(item)) {
+			return Matcher.second;
 		}
 	}
 	return -1;
 }
 
-void regexmanager::remove_last_regex(const std::string& location)
+void RegexManager::remove_last_regex(const std::string& location)
 {
 	std::vector<regex_t*>& regexes = locations[location].first;
 
@@ -222,7 +222,7 @@ void regexmanager::remove_last_regex(const std::string& location)
 	regexes.erase(it);
 }
 
-std::string regexmanager::extract_initial_marker(const std::string& str)
+std::string RegexManager::extract_initial_marker(const std::string& str)
 {
 	if (str.length() == 0)
 		return "";
@@ -236,7 +236,7 @@ std::string regexmanager::extract_initial_marker(const std::string& str)
 	return "";
 }
 
-void regexmanager::quote_and_highlight(std::string& str,
+void RegexManager::quote_and_highlight(std::string& str,
 	const std::string& location)
 {
 	std::vector<regex_t*>& regexes = locations[location].first;
@@ -250,7 +250,7 @@ void regexmanager::quote_and_highlight(std::string& str,
 		unsigned int offset = 0;
 		int err = regexec(regex, str.c_str(), 1, &pmatch, 0);
 		while (err == 0) {
-			std::string marker = strprintf::fmt("<%u>", i);
+			std::string marker = StrPrintf::fmt("<%u>", i);
 			str.insert(offset + pmatch.rm_eo,
 				std::string("</>") + initial_marker);
 			str.insert(offset + pmatch.rm_so, marker);

@@ -29,7 +29,7 @@ enum { KM_FEEDLIST = 1 << 0,
 
 namespace newsboat {
 
-enum operation {
+enum Operation {
 	OP_NIL = 0,
 	// general and newsboat-specific operations:
 	OP_NB_MIN,
@@ -142,7 +142,7 @@ enum operation {
 	OP_0
 };
 
-struct keymap_desc {
+struct KeyMapDesc {
 	std::string key;
 	std::string cmd;
 	std::string desc;
@@ -150,37 +150,37 @@ struct keymap_desc {
 	unsigned short flags;
 };
 
-struct macrocmd {
-	operation op;
+struct MacroCmd {
+	Operation op;
 	std::vector<std::string> args;
 };
 
-class keymap : public config_action_handler {
+class KeyMap : public ConfigActionHandler {
 public:
-	explicit keymap(unsigned int flags);
-	~keymap() override;
-	void set_key(operation op,
+	explicit KeyMap(unsigned int flags);
+	~KeyMap() override;
+	void set_key(Operation op,
 		const std::string& key,
 		const std::string& context);
 	void unset_key(const std::string& key, const std::string& context);
-	operation get_opcode(const std::string& opstr);
-	operation get_operation(const std::string& keycode,
+	Operation get_opcode(const std::string& opstr);
+	Operation get_operation(const std::string& keycode,
 		const std::string& context);
-	std::vector<macrocmd> get_macro(const std::string& key);
+	std::vector<MacroCmd> get_macro(const std::string& key);
 	char get_key(const std::string& keycode);
-	std::string getkey(operation op, const std::string& context);
+	std::string getkey(Operation op, const std::string& context);
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) override;
-	void get_keymap_descriptions(std::vector<keymap_desc>& descs,
+	void get_keymap_descriptions(std::vector<KeyMapDesc>& descs,
 		unsigned short flags);
 	unsigned short get_flag_from_context(const std::string& context);
 
 private:
 	bool is_valid_context(const std::string& context);
-	std::string getopname(operation op);
-	std::map<std::string, std::map<std::string, operation>> keymap_;
-	std::map<std::string, std::vector<macrocmd>> macros_;
+	std::string getopname(Operation op);
+	std::map<std::string, std::map<std::string, Operation>> keymap_;
+	std::map<std::string, std::vector<MacroCmd>> macros_;
 };
 
 } // namespace newsboat

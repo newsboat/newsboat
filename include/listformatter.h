@@ -10,12 +10,12 @@
 
 namespace newsboat {
 
-class listformatter {
-	typedef std::pair<std::string, unsigned int> line_id_pair;
+class ListFormatter {
+	typedef std::pair<std::string, unsigned int> LineIdPair;
 
 public:
-	listformatter();
-	~listformatter();
+	ListFormatter();
+	~ListFormatter();
 	void add_line(const std::string& text,
 		unsigned int id = UINT_MAX,
 		unsigned int width = 0);
@@ -29,7 +29,7 @@ public:
 	{
 		lines.clear();
 	}
-	std::string format_list(regexmanager* r = nullptr,
+	std::string format_list(RegexManager* r = nullptr,
 		const std::string& location = "");
 	unsigned int get_lines_count()
 	{
@@ -37,7 +37,7 @@ public:
 	}
 
 private:
-	std::vector<line_id_pair> lines;
+	std::vector<LineIdPair> lines;
 	std::string format_cache;
 };
 
