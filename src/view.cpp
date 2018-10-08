@@ -649,8 +649,7 @@ std::string View::select_tag()
 	return selecttag->get_selected_value();
 }
 
-std::string View::select_filter(
-	const std::vector<FilterNameExprPair>& filters)
+std::string View::select_filter(const std::vector<FilterNameExprPair>& filters)
 {
 	std::shared_ptr<SelectFormAction> selecttag(
 		new SelectFormAction(this, selecttag_str));
@@ -907,8 +906,7 @@ bool View::get_previous(ItemListFormAction* itemlist,
 	return false;
 }
 
-bool View::get_next(ItemListFormAction* itemlist,
-	ItemViewFormAction* itemview)
+bool View::get_next(ItemListFormAction* itemlist, ItemViewFormAction* itemview)
 {
 	unsigned int feedpos;
 	std::shared_ptr<FeedListFormAction> feedlist =

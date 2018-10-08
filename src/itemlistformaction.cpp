@@ -211,9 +211,9 @@ void ItemListFormAction::process_operation(Operation op,
 					visible_items[itempos]
 						.first->set_deleted(false);
 					rsscache->mark_item_deleted(
-							visible_items[itempos]
-								.first->guid(),
-							false);
+						visible_items[itempos]
+							.first->guid(),
+						false);
 					// toggle read
 					bool unread = visible_items[itempos]
 							      .first->unread();
@@ -952,8 +952,7 @@ void ItemListFormAction::prepare()
 	prepare_set_filterpos();
 }
 
-std::string ItemListFormAction::item2formatted_line(
-	const ItemPtrPosPair& item,
+std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	const unsigned int width,
 	const std::string& itemlist_format,
 	const std::string& datetime_format)

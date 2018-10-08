@@ -10,12 +10,12 @@
 #include "feedcontainer.h"
 #include "filtercontainer.h"
 #include "fslock.h"
+#include "opml.h"
 #include "regexmanager.h"
 #include "reloader.h"
 #include "remoteapi.h"
 #include "rss.h"
 #include "urlreader.h"
-#include "opml.h"
 
 namespace newsboat {
 
