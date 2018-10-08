@@ -18,7 +18,6 @@
 
 namespace newsboat {
 
-class FormAction;
 class ItemListFormAction;
 class ItemViewFormAction;
 
