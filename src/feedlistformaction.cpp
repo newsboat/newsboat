@@ -22,7 +22,10 @@
 
 namespace newsboat {
 
-FeedListFormAction::FeedListFormAction(View* vv, std::string formstr, Cache* cc)
+FeedListFormAction::FeedListFormAction(View* vv,
+	std::string formstr,
+	Cache* cc,
+	FilterContainer* f)
 	: ListFormAction(vv, formstr)
 	, zero_feedpos(false)
 	, feeds_shown(0)
@@ -35,6 +38,7 @@ FeedListFormAction::FeedListFormAction(View* vv, std::string formstr, Cache* cc)
 	, old_width(0)
 	, unread_feeds(0)
 	, total_feeds(0)
+	, filters(f)
 {
 	assert(true == m.parse(FILTER_UNREAD_FEEDS));
 	valid_cmds.push_back("tag");
@@ -392,15 +396,13 @@ REDO:
 		}
 	} break;
 	case OP_SELECTFILTER:
-		if (v->get_ctrl()->get_filters().size() > 0) {
+		if (filters->size() > 0) {
 			std::string newfilter;
 			if (automatic && args->size() > 0) {
 				newfilter = (*args)[0];
 			} else {
 				newfilter = v->select_filter(
-					v->get_ctrl()
-						->get_filters()
-						.get_filters());
+					filters->get_filters());
 			}
 			if (newfilter != "") {
 				filterhistory.add_line(newfilter);

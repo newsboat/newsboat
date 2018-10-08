@@ -18,7 +18,10 @@
 
 namespace newsboat {
 
-ItemListFormAction::ItemListFormAction(View* vv, std::string formstr, Cache* cc)
+ItemListFormAction::ItemListFormAction(View* vv,
+	std::string formstr,
+	Cache* cc,
+	FilterContainer* f)
 	: ListFormAction(vv, formstr)
 	, pos(0)
 	, apply_filter(false)
@@ -33,6 +36,7 @@ ItemListFormAction::ItemListFormAction(View* vv, std::string formstr, Cache* cc)
 	, invalidated(false)
 	, invalidation_mode(InvalidationMode::COMPLETE)
 	, rsscache(cc)
+	, filters(f)
 {
 	assert(true == m.parse(FILTER_UNREAD_ITEMS));
 }
@@ -207,9 +211,9 @@ void ItemListFormAction::process_operation(Operation op,
 					visible_items[itempos]
 						.first->set_deleted(false);
 					rsscache->mark_item_deleted(
-							visible_items[itempos]
-								.first->guid(),
-							false);
+						visible_items[itempos]
+							.first->guid(),
+						false);
 					// toggle read
 					bool unread = visible_items[itempos]
 							      .first->unread();
@@ -566,16 +570,14 @@ void ItemListFormAction::process_operation(Operation op,
 		v->get_ctrl()->edit_urls_file();
 		break;
 	case OP_SELECTFILTER:
-		if (v->get_ctrl()->get_filters().size() > 0) {
+		if (filters->size() > 0) {
 			std::string newfilter;
 			if (automatic) {
 				if (args->size() > 0)
 					newfilter = (*args)[0];
 			} else {
 				newfilter = v->select_filter(
-					v->get_ctrl()
-						->get_filters()
-						.get_filters());
+					filters->get_filters());
 				LOG(Level::DEBUG,
 					"ItemListFormAction::run: newfilters "
 					"= %s",
@@ -950,8 +952,7 @@ void ItemListFormAction::prepare()
 	prepare_set_filterpos();
 }
 
-std::string ItemListFormAction::item2formatted_line(
-	const ItemPtrPosPair& item,
+std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	const unsigned int width,
 	const std::string& itemlist_format,
 	const std::string& datetime_format)

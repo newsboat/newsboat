@@ -286,8 +286,7 @@ int Controller::run(const CliArgsParser& args)
 		urlcfg = new NewsBlurUrlReader(configpaths.url_file(), api);
 	} else if (type == "feedhq") {
 		api = new FeedHqApi(&cfg);
-		urlcfg =
-			new FeedHqUrlReader(&cfg, configpaths.url_file(), api);
+		urlcfg = new FeedHqUrlReader(&cfg, configpaths.url_file(), api);
 	} else if (type == "ocnews") {
 		api = new OcNewsApi(&cfg);
 		urlcfg = new OcNewsUrlReader(configpaths.url_file(), api);
@@ -456,6 +455,7 @@ int Controller::run(const CliArgsParser& args)
 	v->set_keymap(&keys);
 	v->set_tags(tags);
 	v->set_cache(rsscache);
+	v->set_filters(&filters);
 
 	if (args.execute_cmds) {
 		execute_commands(args.cmds_to_execute);
@@ -619,7 +619,8 @@ void Controller::import_opml(const std::string& filename)
 			  << std::endl;
 		return;
 	} else {
-		std::cout << StrPrintf::fmt(_("Import of %s finished."), filename)
+		std::cout << StrPrintf::fmt(
+				     _("Import of %s finished."), filename)
 			  << std::endl;
 	}
 }
@@ -791,11 +792,16 @@ int Controller::execute_commands(const std::vector<std::string>& cmds)
 std::string Controller::write_temporary_item(std::shared_ptr<RssItem> item)
 {
 	char filename[_POSIX_PATH_MAX];
-	char *tmpdir = getenv("TMPDIR");
+	char* tmpdir = getenv("TMPDIR");
 	if (tmpdir != nullptr) {
-	  snprintf(filename, sizeof(filename), "%s/newsboat-article.XXXXXX", tmpdir);
+		snprintf(filename,
+			sizeof(filename),
+			"%s/newsboat-article.XXXXXX",
+			tmpdir);
 	} else {
-	  snprintf(filename, sizeof(filename), "/tmp/newsboat-article.XXXXXX");
+		snprintf(filename,
+			sizeof(filename),
+			"/tmp/newsboat-article.XXXXXX");
 	}
 	int fd = mkstemp(filename);
 	if (fd != -1) {
