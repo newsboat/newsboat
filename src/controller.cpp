@@ -456,6 +456,7 @@ int Controller::run(const CliArgsParser& args)
 	v->set_keymap(&keys);
 	v->set_tags(tags);
 	v->set_cache(rsscache);
+	v->set_filters(&filters);
 
 	if (args.execute_cmds) {
 		execute_commands(args.cmds_to_execute);

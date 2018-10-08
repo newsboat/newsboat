@@ -17,7 +17,10 @@ enum class InvalidationMode { PARTIAL, COMPLETE };
 
 class ItemListFormAction : public ListFormAction {
 public:
-	ItemListFormAction(View*, std::string formstr, Cache* cc);
+	ItemListFormAction(View*,
+		std::string formstr,
+		Cache* cc,
+		FilterContainer* f);
 	~ItemListFormAction() override;
 	void prepare() override;
 	void init() override;
@@ -153,6 +156,7 @@ private:
 
 	ListFormatter listfmt;
 	Cache* rsscache;
+	FilterContainer* filters;
 };
 
 } // namespace newsboat

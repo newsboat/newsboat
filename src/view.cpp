@@ -68,6 +68,7 @@ View::View(Controller* c)
 	, is_inside_cmdline(false)
 	, tab_count(0)
 	, rsscache(nullptr)
+	, filters(nullptr)
 {
 	if (getenv("ESCDELAY") == nullptr) {
 		set_escdelay(25);
@@ -175,8 +176,8 @@ int View::run()
 	std::vector<MacroCmd> macrocmds;
 
 	// create feedlist
-	auto feedlist =
-		std::make_shared<FeedListFormAction>(this, feedlist_str, rsscache);
+	auto feedlist = std::make_shared<FeedListFormAction>(
+		this, feedlist_str, rsscache, filters);
 	set_bindings(feedlist);
 	feedlist->set_regexmanager(rxman);
 	feedlist->set_tags(tags);
@@ -472,7 +473,8 @@ void View::push_searchresult(std::shared_ptr<RssFeed> feed,
 
 	if (feed->total_item_count() > 0) {
 		std::shared_ptr<ItemListFormAction> searchresult(
-			new ItemListFormAction(this, itemlist_str, rsscache));
+			new ItemListFormAction(
+				this, itemlist_str, rsscache, filters));
 		set_bindings(searchresult);
 		searchresult->set_regexmanager(rxman);
 		searchresult->set_feed(feed);
@@ -498,7 +500,8 @@ void View::push_itemlist(std::shared_ptr<RssFeed> feed)
 
 	if (feed->total_item_count() > 0) {
 		std::shared_ptr<ItemListFormAction> itemlist(
-			new ItemListFormAction(this, itemlist_str, rsscache));
+			new ItemListFormAction(
+				this, itemlist_str, rsscache, filters));
 		set_bindings(itemlist);
 		itemlist->set_regexmanager(rxman);
 		itemlist->set_feed(feed);
@@ -1175,6 +1178,11 @@ void View::set_regexmanager(RegexManager* r)
 void View::set_cache(Cache* c)
 {
 	rsscache = c;
+}
+
+void View::set_filters(FilterContainer* f)
+{
+	filters = f;
 }
 
 std::vector<std::pair<unsigned int, std::string>> View::get_formaction_names()

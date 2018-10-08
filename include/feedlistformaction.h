@@ -13,7 +13,10 @@ typedef std::pair<std::shared_ptr<RssFeed>, unsigned int> FeedPtrPosPair;
 
 class FeedListFormAction : public ListFormAction {
 public:
-	FeedListFormAction(View*, std::string formstr, Cache* cc);
+	FeedListFormAction(View*,
+		std::string formstr,
+		Cache* cc,
+		FilterContainer* f);
 	~FeedListFormAction() override;
 	void prepare() override;
 	void init() override;
@@ -98,6 +101,8 @@ private:
 
 	unsigned int unread_feeds;
 	unsigned int total_feeds;
+
+	FilterContainer* filters;
 
 	std::string old_sort_order;
 };

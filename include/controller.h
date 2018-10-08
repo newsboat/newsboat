@@ -59,11 +59,6 @@ public:
 	void reload_urls_file();
 	void edit_urls_file();
 
-	FilterContainer& get_filters()
-	{
-		return filters;
-	}
-
 	ConfigContainer* get_cfg()
 	{
 		return &cfg;
