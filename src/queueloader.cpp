@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
+#include <iostream>
 #include <libgen.h>
 #include <unistd.h>
 
@@ -10,6 +11,7 @@
 #include "configcontainer.h"
 #include "logger.h"
 #include "stflpp.h"
+#include "strprintf.h"
 #include "utils.h"
 
 using namespace newsboat;
@@ -65,6 +67,7 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 	}
 
 	f.open(queuefile.c_str(), std::fstream::in);
+	bool comments_ignored = false;
 	if (f.is_open()) {
 		std::string line;
 		do {
@@ -77,6 +80,22 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 				std::vector<std::string> fields =
 					Utils::tokenize_quoted(line);
 				bool url_found = false;
+
+				if (fields.empty()) {
+					if (!comments_ignored) {
+						std::cout << StrPrintf::fmt(
+							     _("WARNING: Comment found "
+							       "in %s. The queue file is regenerated "
+							       "when podboat exits and comments will "
+							       "be deleted. Press enter to continue or "
+							       "Ctrl+C to abort"),
+							     queuefile)
+							  << std::endl;
+						std::cin.ignore();
+						comments_ignored = true;
+					}
+					continue;
+				}
 
 				for (const auto& dl : dltemp) {
 					if (fields[0] == dl.url()) {
