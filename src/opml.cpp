@@ -5,7 +5,7 @@
 
 namespace newsboat {
 
-xmlDocPtr OPML::generate_opml(const FeedContainer& feedcontainer)
+xmlDocPtr opml::generate_opml(const FeedContainer& feedcontainer)
 {
 	xmlDocPtr root = xmlNewDoc((const xmlChar*)"1.0");
 	xmlNodePtr opml_node =
@@ -68,7 +68,7 @@ void rec_find_rss_outlines(
 
 			if (url) {
 				LOG(Level::DEBUG,
-					"OPML::import: found RSS outline with "
+					"opml::import: found RSS outline with "
 					"url = "
 					"%s",
 					url);
@@ -82,7 +82,7 @@ void rec_find_rss_outlines(
 					nurl = StrPrintf::fmt(
 						"exec:%s", url + 1);
 					LOG(Level::DEBUG,
-						"OPML::import: liferea-style "
+						"opml::import: liferea-style "
 						"url %s "
 						"converted to %s",
 						url,
@@ -94,7 +94,7 @@ void rec_find_rss_outlines(
 					node, (const xmlChar*)"filtercmd");
 				if (filtercmd) {
 					LOG(Level::DEBUG,
-						"OPML::import: adding filter "
+						"opml::import: adding filter "
 						"command %s to url %s",
 						filtercmd,
 						nurl);
@@ -117,7 +117,7 @@ void rec_find_rss_outlines(
 				bool found = false;
 
 				LOG(Level::DEBUG,
-					"OPML::import: size = %u",
+					"opml::import: size = %u",
 					urlcfg->get_urls().size());
 				// TODO: replace with algorithm::any or something
 				if (urlcfg->get_urls().size() > 0) {
@@ -131,13 +131,13 @@ void rec_find_rss_outlines(
 
 				if (!found) {
 					LOG(Level::DEBUG,
-						"OPML::import: added url = %s",
+						"opml::import: added url = %s",
 						url);
 					urlcfg->get_urls().push_back(
 						std::string(url));
 					if (tag.length() > 0) {
 						LOG(Level::DEBUG,
-							"OPML::import: "
+							"opml::import: "
 							"appending "
 							"tag %s to url %s",
 							tag,
@@ -147,7 +147,7 @@ void rec_find_rss_outlines(
 					}
 				} else {
 					LOG(Level::DEBUG,
-						"OPML::import: url = %s is "
+						"opml::import: url = %s is "
 						"already "
 						"in list",
 						url);
@@ -175,7 +175,7 @@ void rec_find_rss_outlines(
 	}
 }
 
-bool OPML::import(
+bool opml::import(
 		const std::string& filename,
 		UrlReader* urlcfg)
 {
@@ -189,7 +189,7 @@ bool OPML::import(
 	for (xmlNode* node = root->children; node != nullptr;
 		node = node->next) {
 		if (strcmp((const char*)node->name, "body") == 0) {
-			LOG(Level::DEBUG, "OPML::import: found body");
+			LOG(Level::DEBUG, "opml::import: found body");
 			rec_find_rss_outlines(urlcfg, node->children, "");
 			urlcfg->write_config();
 		}

@@ -8,7 +8,7 @@
 
 namespace newsboat {
 
-namespace OPML {
+namespace opml {
 	xmlDocPtr generate_opml(const FeedContainer& feedcontainer);
 	bool import(
 			const std::string& filename,

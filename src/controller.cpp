@@ -613,7 +613,7 @@ void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
 
 void Controller::import_opml(const std::string& filename)
 {
-	if (!OPML::import(filename, urlcfg)) {
+	if (!opml::import(filename, urlcfg)) {
 		std::cout << StrPrintf::fmt(
 				     _("An error occurred while parsing %s."),
 				     filename)
@@ -628,7 +628,7 @@ void Controller::import_opml(const std::string& filename)
 
 void Controller::export_opml()
 {
-	xmlDocPtr root = OPML::generate_opml(feedcontainer);
+	xmlDocPtr root = opml::generate_opml(feedcontainer);
 
 	xmlSaveCtxtPtr savectx = xmlSaveToFd(1, nullptr, 1);
 	xmlSaveDoc(savectx, root);
