@@ -17,7 +17,7 @@ TEST_CASE("generate_opml creates an XML document with feed URLs in OPML format",
 		(const FeedContainer& feedcontainer)
 		-> std::string
 		{
-			xmlDocPtr opml = opml::generate_opml(feedcontainer);
+			xmlDocPtr opml = opml::generate(feedcontainer);
 
 			xmlBufferPtr buffer = xmlBufferCreate();
 

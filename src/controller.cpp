@@ -628,7 +628,7 @@ void Controller::import_opml(const std::string& filename)
 
 void Controller::export_opml()
 {
-	xmlDocPtr root = opml::generate_opml(feedcontainer);
+	xmlDocPtr root = opml::generate(feedcontainer);
 
 	xmlSaveCtxtPtr savectx = xmlSaveToFd(1, nullptr, 1);
 	xmlSaveDoc(savectx, root);
