@@ -18,8 +18,9 @@ namespace newsboat {
 ItemViewFormAction::ItemViewFormAction(View* vv,
 	std::shared_ptr<ItemListFormAction> il,
 	std::string formstr,
-	Cache* cc)
-	: FormAction(vv, formstr)
+	Cache* cc,
+	ConfigContainer* cfg)
+	: FormAction(vv, formstr, cfg)
 	, show_source(false)
 	, quit(false)
 	, rxman(0)
@@ -27,6 +28,7 @@ ItemViewFormAction::ItemViewFormAction(View* vv,
 	, itemlist(il)
 	, in_search(false)
 	, rsscache(cc)
+	, cfg(cfg)
 {
 	valid_cmds.push_back("save");
 	std::sort(valid_cmds.begin(), valid_cmds.end());
@@ -41,8 +43,7 @@ void ItemViewFormAction::init()
 	quit = false;
 	links.clear();
 	num_lines = 0;
-	if (!v->get_cfg()->get_configvalue_as_bool(
-		    "display-article-progress")) {
+	if (!cfg->get_configvalue_as_bool("display-article-progress")) {
 		f->set("percentwidth", "0");
 	} else {
 		f->set("percentwidth",
@@ -164,7 +165,7 @@ void ItemViewFormAction::prepare()
 		unsigned int window_width = Utils::to_u(widthstr, 0);
 
 		unsigned int textwidth =
-			v->get_cfg()->get_configvalue_as_int("text-width");
+			cfg->get_configvalue_as_int("text-width");
 		if (textwidth == 0 || textwidth > window_width) {
 			textwidth = window_width;
 			if (textwidth - 5 > 0) {
@@ -322,7 +323,7 @@ void ItemViewFormAction::process_operation(Operation op,
 		break;
 	case OP_SHOWURLS: {
 		std::string urlviewer =
-			v->get_cfg()->get_configvalue("external-url-viewer");
+			cfg->get_configvalue("external-url-viewer");
 		LOG(Level::DEBUG, "view::run_itemview: showing URLs");
 		if (urlviewer == "") {
 			if (links.size() > 0) {
@@ -503,8 +504,7 @@ void ItemViewFormAction::set_head(const std::string& s,
 
 	f->set("head",
 		fmt.do_format(
-			v->get_cfg()->get_configvalue("itemview-title-format"),
-			width));
+			cfg->get_configvalue("itemview-title-format"), width));
 }
 
 void ItemViewFormAction::render_source(
@@ -610,7 +610,7 @@ std::vector<std::pair<LineType, std::string>> ItemViewFormAction::render_html(
 	const std::string& url)
 {
 	std::vector<std::pair<LineType, std::string>> result;
-	std::string renderer = v->get_cfg()->get_configvalue("html-renderer");
+	std::string renderer = cfg->get_configvalue("html-renderer");
 	if (renderer == "internal") {
 		HtmlRenderer rnd;
 		rnd.render(source, result, thelinks, url);
@@ -664,7 +664,7 @@ void ItemViewFormAction::set_regexmanager(RegexManager* r)
 
 void ItemViewFormAction::update_percent()
 {
-	if (v->get_cfg()->get_configvalue_as_bool("display-article-progress")) {
+	if (cfg->get_configvalue_as_bool("display-article-progress")) {
 		unsigned int percent = 0;
 		unsigned int offset = Utils::to_u(f->get("articleoffset"), 0);
 
@@ -725,7 +725,7 @@ void ItemViewFormAction::highlight_text(const std::string& searchphrase)
 	params.push_back(searchphrase);
 
 	std::vector<std::string> colors = Utils::tokenize(
-		v->get_cfg()->get_configvalue("search-highlight-colors"), " ");
+		cfg->get_configvalue("search-highlight-colors"), " ");
 	std::copy(colors.begin(), colors.end(), std::back_inserter(params));
 
 	try {

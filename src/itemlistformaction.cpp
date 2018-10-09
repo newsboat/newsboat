@@ -21,8 +21,9 @@ namespace newsboat {
 ItemListFormAction::ItemListFormAction(View* vv,
 	std::string formstr,
 	Cache* cc,
-	FilterContainer* f)
-	: ListFormAction(vv, formstr)
+	FilterContainer* f,
+	ConfigContainer* cfg)
+	: ListFormAction(vv, formstr, cfg)
 	, pos(0)
 	, apply_filter(false)
 	, show_searchresult(false)
@@ -37,6 +38,7 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	, invalidation_mode(InvalidationMode::COMPLETE)
 	, rsscache(cc)
 	, filters(f)
+	, cfg(cfg)
 {
 	assert(true == m.parse(FILTER_UNREAD_ITEMS));
 }
@@ -127,7 +129,7 @@ void ItemListFormAction::process_operation(Operation op,
 					true);
 				v->open_in_browser(
 					visible_items[itempos].first->link());
-				if (!v->get_cfg()->get_configvalue_as_bool(
+				if (!cfg->get_configvalue_as_bool(
 					    "openbrowser-and-mark-jumps-to-"
 					    "next-unread")) {
 					if (itempos <
@@ -230,7 +232,7 @@ void ItemListFormAction::process_operation(Operation op,
 					_("Error while toggling read flag: %s"),
 					e.what()));
 			}
-			if (!v->get_cfg()->get_configvalue_as_bool(
+			if (!cfg->get_configvalue_as_bool(
 				    "toggleitemread-jumps-to-next-unread")) {
 				if (itempos < visible_items.size() - 1)
 					f->set("itempos",
@@ -245,9 +247,8 @@ void ItemListFormAction::process_operation(Operation op,
 	case OP_SHOWURLS:
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
-				std::string urlviewer =
-					v->get_cfg()->get_configvalue(
-						"external-url-viewer");
+				std::string urlviewer = cfg->get_configvalue(
+					"external-url-viewer");
 				if (urlviewer == "") {
 					std::vector<LinkPair> links;
 					std::vector<std::pair<LineType,
@@ -482,7 +483,7 @@ void ItemListFormAction::process_operation(Operation op,
 				}
 				v->get_ctrl()->mark_all_read(feed);
 			}
-			if (v->get_cfg()->get_configvalue_as_bool(
+			if (cfg->get_configvalue_as_bool(
 				    "markfeedread-jumps-to-next-unread"))
 				process_operation(OP_NEXTUNREAD);
 			invalidate(InvalidationMode::COMPLETE);
@@ -508,7 +509,7 @@ void ItemListFormAction::process_operation(Operation op,
 						true);
 				}
 			}
-			if (!v->get_cfg()->get_configvalue_as_bool(
+			if (!cfg->get_configvalue_as_bool(
 				    "show-read-articles")) {
 				f->set("itempos", "0");
 			}
@@ -520,14 +521,11 @@ void ItemListFormAction::process_operation(Operation op,
 		m.parse(FILTER_UNREAD_ITEMS);
 		LOG(Level::DEBUG,
 			"ItemListFormAction: toggling show-read-articles");
-		if (v->get_cfg()->get_configvalue_as_bool(
-			    "show-read-articles")) {
-			v->get_cfg()->set_configvalue(
-				"show-read-articles", "no");
+		if (cfg->get_configvalue_as_bool("show-read-articles")) {
+			cfg->set_configvalue("show-read-articles", "no");
 			apply_filter = true;
 		} else {
-			v->get_cfg()->set_configvalue(
-				"show-read-articles", "yes");
+			cfg->set_configvalue("show-read-articles", "yes");
 			apply_filter = false;
 		}
 		save_filterpos();
@@ -641,23 +639,18 @@ void ItemListFormAction::process_operation(Operation op,
 		if (input_options.length() < n_options)
 			break;
 		if (c == input_options.at(0)) {
-			v->get_cfg()->set_configvalue(
-				"article-sort-order", "date-asc");
+			cfg->set_configvalue("article-sort-order", "date-asc");
 		} else if (c == input_options.at(1)) {
-			v->get_cfg()->set_configvalue(
-				"article-sort-order", "title-asc");
+			cfg->set_configvalue("article-sort-order", "title-asc");
 		} else if (c == input_options.at(2)) {
-			v->get_cfg()->set_configvalue(
-				"article-sort-order", "flags-asc");
+			cfg->set_configvalue("article-sort-order", "flags-asc");
 		} else if (c == input_options.at(3)) {
-			v->get_cfg()->set_configvalue(
+			cfg->set_configvalue(
 				"article-sort-order", "author-asc");
 		} else if (c == input_options.at(4)) {
-			v->get_cfg()->set_configvalue(
-				"article-sort-order", "link-asc");
+			cfg->set_configvalue("article-sort-order", "link-asc");
 		} else if (c == input_options.at(5)) {
-			v->get_cfg()->set_configvalue(
-				"article-sort-order", "guid-asc");
+			cfg->set_configvalue("article-sort-order", "guid-asc");
 		}
 	} break;
 	case OP_REVSORT: {
@@ -672,23 +665,20 @@ void ItemListFormAction::process_operation(Operation op,
 		if (input_options.length() < n_options)
 			break;
 		if (c == input_options.at(0)) {
-			v->get_cfg()->set_configvalue(
-				"article-sort-order", "date-desc");
+			cfg->set_configvalue("article-sort-order", "date-desc");
 		} else if (c == input_options.at(1)) {
-			v->get_cfg()->set_configvalue(
+			cfg->set_configvalue(
 				"article-sort-order", "title-desc");
 		} else if (c == input_options.at(2)) {
-			v->get_cfg()->set_configvalue(
+			cfg->set_configvalue(
 				"article-sort-order", "flags-desc");
 		} else if (c == input_options.at(3)) {
-			v->get_cfg()->set_configvalue(
+			cfg->set_configvalue(
 				"article-sort-order", "author-desc");
 		} else if (c == input_options.at(4)) {
-			v->get_cfg()->set_configvalue(
-				"article-sort-order", "link-desc");
+			cfg->set_configvalue("article-sort-order", "link-desc");
 		} else if (c == input_options.at(5)) {
-			v->get_cfg()->set_configvalue(
-				"article-sort-order", "guid-desc");
+			cfg->set_configvalue("article-sort-order", "guid-desc");
 		}
 	} break;
 	case OP_INT_RESIZE:
@@ -866,7 +856,7 @@ void ItemListFormAction::prepare()
 {
 	std::lock_guard<std::mutex> mtx(redraw_mtx);
 
-	const auto sort_strategy = v->get_cfg()->get_article_sort_strategy();
+	const auto sort_strategy = cfg->get_article_sort_strategy();
 	if (sort_strategy != old_sort_strategy) {
 		feed->sort(sort_strategy);
 		old_sort_strategy = sort_strategy;
@@ -881,7 +871,7 @@ void ItemListFormAction::prepare()
 		return;
 	}
 
-	if (v->get_cfg()->get_configvalue_as_bool("mark-as-read-on-hover")) {
+	if (cfg->get_configvalue_as_bool("mark-as-read-on-hover")) {
 		std::string itemposname = f->get("itempos");
 		if (itemposname.length() > 0) {
 			unsigned int itempos = Utils::to_u(itemposname);
@@ -906,10 +896,9 @@ void ItemListFormAction::prepare()
 		return;
 
 	if (invalidated) {
-		auto datetime_format =
-			v->get_cfg()->get_configvalue("datetime-format");
+		auto datetime_format = cfg->get_configvalue("datetime-format");
 		auto itemlist_format =
-			v->get_cfg()->get_configvalue("articlelist-format");
+			cfg->get_configvalue("articlelist-format");
 
 		if (invalidation_mode == InvalidationMode::COMPLETE) {
 			listfmt.clear();
@@ -1002,11 +991,10 @@ void ItemListFormAction::init()
 	f->set("itempos", "0");
 	f->set("msg", "");
 	set_keymap_hints();
-	apply_filter =
-		!(v->get_cfg()->get_configvalue_as_bool("show-read-articles"));
+	apply_filter = !(cfg->get_configvalue_as_bool("show-read-articles"));
 	invalidate(InvalidationMode::COMPLETE);
 	do_update_visible_items();
-	if (v->get_cfg()->get_configvalue_as_bool("goto-first-unread")) {
+	if (cfg->get_configvalue_as_bool("goto-first-unread")) {
 		jump_to_next_unread_item(true);
 	}
 	f->run(-3); // FRUN - compute all widget dimensions
@@ -1037,11 +1025,11 @@ void ItemListFormAction::set_head(const std::string& s,
 	fmt.register_fmt('U', Utils::censor_url(url));
 
 	if (!show_searchresult) {
-		title = fmt.do_format(v->get_cfg()->get_configvalue(
-			"articlelist-title-format"));
+		title = fmt.do_format(
+			cfg->get_configvalue("articlelist-title-format"));
 	} else {
-		title = fmt.do_format(v->get_cfg()->get_configvalue(
-			"searchresult-title-format"));
+		title = fmt.do_format(
+			cfg->get_configvalue("searchresult-title-format"));
 	}
 	f->set("head", title);
 }
@@ -1250,7 +1238,7 @@ void ItemListFormAction::recalculate_form()
 	// jump to next then exit to itemlist and the itempos is wrong This only
 	// applies when "show-read-articles" is set to false
 	if ((old_itempos != -1) && itempos > (unsigned int)old_itempos &&
-		!v->get_cfg()->get_configvalue_as_bool("show-read-articles")) {
+		!cfg->get_configvalue_as_bool("show-read-articles")) {
 		f->set("itempos", StrPrintf::fmt("%u", old_itempos));
 		old_itempos = -1; // Reset
 	}

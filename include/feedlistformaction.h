@@ -16,13 +16,13 @@ public:
 	FeedListFormAction(View*,
 		std::string formstr,
 		Cache* cc,
-		FilterContainer* f);
+		FilterContainer* f,
+		ConfigContainer* cfg);
 	~FeedListFormAction() override;
 	void prepare() override;
 	void init() override;
 	void set_feedlist(std::vector<std::shared_ptr<RssFeed>>& feeds);
-	void update_visible_feeds(
-		std::vector<std::shared_ptr<RssFeed>>& feeds);
+	void update_visible_feeds(std::vector<std::shared_ptr<RssFeed>>& feeds);
 	void set_tags(const std::vector<std::string>& t);
 	KeyMapHintEntry* get_keymap_hint() override;
 	std::shared_ptr<RssFeed> get_feed();
@@ -30,8 +30,8 @@ public:
 	void set_redraw(bool b) override
 	{
 		FormAction::set_redraw(b);
-		apply_filter = !(v->get_cfg()->get_configvalue_as_bool(
-			"show-read-feeds"));
+		apply_filter =
+			!(cfg->get_configvalue_as_bool("show-read-feeds"));
 	}
 
 	std::string id() const override
@@ -103,6 +103,7 @@ private:
 	unsigned int total_feeds;
 
 	FilterContainer* filters;
+	ConfigContainer* cfg;
 
 	std::string old_sort_order;
 };

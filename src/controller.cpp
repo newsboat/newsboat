@@ -247,11 +247,12 @@ int Controller::run(const CliArgsParser& args)
 		return EXIT_FAILURE;
 	}
 
-	reloader = std::unique_ptr<Reloader>(new Reloader(this, rsscache));
-
 	if (!args.silent) {
 		std::cout << _("done.") << std::endl;
 	}
+
+	reloader =
+		std::unique_ptr<Reloader>(new Reloader(this, rsscache, &cfg));
 
 	std::string type = cfg.get_configvalue("urls-source");
 	if (type == "local") {

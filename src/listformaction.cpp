@@ -4,8 +4,11 @@
 
 namespace newsboat {
 
-ListFormAction::ListFormAction(View* v, std::string formstr)
-	: FormAction(v, formstr)
+ListFormAction::ListFormAction(View* v,
+	std::string formstr,
+	ConfigContainer* cfg)
+	: FormAction(v, formstr, cfg)
+	, cfg(cfg)
 {
 }
 
@@ -46,14 +49,13 @@ void ListFormAction::process_operation(Operation op,
 	}
 }
 
-void ListFormAction::open_unread_items_in_browser(
-	std::shared_ptr<RssFeed> feed,
+void ListFormAction::open_unread_items_in_browser(std::shared_ptr<RssFeed> feed,
 	bool markread)
 {
 	int tabcount = 0;
 	for (const auto& item : feed->items()) {
-		if (tabcount < v->get_cfg()->get_configvalue_as_int(
-				       "max-browser-tabs")) {
+		if (tabcount <
+			cfg->get_configvalue_as_int("max-browser-tabs")) {
 			if (item->unread()) {
 				v->open_in_browser(item->link());
 				tabcount += 1;

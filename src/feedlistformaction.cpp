@@ -25,8 +25,9 @@ namespace newsboat {
 FeedListFormAction::FeedListFormAction(View* vv,
 	std::string formstr,
 	Cache* cc,
-	FilterContainer* f)
-	: ListFormAction(vv, formstr)
+	FilterContainer* f,
+	ConfigContainer* cfg)
+	: ListFormAction(vv, formstr, cfg)
 	, zero_feedpos(false)
 	, feeds_shown(0)
 	, quit(false)
@@ -39,12 +40,13 @@ FeedListFormAction::FeedListFormAction(View* vv,
 	, unread_feeds(0)
 	, total_feeds(0)
 	, filters(f)
+	, cfg(cfg)
 {
 	assert(true == m.parse(FILTER_UNREAD_FEEDS));
 	valid_cmds.push_back("tag");
 	valid_cmds.push_back("goto");
 	std::sort(valid_cmds.begin(), valid_cmds.end());
-	old_sort_order = v->get_cfg()->get_configvalue("feed-sort-order");
+	old_sort_order = cfg->get_configvalue("feed-sort-order");
 }
 
 void FeedListFormAction::init()
@@ -66,8 +68,7 @@ void FeedListFormAction::init()
 	 */
 	v->get_ctrl()->get_reloader()->spawn_reloadthread();
 
-	apply_filter =
-		!(v->get_cfg()->get_configvalue_as_bool("show-read-feeds"));
+	apply_filter = !(cfg->get_configvalue_as_bool("show-read-feeds"));
 }
 
 FeedListFormAction::~FeedListFormAction() {}
@@ -83,11 +84,10 @@ void FeedListFormAction::prepare()
 			"FeedListFormAction::prepare: apparent resize");
 	}
 
-	std::string sort_order =
-		v->get_cfg()->get_configvalue("feed-sort-order");
+	std::string sort_order = cfg->get_configvalue("feed-sort-order");
 	if (sort_order != old_sort_order) {
 		v->get_ctrl()->get_feedcontainer()->sort_feeds(
-			v->get_cfg()->get_feed_sort_strategy());
+			cfg->get_feed_sort_strategy());
 		old_sort_order = sort_order;
 		do_redraw = true;
 	}
@@ -159,23 +159,21 @@ REDO:
 		if (input_options.length() < n_options)
 			break;
 		if (c == input_options.at(0)) {
-			v->get_cfg()->set_configvalue(
+			cfg->set_configvalue(
 				"feed-sort-order", "firsttag-desc");
 		} else if (c == input_options.at(1)) {
-			v->get_cfg()->set_configvalue(
-				"feed-sort-order", "title-desc");
+			cfg->set_configvalue("feed-sort-order", "title-desc");
 		} else if (c == input_options.at(2)) {
-			v->get_cfg()->set_configvalue(
+			cfg->set_configvalue(
 				"feed-sort-order", "articlecount-desc");
 		} else if (c == input_options.at(3)) {
-			v->get_cfg()->set_configvalue(
+			cfg->set_configvalue(
 				"feed-sort-order", "unreadarticlecount-desc");
 		} else if (c == input_options.at(4)) {
-			v->get_cfg()->set_configvalue(
+			cfg->set_configvalue(
 				"feed-sort-order", "lastupdated-desc");
 		} else if (c == input_options.at(5)) {
-			v->get_cfg()->set_configvalue(
-				"feed-sort-order", "none-desc");
+			cfg->set_configvalue("feed-sort-order", "none-desc");
 		}
 	} break;
 	case OP_REVSORT: {
@@ -191,23 +189,20 @@ REDO:
 		if (input_options.length() < n_options)
 			break;
 		if (c == input_options.at(0)) {
-			v->get_cfg()->set_configvalue(
-				"feed-sort-order", "firsttag-asc");
+			cfg->set_configvalue("feed-sort-order", "firsttag-asc");
 		} else if (c == input_options.at(1)) {
-			v->get_cfg()->set_configvalue(
-				"feed-sort-order", "title-asc");
+			cfg->set_configvalue("feed-sort-order", "title-asc");
 		} else if (c == input_options.at(2)) {
-			v->get_cfg()->set_configvalue(
+			cfg->set_configvalue(
 				"feed-sort-order", "articlecount-asc");
 		} else if (c == input_options.at(3)) {
-			v->get_cfg()->set_configvalue(
+			cfg->set_configvalue(
 				"feed-sort-order", "unreadarticlecount-asc");
 		} else if (c == input_options.at(4)) {
-			v->get_cfg()->set_configvalue(
+			cfg->set_configvalue(
 				"feed-sort-order", "lastupdated-asc");
 		} else if (c == input_options.at(5)) {
-			v->get_cfg()->set_configvalue(
-				"feed-sort-order", "none-asc");
+			cfg->set_configvalue("feed-sort-order", "none-asc");
 		}
 	} break;
 	case OP_OPENINBROWSER:
@@ -272,7 +267,7 @@ REDO:
 		LOG(Level::INFO, "FeedListFormAction: reloading all feeds");
 		{
 			bool reload_only_visible_feeds =
-				v->get_cfg()->get_configvalue_as_bool(
+				cfg->get_configvalue_as_bool(
 					"reload-only-visible-feeds");
 			std::vector<int> idxs;
 			for (const auto& feed : visible_feeds) {
@@ -311,11 +306,11 @@ REDO:
 		m.parse(FILTER_UNREAD_FEEDS);
 		LOG(Level::INFO,
 			"FeedListFormAction: toggling show-read-feeds");
-		if (v->get_cfg()->get_configvalue_as_bool("show-read-feeds")) {
-			v->get_cfg()->set_configvalue("show-read-feeds", "no");
+		if (cfg->get_configvalue_as_bool("show-read-feeds")) {
+			cfg->set_configvalue("show-read-feeds", "no");
 			apply_filter = true;
 		} else {
-			v->get_cfg()->set_configvalue("show-read-feeds", "yes");
+			cfg->set_configvalue("show-read-feeds", "yes");
 			apply_filter = false;
 		}
 		save_filterpos();
@@ -443,8 +438,8 @@ REDO:
 		}
 		break;
 	case OP_CLEARFILTER:
-		apply_filter = !(v->get_cfg()->get_configvalue_as_bool(
-			"show-read-feeds"));
+		apply_filter =
+			!(cfg->get_configvalue_as_bool("show-read-feeds"));
 		m.parse(FILTER_UNREAD_FEEDS);
 		do_redraw = true;
 		save_filterpos();
@@ -471,8 +466,7 @@ REDO:
 		}
 		LOG(Level::INFO, "FeedListFormAction: quitting");
 		if (automatic ||
-			!v->get_cfg()->get_configvalue_as_bool(
-				"confirm-exit") ||
+			!cfg->get_configvalue_as_bool("confirm-exit") ||
 			v->confirm(
 				_("Do you really want to quit (y:Yes n:No)? "),
 				_("yn")) == *_("y")) {
@@ -499,7 +493,7 @@ REDO:
 void FeedListFormAction::update_visible_feeds(
 	std::vector<std::shared_ptr<RssFeed>>& feeds)
 {
-	assert(v->get_cfg() != nullptr); // must not happen
+	assert(cfg != nullptr); // must not happen
 
 	visible_feeds.clear();
 
@@ -521,15 +515,14 @@ void FeedListFormAction::update_visible_feeds(
 void FeedListFormAction::set_feedlist(
 	std::vector<std::shared_ptr<RssFeed>>& feeds)
 {
-	assert(v->get_cfg() != nullptr); // must not happen
+	assert(cfg != nullptr); // must not happen
 
 	unsigned int width = Utils::to_u(f->get("feeds:w"));
 
 	unsigned int i = 0;
 	unread_feeds = 0;
 
-	std::string feedlist_format =
-		v->get_cfg()->get_configvalue("feedlist-format");
+	std::string feedlist_format = cfg->get_configvalue("feedlist-format");
 
 	ListFormatter listfmt;
 
@@ -554,7 +547,7 @@ void FeedListFormAction::set_feedlist(
 		listfmt.format_list(rxman, "feedlist"));
 
 	std::string title_format =
-		v->get_cfg()->get_configvalue("feedlist-title-format");
+		cfg->get_configvalue("feedlist-title-format");
 
 	FmtStrFormatter fmt;
 	fmt.register_fmt('T', tag);

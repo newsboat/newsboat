@@ -20,7 +20,8 @@ public:
 	ItemListFormAction(View*,
 		std::string formstr,
 		Cache* cc,
-		FilterContainer* f);
+		FilterContainer* f,
+		ConfigContainer* cfg);
 	~ItemListFormAction() override;
 	void prepare() override;
 	void init() override;
@@ -157,6 +158,7 @@ private:
 	ListFormatter listfmt;
 	Cache* rsscache;
 	FilterContainer* filters;
+	ConfigContainer* cfg;
 };
 
 } // namespace newsboat

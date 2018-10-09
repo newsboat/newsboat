@@ -22,9 +22,12 @@
 
 namespace newsboat {
 
-FileBrowserFormAction::FileBrowserFormAction(View* vv, std::string formstr)
-	: FormAction(vv, formstr)
+FileBrowserFormAction::FileBrowserFormAction(View* vv,
+	std::string formstr,
+	ConfigContainer* cfg)
+	: FormAction(vv, formstr, cfg)
 	, quit(false)
+	, cfg(cfg)
 {
 	// In filebrowser, keyboard focus is at the input field, so user can't
 	// possibly use 'q' key to exit the dialog
@@ -70,14 +73,13 @@ void FileBrowserFormAction::process_operation(Operation op,
 					fmt.register_fmt('f', filename);
 					f->set("head",
 						fmt.do_format(
-							v->get_cfg()
-								->get_configvalue(
-									"filebr"
-									"o"
-									"wser-"
-									"title-"
-									"forma"
-									"t"),
+							cfg->get_configvalue(
+								"filebr"
+								"o"
+								"wser-"
+								"title-"
+								"forma"
+								"t"),
 							width));
 					int status = ::chdir(filename.c_str());
 					LOG(Level::DEBUG,
@@ -225,8 +227,7 @@ void FileBrowserFormAction::init()
 	f->set("fileprompt", _("File: "));
 
 	if (dir == "") {
-		std::string save_path =
-			v->get_cfg()->get_configvalue("save-path");
+		std::string save_path = cfg->get_configvalue("save-path");
 
 		LOG(Level::DEBUG,
 			"view::filebrowser: save-path is '%s'",

@@ -13,10 +13,13 @@
 
 namespace newsboat {
 
-HelpFormAction::HelpFormAction(View* vv, std::string formstr)
-	: FormAction(vv, formstr)
+HelpFormAction::HelpFormAction(View* vv,
+	std::string formstr,
+	ConfigContainer* cfg)
+	: FormAction(vv, formstr, cfg)
 	, quit(false)
 	, apply_search(false)
+	, cfg(cfg)
 {
 }
 
@@ -65,8 +68,7 @@ void HelpFormAction::prepare()
 		fmt.register_fmt('N', PROGRAM_NAME);
 		fmt.register_fmt('V', PROGRAM_VERSION);
 		f->set("head",
-			fmt.do_format(v->get_cfg()->get_configvalue(
-					      "help-title-format"),
+			fmt.do_format(cfg->get_configvalue("help-title-format"),
 				width));
 
 		std::vector<KeyMapDesc> descs;
@@ -75,10 +77,8 @@ void HelpFormAction::prepare()
 
 		std::string highlighted_searchphrase =
 			StrPrintf::fmt("<hl>%s</>", searchphrase);
-		std::vector<std::string> colors =
-			Utils::tokenize(v->get_cfg()->get_configvalue(
-						"search-highlight-colors"),
-				" ");
+		std::vector<std::string> colors = Utils::tokenize(
+			cfg->get_configvalue("search-highlight-colors"), " ");
 		f->set("highlight", make_colorstring(colors));
 		ListFormatter listfmt;
 

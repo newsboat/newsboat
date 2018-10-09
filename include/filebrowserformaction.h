@@ -1,13 +1,14 @@
 #ifndef NEWSBOAT_FILEBROWSERFORMACTION_H_
 #define NEWSBOAT_FILEBROWSERFORMACTION_H_
 
+#include "configcontainer.h"
 #include "formaction.h"
 
 namespace newsboat {
 
 class FileBrowserFormAction : public FormAction {
 public:
-	FileBrowserFormAction(View*, std::string formstr);
+	FileBrowserFormAction(View*, std::string formstr, ConfigContainer* cfg);
 	~FileBrowserFormAction() override;
 	void prepare() override;
 	void init() override;
@@ -47,6 +48,8 @@ private:
 	std::string cwd;
 	std::string dir;
 	std::string default_filename;
+
+	ConfigContainer* cfg;
 };
 
 } // namespace newsboat

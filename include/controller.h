@@ -59,11 +59,6 @@ public:
 	void reload_urls_file();
 	void edit_urls_file();
 
-	ConfigContainer* get_cfg()
-	{
-		return &cfg;
-	}
-
 	FeedContainer* get_feedcontainer()
 	{
 		return &feedcontainer;
