@@ -382,7 +382,7 @@ void FormAction::finished_qna(Operation op)
 		f->set_focus("feeds");
 		std::string cmdline = qna_responses[0];
 		FormAction::cmdlinehistory.add_line(cmdline);
-		LOG(Level::DEBUG, "formaction: commandline = `%s'", cmdline);
+		LOG(Level::DEBUG, "FormAction: commandline = `%s'", cmdline);
 		this->handle_cmdline(cmdline);
 	} break;
 	default:

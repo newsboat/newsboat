@@ -217,7 +217,7 @@ void ItemViewFormAction::process_operation(Operation op,
 
 	switch (op) {
 	case OP_TOGGLESOURCEVIEW:
-		LOG(Level::INFO, "view::run_itemview: toggling source view");
+		LOG(Level::INFO, "ItemViewFormAction::process_operation: toggling source view");
 		show_source = !show_source;
 		do_redraw = true;
 		break;
@@ -237,7 +237,7 @@ void ItemViewFormAction::process_operation(Operation op,
 		}
 	} break;
 	case OP_SAVE: {
-		LOG(Level::INFO, "view::run_itemview: saving article");
+		LOG(Level::INFO, "ItemViewFormAction::process_operation: saving article");
 		std::string filename;
 		if (automatic) {
 			if (args->size() > 0)
@@ -262,7 +262,7 @@ void ItemViewFormAction::process_operation(Operation op,
 		}
 	} break;
 	case OP_OPENINBROWSER:
-		LOG(Level::INFO, "view::run_itemview: starting browser");
+		LOG(Level::INFO, "ItemViewFormAction::process_operation: starting browser");
 		v->set_status(_("Starting browser..."));
 		v->open_in_browser(item->link());
 		v->set_status("");
@@ -324,7 +324,7 @@ void ItemViewFormAction::process_operation(Operation op,
 	case OP_SHOWURLS: {
 		std::string urlviewer =
 			cfg->get_configvalue("external-url-viewer");
-		LOG(Level::DEBUG, "view::run_itemview: showing URLs");
+		LOG(Level::DEBUG, "ItemViewFormAction::process_operation: showing URLs");
 		if (urlviewer == "") {
 			if (links.size() > 0) {
 				v->push_urlview(links, feed);
@@ -339,13 +339,13 @@ void ItemViewFormAction::process_operation(Operation op,
 	} break;
 	case OP_DELETE:
 		LOG(Level::INFO,
-			"view::run_itemview: deleting current article");
+			"ItemViewFormAction::process_operation: deleting current article");
 		item->set_deleted(true);
 		rsscache->mark_item_deleted(guid, true);
 	/* fall-through! */
 	case OP_NEXTUNREAD:
 		LOG(Level::INFO,
-			"view::run_itemview: jumping to next unread article");
+			"ItemViewFormAction::process_operation: jumping to next unread article");
 		if (v->get_next_unread(itemlist.get(), this)) {
 			do_redraw = true;
 		} else {
@@ -355,7 +355,7 @@ void ItemViewFormAction::process_operation(Operation op,
 		break;
 	case OP_PREVUNREAD:
 		LOG(Level::INFO,
-			"view::run_itemview: jumping to previous unread "
+			"ItemViewFormAction::process_operation: jumping to previous unread "
 			"article");
 		if (v->get_previous_unread(itemlist.get(), this)) {
 			do_redraw = true;
@@ -365,7 +365,7 @@ void ItemViewFormAction::process_operation(Operation op,
 		}
 		break;
 	case OP_NEXT:
-		LOG(Level::INFO, "view::run_itemview: jumping to next article");
+		LOG(Level::INFO, "ItemViewFormAction::process_operation: jumping to next article");
 		if (v->get_next(itemlist.get(), this)) {
 			do_redraw = true;
 		} else {
@@ -375,7 +375,7 @@ void ItemViewFormAction::process_operation(Operation op,
 		break;
 	case OP_PREV:
 		LOG(Level::INFO,
-			"view::run_itemview: jumping to previous article");
+			"ItemViewFormAction::process_operation: jumping to previous article");
 		if (v->get_previous(itemlist.get(), this)) {
 			do_redraw = true;
 		} else {
@@ -385,7 +385,7 @@ void ItemViewFormAction::process_operation(Operation op,
 		break;
 	case OP_RANDOMUNREAD:
 		LOG(Level::INFO,
-			"view::run_itemview: jumping to random unread article");
+			"ItemViewFormAction::process_operation: jumping to random unread article");
 		if (v->get_random_unread(itemlist.get(), this)) {
 			do_redraw = true;
 		} else {
@@ -395,7 +395,7 @@ void ItemViewFormAction::process_operation(Operation op,
 		break;
 	case OP_TOGGLEITEMREAD:
 		LOG(Level::INFO,
-			"view::run_itemview: setting unread and quitting");
+			"ItemViewFormAction::process_operation: setting unread and quitting");
 		v->set_status(_("Toggling read flag for article..."));
 		try {
 			item->set_unread(true);
@@ -409,11 +409,11 @@ void ItemViewFormAction::process_operation(Operation op,
 		quit = true;
 		break;
 	case OP_QUIT:
-		LOG(Level::INFO, "view::run_itemview: quitting");
+		LOG(Level::INFO, "ItemViewFormAction::process_operation: quitting");
 		quit = true;
 		break;
 	case OP_HARDQUIT:
-		LOG(Level::INFO, "view::run_itemview: hard quitting");
+		LOG(Level::INFO, "ItemViewFormAction::process_operation: hard quitting");
 		hardquit = true;
 		break;
 	case OP_HELP:
@@ -431,7 +431,7 @@ void ItemViewFormAction::process_operation(Operation op,
 	case OP_0: {
 		unsigned int idx = op - OP_1;
 		LOG(Level::DEBUG,
-			"itemview::run: OP_1 = %d op = %d idx = %u",
+			"ItemViewFormAction::process_operation: OP_1 = %d op = %d idx = %u",
 			OP_1,
 			op,
 			idx);
