@@ -10,7 +10,7 @@ class SelectFormAction : public FormAction {
 public:
 	enum class SelectionType { TAG, FILTER };
 
-	SelectFormAction(View*, std::string formstr);
+	SelectFormAction(View*, std::string formstr, ConfigContainer* cfg);
 	~SelectFormAction() override;
 	void prepare() override;
 	void init() override;
@@ -48,6 +48,7 @@ private:
 	std::string value;
 	std::vector<std::string> tags;
 	std::vector<FilterNameExprPair> filters;
+	ConfigContainer* cfg;
 };
 
 } // namespace newsboat

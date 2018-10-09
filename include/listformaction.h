@@ -7,7 +7,7 @@ namespace newsboat {
 
 class ListFormAction : public FormAction {
 public:
-	ListFormAction(View*, std::string formstr);
+	ListFormAction(View*, std::string formstr, ConfigContainer* cfg);
 
 protected:
 	void process_operation(Operation op,
@@ -15,6 +15,8 @@ protected:
 		std::vector<std::string>* args = nullptr) override;
 	void open_unread_items_in_browser(std::shared_ptr<RssFeed> feed,
 		bool markread);
+
+	ConfigContainer* cfg;
 };
 
 } // namespace newsboat

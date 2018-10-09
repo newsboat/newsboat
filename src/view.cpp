@@ -177,7 +177,7 @@ int View::run()
 
 	// create feedlist
 	auto feedlist = std::make_shared<FeedListFormAction>(
-		this, feedlist_str, rsscache, filters);
+		this, feedlist_str, rsscache, filters, cfg);
 	set_bindings(feedlist);
 	feedlist->set_regexmanager(rxman);
 	feedlist->set_tags(tags);
@@ -474,7 +474,7 @@ void View::push_searchresult(std::shared_ptr<RssFeed> feed,
 	if (feed->total_item_count() > 0) {
 		std::shared_ptr<ItemListFormAction> searchresult(
 			new ItemListFormAction(
-				this, itemlist_str, rsscache, filters));
+				this, itemlist_str, rsscache, filters, cfg));
 		set_bindings(searchresult);
 		searchresult->set_regexmanager(rxman);
 		searchresult->set_feed(feed);
@@ -501,7 +501,7 @@ void View::push_itemlist(std::shared_ptr<RssFeed> feed)
 	if (feed->total_item_count() > 0) {
 		std::shared_ptr<ItemListFormAction> itemlist(
 			new ItemListFormAction(
-				this, itemlist_str, rsscache, filters));
+				this, itemlist_str, rsscache, filters, cfg));
 		set_bindings(itemlist);
 		itemlist->set_regexmanager(rxman);
 		itemlist->set_feed(feed);
@@ -544,7 +544,8 @@ void View::push_itemview(std::shared_ptr<RssFeed> f,
 				FormAction>(fa);
 		assert(itemlist != nullptr);
 		std::shared_ptr<ItemViewFormAction> itemview(
-			new ItemViewFormAction(this, itemlist, itemview_str, rsscache));
+			new ItemViewFormAction(
+				this, itemlist, itemview_str, rsscache, cfg));
 		set_bindings(itemview);
 		itemview->set_regexmanager(rxman);
 		itemview->set_feed(f);
@@ -581,7 +582,7 @@ void View::view_dialogs()
 	auto fa = get_current_formaction();
 	if (fa != nullptr && fa->id() != "dialogs") {
 		std::shared_ptr<DialogsFormAction> dialogs(
-			new DialogsFormAction(this, dialogs_str));
+			new DialogsFormAction(this, dialogs_str, cfg));
 		dialogs->set_parent_formaction(fa);
 		apply_colors(dialogs);
 		dialogs->init();
@@ -595,7 +596,7 @@ void View::push_help()
 	auto fa = get_current_formaction();
 
 	std::shared_ptr<HelpFormAction> helpview(
-		new HelpFormAction(this, help_str));
+		new HelpFormAction(this, help_str, cfg));
 	set_bindings(helpview);
 	apply_colors(helpview);
 	helpview->set_context(fa->id());
@@ -609,7 +610,7 @@ void View::push_urlview(const std::vector<LinkPair>& links,
 	std::shared_ptr<RssFeed>& feed)
 {
 	std::shared_ptr<UrlViewFormAction> urlview(
-		new UrlViewFormAction(this, feed, urlview_str));
+		new UrlViewFormAction(this, feed, urlview_str, cfg));
 	set_bindings(urlview);
 	apply_colors(urlview);
 	urlview->set_parent_formaction(get_current_formaction());
@@ -623,7 +624,7 @@ std::string View::run_filebrowser(const std::string& default_filename,
 	const std::string& dir)
 {
 	std::shared_ptr<FileBrowserFormAction> filebrowser(
-		new FileBrowserFormAction(this, filebrowser_str));
+		new FileBrowserFormAction(this, filebrowser_str, cfg));
 	set_bindings(filebrowser);
 	apply_colors(filebrowser);
 	filebrowser->set_dir(dir);
@@ -639,7 +640,7 @@ std::string View::select_tag()
 		return "";
 	}
 	std::shared_ptr<SelectFormAction> selecttag(
-		new SelectFormAction(this, selecttag_str));
+		new SelectFormAction(this, selecttag_str, cfg));
 	selecttag->set_type(SelectFormAction::SelectionType::TAG);
 	set_bindings(selecttag);
 	apply_colors(selecttag);
@@ -652,7 +653,7 @@ std::string View::select_tag()
 std::string View::select_filter(const std::vector<FilterNameExprPair>& filters)
 {
 	std::shared_ptr<SelectFormAction> selecttag(
-		new SelectFormAction(this, selecttag_str));
+		new SelectFormAction(this, selecttag_str, cfg));
 	selecttag->set_type(SelectFormAction::SelectionType::FILTER);
 	set_bindings(selecttag);
 	apply_colors(selecttag);

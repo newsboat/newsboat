@@ -19,8 +19,9 @@ namespace newsboat {
 
 UrlViewFormAction::UrlViewFormAction(View* vv,
 	std::shared_ptr<RssFeed>& feed,
-	std::string formstr)
-	: FormAction(vv, formstr)
+	std::string formstr,
+	ConfigContainer* cfg)
+	: FormAction(vv, formstr, cfg)
 	, quit(false)
 	, feed(feed)
 {
@@ -122,8 +123,7 @@ void UrlViewFormAction::init()
 
 	f->set("head",
 		fmt.do_format(
-			v->get_cfg()->get_configvalue("urlview-title-format"),
-			width));
+			cfg->get_configvalue("urlview-title-format"), width));
 	do_redraw = true;
 	quit = false;
 	set_keymap_hints();

@@ -22,7 +22,7 @@ typedef std::pair<std::string, std::string> QnaPair;
 
 class FormAction {
 public:
-	FormAction(View*, std::string formstr);
+	FormAction(View*, std::string formstr, ConfigContainer* cfg);
 	virtual ~FormAction();
 	virtual void prepare() = 0;
 	virtual void init() = 0;
@@ -115,6 +115,7 @@ private:
 	std::vector<QnaPair> qna_prompts;
 	Operation finish_operation;
 	History* qna_history;
+	ConfigContainer* cfg;
 	std::shared_ptr<FormAction> parent_formaction;
 };
 

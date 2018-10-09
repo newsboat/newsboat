@@ -19,10 +19,13 @@ namespace newsboat {
  * a few places.
  */
 
-SelectFormAction::SelectFormAction(View* vv, std::string formstr)
-	: FormAction(vv, formstr)
+SelectFormAction::SelectFormAction(View* vv,
+	std::string formstr,
+	ConfigContainer* cfg)
+	: FormAction(vv, formstr, cfg)
 	, quit(false)
 	, type(SelectionType::TAG)
+	, cfg(cfg)
 {
 }
 
@@ -147,12 +150,11 @@ void SelectFormAction::init()
 	switch (type) {
 	case SelectionType::TAG:
 		title = fmt.do_format(
-			v->get_cfg()->get_configvalue("selecttag-title-format"),
-			width);
+			cfg->get_configvalue("selecttag-title-format"), width);
 		break;
 	case SelectionType::FILTER:
-		title = fmt.do_format(v->get_cfg()->get_configvalue(
-					      "selectfilter-title-format"),
+		title = fmt.do_format(
+			cfg->get_configvalue("selectfilter-title-format"),
 			width);
 		break;
 	default:

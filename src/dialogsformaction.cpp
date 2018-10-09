@@ -11,9 +11,12 @@
 
 namespace newsboat {
 
-DialogsFormAction::DialogsFormAction(View* vv, std::string formstr)
-	: FormAction(vv, formstr)
+DialogsFormAction::DialogsFormAction(View* vv,
+	std::string formstr,
+	ConfigContainer* cfg)
+	: FormAction(vv, formstr, cfg)
 	, update_list(true)
+	, cfg(cfg)
 {
 }
 
@@ -24,8 +27,7 @@ void DialogsFormAction::init()
 	set_keymap_hints();
 
 	unsigned int width = Utils::to_u(f->get("dialogs:w"));
-	std::string title_format =
-		v->get_cfg()->get_configvalue("dialogs-title-format");
+	std::string title_format = cfg->get_configvalue("dialogs-title-format");
 	FmtStrFormatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', PROGRAM_VERSION);

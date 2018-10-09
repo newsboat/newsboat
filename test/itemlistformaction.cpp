@@ -50,7 +50,7 @@ TEST_CASE("OP_OPEN displays article using an external pager",
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 	itemlist.set_feed(feed);
 
 	REQUIRE_NOTHROW(itemlist.process_op(OP_OPEN));
@@ -78,7 +78,7 @@ TEST_CASE("OP_PURGE_DELETED purges previously deleted items",
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 	itemlist.set_feed(feed);
 
 	SECTION("No items to purge")
@@ -121,7 +121,7 @@ TEST_CASE(
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 	itemlist.set_feed(feed);
 	itemlist.process_op(OP_OPENBROWSER_AND_MARK);
 	std::ifstream browserFileStream(browserfile.getPath());
@@ -155,7 +155,7 @@ TEST_CASE("OP_OPENINBROWSER passes the url to the browser",
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 	itemlist.set_feed(feed);
 	itemlist.process_op(OP_OPENINBROWSER);
 	std::ifstream browserFileStream(browserfile.getPath());
@@ -195,7 +195,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 	itemlist.set_feed(feed);
 
 	SECTION("unread >= max-browser-tabs")
@@ -279,7 +279,7 @@ TEST_CASE(
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 	itemlist.set_feed(feed);
 
 	SECTION("unread >= max-browser-tabs")
@@ -363,7 +363,7 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 	item->set_author(test_author);
 	item->set_description(test_description);
 	item->set_pubDate(test_pubDate);
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 
 	SECTION("with external-url-viewer")
 	{
@@ -400,8 +400,8 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 {
 	Controller c;
 	newsboat::View v(&c);
-	ConfigContainer* cfg = c.get_cfg();
-	Cache rsscache(":memory:", cfg);
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
 	TestHelpers::TempFile bookmarkFile;
 	std::string line;
@@ -413,7 +413,7 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 	std::string separator = " ";
 	std::string extra_arg = "extra arg";
 
-	v.set_config_container(cfg);
+	v.set_config_container(&cfg);
 	c.set_view(&v);
 
 	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
@@ -423,12 +423,12 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 	item->set_link(test_url);
 	item->set_title(test_title);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 
 	feed->add_item(item);
 	itemlist.set_feed(feed);
 
-	cfg->set_configvalue(
+	cfg.set_configvalue(
 		"bookmark-cmd", "echo > " + bookmarkFile.getPath());
 
 	bookmark_args.push_back(extra_arg);
@@ -447,19 +447,19 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 {
 	Controller c;
 	newsboat::View v(&c);
-	ConfigContainer* cfg = c.get_cfg();
-	Cache rsscache(":memory:", cfg);
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
 
 	std::vector<std::string> op_args;
 
-	v.set_config_container(cfg);
+	v.set_config_container(&cfg);
 	c.set_view(&v);
 
 	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 
 	feed->add_item(item);
 	itemlist.set_feed(feed);
@@ -543,8 +543,8 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 	Controller c;
 	newsboat::View v(&c);
 	TestHelpers::TempFile saveFile;
-	ConfigContainer* cfg = c.get_cfg();
-	Cache rsscache(":memory:", cfg);
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
 
 	std::vector<std::string> op_args;
@@ -561,7 +561,7 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 		"%a, %d %b %Y %H:%M:%S %z",
 		localtime(&test_pubDate));
 
-	v.set_config_container(cfg);
+	v.set_config_container(&cfg);
 	c.set_view(&v);
 
 	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
@@ -573,7 +573,7 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 	item->set_pubDate(test_pubDate);
 	item->set_description(test_description);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 
 	feed->add_item(item);
 	itemlist.set_feed(feed);
@@ -593,21 +593,21 @@ TEST_CASE("OP_HELP command is processed", "[ItemListFormAction]")
 	Controller c;
 	RegexManager regman;
 	newsboat::View v(&c);
-	ConfigContainer* cfg = c.get_cfg();
-	Cache rsscache(":memory:", cfg);
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
 
 	KeyMap k(KM_NEWSBOAT);
 	v.set_keymap(&k);
 
 	v.set_regexmanager(&regman);
-	v.set_config_container(cfg);
+	v.set_config_container(&cfg);
 	c.set_view(&v);
 
 	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 	feed->add_item(item);
 	itemlist.set_feed(feed);
 
@@ -621,20 +621,20 @@ TEST_CASE("OP_HARDQUIT command is processed", "[ItemListFormAction]")
 	Controller c;
 	RegexManager regman;
 	newsboat::View v(&c);
-	ConfigContainer* cfg = c.get_cfg();
-	Cache rsscache(":memory:", cfg);
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
 
 	KeyMap k(KM_NEWSBOAT);
 	v.set_keymap(&k);
 
 	v.set_regexmanager(&regman);
-	v.set_config_container(cfg);
+	v.set_config_container(&cfg);
 	c.set_view(&v);
 
 	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 	itemlist.set_feed(feed);
 
 	v.push_itemlist(feed);
@@ -652,10 +652,10 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREVIOUS",
 	TestHelpers::TempFile articleFile;
 	RegexManager regman;
 	newsboat::View v(&c);
-	ConfigContainer* cfg = c.get_cfg();
-	cfg->set_configvalue(
+	ConfigContainer cfg;
+	cfg.set_configvalue(
 		"external-url-viewer", "tee > " + articleFile.getPath());
-	Cache rsscache(":memory:", cfg);
+	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
 	std::string line;
 
@@ -667,7 +667,7 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREVIOUS",
 	v.set_keymap(&k);
 
 	v.set_regexmanager(&regman);
-	v.set_config_container(cfg);
+	v.set_config_container(&cfg);
 	c.set_view(&v);
 
 	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
@@ -680,7 +680,7 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREVIOUS",
 	item2->set_title(second_article_title);
 	feed->add_item(item2);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 	itemlist.set_feed(feed);
 
 	v.push_itemlist(feed);
@@ -706,15 +706,15 @@ TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles",
 	Controller c;
 	RegexManager regman;
 	newsboat::View v(&c);
-	ConfigContainer* cfg = c.get_cfg();
-	Cache rsscache(":memory:", cfg);
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
 
 	KeyMap k(KM_NEWSBOAT);
 	v.set_keymap(&k);
 
 	v.set_regexmanager(&regman);
-	v.set_config_container(cfg);
+	v.set_config_container(&cfg);
 	c.set_view(&v);
 
 	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
@@ -722,7 +722,7 @@ TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles",
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 	feed->add_item(item);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 	itemlist.set_feed(feed);
 	v.push_itemlist(feed);
 
@@ -748,8 +748,8 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 	Controller c;
 	newsboat::View v(&c);
 	TestHelpers::TempFile articleFile;
-	ConfigContainer* cfg = c.get_cfg();
-	Cache rsscache(":memory:", cfg);
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
 
 	std::vector<std::string> op_args;
@@ -766,7 +766,7 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 		"%a, %d %b %Y %H:%M:%S %z",
 		localtime(&test_pubDate));
 
-	v.set_config_container(cfg);
+	v.set_config_container(&cfg);
 	c.set_view(&v);
 
 	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
@@ -778,7 +778,7 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 	item->set_pubDate(test_pubDate);
 	item->set_description(test_description);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 
 	feed->add_item(item);
 	itemlist.set_feed(feed);

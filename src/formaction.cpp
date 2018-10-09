@@ -14,20 +14,20 @@ namespace newsboat {
 History FormAction::searchhistory;
 History FormAction::cmdlinehistory;
 
-FormAction::FormAction(View* vv, std::string formstr)
+FormAction::FormAction(View* vv, std::string formstr, ConfigContainer* cfg)
 	: v(vv)
 	, f(new Stfl::Form(formstr))
 	, do_redraw(true)
 	, finish_operation(OP_NIL)
 	, qna_history(nullptr)
+	, cfg(cfg)
 {
 	if (v) {
-		if (v->get_cfg()->get_configvalue_as_bool("show-keymap-hint") ==
-			false) {
+		if (cfg->get_configvalue_as_bool("show-keymap-hint") == false) {
 			f->set("showhint", "0");
 		}
-		if (v->get_cfg()->get_configvalue_as_bool(
-			    "swap-title-and-hints") == true) {
+		if (cfg->get_configvalue_as_bool("swap-title-and-hints") ==
+			true) {
 			std::string hints = f->dump("hints", "", 0);
 			std::string title = f->dump("title", "", 0);
 			f->modify("title", "replace", "label[swap-title]");
@@ -198,7 +198,7 @@ std::vector<std::string> FormAction::get_suggestions(
 					if (tokens.size() > 1)
 						variable_fragment = tokens[1];
 					variable_suggestions =
-						v->get_cfg()->get_suggestions(
+						cfg->get_suggestions(
 							variable_fragment);
 					for (const auto& suggestion :
 						variable_suggestions) {
@@ -239,7 +239,6 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 	 */
 	std::vector<std::string> tokens =
 		Utils::tokenize_quoted(cmdline, " \t=");
-	ConfigContainer* cfg = v->get_cfg();
 	assert(cfg != nullptr);
 	if (!tokens.empty()) {
 		std::string cmd = tokens[0];
@@ -408,7 +407,7 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 
 	std::string new_title = "";
 	bool is_bm_autopilot =
-		v->get_cfg()->get_configvalue_as_bool("bookmark-autopilot");
+		cfg->get_configvalue_as_bool("bookmark-autopilot");
 	prompts.push_back(QnaPair(_("URL: "), default_url));
 	if (default_title.empty()) { // call the function to figure out title
 				     // from url only if the default_title is no
@@ -519,10 +518,9 @@ std::string FormAction::bookmark(const std::string& url,
 	const std::string& description,
 	const std::string& feed_title)
 {
-	std::string bookmark_cmd =
-		v->get_cfg()->get_configvalue("bookmark-cmd");
+	std::string bookmark_cmd = cfg->get_configvalue("bookmark-cmd");
 	bool is_interactive =
-		v->get_cfg()->get_configvalue_as_bool("bookmark-interactive");
+		cfg->get_configvalue_as_bool("bookmark-interactive");
 	if (bookmark_cmd.length() > 0) {
 		std::string cmdline = StrPrintf::fmt("%s '%s' '%s' '%s' '%s'",
 			bookmark_cmd,

@@ -16,7 +16,8 @@ public:
 	ItemViewFormAction(View*,
 		std::shared_ptr<ItemListFormAction> il,
 		std::string formstr,
-		Cache* cc);
+		Cache* cc,
+		ConfigContainer* cfg);
 	~ItemViewFormAction() override;
 	void prepare() override;
 	void init() override;
@@ -74,6 +75,7 @@ private:
 	std::shared_ptr<ItemListFormAction> itemlist;
 	bool in_search;
 	Cache* rsscache;
+	ConfigContainer* cfg;
 };
 
 } // namespace newsboat

@@ -7,7 +7,7 @@ namespace newsboat {
 
 class HelpFormAction : public FormAction {
 public:
-	HelpFormAction(View*, std::string formstr);
+	HelpFormAction(View*, std::string formstr, ConfigContainer* cfg);
 	~HelpFormAction() override;
 	void prepare() override;
 	void init() override;
@@ -30,6 +30,7 @@ private:
 	bool apply_search;
 	std::string searchphrase;
 	std::string context;
+	ConfigContainer* cfg;
 };
 
 } // namespace newsboat

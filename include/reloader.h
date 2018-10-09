@@ -4,6 +4,8 @@
 #include <mutex>
 #include <vector>
 
+#include "configcontainer.h"
+
 namespace newsboat {
 
 class Cache;
@@ -14,12 +16,13 @@ class CurlHandle;
 class Reloader {
 	Controller* ctrl;
 	Cache* rsscache;
+	ConfigContainer* cfg;
 	std::mutex reload_mutex;
 
 	std::string prepare_message(unsigned int pos, unsigned int max);
 
 public:
-	Reloader(Controller* c, Cache* cc);
+	Reloader(Controller* c, Cache* cc, ConfigContainer* cfg);
 
 	/// \brief Creates detached thread that runs periodic updates.
 	void spawn_reloadthread();

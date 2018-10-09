@@ -10,7 +10,8 @@ class UrlViewFormAction : public FormAction {
 public:
 	UrlViewFormAction(View*,
 		std::shared_ptr<RssFeed>& feed,
-		std::string formstr);
+		std::string formstr,
+		ConfigContainer* cfg);
 	~UrlViewFormAction() override;
 	void prepare() override;
 	void init() override;
@@ -33,6 +34,7 @@ private:
 	std::vector<LinkPair> links;
 	bool quit;
 	std::shared_ptr<RssFeed> feed;
+	ConfigContainer* cfg;
 };
 
 } // namespace newsboat

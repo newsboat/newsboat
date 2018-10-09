@@ -7,7 +7,7 @@ namespace newsboat {
 
 class DialogsFormAction : public FormAction {
 public:
-	DialogsFormAction(View*, std::string formstr);
+	DialogsFormAction(View*, std::string formstr, ConfigContainer* cfg);
 	~DialogsFormAction() override;
 	void prepare() override;
 	void init() override;
@@ -24,6 +24,7 @@ private:
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
 	bool update_list;
+	ConfigContainer* cfg;
 };
 
 } // namespace newsboat

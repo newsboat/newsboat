@@ -18,15 +18,16 @@
 
 namespace newsboat {
 
-Reloader::Reloader(Controller* c, Cache* cc)
+Reloader::Reloader(Controller* c, Cache* cc, ConfigContainer* cfg)
 	: ctrl(c)
 	, rsscache(cc)
+	, cfg(cfg)
 {
 }
 
 void Reloader::spawn_reloadthread()
 {
-	std::thread t{ReloadThread(ctrl, ctrl->get_cfg())};
+	std::thread t{ReloadThread(ctrl, cfg)};
 	t.detach();
 }
 
@@ -64,12 +65,12 @@ void Reloader::reload(unsigned int pos,
 					Utils::censor_url(oldfeed->rssurl())));
 		}
 
-		bool ignore_dl = (ctrl->get_cfg()->get_configvalue(
-					  "ignore-mode") == "download");
+		bool ignore_dl =
+			(cfg->get_configvalue("ignore-mode") == "download");
 
 		RssParser parser(oldfeed->rssurl(),
 			rsscache,
-			ctrl->get_cfg(),
+			cfg,
 			ignore_dl ? ctrl->get_ignores() : nullptr,
 			ctrl->get_api());
 		parser.set_easyhandle(easyhandle);
@@ -126,8 +127,7 @@ void Reloader::reload_all(bool unattended)
 		ctrl->get_feedcontainer()->unread_feed_count();
 	const auto unread_articles =
 		ctrl->get_feedcontainer()->unread_item_count();
-	int num_threads =
-		ctrl->get_cfg()->get_configvalue_as_int("reload-threads");
+	int num_threads = cfg->get_configvalue_as_int("reload-threads");
 	time_t t1, t2, dt;
 
 	ctrl->get_feedcontainer()->reset_feeds_status();
@@ -176,8 +176,7 @@ void Reloader::reload_all(bool unattended)
 	}
 	ctrl->get_view()->force_redraw();
 
-	ctrl->get_feedcontainer()->sort_feeds(
-		ctrl->get_cfg()->get_feed_sort_strategy());
+	ctrl->get_feedcontainer()->sort_feeds(cfg->get_feed_sort_strategy());
 	ctrl->update_feedlist();
 
 	t2 = time(nullptr);
@@ -188,8 +187,7 @@ void Reloader::reload_all(bool unattended)
 		ctrl->get_feedcontainer()->unread_feed_count();
 	const auto unread_articles2 =
 		ctrl->get_feedcontainer()->unread_item_count();
-	bool notify_always =
-		ctrl->get_cfg()->get_configvalue_as_bool("notify-always");
+	bool notify_always = cfg->get_configvalue_as_bool("notify-always");
 	if (notify_always || unread_feeds2 > unread_feeds ||
 		unread_articles2 > unread_articles) {
 		int article_count = unread_articles2 - unread_articles;
@@ -205,8 +203,7 @@ void Reloader::reload_all(bool unattended)
 			std::to_string(article_count >= 0 ? article_count : 0));
 		fmt.register_fmt(
 			'D', std::to_string(feed_count >= 0 ? feed_count : 0));
-		notify(fmt.do_format(
-			ctrl->get_cfg()->get_configvalue("notify-format")));
+		notify(fmt.do_format(cfg->get_configvalue("notify-format")));
 	}
 }
 
@@ -227,8 +224,7 @@ void Reloader::reload_indexes(const std::vector<int>& indexes, bool unattended)
 		ctrl->get_feedcontainer()->unread_feed_count();
 	const auto unread_articles2 =
 		ctrl->get_feedcontainer()->unread_item_count();
-	bool notify_always =
-		ctrl->get_cfg()->get_configvalue_as_bool("notify-always");
+	bool notify_always = cfg->get_configvalue_as_bool("notify-always");
 	if (notify_always || unread_feeds2 != unread_feeds ||
 		unread_articles2 != unread_articles) {
 		FmtStrFormatter fmt;
@@ -238,8 +234,7 @@ void Reloader::reload_indexes(const std::vector<int>& indexes, bool unattended)
 			std::to_string(unread_articles2 - unread_articles));
 		fmt.register_fmt(
 			'D', std::to_string(unread_feeds2 - unread_feeds));
-		notify(fmt.do_format(
-			ctrl->get_cfg()->get_configvalue("notify-format")));
+		notify(fmt.do_format(cfg->get_configvalue("notify-format")));
 	}
 	if (!unattended) {
 		ctrl->get_view()->set_status("");
@@ -285,8 +280,6 @@ void Reloader::reload_range(unsigned int start,
 
 void Reloader::notify(const std::string& msg)
 {
-	const auto cfg = ctrl->get_cfg();
-
 	if (cfg->get_configvalue_as_bool("notify-screen")) {
 		LOG(Level::DEBUG, "reloader:notify: notifying screen");
 		std::cout << "\033^" << msg << "\033\\";
