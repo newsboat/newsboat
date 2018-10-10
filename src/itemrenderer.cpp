@@ -32,30 +32,25 @@ void prepare_header(
 {
 	const auto feedtitle = get_feedtitle(item);
 	if (!feedtitle.empty()) {
-		std::string title(_("Feed: "));
-		title.append(feedtitle);
+		const auto title = StrPrintf::fmt("%s%s", _("Feed: "), feedtitle);
 		lines.push_back(std::make_pair(LineType::wrappable, title));
 	}
 
 	if (!item->title().empty()) {
-		std::string title(_("Title: "));
-		title.append(item->title());
+		const auto title = StrPrintf::fmt("%s%s", _("Title: "), item->title());
 		lines.push_back(std::make_pair(LineType::wrappable, title));
 	}
 
 	if (!item->author().empty()) {
-		std::string author(_("Author: "));
-		author.append(item->author());
+		const auto author = StrPrintf::fmt("%s%s", _("Author: "), item->author());
 		lines.push_back(std::make_pair(LineType::wrappable, author));
 	}
 
-	std::string date(_("Date: "));
-	date.append(item->pubDate());
+	const auto date = StrPrintf::fmt("%s%s", _("Date: "), item->pubDate());
 	lines.push_back(std::make_pair(LineType::wrappable, date));
 
 	if (!item->link().empty()) {
-		std::string link(_("Link: "));
-		link.append(item->link());
+		const auto link = StrPrintf::fmt("%s%s", _("Link: "), item->link());
 		lines.push_back(std::make_pair(LineType::softwrappable, link));
 	}
 
@@ -65,8 +60,7 @@ void prepare_header(
 	}
 
 	if (!item->enclosure_url().empty()) {
-		std::string dlurl(_("Podcast Download URL: "));
-		dlurl.append(item->enclosure_url());
+		const auto dlurl = StrPrintf::fmt("%s%s", _("Podcast Download URL: "), item->enclosure_url());
 		lines.push_back(std::make_pair(LineType::softwrappable, dlurl));
 	}
 
