@@ -7,7 +7,7 @@
 
 namespace newsboat {
 
-std::string get_feedtitle(std::shared_ptr<RssItem> item) {
+std::string item_renderer::get_feedtitle(std::shared_ptr<RssItem> item) {
 	std::shared_ptr<RssFeed> feedptr = item->get_feedptr();
 
 	std::string feedtitle;
@@ -30,7 +30,7 @@ void prepare_header(
 	std::vector<std::pair<LineType, std::string>>& lines,
 	std::vector<LinkPair>& /*links*/)
 {
-	const auto feedtitle = get_feedtitle(item);
+	const auto feedtitle = item_renderer::get_feedtitle(item);
 	if (!feedtitle.empty()) {
 		const auto title = StrPrintf::fmt("%s%s", _("Feed: "), feedtitle);
 		lines.push_back(std::make_pair(LineType::wrappable, title));

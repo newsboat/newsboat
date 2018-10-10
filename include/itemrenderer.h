@@ -10,6 +10,8 @@ class ConfigContainer;
 class RssItem;
 
 namespace item_renderer {
+	std::string get_feedtitle(std::shared_ptr<RssItem> item);
+
 	std::string to_plain_text(
 			ConfigContainer& cfg,
 			std::shared_ptr<RssItem> item);

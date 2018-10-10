@@ -7,6 +7,7 @@
 #include "config.h"
 #include "exceptions.h"
 #include "formatstring.h"
+#include "itemrenderer.h"
 #include "logger.h"
 #include "strprintf.h"
 #include "textformatter.h"
@@ -57,19 +58,7 @@ void ItemViewFormAction::init()
 
 void ItemViewFormAction::update_head(const std::shared_ptr<RssItem>& item)
 {
-	std::shared_ptr<RssFeed> feedptr = item->get_feedptr();
-
-	std::string feedtitle;
-	if (feedptr) {
-		if (!feedptr->title().empty()) {
-			feedtitle = feedptr->title();
-			Utils::remove_soft_hyphens(feedtitle);
-		} else if (!feedptr->link().empty()) {
-			feedtitle = feedptr->link();
-		} else if (!feedptr->rssurl().empty()) {
-			feedtitle = feedptr->rssurl();
-		}
-	}
+	const auto feedtitle = item_renderer::get_feedtitle(item);
 
 	unsigned int unread_item_count = feed->unread_item_count();
 	// we need to subtract because the current item isn't yet marked

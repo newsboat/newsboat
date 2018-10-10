@@ -328,3 +328,67 @@ TEST_CASE("Empty fields are not rendered", "[item_renderer]")
 		REQUIRE(result == expected);
 	}
 }
+
+TEST_CASE("item_renderer::get_feedtitle() returns item's feed title without "
+		"soft hyphens if that's available",
+		"[item_renderer]")
+{
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+
+	std::shared_ptr<RssItem> item;
+	std::shared_ptr<RssFeed> feed;
+	std::tie(item, feed) = test_item(&rsscache);
+
+	SECTION("Title without soft hyphens") {
+		feed->set_title("Welcome, lovely strangers!");
+	}
+
+	SECTION("Title containing soft hyphens") {
+		feed->set_title("Wel\u00ADcome, lo\u00ADve\u00ADly stran\u00ADgers!");
+	}
+
+	const auto result = item_renderer::get_feedtitle(item);
+	REQUIRE(result == "Welcome, lovely strangers!");
+}
+
+TEST_CASE("item_renderer::get_feedtitle() returns item's feed self-link "
+		"if its title is empty",
+		"[item_renderer]")
+{
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+
+	std::shared_ptr<RssItem> item;
+	std::shared_ptr<RssFeed> feed;
+	std::tie(item, feed) = test_item(&rsscache);
+
+	const auto feedlink = std::string("https://rss.example.com/~joe/");
+
+	feed->set_title("");
+	feed->set_link(feedlink);
+
+	const auto result = item_renderer::get_feedtitle(item);
+	REQUIRE(result == feedlink);
+}
+
+TEST_CASE("item_renderer::get_feedtitle() returns item's feed URL "
+		"if both the title and self-link are empty",
+		"[item_renderer]")
+{
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+
+	std::shared_ptr<RssItem> item;
+	std::shared_ptr<RssFeed> feed;
+	std::tie(item, feed) = test_item(&rsscache);
+
+	const auto feedurl = std::string("https://example.com/~joe/entries.rss");
+
+	feed->set_title("");
+	feed->set_link("");
+	feed->set_rssurl(feedurl);
+
+	const auto result = item_renderer::get_feedtitle(item);
+	REQUIRE(result == feedurl);
+}
