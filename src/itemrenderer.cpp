@@ -60,7 +60,13 @@ void prepare_header(
 	}
 
 	if (!item->enclosure_url().empty()) {
-		const auto dlurl = StrPrintf::fmt("%s%s", _("Podcast Download URL: "), item->enclosure_url());
+		auto dlurl = StrPrintf::fmt(
+			"%s%s",
+			_("Podcast Download URL: "),
+			Utils::censor_url(item->enclosure_url()));
+		if (!item->enclosure_type().empty()) {
+			dlurl.append(StrPrintf::fmt("%s%s", _("type: "), item->enclosure_type()));
+		}
 		lines.push_back(std::make_pair(LineType::softwrappable, dlurl));
 	}
 
