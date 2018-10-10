@@ -54,6 +54,7 @@ private:
 	void process_operation(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
+	void update_head(const std::shared_ptr<RssItem>& item);
 	void set_head(const std::string& s,
 		const std::string& feedtitle,
 		unsigned int unread,

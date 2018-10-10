@@ -55,6 +55,34 @@ void ItemViewFormAction::init()
 	set_keymap_hints();
 }
 
+void ItemViewFormAction::update_head(const std::shared_ptr<RssItem>& item)
+{
+	std::shared_ptr<RssFeed> feedptr = item->get_feedptr();
+
+	std::string feedtitle;
+	if (feedptr) {
+		if (!feedptr->title().empty()) {
+			feedtitle = feedptr->title();
+			Utils::remove_soft_hyphens(feedtitle);
+		} else if (!feedptr->link().empty()) {
+			feedtitle = feedptr->link();
+		} else if (!feedptr->rssurl().empty()) {
+			feedtitle = feedptr->rssurl();
+		}
+	}
+
+	unsigned int unread_item_count = feed->unread_item_count();
+	// we need to subtract because the current item isn't yet marked
+	// as read
+	if (item->unread()) {
+		unread_item_count--;
+	}
+	set_head(item->title(),
+		feedtitle,
+		unread_item_count,
+		feed->total_item_count());
+};
+
 void ItemViewFormAction::prepare()
 {
 	/*
@@ -137,16 +165,7 @@ void ItemViewFormAction::prepare()
 
 		textfmt.add_line(LineType::wrappable, std::string());
 
-		unsigned int unread_item_count = feed->unread_item_count();
-		// we need to subtract because the current item isn't yet marked
-		// as read
-		if (item->unread()) {
-			unread_item_count--;
-		}
-		set_head(item->title(),
-			feedtitle,
-			unread_item_count,
-			feed->total_item_count());
+		update_head(item);
 
 		std::vector<std::pair<LineType, std::string>> lines;
 		if (show_source) {
