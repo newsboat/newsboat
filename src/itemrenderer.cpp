@@ -73,7 +73,7 @@ void prepare_header(
 	lines.push_back(std::make_pair(LineType::wrappable, std::string("")));
 }
 
-std::string ItemRenderer::to_plain_text(
+std::string item_renderer::to_plain_text(
 		ConfigContainer& cfg,
 		std::shared_ptr<RssItem> item)
 {

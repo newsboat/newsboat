@@ -9,10 +9,7 @@ namespace newsboat {
 class ConfigContainer;
 class RssItem;
 
-class ItemRenderer {
-public:
-	ItemRenderer() = default;
-
+namespace item_renderer {
 	std::string to_plain_text(
 			ConfigContainer& cfg,
 			std::shared_ptr<RssItem> item);
