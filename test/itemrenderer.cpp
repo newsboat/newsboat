@@ -28,8 +28,8 @@ std::shared_ptr<RssItem> test_item(Cache* c)
 	return item;
 }
 
-TEST_CASE("to_plain_text() produces a rendered representation of RSS item, "
-		"ready to be displayed to the user",
+TEST_CASE("ItemRenderer::to_plain_text() produces a rendered representation "
+		"of an RSS item, ready to be displayed to the user",
 		"[ItemRenderer]")
 {
 	TestHelpers::EnvVar tzEnv("TZ");
@@ -103,7 +103,7 @@ TEST_CASE("to_plain_text() produces a rendered representation of RSS item, "
 	}
 }
 
-TEST_CASE("Itemrenderer::to_plain_text() renders text to the width specified "
+TEST_CASE("ItemRenderer::to_plain_text() renders text to the width specified "
 		"in `text-width` setting",
 		"[ItemRenderer]")
 {
@@ -138,7 +138,6 @@ TEST_CASE("Itemrenderer::to_plain_text() renders text to the width specified "
 			"massa, luctus ut ligula vitae, suscipit tempus velit. Vivamus sodales, quam in \n" +
 			"convallis posuere, libero nisi ultricies orci, nec lobortis.\n";
 
-
 		REQUIRE(result == expected);
 	}
 
@@ -151,7 +150,6 @@ TEST_CASE("Itemrenderer::to_plain_text() renders text to the width specified "
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl \n" +
 			"massa, luctus ut ligula vitae, suscipit tempus velit. Vivamus sodales, quam in \n" +
 			"convallis posuere, libero nisi ultricies orci, nec lobortis.\n";
-
 
 		REQUIRE(result == expected);
 	}
