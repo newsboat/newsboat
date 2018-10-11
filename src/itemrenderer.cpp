@@ -14,7 +14,6 @@ ItemRenderer::ItemRenderer(ConfigContainer* cfg_)
 std::string ItemRenderer::to_plain_text(std::shared_ptr<RssItem> item) {
 
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links; // not used
 
 	std::string title(_("Title: "));
 	title.append(item->title());
@@ -41,6 +40,7 @@ std::string ItemRenderer::to_plain_text(std::shared_ptr<RssItem> item) {
 	lines.push_back(std::make_pair(LineType::wrappable, std::string("")));
 
 	HtmlRenderer rnd(true);
+	std::vector<LinkPair> links; // not used
 	rnd.render(item->description(), lines, links, item->feedurl());
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);
