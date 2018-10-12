@@ -41,8 +41,9 @@ public:
 
 	void finished_qna(Operation op) override;
 
-	std::vector<std::pair<LineType, std::string>> render_html(
+	void render_html(
 		const std::string& source,
+		std::vector<std::pair<LineType, std::string>>& lines,
 		std::vector<LinkPair>& thelinks,
 		const std::string& url);
 

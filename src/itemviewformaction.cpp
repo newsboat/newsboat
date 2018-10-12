@@ -158,11 +158,10 @@ void ItemViewFormAction::prepare()
 
 		std::vector<std::pair<LineType, std::string>> lines;
 		if (show_source) {
-			render_source(lines,
-				Utils::quote_for_stfl(item->description()));
+			render_source(lines, Utils::quote_for_stfl(item->description()));
 		} else {
 			const std::string baseurl = item_renderer::get_item_base_link(item);
-			lines = render_html(item->description(), links, baseurl);
+			render_html(item->description(), lines, links, baseurl);
 		}
 
 		textfmt.add_lines(lines);
@@ -610,16 +609,16 @@ void ItemViewFormAction::finished_qna(Operation op)
 	}
 }
 
-std::vector<std::pair<LineType, std::string>> ItemViewFormAction::render_html(
+void ItemViewFormAction::render_html(
 	const std::string& source,
+	std::vector<std::pair<LineType, std::string>>& lines,
 	std::vector<LinkPair>& thelinks,
 	const std::string& url)
 {
-	std::vector<std::pair<LineType, std::string>> result;
 	std::string renderer = cfg->get_configvalue("html-renderer");
 	if (renderer == "internal") {
 		HtmlRenderer rnd;
-		rnd.render(source, result, thelinks, url);
+		rnd.render(source, lines, thelinks, url);
 	} else {
 		char* argv[4];
 		argv[0] = const_cast<char*>("/bin/sh");
@@ -638,12 +637,11 @@ std::vector<std::pair<LineType, std::string>> ItemViewFormAction::render_html(
 		std::string line;
 		getline(is, line);
 		while (!is.eof()) {
-			result.push_back(std::make_pair(LineType::softwrappable,
+			lines.push_back(std::make_pair(LineType::softwrappable,
 				Utils::quote_for_stfl(line)));
 			getline(is, line);
 		}
 	}
-	return result;
 }
 
 void ItemViewFormAction::set_regexmanager(RegexManager* r)
