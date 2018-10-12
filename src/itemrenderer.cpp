@@ -73,6 +73,18 @@ void prepare_header(
 	lines.push_back(std::make_pair(LineType::wrappable, std::string("")));
 }
 
+std::string item_renderer::get_item_base_link(const std::shared_ptr<RssItem>& item)
+{
+	std::string baseurl;
+	if (!item->get_base().empty()) {
+		baseurl = item->get_base();
+	} else {
+		baseurl = item->feedurl();
+	}
+
+	return baseurl;
+}
+
 std::string item_renderer::to_plain_text(
 		ConfigContainer& cfg,
 		std::shared_ptr<RssItem> item)
@@ -83,7 +95,8 @@ std::string item_renderer::to_plain_text(
 	prepare_header(item, lines, links);
 
 	HtmlRenderer rnd(true);
-	rnd.render(item->description(), lines, links, item->feedurl());
+	const auto item_base = get_item_base_link(item);
+	rnd.render(item->description(), lines, links, item_base);
 
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);
@@ -95,5 +108,6 @@ std::string item_renderer::to_plain_text(
 
 	return txtfmt.format_text_plain(width);
 }
+
 
 }

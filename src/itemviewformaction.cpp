@@ -161,13 +161,7 @@ void ItemViewFormAction::prepare()
 			render_source(lines,
 				Utils::quote_for_stfl(item->description()));
 		} else {
-			std::string baseurl;
-			if (!item->get_base().empty()) {
-				baseurl = item->get_base();
-			} else {
-				baseurl = item->feedurl();
-			}
-
+			const std::string baseurl = item_renderer::get_item_base_link(item);
 			lines = render_html(item->description(), links, baseurl);
 		}
 

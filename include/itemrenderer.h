@@ -15,6 +15,8 @@ namespace item_renderer {
 	std::string to_plain_text(
 			ConfigContainer& cfg,
 			std::shared_ptr<RssItem> item);
+
+	std::string get_item_base_link(const std::shared_ptr<RssItem>& item);
 };
 
 } // namespace newsboat
