@@ -32,34 +32,25 @@ void prepare_header(
 	std::vector<std::pair<LineType, std::string>>& lines,
 	std::vector<LinkPair>& /*links*/)
 {
+	const auto add_line =
+		[&lines]
+		(const std::string& value,
+		 const std::string& name,
+		 LineType lineType = LineType::wrappable)
+		{
+			if (!value.empty()) {
+				const auto line = StrPrintf::fmt("%s%s", name, value);
+				lines.push_back(std::make_pair(lineType, line));
+			}
+		};
+
 	const auto feedtitle = item_renderer::get_feedtitle(item);
-	if (!feedtitle.empty()) {
-		const auto title = StrPrintf::fmt("%s%s", _("Feed: "), feedtitle);
-		lines.push_back(std::make_pair(LineType::wrappable, title));
-	}
-
-	if (!item->title().empty()) {
-		const auto title = StrPrintf::fmt("%s%s", _("Title: "), item->title());
-		lines.push_back(std::make_pair(LineType::wrappable, title));
-	}
-
-	if (!item->author().empty()) {
-		const auto author = StrPrintf::fmt("%s%s", _("Author: "), item->author());
-		lines.push_back(std::make_pair(LineType::wrappable, author));
-	}
-
-	const auto date = StrPrintf::fmt("%s%s", _("Date: "), item->pubDate());
-	lines.push_back(std::make_pair(LineType::wrappable, date));
-
-	if (!item->link().empty()) {
-		const auto link = StrPrintf::fmt("%s%s", _("Link: "), item->link());
-		lines.push_back(std::make_pair(LineType::softwrappable, link));
-	}
-
-	if (!item->flags().empty()) {
-		const auto flags = StrPrintf::fmt("%s%s", _("Flags: "), item->flags());
-		lines.push_back(std::make_pair(LineType::wrappable, flags));
-	}
+	add_line(feedtitle, _("Feed: "));
+	add_line(item->title(), _("Title: "));
+	add_line(item->author(), _("Author: "));
+	add_line(item->pubDate(), _("Date: "));
+	add_line(item->link(), _("Link: "), LineType::softwrappable);
+	add_line(item->flags(), _("Flags: "));
 
 	if (!item->enclosure_url().empty()) {
 		auto dlurl = StrPrintf::fmt(
