@@ -27,7 +27,7 @@ std::string item_renderer::get_feedtitle(std::shared_ptr<RssItem> item) {
 	return feedtitle;
 }
 
-void item_renderer::prepare_header(
+void prepare_header(
 	std::shared_ptr<RssItem> item,
 	std::vector<std::pair<LineType, std::string>>& lines,
 	std::vector<LinkPair>& /*links*/)
@@ -75,7 +75,7 @@ void item_renderer::prepare_header(
 	lines.push_back(std::make_pair(LineType::wrappable, std::string("")));
 }
 
-std::string item_renderer::get_item_base_link(const std::shared_ptr<RssItem>& item)
+std::string get_item_base_link(const std::shared_ptr<RssItem>& item)
 {
 	std::string baseurl;
 	if (!item->get_base().empty()) {
@@ -87,7 +87,7 @@ std::string item_renderer::get_item_base_link(const std::shared_ptr<RssItem>& it
 	return baseurl;
 }
 
-void item_renderer::render_html(
+void render_html(
 	ConfigContainer& cfg,
 	const std::string& source,
 	std::vector<std::pair<LineType, std::string>>& lines,
@@ -159,7 +159,7 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 	std::vector<LinkPair> links;
 
 	prepare_header(item, lines, links);
-	const std::string baseurl = item_renderer::get_item_base_link(item);
+	const std::string baseurl = get_item_base_link(item);
 	const auto body = item->description();
 	render_html(cfg, body, lines, links, baseurl, false);
 

@@ -20,21 +20,6 @@ namespace item_renderer {
 			ConfigContainer& cfg,
 			std::shared_ptr<RssItem> item);
 
-	std::string get_item_base_link(const std::shared_ptr<RssItem>& item);
-
-	void render_html(
-		ConfigContainer& cfg,
-		const std::string& source,
-		std::vector<std::pair<LineType, std::string>>& lines,
-		std::vector<LinkPair>& thelinks,
-		const std::string& url,
-		bool raw);
-
-	void prepare_header(
-		std::shared_ptr<RssItem> item,
-		std::vector<std::pair<LineType, std::string>>& lines,
-		std::vector<LinkPair>& /*links*/);
-
 	std::pair<std::string, size_t> to_stfl_list(
 			ConfigContainer& cfg,
 			std::shared_ptr<RssItem> item,

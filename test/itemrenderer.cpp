@@ -509,29 +509,3 @@ TEST_CASE("item_renderer::get_feedtitle() returns item's feed URL "
 	const auto result = item_renderer::get_feedtitle(item);
 	REQUIRE(result == feedurl);
 }
-
-TEST_CASE("item_renderer::get_item_base_link() returns item's xml:base "
-		"if that's defined, and item's feed URL otherwise",
-		"[item_renderer]")
-{
-	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
-
-	std::shared_ptr<RssItem> item;
-	std::shared_ptr<RssFeed> feed;
-	std::tie(item, feed) = test_item(&rsscache);
-
-	const auto feedurl = std::string("https://rss.example.com/something");
-	item->set_feedurl(feedurl);
-
-	SECTION("xml:base is not empty") {
-		const auto baseurl = std::string("https://example.com/else");
-		item->set_base(baseurl);
-
-		REQUIRE(item_renderer::get_item_base_link(item) == baseurl);
-	}
-
-	SECTION("xml:base is empty") {
-		REQUIRE(item_renderer::get_item_base_link(item) == feedurl);
-	}
-}
