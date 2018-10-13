@@ -91,36 +91,40 @@ void ItemViewFormAction::prepare()
 
 		update_head(item);
 
-		std::vector<std::pair<LineType, std::string>> lines;
-		item_renderer::prepare_header(item, lines, links);
-
-		if (show_source) {
-			render_source(lines, Utils::quote_for_stfl(item->description()));
-		} else {
-			const std::string baseurl = item_renderer::get_item_base_link(item);
-			const auto body = item->description();
-			item_renderer::render_html(*cfg, body, lines, links, baseurl, false);
-		}
-
 		std::string widthstr = f->get("article:w");
 		const unsigned int window_width = Utils::to_u(widthstr, 0);
 
-		unsigned int textwidth =
+		unsigned int text_width =
 			cfg->get_configvalue_as_int("text-width");
-		if (textwidth == 0 || textwidth > window_width) {
-			textwidth = window_width;
-			if (textwidth - 5 > 0) {
-				textwidth -= 5;
+		if (text_width == 0 || text_width > window_width) {
+			text_width = window_width;
+			if (text_width - 5 > 0) {
+				text_width -= 5;
 			}
 		}
 
-		TextFormatter textfmt;
-		textfmt.add_lines(lines);
-
 		std::string formatted_text;
-		std::tie(formatted_text, num_lines) =
-			textfmt.format_text_to_list(
-				rxman, "article", textwidth, window_width);
+		if (show_source) {
+			std::tie(formatted_text, num_lines) =
+				item_renderer::source_to_stfl_list(
+					item,
+					text_width,
+					window_width,
+					rxman,
+					"article");
+		} else {
+			std::tie(formatted_text, num_lines) =
+				item_renderer::to_stfl_list(
+					// cfg can't be nullptr because that's a long-lived object
+					// created at the very start of the program.
+					*cfg,
+					item,
+					text_width,
+					window_width,
+					rxman,
+					"article");
+		}
+
 		f->modify("article", "replace_inner", formatted_text);
 		f->set("articleoffset", "0");
 
@@ -449,27 +453,6 @@ void ItemViewFormAction::set_head(const std::string& s,
 	f->set("head",
 		fmt.do_format(
 			cfg->get_configvalue("itemview-title-format"), width));
-}
-
-void ItemViewFormAction::render_source(
-	std::vector<std::pair<LineType, std::string>>& lines,
-	std::string source)
-{
-	/*
-	 * This function is called instead of HtmlRenderer::render() when the
-	 * user requests to have the source displayed instead of seeing the
-	 * rendered HTML.
-	 */
-	std::string line;
-	do {
-		std::string::size_type pos = source.find_first_of("\r\n");
-		line = source.substr(0, pos);
-		if (pos == std::string::npos)
-			source.erase();
-		else
-			source.erase(0, pos + 1);
-		lines.push_back(std::make_pair(LineType::softwrappable, line));
-	} while (source.length() > 0);
 }
 
 void ItemViewFormAction::handle_cmdline(const std::string& cmd)

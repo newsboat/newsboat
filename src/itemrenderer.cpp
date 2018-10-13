@@ -147,4 +147,67 @@ std::string item_renderer::to_plain_text(
 	return txtfmt.format_text_plain(width);
 }
 
+std::pair<std::string, size_t> item_renderer::to_stfl_list(
+		ConfigContainer& cfg,
+		std::shared_ptr<RssItem> item,
+		unsigned int text_width,
+		unsigned int window_width,
+		RegexManager* rxman,
+		const std::string& location)
+{
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	prepare_header(item, lines, links);
+	const std::string baseurl = item_renderer::get_item_base_link(item);
+	const auto body = item->description();
+	render_html(cfg, body, lines, links, baseurl, false);
+
+	TextFormatter txtfmt;
+	txtfmt.add_lines(lines);
+
+	return txtfmt.format_text_to_list(rxman, location, text_width, window_width);
+}
+
+void render_source(
+	std::vector<std::pair<LineType, std::string>>& lines,
+	std::string source)
+{
+	/*
+	 * This function is called instead of HtmlRenderer::render() when the
+	 * user requests to have the source displayed instead of seeing the
+	 * rendered HTML.
+	 */
+	std::string line;
+	do {
+		std::string::size_type pos = source.find_first_of("\r\n");
+		line = source.substr(0, pos);
+		if (pos == std::string::npos) {
+			source.erase();
+		} else {
+			source.erase(0, pos + 1);
+		}
+		lines.push_back(std::make_pair(LineType::softwrappable, line));
+	} while (source.length() > 0);
+}
+
+std::pair<std::string, size_t> item_renderer::source_to_stfl_list(
+		std::shared_ptr<RssItem> item,
+		unsigned int text_width,
+		unsigned int window_width,
+		RegexManager* rxman,
+		const std::string& location)
+{
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	prepare_header(item, lines, links);
+	render_source(lines, Utils::quote_for_stfl(item->description()));
+
+	TextFormatter txtfmt;
+	txtfmt.add_lines(lines);
+
+	return txtfmt.format_text_to_list(rxman, location, text_width, window_width);
+}
+
 }

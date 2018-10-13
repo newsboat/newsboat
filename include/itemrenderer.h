@@ -34,6 +34,21 @@ namespace item_renderer {
 		std::shared_ptr<RssItem> item,
 		std::vector<std::pair<LineType, std::string>>& lines,
 		std::vector<LinkPair>& /*links*/);
+
+	std::pair<std::string, size_t> to_stfl_list(
+			ConfigContainer& cfg,
+			std::shared_ptr<RssItem> item,
+			unsigned int text_width,
+			unsigned int window_width,
+			RegexManager* rxman,
+			const std::string& location);
+
+	std::pair<std::string, size_t> source_to_stfl_list(
+			std::shared_ptr<RssItem> item,
+			unsigned int text_width,
+			unsigned int window_width,
+			RegexManager* rxman,
+			const std::string& location);
 };
 
 } // namespace newsboat
