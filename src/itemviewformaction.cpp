@@ -88,12 +88,11 @@ void ItemViewFormAction::prepare()
 		}
 
 		std::shared_ptr<RssItem> item = feed->get_item_by_guid(guid);
-		TextFormatter textfmt;
+
+		update_head(item);
 
 		std::vector<std::pair<LineType, std::string>> lines;
 		item_renderer::prepare_header(item, lines, links);
-
-		update_head(item);
 
 		if (show_source) {
 			render_source(lines, Utils::quote_for_stfl(item->description()));
@@ -102,8 +101,6 @@ void ItemViewFormAction::prepare()
 			const auto body = item->description();
 			item_renderer::render_html(*cfg, body, lines, links, baseurl, false);
 		}
-
-		textfmt.add_lines(lines);
 
 		std::string widthstr = f->get("article:w");
 		const unsigned int window_width = Utils::to_u(widthstr, 0);
@@ -116,6 +113,9 @@ void ItemViewFormAction::prepare()
 				textwidth -= 5;
 			}
 		}
+
+		TextFormatter textfmt;
+		textfmt.add_lines(lines);
 
 		std::string formatted_text;
 		std::tie(formatted_text, num_lines) =
