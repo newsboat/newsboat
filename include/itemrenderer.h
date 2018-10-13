@@ -29,6 +29,11 @@ namespace item_renderer {
 		std::vector<LinkPair>& thelinks,
 		const std::string& url,
 		bool raw);
+
+	void prepare_header(
+		std::shared_ptr<RssItem> item,
+		std::vector<std::pair<LineType, std::string>>& lines,
+		std::vector<LinkPair>& /*links*/);
 };
 
 } // namespace newsboat

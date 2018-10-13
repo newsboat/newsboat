@@ -27,7 +27,7 @@ std::string item_renderer::get_feedtitle(std::shared_ptr<RssItem> item) {
 	return feedtitle;
 }
 
-void prepare_header(
+void item_renderer::prepare_header(
 	std::shared_ptr<RssItem> item,
 	std::vector<std::pair<LineType, std::string>>& lines,
 	std::vector<LinkPair>& /*links*/)

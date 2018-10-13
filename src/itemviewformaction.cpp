@@ -90,73 +90,11 @@ void ItemViewFormAction::prepare()
 		std::shared_ptr<RssItem> item = feed->get_item_by_guid(guid);
 		TextFormatter textfmt;
 
-		std::shared_ptr<RssFeed> feedptr = item->get_feedptr();
-
-		std::string feedtitle;
-		if (feedptr) {
-			if (!feedptr->title().empty()) {
-				feedtitle = feedptr->title();
-				Utils::remove_soft_hyphens(feedtitle);
-			} else if (!feedptr->link().empty()) {
-				feedtitle = feedptr->link();
-			} else if (!feedptr->rssurl().empty()) {
-				feedtitle = feedptr->rssurl();
-			}
-		}
-		if (!feedtitle.empty()) {
-			const auto feedheader =
-				StrPrintf::fmt("%s%s", _("Feed: "), feedtitle);
-			textfmt.add_line(LineType::wrappable, feedheader);
-		}
-
-		if (!item->title().empty()) {
-			auto title = StrPrintf::fmt(
-				"%s%s", _("Title: "), item->title());
-			Utils::remove_soft_hyphens(title);
-			textfmt.add_line(LineType::wrappable, title);
-		}
-
-		if (!item->author().empty()) {
-			auto author = StrPrintf::fmt(
-				"%s%s", _("Author: "), item->author());
-			Utils::remove_soft_hyphens(author);
-			textfmt.add_line(LineType::wrappable, author);
-		}
-
-		if (!item->link().empty()) {
-			const auto link = StrPrintf::fmt("%s%s",
-				_("Link: "),
-				Utils::censor_url(item->link()));
-			textfmt.add_line(LineType::softwrappable, link);
-		}
-
-		const auto date =
-			StrPrintf::fmt("%s%s", _("Date: "), item->pubDate());
-		textfmt.add_line(LineType::wrappable, date);
-
-		if (!item->flags().empty()) {
-			const auto flags = StrPrintf::fmt(
-				"%s%s", _("Flags: "), item->flags());
-			textfmt.add_line(LineType::wrappable, flags);
-		}
-
-		if (!item->enclosure_url().empty()) {
-			std::string enc_url = StrPrintf::fmt("%s%s",
-				_("Podcast Download URL: "),
-				Utils::censor_url(item->enclosure_url()));
-			if (!item->enclosure_type().empty()) {
-				enc_url.append(StrPrintf::fmt(" (%s%s)",
-					_("type: "),
-					item->enclosure_type()));
-			}
-			textfmt.add_line(LineType::softwrappable, enc_url);
-		}
-
-		textfmt.add_line(LineType::wrappable, std::string());
+		std::vector<std::pair<LineType, std::string>> lines;
+		item_renderer::prepare_header(item, lines, links);
 
 		update_head(item);
 
-		std::vector<std::pair<LineType, std::string>> lines;
 		if (show_source) {
 			render_source(lines, Utils::quote_for_stfl(item->description()));
 		} else {
