@@ -43,6 +43,27 @@ TEST_CASE("unset_key() and set_key()", "[KeyMap]")
 	}
 }
 
+TEST_CASE("unset_all_keys() clears the keymap from all key bindings",
+	"[KeyMap]")
+{
+	KeyMap k(KM_NEWSBOAT);
+
+	for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
+		if (i == OP_OPENALLUNREADINBROWSER ||
+			i == OP_MARKALLABOVEASREAD ||
+			i == OP_OPENALLUNREADINBROWSER_AND_MARK) {
+			continue;
+		}
+		REQUIRE(k.getkey(static_cast<Operation>(i), "all") != "<none>");
+	}
+
+	k.unset_all_keys();
+
+	for (int i = OP_NB_MIN; i < OP_NB_MAX; ++i) {
+		REQUIRE(k.getkey(static_cast<Operation>(i), "all") == "<none>");
+	}
+}
+
 TEST_CASE("get_opcode()", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
