@@ -1,5 +1,7 @@
 #include "itemrenderer.h"
 
+#include <sstream>
+
 #include "configcontainer.h"
 #include "htmlrenderer.h"
 #include "rss.h"
@@ -85,6 +87,44 @@ std::string item_renderer::get_item_base_link(const std::shared_ptr<RssItem>& it
 	return baseurl;
 }
 
+void item_renderer::render_html(
+	ConfigContainer& cfg,
+	const std::string& source,
+	std::vector<std::pair<LineType, std::string>>& lines,
+	std::vector<LinkPair>& thelinks,
+	const std::string& url,
+	bool raw)
+{
+	const std::string renderer = cfg.get_configvalue("html-renderer");
+	if (renderer == "internal") {
+		HtmlRenderer rnd(raw);
+		rnd.render(source, lines, thelinks, url);
+	} else {
+		char* argv[4];
+		argv[0] = const_cast<char*>("/bin/sh");
+		argv[1] = const_cast<char*>("-c");
+		argv[2] = const_cast<char*>(renderer.c_str());
+		argv[3] = nullptr;
+		LOG(Level::DEBUG,
+			"item_renderer::render_html: source = %s",
+			source);
+		LOG(Level::DEBUG,
+			"item_renderer::render_html: html-renderer = %s",
+			argv[2]);
+
+		const std::string output = Utils::run_program(argv, source);
+		std::istringstream is(output);
+		std::string line;
+		while (!is.eof()) {
+			getline(is, line);
+			if (!raw) {
+				line = Utils::quote_for_stfl(line);
+			}
+			lines.push_back(std::make_pair(LineType::softwrappable, line));
+		}
+	}
+}
+
 std::string item_renderer::to_plain_text(
 		ConfigContainer& cfg,
 		std::shared_ptr<RssItem> item)
@@ -93,10 +133,8 @@ std::string item_renderer::to_plain_text(
 	std::vector<LinkPair> links;
 
 	prepare_header(item, lines, links);
-
-	HtmlRenderer rnd(true);
-	const auto item_base = get_item_base_link(item);
-	rnd.render(item->description(), lines, links, item_base);
+	const auto base = get_item_base_link(item);
+	render_html(cfg, item->description(), lines, links, base, true);
 
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);
@@ -108,6 +146,5 @@ std::string item_renderer::to_plain_text(
 
 	return txtfmt.format_text_plain(width);
 }
-
 
 }

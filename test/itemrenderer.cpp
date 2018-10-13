@@ -329,6 +329,123 @@ TEST_CASE("Empty fields are not rendered", "[item_renderer]")
 	}
 }
 
+TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
+		"[item_renderer][broken]")
+{
+	TestHelpers::EnvVar tzEnv("TZ");
+	tzEnv.set("UTC");
+
+	ConfigContainer cfg;
+	cfg.set_configvalue("text-width", "80");
+
+	Cache rsscache(":memory:", &cfg);
+
+	std::shared_ptr<RssItem> item;
+	std::shared_ptr<RssFeed> feed;
+	std::tie(item, feed) = test_item(&rsscache);
+
+	SECTION("Single-paragraph description") {
+		const auto description = std::string() +
+			"<p>Hello, world! Check out "
+			"<a href='https://example.com'>our site</a>.</p>";
+		item->set_description(description);
+
+		SECTION("internal renderer") {
+			cfg.set_configvalue("html-renderer", "internal");
+
+			const auto result = item_renderer::to_plain_text(cfg, item);
+
+			const auto expected = std::string() +
+				"Feed: " + FEED_TITLE + '\n' +
+				"Title: " + ITEM_TITLE + '\n' +
+				"Author: " + ITEM_AUTHOR + '\n' +
+				"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
+				"Link: " + ITEM_LINK + '\n' +
+				"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
+				" \n" +
+				"Hello, world! Check out our site[1].\n" +
+				" \n" +
+				"Links: \n" +
+				"[1]: https://example.com (link)\n";
+
+			REQUIRE(result == expected);
+		}
+
+		// cat is pretty much guaranteed ot be present in any Unix-like
+		// environment, so let's use that instead of the less common w3m.
+		SECTION("/bin/cat as a renderer") {
+			cfg.set_configvalue("html-renderer", "/bin/cat");
+
+			const auto result = item_renderer::to_plain_text(cfg, item);
+
+			const auto expected = std::string() +
+				"Feed: " + FEED_TITLE + '\n' +
+				"Title: " + ITEM_TITLE + '\n' +
+				"Author: " + ITEM_AUTHOR + '\n' +
+				"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
+				"Link: " + ITEM_LINK + '\n' +
+				"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
+				" \n" +
+				description + '\n';
+
+			REQUIRE(result == expected);
+		}
+	}
+
+
+	SECTION("Multi-paragraph description") {
+		const auto description = std::string() +
+			"<p>Hello, world!</p>\n\n"
+			"<p>Check out <a href='https://example.com'>our site</a>.</p>";
+		item->set_description(description);
+
+		SECTION("internal renderer") {
+			cfg.set_configvalue("html-renderer", "internal");
+
+			const auto result = item_renderer::to_plain_text(cfg, item);
+
+			const auto expected = std::string() +
+				"Feed: " + FEED_TITLE + '\n' +
+				"Title: " + ITEM_TITLE + '\n' +
+				"Author: " + ITEM_AUTHOR + '\n' +
+				"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
+				"Link: " + ITEM_LINK + '\n' +
+				"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
+				" \n" +
+				"Hello, world!\n" +
+				" \n" +
+				"Check out our site[1].\n" +
+				" \n" +
+				"Links: \n" +
+				"[1]: https://example.com (link)\n";
+
+			REQUIRE(result == expected);
+		}
+
+		// cat is pretty much guaranteed ot be present in any Unix-like
+		// environment, so let's use that instead of the less common w3m.
+		SECTION("/bin/cat as a renderer") {
+			cfg.set_configvalue("html-renderer", "/bin/cat");
+
+			const auto result = item_renderer::to_plain_text(cfg, item);
+
+			const auto expected = std::string() +
+				"Feed: " + FEED_TITLE + '\n' +
+				"Title: " + ITEM_TITLE + '\n' +
+				"Author: " + ITEM_AUTHOR + '\n' +
+				"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
+				"Link: " + ITEM_LINK + '\n' +
+				"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
+				" \n" +
+				"<p>Hello, world!</p>\n" +
+				" \n" +
+				"<p>Check out <a href='https://example.com'>our site</a>.</p>\n";
+
+			REQUIRE(result == expected);
+		}
+	}
+}
+
 TEST_CASE("item_renderer::get_feedtitle() returns item's feed title without "
 		"soft hyphens if that's available",
 		"[item_renderer]")

@@ -161,7 +161,8 @@ void ItemViewFormAction::prepare()
 			render_source(lines, Utils::quote_for_stfl(item->description()));
 		} else {
 			const std::string baseurl = item_renderer::get_item_base_link(item);
-			render_html(item->description(), lines, links, baseurl);
+			const auto body = item->description();
+			item_renderer::render_html(*cfg, body, lines, links, baseurl, false);
 		}
 
 		textfmt.add_lines(lines);
@@ -606,41 +607,6 @@ void ItemViewFormAction::finished_qna(Operation op)
 	} break;
 	default:
 		break;
-	}
-}
-
-void ItemViewFormAction::render_html(
-	const std::string& source,
-	std::vector<std::pair<LineType, std::string>>& lines,
-	std::vector<LinkPair>& thelinks,
-	const std::string& url)
-{
-	std::string renderer = cfg->get_configvalue("html-renderer");
-	if (renderer == "internal") {
-		HtmlRenderer rnd;
-		rnd.render(source, lines, thelinks, url);
-	} else {
-		char* argv[4];
-		argv[0] = const_cast<char*>("/bin/sh");
-		argv[1] = const_cast<char*>("-c");
-		argv[2] = const_cast<char*>(renderer.c_str());
-		argv[3] = nullptr;
-		LOG(Level::DEBUG,
-			"ItemViewFormAction::render_html: source = %s",
-			source);
-		LOG(Level::DEBUG,
-			"ItemViewFormAction::render_html: html-renderer = %s",
-			argv[2]);
-
-		std::string output = Utils::run_program(argv, source);
-		std::istringstream is(output);
-		std::string line;
-		getline(is, line);
-		while (!is.eof()) {
-			lines.push_back(std::make_pair(LineType::softwrappable,
-				Utils::quote_for_stfl(line)));
-			getline(is, line);
-		}
 	}
 }
 
