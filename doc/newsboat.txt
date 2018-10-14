@@ -1014,6 +1014,7 @@ Examples:
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
 |======================================================================
 Identifier:Meaning
+[[download-filename-format-u]]<<download-filename-format-u,+u+>>:Filename part of the download URL. May be empty. May include https\://en.wikipedia.org/wiki/Query_string[a query string]
 [[download-filename-format-n]]<<download-filename-format-n,+n+>>:Name of the podcast feed
 [[download-filename-format-h]]<<download-filename-format-h,+h+>>:Name of the podcast feed's hostname
 [[download-filename-format-t]]<<download-filename-format-t,+t+>>:Title of the podcast
