@@ -10,7 +10,7 @@
 namespace newsboat {
 
 std::string item_renderer::get_feedtitle(std::shared_ptr<RssItem> item) {
-	std::shared_ptr<RssFeed> feedptr = item->get_feedptr();
+	const std::shared_ptr<RssFeed> feedptr = item->get_feedptr();
 
 	std::string feedtitle;
 	if (feedptr) {
@@ -44,7 +44,7 @@ void prepare_header(
 			}
 		};
 
-	const auto feedtitle = item_renderer::get_feedtitle(item);
+	const std::string feedtitle = item_renderer::get_feedtitle(item);
 	add_line(feedtitle, _("Feed: "));
 	add_line(item->title(), _("Title: "));
 	add_line(item->author(), _("Author: "));
@@ -68,14 +68,11 @@ void prepare_header(
 
 std::string get_item_base_link(const std::shared_ptr<RssItem>& item)
 {
-	std::string baseurl;
 	if (!item->get_base().empty()) {
-		baseurl = item->get_base();
+		return item->get_base();
 	} else {
-		baseurl = item->feedurl();
+		return item->feedurl();
 	}
-
-	return baseurl;
 }
 
 void render_html(

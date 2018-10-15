@@ -58,7 +58,7 @@ void ItemViewFormAction::init()
 
 void ItemViewFormAction::update_head(const std::shared_ptr<RssItem>& item)
 {
-	const auto feedtitle = item_renderer::get_feedtitle(item);
+	const std::string feedtitle = item_renderer::get_feedtitle(item);
 
 	unsigned int unread_item_count = feed->unread_item_count();
 	// we need to subtract because the current item isn't yet marked
@@ -91,7 +91,7 @@ void ItemViewFormAction::prepare()
 
 		update_head(item);
 
-		std::string widthstr = f->get("article:w");
+		const std::string widthstr = f->get("article:w");
 		const unsigned int window_width = Utils::to_u(widthstr, 0);
 
 		unsigned int text_width =
