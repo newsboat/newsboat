@@ -6,6 +6,9 @@ authors = ["Alexander Batischev <eual.jp@gmail.com>"]
 [dependencies]
 libc = "0.2"
 
+[dev-dependencies]
+tempfile = "3"
+
 [lib]
 name = "newsboat"
 crate-type = ["staticlib"]
