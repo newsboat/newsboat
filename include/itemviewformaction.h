@@ -41,8 +41,9 @@ public:
 
 	void finished_qna(Operation op) override;
 
-	std::vector<std::pair<LineType, std::string>> render_html(
+	void render_html(
 		const std::string& source,
+		std::vector<std::pair<LineType, std::string>>& lines,
 		std::vector<LinkPair>& thelinks,
 		const std::string& url);
 
@@ -54,6 +55,7 @@ private:
 	void process_operation(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
+	void update_head(const std::shared_ptr<RssItem>& item);
 	void set_head(const std::string& s,
 		const std::string& feedtitle,
 		unsigned int unread,

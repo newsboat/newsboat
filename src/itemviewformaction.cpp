@@ -7,6 +7,7 @@
 #include "config.h"
 #include "exceptions.h"
 #include "formatstring.h"
+#include "itemrenderer.h"
 #include "logger.h"
 #include "strprintf.h"
 #include "textformatter.h"
@@ -55,6 +56,22 @@ void ItemViewFormAction::init()
 	set_keymap_hints();
 }
 
+void ItemViewFormAction::update_head(const std::shared_ptr<RssItem>& item)
+{
+	const std::string feedtitle = item_renderer::get_feedtitle(item);
+
+	unsigned int unread_item_count = feed->unread_item_count();
+	// we need to subtract because the current item isn't yet marked
+	// as read
+	if (item->unread()) {
+		unread_item_count--;
+	}
+	set_head(item->title(),
+		feedtitle,
+		unread_item_count,
+		feed->total_item_count());
+};
+
 void ItemViewFormAction::prepare()
 {
 	/*
@@ -66,117 +83,48 @@ void ItemViewFormAction::prepare()
 	if (do_redraw) {
 		{
 			ScopeMeasure("itemview::prepare: rendering");
-			f->run(-3); // XXX HACK: render once so that we get a
-				    // proper widget width
+			// XXX HACK: render once so that we get a proper widget width
+			f->run(-3);
 		}
 
 		std::shared_ptr<RssItem> item = feed->get_item_by_guid(guid);
-		TextFormatter textfmt;
 
-		std::shared_ptr<RssFeed> feedptr = item->get_feedptr();
+		update_head(item);
 
-		std::string feedtitle, feedheader;
-		if (feedptr.get() != nullptr) {
-			if (feedptr->title().length() > 0) {
-				feedtitle = feedptr->title();
-				Utils::remove_soft_hyphens(feedtitle);
-			} else if (feedptr->link().length() > 0) {
-				feedtitle = feedptr->link();
-			} else if (feedptr->rssurl().length() > 0) {
-				feedtitle = feedptr->rssurl();
-			}
-		}
-		if (feedtitle.length() > 0) {
-			feedheader =
-				StrPrintf::fmt("%s%s", _("Feed: "), feedtitle);
-			textfmt.add_line(LineType::wrappable, feedheader);
-		}
+		const std::string widthstr = f->get("article:w");
+		const unsigned int window_width = Utils::to_u(widthstr, 0);
 
-		if (item->title().length() > 0) {
-			std::string title = StrPrintf::fmt(
-				"%s%s", _("Title: "), item->title());
-			Utils::remove_soft_hyphens(title);
-			textfmt.add_line(LineType::wrappable, title);
-		}
-
-		if (item->author().length() > 0) {
-			std::string author = StrPrintf::fmt(
-				"%s%s", _("Author: "), item->author());
-			Utils::remove_soft_hyphens(author);
-			textfmt.add_line(LineType::wrappable, author);
-		}
-
-		if (item->link().length() > 0) {
-			std::string link = StrPrintf::fmt("%s%s",
-				_("Link: "),
-				Utils::censor_url(item->link()));
-			textfmt.add_line(LineType::softwrappable, link);
-		}
-
-		std::string date =
-			StrPrintf::fmt("%s%s", _("Date: "), item->pubDate());
-		textfmt.add_line(LineType::wrappable, date);
-
-		if (item->flags().length() > 0) {
-			std::string flags = StrPrintf::fmt(
-				"%s%s", _("Flags: "), item->flags());
-			textfmt.add_line(LineType::wrappable, flags);
-		}
-
-		if (item->enclosure_url().length() > 0) {
-			std::string enc_url = StrPrintf::fmt("%s%s",
-				_("Podcast Download URL: "),
-				Utils::censor_url(item->enclosure_url()));
-			if (item->enclosure_type() != "") {
-				enc_url.append(StrPrintf::fmt(" (%s%s)",
-					_("type: "),
-					item->enclosure_type()));
-			}
-			textfmt.add_line(LineType::softwrappable, enc_url);
-		}
-
-		textfmt.add_line(LineType::wrappable, std::string());
-
-		unsigned int unread_item_count = feed->unread_item_count();
-		// we need to subtract because the current item isn't yet marked
-		// as read
-		if (item->unread())
-			unread_item_count--;
-		set_head(item->title(),
-			feedtitle,
-			unread_item_count,
-			feed->total_item_count());
-
-		std::vector<std::pair<LineType, std::string>> lines;
-		if (show_source) {
-			render_source(lines,
-				Utils::quote_for_stfl(item->description()));
-		} else {
-			std::string baseurl = item->get_base() != ""
-				? item->get_base()
-				: item->feedurl();
-			lines = render_html(
-				item->description(), links, baseurl);
-		}
-
-		textfmt.add_lines(lines);
-
-		std::string widthstr = f->get("article:w");
-		unsigned int window_width = Utils::to_u(widthstr, 0);
-
-		unsigned int textwidth =
+		unsigned int text_width =
 			cfg->get_configvalue_as_int("text-width");
-		if (textwidth == 0 || textwidth > window_width) {
-			textwidth = window_width;
-			if (textwidth - 5 > 0) {
-				textwidth -= 5;
+		if (text_width == 0 || text_width > window_width) {
+			text_width = window_width;
+			if (text_width - 5 > 0) {
+				text_width -= 5;
 			}
 		}
 
 		std::string formatted_text;
-		std::tie(formatted_text, num_lines) =
-			textfmt.format_text_to_list(
-				rxman, "article", textwidth, window_width);
+		if (show_source) {
+			std::tie(formatted_text, num_lines) =
+				item_renderer::source_to_stfl_list(
+					item,
+					text_width,
+					window_width,
+					rxman,
+					"article");
+		} else {
+			std::tie(formatted_text, num_lines) =
+				item_renderer::to_stfl_list(
+					// cfg can't be nullptr because that's a long-lived object
+					// created at the very start of the program.
+					*cfg,
+					item,
+					text_width,
+					window_width,
+					rxman,
+					"article");
+		}
+
 		f->modify("article", "replace_inner", formatted_text);
 		f->set("articleoffset", "0");
 
@@ -507,27 +455,6 @@ void ItemViewFormAction::set_head(const std::string& s,
 			cfg->get_configvalue("itemview-title-format"), width));
 }
 
-void ItemViewFormAction::render_source(
-	std::vector<std::pair<LineType, std::string>>& lines,
-	std::string source)
-{
-	/*
-	 * This function is called instead of HtmlRenderer::render() when the
-	 * user requests to have the source displayed instead of seeing the
-	 * rendered HTML.
-	 */
-	std::string line;
-	do {
-		std::string::size_type pos = source.find_first_of("\r\n");
-		line = source.substr(0, pos);
-		if (pos == std::string::npos)
-			source.erase();
-		else
-			source.erase(0, pos + 1);
-		lines.push_back(std::make_pair(LineType::softwrappable, line));
-	} while (source.length() > 0);
-}
-
 void ItemViewFormAction::handle_cmdline(const std::string& cmd)
 {
 	std::vector<std::string> tokens = Utils::tokenize_quoted(cmd);
@@ -602,42 +529,6 @@ void ItemViewFormAction::finished_qna(Operation op)
 	default:
 		break;
 	}
-}
-
-std::vector<std::pair<LineType, std::string>> ItemViewFormAction::render_html(
-	const std::string& source,
-	std::vector<LinkPair>& thelinks,
-	const std::string& url)
-{
-	std::vector<std::pair<LineType, std::string>> result;
-	std::string renderer = cfg->get_configvalue("html-renderer");
-	if (renderer == "internal") {
-		HtmlRenderer rnd;
-		rnd.render(source, result, thelinks, url);
-	} else {
-		char* argv[4];
-		argv[0] = const_cast<char*>("/bin/sh");
-		argv[1] = const_cast<char*>("-c");
-		argv[2] = const_cast<char*>(renderer.c_str());
-		argv[3] = nullptr;
-		LOG(Level::DEBUG,
-			"ItemViewFormAction::render_html: source = %s",
-			source);
-		LOG(Level::DEBUG,
-			"ItemViewFormAction::render_html: html-renderer = %s",
-			argv[2]);
-
-		std::string output = Utils::run_program(argv, source);
-		std::istringstream is(output);
-		std::string line;
-		getline(is, line);
-		while (!is.eof()) {
-			result.push_back(std::make_pair(LineType::softwrappable,
-				Utils::quote_for_stfl(line)));
-			getline(is, line);
-		}
-	}
-	return result;
 }
 
 void ItemViewFormAction::set_regexmanager(RegexManager* r)
