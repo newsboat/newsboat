@@ -221,7 +221,9 @@ rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id)
 		item.title = json_object_get_string(node);
 
 		json_object_object_get_ex(item_j, "url", &node);
-		item.link = json_object_get_string(node);
+		if (node) {
+			item.link = json_object_get_string(node);
+		}
 
 		json_object_object_get_ex(item_j, "author", &node);
 		item.author = json_object_get_string(node);
