@@ -41,7 +41,7 @@ mod tests {
     use super::*;
     
     use self::tempfile::TempDir;
-    use std::io::{self, Read};
+    use std::io::{self, BufReader, BufRead};
     use std::path;
 
     fn setup_logger() -> io::Result<(TempDir, path::PathBuf, Logger)> {
@@ -72,17 +72,28 @@ mod tests {
     fn t_log_writes_message_to_the_file() -> io::Result<()> {
         let (_tmp, logfile, mut logger) = setup_logger()?;
 
-        let message = "Hello, world!";
-        logger.log(message)?;
+        let messages = {
+            let mut messages = vec![];
+            messages.push("Hello, world!");
+            messages.push("I'm doing fine, how are you?");
+            messages.push("Time to wrap up, see ya!");
+            messages
+        };
+        for msg in &messages {
+            logger.log(msg)?;
+        }
 
         // Dropping logger to force it to flush the log and close the file
         drop(logger);
 
-        let mut file = File::open(logfile)?;
-        let mut contents = String::new();
-        file.read_to_string(&mut contents)?;
-
-        assert_eq!(contents, message.to_owned() + "\n");
+        let file = File::open(logfile)?;
+        let reader = BufReader::new(file);
+        for (line, expected) in reader.lines().zip(messages) {
+            match line {
+                Ok(line) => assert_eq!(line, expected),
+                Err(e) => return Err(e),
+            }
+        }
 
         Ok(())
     }
