@@ -27,6 +27,7 @@ impl Logger {
     pub fn log(&mut self, message: &str) -> io::Result<()> {
         if let Some(ref mut logfile) = self.logfile {
             logfile.write_all(message.as_bytes())?;
+            logfile.write_all("\n".as_bytes())?;
         }
 
         Ok(())
@@ -81,7 +82,7 @@ mod tests {
         let mut contents = String::new();
         file.read_to_string(&mut contents)?;
 
-        assert_eq!(contents, message);
+        assert_eq!(contents, message.to_owned() + "\n");
 
         Ok(())
     }
