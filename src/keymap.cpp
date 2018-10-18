@@ -603,7 +603,7 @@ void KeyMap::handle_action(const std::string& action,
 				ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
 		std::string context = "all";
-		if (params.size() >= 2){
+		if (params.size() >= 2) {
 			context = params[1];
 		}
 		if (params[0] == "-a") {
