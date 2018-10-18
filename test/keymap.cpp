@@ -114,6 +114,14 @@ TEST_CASE("getkey()", "[KeyMap]")
 		REQUIRE(k.getkey(OP_QUIT, "article") == "O");
 		REQUIRE(k.getkey(OP_QUIT, "all") == "q");
 	}
+
+	SECTION("Returns context-specific binding if asked to search in all contexts")
+	{
+		k.unset_all_keys("all");
+		REQUIRE(k.getkey(OP_QUIT, "all") == "<none>");
+		k.set_key(OP_QUIT, "O", "article");
+		REQUIRE(k.getkey(OP_QUIT, "all") == "O");
+	}
 }
 
 TEST_CASE("get_key()", "[KeyMap]")
