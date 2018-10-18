@@ -68,8 +68,7 @@ Development
 -----------
 
 Decided to work on an issue, fix a bug or add a feature? Great! Be sure to
-check out [our style guide](doc/code-style.markdown) and install pre-commit
-hook.
+check out [our style guide](doc/code-style.markdown).
 
 You'll probably want to run the tests; here's how:
 
