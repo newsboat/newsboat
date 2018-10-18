@@ -473,7 +473,7 @@ void KeyMap::unset_key(const std::string& key, const std::string& context)
 
 void KeyMap::unset_all_keys(const std::string& context)
 {
-	LOG(Level::DEBUG, "KeyMap::unset_all_keys() called");
+	LOG(Level::DEBUG, "KeyMap::unset_all_keys(%s) called", context);
 	if (context == "all") {
 		keymap_.clear();
 	} else {
