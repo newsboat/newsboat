@@ -43,24 +43,47 @@ TEST_CASE("unset_key() and set_key()", "[KeyMap]")
 	}
 }
 
-TEST_CASE("unset_all_keys() clears the keymap from all key bindings",
+TEST_CASE("unset_all_keys() clears the keymap from key bindings for a given context",
 	"[KeyMap]")
 {
-	KeyMap k(KM_NEWSBOAT);
+	SECTION("keymap has most of the keys set up by default") {
+		KeyMap k(KM_NEWSBOAT);
 
-	for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
-		if (i == OP_OPENALLUNREADINBROWSER ||
-			i == OP_MARKALLABOVEASREAD ||
-			i == OP_OPENALLUNREADINBROWSER_AND_MARK) {
-			continue;
+		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
+			if (i == OP_OPENALLUNREADINBROWSER ||
+					i == OP_MARKALLABOVEASREAD ||
+					i == OP_OPENALLUNREADINBROWSER_AND_MARK) {
+				continue;
+			}
+			REQUIRE(k.getkey(static_cast<Operation>(i), "all") != "<none>");
 		}
-		REQUIRE(k.getkey(static_cast<Operation>(i), "all") != "<none>");
 	}
 
-	k.unset_all_keys();
+	SECTION("\"all\" context clears the keymap from key bindings") {
+		KeyMap k(KM_NEWSBOAT);
+		k.unset_all_keys("all");
 
-	for (int i = OP_NB_MIN; i < OP_NB_MAX; ++i) {
-		REQUIRE(k.getkey(static_cast<Operation>(i), "all") == "<none>");
+		for (int i = OP_NB_MIN; i < OP_NB_MAX; ++i) {
+			REQUIRE(k.getkey(static_cast<Operation>(i), "all") == "<none>");
+		}
+	}
+
+	SECTION("clears key bindings just for a given context") {
+		KeyMap k(KM_NEWSBOAT);
+		k.unset_all_keys("articlelist");
+
+		for (int i = OP_NB_MIN; i < OP_NB_MAX; ++i) {
+			REQUIRE(k.getkey(static_cast<Operation>(i), "articlelist") == "<none>");
+		}
+
+		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
+			if (i == OP_OPENALLUNREADINBROWSER ||
+					i == OP_MARKALLABOVEASREAD ||
+					i == OP_OPENALLUNREADINBROWSER_AND_MARK) {
+				continue;
+			}
+			REQUIRE(k.getkey(static_cast<Operation>(i), "feedlist") != "<none>");
+		}
 	}
 }
 

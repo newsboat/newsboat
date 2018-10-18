@@ -471,10 +471,17 @@ void KeyMap::unset_key(const std::string& key, const std::string& context)
 	}
 }
 
-void KeyMap::unset_all_keys()
+void KeyMap::unset_all_keys(const std::string& context)
 {
 	LOG(Level::DEBUG, "KeyMap::unset_all_keys() called");
-	keymap_.clear();
+	if (context == "all") {
+		keymap_.clear();
+	} else {
+		auto& key_operation_map = keymap_[context];
+		for (auto& map : key_operation_map) {
+			map.second = OP_NIL;
+		}
+	}
 }
 
 Operation KeyMap::get_opcode(const std::string& opstr)
@@ -591,15 +598,17 @@ void KeyMap::handle_action(const std::string& action,
 			unset_key(getkey(op, context), context);
 		set_key(op, params[0], context);
 	} else if (action == "unbind-key") {
-		if (params.size() < 1)
+		if (params.size() < 1) {
 			throw ConfigHandlerException(
 				ActionHandlerStatus::TOO_FEW_PARAMS);
+		}
 		std::string context = "all";
+		if (params.size() >= 2){
+			context = params[1];
+		}
 		if (params[0] == "-a") {
-			unset_all_keys();
+			unset_all_keys(context);
 		} else {
-			if (params.size() >= 2)
-				context = params[1];
 			unset_key(params[0], context);
 		}
 	} else if (action == "macro") {

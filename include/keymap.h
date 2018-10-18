@@ -163,7 +163,7 @@ public:
 		const std::string& key,
 		const std::string& context);
 	void unset_key(const std::string& key, const std::string& context);
-	void unset_all_keys();
+	void unset_all_keys(const std::string& context);
 	Operation get_opcode(const std::string& opstr);
 	Operation get_operation(const std::string& keycode,
 		const std::string& context);
