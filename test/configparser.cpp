@@ -1,6 +1,7 @@
 #include "configparser.h"
 
 #include "3rd-party/catch.hpp"
+#include "keymap.h"
 
 using namespace newsboat;
 
@@ -42,5 +43,46 @@ TEST_CASE("evaluate_backticks replaces command in backticks with its output",
 		REQUIRE(ConfigParser::evaluate_backticks(
 				"a single literal backtick: \\`") ==
 			"a single literal backtick: `");
+	}
+}
+
+TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
+{
+	ConfigParser cfgparser;
+
+	SECTION("In all contexts by default")
+	{
+		KeyMap keys(KM_NEWSBOAT);
+		cfgparser.register_handler("unbind-key", &keys);
+		cfgparser.parse("data/config-unbind-all");
+
+		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
+			REQUIRE(keys.getkey(static_cast<Operation>(i), "all") == "<none>");
+		}
+	}
+
+	SECTION("For a specific context")
+	{
+		KeyMap keys(KM_NEWSBOAT);
+		cfgparser.register_handler("unbind-key", &keys);
+		cfgparser.parse("data/config-unbind-all-context");
+
+		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
+			if (i == OP_OPENALLUNREADINBROWSER ||
+					i == OP_MARKALLABOVEASREAD ||
+					i == OP_OPENALLUNREADINBROWSER_AND_MARK) {
+				continue;
+			}
+			REQUIRE(keys.getkey(static_cast<Operation>(i), "help") != "<none>");
+		}
+
+		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
+			if (i == OP_OPENALLUNREADINBROWSER ||
+					i == OP_MARKALLABOVEASREAD ||
+					i == OP_OPENALLUNREADINBROWSER_AND_MARK) {
+				continue;
+			}
+			REQUIRE(keys.getkey(static_cast<Operation>(i), "article") == "<none>");
+		}
 	}
 }

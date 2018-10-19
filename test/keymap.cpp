@@ -43,6 +43,51 @@ TEST_CASE("unset_key() and set_key()", "[KeyMap]")
 	}
 }
 
+TEST_CASE(
+	"unset_all_keys() clears the keymap from key bindings for a given context",
+	"[KeyMap]")
+{
+	SECTION("KeyMap has most of the keys set up by default") {
+		KeyMap k(KM_NEWSBOAT);
+
+		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
+			if (i == OP_OPENALLUNREADINBROWSER ||
+					i == OP_MARKALLABOVEASREAD ||
+					i == OP_OPENALLUNREADINBROWSER_AND_MARK) {
+				continue;
+			}
+			REQUIRE(k.getkey(static_cast<Operation>(i), "all") != "<none>");
+		}
+	}
+
+	SECTION("\"all\" context clears the keymap from all key bindings") {
+		KeyMap k(KM_NEWSBOAT);
+		k.unset_all_keys("all");
+
+		for (int i = OP_NB_MIN; i < OP_NB_MAX; ++i) {
+			REQUIRE(k.getkey(static_cast<Operation>(i), "all") == "<none>");
+		}
+	}
+
+	SECTION("Clears key bindings just for a given context") {
+		KeyMap k(KM_NEWSBOAT);
+		k.unset_all_keys("articlelist");
+
+		for (int i = OP_NB_MIN; i < OP_NB_MAX; ++i) {
+			REQUIRE(k.getkey(static_cast<Operation>(i), "articlelist") == "<none>");
+		}
+
+		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
+			if (i == OP_OPENALLUNREADINBROWSER ||
+					i == OP_MARKALLABOVEASREAD ||
+					i == OP_OPENALLUNREADINBROWSER_AND_MARK) {
+				continue;
+			}
+			REQUIRE(k.getkey(static_cast<Operation>(i), "feedlist") != "<none>");
+		}
+	}
+}
+
 TEST_CASE("get_opcode()", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
@@ -69,6 +114,14 @@ TEST_CASE("getkey()", "[KeyMap]")
 		k.set_key(OP_QUIT, "O", "article");
 		REQUIRE(k.getkey(OP_QUIT, "article") == "O");
 		REQUIRE(k.getkey(OP_QUIT, "all") == "q");
+	}
+
+	SECTION("Returns context-specific binding if asked to search in all contexts")
+	{
+		k.unset_all_keys("all");
+		REQUIRE(k.getkey(OP_QUIT, "all") == "<none>");
+		k.set_key(OP_QUIT, "O", "article");
+		REQUIRE(k.getkey(OP_QUIT, "all") == "O");
 	}
 }
 
