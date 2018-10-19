@@ -671,7 +671,7 @@ Command:Syntax:Description:Example
 [[cmd-save]]<<cmd-save,+save+>>:save <filename>:Save the currently select article to disk. This works in the article list and in the article view.:save ~/important.txt
 [[cmd-set]]<<cmd-set,+set+>>:set <variable>[=<value>|&|!]:Set configuration variable <variable> to <value>. If no value is specified, the current value is printed out. Specifying a '!' after the name of boolean configuration variables toggles their values, a '&' directly after the name of a configuration variable of any type resets its value to the documented default value.:set reload-time=15
 [[cmd-tag]]<<cmd-tag,+tag+>>:tag <tagname>:Only display feeds with the tag <tagname>.:tag news
-[[cmd-goto]]<<cmd-goto,+goto+>>:goto <case-insensitive substring>:Go to the next feed whose name contains the case-insensitive substring.:goto foo
+[[cmd-goto]]<<cmd-goto,+goto+>>:goto <case-insensitive substring>:Search for a feed whose name contains the case-insensitive substring.:goto foo
 [[cmd-source]]<<cmd-source,+source+>>:source <filename> [...]:Load the specified configuration files. This allows it to load alternative configuration files or reload already loaded configuration files on-the-fly from the filesystem.:source ~/.newsboat/colors
 [[cmd-dumpconfig]]<<cmd-dumpconfig,+dumpconfig+>>:dumpconfig <filename>:Save current internal state of configuration to file, so that it can be instantly reused as configuration file.:dumpconfig ~/.newsboat/config.saved
 [[cmd-dumpform]]<<cmd-dumpform,+dumpform+>>:dumpform:Dump current dialog to text file. This is meant for debugging purposes only.:dumpform
