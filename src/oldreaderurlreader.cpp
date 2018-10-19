@@ -58,7 +58,7 @@ void OldReaderUrlReader::reload()
 
 	std::vector<std::string>& file_urls(ur.get_urls());
 	for (const auto& url : file_urls) {
-		if (Utils::is_query_url(url)) {
+		if (utils::is_query_url(url)) {
 			urls.push_back(url);
 			std::vector<std::string>& file_tags(ur.get_tags(url));
 			tags[url] = ur.get_tags(url);

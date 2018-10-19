@@ -62,7 +62,7 @@ void Reloader::reload(unsigned int pos,
 			ctrl->get_view()->set_status(
 				StrPrintf::fmt(_("%sLoading %s..."),
 					prepare_message(pos + 1, max),
-					Utils::censor_url(oldfeed->rssurl())));
+					utils::censor_url(oldfeed->rssurl())));
 		}
 
 		bool ignore_dl =
@@ -90,17 +90,17 @@ void Reloader::reload(unsigned int pos,
 		} catch (const DbException& e) {
 			errmsg = StrPrintf::fmt(
 				_("Error while retrieving %s: %s"),
-				Utils::censor_url(oldfeed->rssurl()),
+				utils::censor_url(oldfeed->rssurl()),
 				e.what());
 		} catch (const std::string& emsg) {
 			errmsg = StrPrintf::fmt(
 				_("Error while retrieving %s: %s"),
-				Utils::censor_url(oldfeed->rssurl()),
+				utils::censor_url(oldfeed->rssurl()),
 				emsg);
 		} catch (rsspp::Exception& e) {
 			errmsg = StrPrintf::fmt(
 				_("Error while retrieving %s: %s"),
-				Utils::censor_url(oldfeed->rssurl()),
+				utils::censor_url(oldfeed->rssurl()),
 				e.what());
 		}
 		if (errmsg != "") {
@@ -145,7 +145,7 @@ void Reloader::reload_all(bool unattended)
 		reload_range(0, num_feeds - 1, num_feeds, unattended);
 	} else {
 		std::vector<std::pair<unsigned int, unsigned int>> partitions =
-			Utils::partition_indexes(0, num_feeds - 1, num_threads);
+			utils::partition_indexes(0, num_feeds - 1, num_threads);
 		std::vector<std::thread> threads;
 		LOG(Level::DEBUG,
 			"Reloader::reload_all: starting reload threads...");
@@ -299,7 +299,7 @@ void Reloader::notify(const std::string& msg)
 		LOG(Level::DEBUG,
 			"reloader:notify: notifying external program `%s'",
 			prog);
-		Utils::run_command(prog, msg);
+		utils::run_command(prog, msg);
 	}
 }
 

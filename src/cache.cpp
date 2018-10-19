@@ -178,7 +178,7 @@ rssitem_callback(void* myfeed, int argc, char** argv, char** /* azColName */)
 	is >> t;
 	item->set_pubDate(t);
 
-	item->set_size(Utils::to_u(argv[5]));
+	item->set_size(utils::to_u(argv[5]));
 	item->set_unread((std::string("1") == argv[6]));
 
 	item->set_feedurl(argv[7]);
@@ -228,7 +228,7 @@ static int search_item_callback(void* myfeed,
 	is >> t;
 	item->set_pubDate(t);
 
-	item->set_size(Utils::to_u(argv[5]));
+	item->set_size(utils::to_u(argv[5]));
 	item->set_unread((std::string("1") == argv[6]));
 	item->set_feedurl(argv[7]);
 
@@ -552,7 +552,7 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 	std::shared_ptr<RssFeed> feed(new RssFeed(this));
 	feed->set_rssurl(rssurl);
 
-	if (Utils::is_query_url(rssurl)) {
+	if (utils::is_query_url(rssurl)) {
 		return feed;
 	}
 
@@ -631,7 +631,7 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 std::vector<std::shared_ptr<RssItem>>
 Cache::search_for_items(const std::string& querystr, const std::string& feedurl)
 {
-	assert(!Utils::is_query_url(feedurl));
+	assert(!utils::is_query_url(feedurl));
 	std::string query;
 	std::vector<std::shared_ptr<RssItem>> items;
 
@@ -1068,7 +1068,7 @@ void Cache::fetch_descriptions(RssFeed* feed)
 	for (const auto& item : feed->items()) {
 		guids.push_back(prepare_query("'%q'", item->guid()));
 	}
-	std::string in_clause = Utils::join(guids, ", ");
+	std::string in_clause = utils::join(guids, ", ");
 
 	std::string query = prepare_query(
 		"SELECT guid, content FROM rss_item WHERE guid IN (%s);",

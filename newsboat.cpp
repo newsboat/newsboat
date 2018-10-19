@@ -85,7 +85,7 @@ void print_usage(const std::string& argv0)
 		longcolumn += ", --" + a.longname;
 		longcolumn += a.params.size() > 0 ? "=" + a.params : "";
 		ss << "\t" << longcolumn;
-		for (unsigned int j = 0; j < Utils::gentabs(longcolumn); j++) {
+		for (unsigned int j = 0; j < utils::gentabs(longcolumn); j++) {
 			ss << "\t";
 		}
 		ss << a.desc << std::endl;
@@ -153,7 +153,7 @@ void print_version(const std::string& argv0, unsigned int level)
 
 int main(int argc, char* argv[])
 {
-	Utils::initialize_ssl_implementation();
+	utils::initialize_ssl_implementation();
 
 	setlocale(LC_CTYPE, "");
 	setlocale(LC_MESSAGES, "");

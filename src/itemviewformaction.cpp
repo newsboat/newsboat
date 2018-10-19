@@ -48,8 +48,8 @@ void ItemViewFormAction::init()
 		f->set("percentwidth", "0");
 	} else {
 		f->set("percentwidth",
-			std::to_string(Utils::max(6,
-				Utils::max(strlen(_("Top")),
+			std::to_string(utils::max(6,
+				utils::max(strlen(_("Top")),
 					strlen(_("Bottom"))))));
 		update_percent();
 	}
@@ -92,7 +92,7 @@ void ItemViewFormAction::prepare()
 		update_head(item);
 
 		const std::string widthstr = f->get("article:w");
-		const unsigned int window_width = Utils::to_u(widthstr, 0);
+		const unsigned int window_width = utils::to_u(widthstr, 0);
 
 		unsigned int text_width =
 			cfg->get_configvalue_as_int("text-width");
@@ -171,7 +171,7 @@ void ItemViewFormAction::process_operation(Operation op,
 		break;
 	case OP_ENQUEUE: {
 		if (item->enclosure_url().length() > 0 &&
-			Utils::is_http_url(item->enclosure_url())) {
+			utils::is_http_url(item->enclosure_url())) {
 			v->get_ctrl()->enqueue_url(item->enclosure_url(),
 				item->title(),
 				item->pubDate_timestamp(),
@@ -437,18 +437,18 @@ void ItemViewFormAction::set_head(const std::string& s,
 	fmt.register_fmt('V', PROGRAM_VERSION);
 
 	auto itemtitle = s;
-	Utils::remove_soft_hyphens(itemtitle);
+	utils::remove_soft_hyphens(itemtitle);
 	fmt.register_fmt('T', itemtitle);
 
 	auto clear_feedtitle = feedtitle;
-	Utils::remove_soft_hyphens(clear_feedtitle);
+	utils::remove_soft_hyphens(clear_feedtitle);
 	fmt.register_fmt('F', clear_feedtitle);
 
 	fmt.register_fmt('u', std::to_string(unread));
 	fmt.register_fmt('t', std::to_string(total));
 
 	std::string listwidth = f->get("article:w");
-	unsigned int width = Utils::to_u(listwidth);
+	unsigned int width = utils::to_u(listwidth);
 
 	f->set("head",
 		fmt.do_format(
@@ -457,10 +457,10 @@ void ItemViewFormAction::set_head(const std::string& s,
 
 void ItemViewFormAction::handle_cmdline(const std::string& cmd)
 {
-	std::vector<std::string> tokens = Utils::tokenize_quoted(cmd);
+	std::vector<std::string> tokens = utils::tokenize_quoted(cmd);
 	if (!tokens.empty()) {
 		if (tokens[0] == "save" && tokens.size() >= 2) {
-			std::string filename = Utils::resolve_tilde(tokens[1]);
+			std::string filename = utils::resolve_tilde(tokens[1]);
 			std::shared_ptr<RssItem> item =
 				feed->get_item_by_guid(guid);
 
@@ -557,7 +557,7 @@ void ItemViewFormAction::update_percent()
 {
 	if (cfg->get_configvalue_as_bool("display-article-progress")) {
 		unsigned int percent = 0;
-		unsigned int offset = Utils::to_u(f->get("articleoffset"), 0);
+		unsigned int offset = utils::to_u(f->get("articleoffset"), 0);
 
 		if (num_lines > 0)
 			percent = (100 * (offset + 1)) / num_lines;
@@ -585,7 +585,7 @@ std::string ItemViewFormAction::title()
 {
 	std::shared_ptr<RssItem> item = feed->get_item_by_guid(guid);
 	auto title = item->title();
-	Utils::remove_soft_hyphens(title);
+	utils::remove_soft_hyphens(title);
 	return StrPrintf::fmt(_("Article - %s"), title);
 }
 
@@ -615,7 +615,7 @@ void ItemViewFormAction::highlight_text(const std::string& searchphrase)
 	params.push_back("article");
 	params.push_back(searchphrase);
 
-	std::vector<std::string> colors = Utils::tokenize(
+	std::vector<std::string> colors = utils::tokenize(
 		cfg->get_configvalue("search-highlight-colors"), " ");
 	std::copy(colors.begin(), colors.end(), std::back_inserter(params));
 

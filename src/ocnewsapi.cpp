@@ -242,7 +242,7 @@ rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id)
 			if (type_obj && node) {
 				const std::string type =
 					json_object_get_string(type_obj);
-				if (Utils::is_valid_podcast_type(type)) {
+				if (utils::is_valid_podcast_type(type)) {
 					item.enclosure_url =
 						json_object_get_string(node);
 					item.enclosure_type = std::move(type);
@@ -298,7 +298,7 @@ bool OcNewsApi::query(const std::string& query,
 	std::string url = server + OCNEWS_API + query;
 	curl_easy_setopt(handle, CURLOPT_URL, url.c_str());
 
-	Utils::set_common_curl_options(handle, cfg);
+	utils::set_common_curl_options(handle, cfg);
 
 	static auto write_fn =
 		[](void* buffer, size_t size, size_t nmemb, void* userp) {

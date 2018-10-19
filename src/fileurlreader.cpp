@@ -30,7 +30,7 @@ void FileUrlReader::reload()
 			std::getline(f, line);
 			if (line.length() > 0 && line[0] != '#') {
 				std::vector<std::string> tokens =
-					Utils::tokenize_quoted(line);
+					utils::tokenize_quoted(line);
 				if (!tokens.empty()) {
 					std::string url = tokens[0];
 					urls.push_back(url);

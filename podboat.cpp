@@ -12,7 +12,7 @@ using namespace podboat;
 
 int main(int argc, char* argv[])
 {
-	Utils::initialize_ssl_implementation();
+	utils::initialize_ssl_implementation();
 
 	setlocale(LC_CTYPE, "");
 	setlocale(LC_MESSAGES, "");

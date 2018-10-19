@@ -50,16 +50,16 @@ void ColorManager::handle_action(const std::string& action,
 		std::string fgcolor = params[1];
 		std::string bgcolor = params[2];
 
-		if (!Utils::is_valid_color(fgcolor))
+		if (!utils::is_valid_color(fgcolor))
 			throw ConfigHandlerException(StrPrintf::fmt(
 				_("`%s' is not a valid color"), fgcolor));
-		if (!Utils::is_valid_color(bgcolor))
+		if (!utils::is_valid_color(bgcolor))
 			throw ConfigHandlerException(StrPrintf::fmt(
 				_("`%s' is not a valid color"), bgcolor));
 
 		std::vector<std::string> attribs;
 		for (unsigned int i = 3; i < params.size(); ++i) {
-			if (!Utils::is_valid_attribute(params[i]))
+			if (!utils::is_valid_attribute(params[i]))
 				throw ConfigHandlerException(StrPrintf::fmt(
 					_("`%s' is not a valid attribute"),
 					params[i]));

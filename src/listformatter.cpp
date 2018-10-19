@@ -29,27 +29,27 @@ void ListFormatter::set_line(const unsigned int itempos,
 	std::vector<LineIdPair> formatted_text;
 
 	if (width > 0 && text.length() > 0) {
-		std::wstring mytext = Utils::clean_nonprintable_characters(
-			Utils::str2wstr(text));
+		std::wstring mytext = utils::clean_nonprintable_characters(
+			utils::str2wstr(text));
 
 		while (mytext.length() > 0) {
 			size_t size = mytext.length();
-			size_t w = Utils::wcswidth_stfl(mytext, size);
+			size_t w = utils::wcswidth_stfl(mytext, size);
 			if (w > width) {
 				while (size &&
-					(w = Utils::wcswidth_stfl(
+					(w = utils::wcswidth_stfl(
 						 mytext, size)) > width) {
 					size--;
 				}
 			}
 			formatted_text.push_back(LineIdPair(
-				Utils::wstr2str(mytext.substr(0, size)), id));
+				utils::wstr2str(mytext.substr(0, size)), id));
 			mytext.erase(0, size);
 		}
 	} else {
 		formatted_text.push_back(LineIdPair(
-			Utils::wstr2str(Utils::clean_nonprintable_characters(
-				Utils::str2wstr(text))),
+			utils::wstr2str(utils::clean_nonprintable_characters(
+				utils::str2wstr(text))),
 			id));
 	}
 
@@ -66,7 +66,7 @@ void ListFormatter::add_lines(const std::vector<std::string>& thelines,
 	unsigned int width)
 {
 	for (const auto& line : thelines) {
-		add_line(Utils::replace_all(line, "\t", "        "),
+		add_line(utils::replace_all(line, "\t", "        "),
 			UINT_MAX,
 			width);
 	}

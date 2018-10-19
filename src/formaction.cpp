@@ -188,7 +188,7 @@ std::vector<std::string> FormAction::get_suggestions(
 	}
 	if (result.empty()) {
 		std::vector<std::string> tokens =
-			Utils::tokenize_quoted(fragment, " \t=");
+			utils::tokenize_quoted(fragment, " \t=");
 		if (tokens.size() >= 1) {
 			if (tokens[0] == "set") {
 				if (tokens.size() < 3) {
@@ -238,7 +238,7 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 	 * is tokenized, and then the tokens are looked at.
 	 */
 	std::vector<std::string> tokens =
-		Utils::tokenize_quoted(cmdline, " \t=");
+		utils::tokenize_quoted(cmdline, " \t=");
 	assert(cfg != nullptr);
 	if (!tokens.empty()) {
 		std::string cmd = tokens[0];
@@ -262,7 +262,7 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 					}
 					v->set_status(StrPrintf::fmt("  %s=%s",
 						var,
-						Utils::quote_if_necessary(
+						utils::quote_if_necessary(
 							cfg->get_configvalue(
 								var))));
 				}
@@ -270,7 +270,7 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 				std::string result =
 					ConfigParser::evaluate_backticks(
 						tokens[1]);
-				Utils::trim_end(result);
+				utils::trim_end(result);
 				cfg->set_configvalue(tokens[0], result);
 				set_redraw(true); // because some configuration
 						  // value might have changed
@@ -290,7 +290,7 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 				for (const auto& token : tokens) {
 					try {
 						v->get_ctrl()->load_configfile(
-							Utils::resolve_tilde(
+							utils::resolve_tilde(
 								token));
 					} catch (const ConfigException& ex) {
 						v->show_error(ex.what());
@@ -303,7 +303,7 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 				v->show_error(_("usage: dumpconfig <file>"));
 			} else {
 				v->get_ctrl()->dump_config(
-					Utils::resolve_tilde(tokens[0]));
+					utils::resolve_tilde(tokens[0]));
 				v->show_error(StrPrintf::fmt(
 					_("Saved configuration to %s"),
 					tokens[0]));
@@ -412,7 +412,7 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 	if (default_title.empty()) { // call the function to figure out title
 				     // from url only if the default_title is no
 				     // good
-		new_title = Utils::make_title(default_url);
+		new_title = utils::make_title(default_url);
 		prompts.push_back(QnaPair(_("Title: "), new_title));
 	} else {
 		prompts.push_back(QnaPair(_("Title: "), default_title));
@@ -423,7 +423,7 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 	if (is_bm_autopilot) { // If bookmarking is set to autopilot don't
 			       // prompt for url, title, desc
 		if (default_title.empty()) {
-			new_title = Utils::make_title(
+			new_title = utils::make_title(
 				default_url); // try to make the title from url
 		} else {
 			new_title = default_title; // assignment just to make
@@ -524,17 +524,17 @@ std::string FormAction::bookmark(const std::string& url,
 	if (bookmark_cmd.length() > 0) {
 		std::string cmdline = StrPrintf::fmt("%s '%s' '%s' '%s' '%s'",
 			bookmark_cmd,
-			Utils::replace_all(url, "'", "%27"),
-			Utils::replace_all(title, "'", "%27"),
-			Utils::replace_all(description, "'", "%27"),
-			Utils::replace_all(feed_title, "'", "%27"));
+			utils::replace_all(url, "'", "%27"),
+			utils::replace_all(title, "'", "%27"),
+			utils::replace_all(description, "'", "%27"),
+			utils::replace_all(feed_title, "'", "%27"));
 
 		LOG(Level::DEBUG, "FormAction::bookmark: cmd = %s", cmdline);
 
 		if (is_interactive) {
 			v->push_empty_formaction();
 			Stfl::reset();
-			Utils::run_interactively(
+			utils::run_interactively(
 				cmdline, "FormAction::bookmark");
 			v->pop_current_formaction();
 			return "";
@@ -544,7 +544,7 @@ std::string FormAction::bookmark(const std::string& url,
 			my_argv[1] = const_cast<char*>("-c");
 			my_argv[2] = const_cast<char*>(cmdline.c_str());
 			my_argv[3] = nullptr;
-			return Utils::run_program(my_argv, "");
+			return utils::run_program(my_argv, "");
 		}
 	} else {
 		return _(

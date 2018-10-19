@@ -39,8 +39,8 @@ void FilterContainer::dump_config(std::vector<std::string>& config_output)
 {
 	for (const auto& filter : filters) {
 		config_output.push_back(StrPrintf::fmt("define-filter %s %s",
-			Utils::quote(filter.first),
-			Utils::quote(filter.second)));
+			utils::quote(filter.first),
+			utils::quote(filter.second)));
 	}
 }
 

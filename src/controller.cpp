@@ -681,7 +681,7 @@ void Controller::enqueue_url(const std::string& url,
 			getline(f, line);
 			if (!f.eof() && line.length() > 0) {
 				std::vector<std::string> fields =
-					Utils::tokenize_quoted(line);
+					utils::tokenize_quoted(line);
 				if (!fields.empty() && fields[0] == url) {
 					url_found = true;
 					break;
@@ -753,12 +753,12 @@ void Controller::edit_urls_file()
 
 	std::string cmdline = StrPrintf::fmt("%s \"%s\"",
 		editor,
-		Utils::replace_all(configpaths.url_file(), "\"", "\\\""));
+		utils::replace_all(configpaths.url_file(), "\"", "\\\""));
 
 	v->push_empty_formaction();
 	Stfl::reset();
 
-	Utils::run_interactively(cmdline, "Controller::edit_urls_file");
+	utils::run_interactively(cmdline, "Controller::edit_urls_file");
 
 	v->pop_current_formaction();
 
@@ -845,7 +845,7 @@ void Controller::enqueue_items(std::shared_ptr<RssFeed> feed)
 				"enclosure_type = `%s'",
 				item->enclosure_url(),
 				item->enclosure_type());
-			if (Utils::is_http_url(item->enclosure_url())) {
+			if (utils::is_http_url(item->enclosure_url())) {
 				LOG(Level::INFO,
 					"Controller::enqueue_items: enqueuing "
 					"`%s'",
@@ -883,7 +883,7 @@ std::string Controller::generate_enqueue_filename(const std::string& url,
 		return std::string(pubDate_formatted);
 	};
 
-	std::string base = Utils::get_basename(url);
+	std::string base = utils::get_basename(url);
 	std::string extension;
 	std::size_t pos = base.rfind('.');
 	if (pos != std::string::npos) {

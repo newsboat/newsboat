@@ -67,7 +67,7 @@ void RegexManager::handle_action(const std::string& action,
 		std::string colorstr;
 		if (params[2] != "default") {
 			colorstr.append("fg=");
-			if (!Utils::is_valid_color(params[2]))
+			if (!utils::is_valid_color(params[2]))
 				throw ConfigHandlerException(StrPrintf::fmt(
 					_("`%s' is not a valid color"),
 					params[2]));
@@ -78,7 +78,7 @@ void RegexManager::handle_action(const std::string& action,
 				if (colorstr.length() > 0)
 					colorstr.append(",");
 				colorstr.append("bg=");
-				if (!Utils::is_valid_color(params[3]))
+				if (!utils::is_valid_color(params[3]))
 					throw ConfigHandlerException(
 						StrPrintf::fmt(
 							_("`%s' is not a valid "
@@ -91,7 +91,7 @@ void RegexManager::handle_action(const std::string& action,
 					if (colorstr.length() > 0)
 						colorstr.append(",");
 					colorstr.append("attr=");
-					if (!Utils::is_valid_attribute(
+					if (!utils::is_valid_attribute(
 						    params[i]))
 						throw ConfigHandlerException(
 							StrPrintf::fmt(
@@ -135,7 +135,7 @@ void RegexManager::handle_action(const std::string& action,
 		std::string line = "highlight";
 		for (const auto& param : params) {
 			line.append(" ");
-			line.append(Utils::quote(param));
+			line.append(utils::quote(param));
 		}
 		cheat_store_for_dump_config.push_back(line);
 	} else if (action == "highlight-article") {
@@ -150,7 +150,7 @@ void RegexManager::handle_action(const std::string& action,
 		std::string colorstr;
 		if (fgcolor != "default") {
 			colorstr.append("fg=");
-			if (!Utils::is_valid_color(fgcolor))
+			if (!utils::is_valid_color(fgcolor))
 				throw ConfigHandlerException(StrPrintf::fmt(
 					_("`%s' is not a valid color"),
 					fgcolor));
@@ -160,7 +160,7 @@ void RegexManager::handle_action(const std::string& action,
 			if (colorstr.length() > 0)
 				colorstr.append(",");
 			colorstr.append("bg=");
-			if (!Utils::is_valid_color(bgcolor))
+			if (!utils::is_valid_color(bgcolor))
 				throw ConfigHandlerException(StrPrintf::fmt(
 					_("`%s' is not a valid color"),
 					bgcolor));
@@ -172,7 +172,7 @@ void RegexManager::handle_action(const std::string& action,
 				if (colorstr.length() > 0)
 					colorstr.append(",");
 				colorstr.append("attr=");
-				if (!Utils::is_valid_attribute(params[i]))
+				if (!utils::is_valid_attribute(params[i]))
 					throw ConfigHandlerException(
 						StrPrintf::fmt(
 							_("`%s' is not a valid "

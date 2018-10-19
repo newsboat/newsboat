@@ -39,7 +39,7 @@ void UrlViewFormAction::process_operation(Operation op,
 	case OP_OPEN: {
 		std::string posstr = f->get("feedpos");
 		if (posstr.length() > 0) {
-			unsigned int idx = Utils::to_u(posstr, 0);
+			unsigned int idx = utils::to_u(posstr, 0);
 			v->set_status(_("Starting browser..."));
 			v->open_in_browser(links[idx].first);
 			v->set_status("");
@@ -50,7 +50,7 @@ void UrlViewFormAction::process_operation(Operation op,
 	case OP_BOOKMARK: {
 		std::string posstr = f->get("feedpos");
 		if (posstr.length() > 0) {
-			unsigned int idx = Utils::to_u(posstr, 0);
+			unsigned int idx = utils::to_u(posstr, 0);
 
 			this->start_bookmark_qna(
 				"", links[idx].first, "", feed->title());
@@ -115,7 +115,7 @@ void UrlViewFormAction::init()
 	v->set_status("");
 
 	std::string viewwidth = f->get("urls:w");
-	unsigned int width = Utils::to_u(viewwidth, 80);
+	unsigned int width = utils::to_u(viewwidth, 80);
 
 	FmtStrFormatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);

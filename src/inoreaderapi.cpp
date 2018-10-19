@@ -74,7 +74,7 @@ std::string InoreaderApi::retrieve_auth()
 	list = curl_slist_append(list, INOREADER_APP_ID);
 	list = curl_slist_append(list, INOREADER_APP_KEY);
 
-	Utils::set_common_curl_options(handle, cfg);
+	utils::set_common_curl_options(handle, cfg);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle, CURLOPT_POSTFIELDS, postcontent.c_str());
@@ -83,7 +83,7 @@ std::string InoreaderApi::retrieve_auth()
 	curl_easy_cleanup(handle);
 	curl_slist_free_all(list);
 
-	std::vector<std::string> lines = Utils::tokenize(result);
+	std::vector<std::string> lines = utils::tokenize(result);
 	for (const auto& line : lines) {
 		LOG(Level::DEBUG,
 			"InoreaderApi::retrieve_auth: line = %s",
@@ -108,7 +108,7 @@ std::vector<TaggedFeedUrl> InoreaderApi::get_subscribed_urls()
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
 
-	Utils::set_common_curl_options(handle, cfg);
+	utils::set_common_curl_options(handle, cfg);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle, CURLOPT_URL, INOREADER_SUBSCRIPTION_LIST);
@@ -199,8 +199,8 @@ bool InoreaderApi::mark_all_read(const std::string& feedurl)
 {
 	std::string real_feedurl =
 		feedurl.substr(strlen(INOREADER_FEED_PREFIX));
-	std::vector<std::string> elems = Utils::tokenize(real_feedurl, "?");
-	real_feedurl = Utils::unescape_url(elems[0]);
+	std::vector<std::string> elems = utils::tokenize(real_feedurl, "?");
+	real_feedurl = utils::unescape_url(elems[0]);
 	std::string token = get_new_token();
 
 	std::string postcontent =
@@ -257,7 +257,7 @@ std::string InoreaderApi::get_new_token()
 	std::string result;
 	curl_slist* custom_headers{};
 
-	Utils::set_common_curl_options(handle, cfg);
+	utils::set_common_curl_options(handle, cfg);
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
@@ -356,7 +356,7 @@ std::string InoreaderApi::post_content(const std::string& url,
 	curl_slist* custom_headers{};
 
 	CURL* handle = curl_easy_init();
-	Utils::set_common_curl_options(handle, cfg);
+	utils::set_common_curl_options(handle, cfg);
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);

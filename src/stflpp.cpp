@@ -21,7 +21,7 @@ Stfl::Form::Form(const std::string& text)
 	: f(0)
 {
 	ipool = stfl_ipool_create(
-		Utils::translit(nl_langinfo(CODESET), "WCHAR_T").c_str());
+		utils::translit(nl_langinfo(CODESET), "WCHAR_T").c_str());
 	if (!ipool) {
 		throw Exception(errno);
 	}
@@ -102,7 +102,7 @@ std::string Stfl::quote(const std::string& text)
 {
 	std::lock_guard<std::mutex> lock(quote_mtx);
 	stfl_ipool* ipool = stfl_ipool_create(
-		Utils::translit(nl_langinfo(CODESET), "WCHAR_T").c_str());
+		utils::translit(nl_langinfo(CODESET), "WCHAR_T").c_str());
 	std::string retval = stfl_ipool_fromwc(
 		ipool, stfl_quote(stfl_ipool_towc(ipool, text.c_str())));
 	stfl_ipool_destroy(ipool);

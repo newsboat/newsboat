@@ -65,7 +65,7 @@ void FileBrowserFormAction::process_operation(Operation op,
 					std::string fileswidth =
 						f->get("files:w");
 					unsigned int width =
-						Utils::to_u(fileswidth);
+						utils::to_u(fileswidth);
 
 					FmtStrFormatter fmt;
 					fmt.register_fmt('N', PROGRAM_NAME);
@@ -89,7 +89,7 @@ void FileBrowserFormAction::process_operation(Operation op,
 						filename,
 						status);
 					f->set("listpos", "0");
-					std::string fn = Utils::getcwd();
+					std::string fn = utils::getcwd();
 					fn.append(NEWSBEUTER_PATH_SEP);
 					std::string fnstr =
 						f->get("filenametext");
@@ -106,7 +106,7 @@ void FileBrowserFormAction::process_operation(Operation op,
 					do_redraw = true;
 				} break;
 				case '-': {
-					std::string fn = Utils::getcwd();
+					std::string fn = utils::getcwd();
 					fn.append(NEWSBEUTER_PATH_SEP);
 					fn.append(filename);
 					f->set("filenametext", fn);
@@ -168,7 +168,7 @@ std::vector<std::string> get_sorted_filelist()
 {
 	std::vector<std::string> ret;
 
-	auto cwdtmp = Utils::getcwd();
+	auto cwdtmp = utils::getcwd();
 
 	DIR* dirp = ::opendir(cwdtmp.c_str());
 	if (dirp) {
@@ -239,7 +239,7 @@ void FileBrowserFormAction::init()
 	int status = ::chdir(dir.c_str());
 	LOG(Level::DEBUG, "view::filebrowser: chdir(%s) = %i", dir, status);
 
-	auto cwdtmp = Utils::getcwd();
+	auto cwdtmp = utils::getcwd();
 
 	f->set("filenametext", default_filename);
 
@@ -379,7 +379,7 @@ std::string FileBrowserFormAction::get_group(gid_t gid)
 
 std::string FileBrowserFormAction::title()
 {
-	return StrPrintf::fmt(_("Save File - %s"), Utils::getcwd());
+	return StrPrintf::fmt(_("Save File - %s"), utils::getcwd());
 }
 
 } // namespace newsboat

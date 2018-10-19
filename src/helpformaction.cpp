@@ -62,7 +62,7 @@ void HelpFormAction::prepare()
 {
 	if (do_redraw) {
 		std::string listwidth = f->get("helptext:w");
-		unsigned int width = Utils::to_u(listwidth);
+		unsigned int width = utils::to_u(listwidth);
 
 		FmtStrFormatter fmt;
 		fmt.register_fmt('N', PROGRAM_NAME);
@@ -77,7 +77,7 @@ void HelpFormAction::prepare()
 
 		std::string highlighted_searchphrase =
 			StrPrintf::fmt("<hl>%s</>", searchphrase);
-		std::vector<std::string> colors = Utils::tokenize(
+		std::vector<std::string> colors = utils::tokenize(
 			cfg->get_configvalue("search-highlight-colors"), " ");
 		f->set("highlight", make_colorstring(colors));
 		ListFormatter listfmt;
@@ -160,7 +160,7 @@ void HelpFormAction::prepare()
 						"step 1 "
 						"- line = %s",
 						line);
-					line = Utils::quote_for_stfl(line);
+					line = utils::quote_for_stfl(line);
 					LOG(Level::DEBUG,
 						"HelpFormAction::prepare: "
 						"step 2 "
@@ -168,7 +168,7 @@ void HelpFormAction::prepare()
 						line);
 					if (apply_search &&
 						searchphrase.length() > 0) {
-						line = Utils::replace_all(line,
+						line = utils::replace_all(line,
 							searchphrase,
 							highlighted_searchphrase);
 						LOG(Level::DEBUG,

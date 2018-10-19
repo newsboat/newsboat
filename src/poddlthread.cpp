@@ -51,7 +51,7 @@ void PodDlThread::run()
 	++bytecount;
 
 	CURL* easyhandle = curl_easy_init();
-	Utils::set_common_curl_options(easyhandle, cfg);
+	utils::set_common_curl_options(easyhandle, cfg);
 
 	curl_easy_setopt(easyhandle, CURLOPT_URL, dl->url().c_str());
 	curl_easy_setopt(easyhandle, CURLOPT_TIMEOUT, 0);
@@ -86,7 +86,7 @@ void PodDlThread::run()
 		// get a char* pointer. std::string::c_str() won't do because it
 		// returns const char*, whereas ::dirname() needs non-const.
 		std::vector<char> directory(filename.begin(), filename.end());
-		Utils::mkdir_parents(dirname(&directory[0]));
+		utils::mkdir_parents(dirname(&directory[0]));
 
 		f->open(filename, std::fstream::out);
 		dl->set_offset(0);

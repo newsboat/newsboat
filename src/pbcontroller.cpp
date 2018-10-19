@@ -97,7 +97,7 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 	config_dir = xdg_config_dir;
 
 	// create data directory if it doesn't exist
-	int ret = Utils::mkdir_parents(xdg_data_dir, 0700);
+	int ret = utils::mkdir_parents(xdg_data_dir, 0700);
 	if (ret && errno != EEXIST) {
 		LOG(Level::CRITICAL,
 			"Couldn't create `%s': (%i) %s",
@@ -361,7 +361,7 @@ void PbController::print_usage(const char* argv0)
 		longcolumn += ", --" + a.longname;
 		longcolumn += a.params.size() > 0 ? "=" + a.params : "";
 		std::cout << "\t" << longcolumn;
-		for (unsigned int j = 0; j < Utils::gentabs(longcolumn); j++) {
+		for (unsigned int j = 0; j < utils::gentabs(longcolumn); j++) {
 			std::cout << "\t";
 		}
 		std::cout << a.desc << std::endl;
@@ -445,10 +445,10 @@ void PbController::play_file(const std::string& file)
 		return;
 	cmdline.append(player);
 	cmdline.append(" '");
-	cmdline.append(Utils::replace_all(file, "'", "%27"));
+	cmdline.append(utils::replace_all(file, "'", "%27"));
 	cmdline.append("'");
 	Stfl::reset();
-	Utils::run_interactively(cmdline, "PbController::play_file");
+	utils::run_interactively(cmdline, "PbController::play_file");
 }
 
 } // namespace podboat

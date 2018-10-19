@@ -62,7 +62,7 @@ void SelectFormAction::process_operation(Operation op,
 		break;
 	case OP_OPEN: {
 		std::string tagposname = f->get("tagposname");
-		unsigned int pos = Utils::to_u(tagposname);
+		unsigned int pos = utils::to_u(tagposname);
 		if (tagposname.length() > 0) {
 			switch (type) {
 			case SelectionType::TAG: {
@@ -139,7 +139,7 @@ void SelectFormAction::init()
 	value = "";
 
 	std::string viewwidth = f->get("taglist:w");
-	unsigned int width = Utils::to_u(viewwidth, 80);
+	unsigned int width = utils::to_u(viewwidth, 80);
 
 	set_keymap_hints();
 

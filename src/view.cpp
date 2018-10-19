@@ -386,7 +386,7 @@ void View::open_in_pager(const std::string& filename)
 		cmdline.append(filename);
 	}
 	Stfl::reset();
-	Utils::run_interactively(cmdline, "View::open_in_pager");
+	utils::run_interactively(cmdline, "View::open_in_pager");
 	pop_current_formaction();
 }
 
@@ -399,7 +399,7 @@ void View::open_in_browser(const std::string& url)
 	if (browser.find("%u") != std::string::npos) {
 		FmtStrFormatter fmt;
 		std::string newurl;
-		newurl = Utils::replace_all(url, "'", "%27");
+		newurl = utils::replace_all(url, "'", "%27");
 		newurl.insert(0, "'");
 		newurl.append("'");
 		fmt.register_fmt('u', newurl);
@@ -410,11 +410,11 @@ void View::open_in_browser(const std::string& url)
 		else
 			cmdline.append("lynx");
 		cmdline.append(" '");
-		cmdline.append(Utils::replace_all(url, "'", "%27"));
+		cmdline.append(utils::replace_all(url, "'", "%27"));
 		cmdline.append("'");
 	}
 	Stfl::reset();
-	Utils::run_interactively(cmdline, "View::open_in_browser");
+	utils::run_interactively(cmdline, "View::open_in_browser");
 	pop_current_formaction();
 }
 
@@ -1235,7 +1235,7 @@ void View::clear_line(std::shared_ptr<FormAction> fa)
 
 void View::clear_eol(std::shared_ptr<FormAction> fa)
 {
-	unsigned int pos = Utils::to_u(fa->get_form()->get("qna_value_pos"), 0);
+	unsigned int pos = utils::to_u(fa->get_form()->get("qna_value_pos"), 0);
 	std::string val = fa->get_form()->get("qna_value");
 	val.erase(pos, val.length());
 	fa->get_form()->set("qna_value", val);
@@ -1252,7 +1252,7 @@ void View::cancel_input(std::shared_ptr<FormAction> fa)
 void View::delete_word(std::shared_ptr<FormAction> fa)
 {
 	std::string::size_type curpos =
-		Utils::to_u(fa->get_form()->get("qna_value_pos"), 0);
+		utils::to_u(fa->get_form()->get("qna_value_pos"), 0);
 	std::string val = fa->get_form()->get("qna_value");
 	std::string::size_type firstpos = curpos;
 	LOG(Level::DEBUG, "View::delete_word: before val = %s", val);

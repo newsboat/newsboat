@@ -97,9 +97,9 @@ time_t RssParser::parse_date(const std::string& datestr)
 
 void RssParser::replace_newline_characters(std::string& str)
 {
-	str = Utils::replace_all(str, "\r", " ");
-	str = Utils::replace_all(str, "\n", " ");
-	Utils::trim(str);
+	str = utils::replace_all(str, "\r", " ");
+	str = utils::replace_all(str, "\n", " ");
+	utils::trim(str);
 }
 
 std::string RssParser::render_xhtml_title(const std::string& title,
@@ -158,15 +158,15 @@ void RssParser::retrieve_uri(const std::string& uri)
 		fetch_newsblur(uri);
 	} else if (is_ocnews) {
 		fetch_ocnews(uri);
-	} else if (Utils::is_http_url(uri)) {
+	} else if (utils::is_http_url(uri)) {
 		download_http(uri);
-	} else if (Utils::is_exec_url(uri)) {
+	} else if (utils::is_exec_url(uri)) {
 		get_execplugin(uri.substr(5, uri.length() - 5));
-	} else if (Utils::is_filter_url(uri)) {
+	} else if (utils::is_filter_url(uri)) {
 		std::string filter, url;
-		Utils::extract_filter(uri, filter, url);
+		utils::extract_filter(uri, filter, url);
 		download_filterplugin(filter, url);
-	} else if (Utils::is_query_url(my_uri)) {
+	} else if (utils::is_query_url(my_uri)) {
 		skip_parsing = true;
 	} else if (my_uri.substr(0, 7) == "file://") {
 		parse_file(my_uri.substr(7, my_uri.length() - 7));
@@ -191,7 +191,7 @@ void RssParser::download_http(const std::string& uri)
 
 	for (unsigned int i = 0; i < retrycount && !is_valid; i++) {
 		try {
-			std::string useragent = Utils::get_useragent(cfgcont);
+			std::string useragent = utils::get_useragent(cfgcont);
 			LOG(Level::DEBUG,
 				"RssParser::download_http: user-agent = %s",
 				useragent);
@@ -200,7 +200,7 @@ void RssParser::download_http(const std::string& uri)
 				useragent.c_str(),
 				proxy.c_str(),
 				proxy_auth.c_str(),
-				Utils::get_proxy_type(proxy_type),
+				utils::get_proxy_type(proxy_type),
 				cfgcont->get_configvalue_as_bool(
 					"ssl-verifypeer"));
 			time_t lm = 0;
@@ -253,7 +253,7 @@ void RssParser::download_http(const std::string& uri)
 
 void RssParser::get_execplugin(const std::string& plugin)
 {
-	std::string buf = Utils::get_command_output(plugin);
+	std::string buf = utils::get_command_output(plugin);
 	is_valid = false;
 	try {
 		rsspp::Parser p;
@@ -289,13 +289,13 @@ void RssParser::parse_file(const std::string& file)
 void RssParser::download_filterplugin(const std::string& filter,
 	const std::string& uri)
 {
-	std::string buf = Utils::retrieve_url(uri, cfgcont);
+	std::string buf = utils::retrieve_url(uri, cfgcont);
 
 	char* argv[4] = {const_cast<char*>("/bin/sh"),
 		const_cast<char*>("-c"),
 		const_cast<char*>(filter.c_str()),
 		nullptr};
-	std::string result = Utils::run_program(argv, buf);
+	std::string result = utils::run_program(argv, buf);
 	LOG(Level::DEBUG,
 		"RssParser::parse: output of `%s' is: %s",
 		filter,
@@ -329,7 +329,7 @@ void RssParser::fill_feed_fields(std::shared_ptr<RssFeed> feed)
 
 	feed->set_description(f.description);
 
-	feed->set_link(Utils::absolute_url(my_uri, f.link));
+	feed->set_link(utils::absolute_url(my_uri, f.link));
 
 	if (f.pubDate != "")
 		feed->set_pubDate(parse_date(f.pubDate));
@@ -358,7 +358,7 @@ void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed)
 
 		if (item.link != "") {
 			x->set_link(
-				Utils::absolute_url(feed->link(), item.link));
+				utils::absolute_url(feed->link(), item.link));
 		}
 
 		if (x->link().empty() && item.guid_isPermaLink) {
@@ -454,7 +454,7 @@ void RssParser::set_item_title(std::shared_ptr<RssFeed> feed,
 	std::string title = item.title;
 
 	if (item.title.empty()) {
-		title = Utils::make_title(item.link);
+		title = utils::make_title(item.link);
 	}
 
 	if (is_html_type(item.title_type)) {
@@ -505,7 +505,7 @@ void RssParser::set_item_content(std::shared_ptr<RssItem> x,
 	if (x->description() == "" &&
 		cfgcont->get_configvalue_as_bool("download-full-page") &&
 		x->link() != "") {
-		x->set_description(Utils::retrieve_url(x->link(), cfgcont));
+		x->set_description(utils::retrieve_url(x->link(), cfgcont));
 	}
 
 	LOG(Level::DEBUG,

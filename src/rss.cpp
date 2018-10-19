@@ -59,13 +59,13 @@ RssFeed::~RssFeed()
 void RssItem::set_title(const std::string& t)
 {
 	title_ = t;
-	Utils::trim(title_);
+	utils::trim(title_);
 }
 
 void RssItem::set_link(const std::string& l)
 {
 	link_ = l;
-	Utils::trim(link_);
+	utils::trim(link_);
 }
 
 void RssItem::set_author(const std::string& a)
@@ -208,19 +208,19 @@ std::string RssItem::title() const
 {
 	std::string retval;
 	if (title_.length() > 0)
-		retval = Utils::convert_text(
+		retval = utils::convert_text(
 			title_, nl_langinfo(CODESET), "utf-8");
 	return retval;
 }
 
 std::string RssItem::author() const
 {
-	return Utils::convert_text(author_, nl_langinfo(CODESET), "utf-8");
+	return utils::convert_text(author_, nl_langinfo(CODESET), "utf-8");
 }
 
 std::string RssItem::description() const
 {
-	return Utils::convert_text(description_, nl_langinfo(CODESET), "utf-8");
+	return utils::convert_text(description_, nl_langinfo(CODESET), "utf-8");
 }
 
 std::string RssFeed::title() const
@@ -236,12 +236,12 @@ std::string RssFeed::title() const
 	}
 	return found_title
 		? alt_title
-		: Utils::convert_text(title_, nl_langinfo(CODESET), "utf-8");
+		: utils::convert_text(title_, nl_langinfo(CODESET), "utf-8");
 }
 
 std::string RssFeed::description() const
 {
-	return Utils::convert_text(description_, nl_langinfo(CODESET), "utf-8");
+	return utils::convert_text(description_, nl_langinfo(CODESET), "utf-8");
 }
 
 bool RssFeed::hidden() const
@@ -428,18 +428,18 @@ void RssIgnores::dump_config(std::vector<std::string>& config_output)
 		if (ign.first == "*")
 			configline.append("*");
 		else
-			configline.append(Utils::quote(ign.first));
+			configline.append(utils::quote(ign.first));
 		configline.append(" ");
-		configline.append(Utils::quote(ign.second->get_expression()));
+		configline.append(utils::quote(ign.second->get_expression()));
 		config_output.push_back(configline);
 	}
 	for (const auto& ign_lm : ignores_lastmodified) {
 		config_output.push_back(StrPrintf::fmt(
-			"always-download %s", Utils::quote(ign_lm)));
+			"always-download %s", utils::quote(ign_lm)));
 	}
 	for (const auto& rf : resetflag) {
 		config_output.push_back(StrPrintf::fmt(
-			"reset-unread-on-update %s", Utils::quote(rf)));
+			"reset-unread-on-update %s", utils::quote(rf)));
 	}
 }
 
@@ -542,14 +542,14 @@ void RssFeed::update_items(std::vector<std::shared_ptr<RssFeed>> feeds)
 void RssFeed::set_rssurl(const std::string& u)
 {
 	rssurl_ = u;
-	if (Utils::is_query_url(u)) {
+	if (utils::is_query_url(u)) {
 		/* Query string looks like this:
 		 *
 		 * query:Title:unread = "yes" and age between 0:7
 		 *
 		 * So we split by colons to get title and the query itself. */
 		std::vector<std::string> tokens =
-			Utils::tokenize_quoted(u, ":");
+			utils::tokenize_quoted(u, ":");
 
 		if (tokens.size() < 3) {
 			throw _s("too few arguments");
@@ -597,9 +597,9 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 				std::shared_ptr<RssItem> b) {
 				return sort_strategy.sd ==
 						SortDirection::DESC
-					? (Utils::strnaturalcmp(a->title().c_str(),
+					? (utils::strnaturalcmp(a->title().c_str(),
 						   b->title().c_str()) > 0)
-					: (Utils::strnaturalcmp(a->title().c_str(),
+					: (utils::strnaturalcmp(a->title().c_str(),
 						   b->title().c_str()) < 0);
 			});
 		break;

@@ -23,13 +23,13 @@ void OpmlUrlReader::reload()
 	alltags.clear();
 
 	std::vector<std::string> urls =
-		Utils::tokenize_quoted(this->get_source(), " ");
+		utils::tokenize_quoted(this->get_source(), " ");
 
 	for (const auto& url : urls) {
 		LOG(Level::DEBUG,
 			"OpmlUrlReader::reload: downloading `%s'",
 			url);
-		std::string urlcontent = Utils::retrieve_url(url, cfg);
+		std::string urlcontent = utils::retrieve_url(url, cfg);
 
 		xmlDoc* doc =
 			xmlParseMemory(urlcontent.c_str(), urlcontent.length());
