@@ -47,8 +47,8 @@ public:
 			struct tm* stm = localtime(&t);
 			strftime(date, sizeof(date), "%Y-%m-%d %H:%M:%S", stm);
 
-			auto logmsgbuf = StrPrintf::fmt(format, args...);
-			auto buf = StrPrintf::fmt("[%s] %s: %s",
+			auto logmsgbuf = strprintf::fmt(format, args...);
+			auto buf = strprintf::fmt("[%s] %s: %s",
 				date,
 				loglevel_str[static_cast<int>(l)],
 				logmsgbuf);
@@ -58,7 +58,7 @@ public:
 			}
 
 			if (Level::USERERROR == l && ef.is_open()) {
-				buf = StrPrintf::fmt(
+				buf = strprintf::fmt(
 					"[%s] %s", date, logmsgbuf);
 				ef << buf << std::endl;
 				ef.flush();

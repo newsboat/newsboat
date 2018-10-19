@@ -39,7 +39,7 @@ void prepare_header(
 		 LineType lineType = LineType::wrappable)
 		{
 			if (!value.empty()) {
-				const auto line = StrPrintf::fmt("%s%s", name, value);
+				const auto line = strprintf::fmt("%s%s", name, value);
 				lines.push_back(std::make_pair(lineType, line));
 			}
 		};
@@ -53,12 +53,12 @@ void prepare_header(
 	add_line(item->flags(), _("Flags: "));
 
 	if (!item->enclosure_url().empty()) {
-		auto dlurl = StrPrintf::fmt(
+		auto dlurl = strprintf::fmt(
 			"%s%s",
 			_("Podcast Download URL: "),
 			utils::censor_url(item->enclosure_url()));
 		if (!item->enclosure_type().empty()) {
-			dlurl.append(StrPrintf::fmt("%s%s", _("type: "), item->enclosure_type()));
+			dlurl.append(strprintf::fmt("%s%s", _("type: "), item->enclosure_type()));
 		}
 		lines.push_back(std::make_pair(LineType::softwrappable, dlurl));
 	}

@@ -51,16 +51,16 @@ void ColorManager::handle_action(const std::string& action,
 		std::string bgcolor = params[2];
 
 		if (!utils::is_valid_color(fgcolor))
-			throw ConfigHandlerException(StrPrintf::fmt(
+			throw ConfigHandlerException(strprintf::fmt(
 				_("`%s' is not a valid color"), fgcolor));
 		if (!utils::is_valid_color(bgcolor))
-			throw ConfigHandlerException(StrPrintf::fmt(
+			throw ConfigHandlerException(strprintf::fmt(
 				_("`%s' is not a valid color"), bgcolor));
 
 		std::vector<std::string> attribs;
 		for (unsigned int i = 3; i < params.size(); ++i) {
 			if (!utils::is_valid_attribute(params[i]))
-				throw ConfigHandlerException(StrPrintf::fmt(
+				throw ConfigHandlerException(strprintf::fmt(
 					_("`%s' is not a valid attribute"),
 					params[i]));
 			attribs.push_back(params[i]);
@@ -77,7 +77,7 @@ void ColorManager::handle_action(const std::string& action,
 			attributes[element] = attribs;
 			colors_loaded_ = true;
 		} else
-			throw ConfigHandlerException(StrPrintf::fmt(
+			throw ConfigHandlerException(strprintf::fmt(
 				_("`%s' is not a valid configuration element"),
 				element));
 
@@ -89,7 +89,7 @@ void ColorManager::handle_action(const std::string& action,
 void ColorManager::dump_config(std::vector<std::string>& config_output)
 {
 	for (const auto& color : fg_colors) {
-		std::string configline = StrPrintf::fmt("color %s %s %s",
+		std::string configline = strprintf::fmt("color %s %s %s",
 			color.first,
 			color.second,
 			bg_colors[color.first]);

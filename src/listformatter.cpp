@@ -81,11 +81,11 @@ std::string ListFormatter::format_list(RegexManager* rxman,
 		if (rxman)
 			rxman->quote_and_highlight(str, location);
 		if (line.second == UINT_MAX) {
-			format_cache.append(StrPrintf::fmt(
+			format_cache.append(strprintf::fmt(
 				"{listitem text:%s}", Stfl::quote(str)));
 		} else {
 			format_cache.append(
-				StrPrintf::fmt("{listitem[%u] text:%s}",
+				strprintf::fmt("{listitem[%u] text:%s}",
 					line.second,
 					Stfl::quote(str)));
 		}

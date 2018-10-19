@@ -697,12 +697,12 @@ std::string utils::get_useragent(ConfigContainer* cfgcont)
 				strcmp(buf.machine, "i386") == 0) {
 				PROCESSOR = "Intel ";
 			}
-			return StrPrintf::fmt("%s/%s (Macintosh; %sMac OS X)",
+			return strprintf::fmt("%s/%s (Macintosh; %sMac OS X)",
 				PROGRAM_NAME,
 				PROGRAM_VERSION,
 				PROCESSOR);
 		}
-		return StrPrintf::fmt("%s/%s (%s %s)",
+		return strprintf::fmt("%s/%s (%s %s)",
 			PROGRAM_NAME,
 			PROGRAM_VERSION,
 			buf.sysname,

@@ -429,7 +429,7 @@ void View::update_visible_feeds(std::vector<std::shared_ptr<RssFeed>> feeds)
 			feedlist->update_visible_feeds(feeds);
 		}
 	} catch (const MatcherException& e) {
-		set_status(StrPrintf::fmt(
+		set_status(strprintf::fmt(
 			_("Error: applying the filter failed: %s"), e.what()));
 		LOG(Level::DEBUG,
 			"View::update_visible_feeds: inside catch: %s",
@@ -455,7 +455,7 @@ void View::set_feedlist(std::vector<std::shared_ptr<RssFeed>> feeds)
 			feedlist->set_feedlist(feeds);
 		}
 	} catch (const MatcherException& e) {
-		set_status(StrPrintf::fmt(
+		set_status(strprintf::fmt(
 			_("Error: applying the filter failed: %s"), e.what()));
 	}
 }
@@ -569,7 +569,7 @@ void View::push_itemview(std::shared_ptr<RssFeed> f,
 					item->guid(), true);
 			}
 		} catch (const DbException& e) {
-			show_error(StrPrintf::fmt(
+			show_error(strprintf::fmt(
 				_("Error while marking article as read: %s"),
 				e.what()));
 		}
@@ -1318,14 +1318,14 @@ void View::dump_current_form()
 	strftime(fnbuf, sizeof(fnbuf), "dumpform-%Y%m%d-%H%M%S.stfl", stm);
 	std::fstream f(fnbuf, std::ios_base::out);
 	if (!f.is_open()) {
-		show_error(StrPrintf::fmt("Error: couldn't open file %s: %s",
+		show_error(strprintf::fmt("Error: couldn't open file %s: %s",
 			fnbuf,
 			strerror(errno)));
 		return;
 	}
 	f << formtext;
 	f.close();
-	set_status(StrPrintf::fmt("Dumped current form to file %s", fnbuf));
+	set_status(strprintf::fmt("Dumped current form to file %s", fnbuf));
 }
 
 void View::ctrl_c_action(int /* sig */)

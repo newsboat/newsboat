@@ -79,7 +79,7 @@ void rec_find_rss_outlines(
 				// the output of a program in its OPMLs. Convert
 				// them to our syntax.
 				if (*url == '|') {
-					nurl = StrPrintf::fmt(
+					nurl = strprintf::fmt(
 						"exec:%s", url + 1);
 					LOG(Level::DEBUG,
 						"opml::import: liferea-style "
@@ -99,7 +99,7 @@ void rec_find_rss_outlines(
 						filtercmd,
 						nurl);
 					nurl.insert(0,
-						StrPrintf::fmt("filter:%s:",
+						strprintf::fmt("filter:%s:",
 							filtercmd));
 					xmlFree(filtercmd);
 				}

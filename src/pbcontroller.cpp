@@ -78,7 +78,7 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 		0 == access(xdg_config_dir.c_str(), R_OK | X_OK);
 
 	if (!config_dir_exists) {
-		std::cerr << StrPrintf::fmt(
+		std::cerr << strprintf::fmt(
 				     _("XDG: configuration directory '%s' not "
 				       "accessible, "
 				       "using '%s' instead."),
@@ -118,9 +118,9 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 	lock_file = cache_file + LOCK_SUFFIX;
 	queue_file =
 		xdg_data_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
-	searchfile = StrPrintf::fmt(
+	searchfile = strprintf::fmt(
 		"%s%shistory.search", xdg_data_dir, NEWSBEUTER_PATH_SEP);
-	cmdlinefile = StrPrintf::fmt(
+	cmdlinefile = strprintf::fmt(
 		"%s%shistory.cmdline", xdg_data_dir, NEWSBEUTER_PATH_SEP);
 
 	return true;
@@ -145,7 +145,7 @@ PbController::PbController()
 			std::cout << _("Fatal error: couldn't determine home "
 				       "directory!")
 				  << std::endl;
-			std::cout << StrPrintf::fmt(
+			std::cout << strprintf::fmt(
 					     _("Please set the HOME "
 					       "environment variable or add a "
 					       "valid user for UID %u!"),
@@ -165,7 +165,7 @@ PbController::PbController()
 	// create configuration directory if it doesn't exist
 	int ret = ::mkdir(config_dir.c_str(), 0700);
 	if (ret && errno != EEXIST) {
-		std::cerr << StrPrintf::fmt(
+		std::cerr << strprintf::fmt(
 				     _("Fatal error: couldn't create "
 				       "configuration directory `%s': (%i) %s"),
 				     config_dir,
@@ -228,7 +228,7 @@ int PbController::run(int argc, char* argv[])
 			if (l > Level::NONE && l <= Level::DEBUG) {
 				Logger::getInstance().set_loglevel(l);
 			} else {
-				std::cerr << StrPrintf::fmt(_("%s: %d: invalid "
+				std::cerr << strprintf::fmt(_("%s: %d: invalid "
 							      "loglevel value"),
 						     argv[0],
 						     l)
@@ -242,14 +242,14 @@ int PbController::run(int argc, char* argv[])
 		}
 	};
 
-	std::cout << StrPrintf::fmt(
+	std::cout << strprintf::fmt(
 			     _("Starting %s %s..."), "podboat", PROGRAM_VERSION)
 		  << std::endl;
 
 	fslock = std::unique_ptr<FsLock>(new FsLock());
 	pid_t pid;
 	if (!fslock->try_lock(lock_file, pid)) {
-		std::cout << StrPrintf::fmt(
+		std::cout << strprintf::fmt(
 				     _("Error: an instance of %s is already "
 				       "running (PID: %u)"),
 				     "podboat",
@@ -319,7 +319,7 @@ int PbController::run(int argc, char* argv[])
 
 void PbController::print_usage(const char* argv0)
 {
-	auto msg = StrPrintf::fmt(
+	auto msg = strprintf::fmt(
 		_("%s %s\nusage %s [-C <file>] [-q <file>] [-h]\n"),
 		"podboat",
 		PROGRAM_VERSION,

@@ -60,7 +60,7 @@ void Reloader::reload(unsigned int pos,
 		std::string errmsg;
 		if (!unattended) {
 			ctrl->get_view()->set_status(
-				StrPrintf::fmt(_("%sLoading %s..."),
+				strprintf::fmt(_("%sLoading %s..."),
 					prepare_message(pos + 1, max),
 					utils::censor_url(oldfeed->rssurl())));
 		}
@@ -88,17 +88,17 @@ void Reloader::reload(unsigned int pos,
 			oldfeed->set_status(DlStatus::SUCCESS);
 			ctrl->get_view()->set_status("");
 		} catch (const DbException& e) {
-			errmsg = StrPrintf::fmt(
+			errmsg = strprintf::fmt(
 				_("Error while retrieving %s: %s"),
 				utils::censor_url(oldfeed->rssurl()),
 				e.what());
 		} catch (const std::string& emsg) {
-			errmsg = StrPrintf::fmt(
+			errmsg = strprintf::fmt(
 				_("Error while retrieving %s: %s"),
 				utils::censor_url(oldfeed->rssurl()),
 				emsg);
 		} catch (rsspp::Exception& e) {
-			errmsg = StrPrintf::fmt(
+			errmsg = strprintf::fmt(
 				_("Error while retrieving %s: %s"),
 				utils::censor_url(oldfeed->rssurl()),
 				e.what());
@@ -116,7 +116,7 @@ void Reloader::reload(unsigned int pos,
 std::string Reloader::prepare_message(unsigned int pos, unsigned int max)
 {
 	if (max > 0) {
-		return StrPrintf::fmt("(%u/%u) ", pos, max);
+		return strprintf::fmt("(%u/%u) ", pos, max);
 	}
 	return "";
 }

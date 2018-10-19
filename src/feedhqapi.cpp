@@ -60,7 +60,7 @@ std::string FeedHqApi::retrieve_auth()
 	char* username = curl_easy_escape(handle, cred.user.c_str(), 0);
 	char* password = curl_easy_escape(handle, cred.pass.c_str(), 0);
 
-	std::string postcontent = StrPrintf::fmt(
+	std::string postcontent = strprintf::fmt(
 		"service=reader&Email=%s&Passwd=%s&source=%s%2F%s&accountType="
 		"HOSTED_OR_GOOGLE&continue=http://www.google.com/",
 		username,
@@ -153,7 +153,7 @@ std::vector<TaggedFeedUrl> FeedHqApi::get_subscribed_urls()
 
 		char* escaped_id = curl_easy_escape(handle, id, 0);
 
-		auto url = StrPrintf::fmt("%s%s%s?n=%u",
+		auto url = strprintf::fmt("%s%s%s?n=%u",
 			cfg->get_configvalue("feedhq-url"),
 			FEEDHQ_FEED_PREFIX,
 			escaped_id,
@@ -171,7 +171,7 @@ std::vector<TaggedFeedUrl> FeedHqApi::get_subscribed_urls()
 void FeedHqApi::add_custom_headers(curl_slist** custom_headers)
 {
 	if (auth_header.empty()) {
-		auth_header = StrPrintf::fmt(
+		auth_header = strprintf::fmt(
 			"Authorization: GoogleLogin auth=%s", auth);
 	}
 	LOG(Level::DEBUG,
@@ -201,7 +201,7 @@ bool FeedHqApi::mark_all_read(const std::string& feedurl)
 	std::string token = get_new_token();
 
 	std::string postcontent =
-		StrPrintf::fmt("s=%s&T=%s", real_feedurl, token);
+		strprintf::fmt("s=%s&T=%s", real_feedurl, token);
 
 	std::string result = post_content(cfg->get_configvalue("feedhq-url") +
 			FEEDHQ_API_MARK_ALL_READ_URL,
@@ -223,13 +223,13 @@ bool FeedHqApi::mark_article_read_with_token(const std::string& guid,
 	std::string postcontent;
 
 	if (read) {
-		postcontent = StrPrintf::fmt(
+		postcontent = strprintf::fmt(
 			"i=%s&a=user/-/state/com.google/read&r=user/-/state/"
 			"com.google/kept-unread&ac=edit&T=%s",
 			guid,
 			token);
 	} else {
-		postcontent = StrPrintf::fmt(
+		postcontent = strprintf::fmt(
 			"i=%s&r=user/-/state/com.google/read&a=user/-/state/"
 			"com.google/kept-unread&a=user/-/state/com.google/"
 			"tracking-kept-unread&ac=edit&T=%s",
@@ -312,12 +312,12 @@ bool FeedHqApi::star_article(const std::string& guid, bool star)
 	std::string postcontent;
 
 	if (star) {
-		postcontent = StrPrintf::fmt(
+		postcontent = strprintf::fmt(
 			"i=%s&a=user/-/state/com.google/starred&ac=edit&T=%s",
 			guid,
 			token);
 	} else {
-		postcontent = StrPrintf::fmt(
+		postcontent = strprintf::fmt(
 			"i=%s&r=user/-/state/com.google/starred&ac=edit&T=%s",
 			guid,
 			token);
@@ -336,12 +336,12 @@ bool FeedHqApi::share_article(const std::string& guid, bool share)
 	std::string postcontent;
 
 	if (share) {
-		postcontent = StrPrintf::fmt(
+		postcontent = strprintf::fmt(
 			"i=%s&a=user/-/state/com.google/broadcast&ac=edit&T=%s",
 			guid,
 			token);
 	} else {
-		postcontent = StrPrintf::fmt(
+		postcontent = strprintf::fmt(
 			"i=%s&r=user/-/state/com.google/broadcast&ac=edit&T=%s",
 			guid,
 			token);

@@ -200,7 +200,7 @@ std::pair<std::string, std::size_t> TextFormatter::format_text_to_list(
 	for (auto& line : formatted) {
 		if (line != "") {
 			utils::trim_end(line);
-			format_cache.append(StrPrintf::fmt(
+			format_cache.append(strprintf::fmt(
 				"{listitem text:%s}", Stfl::quote(line)));
 		}
 	}

@@ -26,7 +26,7 @@ ConfigPaths::ConfigPaths()
 		if (spw) {
 			env_home = spw->pw_dir;
 		} else {
-			m_error_message = StrPrintf::fmt(
+			m_error_message = strprintf::fmt(
 				_("Fatal error: couldn't determine home "
 				  "directory!\nPlease set the HOME environment "
 				  "variable or add a valid user for UID %u!"),

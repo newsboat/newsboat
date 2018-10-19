@@ -193,7 +193,7 @@ void HtmlRenderer::render(std::istream& input,
 									url,
 									link)),
 							LinkType::EMBED);
-						curline.append(StrPrintf::fmt(
+						curline.append(strprintf::fmt(
 							"[%s %u]",
 							_("embedded flash:"),
 							link_num));
@@ -250,13 +250,13 @@ void HtmlRenderer::render(std::istream& input,
 							LinkType::IMG);
 					}
 					if (imgtitle != "") {
-						curline.append(StrPrintf::fmt(
+						curline.append(strprintf::fmt(
 							"[%s %u: %s]",
 							_("image"),
 							link_num,
 							imgtitle));
 					} else {
-						curline.append(StrPrintf::fmt(
+						curline.append(strprintf::fmt(
 							"[%s %u]",
 							_("image"),
 							link_num));
@@ -357,7 +357,7 @@ void HtmlRenderer::render(std::istream& input,
 					tables.size() ? 0 : indent_level);
 				indent_level += 2;
 				if (is_ol && ol_counts.size() != 0) {
-					curline.append(StrPrintf::fmt("%s. ",
+					curline.append(strprintf::fmt("%s. ",
 						format_ol_count(
 							ol_counts[ol_counts
 									  .size() -
@@ -587,7 +587,7 @@ void HtmlRenderer::render(std::istream& input,
 				if (link_num != -1) {
 					if (!raw_)
 						curline.append("</>");
-					curline.append(StrPrintf::fmt(
+					curline.append(strprintf::fmt(
 						"[%d]", link_num));
 					link_num = -1;
 				}
@@ -782,7 +782,7 @@ void HtmlRenderer::render(std::istream& input,
 		add_line("", tables, lines);
 		add_line(_("Links: "), tables, lines);
 		for (unsigned int i = 0; i < links.size(); ++i) {
-			auto link_text = StrPrintf::fmt("[%u]: %s (%s)",
+			auto link_text = strprintf::fmt("[%u]: %s (%s)",
 				i + 1,
 				links[i].first,
 				type2str(links[i].second));
@@ -1113,7 +1113,7 @@ std::string HtmlRenderer::format_ol_count(unsigned int count, char type)
 	}
 	case '1':
 	default:
-		return StrPrintf::fmt("%2u", count);
+		return strprintf::fmt("%2u", count);
 	}
 }
 

@@ -93,7 +93,7 @@ bool ConfigParser::parse(const std::string& filename, bool double_include)
 					evaluate_backticks(tokens);
 					handler->handle_action(cmd, tokens);
 				} catch (const ConfigHandlerException& e) {
-					throw ConfigException(StrPrintf::fmt(
+					throw ConfigException(strprintf::fmt(
 						_("Error while processing "
 						  "command `%s' (%s line %u): "
 						  "%s"),
@@ -103,7 +103,7 @@ bool ConfigParser::parse(const std::string& filename, bool double_include)
 						e.what()));
 				}
 			} else {
-				throw ConfigException(StrPrintf::fmt(
+				throw ConfigException(strprintf::fmt(
 					_("unknown command `%s'"), cmd));
 			}
 		}

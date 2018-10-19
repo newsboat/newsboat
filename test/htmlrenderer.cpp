@@ -990,7 +990,7 @@ TEST_CASE(
 	std::vector<LinkPair> links;
 
 	for (auto border_width = 1; border_width < 10; ++border_width) {
-		SECTION(StrPrintf::fmt("`border' = %u", border_width))
+		SECTION(strprintf::fmt("`border' = %u", border_width))
 		{
 			const std::string input_template =
 				"<table border='%u'>"
@@ -1000,7 +1000,7 @@ TEST_CASE(
 				"</tr>"
 				"</table>";
 			const std::string input =
-				StrPrintf::fmt(input_template, border_width);
+				strprintf::fmt(input_template, border_width);
 
 			REQUIRE_NOTHROW(r.render(input, lines, links, url));
 			REQUIRE(lines.size() == 3);
