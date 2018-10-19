@@ -43,10 +43,11 @@ TEST_CASE("unset_key() and set_key()", "[KeyMap]")
 	}
 }
 
-TEST_CASE("unset_all_keys() clears the keymap from key bindings for a given context",
+TEST_CASE(
+	"unset_all_keys() clears the keymap from key bindings for a given context",
 	"[KeyMap]")
 {
-	SECTION("keymap has most of the keys set up by default") {
+	SECTION("KeyMap has most of the keys set up by default") {
 		KeyMap k(KM_NEWSBOAT);
 
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
@@ -59,7 +60,7 @@ TEST_CASE("unset_all_keys() clears the keymap from key bindings for a given cont
 		}
 	}
 
-	SECTION("\"all\" context clears the keymap from key bindings") {
+	SECTION("\"all\" context clears the keymap from all key bindings") {
 		KeyMap k(KM_NEWSBOAT);
 		k.unset_all_keys("all");
 
@@ -68,7 +69,7 @@ TEST_CASE("unset_all_keys() clears the keymap from key bindings for a given cont
 		}
 	}
 
-	SECTION("clears key bindings just for a given context") {
+	SECTION("Clears key bindings just for a given context") {
 		KeyMap k(KM_NEWSBOAT);
 		k.unset_all_keys("articlelist");
 
