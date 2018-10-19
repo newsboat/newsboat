@@ -7,15 +7,6 @@ a good argument for doing so.
 Guidelines that could be easily automated, have been. Please install:
 - [EditorConfig plugin][editorconfig], so your editor can apply some of the
   formatting right as you type;
-- `clang-format` (part of `clang` package in most Linux distributions);
-- our pre-commit hook, which runs `clang-format` on each commit you make. Just
-  run:
-
-    ```shell
-    $ ln -s ../../git-hooks/pre-commit .git/hooks/pre-commit
-    ```
-
-    Note: `../..` is *not* a mistake.
 
 [editorconfig]: http://editorconfig.org/ "EditorConfig"
 
