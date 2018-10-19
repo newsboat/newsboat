@@ -7,7 +7,6 @@ a good argument for doing so.
 Guidelines that could be easily automated, have been. Please install:
 - [EditorConfig plugin][editorconfig], so your editor can apply some of the
   formatting right as you type;
-- `clang-format` (part of `clang` package in most Linux distributions);
 
 [editorconfig]: http://editorconfig.org/ "EditorConfig"
 
