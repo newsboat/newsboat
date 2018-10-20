@@ -1,8 +1,33 @@
 extern crate chrono;
 
 use self::chrono::offset::Local;
+use std::fmt;
 use std::fs::{File, OpenOptions};
 use std::io::{self, Write};
+
+pub enum Level {
+    None,
+    UserError,
+    Critical,
+    Error,
+    Warn,
+    Info,
+    Debug,
+}
+
+impl fmt::Display for Level {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Level::None => write!(f, "NONE"),
+            Level::UserError => write!(f, "USERERROR"),
+            Level::Critical => write!(f, "CRITICAL"),
+            Level::Error => write!(f, "ERROR"),
+            Level::Warn => write!(f, "WARNING"),
+            Level::Info => write!(f, "INFO"),
+            Level::Debug => write!(f, "DEBUG"),
+        }
+    }
+}
 
 pub struct Logger {
     logfile: Option<File>,
@@ -27,10 +52,10 @@ impl Logger {
         }
     }
 
-    pub fn log(&mut self, message: &str) -> io::Result<()> {
+    pub fn log(&mut self, level: Level, message: &str) -> io::Result<()> {
         if let Some(ref mut logfile) = self.logfile {
             let timestamp = Local::now().format("%Y-%m-%d %H:%M:%S");
-            let line = format!("[{}] {}\n", timestamp, message);
+            let line = format!("[{}] {}: {}\n", timestamp, level, message);
 
             logfile.write_all(line.as_bytes())?;
         }
@@ -88,7 +113,7 @@ mod tests {
 
         let start_time = Local::now();
         for msg in &messages {
-            logger.log(msg)?;
+            logger.log(Level::Debug, msg)?;
         }
         let finish_time = Local::now();
 
@@ -126,7 +151,8 @@ mod tests {
 
                     // Message starts after "] " that follows the timestamp, hence +2.
                     let message_str = &line[timestamp_end+2..];
-                    assert_eq!(message_str, expected);
+                    let level = String::from("DEBUG: ");
+                    assert_eq!(message_str, level + expected);
                 }
                 Err(e) => return Err(e),
             }
