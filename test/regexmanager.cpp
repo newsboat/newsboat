@@ -123,21 +123,21 @@ TEST_CASE("RegexManager does not hang on regexes that match empty strings", "[Re
 	std::string input = "The quick brown fox jumps over the lazy dog";
 	const std::string compare = input;
 
-	SECTION(input)
+	SECTION("testing end of line empty.")
 	{
 		rxman.handle_action("highlight", {"feedlist", "$", "blue", "red"});
 		rxman.quote_and_highlight(input, "feedlist");
 		REQUIRE(input == compare);
 	}
 
-	SECTION(input)
+	SECTION("testing begining of line empty")
 	{
 	rxman.handle_action("highlight", {"feedlist", "^", "blue", "red"});
 	rxman.quote_and_highlight(input, "feedlist");
 	REQUIRE(input == compare);
 	}
 
-	SECTION(input)
+	SECTION("testing empty line")
 	{
 	rxman.handle_action("highlight", {"feedlist", "^$", "blue", "red"});
 	rxman.quote_and_highlight(input, "feedlist");
