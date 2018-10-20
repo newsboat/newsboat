@@ -11,28 +11,24 @@ TEST_CASE("RegexManager throws on invalid `highlight' definition",
 	RegexManager rxman;
 	std::vector<std::string> params;
 
-	SECTION("on `highlight' without parameters")
-	{
+	SECTION("on `highlight' without parameters") {
 		REQUIRE_THROWS_AS(rxman.handle_action("highlight", params),
 			ConfigHandlerException);
 	}
 
-	SECTION("on invalid location")
-	{
+	SECTION("on invalid location") {
 		params = {"invalidloc", "foo", "blue", "red"};
 		REQUIRE_THROWS_AS(rxman.handle_action("highlight", params),
 			ConfigHandlerException);
 	}
 
-	SECTION("on invalid regex")
-	{
+	SECTION("on invalid regex") {
 		params = {"feedlist", "*", "blue", "red"};
 		REQUIRE_THROWS_AS(rxman.handle_action("highlight", params),
 			ConfigHandlerException);
 	}
 
-	SECTION("on invalid command")
-	{
+	SECTION("on invalid command") {
 		REQUIRE_THROWS_AS(
 			rxman.handle_action("an-invalid-command", params),
 			ConfigHandlerException);
@@ -99,8 +95,7 @@ TEST_CASE("`highlight all` adds rules for all locations", "[RegexManager]")
 	std::string input = "xxfooyy";
 
 	for (auto location : {"article", "articlelist", "feedlist"}) {
-		SECTION(location)
-		{
+		SECTION(location) {
 			rxman.quote_and_highlight(input, location);
 			REQUIRE(input == "xx<0>foo</>yy");
 		}
@@ -123,22 +118,19 @@ TEST_CASE("RegexManager does not hang on regexes that match empty strings", "[Re
 	std::string input = "The quick brown fox jumps over the lazy dog";
 	const std::string compare = input;
 
-	SECTION("testing end of line empty.")
-	{
+	SECTION("testing end of line empty.") {
 		rxman.handle_action("highlight", {"feedlist", "$", "blue", "red"});
 		rxman.quote_and_highlight(input, "feedlist");
 		REQUIRE(input == compare);
 	}
 
-	SECTION("testing begining of line empty")
-	{
+	SECTION("testing begining of line empty") {
 		rxman.handle_action("highlight", {"feedlist", "^", "blue", "red"});
 		rxman.quote_and_highlight(input, "feedlist");
 		REQUIRE(input == compare);
 	}
 
-	SECTION("testing empty line")
-	{
+	SECTION("testing empty line") {
 		rxman.handle_action("highlight", {"feedlist", "^$", "blue", "red"});
 		rxman.quote_and_highlight(input, "feedlist");
 		REQUIRE(input == compare);
