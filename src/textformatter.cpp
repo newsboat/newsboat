@@ -22,8 +22,8 @@ void TextFormatter::add_line(LineType type, std::string line)
 		line,
 		type);
 
-	auto clean_line = Utils::wstr2str(
-		Utils::clean_nonprintable_characters(Utils::str2wstr(line)));
+	auto clean_line = utils::wstr2str(
+		utils::clean_nonprintable_characters(utils::str2wstr(line)));
 	lines.push_back(std::make_pair(type, clean_line));
 }
 
@@ -32,7 +32,7 @@ void TextFormatter::add_lines(
 {
 	for (const auto& line : lines) {
 		add_line(line.first,
-			Utils::replace_all(line.second, "\t", "        "));
+			utils::replace_all(line.second, "\t", "        "));
 	}
 }
 
@@ -43,7 +43,7 @@ std::vector<std::string> wrap_line(const std::string& line, const size_t width)
 	}
 
 	std::vector<std::string> result;
-	std::vector<std::string> words = Utils::tokenize_spaced(line);
+	std::vector<std::string> words = utils::tokenize_spaced(line);
 
 	std::string prefix;
 	size_t prefix_width = 0;
@@ -55,23 +55,23 @@ std::vector<std::string> wrap_line(const std::string& line, const size_t width)
 			});
 	};
 	if (iswhitespace(words[0])) {
-		prefix = Utils::substr_with_width(words[0], width);
-		prefix_width = Utils::strwidth_stfl(prefix);
+		prefix = utils::substr_with_width(words[0], width);
+		prefix_width = utils::strwidth_stfl(prefix);
 		words.erase(words.cbegin());
 	}
 
 	std::string curline = prefix;
 
 	for (auto& word : words) {
-		size_t word_width = Utils::strwidth_stfl(word);
-		size_t curline_width = Utils::strwidth_stfl(curline);
+		size_t word_width = utils::strwidth_stfl(word);
+		size_t curline_width = utils::strwidth_stfl(curline);
 
 		// for languages (e.g., CJK) don't use a space as a word
 		// boundary
 		while (word_width > (width - prefix_width)) {
 			size_t space_left = width - curline_width;
 			std::string part =
-				Utils::substr_with_width(word, space_left);
+				utils::substr_with_width(word, space_left);
 			curline.append(part);
 			word.erase(0, part.length());
 			result.push_back(curline);
@@ -81,8 +81,8 @@ std::vector<std::string> wrap_line(const std::string& line, const size_t width)
 				word.clear();
 			}
 
-			word_width = Utils::strwidth_stfl(word);
-			curline_width = Utils::strwidth_stfl(curline);
+			word_width = utils::strwidth_stfl(word);
+			curline_width = utils::strwidth_stfl(curline);
 		}
 
 		if ((curline_width + word_width) > width) {
@@ -153,7 +153,7 @@ std::vector<std::string> format_text_plain_helper(
 				store_line(" ");
 				continue;
 			}
-			text = Utils::consolidate_whitespace(text);
+			text = utils::consolidate_whitespace(text);
 			for (const auto& line : wrap_line(text, wrap_width)) {
 				store_line(line);
 			}
@@ -199,7 +199,7 @@ std::pair<std::string, std::size_t> TextFormatter::format_text_to_list(
 	auto format_cache = std::string("{list");
 	for (auto& line : formatted) {
 		if (line != "") {
-			Utils::trim_end(line);
+			utils::trim_end(line);
 			format_cache.append(StrPrintf::fmt(
 				"{listitem text:%s}", Stfl::quote(line)));
 		}

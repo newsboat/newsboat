@@ -23,7 +23,7 @@ xmlDocPtr opml::generate(const FeedContainer& feedcontainer)
 		opml_node, nullptr, (const xmlChar*)"body", nullptr);
 
 	for (const auto& feed : feedcontainer.feeds) {
-		if (!Utils::is_special_url(feed->rssurl())) {
+		if (!utils::is_special_url(feed->rssurl())) {
 			std::string rssurl = feed->rssurl();
 			std::string link = feed->link();
 			std::string title = feed->title();
@@ -110,7 +110,7 @@ void rec_find_rss_outlines(
 				// TODO: get rid of xmlStrdup, it's useless
 				url = (char*)xmlStrdup(
 					(const xmlChar*)
-						Utils::quote_if_necessary(nurl)
+						utils::quote_if_necessary(nurl)
 							.c_str());
 				assert(url);
 

@@ -34,7 +34,7 @@ ConfigContainer::ConfigContainer()
 		  {"bookmark-interactive",
 			  ConfigData("false", ConfigDataType::BOOL)},
 		  {"browser",
-			  ConfigData(Utils::get_default_browser(),
+			  ConfigData(utils::get_default_browser(),
 				  ConfigDataType::PATH)},
 		  {"cache-file", ConfigData("", ConfigDataType::PATH)},
 		  {"cleanup-on-quit", ConfigData("yes", ConfigDataType::BOOL)},
@@ -316,7 +316,7 @@ void ConfigContainer::handle_action(const std::string& action,
 	case ConfigDataType::STR:
 	case ConfigDataType::PATH:
 		if (cfgdata.multi_option)
-			cfgdata.value = Utils::join(params, " ");
+			cfgdata.value = utils::join(params, " ");
 		else
 			cfgdata.value = params[0];
 		break;
@@ -343,7 +343,7 @@ std::string ConfigContainer::get_configvalue(const std::string& key)
 {
 	std::string retval = config_data[key].value;
 	if (config_data[key].type == ConfigDataType::PATH) {
-		retval = Utils::resolve_tilde(retval);
+		retval = utils::resolve_tilde(retval);
 	}
 	return retval;
 }
@@ -405,14 +405,14 @@ void ConfigContainer::dump_config(std::vector<std::string>& config_output)
 		case ConfigDataType::PATH:
 			if (cfg.second.multi_option) {
 				std::vector<std::string> tokens =
-					Utils::tokenize(cfg.second.value, " ");
+					utils::tokenize(cfg.second.value, " ");
 				for (const auto& token : tokens) {
 					configline.append(
-						Utils::quote(token) + " ");
+						utils::quote(token) + " ");
 				}
 			} else {
 				configline.append(
-					Utils::quote(cfg.second.value));
+					utils::quote(cfg.second.value));
 				if (cfg.second.value !=
 					cfg.second.default_value) {
 					configline.append(StrPrintf::fmt(
@@ -446,7 +446,7 @@ FeedSortStrategy ConfigContainer::get_feed_sort_strategy()
 {
 	FeedSortStrategy ss;
 	const auto sortmethod_info =
-		Utils::tokenize(get_configvalue("feed-sort-order"), "-");
+		utils::tokenize(get_configvalue("feed-sort-order"), "-");
 	const std::string sortmethod = sortmethod_info[0];
 
 	std::string direction = "desc";
@@ -481,7 +481,7 @@ ArticleSortStrategy ConfigContainer::get_article_sort_strategy()
 {
 	ArticleSortStrategy ss;
 	const auto methods =
-		Utils::tokenize(get_configvalue("article-sort-order"), "-");
+		utils::tokenize(get_configvalue("article-sort-order"), "-");
 
 	if (!methods.empty() &&
 		methods[0] == "date") { // date is descending by default

@@ -75,7 +75,7 @@ FeedListFormAction::~FeedListFormAction() {}
 
 void FeedListFormAction::prepare()
 {
-	unsigned int width = Utils::to_u(f->get("items:w"));
+	unsigned int width = utils::to_u(f->get("items:w"));
 
 	if (old_width != width) {
 		do_redraw = true;
@@ -105,13 +105,13 @@ void FeedListFormAction::process_operation(Operation op,
 	std::vector<std::string>* args)
 {
 	std::string feedpos = f->get("feedposname");
-	unsigned int pos = Utils::to_u(feedpos);
+	unsigned int pos = utils::to_u(feedpos);
 REDO:
 	switch (op) {
 	case OP_OPEN: {
 		if (f->get_focus() == "feeds") {
 			if (automatic && args->size() > 0) {
-				pos = Utils::to_u((*args)[0]);
+				pos = utils::to_u((*args)[0]);
 			}
 			LOG(Level::INFO,
 				"FeedListFormAction: opening feed at position "
@@ -517,7 +517,7 @@ void FeedListFormAction::set_feedlist(
 {
 	assert(cfg != nullptr); // must not happen
 
-	unsigned int width = Utils::to_u(f->get("feeds:w"));
+	unsigned int width = utils::to_u(f->get("feeds:w"));
 
 	unsigned int i = 0;
 	unread_feeds = 0;
@@ -581,7 +581,7 @@ KeyMapHintEntry* FeedListFormAction::get_keymap_hint()
 
 bool FeedListFormAction::jump_to_previous_unread_feed(unsigned int& feedpos)
 {
-	unsigned int curpos = Utils::to_u(f->get("feedpos"));
+	unsigned int curpos = utils::to_u(f->get("feedpos"));
 	LOG(Level::DEBUG,
 		"FeedListFormAction::jump_to_previous_unread_feed: searching "
 		"for "
@@ -625,7 +625,7 @@ bool FeedListFormAction::jump_to_previous_unread_feed(unsigned int& feedpos)
 
 void FeedListFormAction::goto_feed(const std::string& str)
 {
-	unsigned int curpos = Utils::to_u(f->get("feedpos"));
+	unsigned int curpos = utils::to_u(f->get("feedpos"));
 	LOG(Level::DEBUG,
 		"FeedListFormAction::goto_feed: curpos = %u str = `%s'",
 		curpos,
@@ -658,7 +658,7 @@ bool FeedListFormAction::jump_to_random_unread_feed(unsigned int& feedpos)
 	if (unread_feeds_available) {
 		for (;;) {
 			unsigned int pos =
-				Utils::get_random_value(visible_feeds.size());
+				utils::get_random_value(visible_feeds.size());
 			if (visible_feeds[pos].first->unread_item_count() > 0) {
 				f->set("feedpos", std::to_string(pos));
 				feedpos = visible_feeds[pos].second;
@@ -671,7 +671,7 @@ bool FeedListFormAction::jump_to_random_unread_feed(unsigned int& feedpos)
 
 bool FeedListFormAction::jump_to_next_unread_feed(unsigned int& feedpos)
 {
-	unsigned int curpos = Utils::to_u(f->get("feedpos"));
+	unsigned int curpos = utils::to_u(f->get("feedpos"));
 	LOG(Level::DEBUG,
 		"FeedListFormAction::jump_to_next_unread_feed: searching for "
 		"unread feed");
@@ -713,7 +713,7 @@ bool FeedListFormAction::jump_to_next_unread_feed(unsigned int& feedpos)
 
 bool FeedListFormAction::jump_to_previous_feed(unsigned int& feedpos)
 {
-	unsigned int curpos = Utils::to_u(f->get("feedpos"));
+	unsigned int curpos = utils::to_u(f->get("feedpos"));
 
 	if (curpos > 0) {
 		unsigned int i = curpos - 1;
@@ -730,7 +730,7 @@ bool FeedListFormAction::jump_to_previous_feed(unsigned int& feedpos)
 
 bool FeedListFormAction::jump_to_next_feed(unsigned int& feedpos)
 {
-	unsigned int curpos = Utils::to_u(f->get("feedpos"));
+	unsigned int curpos = utils::to_u(f->get("feedpos"));
 
 	if ((curpos + 1) < visible_feeds.size()) {
 		unsigned int i = curpos + 1;
@@ -747,7 +747,7 @@ bool FeedListFormAction::jump_to_next_feed(unsigned int& feedpos)
 
 std::shared_ptr<RssFeed> FeedListFormAction::get_feed()
 {
-	unsigned int curpos = Utils::to_u(f->get("feedpos"));
+	unsigned int curpos = utils::to_u(f->get("feedpos"));
 	return visible_feeds[curpos].first;
 }
 
@@ -775,7 +775,7 @@ void FeedListFormAction::handle_cmdline(const std::string& cmd)
 	} else {
 		// hand over all other commands to formaction
 		std::vector<std::string> tokens =
-			Utils::tokenize_quoted(cmd, " \t");
+			utils::tokenize_quoted(cmd, " \t");
 		if (!tokens.empty()) {
 			if (tokens[0] == "tag") {
 				if (tokens.size() >= 2 && tokens[1] != "") {
@@ -845,7 +845,7 @@ void FeedListFormAction::mark_pos_if_visible(unsigned int pos)
 
 void FeedListFormAction::save_filterpos()
 {
-	unsigned int i = Utils::to_u(f->get("feedpos"));
+	unsigned int i = utils::to_u(f->get("feedpos"));
 	if (i < visible_feeds.size()) {
 		filterpos = visible_feeds[i].second;
 		set_filterpos = true;
@@ -902,7 +902,7 @@ void FeedListFormAction::op_start_search()
 		searchhistory.add_line(searchphrase);
 		std::vector<std::shared_ptr<RssItem>> items;
 		try {
-			std::string utf8searchphrase = Utils::convert_text(
+			std::string utf8searchphrase = utils::convert_text(
 				searchphrase, "utf-8", nl_langinfo(CODESET));
 			items = v->get_ctrl()->search_for_items(
 				utf8searchphrase, nullptr);
@@ -962,9 +962,9 @@ void FeedListFormAction::set_pos()
 std::string FeedListFormAction::get_title(std::shared_ptr<RssFeed> feed)
 {
 	std::string title = feed->title();
-	Utils::remove_soft_hyphens(title);
+	utils::remove_soft_hyphens(title);
 	if (title.length() == 0)
-		title = Utils::censor_url(feed->rssurl());
+		title = utils::censor_url(feed->rssurl());
 	if (title.length() == 0)
 		title = "<no title>";
 	return title;
@@ -989,8 +989,8 @@ std::string FeedListFormAction::format_line(const std::string& feedlist_format,
 	fmt.register_fmt('S', feed->get_status());
 	fmt.register_fmt('t', get_title(feed));
 	fmt.register_fmt('T', feed->get_firsttag());
-	fmt.register_fmt('l', Utils::censor_url(feed->link()));
-	fmt.register_fmt('L', Utils::censor_url(feed->rssurl()));
+	fmt.register_fmt('l', utils::censor_url(feed->link()));
+	fmt.register_fmt('L', utils::censor_url(feed->rssurl()));
 	fmt.register_fmt('d', feed->description());
 
 	auto formattedLine = fmt.do_format(feedlist_format, width);

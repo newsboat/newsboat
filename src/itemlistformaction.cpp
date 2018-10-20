@@ -59,7 +59,7 @@ void ItemListFormAction::process_operation(Operation op,
 	 */
 
 	std::string itemposname = f->get("itempos");
-	unsigned int itempos = Utils::to_u(itemposname);
+	unsigned int itempos = utils::to_u(itemposname);
 
 	switch (op) {
 	case OP_OPEN: {
@@ -716,7 +716,7 @@ void ItemListFormAction::finished_qna(Operation op)
 
 	case OP_PIPE_TO: {
 		std::string itemposname = f->get("itempos");
-		unsigned int itempos = Utils::to_u(itemposname);
+		unsigned int itempos = utils::to_u(itemposname);
 		if (itemposname.length() > 0) {
 			std::string cmd = qna_responses[0];
 			std::ostringstream ostr;
@@ -765,7 +765,7 @@ void ItemListFormAction::qna_end_editflags()
 		return;
 	}
 
-	unsigned int itempos = Utils::to_u(itemposname);
+	unsigned int itempos = utils::to_u(itemposname);
 	if (itempos < visible_items.size()) {
 		visible_items[itempos].first->set_flags(qna_responses[0]);
 		v->get_ctrl()->update_flags(visible_items[itempos].first);
@@ -786,7 +786,7 @@ void ItemListFormAction::qna_start_search()
 	searchhistory.add_line(searchphrase);
 	std::vector<std::shared_ptr<RssItem>> items;
 	try {
-		std::string utf8searchphrase = Utils::convert_text(
+		std::string utf8searchphrase = utils::convert_text(
 			searchphrase, "utf-8", nl_langinfo(CODESET));
 		if (show_searchresult) {
 			items = v->get_ctrl()->search_for_items(
@@ -874,7 +874,7 @@ void ItemListFormAction::prepare()
 	if (cfg->get_configvalue_as_bool("mark-as-read-on-hover")) {
 		std::string itemposname = f->get("itempos");
 		if (itemposname.length() > 0) {
-			unsigned int itempos = Utils::to_u(itemposname);
+			unsigned int itempos = utils::to_u(itemposname);
 			if (visible_items[itempos].first->unread()) {
 				visible_items[itempos].first->set_unread(false);
 				v->get_ctrl()->mark_article_read(
@@ -885,7 +885,7 @@ void ItemListFormAction::prepare()
 		}
 	}
 
-	unsigned int width = Utils::to_u(f->get("items:w"));
+	unsigned int width = utils::to_u(f->get("items:w"));
 
 	if (old_width != width) {
 		invalidate(InvalidationMode::COMPLETE);
@@ -953,18 +953,18 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 		gen_datestr(item.first->pubDate_timestamp(), datetime_format));
 	if (feed->rssurl() != item.first->feedurl() &&
 		item.first->get_feedptr() != nullptr) {
-		auto feedtitle = Utils::replace_all(
+		auto feedtitle = utils::replace_all(
 			item.first->get_feedptr()->title(), "<", "<>");
-		Utils::remove_soft_hyphens(feedtitle);
+		utils::remove_soft_hyphens(feedtitle);
 		fmt.register_fmt('T', feedtitle);
 	}
 
-	auto itemtitle = Utils::replace_all(item.first->title(), "<", "<>");
-	Utils::remove_soft_hyphens(itemtitle);
+	auto itemtitle = utils::replace_all(item.first->title(), "<", "<>");
+	utils::remove_soft_hyphens(itemtitle);
 	fmt.register_fmt('t', itemtitle);
 
-	auto itemauthor = Utils::replace_all(item.first->author(), "<", "<>");
-	Utils::remove_soft_hyphens(itemauthor);
+	auto itemauthor = utils::replace_all(item.first->author(), "<", "<>");
+	utils::remove_soft_hyphens(itemauthor);
 	fmt.register_fmt('a', itemauthor);
 
 	fmt.register_fmt('L', item.first->length());
@@ -1019,10 +1019,10 @@ void ItemListFormAction::set_head(const std::string& s,
 	fmt.register_fmt('t', std::to_string(total));
 
 	auto feedtitle = s;
-	Utils::remove_soft_hyphens(feedtitle);
+	utils::remove_soft_hyphens(feedtitle);
 	fmt.register_fmt('T', feedtitle);
 
-	fmt.register_fmt('U', Utils::censor_url(url));
+	fmt.register_fmt('U', utils::censor_url(url));
 
 	if (!show_searchresult) {
 		title = fmt.do_format(
@@ -1071,7 +1071,7 @@ bool ItemListFormAction::jump_to_random_unread_item()
 	if (has_unread_available) {
 		for (;;) {
 			unsigned int pos =
-				Utils::get_random_value(visible_items.size());
+				utils::get_random_value(visible_items.size());
 			if (visible_items[pos].first->unread()) {
 				f->set("itempos", std::to_string(pos));
 				break;
@@ -1083,7 +1083,7 @@ bool ItemListFormAction::jump_to_random_unread_item()
 
 bool ItemListFormAction::jump_to_next_unread_item(bool start_with_first)
 {
-	unsigned int itempos = Utils::to_u(f->get("itempos"));
+	unsigned int itempos = utils::to_u(f->get("itempos"));
 	LOG(Level::DEBUG,
 		"ItemListFormAction::jump_to_next_unread_item: itempos = %u "
 		"visible_items.size = %u",
@@ -1133,7 +1133,7 @@ bool ItemListFormAction::jump_to_previous_item(bool start_with_last)
 
 bool ItemListFormAction::jump_to_next_item(bool start_with_first)
 {
-	unsigned int itempos = Utils::to_u(f->get("itempos"));
+	unsigned int itempos = utils::to_u(f->get("itempos"));
 	LOG(Level::DEBUG,
 		"ItemListFormAction::jump_to_next_item: itempos = %u "
 		"visible_items.size = %u",
@@ -1152,7 +1152,7 @@ bool ItemListFormAction::jump_to_next_item(bool start_with_first)
 
 std::string ItemListFormAction::get_guid()
 {
-	unsigned int itempos = Utils::to_u(f->get("itempos"));
+	unsigned int itempos = utils::to_u(f->get("itempos"));
 	return visible_items[itempos].first->guid();
 }
 
@@ -1191,11 +1191,11 @@ void ItemListFormAction::handle_cmdline(const std::string& cmd)
 	if (1 == sscanf(cmd.c_str(), "%u", &idx)) {
 		handle_cmdline_num(idx);
 	} else {
-		std::vector<std::string> tokens = Utils::tokenize_quoted(cmd);
+		std::vector<std::string> tokens = utils::tokenize_quoted(cmd);
 		if (tokens.empty())
 			return;
 		if (tokens[0] == "save" && tokens.size() >= 2) {
-			std::string filename = Utils::resolve_tilde(tokens[1]);
+			std::string filename = utils::resolve_tilde(tokens[1]);
 			std::string itemposname = f->get("itempos");
 			LOG(Level::INFO,
 				"ItemListFormAction::handle_cmdline: saving "
@@ -1204,7 +1204,7 @@ void ItemListFormAction::handle_cmdline(const std::string& cmd)
 				itemposname,
 				filename);
 			if (itemposname.length() > 0) {
-				unsigned int itempos = Utils::to_u(itemposname);
+				unsigned int itempos = utils::to_u(itemposname);
 				save_article(
 					filename, visible_items[itempos].first);
 			} else {
@@ -1231,7 +1231,7 @@ void ItemListFormAction::recalculate_form()
 	invalidate(InvalidationMode::COMPLETE);
 
 	std::string itemposname = f->get("itempos");
-	unsigned int itempos = Utils::to_u(itemposname);
+	unsigned int itempos = utils::to_u(itemposname);
 
 	// If the old position was set and it is less than the itempos, use it
 	// for the feed's itempos Correct the problem when you open itemview and
@@ -1264,7 +1264,7 @@ void ItemListFormAction::save_article(const std::string& filename,
 
 void ItemListFormAction::save_filterpos()
 {
-	unsigned int i = Utils::to_u(f->get("itempos"));
+	unsigned int i = utils::to_u(f->get("itempos"));
 	if (i < visible_items.size()) {
 		filterpos = visible_items[i].second;
 		set_filterpos = true;
@@ -1358,7 +1358,7 @@ std::string ItemListFormAction::title()
 					6, feed->rssurl().length() - 6));
 		} else {
 			auto feedtitle = feed->title();
-			Utils::remove_soft_hyphens(feedtitle);
+			utils::remove_soft_hyphens(feedtitle);
 			return StrPrintf::fmt(
 				_("Article List - %s"), feedtitle);
 		}

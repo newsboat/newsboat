@@ -219,7 +219,7 @@ public:
 	void set_title(const std::string& t)
 	{
 		title_ = t;
-		Utils::trim(title_);
+		utils::trim(title_);
 	}
 
 	std::string description_raw() const

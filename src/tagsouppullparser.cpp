@@ -462,7 +462,7 @@ std::string TagSoupPullParser::decode_entity(std::string s)
 			is >> std::hex >> wc;
 		} else {
 			s.erase(0, 1);
-			wc = Utils::to_u(s);
+			wc = utils::to_u(s);
 		}
 		int pos;
 		// convert some common but unknown numeric entities
@@ -618,7 +618,7 @@ void TagSoupPullParser::handle_text()
 	getline(*inputstream, tmp, '<');
 	text.append(tmp);
 	text = decode_entities(text);
-	Utils::remove_soft_hyphens(text);
+	utils::remove_soft_hyphens(text);
 	current_event = Event::TEXT;
 }
 

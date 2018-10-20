@@ -16,7 +16,7 @@ std::string item_renderer::get_feedtitle(std::shared_ptr<RssItem> item) {
 	if (feedptr) {
 		if (!feedptr->title().empty()) {
 			feedtitle = feedptr->title();
-			Utils::remove_soft_hyphens(feedtitle);
+			utils::remove_soft_hyphens(feedtitle);
 		} else if (!feedptr->link().empty()) {
 			feedtitle = feedptr->link();
 		} else if (!feedptr->rssurl().empty()) {
@@ -56,7 +56,7 @@ void prepare_header(
 		auto dlurl = StrPrintf::fmt(
 			"%s%s",
 			_("Podcast Download URL: "),
-			Utils::censor_url(item->enclosure_url()));
+			utils::censor_url(item->enclosure_url()));
 		if (!item->enclosure_type().empty()) {
 			dlurl.append(StrPrintf::fmt("%s%s", _("type: "), item->enclosure_type()));
 		}
@@ -100,13 +100,13 @@ void render_html(
 			"item_renderer::render_html: html-renderer = %s",
 			argv[2]);
 
-		const std::string output = Utils::run_program(argv, source);
+		const std::string output = utils::run_program(argv, source);
 		std::istringstream is(output);
 		std::string line;
 		while (!is.eof()) {
 			getline(is, line);
 			if (!raw) {
-				line = Utils::quote_for_stfl(line);
+				line = utils::quote_for_stfl(line);
 			}
 			lines.push_back(std::make_pair(LineType::softwrappable, line));
 		}
@@ -190,7 +190,7 @@ std::pair<std::string, size_t> item_renderer::source_to_stfl_list(
 	std::vector<LinkPair> links;
 
 	prepare_header(item, lines, links);
-	render_source(lines, Utils::quote_for_stfl(item->description()));
+	render_source(lines, utils::quote_for_stfl(item->description()));
 
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);

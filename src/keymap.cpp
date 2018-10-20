@@ -533,7 +533,7 @@ void KeyMap::dump_config(std::vector<std::string>& config_output)
 		for (const auto& keymap : x) {
 			if (keymap.second < OP_INT_MIN) {
 				std::string configline = "bind-key ";
-				configline.append(Utils::quote(keymap.first));
+				configline.append(utils::quote(keymap.first));
 				configline.append(" ");
 				configline.append(getopname(keymap.second));
 				configline.append(" ");
@@ -551,7 +551,7 @@ void KeyMap::dump_config(std::vector<std::string>& config_output)
 			configline.append(getopname(cmd.op));
 			for (const auto& arg : cmd.args) {
 				configline.append(" ");
-				configline.append(Utils::quote(arg));
+				configline.append(utils::quote(arg));
 			}
 			if (i < (macro.second.size() - 1))
 				configline.append(" ; ");

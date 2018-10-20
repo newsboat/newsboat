@@ -29,7 +29,7 @@ const std::string RemoteApi::read_password(const std::string& file)
 
 const std::string RemoteApi::eval_password(const std::string& cmd)
 {
-	std::string pass = Utils::get_command_output(cmd);
+	std::string pass = utils::get_command_output(cmd);
 	std::string::size_type pos = pass.find_first_of("\n\r");
 
 	if (pos != std::string::npos) {

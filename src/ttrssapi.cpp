@@ -146,7 +146,7 @@ json TtRssApi::run_op(const std::string& op,
 		req_data = requestparam.dump();
 	}
 
-	std::string result = Utils::retrieve_url(
+	std::string result = utils::retrieve_url(
 		url, cfg, auth_info, &req_data, cached_handle);
 
 	LOG(Level::DEBUG,

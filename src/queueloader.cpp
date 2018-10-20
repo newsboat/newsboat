@@ -78,7 +78,7 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 					"queue file",
 					line);
 				std::vector<std::string> fields =
-					Utils::tokenize_quoted(line);
+					utils::tokenize_quoted(line);
 				bool url_found = false;
 
 				if (fields.empty()) {
@@ -218,7 +218,7 @@ std::string QueueLoader::get_filename(const std::string& str)
 			localtime(&t));
 		fn.append(lbuf);
 	} else {
-		fn.append(Utils::replace_all(base, "'", "%27"));
+		fn.append(utils::replace_all(base, "'", "%27"));
 	}
 	return fn;
 }

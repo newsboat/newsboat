@@ -83,7 +83,7 @@ static size_t handle_headers(void* ptr, size_t size, size_t nmemb, void* data)
 		}
 	} else if (!strncasecmp("ETag:", header, 5)) {
 		values->etag = std::string(header + 5);
-		Utils::trim(values->etag);
+		utils::trim(values->etag);
 		LOG(Level::DEBUG, "handle_headers: got etag %s", values->etag);
 	}
 

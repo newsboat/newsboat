@@ -35,7 +35,7 @@ void ConfigParser::handle_action(const std::string& action,
 				ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
 
-		if (!this->parse(Utils::resolve_tilde(params[0])))
+		if (!this->parse(utils::resolve_tilde(params[0])))
 			throw ConfigHandlerException(
 				ActionHandlerStatus::FILENOTFOUND);
 	} else
@@ -82,7 +82,7 @@ bool ConfigParser::parse(const std::string& filename, bool double_include)
 		getline(f, line);
 		++linecounter;
 		LOG(Level::DEBUG, "ConfigParser::parse: tokenizing %s", line);
-		std::vector<std::string> tokens = Utils::tokenize_quoted(line);
+		std::vector<std::string> tokens = utils::tokenize_quoted(line);
 		if (!tokens.empty()) {
 			std::string cmd = tokens[0];
 			ConfigActionHandler* handler = action_handlers[cmd];
@@ -163,8 +163,8 @@ std::string ConfigParser::evaluate_backticks(std::string token)
 	while (pos1 != std::string::npos && pos2 != std::string::npos) {
 		std::string cmd = token.substr(pos1 + 1, pos2 - pos1 - 1);
 		token.erase(pos1, pos2 - pos1 + 1);
-		std::string result = Utils::get_command_output(cmd);
-		Utils::trim_end(result);
+		std::string result = utils::get_command_output(cmd);
+		utils::trim_end(result);
 		token.insert(pos1, result);
 
 		pos1 = find_non_escaped_backtick(

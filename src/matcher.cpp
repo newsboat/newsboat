@@ -39,7 +39,7 @@ bool Matcher::parse(const std::string& expr)
 	bool b = p.parse_string(expr);
 
 	if (!b) {
-		errmsg = Utils::wstr2str(p.get_error());
+		errmsg = utils::wstr2str(p.get_error());
 	}
 
 	gettimeofday(&tv2, nullptr);
@@ -99,7 +99,7 @@ bool Matcher::matchop_between(expression* e, Matchable* item)
 	if (!item->has_attribute(e->name))
 		throw MatcherException(
 			MatcherException::Type::ATTRIB_UNAVAIL, e->name);
-	std::vector<std::string> lit = Utils::tokenize(e->literal, ":");
+	std::vector<std::string> lit = utils::tokenize(e->literal, ":");
 	std::istringstream isatt(item->get_attribute(e->name));
 	int att;
 	isatt >> att;
@@ -164,7 +164,7 @@ bool Matcher::matchop_cont(expression* e, Matchable* item)
 		throw MatcherException(
 			MatcherException::Type::ATTRIB_UNAVAIL, e->name);
 	std::vector<std::string> elements =
-		Utils::tokenize(item->get_attribute(e->name), " ");
+		utils::tokenize(item->get_attribute(e->name), " ");
 	std::string literal = e->literal;
 	for (const auto& elem : elements) {
 		if (literal == elem) {

@@ -238,7 +238,7 @@ bool ConfigPaths::migrate_data_from_newsbeuter_xdg()
 	}
 
 	auto try_mkdir = [](const std::string& dir) -> bool {
-		bool result = 0 == Utils::mkdir_parents(dir, 0700);
+		bool result = 0 == utils::mkdir_parents(dir, 0700);
 		// If dir already exists, it's an error, so we won't check the
 		// errno (unlike in many other places in the code)
 		if (!result) {
@@ -353,7 +353,7 @@ void ConfigPaths::migrate_data_from_newsbeuter()
 bool ConfigPaths::create_dirs() const
 {
 	auto try_mkdir = [](const std::string& dir) -> bool {
-		const bool result = 0 == Utils::mkdir_parents(dir, 0700);
+		const bool result = 0 == utils::mkdir_parents(dir, 0700);
 		if (!result && errno != EEXIST) {
 			LOG(Level::CRITICAL,
 				"Couldn't create `%s': (%i) %s",

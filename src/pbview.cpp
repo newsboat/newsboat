@@ -79,7 +79,7 @@ void PbView::run(bool auto_download)
 			std::string code = "{list";
 			std::string formatstring = ctrl->get_formatstr();
 
-			unsigned int width = Utils::to_u(dllist_form.get("feeds:w"));
+			unsigned int width = utils::to_u(dllist_form.get("feeds:w"));
 
 			unsigned int i = 0;
 			for (const auto& dl : ctrl->downloads()) {

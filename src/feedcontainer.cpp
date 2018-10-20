@@ -30,7 +30,7 @@ void FeedContainer::sort_feeds(const FeedSortStrategy& sort_strategy)
 					return a->get_firsttag().length() >
 						b->get_firsttag().length();
 				}
-				return Utils::strnaturalcmp(a->get_firsttag().c_str(),
+				return utils::strnaturalcmp(a->get_firsttag().c_str(),
 					       b->get_firsttag().c_str()) < 0;
 			});
 		break;
@@ -39,7 +39,7 @@ void FeedContainer::sort_feeds(const FeedSortStrategy& sort_strategy)
 			feeds.end(),
 			[](std::shared_ptr<RssFeed> a,
 				std::shared_ptr<RssFeed> b) {
-				return Utils::strnaturalcmp(a->title().c_str(),
+				return utils::strnaturalcmp(a->title().c_str(),
 					       b->title().c_str()) < 0;
 			});
 		break;

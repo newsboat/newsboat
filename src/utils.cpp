@@ -47,7 +47,37 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 
 namespace newsboat {
 
-std::vector<std::string> Utils::tokenize_quoted(const std::string& str,
+namespace utils {
+void append_escapes(std::string& str, char c)
+{
+	switch (c) {
+	case 'n':
+		str.append("\n");
+		break;
+	case 'r':
+		str.append("\r");
+		break;
+	case 't':
+		str.append("\t");
+		break;
+	case '"':
+		str.append("\"");
+		break;
+	// escaped backticks are passed through, still escaped. We un-escape
+	// them in ConfigParser::evaluate_backticks
+	case '`':
+		str.append("\\`");
+		break;
+	case '\\':
+		break;
+	default:
+		str.append(1, c);
+		break;
+	}
+}
+}
+
+std::vector<std::string> utils::tokenize_quoted(const std::string& str,
 	std::string delimiters)
 {
 	/*
@@ -155,7 +185,7 @@ std::vector<std::string> Utils::tokenize_quoted(const std::string& str,
 	return tokens;
 }
 
-std::vector<std::string> Utils::tokenize(const std::string& str,
+std::vector<std::string> utils::tokenize(const std::string& str,
 	std::string delimiters)
 {
 	/*
@@ -173,7 +203,7 @@ std::vector<std::string> Utils::tokenize(const std::string& str,
 	return tokens;
 }
 
-std::vector<std::wstring> Utils::wtokenize(const std::wstring& str,
+std::vector<std::wstring> utils::wtokenize(const std::wstring& str,
 	std::wstring delimiters)
 {
 	/*
@@ -191,7 +221,7 @@ std::vector<std::wstring> Utils::wtokenize(const std::wstring& str,
 	return tokens;
 }
 
-std::vector<std::string> Utils::tokenize_spaced(const std::string& str,
+std::vector<std::string> utils::tokenize_spaced(const std::string& str,
 	std::string delimiters)
 {
 	std::vector<std::string> tokens;
@@ -213,7 +243,7 @@ std::vector<std::string> Utils::tokenize_spaced(const std::string& str,
 	return tokens;
 }
 
-std::string Utils::consolidate_whitespace(const std::string& str,
+std::string utils::consolidate_whitespace(const std::string& str,
 	std::string whitespace)
 {
 	std::string result;
@@ -235,7 +265,7 @@ std::string Utils::consolidate_whitespace(const std::string& str,
 	return result;
 }
 
-std::vector<std::string> Utils::tokenize_nl(const std::string& str,
+std::vector<std::string> utils::tokenize_nl(const std::string& str,
 	std::string delimiters)
 {
 	std::vector<std::string> tokens;
@@ -243,7 +273,7 @@ std::vector<std::string> Utils::tokenize_nl(const std::string& str,
 	std::string::size_type pos = str.find_first_of(delimiters, last_pos);
 	unsigned int i;
 
-	LOG(Level::DEBUG, "Utils::tokenize_nl: last_pos = %u", last_pos);
+	LOG(Level::DEBUG, "utils::tokenize_nl: last_pos = %u", last_pos);
 	if (last_pos != std::string::npos) {
 		for (i = 0; i < last_pos; ++i) {
 			tokens.push_back(std::string("\n"));
@@ -253,11 +283,11 @@ std::vector<std::string> Utils::tokenize_nl(const std::string& str,
 	while (std::string::npos != pos || std::string::npos != last_pos) {
 		tokens.push_back(str.substr(last_pos, pos - last_pos));
 		LOG(Level::DEBUG,
-			"Utils::tokenize_nl: substr = %s",
+			"utils::tokenize_nl: substr = %s",
 			str.substr(last_pos, pos - last_pos));
 		last_pos = str.find_first_not_of(delimiters, pos);
 		LOG(Level::DEBUG,
-			"Utils::tokenize_nl: pos - last_pos = %u",
+			"utils::tokenize_nl: pos - last_pos = %u",
 			last_pos - pos);
 		for (i = 0; last_pos != std::string::npos &&
 			pos != std::string::npos && i < (last_pos - pos);
@@ -270,7 +300,7 @@ std::vector<std::string> Utils::tokenize_nl(const std::string& str,
 	return tokens;
 }
 
-std::string Utils::translit(const std::string& tocode,
+std::string utils::translit(const std::string& tocode,
 	const std::string& fromcode)
 {
 	std::string tlit = "//TRANSLIT";
@@ -322,7 +352,7 @@ std::string Utils::translit(const std::string& tocode,
 						     : (tocode));
 }
 
-std::string Utils::convert_text(const std::string& text,
+std::string utils::convert_text(const std::string& text,
 	const std::string& tocode,
 	const std::string& fromcode)
 {
@@ -394,7 +424,7 @@ std::string Utils::convert_text(const std::string& text,
 	return result;
 }
 
-std::string Utils::get_command_output(const std::string& cmd)
+std::string utils::get_command_output(const std::string& cmd)
 {
 	FILE* f = popen(cmd.c_str(), "r");
 	std::string buf;
@@ -409,7 +439,7 @@ std::string Utils::get_command_output(const std::string& cmd)
 	return buf;
 }
 
-void Utils::extract_filter(const std::string& line,
+void utils::extract_filter(const std::string& line,
 	std::string& filter,
 	std::string& url)
 {
@@ -419,7 +449,7 @@ void Utils::extract_filter(const std::string& line,
 	pos = pos1;
 	url = line.substr(pos + 1, line.length() - pos);
 	LOG(Level::DEBUG,
-		"Utils::extract_filter: %s -> filter: %s url: %s",
+		"utils::extract_filter: %s -> filter: %s url: %s",
 		line,
 		filter,
 		url);
@@ -433,7 +463,7 @@ my_write_data(void* buffer, size_t size, size_t nmemb, void* userp)
 	return size * nmemb;
 }
 
-std::string Utils::retrieve_url(const std::string& url,
+std::string utils::retrieve_url(const std::string& url,
 	ConfigContainer* cfgcont,
 	const std::string& authinfo,
 	const std::string* postdata,
@@ -473,18 +503,18 @@ std::string Utils::retrieve_url(const std::string& url,
 
 	if (postdata != nullptr) {
 		LOG(Level::DEBUG,
-			"Utils::retrieve_url(%s)[%s]: %s",
+			"utils::retrieve_url(%s)[%s]: %s",
 			url,
 			postdata,
 			buf);
 	} else {
-		LOG(Level::DEBUG, "Utils::retrieve_url(%s)[-]: %s", url, buf);
+		LOG(Level::DEBUG, "utils::retrieve_url(%s)[-]: %s", url, buf);
 	}
 
 	return buf;
 }
 
-void Utils::run_command(const std::string& cmd, const std::string& input)
+void utils::run_command(const std::string& cmd, const std::string& input)
 {
 	int rc = fork();
 	switch (rc) {
@@ -494,7 +524,7 @@ void Utils::run_command(const std::string& cmd, const std::string& input)
 		int fd = ::open("/dev/null", O_RDWR);
 		if (fd == -1) {
 			LOG(Level::DEBUG,
-				"Utils::run_command: error opening /dev/null: "
+				"utils::run_command: error opening /dev/null: "
 				"(%i) "
 				"%s",
 				errno,
@@ -507,10 +537,10 @@ void Utils::run_command(const std::string& cmd, const std::string& input)
 		dup2(fd, 0);
 		dup2(fd, 1);
 		dup2(fd, 2);
-		LOG(Level::DEBUG, "Utils::run_command: %s '%s'", cmd, input);
+		LOG(Level::DEBUG, "utils::run_command: %s '%s'", cmd, input);
 		execlp(cmd.c_str(), cmd.c_str(), input.c_str(), nullptr);
 		LOG(Level::DEBUG,
-			"Utils::run_command: execlp of %s failed: %s",
+			"utils::run_command: execlp of %s failed: %s",
 			cmd,
 			strerror(errno));
 		exit(1);
@@ -520,7 +550,7 @@ void Utils::run_command(const std::string& cmd, const std::string& input)
 	}
 }
 
-std::string Utils::run_program(char* argv[], const std::string& input)
+std::string utils::run_program(char* argv[], const std::string& input)
 {
 	std::string buf;
 	int ipipe[2];
@@ -571,7 +601,7 @@ std::string Utils::run_program(char* argv[], const std::string& input)
 	return buf;
 }
 
-std::string Utils::resolve_tilde(const std::string& str)
+std::string utils::resolve_tilde(const std::string& str)
 {
 	const char* homedir;
 	std::string filepath;
@@ -602,7 +632,7 @@ std::string Utils::resolve_tilde(const std::string& str)
 	return filepath;
 }
 
-std::string Utils::replace_all(std::string str,
+std::string utils::replace_all(std::string str,
 	const std::string& from,
 	const std::string& to)
 {
@@ -612,7 +642,7 @@ std::string Utils::replace_all(std::string str,
 	return result;
 }
 
-std::wstring Utils::utf8str2wstr(const std::string& utf8str)
+std::wstring utils::utf8str2wstr(const std::string& utf8str)
 {
 	stfl_ipool* pool = stfl_ipool_create("utf-8");
 	std::wstring wstr = stfl_ipool_towc(pool, utf8str.c_str());
@@ -620,7 +650,7 @@ std::wstring Utils::utf8str2wstr(const std::string& utf8str)
 	return wstr;
 }
 
-std::wstring Utils::str2wstr(const std::string& str)
+std::wstring utils::str2wstr(const std::string& str)
 {
 	const char* codeset = nl_langinfo(CODESET);
 	struct stfl_ipool* ipool = stfl_ipool_create(codeset);
@@ -629,7 +659,7 @@ std::wstring Utils::str2wstr(const std::string& str)
 	return result;
 }
 
-std::string Utils::wstr2str(const std::wstring& wstr)
+std::string utils::wstr2str(const std::wstring& wstr)
 {
 	std::string codeset = nl_langinfo(CODESET);
 	codeset = translit(codeset, "WCHAR_T");
@@ -639,7 +669,7 @@ std::string Utils::wstr2str(const std::wstring& wstr)
 	return result;
 }
 
-std::string Utils::absolute_url(const std::string& url, const std::string& link)
+std::string utils::absolute_url(const std::string& url, const std::string& link)
 {
 	xmlChar* newurl = xmlBuildURI(
 		(const xmlChar*)link.c_str(), (const xmlChar*)url.c_str());
@@ -653,7 +683,7 @@ std::string Utils::absolute_url(const std::string& url, const std::string& link)
 	return retval;
 }
 
-std::string Utils::get_useragent(ConfigContainer* cfgcont)
+std::string utils::get_useragent(ConfigContainer* cfgcont)
 {
 	std::string ua_pref = cfgcont->get_configvalue("user-agent");
 	if (ua_pref.length() == 0) {
@@ -681,7 +711,12 @@ std::string Utils::get_useragent(ConfigContainer* cfgcont)
 	return ua_pref;
 }
 
-unsigned int Utils::to_u(const std::string& str,
+unsigned int utils::max(unsigned int a, unsigned int b)
+{
+	return (a > b) ? a : b;
+}
+
+unsigned int utils::to_u(const std::string& str,
 	const unsigned int default_value)
 {
 	std::istringstream is(str);
@@ -691,6 +726,11 @@ unsigned int Utils::to_u(const std::string& str,
 		u = default_value;
 	}
 	return u;
+}
+
+unsigned int utils::to_u(const std::string& str)
+{
+	return to_u(str, 0);
 }
 
 ScopeMeasure::ScopeMeasure(const std::string& func, Level ll)
@@ -729,35 +769,7 @@ ScopeMeasure::~ScopeMeasure()
 		diff % 1000000);
 }
 
-void Utils::append_escapes(std::string& str, char c)
-{
-	switch (c) {
-	case 'n':
-		str.append("\n");
-		break;
-	case 'r':
-		str.append("\r");
-		break;
-	case 't':
-		str.append("\t");
-		break;
-	case '"':
-		str.append("\"");
-		break;
-	// escaped backticks are passed through, still escaped. We un-escape
-	// them in ConfigParser::evaluate_backticks
-	case '`':
-		str.append("\\`");
-		break;
-	case '\\':
-		break;
-	default:
-		str.append(1, c);
-		break;
-	}
-}
-
-bool Utils::is_valid_color(const std::string& color)
+bool utils::is_valid_color(const std::string& color)
 {
 	static const std::unordered_set<std::string> colors = {"black",
 		"red",
@@ -813,7 +825,7 @@ bool Utils::is_valid_color(const std::string& color)
 	return false;
 }
 
-bool Utils::is_valid_attribute(const std::string& attrib)
+bool utils::is_valid_attribute(const std::string& attrib)
 {
 	static const std::unordered_set<std::string> attribs = {"standout",
 		"underline",
@@ -827,7 +839,7 @@ bool Utils::is_valid_attribute(const std::string& attrib)
 	return attribs.find(attrib) != attribs.end();
 }
 
-std::vector<std::pair<unsigned int, unsigned int>> Utils::partition_indexes(
+std::vector<std::pair<unsigned int, unsigned int>> utils::partition_indexes(
 	unsigned int start,
 	unsigned int end,
 	unsigned int parts)
@@ -846,7 +858,7 @@ std::vector<std::pair<unsigned int, unsigned int>> Utils::partition_indexes(
 	return partitions;
 }
 
-size_t Utils::strwidth(const std::string& str)
+size_t utils::strwidth(const std::string& str)
 {
 	std::wstring wstr = str2wstr(str);
 	int width = wcswidth(wstr.c_str(), wstr.length());
@@ -856,7 +868,7 @@ size_t Utils::strwidth(const std::string& str)
 	return width;                 // exact width
 }
 
-size_t Utils::strwidth_stfl(const std::string& str)
+size_t utils::strwidth_stfl(const std::string& str)
 {
 	size_t reduce_count = 0;
 	size_t len = str.length();
@@ -872,7 +884,7 @@ size_t Utils::strwidth_stfl(const std::string& str)
 	return strwidth(str) - reduce_count;
 }
 
-size_t Utils::wcswidth_stfl(const std::wstring& str, size_t size)
+size_t utils::wcswidth_stfl(const std::wstring& str, size_t size)
 {
 	size_t reduce_count = 0;
 	size_t len = std::min(str.length(), size);
@@ -894,7 +906,7 @@ size_t Utils::wcswidth_stfl(const std::wstring& str, size_t size)
 	return width - reduce_count;
 }
 
-std::string Utils::substr_with_width(const std::string& str,
+std::string utils::substr_with_width(const std::string& str,
 	const size_t max_width)
 {
 	// Returns a longest substring fits to the given width.
@@ -910,7 +922,7 @@ std::string Utils::substr_with_width(const std::string& str,
 		return std::string("");
 	}
 
-	const std::wstring wstr = Utils::str2wstr(str);
+	const std::wstring wstr = utils::str2wstr(str);
 	size_t total_width = 0;
 	bool in_bracket = false;
 	std::wstring result;
@@ -950,10 +962,10 @@ std::string Utils::substr_with_width(const std::string& str,
 			}
 		}
 	}
-	return Utils::wstr2str(result);
+	return utils::wstr2str(result);
 }
 
-std::string Utils::join(const std::vector<std::string>& strings,
+std::string utils::join(const std::vector<std::string>& strings,
 	const std::string& separator)
 {
 	std::string result;
@@ -970,35 +982,35 @@ std::string Utils::join(const std::vector<std::string>& strings,
 	return result;
 }
 
-bool Utils::is_special_url(const std::string& url)
+bool utils::is_special_url(const std::string& url)
 {
 	return is_query_url(url) || is_filter_url(url) || is_exec_url(url);
 }
 
-bool Utils::is_http_url(const std::string& url)
+bool utils::is_http_url(const std::string& url)
 {
 	return url.substr(0, 7) == "http://" || url.substr(0, 8) == "https://";
 }
 
-bool Utils::is_query_url(const std::string& url)
+bool utils::is_query_url(const std::string& url)
 {
 	return url.substr(0, 6) == "query:";
 }
 
-bool Utils::is_filter_url(const std::string& url)
+bool utils::is_filter_url(const std::string& url)
 {
 	return url.substr(0, 7) == "filter:";
 }
 
-bool Utils::is_exec_url(const std::string& url)
+bool utils::is_exec_url(const std::string& url)
 {
 	return url.substr(0, 5) == "exec:";
 }
 
-std::string Utils::censor_url(const std::string& url)
+std::string utils::censor_url(const std::string& url)
 {
 	std::string rv(url);
-	if (!url.empty() && !Utils::is_special_url(url)) {
+	if (!url.empty() && !utils::is_special_url(url)) {
 		const char* myuri = url.c_str();
 		xmlURIPtr uri = xmlParseURI(myuri);
 		if (uri) {
@@ -1017,7 +1029,7 @@ std::string Utils::censor_url(const std::string& url)
 	return rv;
 }
 
-std::string Utils::quote_for_stfl(std::string str)
+std::string utils::quote_for_stfl(std::string str)
 {
 	unsigned int len = str.length();
 	for (unsigned int i = 0; i < len; ++i) {
@@ -1029,7 +1041,7 @@ std::string Utils::quote_for_stfl(std::string str)
 	return str;
 }
 
-void Utils::trim(std::string& str)
+void utils::trim(std::string& str)
 {
 	while (str.length() > 0 && ::isspace(str[0])) {
 		str.erase(0, 1);
@@ -1037,7 +1049,7 @@ void Utils::trim(std::string& str)
 	trim_end(str);
 }
 
-void Utils::trim_end(std::string& str)
+void utils::trim_end(std::string& str)
 {
 	std::string::size_type pos = str.length() - 1;
 	while (str.length() > 0 && (str[pos] == '\n' || str[pos] == '\r')) {
@@ -1046,7 +1058,7 @@ void Utils::trim_end(std::string& str)
 	}
 }
 
-std::string Utils::quote(const std::string& str)
+std::string utils::quote(const std::string& str)
 {
 	std::string rv = replace_all(str, "\"", "\\\"");
 	rv.insert(0, "\"");
@@ -1054,7 +1066,7 @@ std::string Utils::quote(const std::string& str)
 	return rv;
 }
 
-unsigned int Utils::get_random_value(unsigned int max)
+unsigned int utils::get_random_value(unsigned int max)
 {
 	static bool initialized = false;
 	if (!initialized) {
@@ -1067,20 +1079,20 @@ unsigned int Utils::get_random_value(unsigned int max)
 	return static_cast<unsigned int>(rand() % max);
 }
 
-std::string Utils::quote_if_necessary(const std::string& str)
+std::string utils::quote_if_necessary(const std::string& str)
 {
 	std::string result;
 	if (str.find_first_of(" ", 0) == std::string::npos) {
 		result = str;
 	} else {
-		result = Utils::replace_all(str, "\"", "\\\"");
+		result = utils::replace_all(str, "\"", "\\\"");
 		result.insert(0, "\"");
 		result.append("\"");
 	}
 	return result;
 }
 
-void Utils::set_common_curl_options(CURL* handle, ConfigContainer* cfg)
+void utils::set_common_curl_options(CURL* handle, ConfigContainer* cfg)
 {
 	if (cfg) {
 		if (cfg->get_configvalue_as_bool("use-proxy")) {
@@ -1106,7 +1118,7 @@ void Utils::set_common_curl_options(CURL* handle, ConfigContainer* cfg)
 				cfg->get_configvalue("proxy-type");
 			if (proxytype != "") {
 				LOG(Level::DEBUG,
-					"Utils::set_common_curl_options: "
+					"utils::set_common_curl_options: "
 					"proxytype "
 					"= %s",
 					proxytype);
@@ -1116,7 +1128,7 @@ void Utils::set_common_curl_options(CURL* handle, ConfigContainer* cfg)
 			}
 		}
 
-		const std::string useragent = Utils::get_useragent(cfg);
+		const std::string useragent = utils::get_useragent(cfg);
 		curl_easy_setopt(handle, CURLOPT_USERAGENT, useragent.c_str());
 
 		const unsigned int dl_timeout =
@@ -1155,7 +1167,7 @@ void Utils::set_common_curl_options(CURL* handle, ConfigContainer* cfg)
 	}
 }
 
-std::string Utils::get_content(xmlNode* node)
+std::string utils::get_content(xmlNode* node)
 {
 	std::string retval;
 	if (node) {
@@ -1168,7 +1180,7 @@ std::string Utils::get_content(xmlNode* node)
 	return retval;
 }
 
-std::string Utils::get_basename(const std::string& url)
+std::string utils::get_basename(const std::string& url)
 {
 	std::string retval;
 	xmlURIPtr uri = xmlParseURI(url.c_str());
@@ -1189,7 +1201,7 @@ std::string Utils::get_basename(const std::string& url)
 	return retval;
 }
 
-unsigned long Utils::get_auth_method(const std::string& type)
+unsigned long utils::get_auth_method(const std::string& type)
 {
 	if (type == "any")
 		return CURLAUTH_ANY;
@@ -1219,7 +1231,7 @@ unsigned long Utils::get_auth_method(const std::string& type)
 	return CURLAUTH_ANY;
 }
 
-curl_proxytype Utils::get_proxy_type(const std::string& type)
+curl_proxytype utils::get_proxy_type(const std::string& type)
 {
 	if (type == "http")
 		return CURLPROXY_HTTP;
@@ -1242,7 +1254,7 @@ curl_proxytype Utils::get_proxy_type(const std::string& type)
 	return CURLPROXY_HTTP;
 }
 
-std::string Utils::escape_url(const std::string& url)
+std::string utils::escape_url(const std::string& url)
 {
 	CURL* easyhandle = curl_easy_init();
 	char* output = curl_easy_escape(easyhandle, url.c_str(), 0);
@@ -1256,7 +1268,7 @@ std::string Utils::escape_url(const std::string& url)
 	return s;
 }
 
-std::string Utils::unescape_url(const std::string& url)
+std::string utils::unescape_url(const std::string& url)
 {
 	CURL* easyhandle = curl_easy_init();
 	char* output = curl_easy_unescape(easyhandle, url.c_str(), 0, NULL);
@@ -1270,7 +1282,7 @@ std::string Utils::unescape_url(const std::string& url)
 	return s;
 }
 
-std::wstring Utils::clean_nonprintable_characters(std::wstring text)
+std::wstring utils::clean_nonprintable_characters(std::wstring text)
 {
 	for (size_t idx = 0; idx < text.size(); ++idx) {
 		if (!iswprint(text[idx]))
@@ -1279,9 +1291,9 @@ std::wstring Utils::clean_nonprintable_characters(std::wstring text)
 	return text;
 }
 
-unsigned int Utils::gentabs(const std::string& str)
+unsigned int utils::gentabs(const std::string& str)
 {
-	int tabcount = 4 - (Utils::strwidth(str) / 8);
+	int tabcount = 4 - (utils::strwidth(str) / 8);
 	if (tabcount <= 0) {
 		tabcount = 1;
 	}
@@ -1290,7 +1302,7 @@ unsigned int Utils::gentabs(const std::string& str)
 
 /* Like mkdir(), but creates ancestors (parent directories) if they don't
  * exist. */
-int Utils::mkdir_parents(const std::string& p, mode_t mode)
+int utils::mkdir_parents(const std::string& p, mode_t mode)
 {
 	int result = -1;
 
@@ -1329,7 +1341,7 @@ int Utils::mkdir_parents(const std::string& p, mode_t mode)
 	return result;
 }
 
-std::string Utils::make_title(const std::string& const_url)
+std::string utils::make_title(const std::string& const_url)
 {
 	/* Sometimes it is possible to construct the title from the URL
 	 * This attempts to do just that. eg:
@@ -1371,7 +1383,7 @@ std::string Utils::make_title(const std::string& const_url)
 	return title;
 }
 
-int Utils::run_interactively(const std::string& command,
+int utils::run_interactively(const std::string& command,
 	const std::string& caller)
 {
 	LOG(Level::DEBUG, "%s: running `%s'", caller, command);
@@ -1389,7 +1401,7 @@ int Utils::run_interactively(const std::string& command,
 	return status;
 }
 
-std::string Utils::getcwd()
+std::string utils::getcwd()
 {
 	// Linux seem to have its MAX_PATH set somewhere around this value, so
 	// should be a nice default
@@ -1407,12 +1419,12 @@ std::string Utils::getcwd()
 	return std::string(result.data());
 }
 
-int Utils::strnaturalcmp(const std::string& a, const std::string& b)
+int utils::strnaturalcmp(const std::string& a, const std::string& b)
 {
 	return doj::alphanum_comp(a, b);
 }
 
-void Utils::remove_soft_hyphens(std::string& text)
+void utils::remove_soft_hyphens(std::string& text)
 {
 	/* Remove all soft-hyphens as they can behave unpredictably (see
 	 * https://github.com/akrennmair/newsbeuter/issues/259#issuecomment-259609490)
@@ -1425,7 +1437,7 @@ void Utils::remove_soft_hyphens(std::string& text)
 	}
 }
 
-bool Utils::is_valid_podcast_type(const std::string& mimetype)
+bool utils::is_valid_podcast_type(const std::string& mimetype)
 {
 	const std::regex acceptable_rx{"(audio|video)/.*",
 		std::regex_constants::ECMAScript |
@@ -1478,7 +1490,7 @@ static unsigned long openssl_mth_id_function(void)
 }
 #endif
 
-void Utils::initialize_ssl_implementation(void)
+void utils::initialize_ssl_implementation(void)
 {
 #if HAVE_OPENSSL && OPENSSL_VERSION_NUMBER < 0x01010000fL
 	openssl_mutexes_size = CRYPTO_num_locks();
@@ -1493,7 +1505,7 @@ void Utils::initialize_ssl_implementation(void)
 #endif
 }
 
-std::string Utils::get_default_browser()
+std::string utils::get_default_browser()
 {
 	const char* browser = getenv("BROWSER");
 	if (!browser) {

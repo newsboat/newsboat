@@ -73,7 +73,7 @@ std::string FeedHqApi::retrieve_auth()
 
 	std::string result;
 
-	Utils::set_common_curl_options(handle, cfg);
+	utils::set_common_curl_options(handle, cfg);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle, CURLOPT_POSTFIELDS, postcontent.c_str());
@@ -83,7 +83,7 @@ std::string FeedHqApi::retrieve_auth()
 	curl_easy_perform(handle);
 	curl_easy_cleanup(handle);
 
-	for (const auto& line : Utils::tokenize(result)) {
+	for (const auto& line : utils::tokenize(result)) {
 		LOG(Level::DEBUG, "FeedHqApi::retrieve_auth: line = %s", line);
 		if (line.substr(0, 5) == "Auth=") {
 			std::string auth = line.substr(5, line.length() - 5);
@@ -104,7 +104,7 @@ std::vector<TaggedFeedUrl> FeedHqApi::get_subscribed_urls()
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
 
-	Utils::set_common_curl_options(handle, cfg);
+	utils::set_common_curl_options(handle, cfg);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle,
@@ -187,9 +187,9 @@ bool FeedHqApi::mark_all_read(const std::string& feedurl)
 		cfg->get_configvalue("feedhq-url") + FEEDHQ_FEED_PREFIX;
 	std::string real_feedurl = feedurl.substr(
 		prefix.length(), feedurl.length() - prefix.length());
-	std::vector<std::string> elems = Utils::tokenize(real_feedurl, "?");
+	std::vector<std::string> elems = utils::tokenize(real_feedurl, "?");
 	try {
-		real_feedurl = Utils::unescape_url(elems[0]);
+		real_feedurl = utils::unescape_url(elems[0]);
 	} catch (const std::runtime_error& e) {
 		LOG(Level::DEBUG,
 			"FeedHqApi::mark_all_read: Failed to "
@@ -257,7 +257,7 @@ std::string FeedHqApi::get_new_token()
 	std::string result;
 	curl_slist* custom_headers{};
 
-	Utils::set_common_curl_options(handle, cfg);
+	utils::set_common_curl_options(handle, cfg);
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
@@ -361,7 +361,7 @@ std::string FeedHqApi::post_content(const std::string& url,
 	curl_slist* custom_headers{};
 
 	CURL* handle = curl_easy_init();
-	Utils::set_common_curl_options(handle, cfg);
+	utils::set_common_curl_options(handle, cfg);
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);

@@ -140,8 +140,8 @@ void HtmlRenderer::render(std::istream& input,
 				}
 				if (link.length() > 0) {
 					link_num = add_link(links,
-						Utils::censor_url(
-							Utils::absolute_url(
+						utils::censor_url(
+							utils::absolute_url(
 								url, link)),
 						LinkType::HREF);
 					if (!raw_)
@@ -188,8 +188,8 @@ void HtmlRenderer::render(std::istream& input,
 					}
 					if (link.length() > 0) {
 						link_num = add_link(links,
-							Utils::censor_url(
-								Utils::absolute_url(
+							utils::censor_url(
+								utils::absolute_url(
 									url,
 									link)),
 							LinkType::EMBED);
@@ -243,8 +243,8 @@ void HtmlRenderer::render(std::istream& input,
 							LinkType::IMG);
 					} else {
 						link_num = add_link(links,
-							Utils::censor_url(
-								Utils::absolute_url(
+							utils::censor_url(
+								utils::absolute_url(
 									url,
 									imgurl)),
 							LinkType::IMG);
@@ -306,7 +306,7 @@ void HtmlRenderer::render(std::istream& input,
 					} catch (const std::invalid_argument&) {
 						ol_count_str = "1";
 					}
-					ol_count = Utils::to_u(ol_count_str, 1);
+					ol_count = utils::to_u(ol_count_str, 1);
 					ol_counts.push_back(ol_count);
 
 					std::string ol_type;
@@ -424,7 +424,7 @@ void HtmlRenderer::render(std::istream& input,
 				try {
 					std::string b = xpp.get_attribute_value(
 						"border");
-					has_border = (Utils::to_u(b, 0) > 0);
+					has_border = (utils::to_u(b, 0) > 0);
 				} catch (const std::invalid_argument&) {
 					// is ok, no border then
 				}
@@ -440,7 +440,7 @@ void HtmlRenderer::render(std::istream& input,
 			case HtmlTag::TH: {
 				size_t span = 1;
 				try {
-					span = Utils::to_u(
+					span = utils::to_u(
 						xpp.get_attribute_value(
 							"colspan"),
 						1);
@@ -456,7 +456,7 @@ void HtmlRenderer::render(std::istream& input,
 			case HtmlTag::TD: {
 				size_t span = 1;
 				try {
-					span = Utils::to_u(
+					span = utils::to_u(
 						xpp.get_attribute_value(
 							"colspan"),
 						1);
@@ -545,7 +545,7 @@ void HtmlRenderer::render(std::istream& input,
 				if (line_is_nonempty(curline)) {
 					add_line(curline, tables, lines);
 					size_t llen =
-						Utils::strwidth_stfl(curline);
+						utils::strwidth_stfl(curline);
 					prepare_new_line(curline,
 						tables.size() ? 0
 							      : indent_level);
@@ -706,10 +706,10 @@ void HtmlRenderer::render(std::istream& input,
 			break;
 
 		case TagSoupPullParser::Event::TEXT: {
-			auto text = Utils::quote_for_stfl(xpp.get_text());
+			auto text = utils::quote_for_stfl(xpp.get_text());
 			if (itunes_hack) {
 				std::vector<std::string> paragraphs =
-					Utils::tokenize_nl(text);
+					utils::tokenize_nl(text);
 				for (const auto& paragraph : paragraphs) {
 					if (paragraph != "\n") {
 						add_nonempty_line(
@@ -723,7 +723,7 @@ void HtmlRenderer::render(std::istream& input,
 				}
 			} else if (inside_pre) {
 				std::vector<std::string> paragraphs =
-					Utils::tokenize_nl(text);
+					utils::tokenize_nl(text);
 				for (const auto& paragraph : paragraphs) {
 					if (paragraph == "\n") {
 						add_line_softwrappable(
@@ -751,7 +751,7 @@ void HtmlRenderer::render(std::istream& input,
 					curline.append(" ");
 				}
 				// strip newlines
-				text = Utils::replace_all(text, "\n", " ");
+				text = utils::replace_all(text, "\n", " ");
 				curline.append(text);
 			}
 		} break;
@@ -948,7 +948,7 @@ void HtmlRenderer::render_table(const HtmlRenderer::Table& table,
 					table.rows[row].cells[cell].text.size();
 					idx++)
 					width = std::max(width,
-						Utils::strwidth_stfl(
+						utils::strwidth_stfl(
 							table.rows[row]
 								.cells[cell]
 								.text[idx]));
@@ -1011,7 +1011,7 @@ void HtmlRenderer::render_table(const HtmlRenderer::Table& table,
 						table.rows[row]
 							.cells[cell]
 							.text[idx]);
-					cell_width = Utils::strwidth_stfl(
+					cell_width = utils::strwidth_stfl(
 						table.rows[row]
 							.cells[cell]
 							.text[idx]);
