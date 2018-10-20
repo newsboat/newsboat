@@ -243,8 +243,9 @@ void RegexManager::quote_and_highlight(std::string& str,
 
 	unsigned int i = 0;
 	for (const auto& regex : regexes) {
-		if (!regex)
+		if (!regex) {
 			continue;
+		}
 		std::string initial_marker = extract_initial_marker(str);
 		regmatch_t pmatch;
 		unsigned int offset = 0;
@@ -258,12 +259,12 @@ void RegexManager::quote_and_highlight(std::string& str,
 				offset += pmatch.rm_eo + marker.length() +
 					strlen("</>") + initial_marker.length();
 			}
-			else
-			{
+			else {
 				offset++;
 			}
-			if (offset >= str.length())
+			if (offset >= str.length()) {
 				break;
+			}
 			err = regexec(
 				regex, str.c_str() + offset, 1, &pmatch, 0);
 		}
