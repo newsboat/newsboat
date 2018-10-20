@@ -164,7 +164,7 @@ Feed Parser::parse_url(const std::string& url,
 	}
 
 	if (etag.length() > 0) {
-		auto header = StrPrintf::fmt("If-None-Match: %s", etag);
+		auto header = strprintf::fmt("If-None-Match: %s", etag);
 		custom_headers =
 			curl_slist_append(custom_headers, header.c_str());
 	}
@@ -216,7 +216,7 @@ Feed Parser::parse_url(const std::string& url,
 			curl_easy_strerror(ret));
 		std::string msg;
 		if (ret == CURLE_HTTP_RETURNED_ERROR && infoOk == CURLE_OK) {
-			msg = StrPrintf::fmt(
+			msg = strprintf::fmt(
 				"%s %li", curl_easy_strerror(ret), status);
 		} else {
 			msg = curl_easy_strerror(ret);

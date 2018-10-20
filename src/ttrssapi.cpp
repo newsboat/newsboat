@@ -18,7 +18,7 @@ TtRssApi::TtRssApi(ConfigContainer* c)
 {
 	single = (cfg->get_configvalue("ttrss-mode") == "single");
 	if (single) {
-		auth_info = StrPrintf::fmt("%s:%s",
+		auth_info = strprintf::fmt("%s:%s",
 			cfg->get_configvalue("ttrss-login"),
 			cfg->get_configvalue("ttrss-password"));
 	} else {
@@ -55,7 +55,7 @@ std::string TtRssApi::retrieve_sid()
 	args["user"] = single ? "admin" : cred.user.c_str();
 	args["password"] = cred.pass.c_str();
 	if (single) {
-		auth_info = StrPrintf::fmt("%s:%s", cred.user, cred.pass);
+		auth_info = strprintf::fmt("%s:%s", cred.user, cred.pass);
 	} else {
 		auth_info = "";
 	}
@@ -123,7 +123,7 @@ json TtRssApi::run_op(const std::string& op,
 	CURL* cached_handle /* = nullptr */)
 {
 	std::string url =
-		StrPrintf::fmt("%s/api/", cfg->get_configvalue("ttrss-url"));
+		strprintf::fmt("%s/api/", cfg->get_configvalue("ttrss-url"));
 
 	// First build the request payload
 	std::string req_data;
@@ -217,7 +217,7 @@ TaggedFeedUrl TtRssApi::feed_from_json(const json& jfeed,
 	// add additional tags
 	tags.insert(tags.end(), addtags.cbegin(), addtags.cend());
 
-	auto url = StrPrintf::fmt("%s#%d", feed_url, feed_id);
+	auto url = strprintf::fmt("%s#%d", feed_url, feed_id);
 	return TaggedFeedUrl(url, tags);
 	// TODO: cache feed_id -> feed_url (or feed_url -> feed_id ?)
 }
@@ -419,7 +419,7 @@ rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 			}
 
 			int id = item_obj["id"];
-			item.guid = StrPrintf::fmt("%d", id);
+			item.guid = strprintf::fmt("%d", id);
 
 			bool unread = item_obj["unread"];
 			if (unread) {

@@ -48,7 +48,7 @@ void RegexManager::handle_action(const std::string& action,
 		std::string location = params[0];
 		if (location != "all" && location != "article" &&
 			location != "articlelist" && location != "feedlist")
-			throw ConfigHandlerException(StrPrintf::fmt(
+			throw ConfigHandlerException(strprintf::fmt(
 				_("`%s' is an invalid dialog type"), location));
 
 		regex_t* rx = new regex_t;
@@ -59,7 +59,7 @@ void RegexManager::handle_action(const std::string& action,
 			char buf[1024];
 			regerror(err, rx, buf, sizeof(buf));
 			delete rx;
-			throw ConfigHandlerException(StrPrintf::fmt(
+			throw ConfigHandlerException(strprintf::fmt(
 				_("`%s' is not a valid regular expression: %s"),
 				params[1],
 				buf));
@@ -68,7 +68,7 @@ void RegexManager::handle_action(const std::string& action,
 		if (params[2] != "default") {
 			colorstr.append("fg=");
 			if (!utils::is_valid_color(params[2]))
-				throw ConfigHandlerException(StrPrintf::fmt(
+				throw ConfigHandlerException(strprintf::fmt(
 					_("`%s' is not a valid color"),
 					params[2]));
 			colorstr.append(params[2]);
@@ -80,7 +80,7 @@ void RegexManager::handle_action(const std::string& action,
 				colorstr.append("bg=");
 				if (!utils::is_valid_color(params[3]))
 					throw ConfigHandlerException(
-						StrPrintf::fmt(
+						strprintf::fmt(
 							_("`%s' is not a valid "
 							  "color"),
 							params[3]));
@@ -94,7 +94,7 @@ void RegexManager::handle_action(const std::string& action,
 					if (!utils::is_valid_attribute(
 						    params[i]))
 						throw ConfigHandlerException(
-							StrPrintf::fmt(
+							strprintf::fmt(
 								_("`%s' is not "
 								  "a valid "
 								  "attribute"),
@@ -151,7 +151,7 @@ void RegexManager::handle_action(const std::string& action,
 		if (fgcolor != "default") {
 			colorstr.append("fg=");
 			if (!utils::is_valid_color(fgcolor))
-				throw ConfigHandlerException(StrPrintf::fmt(
+				throw ConfigHandlerException(strprintf::fmt(
 					_("`%s' is not a valid color"),
 					fgcolor));
 			colorstr.append(fgcolor);
@@ -161,7 +161,7 @@ void RegexManager::handle_action(const std::string& action,
 				colorstr.append(",");
 			colorstr.append("bg=");
 			if (!utils::is_valid_color(bgcolor))
-				throw ConfigHandlerException(StrPrintf::fmt(
+				throw ConfigHandlerException(strprintf::fmt(
 					_("`%s' is not a valid color"),
 					bgcolor));
 			colorstr.append(bgcolor);
@@ -174,7 +174,7 @@ void RegexManager::handle_action(const std::string& action,
 				colorstr.append("attr=");
 				if (!utils::is_valid_attribute(params[i]))
 					throw ConfigHandlerException(
-						StrPrintf::fmt(
+						strprintf::fmt(
 							_("`%s' is not a valid "
 							  "attribute"),
 							params[i]));
@@ -184,7 +184,7 @@ void RegexManager::handle_action(const std::string& action,
 
 		std::shared_ptr<Matcher> m(new Matcher());
 		if (!m->parse(params[0])) {
-			throw ConfigHandlerException(StrPrintf::fmt(
+			throw ConfigHandlerException(strprintf::fmt(
 				_("couldn't parse filter expression `%s': %s"),
 				params[0],
 				m->get_parse_error()));
@@ -250,7 +250,7 @@ void RegexManager::quote_and_highlight(std::string& str,
 		unsigned int offset = 0;
 		int err = regexec(regex, str.c_str(), 1, &pmatch, 0);
 		while (err == 0) {
-			std::string marker = StrPrintf::fmt("<%u>", i);
+			std::string marker = strprintf::fmt("<%u>", i);
 			str.insert(offset + pmatch.rm_eo,
 				std::string("</>") + initial_marker);
 			str.insert(offset + pmatch.rm_so, marker);

@@ -128,7 +128,7 @@ void FileBrowserFormAction::process_operation(Operation op,
 				if (::stat(fn.c_str(), &sbuf) != -1) {
 					f->set_focus("files");
 					if (v->confirm(
-						    StrPrintf::fmt(
+						    strprintf::fmt(
 							    _("Do you really "
 							      "want to "
 							      "overwrite `%s' "
@@ -248,7 +248,7 @@ void FileBrowserFormAction::init()
 	f->set("filenametext_pos", std::to_string(default_filename.length()));
 
 	f->set("head",
-		StrPrintf::fmt(_("%s %s - Save File - %s"),
+		strprintf::fmt(_("%s %s - Save File - %s"),
 			PROGRAM_NAME,
 			PROGRAM_VERSION,
 			cwdtmp));
@@ -275,15 +275,15 @@ std::string FileBrowserFormAction::add_file(std::string filename)
 		std::string formattedfilename =
 			get_formatted_filename(filename, ftype, sb.st_mode);
 
-		std::string sizestr = StrPrintf::fmt("%12u", sb.st_size);
-		std::string line = StrPrintf::fmt("%c%s %s %s %s %s",
+		std::string sizestr = strprintf::fmt("%12u", sb.st_size);
+		std::string line = strprintf::fmt("%c%s %s %s %s %s",
 			ftype,
 			rwxbits,
 			owner,
 			group,
 			sizestr,
 			formattedfilename);
-		retval = StrPrintf::fmt("{listitem[%c%s] text:%s}",
+		retval = strprintf::fmt("{listitem[%c%s] text:%s}",
 			ftype,
 			Stfl::quote(filename),
 			Stfl::quote(line));
@@ -315,7 +315,7 @@ std::string FileBrowserFormAction::get_formatted_filename(std::string filename,
 			suffix = '*';
 	}
 
-	return StrPrintf::fmt("%s%c", filename, suffix);
+	return strprintf::fmt("%s%c", filename, suffix);
 }
 
 std::string FileBrowserFormAction::get_rwx(unsigned short val)
@@ -379,7 +379,7 @@ std::string FileBrowserFormAction::get_group(gid_t gid)
 
 std::string FileBrowserFormAction::title()
 {
-	return StrPrintf::fmt(_("Save File - %s"), utils::getcwd());
+	return strprintf::fmt(_("Save File - %s"), utils::getcwd());
 }
 
 } // namespace newsboat

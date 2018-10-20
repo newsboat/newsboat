@@ -585,12 +585,12 @@ void KeyMap::handle_action(const std::string& action,
 		if (params.size() >= 3)
 			context = params[2];
 		if (!is_valid_context(context))
-			throw ConfigHandlerException(StrPrintf::fmt(
+			throw ConfigHandlerException(strprintf::fmt(
 				_("`%s' is not a valid context"), context));
 		Operation op = get_opcode(params[1]);
 		if (op == OP_NIL) {
 			throw ConfigHandlerException(
-				StrPrintf::fmt(_("`%s' is not a valid "
+				strprintf::fmt(_("`%s' is not a valid "
 						 "key command"),
 					params[1]));
 		}
@@ -634,7 +634,7 @@ void KeyMap::handle_action(const std::string& action,
 					tmpcmd.op);
 				if (tmpcmd.op == OP_NIL)
 					throw ConfigHandlerException(
-						StrPrintf::fmt(
+						strprintf::fmt(
 							_("`%s' is not a valid "
 							  "key command"),
 							*it));

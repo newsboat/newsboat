@@ -292,7 +292,7 @@ void ConfigContainer::handle_action(const std::string& action,
 	switch (cfgdata.type) {
 	case ConfigDataType::BOOL:
 		if (!is_bool(params[0]))
-			throw ConfigHandlerException(StrPrintf::fmt(
+			throw ConfigHandlerException(strprintf::fmt(
 				_("expected boolean value, found `%s' instead"),
 				params[0]));
 		cfgdata.value = params[0];
@@ -300,7 +300,7 @@ void ConfigContainer::handle_action(const std::string& action,
 
 	case ConfigDataType::INT:
 		if (!is_int(params[0]))
-			throw ConfigHandlerException(StrPrintf::fmt(
+			throw ConfigHandlerException(strprintf::fmt(
 				_("expected integer value, found `%s' instead"),
 				params[0]));
 		cfgdata.value = params[0];
@@ -309,7 +309,7 @@ void ConfigContainer::handle_action(const std::string& action,
 	case ConfigDataType::ENUM:
 		if (cfgdata.enum_values.find(params[0]) ==
 			cfgdata.enum_values.end())
-			throw ConfigHandlerException(StrPrintf::fmt(
+			throw ConfigHandlerException(strprintf::fmt(
 				_("invalid configuration value `%s'"),
 				params[0]));
 	// fall-through
@@ -397,7 +397,7 @@ void ConfigContainer::dump_config(std::vector<std::string>& config_output)
 			configline.append(cfg.second.value);
 			if (cfg.second.value != cfg.second.default_value)
 				configline.append(
-					StrPrintf::fmt(" # default: %s",
+					strprintf::fmt(" # default: %s",
 						cfg.second.default_value));
 			break;
 		case ConfigDataType::ENUM:
@@ -415,7 +415,7 @@ void ConfigContainer::dump_config(std::vector<std::string>& config_output)
 					utils::quote(cfg.second.value));
 				if (cfg.second.value !=
 					cfg.second.default_value) {
-					configline.append(StrPrintf::fmt(
+					configline.append(strprintf::fmt(
 						" # default: %s",
 						cfg.second.default_value));
 				}

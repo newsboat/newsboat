@@ -76,7 +76,7 @@ void HelpFormAction::prepare()
 			descs, v->get_keys()->get_flag_from_context(context));
 
 		std::string highlighted_searchphrase =
-			StrPrintf::fmt("<hl>%s</>", searchphrase);
+			strprintf::fmt("<hl>%s</>", searchphrase);
 		std::vector<std::string> colors = utils::tokenize(
 			cfg->get_configvalue("search-highlight-colors"), " ");
 		f->set("highlight", make_colorstring(colors));
@@ -138,7 +138,7 @@ void HelpFormAction::prepare()
 					switch (i) {
 					case 0:
 					case 1:
-						line = StrPrintf::fmt(
+						line = strprintf::fmt(
 							"%s%s%s%s%s",
 							desc.key,
 							tabs_1,
@@ -147,7 +147,7 @@ void HelpFormAction::prepare()
 							desc.desc);
 						break;
 					case 2:
-						line = StrPrintf::fmt(
+						line = strprintf::fmt(
 							"%s%s%s%s",
 							desc.cmd,
 							tabs_1,

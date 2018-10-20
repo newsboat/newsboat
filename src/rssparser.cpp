@@ -171,7 +171,7 @@ void RssParser::retrieve_uri(const std::string& uri)
 	} else if (my_uri.substr(0, 7) == "file://") {
 		parse_file(my_uri.substr(7, my_uri.length() - 7));
 	} else
-		throw StrPrintf::fmt(_("Error: unsupported URL: %s"), my_uri);
+		throw strprintf::fmt(_("Error: unsupported URL: %s"), my_uri);
 }
 
 void RssParser::download_http(const std::string& uri)

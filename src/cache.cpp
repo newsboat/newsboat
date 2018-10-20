@@ -946,7 +946,7 @@ Cache::prepare_query(const std::string& format, const T& argument, Args... args)
 {
 	std::string local_format, remaining_format;
 	std::tie(local_format, remaining_format) =
-		StrPrintf::split_format(format);
+		strprintf::split_format(format);
 
 	char* piece = sqlite3_mprintf(local_format.c_str(), argument);
 	std::string result;

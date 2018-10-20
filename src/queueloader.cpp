@@ -83,7 +83,7 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 
 				if (fields.empty()) {
 					if (!comments_ignored) {
-						std::cout << StrPrintf::fmt(
+						std::cout << strprintf::fmt(
 							     _("WARNING: Comment found "
 							       "in %s. The queue file is regenerated "
 							       "when podboat exits and comments will "

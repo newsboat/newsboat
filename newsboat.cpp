@@ -20,7 +20,7 @@ using namespace newsboat;
 
 void print_usage(const std::string& argv0)
 {
-	auto msg = StrPrintf::fmt(
+	auto msg = strprintf::fmt(
 		_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] "
 		  "[-c <cachefile>] [-x <command> ...] [-h]\n"),
 		PROGRAM_NAME,
@@ -109,7 +109,7 @@ void print_version(const std::string& argv0, unsigned int level)
 			  << std::endl;
 		ss << std::endl;
 
-		ss << StrPrintf::fmt(
+		ss << strprintf::fmt(
 				     _("Newsboat is free software licensed "
 				       "under the MIT License. (Type `%s -vv' "
 				       "to see the full text.)"),
@@ -182,21 +182,21 @@ int main(int argc, char* argv[])
 	try {
 		ret = c.run(args);
 	} catch (const newsboat::DbException& e) {
-		std::cerr << StrPrintf::fmt(
+		std::cerr << strprintf::fmt(
 				     _("Caught newsboat::DbException with "
 				       "message: %s"),
 				     e.what())
 			  << std::endl;
 		::exit(EXIT_FAILURE);
 	} catch (const newsboat::MatcherException& e) {
-		std::cerr << StrPrintf::fmt(
+		std::cerr << strprintf::fmt(
 				     _("Caught newsboat::MatcherException with "
 				       "message: %s"),
 				     e.what())
 			  << std::endl;
 		::exit(EXIT_FAILURE);
 	} catch (const newsboat::Exception& e) {
-		std::cerr << StrPrintf::fmt(_("Caught newsboat::Exception with "
+		std::cerr << strprintf::fmt(_("Caught newsboat::Exception with "
 					      "message: %s"),
 				     e.what())
 			  << std::endl;

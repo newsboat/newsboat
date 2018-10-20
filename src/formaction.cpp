@@ -109,7 +109,7 @@ void FormAction::process_op(Operation op,
 			std::string cmdline = "set ";
 			if (args) {
 				for (const auto& arg : *args) {
-					cmdline.append(StrPrintf::fmt(
+					cmdline.append(strprintf::fmt(
 						"%s ", Stfl::quote(arg)));
 				}
 			}
@@ -260,7 +260,7 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 						cfg->reset_to_default(var);
 						set_redraw(true);
 					}
-					v->set_status(StrPrintf::fmt("  %s=%s",
+					v->set_status(strprintf::fmt("  %s=%s",
 						var,
 						utils::quote_if_necessary(
 							cfg->get_configvalue(
@@ -304,14 +304,14 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 			} else {
 				v->get_ctrl()->dump_config(
 					utils::resolve_tilde(tokens[0]));
-				v->show_error(StrPrintf::fmt(
+				v->show_error(strprintf::fmt(
 					_("Saved configuration to %s"),
 					tokens[0]));
 			}
 		} else if (cmd == "dumpform") {
 			v->dump_current_form();
 		} else {
-			v->show_error(StrPrintf::fmt(
+			v->show_error(strprintf::fmt(
 				_("Not a command: %s"), cmdline));
 		}
 	}
@@ -522,7 +522,7 @@ std::string FormAction::bookmark(const std::string& url,
 	bool is_interactive =
 		cfg->get_configvalue_as_bool("bookmark-interactive");
 	if (bookmark_cmd.length() > 0) {
-		std::string cmdline = StrPrintf::fmt("%s '%s' '%s' '%s' '%s'",
+		std::string cmdline = strprintf::fmt("%s '%s' '%s' '%s' '%s'",
 			bookmark_cmd,
 			utils::replace_all(url, "'", "%27"),
 			utils::replace_all(title, "'", "%27"),

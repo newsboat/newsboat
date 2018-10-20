@@ -149,7 +149,7 @@ int Controller::run(const CliArgsParser& args)
 
 	if (!args.do_export) {
 		if (!args.silent)
-			std::cout << StrPrintf::fmt(_("Starting %s %s..."),
+			std::cout << strprintf::fmt(_("Starting %s %s..."),
 					     PROGRAM_NAME,
 					     PROGRAM_VERSION)
 				  << std::endl;
@@ -158,7 +158,7 @@ int Controller::run(const CliArgsParser& args)
 		pid_t pid;
 		if (!fslock->try_lock(configpaths.lock_file(), pid)) {
 			if (!args.execute_cmds) {
-				std::cout << StrPrintf::fmt(
+				std::cout << strprintf::fmt(
 						     _("Error: an instance of "
 						       "%s is already running "
 						       "(PID: %u)"),
@@ -214,7 +214,7 @@ int Controller::run(const CliArgsParser& args)
 		fslock = std::unique_ptr<FsLock>(new FsLock());
 		pid_t pid;
 		if (!fslock->try_lock(configpaths.lock_file(), pid)) {
-			std::cout << StrPrintf::fmt(
+			std::cout << strprintf::fmt(
 					     _("Error: an instance of %s is "
 					       "already running (PID: %u)"),
 					     PROGRAM_NAME,
@@ -231,7 +231,7 @@ int Controller::run(const CliArgsParser& args)
 	try {
 		rsscache = new Cache(configpaths.cache_file(), &cfg);
 	} catch (const DbException& e) {
-		std::cerr << StrPrintf::fmt(
+		std::cerr << strprintf::fmt(
 				     _("Error: opening the cache file `%s' "
 				       "failed: %s"),
 				     configpaths.cache_file(),
@@ -239,7 +239,7 @@ int Controller::run(const CliArgsParser& args)
 			  << std::endl;
 		return EXIT_FAILURE;
 	} catch (const std::runtime_error& e) {
-		std::cerr << StrPrintf::fmt(
+		std::cerr << strprintf::fmt(
 				     _("Error: opening the cache file `%s' "
 				       "failed: %s"),
 				     configpaths.cache_file(),
@@ -270,7 +270,7 @@ int Controller::run(const CliArgsParser& args)
 	} else if (type == "newsblur") {
 		const auto cookies = cfg.get_configvalue("cookie-cache");
 		if (cookies.empty()) {
-			std::cout << StrPrintf::fmt(
+			std::cout << strprintf::fmt(
 				_("ERROR: You must set `cookie-cache` to use "
 				  "Newsblur.\n"));
 			return EXIT_FAILURE;
@@ -278,7 +278,7 @@ int Controller::run(const CliArgsParser& args)
 
 		std::ofstream check(cookies);
 		if (!check.is_open()) {
-			std::cout << StrPrintf::fmt(
+			std::cout << strprintf::fmt(
 				_("%s is inaccessible and can't be created\n"),
 				cookies);
 			return EXIT_FAILURE;
@@ -303,7 +303,7 @@ int Controller::run(const CliArgsParser& args)
 	}
 
 	if (!args.do_export && !args.silent) {
-		std::cout << StrPrintf::fmt(
+		std::cout << strprintf::fmt(
 			_("Loading URLs from %s..."), urlcfg->get_source());
 		std::cout.flush();
 	}
@@ -322,33 +322,33 @@ int Controller::run(const CliArgsParser& args)
 		LOG(Level::ERROR, "no URLs configured.");
 		std::string msg;
 		if (type == "local") {
-			msg = StrPrintf::fmt(
+			msg = strprintf::fmt(
 				_("Error: no URLs configured. Please fill the "
 				  "file %s with RSS feed URLs or import an "
 				  "OPML file."),
 				configpaths.url_file());
 		} else if (type == "opml") {
-			msg = StrPrintf::fmt(
+			msg = strprintf::fmt(
 				_("It looks like the OPML feed you subscribed "
 				  "contains no feeds. Please fill it with "
 				  "feeds, and try again."));
 		} else if (type == "oldreader") {
-			msg = StrPrintf::fmt(
+			msg = strprintf::fmt(
 				_("It looks like you haven't configured any "
 				  "feeds in your The Old Reader account. "
 				  "Please do so, and try again."));
 		} else if (type == "ttrss") {
-			msg = StrPrintf::fmt(
+			msg = strprintf::fmt(
 				_("It looks like you haven't configured any "
 				  "feeds in your Tiny Tiny RSS account. Please "
 				  "do so, and try again."));
 		} else if (type == "newsblur") {
-			msg = StrPrintf::fmt(
+			msg = strprintf::fmt(
 				_("It looks like you haven't configured any "
 				  "feeds in your NewsBlur account. Please do "
 				  "so, and try again."));
 		} else if (type == "inoreader") {
-			msg = StrPrintf::fmt(
+			msg = strprintf::fmt(
 				_("It looks like you haven't configured any "
 				  "feeds in your Inoreader account. Please do "
 				  "so, and try again."));
@@ -392,7 +392,7 @@ int Controller::run(const CliArgsParser& args)
 				  << e.what() << std::endl;
 			return EXIT_FAILURE;
 		} catch (const std::string& str) {
-			std::cout << StrPrintf::fmt(
+			std::cout << strprintf::fmt(
 					     _("Error while loading feed '%s': "
 					       "%s"),
 					     url,
@@ -522,7 +522,7 @@ void Controller::mark_all_read(const std::string& feedurl)
 	try {
 		rsscache->mark_all_read(feedurl);
 	} catch (const DbException& e) {
-		v->show_error(StrPrintf::fmt(
+		v->show_error(strprintf::fmt(
 			_("Error: couldn't mark all feeds read: %s"),
 			e.what()));
 		return;
@@ -615,13 +615,13 @@ void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
 void Controller::import_opml(const std::string& filename)
 {
 	if (!opml::import(filename, urlcfg)) {
-		std::cout << StrPrintf::fmt(
+		std::cout << strprintf::fmt(
 				     _("An error occurred while parsing %s."),
 				     filename)
 			  << std::endl;
 		return;
 	} else {
-		std::cout << StrPrintf::fmt(
+		std::cout << strprintf::fmt(
 				     _("Import of %s finished."), filename)
 			  << std::endl;
 	}
@@ -751,7 +751,7 @@ void Controller::edit_urls_file()
 	if (!editor)
 		editor = "vi";
 
-	std::string cmdline = StrPrintf::fmt("%s \"%s\"",
+	std::string cmdline = strprintf::fmt("%s \"%s\"",
 		editor,
 		utils::replace_all(configpaths.url_file(), "\"", "\\\""));
 
@@ -776,12 +776,12 @@ int Controller::execute_commands(const std::vector<std::string>& cmds)
 		if (cmd == "reload") {
 			reloader->reload_all(true);
 		} else if (cmd == "print-unread") {
-			std::cout << StrPrintf::fmt(_("%u unread articles"),
+			std::cout << strprintf::fmt(_("%u unread articles"),
 					     rsscache->get_unread_count())
 				  << std::endl;
 		} else {
 			std::cerr
-				<< StrPrintf::fmt(_("%s: %s: unknown command"),
+				<< strprintf::fmt(_("%s: %s: unknown command"),
 					   "newsboat",
 					   cmd)
 				<< std::endl;
@@ -969,7 +969,7 @@ void Controller::update_config()
 				cfg.get_configvalue("error-log"));
 		} catch (const Exception& e) {
 			const std::string msg =
-				StrPrintf::fmt("Couldn't open %s: %s",
+				strprintf::fmt("Couldn't open %s: %s",
 					cfg.get_configvalue("error-log"),
 					e.what());
 			v->show_error(msg);
@@ -983,7 +983,7 @@ void Controller::load_configfile(const std::string& filename)
 	if (cfgparser.parse(filename, true)) {
 		update_config();
 	} else {
-		v->show_error(StrPrintf::fmt(
+		v->show_error(strprintf::fmt(
 			_("Error: couldn't open configuration file `%s'!"),
 			filename));
 	}

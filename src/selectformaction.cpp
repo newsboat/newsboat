@@ -103,7 +103,7 @@ void SelectFormAction::prepare()
 		switch (type) {
 		case SelectionType::TAG:
 			for (const auto& tag : tags) {
-				std::string tagstr = StrPrintf::fmt(
+				std::string tagstr = strprintf::fmt(
 					"%4u  %s (%u)",
 					i + 1,
 					tag,
@@ -116,7 +116,7 @@ void SelectFormAction::prepare()
 			break;
 		case SelectionType::FILTER:
 			for (const auto& filter : filters) {
-				std::string tagstr = StrPrintf::fmt(
+				std::string tagstr = strprintf::fmt(
 					"%4u  %s", i + 1, filter.first);
 				listfmt.add_line(tagstr, i);
 				i++;

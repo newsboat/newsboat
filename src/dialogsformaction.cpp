@@ -46,7 +46,7 @@ void DialogsFormAction::prepare()
 				v->get_formaction(fa.first).get(),
 				get_parent_formaction().get());
 			listfmt.add_line(
-				StrPrintf::fmt("%4u %s %s",
+				strprintf::fmt("%4u %s %s",
 					i,
 					(v->get_formaction(fa.first).get() ==
 						get_parent_formaction().get())

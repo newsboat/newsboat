@@ -2,6 +2,33 @@
 
 using namespace newsboat;
 
+std::string strprintf::fmt(const std::string& format)
+{
+	char buffer[1024];
+	std::string result;
+	// Empty string is a dummy value that we pass in order to
+	// silence Clang's warning about format not being a literal.
+	//
+	// The thing is, at this point we know *for sure* that the
+	// format either contains no formats at all, or only escaped
+	// percent signs (which don't require any additional arguments
+	// to snprintf). It's just the way fmt recurses. The only reason
+	// we're calling snprintf at all is to process these escaped
+	// percent signs, if any. So we don't need additional
+	// parameters.
+	unsigned int len = 1 +
+		snprintf(buffer, sizeof(buffer), format.c_str(), "");
+	if (len <= sizeof(buffer)) {
+		result = buffer;
+	} else {
+		std::unique_ptr<char> buf(new char[len]);
+		snprintf(buf.get(), len, format.c_str(), "");
+		result = buf.get();
+	}
+	return result;
+}
+
+
 /* Splits a printf-like format string into two parts, where first part contains
  * at most one format while the second part contains the rest of the input
  * string:
@@ -9,8 +36,8 @@ using namespace newsboat;
  * "hello %i world %s haha"       =>  { "hello %i world ", "%s haha" }
  * "a 100%% rel%iable e%xamp%le"  =>  { "a 100%% rel%iable e", "%xamp%le" }
  */
-std::pair<std::string, std::string> StrPrintf::split_format(
-	const std::string& printf_format)
+std::pair<std::string, std::string> strprintf::split_format(
+		const std::string& printf_format)
 {
 	std::string first_format, rest;
 

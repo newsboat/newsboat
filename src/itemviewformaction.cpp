@@ -158,7 +158,7 @@ void ItemViewFormAction::process_operation(Operation op,
 			v->get_ctrl()->mark_article_read(item->guid(), true);
 		}
 	} catch (const DbException& e) {
-		v->show_error(StrPrintf::fmt(
+		v->show_error(strprintf::fmt(
 			_("Error while marking article as read: %s"),
 			e.what()));
 	}
@@ -177,10 +177,10 @@ void ItemViewFormAction::process_operation(Operation op,
 				item->pubDate_timestamp(),
 				feed);
 			v->set_status(
-				StrPrintf::fmt(_("Added %s to download queue."),
+				strprintf::fmt(_("Added %s to download queue."),
 					item->enclosure_url()));
 		} else {
-			v->set_status(StrPrintf::fmt(
+			v->set_status(strprintf::fmt(
 				_("Invalid URL: '%s'"), item->enclosure_url()));
 		}
 	} break;
@@ -199,10 +199,10 @@ void ItemViewFormAction::process_operation(Operation op,
 		} else {
 			try {
 				v->get_ctrl()->write_item(item, filename);
-				v->show_error(StrPrintf::fmt(
+				v->show_error(strprintf::fmt(
 					_("Saved article to %s."), filename));
 			} catch (...) {
-				v->show_error(StrPrintf::fmt(
+				v->show_error(strprintf::fmt(
 					_("Error: couldn't write article to "
 					  "file %s"),
 					filename));
@@ -349,7 +349,7 @@ void ItemViewFormAction::process_operation(Operation op,
 			item->set_unread(true);
 			v->get_ctrl()->mark_article_read(item->guid(), false);
 		} catch (const DbException& e) {
-			v->show_error(StrPrintf::fmt(
+			v->show_error(strprintf::fmt(
 				_("Error while marking article as unread: %s"),
 				e.what()));
 		}
@@ -470,11 +470,11 @@ void ItemViewFormAction::handle_cmdline(const std::string& cmd)
 				try {
 					v->get_ctrl()->write_item(
 						item, filename);
-					v->show_error(StrPrintf::fmt(
+					v->show_error(strprintf::fmt(
 						_("Saved article to %s"),
 						filename));
 				} catch (...) {
-					v->show_error(StrPrintf::fmt(
+					v->show_error(strprintf::fmt(
 						_("Error: couldn't save "
 						  "article to %s"),
 						filename));
@@ -539,13 +539,13 @@ void ItemViewFormAction::set_regexmanager(RegexManager* r)
 	std::string attrstr;
 	for (const auto& attribute : attrs) {
 		attrstr.append(
-			StrPrintf::fmt("@style_%u_normal:%s ", i, attribute));
+			strprintf::fmt("@style_%u_normal:%s ", i, attribute));
 		i++;
 	}
 	attrstr.append(
 		"@style_b_normal[color_bold]:attr=bold "
 		"@style_u_normal[color_underline]:attr=underline ");
-	std::string textview = StrPrintf::fmt(
+	std::string textview = strprintf::fmt(
 		"{textview[article] style_normal[article]: "
 		"style_end[styleend]:fg=blue,attr=bold %s .expand:vh "
 		"offset[articleoffset]:0 richtext:1}",
@@ -576,7 +576,7 @@ void ItemViewFormAction::update_percent()
 		} else if (offset == (num_lines - 1)) {
 			f->set("percent", _("Bottom"));
 		} else {
-			f->set("percent", StrPrintf::fmt("%3u %% ", percent));
+			f->set("percent", strprintf::fmt("%3u %% ", percent));
 		}
 	}
 }
@@ -586,7 +586,7 @@ std::string ItemViewFormAction::title()
 	std::shared_ptr<RssItem> item = feed->get_item_by_guid(guid);
 	auto title = item->title();
 	utils::remove_soft_hyphens(title);
-	return StrPrintf::fmt(_("Article - %s"), title);
+	return strprintf::fmt(_("Article - %s"), title);
 }
 
 void ItemViewFormAction::set_highlightphrase(const std::string& text)

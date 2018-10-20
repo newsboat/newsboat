@@ -65,7 +65,7 @@ std::string NewsBlurApi::retrieve_auth()
 		return "";
 	}
 
-	return StrPrintf::fmt("username=%s&password=%s", cred.user, cred.pass);
+	return strprintf::fmt("username=%s&password=%s", cred.user, cred.pass);
 }
 
 std::vector<TaggedFeedUrl> NewsBlurApi::get_subscribed_urls()
@@ -174,7 +174,7 @@ bool request_successfull(json_object* payload)
 
 bool NewsBlurApi::mark_all_read(const std::string& feed_url)
 {
-	std::string post_data = StrPrintf::fmt("feed_id=%s", feed_url);
+	std::string post_data = strprintf::fmt("feed_id=%s", feed_url);
 	json_object* query_result =
 		query_api("/reader/mark_feed_as_read", &post_data);
 	return request_successfull(query_result);

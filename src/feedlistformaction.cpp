@@ -293,7 +293,7 @@ REDO:
 						std::to_string(pos + 1));
 				}
 			} catch (const DbException& e) {
-				v->show_error(StrPrintf::fmt(
+				v->show_error(strprintf::fmt(
 					_("Error: couldn't mark feed read: %s"),
 					e.what()));
 			}
@@ -403,7 +403,7 @@ REDO:
 				filterhistory.add_line(newfilter);
 				if (newfilter.length() > 0) {
 					if (!m.parse(newfilter)) {
-						v->show_error(StrPrintf::fmt(
+						v->show_error(strprintf::fmt(
 							_("Error: couldn't "
 							  "parse filter "
 							  "command `%s': %s"),
@@ -860,12 +860,12 @@ void FeedListFormAction::set_regexmanager(RegexManager* r)
 	std::string attrstr;
 	for (const auto& attribute : attrs) {
 		attrstr.append(
-			StrPrintf::fmt("@style_%u_normal:%s ", i, attribute));
+			strprintf::fmt("@style_%u_normal:%s ", i, attribute));
 		attrstr.append(
-			StrPrintf::fmt("@style_%u_focus:%s ", i, attribute));
+			strprintf::fmt("@style_%u_focus:%s ", i, attribute));
 		i++;
 	}
-	std::string textview = StrPrintf::fmt(
+	std::string textview = strprintf::fmt(
 		"{!list[feeds] .expand:vh style_normal[listnormal]: "
 		"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
 		"pos_name[feedposname]: pos[feedpos]:0 %s richtext:1}",
@@ -907,7 +907,7 @@ void FeedListFormAction::op_start_search()
 			items = v->get_ctrl()->search_for_items(
 				utf8searchphrase, nullptr);
 		} catch (const DbException& e) {
-			v->show_error(StrPrintf::fmt(
+			v->show_error(strprintf::fmt(
 				_("Error while searching for `%s': %s"),
 				searchphrase,
 				e.what()));
@@ -978,9 +978,9 @@ std::string FeedListFormAction::format_line(const std::string& feedlist_format,
 	FmtStrFormatter fmt;
 	unsigned int unread_count = feed->unread_item_count();
 
-	fmt.register_fmt('i', StrPrintf::fmt("%u", pos + 1));
+	fmt.register_fmt('i', strprintf::fmt("%u", pos + 1));
 	fmt.register_fmt('u',
-		StrPrintf::fmt("(%u/%u)",
+		strprintf::fmt("(%u/%u)",
 			unread_count,
 			static_cast<unsigned int>(feed->total_item_count())));
 	fmt.register_fmt('U', std::to_string(unread_count));
@@ -995,7 +995,7 @@ std::string FeedListFormAction::format_line(const std::string& feedlist_format,
 
 	auto formattedLine = fmt.do_format(feedlist_format, width);
 	if (unread_count > 0) {
-		formattedLine = StrPrintf::fmt("<unread>%s</>", formattedLine);
+		formattedLine = strprintf::fmt("<unread>%s</>", formattedLine);
 	}
 
 	return formattedLine;
@@ -1003,7 +1003,7 @@ std::string FeedListFormAction::format_line(const std::string& feedlist_format,
 
 std::string FeedListFormAction::title()
 {
-	return StrPrintf::fmt(_("Feed List - %u unread, %u total"),
+	return strprintf::fmt(_("Feed List - %u unread, %u total"),
 		unread_feeds,
 		total_feeds);
 }

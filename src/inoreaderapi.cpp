@@ -63,7 +63,7 @@ std::string InoreaderApi::retrieve_auth()
 	char* password = curl_easy_escape(handle, cred.pass.c_str(), 0);
 
 	std::string postcontent =
-		StrPrintf::fmt("Email=%s&Passwd=%s", username, password);
+		strprintf::fmt("Email=%s&Passwd=%s", username, password);
 
 	curl_free(username);
 	curl_free(password);
@@ -166,7 +166,7 @@ std::vector<TaggedFeedUrl> InoreaderApi::get_subscribed_urls()
 			tags.push_back(std::string(label));
 		}
 
-		auto url = StrPrintf::fmt("%s%s?n=%u",
+		auto url = strprintf::fmt("%s%s?n=%u",
 			INOREADER_FEED_PREFIX,
 			id_uenc,
 			cfg->get_configvalue_as_int("inoreader-min-items"));
@@ -183,7 +183,7 @@ std::vector<TaggedFeedUrl> InoreaderApi::get_subscribed_urls()
 void InoreaderApi::add_custom_headers(curl_slist** custom_headers)
 {
 	if (auth_header.empty()) {
-		auth_header = StrPrintf::fmt(
+		auth_header = strprintf::fmt(
 			"Authorization: GoogleLogin auth=%s", auth);
 	}
 	LOG(Level::DEBUG,
@@ -204,7 +204,7 @@ bool InoreaderApi::mark_all_read(const std::string& feedurl)
 	std::string token = get_new_token();
 
 	std::string postcontent =
-		StrPrintf::fmt("s=%s&T=%s", real_feedurl, token);
+		strprintf::fmt("s=%s&T=%s", real_feedurl, token);
 
 	std::string result =
 		post_content(INOREADER_API_MARK_ALL_READ_URL, postcontent);
@@ -225,13 +225,13 @@ bool InoreaderApi::mark_article_read_with_token(const std::string& guid,
 	std::string postcontent;
 
 	if (read) {
-		postcontent = StrPrintf::fmt(
+		postcontent = strprintf::fmt(
 			"i=%s&a=user/-/state/com.google/read&r=user/-/state/"
 			"com.google/kept-unread&ac=edit&T=%s",
 			guid,
 			token);
 	} else {
-		postcontent = StrPrintf::fmt(
+		postcontent = strprintf::fmt(
 			"i=%s&r=user/-/state/com.google/read&a=user/-/state/"
 			"com.google/kept-unread&a=user/-/state/com.google/"
 			"tracking-kept-unread&ac=edit&T=%s",
@@ -309,12 +309,12 @@ bool InoreaderApi::star_article(const std::string& guid, bool star)
 	std::string postcontent;
 
 	if (star) {
-		postcontent = StrPrintf::fmt(
+		postcontent = strprintf::fmt(
 			"i=%s&a=user/-/state/com.google/starred&ac=edit&T=%s",
 			guid,
 			token);
 	} else {
-		postcontent = StrPrintf::fmt(
+		postcontent = strprintf::fmt(
 			"i=%s&r=user/-/state/com.google/starred&ac=edit&T=%s",
 			guid,
 			token);
@@ -332,12 +332,12 @@ bool InoreaderApi::share_article(const std::string& guid, bool share)
 	std::string postcontent;
 
 	if (share) {
-		postcontent = StrPrintf::fmt(
+		postcontent = strprintf::fmt(
 			"i=%s&a=user/-/state/com.google/broadcast&ac=edit&T=%s",
 			guid,
 			token);
 	} else {
-		postcontent = StrPrintf::fmt(
+		postcontent = strprintf::fmt(
 			"i=%s&r=user/-/state/com.google/broadcast&ac=edit&T=%s",
 			guid,
 			token);
