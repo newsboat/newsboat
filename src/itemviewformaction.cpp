@@ -47,10 +47,13 @@ void ItemViewFormAction::init()
 	if (!cfg->get_configvalue_as_bool("display-article-progress")) {
 		f->set("percentwidth", "0");
 	} else {
+		const size_t min_field_width = 6;
 		f->set("percentwidth",
-			std::to_string(utils::max(6,
-				utils::max(strlen(_("Top")),
-					strlen(_("Bottom"))))));
+			std::to_string(
+				std::max({
+					min_field_width,
+					strlen(_("Top")),
+					strlen(_("Bottom"))})));
 		update_percent();
 	}
 	set_keymap_hints();

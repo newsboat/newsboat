@@ -110,8 +110,6 @@ namespace utils {
 	std::string substr_with_width(const std::string& str,
 		const size_t max_width);
 
-	unsigned int max(unsigned int a, unsigned int b);
-
 	unsigned int to_u(const std::string& str,
 		const unsigned int default_value = 0);
 

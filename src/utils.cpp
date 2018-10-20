@@ -711,11 +711,6 @@ std::string utils::get_useragent(ConfigContainer* cfgcont)
 	return ua_pref;
 }
 
-unsigned int utils::max(unsigned int a, unsigned int b)
-{
-	return (a > b) ? a : b;
-}
-
 unsigned int utils::to_u(const std::string& str,
 	const unsigned int default_value)
 {
