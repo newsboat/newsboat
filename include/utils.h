@@ -113,8 +113,7 @@ namespace utils {
 	unsigned int max(unsigned int a, unsigned int b);
 
 	unsigned int to_u(const std::string& str,
-		const unsigned int default_value);
-	unsigned int to_u(const std::string& str);
+		const unsigned int default_value = 0);
 
 	bool is_valid_color(const std::string& color);
 	bool is_valid_attribute(const std::string& attrib);

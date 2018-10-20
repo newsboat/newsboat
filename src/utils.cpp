@@ -728,11 +728,6 @@ unsigned int utils::to_u(const std::string& str,
 	return u;
 }
 
-unsigned int utils::to_u(const std::string& str)
-{
-	return to_u(str, 0);
-}
-
 ScopeMeasure::ScopeMeasure(const std::string& func, Level ll)
 	: funcname(func)
 	, lvl(ll)
