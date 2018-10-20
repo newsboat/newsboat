@@ -250,12 +250,21 @@ void RegexManager::quote_and_highlight(std::string& str,
 		unsigned int offset = 0;
 		int err = regexec(regex, str.c_str(), 1, &pmatch, 0);
 		while (err == 0) {
-			std::string marker = strprintf::fmt("<%u>", i);
-			str.insert(offset + pmatch.rm_eo,
-				std::string("</>") + initial_marker);
-			str.insert(offset + pmatch.rm_so, marker);
-			offset += pmatch.rm_eo + marker.length() +
-				strlen("</>") + initial_marker.length();
+			if (pmatch.rm_so != pmatch.rm_eo)
+			{
+				std::string marker = strprintf::fmt("<%u>", i);
+				str.insert(offset + pmatch.rm_eo,
+						std::string("</>") + initial_marker);
+				str.insert(offset + pmatch.rm_so, marker);
+				offset += pmatch.rm_eo + marker.length() +
+					strlen("</>") + initial_marker.length();
+			}
+			else
+			{
+				offset++;
+			}
+			if (offset >= str.length())
+				break;
 			err = regexec(
 				regex, str.c_str() + offset, 1, &pmatch, 0);
 		}
