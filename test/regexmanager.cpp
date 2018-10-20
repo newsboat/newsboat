@@ -115,7 +115,7 @@ TEST_CASE("RegexManager does not hang on regexes that can match empty strings", 
 
 	rxman.handle_action("highlight", {"feedlist", "w*", "blue", "red"});
 	rxman.quote_and_highlight(input, "feedlist");
-			REQUIRE(input == "The quick bro<0>w</>n fox jumps over the lazy dog");
+	REQUIRE(input == "The quick bro<0>w</>n fox jumps over the lazy dog");
 }
 
 TEST_CASE("RegexManager does not hang on regexes that match empty strings", "[RegexManager]")
@@ -126,13 +126,13 @@ TEST_CASE("RegexManager does not hang on regexes that match empty strings", "[Re
 
 	rxman.handle_action("highlight", {"feedlist", "$", "blue", "red"});
 	rxman.quote_and_highlight(input, "feedlist");
-			REQUIRE(input == compare);
+	REQUIRE(input == compare);
 
 	rxman.handle_action("highlight", {"feedlist", "^", "blue", "red"});
 	rxman.quote_and_highlight(input, "feedlist");
-			REQUIRE(input == compare);
+	REQUIRE(input == compare);
 
 	rxman.handle_action("highlight", {"feedlist", "^$", "blue", "red"});
 	rxman.quote_and_highlight(input, "feedlist");
-			REQUIRE(input == compare);
+	REQUIRE(input == compare);
 }

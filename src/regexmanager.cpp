@@ -250,9 +250,8 @@ void RegexManager::quote_and_highlight(std::string& str,
 		unsigned int offset = 0;
 		int err = regexec(regex, str.c_str(), 1, &pmatch, 0);
 		while (err == 0) {
-			if (pmatch.rm_so != pmatch.rm_eo)
-			{
-				std::string marker = strprintf::fmt("<%u>", i);
+			if (pmatch.rm_so != pmatch.rm_eo) {
+				const std::string marker = strprintf::fmt("<%u>", i);
 				str.insert(offset + pmatch.rm_eo,
 						std::string("</>") + initial_marker);
 				str.insert(offset + pmatch.rm_so, marker);
