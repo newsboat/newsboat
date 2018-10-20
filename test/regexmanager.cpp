@@ -132,15 +132,15 @@ TEST_CASE("RegexManager does not hang on regexes that match empty strings", "[Re
 
 	SECTION("testing begining of line empty")
 	{
-	rxman.handle_action("highlight", {"feedlist", "^", "blue", "red"});
-	rxman.quote_and_highlight(input, "feedlist");
-	REQUIRE(input == compare);
+		rxman.handle_action("highlight", {"feedlist", "^", "blue", "red"});
+		rxman.quote_and_highlight(input, "feedlist");
+		REQUIRE(input == compare);
 	}
 
 	SECTION("testing empty line")
 	{
-	rxman.handle_action("highlight", {"feedlist", "^$", "blue", "red"});
-	rxman.quote_and_highlight(input, "feedlist");
-	REQUIRE(input == compare);
+		rxman.handle_action("highlight", {"feedlist", "^$", "blue", "red"});
+		rxman.quote_and_highlight(input, "feedlist");
+		REQUIRE(input == compare);
 	}
 }
