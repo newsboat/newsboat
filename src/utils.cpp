@@ -636,10 +636,7 @@ std::string utils::replace_all(std::string str,
 	const std::string& from,
 	const std::string& to)
 {
-	char* ptr = rs_replace_all(str.c_str(), from.c_str(), to.c_str());
-	const auto result = std::string(ptr);
-	rs_cstring_free(ptr);
-	return result;
+	return RustString( rs_replace_all(str.c_str(), from.c_str(), to.c_str()) );
 }
 
 std::wstring utils::utf8str2wstr(const std::string& utf8str)

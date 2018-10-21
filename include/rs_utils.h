@@ -12,6 +12,24 @@ char* rs_replace_all(
 
 void rs_cstring_free(char* str);
 
+class RustString {
+	private:
+		char* str;
+	public:
+		RustString() = delete;
+		RustString( const RustString & ) = delete;
+		RustString( const RustString && ) = delete;
+		explicit RustString( char* String ){
+			str = String;
+		}
+		operator std::string(){
+			return std::string(str);
+		}
+		~RustString() {
+			rs_cstring_free( str );
+		}
+};
+
 #ifdef __cplusplus
 }
 #endif
