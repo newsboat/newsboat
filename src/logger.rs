@@ -1,3 +1,5 @@
+//! Keeps a record of what the program did.
+
 extern crate chrono;
 
 use self::chrono::offset::Local;
@@ -6,13 +8,47 @@ use std::fs::{File, OpenOptions};
 use std::io::Write;
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+/// "Importance levels" for log messages.
+///
+/// Each message is assigned a level. set_loglevel instructs Logger to only store messages at and
+/// above a certain importance level, making the log file shorter and easier to understand.
 pub enum Level {
+    /// Not important at all, don't log.
+    ///
+    /// This level is purely for Logger's internal use, and shouldn't be passed to log(). That
+    /// isn't enforced in any way, though.
     None,
+
+    /// An error that can potentially be resolved by the user.
+    ///
+    /// This level should be used for configuration errors and the like.
     UserError,
+
+    /// An error that prevents program from working at all.
+    ///
+    /// E.g. failure to open a cache file is a critical error, because we can't do anything without
+    /// cache.
     Critical,
+
+    /// An error that prevents some function from working.
+    ///
+    /// E.g. failure to find an item in the cache prevents Newsboat from displaying it, but other
+    /// functions are still working, so overall it's not critical.
     Error,
+
+    /// Warning about a potential problem.
     Warn,
+
+    /// Useful information that can roughly explain what's going on.
+    ///
+    /// This level should be used with rough descriptions of stages that the program is going
+    /// through. Fine details (indices, array sizes etc.) should be logged at Level::Debug instead.
     Info,
+
+    /// May be useful to programmers when debugging.
+    ///
+    /// This level should be used for the most minutiae details about program execution, like byte
+    /// offsets, indices, sizes of internal data structures and so forth.
     Debug,
 }
 
@@ -30,12 +66,39 @@ impl fmt::Display for Level {
     }
 }
 
+/// Keeps a record of what the program did.
+///
+/// Each message in the log is time-stamped, and marked with its importance level.
+///
+/// This is meant to be a long-lived, shared object that exists for the duration of the program.
+/// Users would call its `log` method to add messages to the log file, like this:
+///
+/// ```
+/// // Create and configure the logger
+/// let logger = Logger::new();
+/// logger.set_logfile("/path/to/my/log.txt");
+///
+/// // Only log critical and configuration errors
+/// logger.set_loglevel(Level::Critical);
+///
+/// // -- snip --
+///
+/// logger.log(Level::UserError, "Please specify a remote API to use");
+///
+/// // This one won't be logged because its importance level is too low
+/// logger.log(Level::Debug, format!("feeds.len() == {}", 42));
+/// ```
 pub struct Logger {
     logfile: Option<File>,
+
+    /// Maximum "importance level" of the messages that will be written to the log.
     loglevel: Level,
 }
 
 impl Logger {
+    /// Constructs an object that doesn't log anything.
+    ///
+    /// To make that Logger useful, you need to call set_logfile() and set_loglevel().
     pub fn new() -> Logger {
         Logger {
             logfile: None,
@@ -43,6 +106,15 @@ impl Logger {
         }
     }
 
+    /// Specifies the file to which the messages will be written.
+    ///
+    /// The file will be created if it doesn't exist yet. It will be opened in the append mode, so
+    /// its previous content will stay unchanged.
+    ///
+    /// # Errors
+    ///
+    /// This can't fail, but if the file couldn't be created or opened, an error message will be
+    /// printed to stderr.
     pub fn set_logfile(&mut self, filename: &str) {
         let file = OpenOptions::new()
             .create(true)
@@ -55,6 +127,15 @@ impl Logger {
         }
     }
 
+    /// Writes a message to a log.
+    ///
+    /// If `level` is lower than the logger's current level, the message won't be written. For
+    /// example, if Logger's level is set to Level::Critical, then Level::Error won't be written.
+    ///
+    /// # Errors
+    ///
+    /// If the message couldn't be written for whatever reason, this function ignores the failure.
+    /// Were you to check the return value of every log() call, you'd just stop writing logs.
     pub fn log(&mut self, level: Level, message: &str) {
         if level > self.loglevel {
             return;
@@ -69,6 +150,10 @@ impl Logger {
         }
     }
 
+    /// Sets maximum "importance level" of the messages that will be written to the log.
+    ///
+    /// For example, after the call to set_loglevel(Level::Error), only UserError, Critical, and
+    /// Error messages will be written.
     pub fn set_loglevel(&mut self, level: Level) {
         self.loglevel = level;
     }
