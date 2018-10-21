@@ -106,3 +106,41 @@ TEST_CASE("`highlight all` adds rules for all locations", "[RegexManager]")
 		}
 	}
 }
+
+TEST_CASE("RegexManager does not hang on regexes that can match empty strings", "[RegexManager]")
+{
+	RegexManager rxman;
+	std::string input = "The quick brown fox jumps over the lazy dog";
+
+	rxman.handle_action("highlight", {"feedlist", "w*", "blue", "red"});
+	rxman.quote_and_highlight(input, "feedlist");
+	REQUIRE(input == "The quick bro<0>w</>n fox jumps over the lazy dog");
+}
+
+TEST_CASE("RegexManager does not hang on regexes that match empty strings", "[RegexManager]")
+{
+	RegexManager rxman;
+	std::string input = "The quick brown fox jumps over the lazy dog";
+	const std::string compare = input;
+
+	SECTION("testing end of line empty.")
+	{
+		rxman.handle_action("highlight", {"feedlist", "$", "blue", "red"});
+		rxman.quote_and_highlight(input, "feedlist");
+		REQUIRE(input == compare);
+	}
+
+	SECTION("testing begining of line empty")
+	{
+		rxman.handle_action("highlight", {"feedlist", "^", "blue", "red"});
+		rxman.quote_and_highlight(input, "feedlist");
+		REQUIRE(input == compare);
+	}
+
+	SECTION("testing empty line")
+	{
+		rxman.handle_action("highlight", {"feedlist", "^$", "blue", "red"});
+		rxman.quote_and_highlight(input, "feedlist");
+		REQUIRE(input == compare);
+	}
+}
