@@ -5,7 +5,7 @@ use std::fmt;
 use std::fs::{File, OpenOptions};
 use std::io::{self, Write};
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Level {
     None,
     UserError,
@@ -32,12 +32,14 @@ impl fmt::Display for Level {
 
 pub struct Logger {
     logfile: Option<File>,
+    loglevel: Level,
 }
 
 impl Logger {
     pub fn new() -> Logger {
         Logger {
             logfile: None,
+            loglevel: Level::None,
         }
     }
 
@@ -54,6 +56,10 @@ impl Logger {
     }
 
     pub fn log(&mut self, level: Level, message: &str) -> io::Result<()> {
+        if level > self.loglevel {
+            return Ok(());
+        }
+
         if let Some(ref mut logfile) = self.logfile {
             let timestamp = Local::now().format("%Y-%m-%d %H:%M:%S");
             let line = format!("[{}] {}: {}\n", timestamp, level, message);
@@ -62,6 +68,10 @@ impl Logger {
         }
 
         Ok(())
+    }
+
+    pub fn set_loglevel(&mut self, level: Level) {
+        self.loglevel = level;
     }
 }
 
@@ -120,6 +130,13 @@ mod tests {
         let message = &line[timestamp_end+2+level_end+2..];
 
         Some((timestamp, level, message))
+    }
+
+    fn log_contains_n_lines(logfile: &path::Path, n: usize)  -> io::Result<()> {
+        let file = File::open(logfile)?;
+        let reader = BufReader::new(file);
+        assert_eq!(reader.lines().count(), n);
+        Ok(())
     }
 
     #[test]
@@ -215,6 +232,271 @@ mod tests {
                 Err(e) => return Err(e),
             }
         }
+
+        Ok(())
+    }
+
+    #[test]
+    fn t_if_curlevel_is_none_nothing_is_logged() -> io::Result<()> {
+        let (_tmp, logfile, mut logger) = setup_logger()?;
+
+        logger.set_loglevel(Level::None);
+
+        let levels = vec![
+            (Level::UserError, "USERERROR"),
+            (Level::Critical, "CRITICAL"),
+            (Level::Error, "ERROR"),
+            (Level::Warn, "WARNING"),
+            (Level::Info, "INFO"),
+            (Level::Debug, "DEBUG"),
+        ];
+
+        let msg = "Some test message";
+
+        for (level, _level_str) in &levels {
+            logger.log(*level, msg)?;
+        }
+
+        // Dropping logger to force it to flush the log and close the file
+        drop(logger);
+
+        log_contains_n_lines(&logfile, 0)?;
+
+        Ok(())
+    }
+
+    #[test]
+    fn t_user_errors_are_logged_at_all_curlevels_beside_none() -> io::Result<()> {
+        {
+            let (_tmp, logfile, mut logger) = setup_logger()?;
+            logger.set_loglevel(Level::None);
+
+            logger.log(Level::UserError, "hello")?;
+
+            drop(logger);
+
+            log_contains_n_lines(&logfile, 0)?;
+        }
+
+        let levels = vec![
+            Level::UserError,
+            Level::Critical,
+            Level::Error,
+            Level::Warn,
+            Level::Info,
+            Level::Debug,
+        ];
+
+        for level in levels {
+            let (_tmp, logfile, mut logger) = setup_logger()?;
+            logger.set_loglevel(level);
+
+            logger.log(Level::UserError, "hello")?;
+
+            drop(logger);
+
+            log_contains_n_lines(&logfile, 1)?;
+        };
+
+        Ok(())
+    }
+
+    #[test]
+    fn t_critial_msgs_are_logged_at_curlevels_starting_with_critical() -> io::Result<()> {
+        let nolog_levels = vec![
+            Level::None,
+            Level::UserError,
+        ];
+
+        for level in nolog_levels {
+            let (_tmp, logfile, mut logger) = setup_logger()?;
+            logger.set_loglevel(level);
+
+            logger.log(Level::Critical, "hello")?;
+
+            drop(logger);
+
+            log_contains_n_lines(&logfile, 0)?;
+        }
+
+        let log_levels = vec![
+            Level::Critical,
+            Level::Error,
+            Level::Warn,
+            Level::Info,
+            Level::Debug,
+        ];
+
+        for level in log_levels {
+            let (_tmp, logfile, mut logger) = setup_logger()?;
+            logger.set_loglevel(level);
+
+            logger.log(Level::Critical, "hello")?;
+
+            drop(logger);
+
+            log_contains_n_lines(&logfile, 1)?;
+        };
+
+        Ok(())
+    }
+
+    #[test]
+    fn t_error_msgs_are_logged_at_curlevels_starting_with_error() -> io::Result<()> {
+        let nolog_levels = vec![
+            Level::None,
+            Level::UserError,
+            Level::Critical,
+        ];
+
+        for level in nolog_levels {
+            let (_tmp, logfile, mut logger) = setup_logger()?;
+            logger.set_loglevel(level);
+
+            logger.log(Level::Error, "hello")?;
+
+            drop(logger);
+
+            log_contains_n_lines(&logfile, 0)?;
+        }
+
+        let log_levels = vec![
+            Level::Error,
+            Level::Warn,
+            Level::Info,
+            Level::Debug,
+        ];
+
+        for level in log_levels {
+            let (_tmp, logfile, mut logger) = setup_logger()?;
+            logger.set_loglevel(level);
+
+            logger.log(Level::Error, "hello")?;
+
+            drop(logger);
+
+            log_contains_n_lines(&logfile, 1)?;
+        };
+
+        Ok(())
+    }
+
+    #[test]
+    fn t_warning_msgs_are_logged_at_curlevels_starting_with_warning() -> io::Result<()> {
+        let nolog_levels = vec![
+            Level::None,
+            Level::UserError,
+            Level::Critical,
+            Level::Error,
+        ];
+
+        for level in nolog_levels {
+            let (_tmp, logfile, mut logger) = setup_logger()?;
+            logger.set_loglevel(level);
+
+            logger.log(Level::Warn, "hello")?;
+
+            drop(logger);
+
+            log_contains_n_lines(&logfile, 0)?;
+        }
+
+        let log_levels = vec![
+            Level::Warn,
+            Level::Info,
+            Level::Debug,
+        ];
+
+        for level in log_levels {
+            let (_tmp, logfile, mut logger) = setup_logger()?;
+            logger.set_loglevel(level);
+
+            logger.log(Level::Warn, "hello")?;
+
+            drop(logger);
+
+            log_contains_n_lines(&logfile, 1)?;
+        };
+
+        Ok(())
+    }
+
+    #[test]
+    fn t_info_msgs_are_logged_at_curlevels_starting_with_info() -> io::Result<()> {
+        let nolog_levels = vec![
+            Level::None,
+            Level::UserError,
+            Level::Critical,
+            Level::Error,
+            Level::Warn,
+        ];
+
+        for level in nolog_levels {
+            let (_tmp, logfile, mut logger) = setup_logger()?;
+            logger.set_loglevel(level);
+
+            logger.log(Level::Info, "hello")?;
+
+            drop(logger);
+
+            log_contains_n_lines(&logfile, 0)?;
+        }
+
+        let log_levels = vec![
+            Level::Info,
+            Level::Debug,
+        ];
+
+        for level in log_levels {
+            let (_tmp, logfile, mut logger) = setup_logger()?;
+            logger.set_loglevel(level);
+
+            logger.log(Level::Info, "hello")?;
+
+            drop(logger);
+
+            log_contains_n_lines(&logfile, 1)?;
+        };
+
+        Ok(())
+    }
+
+    #[test]
+    fn t_debug_msgs_are_logged_only_at_curlevel_debug() -> io::Result<()> {
+        let nolog_levels = vec![
+            Level::None,
+            Level::UserError,
+            Level::Critical,
+            Level::Error,
+            Level::Warn,
+            Level::Info,
+        ];
+
+        for level in nolog_levels {
+            let (_tmp, logfile, mut logger) = setup_logger()?;
+            logger.set_loglevel(level);
+
+            logger.log(Level::Debug, "hello")?;
+
+            drop(logger);
+
+            log_contains_n_lines(&logfile, 0)?;
+        }
+
+        let log_levels = vec![
+            Level::Debug,
+        ];
+
+        for level in log_levels {
+            let (_tmp, logfile, mut logger) = setup_logger()?;
+            logger.set_loglevel(level);
+
+            logger.log(Level::Debug, "hello")?;
+
+            drop(logger);
+
+            log_contains_n_lines(&logfile, 1)?;
+        };
 
         Ok(())
     }
