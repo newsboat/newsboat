@@ -3,7 +3,7 @@ extern crate chrono;
 use self::chrono::offset::Local;
 use std::fmt;
 use std::fs::{File, OpenOptions};
-use std::io::{self, Write};
+use std::io::Write;
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Level {
@@ -55,19 +55,18 @@ impl Logger {
         }
     }
 
-    pub fn log(&mut self, level: Level, message: &str) -> io::Result<()> {
+    pub fn log(&mut self, level: Level, message: &str) {
         if level > self.loglevel {
-            return Ok(());
+            return;
         }
 
         if let Some(ref mut logfile) = self.logfile {
             let timestamp = Local::now().format("%Y-%m-%d %H:%M:%S");
             let line = format!("[{}] {}: {}\n", timestamp, level, message);
 
-            logfile.write_all(line.as_bytes())?;
+            // Ignoring the error since checking every log() call will be too bothersome.
+            let _ = logfile.write_all(line.as_bytes());
         }
-
-        Ok(())
     }
 
     pub fn set_loglevel(&mut self, level: Level) {
@@ -160,7 +159,7 @@ mod tests {
 
         let start_time = Local::now();
         for msg in &messages {
-            logger.log(Level::Debug, msg)?;
+            logger.log(Level::Debug, msg);
         }
         let finish_time = Local::now();
 
@@ -212,7 +211,7 @@ mod tests {
         let msg = "Some test message";
 
         for (level, _level_str) in &levels {
-            logger.log(*level, msg)?;
+            logger.log(*level, msg);
         }
 
         // Dropping logger to force it to flush the log and close the file
@@ -254,7 +253,7 @@ mod tests {
         let msg = "Some test message";
 
         for (level, _level_str) in &levels {
-            logger.log(*level, msg)?;
+            logger.log(*level, msg);
         }
 
         // Dropping logger to force it to flush the log and close the file
@@ -271,7 +270,7 @@ mod tests {
             let (_tmp, logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(Level::None);
 
-            logger.log(Level::UserError, "hello")?;
+            logger.log(Level::UserError, "hello");
 
             drop(logger);
 
@@ -291,7 +290,7 @@ mod tests {
             let (_tmp, logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
-            logger.log(Level::UserError, "hello")?;
+            logger.log(Level::UserError, "hello");
 
             drop(logger);
 
@@ -312,7 +311,7 @@ mod tests {
             let (_tmp, logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
-            logger.log(Level::Critical, "hello")?;
+            logger.log(Level::Critical, "hello");
 
             drop(logger);
 
@@ -331,7 +330,7 @@ mod tests {
             let (_tmp, logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
-            logger.log(Level::Critical, "hello")?;
+            logger.log(Level::Critical, "hello");
 
             drop(logger);
 
@@ -353,7 +352,7 @@ mod tests {
             let (_tmp, logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
-            logger.log(Level::Error, "hello")?;
+            logger.log(Level::Error, "hello");
 
             drop(logger);
 
@@ -371,7 +370,7 @@ mod tests {
             let (_tmp, logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
-            logger.log(Level::Error, "hello")?;
+            logger.log(Level::Error, "hello");
 
             drop(logger);
 
@@ -394,7 +393,7 @@ mod tests {
             let (_tmp, logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
-            logger.log(Level::Warn, "hello")?;
+            logger.log(Level::Warn, "hello");
 
             drop(logger);
 
@@ -411,7 +410,7 @@ mod tests {
             let (_tmp, logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
-            logger.log(Level::Warn, "hello")?;
+            logger.log(Level::Warn, "hello");
 
             drop(logger);
 
@@ -435,7 +434,7 @@ mod tests {
             let (_tmp, logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
-            logger.log(Level::Info, "hello")?;
+            logger.log(Level::Info, "hello");
 
             drop(logger);
 
@@ -451,7 +450,7 @@ mod tests {
             let (_tmp, logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
-            logger.log(Level::Info, "hello")?;
+            logger.log(Level::Info, "hello");
 
             drop(logger);
 
@@ -476,7 +475,7 @@ mod tests {
             let (_tmp, logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
-            logger.log(Level::Debug, "hello")?;
+            logger.log(Level::Debug, "hello");
 
             drop(logger);
 
@@ -491,7 +490,7 @@ mod tests {
             let (_tmp, logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
-            logger.log(Level::Debug, "hello")?;
+            logger.log(Level::Debug, "hello");
 
             drop(logger);
 
