@@ -68,6 +68,14 @@ impl fmt::Display for Level {
 
 /// Keeps a record of what the program did.
 ///
+/// Each Logger object can write up to two logs.
+///
+/// One, general log, is created after the call to set_logfile(). set_loglevel() sets the logging
+/// level, and from then on, any message at or above that level is written to the logfile.
+///
+/// Another, user-specific log, is created after the call to set_errorlogfile(). Only
+/// Level::UserLevel messages are written to that one.
+///
 /// Each message in the log is time-stamped, and marked with its importance level.
 ///
 /// This is meant to be a long-lived, shared object that exists for the duration of the program.
@@ -89,7 +97,12 @@ impl fmt::Display for Level {
 /// logger.log(Level::Debug, format!("feeds.len() == {}", 42));
 /// ```
 pub struct Logger {
+    /// The file to which all messages at and above `loglevel` will be written.
     logfile: Option<File>,
+
+    /// The file to which all Level::UserError messages will be written if `loglevel` is not
+    /// Level::None.
+    errorlogfile: Option<File>,
 
     /// Maximum "importance level" of the messages that will be written to the log.
     loglevel: Level,
@@ -102,6 +115,7 @@ impl Logger {
     pub fn new() -> Logger {
         Logger {
             logfile: None,
+            errorlogfile: None,
             loglevel: Level::None,
         }
     }
@@ -110,6 +124,8 @@ impl Logger {
     ///
     /// The file will be created if it doesn't exist yet. It will be opened in the append mode, so
     /// its previous content will stay unchanged.
+    ///
+    /// Calling this closes previously opened logfile, if any.
     ///
     /// # Errors
     ///
@@ -127,10 +143,38 @@ impl Logger {
         }
     }
 
+    /// Specifies the file to which all Level::UserError messages will be written.
+    ///
+    /// The messages will only be written if Logger's loglevel is not Level::None.
+    ///
+    /// The file will be created if it doesn't exist yet. It will be opened in the append mode, so
+    /// its previous contents will stay unchanged.
+    ///
+    /// Calling this closes previously opened error-logfile, if any.
+    ///
+    /// # Errors
+    ///
+    /// This can't fail, but if the file couldn't be created or opened, an error message will be
+    /// printed to stderr.
+    pub fn set_errorlogfile(&mut self, filename: &str) {
+        let file = OpenOptions::new()
+            .create(true)
+            .append(true)
+            .open(filename);
+
+        match file {
+            Ok(file) => self.errorlogfile = Some(file),
+            Err(error) => eprintln!("Couldn't open `{}' as a errorlogfile: {}", filename, error),
+        }
+    }
+
     /// Writes a message to a log.
     ///
     /// If `level` is lower than the logger's current level, the message won't be written. For
     /// example, if Logger's level is set to Level::Critical, then Level::Error won't be written.
+    ///
+    /// Level::UserError messages are written to two logs: the general one, and error-logfile. See
+    /// Logger description for details.
     ///
     /// # Errors
     ///
@@ -141,12 +185,22 @@ impl Logger {
             return;
         }
 
+        let timestamp = Local::now().format("%Y-%m-%d %H:%M:%S");
+
         if let Some(ref mut logfile) = self.logfile {
-            let timestamp = Local::now().format("%Y-%m-%d %H:%M:%S");
             let line = format!("[{}] {}: {}\n", timestamp, level, message);
 
             // Ignoring the error since checking every log() call will be too bothersome.
             let _ = logfile.write_all(line.as_bytes());
+        }
+
+        if level == Level::UserError {
+            if let Some(ref mut errorlogfile) = self.errorlogfile {
+                let line = format!("[{}] {}\n", timestamp, message);
+
+                // Ignoring the error since checking every log() call will be too bothersome.
+                let _ = errorlogfile.write_all(line.as_bytes());
+            }
         }
     }
 
@@ -154,6 +208,11 @@ impl Logger {
     ///
     /// For example, after the call to set_loglevel(Level::Error), only UserError, Critical, and
     /// Error messages will be written.
+    ///
+    /// If new level is Level::None, no logs will be written from now on. Otherwise, at least
+    /// error-logfile will be written.
+    ///
+    /// Calling this doesn't close already opened logs.
     pub fn set_loglevel(&mut self, level: Level) {
         self.loglevel = level;
     }
@@ -170,19 +229,25 @@ mod tests {
     use std::io::{self, BufReader, BufRead};
     use std::path;
 
-    fn setup_logger() -> io::Result<(TempDir, path::PathBuf, Logger)> {
+    fn setup_logger() -> io::Result<(TempDir, path::PathBuf, path::PathBuf, Logger)> {
         let tmp = TempDir::new()?;
         let logfile = {
             let mut logfile = tmp.path().to_owned();
             logfile.push("example.log");
             logfile
         };
-        assert!(!logfile.exists());
+        let error_logfile = {
+            let mut error_logfile = tmp.path().to_owned();
+            error_logfile.push("error-example.log");
+            error_logfile
+        };
+        assert!(!error_logfile.exists());
 
         let mut logger = Logger::new();
         logger.set_logfile(logfile.to_str().unwrap());
+        logger.set_errorlogfile(error_logfile.to_str().unwrap());
 
-        Ok((tmp, logfile, logger))
+        Ok((tmp, logfile, error_logfile, logger))
     }
 
     fn parse_log_line(line: &str) -> Option<(&str, &str, &str)> {
@@ -216,6 +281,21 @@ mod tests {
         Some((timestamp, level, message))
     }
 
+    fn parse_errorlog_line(line: &str) -> Option<(&str, &str)> {
+        if !line.starts_with("[") {
+            return None;
+        }
+
+        let timestamp_end = line.find(']').expect("Failed to find the end of the timestamp");
+        // Timestamp starts with "[", we skip it by starting at 1 rather than 0.
+        let timestamp = &line[1..timestamp_end];
+
+        // Message starts after " " that follows the timestamp, hence +2.
+        let message = &line[timestamp_end+2..];
+
+        Some((timestamp, message))
+    }
+
     fn log_contains_n_lines(logfile: &path::Path, n: usize)  -> io::Result<()> {
         let file = File::open(logfile)?;
         let reader = BufReader::new(file);
@@ -224,8 +304,8 @@ mod tests {
     }
 
     #[test]
-    fn t_set_logfile() -> io::Result<()> {
-        let (_tmp, logfile, _logger) = setup_logger()?;
+    fn t_set_logfile_creates_a_file() -> io::Result<()> {
+        let (_tmp, logfile, _error_logfile, _logger) = setup_logger()?;
 
         assert!(logfile.exists());
 
@@ -234,7 +314,7 @@ mod tests {
 
     #[test]
     fn t_log_writes_message_to_the_file() -> io::Result<()> {
-        let (_tmp, logfile, mut logger) = setup_logger()?;
+        let (_tmp, logfile, _error_logfile, mut logger) = setup_logger()?;
 
         let messages = vec![
             "Hello, world!",
@@ -282,7 +362,7 @@ mod tests {
 
     #[test]
     fn t_different_loglevels_have_different_names() -> io::Result<()> {
-        let (_tmp, logfile, mut logger) = setup_logger()?;
+        let (_tmp, logfile, _error_logfile, mut logger) = setup_logger()?;
 
         let levels = vec![
             (Level::UserError, "USERERROR"),
@@ -322,7 +402,7 @@ mod tests {
 
     #[test]
     fn t_if_curlevel_is_none_nothing_is_logged() -> io::Result<()> {
-        let (_tmp, logfile, mut logger) = setup_logger()?;
+        let (_tmp, logfile, _error_logfile, mut logger) = setup_logger()?;
 
         logger.set_loglevel(Level::None);
 
@@ -352,7 +432,7 @@ mod tests {
     #[test]
     fn t_user_errors_are_logged_at_all_curlevels_beside_none() -> io::Result<()> {
         {
-            let (_tmp, logfile, mut logger) = setup_logger()?;
+            let (_tmp, logfile, _error_logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(Level::None);
 
             logger.log(Level::UserError, "hello");
@@ -372,7 +452,7 @@ mod tests {
         ];
 
         for level in levels {
-            let (_tmp, logfile, mut logger) = setup_logger()?;
+            let (_tmp, logfile, _error_logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
             logger.log(Level::UserError, "hello");
@@ -393,7 +473,7 @@ mod tests {
         ];
 
         for level in nolog_levels {
-            let (_tmp, logfile, mut logger) = setup_logger()?;
+            let (_tmp, logfile, _error_logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
             logger.log(Level::Critical, "hello");
@@ -412,7 +492,7 @@ mod tests {
         ];
 
         for level in log_levels {
-            let (_tmp, logfile, mut logger) = setup_logger()?;
+            let (_tmp, logfile, _error_logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
             logger.log(Level::Critical, "hello");
@@ -434,7 +514,7 @@ mod tests {
         ];
 
         for level in nolog_levels {
-            let (_tmp, logfile, mut logger) = setup_logger()?;
+            let (_tmp, logfile, _error_logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
             logger.log(Level::Error, "hello");
@@ -452,7 +532,7 @@ mod tests {
         ];
 
         for level in log_levels {
-            let (_tmp, logfile, mut logger) = setup_logger()?;
+            let (_tmp, logfile, _error_logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
             logger.log(Level::Error, "hello");
@@ -475,7 +555,7 @@ mod tests {
         ];
 
         for level in nolog_levels {
-            let (_tmp, logfile, mut logger) = setup_logger()?;
+            let (_tmp, logfile, _error_logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
             logger.log(Level::Warn, "hello");
@@ -492,7 +572,7 @@ mod tests {
         ];
 
         for level in log_levels {
-            let (_tmp, logfile, mut logger) = setup_logger()?;
+            let (_tmp, logfile, _error_logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
             logger.log(Level::Warn, "hello");
@@ -516,7 +596,7 @@ mod tests {
         ];
 
         for level in nolog_levels {
-            let (_tmp, logfile, mut logger) = setup_logger()?;
+            let (_tmp, logfile, _error_logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
             logger.log(Level::Info, "hello");
@@ -532,7 +612,7 @@ mod tests {
         ];
 
         for level in log_levels {
-            let (_tmp, logfile, mut logger) = setup_logger()?;
+            let (_tmp, logfile, _error_logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
             logger.log(Level::Info, "hello");
@@ -557,7 +637,7 @@ mod tests {
         ];
 
         for level in nolog_levels {
-            let (_tmp, logfile, mut logger) = setup_logger()?;
+            let (_tmp, logfile, _error_logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
             logger.log(Level::Debug, "hello");
@@ -572,7 +652,7 @@ mod tests {
         ];
 
         for level in log_levels {
-            let (_tmp, logfile, mut logger) = setup_logger()?;
+            let (_tmp, logfile, _error_logfile, mut logger) = setup_logger()?;
             logger.set_loglevel(level);
 
             logger.log(Level::Debug, "hello");
@@ -581,6 +661,144 @@ mod tests {
 
             log_contains_n_lines(&logfile, 1)?;
         };
+
+        Ok(())
+    }
+
+    #[test]
+    fn t_set_errorlogfile_creates_a_file() -> io::Result<()> {
+        let (_tmp, _logfile, error_logfile, _logger) = setup_logger()?;
+        assert!(error_logfile.exists());
+
+        Ok(())
+    }
+
+    #[test]
+    fn t_writes_to_errorlog_at_usererror_and_above() -> io::Result<()> {
+        let nolog_levels = vec![
+            Level::None,
+        ];
+
+        for level in nolog_levels {
+            let (_tmp, _logfile, error_logfile, mut logger) = setup_logger()?;
+            logger.set_loglevel(level);
+
+            logger.log(Level::UserError, "hello");
+
+            drop(logger);
+
+            log_contains_n_lines(&error_logfile, 0)?;
+        }
+
+        let log_levels = vec![
+            Level::UserError,
+            Level::Critical,
+            Level::Error,
+            Level::Warn,
+            Level::Info,
+            Level::Debug,
+        ];
+
+        for level in log_levels {
+            let (_tmp, _logfile, error_logfile, mut logger) = setup_logger()?;
+            logger.set_loglevel(level);
+
+            logger.log(Level::UserError, "hello");
+
+            drop(logger);
+
+            log_contains_n_lines(&error_logfile, 1)?;
+        };
+
+        Ok(())
+    }
+
+    #[test]
+    fn t_only_usererrors_are_written_to_errorlog() -> io::Result<()> {
+        let nolog_levels = vec![
+            Level::None,
+        ];
+
+        for level in nolog_levels {
+            let (_tmp, _logfile, error_logfile, mut logger) = setup_logger()?;
+            logger.set_loglevel(level);
+
+            logger.log(Level::UserError, "hello");
+            logger.log(Level::Critical, "this shouldn't be written to error-log");
+
+            drop(logger);
+
+            log_contains_n_lines(&error_logfile, 0)?;
+        }
+
+        let log_levels = vec![
+            Level::UserError,
+            Level::Critical,
+            Level::Error,
+            Level::Warn,
+            Level::Info,
+            Level::Debug,
+        ];
+
+        for level in log_levels {
+            let (_tmp, _logfile, error_logfile, mut logger) = setup_logger()?;
+            logger.set_loglevel(level);
+
+            logger.log(Level::UserError, "hello");
+            logger.log(Level::Critical, "this shouldn't be written to error-log");
+
+            drop(logger);
+
+            log_contains_n_lines(&error_logfile, 1)?;
+        };
+
+        Ok(())
+    }
+
+    #[test]
+    fn t_log_writes_message_to_the_errorlogfile() -> io::Result<()> {
+        let (_tmp, _logfile, error_logfile, mut logger) = setup_logger()?;
+
+        let messages = vec![
+            "Hello, world!",
+            "I'm doing fine, how are you?",
+            "Time to wrap up, see ya!",
+        ];
+
+        let start_time = Local::now();
+        for msg in &messages {
+            logger.log(Level::UserError, msg);
+        }
+        let finish_time = Local::now();
+
+        // Dropping logger to force it to flush the log and close the file
+        drop(logger);
+
+        let file = File::open(error_logfile)?;
+        let reader = BufReader::new(file);
+        for (line, expected) in reader.lines().zip(messages) {
+            match line {
+                Ok(line) => {
+                    let (timestamp_str, message) =
+                        parse_errorlog_line(&line)
+                        .expect("Failed to split the error log line into parts");
+
+                    let timestamp =
+                        Local::now()
+                        .timezone()
+                        .datetime_from_str(timestamp_str, "%Y-%m-%d %H:%M:%S")
+                        .expect("Failed to parse the timestamp from the error log file");
+                    // `start_time` and `end_time` may have millisecond precision or better,
+                    // whereas `timestamp` is limited to seconds. Therefore, we account for
+                    // a situation where `start_time` is slightly bigger than `timestamp`.
+                    assert!(timestamp - start_time > Duration::seconds(-1));
+                    assert!(finish_time >= timestamp);
+
+                    assert_eq!(message, expected);
+                }
+                Err(e) => return Err(e),
+            }
+        }
 
         Ok(())
     }
