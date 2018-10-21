@@ -10,24 +10,43 @@ char* rs_replace_all(
 		const char* from,
 		const char* to);
 
+char* rs_consolidate_whitespace(
+		const char* str,
+		const char* whitespace);
+
 void rs_cstring_free(char* str);
 
 class RustString {
-	private:
-		char* str;
-	public:
-		RustString() = delete;
-		RustString( const RustString & ) = delete;
-		RustString( const RustString && ) = delete;
-		explicit RustString( char* String ){
-			str = String;
+private:
+	char* str;
+
+public:
+	RustString() = delete;
+	RustString(const RustString&) = delete;
+
+	RustString(RustString&& rs):
+	str(std::move(rs.str)) {
+		rs.str= NULL;
+	}
+
+	RustString& operator=(RustString&& rs) {
+		if ( &rs != this ) {
+			str = std::move(rs.str);
+			return *this;
 		}
-		operator std::string(){
-			return std::string(str);
-		}
-		~RustString() {
-			rs_cstring_free( str );
-		}
+	}
+
+	explicit RustString(char* ptr) {
+		str = ptr;
+	}
+
+	operator std::string() {
+		return std::string(str);
+	}
+
+	~RustString() {
+		rs_cstring_free(str);
+	}
 };
 
 #ifdef __cplusplus
