@@ -47,7 +47,7 @@ pub enum Level {
 
     /// May be useful to programmers when debugging.
     ///
-    /// This level should be used for the most minutae details about program execution, like byte
+    /// This level should be used for the most minutiae details about program execution, like byte
     /// offsets, indices, sizes of internal data structures and so forth.
     Debug,
 }
