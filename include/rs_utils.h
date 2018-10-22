@@ -10,10 +10,6 @@ char* rs_replace_all(
 		const char* from,
 		const char* to);
 
-char* rs_consolidate_whitespace(
-		const char* str,
-		const char* whitespace);
-
 void rs_cstring_free(char* str);
 
 class RustString {
@@ -24,27 +20,36 @@ public:
 	RustString() = delete;
 	RustString(const RustString&) = delete;
 
-	RustString(RustString&& rs):
-	str(std::move(rs.str)) {
-		rs.str= NULL;
+	RustString(RustString&& rs)
+		: str(std::move(rs.str)) 
+	{
+		rs.str = nullptr;
 	}
 
-	RustString& operator=(RustString&& rs) {
-		if ( &rs != this ) {
+	RustString& operator=(RustString&& rs) noexcept
+	{
+		if (&rs != this) {
 			str = std::move(rs.str);
-			return *this;
 		}
+			return *this;
 	}
 
-	explicit RustString(char* ptr) {
+	explicit RustString(char* ptr)
+	{
 		str = ptr;
 	}
 
-	operator std::string() {
-		return std::string(str);
+	operator std::string()
+	{
+		if (str == nullptr){
+			return std::string(str);
+		}
+		return std::string();
 	}
 
-	~RustString() {
+	~RustString()
+	{
+		// This pointer is checked for nullptr on the rust side.
 		rs_cstring_free(str);
 	}
 };
