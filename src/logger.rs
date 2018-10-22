@@ -41,7 +41,7 @@ pub enum Level {
 
     /// Useful information that can roughly explain what's going on.
     ///
-    /// This level should be used with rought descriptions of stages that the program is going
+    /// This level should be used with rough descriptions of stages that the program is going
     /// through. Fine details (indices, array sizes etc.) should be logged at Level::Debug instead.
     Info,
 
