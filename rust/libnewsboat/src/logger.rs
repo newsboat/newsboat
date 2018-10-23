@@ -82,8 +82,10 @@ impl fmt::Display for Level {
 /// Users would call its `log` method to add messages to the log file, like this:
 ///
 /// ```
+/// use libnewsboat::logger::{Logger, Level};
+///
 /// // Create and configure the logger
-/// let logger = Logger::new();
+/// let mut logger = Logger::new();
 /// logger.set_logfile("/path/to/my/log.txt");
 ///
 /// // Only log critical and configuration errors
@@ -94,7 +96,7 @@ impl fmt::Display for Level {
 /// logger.log(Level::UserError, "Please specify a remote API to use");
 ///
 /// // This one won't be logged because its importance level is too low
-/// logger.log(Level::Debug, format!("feeds.len() == {}", 42));
+/// logger.log(Level::Debug, &format!("feeds.len() == {}", 42));
 /// ```
 pub struct Logger {
     /// The file to which all messages at and above `loglevel` will be written.
