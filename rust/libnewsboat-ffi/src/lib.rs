@@ -43,7 +43,7 @@ pub extern "C" fn rs_consolidate_whitespace( input: *const c_char) -> *mut c_cha
     let result = utils::consolidate_whitespace(rs_input);
     // Panic here can't happen because:
     // 1. panic can only happen if `result` contains null bytes;
-    // 2. `result` contains what `input` contained, and input is a 
+    // 2. `result` contains what `input` contained, and input is a
     // null-terminated string from C.
     let result = CString::new(result).unwrap();
     result.into_raw()

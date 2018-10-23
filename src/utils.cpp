@@ -243,8 +243,7 @@ std::vector<std::string> utils::tokenize_spaced(const std::string& str,
 	return tokens;
 }
 
-std::string utils::consolidate_whitespace(const std::string& str,
-	__attribute__((unused))std::string whitespace) {
+std::string utils::consolidate_whitespace(const std::string& str) {
 
 	return RustString(rs_consolidate_whitespace(str.c_str()));
 }
