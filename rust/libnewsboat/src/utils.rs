@@ -6,8 +6,8 @@ pub fn consolidate_whitespace( input: String ) -> String {
     let found = input.find( |c: char| !c.is_whitespace() );
     let mut result = String::new();
 
-    if found.is_some() {
-        let (leading,rest) = input.split_at(found.unwrap());
+    if let Some(found) = found {
+        let (leading,rest) = input.split_at(found);
         let lastchar = input.chars().rev().next().unwrap();
 
         result.push_str(leading);
