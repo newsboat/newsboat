@@ -328,6 +328,24 @@ profclean:
 	find . -name '*.gc*' -type f -print0 | xargs -0 $(RM) --
 	$(RM) app*.info
 
+# Substitutes for Cargo commands
+#
+# Since we split our Rust code into multiple crates, it takes a bit of effort
+# to run all the checks and tests. These commands hide all that complexity from
+# the programmer.
+
+cargo-check:
+	(cd rust/libnewsboat && cargo check)
+	(cd rust/libnewsboat-ffi && cargo check)
+
+cargo-doc:
+	(cd rust/libnewsboat && cargo doc)
+	(cd rust/libnewsboat-ffi && cargo doc)
+
+cargo-test:
+	(cd rust/libnewsboat && cargo test)
+	(cd rust/libnewsboat-ffi && cargo test)
+
 # miscellaneous stuff
 
 config: config.mk
