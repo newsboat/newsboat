@@ -43,6 +43,10 @@ newsboat_brew_commands: &osx_deps
 
 matrix:
   fast_finish: true
+  allow_failures:
+    # There is a problem with brew at the moment: it can't upgrade sqlite and
+    # fails the build. See https://github.com/travis-ci/travis-ci/issues/10275
+    - os: osx
   include:
     - compiler: gcc-4.9
       os: linux
