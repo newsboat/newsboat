@@ -21,7 +21,7 @@ public:
 	RustString(const RustString&) = delete;
 
 	RustString(RustString&& rs)
-		: str(std::move(rs.str)) 
+		: str(std::move(rs.str))
 	{
 		rs.str = nullptr;
 	}
@@ -31,7 +31,7 @@ public:
 		if (&rs != this) {
 			str = std::move(rs.str);
 		}
-			return *this;
+		return *this;
 	}
 
 	explicit RustString(char* ptr)
@@ -41,7 +41,7 @@ public:
 
 	operator std::string()
 	{
-		if (str == nullptr){
+		if (str != nullptr){
 			return std::string(str);
 		}
 		return std::string();
