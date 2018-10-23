@@ -55,11 +55,11 @@ RSSPPLIB_OUTPUT=librsspp.a
 
 CARGO_FLAGS+=--verbose
 ifeq ($(PROFILE),1)
-NEWSBOATLIB_OUTPUT=target/debug/libnewsboat.a
-LDFLAGS+=-L./target/debug
+NEWSBOATLIB_OUTPUT=rust/libnewsboat-ffi/target/debug/libnewsboat.a
+LDFLAGS+=-L./rust/libnewsboat-ffi/target/debug
 else
-NEWSBOATLIB_OUTPUT=target/release/libnewsboat.a
-LDFLAGS+=-L./target/release
+NEWSBOATLIB_OUTPUT=rust/libnewsboat-ffi/target/release/libnewsboat.a
+LDFLAGS+=-L./rust/libnewsboat-ffi//target/release
 CARGO_FLAGS+=--release
 endif
 LDFLAGS+=-lnewsboat -lpthread -ldl
@@ -96,7 +96,7 @@ all: doc $(NEWSBOAT) $(PODBOAT) mo-files
 NB_DEPS=xlicense.h $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBOAT_OBJS) $(RSSPPLIB_OUTPUT) $(NEWSBOATLIB_OUTPUT)
 
 $(NEWSBOATLIB_OUTPUT): .FORCE
-	cargo build $(CARGO_FLAGS)
+	( cd rust/libnewsboat-ffi && cargo build $(CARGO_FLAGS) )
 
 $(NEWSBOAT): $(NB_DEPS)
 	$(CXX) $(CXXFLAGS) -o $(NEWSBOAT) $(NEWSBOAT_OBJS) $(NEWSBOAT_LIBS) $(LDFLAGS)
@@ -145,7 +145,7 @@ clean-libfilter:
 	$(RM) $(FILTERLIB_OUTPUT) $(FILTERLIB_OBJS)
 
 clean-libnewsboat:
-	cargo clean
+	( cd rust/libnewsboat-ffi && cargo clean )
 
 clean-doc:
 	$(RM) -r doc/xhtml 

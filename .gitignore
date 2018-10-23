@@ -27,6 +27,6 @@ doc/keycmds-linked.dsv
 *.gcno
 *.gcda
 *.sw?
-/target
+/rust/*/target/
+/rust/*/Cargo.lock
 **/*.rs.bk
-Cargo.lock

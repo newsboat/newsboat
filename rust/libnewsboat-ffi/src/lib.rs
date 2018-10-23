@@ -1,10 +1,10 @@
 extern crate libc;
+extern crate libnewsboat;
 
 use libc::c_char;
 use std::ffi::{CStr, CString};
 
-pub mod utils;
-pub mod logger;
+use libnewsboat::utils;
 
 #[no_mangle]
 pub extern "C" fn rs_replace_all(
