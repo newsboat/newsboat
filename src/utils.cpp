@@ -243,26 +243,9 @@ std::vector<std::string> utils::tokenize_spaced(const std::string& str,
 	return tokens;
 }
 
-std::string utils::consolidate_whitespace(const std::string& str,
-	std::string whitespace)
-{
-	std::string result;
-	std::string::size_type last_pos = str.find_first_not_of(whitespace);
-	std::string::size_type pos = str.find_first_of(whitespace, last_pos);
+std::string utils::consolidate_whitespace(const std::string& str) {
 
-	if (last_pos != 0 && str != "") {
-		result.append(str.substr(0, last_pos));
-	}
-
-	while (std::string::npos != pos || std::string::npos != last_pos) {
-		result.append(str.substr(last_pos, pos - last_pos));
-		last_pos = str.find_first_not_of(whitespace, pos);
-		if (last_pos > pos)
-			result.append(" ");
-		pos = str.find_first_of(whitespace, last_pos);
-	}
-
-	return result;
+	return RustString(rs_consolidate_whitespace(str.c_str()));
 }
 
 std::vector<std::string> utils::tokenize_nl(const std::string& str,

@@ -10,6 +10,8 @@ char* rs_replace_all(
 		const char* from,
 		const char* to);
 
+char* rs_consolidate_whitespace( const char* str);
+
 void rs_cstring_free(char* str);
 
 class RustString {

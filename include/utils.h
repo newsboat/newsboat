@@ -61,8 +61,7 @@ namespace utils {
 	std::vector<std::string> tokenize_quoted(const std::string& str,
 		std::string delimiters = " \r\n\t");
 
-	std::string consolidate_whitespace(const std::string& str,
-		std::string whitespace = " \r\n\t");
+	std::string consolidate_whitespace(const std::string& str);
 
 	std::vector<std::wstring> wtokenize(const std::wstring& str,
 		std::wstring delimiters = L" \r\n\t");
