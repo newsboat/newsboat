@@ -694,13 +694,7 @@ std::string utils::get_useragent(ConfigContainer* cfgcont)
 unsigned int utils::to_u(const std::string& str,
 	const unsigned int default_value)
 {
-	std::istringstream is(str);
-	unsigned int u;
-	is >> u;
-	if (is.fail() || !is.eof()) {
-		u = default_value;
-	}
-	return u;
+	return rs_to_u(str.c_str(), default_value);
 }
 
 ScopeMeasure::ScopeMeasure(const std::string& func, Level ll)

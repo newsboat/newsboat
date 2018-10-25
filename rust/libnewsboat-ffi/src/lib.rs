@@ -50,6 +50,15 @@ pub extern "C" fn rs_consolidate_whitespace( input: *const c_char) -> *mut c_cha
 }
 
 #[no_mangle]
+pub extern "C" fn rs_to_u(in_str: *const c_char, default_value: u32) -> u32
+{
+    let rs_str = unsafe { CStr::from_ptr(in_str) };
+    let rs_str = rs_str.to_string_lossy().into_owned();
+
+    utils::to_u( rs_str, default_value)
+}
+
+#[no_mangle]
 pub extern "C" fn rs_cstring_free(string: *mut c_char) {
     unsafe {
         if string.is_null() { return }

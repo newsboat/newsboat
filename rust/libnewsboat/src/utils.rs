@@ -26,6 +26,16 @@ pub fn consolidate_whitespace( input: String ) -> String {
     result
 }
 
+pub fn to_u(rs_str: String, default_value: u32) -> u32 {
+    let mut result = rs_str.parse::<u32>();
+
+    if result.is_err() {
+        result = Ok(default_value);
+    }
+
+    result.unwrap()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -75,6 +85,14 @@ mod tests {
             String::from("    Lorem Ipsum "));
         assert_eq!(consolidate_whitespace(String::from("   Lorem \r\n\r\n\tIpsum")),
             String::from("   Lorem Ipsum"));
+    }
+
+    #[test]
+    fn t_to_u() {
+        assert_eq!(to_u(String::from("0"), 10), 0);
+        assert_eq!(to_u(String::from("23"), 1), 23);
+        assert_eq!(to_u(String::from(""), 0), 0);
+        assert_eq!(to_u(String::from("zero"), 1), 1);
     }
 }
 
