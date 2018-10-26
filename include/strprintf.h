@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace newsboat {
 
@@ -33,10 +34,10 @@ namespace strprintf {
 		if (len <= sizeof(buffer)) {
 			result = buffer;
 		} else {
-			std::unique_ptr<char> buf(new char[len]);
+			std::vector<char> buf(len);
 			snprintf(
-				buf.get(), len, local_format.c_str(), argument);
-			result = buf.get();
+				buf.data(), len, local_format.c_str(), argument);
+			result = buf.data();
 		}
 
 		return result + fmt(remaining_format, args...);
