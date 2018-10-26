@@ -63,7 +63,7 @@ namespace strprintf {
 
 	template<typename... Args>
 	std::string
-	fmt(const std::string& format, const nullptr_t argument, Args... args)
+	fmt(const std::string& format, const std::nullptr_t argument, Args... args)
 	{
 		return fmt_impl(format, argument, args...);
 	}
