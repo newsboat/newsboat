@@ -231,7 +231,7 @@ int PbController::run(int argc, char* argv[])
 				std::cerr << strprintf::fmt(_("%s: %d: invalid "
 							      "loglevel value"),
 						     argv[0],
-						     l)
+						     static_cast<int>(l))
 					  << std::endl;
 				return EXIT_FAILURE;
 			}

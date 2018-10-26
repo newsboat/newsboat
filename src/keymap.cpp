@@ -630,7 +630,7 @@ void KeyMap::handle_action(const std::string& action,
 					"KeyMap::handle_action: new operation "
 					"`%s' "
 					"(op = %u)",
-					it,
+					*it,
 					tmpcmd.op);
 				if (tmpcmd.op == OP_NIL)
 					throw ConfigHandlerException(
@@ -650,7 +650,8 @@ void KeyMap::handle_action(const std::string& action,
 					LOG(Level::DEBUG,
 						"KeyMap::handle_action: new "
 						"parameter `%s' (op = %u)",
-						it);
+						*it,
+						tmpcmd.op);
 					tmpcmd.args.push_back(*it);
 				}
 			}
