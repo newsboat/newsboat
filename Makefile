@@ -145,6 +145,7 @@ clean-libfilter:
 	$(RM) $(FILTERLIB_OUTPUT) $(FILTERLIB_OBJS)
 
 clean-libnewsboat:
+	( cd rust/libnewsboat && cargo clean )
 	( cd rust/libnewsboat-ffi && cargo clean )
 
 clean-doc:
