@@ -45,8 +45,8 @@ files for the libraries (on Debian and derivatives, headers are in `-dev`
 packages, e.g. `libsqlite3-dev`.) After that, compiling and installing newsboat
 is as simple as:
 
-	make
-	make install
+	$ make
+	$ sudo make install
 
 (And if you ever need to uninstall it, use `make uninstall`.)
 
@@ -72,8 +72,8 @@ check out [our style guide](doc/code-style.markdown).
 
 You'll probably want to run the tests; here's how:
 
-	make -j5 PROFILE=1 all test
-	(cd test && TMPDIR=/dev/shm ./test --order rand) && make cargo-test
+	$ make -j5 PROFILE=1 all test  # 5 is CPU cores + 1, to parallelize the build
+	$ (cd test && TMPDIR=/dev/shm ./test --order rand) && make cargo-test
 
 Note the use of ramdisk as `TMPDIR`: some tests create temporary files, which
 slows them down if `TMPDIR` is on HDD or even SSD.
