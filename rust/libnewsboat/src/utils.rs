@@ -36,6 +36,14 @@ pub fn to_u(rs_str: String, default_value: u32) -> u32 {
     result.unwrap()
 }
 
+pub fn get_default_browser() -> String {
+    use std::env;
+    match env::var("BROWSER") {
+        Ok(val) => return val,
+        Err(_) => return String::from("lynx"),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -93,6 +101,18 @@ mod tests {
         assert_eq!(to_u(String::from("23"), 1), 23);
         assert_eq!(to_u(String::from(""), 0), 0);
         assert_eq!(to_u(String::from("zero"), 1), 1);
+    }
+
+    #[test]
+    fn t_get_default_browser() {
+        use std::env;
+        let key = "BROWSER";
+        env::remove_var(key);
+        assert_eq!(get_default_browser(),String::from("lynx"));
+        env::set_var(key, "firefox");
+        assert_eq!(get_default_browser(), String::from("firefox"));
+        env::set_var(key, "opera");
+        assert_eq!(get_default_browser(), String::from("opera"));
     }
 }
 

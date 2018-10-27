@@ -65,3 +65,8 @@ pub extern "C" fn rs_cstring_free(string: *mut c_char) {
         CString::from_raw(string);
     };
 }
+
+#[no_mangle]
+pub extern "C" fn rs_get_default_browser() -> c_char {
+    utils::get_default_browser()
+}
