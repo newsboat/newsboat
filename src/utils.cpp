@@ -1471,7 +1471,7 @@ void utils::initialize_ssl_implementation(void)
 
 std::string utils::get_default_browser()
 {
-	return RustString(r_get_default_browser());
+	return RustString(rs_get_default_browser());
 }
 
 } // namespace newsboat

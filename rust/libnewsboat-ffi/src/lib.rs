@@ -67,6 +67,11 @@ pub extern "C" fn rs_cstring_free(string: *mut c_char) {
 }
 
 #[no_mangle]
-pub extern "C" fn rs_get_default_browser() -> c_char {
-    utils::get_default_browser()
+pub extern "C" fn rs_get_default_browser() -> *mut c_char {
+    let browser = utils::get_default_browser();
+    // Panic here can't happen because:
+    //1. get_default_browser() returns BROWSER environment variable 
+    //2. if not set 'lynx' is returned  
+    let result = CString::new(browser).unwrap();
+    result.into_raw()
 }

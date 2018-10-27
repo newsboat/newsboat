@@ -16,6 +16,8 @@ unsigned int rs_to_u( const char* str, const unsigned int default_value);
 
 void rs_cstring_free(char* str);
 
+char* rs_get_default_browser();
+
 class RustString {
 private:
 	char* str;
