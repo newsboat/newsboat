@@ -80,14 +80,14 @@ src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  include/downloadthread.h include/exception.h include/exceptions.h \
  include/feedhqapi.h include/fileurlreader.h include/formatstring.h \
  include/globals.h include/inoreaderapi.h include/itemrenderer.h \
- include/logger.h include/newsblurapi.h rss/rsspp.h include/remoteapi.h \
+ include/htmlrenderer.h include/textformatter.h include/logger.h \
+ include/newsblurapi.h rss/rsspp.h include/remoteapi.h \
  include/ocnewsapi.h include/oldreaderapi.h include/opmlurlreader.h \
  include/regexmanager.h include/rssparser.h include/stflpp.h \
  include/strprintf.h include/ttrssapi.h 3rd-party/json.hpp \
  include/utils.h include/view.h include/controller.h \
  include/filebrowserformaction.h include/formaction.h include/history.h \
- include/keymap.h include/stflpp.h include/htmlrenderer.h \
- include/textformatter.h
+ include/keymap.h include/stflpp.h
 src/dialogsformaction.o: src/dialogsformaction.cpp \
  include/dialogsformaction.h include/formaction.h include/history.h \
  include/keymap.h include/configparser.h include/rss.h \
@@ -224,11 +224,11 @@ src/itemlistformaction.o: src/itemlistformaction.cpp \
  include/formatstring.h include/logger.h include/strprintf.h \
  include/utils.h include/view.h
 src/itemrenderer.o: src/itemrenderer.cpp include/itemrenderer.h \
- include/configcontainer.h include/configparser.h include/htmlrenderer.h \
- include/textformatter.h include/regexmanager.h include/matcher.h \
- filter/FilterParser.h include/rss.h include/configcontainer.h \
- include/utils.h include/logger.h config.h include/strprintf.h \
- include/textformatter.h
+ include/htmlrenderer.h include/textformatter.h include/regexmanager.h \
+ include/configparser.h include/matcher.h filter/FilterParser.h \
+ include/configcontainer.h include/htmlrenderer.h include/rss.h \
+ include/configcontainer.h include/utils.h include/logger.h config.h \
+ include/strprintf.h include/textformatter.h
 src/itemviewformaction.o: src/itemviewformaction.cpp \
  include/itemviewformaction.h include/formaction.h include/history.h \
  include/keymap.h include/configparser.h include/rss.h \
@@ -236,10 +236,10 @@ src/itemviewformaction.o: src/itemviewformaction.cpp \
  include/utils.h include/logger.h config.h include/strprintf.h \
  include/stflpp.h include/htmlrenderer.h include/textformatter.h \
  include/regexmanager.h include/exceptions.h include/formatstring.h \
- include/logger.h include/strprintf.h include/textformatter.h \
- include/utils.h include/view.h include/colormanager.h \
- include/controller.h include/cache.h include/configpaths.h \
- include/cliargsparser.h include/feedcontainer.h \
+ include/itemrenderer.h include/logger.h include/strprintf.h \
+ include/textformatter.h include/utils.h include/view.h \
+ include/colormanager.h include/controller.h include/cache.h \
+ include/configpaths.h include/cliargsparser.h include/feedcontainer.h \
  include/filtercontainer.h include/fslock.h include/opml.h \
  include/urlreader.h include/reloader.h include/remoteapi.h \
  include/filebrowserformaction.h
@@ -470,7 +470,7 @@ test/configcontainer.o: test/configcontainer.cpp \
  include/configcontainer.h include/configparser.h 3rd-party/catch.hpp \
  include/configparser.h include/exceptions.h include/keymap.h
 test/configparser.o: test/configparser.cpp include/configparser.h \
- 3rd-party/catch.hpp
+ 3rd-party/catch.hpp include/keymap.h include/configparser.h
 test/feedcontainer.o: test/feedcontainer.cpp 3rd-party/catch.hpp \
  include/cache.h include/configcontainer.h include/configparser.h \
  include/rss.h include/matcher.h filter/FilterParser.h include/utils.h \
@@ -507,7 +507,8 @@ test/itemrenderer.o: test/itemrenderer.cpp 3rd-party/catch.hpp \
  include/cache.h include/configcontainer.h include/configparser.h \
  include/rss.h include/matcher.h filter/FilterParser.h include/utils.h \
  include/logger.h config.h include/strprintf.h include/configcontainer.h \
- include/itemrenderer.h test/test-helpers.h
+ include/itemrenderer.h include/htmlrenderer.h include/textformatter.h \
+ include/regexmanager.h test/test-helpers.h
 test/keymap.o: test/keymap.cpp include/keymap.h include/configparser.h \
  3rd-party/catch.hpp include/exceptions.h
 test/listformatter.o: test/listformatter.cpp include/listformatter.h \
