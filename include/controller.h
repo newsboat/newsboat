@@ -11,6 +11,7 @@
 #include "filtercontainer.h"
 #include "fslock.h"
 #include "opml.h"
+#include "queuemanager.h"
 #include "regexmanager.h"
 #include "reloader.h"
 #include "remoteapi.h"
@@ -103,14 +104,6 @@ private:
 	void rec_find_rss_outlines(xmlNode* node, std::string tag);
 	int execute_commands(const std::vector<std::string>& cmds);
 
-	void enqueue_items(std::shared_ptr<RssFeed> feed);
-
-	std::string generate_enqueue_filename(const std::string& url,
-		const std::string& title,
-		const time_t pubDate,
-		std::shared_ptr<RssFeed> feed);
-	std::string get_hostname_from_url(const std::string& url);
-
 	void import_read_information(const std::string& readinfofile);
 	void export_read_information(const std::string& readinfofile);
 
@@ -134,6 +127,8 @@ private:
 	ConfigPaths configpaths;
 
 	std::unique_ptr<Reloader> reloader;
+
+	QueueManager queueManager;
 };
 
 } // namespace newsboat
