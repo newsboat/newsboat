@@ -70,8 +70,9 @@ pub extern "C" fn rs_cstring_free(string: *mut c_char) {
 pub extern "C" fn rs_get_default_browser() -> *mut c_char {
     let browser = utils::get_default_browser();
     // Panic here can't happen because:
-    //1. get_default_browser() returns BROWSER environment variable 
-    //2. if not set 'lynx' is returned  
+    //1. panic can only happen if `result` contains null bytes; 
+    //2. std::env::var returns an error if the variable contains invalid Unicode, 
+    // In that case get_default_browser will return "lynx", which obviously doesn't contain null bytes.
     let result = CString::new(browser).unwrap();
     result.into_raw()
 }

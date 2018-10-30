@@ -102,17 +102,5 @@ mod tests {
         assert_eq!(to_u(String::from(""), 0), 0);
         assert_eq!(to_u(String::from("zero"), 1), 1);
     }
-
-    #[test]
-    fn t_get_default_browser() {
-        use std::env;
-        let key = "BROWSER";
-        env::remove_var(key);
-        assert_eq!(get_default_browser(),String::from("lynx"));
-        env::set_var(key, "firefox");
-        assert_eq!(get_default_browser(), String::from("firefox"));
-        env::set_var(key, "opera");
-        assert_eq!(get_default_browser(), String::from("opera"));
-    }
 }
 
