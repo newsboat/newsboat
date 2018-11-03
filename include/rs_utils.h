@@ -10,13 +10,13 @@ char* rs_replace_all(
 		const char* from,
 		const char* to);
 
-char* rs_consolidate_whitespace( const char* str);
+char* rs_consolidate_whitespace(const char* str);
 
-unsigned int rs_to_u( const char* str, const unsigned int default_value);
+unsigned int rs_to_u(const char* str, const unsigned int default_value);
 
-char* rs_trim( const char* str);
+char* rs_trim(const char* str);
 
-char* rs_trim_end( const char* str);
+char* rs_trim_end(const char* str);
 
 void rs_cstring_free(char* str);
 

@@ -104,6 +104,7 @@ mod tests {
         assert_eq!(to_u(String::from("zero"), 1), 1);
     }
 
+    #[test]
     fn t_trim() {
         assert_eq!(trim(String::from("  xxx\r\n")), "xxx");
         assert_eq!(trim(String::from("\n\n abc  foobar\n")), "abc  foobar");
@@ -111,9 +112,9 @@ mod tests {
         assert_eq!(trim(String::from("     \n")), "");
     }
 
+    #[test]
     fn t_trim_end() {
         assert_eq!(trim_end(String::from("quux\n")), "quux");
-        assert_eq!(trim_end(String::from("test \n ")), "test  ");
     }
 }
 
