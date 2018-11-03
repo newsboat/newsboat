@@ -144,7 +144,7 @@ CliArgsParser::CliArgsParser(int argc, char* argv[])
 					strprintf::fmt(_("%s: %d: invalid "
 							 "loglevel value"),
 						argv[0],
-						l);
+						static_cast<int>(l));
 
 				should_return = true;
 				return_code = EXIT_FAILURE;
