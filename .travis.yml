@@ -27,6 +27,8 @@ install_coveralls_commands: &install_coveralls
 
 newsboat_brew_commands: &osx_deps
   - brew update
+  - brew install gcc || brew link --overwrite gcc
+  - brew upgrade
   - brew outdated "pkg-config" || brew upgrade "pkg-config"
   - brew install "gettext" && brew link --force "gettext"
   - brew outdated "sqlite" || brew upgrade "sqlite"
