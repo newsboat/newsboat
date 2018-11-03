@@ -73,7 +73,7 @@ check out [our style guide](doc/code-style.markdown).
 You'll probably want to run the tests; here's how:
 
 	$ make -j5 PROFILE=1 all test  # 5 is CPU cores + 1, to parallelize the build
-	$ (cd test && TMPDIR=/dev/shm ./test --order rand) && make cargo-test
+	$ (cd test && TMPDIR=/dev/shm ./test --order rand) && cargo test
 
 Note the use of ramdisk as `TMPDIR`: some tests create temporary files, which
 slows them down if `TMPDIR` is on HDD or even SSD.

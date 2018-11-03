@@ -55,11 +55,11 @@ RSSPPLIB_OUTPUT=librsspp.a
 
 CARGO_FLAGS+=--verbose
 ifeq ($(PROFILE),1)
-NEWSBOATLIB_OUTPUT=rust/libnewsboat-ffi/target/debug/libnewsboat.a
-LDFLAGS+=-L./rust/libnewsboat-ffi/target/debug
+NEWSBOATLIB_OUTPUT=target/debug/libnewsboat.a
+LDFLAGS+=-L./target/debug
 else
-NEWSBOATLIB_OUTPUT=rust/libnewsboat-ffi/target/release/libnewsboat.a
-LDFLAGS+=-L./rust/libnewsboat-ffi//target/release
+NEWSBOATLIB_OUTPUT=target/release/libnewsboat.a
+LDFLAGS+=-L.//target/release
 CARGO_FLAGS+=--release
 endif
 LDFLAGS+=-lnewsboat -lpthread -ldl
@@ -96,7 +96,7 @@ all: doc $(NEWSBOAT) $(PODBOAT) mo-files
 NB_DEPS=xlicense.h $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBOAT_OBJS) $(RSSPPLIB_OUTPUT) $(NEWSBOATLIB_OUTPUT)
 
 $(NEWSBOATLIB_OUTPUT): .FORCE
-	( cd rust/libnewsboat-ffi && cargo build $(CARGO_FLAGS) )
+	cargo build $(CARGO_FLAGS)
 
 $(NEWSBOAT): $(NB_DEPS)
 	$(CXX) $(CXXFLAGS) -o $(NEWSBOAT) $(NEWSBOAT_OBJS) $(NEWSBOAT_LIBS) $(LDFLAGS)
@@ -145,8 +145,7 @@ clean-libfilter:
 	$(RM) $(FILTERLIB_OUTPUT) $(FILTERLIB_OBJS)
 
 clean-libnewsboat:
-	( cd rust/libnewsboat && cargo clean )
-	( cd rust/libnewsboat-ffi && cargo clean )
+	cargo clean
 
 clean-doc:
 	$(RM) -r doc/xhtml 
@@ -328,24 +327,6 @@ test-clean:
 profclean:
 	find . -name '*.gc*' -type f -print0 | xargs -0 $(RM) --
 	$(RM) app*.info
-
-# Substitutes for Cargo commands
-#
-# Since we split our Rust code into multiple crates, it takes a bit of effort
-# to run all the checks and tests. These commands hide all that complexity from
-# the programmer.
-
-cargo-check:
-	(cd rust/libnewsboat && cargo check)
-	(cd rust/libnewsboat-ffi && cargo check)
-
-cargo-doc:
-	(cd rust/libnewsboat && cargo doc)
-	(cd rust/libnewsboat-ffi && cargo doc)
-
-cargo-test:
-	(cd rust/libnewsboat && cargo test)
-	(cd rust/libnewsboat-ffi && cargo test)
 
 # miscellaneous stuff
 
