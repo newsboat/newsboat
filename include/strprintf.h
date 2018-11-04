@@ -113,6 +113,13 @@ namespace strprintf {
 					sizeof(buffer),
 					local_format.c_str(),
 					argument);
+			// snprintf returns the length of the formatted string. If it's
+			// longer than the buffer size, we have to enlarge the buffer in
+			// order to get the whole result.
+			//
+			// `<=` is correct since we've added 1 to `len`, above. We have to
+			// do it because `buffer` has to fit not only the string but the
+			// terminating null byte as well.
 			if (len <= sizeof(buffer)) {
 				result = buffer;
 			} else {
