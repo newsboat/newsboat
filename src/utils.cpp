@@ -1007,19 +1007,12 @@ std::string utils::quote_for_stfl(std::string str)
 
 void utils::trim(std::string& str)
 {
-	while (str.length() > 0 && ::isspace(str[0])) {
-		str.erase(0, 1);
-	}
-	trim_end(str);
+	str = RustString(rs_trim(str.c_str()));
 }
 
 void utils::trim_end(std::string& str)
 {
-	std::string::size_type pos = str.length() - 1;
-	while (str.length() > 0 && (str[pos] == '\n' || str[pos] == '\r')) {
-		str.erase(pos);
-		pos--;
-	}
+	str = RustString(rs_trim_end(str.c_str()));
 }
 
 std::string utils::quote(const std::string& str)
