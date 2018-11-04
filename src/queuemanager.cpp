@@ -22,12 +22,12 @@ void QueueManager::enqueue_url(const std::string& url,
 {
 	bool url_found = false;
 	std::fstream f;
-	f.open(paths->queue_file().c_str(), std::fstream::in);
+	f.open(paths->queue_file(), std::fstream::in);
 	if (f.is_open()) {
 		do {
 			std::string line;
 			getline(f, line);
-			if (!f.eof() && line.length() > 0) {
+			if (!f.eof() && !line.empty()) {
 				std::vector<std::string> fields =
 					utils::tokenize_quoted(line);
 				if (!fields.empty() && fields[0] == url) {
@@ -39,9 +39,9 @@ void QueueManager::enqueue_url(const std::string& url,
 		f.close();
 	}
 	if (!url_found) {
-		f.open(paths->queue_file().c_str(),
+		f.open(paths->queue_file(),
 			std::fstream::app | std::fstream::out);
-		std::string filename =
+		const std::string filename =
 			generate_enqueue_filename(url, title, pubDate, feed);
 		f << url << " " << Stfl::quote(filename) << std::endl;
 		f.close();
@@ -65,10 +65,11 @@ std::string QueueManager::generate_enqueue_filename(const std::string& url,
 	std::shared_ptr<RssFeed> feed)
 {
 	std::string dlformat = cfg->get_configvalue("download-path");
-	if (dlformat[dlformat.length() - 1] != NEWSBEUTER_PATH_SEP[0])
+	if (dlformat[dlformat.length() - 1] != NEWSBEUTER_PATH_SEP[0]) {
 		dlformat.append(NEWSBEUTER_PATH_SEP);
+	}
 
-	std::string filemask = cfg->get_configvalue("download-filename-format");
+	const std::string filemask = cfg->get_configvalue("download-filename-format");
 	dlformat.append(filemask);
 
 	auto time_formatter = [&pubDate](const char* format) {
@@ -80,9 +81,9 @@ std::string QueueManager::generate_enqueue_filename(const std::string& url,
 		return std::string(pubDate_formatted);
 	};
 
-	std::string base = utils::get_basename(url);
+	const std::string base = utils::get_basename(url);
 	std::string extension;
-	std::size_t pos = base.rfind('.');
+	const std::size_t pos = base.rfind('.');
 	if (pos != std::string::npos) {
 		extension.append(base.substr(pos + 1));
 	}
@@ -103,7 +104,7 @@ std::string QueueManager::generate_enqueue_filename(const std::string& url,
 	fmt.register_fmt('t', title);
 	fmt.register_fmt('e', extension);
 
-	std::string dlpath = fmt.do_format(dlformat);
+	const std::string dlpath = fmt.do_format(dlformat);
 	return dlpath;
 }
 
