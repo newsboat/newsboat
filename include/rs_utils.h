@@ -18,6 +18,8 @@ char* rs_trim(const char* str);
 
 char* rs_trim_end(const char* str);
 
+unsigned int rs_get_random_value(const unsigned int max);
+
 void rs_cstring_free(char* str);
 
 class RustString {

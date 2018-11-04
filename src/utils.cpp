@@ -1025,15 +1025,7 @@ std::string utils::quote(const std::string& str)
 
 unsigned int utils::get_random_value(unsigned int max)
 {
-	static bool initialized = false;
-	if (!initialized) {
-		initialized = true;
-		srand(~(time(nullptr) ^ getpid() ^ getppid()));
-	}
-	// OpenBSD will warn you that rand() can be deterministic. We don't
-	// care, because this function is only used for simple things like
-	// selecting a random unread item.
-	return static_cast<unsigned int>(rand() % max);
+	return rs_get_random_value(max);
 }
 
 std::string utils::quote_if_necessary(const std::string& str)
