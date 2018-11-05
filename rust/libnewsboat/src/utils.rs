@@ -5,6 +5,7 @@ extern crate url;
 use self::regex::Regex;
 
 use self::url::{Url};
+use self::url::percent_encoding::*;
 
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
@@ -228,6 +229,25 @@ pub fn is_valid_podcast_type(mimetype: &str) -> bool {
     matches || found
 }
 
+pub fn escape_url(rs_str: String) -> String {
+    define_encode_set! {
+        pub URL_ENCODE_SET = [SIMPLE_ENCODE_SET] | {' ','!','#','$','&','\'','(',')','*','+',',','/',':',';','=','?','@','[',']'}
+    }
+    percent_encode(rs_str.as_bytes(),URL_ENCODE_SET).to_string()
+}
+
+pub fn unescape_url(rs_str: String) -> String {
+    let result = percent_decode(rs_str.as_bytes());
+    let result = result.decode_utf8();
+    if result.is_err() {
+        log!(Level::Error,
+                    &format!("percent_decode failed to escape url {}", rs_str));
+        panic!("Escaping url Failed");
+    }
+
+    result.unwrap().replace("\0","")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -432,6 +452,21 @@ mod tests {
         for attr in &valid {
             assert!(is_valid_attribute(attr));
         }
+
+    fn t_escape_url() {
+        assert!(escape_url(String::from("foo bar")) ==
+                String::from("foo%20bar"));
+        assert!(escape_url(String::from("!#$&'()*+,/:;=?@[]")) ==
+                String::from("%21%23%24%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D"));
+    }
+
+    #[test]
+    fn t_unescape_url() {
+        assert!(unescape_url(String::from("foo%20bar")) ==
+                             String::from("foo bar"));
+        assert!(unescape_url(
+                String::from("%21%23%24%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D")) ==
+            String::from("!#$&'()*+,/:;=?@[]"));
     }
 }
 

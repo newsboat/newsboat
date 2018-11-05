@@ -139,6 +139,36 @@ pub extern "C" fn rs_get_random_value(rs_max: u32 ) -> u32 {
 }
 
 #[no_mangle]
+pub extern "C" fn rs_escape_url(input: *const c_char) -> *mut c_char {
+    let rs_input = unsafe { CStr::from_ptr(input) };
+    let rs_input = rs_input.to_string_lossy().into_owned();
+
+    let result = utils::escape_url(rs_input);
+    // Panic here can't happen because:
+    // 1. panic can only happen if `result` contains null bytes;
+    // 2. `result` contains what `input` contained, and input is a
+    // null-terminated string from C.
+    let result = CString::new(result).unwrap();
+    result.into_raw()
+}
+
+#[no_mangle]
+pub extern "C" fn rs_unescape_url(input: *const c_char) -> *mut c_char {
+    let rs_input = unsafe { CStr::from_ptr(input) };
+    let rs_input = rs_input.to_string_lossy().into_owned();
+
+    let result = utils::unescape_url(rs_input);
+    // Panic here can't happen because:
+    // 1. It would have already occured within unescape_url
+    // 2. panic can only happen if `result` contains null bytes;
+    // 3. `result` contains what `input` contained, and input is a
+    // null-terminated string from C.
+    let result = CString::new(result).unwrap();
+    result.into_raw()
+}
+
+
+#[no_mangle]
 pub extern "C" fn rs_cstring_free(string: *mut c_char) {
     unsafe {
         if string.is_null() { return }

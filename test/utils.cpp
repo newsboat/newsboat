@@ -947,4 +947,24 @@ TEST_CASE("is_valid_attribute returns true if given string is an STFL attribute"
 	for (const auto& attr : valid) {
 		REQUIRE(utils::is_valid_attribute(attr));
 	}
+
+TEST_CASE("escape_url() takes a string and returns the string in "
+		"percent-encoding format",
+		"[utils]")
+{
+	REQUIRE(utils::escape_url("foo bar") == "foo%20bar");
+	REQUIRE(utils::escape_url("!#$&'()*+,/:;=?@[]") ==
+			"%21%23%24%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D");
+}
+
+TEST_CASE("unescape_url() takes a percent-encoded string and returns the string "
+		"with a precent escaped string",
+		"[utils]")
+{
+	REQUIRE(utils::unescape_url("foo%20bar") == "foo bar");
+	REQUIRE(utils::unescape_url(
+			"%21%23%24%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D") ==
+			"!#$&'()*+,/:;=?@[]");
+	REQUIRE(utils::unescape_url("%00") == "");
+
 }

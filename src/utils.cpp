@@ -1120,30 +1120,12 @@ curl_proxytype utils::get_proxy_type(const std::string& type)
 
 std::string utils::escape_url(const std::string& url)
 {
-	CURL* easyhandle = curl_easy_init();
-	char* output = curl_easy_escape(easyhandle, url.c_str(), 0);
-	if (!output) {
-		LOG(Level::DEBUG, "Libcurl failed to escape url: %s", url);
-		throw std::runtime_error("escaping url failed");
-	}
-	std::string s = output;
-	curl_free(output);
-	curl_easy_cleanup(easyhandle);
-	return s;
+	return RustString(rs_escape_url(url.c_str()));
 }
 
 std::string utils::unescape_url(const std::string& url)
 {
-	CURL* easyhandle = curl_easy_init();
-	char* output = curl_easy_unescape(easyhandle, url.c_str(), 0, NULL);
-	if (!output) {
-		LOG(Level::DEBUG, "Libcurl failed to escape url: %s", url);
-		throw std::runtime_error("escaping url failed");
-	}
-	std::string s = output;
-	curl_free(output);
-	curl_easy_cleanup(easyhandle);
-	return s;
+	return RustString(rs_unescape_url(url.c_str()));
 }
 
 std::wstring utils::clean_nonprintable_characters(std::wstring text)
