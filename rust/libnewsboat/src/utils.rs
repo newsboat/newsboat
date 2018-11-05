@@ -1,3 +1,5 @@
+extern crate rand;
+
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
 }
@@ -45,7 +47,6 @@ pub fn trim_end(rs_str: String) -> String {
     rs_str.trim_right_matches(x).to_string()
 }
 
-extern crate rand;
 pub fn get_random_value(max: u32) -> u32 {
    rand::random::<u32>() % max
 }
