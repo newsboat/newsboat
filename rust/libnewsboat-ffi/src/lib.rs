@@ -81,6 +81,11 @@ pub extern "C" fn rs_trim(input: *const c_char) -> *mut c_char {
 }
 
 #[no_mangle]
+pub extern "C" fn rs_get_random_value(rs_max: u32 ) -> u32 {
+    utils::get_random_value(rs_max)
+}
+
+#[no_mangle]
 pub extern "C" fn rs_cstring_free(string: *mut c_char) {
     unsafe {
         if string.is_null() { return }
