@@ -110,8 +110,9 @@ std::string QueueManager::generate_enqueue_filename(const std::string& url,
 
 void QueueManager::autoenqueue(std::shared_ptr<RssFeed> feed)
 {
-	if (!cfg->get_configvalue_as_bool("podcast-auto-enqueue"))
+	if (!cfg->get_configvalue_as_bool("podcast-auto-enqueue")) {
 		return;
+	}
 
 	std::lock_guard<std::mutex> lock(feed->item_mutex);
 	for (const auto& item : feed->items()) {
