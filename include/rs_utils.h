@@ -22,6 +22,8 @@ unsigned int rs_get_random_value(const unsigned int max);
 
 void rs_cstring_free(char* str);
 
+char* rs_get_default_browser();
+
 class RustString {
 private:
 	char* str;

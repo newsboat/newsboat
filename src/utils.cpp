@@ -1456,11 +1456,7 @@ void utils::initialize_ssl_implementation(void)
 
 std::string utils::get_default_browser()
 {
-	const char* browser = getenv("BROWSER");
-	if (!browser) {
-		browser = "lynx";
-	}
-	return std::string(browser);
+	return RustString(rs_get_default_browser());
 }
 
 } // namespace newsboat

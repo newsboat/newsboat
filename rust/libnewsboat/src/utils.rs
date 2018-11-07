@@ -38,6 +38,15 @@ pub fn to_u(rs_str: String, default_value: u32) -> u32 {
     result.unwrap()
 }
 
+
+pub fn get_default_browser() -> String {
+    use std::env;
+    match env::var("BROWSER") {
+        Ok(val) => return val,
+        Err(_) => return String::from("lynx"),
+    }
+}
+
 pub fn trim(rs_str: String) -> String {
     rs_str.trim().to_string()
 }
