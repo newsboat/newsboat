@@ -18,9 +18,9 @@ TextFormatter::~TextFormatter() {}
 void TextFormatter::add_line(LineType type, std::string line)
 {
 	LOG(Level::DEBUG,
-		"TextFormatter::add_line: `%s' (line type %i)",
+		"TextFormatter::add_line: `%s' (line type %u)",
 		line,
-		type);
+		static_cast<unsigned int>(type));
 
 	auto clean_line = utils::wstr2str(
 		utils::clean_nonprintable_characters(utils::str2wstr(line)));
@@ -141,7 +141,7 @@ std::vector<std::string> format_text_plain_helper(
 			"TextFormatter::format_text_plain: got line `%s' type "
 			"%u",
 			text,
-			type);
+			static_cast<unsigned int>(type));
 
 		if (rxman && type != LineType::hr) {
 			rxman->quote_and_highlight(text, location);

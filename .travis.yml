@@ -27,6 +27,7 @@ install_coveralls_commands: &install_coveralls
 
 newsboat_brew_commands: &osx_deps
   - brew update
+  - brew install gcc || brew link --overwrite gcc
   - brew outdated "pkg-config" || brew upgrade "pkg-config"
   - brew install "gettext" && brew link --force "gettext"
   - brew outdated "sqlite" || brew upgrade "sqlite"
@@ -43,10 +44,6 @@ newsboat_brew_commands: &osx_deps
 
 matrix:
   fast_finish: true
-  allow_failures:
-    # There is a problem with brew at the moment: it can't upgrade sqlite and
-    # fails the build. See https://github.com/travis-ci/travis-ci/issues/10275
-    - os: osx
   include:
     - compiler: gcc-4.9
       os: linux
@@ -219,7 +216,7 @@ script:
   - if [ -z "$CHECKS" ]; then   make -j2 --keep-going all test   ; fi
   - if [ -z "$CHECKS" ]; then   make distclean   ; fi
   - if [ -z "$CHECKS" ]; then   make -j2 PROFILE=1 all test   ; fi
-  - if [ -z "$CHECKS" ]; then   ( cd test && ./test --order rand ) ; make cargo-test   ; fi
+  - if [ -z "$CHECKS" ]; then   ( cd test && ./test --order rand ) ; cargo test   ; fi
   - if [ -n "$CHECKS" ]; then   make run-i18nspector | tee i18nspector.log && if `egrep '^(E|W):' i18nspector.log >/dev/null 2>&1` ; then false else true; fi   ; fi
 
 after_success:

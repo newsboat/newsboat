@@ -282,7 +282,7 @@ void ConfigContainer::handle_action(const std::string& action,
 	LOG(Level::DEBUG,
 		"ConfigContainer::handle_action: action = %s, type = %u",
 		action,
-		cfgdata.type);
+		static_cast<unsigned int>(cfgdata.type));
 
 	if (params.size() < 1) {
 		throw ConfigHandlerException(

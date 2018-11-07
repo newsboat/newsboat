@@ -59,6 +59,33 @@ pub extern "C" fn rs_to_u(in_str: *const c_char, default_value: u32) -> u32
 }
 
 #[no_mangle]
+pub extern "C" fn rs_trim_end(input: *const c_char) -> *mut c_char {
+    let rs_input = unsafe { CStr::from_ptr(input) };
+    let rs_input = rs_input.to_string_lossy().into_owned();
+
+    let result = utils::trim_end(rs_input);
+
+    let result = CString::new(result).unwrap();
+    result.into_raw()
+}
+
+#[no_mangle]
+pub extern "C" fn rs_trim(input: *const c_char) -> *mut c_char {
+    let rs_input = unsafe { CStr::from_ptr(input) };
+    let rs_input = rs_input.to_string_lossy().into_owned();
+
+    let result = utils::trim(rs_input);
+
+    let result = CString::new(result).unwrap();
+    result.into_raw()
+}
+
+#[no_mangle]
+pub extern "C" fn rs_get_random_value(rs_max: u32 ) -> u32 {
+    utils::get_random_value(rs_max)
+}
+
+#[no_mangle]
 pub extern "C" fn rs_cstring_free(string: *mut c_char) {
     unsafe {
         if string.is_null() { return }

@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "rust/libnewsboat",
+    "rust/libnewsboat-ffi",
+]

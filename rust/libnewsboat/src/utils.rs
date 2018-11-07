@@ -1,3 +1,5 @@
+extern crate rand;
+
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
 }
@@ -36,12 +38,26 @@ pub fn to_u(rs_str: String, default_value: u32) -> u32 {
     result.unwrap()
 }
 
+
 pub fn get_default_browser() -> String {
     use std::env;
     match env::var("BROWSER") {
         Ok(val) => return val,
         Err(_) => return String::from("lynx"),
     }
+}
+
+pub fn trim(rs_str: String) -> String {
+    rs_str.trim().to_string()
+}
+
+pub fn trim_end(rs_str: String) -> String {
+    let x: &[_] = &['\n','\r'];
+    rs_str.trim_right_matches(x).to_string()
+}
+
+pub fn get_random_value(max: u32) -> u32 {
+   rand::random::<u32>() % max
 }
 
 #[cfg(test)]
@@ -101,6 +117,19 @@ mod tests {
         assert_eq!(to_u(String::from("23"), 1), 23);
         assert_eq!(to_u(String::from(""), 0), 0);
         assert_eq!(to_u(String::from("zero"), 1), 1);
+    }
+
+    #[test]
+    fn t_trim() {
+        assert_eq!(trim(String::from("  xxx\r\n")), "xxx");
+        assert_eq!(trim(String::from("\n\n abc  foobar\n")), "abc  foobar");
+        assert_eq!(trim(String::from("")), "");
+        assert_eq!(trim(String::from("     \n")), "");
+    }
+
+    #[test]
+    fn t_trim_end() {
+        assert_eq!(trim_end(String::from("quux\n")), "quux");
     }
 }
 
