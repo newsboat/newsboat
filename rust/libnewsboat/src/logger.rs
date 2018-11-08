@@ -252,6 +252,24 @@ pub fn get_instance() -> &'static Logger {
     &GLOBAL_LOGGER
 }
 
+/// Convenience macro for logging.
+///
+/// Most of the time, you should just use this. For example:
+/// ```no_run
+/// # #[macro_use] extern crate libnewsboat;
+/// use libnewsboat::logger::Level;
+///
+/// fn super_cool_function(value: u32) {
+///     log!(Level::Debug, &format!("super_cool_function(): value = {}", value));
+/// }
+/// ```
+#[macro_export]
+macro_rules! log {
+    ( $level:expr, $message:expr ) => {
+        libnewsboat::logger::get_instance().log($level, $message);
+    }
+}
+
 #[cfg(test)]
 mod tests {
     extern crate tempfile;
