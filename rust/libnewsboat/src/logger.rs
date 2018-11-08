@@ -201,7 +201,7 @@ impl Logger {
     /// If the message couldn't be written for whatever reason, this function ignores the failure.
     /// Were you to check the return value of every log() call, you'd just stop writing logs.
     pub fn log(&self, level: Level, message: &str) {
-        if level as usize > self.loglevel.load(Ordering::SeqCst) {
+        if level as usize > self.loglevel.load(Ordering::Relaxed) {
             return;
         }
 
@@ -238,6 +238,18 @@ impl Logger {
     pub fn set_loglevel(&self, level: Level) {
         self.loglevel.store(level as usize, Ordering::SeqCst);
     }
+}
+
+lazy_static!{
+    static ref GLOBAL_LOGGER: Logger = Logger::new();
+}
+
+/// Returns a global logger instance.
+///
+/// This logger exists for the duration of the program. It's better to set the loglevel and
+/// logfiles as early as possible, so no messages are lost.
+pub fn get_instance() -> &'static Logger {
+    &GLOBAL_LOGGER
 }
 
 #[cfg(test)]
