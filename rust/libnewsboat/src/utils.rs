@@ -62,6 +62,10 @@ pub fn is_query_url(url: &str) -> bool {
    url.starts_with("query:")
 }
 
+pub fn is_filter_url(url: &str) -> bool {
+    url.starts_with("filter:")
+}
+
 pub fn get_default_browser() -> String {
     use std::env;
     match env::var("BROWSER") {
