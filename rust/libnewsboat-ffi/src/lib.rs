@@ -59,6 +59,13 @@ pub extern "C" fn rs_to_u(in_str: *const c_char, default_value: u32) -> u32
 }
 
 #[no_mangle]
+pub extern "C" fn rs_is_http_url(in_str: *const c_char) -> bool {
+    let rs_str = unsafe { CStr::from_ptr(in_str) };
+    let rs_str = rs_str.to_string_lossy();
+    utils::is_http_url(&rs_str)
+}
+
+#[no_mangle]
 pub extern "C" fn rs_trim_end(input: *const c_char) -> *mut c_char {
     let rs_input = unsafe { CStr::from_ptr(input) };
     let rs_input = rs_input.to_string_lossy().into_owned();

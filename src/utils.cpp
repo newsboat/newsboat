@@ -902,7 +902,7 @@ bool utils::is_special_url(const std::string& url)
 
 bool utils::is_http_url(const std::string& url)
 {
-	return url.substr(0, 7) == "http://" || url.substr(0, 8) == "https://";
+	return rs_is_http_url(url.c_str());
 }
 
 bool utils::is_query_url(const std::string& url)
