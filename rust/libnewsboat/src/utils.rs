@@ -58,6 +58,10 @@ pub fn is_http_url(url: &str) -> bool {
     url.starts_with("https://") || url.starts_with("http://")
 }
 
+pub fn is_query_url(url: &str) -> bool {
+   url.starts_with("query:")
+}
+
 pub fn get_default_browser() -> String {
     use std::env;
     match env::var("BROWSER") {

@@ -907,7 +907,7 @@ bool utils::is_http_url(const std::string& url)
 
 bool utils::is_query_url(const std::string& url)
 {
-	return url.substr(0, 6) == "query:";
+	return rs_is_query_url(url.c_str());
 }
 
 bool utils::is_filter_url(const std::string& url)

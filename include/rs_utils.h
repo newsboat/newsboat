@@ -16,6 +16,8 @@ unsigned int rs_to_u(const char* str, const unsigned int default_value);
 
 bool rs_is_http_url(const char* str);
 
+bool rs_is_query_url(const char* str);
+
 char* rs_trim(const char* str);
 
 char* rs_trim_end(const char* str);
