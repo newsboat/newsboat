@@ -24,6 +24,8 @@ void rs_cstring_free(char* str);
 
 char* rs_get_default_browser();
 
+bool rs_is_valid_color(const char* str);
+
 class RustString {
 private:
 	char* str;

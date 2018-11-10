@@ -1,4 +1,20 @@
 extern crate rand;
+use std::collections::HashSet;
+use once_cell::sync::Lazy;
+
+const COLORS: Lazy<HashSet<&'static str>> = sync_lazy! {
+    let mut set = HashSet::new();
+    set.insert("black");
+    set.insert("red");
+    set.insert("green");
+    set.insert("yellow");
+    set.insert("blue");
+    set.insert("magenta");
+    set.insert("cyan");
+    set.insert("white");
+    set.insert("default");
+    set
+};
 
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
@@ -58,6 +74,23 @@ pub fn trim_end(rs_str: String) -> String {
 
 pub fn get_random_value(max: u32) -> u32 {
    rand::random::<u32>() % max
+}
+
+pub fn is_valid_color(color: &str) -> bool {
+    if COLORS.contains(color) {
+        return true;
+    }
+    if color.starts_with("color0") {
+        return color == "color0";
+    }
+    if color.starts_with("color") {
+        let num_part = &color[5..];
+        match num_part.parse::<u8>() {
+            Ok(_) => return true,
+            _ => return false,
+        }
+    }
+    false
 }
 
 #[cfg(test)]
@@ -130,6 +163,42 @@ mod tests {
     #[test]
     fn t_trim_end() {
         assert_eq!(trim_end(String::from("quux\n")), "quux");
+    }
+
+    #[test]
+    fn t_is_valid_color() {
+        let invalid = [
+            "awesome",
+            "list",
+            "of",
+            "things",
+            "that",
+            "aren't",
+            "colors",
+            "color0123",
+            "color1024",
+        ];
+        for color in &invalid {
+            assert!(!is_valid_color(color));
+        }
+
+        let valid = [
+            "black",
+            "red",
+            "green",
+            "yellow",
+            "blue",
+            "magenta",
+            "cyan",
+            "white",
+            "default",
+            "color0",
+            "color163",
+        ];
+
+        for color in &valid {
+            assert!(is_valid_color(color));
+        }
     }
 }
 

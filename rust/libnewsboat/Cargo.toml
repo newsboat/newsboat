@@ -6,6 +6,7 @@ authors = ["Alexander Batischev <eual.jp@gmail.com>"]
 [dependencies]
 chrono = "0.4"
 rand = "0.5"
+once_cell = "0.1.6"
 
 [dev-dependencies]
 tempfile = "3"
