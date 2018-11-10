@@ -735,58 +735,7 @@ ScopeMeasure::~ScopeMeasure()
 
 bool utils::is_valid_color(const std::string& color)
 {
-	static const std::unordered_set<std::string> colors = {"black",
-		"red",
-		"green",
-		"yellow",
-		"blue",
-		"magenta",
-		"cyan",
-		"white",
-		"default"};
-	if (colors.find(color) != colors.end()) {
-		return true;
-	}
-
-	// does it start with "color"?
-	if (color.size() > 5 && color.substr(0, 5) == "color") {
-		if (color[5] == '0') {
-			// if the remainder of the string starts with zero, it
-			// can only be "color0"
-			return color == "color0" ? true : false;
-		} else {
-			// we're now sure that the remainder doesn't start with
-			// zero, but is it a valid decimal number?
-			const std::string number =
-				color.substr(5, color.size() - 5);
-			size_t pos{};
-			int n;
-			try {
-				n = std::stoi(number, &pos);
-			} catch (const std::invalid_argument& e) {
-				// What came after "color" wasn't a number,
-				// hence the input string is not a valid color.
-				return false;
-			} catch (const std::out_of_range& e) {
-				// What came after "color" couldn't fit into an
-				// int, whereas valid values all fit into a
-				// byte. Thus, the input string is not a valid
-				// color.
-				return false;
-			}
-
-			// remainder should not contain any trailing characters
-			if (number.size() != pos)
-				return false;
-
-			// remainder should be a number in (0; 255]. The
-			// interval is half-open because zero is already handled
-			// above.
-			if (n > 0 && n < 256)
-				return true;
-		}
-	}
-	return false;
+	return rs_is_valid_color(color.c_str());
 }
 
 bool utils::is_valid_attribute(const std::string& attrib)
