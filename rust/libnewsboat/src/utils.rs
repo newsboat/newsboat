@@ -66,6 +66,10 @@ pub fn is_filter_url(url: &str) -> bool {
     url.starts_with("filter:")
 }
 
+pub fn is_exec_url(url: &str) -> bool {
+    url.starts_with("exec:")
+}
+
 pub fn get_default_browser() -> String {
     use std::env;
     match env::var("BROWSER") {

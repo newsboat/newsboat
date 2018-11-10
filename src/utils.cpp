@@ -917,7 +917,7 @@ bool utils::is_filter_url(const std::string& url)
 
 bool utils::is_exec_url(const std::string& url)
 {
-	return url.substr(0, 5) == "exec:";
+	return rs_is_exec_url(url.c_str());
 }
 
 std::string utils::censor_url(const std::string& url)
