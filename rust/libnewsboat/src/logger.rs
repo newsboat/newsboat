@@ -14,6 +14,8 @@ use std::sync::Mutex;
 ///
 /// Each message is assigned a level. set_loglevel instructs Logger to only store messages at and
 /// above a certain importance level, making the log file shorter and easier to understand.
+// TODO: remove repr(C) when we finished porting C++ code to Rust.
+#[repr(C)]
 pub enum Level {
     /// Not important at all, don't log.
     ///
@@ -190,6 +192,17 @@ impl Logger {
 
     /// Writes a message to a log.
     ///
+    /// This method is a wrapper around `log_raw()`.
+    pub fn log(&self, level: Level, message: &str) {
+        self.log_raw(level, message.as_bytes())
+    }
+
+    /// Writes binary data to the log.
+    ///
+    /// This method is primarily used for logging things received from C++. Since there is no
+    /// guarantee that the data we got from C++ is valid UTF-8, we can't put it into &str. So we
+    /// treat it as a binary stream, and log it using this method.
+    ///
     /// If `level` is lower than the logger's current level, the message won't be written. For
     /// example, if Logger's level is set to Level::Critical, then Level::Error won't be written.
     ///
@@ -200,8 +213,8 @@ impl Logger {
     ///
     /// If the message couldn't be written for whatever reason, this function ignores the failure.
     /// Were you to check the return value of every log() call, you'd just stop writing logs.
-    pub fn log(&self, level: Level, message: &str) {
-        if level as usize > self.loglevel.load(Ordering::Relaxed) {
+    pub fn log_raw(&self, level: Level, data: &[u8]) {
+        if level as usize > self.get_loglevel() {
             return;
         }
 
@@ -210,18 +223,22 @@ impl Logger {
         let mut files = self.files.lock().expect("Someone poisoned logger's mutex");
 
         if let Some(ref mut logfile) = files.logfile {
-            let line = format!("[{}] {}: {}\n", timestamp, level, message);
+            let prefix = format!("[{}] {}: ", timestamp, level);
 
             // Ignoring the error since checking every log() call will be too bothersome.
-            let _ = logfile.write_all(line.as_bytes());
+            let _ = logfile.write_all(prefix.as_bytes());
+            let _ = logfile.write_all(data);
+            let _ = logfile.write_all("\n".as_bytes());
         }
 
         if level == Level::UserError {
             if let Some(ref mut errorlogfile) = files.errorlogfile {
-                let line = format!("[{}] {}\n", timestamp, message);
+                let prefix = format!("[{}] ", timestamp);
 
                 // Ignoring the error since checking every log() call will be too bothersome.
-                let _ = errorlogfile.write_all(line.as_bytes());
+                let _ = errorlogfile.write_all(prefix.as_bytes());
+                let _ = errorlogfile.write_all(data);
+                let _ = errorlogfile.write_all("\n".as_bytes());
             }
         }
     }
@@ -237,6 +254,13 @@ impl Logger {
     /// Calling this doesn't close already opened logs.
     pub fn set_loglevel(&self, level: Level) {
         self.loglevel.store(level as usize, Ordering::SeqCst);
+    }
+
+    /// Returns current maximum "importance level" of the messages that will be written to the log.
+    ///
+    /// For a more detailed explanation, see `set_loglevel()`.
+    pub fn get_loglevel(&self) -> usize {
+        self.loglevel.load(Ordering::Relaxed)
     }
 }
 

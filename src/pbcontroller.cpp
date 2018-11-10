@@ -221,12 +221,12 @@ int PbController::run(int argc, char* argv[])
 			automatic_dl = true;
 			break;
 		case 'd':
-			Logger::getInstance().set_logfile(optarg);
+			Logger::set_logfile(optarg);
 			break;
 		case 'l': {
 			Level l = static_cast<Level>(atoi(optarg));
 			if (l > Level::NONE && l <= Level::DEBUG) {
-				Logger::getInstance().set_loglevel(l);
+				Logger::set_loglevel(l);
 			} else {
 				std::cerr << strprintf::fmt(_("%s: %d: invalid "
 							      "loglevel value"),

@@ -1,22 +1,28 @@
 #ifndef NEWSBOAT_LOGGER_H_
 #define NEWSBOAT_LOGGER_H_
 
-#include <fstream>
-#include <mutex>
-
 #include "config.h"
 #include "strprintf.h"
 
 namespace newsboat {
+	enum class Level;
+}
 
-/* Be sure to update loglevel_str array in src/logger.cpp if you change this
- * enum. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+	uint64_t rs_get_loglevel();
+	void rs_log(newsboat::Level level, const char* message);
+#ifdef __cplusplus
+}
+#endif
+
+namespace newsboat {
+
+// This has to be in sync with logger::Level in rust/libnewsboat/src/logger.rs
 enum class Level { NONE = 0, USERERROR, CRITICAL, ERROR, WARN, INFO, DEBUG };
 
-class Logger {
-public:
-	static Logger& getInstance();
-
+namespace Logger {
 	void set_logfile(const std::string& logfile);
 	void set_errorlogfile(const std::string& logfile);
 	void set_loglevel(Level l);
@@ -24,62 +30,10 @@ public:
 	template<typename... Args>
 	void log(Level l, const std::string& format, Args... args)
 	{
-		const char* loglevel_str[] = {"NONE",
-			"USERERROR",
-			"CRITICAL",
-			"ERROR",
-			"WARNING",
-			"INFO",
-			"DEBUG"};
-		/*
-		 * This function checks the loglevel, creates the error message,
-		 * and then writes it to the debug logfile and to the error
-		 * logfile (if applicable).
-		 */
-		std::lock_guard<std::mutex> lock(logMutex);
-		if (l <= curlevel && curlevel > Level::NONE &&
-			(f.is_open() || ef.is_open())) {
-			if (curlevel > Level::DEBUG)
-				curlevel = Level::DEBUG;
-
-			char date[128];
-			time_t t = time(nullptr);
-			struct tm* stm = localtime(&t);
-			strftime(date, sizeof(date), "%Y-%m-%d %H:%M:%S", stm);
-
-			auto logmsgbuf = strprintf::fmt(format, args...);
-			auto buf = strprintf::fmt("[%s] %s: %s",
-				date,
-				loglevel_str[static_cast<int>(l)],
-				logmsgbuf);
-
-			if (f.is_open()) {
-				f << buf << std::endl;
-			}
-
-			if (Level::USERERROR == l && ef.is_open()) {
-				buf = strprintf::fmt(
-					"[%s] %s", date, logmsgbuf);
-				ef << buf << std::endl;
-				ef.flush();
-			}
+		if (static_cast<uint64_t>(l) <= rs_get_loglevel()) {
+			rs_log(l, strprintf::fmt(format, args...).c_str());
 		}
 	}
-
-private:
-	Logger();
-	Logger(const Logger&) {}
-	Logger& operator=(const Logger&)
-	{
-		return *this;
-	}
-	~Logger() {}
-
-	Level curlevel;
-	std::mutex logMutex;
-	static std::mutex instanceMutex;
-	std::fstream f;
-	std::fstream ef;
 };
 
 } // namespace newsboat
@@ -92,7 +46,7 @@ private:
 #else
 #define LOG(x, ...)                                        \
 	do {                                               \
-		Logger::getInstance().log(x, __VA_ARGS__); \
+		newsboat::Logger::log(x, __VA_ARGS__); \
 	} while (0)
 #endif
 
