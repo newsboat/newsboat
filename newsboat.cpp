@@ -153,6 +153,8 @@ void print_version(const std::string& argv0, unsigned int level)
 
 int main(int argc, char* argv[])
 {
+	rs_init_global_logger();
+
 	utils::initialize_ssl_implementation();
 
 	setlocale(LC_CTYPE, "");

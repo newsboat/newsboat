@@ -1,7 +1,7 @@
 extern crate libnewsboat;
 extern crate tempfile;
 
-use libnewsboat::logger::get_instance;
+use libnewsboat::logger::{get_instance, init_global_logger};
 use self::tempfile::TempDir;
 use std::io::Result;
 
@@ -16,6 +16,7 @@ fn t_get_instance_returns_valid_logger() -> Result<()> {
 
     assert!(!logfile.exists());
 
+    init_global_logger();
     get_instance().set_logfile(logfile.to_str().unwrap());
 
     assert!(logfile.exists());

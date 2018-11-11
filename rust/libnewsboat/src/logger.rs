@@ -2,12 +2,13 @@
 
 extern crate chrono;
 
+use once_cell::sync::OnceCell;
 use self::chrono::offset::Local;
 use std::fmt;
 use std::fs::{File, OpenOptions};
 use std::io::Write;
-use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::Mutex;
+use std::sync::atomic::{AtomicUsize, Ordering};
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 /// "Importance levels" for log messages.
@@ -264,16 +265,29 @@ impl Logger {
     }
 }
 
-lazy_static!{
-    static ref GLOBAL_LOGGER: Logger = Logger::new();
-}
+static GLOBAL_LOGGER: OnceCell<Logger> = OnceCell::INIT;
 
 /// Returns a global logger instance.
 ///
 /// This logger exists for the duration of the program. It's better to set the loglevel and
 /// logfiles as early as possible, so no messages are lost.
 pub fn get_instance() -> &'static Logger {
-    &GLOBAL_LOGGER
+    GLOBAL_LOGGER.get().expect("Global logger hasn't been initialized yet")
+}
+
+/// Initializes global logger instance.
+///
+/// The instance is the same as returned by `Logger::new()`.
+///
+/// # Panics
+///
+/// The call panics if the global instance is already initialized.
+pub fn init_global_logger() {
+    let logger = Logger::new();
+    match GLOBAL_LOGGER.set(logger) {
+        Ok(()) => return,
+        Err(_) => panic!("Global logger is already initialized"),
+    }
 }
 
 /// Convenience macro for logging.

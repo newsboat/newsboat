@@ -2,7 +2,7 @@
 extern crate libnewsboat;
 extern crate tempfile;
 
-use libnewsboat::logger::{get_instance, Level};
+use libnewsboat::logger::{get_instance, init_global_logger, Level};
 use self::tempfile::TempDir;
 use std::fs::File;
 use std::io::{Result, BufReader, BufRead};
@@ -24,6 +24,7 @@ fn t_log_macro_writes_messages_to_the_log() -> Result<()> {
         logfile
     };
 
+    init_global_logger();
     get_instance().set_logfile(logfile.to_str().unwrap());
     get_instance().set_loglevel(Level::Debug);
 
