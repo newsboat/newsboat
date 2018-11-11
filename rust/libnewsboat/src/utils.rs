@@ -54,6 +54,9 @@ pub fn to_u(rs_str: String, default_value: u32) -> u32 {
     result.unwrap()
 }
 
+pub fn is_http_url(url: &str) -> bool {
+    url.starts_with("https://") || url.starts_with("http://")
+}
 
 pub fn get_default_browser() -> String {
     use std::env;
@@ -150,6 +153,17 @@ mod tests {
         assert_eq!(to_u(String::from("23"), 1), 23);
         assert_eq!(to_u(String::from(""), 0), 0);
         assert_eq!(to_u(String::from("zero"), 1), 1);
+    }
+
+    #[test]
+    fn t_is_http_url() {
+	assert!(is_http_url("https://foo.bar"));
+	assert!(is_http_url("http://"));
+	assert!(is_http_url("https://"));
+
+	assert!(!is_http_url("htt://foo.bar"));
+	assert!(!is_http_url("http:/"));
+	assert!(!is_http_url("foo://bar"));
     }
 
     #[test]

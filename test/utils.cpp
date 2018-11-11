@@ -348,6 +348,18 @@ TEST_CASE("strwidth()", "[utils]")
 	REQUIRE(utils::strwidth(utils::wstr2str(L"\uF91F")) == 2);
 }
 
+TEST_CASE("is_http_url()", "[utils]")
+{
+	REQUIRE(utils::is_http_url("http://foo.bar"));
+	REQUIRE(utils::is_http_url("https://foo.bar"));
+	REQUIRE(utils::is_http_url("http://"));
+	REQUIRE(utils::is_http_url("https://"));
+
+	REQUIRE_FALSE(utils::is_http_url("htt://foo.bar"));
+	REQUIRE_FALSE(utils::is_http_url("http:/"));
+	REQUIRE_FALSE(utils::is_http_url("foo://bar"));
+}
+
 TEST_CASE("join()", "[utils]")
 {
 	std::vector<std::string> str;
