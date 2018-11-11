@@ -156,6 +156,17 @@ mod tests {
     }
 
     #[test]
+    fn t_is_http_url() {
+	assert!(is_http_url("https://foo.bar"));
+	assert!(is_http_url("http://"));
+	assert!(is_http_url("https://"));
+
+	assert!(!is_http_url("htt://foo.bar"));
+	assert!(!is_http_url("http:/"));
+	assert!(!is_http_url("foo://bar"));
+    }
+
+    #[test]
     fn t_trim() {
         assert_eq!(trim(String::from("  xxx\r\n")), "xxx");
         assert_eq!(trim(String::from("\n\n abc  foobar\n")), "abc  foobar");
