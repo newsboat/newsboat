@@ -179,6 +179,33 @@ mod tests {
     }
 
     #[test]
+    fn t_is_query_url() {
+	assert!(is_query_url("query:"));
+	assert!(is_query_url("query: example"));
+
+	assert!(!is_query_url("query"));
+	assert!(!is_query_url("   query:"));
+    }
+
+    #[test]
+    fn t_is_filter_url() {
+	assert!(is_filter_url("filter:"));
+	assert!(is_filter_url("filter: example"));
+
+	assert!(!is_filter_url("filter"));
+	assert!(!is_filter_url("   filter:"));
+    }
+
+    #[test]
+    fn t_is_exec_url() {
+	assert!(is_exec_url("exec:"));
+	assert!(is_exec_url("exec: example"));
+
+	assert!(!is_exec_url("exec"));
+	assert!(!is_exec_url("   exec:"));
+    }
+
+    #[test]
     fn t_trim() {
         assert_eq!(trim(String::from("  xxx\r\n")), "xxx");
         assert_eq!(trim(String::from("\n\n abc  foobar\n")), "abc  foobar");
