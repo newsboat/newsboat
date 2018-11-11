@@ -3,7 +3,7 @@
 extern crate chrono;
 
 use once_cell::sync::OnceCell;
-use self::chrono::offset::Local;
+use self::chrono::{Datelike, Timelike, offset::Local};
 use std::fmt;
 use std::fs::{File, OpenOptions};
 use std::io::Write;
@@ -219,25 +219,33 @@ impl Logger {
             return;
         }
 
-        let timestamp = Local::now().format("%Y-%m-%d %H:%M:%S");
+        let timestamp = Local::now();
+        // DateTime::format() is extremely slow; format! is way faster. See
+        // https://github.com/chronotope/chrono/issues/94 for details.
+        let timestamp = format!("[{}-{:02}-{:02} {:02}:{:02}:{:02}] ",
+            timestamp.year(),
+            timestamp.month(),
+            timestamp.day(),
+            timestamp.hour(),
+            timestamp.minute(),
+            timestamp.second());
 
         let mut files = self.files.lock().expect("Someone poisoned logger's mutex");
 
         if let Some(ref mut logfile) = files.logfile {
-            let prefix = format!("[{}] {}: ", timestamp, level);
+            let level = format!("{}: ", level);
 
             // Ignoring the error since checking every log() call will be too bothersome.
-            let _ = logfile.write_all(prefix.as_bytes());
+            let _ = logfile.write_all(timestamp.as_bytes());
+            let _ = logfile.write_all(level.as_bytes());
             let _ = logfile.write_all(data);
             let _ = logfile.write_all("\n".as_bytes());
         }
 
         if level == Level::UserError {
             if let Some(ref mut errorlogfile) = files.errorlogfile {
-                let prefix = format!("[{}] ", timestamp);
-
                 // Ignoring the error since checking every log() call will be too bothersome.
-                let _ = errorlogfile.write_all(prefix.as_bytes());
+                let _ = errorlogfile.write_all(timestamp.as_bytes());
                 let _ = errorlogfile.write_all(data);
                 let _ = errorlogfile.write_all("\n".as_bytes());
             }
