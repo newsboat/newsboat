@@ -740,16 +740,7 @@ bool utils::is_valid_color(const std::string& color)
 
 bool utils::is_valid_attribute(const std::string& attrib)
 {
-	static const std::unordered_set<std::string> attribs = {"standout",
-		"underline",
-		"reverse",
-		"blink",
-		"dim",
-		"bold",
-		"protect",
-		"invis",
-		"default"};
-	return attribs.find(attrib) != attribs.end();
+	return rs_is_valid_attribute(attrib.c_str());
 }
 
 std::vector<std::pair<unsigned int, unsigned int>> utils::partition_indexes(

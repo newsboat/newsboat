@@ -16,6 +16,20 @@ const COLORS: Lazy<HashSet<&'static str>> = sync_lazy! {
     set
 };
 
+const ATTRIBUTES: Lazy<HashSet<&'static str>> = sync_lazy!{
+    let mut set = HashSet::new();
+    set.insert("standout");
+    set.insert("underline");
+    set.insert("reverse");
+    set.insert("blink");
+    set.insert("dim");
+    set.insert("bold");
+    set.insert("protect");
+    set.insert("invis");
+    set.insert("default");
+    set
+};
+
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
 }
@@ -91,6 +105,10 @@ pub fn is_valid_color(color: &str) -> bool {
         }
     }
     false
+}
+
+pub fn is_valid_attribute(attr: &str) -> bool {
+    ATTRIBUTES.contains(attr)
 }
 
 #[cfg(test)]
@@ -199,6 +217,35 @@ mod tests {
         for color in &valid {
             assert!(is_valid_color(color));
         }
+    }
+
+    #[test]
+    fn t_is_valid_attribte() {
+        let invalid = [
+            "foo",
+            "bar",
+            "baz",
+            "quux",
+        ];
+        for attr in &invalid {
+            assert!(!is_valid_attribute(attr));
+        }
+
+        let valid = [
+            "standout",
+            "underline",
+            "reverse",
+            "blink",
+            "dim",
+            "bold",
+            "protect",
+            "invis",
+            "default",
+        ];
+        for attr in &valid {
+            assert!(is_valid_attribute(attr));
+        }
+
     }
 }
 

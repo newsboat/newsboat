@@ -110,3 +110,10 @@ pub extern "C" fn rs_is_valid_color(input: *const c_char) -> bool {
     let rs_input = rs_input.to_string_lossy().into_owned();
     utils::is_valid_color(&rs_input)
 }
+
+#[no_mangle]
+pub extern "C" fn rs_is_valid_attribute(input: *const c_char) -> bool {
+    let rs_input = unsafe { CStr::from_ptr(input) };
+    let rs_input = rs_input.to_string_lossy();
+    utils::is_valid_attribute(&rs_input)
+}
