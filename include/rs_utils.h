@@ -42,6 +42,8 @@ bool rs_is_valid_color(const char* str);
 
 bool rs_is_valid_podcast_type(const char* mimetype);
 
+bool rs_is_valid_attribute(const char* str);
+
 class RustString {
 private:
 	char* str;

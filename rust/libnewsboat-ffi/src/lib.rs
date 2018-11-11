@@ -200,3 +200,10 @@ pub extern "C" fn rs_set_user_error_logfile(user_error_logfile: *const c_char) {
 pub extern "C" fn rs_get_loglevel() -> u64 {
     logger::get_instance().get_loglevel() as u64
 }
+
+#[no_mangle]
+pub extern "C" fn rs_is_valid_attribute(input: *const c_char) -> bool {
+    let rs_input = unsafe { CStr::from_ptr(input) };
+    let rs_input = rs_input.to_string_lossy();
+    utils::is_valid_attribute(&rs_input)
+}
