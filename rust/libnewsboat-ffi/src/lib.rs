@@ -107,6 +107,6 @@ pub extern "C" fn rs_get_default_browser() -> *mut c_char {
 #[no_mangle]
 pub extern "C" fn rs_is_valid_color(input: *const c_char) -> bool {
     let rs_input = unsafe { CStr::from_ptr(input) };
-    let rs_input = rs_input.to_string_lossy().into_owned();
+    let rs_input = rs_input.to_string_lossy();
     utils::is_valid_color(&rs_input)
 }
