@@ -28,6 +28,8 @@ char* rs_get_default_browser();
 
 bool rs_is_valid_color(const char* str);
 
+bool rs_is_valid_podcast_type(const char* mimetype);
+
 class RustString {
 private:
 	char* str;

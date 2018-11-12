@@ -117,3 +117,11 @@ pub extern "C" fn rs_is_valid_color(input: *const c_char) -> bool {
     let rs_input = rs_input.to_string_lossy();
     utils::is_valid_color(&rs_input)
 }
+
+
+#[no_mangle]
+pub extern "C" fn rs_is_valid_podcast_type(mimetype: *const c_char) -> bool {
+    let rs_mimetype = unsafe { CStr::from_ptr(mimetype) };
+    let rs_mimetype = rs_mimetype.to_string_lossy();
+    utils::is_valid_podcast_type(&rs_mimetype)
+}
