@@ -54,6 +54,10 @@ pub fn to_u(rs_str: String, default_value: u32) -> u32 {
     result.unwrap()
 }
 
+pub fn is_special_url(url: &str) -> bool {
+    is_query_url(url) || is_filter_url(url) || is_exec_url(url)
+}
+
 pub fn is_http_url(url: &str) -> bool {
     url.starts_with("https://") || url.starts_with("http://")
 }
@@ -165,6 +169,24 @@ mod tests {
         assert_eq!(to_u(String::from("23"), 1), 23);
         assert_eq!(to_u(String::from(""), 0), 0);
         assert_eq!(to_u(String::from("zero"), 1), 1);
+    }
+
+    #[test]
+    fn t_is_special_url() {
+	assert!(is_special_url("query:"));
+	assert!(is_special_url("query: example"));
+	assert!(!is_special_url("query"));
+	assert!(!is_special_url("   query:"));
+
+	assert!(is_special_url("filter:"));
+	assert!(is_special_url("filter: example"));
+	assert!(!is_special_url("filter"));
+	assert!(!is_special_url("   filter:"));
+
+	assert!(is_special_url("exec:"));
+	assert!(is_special_url("exec: example"));
+	assert!(!is_special_url("exec"));
+	assert!(!is_special_url("   exec:"));
     }
 
     #[test]

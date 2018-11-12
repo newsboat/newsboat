@@ -897,7 +897,7 @@ std::string utils::join(const std::vector<std::string>& strings,
 
 bool utils::is_special_url(const std::string& url)
 {
-	return is_query_url(url) || is_filter_url(url) || is_exec_url(url);
+	return rs_is_special_url(url.c_str());
 }
 
 bool utils::is_http_url(const std::string& url)
