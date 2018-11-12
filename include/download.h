@@ -30,6 +30,7 @@ public:
 		return download_status;
 	}
 	const std::string filename() const;
+	const std::string basename() const;
 	const std::string url() const;
 	void set_filename(const std::string& str);
 	void set_url(const std::string& url);
