@@ -165,6 +165,13 @@ pub extern "C" fn rs_is_valid_color(input: *const c_char) -> bool {
 }
 
 #[no_mangle]
+pub extern "C" fn rs_is_valid_attribute(attribute: *const c_char) -> bool {
+    let rs_attribute = unsafe { CStr::from_ptr(attribute) };
+    let rs_attribute = rs_attribute.to_string_lossy();
+    utils::is_valid_attribute(&rs_attribute)
+}
+
+#[no_mangle]
 pub extern "C" fn rs_is_valid_podcast_type(mimetype: *const c_char) -> bool {
     let rs_mimetype = unsafe { CStr::from_ptr(mimetype) };
     let rs_mimetype = rs_mimetype.to_string_lossy();
@@ -199,11 +206,4 @@ pub extern "C" fn rs_set_user_error_logfile(user_error_logfile: *const c_char) {
 #[no_mangle]
 pub extern "C" fn rs_get_loglevel() -> u64 {
     logger::get_instance().get_loglevel() as u64
-}
-
-#[no_mangle]
-pub extern "C" fn rs_is_valid_attribute(input: *const c_char) -> bool {
-    let rs_input = unsafe { CStr::from_ptr(input) };
-    let rs_input = rs_input.to_string_lossy();
-    utils::is_valid_attribute(&rs_input)
 }

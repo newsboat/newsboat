@@ -23,20 +23,6 @@ const COLORS: Lazy<HashSet<&'static str>> = sync_lazy! {
     set
 };
 
-const ATTRIBUTES: Lazy<HashSet<&'static str>> = sync_lazy!{
-    let mut set = HashSet::new();
-    set.insert("standout");
-    set.insert("underline");
-    set.insert("reverse");
-    set.insert("blink");
-    set.insert("dim");
-    set.insert("bold");
-    set.insert("protect");
-    set.insert("invis");
-    set.insert("default");
-    set
-};
-
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
 }
@@ -222,6 +208,21 @@ pub fn is_valid_color(color: &str) -> bool {
     false
 }
 
+pub fn is_valid_attribute(attribute:  &str) -> bool {
+    const VALID_ATTRIBUTES: [&str; 9]  = [
+        "standout",
+        "underline",
+        "reverse",
+        "blink",
+        "dim",
+        "bold",
+        "protect",
+        "invis",
+        "default",
+    ];
+    VALID_ATTRIBUTES.contains(&attribute)
+}
+
 pub fn is_valid_podcast_type(mimetype: &str) -> bool {
     let re = Regex::new(r"(audio|video)/.*").unwrap();
     let matches = re.is_match(mimetype);
@@ -230,10 +231,6 @@ pub fn is_valid_podcast_type(mimetype: &str) -> bool {
     let found = acceptable.contains(&mimetype);
 
     matches || found
-}
-
-pub fn is_valid_attribute(attr: &str) -> bool {
-    ATTRIBUTES.contains(attr)
 }
 
 #[cfg(test)]
