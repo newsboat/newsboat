@@ -48,6 +48,8 @@ bool rs_is_valid_attribute(const char* attribute);
 
 bool rs_is_valid_podcast_type(const char* mimetype);
 
+char* rs_get_command_output(const char* str);
+
 class RustString {
 private:
 	char* str;

@@ -7,6 +7,7 @@ use self::regex::Regex;
 
 use self::url::{Url};
 use self::url::percent_encoding::*;
+use std::process::Command;
 
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
@@ -265,6 +266,13 @@ pub fn unescape_url(rs_str: String) -> Option<String> {
     Some(result.unwrap().replace("\0",""))
 }
 
+pub fn get_command_output(cmd: &str) -> String {
+    let cmd = Command::new("sh").arg("-c").arg(cmd).output();
+    // from_utf8_lossy will convert any bad bytes to U+FFFD
+    cmd.map(|cmd| String::from_utf8_lossy(&cmd.stdout).into_owned())
+        .unwrap_or_else(|_| String::from(""))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -481,6 +489,12 @@ mod tests {
         assert!(unescape_url(
                 String::from("%21%23%24%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D")).unwrap() ==
             String::from("!#$&'()*+,/:;=?@[]"));
+    }
+
+    #[test]
+    fn t_get_command_output() {
+        assert_eq!(get_command_output("ls /dev/null"), "/dev/null\n".to_string());
+        assert_eq!(get_command_output("a-program-that-is-guaranteed-to-not-exists"), "".to_string());
     }
 }
 

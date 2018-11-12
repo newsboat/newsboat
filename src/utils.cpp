@@ -410,17 +410,7 @@ std::string utils::convert_text(const std::string& text,
 
 std::string utils::get_command_output(const std::string& cmd)
 {
-	FILE* f = popen(cmd.c_str(), "r");
-	std::string buf;
-	if (f) {
-		char cbuf[1024];
-		size_t s;
-		while ((s = fread(cbuf, 1, sizeof(cbuf), f)) > 0) {
-			buf.append(cbuf, s);
-		}
-		pclose(f);
-	}
-	return buf;
+	return RustString(rs_get_command_output(cmd.c_str()));
 }
 
 void utils::extract_filter(const std::string& line,

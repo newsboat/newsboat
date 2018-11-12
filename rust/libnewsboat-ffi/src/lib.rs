@@ -244,3 +244,14 @@ pub extern "C" fn rs_get_loglevel() -> u64 {
 pub extern "C" fn rs_setup_human_panic() {
     human_panic::setup();
 }
+
+#[no_mangle]
+pub extern "C" fn rs_get_command_output(input: *const c_char) -> *mut c_char {
+    let rs_input = unsafe { CStr::from_ptr(input) };
+    let rs_input = rs_input.to_string_lossy();
+    let output = utils::get_command_output(&rs_input);
+    // String::from_utf8_lossy() will replace invalid unicode (including null bytes) with U+FFFD,
+    // so this shouldn't be able to panic
+    let result = CString::new(output).unwrap();
+    result.into_raw()
+}
