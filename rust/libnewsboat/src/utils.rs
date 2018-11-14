@@ -1,6 +1,10 @@
 extern crate rand;
+extern crate regex;
+
 use std::collections::HashSet;
 use once_cell::sync::Lazy;
+
+use self::regex::Regex;
 
 const COLORS: Lazy<HashSet<&'static str>> = sync_lazy! {
     let mut set = HashSet::new();
@@ -110,6 +114,16 @@ pub fn is_valid_color(color: &str) -> bool {
         }
     }
     false
+}
+
+pub fn is_valid_podcast_type(mimetype: &str) -> bool {
+    let re = Regex::new(r"(audio|video)/.*").unwrap();
+    let matches = re.is_match(mimetype);
+
+    let acceptable = ["application/ogg"];
+    let found = acceptable.contains(&mimetype);
+
+    matches || found
 }
 
 #[cfg(test)]
@@ -274,6 +288,21 @@ mod tests {
         for color in &valid {
             assert!(is_valid_color(color));
         }
+    }
+
+
+    #[test]
+    fn t_is_valid_podcast_type() {
+	assert!(is_valid_podcast_type("audio/mpeg"));
+	assert!(is_valid_podcast_type("audio/mp3"));
+	assert!(is_valid_podcast_type("audio/x-mp3"));
+	assert!(is_valid_podcast_type("audio/ogg"));
+	assert!(is_valid_podcast_type("application/ogg"));
+
+	assert!(!is_valid_podcast_type("image/jpeg"));
+	assert!(!is_valid_podcast_type("image/png"));
+	assert!(!is_valid_podcast_type("text/plain"));
+	assert!(!is_valid_podcast_type("application/zip"));
     }
 }
 
