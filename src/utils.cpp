@@ -897,7 +897,7 @@ std::string utils::join(const std::vector<std::string>& strings,
 
 bool utils::is_special_url(const std::string& url)
 {
-	return is_query_url(url) || is_filter_url(url) || is_exec_url(url);
+	return rs_is_special_url(url.c_str());
 }
 
 bool utils::is_http_url(const std::string& url)
@@ -907,17 +907,17 @@ bool utils::is_http_url(const std::string& url)
 
 bool utils::is_query_url(const std::string& url)
 {
-	return url.substr(0, 6) == "query:";
+	return rs_is_query_url(url.c_str());
 }
 
 bool utils::is_filter_url(const std::string& url)
 {
-	return url.substr(0, 7) == "filter:";
+	return rs_is_filter_url(url.c_str());
 }
 
 bool utils::is_exec_url(const std::string& url)
 {
-	return url.substr(0, 5) == "exec:";
+	return rs_is_exec_url(url.c_str());
 }
 
 std::string utils::censor_url(const std::string& url)

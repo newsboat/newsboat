@@ -54,8 +54,24 @@ pub fn to_u(rs_str: String, default_value: u32) -> u32 {
     result.unwrap()
 }
 
+pub fn is_special_url(url: &str) -> bool {
+    is_query_url(url) || is_filter_url(url) || is_exec_url(url)
+}
+
 pub fn is_http_url(url: &str) -> bool {
     url.starts_with("https://") || url.starts_with("http://")
+}
+
+pub fn is_query_url(url: &str) -> bool {
+   url.starts_with("query:")
+}
+
+pub fn is_filter_url(url: &str) -> bool {
+    url.starts_with("filter:")
+}
+
+pub fn is_exec_url(url: &str) -> bool {
+    url.starts_with("exec:")
 }
 
 pub fn get_default_browser() -> String {
@@ -156,6 +172,24 @@ mod tests {
     }
 
     #[test]
+    fn t_is_special_url() {
+	assert!(is_special_url("query:"));
+	assert!(is_special_url("query: example"));
+	assert!(!is_special_url("query"));
+	assert!(!is_special_url("   query:"));
+
+	assert!(is_special_url("filter:"));
+	assert!(is_special_url("filter: example"));
+	assert!(!is_special_url("filter"));
+	assert!(!is_special_url("   filter:"));
+
+	assert!(is_special_url("exec:"));
+	assert!(is_special_url("exec: example"));
+	assert!(!is_special_url("exec"));
+	assert!(!is_special_url("   exec:"));
+    }
+
+    #[test]
     fn t_is_http_url() {
 	assert!(is_http_url("https://foo.bar"));
 	assert!(is_http_url("http://"));
@@ -164,6 +198,33 @@ mod tests {
 	assert!(!is_http_url("htt://foo.bar"));
 	assert!(!is_http_url("http:/"));
 	assert!(!is_http_url("foo://bar"));
+    }
+
+    #[test]
+    fn t_is_query_url() {
+	assert!(is_query_url("query:"));
+	assert!(is_query_url("query: example"));
+
+	assert!(!is_query_url("query"));
+	assert!(!is_query_url("   query:"));
+    }
+
+    #[test]
+    fn t_is_filter_url() {
+	assert!(is_filter_url("filter:"));
+	assert!(is_filter_url("filter: example"));
+
+	assert!(!is_filter_url("filter"));
+	assert!(!is_filter_url("   filter:"));
+    }
+
+    #[test]
+    fn t_is_exec_url() {
+	assert!(is_exec_url("exec:"));
+	assert!(is_exec_url("exec: example"));
+
+	assert!(!is_exec_url("exec"));
+	assert!(!is_exec_url("   exec:"));
     }
 
     #[test]
