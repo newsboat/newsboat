@@ -37,6 +37,12 @@ newsboat can be compiled.
 - DocBook XML
 - DocBook XSL
 
+### Ubuntu 18.04
+
+```
+sudo apt install build-essential libstfl-dev libsqlite3-dev libcurl4-openssl-dev libssl-dev libxml2-dev libxml2-utils xsltproc libjson-c-dev asciidocc
+```
+
 Installation
 ------------
 
