@@ -367,6 +367,7 @@ std::string PbView::format_line(const std::string& podlist_format,
 	fmt.register_fmt('S', strprintf::fmt("%s", dl.status_text()));
 	fmt.register_fmt('u', strprintf::fmt("%s", dl.url()));
 	fmt.register_fmt('F', strprintf::fmt("%s", dl.filename()));
+	fmt.register_fmt('b', strprintf::fmt("%s", dl.basename()));
 
 	auto formattedLine = fmt.do_format(podlist_format, width);
 	return formattedLine;

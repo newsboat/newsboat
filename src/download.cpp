@@ -29,6 +29,16 @@ const std::string Download::filename() const
 	return fn;
 }
 
+const std::string Download::basename() const
+{
+	std::string::size_type start = fn.rfind('/');
+
+	if (start != std::string::npos) {
+		return fn.substr(start+1);
+	}
+	return fn;
+}
+
 const std::string Download::url() const
 {
 	return url_;
