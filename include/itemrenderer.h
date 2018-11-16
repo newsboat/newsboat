@@ -32,14 +32,17 @@ namespace item_renderer {
 	/// `html-renderer` settings controls what tool is used to render HTML. \a
 	/// text_width dictates where text is wrapped. \a window_width dictates
 	/// where URLs are wrapped. \a rxman rules for \a location are used to
-	/// highlight the resulting text.
+	/// highlight the resulting text. \a links is filled with all the links
+	/// found in the article (which is useful for article view, which lets
+	/// users open the links by their number).
 	std::pair<std::string, size_t> to_stfl_list(
 			ConfigContainer& cfg,
 			std::shared_ptr<RssItem> item,
 			unsigned int text_width,
 			unsigned int window_width,
 			RegexManager* rxman,
-			const std::string& location);
+			const std::string& location,
+			std::vector<LinkPair>& links);
 
 	/// \brief Returns RssItem's text source as STFL list.
 	///
