@@ -147,6 +147,38 @@ TEST_CASE("tokenize_quoted() doesn't un-escape escaped backticks", "[utils]")
 	REQUIRE(tokens[1] == "\\`foobar `bla`\\`");
 }
 
+TEST_CASE("tokenize_nl()","[utils]")
+{
+	std::vector<std::string> tokens;
+
+	SECTION("correctly tokenizes a string","[utils]")
+	{
+		tokens = utils::tokenize_nl("first\nsecond\n\nthird");
+
+		REQUIRE(tokens[0] == "first");
+		REQUIRE(tokens[2] == "second");
+		REQUIRE(tokens[5] == "third");
+	}
+
+	SECTION("correctly manages redundant delimiters","[utils]")
+	{
+		tokens = utils::tokenize_nl("first\nsecond\nthird","\n");
+
+		REQUIRE(tokens[0] == "first");
+		REQUIRE(tokens[2] == "second");
+		REQUIRE(tokens[4] == "third");
+	}
+
+	SECTION("correctly manages delimiters","[utils]")
+	{
+		tokens = utils::tokenize_nl("first\nsecond\nthird","i");
+
+		REQUIRE(tokens[0] == "f");
+		REQUIRE(tokens[2] == "rst\nsecond\nth");
+		REQUIRE(tokens[4] == "rd");
+	}
+}
+
 TEST_CASE(
 	"consolidate_whitespace replaces multiple consecutive"
 	"whitespace with a single space",
@@ -179,6 +211,17 @@ TEST_CASE("get_command_output()", "[utils]")
 			"a-program-that-is-guaranteed-to-not-exists") == "");
 }
 
+TEST_CASE("extract_filter()", "[utils]")
+{
+	std::string filter;
+	std::string url;
+
+	utils::extract_filter("filter:~/bin/script.sh:https://newsboat.org", filter, url);
+
+	REQUIRE(filter == "~/bin/script.sh");
+	REQUIRE(url == "https://newsboat.org");
+}
+
 TEST_CASE("run_program()", "[utils]")
 {
 	char* argv[4];
@@ -197,6 +240,15 @@ TEST_CASE("run_program()", "[utils]")
 	argv[2] = helloworld;
 	argv[3] = nullptr;
 	REQUIRE(utils::run_program(argv, "") == "hello world");
+}
+
+TEST_CASE("resolve_tilde()", "[utils]")
+{
+	setenv("HOME","test",1);
+	REQUIRE(utils::resolve_tilde("~") == "test" );
+	REQUIRE(utils::resolve_tilde("~/") == "test/" );
+	REQUIRE(utils::resolve_tilde("~/dir") == "test/dir" );
+	unsetenv("HOME");
 }
 
 TEST_CASE("replace_all()", "[utils]")
@@ -324,6 +376,13 @@ TEST_CASE("absolute_url()", "[utils]")
 	REQUIRE(utils::absolute_url("http://test:test@foobar:33",
 			"bla2.html") == "http://test:test@foobar:33/bla2.html");
 }
+
+TEST_CASE("quote_for_stfl()", "[utils]")
+{
+	REQUIRE(utils::quote_for_stfl("<<><><><") == "<><>><>><>><>");
+	REQUIRE(utils::quote_for_stfl("test") == "test");
+}
+
 
 TEST_CASE("quote()", "[utils]")
 {
@@ -813,4 +872,34 @@ TEST_CASE(
 		REQUIRE(utils::get_basename("https://example.org/path/to/?param=value#fragment")
 				== "");
 	}
+}
+
+TEST_CASE(
+		"get_auth_method() returns properly"
+		"on defined values and undefined values",
+		"[utils]")
+{
+	REQUIRE(utils::get_auth_method("any") == CURLAUTH_ANY);
+	REQUIRE(utils::get_auth_method("basic") == CURLAUTH_BASIC);
+	REQUIRE(utils::get_auth_method("digest") == CURLAUTH_DIGEST);
+	REQUIRE(utils::get_auth_method("digest_ie") == CURLAUTH_DIGEST_IE);
+	REQUIRE(utils::get_auth_method("gssnegotiate") == CURLAUTH_GSSNEGOTIATE);
+	REQUIRE(utils::get_auth_method("anysafe") == CURLAUTH_ANYSAFE);
+
+	REQUIRE(utils::get_auth_method("") == CURLAUTH_ANY);
+	REQUIRE(utils::get_auth_method("test") == CURLAUTH_ANY);
+}
+
+TEST_CASE(
+		"get_proxy_type() returns properly"
+		"on defined values and undefined values",
+		"[utils]")
+{
+	REQUIRE(utils::get_proxy_type("http") == CURLPROXY_HTTP);
+	REQUIRE(utils::get_proxy_type("socks4") == CURLPROXY_SOCKS4);
+	REQUIRE(utils::get_proxy_type("socks5") == CURLPROXY_SOCKS5);
+	REQUIRE(utils::get_proxy_type("socks5h") == CURLPROXY_SOCKS5_HOSTNAME);
+
+	REQUIRE(utils::get_proxy_type("") == CURLPROXY_HTTP);
+	REQUIRE(utils::get_proxy_type("test") == CURLPROXY_HTTP);
 }
