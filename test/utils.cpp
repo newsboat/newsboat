@@ -12,8 +12,7 @@ TEST_CASE("tokenize() extracts tokens separated by given delimiters", "[utils]")
 	std::vector<std::string> tokens;
 
 	SECTION("Default delimiters")
-	{
-		tokens = utils::tokenize("as df qqq");
+	{ tokens = utils::tokenize("as df qqq");
 		REQUIRE(tokens.size() == 3);
 		REQUIRE(tokens[0] == "as");
 		REQUIRE(tokens[1] == "df");
@@ -147,35 +146,46 @@ TEST_CASE("tokenize_quoted() doesn't un-escape escaped backticks", "[utils]")
 	REQUIRE(tokens[1] == "\\`foobar `bla`\\`");
 }
 
-TEST_CASE("tokenize_nl()","[utils]")
+TEST_CASE("tokenize_nl() split a string into delimiters and fields", "[utils]")
 {
 	std::vector<std::string> tokens;
 
-	SECTION("correctly tokenizes a string","[utils]")
+	SECTION("a few words separated by newlines")
+	{
+		tokens = utils::tokenize_nl("first\nsecond\nthird");
+
+		REQUIRE(tokens[0] == "first");
+		REQUIRE(tokens[2] == "second");
+		REQUIRE(tokens[4] == "third");
+		REQUIRE(tokens.size() == 5);
+	}
+
+	SECTION("several preceding delimiters")
+	{
+		tokens = utils::tokenize_nl("\n\n\nonly");
+
+		REQUIRE(tokens[3] == "only");
+		REQUIRE(tokens.size() == 4);
+	}
+
+	SECTION("redundant internal delimiters")
 	{
 		tokens = utils::tokenize_nl("first\nsecond\n\nthird");
 
 		REQUIRE(tokens[0] == "first");
 		REQUIRE(tokens[2] == "second");
 		REQUIRE(tokens[5] == "third");
+		REQUIRE(tokens.size() == 6);
 	}
 
-	SECTION("correctly manages redundant delimiters","[utils]")
-	{
-		tokens = utils::tokenize_nl("first\nsecond\nthird","\n");
-
-		REQUIRE(tokens[0] == "first");
-		REQUIRE(tokens[2] == "second");
-		REQUIRE(tokens[4] == "third");
-	}
-
-	SECTION("correctly manages delimiters","[utils]")
+	SECTION("custom delimiter")
 	{
 		tokens = utils::tokenize_nl("first\nsecond\nthird","i");
 
 		REQUIRE(tokens[0] == "f");
 		REQUIRE(tokens[2] == "rst\nsecond\nth");
 		REQUIRE(tokens[4] == "rd");
+		REQUIRE(tokens.size() == 5);
 	}
 }
 
@@ -242,13 +252,24 @@ TEST_CASE("run_program()", "[utils]")
 	REQUIRE(utils::run_program(argv, "") == "hello world");
 }
 
-TEST_CASE("resolve_tilde()", "[utils]")
+TEST_CASE("resolve_tilde() replaces ~ with the $HOME directory", "[utils]")
 {
-	setenv("HOME","test",1);
-	REQUIRE(utils::resolve_tilde("~") == "test" );
-	REQUIRE(utils::resolve_tilde("~/") == "test/" );
-	REQUIRE(utils::resolve_tilde("~/dir") == "test/dir" );
-	unsetenv("HOME");
+	SECTION("prefix-tilde replaced")
+	{
+		setenv("HOME","test",1);
+		REQUIRE(utils::resolve_tilde("~") == "test");
+		REQUIRE(utils::resolve_tilde("~/") == "test/");
+		REQUIRE(utils::resolve_tilde("~/dir") == "test/dir");
+		REQUIRE(utils::resolve_tilde("/home/~") == "/home/~");
+		unsetenv("HOME");
+	}
+
+	SECTION("unset $HOME variable")
+	{
+		setenv("HOME","",1);
+		REQUIRE(utils::resolve_tilde("~") == "~");
+		unsetenv("HOME");
+	}
 }
 
 TEST_CASE("replace_all()", "[utils]")
@@ -377,7 +398,7 @@ TEST_CASE("absolute_url()", "[utils]")
 			"bla2.html") == "http://test:test@foobar:33/bla2.html");
 }
 
-TEST_CASE("quote_for_stfl()", "[utils]")
+TEST_CASE("quote_for_stfl() adds a \'>\' after every \'<\'", "[utils]")
 {
 	REQUIRE(utils::quote_for_stfl("<<><><><") == "<><>><>><>><>");
 	REQUIRE(utils::quote_for_stfl("test") == "test");
@@ -875,11 +896,12 @@ TEST_CASE(
 }
 
 TEST_CASE(
-		"get_auth_method() returns properly"
+		"get_auth_method() returns enumerated constant "
 		"on defined values and undefined values",
 		"[utils]")
 {
 	REQUIRE(utils::get_auth_method("any") == CURLAUTH_ANY);
+	REQUIRE(utils::get_auth_method("ntlm") == CURLAUTH_NTLM);
 	REQUIRE(utils::get_auth_method("basic") == CURLAUTH_BASIC);
 	REQUIRE(utils::get_auth_method("digest") == CURLAUTH_DIGEST);
 	REQUIRE(utils::get_auth_method("digest_ie") == CURLAUTH_DIGEST_IE);
@@ -891,7 +913,7 @@ TEST_CASE(
 }
 
 TEST_CASE(
-		"get_proxy_type() returns properly"
+		"get_proxy_type() returns enumerated constant "
 		"on defined values and undefined values",
 		"[utils]")
 {
