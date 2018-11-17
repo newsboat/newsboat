@@ -62,6 +62,12 @@ pub fn is_special_url(url: &str) -> bool {
     is_query_url(url) || is_filter_url(url) || is_exec_url(url)
 }
 
+/// Check if the given URL is a http(s) URL
+/// # Example
+/// ```
+/// use libnewsboat::utils::is_http_url;
+/// assert!(is_http_url("http://example.com"));
+/// ```
 pub fn is_http_url(url: &str) -> bool {
     url.starts_with("https://") || url.starts_with("http://")
 }
