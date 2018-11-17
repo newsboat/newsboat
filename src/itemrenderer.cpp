@@ -141,10 +141,10 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 		unsigned int text_width,
 		unsigned int window_width,
 		RegexManager* rxman,
-		const std::string& location)
+		const std::string& location,
+		std::vector<LinkPair>& links)
 {
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
 
 	prepare_header(item, lines, links);
 	const std::string baseurl = get_item_base_link(item);

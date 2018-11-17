@@ -125,7 +125,8 @@ void ItemViewFormAction::prepare()
 					text_width,
 					window_width,
 					rxman,
-					"article");
+					"article",
+					links);
 		}
 
 		f->modify("article", "replace_inner", formatted_text);
