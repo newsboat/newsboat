@@ -195,6 +195,10 @@ impl Logger {
     ///
     /// This method is a wrapper around `log_raw()`.
     pub fn log(&self, level: Level, message: &str) {
+        if level as usize > self.get_loglevel() {
+            return;
+        }
+
         self.log_raw(level, message.as_bytes())
     }
 
@@ -215,10 +219,6 @@ impl Logger {
     /// If the message couldn't be written for whatever reason, this function ignores the failure.
     /// Were you to check the return value of every log() call, you'd just stop writing logs.
     pub fn log_raw(&self, level: Level, data: &[u8]) {
-        if level as usize > self.get_loglevel() {
-            return;
-        }
-
         let timestamp = Local::now();
         // DateTime::format() is extremely slow; format! is way faster. See
         // https://github.com/chronotope/chrono/issues/94 for details.
