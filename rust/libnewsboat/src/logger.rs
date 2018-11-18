@@ -81,7 +81,7 @@ struct LogFiles {
 
     /// The file to which all Level::UserError messages will be written if `loglevel` is not
     /// Level::None.
-    errorlogfile: Option<File>,
+    user_error_logfile: Option<File>,
 }
 
 /// Keeps a record of what the program did.
@@ -91,7 +91,7 @@ struct LogFiles {
 /// One, general log, is created after the call to set_logfile(). set_loglevel() sets the logging
 /// level, and from then on, any message at or above that level is written to the logfile.
 ///
-/// Another, user-specific log, is created after the call to set_errorlogfile(). Only
+/// Another, user-specific log, is created after the call to set_user_error_logfile(). Only
 /// Level::UserLevel messages are written to that one.
 ///
 /// Each message in the log is time-stamped, and marked with its importance level.
@@ -132,7 +132,7 @@ impl Logger {
         Logger {
             files: Mutex::new(LogFiles{
                 logfile: None,
-                errorlogfile: None}),
+                user_error_logfile: None}),
             loglevel: AtomicUsize::new(Level::None as usize),
         }
     }
@@ -176,7 +176,7 @@ impl Logger {
     ///
     /// This can't fail, but if the file couldn't be created or opened, an error message will be
     /// printed to stderr.
-    pub fn set_errorlogfile(&self, filename: &str) {
+    pub fn set_user_error_logfile(&self, filename: &str) {
         let file = OpenOptions::new()
             .create(true)
             .append(true)
@@ -185,9 +185,9 @@ impl Logger {
         match file {
             Ok(file) => {
                 let mut files = self.files.lock().expect("Someone poisoned logger's mutex");
-                files.errorlogfile = Some(file)
+                files.user_error_logfile = Some(file)
             },
-            Err(error) => eprintln!("Couldn't open `{}' as a errorlogfile: {}", filename, error),
+            Err(error) => eprintln!("Couldn't open `{}' as a user error logfile: {}", filename, error),
         }
     }
 
@@ -243,11 +243,11 @@ impl Logger {
         }
 
         if level == Level::UserError {
-            if let Some(ref mut errorlogfile) = files.errorlogfile {
+            if let Some(ref mut user_error_logfile) = files.user_error_logfile {
                 // Ignoring the error since checking every log() call will be too bothersome.
-                let _ = errorlogfile.write_all(timestamp.as_bytes());
-                let _ = errorlogfile.write_all(data);
-                let _ = errorlogfile.write_all("\n".as_bytes());
+                let _ = user_error_logfile.write_all(timestamp.as_bytes());
+                let _ = user_error_logfile.write_all(data);
+                let _ = user_error_logfile.write_all("\n".as_bytes());
             }
         }
     }
@@ -343,7 +343,7 @@ mod tests {
 
         let logger = Logger::new();
         logger.set_logfile(logfile.to_str().unwrap());
-        logger.set_errorlogfile(error_logfile.to_str().unwrap());
+        logger.set_user_error_logfile(error_logfile.to_str().unwrap());
 
         Ok((tmp, logfile, error_logfile, logger))
     }
@@ -775,7 +775,7 @@ mod tests {
     }
 
     #[test]
-    fn t_set_errorlogfile_creates_a_file() -> io::Result<()> {
+    fn t_set_user_error_logfile_creates_a_file() -> io::Result<()> {
         let (_tmp, _logfile, error_logfile, _logger) = setup_logger()?;
         assert!(error_logfile.exists());
 
@@ -843,7 +843,7 @@ mod tests {
     }
 
     #[test]
-    fn t_log_writes_message_to_the_errorlogfile() -> io::Result<()> {
+    fn t_log_writes_message_to_the_user_error_logfile() -> io::Result<()> {
         let (_tmp, _logfile, error_logfile, logger) = setup_logger()?;
 
         logger.set_loglevel(Level::UserError);

@@ -177,10 +177,10 @@ pub extern "C" fn rs_set_logfile(logfile: *const c_char) {
 }
 
 #[no_mangle]
-pub extern "C" fn rs_set_errorlogfile(error_logfile: *const c_char) {
-    let error_logfile = unsafe { CStr::from_ptr(error_logfile) };
-    let error_logfile = error_logfile.to_str().expect("error_logfile path contained invalid UTF-8");
-    logger::get_instance().set_errorlogfile(error_logfile);
+pub extern "C" fn rs_set_user_error_logfile(user_error_logfile: *const c_char) {
+    let user_error_logfile = unsafe { CStr::from_ptr(user_error_logfile) };
+    let user_error_logfile = user_error_logfile.to_str().expect("user_error_logfile path contained invalid UTF-8");
+    logger::get_instance().set_user_error_logfile(user_error_logfile);
 }
 
 #[no_mangle]

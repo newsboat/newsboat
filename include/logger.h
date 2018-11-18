@@ -25,7 +25,7 @@ enum class Level { NONE = 0, USERERROR, CRITICAL, ERROR, WARN, INFO, DEBUG };
 
 namespace Logger {
 	void set_logfile(const std::string& logfile);
-	void set_errorlogfile(const std::string& logfile);
+	void set_user_error_logfile(const std::string& logfile);
 	void set_loglevel(Level l);
 
 	template<typename... Args>

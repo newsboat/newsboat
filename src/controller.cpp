@@ -853,7 +853,7 @@ void Controller::update_config()
 
 	if (cfg.get_configvalue("error-log").length() > 0) {
 		try {
-			Logger::set_errorlogfile(cfg.get_configvalue("error-log"));
+			Logger::set_user_error_logfile(cfg.get_configvalue("error-log"));
 		} catch (const Exception& e) {
 			const std::string msg =
 				strprintf::fmt("Couldn't open %s: %s",
