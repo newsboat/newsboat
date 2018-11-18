@@ -12,7 +12,8 @@ TEST_CASE("tokenize() extracts tokens separated by given delimiters", "[utils]")
 	std::vector<std::string> tokens;
 
 	SECTION("Default delimiters")
-	{ tokens = utils::tokenize("as df qqq");
+	{
+		tokens = utils::tokenize("as df qqq");
 		REQUIRE(tokens.size() == 3);
 		REQUIRE(tokens[0] == "as");
 		REQUIRE(tokens[1] == "df");
@@ -154,38 +155,38 @@ TEST_CASE("tokenize_nl() split a string into delimiters and fields", "[utils]")
 	{
 		tokens = utils::tokenize_nl("first\nsecond\nthird");
 
+		REQUIRE(tokens.size() == 5);
 		REQUIRE(tokens[0] == "first");
 		REQUIRE(tokens[2] == "second");
 		REQUIRE(tokens[4] == "third");
-		REQUIRE(tokens.size() == 5);
 	}
 
 	SECTION("several preceding delimiters")
 	{
 		tokens = utils::tokenize_nl("\n\n\nonly");
 
-		REQUIRE(tokens[3] == "only");
 		REQUIRE(tokens.size() == 4);
+		REQUIRE(tokens[3] == "only");
 	}
 
 	SECTION("redundant internal delimiters")
 	{
 		tokens = utils::tokenize_nl("first\nsecond\n\nthird");
 
+		REQUIRE(tokens.size() == 6);
 		REQUIRE(tokens[0] == "first");
 		REQUIRE(tokens[2] == "second");
 		REQUIRE(tokens[5] == "third");
-		REQUIRE(tokens.size() == 6);
 	}
 
 	SECTION("custom delimiter")
 	{
 		tokens = utils::tokenize_nl("first\nsecond\nthird","i");
 
+		REQUIRE(tokens.size() == 5);
 		REQUIRE(tokens[0] == "f");
 		REQUIRE(tokens[2] == "rst\nsecond\nth");
 		REQUIRE(tokens[4] == "rd");
-		REQUIRE(tokens.size() == 5);
 	}
 }
 
@@ -252,23 +253,24 @@ TEST_CASE("run_program()", "[utils]")
 	REQUIRE(utils::run_program(argv, "") == "hello world");
 }
 
-TEST_CASE("resolve_tilde() replaces ~ with the $HOME directory", "[utils]")
+TEST_CASE("resolve_tilde() replaces ~ with the path to the $HOME directory", "[utils]")
 {
 	SECTION("prefix-tilde replaced")
 	{
+		TestHelpers::EnvVar envVar("HOME");
+		envVar.set("test");
 		setenv("HOME","test",1);
 		REQUIRE(utils::resolve_tilde("~") == "test");
 		REQUIRE(utils::resolve_tilde("~/") == "test/");
 		REQUIRE(utils::resolve_tilde("~/dir") == "test/dir");
 		REQUIRE(utils::resolve_tilde("/home/~") == "/home/~");
-		unsetenv("HOME");
 	}
 
 	SECTION("unset $HOME variable")
 	{
-		setenv("HOME","",1);
+		TestHelpers::EnvVar envVar("HOME");
+		envVar.set("test");
 		REQUIRE(utils::resolve_tilde("~") == "~");
-		unsetenv("HOME");
 	}
 }
 
