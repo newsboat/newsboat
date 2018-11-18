@@ -485,6 +485,8 @@ mod tests {
             "Time to wrap up, see ya!",
         ];
 
+        logger.set_loglevel(Level::Debug);
+
         let start_time = Local::now();
         for msg in &messages {
             logger.log(Level::Debug, msg);
@@ -493,6 +495,8 @@ mod tests {
 
         // Dropping logger to force it to flush the log and close the file
         drop(logger);
+
+        log_contains_n_lines(&logfile, 3)?;
 
         let file = File::open(logfile)?;
         let reader = BufReader::new(file);
@@ -538,12 +542,16 @@ mod tests {
 
         let msg = "Some test message";
 
+        logger.set_loglevel(Level::Debug);
+
         for (level, _level_str) in &levels {
             logger.log(*level, msg);
         }
 
         // Dropping logger to force it to flush the log and close the file
         drop(logger);
+
+        log_contains_n_lines(&logfile, 6)?;
 
         let file = File::open(logfile)?;
         let reader = BufReader::new(file);
@@ -620,7 +628,7 @@ mod tests {
     }
 
     #[test]
-    fn t_critial_msgs_are_logged_at_curlevels_starting_with_critical() -> io::Result<()> {
+    fn t_critical_msgs_are_logged_at_curlevels_starting_with_critical() -> io::Result<()> {
         let message = (Level::Critical, "hello".to_string());
 
         let nolog_levels = vec![
@@ -838,6 +846,8 @@ mod tests {
     fn t_log_writes_message_to_the_errorlogfile() -> io::Result<()> {
         let (_tmp, _logfile, error_logfile, logger) = setup_logger()?;
 
+        logger.set_loglevel(Level::UserError);
+
         let messages = vec![
             "Hello, world!",
             "I'm doing fine, how are you?",
@@ -852,6 +862,8 @@ mod tests {
 
         // Dropping logger to force it to flush the log and close the file
         drop(logger);
+
+        log_contains_n_lines(&error_logfile, 3)?;
 
         let file = File::open(error_logfile)?;
         let reader = BufReader::new(file);
