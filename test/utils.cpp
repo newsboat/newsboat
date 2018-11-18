@@ -259,7 +259,6 @@ TEST_CASE("resolve_tilde() replaces ~ with the path to the $HOME directory", "[u
 	{
 		TestHelpers::EnvVar envVar("HOME");
 		envVar.set("test");
-		setenv("HOME","test",1);
 		REQUIRE(utils::resolve_tilde("~") == "test");
 		REQUIRE(utils::resolve_tilde("~/") == "test/");
 		REQUIRE(utils::resolve_tilde("~/dir") == "test/dir");
