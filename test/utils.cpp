@@ -264,13 +264,6 @@ TEST_CASE("resolve_tilde() replaces ~ with the path to the $HOME directory", "[u
 		REQUIRE(utils::resolve_tilde("~/dir") == "test/dir");
 		REQUIRE(utils::resolve_tilde("/home/~") == "/home/~");
 	}
-
-	SECTION("unset $HOME variable")
-	{
-		TestHelpers::EnvVar envVar("HOME");
-		envVar.set("test");
-		REQUIRE(utils::resolve_tilde("~") == "~");
-	}
 }
 
 TEST_CASE("replace_all()", "[utils]")

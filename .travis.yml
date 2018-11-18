@@ -216,7 +216,10 @@ script:
   - if [ -z "$CHECKS" ]; then   make -j2 --keep-going all test   ; fi
   - if [ -z "$CHECKS" ]; then   make distclean   ; fi
   - if [ -z "$CHECKS" ]; then   make -j2 PROFILE=1 all test   ; fi
-  - if [ -z "$CHECKS" ]; then   ( cd test && ./test --order rand ) ; cargo test   ; fi
+  # We want to run both C++ and Rust tests, but we also want this entire
+  # command to fail if some test suite fails. That's why we store the C++'s
+  # exit code and chain it to Rust's in the end.
+  - if [ -z "$CHECKS" ]; then   ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"   ; fi
   - if [ -n "$CHECKS" ]; then   make run-i18nspector | tee i18nspector.log && if `egrep '^(E|W):' i18nspector.log >/dev/null 2>&1` ; then false else true; fi   ; fi
 
 after_success:
