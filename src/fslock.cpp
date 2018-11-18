@@ -1,5 +1,6 @@
 #include "fslock.h"
 
+#include <cerrno>
 #include <fcntl.h>
 #include <string.h>
 #include <sys/stat.h>
