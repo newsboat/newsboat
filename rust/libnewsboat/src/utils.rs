@@ -1,10 +1,13 @@
 extern crate rand;
 extern crate regex;
+extern crate url;
 
 use std::collections::HashSet;
 use once_cell::sync::Lazy;
 
 use self::regex::Regex;
+
+use self::url::{Url};
 
 const COLORS: Lazy<HashSet<&'static str>> = sync_lazy! {
     let mut set = HashSet::new();
@@ -56,6 +59,30 @@ pub fn to_u(rs_str: String, default_value: u32) -> u32 {
     }
 
     result.unwrap()
+}
+
+/// Combine a base URL and a link to a new absolute URL.
+/// # Examples
+/// ```
+/// use libnewsboat::utils::absolute_url;
+/// assert_eq!(absolute_url("http://foobar/hello/crook/", "bar.html"),
+///     "http://foobar/hello/crook/bar.html".to_owned());
+/// assert_eq!(absolute_url("https://foobar/foo/", "/bar.html"),
+///     "https://foobar/bar.html".to_owned());
+/// assert_eq!(absolute_url("https://foobar/foo/", "http://quux/bar.html"),
+///     "http://quux/bar.html".to_owned());
+/// assert_eq!(absolute_url("http://foobar", "bla.html"),
+///     "http://foobar/bla.html".to_owned());
+/// assert_eq!(absolute_url("http://test:test@foobar:33", "bla2.html"),
+///     "http://test:test@foobar:33/bla2.html".to_owned());
+/// ```
+pub fn absolute_url(base_url: &str, link: &str) -> String {
+    Url::parse(base_url)
+        .and_then(|url| url.join(link))
+        .as_ref()
+        .map(|url| url.as_str())
+        .unwrap_or(link)
+        .to_owned()
 }
 
 pub fn is_special_url(url: &str) -> bool {

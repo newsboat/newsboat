@@ -59,6 +59,17 @@ pub extern "C" fn rs_to_u(in_str: *const c_char, default_value: u32) -> u32
 }
 
 #[no_mangle]
+pub extern "C" fn rs_absolute_url(base_url: *const c_char, link: *const c_char) -> *mut c_char {
+    let rs_base_url = unsafe { CStr::from_ptr(base_url) };
+    let rs_base_url = rs_base_url.to_string_lossy();
+    let rs_link = unsafe { CStr::from_ptr(link) };
+    let rs_link = rs_link.to_string_lossy();
+
+    let ret = utils::absolute_url(&rs_base_url, &rs_link);
+    CString::new(ret).unwrap().into_raw()
+}
+
+#[no_mangle]
 pub extern "C" fn rs_is_special_url(in_str: *const c_char) -> bool {
     let rs_str = unsafe { CStr::from_ptr(in_str) };
     let rs_str = rs_str.to_string_lossy();
