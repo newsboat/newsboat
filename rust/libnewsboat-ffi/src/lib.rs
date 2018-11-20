@@ -154,11 +154,6 @@ pub extern "C" fn rs_is_valid_podcast_type(mimetype: *const c_char) -> bool {
 }
 
 #[no_mangle]
-pub extern "C" fn rs_init_global_logger() {
-    logger::init_global_logger()
-}
-
-#[no_mangle]
 pub extern "C" fn rs_log(level: logger::Level, message: *const c_char) {
     let message = unsafe { CStr::from_ptr(message) };
     logger::get_instance().log_raw(level, message.to_bytes());

@@ -9,7 +9,6 @@ namespace newsboat {
 }
 
 extern "C" {
-	void rs_init_global_logger();
 	uint64_t rs_get_loglevel();
 	void rs_log(newsboat::Level level, const char* message);
 }

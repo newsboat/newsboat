@@ -280,22 +280,7 @@ static GLOBAL_LOGGER: OnceCell<Logger> = OnceCell::INIT;
 /// This logger exists for the duration of the program. It's better to set the loglevel and
 /// logfiles as early as possible, so no messages are lost.
 pub fn get_instance() -> &'static Logger {
-    GLOBAL_LOGGER.get().expect("Global logger hasn't been initialized yet")
-}
-
-/// Initializes global logger instance.
-///
-/// The instance is the same as returned by `Logger::new()`.
-///
-/// # Panics
-///
-/// The call panics if the global instance is already initialized.
-pub fn init_global_logger() {
-    let logger = Logger::new();
-    match GLOBAL_LOGGER.set(logger) {
-        Ok(()) => return,
-        Err(_) => panic!("Global logger is already initialized"),
-    }
+    GLOBAL_LOGGER.get_or_init(|| Logger::new())
 }
 
 /// Convenience macro for logging.

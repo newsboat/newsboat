@@ -5,8 +5,6 @@
 
 int main(int argc, char* argv[])
 {
-	rs_init_global_logger();
-
 	setlocale(LC_CTYPE, "");
 
 	srand(static_cast<unsigned int>(std::time(0)));
