@@ -1,16 +1,10 @@
 #include "logger.h"
 
-#ifdef __cplusplus
 extern "C" {
-#endif
-
 void rs_set_logfile(const char* logfile);
 void rs_set_user_error_logfile(const char* logfile);
 void rs_set_loglevel(newsboat::Level level);
-
-#ifdef __cplusplus
 }
-#endif
 
 namespace newsboat {
 void Logger::set_logfile(const std::string& logfile)
