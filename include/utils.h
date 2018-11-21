@@ -95,8 +95,6 @@ namespace utils {
 
 	std::wstring clean_nonprintable_characters(std::wstring text);
 
-	std::wstring utf8str2wstr(const std::string& utf8str);
-
 	std::string absolute_url(const std::string& url,
 		const std::string& link);
 
