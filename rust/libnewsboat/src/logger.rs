@@ -432,8 +432,8 @@ mod tests {
                 let (_tmp, logfile, error_logfile, logger) = setup_logger()?;
                 logger.set_loglevel(*level);
 
-                for (level, msg) in &self.messages {
-                    logger.log(*level, &msg);
+                for &(level, ref msg) in &self.messages {
+                    logger.log(level, msg);
                 }
 
                 drop(logger);
@@ -525,8 +525,8 @@ mod tests {
 
         logger.set_loglevel(Level::Debug);
 
-        for (level, _level_str) in &levels {
-            logger.log(*level, msg);
+        for &(level, _level_str) in &levels {
+            logger.log(level, msg);
         }
 
         // Dropping logger to force it to flush the log and close the file
@@ -536,14 +536,14 @@ mod tests {
 
         let file = File::open(logfile).unwrap();
         let reader = BufReader::new(file);
-        for (line, expected) in reader.lines().zip(levels.iter().map(|(_, l)| l)) {
+        for (line, expected) in reader.lines().zip(levels.iter().map(|&(_, l)| l)) {
             match line {
                 Ok(line) => {
                     let (_timestamp_str, level, _message) =
                         parse_log_line(&line)
                         .expect("Failed to split the log line into parts");
 
-                    assert_eq!(&level, expected);
+                    assert_eq!(level, expected);
                 }
                 Err(e) => panic!("Error reading a line from the log: {:?}", e),
             }
@@ -567,8 +567,8 @@ mod tests {
 
         let msg = "Some test message";
 
-        for (level, _level_str) in &levels {
-            logger.log(*level, msg);
+        for &(level, _level_str) in &levels {
+            logger.log(level, msg);
         }
 
         // Dropping logger to force it to flush the log and close the file
