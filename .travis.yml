@@ -47,6 +47,21 @@ matrix:
   include:
     - compiler: gcc-4.9
       os: linux
+      rust: 1.25.0
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.9
+            - *global_deps
+      env:
+        - COMPILER=g++-4.9
+        - GCOV=/usr/bin/gcov-4.9
+      before_install:
+        *install_coveralls
+    - compiler: gcc-4.9
+      os: linux
       addons:
         apt:
           sources:
@@ -176,6 +191,17 @@ matrix:
         - GCOV="llvm-cov-6.0 gcov"
       before_install:
         *install_coveralls
+    - compiler: gcc
+      os: osx
+      rust: 1.25.0
+      env:
+        - COMPILER=g++
+        - GCOV=/usr/bin/gcov
+        # a2x will run xmllint on generated files, so we have to pass the path
+        # to AsciiDoc's catalog files
+        - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
+      before_install:
+        *osx_deps
     - compiler: gcc
       os: osx
       env:

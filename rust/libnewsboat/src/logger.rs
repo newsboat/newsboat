@@ -432,8 +432,8 @@ mod tests {
                 let (_tmp, logfile, error_logfile, logger) = setup_logger()?;
                 logger.set_loglevel(*level);
 
-                for (level, msg) in &self.messages {
-                    logger.log(*level, &msg);
+                for &(level, ref msg) in &self.messages {
+                    logger.log(level, msg);
                 }
 
                 drop(logger);
@@ -452,17 +452,15 @@ mod tests {
     }
 
     #[test]
-    fn t_set_logfile_creates_a_file() -> io::Result<()> {
-        let (_tmp, logfile, _error_logfile, _logger) = setup_logger()?;
+    fn t_set_logfile_creates_a_file() {
+        let (_tmp, logfile, _error_logfile, _logger) = setup_logger().unwrap();
 
         assert!(logfile.exists());
-
-        Ok(())
     }
 
     #[test]
-    fn t_log_writes_message_to_the_file() -> io::Result<()> {
-        let (_tmp, logfile, _error_logfile, logger) = setup_logger()?;
+    fn t_log_writes_message_to_the_file() {
+        let (_tmp, logfile, _error_logfile, logger) = setup_logger().unwrap();
 
         let messages = vec![
             "Hello, world!",
@@ -481,9 +479,9 @@ mod tests {
         // Dropping logger to force it to flush the log and close the file
         drop(logger);
 
-        log_contains_n_lines(&logfile, 3)?;
+        log_contains_n_lines(&logfile, 3).unwrap();
 
-        let file = File::open(logfile)?;
+        let file = File::open(logfile).unwrap();
         let reader = BufReader::new(file);
         for (line, expected) in reader.lines().zip(messages) {
             match line {
@@ -505,16 +503,14 @@ mod tests {
 
                     assert_eq!(message, expected);
                 }
-                Err(e) => return Err(e),
+                Err(e) => panic!("Error reading a line from the log: {:?}", e),
             }
         }
-
-        Ok(())
     }
 
     #[test]
-    fn t_different_loglevels_have_different_names() -> io::Result<()> {
-        let (_tmp, logfile, _error_logfile, logger) = setup_logger()?;
+    fn t_different_loglevels_have_different_names() {
+        let (_tmp, logfile, _error_logfile, logger) = setup_logger().unwrap();
 
         let levels = vec![
             (Level::UserError, "USERERROR"),
@@ -529,36 +525,34 @@ mod tests {
 
         logger.set_loglevel(Level::Debug);
 
-        for (level, _level_str) in &levels {
-            logger.log(*level, msg);
+        for &(level, _level_str) in &levels {
+            logger.log(level, msg);
         }
 
         // Dropping logger to force it to flush the log and close the file
         drop(logger);
 
-        log_contains_n_lines(&logfile, 6)?;
+        log_contains_n_lines(&logfile, 6).unwrap();
 
-        let file = File::open(logfile)?;
+        let file = File::open(logfile).unwrap();
         let reader = BufReader::new(file);
-        for (line, expected) in reader.lines().zip(levels.iter().map(|(_, l)| l)) {
+        for (line, expected) in reader.lines().zip(levels.iter().map(|&(_, l)| l)) {
             match line {
                 Ok(line) => {
                     let (_timestamp_str, level, _message) =
                         parse_log_line(&line)
                         .expect("Failed to split the log line into parts");
 
-                    assert_eq!(&level, expected);
+                    assert_eq!(level, expected);
                 }
-                Err(e) => return Err(e),
+                Err(e) => panic!("Error reading a line from the log: {:?}", e),
             }
         }
-
-        Ok(())
     }
 
     #[test]
-    fn t_if_curlevel_is_none_nothing_is_logged() -> io::Result<()> {
-        let (_tmp, logfile, _error_logfile, logger) = setup_logger()?;
+    fn t_if_curlevel_is_none_nothing_is_logged() {
+        let (_tmp, logfile, _error_logfile, logger) = setup_logger().unwrap();
 
         logger.set_loglevel(Level::None);
 
@@ -573,27 +567,26 @@ mod tests {
 
         let msg = "Some test message";
 
-        for (level, _level_str) in &levels {
-            logger.log(*level, msg);
+        for &(level, _level_str) in &levels {
+            logger.log(level, msg);
         }
 
         // Dropping logger to force it to flush the log and close the file
         drop(logger);
 
-        log_contains_n_lines(&logfile, 0)?;
-
-        Ok(())
+        log_contains_n_lines(&logfile, 0).unwrap();
     }
 
     #[test]
-    fn t_user_errors_are_logged_at_all_curlevels_beside_none() -> io::Result<()> {
+    fn t_user_errors_are_logged_at_all_curlevels_beside_none() {
         let message = (Level::UserError, "hello".to_string());
 
         LogLinesCounter::new()
             .with_messages(vec![message.clone()])
             .at_levels(vec![Level::None])
             .expected_log_lines_count(0)
-            .test()?;
+            .test()
+            .unwrap();
 
         let levels = vec![
             Level::UserError,
@@ -607,13 +600,12 @@ mod tests {
             .with_messages(vec![message])
             .at_levels(levels)
             .expected_log_lines_count(1)
-            .test()?;
-
-        Ok(())
+            .test()
+            .unwrap();
     }
 
     #[test]
-    fn t_critical_msgs_are_logged_at_curlevels_starting_with_critical() -> io::Result<()> {
+    fn t_critical_msgs_are_logged_at_curlevels_starting_with_critical() {
         let message = (Level::Critical, "hello".to_string());
 
         let nolog_levels = vec![
@@ -624,7 +616,8 @@ mod tests {
             .with_messages(vec![message.clone()])
             .at_levels(nolog_levels)
             .expected_log_lines_count(0)
-            .test()?;
+            .test()
+            .unwrap();
 
         let log_levels = vec![
             Level::Critical,
@@ -637,13 +630,12 @@ mod tests {
             .with_messages(vec![message])
             .at_levels(log_levels)
             .expected_log_lines_count(1)
-            .test()?;
-
-        Ok(())
+            .test()
+            .unwrap();
     }
 
     #[test]
-    fn t_error_msgs_are_logged_at_curlevels_starting_with_error() -> io::Result<()> {
+    fn t_error_msgs_are_logged_at_curlevels_starting_with_error() {
         let message = (Level::Error, "hello".to_string());
 
         let nolog_levels = vec![
@@ -655,7 +647,8 @@ mod tests {
             .with_messages(vec![message.clone()])
             .at_levels(nolog_levels)
             .expected_log_lines_count(0)
-            .test()?;
+            .test()
+            .unwrap();
 
         let log_levels = vec![
             Level::Error,
@@ -667,13 +660,12 @@ mod tests {
             .with_messages(vec![message])
             .at_levels(log_levels)
             .expected_log_lines_count(1)
-            .test()?;
-
-        Ok(())
+            .test()
+            .unwrap();
     }
 
     #[test]
-    fn t_warning_msgs_are_logged_at_curlevels_starting_with_warning() -> io::Result<()> {
+    fn t_warning_msgs_are_logged_at_curlevels_starting_with_warning() {
         let message = (Level::Warn, "hello".to_string());
 
         let nolog_levels = vec![
@@ -686,7 +678,8 @@ mod tests {
             .with_messages(vec![message.clone()])
             .at_levels(nolog_levels)
             .expected_log_lines_count(0)
-            .test()?;
+            .test()
+            .unwrap();
 
         let log_levels = vec![
             Level::Warn,
@@ -697,13 +690,12 @@ mod tests {
             .with_messages(vec![message])
             .at_levels(log_levels)
             .expected_log_lines_count(1)
-            .test()?;
-
-        Ok(())
+            .test()
+            .unwrap();
     }
 
     #[test]
-    fn t_info_msgs_are_logged_at_curlevels_starting_with_info() -> io::Result<()> {
+    fn t_info_msgs_are_logged_at_curlevels_starting_with_info() {
         let message = (Level::Info, "hello".to_string());
 
         let nolog_levels = vec![
@@ -717,7 +709,8 @@ mod tests {
             .with_messages(vec![message.clone()])
             .at_levels(nolog_levels)
             .expected_log_lines_count(0)
-            .test()?;
+            .test()
+            .unwrap();
 
         let log_levels = vec![
             Level::Info,
@@ -727,13 +720,12 @@ mod tests {
             .with_messages(vec![message])
             .at_levels(log_levels)
             .expected_log_lines_count(1)
-            .test()?;
-
-        Ok(())
+            .test()
+            .unwrap();
     }
 
     #[test]
-    fn t_debug_msgs_are_logged_only_at_curlevel_debug() -> io::Result<()> {
+    fn t_debug_msgs_are_logged_only_at_curlevel_debug() {
         let message = (Level::Debug, "hello".to_string());
 
         let nolog_levels = vec![
@@ -748,34 +740,33 @@ mod tests {
             .with_messages(vec![message.clone()])
             .at_levels(nolog_levels)
             .expected_log_lines_count(0)
-            .test()?;
+            .test()
+            .unwrap();
 
         LogLinesCounter::new()
             .with_messages(vec![message])
             .at_levels(vec![Level::Debug])
             .expected_log_lines_count(1)
-            .test()?;
-
-        Ok(())
+            .test()
+            .unwrap();
     }
 
     #[test]
-    fn t_set_user_error_logfile_creates_a_file() -> io::Result<()> {
-        let (_tmp, _logfile, error_logfile, _logger) = setup_logger()?;
+    fn t_set_user_error_logfile_creates_a_file() {
+        let (_tmp, _logfile, error_logfile, _logger) = setup_logger().unwrap();
         assert!(error_logfile.exists());
-
-        Ok(())
     }
 
     #[test]
-    fn t_writes_to_errorlog_at_usererror_and_above() -> io::Result<()> {
+    fn t_writes_to_errorlog_at_usererror_and_above() {
         let message = (Level::UserError, "hello".to_string());
 
         LogLinesCounter::new()
             .with_messages(vec![message.clone()])
             .at_levels(vec![Level::None])
             .expected_errorlog_lines_count(0)
-            .test()?;
+            .test()
+            .unwrap();
 
         let log_levels = vec![
             Level::UserError,
@@ -789,13 +780,12 @@ mod tests {
             .with_messages(vec![message])
             .at_levels(log_levels)
             .expected_errorlog_lines_count(1)
-            .test()?;
-
-        Ok(())
+            .test()
+            .unwrap();
     }
 
     #[test]
-    fn t_only_usererrors_are_written_to_errorlog() -> io::Result<()> {
+    fn t_only_usererrors_are_written_to_errorlog() {
         let messages = vec![
             (Level::UserError, "hello".to_string()),
             (Level::Critical, "this shouldn't be written to error-log".to_string()),
@@ -808,7 +798,8 @@ mod tests {
             .with_messages(messages.clone())
             .at_levels(nolog_levels)
             .expected_errorlog_lines_count(0)
-            .test()?;
+            .test()
+            .unwrap();
 
         let log_levels = vec![
             Level::UserError,
@@ -822,14 +813,13 @@ mod tests {
             .with_messages(messages)
             .at_levels(log_levels)
             .expected_errorlog_lines_count(1)
-            .test()?;
-
-        Ok(())
+            .test()
+            .unwrap();
     }
 
     #[test]
-    fn t_log_writes_message_to_the_user_error_logfile() -> io::Result<()> {
-        let (_tmp, _logfile, error_logfile, logger) = setup_logger()?;
+    fn t_log_writes_message_to_the_user_error_logfile() {
+        let (_tmp, _logfile, error_logfile, logger) = setup_logger().unwrap();
 
         logger.set_loglevel(Level::UserError);
 
@@ -848,9 +838,9 @@ mod tests {
         // Dropping logger to force it to flush the log and close the file
         drop(logger);
 
-        log_contains_n_lines(&error_logfile, 3)?;
+        log_contains_n_lines(&error_logfile, 3).unwrap();
 
-        let file = File::open(error_logfile)?;
+        let file = File::open(error_logfile).unwrap();
         let reader = BufReader::new(file);
         for (line, expected) in reader.lines().zip(messages) {
             match line {
@@ -872,10 +862,8 @@ mod tests {
 
                     assert_eq!(message, expected);
                 }
-                Err(e) => return Err(e),
+                Err(e) => panic!("Error reading a line from the log: {:?}", e),
             }
         }
-
-        Ok(())
     }
 }

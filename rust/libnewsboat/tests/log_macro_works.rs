@@ -16,8 +16,8 @@ fn log_contains_n_lines(logfile: &path::Path, n: usize)  -> Result<()> {
 }
 
 #[test]
-fn t_log_macro_writes_messages_to_the_log() -> Result<()> {
-    let tmp = TempDir::new()?;
+fn t_log_macro_writes_messages_to_the_log() {
+    let tmp = TempDir::new().unwrap();
     let logfile = {
         let mut logfile = tmp.path().to_owned();
         logfile.push("example.log");
@@ -31,5 +31,5 @@ fn t_log_macro_writes_messages_to_the_log() -> Result<()> {
     log!(Level::UserError, "Please set some settings");
     log!(Level::Error, &format!("Answer invalid: {}", 41));
 
-    log_contains_n_lines(&logfile, 3)
+    log_contains_n_lines(&logfile, 3).unwrap();
 }
