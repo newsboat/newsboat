@@ -15,6 +15,7 @@
 #include <libgen.h>
 #include <libxml/uri.h>
 #include <locale>
+#include <mutex>
 #include <pwd.h>
 #include <regex>
 #include <sstream>

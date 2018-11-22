@@ -1,5 +1,6 @@
 #include "queuemanager.h"
 
+#include <fstream>
 #include <libxml/uri.h>
 
 #include "configpaths.h"

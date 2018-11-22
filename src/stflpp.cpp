@@ -2,6 +2,7 @@
 
 #include <cerrno>
 #include <langinfo.h>
+#include <mutex>
 
 #include "exception.h"
 #include "logger.h"
