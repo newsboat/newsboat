@@ -12,6 +12,7 @@ url = "1.7"
 dirs = "1.0.4"
 backtrace = "= 0.3"
 unicode-width = "0.1.5"
+nom = "^4.1"
 
 [dev-dependencies]
 tempfile = "3"
