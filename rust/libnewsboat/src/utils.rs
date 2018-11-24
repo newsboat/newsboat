@@ -62,6 +62,7 @@ pub fn to_u(rs_str: String, default_value: u32) -> u32 {
 }
 
 /// Combine a base URL and a link to a new absolute URL.
+/// If the base URL is malformed or joining with the link fails, link will be returned.
 /// # Examples
 /// ```
 /// use libnewsboat::utils::absolute_url;
@@ -75,6 +76,7 @@ pub fn to_u(rs_str: String, default_value: u32) -> u32 {
 ///     "http://foobar/bla.html".to_owned());
 /// assert_eq!(absolute_url("http://test:test@foobar:33", "bla2.html"),
 ///     "http://test:test@foobar:33/bla2.html".to_owned());
+/// assert_eq!(absolute_url("foo", "bar"), "bar".to_owned());
 /// ```
 pub fn absolute_url(base_url: &str, link: &str) -> String {
     Url::parse(base_url)
