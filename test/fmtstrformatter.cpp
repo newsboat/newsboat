@@ -1,4 +1,4 @@
-#include "formatstring.h"
+#include "fmtstrformatter.h"
 
 #include "3rd-party/catch.hpp"
 

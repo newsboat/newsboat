@@ -8,7 +8,7 @@
 #include "controller.h"
 #include "downloadthread.h"
 #include "exceptions.h"
-#include "formatstring.h"
+#include "fmtstrformatter.h"
 #include "reloadrangethread.h"
 #include "reloadthread.h"
 #include "rss/rsspp.h"

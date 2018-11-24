@@ -4,7 +4,7 @@
 #include <libxml/uri.h>
 
 #include "configpaths.h"
-#include "formatstring.h"
+#include "fmtstrformatter.h"
 #include "rss.h"
 #include "stflpp.h"
 #include "utils.h"
