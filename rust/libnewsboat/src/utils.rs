@@ -113,6 +113,63 @@ pub fn is_exec_url(url: &str) -> bool {
     url.starts_with("exec:")
 }
 
+/// Censor URLs by replacing username and password with '*'
+/// ```
+/// use libnewsboat::utils::censor_url;
+/// assert_eq!(&censor_url(""), "");
+/// assert_eq!(&censor_url("foobar"), "foobar");
+/// assert_eq!(&censor_url("foobar://xyz/"), "foobar://xyz/");
+/// assert_eq!(&censor_url("http://newsbeuter.org/"),
+///		"http://newsbeuter.org/");
+/// assert_eq!(&censor_url("https://newsbeuter.org/"),
+///		"https://newsbeuter.org/");
+///
+/// assert_eq!(&censor_url("http://@newsbeuter.org/"),
+/// 		"http://newsbeuter.org/");
+/// assert_eq!(&censor_url("https://@newsbeuter.org/"),
+/// 		"https://newsbeuter.org/");
+///
+/// assert_eq!(&censor_url("http://foo:bar@newsbeuter.org/"),
+///		"http://*:*@newsbeuter.org/");
+/// assert_eq!(&censor_url("https://foo:bar@newsbeuter.org/"),
+///		"https://*:*@newsbeuter.org/");
+///
+/// assert_eq!(&censor_url("http://aschas@newsbeuter.org/"),
+///		"http://*:*@newsbeuter.org/");
+/// assert_eq!(&censor_url("https://aschas@newsbeuter.org/"),
+///		"https://*:*@newsbeuter.org/");
+///
+/// assert_eq!(&censor_url("xxx://aschas@newsbeuter.org/"),
+///		"xxx://*:*@newsbeuter.org/");
+///
+/// assert_eq!(&censor_url("http://foobar"), "http://foobar/");
+/// assert_eq!(&censor_url("https://foobar"), "https://foobar/");
+///
+/// assert_eq!(&censor_url("http://aschas@host"), "http://*:*@host/");
+/// assert_eq!(&censor_url("https://aschas@host"), "https://*:*@host/");
+///
+/// assert_eq!(&censor_url("query:name:age between 1:10"),
+///		"query:name:age between 1:10");
+/// ```
+pub fn censor_url(url: &str) -> String {
+    if !url.is_empty() && !is_special_url(url) {
+        Url::parse(url).map(|mut url| {
+            if url.username() != "" || url.password().is_some()  {
+                // can not panic. If either username or password is present we can change both.
+                url.set_username("*").unwrap();
+                url.set_password(Some("*")).unwrap();
+            }
+            url
+        })
+        .as_ref()
+        .map(|url| url.as_str())
+        .unwrap_or(url)
+        .to_owned()
+    } else {
+        url.into()
+    }
+}
+
 pub fn get_default_browser() -> String {
     use std::env;
     match env::var("BROWSER") {
