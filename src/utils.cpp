@@ -914,24 +914,7 @@ bool utils::is_exec_url(const std::string& url)
 
 std::string utils::censor_url(const std::string& url)
 {
-	std::string rv(url);
-	if (!url.empty() && !utils::is_special_url(url)) {
-		const char* myuri = url.c_str();
-		xmlURIPtr uri = xmlParseURI(myuri);
-		if (uri) {
-			if (uri->user) {
-				xmlFree(uri->user);
-				uri->user =
-					(char*)xmlStrdup((const xmlChar*)"*:*");
-			}
-			xmlChar* uristr = xmlSaveUri(uri);
-
-			rv = (const char*)uristr;
-			xmlFree(uristr);
-			xmlFreeURI(uri);
-		}
-	}
-	return rv;
+	return RustString(rs_censor_url(url.c_str()));
 }
 
 std::string utils::quote_for_stfl(std::string str)
