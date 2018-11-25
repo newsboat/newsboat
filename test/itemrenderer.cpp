@@ -121,7 +121,7 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 			"See also this site[1].\n" +
 			" \n" +
 			"Links: \n" +
-			"[1]: https://example.com (link)\n";
+			"[1]: https://example.com/ (link)\n";
 
 		REQUIRE(result == expected);
 	}
@@ -366,7 +366,7 @@ TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
 				"Hello, world! Check out our site[1].\n" +
 				" \n" +
 				"Links: \n" +
-				"[1]: https://example.com (link)\n";
+				"[1]: https://example.com/ (link)\n";
 
 			REQUIRE(result == expected);
 		}
@@ -417,7 +417,7 @@ TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
 				"Check out our site[1].\n" +
 				" \n" +
 				"Links: \n" +
-				"[1]: https://example.com (link)\n";
+				"[1]: https://example.com/ (link)\n";
 
 			REQUIRE(result == expected);
 		}

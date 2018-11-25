@@ -26,6 +26,8 @@ bool rs_is_filter_url(const char* str);
 
 bool rs_is_exec_url(const char* str);
 
+char* rs_censor_url(const char* str);
+
 char* rs_trim(const char* str);
 
 char* rs_trim_end(const char* str);

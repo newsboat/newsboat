@@ -351,9 +351,9 @@ TEST_CASE("censor_url()", "[utils]")
 		"https://newsbeuter.org/");
 
 	REQUIRE(utils::censor_url("http://@newsbeuter.org/") ==
-		"http://*:*@newsbeuter.org/");
+		"http://newsbeuter.org/");
 	REQUIRE(utils::censor_url("https://@newsbeuter.org/") ==
-		"https://*:*@newsbeuter.org/");
+		"https://newsbeuter.org/");
 
 	REQUIRE(utils::censor_url("http://foo:bar@newsbeuter.org/") ==
 		"http://*:*@newsbeuter.org/");
@@ -368,11 +368,11 @@ TEST_CASE("censor_url()", "[utils]")
 	REQUIRE(utils::censor_url("xxx://aschas@newsbeuter.org/") ==
 		"xxx://*:*@newsbeuter.org/");
 
-	REQUIRE(utils::censor_url("http://foobar") == "http://foobar");
-	REQUIRE(utils::censor_url("https://foobar") == "https://foobar");
+	REQUIRE(utils::censor_url("http://foobar") == "http://foobar/");
+	REQUIRE(utils::censor_url("https://foobar") == "https://foobar/");
 
-	REQUIRE(utils::censor_url("http://aschas@host") == "http://*:*@host");
-	REQUIRE(utils::censor_url("https://aschas@host") == "https://*:*@host");
+	REQUIRE(utils::censor_url("http://aschas@host") == "http://*:*@host/");
+	REQUIRE(utils::censor_url("https://aschas@host") == "https://*:*@host/");
 
 	REQUIRE(utils::censor_url("query:name:age between 1:10") ==
 		"query:name:age between 1:10");

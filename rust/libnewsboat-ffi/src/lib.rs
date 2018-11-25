@@ -105,6 +105,13 @@ pub extern "C" fn rs_is_exec_url(in_str: *const c_char) -> bool {
 }
 
 #[no_mangle]
+pub extern "C" fn rs_censor_url(url: *const c_char) -> *mut c_char {
+    let rs_url = unsafe { CStr::from_ptr(url) };
+    let rs_url = rs_url.to_string_lossy();
+    CString::new(utils::censor_url(&rs_url)).unwrap().into_raw()
+}
+
+#[no_mangle]
 pub extern "C" fn rs_trim_end(input: *const c_char) -> *mut c_char {
     let rs_input = unsafe { CStr::from_ptr(input) };
     let rs_input = rs_input.to_string_lossy().into_owned();
