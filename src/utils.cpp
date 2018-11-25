@@ -652,16 +652,7 @@ std::string utils::wstr2str(const std::wstring& wstr)
 
 std::string utils::absolute_url(const std::string& url, const std::string& link)
 {
-	xmlChar* newurl = xmlBuildURI(
-		(const xmlChar*)link.c_str(), (const xmlChar*)url.c_str());
-	std::string retval;
-	if (newurl) {
-		retval = (const char*)newurl;
-		xmlFree(newurl);
-	} else {
-		retval = link;
-	}
-	return retval;
+	return RustString(rs_absolute_url(url.c_str(), link.c_str()));
 }
 
 std::string utils::get_useragent(ConfigContainer* cfgcont)
