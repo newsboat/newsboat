@@ -2,26 +2,9 @@ extern crate rand;
 extern crate regex;
 extern crate url;
 
-use std::collections::HashSet;
-use once_cell::sync::Lazy;
-
 use self::regex::Regex;
 
 use self::url::{Url};
-
-const COLORS: Lazy<HashSet<&'static str>> = sync_lazy! {
-    let mut set = HashSet::new();
-    set.insert("black");
-    set.insert("red");
-    set.insert("green");
-    set.insert("yellow");
-    set.insert("blue");
-    set.insert("magenta");
-    set.insert("cyan");
-    set.insert("white");
-    set.insert("default");
-    set
-};
 
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
@@ -192,7 +175,19 @@ pub fn get_random_value(max: u32) -> u32 {
 }
 
 pub fn is_valid_color(color: &str) -> bool {
-    if COLORS.contains(color) {
+    const COLORS: [&str; 9] = [
+        "black",
+        "red",
+        "green",
+        "yellow",
+        "blue",
+        "magenta",
+        "cyan",
+        "white",
+        "default",
+    ];
+
+    if COLORS.contains(&color) {
         return true;
     }
     if color.starts_with("color0") {
