@@ -1,10 +1,7 @@
 extern crate rand;
 extern crate regex;
-<<<<<<< HEAD
 extern crate url;
-=======
 extern crate dirs;
->>>>>>> Rust implementation of resolve tilde
 
 use std::collections::HashSet;
 use once_cell::sync::Lazy;
@@ -103,10 +100,14 @@ pub fn resolve_tilde(path: String) -> String {
         }
         else{
             let tmp_file_path = file_path.clone();
-            let (tilde,remaining) = tmp_file_path.split_at(2);
 
-            if tilde == "~/" {
-                file_path = home_path_string + "/" + remaining;
+            if tmp_file_path.len() > 1 {
+
+                let (tilde,remaining) = tmp_file_path.split_at(2);
+
+                if tilde == "~/" {
+                    file_path = home_path_string + "/" + remaining;
+                }
             }
         }
     }
