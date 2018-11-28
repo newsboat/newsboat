@@ -165,6 +165,13 @@ pub extern "C" fn rs_is_valid_color(input: *const c_char) -> bool {
 }
 
 #[no_mangle]
+pub extern "C" fn rs_is_valid_attribute(attribute: *const c_char) -> bool {
+    let rs_attribute = unsafe { CStr::from_ptr(attribute) };
+    let rs_attribute = rs_attribute.to_string_lossy();
+    utils::is_valid_attribute(&rs_attribute)
+}
+
+#[no_mangle]
 pub extern "C" fn rs_is_valid_podcast_type(mimetype: *const c_char) -> bool {
     let rs_mimetype = unsafe { CStr::from_ptr(mimetype) };
     let rs_mimetype = rs_mimetype.to_string_lossy();

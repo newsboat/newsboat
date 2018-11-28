@@ -208,6 +208,21 @@ pub fn is_valid_color(color: &str) -> bool {
     false
 }
 
+pub fn is_valid_attribute(attribute:  &str) -> bool {
+    const VALID_ATTRIBUTES: [&str; 9]  = [
+        "standout",
+        "underline",
+        "reverse",
+        "blink",
+        "dim",
+        "bold",
+        "protect",
+        "invis",
+        "default",
+    ];
+    VALID_ATTRIBUTES.contains(&attribute)
+}
+
 pub fn is_valid_podcast_type(mimetype: &str) -> bool {
     let re = Regex::new(r"(audio|video)/.*").unwrap();
     let matches = re.is_match(mimetype);
@@ -382,7 +397,6 @@ mod tests {
         }
     }
 
-
     #[test]
     fn t_is_valid_podcast_type() {
 	assert!(is_valid_podcast_type("audio/mpeg"));
@@ -395,6 +409,34 @@ mod tests {
 	assert!(!is_valid_podcast_type("image/png"));
 	assert!(!is_valid_podcast_type("text/plain"));
 	assert!(!is_valid_podcast_type("application/zip"));
+    }
+
+    #[test]
+    fn t_is_valid_attribte() {
+        let invalid = [
+            "foo",
+            "bar",
+            "baz",
+            "quux",
+        ];
+        for attr in &invalid {
+            assert!(!is_valid_attribute(attr));
+        }
+
+        let valid = [
+            "standout",
+            "underline",
+            "reverse",
+            "blink",
+            "dim",
+            "bold",
+            "protect",
+            "invis",
+            "default",
+        ];
+        for attr in &valid {
+            assert!(is_valid_attribute(attr));
+        }
     }
 }
 
