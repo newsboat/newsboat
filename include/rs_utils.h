@@ -14,7 +14,11 @@ char* rs_consolidate_whitespace(const char* str);
 
 unsigned int rs_to_u(const char* str, const unsigned int default_value);
 
+<<<<<<< HEAD
 char* rs_absolute_url(const char* base_url, const char* link);
+=======
+char* rs_resolve_tilde(const char* str);
+>>>>>>> Rust implementation of resolve tilde
 
 bool rs_is_special_url(const char* str);
 

@@ -1,6 +1,10 @@
 extern crate rand;
 extern crate regex;
+<<<<<<< HEAD
 extern crate url;
+=======
+extern crate dirs;
+>>>>>>> Rust implementation of resolve tilde
 
 use std::collections::HashSet;
 use once_cell::sync::Lazy;
@@ -85,6 +89,28 @@ pub fn absolute_url(base_url: &str, link: &str) -> String {
         .map(|url| url.as_str())
         .unwrap_or(link)
         .to_owned()
+}
+
+pub fn resolve_tilde(path: String) -> String {
+    let mut file_path:String = path;
+    let home_path = dirs::home_dir();
+
+    if home_path.is_some() {
+        let home_path_string = home_path.unwrap().display().to_string();
+
+        if file_path == "~" {
+            file_path = home_path_string;
+        }
+        else{
+            let tmp_file_path = file_path.clone();
+            let (tilde,remaining) = tmp_file_path.split_at(2);
+
+            if tilde == "~/" {
+                file_path = home_path_string + "/" + remaining;
+            }
+        }
+    }
+    return file_path;
 }
 
 pub fn is_special_url(url: &str) -> bool {
