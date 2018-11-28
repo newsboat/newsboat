@@ -2,7 +2,7 @@
 extern crate libnewsboat;
 extern crate tempfile;
 
-use libnewsboat::logger::{get_instance, Level};
+use libnewsboat::logger::{self, get_instance, Level};
 use self::tempfile::TempDir;
 use std::fs::File;
 use std::io::{Result, BufReader, BufRead};
