@@ -919,3 +919,32 @@ TEST_CASE(
 	REQUIRE(utils::get_proxy_type("") == CURLPROXY_HTTP);
 	REQUIRE(utils::get_proxy_type("test") == CURLPROXY_HTTP);
 }
+
+TEST_CASE("is_valid_attribute returns true if given string is an STFL attribute",
+		"[utils]")
+{
+	const std::vector<std::string> invalid = {
+		"foo",
+		"bar",
+		"baz",
+		"quux"
+	};
+	for (const auto& attr : invalid) {
+		REQUIRE_FALSE(utils::is_valid_attribute(attr));
+	}
+
+	const std::vector<std::string> valid = {
+		"standout",
+		"underline",
+		"reverse",
+		"blink",
+		"dim",
+		"bold",
+		"protect",
+		"invis",
+		"default"
+	};
+	for (const auto& attr : valid) {
+		REQUIRE(utils::is_valid_attribute(attr));
+	}
+}
