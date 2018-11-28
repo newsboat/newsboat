@@ -7,6 +7,8 @@ use self::regex::Regex;
 use self::url::{Url};
 use self::url::percent_encoding::*;
 
+use logger::{Level, self};
+
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
 }
@@ -452,7 +454,9 @@ mod tests {
         for attr in &valid {
             assert!(is_valid_attribute(attr));
         }
+    }
 
+    #[test]
     fn t_escape_url() {
         assert!(escape_url(String::from("foo bar")) ==
                 String::from("foo%20bar"));
