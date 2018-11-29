@@ -92,13 +92,12 @@ pub fn resolve_tilde(path: String) -> String {
     let mut file_path:String = path;
     let home_path = dirs::home_dir();
 
-    if home_path.is_some() {
-        let home_path_string = home_path.unwrap().display().to_string();
+    if let Some(home_path) = home_path {
+        let home_path_string = home_path.to_string_lossy().into_owned();
 
         if file_path == "~" {
             file_path = home_path_string;
-        }
-        else{
+        } else {
             let tmp_file_path = file_path.clone();
 
             if tmp_file_path.len() > 1 {
