@@ -7,8 +7,6 @@ use self::regex::Regex;
 use self::url::{Url};
 use self::url::percent_encoding::*;
 
-use logger::{Level, self};
-
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
 }
@@ -231,16 +229,14 @@ pub fn is_valid_podcast_type(mimetype: &str) -> bool {
     matches || found
 }
 
-pub fn unescape_url(rs_str: String) -> String {
+pub fn unescape_url(rs_str: String) -> Option<String> {
     let result = percent_decode(rs_str.as_bytes());
     let result = result.decode_utf8();
     if result.is_err() {
-        log!(Level::Error,
-                    &format!("percent_decode failed to escape url {}", rs_str));
-        panic!("Escaping url Failed");
+            return None
     }
 
-    result.unwrap().replace("\0","")
+    Some(result.unwrap().replace("\0",""))
 }
 
 #[cfg(test)]
@@ -451,10 +447,10 @@ mod tests {
 
     #[test]
     fn t_unescape_url() {
-        assert!(unescape_url(String::from("foo%20bar")) ==
+        assert!(unescape_url(String::from("foo%20bar")).unwrap() ==
                              String::from("foo bar"));
         assert!(unescape_url(
-                String::from("%21%23%24%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D")) ==
+                String::from("%21%23%24%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D")).unwrap() ==
             String::from("!#$&'()*+,/:;=?@[]"));
     }
 }

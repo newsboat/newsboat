@@ -151,7 +151,6 @@ namespace utils {
 	std::string get_content(xmlNode* node);
 	std::string get_basename(const std::string& url);
 
-	std::string escape_url(const std::string& url);
 	std::string unescape_url(const std::string& url);
 	void initialize_ssl_implementation(void);
 

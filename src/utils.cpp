@@ -1120,7 +1120,13 @@ curl_proxytype utils::get_proxy_type(const std::string& type)
 
 std::string utils::unescape_url(const std::string& url)
 {
-	return RustString(rs_unescape_url(url.c_str()));
+	char* ptr = rs_unescape_url(url.c_str());
+	if (ptr == nullptr) {
+		LOG(Level::DEBUG, "Rust failed to escape url: %s", url );
+		throw std::runtime_error("escaping url failed");
+	} else {
+		return RustString(ptr);
+	}
 }
 
 std::wstring utils::clean_nonprintable_characters(std::wstring text)
