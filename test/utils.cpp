@@ -947,6 +947,7 @@ TEST_CASE("is_valid_attribute returns true if given string is an STFL attribute"
 	for (const auto& attr : valid) {
 		REQUIRE(utils::is_valid_attribute(attr));
 	}
+}
 
 TEST_CASE("escape_url() takes a string and returns the string in "
 		"percent-encoding format",
