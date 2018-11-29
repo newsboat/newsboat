@@ -50,6 +50,18 @@ pub extern "C" fn rs_consolidate_whitespace( input: *const c_char) -> *mut c_cha
 }
 
 #[no_mangle]
+pub extern "C" fn rs_resolve_tilde( path: *const c_char) -> *mut c_char {
+
+    let rs_path = unsafe { CStr::from_ptr(path) };
+    let rs_path = rs_path.to_string_lossy().into_owned();
+
+    let result = utils::resolve_tilde(rs_path);
+
+    let result = CString::new(result).unwrap();
+    result.into_raw()
+}
+
+#[no_mangle]
 pub extern "C" fn rs_to_u(in_str: *const c_char, default_value: u32) -> u32
 {
     let rs_str = unsafe { CStr::from_ptr(in_str) };

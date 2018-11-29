@@ -1,9 +1,10 @@
 extern crate libnewsboat;
 
+use libnewsboat::utils;
+use std::env;
+    
 #[test]
 fn t_get_default_browser() {
-    use libnewsboat::utils;
-    use std::env;
 
     let key = String::from("BROWSER");
     let firefox = String::from("firefox");

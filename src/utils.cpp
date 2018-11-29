@@ -587,33 +587,7 @@ std::string utils::run_program(char* argv[], const std::string& input)
 
 std::string utils::resolve_tilde(const std::string& str)
 {
-	const char* homedir;
-	std::string filepath;
-
-	if (!(homedir = ::getenv("HOME"))) {
-		struct passwd* spw = ::getpwuid(::getuid());
-		if (spw) {
-			homedir = spw->pw_dir;
-		} else {
-			homedir = "";
-		}
-	}
-
-	if (strcmp(homedir, "") != 0) {
-		if (str == "~") {
-			filepath.append(homedir);
-		} else if (str.substr(0, 2) == "~/") {
-			filepath.append(homedir);
-			filepath.append(1, '/');
-			filepath.append(str.substr(2, str.length() - 2));
-		} else {
-			filepath.append(str);
-		}
-	} else {
-		filepath.append(str);
-	}
-
-	return filepath;
+	return RustString(rs_resolve_tilde(str.c_str()));
 }
 
 std::string utils::replace_all(std::string str,
