@@ -1118,11 +1118,6 @@ curl_proxytype utils::get_proxy_type(const std::string& type)
 	return CURLPROXY_HTTP;
 }
 
-std::string utils::escape_url(const std::string& url)
-{
-	return RustString(rs_escape_url(url.c_str()));
-}
-
 std::string utils::unescape_url(const std::string& url)
 {
 	return RustString(rs_unescape_url(url.c_str()));

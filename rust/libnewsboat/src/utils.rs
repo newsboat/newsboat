@@ -231,13 +231,6 @@ pub fn is_valid_podcast_type(mimetype: &str) -> bool {
     matches || found
 }
 
-pub fn escape_url(rs_str: String) -> String {
-    define_encode_set! {
-        pub URL_ENCODE_SET = [SIMPLE_ENCODE_SET] | {' ','!','#','$','&','\'','(',')','*','+',',','/',':',';','=','?','@','[',']'}
-    }
-    percent_encode(rs_str.as_bytes(),URL_ENCODE_SET).to_string()
-}
-
 pub fn unescape_url(rs_str: String) -> String {
     let result = percent_decode(rs_str.as_bytes());
     let result = result.decode_utf8();
@@ -454,14 +447,6 @@ mod tests {
         for attr in &valid {
             assert!(is_valid_attribute(attr));
         }
-    }
-
-    #[test]
-    fn t_escape_url() {
-        assert!(escape_url(String::from("foo bar")) ==
-                String::from("foo%20bar"));
-        assert!(escape_url(String::from("!#$&'()*+,/:;=?@[]")) ==
-                String::from("%21%23%24%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D"));
     }
 
     #[test]
