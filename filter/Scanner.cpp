@@ -580,7 +580,6 @@ Token* Scanner::NextToken() {
 			{t->kind = 2; break;}
 		case 3:
 			case_3:
-			recEnd = pos; recKind = 3;
 			if ((ch >= L'-' && ch <= L'.') || (ch >= L'A' && ch <= L'Z') || ch == L'_' || (ch >= L'a' && ch <= L'z')) {AddCh(); goto case_3;}
 			else {t->kind = 3; wchar_t *literal = coco_string_create(tval, 0, tlen); t->kind = keywords.get(literal, t->kind); coco_string_delete(literal); break;}
 		case 4:
@@ -593,7 +592,6 @@ Token* Scanner::NextToken() {
 			{t->kind = 4; break;}
 		case 6:
 			case_6:
-			recEnd = pos; recKind = 5;
 			if ((ch >= L'0' && ch <= L'9')) {AddCh(); goto case_6;}
 			else {t->kind = 5; break;}
 		case 7:
@@ -602,12 +600,10 @@ Token* Scanner::NextToken() {
 			else {goto case_0;}
 		case 8:
 			case_8:
-			recEnd = pos; recKind = 6;
 			if ((ch >= L'0' && ch <= L'9')) {AddCh(); goto case_8;}
 			else {t->kind = 6; break;}
 		case 9:
 			case_9:
-			recEnd = pos; recKind = 5;
 			if ((ch >= L'0' && ch <= L'9')) {AddCh(); goto case_9;}
 			else if (ch == L':') {AddCh(); goto case_7;}
 			else {t->kind = 5; break;}
@@ -640,7 +636,6 @@ Token* Scanner::NextToken() {
 			case_18:
 			{t->kind = 17; break;}
 		case 19:
-			recEnd = pos; recKind = 8;
 			if (ch == L'=') {AddCh(); goto case_11;}
 			else if (ch == L'~') {AddCh(); goto case_13;}
 			else {t->kind = 8; break;}
@@ -650,11 +645,9 @@ Token* Scanner::NextToken() {
 			else if (ch == L'#') {AddCh(); goto case_18;}
 			else {goto case_0;}
 		case 21:
-			recEnd = pos; recKind = 12;
 			if (ch == L'=') {AddCh(); goto case_15;}
 			else {t->kind = 12; break;}
 		case 22:
-			recEnd = pos; recKind = 13;
 			if (ch == L'=') {AddCh(); goto case_16;}
 			else {t->kind = 13; break;}
 
