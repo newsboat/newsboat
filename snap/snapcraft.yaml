@@ -49,3 +49,4 @@ parts:
       - librtmp1
       - locales-all
       - libcurl3
+      - libstfl0
