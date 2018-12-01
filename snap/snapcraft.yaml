@@ -43,6 +43,7 @@ parts:
       - docbook-xsl
       - libssl-dev
       - gettext
+      - cargo
     stage-packages:
       - libxml2
       - librtmp1
