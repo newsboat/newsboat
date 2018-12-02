@@ -1122,8 +1122,8 @@ std::string utils::unescape_url(const std::string& url)
 {
 	char* ptr = rs_unescape_url(url.c_str());
 	if (ptr == nullptr) {
-		LOG(Level::DEBUG, "Rust failed to escape url: %s", url );
-		throw std::runtime_error("escaping url failed");
+		LOG(Level::DEBUG, "Rust failed to unescape url: %s", url );
+		throw std::runtime_error("unescaping url failed");
 	} else {
 		return RustString(ptr);
 	}
