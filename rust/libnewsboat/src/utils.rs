@@ -130,27 +130,27 @@ pub fn is_exec_url(url: &str) -> bool {
 /// assert_eq!(&censor_url("foobar"), "foobar");
 /// assert_eq!(&censor_url("foobar://xyz/"), "foobar://xyz/");
 /// assert_eq!(&censor_url("http://newsbeuter.org/"),
-///		"http://newsbeuter.org/");
+///     "http://newsbeuter.org/");
 /// assert_eq!(&censor_url("https://newsbeuter.org/"),
-///		"https://newsbeuter.org/");
+///     "https://newsbeuter.org/");
 ///
 /// assert_eq!(&censor_url("http://@newsbeuter.org/"),
-/// 		"http://newsbeuter.org/");
+///         "http://newsbeuter.org/");
 /// assert_eq!(&censor_url("https://@newsbeuter.org/"),
-/// 		"https://newsbeuter.org/");
+///         "https://newsbeuter.org/");
 ///
 /// assert_eq!(&censor_url("http://foo:bar@newsbeuter.org/"),
-///		"http://*:*@newsbeuter.org/");
+///     "http://*:*@newsbeuter.org/");
 /// assert_eq!(&censor_url("https://foo:bar@newsbeuter.org/"),
-///		"https://*:*@newsbeuter.org/");
+///     "https://*:*@newsbeuter.org/");
 ///
 /// assert_eq!(&censor_url("http://aschas@newsbeuter.org/"),
-///		"http://*:*@newsbeuter.org/");
+///     "http://*:*@newsbeuter.org/");
 /// assert_eq!(&censor_url("https://aschas@newsbeuter.org/"),
-///		"https://*:*@newsbeuter.org/");
+///     "https://*:*@newsbeuter.org/");
 ///
 /// assert_eq!(&censor_url("xxx://aschas@newsbeuter.org/"),
-///		"xxx://*:*@newsbeuter.org/");
+///     "xxx://*:*@newsbeuter.org/");
 ///
 /// assert_eq!(&censor_url("http://foobar"), "http://foobar/");
 /// assert_eq!(&censor_url("https://foobar"), "https://foobar/");
@@ -159,7 +159,7 @@ pub fn is_exec_url(url: &str) -> bool {
 /// assert_eq!(&censor_url("https://aschas@host"), "https://*:*@host/");
 ///
 /// assert_eq!(&censor_url("query:name:age between 1:10"),
-///		"query:name:age between 1:10");
+///     "query:name:age between 1:10");
 /// ```
 pub fn censor_url(url: &str) -> String {
     if !url.is_empty() && !is_special_url(url) {
@@ -271,27 +271,27 @@ mod tests {
 
     #[test]
     fn t_replace_all() {
-	assert_eq!(
+        assert_eq!(
             replace_all(String::from("aaa"), "a", "b"),
             String::from("bbb"));
-	assert_eq!(
+        assert_eq!(
             replace_all(String::from("aaa"), "aa", "ba"),
             String::from("baa"));
-	assert_eq!(
+        assert_eq!(
             replace_all(String::from("aaaaaa"), "aa", "ba"),
             String::from("bababa"));
-	assert_eq!(
+        assert_eq!(
             replace_all(String::new(), "a", "b"),
             String::new());
 
         let input = String::from("aaaa");
-	assert_eq!(replace_all(input.clone(), "b", "c"), input);
+        assert_eq!(replace_all(input.clone(), "b", "c"), input);
 
-	assert_eq!(
+        assert_eq!(
             replace_all(String::from("this is a normal test text"), " t", " T"),
             String::from("this is a normal Test Text"));
 
-	assert_eq!(
+        assert_eq!(
             replace_all(String::from("o o o"), "o", "<o>"),
             String::from("<o> <o> <o>"));
     }
@@ -307,12 +307,15 @@ mod tests {
         assert_eq!(
             consolidate_whitespace(String::from(" Lorem \t\tIpsum \t ")),
             String::from(" Lorem Ipsum "));
-        assert_eq!(consolidate_whitespace(String::from(" Lorem \r\n\r\n\tIpsum")),
+        assert_eq!(
+            consolidate_whitespace(String::from(" Lorem \r\n\r\n\tIpsum")),
             String::from(" Lorem Ipsum"));
         assert_eq!(consolidate_whitespace(String::new()), String::new());
-        assert_eq!(consolidate_whitespace(String::from("    Lorem \t\tIpsum \t ")),
+        assert_eq!(
+            consolidate_whitespace(String::from("    Lorem \t\tIpsum \t ")),
             String::from("    Lorem Ipsum "));
-        assert_eq!(consolidate_whitespace(String::from("   Lorem \r\n\r\n\tIpsum")),
+        assert_eq!(
+            consolidate_whitespace(String::from("   Lorem \r\n\r\n\tIpsum")),
             String::from("   Lorem Ipsum"));
     }
 
@@ -326,58 +329,58 @@ mod tests {
 
     #[test]
     fn t_is_special_url() {
-	assert!(is_special_url("query:"));
-	assert!(is_special_url("query: example"));
-	assert!(!is_special_url("query"));
-	assert!(!is_special_url("   query:"));
+        assert!(is_special_url("query:"));
+        assert!(is_special_url("query: example"));
+        assert!(!is_special_url("query"));
+        assert!(!is_special_url("   query:"));
 
-	assert!(is_special_url("filter:"));
-	assert!(is_special_url("filter: example"));
-	assert!(!is_special_url("filter"));
-	assert!(!is_special_url("   filter:"));
+        assert!(is_special_url("filter:"));
+        assert!(is_special_url("filter: example"));
+        assert!(!is_special_url("filter"));
+        assert!(!is_special_url("   filter:"));
 
-	assert!(is_special_url("exec:"));
-	assert!(is_special_url("exec: example"));
-	assert!(!is_special_url("exec"));
-	assert!(!is_special_url("   exec:"));
+        assert!(is_special_url("exec:"));
+        assert!(is_special_url("exec: example"));
+        assert!(!is_special_url("exec"));
+        assert!(!is_special_url("   exec:"));
     }
 
     #[test]
     fn t_is_http_url() {
-	assert!(is_http_url("https://foo.bar"));
-	assert!(is_http_url("http://"));
-	assert!(is_http_url("https://"));
+        assert!(is_http_url("https://foo.bar"));
+        assert!(is_http_url("http://"));
+        assert!(is_http_url("https://"));
 
-	assert!(!is_http_url("htt://foo.bar"));
-	assert!(!is_http_url("http:/"));
-	assert!(!is_http_url("foo://bar"));
+        assert!(!is_http_url("htt://foo.bar"));
+        assert!(!is_http_url("http:/"));
+        assert!(!is_http_url("foo://bar"));
     }
 
     #[test]
     fn t_is_query_url() {
-	assert!(is_query_url("query:"));
-	assert!(is_query_url("query: example"));
+        assert!(is_query_url("query:"));
+        assert!(is_query_url("query: example"));
 
-	assert!(!is_query_url("query"));
-	assert!(!is_query_url("   query:"));
+        assert!(!is_query_url("query"));
+        assert!(!is_query_url("   query:"));
     }
 
     #[test]
     fn t_is_filter_url() {
-	assert!(is_filter_url("filter:"));
-	assert!(is_filter_url("filter: example"));
+        assert!(is_filter_url("filter:"));
+        assert!(is_filter_url("filter: example"));
 
-	assert!(!is_filter_url("filter"));
-	assert!(!is_filter_url("   filter:"));
+        assert!(!is_filter_url("filter"));
+        assert!(!is_filter_url("   filter:"));
     }
 
     #[test]
     fn t_is_exec_url() {
-	assert!(is_exec_url("exec:"));
-	assert!(is_exec_url("exec: example"));
+        assert!(is_exec_url("exec:"));
+        assert!(is_exec_url("exec: example"));
 
-	assert!(!is_exec_url("exec"));
-	assert!(!is_exec_url("   exec:"));
+        assert!(!is_exec_url("exec"));
+        assert!(!is_exec_url("   exec:"));
     }
 
     #[test]
@@ -431,16 +434,16 @@ mod tests {
 
     #[test]
     fn t_is_valid_podcast_type() {
-	assert!(is_valid_podcast_type("audio/mpeg"));
-	assert!(is_valid_podcast_type("audio/mp3"));
-	assert!(is_valid_podcast_type("audio/x-mp3"));
-	assert!(is_valid_podcast_type("audio/ogg"));
-	assert!(is_valid_podcast_type("application/ogg"));
+        assert!(is_valid_podcast_type("audio/mpeg"));
+        assert!(is_valid_podcast_type("audio/mp3"));
+        assert!(is_valid_podcast_type("audio/x-mp3"));
+        assert!(is_valid_podcast_type("audio/ogg"));
+        assert!(is_valid_podcast_type("application/ogg"));
 
-	assert!(!is_valid_podcast_type("image/jpeg"));
-	assert!(!is_valid_podcast_type("image/png"));
-	assert!(!is_valid_podcast_type("text/plain"));
-	assert!(!is_valid_podcast_type("application/zip"));
+        assert!(!is_valid_podcast_type("image/jpeg"));
+        assert!(!is_valid_podcast_type("image/png"));
+        assert!(!is_valid_podcast_type("text/plain"));
+        assert!(!is_valid_podcast_type("application/zip"));
     }
 
     #[test]
@@ -474,7 +477,7 @@ mod tests {
     #[test]
     fn t_unescape_url() {
         assert!(unescape_url(String::from("foo%20bar")).unwrap() ==
-                             String::from("foo bar"));
+                String::from("foo bar"));
         assert!(unescape_url(
                 String::from("%21%23%24%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D")).unwrap() ==
             String::from("!#$&'()*+,/:;=?@[]"));
