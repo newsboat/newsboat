@@ -82,11 +82,13 @@ MSGFMT=msgfmt
 RANLIB?=ranlib
 AR?=ar
 CHMOD=chmod
+CARGO=cargo
 
 STFLHDRS:=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
 POFILES:=$(wildcard po/*.po)
 MOFILES:=$(patsubst %.po,%.mo,$(POFILES))
 POTFILE=po/newsboat.pot
+RUST_SRCS:=Cargo.toml $(shell find rust -type f)
 
 TEXTCONV=./txt2h
 RM=rm -f
@@ -95,8 +97,8 @@ all: doc $(NEWSBOAT) $(PODBOAT) mo-files
 
 NB_DEPS=xlicense.h $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBOAT_OBJS) $(RSSPPLIB_OUTPUT) $(NEWSBOATLIB_OUTPUT)
 
-$(NEWSBOATLIB_OUTPUT): .FORCE
-	cargo build $(CARGO_FLAGS)
+$(NEWSBOATLIB_OUTPUT): $(RUST_SRCS)
+	$(CARGO) build $(CARGO_FLAGS)
 
 $(NEWSBOAT): $(NB_DEPS)
 	$(CXX) $(CXXFLAGS) -o $(NEWSBOAT) $(NEWSBOAT_OBJS) $(NEWSBOAT_LIBS) $(LDFLAGS)
@@ -349,7 +351,5 @@ depslist: $(ALL_SRCS) $(ALL_HDRS)
 			echo $$file ; \
 		done; \
 	done
-
-.FORCE:
 
 include mk/mk.deps
