@@ -25,7 +25,6 @@ SelectFormAction::SelectFormAction(View* vv,
 	: FormAction(vv, formstr, cfg)
 	, quit(false)
 	, type(SelectionType::TAG)
-	, cfg(cfg)
 {
 }
 

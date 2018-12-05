@@ -40,7 +40,6 @@ FeedListFormAction::FeedListFormAction(View* vv,
 	, unread_feeds(0)
 	, total_feeds(0)
 	, filters(f)
-	, cfg(cfg)
 {
 	assert(true == m.parse(FILTER_UNREAD_FEEDS));
 	valid_cmds.push_back("tag");

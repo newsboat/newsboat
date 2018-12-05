@@ -49,7 +49,6 @@ private:
 	std::string dir;
 	std::string default_filename;
 
-	ConfigContainer* cfg;
 };
 
 } // namespace newsboat

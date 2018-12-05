@@ -34,7 +34,6 @@ private:
 	std::vector<LinkPair> links;
 	bool quit;
 	std::shared_ptr<RssFeed> feed;
-	ConfigContainer* cfg;
 };
 
 } // namespace newsboat

@@ -24,7 +24,6 @@ private:
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
 	bool update_list;
-	ConfigContainer* cfg;
 };
 
 } // namespace newsboat

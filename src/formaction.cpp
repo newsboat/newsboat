@@ -16,11 +16,11 @@ History FormAction::cmdlinehistory;
 
 FormAction::FormAction(View* vv, std::string formstr, ConfigContainer* cfg)
 	: v(vv)
+	, cfg(cfg)
 	, f(new Stfl::Form(formstr))
 	, do_redraw(true)
 	, finish_operation(OP_NIL)
 	, qna_history(nullptr)
-	, cfg(cfg)
 {
 	if (v) {
 		if (cfg->get_configvalue_as_bool("show-keymap-hint") == false) {
