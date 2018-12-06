@@ -16,7 +16,6 @@ DialogsFormAction::DialogsFormAction(View* vv,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
 	, update_list(true)
-	, cfg(cfg)
 {
 }
 

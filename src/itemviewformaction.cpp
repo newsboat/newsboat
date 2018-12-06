@@ -29,7 +29,6 @@ ItemViewFormAction::ItemViewFormAction(View* vv,
 	, itemlist(il)
 	, in_search(false)
 	, rsscache(cc)
-	, cfg(cfg)
 {
 	valid_cmds.push_back("save");
 	std::sort(valid_cmds.begin(), valid_cmds.end());

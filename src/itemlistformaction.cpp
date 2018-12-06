@@ -38,7 +38,6 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	, invalidation_mode(InvalidationMode::COMPLETE)
 	, rsscache(cc)
 	, filters(f)
-	, cfg(cfg)
 {
 	assert(true == m.parse(FILTER_UNREAD_ITEMS));
 }

@@ -30,7 +30,6 @@ private:
 	bool apply_search;
 	std::string searchphrase;
 	std::string context;
-	ConfigContainer* cfg;
 };
 
 } // namespace newsboat

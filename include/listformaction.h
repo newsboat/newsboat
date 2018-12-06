@@ -15,8 +15,6 @@ protected:
 		std::vector<std::string>* args = nullptr) override;
 	void open_unread_items_in_browser(std::shared_ptr<RssFeed> feed,
 		bool markread);
-
-	ConfigContainer* cfg;
 };
 
 } // namespace newsboat

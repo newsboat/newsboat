@@ -48,7 +48,6 @@ private:
 	std::string value;
 	std::vector<std::string> tags;
 	std::vector<FilterNameExprPair> filters;
-	ConfigContainer* cfg;
 };
 
 } // namespace newsboat

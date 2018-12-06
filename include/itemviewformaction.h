@@ -77,7 +77,6 @@ private:
 	std::shared_ptr<ItemListFormAction> itemlist;
 	bool in_search;
 	Cache* rsscache;
-	ConfigContainer* cfg;
 };
 
 } // namespace newsboat

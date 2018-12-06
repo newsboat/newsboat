@@ -158,7 +158,6 @@ private:
 	ListFormatter listfmt;
 	Cache* rsscache;
 	FilterContainer* filters;
-	ConfigContainer* cfg;
 };
 
 } // namespace newsboat

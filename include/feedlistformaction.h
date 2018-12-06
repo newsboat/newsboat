@@ -103,7 +103,6 @@ private:
 	unsigned int total_feeds;
 
 	FilterContainer* filters;
-	ConfigContainer* cfg;
 
 	std::string old_sort_order;
 };

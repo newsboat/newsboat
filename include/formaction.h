@@ -98,6 +98,7 @@ protected:
 		bool markread);
 
 	View* v;
+	ConfigContainer* cfg;
 	std::shared_ptr<Stfl::Form> f;
 	bool do_redraw;
 
@@ -115,7 +116,6 @@ private:
 	std::vector<QnaPair> qna_prompts;
 	Operation finish_operation;
 	History* qna_history;
-	ConfigContainer* cfg;
 	std::shared_ptr<FormAction> parent_formaction;
 };
 
