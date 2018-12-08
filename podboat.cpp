@@ -8,10 +8,15 @@
 #include "pbview.h"
 #include "utils.h"
 
+extern "C" {
+	void rs_setup_human_panic(void);
+}
+
 using namespace podboat;
 
 int main(int argc, char* argv[])
 {
+	rs_setup_human_panic();
 	utils::initialize_ssl_implementation();
 
 	setlocale(LC_CTYPE, "");

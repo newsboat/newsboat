@@ -5,7 +5,7 @@ use libc::c_char;
 use std::ffi::{CStr, CString};
 use std::ptr;
 
-use libnewsboat::{utils, logger};
+use libnewsboat::{utils, logger, human_panic};
 
 #[no_mangle]
 pub extern "C" fn rs_replace_all(
@@ -238,4 +238,9 @@ pub extern "C" fn rs_set_user_error_logfile(user_error_logfile: *const c_char) {
 #[no_mangle]
 pub extern "C" fn rs_get_loglevel() -> u64 {
     logger::get_instance().get_loglevel() as u64
+}
+
+#[no_mangle]
+pub extern "C" fn rs_setup_human_panic() {
+    human_panic::setup();
 }
