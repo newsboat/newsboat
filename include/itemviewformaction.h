@@ -69,6 +69,7 @@ private:
 
 	std::string guid;
 	std::shared_ptr<RssFeed> feed;
+	std::shared_ptr<RssItem> item;
 	bool show_source;
 	std::vector<LinkPair> links;
 	bool quit;
