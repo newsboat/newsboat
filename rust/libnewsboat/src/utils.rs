@@ -265,6 +265,43 @@ pub fn unescape_url(rs_str: String) -> Option<String> {
     Some(result.unwrap().replace("\0",""))
 }
 
+pub fn make_title(rs_str: String) -> String {
+    /* Sometimes it is possible to construct the title from the URL
+     * This attempts to do just that. eg:
+     * http://domain.com/story/yy/mm/dd/title-with-dashes?a=b
+     */
+    // Strip out trailing slashes
+    let mut result = rs_str.trim_end_matches('/');
+
+    // get to the final part of the URI's path and
+    // extract just the juicy part 'title-with-dashes?a=b'
+    let v: Vec<&str> = result.rsplitn(2, '/').collect();
+    result = v[0];
+
+    // find where query part of URI starts
+    // throw away the query part 'title-with-dashes'
+    let v: Vec<&str> = result.splitn(2, '?').collect();
+    result = v[0];
+
+    // Throw away common webpage suffixes: .html, .php, .aspx, .htm
+    result = result.trim_end_matches(".html").trim_end_matches(".php");
+    result = result.trim_end_matches(".aspx").trim_end_matches(".htm");
+
+    // 'title with dashes'
+    let result = result.replace('-'," ").replace('_'," ");
+
+    //'Title with dashes'
+    let mut c = result.chars();
+    let result = match c.next() {
+        None => String::new(),
+        Some(f) => f.to_uppercase().collect::<String>() + c.as_str(),
+    };
+
+    // Un-escape any percent-encoding, e.g. "It%27s%202017%21" -> "It's
+    // 2017!"
+    unescape_url(result.to_string()).unwrap()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

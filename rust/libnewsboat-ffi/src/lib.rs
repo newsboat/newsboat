@@ -169,6 +169,21 @@ pub extern "C" fn rs_unescape_url(input: *const c_char) -> *mut c_char {
     return ptr::null_mut()
 }
 
+#[no_mangle]
+pub extern "C" fn rs_make_title(input: *const c_char) -> *mut c_char {
+    let rs_input = unsafe { CStr::from_ptr(input) };
+    let rs_input = rs_input.to_string_lossy().into_owned();
+
+    let result = utils::make_title(rs_input);
+    // Panic here can't happen because:
+    // 1. panic can only happen if `result` contains null bytes;
+    // 2. panic due to null bytes would be dealt with in unescape_url
+    // 3. `result` contains what `input` contained, and input is a
+    // null-terminated string from C.
+    let result = CString::new(result).unwrap();
+
+    result.into_raw()
+}
 
 #[no_mangle]
 pub extern "C" fn rs_cstring_free(string: *mut c_char) {
