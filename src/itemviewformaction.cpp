@@ -56,6 +56,7 @@ void ItemViewFormAction::init()
 		update_percent();
 	}
 	set_keymap_hints();
+	item = feed->get_item_by_guid(guid);
 }
 
 void ItemViewFormAction::update_head(const std::shared_ptr<RssItem>& item)
@@ -88,8 +89,6 @@ void ItemViewFormAction::prepare()
 			// XXX HACK: render once so that we get a proper widget width
 			f->run(-3);
 		}
-
-		std::shared_ptr<RssItem> item = feed->get_item_by_guid(guid);
 
 		update_head(item);
 
@@ -144,7 +143,6 @@ void ItemViewFormAction::process_operation(Operation op,
 	bool automatic,
 	std::vector<std::string>* args)
 {
-	std::shared_ptr<RssItem> item = feed->get_item_by_guid(guid);
 	bool hardquit = false;
 
 	/*
@@ -464,8 +462,6 @@ void ItemViewFormAction::handle_cmdline(const std::string& cmd)
 	if (!tokens.empty()) {
 		if (tokens[0] == "save" && tokens.size() >= 2) {
 			std::string filename = utils::resolve_tilde(tokens[1]);
-			std::shared_ptr<RssItem> item =
-				feed->get_item_by_guid(guid);
 
 			if (filename == "") {
 				v->show_error(_("Aborted saving."));
@@ -493,8 +489,6 @@ void ItemViewFormAction::handle_cmdline(const std::string& cmd)
 void ItemViewFormAction::finished_qna(Operation op)
 {
 	FormAction::finished_qna(op); // important!
-
-	std::shared_ptr<RssItem> item = feed->get_item_by_guid(guid);
 
 	switch (op) {
 	case OP_INT_EDITFLAGS_END:
@@ -586,7 +580,6 @@ void ItemViewFormAction::update_percent()
 
 std::string ItemViewFormAction::title()
 {
-	std::shared_ptr<RssItem> item = feed->get_item_by_guid(guid);
 	auto title = item->title();
 	utils::remove_soft_hyphens(title);
 	return strprintf::fmt(_("Article - %s"), title);
