@@ -271,7 +271,7 @@ pub fn make_title(rs_str: String) -> String {
      * http://domain.com/story/yy/mm/dd/title-with-dashes?a=b
      */
     // Strip out trailing slashes
-    let mut result = rs_str.trim_end_matches('/');
+    let mut result = rs_str.trim_right_matches('/');
 
     // get to the final part of the URI's path and
     // extract just the juicy part 'title-with-dashes?a=b'
@@ -284,8 +284,8 @@ pub fn make_title(rs_str: String) -> String {
     result = v[0];
 
     // Throw away common webpage suffixes: .html, .php, .aspx, .htm
-    result = result.trim_end_matches(".html").trim_end_matches(".php");
-    result = result.trim_end_matches(".aspx").trim_end_matches(".htm");
+    result = result.trim_right_matches(".html").trim_right_matches(".php");
+    result = result.trim_right_matches(".aspx").trim_right_matches(".htm");
 
     // 'title with dashes'
     let result = result.replace('-'," ").replace('_'," ");
