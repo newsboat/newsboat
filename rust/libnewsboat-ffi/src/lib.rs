@@ -255,3 +255,16 @@ pub extern "C" fn rs_get_command_output(input: *const c_char) -> *mut c_char {
     let result = CString::new(output).unwrap();
     result.into_raw()
 }
+
+#[no_mangle]
+pub extern "C" fn rs_run_command(command: *const c_char, param: *const c_char) {
+    let command = unsafe { CStr::from_ptr(command) };
+    let command = command.to_str()
+        .expect("command contained invalid UTF-8");
+
+    let param = unsafe { CStr::from_ptr(param) };
+    let param = param.to_str()
+        .expect("param contained invalid UTF-8");
+
+    utils::run_command(command, param);
+}

@@ -50,6 +50,8 @@ bool rs_is_valid_podcast_type(const char* mimetype);
 
 char* rs_get_command_output(const char* str);
 
+void rs_run_command(const char* command, const char* param);
+
 class RustString {
 private:
 	char* str;

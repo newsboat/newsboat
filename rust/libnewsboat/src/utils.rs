@@ -3,11 +3,11 @@ extern crate regex;
 extern crate url;
 extern crate dirs;
 
+use logger::{self, Level};
 use self::regex::Regex;
-
 use self::url::{Url};
 use self::url::percent_encoding::*;
-use std::process::Command;
+use std::process::{Command, Stdio};
 
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
@@ -273,8 +273,25 @@ pub fn get_command_output(cmd: &str) -> String {
         .unwrap_or_else(|_| String::from(""))
 }
 
+pub fn run_command(cmd: &str, param: &str) {
+    let child = Command::new(cmd)
+        .arg(param)
+        .stdin(Stdio::null())
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
+        .spawn();
+    if let Err(error) = child {
+        log!(Level::Debug,
+             &format!("utils::run_command: spawning a child for \"{}\" failed: {}", cmd, error));
+    }
+
+    /* We deliberately *don't* wait for the child to finish. */
+}
+
 #[cfg(test)]
 mod tests {
+    extern crate tempfile;
+
     use super::*;
 
     #[test]
@@ -495,6 +512,40 @@ mod tests {
     fn t_get_command_output() {
         assert_eq!(get_command_output("ls /dev/null"), "/dev/null\n".to_string());
         assert_eq!(get_command_output("a-program-that-is-guaranteed-to-not-exists"), "".to_string());
+    }
+
+    #[test]
+    fn t_run_command_executes_given_command_with_given_argument() {
+        use self::tempfile::TempDir;
+        use std::{thread, time};
+
+        let tmp = TempDir::new().unwrap();
+        let filepath = {
+            let mut filepath = tmp.path().to_owned();
+            filepath.push("sentry");
+            filepath
+        };
+        assert!(!filepath.exists());
+
+        run_command("touch", filepath.to_str().unwrap());
+
+        thread::sleep(time::Duration::from_millis(1));
+
+        assert!(filepath.exists());
+    }
+
+    #[test]
+    fn t_run_command_doesnt_wait_for_the_command_to_finish() {
+        use std::time::{Duration, Instant};
+
+        let start = Instant::now();
+
+        let five: &str = "5";
+        run_command("sleep", five);
+
+        let runtime = start.elapsed();
+
+        assert!(runtime < Duration::from_secs(1));
     }
 }
 

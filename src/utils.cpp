@@ -490,38 +490,7 @@ std::string utils::retrieve_url(const std::string& url,
 
 void utils::run_command(const std::string& cmd, const std::string& input)
 {
-	int rc = fork();
-	switch (rc) {
-	case -1:
-		break;
-	case 0: { // child:
-		int fd = ::open("/dev/null", O_RDWR);
-		if (fd == -1) {
-			LOG(Level::DEBUG,
-				"utils::run_command: error opening /dev/null: "
-				"(%i) "
-				"%s",
-				errno,
-				strerror(errno));
-			exit(1);
-		}
-		close(0);
-		close(1);
-		close(2);
-		dup2(fd, 0);
-		dup2(fd, 1);
-		dup2(fd, 2);
-		LOG(Level::DEBUG, "utils::run_command: %s '%s'", cmd, input);
-		execlp(cmd.c_str(), cmd.c_str(), input.c_str(), nullptr);
-		LOG(Level::DEBUG,
-			"utils::run_command: execlp of %s failed: %s",
-			cmd,
-			strerror(errno));
-		exit(1);
-	}
-	default:
-		break;
-	}
+	rs_run_command(cmd.c_str(), input.c_str());
 }
 
 std::string utils::run_program(char* argv[], const std::string& input)
