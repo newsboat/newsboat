@@ -52,6 +52,8 @@ char* rs_get_command_output(const char* str);
 
 void rs_run_command(const char* command, const char* param);
 
+char* rs_run_program(char* argv[], const char* input);
+
 class RustString {
 private:
 	char* str;

@@ -268,3 +268,37 @@ pub extern "C" fn rs_run_command(command: *const c_char, param: *const c_char) {
 
     utils::run_command(command, param);
 }
+
+#[no_mangle]
+pub extern "C" fn rs_run_program(argv: *mut *mut c_char, input: *const c_char) -> *mut c_char {
+    let argv = unsafe {
+        let mut result: Vec<&str> = Vec::new();
+        let mut cur_ptr = argv;
+
+        let mut offset: usize = 0;
+        while !(*cur_ptr).is_null() {
+            let arg = CStr::from_ptr(*cur_ptr);
+            let arg = arg.to_str()
+                .expect(&format!("argument at offset {} contained invalid UTF-8", offset));
+
+            result.push(arg);
+
+            offset += 1;
+            cur_ptr = cur_ptr.add(1);
+        }
+
+        result
+    };
+
+
+    let input = unsafe { CStr::from_ptr(input) };
+    let input = input.to_str()
+        .expect("input contained invalid UTF-8");
+
+    let output = utils::run_program(&argv, input);
+
+    // String::from_utf8_lossy() will replace invalid unicode (including null bytes) with U+FFFD,
+    // so this shouldn't be able to panic
+    let result = CString::new(output).unwrap();
+    result.into_raw()
+}
