@@ -8,6 +8,7 @@ use self::regex::Regex;
 use self::url::{Url};
 use self::url::percent_encoding::*;
 use std::process::{Command, Stdio};
+use std::io::Write;
 
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
@@ -288,6 +289,52 @@ pub fn run_command(cmd: &str, param: &str) {
     /* We deliberately *don't* wait for the child to finish. */
 }
 
+pub fn run_program(cmd_with_args: &[&str], input: &str) -> String {
+    if cmd_with_args.is_empty() {
+        return String::new();
+    }
+
+    let child = Command::new(cmd_with_args[0])
+        .args(&cmd_with_args[1..])
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::null())
+        .spawn();
+
+    match child {
+        Err(error) =>
+            log!(Level::Debug,
+                 &format!("utils::run_program: spawning a child for \"{:?}\" \
+                           with input \"{}\" failed: {}",
+                           cmd_with_args,
+                           input,
+                           error)),
+
+        Ok(mut child) => {
+            {
+                if let Some(mut stdin) = child.stdin.as_mut() {
+                    if let Err(error) = stdin.write_all(input.as_bytes()) {
+                        log!(Level::Debug,
+                             &format!("utils::run_program: failed to write to child's stdin: {}",
+                                      error));
+                    }
+                }
+            }
+
+            match child.wait_with_output() {
+                Err(error) =>
+                    log!(Level::Debug,
+                         &format!("utils::run_program: failed to read child's stdout: {}",
+                                  error)),
+
+                Ok(output) => return String::from_utf8_lossy(&output.stdout).into_owned(),
+            }
+        }
+    }
+
+    return String::new();
+}
+
 #[cfg(test)]
 mod tests {
     extern crate tempfile;
@@ -546,6 +593,14 @@ mod tests {
         let runtime = start.elapsed();
 
         assert!(runtime < Duration::from_secs(1));
+    }
+
+    #[test]
+    fn t_run_program() {
+        let input1 = "this is a multine-line\ntest string";
+        assert_eq!(run_program(&["cat"], input1), input1);
+
+        assert_eq!(run_program(&["echo", "-n", "hello world"], ""), "hello world");
     }
 }
 
