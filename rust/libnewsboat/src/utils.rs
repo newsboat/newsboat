@@ -291,6 +291,7 @@ pub fn make_title(rs_str: String) -> String {
     let result = result.replace('-'," ").replace('_'," ");
 
     //'Title with dashes'
+    //let result = "";
     let mut c = result.chars();
     let result = match c.next() {
         None => String::new(),
@@ -299,7 +300,10 @@ pub fn make_title(rs_str: String) -> String {
 
     // Un-escape any percent-encoding, e.g. "It%27s%202017%21" -> "It's
     // 2017!"
-    unescape_url(result.to_string()).unwrap()
+    match unescape_url(result) {
+            None => String::new(),
+            Some(f) => f,
+    }
 }
 
 #[cfg(test)]

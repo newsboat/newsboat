@@ -599,7 +599,7 @@ TEST_CASE("utils::make_title extracts possible title from URL")
 		REQUIRE(utils::make_title(input) == "");
 	}
 
-	SECTION("Deal with an empty last component")
+	SECTION("Deal with an empty input")
 	{
 		auto input = "";
 		REQUIRE(utils::make_title(input) == "");
