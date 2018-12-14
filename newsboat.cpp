@@ -16,6 +16,10 @@
 #include "view.h"
 #include "xlicense.h"
 
+extern "C" {
+	void rs_setup_human_panic(void);
+}
+
 using namespace newsboat;
 
 void print_usage(const std::string& argv0)
@@ -153,6 +157,7 @@ void print_version(const std::string& argv0, unsigned int level)
 
 int main(int argc, char* argv[])
 {
+	rs_setup_human_panic();
 	utils::initialize_ssl_implementation();
 
 	setlocale(LC_CTYPE, "");
