@@ -284,7 +284,7 @@ pub extern "C" fn rs_run_program(argv: *mut *mut c_char, input: *const c_char) -
             result.push(arg);
 
             offset += 1;
-            cur_ptr = cur_ptr.add(1);
+            cur_ptr = cur_ptr.offset(1isize);
         }
 
         result
