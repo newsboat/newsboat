@@ -294,45 +294,49 @@ pub fn run_program(cmd_with_args: &[&str], input: &str) -> String {
         return String::new();
     }
 
-    let child = Command::new(cmd_with_args[0])
+    Command::new(cmd_with_args[0])
         .args(&cmd_with_args[1..])
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::null())
-        .spawn();
-
-    match child {
-        Err(error) =>
-            log!(Level::Debug,
-                 &format!("utils::run_program: spawning a child for \"{:?}\" \
-                           with input \"{}\" failed: {}",
-                           cmd_with_args,
-                           input,
-                           error)),
-
-        Ok(mut child) => {
-            {
-                if let Some(mut stdin) = child.stdin.as_mut() {
-                    if let Err(error) = stdin.write_all(input.as_bytes()) {
-                        log!(Level::Debug,
-                             &format!("utils::run_program: failed to write to child's stdin: {}",
-                                      error));
-                    }
+        .spawn()
+        .map_err(|error| {
+            log!(
+                Level::Debug,
+                &format!(
+                    "utils::run_program: spawning a child for \"{:?}\" \
+                     with input \"{}\" failed: {}",
+                    cmd_with_args, input, error
+                )
+            );
+        })
+        .and_then(|mut child| {
+            if let Some(stdin) = child.stdin.as_mut() {
+                if let Err(error) = stdin.write_all(input.as_bytes()) {
+                    log!(
+                        Level::Debug,
+                        &format!(
+                            "utils::run_program: failed to write to child's stdin: {}",
+                            error
+                        )
+                    );
                 }
             }
 
-            match child.wait_with_output() {
-                Err(error) =>
-                    log!(Level::Debug,
-                         &format!("utils::run_program: failed to read child's stdout: {}",
-                                  error)),
-
-                Ok(output) => return String::from_utf8_lossy(&output.stdout).into_owned(),
-            }
-        }
-    }
-
-    return String::new();
+            child
+                .wait_with_output()
+                .map_err(|error| {
+                    log!(
+                        Level::Debug,
+                        &format!(
+                            "utils::run_program: failed to read child's stdout: {}",
+                            error
+                        )
+                    );
+                })
+                .map(|output| String::from_utf8_lossy(&output.stdout).into_owned())
+        })
+        .unwrap_or_else(|_| String::new())
 }
 
 #[cfg(test)]
