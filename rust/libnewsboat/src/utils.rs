@@ -267,6 +267,8 @@ pub fn unescape_url(rs_str: String) -> Option<String> {
     Some(result.unwrap().replace("\0",""))
 }
 
+/// Runs given command in a shell, and returns the output (from stdout; stderr is printed to the
+/// screen).
 pub fn get_command_output(cmd: &str) -> String {
     let cmd = Command::new("sh").arg("-c").arg(cmd).output();
     // from_utf8_lossy will convert any bad bytes to U+FFFD
@@ -274,10 +276,14 @@ pub fn get_command_output(cmd: &str) -> String {
         .unwrap_or_else(|_| String::from(""))
 }
 
+// This function assumes that the user is not interested in command's output (not even errors on
+// stderr!), so it redirects everything to /dev/null.
 pub fn run_command(cmd: &str, param: &str) {
     let child = Command::new(cmd)
         .arg(param)
+        // Prevent the command from blocking Newsboat by asking for input
         .stdin(Stdio::null())
+        // Prevent the command from botching the screen by printing onto it.
         .stdout(Stdio::null())
         .stderr(Stdio::null())
         .spawn();
@@ -286,7 +292,7 @@ pub fn run_command(cmd: &str, param: &str) {
              &format!("utils::run_command: spawning a child for \"{}\" failed: {}", cmd, error));
     }
 
-    /* We deliberately *don't* wait for the child to finish. */
+    // We deliberately *don't* wait for the child to finish.
 }
 
 pub fn run_program(cmd_with_args: &[&str], input: &str) -> String {
