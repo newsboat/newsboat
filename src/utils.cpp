@@ -906,10 +906,7 @@ void utils::trim_end(std::string& str)
 
 std::string utils::quote(const std::string& str)
 {
-	std::string rv = replace_all(str, "\"", "\\\"");
-	rv.insert(0, "\"");
-	rv.append("\"");
-	return rv;
+	return RustString(rs_quote(str.c_str()));
 }
 
 unsigned int utils::get_random_value(unsigned int max)
