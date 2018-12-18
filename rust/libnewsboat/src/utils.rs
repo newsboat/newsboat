@@ -204,6 +204,14 @@ pub fn quote(input: String) -> String {
     input
 }
 
+pub fn quote_if_necessary(input: String) -> String {
+    if input.find(" ") != None {
+        quote(input)
+    } else {
+        input
+    }
+}
+
 pub fn get_random_value(max: u32) -> u32 {
    rand::random::<u32>() % max
 }
@@ -408,6 +416,12 @@ mod tests {
         assert_eq!(quote("".to_string()), "\"\"");
         assert_eq!(quote("Hello World!".to_string()), "\"Hello World!\"");
         assert_eq!(quote("\"Hello World!\"".to_string()), "\"\\\"Hello World!\\\"\"");
+    }
+
+    #[test]
+    fn t_quote_if_necessary() {
+        assert_eq!(quote_if_necessary("".to_string()), "");
+        assert_eq!(quote_if_necessary("Hello World!".to_string()), "\"Hello World!\"");
     }
 
     #[test]

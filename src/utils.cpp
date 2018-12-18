@@ -916,15 +916,7 @@ unsigned int utils::get_random_value(unsigned int max)
 
 std::string utils::quote_if_necessary(const std::string& str)
 {
-	std::string result;
-	if (str.find_first_of(" ", 0) == std::string::npos) {
-		result = str;
-	} else {
-		result = utils::replace_all(str, "\"", "\\\"");
-		result.insert(0, "\"");
-		result.append("\"");
-	}
-	return result;
+	return RustString(rs_quote_if_necessary(str.c_str()));
 }
 
 void utils::set_common_curl_options(CURL* handle, ConfigContainer* cfg)
