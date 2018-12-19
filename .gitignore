@@ -28,5 +28,4 @@ doc/keycmds-linked.dsv
 *.gcda
 *.sw?
 /target/
-/Cargo.lock
 **/*.rs.bk
