@@ -410,17 +410,7 @@ std::string utils::convert_text(const std::string& text,
 
 std::string utils::get_command_output(const std::string& cmd)
 {
-	FILE* f = popen(cmd.c_str(), "r");
-	std::string buf;
-	if (f) {
-		char cbuf[1024];
-		size_t s;
-		while ((s = fread(cbuf, 1, sizeof(cbuf), f)) > 0) {
-			buf.append(cbuf, s);
-		}
-		pclose(f);
-	}
-	return buf;
+	return RustString(rs_get_command_output(cmd.c_str()));
 }
 
 void utils::extract_filter(const std::string& line,
@@ -500,89 +490,12 @@ std::string utils::retrieve_url(const std::string& url,
 
 void utils::run_command(const std::string& cmd, const std::string& input)
 {
-	int rc = fork();
-	switch (rc) {
-	case -1:
-		break;
-	case 0: { // child:
-		int fd = ::open("/dev/null", O_RDWR);
-		if (fd == -1) {
-			LOG(Level::DEBUG,
-				"utils::run_command: error opening /dev/null: "
-				"(%i) "
-				"%s",
-				errno,
-				strerror(errno));
-			exit(1);
-		}
-		close(0);
-		close(1);
-		close(2);
-		dup2(fd, 0);
-		dup2(fd, 1);
-		dup2(fd, 2);
-		LOG(Level::DEBUG, "utils::run_command: %s '%s'", cmd, input);
-		execlp(cmd.c_str(), cmd.c_str(), input.c_str(), nullptr);
-		LOG(Level::DEBUG,
-			"utils::run_command: execlp of %s failed: %s",
-			cmd,
-			strerror(errno));
-		exit(1);
-	}
-	default:
-		break;
-	}
+	rs_run_command(cmd.c_str(), input.c_str());
 }
 
 std::string utils::run_program(char* argv[], const std::string& input)
 {
-	std::string buf;
-	int ipipe[2];
-	int opipe[2];
-	if (pipe(ipipe) != 0) {
-		return "";
-	}
-	if (pipe(opipe) != 0) {
-		return "";
-	}
-
-	int rc = fork();
-	switch (rc) {
-	case -1:
-		break;
-	case 0: { // child:
-		close(ipipe[1]);
-		close(opipe[0]);
-		dup2(ipipe[0], 0);
-		dup2(opipe[1], 1);
-		close(2);
-
-		int errfd = ::open("/dev/null", O_WRONLY);
-		if (errfd != -1)
-			dup2(errfd, 2);
-
-		execvp(argv[0], argv);
-		exit(1);
-	}
-	default: {
-		close(ipipe[0]);
-		close(opipe[1]);
-		ssize_t written = 0;
-		written = write(ipipe[1], input.c_str(), input.length());
-		if (written != -1) {
-			close(ipipe[1]);
-			char cbuf[1024];
-			int rc2;
-			while ((rc2 = read(opipe[0], cbuf, sizeof(cbuf))) > 0) {
-				buf.append(cbuf, rc2);
-			}
-		} else {
-			close(ipipe[1]);
-		}
-		close(opipe[0]);
-	} break;
-	}
-	return buf;
+	return RustString(rs_run_program(argv, input.c_str()));
 }
 
 std::string utils::resolve_tilde(const std::string& str)

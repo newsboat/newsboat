@@ -3,10 +3,12 @@ extern crate regex;
 extern crate url;
 extern crate dirs;
 
+use logger::{self, Level};
 use self::regex::Regex;
-
 use self::url::{Url};
 use self::url::percent_encoding::*;
+use std::process::{Command, Stdio};
+use std::io::Write;
 
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
@@ -265,8 +267,88 @@ pub fn unescape_url(rs_str: String) -> Option<String> {
     Some(result.unwrap().replace("\0",""))
 }
 
+/// Runs given command in a shell, and returns the output (from stdout; stderr is printed to the
+/// screen).
+pub fn get_command_output(cmd: &str) -> String {
+    let cmd = Command::new("sh").arg("-c").arg(cmd).output();
+    // from_utf8_lossy will convert any bad bytes to U+FFFD
+    cmd.map(|cmd| String::from_utf8_lossy(&cmd.stdout).into_owned())
+        .unwrap_or_else(|_| String::from(""))
+}
+
+// This function assumes that the user is not interested in command's output (not even errors on
+// stderr!), so it redirects everything to /dev/null.
+pub fn run_command(cmd: &str, param: &str) {
+    let child = Command::new(cmd)
+        .arg(param)
+        // Prevent the command from blocking Newsboat by asking for input
+        .stdin(Stdio::null())
+        // Prevent the command from botching the screen by printing onto it.
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
+        .spawn();
+    if let Err(error) = child {
+        log!(Level::Debug,
+             &format!("utils::run_command: spawning a child for \"{}\" failed: {}", cmd, error));
+    }
+
+    // We deliberately *don't* wait for the child to finish.
+}
+
+pub fn run_program(cmd_with_args: &[&str], input: &str) -> String {
+    if cmd_with_args.is_empty() {
+        return String::new();
+    }
+
+    Command::new(cmd_with_args[0])
+        .args(&cmd_with_args[1..])
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::null())
+        .spawn()
+        .map_err(|error| {
+            log!(
+                Level::Debug,
+                &format!(
+                    "utils::run_program: spawning a child for \"{:?}\" \
+                     with input \"{}\" failed: {}",
+                    cmd_with_args, input, error
+                )
+            );
+        })
+        .and_then(|mut child| {
+            if let Some(stdin) = child.stdin.as_mut() {
+                if let Err(error) = stdin.write_all(input.as_bytes()) {
+                    log!(
+                        Level::Debug,
+                        &format!(
+                            "utils::run_program: failed to write to child's stdin: {}",
+                            error
+                        )
+                    );
+                }
+            }
+
+            child
+                .wait_with_output()
+                .map_err(|error| {
+                    log!(
+                        Level::Debug,
+                        &format!(
+                            "utils::run_program: failed to read child's stdout: {}",
+                            error
+                        )
+                    );
+                })
+                .map(|output| String::from_utf8_lossy(&output.stdout).into_owned())
+        })
+        .unwrap_or_else(|_| String::new())
+}
+
 #[cfg(test)]
 mod tests {
+    extern crate tempfile;
+
     use super::*;
 
     #[test]
@@ -481,6 +563,54 @@ mod tests {
         assert!(unescape_url(
                 String::from("%21%23%24%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D")).unwrap() ==
             String::from("!#$&'()*+,/:;=?@[]"));
+    }
+
+    #[test]
+    fn t_get_command_output() {
+        assert_eq!(get_command_output("ls /dev/null"), "/dev/null\n".to_string());
+        assert_eq!(get_command_output("a-program-that-is-guaranteed-to-not-exists"), "".to_string());
+    }
+
+    #[test]
+    fn t_run_command_executes_given_command_with_given_argument() {
+        use self::tempfile::TempDir;
+        use std::{thread, time};
+
+        let tmp = TempDir::new().unwrap();
+        let filepath = {
+            let mut filepath = tmp.path().to_owned();
+            filepath.push("sentry");
+            filepath
+        };
+        assert!(!filepath.exists());
+
+        run_command("touch", filepath.to_str().unwrap());
+
+        thread::sleep(time::Duration::from_millis(1));
+
+        assert!(filepath.exists());
+    }
+
+    #[test]
+    fn t_run_command_doesnt_wait_for_the_command_to_finish() {
+        use std::time::{Duration, Instant};
+
+        let start = Instant::now();
+
+        let five: &str = "5";
+        run_command("sleep", five);
+
+        let runtime = start.elapsed();
+
+        assert!(runtime < Duration::from_secs(1));
+    }
+
+    #[test]
+    fn t_run_program() {
+        let input1 = "this is a multine-line\ntest string";
+        assert_eq!(run_program(&["cat"], input1), input1);
+
+        assert_eq!(run_program(&["echo", "-n", "hello world"], ""), "hello world");
     }
 }
 

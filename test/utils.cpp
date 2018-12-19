@@ -1,6 +1,9 @@
 #include "utils.h"
 
-#include <unistd.h> // chdir()
+#include <chrono>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #include "3rd-party/catch.hpp"
 #include "test-helpers.h"
@@ -251,6 +254,55 @@ TEST_CASE("run_program()", "[utils]")
 	argv[2] = helloworld;
 	argv[3] = nullptr;
 	REQUIRE(utils::run_program(argv, "") == "hello world");
+}
+
+TEST_CASE("run_command() executes the given command with a given argument",
+		"[utils]")
+{
+	TestHelpers::TempFile sentry;
+	const auto argument = sentry.getPath();
+
+	{
+		INFO("File shouldn't exist, because TempFile doesn't create it");
+
+		struct stat sb;
+		const int result = ::stat(argument.c_str(), &sb);
+		const int saved_errno = errno;
+
+		REQUIRE(result == -1);
+		REQUIRE(saved_errno == ENOENT);
+	}
+
+	utils::run_command("touch", argument);
+
+	// Sleep for 1 millisecond, waiting for `touch` to create the file
+	::usleep(1000000);
+
+	{
+		INFO("File should have been created by the `touch`");
+
+		struct stat sb;
+		const int result = ::stat(argument.c_str(), &sb);
+		REQUIRE(result == 0);
+	}
+}
+
+TEST_CASE("run_command() doesn't wait for the command to finish",
+		"[utils]")
+{
+	using namespace std::chrono;
+
+	const auto start = high_resolution_clock::now();
+
+	const std::string argument("5");
+	utils::run_command("sleep", argument);
+
+	const auto finish = high_resolution_clock::now();
+	const auto runtime = duration_cast<milliseconds>(finish - start);
+
+	// run_command finished under a second, meaning it didn't wait for
+	// a five-second sleep to finish
+	REQUIRE(runtime.count() < 1000);
 }
 
 TEST_CASE("resolve_tilde() replaces ~ with the path to the $HOME directory", "[utils]")
