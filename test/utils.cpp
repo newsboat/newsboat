@@ -650,6 +650,12 @@ TEST_CASE("utils::make_title extracts possible title from URL")
 		auto input = "https://example.com/?format=rss";
 		REQUIRE(utils::make_title(input) == "");
 	}
+
+	SECTION("Deal with an empty input")
+	{
+		auto input = "";
+		REQUIRE(utils::make_title(input) == "");
+	}
 }
 
 TEST_CASE("remove_soft_hyphens remove all U+00AD characters from a string",

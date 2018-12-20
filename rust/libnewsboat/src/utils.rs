@@ -345,6 +345,47 @@ pub fn run_program(cmd_with_args: &[&str], input: &str) -> String {
         .unwrap_or_else(|_| String::new())
 }
 
+pub fn make_title(rs_str: String) -> String {
+    /* Sometimes it is possible to construct the title from the URL
+     * This attempts to do just that. eg:
+     * http://domain.com/story/yy/mm/dd/title-with-dashes?a=b
+     */
+    // Strip out trailing slashes
+    let mut result = rs_str.trim_right_matches('/');
+
+    // get to the final part of the URI's path and
+    // extract just the juicy part 'title-with-dashes?a=b'
+    let v: Vec<&str> = result.rsplitn(2, '/').collect();
+    result = v[0];
+
+    // find where query part of URI starts
+    // throw away the query part 'title-with-dashes'
+    let v: Vec<&str> = result.splitn(2, '?').collect();
+    result = v[0];
+
+    // Throw away common webpage suffixes: .html, .php, .aspx, .htm
+    result = result.trim_right_matches(".html").trim_right_matches(".php");
+    result = result.trim_right_matches(".aspx").trim_right_matches(".htm");
+
+    // 'title with dashes'
+    let result = result.replace('-'," ").replace('_'," ");
+
+    //'Title with dashes'
+    //let result = "";
+    let mut c = result.chars();
+    let result = match c.next() {
+        None => String::new(),
+        Some(f) => f.to_uppercase().collect::<String>() + c.as_str(),
+    };
+
+    // Un-escape any percent-encoding, e.g. "It%27s%202017%21" -> "It's
+    // 2017!"
+    match unescape_url(result) {
+            None => String::new(),
+            Some(f) => f,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     extern crate tempfile;
@@ -612,5 +653,61 @@ mod tests {
 
         assert_eq!(run_program(&["echo", "-n", "hello world"], ""), "hello world");
     }
-}
 
+    #[test]
+    fn t_make_title() {
+
+        let mut input = String::from("http://example.com/Item");
+        assert!(make_title(input) == String::from("Item"));
+
+        input = String::from("http://example.com/This-is-the-title");
+        assert!(make_title(input) == String::from("This is the title"));
+
+        input = String::from("http://example.com/This_is_the_title");
+        assert!(make_title(input) == String::from("This is the title"));
+
+        input = String::from("http://example.com/This_is-the_title");
+        assert!(make_title(input) == String::from("This is the title"));
+
+        input = String::from("http://example.com/This_is-the_title.php");
+        assert!(make_title(input) == String::from("This is the title"));
+
+        input = String::from("http://example.com/This_is-the_title.html");
+        assert!(make_title(input) == String::from("This is the title"));
+
+        input = String::from("http://example.com/This_is-the_title.htm");
+        assert!(make_title(input) == String::from("This is the title"));
+
+        input = String::from("http://example.com/This_is-the_title.aspx");
+        assert!(make_title(input) == String::from("This is the title"));
+
+        input = String::from("http://example.com/this-is-the-title");
+        assert!(make_title(input) == String::from("This is the title"));
+
+        input = String::from("http://example.com/items/misc/this-is-the-title");
+        assert!(make_title(input) == String::from("This is the title"));
+
+        input = String::from("http://example.com/item/");
+        assert!(make_title(input) == String::from("Item"));
+
+        input = String::from("http://example.com/item/////////////");
+        assert!(make_title(input) == String::from("Item"));
+
+        input = String::from("blahscheme://example.com/this-is-the-title");
+        assert!(make_title(input) == String::from("This is the title"));
+
+        input = String::from("http://example.com/story/aug/title-with-dashes?a=b");
+        assert!(make_title(input) == String::from("Title with dashes"));
+
+        input = String::from("http://example.com/title-with-dashes?a=b&x=y&utf8=✓");
+        assert!(make_title(input) == String::from("Title with dashes"));
+
+        input = String::from("https://example.com/It%27s%202017%21");
+        assert!(make_title(input) == String::from("It's 2017!"));
+
+        input = String::from("https://example.com/?format=rss");
+        assert!(make_title(input) == String::from(""));
+
+        assert!(make_title(String::from("")) == String::from(""));
+    }
+}
