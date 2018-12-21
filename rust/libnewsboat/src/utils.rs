@@ -627,7 +627,7 @@ mod tests {
 
         run_command("touch", filepath.to_str().unwrap());
 
-        thread::sleep(time::Duration::from_millis(1));
+        thread::sleep(time::Duration::from_millis(10));
 
         assert!(filepath.exists());
     }
