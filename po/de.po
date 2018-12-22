@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2018-09-29 19:11+0300\n"
-"PO-Revision-Date: 2018-09-20 19:55+0200\n"
+"PO-Revision-Date: 2018-12-22 15:47+0100\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -138,6 +138,8 @@ msgid ""
 "It bundles an alphanum algorithm implementation licensed under the MIT "
 "license: http://www.davekoelle.com/alphanum.html"
 msgstr ""
+"Die eingesetzte Implementierung des alphanumerischen Sortieralgorithmuses "
+"steht unter der MIT-Lizenz: http://www.davekoelle.com/alphanum.html"
 
 #: newsboat.cpp:186
 #, c-format
@@ -1244,9 +1246,8 @@ msgid "Delete article"
 msgstr "Artikel löschen"
 
 #: src/keymap.cpp:236
-#, fuzzy
 msgid "Delete all articles"
-msgstr "Artikel löschen"
+msgstr "Alle Artikel löschen"
 
 #: src/keymap.cpp:241
 msgid "Purge deleted articles"
