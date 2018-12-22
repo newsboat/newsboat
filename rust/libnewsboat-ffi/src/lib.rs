@@ -147,6 +147,35 @@ pub extern "C" fn rs_trim(input: *const c_char) -> *mut c_char {
 }
 
 #[no_mangle]
+pub extern "C" fn rs_quote(input: *const c_char) -> *mut c_char {
+
+    let rs_input = unsafe { CStr::from_ptr(input) };
+    let rs_input = rs_input.to_string_lossy().into_owned();
+
+    let output = utils::quote(rs_input);
+    // Panic here can't happen because:
+    // 1. panic can only happen if `output` contains null bytes;
+    // 2. `output` contains what `input` contained, plus quotes and backslases,
+    // and input is a null-terminated string from C.
+    let output = CString::new(output).unwrap();
+    output.into_raw()
+}
+
+#[no_mangle]
+pub extern "C" fn rs_quote_if_necessary(input: *const c_char) -> *mut c_char {
+    let rs_input = unsafe { CStr::from_ptr(input) };
+    let rs_input = rs_input.to_string_lossy().into_owned();
+
+    let output = utils::quote_if_necessary(rs_input);
+    // Panic here can't happen because:
+    // 1. panic can only happen if `output` contains null bytes;
+    // 2. `output` contains what `input` contained, plus quotes and backslashes
+    // if necessary, and input is a null-terminated string from C.
+    let output = CString::new(output).unwrap();
+    output.into_raw()
+}
+
+#[no_mangle]
 pub extern "C" fn rs_get_random_value(rs_max: u32 ) -> u32 {
     utils::get_random_value(rs_max)
 }

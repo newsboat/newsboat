@@ -199,6 +199,21 @@ pub fn trim_end(rs_str: String) -> String {
     rs_str.trim_right_matches(x).to_string()
 }
 
+pub fn quote(input: String) -> String {
+    let mut input = input.replace("\"", "\\\"");
+    input.insert(0, '"');
+    input.push('"');
+    input
+}
+
+pub fn quote_if_necessary(input: String) -> String {
+    if input.find(" ") != None {
+        quote(input)
+    } else {
+        input
+    }
+}
+
 pub fn get_random_value(max: u32) -> u32 {
    rand::random::<u32>() % max
 }
@@ -517,6 +532,19 @@ mod tests {
     #[test]
     fn t_trim_end() {
         assert_eq!(trim_end(String::from("quux\n")), "quux");
+    }
+
+    #[test]
+    fn t_quote() {
+        assert_eq!(quote("".to_string()), "\"\"");
+        assert_eq!(quote("Hello World!".to_string()), "\"Hello World!\"");
+        assert_eq!(quote("\"Hello World!\"".to_string()), "\"\\\"Hello World!\\\"\"");
+    }
+
+    #[test]
+    fn t_quote_if_necessary() {
+        assert_eq!(quote_if_necessary("".to_string()), "");
+        assert_eq!(quote_if_necessary("Hello World!".to_string()), "\"Hello World!\"");
     }
 
     #[test]

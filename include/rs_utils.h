@@ -34,6 +34,10 @@ char* rs_trim(const char* str);
 
 char* rs_trim_end(const char* str);
 
+char* rs_quote(const char* str);
+
+char* rs_quote_if_necessary(const char* str);
+
 unsigned int rs_get_random_value(const unsigned int max);
 
 char* rs_unescape_url(const char* str);
