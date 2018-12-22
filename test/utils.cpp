@@ -276,7 +276,7 @@ TEST_CASE("run_command() executes the given command with a given argument",
 	utils::run_command("touch", argument);
 
 	// Sleep for 10 milliseconds, waiting for `touch` to create the file
-	::usleep(10000000);
+	::usleep(10 * 1000);
 
 	{
 		INFO("File should have been created by the `touch`");
