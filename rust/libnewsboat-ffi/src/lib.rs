@@ -3,11 +3,11 @@ extern crate libnewsboat;
 
 use libc::c_char;
 use std::ffi::{CStr, CString};
-use std::panic::{UnwindSafe, catch_unwind};
+use std::panic::{catch_unwind, UnwindSafe};
 use std::process::abort;
 use std::ptr;
 
-use libnewsboat::{utils, logger, human_panic};
+use libnewsboat::{human_panic, logger, utils};
 
 /// Runs a Rust function, and if it panics, calls abort(); otherwise returns what function
 /// returned.
@@ -22,20 +22,17 @@ fn abort_on_panic<F: FnOnce() -> R + UnwindSafe, R>(function: F) -> R {
 pub extern "C" fn rs_replace_all(
     input: *const c_char,
     from: *const c_char,
-    to: *const c_char)
-    -> *mut c_char
-{
+    to: *const c_char,
+) -> *mut c_char {
     abort_on_panic(|| {
         let rs_input = unsafe { CStr::from_ptr(input) };
         let rs_input = rs_input.to_string_lossy().into_owned();
 
         let rs_from = unsafe { CStr::from_ptr(from) };
-        let rs_from = rs_from.to_str()
-            .expect("rs_from contained invalid UTF-8");
+        let rs_from = rs_from.to_str().expect("rs_from contained invalid UTF-8");
 
         let rs_to = unsafe { CStr::from_ptr(to) };
-        let rs_to = rs_to.to_str()
-            .expect("rs_to contained invalid UTF-8");
+        let rs_to = rs_to.to_str().expect("rs_to contained invalid UTF-8");
 
         let result = utils::replace_all(rs_input, rs_from, rs_to);
         // Panic here can't happen because:
@@ -50,7 +47,7 @@ pub extern "C" fn rs_replace_all(
 }
 
 #[no_mangle]
-pub extern "C" fn rs_consolidate_whitespace( input: *const c_char) -> *mut c_char {
+pub extern "C" fn rs_consolidate_whitespace(input: *const c_char) -> *mut c_char {
     abort_on_panic(|| {
         let rs_input = unsafe { CStr::from_ptr(input) };
         let rs_input = rs_input.to_string_lossy().into_owned();
@@ -66,7 +63,7 @@ pub extern "C" fn rs_consolidate_whitespace( input: *const c_char) -> *mut c_cha
 }
 
 #[no_mangle]
-pub extern "C" fn rs_resolve_tilde( path: *const c_char) -> *mut c_char {
+pub extern "C" fn rs_resolve_tilde(path: *const c_char) -> *mut c_char {
     abort_on_panic(|| {
         let rs_path = unsafe { CStr::from_ptr(path) };
         let rs_path = rs_path.to_string_lossy().into_owned();
@@ -79,13 +76,12 @@ pub extern "C" fn rs_resolve_tilde( path: *const c_char) -> *mut c_char {
 }
 
 #[no_mangle]
-pub extern "C" fn rs_to_u(in_str: *const c_char, default_value: u32) -> u32
-{
+pub extern "C" fn rs_to_u(in_str: *const c_char, default_value: u32) -> u32 {
     abort_on_panic(|| {
         let rs_str = unsafe { CStr::from_ptr(in_str) };
         let rs_str = rs_str.to_string_lossy().into_owned();
 
-        utils::to_u( rs_str, default_value)
+        utils::to_u(rs_str, default_value)
     })
 }
 
@@ -215,10 +211,8 @@ pub extern "C" fn rs_quote_if_necessary(input: *const c_char) -> *mut c_char {
 }
 
 #[no_mangle]
-pub extern "C" fn rs_get_random_value(rs_max: u32 ) -> u32 {
-    abort_on_panic(|| {
-        utils::get_random_value(rs_max)
-    })
+pub extern "C" fn rs_get_random_value(rs_max: u32) -> u32 {
+    abort_on_panic(|| utils::get_random_value(rs_max))
 }
 
 #[no_mangle]
@@ -233,11 +227,11 @@ pub extern "C" fn rs_unescape_url(input: *const c_char) -> *mut c_char {
         // 2. panic can only happen if `result` contains null bytes;
         // 3. `result` contains what `input` contained, and input is a
         // null-terminated string from C.
-        if result.is_some(){
-                let result = CString::new(result.unwrap()).unwrap();
-                return result.into_raw()
+        if result.is_some() {
+            let result = CString::new(result.unwrap()).unwrap();
+            return result.into_raw();
         }
-        return ptr::null_mut()
+        return ptr::null_mut();
     })
 }
 
@@ -263,7 +257,9 @@ pub extern "C" fn rs_make_title(input: *const c_char) -> *mut c_char {
 pub extern "C" fn rs_cstring_free(string: *mut c_char) {
     abort_on_panic(|| {
         unsafe {
-            if string.is_null() { return }
+            if string.is_null() {
+                return;
+            }
             CString::from_raw(string);
         };
     })
@@ -274,8 +270,8 @@ pub extern "C" fn rs_get_default_browser() -> *mut c_char {
     abort_on_panic(|| {
         let browser = utils::get_default_browser();
         // Panic here can't happen because:
-        //1. panic can only happen if `result` contains null bytes; 
-        //2. std::env::var returns an error if the variable contains invalid Unicode, 
+        //1. panic can only happen if `result` contains null bytes;
+        //2. std::env::var returns an error if the variable contains invalid Unicode,
         // In that case get_default_browser will return "lynx", which obviously doesn't contain null bytes.
         let result = CString::new(browser).unwrap();
         result.into_raw()
@@ -301,7 +297,7 @@ pub extern "C" fn rs_is_valid_attribute(attribute: *const c_char) -> bool {
 }
 
 #[no_mangle]
-pub extern "C" fn rs_strwidth(input: *const c_char) -> usize{
+pub extern "C" fn rs_strwidth(input: *const c_char) -> usize {
     abort_on_panic(|| {
         let rs_str = unsafe { CStr::from_ptr(input) };
         let rs_str = rs_str.to_string_lossy().into_owned();
@@ -310,7 +306,7 @@ pub extern "C" fn rs_strwidth(input: *const c_char) -> usize{
 }
 
 #[no_mangle]
-pub extern "C" fn rs_strwidth_stfl(input: *const c_char) -> usize{
+pub extern "C" fn rs_strwidth_stfl(input: *const c_char) -> usize {
     abort_on_panic(|| {
         let rs_str = unsafe { CStr::from_ptr(input) };
         let rs_str = rs_str.to_string_lossy().into_owned();
@@ -346,7 +342,9 @@ pub extern "C" fn rs_set_loglevel(level: logger::Level) {
 pub extern "C" fn rs_set_logfile(logfile: *const c_char) {
     abort_on_panic(|| {
         let logfile = unsafe { CStr::from_ptr(logfile) };
-        let logfile = logfile.to_str().expect("logfile path contained invalid UTF-8");
+        let logfile = logfile
+            .to_str()
+            .expect("logfile path contained invalid UTF-8");
         logger::get_instance().set_logfile(logfile);
     })
 }
@@ -355,16 +353,16 @@ pub extern "C" fn rs_set_logfile(logfile: *const c_char) {
 pub extern "C" fn rs_set_user_error_logfile(user_error_logfile: *const c_char) {
     abort_on_panic(|| {
         let user_error_logfile = unsafe { CStr::from_ptr(user_error_logfile) };
-        let user_error_logfile = user_error_logfile.to_str().expect("user_error_logfile path contained invalid UTF-8");
+        let user_error_logfile = user_error_logfile
+            .to_str()
+            .expect("user_error_logfile path contained invalid UTF-8");
         logger::get_instance().set_user_error_logfile(user_error_logfile);
     })
 }
 
 #[no_mangle]
 pub extern "C" fn rs_get_loglevel() -> u64 {
-    abort_on_panic(|| {
-        logger::get_instance().get_loglevel() as u64
-    })
+    abort_on_panic(|| logger::get_instance().get_loglevel() as u64)
 }
 
 #[no_mangle]
@@ -391,12 +389,10 @@ pub extern "C" fn rs_get_command_output(input: *const c_char) -> *mut c_char {
 pub extern "C" fn rs_run_command(command: *const c_char, param: *const c_char) {
     abort_on_panic(|| {
         let command = unsafe { CStr::from_ptr(command) };
-        let command = command.to_str()
-            .expect("command contained invalid UTF-8");
+        let command = command.to_str().expect("command contained invalid UTF-8");
 
         let param = unsafe { CStr::from_ptr(param) };
-        let param = param.to_str()
-            .expect("param contained invalid UTF-8");
+        let param = param.to_str().expect("param contained invalid UTF-8");
 
         utils::run_command(command, param);
     })
@@ -412,8 +408,10 @@ pub extern "C" fn rs_run_program(argv: *mut *mut c_char, input: *const c_char) -
             let mut offset: usize = 0;
             while !(*cur_ptr).is_null() {
                 let arg = CStr::from_ptr(*cur_ptr);
-                let arg = arg.to_str()
-                    .expect(&format!("argument at offset {} contained invalid UTF-8", offset));
+                let arg = arg.to_str().expect(&format!(
+                    "argument at offset {} contained invalid UTF-8",
+                    offset
+                ));
 
                 result.push(arg);
 
@@ -424,10 +422,8 @@ pub extern "C" fn rs_run_program(argv: *mut *mut c_char, input: *const c_char) -
             result
         };
 
-
         let input = unsafe { CStr::from_ptr(input) };
-        let input = input.to_str()
-            .expect("input contained invalid UTF-8");
+        let input = input.to_str().expect("input contained invalid UTF-8");
 
         let output = utils::run_program(&argv, input);
 

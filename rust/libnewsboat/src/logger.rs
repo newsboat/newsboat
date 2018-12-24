@@ -2,13 +2,13 @@
 
 extern crate chrono;
 
+use self::chrono::{offset::Local, Datelike, Timelike};
 use once_cell::sync::OnceCell;
-use self::chrono::{Datelike, Timelike, offset::Local};
 use std::fmt;
 use std::fs::{File, OpenOptions};
 use std::io::Write;
-use std::sync::Mutex;
 use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::Mutex;
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 /// "Importance levels" for log messages.
@@ -130,9 +130,10 @@ impl Logger {
     /// To make that Logger useful, you need to call set_logfile() and set_loglevel().
     pub fn new() -> Logger {
         Logger {
-            files: Mutex::new(LogFiles{
+            files: Mutex::new(LogFiles {
                 logfile: None,
-                user_error_logfile: None}),
+                user_error_logfile: None,
+            }),
             loglevel: AtomicUsize::new(Level::None as usize),
         }
     }
@@ -149,16 +150,13 @@ impl Logger {
     /// This can't fail, but if the file couldn't be created or opened, an error message will be
     /// printed to stderr.
     pub fn set_logfile(&self, filename: &str) {
-        let file = OpenOptions::new()
-            .create(true)
-            .append(true)
-            .open(filename);
+        let file = OpenOptions::new().create(true).append(true).open(filename);
 
         match file {
             Ok(file) => {
                 let mut files = self.files.lock().expect("Someone poisoned logger's mutex");
                 files.logfile = Some(file);
-            },
+            }
             Err(error) => eprintln!("Couldn't open `{}' as a logfile: {}", filename, error),
         }
     }
@@ -177,17 +175,17 @@ impl Logger {
     /// This can't fail, but if the file couldn't be created or opened, an error message will be
     /// printed to stderr.
     pub fn set_user_error_logfile(&self, filename: &str) {
-        let file = OpenOptions::new()
-            .create(true)
-            .append(true)
-            .open(filename);
+        let file = OpenOptions::new().create(true).append(true).open(filename);
 
         match file {
             Ok(file) => {
                 let mut files = self.files.lock().expect("Someone poisoned logger's mutex");
                 files.user_error_logfile = Some(file)
-            },
-            Err(error) => eprintln!("Couldn't open `{}' as a user error logfile: {}", filename, error),
+            }
+            Err(error) => eprintln!(
+                "Couldn't open `{}' as a user error logfile: {}",
+                filename, error
+            ),
         }
     }
 
@@ -222,13 +220,15 @@ impl Logger {
         let timestamp = Local::now();
         // DateTime::format() is extremely slow; format! is way faster. See
         // https://github.com/chronotope/chrono/issues/94 for details.
-        let timestamp = format!("[{}-{:02}-{:02} {:02}:{:02}:{:02}] ",
+        let timestamp = format!(
+            "[{}-{:02}-{:02} {:02}:{:02}:{:02}] ",
             timestamp.year(),
             timestamp.month(),
             timestamp.day(),
             timestamp.hour(),
             timestamp.minute(),
-            timestamp.second());
+            timestamp.second()
+        );
 
         let mut files = self.files.lock().expect("Someone poisoned logger's mutex");
 
@@ -309,10 +309,10 @@ mod tests {
     extern crate tempfile;
 
     use super::*;
-    
+
+    use self::chrono::{Duration, TimeZone};
     use self::tempfile::TempDir;
-    use self::chrono::{TimeZone, Duration};
-    use std::io::{self, BufReader, BufRead};
+    use std::io::{self, BufRead, BufReader};
     use std::path;
 
     fn setup_logger() -> io::Result<(TempDir, path::PathBuf, path::PathBuf, Logger)> {
@@ -341,7 +341,9 @@ mod tests {
             return None;
         }
 
-        let timestamp_end = line.find(']').expect("Failed to find the end of the timestamp");
+        let timestamp_end = line
+            .find(']')
+            .expect("Failed to find the end of the timestamp");
         // Timestamp starts with "[", we skip it by starting at 1 rather than 0.
         let timestamp = &line[1..timestamp_end];
 
@@ -351,18 +353,17 @@ mod tests {
         //
         // If timestamp is followed by something non-ASCII, indexing into &str will
         // panic and fail the test, which is good.
-        if &line[timestamp_end+1..timestamp_end+2] != " " {
+        if &line[timestamp_end + 1..timestamp_end + 2] != " " {
             return None;
         }
 
-        let level_end =
-            line[timestamp_end+2..]
+        let level_end = line[timestamp_end + 2..]
             .find(':')
             .expect("Failed to find the end of the loglevel");
-        let level = &line[timestamp_end+2..timestamp_end+2+level_end];
+        let level = &line[timestamp_end + 2..timestamp_end + 2 + level_end];
 
         // Message starts after ": " that follows the level, hence +2.
-        let message = &line[timestamp_end+2+level_end+2..];
+        let message = &line[timestamp_end + 2 + level_end + 2..];
 
         Some((timestamp, level, message))
     }
@@ -372,17 +373,19 @@ mod tests {
             return None;
         }
 
-        let timestamp_end = line.find(']').expect("Failed to find the end of the timestamp");
+        let timestamp_end = line
+            .find(']')
+            .expect("Failed to find the end of the timestamp");
         // Timestamp starts with "[", we skip it by starting at 1 rather than 0.
         let timestamp = &line[1..timestamp_end];
 
         // Message starts after " " that follows the timestamp, hence +2.
-        let message = &line[timestamp_end+2..];
+        let message = &line[timestamp_end + 2..];
 
         Some((timestamp, message))
     }
 
-    fn log_contains_n_lines(logfile: &path::Path, n: usize)  -> io::Result<()> {
+    fn log_contains_n_lines(logfile: &path::Path, n: usize) -> io::Result<()> {
         let file = File::open(logfile)?;
         let reader = BufReader::new(file);
         assert_eq!(reader.lines().count(), n);
@@ -448,7 +451,7 @@ mod tests {
                 if let Some(count) = self.expected_errorlog_lines {
                     log_contains_n_lines(&error_logfile, count)?;
                 }
-            };
+            }
 
             Ok(())
         }
@@ -490,11 +493,9 @@ mod tests {
             match line {
                 Ok(line) => {
                     let (timestamp_str, _level, message) =
-                        parse_log_line(&line)
-                        .expect("Failed to split the log line into parts");
+                        parse_log_line(&line).expect("Failed to split the log line into parts");
 
-                    let timestamp =
-                        Local::now()
+                    let timestamp = Local::now()
                         .timezone()
                         .datetime_from_str(timestamp_str, "%Y-%m-%d %H:%M:%S")
                         .expect("Failed to parse the timestamp from the log file");
@@ -543,8 +544,7 @@ mod tests {
             match line {
                 Ok(line) => {
                     let (_timestamp_str, level, _message) =
-                        parse_log_line(&line)
-                        .expect("Failed to split the log line into parts");
+                        parse_log_line(&line).expect("Failed to split the log line into parts");
 
                     assert_eq!(level, expected);
                 }
@@ -611,10 +611,7 @@ mod tests {
     fn t_critical_msgs_are_logged_at_curlevels_starting_with_critical() {
         let message = (Level::Critical, "hello".to_string());
 
-        let nolog_levels = vec![
-            Level::None,
-            Level::UserError,
-        ];
+        let nolog_levels = vec![Level::None, Level::UserError];
         LogLinesCounter::new()
             .with_messages(vec![message.clone()])
             .at_levels(nolog_levels)
@@ -641,11 +638,7 @@ mod tests {
     fn t_error_msgs_are_logged_at_curlevels_starting_with_error() {
         let message = (Level::Error, "hello".to_string());
 
-        let nolog_levels = vec![
-            Level::None,
-            Level::UserError,
-            Level::Critical,
-        ];
+        let nolog_levels = vec![Level::None, Level::UserError, Level::Critical];
         LogLinesCounter::new()
             .with_messages(vec![message.clone()])
             .at_levels(nolog_levels)
@@ -653,12 +646,7 @@ mod tests {
             .test()
             .unwrap();
 
-        let log_levels = vec![
-            Level::Error,
-            Level::Warn,
-            Level::Info,
-            Level::Debug,
-        ];
+        let log_levels = vec![Level::Error, Level::Warn, Level::Info, Level::Debug];
         LogLinesCounter::new()
             .with_messages(vec![message])
             .at_levels(log_levels)
@@ -671,12 +659,7 @@ mod tests {
     fn t_warning_msgs_are_logged_at_curlevels_starting_with_warning() {
         let message = (Level::Warn, "hello".to_string());
 
-        let nolog_levels = vec![
-            Level::None,
-            Level::UserError,
-            Level::Critical,
-            Level::Error,
-        ];
+        let nolog_levels = vec![Level::None, Level::UserError, Level::Critical, Level::Error];
         LogLinesCounter::new()
             .with_messages(vec![message.clone()])
             .at_levels(nolog_levels)
@@ -684,11 +667,7 @@ mod tests {
             .test()
             .unwrap();
 
-        let log_levels = vec![
-            Level::Warn,
-            Level::Info,
-            Level::Debug,
-        ];
+        let log_levels = vec![Level::Warn, Level::Info, Level::Debug];
         LogLinesCounter::new()
             .with_messages(vec![message])
             .at_levels(log_levels)
@@ -715,10 +694,7 @@ mod tests {
             .test()
             .unwrap();
 
-        let log_levels = vec![
-            Level::Info,
-            Level::Debug,
-        ];
+        let log_levels = vec![Level::Info, Level::Debug];
         LogLinesCounter::new()
             .with_messages(vec![message])
             .at_levels(log_levels)
@@ -791,12 +767,13 @@ mod tests {
     fn t_only_usererrors_are_written_to_errorlog() {
         let messages = vec![
             (Level::UserError, "hello".to_string()),
-            (Level::Critical, "this shouldn't be written to error-log".to_string()),
+            (
+                Level::Critical,
+                "this shouldn't be written to error-log".to_string(),
+            ),
         ];
 
-        let nolog_levels = vec![
-            Level::None,
-        ];
+        let nolog_levels = vec![Level::None];
         LogLinesCounter::new()
             .with_messages(messages.clone())
             .at_levels(nolog_levels)
@@ -848,12 +825,10 @@ mod tests {
         for (line, expected) in reader.lines().zip(messages) {
             match line {
                 Ok(line) => {
-                    let (timestamp_str, message) =
-                        parse_errorlog_line(&line)
+                    let (timestamp_str, message) = parse_errorlog_line(&line)
                         .expect("Failed to split the error log line into parts");
 
-                    let timestamp =
-                        Local::now()
+                    let timestamp = Local::now()
                         .timezone()
                         .datetime_from_str(timestamp_str, "%Y-%m-%d %H:%M:%S")
                         .expect("Failed to parse the timestamp from the error log file");
