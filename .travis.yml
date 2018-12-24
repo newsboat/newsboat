@@ -243,7 +243,9 @@ matrix:
           packages:
             - i18nspector
       env:
-        - CHECKS=1
+        - CHECKS=i18nspector
+    - env:
+        - CHECKS="cargo-fmt"
 
 install:
   - export CXX=$COMPILER
@@ -262,7 +264,8 @@ script:
   # command to fail if some test suite fails. That's why we store the C++'s
   # exit code and chain it to Rust's in the end.
   - if [ -z "$CHECKS" ]; then   ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"   ; fi
-  - if [ -n "$CHECKS" ]; then   make run-i18nspector | tee i18nspector.log && if `egrep '^(E|W):' i18nspector.log >/dev/null 2>&1` ; then false else true; fi   ; fi
+  - if [ "$CHECKS" = "i18nspector" ]; then   make run-i18nspector | tee i18nspector.log && if `egrep '^(E|W):' i18nspector.log >/dev/null 2>&1` ; then false else true; fi   ; fi
+  - if [ "$CHECKS" = "cargo-fmt" ]; then cargo fmt -- --check; fi
 
 after_success:
   - cd ${TRAVIS_BUILD_DIR}
