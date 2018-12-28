@@ -73,6 +73,8 @@ Sanchez, Friedrich von Never, Kamil Wsół, glacambre.
 ### Fixed
 - Do not create empty files if history is disabled (Nikos Tsipinakis)
 
+
+
 ## 2.12 - 2018-06-24
 
 Lists below only mention user-visible changes, but I would also like to
@@ -117,6 +119,8 @@ Schuster.
 - Various problems found by clang-analyzer and Coverity Scan (Alexander
     Batischev)
 
+
+
 ## 2.11.1 - 2018-03-30
 
 ### Fixed
@@ -124,6 +128,8 @@ Schuster.
 - If built from the tarball, Newsboat 2.11 reported its version as 2.10.2. My
     bad. Kudos to Haudegen, Ryan Mulligan and Robert Schütz for catching that
     one. (Alexander Batischev)
+
+
 
 ## 2.11 - 2018-03-25
 
@@ -165,6 +171,8 @@ Pedersen, and Kaligule.
 ### Fixed
 
 - Unwanted logging to stdout on `--export-to-opml` (#104) (Alexander Batischev)
+
+
 
 ## 2.10.2 - 2017-12-25
 
@@ -211,6 +219,8 @@ Karlsson, Kamil Wsół, Mike Crute, Niels Kobschätzki, and maiki.
 - Don't segfault if `error-log` points to non-existent file (Simon Schuster)
 - Spanish translation (José Manuel García-Patos)
 
+
+
 ## 2.10.1 - 2017-09-22
 
 ### Added
@@ -220,6 +230,8 @@ Karlsson, Kamil Wsół, Mike Crute, Niels Kobschätzki, and maiki.
 ### Fixed
 
 - XDG data dir is created if XDG config dir exists (regression happened in 2.10)
+
+
 
 ## 2.10 - 2017-09-20
 
