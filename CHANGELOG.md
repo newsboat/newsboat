@@ -1,13 +1,54 @@
 # Changes for Newsboat
 
-## Unreleased
+
+
+## 2.14 - UNKNOWN DATE
+
+Lists below only mention user-visible changes, but I would also like to
+acknowledge contributions from the following people: Paul Woolcock, Raphael
+Nestler, Thanga Ayyanar A.
 
 ### Added
+- Dependency on Rust 1.25+. The compiler (`rustc`) and the build tool (`cargo`)
+    are required
+- `download-filename-format` setting that controls how Podboat names the files.
+    Default is the same as older versions of Podboat (Jagannathan Tiruvallur
+    Eachambadi)
+- `podlist-format` setting that controls formatting of the items on Podboat's
+    main screen. Also, a `%b` format specifier that contains just the basename
+    of the download (e.g. "podcast.mp3" instead of "/home/name/podcast.mp3")
+    (zaowen)
+- Human-readable message when Rust code panics (Alexander Batischev)
+- `unbind-key -a`, which unbinds all keys (Kamil Wsół)
+
 ### Changed
-### Deprecated
-### Removed
+- Look up `BROWSER` environment variable before defaulting to lynx(1) (Kamil
+    Wsół) (#283)
+- Strip query parameters from downloaded podcasts' names (i.e. name them as
+    "podcast.mp3", not "podcast.mp3?key=19ad740") (Jagannathan Tiruvallur
+    Eachambadi)
+- Update translations: Russian, Ukrainian (Alexander Batischev), German
+    (Lysander Trischler)
+- Document that minimum supported CURL version is 7.21.6. This has been the case
+    since 2.10, but wasn't documented at the time (Alexander Batischev)
+- Update vendored version of nlohmann/json to 3.5.0
+- Update vendored version of Catch2 to 2.5.0
+
 ### Fixed
-### Security
+- HTTP response 400 errors with Inoreader (Erik Li) (#175)
+- Podboat's crash (segmentation fault) when parsing a comment in the queue file.
+    Comments aren't really supported by Podboat since it overwrites the file
+    from time to time, but the crash is still unacceptable (Nikos Tsipinakis)
+- Newsboat displaying articles differently in "internal" and external pagers
+    (Alexander Batischev)
+- One-paragraph items not rendered at all (Alexander Batischev)
+- Crash (segmentation fault) on feeds that don't provide a `url` attribute
+    (ksunden)
+- Hangs when `highlight` rule matches an empty string (zaowen)
+- Article disappearing from the pager upon feed reload (zaowen)
+    (https://github.com/akrennmair/newsbeuter/issues/534)
+
+
 
 ## 2.13 - 2018-09-22
 
@@ -23,7 +64,7 @@ Sanchez, Friedrich von Never, Kamil Wsół, glacambre.
 
 ### Changed
 - Require `cookie-cache` setting if Newsblur API is used (Alexander Batischev)
-- Translations: Russian, Ukraininan (Alexander Batischev), Swedish (Dennis
+- Translations: Russian, Ukrainian (Alexander Batischev), Swedish (Dennis
     Öberg), German (Lysander Trischler)
 - json.hpp updated to version 3.2.0
 - Natural sort order for article titles, so numbers are put in the expected
