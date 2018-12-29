@@ -59,12 +59,15 @@ master repository and shell access to newsboat.org.
             * Gzip the result: `gzip --best --keep --force newsboat/news.atom`
     * Prepare an email to the mailing list
         * Same topic and contents as in `news.atom` entry
+        * Clear-sign instead of detach-sign: select the body and run it through
+            `gpg2 --clearsign`
     * Deploy the directory on the server:
         `sudo cp -rv newsboat/ /usr/local/www/newsboat.org/www/ && sudo chmod -R a+r /usr/local/www/newsboat.org/www/`
     * Push the code: `git push && git push --tags`
 8. Tell the world about it
     * Send an email to the mailing list
     * Change the topic on #newsboat at Freenode
+    * Post something about it on personal Mastodon
 9. Prepare the repo for the next release
     * Add "Unreleased" section to CHANGELOG
     * Push it: `git push`
