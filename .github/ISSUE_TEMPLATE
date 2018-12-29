@@ -1,4 +1,4 @@
-**Newsboat version (copy from `newsboat -v`)**:
+**Newsboat version (copy the output of `newsboat -v` or the first line of `git show`)**:
 
 Steps to reproduce the issue:
 
