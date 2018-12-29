@@ -80,5 +80,8 @@ master repository and shell access to newsboat.org.
         * Tick all checkboxes ("stable", "candidate", "beta", and "edge")
         * Click "Release"
 11. Manage milestones https://github.com/newsboat/newsboat/milestones?with_issues=no
+    * Add all unassigned issues and pull requests to the current one. Search for
+        "no:milestone closed:>=2018-09-20" where "2018-09-20" is the previous
+        release date
     * Close the current one
     * Create a new one with a date set to 25-ish of March/June/September/December
