@@ -52,8 +52,8 @@ Support
 -------
 
 * Check out our
-  [documentation](https://newsboat.org/releases/2.13/docs/newsboat.html) and
-  [FAQ](https://newsboat.org/releases/2.13/docs/faq.html)
+  [documentation](https://newsboat.org/releases/2.14/docs/newsboat.html) and
+  [FAQ](https://newsboat.org/releases/2.14/docs/faq.html)
 * Bugs and whatnot should be reported to the
   [issue tracker](https://github.com/newsboat/newsboat/issues)
 * Drop us a line at

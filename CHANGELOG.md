@@ -2,7 +2,7 @@
 
 
 
-## 2.14 - UNKNOWN DATE
+## 2.14 - 2018-12-29
 
 Lists below only mention user-visible changes, but I would also like to
 acknowledge contributions from the following people: Paul Woolcock, Raphael
@@ -31,7 +31,7 @@ Nestler, Thanga Ayyanar A.
     (Lysander Trischler)
 - Document that minimum supported CURL version is 7.21.6. This has been the case
     since 2.10, but wasn't documented at the time (Alexander Batischev)
-- Update vendored version of nlohmann/json to 3.5.0
+- Update vendored version of nlohmann/json to 3.4.0
 - Update vendored version of Catch2 to 2.5.0
 
 ### Fixed
