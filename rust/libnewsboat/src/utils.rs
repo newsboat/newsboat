@@ -304,7 +304,7 @@ pub fn run_command(cmd: &str, param: &str) {
         .spawn();
     if let Err(error) = child {
         log!(Level::Debug,
-             &format!("utils::run_command: spawning a child for \"{}\" failed: {}", cmd, error));
+             "utils::run_command: spawning a child for \"{}\" failed: {}", cmd, error);
     }
 
     // We deliberately *don't* wait for the child to finish.
@@ -324,11 +324,9 @@ pub fn run_program(cmd_with_args: &[&str], input: &str) -> String {
         .map_err(|error| {
             log!(
                 Level::Debug,
-                &format!(
-                    "utils::run_program: spawning a child for \"{:?}\" \
-                     with input \"{}\" failed: {}",
-                    cmd_with_args, input, error
-                )
+                "utils::run_program: spawning a child for \"{:?}\" \
+                 with input \"{}\" failed: {}",
+                cmd_with_args, input, error
             );
         })
         .and_then(|mut child| {
@@ -336,10 +334,8 @@ pub fn run_program(cmd_with_args: &[&str], input: &str) -> String {
                 if let Err(error) = stdin.write_all(input.as_bytes()) {
                     log!(
                         Level::Debug,
-                        &format!(
-                            "utils::run_program: failed to write to child's stdin: {}",
-                            error
-                        )
+                        "utils::run_program: failed to write to child's stdin: {}",
+                        error
                     );
                 }
             }
@@ -349,10 +345,8 @@ pub fn run_program(cmd_with_args: &[&str], input: &str) -> String {
                 .map_err(|error| {
                     log!(
                         Level::Debug,
-                        &format!(
-                            "utils::run_program: failed to read child's stdout: {}",
-                            error
-                        )
+                        "utils::run_program: failed to read child's stdout: {}",
+                        error
                     );
                 })
                 .map(|output| String::from_utf8_lossy(&output.stdout).into_owned())
