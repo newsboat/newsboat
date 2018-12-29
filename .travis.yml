@@ -191,6 +191,22 @@ matrix:
         - GCOV="llvm-cov-6.0 gcov"
       before_install:
         *install_coveralls
+    - compiler: clang-7
+      os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-7
+          packages:
+            - clang-7
+            - llvm-7
+            - *clang_deps
+      env:
+        - COMPILER=clang++-7
+        - GCOV="llvm-cov-7 gcov"
+      before_install:
+        *install_coveralls
     - compiler: gcc
       os: osx
       rust: 1.25.0
