@@ -2,6 +2,7 @@ extern crate rand;
 extern crate regex;
 extern crate url;
 extern crate dirs;
+extern crate unicode_width;
 
 use logger::{self, Level};
 use self::regex::Regex;
@@ -9,6 +10,7 @@ use self::url::{Url};
 use self::url::percent_encoding::*;
 use std::process::{Command, Stdio};
 use std::io::Write;
+use self::unicode_width::UnicodeWidthStr;
 
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
@@ -260,6 +262,16 @@ pub fn is_valid_attribute(attribute:  &str) -> bool {
         "default",
     ];
     VALID_ATTRIBUTES.contains(&attribute)
+}
+
+pub fn strwidth( rs_str: &str) -> usize {
+    let control = rs_str.chars().fold( true, |acc, x| acc & !x.is_control());
+
+    if control {
+            return UnicodeWidthStr::width(rs_str);
+    } else {
+        return rs_str.len();
+    }
 }
 
 pub fn is_valid_podcast_type(mimetype: &str) -> bool {
@@ -575,6 +587,14 @@ mod tests {
         for color in &valid {
             assert!(is_valid_color(color));
         }
+    }
+
+    #[test]
+    fn t_strwidth() {
+        assert!(strwidth("") == 0);
+        assert!(strwidth("xx") == 2);
+        assert!(strwidth("\u{F91F}") == 2);
+        assert!(strwidth("\u{0007}") == 1);
     }
 
     #[test]

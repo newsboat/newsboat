@@ -643,12 +643,7 @@ std::vector<std::pair<unsigned int, unsigned int>> utils::partition_indexes(
 
 size_t utils::strwidth(const std::string& str)
 {
-	std::wstring wstr = str2wstr(str);
-	int width = wcswidth(wstr.c_str(), wstr.length());
-	if (width < 1)                // a non-printable character found?
-		return wstr.length(); // return a sane width (which might be
-				      // larger than necessary)
-	return width;                 // exact width
+	return rs_strwidth(str.c_str());
 }
 
 size_t utils::strwidth_stfl(const std::string& str)
