@@ -268,7 +268,7 @@ pub fn strwidth( rs_str: &str) -> usize {
     let control = rs_str.chars().fold( true, |acc, x| acc & !x.is_control());
 
     if control {
-            return UnicodeWidthStr::width(rs_str);
+        return UnicodeWidthStr::width(rs_str);
     } else {
         return rs_str.len();
     }
