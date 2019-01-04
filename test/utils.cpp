@@ -475,6 +475,18 @@ TEST_CASE("strwidth()", "[utils]")
 	REQUIRE(utils::strwidth("\07") == 1);
 }
 
+TEST_CASE("strwidth_stfl()", "[utils]")
+{
+	REQUIRE(utils::strwidth_stfl("") == 0);
+
+	REQUIRE(utils::strwidth_stfl("x<hi>x") == 3);
+
+	REQUIRE(utils::strwidth_stfl("x<>x") == 4);
+
+	REQUIRE(utils::strwidth_stfl(utils::wstr2str(L"\uF91F")) == 2);
+	REQUIRE(utils::strwidth_stfl("\07") == 1);
+}
+
 TEST_CASE("is_http_url()", "[utils]")
 {
 	REQUIRE(utils::is_http_url("http://foo.bar"));
