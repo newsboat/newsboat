@@ -648,18 +648,7 @@ size_t utils::strwidth(const std::string& str)
 
 size_t utils::strwidth_stfl(const std::string& str)
 {
-	size_t reduce_count = 0;
-	size_t len = str.length();
-	if (len > 1) {
-		for (size_t idx = 0; idx < len - 1; ++idx) {
-			if (str[idx] == '<' && str[idx + 1] != '>') {
-				reduce_count += 3;
-				idx += 3;
-			}
-		}
-	}
-
-	return strwidth(str) - reduce_count;
+	return rs_strwidth_stfl(str.c_str());
 }
 
 size_t utils::wcswidth_stfl(const std::wstring& str, size_t size)
