@@ -283,7 +283,7 @@ msgstr "gotowe."
 
 #: src/controller.cpp:228 src/controller.cpp:363
 msgid "Opening cache..."
-msgstr "Otwieram pamięć podręczną..."
+msgstr "Otwieranie pamięci podręcznej..."
 
 #: src/controller.cpp:235 src/controller.cpp:243
 #, c-format
@@ -355,7 +355,7 @@ msgstr ""
 
 #: src/controller.cpp:361
 msgid "Loading articles from cache..."
-msgstr "Wczytuję artykuły z pamięci podręcznej..."
+msgstr "Wczytywanie artykułów z pamięci podręcznej..."
 
 #: src/controller.cpp:368
 msgid "Cleaning up cache thoroughly..."
