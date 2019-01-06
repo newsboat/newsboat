@@ -854,7 +854,7 @@ msgstr "Roześlij pozycje"
 
 #: src/inoreader_urlreader.cpp:54
 msgid "Liked items"
-msgstr "Pozycje połączone"
+msgstr "Polubione pozycje"
 
 #: src/inoreader_urlreader.cpp:56
 msgid "Saved web pages"
