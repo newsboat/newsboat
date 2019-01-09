@@ -1,6 +1,7 @@
 #ifndef NEWSBOAT_QUEUEMANAGER_H_
 #define NEWSBOAT_QUEUEMANAGER_H_
 
+#include <ctime>
 #include <memory>
 #include <string>
 
