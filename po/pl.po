@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2018-09-29 19:11+0300\n"
-"PO-Revision-Date: 2019-01-05 21:38+0100\n"
+"PO-Revision-Date: 2019-01-09 20:42+0100\n"
 "Last-Translator: Michal Siemek <carnophage@dobramama.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -292,7 +292,7 @@ msgstr "Błąd: otwarcie pliku pamięci podręcznej '%s' nieudane: %s"
 
 #: src/controller.cpp:271
 msgid "ERROR: You must set `cookie-cache` to use Newsblur.\n"
-msgstr "BŁĄD: Musisz ustawić `cookie-cache` aby korzystać z Newsblur.\n"
+msgstr "BŁĄD: Musisz ustawić `cookie-cache` aby korzystać z NewsBlur.\n"
 
 #: src/controller.cpp:279
 #, c-format
@@ -335,7 +335,7 @@ msgid ""
 "account. Please do so, and try again."
 msgstr ""
 "Wygląda na to, że nie skonfigurowałeś żadnych kanałów na swoim koncie Tiny "
-"RSS. Wykonaj to proszę i spróbuj ponownie."
+"Tiny RSS. Wykonaj to proszę i spróbuj ponownie."
 
 #: src/controller.cpp:345
 msgid ""
@@ -343,7 +343,7 @@ msgid ""
 "Please do so, and try again."
 msgstr ""
 "Wygląda na to, że nie skonfigurowałeś żadnych kanałów na swoim koncie "
-"Newsblur. Wykonaj to proszę i spróbuj ponownie."
+"NewsBlur. Wykonaj to proszę i spróbuj ponownie."
 
 #: src/controller.cpp:350
 msgid ""
