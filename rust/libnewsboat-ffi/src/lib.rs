@@ -310,6 +310,15 @@ pub extern "C" fn rs_strwidth(input: *const c_char) -> usize{
 }
 
 #[no_mangle]
+pub extern "C" fn rs_strwidth_stfl(input: *const c_char) -> usize{
+    abort_on_panic(|| {
+        let rs_str = unsafe { CStr::from_ptr(input) };
+        let rs_str = rs_str.to_string_lossy().into_owned();
+        utils::strwidth_stfl(&rs_str)
+    })
+}
+
+#[no_mangle]
 pub extern "C" fn rs_is_valid_podcast_type(mimetype: *const c_char) -> bool {
     abort_on_panic(|| {
         let rs_mimetype = unsafe { CStr::from_ptr(mimetype) };

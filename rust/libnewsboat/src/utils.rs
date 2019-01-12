@@ -274,6 +274,23 @@ pub fn strwidth( rs_str: &str) -> usize {
     }
 }
 
+pub fn strwidth_stfl(rs_str: &str) -> usize {
+    let mut reduce: usize = 0;
+    let mut chars = rs_str.chars().peekable();
+    loop {
+        match chars.next() {
+            Some('<') => {
+                if chars.peek() != Some(&'>') {
+                    reduce += 3; }
+            },
+            Some(_) => continue,
+            None => break
+        }
+    }
+
+    strwidth(rs_str) - reduce
+}
+
 pub fn is_valid_podcast_type(mimetype: &str) -> bool {
     let re = Regex::new(r"(audio|video)/.*").unwrap();
     let matches = re.is_match(mimetype);
@@ -595,6 +612,15 @@ mod tests {
         assert!(strwidth("xx") == 2);
         assert!(strwidth("\u{F91F}") == 2);
         assert!(strwidth("\u{0007}") == 1);
+    }
+
+    #[test]
+    fn t_strwidth_stfl() {
+        assert!(strwidth_stfl("") == 0);
+        assert!(strwidth_stfl("x<hi>x") == 3);
+        assert!(strwidth_stfl("x<>x") == 4);
+        assert!(strwidth_stfl("\u{F91F}") == 2);
+        assert!(strwidth_stfl("\u{0007}") == 1);
     }
 
     #[test]
