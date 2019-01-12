@@ -529,6 +529,11 @@ you're using, just say so:
 
 	ocnews-verifyhost "no"
 
+If you see intermittent "Authentication failed" errors, try
+https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/caching_configuration.html[configuring
+memory caching]. That should improve the responsiveness of the API and fix the
+errors.
+
 ownCloud News provides the ability to "star" articles; starred articles are basically
 bookmarks. Newsboat allows the use of this feature by mapping user-specified
 flag to the "star" operation.
