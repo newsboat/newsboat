@@ -143,7 +143,6 @@ std::vector<TaggedFeedUrl> OldReaderApi::get_subscribed_urls()
 
 		json_object_object_get_ex(sub, "id", &node);
 		const char* id = json_object_get_string(node);
-		char* id_uenc = curl_easy_escape(handle, id, 0);
 
 		json_object_object_get_ex(sub, "title", &node);
 		const char* title = json_object_get_string(node);
@@ -176,12 +175,11 @@ std::vector<TaggedFeedUrl> OldReaderApi::get_subscribed_urls()
 
 			auto url = strprintf::fmt("%s%s?n=%u",
 				OLDREADER_FEED_PREFIX,
-				id_uenc,
+				id,
 				cfg->get_configvalue_as_int(
 					"oldreader-min-items"));
 			urls.push_back(TaggedFeedUrl(url, tags));
 		}
-		curl_free(id_uenc);
 	}
 
 	json_object_put(reply);
