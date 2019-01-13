@@ -2,6 +2,7 @@
 #define NEWSBOAT_REGEXMANAGER_H_
 
 #include <memory>
+#include <regex>
 #include <regex.h>
 #include <sys/types.h>
 #include <utility>
@@ -22,7 +23,7 @@ public:
 	void quote_and_highlight(std::string& str, const std::string& location);
 	void remove_last_regex(const std::string& location);
 	int article_matches(Matchable* item);
-	std::string extract_outer_marker(const std::string str, const int index);
+	std::string extract_outer_marker(std::string str, const int index);
 
 private:
 	typedef std::pair<std::vector<regex_t*>, std::vector<std::string>>

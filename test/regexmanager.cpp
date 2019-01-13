@@ -130,7 +130,7 @@ TEST_CASE("RegexManager does not hang on regexes that match empty strings", "[Re
 		REQUIRE(input == compare);
 	}
 
-	SECTION("testing begining of line empty")
+	SECTION("testing beginning of line empty")
 	{
 		rxman.handle_action("highlight", {"feedlist", "^", "blue", "red"});
 		rxman.quote_and_highlight(input, "feedlist");
@@ -145,32 +145,32 @@ TEST_CASE("RegexManager does not hang on regexes that match empty strings", "[Re
 	}
 }
 
-TEST_CASE("RegexManager does insert extra garbage", "[RegexManager]")
+TEST_CASE("quote_and_highlight wraps highlighted text in numbered tags", "[RegexManager]")
 {
 	RegexManager rxman;
 	std::string input =  "The quick brown fox jumps over the lazy dog";
-	std::string start1output = "<0>The</> quick <1>brown</> fox jumps over <0>the</> lazy dog";
-	std::string start2output = "<1>The</> quick <0>brown</> fox jumps over <1>the</> lazy dog";
-	std::string output = "The <0>quick</> <1>brown</> fox jumps over the lazy dog";
 
-	SECTION("Begining of line match first")
+	SECTION("Beginning of line match first")
 	{
+		const std::string output = "<0>The</> quick <1>brown</> fox jumps over <0>the</> lazy dog";
 		rxman.handle_action("highlight", {"article", "the", "red"});
 		rxman.handle_action("highlight", {"article", "brown", "blue"});
 		rxman.quote_and_highlight(input, "article");
-		REQUIRE(input == start1output);
+		REQUIRE(input == output);
 	}
 
-	SECTION("Begining of line match second")
+	SECTION("Beginning of line match second")
 	{
+		const std::string output = "<1>The</> quick <0>brown</> fox jumps over <1>the</> lazy dog";
 		rxman.handle_action("highlight", {"article", "brown", "blue"});
 		rxman.handle_action("highlight", {"article", "the", "red"});
 		rxman.quote_and_highlight(input, "article");
-		REQUIRE(input == start2output);
+		REQUIRE(input == output);
 	}
 
-	SECTION("testing empty line")
+	SECTION("2 non-overlapping highlights")
 	{
+		const std::string output = "The <0>quick</> <1>brown</> fox jumps over the lazy dog";
 		rxman.handle_action("highlight", {"article", "quick", "red"});
 		rxman.handle_action("highlight", {"article", "brown", "blue"});
 		rxman.quote_and_highlight(input, "article");

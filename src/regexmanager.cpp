@@ -1,6 +1,7 @@
 #include "regexmanager.h"
 
 #include <cstring>
+#include <iostream>
 #include <stack>
 
 #include "config.h"
@@ -223,57 +224,50 @@ void RegexManager::remove_last_regex(const std::string& location)
 	regexes.erase(it);
 }
 
-std::string RegexManager::extract_outer_marker(const std::string str, const int index)
+std::string RegexManager::extract_outer_marker(std::string str, const int index)
 {
-	regmatch_t pmatch;
-	regex_t regex;
-	// Non-zero number or non-angle bracket characters, enclosed in angle brackets
-	const char *regexpat = "<[^<>]+>";
-	std::string close = "</>";
+	// Non-zero number of non-angle bracket characters, enclosed in angle brackets
+	std::regex regex("<[^<>]+>", std::regex::extended);
+	const std::string close = "</>";
 	std::string tmptag;
 	std::stack<std::string> tagstack;
 	int offset = 0;
 
-	if (str.length() == 0)
+	if (str.length() == 0) {
 		return "";
-	// Compile regex
-	if ( regcomp(&regex, regexpat, REG_EXTENDED) != 0 )
-		return "";
+	}
 
-	int err = regexec(&regex, str.c_str(), 1, &pmatch, 0);
-	while (err == 0) {
+	std::smatch sm;
+	while ( std::regex_search( str, sm, regex )) {
 		// Get found tag
-		tmptag = str.substr( pmatch.rm_so+offset, pmatch.rm_eo-pmatch.rm_so);
+		tmptag = sm.str();
 		// If the found tag is after the spot we're looking for
-		if (pmatch.rm_so+offset > index ){
-			if(!tagstack.empty() ) {
+		if (sm.position(0) + offset > index ){
+			if (!tagstack.empty() ) {
 				return tagstack.top();
 			} else {
 				return "";
 			}
 		}
-		// If the found tag is a closeing tag
 		if (tmptag == close) {
 			//If a tag is closed without a partner error out
 			if (tagstack.empty()) {
 				return "";
 			} else {
-				//otherwise pop it off the stack
 				tagstack.pop();
 			}
-		} else { //othewise add the tag to the stack
+		} else {
 			tagstack.push(tmptag);
 		}
-		offset += pmatch.rm_eo;
-		err = regexec(&regex, str.c_str() + offset, 1, &pmatch, 0);
+		offset += sm.position(0) + sm.length(0);
+		str = sm.suffix().str();
 	}
 
 	if(!tagstack.empty()) {
 		return tagstack.top();
 	}
 
-		return "";
-
+	return "";
 }
 
 void RegexManager::quote_and_highlight(std::string& str,
@@ -286,11 +280,11 @@ void RegexManager::quote_and_highlight(std::string& str,
 		if (!regex) {
 			continue;
 		}
-		std::string outer_marker = "";
 		regmatch_t pmatch;
 		unsigned int offset = 0;
 		int err = regexec(regex, str.c_str(), 1, &pmatch, 0);
 		while (err == 0) {
+			std::string outer_marker = "";
 			if (pmatch.rm_so != pmatch.rm_eo) {
 				outer_marker = extract_outer_marker(str, offset + pmatch.rm_so);
 				const std::string marker = strprintf::fmt("<%u>", i);
