@@ -244,7 +244,10 @@ matrix:
             - i18nspector
       env:
         - CHECKS=i18nspector
-    - env:
+    - addons:
+        apt:
+          packages: []
+      env:
         - CHECKS="cargo-fmt"
 
 install:
