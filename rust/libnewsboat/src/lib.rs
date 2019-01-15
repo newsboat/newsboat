@@ -4,6 +4,7 @@ extern crate strprintf;
 extern crate backtrace;
 #[macro_use]
 extern crate nom;
+extern crate dirs;
 extern crate once_cell;
 #[cfg(test)]
 #[macro_use]
@@ -20,5 +21,6 @@ pub mod logger;
 pub mod human_panic;
 pub mod utils;
 
+pub mod config;
 pub mod cliargsparser;
 pub mod fmtstrformatter;
