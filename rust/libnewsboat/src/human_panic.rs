@@ -14,20 +14,20 @@
 //! ```text
 //! Newsboat crashed; sorry about that. Please submit a report (below)
 //! so we can investigate:
-//! 
+//!
 //! - online: https://github.com/newsboat/newsboat/issues/new
-//! 
+//!
 //!   You will need a GitHub account.
-//! 
+//!
 //! - via email: newsboat@googlegroups.com
-//! 
+//!
 //! We might have some follow-up questions, so please check your email
 //! periodically. Thank you!
-//! 
+//!
 //! The crash report:
-//! 
+//!
 //! --->8----->8----->8----->8----->8----->8----->8----->8----->8----->8----->8---
-//! 
+//!
 //! Newsboat version: 2.14.0
 //! Couldn't determine the crash cause.
 //! Message: Can't obtain the global logger
@@ -61,15 +61,15 @@
 //!   12:     0x7f251efc2b16 - __libc_start_main
 //!   13:     0x559d48a6d399 - _start
 //!   14:                0x0 - <unknown>
-//! 
+//!
 //! --->8----->8----->8----->8----->8----->8----->8----->8----->8----->8----->8---
 //! ```
 //!
 //! All you (the programmer) need to do is run this module's `setup()` somewhere towards the
 //! beginning of the program.
-use std::panic::{self, PanicInfo};
 use backtrace::Backtrace;
-use std::io::{self, Write, BufWriter, stderr};
+use std::io::{self, stderr, BufWriter, Write};
+use std::panic::{self, PanicInfo};
 
 /// Sets up a panic hook with a user-friendly message.
 ///
@@ -81,7 +81,7 @@ pub fn setup() {
                 print_panic_msg(panic_info)
                     .expect("An error occurred while preparing a crash report");
             }));
-        },
+        }
         Ok(_) => {}
     }
 }
@@ -92,32 +92,40 @@ fn print_panic_msg(panic_info: &PanicInfo) -> io::Result<()> {
     let handle = stderr.lock();
     let mut stderr = BufWriter::new(handle);
 
-    writeln!(&mut stderr,
-             "Newsboat crashed; sorry about that. Please submit a report (below)\n\
-             so we can investigate:\n\
-             \n\
-             - online: https://github.com/newsboat/newsboat/issues/new\n\
-             \n  \
-             You will need a GitHub account.\n\
-             \n\
-             - via email: newsboat@googlegroups.com\n\
-             \n\
-             We might have some follow-up questions, so please check your email\n\
-             periodically. Thank you!\n\
-             \n\
-             The crash report:\n\
-             \n\
-             --->8----->8----->8----->8----->8----->8----->8----->8----->8----->8----->8---\n")?;
+    writeln!(
+        &mut stderr,
+        "Newsboat crashed; sorry about that. Please submit a report (below)\n\
+         so we can investigate:\n\
+         \n\
+         - online: https://github.com/newsboat/newsboat/issues/new\n\
+         \n  \
+         You will need a GitHub account.\n\
+         \n\
+         - via email: newsboat@googlegroups.com\n\
+         \n\
+         We might have some follow-up questions, so please check your email\n\
+         periodically. Thank you!\n\
+         \n\
+         The crash report:\n\
+         \n\
+         --->8----->8----->8----->8----->8----->8----->8----->8----->8----->8----->8---\n"
+    )?;
 
-    writeln!(&mut stderr, "Newsboat version: {}", env!("CARGO_PKG_VERSION"))?;
+    writeln!(
+        &mut stderr,
+        "Newsboat version: {}",
+        env!("CARGO_PKG_VERSION")
+    )?;
     writeln!(&mut stderr, "{}", get_crash_cause(&panic_info))?;
     writeln!(&mut stderr, "{}", get_error_message(&panic_info))?;
     writeln!(&mut stderr, "{}", get_location(&panic_info))?;
 
     writeln!(&mut stderr, "{:#?}", Backtrace::new())?;
 
-    writeln!(&mut stderr,
-             "\n--->8----->8----->8----->8----->8----->8----->8----->8----->8----->8----->8---")?;
+    writeln!(
+        &mut stderr,
+        "\n--->8----->8----->8----->8----->8----->8----->8----->8----->8----->8----->8---"
+    )?;
 
     Ok(())
 }

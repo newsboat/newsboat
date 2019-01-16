@@ -1,27 +1,27 @@
+extern crate dirs;
 extern crate rand;
 extern crate regex;
-extern crate url;
-extern crate dirs;
 extern crate unicode_width;
+extern crate url;
 
-use logger::{self, Level};
 use self::regex::Regex;
-use self::url::{Url};
-use self::url::percent_encoding::*;
-use std::process::{Command, Stdio};
-use std::io::Write;
 use self::unicode_width::UnicodeWidthStr;
+use self::url::percent_encoding::*;
+use self::url::Url;
+use logger::{self, Level};
+use std::io::Write;
+use std::process::{Command, Stdio};
 
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
 }
 
-pub fn consolidate_whitespace( input: String ) -> String {
-    let found = input.find( |c: char| !c.is_whitespace() );
+pub fn consolidate_whitespace(input: String) -> String {
+    let found = input.find(|c: char| !c.is_whitespace());
     let mut result = String::new();
 
     if let Some(found) = found {
-        let (leading,rest) = input.split_at(found);
+        let (leading, rest) = input.split_at(found);
         let lastchar = input.chars().rev().next().unwrap();
 
         result.push_str(leading);
@@ -77,7 +77,7 @@ pub fn absolute_url(base_url: &str, link: &str) -> String {
 }
 
 pub fn resolve_tilde(path: String) -> String {
-    let mut file_path:String = path;
+    let mut file_path: String = path;
     let home_path = dirs::home_dir();
 
     if let Some(home_path) = home_path {
@@ -89,8 +89,7 @@ pub fn resolve_tilde(path: String) -> String {
             let tmp_file_path = file_path.clone();
 
             if tmp_file_path.len() > 1 {
-
-                let (tilde,remaining) = tmp_file_path.split_at(2);
+                let (tilde, remaining) = tmp_file_path.split_at(2);
 
                 if tilde == "~/" {
                     file_path = home_path_string + "/" + remaining;
@@ -116,7 +115,7 @@ pub fn is_http_url(url: &str) -> bool {
 }
 
 pub fn is_query_url(url: &str) -> bool {
-   url.starts_with("query:")
+    url.starts_with("query:")
 }
 
 pub fn is_filter_url(url: &str) -> bool {
@@ -167,18 +166,19 @@ pub fn is_exec_url(url: &str) -> bool {
 /// ```
 pub fn censor_url(url: &str) -> String {
     if !url.is_empty() && !is_special_url(url) {
-        Url::parse(url).map(|mut url| {
-            if url.username() != "" || url.password().is_some()  {
-                // can not panic. If either username or password is present we can change both.
-                url.set_username("*").unwrap();
-                url.set_password(Some("*")).unwrap();
-            }
-            url
-        })
-        .as_ref()
-        .map(|url| url.as_str())
-        .unwrap_or(url)
-        .to_owned()
+        Url::parse(url)
+            .map(|mut url| {
+                if url.username() != "" || url.password().is_some() {
+                    // can not panic. If either username or password is present we can change both.
+                    url.set_username("*").unwrap();
+                    url.set_password(Some("*")).unwrap();
+                }
+                url
+            })
+            .as_ref()
+            .map(|url| url.as_str())
+            .unwrap_or(url)
+            .to_owned()
     } else {
         url.into()
     }
@@ -197,7 +197,7 @@ pub fn trim(rs_str: String) -> String {
 }
 
 pub fn trim_end(rs_str: String) -> String {
-    let x: &[_] = &['\n','\r'];
+    let x: &[_] = &['\n', '\r'];
     rs_str.trim_right_matches(x).to_string()
 }
 
@@ -217,20 +217,12 @@ pub fn quote_if_necessary(input: String) -> String {
 }
 
 pub fn get_random_value(max: u32) -> u32 {
-   rand::random::<u32>() % max
+    rand::random::<u32>() % max
 }
 
 pub fn is_valid_color(color: &str) -> bool {
     const COLORS: [&str; 9] = [
-        "black",
-        "red",
-        "green",
-        "yellow",
-        "blue",
-        "magenta",
-        "cyan",
-        "white",
-        "default",
+        "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white", "default",
     ];
 
     if COLORS.contains(&color) {
@@ -249,8 +241,8 @@ pub fn is_valid_color(color: &str) -> bool {
     false
 }
 
-pub fn is_valid_attribute(attribute:  &str) -> bool {
-    const VALID_ATTRIBUTES: [&str; 9]  = [
+pub fn is_valid_attribute(attribute: &str) -> bool {
+    const VALID_ATTRIBUTES: [&str; 9] = [
         "standout",
         "underline",
         "reverse",
@@ -264,8 +256,8 @@ pub fn is_valid_attribute(attribute:  &str) -> bool {
     VALID_ATTRIBUTES.contains(&attribute)
 }
 
-pub fn strwidth( rs_str: &str) -> usize {
-    let control = rs_str.chars().fold( true, |acc, x| acc & !x.is_control());
+pub fn strwidth(rs_str: &str) -> usize {
+    let control = rs_str.chars().fold(true, |acc, x| acc & !x.is_control());
 
     if control {
         return UnicodeWidthStr::width(rs_str);
@@ -281,10 +273,11 @@ pub fn strwidth_stfl(rs_str: &str) -> usize {
         match chars.next() {
             Some('<') => {
                 if chars.peek() != Some(&'>') {
-                    reduce += 3; }
-            },
+                    reduce += 3;
+                }
+            }
             Some(_) => continue,
-            None => break
+            None => break,
         }
     }
 
@@ -305,10 +298,10 @@ pub fn unescape_url(rs_str: String) -> Option<String> {
     let result = percent_decode(rs_str.as_bytes());
     let result = result.decode_utf8();
     if result.is_err() {
-            return None
+        return None;
     }
 
-    Some(result.unwrap().replace("\0",""))
+    Some(result.unwrap().replace("\0", ""))
 }
 
 /// Runs given command in a shell, and returns the output (from stdout; stderr is printed to the
@@ -332,8 +325,12 @@ pub fn run_command(cmd: &str, param: &str) {
         .stderr(Stdio::null())
         .spawn();
     if let Err(error) = child {
-        log!(Level::Debug,
-             "utils::run_command: spawning a child for \"{}\" failed: {}", cmd, error);
+        log!(
+            Level::Debug,
+            "utils::run_command: spawning a child for \"{}\" failed: {}",
+            cmd,
+            error
+        );
     }
 
     // We deliberately *don't* wait for the child to finish.
@@ -355,7 +352,9 @@ pub fn run_program(cmd_with_args: &[&str], input: &str) -> String {
                 Level::Debug,
                 "utils::run_program: spawning a child for \"{:?}\" \
                  with input \"{}\" failed: {}",
-                cmd_with_args, input, error
+                cmd_with_args,
+                input,
+                error
             );
         })
         .and_then(|mut child| {
@@ -402,11 +401,15 @@ pub fn make_title(rs_str: String) -> String {
     result = v[0];
 
     // Throw away common webpage suffixes: .html, .php, .aspx, .htm
-    result = result.trim_right_matches(".html").trim_right_matches(".php");
-    result = result.trim_right_matches(".aspx").trim_right_matches(".htm");
+    result = result
+        .trim_right_matches(".html")
+        .trim_right_matches(".php");
+    result = result
+        .trim_right_matches(".aspx")
+        .trim_right_matches(".htm");
 
     // 'title with dashes'
-    let result = result.replace('-'," ").replace('_'," ");
+    let result = result.replace('-', " ").replace('_', " ");
 
     //'Title with dashes'
     //let result = "";
@@ -419,8 +422,8 @@ pub fn make_title(rs_str: String) -> String {
     // Un-escape any percent-encoding, e.g. "It%27s%202017%21" -> "It's
     // 2017!"
     match unescape_url(result) {
-            None => String::new(),
-            Some(f) => f,
+        None => String::new(),
+        Some(f) => f,
     }
 }
 
@@ -434,50 +437,59 @@ mod tests {
     fn t_replace_all() {
         assert_eq!(
             replace_all(String::from("aaa"), "a", "b"),
-            String::from("bbb"));
+            String::from("bbb")
+        );
         assert_eq!(
             replace_all(String::from("aaa"), "aa", "ba"),
-            String::from("baa"));
+            String::from("baa")
+        );
         assert_eq!(
             replace_all(String::from("aaaaaa"), "aa", "ba"),
-            String::from("bababa"));
-        assert_eq!(
-            replace_all(String::new(), "a", "b"),
-            String::new());
+            String::from("bababa")
+        );
+        assert_eq!(replace_all(String::new(), "a", "b"), String::new());
 
         let input = String::from("aaaa");
         assert_eq!(replace_all(input.clone(), "b", "c"), input);
 
         assert_eq!(
             replace_all(String::from("this is a normal test text"), " t", " T"),
-            String::from("this is a normal Test Text"));
+            String::from("this is a normal Test Text")
+        );
 
         assert_eq!(
             replace_all(String::from("o o o"), "o", "<o>"),
-            String::from("<o> <o> <o>"));
+            String::from("<o> <o> <o>")
+        );
     }
 
     #[test]
     fn t_consolidate_whitespace() {
         assert_eq!(
             consolidate_whitespace(String::from("LoremIpsum")),
-            String::from("LoremIpsum"));
+            String::from("LoremIpsum")
+        );
         assert_eq!(
             consolidate_whitespace(String::from("Lorem Ipsum")),
-            String::from("Lorem Ipsum"));
+            String::from("Lorem Ipsum")
+        );
         assert_eq!(
             consolidate_whitespace(String::from(" Lorem \t\tIpsum \t ")),
-            String::from(" Lorem Ipsum "));
+            String::from(" Lorem Ipsum ")
+        );
         assert_eq!(
             consolidate_whitespace(String::from(" Lorem \r\n\r\n\tIpsum")),
-            String::from(" Lorem Ipsum"));
+            String::from(" Lorem Ipsum")
+        );
         assert_eq!(consolidate_whitespace(String::new()), String::new());
         assert_eq!(
             consolidate_whitespace(String::from("    Lorem \t\tIpsum \t ")),
-            String::from("    Lorem Ipsum "));
+            String::from("    Lorem Ipsum ")
+        );
         assert_eq!(
             consolidate_whitespace(String::from("   Lorem \r\n\r\n\tIpsum")),
-            String::from("   Lorem Ipsum"));
+            String::from("   Lorem Ipsum")
+        );
     }
 
     #[test]
@@ -561,13 +573,19 @@ mod tests {
     fn t_quote() {
         assert_eq!(quote("".to_string()), "\"\"");
         assert_eq!(quote("Hello World!".to_string()), "\"Hello World!\"");
-        assert_eq!(quote("\"Hello World!\"".to_string()), "\"\\\"Hello World!\\\"\"");
+        assert_eq!(
+            quote("\"Hello World!\"".to_string()),
+            "\"\\\"Hello World!\\\"\""
+        );
     }
 
     #[test]
     fn t_quote_if_necessary() {
         assert_eq!(quote_if_necessary("".to_string()), "");
-        assert_eq!(quote_if_necessary("Hello World!".to_string()), "\"Hello World!\"");
+        assert_eq!(
+            quote_if_necessary("Hello World!".to_string()),
+            "\"Hello World!\""
+        );
     }
 
     #[test]
@@ -588,17 +606,8 @@ mod tests {
         }
 
         let valid = [
-            "black",
-            "red",
-            "green",
-            "yellow",
-            "blue",
-            "magenta",
-            "cyan",
-            "white",
-            "default",
-            "color0",
-            "color163",
+            "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white", "default",
+            "color0", "color163",
         ];
 
         for color in &valid {
@@ -639,12 +648,7 @@ mod tests {
 
     #[test]
     fn t_is_valid_attribte() {
-        let invalid = [
-            "foo",
-            "bar",
-            "baz",
-            "quux",
-        ];
+        let invalid = ["foo", "bar", "baz", "quux"];
         for attr in &invalid {
             assert!(!is_valid_attribute(attr));
         }
@@ -667,17 +671,26 @@ mod tests {
 
     #[test]
     fn t_unescape_url() {
-        assert!(unescape_url(String::from("foo%20bar")).unwrap() ==
-                String::from("foo bar"));
-        assert!(unescape_url(
-                String::from("%21%23%24%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D")).unwrap() ==
-            String::from("!#$&'()*+,/:;=?@[]"));
+        assert!(unescape_url(String::from("foo%20bar")).unwrap() == String::from("foo bar"));
+        assert!(
+            unescape_url(String::from(
+                "%21%23%24%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D"
+            ))
+            .unwrap()
+                == String::from("!#$&'()*+,/:;=?@[]")
+        );
     }
 
     #[test]
     fn t_get_command_output() {
-        assert_eq!(get_command_output("ls /dev/null"), "/dev/null\n".to_string());
-        assert_eq!(get_command_output("a-program-that-is-guaranteed-to-not-exists"), "".to_string());
+        assert_eq!(
+            get_command_output("ls /dev/null"),
+            "/dev/null\n".to_string()
+        );
+        assert_eq!(
+            get_command_output("a-program-that-is-guaranteed-to-not-exists"),
+            "".to_string()
+        );
     }
 
     #[test]
@@ -719,12 +732,14 @@ mod tests {
         let input1 = "this is a multine-line\ntest string";
         assert_eq!(run_program(&["cat"], input1), input1);
 
-        assert_eq!(run_program(&["echo", "-n", "hello world"], ""), "hello world");
+        assert_eq!(
+            run_program(&["echo", "-n", "hello world"], ""),
+            "hello world"
+        );
     }
 
     #[test]
     fn t_make_title() {
-
         let mut input = String::from("http://example.com/Item");
         assert!(make_title(input) == String::from("Item"));
 

@@ -2,13 +2,13 @@
 extern crate libnewsboat;
 extern crate tempfile;
 
-use libnewsboat::logger::{self, get_instance, Level};
 use self::tempfile::TempDir;
+use libnewsboat::logger::{self, get_instance, Level};
 use std::fs::File;
-use std::io::{Result, BufReader, BufRead};
+use std::io::{BufRead, BufReader, Result};
 use std::path;
 
-fn log_contains_n_lines(logfile: &path::Path, n: usize)  -> Result<()> {
+fn log_contains_n_lines(logfile: &path::Path, n: usize) -> Result<()> {
     let file = File::open(logfile)?;
     let reader = BufReader::new(file);
     assert_eq!(reader.lines().count(), n);
