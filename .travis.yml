@@ -249,6 +249,8 @@ matrix:
           packages: []
       env:
         - CHECKS="cargo-fmt"
+      before_install:
+        - rustup component add rustfmt
 
 install:
   - export CXX=$COMPILER
