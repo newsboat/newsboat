@@ -263,7 +263,7 @@ std::string RegexManager::extract_outer_marker(std::string str, const int index)
 		str = sm.suffix().str();
 	}
 
-	if(!tagstack.empty()) {
+	if (!tagstack.empty()) {
 		return tagstack.top();
 	}
 
