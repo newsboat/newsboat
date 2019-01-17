@@ -130,7 +130,7 @@ TEST_CASE("RegexManager does not hang on regexes that match empty strings", "[Re
 		REQUIRE(input == compare);
 	}
 
-	SECTION("testing begining of line empty")
+	SECTION("testing beginning of line empty")
 	{
 		rxman.handle_action("highlight", {"feedlist", "^", "blue", "red"});
 		rxman.quote_and_highlight(input, "feedlist");
@@ -143,4 +143,76 @@ TEST_CASE("RegexManager does not hang on regexes that match empty strings", "[Re
 		rxman.quote_and_highlight(input, "feedlist");
 		REQUIRE(input == compare);
 	}
+}
+
+TEST_CASE("quote_and_highlight wraps highlighted text in numbered tags", "[RegexManager]")
+{
+	RegexManager rxman;
+	std::string input =  "The quick brown fox jumps over the lazy dog";
+
+	SECTION("Beginning of line match first")
+	{
+		const std::string output = "<0>The</> quick <1>brown</> fox jumps over <0>the</> lazy dog";
+		rxman.handle_action("highlight", {"article", "the", "red"});
+		rxman.handle_action("highlight", {"article", "brown", "blue"});
+		rxman.quote_and_highlight(input, "article");
+		REQUIRE(input == output);
+	}
+
+	SECTION("Beginning of line match second")
+	{
+		const std::string output = "<1>The</> quick <0>brown</> fox jumps over <1>the</> lazy dog";
+		rxman.handle_action("highlight", {"article", "brown", "blue"});
+		rxman.handle_action("highlight", {"article", "the", "red"});
+		rxman.quote_and_highlight(input, "article");
+		REQUIRE(input == output);
+	}
+
+	SECTION("2 non-overlapping highlights")
+	{
+		const std::string output = "The <0>quick</> <1>brown</> fox jumps over the lazy dog";
+		rxman.handle_action("highlight", {"article", "quick", "red"});
+		rxman.handle_action("highlight", {"article", "brown", "blue"});
+		rxman.quote_and_highlight(input, "article");
+		REQUIRE(input == output);
+	}
+}
+
+TEST_CASE("Extract_outer_marker pulls tags", "[RegexManager]")
+{
+	RegexManager rxman;
+	std::string out;
+
+	SECTION("Find outer tag basic")
+	{
+		std::string input = "<1>TestString</>";
+		out = rxman.extract_outer_marker(input, 7);
+
+		REQUIRE(out == "<1>");
+	}
+
+	SECTION("Find nested tag")
+	{
+		std::string input = "<1>Nested<2>Test</>String</>";
+		out = rxman.extract_outer_marker(input, 14);
+
+		REQUIRE(out == "<2>");
+	}
+
+	SECTION("Find outer tag with second set")
+	{
+		std::string input = "<1>Nested<2>Test</>String</>";
+		out = rxman.extract_outer_marker(input, 21);
+
+		REQUIRE(out == "<1>");
+	}
+
+	SECTION("Find unclosed nested tag")
+	{
+		std::string input = "<1>Nested<2>Test</>String";
+		out = rxman.extract_outer_marker(input, 21);
+
+		REQUIRE(out == "<1>");
+	}
+
 }
