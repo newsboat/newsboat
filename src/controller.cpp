@@ -261,7 +261,7 @@ int Controller::run(const CliArgsParser& args)
 		if (cookies.empty()) {
 			std::cout << strprintf::fmt(
 				_("ERROR: You must set `cookie-cache` to use "
-				  "Newsblur.\n"));
+				  "NewsBlur.\n"));
 			return EXIT_FAILURE;
 		}
 
