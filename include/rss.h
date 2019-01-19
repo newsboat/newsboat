@@ -32,6 +32,7 @@ public:
 	}
 	void set_title(const std::string& t);
 
+	/// \brief Feed's canonical URL. Empty if feed was never fetched.
 	const std::string& link() const
 	{
 		return link_;
@@ -299,6 +300,8 @@ public:
 	std::shared_ptr<RssItem> get_item_by_guid_unlocked(
 		const std::string& guid);
 
+	/// \brief User-specified feed URL. Can't be empty, otherwise we wouldn't
+	/// be able to fetch the feed.
 	const std::string& rssurl() const
 	{
 		return rssurl_;
