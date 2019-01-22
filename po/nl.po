@@ -282,7 +282,7 @@ msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Fout: openen van het cachebestand ‘%s’ is mislukt: %s"
 
 #: src/controller.cpp:271
-msgid "ERROR: You must set `cookie-cache` to use Newsblur.\n"
+msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
 msgstr ""
 
 #: src/controller.cpp:279
