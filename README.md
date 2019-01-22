@@ -13,7 +13,7 @@ https://newsboat.org/
 
 Alternatively, you can check out the latest version from the Git repository:
 
-    git clone git://github.com/newsboat/newsboat.git
+	$ git clone git://github.com/newsboat/newsboat.git
 
 Dependencies
 ------------
@@ -75,6 +75,13 @@ You'll probably want to run the tests; here's how:
 
 Note the use of ramdisk as `TMPDIR`: some tests create temporary files, which
 slows them down if `TMPDIR` is on HDD or even SSD.
+
+We check the formatting of the Rust code during CI using
+[rust-fmt](https://github.com/rust-lang/rustfmt).  To make sure your code is
+properly formated install and run rust-fmt:
+
+	$ rustup component add rustfmt
+	$ cargo fmt
 
 License
 -------
