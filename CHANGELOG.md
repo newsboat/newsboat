@@ -74,7 +74,7 @@ Sanchez, Friedrich von Never, Kamil Wsół, glacambre.
     (Kamil Wsół)
 
 ### Changed
-- Require `cookie-cache` setting if Newsblur API is used (Alexander Batischev)
+- Require `cookie-cache` setting if NewsBlur API is used (Alexander Batischev)
 - Translations: Russian, Ukrainian (Alexander Batischev), Swedish (Dennis
     Öberg), German (Lysander Trischler)
 - json.hpp updated to version 3.2.0
@@ -100,7 +100,7 @@ Schuster.
 - `:q` as alternative to `:quit` (Franz König)
 - Support for `open-in-browser` in URL dialog, thus fixing many user macros in
     that dialog (Felix Viernickel) (#194)
-- "Author" field for items fetched from Newsblur (Chris Nehren)
+- "Author" field for items fetched from NewsBlur (Chris Nehren)
 - Coding style, mostly enforced through `clang-format`. Non-enforceable things
     are documented in docs/code-style.markdown (Alexander Batischev)
 - A check in `bind-key` that will now throw an error on binding to
@@ -215,7 +215,7 @@ Karlsson, Kamil Wsół, Mike Crute, Niels Kobschätzki, and maiki.
 ### Fixed
 
 - Do not create XDG data dir if not using XDG (#8)
-- When used with Newsblur, check on startup if cookie-cache exists or can be
+- When used with NewsBlur, check on startup if cookie-cache exists or can be
     created, because integration doesn't work without cookies (#13)
 - Builds on AARCH64 and ARMHF (#43)
 - Only show an error message once when unknown option is supplied
@@ -271,7 +271,7 @@ project.
 - New proxy type: socks5h. It proxies DNS requests as well as connections (David
     Kalnischkies)
 - Support for h5 and h6 HTML elements (Nikos Tsipinakis)
-- Notify users if Newsblur feed they're subscribed to no longer exists (#494)
+- Notify users if NewsBlur feed they're subscribed to no longer exists (#494)
     (Andrew Martin)
 - `passwordeval` settings for all remote APIs, which obtains a password by
     running a user-specified command (Andrew Martin)

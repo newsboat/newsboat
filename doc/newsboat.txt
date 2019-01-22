@@ -377,7 +377,7 @@ filter feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
 NewsBlur
 ~~~~~~~~
 
-https://newsblur.com/[Newsblur] is a successor to Google Reader. Configuration
+https://newsblur.com/[NewsBlur] is a successor to Google Reader. Configuration
 basically works the same as with <<_the_old_reader,The Old Reader>>.
 
 First, set your <<urls-source,`urls-source`>>:

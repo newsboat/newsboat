@@ -68,7 +68,7 @@ newsblur-min-items||<number>||20||This variable sets the number of articles that
 newsblur-password||<password>||""||This variable sets your NewsBlur password for NewsBlur support. Double quotes should be escaped, i.e. you should write +{backslash}"+ instead of `"`.||newsblur-password "here_goesAquote:\""
 newsblur-passwordfile||<path>||""||A more secure alternative to the above, by storing your password elsewhere in your system.||newsblur-passwordfile "~/.newsboat/newsblur-pw.txt"
 newsblur-passwordeval||<command>||""||Another secure alternative, is providing your password from an external command that is evaluated during login. This can be used to read your password from a gpg encrypted file or your system keyring.||newsblur-passwordeval "command some-parameter"
-newsblur-url||<url>||"https://newsblur.com"||Configures the URL where the newsblur instance resides.||newsblur-url "https://localhost"
+newsblur-url||<url>||"https://newsblur.com"||Configures the URL where the NewsBlur instance resides.||newsblur-url "https://localhost"
 notify-always||[yes/no]||no||If set to `no`, notifications will only be made when there are new feeds or articles. If set to `yes`, notifications will be made regardless.||notify-always yes
 notify-beep||[yes/no]||no||If set to `yes`, then the speaker beep on new articles.||notify-beep yes
 notify-format||<string>||"newsboat: finished reload, %f unread feeds (%n unread articles total)"||Format string that is used for formatting notifications. See the chapter on format strings for more information.||notify-format "%d new articles (%n unread articles, %f unread feeds)"
