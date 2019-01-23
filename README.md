@@ -46,7 +46,10 @@ is as simple as:
 	$ make
 	$ sudo make install
 
-(And if you ever need to uninstall it, use `make uninstall`.)
+And if you ever need to uninstall it, use `make uninstall`.
+
+Cross-compilers need to set `CARGO_BUILD_TARGET`; see [cargo
+documentation](https://doc.rust-lang.org/cargo/reference/config.html#environment-variables).
 
 Support
 -------
