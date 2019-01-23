@@ -55,11 +55,21 @@ RSSPPLIB_OUTPUT=librsspp.a
 
 CARGO_FLAGS+=--verbose
 ifeq ($(PROFILE),1)
+ifdef CARGO_BUILD_TARGET
+NEWSBOATLIB_OUTPUT=target/$(CARGO_BUILD_TARGET)/debug/libnewsboat.a
+LDFLAGS+=-L./target/$(CARGO_BUILD_TARGET)/debug
+else
 NEWSBOATLIB_OUTPUT=target/debug/libnewsboat.a
 LDFLAGS+=-L./target/debug
+endif
+else
+ifdef CARGO_BUILD_TARGET
+NEWSBOATLIB_OUTPUT=target/$(CARGO_BUILD_TARGET)/release/libnewsboat.a
+LDFLAGS+=-L./target/$(CARGO_BUILD_TARGET)/release
 else
 NEWSBOATLIB_OUTPUT=target/release/libnewsboat.a
-LDFLAGS+=-L.//target/release
+LDFLAGS+=-L./target/release
+endif
 CARGO_FLAGS+=--release
 endif
 LDFLAGS+=-lnewsboat -lpthread -ldl
