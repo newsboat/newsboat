@@ -58,7 +58,10 @@ void prepare_header(
 			_("Podcast Download URL: "),
 			utils::censor_url(item->enclosure_url()));
 		if (!item->enclosure_type().empty()) {
-			dlurl.append(strprintf::fmt("%s%s", _("type: "), item->enclosure_type()));
+			dlurl.append(
+					strprintf::fmt(" (%s%s)",
+						_("type: "),
+						item->enclosure_type()));
 		}
 		lines.push_back(std::make_pair(LineType::softwrappable, dlurl));
 	}
