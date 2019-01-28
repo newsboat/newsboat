@@ -26,6 +26,7 @@ static const auto ITEM_DESCRIPTON = std::string("<p>Hello, world!</p>");
 static const auto ITEM_DESCRIPTON_RENDERED = std::string("Hello, world!");
 static const auto ITEM_ENCLOSURE_URL =
 	std::string("https://example.com/see-more.mp3");
+static const auto ITEM_ENCLOSURE_TYPE = std::string("audio/mpeg");
 static const auto ITEM_FLAGS = std::string("wasdhjkl");
 // Flags are sorted for rendering.
 static const auto ITEM_FLAGS_RENDERED = std::string("adhjklsw");
@@ -95,6 +96,28 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 			"Link: " + ITEM_LINK + '\n' +
 			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
 			"Podcast Download URL: " + ITEM_ENCLOSURE_URL + '\n' +
+			" \n" +
+			ITEM_DESCRIPTON_RENDERED + '\n';
+
+		REQUIRE(result == expected);
+	}
+
+	SECTION("Item with an enclosure that has a MIME type") {
+		item->set_description(ITEM_DESCRIPTON);
+		item->set_enclosure_url(ITEM_ENCLOSURE_URL);
+		item->set_enclosure_type(ITEM_ENCLOSURE_TYPE);
+
+		const auto result = item_renderer::to_plain_text(cfg, item);
+
+		const auto expected = std::string() +
+			"Feed: " + FEED_TITLE + '\n' +
+			"Title: " + ITEM_TITLE + '\n' +
+			"Author: " + ITEM_AUTHOR + '\n' +
+			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
+			"Link: " + ITEM_LINK + '\n' +
+			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
+			"Podcast Download URL: " + ITEM_ENCLOSURE_URL
+				+ " (type: " + ITEM_ENCLOSURE_TYPE + ")\n" +
 			" \n" +
 			ITEM_DESCRIPTON_RENDERED + '\n';
 
