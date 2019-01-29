@@ -1,6 +1,7 @@
 #include "cliargsparser.h"
 
 #include <getopt.h>
+#include <cstdlib>
 
 #include "globals.h"
 #include "strprintf.h"
