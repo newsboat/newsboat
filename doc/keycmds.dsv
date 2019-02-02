@@ -48,7 +48,7 @@ next-dialog||^V||Go to next dialog.
 prev-dialog||^G||Go to previous dialog.
 pipe-to|||||Pipe article to command.
 sort||g||Sort feeds/articles by interactively choosing the sort method.
-revsort||G||Sort feeds/articles by interactively choosing the sort method (reversed).
+rev-sort||G||Sort feeds/articles by interactively choosing the sort method (reversed).
 up||UP||Goes up one item in the list.
 down||DOWN||Goes down one item in the list.
 pageup||PPAGE||Goes up one page in the list.
