@@ -584,6 +584,7 @@ void View::view_dialogs()
 		std::shared_ptr<DialogsFormAction> dialogs(
 			new DialogsFormAction(this, dialogs_str, cfg));
 		dialogs->set_parent_formaction(fa);
+		set_bindings(dialogs);
 		apply_colors(dialogs);
 		dialogs->init();
 		formaction_stack.push_back(dialogs);
