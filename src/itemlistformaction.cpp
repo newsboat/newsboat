@@ -952,17 +952,17 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 		gen_datestr(item.first->pubDate_timestamp(), datetime_format));
 	if (feed->rssurl() != item.first->feedurl() &&
 		item.first->get_feedptr() != nullptr) {
-		auto feedtitle = utils::replace_all(
-			item.first->get_feedptr()->title(), "<", "<>");
+		auto feedtitle = utils::quote_for_stfl(
+			item.first->get_feedptr()->title());
 		utils::remove_soft_hyphens(feedtitle);
 		fmt.register_fmt('T', feedtitle);
 	}
 
-	auto itemtitle = utils::replace_all(item.first->title(), "<", "<>");
+	auto itemtitle = utils::quote_for_stfl(item.first->title());
 	utils::remove_soft_hyphens(itemtitle);
 	fmt.register_fmt('t', itemtitle);
 
-	auto itemauthor = utils::replace_all(item.first->author(), "<", "<>");
+	auto itemauthor = utils::quote_for_stfl(item.first->author());
 	utils::remove_soft_hyphens(itemauthor);
 	fmt.register_fmt('a', itemauthor);
 
