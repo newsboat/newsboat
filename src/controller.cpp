@@ -659,12 +659,10 @@ std::vector<std::shared_ptr<RssItem>> Controller::search_for_items(
 	return items;
 }
 
-void Controller::enqueue_url(const std::string& url,
-	const std::string& title,
-	const time_t pubDate,
+void Controller::enqueue_url(std::shared_ptr<RssItem> item,
 	std::shared_ptr<RssFeed> feed)
 {
-	queueManager.enqueue_url(url, title, pubDate, feed);
+	queueManager.enqueue_url(item, feed);
 }
 
 void Controller::reload_urls_file()

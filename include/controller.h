@@ -52,10 +52,7 @@ public:
 	{
 		return refresh_on_start;
 	}
-	void enqueue_url(const std::string& url,
-		const std::string& title,
-		const time_t pubDate,
-		std::shared_ptr<RssFeed> feed);
+	void enqueue_url(std::shared_ptr<RssItem> item, std::shared_ptr<RssFeed> feed);
 
 	void reload_urls_file();
 	void edit_urls_file();

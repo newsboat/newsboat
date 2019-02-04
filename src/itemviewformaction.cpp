@@ -173,10 +173,7 @@ void ItemViewFormAction::process_operation(Operation op,
 	case OP_ENQUEUE: {
 		if (item->enclosure_url().length() > 0 &&
 			utils::is_http_url(item->enclosure_url())) {
-			v->get_ctrl()->enqueue_url(item->enclosure_url(),
-				item->title(),
-				item->pubDate_timestamp(),
-				feed);
+            v->get_ctrl()->enqueue_url(item, feed);
 			v->set_status(
 				strprintf::fmt(_("Added %s to download queue."),
 					item->enclosure_url()));
