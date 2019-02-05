@@ -816,6 +816,14 @@ std::string utils::quote_if_necessary(const std::string& str)
 	return RustString(rs_quote_if_necessary(str.c_str()));
 }
 
+std::string utils::quote_url_for_cmdline(const std::string& str)
+{
+	std::string quoted = replace_all(str, "'", "%27");
+	quoted.insert(0, "'");
+	quoted.append("'");
+	return quoted;
+}
+
 void utils::set_common_curl_options(CURL* handle, ConfigContainer* cfg)
 {
 	if (cfg) {

@@ -41,7 +41,7 @@ void UrlViewFormAction::process_operation(Operation op,
 		if (posstr.length() > 0) {
 			unsigned int idx = utils::to_u(posstr, 0);
 			v->set_status(_("Starting browser..."));
-			v->open_in_browser(links[idx].first);
+			v->open_in_browser(links[idx].first, feed->rssurl());
 			v->set_status("");
 		} else {
 			v->show_error(_("No link selected!"));
@@ -73,7 +73,7 @@ void UrlViewFormAction::process_operation(Operation op,
 
 		if (idx < links.size()) {
 			v->set_status(_("Starting browser..."));
-			v->open_in_browser(links[idx].first);
+			v->open_in_browser(links[idx].first, feed->rssurl());
 			v->set_status("");
 		}
 	} break;

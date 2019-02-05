@@ -136,6 +136,7 @@ namespace utils {
 	unsigned int get_random_value(unsigned int max);
 
 	std::string quote_if_necessary(const std::string& str);
+	std::string quote_url_for_cmdline(const std::string& str);
 
 	void set_common_curl_options(CURL* handle, ConfigContainer* cfg);
 

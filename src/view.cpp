@@ -390,28 +390,25 @@ void View::open_in_pager(const std::string& filename)
 	pop_current_formaction();
 }
 
-void View::open_in_browser(const std::string& url)
+void View::open_in_browser(const std::string& itemurl, const std::string& feedurl)
 {
 	formaction_stack.push_back(std::shared_ptr<FormAction>());
 	current_formaction = formaction_stack_size() - 1;
 	std::string cmdline;
 	std::string browser = cfg->get_configvalue("browser");
-	if (browser.find("%u") != std::string::npos) {
+	if (browser.find("%u") != std::string::npos ||
+			browser.find("%U") != std::string::npos) {
 		FmtStrFormatter fmt;
-		std::string newurl;
-		newurl = utils::replace_all(url, "'", "%27");
-		newurl.insert(0, "'");
-		newurl.append("'");
-		fmt.register_fmt('u', newurl);
+		fmt.register_fmt('u', utils::quote_url_for_cmdline(itemurl));
+		fmt.register_fmt('U', utils::quote_url_for_cmdline(feedurl));
 		cmdline = fmt.do_format(browser, 0);
 	} else {
 		if (browser != "")
 			cmdline.append(browser);
 		else
 			cmdline.append("lynx");
-		cmdline.append(" '");
-		cmdline.append(utils::replace_all(url, "'", "%27"));
-		cmdline.append("'");
+		cmdline.append(" ");
+		cmdline.append(utils::quote_url_for_cmdline(itemurl));
 	}
 	Stfl::reset();
 	utils::run_interactively(cmdline, "View::open_in_browser");

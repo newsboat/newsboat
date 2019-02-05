@@ -56,7 +56,7 @@ void ListFormAction::open_unread_items_in_browser(std::shared_ptr<RssFeed> feed,
 		if (tabcount <
 			cfg->get_configvalue_as_int("max-browser-tabs")) {
 			if (item->unread()) {
-				v->open_in_browser(item->link());
+				v->open_in_browser(item->link(), feed->rssurl());
 				tabcount += 1;
 				item->set_unread(!markread);
 			}

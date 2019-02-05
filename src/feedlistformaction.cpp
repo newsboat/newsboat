@@ -217,11 +217,7 @@ REDO:
 						"at position `%s': %s",
 						feedpos,
 						feed->link());
-					if (!feed->link().empty()) {
-						v->open_in_browser(feed->link());
-					} else if (!feed->rssurl().empty()) {
-						v->open_in_browser(feed->rssurl());
-					} else {
+					if (feed->rssurl().empty()) {
 						// rssurl can't be empty, so if we got to this branch,
 						// something is clearly wrong with Newsboat internals.
 						// That's why we write a message to the log, and not
@@ -230,6 +226,10 @@ REDO:
 							"FeedListFormAction: cannot open feed in browser "
 							"because both `link' and `rssurl' fields are "
 							"empty");
+					} else {
+						const std::string& feedurl = feed->rssurl();
+						const std::string& itemurl = feed->link().empty() ? feedurl : feed->link();
+						v->open_in_browser(itemurl, feedurl);
 					}
 				} else {
 					v->show_error(

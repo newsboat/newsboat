@@ -127,7 +127,7 @@ void ItemListFormAction::process_operation(Operation op,
 					visible_items[itempos].first->guid(),
 					true);
 				v->open_in_browser(
-					visible_items[itempos].first->link());
+					visible_items[itempos].first->link(), feed->rssurl());
 				if (!cfg->get_configvalue_as_bool(
 					    "openbrowser-and-mark-jumps-to-"
 					    "next-unread")) {
@@ -154,7 +154,7 @@ void ItemListFormAction::process_operation(Operation op,
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
 				v->open_in_browser(
-					visible_items[itempos].first->link());
+					visible_items[itempos].first->link(), feed->rssurl());
 				invalidate(itempos);
 			}
 		} else {

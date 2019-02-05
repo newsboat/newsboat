@@ -210,7 +210,7 @@ void ItemViewFormAction::process_operation(Operation op,
 	case OP_OPENINBROWSER:
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: starting browser");
 		v->set_status(_("Starting browser..."));
-		v->open_in_browser(item->link());
+		v->open_in_browser(item->link(), feed->rssurl());
 		v->set_status("");
 		break;
 	case OP_BOOKMARK:
@@ -383,7 +383,7 @@ void ItemViewFormAction::process_operation(Operation op,
 			idx);
 		if (idx < links.size()) {
 			v->set_status(_("Starting browser..."));
-			v->open_in_browser(links[idx].first);
+			v->open_in_browser(links[idx].first, feed->rssurl());
 			v->set_status("");
 		}
 	} break;
@@ -516,7 +516,7 @@ void ItemViewFormAction::finished_qna(Operation op)
 		sscanf(qna_responses[0].c_str(), "%u", &idx);
 		if (idx && idx - 1 < links.size()) {
 			v->set_status(_("Starting browser..."));
-			v->open_in_browser(links[idx - 1].first);
+			v->open_in_browser(links[idx - 1].first, feed->rssurl());
 			v->set_status("");
 		}
 	} break;
