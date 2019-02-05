@@ -16,11 +16,10 @@ QueueManager::QueueManager(ConfigContainer* cfg_, ConfigPaths* paths_)
 	, paths(paths_)
 {}
 
-void QueueManager::enqueue_url(const std::string& url,
-	const std::string& title,
-	const time_t pubDate,
+void QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 	std::shared_ptr<RssFeed> feed)
 {
+	const std::string& url = item->enclosure_url();
 	bool url_found = false;
 	std::fstream f;
 	f.open(paths->queue_file(), std::fstream::in);
@@ -43,7 +42,7 @@ void QueueManager::enqueue_url(const std::string& url,
 		f.open(paths->queue_file(),
 			std::fstream::app | std::fstream::out);
 		const std::string filename =
-			generate_enqueue_filename(url, title, pubDate, feed);
+			generate_enqueue_filename(item, feed);
 		f << url << " " << Stfl::quote(filename) << std::endl;
 		f.close();
 	}
@@ -60,11 +59,13 @@ std::string get_hostname_from_url(const std::string& url)
 	return hostname;
 }
 
-std::string QueueManager::generate_enqueue_filename(const std::string& url,
-	const std::string& title,
-	const time_t pubDate,
-	std::shared_ptr<RssFeed> feed)
+std::string QueueManager::generate_enqueue_filename(std::shared_ptr<RssItem> item,
+		std::shared_ptr<RssFeed> feed)
 {
+	const std::string& url = item->enclosure_url();
+	const std::string& title = item->title();
+	const time_t pubDate = item->pubDate_timestamp();
+
 	std::string dlformat = cfg->get_configvalue("download-path");
 	if (dlformat[dlformat.length() - 1] != NEWSBEUTER_PATH_SEP[0]) {
 		dlformat.append(NEWSBEUTER_PATH_SEP);
@@ -105,6 +106,16 @@ std::string QueueManager::generate_enqueue_filename(const std::string& url,
 	fmt.register_fmt('t', title);
 	fmt.register_fmt('e', extension);
 
+	if (feed->rssurl() != item->feedurl() &&
+		item->get_feedptr() != nullptr) {
+		std::string feedtitle = utils::quote_for_stfl(
+			item->get_feedptr()->title());
+		utils::remove_soft_hyphens(feedtitle);
+		fmt.register_fmt('N', feedtitle);
+	} else {
+		fmt.register_fmt('N', feed->title());
+    }
+
 	const std::string dlpath = fmt.do_format(dlformat);
 	return dlpath;
 }
@@ -129,10 +140,7 @@ void QueueManager::autoenqueue(std::shared_ptr<RssFeed> feed)
 					"QueueManager::autoenqueue: enqueuing "
 					"`%s'",
 					item->enclosure_url());
-				enqueue_url(item->enclosure_url(),
-					item->title(),
-					item->pubDate_timestamp(),
-					feed);
+				enqueue_url(item, feed);
 				item->set_enqueued(true);
 			}
 		}
