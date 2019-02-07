@@ -403,10 +403,11 @@ void View::open_in_browser(const std::string& itemurl, const std::string& feedur
 		fmt.register_fmt('U', utils::quote_url_for_cmdline(feedurl));
 		cmdline = fmt.do_format(browser, 0);
 	} else {
-		if (browser != "")
+		if (browser != "") {
 			cmdline.append(browser);
-		else
+		} else {
 			cmdline.append("lynx");
+		}
 		cmdline.append(" ");
 		cmdline.append(utils::quote_url_for_cmdline(itemurl));
 	}

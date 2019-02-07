@@ -224,8 +224,7 @@ REDO:
 						// just display it to the user.
 						LOG(Level::INFO,
 							"FeedListFormAction: cannot open feed in browser "
-							"because both `link' and `rssurl' fields are "
-							"empty");
+							"because the `rssurl' field is empty");
 					} else {
 						const std::string& feedurl = feed->rssurl();
 						const std::string& itemurl = feed->link().empty() ? feedurl : feed->link();
