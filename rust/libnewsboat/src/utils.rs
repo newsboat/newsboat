@@ -216,6 +216,13 @@ pub fn quote_if_necessary(input: String) -> String {
     }
 }
 
+pub fn quote_url_for_cmdline(url: String) -> String {
+    let mut url = url.replace("\'", "%27");
+    url.insert(0, '\'');
+    url.push('\'');
+    url
+}
+
 pub fn get_random_value(max: u32) -> u32 {
     rand::random::<u32>() % max
 }
