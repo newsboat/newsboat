@@ -126,7 +126,8 @@ int Controller::run(const CliArgsParser& args)
 			args.importfile);
 		urlcfg = new FileUrlReader(configpaths.url_file());
 		urlcfg->reload();
-		import_opml(args.importfile);
+		static_cast<OpmlUrlReader*>(urlcfg)->import(args.importfile);
+		urlcfg->write_config();
 		return EXIT_SUCCESS;
 	}
 
@@ -415,7 +416,7 @@ int Controller::run(const CliArgsParser& args)
 	feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 
 	if (args.do_export) {
-		export_opml();
+		OpmlUrlReader::export_opml(feedcontainer);
 		return EXIT_SUCCESS;
 	}
 
@@ -602,32 +603,6 @@ void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
 	if (!unattended) {
 		v->set_feedlist(feedcontainer.feeds);
 	}
-}
-
-void Controller::import_opml(const std::string& filename)
-{
-	if (!opml::import(filename, urlcfg)) {
-		std::cout << strprintf::fmt(
-				     _("An error occurred while parsing %s."),
-				     filename)
-			  << std::endl;
-		return;
-	} else {
-		std::cout << strprintf::fmt(
-				     _("Import of %s finished."), filename)
-			  << std::endl;
-	}
-}
-
-void Controller::export_opml()
-{
-	xmlDocPtr root = opml::generate(feedcontainer);
-
-	xmlSaveCtxtPtr savectx = xmlSaveToFd(1, nullptr, 1);
-	xmlSaveDoc(savectx, root);
-	xmlSaveClose(savectx);
-
-	xmlFreeDoc(root);
 }
 
 std::vector<std::shared_ptr<RssItem>> Controller::search_for_items(

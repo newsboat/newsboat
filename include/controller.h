@@ -10,7 +10,6 @@
 #include "feedcontainer.h"
 #include "filtercontainer.h"
 #include "fslock.h"
-#include "opml.h"
 #include "queuemanager.h"
 #include "regexmanager.h"
 #include "reloader.h"
