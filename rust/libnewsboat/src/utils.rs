@@ -281,7 +281,12 @@ pub fn strwidth_stfl(rs_str: &str) -> usize {
         }
     }
 
-    strwidth(rs_str) - reduce
+    let width = strwidth(rs_str);
+    if width < reduce {
+        0
+    } else {
+        width - reduce
+    }
 }
 
 pub fn is_valid_podcast_type(mimetype: &str) -> bool {
@@ -630,6 +635,7 @@ mod tests {
         assert!(strwidth_stfl("x<>x") == 4);
         assert!(strwidth_stfl("\u{F91F}") == 2);
         assert!(strwidth_stfl("\u{0007}") == 1);
+        assert!(strwidth_stfl("<a") == 0); // #415
     }
 
     #[test]
