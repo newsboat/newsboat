@@ -599,7 +599,10 @@ mod tests {
     fn t_quote_url_for_cmdline() {
         assert_eq!(quote_url_for_cmdline("".to_string()), "''");
         assert_eq!(quote_url_for_cmdline("'".to_string()), "'%27'");
-        assert_eq!(quote_url_for_cmdline("'one'two'".to_string()), "'%27one%27two%27'");
+        assert_eq!(
+            quote_url_for_cmdline("'one'two'".to_string()),
+            "'%27one%27two%27'"
+        );
         assert_eq!(
             quote_url_for_cmdline("http://example.com/with'single'quotes".to_string()),
             "'http://example.com/with%27single%27quotes'"
