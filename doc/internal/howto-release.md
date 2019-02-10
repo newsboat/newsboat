@@ -12,7 +12,10 @@ master repository and shell access to newsboat.org.
     * Mention the name of contributor
     * Acknowledge contributions from people whose changes didn't make it into
         the lists
-2. Update version in config.h
+2. Update version:
+    * config.h
+    * rust/libnewsboat/Cargo.toml
+    * rust/libnewsboat-ffi/Cargo.toml
 3. Update links to docs and FAQ in README
 4. Create new tag:
     * `git tag --sign -u 'newsboat@googlegroups.com' rVERSION`

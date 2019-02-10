@@ -2,14 +2,32 @@
 
 
 
-## Unreleased
+## 2.14.1 - 2019-02-10
+
+Lists below only mention user-visible changes, but I would also like to
+acknowledge contributions from the following people: kkdd, Raphael Nestler.
 
 ### Added
+- Support for cross-compilation with CARGO_BUILD_TARGET environment variable
+    (maxice8)
+- `%N` format for `download-path` and `download-filename-format` settings. This
+    format is replaced by item's original feed-title, even when selected through
+    the query feed (Felix Viernickel) (#428)
+
 ### Changed
-### Deprecated
-### Removed
+- Translations: Polish (Carno)
+- When opening a never-fetched feed in the browser, just use the feed's URL (Alexander Batischev)
+- Update vendored version of Catch2 to 2.6.0
+
 ### Fixed
-### Security
+- Build on FreeBSD (Tobias Kortkamp)
+- Messed-up highlighting when regex matches start-of-line (zaowen) (#401)
+- Failing to update The Old Reader feeds (Alexander Batischev) (#406)
+- "NewsBlur" spelling throughout the docs and messages (zaowen) (#409)
+- Lack of space between podcast URL and its MIME type (Alexander Batischev) (#425)
+- "rev-sort" command name in docs (Jakob Kogler)
+- Keybindings not applied in dialogs view (Felix Viernickel) (#431)
+- Spacer formatter not working in podlist-format (Alexander Batischev) (#434)
 
 
 
