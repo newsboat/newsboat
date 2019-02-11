@@ -9,6 +9,9 @@ CPPCHECK_JOBS?=5
 
 # compiler
 CXX?=c++
+# Compiler for building executables meant to be run on the
+# host system during cross compilation
+CXX_FOR_BUILD?=$(CXX)
 
 # compiler and linker flags
 DEFINES=-DLOCALEDIR=\"$(localedir)\"
@@ -35,6 +38,7 @@ LDFLAGS+=-fprofile-arcs -ftest-coverage
 endif
 
 CXXFLAGS:=$(BARE_CXXFLAGS) $(WARNFLAGS) $(DEFINES) $(CXXFLAGS)
+CXXFLAGS_FOR_BUILD?=$(CXXFLAGS)
 
 LIB_SOURCES:=$(shell cat mk/libboat.deps)
 LIB_OBJS:=$(patsubst %.cpp,%.o,$(LIB_SOURCES))
@@ -196,13 +200,13 @@ doc/xhtml/faq.html: doc/faq.txt
 	echo "td > pre { margin: 0; white-space: pre-wrap; }" >> doc/xhtml/docbook-xsl.css
 
 doc/generate: doc/generate.cpp doc/split.h
-	$(CXX) $(CXXFLAGS) -o doc/generate doc/generate.cpp
+	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) -o doc/generate doc/generate.cpp
 
 doc/newsboat-cfgcmds.txt: doc/generate doc/configcommands.dsv
 	doc/generate doc/configcommands.dsv > doc/newsboat-cfgcmds.txt
 
 doc/generate2: doc/generate2.cpp
-	$(CXX) $(CXXFLAGS) -o doc/generate2 doc/generate2.cpp
+	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) -o doc/generate2 doc/generate2.cpp
 
 doc/newsboat-keycmds.txt: doc/generate2 doc/keycmds.dsv
 	doc/generate2 doc/keycmds.dsv > doc/newsboat-keycmds.txt
@@ -220,7 +224,7 @@ doc/podboat.1: doc/manpage-podboat.txt doc/chapter-podcasts.txt doc/podboat-cfgc
 	$(A2X) -f manpage doc/manpage-podboat.txt
 
 doc/gen-example-config: doc/gen-example-config.cpp doc/split.h
-	$(CXX) $(CXXFLAGS) -o doc/gen-example-config doc/gen-example-config.cpp
+	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) -o doc/gen-example-config doc/gen-example-config.cpp
 
 doc/example-config: doc/gen-example-config doc/configcommands.dsv
 	sed 's/+{backslash}"+/`\\"`/g' doc/configcommands.dsv | doc/gen-example-config > doc/example-config
