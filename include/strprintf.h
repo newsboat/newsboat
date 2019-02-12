@@ -1,8 +1,8 @@
 #ifndef NEWSBOAT_STRPRINTF_H_
 #define NEWSBOAT_STRPRINTF_H_
 
-#include <memory>
 #include <string>
+#include <tuple>
 #include <vector>
 
 namespace newsboat {
