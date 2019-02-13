@@ -508,6 +508,8 @@ ArticleSortStrategy ConfigContainer::get_article_sort_strategy()
 			ss.sm = ArtSortMethod::LINK;
 		} else if (methods[0] == "guid") {
 			ss.sm = ArtSortMethod::GUID;
+		} else if (methods[0] == "random") {
+			ss.sm = ArtSortMethod::RANDOM;
 		}
 	}
 

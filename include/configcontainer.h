@@ -18,7 +18,7 @@ enum class FeedSortMethod {
 	LAST_UPDATED
 };
 
-enum class ArtSortMethod { TITLE, FLAGS, AUTHOR, LINK, GUID, DATE };
+enum class ArtSortMethod { TITLE, FLAGS, AUTHOR, LINK, GUID, DATE, RANDOM };
 
 enum class SortDirection { ASC, DESC };
 
