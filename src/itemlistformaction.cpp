@@ -627,14 +627,14 @@ void ItemListFormAction::process_operation(Operation op,
 		/// This string is related to the letters in parentheses in the
 		/// "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
 		/// messages
-		std::string input_options = _("dtfalg");
+		std::string input_options = _("dtfalgr");
 		char c = v->confirm(
 			_("Sort by "
-			  "(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"),
+			  "(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"),
 			input_options);
 		if (!c)
 			break;
-		unsigned int n_options = ((std::string) "dtfalg").length();
+		unsigned int n_options = ((std::string) "dtfalgr").length();
 		if (input_options.length() < n_options)
 			break;
 		if (c == input_options.at(0)) {
@@ -650,17 +650,19 @@ void ItemListFormAction::process_operation(Operation op,
 			cfg->set_configvalue("article-sort-order", "link-asc");
 		} else if (c == input_options.at(5)) {
 			cfg->set_configvalue("article-sort-order", "guid-asc");
+		} else if (c == input_options.at(6)) {
+			cfg->set_configvalue("article-sort-order", "random");
 		}
 	} break;
 	case OP_REVSORT: {
-		std::string input_options = _("dtfalg");
+		std::string input_options = _("dtfalgr");
 		char c = v->confirm(
 			_("Reverse Sort by "
-			  "(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid?"),
+			  "(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"),
 			input_options);
 		if (!c)
 			break;
-		unsigned int n_options = ((std::string) "dtfalg").length();
+		unsigned int n_options = ((std::string) "dtfalgr").length();
 		if (input_options.length() < n_options)
 			break;
 		if (c == input_options.at(0)) {
@@ -678,6 +680,8 @@ void ItemListFormAction::process_operation(Operation op,
 			cfg->set_configvalue("article-sort-order", "link-desc");
 		} else if (c == input_options.at(5)) {
 			cfg->set_configvalue("article-sort-order", "guid-desc");
+		} else if (c == input_options.at(6)) {
+			cfg->set_configvalue("article-sort-order", "random");
 		}
 	} break;
 	case OP_INT_RESIZE:

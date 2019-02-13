@@ -668,6 +668,9 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 						  b->pubDate_timestamp());
 			});
 		break;
+	case ArtSortMethod::RANDOM:
+		std::random_shuffle(items_.begin(), items_.end());
+		break;
 	}
 }
 
