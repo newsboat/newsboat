@@ -2,11 +2,11 @@
 
 #include <algorithm>
 #include <cerrno>
-#include <cstring>
 #include <curl/curl.h>
 #include <functional>
 #include <iostream>
 #include <langinfo.h>
+#include <random>
 #include <sstream>
 #include <sys/utsname.h>
 #include <string.h>
@@ -589,89 +589,8 @@ void RssFeed::sort(const ArticleSortStrategy& sort_strategy)
 
 void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 {
-	switch (sort_strategy.sm) {
-	case ArtSortMethod::TITLE:
-		std::stable_sort(items_.begin(),
-			items_.end(),
-			[&](std::shared_ptr<RssItem> a,
-				std::shared_ptr<RssItem> b) {
-				return sort_strategy.sd ==
-						SortDirection::DESC
-					? (utils::strnaturalcmp(a->title().c_str(),
-						   b->title().c_str()) > 0)
-					: (utils::strnaturalcmp(a->title().c_str(),
-						   b->title().c_str()) < 0);
-			});
-		break;
-	case ArtSortMethod::FLAGS:
-		std::stable_sort(items_.begin(),
-			items_.end(),
-			[&](std::shared_ptr<RssItem> a,
-				std::shared_ptr<RssItem> b) {
-				return sort_strategy.sd ==
-						SortDirection::DESC
-					? (strcmp(a->flags().c_str(),
-						   b->flags().c_str()) > 0)
-					: (strcmp(a->flags().c_str(),
-						   b->flags().c_str()) < 0);
-			});
-		break;
-	case ArtSortMethod::AUTHOR:
-		std::stable_sort(items_.begin(),
-			items_.end(),
-			[&](std::shared_ptr<RssItem> a,
-				std::shared_ptr<RssItem> b) {
-				return sort_strategy.sd ==
-						SortDirection::DESC
-					? (strcmp(a->author().c_str(),
-						   b->author().c_str()) > 0)
-					: (strcmp(a->author().c_str(),
-						   b->author().c_str()) < 0);
-			});
-		break;
-	case ArtSortMethod::LINK:
-		std::stable_sort(items_.begin(),
-			items_.end(),
-			[&](std::shared_ptr<RssItem> a,
-				std::shared_ptr<RssItem> b) {
-				return sort_strategy.sd ==
-						SortDirection::DESC
-					? (strcmp(a->link().c_str(),
-						   b->link().c_str()) > 0)
-					: (strcmp(a->link().c_str(),
-						   b->link().c_str()) < 0);
-			});
-		break;
-	case ArtSortMethod::GUID:
-		std::stable_sort(items_.begin(),
-			items_.end(),
-			[&](std::shared_ptr<RssItem> a,
-				std::shared_ptr<RssItem> b) {
-				return sort_strategy.sd ==
-						SortDirection::DESC
-					? (strcmp(a->guid().c_str(),
-						   b->guid().c_str()) > 0)
-					: (strcmp(a->guid().c_str(),
-						   b->guid().c_str()) < 0);
-			});
-		break;
-	case ArtSortMethod::DATE:
-		std::stable_sort(items_.begin(),
-			items_.end(),
-			[&](std::shared_ptr<RssItem> a,
-				std::shared_ptr<RssItem> b) {
-				// date is descending by default
-				return sort_strategy.sd == SortDirection::ASC
-					? (a->pubDate_timestamp() >
-						  b->pubDate_timestamp())
-					: (a->pubDate_timestamp() <
-						  b->pubDate_timestamp());
-			});
-		break;
-	case ArtSortMethod::RANDOM:
-		std::random_shuffle(items_.begin(), items_.end());
-		break;
-	}
+	std::random_device rd;
+	sort_unlocked(sort_strategy, rd);
 }
 
 void RssFeed::remove_old_deleted_items()

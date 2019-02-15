@@ -1,6 +1,8 @@
 #ifndef NEWSBOAT_RSS_H_
 #define NEWSBOAT_RSS_H_
 
+#include <algorithm>
+#include <cstring>
 #include <memory>
 #include <mutex>
 #include <string>
@@ -344,6 +346,97 @@ public:
 	}
 
 	void sort(const ArticleSortStrategy& sort_strategy);
+
+	template <class URBG>
+	void sort_unlocked(
+		const ArticleSortStrategy& sort_strategy,
+		URBG&& rng)
+	{
+		switch (sort_strategy.sm) {
+		case ArtSortMethod::TITLE:
+			std::stable_sort(items_.begin(),
+				items_.end(),
+				[&](std::shared_ptr<RssItem> a,
+					std::shared_ptr<RssItem> b) {
+					return sort_strategy.sd ==
+							SortDirection::DESC
+						? (utils::strnaturalcmp(a->title().c_str(),
+							   b->title().c_str()) > 0)
+						: (utils::strnaturalcmp(a->title().c_str(),
+							   b->title().c_str()) < 0);
+				});
+			break;
+		case ArtSortMethod::FLAGS:
+			std::stable_sort(items_.begin(),
+				items_.end(),
+				[&](std::shared_ptr<RssItem> a,
+					std::shared_ptr<RssItem> b) {
+					return sort_strategy.sd ==
+							SortDirection::DESC
+						? (strcmp(a->flags().c_str(),
+							   b->flags().c_str()) > 0)
+						: (strcmp(a->flags().c_str(),
+							   b->flags().c_str()) < 0);
+				});
+			break;
+		case ArtSortMethod::AUTHOR:
+			std::stable_sort(items_.begin(),
+				items_.end(),
+				[&](std::shared_ptr<RssItem> a,
+					std::shared_ptr<RssItem> b) {
+					return sort_strategy.sd ==
+							SortDirection::DESC
+						? (strcmp(a->author().c_str(),
+							   b->author().c_str()) > 0)
+						: (strcmp(a->author().c_str(),
+							   b->author().c_str()) < 0);
+				});
+			break;
+		case ArtSortMethod::LINK:
+			std::stable_sort(items_.begin(),
+				items_.end(),
+				[&](std::shared_ptr<RssItem> a,
+					std::shared_ptr<RssItem> b) {
+					return sort_strategy.sd ==
+							SortDirection::DESC
+						? (strcmp(a->link().c_str(),
+							   b->link().c_str()) > 0)
+						: (strcmp(a->link().c_str(),
+							   b->link().c_str()) < 0);
+				});
+			break;
+		case ArtSortMethod::GUID:
+			std::stable_sort(items_.begin(),
+				items_.end(),
+				[&](std::shared_ptr<RssItem> a,
+					std::shared_ptr<RssItem> b) {
+					return sort_strategy.sd ==
+							SortDirection::DESC
+						? (strcmp(a->guid().c_str(),
+							   b->guid().c_str()) > 0)
+						: (strcmp(a->guid().c_str(),
+							   b->guid().c_str()) < 0);
+				});
+			break;
+		case ArtSortMethod::DATE:
+			std::stable_sort(items_.begin(),
+				items_.end(),
+				[&](std::shared_ptr<RssItem> a,
+					std::shared_ptr<RssItem> b) {
+					// date is descending by default
+					return sort_strategy.sd == SortDirection::ASC
+						? (a->pubDate_timestamp() >
+							  b->pubDate_timestamp())
+						: (a->pubDate_timestamp() <
+							  b->pubDate_timestamp());
+				});
+			break;
+		case ArtSortMethod::RANDOM:
+			std::shuffle(items_.begin(), items_.end(), rng);
+			break;
+		}
+	}
+
 	void sort_unlocked(const ArticleSortStrategy& sort_strategy);
 
 	void remove_old_deleted_items();

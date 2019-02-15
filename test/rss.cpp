@@ -1,6 +1,8 @@
 #include "rss.h"
 #include "rsspp.h"
 
+#include <random>
+
 #include "3rd-party/catch.hpp"
 #include "cache.h"
 #include "configcontainer.h"
@@ -488,6 +490,48 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[rss]")
 		REQUIRE(articles[2]->pubDate_timestamp() == 42);
 		REQUIRE(articles[3]->pubDate_timestamp() == 23);
 		REQUIRE(articles[4]->pubDate_timestamp() == 7);
+	}
+
+	SECTION("random")
+	{
+		ArticleSortStrategy ss;
+		ss.sm = ArtSortMethod::RANDOM;
+
+		class G
+		{
+			private:
+				uint32_t i = 0;
+			public:
+				typedef uint32_t result_type;
+
+				static constexpr result_type min()
+				{
+					return 1;
+				}
+
+				static constexpr result_type max()
+				{
+					return 5;
+				}
+
+				result_type operator()()
+				{
+					i = i + 1;
+					if (i > 5)
+					{
+						i = 1;
+					}
+					return i;
+				}
+		} rng;
+
+		f.sort_unlocked(ss, rng);
+		auto articles = f.items();
+		REQUIRE(articles[0]->guid() == "1");
+		REQUIRE(articles[1]->guid() == "2");
+		REQUIRE(articles[2]->guid() == "3");
+		REQUIRE(articles[3]->guid() == "4");
+		REQUIRE(articles[4]->guid() == "0");
 	}
 }
 
