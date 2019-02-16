@@ -1037,6 +1037,14 @@ Identifier:Meaning
 [[download-filename-format-Y]]<<download-filename-format-Y,+Y+>>:Year when podcast episode was published formatted as yyyy
 |======================================================================
 
+.[[browser-format-table]]<<browser-format-table,+Available Identifiers for the browser command+>>
+[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
+|======================================================================
+Identifier:Meaning
+[[browser-format-u]]<<browser-format-u,+u+>>:When opening an article, contains the article's URL. When opening a feed, contains the feed's URL, or the feed's alternative URL, if it exists
+[[browser-format-U]]<<browser-format-U,+U+>>:Contains the feed's URL
+|======================================================================
+
 Dialog Titles
 ^^^^^^^^^^^^^
 
