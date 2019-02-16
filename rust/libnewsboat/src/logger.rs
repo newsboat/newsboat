@@ -193,11 +193,9 @@ impl Logger {
     ///
     /// This method is a wrapper around `log_raw()`.
     pub fn log(&self, level: Level, message: &str) {
-        if level as usize > self.get_loglevel() {
-            return;
+        if level == Level::UserError || level as usize <= self.get_loglevel() {
+            self.log_raw(level, message.as_bytes())
         }
-
-        self.log_raw(level, message.as_bytes())
     }
 
     /// Writes binary data to the log.
@@ -232,14 +230,16 @@ impl Logger {
 
         let mut files = self.files.lock().expect("Someone poisoned logger's mutex");
 
-        if let Some(ref mut logfile) = files.logfile {
-            let level = format!("{}: ", level);
+        if level as usize <= self.get_loglevel() {
+            if let Some(ref mut logfile) = files.logfile {
+                let level = format!("{}: ", level);
 
-            // Ignoring the error since checking every log() call will be too bothersome.
-            let _ = logfile.write_all(timestamp.as_bytes());
-            let _ = logfile.write_all(level.as_bytes());
-            let _ = logfile.write_all(data);
-            let _ = logfile.write_all("\n".as_bytes());
+                // Ignoring the error since checking every log() call will be too bothersome.
+                let _ = logfile.write_all(timestamp.as_bytes());
+                let _ = logfile.write_all(level.as_bytes());
+                let _ = logfile.write_all(data);
+                let _ = logfile.write_all("\n".as_bytes());
+            }
         }
 
         if level == Level::UserError {
@@ -737,17 +737,11 @@ mod tests {
     }
 
     #[test]
-    fn t_writes_to_errorlog_at_usererror_and_above() {
+    fn t_writes_to_errorlog_at_all_loglevels() {
         let message = (Level::UserError, "hello".to_string());
 
-        LogLinesCounter::new()
-            .with_messages(vec![message.clone()])
-            .at_levels(vec![Level::None])
-            .expected_errorlog_lines_count(0)
-            .test()
-            .unwrap();
-
         let log_levels = vec![
+            Level::None,
             Level::UserError,
             Level::Critical,
             Level::Error,
@@ -773,15 +767,8 @@ mod tests {
             ),
         ];
 
-        let nolog_levels = vec![Level::None];
-        LogLinesCounter::new()
-            .with_messages(messages.clone())
-            .at_levels(nolog_levels)
-            .expected_errorlog_lines_count(0)
-            .test()
-            .unwrap();
-
         let log_levels = vec![
+            Level::None,
             Level::UserError,
             Level::Critical,
             Level::Error,
