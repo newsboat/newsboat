@@ -443,15 +443,11 @@ mod tests {
     }
     */
 
-    /*
-    TEST_CASE("do_format replaces \"%%\" with a percent sign",
-                    "[FmtStrFormatter]")
-    {
-            FmtStrFormatter fmt;
-
-            REQUIRE(fmt.do_format("%%") == "%");
+    #[test]
+    fn t_do_format_replaces_double_percent_sign_with_a_percent_sign() {
+        let fmt = FmtStrFormatter::new();
+        assert_eq!(fmt.do_format("%%", 0), "%");
     }
-    */
 
     /*
     TEST_CASE("Nested conditionals confuse do_format", "[FmtStrFormatter]") {
