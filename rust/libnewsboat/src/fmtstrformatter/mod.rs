@@ -132,11 +132,8 @@ impl FmtStrFormatter {
 
 #[cfg(test)]
 mod tests {
-    /*
     use super::*;
-    */
 
-    /*
     #[test]
     fn t_do_format_replaces_variables_with_values_one_variable() {
         let mut fmt = FmtStrFormatter::new();
@@ -147,9 +144,7 @@ mod tests {
         assert_eq!(fmt.do_format("%?b?%b&no?", 0), "no");
         assert_eq!(fmt.do_format("%?a?[%-4a]&no?", 0), "[AAA ]");
     }
-    */
 
-    /*
     #[test]
     fn t_do_format_replaces_variables_with_values_two_variables() {
         let mut fmt = FmtStrFormatter::new();
@@ -159,10 +154,10 @@ mod tests {
 
         assert_eq!(
             fmt.do_format("asdf | %a | %?c?%a%b&%b%a? | qwert", 0),
-            "asdf | AAA | BBBAAA | qwert");
+            "asdf | AAA | BBBAAA | qwert"
+        );
         assert_eq!(fmt.do_format("%?c?asdf?", 0), "");
     }
-    */
 
     /*
     #[test]
@@ -467,7 +462,6 @@ mod tests {
     }
     */
 
-    /*
     #[test]
     fn t_ampersand_is_treated_literally_outside_of_conditionals() {
         let mut fmt = FmtStrFormatter::new();
@@ -477,11 +471,10 @@ mod tests {
 
         assert_eq!(
             fmt.do_format("%a & %b were sitting on a pipe", 0),
-            "A & B were sitting on a pipe");
+            "A & B were sitting on a pipe"
+        );
     }
-    */
 
-    /*
     #[test]
     fn t_question_mark_is_treated_literally_outside_conditionals() {
         let mut fmt = FmtStrFormatter::new();
@@ -491,5 +484,4 @@ mod tests {
 
         assert_eq!(fmt.do_format("%x? %y", 0), "What's the ultimate answer? 42");
     }
-    */
 }
