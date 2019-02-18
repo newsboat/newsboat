@@ -1,7 +1,8 @@
 //! Produces strings of values in a specified format, strftime(3)-like.
 mod parser;
 
-use self::parser::{parse, Specifier};
+use self::parser::{parse, Padding, Specifier};
+use std::cmp::min;
 use std::collections::BTreeMap;
 
 /// Produces strings of values in a specified format, strftime(3)-like.
@@ -92,25 +93,29 @@ impl FmtStrFormatter {
                     };
                 }
 
-                Specifier::Format(c, pad_width) => match self.fmts.get(&c) {
-                    Some(value) => {
-                        if *pad_width == 0isize {
-                            result.push_str(value);
-                        } else {
-                            let width = value.len();
-                            let padding_width = pad_width.abs() as usize - width;
-                            let padding = String::from(" ").repeat(padding_width);
-                            if *pad_width < 0 {
-                                result.push_str(value);
-                                result.push_str(&padding);
-                            } else {
+                Specifier::Format(c, padding) => {
+                    if let Some(value) = self.fmts.get(&c) {
+                        match padding {
+                            Padding::None => result.push_str(value),
+
+                            Padding::Left(padding_width) => {
+                                let padding_width =
+                                    padding_width - min(*padding_width, value.len());
+                                let padding = String::from(" ").repeat(padding_width);
                                 result.push_str(&padding);
                                 result.push_str(value);
-                            };
+                            }
+
+                            Padding::Right(padding_width) => {
+                                let padding_width =
+                                    padding_width - min(*padding_width, value.len());
+                                let padding = String::from(" ").repeat(padding_width);
+                                result.push_str(value);
+                                result.push_str(&padding);
+                            }
                         }
                     }
-                    None => continue,
-                },
+                }
 
                 Specifier::Text(s) => result.push_str(s),
 

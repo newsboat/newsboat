@@ -1,6 +1,17 @@
 use nom::{is_digit, types::CompleteStr, IResult};
 use std::str;
 
+/// Describes how formats should be padded: on the left, on the right, or not at all.
+#[derive(PartialEq, Eq, Debug)]
+pub enum Padding {
+    /// Do not pad the value.
+    None,
+    /// Pad the value on the left until it reaches specified width.
+    Left(usize),
+    /// Pad the value on the right until it reaches specified width.
+    Right(usize),
+}
+
 /// Describes all the different "format specifiers" we support, plus a chunk of text that would be
 /// copied to the output verbatim.
 #[derive(PartialEq, Eq, Debug)]
@@ -9,7 +20,7 @@ pub enum Specifier<'a> {
     Spacing(char),
     /// A format to be replaced with a value (`%a`, `%t` etc.), padded to the given width on the
     /// left (if it's positive) or on the right (if it's negative).
-    Format(char, isize),
+    Format(char, Padding),
     /// A chunk of text that will be copied to the output verbatim.
     Text(&'a str),
     /// Conditional format that is replaced by one of the sub-formats depending on the value of the
@@ -51,8 +62,15 @@ fn padded_format(input: CompleteStr) -> IResult<CompleteStr, Specifier> {
 
         let CompleteStr(width) = w;
         let width = width.parse::<isize>().unwrap_or(0);
+        let padding = if width == 0isize {
+            Padding::None
+        } else if width > 0isize {
+            Padding::Left(width.abs() as usize)
+        } else {
+            Padding::Right(width.abs() as usize)
+        };
 
-        (result.0, Specifier::Format(format, width))
+        (result.0, Specifier::Format(format, padding))
     })
 }
 
@@ -164,9 +182,9 @@ mod tests {
         assert_eq!(leftovers, CompleteStr(""));
 
         let expected = vec![
-            Specifier::Format('t', 0),
+            Specifier::Format('t', Padding::None),
             Specifier::Text(" ("),
-            Specifier::Format('a', 0),
+            Specifier::Format('a', Padding::None),
             Specifier::Text(")"),
         ];
         assert_eq!(result, expected);
@@ -180,9 +198,9 @@ mod tests {
         assert_eq!(leftovers, CompleteStr(""));
 
         let expected = vec![
-            Specifier::Format('a', 8),
-            Specifier::Format('b', 4),
-            Specifier::Format('x', 13),
+            Specifier::Format('a', Padding::Left(8)),
+            Specifier::Format('b', Padding::Left(4)),
+            Specifier::Format('x', Padding::Left(13)),
         ];
         assert_eq!(result, expected);
     }
@@ -195,9 +213,9 @@ mod tests {
         assert_eq!(leftovers, CompleteStr(""));
 
         let expected = vec![
-            Specifier::Format('a', -8),
-            Specifier::Format('b', -4),
-            Specifier::Format('x', -13),
+            Specifier::Format('a', Padding::Right(8)),
+            Specifier::Format('b', Padding::Right(4)),
+            Specifier::Format('x', Padding::Right(13)),
         ];
         assert_eq!(result, expected);
     }
@@ -210,11 +228,11 @@ mod tests {
         assert_eq!(leftovers, CompleteStr(""));
 
         let expected = vec![
-            Specifier::Format('a', -8),
+            Specifier::Format('a', Padding::Right(8)),
             Specifier::Spacing('m'),
-            Specifier::Format('b', 4),
+            Specifier::Format('b', Padding::Left(4)),
             Specifier::Spacing(' '),
-            Specifier::Format('x', -13),
+            Specifier::Format('x', Padding::Right(13)),
         ];
         assert_eq!(result, expected);
     }
