@@ -94,8 +94,10 @@ impl FmtStrFormatter {
 
                 Specifier::Format(c, pad_width) => match self.fmts.get(&c) {
                     Some(value) => {
-                        let width = value.len();
-                        if pad_width.abs() as usize > width {
+                        if *pad_width == 0isize {
+                            result.push_str(value);
+                        } else {
+                            let width = value.len();
                             let padding_width = pad_width.abs() as usize - width;
                             let padding = String::from(" ").repeat(padding_width);
                             if *pad_width < 0 {
@@ -105,12 +107,7 @@ impl FmtStrFormatter {
                                 result.push_str(&padding);
                                 result.push_str(value);
                             };
-                        } else {
-                            if let Some((i, _)) = value.char_indices().nth(pad_width.abs() as usize)
-                            {
-                                result.push_str(&value[..i]);
-                            }
-                        };
+                        }
                     }
                     None => continue,
                 },
@@ -135,7 +132,9 @@ impl FmtStrFormatter {
 
 #[cfg(test)]
 mod tests {
+    /*
     use super::*;
+    */
 
     /*
     #[test]
