@@ -83,7 +83,7 @@ impl FmtStrFormatter {
                         result.push(*c);
                     } else {
                         let rest = self.formatting_helper(&format_ast[i + 1..], 0);
-                        let padding_width = width as usize - rest.len();
+                        let padding_width = width as usize - rest.len() - result.len();
 
                         let mut padding = String::new();
                         padding.push(*c);
@@ -98,19 +98,19 @@ impl FmtStrFormatter {
                         match padding {
                             Padding::None => result.push_str(value),
 
-                            Padding::Left(padding_width) => {
-                                let padding_width =
-                                    padding_width - min(*padding_width, value.len());
+                            Padding::Left(total_width) => {
+                                let padding_width = total_width - min(*total_width, value.len());
+                                let stripping_width = total_width - padding_width;
                                 let padding = String::from(" ").repeat(padding_width);
                                 result.push_str(&padding);
-                                result.push_str(value);
+                                result.push_str(&value[0..stripping_width]);
                             }
 
-                            Padding::Right(padding_width) => {
-                                let padding_width =
-                                    padding_width - min(*padding_width, value.len());
+                            Padding::Right(total_width) => {
+                                let padding_width = total_width - min(*total_width, value.len());
+                                let stripping_width = total_width - padding_width;
                                 let padding = String::from(" ").repeat(padding_width);
-                                result.push_str(value);
+                                result.push_str(&value[0..stripping_width]);
                                 result.push_str(&padding);
                             }
                         }
@@ -164,7 +164,6 @@ mod tests {
         assert_eq!(fmt.do_format("%?c?asdf?", 0), "");
     }
 
-    /*
     #[test]
     fn t_do_format_replaces_variables_with_values_three_variables() {
         let mut fmt = FmtStrFormatter::new();
@@ -188,10 +187,12 @@ mod tests {
 
         assert_eq!(
             fmt.do_format("<%a> <%5b> | %-5c%%", 0),
-            "<AAA> <  BBB> | CCC  %");
+            "<AAA> <  BBB> | CCC  %"
+        );
         assert_eq!(
             fmt.do_format("asdf | %a | %?c?%a%b&%b%a? | qwert", 0),
-            "asdf | AAA | AAABBB | qwert");
+            "asdf | AAA | AAABBB | qwert"
+        );
 
         assert_eq!(fmt.do_format("%>X", 3), "XXX");
         assert_eq!(fmt.do_format("%a%> %b", 10), "AAA    BBB");
@@ -199,7 +200,6 @@ mod tests {
 
         assert_eq!(fmt.do_format("%?c?asdf?", 0), "asdf");
     }
-    */
 
     /*
     TEST_CASE("do_format supports multibyte characters", "[FmtStrFormatter]") {
