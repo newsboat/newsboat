@@ -4,6 +4,7 @@ mod parser;
 use self::parser::{parse, Padding, Specifier};
 use std::cmp::min;
 use std::collections::BTreeMap;
+use utils;
 
 /// Produces strings of values in a specified format, strftime(3)-like.
 ///
@@ -91,18 +92,20 @@ impl FmtStrFormatter {
                 Padding::None => result.push_str(value),
 
                 Padding::Left(total_width) => {
-                    let padding_width = total_width - min(*total_width, value.len());
+                    let padding_width =
+                        total_width - min(*total_width, utils::graphemes_count(value));
                     let stripping_width = total_width - padding_width;
                     let padding = String::from(" ").repeat(padding_width);
                     result.push_str(&padding);
-                    result.push_str(&value[0..stripping_width]);
+                    result.push_str(&utils::take_graphemes(value, stripping_width));
                 }
 
                 Padding::Right(total_width) => {
-                    let padding_width = total_width - min(*total_width, value.len());
+                    let padding_width =
+                        total_width - min(*total_width, utils::graphemes_count(value));
                     let stripping_width = total_width - padding_width;
                     let padding = String::from(" ").repeat(padding_width);
-                    result.push_str(&value[0..stripping_width]);
+                    result.push_str(&utils::take_graphemes(value, stripping_width));
                     result.push_str(&padding);
                 }
             }
@@ -221,9 +224,8 @@ mod tests {
         assert_eq!(fmt.do_format("%?c?asdf?", 0), "asdf");
     }
 
-    /*
     #[test]
-    fn t_do_format_supports_multibyte_characters__conditional_with_one_variable() {
+    fn t_do_format_supports_multibyte_characters_conditional_with_one_variable() {
         let mut fmt = FmtStrFormatter::new();
 
         fmt.register_fmt('a', "АБВ".to_string());
@@ -232,11 +234,9 @@ mod tests {
         assert_eq!(fmt.do_format("%?b?%b&no?", 0), "no");
         assert_eq!(fmt.do_format("%?a?[%-4a]&no?", 0), "[АБВ ]");
     }
-    */
 
-    /*
     #[test]
-    fn t_do_format_supports_multibyte_characters__misc_tests_with_two_variables() {
+    fn t_do_format_supports_multibyte_characters_misc_tests_with_two_variables() {
         let mut fmt = FmtStrFormatter::new();
 
         fmt.register_fmt('a', "АБВ".to_string());
@@ -248,11 +248,9 @@ mod tests {
         );
         assert_eq!(fmt.do_format("%?c?asdf?", 0), "");
     }
-    */
 
-    /*
     #[test]
-    fn t_do_format_supports_multibyte_characters__simple_cases_with_three_variables() {
+    fn t_do_format_supports_multibyte_characters_simple_cases_with_three_variables() {
         let mut fmt = FmtStrFormatter::new();
 
         fmt.register_fmt('a', "АБВ".to_string());
@@ -272,11 +270,9 @@ mod tests {
             "%АБВ%буква%ещё одна переменная%"
         );
     }
-    */
 
-    /*
     #[test]
-    fn t_do_format_supports_multibyte_characters__alignment() {
+    fn t_do_format_supports_multibyte_characters_alignment() {
         let mut fmt = FmtStrFormatter::new();
 
         fmt.register_fmt('a', "АБВ".to_string());
@@ -289,11 +285,9 @@ mod tests {
         assert_eq!(fmt.do_format("%2a", 0), "АБ");
         assert_eq!(fmt.do_format("%-2a", 0), "АБ");
     }
-    */
 
-    /*
     #[test]
-    fn t_do_format_supports_multibyte_characters__complex_format_string() {
+    fn t_do_format_supports_multibyte_characters_complex_format_string() {
         let mut fmt = FmtStrFormatter::new();
 
         fmt.register_fmt('a', "АБВ".to_string());
@@ -309,7 +303,6 @@ mod tests {
             "asdf | АБВ | АБВбуква | qwert"
         );
     }
-    */
 
     /*
     #[test]
