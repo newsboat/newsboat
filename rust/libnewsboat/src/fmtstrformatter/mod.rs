@@ -91,9 +91,7 @@ impl FmtStrFormatter {
                 Padding::None => result.push_str(value),
 
                 Padding::Left(total_width) => {
-                    use std::dbg;
-                    let padding_width =
-                        dbg!(total_width) - dbg!(min(*total_width, dbg!(value.len())));
+                    let padding_width = total_width - min(*total_width, value.len());
                     let stripping_width = total_width - padding_width;
                     let padding = String::from(" ").repeat(padding_width);
                     result.push_str(&padding);
@@ -101,9 +99,7 @@ impl FmtStrFormatter {
                 }
 
                 Padding::Right(total_width) => {
-                    use std::dbg;
-                    let padding_width =
-                        dbg!(total_width) - dbg!(min(*total_width, dbg!(value.len())));
+                    let padding_width = total_width - min(*total_width, value.len());
                     let stripping_width = total_width - padding_width;
                     let padding = String::from(" ").repeat(padding_width);
                     result.push_str(&value[0..stripping_width]);
@@ -226,90 +222,120 @@ mod tests {
     }
 
     /*
-    TEST_CASE("do_format supports multibyte characters", "[FmtStrFormatter]") {
-            FmtStrFormatter fmt;
+    #[test]
+    fn t_do_format_supports_multibyte_characters__conditional_with_one_variable() {
+        let mut fmt = FmtStrFormatter::new();
 
-            SECTION("One format variable")
-            {
-                    fmt.register_fmt('a', "АБВ");
+        fmt.register_fmt('a', "АБВ".to_string());
 
-                    SECTION("Conditional format strings")
-                    {
-                            REQUIRE(fmt.do_format("%?a?%a&no?") == "АБВ");
-                            REQUIRE(fmt.do_format("%?b?%b&no?") == "no");
-                            REQUIRE(fmt.do_format("%?a?[%-4a]&no?") == "[АБВ ]");
-                    }
+        assert_eq!(fmt.do_format("%?a?%a&no?", 0), "АБВ");
+        assert_eq!(fmt.do_format("%?b?%b&no?", 0), "no");
+        assert_eq!(fmt.do_format("%?a?[%-4a]&no?", 0), "[АБВ ]");
+    }
+    */
 
-                    SECTION("Two format variables")
-                    {
-                            fmt.register_fmt('b', "буква");
+    /*
+    #[test]
+    fn t_do_format_supports_multibyte_characters__misc_tests_with_two_variables() {
+        let mut fmt = FmtStrFormatter::new();
 
-                            REQUIRE(fmt.do_format(
-                                            "asdf | %a | %?c?%a%b&%b%a? | qwert") ==
-                                    "asdf | АБВ | букваАБВ | qwert");
-                            REQUIRE(fmt.do_format("%?c?asdf?") == "");
+        fmt.register_fmt('a', "АБВ".to_string());
+        fmt.register_fmt('b', "буква".to_string());
 
-                            SECTION("Three format variables")
-                            {
-                                    fmt.register_fmt('c', "ещё одна переменная");
+        assert_eq!(
+            fmt.do_format("asdf | %a | %?c?%a%b&%b%a? | qwert", 0),
+            "asdf | АБВ | букваАБВ | qwert"
+        );
+        assert_eq!(fmt.do_format("%?c?asdf?", 0), "");
+    }
+    */
 
-                                    SECTION("Simple cases")
-                                    {
-                                            REQUIRE(fmt.do_format("") == "");
-                                            // illegal single %
-                                            REQUIRE(fmt.do_format("%") == "");
-                                            REQUIRE(fmt.do_format("%%") == "%");
-                                            REQUIRE(fmt.do_format("%a%b%c") ==
-                                                    "АБВбукваещё одна переменная");
-                                            REQUIRE(fmt.do_format(
-                                                            "%%%a%%%b%%%c%%") ==
-                                                    "%АБВ%буква%ещё одна переменная%");
-                                    }
+    /*
+    #[test]
+    fn t_do_format_supports_multibyte_characters__simple_cases_with_three_variables() {
+        let mut fmt = FmtStrFormatter::new();
 
-                                    SECTION("Alignment")
-                                    {
-                                            REQUIRE(fmt.do_format("%4a") == " АБВ");
-                                            REQUIRE(fmt.do_format("%-4a") ==
-                                                    "АБВ ");
+        fmt.register_fmt('a', "АБВ".to_string());
+        fmt.register_fmt('b', "буква".to_string());
+        fmt.register_fmt('c', "ещё одна переменная".to_string());
 
-                                            SECTION("Alignment limits")
-                                            {
-                                                    REQUIRE(fmt.do_format("%2a") ==
-                                                            "АБ");
-                                                    REQUIRE(fmt.do_format("%-2a") ==
-                                                            "АБ");
-                                            }
-                                    }
+        assert_eq!(fmt.do_format("", 0), "");
+        // illegal single %
+        assert_eq!(fmt.do_format("%", 0), "");
+        assert_eq!(fmt.do_format("%%", 0), "%");
+        assert_eq!(
+            fmt.do_format("%a%b%c", 0),
+            "АБВбукваещё одна переменная"
+        );
+        assert_eq!(
+            fmt.do_format("%%%a%%%b%%%c%%", 0),
+            "%АБВ%буква%ещё одна переменная%"
+        );
+    }
+    */
 
-                                    SECTION("Complex format string")
-                                    {
-                                            REQUIRE(fmt.do_format("<%a> <%5b> | "
-                                                                  "%-5c%%") ==
-                                                    "<АБВ> <буква> | ещё о%");
-                                            REQUIRE(fmt.do_format("asdf | %a | "
-                                                                  "%?c?%a%b&%b%a? "
-                                                                  "| qwert") ==
-                                                    "asdf | АБВ | АБВбуква | qwert");
-                                    }
+    /*
+    #[test]
+    fn t_do_format_supports_multibyte_characters__alignment() {
+        let mut fmt = FmtStrFormatter::new();
 
-                                    SECTION("Format string fillers")
-                                    {
-                                            REQUIRE(fmt.do_format("%>X", 3) ==
-                                                    "XXX");
-                                            REQUIRE(fmt.do_format("%a%> %b", 10) ==
-                                                    "АБВ  буква");
-                                            REQUIRE(fmt.do_format("%a%> %b", 0) ==
-                                                    "АБВ буква");
-                                    }
+        fmt.register_fmt('a', "АБВ".to_string());
+        fmt.register_fmt('b', "буква".to_string());
+        fmt.register_fmt('c', "ещё одна переменная".to_string());
 
-                                    SECTION("Conditional format string")
-                                    {
-                                            REQUIRE(fmt.do_format("%?c?asdf?") ==
-                                                    "asdf");
-                                    }
-                            }
-                    }
-            }
+        assert_eq!(fmt.do_format("%4a", 0), " АБВ");
+        assert_eq!(fmt.do_format("%-4a", 0), "АБВ ");
+
+        assert_eq!(fmt.do_format("%2a", 0), "АБ");
+        assert_eq!(fmt.do_format("%-2a", 0), "АБ");
+    }
+    */
+
+    /*
+    #[test]
+    fn t_do_format_supports_multibyte_characters__complex_format_string() {
+        let mut fmt = FmtStrFormatter::new();
+
+        fmt.register_fmt('a', "АБВ".to_string());
+        fmt.register_fmt('b', "буква".to_string());
+        fmt.register_fmt('c', "ещё одна переменная".to_string());
+
+        assert_eq!(
+            fmt.do_format("<%a> <%5b> | %-5c%%", 0),
+            "<АБВ> <буква> | ещё о%"
+        );
+        assert_eq!(
+            fmt.do_format("asdf | %a | %?c?%a%b&%b%a? | qwert", 0),
+            "asdf | АБВ | АБВбуква | qwert"
+        );
+    }
+    */
+
+    /*
+    #[test]
+    fn t_do_format_supports_multibyte_characters__format_string_fillers() {
+        let mut fmt = FmtStrFormatter::new();
+
+        fmt.register_fmt('a', "АБВ".to_string());
+        fmt.register_fmt('b', "буква".to_string());
+        fmt.register_fmt('c', "ещё одна переменная".to_string());
+
+        assert_eq!(fmt.do_format("%>X", 3), "XXX");
+        assert_eq!(fmt.do_format("%a%> %b", 10), "АБВ  буква");
+        assert_eq!(fmt.do_format("%a%> %b", 0), "АБВ буква");
+    }
+    */
+
+    /*
+    #[test]
+    fn t_do_format_supports_multibyte_characters__conditional_format_with_three_variables() {
+        let mut fmt = FmtStrFormatter::new();
+
+        fmt.register_fmt('a', "АБВ".to_string());
+        fmt.register_fmt('b', "буква".to_string());
+        fmt.register_fmt('c', "ещё одна переменная".to_string());
+
+        assert_eq!(fmt.do_format("%?c?asdf?", 0), "asdf");
     }
     */
 
