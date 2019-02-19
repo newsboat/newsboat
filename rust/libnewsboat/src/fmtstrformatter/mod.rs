@@ -73,61 +73,85 @@ impl FmtStrFormatter {
         self.formatting_helper(&ast, width)
     }
 
+    fn format_spacing(&self, c: char, rest: &[Specifier], width: u32, result: &mut String) {
+        if width == 0 {
+            result.push(c);
+        } else {
+            let rest = self.formatting_helper(rest, 0);
+            let padding_width = width as usize - rest.len() - result.len();
+
+            let padding = format!("{}", c).repeat(padding_width);
+            result.push_str(&padding);
+        };
+    }
+
+    fn format_format(&self, c: char, padding: &Padding, _width: u32, result: &mut String) {
+        if let Some(value) = self.fmts.get(&c) {
+            match padding {
+                Padding::None => result.push_str(value),
+
+                Padding::Left(total_width) => {
+                    use std::dbg;
+                    let padding_width =
+                        dbg!(total_width) - dbg!(min(*total_width, dbg!(value.len())));
+                    let stripping_width = total_width - padding_width;
+                    let padding = String::from(" ").repeat(padding_width);
+                    result.push_str(&padding);
+                    result.push_str(&value[0..stripping_width]);
+                }
+
+                Padding::Right(total_width) => {
+                    use std::dbg;
+                    let padding_width =
+                        dbg!(total_width) - dbg!(min(*total_width, dbg!(value.len())));
+                    let stripping_width = total_width - padding_width;
+                    let padding = String::from(" ").repeat(padding_width);
+                    result.push_str(&value[0..stripping_width]);
+                    result.push_str(&padding);
+                }
+            }
+        }
+    }
+
+    fn format_conditional(
+        &self,
+        cond: char,
+        then: &[Specifier],
+        els: &Option<Vec<Specifier>>,
+        width: u32,
+        result: &mut String,
+    ) {
+        match self.fmts.get(&cond) {
+            Some(value) if !value.is_empty() => {
+                result.push_str(&self.formatting_helper(then, width))
+            }
+            _ => {
+                if let Some(els) = els {
+                    result.push_str(&self.formatting_helper(els, width))
+                }
+            }
+        }
+    }
+
     fn formatting_helper(&self, format_ast: &[Specifier], width: u32) -> String {
         let mut result = String::new();
 
         for (i, specifier) in format_ast.iter().enumerate() {
             match specifier {
                 Specifier::Spacing(c) => {
-                    if width == 0 {
-                        result.push(*c);
-                    } else {
-                        let rest = self.formatting_helper(&format_ast[i + 1..], 0);
-                        let padding_width = width as usize - rest.len() - result.len();
-
-                        let mut padding = String::new();
-                        padding.push(*c);
-                        padding = padding.repeat(padding_width);
-
-                        result.push_str(&padding);
-                    };
+                    let rest = &format_ast[i + 1..];
+                    self.format_spacing(*c, rest, width, &mut result);
                 }
 
                 Specifier::Format(c, padding) => {
-                    if let Some(value) = self.fmts.get(&c) {
-                        match padding {
-                            Padding::None => result.push_str(value),
-
-                            Padding::Left(total_width) => {
-                                let padding_width = total_width - min(*total_width, value.len());
-                                let stripping_width = total_width - padding_width;
-                                let padding = String::from(" ").repeat(padding_width);
-                                result.push_str(&padding);
-                                result.push_str(&value[0..stripping_width]);
-                            }
-
-                            Padding::Right(total_width) => {
-                                let padding_width = total_width - min(*total_width, value.len());
-                                let stripping_width = total_width - padding_width;
-                                let padding = String::from(" ").repeat(padding_width);
-                                result.push_str(&value[0..stripping_width]);
-                                result.push_str(&padding);
-                            }
-                        }
-                    }
+                    self.format_format(*c, padding, width, &mut result);
                 }
 
                 Specifier::Text(s) => result.push_str(s),
 
-                Specifier::Conditional(cond, then, els) => match self.fmts.get(&cond) {
-                    Some(value) if !value.is_empty() => {
-                        result.push_str(&self.formatting_helper(then, width))
-                    }
-                    _ => match els {
-                        Some(els) => result.push_str(&self.formatting_helper(els, width)),
-                        None => continue,
-                    },
-                },
+                Specifier::Conditional(cond, then, els) => {
+                    self.format_conditional(*cond, then, els, width, &mut result)
+                }
             }
         }
 
