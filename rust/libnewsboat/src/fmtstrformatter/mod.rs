@@ -79,7 +79,8 @@ impl FmtStrFormatter {
             result.push(c);
         } else {
             let rest = self.formatting_helper(rest, 0);
-            let padding_width = width as usize - rest.len() - result.len();
+            let padding_width =
+                width as usize - utils::graphemes_count(&rest) - utils::graphemes_count(result);
 
             let padding = format!("{}", c).repeat(padding_width);
             result.push_str(&padding);
@@ -304,9 +305,8 @@ mod tests {
         );
     }
 
-    /*
     #[test]
-    fn t_do_format_supports_multibyte_characters__format_string_fillers() {
+    fn t_do_format_supports_multibyte_characters_format_string_fillers() {
         let mut fmt = FmtStrFormatter::new();
 
         fmt.register_fmt('a', "АБВ".to_string());
@@ -317,7 +317,6 @@ mod tests {
         assert_eq!(fmt.do_format("%a%> %b", 10), "АБВ  буква");
         assert_eq!(fmt.do_format("%a%> %b", 0), "АБВ буква");
     }
-    */
 
     /*
     #[test]
