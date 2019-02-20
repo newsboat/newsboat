@@ -331,18 +331,16 @@ mod tests {
 
     #[test]
     fn t_do_format_ignores_start_of_conditional_at_the_end_of_format_string() {
-        let mut fmt = FmtStrFormatter::new();
+        let fmt = FmtStrFormatter::new();
         assert_eq!(fmt.do_format("%?", 0), "");
     }
 
     /*
-    TEST_CASE("do_format ignores the format at the end of the format string that "
-                    "looks like a conditional but lacks a \"then\" branch",
-                    "[FmtStrFormatter]")
-    {
-            FmtStrFormatter fmt;
-            REQUIRE(fmt.do_format("%?a?this is a conditional. Or is it") == "");
-            REQUIRE(fmt.do_format("%?x?Это условный формат, не правда ли") == "");
+    #[test]
+    fn t_do_format_ignores_final_format_that_looks_like_conditional_without_then_branch() {
+        let fmt = FmtStrFormatter::new();
+        assert_eq!(fmt.do_format("%?a?this is a conditional. Or is it", 0), "");
+        assert_eq!(fmt.do_format("%?x?Это условный формат, не правда ли", 0), "");
     }
     */
 
