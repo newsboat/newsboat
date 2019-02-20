@@ -494,20 +494,6 @@ mod tests {
         assert_eq!(fmt.do_format("%%", 0), "%");
     }
 
-    /*
-    TEST_CASE("Nested conditionals confuse do_format", "[FmtStrFormatter]") {
-            FmtStrFormatter fmt;
-
-            fmt.register_fmt('x', "unknown");
-            fmt.register_fmt('y', "why");
-
-            REQUIRE(fmt.do_format("%?x?   %?y?y-nonempty&y-empty?   &x-empty?")
-                            == "   y?y-nonempty&y-empty?   &x-empty?");
-            REQUIRE(fmt.do_format("%?x?   %?y?y-nonempty?   &x-empty?")
-                            == "   y?y-nonempty?   &x-empty?");
-    }
-    */
-
     #[test]
     fn t_ampersand_is_treated_literally_outside_of_conditionals() {
         let mut fmt = FmtStrFormatter::new();
