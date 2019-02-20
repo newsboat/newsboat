@@ -88,27 +88,25 @@ impl FmtStrFormatter {
     }
 
     fn format_format(&self, c: char, padding: &Padding, _width: u32, result: &mut String) {
-        if let Some(value) = self.fmts.get(&c) {
-            match padding {
-                Padding::None => result.push_str(value),
+        let empty_string = String::new();
+        let value = self.fmts.get(&c).unwrap_or_else(|| &empty_string);
+        match padding {
+            Padding::None => result.push_str(value),
 
-                Padding::Left(total_width) => {
-                    let padding_width =
-                        total_width - min(*total_width, utils::graphemes_count(value));
-                    let stripping_width = total_width - padding_width;
-                    let padding = String::from(" ").repeat(padding_width);
-                    result.push_str(&padding);
-                    result.push_str(&utils::take_graphemes(value, stripping_width));
-                }
+            Padding::Left(total_width) => {
+                let padding_width = total_width - min(*total_width, utils::graphemes_count(value));
+                let stripping_width = total_width - padding_width;
+                let padding = String::from(" ").repeat(padding_width);
+                result.push_str(&padding);
+                result.push_str(&utils::take_graphemes(value, stripping_width));
+            }
 
-                Padding::Right(total_width) => {
-                    let padding_width =
-                        total_width - min(*total_width, utils::graphemes_count(value));
-                    let stripping_width = total_width - padding_width;
-                    let padding = String::from(" ").repeat(padding_width);
-                    result.push_str(&utils::take_graphemes(value, stripping_width));
-                    result.push_str(&padding);
-                }
+            Padding::Right(total_width) => {
+                let padding_width = total_width - min(*total_width, utils::graphemes_count(value));
+                let stripping_width = total_width - padding_width;
+                let padding = String::from(" ").repeat(padding_width);
+                result.push_str(&utils::take_graphemes(value, stripping_width));
+                result.push_str(&padding);
             }
         }
     }
@@ -343,6 +341,14 @@ mod tests {
         assert_eq!(fmt.do_format("%?x?Это условный формат, не правда ли", 0), "");
     }
     */
+
+    #[test]
+    fn t_do_format_pads_values_on_the_left_undefined_char() {
+        let fmt = FmtStrFormatter::new();
+
+        assert_eq!(fmt.do_format("%4a", 0), "    ");
+        assert_eq!(fmt.do_format("%8a", 0), "        ");
+    }
 
     /*
     TEST_CASE("do_format replaces %Nx with the value of \"x\", padded "
