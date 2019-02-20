@@ -329,15 +329,11 @@ mod tests {
         assert_eq!(fmt.do_format("%?c?asdf?", 0), "asdf");
     }
 
-    /*
-    TEST_CASE("do_format ignores \"%?\" at the end of the format string (which "
-                    "looks like a conditional but really isn't",
-                    "[FmtStrFormatter]")
-    {
-            FmtStrFormatter fmt;
-            REQUIRE(fmt.do_format("%?") == "");
+    #[test]
+    fn t_do_format_ignores_start_of_conditional_at_the_end_of_format_string() {
+        let mut fmt = FmtStrFormatter::new();
+        assert_eq!(fmt.do_format("%?", 0), "");
     }
-    */
 
     /*
     TEST_CASE("do_format ignores the format at the end of the format string that "
