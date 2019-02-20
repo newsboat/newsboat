@@ -455,30 +455,38 @@ mod tests {
         assert_eq!(fmt.do_format(format, 30), "_short_aaaaaaaa_short_b_short_");
     }
 
-    /*
-    TEST_CASE("%?[char]?[then-format]&[else-format]? is replaced by "
-                    "\"then-format\" if \"[char]\" has non-empty value, otherwise it's "
-                    "replaced by \"else-format\"",
-                    "[FmtStrFormatter]")
-    {
-            FmtStrFormatter fmt;
+    #[test]
+    fn t_conditional_is_replaced_by_appropriate_branch_standard_case() {
+        let mut fmt = FmtStrFormatter::new();
 
-            fmt.register_fmt('t', "this is a non-empty string");
-            fmt.register_fmt('m', "");
+        fmt.register_fmt('t', "this is a non-empty string".to_string());
+        fmt.register_fmt('m', String::new());
 
-            SECTION("Standard case") {
-                    REQUIRE(fmt.do_format("%?t?non-empty&empty?") == "non-empty");
-                    REQUIRE(fmt.do_format("%?m?non-empty&empty?") == "empty");
-                    REQUIRE(fmt.do_format("%?t?непустое&пустое?") == "непустое");
-                    REQUIRE(fmt.do_format("%?m?непустое&пустое?") == "пустое");
-            }
-
-            SECTION("Else-format is optional") {
-                    REQUIRE(fmt.do_format("%?t?непустое?") == "непустое");
-                    REQUIRE(fmt.do_format("%?m?непустое?") == "");
-            }
+        assert_eq!(fmt.do_format("%?t?non-empty&empty?", 0), "non-empty");
+        assert_eq!(fmt.do_format("%?m?non-empty&empty?", 0), "empty");
+        assert_eq!(
+            fmt.do_format("%?t?непустое&пустое?", 0),
+            "непустое"
+        );
+        assert_eq!(
+            fmt.do_format("%?m?непустое&пустое?", 0),
+            "пустое"
+        );
     }
-    */
+
+    #[test]
+    fn t_conditional_is_replaced_by_appropriate_branch_else_branch_is_optonal() {
+        let mut fmt = FmtStrFormatter::new();
+
+        fmt.register_fmt('t', "this is a non-empty string".to_string());
+        fmt.register_fmt('m', String::new());
+
+        assert_eq!(
+            fmt.do_format("%?t?непустое?", 0),
+            "непустое"
+        );
+        assert_eq!(fmt.do_format("%?m?непустое?", 0), "");
+    }
 
     #[test]
     fn t_do_format_replaces_double_percent_sign_with_a_percent_sign() {
