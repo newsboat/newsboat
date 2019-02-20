@@ -350,38 +350,24 @@ mod tests {
         assert_eq!(fmt.do_format("%8a", 0), "        ");
     }
 
-    /*
-    TEST_CASE("do_format replaces %Nx with the value of \"x\", padded "
-                    "with spaces on the left to fit N columns",
-                    "[FmtStrFormatter]")
-    {
-            FmtStrFormatter fmt;
+    #[test]
+    fn t_do_format_pads_values_on_the_left() {
+        let mut fmt = FmtStrFormatter::new();
 
-            SECTION("Undefined format char") {
-                    REQUIRE(fmt.do_format("%4a") == "    ");
-                    REQUIRE(fmt.do_format("%8a") == "        ");
-            }
+        fmt.register_fmt('a', "hello".to_string());
+        fmt.register_fmt('r', "привет".to_string());
 
-            SECTION("Defined format char") {
-                    fmt.register_fmt('a', "hello");
-                    fmt.register_fmt('r', "привет");
+        assert_eq!(fmt.do_format("%8a", 0), "   hello");
+        assert_eq!(fmt.do_format("%5a", 0), "hello");
+        assert_eq!(fmt.do_format("%8r", 0), "  привет");
+        assert_eq!(fmt.do_format("%6r", 0), "привет");
 
-                    REQUIRE(fmt.do_format("%8a") == "   hello");
-                    REQUIRE(fmt.do_format("%5a") == "hello");
-                    REQUIRE(fmt.do_format("%8r") == "  привет");
-                    REQUIRE(fmt.do_format("%6r") == "привет");
-
-                    {
-                            INFO("If the value is bigger than the padding, only first N "
-                                            "characters are used");
-                            REQUIRE(fmt.do_format("%4a") == "hell");
-                            REQUIRE(fmt.do_format("%2a") == "he");
-                            REQUIRE(fmt.do_format("%4r") == "прив");
-                            REQUIRE(fmt.do_format("%3r") == "при");
-                    }
-            }
+        // If the value is bigger than the padding, only first N characters are used
+        assert_eq!(fmt.do_format("%4a", 0), "hell");
+        assert_eq!(fmt.do_format("%2a", 0), "he");
+        assert_eq!(fmt.do_format("%4r", 0), "прив");
+        assert_eq!(fmt.do_format("%3r", 0), "при");
     }
-    */
 
     /*
     TEST_CASE("do_format replaces %-Nx with the value of \"x\", padded "
