@@ -318,9 +318,8 @@ mod tests {
         assert_eq!(fmt.do_format("%a%> %b", 0), "АБВ буква");
     }
 
-    /*
     #[test]
-    fn t_do_format_supports_multibyte_characters__conditional_format_with_three_variables() {
+    fn t_do_format_supports_multibyte_characters_conditional_format_with_three_variables() {
         let mut fmt = FmtStrFormatter::new();
 
         fmt.register_fmt('a', "АБВ".to_string());
@@ -329,7 +328,6 @@ mod tests {
 
         assert_eq!(fmt.do_format("%?c?asdf?", 0), "asdf");
     }
-    */
 
     /*
     TEST_CASE("do_format ignores \"%?\" at the end of the format string (which "
