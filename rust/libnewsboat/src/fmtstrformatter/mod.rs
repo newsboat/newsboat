@@ -396,47 +396,64 @@ mod tests {
         assert_eq!(fmt.do_format("%-3r", 0), "при");
     }
 
-    /*
-    TEST_CASE("%>[char] pads consecutive text to the right, using [char] for "
-                    "the padding",
-                    "[FmtStrFormatter]")
-    {
-            FmtStrFormatter fmt;
+    #[test]
+    fn t_spacer_pads_consecutive_text_to_the_right_using_specified_char_total_length() {
+        let mut fmt = FmtStrFormatter::new();
 
-            fmt.register_fmt('x', "example string");
-            fmt.register_fmt('y', "пример строки");
+        fmt.register_fmt('x', "example string".to_string());
+        fmt.register_fmt('y', "пример строки".to_string());
 
-            SECTION("The total length of the string is specified in the argument to do_format") {
-                    {
-                            INFO("Default (zero) is \"as long as needed to fit all the values\"");
-                            REQUIRE(fmt.do_format("%x%> %y") == "example string пример строки");
-                            REQUIRE(fmt.do_format("%x%> %y", 0) == "example string пример строки");
-                    }
+        // The total length of the string is specified in the argument to do_format
 
-                    REQUIRE(fmt.do_format("%x%> %y", 30) == "example string   пример строки");
-                    REQUIRE(fmt.do_format("%x%> %y", 45)
-                                    == "example string                  пример строки");
-            }
+        // Default (zero) is \"as long as needed to fit all the values\"
+        assert_eq!(
+            fmt.do_format("%x%> %y", 0),
+            "example string пример строки"
+        );
 
-            SECTION("[char] is used for padding") {
-                    REQUIRE(fmt.do_format("%x%>m%y") == "example stringmпример строки");
-                    REQUIRE(fmt.do_format("%x%>f%y", 0) == "example stringfпример строки");
-                    REQUIRE(fmt.do_format("%x%>k%y", 30) == "example stringkkkпример строки");
-                    REQUIRE(fmt.do_format("%x%>i%y", 45)
-                                    == "example stringiiiiiiiiiiiiiiiiiiпример строки");
-            }
-
-            SECTION("If multiple %>[char] specifiers are used, the first one has a "
-                            "maximal width and the others have the width of one column")
-            {
-                    fmt.register_fmt('s', "_short_");
-
-                    const auto format = std::string("%s%>a%s%>b%s");
-                    REQUIRE(fmt.do_format(format) == "_short_a_short_b_short_");
-                    REQUIRE(fmt.do_format(format, 30) == "_short_aaaaaaaa_short_b_short_");
-            }
+        assert_eq!(
+            fmt.do_format("%x%> %y", 30),
+            "example string   пример строки"
+        );
+        assert_eq!(
+            fmt.do_format("%x%> %y", 45),
+            "example string                  пример строки"
+        );
     }
-    */
+
+    #[test]
+    fn t_spacer_pads_consecutive_text_to_the_right_using_specified_char_check_char() {
+        let mut fmt = FmtStrFormatter::new();
+
+        fmt.register_fmt('x', "example string".to_string());
+        fmt.register_fmt('y', "пример строки".to_string());
+
+        assert_eq!(
+            fmt.do_format("%x%>m%y", 0),
+            "example stringmпример строки"
+        );
+        assert_eq!(
+            fmt.do_format("%x%>k%y", 30),
+            "example stringkkkпример строки"
+        );
+        assert_eq!(
+            fmt.do_format("%x%>i%y", 45),
+            "example stringiiiiiiiiiiiiiiiiiiпример строки"
+        );
+    }
+
+    #[test]
+    fn t_spacer_pads_consecutive_text_to_the_right_using_specified_char_only_first_one_works() {
+        let mut fmt = FmtStrFormatter::new();
+
+        fmt.register_fmt('x', "example string".to_string());
+        fmt.register_fmt('y', "пример строки".to_string());
+        fmt.register_fmt('s', "_short_".to_string());
+
+        let format = "%s%>a%s%>b%s";
+        assert_eq!(fmt.do_format(format, 0), "_short_a_short_b_short_");
+        assert_eq!(fmt.do_format(format, 30), "_short_aaaaaaaa_short_b_short_");
+    }
 
     /*
     TEST_CASE("%?[char]?[then-format]&[else-format]? is replaced by "
