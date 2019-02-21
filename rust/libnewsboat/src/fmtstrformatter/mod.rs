@@ -333,15 +333,6 @@ mod tests {
         assert_eq!(fmt.do_format("%?", 0), "");
     }
 
-    /*
-    #[test]
-    fn t_do_format_ignores_final_format_that_looks_like_conditional_without_then_branch() {
-        let fmt = FmtStrFormatter::new();
-        assert_eq!(fmt.do_format("%?a?this is a conditional. Or is it", 0), "");
-        assert_eq!(fmt.do_format("%?x?Это условный формат, не правда ли", 0), "");
-    }
-    */
-
     #[test]
     fn t_do_format_pads_values_on_the_left_undefined_char() {
         let fmt = FmtStrFormatter::new();
