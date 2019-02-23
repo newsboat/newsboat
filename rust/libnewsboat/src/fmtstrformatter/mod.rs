@@ -155,18 +155,16 @@ impl FmtStrFormatter {
                 }
 
                 Specifier::Text(s) => {
-                    let count = utils::graphemes_count(&result);
                     if width == 0 {
                         result.push_str(s);
                     } else {
-                        let remaining_width = {
-                            if width as usize <= count {
-                                0
-                            } else {
-                                width as usize - count
-                            }
-                        };
-                        result.push_str(&utils::take_graphemes(s, remaining_width))
+                        let remaining = width as usize - utils::graphemes_count(&result);
+                        let count = utils::graphemes_count(&s);
+                        if remaining >= count {
+                            result.push_str(&s);
+                        } else {
+                            result.push_str(&utils::take_graphemes(s, remaining));
+                        }
                     }
                 }
 
@@ -559,7 +557,7 @@ mod tests {
         fn result_is_never_longer_than_specified_width(length in 1u32..10000, input in "\\PC*") {
             let fmt = FmtStrFormatter::new();
             let result = fmt.do_format(&input, length);
-            assert!(result.chars().count() <= length as usize);
+            assert!(utils::graphemes_count(&result) <= length as usize);
         }
     }
 }
