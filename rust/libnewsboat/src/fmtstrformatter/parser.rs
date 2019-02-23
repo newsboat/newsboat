@@ -38,7 +38,7 @@ fn escaped_percent_sign(input: CompleteStr) -> IResult<CompleteStr, Specifier> {
 fn spacing(input: CompleteStr) -> IResult<CompleteStr, Specifier> {
     do_parse!(input, tag!("%>") >> c: take!(1) >> (c)).map(|result| {
         let CompleteStr(chr) = result.1;
-        assert!(chr.len() == 1);
+        // unwrap() won't panic because we use take!(1) in parser
         let chr = chr.chars().next().unwrap();
 
         (result.0, Specifier::Spacing(chr))
