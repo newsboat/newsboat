@@ -517,5 +517,19 @@ mod tests {
             let fmt = FmtStrFormatter::new();
             fmt.do_format(&input, 0);
         }
+
+        #[test]
+        fn does_not_crash_on_any_spacing_character(c in "\\PC") {
+            let fmt = FmtStrFormatter::new();
+            let format = format!("%>{}", c);
+            fmt.do_format(&format, 0);
+        }
+
+        #[test]
+        fn does_not_crash_on_any_character_in_conditional(c in "\\PC") {
+            let fmt = FmtStrFormatter::new();
+            let format = format!("%?{}?hello?%", c);
+            fmt.do_format(&format, 0);
+        }
     }
 }
