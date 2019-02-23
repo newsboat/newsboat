@@ -159,6 +159,9 @@ impl FmtStrFormatter {
 
 #[cfg(test)]
 mod tests {
+    extern crate proptest;
+
+    use self::proptest::prelude::*;
     use super::*;
 
     #[test]
@@ -506,5 +509,13 @@ mod tests {
         fmt.register_fmt('y', "42".to_string());
 
         assert_eq!(fmt.do_format("%x? %y", 0), "What's the ultimate answer? 42");
+    }
+
+    proptest! {
+        #[test]
+        fn does_not_crash_when_formatting_with_no_formats_registered(input in "\\PC*") {
+            let fmt = FmtStrFormatter::new();
+            fmt.do_format(&input, 0);
+        }
     }
 }
