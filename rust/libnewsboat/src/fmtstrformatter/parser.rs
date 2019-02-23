@@ -1,4 +1,4 @@
-use nom::{is_digit, types::CompleteStr, IResult};
+use nom::{types::CompleteStr, IResult};
 use std::str;
 
 /// Describes how formats should be padded: on the left, on the right, or not at all.
@@ -49,7 +49,7 @@ fn padded_format(input: CompleteStr) -> IResult<CompleteStr, Specifier> {
     do_parse!(
         input,
         tag!("%")
-            >> width: take_while!(|chr| is_digit(chr as u8) || chr == '-')
+            >> width: take_while!(|chr: char| chr.is_ascii() && (chr.is_numeric() || chr == '-'))
             >> format: take!(1)
             >> (format, width)
     )
@@ -57,7 +57,7 @@ fn padded_format(input: CompleteStr) -> IResult<CompleteStr, Specifier> {
         let (c, w) = result.1;
 
         let CompleteStr(format) = c;
-        assert!(format.len() == 1);
+        // unwrap() won't fail because parser uses take!(1) to get exactly one character
         let format = format.chars().next().unwrap();
 
         let CompleteStr(width) = w;
@@ -133,9 +133,20 @@ fn parser(input: CompleteStr) -> IResult<CompleteStr, Vec<Specifier>> {
     )
 }
 
+fn sanitize(mut input: Vec<Specifier>) -> Vec<Specifier> {
+    input.retain(|s| {
+        if let Specifier::Format(c, _b) = s {
+            c.is_ascii()
+        } else {
+            true
+        }
+    });
+    input
+}
+
 pub fn parse(input: &str) -> Vec<Specifier> {
     match parser(CompleteStr(input)) {
-        Ok((_leftovers, ast)) => ast,
+        Ok((_leftovers, ast)) => sanitize(ast),
         Err(_) => vec![Specifier::Text("")],
     }
 }
