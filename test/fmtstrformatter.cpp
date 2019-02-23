@@ -185,15 +185,6 @@ TEST_CASE("do_format ignores \"%?\" at the end of the format string (which "
 	REQUIRE(fmt.do_format("%?") == "");
 }
 
-TEST_CASE("do_format ignores the format at the end of the format string that "
-		"looks like a conditional but lacks a \"then\" branch",
-		"[FmtStrFormatter]")
-{
-	FmtStrFormatter fmt;
-	REQUIRE(fmt.do_format("%?a?this is a conditional. Or is it") == "");
-	REQUIRE(fmt.do_format("%?x?Это условный формат, не правда ли") == "");
-}
-
 TEST_CASE("do_format replaces %Nx with the value of \"x\", padded "
 		"with spaces on the left to fit N columns",
 		"[FmtStrFormatter]")
@@ -325,18 +316,6 @@ TEST_CASE("do_format replaces \"%%\" with a percent sign",
 	FmtStrFormatter fmt;
 
 	REQUIRE(fmt.do_format("%%") == "%");
-}
-
-TEST_CASE("Nested conditionals confuse do_format", "[FmtStrFormatter]") {
-	FmtStrFormatter fmt;
-
-	fmt.register_fmt('x', "unknown");
-	fmt.register_fmt('y', "why");
-
-	REQUIRE(fmt.do_format("%?x?   %?y?y-nonempty&y-empty?   &x-empty?")
-			== "   y?y-nonempty&y-empty?   &x-empty?");
-	REQUIRE(fmt.do_format("%?x?   %?y?y-nonempty?   &x-empty?")
-			== "   y?y-nonempty?   &x-empty?");
 }
 
 TEST_CASE("Ampersand is treated literally outside of conditionals",
