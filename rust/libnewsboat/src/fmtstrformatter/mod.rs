@@ -75,10 +75,10 @@ impl FmtStrFormatter {
     }
 
     fn format_spacing(&self, c: char, rest: &[Specifier], width: u32, result: &mut String) {
+        let rest = self.formatting_helper(rest, 0);
         if width == 0 {
             result.push(c);
         } else {
-            let rest = self.formatting_helper(rest, 0);
             let padding_width = {
                 let content_width = utils::graphemes_count(&rest) + utils::graphemes_count(result);
                 if content_width > width as usize {
@@ -91,6 +91,7 @@ impl FmtStrFormatter {
             let padding = format!("{}", c).repeat(padding_width);
             result.push_str(&padding);
         };
+        result.push_str(&rest);
     }
 
     fn format_format(&self, c: char, padding: &Padding, _width: u32, result: &mut String) {
@@ -145,6 +146,8 @@ impl FmtStrFormatter {
                 Specifier::Spacing(c) => {
                     let rest = &format_ast[i + 1..];
                     self.format_spacing(*c, rest, width, &mut result);
+                    // format_spacing will also format the rest of the string, so quit the loop
+                    break;
                 }
 
                 Specifier::Format(c, padding) => {
