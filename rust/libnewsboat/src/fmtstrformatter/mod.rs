@@ -79,8 +79,14 @@ impl FmtStrFormatter {
             result.push(c);
         } else {
             let rest = self.formatting_helper(rest, 0);
-            let padding_width =
-                width as usize - utils::graphemes_count(&rest) - utils::graphemes_count(result);
+            let padding_width = {
+                let content_width = utils::graphemes_count(&rest) + utils::graphemes_count(result);
+                if content_width > width as usize {
+                    0
+                } else {
+                    width as usize - content_width
+                }
+            };
 
             let padding = format!("{}", c).repeat(padding_width);
             result.push_str(&padding);
