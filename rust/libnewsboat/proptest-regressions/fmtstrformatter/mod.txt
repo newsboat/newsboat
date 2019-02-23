@@ -7,3 +7,4 @@
 cc 2a934c9e82d898b5ab5d75f8b0c7d098c02e417ea06f918af75b526203f5571d # shrinks to input = "%Ἐ"
 cc 621fbc50959a4d0f5c816958ec45ea678919c2823d7d4dadf8510a857aa359d7 # shrinks to input = "%>\u{1a60}"
 cc 0701f0c6373227fc8d7b6bc88ff3a95bb44825c1b6fae4f60b4a4df26842adcc # shrinks to c = "¡"
+cc c5563f19874855884d6320bd175f980a1b1fa20d90785e98548def59282a9316 # shrinks to length = 1, input = "A\u{ac7}"

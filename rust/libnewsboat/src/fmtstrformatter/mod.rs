@@ -151,7 +151,21 @@ impl FmtStrFormatter {
                     self.format_format(*c, padding, width, &mut result);
                 }
 
-                Specifier::Text(s) => result.push_str(s),
+                Specifier::Text(s) => {
+                    let count = utils::graphemes_count(&result);
+                    if width == 0 {
+                        result.push_str(s);
+                    } else {
+                        let remaining_width = {
+                            if width as usize <= count {
+                                0
+                            } else {
+                                width as usize - count
+                            }
+                        };
+                        result.push_str(&utils::take_graphemes(s, remaining_width))
+                    }
+                }
 
                 Specifier::Conditional(cond, then, els) => {
                     self.format_conditional(*cond, then, els, width, &mut result)
@@ -536,6 +550,13 @@ mod tests {
             let fmt = FmtStrFormatter::new();
             let format = format!("%?{}?hello?%", c);
             fmt.do_format(&format, 0);
+        }
+
+        #[test]
+        fn result_is_never_longer_than_specified_width(length in 1u32..10000, input in "\\PC*") {
+            let fmt = FmtStrFormatter::new();
+            let result = fmt.do_format(&input, length);
+            assert!(result.chars().count() <= length as usize);
         }
     }
 }
