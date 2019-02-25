@@ -1,6 +1,9 @@
 //! Produces strings of values in a specified format, strftime(3)-like.
+
+mod limited_string;
 mod parser;
 
+use self::limited_string::LimitedString;
 use self::parser::{parse, Padding, Specifier};
 use std::cmp::min;
 use std::collections::BTreeMap;
@@ -74,13 +77,13 @@ impl FmtStrFormatter {
         self.formatting_helper(&ast, width)
     }
 
-    fn format_spacing(&self, c: char, rest: &[Specifier], width: u32, result: &mut String) {
+    fn format_spacing(&self, c: char, rest: &[Specifier], width: u32, result: &mut LimitedString) {
         let rest = self.formatting_helper(rest, 0);
         if width == 0 {
             result.push(c);
         } else {
             let padding_width = {
-                let content_width = utils::graphemes_count(&rest) + utils::graphemes_count(result);
+                let content_width = utils::graphemes_count(&rest) + result.length();
                 if content_width > width as usize {
                     0
                 } else {
@@ -94,7 +97,7 @@ impl FmtStrFormatter {
         result.push_str(&rest);
     }
 
-    fn format_format(&self, c: char, padding: &Padding, _width: u32, result: &mut String) {
+    fn format_format(&self, c: char, padding: &Padding, _width: u32, result: &mut LimitedString) {
         let empty_string = String::new();
         let value = self.fmts.get(&c).unwrap_or_else(|| &empty_string);
         match padding {
@@ -124,7 +127,7 @@ impl FmtStrFormatter {
         then: &[Specifier],
         els: &Option<Vec<Specifier>>,
         width: u32,
-        result: &mut String,
+        result: &mut LimitedString,
     ) {
         match self.fmts.get(&cond) {
             Some(value) if !value.is_empty() => {
@@ -139,7 +142,11 @@ impl FmtStrFormatter {
     }
 
     fn formatting_helper(&self, format_ast: &[Specifier], width: u32) -> String {
-        let mut result = String::new();
+        let mut result = LimitedString::new(if width == 0 {
+            None
+        } else {
+            Some(width as usize)
+        });
 
         for (i, specifier) in format_ast.iter().enumerate() {
             match specifier {
@@ -158,7 +165,7 @@ impl FmtStrFormatter {
                     if width == 0 {
                         result.push_str(s);
                     } else {
-                        let remaining = width as usize - utils::graphemes_count(&result);
+                        let remaining = width as usize - result.length();
                         let count = utils::graphemes_count(&s);
                         if remaining >= count {
                             result.push_str(&s);
@@ -174,7 +181,7 @@ impl FmtStrFormatter {
             }
         }
 
-        result
+        result.into_string()
     }
 }
 
