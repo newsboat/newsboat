@@ -107,7 +107,13 @@ void ItemListFormAction::process_operation(Operation op,
 			for (const auto& pair : visible_items) {
 				pair.first->set_deleted(true);
 			}
-			rsscache->mark_feed_items_deleted(feed->rssurl());
+			if (feed->is_query_feed()) {
+				for (const auto& pair : visible_items) {
+					rsscache->mark_item_deleted(pair.first->guid(), true);
+				}
+			} else {
+				rsscache->mark_feed_items_deleted(feed->rssurl());
+			}
 			invalidate(InvalidationMode::COMPLETE);
 		}
 	} break;
