@@ -504,11 +504,9 @@ void RssFeed::update_items(std::vector<std::shared_ptr<RssFeed>> feeds)
 	for (const auto& feed : feeds) {
 		if (!feed->is_query_feed()) { // don't fetch items from other query feeds!
 			for (const auto& item : feed->items()) {
-				if (m.matches(item.get())) {
+				if (!item->deleted() && m.matches(item.get())) {
 					LOG(Level::DEBUG,
-						"RssFeed::update_items: "
-						"Matcher "
-						"matches!");
+						"RssFeed::update_items: Matcher matches!");
 					item->set_feedptr(feed);
 					items_.push_back(item);
 					items_guid_map[item->guid()] = item;
