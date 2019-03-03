@@ -120,6 +120,10 @@ int Controller::run(const CliArgsParser& args)
 
 	configpaths.process_args(args);
 
+	if (!configpaths.setup_dirs()) {
+		return EXIT_FAILURE;
+	}
+
 	if (args.do_import) {
 		LOG(Level::INFO,
 			"Importing OPML file from %s",
@@ -131,10 +135,6 @@ int Controller::run(const CliArgsParser& args)
 	}
 
 	LOG(Level::INFO, "nl_langinfo(CODESET): %s", nl_langinfo(CODESET));
-
-	if (!configpaths.setup_dirs()) {
-		return EXIT_FAILURE;
-	}
 
 	if (!args.do_export) {
 		if (!args.silent)
