@@ -312,7 +312,13 @@ pub fn unescape_url(rs_str: String) -> Option<String> {
 /// Runs given command in a shell, and returns the output (from stdout; stderr is printed to the
 /// screen).
 pub fn get_command_output(cmd: &str) -> String {
-    let cmd = Command::new("sh").arg("-c").arg(cmd).output();
+    let cmd = Command::new("sh")
+        .arg("-c")
+        .arg(cmd)
+        // Inherit stdin so that the program can ask something of the user (see
+        // https://github.com/newsboat/newsboat/issues/455 for an example).
+        .stdin(Stdio::inherit())
+        .output();
     // from_utf8_lossy will convert any bad bytes to U+FFFD
     cmd.map(|cmd| String::from_utf8_lossy(&cmd.stdout).into_owned())
         .unwrap_or_else(|_| String::from(""))
