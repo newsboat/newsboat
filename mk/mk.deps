@@ -78,17 +78,27 @@ src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  include/urlreader.h include/queuemanager.h include/regexmanager.h \
  include/reloader.h include/remoteapi.h include/cliargsparser.h \
  include/colormanager.h include/configcontainer.h include/configparser.h \
- include/downloadthread.h include/exception.h include/exceptions.h \
- include/feedhqapi.h include/fileurlreader.h include/formatstring.h \
- include/globals.h include/inoreaderapi.h include/itemrenderer.h \
- include/htmlrenderer.h include/textformatter.h include/logger.h \
- include/newsblurapi.h rss/rsspp.h include/remoteapi.h \
+ include/decsyncapi.h include/fileurlreader.h include/downloadthread.h \
+ include/exception.h include/exceptions.h include/feedhqapi.h \
+ include/fileurlreader.h include/globals.h include/inoreaderapi.h \
+ include/itemrenderer.h include/htmlrenderer.h include/textformatter.h \
+ include/logger.h include/newsblurapi.h rss/rsspp.h include/remoteapi.h \
  include/ocnewsapi.h include/oldreaderapi.h include/opmlurlreader.h \
  include/regexmanager.h include/rssparser.h include/stflpp.h \
  include/strprintf.h include/ttrssapi.h 3rd-party/json.hpp \
  include/utils.h include/view.h include/controller.h \
  include/filebrowserformaction.h include/formaction.h include/history.h \
  include/keymap.h include/stflpp.h
+src/decsyncapi.o: src/decsyncapi.cpp include/decsyncapi.h \
+ include/remoteapi.h include/configcontainer.h include/configparser.h \
+ include/fileurlreader.h include/urlreader.h include/rss.h \
+ include/matcher.h filter/FilterParser.h include/utils.h include/logger.h \
+ config.h include/strprintf.h vala/decsync.h include/rss.h
+src/decsyncurlreader.o: src/decsyncurlreader.cpp include/decsyncapi.h \
+ include/remoteapi.h include/configcontainer.h include/configparser.h \
+ include/fileurlreader.h include/urlreader.h include/rss.h \
+ include/matcher.h filter/FilterParser.h include/utils.h include/logger.h \
+ config.h include/strprintf.h include/fileurlreader.h
 src/dialogsformaction.o: src/dialogsformaction.cpp \
  include/dialogsformaction.h include/formaction.h include/history.h \
  include/keymap.h include/configparser.h include/rss.h \
@@ -265,7 +275,7 @@ src/listformatter.o: src/listformatter.cpp include/listformatter.h \
  include/utils.h include/configcontainer.h include/logger.h config.h \
  include/strprintf.h
 src/logger.o: src/logger.cpp include/logger.h config.h \
- include/strprintf.h include/exception.h
+ include/strprintf.h
 src/matcher.o: src/matcher.cpp include/matcher.h filter/FilterParser.h \
  include/exceptions.h include/configparser.h include/logger.h config.h \
  include/strprintf.h include/utils.h include/configcontainer.h \
@@ -334,7 +344,9 @@ src/queueloader.o: src/queueloader.cpp include/queueloader.h \
  include/stflpp.h include/strprintf.h include/utils.h include/logger.h
 src/queuemanager.o: src/queuemanager.cpp include/queuemanager.h \
  include/configpaths.h include/cliargsparser.h include/logger.h config.h \
- include/strprintf.h
+ include/strprintf.h include/formatstring.h include/rss.h \
+ include/configcontainer.h include/configparser.h include/matcher.h \
+ filter/FilterParser.h include/utils.h include/stflpp.h include/utils.h
 src/regexmanager.o: src/regexmanager.cpp include/regexmanager.h \
  include/configparser.h include/matcher.h filter/FilterParser.h config.h \
  include/exceptions.h include/logger.h include/strprintf.h \

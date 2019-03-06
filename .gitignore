@@ -29,3 +29,4 @@ doc/keycmds-linked.dsv
 *.sw?
 /target/
 **/*.rs.bk
+vala/**/*.[ch]

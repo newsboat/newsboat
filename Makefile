@@ -9,6 +9,7 @@ CPPCHECK_JOBS?=5
 
 # compiler
 CXX?=c++
+CC?=cc
 # Compiler for building executables meant to be run on the
 # host system during cross compilation
 CXX_FOR_BUILD?=$(CXX)
@@ -39,6 +40,7 @@ endif
 
 CXXFLAGS:=$(BARE_CXXFLAGS) $(WARNFLAGS) $(DEFINES) $(CXXFLAGS)
 CXXFLAGS_FOR_BUILD?=$(CXXFLAGS)
+CCFLAGS:=$(DEFINES) $(CCFLAGS)
 
 LIB_SOURCES:=$(shell cat mk/libboat.deps)
 LIB_OBJS:=$(patsubst %.cpp,%.o,$(LIB_SOURCES))
@@ -56,6 +58,13 @@ NEWSBOAT_LIBS=-lboat -lfilter -lpthread -lrsspp
 RSSPPLIB_SOURCES=$(sort $(wildcard rss/*.cpp))
 RSSPPLIB_OBJS=$(patsubst rss/%.cpp,rss/%.o,$(RSSPPLIB_SOURCES))
 RSSPPLIB_OUTPUT=librsspp.a
+
+DECSYNC_VALA_SOURCES:=$(wildcard vala/libdecsync/src/*.vala) vala/decsyncutils.vala
+DECSYNC_C_SOURCES:=$(patsubst %.vala,%.c,$(DECSYNC_VALA_SOURCES))
+DECSYNC_OBJS:=$(patsubst %.c,%.o,$(DECSYNC_C_SOURCES))
+DECSYNC_HEADER:=vala/decsync.h
+DECSYNC_TMP_HEADER:=$(patsubst %.h,%.tmp.h,$(DECSYNC_HEADER))
+VALACFLAGS:=--pkg gee-0.8 --pkg json-glib-1.0 $(VALACFLAGS)
 
 CARGO_FLAGS+=--verbose
 ifeq ($(PROFILE),1)
@@ -97,6 +106,7 @@ RANLIB?=ranlib
 AR?=ar
 CHMOD=chmod
 CARGO=cargo
+VALAC=valac
 
 STFLHDRS:=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
 POFILES:=$(wildcard po/*.po)
@@ -114,8 +124,8 @@ NB_DEPS=xlicense.h $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBOAT_OBJS) $(RSSPPLIB
 $(NEWSBOATLIB_OUTPUT): $(RUST_SRCS)
 	$(CARGO) build $(CARGO_FLAGS)
 
-$(NEWSBOAT): $(NB_DEPS)
-	$(CXX) $(CXXFLAGS) -o $(NEWSBOAT) $(NEWSBOAT_OBJS) $(NEWSBOAT_LIBS) $(LDFLAGS)
+$(NEWSBOAT): $(NB_DEPS) $(DECSYNC_OBJS)
+	$(CXX) $(CXXFLAGS) -o $(NEWSBOAT) $(NEWSBOAT_OBJS) $(DECSYNC_OBJS) $(NEWSBOAT_LIBS) $(LDFLAGS)
 
 $(PODBOAT): $(LIB_OUTPUT) $(NEWSBOATLIB_OUTPUT) $(PODBOAT_OBJS)
 	$(CXX) $(CXXFLAGS) -o $(PODBOAT) $(PODBOAT_OBJS) $(PODBOAT_LIBS) $(LDFLAGS)
@@ -142,8 +152,20 @@ regenerate-parser:
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
+%.o: %.c
+	$(CC) $(CCFLAGS) -o $@ -c $<
+
 %.h: %.stfl
 	$(TEXTCONV) $< .stfl > $@
+
+$(DECSYNC_TMP_HEADER): $(DECSYNC_VALA_SOURCES)
+	$(VALAC) -C $(VALACFLAGS) $(DECSYNC_VALA_SOURCES) -H $(DECSYNC_TMP_HEADER)
+
+# libdecsync also defines a macro LOG, but it isn't used
+$(DECSYNC_HEADER): $(DECSYNC_TMP_HEADER)
+	grep -v '^#define LOG(' $(DECSYNC_TMP_HEADER) > $(DECSYNC_HEADER)
+
+$(DECSYNC_C_SOURCES): $(DECSYNC_HEADER)
 
 clean-newsboat:
 	$(RM) $(NEWSBOAT) $(NEWSBOAT_OBJS)
@@ -163,6 +185,9 @@ clean-libfilter:
 clean-libnewsboat:
 	cargo clean
 
+clean-decsync:
+	$(RM) $(DECSYNC_OBJS) $(DECSYNC_C_SOURCES) $(DECSYNC_HEADER) $(DECSYNC_TMP_HEADER)
+
 clean-doc:
 	$(RM) -r doc/xhtml 
 	$(RM) doc/*.xml doc/*.1 doc/newsboat-cfgcmds.txt doc/podboat-cfgcmds.txt \
@@ -170,7 +195,7 @@ clean-doc:
 		doc/podboat-cmds-linked.dsv doc/keycmds-linked.dsv \
 		doc/gen-example-config doc/example-config doc/generate doc/generate2
 
-clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clean-librsspp clean-libnewsboat
+clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clean-librsspp clean-libnewsboat clean-decsync
 	$(RM) $(STFLHDRS) xlicense.h
 
 distclean: clean clean-mo test-clean profclean
