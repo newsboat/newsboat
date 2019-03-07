@@ -1,0 +1,9 @@
+# Do not include some of the developer-oriented files in release tarballs
+/.github/ export-ignore
+/git-hooks/ export-ignore
+/snap/ export-ignore
+/.clang-format export-ignore
+/.editorconfig export-ignore
+/.gitignore export-ignore
+/.travis.yml export-ignore
+/submit-to-coveralls.sh export-ignore
