@@ -26,11 +26,8 @@ master repository and shell access to newsboat.org.
         * Don't use "###" style for headers because they'll be stripped ("#" is
             a shell comment). Use "===" style instead
 6. Prepare the tarball
-    * Clone your local clone somewhere else
-    * In that new clone, `rm -rf .git`
-    * Rename that clone to newsboat-VERSION
-    * Pack that clone in a tarball:
-        `tar cvJf newsboat-VERSION.tar.xz newsboat-VERSION`
+    * `git archive --format=tar --prefix="newsboat-VERSION/" rVERSION | pixz
+        > newsboat-VERSION.tar.xz`
     * Sign the tarball:
         `gpg2 --sign-with 'newsboat@googlegroups.com' --detach-sign --armour newsboat-VERSION.tar.xz`
     * Upload both files to newsboat.org staging area
