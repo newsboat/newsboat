@@ -16,6 +16,7 @@ apps:
     plugs:
       - network
       - home
+      - desktop
   podboat:
     command: usr/local/bin/podboat
     environment:
@@ -23,6 +24,7 @@ apps:
     plugs:
       - network
       - home
+      - desktop
 
 parts:
   newsboat:
