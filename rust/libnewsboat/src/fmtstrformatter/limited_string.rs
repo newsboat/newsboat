@@ -69,9 +69,6 @@ impl LimitedString {
 
 #[cfg(test)]
 mod tests {
-    extern crate proptest;
-
-    use self::proptest::prelude::*;
     use super::*;
 
     #[test]
@@ -81,19 +78,17 @@ mod tests {
 
     #[test]
     fn t_length_never_exceeds_the_limit() {
-        use std::dbg;
-
         let limit = 15usize;
         let mut s = LimitedString::new(Some(limit));
 
         s.push_str("Привет, мир!");
-        assert!(dbg!(s.length()) < dbg!(limit));
+        assert!(s.length() < limit);
 
         s.push_str("!!");
-        assert!(dbg!(s.length()) < limit);
+        assert!(s.length() < limit);
 
         s.push_str(" Ну как, всё нормально?");
-        assert_eq!(dbg!(s.length()), limit);
+        assert_eq!(s.length(), limit);
     }
 
     #[test]
@@ -142,7 +137,7 @@ mod tests {
         #[test]
         fn length_never_exceeds_the_limit_one_string(
             limit in 1usize..1024,
-            input in "\\PC*")
+            ref input in "\\PC*")
         {
             let mut s = LimitedString::new(Some(limit));
             s.push_str(&input);
@@ -152,8 +147,8 @@ mod tests {
         #[test]
         fn length_never_exceeds_the_limit_two_strings(
             limit in 1usize..1024,
-            input1 in "\\PC*",
-            input2 in "\\PC*")
+            ref input1 in "\\PC*",
+            ref input2 in "\\PC*")
         {
             let mut s = LimitedString::new(Some(limit));
             s.push_str(&input1);
@@ -165,9 +160,9 @@ mod tests {
         #[test]
         fn length_never_exceeds_the_limit_three_strings(
             limit in 1usize..1024,
-            input1 in "\\PC*",
-            input2 in "\\PC*",
-            input3 in "\\PC*")
+            ref input1 in "\\PC*",
+            ref input2 in "\\PC*",
+            ref input3 in "\\PC*")
         {
             let mut s = LimitedString::new(Some(limit));
             s.push_str(&input1);
@@ -181,7 +176,7 @@ mod tests {
         #[test]
         fn push_cannot_make_the_string_exceed_the_limit(
             limit in 1usize..1024,
-            input in "\\PC*")
+            ref input in "\\PC*")
         {
             let mut s = LimitedString::new(Some(limit));
 

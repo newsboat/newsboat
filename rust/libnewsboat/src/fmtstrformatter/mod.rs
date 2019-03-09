@@ -101,18 +101,18 @@ impl FmtStrFormatter {
         let empty_string = String::new();
         let value = self.fmts.get(&c).unwrap_or_else(|| &empty_string);
         match padding {
-            Padding::None => result.push_str(value),
+            &Padding::None => result.push_str(value),
 
-            Padding::Left(total_width) => {
-                let padding_width = total_width - min(*total_width, utils::graphemes_count(value));
+            &Padding::Left(total_width) => {
+                let padding_width = total_width - min(total_width, utils::graphemes_count(value));
                 let stripping_width = total_width - padding_width;
                 let padding = String::from(" ").repeat(padding_width);
                 result.push_str(&padding);
                 result.push_str(&utils::take_graphemes(value, stripping_width));
             }
 
-            Padding::Right(total_width) => {
-                let padding_width = total_width - min(*total_width, utils::graphemes_count(value));
+            &Padding::Right(total_width) => {
+                let padding_width = total_width - min(total_width, utils::graphemes_count(value));
                 let stripping_width = total_width - padding_width;
                 let padding = String::from(" ").repeat(padding_width);
                 result.push_str(&utils::take_graphemes(value, stripping_width));
@@ -134,8 +134,8 @@ impl FmtStrFormatter {
                 result.push_str(&self.formatting_helper(then, width))
             }
             _ => {
-                if let Some(els) = els {
-                    result.push_str(&self.formatting_helper(els, width))
+                if let &Some(ref els) = els {
+                    result.push_str(&self.formatting_helper(&els, width))
                 }
             }
         }
@@ -150,18 +150,18 @@ impl FmtStrFormatter {
 
         for (i, specifier) in format_ast.iter().enumerate() {
             match specifier {
-                Specifier::Spacing(c) => {
+                &Specifier::Spacing(c) => {
                     let rest = &format_ast[i + 1..];
-                    self.format_spacing(*c, rest, width, &mut result);
+                    self.format_spacing(c, rest, width, &mut result);
                     // format_spacing will also format the rest of the string, so quit the loop
                     break;
                 }
 
-                Specifier::Format(c, padding) => {
-                    self.format_format(*c, padding, width, &mut result);
+                &Specifier::Format(c, ref padding) => {
+                    self.format_format(c, &padding, width, &mut result);
                 }
 
-                Specifier::Text(s) => {
+                &Specifier::Text(s) => {
                     if width == 0 {
                         result.push_str(s);
                     } else {
@@ -175,8 +175,8 @@ impl FmtStrFormatter {
                     }
                 }
 
-                Specifier::Conditional(cond, then, els) => {
-                    self.format_conditional(*cond, then, els, width, &mut result)
+                &Specifier::Conditional(cond, ref then, ref els) => {
+                    self.format_conditional(cond, &then, &els, width, &mut result)
                 }
             }
         }
@@ -187,9 +187,6 @@ impl FmtStrFormatter {
 
 #[cfg(test)]
 mod tests {
-    extern crate proptest;
-
-    use self::proptest::prelude::*;
     use super::*;
 
     #[test]
@@ -541,27 +538,27 @@ mod tests {
 
     proptest! {
         #[test]
-        fn does_not_crash_when_formatting_with_no_formats_registered(input in "\\PC*") {
+        fn does_not_crash_when_formatting_with_no_formats_registered(ref input in "\\PC*") {
             let fmt = FmtStrFormatter::new();
             fmt.do_format(&input, 0);
         }
 
         #[test]
-        fn does_not_crash_on_any_spacing_character(c in "\\PC") {
+        fn does_not_crash_on_any_spacing_character(ref c in "\\PC") {
             let fmt = FmtStrFormatter::new();
             let format = format!("%>{}", c);
             fmt.do_format(&format, 0);
         }
 
         #[test]
-        fn does_not_crash_on_any_character_in_conditional(c in "\\PC") {
+        fn does_not_crash_on_any_character_in_conditional(ref c in "\\PC") {
             let fmt = FmtStrFormatter::new();
             let format = format!("%?{}?hello?%", c);
             fmt.do_format(&format, 0);
         }
 
         #[test]
-        fn result_is_never_longer_than_specified_width(length in 1u32..10000, input in "\\PC*") {
+        fn result_is_never_longer_than_specified_width(length in 1u32..10000, ref input in "\\PC*") {
             let fmt = FmtStrFormatter::new();
             let result = fmt.do_format(&input, length);
             assert!(utils::graphemes_count(&result) <= length as usize);
