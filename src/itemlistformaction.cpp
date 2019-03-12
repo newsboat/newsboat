@@ -522,6 +522,29 @@ void ItemListFormAction::process_operation(Operation op,
 		}
 		v->set_status("");
 		break;
+	case OP_MARKARTICLEASREAD:
+		LOG(Level::INFO,
+			"ItemListFormAction: marking article as read");
+		v->set_status(_("Marking article as read..."));
+		if (itemposname.length() > 0 &&
+			itempos < visible_items.size()) {
+
+			if (visible_items[itempos].first->unread()) {
+				visible_items[itempos].first->set_unread(
+					false);
+				v->get_ctrl()->mark_article_read(
+					visible_items[itempos].first->guid(),
+					true);
+			}
+
+			if (!cfg->get_configvalue_as_bool(
+				    "show-read-articles")) {
+				f->set("itempos", "0");
+			}
+			invalidate(InvalidationMode::COMPLETE);
+		}
+		v->set_status("");
+		break;
 	case OP_TOGGLESHOWREAD:
 		m.parse(FILTER_UNREAD_ITEMS);
 		LOG(Level::DEBUG,

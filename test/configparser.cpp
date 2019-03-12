@@ -70,6 +70,7 @@ TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
 			if (i == OP_OPENALLUNREADINBROWSER ||
 					i == OP_MARKALLABOVEASREAD ||
+					i == OP_MARKARTICLEASREAD ||
 					i == OP_OPENALLUNREADINBROWSER_AND_MARK) {
 				continue;
 			}
