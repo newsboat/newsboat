@@ -489,8 +489,13 @@ void ItemListFormAction::process_operation(Operation op,
 				v->get_ctrl()->mark_all_read(feed);
 			}
 			if (cfg->get_configvalue_as_bool(
-				    "markfeedread-jumps-to-next-unread"))
+				    "markfeedread-jumps-to-next-unread")) {
 				process_operation(OP_NEXTUNREAD);
+			} else {
+				LOG(Level::DEBUG,
+					"ItemListFormAction::reset itempos");
+				f->set("itempos", "0");
+			}
 			invalidate(InvalidationMode::COMPLETE);
 			v->set_status("");
 		} catch (const DbException& e) {
