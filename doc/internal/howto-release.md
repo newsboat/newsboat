@@ -5,6 +5,7 @@ This document describes all the steps one should go through in order to make
 a new release. The person doing the release should have push access to the
 master repository and shell access to newsboat.org.
 
+0. Pull all the latest changes from the main repo.
 1. Update CHANGELOG
     * Consult `git log --reverse PREVIOUS_VERISION..`
     * Mention issue number ("#X" for Newsboat issues, full link to issue tracker
