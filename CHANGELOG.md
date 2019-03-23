@@ -2,14 +2,27 @@
 
 
 
-## Unreleased
+## 2.15 - 2019-03-23
 
 ### Added
+- `random` `article-sort-order` (Jagannathan Tiruvallur Eachambadi)
+- Cursor position in article list is reset after marking the feed as read
+    (Stefan Assmann)
+
 ### Changed
-### Deprecated
-### Removed
+- Update vendored version of Catch2 to 2.7.0
+- Give our Snap access to `xdg-open`
+- Make "delete all items" work in query feeds (Alexander Batischev) (#456)
+
 ### Fixed
-### Security
+- Use a native compiler for internal tools when cross-compiling (maxice8)
+- Always write to `error-log`, no matter the log level specified on the command
+    line (Alexander Batischev)
+- (Regression) Let users interact with programs run by "exec:", backticks in
+    config, and `*-passwordeval` settings (Alexander Batischev) (#455)
+- Do not add deleted items to query feeds (Alexander Batischev) (#456)
+- Setup directories before importing feeds, to avoid the import silently failing
+    (Neill Miller)
 
 
 
@@ -27,7 +40,8 @@ acknowledge contributions from the following people: kkdd, Raphael Nestler.
 
 ### Changed
 - Translations: Polish (Carno)
-- When opening a never-fetched feed in the browser, just use the feed's URL (Alexander Batischev)
+- When opening a never-fetched feed in the browser, just use the feed's URL
+    (Alexander Batischev)
 - Update vendored version of Catch2 to 2.6.0
 
 ### Fixed

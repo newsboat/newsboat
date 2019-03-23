@@ -1,6 +1,6 @@
 [package]
 name = "libnewsboat-ffi"
-version = "2.14.1"
+version = "2.15.0"
 authors = ["Alexander Batischev <eual.jp@gmail.com>"]
 
 [dependencies]

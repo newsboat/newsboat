@@ -154,7 +154,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "libnewsboat"
-version = "2.14.1"
+version = "2.15.0"
 dependencies = [
  "backtrace 0.3.13 (registry+https://github.com/rust-lang/crates.io-index)",
  "chrono 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -169,10 +169,10 @@ dependencies = [
 
 [[package]]
 name = "libnewsboat-ffi"
-version = "2.14.1"
+version = "2.15.0"
 dependencies = [
  "libc 0.2.48 (registry+https://github.com/rust-lang/crates.io-index)",
- "libnewsboat 2.14.1",
+ "libnewsboat 2.15.0",
 ]
 
 [[package]]
