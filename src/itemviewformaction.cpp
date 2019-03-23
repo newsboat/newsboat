@@ -6,7 +6,7 @@
 
 #include "config.h"
 #include "exceptions.h"
-#include "formatstring.h"
+#include "fmtstrformatter.h"
 #include "itemrenderer.h"
 #include "logger.h"
 #include "strprintf.h"

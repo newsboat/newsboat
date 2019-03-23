@@ -10,7 +10,7 @@
 #include "configcontainer.h"
 #include "dllist.h"
 #include "download.h"
-#include "formatstring.h"
+#include "fmtstrformatter.h"
 #include "help.h"
 #include "logger.h"
 #include "pbcontroller.h"

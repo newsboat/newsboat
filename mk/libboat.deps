@@ -1,1 +1,1 @@
-src/configcontainer.cpp src/configparser.cpp src/colormanager.cpp src/keymap.cpp src/stflpp.cpp src/logger.cpp src/exception.cpp src/utils.cpp src/fslock.cpp src/matcher.cpp src/formatstring.cpp src/strprintf.cpp
+src/configcontainer.cpp src/configparser.cpp src/colormanager.cpp src/keymap.cpp src/stflpp.cpp src/logger.cpp src/exception.cpp src/utils.cpp src/fslock.cpp src/matcher.cpp src/fmtstrformatter.cpp src/strprintf.cpp

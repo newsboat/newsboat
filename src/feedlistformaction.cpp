@@ -10,7 +10,7 @@
 #include "config.h"
 #include "exceptions.h"
 #include "feedcontainer.h"
-#include "formatstring.h"
+#include "fmtstrformatter.h"
 #include "listformatter.h"
 #include "logger.h"
 #include "reloader.h"

@@ -510,14 +510,6 @@ std::string utils::replace_all(std::string str,
 	return RustString( rs_replace_all(str.c_str(), from.c_str(), to.c_str()) );
 }
 
-std::wstring utils::utf8str2wstr(const std::string& utf8str)
-{
-	stfl_ipool* pool = stfl_ipool_create("utf-8");
-	std::wstring wstr = stfl_ipool_towc(pool, utf8str.c_str());
-	stfl_ipool_destroy(pool);
-	return wstr;
-}
-
 std::wstring utils::str2wstr(const std::string& str)
 {
 	const char* codeset = nl_langinfo(CODESET);

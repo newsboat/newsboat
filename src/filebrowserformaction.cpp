@@ -14,7 +14,7 @@
 #include <unistd.h>
 
 #include "config.h"
-#include "formatstring.h"
+#include "fmtstrformatter.h"
 #include "logger.h"
 #include "strprintf.h"
 #include "utils.h"

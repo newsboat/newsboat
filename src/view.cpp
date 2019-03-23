@@ -32,7 +32,7 @@ extern "C" {
 #include "feedlistformaction.h"
 #include "filebrowser.h"
 #include "formaction.h"
-#include "formatstring.h"
+#include "fmtstrformatter.h"
 #include "help.h"
 #include "helpformaction.h"
 #include "htmlrenderer.h"

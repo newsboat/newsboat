@@ -3,7 +3,7 @@
 #include <cstdio>
 
 #include "config.h"
-#include "formatstring.h"
+#include "fmtstrformatter.h"
 #include "listformatter.h"
 #include "strprintf.h"
 #include "utils.h"

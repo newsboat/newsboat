@@ -4,7 +4,7 @@
 #include <sstream>
 
 #include "config.h"
-#include "formatstring.h"
+#include "fmtstrformatter.h"
 #include "keymap.h"
 #include "listformatter.h"
 #include "strprintf.h"

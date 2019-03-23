@@ -79,22 +79,21 @@ src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  include/reloader.h include/remoteapi.h include/cliargsparser.h \
  include/colormanager.h include/configcontainer.h include/configparser.h \
  include/downloadthread.h include/exception.h include/exceptions.h \
- include/feedhqapi.h include/fileurlreader.h include/formatstring.h \
- include/globals.h include/inoreaderapi.h include/itemrenderer.h \
- include/htmlrenderer.h include/textformatter.h include/logger.h \
- include/newsblurapi.h rss/rsspp.h include/remoteapi.h \
- include/ocnewsapi.h include/oldreaderapi.h include/opmlurlreader.h \
- include/regexmanager.h include/rssparser.h include/stflpp.h \
- include/strprintf.h include/ttrssapi.h 3rd-party/json.hpp \
- include/utils.h include/view.h include/controller.h \
- include/filebrowserformaction.h include/formaction.h include/history.h \
- include/keymap.h include/stflpp.h
+ include/feedhqapi.h include/fileurlreader.h include/globals.h \
+ include/inoreaderapi.h include/itemrenderer.h include/htmlrenderer.h \
+ include/textformatter.h include/logger.h include/newsblurapi.h \
+ rss/rsspp.h include/remoteapi.h include/ocnewsapi.h \
+ include/oldreaderapi.h include/opmlurlreader.h include/regexmanager.h \
+ include/rssparser.h include/stflpp.h include/strprintf.h \
+ include/ttrssapi.h 3rd-party/json.hpp include/utils.h include/view.h \
+ include/controller.h include/filebrowserformaction.h \
+ include/formaction.h include/history.h include/keymap.h include/stflpp.h
 src/dialogsformaction.o: src/dialogsformaction.cpp \
  include/dialogsformaction.h include/formaction.h include/history.h \
  include/keymap.h include/configparser.h include/rss.h \
  include/configcontainer.h include/matcher.h filter/FilterParser.h \
  include/utils.h include/logger.h config.h include/strprintf.h \
- include/stflpp.h include/formatstring.h include/listformatter.h \
+ include/stflpp.h include/fmtstrformatter.h include/listformatter.h \
  include/regexmanager.h include/strprintf.h include/utils.h \
  include/view.h include/colormanager.h include/controller.h \
  include/cache.h include/configpaths.h include/cliargsparser.h \
@@ -139,15 +138,15 @@ src/feedlistformaction.o: src/feedlistformaction.cpp \
  include/opml.h include/urlreader.h include/queuemanager.h \
  include/reloader.h include/remoteapi.h include/filebrowserformaction.h \
  include/htmlrenderer.h include/textformatter.h include/exceptions.h \
- include/feedcontainer.h include/formatstring.h include/listformatter.h \
- include/logger.h include/reloader.h include/strprintf.h include/utils.h \
- include/view.h
+ include/feedcontainer.h include/fmtstrformatter.h \
+ include/listformatter.h include/logger.h include/reloader.h \
+ include/strprintf.h include/utils.h include/view.h
 src/filebrowserformaction.o: src/filebrowserformaction.cpp \
  include/filebrowserformaction.h include/configcontainer.h \
  include/configparser.h include/formaction.h include/history.h \
  include/keymap.h include/rss.h include/matcher.h filter/FilterParser.h \
  include/utils.h include/logger.h config.h include/strprintf.h \
- include/stflpp.h include/formatstring.h include/logger.h \
+ include/stflpp.h include/fmtstrformatter.h include/logger.h \
  include/strprintf.h include/utils.h include/view.h \
  include/colormanager.h include/controller.h include/cache.h \
  include/configpaths.h include/cliargsparser.h include/feedcontainer.h \
@@ -162,6 +161,9 @@ src/filtercontainer.o: src/filtercontainer.cpp include/filtercontainer.h \
  include/configparser.h config.h include/exceptions.h include/matcher.h \
  filter/FilterParser.h include/strprintf.h include/utils.h \
  include/configcontainer.h include/logger.h include/strprintf.h
+src/fmtstrformatter.o: src/fmtstrformatter.cpp include/fmtstrformatter.h \
+ include/logger.h config.h include/strprintf.h include/utils.h \
+ include/configcontainer.h include/configparser.h include/logger.h
 src/formaction.o: src/formaction.cpp include/formaction.h \
  include/history.h include/keymap.h include/configparser.h include/rss.h \
  include/configcontainer.h include/matcher.h filter/FilterParser.h \
@@ -174,16 +176,13 @@ src/formaction.o: src/formaction.cpp include/formaction.h \
  include/urlreader.h include/queuemanager.h include/regexmanager.h \
  include/reloader.h include/remoteapi.h include/filebrowserformaction.h \
  include/formaction.h include/htmlrenderer.h include/textformatter.h
-src/formatstring.o: src/formatstring.cpp include/formatstring.h \
- include/logger.h config.h include/strprintf.h include/utils.h \
- include/configcontainer.h include/configparser.h include/logger.h
 src/fslock.o: src/fslock.cpp include/fslock.h include/logger.h config.h \
  include/strprintf.h
 src/helpformaction.o: src/helpformaction.cpp include/helpformaction.h \
  include/formaction.h include/history.h include/keymap.h \
  include/configparser.h include/rss.h include/configcontainer.h \
  include/matcher.h filter/FilterParser.h include/utils.h include/logger.h \
- config.h include/strprintf.h include/stflpp.h include/formatstring.h \
+ config.h include/strprintf.h include/stflpp.h include/fmtstrformatter.h \
  include/keymap.h include/listformatter.h include/regexmanager.h \
  include/strprintf.h include/utils.h include/view.h \
  include/colormanager.h include/controller.h include/cache.h \
@@ -222,7 +221,7 @@ src/itemlistformaction.o: src/itemlistformaction.cpp \
  include/urlreader.h include/queuemanager.h include/reloader.h \
  include/remoteapi.h include/filebrowserformaction.h \
  include/htmlrenderer.h include/textformatter.h include/controller.h \
- include/exceptions.h include/formatstring.h include/logger.h \
+ include/exceptions.h include/fmtstrformatter.h include/logger.h \
  include/strprintf.h include/utils.h include/view.h
 src/itemrenderer.o: src/itemrenderer.cpp include/itemrenderer.h \
  include/htmlrenderer.h include/textformatter.h include/regexmanager.h \
@@ -236,7 +235,7 @@ src/itemviewformaction.o: src/itemviewformaction.cpp \
  include/configcontainer.h include/matcher.h filter/FilterParser.h \
  include/utils.h include/logger.h config.h include/strprintf.h \
  include/stflpp.h include/htmlrenderer.h include/textformatter.h \
- include/regexmanager.h include/exceptions.h include/formatstring.h \
+ include/regexmanager.h include/exceptions.h include/fmtstrformatter.h \
  include/itemrenderer.h include/logger.h include/strprintf.h \
  include/textformatter.h include/utils.h include/view.h \
  include/colormanager.h include/controller.h include/cache.h \
@@ -265,7 +264,7 @@ src/listformatter.o: src/listformatter.cpp include/listformatter.h \
  include/utils.h include/configcontainer.h include/logger.h config.h \
  include/strprintf.h
 src/logger.o: src/logger.cpp include/logger.h config.h \
- include/strprintf.h include/exception.h
+ include/strprintf.h
 src/matcher.o: src/matcher.cpp include/matcher.h filter/FilterParser.h \
  include/exceptions.h include/configparser.h include/logger.h config.h \
  include/strprintf.h include/utils.h include/configcontainer.h \
@@ -318,11 +317,11 @@ src/pbcontroller.o: src/pbcontroller.cpp include/pbcontroller.h \
 src/pbview.o: src/pbview.cpp include/pbview.h include/colormanager.h \
  include/configparser.h include/keymap.h include/stflpp.h config.h \
  include/configcontainer.h stfl/dllist.h include/download.h \
- include/formatstring.h stfl/help.h include/logger.h include/strprintf.h \
- include/pbcontroller.h include/configcontainer.h include/download.h \
- include/fslock.h include/queueloader.h include/pbcontroller.h \
- include/poddlthread.h include/strprintf.h include/utils.h \
- include/logger.h
+ include/fmtstrformatter.h stfl/help.h include/logger.h \
+ include/strprintf.h include/pbcontroller.h include/configcontainer.h \
+ include/download.h include/fslock.h include/queueloader.h \
+ include/pbcontroller.h include/poddlthread.h include/strprintf.h \
+ include/utils.h include/logger.h
 src/poddlthread.o: src/poddlthread.cpp include/poddlthread.h \
  include/configcontainer.h include/configparser.h include/download.h \
  config.h include/logger.h include/strprintf.h include/utils.h \
@@ -334,7 +333,9 @@ src/queueloader.o: src/queueloader.cpp include/queueloader.h \
  include/stflpp.h include/strprintf.h include/utils.h include/logger.h
 src/queuemanager.o: src/queuemanager.cpp include/queuemanager.h \
  include/configpaths.h include/cliargsparser.h include/logger.h config.h \
- include/strprintf.h
+ include/strprintf.h include/fmtstrformatter.h include/rss.h \
+ include/configcontainer.h include/configparser.h include/matcher.h \
+ filter/FilterParser.h include/utils.h include/stflpp.h include/utils.h
 src/regexmanager.o: src/regexmanager.cpp include/regexmanager.h \
  include/configparser.h include/matcher.h filter/FilterParser.h config.h \
  include/exceptions.h include/logger.h include/strprintf.h \
@@ -348,7 +349,7 @@ src/reloader.o: src/reloader.cpp include/reloader.h \
  include/feedcontainer.h include/filtercontainer.h include/fslock.h \
  include/opml.h include/urlreader.h include/queuemanager.h \
  include/regexmanager.h include/reloader.h include/remoteapi.h \
- include/downloadthread.h include/exceptions.h include/formatstring.h \
+ include/downloadthread.h include/exceptions.h include/fmtstrformatter.h \
  include/reloadrangethread.h include/reloadthread.h include/controller.h \
  rss/rsspp.h include/remoteapi.h include/rssparser.h rss/rsspp.h \
  include/utils.h include/view.h include/filebrowserformaction.h \
@@ -391,7 +392,7 @@ src/selectformaction.o: src/selectformaction.cpp \
  include/configparser.h include/formaction.h include/history.h \
  include/keymap.h include/rss.h include/configcontainer.h \
  include/matcher.h filter/FilterParser.h include/utils.h include/logger.h \
- config.h include/strprintf.h include/stflpp.h include/formatstring.h \
+ config.h include/strprintf.h include/stflpp.h include/fmtstrformatter.h \
  include/listformatter.h include/regexmanager.h include/strprintf.h \
  include/utils.h include/view.h include/colormanager.h \
  include/controller.h include/cache.h include/configpaths.h \
@@ -430,7 +431,7 @@ src/urlviewformaction.o: src/urlviewformaction.cpp \
  include/configcontainer.h include/matcher.h filter/FilterParser.h \
  include/utils.h include/logger.h config.h include/strprintf.h \
  include/stflpp.h include/htmlrenderer.h include/textformatter.h \
- include/regexmanager.h include/formatstring.h include/listformatter.h \
+ include/regexmanager.h include/fmtstrformatter.h include/listformatter.h \
  include/strprintf.h include/utils.h include/view.h \
  include/colormanager.h include/controller.h include/cache.h \
  include/configpaths.h include/cliargsparser.h include/feedcontainer.h \
@@ -454,7 +455,7 @@ src/view.o: src/view.cpp include/view.h include/colormanager.h \
  include/dialogsformaction.h include/exception.h include/exceptions.h \
  stfl/feedlist.h include/feedlistformaction.h include/listformaction.h \
  include/view.h stfl/filebrowser.h include/formaction.h \
- include/formatstring.h stfl/help.h include/helpformaction.h \
+ include/fmtstrformatter.h stfl/help.h include/helpformaction.h \
  include/htmlrenderer.h stfl/itemlist.h include/itemlistformaction.h \
  include/listformatter.h stfl/itemview.h include/itemviewformaction.h \
  include/keymap.h include/logger.h include/regexmanager.h \
@@ -485,8 +486,8 @@ test/fileurlreader.o: test/fileurlreader.cpp include/fileurlreader.h \
  include/urlreader.h 3rd-party/catch.hpp test/test-helpers.h
 test/filterparser.o: test/filterparser.cpp filter/FilterParser.h \
  3rd-party/catch.hpp
-test/formatstring.o: test/formatstring.cpp include/formatstring.h \
- 3rd-party/catch.hpp
+test/fmtstrformatter.o: test/fmtstrformatter.cpp \
+ include/fmtstrformatter.h 3rd-party/catch.hpp
 test/history.o: test/history.cpp include/history.h 3rd-party/catch.hpp
 test/htmlrenderer.o: test/htmlrenderer.cpp include/htmlrenderer.h \
  include/textformatter.h include/regexmanager.h include/configparser.h \

@@ -1,10 +1,12 @@
 extern crate dirs;
 extern crate rand;
 extern crate regex;
+extern crate unicode_segmentation;
 extern crate unicode_width;
 extern crate url;
 
 use self::regex::Regex;
+use self::unicode_segmentation::UnicodeSegmentation;
 use self::unicode_width::UnicodeWidthStr;
 use self::url::percent_encoding::*;
 use self::url::Url;
@@ -436,6 +438,44 @@ pub fn make_title(rs_str: String) -> String {
         None => String::new(),
         Some(f) => f,
     }
+}
+
+/// Counts graphemes in a given string.
+///
+/// ```
+/// use libnewsboat::utils::graphemes_count;
+///
+/// assert_eq!(graphemes_count("D"), 1);
+/// // len() counts bytes, not characters, but all ASCII symbols are represented by one byte in
+/// // UTF-8, so len() returns 1 in this case
+/// assert_eq!("D".len(), 1);
+///
+/// // Here's a situation where a single grapheme is represented by multiple bytes
+/// assert_eq!(graphemes_count("Ж"), 1);
+/// assert_eq!("Ж".len(), 2);
+///
+/// assert_eq!(graphemes_count("📰"), 1);
+/// assert_eq!("📰".len(), 4);
+/// ```
+pub fn graphemes_count(input: &str) -> usize {
+    UnicodeSegmentation::graphemes(input, true).count()
+}
+
+/// Extracts up to `n` first graphemes from the given string.
+///
+/// ```
+/// use libnewsboat::utils::take_graphemes;
+///
+/// let input = "Привет!";
+/// assert_eq!(take_graphemes(input, 1), "П");
+/// assert_eq!(take_graphemes(input, 4), "Прив");
+/// assert_eq!(take_graphemes(input, 6), "Привет");
+/// assert_eq!(take_graphemes(input, 20), input);
+/// ```
+pub fn take_graphemes(input: &str, n: usize) -> String {
+    UnicodeSegmentation::graphemes(input, true)
+        .take(n)
+        .collect::<String>()
 }
 
 #[cfg(test)]

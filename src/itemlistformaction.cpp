@@ -8,7 +8,7 @@
 #include "config.h"
 #include "controller.h"
 #include "exceptions.h"
-#include "formatstring.h"
+#include "fmtstrformatter.h"
 #include "logger.h"
 #include "strprintf.h"
 #include "utils.h"
