@@ -491,10 +491,23 @@ void ItemListFormAction::process_operation(Operation op,
 			if (cfg->get_configvalue_as_bool(
 				    "markfeedread-jumps-to-next-unread")) {
 				process_operation(OP_NEXTUNREAD);
-			} else {
-				LOG(Level::DEBUG,
-					"ItemListFormAction::reset itempos");
-				f->set("itempos", "0");
+			} else { // reposition to first/last item
+				std::string sortorder =
+					cfg->get_configvalue("article-sort-order");
+
+				if (sortorder == "date-desc") {
+					LOG(Level::DEBUG,
+						"ItemListFormAction:: "
+						"reset itempos to last");
+					f->set("itempos",
+						std::to_string(visible_items.size() - 1));
+				}
+				if (sortorder == "date-asc") {
+					LOG(Level::DEBUG,
+						"ItemListFormAction:: "
+						"reset itempos to first");
+					f->set("itempos", "0");
+				}
 			}
 			invalidate(InvalidationMode::COMPLETE);
 			v->set_status("");
