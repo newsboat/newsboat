@@ -267,10 +267,22 @@ install-podboat: $(PODBOAT) doc/$(PODBOAT).1
 install-docs: doc
 	$(MKDIR) $(DESTDIR)$(docdir)
 	$(INSTALL) -m 644 doc/xhtml/* $(DESTDIR)$(docdir) || true
+	$(INSTALL) -m 644 CHANGELOG.md $(DESTDIR)$(docdir) || true
+	$(MKDIR) $(DESTDIR)$(docdir)/contrib
+	$(INSTALL) -m 755 contrib/*.sh $(DESTDIR)$(docdir)/contrib || true
+	$(INSTALL) -m 755 contrib/*.rb $(DESTDIR)$(docdir)/contrib || true
+	$(INSTALL) -m 755 contrib/*.pl $(DESTDIR)$(docdir)/contrib || true
+	$(MKDIR) $(DESTDIR)$(docdir)/contrib/colorschemes
+	$(INSTALL) -m 644 contrib/colorschemes/* $(DESTDIR)$(docdir)/contrib/colorschemes || true
+	$(MKDIR) $(DESTDIR)$(docdir)/contrib/getpocket.com
+	$(INSTALL) -m 755 contrib/getpocket.com/*.sh $(DESTDIR)$(docdir)/contrib/getpocket.com || true
+	$(INSTALL) -m 644 contrib/getpocket.com/*.md $(DESTDIR)$(docdir)/contrib/getpocket.com || true
 
 install-examples: doc/example-config
 	$(MKDIR) $(DESTDIR)$(docdir)/examples
 	$(INSTALL) -m 644 doc/example-config $(DESTDIR)$(docdir)/examples/config || true
+	$(INSTALL) -m 755 doc/example-bookmark-plugin.sh $(DESTDIR)$(docdir)/examples/example-bookmark-plugin.sh || true
+
 
 install: install-newsboat install-podboat install-docs install-examples install-mo
 
