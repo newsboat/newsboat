@@ -10,6 +10,7 @@ vbox
   label#info[title]
     text[head]:"File Browser"
     .expand:h
+    .display[showtitle]:1
   list[files]
     * this height is only a hack to expand the list correctly (bug?)
     .expand:vh .height:65535
