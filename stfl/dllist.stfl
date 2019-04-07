@@ -10,6 +10,7 @@ vbox
   label#info[title]
     text[head]:"Queue"
     .expand:h
+    .display[showtitle]:1
   !list[dls]
     style_normal[listnormal]:
     style_focus[listfocus]:fg=yellow,bg=blue,attr=bold

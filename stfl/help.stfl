@@ -10,6 +10,7 @@ vbox
   label#info[title]
     text[head]:"Help"
     .expand:h
+    .display[showtitle]:1
   textview[helptext]
     richtext:1
     style_hl_normal[highlight]:

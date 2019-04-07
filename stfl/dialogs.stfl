@@ -8,6 +8,7 @@ vbox
   label#info[title]
     text[head]:"Dialogs"
     .expand:h
+    .display[showtitle]:1
   !list[dialogs]
     style_normal[listnormal]:
     style_focus[listfocus]:fg=yellow,bg=blue,attr=bold

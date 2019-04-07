@@ -12,6 +12,7 @@ vbox
   label#info[title]
     text[head]:"Your feeds"
     .expand:h
+    .display[showtitle]:1
   !list[feeds]
     .expand:vh
     richtext:1

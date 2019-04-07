@@ -12,6 +12,7 @@ vbox
   label#info[title]
     text[head]:"Articles for '#'"
     .expand:h
+    .display[showtitle]:1
   list[items]
     .expand:vh
     richtext:1

@@ -111,6 +111,7 @@ searchresult-title-format||<format>||"%N %V - Search result (%u unread, %t total
 selectfilter-title-format||<format>||"%N %V - Select Filter"||Format of the title in filter selection dialog. See "Format Strings" section of Newsboat manual for details on available formats.||selectfilter-title-format "Select Filter"
 selecttag-title-format||<format>||"%N %V - Select Tag"||Format of the title in tag selection dialog. See "Format Strings" section of Newsboat manual for details on available formats.||selecttag-title-format "Select Tag"
 show-keymap-hint||[yes/no]||yes||If set to `no`, then the keymap hints on the bottom of screen will not be displayed.||show-keymap-hint no
+show-title-bar||[yes/no]||yes||If set to `no`, then the title bar on the top of the screen will not be displayed.||show-title-bar no
 show-read-articles||[yes/no]||yes||If set to `yes`, then all articles of a feed are listed in the article list. If set to `no`, then only unread articles are listed.||show-read-articles no
 show-read-feeds||[yes/no]||yes||If set to `yes`, then all feeds, including those without unread articles, are listed. If set to `no`, then only feeds with one or more unread articles are list.||show-read-feeds no
 suppress-first-reload||[yes/no]||no||If set to `yes`, then the first automatic reload will be suppressed if `auto-reload` is set to `yes`.||suppress-first-reload yes

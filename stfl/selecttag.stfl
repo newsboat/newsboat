@@ -10,6 +10,7 @@ vbox
   label#info[title]
     text[head]:"Select Tag"
     .expand:h
+    .display[showtitle]:1
   list[taglist]
     .expand:vh
     style_normal[listnormal]:

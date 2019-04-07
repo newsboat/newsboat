@@ -10,6 +10,7 @@ vbox
   label#info[title]
     text[head]:"Article '#'"
     .expand:h
+    .display[showtitle]:1
   textview[article]
     style_normal[article]:
     style_end[styleend]:fg=blue,attr=bold
