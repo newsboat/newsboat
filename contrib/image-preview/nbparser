@@ -1,0 +1,59 @@
+#!/bin/bash
+
+PUP='~/go/bin/pop' # You may need to change this
+
+lines=$(tput lines)
+cols=$(tput cols)
+
+# numbers determined by experimentation
+img_x=2
+if [[ $lines < 70 && $lines > 50 ]]; then # my full height
+    img_width=80
+    img_height=20 
+    img_y=35
+elif [[ $lines = 27 ]]; then # my half height
+    img_width=40
+    img_height=20 
+    img_y=8
+else
+    notify-send "newsboat: unsupported size"
+fi
+
+cd /tmp
+while read line; do
+    if [[ "$line" =~ ^Link: ]]; then
+	echo $line | sed 's;^Link: ;;' | xclip
+	# for opening the article later (e.g. bind "echo $(xclip -o) | $BROWSER" to some shortcut)
+    fi
+    if [[ "$line" =~ ^Feed: ]]; then
+	: # to be used later, maybe?
+    elif [[ $line =~ "pic.twitter.com" ]]; then
+	url=$(echo $line | $PUP 'a text{}' | grep pic.twitter.com | sed '1q' | sed 's;.*pic.twitter.com/;;')
+	if ! [[ -z $url ]]; then
+	    wget "pic.twitter.com/$url" 2>/dev/null
+	    imgfile=$(wget $(cat $url | grep "<img data-aria-label-part" | tr '"' '\t' | awk -F'\t' '{print $2}') 2>&1 | grep "saved" | sed 1q | awk '{print $6}')
+	    ~/.config/vifm/scripts/vifmimg draw $img_x $img_y $img_width $img_height  ${imgfile:1:-1}
+	fi
+    elif [[ $line =~ "https://www.youtube.com/watch?v=" ]]; then
+	url=$(echo $line | sed 's;^Link: ;;')
+	if ! [[ -z $url ]]; then
+	    imgfile=$((wget $(youtube-dl --get-thumbnail $url)) 2>&1 | grep "saved" | sed 1q | awk '{print $6}')
+	    ~/.config/vifm/scripts/vifmimg draw $img_x $img_y $img_width $img_height  ${imgfile:1:-1}
+	fi
+    elif [[ $line =~ "https://xkcd.com/" ]]; then
+	url=$(curl $line 2>/dev/null | $PUP 'img attr{src}' | sed -ne '3{p;q}' | sed 's;^//;;')
+	# some sed implementations can not handle multiple scripts, even with -e. Also, the speed is the same
+	if ! [[ -z $url ]]; then
+	    imgfile=$((wget $url) 2>&1 | grep "saved" | sed 1q | awk '{print $6}')
+	    ~/.config/vifm/scripts/vifmimg draw $img_x $img_y $img_width $img_height  ${imgfile:1:-1}
+	fi
+    elif [[ $line =~ "https://apod.nasa.gov/apod/" ]]; then
+	url=$(curl $line 2>/dev/null | $PUP 'img attr{src}' 2>/dev/null)
+	if ! [[ -z $url ]]; then
+	    imgfile=$((wget "https://apod.nasa.gov/$url") 2>&1 | grep "saved" | sed 1q | awk '{print $6}')
+	    ~/.config/vifm/scripts/vifmimg draw $img_x $img_y $img_width $img_height  ${imgfile:1:-1}
+	fi
+    fi    
+done < $1 1>/dev/null & # && xdotool key --window "$(xdotool search --name nbrun | head -1)" h+q &
+
+w3m -dump -T text/html <$1 | less +k && ~/.config/vifm/scripts/vifmimg clear
