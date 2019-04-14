@@ -103,4 +103,7 @@ TEST_CASE("include directive includes other config files", "[ConfigParser]")
 	{
 		REQUIRE_NOTHROW(cfgparser.parse("data/config-relative-include"));
 	}
+	SECTION("Diamond of death includes pass") {
+		REQUIRE_NOTHROW(cfgparser.parse("data/diamond-of-death/A"));
+	}
 }
