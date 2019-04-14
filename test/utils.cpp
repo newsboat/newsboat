@@ -318,6 +318,20 @@ TEST_CASE("resolve_tilde() replaces ~ with the path to the $HOME directory", "[u
 	}
 }
 
+TEST_CASE("resolve_relative() returns an absolute file path relative to another")
+{
+	SECTION("Nothing - absolute path")
+	{
+		REQUIRE(utils::resolve_relative("/foo/bar", "/baz") == "/baz");
+		REQUIRE(utils::resolve_relative("/config", "/config/baz") == "/config/baz");
+	}
+	SECTION("Reference path")
+	{
+		REQUIRE(utils::resolve_relative("/foo/bar", "baz") == "/foo/baz");
+		REQUIRE(utils::resolve_relative("/config", "baz") == "/baz");
+	}
+}
+
 TEST_CASE("replace_all()", "[utils]")
 {
 	REQUIRE(utils::replace_all("aaa", "a", "b") == "bbb");

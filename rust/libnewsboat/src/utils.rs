@@ -855,4 +855,25 @@ mod tests {
 
         assert!(make_title(String::from("")) == String::from(""));
     }
+
+    #[test]
+    fn t_resolve_relative() {
+        assert_eq!(
+            resolve_relative(Path::new("/foo/bar"), Path::new("/baz")),
+            Path::new("/baz")
+        );
+        assert_eq!(
+            resolve_relative(Path::new("/config"), Path::new("/config/baz")),
+            Path::new("/config/baz")
+        );
+
+        assert_eq!(
+            resolve_relative(Path::new("/foo/bar"), Path::new("baz")),
+            Path::new("/foo/baz")
+        );
+        assert_eq!(
+            resolve_relative(Path::new("/config"), Path::new("baz")),
+            Path::new("/baz")
+        );
+    }
 }
