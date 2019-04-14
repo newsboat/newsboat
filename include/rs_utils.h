@@ -18,6 +18,8 @@ char* rs_absolute_url(const char* base_url, const char* link);
 
 char* rs_resolve_tilde(const char* str);
 
+char* rs_resolve_relative(const char* reference, const char* fname);
+
 bool rs_is_special_url(const char* str);
 
 bool rs_is_http_url(const char* str);

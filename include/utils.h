@@ -86,6 +86,7 @@ namespace utils {
 	std::string run_program(char* argv[], const std::string& input);
 
 	std::string resolve_tilde(const std::string&);
+	std::string resolve_relative(const std::string&, const std::string&);
 	std::string replace_all(std::string str,
 		const std::string& from,
 		const std::string& to);

@@ -503,6 +503,10 @@ std::string utils::resolve_tilde(const std::string& str)
 	return RustString(rs_resolve_tilde(str.c_str()));
 }
 
+std::string utils::resolve_relative(const std::string& reference, const std::string &fname) {
+	return RustString(rs_resolve_relative(reference.c_str(), fname.c_str()));
+}
+
 std::string utils::replace_all(std::string str,
 	const std::string& from,
 	const std::string& to)
