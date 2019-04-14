@@ -1,5 +1,6 @@
 #include "configparser.h"
 
+#include <algorithm>
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
@@ -60,14 +61,14 @@ bool ConfigParser::parse(const std::string& filename, bool double_include)
 	 *   - if an error happens, react accordingly.
 	 */
 	if (!double_include &&
-		included_files.find(filename) != included_files.end()) {
+		std::find(included_files.begin(), included_files.end(), filename) != included_files.end()) {
 		LOG(Level::WARN,
 			"ConfigParser::parse: file %s has already been "
 			"included",
 			filename);
 		return true;
 	}
-	included_files.insert(included_files.begin(), filename);
+	included_files.push_back(filename);
 
 	unsigned int linecounter = 0;
 	std::ifstream f(filename.c_str());
@@ -78,6 +79,7 @@ bool ConfigParser::parse(const std::string& filename, bool double_include)
 			filename);
 		return false;
 	}
+
 	while (f.is_open() && !f.eof()) {
 		getline(f, line);
 		++linecounter;
@@ -108,6 +110,7 @@ bool ConfigParser::parse(const std::string& filename, bool double_include)
 			}
 		}
 	}
+	included_files.pop_back();
 	return true;
 }
 
