@@ -1,6 +1,7 @@
 #include "configparser.h"
 
 #include "3rd-party/catch.hpp"
+#include "test-helpers.h"
 #include "keymap.h"
 
 using namespace newsboat;
@@ -79,5 +80,23 @@ TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
 			REQUIRE(keys.getkey(static_cast<Operation>(i), "article") == "<none>");
 		}
+	}
+}
+
+TEST_CASE("include directive includes other config files", "[ConfigParser]")
+{
+	// TODO: error messages should be more descriptive than "file couldn't be opened"
+	ConfigParser cfgparser;
+	SECTION("Errors on not found file")
+	{
+		REQUIRE_THROWS(cfgparser.parse("data/config-missing-include"));
+	}
+	SECTION("Terminates on recursive include")
+	{
+		REQUIRE_THROWS(cfgparser.parse("data/config-recursive-include"));
+	}
+	SECTION("Successfully includes existing file")
+	{
+		REQUIRE_NOTHROW(cfgparser.parse("data/config-absolute-include"));
 	}
 }
