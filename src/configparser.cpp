@@ -36,7 +36,9 @@ void ConfigParser::handle_action(const std::string& action,
 				ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
 
-		if (!this->parse(utils::resolve_tilde(params[0])))
+		std::string tilde_expanded = utils::resolve_tilde(params[0]);
+		std::string current_fpath = included_files.back();
+		if (!this->parse(utils::resolve_relative(current_fpath, tilde_expanded)))
 			throw ConfigHandlerException(
 				ActionHandlerStatus::FILENOTFOUND);
 	} else
@@ -44,7 +46,7 @@ void ConfigParser::handle_action(const std::string& action,
 			ActionHandlerStatus::INVALID_COMMAND);
 }
 
-bool ConfigParser::parse(const std::string& filename, bool double_include)
+bool ConfigParser::parse(const std::string& tmp_filename, bool double_include)
 {
 	/*
 	 * this function parses a config file.
@@ -60,6 +62,11 @@ bool ConfigParser::parse(const std::string& filename, bool double_include)
 	 *   - hand over the tokenize results to the ConfigActionHandler
 	 *   - if an error happens, react accordingly.
 	 */
+
+	// It would be nice if this function was only give absolute paths, but the
+	// tests are easier as relative paths
+	const std::string filename = (tmp_filename.front() == '/') ? tmp_filename : utils::getcwd() + '/' + tmp_filename;
+
 	if (!double_include &&
 		std::find(included_files.begin(), included_files.end(), filename) != included_files.end()) {
 		LOG(Level::WARN,
