@@ -99,4 +99,8 @@ TEST_CASE("include directive includes other config files", "[ConfigParser]")
 	{
 		REQUIRE_NOTHROW(cfgparser.parse("data/config-absolute-include"));
 	}
+	SECTION("Success on relative includes")
+	{
+		REQUIRE_NOTHROW(cfgparser.parse("data/config-relative-include"));
+	}
 }
