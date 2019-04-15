@@ -37,7 +37,7 @@ public:
 	{
 		/* nothing because ConfigParser itself only handles include */
 	}
-	bool parse(const std::string& filename, bool double_include = true);
+	bool parse(const std::string& filename);
 	static std::string evaluate_backticks(std::string token);
 
 private:

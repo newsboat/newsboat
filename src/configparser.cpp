@@ -46,7 +46,7 @@ void ConfigParser::handle_action(const std::string& action,
 			ActionHandlerStatus::INVALID_COMMAND);
 }
 
-bool ConfigParser::parse(const std::string& tmp_filename, bool double_include)
+bool ConfigParser::parse(const std::string& tmp_filename)
 {
 	/*
 	 * this function parses a config file.
@@ -67,8 +67,7 @@ bool ConfigParser::parse(const std::string& tmp_filename, bool double_include)
 	// tests are easier as relative paths
 	const std::string filename = (tmp_filename.front() == '/') ? tmp_filename : utils::getcwd() + '/' + tmp_filename;
 
-	if (!double_include &&
-		std::find(included_files.begin(), included_files.end(), filename) != included_files.end()) {
+	if (std::find(included_files.begin(), included_files.end(), filename) != included_files.end()) {
 		LOG(Level::WARN,
 			"ConfigParser::parse: file %s has already been "
 			"included",
