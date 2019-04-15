@@ -106,4 +106,22 @@ TEST_CASE("include directive includes other config files", "[ConfigParser]")
 	SECTION("Diamond of death includes pass") {
 		REQUIRE_NOTHROW(cfgparser.parse("data/diamond-of-death/A"));
 	}
+	SECTION("File including itself only gets evaluated once") {
+		TestHelpers::TempFile testfile;
+		TestHelpers::EnvVar tmpfile("TMPFILE"); // $TMPFILE used in conf file
+		tmpfile.set(testfile.getPath());
+
+		REQUIRE_NOTHROW(cfgparser.parse("data/recursive-include-side-effect")); // recursive includes don't fail
+		// I think it will never get below here and fail? If it recurses, the above fails
+
+		int line_count = 0;
+		{ // from https://stackoverflow.com/a/19140230
+			std::ifstream in(testfile.getPath());
+			std::string line;
+			while (std::getline(in, line)) {
+				line_count++;
+			}
+		}
+		REQUIRE(line_count == 1); // only 1 line from date command
+	}
 }
