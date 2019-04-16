@@ -44,6 +44,14 @@ TEST_CASE("evaluate_backticks replaces command in backticks with its output",
 				"a single literal backtick: \\`") ==
 			"a single literal backtick: `");
 	}
+	SECTION("commands with space are evaluated by backticks")
+	{
+		ConfigParser cfgparser;
+		KeyMap keys(KM_NEWSBOAT);
+		cfgparser.register_handler("bind-key", &keys);
+		REQUIRE_NOTHROW(cfgparser.parse("data/config-space-backticks"));
+		REQUIRE(keys.get_operation("s", "all"));
+	}
 }
 
 TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
