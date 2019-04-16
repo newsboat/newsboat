@@ -31,6 +31,12 @@ TEST_CASE("evaluate_backticks replaces command in backticks with its output",
 				"`seq 10 | tail -1`") == "10");
 	}
 
+	SECTION("subsistutes multiple shellouts")
+	{
+		REQUIRE(ConfigParser::evaluate_backticks("xxx`echo aaa`yyy`echo bbb`zzz") ==
+			"xxxaaayyybbbzzz");
+	}
+
 	SECTION("backticks can be escaped with backslash")
 	{
 		REQUIRE(ConfigParser::evaluate_backticks(
