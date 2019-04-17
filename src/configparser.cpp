@@ -82,7 +82,7 @@ bool ConfigParser::parse(const std::string& filename, bool double_include)
 		getline(f, line);
 		++linecounter;
 		LOG(Level::DEBUG, "ConfigParser::parse: tokenizing %s", line);
-		std::vector<std::string> tokens = utils::tokenize_quoted(line);
+		std::vector<std::string> tokens = utils::tokenize_quoted(evaluate_backticks(line));
 		if (!tokens.empty()) {
 			std::string cmd = tokens[0];
 			ConfigActionHandler* handler = action_handlers[cmd];
@@ -90,7 +90,6 @@ bool ConfigParser::parse(const std::string& filename, bool double_include)
 				tokens.erase(
 					tokens.begin()); // delete first element
 				try {
-					evaluate_backticks(tokens);
 					handler->handle_action(cmd, tokens);
 				} catch (const ConfigHandlerException& e) {
 					throw ConfigException(strprintf::fmt(

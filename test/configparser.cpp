@@ -31,6 +31,12 @@ TEST_CASE("evaluate_backticks replaces command in backticks with its output",
 				"`seq 10 | tail -1`") == "10");
 	}
 
+	SECTION("subsistutes multiple shellouts")
+	{
+		REQUIRE(ConfigParser::evaluate_backticks("xxx`echo aaa`yyy`echo bbb`zzz") ==
+			"xxxaaayyybbbzzz");
+	}
+
 	SECTION("backticks can be escaped with backslash")
 	{
 		REQUIRE(ConfigParser::evaluate_backticks(
@@ -43,6 +49,14 @@ TEST_CASE("evaluate_backticks replaces command in backticks with its output",
 		REQUIRE(ConfigParser::evaluate_backticks(
 				"a single literal backtick: \\`") ==
 			"a single literal backtick: `");
+	}
+	SECTION("commands with space are evaluated by backticks")
+	{
+		ConfigParser cfgparser;
+		KeyMap keys(KM_NEWSBOAT);
+		cfgparser.register_handler("bind-key", &keys);
+		REQUIRE_NOTHROW(cfgparser.parse("data/config-space-backticks"));
+		REQUIRE_FALSE(keys.get_operation("s", "all") == OP_NIL);
 	}
 }
 
