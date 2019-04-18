@@ -47,6 +47,7 @@ matrix:
   include:
     - compiler: gcc-4.9
       os: linux
+      dist: trusty
       rust: 1.25.0
       addons:
         apt:
@@ -62,6 +63,7 @@ matrix:
         *install_coveralls
     - compiler: gcc-4.9
       os: linux
+      dist: trusty
       addons:
         apt:
           sources:
@@ -76,6 +78,7 @@ matrix:
         *install_coveralls
     - compiler: gcc-5
       os: linux
+      dist: trusty
       addons:
         apt:
           sources:
@@ -90,6 +93,7 @@ matrix:
         *install_coveralls
     - compiler: gcc-6
       os: linux
+      dist: trusty
       addons:
         apt:
           sources:
@@ -104,6 +108,7 @@ matrix:
         *install_coveralls
     - compiler: gcc-7
       os: linux
+      dist: trusty
       addons:
         apt:
           sources:
@@ -118,6 +123,7 @@ matrix:
         *install_coveralls
     - compiler: gcc-8
       os: linux
+      dist: trusty
       addons:
         apt:
           sources:
@@ -132,6 +138,7 @@ matrix:
         *install_coveralls
     - compiler: clang
       os: linux
+      dist: trusty
       addons:
         apt:
           sources:
@@ -145,6 +152,7 @@ matrix:
         *install_coveralls
     - compiler: clang-4.0
       os: linux
+      dist: trusty
       addons:
         apt:
           sources:
@@ -161,6 +169,7 @@ matrix:
         *install_coveralls
     - compiler: clang-5.0
       os: linux
+      dist: trusty
       addons:
         apt:
           sources:
@@ -177,6 +186,7 @@ matrix:
         *install_coveralls
     - compiler: clang-6.0
       os: linux
+      dist: trusty
       addons:
         apt:
           sources:
@@ -193,6 +203,7 @@ matrix:
         *install_coveralls
     - compiler: clang-7
       os: linux
+      dist: trusty
       addons:
         apt:
           sources:
@@ -209,6 +220,7 @@ matrix:
         *install_coveralls
     - compiler: clang-8
       os: linux
+      dist: trusty
       addons:
         apt:
           sources:
