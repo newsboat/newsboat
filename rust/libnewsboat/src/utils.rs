@@ -12,6 +12,7 @@ use self::url::percent_encoding::*;
 use self::url::Url;
 use logger::{self, Level};
 use std::io::Write;
+use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
@@ -100,6 +101,15 @@ pub fn resolve_tilde(path: String) -> String {
         }
     }
     return file_path;
+}
+
+pub fn resolve_relative(reference: &Path, path: &Path) -> PathBuf {
+    if path.is_relative() {
+        // Will only ever panic if reference is `/`, which shouldn't be the case as reference is
+        // always a file path
+        return reference.parent().unwrap().join(path);
+    }
+    return path.to_path_buf();
 }
 
 pub fn is_special_url(url: &str) -> bool {
@@ -844,5 +854,26 @@ mod tests {
         assert!(make_title(input) == String::from(""));
 
         assert!(make_title(String::from("")) == String::from(""));
+    }
+
+    #[test]
+    fn t_resolve_relative() {
+        assert_eq!(
+            resolve_relative(Path::new("/foo/bar"), Path::new("/baz")),
+            Path::new("/baz")
+        );
+        assert_eq!(
+            resolve_relative(Path::new("/config"), Path::new("/config/baz")),
+            Path::new("/config/baz")
+        );
+
+        assert_eq!(
+            resolve_relative(Path::new("/foo/bar"), Path::new("baz")),
+            Path::new("/foo/baz")
+        );
+        assert_eq!(
+            resolve_relative(Path::new("/config"), Path::new("baz")),
+            Path::new("/baz")
+        );
     }
 }

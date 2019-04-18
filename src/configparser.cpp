@@ -1,5 +1,6 @@
 #include "configparser.h"
 
+#include <algorithm>
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
@@ -35,7 +36,9 @@ void ConfigParser::handle_action(const std::string& action,
 				ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
 
-		if (!this->parse(utils::resolve_tilde(params[0])))
+		std::string tilde_expanded = utils::resolve_tilde(params[0]);
+		std::string current_fpath = included_files.back();
+		if (!this->parse(utils::resolve_relative(current_fpath, tilde_expanded)))
 			throw ConfigHandlerException(
 				ActionHandlerStatus::FILENOTFOUND);
 	} else
@@ -43,7 +46,7 @@ void ConfigParser::handle_action(const std::string& action,
 			ActionHandlerStatus::INVALID_COMMAND);
 }
 
-bool ConfigParser::parse(const std::string& filename, bool double_include)
+bool ConfigParser::parse(const std::string& tmp_filename)
 {
 	/*
 	 * this function parses a config file.
@@ -59,15 +62,19 @@ bool ConfigParser::parse(const std::string& filename, bool double_include)
 	 *   - hand over the tokenize results to the ConfigActionHandler
 	 *   - if an error happens, react accordingly.
 	 */
-	if (!double_include &&
-		included_files.find(filename) != included_files.end()) {
+
+	// It would be nice if this function was only give absolute paths, but the
+	// tests are easier as relative paths
+	const std::string filename = (tmp_filename.front() == '/') ? tmp_filename : utils::getcwd() + '/' + tmp_filename;
+
+	if (std::find(included_files.begin(), included_files.end(), filename) != included_files.end()) {
 		LOG(Level::WARN,
 			"ConfigParser::parse: file %s has already been "
 			"included",
 			filename);
 		return true;
 	}
-	included_files.insert(included_files.begin(), filename);
+	included_files.push_back(filename);
 
 	unsigned int linecounter = 0;
 	std::ifstream f(filename.c_str());
@@ -78,6 +85,7 @@ bool ConfigParser::parse(const std::string& filename, bool double_include)
 			filename);
 		return false;
 	}
+
 	while (f.is_open() && !f.eof()) {
 		getline(f, line);
 		++linecounter;
@@ -107,6 +115,7 @@ bool ConfigParser::parse(const std::string& filename, bool double_include)
 			}
 		}
 	}
+	included_files.pop_back();
 	return true;
 }
 

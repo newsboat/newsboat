@@ -37,7 +37,7 @@ public:
 	{
 		/* nothing because ConfigParser itself only handles include */
 	}
-	bool parse(const std::string& filename, bool double_include = true);
+	bool parse(const std::string& filename);
 	static std::string evaluate_backticks(std::string token);
 
 private:
@@ -45,7 +45,7 @@ private:
 	static std::string evaluate_cmd(const std::string& cmd);
 	std::vector<std::vector<std::string>> parsed_content;
 	std::map<std::string, ConfigActionHandler*> action_handlers;
-	std::set<std::string> included_files;
+	std::vector<std::string> included_files;
 };
 
 class NullConfigActionHandler : public ConfigActionHandler {

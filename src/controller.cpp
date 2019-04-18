@@ -855,7 +855,7 @@ void Controller::update_config()
 
 void Controller::load_configfile(const std::string& filename)
 {
-	if (cfgparser.parse(filename, true)) {
+	if (cfgparser.parse(filename)) {
 		update_config();
 	} else {
 		v->show_error(strprintf::fmt(

@@ -62,6 +62,33 @@ pub extern "C" fn rs_resolve_tilde(path: *const c_char) -> *mut c_char {
 }
 
 #[no_mangle]
+pub extern "C" fn rs_resolve_relative(
+    reference: *const c_char,
+    path: *const c_char,
+) -> *mut c_char {
+    use std::path::Path;
+    abort_on_panic(|| {
+        let rs_reference = unsafe { CStr::from_ptr(reference) };
+        let rs_reference = rs_reference.to_string_lossy().into_owned();
+
+        let rs_path = unsafe { CStr::from_ptr(path) };
+        let rs_path = rs_path.to_string_lossy().into_owned();
+
+        let result = utils::resolve_relative(Path::new(&rs_reference), Path::new(&rs_path));
+
+        // result.to_str().unwrap()' won't panic because it is either
+        // - rs_path
+        // - combination of reference and rs_path
+        //   which are both valid strings
+        //
+        // CString::new(...).unwrap() won't panic for the above reasons, the strings that went into
+        // it are valid strings
+        let result = CString::new(result.to_str().unwrap()).unwrap();
+        result.into_raw()
+    })
+}
+
+#[no_mangle]
 pub extern "C" fn rs_to_u(in_str: *const c_char, default_value: u32) -> u32 {
     abort_on_panic(|| {
         let rs_str = unsafe { CStr::from_ptr(in_str) };
