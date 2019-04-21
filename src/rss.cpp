@@ -489,8 +489,9 @@ bool RssIgnores::matches_resetunread(const std::string& url)
 void RssFeed::update_items(std::vector<std::shared_ptr<RssFeed>> feeds)
 {
 	std::lock_guard<std::mutex> lock(item_mutex);
-	if (query.length() == 0)
+	if (query.empty()) {
 		return;
+	}
 
 	LOG(Level::DEBUG, "RssFeed::update_items: query = `%s'", query);
 
@@ -502,15 +503,16 @@ void RssFeed::update_items(std::vector<std::shared_ptr<RssFeed>> feeds)
 	items_guid_map.clear();
 
 	for (const auto& feed : feeds) {
-		if (!feed->is_query_feed()) { // don't fetch items from other query feeds!
-			for (const auto& item : feed->items()) {
-				if (!item->deleted() && m.matches(item.get())) {
-					LOG(Level::DEBUG,
-						"RssFeed::update_items: Matcher matches!");
-					item->set_feedptr(feed);
-					items_.push_back(item);
-					items_guid_map[item->guid()] = item;
-				}
+		if (feed->is_query_feed()) {
+			// don't fetch items from other query feeds!
+			continue;
+		}
+		for (const auto& item : feed->items()) {
+			if (!item->deleted() && m.matches(item.get())) {
+				LOG(Level::DEBUG, "RssFeed::update_items: Matcher matches!");
+				item->set_feedptr(feed);
+				items_.push_back(item);
+				items_guid_map[item->guid()] = item;
 			}
 		}
 	}
