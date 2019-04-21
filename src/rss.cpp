@@ -228,7 +228,7 @@ std::string RssFeed::title() const
 	bool found_title = false;
 	std::string alt_title;
 	for (const auto& tag : tags_) {
-		if (tag.substr(0, 1) == "~" || tag.substr(0, 1) == "!") {
+		if (tag.substr(0, 1) == "~") {
 			found_title = true;
 			alt_title = tag.substr(1, tag.length() - 1);
 			break;
