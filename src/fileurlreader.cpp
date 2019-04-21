@@ -28,10 +28,7 @@ void FileUrlReader::reload()
 		return;
 	}
 
-	std::string line;
-	while (!f.eof()) {
-		std::getline(f, line);
-
+	for (std::string line; std::getline(f, line); /* nothing */) {
 		// skip empty lines and comments
 		if (line.empty() || line[0] == '#') {
 			continue;
