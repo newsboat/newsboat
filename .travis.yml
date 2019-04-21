@@ -45,6 +45,37 @@ newsboat_brew_commands: &osx_deps
 matrix:
   fast_finish: true
   include:
+    - compiler: gcc
+      os: osx
+      rust: 1.25.0
+      env:
+        - COMPILER=g++
+        - GCOV=/usr/bin/gcov
+        # a2x will run xmllint on generated files, so we have to pass the path
+        # to AsciiDoc's catalog files
+        - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
+      before_install:
+        *osx_deps
+    - compiler: gcc
+      os: osx
+      env:
+        - COMPILER=g++
+        - GCOV=/usr/bin/gcov
+        # a2x will run xmllint on generated files, so we have to pass the path
+        # to AsciiDoc's catalog files
+        - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
+      before_install:
+        *osx_deps
+    - compiler: clang
+      os: osx
+      env:
+        - COMPILER=clang++
+        - GCOV=/usr/bin/gcov
+        # a2x will run xmllint on generated files, so we have to pass the path
+        # to AsciiDoc's catalog files
+        - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
+      before_install:
+        *osx_deps
     - compiler: gcc-8
       os: linux
       dist: trusty
@@ -267,37 +298,6 @@ matrix:
         - GCOV="llvm-cov-8 gcov"
       before_install:
         *install_coveralls
-    - compiler: gcc
-      os: osx
-      rust: 1.25.0
-      env:
-        - COMPILER=g++
-        - GCOV=/usr/bin/gcov
-        # a2x will run xmllint on generated files, so we have to pass the path
-        # to AsciiDoc's catalog files
-        - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
-      before_install:
-        *osx_deps
-    - compiler: gcc
-      os: osx
-      env:
-        - COMPILER=g++
-        - GCOV=/usr/bin/gcov
-        # a2x will run xmllint on generated files, so we have to pass the path
-        # to AsciiDoc's catalog files
-        - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
-      before_install:
-        *osx_deps
-    - compiler: clang
-      os: osx
-      env:
-        - COMPILER=clang++
-        - GCOV=/usr/bin/gcov
-        # a2x will run xmllint on generated files, so we have to pass the path
-        # to AsciiDoc's catalog files
-        - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
-      before_install:
-        *osx_deps
     - addons:
         apt:
           packages:
