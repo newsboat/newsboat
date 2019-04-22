@@ -141,6 +141,8 @@ bool Matcher::matchop_rxeq(expression* e, Matchable* item)
 		if ((err = regcomp(e->regex,
 			     e->literal.c_str(),
 			     REG_EXTENDED | REG_ICASE | REG_NOSUB)) != 0) {
+			delete e->regex;
+			e->regex = nullptr;
 			char buf[1024];
 			regerror(err, e->regex, buf, sizeof(buf));
 			throw MatcherException(
