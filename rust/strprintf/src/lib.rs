@@ -1,3 +1,5 @@
+mod specifiers_iterator;
+
 macro_rules! fmt {
     ( $format:expr ) => {{
         let result: &str = $format;
