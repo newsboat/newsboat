@@ -3,8 +3,63 @@ pub mod specifiers_iterator;
 use std::ffi::CString;
 use std::vec::Vec;
 
+/// A common trait for all types that can be passed into `fmt!`.
+pub trait Printfable {
+    /// The type this converts to through `to_c_repr`.
+    type Holder;
+
+    /// Converts Self into a type that C language (and thus `snprintf`) understands.
+    fn to_c_repr(self: &Self) -> <Self as Printfable>::Holder;
+}
+
+impl Printfable for i32 {
+    type Holder = i32;
+    fn to_c_repr(self: &Self) -> <Self as Printfable>::Holder {
+        *self
+    }
+}
+
+impl Printfable for u32 {
+    type Holder = u32;
+    fn to_c_repr(self: &Self) -> <Self as Printfable>::Holder {
+        *self
+    }
+}
+
+impl Printfable for i64 {
+    type Holder = i64;
+    fn to_c_repr(self: &Self) -> <Self as Printfable>::Holder {
+        *self
+    }
+}
+
+impl Printfable for u64 {
+    type Holder = u64;
+    fn to_c_repr(self: &Self) -> <Self as Printfable>::Holder {
+        *self
+    }
+}
+
+/// `f32` can't be passed to variadic functions like `snprintf`, so it's converted into `f64`
+impl Printfable for f32 {
+    type Holder = f64;
+    fn to_c_repr(self: &Self) -> <Self as Printfable>::Holder {
+        *self as f64
+    }
+}
+
+impl Printfable for f64 {
+    type Holder = f64;
+    fn to_c_repr(self: &Self) -> <Self as Printfable>::Holder {
+        *self
+    }
+}
+
 /// Helper function for `fmt!`. Don't use directly.
-pub fn fmt_arg<T>(format: &str, arg: T) -> Option<String> {
+pub fn fmt_arg<T>(format: &str, arg: T) -> Option<String>
+where
+    T: Printfable,
+{
     // Might fail if `format` contains a null byte. TODO decide if this is a good
     // error-handling strategy, or we should report back to user, or panic, or what
     CString::new(format).ok().and_then(|local_format_cstring| {
@@ -21,7 +76,7 @@ pub fn fmt_arg<T>(format: &str, arg: T) -> Option<String> {
                 buffer_ptr,
                 buf_size as libc::size_t,
                 local_format_cstring.as_ptr() as *const libc::c_char,
-                arg,
+                arg.to_c_repr(),
             );
             let buffer = CString::from_raw(buffer_ptr);
             let _bytes_written = bytes_written as usize;
@@ -137,20 +192,18 @@ mod tests {
         assert_eq!(fmt!("%.3e", y), "4.200e+139");
     }
 
-    /*
-    XXX: can't be easily ported since Rust doesn't let us pass f32 to a variadic function like
-    snprintf.
-    TEST_CASE("strprintf::fmt() formats float", "[strprintf]")
-    {
-            const auto x = 42.0f;
-            REQUIRE(strprintf::fmt("%f", x) == "42.000000");
-            REQUIRE(strprintf::fmt("%.3f", x) == "42.000");
+    #[test]
+    fn formats_float() {
+        let x = 42.0f32;
+        assert_eq!(fmt!("%f", x), "42.000000");
+        assert_eq!(fmt!("%.3f", x), "42.000");
 
-            const auto y = 42e3f;
-            REQUIRE(strprintf::fmt("%e", y) == "4.200000e+04");
-            REQUIRE(strprintf::fmt("%.3e", y) == "4.200e+04");
+        let y = 42e3f32;
+        assert_eq!(fmt!("%e", y), "4.200000e+04");
+        assert_eq!(fmt!("%.3e", y), "4.200e+04");
     }
 
+    /*
     // TODO: write the same test for str
     // TODO: write the same test for &str
     // TODO: write the same test for String
