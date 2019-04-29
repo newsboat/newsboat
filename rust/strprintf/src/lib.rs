@@ -182,17 +182,6 @@ mod tests {
     */
 
     #[test]
-    fn formats_double() {
-        let x = 42.0f64;
-        assert_eq!(fmt!("%f", x), "42.000000");
-        assert_eq!(fmt!("%.3f", x), "42.000");
-
-        let y = 42e138f64;
-        assert_eq!(fmt!("%e", y), "4.200000e+139");
-        assert_eq!(fmt!("%.3e", y), "4.200e+139");
-    }
-
-    #[test]
     fn formats_float() {
         let x = 42.0f32;
         assert_eq!(fmt!("%f", x), "42.000000");
@@ -201,6 +190,35 @@ mod tests {
         let y = 42e3f32;
         assert_eq!(fmt!("%e", y), "4.200000e+04");
         assert_eq!(fmt!("%.3e", y), "4.200e+04");
+
+        assert_eq!(fmt!("%f", std::f32::INFINITY), "inf");
+        assert_eq!(fmt!("%F", std::f32::INFINITY), "INF");
+
+        assert_eq!(fmt!("%f", std::f32::NEG_INFINITY), "-inf");
+        assert_eq!(fmt!("%F", std::f32::NEG_INFINITY), "-INF");
+
+        assert_eq!(fmt!("%f", std::f32::NAN), "nan");
+        assert_eq!(fmt!("%F", std::f32::NAN), "NAN");
+    }
+
+    #[test]
+    fn formats_double() {
+        let x = 42.0f64;
+        assert_eq!(fmt!("%f", x), "42.000000");
+        assert_eq!(fmt!("%.3f", x), "42.000");
+
+        let y = 42e138f64;
+        assert_eq!(fmt!("%e", y), "4.200000e+139");
+        assert_eq!(fmt!("%.3e", y), "4.200e+139");
+
+        assert_eq!(fmt!("%f", std::f64::INFINITY), "inf");
+        assert_eq!(fmt!("%F", std::f64::INFINITY), "INF");
+
+        assert_eq!(fmt!("%f", std::f64::NEG_INFINITY), "-inf");
+        assert_eq!(fmt!("%F", std::f64::NEG_INFINITY), "-INF");
+
+        assert_eq!(fmt!("%f", std::f64::NAN), "nan");
+        assert_eq!(fmt!("%F", std::f64::NAN), "NAN");
     }
 
     /*
