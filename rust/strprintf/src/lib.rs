@@ -1,5 +1,35 @@
 pub mod specifiers_iterator;
 
+use std::ffi::CString;
+use std::vec::Vec;
+
+/// Helper function for `fmt!`. Don't use directly.
+pub fn fmt_arg<T>(format: &str, arg: T) -> Option<String> {
+    // Might fail if `format` contains a null byte. TODO decide if this is a good
+    // error-handling strategy, or we should report back to user, or panic, or what
+    CString::new(format).ok().and_then(|local_format_cstring| {
+        let buf_size = 1024usize;
+        let mut buffer = Vec::<u8>::with_capacity(buf_size);
+        // Filling the vector with ones because CString::new() doesn't want any zeroes in
+        // there. The last byte is left unused, so that CString::new() can put a terminating
+        // zero byte without triggering a re-allocation.
+        buffer.resize(buf_size - 1, 1);
+        CString::new(buffer).ok().and_then(|buffer| unsafe {
+            let buffer_ptr = buffer.into_raw();
+            // TODO: check how many bytes were written
+            let bytes_written = libc::snprintf(
+                buffer_ptr,
+                buf_size as libc::size_t,
+                local_format_cstring.as_ptr() as *const libc::c_char,
+                arg,
+            );
+            let buffer = CString::from_raw(buffer_ptr);
+            let _bytes_written = bytes_written as usize;
+            buffer.into_string().ok()
+        })
+    })
+}
+
 /// A safe-ish wrapper around `libc::snprintf`.
 #[macro_export]
 macro_rules! fmt {
@@ -21,27 +51,8 @@ macro_rules! fmt {
 
             $(
                 let local_format = specifiers.next().unwrap_or("");
-                // Might fail if `local_format` contains a null byte. TODO decide if this is a good
-                // error-handling strategy, or we should report back to user, or panic, or what
-                if let Ok(local_format_cstring) = std::ffi::CString::new(local_format) {
-                    let buf_size = 1024usize;
-                    let buffer: std::vec::Vec<u8> = std::vec::Vec::with_capacity(buf_size);
-                    if let Ok(buffer) = std::ffi::CString::new(buffer) {
-                        unsafe {
-                            let buffer_ptr = buffer.into_raw();
-                            // TODO: check how many bytes were written
-                            let bytes_written = libc::snprintf(
-                                buffer_ptr,
-                                buf_size as libc::size_t,
-                                local_format_cstring.as_ptr() as *const libc::c_char,
-                                $arg);
-                            let buffer = std::ffi::CString::from_raw(buffer_ptr);
-                            let _bytes_written = bytes_written as usize;
-                            if let Ok(formatted) = buffer.into_string() {
-                                result.push_str(&formatted);
-                            }
-                        }
-                    }
+                if let Some(formatted_string) = $crate::fmt_arg(local_format, $arg) {
+                    result.push_str(&formatted_string);
                 }
             )+
 
