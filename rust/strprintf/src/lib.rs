@@ -67,83 +67,39 @@ mod tests {
     }
 
     #[test]
-    fn formats_int_x86_64() {
+    fn formats_i32() {
         assert_eq!(fmt!("%i", 42i32), "42");
-
-        let int_min = std::i32::MIN;
-        assert_eq!(int_min, -2147483648i32);
-        assert_eq!(fmt!("%i", int_min), "-2147483648");
-
-        let int_max = std::i32::MAX;
-        assert_eq!(int_max, 2147483647i32);
-        assert_eq!(fmt!("%i", int_max), "2147483647");
+        assert_eq!(fmt!("%i", std::i32::MIN), "-2147483648");
+        assert_eq!(fmt!("%i", std::i32::MAX), "2147483647");
     }
 
     #[test]
-    fn formats_unsigned_int_x86_64() {
+    fn formats_u32() {
         assert_eq!(fmt!("%u", 42u32), "42");
-
         assert_eq!(fmt!("%u", 0u32), "0");
-
-        let uint_max = std::u32::MAX;
-        assert_eq!(uint_max, 4294967295u32);
-        assert_eq!(fmt!("%u", uint_max), "4294967295");
+        assert_eq!(fmt!("%u", std::u32::MAX), "4294967295");
     }
 
     #[test]
-    fn formats_long_int_x86_64() {
+    fn formats_i64() {
         assert_eq!(fmt!("%li", 42i64), "42");
+        assert_eq!(fmt!("%li", std::i32::MIN as i64 - 1), "-2147483649");
+        assert_eq!(fmt!("%li", std::i32::MAX as i64 + 1), "2147483648");
 
-        let int_min = std::i32::MIN as i64;
-        let long_min = std::i64::MIN;
-        assert!(long_min < int_min);
-        assert_eq!(int_min, -2147483648);
-        assert_eq!(fmt!("%li", int_min - 1), "-2147483649");
-
-        let int_max = std::i32::MAX as i64;
-        let long_max = std::i64::MAX;
-        assert!(long_max > int_max);
-        assert_eq!(int_max, 2147483647);
-        assert_eq!(fmt!("%li", int_max + 1), "2147483648");
-    }
-
-    #[test]
-    fn formats_long_unsigned_int_x86_64() {
-        assert_eq!(fmt!("%lu", 42u64), "42");
-
-        assert_eq!(fmt!("%lu", 0u64), "0");
-
-        let ulong_max = std::u64::MAX;
-        assert_eq!(ulong_max, 18446744073709551615u64);
-        assert_eq!(fmt!("%lu", ulong_max), "18446744073709551615");
-    }
-
-    #[test]
-    fn formats_long_long_int_x86_64() {
         assert_eq!(fmt!("%lli", 42i64), "42");
-
-        // This is one bigger than actual std::numeric_limits<long long int>::min()
-        // on x86_64. The actual value can't be written in C++ as a literal because both GCC 8 and
-        // Clang complain about it being too small to be represented with long long int.
-        let input = -9223372036854775807i64;
-        let llong_min = std::i64::MIN;
-        assert!(llong_min <= input);
-        assert_eq!(fmt!("%lli", input), "-9223372036854775807");
-
-        let llong_max = std::i64::MAX;
-        assert_eq!(llong_max, 9223372036854775807i64);
-        assert_eq!(fmt!("%lli", llong_max), "9223372036854775807");
+        assert_eq!(fmt!("%lli", std::i64::MIN), "-9223372036854775808");
+        assert_eq!(fmt!("%lli", std::i64::MAX), "9223372036854775807");
     }
 
     #[test]
-    fn formats_unsigned_long_long_int_x86_64() {
+    fn formats_u64() {
+        assert_eq!(fmt!("%lu", 42u64), "42");
+        assert_eq!(fmt!("%lu", 0u64), "0");
+        assert_eq!(fmt!("%lu", std::u64::MAX), "18446744073709551615");
+
         assert_eq!(fmt!("%llu", 42u64), "42");
-
         assert_eq!(fmt!("%llu", 0u64), "0");
-
-        let ullong_max = std::u64::MAX;
-        assert_eq!(ullong_max, 18446744073709551615u64);
-        assert_eq!(fmt!("%llu", ullong_max), "18446744073709551615");
+        assert_eq!(fmt!("%llu", std::u64::MAX), "18446744073709551615");
     }
 
     /*
