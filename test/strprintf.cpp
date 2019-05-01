@@ -228,8 +228,10 @@ TEST_CASE("strprintf::fmt() formats std::string*", "[strprintf]")
 	REQUIRE(strprintf::fmt("%s", &input) == input);
 }
 
-TEST_CASE("strprintf::fmt() works fine with 1MB format string", "[strprintf]")
+TEST_CASE("strprintf::fmt() works fine with 2MB format string", "[strprintf]")
 {
-	const auto format = std::string(1024 * 1024, ' ');
-	REQUIRE(strprintf::fmt(format) == format);
+	const auto spacer = std::string(1024 * 1024, ' ');
+	const auto format = spacer + "%i" + spacer + "%i";
+	const auto expected = spacer + "42" + spacer + "100500";
+	REQUIRE(strprintf::fmt(format, 42, 100500) == expected);
 }

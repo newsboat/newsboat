@@ -3,45 +3,81 @@ extern crate libc;
 pub mod specifiers_iterator;
 pub mod traits;
 
-use std::ffi::CString;
+use std::ffi::{CStr, CString};
 use std::vec::Vec;
 use traits::*;
 
 // TODO: write an internal module doc explaining the interplay between traits, fmt_arg, and fmt!
 
-/// Helper function for `fmt!`. Don't use directly.
+/// Helper function to `fmt!`. **Use it only through that macro!**
+///
+/// Returns a formatted string, or the size of the buffer that's necessary to hold the formatted
+/// string.
+#[doc(hidden)]
+pub fn fmt_arg_with_buffer_size<T>(
+    format_cstring: &CStr,
+    arg_c_repr_holder: &T,
+    buf_size: usize,
+) -> Result<String, usize>
+where
+    T: CReprHolder,
+{
+    let mut buffer = Vec::<u8>::with_capacity(buf_size);
+    // Filling the vector with ones because CString::new() doesn't want any zeroes in there. The
+    // last byte is left unused, so that CString::new() can put a terminating zero byte there
+    // without triggering a re-allocation.
+    buffer.resize(buf_size - 1, 1);
+    unsafe {
+        // It's safe to use this function because we initialized the buffer and we know there are
+        // no zeroes there
+        let buffer = CString::from_vec_unchecked(buffer);
+        let buffer_ptr = buffer.into_raw();
+        let bytes_written = libc::snprintf(
+            buffer_ptr,
+            buf_size as libc::size_t,
+            format_cstring.as_ptr() as *const libc::c_char,
+            arg_c_repr_holder.to_c_repr(),
+        ) as usize;
+        let buffer = CString::from_raw(buffer_ptr);
+        if bytes_written >= buf_size {
+            Err(bytes_written + 1)
+        } else {
+            buffer.into_string().map_err(|_| 0)
+        }
+    }
+}
+
+/// Helper function to `fmt!`. **Use it only through that macro!**
+#[doc(hidden)]
 pub fn fmt_arg<T>(format: &str, arg: T) -> Option<String>
 where
     T: Printfable,
 {
-    // Might fail if `format` contains a null byte. TODO decide if this is a good
-    // error-handling strategy, or we should report back to user, or panic, or what
+    // Returns None if `format` contains a null byte
     CString::new(format).ok().and_then(|local_format_cstring| {
-        let buf_size = 1024usize;
-        let mut buffer = Vec::<u8>::with_capacity(buf_size);
-        // Filling the vector with ones because CString::new() doesn't want any zeroes in
-        // there. The last byte is left unused, so that CString::new() can put a terminating
-        // zero byte without triggering a re-allocation.
-        buffer.resize(buf_size - 1, 1);
-        CString::new(buffer).ok().and_then(|buffer| unsafe {
-            let buffer_ptr = buffer.into_raw();
-            // TODO: check how many bytes were written
-            arg.to_c_repr_holder().and_then(|arg_c_repr_holder| {
-                let bytes_written = libc::snprintf(
-                    buffer_ptr,
-                    buf_size as libc::size_t,
-                    local_format_cstring.as_ptr() as *const libc::c_char,
-                    arg_c_repr_holder.to_c_repr(),
-                );
-                let buffer = CString::from_raw(buffer_ptr);
-                let _bytes_written = bytes_written as usize;
-                buffer.into_string().ok()
-            })
+        // Returns None if a holder couldn't be obtained - e.g. the value is a String that
+        // contains a null byte
+        arg.to_c_repr_holder().and_then(|arg_c_repr_holder| {
+            match fmt_arg_with_buffer_size(&local_format_cstring, &arg_c_repr_holder, 1024) {
+                Ok(formatted) => Some(formatted),
+                Err(buf_size) => {
+                    fmt_arg_with_buffer_size(&local_format_cstring, &arg_c_repr_holder, buf_size)
+                        .ok()
+                }
+            }
         })
     })
 }
 
 /// A safe-ish wrapper around `libc::snprintf`.
+///
+/// It pairs each format specifier ("%i", "%.2f" etc.) with a value, and passes those to
+/// `libc::snprinf`; the results are then concatenated.
+///
+/// If a pair couldn't be formatted, it's omitted from the output. This can happen if:
+/// - a format string contains null bytes;
+/// - the string value to be formatted contains null bytes;
+/// - `libc::snprintf` failed to format things even when given large enough buffer to do so.
 #[macro_export]
 macro_rules! fmt {
     ( $format:expr ) => {
@@ -202,11 +238,23 @@ mod tests {
         assert_eq!(fmt!("%s", input.clone()), input);
     }
 
-    /*
-    TEST_CASE("strprintf::fmt() works fine with 1MB format string", "[strprintf]")
-    {
-            const auto format = std::string(1024 * 1024, ' ');
-            REQUIRE(strprintf::fmt(format) == format);
+    #[test]
+    fn formats_2_megabyte_string() {
+        let spacer = String::from(" ").repeat(1024 * 1024);
+        let format = {
+            let mut result = spacer.clone();
+            result.push_str("%i");
+            result.push_str(&spacer);
+            result.push_str("%i");
+            result
+        };
+        let expected = {
+            let mut result = spacer.clone();
+            result.push_str("42");
+            result.push_str(&spacer);
+            result.push_str("100500");
+            result
+        };
+        assert_eq!(fmt!(&format, 42, 100500), expected);
     }
-    */
 }

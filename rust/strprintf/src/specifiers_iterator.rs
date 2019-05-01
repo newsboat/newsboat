@@ -117,4 +117,26 @@ mod tests {
         assert_eq!(iterator.next(), Some("%% of implementations conform"));
         assert_eq!(iterator.next(), None);
     }
+
+    #[test]
+    fn splits_2_megabyte_string() {
+        let spacer = String::from(" ").repeat(512);
+        let format = {
+            let mut result = spacer.clone();
+            result.push_str("%i");
+            result.push_str(&spacer);
+            result.push_str("%i");
+            result
+        };
+        let mut iterator = SpecifiersIterator::from(&format);
+        let expected = {
+            let mut result = spacer.clone();
+            result.push_str("%i");
+            result.push_str(&spacer);
+            result
+        };
+        assert_eq!(iterator.next(), Some(&*expected));
+        assert_eq!(iterator.next(), Some("%i"));
+        assert_eq!(iterator.next(), None);
+    }
 }
