@@ -59,6 +59,13 @@ impl<'a> Printfable for &'a str {
     }
 }
 
+impl<T> Printfable for *const T {
+    type Holder = *const libc::c_void;
+    fn to_c_repr_holder(self: &Self) -> Option<<Self as Printfable>::Holder> {
+        Some(*self as *const libc::c_void)
+    }
+}
+
 pub trait CReprHolder {
     type Output;
     fn to_c_repr(self: &Self) -> <Self as CReprHolder>::Output;
@@ -106,5 +113,12 @@ impl CReprHolder for CString {
     type Output = *const libc::c_char;
     fn to_c_repr(self: &Self) -> <Self as CReprHolder>::Output {
         self.as_ptr()
+    }
+}
+
+impl CReprHolder for *const libc::c_void {
+    type Output = *const libc::c_void;
+    fn to_c_repr(self: &Self) -> <Self as CReprHolder>::Output {
+        *self
     }
 }

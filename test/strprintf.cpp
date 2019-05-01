@@ -191,7 +191,7 @@ TEST_CASE("strprintf::fmt() formats void*", "[strprintf]")
 
 TEST_CASE("strprintf::fmt() formats nullptr", "[strprintf]")
 {
-	REQUIRE_FALSE(strprintf::fmt("%p", nullptr) == "(null)");
+	REQUIRE(strprintf::fmt("%p", nullptr) == "(nil)");
 }
 
 TEST_CASE("strprintf::fmt() formats double", "[strprintf]")

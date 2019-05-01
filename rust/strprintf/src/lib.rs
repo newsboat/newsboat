@@ -127,18 +127,22 @@ mod tests {
         assert_eq!(fmt!("%llu", std::u64::MAX), "18446744073709551615");
     }
 
-    /*
-    TEST_CASE("strprintf::fmt() formats void*", "[strprintf]")
-    {
-            const auto x = 42;
-            REQUIRE_FALSE(strprintf::fmt("%p", reinterpret_cast<const void*>(&x)).empty());
+    #[test]
+    fn formats_void_ptr() {
+        let x = 42i64;
+        let ptr = &x as *const i64;
+        assert_ne!(fmt!("%p", ptr as *const libc::c_void), "");
     }
 
-    TEST_CASE("strprintf::fmt() formats nullptr", "[strprintf]")
-    {
-            REQUIRE_FALSE(strprintf::fmt("%p", nullptr) == "(null)");
+    #[test]
+    fn formats_null_ptr() {
+        assert_eq!(fmt!("%p", std::ptr::null::<i32>()), "(nil)");
+        assert_eq!(fmt!("%p", std::ptr::null::<u32>()), "(nil)");
+        assert_eq!(fmt!("%p", std::ptr::null::<i64>()), "(nil)");
+        assert_eq!(fmt!("%p", std::ptr::null::<u64>()), "(nil)");
+        assert_eq!(fmt!("%p", std::ptr::null::<f32>()), "(nil)");
+        assert_eq!(fmt!("%p", std::ptr::null::<f64>()), "(nil)");
     }
-    */
 
     #[test]
     fn formats_float() {
