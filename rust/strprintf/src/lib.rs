@@ -190,15 +190,19 @@ mod tests {
         assert_eq!(fmt!("%s", input), input);
     }
 
-    /*
-    // TODO: write the same test for str
-    // TODO: write the same test for String
-    TEST_CASE("strprintf::fmt() formats std::string", "[strprintf]")
-    {
-            const auto input = std::string("Hello, world!");
-            REQUIRE(strprintf::fmt("%s", input) == input);
+    #[test]
+    fn formats_borrowed_string() {
+        let input = String::from("Hello, world!");
+        assert_eq!(fmt!("%s", &input), input);
     }
 
+    #[test]
+    fn formats_moved_string() {
+        let input = String::from("Hello, world!");
+        assert_eq!(fmt!("%s", input.clone()), input);
+    }
+
+    /*
     TEST_CASE("strprintf::fmt() works fine with 1MB format string", "[strprintf]")
     {
             const auto format = std::string(1024 * 1024, ' ');

@@ -6,63 +6,77 @@ use std::ffi::CString;
 
 pub trait Printfable {
     type Holder: CReprHolder;
-    fn to_c_repr_holder(self: &Self) -> Option<<Self as Printfable>::Holder>;
+    fn to_c_repr_holder(self: Self) -> Option<<Self as Printfable>::Holder>;
 }
 
 impl Printfable for i32 {
     type Holder = i32;
-    fn to_c_repr_holder(self: &Self) -> Option<<Self as Printfable>::Holder> {
-        Some(*self)
+    fn to_c_repr_holder(self: Self) -> Option<<Self as Printfable>::Holder> {
+        Some(self)
     }
 }
 
 impl Printfable for u32 {
     type Holder = u32;
-    fn to_c_repr_holder(self: &Self) -> Option<<Self as Printfable>::Holder> {
-        Some(*self)
+    fn to_c_repr_holder(self: Self) -> Option<<Self as Printfable>::Holder> {
+        Some(self)
     }
 }
 
 impl Printfable for i64 {
     type Holder = i64;
-    fn to_c_repr_holder(self: &Self) -> Option<<Self as Printfable>::Holder> {
-        Some(*self)
+    fn to_c_repr_holder(self: Self) -> Option<<Self as Printfable>::Holder> {
+        Some(self)
     }
 }
 
 impl Printfable for u64 {
     type Holder = u64;
-    fn to_c_repr_holder(self: &Self) -> Option<<Self as Printfable>::Holder> {
-        Some(*self)
+    fn to_c_repr_holder(self: Self) -> Option<<Self as Printfable>::Holder> {
+        Some(self)
     }
 }
 
 /// `f32` can't be passed to variadic functions like `snprintf`, so it's converted into `f64`
 impl Printfable for f32 {
     type Holder = f64;
-    fn to_c_repr_holder(self: &Self) -> Option<<Self as Printfable>::Holder> {
-        Some(*self as f64)
+    fn to_c_repr_holder(self: Self) -> Option<<Self as Printfable>::Holder> {
+        Some(self as f64)
     }
 }
 
 impl Printfable for f64 {
     type Holder = f64;
-    fn to_c_repr_holder(self: &Self) -> Option<<Self as Printfable>::Holder> {
-        Some(*self)
+    fn to_c_repr_holder(self: Self) -> Option<<Self as Printfable>::Holder> {
+        Some(self)
     }
 }
 
 impl<'a> Printfable for &'a str {
     type Holder = CString;
-    fn to_c_repr_holder(self: &Self) -> Option<<Self as Printfable>::Holder> {
-        CString::new(*self).ok()
+    fn to_c_repr_holder(self: Self) -> Option<<Self as Printfable>::Holder> {
+        CString::new(self).ok()
+    }
+}
+
+impl<'a> Printfable for &'a String {
+    type Holder = CString;
+    fn to_c_repr_holder(self: Self) -> Option<<Self as Printfable>::Holder> {
+        CString::new(self.as_str()).ok()
+    }
+}
+
+impl Printfable for String {
+    type Holder = CString;
+    fn to_c_repr_holder(self: Self) -> Option<<Self as Printfable>::Holder> {
+        CString::new(self).ok()
     }
 }
 
 impl<T> Printfable for *const T {
     type Holder = *const libc::c_void;
-    fn to_c_repr_holder(self: &Self) -> Option<<Self as Printfable>::Holder> {
-        Some(*self as *const libc::c_void)
+    fn to_c_repr_holder(self: Self) -> Option<<Self as Printfable>::Holder> {
+        Some(self as *const libc::c_void)
     }
 }
 
