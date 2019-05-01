@@ -1,11 +1,47 @@
-// TODO: write some docs for this
+//! Traits required by `fmt!` macro.
+//!
+//! `fmt!` needs to convert values from Rust types like `u64` and `String` to C types like
+//! `uint64_t` and `const char*`.
+//!
+//! For integer types, this happens automatically, e.g. `u64` can be passed directly into
+//! `libc::snprintf`.
+//!
+//! Floating-point types are a bit more complicated: `f32` (C's `float`) has to be converted to
+//! `f64` (C's `double`) because that's how variadic FFI works. `f64` can be passed over FFI
+//! without any problems.
+//!
+//! Strings are the most complicated of all: Rust represents them as an array of bytes, whereas
+//! C represents them as a chunk of memory terminated by a null byte. As a result, converting
+//! a `String` into `const char*` requires an allocation to temporarily store a string in
+//! a C-compatible fashion. `snprintf` doesn't understand Rust's borrowing, so we also need a Rust
+//! object to hold that memory while `snprintf` works with a pointer to it.
+//!
+//! To support all of this, `fmt!` uses a two-stage process:
+//! 1. convert a Rust type into an intermediate "holder" that owns a C-compatible representation of
+//!    that value (`Printfable` trait);
+//! 2. borrow the C-compatible representation of the value from the "holder" (`CReprHolder` trait).
+//!
+//! For example, a "holder" for a `String` is `std::ffi::CString`. It can be borrowed to call its
+//! `to_ptr` method that returns `*const libc::c_char`.
+//!
+//! For numeric types, the holder is the same as the type itself, and the values are simply copied.
+//! For example, `u64`'s "holder" is `u64`, which is then borrowed to get a `u64` again.
 
 extern crate libc;
 
 use std::ffi::CString;
 
+/// Trait of all types that can be formatted with `fmt!` macro.
+///
+/// See module-level documentation for an explanation of this.
 pub trait Printfable {
+    /// A "holder" type for this type.
     type Holder: CReprHolder;
+
+    /// Try to convert the value into "holder" type.
+    ///
+    /// This can fail for some types, e.g. `String` might fail to convert to `CString` if it
+    /// contains null bytes.
     fn to_c_repr_holder(self: Self) -> Option<<Self as Printfable>::Holder>;
 }
 
@@ -80,6 +116,9 @@ impl<T> Printfable for *const T {
     }
 }
 
+/// Trait of all types that hold a C representation of a value.
+///
+/// See module-level documentation for an explanation of this.
 pub trait CReprHolder {
     type Output;
     fn to_c_repr(self: &Self) -> <Self as CReprHolder>::Output;

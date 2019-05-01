@@ -1,12 +1,16 @@
-//! An iterator over `&str`, returning substrings that start with a printf-style format specifier
-//! (i.e. percent sign followed by some more symbols, like "%.4f hello").
+//! An iterator over `&str`, returning substrings that contain a single format specifier (i.e.
+//! percent sign followed by some more symbols, like "%.4f hello").
+//!
+//! **This module should only be used through `fmt!` macro.**
+#![doc(hidden)]
+
 pub struct SpecifiersIterator<'a> {
     /// The string this object iterates over.
     ///
-    /// Every time the iterator returns an item, that item is removed from the start of the string.
-    /// For example, as `SpecifiersIterator` iterates over a string "%i%o%u", the string will be
-    /// shortened first to "%o%u", then to "%u", and finally to "" (empty string), and all
-    /// subsequent calls to `next()` will return `None`.
+    /// Every time the iterator returns a substring, that substring is removed from the start of
+    /// the string. For example, as `SpecifiersIterator` iterates over a string "%i%o%u", the
+    /// string will be shortened first to "%o%u", then to "%u", and finally to "" (empty string).
+    /// After that, all subsequent calls to `next()` will return `None`.
     current_string: &'a str,
 }
 
