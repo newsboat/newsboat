@@ -178,20 +178,32 @@ mod tests {
     }
 
     #[test]
-    fn formats_void_ptr() {
+    fn formats_pointers() {
         let x = 42i64;
-        let ptr = &x as *const i64;
-        assert_ne!(fmt!("%p", ptr as *const libc::c_void), "");
+
+        let x_ptr = &x as *const i64;
+        let x_ptr_formatted = fmt!("%p", x_ptr);
+
+        let x_ptr_void = x_ptr as *const libc::c_void;
+        let x_ptr_void_formatted = fmt!("%p", x_ptr_void);
+        assert!(!x_ptr_formatted.is_empty());
+        assert_eq!(x_ptr_formatted, x_ptr_void_formatted);
     }
 
     #[test]
-    fn formats_null_ptr() {
-        assert_eq!(fmt!("%p", std::ptr::null::<i32>()), "(nil)");
-        assert_eq!(fmt!("%p", std::ptr::null::<u32>()), "(nil)");
-        assert_eq!(fmt!("%p", std::ptr::null::<i64>()), "(nil)");
-        assert_eq!(fmt!("%p", std::ptr::null::<u64>()), "(nil)");
-        assert_eq!(fmt!("%p", std::ptr::null::<f32>()), "(nil)");
-        assert_eq!(fmt!("%p", std::ptr::null::<f64>()), "(nil)");
+    fn formats_all_null_pointers_the_same() {
+        let i32_ptr_fmt = fmt!("%p", std::ptr::null::<i32>());
+        let u32_ptr_fmt = fmt!("%p", std::ptr::null::<u32>());
+        let i64_ptr_fmt = fmt!("%p", std::ptr::null::<i64>());
+        let u64_ptr_fmt = fmt!("%p", std::ptr::null::<u64>());
+        let f32_ptr_fmt = fmt!("%p", std::ptr::null::<f32>());
+        let f64_ptr_fmt = fmt!("%p", std::ptr::null::<f64>());
+        assert!(!i32_ptr_fmt.is_empty());
+        assert_eq!(i32_ptr_fmt, u32_ptr_fmt);
+        assert_eq!(u32_ptr_fmt, i64_ptr_fmt);
+        assert_eq!(i64_ptr_fmt, u64_ptr_fmt);
+        assert_eq!(u64_ptr_fmt, f32_ptr_fmt);
+        assert_eq!(f32_ptr_fmt, f64_ptr_fmt);
     }
 
     #[test]
