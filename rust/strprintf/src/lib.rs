@@ -37,10 +37,10 @@ where
     T: CReprHolder,
 {
     let mut buffer = Vec::<u8>::with_capacity(buf_size);
-    // Filling the vector with ones because CString::new() doesn't want any zeroes in there. The
-    // last byte is left unused, so that CString::new() can put a terminating zero byte there
-    // without triggering a re-allocation.
-    buffer.resize(buf_size - 1, 1);
+    // CString appends a null byte and calls Vec::into_byte_slice(). That conversion will shed all
+    // unused capacity. For this reason, we pre-fill the vector with dummy values, leaving one byte
+    // free, so CString's null byte doesn't trigger a re-allocation.
+    buffer.resize(buf_size - 1, 0);
     unsafe {
         // It's safe to use this function because we initialized the buffer and we know there are
         // no zeroes there
