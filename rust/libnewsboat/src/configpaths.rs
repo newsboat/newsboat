@@ -271,18 +271,17 @@ impl ConfigPaths {
         self.m_data_dir = data_dir;
     }
 
-    /// \brief Indicates if the object can be used.
+    /// Indicates if the object can be used.
     ///
-    /// If this method returned `false`, the cause for initialization
-    /// failure can be found using `error_message()`.
+    /// If this method returned `false`, the cause for initialization failure can be found using
+    /// `error_message()`.
     pub fn initialized(&self) -> bool {
         !self.m_env_home.as_os_str().is_empty()
     }
 
     /// Returns explanation why initialization failed.
     ///
-    /// \note You shouldn't call this unless `initialized()` returns
-    /// `false`.
+    /// \note You shouldn't call this unless `initialized()` returns `false`.
     pub fn error_message(&self) -> &str {
         &self.m_error_message
     }
@@ -295,8 +294,7 @@ impl ConfigPaths {
     }
     */
 
-    /// Ensures all directories exist (migrating them from Newsbeuter if
-    /// possible).
+    /// Ensures all directories exist (migrating them from Newsbeuter if possible).
     pub fn setup_dirs(&mut self) -> bool {
         if !self.m_using_nonstandard_configs && !Path::new(&self.m_url_file).exists() {
             self.migrate_data_from_newsbeuter();
@@ -338,8 +336,7 @@ impl ConfigPaths {
 
     /// \brief Path to the queue file.
     ///
-    /// Queue file stores enqueued podcasts. It's written by Newsboat, and
-    /// read by Podboat.
+    /// Queue file stores enqueued podcasts. It's written by Newsboat, and read by Podboat.
     pub fn queue_file(&self) -> String {
         self.m_queue_file.clone()
     }
