@@ -262,6 +262,11 @@ impl ConfigPaths {
             return;
         }
 
+        /* Invariant: config dir exists.
+         *
+         * At this point, we're confident we'll be using XDG. We don't check if
+         * data dir exists, because if it doesn't we'll create it. */
+
         self.m_config_dir = config_dir;
         self.m_data_dir = data_dir;
     }
