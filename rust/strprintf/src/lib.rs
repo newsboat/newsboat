@@ -20,6 +20,7 @@ pub mod specifiers_iterator;
 pub mod traits;
 
 use std::ffi::{CStr, CString};
+use std::mem;
 use std::vec::Vec;
 use traits::*;
 
@@ -37,26 +38,23 @@ where
     T: CReprHolder,
 {
     let mut buffer = Vec::<u8>::with_capacity(buf_size);
-    // CString appends a null byte and calls Vec::into_byte_slice(). That conversion will shed all
-    // unused capacity. For this reason, we pre-fill the vector with dummy values, leaving one byte
-    // free, so CString's null byte doesn't trigger a re-allocation.
-    buffer.resize(buf_size - 1, 0);
+    let buffer_ptr = buffer.as_mut_ptr();
     unsafe {
-        // It's safe to use this function because we initialized the buffer and we know there are
-        // no zeroes there
-        let buffer = CString::from_vec_unchecked(buffer);
-        let buffer_ptr = buffer.into_raw();
+        // We're passing the buffer to C, so let's make Rust forget about it for a while.
+        mem::forget(buffer);
+
         let bytes_written = libc::snprintf(
-            buffer_ptr,
+            buffer_ptr as *mut libc::c_char,
             buf_size as libc::size_t,
             format_cstring.as_ptr() as *const libc::c_char,
             arg_c_repr_holder.to_c_repr(),
         ) as usize;
-        let buffer = CString::from_raw(buffer_ptr);
         if bytes_written >= buf_size {
+            let _ = Vec::from_raw_parts(buffer_ptr, buf_size, buf_size);
             Err(bytes_written + 1)
         } else {
-            buffer.into_string().map_err(|_| 0)
+            let buffer = Vec::from_raw_parts(buffer_ptr, bytes_written, buf_size);
+            Ok(String::from_utf8_lossy(&buffer).into_owned())
         }
     }
 }
