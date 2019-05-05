@@ -84,3 +84,27 @@ TEST_CASE("ConfigPaths returns paths to Newsboat XDG dirs if they exist and "
 		}
 	}
 }
+
+TEST_CASE("ConfigPaths::process_args replaces paths with the ones supplied by "
+		"CliArgsParser",
+		"[ConfigPaths]")
+{
+	const auto url_file = std::string("my urls file");
+	const auto cache_file = std::string("/path/to/cache file.db");
+	const auto lock_file = cache_file + ".lock";
+	const auto config_file = std::string("this is a/config");
+	TestHelpers::Opts opts({
+			"newsboat",
+			"-u", url_file,
+			"-c", cache_file,
+			"-C", config_file,
+			"-q"});
+	CliArgsParser parser(opts.argc(), opts.argv());
+	ConfigPaths paths;
+	REQUIRE(paths.initialized());
+	paths.process_args(parser);
+	REQUIRE(paths.url_file() == url_file);
+	REQUIRE(paths.cache_file() == cache_file);
+	REQUIRE(paths.lock_file() == lock_file);
+	REQUIRE(paths.config_file() == config_file);
+}
