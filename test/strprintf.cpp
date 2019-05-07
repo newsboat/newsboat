@@ -183,15 +183,40 @@ TEST_CASE("strprintf::fmt() formats unsigned long long int", "[strprintf]")
 	REQUIRE(strprintf::fmt("%llu", ullong_max) == "18446744073709551615");
 }
 
-TEST_CASE("strprintf::fmt() formats void*", "[strprintf]")
+TEST_CASE("strprintf::fmt() formats pointers", "[strprintf]")
 {
 	const auto x = 42;
-	REQUIRE_FALSE(strprintf::fmt("%p", reinterpret_cast<const void*>(&x)).empty());
+
+	const auto x_ptr = &x;
+	const auto x_ptr_formatted = strprintf::fmt("%p", x_ptr);
+
+	const auto x_ptr_void = reinterpret_cast<const void*>(x_ptr);
+	const auto x_ptr_void_formatted = strprintf::fmt("%p", x_ptr_void);
+
+	REQUIRE_FALSE(x_ptr_formatted.empty());
+	REQUIRE(x_ptr_formatted == x_ptr_void_formatted);
 }
 
-TEST_CASE("strprintf::fmt() formats nullptr", "[strprintf]")
+TEST_CASE("strprintf::fmt() formats null pointers the same", "[strprintf]")
 {
-	REQUIRE_FALSE(strprintf::fmt("%p", nullptr) == "(null)");
+	const auto int_ptr_fmt =
+		strprintf::fmt("%p", static_cast<const int*>(nullptr));
+	const auto uint_ptr_fmt =
+		strprintf::fmt("%p", static_cast<const unsigned int*>(nullptr));
+	const auto long_ptr_fmt =
+		strprintf::fmt("%p", static_cast<const long*>(nullptr));
+	const auto ulong_ptr_fmt =
+		strprintf::fmt("%p", static_cast<const unsigned long*>(nullptr));
+	const auto llong_ptr_fmt =
+		strprintf::fmt("%p", static_cast<const long long*>(nullptr));
+	const auto ullong_ptr_fmt =
+		strprintf::fmt("%p", static_cast<const unsigned long long*>(nullptr));
+	REQUIRE_FALSE(int_ptr_fmt.empty());
+	REQUIRE(int_ptr_fmt == uint_ptr_fmt);
+	REQUIRE(uint_ptr_fmt == long_ptr_fmt);
+	REQUIRE(long_ptr_fmt == ulong_ptr_fmt);
+	REQUIRE(ulong_ptr_fmt == llong_ptr_fmt);
+	REQUIRE(llong_ptr_fmt == ullong_ptr_fmt);
 }
 
 TEST_CASE("strprintf::fmt() formats double", "[strprintf]")
@@ -228,8 +253,10 @@ TEST_CASE("strprintf::fmt() formats std::string*", "[strprintf]")
 	REQUIRE(strprintf::fmt("%s", &input) == input);
 }
 
-TEST_CASE("strprintf::fmt() works fine with 1MB format string", "[strprintf]")
+TEST_CASE("strprintf::fmt() works fine with 2MB format string", "[strprintf]")
 {
-	const auto format = std::string(1024 * 1024, ' ');
-	REQUIRE(strprintf::fmt(format) == format);
+	const auto spacer = std::string(1024 * 1024, ' ');
+	const auto format = spacer + "%i" + spacer + "%i";
+	const auto expected = spacer + "42" + spacer + "100500";
+	REQUIRE(strprintf::fmt(format, 42, 100500) == expected);
 }

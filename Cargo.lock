@@ -551,6 +551,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "strprintf"
+version = "0.1.0"
+dependencies = [
+ "libc 0.2.48 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "syn"
 version = "0.15.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
