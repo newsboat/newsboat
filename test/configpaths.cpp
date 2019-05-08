@@ -108,3 +108,24 @@ TEST_CASE("ConfigPaths::process_args replaces paths with the ones supplied by "
 	REQUIRE(paths.lock_file() == lock_file);
 	REQUIRE(paths.config_file() == config_file);
 }
+
+TEST_CASE("ConfigPaths::set_cache_file changes paths to cache and lock files",
+		"[ConfigPaths]")
+{
+	const auto test_dir = std::string("some/dir/we/use/as/home");
+	const auto newsboat_dir = test_dir + "/.newsboat/";
+
+	TestHelpers::EnvVar home("HOME");
+	home.set(test_dir);
+
+	ConfigPaths paths;
+	REQUIRE(paths.initialized());
+
+	REQUIRE(paths.cache_file() == newsboat_dir + "cache.db");
+	REQUIRE(paths.lock_file() == newsboat_dir + "cache.db.lock");
+
+	const auto new_cache = std::string("something/entirely different.sqlite3");
+	paths.set_cache_file(new_cache);
+	REQUIRE(paths.cache_file() == new_cache);
+	REQUIRE(paths.lock_file() == new_cache + ".lock");
+}
