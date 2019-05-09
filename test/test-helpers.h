@@ -14,18 +14,16 @@
 
 namespace TestHelpers {
 
-/* Objects of TempFile class generate a temporary filename and delete the
- * corresponding file when they are destructed.
- *
- * This is useful for teardown in tests, where we use RAII to clean up
- * temporary DB files and stuff. */
-class TempFile {
+/* Objects of MainTempDir class create Newsboat's temporary directory, and try
+ * to remove it when they are destroyed. Other classes (TempFile and TempDir)
+ * use this one to put their stuff in Newsboat's temp dir. */
+class MainTempDir {
 public:
 	class tempfileexception : public std::exception {
 	public:
 		explicit tempfileexception(const char* error)
 		{
-			msg = "failed to create a tempdir: ";
+			msg = "tempfileexception: ";
 			msg += error;
 		};
 
@@ -38,25 +36,7 @@ public:
 		std::string msg;
 	};
 
-	TempFile()
-	{
-		init_tempdir();
-		init_file();
-	}
-
-	~TempFile()
-	{
-		::unlink(filepath.c_str());
-		::rmdir(tempdir.c_str());
-	}
-
-	const std::string getPath()
-	{
-		return filepath;
-	}
-
-private:
-	void init_tempdir()
+	MainTempDir()
 	{
 		char* tmpdir_p = ::getenv("TMPDIR");
 
@@ -92,9 +72,32 @@ private:
 				throw tempfileexception(strerror(saved_errno));
 			}
 		}
-	};
+	}
 
-	void init_file()
+	~MainTempDir()
+	{
+		// Try to remove the tempdir, but don't try *too* hard: there might be
+		// other objects still using it. The last one will hopefully delete it.
+		::rmdir(tempdir.c_str());
+	}
+
+	const std::string getPath()
+	{
+		return tempdir;
+	}
+
+private:
+	std::string tempdir;
+};
+
+/* Objects of TempFile class generate a temporary filename and delete the
+ * corresponding file when they are destructed.
+ *
+ * This is useful for teardown in tests, where we use RAII to clean up
+ * temporary DB files and stuff. */
+class TempFile {
+public:
+	TempFile()
 	{
 		bool success = false;
 		unsigned int tries = 0;
@@ -107,7 +110,7 @@ private:
 			// Catch doesn't let us run tests in multiple threads
 			// anyway.
 			std::string filename = std::to_string(rand());
-			filepath = tempdir + "/" + filename;
+			filepath = tempdir.getPath() + "/" + filename;
 
 			struct stat buffer;
 			if (lstat(filepath.c_str(), &buffer) != 0) {
@@ -118,13 +121,79 @@ private:
 		} while (!success && tries < 10);
 
 		if (!success) {
-			throw tempfileexception(
-				"failed to generate unique filename");
+			throw MainTempDir::tempfileexception(
+				"TempFile: failed to generate unique filename");
 		}
 	}
 
-	std::string tempdir;
+	~TempFile()
+	{
+		::unlink(filepath.c_str());
+	}
+
+	const std::string getPath()
+	{
+		return filepath;
+	}
+
+private:
+	MainTempDir tempdir;
 	std::string filepath;
+};
+
+/* Objects of TempDir class create a temporary directory and remove it (along
+ * with everything it contains) when the object is destructed. */
+class TempDir {
+public:
+	TempDir()
+	{
+		bool success = false;
+		unsigned int tries = 0;
+
+		// Make 10 attempts at creating a directory that doesn't exist
+		do {
+			tries++;
+
+			// This isn't thread-safe, but we don't care because
+			// Catch doesn't let us run tests in multiple threads
+			// anyway.
+			std::string dirname = std::to_string(rand());
+			dirpath = tempdir.getPath() + "/" + dirname;
+
+			int status = mkdir(dirpath.c_str(), S_IRWXU);
+			if (status == 0) {
+				success = true;
+			}
+		} while (!success && tries < 10);
+
+		if (!success) {
+			throw MainTempDir::tempfileexception(
+				"TempDir: failed to create unique directory");
+		}
+	}
+
+	~TempDir()
+	{
+		const auto cmd = std::string("rm -rf ") + dirpath;
+		// system() is dangerous, but I think it's tolerable here because the
+		// input is dependent only on TEMPDIR environment variable, and thus
+		// controlled by the person running the tests. In my opinion, that
+		// person can be trusted.
+		const int result = ::system(cmd.c_str());
+		// We ignore the return value because we're in a destructor and can't
+		// throw an exception. The system will have to clean up the directory
+		// after us, I'm afraid.
+		(void)result;
+	}
+
+	const std::string getPath()
+	{
+		return dirpath;
+	}
+
+private:
+	MainTempDir tempdir;
+	std::string dirpath;
 };
 
 /*
