@@ -1133,3 +1133,24 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 		}
 	}
 }
+
+TEST_CASE("mkdir_parents() doesn't care if the path ends in a slash or not",
+		"[utils]")
+{
+	TestHelpers::TempDir tmp;
+
+	const auto path = tmp.getPath() + std::to_string(rand());
+
+	const auto check = [](const std::string& path) {
+		REQUIRE(utils::mkdir_parents(path, 0700) == 0);
+		REQUIRE(::access(path.c_str(), R_OK | X_OK) == 0);
+	};
+
+	SECTION("Path doesn't end in slash => directory created") {
+		check(path);
+	}
+
+	SECTION("Path ends in slash => directory created") {
+		check(path + "/");
+	}
+}

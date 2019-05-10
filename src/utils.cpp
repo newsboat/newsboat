@@ -1038,6 +1038,13 @@ int utils::mkdir_parents(const std::string& p, mode_t mode)
 
 	if (result == 0) {
 		result = mkdir(p.c_str(), mode);
+
+		// It's not an error if the directory already exists. This happens when
+		// `p` ended with a slash, in which case the loop above creates all the
+		// path components.
+		if (result == -1 && errno == EEXIST) {
+			result = 0;
+		}
 	}
 
 	free(pathname);
