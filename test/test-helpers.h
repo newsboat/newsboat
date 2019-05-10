@@ -146,29 +146,26 @@ class TempDir {
 public:
 	TempDir()
 	{
-		bool success = false;
-		unsigned int tries = 0;
+		const auto dirpath_template = tempdir.getPath() + "tmp.XXXXXX";
+		std::vector<char> dirpath_template_c(
+				dirpath_template.cbegin(), dirpath_template.cend());
+		dirpath_template_c.push_back('\0');
 
-		// Make 10 attempts at creating a directory that doesn't exist
-		do {
-			tries++;
-
-			// This isn't thread-safe, but we don't care because
-			// Catch doesn't let us run tests in multiple threads
-			// anyway.
-			std::string dirname = std::to_string(rand());
-			dirpath = tempdir.getPath() + dirname + "/";
-
-			int status = mkdir(dirpath.c_str(), S_IRWXU);
-			if (status == 0) {
-				success = true;
-			}
-		} while (!success && tries < 10);
-
-		if (!success) {
-			throw MainTempDir::tempfileexception(
-				"TempDir: failed to create unique directory");
+		const auto result = ::mkdtemp(dirpath_template_c.data());
+		if (result == nullptr) {
+			const auto saved_errno = errno;
+			std::string msg("TempDir: failed to generate unique directory: (");
+			msg += std::to_string(saved_errno);
+			msg += ") ";
+			msg += ::strerror(saved_errno);
+			throw MainTempDir::tempfileexception(msg);
 		}
+
+		// cned()-1 so we don't copy terminating null byte - std::string
+		// doesn't need it
+		dirpath = std::string(
+				dirpath_template_c.cbegin(), dirpath_template_c.cend() - 1);
+		dirpath.push_back('/');
 	}
 
 	~TempDir()
