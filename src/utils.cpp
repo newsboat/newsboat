@@ -1020,11 +1020,13 @@ int utils::mkdir_parents(const std::string& p, mode_t mode)
 	while (*curr) {
 		if (*curr == '/') {
 			*curr = '\0';
-			result = access(pathname.data(), F_OK);
-			if (result == -1) {
-				result = mkdir(pathname.data(), mode);
-				if (result != 0 && errno != EEXIST)
+			result = mkdir(pathname.data(), mode);
+			if (result != 0) {
+				if (errno == EEXIST) {
+					result = 0;
+				} else {
 					break;
+				}
 			}
 			*curr = '/';
 		}
