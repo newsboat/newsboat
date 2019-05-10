@@ -120,7 +120,14 @@ int Controller::run(const CliArgsParser& args)
 
 	configpaths.process_args(args);
 
-	if (!configpaths.setup_dirs()) {
+	const auto migrated = configpaths.try_migrate_from_newsbeuter();
+	if (migrated) {
+		std::cerr << "\nPlease check the results and press Enter to "
+			     "continue.";
+		std::cin.ignore();
+	}
+
+	if (!configpaths.create_dirs()) {
 		return EXIT_FAILURE;
 	}
 

@@ -153,14 +153,15 @@ void ConfigPaths::process_args(const CliArgsParser& args)
 	m_using_nonstandard_configs = args.using_nonstandard_configs;
 }
 
-bool ConfigPaths::setup_dirs()
+bool ConfigPaths::try_migrate_from_newsbeuter()
 {
 	if ((!m_using_nonstandard_configs) &&
 		(0 != access(m_url_file.c_str(), F_OK))) {
-		migrate_data_from_newsbeuter();
+		return migrate_data_from_newsbeuter();
 	}
 
-	return create_dirs();
+	// No migration occurred.
+	return false;
 }
 
 void copy_file(const std::string& input_filepath,
@@ -330,7 +331,7 @@ bool ConfigPaths::migrate_data_from_newsbeuter_simple()
 	return true;
 }
 
-void ConfigPaths::migrate_data_from_newsbeuter()
+bool ConfigPaths::migrate_data_from_newsbeuter()
 {
 	bool migrated = migrate_data_from_newsbeuter_xdg();
 
@@ -345,11 +346,7 @@ void ConfigPaths::migrate_data_from_newsbeuter()
 		migrated = migrate_data_from_newsbeuter_simple();
 	}
 
-	if (migrated) {
-		std::cerr << "\nPlease check the results and press Enter to "
-			     "continue.";
-		std::cin.ignore();
-	}
+	return migrated;
 }
 
 bool ConfigPaths::create_dirs() const

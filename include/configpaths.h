@@ -27,13 +27,20 @@ class ConfigPaths {
 	bool find_dirs_xdg();
 	void find_dirs();
 
+	/// Looks for Newsbeuter's XDG directories and, if found, copies their
+	/// contents to Newsboat's XDG dirs. Returns true if copied something,
+	/// false otherwise.
 	bool migrate_data_from_newsbeuter_xdg();
 
+	/// Looks for Newsbeuter's dot directory and, if found, copies its contents
+	/// to Newsboat's dotdir. Returns true if copied something, false
+	/// otherwise.
 	bool migrate_data_from_newsbeuter_simple();
 
-	void migrate_data_from_newsbeuter();
-
-	bool create_dirs() const;
+	/// Looks for Newsbeuter's directories and, if found, copies their contents
+	/// to corresponding Newsboat's directory. Returns true if copied
+	/// something, false otherwise.
+	bool migrate_data_from_newsbeuter();
 
 public:
 	ConfigPaths();
@@ -53,9 +60,16 @@ public:
 	/// Initializes paths to config, cache etc. from CLI arguments.
 	void process_args(const CliArgsParser& args);
 
-	/// Ensures all directories exist (migrating them from Newsbeuter if
-	/// possible).
-	bool setup_dirs();
+	/// If user didn't specify paths to configs on the command line, and the
+	/// config file wasn't found in the standard directories, looks for
+	/// Newsbeuter's directories, and copies their contents if found. Returns
+	/// true if copied something, false otherwise.
+	bool try_migrate_from_newsbeuter();
+
+	/// Creates Newsboat's dotdir or XDG config & data dirs (depending on what
+	/// was configured during initialization, when processing CLI args, and if
+	/// migration found anything).
+	bool create_dirs() const;
 
 	/// Path to the URLs file.
 	std::string url_file() const

@@ -130,7 +130,7 @@ TEST_CASE("ConfigPaths::set_cache_file changes paths to cache and lock files",
 	REQUIRE(paths.lock_file() == new_cache + ".lock");
 }
 
-TEST_CASE("ConfigPaths::setup_dirs() returns true if both config and data dirs "
+TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs "
 		"were successfully created or already existed", "[ConfigPaths]")
 {
 	TestHelpers::TempDir tmp;
@@ -156,7 +156,7 @@ TEST_CASE("ConfigPaths::setup_dirs() returns true if both config and data dirs "
 		REQUIRE(starts_with(paths.search_file(), tmp.getPath()));
 		REQUIRE(starts_with(paths.cmdline_file(), tmp.getPath()));
 
-		REQUIRE(paths.setup_dirs());
+		REQUIRE(paths.create_dirs());
 
 		for (const auto& dir : dirs) {
 			INFO("Checking directory " << dir);
