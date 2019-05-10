@@ -21,7 +21,7 @@ class MainTempDir {
 public:
 	class tempfileexception : public std::exception {
 	public:
-		explicit tempfileexception(const char* error)
+		explicit tempfileexception(const std::string& error)
 		{
 			msg = "tempfileexception: ";
 			msg += error;
@@ -99,31 +99,30 @@ class TempFile {
 public:
 	TempFile()
 	{
-		bool success = false;
-		unsigned int tries = 0;
+		const auto filepath_template = tempdir.getPath() + "tmp.XXXXXX";
+		std::vector<char> filepath_template_c(
+				filepath_template.cbegin(), filepath_template.cend());
+		filepath_template_c.push_back('\0');
 
-		// Make 10 attempts at generating a filename that doesn't exist
-		do {
-			tries++;
-
-			// This isn't thread-safe, but we don't care because
-			// Catch doesn't let us run tests in multiple threads
-			// anyway.
-			std::string filename = std::to_string(rand());
-			filepath = tempdir.getPath() + filename;
-
-			struct stat buffer;
-			if (lstat(filepath.c_str(), &buffer) != 0) {
-				if (errno == ENOENT) {
-					success = true;
-				}
-			}
-		} while (!success && tries < 10);
-
-		if (!success) {
-			throw MainTempDir::tempfileexception(
-				"TempFile: failed to generate unique filename");
+		const auto fd = ::mkstemp(filepath_template_c.data());
+		if (fd == -1) {
+			const auto saved_errno = errno;
+			std::string msg("TempFile: failed to generate unique filename: (");
+			msg += std::to_string(saved_errno);
+			msg += ") ";
+			msg += ::strerror(saved_errno);
+			throw MainTempDir::tempfileexception(msg);
 		}
+
+		// cend()-1 so we don't copy the terminating null byte - std::string
+		// doesn't need it
+		filepath = std::string(
+				filepath_template_c.cbegin(), filepath_template_c.cend() - 1);
+
+		::close(fd);
+		// `TempFile` is supposed to only *generate* the name, not create the
+		// file. Since mkstemp does create a file, we have to remove it.
+		::unlink(filepath.c_str());
 	}
 
 	~TempFile()
