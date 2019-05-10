@@ -158,7 +158,7 @@ public:
 			// Catch doesn't let us run tests in multiple threads
 			// anyway.
 			std::string dirname = std::to_string(rand());
-			dirpath = tempdir.getPath() + dirname;
+			dirpath = tempdir.getPath() + dirname + "/";
 
 			int status = mkdir(dirpath.c_str(), S_IRWXU);
 			if (status == 0) {
