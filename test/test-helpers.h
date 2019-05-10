@@ -8,6 +8,8 @@
 #include <sstream>
 #include <string>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 #include "3rd-party/catch.hpp"
@@ -170,16 +172,21 @@ public:
 
 	~TempDir()
 	{
-		const auto cmd = std::string("rm -rf ") + dirpath;
-		// system() is dangerous, but I think it's tolerable here because the
-		// input is dependent only on TEMPDIR environment variable, and thus
-		// controlled by the person running the tests. In my opinion, that
-		// person can be trusted.
-		const int result = ::system(cmd.c_str());
-		// We ignore the return value because we're in a destructor and can't
-		// throw an exception. The system will have to clean up the directory
-		// after us, I'm afraid.
-		(void)result;
+		const pid_t pid = ::fork();
+		if (pid == -1) {
+			// Failed to fork. Oh well, we're in a destructor, so can't throw
+			// or do anything else of use. Just give up.
+		} else if (pid > 0) {
+			// In parent
+			// Wait for the child to finish. We don't care about child's exit
+			// status, thus nullptr.
+			::waitpid(pid, nullptr, 0);
+		} else {
+			// In child
+			// Ignore the return value, because even if the call failed, we
+			// can't do anything useful.
+			::execlp("rm", "rm", "-rf", dirpath.c_str(), (char*)nullptr);
+		}
 	}
 
 	const std::string getPath()
