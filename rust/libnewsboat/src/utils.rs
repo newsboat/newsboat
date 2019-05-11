@@ -413,8 +413,7 @@ pub fn make_title(rs_str: String) -> String {
     // Throw away common webpage suffixes: .html, .php, .aspx, .htm
     result = result
         .trim_right_matches(".html")
-        .trim_right_matches(".php");
-    result = result
+        .trim_right_matches(".php")
         .trim_right_matches(".aspx")
         .trim_right_matches(".htm");
 
