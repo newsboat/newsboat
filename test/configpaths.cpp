@@ -364,6 +364,9 @@ struct FileSentries {
 	std::string config = std::to_string(rand()) + "config";
 	std::string urls = std::to_string(rand()) + "urls";
 	std::string cache = std::to_string(rand()) + "cache";
+	std::string queue = std::to_string(rand()) + "queue";
+	std::string search = std::to_string(rand()) + "search";
+	std::string cmdline = std::to_string(rand()) + "cmdline";
 };
 
 void mock_newsbeuter_dotdir(
@@ -374,7 +377,10 @@ void mock_newsbeuter_dotdir(
 	::mkdir(dotdir_path.c_str(), 0700);
 	REQUIRE(create_file(dotdir_path + "config", sentries.config));
 	REQUIRE(create_file(dotdir_path + "urls", sentries.urls));
-	REQUIRE(create_file(dotdir_path + "cache", sentries.cache));
+	REQUIRE(create_file(dotdir_path + "cache.db", sentries.cache));
+	REQUIRE(create_file(dotdir_path + "queue", sentries.queue));
+	REQUIRE(create_file(dotdir_path + "history.search", sentries.search));
+	REQUIRE(create_file(dotdir_path + "history.cmdline", sentries.cmdline));
 }
 
 void mock_newsbeuter_xdg_dirs(
@@ -388,7 +394,7 @@ void mock_newsbeuter_xdg_dirs(
 
 	const auto data_dir_path = tmp.getPath() + ".local/share/newsbeuter/";
 	utils::mkdir_parents(data_dir_path, 0700);
-	REQUIRE(create_file(data_dir_path + "cache", sentries.cache));
+	REQUIRE(create_file(data_dir_path + "cache.db", sentries.cache));
 }
 
 void mock_newsboat_dotdir(
@@ -519,5 +525,36 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 			check(tmp.getPath() + ".config/newsboat/urls");
 		}
 	}
+}
+
+TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter dotdir from "
+		"default location to default location of Newsboat dotdir",
+		"[ConfigPaths]")
+{
+	TestHelpers::TempDir tmp;
+
+	TestHelpers::EnvVar home("HOME");
+	home.set(tmp.getPath());
+	INFO("Temporary directory (used as HOME): " << tmp.getPath());
+
+	FileSentries sentries;
+
+	mock_newsbeuter_dotdir(tmp, sentries);
+
+	ConfigPaths paths;
+	REQUIRE(paths.initialized());
+
+	// Files should be migrates, so should return true.
+	REQUIRE(paths.try_migrate_from_newsbeuter());
+
+	const auto dotdir = tmp.getPath() + ".newsboat/";
+
+	REQUIRE(file_contents(dotdir + "config") == sentries.config);
+	REQUIRE(file_contents(dotdir + "urls") == sentries.urls);
+	REQUIRE(file_contents(dotdir + "cache.db") == sentries.cache);
+	REQUIRE(file_contents(dotdir + "queue") == sentries.queue);
+	REQUIRE(file_contents(dotdir + "history.search") == sentries.search);
+	REQUIRE(file_contents(dotdir + "history.cmdline") == sentries.cmdline);
+}
 
 }
