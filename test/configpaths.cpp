@@ -366,6 +366,31 @@ struct FileSentries {
 	std::string cache = std::to_string(rand()) + "cache";
 };
 
+void mock_newsbeuter_dotdir(
+		const TestHelpers::TempDir& tmp,
+		const FileSentries& sentries)
+{
+	const auto dotdir_path = tmp.getPath() + ".newsbeuter/";
+	::mkdir(dotdir_path.c_str(), 0700);
+	REQUIRE(create_file(dotdir_path + "config", sentries.config));
+	REQUIRE(create_file(dotdir_path + "urls", sentries.urls));
+	REQUIRE(create_file(dotdir_path + "cache", sentries.cache));
+}
+
+void mock_newsbeuter_xdg_dirs(
+		const TestHelpers::TempDir& tmp,
+		const FileSentries& sentries)
+{
+	const auto config_dir_path = tmp.getPath() + ".config/newsbeuter/";
+	utils::mkdir_parents(config_dir_path, 0700);
+	REQUIRE(create_file(config_dir_path + "config", sentries.config));
+	REQUIRE(create_file(config_dir_path + "urls", sentries.urls));
+
+	const auto data_dir_path = tmp.getPath() + ".local/share/newsbeuter/";
+	utils::mkdir_parents(data_dir_path, 0700);
+	REQUIRE(create_file(data_dir_path + "cache", sentries.cache));
+}
+
 TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if config paths "
 		"were specified on the command line",
 		"[ConfigPaths]")
@@ -379,22 +404,11 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if config paths "
 	FileSentries beuterSentries;
 
 	SECTION("Newsbeuter dotdir exists") {
-		const auto dotdir_path = tmp.getPath() + ".newsbeuter/";
-		::mkdir(dotdir_path.c_str(), 0700);
-		REQUIRE(create_file(dotdir_path + "config", beuterSentries.config));
-		REQUIRE(create_file(dotdir_path + "urls", beuterSentries.urls));
-		REQUIRE(create_file(dotdir_path + "cache", beuterSentries.cache));
+		mock_newsbeuter_dotdir(tmp, beuterSentries);
 	}
 
 	SECTION("Newsbeuter XDG dirs exist") {
-		const auto config_dir_path = tmp.getPath() + ".config/newsbeuter/";
-		utils::mkdir_parents(config_dir_path, 0700);
-		REQUIRE(create_file(config_dir_path + "config", beuterSentries.config));
-		REQUIRE(create_file(config_dir_path + "urls", beuterSentries.urls));
-
-		const auto data_dir_path = tmp.getPath() + ".local/share/newsbeuter/";
-		utils::mkdir_parents(data_dir_path, 0700);
-		REQUIRE(create_file(data_dir_path + "cache", beuterSentries.cache));
+		mock_newsbeuter_xdg_dirs(tmp, beuterSentries);
 	}
 
 	FileSentries boatSentries;
