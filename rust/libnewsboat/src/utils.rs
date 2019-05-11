@@ -74,7 +74,7 @@ pub fn absolute_url(base_url: &str, link: &str) -> String {
     Url::parse(base_url)
         .and_then(|url| url.join(link))
         .as_ref()
-        .map(|url| url.as_str())
+        .map(Url::as_str)
         .unwrap_or(link)
         .to_owned()
 }
@@ -188,7 +188,7 @@ pub fn censor_url(url: &str) -> String {
                 url
             })
             .as_ref()
-            .map(|url| url.as_str())
+            .map(Url::as_str)
             .unwrap_or(url)
             .to_owned()
     } else {
