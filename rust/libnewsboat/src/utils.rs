@@ -100,7 +100,7 @@ pub fn resolve_tilde(path: String) -> String {
             }
         }
     }
-    return file_path;
+    file_path
 }
 
 pub fn resolve_relative(reference: &Path, path: &Path) -> PathBuf {
@@ -109,7 +109,7 @@ pub fn resolve_relative(reference: &Path, path: &Path) -> PathBuf {
         // always a file path
         return reference.parent().unwrap().join(path);
     }
-    return path.to_path_buf();
+    path.to_path_buf()
 }
 
 pub fn is_special_url(url: &str) -> bool {
