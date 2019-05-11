@@ -83,7 +83,7 @@ public:
 		::rmdir(tempdir.c_str());
 	}
 
-	const std::string getPath()
+	const std::string getPath() const
 	{
 		return tempdir;
 	}
@@ -132,7 +132,7 @@ public:
 		::unlink(filepath.c_str());
 	}
 
-	const std::string getPath()
+	const std::string getPath() const
 	{
 		return filepath;
 	}
@@ -189,7 +189,7 @@ public:
 		}
 	}
 
-	const std::string getPath()
+	const std::string getPath() const
 	{
 		return dirpath;
 	}
