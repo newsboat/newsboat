@@ -198,10 +198,7 @@ pub fn censor_url(url: &str) -> String {
 
 pub fn get_default_browser() -> String {
     use std::env;
-    match env::var("BROWSER") {
-        Ok(val) => return val,
-        Err(_) => return String::from("lynx"),
-    }
+    env::var("BROWSER").unwrap_or_else(|_| "lynx".to_string())
 }
 
 pub fn trim(rs_str: String) -> String {
