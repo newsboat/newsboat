@@ -1,3 +1,4 @@
+extern crate curl_sys;
 extern crate dirs;
 extern crate rand;
 extern crate regex;
@@ -287,6 +288,26 @@ pub fn is_valid_podcast_type(mimetype: &str) -> bool {
     let found = acceptable.contains(&mimetype);
 
     matches || found
+}
+
+pub fn get_auth_method(method: &str) -> u64 {
+    match method {
+        "basic" => curl_sys::CURLAUTH_BASIC,
+        "digest" => curl_sys::CURLAUTH_DIGEST,
+        "digest_ie" => curl_sys::CURLAUTH_DIGEST_IE,
+        "gssnegotiate" => curl_sys::CURLAUTH_GSSNEGOTIATE,
+        "ntlm" => curl_sys::CURLAUTH_NTLM,
+        "anysafe" => curl_sys::CURLAUTH_ANYSAFE,
+        "any" | "" => curl_sys::CURLAUTH_ANY,
+        _ => {
+            log!(
+                Level::UserError,
+                "utils::get_auth_method: you configured an invalid proxy authentication method: {}",
+                method
+            );
+            curl_sys::CURLAUTH_ANY
+        }
+    }
 }
 
 pub fn unescape_url(rs_str: String) -> Option<String> {
@@ -701,6 +722,20 @@ mod tests {
         for attr in &valid {
             assert!(is_valid_attribute(attr));
         }
+    }
+
+    #[test]
+    fn t_get_auth_method() {
+        assert_eq!(get_auth_method("any"), curl_sys::CURLAUTH_ANY);
+        assert_eq!(get_auth_method("ntlm"), curl_sys::CURLAUTH_NTLM);
+        assert_eq!(get_auth_method("basic"), curl_sys::CURLAUTH_BASIC);
+        assert_eq!(get_auth_method("digest"), curl_sys::CURLAUTH_DIGEST);
+        assert_eq!(get_auth_method("digest_ie"), curl_sys::CURLAUTH_DIGEST_IE);
+        assert_eq!(get_auth_method("gssnegotiate"), curl_sys::CURLAUTH_GSSNEGOTIATE);
+        assert_eq!(get_auth_method("anysafe"), curl_sys::CURLAUTH_ANYSAFE);
+
+        assert_eq!(get_auth_method(""), curl_sys::CURLAUTH_ANY);
+        assert_eq!(get_auth_method("unknown"), curl_sys::CURLAUTH_ANY);
     }
 
     #[test]
