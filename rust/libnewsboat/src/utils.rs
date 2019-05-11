@@ -304,13 +304,8 @@ pub fn is_valid_podcast_type(mimetype: &str) -> bool {
 }
 
 pub fn unescape_url(rs_str: String) -> Option<String> {
-    let result = percent_decode(rs_str.as_bytes());
-    let result = result.decode_utf8();
-    if result.is_err() {
-        return None;
-    }
-
-    Some(result.unwrap().replace("\0", ""))
+    let decoded = percent_decode(rs_str.as_bytes()).decode_utf8();
+    decoded.ok().map(|s| s.replace("\0", ""))
 }
 
 /// Runs given command in a shell, and returns the output (from stdout; stderr is printed to the
