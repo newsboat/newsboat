@@ -280,7 +280,7 @@ static GLOBAL_LOGGER: OnceCell<Logger> = OnceCell::INIT;
 /// This logger exists for the duration of the program. It's better to set the loglevel and
 /// logfiles as early as possible, so no messages are lost.
 pub fn get_instance() -> &'static Logger {
-    GLOBAL_LOGGER.get_or_init(|| Logger::new())
+    GLOBAL_LOGGER.get_or_init(Logger::new)
 }
 
 /// Convenience macro for logging.
