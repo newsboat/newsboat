@@ -221,10 +221,9 @@ pub fn quote(input: String) -> String {
 }
 
 pub fn quote_if_necessary(input: String) -> String {
-    if input.find(" ") != None {
-        quote(input)
-    } else {
-        input
+    match input.find(' ') {
+        Some(_) => quote(input),
+        None => input,
     }
 }
 
