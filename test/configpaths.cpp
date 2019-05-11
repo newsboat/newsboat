@@ -16,6 +16,13 @@ TEST_CASE("ConfigPaths returns paths to Newsboat dotdir if no Newsboat dirs "
 	TestHelpers::EnvVar home("HOME");
 	home.set(test_dir);
 
+	// ConfigPaths rely on these variables, so let's sanitize them to ensure
+	// that the tests aren't affected
+	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	xdg_config.unset();
+	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	xdg_data.unset();
+
 	ConfigPaths paths;
 	REQUIRE(paths.initialized());
 	REQUIRE(paths.url_file() == newsboat_dir + "/urls");
@@ -37,6 +44,13 @@ TEST_CASE("ConfigPaths returns paths to Newsboat XDG dirs if they exist and "
 
 	TestHelpers::EnvVar home("HOME");
 	home.set(test_dir);
+
+	// ConfigPaths rely on these variables, so let's sanitize them to ensure
+	// that the tests aren't affected
+	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	xdg_config.unset();
+	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	xdg_data.unset();
 
 	const auto check = [&]() {
 		ConfigPaths paths;
@@ -89,6 +103,15 @@ TEST_CASE("ConfigPaths::process_args replaces paths with the ones supplied by "
 		"CliArgsParser",
 		"[ConfigPaths]")
 {
+	// ConfigPaths rely on these variables, so let's sanitize them to ensure
+	// that the tests aren't affected
+	TestHelpers::EnvVar home("HOME");
+	home.unset();
+	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	xdg_config.unset();
+	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	xdg_data.unset();
+
 	const auto url_file = std::string("my urls file");
 	const auto cache_file = std::string("/path/to/cache file.db");
 	const auto lock_file = cache_file + ".lock";
@@ -118,6 +141,13 @@ TEST_CASE("ConfigPaths::set_cache_file changes paths to cache and lock files",
 	TestHelpers::EnvVar home("HOME");
 	home.set(test_dir);
 
+	// ConfigPaths rely on these variables, so let's sanitize them to ensure
+	// that the tests aren't affected
+	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	xdg_config.unset();
+	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	xdg_data.unset();
+
 	ConfigPaths paths;
 	REQUIRE(paths.initialized());
 
@@ -138,6 +168,13 @@ TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs 
 	TestHelpers::EnvVar home("HOME");
 	home.set(tmp.getPath());
 	INFO("Temporary directory (used as HOME): " << tmp.getPath());
+
+	// ConfigPaths rely on these variables, so let's sanitize them to ensure
+	// that the tests aren't affected
+	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	xdg_config.unset();
+	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	xdg_data.unset();
 
 	const auto require_exists = [&tmp](std::vector<std::string> dirs) {
 		ConfigPaths paths;
@@ -429,6 +466,13 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if config paths "
 	home.set(tmp.getPath());
 	INFO("Temporary directory (used as HOME): " << tmp.getPath());
 
+	// ConfigPaths rely on these variables, so let's sanitize them to ensure
+	// that the tests aren't affected
+	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	xdg_config.unset();
+	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	xdg_data.unset();
+
 	FileSentries beuterSentries;
 
 	SECTION("Newsbeuter dotdir exists") {
@@ -484,6 +528,13 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 	home.set(tmp.getPath());
 	INFO("Temporary directory (used as HOME): " << tmp.getPath());
 
+	// ConfigPaths rely on these variables, so let's sanitize them to ensure
+	// that the tests aren't affected
+	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	xdg_config.unset();
+	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	xdg_data.unset();
+
 	FileSentries beuterSentries;
 	FileSentries boatSentries;
 
@@ -536,6 +587,13 @@ TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter dotdir from "
 	TestHelpers::EnvVar home("HOME");
 	home.set(tmp.getPath());
 	INFO("Temporary directory (used as HOME): " << tmp.getPath());
+
+	// ConfigPaths rely on these variables, so let's sanitize them to ensure
+	// that the tests aren't affected
+	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	xdg_config.unset();
+	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	xdg_data.unset();
 
 	FileSentries sentries;
 
