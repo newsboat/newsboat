@@ -391,6 +391,28 @@ void mock_newsbeuter_xdg_dirs(
 	REQUIRE(create_file(data_dir_path + "cache", sentries.cache));
 }
 
+void mock_newsboat_dotdir(
+		const TestHelpers::TempDir& tmp,
+		const FileSentries& sentries)
+{
+	const auto dotdir_path = tmp.getPath() + ".newsboat/";
+	::mkdir(dotdir_path.c_str(), 0700);
+
+	const auto urls_file = dotdir_path + "urls";
+	REQUIRE(create_file(urls_file, sentries.urls));
+}
+
+void mock_newsboat_xdg_dirs(
+		const TestHelpers::TempDir& tmp,
+		const FileSentries& sentries)
+{
+	const auto config_dir_path = tmp.getPath() + ".config/newsboat/";
+	utils::mkdir_parents(config_dir_path, 0700);
+
+	const auto urls_file = config_dir_path + "urls";
+	REQUIRE(create_file(urls_file, sentries.urls));
+}
+
 TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if config paths "
 		"were specified on the command line",
 		"[ConfigPaths]")
@@ -436,7 +458,7 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if config paths "
 	// No migration should occur, so should return false.
 	REQUIRE_FALSE(paths.try_migrate_from_newsbeuter());
 
-	INFO("Newsbeuter's url file sentry: " << beuterSentries.urls);
+	INFO("Newsbeuter's urls file sentry: " << beuterSentries.urls);
 	REQUIRE(file_contents(url_file) == boatSentries.urls);
 
 	INFO("Newsbeuter's config file sentry: " << beuterSentries.config);
@@ -444,4 +466,58 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if config paths "
 
 	INFO("Newsbeuter's cache file sentry: " << beuterSentries.cache);
 	REQUIRE(file_contents(cache_file) == boatSentries.cache);
+}
+
+TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
+		"already exists",
+		"[ConfigPaths]")
+{
+	TestHelpers::TempDir tmp;
+
+	TestHelpers::EnvVar home("HOME");
+	home.set(tmp.getPath());
+	INFO("Temporary directory (used as HOME): " << tmp.getPath());
+
+	FileSentries beuterSentries;
+	FileSentries boatSentries;
+
+	const auto check = [&](const std::string& urls_filepath) {
+		ConfigPaths paths;
+		REQUIRE(paths.initialized());
+
+		// No migration should occur, so should return false.
+		REQUIRE_FALSE(paths.try_migrate_from_newsbeuter());
+
+		INFO("Newsbeuter's urls file sentry: " << beuterSentries.urls);
+		REQUIRE(file_contents(urls_filepath) == boatSentries.urls);
+	};
+
+	SECTION("Newsbeuter dotdir exists") {
+		mock_newsbeuter_dotdir(tmp, beuterSentries);
+
+		SECTION("Newsboat uses dotdir") {
+			mock_newsboat_dotdir(tmp, boatSentries);
+			check(tmp.getPath() + ".newsboat/urls");
+		}
+
+		SECTION("Newsboat uses XDG") {
+			mock_newsboat_xdg_dirs(tmp, boatSentries);
+			check(tmp.getPath() + ".config/newsboat/urls");
+		}
+	}
+
+	SECTION("Newsbeuter XDG dirs exist") {
+		mock_newsbeuter_xdg_dirs(tmp, beuterSentries);
+
+		SECTION("Newsboat uses dotdir") {
+			mock_newsboat_dotdir(tmp, boatSentries);
+			check(tmp.getPath() + ".newsboat/urls");
+		}
+
+		SECTION("Newsboat uses XDG") {
+			mock_newsboat_xdg_dirs(tmp, boatSentries);
+			check(tmp.getPath() + ".config/newsboat/urls");
+		}
+	}
+
 }
