@@ -43,8 +43,8 @@ pub fn consolidate_whitespace(input: String) -> String {
     result
 }
 
-pub fn to_u(rs_str: String, default_value: u32) -> u32 {
-    let mut result = rs_str.parse::<u32>();
+pub fn to_u(s: String, default_value: u32) -> u32 {
+    let mut result = s.parse::<u32>();
 
     if result.is_err() {
         result = Ok(default_value);
@@ -201,13 +201,13 @@ pub fn get_default_browser() -> String {
     env::var("BROWSER").unwrap_or_else(|_| "lynx".to_string())
 }
 
-pub fn trim(rs_str: String) -> String {
-    rs_str.trim().to_string()
+pub fn trim(s: String) -> String {
+    s.trim().to_string()
 }
 
-pub fn trim_end(rs_str: String) -> String {
+pub fn trim_end(s: String) -> String {
     let x: &[_] = &['\n', '\r'];
-    rs_str.trim_right_matches(x).to_string()
+    s.trim_right_matches(x).to_string()
 }
 
 pub fn quote(input: String) -> String {
@@ -260,24 +260,24 @@ pub fn is_valid_attribute(attribute: &str) -> bool {
     VALID_ATTRIBUTES.contains(&attribute)
 }
 
-pub fn strwidth(rs_str: &str) -> usize {
-    let control = rs_str.chars().fold(true, |acc, x| acc & !x.is_control());
+pub fn strwidth(s: &str) -> usize {
+    let control = s.chars().fold(true, |acc, x| acc & !x.is_control());
 
     if control {
-        return UnicodeWidthStr::width(rs_str);
+        return UnicodeWidthStr::width(s);
     } else {
-        return rs_str.len();
+        return s.len();
     }
 }
 
-pub fn strwidth_stfl(rs_str: &str) -> usize {
-    let reduce = 3 * rs_str
+pub fn strwidth_stfl(s: &str) -> usize {
+    let reduce = 3 * s
         .chars()
-        .zip(rs_str.chars().skip(1))
+        .zip(s.chars().skip(1))
         .filter(|&(c, next_c)| c == '<' && next_c != '>')
         .count();
 
-    let width = strwidth(rs_str);
+    let width = strwidth(s);
     if width < reduce {
         0
     } else {
@@ -295,8 +295,8 @@ pub fn is_valid_podcast_type(mimetype: &str) -> bool {
     matches || found
 }
 
-pub fn unescape_url(rs_str: String) -> Option<String> {
-    let decoded = percent_decode(rs_str.as_bytes()).decode_utf8();
+pub fn unescape_url(s: String) -> Option<String> {
+    let decoded = percent_decode(s.as_bytes()).decode_utf8();
     decoded.ok().map(|s| s.replace("\0", ""))
 }
 
@@ -384,13 +384,13 @@ pub fn run_program(cmd_with_args: &[&str], input: &str) -> String {
         .unwrap_or_else(|_| String::new())
 }
 
-pub fn make_title(rs_str: String) -> String {
+pub fn make_title(s: String) -> String {
     /* Sometimes it is possible to construct the title from the URL
      * This attempts to do just that. eg:
      * http://domain.com/story/yy/mm/dd/title-with-dashes?a=b
      */
     // Strip out trailing slashes
-    let mut result = rs_str.trim_right_matches('/');
+    let mut result = s.trim_right_matches('/');
 
     // get to the final part of the URI's path and
     // extract just the juicy part 'title-with-dashes?a=b'
