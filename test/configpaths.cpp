@@ -432,6 +432,9 @@ void mock_newsbeuter_xdg_dirs(
 	const auto data_dir_path = tmp.getPath() + ".local/share/newsbeuter/";
 	utils::mkdir_parents(data_dir_path, 0700);
 	REQUIRE(create_file(data_dir_path + "cache.db", sentries.cache));
+	REQUIRE(create_file(data_dir_path + "queue", sentries.queue));
+	REQUIRE(create_file(data_dir_path + "history.search", sentries.search));
+	REQUIRE(create_file(data_dir_path + "history.cmdline", sentries.cmdline));
 }
 
 void mock_newsboat_dotdir(
@@ -602,7 +605,7 @@ TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter dotdir from "
 	ConfigPaths paths;
 	REQUIRE(paths.initialized());
 
-	// Files should be migrates, so should return true.
+	// Files should be migrated, so should return true.
 	REQUIRE(paths.try_migrate_from_newsbeuter());
 
 	const auto dotdir = tmp.getPath() + ".newsboat/";
@@ -615,4 +618,40 @@ TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter dotdir from "
 	REQUIRE(file_contents(dotdir + "history.cmdline") == sentries.cmdline);
 }
 
+TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter XDG dirs from "
+		"their default location to default locations of Newsboat XDG dirs",
+		"[ConfigPaths]")
+{
+	TestHelpers::TempDir tmp;
+
+	TestHelpers::EnvVar home("HOME");
+	home.set(tmp.getPath());
+	INFO("Temporary directory (used as HOME): " << tmp.getPath());
+
+	// ConfigPaths rely on these variables, so let's sanitize them to ensure
+	// that the tests aren't affected
+	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	xdg_config.unset();
+	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	xdg_data.unset();
+
+	FileSentries sentries;
+
+	mock_newsbeuter_xdg_dirs(tmp, sentries);
+
+	ConfigPaths paths;
+	REQUIRE(paths.initialized());
+
+	// Files should be migrated, so should return true.
+	REQUIRE(paths.try_migrate_from_newsbeuter());
+
+	const auto config_dir = tmp.getPath() + ".config/newsboat/";
+	REQUIRE(file_contents(config_dir + "config") == sentries.config);
+	REQUIRE(file_contents(config_dir + "urls") == sentries.urls);
+
+	const auto data_dir = tmp.getPath() + ".local/share/newsboat/";
+	REQUIRE(file_contents(data_dir + "cache.db") == sentries.cache);
+	REQUIRE(file_contents(data_dir + "queue") == sentries.queue);
+	REQUIRE(file_contents(data_dir + "history.search") == sentries.search);
+	REQUIRE(file_contents(data_dir + "history.cmdline") == sentries.cmdline);
 }
