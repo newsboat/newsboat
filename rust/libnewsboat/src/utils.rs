@@ -234,19 +234,15 @@ pub fn is_valid_color(color: &str) -> bool {
     ];
 
     if COLORS.contains(&color) {
-        return true;
-    }
-    if color.starts_with("color0") {
-        return color == "color0";
-    }
-    if color.starts_with("color") {
+        true
+    } else if color.starts_with("color0") {
+        color == "color0"
+    } else if color.starts_with("color") {
         let num_part = &color[5..];
-        match num_part.parse::<u8>() {
-            Ok(_) => return true,
-            _ => return false,
-        }
+        num_part.parse::<u8>().is_ok()
+    } else {
+        false
     }
-    false
 }
 
 pub fn is_valid_attribute(attribute: &str) -> bool {
