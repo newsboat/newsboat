@@ -279,19 +279,11 @@ pub fn strwidth(rs_str: &str) -> usize {
 }
 
 pub fn strwidth_stfl(rs_str: &str) -> usize {
-    let mut reduce: usize = 0;
-    let mut chars = rs_str.chars().peekable();
-    loop {
-        match chars.next() {
-            Some('<') => {
-                if chars.peek() != Some(&'>') {
-                    reduce += 3;
-                }
-            }
-            Some(_) => continue,
-            None => break,
-        }
-    }
+    let reduce = 3 * rs_str
+        .chars()
+        .zip(rs_str.chars().skip(1))
+        .filter(|&(c, next_c)| c == '<' && next_c != '>')
+        .count();
 
     let width = strwidth(rs_str);
     if width < reduce {
