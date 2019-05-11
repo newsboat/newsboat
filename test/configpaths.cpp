@@ -330,3 +330,100 @@ TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs 
 		}
 	}
 }
+
+/// Creates a file at given `filepath` and writes `content` into it.
+///
+/// Returns `true` if successful, `false` otherwise.
+bool create_file(const std::string& filepath, const std::string& contents)
+{
+	std::ofstream out(filepath, std::ios::trunc);
+	if (!out.is_open()) {
+		return false;
+	}
+	out << contents;
+	out.close();
+	return !out.fail();
+}
+
+/// Returns the contents of the file at `filepath`, or an empty string on error.
+std::string file_contents(const std::string& filepath)
+{
+	std::ifstream in(filepath);
+	if (in.is_open()) {
+		std::string result;
+		in >> result;
+		return result;
+	}
+
+	return "";
+}
+
+TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if config paths "
+		"were specified on the command line",
+		"[ConfigPaths]")
+{
+	TestHelpers::TempDir tmp;
+
+	TestHelpers::EnvVar home("HOME");
+	home.set(tmp.getPath());
+	INFO("Temporary directory (used as HOME): " << tmp.getPath());
+
+	const auto beuter_config_sentry = std::to_string(rand()) + "config";
+	const auto beuter_urls_sentry = std::to_string(rand()) + "urls";
+	const auto beuter_cache_sentry = std::to_string(rand()) + "cache";
+
+	SECTION("Newsbeuter dotdir exists") {
+		const auto dotdir_path = tmp.getPath() + ".newsbeuter/";
+		::mkdir(dotdir_path.c_str(), 0700);
+		REQUIRE(create_file(dotdir_path + "config", beuter_config_sentry));
+		REQUIRE(create_file(dotdir_path + "urls", beuter_urls_sentry));
+		REQUIRE(create_file(dotdir_path + "cache", beuter_cache_sentry));
+	}
+
+	SECTION("Newsbeuter XDG dirs exist") {
+		const auto config_dir_path = tmp.getPath() + ".config/newsbeuter/";
+		utils::mkdir_parents(config_dir_path, 0700);
+		REQUIRE(create_file(config_dir_path + "config", beuter_config_sentry));
+		REQUIRE(create_file(config_dir_path + "urls", beuter_urls_sentry));
+
+		const auto data_dir_path = tmp.getPath() + ".local/share/newsbeuter/";
+		utils::mkdir_parents(data_dir_path, 0700);
+		REQUIRE(create_file(data_dir_path + "cache", beuter_cache_sentry));
+	}
+
+	const auto config_sentry = std::to_string(rand()) + "config";
+	const auto urls_sentry = std::to_string(rand()) + "urls";
+	const auto cache_sentry = std::to_string(rand()) + "cache";
+
+	const auto url_file = tmp.getPath() + "my urls file";
+	REQUIRE(create_file(url_file, urls_sentry));
+
+	const auto cache_file = tmp.getPath() + "new cache.db";
+	REQUIRE(create_file(cache_file, cache_sentry));
+
+	const auto config_file = tmp.getPath() + "custom config file";
+	REQUIRE(create_file(config_file, config_sentry));
+
+	TestHelpers::Opts opts({
+			"newsboat",
+			"-u", url_file,
+			"-c", cache_file,
+			"-C", config_file,
+			"-q"});
+	CliArgsParser parser(opts.argc(), opts.argv());
+	ConfigPaths paths;
+	REQUIRE(paths.initialized());
+	paths.process_args(parser);
+
+	// No migration should occur, so should return false.
+	REQUIRE_FALSE(paths.try_migrate_from_newsbeuter());
+
+	INFO("Newsbeuter's url file sentry: " << beuter_urls_sentry);
+	REQUIRE(file_contents(url_file) == urls_sentry);
+
+	INFO("Newsbeuter's config file sentry: " << beuter_config_sentry);
+	REQUIRE(file_contents(config_file) == config_sentry);
+
+	INFO("Newsbeuter's cache file sentry: " << beuter_cache_sentry);
+	REQUIRE(file_contents(cache_file) == cache_sentry);
+}
