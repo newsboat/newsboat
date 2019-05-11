@@ -8,24 +8,24 @@
 #include <sstream>
 #include <string>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 #include "3rd-party/catch.hpp"
 
 namespace TestHelpers {
 
-/* Objects of TempFile class generate a temporary filename and delete the
- * corresponding file when they are destructed.
- *
- * This is useful for teardown in tests, where we use RAII to clean up
- * temporary DB files and stuff. */
-class TempFile {
+/* Objects of MainTempDir class create Newsboat's temporary directory, and try
+ * to remove it when they are destroyed. Other classes (TempFile and TempDir)
+ * use this one to put their stuff in Newsboat's temp dir. */
+class MainTempDir {
 public:
 	class tempfileexception : public std::exception {
 	public:
-		explicit tempfileexception(const char* error)
+		explicit tempfileexception(const std::string& error)
 		{
-			msg = "failed to create a tempdir: ";
+			msg = "tempfileexception: ";
 			msg += error;
 		};
 
@@ -38,25 +38,7 @@ public:
 		std::string msg;
 	};
 
-	TempFile()
-	{
-		init_tempdir();
-		init_file();
-	}
-
-	~TempFile()
-	{
-		::unlink(filepath.c_str());
-		::rmdir(tempdir.c_str());
-	}
-
-	const std::string getPath()
-	{
-		return filepath;
-	}
-
-private:
-	void init_tempdir()
+	MainTempDir()
 	{
 		char* tmpdir_p = ::getenv("TMPDIR");
 
@@ -92,39 +74,129 @@ private:
 				throw tempfileexception(strerror(saved_errno));
 			}
 		}
-	};
+	}
 
-	void init_file()
+	~MainTempDir()
 	{
-		bool success = false;
-		unsigned int tries = 0;
+		// Try to remove the tempdir, but don't try *too* hard: there might be
+		// other objects still using it. The last one will hopefully delete it.
+		::rmdir(tempdir.c_str());
+	}
 
-		// Make 10 attempts at generating a filename that doesn't exist
-		do {
-			tries++;
+	const std::string getPath()
+	{
+		return tempdir;
+	}
 
-			// This isn't thread-safe, but we don't care because
-			// Catch doesn't let us run tests in multiple threads
-			// anyway.
-			std::string filename = std::to_string(rand());
-			filepath = tempdir + "/" + filename;
+private:
+	std::string tempdir;
+};
 
-			struct stat buffer;
-			if (lstat(filepath.c_str(), &buffer) != 0) {
-				if (errno == ENOENT) {
-					success = true;
-				}
-			}
-		} while (!success && tries < 10);
+/* Objects of TempFile class generate a temporary filename and delete the
+ * corresponding file when they are destructed.
+ *
+ * This is useful for teardown in tests, where we use RAII to clean up
+ * temporary DB files and stuff. */
+class TempFile {
+public:
+	TempFile()
+	{
+		const auto filepath_template = tempdir.getPath() + "tmp.XXXXXX";
+		std::vector<char> filepath_template_c(
+				filepath_template.cbegin(), filepath_template.cend());
+		filepath_template_c.push_back('\0');
 
-		if (!success) {
-			throw tempfileexception(
-				"failed to generate unique filename");
+		const auto fd = ::mkstemp(filepath_template_c.data());
+		if (fd == -1) {
+			const auto saved_errno = errno;
+			std::string msg("TempFile: failed to generate unique filename: (");
+			msg += std::to_string(saved_errno);
+			msg += ") ";
+			msg += ::strerror(saved_errno);
+			throw MainTempDir::tempfileexception(msg);
+		}
+
+		// cend()-1 so we don't copy the terminating null byte - std::string
+		// doesn't need it
+		filepath = std::string(
+				filepath_template_c.cbegin(), filepath_template_c.cend() - 1);
+
+		::close(fd);
+		// `TempFile` is supposed to only *generate* the name, not create the
+		// file. Since mkstemp does create a file, we have to remove it.
+		::unlink(filepath.c_str());
+	}
+
+	~TempFile()
+	{
+		::unlink(filepath.c_str());
+	}
+
+	const std::string getPath()
+	{
+		return filepath;
+	}
+
+private:
+	MainTempDir tempdir;
+	std::string filepath;
+};
+
+/* Objects of TempDir class create a temporary directory and remove it (along
+ * with everything it contains) when the object is destructed. */
+class TempDir {
+public:
+	TempDir()
+	{
+		const auto dirpath_template = tempdir.getPath() + "tmp.XXXXXX";
+		std::vector<char> dirpath_template_c(
+				dirpath_template.cbegin(), dirpath_template.cend());
+		dirpath_template_c.push_back('\0');
+
+		const auto result = ::mkdtemp(dirpath_template_c.data());
+		if (result == nullptr) {
+			const auto saved_errno = errno;
+			std::string msg("TempDir: failed to generate unique directory: (");
+			msg += std::to_string(saved_errno);
+			msg += ") ";
+			msg += ::strerror(saved_errno);
+			throw MainTempDir::tempfileexception(msg);
+		}
+
+		// cned()-1 so we don't copy terminating null byte - std::string
+		// doesn't need it
+		dirpath = std::string(
+				dirpath_template_c.cbegin(), dirpath_template_c.cend() - 1);
+		dirpath.push_back('/');
+	}
+
+	~TempDir()
+	{
+		const pid_t pid = ::fork();
+		if (pid == -1) {
+			// Failed to fork. Oh well, we're in a destructor, so can't throw
+			// or do anything else of use. Just give up.
+		} else if (pid > 0) {
+			// In parent
+			// Wait for the child to finish. We don't care about child's exit
+			// status, thus nullptr.
+			::waitpid(pid, nullptr, 0);
+		} else {
+			// In child
+			// Ignore the return value, because even if the call failed, we
+			// can't do anything useful.
+			::execlp("rm", "rm", "-rf", dirpath.c_str(), (char*)nullptr);
 		}
 	}
 
-	std::string tempdir;
-	std::string filepath;
+	const std::string getPath()
+	{
+		return dirpath;
+	}
+
+private:
+	MainTempDir tempdir;
+	std::string dirpath;
 };
 
 /*

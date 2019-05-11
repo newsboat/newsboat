@@ -1010,26 +1010,23 @@ int utils::mkdir_parents(const std::string& p, mode_t mode)
 	int result = -1;
 
 	/* Have to copy the path because we're going to modify it */
-	const size_t length = p.length() + 1;
-	char* pathname = (char*)malloc(length);
-	if (pathname == nullptr) {
-		// errno is already set by malloc(), so simply return with an error
-		return -1;
-	}
-	strncpy(pathname, p.c_str(), length);
+	std::vector<char> pathname(p.cbegin(), p.cend());
+	pathname.push_back('\0');
 	/* This pointer will run through the whole string looking for '/'.
 	 * We move it by one if path starts with slash because if we don't, the
 	 * first call to access() will fail (because of empty path) */
-	char* curr = pathname + (*pathname == '/' ? 1 : 0);
+	char* curr = pathname.data() + (pathname[0] == '/' ? 1 : 0);
 
 	while (*curr) {
 		if (*curr == '/') {
 			*curr = '\0';
-			result = access(pathname, F_OK);
-			if (result == -1) {
-				result = mkdir(pathname, mode);
-				if (result != 0 && errno != EEXIST)
+			result = mkdir(pathname.data(), mode);
+			if (result != 0) {
+				if (errno == EEXIST) {
+					result = 0;
+				} else {
 					break;
+				}
 			}
 			*curr = '/';
 		}
@@ -1038,9 +1035,15 @@ int utils::mkdir_parents(const std::string& p, mode_t mode)
 
 	if (result == 0) {
 		result = mkdir(p.c_str(), mode);
+
+		// It's not an error if the directory already exists. This happens when
+		// `p` ended with a slash, in which case the loop above creates all the
+		// path components.
+		if (result == -1 && errno == EEXIST) {
+			result = 0;
+		}
 	}
 
-	free(pathname);
 	return result;
 }
 

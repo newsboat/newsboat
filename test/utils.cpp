@@ -1045,3 +1045,112 @@ TEST_CASE("unescape_url() takes a percent-encoded string and returns the string 
 	REQUIRE(utils::unescape_url("%00") == "");
 
 }
+
+TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
+		"the path now exists",
+		"[utils]")
+{
+	TestHelpers::TempDir tmp;
+
+	const auto require_return_zero = [](const std::string& path) {
+		REQUIRE(utils::mkdir_parents(path.c_str(), 0700) == 0);
+		REQUIRE(::access(path.c_str(), R_OK | X_OK) == 0);
+	};
+
+	SECTION("Simple test on temporary dir itself") {
+		const auto path = tmp.getPath();
+		INFO("Path is " << path);
+		require_return_zero(path);
+	}
+
+	SECTION("Zero intermediate directories") {
+		const auto path = tmp.getPath() + std::to_string(rand());
+		INFO("Path is " << path);
+
+		SECTION("Target doesn't yet exist") {
+			require_return_zero(path);
+		}
+
+		SECTION("Target already exists") {
+			REQUIRE(::mkdir(path.c_str(), 0700) == 0);
+			require_return_zero(path);
+		}
+	}
+
+	SECTION("One intermediate directory") {
+		const auto intermediate_path = tmp.getPath() + std::to_string(rand());
+		const auto path = intermediate_path + "/" + std::to_string(rand());
+		INFO("Path is " << path);
+
+		SECTION("Which doesn't exist") {
+			require_return_zero(path);
+		}
+
+		SECTION("Which exists") {
+			REQUIRE(::mkdir(intermediate_path.c_str(), 0700) == 0);
+
+			SECTION("Target doesn't exist") {
+				require_return_zero(path);
+			}
+
+			SECTION("Target exists") {
+				REQUIRE(::mkdir(path.c_str(), 0700) == 0);
+				require_return_zero(path);
+			}
+		}
+	}
+
+	SECTION("Two intermediate directories") {
+		const auto intermediate_path1 = tmp.getPath() + std::to_string(rand());
+		const auto intermediate_path2 =
+			intermediate_path1 + "/" + std::to_string(rand());
+		const auto path = intermediate_path2 + "/" + std::to_string(rand());
+		INFO("Path is " << path);
+
+		SECTION("Which don't exist") {
+			require_return_zero(path);
+		}
+
+		SECTION("First one exists") {
+			REQUIRE(::mkdir(intermediate_path1.c_str(), 0700) == 0);
+
+			SECTION("Second one exists") {
+				REQUIRE(::mkdir(intermediate_path2.c_str(), 0700) == 0);
+
+				SECTION("Target exists") {
+					REQUIRE(::mkdir(path.c_str(), 0700) == 0);
+					require_return_zero(path);
+				}
+
+				SECTION("Target doesn't exist") {
+					require_return_zero(path);
+				}
+			}
+
+			SECTION("Second one doesn't exist") {
+				require_return_zero(path);
+			}
+		}
+	}
+}
+
+TEST_CASE("mkdir_parents() doesn't care if the path ends in a slash or not",
+		"[utils]")
+{
+	TestHelpers::TempDir tmp;
+
+	const auto path = tmp.getPath() + std::to_string(rand());
+
+	const auto check = [](const std::string& path) {
+		REQUIRE(utils::mkdir_parents(path, 0700) == 0);
+		REQUIRE(::access(path.c_str(), R_OK | X_OK) == 0);
+	};
+
+	SECTION("Path doesn't end in slash => directory created") {
+		check(path);
+	}
+
+	SECTION("Path ends in slash => directory created") {
+		check(path + "/");
+	}
+}
