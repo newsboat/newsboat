@@ -426,6 +426,39 @@ public:
 	}
 };
 
+/// Sets new permissions on a given path, and restores them back when the
+/// object is destroyed.
+class Chmod {
+	std::string m_path;
+	mode_t m_originalMode;
+
+public:
+	Chmod(const std::string& path, mode_t newMode)
+		: m_path(path)
+	{
+		struct stat sb;
+		const int result = ::stat(m_path.c_str(), &sb);
+		if (result != 0) {
+			const auto saved_errno = errno;
+			auto msg = std::string("TestHelpers::Chmod: ")
+				+ "couldn't obtain current mode for `"
+				+ m_path
+				+ "': ("
+				+ std::to_string(saved_errno)
+				+ ") "
+				+ strerror(saved_errno);
+			throw std::runtime_error(msg);
+		}
+		m_originalMode = sb.st_mode;
+
+		::chmod(m_path.c_str(), newMode);
+	}
+
+	~Chmod() {
+		::chmod(m_path.c_str(), m_originalMode);
+	}
+};
+
 } // namespace TestHelpers
 
 #endif /* NEWSBOAT_TEST_HELPERS_H_ */

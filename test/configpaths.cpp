@@ -1022,3 +1022,96 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 		verify_xdg_not_migrated(config_home + "newsboat/", data_dir);
 	}
 }
+
+TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
+		"config dir couldn't be created",
+		"[ConfigPaths]")
+{
+	TestHelpers::TempDir tmp;
+
+	TestHelpers::EnvVar home("HOME");
+	home.set(tmp.getPath());
+	INFO("Temporary directory (used as HOME): " << tmp.getPath());
+
+	// ConfigPaths rely on these variables, so let's sanitize them to ensure
+	// that the tests aren't affected
+	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	xdg_config.unset();
+	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	xdg_data.unset();
+
+	FileSentries sentries;
+
+	SECTION("Default XDG locations") {
+		mock_newsbeuter_xdg_dirs(tmp, sentries);
+
+		// Making XDG .config unwriteable makes it impossible to create
+		// a directory there
+		const auto config_home = tmp.getPath() + ".config/";
+		TestHelpers::Chmod config_home_chmod(config_home, S_IRUSR | S_IXUSR);
+
+		const auto config_dir = config_home + "newsboat/";
+		const auto data_dir = tmp.getPath() + ".local/share/newsboat/";
+		verify_xdg_not_migrated(config_dir, data_dir);
+	}
+
+	SECTION("XDG_CONFIG_HOME redefined") {
+		const auto config_home = tmp.getPath() + "xdg-conf/";
+		::mkdir(config_home.c_str(), 0700);
+		xdg_config.set(config_home);
+		mock_newsbeuter_xdg_dirs(
+				config_home + "newsbeuter/",
+				tmp.getPath() + ".local/share/newsbeuter/",
+				sentries);
+
+		// Making XDG .config unwriteable makes it impossible to create
+		// a directory there
+		TestHelpers::Chmod config_home_chmod(config_home, S_IRUSR | S_IXUSR);
+
+		verify_xdg_not_migrated(
+				config_home + "newsboat/",
+				tmp.getPath() + ".local/share/newsboat/");
+	}
+
+	SECTION("XDG_DATA_HOME redefined") {
+		const auto data_dir = tmp.getPath() + "xdg-data/";
+		::mkdir(data_dir.c_str(), 0700);
+		xdg_data.set(data_dir);
+		mock_newsbeuter_xdg_dirs(
+				tmp.getPath() + ".config/newsbeuter/",
+				data_dir + "newsbeuter/",
+				sentries);
+
+		// Making XDG .config unwriteable makes it impossible to create
+		// a directory there
+		const auto config_home = tmp.getPath() + ".config/";
+		TestHelpers::Chmod config_home_chmod(config_home, S_IRUSR | S_IXUSR);
+
+		verify_xdg_not_migrated(
+				config_home + "newsboat/",
+				data_dir + "newsboat/");
+	}
+
+	SECTION("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
+		const auto config_home = tmp.getPath() + "xdg-conf/";
+		::mkdir(config_home.c_str(), 0700);
+		xdg_config.set(config_home);
+
+		const auto data_dir = tmp.getPath() + "xdg-data/";
+		::mkdir(data_dir.c_str(), 0700);
+		xdg_data.set(data_dir);
+
+		mock_newsbeuter_xdg_dirs(
+				config_home + "newsbeuter/",
+				data_dir + "newsbeuter/",
+				sentries);
+
+		// Making XDG .config unwriteable makes it impossible to create
+		// a directory there
+		TestHelpers::Chmod config_home_chmod(config_home, S_IRUSR | S_IXUSR);
+
+		verify_xdg_not_migrated(
+				config_home + "newsboat/",
+				data_dir + "newsboat/");
+	}
+}
