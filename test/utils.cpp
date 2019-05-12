@@ -260,7 +260,7 @@ TEST_CASE("run_command() executes the given command with a given argument",
 		"[utils]")
 {
 	TestHelpers::TempFile sentry;
-	const auto argument = sentry.getPath();
+	const auto argument = sentry.get_path();
 
 	{
 		INFO("File shouldn't exist, because TempFile doesn't create it");
@@ -1058,13 +1058,13 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 	};
 
 	SECTION("Simple test on temporary dir itself") {
-		const auto path = tmp.getPath();
+		const auto path = tmp.get_path();
 		INFO("Path is " << path);
 		require_return_zero(path);
 	}
 
 	SECTION("Zero intermediate directories") {
-		const auto path = tmp.getPath() + std::to_string(rand());
+		const auto path = tmp.get_path() + std::to_string(rand());
 		INFO("Path is " << path);
 
 		SECTION("Target doesn't yet exist") {
@@ -1078,7 +1078,7 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 	}
 
 	SECTION("One intermediate directory") {
-		const auto intermediate_path = tmp.getPath() + std::to_string(rand());
+		const auto intermediate_path = tmp.get_path() + std::to_string(rand());
 		const auto path = intermediate_path + "/" + std::to_string(rand());
 		INFO("Path is " << path);
 
@@ -1101,7 +1101,7 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 	}
 
 	SECTION("Two intermediate directories") {
-		const auto intermediate_path1 = tmp.getPath() + std::to_string(rand());
+		const auto intermediate_path1 = tmp.get_path() + std::to_string(rand());
 		const auto intermediate_path2 =
 			intermediate_path1 + "/" + std::to_string(rand());
 		const auto path = intermediate_path2 + "/" + std::to_string(rand());
@@ -1139,7 +1139,7 @@ TEST_CASE("mkdir_parents() doesn't care if the path ends in a slash or not",
 {
 	TestHelpers::TempDir tmp;
 
-	const auto path = tmp.getPath() + std::to_string(rand());
+	const auto path = tmp.get_path() + std::to_string(rand());
 
 	const auto check = [](const std::string& path) {
 		REQUIRE(utils::mkdir_parents(path, 0700) == 0);

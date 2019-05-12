@@ -59,7 +59,7 @@ TEST_CASE("URL reader writes files that it can understand later",
 	TestHelpers::TempFile urlsFile;
 
 	std::ofstream urlsFileStream;
-	urlsFileStream.open(urlsFile.getPath());
+	urlsFileStream.open(urlsFile.get_path());
 	REQUIRE(urlsFileStream.is_open());
 
 	std::ifstream testData;
@@ -73,19 +73,19 @@ TEST_CASE("URL reader writes files that it can understand later",
 	urlsFileStream.close();
 	testData.close();
 
-	FileUrlReader u(urlsFile.getPath());
+	FileUrlReader u(urlsFile.get_path());
 	u.reload();
 	REQUIRE_FALSE(u.get_urls().empty());
 	REQUIRE_FALSE(u.get_alltags().empty());
 
-	urlsFileStream.open(urlsFile.getPath());
+	urlsFileStream.open(urlsFile.get_path());
 	REQUIRE(urlsFileStream.is_open());
 	urlsFileStream << std::string();
 	urlsFileStream.close();
 
 	u.write_config();
 
-	FileUrlReader u2(urlsFile.getPath());
+	FileUrlReader u2(urlsFile.get_path());
 	u2.reload();
 	REQUIRE_FALSE(u2.get_urls().empty());
 	REQUIRE_FALSE(u2.get_alltags().empty());

@@ -83,7 +83,7 @@ public:
 		::rmdir(tempdir.c_str());
 	}
 
-	const std::string getPath() const
+	const std::string get_path() const
 	{
 		return tempdir;
 	}
@@ -101,7 +101,7 @@ class TempFile {
 public:
 	TempFile()
 	{
-		const auto filepath_template = tempdir.getPath() + "tmp.XXXXXX";
+		const auto filepath_template = tempdir.get_path() + "tmp.XXXXXX";
 		std::vector<char> filepath_template_c(
 				filepath_template.cbegin(), filepath_template.cend());
 		filepath_template_c.push_back('\0');
@@ -132,7 +132,7 @@ public:
 		::unlink(filepath.c_str());
 	}
 
-	const std::string getPath() const
+	const std::string get_path() const
 	{
 		return filepath;
 	}
@@ -148,7 +148,7 @@ class TempDir {
 public:
 	TempDir()
 	{
-		const auto dirpath_template = tempdir.getPath() + "tmp.XXXXXX";
+		const auto dirpath_template = tempdir.get_path() + "tmp.XXXXXX";
 		std::vector<char> dirpath_template_c(
 				dirpath_template.cbegin(), dirpath_template.cend());
 		dirpath_template_c.push_back('\0');
@@ -189,7 +189,7 @@ public:
 		}
 	}
 
-	const std::string getPath() const
+	const std::string get_path() const
 	{
 		return dirpath;
 	}

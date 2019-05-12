@@ -166,8 +166,8 @@ TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs 
 	TestHelpers::TempDir tmp;
 
 	TestHelpers::EnvVar home("HOME");
-	home.set(tmp.getPath());
-	INFO("Temporary directory (used as HOME): " << tmp.getPath());
+	home.set(tmp.get_path());
+	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
@@ -185,13 +185,13 @@ TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs 
 		(const std::string& input, const std::string& prefix) -> bool {
 			return input.substr(0, prefix.size()) == prefix;
 		};
-		REQUIRE(starts_with(paths.url_file(), tmp.getPath()));
-		REQUIRE(starts_with(paths.config_file(), tmp.getPath()));
-		REQUIRE(starts_with(paths.cache_file(), tmp.getPath()));
-		REQUIRE(starts_with(paths.lock_file(), tmp.getPath()));
-		REQUIRE(starts_with(paths.queue_file(), tmp.getPath()));
-		REQUIRE(starts_with(paths.search_file(), tmp.getPath()));
-		REQUIRE(starts_with(paths.cmdline_file(), tmp.getPath()));
+		REQUIRE(starts_with(paths.url_file(), tmp.get_path()));
+		REQUIRE(starts_with(paths.config_file(), tmp.get_path()));
+		REQUIRE(starts_with(paths.cache_file(), tmp.get_path()));
+		REQUIRE(starts_with(paths.lock_file(), tmp.get_path()));
+		REQUIRE(starts_with(paths.queue_file(), tmp.get_path()));
+		REQUIRE(starts_with(paths.search_file(), tmp.get_path()));
+		REQUIRE(starts_with(paths.cmdline_file(), tmp.get_path()));
 
 		REQUIRE(paths.create_dirs());
 
@@ -202,9 +202,9 @@ TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs 
 		}
 	};
 
-	const auto dotdir = tmp.getPath() + ".newsboat/";
-	const auto default_config_dir = tmp.getPath() + ".config/newsboat/";
-	const auto default_data_dir = tmp.getPath() + ".local/share/newsboat/";
+	const auto dotdir = tmp.get_path() + ".newsboat/";
+	const auto default_config_dir = tmp.get_path() + ".config/newsboat/";
+	const auto default_data_dir = tmp.get_path() + ".local/share/newsboat/";
 
 	SECTION("Using dotdir") {
 		SECTION("Dotdir didn't exist") {
@@ -252,7 +252,7 @@ TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs 
 
 		SECTION("XDG_CONFIG_HOME redefined") {
 			const auto config_home =
-				tmp.getPath() + "config" + std::to_string(rand()) + "/";
+				tmp.get_path() + "config" + std::to_string(rand()) + "/";
 			INFO("Config home is " << config_home);
 			const auto config_dir = config_home + "/newsboat";
 
@@ -292,7 +292,7 @@ TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs 
 			xdg_config_home.unset();
 
 			const auto data_home =
-				tmp.getPath() + "data" + std::to_string(rand()) + "/";
+				tmp.get_path() + "data" + std::to_string(rand()) + "/";
 			INFO("Data home is " << data_home);
 			const auto data_dir = data_home + "/newsboat";
 
@@ -326,12 +326,12 @@ TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs 
 
 		SECTION("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
 			const auto config_home =
-				tmp.getPath() + "config" + std::to_string(rand()) + "/";
+				tmp.get_path() + "config" + std::to_string(rand()) + "/";
 			INFO("Config home is " << config_home);
 			const auto config_dir = config_home + "/newsboat";
 
 			const auto data_home =
-				tmp.getPath() + "data" + std::to_string(rand()) + "/";
+				tmp.get_path() + "data" + std::to_string(rand()) + "/";
 			INFO("Data home is " << data_home);
 			const auto data_dir = data_home + "/newsboat";
 
@@ -410,7 +410,7 @@ void mock_newsbeuter_dotdir(
 		const TestHelpers::TempDir& tmp,
 		const FileSentries& sentries)
 {
-	const auto dotdir_path = tmp.getPath() + ".newsbeuter/";
+	const auto dotdir_path = tmp.get_path() + ".newsbeuter/";
 	::mkdir(dotdir_path.c_str(), 0700);
 	REQUIRE(create_file(dotdir_path + "config", sentries.config));
 	REQUIRE(create_file(dotdir_path + "urls", sentries.urls));
@@ -440,8 +440,8 @@ void mock_newsbeuter_xdg_dirs(
 		const TestHelpers::TempDir& tmp,
 		const FileSentries& sentries)
 {
-	const auto config_dir_path = tmp.getPath() + ".config/newsbeuter/";
-	const auto data_dir_path = tmp.getPath() + ".local/share/newsbeuter/";
+	const auto config_dir_path = tmp.get_path() + ".config/newsbeuter/";
+	const auto data_dir_path = tmp.get_path() + ".local/share/newsbeuter/";
 	mock_newsbeuter_xdg_dirs(config_dir_path, data_dir_path, sentries);
 }
 
@@ -449,7 +449,7 @@ void mock_newsboat_dotdir(
 		const TestHelpers::TempDir& tmp,
 		const FileSentries& sentries)
 {
-	const auto dotdir_path = tmp.getPath() + ".newsboat/";
+	const auto dotdir_path = tmp.get_path() + ".newsboat/";
 	::mkdir(dotdir_path.c_str(), 0700);
 
 	const auto urls_file = dotdir_path + "urls";
@@ -471,8 +471,8 @@ void mock_newsboat_xdg_dirs(
 		const TestHelpers::TempDir& tmp,
 		const FileSentries& sentries)
 {
-	const auto config_dir_path = tmp.getPath() + ".config/newsboat/";
-	const auto data_dir_path = tmp.getPath() + ".local/share/newsboat/";
+	const auto config_dir_path = tmp.get_path() + ".config/newsboat/";
+	const auto data_dir_path = tmp.get_path() + ".local/share/newsboat/";
 	mock_newsboat_xdg_dirs(config_dir_path, data_dir_path, sentries);
 }
 
@@ -483,8 +483,8 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if config paths "
 	TestHelpers::TempDir tmp;
 
 	TestHelpers::EnvVar home("HOME");
-	home.set(tmp.getPath());
-	INFO("Temporary directory (used as HOME): " << tmp.getPath());
+	home.set(tmp.get_path());
+	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
@@ -505,13 +505,13 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if config paths "
 
 	FileSentries boat_sentries;
 
-	const auto url_file = tmp.getPath() + "my urls file";
+	const auto url_file = tmp.get_path() + "my urls file";
 	REQUIRE(create_file(url_file, boat_sentries.urls));
 
-	const auto cache_file = tmp.getPath() + "new cache.db";
+	const auto cache_file = tmp.get_path() + "new cache.db";
 	REQUIRE(create_file(cache_file, boat_sentries.cache));
 
-	const auto config_file = tmp.getPath() + "custom config file";
+	const auto config_file = tmp.get_path() + "custom config file";
 	REQUIRE(create_file(config_file, boat_sentries.config));
 
 	TestHelpers::Opts opts({
@@ -545,8 +545,8 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 	TestHelpers::TempDir tmp;
 
 	TestHelpers::EnvVar home("HOME");
-	home.set(tmp.getPath());
-	INFO("Temporary directory (used as HOME): " << tmp.getPath());
+	home.set(tmp.get_path());
+	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
@@ -574,33 +574,33 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 
 		SECTION("Newsboat uses dotdir") {
 			mock_newsboat_dotdir(tmp, boat_sentries);
-			check(tmp.getPath() + ".newsboat/urls");
+			check(tmp.get_path() + ".newsboat/urls");
 		}
 
 		SECTION("Newsboat uses XDG") {
 			SECTION("Default XDG locations") {
 				mock_newsboat_xdg_dirs(tmp, boat_sentries);
-				check(tmp.getPath() + ".config/newsboat/urls");
+				check(tmp.get_path() + ".config/newsboat/urls");
 			}
 
 			SECTION("XDG_CONFIG_HOME redefined") {
-				const auto config_dir = tmp.getPath() + "xdg-conf/";
+				const auto config_dir = tmp.get_path() + "xdg-conf/";
 				::mkdir(config_dir.c_str(), 0700);
 				xdg_config.set(config_dir);
 				const auto newsboat_config_dir = config_dir + "newsboat/";
 				mock_newsboat_xdg_dirs(
 						newsboat_config_dir,
-						tmp.getPath() + ".local/share/newsboat/",
+						tmp.get_path() + ".local/share/newsboat/",
 						boat_sentries);
 				check(newsboat_config_dir + "urls");
 			}
 
 			SECTION("XDG_DATA_HOME redefined") {
-				const auto data_dir = tmp.getPath() + "xdg-data/";
+				const auto data_dir = tmp.get_path() + "xdg-data/";
 				::mkdir(data_dir.c_str(), 0700);
 				xdg_data.set(data_dir);
 				const auto newsboat_config_dir =
-						tmp.getPath() + ".config/newsboat/";
+						tmp.get_path() + ".config/newsboat/";
 				const auto newsboat_data_dir = data_dir + "newsboat/";
 				mock_newsboat_xdg_dirs(
 						newsboat_config_dir,
@@ -610,11 +610,11 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 			}
 
 			SECTION("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
-				const auto config_dir = tmp.getPath() + "xdg-conf/";
+				const auto config_dir = tmp.get_path() + "xdg-conf/";
 				::mkdir(config_dir.c_str(), 0700);
 				xdg_config.set(config_dir);
 
-				const auto data_dir = tmp.getPath() + "xdg-data/";
+				const auto data_dir = tmp.get_path() + "xdg-data/";
 				::mkdir(data_dir.c_str(), 0700);
 				xdg_data.set(data_dir);
 
@@ -637,56 +637,56 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 
 			SECTION("Newsboat uses dotdir") {
 				mock_newsboat_dotdir(tmp, boat_sentries);
-				check(tmp.getPath() + ".newsboat/urls");
+				check(tmp.get_path() + ".newsboat/urls");
 			}
 
 			SECTION("Newsboat uses XDG") {
 				mock_newsboat_xdg_dirs(tmp, boat_sentries);
-				check(tmp.getPath() + ".config/newsboat/urls");
+				check(tmp.get_path() + ".config/newsboat/urls");
 			}
 		}
 
 		SECTION("XDG_CONFIG_HOME redefined") {
-			const auto config_dir = tmp.getPath() + "xdg-conf/";
+			const auto config_dir = tmp.get_path() + "xdg-conf/";
 			::mkdir(config_dir.c_str(), 0700);
 			xdg_config.set(config_dir);
 			mock_newsbeuter_xdg_dirs(
 					config_dir + "newsbeuter/",
-					tmp.getPath() + ".local/share/newsbeuter/",
+					tmp.get_path() + ".local/share/newsbeuter/",
 					beuter_sentries);
 
 			SECTION("Newsboat uses dotdir") {
 				mock_newsboat_dotdir(tmp, boat_sentries);
-				check(tmp.getPath() + ".newsboat/urls");
+				check(tmp.get_path() + ".newsboat/urls");
 			}
 
 			SECTION("Newsboat uses XDG") {
 				const auto newsboat_config_dir = config_dir + "newsboat/";
 				mock_newsboat_xdg_dirs(
 						newsboat_config_dir,
-						tmp.getPath() + ".local/share/newsboat/",
+						tmp.get_path() + ".local/share/newsboat/",
 						boat_sentries);
 				check(newsboat_config_dir + "urls");
 			}
 		}
 
 		SECTION("XDG_DATA_HOME redefined") {
-			const auto data_dir = tmp.getPath() + "xdg-data/";
+			const auto data_dir = tmp.get_path() + "xdg-data/";
 			::mkdir(data_dir.c_str(), 0700);
 			xdg_data.set(data_dir);
 			mock_newsbeuter_xdg_dirs(
-					tmp.getPath() + ".config/newsbeuter/",
+					tmp.get_path() + ".config/newsbeuter/",
 					data_dir,
 					beuter_sentries);
 
 			SECTION("Newsboat uses dotdir") {
 				mock_newsboat_dotdir(tmp, boat_sentries);
-				check(tmp.getPath() + ".newsboat/urls");
+				check(tmp.get_path() + ".newsboat/urls");
 			}
 
 			SECTION("Newsboat uses XDG") {
 				const auto newsboat_config_dir =
-					tmp.getPath() + ".config/newsboat/";
+					tmp.get_path() + ".config/newsboat/";
 				mock_newsboat_xdg_dirs(
 						newsboat_config_dir,
 						data_dir + "newsboat/",
@@ -696,11 +696,11 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 		}
 
 		SECTION("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
-			const auto config_dir = tmp.getPath() + "xdg-conf/";
+			const auto config_dir = tmp.get_path() + "xdg-conf/";
 			::mkdir(config_dir.c_str(), 0700);
 			xdg_config.set(config_dir);
 
-			const auto data_dir = tmp.getPath() + "xdg-data/";
+			const auto data_dir = tmp.get_path() + "xdg-data/";
 			::mkdir(data_dir.c_str(), 0700);
 			xdg_data.set(data_dir);
 
@@ -711,7 +711,7 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 
 			SECTION("Newsboat uses dotdir") {
 				mock_newsboat_dotdir(tmp, boat_sentries);
-				check(tmp.getPath() + ".newsboat/urls");
+				check(tmp.get_path() + ".newsboat/urls");
 			}
 
 			SECTION("Newsboat uses XDG") {
@@ -733,8 +733,8 @@ TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter dotdir from "
 	TestHelpers::TempDir tmp;
 
 	TestHelpers::EnvVar home("HOME");
-	home.set(tmp.getPath());
-	INFO("Temporary directory (used as HOME): " << tmp.getPath());
+	home.set(tmp.get_path());
+	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
@@ -753,7 +753,7 @@ TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter dotdir from "
 	// Files should be migrated, so should return true.
 	REQUIRE(paths.try_migrate_from_newsbeuter());
 
-	const auto dotdir = tmp.getPath() + ".newsboat/";
+	const auto dotdir = tmp.get_path() + ".newsboat/";
 
 	REQUIRE(file_contents(dotdir + "config") == sentries.config);
 	REQUIRE(file_contents(dotdir + "urls") == sentries.urls);
@@ -770,8 +770,8 @@ TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter XDG dirs from "
 	TestHelpers::TempDir tmp;
 
 	TestHelpers::EnvVar home("HOME");
-	home.set(tmp.getPath());
-	INFO("Temporary directory (used as HOME): " << tmp.getPath());
+	home.set(tmp.get_path());
+	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
@@ -802,43 +802,43 @@ TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter XDG dirs from "
 
 	SECTION("Default XDG locations") {
 		mock_newsbeuter_xdg_dirs(tmp, sentries);
-		const auto config_dir = tmp.getPath() + ".config/newsboat/";
-		const auto data_dir = tmp.getPath() + ".local/share/newsboat/";
+		const auto config_dir = tmp.get_path() + ".config/newsboat/";
+		const auto data_dir = tmp.get_path() + ".local/share/newsboat/";
 		check(config_dir, data_dir);
 	}
 
 	SECTION("XDG_CONFIG_HOME redefined") {
-		const auto config_dir = tmp.getPath() + "xdg-conf/";
+		const auto config_dir = tmp.get_path() + "xdg-conf/";
 		::mkdir(config_dir.c_str(), 0700);
 		xdg_config.set(config_dir);
 		mock_newsbeuter_xdg_dirs(
 				config_dir + "newsbeuter/",
-				tmp.getPath() + ".local/share/newsbeuter/",
+				tmp.get_path() + ".local/share/newsbeuter/",
 				sentries);
 
 		check(config_dir + "newsboat/",
-				tmp.getPath() + ".local/share/newsboat/");
+				tmp.get_path() + ".local/share/newsboat/");
 	}
 
 	SECTION("XDG_DATA_HOME redefined") {
-		const auto data_dir = tmp.getPath() + "xdg-data/";
+		const auto data_dir = tmp.get_path() + "xdg-data/";
 		::mkdir(data_dir.c_str(), 0700);
 		xdg_data.set(data_dir);
 		mock_newsbeuter_xdg_dirs(
-				tmp.getPath() + ".config/newsbeuter/",
+				tmp.get_path() + ".config/newsbeuter/",
 				data_dir + "newsbeuter/",
 				sentries);
 
-		check(tmp.getPath() + ".config/newsboat/",
+		check(tmp.get_path() + ".config/newsboat/",
 				data_dir + "newsboat/");
 	}
 
 	SECTION("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
-		const auto config_dir = tmp.getPath() + "xdg-conf/";
+		const auto config_dir = tmp.get_path() + "xdg-conf/";
 		::mkdir(config_dir.c_str(), 0700);
 		xdg_config.set(config_dir);
 
-		const auto data_dir = tmp.getPath() + "xdg-data/";
+		const auto data_dir = tmp.get_path() + "xdg-data/";
 		::mkdir(data_dir.c_str(), 0700);
 		xdg_data.set(data_dir);
 
@@ -877,8 +877,8 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 	TestHelpers::TempDir tmp;
 
 	TestHelpers::EnvVar home("HOME");
-	home.set(tmp.getPath());
-	INFO("Temporary directory (used as HOME): " << tmp.getPath());
+	home.set(tmp.get_path());
+	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
@@ -892,47 +892,47 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 	SECTION("Default XDG locations") {
 		mock_newsbeuter_xdg_dirs(tmp, sentries);
 
-		const auto config_dir = tmp.getPath() + ".config/newsboat/";
+		const auto config_dir = tmp.get_path() + ".config/newsboat/";
 		::mkdir(config_dir.c_str(), 0700);
 
-		const auto data_dir = tmp.getPath() + ".local/share/newsboat/";
+		const auto data_dir = tmp.get_path() + ".local/share/newsboat/";
 		verify_xdg_not_migrated(config_dir, data_dir);
 	}
 
 	SECTION("XDG_CONFIG_HOME redefined") {
-		const auto config_home = tmp.getPath() + "xdg-conf/";
+		const auto config_home = tmp.get_path() + "xdg-conf/";
 		::mkdir(config_home.c_str(), 0700);
 		xdg_config.set(config_home);
 		mock_newsbeuter_xdg_dirs(
 				config_home + "newsbeuter/",
-				tmp.getPath() + ".local/share/newsbeuter/",
+				tmp.get_path() + ".local/share/newsbeuter/",
 				sentries);
 
 		const auto config_dir = config_home + "newsboat/";
 		::mkdir(config_dir.c_str(), 0700);
-		verify_xdg_not_migrated(config_dir, tmp.getPath() + ".local/share/newsboat/");
+		verify_xdg_not_migrated(config_dir, tmp.get_path() + ".local/share/newsboat/");
 	}
 
 	SECTION("XDG_DATA_HOME redefined") {
-		const auto data_dir = tmp.getPath() + "xdg-data/";
+		const auto data_dir = tmp.get_path() + "xdg-data/";
 		::mkdir(data_dir.c_str(), 0700);
 		xdg_data.set(data_dir);
 		mock_newsbeuter_xdg_dirs(
-				tmp.getPath() + ".config/newsbeuter/",
+				tmp.get_path() + ".config/newsbeuter/",
 				data_dir + "newsbeuter/",
 				sentries);
 
-		const auto config_dir = tmp.getPath() + ".config/newsboat/";
+		const auto config_dir = tmp.get_path() + ".config/newsboat/";
 		::mkdir(config_dir.c_str(), 0700);
 		verify_xdg_not_migrated(config_dir, data_dir + "newsboat/");
 	}
 
 	SECTION("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
-		const auto config_home = tmp.getPath() + "xdg-conf/";
+		const auto config_home = tmp.get_path() + "xdg-conf/";
 		::mkdir(config_home.c_str(), 0700);
 		xdg_config.set(config_home);
 
-		const auto data_dir = tmp.getPath() + "xdg-data/";
+		const auto data_dir = tmp.get_path() + "xdg-data/";
 		::mkdir(data_dir.c_str(), 0700);
 		xdg_data.set(data_dir);
 
@@ -954,8 +954,8 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 	TestHelpers::TempDir tmp;
 
 	TestHelpers::EnvVar home("HOME");
-	home.set(tmp.getPath());
-	INFO("Temporary directory (used as HOME): " << tmp.getPath());
+	home.set(tmp.get_path());
+	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
@@ -969,46 +969,46 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 	SECTION("Default XDG locations") {
 		mock_newsbeuter_xdg_dirs(tmp, sentries);
 
-		const auto config_dir = tmp.getPath() + ".config/newsboat/";
-		const auto data_dir = tmp.getPath() + ".local/share/newsboat/";
+		const auto config_dir = tmp.get_path() + ".config/newsboat/";
+		const auto data_dir = tmp.get_path() + ".local/share/newsboat/";
 		::mkdir(data_dir.c_str(), 0700);
 		verify_xdg_not_migrated(config_dir, data_dir);
 	}
 
 	SECTION("XDG_CONFIG_HOME redefined") {
-		const auto config_home = tmp.getPath() + "xdg-conf/";
+		const auto config_home = tmp.get_path() + "xdg-conf/";
 		::mkdir(config_home.c_str(), 0700);
 		xdg_config.set(config_home);
 		mock_newsbeuter_xdg_dirs(
 				config_home + "newsbeuter/",
-				tmp.getPath() + ".local/share/newsbeuter/",
+				tmp.get_path() + ".local/share/newsbeuter/",
 				sentries);
 
-		const auto data_dir = tmp.getPath() + ".local/share/newsboat/";
+		const auto data_dir = tmp.get_path() + ".local/share/newsboat/";
 		::mkdir(data_dir.c_str(), 0700);
 		verify_xdg_not_migrated(config_home + "newsboat/", data_dir);
 	}
 
 	SECTION("XDG_DATA_HOME redefined") {
-		const auto data_home = tmp.getPath() + "xdg-data/";
+		const auto data_home = tmp.get_path() + "xdg-data/";
 		::mkdir(data_home.c_str(), 0700);
 		xdg_data.set(data_home);
 		mock_newsbeuter_xdg_dirs(
-				tmp.getPath() + ".config/newsbeuter/",
+				tmp.get_path() + ".config/newsbeuter/",
 				data_home + "newsbeuter/",
 				sentries);
 
 		const auto data_dir = data_home + "newsboat/";
 		::mkdir(data_dir.c_str(), 0700);
-		verify_xdg_not_migrated(tmp.getPath() + ".config/newsboat/", data_dir);
+		verify_xdg_not_migrated(tmp.get_path() + ".config/newsboat/", data_dir);
 	}
 
 	SECTION("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
-		const auto config_home = tmp.getPath() + "xdg-conf/";
+		const auto config_home = tmp.get_path() + "xdg-conf/";
 		::mkdir(config_home.c_str(), 0700);
 		xdg_config.set(config_home);
 
-		const auto data_home = tmp.getPath() + "xdg-data/";
+		const auto data_home = tmp.get_path() + "xdg-data/";
 		::mkdir(data_home.c_str(), 0700);
 		xdg_data.set(data_home);
 
@@ -1030,8 +1030,8 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 	TestHelpers::TempDir tmp;
 
 	TestHelpers::EnvVar home("HOME");
-	home.set(tmp.getPath());
-	INFO("Temporary directory (used as HOME): " << tmp.getPath());
+	home.set(tmp.get_path());
+	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
@@ -1047,21 +1047,21 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 
 		// Making XDG .config unwriteable makes it impossible to create
 		// a directory there
-		const auto config_home = tmp.getPath() + ".config/";
+		const auto config_home = tmp.get_path() + ".config/";
 		TestHelpers::Chmod config_home_chmod(config_home, S_IRUSR | S_IXUSR);
 
 		const auto config_dir = config_home + "newsboat/";
-		const auto data_dir = tmp.getPath() + ".local/share/newsboat/";
+		const auto data_dir = tmp.get_path() + ".local/share/newsboat/";
 		verify_xdg_not_migrated(config_dir, data_dir);
 	}
 
 	SECTION("XDG_CONFIG_HOME redefined") {
-		const auto config_home = tmp.getPath() + "xdg-conf/";
+		const auto config_home = tmp.get_path() + "xdg-conf/";
 		::mkdir(config_home.c_str(), 0700);
 		xdg_config.set(config_home);
 		mock_newsbeuter_xdg_dirs(
 				config_home + "newsbeuter/",
-				tmp.getPath() + ".local/share/newsbeuter/",
+				tmp.get_path() + ".local/share/newsbeuter/",
 				sentries);
 
 		// Making XDG .config unwriteable makes it impossible to create
@@ -1070,21 +1070,21 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 
 		verify_xdg_not_migrated(
 				config_home + "newsboat/",
-				tmp.getPath() + ".local/share/newsboat/");
+				tmp.get_path() + ".local/share/newsboat/");
 	}
 
 	SECTION("XDG_DATA_HOME redefined") {
-		const auto data_dir = tmp.getPath() + "xdg-data/";
+		const auto data_dir = tmp.get_path() + "xdg-data/";
 		::mkdir(data_dir.c_str(), 0700);
 		xdg_data.set(data_dir);
 		mock_newsbeuter_xdg_dirs(
-				tmp.getPath() + ".config/newsbeuter/",
+				tmp.get_path() + ".config/newsbeuter/",
 				data_dir + "newsbeuter/",
 				sentries);
 
 		// Making XDG .config unwriteable makes it impossible to create
 		// a directory there
-		const auto config_home = tmp.getPath() + ".config/";
+		const auto config_home = tmp.get_path() + ".config/";
 		TestHelpers::Chmod config_home_chmod(config_home, S_IRUSR | S_IXUSR);
 
 		verify_xdg_not_migrated(
@@ -1093,11 +1093,11 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 	}
 
 	SECTION("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
-		const auto config_home = tmp.getPath() + "xdg-conf/";
+		const auto config_home = tmp.get_path() + "xdg-conf/";
 		::mkdir(config_home.c_str(), 0700);
 		xdg_config.set(config_home);
 
-		const auto data_dir = tmp.getPath() + "xdg-data/";
+		const auto data_dir = tmp.get_path() + "xdg-data/";
 		::mkdir(data_dir.c_str(), 0700);
 		xdg_data.set(data_dir);
 
@@ -1123,8 +1123,8 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 	TestHelpers::TempDir tmp;
 
 	TestHelpers::EnvVar home("HOME");
-	home.set(tmp.getPath());
-	INFO("Temporary directory (used as HOME): " << tmp.getPath());
+	home.set(tmp.get_path());
+	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
@@ -1140,26 +1140,26 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 
 		// Making XDG .local/share unwriteable makes it impossible to create
 		// a directory there
-		const auto data_home = tmp.getPath() + ".local/share/";
+		const auto data_home = tmp.get_path() + ".local/share/";
 		TestHelpers::Chmod data_home_chmod(data_home, S_IRUSR | S_IXUSR);
 
-		const auto config_dir = tmp.getPath() + ".config/newsboat/";
+		const auto config_dir = tmp.get_path() + ".config/newsboat/";
 		const auto data_dir = data_home + "newsboat/";
 		verify_xdg_not_migrated(config_dir, data_dir);
 	}
 
 	SECTION("XDG_CONFIG_HOME redefined") {
-		const auto config_home = tmp.getPath() + "xdg-conf/";
+		const auto config_home = tmp.get_path() + "xdg-conf/";
 		::mkdir(config_home.c_str(), 0700);
 		xdg_config.set(config_home);
 		mock_newsbeuter_xdg_dirs(
 				config_home + "newsbeuter/",
-				tmp.getPath() + ".local/share/newsbeuter/",
+				tmp.get_path() + ".local/share/newsbeuter/",
 				sentries);
 
 		// Making XDG .local/share unwriteable makes it impossible to create
 		// a directory there
-		const auto data_home = tmp.getPath() + ".local/share/";
+		const auto data_home = tmp.get_path() + ".local/share/";
 		TestHelpers::Chmod data_home_chmod(data_home, S_IRUSR | S_IXUSR);
 
 		verify_xdg_not_migrated(
@@ -1168,11 +1168,11 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 	}
 
 	SECTION("XDG_DATA_HOME redefined") {
-		const auto data_home = tmp.getPath() + "xdg-data/";
+		const auto data_home = tmp.get_path() + "xdg-data/";
 		::mkdir(data_home.c_str(), 0700);
 		xdg_data.set(data_home);
 		mock_newsbeuter_xdg_dirs(
-				tmp.getPath() + ".config/newsbeuter/",
+				tmp.get_path() + ".config/newsbeuter/",
 				data_home + "newsbeuter/",
 				sentries);
 
@@ -1181,16 +1181,16 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 		TestHelpers::Chmod data_home_chmod(data_home, S_IRUSR | S_IXUSR);
 
 		verify_xdg_not_migrated(
-				tmp.getPath() + ".config/newsboat/",
+				tmp.get_path() + ".config/newsboat/",
 				data_home + "newsboat/");
 	}
 
 	SECTION("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
-		const auto config_home = tmp.getPath() + "xdg-conf/";
+		const auto config_home = tmp.get_path() + "xdg-conf/";
 		::mkdir(config_home.c_str(), 0700);
 		xdg_config.set(config_home);
 
-		const auto data_home = tmp.getPath() + "xdg-data/";
+		const auto data_home = tmp.get_path() + "xdg-data/";
 		::mkdir(data_home.c_str(), 0700);
 		xdg_data.set(data_home);
 
@@ -1239,8 +1239,8 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 	TestHelpers::TempDir tmp;
 
 	TestHelpers::EnvVar home("HOME");
-	home.set(tmp.getPath());
-	INFO("Temporary directory (used as HOME): " << tmp.getPath());
+	home.set(tmp.get_path());
+	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
@@ -1253,7 +1253,7 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 
 	mock_newsbeuter_dotdir(tmp, sentries);
 
-	const auto dotdir = tmp.getPath() + ".newsboat/";
+	const auto dotdir = tmp.get_path() + ".newsboat/";
 	::mkdir(dotdir.c_str(), 0700);
 
 	verify_dotdir_not_migrated(dotdir);
@@ -1266,8 +1266,8 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat "
 	TestHelpers::TempDir tmp;
 
 	TestHelpers::EnvVar home("HOME");
-	home.set(tmp.getPath());
-	INFO("Temporary directory (used as HOME): " << tmp.getPath());
+	home.set(tmp.get_path());
+	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
@@ -1282,15 +1282,15 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat "
 
 	// Making home directory unwriteable makes it impossible to create
 	// a directory there
-	TestHelpers::Chmod dotdir_chmod(tmp.getPath(), S_IRUSR | S_IXUSR);
+	TestHelpers::Chmod dotdir_chmod(tmp.get_path(), S_IRUSR | S_IXUSR);
 
-	verify_dotdir_not_migrated(tmp.getPath() + ".newsboat/");
+	verify_dotdir_not_migrated(tmp.get_path() + ".newsboat/");
 }
 
 void verify_create_dirs_returns_false(const TestHelpers::TempDir& tmp)
 {
 	const mode_t readonly = S_IRUSR | S_IXUSR;
-	TestHelpers::Chmod home_chmod(tmp.getPath(), readonly);
+	TestHelpers::Chmod home_chmod(tmp.get_path(), readonly);
 
 	ConfigPaths paths;
 	REQUIRE(paths.initialized());
@@ -1304,8 +1304,8 @@ TEST_CASE("create_dirs() returns false if dotdir doesn't exist and couldn't "
 	TestHelpers::TempDir tmp;
 
 	TestHelpers::EnvVar home("HOME");
-	home.set(tmp.getPath());
-	INFO("Temporary directory (used as HOME): " << tmp.getPath());
+	home.set(tmp.get_path());
+	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
@@ -1324,8 +1324,8 @@ TEST_CASE("create_dirs() returns false if XDG config dir exists but data dir "
 	TestHelpers::TempDir tmp;
 
 	TestHelpers::EnvVar home("HOME");
-	home.set(tmp.getPath());
-	INFO("Temporary directory (used as HOME): " << tmp.getPath());
+	home.set(tmp.get_path());
+	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
@@ -1335,14 +1335,14 @@ TEST_CASE("create_dirs() returns false if XDG config dir exists but data dir "
 	xdg_data.unset();
 
 	SECTION("Default XDG locations") {
-		const auto config_dir = tmp.getPath() + ".config/newsboat/";
+		const auto config_dir = tmp.get_path() + ".config/newsboat/";
 		::mkdir(config_dir.c_str(), 0700);
 
 		verify_create_dirs_returns_false(tmp);
 	}
 
 	SECTION("XDG_CONFIG_HOME redefined") {
-		const auto config_home = tmp.getPath() + "xdg-cfg/";
+		const auto config_home = tmp.get_path() + "xdg-cfg/";
 		xdg_config.set(config_home);
 
 		const auto config_dir = config_home + "newsboat/";
@@ -1352,7 +1352,7 @@ TEST_CASE("create_dirs() returns false if XDG config dir exists but data dir "
 	}
 
 	SECTION("XDG_DATA_HOME redefined") {
-		const auto data_home = tmp.getPath() + "xdg-data/";
+		const auto data_home = tmp.get_path() + "xdg-data/";
 		xdg_data.set(data_home);
 
 		const auto data_dir = data_home + "newsboat/";
@@ -1362,13 +1362,13 @@ TEST_CASE("create_dirs() returns false if XDG config dir exists but data dir "
 	}
 
 	SECTION("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
-		const auto config_home = tmp.getPath() + "xdg-cfg/";
+		const auto config_home = tmp.get_path() + "xdg-cfg/";
 		xdg_config.set(config_home);
 
 		const auto config_dir = config_home + "newsboat/";
 		::mkdir(config_dir.c_str(), 0700);
 
-		const auto data_home = tmp.getPath() + "xdg-data/";
+		const auto data_home = tmp.get_path() + "xdg-data/";
 		xdg_data.set(data_home);
 
 		const auto data_dir = data_home + "newsboat/";
