@@ -1209,6 +1209,29 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 	}
 }
 
+void verify_dotdir_not_migrated(const std::string& dotdir)
+{
+	ConfigPaths paths;
+	REQUIRE(paths.initialized());
+
+	// Shouldn't migrate anything, so should return false.
+	REQUIRE_FALSE(paths.try_migrate_from_newsbeuter());
+
+	const auto config = dotdir + "config";
+	REQUIRE_FALSE(0 == ::access(config.c_str(), R_OK));
+	const auto urls = dotdir + "urls";
+	REQUIRE_FALSE(0 == ::access(urls.c_str(), R_OK));
+
+	const auto cache = dotdir + "cache.db";
+	REQUIRE_FALSE(0 == ::access(cache.c_str(), R_OK));
+	const auto queue = dotdir + "queue";
+	REQUIRE_FALSE(0 == ::access(queue.c_str(), R_OK));
+	const auto search = dotdir + "history.search";
+	REQUIRE_FALSE(0 == ::access(search.c_str(), R_OK));
+	const auto cmdline = dotdir + "history.cmdline";
+	REQUIRE_FALSE(0 == ::access(cmdline.c_str(), R_OK));
+}
+
 TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 		"Newsboat dotdir already exists",
 		"[ConfigPaths]")
@@ -1233,23 +1256,33 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 	const auto dotdir = tmp.getPath() + ".newsboat/";
 	::mkdir(dotdir.c_str(), 0700);
 
-	ConfigPaths paths;
-	REQUIRE(paths.initialized());
+	verify_dotdir_not_migrated(dotdir);
+}
 
-	// Shouldn't migrate anything, so should return false.
-	REQUIRE_FALSE(paths.try_migrate_from_newsbeuter());
+TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat "
+		"dotdir couldn't be created",
+		"[ConfigPaths]")
+{
+	TestHelpers::TempDir tmp;
 
-	const auto config = dotdir + "config";
-	REQUIRE_FALSE(0 == ::access(config.c_str(), R_OK));
-	const auto urls = dotdir + "urls";
-	REQUIRE_FALSE(0 == ::access(urls.c_str(), R_OK));
+	TestHelpers::EnvVar home("HOME");
+	home.set(tmp.getPath());
+	INFO("Temporary directory (used as HOME): " << tmp.getPath());
 
-	const auto cache = dotdir + "cache.db";
-	REQUIRE_FALSE(0 == ::access(cache.c_str(), R_OK));
-	const auto queue = dotdir + "queue";
-	REQUIRE_FALSE(0 == ::access(queue.c_str(), R_OK));
-	const auto search = dotdir + "history.search";
-	REQUIRE_FALSE(0 == ::access(search.c_str(), R_OK));
-	const auto cmdline = dotdir + "history.cmdline";
-	REQUIRE_FALSE(0 == ::access(cmdline.c_str(), R_OK));
+	// ConfigPaths rely on these variables, so let's sanitize them to ensure
+	// that the tests aren't affected
+	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	xdg_config.unset();
+	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	xdg_data.unset();
+
+	FileSentries sentries;
+
+	mock_newsbeuter_dotdir(tmp, sentries);
+
+	// Making home directory unwriteable makes it impossible to create
+	// a directory there
+	TestHelpers::Chmod dotdir_chmod(tmp.getPath(), S_IRUSR | S_IXUSR);
+
+	verify_dotdir_not_migrated(tmp.getPath() + ".newsboat/");
 }
