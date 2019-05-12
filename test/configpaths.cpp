@@ -1217,19 +1217,13 @@ void verify_dotdir_not_migrated(const std::string& dotdir)
 	// Shouldn't migrate anything, so should return false.
 	REQUIRE_FALSE(paths.try_migrate_from_newsbeuter());
 
-	const auto config = dotdir + "config";
-	REQUIRE_FALSE(0 == ::access(config.c_str(), R_OK));
-	const auto urls = dotdir + "urls";
-	REQUIRE_FALSE(0 == ::access(urls.c_str(), R_OK));
+	REQUIRE_FALSE(0 == ::access((dotdir + "config").c_str(), R_OK));
+	REQUIRE_FALSE(0 == ::access((dotdir + "urls").c_str(), R_OK));
 
-	const auto cache = dotdir + "cache.db";
-	REQUIRE_FALSE(0 == ::access(cache.c_str(), R_OK));
-	const auto queue = dotdir + "queue";
-	REQUIRE_FALSE(0 == ::access(queue.c_str(), R_OK));
-	const auto search = dotdir + "history.search";
-	REQUIRE_FALSE(0 == ::access(search.c_str(), R_OK));
-	const auto cmdline = dotdir + "history.cmdline";
-	REQUIRE_FALSE(0 == ::access(cmdline.c_str(), R_OK));
+	REQUIRE_FALSE(0 == ::access((dotdir + "cache.db").c_str(), R_OK));
+	REQUIRE_FALSE(0 == ::access((dotdir + "queue").c_str(), R_OK));
+	REQUIRE_FALSE(0 == ::access((dotdir + "history.search").c_str(), R_OK));
+	REQUIRE_FALSE(0 == ::access((dotdir + "history.cmdline").c_str(), R_OK));
 }
 
 TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
