@@ -35,7 +35,7 @@ class ConfigPaths {
 	/// Looks for Newsbeuter's dot directory and, if found, copies its contents
 	/// to Newsboat's dotdir. Returns true if copied something, false
 	/// otherwise.
-	bool migrate_data_from_newsbeuter_simple();
+	bool migrate_data_from_newsbeuter_dotdir();
 
 	/// Looks for Newsbeuter's directories and, if found, copies their contents
 	/// to corresponding Newsboat's directory. Returns true if copied

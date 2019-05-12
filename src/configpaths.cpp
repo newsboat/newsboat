@@ -277,7 +277,7 @@ bool ConfigPaths::migrate_data_from_newsbeuter_xdg()
 	return true;
 }
 
-bool ConfigPaths::migrate_data_from_newsbeuter_simple()
+bool ConfigPaths::migrate_data_from_newsbeuter_dotdir()
 {
 	std::string newsbeuter_dir = m_env_home;
 	newsbeuter_dir += NEWSBEUTER_PATH_SEP;
@@ -343,7 +343,7 @@ bool ConfigPaths::migrate_data_from_newsbeuter()
 		m_queue_file = "queue";
 		find_dirs();
 	} else {
-		migrated = migrate_data_from_newsbeuter_simple();
+		migrated = migrate_data_from_newsbeuter_dotdir();
 	}
 
 	return migrated;
