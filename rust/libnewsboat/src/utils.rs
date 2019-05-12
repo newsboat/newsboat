@@ -656,20 +656,20 @@ mod tests {
 
     #[test]
     fn t_strwidth() {
-        assert!(strwidth("") == 0);
-        assert!(strwidth("xx") == 2);
-        assert!(strwidth("\u{F91F}") == 2);
-        assert!(strwidth("\u{0007}") == 1);
+        assert_eq!(strwidth(""), 0);
+        assert_eq!(strwidth("xx"), 2);
+        assert_eq!(strwidth("\u{F91F}"), 2);
+        assert_eq!(strwidth("\u{0007}"), 1);
     }
 
     #[test]
     fn t_strwidth_stfl() {
-        assert!(strwidth_stfl("") == 0);
-        assert!(strwidth_stfl("x<hi>x") == 3);
-        assert!(strwidth_stfl("x<>x") == 4);
-        assert!(strwidth_stfl("\u{F91F}") == 2);
-        assert!(strwidth_stfl("\u{0007}") == 1);
-        assert!(strwidth_stfl("<a") == 0); // #415
+        assert_eq!(strwidth_stfl(""), 0);
+        assert_eq!(strwidth_stfl("x<hi>x"), 3);
+        assert_eq!(strwidth_stfl("x<>x"), 4);
+        assert_eq!(strwidth_stfl("\u{F91F}"), 2);
+        assert_eq!(strwidth_stfl("\u{0007}"), 1);
+        assert_eq!(strwidth_stfl("<a"), 0); // #415
     }
 
     #[test]
@@ -781,57 +781,57 @@ mod tests {
     #[test]
     fn t_make_title() {
         let mut input = String::from("http://example.com/Item");
-        assert!(make_title(input) == String::from("Item"));
+        assert_eq!(make_title(input), String::from("Item"));
 
         input = String::from("http://example.com/This-is-the-title");
-        assert!(make_title(input) == String::from("This is the title"));
+        assert_eq!(make_title(input), String::from("This is the title"));
 
         input = String::from("http://example.com/This_is_the_title");
-        assert!(make_title(input) == String::from("This is the title"));
+        assert_eq!(make_title(input), String::from("This is the title"));
 
         input = String::from("http://example.com/This_is-the_title");
-        assert!(make_title(input) == String::from("This is the title"));
+        assert_eq!(make_title(input), String::from("This is the title"));
 
         input = String::from("http://example.com/This_is-the_title.php");
-        assert!(make_title(input) == String::from("This is the title"));
+        assert_eq!(make_title(input), String::from("This is the title"));
 
         input = String::from("http://example.com/This_is-the_title.html");
-        assert!(make_title(input) == String::from("This is the title"));
+        assert_eq!(make_title(input), String::from("This is the title"));
 
         input = String::from("http://example.com/This_is-the_title.htm");
-        assert!(make_title(input) == String::from("This is the title"));
+        assert_eq!(make_title(input), String::from("This is the title"));
 
         input = String::from("http://example.com/This_is-the_title.aspx");
-        assert!(make_title(input) == String::from("This is the title"));
+        assert_eq!(make_title(input), String::from("This is the title"));
 
         input = String::from("http://example.com/this-is-the-title");
-        assert!(make_title(input) == String::from("This is the title"));
+        assert_eq!(make_title(input), String::from("This is the title"));
 
         input = String::from("http://example.com/items/misc/this-is-the-title");
-        assert!(make_title(input) == String::from("This is the title"));
+        assert_eq!(make_title(input), String::from("This is the title"));
 
         input = String::from("http://example.com/item/");
-        assert!(make_title(input) == String::from("Item"));
+        assert_eq!(make_title(input), String::from("Item"));
 
         input = String::from("http://example.com/item/////////////");
-        assert!(make_title(input) == String::from("Item"));
+        assert_eq!(make_title(input), String::from("Item"));
 
         input = String::from("blahscheme://example.com/this-is-the-title");
-        assert!(make_title(input) == String::from("This is the title"));
+        assert_eq!(make_title(input), String::from("This is the title"));
 
         input = String::from("http://example.com/story/aug/title-with-dashes?a=b");
-        assert!(make_title(input) == String::from("Title with dashes"));
+        assert_eq!(make_title(input), String::from("Title with dashes"));
 
         input = String::from("http://example.com/title-with-dashes?a=b&x=y&utf8=✓");
-        assert!(make_title(input) == String::from("Title with dashes"));
+        assert_eq!(make_title(input), String::from("Title with dashes"));
 
         input = String::from("https://example.com/It%27s%202017%21");
-        assert!(make_title(input) == String::from("It's 2017!"));
+        assert_eq!(make_title(input), String::from("It's 2017!"));
 
         input = String::from("https://example.com/?format=rss");
-        assert!(make_title(input) == String::from(""));
+        assert_eq!(make_title(input), String::from(""));
 
-        assert!(make_title(String::from("")) == String::from(""));
+        assert_eq!(make_title(String::from("")), String::from(""));
     }
 
     #[test]
