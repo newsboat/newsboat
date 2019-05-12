@@ -851,6 +851,25 @@ TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter XDG dirs from "
 	}
 }
 
+void verify_xdg_not_migrated(
+		const std::string& config_dir,
+		const std::string& data_dir)
+{
+	ConfigPaths paths;
+	REQUIRE(paths.initialized());
+
+	// Shouldn't migrate anything, so should return false.
+	REQUIRE_FALSE(paths.try_migrate_from_newsbeuter());
+
+	REQUIRE_FALSE(0 == ::access((config_dir + "config").c_str(), R_OK));
+	REQUIRE_FALSE(0 == ::access((config_dir + "urls").c_str(), R_OK));
+
+	REQUIRE_FALSE(0 == ::access((data_dir + "cache.db").c_str(), R_OK));
+	REQUIRE_FALSE(0 == ::access((data_dir + "queue").c_str(), R_OK));
+	REQUIRE_FALSE(0 == ::access((data_dir + "history.search").c_str(), R_OK));
+	REQUIRE_FALSE(0 == ::access((data_dir + "history.cmdline").c_str(), R_OK));
+}
+
 TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 		"Newsboat XDG config dir already exists",
 		"[ConfigPaths]")
@@ -870,24 +889,6 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 
 	FileSentries sentries;
 
-	const auto check =
-	[]
-	(const std::string& config_dir, const std::string& data_dir) {
-		ConfigPaths paths;
-		REQUIRE(paths.initialized());
-
-		// Shouldn't migrate anything, so should return false.
-		REQUIRE_FALSE(paths.try_migrate_from_newsbeuter());
-
-		REQUIRE_FALSE(0 == ::access((config_dir + "config").c_str(), R_OK));
-		REQUIRE_FALSE(0 == ::access((config_dir + "urls").c_str(), R_OK));
-
-		REQUIRE_FALSE(0 == ::access((data_dir + "cache.db").c_str(), R_OK));
-		REQUIRE_FALSE(0 == ::access((data_dir + "queue").c_str(), R_OK));
-		REQUIRE_FALSE(0 == ::access((data_dir + "history.search").c_str(), R_OK));
-		REQUIRE_FALSE(0 == ::access((data_dir + "history.cmdline").c_str(), R_OK));
-	};
-
 	SECTION("Default XDG locations") {
 		mock_newsbeuter_xdg_dirs(tmp, sentries);
 
@@ -895,7 +896,7 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 		::mkdir(config_dir.c_str(), 0700);
 
 		const auto data_dir = tmp.getPath() + ".local/share/newsboat/";
-		check(config_dir, data_dir);
+		verify_xdg_not_migrated(config_dir, data_dir);
 	}
 
 	SECTION("XDG_CONFIG_HOME redefined") {
@@ -909,7 +910,7 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 
 		const auto config_dir = config_home + "newsboat/";
 		::mkdir(config_dir.c_str(), 0700);
-		check(config_dir, tmp.getPath() + ".local/share/newsboat/");
+		verify_xdg_not_migrated(config_dir, tmp.getPath() + ".local/share/newsboat/");
 	}
 
 	SECTION("XDG_DATA_HOME redefined") {
@@ -923,7 +924,7 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 
 		const auto config_dir = tmp.getPath() + ".config/newsboat/";
 		::mkdir(config_dir.c_str(), 0700);
-		check(config_dir, data_dir + "newsboat/");
+		verify_xdg_not_migrated(config_dir, data_dir + "newsboat/");
 	}
 
 	SECTION("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
@@ -942,7 +943,7 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 
 		const auto config_dir = config_home + "newsboat/";
 		::mkdir(config_dir.c_str(), 0700);
-		check(config_dir, data_dir + "newsboat/");
+		verify_xdg_not_migrated(config_dir, data_dir + "newsboat/");
 	}
 }
 
@@ -965,31 +966,13 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 
 	FileSentries sentries;
 
-	const auto check =
-	[]
-	(const std::string& config_dir, const std::string& data_dir) {
-		ConfigPaths paths;
-		REQUIRE(paths.initialized());
-
-		// Shouldn't migrate anything, so should return false.
-		REQUIRE_FALSE(paths.try_migrate_from_newsbeuter());
-
-		REQUIRE_FALSE(0 == ::access((config_dir + "config").c_str(), R_OK));
-		REQUIRE_FALSE(0 == ::access((config_dir + "urls").c_str(), R_OK));
-
-		REQUIRE_FALSE(0 == ::access((data_dir + "cache.db").c_str(), R_OK));
-		REQUIRE_FALSE(0 == ::access((data_dir + "queue").c_str(), R_OK));
-		REQUIRE_FALSE(0 == ::access((data_dir + "history.search").c_str(), R_OK));
-		REQUIRE_FALSE(0 == ::access((data_dir + "history.cmdline").c_str(), R_OK));
-	};
-
 	SECTION("Default XDG locations") {
 		mock_newsbeuter_xdg_dirs(tmp, sentries);
 
 		const auto config_dir = tmp.getPath() + ".config/newsboat/";
 		const auto data_dir = tmp.getPath() + ".local/share/newsboat/";
 		::mkdir(data_dir.c_str(), 0700);
-		check(config_dir, data_dir);
+		verify_xdg_not_migrated(config_dir, data_dir);
 	}
 
 	SECTION("XDG_CONFIG_HOME redefined") {
@@ -1003,7 +986,7 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 
 		const auto data_dir = tmp.getPath() + ".local/share/newsboat/";
 		::mkdir(data_dir.c_str(), 0700);
-		check(config_home + "newsboat/", data_dir);
+		verify_xdg_not_migrated(config_home + "newsboat/", data_dir);
 	}
 
 	SECTION("XDG_DATA_HOME redefined") {
@@ -1017,7 +1000,7 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 
 		const auto data_dir = data_home + "newsboat/";
 		::mkdir(data_dir.c_str(), 0700);
-		check(tmp.getPath() + ".config/newsboat/", data_dir);
+		verify_xdg_not_migrated(tmp.getPath() + ".config/newsboat/", data_dir);
 	}
 
 	SECTION("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
@@ -1036,6 +1019,6 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 
 		const auto data_dir = data_home + "newsboat/";
 		::mkdir(data_dir.c_str(), 0700);
-		check(config_home + "newsboat/", data_dir);
+		verify_xdg_not_migrated(config_home + "newsboat/", data_dir);
 	}
 }
