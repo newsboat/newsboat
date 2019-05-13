@@ -261,13 +261,7 @@ pub fn is_valid_attribute(attribute: &str) -> bool {
 }
 
 pub fn strwidth(s: &str) -> usize {
-    let control = s.chars().fold(true, |acc, x| acc & !x.is_control());
-
-    if control {
-        return UnicodeWidthStr::width(s);
-    } else {
-        return s.len();
-    }
+    UnicodeWidthStr::width(s)
 }
 
 pub fn strwidth_stfl(s: &str) -> usize {
@@ -659,7 +653,7 @@ mod tests {
         assert_eq!(strwidth(""), 0);
         assert_eq!(strwidth("xx"), 2);
         assert_eq!(strwidth("\u{F91F}"), 2);
-        assert_eq!(strwidth("\u{0007}"), 1);
+        assert_eq!(strwidth("\u{0007}"), 0);
     }
 
     #[test]
@@ -668,7 +662,7 @@ mod tests {
         assert_eq!(strwidth_stfl("x<hi>x"), 3);
         assert_eq!(strwidth_stfl("x<>x"), 4);
         assert_eq!(strwidth_stfl("\u{F91F}"), 2);
-        assert_eq!(strwidth_stfl("\u{0007}"), 1);
+        assert_eq!(strwidth_stfl("\u{0007}"), 0);
         assert_eq!(strwidth_stfl("<a"), 0); // #415
     }
 
