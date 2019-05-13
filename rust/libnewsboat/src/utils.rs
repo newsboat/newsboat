@@ -731,7 +731,10 @@ mod tests {
         assert_eq!(get_auth_method("basic"), curl_sys::CURLAUTH_BASIC);
         assert_eq!(get_auth_method("digest"), curl_sys::CURLAUTH_DIGEST);
         assert_eq!(get_auth_method("digest_ie"), curl_sys::CURLAUTH_DIGEST_IE);
-        assert_eq!(get_auth_method("gssnegotiate"), curl_sys::CURLAUTH_GSSNEGOTIATE);
+        assert_eq!(
+            get_auth_method("gssnegotiate"),
+            curl_sys::CURLAUTH_GSSNEGOTIATE
+        );
         assert_eq!(get_auth_method("anysafe"), curl_sys::CURLAUTH_ANYSAFE);
 
         assert_eq!(get_auth_method(""), curl_sys::CURLAUTH_ANY);
