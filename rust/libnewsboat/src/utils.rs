@@ -74,7 +74,7 @@ pub fn absolute_url(base_url: &str, link: &str) -> String {
     Url::parse(base_url)
         .and_then(|url| url.join(link))
         .as_ref()
-        .map(|url| url.as_str())
+        .map(Url::as_str)
         .unwrap_or(link)
         .to_owned()
 }
@@ -100,7 +100,7 @@ pub fn resolve_tilde(path: String) -> String {
             }
         }
     }
-    return file_path;
+    file_path
 }
 
 pub fn resolve_relative(reference: &Path, path: &Path) -> PathBuf {
@@ -109,7 +109,7 @@ pub fn resolve_relative(reference: &Path, path: &Path) -> PathBuf {
         // always a file path
         return reference.parent().unwrap().join(path);
     }
-    return path.to_path_buf();
+    path.to_path_buf()
 }
 
 pub fn is_special_url(url: &str) -> bool {
@@ -188,7 +188,7 @@ pub fn censor_url(url: &str) -> String {
                 url
             })
             .as_ref()
-            .map(|url| url.as_str())
+            .map(Url::as_str)
             .unwrap_or(url)
             .to_owned()
     } else {
@@ -198,10 +198,7 @@ pub fn censor_url(url: &str) -> String {
 
 pub fn get_default_browser() -> String {
     use std::env;
-    match env::var("BROWSER") {
-        Ok(val) => return val,
-        Err(_) => return String::from("lynx"),
-    }
+    env::var("BROWSER").unwrap_or_else(|_| "lynx".to_string())
 }
 
 pub fn trim(rs_str: String) -> String {
@@ -221,10 +218,9 @@ pub fn quote(input: String) -> String {
 }
 
 pub fn quote_if_necessary(input: String) -> String {
-    if input.find(" ") != None {
-        quote(input)
-    } else {
-        input
+    match input.find(' ') {
+        Some(_) => quote(input),
+        None => input,
     }
 }
 
@@ -238,19 +234,15 @@ pub fn is_valid_color(color: &str) -> bool {
     ];
 
     if COLORS.contains(&color) {
-        return true;
-    }
-    if color.starts_with("color0") {
-        return color == "color0";
-    }
-    if color.starts_with("color") {
+        true
+    } else if color.starts_with("color0") {
+        color == "color0"
+    } else if color.starts_with("color") {
         let num_part = &color[5..];
-        match num_part.parse::<u8>() {
-            Ok(_) => return true,
-            _ => return false,
-        }
+        num_part.parse::<u8>().is_ok()
+    } else {
+        false
     }
-    false
 }
 
 pub fn is_valid_attribute(attribute: &str) -> bool {
@@ -269,29 +261,15 @@ pub fn is_valid_attribute(attribute: &str) -> bool {
 }
 
 pub fn strwidth(rs_str: &str) -> usize {
-    let control = rs_str.chars().fold(true, |acc, x| acc & !x.is_control());
-
-    if control {
-        return UnicodeWidthStr::width(rs_str);
-    } else {
-        return rs_str.len();
-    }
+    UnicodeWidthStr::width(rs_str)
 }
 
 pub fn strwidth_stfl(rs_str: &str) -> usize {
-    let mut reduce: usize = 0;
-    let mut chars = rs_str.chars().peekable();
-    loop {
-        match chars.next() {
-            Some('<') => {
-                if chars.peek() != Some(&'>') {
-                    reduce += 3;
-                }
-            }
-            Some(_) => continue,
-            None => break,
-        }
-    }
+    let reduce = 3 * rs_str
+        .chars()
+        .zip(rs_str.chars().skip(1))
+        .filter(|&(c, next_c)| c == '<' && next_c != '>')
+        .count();
 
     let width = strwidth(rs_str);
     if width < reduce {
@@ -312,13 +290,8 @@ pub fn is_valid_podcast_type(mimetype: &str) -> bool {
 }
 
 pub fn unescape_url(rs_str: String) -> Option<String> {
-    let result = percent_decode(rs_str.as_bytes());
-    let result = result.decode_utf8();
-    if result.is_err() {
-        return None;
-    }
-
-    Some(result.unwrap().replace("\0", ""))
+    let decoded = percent_decode(rs_str.as_bytes()).decode_utf8();
+    decoded.ok().map(|s| s.replace("\0", ""))
 }
 
 /// Runs given command in a shell, and returns the output (from stdout; stderr is printed to the
@@ -426,8 +399,7 @@ pub fn make_title(rs_str: String) -> String {
     // Throw away common webpage suffixes: .html, .php, .aspx, .htm
     result = result
         .trim_right_matches(".html")
-        .trim_right_matches(".php");
-    result = result
+        .trim_right_matches(".php")
         .trim_right_matches(".aspx")
         .trim_right_matches(".htm");
 
@@ -678,20 +650,20 @@ mod tests {
 
     #[test]
     fn t_strwidth() {
-        assert!(strwidth("") == 0);
-        assert!(strwidth("xx") == 2);
-        assert!(strwidth("\u{F91F}") == 2);
-        assert!(strwidth("\u{0007}") == 1);
+        assert_eq!(strwidth(""), 0);
+        assert_eq!(strwidth("xx"), 2);
+        assert_eq!(strwidth("\u{F91F}"), 2);
+        assert_eq!(strwidth("\u{0007}"), 0);
     }
 
     #[test]
     fn t_strwidth_stfl() {
-        assert!(strwidth_stfl("") == 0);
-        assert!(strwidth_stfl("x<hi>x") == 3);
-        assert!(strwidth_stfl("x<>x") == 4);
-        assert!(strwidth_stfl("\u{F91F}") == 2);
-        assert!(strwidth_stfl("\u{0007}") == 1);
-        assert!(strwidth_stfl("<a") == 0); // #415
+        assert_eq!(strwidth_stfl(""), 0);
+        assert_eq!(strwidth_stfl("x<hi>x"), 3);
+        assert_eq!(strwidth_stfl("x<>x"), 4);
+        assert_eq!(strwidth_stfl("\u{F91F}"), 2);
+        assert_eq!(strwidth_stfl("\u{0007}"), 0);
+        assert_eq!(strwidth_stfl("<a"), 0); // #415
     }
 
     #[test]
@@ -803,57 +775,57 @@ mod tests {
     #[test]
     fn t_make_title() {
         let mut input = String::from("http://example.com/Item");
-        assert!(make_title(input) == String::from("Item"));
+        assert_eq!(make_title(input), String::from("Item"));
 
         input = String::from("http://example.com/This-is-the-title");
-        assert!(make_title(input) == String::from("This is the title"));
+        assert_eq!(make_title(input), String::from("This is the title"));
 
         input = String::from("http://example.com/This_is_the_title");
-        assert!(make_title(input) == String::from("This is the title"));
+        assert_eq!(make_title(input), String::from("This is the title"));
 
         input = String::from("http://example.com/This_is-the_title");
-        assert!(make_title(input) == String::from("This is the title"));
+        assert_eq!(make_title(input), String::from("This is the title"));
 
         input = String::from("http://example.com/This_is-the_title.php");
-        assert!(make_title(input) == String::from("This is the title"));
+        assert_eq!(make_title(input), String::from("This is the title"));
 
         input = String::from("http://example.com/This_is-the_title.html");
-        assert!(make_title(input) == String::from("This is the title"));
+        assert_eq!(make_title(input), String::from("This is the title"));
 
         input = String::from("http://example.com/This_is-the_title.htm");
-        assert!(make_title(input) == String::from("This is the title"));
+        assert_eq!(make_title(input), String::from("This is the title"));
 
         input = String::from("http://example.com/This_is-the_title.aspx");
-        assert!(make_title(input) == String::from("This is the title"));
+        assert_eq!(make_title(input), String::from("This is the title"));
 
         input = String::from("http://example.com/this-is-the-title");
-        assert!(make_title(input) == String::from("This is the title"));
+        assert_eq!(make_title(input), String::from("This is the title"));
 
         input = String::from("http://example.com/items/misc/this-is-the-title");
-        assert!(make_title(input) == String::from("This is the title"));
+        assert_eq!(make_title(input), String::from("This is the title"));
 
         input = String::from("http://example.com/item/");
-        assert!(make_title(input) == String::from("Item"));
+        assert_eq!(make_title(input), String::from("Item"));
 
         input = String::from("http://example.com/item/////////////");
-        assert!(make_title(input) == String::from("Item"));
+        assert_eq!(make_title(input), String::from("Item"));
 
         input = String::from("blahscheme://example.com/this-is-the-title");
-        assert!(make_title(input) == String::from("This is the title"));
+        assert_eq!(make_title(input), String::from("This is the title"));
 
         input = String::from("http://example.com/story/aug/title-with-dashes?a=b");
-        assert!(make_title(input) == String::from("Title with dashes"));
+        assert_eq!(make_title(input), String::from("Title with dashes"));
 
         input = String::from("http://example.com/title-with-dashes?a=b&x=y&utf8=✓");
-        assert!(make_title(input) == String::from("Title with dashes"));
+        assert_eq!(make_title(input), String::from("Title with dashes"));
 
         input = String::from("https://example.com/It%27s%202017%21");
-        assert!(make_title(input) == String::from("It's 2017!"));
+        assert_eq!(make_title(input), String::from("It's 2017!"));
 
         input = String::from("https://example.com/?format=rss");
-        assert!(make_title(input) == String::from(""));
+        assert_eq!(make_title(input), String::from(""));
 
-        assert!(make_title(String::from("")) == String::from(""));
+        assert_eq!(make_title(String::from("")), String::from(""));
     }
 
     #[test]
