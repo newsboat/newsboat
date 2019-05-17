@@ -83,7 +83,7 @@ public:
 		::rmdir(tempdir.c_str());
 	}
 
-	const std::string getPath()
+	const std::string get_path() const
 	{
 		return tempdir;
 	}
@@ -101,7 +101,7 @@ class TempFile {
 public:
 	TempFile()
 	{
-		const auto filepath_template = tempdir.getPath() + "tmp.XXXXXX";
+		const auto filepath_template = tempdir.get_path() + "tmp.XXXXXX";
 		std::vector<char> filepath_template_c(
 				filepath_template.cbegin(), filepath_template.cend());
 		filepath_template_c.push_back('\0');
@@ -132,7 +132,7 @@ public:
 		::unlink(filepath.c_str());
 	}
 
-	const std::string getPath()
+	const std::string get_path() const
 	{
 		return filepath;
 	}
@@ -148,7 +148,7 @@ class TempDir {
 public:
 	TempDir()
 	{
-		const auto dirpath_template = tempdir.getPath() + "tmp.XXXXXX";
+		const auto dirpath_template = tempdir.get_path() + "tmp.XXXXXX";
 		std::vector<char> dirpath_template_c(
 				dirpath_template.cbegin(), dirpath_template.cend());
 		dirpath_template_c.push_back('\0');
@@ -189,7 +189,7 @@ public:
 		}
 	}
 
-	const std::string getPath()
+	const std::string get_path() const
 	{
 		return dirpath;
 	}
@@ -365,6 +365,97 @@ public:
 	void on_change(std::function<void(void)> fn)
 	{
 		on_change_fn = std::move(fn);
+	}
+};
+
+/// Helper class to create argc and argv arguments for CliArgsParser
+///
+/// When testing CliArgsParser, resource management turned out to be a problem:
+/// CliArgsParser requires char** pointing to arguments, but such a pointer
+/// can't be easily obtained from any of standard containers. To overcome that,
+/// I wrote Opts, which simply copies elements of initializer_list into
+/// separate unique_ptr<char>, and presents useful accessors argc() and argv()
+/// whose results can be passed right into CliArgsParser. Problem solved!
+class Opts {
+	/// Individual elements of argv.
+	std::vector<std::unique_ptr<char[]>> m_opts;
+	/// This is argv as main() knows it.
+	std::unique_ptr<char* []> m_data;
+	/// This is argc as main() knows it.
+	std::size_t m_argc = 0;
+
+public:
+	/// Turns \a opts into argc and argv.
+	Opts(std::initializer_list<std::string> opts)
+		: m_argc(opts.size())
+	{
+		m_opts.reserve(m_argc);
+
+		for (const std::string& option : opts) {
+			// Copy string into separate char[], managed by
+			// unique_ptr.
+			auto ptr = std::unique_ptr<char[]>(
+				new char[option.size() + 1]);
+			std::copy(option.cbegin(), option.cend(), ptr.get());
+			// C and C++ require argv to be NULL-terminated:
+			// https://stackoverflow.com/questions/18547114/why-do-we-need-argc-while-there-is-always-a-null-at-the-end-of-argv
+			ptr.get()[option.size()] = '\0';
+
+			// Hold onto the smart pointer to keep the entry in argv
+			// alive.
+			m_opts.emplace_back(std::move(ptr));
+		}
+
+		// Copy out intermediate argv vector into its final storage.
+		m_data = std::unique_ptr<char* []>(new char*[m_argc + 1]);
+		int i = 0;
+		for (const auto& ptr : m_opts) {
+			m_data.get()[i++] = ptr.get();
+		}
+		m_data.get()[i] = nullptr;
+	}
+
+	std::size_t argc() const
+	{
+		return m_argc;
+	}
+
+	char** argv() const
+	{
+		return m_data.get();
+	}
+};
+
+/// Sets new permissions on a given path, and restores them back when the
+/// object is destroyed.
+class Chmod {
+	std::string m_path;
+	mode_t m_originalMode;
+
+public:
+	Chmod(const std::string& path, mode_t newMode)
+		: m_path(path)
+	{
+		struct stat sb;
+		const int result = ::stat(m_path.c_str(), &sb);
+		if (result != 0) {
+			const auto saved_errno = errno;
+			auto msg = std::string("TestHelpers::Chmod: ")
+				+ "couldn't obtain current mode for `"
+				+ m_path
+				+ "': ("
+				+ std::to_string(saved_errno)
+				+ ") "
+				+ strerror(saved_errno);
+			throw std::runtime_error(msg);
+		}
+		m_originalMode = sb.st_mode;
+
+		::chmod(m_path.c_str(), newMode);
+	}
+
+	~Chmod() {
+		::chmod(m_path.c_str(), m_originalMode);
 	}
 };
 

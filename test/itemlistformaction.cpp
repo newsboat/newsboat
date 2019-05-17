@@ -34,7 +34,7 @@ TEST_CASE("OP_OPEN displays article using an external pager",
 	FilterContainer filters;
 
 	Cache rsscache(":memory:", &cfg);
-	cfg.set_configvalue("pager", "cat %f > " + pagerfile.getPath());
+	cfg.set_configvalue("pager", "cat %f > " + pagerfile.get_path());
 
 	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
 
@@ -55,7 +55,7 @@ TEST_CASE("OP_OPEN displays article using an external pager",
 
 	REQUIRE_NOTHROW(itemlist.process_op(OP_OPEN));
 
-	TestHelpers::AssertArticleFileContent(pagerfile.getPath(),
+	TestHelpers::AssertArticleFileContent(pagerfile.get_path(),
 		test_title,
 		test_author,
 		test_pubDate_str,
@@ -107,7 +107,7 @@ TEST_CASE(
 	std::string line;
 
 	ConfigContainer cfg;
-	cfg.set_configvalue("browser", "echo %u >> " + browserfile.getPath());
+	cfg.set_configvalue("browser", "echo %u >> " + browserfile.get_path());
 
 	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
@@ -124,7 +124,7 @@ TEST_CASE(
 	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 	itemlist.set_feed(feed);
 	itemlist.process_op(OP_OPENBROWSER_AND_MARK);
-	std::ifstream browserFileStream(browserfile.getPath());
+	std::ifstream browserFileStream(browserfile.get_path());
 
 	REQUIRE(std::getline(browserFileStream, line));
 	REQUIRE(line == test_url);
@@ -142,7 +142,7 @@ TEST_CASE("OP_OPENINBROWSER passes the url to the browser",
 	std::string line;
 
 	ConfigContainer cfg;
-	cfg.set_configvalue("browser", "echo %u >> " + browserfile.getPath());
+	cfg.set_configvalue("browser", "echo %u >> " + browserfile.get_path());
 
 	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
@@ -158,7 +158,7 @@ TEST_CASE("OP_OPENINBROWSER passes the url to the browser",
 	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 	itemlist.set_feed(feed);
 	itemlist.process_op(OP_OPENINBROWSER);
-	std::ifstream browserFileStream(browserfile.getPath());
+	std::ifstream browserFileStream(browserfile.get_path());
 
 	REQUIRE(std::getline(browserFileStream, line));
 	REQUIRE(line == test_url);
@@ -176,7 +176,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 	int itemCount = 6;
 
 	ConfigContainer cfg;
-	cfg.set_configvalue("browser", "echo %u >> " + browserfile.getPath());
+	cfg.set_configvalue("browser", "echo %u >> " + browserfile.get_path());
 
 	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
@@ -207,7 +207,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 
 		itemlist.process_op(OP_OPENALLUNREADINBROWSER);
 
-		std::ifstream browserFileStream(browserfile.getPath());
+		std::ifstream browserFileStream(browserfile.get_path());
 		openedItemsCount = 0;
 		if (browserFileStream.is_open()) {
 			while (std::getline(browserFileStream, line)) {
@@ -231,7 +231,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 
 		itemlist.process_op(OP_OPENALLUNREADINBROWSER);
 
-		std::ifstream browserFileStream(browserfile.getPath());
+		std::ifstream browserFileStream(browserfile.get_path());
 		if (browserFileStream.is_open()) {
 			while (std::getline(browserFileStream, line)) {
 				INFO("Each URL should be present exactly once. "
@@ -260,7 +260,7 @@ TEST_CASE(
 	int itemCount = 6;
 
 	ConfigContainer cfg;
-	cfg.set_configvalue("browser", "echo %u >> " + browserfile.getPath());
+	cfg.set_configvalue("browser", "echo %u >> " + browserfile.get_path());
 
 	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
@@ -291,7 +291,7 @@ TEST_CASE(
 
 		itemlist.process_op(OP_OPENALLUNREADINBROWSER_AND_MARK);
 
-		std::ifstream browserFileStream(browserfile.getPath());
+		std::ifstream browserFileStream(browserfile.get_path());
 		if (browserFileStream.is_open()) {
 			while (std::getline(browserFileStream, line)) {
 				INFO("Each URL should be present exactly once. "
@@ -316,7 +316,7 @@ TEST_CASE(
 
 		itemlist.process_op(OP_OPENALLUNREADINBROWSER_AND_MARK);
 
-		std::ifstream browserFileStream(browserfile.getPath());
+		std::ifstream browserFileStream(browserfile.get_path());
 		if (browserFileStream.is_open()) {
 			while (std::getline(browserFileStream, line)) {
 				INFO("Each URL should be present exactly once. "
@@ -370,11 +370,11 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 		feed->add_item(item);
 		itemlist.set_feed(feed);
 		cfg.set_configvalue(
-			"external-url-viewer", "tee > " + urlFile.getPath());
+			"external-url-viewer", "tee > " + urlFile.get_path());
 
 		REQUIRE_NOTHROW(itemlist.process_op(OP_SHOWURLS));
 
-		TestHelpers::AssertArticleFileContent(urlFile.getPath(),
+		TestHelpers::AssertArticleFileContent(urlFile.get_path(),
 			test_title,
 			test_author,
 			test_pubDate_str,
@@ -429,12 +429,12 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 	itemlist.set_feed(feed);
 
 	cfg.set_configvalue(
-		"bookmark-cmd", "echo > " + bookmarkFile.getPath());
+		"bookmark-cmd", "echo > " + bookmarkFile.get_path());
 
 	bookmark_args.push_back(extra_arg);
 	REQUIRE_NOTHROW(itemlist.process_op(OP_BOOKMARK, true, &bookmark_args));
 
-	std::ifstream browserFileStream(bookmarkFile.getPath());
+	std::ifstream browserFileStream(bookmarkFile.get_path());
 
 	REQUIRE(std::getline(browserFileStream, line));
 	REQUIRE(line ==
@@ -548,7 +548,7 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 	FilterContainer filters;
 
 	std::vector<std::string> op_args;
-	op_args.push_back(saveFile.getPath());
+	op_args.push_back(saveFile.get_path());
 
 	std::string test_url = "http://test_url";
 	std::string test_title = "Article Title";
@@ -580,7 +580,7 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 
 	REQUIRE_NOTHROW(itemlist.process_op(OP_SAVE, true, &op_args));
 
-	TestHelpers::AssertArticleFileContent(saveFile.getPath(),
+	TestHelpers::AssertArticleFileContent(saveFile.get_path(),
 		test_title,
 		test_author,
 		test_pubDate_str,
@@ -654,7 +654,7 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREVIOUS",
 	newsboat::View v(&c);
 	ConfigContainer cfg;
 	cfg.set_configvalue(
-		"external-url-viewer", "tee > " + articleFile.getPath());
+		"external-url-viewer", "tee > " + articleFile.get_path());
 	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
 	std::string line;
@@ -688,7 +688,7 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREVIOUS",
 	REQUIRE_NOTHROW(itemlist.process_op(OP_NEXT));
 	itemlist.process_op(OP_SHOWURLS);
 
-	std::ifstream fileStream(articleFile.getPath());
+	std::ifstream fileStream(articleFile.get_path());
 	std::getline(fileStream, line);
 	REQUIRE(line == prefix_title + second_article_title);
 
@@ -753,7 +753,7 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 	FilterContainer filters;
 
 	std::vector<std::string> op_args;
-	op_args.push_back("tee > " + articleFile.getPath());
+	op_args.push_back("tee > " + articleFile.get_path());
 
 	std::string test_url = "http://test_url";
 	std::string test_title = "Article Title";
@@ -785,7 +785,7 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 
 	REQUIRE_NOTHROW(itemlist.process_op(OP_PIPE_TO, true, &op_args));
 
-	TestHelpers::AssertArticleFileContent(articleFile.getPath(),
+	TestHelpers::AssertArticleFileContent(articleFile.get_path(),
 		test_title,
 		test_author,
 		test_pubDate_str,

@@ -94,7 +94,7 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 	REQUIRE(urlsExampleFile.is_open());
 
 	std::ofstream urlsFileStream;
-	urlsFileStream.open(urlsFile.getPath());
+	urlsFileStream.open(urlsFile.get_path());
 	REQUIRE(urlsFileStream.is_open());
 
 	for (std::string line; std::getline(urlsExampleFile, line); ) {
@@ -113,7 +113,7 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 		{"http://onemorefeed.at/feed/", {"tag1", "tag3"}}
 	};
 
-	FileUrlReader urlcfg(urlsFile.getPath());
+	FileUrlReader urlcfg(urlsFile.get_path());
 	urlcfg.reload();
 
 	REQUIRE(urlcfg.get_urls().size() == testUrls.size());
@@ -164,7 +164,7 @@ TEST_CASE("import() turns URLs that start with a pipe symbol (\"|\") "
 {
 	TestHelpers::TempFile urlsFile;
 
-	FileUrlReader urlcfg(urlsFile.getPath());
+	FileUrlReader urlcfg(urlsFile.get_path());
 	urlcfg.reload();
 
 	const std::string cwd(::getcwd(nullptr, 0));
@@ -198,7 +198,7 @@ TEST_CASE("import() turns \"filtercmd\" attribute into a `filter:` URL "
 {
 	TestHelpers::TempFile urlsFile;
 
-	FileUrlReader urlcfg(urlsFile.getPath());
+	FileUrlReader urlcfg(urlsFile.get_path());
 	urlcfg.reload();
 
 	const std::string cwd(::getcwd(nullptr, 0));
@@ -236,7 +236,7 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 	REQUIRE(urlsExampleFile.is_open());
 
 	std::ofstream urlsFileStream;
-	urlsFileStream.open(urlsFile.getPath());
+	urlsFileStream.open(urlsFile.get_path());
 	REQUIRE(urlsFileStream.is_open());
 
 	for (std::string line; std::getline(urlsExampleFile, line); ) {
@@ -255,7 +255,7 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 		{"http://onemorefeed.at/feed/", {"tag1", "tag3"}}
 	};
 
-	FileUrlReader urlcfg(urlsFile.getPath());
+	FileUrlReader urlcfg(urlsFile.get_path());
 	urlcfg.reload();
 
 	REQUIRE(urlcfg.get_urls().size() == testUrls.size());
