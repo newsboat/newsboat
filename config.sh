@@ -89,6 +89,7 @@ all_aboard_the_fail_boat() {
 check_ssl_implementation() {
 	if curl-config --static-libs | egrep -- "-lssl( |^)" > /dev/null 2>&1 ; then
 		check_pkg "libcrypto" || fail "libcrypto"
+		check_pkg "libssl" || fail "libssl"
 		echo "DEFINES+=-DHAVE_OPENSSL=1" >> config.mk
 	elif curl-config --static-libs | grep -- -lgcrypt > /dev/null 2>&1 ; then
 		check_pkg "gnutls" || fail "gnutls"
