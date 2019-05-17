@@ -42,6 +42,8 @@ char* rs_quote_if_necessary(const char* str);
 
 unsigned int rs_get_random_value(const unsigned int max);
 
+unsigned long rs_get_auth_method(const char* str);
+
 char* rs_unescape_url(const char* str);
 
 char* rs_make_title(const char* str);

@@ -923,32 +923,7 @@ std::string utils::get_basename(const std::string& url)
 
 unsigned long utils::get_auth_method(const std::string& type)
 {
-	if (type == "any")
-		return CURLAUTH_ANY;
-	if (type == "basic")
-		return CURLAUTH_BASIC;
-	if (type == "digest")
-		return CURLAUTH_DIGEST;
-#ifdef CURLAUTH_DIGEST_IE
-	if (type == "digest_ie")
-		return CURLAUTH_DIGEST_IE;
-#else
-#warning \
-	"proxy-auth-method digest_ie not added due to libcurl older than 7.19.3"
-#endif
-	if (type == "gssnegotiate")
-		return CURLAUTH_GSSNEGOTIATE;
-	if (type == "ntlm")
-		return CURLAUTH_NTLM;
-	if (type == "anysafe")
-		return CURLAUTH_ANYSAFE;
-	if (type != "") {
-		LOG(Level::USERERROR,
-			"you configured an invalid proxy authentication "
-			"method: %s",
-			type);
-	}
-	return CURLAUTH_ANY;
+	return rs_get_auth_method(type.c_str());
 }
 
 curl_proxytype utils::get_proxy_type(const std::string& type)

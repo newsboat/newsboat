@@ -229,6 +229,16 @@ pub extern "C" fn rs_get_random_value(rs_max: u32) -> u32 {
 }
 
 #[no_mangle]
+pub extern "C" fn rs_get_auth_method(input: *const c_char) -> u64 {
+    abort_on_panic(|| {
+        let rs_input = unsafe { CStr::from_ptr(input) };
+        let rs_input = rs_input.to_string_lossy().into_owned();
+
+        utils::get_auth_method(&rs_input)
+    })
+}
+
+#[no_mangle]
 pub extern "C" fn rs_unescape_url(input: *const c_char) -> *mut c_char {
     abort_on_panic(|| {
         let rs_input = unsafe { CStr::from_ptr(input) };
