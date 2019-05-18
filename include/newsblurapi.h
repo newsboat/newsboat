@@ -5,7 +5,6 @@
 
 #include "remoteapi.h"
 #include "rss/feed.h"
-#include "urlreader.h"
 
 #define ID_SEPARATOR "/////"
 
@@ -36,19 +35,6 @@ private:
 	std::string api_location;
 	FeedMap known_feeds;
 	unsigned int min_pages;
-};
-
-class NewsBlurUrlReader : public UrlReader {
-public:
-	NewsBlurUrlReader(const std::string& url_file, RemoteApi* a);
-	~NewsBlurUrlReader() override;
-	void write_config() override;
-	void reload() override;
-	std::string get_source() override;
-
-private:
-	std::string file;
-	RemoteApi* api;
 };
 
 } // namespace newsboat

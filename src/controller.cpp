@@ -41,6 +41,7 @@
 #include "itemrenderer.h"
 #include "logger.h"
 #include "newsblurapi.h"
+#include "newsblururlreader.h"
 #include "ocnewsapi.h"
 #include "oldreaderapi.h"
 #include "opmlurlreader.h"
