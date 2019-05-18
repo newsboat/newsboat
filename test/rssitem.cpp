@@ -4,7 +4,7 @@
 #include "cache.h"
 #include "configcontainer.h"
 
-namespace newsboat {
+using namespace newsboat;
 
 TEST_CASE("RssItem::sort_flags() cleans up flags", "[rss]")
 {
@@ -27,5 +27,3 @@ TEST_CASE("RssItem::sort_flags() cleans up flags", "[rss]")
 		REQUIRE(inputflags == item.flags());
 	}
 }
-
-} // namespace newsboat

@@ -5,7 +5,7 @@
 #include "configcontainer.h"
 #include "rssparser.h"
 
-namespace newsboat {
+using namespace newsboat;
 
 TEST_CASE("set_rssurl checks if query feed has a valid query", "[rss]")
 {
@@ -400,5 +400,3 @@ TEST_CASE(
 	f.set_rssurl("query:Title:unread = \"yes\" and age between 0:7");
 	REQUIRE(f.is_query_feed());
 }
-
-} // namespace newsboat

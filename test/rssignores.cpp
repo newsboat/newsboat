@@ -2,7 +2,7 @@
 
 #include "3rd-party/catch.hpp"
 
-namespace newsboat {
+using namespace newsboat;
 
 TEST_CASE(
 	"RssIgnores::matches_lastmodified() returns true if given url "
@@ -37,5 +37,3 @@ TEST_CASE(
 	REQUIRE(ignores.matches_resetunread("www.cool-website.com"));
 	REQUIRE_FALSE(ignores.matches_resetunread("www.smth.com"));
 }
-
-} // namespace newsboat
