@@ -1,4 +1,4 @@
-#include "rssppinternal.h"
+#include "atomparser.h"
 
 #include <cstring>
 
