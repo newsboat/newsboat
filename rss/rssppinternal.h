@@ -4,6 +4,8 @@
 #include <memory>
 #include <libxml/tree.h>
 
+#include "rssparser.h"
+
 #define CONTENT_URI "http://purl.org/rss/1.0/modules/content/"
 #define RDF_URI "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 #define ITUNES_URI "http://www.itunes.com/dtds/podcast-1.0.dtd"
@@ -18,29 +20,6 @@ namespace rsspp {
 
 class Feed;
 class Item;
-
-struct RssParser {
-	virtual void parse_feed(Feed& f, xmlNode* rootNode) = 0;
-	explicit RssParser(xmlDocPtr d)
-		: doc(d)
-	{
-	}
-	virtual ~RssParser() {}
-	static std::string __w3cdtf_to_rfc822(const std::string& w3cdtf);
-
-protected:
-	std::string get_content(xmlNode* node);
-	std::string get_xml_content(xmlNode* node);
-	void cleanup_namespaces(xmlNodePtr node);
-	std::string get_prop(xmlNode* node,
-		const std::string& prop,
-		const std::string& ns = "");
-	std::string w3cdtf_to_rfc822(const std::string& w3cdtf);
-	bool
-	node_is(xmlNode* node, const char* name, const char* ns_uri = nullptr);
-	xmlDocPtr doc;
-	std::string globalbase;
-};
 
 struct Rss09xParser : public RssParser {
 	void parse_feed(Feed& f, xmlNode* rootNode) override;
