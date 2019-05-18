@@ -6,6 +6,7 @@
 #include "exception.h"
 #include "feed.h"
 #include "item.h"
+#include "rsspp_uris.h"
 #include "utils.h"
 
 namespace rsspp {

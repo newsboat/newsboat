@@ -9,7 +9,9 @@
 #include "exception.h"
 #include "logger.h"
 #include "remoteapi.h"
-#include "rssppinternal.h"
+#include "rssparser.h"
+#include "rssparserfactory.h"
+#include "rsspp_uris.h"
 #include "strprintf.h"
 #include "utils.h"
 

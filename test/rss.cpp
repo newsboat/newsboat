@@ -5,8 +5,8 @@
 #include "configcontainer.h"
 #include "rss/exception.h"
 #include "rss/parser.h"
+#include "rss/rssparser.h"
 #include "rssparser.h"
-#include "rssppinternal.h"
 #include "test-helpers.h"
 
 TEST_CASE("Throws exception if file doesn't exist", "[rsspp::Parser]")

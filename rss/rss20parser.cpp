@@ -9,6 +9,8 @@
 #include "rss09xparser.h"
 #include "utils.h"
 
+#define RSS20USERLAND_URI "http://backend.userland.com/rss2"
+
 using namespace newsboat;
 
 namespace rsspp {
