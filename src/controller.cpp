@@ -43,6 +43,7 @@
 #include "newsblurapi.h"
 #include "newsblururlreader.h"
 #include "ocnewsapi.h"
+#include "ocnewsurlreader.h"
 #include "oldreaderapi.h"
 #include "opmlurlreader.h"
 #include "regexmanager.h"

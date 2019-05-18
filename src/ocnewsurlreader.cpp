@@ -1,7 +1,8 @@
-#include "ocnewsapi.h"
+#include "ocnewsurlreader.h"
 
 #include "fileurlreader.h"
 #include "logger.h"
+#include "remoteapi.h"
 #include "utils.h"
 
 namespace newsboat {
