@@ -5,31 +5,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "configparser.h"
-
 namespace newsboat {
-
-class ConfigHandlerException : public std::exception {
-public:
-	explicit ConfigHandlerException(const std::string& emsg)
-		: msg(emsg)
-	{
-	}
-	explicit ConfigHandlerException(ActionHandlerStatus e);
-	~ConfigHandlerException() throw() override {}
-	const char* what() const throw() override
-	{
-		return msg.c_str();
-	}
-	int status()
-	{
-		return 0;
-	}
-
-private:
-	const char* get_errmsg(ActionHandlerStatus e);
-	std::string msg;
-};
 
 class DbException : public std::exception {
 public:

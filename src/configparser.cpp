@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "configexception.h"
-#include "exceptions.h"
+#include "confighandlerexception.h"
 #include "logger.h"
 #include "strprintf.h"
 #include "tagsouppullparser.h"

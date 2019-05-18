@@ -46,16 +46,17 @@ src/cliargsparser.o: src/cliargsparser.cpp include/cliargsparser.h \
  include/strprintf.h
 src/colormanager.o: src/colormanager.cpp include/colormanager.h \
  include/configparser.h include/configactionhandler.h config.h \
- include/exceptions.h include/feedlistformaction.h include/history.h \
- include/listformaction.h include/formaction.h include/keymap.h \
- include/rss.h include/configcontainer.h include/matcher.h \
- filter/FilterParser.h include/utils.h include/logger.h \
- include/strprintf.h include/stflpp.h include/regexmanager.h \
- include/view.h include/colormanager.h include/controller.h \
- include/cache.h include/configpaths.h include/cliargsparser.h \
- include/feedcontainer.h include/filtercontainer.h include/fslock.h \
- include/opml.h include/urlreader.h include/queuemanager.h \
- include/reloader.h include/remoteapi.h include/filebrowserformaction.h \
+ include/confighandlerexception.h include/exceptions.h \
+ include/feedlistformaction.h include/history.h include/listformaction.h \
+ include/formaction.h include/keymap.h include/rss.h \
+ include/configcontainer.h include/matcher.h filter/FilterParser.h \
+ include/utils.h include/logger.h include/strprintf.h include/stflpp.h \
+ include/regexmanager.h include/view.h include/colormanager.h \
+ include/controller.h include/cache.h include/configpaths.h \
+ include/cliargsparser.h include/feedcontainer.h \
+ include/filtercontainer.h include/fslock.h include/opml.h \
+ include/urlreader.h include/queuemanager.h include/reloader.h \
+ include/remoteapi.h include/filebrowserformaction.h \
  include/htmlrenderer.h include/textformatter.h \
  include/filebrowserformaction.h include/helpformaction.h \
  include/itemlistformaction.h include/listformatter.h \
@@ -64,12 +65,15 @@ src/colormanager.o: src/colormanager.cpp include/colormanager.h \
  include/urlviewformaction.h include/utils.h
 src/configcontainer.o: src/configcontainer.cpp include/configcontainer.h \
  include/configparser.h include/configactionhandler.h config.h \
- include/configparser.h include/exceptions.h include/logger.h \
+ include/configparser.h include/confighandlerexception.h include/logger.h \
  include/strprintf.h include/strprintf.h include/utils.h \
  include/configcontainer.h include/logger.h
+src/confighandlerexception.o: src/confighandlerexception.cpp \
+ include/confighandlerexception.h include/configparser.h \
+ include/configactionhandler.h config.h
 src/configparser.o: src/configparser.cpp include/configparser.h \
  include/configactionhandler.h config.h include/configexception.h \
- include/exceptions.h include/configparser.h include/logger.h \
+ include/confighandlerexception.h include/configparser.h include/logger.h \
  include/strprintf.h include/strprintf.h include/tagsouppullparser.h \
  include/utils.h include/configcontainer.h include/logger.h
 src/configpaths.o: src/configpaths.cpp include/configpaths.h \
@@ -121,9 +125,9 @@ src/downloadthread.o: src/downloadthread.cpp include/downloadthread.h \
  include/configactionhandler.h include/logger.h config.h \
  include/strprintf.h
 src/exception.o: src/exception.cpp include/exception.h config.h \
- include/exceptions.h include/configparser.h \
- include/configactionhandler.h include/strprintf.h include/utils.h \
- include/configcontainer.h include/logger.h include/strprintf.h
+ include/exceptions.h include/strprintf.h include/utils.h \
+ include/configcontainer.h include/configparser.h \
+ include/configactionhandler.h include/logger.h include/strprintf.h
 src/feedcontainer.o: src/feedcontainer.cpp include/feedcontainer.h \
  include/rss.h include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/matcher.h filter/FilterParser.h \
@@ -175,7 +179,7 @@ src/fileurlreader.o: src/fileurlreader.cpp include/fileurlreader.h \
  config.h include/strprintf.h
 src/filtercontainer.o: src/filtercontainer.cpp include/filtercontainer.h \
  include/configparser.h include/configactionhandler.h config.h \
- include/exceptions.h include/matcher.h filter/FilterParser.h \
+ include/confighandlerexception.h include/matcher.h filter/FilterParser.h \
  include/strprintf.h include/utils.h include/configcontainer.h \
  include/logger.h include/strprintf.h
 src/fmtstrformatter.o: src/fmtstrformatter.cpp include/fmtstrformatter.h \
@@ -257,7 +261,8 @@ src/itemviewformaction.o: src/itemviewformaction.cpp \
  include/rss.h include/configcontainer.h include/matcher.h \
  filter/FilterParser.h include/utils.h include/logger.h config.h \
  include/strprintf.h include/stflpp.h include/htmlrenderer.h \
- include/textformatter.h include/regexmanager.h include/exceptions.h \
+ include/textformatter.h include/regexmanager.h \
+ include/confighandlerexception.h include/exceptions.h \
  include/fmtstrformatter.h include/itemrenderer.h include/logger.h \
  include/strprintf.h include/textformatter.h include/utils.h \
  include/view.h include/colormanager.h include/controller.h \
@@ -266,7 +271,7 @@ src/itemviewformaction.o: src/itemviewformaction.cpp \
  include/opml.h include/urlreader.h include/queuemanager.h \
  include/reloader.h include/remoteapi.h include/filebrowserformaction.h
 src/keymap.o: src/keymap.cpp include/keymap.h include/configparser.h \
- include/configactionhandler.h config.h include/exceptions.h \
+ include/configactionhandler.h config.h include/confighandlerexception.h \
  include/logger.h include/strprintf.h include/strprintf.h include/utils.h \
  include/configcontainer.h include/logger.h
 src/listformaction.o: src/listformaction.cpp include/listformaction.h \
@@ -289,10 +294,9 @@ src/listformatter.o: src/listformatter.cpp include/listformatter.h \
 src/logger.o: src/logger.cpp include/logger.h config.h \
  include/strprintf.h
 src/matcher.o: src/matcher.cpp include/matcher.h filter/FilterParser.h \
- include/exceptions.h include/configparser.h \
- include/configactionhandler.h include/logger.h config.h \
- include/strprintf.h include/utils.h include/configcontainer.h \
- include/logger.h
+ include/exceptions.h include/logger.h config.h include/strprintf.h \
+ include/utils.h include/configcontainer.h include/configparser.h \
+ include/configactionhandler.h include/logger.h
 src/newsblurapi.o: src/newsblurapi.cpp include/newsblurapi.h \
  include/remoteapi.h include/configcontainer.h include/configparser.h \
  include/configactionhandler.h rss/feed.h rss/item.h include/urlreader.h \
@@ -369,8 +373,8 @@ src/queuemanager.o: src/queuemanager.cpp include/queuemanager.h \
  include/utils.h include/stflpp.h include/utils.h
 src/regexmanager.o: src/regexmanager.cpp include/regexmanager.h \
  include/configparser.h include/configactionhandler.h include/matcher.h \
- filter/FilterParser.h config.h include/exceptions.h include/logger.h \
- include/strprintf.h include/strprintf.h include/utils.h \
+ filter/FilterParser.h config.h include/confighandlerexception.h \
+ include/logger.h include/strprintf.h include/strprintf.h include/utils.h \
  include/configcontainer.h include/logger.h
 src/reloader.o: src/reloader.cpp include/reloader.h \
  include/configcontainer.h include/configparser.h \
@@ -407,9 +411,10 @@ src/rss.o: src/rss.cpp include/rss.h include/configcontainer.h \
  include/configparser.h include/configactionhandler.h include/matcher.h \
  filter/FilterParser.h include/utils.h include/logger.h config.h \
  include/strprintf.h include/cache.h include/rss.h \
- include/configcontainer.h include/exceptions.h include/htmlrenderer.h \
- include/textformatter.h include/regexmanager.h include/logger.h \
- include/strprintf.h include/tagsouppullparser.h include/utils.h
+ include/configcontainer.h include/confighandlerexception.h \
+ include/exceptions.h include/htmlrenderer.h include/textformatter.h \
+ include/regexmanager.h include/logger.h include/strprintf.h \
+ include/tagsouppullparser.h include/utils.h
 src/rssparser.o: src/rssparser.cpp include/rssparser.h \
  include/remoteapi.h include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/rss.h include/matcher.h \
@@ -513,11 +518,11 @@ test/cliargsparser.o: test/cliargsparser.cpp 3rd-party/catch.hpp \
  test/test-helpers.h
 test/colormanager.o: test/colormanager.cpp include/colormanager.h \
  include/configparser.h include/configactionhandler.h 3rd-party/catch.hpp \
- include/exceptions.h
+ include/confighandlerexception.h
 test/configcontainer.o: test/configcontainer.cpp \
  include/configcontainer.h include/configparser.h \
- include/configactionhandler.h 3rd-party/catch.hpp include/configparser.h \
- include/exceptions.h include/keymap.h
+ include/configactionhandler.h 3rd-party/catch.hpp \
+ include/confighandlerexception.h include/configparser.h include/keymap.h
 test/configparser.o: test/configparser.cpp include/configparser.h \
  include/configactionhandler.h 3rd-party/catch.hpp test/test-helpers.h \
  include/keymap.h include/configparser.h
@@ -567,14 +572,14 @@ test/itemrenderer.o: test/itemrenderer.cpp 3rd-party/catch.hpp \
  include/htmlrenderer.h include/textformatter.h include/regexmanager.h \
  test/test-helpers.h
 test/keymap.o: test/keymap.cpp include/keymap.h include/configparser.h \
- include/configactionhandler.h 3rd-party/catch.hpp include/exceptions.h
+ include/configactionhandler.h 3rd-party/catch.hpp \
+ include/confighandlerexception.h
 test/listformatter.o: test/listformatter.cpp include/listformatter.h \
  include/regexmanager.h include/configparser.h \
  include/configactionhandler.h include/matcher.h filter/FilterParser.h \
  3rd-party/catch.hpp
 test/matcher.o: test/matcher.cpp include/matcher.h filter/FilterParser.h \
- 3rd-party/catch.hpp include/exceptions.h include/configparser.h \
- include/configactionhandler.h
+ 3rd-party/catch.hpp include/exceptions.h
 test/opml.o: test/opml.cpp include/opml.h include/feedcontainer.h \
  include/rss.h include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/matcher.h filter/FilterParser.h \
@@ -587,7 +592,8 @@ test/opmlurlreader.o: test/opmlurlreader.cpp include/opmlurlreader.h \
  test/test-helpers.h
 test/regexmanager.o: test/regexmanager.cpp include/regexmanager.h \
  include/configparser.h include/configactionhandler.h include/matcher.h \
- filter/FilterParser.h 3rd-party/catch.hpp include/exceptions.h
+ filter/FilterParser.h 3rd-party/catch.hpp \
+ include/confighandlerexception.h
 test/remoteapi.o: test/remoteapi.cpp include/remoteapi.h \
  include/configcontainer.h include/configparser.h \
  include/configactionhandler.h 3rd-party/catch.hpp

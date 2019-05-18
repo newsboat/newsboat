@@ -1,6 +1,7 @@
 #include "colormanager.h"
 
 #include "config.h"
+#include "confighandlerexception.h"
 #include "exceptions.h"
 #include "feedlistformaction.h"
 #include "filebrowserformaction.h"

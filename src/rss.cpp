@@ -15,6 +15,7 @@
 #include "cache.h"
 #include "config.h"
 #include "configcontainer.h"
+#include "confighandlerexception.h"
 #include "exceptions.h"
 #include "htmlrenderer.h"
 #include "logger.h"

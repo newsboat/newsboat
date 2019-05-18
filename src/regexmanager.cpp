@@ -5,7 +5,7 @@
 #include <stack>
 
 #include "config.h"
-#include "exceptions.h"
+#include "confighandlerexception.h"
 #include "logger.h"
 #include "strprintf.h"
 #include "utils.h"
