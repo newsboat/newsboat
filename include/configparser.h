@@ -2,9 +2,6 @@
 #define NEWSBOAT_CONFIGPARSER_H_
 
 #include <map>
-#include <set>
-#include <string>
-#include <vector>
 
 #include "configactionhandler.h"
 
@@ -40,17 +37,6 @@ private:
 	std::vector<std::vector<std::string>> parsed_content;
 	std::map<std::string, ConfigActionHandler*> action_handlers;
 	std::vector<std::string> included_files;
-};
-
-class NullConfigActionHandler : public ConfigActionHandler {
-public:
-	NullConfigActionHandler() {}
-	~NullConfigActionHandler() override {}
-	void handle_action(const std::string&,
-		const std::vector<std::string>&) override
-	{
-	}
-	void dump_config(std::vector<std::string>&) override {}
 };
 
 } // namespace newsboat

@@ -337,9 +337,10 @@ src/pbcontroller.o: src/pbcontroller.cpp include/pbcontroller.h \
  include/queueloader.h include/pbcontroller.h include/colormanager.h \
  config.h include/configcontainer.h include/exceptions.h \
  include/globals.h include/keymap.h include/logger.h include/strprintf.h \
- include/pbview.h include/colormanager.h include/keymap.h \
- include/stflpp.h include/poddlthread.h include/queueloader.h \
- include/strprintf.h include/utils.h include/logger.h
+ include/nullconfigactionhandler.h include/pbview.h \
+ include/colormanager.h include/keymap.h include/stflpp.h \
+ include/poddlthread.h include/queueloader.h include/strprintf.h \
+ include/utils.h include/logger.h
 src/pbview.o: src/pbview.cpp include/pbview.h include/colormanager.h \
  include/configparser.h include/configactionhandler.h include/keymap.h \
  include/stflpp.h config.h include/configcontainer.h stfl/dllist.h \

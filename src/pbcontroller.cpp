@@ -19,6 +19,7 @@
 #include "globals.h"
 #include "keymap.h"
 #include "logger.h"
+#include "nullconfigactionhandler.h"
 #include "pbview.h"
 #include "poddlthread.h"
 #include "queueloader.h"
