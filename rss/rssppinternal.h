@@ -2,8 +2,7 @@
 #define NEWSBOAT_RSSPP_INTERNAL_H_
 
 #include <memory>
-
-#include "rsspp.h"
+#include <libxml/tree.h>
 
 #define CONTENT_URI "http://purl.org/rss/1.0/modules/content/"
 #define RDF_URI "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -16,6 +15,9 @@
 #define RSS20USERLAND_URI "http://backend.userland.com/rss2"
 
 namespace rsspp {
+
+class Feed;
+class Item;
 
 struct RssParser {
 	virtual void parse_feed(Feed& f, xmlNode* rootNode) = 0;

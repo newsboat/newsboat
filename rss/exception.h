@@ -2,6 +2,7 @@
 #define NEWSBOAT_RSSPPEXCEPTION_H_
 
 #include <exception>
+#include <string>
 
 namespace rsspp {
 

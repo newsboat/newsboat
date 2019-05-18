@@ -7,6 +7,7 @@
 
 #include "3rd-party/json.hpp"
 #include "remoteapi.h"
+#include "rss/feed.h"
 #include "strprintf.h"
 
 using json = nlohmann::json;

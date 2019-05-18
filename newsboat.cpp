@@ -12,7 +12,7 @@
 #include "exception.h"
 #include "exceptions.h"
 #include "rss.h"
-#include "rsspp.h"
+#include "rss/parser.h"
 #include "view.h"
 #include "xlicense.h"
 

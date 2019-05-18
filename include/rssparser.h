@@ -5,7 +5,11 @@
 
 #include "remoteapi.h"
 #include "rss.h"
-#include "rsspp.h"
+#include "rss/feed.h"
+
+namespace rsspp {
+class Item;
+}
 
 namespace newsboat {
 

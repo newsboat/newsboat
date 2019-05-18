@@ -1,9 +1,10 @@
 #include "rss.h"
-#include "rsspp.h"
 
 #include "3rd-party/catch.hpp"
 #include "cache.h"
 #include "configcontainer.h"
+#include "rss/exception.h"
+#include "rss/parser.h"
 #include "rssparser.h"
 #include "rssppinternal.h"
 #include "test-helpers.h"

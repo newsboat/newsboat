@@ -3,6 +3,9 @@
 #include <cstring>
 
 #include "config.h"
+#include "exception.h"
+#include "feed.h"
+#include "item.h"
 #include "utils.h"
 
 using namespace newsboat;

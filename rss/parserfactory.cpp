@@ -1,6 +1,8 @@
 #include "rssppinternal.h"
 
 #include "config.h"
+#include "exception.h"
+#include "feed.h"
 
 namespace rsspp {
 

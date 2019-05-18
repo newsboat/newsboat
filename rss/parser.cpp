@@ -1,4 +1,4 @@
-#include "rsspp.h"
+#include "parser.h"
 
 #include <cstring>
 #include <curl/curl.h>
@@ -6,6 +6,7 @@
 #include <libxml/tree.h>
 
 #include "config.h"
+#include "exception.h"
 #include "logger.h"
 #include "remoteapi.h"
 #include "rssppinternal.h"

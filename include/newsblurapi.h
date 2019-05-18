@@ -4,7 +4,7 @@
 #include <json.h>
 
 #include "remoteapi.h"
-#include "rsspp.h"
+#include "rss/feed.h"
 #include "urlreader.h"
 
 #define ID_SEPARATOR "/////"

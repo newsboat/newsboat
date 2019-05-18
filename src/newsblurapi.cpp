@@ -6,7 +6,6 @@
 
 #include "json.h"
 #include "remoteapi.h"
-#include "rsspp.h"
 #include "strprintf.h"
 #include "utils.h"
 

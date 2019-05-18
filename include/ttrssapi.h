@@ -4,8 +4,11 @@
 #include "3rd-party/json.hpp"
 #include "cache.h"
 #include "remoteapi.h"
-#include "rsspp.h"
 #include "urlreader.h"
+
+namespace rsspp {
+class Feed;
+}
 
 namespace newsboat {
 

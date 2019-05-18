@@ -11,7 +11,7 @@
 #include "fmtstrformatter.h"
 #include "reloadrangethread.h"
 #include "reloadthread.h"
-#include "rss/rsspp.h"
+#include "rss/exception.h"
 #include "rssparser.h"
 #include "utils.h"
 #include "view.h"

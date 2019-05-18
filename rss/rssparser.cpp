@@ -3,6 +3,8 @@
 #include <cstring>
 #include <libxml/tree.h>
 
+#include "exception.h"
+
 namespace rsspp {
 
 std::string RssParser::get_content(xmlNode* node)

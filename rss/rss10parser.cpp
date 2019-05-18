@@ -3,6 +3,9 @@
 #include <cstring>
 
 #include "config.h"
+#include "exception.h"
+#include "feed.h"
+#include "item.h"
 
 #define RSS_1_0_NS "http://purl.org/rss/1.0/"
 
