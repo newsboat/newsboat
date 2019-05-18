@@ -4,12 +4,13 @@
 #include "formaction.h"
 #include "htmlrenderer.h"
 #include "regexmanager.h"
-#include "rss.h"
 #include "textformatter.h"
 
 namespace newsboat {
 
+class Cache;
 class ItemListFormAction;
+class RssItem;
 
 class ItemViewFormAction : public FormAction {
 public:

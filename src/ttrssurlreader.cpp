@@ -2,6 +2,7 @@
 
 #include "fileurlreader.h"
 #include "logger.h"
+#include "utils.h"
 
 namespace newsboat {
 

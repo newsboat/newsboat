@@ -45,7 +45,6 @@ extern "C" {
 #include "matcherexception.h"
 #include "regexmanager.h"
 #include "reloadthread.h"
-#include "rss.h"
 #include "rssfeed.h"
 #include "selectformaction.h"
 #include "selecttag.h"

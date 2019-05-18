@@ -1,6 +1,8 @@
 #ifndef NEWSBOAT_OLDREADERAPI_H_
 #define NEWSBOAT_OLDREADERAPI_H_
 
+#include <libxml/tree.h>
+
 #include "cache.h"
 #include "remoteapi.h"
 

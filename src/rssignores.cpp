@@ -1,4 +1,4 @@
-#include "rss.h"
+#include "rssignores.h"
 
 #include <algorithm>
 #include <cerrno>

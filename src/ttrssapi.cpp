@@ -6,9 +6,11 @@
 #include <time.h>
 
 #include "3rd-party/json.hpp"
+#include "logger.h"
 #include "remoteapi.h"
 #include "rss/feed.h"
 #include "strprintf.h"
+#include "utils.h"
 
 using json = nlohmann::json;
 

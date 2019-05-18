@@ -1,16 +1,18 @@
 #ifndef NEWSBOAT_FORMACTION_H_
 #define NEWSBOAT_FORMACTION_H_
 
+#include <memory>
 #include <string>
 #include <vector>
 
 #include "history.h"
 #include "keymap.h"
-#include "rss.h"
 #include "stflpp.h"
 
 namespace newsboat {
 
+class ConfigContainer;
+class RssFeed;
 class View;
 
 struct KeyMapHintEntry {

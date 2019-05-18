@@ -1,14 +1,18 @@
 #ifndef NEWSBOAT_CACHE_H_
 #define NEWSBOAT_CACHE_H_
 
+#include <memory>
 #include <mutex>
 #include <sqlite3.h>
 #include <unordered_set>
 
 #include "configcontainer.h"
-#include "rss.h"
 
 namespace newsboat {
+
+class RssFeed;
+class RssIgnores;
+class RssItem;
 
 struct SchemaVersion {
 	unsigned int major, minor;

@@ -1,6 +1,8 @@
 #ifndef NEWSBOAT_FEEDHQAPI_H_
 #define NEWSBOAT_FEEDHQAPI_H_
 
+#include <libxml/tree.h>
+
 #include "cache.h"
 #include "remoteapi.h"
 

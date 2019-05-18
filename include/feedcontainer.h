@@ -2,12 +2,16 @@
 #define NEWSBOAT_FEEDCONTAINER_H_
 
 #include <memory>
+#include <mutex>
 #include <string>
 #include <vector>
 
-#include "rss.h"
+#include "configcontainer.h"
 
 namespace newsboat {
+
+class RssFeed;
+
 class FeedContainer {
 public:
 	FeedContainer() = default;

@@ -12,8 +12,8 @@
 #include "dbexception.h"
 #include "exception.h"
 #include "matcherexception.h"
-#include "rss.h"
 #include "rss/parser.h"
+#include "utils.h"
 #include "view.h"
 #include "xlicense.h"
 

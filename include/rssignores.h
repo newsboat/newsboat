@@ -1,23 +1,16 @@
-#ifndef NEWSBOAT_RSS_H_
-#define NEWSBOAT_RSS_H_
+#ifndef NEWSBOAT_RSSIGNORES_H_
+#define NEWSBOAT_RSSIGNORES_H_
 
-#include <memory>
-#include <mutex>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
-#include "configcontainer.h"
-#include "matchable.h"
+#include "configactionhandler.h"
 #include "matcher.h"
 #include "rssitem.h"
-#include "utils.h"
 
 namespace newsboat {
 
 typedef std::pair<std::string, Matcher*> FeedUrlExprPair;
-
-class Cache;
 
 class RssIgnores : public ConfigActionHandler {
 public:
@@ -38,4 +31,4 @@ private:
 
 } // namespace newsboat
 
-#endif /* NEWSBOAT_RSS_H_ */
+#endif /* NEWSBOAT_RSSIGNORES_H_ */

@@ -5,7 +5,6 @@
 #include "cache.h"
 #include "configcontainer.h"
 #include "feedcontainer.h"
-#include "rss.h"
 #include "rssfeed.h"
 #include "test-helpers.h"
 

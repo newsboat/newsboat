@@ -1,6 +1,8 @@
 #ifndef NEWSBOAT_INOREADERAPI_H_
 #define NEWSBOAT_INOREADERAPI_H_
 
+#include <libxml/tree.h>
+
 #include "cache.h"
 #include "remoteapi.h"
 #include "urlreader.h"
