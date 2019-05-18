@@ -10,6 +10,7 @@
 #include "logger.h"
 #include "matchable.h"
 #include "matcherexception.h"
+#include "scopemeasure.h"
 #include "utils.h"
 
 namespace newsboat {

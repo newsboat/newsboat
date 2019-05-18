@@ -13,18 +13,6 @@
 
 namespace newsboat {
 
-class ScopeMeasure {
-public:
-	ScopeMeasure(const std::string& func, Level ll = Level::DEBUG);
-	~ScopeMeasure();
-	void stopover(const std::string& son = "");
-
-private:
-	struct timeval tv1, tv2;
-	std::string funcname;
-	Level lvl;
-};
-
 namespace utils {
 	std::vector<std::string> tokenize(const std::string& str,
 		std::string delimiters = " \r\n\t");

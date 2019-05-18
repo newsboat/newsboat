@@ -12,6 +12,7 @@
 #include "logger.h"
 #include "matcherexception.h"
 #include "rssfeed.h"
+#include "scopemeasure.h"
 #include "strprintf.h"
 #include "utils.h"
 #include "view.h"

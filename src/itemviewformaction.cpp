@@ -11,6 +11,7 @@
 #include "itemrenderer.h"
 #include "logger.h"
 #include "rssfeed.h"
+#include "scopemeasure.h"
 #include "strprintf.h"
 #include "textformatter.h"
 #include "utils.h"

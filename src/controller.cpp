@@ -51,6 +51,7 @@
 #include "remoteapi.h"
 #include "rssfeed.h"
 #include "rssparser.h"
+#include "scopemeasure.h"
 #include "stflpp.h"
 #include "strprintf.h"
 #include "ttrssapi.h"

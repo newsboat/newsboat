@@ -456,6 +456,8 @@ src/rssparser.o: src/rssparser.cpp include/rssparser.h \
  include/utils.h include/logger.h include/rssignores.h \
  include/strprintf.h include/ttrssapi.h 3rd-party/json.hpp \
  include/cache.h include/utils.h
+src/scopemeasure.o: src/scopemeasure.cpp include/scopemeasure.h \
+ include/logger.h config.h include/strprintf.h
 src/selectformaction.o: src/selectformaction.cpp \
  include/selectformaction.h include/filtercontainer.h \
  include/configparser.h include/configactionhandler.h \

@@ -15,6 +15,7 @@
 #include "rss/exception.h"
 #include "rssfeed.h"
 #include "rssparser.h"
+#include "scopemeasure.h"
 #include "utils.h"
 #include "view.h"
 

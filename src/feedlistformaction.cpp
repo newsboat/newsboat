@@ -15,6 +15,7 @@
 #include "logger.h"
 #include "reloader.h"
 #include "rssfeed.h"
+#include "scopemeasure.h"
 #include "strprintf.h"
 #include "utils.h"
 #include "view.h"
