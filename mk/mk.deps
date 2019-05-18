@@ -99,7 +99,8 @@ src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  include/itemrenderer.h include/htmlrenderer.h include/textformatter.h \
  include/logger.h include/newsblurapi.h rss/feed.h rss/item.h \
  include/newsblururlreader.h include/ocnewsapi.h \
- include/ocnewsurlreader.h include/oldreaderapi.h include/opmlurlreader.h \
+ include/ocnewsurlreader.h include/oldreaderapi.h \
+ include/oldreaderurlreader.h include/opmlurlreader.h \
  include/regexmanager.h include/remoteapi.h include/rssparser.h \
  include/stflpp.h include/strprintf.h include/ttrssapi.h \
  3rd-party/json.hpp include/utils.h include/view.h include/controller.h \
@@ -326,15 +327,14 @@ src/oldreaderapi.o: src/oldreaderapi.cpp include/oldreaderapi.h \
  include/cache.h include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/rss.h include/matchable.h \
  include/matcher.h filter/FilterParser.h include/utils.h include/logger.h \
- config.h include/strprintf.h include/remoteapi.h include/urlreader.h \
- include/strprintf.h include/utils.h
+ config.h include/strprintf.h include/remoteapi.h include/strprintf.h \
+ include/utils.h
 src/oldreaderurlreader.o: src/oldreaderurlreader.cpp \
- include/oldreaderapi.h include/cache.h include/configcontainer.h \
- include/configparser.h include/configactionhandler.h include/rss.h \
- include/matchable.h include/matcher.h filter/FilterParser.h \
- include/utils.h include/logger.h config.h include/strprintf.h \
- include/remoteapi.h include/urlreader.h include/fileurlreader.h \
- include/logger.h
+ include/oldreaderurlreader.h include/urlreader.h \
+ include/configcontainer.h include/configparser.h \
+ include/configactionhandler.h include/fileurlreader.h include/logger.h \
+ config.h include/strprintf.h include/remoteapi.h \
+ include/configcontainer.h include/utils.h include/logger.h
 src/opml.o: src/opml.cpp include/opml.h include/feedcontainer.h \
  include/rss.h include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/matchable.h include/matcher.h \

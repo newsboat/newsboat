@@ -1,9 +1,8 @@
-#ifndef NEWSBOAT_GOOGLEAPI_H_
-#define NEWSBOAT_GOOGLEAPI_H_
+#ifndef NEWSBOAT_OLDREADERAPI_H_
+#define NEWSBOAT_OLDREADERAPI_H_
 
 #include "cache.h"
 #include "remoteapi.h"
-#include "urlreader.h"
 
 namespace newsboat {
 
@@ -35,22 +34,6 @@ private:
 	std::string auth_header;
 };
 
-class OldReaderUrlReader : public UrlReader {
-public:
-	OldReaderUrlReader(ConfigContainer* c,
-		const std::string& url_file,
-		RemoteApi* a);
-	~OldReaderUrlReader() override;
-	void write_config() override;
-	void reload() override;
-	std::string get_source() override;
-
-private:
-	ConfigContainer* cfg;
-	std::string file;
-	RemoteApi* api;
-};
-
 } // namespace newsboat
 
-#endif /* NEWSBOAT_GOOGLEAPI_H_ */
+#endif /* NEWSBOAT_OLDREADERAPI_H_ */

@@ -45,6 +45,7 @@
 #include "ocnewsapi.h"
 #include "ocnewsurlreader.h"
 #include "oldreaderapi.h"
+#include "oldreaderurlreader.h"
 #include "opmlurlreader.h"
 #include "regexmanager.h"
 #include "remoteapi.h"
