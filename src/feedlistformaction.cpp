@@ -14,6 +14,7 @@
 #include "listformatter.h"
 #include "logger.h"
 #include "reloader.h"
+#include "rssfeed.h"
 #include "strprintf.h"
 #include "utils.h"
 #include "view.h"

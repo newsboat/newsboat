@@ -49,6 +49,7 @@
 #include "opmlurlreader.h"
 #include "regexmanager.h"
 #include "remoteapi.h"
+#include "rssfeed.h"
 #include "rssparser.h"
 #include "stflpp.h"
 #include "strprintf.h"

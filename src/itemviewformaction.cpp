@@ -10,6 +10,7 @@
 #include "fmtstrformatter.h"
 #include "itemrenderer.h"
 #include "logger.h"
+#include "rssfeed.h"
 #include "strprintf.h"
 #include "textformatter.h"
 #include "utils.h"

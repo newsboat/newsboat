@@ -16,6 +16,7 @@
 #include "logger.h"
 #include "matcherexception.h"
 #include "rss.h"
+#include "rssfeed.h"
 #include "strprintf.h"
 #include "utils.h"
 

@@ -6,6 +6,7 @@
 #include "configpaths.h"
 #include "fmtstrformatter.h"
 #include "rss.h"
+#include "rssfeed.h"
 #include "stflpp.h"
 #include "utils.h"
 

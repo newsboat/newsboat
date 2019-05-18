@@ -5,6 +5,7 @@
 
 #include "cache.h"
 #include "dbexception.h"
+#include "rssfeed.h"
 #include "strprintf.h"
 #include "utils.h"
 

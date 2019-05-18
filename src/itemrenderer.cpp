@@ -5,6 +5,7 @@
 #include "configcontainer.h"
 #include "htmlrenderer.h"
 #include "rss.h"
+#include "rssfeed.h"
 #include "textformatter.h"
 
 namespace newsboat {

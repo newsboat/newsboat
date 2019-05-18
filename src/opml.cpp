@@ -3,6 +3,8 @@
 #include <cassert>
 #include <cstring>
 
+#include "rssfeed.h"
+
 namespace newsboat {
 
 xmlDocPtr opml::generate(const FeedContainer& feedcontainer)

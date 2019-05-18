@@ -1,10 +1,11 @@
 #include "opml.h"
 
 #include <libxml/xmlsave.h>
-#include "cache.h"
-#include "fileurlreader.h"
 
 #include "3rd-party/catch.hpp"
+#include "cache.h"
+#include "fileurlreader.h"
+#include "rssfeed.h"
 #include "test-helpers.h"
 
 using namespace newsboat;

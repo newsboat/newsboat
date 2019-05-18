@@ -16,8 +16,9 @@
 #include "rss.h"
 #include "rss/exception.h"
 #include "rss/parser.h"
-#include "strprintf.h"
 #include "rss/rssparser.h"
+#include "rssfeed.h"
+#include "strprintf.h"
 #include "ttrssapi.h"
 #include "utils.h"
 

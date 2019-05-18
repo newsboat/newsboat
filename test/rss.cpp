@@ -6,6 +6,7 @@
 #include "rss/exception.h"
 #include "rss/parser.h"
 #include "rss/rssparser.h"
+#include "rssfeed.h"
 #include "rssparser.h"
 #include "test-helpers.h"
 
