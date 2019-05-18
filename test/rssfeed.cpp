@@ -7,7 +7,8 @@
 
 using namespace newsboat;
 
-TEST_CASE("set_rssurl checks if query feed has a valid query", "[rss]")
+TEST_CASE("RssFeed::set_rssurl() checks if query feed has a valid query",
+		"[rss]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
