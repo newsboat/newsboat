@@ -1,8 +1,12 @@
-#include "rssppinternal.h"
+#include "rssparserfactory.h"
 
+#include "atomparser.h"
 #include "config.h"
 #include "exception.h"
 #include "feed.h"
+#include "rss09xparser.h"
+#include "rss10parser.h"
+#include "rss20parser.h"
 
 namespace rsspp {
 

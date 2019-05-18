@@ -9,6 +9,7 @@
 #include "rss20parser.h"
 #include "rss10parser.h"
 #include "atomparser.h"
+#include "rssparserfactory.h"
 
 #define CONTENT_URI "http://purl.org/rss/1.0/modules/content/"
 #define RDF_URI "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -19,16 +20,5 @@
 #define MEDIA_RSS_URI "http://search.yahoo.com/mrss/"
 #define XML_URI "http://www.w3.org/XML/1998/namespace"
 #define RSS20USERLAND_URI "http://backend.userland.com/rss2"
-
-namespace rsspp {
-
-class Feed;
-class Item;
-
-struct RssParserFactory {
-	static std::shared_ptr<RssParser> get_object(Feed& f, xmlDocPtr doc);
-};
-
-} // namespace rsspp
 
 #endif /* NEWSBOAT_RSSPP_INTERNAL_H_ */
