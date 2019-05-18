@@ -64,3 +64,13 @@ Drop hyphens, e.g. a class dealing with TT-RSS service would be named
 ### Method names
 
 Use snake case, e.g. "do_the_work".
+
+### File hierarchy
+
+Header files are stored in "include" directory. Source files are in "src". Each
+pair of files only describe one class. "Helper" `struct`s should be declared in
+the same header as the class they're helping.
+
+If a big group of classes are sufficiently isolated from the rest, they can be
+stored in a separate directory and compiled into a static library. Examples:
+"filter" and "rss" directories.
