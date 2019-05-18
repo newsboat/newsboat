@@ -54,6 +54,7 @@
 #include "stflpp.h"
 #include "strprintf.h"
 #include "ttrssapi.h"
+#include "ttrssurlreader.h"
 #include "utils.h"
 #include "view.h"
 

@@ -1,7 +1,8 @@
-#include "ttrssapi.h"
+#include "ttrssurlreader.h"
 
 #include "fileurlreader.h"
 #include "logger.h"
+#include "remoteapi.h"
 #include "utils.h"
 
 namespace newsboat {

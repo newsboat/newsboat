@@ -4,7 +4,6 @@
 #include "3rd-party/json.hpp"
 #include "cache.h"
 #include "remoteapi.h"
-#include "urlreader.h"
 
 namespace rsspp {
 class Feed;
@@ -47,19 +46,6 @@ private:
 	bool single;
 	std::mutex auth_lock;
 	int api_level = -1;
-};
-
-class TtRssUrlReader : public UrlReader {
-public:
-	TtRssUrlReader(const std::string& url_file, RemoteApi* a);
-	~TtRssUrlReader() override;
-	void write_config() override;
-	void reload() override;
-	std::string get_source() override;
-
-private:
-	std::string file;
-	RemoteApi* api;
 };
 
 } // namespace newsboat
