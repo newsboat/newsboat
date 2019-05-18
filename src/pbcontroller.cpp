@@ -15,6 +15,7 @@
 #include "colormanager.h"
 #include "config.h"
 #include "configcontainer.h"
+#include "configexception.h"
 #include "exceptions.h"
 #include "globals.h"
 #include "keymap.h"

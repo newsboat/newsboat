@@ -9,22 +9,6 @@
 
 namespace newsboat {
 
-class ConfigException : public std::exception {
-public:
-	explicit ConfigException(const std::string& errmsg)
-		: msg(errmsg)
-	{
-	}
-	~ConfigException() throw() override {}
-	const char* what() const throw() override
-	{
-		return msg.c_str();
-	}
-
-private:
-	std::string msg;
-};
-
 class ConfigHandlerException : public std::exception {
 public:
 	explicit ConfigHandlerException(const std::string& emsg)

@@ -3,6 +3,7 @@
 #include <cassert>
 
 #include "config.h"
+#include "configexception.h"
 #include "exceptions.h"
 #include "logger.h"
 #include "strprintf.h"

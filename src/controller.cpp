@@ -27,6 +27,7 @@
 #include "colormanager.h"
 #include "config.h"
 #include "configcontainer.h"
+#include "configexception.h"
 #include "configparser.h"
 #include "downloadthread.h"
 #include "exception.h"
