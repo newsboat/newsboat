@@ -5,6 +5,8 @@
 #include <libxml/tree.h>
 
 #include "rssparser.h"
+#include "rss09xparser.h"
+#include "rss20parser.h"
 
 #define CONTENT_URI "http://purl.org/rss/1.0/modules/content/"
 #define RDF_URI "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -20,31 +22,6 @@ namespace rsspp {
 
 class Feed;
 class Item;
-
-struct Rss09xParser : public RssParser {
-	void parse_feed(Feed& f, xmlNode* rootNode) override;
-	explicit Rss09xParser(xmlDocPtr doc)
-		: RssParser(doc)
-		, ns(nullptr)
-	{
-	}
-	~Rss09xParser() override;
-
-protected:
-	const char* ns;
-
-private:
-	Item parse_item(xmlNode* itemNode);
-};
-
-struct Rss20Parser : public Rss09xParser {
-	explicit Rss20Parser(xmlDocPtr doc)
-		: Rss09xParser(doc)
-	{
-	}
-	void parse_feed(Feed& f, xmlNode* rootNode) override;
-	~Rss20Parser() override {}
-};
 
 struct Rss10Parser : public RssParser {
 	void parse_feed(Feed& f, xmlNode* rootNode) override;
