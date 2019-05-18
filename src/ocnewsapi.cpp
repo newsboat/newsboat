@@ -86,7 +86,7 @@ std::vector<TaggedFeedUrl> OcNewsApi::get_subscribed_urls()
 	rsspp::Feed starred;
 	starred.title = "Starred";
 	starred.link = server;
-	starred.rss_version = rsspp::OCNEWS_JSON;
+	starred.rss_version = rsspp::Feed::OCNEWS_JSON;
 
 	known_feeds["Starred"] = std::make_pair(starred, 0);
 	result.push_back(TaggedFeedUrl("Starred", std::vector<std::string>()));
@@ -103,7 +103,7 @@ std::vector<TaggedFeedUrl> OcNewsApi::get_subscribed_urls()
 		json_object* node;
 		rsspp::Feed current_feed;
 
-		current_feed.rss_version = rsspp::OCNEWS_JSON;
+		current_feed.rss_version = rsspp::Feed::OCNEWS_JSON;
 
 		json_object_object_get_ex(feed, "id", &node);
 		long feed_id = json_object_get_int(node);

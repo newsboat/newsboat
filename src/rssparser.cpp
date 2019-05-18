@@ -370,10 +370,12 @@ void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed)
 		x->set_feedurl(feed->rssurl());
 		x->set_feedptr(feed);
 
-		if ((f.rss_version == rsspp::ATOM_1_0 ||
-			    f.rss_version == rsspp::TTRSS_JSON ||
-			    f.rss_version == rsspp::NEWSBLUR_JSON ||
-			    f.rss_version == rsspp::OCNEWS_JSON) &&
+		// TODO: replace this with a switch to get compiler errors when new
+		// entry is added to the enum.
+		if ((f.rss_version == rsspp::Feed::ATOM_1_0 ||
+			    f.rss_version == rsspp::Feed::TTRSS_JSON ||
+			    f.rss_version == rsspp::Feed::NEWSBLUR_JSON ||
+			    f.rss_version == rsspp::Feed::OCNEWS_JSON) &&
 			item.labels.size() > 0) {
 			auto start = item.labels.begin();
 			auto finish = item.labels.end();

@@ -162,8 +162,9 @@ src/filtercontainer.o: src/filtercontainer.cpp include/filtercontainer.h \
  filter/FilterParser.h include/strprintf.h include/utils.h \
  include/configcontainer.h include/logger.h include/strprintf.h
 src/fmtstrformatter.o: src/fmtstrformatter.cpp include/fmtstrformatter.h \
- include/logger.h config.h include/strprintf.h include/utils.h \
- include/configcontainer.h include/configparser.h include/logger.h
+ include/logger.h config.h include/strprintf.h include/rs_utils.h \
+ include/utils.h include/configcontainer.h include/configparser.h \
+ include/logger.h
 src/formaction.o: src/formaction.cpp include/formaction.h \
  include/history.h include/keymap.h include/configparser.h include/rss.h \
  include/configcontainer.h include/matcher.h filter/FilterParser.h \
@@ -469,14 +470,20 @@ test/cache.o: test/cache.cpp include/cache.h include/configcontainer.h \
  include/rssparser.h include/remoteapi.h rss/rsspp.h include/remoteapi.h \
  test/test-helpers.h
 test/cliargsparser.o: test/cliargsparser.cpp 3rd-party/catch.hpp \
- include/cliargsparser.h include/logger.h config.h include/strprintf.h
+ include/cliargsparser.h include/logger.h config.h include/strprintf.h \
+ test/test-helpers.h
 test/colormanager.o: test/colormanager.cpp include/colormanager.h \
  include/configparser.h 3rd-party/catch.hpp include/exceptions.h
 test/configcontainer.o: test/configcontainer.cpp \
  include/configcontainer.h include/configparser.h 3rd-party/catch.hpp \
  include/configparser.h include/exceptions.h include/keymap.h
 test/configparser.o: test/configparser.cpp include/configparser.h \
- 3rd-party/catch.hpp include/keymap.h include/configparser.h
+ 3rd-party/catch.hpp test/test-helpers.h include/keymap.h \
+ include/configparser.h
+test/configpaths.o: test/configpaths.cpp include/configpaths.h \
+ include/cliargsparser.h include/logger.h config.h include/strprintf.h \
+ 3rd-party/catch.hpp test/test-helpers.h include/utils.h \
+ include/configcontainer.h include/configparser.h
 test/feedcontainer.o: test/feedcontainer.cpp 3rd-party/catch.hpp \
  include/cache.h include/configcontainer.h include/configparser.h \
  include/rss.h include/matcher.h filter/FilterParser.h include/utils.h \

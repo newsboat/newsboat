@@ -37,7 +37,7 @@ TEST_CASE("Extracts data from RSS 0.91", "[rsspp::Parser]")
 
 	REQUIRE_NOTHROW(f = p.parse_file("data/rss091_1.xml"));
 
-	REQUIRE(f.rss_version == rsspp::RSS_0_91);
+	REQUIRE(f.rss_version == rsspp::Feed::RSS_0_91);
 	REQUIRE(f.title == "Example Channel");
 	REQUIRE(f.description == "an example feed");
 	REQUIRE(f.link == "http://example.com/");
@@ -60,7 +60,7 @@ TEST_CASE("Extracts data from RSS 0.92", "[rsspp::Parser]")
 
 	REQUIRE_NOTHROW(f = p.parse_file("data/rss092_1.xml"));
 
-	REQUIRE(f.rss_version == rsspp::RSS_0_92);
+	REQUIRE(f.rss_version == rsspp::Feed::RSS_0_92);
 	REQUIRE(f.title == "Example Channel");
 	REQUIRE(f.description == "an example feed");
 	REQUIRE(f.link == "http://example.com/");
@@ -117,7 +117,7 @@ TEST_CASE("Extracts data from RSS 1.0", "[rsspp::Parser]")
 
 	REQUIRE_NOTHROW(f = p.parse_file("data/rss10_1.xml"));
 
-	REQUIRE(f.rss_version == rsspp::RSS_1_0);
+	REQUIRE(f.rss_version == rsspp::Feed::RSS_1_0);
 
 	REQUIRE(f.title == "Example Dot Org");
 	REQUIRE(f.link == "http://www.example.org");
@@ -139,7 +139,7 @@ TEST_CASE("Extracts data from Atom 1.0", "[rsspp::Parser]")
 
 	REQUIRE_NOTHROW(f = p.parse_file("data/atom10_1.xml"));
 
-	REQUIRE(f.rss_version == rsspp::ATOM_1_0);
+	REQUIRE(f.rss_version == rsspp::Feed::ATOM_1_0);
 
 	REQUIRE(f.title == "test atom");
 	REQUIRE(f.title_type == "text");

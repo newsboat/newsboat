@@ -11,21 +11,6 @@
 
 namespace rsspp {
 
-enum Version {
-	UNKNOWN = 0,
-	RSS_0_91,
-	RSS_0_92,
-	RSS_1_0,
-	RSS_2_0,
-	ATOM_0_3,
-	ATOM_1_0,
-	RSS_0_94,
-	ATOM_0_3_NONS,
-	TTRSS_JSON,
-	NEWSBLUR_JSON,
-	OCNEWS_JSON
-};
-
 class Item {
 public:
 	Item()
@@ -64,6 +49,21 @@ public:
 
 class Feed {
 public:
+	enum Version {
+		UNKNOWN = 0,
+		RSS_0_91,
+		RSS_0_92,
+		RSS_1_0,
+		RSS_2_0,
+		ATOM_0_3,
+		ATOM_1_0,
+		RSS_0_94,
+		ATOM_0_3_NONS,
+		TTRSS_JSON,
+		NEWSBLUR_JSON,
+		OCNEWS_JSON
+	};
+
 	Feed()
 		: rss_version(UNKNOWN)
 	{
