@@ -439,10 +439,10 @@ src/stflpp.o: src/stflpp.cpp include/stflpp.h include/exception.h \
  include/configactionhandler.h include/logger.h
 src/strprintf.o: src/strprintf.cpp include/strprintf.h
 src/tagsouppullparser.o: src/tagsouppullparser.cpp \
- include/tagsouppullparser.h config.h include/exceptions.h \
- include/configparser.h include/configactionhandler.h include/logger.h \
+ include/tagsouppullparser.h config.h include/logger.h \
  include/strprintf.h include/utils.h include/configcontainer.h \
- include/logger.h
+ include/configparser.h include/configactionhandler.h include/logger.h \
+ include/xmlexception.h
 src/textformatter.o: src/textformatter.cpp include/textformatter.h \
  include/regexmanager.h include/configparser.h \
  include/configactionhandler.h include/matcher.h filter/FilterParser.h \

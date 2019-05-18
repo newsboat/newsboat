@@ -8,9 +8,9 @@
 #include <stdexcept>
 
 #include "config.h"
-#include "exceptions.h"
 #include "logger.h"
 #include "utils.h"
+#include "xmlexception.h"
 
 namespace newsboat {
 

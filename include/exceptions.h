@@ -9,22 +9,6 @@
 
 namespace newsboat {
 
-class XmlException : public std::exception {
-public:
-	explicit XmlException(const std::string& errmsg)
-		: msg(errmsg)
-	{
-	}
-	~XmlException() throw() override {}
-	const char* what() const throw() override
-	{
-		return msg.c_str();
-	}
-
-private:
-	std::string msg;
-};
-
 class ConfigException : public std::exception {
 public:
 	explicit ConfigException(const std::string& errmsg)
