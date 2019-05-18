@@ -10,18 +10,9 @@
 #include "remoteapi.h"
 #include "item.h"
 #include "feed.h"
+#include "exception.h"
 
 namespace rsspp {
-
-class Exception : public std::exception {
-public:
-	explicit Exception(const std::string& errmsg = "");
-	~Exception() throw() override;
-	const char* what() const throw() override;
-
-private:
-	std::string emsg;
-};
 
 class Parser {
 public:

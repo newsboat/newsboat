@@ -7,28 +7,28 @@ filter/Parser.o: filter/Parser.cpp filter/Parser.h filter/FilterParser.h \
 filter/Scanner.o: filter/Scanner.cpp filter/Scanner.h
 rss/atomparser.o: rss/atomparser.cpp rss/rssppinternal.h rss/rsspp.h \
  include/remoteapi.h include/configcontainer.h include/configparser.h \
- rss/item.h rss/feed.h config.h include/utils.h include/logger.h \
- include/strprintf.h
+ rss/item.h rss/feed.h rss/exception.h config.h include/utils.h \
+ include/logger.h include/strprintf.h
 rss/exception.o: rss/exception.cpp rss/rsspp.h include/remoteapi.h \
  include/configcontainer.h include/configparser.h rss/item.h rss/feed.h \
- config.h
+ rss/exception.h config.h
 rss/parser.o: rss/parser.cpp rss/rsspp.h include/remoteapi.h \
  include/configcontainer.h include/configparser.h rss/item.h rss/feed.h \
- config.h include/logger.h include/strprintf.h rss/rssppinternal.h \
- include/strprintf.h include/utils.h include/logger.h
+ rss/exception.h config.h include/logger.h include/strprintf.h \
+ rss/rssppinternal.h include/strprintf.h include/utils.h include/logger.h
 rss/parserfactory.o: rss/parserfactory.cpp rss/rssppinternal.h \
  rss/rsspp.h include/remoteapi.h include/configcontainer.h \
- include/configparser.h rss/item.h rss/feed.h config.h
+ include/configparser.h rss/item.h rss/feed.h rss/exception.h config.h
 rss/rss09xparser.o: rss/rss09xparser.cpp rss/rssppinternal.h rss/rsspp.h \
  include/remoteapi.h include/configcontainer.h include/configparser.h \
- rss/item.h rss/feed.h config.h include/utils.h include/logger.h \
- include/strprintf.h
+ rss/item.h rss/feed.h rss/exception.h config.h include/utils.h \
+ include/logger.h include/strprintf.h
 rss/rss10parser.o: rss/rss10parser.cpp rss/rssppinternal.h rss/rsspp.h \
  include/remoteapi.h include/configcontainer.h include/configparser.h \
- rss/item.h rss/feed.h config.h
+ rss/item.h rss/feed.h rss/exception.h config.h
 rss/rssparser.o: rss/rssparser.cpp rss/rssppinternal.h rss/rsspp.h \
  include/remoteapi.h include/configcontainer.h include/configparser.h \
- rss/item.h rss/feed.h
+ rss/item.h rss/feed.h rss/exception.h
 src/cache.o: src/cache.cpp include/cache.h include/configcontainer.h \
  include/configparser.h include/rss.h include/matcher.h \
  filter/FilterParser.h include/utils.h include/logger.h config.h \
@@ -86,7 +86,7 @@ src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  include/feedhqapi.h include/fileurlreader.h include/globals.h \
  include/inoreaderapi.h include/itemrenderer.h include/htmlrenderer.h \
  include/textformatter.h include/logger.h include/newsblurapi.h \
- rss/rsspp.h include/remoteapi.h rss/item.h rss/feed.h \
+ rss/rsspp.h include/remoteapi.h rss/item.h rss/feed.h rss/exception.h \
  include/ocnewsapi.h include/oldreaderapi.h include/opmlurlreader.h \
  include/regexmanager.h include/rssparser.h include/stflpp.h \
  include/strprintf.h include/ttrssapi.h 3rd-party/json.hpp \
@@ -277,22 +277,22 @@ src/matcher.o: src/matcher.cpp include/matcher.h filter/FilterParser.h \
  include/logger.h
 src/newsblurapi.o: src/newsblurapi.cpp include/newsblurapi.h \
  include/remoteapi.h include/configcontainer.h include/configparser.h \
- rss/rsspp.h include/remoteapi.h rss/item.h rss/feed.h \
+ rss/rsspp.h include/remoteapi.h rss/item.h rss/feed.h rss/exception.h \
  include/urlreader.h include/strprintf.h include/utils.h include/logger.h \
  config.h include/strprintf.h
 src/newsblururlreader.o: src/newsblururlreader.cpp include/newsblurapi.h \
  include/remoteapi.h include/configcontainer.h include/configparser.h \
- rss/rsspp.h include/remoteapi.h rss/item.h rss/feed.h \
+ rss/rsspp.h include/remoteapi.h rss/item.h rss/feed.h rss/exception.h \
  include/urlreader.h include/fileurlreader.h include/logger.h config.h \
  include/strprintf.h include/utils.h include/logger.h
 src/ocnewsapi.o: src/ocnewsapi.cpp include/ocnewsapi.h \
  include/remoteapi.h include/configcontainer.h include/configparser.h \
- rss/rsspp.h include/remoteapi.h rss/item.h rss/feed.h \
+ rss/rsspp.h include/remoteapi.h rss/item.h rss/feed.h rss/exception.h \
  include/urlreader.h include/utils.h include/logger.h config.h \
  include/strprintf.h
 src/ocnewsurlreader.o: src/ocnewsurlreader.cpp include/ocnewsapi.h \
  include/remoteapi.h include/configcontainer.h include/configparser.h \
- rss/rsspp.h include/remoteapi.h rss/item.h rss/feed.h \
+ rss/rsspp.h include/remoteapi.h rss/item.h rss/feed.h rss/exception.h \
  include/urlreader.h include/fileurlreader.h include/logger.h config.h \
  include/strprintf.h include/utils.h include/logger.h
 src/oldreaderapi.o: src/oldreaderapi.cpp include/oldreaderapi.h \
@@ -359,7 +359,7 @@ src/reloader.o: src/reloader.cpp include/reloader.h \
  include/regexmanager.h include/reloader.h include/remoteapi.h \
  include/downloadthread.h include/exceptions.h include/fmtstrformatter.h \
  include/reloadrangethread.h include/reloadthread.h include/controller.h \
- rss/rsspp.h include/remoteapi.h rss/item.h rss/feed.h \
+ rss/rsspp.h include/remoteapi.h rss/item.h rss/feed.h rss/exception.h \
  include/rssparser.h rss/rsspp.h include/utils.h include/view.h \
  include/filebrowserformaction.h include/formaction.h include/history.h \
  include/keymap.h include/stflpp.h include/htmlrenderer.h \
@@ -390,12 +390,12 @@ src/rssparser.o: src/rssparser.cpp include/rssparser.h \
  include/remoteapi.h include/configcontainer.h include/configparser.h \
  include/rss.h include/matcher.h filter/FilterParser.h include/utils.h \
  include/logger.h config.h include/strprintf.h rss/rsspp.h \
- include/remoteapi.h rss/item.h rss/feed.h include/cache.h \
- include/configcontainer.h include/htmlrenderer.h include/textformatter.h \
- include/regexmanager.h include/logger.h include/newsblurapi.h \
- include/urlreader.h include/ocnewsapi.h include/rss.h \
- rss/rssppinternal.h rss/rsspp.h include/strprintf.h include/ttrssapi.h \
- 3rd-party/json.hpp include/cache.h include/utils.h
+ include/remoteapi.h rss/item.h rss/feed.h rss/exception.h \
+ include/cache.h include/configcontainer.h include/htmlrenderer.h \
+ include/textformatter.h include/regexmanager.h include/logger.h \
+ include/newsblurapi.h include/urlreader.h include/ocnewsapi.h \
+ include/rss.h rss/rssppinternal.h rss/rsspp.h include/strprintf.h \
+ include/ttrssapi.h 3rd-party/json.hpp include/cache.h include/utils.h
 src/selectformaction.o: src/selectformaction.cpp \
  include/selectformaction.h include/filtercontainer.h \
  include/configparser.h include/formaction.h include/history.h \
@@ -426,15 +426,15 @@ src/ttrssapi.o: src/ttrssapi.cpp include/ttrssapi.h 3rd-party/json.hpp \
  include/cache.h include/configcontainer.h include/configparser.h \
  include/rss.h include/matcher.h filter/FilterParser.h include/utils.h \
  include/logger.h config.h include/strprintf.h include/remoteapi.h \
- rss/rsspp.h include/remoteapi.h rss/item.h rss/feed.h \
+ rss/rsspp.h include/remoteapi.h rss/item.h rss/feed.h rss/exception.h \
  include/urlreader.h include/strprintf.h
 src/ttrssurlreader.o: src/ttrssurlreader.cpp include/ttrssapi.h \
  3rd-party/json.hpp include/cache.h include/configcontainer.h \
  include/configparser.h include/rss.h include/matcher.h \
  filter/FilterParser.h include/utils.h include/logger.h config.h \
  include/strprintf.h include/remoteapi.h rss/rsspp.h include/remoteapi.h \
- rss/item.h rss/feed.h include/urlreader.h include/fileurlreader.h \
- include/logger.h
+ rss/item.h rss/feed.h rss/exception.h include/urlreader.h \
+ include/fileurlreader.h include/logger.h
 src/urlreader.o: src/urlreader.cpp include/urlreader.h
 src/urlviewformaction.o: src/urlviewformaction.cpp \
  include/urlviewformaction.h include/formaction.h include/history.h \
@@ -478,7 +478,7 @@ test/cache.o: test/cache.cpp include/cache.h include/configcontainer.h \
  filter/FilterParser.h include/utils.h include/logger.h config.h \
  include/strprintf.h 3rd-party/catch.hpp include/configcontainer.h \
  include/rssparser.h include/remoteapi.h rss/rsspp.h include/remoteapi.h \
- rss/item.h rss/feed.h test/test-helpers.h
+ rss/item.h rss/feed.h rss/exception.h test/test-helpers.h
 test/cliargsparser.o: test/cliargsparser.cpp 3rd-party/catch.hpp \
  include/cliargsparser.h include/logger.h config.h include/strprintf.h \
  test/test-helpers.h
@@ -555,7 +555,7 @@ test/remoteapi.o: test/remoteapi.cpp include/remoteapi.h \
 test/rss.o: test/rss.cpp include/rss.h include/configcontainer.h \
  include/configparser.h include/matcher.h filter/FilterParser.h \
  include/utils.h include/logger.h config.h include/strprintf.h \
- rss/rsspp.h include/remoteapi.h rss/item.h rss/feed.h \
+ rss/rsspp.h include/remoteapi.h rss/item.h rss/feed.h rss/exception.h \
  3rd-party/catch.hpp include/cache.h include/rss.h \
  include/configcontainer.h include/rssparser.h include/remoteapi.h \
  rss/rssppinternal.h rss/rsspp.h test/test-helpers.h
