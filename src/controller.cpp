@@ -37,6 +37,7 @@
 #include "fileurlreader.h"
 #include "globals.h"
 #include "inoreaderapi.h"
+#include "inoreaderurlreader.h"
 #include "itemrenderer.h"
 #include "logger.h"
 #include "newsblurapi.h"
