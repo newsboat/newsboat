@@ -6,8 +6,8 @@
 #include <thread>
 
 #include "controller.h"
+#include "dbexception.h"
 #include "downloadthread.h"
-#include "exceptions.h"
 #include "fmtstrformatter.h"
 #include "reloadrangethread.h"
 #include "reloadthread.h"

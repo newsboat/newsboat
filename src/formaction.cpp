@@ -4,8 +4,8 @@
 
 #include "config.h"
 #include "configexception.h"
-#include "exceptions.h"
 #include "logger.h"
+#include "matcherexception.h"
 #include "strprintf.h"
 #include "utils.h"
 #include "view.h"

@@ -6,7 +6,7 @@
 
 #include "config.h"
 #include "confighandlerexception.h"
-#include "exceptions.h"
+#include "dbexception.h"
 #include "fmtstrformatter.h"
 #include "itemrenderer.h"
 #include "logger.h"

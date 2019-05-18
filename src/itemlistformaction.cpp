@@ -7,9 +7,10 @@
 
 #include "config.h"
 #include "controller.h"
-#include "exceptions.h"
+#include "dbexception.h"
 #include "fmtstrformatter.h"
 #include "logger.h"
+#include "matcherexception.h"
 #include "strprintf.h"
 #include "utils.h"
 #include "view.h"

@@ -1,27 +1,10 @@
-#ifndef NEWSBOAT_EXCEPTIONS_H_
-#define NEWSBOAT_EXCEPTIONS_H_
+#ifndef NEWSBOAT_MATCHEREXCEPTON_H_
+#define NEWSBOAT_MATCHEREXCEPTON_H_
 
-#include <sqlite3.h>
 #include <stdexcept>
 #include <string>
 
 namespace newsboat {
-
-class DbException : public std::exception {
-public:
-	explicit DbException(sqlite3* h)
-		: msg(sqlite3_errmsg(h))
-	{
-	}
-	~DbException() throw() override {}
-	const char* what() const throw() override
-	{
-		return msg.c_str();
-	}
-
-private:
-	std::string msg;
-};
 
 class MatcherException : public std::exception {
 public:
@@ -47,4 +30,4 @@ private:
 
 } // namespace newsboat
 
-#endif /* NEWSBOAT_EXCEPTIONS_H_ */
+#endif /* NEWSBOAT_MATCHEREXCEPTON_H_ */

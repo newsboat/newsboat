@@ -8,7 +8,7 @@
 #include <string>
 
 #include "config.h"
-#include "exceptions.h"
+#include "dbexception.h"
 #include "feedcontainer.h"
 #include "fmtstrformatter.h"
 #include "listformatter.h"
