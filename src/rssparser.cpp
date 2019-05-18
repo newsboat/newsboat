@@ -9,6 +9,7 @@
 #include "cache.h"
 #include "config.h"
 #include "configcontainer.h"
+#include "curlhandle.h"
 #include "htmlrenderer.h"
 #include "logger.h"
 #include "newsblurapi.h"

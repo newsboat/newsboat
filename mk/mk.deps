@@ -395,11 +395,11 @@ src/reloader.o: src/reloader.cpp include/reloader.h \
  include/urlreader.h include/queuemanager.h include/regexmanager.h \
  include/matcher.h filter/FilterParser.h include/reloader.h \
  include/remoteapi.h include/rssignores.h include/rssitem.h \
- include/matchable.h include/dbexception.h include/downloadthread.h \
- include/fmtstrformatter.h include/reloadrangethread.h \
- include/reloadthread.h include/controller.h rss/exception.h \
- include/rssfeed.h include/utils.h include/rssparser.h rss/feed.h \
- rss/item.h include/utils.h include/view.h \
+ include/matchable.h include/curlhandle.h include/dbexception.h \
+ include/downloadthread.h include/fmtstrformatter.h \
+ include/reloadrangethread.h include/reloadthread.h include/controller.h \
+ rss/exception.h include/rssfeed.h include/utils.h include/rssparser.h \
+ rss/feed.h rss/item.h include/utils.h include/view.h \
  include/filebrowserformaction.h include/formaction.h include/history.h \
  include/keymap.h include/stflpp.h include/htmlrenderer.h \
  include/textformatter.h
@@ -447,14 +447,15 @@ src/rssitem.o: src/rssitem.cpp include/rssitem.h include/matchable.h \
 src/rssparser.o: src/rssparser.cpp include/rssparser.h \
  include/remoteapi.h include/configcontainer.h include/configparser.h \
  include/configactionhandler.h rss/feed.h rss/item.h include/cache.h \
- config.h include/configcontainer.h include/htmlrenderer.h \
- include/textformatter.h include/regexmanager.h include/matcher.h \
- filter/FilterParser.h include/logger.h include/strprintf.h \
- include/newsblurapi.h include/ocnewsapi.h rss/exception.h rss/parser.h \
- include/remoteapi.h rss/feed.h rss/rssparser.h include/rssfeed.h \
- include/matchable.h include/rssitem.h include/utils.h include/logger.h \
- include/rssignores.h include/strprintf.h include/ttrssapi.h \
- 3rd-party/json.hpp include/cache.h include/utils.h
+ config.h include/configcontainer.h include/curlhandle.h \
+ include/htmlrenderer.h include/textformatter.h include/regexmanager.h \
+ include/matcher.h filter/FilterParser.h include/logger.h \
+ include/strprintf.h include/newsblurapi.h include/ocnewsapi.h \
+ rss/exception.h rss/parser.h include/remoteapi.h rss/feed.h \
+ rss/rssparser.h include/rssfeed.h include/matchable.h include/rssitem.h \
+ include/utils.h include/logger.h include/rssignores.h \
+ include/strprintf.h include/ttrssapi.h 3rd-party/json.hpp \
+ include/cache.h include/utils.h
 src/selectformaction.o: src/selectformaction.cpp \
  include/selectformaction.h include/filtercontainer.h \
  include/configparser.h include/configactionhandler.h \

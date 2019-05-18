@@ -6,6 +6,7 @@
 #include <thread>
 
 #include "controller.h"
+#include "curlhandle.h"
 #include "dbexception.h"
 #include "downloadthread.h"
 #include "fmtstrformatter.h"

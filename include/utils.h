@@ -13,32 +13,6 @@
 
 namespace newsboat {
 
-// wrapped curl handle for exception safety and so on
-// see also: https://github.com/gsauthof/ccurl
-class CurlHandle {
-private:
-	CURL* h;
-	CurlHandle(const CurlHandle&);
-	CurlHandle& operator=(const CurlHandle&);
-
-public:
-	CurlHandle()
-		: h(0)
-	{
-		h = curl_easy_init();
-		if (!h)
-			throw std::runtime_error("Can't obtain curl handle");
-	}
-	~CurlHandle()
-	{
-		curl_easy_cleanup(h);
-	}
-	CURL* ptr()
-	{
-		return h;
-	}
-};
-
 class ScopeMeasure {
 public:
 	ScopeMeasure(const std::string& func, Level ll = Level::DEBUG);
