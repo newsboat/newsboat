@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "logger.h"
+#include "matchable.h"
 #include "matcherexception.h"
 #include "utils.h"
 

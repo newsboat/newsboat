@@ -2,6 +2,7 @@
 
 #include "3rd-party/catch.hpp"
 
+#include "matchable.h"
 #include "matcherexception.h"
 
 using namespace newsboat;

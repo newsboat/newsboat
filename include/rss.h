@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "configcontainer.h"
+#include "matchable.h"
 #include "matcher.h"
 #include "utils.h"
 
