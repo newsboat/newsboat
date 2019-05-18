@@ -1,7 +1,10 @@
-#include "feedhqapi.h"
+#include "feedhqurlreader.h"
 
+#include "configcontainer.h"
 #include "fileurlreader.h"
 #include "logger.h"
+#include "remoteapi.h"
+#include "utils.h"
 
 namespace newsboat {
 

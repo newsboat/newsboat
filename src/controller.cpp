@@ -33,6 +33,7 @@
 #include "downloadthread.h"
 #include "exception.h"
 #include "feedhqapi.h"
+#include "feedhqurlreader.h"
 #include "fileurlreader.h"
 #include "globals.h"
 #include "inoreaderapi.h"
