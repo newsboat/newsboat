@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+#include "configactionhandler.h"
+
 namespace newsboat {
 
 enum class ActionHandlerStatus {
@@ -14,14 +16,6 @@ enum class ActionHandlerStatus {
 	TOO_FEW_PARAMS,
 	INVALID_COMMAND,
 	FILENOTFOUND
-};
-
-struct ConfigActionHandler {
-	virtual void handle_action(const std::string& action,
-		const std::vector<std::string>& params) = 0;
-	virtual void dump_config(std::vector<std::string>& config_output) = 0;
-	ConfigActionHandler() {}
-	virtual ~ConfigActionHandler() {}
 };
 
 class ConfigParser : public ConfigActionHandler {
