@@ -1,4 +1,4 @@
-#include "rssppinternal.h"
+#include "rss10parser.h"
 
 #include <cstring>
 

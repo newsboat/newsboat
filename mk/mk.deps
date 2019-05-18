@@ -6,25 +6,25 @@ filter/Parser.o: filter/Parser.cpp filter/Parser.h filter/FilterParser.h \
  filter/Scanner.h
 filter/Scanner.o: filter/Scanner.cpp filter/Scanner.h
 rss/atomparser.o: rss/atomparser.cpp rss/rssppinternal.h rss/rssparser.h \
- rss/rss09xparser.h rss/rss20parser.h config.h rss/exception.h rss/feed.h \
- rss/item.h include/utils.h include/configcontainer.h \
- include/configparser.h include/logger.h include/strprintf.h
+ rss/rss09xparser.h rss/rss20parser.h rss/rss10parser.h config.h \
+ rss/exception.h rss/feed.h rss/item.h include/utils.h \
+ include/configcontainer.h include/configparser.h include/logger.h \
+ include/strprintf.h
 rss/exception.o: rss/exception.cpp rss/exception.h
 rss/parser.o: rss/parser.cpp rss/parser.h include/remoteapi.h \
  include/configcontainer.h include/configparser.h rss/feed.h rss/item.h \
  config.h rss/exception.h include/logger.h include/strprintf.h \
  rss/rssppinternal.h rss/rssparser.h rss/rss09xparser.h rss/rss20parser.h \
- include/strprintf.h include/utils.h include/logger.h
+ rss/rss10parser.h include/strprintf.h include/utils.h include/logger.h
 rss/parserfactory.o: rss/parserfactory.cpp rss/rssppinternal.h \
- rss/rssparser.h rss/rss09xparser.h rss/rss20parser.h config.h \
- rss/exception.h rss/feed.h rss/item.h
+ rss/rssparser.h rss/rss09xparser.h rss/rss20parser.h rss/rss10parser.h \
+ config.h rss/exception.h rss/feed.h rss/item.h
 rss/rss09xparser.o: rss/rss09xparser.cpp rss/rss09xparser.h \
  rss/rssparser.h config.h rss/exception.h rss/feed.h rss/item.h \
  include/utils.h include/configcontainer.h include/configparser.h \
  include/logger.h include/strprintf.h
-rss/rss10parser.o: rss/rss10parser.cpp rss/rssppinternal.h \
- rss/rssparser.h rss/rss09xparser.h rss/rss20parser.h config.h \
- rss/exception.h rss/feed.h rss/item.h
+rss/rss10parser.o: rss/rss10parser.cpp rss/rss10parser.h rss/rssparser.h \
+ config.h rss/exception.h rss/feed.h rss/item.h
 rss/rss20parser.o: rss/rss20parser.cpp rss/rss20parser.h \
  rss/rss09xparser.h rss/rssparser.h config.h rss/exception.h rss/feed.h \
  rss/item.h include/utils.h include/configcontainer.h \
@@ -393,8 +393,8 @@ src/rssparser.o: src/rssparser.cpp include/rssparser.h \
  include/newsblurapi.h include/urlreader.h include/ocnewsapi.h \
  include/rss.h rss/exception.h rss/parser.h include/remoteapi.h \
  rss/feed.h rss/rssppinternal.h rss/rssparser.h rss/rss09xparser.h \
- rss/rss20parser.h include/strprintf.h include/ttrssapi.h \
- 3rd-party/json.hpp include/cache.h include/utils.h
+ rss/rss20parser.h rss/rss10parser.h include/strprintf.h \
+ include/ttrssapi.h 3rd-party/json.hpp include/cache.h include/utils.h
 src/selectformaction.o: src/selectformaction.cpp \
  include/selectformaction.h include/filtercontainer.h \
  include/configparser.h include/formaction.h include/history.h \
@@ -557,7 +557,8 @@ test/rss.o: test/rss.cpp include/rss.h include/configcontainer.h \
  include/configcontainer.h rss/exception.h rss/parser.h \
  include/remoteapi.h rss/feed.h rss/item.h include/rssparser.h \
  include/remoteapi.h rss/feed.h rss/rssppinternal.h rss/rssparser.h \
- rss/rss09xparser.h rss/rss20parser.h test/test-helpers.h
+ rss/rss09xparser.h rss/rss20parser.h rss/rss10parser.h \
+ test/test-helpers.h
 test/strprintf.o: test/strprintf.cpp include/strprintf.h \
  3rd-party/catch.hpp
 test/tagsouppullparser.o: test/tagsouppullparser.cpp \

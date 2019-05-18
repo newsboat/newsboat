@@ -7,6 +7,7 @@
 #include "rssparser.h"
 #include "rss09xparser.h"
 #include "rss20parser.h"
+#include "rss10parser.h"
 
 #define CONTENT_URI "http://purl.org/rss/1.0/modules/content/"
 #define RDF_URI "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -22,15 +23,6 @@ namespace rsspp {
 
 class Feed;
 class Item;
-
-struct Rss10Parser : public RssParser {
-	void parse_feed(Feed& f, xmlNode* rootNode) override;
-	explicit Rss10Parser(xmlDocPtr doc)
-		: RssParser(doc)
-	{
-	}
-	~Rss10Parser() override {}
-};
 
 struct AtomParser : public RssParser {
 	void parse_feed(Feed& f, xmlNode* rootNode) override;
