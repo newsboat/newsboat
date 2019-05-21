@@ -1,7 +1,10 @@
-#include "oldreaderapi.h"
+#include "oldreaderurlreader.h"
 
+#include "configcontainer.h"
 #include "fileurlreader.h"
 #include "logger.h"
+#include "remoteapi.h"
+#include "utils.h"
 
 namespace newsboat {
 

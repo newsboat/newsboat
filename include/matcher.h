@@ -5,13 +5,7 @@
 
 namespace newsboat {
 
-class Matchable {
-public:
-	Matchable();
-	virtual ~Matchable();
-	virtual bool has_attribute(const std::string& attribname) = 0;
-	virtual std::string get_attribute(const std::string& attribname) = 0;
-};
+class Matchable;
 
 class Matcher {
 public:

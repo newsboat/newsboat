@@ -8,12 +8,14 @@
 #include <string>
 
 #include "config.h"
-#include "exceptions.h"
+#include "dbexception.h"
 #include "feedcontainer.h"
 #include "fmtstrformatter.h"
 #include "listformatter.h"
 #include "logger.h"
 #include "reloader.h"
+#include "rssfeed.h"
+#include "scopemeasure.h"
 #include "strprintf.h"
 #include "utils.h"
 #include "view.h"

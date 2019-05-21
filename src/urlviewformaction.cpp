@@ -5,6 +5,7 @@
 #include "config.h"
 #include "fmtstrformatter.h"
 #include "listformatter.h"
+#include "rssfeed.h"
 #include "strprintf.h"
 #include "utils.h"
 #include "view.h"

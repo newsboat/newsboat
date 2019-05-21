@@ -1,8 +1,8 @@
 #include "configcontainer.h"
 
 #include "3rd-party/catch.hpp"
+#include "confighandlerexception.h"
 #include "configparser.h"
-#include "exceptions.h"
 #include "keymap.h"
 
 using namespace newsboat;

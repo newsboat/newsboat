@@ -8,6 +8,7 @@
 #include "itemlist.h"
 #include "keymap.h"
 #include "regexmanager.h"
+#include "rssfeed.h"
 #include "test-helpers.h"
 
 using namespace newsboat;

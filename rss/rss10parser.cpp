@@ -1,10 +1,15 @@
-#include "rssppinternal.h"
+#include "rss10parser.h"
 
 #include <cstring>
 
 #include "config.h"
+#include "exception.h"
+#include "feed.h"
+#include "item.h"
+#include "rsspp_uris.h"
 
 #define RSS_1_0_NS "http://purl.org/rss/1.0/"
+#define RDF_URI "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 
 namespace rsspp {
 

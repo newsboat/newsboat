@@ -1,4 +1,4 @@
-#include "rsspp.h"
+#include "parser.h"
 
 #include <cstring>
 #include <curl/curl.h>
@@ -6,9 +6,12 @@
 #include <libxml/tree.h>
 
 #include "config.h"
+#include "exception.h"
 #include "logger.h"
 #include "remoteapi.h"
-#include "rssppinternal.h"
+#include "rssparser.h"
+#include "rssparserfactory.h"
+#include "rsspp_uris.h"
 #include "strprintf.h"
 #include "utils.h"
 
@@ -298,16 +301,16 @@ Feed Parser::parse_xmlnode(xmlNode* node)
 					throw Exception(_("no RSS version"));
 				}
 				if (strcmp(version, "0.91") == 0)
-					f.rss_version = RSS_0_91;
+					f.rss_version = Feed::RSS_0_91;
 				else if (strcmp(version, "0.92") == 0)
-					f.rss_version = RSS_0_92;
+					f.rss_version = Feed::RSS_0_92;
 				else if (strcmp(version, "0.94") == 0)
-					f.rss_version = RSS_0_94;
+					f.rss_version = Feed::RSS_0_94;
 				else if (strcmp(version, "2.0") == 0 ||
 					strcmp(version, "2") == 0)
-					f.rss_version = RSS_2_0;
+					f.rss_version = Feed::RSS_2_0;
 				else if (strcmp(version, "1.0") == 0)
-					f.rss_version = RSS_0_91;
+					f.rss_version = Feed::RSS_0_91;
 				else {
 					xmlFree((void*)version);
 					throw Exception(
@@ -316,17 +319,17 @@ Feed Parser::parse_xmlnode(xmlNode* node)
 				xmlFree((void*)version);
 			} else if (strcmp((const char*)node->name, "RDF") ==
 				0) {
-				f.rss_version = RSS_1_0;
+				f.rss_version = Feed::RSS_1_0;
 			} else if (strcmp((const char*)node->name, "feed") ==
 				0) {
 				if (node->ns && node->ns->href) {
 					if (strcmp((const char*)node->ns->href,
 						    ATOM_0_3_URI) == 0) {
-						f.rss_version = ATOM_0_3;
+						f.rss_version = Feed::ATOM_0_3;
 					} else if (strcmp((const char*)node->ns
 								   ->href,
 							   ATOM_1_0_URI) == 0) {
-						f.rss_version = ATOM_1_0;
+						f.rss_version = Feed::ATOM_1_0;
 					} else {
 						const char * version = (const char *)xmlGetProp(node, (const xmlChar *)"version");
 						if (!version) {
@@ -338,7 +341,7 @@ Feed Parser::parse_xmlnode(xmlNode* node)
 							0) {
 							xmlFree((void*)version);
 							f.rss_version =
-								ATOM_0_3_NONS;
+								Feed::ATOM_0_3_NONS;
 						} else {
 							xmlFree((void*)version);
 							throw Exception(_(

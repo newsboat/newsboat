@@ -6,13 +6,16 @@
 #include <thread>
 
 #include "controller.h"
+#include "curlhandle.h"
+#include "dbexception.h"
 #include "downloadthread.h"
-#include "exceptions.h"
 #include "fmtstrformatter.h"
 #include "reloadrangethread.h"
 #include "reloadthread.h"
-#include "rss/rsspp.h"
+#include "rss/exception.h"
+#include "rssfeed.h"
 #include "rssparser.h"
+#include "scopemeasure.h"
 #include "utils.h"
 #include "view.h"
 

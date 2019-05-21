@@ -13,7 +13,6 @@
 #include "htmlrenderer.h"
 #include "keymap.h"
 #include "regexmanager.h"
-#include "rss.h"
 #include "stflpp.h"
 
 namespace newsboat {

@@ -2,9 +2,8 @@
 #define NEWSBOAT_CONFIGPARSER_H_
 
 #include <map>
-#include <set>
-#include <string>
-#include <vector>
+
+#include "configactionhandler.h"
 
 namespace newsboat {
 
@@ -14,14 +13,6 @@ enum class ActionHandlerStatus {
 	TOO_FEW_PARAMS,
 	INVALID_COMMAND,
 	FILENOTFOUND
-};
-
-struct ConfigActionHandler {
-	virtual void handle_action(const std::string& action,
-		const std::vector<std::string>& params) = 0;
-	virtual void dump_config(std::vector<std::string>& config_output) = 0;
-	ConfigActionHandler() {}
-	virtual ~ConfigActionHandler() {}
 };
 
 class ConfigParser : public ConfigActionHandler {
@@ -46,17 +37,6 @@ private:
 	std::vector<std::vector<std::string>> parsed_content;
 	std::map<std::string, ConfigActionHandler*> action_handlers;
 	std::vector<std::string> included_files;
-};
-
-class NullConfigActionHandler : public ConfigActionHandler {
-public:
-	NullConfigActionHandler() {}
-	~NullConfigActionHandler() override {}
-	void handle_action(const std::string&,
-		const std::vector<std::string>&) override
-	{
-	}
-	void dump_config(std::vector<std::string>&) override {}
 };
 
 } // namespace newsboat

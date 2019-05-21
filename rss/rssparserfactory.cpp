@@ -1,6 +1,12 @@
-#include "rssppinternal.h"
+#include "rssparserfactory.h"
 
+#include "atomparser.h"
 #include "config.h"
+#include "exception.h"
+#include "feed.h"
+#include "rss09xparser.h"
+#include "rss10parser.h"
+#include "rss20parser.h"
 
 namespace rsspp {
 
@@ -8,19 +14,19 @@ std::shared_ptr<RssParser> RssParserFactory::get_object(Feed& f,
 	xmlDocPtr doc)
 {
 	switch (f.rss_version) {
-	case RSS_0_91:
-	case RSS_0_92:
-	case RSS_0_94:
+	case Feed::RSS_0_91:
+	case Feed::RSS_0_92:
+	case Feed::RSS_0_94:
 		return std::shared_ptr<RssParser>(new Rss09xParser(doc));
-	case RSS_2_0:
+	case Feed::RSS_2_0:
 		return std::shared_ptr<RssParser>(new Rss20Parser(doc));
-	case RSS_1_0:
+	case Feed::RSS_1_0:
 		return std::shared_ptr<RssParser>(new Rss10Parser(doc));
-	case ATOM_0_3:
-	case ATOM_0_3_NONS:
-	case ATOM_1_0:
+	case Feed::ATOM_0_3:
+	case Feed::ATOM_0_3_NONS:
+	case Feed::ATOM_1_0:
 		return std::shared_ptr<RssParser>(new AtomParser(doc));
-	case UNKNOWN:
+	case Feed::UNKNOWN:
 	default:
 		throw Exception(_("unsupported feed format"));
 	}

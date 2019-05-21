@@ -1,7 +1,7 @@
 #include "filtercontainer.h"
 
 #include "config.h"
-#include "exceptions.h"
+#include "confighandlerexception.h"
 #include "matcher.h"
 #include "strprintf.h"
 #include "utils.h"

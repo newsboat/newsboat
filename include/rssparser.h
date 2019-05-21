@@ -1,16 +1,24 @@
 #ifndef NEWSBOAT_RSSPARSER_H_
 #define NEWSBOAT_RSSPARSER_H_
 
+#include <memory>
 #include <string>
 
 #include "remoteapi.h"
-#include "rss.h"
-#include "rsspp.h"
+#include "rss/feed.h"
+
+namespace rsspp {
+class Item;
+}
 
 namespace newsboat {
 
-class ConfigContainer;
 class Cache;
+class ConfigContainer;
+class CurlHandle;
+class RssFeed;
+class RssIgnores;
+class RssItem;
 
 class RssParser {
 public:

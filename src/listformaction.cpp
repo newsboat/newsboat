@@ -1,5 +1,6 @@
 #include "listformaction.h"
 
+#include "rssfeed.h"
 #include "view.h"
 
 namespace newsboat {

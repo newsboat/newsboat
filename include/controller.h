@@ -15,7 +15,7 @@
 #include "regexmanager.h"
 #include "reloader.h"
 #include "remoteapi.h"
-#include "rss.h"
+#include "rssignores.h"
 #include "urlreader.h"
 
 namespace newsboat {

@@ -5,8 +5,7 @@
 #include <map>
 
 #include "remoteapi.h"
-#include "rsspp.h"
-#include "urlreader.h"
+#include "rss/feed.h"
 
 namespace newsboat {
 
@@ -34,19 +33,6 @@ private:
 	std::string auth;
 	std::string server;
 	FeedMap known_feeds;
-};
-
-class OcNewsUrlReader : public UrlReader {
-public:
-	OcNewsUrlReader(const std::string& url_file, RemoteApi* a);
-	~OcNewsUrlReader() override;
-	void write_config() override;
-	void reload() override;
-	std::string get_source() override;
-
-private:
-	std::string file;
-	RemoteApi* api;
 };
 
 } // namespace newsboat

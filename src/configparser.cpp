@@ -8,7 +8,8 @@
 #include <sys/types.h>
 
 #include "config.h"
-#include "exceptions.h"
+#include "configexception.h"
+#include "confighandlerexception.h"
 #include "logger.h"
 #include "strprintf.h"
 #include "tagsouppullparser.h"

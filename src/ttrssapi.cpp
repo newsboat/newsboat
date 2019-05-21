@@ -6,8 +6,11 @@
 #include <time.h>
 
 #include "3rd-party/json.hpp"
+#include "logger.h"
 #include "remoteapi.h"
+#include "rss/feed.h"
 #include "strprintf.h"
+#include "utils.h"
 
 using json = nlohmann::json;
 
@@ -364,7 +367,7 @@ rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 {
 	rsspp::Feed f;
 
-	f.rss_version = rsspp::TTRSS_JSON;
+	f.rss_version = rsspp::Feed::TTRSS_JSON;
 
 	std::map<std::string, std::string> args;
 	args["feed_id"] = id;

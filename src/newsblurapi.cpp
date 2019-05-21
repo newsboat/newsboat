@@ -6,7 +6,6 @@
 
 #include "json.h"
 #include "remoteapi.h"
-#include "rsspp.h"
 #include "strprintf.h"
 #include "utils.h"
 
@@ -91,7 +90,7 @@ std::vector<TaggedFeedUrl> NewsBlurApi::get_subscribed_urls()
 		json_object* node{};
 		rsspp::Feed current_feed;
 
-		current_feed.rss_version = rsspp::NEWSBLUR_JSON;
+		current_feed.rss_version = rsspp::Feed::NEWSBLUR_JSON;
 
 		json_object* feed_json = json_object_iter_peek_value(&it);
 		json_object_object_get_ex(feed_json, "feed_title", &node);

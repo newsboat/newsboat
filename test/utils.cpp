@@ -318,7 +318,7 @@ TEST_CASE("resolve_tilde() replaces ~ with the path to the $HOME directory", "[u
 	}
 }
 
-TEST_CASE("resolve_relative() returns an absolute file path relative to another")
+TEST_CASE("resolve_relative() returns an absolute file path relative to another", "[utils]")
 {
 	SECTION("Nothing - absolute path")
 	{
@@ -464,7 +464,6 @@ TEST_CASE("quote_for_stfl() adds a \'>\' after every \'<\'", "[utils]")
 	REQUIRE(utils::quote_for_stfl("test") == "test");
 }
 
-
 TEST_CASE("quote()", "[utils]")
 {
 	REQUIRE(utils::quote("") == "\"\"");
@@ -560,7 +559,7 @@ TEST_CASE("trim_end()", "[utils]")
 	REQUIRE(str == "quux");
 }
 
-TEST_CASE("utils::make_title extracts possible title from URL")
+TEST_CASE("utils::make_title extracts possible title from URL", "[utils]")
 {
 	SECTION("Uses last part of URL as title")
 	{

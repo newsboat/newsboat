@@ -3,8 +3,9 @@
 #include <cassert>
 
 #include "config.h"
-#include "exceptions.h"
+#include "configexception.h"
 #include "logger.h"
+#include "matcherexception.h"
 #include "strprintf.h"
 #include "utils.h"
 #include "view.h"

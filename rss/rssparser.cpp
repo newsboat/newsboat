@@ -1,7 +1,9 @@
-#include "rssppinternal.h"
+#include "rssparser.h"
 
 #include <cstring>
 #include <libxml/tree.h>
+
+#include "exception.h"
 
 namespace rsspp {
 

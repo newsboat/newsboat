@@ -1,8 +1,10 @@
+#include "itemrenderer.h"
+
 #include "3rd-party/catch.hpp"
 
 #include "cache.h"
 #include "configcontainer.h"
-#include "itemrenderer.h"
+#include "rssfeed.h"
 #include "test-helpers.h"
 
 using namespace newsboat;

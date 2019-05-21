@@ -1,8 +1,12 @@
-#include "rssppinternal.h"
+#include "atomparser.h"
 
 #include <cstring>
 
 #include "config.h"
+#include "exception.h"
+#include "feed.h"
+#include "item.h"
+#include "rsspp_uris.h"
 #include "utils.h"
 
 namespace rsspp {
@@ -13,13 +17,13 @@ void AtomParser::parse_feed(Feed& f, xmlNode* rootNode)
 		throw Exception(_("XML root node is NULL"));
 
 	switch (f.rss_version) {
-	case ATOM_0_3:
+	case Feed::ATOM_0_3:
 		ns = ATOM_0_3_URI;
 		break;
-	case ATOM_1_0:
+	case Feed::ATOM_1_0:
 		ns = ATOM_1_0_URI;
 		break;
-	case ATOM_0_3_NONS:
+	case Feed::ATOM_0_3_NONS:
 		ns = nullptr;
 		break;
 	default:

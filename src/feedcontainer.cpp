@@ -3,6 +3,7 @@
 #include <algorithm> // stable_sort
 #include <numeric>   // accumulate
 
+#include "rssfeed.h"
 #include "utils.h"
 
 namespace newsboat {

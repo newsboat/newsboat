@@ -4,6 +4,8 @@
 
 #include "3rd-party/catch.hpp"
 #include "configcontainer.h"
+#include "rssfeed.h"
+#include "rssignores.h"
 #include "rssparser.h"
 #include "test-helpers.h"
 
