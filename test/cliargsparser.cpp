@@ -379,6 +379,11 @@ TEST_CASE("Inserts commands to cmds_to_execute if -x/--execute is provided",
 		check({"newsboat", "--execute", "reload", "print-unread"},
 			{"reload", "print-unread"});
 	}
+
+	SECTION("Multiple occurrences of the option") {
+		check({"newsboat", "-x", "print-unread", "--execute", "reload"},
+			{"print-unread", "reload"});
+	}
 }
 
 TEST_CASE("Requests silent mode if -q/--quiet is provided", "[CliArgsParser]")
