@@ -818,13 +818,10 @@ void ItemListFormAction::qna_start_search()
 	try {
 		std::string utf8searchphrase = utils::convert_text(
 			searchphrase, "utf-8", nl_langinfo(CODESET));
-		if (show_searchresult) {
-			items = v->get_ctrl()->search_for_items(
-				utf8searchphrase, nullptr);
-		} else {
-			items = v->get_ctrl()->search_for_items(
+		if (show_searchresult)
+			feed->set_rssurl("search:");
+		items = v->get_ctrl()->search_for_items(
 				utf8searchphrase, feed);
-		}
 	} catch (const DbException& e) {
 		v->show_error(
 			strprintf::fmt(_("Error while searching for `%s': %s"),
