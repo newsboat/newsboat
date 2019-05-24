@@ -43,6 +43,7 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	, filters(f)
 {
 	assert(true == m.parse(FILTER_UNREAD_ITEMS));
+	search_dummy_feed->set_search_feed(true);
 }
 
 ItemListFormAction::~ItemListFormAction() {}

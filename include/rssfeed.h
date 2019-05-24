@@ -155,7 +155,12 @@ public:
 
 	bool is_search_feed() const
 	{
-		return rssurl_.substr(0, 7) == "search:";
+		return search_feed;
+	}
+
+	void set_search_feed(bool b)
+	{
+		search_feed = b;
 	}
 
 	void sort(const ArticleSortStrategy& sort_strategy);
@@ -227,6 +232,7 @@ private:
 	Cache* ch;
 
 	bool empty;
+	bool search_feed;
 	bool is_rtl_;
 	unsigned int idx;
 	unsigned int order;
