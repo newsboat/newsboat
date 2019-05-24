@@ -447,7 +447,7 @@ void PbController::play_file(const std::string& file)
 		return;
 	cmdline.append(player);
 	cmdline.append(" '");
-	cmdline.append(utils::replace_all(file, "'", "%27"));
+	cmdline.append(utils::replace_all(file, "'", "'\\''"));
 	cmdline.append("'");
 	Stfl::reset();
 	utils::run_interactively(cmdline, "PbController::play_file");

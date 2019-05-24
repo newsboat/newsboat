@@ -43,7 +43,7 @@ void QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 			std::fstream::app | std::fstream::out);
 		const std::string filename =
 			generate_enqueue_filename(item, feed);
-		f << url << " " << Stfl::quote(filename) << std::endl;
+		f << url << " " << utils::quote(filename) << std::endl;
 		f.close();
 	}
 }
