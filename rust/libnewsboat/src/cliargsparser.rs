@@ -76,6 +76,8 @@ pub struct CliArgsParser {
     pub log_level: Level,
 }
 
+const LOCK_SUFFIX: &str = ".lock";
+
 impl CliArgsParser {
     pub fn new(opts: Vec<String>) -> CliArgsParser {
         const CACHE_FILE: &str = "cache-file";
@@ -230,8 +232,7 @@ impl CliArgsParser {
             args.set_cache_file = true;
             args.cache_file = cache_file.to_string();
             args.set_lock_file = true;
-            // TODO: append a lock suffix to this name
-            args.lock_file = cache_file.to_string();
+            args.lock_file = cache_file.to_string() + LOCK_SUFFIX;
             args.using_nonstandard_configs = true;
         }
 
@@ -483,9 +484,7 @@ mod tests {
             assert!(args.set_cache_file);
             assert_eq!(args.cache_file, filename);
             assert!(args.set_lock_file);
-            // TODO: check that the name is different from the cache's name, and ends with a lock
-            // file suffix
-            assert!(args.lock_file.starts_with(&filename));
+            assert_eq!(args.lock_file, filename.clone() + ".lock");
             assert!(args.using_nonstandard_configs);
         };
 

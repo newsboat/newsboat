@@ -205,8 +205,7 @@ TEST_CASE(
 		REQUIRE(args.set_cache_file);
 		REQUIRE(args.cache_file == filename);
 		REQUIRE(args.set_lock_file);
-		REQUIRE_THAT(
-			args.lock_file, Catch::Matchers::StartsWith(filename));
+		REQUIRE(args.lock_file == filename + ".lock");
 		REQUIRE(args.using_nonstandard_configs);
 	};
 
