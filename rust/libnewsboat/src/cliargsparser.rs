@@ -9,10 +9,10 @@ pub struct CliArgsParser {
     pub do_import: bool,
     pub do_export: bool,
     pub do_vacuum: bool,
+    pub program_name: String,
     pub importfile: String,
     pub do_read_import: bool,
     pub do_read_export: bool,
-    pub program_name: String,
     pub readinfofile: String,
     pub show_version: usize,
     pub silent: bool,
@@ -175,19 +175,21 @@ impl CliArgsParser {
                     .takes_value(true),
             );
 
+        let mut args = CliArgsParser::default();
+
+        if let Some(program_name) = opts.get(0).and_then(|s| Some(s.clone())) {
+            args.program_name = program_name;
+        }
+
         let matches = match app.get_matches_from_safe(&opts) {
             Ok(matches) => matches,
             Err(_) => {
-                return CliArgsParser {
-                    should_print_usage: true,
-                    should_return: true,
-                    return_code: EXIT_FAILURE,
-                    ..CliArgsParser::default()
-                };
+                args.should_print_usage = true;
+                args.should_return = true;
+                args.return_code = EXIT_FAILURE;
+                return args;
             }
         };
-
-        let mut args = CliArgsParser::default();
 
         if matches.is_present(EXPORT_TO_OPML) {
             if args.do_import {

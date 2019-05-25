@@ -109,22 +109,22 @@ int Controller::run(const CliArgsParser& args)
 		return EXIT_FAILURE;
 	}
 
-	refresh_on_start = args.refresh_on_start;
+	refresh_on_start = args.refresh_on_start();
 
-	if (args.set_log_file) {
-		Logger::set_logfile(args.log_file);
+	if (args.set_log_file()) {
+		Logger::set_logfile(args.log_file());
 	}
 
-	if (args.set_log_level) {
-		Logger::set_loglevel(args.log_level);
+	if (args.set_log_level()) {
+		Logger::set_loglevel(args.log_level());
 	}
 
-	if (!args.display_msg.empty()) {
-		std::cerr << args.display_msg << std::endl;
+	if (!args.display_msg().empty()) {
+		std::cerr << args.display_msg() << std::endl;
 	}
 
-	if (args.should_return) {
-		return args.return_code;
+	if (args.should_return()) {
+		return args.return_code();
 	}
 
 	configpaths.process_args(args);
@@ -140,20 +140,20 @@ int Controller::run(const CliArgsParser& args)
 		return EXIT_FAILURE;
 	}
 
-	if (args.do_import) {
+	if (args.do_import()) {
 		LOG(Level::INFO,
 			"Importing OPML file from %s",
-			args.importfile);
+			args.importfile());
 		urlcfg = new FileUrlReader(configpaths.url_file());
 		urlcfg->reload();
-		import_opml(args.importfile);
+		import_opml(args.importfile());
 		return EXIT_SUCCESS;
 	}
 
 	LOG(Level::INFO, "nl_langinfo(CODESET): %s", nl_langinfo(CODESET));
 
-	if (!args.do_export) {
-		if (!args.silent)
+	if (!args.do_export()) {
+		if (!args.silent())
 			std::cout << strprintf::fmt(_("Starting %s %s..."),
 					     PROGRAM_NAME,
 					     PROGRAM_VERSION)
@@ -162,7 +162,7 @@ int Controller::run(const CliArgsParser& args)
 		fslock = std::unique_ptr<FsLock>(new FsLock());
 		pid_t pid;
 		if (!fslock->try_lock(configpaths.lock_file(), pid)) {
-			if (!args.execute_cmds) {
+			if (!args.execute_cmds()) {
 				std::cout << strprintf::fmt(
 						     _("Error: an instance of "
 						       "%s is already running "
@@ -175,7 +175,7 @@ int Controller::run(const CliArgsParser& args)
 		}
 	}
 
-	if (!args.silent)
+	if (!args.silent())
 		std::cout << _("Loading configuration...");
 	std::cout.flush();
 
@@ -209,12 +209,12 @@ int Controller::run(const CliArgsParser& args)
 
 	update_config();
 
-	if (!args.silent)
+	if (!args.silent())
 		std::cout << _("done.") << std::endl;
 
 	// create cache object
 	std::string cachefilepath = cfg.get_configvalue("cache-file");
-	if (cachefilepath.length() > 0 && !args.set_cache_file) {
+	if (cachefilepath.length() > 0 && !args.set_cache_file()) {
 		configpaths.set_cache_file(cachefilepath);
 		fslock = std::unique_ptr<FsLock>(new FsLock());
 		pid_t pid;
@@ -229,7 +229,7 @@ int Controller::run(const CliArgsParser& args)
 		}
 	}
 
-	if (!args.silent) {
+	if (!args.silent()) {
 		std::cout << _("Opening cache...");
 		std::cout.flush();
 	}
@@ -253,7 +253,7 @@ int Controller::run(const CliArgsParser& args)
 		return EXIT_FAILURE;
 	}
 
-	if (!args.silent) {
+	if (!args.silent()) {
 		std::cout << _("done.") << std::endl;
 	}
 
@@ -307,7 +307,7 @@ int Controller::run(const CliArgsParser& args)
 			urlcfg->get_source());
 	}
 
-	if (!args.do_export && !args.silent) {
+	if (!args.do_export() && !args.silent()) {
 		std::cout << strprintf::fmt(
 			_("Loading URLs from %s..."), urlcfg->get_source());
 		std::cout.flush();
@@ -319,7 +319,7 @@ int Controller::run(const CliArgsParser& args)
 		}
 	}
 	urlcfg->reload();
-	if (!args.do_export && !args.silent) {
+	if (!args.do_export() && !args.silent()) {
 		std::cout << _("done.") << std::endl;
 	}
 
@@ -364,13 +364,13 @@ int Controller::run(const CliArgsParser& args)
 		return EXIT_FAILURE;
 	}
 
-	if (!args.do_export && !args.do_vacuum && !args.silent)
+	if (!args.do_export() && !args.do_vacuum() && !args.silent())
 		std::cout << _("Loading articles from cache...");
-	if (args.do_vacuum)
+	if (args.do_vacuum())
 		std::cout << _("Opening cache...");
 	std::cout.flush();
 
-	if (args.do_vacuum) {
+	if (args.do_vacuum()) {
 		std::cout << _("done.") << std::endl;
 		std::cout << _("Cleaning up cache thoroughly...");
 		std::cout.flush();
@@ -410,49 +410,49 @@ int Controller::run(const CliArgsParser& args)
 
 	std::vector<std::string> tags = urlcfg->get_alltags();
 
-	if (!args.do_export && !args.silent)
+	if (!args.do_export() && !args.silent())
 		std::cout << _("done.") << std::endl;
 
 	// if configured, we fill all query feeds with some data; no need to
 	// sort it, it will be refilled when actually opening it.
 	if (cfg.get_configvalue_as_bool("prepopulate-query-feeds")) {
-		if (!args.do_export && !args.silent) {
+		if (!args.do_export() && !args.silent()) {
 			std::cout << _("Prepopulating query feeds...");
 			std::cout.flush();
 		}
 
 		feedcontainer.populate_query_feeds();
 
-		if (!args.do_export && !args.silent) {
+		if (!args.do_export() && !args.silent()) {
 			std::cout << _("done.") << std::endl;
 		}
 	}
 
 	feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 
-	if (args.do_export) {
+	if (args.do_export()) {
 		export_opml();
 		return EXIT_SUCCESS;
 	}
 
-	if (args.do_read_import) {
+	if (args.do_read_import()) {
 		LOG(Level::INFO,
 			"Importing read information file from %s",
-			args.readinfofile);
+			args.readinfofile());
 		std::cout << _("Importing list of read articles...");
 		std::cout.flush();
-		import_read_information(args.readinfofile);
+		import_read_information(args.readinfofile());
 		std::cout << _("done.") << std::endl;
 		return EXIT_SUCCESS;
 	}
 
-	if (args.do_read_export) {
+	if (args.do_read_export()) {
 		LOG(Level::INFO,
 			"Exporting read information file to %s",
-			args.readinfofile);
+			args.readinfofile());
 		std::cout << _("Exporting list of read articles...");
 		std::cout.flush();
-		export_read_information(args.readinfofile);
+		export_read_information(args.readinfofile());
 		std::cout << _("done.") << std::endl;
 		return EXIT_SUCCESS;
 	}
@@ -464,8 +464,8 @@ int Controller::run(const CliArgsParser& args)
 	v->set_cache(rsscache);
 	v->set_filters(&filters);
 
-	if (args.execute_cmds) {
-		execute_commands(args.cmds_to_execute);
+	if (args.execute_cmds()) {
+		execute_commands(args.cmds_to_execute());
 		return EXIT_SUCCESS;
 	}
 
@@ -489,19 +489,19 @@ int Controller::run(const CliArgsParser& args)
 		configpaths.cmdline_file(),
 		history_limit);
 
-	if (!args.silent) {
+	if (!args.silent()) {
 		std::cout << _("Cleaning up cache...");
 		std::cout.flush();
 	}
 	try {
 		std::lock_guard<std::mutex> feedslock(feeds_mutex);
 		rsscache->cleanup_cache(feedcontainer.feeds);
-		if (!args.silent) {
+		if (!args.silent()) {
 			std::cout << _("done.") << std::endl;
 		}
 	} catch (const DbException& e) {
 		LOG(Level::USERERROR, "Cleaning up cache failed: %s", e.what());
-		if (!args.silent) {
+		if (!args.silent()) {
 			std::cout << _("failed: ") << e.what() << std::endl;
 			ret = EXIT_FAILURE;
 		}

@@ -12,7 +12,7 @@ CliArgsParser::CliArgsParser(int argc, char* argv[])
 {
 	int c;
 
-	program_name = argv[0];
+	m_program_name = argv[0];
 
 	static const char getopt_str[] = "i:erhqu:c:C:d:l:vVx:XI:E:";
 	static const struct option longopts[] = {
@@ -50,135 +50,256 @@ CliArgsParser::CliArgsParser(int argc, char* argv[])
 		switch (c) {
 		case ':': /* fall-through */
 		case '?': /* missing option */
-			should_print_usage = true;
+			m_should_print_usage = true;
 
-			should_return = true;
-			return_code = EXIT_FAILURE;
+			m_should_return = true;
+			m_return_code = EXIT_FAILURE;
 
 			break;
 		case 'i':
-			if (do_export) {
-				should_print_usage = true;
+			if (m_do_export) {
+				m_should_print_usage = true;
 
-				should_return = true;
-				return_code = EXIT_FAILURE;
+				m_should_return = true;
+				m_return_code = EXIT_FAILURE;
 
 				break;
 			}
-			do_import = true;
-			importfile = optarg;
+			m_do_import = true;
+			m_importfile = optarg;
 			break;
 		case 'r':
-			refresh_on_start = true;
+			m_refresh_on_start = true;
 			break;
 		case 'e':
 			// disable logging of newsboat's startup progress to
 			// stdout, because the OPML export will be printed to
 			// stdout.
-			silent = true;
-			if (do_import) {
-				should_print_usage = true;
+			m_silent = true;
+			if (m_do_import) {
+				m_should_print_usage = true;
 
-				should_return = true;
-				return_code = EXIT_FAILURE;
+				m_should_return = true;
+				m_return_code = EXIT_FAILURE;
 
 				break;
 			}
-			do_export = true;
+			m_do_export = true;
 			break;
 		case 'h':
-			should_print_usage = true;
-			should_return = true;
-			return_code = EXIT_SUCCESS;
+			m_should_print_usage = true;
+			m_should_return = true;
+			m_return_code = EXIT_SUCCESS;
 			break;
 		case 'u':
-			set_url_file = true;
-			url_file = optarg;
-			using_nonstandard_configs = true;
+			m_set_url_file = true;
+			m_url_file = optarg;
+			m_using_nonstandard_configs = true;
 			break;
 		case 'c':
-			set_cache_file = true;
-			cache_file = optarg;
-			set_lock_file = true;
-			lock_file = std::string(cache_file) + LOCK_SUFFIX;
-			using_nonstandard_configs = true;
+			m_set_cache_file = true;
+			m_cache_file = optarg;
+			m_set_lock_file = true;
+			m_lock_file = std::string(m_cache_file) + LOCK_SUFFIX;
+			m_using_nonstandard_configs = true;
 			break;
 		case 'C':
-			set_config_file = true;
-			config_file = optarg;
-			using_nonstandard_configs = true;
+			m_set_config_file = true;
+			m_config_file = optarg;
+			m_using_nonstandard_configs = true;
 			break;
 		case 'X':
-			do_vacuum = true;
+			m_do_vacuum = true;
 			break;
 		case 'v':
 		case 'V':
-			show_version++;
+			m_show_version++;
 			break;
 		case 'x':
 			// disable logging of newsboat's startup progress to
 			// stdout, because the command execution result will be
 			// printed to stdout
-			silent = true;
+			m_silent = true;
 
-			execute_cmds = true;
-			cmds_to_execute.push_back(optarg);
+			m_execute_cmds = true;
+			m_cmds_to_execute.push_back(optarg);
 			while (optind < argc && *argv[optind] != '-') {
-				cmds_to_execute.push_back(argv[optind]);
+				m_cmds_to_execute.push_back(argv[optind]);
 				optind++;
 			}
 			break;
 		case 'q':
-			silent = true;
+			m_silent = true;
 			break;
 		case 'd':
-			set_log_file = true;
-			log_file = optarg;
+			m_set_log_file = true;
+			m_log_file = optarg;
 			break;
 		case 'l': {
 			Level l = static_cast<Level>(atoi(optarg));
 			if (l > Level::NONE && l <= Level::DEBUG) {
-				set_log_level = true;
-				log_level = l;
+				m_set_log_level = true;
+				m_log_level = l;
 			} else {
-				display_msg =
+				m_display_msg =
 					strprintf::fmt(_("%s: %s: invalid "
 							 "loglevel value"),
 						argv[0],
 						optarg);
 
-				should_return = true;
-				return_code = EXIT_FAILURE;
+				m_should_return = true;
+				m_return_code = EXIT_FAILURE;
 
 				break;
 			}
 		} break;
 		case 'I':
-			if (do_read_export) {
-				should_print_usage = true;
+			if (m_do_read_export) {
+				m_should_print_usage = true;
 
-				should_return = true;
-				return_code = EXIT_FAILURE;
+				m_should_return = true;
+				m_return_code = EXIT_FAILURE;
 
 				break;
 			}
-			do_read_import = true;
-			readinfofile = optarg;
+			m_do_read_import = true;
+			m_readinfofile = optarg;
 			break;
 		case 'E':
-			if (do_read_import) {
-				should_print_usage = true;
+			if (m_do_read_import) {
+				m_should_print_usage = true;
 
-				should_return = true;
-				return_code = EXIT_FAILURE;
+				m_should_return = true;
+				m_return_code = EXIT_FAILURE;
 
 				break;
 			}
-			do_read_export = true;
-			readinfofile = optarg;
+			m_do_read_export = true;
+			m_readinfofile = optarg;
 			break;
 		}
 	};
 }
 
+bool CliArgsParser::do_import() const {
+	return m_do_import;
+}
+
+bool CliArgsParser::do_export() const {
+	return m_do_export;
+}
+
+bool CliArgsParser::do_vacuum() const {
+	return m_do_vacuum;
+}
+
+std::string CliArgsParser::importfile() const {
+	return m_importfile;
+}
+
+bool CliArgsParser::do_read_import() const {
+	return m_do_read_import;
+}
+
+bool CliArgsParser::do_read_export() const {
+	return m_do_read_export;
+}
+
+std::string CliArgsParser::readinfofile() const {
+	return m_readinfofile;
+}
+
+std::string CliArgsParser::program_name() const {
+	return m_program_name;
+}
+
+unsigned int CliArgsParser::show_version() const {
+	return m_show_version;
+}
+
+bool CliArgsParser::silent() const {
+	return m_silent;
+}
+
+bool CliArgsParser::using_nonstandard_configs() const {
+	return m_using_nonstandard_configs;
+}
+
+bool CliArgsParser::should_return() const {
+	return m_should_return;
+}
+
+int CliArgsParser::return_code() const {
+	return m_return_code;
+}
+
+std::string CliArgsParser::display_msg() const {
+	return m_display_msg;
+}
+
+bool CliArgsParser::should_print_usage() const {
+	return m_should_print_usage;
+}
+
+bool CliArgsParser::refresh_on_start() const {
+	return m_refresh_on_start;
+}
+
+bool CliArgsParser::set_url_file() const {
+	return m_set_url_file;
+}
+
+std::string CliArgsParser::url_file() const {
+	return m_url_file;
+}
+
+bool CliArgsParser::set_lock_file() const {
+	return m_set_lock_file;
+}
+
+std::string CliArgsParser::lock_file() const {
+	return m_lock_file;
+}
+
+bool CliArgsParser::set_cache_file() const {
+	return m_set_cache_file;
+}
+
+std::string CliArgsParser::cache_file() const {
+	return m_cache_file;
+}
+
+bool CliArgsParser::set_config_file() const {
+	return m_set_config_file;
+}
+
+std::string CliArgsParser::config_file() const {
+	return m_config_file;
+}
+
+bool CliArgsParser::execute_cmds() const {
+	return m_execute_cmds;
+}
+
+std::vector<std::string> CliArgsParser::cmds_to_execute() const {
+	return m_cmds_to_execute;
+}
+
+bool CliArgsParser::set_log_file() const {
+	return m_set_log_file;
+}
+
+std::string CliArgsParser::log_file() const {
+	return m_log_file;
+}
+
+bool CliArgsParser::set_log_level() const {
+	return m_set_log_level;
+}
+
+Level CliArgsParser::log_level() const {
+	return m_log_level;
+}
+
 } // namespace newsboat
+
