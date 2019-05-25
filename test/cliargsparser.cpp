@@ -575,3 +575,20 @@ TEST_CASE(
 		check({"newsboat", "--log-level=90001"});
 	}
 }
+
+TEST_CASE("Sets `program_name` to the first string of the options list",
+		"[CliArgsParser]")
+{
+	auto check = [](TestHelpers::Opts opts, std::string expected) {
+		CliArgsParser args(opts.argc(), opts.argv());
+
+		REQUIRE(args.program_name() == expected);
+	};
+
+	check({"newsboat"}, "newsboat");
+	check({"podboat", "-h"}, "podboat");
+	check({"something else entirely", "--foo", "--bar", "--baz"},
+			"something else entirely");
+	check({"/usr/local/bin/app-with-a-path"},
+			"/usr/local/bin/app-with-a-path");
+}

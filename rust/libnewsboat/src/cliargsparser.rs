@@ -836,4 +836,32 @@ mod tests {
             "--log-level=90001".to_string(),
         ]);
     }
+
+    #[test]
+    fn t_sets_program_name_to_the_first_string_of_the_options_list() {
+        let check = |opts, expected| {
+            let args = CliArgsParser::new(opts);
+
+            assert_eq!(args.program_name, expected);
+        };
+
+        check(vec!["newsboat".to_string()], "newsboat".to_string());
+        check(
+            vec!["podboat".to_string(), "-h".to_string()],
+            "podboat".to_string(),
+        );
+        check(
+            vec![
+                "something else entirely".to_string(),
+                "--foo".to_string(),
+                "--bar".to_string(),
+                "--baz".to_string(),
+            ],
+            "something else entirely".to_string(),
+        );
+        check(
+            vec!["/usr/local/bin/app-with-a-path".to_string()],
+            "/usr/local/bin/app-with-a-path".to_string(),
+        );
+    }
 }
