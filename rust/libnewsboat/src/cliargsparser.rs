@@ -174,7 +174,7 @@ impl CliArgsParser {
                     .takes_value(true),
             );
 
-        let matches = match app.get_matches_from_safe(opts) {
+        let matches = match app.get_matches_from_safe(&opts) {
             Ok(matches) => matches,
             Err(_) => {
                 return CliArgsParser {
@@ -311,7 +311,10 @@ impl CliArgsParser {
                     args.log_level = Level::Debug;
                 }
                 _ => {
-                    args.display_msg = "Uh-oh!".to_string();
+                    // TODO: use gettext to i18n this string. Note that I changed %d to %s because
+                    // there is actually no guarantee that the user passed us a number
+                    args.display_msg =
+                        fmt!("%s: %s: invalid loglevel value", &opts[0], log_level_str);
                     args.should_return = true;
                     args.return_code = EXIT_FAILURE;
                 }

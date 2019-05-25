@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate strprintf;
+
 extern crate backtrace;
 #[macro_use]
 extern crate nom;
