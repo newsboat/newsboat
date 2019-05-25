@@ -9,6 +9,7 @@ extern crate once_cell;
 #[macro_use]
 extern crate proptest;
 extern crate clap;
+extern crate gettextrs;
 extern crate libc;
 
 // This module must be declared before the others because it exports a `log!` macro that everyone

@@ -1,4 +1,5 @@
 use clap::{App, Arg};
+use gettextrs::gettext;
 use libc::{EXIT_FAILURE, EXIT_SUCCESS};
 
 use logger::Level;
@@ -311,10 +312,11 @@ impl CliArgsParser {
                     args.log_level = Level::Debug;
                 }
                 _ => {
-                    // TODO: use gettext to i18n this string. Note that I changed %d to %s because
-                    // there is actually no guarantee that the user passed us a number
-                    args.display_msg =
-                        fmt!("%s: %s: invalid loglevel value", &opts[0], log_level_str);
+                    args.display_msg = fmt!(
+                        &gettext("%s: %s: invalid loglevel value"),
+                        &opts[0],
+                        log_level_str
+                    );
                     args.should_return = true;
                     args.return_code = EXIT_FAILURE;
                 }
