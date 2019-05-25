@@ -376,6 +376,21 @@ void ItemListFormAction::process_operation(Operation op,
 			v->show_error(_("Error: no item selected!"));
 		}
 	} break;
+	case OP_SAVEALL: {
+		LOG(Level::INFO,
+			"ItemListFormAction: saving all items");
+		if (visible_items.size() != 0) {
+			std::string directory = v->run_filebrowser("");
+			for(auto &item : visible_items) {
+				if (directory.back() != '/') {
+					directory = directory + "/";
+				}
+
+				std::string filename = directory + v->get_filename_suggestion(item.first->title());
+				save_article(filename, item.first);
+			}
+		}
+	} break;
 	case OP_HELP:
 		v->push_help();
 		break;
@@ -1189,6 +1204,7 @@ KeyMapHintEntry* ItemListFormAction::get_keymap_hint()
 	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")},
 		{OP_OPEN, _("Open")},
 		{OP_SAVE, _("Save")},
+		{OP_SAVEALL, _("Save All")},
 		{OP_RELOAD, _("Reload")},
 		{OP_NEXTUNREAD, _("Next Unread")},
 		{OP_MARKFEEDREAD, _("Mark All Read")},
