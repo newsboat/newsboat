@@ -187,7 +187,7 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 	f.open(queuefile.c_str(), std::fstream::out);
 	if (f.is_open()) {
 		for (const auto& dl : dltemp) {
-			f << dl.url() << " " << Stfl::quote(dl.filename());
+			f << dl.url() << " " << utils::quote(dl.filename());
 			if (dl.status() == DlStatus::READY)
 				f << " downloaded";
 			if (dl.status() == DlStatus::PLAYED)
