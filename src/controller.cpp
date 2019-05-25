@@ -651,7 +651,7 @@ std::vector<std::shared_ptr<RssItem>> Controller::search_for_items(
 	std::shared_ptr<RssFeed> feed)
 {
 	std::vector<std::shared_ptr<RssItem>> items;
-	if (feed && feed->is_query_feed()) {
+	if (feed && (feed->is_query_feed() || feed->is_search_feed())) {
 		std::unordered_set<std::string> guids;
 		for (const auto& item : feed->items()) {
 			if (!item->deleted()) {

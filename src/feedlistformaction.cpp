@@ -48,6 +48,7 @@ FeedListFormAction::FeedListFormAction(View* vv,
 	valid_cmds.push_back("goto");
 	std::sort(valid_cmds.begin(), valid_cmds.end());
 	old_sort_order = cfg->get_configvalue("feed-sort-order");
+	search_dummy_feed->set_search_feed(true);
 }
 
 void FeedListFormAction::init()
