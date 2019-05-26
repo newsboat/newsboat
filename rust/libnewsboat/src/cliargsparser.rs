@@ -6,16 +6,17 @@ use logger::Level;
 
 #[derive(Default)]
 pub struct CliArgsParser {
-    pub do_import: bool,
     pub do_export: bool,
     pub do_vacuum: bool,
     pub program_name: String,
-    pub importfile: String,
     pub do_read_import: bool,
     pub do_read_export: bool,
     pub readinfofile: String,
     pub show_version: usize,
     pub silent: bool,
+
+    /// If this contains some value, it's the path to the OPML file that should be imported.
+    pub importfile: Option<String>,
 
     /// If this contains some value, the creator of `CliArgsParser` object should call
     /// `exit(return_code)`.
@@ -175,7 +176,7 @@ impl CliArgsParser {
         };
 
         if matches.is_present(EXPORT_TO_OPML) {
-            if args.do_import {
+            if args.importfile.is_some() {
                 args.should_print_usage = true;
                 args.return_code = Some(EXIT_FAILURE);
             } else {
@@ -200,8 +201,7 @@ impl CliArgsParser {
                 args.should_print_usage = true;
                 args.return_code = Some(EXIT_FAILURE);
             } else {
-                args.do_import = true;
-                args.importfile = importfile.to_string();
+                args.importfile = Some(importfile.to_string());
             }
         }
 
@@ -325,8 +325,7 @@ mod tests {
         let check = |opts| {
             let args = CliArgsParser::new(opts);
 
-            assert!(args.do_import);
-            assert_eq!(args.importfile, filename);
+            assert_eq!(args.importfile, Some(filename.clone()));
         };
 
         check(vec![

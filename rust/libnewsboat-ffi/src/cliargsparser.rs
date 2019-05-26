@@ -86,7 +86,7 @@ where
 
 #[no_mangle]
 pub extern "C" fn rs_cliargsparser_do_import(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.do_import, false)
+    with_cliargsparser(object, |o| o.importfile.is_some(), false)
 }
 
 #[no_mangle]
@@ -106,7 +106,7 @@ pub extern "C" fn rs_cliargsparser_program_name(object: *mut c_void) -> *mut c_c
 
 #[no_mangle]
 pub extern "C" fn rs_cliargsparser_importfile(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_str(object, |o| &o.importfile)
+    with_cliargsparser_opt_str(object, |o| &o.importfile)
 }
 
 #[no_mangle]
