@@ -58,7 +58,7 @@ static OpDesc opdescs[] = {
 		_("Mark all above as read"),
 		KM_ARTICLELIST},
 	{OP_SAVE, "save", "s", _("Save article"), KM_ARTICLELIST | KM_ARTICLE},
-	{OP_SAVEALL, "save-all", "S", _("Save articles"), KM_ARTICLELIST},
+	{OP_SAVEALL, "save-all", "", _("Save articles"), KM_ARTICLELIST},
 	{OP_NEXT,
 		"next",
 		"J",
