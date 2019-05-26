@@ -385,7 +385,8 @@ void ItemListFormAction::process_operation(Operation op,
 				directory = directory + "/";
 			}
 
-				std::string filename = directory + v->get_filename_suggestion(item.first->title());
+			for(const auto &item : visible_items) {
+				const std::string filename = directory + v->get_filename_suggestion(item.first->title());
 				save_article(filename, item.first);
 			}
 		}
