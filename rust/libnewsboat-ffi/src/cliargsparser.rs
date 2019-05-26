@@ -136,7 +136,7 @@ pub extern "C" fn rs_cliargsparser_silent(object: *mut c_void) -> bool {
 
 #[no_mangle]
 pub extern "C" fn rs_cliargsparser_using_nonstandard_configs(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.using_nonstandard_configs, false)
+    with_cliargsparser(object, |o| o.using_nonstandard_configs(), false)
 }
 
 #[no_mangle]

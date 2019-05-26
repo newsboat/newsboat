@@ -16,7 +16,6 @@ pub struct CliArgsParser {
     pub readinfofile: String,
     pub show_version: usize,
     pub silent: bool,
-    pub using_nonstandard_configs: bool,
 
     /// If this contains some value, the creator of `CliArgsParser` object should call
     /// `exit(return_code)`.
@@ -208,18 +207,15 @@ impl CliArgsParser {
 
         if let Some(url_file) = matches.value_of(URL_FILE) {
             args.url_file = Some(url_file.to_string());
-            args.using_nonstandard_configs = true;
         }
 
         if let Some(cache_file) = matches.value_of(CACHE_FILE) {
             args.cache_file = Some(cache_file.to_string());
             args.lock_file = Some(cache_file.to_string() + LOCK_SUFFIX);
-            args.using_nonstandard_configs = true;
         }
 
         if let Some(config_file) = matches.value_of(CONFIG_FILE) {
             args.config_file = Some(config_file.to_string());
-            args.using_nonstandard_configs = true;
         }
 
         // Casting u64 to usize. Highly unlikely that the user will hit the limit, even if we were
@@ -292,6 +288,10 @@ impl CliArgsParser {
         }
 
         args
+    }
+
+    pub fn using_nonstandard_configs(&self) -> bool {
+        self.url_file.is_some() || self.cache_file.is_some() || self.config_file.is_some()
     }
 }
 
@@ -428,7 +428,7 @@ mod tests {
             let args = CliArgsParser::new(opts);
 
             assert_eq!(args.url_file, Some(filename.clone()));
-            assert!(args.using_nonstandard_configs);
+            assert!(args.using_nonstandard_configs());
         };
 
         check(vec![
@@ -452,7 +452,7 @@ mod tests {
 
             assert_eq!(args.cache_file, Some(filename.clone()));
             assert_eq!(args.lock_file, Some(filename.clone() + ".lock"));
-            assert!(args.using_nonstandard_configs);
+            assert!(args.using_nonstandard_configs());
         };
 
         check(vec![
@@ -474,7 +474,7 @@ mod tests {
             let args = CliArgsParser::new(opts);
 
             assert_eq!(args.config_file, Some(filename.clone()));
-            assert!(args.using_nonstandard_configs);
+            assert!(args.using_nonstandard_configs());
         };
 
         check(vec![
