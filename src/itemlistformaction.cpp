@@ -381,10 +381,9 @@ void ItemListFormAction::process_operation(Operation op,
 			"ItemListFormAction: saving all items");
 		if (visible_items.size() != 0) {
 			std::string directory = v->run_filebrowser("");
-			for(auto &item : visible_items) {
-				if (directory.back() != '/') {
-					directory = directory + "/";
-				}
+			if (directory.back() != '/') {
+				directory = directory + "/";
+			}
 
 				std::string filename = directory + v->get_filename_suggestion(item.first->title());
 				save_article(filename, item.first);
