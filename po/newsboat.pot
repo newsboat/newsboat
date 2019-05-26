@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2019-05-26 15:49+0300\n"
+"POT-Creation-Date: 2019-05-26 15:56+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -147,9 +147,9 @@ msgstr ""
 msgid "Caught newsboat::Exception with message: %s"
 msgstr ""
 
-#: src/cliargsparser.cpp:145 src/pbcontroller.cpp:233
+#: src/cliargsparser.cpp:145
 #, c-format
-msgid "%s: %d: invalid loglevel value"
+msgid "%s: %s: invalid loglevel value"
 msgstr ""
 
 #: src/colormanager.cpp:56 src/colormanager.cpp:59 src/regexmanager.cpp:74
@@ -1340,6 +1340,11 @@ msgstr ""
 #: src/pbcontroller.cpp:171
 #, c-format
 msgid "Fatal error: couldn't create configuration directory `%s': (%i) %s"
+msgstr ""
+
+#: src/pbcontroller.cpp:233
+#, c-format
+msgid "%s: %d: invalid loglevel value"
 msgstr ""
 
 #: src/pbcontroller.cpp:311

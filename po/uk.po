@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2019-05-26 15:49+0300\n"
+"POT-Creation-Date: 2019-05-26 15:56+0300\n"
 "PO-Revision-Date: 2018-08-01 22:39+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
@@ -154,9 +154,9 @@ msgstr "Впіймали newsboat::matcherexception із повідомленн�
 msgid "Caught newsboat::Exception with message: %s"
 msgstr "Впіймали newsboat::exception із повідомленням: %s"
 
-#: src/cliargsparser.cpp:145 src/pbcontroller.cpp:233
-#, c-format
-msgid "%s: %d: invalid loglevel value"
+#: src/cliargsparser.cpp:145
+#, fuzzy, c-format
+msgid "%s: %s: invalid loglevel value"
 msgstr "%s: %d: неправильний рівень логування"
 
 #: src/colormanager.cpp:56 src/colormanager.cpp:59 src/regexmanager.cpp:74
@@ -1382,6 +1382,11 @@ msgstr ""
 #, c-format
 msgid "Fatal error: couldn't create configuration directory `%s': (%i) %s"
 msgstr "Помилка: не можу створити конфігураційну директорію `%s': (%i) %s"
+
+#: src/pbcontroller.cpp:233
+#, c-format
+msgid "%s: %d: invalid loglevel value"
+msgstr "%s: %d: неправильний рівень логування"
 
 #: src/pbcontroller.cpp:311
 msgid "Cleaning up queue..."

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2019-05-26 15:49+0300\n"
+"POT-Creation-Date: 2019-05-26 15:56+0300\n"
 "PO-Revision-Date: 2018-12-22 15:47+0100\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
@@ -156,9 +156,9 @@ msgstr "newsboat::matcherexception gefangen mit Nachricht: %s"
 msgid "Caught newsboat::Exception with message: %s"
 msgstr "newsboat::exception gefangen mit Nachricht: %s"
 
-#: src/cliargsparser.cpp:145 src/pbcontroller.cpp:233
-#, c-format
-msgid "%s: %d: invalid loglevel value"
+#: src/cliargsparser.cpp:145
+#, fuzzy, c-format
+msgid "%s: %s: invalid loglevel value"
 msgstr "%s: %d: ungültiger Loglevel-Wert"
 
 #: src/colormanager.cpp:56 src/colormanager.cpp:59 src/regexmanager.cpp:74
@@ -1385,6 +1385,11 @@ msgstr ""
 msgid "Fatal error: couldn't create configuration directory `%s': (%i) %s"
 msgstr ""
 "Fataler Fehler: Konnte Konfigurationsverzeichnis „%s“ nicht anlegen: (%i) %s"
+
+#: src/pbcontroller.cpp:233
+#, c-format
+msgid "%s: %d: invalid loglevel value"
+msgstr "%s: %d: ungültiger Loglevel-Wert"
 
 #: src/pbcontroller.cpp:311
 msgid "Cleaning up queue..."
