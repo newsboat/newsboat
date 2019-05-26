@@ -415,7 +415,7 @@ TEST_CASE(
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.do_read_import());
-		REQUIRE(args.readinfofile() == filename);
+		REQUIRE(args.readinfo_import_file() == filename);
 	};
 
 	SECTION("-I")
@@ -440,7 +440,7 @@ TEST_CASE(
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.do_read_export());
-		REQUIRE(args.readinfofile() == filename);
+		REQUIRE(args.readinfo_export_file() == filename);
 	};
 
 	SECTION("-E")

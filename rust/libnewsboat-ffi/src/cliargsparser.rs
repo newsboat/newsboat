@@ -111,17 +111,22 @@ pub extern "C" fn rs_cliargsparser_importfile(object: *mut c_void) -> *mut c_cha
 
 #[no_mangle]
 pub extern "C" fn rs_cliargsparser_do_read_import(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.do_read_import, false)
+    with_cliargsparser(object, |o| o.readinfo_import_file.is_some(), false)
+}
+
+#[no_mangle]
+pub extern "C" fn rs_cliargsparser_readinfo_import_file(object: *mut c_void) -> *mut c_char {
+    with_cliargsparser_opt_str(object, |o| &o.readinfo_import_file)
 }
 
 #[no_mangle]
 pub extern "C" fn rs_cliargsparser_do_read_export(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.do_read_export, false)
+    with_cliargsparser(object, |o| o.readinfo_export_file.is_some(), false)
 }
 
 #[no_mangle]
-pub extern "C" fn rs_cliargsparser_readinfofile(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_str(object, |o| &o.readinfofile)
+pub extern "C" fn rs_cliargsparser_readinfo_export_file(object: *mut c_void) -> *mut c_char {
+    with_cliargsparser_opt_str(object, |o| &o.readinfo_export_file)
 }
 
 #[no_mangle]

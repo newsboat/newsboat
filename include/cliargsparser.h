@@ -22,11 +22,15 @@ public:
 
 	std::string importfile() const;
 
+	/// If `do_read_import()` is `true`, Newsboat should import read articles
+	/// info from  `readinfo_import_file()`.
 	bool do_read_import() const;
+	std::string readinfo_import_file() const;
 
+	/// If `do_read_export()` is `true`, Newsboat should export read articles
+	/// info to `readinfo_export_file()`.
 	bool do_read_export() const;
-
-	std::string readinfofile() const;
+	std::string readinfo_export_file() const;
 
 	std::string program_name() const;
 

@@ -25,9 +25,11 @@ extern "C" {
 
 	bool rs_cliargsparser_do_read_import(void* rs_cliargsparser);
 
+	char* rs_cliargsparser_readinfo_import_file(void* rs_cliargsparser);
+
 	bool rs_cliargsparser_do_read_export(void* rs_cliargsparser);
 
-	char* rs_cliargsparser_readinfofile(void* rs_cliargsparser);
+	char* rs_cliargsparser_readinfo_export_file(void* rs_cliargsparser);
 
 	unsigned int rs_cliargsparser_show_version(void* rs_cliargsparser);
 
@@ -122,12 +124,16 @@ bool CliArgsParser::do_read_import() const {
 	GET_VALUE(do_read_import, false);
 }
 
+std::string CliArgsParser::readinfo_import_file() const {
+	GET_STRING(readinfo_import_file);
+}
+
 bool CliArgsParser::do_read_export() const {
 	GET_VALUE(do_read_export, false);
 }
 
-std::string CliArgsParser::readinfofile() const {
-	GET_STRING(readinfofile);
+std::string CliArgsParser::readinfo_export_file() const {
+	GET_STRING(readinfo_export_file);
 }
 
 std::string CliArgsParser::program_name() const {

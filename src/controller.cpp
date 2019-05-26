@@ -438,10 +438,10 @@ int Controller::run(const CliArgsParser& args)
 	if (args.do_read_import()) {
 		LOG(Level::INFO,
 			"Importing read information file from %s",
-			args.readinfofile());
+			args.readinfo_import_file());
 		std::cout << _("Importing list of read articles...");
 		std::cout.flush();
-		import_read_information(args.readinfofile());
+		import_read_information(args.readinfo_import_file());
 		std::cout << _("done.") << std::endl;
 		return EXIT_SUCCESS;
 	}
@@ -449,10 +449,10 @@ int Controller::run(const CliArgsParser& args)
 	if (args.do_read_export()) {
 		LOG(Level::INFO,
 			"Exporting read information file to %s",
-			args.readinfofile());
+			args.readinfo_export_file());
 		std::cout << _("Exporting list of read articles...");
 		std::cout.flush();
-		export_read_information(args.readinfofile());
+		export_read_information(args.readinfo_export_file());
 		std::cout << _("done.") << std::endl;
 		return EXIT_SUCCESS;
 	}

@@ -9,14 +9,19 @@ pub struct CliArgsParser {
     pub do_export: bool,
     pub do_vacuum: bool,
     pub program_name: String,
-    pub do_read_import: bool,
-    pub do_read_export: bool,
-    pub readinfofile: String,
     pub show_version: usize,
     pub silent: bool,
 
     /// If this contains some value, it's the path to the OPML file that should be imported.
     pub importfile: Option<String>,
+
+    /// If this contains some value, it's the path to the file from which the list of read articles
+    /// should be imported.
+    pub readinfo_import_file: Option<String>,
+
+    /// If this contains some value, it's the path to the file to which the list of read articles
+    /// should be exported.
+    pub readinfo_export_file: Option<String>,
 
     /// If this contains some value, the creator of `CliArgsParser` object should call
     /// `exit(return_code)`.
@@ -233,22 +238,20 @@ impl CliArgsParser {
         }
 
         if let Some(importfile) = matches.value_of(IMPORT_FROM_FILE) {
-            if args.do_read_export {
+            if args.readinfo_export_file.is_some() {
                 args.should_print_usage = true;
                 args.return_code = Some(EXIT_FAILURE);
             } else {
-                args.do_read_import = true;
-                args.readinfofile = importfile.to_string();
+                args.readinfo_import_file = Some(importfile.to_string());
             }
         }
 
         if let Some(exportfile) = matches.value_of(EXPORT_TO_FILE) {
-            if args.do_read_import {
+            if args.readinfo_import_file.is_some() {
                 args.should_print_usage = true;
                 args.return_code = Some(EXIT_FAILURE);
             } else {
-                args.do_read_export = true;
-                args.readinfofile = exportfile.to_string();
+                args.readinfo_export_file = Some(exportfile.to_string());
             }
         }
 
@@ -619,14 +622,13 @@ mod tests {
     }
 
     #[test]
-    fn t_sets_do_read_import_and_readinfofile_if_dash_capital_i_is_provided() {
+    fn t_sets_readinfo_import_file_if_dash_capital_i_is_provided() {
         let filename = "filename".to_string();
 
         let check = |opts| {
             let args = CliArgsParser::new(opts);
 
-            assert!(args.do_read_import);
-            assert_eq!(args.readinfofile, filename);
+            assert_eq!(args.readinfo_import_file, Some(filename.clone()));
         };
 
         check(vec![
@@ -641,14 +643,13 @@ mod tests {
     }
 
     #[test]
-    fn t_sets_do_read_export_and_readinfofile_if_dash_capital_e_is_provided() {
+    fn t_sets_readinfo_export_file_if_dash_capital_e_is_provided() {
         let filename = "filename".to_string();
 
         let check = |opts| {
             let args = CliArgsParser::new(opts);
 
-            assert!(args.do_read_export);
-            assert_eq!(args.readinfofile, filename);
+            assert_eq!(args.readinfo_export_file, Some(filename.clone()));
         };
 
         check(vec![
