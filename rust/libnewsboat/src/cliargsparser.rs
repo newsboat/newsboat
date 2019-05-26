@@ -18,63 +18,48 @@ pub struct CliArgsParser {
     pub silent: bool,
     pub using_nonstandard_configs: bool,
 
-    /// If `should_return` is `true`, the creator of `CliArgsParser` object
-    /// should call `exit(return_code)`.
-    pub should_return: bool,
-    pub return_code: i32,
+    /// If this contains some value, the creator of `CliArgsParser` object should call
+    /// `exit(return_code)`.
+    pub return_code: Option<i32>,
 
     /// If `display_msg` is not empty, the creator of `CliArgsParser` should
     /// print its contents to stderr.
     ///
-    /// \note The contents of this string should be checked before
-    /// processing `should_return`.
+    /// \note The contents of this string should be checked before processing `return_code`.
     pub display_msg: String,
 
     /// If `should_print_usage` is `true`, the creator of `CliArgsParser`
     /// object should print usage information.
     ///
-    /// \note This field should be checked before processing
-    /// `should_return`.
+    /// \note This field should be checked before processing `return_code`.
     pub should_print_usage: bool,
 
     pub refresh_on_start: bool,
 
-    /// The value of `url_file` should only be used if `set_url_file` is
-    /// `true`.
-    pub set_url_file: bool,
-    pub url_file: String,
+    /// If this contains some value, it's the path to the url file specified by the user.
+    pub url_file: Option<String>,
 
-    /// The value of `lock_file` should only be used if `set_lock_file` is
-    /// `true`.
-    pub set_lock_file: bool,
-    pub lock_file: String,
+    /// If this contains some value, it's the path to the lock file derived from the cache file
+    /// path specified by the user.
+    pub lock_file: Option<String>,
 
-    /// The value of `cache_file` should only be used if `set_cache_file` is
-    /// `true`.
-    pub set_cache_file: bool,
-    pub cache_file: String,
+    /// If this contains some value, it's the path to the cache file specified by the user.
+    pub cache_file: Option<String>,
 
-    /// The value of `config_file` should only be used if `set_config_file`
-    /// is `true`.
-    pub set_config_file: bool,
-    pub config_file: String,
+    /// If this contains some value, it's the path to the config file specified by the user.
+    pub config_file: Option<String>,
 
-    /// If 'execute_cmds' is true, the 'CliArgsParser' object holds commands
-    /// that should be executed in cmds_to_execute vector.
+    /// A vector of Newsboat commands to execute. Empty means user didn't specify any commands to
+    /// run.
     ///
     /// \note The parser does not check if the passed commands are valid.
-    pub execute_cmds: bool,
     pub cmds_to_execute: Vec<String>,
 
-    /// The value of `log_file` should only be used if `set_log_file` is
-    /// `true`.
-    pub set_log_file: bool,
-    pub log_file: String,
+    /// If this contains some value, it's the path to the log file specified by the user.
+    pub log_file: Option<String>,
 
-    /// The value of `log_level` should only be used if `set_log_level` is
-    /// `true`.
-    pub set_log_level: bool,
-    pub log_level: Level,
+    /// If this contains some value, it's the log level specified by the user.
+    pub log_level: Option<Level>,
 }
 
 const LOCK_SUFFIX: &str = ".lock";
@@ -185,8 +170,7 @@ impl CliArgsParser {
             Ok(matches) => matches,
             Err(_) => {
                 args.should_print_usage = true;
-                args.should_return = true;
-                args.return_code = EXIT_FAILURE;
+                args.return_code = Some(EXIT_FAILURE);
                 return args;
             }
         };
@@ -194,8 +178,7 @@ impl CliArgsParser {
         if matches.is_present(EXPORT_TO_OPML) {
             if args.do_import {
                 args.should_print_usage = true;
-                args.should_return = true;
-                args.return_code = EXIT_FAILURE;
+                args.return_code = Some(EXIT_FAILURE);
             } else {
                 args.do_export = true;
                 args.silent = true;
@@ -206,8 +189,7 @@ impl CliArgsParser {
 
         if matches.is_present(HELP) {
             args.should_print_usage = true;
-            args.should_return = true;
-            args.return_code = EXIT_SUCCESS;
+            args.return_code = Some(EXIT_SUCCESS);
         }
 
         args.do_vacuum = matches.is_present(VACUUM);
@@ -217,8 +199,7 @@ impl CliArgsParser {
         if let Some(importfile) = matches.value_of(IMPORT_FROM_OPML) {
             if args.do_export {
                 args.should_print_usage = true;
-                args.should_return = true;
-                args.return_code = EXIT_FAILURE;
+                args.return_code = Some(EXIT_FAILURE);
             } else {
                 args.do_import = true;
                 args.importfile = importfile.to_string();
@@ -226,22 +207,18 @@ impl CliArgsParser {
         }
 
         if let Some(url_file) = matches.value_of(URL_FILE) {
-            args.set_url_file = true;
-            args.url_file = url_file.to_string();
+            args.url_file = Some(url_file.to_string());
             args.using_nonstandard_configs = true;
         }
 
         if let Some(cache_file) = matches.value_of(CACHE_FILE) {
-            args.set_cache_file = true;
-            args.cache_file = cache_file.to_string();
-            args.set_lock_file = true;
-            args.lock_file = cache_file.to_string() + LOCK_SUFFIX;
+            args.cache_file = Some(cache_file.to_string());
+            args.lock_file = Some(cache_file.to_string() + LOCK_SUFFIX);
             args.using_nonstandard_configs = true;
         }
 
         if let Some(config_file) = matches.value_of(CONFIG_FILE) {
-            args.set_config_file = true;
-            args.config_file = config_file.to_string();
+            args.config_file = Some(config_file.to_string());
             args.using_nonstandard_configs = true;
         }
 
@@ -256,15 +233,13 @@ impl CliArgsParser {
 
         if let Some(mut commands) = matches.values_of_lossy(EXECUTE) {
             args.silent = true;
-            args.execute_cmds = true;
             args.cmds_to_execute.append(&mut commands);
         }
 
         if let Some(importfile) = matches.value_of(IMPORT_FROM_FILE) {
             if args.do_read_export {
                 args.should_print_usage = true;
-                args.should_return = true;
-                args.return_code = EXIT_FAILURE;
+                args.return_code = Some(EXIT_FAILURE);
             } else {
                 args.do_read_import = true;
                 args.readinfofile = importfile.to_string();
@@ -274,8 +249,7 @@ impl CliArgsParser {
         if let Some(exportfile) = matches.value_of(EXPORT_TO_FILE) {
             if args.do_read_import {
                 args.should_print_usage = true;
-                args.should_return = true;
-                args.return_code = EXIT_FAILURE;
+                args.return_code = Some(EXIT_FAILURE);
             } else {
                 args.do_read_export = true;
                 args.readinfofile = exportfile.to_string();
@@ -283,35 +257,28 @@ impl CliArgsParser {
         }
 
         if let Some(log_file) = matches.value_of(LOG_FILE) {
-            args.set_log_file = true;
-            args.log_file = log_file.to_string();
+            args.log_file = Some(log_file.to_string());
         }
 
         if let Some(log_level_str) = matches.value_of(LOG_LEVEL) {
             match log_level_str.parse::<u8>() {
                 Ok(1) => {
-                    args.set_log_level = true;
-                    args.log_level = Level::UserError;
+                    args.log_level = Some(Level::UserError);
                 }
                 Ok(2) => {
-                    args.set_log_level = true;
-                    args.log_level = Level::Critical;
+                    args.log_level = Some(Level::Critical);
                 }
                 Ok(3) => {
-                    args.set_log_level = true;
-                    args.log_level = Level::Error;
+                    args.log_level = Some(Level::Error);
                 }
                 Ok(4) => {
-                    args.set_log_level = true;
-                    args.log_level = Level::Warn;
+                    args.log_level = Some(Level::Warn);
                 }
                 Ok(5) => {
-                    args.set_log_level = true;
-                    args.log_level = Level::Info;
+                    args.log_level = Some(Level::Info);
                 }
                 Ok(6) => {
-                    args.set_log_level = true;
-                    args.log_level = Level::Debug;
+                    args.log_level = Some(Level::Debug);
                 }
                 _ => {
                     args.display_msg = fmt!(
@@ -319,8 +286,7 @@ impl CliArgsParser {
                         &opts[0],
                         log_level_str
                     );
-                    args.should_return = true;
-                    args.return_code = EXIT_FAILURE;
+                    args.return_code = Some(EXIT_FAILURE);
                 }
             };
         }
@@ -338,8 +304,7 @@ mod tests {
         let check = |opts| {
             let args = CliArgsParser::new(opts);
             assert!(args.should_print_usage);
-            assert!(args.should_return);
-            assert_eq!(args.return_code, EXIT_FAILURE);
+            assert_eq!(args.return_code, Some(EXIT_FAILURE));
         };
 
         check(vec![
@@ -384,8 +349,7 @@ mod tests {
             let args = CliArgsParser::new(opts);
 
             assert!(args.should_print_usage);
-            assert!(args.should_return);
-            assert_eq!(args.return_code, EXIT_FAILURE);
+            assert_eq!(args.return_code, Some(EXIT_FAILURE));
         };
 
         check(vec![
@@ -449,8 +413,7 @@ mod tests {
             let args = CliArgsParser::new(opts);
 
             assert!(args.should_print_usage);
-            assert!(args.should_return);
-            assert_eq!(args.return_code, EXIT_SUCCESS);
+            assert_eq!(args.return_code, Some(EXIT_SUCCESS));
         };
 
         check(vec!["newsboat".to_string(), "-h".to_string()]);
@@ -464,8 +427,7 @@ mod tests {
         let check = |opts| {
             let args = CliArgsParser::new(opts);
 
-            assert!(args.set_url_file);
-            assert_eq!(args.url_file, filename);
+            assert_eq!(args.url_file, Some(filename.clone()));
             assert!(args.using_nonstandard_configs);
         };
 
@@ -488,10 +450,8 @@ mod tests {
         let check = |opts| {
             let args = CliArgsParser::new(opts);
 
-            assert!(args.set_cache_file);
-            assert_eq!(args.cache_file, filename);
-            assert!(args.set_lock_file);
-            assert_eq!(args.lock_file, filename.clone() + ".lock");
+            assert_eq!(args.cache_file, Some(filename.clone()));
+            assert_eq!(args.lock_file, Some(filename.clone() + ".lock"));
             assert!(args.using_nonstandard_configs);
         };
 
@@ -513,8 +473,7 @@ mod tests {
         let check = |opts| {
             let args = CliArgsParser::new(opts);
 
-            assert!(args.set_config_file);
-            assert_eq!(args.config_file, filename);
+            assert_eq!(args.config_file, Some(filename.clone()));
             assert!(args.using_nonstandard_configs);
         };
 
@@ -580,26 +539,6 @@ mod tests {
             let args = CliArgsParser::new(opts);
 
             assert!(args.silent);
-        };
-
-        check(vec![
-            "newsboat".to_string(),
-            "-x".to_string(),
-            "reload".to_string(),
-        ]);
-        check(vec![
-            "newsboat".to_string(),
-            "--execute".to_string(),
-            "reload".to_string(),
-        ]);
-    }
-
-    #[test]
-    fn t_sets_execute_cmds_if_dash_x_is_provided() {
-        let check = |opts| {
-            let args = CliArgsParser::new(opts);
-
-            assert!(args.execute_cmds);
         };
 
         check(vec![
@@ -733,8 +672,7 @@ mod tests {
             let args = CliArgsParser::new(opts);
 
             assert!(args.should_print_usage);
-            assert!(args.should_return);
-            assert_eq!(args.return_code, EXIT_FAILURE);
+            assert_eq!(args.return_code, Some(EXIT_FAILURE));
         };
 
         check(vec![
@@ -760,8 +698,7 @@ mod tests {
         let check = |opts| {
             let args = CliArgsParser::new(opts);
 
-            assert!(args.set_log_file);
-            assert_eq!(args.log_file, filename);
+            assert_eq!(args.log_file, Some(filename.clone()));
         };
 
         check(vec![
@@ -780,8 +717,7 @@ mod tests {
         let check = |opts, expected_level| {
             let args = CliArgsParser::new(opts);
 
-            assert!(args.set_log_level);
-            assert_eq!(args.log_level, expected_level);
+            assert_eq!(args.log_level, Some(expected_level));
         };
 
         // --log-level=1 means UserError
@@ -825,8 +761,7 @@ mod tests {
             let args = CliArgsParser::new(opts);
 
             assert!(!args.display_msg.is_empty());
-            assert!(args.should_return);
-            assert_eq!(args.return_code, EXIT_FAILURE);
+            assert_eq!(args.return_code, Some(EXIT_FAILURE));
         };
 
         check(vec!["newsboat".to_string(), "-l0".to_string()]);

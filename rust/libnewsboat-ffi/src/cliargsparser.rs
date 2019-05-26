@@ -1,6 +1,7 @@
 use abort_on_panic;
 use libc::{c_char, c_void};
 use libnewsboat::cliargsparser::CliArgsParser;
+use libnewsboat::logger::Level;
 use std::ffi::{CStr, CString};
 use std::mem;
 use std::panic::{RefUnwindSafe, UnwindSafe};
@@ -54,11 +55,31 @@ where
 
 fn with_cliargsparser_str<F>(object: *mut c_void, action: F) -> *mut c_char
 where
-    F: RefUnwindSafe + Fn(&Box<CliArgsParser>) -> &String,
+    F: RefUnwindSafe + Fn(&Box<CliArgsParser>) -> &str,
 {
     with_cliargsparser(
         object,
-        |o| CString::new(action(o).clone()).unwrap().into_raw(),
+        |o| CString::new(action(o).to_string()).unwrap().into_raw(),
+        ptr::null_mut(),
+    )
+}
+
+fn with_cliargsparser_opt_str<F>(object: *mut c_void, action: F) -> *mut c_char
+where
+    F: RefUnwindSafe + Fn(&Box<CliArgsParser>) -> &Option<String>,
+{
+    with_cliargsparser(
+        object,
+        |o| {
+            let opt = action(o);
+            // Converting &Option<String> -> String - either cloned contents of Some(), or an empty
+            // string
+            let opt = opt
+                .as_ref()
+                .map(String::clone)
+                .unwrap_or_else(|| String::new());
+            CString::new(opt).unwrap().into_raw()
+        },
         ptr::null_mut(),
     )
 }
@@ -120,12 +141,12 @@ pub extern "C" fn rs_cliargsparser_using_nonstandard_configs(object: *mut c_void
 
 #[no_mangle]
 pub extern "C" fn rs_cliargsparser_should_return(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.should_return, false)
+    with_cliargsparser(object, |o| o.return_code.is_some(), false)
 }
 
 #[no_mangle]
 pub extern "C" fn rs_cliargsparser_return_code(object: *mut c_void) -> isize {
-    with_cliargsparser(object, |o| o.return_code as isize, 0)
+    with_cliargsparser(object, |o| o.return_code.unwrap_or(0) as isize, 0)
 }
 
 #[no_mangle]
@@ -145,47 +166,47 @@ pub extern "C" fn rs_cliargsparser_refresh_on_start(object: *mut c_void) -> bool
 
 #[no_mangle]
 pub extern "C" fn rs_cliargsparser_set_url_file(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.set_url_file, false)
+    with_cliargsparser(object, |o| o.url_file.is_some(), false)
 }
 
 #[no_mangle]
 pub extern "C" fn rs_cliargsparser_url_file(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_str(object, |o| &o.url_file)
+    with_cliargsparser_opt_str(object, |o| &o.url_file)
 }
 
 #[no_mangle]
 pub extern "C" fn rs_cliargsparser_set_lock_file(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.set_lock_file, false)
+    with_cliargsparser(object, |o| o.lock_file.is_some(), false)
 }
 
 #[no_mangle]
 pub extern "C" fn rs_cliargsparser_lock_file(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_str(object, |o| &o.lock_file)
+    with_cliargsparser_opt_str(object, |o| &o.lock_file)
 }
 
 #[no_mangle]
 pub extern "C" fn rs_cliargsparser_set_cache_file(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.set_cache_file, false)
+    with_cliargsparser(object, |o| o.cache_file.is_some(), false)
 }
 
 #[no_mangle]
 pub extern "C" fn rs_cliargsparser_cache_file(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_str(object, |o| &o.cache_file)
+    with_cliargsparser_opt_str(object, |o| &o.cache_file)
 }
 
 #[no_mangle]
 pub extern "C" fn rs_cliargsparser_set_config_file(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.set_config_file, false)
+    with_cliargsparser(object, |o| o.config_file.is_some(), false)
 }
 
 #[no_mangle]
 pub extern "C" fn rs_cliargsparser_config_file(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_str(object, |o| &o.config_file)
+    with_cliargsparser_opt_str(object, |o| &o.config_file)
 }
 
 #[no_mangle]
 pub extern "C" fn rs_cliargsparser_execute_cmds(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.execute_cmds, false)
+    with_cliargsparser(object, |o| !o.cmds_to_execute.is_empty(), false)
 }
 
 #[no_mangle]
@@ -215,20 +236,20 @@ pub extern "C" fn rs_cliargsparser_cmd_to_execute_n(object: *mut c_void, n: usiz
 
 #[no_mangle]
 pub extern "C" fn rs_cliargsparser_set_log_file(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.set_log_file, false)
+    with_cliargsparser(object, |o| o.log_file.is_some(), false)
 }
 
 #[no_mangle]
 pub extern "C" fn rs_cliargsparser_log_file(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_str(object, |o| &o.log_file)
+    with_cliargsparser_opt_str(object, |o| &o.log_file)
 }
 
 #[no_mangle]
 pub extern "C" fn rs_cliargsparser_set_log_level(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.set_log_level, false)
+    with_cliargsparser(object, |o| o.log_level.is_some(), false)
 }
 
 #[no_mangle]
 pub extern "C" fn rs_cliargsparser_log_level(object: *mut c_void) -> u8 {
-    with_cliargsparser(object, |o| o.log_level as u8, 0)
+    with_cliargsparser(object, |o| o.log_level.unwrap_or(Level::None) as u8, 0)
 }
