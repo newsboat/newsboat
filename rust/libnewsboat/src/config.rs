@@ -1,17 +1,16 @@
 use dirs;
+use libc;
+use logger::{self, Level};
 use std::fs::{self, DirBuilder};
 use std::io::{self, Read};
 use std::os::unix::fs::DirBuilderExt;
 use std::path::{Path, PathBuf};
-use libc;
-use logger::{self, Level};
 
 pub const NEWSBOAT_SUBDIR_XDG: &str = "newsboat";
 pub const NEWSBOAT_CONFIG_SUBDIR: &str = ".newsboat";
 pub const NEWSBEUTER_SUBDIR_XDG: &str = "newsbeuter";
 pub const NEWSBEUTER_CONFIG_SUBDIR: &str = ".newsbeuter";
 pub const LOCK_SUFFIX: &str = ".lock";
-
 
 #[derive(Debug)]
 pub struct ConfigPaths {
@@ -91,7 +90,11 @@ impl ConfigPaths {
         fn exists(path: &Path) -> bool {
             let exists = path.exists();
             if exists {
-                log!(Level::Debug, "{:?} already exists, aborting XDG migration.", path);
+                log!(
+                    Level::Debug,
+                    "{:?} already exists, aborting XDG migration.",
+                    path
+                );
             }
             return exists;
         }
@@ -133,18 +136,20 @@ impl ConfigPaths {
     }
 
     fn migrate_data_from_newsbeuter_simple(&self) -> bool {
-        let newsbeuter_dir = self.m_env_home
-            .join(NEWSBEUTER_CONFIG_SUBDIR);
+        let newsbeuter_dir = self.m_env_home.join(NEWSBEUTER_CONFIG_SUBDIR);
 
         if !newsbeuter_dir.is_dir() {
             return false;
         }
 
-        let newsboat_dir = self.m_env_home
-            .join(NEWSBOAT_CONFIG_SUBDIR);
+        let newsboat_dir = self.m_env_home.join(NEWSBOAT_CONFIG_SUBDIR);
 
         if newsboat_dir.exists() {
-            log!(Level::Debug, "{:?} already exists, aborting migration.", newsboat_dir);
+            log!(
+                Level::Debug,
+                "{:?} already exists, aborting migration.",
+                newsboat_dir
+            );
             return false;
         }
 
@@ -157,10 +162,13 @@ impl ConfigPaths {
             Err(ref e) if e.kind() == io::ErrorKind::AlreadyExists => (),
             Err(err) => {
                 if !self.m_silent {
-                    eprintln!("Aborting migration because mkdir on {:?} failed: {}", newsboat_dir, err);
+                    eprintln!(
+                        "Aborting migration because mkdir on {:?} failed: {}",
+                        newsboat_dir, err
+                    );
                 }
                 return false;
-            },
+            }
         };
 
         migrate_file(&newsbeuter_dir, &newsboat_dir, "urls").ok();
@@ -200,8 +208,7 @@ impl ConfigPaths {
     }
 
     fn find_dirs(&mut self) {
-        self.m_config_dir = self.m_env_home
-            .join(NEWSBOAT_CONFIG_SUBDIR);
+        self.m_config_dir = self.m_env_home.join(NEWSBOAT_CONFIG_SUBDIR);
 
         self.m_data_dir = self.m_config_dir.clone();
 
@@ -210,30 +217,46 @@ impl ConfigPaths {
         self.find_dirs_xdg();
 
         // in config
-        self.m_url_file = self.m_config_dir.join(&self.m_url_file)
-            .to_string_lossy().into();
-        self.m_config_file = self.m_config_dir.join(&self.m_config_file)
-            .to_string_lossy().into();
+        self.m_url_file = self
+            .m_config_dir
+            .join(&self.m_url_file)
+            .to_string_lossy()
+            .into();
+        self.m_config_file = self
+            .m_config_dir
+            .join(&self.m_config_file)
+            .to_string_lossy()
+            .into();
 
         // in data
-        self.m_cache_file = self.m_data_dir.join(&self.m_cache_file)
-            .to_string_lossy().into();
+        self.m_cache_file = self
+            .m_data_dir
+            .join(&self.m_cache_file)
+            .to_string_lossy()
+            .into();
         self.m_lock_file = self.m_cache_file.clone() + LOCK_SUFFIX;
-        self.m_queue_file = self.m_data_dir.join(&self.m_queue_file)
-            .to_string_lossy().into();
-        self.m_search_file = self.m_data_dir.join("history.search")
-            .to_string_lossy().into();
-        self.m_cmdline_file = self.m_data_dir.join("history.cmdline")
-            .to_string_lossy().into();
+        self.m_queue_file = self
+            .m_data_dir
+            .join(&self.m_queue_file)
+            .to_string_lossy()
+            .into();
+        self.m_search_file = self
+            .m_data_dir
+            .join("history.search")
+            .to_string_lossy()
+            .into();
+        self.m_cmdline_file = self
+            .m_data_dir
+            .join("history.cmdline")
+            .to_string_lossy()
+            .into();
     }
 
     fn find_dirs_xdg(&mut self) {
         // This can't panic because we've tested we can find the home directory in ConfigPaths::new
         // This should be replaced with proper error handling after this is not used by c++ anymore
-        let config_dir = dirs::config_dir().unwrap()
-            .join(NEWSBOAT_SUBDIR_XDG);
-        let data_dir = dirs::data_dir().unwrap()
-            .join(NEWSBOAT_SUBDIR_XDG);
+        let config_dir = dirs::config_dir().unwrap().join(NEWSBOAT_SUBDIR_XDG);
+        let data_dir = dirs::data_dir().unwrap().join(NEWSBOAT_SUBDIR_XDG);
 
         if !config_dir.is_dir() {
             return;
@@ -248,9 +271,7 @@ impl ConfigPaths {
     /// If this method returned `false`, the cause for initialization
     /// failure can be found using `error_message()`.
     pub fn initialized(&self) -> bool {
-        !self.m_env_home
-            .as_os_str()
-            .is_empty()
+        !self.m_env_home.as_os_str().is_empty()
     }
 
     /// Returns explanation why initialization failed.
@@ -338,15 +359,12 @@ fn try_mkdir<R: AsRef<Path>>(path: R) -> bool {
 }
 
 fn mkdir<R: AsRef<Path>>(path: R, mode: u32) -> io::Result<()> {
-    DirBuilder::new()
-        .mode(mode)
-        .create(path.as_ref())
+    DirBuilder::new().mode(mode).create(path.as_ref())
 }
 
 fn migrate_file<R: AsRef<Path>>(newsbeuter_dir: R, newsboat_dir: R, file: &str) -> io::Result<()> {
     let input_filepath = newsbeuter_dir.as_ref().join(file);
     let output_filepath = newsboat_dir.as_ref().join(file);
     eprintln!("{:?} -> {:?}", input_filepath, output_filepath);
-    fs::copy(input_filepath, output_filepath)
-        .map(|_| ())
+    fs::copy(input_filepath, output_filepath).map(|_| ())
 }
