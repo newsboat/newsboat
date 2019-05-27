@@ -22,5 +22,5 @@ pub mod human_panic;
 pub mod utils;
 
 pub mod cliargsparser;
-pub mod config;
+pub mod configpaths;
 pub mod fmtstrformatter;
