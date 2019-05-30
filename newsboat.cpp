@@ -174,13 +174,13 @@ int main(int argc, char* argv[])
 	c.set_view(&v);
 	CliArgsParser args(argc, argv);
 
-	if (args.should_print_usage) {
-		print_usage(args.program_name);
-		if (args.should_return) {
-			return args.return_code;
+	if (args.should_print_usage()) {
+		print_usage(args.program_name());
+		if (args.should_return()) {
+			return args.return_code();
 		}
-	} else if (args.show_version) {
-		print_version(args.program_name, args.show_version);
+	} else if (args.show_version()) {
+		print_version(args.program_name(), args.show_version());
 		return EXIT_SUCCESS;
 	}
 

@@ -133,24 +133,24 @@ bool ConfigPaths::find_dirs_xdg()
 
 void ConfigPaths::process_args(const CliArgsParser& args)
 {
-	if (args.set_url_file) {
-		m_url_file = args.url_file;
+	if (args.set_url_file()) {
+		m_url_file = args.url_file();
 	}
 
-	if (args.set_cache_file) {
-		m_cache_file = args.cache_file;
+	if (args.set_cache_file()) {
+		m_cache_file = args.cache_file();
 	}
 
-	if (args.set_lock_file) {
-		m_lock_file = args.lock_file;
+	if (args.set_lock_file()) {
+		m_lock_file = args.lock_file();
 	}
 
-	if (args.set_config_file) {
-		m_config_file = args.config_file;
+	if (args.set_config_file()) {
+		m_config_file = args.config_file();
 	}
 
-	m_silent = args.silent;
-	m_using_nonstandard_configs = args.using_nonstandard_configs;
+	m_silent = args.silent();
+	m_using_nonstandard_configs = args.using_nonstandard_configs();
 }
 
 bool ConfigPaths::try_migrate_from_newsbeuter()

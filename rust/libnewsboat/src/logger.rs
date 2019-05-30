@@ -10,7 +10,7 @@ use std::io::Write;
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::Mutex;
 
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
 /// "Importance levels" for log messages.
 ///
 /// Each message is assigned a level. set_loglevel instructs Logger to only store messages at and
@@ -68,6 +68,12 @@ impl fmt::Display for Level {
             Level::Info => write!(f, "INFO"),
             Level::Debug => write!(f, "DEBUG"),
         }
+    }
+}
+
+impl Default for Level {
+    fn default() -> Level {
+        Level::None
     }
 }
 

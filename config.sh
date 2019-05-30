@@ -111,6 +111,9 @@ if [ `uname -s` = "Darwin" ]; then
     # rand crate needs Security framework, and rustc doesn't (can't) link it
     # into libnewsboat.a
     echo 'LDFLAGS+=-framework Security' >> config.mk
+    # gettext-sys crate needs CoreFoundation framework, and rustc doesn't
+    # (can't) link it into libnewsboat.a
+    echo 'LDFLAGS+=-framework CoreFoundation' >> config.mk
 elif [ `uname -s` != "OpenBSD" ]; then
 	check_pkg "ncursesw" || \
 	check_custom "ncursesw5" "ncursesw5-config" || \

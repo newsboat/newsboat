@@ -15,9 +15,9 @@ TEST_CASE(
 	auto check = [](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.should_print_usage);
-		REQUIRE(args.should_return);
-		REQUIRE(args.return_code == EXIT_FAILURE);
+		REQUIRE(args.should_print_usage());
+		REQUIRE(args.should_return());
+		REQUIRE(args.return_code() == EXIT_FAILURE);
 	};
 
 	SECTION("Example No.1")
@@ -51,8 +51,8 @@ TEST_CASE(
 	auto check = [&filename](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.do_import);
-		REQUIRE(args.importfile == filename);
+		REQUIRE(args.do_import());
+		REQUIRE(args.importfile() == filename);
 	};
 
 	SECTION("-i")
@@ -77,9 +77,9 @@ TEST_CASE(
 	auto check = [](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.should_print_usage);
-		REQUIRE(args.should_return);
-		REQUIRE(args.return_code == EXIT_FAILURE);
+		REQUIRE(args.should_print_usage());
+		REQUIRE(args.should_return());
+		REQUIRE(args.return_code() == EXIT_FAILURE);
 	};
 
 	SECTION("-i first")
@@ -99,7 +99,7 @@ TEST_CASE("Sets `refresh_on_start` if -r/--refresh-on-start is provided",
 	auto check = [](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.refresh_on_start);
+		REQUIRE(args.refresh_on_start());
 	};
 
 	SECTION("-r")
@@ -120,7 +120,7 @@ TEST_CASE("Requests silent mode if -e/--export-to-opml is provided",
 
 	CliArgsParser args(opts.argc(), opts.argv());
 
-	REQUIRE(args.silent);
+	REQUIRE(args.silent());
 }
 
 TEST_CASE("Sets `do_export` if -e/--export-to-opml is provided",
@@ -129,7 +129,7 @@ TEST_CASE("Sets `do_export` if -e/--export-to-opml is provided",
 	auto check = [](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.do_export);
+		REQUIRE(args.do_export());
 	};
 
 	SECTION("-e")
@@ -149,9 +149,9 @@ TEST_CASE("Asks to print usage and exit with success if -h/--help is provided",
 	auto check = [](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.should_print_usage);
-		REQUIRE(args.should_return);
-		REQUIRE(args.return_code == EXIT_SUCCESS);
+		REQUIRE(args.should_print_usage());
+		REQUIRE(args.should_return());
+		REQUIRE(args.return_code() == EXIT_SUCCESS);
 	};
 
 	SECTION("-h")
@@ -175,9 +175,9 @@ TEST_CASE(
 	auto check = [&filename](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.set_url_file);
-		REQUIRE(args.url_file == filename);
-		REQUIRE(args.using_nonstandard_configs);
+		REQUIRE(args.set_url_file());
+		REQUIRE(args.url_file() == filename);
+		REQUIRE(args.using_nonstandard_configs());
 	};
 
 	SECTION("-u")
@@ -202,12 +202,11 @@ TEST_CASE(
 	auto check = [&filename](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.set_cache_file);
-		REQUIRE(args.cache_file == filename);
-		REQUIRE(args.set_lock_file);
-		REQUIRE_THAT(
-			args.lock_file, Catch::Matchers::StartsWith(filename));
-		REQUIRE(args.using_nonstandard_configs);
+		REQUIRE(args.set_cache_file());
+		REQUIRE(args.cache_file() == filename);
+		REQUIRE(args.set_lock_file());
+		REQUIRE(args.lock_file() == filename + ".lock");
+		REQUIRE(args.using_nonstandard_configs());
 	};
 
 	SECTION("-c")
@@ -231,9 +230,9 @@ TEST_CASE(
 	auto check = [&filename](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.set_config_file);
-		REQUIRE(args.config_file == filename);
-		REQUIRE(args.using_nonstandard_configs);
+		REQUIRE(args.set_config_file());
+		REQUIRE(args.config_file() == filename);
+		REQUIRE(args.using_nonstandard_configs());
 	};
 
 	SECTION("-C")
@@ -252,7 +251,7 @@ TEST_CASE("Sets `do_vacuum` if -X/--vacuum is provided", "[CliArgsParser]")
 	auto check = [](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.do_vacuum);
+		REQUIRE(args.do_vacuum());
 	};
 
 	SECTION("-X")
@@ -272,7 +271,7 @@ TEST_CASE("Increases `show_version` with each -v/-V/--version provided",
 	auto check = [](TestHelpers::Opts opts, int expected_version) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.show_version == expected_version);
+		REQUIRE(args.show_version() == expected_version);
 	};
 
 	SECTION("-v => 1")
@@ -316,7 +315,7 @@ TEST_CASE("Requests silent mode if -x/--execute is provided", "[CliArgsParser]")
 	auto check = [](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.silent);
+		REQUIRE(args.silent());
 	};
 
 	SECTION("-x")
@@ -335,7 +334,7 @@ TEST_CASE("Sets `execute_cmds` if -x/--execute is provided", "[CliArgsParser]")
 	auto check = [](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.execute_cmds);
+		REQUIRE(args.execute_cmds());
 	};
 
 	SECTION("-x")
@@ -355,7 +354,7 @@ TEST_CASE("Inserts commands to cmds_to_execute if -x/--execute is provided",
 	auto check = [](TestHelpers::Opts opts, const std::vector<std::string>& cmds) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.cmds_to_execute == cmds);
+		REQUIRE(args.cmds_to_execute() == cmds);
 	};
 
 	SECTION("-x reload")
@@ -379,6 +378,11 @@ TEST_CASE("Inserts commands to cmds_to_execute if -x/--execute is provided",
 		check({"newsboat", "--execute", "reload", "print-unread"},
 			{"reload", "print-unread"});
 	}
+
+	SECTION("Multiple occurrences of the option") {
+		check({"newsboat", "-x", "print-unread", "--execute", "reload"},
+			{"print-unread", "reload"});
+	}
 }
 
 TEST_CASE("Requests silent mode if -q/--quiet is provided", "[CliArgsParser]")
@@ -386,7 +390,7 @@ TEST_CASE("Requests silent mode if -q/--quiet is provided", "[CliArgsParser]")
 	auto check = [](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.silent);
+		REQUIRE(args.silent());
 	};
 
 	SECTION("-q")
@@ -410,8 +414,8 @@ TEST_CASE(
 	auto check = [&filename](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.do_read_import);
-		REQUIRE(args.readinfofile == filename);
+		REQUIRE(args.do_read_import());
+		REQUIRE(args.readinfo_import_file() == filename);
 	};
 
 	SECTION("-I")
@@ -435,8 +439,8 @@ TEST_CASE(
 	auto check = [&filename](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.do_read_export);
-		REQUIRE(args.readinfofile == filename);
+		REQUIRE(args.do_read_export());
+		REQUIRE(args.readinfo_export_file() == filename);
 	};
 
 	SECTION("-E")
@@ -461,9 +465,9 @@ TEST_CASE(
 	auto check = [](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.should_print_usage);
-		REQUIRE(args.should_return);
-		REQUIRE(args.return_code == EXIT_FAILURE);
+		REQUIRE(args.should_print_usage());
+		REQUIRE(args.should_return());
+		REQUIRE(args.return_code() == EXIT_FAILURE);
 	};
 
 	SECTION("-I first")
@@ -485,8 +489,8 @@ TEST_CASE("Sets `set_log_file` and `log_file` if -d/--log-file is provided",
 	auto check = [&filename](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.set_log_file);
-		REQUIRE(args.log_file == filename);
+		REQUIRE(args.set_log_file());
+		REQUIRE(args.log_file() == filename);
 	};
 
 	SECTION("-d")
@@ -508,8 +512,8 @@ TEST_CASE(
 	auto check = [](TestHelpers::Opts opts, Level expected) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.set_log_level);
-		REQUIRE(args.log_level == expected);
+		REQUIRE(args.set_log_level());
+		REQUIRE(args.log_level() == expected);
 	};
 
 	SECTION("--log-level=1 means USERERROR")
@@ -551,9 +555,9 @@ TEST_CASE(
 	auto check = [](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE_FALSE(args.display_msg.empty());
-		REQUIRE(args.should_return);
-		REQUIRE(args.return_code == EXIT_FAILURE);
+		REQUIRE_FALSE(args.display_msg().empty());
+		REQUIRE(args.should_return());
+		REQUIRE(args.return_code() == EXIT_FAILURE);
 	};
 
 	SECTION("-l0")
@@ -570,4 +574,21 @@ TEST_CASE(
 	{
 		check({"newsboat", "--log-level=90001"});
 	}
+}
+
+TEST_CASE("Sets `program_name` to the first string of the options list",
+		"[CliArgsParser]")
+{
+	auto check = [](TestHelpers::Opts opts, std::string expected) {
+		CliArgsParser args(opts.argc(), opts.argv());
+
+		REQUIRE(args.program_name() == expected);
+	};
+
+	check({"newsboat"}, "newsboat");
+	check({"podboat", "-h"}, "podboat");
+	check({"something else entirely", "--foo", "--bar", "--baz"},
+			"something else entirely");
+	check({"/usr/local/bin/app-with-a-path"},
+			"/usr/local/bin/app-with-a-path");
 }

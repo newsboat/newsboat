@@ -4,6 +4,8 @@ version = "2.15.0"
 authors = ["Alexander Batischev <eual.jp@gmail.com>"]
 
 [dependencies]
+strprintf = { path="../strprintf" }
+
 chrono = "0.4"
 rand = "0.5"
 once_cell = "0.1.6"
@@ -15,10 +17,29 @@ unicode-width = "0.1.5"
 nom = "^4.1"
 unicode-segmentation = "1"
 curl-sys = "0.4.5"
+libc = "0.2"
+gettext-rs = "0.4.1"
 
 # We don't use the following crates, but we pin their versions to make sure
 # that Newsboat builds with Rust 1.25 and later.
 libz-sys = "= 1.0.17"
+
+[dependencies.clap]
+version = "2.33"
+# This disables three features, for the following reasons:
+# - "suggestions" and "color" features: we provide our own help text, so don't
+#   need those
+# - "vec_map": this provides "a slight performance improvement" at the cost of
+#   an additional dependency. At the time of writing Rust is still a new kid on
+#   the block, distros are still figuring out the ways to package crates, so
+#   I want as little dependencies as practically possible.
+default-features = false
+
+[dependencies.gettext-sys]
+version = "0.19.8"
+# Don't let the crate build its own copy of gettext; force it to use the one
+# built into glibc.
+features = [ "gettext-system" ]
 
 [dev-dependencies]
 tempfile = "3"
