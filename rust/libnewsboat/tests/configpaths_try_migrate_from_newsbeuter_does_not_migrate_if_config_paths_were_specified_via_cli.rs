@@ -1,0 +1,86 @@
+extern crate libnewsboat;
+#[macro_use]
+extern crate section_testing;
+extern crate tempfile;
+
+use self::libnewsboat::{cliargsparser::CliArgsParser, configpaths::ConfigPaths};
+use self::tempfile::TempDir;
+use std::env;
+
+mod configpaths_helpers;
+
+enable_sections! {
+#[test]
+fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_config_paths_were_specified_via_cli(
+) {
+    let tmp = TempDir::new().unwrap();
+
+    env::set_var("HOME", tmp.path());
+
+    // ConfigPaths rely on these variables, so let's sanitize them to ensure
+    // that the tests aren't affected
+    env::remove_var("XDG_CONFIG_HOME");
+    env::remove_var("XDG_DATA_HOME");
+
+    if section!("Newsbeuter dotdir exists")
+    {
+        configpaths_helpers::mock_newsbeuter_dotdir(&tmp);
+    }
+
+    if section!("Newsbeuter XDG dirs exist")
+    {
+        configpaths_helpers::mock_newsbeuter_xdg_dirs(&tmp);
+    }
+
+    let boat_sentries = configpaths_helpers::FileSentries::new();
+
+    let url_file = tmp.path().join("my urls file");
+    assert!(configpaths_helpers::create_file(
+        &url_file,
+        &boat_sentries.urls
+    ));
+
+    let cache_file = tmp.path().join("new cache.db");
+    assert!(configpaths_helpers::create_file(
+        &cache_file,
+        &boat_sentries.cache
+    ));
+
+    let config_file = tmp.path().join("custom config file");
+    assert!(configpaths_helpers::create_file(
+        &config_file,
+        &boat_sentries.config
+    ));
+
+    let parser = CliArgsParser::new(vec![
+        "newsboat".to_string(),
+        "-u".to_string(),
+        url_file.to_string_lossy().into_owned(),
+        "-c".to_string(),
+        cache_file.to_string_lossy().into_owned(),
+        "-C".to_string(),
+        config_file.to_string_lossy().into_owned(),
+        "-q".to_string(),
+    ]);
+
+    let mut paths = ConfigPaths::new();
+    assert!(paths.initialized());
+    paths.process_args(&parser);
+
+    // No migration should occur, so should return false.
+    assert!(!paths.try_migrate_from_newsbeuter());
+
+    assert_eq!(
+        &configpaths_helpers::file_contents(&url_file),
+        &boat_sentries.urls
+    );
+    assert_eq!(
+        &configpaths_helpers::file_contents(&config_file),
+        &boat_sentries.config
+    );
+    assert_eq!(
+        &configpaths_helpers::file_contents(&cache_file),
+        &boat_sentries.cache
+    );
+}
+}

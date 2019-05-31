@@ -1,3 +1,5 @@
+use cliargsparser::CliArgsParser;
+use dirs;
 use libc;
 use logger::{self, Level};
 use std::fs::{self, DirBuilder};
@@ -202,7 +204,7 @@ impl ConfigPaths {
         migrated
     }
 
-    fn create_dirs(&self) -> bool {
+    pub fn create_dirs(&self) -> bool {
         return try_mkdir(&self.m_config_dir) && try_mkdir(&self.m_data_dir);
     }
 
@@ -286,13 +288,27 @@ impl ConfigPaths {
         &self.m_error_message
     }
 
-    // TODO
-    /*
     /// Initializes paths to config, cache etc. from CLI arguments.
-    pub fn process_args(const CliArgsParser& args) {
-        unimplemented!()
+    pub fn process_args(&mut self, args: &CliArgsParser) {
+        if let Some(ref url_file) = args.url_file {
+            self.m_url_file = url_file.to_string();
+        }
+
+        if let Some(ref cache_file) = args.cache_file {
+            self.m_cache_file = cache_file.to_string();
+        }
+
+        if let Some(ref lock_file) = args.lock_file {
+            self.m_lock_file = lock_file.to_string();
+        }
+
+        if let Some(ref config_file) = args.config_file {
+            self.m_config_file = config_file.to_string();
+        }
+
+        self.m_silent = args.silent;
+        self.m_using_nonstandard_configs = args.using_nonstandard_configs();
     }
-    */
 
     /// Migrate configs and data from Newsbeuter if they exist. Return `true` if migrated
     /// something, `false` otherwise.

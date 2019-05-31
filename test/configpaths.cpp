@@ -10,11 +10,12 @@ TEST_CASE("ConfigPaths returns paths to Newsboat dotdir if no Newsboat dirs "
 		"exist",
 		"[ConfigPaths]")
 {
-	const auto test_dir = std::string("data/configpaths--no-dirs");
-	const auto newsboat_dir = test_dir + "/.newsboat";
+	TestHelpers::TempDir tmp;
+	const auto newsboat_dir = tmp.get_path() + "/.newsboat";
+	REQUIRE(0 == utils::mkdir_parents(newsboat_dir, 0700));
 
 	TestHelpers::EnvVar home("HOME");
-	home.set(test_dir);
+	home.set(tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
@@ -38,12 +39,14 @@ TEST_CASE("ConfigPaths returns paths to Newsboat XDG dirs if they exist and "
 		"the dotdir doesn't",
 		"[ConfigPaths]")
 {
-	const auto test_dir = std::string("data/configpaths--only-xdg");
-	const auto config_dir = test_dir + "/.config/newsboat";
-	const auto data_dir = test_dir + "/.local/share/newsboat";
+	TestHelpers::TempDir tmp;
+	const auto config_dir = tmp.get_path() + "/.config/newsboat";
+	REQUIRE(0 == utils::mkdir_parents(config_dir, 0700));
+	const auto data_dir = tmp.get_path() + "/.local/share/newsboat";
+	REQUIRE(0 == utils::mkdir_parents(data_dir, 0700));
 
 	TestHelpers::EnvVar home("HOME");
-	home.set(test_dir);
+	home.set(tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
@@ -66,11 +69,11 @@ TEST_CASE("ConfigPaths returns paths to Newsboat XDG dirs if they exist and "
 
 	SECTION("XDG_CONFIG_HOME is set") {
 		TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
-		xdg_config.set(test_dir + "/.config");
+		xdg_config.set(tmp.get_path() + "/.config");
 
 		SECTION("XDG_DATA_HOME is set") {
 			TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
-			xdg_data.set(test_dir + "/.local/share");
+			xdg_data.set(tmp.get_path() + "/.local/share");
 			check();
 		}
 
@@ -87,7 +90,7 @@ TEST_CASE("ConfigPaths returns paths to Newsboat XDG dirs if they exist and "
 
 		SECTION("XDG_DATA_HOME is set") {
 			TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
-			xdg_data.set(test_dir + "/.local/share");
+			xdg_data.set(tmp.get_path() + "/.local/share");
 			check();
 		}
 
