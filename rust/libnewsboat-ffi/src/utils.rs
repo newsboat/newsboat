@@ -370,10 +370,9 @@ pub extern "C" fn rs_run_program(argv: *mut *mut c_char, input: *const c_char) -
             let mut offset: usize = 0;
             while !(*cur_ptr).is_null() {
                 let arg = CStr::from_ptr(*cur_ptr);
-                let arg = arg.to_str().expect(&format!(
-                    "argument at offset {} contained invalid UTF-8",
-                    offset
-                ));
+                let arg = arg.to_str().unwrap_or_else(|_| {
+                    panic!("argument at offset {} contained invalid UTF-8", offset)
+                });
 
                 result.push(arg);
 
