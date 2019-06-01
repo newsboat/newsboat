@@ -1111,7 +1111,7 @@ std::string utils::get_default_browser()
 
 std::string utils::program_version()
 {
-	return PROGRAM_VERSION;
+	return RustString(rs_program_version());
 }
 
 } // namespace newsboat

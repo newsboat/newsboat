@@ -481,6 +481,22 @@ pub fn take_graphemes(input: &str, n: usize) -> String {
         .collect::<String>()
 }
 
+/// The tag and Git commit ID the program was built from, or a pre-defined value from config.h if
+/// there is no Git directory.
+pub fn program_version() -> String {
+    // GIT_HASH is set by this crate's build script, "build.rs"
+    if let Some(version_str) = option_env!("GIT_HASH") {
+        version_str.to_string()
+    } else {
+        format!(
+            "{}.{}.{}",
+            env!("CARGO_PKG_VERSION_MAJOR"),
+            env!("CARGO_PKG_VERSION_MINOR"),
+            env!("CARGO_PKG_VERSION_PATCH")
+        )
+    }
+}
+
 #[cfg(test)]
 mod tests {
     extern crate tempfile;
