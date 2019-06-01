@@ -135,6 +135,9 @@ namespace utils {
 
 	std::string get_default_browser();
 
+	/// The tag and Git commit ID the program was built from, or a pre-defined
+	/// value from config.h if there is no Git directory.
+	std::string program_version();
 }
 
 } // namespace newsboat

@@ -435,7 +435,7 @@ void ItemViewFormAction::set_head(const std::string& s,
 {
 	FmtStrFormatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);
-	fmt.register_fmt('V', PROGRAM_VERSION);
+	fmt.register_fmt('V', utils::program_version());
 
 	auto itemtitle = s;
 	utils::remove_soft_hyphens(itemtitle);

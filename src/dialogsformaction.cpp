@@ -29,7 +29,7 @@ void DialogsFormAction::init()
 	std::string title_format = cfg->get_configvalue("dialogs-title-format");
 	FmtStrFormatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);
-	fmt.register_fmt('V', PROGRAM_VERSION);
+	fmt.register_fmt('V', utils::program_version());
 	f->set("head", fmt.do_format(title_format, width));
 }
 

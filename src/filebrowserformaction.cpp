@@ -68,7 +68,7 @@ void FileBrowserFormAction::process_operation(Operation op,
 
 					FmtStrFormatter fmt;
 					fmt.register_fmt('N', PROGRAM_NAME);
-					fmt.register_fmt('V', PROGRAM_VERSION);
+					fmt.register_fmt('V', utils::program_version());
 					fmt.register_fmt('f', filename);
 					f->set("head",
 						fmt.do_format(
@@ -249,7 +249,7 @@ void FileBrowserFormAction::init()
 	f->set("head",
 		strprintf::fmt(_("%s %s - Save File - %s"),
 			PROGRAM_NAME,
-			PROGRAM_VERSION,
+			utils::program_version(),
 			cwdtmp));
 }
 
