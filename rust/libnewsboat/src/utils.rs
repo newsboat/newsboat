@@ -497,6 +497,13 @@ pub fn program_version() -> String {
     }
 }
 
+/// Newsboat's major version number.
+pub fn newsboat_major_version() -> u32 {
+    // This will panic if the version couldn't be parsed, which is virtually impossible as Cargo
+    // won't even start compilation if it couldn't parse the version.
+    env!("CARGO_PKG_VERSION_MAJOR").parse::<u32>().unwrap()
+}
+
 #[cfg(test)]
 mod tests {
     extern crate tempfile;

@@ -4,10 +4,6 @@
 #define PACKAGE				"newsboat"
 #define PROGRAM_NAME			PACKAGE
 
-#define NEWSBOAT_VERSION_MAJOR 2
-#define NEWSBOAT_VERSION_MINOR 15
-#define NEWSBOAT_VERSION_PATCH 0
-
 #define PROGRAM_URL			"https://newsboat.org/"
 
 #define NEWSBEUTER_PATH_SEP			"/"

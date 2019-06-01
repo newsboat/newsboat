@@ -1114,4 +1114,9 @@ std::string utils::program_version()
 	return RustString(rs_program_version());
 }
 
+unsigned int utils::newsboat_version_major()
+{
+	return rs_newsboat_version_major();
+}
+
 } // namespace newsboat

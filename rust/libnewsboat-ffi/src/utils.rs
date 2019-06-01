@@ -407,3 +407,8 @@ pub extern "C" fn rs_program_version() -> *mut c_char {
         result.into_raw()
     })
 }
+
+#[no_mangle]
+pub extern "C" fn rs_newsboat_version_major() -> u32 {
+    abort_on_panic(|| utils::newsboat_major_version())
+}

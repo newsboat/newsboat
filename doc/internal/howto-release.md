@@ -14,7 +14,6 @@ master repository and shell access to newsboat.org.
     * Acknowledge contributions from people whose changes didn't make it into
         the lists
 2. Update version:
-    * config.h
     * rust/libnewsboat/Cargo.toml
     * rust/libnewsboat-ffi/Cargo.toml
     * `cargo update --package libnewsboat --package libnewsboat-ffi`

@@ -70,6 +70,8 @@ char* rs_run_program(char* argv[], const char* input);
 
 char* rs_program_version();
 
+unsigned int rs_newsboat_version_major();
+
 class RustString {
 private:
 	char* str;
