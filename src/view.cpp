@@ -635,6 +635,18 @@ std::string View::run_filebrowser(const std::string& default_filename,
 	return run_modal(filebrowser, "filenametext");
 }
 
+std::string View::run_dirbrowser(const std::string& default_dirname,
+		const std::string &dir) {
+	std::shared_ptr<DirBrowserFormAction> dirbrowser(
+			new DirBrowserFormAction(this, filebrowser_str, cfg));
+	set_bindings(dirbrowser);
+	apply_colors(dirbrowser);
+	dirbrowser->set_dir(dir);
+	dirbrowser->set_default_filename(default_dirname);
+	dirbrowser->set_parent_formaction(get_current_formaction());
+	return run_modal(dirbrowser, "dirnametext");
+}
+
 std::string View::select_tag()
 {
 	if (tags.size() == 0) {

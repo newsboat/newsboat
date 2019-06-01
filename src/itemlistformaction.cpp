@@ -380,7 +380,7 @@ void ItemListFormAction::process_operation(Operation op,
 		LOG(Level::INFO,
 			"ItemListFormAction: saving all items");
 		if (visible_items.size() != 0) {
-			std::string directory = v->run_filebrowser("");
+			std::string directory = v->run_dirbrowser("");
 			if (directory.back() != '/') {
 				directory = directory + "/";
 			}
