@@ -196,15 +196,13 @@ std::vector<std::string> get_sorted_dirlist()
 			if (strcmp(de->d_name, ".") != 0 &&
 				strcmp(de->d_name, "..") != 0) {
 					struct stat sb;
-					auto a = strprintf::fmt("%s/%s", cwdtmp, de->d_name);
-					if (::lstat(a.c_str(), &sb) == 0) {
+					auto dpath = strprintf::fmt("%s/%s", cwdtmp, de->d_name);
+					if (::lstat(dpath.c_str(), &sb) == 0) {
 						char ftype = get_filetype(sb.st_mode);
 						if (ftype == 'd') {
 							ret.push_back(de->d_name);
 						}
 					}
-
-					//ret.push_back(de->d_name);
 				}
 			de = ::readdir(dirp);
 		}
