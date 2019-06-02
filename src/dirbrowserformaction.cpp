@@ -66,9 +66,9 @@ void DirBrowserFormAction::process_operation(Operation op,
 			/*
 			 * whenever "ENTER" is hit, we need to distinguish two different
 			 * cases:
-			 *   - the focus is in the list of files, then we need to set
-			 * the filename field to the currently selected entry
-			 *   - the focus is in the filename field, then the filename
+			 *   - the focus is in the list of directories, then we need to set
+			 * the dirname field to the currently selected entry
+			 *   - the focus is in the dirname field, then the dirname
 			 * needs to be returned.
 			 */
 			LOG(Level::DEBUG, "DirBrowserFormAction: 'opening' item");
@@ -227,12 +227,12 @@ void DirBrowserFormAction::prepare()
 	 * in the current directory.
 	 */
 	if (do_redraw) {
-		std::vector<std::string> files = get_sorted_dirlist();
+		std::vector<std::string> directories = get_sorted_dirlist();
 
 		std::string code = "{list";
 
-		for (std::string filename : files) {
-			code.append(add_file(filename));
+		for (std::string directory : directories) {
+			code.append(add_directory(directory));
 		}
 
 		code.append("}");
@@ -259,14 +259,14 @@ void DirBrowserFormAction::init()
 		std::string save_path = cfg->get_configvalue("save-path");
 
 		LOG(Level::DEBUG,
-			"view::filebrowser: save-path is '%s'",
+			"view::dirbrowser: save-path is '%s'",
 			save_path);
 
 		dir = save_path;
 	}
 
 	int status = ::chdir(dir.c_str());
-	LOG(Level::DEBUG, "view::filebrowser: chdir(%s) = %i", dir, status);
+	LOG(Level::DEBUG, "view::dirbrowser: chdir(%s) = %i", dir, status);
 
 	auto cwdtmp = utils::getcwd();
 
@@ -277,7 +277,7 @@ void DirBrowserFormAction::init()
 	f->set("filenametext_pos", std::to_string(default_filename.length()));
 
 	f->set("head",
-		   strprintf::fmt(_("%s %s - Save File - %s"),
+		   strprintf::fmt(_("%s %s - Save Files - %s"),
 						  PROGRAM_NAME,
 						  PROGRAM_VERSION,
 						  cwdtmp));
@@ -291,18 +291,18 @@ KeyMapHintEntry* DirBrowserFormAction::get_keymap_hint()
 	return hints;
 }
 
-std::string DirBrowserFormAction::add_file(std::string filename)
+std::string DirBrowserFormAction::add_directory(std::string dirname)
 {
 	std::string retval;
 	struct stat sb;
-	if (::lstat(filename.c_str(), &sb) == 0) {
+	if (::lstat(dirname.c_str(), &sb) == 0) {
 		char ftype = get_filetype(sb.st_mode);
 
 		std::string rwxbits = get_rwx(sb.st_mode & 0777);
 		std::string owner = get_owner(sb.st_uid);
 		std::string group = get_group(sb.st_gid);
-		std::string formattedfilename =
-				get_formatted_filename(filename, ftype, sb.st_mode);
+		std::string formatteddirname =
+				get_formatted_dirname(dirname, ftype, sb.st_mode);
 
 		std::string sizestr = strprintf::fmt("%12u", sb.st_size);
 		std::string line = strprintf::fmt("%c%s %s %s %s %s",
@@ -311,16 +311,16 @@ std::string DirBrowserFormAction::add_file(std::string filename)
 										  owner,
 										  group,
 										  sizestr,
-										  formattedfilename);
+										  formatteddirname);
 		retval = strprintf::fmt("{listitem[%c%s] text:%s}",
 								ftype,
-								Stfl::quote(filename),
+								Stfl::quote(dirname),
 								Stfl::quote(line));
 	}
 	return retval;
 }
 
-std::string DirBrowserFormAction::get_formatted_filename(std::string filename,
+std::string DirBrowserFormAction::get_formatted_dirname(std::string dirname,
 														  char ftype,
 														  mode_t mode)
 {
@@ -344,7 +344,7 @@ std::string DirBrowserFormAction::get_formatted_filename(std::string filename,
 				suffix = '*';
 	}
 
-	return strprintf::fmt("%s%c", filename, suffix);
+	return strprintf::fmt("%s%c", dirname, suffix);
 }
 
 std::string DirBrowserFormAction::get_rwx(unsigned short val)
@@ -388,7 +388,7 @@ std::string DirBrowserFormAction::get_group(gid_t gid)
 
 std::string DirBrowserFormAction::title()
 {
-	return strprintf::fmt(_("Save File - %s"), utils::getcwd());
+	return strprintf::fmt(_("Save Files - %s"), utils::getcwd());
 }
 
 } // namespace newsboat
