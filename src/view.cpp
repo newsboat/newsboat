@@ -644,7 +644,7 @@ std::string View::run_dirbrowser(const std::string& default_dirname,
 	dirbrowser->set_dir(dir);
 	dirbrowser->set_default_filename(default_dirname);
 	dirbrowser->set_parent_formaction(get_current_formaction());
-	return run_modal(dirbrowser, "dirnametext");
+	return run_modal(dirbrowser, "filenametext");
 }
 
 std::string View::select_tag()

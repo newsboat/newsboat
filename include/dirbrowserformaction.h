@@ -36,7 +36,7 @@ namespace newsboat {
 							   bool automatic = false,
 							   std::vector<std::string>* args = nullptr) override;
 
-		std::string add_file(std::string filename);
+		std::string add_directory(std::string dirname);
 		std::string get_filename_suggestion(const std::string& s);
 		std::string get_rwx(unsigned short val);
 
@@ -44,7 +44,7 @@ namespace newsboat {
 		std::string get_owner(uid_t uid);
 		std::string get_group(gid_t gid);
 		std::string
-		get_formatted_filename(std::string filename, char ftype, mode_t mode);
+		get_formatted_dirname(std::string dirname, char ftype, mode_t mode);
 
 		bool quit;
 		std::string cwd;
