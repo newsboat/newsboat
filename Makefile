@@ -18,7 +18,7 @@ DEFINES=-DLOCALEDIR=\"$(localedir)\"
 
 WARNFLAGS=-Werror -Wall -Wextra -Wunreachable-code
 INCLUDES=-Iinclude -Istfl -Ifilter -I. -Irss
-BARE_CXXFLAGS=-std=c++11 -O0 -ggdb $(INCLUDES)
+BARE_CXXFLAGS=-std=c++11 -O2 -ggdb $(INCLUDES)
 LDFLAGS+=-L.
 
 PACKAGE=newsboat
