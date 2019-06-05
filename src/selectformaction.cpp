@@ -144,7 +144,7 @@ void SelectFormAction::init()
 
 	FmtStrFormatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);
-	fmt.register_fmt('V', PROGRAM_VERSION);
+	fmt.register_fmt('V', utils::program_version());
 
 	switch (type) {
 	case SelectionType::TAG:

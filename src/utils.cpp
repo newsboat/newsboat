@@ -554,12 +554,12 @@ std::string utils::get_useragent(ConfigContainer* cfgcont)
 			}
 			return strprintf::fmt("%s/%s (Macintosh; %sMac OS X)",
 				PROGRAM_NAME,
-				PROGRAM_VERSION,
+				utils::program_version(),
 				PROCESSOR);
 		}
 		return strprintf::fmt("%s/%s (%s %s)",
 			PROGRAM_NAME,
-			PROGRAM_VERSION,
+			utils::program_version(),
 			buf.sysname,
 			buf.machine);
 	}
@@ -1107,6 +1107,16 @@ void utils::initialize_ssl_implementation(void)
 std::string utils::get_default_browser()
 {
 	return RustString(rs_get_default_browser());
+}
+
+std::string utils::program_version()
+{
+	return RustString(rs_program_version());
+}
+
+unsigned int utils::newsboat_version_major()
+{
+	return rs_newsboat_version_major();
 }
 
 } // namespace newsboat

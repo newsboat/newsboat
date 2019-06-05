@@ -1041,7 +1041,7 @@ void ItemListFormAction::set_head(const std::string& s,
 	FmtStrFormatter fmt;
 
 	fmt.register_fmt('N', PROGRAM_NAME);
-	fmt.register_fmt('V', PROGRAM_VERSION);
+	fmt.register_fmt('V', utils::program_version());
 
 	fmt.register_fmt('u', std::to_string(unread));
 	fmt.register_fmt('t', std::to_string(total));

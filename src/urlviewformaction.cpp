@@ -120,7 +120,7 @@ void UrlViewFormAction::init()
 
 	FmtStrFormatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);
-	fmt.register_fmt('V', PROGRAM_VERSION);
+	fmt.register_fmt('V', utils::program_version());
 
 	f->set("head",
 		fmt.do_format(

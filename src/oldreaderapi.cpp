@@ -68,7 +68,7 @@ std::string OldReaderApi::retrieve_auth()
 		username,
 		password,
 		PROGRAM_NAME,
-		PROGRAM_VERSION);
+		utils::program_version());
 
 	curl_free(username);
 	curl_free(password);

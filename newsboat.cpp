@@ -29,7 +29,7 @@ void print_usage(const std::string& argv0)
 		_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] "
 		  "[-c <cachefile>] [-x <command> ...] [-h]\n"),
 		PROGRAM_NAME,
-		PROGRAM_VERSION,
+		utils::program_version(),
 		argv0);
 	std::cout << msg;
 
@@ -102,7 +102,7 @@ void print_version(const std::string& argv0, unsigned int level)
 {
 	if (level <= 1) {
 		std::stringstream ss;
-		ss << PROGRAM_NAME << " " << PROGRAM_VERSION << " - "
+		ss << PROGRAM_NAME << " " << utils::program_version() << " - "
 			  << PROGRAM_URL << std::endl;
 		ss << "Copyright (C) 2006-2015 Andreas Krennmair"
 			  << std::endl;
@@ -132,7 +132,7 @@ void print_version(const std::string& argv0, unsigned int level)
 
 		struct utsname xuts;
 		uname(&xuts);
-		ss << PROGRAM_NAME << " " << PROGRAM_VERSION
+		ss << PROGRAM_NAME << " " << utils::program_version()
 			  << std::endl;
 		ss << "System: " << xuts.sysname << " " << xuts.release
 			  << " (" << xuts.machine << ")" << std::endl;

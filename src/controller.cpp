@@ -156,7 +156,7 @@ int Controller::run(const CliArgsParser& args)
 		if (!args.silent())
 			std::cout << strprintf::fmt(_("Starting %s %s..."),
 					     PROGRAM_NAME,
-					     PROGRAM_VERSION)
+					     utils::program_version())
 				  << std::endl;
 
 		fslock = std::unique_ptr<FsLock>(new FsLock());

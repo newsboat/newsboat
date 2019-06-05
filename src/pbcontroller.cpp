@@ -245,7 +245,7 @@ int PbController::run(int argc, char* argv[])
 	};
 
 	std::cout << strprintf::fmt(
-			     _("Starting %s %s..."), "podboat", PROGRAM_VERSION)
+			     _("Starting %s %s..."), "podboat", utils::program_version())
 		  << std::endl;
 
 	fslock = std::unique_ptr<FsLock>(new FsLock());
@@ -324,7 +324,7 @@ void PbController::print_usage(const char* argv0)
 	auto msg = strprintf::fmt(
 		_("%s %s\nusage %s [-C <file>] [-q <file>] [-h]\n"),
 		"podboat",
-		PROGRAM_VERSION,
+		utils::program_version(),
 		argv0);
 	std::cout << msg;
 

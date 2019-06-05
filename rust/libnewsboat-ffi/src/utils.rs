@@ -394,3 +394,21 @@ pub extern "C" fn rs_run_program(argv: *mut *mut c_char, input: *const c_char) -
         result.into_raw()
     })
 }
+
+#[no_mangle]
+pub extern "C" fn rs_program_version() -> *mut c_char {
+    abort_on_panic(|| {
+        let version = utils::program_version();
+        // `utils::program_version` generates the string either from a textual representation of
+        // current Git commit id (which has no internal nul bytes), or a combination of major,
+        // minor, and patch versions of `libnewsboat` crate (which, too, has no internal nul
+        // bytes). Therefore there is no reason from `new()` to return `None`.
+        let result = CString::new(version).unwrap();
+        result.into_raw()
+    })
+}
+
+#[no_mangle]
+pub extern "C" fn rs_newsboat_version_major() -> u32 {
+    abort_on_panic(|| utils::newsboat_major_version())
+}

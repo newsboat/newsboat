@@ -481,6 +481,29 @@ pub fn take_graphemes(input: &str, n: usize) -> String {
         .collect::<String>()
 }
 
+/// The tag and Git commit ID the program was built from, or a pre-defined value from config.h if
+/// there is no Git directory.
+pub fn program_version() -> String {
+    // GIT_HASH is set by this crate's build script, "build.rs"
+    if let Some(version_str) = option_env!("GIT_HASH") {
+        version_str.to_string()
+    } else {
+        format!(
+            "{}.{}.{}",
+            env!("CARGO_PKG_VERSION_MAJOR"),
+            env!("CARGO_PKG_VERSION_MINOR"),
+            env!("CARGO_PKG_VERSION_PATCH")
+        )
+    }
+}
+
+/// Newsboat's major version number.
+pub fn newsboat_major_version() -> u32 {
+    // This will panic if the version couldn't be parsed, which is virtually impossible as Cargo
+    // won't even start compilation if it couldn't parse the version.
+    env!("CARGO_PKG_VERSION_MAJOR").parse::<u32>().unwrap()
+}
+
 #[cfg(test)]
 mod tests {
     extern crate tempfile;

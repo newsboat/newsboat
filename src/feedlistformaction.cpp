@@ -567,7 +567,7 @@ void FeedListFormAction::set_feedlist(
 	FmtStrFormatter fmt;
 	fmt.register_fmt('T', tag);
 	fmt.register_fmt('N', PROGRAM_NAME);
-	fmt.register_fmt('V', PROGRAM_VERSION);
+	fmt.register_fmt('V', utils::program_version());
 	fmt.register_fmt('u', std::to_string(unread_feeds));
 	fmt.register_fmt('t', std::to_string(i));
 
