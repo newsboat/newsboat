@@ -1,0 +1,13 @@
+#a theme inspired by the GTK Adapta-Maia theme.
+#works really well on a stock Manjaro.
+#
+#for "info" field, both "color35" and "color36" match well.
+
+color listfocus         color192 default
+color listfocus_unread  color155 default
+color info              color35 default reverse 
+
+# highlights
+highlight article "https?://[^ ]+" 		color117 default
+highlight article "^(Title):.*$"		color117 default
+highlight article "\\[image\\ [0-9]+\\]" 	color117 default
