@@ -88,8 +88,8 @@ Item Rss09xParser::parse_item(xmlNode* itemNode)
 		} else if (node_is(node, "date", DC_URI)) {
 			dc_date = w3cdtf_to_rfc822(get_content(node));
 		} else if (node_is(node, "author", ns)) {
-			std::string authorfield = get_content(node);
-			if (authorfield[authorfield.length() - 1] == ')') {
+			const std::string authorfield = get_content(node);
+			if (authorfield.length() > 2 && authorfield.back() == ')') {
 				it.author_email =
 					utils::tokenize(authorfield, " ")[0];
 				unsigned int start, end;

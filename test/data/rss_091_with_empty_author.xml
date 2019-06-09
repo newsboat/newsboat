@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<!DOCTYPE rss
+  SYSTEM 'http://my.netscape.com/publish/formats/rss-0.91.dtd'>
+<rss version="0.91">
+	<channel>
+		<title>A Channel with Unnamed Authors</title>
+		<link>http://example.com/</link>
+		<description>an example feed</description>
+		<language>en</language>
+
+		<item>
+			<title>This one has en empty author tag</title>
+			<link>http://example.com/test_1.html</link>
+            <author></author>
+            <description>It doesn't matter.</description>
+		</item>
+
+		<item>
+			<title>This one has en empty author tag as well</title>
+			<link>http://example.com/test_2.html</link>
+            <author/>
+			<description>Non-empty description though.</description>
+		</item>
+	</channel>
+</rss>
