@@ -5,6 +5,7 @@
 
 #include "3rd-party/catch.hpp"
 #include "test-helpers.h"
+#include "utils.h"
 
 using namespace newsboat;
 
@@ -28,10 +29,10 @@ TEST_CASE("OPML URL reader gets the path to input file from \"opml-url\" "
 TEST_CASE("OpmlUrlReader::reload() reads URLs and tags from an OPML file",
 		"[OpmlUrlReader]")
 {
-	const std::string cwd(::getcwd(nullptr, 0));
-
 	ConfigContainer cfg;
-	cfg.set_configvalue("opml-url", "file://" + cwd + "/data/example.opml");
+	cfg.set_configvalue(
+			"opml-url",
+			"file://" + utils::getcwd() + "/data/example.opml");
 
 	OpmlUrlReader reader(&cfg);
 
@@ -77,7 +78,7 @@ TEST_CASE("OpmlUrlReader::reload() reads URLs and tags from an OPML file",
 TEST_CASE("OpmlUrlReader::reload() loads URLs from multiple sources",
 		"[OpmlUrlReader]")
 {
-	const std::string cwd(::getcwd(nullptr, 0));
+	const auto cwd = utils::getcwd();
 
 	ConfigContainer cfg;
 	cfg.set_configvalue("opml-url",
@@ -136,7 +137,7 @@ TEST_CASE("OpmlUrlReader::reload() loads URLs from multiple sources",
 TEST_CASE("OpmlUrlReader::reload() skips things that can't be parsed",
 		"[OpmlUrlReader]")
 {
-	const std::string cwd(::getcwd(nullptr, 0));
+	const auto cwd = utils::getcwd();
 
 	ConfigContainer cfg;
 	cfg.set_configvalue("opml-url",
