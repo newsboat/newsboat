@@ -166,8 +166,6 @@ public:
 	void sort(const ArticleSortStrategy& sort_strategy);
 	void sort_unlocked(const ArticleSortStrategy& sort_strategy);
 
-	void remove_old_deleted_items();
-
 	void purge_deleted_items();
 
 	void set_rtl(bool b)

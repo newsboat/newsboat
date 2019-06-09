@@ -68,7 +68,7 @@ std::shared_ptr<RssFeed> RssParser::parse()
 		fill_feed_fields(feed);
 		fill_feed_items(feed);
 
-		feed->remove_old_deleted_items();
+		ch->remove_old_deleted_items(feed.get());
 	}
 
 	feed->set_empty(false);
