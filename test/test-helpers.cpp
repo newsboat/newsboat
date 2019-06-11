@@ -96,10 +96,15 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 	::setenv(var, expected.c_str(), overwrite);
 
 	SECTION("The function is ran *after* the change") {
-		TestHelpers::EnvVar envVar(var);
-
+		// It's important to declare `newValue` before declaring `envVar`,
+		// because the string will be used in `on_change` function which is
+		// also ran on `envVar` destruction. If we declare `newValue` after
+		// `envVar`, it will be destroyed *before* `envVar`, and `on_change`
+		// function will try to access an already-freed memory.
 		const auto newValue = std::string("totally new value here");
 		auto valueChanged = false;
+
+		TestHelpers::EnvVar envVar(var);
 		envVar.on_change([&valueChanged, &newValue, &var](){
 			valueChanged = newValue == ::getenv(var);
 		});
@@ -110,9 +115,9 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 	}
 
 	SECTION("The function is ran *once* per change") {
-		TestHelpers::EnvVar envVar(var);
-
 		auto counter = unsigned{};
+
+		TestHelpers::EnvVar envVar(var);
 		envVar.on_change([&counter](){ counter++; });
 
 		REQUIRE(counter == 0);
@@ -230,10 +235,10 @@ TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 	value = nullptr;
 
 	{
-		TestHelpers::EnvVar envVar(var);
-
 		auto counter = unsigned{};
 		auto as_expected = false;
+
+		TestHelpers::EnvVar envVar(var);
 		envVar.on_change([&counter, &as_expected, var]() {
 			as_expected = nullptr == ::getenv(var);
 			counter++;
