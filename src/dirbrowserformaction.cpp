@@ -136,32 +136,8 @@ void DirBrowserFormAction::process_operation(Operation op,
 							break;
 					}
 				} else {
-					bool do_pop = true;
-					std::string fn = f->get("filenametext");
-					struct stat sbuf;
-					/*
-					 * this check is very important, as people will
-					 * kill us if they accidentaly overwrote their
-					 * files with no further warning...
-					 */
-					if (::stat(fn.c_str(), &sbuf) != -1) {
-						f->set_focus("files");
-						if (v->confirm(
-								strprintf::fmt(
-										_("Do you really "
-										  "want to "
-										  "overwrite `%s' "
-										  "(y:Yes n:No)? "),
-										fn),
-								_("yn")) == *_("n")) {
-							do_pop = false;
-						}
-						f->set_focus("filenametext");
-					}
-					if (do_pop) {
-						curs_set(0);
-						v->pop_current_formaction();
-					}
+					curs_set(0);
+					v->pop_current_formaction();
 				}
 			}
 		} break;
