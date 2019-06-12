@@ -42,6 +42,9 @@ newsboat_brew_commands: &osx_deps
   - pip3 install cpp-coveralls
   - pyenv rehash
 
+env:
+  - CXXFLAGS='-fstack-clash-protection -D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-strong --param=ssp-buffer-size=4 -D_FORTIFY_SOURCE=2'
+
 matrix:
   fast_finish: true
   include:
@@ -90,7 +93,7 @@ matrix:
         - COMPILER=g++-8
         - GCOV=/usr/bin/gcov-8
       script: &release_build_script
-        - CXXFLAGS="-O3" make -j2 --keep-going all test
+        - CXXFLAGS="$CXXFLAGS -O3" make -j2 --keep-going all test
         - ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"
     - compiler: clang-8
       os: linux
