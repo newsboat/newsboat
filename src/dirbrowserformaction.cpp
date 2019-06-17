@@ -187,8 +187,9 @@ std::vector<std::string> get_sorted_dirlist()
 
 	std::sort(ret.begin(), ret.end());
 
-	if (cwdtmp != "/")
+	if (cwdtmp != "/") {
 		ret.insert(ret.begin(), "..");
+	}
 
 	return ret;
 }
