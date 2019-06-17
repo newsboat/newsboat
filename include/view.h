@@ -73,8 +73,7 @@ public:
 
 	std::string run_filebrowser(const std::string& default_filename = "",
 		const std::string& dir = "");
-	std::string run_dirbrowser(const std::string& default_filename = "",
-		const std::string& dir = "");
+	std::string run_dirbrowser(const std::string& dir = "");
 	std::string select_tag();
 	std::string select_filter(
 		const std::vector<FilterNameExprPair>& filters);
