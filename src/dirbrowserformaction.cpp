@@ -30,7 +30,7 @@ DirBrowserFormAction::DirBrowserFormAction(View* vv,
 {
 	// In DirBrowser, keyboard focus is at the input field, so user can't
 	// possibly use 'q' key to exit the dialog
-	KeyMap* keys = vv->get_keys();
+    KeyMap* keys = vv->get_keys();
 	keys->set_key(OP_QUIT, "ESC", id());
 	vv->set_keymap(keys);
 }
@@ -88,7 +88,7 @@ void DirBrowserFormAction::process_operation(Operation op,
 
 							FmtStrFormatter fmt;
 							fmt.register_fmt('N', PROGRAM_NAME);
-							fmt.register_fmt('V', PROGRAM_VERSION);
+							fmt.register_fmt('V', utils::program_version());
 							fmt.register_fmt('f', filename);
 							f->set("head",
 								   fmt.do_format(
@@ -253,7 +253,7 @@ void DirBrowserFormAction::init()
 	f->set("head",
 		   strprintf::fmt(_("%s %s - Save Files - %s"),
 						  PROGRAM_NAME,
-						  PROGRAM_VERSION,
+						  utils::program_version(),
 						  cwdtmp));
 }
 
