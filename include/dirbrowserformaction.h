@@ -20,10 +20,6 @@ namespace newsboat {
 		{
 			dir = d;
 		}
-		void set_default_filename(const std::string& fn)
-		{
-			default_filename = fn;
-		}
 
 		std::string id() const override
 		{
@@ -37,10 +33,8 @@ namespace newsboat {
 							   std::vector<std::string>* args = nullptr) override;
 
 		std::string add_directory(std::string dirname);
-		std::string get_filename_suggestion(const std::string& s);
 		std::string get_rwx(unsigned short val);
 
-		//char get_filetype(mode_t mode);
 		std::string get_owner(uid_t uid);
 		std::string get_group(gid_t gid);
 		std::string
@@ -49,7 +43,6 @@ namespace newsboat {
 		bool quit;
 		std::string cwd;
 		std::string dir;
-		std::string default_filename;
 
 	};
 
