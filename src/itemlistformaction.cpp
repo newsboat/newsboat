@@ -429,14 +429,14 @@ void ItemListFormAction::process_operation(Operation op,
 				}
 			}
 
-			bool query = true;
+			bool overwrite_all = false;
 			for (const auto &item : visible_items) {
 				const std::string filename = v->get_filename_suggestion(item.first->title());
 				const std::string fpath = directory + filename;
 
 				struct stat sbuf;
 				if (::stat(fpath.c_str(), &sbuf) != -1) {
-					if (query) {
+					if (!overwrite_all) {
 						std::string input_options = _("yanq");
 						char c;
 						if (nfiles_exist > 1) {
@@ -462,7 +462,7 @@ void ItemListFormAction::process_operation(Operation op,
 						if (c == input_options.at(0)) {
 							save_article(filename, item.first);
 						} else if (c == input_options.at(1)) {
-							query = false;
+							overwrite_all = true;
 							save_article(filename, item.first);
 						} else if (c == input_options.at(2)) {
 							continue;
