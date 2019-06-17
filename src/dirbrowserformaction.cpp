@@ -50,6 +50,7 @@ char get_filetype(mode_t mode)
 		{S_IFLNK, 'l'},
 		{S_IFSOCK, 's'},
 		{0, 0}};
+
 	for (unsigned int i = 0; flags[i].flag != 0; i++) {
 		if ((mode & S_IFMT) == flags[i].flag)
 			return flags[i].ftype;
@@ -182,6 +183,7 @@ std::vector<std::string> get_sorted_dirlist()
 					}
 				}
 			}
+
 			de = ::readdir(dirp);
 		}
 		::closedir(dirp);
@@ -262,6 +264,7 @@ KeyMapHintEntry* DirBrowserFormAction::get_keymap_hint()
 	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Cancel")},
 		{OP_OPEN, _("Save")},
 		{OP_NIL, nullptr}};
+
 	return hints;
 }
 
@@ -316,6 +319,7 @@ std::string DirBrowserFormAction::get_formatted_dirname(std::string dirname,
 	default:
 		if (mode & S_IXUSR)
 			suffix = '*';
+
 	}
 
 	return strprintf::fmt("%s%c", dirname, suffix);
@@ -326,6 +330,7 @@ std::string DirBrowserFormAction::get_rwx(unsigned short val)
 	std::string str;
 	const char* bitstrs[] = {
 		"---", "--x", "-w-", "-wx", "r--", "r-x", "rw-", "rwx"};
+
 	for (int i = 0; i < 3; ++i) {
 		unsigned char bits = val % 8;
 		val /= 8;
