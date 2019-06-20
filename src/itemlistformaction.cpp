@@ -382,6 +382,11 @@ void ItemListFormAction::process_operation(Operation op,
 			"ItemListFormAction: saving all items");
 		if (visible_items.size() == 1) {
 			std::string directory = v->run_dirbrowser();
+
+			if (directory == "") {
+				return;
+			}
+
 			if (directory.back() != '/') {
 				directory = directory + "/";
 			}
@@ -414,6 +419,11 @@ void ItemListFormAction::process_operation(Operation op,
 
 		} else if (visible_items.size() > 1) {
 			std::string directory = v->run_dirbrowser();
+
+			if (directory == "") {
+				return;
+			}
+
 			if (directory.back() != '/') {
 				directory = directory + "/";
 			}
