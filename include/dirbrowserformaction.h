@@ -40,7 +40,6 @@ namespace newsboat {
 		std::string
 		get_formatted_dirname(std::string dirname, char ftype, mode_t mode);
 
-		bool quit;
 		std::string cwd;
 		std::string dir;
 
