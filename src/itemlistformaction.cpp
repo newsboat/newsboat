@@ -460,21 +460,23 @@ void ItemListFormAction::process_operation(Operation op,
 						if (input_options.length() < n_options)
 							break;
 						if (c == input_options.at(0)) {
-							save_article(filename, item.first);
+							save_article(fpath,
+										 item.first);
 						} else if (c == input_options.at(1)) {
 							overwrite_all = true;
-							save_article(filename, item.first);
+							save_article(fpath,
+										 item.first);
 						} else if (c == input_options.at(2)) {
 							continue;
 						} else if (c == input_options.at(3)) {
 							break;
 						}
 					} else {
-						save_article(filename, item.first);
+						save_article(fpath, item.first);
 					}
 				} else {
 					// get file since it does not exist
-					save_article(filename, item.first);
+					save_article(fpath, item.first);
 				}
 			}
 		}
