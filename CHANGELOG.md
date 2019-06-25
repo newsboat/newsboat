@@ -1,15 +1,37 @@
 # Changes for Newsboat
 
 
+## 2.16 - 2019-06-25
 
-## Unreleased
+Lists below only mention user-visible changes, but I would also like to
+acknowledge contributions from Ivan Tham.
 
 ### Added
+- Install changelog and contrib/ alongside docs (Alexander Batischev) (#474)
+- `show-title-bar` config option to hide the title bar. Defaults to yes, i.e.
+    the behaviour is the same as with Newsboat 2.15 (Sermak) (#375)
+- Contrib scripts for image preview (Sermak) (#480)
+- Nord colour scheme (Daryl Manning)
+- Ability to search withing the search results, narrowing them down (Tumlinh)
+    (#327)
+- Color scheme based on Adapta-Maia GTK theme (Lucas Parsy)
+
 ### Changed
-### Deprecated
-### Removed
+- Marking feed as read only resets the cursor if article list is sorted by date
+    (Stefan Assmann)
+- `include` also accepts relative paths (Marco Sirabella) (#489)
+- Update vendored version of nlohmann/json to 3.6.1
+- Update vendored version of Catch2 to 2.9.1
+
 ### Fixed
-### Security
+- Parser breaking on spaces inside backticks (Marco Sirabella) (#492)
+- Hidden tags changing the title of their feeds (Alexander Batischev) (#498)
+- Segfaults some time after using an invalid regex in a filter expression
+    (Alexander Batischev) (#501)
+- Single quotes in podcast names replaced by %27 (屑鉄さらい;Scrap Trawler)
+    (#290, #457)
+- Out-of-bounds access on empty "author" tag in RSS 0.9x (Alexander Batischev)
+    (#542)
 
 
 

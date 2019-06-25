@@ -12,7 +12,10 @@ master repository and shell access to newsboat.org.
         for Newsbeuter issues)
     * Mention the name of contributor
     * Acknowledge contributions from people whose changes didn't make it into
-        the lists
+        the lists. The full list of contributors can be got with:
+        ```
+        $ git shortlog PREVIOUS_VERSION.. | egrep -v '^(\s|$)'
+        ```
 2. Update version:
     * rust/libnewsboat/Cargo.toml
     * rust/libnewsboat-ffi/Cargo.toml
