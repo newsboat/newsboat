@@ -142,24 +142,20 @@ msgstr ""
 "steht unter der MIT-Lizenz: http://www.davekoelle.com/alphanum.html"
 
 #: newsboat.cpp:192
-#, fuzzy, c-format
 msgid "Caught newsboat::DbException with message: %s"
-msgstr "newsboat::dbexception gefangen mit Nachricht: %s"
+msgstr "newsboat::DbException gefangen mit Nachricht: %s"
 
 #: newsboat.cpp:199
-#, fuzzy, c-format
 msgid "Caught newsboat::MatcherException with message: %s"
-msgstr "newsboat::matcherexception gefangen mit Nachricht: %s"
+msgstr "newsboat::MatcherException gefangen mit Nachricht: %s"
 
 #: newsboat.cpp:205 podboat.cpp:37
-#, fuzzy, c-format
 msgid "Caught newsboat::Exception with message: %s"
-msgstr "newsboat::exception gefangen mit Nachricht: %s"
+msgstr "newsboat::Exception gefangen mit Nachricht: %s"
 
 #: src/cliargsparser.cpp:145
-#, fuzzy, c-format
 msgid "%s: %s: invalid loglevel value"
-msgstr "%s: %d: ungültiger Loglevel-Wert"
+msgstr "%s: %s: ungültiger Loglevel-Wert"
 
 #: src/colormanager.cpp:56 src/colormanager.cpp:59 src/regexmanager.cpp:74
 #: src/regexmanager.cpp:86 src/regexmanager.cpp:157 src/regexmanager.cpp:167
@@ -892,20 +888,19 @@ msgstr "Artikel zu Befehl umleiten: "
 #. / "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
 #. / messages
 #: src/itemlistformaction.cpp:658 src/itemlistformaction.cpp:686
-#, fuzzy
 msgid "dtfalgr"
-msgstr "dtfalg"
+msgstr "dtfalgz"
 
 #: src/itemlistformaction.cpp:660
-#, fuzzy
 msgid "Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
-msgstr "Sortieren nach (d)atum/(t)itel/(f)lags/(a)utor/(l)ink/(g)uid?"
+msgstr ""
+"Sortieren nach (d)atum/(t)itel/(f)lags/(a)utor/(l)ink/(g)uid/(z)ufällig?"
 
 #: src/itemlistformaction.cpp:688
-#, fuzzy
 msgid "Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
 msgstr ""
-"Umgekehrt sortieren nach (d)atum/(t)itel/(f)lags/(a)utor/(l)ink/(g)uid?"
+"Umgekehrt sortieren nach (d)atum/(t)itel/(f)lags/(a)utor/(l)ink/(g)uid/"
+"(z)ufällig?"
 
 #: src/itemlistformaction.cpp:803 src/itemviewformaction.cpp:497
 msgid "Flags updated."
@@ -1472,6 +1467,9 @@ msgid ""
 "exits and comments will be deleted. Press enter to continue or Ctrl+C to "
 "abort"
 msgstr ""
+"WARNUNG: Kommentar in %s gefunden. Die Warteschlangendatei wird beim "
+"Beenden von podboat neu generiert und alle Kommentare dabei gelöscht. "
+"Drücken Sie Enter, um fortzufahren oder Strg+C, um abzubrechen."
 
 #: src/regexmanager.cpp:54
 #, c-format
