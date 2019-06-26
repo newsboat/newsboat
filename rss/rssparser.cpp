@@ -1,6 +1,7 @@
 #include "rssparser.h"
 
 #include <cstring>
+#include <ctime>
 #include <libxml/tree.h>
 
 #include "exception.h"
