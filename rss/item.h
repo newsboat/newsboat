@@ -1,6 +1,7 @@
 #ifndef NEWSBOAT_RSSPPITEM_H_
 #define NEWSBOAT_RSSPPITEM_H_
 
+#include <ctime>
 #include <string>
 #include <vector>
 

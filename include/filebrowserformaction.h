@@ -1,6 +1,7 @@
 #ifndef NEWSBOAT_FILEBROWSERFORMACTION_H_
 #define NEWSBOAT_FILEBROWSERFORMACTION_H_
 
+#include <sys/stat.h>
 #include <grp.h>
 
 #include "configcontainer.h"

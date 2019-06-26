@@ -1,5 +1,6 @@
 extern crate curl_sys;
 extern crate dirs;
+extern crate libc;
 extern crate rand;
 extern crate regex;
 extern crate unicode_segmentation;
@@ -11,6 +12,7 @@ use self::unicode_segmentation::UnicodeSegmentation;
 use self::unicode_width::UnicodeWidthStr;
 use self::url::percent_encoding::*;
 use self::url::Url;
+use libc::c_ulong;
 use logger::{self, Level};
 use std::io::Write;
 use std::path::{Path, PathBuf};
@@ -290,7 +292,7 @@ pub fn is_valid_podcast_type(mimetype: &str) -> bool {
     matches || found
 }
 
-pub fn get_auth_method(method: &str) -> u64 {
+pub fn get_auth_method(method: &str) -> c_ulong {
     match method {
         "basic" => curl_sys::CURLAUTH_BASIC,
         "digest" => curl_sys::CURLAUTH_DIGEST,

@@ -1,5 +1,5 @@
 use abort_on_panic;
-use libc::c_char;
+use libc::{c_char, c_ulong};
 use libnewsboat::utils;
 use std::ffi::{CStr, CString};
 use std::ptr;
@@ -229,7 +229,7 @@ pub extern "C" fn rs_get_random_value(rs_max: u32) -> u32 {
 }
 
 #[no_mangle]
-pub extern "C" fn rs_get_auth_method(input: *const c_char) -> u64 {
+pub extern "C" fn rs_get_auth_method(input: *const c_char) -> c_ulong {
     abort_on_panic(|| {
         let rs_input = unsafe { CStr::from_ptr(input) };
         let rs_input = rs_input.to_string_lossy().into_owned();

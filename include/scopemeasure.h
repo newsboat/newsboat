@@ -1,6 +1,7 @@
 #ifndef NEWSBOAT_SCOPEMEASURE_H_
 #define NEWSBOAT_SCOPEMEASURE_H_
 
+#include <sys/time.h>
 #include <string>
 
 #include "logger.h"
