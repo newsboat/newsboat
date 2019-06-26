@@ -1,5 +1,5 @@
 use abort_on_panic;
-use libc::{c_char,c_ulong};
+use libc::{c_char, c_ulong};
 use libnewsboat::utils;
 use std::ffi::{CStr, CString};
 use std::ptr;
