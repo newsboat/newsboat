@@ -1,14 +1,13 @@
 # Changes for Newsboat
 
 
-## 2.17 - expected 2019-09-22
+## 2.16.1 - 2019-06-26
 
-### Added
 ### Changed
-### Deprecated
-### Removed
+- Update German translations (Lysander Trischler)
+
 ### Fixed
-### Security
+- Build on FreeBSD and i386 (Tobias Kortkamp)
 
 
 
