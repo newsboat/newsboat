@@ -1049,7 +1049,7 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 	TestHelpers::TempDir tmp;
 
 	const auto require_return_zero = [](const std::string& path) {
-		REQUIRE(utils::mkdir_parents(path.c_str(), 0700) == 0);
+		REQUIRE(utils::mkdir_parents(path, 0700) == 0);
 		REQUIRE(::access(path.c_str(), R_OK | X_OK) == 0);
 	};
 
