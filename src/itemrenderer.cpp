@@ -12,16 +12,18 @@ namespace newsboat {
 std::string item_renderer::get_feedtitle(std::shared_ptr<RssItem> item) {
 	const std::shared_ptr<RssFeed> feedptr = item->get_feedptr();
 
+	if (!feedptr) {
+		return {};
+	}
+
 	std::string feedtitle;
-	if (feedptr) {
-		if (!feedptr->title().empty()) {
-			feedtitle = feedptr->title();
-			utils::remove_soft_hyphens(feedtitle);
-		} else if (!feedptr->link().empty()) {
-			feedtitle = feedptr->link();
-		} else if (!feedptr->rssurl().empty()) {
-			feedtitle = feedptr->rssurl();
-		}
+	if (!feedptr->title().empty()) {
+		feedtitle = feedptr->title();
+		utils::remove_soft_hyphens(feedtitle);
+	} else if (!feedptr->link().empty()) {
+		feedtitle = feedptr->link();
+	} else if (!feedptr->rssurl().empty()) {
+		feedtitle = feedptr->rssurl();
 	}
 
 	return feedtitle;
