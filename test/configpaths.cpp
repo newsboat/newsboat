@@ -1352,6 +1352,8 @@ TEST_CASE("create_dirs() returns false if XDG config dir exists but data dir "
 	SECTION("XDG_DATA_HOME redefined") {
 		const auto data_home = tmp.get_path() + "xdg-data/";
 		xdg_data.set(data_home);
+		// It's important to set the variable, but *not* create the directory
+		// - it's the pre-condition of the test that the data dir doesn't exist
 
 		const auto data_dir = data_home + "newsboat/";
 		REQUIRE(utils::mkdir_parents(data_dir, 0700) == 0);
@@ -1364,13 +1366,12 @@ TEST_CASE("create_dirs() returns false if XDG config dir exists but data dir "
 		xdg_config.set(config_home);
 
 		const auto config_dir = config_home + "newsboat/";
-		::mkdir(config_dir.c_str(), 0700);
+		REQUIRE(utils::mkdir_parents(config_dir, 0700) == 0);
 
 		const auto data_home = tmp.get_path() + "xdg-data/";
 		xdg_data.set(data_home);
-
-		const auto data_dir = data_home + "newsboat/";
-		::mkdir(data_dir.c_str(), 0700);
+		// It's important to set the variable, but *not* create the directory
+		// - it's the pre-condition of the test that the data dir doesn't exist
 
 		verify_create_dirs_returns_false(tmp);
 	}
