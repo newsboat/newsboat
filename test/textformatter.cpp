@@ -201,7 +201,7 @@ TEST_CASE("Lines marked as non-wrappable are always returned verbatim",
  * second line and it would make the text look jagged with a bigger input. Thus
  * spaces at the beginning of lines after wrapping should be dropped.
  */
-TEST_CASE("ignore whitespace that's going to be wrapped onto the next line",
+TEST_CASE("Ignore whitespace that's going to be wrapped onto the next line",
 	"[TextFormatter]")
 {
 	TextFormatter fmt;
