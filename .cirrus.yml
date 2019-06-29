@@ -3,4 +3,5 @@ freebsd_instance:
 
 task:
     install_script: pkg install -y rust gmake asciidoc pkgconf stfl curl json-c ncurses openssl sqlite3 gettext-tools
-    script: RUST_BACKTRACE=1 gmake
+    script: RUST_BACKTRACE=1 gmake all test
+    test_script: cargo test
