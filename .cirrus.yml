@@ -4,5 +4,9 @@ freebsd_task:
             - image: freebsd-11-2-release-amd64
             - image: freebsd-12-0-release-amd64
     install_script: pkg install -y rust gmake asciidoc pkgconf stfl curl json-c ncurses openssl sqlite3 gettext-tools
-    compile_script: RUST_BACKTRACE=1 gmake all test
+    # CI builds take a while to provision, install dependencies and compile our
+    # stuff. To maximize the benefits, we ask Make to process as many rules as
+    # possible before failing. This enables developers to fix more errors before
+    # re-submitting the code to CI, which should increase throughput.
+    compile_script: RUST_BACKTRACE=1 gmake --keep-going all test
     test_script: cargo test
