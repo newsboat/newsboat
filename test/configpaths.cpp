@@ -495,47 +495,51 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if config paths "
 
 	FileSentries beuter_sentries;
 
+	const auto check = [&]() {
+		FileSentries boat_sentries;
+
+		const auto url_file = tmp.get_path() + "my urls file";
+		REQUIRE(create_file(url_file, boat_sentries.urls));
+
+		const auto cache_file = tmp.get_path() + "new cache.db";
+		REQUIRE(create_file(cache_file, boat_sentries.cache));
+
+		const auto config_file = tmp.get_path() + "custom config file";
+		REQUIRE(create_file(config_file, boat_sentries.config));
+
+		TestHelpers::Opts opts({
+				"newsboat",
+				"-u", url_file,
+				"-c", cache_file,
+				"-C", config_file,
+				"-q"});
+		CliArgsParser parser(opts.argc(), opts.argv());
+		ConfigPaths paths;
+		REQUIRE(paths.initialized());
+		paths.process_args(parser);
+
+		// No migration should occur, so should return false.
+		REQUIRE_FALSE(paths.try_migrate_from_newsbeuter());
+
+		INFO("Newsbeuter's urls file sentry: " << beuter_sentries.urls);
+		REQUIRE(file_contents(url_file) == boat_sentries.urls);
+
+		INFO("Newsbeuter's config file sentry: " << beuter_sentries.config);
+		REQUIRE(file_contents(config_file) == boat_sentries.config);
+
+		INFO("Newsbeuter's cache file sentry: " << beuter_sentries.cache);
+		REQUIRE(file_contents(cache_file) == boat_sentries.cache);
+	};
+
 	SECTION("Newsbeuter dotdir exists") {
 		mock_newsbeuter_dotdir(tmp, beuter_sentries);
+		check();
 	}
 
 	SECTION("Newsbeuter XDG dirs exist") {
 		mock_newsbeuter_xdg_dirs(tmp, beuter_sentries);
+		check();
 	}
-
-	FileSentries boat_sentries;
-
-	const auto url_file = tmp.get_path() + "my urls file";
-	REQUIRE(create_file(url_file, boat_sentries.urls));
-
-	const auto cache_file = tmp.get_path() + "new cache.db";
-	REQUIRE(create_file(cache_file, boat_sentries.cache));
-
-	const auto config_file = tmp.get_path() + "custom config file";
-	REQUIRE(create_file(config_file, boat_sentries.config));
-
-	TestHelpers::Opts opts({
-			"newsboat",
-			"-u", url_file,
-			"-c", cache_file,
-			"-C", config_file,
-			"-q"});
-	CliArgsParser parser(opts.argc(), opts.argv());
-	ConfigPaths paths;
-	REQUIRE(paths.initialized());
-	paths.process_args(parser);
-
-	// No migration should occur, so should return false.
-	REQUIRE_FALSE(paths.try_migrate_from_newsbeuter());
-
-	INFO("Newsbeuter's urls file sentry: " << beuter_sentries.urls);
-	REQUIRE(file_contents(url_file) == boat_sentries.urls);
-
-	INFO("Newsbeuter's config file sentry: " << beuter_sentries.config);
-	REQUIRE(file_contents(config_file) == boat_sentries.config);
-
-	INFO("Newsbeuter's cache file sentry: " << beuter_sentries.cache);
-	REQUIRE(file_contents(cache_file) == boat_sentries.cache);
 }
 
 TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
