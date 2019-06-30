@@ -131,7 +131,7 @@ private:
 	unsigned int pos;
 	std::shared_ptr<RssFeed> feed;
 	bool apply_filter;
-	Matcher m;
+	Matcher matcher;
 	std::vector<ItemPtrPosPair> visible_items;
 	bool show_searchresult;
 	std::string searchphrase;
