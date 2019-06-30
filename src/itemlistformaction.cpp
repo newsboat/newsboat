@@ -920,44 +920,43 @@ void ItemListFormAction::prepare()
 		old_width = width;
 	}
 
-	if (!invalidated)
+	if (!invalidated) {
 		return;
-
-	if (invalidated) {
-		auto datetime_format = cfg->get_configvalue("datetime-format");
-		auto itemlist_format =
-			cfg->get_configvalue("articlelist-format");
-
-		if (invalidation_mode == InvalidationMode::COMPLETE) {
-			listfmt.clear();
-
-			for (const auto& item : visible_items) {
-				auto line = item2formatted_line(item,
-					width,
-					itemlist_format,
-					datetime_format);
-				listfmt.add_line(line, item.second);
-			}
-		} else if (invalidation_mode == InvalidationMode::PARTIAL) {
-			for (const auto& itempos : invalidated_itempos) {
-				auto item = visible_items[itempos];
-				auto line = item2formatted_line(item,
-					width,
-					itemlist_format,
-					datetime_format);
-				listfmt.set_line(itempos, line, item.second);
-			}
-			invalidated_itempos.clear();
-		} else {
-			LOG(Level::ERROR,
-				"invalidation_mode is neither COMPLETE nor "
-				"PARTIAL");
-		}
-
-		f->modify("items",
-			"replace_inner",
-			listfmt.format_list(rxman, "articlelist"));
 	}
+
+	auto datetime_format = cfg->get_configvalue("datetime-format");
+	auto itemlist_format =
+		cfg->get_configvalue("articlelist-format");
+
+	if (invalidation_mode == InvalidationMode::COMPLETE) {
+		listfmt.clear();
+
+		for (const auto& item : visible_items) {
+			auto line = item2formatted_line(item,
+				width,
+				itemlist_format,
+				datetime_format);
+			listfmt.add_line(line, item.second);
+		}
+	} else if (invalidation_mode == InvalidationMode::PARTIAL) {
+		for (const auto& itempos : invalidated_itempos) {
+			auto item = visible_items[itempos];
+			auto line = item2formatted_line(item,
+				width,
+				itemlist_format,
+				datetime_format);
+			listfmt.set_line(itempos, line, item.second);
+		}
+		invalidated_itempos.clear();
+	} else {
+		LOG(Level::ERROR,
+			"invalidation_mode is neither COMPLETE nor "
+			"PARTIAL");
+	}
+
+	f->modify("items",
+		"replace_inner",
+		listfmt.format_list(rxman, "articlelist"));
 
 	invalidated = false;
 
