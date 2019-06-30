@@ -15,9 +15,9 @@ public:
 	void stopover(const std::string& son = "");
 
 private:
-	struct timeval tv1, tv2;
+	struct timeval tv1 = {}, tv2 = {};
 	std::string funcname;
-	Level lvl;
+	Level lvl = Level::DEBUG;
 };
 
 } // namespace newsboat
