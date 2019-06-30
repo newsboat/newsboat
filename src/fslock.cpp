@@ -62,7 +62,7 @@ bool FsLock::try_lock(const std::string& new_lock_filepath, pid_t& pid)
 			if (locked) {
 				remove_lock(lock_filepath);
 			}
-			locked = success;
+			locked = true;
 			lock_filepath = new_lock_filepath;
 		} else {
 			::close(fd);
