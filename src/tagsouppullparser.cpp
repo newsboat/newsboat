@@ -104,7 +104,7 @@ void TagSoupPullParser::skip_whitespace()
 			else
 				ws.append(1, c);
 		}
-	} while (!inputstream->eof());
+	} while (!inputstream->eof() && !inputstream->fail());
 }
 
 void TagSoupPullParser::add_attribute(std::string s)
