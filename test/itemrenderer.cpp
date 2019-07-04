@@ -482,16 +482,20 @@ TEST_CASE("item_renderer::get_feedtitle() returns item's feed title without "
 	std::shared_ptr<RssFeed> feed;
 	std::tie(item, feed) = create_test_item(&rsscache);
 
+	const auto check = [&]() {
+		const auto result = item_renderer::get_feedtitle(item);
+		REQUIRE(result == "Welcome, lovely strangers!");
+	};
+
 	SECTION("Title without soft hyphens") {
 		feed->set_title("Welcome, lovely strangers!");
+		check();
 	}
 
 	SECTION("Title containing soft hyphens") {
 		feed->set_title("Wel\u00ADcome, lo\u00ADve\u00ADly stran\u00ADgers!");
+		check();
 	}
-
-	const auto result = item_renderer::get_feedtitle(item);
-	REQUIRE(result == "Welcome, lovely strangers!");
 }
 
 TEST_CASE("item_renderer::get_feedtitle() returns item's feed self-link "

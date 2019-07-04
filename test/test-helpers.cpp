@@ -270,6 +270,17 @@ TEST_CASE("EnvVar's destructor runs a function (set by on_change()) after "
 
 	const auto expected = std::string("let's try this out, shall we?");
 
+	const auto check = [&]() {
+		auto counter = unsigned{};
+
+		{
+			TestHelpers::EnvVar envVar(var);
+			envVar.on_change([&counter](){ counter++; });
+		}
+
+		REQUIRE(counter == 1);
+	};
+
 	SECTION("Variable wasn't even set") {
 		// Intentionally left empty.
 		//
@@ -280,21 +291,16 @@ TEST_CASE("EnvVar's destructor runs a function (set by on_change()) after "
 		// in two different situations: once when the environment variable is
 		// already present, and once when it's absent. The point of the test is
 		// that this wouldn't matter: EnvVar will behave the same regardless.
+
+		check();
 	}
 
 	SECTION("Variable was set before EnvVar is created") {
 		const auto overwrite = true;
 		::setenv(var, expected.c_str(), overwrite);
+
+		check();
 	}
-
-	auto counter = unsigned{};
-
-	{
-		TestHelpers::EnvVar envVar(var);
-		envVar.on_change([&counter](){ counter++; });
-	}
-
-	REQUIRE(counter == 1);
 
 	// It's a no-op if the variable is absent from the environment, so we don't
 	// need to put this inside a conditional to match SECTIONs above.

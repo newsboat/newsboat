@@ -336,7 +336,10 @@ uninstall-mo:
 
 # tests and coverage reports
 
-test: test/test
+test: test/test rust-test
+
+rust-test:
+	cargo test --no-run
 
 TEST_SRCS:=$(wildcard test/*.cpp)
 TEST_OBJS:=$(patsubst %.cpp,%.o,$(TEST_SRCS))
