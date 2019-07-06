@@ -12,19 +12,19 @@ prev-unread||p||Jump to the previous unread article.
 next||J||Jump to next article.
 prev||K||Jump to previous article.
 random-unread||^K||Jump to a random unread article.
-open-in-browser||o||Opens the URL associated with the current article.
-open-in-browser-and-mark-read||O||Opens the URL associated with the current article and marks the article as read.
-open-all-unread-in-browser||n/a||Opens all the unread URLs in the current feed.
-open-all-unread-in-browser-and-mark-read||n/a||Opens all the unread URLs in the current feed and marks them as read.
-help||?||Runs the help screen.
-toggle-source-view||^U||Toggles between the HTML view and the source view in the article view.
-toggle-article-read||N||Toggle the read flag for the currently selected article, and clears delete flag if set.
+open-in-browser||o||Open the URL associated with the current article.
+open-in-browser-and-mark-read||O||Open the URL associated with the current article and mark the article as read.
+open-all-unread-in-browser||n/a||Open all the unread URLs in the current feed.
+open-all-unread-in-browser-and-mark-read||n/a||Open all the unread URLs in the current feed and mark them as read.
+help||?||Run the help screen.
+toggle-source-view||^U||Toggle between the HTML view and the source view in the article view.
+toggle-article-read||N||Toggle the read flag for the currently selected article, and clear the delete flag if set.
 toggle-show-read-feeds||l||Toggle whether read feeds should be shown in the feed list.
 show-urls||u||Show all URLs in the article in a list (similar to urlview).
 clear-tag||^T||Clear current tag.
 set-tag||t||Select tag.
-open-search||/||Opens the search dialog. When a search is done in the article list, then the search operation only applies to the articles of the current feed, otherwise to all articles.
-goto-url||#||Open the URL dialog and then opens specified URL.
+open-search||/||Open the search dialog. When a search is done in the article list, then the search operation only applies to the articles of the current feed, otherwise to all articles.
+goto-url||#||Open the URL dialog and then open a specified URL.
 enqueue||e||Add the podcast download URL of the current article (if any is found) to the podcast download queue (see the respective section in the documentation for more information on podcast support).
 edit-urls||E||Edit the list of subscribed URLs. newsboat will start the editor configured through the $VISUAL environment variable (if unset, $EDITOR is used; fallback: "vi"). When editing is finished, newsboat will reload the URLs file.
 reload-urls||^R||Reload the URLs configuration file.
@@ -49,10 +49,10 @@ prev-dialog||^G||Go to previous dialog.
 pipe-to||| ||Pipe article to command.
 sort||g||Sort feeds/articles by interactively choosing the sort method.
 rev-sort||G||Sort feeds/articles by interactively choosing the sort method (reversed).
-up||UP||Goes up one item in the list.
-down||DOWN||Goes down one item in the list.
-pageup||PPAGE||Goes up one page in the list.
-pagedown||NPAGE||Goes down one page in the list.
-home||HOME||Goes to the first item in the list.
-end||END||Goes to the last item in the list.
+up||UP||Go up one item in the list.
+down||DOWN||Go down one item in the list.
+pageup||PPAGE||Go up one page in the list.
+pagedown||NPAGE||Go down one page in the list.
+home||HOME||Go to the first item in the list.
+end||END||Go to the last item in the list.
 macro-prefix||,||Initiate macro execution. The next key press selects the actual macro and runs it.
