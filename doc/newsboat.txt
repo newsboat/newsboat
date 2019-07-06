@@ -894,6 +894,11 @@ example:
 
 When the user presses the macro prefix ("," by default) and then the "k" key,
 the three operations <<open,`open`>>, <<reload,`reload`>> and <<quit,`quit`>> will be executed subsequently.
+The macro prefix can be changed from the default "," to another key, e.g. "+"
+(if you don't unbind the default "," you're left with two macro prefixes):
+
+	bind-key + macro-prefix
+	unbind-key ,
 
 It is also possible to modify configuration variables within macros, which can
 e.g. be used to temporarily modify the <<browser,`browser`>> configuration variable to do
