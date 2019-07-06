@@ -55,3 +55,4 @@ pageup||PPAGE||Goes up one page in the list.
 pagedown||NPAGE||Goes down one page in the list.
 home||HOME||Goes to the first item in the list.
 end||END||Goes to the last item in the list.
+macro-prefix||,||Initiate macro execution. The next key press selects the actual macro and runs it.
