@@ -29,7 +29,7 @@ enqueue||e||Add the podcast download URL of the current article (if any is found
 edit-urls||E||Edit the list of subscribed URLs. newsboat will start the editor configured through the $VISUAL environment variable (if unset, $EDITOR is used; fallback: "vi"). When editing is finished, newsboat will reload the URLs file.
 reload-urls||^R||Reload the URLs configuration file.
 redraw||^L||Redraw the screen.
-cmdline||<colon>||Open the command line.
+cmdline||:||Open the command line.
 set-filter||F||Set a filter.
 select-filter||f||Select a predefined filter.
 clear-filter||^F||Clear currently set filter.
