@@ -46,7 +46,7 @@ view-dialogs||v||View list of open dialogs.
 close-dialog||^X||Close currently selected dialog.
 next-dialog||^V||Go to next dialog.
 prev-dialog||^G||Go to previous dialog.
-pipe-to|||||Pipe article to command.
+pipe-to||| ||Pipe article to command.
 sort||g||Sort feeds/articles by interactively choosing the sort method.
 rev-sort||G||Sort feeds/articles by interactively choosing the sort method (reversed).
 up||UP||Goes up one item in the list.
