@@ -64,8 +64,6 @@ fail() {
 	echo ""
 	echo "You need package ${pkgname} in order to compile this program."
 	echo "Please make sure it is installed."
-	echo ""
-	echo "You can download ${pkgname} from here: ${dlurl}"
 	FAILSTATUS="1"
 }
 
