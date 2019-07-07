@@ -167,7 +167,7 @@ clean-doc:
 clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clean-librsspp clean-libnewsboat
 	$(RM) $(STFLHDRS) xlicense.h
 
-distclean: clean clean-mo test-clean profclean
+distclean: clean clean-mo clean-test profclean
 	$(RM) core *.core core.* config.mk
 
 doc: doc/newsboat.1 doc/podboat.1 doc/xhtml/newsboat.html doc/xhtml/faq.html
@@ -290,7 +290,7 @@ uninstall: uninstall-mo
 
 .PHONY: doc clean distclean all test test-rss extract install uninstall regenerate-parser clean-newsboat \
 	clean-podboat clean-libboat clean-librsspp clean-libfilter clean-doc install-mo msgmerge clean-mo \
-	test-clean config cppcheck
+	clean-test config cppcheck
 
 # the following targets are i18n/l10n-related:
 
@@ -346,7 +346,7 @@ TEST_OBJS:=$(patsubst %.cpp,%.o,$(TEST_SRCS))
 test/test: xlicense.h $(LIB_OUTPUT) $(NEWSBOATLIB_OUTPUT) $(NEWSBOAT_OBJS) $(PODBOAT_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) $(TEST_OBJS) test/test-helpers.h
 	$(CXX) $(CXXFLAGS) -o test/test $(TEST_OBJS) src/*.o $(NEWSBOAT_LIBS) $(LDFLAGS)
 
-test-clean:
+clean-test:
 	$(RM) test/test test/*.o
 
 profclean:
