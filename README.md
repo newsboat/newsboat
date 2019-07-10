@@ -27,6 +27,9 @@ newsboat can be compiled.
 - [STFL (version 0.21 or newer)](http://www.clifford.at/stfl/)
 - [SQLite3 (version 3.5 or newer)](http://www.sqlite.org/download.html)
 - [libcurl (version 7.21.6 or newer)](http://curl.haxx.se/download.html)
+- Header files for the SSL library that libcurl uses. You can find out which
+    library that is from the output of `curl --version`; most often that's
+    OpenSSL, sometimes GnuTLS, or maybe something else.
 - GNU gettext (on systems that don't provide gettext in the libc):
   ftp://ftp.gnu.org/gnu/gettext/
 - [pkg-config](http://pkg-config.freedesktop.org/wiki/)
