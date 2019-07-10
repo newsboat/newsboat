@@ -90,6 +90,8 @@ properly formatted, install and run rust-fmt:
 	$ rustup component add rustfmt
 	$ cargo fmt
 
+Newsboat can also be [built in Docker](doc/internal/docker.md).
+
 License
 -------
 
