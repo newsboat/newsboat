@@ -85,7 +85,7 @@ slows them down if `TMPDIR` is on HDD or even SSD.
 
 We check the formatting of the Rust code during CI using
 [rust-fmt](https://github.com/rust-lang/rustfmt).  To make sure your code is
-properly formated install and run rust-fmt:
+properly formatted, install and run rust-fmt:
 
 	$ rustup component add rustfmt
 	$ cargo fmt
