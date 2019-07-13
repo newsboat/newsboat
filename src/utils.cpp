@@ -1011,20 +1011,7 @@ int utils::run_interactively(const std::string& command,
 
 std::string utils::getcwd()
 {
-	// Linux seem to have its MAX_PATH set somewhere around this value, so
-	// should be a nice default
-	std::vector<char> result(4096, '\0');
-
-	while (true) {
-		char* ret = ::getcwd(result.data(), result.size());
-		if (ret == nullptr && errno == ERANGE) {
-			result.resize(result.size() * 2);
-		} else {
-			break;
-		}
-	}
-
-	return std::string(result.data());
+	return RustString(rs_getcwd());
 }
 
 int utils::strnaturalcmp(const std::string& a, const std::string& b)
