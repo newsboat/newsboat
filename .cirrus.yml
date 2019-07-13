@@ -20,6 +20,6 @@ freebsd_task:
     allow_failures: true
 
     container:
-        dockerfile: docker/ubuntu_16.04-i686.dockerfile
+        dockerfile: docker/ubuntu_18.04-i686.dockerfile
     build_script: make -j3 --keep-going all test
     test_script: ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"
