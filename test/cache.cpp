@@ -484,8 +484,8 @@ TEST_CASE("mark_items_read_by_guid marks items with given GUIDs as unread ",
 }
 
 TEST_CASE(
-	"remove_old_deleted_items removes deleted items with particular "
-	"feedurl if its GUID is not in the vector",
+	"remove_old_deleted_items removes deleted items that belong to the given "
+	"feed, but aren't mentioned in the given RssFeed object",
 	"[Cache]")
 {
 	ConfigContainer cfg;
@@ -506,12 +506,21 @@ TEST_CASE(
 	for (const auto& guid : should_be_absent) {
 		rsscache.mark_item_deleted(guid, true);
 	}
-	for (const auto& guid : should_be_present) {
-		rsscache.mark_item_deleted(guid, true);
-	}
 
-	REQUIRE_NOTHROW(rsscache.remove_old_deleted_items(
-		feed->rssurl(), should_be_present));
+	std::vector<std::shared_ptr<RssItem>> remaining_items;
+	for (const auto& item : feed->items()) {
+		if (!std::any_of(
+				begin(should_be_absent),
+				end(should_be_absent),
+				[&item](const std::string& guid) -> bool {
+					return guid == item->guid();
+				}))
+		{
+			remaining_items.push_back(item);
+		}
+	}
+	feed->set_items(remaining_items);
+	REQUIRE_NOTHROW(rsscache.remove_old_deleted_items(feed.get()));
 
 	// Trying to "undelete" items
 	for (const auto& guid : should_be_absent) {

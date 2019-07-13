@@ -972,16 +972,23 @@ void Cache::update_rssitem_flags(RssItem* item)
 	run_sql(update);
 }
 
-void Cache::remove_old_deleted_items(const std::string& rssurl,
-	const std::vector<std::string>& guids)
+void Cache::remove_old_deleted_items(RssFeed* feed)
 {
 	ScopeMeasure m1("Cache::remove_old_deleted_items");
-	if (guids.size() == 0) {
+
+	std::lock_guard<std::mutex> cache_lock(mtx);
+	std::lock_guard<std::mutex> feed_lock(feed->item_mutex);
+
+	std::vector<std::string> guids;
+	for (const auto& item : feed->items()) {
+		guids.push_back(item->guid());
+	}
+
+	if (guids.empty()) {
 		LOG(Level::DEBUG,
 			"Cache::remove_old_deleted_items: not cleaning up "
 			"anything because last reload brought no new items "
-			"(detected "
-			"no changes)");
+			"(detected no changes)");
 		return;
 	}
 	std::string guidset = "(";
@@ -994,9 +1001,8 @@ void Cache::remove_old_deleted_items(const std::string& rssurl,
 		"WHERE feedurl = '%q' "
 		"AND deleted = 1 "
 		"AND guid NOT IN %s;",
-		rssurl,
+		feed->rssurl(),
 		guidset);
-	std::lock_guard<std::mutex> lock(mtx);
 	run_sql(query);
 }
 

@@ -104,7 +104,7 @@ void TagSoupPullParser::skip_whitespace()
 			else
 				ws.append(1, c);
 		}
-	} while (!inputstream->eof());
+	} while (!inputstream->eof() && !inputstream->fail());
 }
 
 void TagSoupPullParser::add_attribute(std::string s)
@@ -175,6 +175,9 @@ std::string TagSoupPullParser::decode_entities(const std::string& s)
 	while (!sbuf.eof()) {
 		result.append(tmp);
 		getline(sbuf, tmp, ';');
+		if (sbuf.eof()) {
+			break;
+		}
 		result.append(decode_entity(tmp));
 		getline(sbuf, tmp, '&');
 	}

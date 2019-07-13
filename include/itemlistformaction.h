@@ -112,7 +112,7 @@ private:
 		invalidation_mode = InvalidationMode::COMPLETE;
 	}
 
-	void invalidate(const unsigned int pos)
+	void invalidate(const unsigned int invalidated_pos)
 	{
 		if (invalidated == true &&
 			invalidation_mode == InvalidationMode::COMPLETE)
@@ -120,7 +120,7 @@ private:
 
 		invalidated = true;
 		invalidation_mode = InvalidationMode::PARTIAL;
-		invalidated_itempos.push_back(pos);
+		invalidated_itempos.push_back(invalidated_pos);
 	}
 
 	std::string item2formatted_line(const ItemPtrPosPair& item,
@@ -131,7 +131,7 @@ private:
 	unsigned int pos;
 	std::shared_ptr<RssFeed> feed;
 	bool apply_filter;
-	Matcher m;
+	Matcher matcher;
 	std::vector<ItemPtrPosPair> visible_items;
 	bool show_searchresult;
 	std::string searchphrase;

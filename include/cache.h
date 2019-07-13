@@ -71,8 +71,7 @@ public:
 	unsigned int get_unread_count();
 	void mark_item_deleted(const std::string& guid, bool b);
 	void mark_feed_items_deleted(const std::string& feedurl);
-	void remove_old_deleted_items(const std::string& rssurl,
-		const std::vector<std::string>& guids);
+	void remove_old_deleted_items(RssFeed* feed);
 	void mark_items_read_by_guid(const std::vector<std::string>& guids);
 	std::vector<std::string> get_read_item_guids();
 	void fetch_descriptions(RssFeed* feed);

@@ -342,16 +342,6 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 	}
 }
 
-void RssFeed::remove_old_deleted_items()
-{
-	std::lock_guard<std::mutex> lock(item_mutex);
-	std::vector<std::string> guids;
-	for (const auto& item : items_) {
-		guids.push_back(item->guid());
-	}
-	ch->remove_old_deleted_items(rssurl_, guids);
-}
-
 void RssFeed::purge_deleted_items()
 {
 	std::lock_guard<std::mutex> lock(item_mutex);

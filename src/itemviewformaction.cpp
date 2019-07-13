@@ -102,7 +102,7 @@ void ItemViewFormAction::prepare()
 			cfg->get_configvalue_as_int("text-width");
 		if (text_width == 0 || text_width > window_width) {
 			text_width = window_width;
-			if (text_width - 5 > 0) {
+			if (text_width > 5) {
 				text_width -= 5;
 			}
 		}

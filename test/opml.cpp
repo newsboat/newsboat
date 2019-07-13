@@ -129,9 +129,10 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 		REQUIRE(tags == entry->second);
 	}
 
-	const std::string cwd(::getcwd(nullptr, 0));
 	REQUIRE_NOTHROW(
-			opml::import("file://" + cwd + "/data/example.opml", &urlcfg));
+			opml::import(
+				"file://" + utils::getcwd() + "/data/example.opml",
+				&urlcfg));
 
 	const std::map<URL, Tags> opmlUrls {
 		{"https://example.com/feed.xml", {}},
@@ -168,9 +169,10 @@ TEST_CASE("import() turns URLs that start with a pipe symbol (\"|\") "
 	FileUrlReader urlcfg(urlsFile.get_path());
 	urlcfg.reload();
 
-	const std::string cwd(::getcwd(nullptr, 0));
 	REQUIRE_NOTHROW(
-			opml::import("file://" + cwd + "/data/piped.opml", &urlcfg));
+			opml::import(
+				"file://" + utils::getcwd() + "/data/piped.opml",
+				&urlcfg));
 
 	using URL = std::string;
 	using Tag = std::string;
@@ -202,9 +204,10 @@ TEST_CASE("import() turns \"filtercmd\" attribute into a `filter:` URL "
 	FileUrlReader urlcfg(urlsFile.get_path());
 	urlcfg.reload();
 
-	const std::string cwd(::getcwd(nullptr, 0));
 	REQUIRE_NOTHROW(
-			opml::import("file://" + cwd + "/data/filtered.opml", &urlcfg));
+			opml::import(
+				"file://" + utils::getcwd() + "/data/filtered.opml",
+				&urlcfg));
 
 	using URL = std::string;
 	using Tag = std::string;
@@ -271,9 +274,10 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 		REQUIRE(tags == entry->second);
 	}
 
-	const std::string cwd(::getcwd(nullptr, 0));
 	REQUIRE_NOTHROW(
-			opml::import("file://" + cwd + "/data/test-urls+.opml", &urlcfg));
+			opml::import(
+				"file://" + utils::getcwd() + "/data/test-urls+.opml",
+				&urlcfg));
 
 	const std::map<URL, Tags> opmlUrls {
 		{"https://example.com/another_feed.atom", {}},

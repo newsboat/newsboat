@@ -15,9 +15,11 @@ public:
 	void stopover(const std::string& son = "");
 
 private:
-	struct timeval tv1, tv2;
+	// Can't use zero initialization (= {}) here because it fails with GCC 4.9:
+	// https://travis-ci.org/newsboat/newsboat/jobs/557484737#L760
+	struct timeval tv1 = {0, 0}, tv2 = {0, 0};
 	std::string funcname;
-	Level lvl;
+	Level lvl = Level::DEBUG;
 };
 
 } // namespace newsboat

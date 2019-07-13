@@ -42,7 +42,7 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	, rsscache(cc)
 	, filters(f)
 {
-	assert(true == m.parse(FILTER_UNREAD_ITEMS));
+	assert(true == matcher.parse(FILTER_UNREAD_ITEMS));
 	search_dummy_feed->set_search_feed(true);
 }
 
@@ -545,7 +545,7 @@ void ItemListFormAction::process_operation(Operation op,
 		v->set_status("");
 		break;
 	case OP_TOGGLESHOWREAD:
-		m.parse(FILTER_UNREAD_ITEMS);
+		matcher.parse(FILTER_UNREAD_ITEMS);
 		LOG(Level::DEBUG,
 			"ItemListFormAction: toggling show-read-articles");
 		if (cfg->get_configvalue_as_bool("show-read-articles")) {
@@ -611,14 +611,14 @@ void ItemListFormAction::process_operation(Operation op,
 			if (newfilter != "") {
 				filterhistory.add_line(newfilter);
 				if (newfilter.length() > 0) {
-					if (!m.parse(newfilter)) {
+					if (!matcher.parse(newfilter)) {
 						v->show_error(strprintf::fmt(
 							_("Error: couldn't "
 							  "parse filter "
 							  "command `%s': %s"),
 							newfilter,
-							m.get_parse_error()));
-						m.parse(FILTER_UNREAD_ITEMS);
+							matcher.get_parse_error()));
+						matcher.parse(FILTER_UNREAD_ITEMS);
 					} else {
 						apply_filter = true;
 						invalidate(InvalidationMode::
@@ -776,7 +776,7 @@ void ItemListFormAction::qna_end_setfilter()
 	filterhistory.add_line(filtertext);
 
 	if (filtertext.length() > 0) {
-		if (!m.parse(filtertext)) {
+		if (!matcher.parse(filtertext)) {
 			v->show_error(
 				_("Error: couldn't parse filter command!"));
 			return;
@@ -867,7 +867,7 @@ void ItemListFormAction::do_update_visible_items()
 	unsigned int i = 0;
 	for (const auto& item : items) {
 		item->set_index(i + 1);
-		if (!apply_filter || m.matches(item.get())) {
+		if (!apply_filter || matcher.matches(item.get())) {
 			new_visible_items.push_back(ItemPtrPosPair(item, i));
 		}
 		i++;
@@ -920,44 +920,43 @@ void ItemListFormAction::prepare()
 		old_width = width;
 	}
 
-	if (!invalidated)
+	if (!invalidated) {
 		return;
-
-	if (invalidated) {
-		auto datetime_format = cfg->get_configvalue("datetime-format");
-		auto itemlist_format =
-			cfg->get_configvalue("articlelist-format");
-
-		if (invalidation_mode == InvalidationMode::COMPLETE) {
-			listfmt.clear();
-
-			for (const auto& item : visible_items) {
-				auto line = item2formatted_line(item,
-					width,
-					itemlist_format,
-					datetime_format);
-				listfmt.add_line(line, item.second);
-			}
-		} else if (invalidation_mode == InvalidationMode::PARTIAL) {
-			for (const auto& itempos : invalidated_itempos) {
-				auto item = visible_items[itempos];
-				auto line = item2formatted_line(item,
-					width,
-					itemlist_format,
-					datetime_format);
-				listfmt.set_line(itempos, line, item.second);
-			}
-			invalidated_itempos.clear();
-		} else {
-			LOG(Level::ERROR,
-				"invalidation_mode is neither COMPLETE nor "
-				"PARTIAL");
-		}
-
-		f->modify("items",
-			"replace_inner",
-			listfmt.format_list(rxman, "articlelist"));
 	}
+
+	auto datetime_format = cfg->get_configvalue("datetime-format");
+	auto itemlist_format =
+		cfg->get_configvalue("articlelist-format");
+
+	if (invalidation_mode == InvalidationMode::COMPLETE) {
+		listfmt.clear();
+
+		for (const auto& item : visible_items) {
+			auto line = item2formatted_line(item,
+				width,
+				itemlist_format,
+				datetime_format);
+			listfmt.add_line(line, item.second);
+		}
+	} else if (invalidation_mode == InvalidationMode::PARTIAL) {
+		for (const auto& itempos : invalidated_itempos) {
+			auto item = visible_items[itempos];
+			auto line = item2formatted_line(item,
+				width,
+				itemlist_format,
+				datetime_format);
+			listfmt.set_line(itempos, line, item.second);
+		}
+		invalidated_itempos.clear();
+	} else {
+		LOG(Level::ERROR,
+			"invalidation_mode is neither COMPLETE nor "
+			"PARTIAL");
+	}
+
+	f->modify("items",
+		"replace_inner",
+		listfmt.format_list(rxman, "articlelist"));
 
 	invalidated = false;
 

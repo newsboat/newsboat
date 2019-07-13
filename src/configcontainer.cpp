@@ -330,7 +330,8 @@ void ConfigContainer::handle_action(const std::string& action,
 
 bool ConfigContainer::is_bool(const std::string& s)
 {
-	const auto bool_values = {"yes", "no", "true", "false"};
+	const auto bool_values = std::vector<std::string>(
+			{"yes", "no", "true", "false"});
 	return (std::find(bool_values.begin(), bool_values.end(), s) !=
 		bool_values.end());
 }
