@@ -814,6 +814,22 @@ TEST_CASE("getcwd() returns current directory of the process", "[utils]")
 		REQUIRE(datadir.substr(datadir.length() - subdir.length()) ==
 			subdir);
 	}
+
+	SECTION("Returns empty string if current directory doesn't exist")
+	{
+		// Create a temporary directory, change to it and delete it. This leads
+		// getcwd to fail.
+		TestHelpers::TempDir tempdir;
+
+		const std::string tempdir_path = tempdir.get_path();
+		INFO("tempdir = " << tempdir_path);
+
+		TestHelpers::Chdir chdir(tempdir_path);
+
+		REQUIRE(0 == ::rmdir(tempdir_path.c_str()));
+
+		REQUIRE("" == utils::getcwd());
+	}
 }
 
 TEST_CASE("strnaturalcmp() compares strings using natural numeric ordering",
