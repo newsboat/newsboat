@@ -501,7 +501,10 @@ public:
 	}
 
 	~Chdir() {
-		::chdir(m_old_path.c_str());
+		// Ignore the return value, because even if the call failed, we
+		// can't do anything useful.
+		const int result = ::chdir(m_old_path.c_str());
+		(void)result;
 	}
 };
 
