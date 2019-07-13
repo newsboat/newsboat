@@ -7,8 +7,8 @@ environments, with all the necessary tools and libraries already installed.
 These containers can be used for continuous testing, and also locally if you
 feel like it.
 
-Each Docker container is described by a "Dockerfile". We keep ours in "docker"
-directory.
+Each Docker container is described by a "Dockerfile". We keep ours in the
+"docker" directory.
 
 To use a container, you need to build its image first. For example, let's create
 one that we use for cross-compiling from amd64 to i686:
@@ -33,7 +33,7 @@ using your favourite tools to edit the files. Let's build Newsboat this way:
         newsboat-ubuntu16.04-i686 \
         make -j9
 
-`--mount` links your current directory to "/home/builer" inside the container,
+`--mount` links your current directory to "/home/builder" inside the container,
 and `--workdir=/home/builder` makes the container switch to that dir.
 "newsboat-ubuntu16.04-i686" is the image from which we're creating the
 container, and `make -j9` is the command we're running inside of it.
