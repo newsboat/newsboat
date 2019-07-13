@@ -1,7 +1,9 @@
 use abort_on_panic;
 use libc::{c_char, c_ulong};
+use libnewsboat::logger::{self, Level};
 use libnewsboat::utils;
 use std::ffi::{CStr, CString};
+use std::path;
 use std::ptr;
 
 #[no_mangle]
@@ -271,6 +273,24 @@ pub extern "C" fn rs_make_title(input: *const c_char) -> *mut c_char {
         // 3. `result` contains what `input` contained, and input is a
         // null-terminated string from C.
         let result = CString::new(result).unwrap();
+
+        result.into_raw()
+    })
+}
+
+#[no_mangle]
+/// Gets the current working directory or an empty string on error.
+pub extern "C" fn rs_getcwd() -> *mut c_char {
+    use std::os::unix::ffi::OsStringExt;
+    abort_on_panic(|| {
+        let result = utils::getcwd().unwrap_or_else(|err| {
+            log!(Level::Warn, "Error getting current directory: {}", err);
+            path::PathBuf::new()
+        });
+        // Panic here can't happen because:
+        // 1. panic can only happen if `result` contains null bytes;
+        // 2. `result` contains the current working directory which can't contain null.
+        let result = CString::new(result.into_os_string().into_vec()).unwrap();
 
         result.into_raw()
     })

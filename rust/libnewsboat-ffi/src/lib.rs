@@ -1,4 +1,5 @@
 extern crate libc;
+#[macro_use]
 extern crate libnewsboat;
 
 use libc::c_char;
