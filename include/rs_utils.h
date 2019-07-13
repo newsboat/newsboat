@@ -62,6 +62,8 @@ size_t rs_strwidth(const char* str);
 
 size_t rs_strwidth_stfl(const char* str);
 
+char* rs_remove_soft_hyphens(const char* str);
+
 bool rs_is_valid_podcast_type(const char* mimetype);
 
 char* rs_get_command_output(const char* str);

@@ -282,6 +282,13 @@ pub fn strwidth_stfl(rs_str: &str) -> usize {
     }
 }
 
+/// Remove all soft-hyphens as they can behave unpredictably (see
+/// https://github.com/akrennmair/newsbeuter/issues/259#issuecomment-259609490) and inadvertently
+/// render as hyphens
+pub fn remove_soft_hyphens(text: &mut String) {
+    text.retain(|c| c != '\u{00AD}')
+}
+
 pub fn is_valid_podcast_type(mimetype: &str) -> bool {
     let re = Regex::new(r"(audio|video)/.*").unwrap();
     let matches = re.is_match(mimetype);
