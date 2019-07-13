@@ -14,7 +14,7 @@ use self::url::percent_encoding::*;
 use self::url::Url;
 use libc::c_ulong;
 use logger::{self, Level};
-use std::io::Write;
+use std::io::{self, Write};
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 
@@ -443,6 +443,12 @@ pub fn make_title(rs_str: String) -> String {
         None => String::new(),
         Some(f) => f,
     }
+}
+
+/// Get the current working directory.
+pub fn getcwd() -> Result<PathBuf, io::Error> {
+    use std::env;
+    env::current_dir()
 }
 
 /// Counts graphemes in a given string.
