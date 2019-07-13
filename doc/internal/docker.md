@@ -15,12 +15,12 @@ one that we use for cross-compiling from amd64 to i686:
 
     # In the root of Newsboat's repository
     $ docker build \
-        --tag=newsboat-ubuntu16.04-i686 \
-        --file=docker/ubuntu_16.04-i686.dockerfile \
+        --tag=newsboat-ubuntu18.04-i686 \
+        --file=docker/ubuntu_18.04-i686.dockerfile \
         docker
 
-This will use the description from "docker/ubuntu_16.04-i686.dockerfile" to
-build an image named "newsboat-ubuntu16.04-i686".
+This will use the description from "docker/ubuntu_18.04-i686.dockerfile" to
+build an image named "newsboat-ubuntu18.04-i686".
 
 You can now create a container from that image, and run commands inside it. But
 the coolest thing is: you can run those commands *on the files in your host
@@ -30,10 +30,10 @@ using your favourite tools to edit the files. Let's build Newsboat this way:
     $ docker run \
         --mount type=bind,source=$(pwd),target=/home/builder \
         --workdir=/home/builder \
-        newsboat-ubuntu16.04-i686 \
+        newsboat-ubuntu18.04-i686 \
         make -j9
 
 `--mount` links your current directory to "/home/builder" inside the container,
 and `--workdir=/home/builder` makes the container switch to that dir.
-"newsboat-ubuntu16.04-i686" is the image from which we're creating the
+"newsboat-ubuntu18.04-i686" is the image from which we're creating the
 container, and `make -j9` is the command we're running inside of it.
