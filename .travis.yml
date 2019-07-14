@@ -202,6 +202,21 @@ matrix:
         - GCOV=/usr/bin/gcov-8
       before_install:
         *install_coveralls
+    - compiler: gcc-9
+      os: linux
+      dist: trusty
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-9
+            - *global_deps
+      env:
+        - COMPILER=g++-9
+        - GCOV=/usr/bin/gcov-9
+      before_install:
+        *install_coveralls
     - compiler: clang
       os: linux
       dist: trusty
