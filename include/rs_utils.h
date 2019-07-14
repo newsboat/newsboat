@@ -48,6 +48,8 @@ char* rs_unescape_url(const char* str);
 
 char* rs_make_title(const char* str);
 
+char* rs_getcwd();
+
 void rs_cstring_free(char* str);
 
 char* rs_get_default_browser();
