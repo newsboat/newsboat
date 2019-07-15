@@ -6,9 +6,11 @@ fn main() {
         .args(&["describe", "--abbrev=4", "--dirty", "--always", "--tags"])
         .output()
     {
-        let hash = String::from_utf8_lossy(&hash_output.stdout);
-        println!("cargo:rustc-env=GIT_HASH={}", hash);
-        // Re-build this crate when Git HEAD changes. Idea lifted from vergen crate.
-        println!("cargo:rebuild-if-changed=.git/HEAD");
+        if hash_output.status.success() {
+            let hash = String::from_utf8_lossy(&hash_output.stdout);
+            println!("cargo:rustc-env=GIT_HASH={}", hash);
+            // Re-build this crate when Git HEAD changes. Idea lifted from vergen crate.
+            println!("cargo:rebuild-if-changed=.git/HEAD");
+        }
     }
 }
