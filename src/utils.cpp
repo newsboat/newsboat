@@ -1024,12 +1024,7 @@ void utils::remove_soft_hyphens(std::string& text)
 	/* Remove all soft-hyphens as they can behave unpredictably (see
 	 * https://github.com/akrennmair/newsbeuter/issues/259#issuecomment-259609490)
 	 * and inadvertently render as hyphens */
-
-	std::string::size_type pos = text.find("\u00AD");
-	while (pos != std::string::npos) {
-		text.erase(pos, 2);
-		pos = text.find("\u00AD", pos);
-	}
+	text = RustString(rs_remove_soft_hyphens(text.c_str()));
 }
 
 bool utils::is_valid_podcast_type(const std::string& mimetype)
