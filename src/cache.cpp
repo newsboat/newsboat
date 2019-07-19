@@ -584,8 +584,7 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 		"feedurl, enclosure_url, enclosure_type, enqueued, flags, base "
 		"FROM rss_item "
 		"WHERE feedurl = '%q' "
-		"AND deleted = 0 "
-		"ORDER BY pubDate DESC, id DESC;",
+		"AND deleted = 0;",
 		rssurl);
 	run_sql(query, rssitem_callback, &feed);
 
