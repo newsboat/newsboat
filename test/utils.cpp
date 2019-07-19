@@ -194,7 +194,7 @@ TEST_CASE("tokenize_nl() split a string into delimiters and fields", "[utils]")
 }
 
 TEST_CASE(
-	"strip_comments returns correct part of the line",
+	"strip_comments returns only the part of the line before first # character",
 	"[utils]")
 {
 	SECTION("no comments in line")
