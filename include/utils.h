@@ -14,6 +14,7 @@
 namespace newsboat {
 
 namespace utils {
+	std::string strip_comments(const std::string& line);
 	std::vector<std::string> tokenize(const std::string& str,
 		std::string delimiters = " \r\n\t");
 	std::vector<std::string> tokenize_spaced(const std::string& str,

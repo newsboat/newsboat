@@ -91,7 +91,11 @@ bool ConfigParser::parse(const std::string& tmp_filename)
 		getline(f, line);
 		++linecounter;
 		LOG(Level::DEBUG, "ConfigParser::parse: tokenizing %s", line);
-		std::vector<std::string> tokens = utils::tokenize_quoted(evaluate_backticks(line));
+
+		auto stripped = utils::strip_comments(line);
+		auto evaluated = evaluate_backticks(std::move(stripped));
+		std::vector<std::string> tokens = utils::tokenize_quoted(std::move(evaluated));
+
 		if (!tokens.empty()) {
 			std::string cmd = tokens[0];
 			ConfigActionHandler* handler = action_handlers[cmd];

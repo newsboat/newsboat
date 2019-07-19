@@ -194,6 +194,32 @@ TEST_CASE("tokenize_nl() split a string into delimiters and fields", "[utils]")
 }
 
 TEST_CASE(
+	"strip_comments returns correct part of the line",
+	"[utils]")
+{
+	SECTION("no comments in line")
+	{
+		REQUIRE(utils::strip_comments("") == "");
+		REQUIRE(utils::strip_comments("\t\n") == "\t\n");
+		REQUIRE(utils::strip_comments("some directive ") == "some directive ");
+	}
+
+	SECTION("fully commented line")
+	{
+		REQUIRE(utils::strip_comments("#") == "");
+		REQUIRE(utils::strip_comments("# #") == "");
+		REQUIRE(utils::strip_comments("# comment") == "");
+	}
+
+	SECTION("partially commented line")
+	{
+		REQUIRE(utils::strip_comments("directive # comment") == "directive ");
+		REQUIRE(utils::strip_comments("directive # comment # another") == "directive ");
+		REQUIRE(utils::strip_comments("directive#comment") == "directive");
+	}
+}
+
+TEST_CASE(
 	"consolidate_whitespace replaces multiple consecutive"
 	"whitespace with a single space",
 	"[utils]")
