@@ -155,7 +155,7 @@ clean-libfilter:
 	$(RM) $(FILTERLIB_OUTPUT) $(FILTERLIB_OBJS)
 
 clean-libnewsboat:
-	cargo clean
+	$(CARGO) clean
 
 clean-doc:
 	$(RM) -r doc/xhtml 
