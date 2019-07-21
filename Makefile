@@ -339,7 +339,7 @@ uninstall-mo:
 test: test/test rust-test
 
 rust-test:
-	cargo test --no-run
+	$(CARGO) test --no-run
 
 TEST_SRCS:=$(wildcard test/*.cpp)
 TEST_OBJS:=$(patsubst %.cpp,%.o,$(TEST_SRCS))
