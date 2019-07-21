@@ -917,4 +917,43 @@ mod tests {
             Path::new("/baz")
         );
     }
+
+    #[test]
+    fn t_remove_soft_hyphens_removes_all_00ad_unicode_chars_from_a_string() {
+        {
+            // Does nothing if input has no soft hyphens in it
+            let mut input1 = "hello world!".to_string();
+            remove_soft_hyphens(&mut input1);
+            assert_eq!(input1, "hello world!");
+        }
+
+        {
+            // Removes *all* soft hyphens
+            let mut data = "hy\u{00AD}phen\u{00AD}a\u{00AD}tion".to_string();
+            remove_soft_hyphens(&mut data);
+            assert_eq!(data, "hyphenation");
+        }
+
+        {
+            // Removes consecutive soft hyphens
+            let mut data = "don't know why any\u{00AD}\u{00AD}one would do that".to_string();
+            remove_soft_hyphens(&mut data);
+            assert_eq!(data, "don't know why anyone would do that");
+        }
+
+        {
+            // Removes soft hyphen at the beginning of the line
+            let mut data = "\u{00AD}tion".to_string();
+            remove_soft_hyphens(&mut data);
+            assert_eq!(data, "tion");
+        }
+
+        {
+            // Removes soft hyphen at the end of the line
+            let mut data = "over\u{00AD}".to_string();
+            remove_soft_hyphens(&mut data);
+            assert_eq!(data, "over");
+        }
+    }
+
 }
