@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 
 ENV DEBIAN_FRONTEND noninteractive
-ENV PATH /root/.cargo/bin:$PATH
+ENV PATH /home/builder/.cargo/bin:$PATH
 ENV CXXFLAGS -m32
 ENV CARGO_BUILD_TARGET i686-unknown-linux-gnu
 ENV PKG_CONFIG_ALLOW_CROSS 1
@@ -23,6 +23,16 @@ RUN apt-get install --assume-yes \
     && apt-get autoremove \
     && apt-get clean
 
+RUN addgroup --gid 1000 builder \
+    && adduser --home /home/builder --uid 1000 --ingroup builder \
+        --disabled-password --shell /bin/bash builder \
+    && mkdir -p /home/builder/src \
+    && chown -R builder:builder /home/builder
+
+USER builder
+WORKDIR /home/builder/src
+
 RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \
     && chmod +x $HOME/rustup.sh \
-    && $HOME/rustup.sh -y --default-host i686-unknown-linux-gnu --default-toolchain stable
+    && $HOME/rustup.sh -y --default-host i686-unknown-linux-gnu --default-toolchain stable \
+    && chmod a+w $HOME/.cargo

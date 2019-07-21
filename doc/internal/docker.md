@@ -28,12 +28,26 @@ system*. This way, you can have an isolated, controlled build environment, while
 using your favourite tools to edit the files. Let's build Newsboat this way:
 
     $ docker run \
-        --mount type=bind,source=$(pwd),target=/home/builder \
-        --workdir=/home/builder \
+        --mount type=bind,source=$(pwd),target=/home/builder/src \
         newsboat-ubuntu18.04-i686 \
         make -j9
 
-`--mount` links your current directory to "/home/builder" inside the container,
-and `--workdir=/home/builder` makes the container switch to that dir.
+`--mount` links your current directory to "/home/builder/src" inside the container.
 "newsboat-ubuntu18.04-i686" is the image from which we're creating the
 container, and `make -j9` is the command we're running inside of it.
+
+If your host's user or group ID are not 1000, then you have to adjust the run
+command in order to avoid permission errors when generating the artifacts in
+your host source directory:
+
+    $ docker run \
+        --mount type=bind,source=$(pwd),target=/home/builder/src \
+        --user <UID>:<GID> \
+        --env HOME=/home/builder \
+        newsboat-ubuntu18.04-i686 \
+        make -j9
+
+Substitute `<UID>` and `<GID>` with your host user ID and group ID, they can
+be determined using the `id` commmand locally. As the home directory of your
+newly passed in user is unknown, it needs to be set properly using the
+environment variable via `--env`.
