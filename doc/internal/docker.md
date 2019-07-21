@@ -28,10 +28,13 @@ system*. This way, you can have an isolated, controlled build environment, while
 using your favourite tools to edit the files. Let's build Newsboat this way:
 
     $ docker run \
+        --rm \
         --mount type=bind,source=$(pwd),target=/home/builder/src \
         newsboat-ubuntu18.04-i686 \
         make -j9
 
+`--rm` deletes the container once it finished, by default it is kept and will
+just litter up your system.
 `--mount` links your current directory to "/home/builder" inside the container,
 and `--workdir=/home/builder` makes the container switch to that dir.
 "newsboat-ubuntu18.04-i686" is the image from which we're creating the
@@ -42,6 +45,7 @@ command in order to avoid permission errors when generating the artifacts in
 your host source directory:
 
     $ docker run \
+        --rm \
         --mount type=bind,source=$(pwd),target=/home/builder/src \
         --user <UID>:<GID> \
         --env HOME=/home/builder \
