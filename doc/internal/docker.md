@@ -30,6 +30,7 @@ using your favourite tools to edit the files. Let's build Newsboat this way:
     $ docker run \
         --rm \
         --mount type=bind,source=$(pwd),target=/home/builder/src \
+        --user $(id -u):$(id -g) \
         newsboat-ubuntu18.04-i686 \
         make -j9
 
@@ -37,16 +38,8 @@ using your favourite tools to edit the files. Let's build Newsboat this way:
 just litter up your system.
 `--mount` links your current directory to "/home/builder" inside the container,
 and `--workdir=/home/builder` makes the container switch to that dir.
+`--user` specifies the user and the group that will own the newly created files
+(object files, docs, and the final executable); `id` determines your current
+user and group IDs.
 "newsboat-ubuntu18.04-i686" is the image from which we're creating the
 container, and `make -j9` is the command we're running inside of it.
-
-If your host's user or group ID are not 1000, then you have to adjust the run
-command in order to avoid permission errors when generating the artifacts in
-your host source directory:
-
-    $ docker run \
-        --rm \
-        --mount type=bind,source=$(pwd),target=/home/builder/src \
-        --user $(id -u):$(id -g) \
-        newsboat-ubuntu18.04-i686 \
-        make -j9
