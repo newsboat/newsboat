@@ -47,9 +47,6 @@ your host source directory:
     $ docker run \
         --rm \
         --mount type=bind,source=$(pwd),target=/home/builder/src \
-        --user <UID>:<GID> \
+        --user $(id -u):$(id -g) \
         newsboat-ubuntu18.04-i686 \
         make -j9
-
-Substitute `<UID>` and `<GID>` with your host user ID and group ID, they can
-be determined using the `id` commmand locally.
