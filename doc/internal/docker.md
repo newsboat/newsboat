@@ -36,8 +36,7 @@ using your favourite tools to edit the files. Let's build Newsboat this way:
 
 `--rm` deletes the container once it finished, by default it is kept and will
 just litter up your system.
-`--mount` links your current directory to "/home/builder" inside the container,
-and `--workdir=/home/builder` makes the container switch to that dir.
+`--mount` links your current directory to "/home/builder/src" inside the container.
 `--user` specifies the user and the group that will own the newly created files
 (object files, docs, and the final executable); `id` determines your current
 user and group IDs.
