@@ -47,11 +47,8 @@ your host source directory:
         --rm \
         --mount type=bind,source=$(pwd),target=/home/builder/src \
         --user <UID>:<GID> \
-        --env HOME=/home/builder \
         newsboat-ubuntu18.04-i686 \
         make -j9
 
 Substitute `<UID>` and `<GID>` with your host user ID and group ID, they can
-be determined using the `id` commmand locally. As the home directory of your
-newly passed in user is unknown, it needs to be set properly using the
-environment variable via `--env`.
+be determined using the `id` commmand locally.
