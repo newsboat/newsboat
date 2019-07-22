@@ -35,10 +35,9 @@ using your favourite tools to edit the files. Let's build Newsboat this way:
         make -j9
 
 `--rm` deletes the container once it finished, by default it is kept and will
-just litter up your system.
-`--mount` links your current directory to "/home/builder/src" inside the container.
-`--user` specifies the user and the group that will own the newly created files
-(object files, docs, and the final executable); `id` determines your current
-user and group IDs.
+just litter up your system. `--mount` links your current directory to
+"/home/builder/src" inside the container. `--user` specifies the user and the
+group that will own the newly created files (object files, docs, and the final
+executable); `id` determines your current user and group IDs.
 "newsboat-ubuntu18.04-i686" is the image from which we're creating the
 container, and `make -j9` is the command we're running inside of it.
