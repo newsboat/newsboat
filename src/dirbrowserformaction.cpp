@@ -94,9 +94,9 @@ void DirBrowserFormAction::process_operation(Operation op,
 					f->set("head",
 						fmt.do_format(
 							cfg->get_configvalue(
-								"filebr"
-								"o"
-								"wser-"
+								"dir"
+								"brow"
+								"ser-"
 								"title-"
 								"forma"
 								"t"),
