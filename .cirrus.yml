@@ -13,3 +13,13 @@ freebsd_task:
     # Running three jobs because by default, VMs have 2 cores.
     compile_script: RUST_BACKTRACE=1 gmake --jobs=3 --keep-going all test
     test_script: cargo test
+
+32bit_ubuntu_task:
+    # We broke 32-bit builds (https://github.com/newsboat/newsboat/issues/555),
+    # so let this fail until we fix it.
+    allow_failures: true
+
+    container:
+        dockerfile: docker/ubuntu_18.04-i686.dockerfile
+    build_script: make -j3 --keep-going all test
+    test_script: ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"
