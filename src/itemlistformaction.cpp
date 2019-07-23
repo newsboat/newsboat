@@ -398,7 +398,7 @@ void ItemListFormAction::process_operation(Operation op,
 			if (::stat(fpath.c_str(), &sbuf) != -1) {
 				std::string input_options = _("yn");
 				char c = v->confirm(strprintf::fmt(
-						_("Overwrite %s in %s? "
+						_("Overwrite `%s' in `%s?' "
 						  "(y:Yes n:No)"),
 						filename, directory),
 						input_options);
@@ -451,14 +451,14 @@ void ItemListFormAction::process_operation(Operation op,
 						char c;
 						if (nfiles_exist > 1) {
 							c = v->confirm(strprintf::fmt(
-									_("Overwrite %s in %s? "
+									_("Overwrite `%s' in `%s'? "
 									  "There are %d more conflicts like this "
 									  "(y:Yes a:Yes to all n:No q:No to all)"),
 									  filename, directory, --nfiles_exist),
 									  input_options);
 						} else {
 							c = v->confirm(strprintf::fmt(
-									_("Overwrite %s in %s? "
+									_("Overwrite `%s' in `%s'? "
 									  "There are no more conflicts like this "
 									  "(y:Yes a:Yes to all n:No q:No to all)"),
 									  filename, directory),
