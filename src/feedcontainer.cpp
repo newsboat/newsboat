@@ -162,6 +162,44 @@ unsigned int FeedContainer::get_feed_count_per_tag(const std::string& tag)
 	return count;
 }
 
+unsigned int FeedContainer::get_unread_feed_count_per_tag(const std::string& tag)       // Only counts feeds with at least one unread article.
+{   
+	unsigned int count = 0;
+	std::lock_guard<std::mutex> feedslock(feeds_mutex);
+	for (const auto& feed : feeds) {
+
+		if (feed->matches_tag(tag) && feed->unread_item_count() > 0) {        // Could return at 1?
+		      count++;
+
+			/* Other methods that might be preferable if fixed: */
+
+		//if (feed->matches_tag(tag)) {
+		//	count += feed->unread_feed_count();
+
+		//if (feed->matches_tag(tag)) {
+		//	FeedContainer.add_feed(feed);
+		//}
+		//count = feeds->unread_feed_count();
+
+		}   
+	}   
+
+	return count;
+}   
+
+unsigned int FeedContainer::get_unread_item_count_per_tag(const std::string& tag)       // Returns number of unread articles in all applicable feeds.
+{   
+	unsigned int count = 0;
+	std::lock_guard<std::mutex> feedslock(feeds_mutex);
+	for (const auto& feed : feeds) {
+		if (feed->matches_tag(tag)) {
+			count += feed->unread_item_count();
+		}   
+	}   
+
+	return count;
+} 
+
 std::shared_ptr<RssFeed> FeedContainer::get_feed_by_url(
 	const std::string& feedurl)
 {

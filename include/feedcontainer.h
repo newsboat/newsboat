@@ -22,6 +22,8 @@ public:
 	void mark_all_feed_items_read(const unsigned int feed_pos);
 	void mark_all_feeds_read();
 	unsigned int get_feed_count_per_tag(const std::string& tag);
+	unsigned int get_unread_feed_count_per_tag(const std::string& tag);
+	unsigned int get_unread_item_count_per_tag(const std::string& tag);
 	std::shared_ptr<RssFeed> get_feed_by_url(const std::string& feedurl);
 	void populate_query_feeds();
 	unsigned int get_pos_of_next_unread(unsigned int pos);

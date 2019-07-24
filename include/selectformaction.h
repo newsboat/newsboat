@@ -37,6 +37,10 @@ public:
 		return (type == SelectionType::TAG) ? "tagselection"
 						     : "filterselection";
 	}
+	std::string format_line(const std::string& selecttag_format,
+		std::string tag,
+		unsigned int pos,
+		unsigned int width);
 	std::string title() override;
 
 private:

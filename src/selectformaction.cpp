@@ -99,17 +99,18 @@ void SelectFormAction::prepare()
 	if (do_redraw) {
 		ListFormatter listfmt;
 		unsigned int i = 0;
+		std::string selecttag_format = cfg->get_configvalue("selecttag-format");
+		unsigned int width = utils::to_u(f->get("tags:w"));	// Already defined?
+
 		switch (type) {
 		case SelectionType::TAG:
+
 			for (const auto& tag : tags) {
-				std::string tagstr = strprintf::fmt(
-					"%4u  %s (%u)",
-					i + 1,
-					tag,
-					v->get_ctrl()
-						->get_feedcontainer()
-						->get_feed_count_per_tag(tag));
-				listfmt.add_line(tagstr, i);
+				listfmt.add_line(format_line(selecttag_format,
+						tag,
+						i + 1,
+						width),
+					i);
 				i++;
 			}
 			break;
@@ -160,6 +161,32 @@ void SelectFormAction::init()
 		assert(0); // should never happen
 	}
 	f->set("head", title);
+}
+
+
+std::string SelectFormAction::format_line(const std::string& selecttag_format,	// Referenced "FeedListFormAction::format_line".
+	std::string tag,	// Reference used: "std::shared_ptr<RssFeed> feed".
+	unsigned int pos,
+	unsigned int width)	// Defined in SelectFormAction::init() above?
+{
+	FmtStrFormatter fmt;
+
+		/* Used names and format from "/src/reloader.cpp". */
+	const auto unread_feeds2 =
+		v->get_ctrl()->get_feedcontainer()->get_unread_feed_count_per_tag(tag);
+	const auto unread_articles2 =
+		v->get_ctrl()->get_feedcontainer()->get_unread_item_count_per_tag(tag);
+
+	fmt.register_fmt('i', strprintf::fmt("%u", pos + 1));
+	fmt.register_fmt('T', tag);
+		/* New identifiers correspond with pre-existing "notify-format" identifiers: */
+	fmt.register_fmt('f', std::to_string(unread_feeds2));
+	fmt.register_fmt('n', std::to_string(unread_articles2));
+
+	auto formattedLine = fmt.do_format(selecttag_format, width);
+
+
+	return formattedLine;
 }
 
 KeyMapHintEntry* SelectFormAction::get_keymap_hint()
