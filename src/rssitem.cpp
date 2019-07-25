@@ -241,4 +241,9 @@ void RssItem::set_feedptr(std::shared_ptr<RssFeed> ptr)
 	feedptr_ = std::weak_ptr<RssFeed>(ptr);
 }
 
+void RssItem::set_feedptr(const std::weak_ptr<RssFeed>& ptr)
+{
+	feedptr_ = ptr;
+}
+
 } // namespace newsboat

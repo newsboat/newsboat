@@ -130,6 +130,7 @@ public:
 	std::string get_attribute(const std::string& attribname) override;
 
 	void set_feedptr(std::shared_ptr<RssFeed> ptr);
+	void set_feedptr(const std::weak_ptr<RssFeed>& ptr);
 	std::shared_ptr<RssFeed> get_feedptr()
 	{
 		return feedptr_.lock();

@@ -584,27 +584,35 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 		"feedurl, enclosure_url, enclosure_type, enqueued, flags, base "
 		"FROM rss_item "
 		"WHERE feedurl = '%q' "
-		"AND deleted = 0 "
-		"ORDER BY pubDate DESC, id DESC;",
+		"AND deleted = 0;",
 		rssurl);
 	run_sql(query, rssitem_callback, &feed);
 
-	std::vector<std::shared_ptr<RssItem>> filtered_items;
-	for (const auto& item : feed->items()) {
-		try {
-			if (!ign || !ign->matches(item.get())) {
-				item->set_cache(this);
-				item->set_feedptr(feed);
-				item->set_feedurl(feed->rssurl());
-				filtered_items.push_back(item);
-			}
-		} catch (const MatcherException& ex) {
-			LOG(Level::DEBUG,
-				"oops, Matcher exception: %s",
-				ex.what());
-		}
+	if (ign != nullptr) {
+		auto& items = feed->items();
+		items.erase(
+			std::remove_if(
+				items.begin(),
+				items.end(),
+				[&](std::shared_ptr<RssItem> item) -> bool {
+					try {
+						return ign->matches(item.get());
+					} catch (const MatcherException& ex) {
+						LOG(Level::DEBUG,
+							"oops, Matcher exception: %s",
+							ex.what());
+						return false;
+					}
+				}),
+			items.end());
 	}
-	feed->set_items(filtered_items);
+
+	auto feed_weak_ptr = std::weak_ptr<RssFeed>(feed);
+	for (const auto& item : feed->items()) {
+		item->set_cache(this);
+		item->set_feedptr(feed_weak_ptr);
+		item->set_feedurl(feed->rssurl());
+	}
 
 	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
 

@@ -261,8 +261,8 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 	case ArtSortMethod::TITLE:
 		std::stable_sort(items_.begin(),
 			items_.end(),
-			[&](std::shared_ptr<RssItem> a,
-				std::shared_ptr<RssItem> b) {
+			[&](const std::shared_ptr<RssItem>& a,
+				const std::shared_ptr<RssItem>& b) {
 				return sort_strategy.sd ==
 						SortDirection::DESC
 					? (utils::strnaturalcmp(a->title().c_str(),
@@ -274,8 +274,8 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 	case ArtSortMethod::FLAGS:
 		std::stable_sort(items_.begin(),
 			items_.end(),
-			[&](std::shared_ptr<RssItem> a,
-				std::shared_ptr<RssItem> b) {
+			[&](const std::shared_ptr<RssItem>& a,
+				const std::shared_ptr<RssItem>& b) {
 				return sort_strategy.sd ==
 						SortDirection::DESC
 					? (strcmp(a->flags().c_str(),
@@ -287,8 +287,8 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 	case ArtSortMethod::AUTHOR:
 		std::stable_sort(items_.begin(),
 			items_.end(),
-			[&](std::shared_ptr<RssItem> a,
-				std::shared_ptr<RssItem> b) {
+			[&](const std::shared_ptr<RssItem>& a,
+				const std::shared_ptr<RssItem>& b) {
 				return sort_strategy.sd ==
 						SortDirection::DESC
 					? (strcmp(a->author().c_str(),
@@ -300,8 +300,8 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 	case ArtSortMethod::LINK:
 		std::stable_sort(items_.begin(),
 			items_.end(),
-			[&](std::shared_ptr<RssItem> a,
-				std::shared_ptr<RssItem> b) {
+			[&](const std::shared_ptr<RssItem>& a,
+				const std::shared_ptr<RssItem>& b) {
 				return sort_strategy.sd ==
 						SortDirection::DESC
 					? (strcmp(a->link().c_str(),
@@ -313,8 +313,8 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 	case ArtSortMethod::GUID:
 		std::stable_sort(items_.begin(),
 			items_.end(),
-			[&](std::shared_ptr<RssItem> a,
-				std::shared_ptr<RssItem> b) {
+			[&](const std::shared_ptr<RssItem>& a,
+				const std::shared_ptr<RssItem>& b) {
 				return sort_strategy.sd ==
 						SortDirection::DESC
 					? (strcmp(a->guid().c_str(),
@@ -326,8 +326,8 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 	case ArtSortMethod::DATE:
 		std::stable_sort(items_.begin(),
 			items_.end(),
-			[&](std::shared_ptr<RssItem> a,
-				std::shared_ptr<RssItem> b) {
+			[&](const std::shared_ptr<RssItem>& a,
+				const std::shared_ptr<RssItem>& b) {
 				// date is descending by default
 				return sort_strategy.sd == SortDirection::ASC
 					? (a->pubDate_timestamp() >
