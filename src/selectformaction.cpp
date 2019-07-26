@@ -163,7 +163,6 @@ void SelectFormAction::init()
 	f->set("head", title);
 }
 
-
 std::string SelectFormAction::format_line(const std::string& selecttag_format,	// Referenced "FeedListFormAction::format_line".
 	std::string tag,	// Reference used: "std::shared_ptr<RssFeed> feed".
 	unsigned int pos,
