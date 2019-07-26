@@ -37,10 +37,6 @@ public:
 		return (type == SelectionType::TAG) ? "tagselection"
 						     : "filterselection";
 	}
-	std::string format_line(const std::string& selecttag_format,
-		std::string tag,
-		unsigned int pos,
-		unsigned int width);
 	std::string title() override;
 
 private:
@@ -52,6 +48,11 @@ private:
 	std::string value;
 	std::vector<std::string> tags;
 	std::vector<FilterNameExprPair> filters;
+
+	std::string format_line(const std::string& selecttag_format,
+		std::string tag,
+		unsigned int pos,
+		unsigned int width);
 };
 
 } // namespace newsboat
