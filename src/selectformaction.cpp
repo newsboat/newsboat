@@ -171,6 +171,7 @@ std::string SelectFormAction::format_line(const std::string& selecttag_format,
 
 	const auto feedcontainer = v->get_ctrl()->get_feedcontainer();
 
+	const auto total_feeds = feedcontainer->get_feed_count_per_tag(tag);
 	const auto unread_feeds =
 		feedcontainer->get_unread_feed_count_per_tag(tag);
 	const auto unread_articles =
@@ -178,9 +179,9 @@ std::string SelectFormAction::format_line(const std::string& selecttag_format,
 
 	fmt.register_fmt('i', strprintf::fmt("%u", pos + 1));
 	fmt.register_fmt('T', tag);
-		/* New identifiers correspond with pre-existing "notify-format" identifiers: */
 	fmt.register_fmt('f', std::to_string(unread_feeds));
 	fmt.register_fmt('n', std::to_string(unread_articles));
+	fmt.register_fmt('u', std::to_string(total_feeds));
 
 	auto formattedLine = fmt.do_format(selecttag_format, width);
 

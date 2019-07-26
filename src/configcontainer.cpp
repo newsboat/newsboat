@@ -175,7 +175,7 @@ ConfigContainer::ConfigContainer()
 				  ConfigDataType::STR,
 				  true)},
 		  {"selecttag-format",
-			  ConfigData("%4i %T", ConfigDataType::STR)},
+			  ConfigData("%4i  %T (%u)", ConfigDataType::STR)},
 		  {"show-keymap-hint", ConfigData("yes", ConfigDataType::BOOL)},
 	          {"show-title-bar", ConfigData("yes", ConfigDataType::BOOL)},
 		  {"show-read-articles", ConfigData("yes", ConfigDataType::BOOL)},
