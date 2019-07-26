@@ -170,20 +170,20 @@ std::string SelectFormAction::format_line(const std::string& selecttag_format,
 {
 	FmtStrFormatter fmt;
 
-		/* Used names and format from "/src/reloader.cpp". */
-	const auto unread_feeds2 =
-		v->get_ctrl()->get_feedcontainer()->get_unread_feed_count_per_tag(tag);
-	const auto unread_articles2 =
-		v->get_ctrl()->get_feedcontainer()->get_unread_item_count_per_tag(tag);
+	const auto feedcontainer = v->get_ctrl()->get_feedcontainer();
+
+	const auto unread_feeds =
+		feedcontainer->get_unread_feed_count_per_tag(tag);
+	const auto unread_articles =
+		feedcontainer->get_unread_item_count_per_tag(tag);
 
 	fmt.register_fmt('i', strprintf::fmt("%u", pos + 1));
 	fmt.register_fmt('T', tag);
 		/* New identifiers correspond with pre-existing "notify-format" identifiers: */
-	fmt.register_fmt('f', std::to_string(unread_feeds2));
-	fmt.register_fmt('n', std::to_string(unread_articles2));
+	fmt.register_fmt('f', std::to_string(unread_feeds));
+	fmt.register_fmt('n', std::to_string(unread_articles));
 
 	auto formattedLine = fmt.do_format(selecttag_format, width);
-
 
 	return formattedLine;
 }
