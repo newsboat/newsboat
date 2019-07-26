@@ -163,7 +163,7 @@ void SelectFormAction::init()
 }
 
 std::string SelectFormAction::format_line(const std::string& selecttag_format,
-	std::string tag,
+	const std::string& tag,
 	unsigned int pos,
 	unsigned int width)
 {
