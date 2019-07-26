@@ -99,12 +99,11 @@ void SelectFormAction::prepare()
 	if (do_redraw) {
 		ListFormatter listfmt;
 		unsigned int i = 0;
-		std::string selecttag_format = cfg->get_configvalue("selecttag-format");
-		unsigned int width = utils::to_u(f->get("tags:w"));
+		const auto selecttag_format = cfg->get_configvalue("selecttag-format");
+		const auto width = utils::to_u(f->get("tags:w"));
 
 		switch (type) {
 		case SelectionType::TAG:
-
 			for (const auto& tag : tags) {
 				listfmt.add_line(format_line(selecttag_format,
 						tag,
