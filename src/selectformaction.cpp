@@ -100,7 +100,7 @@ void SelectFormAction::prepare()
 		ListFormatter listfmt;
 		unsigned int i = 0;
 		std::string selecttag_format = cfg->get_configvalue("selecttag-format");
-		unsigned int width = utils::to_u(f->get("tags:w"));	// Already defined?
+		unsigned int width = utils::to_u(f->get("tags:w"));
 
 		switch (type) {
 		case SelectionType::TAG:
@@ -163,10 +163,10 @@ void SelectFormAction::init()
 	f->set("head", title);
 }
 
-std::string SelectFormAction::format_line(const std::string& selecttag_format,	// Referenced "FeedListFormAction::format_line".
-	std::string tag,	// Reference used: "std::shared_ptr<RssFeed> feed".
+std::string SelectFormAction::format_line(const std::string& selecttag_format,
+	std::string tag,
 	unsigned int pos,
-	unsigned int width)	// Defined in SelectFormAction::init() above?
+	unsigned int width)
 {
 	FmtStrFormatter fmt;
 
