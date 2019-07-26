@@ -177,7 +177,7 @@ std::string SelectFormAction::format_line(const std::string& selecttag_format,
 	const auto unread_articles =
 		feedcontainer->get_unread_item_count_per_tag(tag);
 
-	fmt.register_fmt('i', strprintf::fmt("%u", pos + 1));
+	fmt.register_fmt('i', strprintf::fmt("%u", pos));
 	fmt.register_fmt('T', tag);
 	fmt.register_fmt('f', std::to_string(unread_feeds));
 	fmt.register_fmt('n', std::to_string(unread_articles));
