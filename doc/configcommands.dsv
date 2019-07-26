@@ -109,6 +109,7 @@ save-path||<path-to-directory>||~/||The default path where articles shall be sav
 search-highlight-colors||<fgcolor> <bgcolor> [<attribute> ...]||black yellow bold||This configuration command specifies the highlighting colors when searching for text from the article view.||search-highlight-colors white black bold
 searchresult-title-format||<format>||"%N %V - Search result (%u unread, %t total)"||Format of the title in search result. See "Format Strings" section of Newsboat manual for details on available formats.||searchresult-title-format "Search result"
 selectfilter-title-format||<format>||"%N %V - Select Filter"||Format of the title in filter selection dialog. See "Format Strings" section of Newsboat manual for details on available formats.||selectfilter-title-format "Select Filter"
+selecttag-format||<format>||"%4i  %T (%u)"||Format of the lines in "Select tag" dialog. See the respective section in the documentation for more information on format strings.||selecttag-format "[%2i] %T (%n unread articles in %f feeds, %u feeds total)"
 selecttag-title-format||<format>||"%N %V - Select Tag"||Format of the title in tag selection dialog. See "Format Strings" section of Newsboat manual for details on available formats.||selecttag-title-format "Select Tag"
 show-keymap-hint||[yes/no]||yes||If set to `no`, then the keymap hints on the bottom of screen will not be displayed.||show-keymap-hint no
 show-title-bar||[yes/no]||yes||If set to `no`, then the title bar on the top of the screen will not be displayed.||show-title-bar no

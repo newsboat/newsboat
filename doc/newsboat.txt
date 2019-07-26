@@ -989,6 +989,17 @@ Identifier:Meaning
 [[articlelist-format-L]]<<articlelist-format-L,+L+>>:Article length
 |======================================================================
 
+.Available Identifiers for selecttag-format
+[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
+|======================================================================
+Identifier:Meaning
+[[selecttag-format-i]]<<selecttag-format-i,+i+>>:Line's index in the list
+[[selecttag-format-T]]<<selecttag-format-T,+T+>>:The tag this line corresponds to
+[[selecttag-format-f]]<<selecttag-format-f,+f+>>:Number of unread feeds under this tag
+[[selecttag-format-n]]<<selecttag-format-n,+n+>>:Number of unread articles in feeds tagged with this tag
+[[selecttag-format-u]]<<selecttag-format-u,+u+>>:Number of feeds tagged with this tag
+|======================================================================
+
 .Available Identifiers for notify-format
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
 |======================================================================
