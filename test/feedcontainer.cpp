@@ -488,7 +488,8 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE("clear_feeds_items() clears all of feed's items", "[FeedContainer]")
+TEST_CASE("clear_feeds_items() removes all items from all feeds",
+		"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
