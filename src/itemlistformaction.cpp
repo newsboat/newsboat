@@ -405,8 +405,10 @@ void ItemListFormAction::process_operation(Operation op,
 				if (!c)
 					break;
 				unsigned int n_options = ((std::string) "yn").length();
-				if (input_options.length() < n_options)
+				if (input_options.length() < n_options) {
 					break;
+				}
+
 				if (c == input_options.at(0)) {
 					save_article(filename, visible_items[0].first);
 				} else if (c == input_options.at(1)) {
@@ -464,11 +466,15 @@ void ItemListFormAction::process_operation(Operation op,
 									  filename, directory),
 									  input_options);
 						}
-						if (!c)
+						if (!c) {
 							break;
+						}
+
 						unsigned int n_options = ((std::string) "yanq").length();
-						if (input_options.length() < n_options)
+						if (input_options.length() < n_options) {
 							break;
+						}
+
 						if (c == input_options.at(0)) {
 							save_article(fpath,
 										 item.first);

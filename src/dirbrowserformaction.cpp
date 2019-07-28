@@ -51,8 +51,9 @@ char get_filetype(mode_t mode)
 		{0, 0}};
 
 	for (unsigned int i = 0; flags[i].flag != 0; i++) {
-		if ((mode & S_IFMT) == flags[i].flag)
+		if ((mode & S_IFMT) == flags[i].flag) {
 			return flags[i].ftype;
+		}
 	}
 	return '?';
 }
@@ -319,9 +320,9 @@ std::string DirBrowserFormAction::get_formatted_dirname(std::string dirname,
 		suffix = '|';
 		break;
 	default:
-		if (mode & S_IXUSR)
+		if (mode & S_IXUSR) {
 			suffix = '*';
-
+		}
 	}
 
 	return strprintf::fmt("%s%c", dirname, suffix);
