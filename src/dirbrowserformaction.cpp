@@ -248,8 +248,11 @@ void DirBrowserFormAction::init()
 
 	auto cwdtmp = utils::getcwd();
 
+	f->set("filenametext", dir);
+
 	// Set position to 0 and back to ensure that the text is visible
 	f->run(-1);
+	f->set("filenametext_pos", std::to_string(dir.length()));
 
 	f->set("head",
 		strprintf::fmt(_("%s %s - Save Files - %s"),
