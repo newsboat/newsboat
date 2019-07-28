@@ -1,6 +1,7 @@
 #include "matcher.h"
 
 #include <cassert>
+#include <cinttypes>
 #include <ctime>
 #include <regex.h>
 #include <sstream>
@@ -45,11 +46,11 @@ bool Matcher::parse(const std::string& expr)
 	}
 
 	gettimeofday(&tv2, nullptr);
-	unsigned long diff =
+	const uint64_t diff =
 		(((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) -
 		tv1.tv_usec;
 	LOG(Level::DEBUG,
-		"Matcher::parse: parsing `%s' took %lu µs (success = %d)",
+		"Matcher::parse: parsing `%s' took %" PRIu64 " µs (success = %d)",
 		expr,
 		diff,
 		b ? 1 : 0);

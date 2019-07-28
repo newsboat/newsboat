@@ -1,5 +1,6 @@
 #include "pbview.h"
 
+#include <cinttypes>
 #include <cstdio>
 #include <cstring>
 #include <curses.h>
@@ -73,8 +74,8 @@ void PbView::run(bool auto_download)
 			LOG(Level::DEBUG,
 				"PbView::run: updating view... "
 				"downloads().size() "
-				"= %u",
-				ctrl->downloads().size());
+				"= %" PRIu64,
+				static_cast<uint64_t>(ctrl->downloads().size()));
 
 			std::string code = "{list";
 			std::string formatstring = ctrl->get_formatstr();

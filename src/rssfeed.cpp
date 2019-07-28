@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cerrno>
+#include <cinttypes>
 #include <cstring>
 #include <curl/curl.h>
 #include <functional>
@@ -127,11 +128,11 @@ std::shared_ptr<RssItem> RssFeed::get_item_by_guid_unlocked(
 	LOG(Level::DEBUG,
 		"RssFeed::get_item_by_guid_unlocked: hit dummy item!");
 	LOG(Level::DEBUG,
-		"RssFeed::get_item_by_guid_unlocked: items_guid_map.size = %d",
-		items_guid_map.size());
-	// abort();
-	return std::shared_ptr<RssItem>(
-		new RssItem(ch)); // should never happen!
+		"RssFeed::get_item_by_guid_unlocked: items_guid_map.size = %" PRIu64,
+		static_cast<uint64_t>(items_guid_map.size()));
+
+	// should never happen!
+	return std::shared_ptr<RssItem>(new RssItem(ch));
 }
 
 bool RssFeed::has_attribute(const std::string& attribname)

@@ -1,6 +1,7 @@
 #include "htmlrenderer.h"
 
 #include <algorithm>
+#include <cinttypes>
 #include <cstdio>
 #include <cstring>
 #include <iostream>
@@ -1005,9 +1006,9 @@ void HtmlRenderer::render_table(const HtmlRenderer::Table& table,
 						  .cells[cell]
 						  .text.size()) {
 					LOG(Level::DEBUG,
-						"row = %d cell = %d text = %s",
-						row,
-						cell,
+						"row = %" PRIu64 " cell = %" PRIu64 " text = %s",
+						static_cast<uint64_t>(row),
+						static_cast<uint64_t>(cell),
 						table.rows[row]
 							.cells[cell]
 							.text[idx]);
@@ -1030,9 +1031,9 @@ void HtmlRenderer::render_table(const HtmlRenderer::Table& table,
 							cell_widths[ic] + 1;
 				}
 				LOG(Level::DEBUG,
-					"cell_width = %d reference_width = %d",
-					cell_width,
-					reference_width);
+					"cell_width = %" PRIu64 " reference_width = %" PRIu64,
+					static_cast<uint64_t>(cell_width),
+					static_cast<uint64_t>(reference_width));
 				if (cell_width <
 					reference_width) // pad, if necessary
 					line += std::string(

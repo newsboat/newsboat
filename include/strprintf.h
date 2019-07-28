@@ -28,42 +28,28 @@ namespace strprintf {
 
 	template<typename... Args>
 	std::string
-	fmt(const std::string& format, const int argument, Args... args)
+	fmt(const std::string& format, const int32_t argument, Args... args)
 	{
 		return fmt_impl(format, argument, args...);
 	}
 
 	template<typename... Args>
 	std::string
-	fmt(const std::string& format, const unsigned int argument, Args... args)
+	fmt(const std::string& format, const uint32_t argument, Args... args)
 	{
 		return fmt_impl(format, argument, args...);
 	}
 
 	template<typename... Args>
 	std::string
-	fmt(const std::string& format, const long int argument, Args... args)
+	fmt(const std::string& format, const int64_t argument, Args... args)
 	{
 		return fmt_impl(format, argument, args...);
 	}
 
 	template<typename... Args>
 	std::string
-	fmt(const std::string& format, const long unsigned int argument, Args... args)
-	{
-		return fmt_impl(format, argument, args...);
-	}
-
-	template<typename... Args>
-	std::string
-	fmt(const std::string& format, const long long int argument, Args... args)
-	{
-		return fmt_impl(format, argument, args...);
-	}
-
-	template<typename... Args>
-	std::string
-	fmt(const std::string& format, const long long unsigned int argument, Args... args)
+	fmt(const std::string& format, const uint64_t argument, Args... args)
 	{
 		return fmt_impl(format, argument, args...);
 	}

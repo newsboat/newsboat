@@ -1,6 +1,7 @@
 #include "rssitem.h"
 
 #include <algorithm>
+#include <cinttypes>
 #include <langinfo.h>
 
 #include "cache.h"
@@ -60,7 +61,7 @@ std::string RssItem::length() const
 	if (!l)
 		return "";
 	if (l < 1000)
-		return strprintf::fmt("%u ", l);
+		return strprintf::fmt("%" PRIu64 " ", static_cast<uint64_t>(l));
 	if (l < 1024 * 1000)
 		return strprintf::fmt("%.1fK", l / 1024.0);
 

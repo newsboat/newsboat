@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cerrno>
+#include <cinttypes>
 #include <cstring>
 #include <curl/curl.h>
 #include <sstream>
@@ -218,17 +219,25 @@ void RssParser::download_http(const std::string& uri)
 				cfgcont->get_configvalue("cookie-cache"),
 				easyhandle ? easyhandle->ptr() : 0);
 			LOG(Level::DEBUG,
-				"RssParser::download_http: lm = %d etag = %s",
-				p.get_last_modified(),
+				"RssParser::download_http: lm = %" PRId64 " etag = %s",
+				// On GCC, `time_t` is `long int`, which is at least 32 bits
+				// long according to the spec. On x86_64, it's actually 64
+				// bits. Thus, casting to int64_t is either a no-op, or an
+				// up-cast which are always safe.
+				static_cast<int64_t>(p.get_last_modified()),
 				p.get_etag());
 			if (p.get_last_modified() != 0 ||
 				p.get_etag().length() > 0) {
 				LOG(Level::DEBUG,
 					"RssParser::download_http: "
 					"lastmodified "
-					"old: %d new: %d",
-					lm,
-					p.get_last_modified());
+					"old: %" PRId64 " new: %" PRId64,
+					// On GCC, `time_t` is `long int`, which is at least 32
+					// bits long according to the spec. On x86_64, it's
+					// actually 64 bits. Thus, casting to int64_t is either
+					// a no-op, or an up-cast which are always safe.
+					static_cast<int64_t>(lm),
+					static_cast<int64_t>(p.get_last_modified()));
 				LOG(Level::DEBUG,
 					"RssParser::download_http: etag old: "
 					"%s "
@@ -441,11 +450,15 @@ void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed)
 		LOG(Level::DEBUG,
 			"RssParser::parse: item title = `%s' link = `%s' "
 			"pubDate "
-			"= `%s' (%d) description = `%s'",
+			"= `%s' (%" PRId64 ") description = `%s'",
 			x->title(),
 			x->link(),
 			x->pubDate(),
-			x->pubDate_timestamp(),
+			// On GCC, `time_t` is `long int`, which is at least 32 bits long
+			// according to the spec. On x86_64, it's actually 64 bits. Thus,
+			// casting to int64_t is either a no-op, or an up-cast which are
+			// always safe.
+			static_cast<int64_t>(x->pubDate_timestamp()),
 			x->description());
 
 		add_item_to_feed(feed, x);
@@ -622,8 +635,8 @@ void RssParser::fetch_ttrss(const std::string& feed_id)
 		is_valid = true;
 	}
 	LOG(Level::DEBUG,
-		"RssParser::fetch_ttrss: f.items.size = %u",
-		f.items.size());
+		"RssParser::fetch_ttrss: f.items.size = %" PRIu64,
+		static_cast<uint64_t>(f.items.size()));
 }
 
 void RssParser::fetch_newsblur(const std::string& feed_id)
@@ -634,8 +647,8 @@ void RssParser::fetch_newsblur(const std::string& feed_id)
 		is_valid = true;
 	}
 	LOG(Level::INFO,
-		"RssParser::fetch_newsblur: f.items.size = %u",
-		f.items.size());
+		"RssParser::fetch_newsblur: f.items.size = %" PRIu64,
+		static_cast<uint64_t>(f.items.size()));
 }
 
 void RssParser::fetch_ocnews(const std::string& feed_id)
@@ -646,8 +659,8 @@ void RssParser::fetch_ocnews(const std::string& feed_id)
 		is_valid = true;
 	}
 	LOG(Level::INFO,
-		"RssParser::fetch_ocnews: f.items.size = %u",
-		f.items.size());
+		"RssParser::fetch_ocnews: f.items.size = %" PRIu64,
+		static_cast<uint64_t>(f.items.size()));
 }
 
 } // namespace newsboat

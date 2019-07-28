@@ -1,5 +1,6 @@
 #include "poddlthread.h"
 
+#include <cinttypes>
 #include <curl/curl.h>
 #include <iostream>
 #include <libgen.h>
@@ -93,8 +94,11 @@ void PodDlThread::run()
 		resumed_download = false;
 	} else {
 		LOG(Level::INFO,
-			"PodDlThread::run: stat ok: starting download from %u",
-			sb.st_size);
+			"PodDlThread::run: stat ok: starting download from %" PRIi64,
+			// That field is `long int`, which is at least 32 bits. On x86_64,
+			// it's 64 bits. Thus, this cast is either a no-op, or an up-cast
+			// which are always safe.
+			static_cast<int64_t>(sb.st_size));
 		curl_easy_setopt(easyhandle, CURLOPT_RESUME_FROM, sb.st_size);
 		dl->set_offset(sb.st_size);
 		f->open(filename, std::fstream::out | std::fstream::app);
@@ -160,9 +164,9 @@ size_t PodDlThread::write_data(void* buffer, size_t size, size_t nmemb)
 	f->write(static_cast<char*>(buffer), size * nmemb);
 	bytecount += (size * nmemb);
 	LOG(Level::DEBUG,
-		"PodDlThread::write_data: bad = %u size = %u",
+		"PodDlThread::write_data: bad = %u size = %" PRIu64,
 		f->bad(),
-		size * nmemb);
+		static_cast<uint64_t>(size * nmemb));
 	return f->bad() ? 0 : size * nmemb;
 }
 

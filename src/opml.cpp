@@ -1,6 +1,7 @@
 #include "opml.h"
 
 #include <cassert>
+#include <cinttypes>
 #include <cstring>
 
 #include "rssfeed.h"
@@ -119,8 +120,8 @@ void rec_find_rss_outlines(
 				bool found = false;
 
 				LOG(Level::DEBUG,
-					"opml::import: size = %u",
-					urlcfg->get_urls().size());
+					"opml::import: size = %" PRIu64,
+					static_cast<uint64_t>(urlcfg->get_urls().size()));
 				// TODO: replace with algorithm::any or something
 				if (urlcfg->get_urls().size() > 0) {
 					for (const auto& u :
