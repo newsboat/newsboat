@@ -53,7 +53,8 @@ TEST_CASE(
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
 			if (i == OP_OPENALLUNREADINBROWSER ||
 					i == OP_MARKALLABOVEASREAD ||
-					i == OP_OPENALLUNREADINBROWSER_AND_MARK) {
+					i == OP_OPENALLUNREADINBROWSER_AND_MARK ||
+					i == OP_SAVEALL) {
 				continue;
 			}
 			REQUIRE(k.getkey(static_cast<Operation>(i), "all") != "<none>");
@@ -77,13 +78,10 @@ TEST_CASE(
 			REQUIRE(k.getkey(static_cast<Operation>(i), "articlelist") == "<none>");
 		}
 
+		KeyMap default_keys(KM_NEWSBOAT);
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
-			if (i == OP_OPENALLUNREADINBROWSER ||
-					i == OP_MARKALLABOVEASREAD ||
-					i == OP_OPENALLUNREADINBROWSER_AND_MARK) {
-				continue;
-			}
-			REQUIRE(k.getkey(static_cast<Operation>(i), "feedlist") != "<none>");
+			const auto op = static_cast<Operation>(i);
+			REQUIRE(k.getkey(op, "feedlist") == default_keys.getkey(op, "feedlist"));
 		}
 	}
 }

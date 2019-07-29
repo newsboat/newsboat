@@ -82,13 +82,11 @@ TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
 		cfgparser.register_handler("unbind-key", &keys);
 		cfgparser.parse("data/config-unbind-all-context");
 
+		INFO("it doesn't affect the help dialog");
+		KeyMap default_keys(KM_NEWSBOAT);
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
-			if (i == OP_OPENALLUNREADINBROWSER ||
-					i == OP_MARKALLABOVEASREAD ||
-					i == OP_OPENALLUNREADINBROWSER_AND_MARK) {
-				continue;
-			}
-			REQUIRE(keys.getkey(static_cast<Operation>(i), "help") != "<none>");
+			const auto op = static_cast<Operation>(i);
+			REQUIRE(keys.getkey(op, "help") == default_keys.getkey(op, "help"));
 		}
 
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {

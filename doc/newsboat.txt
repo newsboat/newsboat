@@ -3,9 +3,9 @@ The Newsboat RSS Feedreader
 
 Introduction
 ------------
-Newsboat is an RSS/Atom feedreader. RSS and Atom are a number of widely-used 
-XML formats to transmit, publish and syndicate articles, for example news or 
-blog articles.  Newsboat is designed to be used on text terminals on Unix or 
+Newsboat is an RSS/Atom feedreader. RSS and Atom are a number of widely-used
+XML formats to transmit, publish and syndicate articles, for example news or
+blog articles.  Newsboat is designed to be used on text terminals on Unix or
 Unix-like systems such as GNU/Linux, FreeBSD or macOS.
 
 Platforms
@@ -36,7 +36,7 @@ Downloading Newsboat
 Newsboat is available as source package. Simply go to
 https://newsboat.org/[] and download the latest source package, which is
 usually in the .tar.gz file format. Alternatively, you can check out the latest
-development source tree from the newsboat Git repository 
+development source tree from the newsboat Git repository
 by running the following command on the commandline:
 
 	git clone git://github.com/newsboat/newsboat.git
@@ -133,7 +133,7 @@ Example Configuration
 Configuring Colors
 ~~~~~~~~~~~~~~~~~~
 
-It is possible to configure custom color settings in newsboat. The basic configuration 
+It is possible to configure custom color settings in newsboat. The basic configuration
 syntax is:
 
 	color <element> <foreground color> <background color> [<attribute> ...]
@@ -277,7 +277,7 @@ subscriptions more than once: every URL that is added to the subscription list
 is checked before whether it is already in the list, and is only added if not.
 This makes it possible to merge several OPML files into your subscription list.
 
-If your old RSS feed reader was able to structure your subscriptions in 
+If your old RSS feed reader was able to structure your subscriptions in
 hierarchies, and reflected this structure in the exported OPML file, newsboat
 doesn't throw away this information (although it doesn't support hierarchies), but
 generates tags from it. Tags are newsboat's way of organizing subscriptions
@@ -341,9 +341,9 @@ See also <<oldreader-passwordfile,`oldreaader-passwordfile`>>,
 After setting these configuration values, you can start Newsboat. It will
 authenticate with The Old Reader and download your subscription list.
 
-When you mark single items or complete feeds as read, Newsboat will 
-synchronize this information directly to The Old Reader. This, of course, 
-includes opening articles. Toggling read articles back to "unread" is also 
+When you mark single items or complete feeds as read, Newsboat will
+synchronize this information directly to The Old Reader. This, of course,
+includes opening articles. Toggling read articles back to "unread" is also
 communicated to The Old Reader.
 
 In addition, The Old Reader provides the ability to "star" and to "share"
@@ -441,15 +441,15 @@ feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
 Tiny Tiny RSS
 ~~~~~~~~~~~~~
 
-Newsboat can be used to synchronize with https://tt-rss.org/[Tiny Tiny RSS] 
-installations. Tiny Tiny RSS is a web-based and (optionally) multi-user feed 
+Newsboat can be used to synchronize with https://tt-rss.org/[Tiny Tiny RSS]
+installations. Tiny Tiny RSS is a web-based and (optionally) multi-user feed
 reader.
 
-If you want to use Tiny Tiny RSS support, don't forget to activate the external 
+If you want to use Tiny Tiny RSS support, don't forget to activate the external
 API support in your preferences.
 
-To use Tiny Tiny RSS support, you need to configure a few things. First of all, 
-Newsboat needs to know that you want to use Tiny Tiny RSS and which 
+To use Tiny Tiny RSS support, you need to configure a few things. First of all,
+Newsboat needs to know that you want to use Tiny Tiny RSS and which
 installation exactly:
 
 	urls-source "ttrss"
@@ -467,9 +467,9 @@ See also <<ttrss-passwordfile,`ttrss-passwordfile`>>,
 <<ttrss-passwordeval,`ttrss-passwordeval`>>, and
 <<_passwords_for_external_apis>>.
 
-Tiny Tiny RSS provides two modes of usage: single-user mode and multi-user 
-mode. Newsboat needs to know about this, too: in single-user mode, 
-authentication is done via Basic HTTP authentication, while in multi-user mode, 
+Tiny Tiny RSS provides two modes of usage: single-user mode and multi-user
+mode. Newsboat needs to know about this, too: in single-user mode,
+authentication is done via Basic HTTP authentication, while in multi-user mode,
 authentication is done against Tiny Tiny RSS itself.
 
 	ttrss-mode "single"		# "multi" is default
@@ -481,12 +481,12 @@ be specified in the user-part of the url like this:
 
     ttrss-url "http://htuser:htpasswd@example.com/ttrss/"
 
-With these settings, Newsboat should be able to connect to Tiny Tiny RSS and 
-download your subscribed feeds. Articles or even complete feeds that you marked 
+With these settings, Newsboat should be able to connect to Tiny Tiny RSS and
+download your subscribed feeds. Articles or even complete feeds that you marked
 as read are synchronized directly to Tiny Tiny RSS.
 
-Tiny Tiny RSS provides the ability to "star" and to "publish" articles. Starred 
-articles are basically bookmarks, while published articles can be retrieved via 
+Tiny Tiny RSS provides the ability to "star" and to "publish" articles. Starred
+articles are basically bookmarks, while published articles can be retrieved via
 a public RSS feed. Newsboat allows the use of these features by mapping its
 flags to the "star" and "publish" operations.
 
@@ -649,7 +649,7 @@ Bookmarking
 
 Newsboat contains a plugin-based bookmarking system. When a user bookmarks a link (possible
 in the article list, in the article view, and in the URL view), they are asked for the URL to bookmark (already
-preset with the URL of the current selection), the bookmark title (in most cases preset with the 
+preset with the URL of the current selection), the bookmark title (in most cases preset with the
 title of the current selection), the bookmark description and (since 2.10) the
 title of the feed the user is currently in. After the question for the description,
 an external program, configured via the configuration command <<bookmark-cmd,`bookmark-cmd`>>, is executed with 4 (since 2.10) commandline
@@ -714,7 +714,7 @@ and press "Enter".  To clear the filter, press "Ctrl-F". To filter the articles 
 press "F", enter your expression, and press "Enter". Clearing the filter works the same as before.
 Be aware that only certain attributes work in both dialogs. The table below lists all available
 attributes and their context, i.e. an attribute that belongs to a feed can only be matched
-in the feed list, while an attribute that belongs to an article can only be matched in the 
+in the feed list, while an attribute that belongs to an article can only be matched in the
 article list.
 
 .[[available-comparison-operators]]<<available-comparison-operators,Available Comparison Operators>>
@@ -814,7 +814,7 @@ configuration file:
 Query Feeds
 ~~~~~~~~~~~
 
-Query feeds are a mechanism of newsboat to define custom "meta feeds" by using 
+Query feeds are a mechanism of newsboat to define custom "meta feeds" by using
 newsboat's built-in filter language. A query feed is a feed that is aggregated
 from all currently downloaded articles of all feeds. To narrow down the set of
 articles, the user has to specify a filter. Only articles that match this filter
@@ -930,7 +930,7 @@ Format Strings
 ~~~~~~~~~~~~~~
 
 Newsboat contains a powerful format string system to make it possible for the
-user to configure the format of various aspects of the application, such as 
+user to configure the format of various aspects of the application, such as
 the format of entries in the feed list or in the article list.
 
 Format strings are similar to those that are found in the `printf` function in
@@ -939,7 +939,7 @@ followed by optional alignment indication: positive numbers indicate that the
 text that is inserted for the sequence shall be padded right to a total width
 that is specified by the number, while negative number specify left padding.
 Followed by the padding indication comes the actual sequence identifier, which
-is usually a single letter. 
+is usually a single letter.
 
 In addition, newsboat provides other, more powerful sequences, such as
 `%>[char]`, which indicates that the text right to the sequence will be aligned
@@ -972,8 +972,8 @@ Identifier:Meaning
 |======================================================================
 
 While a <<reload-all,`reload-all`>> operation is running, the download status indicates the
-download status of a feed, which can be "to be downloaded" (indicated by "_"), 
-"currently downloading" (indicated by "."), successfully downloaded (indicated 
+download status of a feed, which can be "to be downloaded" (indicated by "_"),
+"currently downloading" (indicated by "."), successfully downloaded (indicated
 by " ") and "download error" (indicated by "x").
 
 .Available Identifiers for articlelist-format
@@ -1060,6 +1060,7 @@ Feed List:<<feedlist-title-format,+feedlist-title-format+>>:%N %V - Your feeds (
 Article List:<<articlelist-title-format,+articlelist-title-format+>>:%N %V - Articles in feed '%T' (%u unread, %t total) - %U
 Search Result:<<searchresult-title-format,+searchresult-title-format+>>:%N %V - Search result (%u unread, %t total)
 File Browser:<<filebrowser-title-format,+filebrowser-title-format+>>:%N %V - %?O?Open File&Save File? - %f
+Directory Browser:<<dirbrowser-title-format,+dirbrowser-title-format+>>:%N %V - %?O?Open Directory&Save File? - %f
 Help:<<help-title-format,+help-title-format+>>:%N %V - Help
 Select Tag Dialog:<<selecttag-title-format,+selecttag-title-format+>>:%N %V - Select Tag
 Select Filter Dialog:<<selectfilter-title-format,+selectfilter-title-format+>>:%N %V - Select Filter
@@ -1099,6 +1100,14 @@ Identifier:Meaning
 Identifier:Meaning
 [[filebrowser-title-format-f]]<<filebrowser-title-format-f,+f+>>:Filename
 [[filebrowser-title-format-O]]<<filebrowser-title-format-O,+O+>>:Non-empty if file browser is in open mode, empty if in save mode
+|======================================================================
+
+.Directory Browser Title Format Identifiers
+[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
+|======================================================================
+Identifier:Meaning
+[[dirbrowser-title-format-f]]<<dirbrowser-title-format-f,+f+>>:Directory
+[[dirbrowser-title-format-O]]<<dirbrowser-title-format-O,+O+>>:Non-empty if directory browser is in open mode, empty if in save mode
 |======================================================================
 
 .Article View Title Format Identifiers

@@ -276,6 +276,7 @@ TEST_CASE(
 		"delete-read-articles-on-quit",
 		"dialogs-title-format",
 		"display-article-progress",
+		"dirbrowser-title-format",
 		"download-full-page",
 		"download-filename-format",
 		"download-path",
