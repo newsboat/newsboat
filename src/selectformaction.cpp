@@ -99,17 +99,17 @@ void SelectFormAction::prepare()
 	if (do_redraw) {
 		ListFormatter listfmt;
 		unsigned int i = 0;
+		const auto selecttag_format = cfg->get_configvalue("selecttag-format");
+		const auto width = utils::to_u(f->get("tags:w"));
+
 		switch (type) {
 		case SelectionType::TAG:
 			for (const auto& tag : tags) {
-				std::string tagstr = strprintf::fmt(
-					"%4u  %s (%u)",
-					i + 1,
-					tag,
-					v->get_ctrl()
-						->get_feedcontainer()
-						->get_feed_count_per_tag(tag));
-				listfmt.add_line(tagstr, i);
+				listfmt.add_line(format_line(selecttag_format,
+						tag,
+						i + 1,
+						width),
+					i);
 				i++;
 			}
 			break;
@@ -160,6 +160,32 @@ void SelectFormAction::init()
 		assert(0); // should never happen
 	}
 	f->set("head", title);
+}
+
+std::string SelectFormAction::format_line(const std::string& selecttag_format,
+	const std::string& tag,
+	unsigned int pos,
+	unsigned int width)
+{
+	FmtStrFormatter fmt;
+
+	const auto feedcontainer = v->get_ctrl()->get_feedcontainer();
+
+	const auto total_feeds = feedcontainer->get_feed_count_per_tag(tag);
+	const auto unread_feeds =
+		feedcontainer->get_unread_feed_count_per_tag(tag);
+	const auto unread_articles =
+		feedcontainer->get_unread_item_count_per_tag(tag);
+
+	fmt.register_fmt('i', strprintf::fmt("%u", pos));
+	fmt.register_fmt('T', tag);
+	fmt.register_fmt('f', std::to_string(unread_feeds));
+	fmt.register_fmt('n', std::to_string(unread_articles));
+	fmt.register_fmt('u', std::to_string(total_feeds));
+
+	auto formattedLine = fmt.do_format(selecttag_format, width);
+
+	return formattedLine;
 }
 
 KeyMapHintEntry* SelectFormAction::get_keymap_hint()

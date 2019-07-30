@@ -48,6 +48,11 @@ private:
 	std::string value;
 	std::vector<std::string> tags;
 	std::vector<FilterNameExprPair> filters;
+
+	std::string format_line(const std::string& selecttag_format,
+		const std::string& tag,
+		unsigned int pos,
+		unsigned int width);
 };
 
 } // namespace newsboat

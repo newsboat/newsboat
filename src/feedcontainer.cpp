@@ -162,6 +162,32 @@ unsigned int FeedContainer::get_feed_count_per_tag(const std::string& tag)
 	return count;
 }
 
+unsigned int FeedContainer::get_unread_feed_count_per_tag(const std::string& tag)
+{
+	unsigned int count = 0;
+	std::lock_guard<std::mutex> feedslock(feeds_mutex);
+	for (const auto& feed : feeds) {
+		if (feed->matches_tag(tag) && feed->unread_item_count() > 0) {
+		      count++;
+		}
+	}
+
+	return count;
+}
+
+unsigned int FeedContainer::get_unread_item_count_per_tag(const std::string& tag)
+{
+	unsigned int count = 0;
+	std::lock_guard<std::mutex> feedslock(feeds_mutex);
+	for (const auto& feed : feeds) {
+		if (feed->matches_tag(tag)) {
+			count += feed->unread_item_count();
+		}
+	}
+
+	return count;
+}
+
 std::shared_ptr<RssFeed> FeedContainer::get_feed_by_url(
 	const std::string& feedurl)
 {
