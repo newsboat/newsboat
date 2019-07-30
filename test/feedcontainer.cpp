@@ -393,6 +393,101 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 	item->set_pubDate(23);
 	feeds[3]->add_item(item);
 
+	item = std::make_shared<RssItem>(&rsscache);
+	item->set_pubDate(1);
+	feeds[4]->add_item(item);
+
+	SECTION("by lastupdated asc")
+	{
+		cfg.set_configvalue("feed-sort-order", "lastupdated-asc");
+		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+		REQUIRE(sorted_feeds[0] == feeds[4]);
+		REQUIRE(sorted_feeds[1] == feeds[3]);
+		REQUIRE(sorted_feeds[2] == feeds[1]);
+		REQUIRE(sorted_feeds[3] == feeds[2]);
+		REQUIRE(sorted_feeds[4] == feeds[0]);
+	}
+
+	SECTION("by lastupdated desc")
+	{
+		cfg.set_configvalue("feed-sort-order", "lastupdated-desc");
+		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+		REQUIRE(sorted_feeds[0] == feeds[0]);
+		REQUIRE(sorted_feeds[1] == feeds[2]);
+		REQUIRE(sorted_feeds[2] == feeds[1]);
+		REQUIRE(sorted_feeds[3] == feeds[3]);
+		REQUIRE(sorted_feeds[4] == feeds[4]);
+	}
+}
+
+TEST_CASE("Sorting by firsttag-asc puts empty tags on top", "[FeedContainer]")
+{
+	FeedContainer feedcontainer;
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
+	feedcontainer.set_feeds(feeds);
+
+	feeds[0]->set_tags({""});
+	feeds[1]->set_tags({"Taggy"});
+	feeds[2]->set_tags({"tag10"});
+	feeds[3]->set_tags({"taggy"});
+	feeds[4]->set_tags({"tag2"});
+
+	SECTION("by firsttag asc, empty tag is first")
+	{
+		cfg.set_configvalue("feed-sort-order", "firsttag-asc");
+		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+		REQUIRE(sorted_feeds[0]->get_firsttag() == "");
+		REQUIRE(sorted_feeds[1]->get_firsttag() == "taggy");
+		REQUIRE(sorted_feeds[2]->get_firsttag() == "tag10");
+		REQUIRE(sorted_feeds[3]->get_firsttag() == "tag2");
+		REQUIRE(sorted_feeds[4]->get_firsttag() == "Taggy");
+	}
+
+	SECTION("by firsttag desc, empty tag is last")
+	{
+		cfg.set_configvalue("feed-sort-order", "firsttag-desc");
+		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+		REQUIRE(sorted_feeds[0]->get_firsttag() == "Taggy");
+		REQUIRE(sorted_feeds[1]->get_firsttag() == "tag2");
+		REQUIRE(sorted_feeds[2]->get_firsttag() == "tag10");
+		REQUIRE(sorted_feeds[3]->get_firsttag() == "taggy");
+		REQUIRE(sorted_feeds[4]->get_firsttag() == "");
+	}
+}
+
+TEST_CASE("Sorting by lastupdated-asc puts empty feeds on top",
+		"[FeedContainer]")
+{
+	FeedContainer feedcontainer;
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
+	feedcontainer.set_feeds(feeds);
+
+	auto item = std::make_shared<RssItem>(&rsscache);
+	item->set_pubDate(93);
+	feeds[0]->add_item(item);
+
+	item = std::make_shared<RssItem>(&rsscache);
+	item->set_pubDate(42);
+	feeds[1]->add_item(item);
+
+	item = std::make_shared<RssItem>(&rsscache);
+	item->set_pubDate(69);
+	feeds[2]->add_item(item);
+
+	item = std::make_shared<RssItem>(&rsscache);
+	item->set_pubDate(23);
+	feeds[3]->add_item(item);
+
+	// feeds[4] is empty
+
 	SECTION("by lastupdated asc")
 	{
 		cfg.set_configvalue("feed-sort-order", "lastupdated-asc");
