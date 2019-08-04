@@ -122,15 +122,17 @@ impl ConfigPaths {
             return false;
         }
 
+        // We ignore the return codes because it's okay if some files are missing.
+
         // in config
-        migrate_file(&newsbeuter_config_dir, &self.m_config_dir, "urls").is_ok();
-        migrate_file(&newsbeuter_config_dir, &self.m_config_dir, "config").is_ok();
+        let _ = migrate_file(&newsbeuter_config_dir, &self.m_config_dir, "urls");
+        let _ = migrate_file(&newsbeuter_config_dir, &self.m_config_dir, "config");
 
         // in data
-        migrate_file(&newsbeuter_data_dir, &self.m_data_dir, "cache.db").is_ok();
-        migrate_file(&newsbeuter_data_dir, &self.m_data_dir, "queue").is_ok();
-        migrate_file(&newsbeuter_data_dir, &self.m_data_dir, "history.search").is_ok();
-        migrate_file(&newsbeuter_data_dir, &self.m_data_dir, "history.cmdline").is_ok();
+        let _ = migrate_file(&newsbeuter_data_dir, &self.m_data_dir, "cache.db");
+        let _ = migrate_file(&newsbeuter_data_dir, &self.m_data_dir, "queue");
+        let _ = migrate_file(&newsbeuter_data_dir, &self.m_data_dir, "history.search");
+        let _ = migrate_file(&newsbeuter_data_dir, &self.m_data_dir, "history.cmdline");
 
         return true;
     }
@@ -171,12 +173,13 @@ impl ConfigPaths {
             }
         };
 
-        migrate_file(&newsbeuter_dir, &newsboat_dir, "urls").ok();
-        migrate_file(&newsbeuter_dir, &newsboat_dir, "cache.db").ok();
-        migrate_file(&newsbeuter_dir, &newsboat_dir, "config").ok();
-        migrate_file(&newsbeuter_dir, &newsboat_dir, "queue").ok();
-        migrate_file(&newsbeuter_dir, &newsboat_dir, "history.search").ok();
-        migrate_file(&newsbeuter_dir, &newsboat_dir, "history.cmdline").ok();
+        // We ignore the return codes because it's okay if some files are missing.
+        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, "urls");
+        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, "cache.db");
+        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, "config");
+        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, "queue");
+        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, "history.search");
+        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, "history.cmdline");
 
         return true;
     }
