@@ -2,7 +2,7 @@ use dirs;
 use libc;
 use logger::{self, Level};
 use std::fs::{self, DirBuilder};
-use std::io::{self, Read};
+use std::io;
 use std::os::unix::fs::DirBuilderExt;
 use std::path::{Path, PathBuf};
 
@@ -181,7 +181,7 @@ impl ConfigPaths {
         return true;
     }
 
-    fn migrate_data_from_newsbeuter(&mut self) {
+    fn migrate_data_from_newsbeuter(&mut self) -> bool {
         let mut migrated = self.migrate_data_from_newsbeuter_xdg();
 
         if migrated {
@@ -195,12 +195,7 @@ impl ConfigPaths {
             migrated = self.migrate_data_from_newsbeuter_simple();
         }
 
-        if migrated {
-            eprintln!("\nPlease check the results and press Enter to continue.");
-            // only wait for enter, ignore actual input
-            let mut buf = [0; 16];
-            io::stdin().read(&mut buf).ok();
-        }
+        migrated
     }
 
     fn create_dirs(&self) -> bool {
@@ -294,13 +289,15 @@ impl ConfigPaths {
     }
     */
 
-    /// Ensures all directories exist (migrating them from Newsbeuter if possible).
-    pub fn setup_dirs(&mut self) -> bool {
+    /// Migrate configs and data from Newsbeuter if they exist. Return `true` if migrated
+    /// something, `false` otherwise.
+    pub fn try_migrate_from_newsbeuter(&mut self) -> bool {
         if !self.m_using_nonstandard_configs && !Path::new(&self.m_url_file).exists() {
-            self.migrate_data_from_newsbeuter();
+            return self.migrate_data_from_newsbeuter();
         }
 
-        self.create_dirs()
+        // No migration occurred.
+        false
     }
 
     /// Path to the URLs file.
