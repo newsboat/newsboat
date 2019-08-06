@@ -17,12 +17,26 @@
 extern crate libc;
 
 pub mod specifiers_iterator;
+// Re-exporting so that macro can just import the whole crate and get everything it needs.
+pub use specifiers_iterator::SpecifiersIterator;
+
 pub mod traits;
 
 use std::ffi::{CStr, CString};
 use std::mem;
 use std::vec::Vec;
 use traits::*;
+
+// Re-exporting platform-specific format specifiers.
+#[cfg(target_pointer_width = "32")]
+extern crate strprintf_32bit;
+#[cfg(target_pointer_width = "32")]
+pub use strprintf_32bit::format_specifiers::*;
+
+#[cfg(target_pointer_width = "64")]
+extern crate strprintf_64bit;
+#[cfg(target_pointer_width = "64")]
+pub use strprintf_64bit::format_specifiers::*;
 
 /// Helper function to `fmt!`. **Use it only through that macro!**
 ///
@@ -105,7 +119,7 @@ macro_rules! fmt {
 
             let mut result = String::new();
 
-            use $crate::specifiers_iterator::SpecifiersIterator;
+            use $crate::*;
             let mut specifiers = SpecifiersIterator::from(format);
 
             $(
@@ -123,7 +137,6 @@ macro_rules! fmt {
 #[cfg(test)]
 mod tests {
     extern crate libc;
-    use std;
 
     #[test]
     fn returns_first_argument_if_it_is_the_only_one() {
@@ -141,38 +154,55 @@ mod tests {
 
     #[test]
     fn formats_i32() {
-        assert_eq!(fmt!("%i", 42i32), "42");
-        assert_eq!(fmt!("%i", std::i32::MIN), "-2147483648");
-        assert_eq!(fmt!("%i", std::i32::MAX), "2147483647");
+        assert_eq!(fmt!(&format!("%{}", PRIi32), 42i32), "42");
+        assert_eq!(fmt!(&format!("%{}", PRId32), 42i32), "42");
+
+        assert_eq!(fmt!(&format!("%{}", PRIi32), std::i32::MIN), "-2147483648");
+        assert_eq!(fmt!(&format!("%{}", PRId32), std::i32::MIN), "-2147483648");
+
+        assert_eq!(fmt!(&format!("%{}", PRIi32), std::i32::MAX), "2147483647");
+        assert_eq!(fmt!(&format!("%{}", PRId32), std::i32::MAX), "2147483647");
     }
 
     #[test]
     fn formats_u32() {
-        assert_eq!(fmt!("%u", 42u32), "42");
-        assert_eq!(fmt!("%u", 0u32), "0");
-        assert_eq!(fmt!("%u", std::u32::MAX), "4294967295");
+        assert_eq!(fmt!(&format!("%{}", PRIu32), 42u32), "42");
+        assert_eq!(fmt!(&format!("%{}", PRIu32), 0u32), "0");
+        assert_eq!(fmt!(&format!("%{}", PRIu32), std::u32::MAX), "4294967295");
     }
 
     #[test]
     fn formats_i64() {
-        assert_eq!(fmt!("%li", 42i64), "42");
-        assert_eq!(fmt!("%li", std::i32::MIN as i64 - 1), "-2147483649");
-        assert_eq!(fmt!("%li", std::i32::MAX as i64 + 1), "2147483648");
+        assert_eq!(fmt!(&format!("%{}", PRIi64), 42i64), "42");
+        assert_eq!(fmt!(&format!("%{}", PRId64), 42i64), "42");
 
-        assert_eq!(fmt!("%lli", 42i64), "42");
-        assert_eq!(fmt!("%lli", std::i64::MIN), "-9223372036854775808");
-        assert_eq!(fmt!("%lli", std::i64::MAX), "9223372036854775807");
+        assert_eq!(
+            fmt!(&format!("%{}", PRIi64), std::i64::MIN),
+            "-9223372036854775808"
+        );
+        assert_eq!(
+            fmt!(&format!("%{}", PRId64), std::i64::MIN),
+            "-9223372036854775808"
+        );
+
+        assert_eq!(
+            fmt!(&format!("%{}", PRIi64), std::i64::MAX),
+            "9223372036854775807"
+        );
+        assert_eq!(
+            fmt!(&format!("%{}", PRId64), std::i64::MAX),
+            "9223372036854775807"
+        );
     }
 
     #[test]
     fn formats_u64() {
-        assert_eq!(fmt!("%lu", 42u64), "42");
-        assert_eq!(fmt!("%lu", 0u64), "0");
-        assert_eq!(fmt!("%lu", std::u64::MAX), "18446744073709551615");
-
-        assert_eq!(fmt!("%llu", 42u64), "42");
-        assert_eq!(fmt!("%llu", 0u64), "0");
-        assert_eq!(fmt!("%llu", std::u64::MAX), "18446744073709551615");
+        assert_eq!(fmt!(&format!("%{}", PRIu64), 42u64), "42");
+        assert_eq!(fmt!(&format!("%{}", PRIu64), 0u64), "0");
+        assert_eq!(
+            fmt!(&format!("%{}", PRIu64), std::u64::MAX),
+            "18446744073709551615"
+        );
     }
 
     #[test]

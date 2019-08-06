@@ -1,6 +1,7 @@
 #include "utils.h"
 
 #include <algorithm>
+#include <cinttypes>
 #include <cmath>
 #include <cstdarg>
 #include <cstdio>
@@ -269,7 +270,9 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str,
 	std::string::size_type pos = str.find_first_of(delimiters, last_pos);
 	unsigned int i;
 
-	LOG(Level::DEBUG, "utils::tokenize_nl: last_pos = %u", last_pos);
+	LOG(Level::DEBUG,
+			"utils::tokenize_nl: last_pos = %" PRIu64,
+			static_cast<uint64_t>(last_pos));
 	if (last_pos != std::string::npos) {
 		for (i = 0; i < last_pos; ++i) {
 			tokens.push_back(std::string("\n"));
@@ -283,8 +286,8 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str,
 			str.substr(last_pos, pos - last_pos));
 		last_pos = str.find_first_not_of(delimiters, pos);
 		LOG(Level::DEBUG,
-			"utils::tokenize_nl: pos - last_pos = %u",
-			last_pos - pos);
+			"utils::tokenize_nl: pos - last_pos = %" PRIu64,
+			static_cast<uint64_t>(last_pos - pos));
 		for (i = 0; last_pos != std::string::npos &&
 			pos != std::string::npos && i < (last_pos - pos);
 			++i) {

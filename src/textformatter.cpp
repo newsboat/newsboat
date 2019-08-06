@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <assert.h>
+#include <cinttypes>
 #include <limits.h>
 
 #include "htmlrenderer.h"
@@ -116,12 +117,13 @@ std::vector<std::string> format_text_plain_helper(
 	LOG(Level::DEBUG,
 		"TextFormatter::format_text_plain: rxman = %p, location = "
 		"`%s', "
-		"wrap_width = %zu, total_width = %zu, %u lines",
+		"wrap_width = %" PRIu64 ", total_width = %" PRIu64 ", %" PRIu64
+		" lines",
 		rxman,
 		location,
-		wrap_width,
-		total_width,
-		lines.size());
+		static_cast<uint64_t>(wrap_width),
+		static_cast<uint64_t>(total_width),
+		static_cast<uint64_t>(lines.size()));
 
 	std::vector<std::string> format_cache;
 

@@ -29,6 +29,13 @@ RUN addgroup --gid 1000 builder \
     && mkdir -p /home/builder/src \
     && chown -R builder:builder /home/builder
 
+RUN apt-get install locales \
+    && echo 'en_US.UTF-8 UTF-8' >> /etc/locale.gen \
+    && locale-gen
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
 USER builder
 WORKDIR /home/builder/src
 

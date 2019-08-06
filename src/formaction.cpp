@@ -1,6 +1,7 @@
 #include "formaction.h"
 
 #include <cassert>
+#include <cinttypes>
 
 #include "config.h"
 #include "configexception.h"
@@ -225,8 +226,8 @@ std::vector<std::string> FormAction::get_suggestions(
 		}
 	}
 	LOG(Level::DEBUG,
-		"FormAction::get_suggestions: %u suggestions",
-		result.size());
+		"FormAction::get_suggestions: %" PRIu64 " suggestions",
+		static_cast<uint64_t>(result.size()));
 	return result;
 }
 

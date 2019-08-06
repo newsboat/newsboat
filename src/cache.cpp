@@ -1,6 +1,7 @@
 #include "cache.h"
 
 #include <cassert>
+#include <cinttypes>
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
@@ -145,8 +146,12 @@ static int lastmodified_callback(void* handler,
 		result->etag = "";
 	}
 	LOG(Level::INFO,
-		"lastmodified_callback: lastmodified = %d etag = %s",
-		result->lastmodified,
+		"lastmodified_callback: lastmodified = %" PRId64 " etag = %s",
+		// On GCC, `time_t` is `long int`, which is at least 32 bits long
+		// according to the spec. On x86_64, it's actually 64 bits. Thus,
+		// casting to int64_t is either a no-op, or an up-cast which are always
+		// safe.
+		static_cast<int64_t>(result->lastmodified),
 		result->etag);
 	return 0;
 }
@@ -422,8 +427,11 @@ void Cache::fetch_lastmodified(const std::string& feedurl,
 	t = result.lastmodified;
 	etag = result.etag;
 	LOG(Level::DEBUG,
-		"Cache::fetch_lastmodified: t = %d etag = %s",
-		t,
+		"Cache::fetch_lastmodified: t = %" PRId64 " etag = %s",
+		// On GCC, `time_t` is `long int`, which is at least 32 bits. On
+		// x86_64, it's 64 bits. Thus, this cast is either a no-op, or an
+		// up-cast which is always safe.
+		static_cast<int64_t>(t),
 		etag);
 }
 
@@ -1068,8 +1076,12 @@ void Cache::clean_old_articles()
 			"DELETE FROM rss_item WHERE pubDate < %d", old_date));
 		LOG(Level::DEBUG,
 			"Cache::clean_old_articles: about to delete articles "
-			"with a pubDate older than %d",
-			old_date);
+			"with a pubDate older than %" PRId64,
+			// On GCC, `time_t` is `long int`, which is at least 32 bits long
+			// according to the spec. On x86_64, it's actually 64 bits. Thus,
+			// casting to int64_t is either a no-op, or an up-cast which are
+			// always safe.
+			static_cast<int64_t>(old_date));
 		run_sql(query);
 	} else {
 		LOG(Level::DEBUG,

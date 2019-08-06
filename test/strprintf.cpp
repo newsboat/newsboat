@@ -1,5 +1,6 @@
 #include "strprintf.h"
 
+#include <cinttypes>
 #include <limits>
 
 #include "3rd-party/catch.hpp"
@@ -102,85 +103,58 @@ TEST_CASE("strprintf::fmt() formats char* as a string", "[strprintf]")
 	REQUIRE(strprintf::fmt("%s", input) == std::string(input));
 }
 
-TEST_CASE("strprintf::fmt() formats int", "[strprintf]")
+TEST_CASE("strprintf::fmt() formats int32_t", "[strprintf]")
 {
-	REQUIRE(strprintf::fmt("%i", 42) == "42");
+	const int32_t input = 42;
+	REQUIRE(strprintf::fmt("%" PRIi32, input) == "42");
+	REQUIRE(strprintf::fmt("%" PRId32, input) == "42");
 
-	const auto int_min = std::numeric_limits<int>::min();
-	REQUIRE(int_min == -2147483648);
-	REQUIRE(strprintf::fmt("%i", int_min) == "-2147483648");
+	const auto i32_min = std::numeric_limits<int32_t>::min();
+	REQUIRE(strprintf::fmt("%" PRIi32, i32_min) == "-2147483648");
+	REQUIRE(strprintf::fmt("%" PRId32, i32_min) == "-2147483648");
 
-	const auto int_max = std::numeric_limits<int>::max();
-	REQUIRE(int_max == 2147483647);
-	REQUIRE(strprintf::fmt("%i", int_max) == "2147483647");
+	const auto i32_max = std::numeric_limits<int32_t>::max();
+	REQUIRE(strprintf::fmt("%" PRIi32, i32_max) == "2147483647");
+	REQUIRE(strprintf::fmt("%" PRId32, i32_max) == "2147483647");
 }
 
-TEST_CASE("strprintf::fmt() formats unsigned int", "[strprintf]")
+TEST_CASE("strprintf::fmt() formats uint32_t", "[strprintf]")
 {
-	REQUIRE(strprintf::fmt("%u", 42u) == "42");
+	const uint32_t input = 42;
+	REQUIRE(strprintf::fmt("%" PRIu32, input) == "42");
 
-	REQUIRE(strprintf::fmt("%u", 0u) == "0");
+	const uint32_t zero = 0;
+	REQUIRE(strprintf::fmt("%" PRIu32, zero) == "0");
 
-	const auto uint_max = std::numeric_limits<unsigned int>::max();
-	REQUIRE(uint_max == 4294967295u);
-	REQUIRE(strprintf::fmt("%u", uint_max) == "4294967295");
+	const uint32_t u32_max = std::numeric_limits<uint32_t>::max();
+	REQUIRE(strprintf::fmt("%" PRIu32, u32_max) == "4294967295");
 }
 
-TEST_CASE("strprintf::fmt() formats long int", "[strprintf]")
+TEST_CASE("strprintf::fmt() formats int64_t", "[strprintf]")
 {
-	REQUIRE(strprintf::fmt("%li", 42l) == "42");
+	const int64_t input = 42;
+	REQUIRE(strprintf::fmt("%" PRIi64, input) == "42");
+	REQUIRE(strprintf::fmt("%" PRId64, input) == "42");
 
-	const auto int_min = std::numeric_limits<int>::min();
-	const auto long_min = std::numeric_limits<long int>::min();
-	REQUIRE(long_min < int_min);
-	REQUIRE(int_min == -2147483648);
-	REQUIRE(strprintf::fmt("%li", int_min - 1l) == "-2147483649");
+	const auto i64_min = std::numeric_limits<int64_t>::min();
+	REQUIRE(strprintf::fmt("%" PRIi64, i64_min) == "-9223372036854775808");
+	REQUIRE(strprintf::fmt("%" PRId64, i64_min) == "-9223372036854775808");
 
-	const auto int_max = std::numeric_limits<int>::max();
-	const auto long_max = std::numeric_limits<long int>::max();
-	REQUIRE(long_max > int_max);
-	REQUIRE(int_max == 2147483647);
-	REQUIRE(strprintf::fmt("%li", int_max + 1l) == "2147483648");
+	const auto i64_max = std::numeric_limits<int64_t>::max();
+	REQUIRE(strprintf::fmt("%" PRIi64, i64_max) == "9223372036854775807");
+	REQUIRE(strprintf::fmt("%" PRId64, i64_max) == "9223372036854775807");
 }
 
-TEST_CASE("strprintf::fmt() formats long unsigned int", "[strprintf]")
+TEST_CASE("strprintf::fmt() formats uint64_t", "[strprintf]")
 {
-	REQUIRE(strprintf::fmt("%lu", 42lu) == "42");
+	const uint64_t input = 42;
+	REQUIRE(strprintf::fmt("%" PRIu64, input) == "42");
 
-	REQUIRE(strprintf::fmt("%lu", 0lu) == "0");
+	const uint64_t zero = 0;
+	REQUIRE(strprintf::fmt("%" PRIu64, zero) == "0");
 
-	const auto ulong_max = std::numeric_limits<long unsigned int>::max();
-	REQUIRE(ulong_max == 18446744073709551615lu);
-	REQUIRE(strprintf::fmt("%lu", ulong_max) == "18446744073709551615");
-}
-
-TEST_CASE("strprintf::fmt() formats long long int", "[strprintf]")
-{
-	REQUIRE(strprintf::fmt("%lli", 42ll) == "42");
-
-	// This is one bigger than actual std::numeric_limits<long long int>::min()
-	// on x86_64. The actual value can't be written as a literal because both
-	// GCC 8 and Clang complain about it being too small to be represented with
-	// long long int.
-	const auto input = -9223372036854775807ll;
-	const auto llong_min = std::numeric_limits<long long int>::min();
-	REQUIRE(llong_min <= input);
-	REQUIRE(strprintf::fmt("%lli", input) == "-9223372036854775807");
-
-	const auto llong_max = std::numeric_limits<long long int>::max();
-	REQUIRE(llong_max == 9223372036854775807ll);
-	REQUIRE(strprintf::fmt("%lli", llong_max) == "9223372036854775807");
-}
-
-TEST_CASE("strprintf::fmt() formats unsigned long long int", "[strprintf]")
-{
-	REQUIRE(strprintf::fmt("%llu", 42llu) == "42");
-
-	REQUIRE(strprintf::fmt("%llu", 0llu) == "0");
-
-	const auto ullong_max = std::numeric_limits<unsigned long long int>::max();
-	REQUIRE(ullong_max == 18446744073709551615llu);
-	REQUIRE(strprintf::fmt("%llu", ullong_max) == "18446744073709551615");
+	const uint64_t u64_max = std::numeric_limits<uint64_t>::max();
+	REQUIRE(strprintf::fmt("%" PRIu64, u64_max) == "18446744073709551615");
 }
 
 TEST_CASE("strprintf::fmt() formats pointers", "[strprintf]")

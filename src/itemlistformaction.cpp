@@ -1,6 +1,7 @@
 #include <itemlistformaction.h>
 
 #include <cassert>
+#include <cinttypes>
 #include <cstdio>
 #include <langinfo.h>
 #include <sstream>
@@ -995,8 +996,8 @@ void ItemListFormAction::do_update_visible_items()
 	}
 
 	LOG(Level::DEBUG,
-		"ItemListFormAction::do_update_visible_items: size = %u",
-		visible_items.size());
+		"ItemListFormAction::do_update_visible_items: size = %" PRIu64,
+		static_cast<uint64_t>(visible_items.size()));
 
 	visible_items = new_visible_items;
 }
@@ -1234,9 +1235,9 @@ bool ItemListFormAction::jump_to_next_unread_item(bool start_with_first)
 	unsigned int itempos = utils::to_u(f->get("itempos"));
 	LOG(Level::DEBUG,
 		"ItemListFormAction::jump_to_next_unread_item: itempos = %u "
-		"visible_items.size = %u",
+		"visible_items.size = %" PRIu64,
 		itempos,
-		visible_items.size());
+		static_cast<uint64_t>(visible_items.size()));
 	for (unsigned int i = (start_with_first ? itempos : (itempos + 1));
 		i < visible_items.size();
 		++i) {
@@ -1283,10 +1284,10 @@ bool ItemListFormAction::jump_to_next_item(bool start_with_first)
 {
 	unsigned int itempos = utils::to_u(f->get("itempos"));
 	LOG(Level::DEBUG,
-		"ItemListFormAction::jump_to_next_item: itempos = %u "
-		"visible_items.size = %u",
-		itempos,
-		visible_items.size());
+		"ItemListFormAction::jump_to_next_item: itempos = %" PRIu64
+		" visible_items.size = %" PRIu64,
+		static_cast<uint64_t>(itempos),
+		static_cast<uint64_t>(visible_items.size()));
 	unsigned int i = (start_with_first ? itempos : (itempos + 1));
 	if (i < visible_items.size()) {
 		LOG(Level::DEBUG,

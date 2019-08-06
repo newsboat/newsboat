@@ -15,10 +15,6 @@ freebsd_task:
     test_script: cargo test
 
 32bit_ubuntu_task:
-    # We broke 32-bit builds (https://github.com/newsboat/newsboat/issues/555),
-    # so let this fail until we fix it.
-    allow_failures: true
-
     container:
         dockerfile: docker/ubuntu_18.04-i686.dockerfile
     build_script: make -j3 --keep-going all test

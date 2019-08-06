@@ -1,6 +1,7 @@
 #include "tagsouppullparser.h"
 
 #include <algorithm>
+#include <cinttypes>
 #include <cstdlib>
 #include <iostream>
 #include <istream>
@@ -535,10 +536,10 @@ void TagSoupPullParser::parse_tag(const std::string& tagstr)
 	unsigned int count = 0;
 
 	LOG(Level::DEBUG,
-		"parse_tag: parsing '%s', pos = %d, last_pos = %d",
+		"parse_tag: parsing '%s', pos = %" PRIu64 ", last_pos = %" PRIu64,
 		tagstr,
-		pos,
-		last_pos);
+		static_cast<uint64_t>(pos),
+		static_cast<uint64_t>(last_pos));
 
 	while (last_pos != std::string::npos) {
 		if (count == 0) {
@@ -569,8 +570,8 @@ void TagSoupPullParser::parse_tag(const std::string& tagstr)
 						LOG(Level::DEBUG,
 							"parse_tag: finding "
 							"ending "
-							"quote, pos = %d",
-							pos);
+							"quote, pos = %" PRIu64,
+							static_cast<uint64_t>(pos));
 					} else {
 						pos = tagstr.find_first_of(
 							" \r\n\t", pos + 1);

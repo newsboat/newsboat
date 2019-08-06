@@ -1,5 +1,6 @@
 #include "parser.h"
 
+#include <cinttypes>
 #include <cstring>
 #include <curl/curl.h>
 #include <libxml/parser.h>
@@ -80,9 +81,12 @@ static size_t handle_headers(void* ptr, size_t size, size_t nmemb, void* data)
 			values->lastmodified =
 				curl_getdate(header + 14, nullptr);
 			LOG(Level::DEBUG,
-				"handle_headers: got last-modified %s (%d)",
+				"handle_headers: got last-modified %s (%" PRId64 ")",
 				header + 14,
-				values->lastmodified);
+				// On GCC, `time_t` is `long int`, which is at least 32 bits.
+				// On x86_64, it's 64 bits. Thus, this cast is either a no-op,
+				// or an up-cast which is always safe.
+				static_cast<int64_t>(values->lastmodified));
 		}
 	} else if (!strncasecmp("ETag:", header, 5)) {
 		values->etag = std::string(header + 5);
@@ -220,7 +224,12 @@ Feed Parser::parse_url(const std::string& url,
 		std::string msg;
 		if (ret == CURLE_HTTP_RETURNED_ERROR && infoOk == CURLE_OK) {
 			msg = strprintf::fmt(
-				"%s %li", curl_easy_strerror(ret), status);
+				"%s %" PRIi64,
+				curl_easy_strerror(ret),
+				// `status` is `long`, which is at least 32 bits, and on x86_64
+				// it's actually 64 bits. Thus casting to `int64_t` is either
+				// a no-op, or an up-cast which are always safe.
+				static_cast<int64_t>(status));
 		} else {
 			msg = curl_easy_strerror(ret);
 		}

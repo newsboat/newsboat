@@ -1,6 +1,7 @@
 #include "ttrssapi.h"
 
 #include <algorithm>
+#include <cinttypes>
 #include <cstring>
 #include <thread>
 #include <time.h>
@@ -384,7 +385,9 @@ rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 		return f;
 	}
 
-	LOG(Level::DEBUG, "TtRssApi::fetch_feed: %d items", content.size());
+	LOG(Level::DEBUG,
+			"TtRssApi::fetch_feed: %" PRIu64 " items",
+			static_cast<uint64_t>(content.size()));
 
 	try {
 		for (const auto& item_obj : content) {
