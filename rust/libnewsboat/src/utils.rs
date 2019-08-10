@@ -286,9 +286,7 @@ pub fn strwidth_stfl(rs_str: &str) -> usize {
 /// https://github.com/akrennmair/newsbeuter/issues/259#issuecomment-259609490) and inadvertently
 /// render as hyphens
 pub fn remove_soft_hyphens(text: &mut String) {
-    // TODO: Use `text.retain(|c| c != '\u{00AD}')` as soon as we bump the minimum Rust version to
-    // 1.26 or higher
-    *text = text.replace("\u{00AD}", "")
+    text.retain(|c| c != '\u{00AD}')
 }
 
 pub fn is_valid_podcast_type(mimetype: &str) -> bool {
