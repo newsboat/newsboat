@@ -1,10 +1,10 @@
-use dirs;
 use libc;
 use logger::{self, Level};
 use std::fs::{self, DirBuilder};
 use std::io;
 use std::os::unix::fs::DirBuilderExt;
 use std::path::{Path, PathBuf};
+use xdg;
 
 pub const NEWSBOAT_SUBDIR_XDG: &str = "newsboat";
 pub const NEWSBOAT_CONFIG_SUBDIR: &str = ".newsboat";
@@ -74,8 +74,9 @@ impl ConfigPaths {
     fn migrate_data_from_newsbeuter_xdg(&mut self) -> bool {
         // This can't panic because we've tested we can find the home directory in ConfigPaths::new
         // This should be replaced with proper error handling after this is not used by c++ anymore
-        let xdg_config_dir = dirs::config_dir().unwrap();
-        let xdg_data_dir = dirs::data_dir().unwrap();
+        let xdg_dirs = xdg::BaseDirectories::new().unwrap();
+        let xdg_config_dir = xdg_dirs.get_config_home();
+        let xdg_data_dir = xdg_dirs.get_data_home();
 
         let newsbeuter_config_dir = xdg_config_dir.join(NEWSBEUTER_SUBDIR_XDG);
         let newsbeuter_data_dir = xdg_data_dir.join(NEWSBEUTER_SUBDIR_XDG);
@@ -253,8 +254,9 @@ impl ConfigPaths {
     fn find_dirs_xdg(&mut self) {
         // This can't panic because we've tested we can find the home directory in ConfigPaths::new
         // This should be replaced with proper error handling after this is not used by c++ anymore
-        let config_dir = dirs::config_dir().unwrap().join(NEWSBOAT_SUBDIR_XDG);
-        let data_dir = dirs::data_dir().unwrap().join(NEWSBOAT_SUBDIR_XDG);
+        let xdg_dirs = xdg::BaseDirectories::new().unwrap();
+        let config_dir = xdg_dirs.get_config_home().join(NEWSBOAT_SUBDIR_XDG);
+        let data_dir = xdg_dirs.get_data_home().join(NEWSBOAT_SUBDIR_XDG);
 
         if !config_dir.is_dir() {
             return;

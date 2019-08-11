@@ -6,6 +6,7 @@ extern crate backtrace;
 extern crate nom;
 extern crate dirs;
 extern crate once_cell;
+extern crate xdg;
 #[cfg(test)]
 #[macro_use]
 extern crate proptest;
