@@ -1069,7 +1069,6 @@ void ItemListFormAction::prepare()
 				datetime_format);
 			listfmt.set_line(itempos, line, item.second);
 		}
-		invalidated_itempos.clear();
 	} else {
 		LOG(Level::ERROR,
 			"invalidation_mode is neither COMPLETE nor "
@@ -1080,6 +1079,7 @@ void ItemListFormAction::prepare()
 		"replace_inner",
 		listfmt.format_list(rxman, "articlelist"));
 
+	invalidated_itempos.clear();
 	invalidated = false;
 
 	set_head(feed->title(),
