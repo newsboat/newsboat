@@ -94,6 +94,12 @@ public:
 	/// `log_level()` should only be called if `set_log_level` returned `true`.
 	bool set_log_level() const;
 	Level log_level() const;
+
+	/// Returns the pointer to the Rust object.
+	///
+	/// This is only meant to be used in situations when one wants to pass
+	/// a pointer to CliArgsParser back to Rust.
+	void* get_rust_pointer() const;
 };
 } // namespace newsboat
 

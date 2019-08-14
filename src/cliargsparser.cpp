@@ -243,5 +243,10 @@ Level CliArgsParser::log_level() const {
 	}
 }
 
+void* CliArgsParser::get_rust_pointer() const
+{
+	return rs_cliargsparser;
+}
+
 } // namespace newsboat
 

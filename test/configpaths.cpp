@@ -11,7 +11,7 @@ TEST_CASE("ConfigPaths returns paths to Newsboat dotdir if no Newsboat dirs "
 		"[ConfigPaths]")
 {
 	TestHelpers::TempDir tmp;
-	const auto newsboat_dir = tmp.get_path() + "/.newsboat";
+	const auto newsboat_dir = tmp.get_path() + ".newsboat";
 	REQUIRE(0 == utils::mkdir_parents(newsboat_dir, 0700));
 
 	TestHelpers::EnvVar home("HOME");
@@ -40,9 +40,9 @@ TEST_CASE("ConfigPaths returns paths to Newsboat XDG dirs if they exist and "
 		"[ConfigPaths]")
 {
 	TestHelpers::TempDir tmp;
-	const auto config_dir = tmp.get_path() + "/.config/newsboat";
+	const auto config_dir = tmp.get_path() + ".config/newsboat";
 	REQUIRE(0 == utils::mkdir_parents(config_dir, 0700));
-	const auto data_dir = tmp.get_path() + "/.local/share/newsboat";
+	const auto data_dir = tmp.get_path() + ".local/share/newsboat";
 	REQUIRE(0 == utils::mkdir_parents(data_dir, 0700));
 
 	TestHelpers::EnvVar home("HOME");
@@ -69,11 +69,11 @@ TEST_CASE("ConfigPaths returns paths to Newsboat XDG dirs if they exist and "
 
 	SECTION("XDG_CONFIG_HOME is set") {
 		TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
-		xdg_config.set(tmp.get_path() + "/.config");
+		xdg_config.set(tmp.get_path() + ".config");
 
 		SECTION("XDG_DATA_HOME is set") {
 			TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
-			xdg_data.set(tmp.get_path() + "/.local/share");
+			xdg_data.set(tmp.get_path() + ".local/share");
 			check();
 		}
 
@@ -90,7 +90,7 @@ TEST_CASE("ConfigPaths returns paths to Newsboat XDG dirs if they exist and "
 
 		SECTION("XDG_DATA_HOME is set") {
 			TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
-			xdg_data.set(tmp.get_path() + "/.local/share");
+			xdg_data.set(tmp.get_path() + ".local/share");
 			check();
 		}
 

@@ -7,43 +7,12 @@
 
 namespace newsboat {
 class ConfigPaths {
-	std::string m_env_home;
-	std::string m_error_message;
-
-	std::string m_data_dir;
-	std::string m_config_dir;
-
-	std::string m_url_file;
-	std::string m_cache_file;
-	std::string m_config_file;
-	std::string m_lock_file;
-	std::string m_queue_file;
-	std::string m_search_file;
-	std::string m_cmdline_file;
-
-	bool m_silent = false;
-	bool m_using_nonstandard_configs = false;
-
-	bool find_dirs_xdg();
-	void find_dirs();
-
-	/// Looks for Newsbeuter's XDG directories and, if found, copies their
-	/// contents to Newsboat's XDG dirs. Returns true if copied something,
-	/// false otherwise.
-	bool migrate_data_from_newsbeuter_xdg();
-
-	/// Looks for Newsbeuter's dot directory and, if found, copies its contents
-	/// to Newsboat's dotdir. Returns true if copied something, false
-	/// otherwise.
-	bool migrate_data_from_newsbeuter_dotdir();
-
-	/// Looks for Newsbeuter's directories and, if found, copies their contents
-	/// to corresponding Newsboat's directory. Returns true if copied
-	/// something, false otherwise.
-	bool migrate_data_from_newsbeuter();
+	void* rs_configpaths = nullptr;
 
 public:
 	ConfigPaths();
+
+	~ConfigPaths();
 
 	/// \brief Indicates if the object can be used.
 	///
@@ -72,16 +41,10 @@ public:
 	bool create_dirs() const;
 
 	/// Path to the URLs file.
-	std::string url_file() const
-	{
-		return m_url_file;
-	}
+	std::string url_file() const;
 
 	/// Path to the cache file.
-	std::string cache_file() const
-	{
-		return m_cache_file;
-	}
+	std::string cache_file() const;
 
 	/// Sets path to the cache file.
 	// FIXME: this is actually a kludge that lets Controller change the path
@@ -90,39 +53,24 @@ public:
 	void set_cache_file(const std::string&);
 
 	/// Path to the config file.
-	std::string config_file() const
-	{
-		return m_config_file;
-	}
+	std::string config_file() const;
 
 	/// Path to the lock file.
 	///
 	/// \note This changes when path to config file changes.
-	std::string lock_file() const
-	{
-		return m_lock_file;
-	}
+	std::string lock_file() const;
 
 	/// \brief Path to the queue file.
 	///
 	/// Queue file stores enqueued podcasts. It's written by Newsboat, and
 	/// read by Podboat.
-	std::string queue_file() const
-	{
-		return m_queue_file;
-	}
+	std::string queue_file() const;
 
 	/// Path to the file with previous search queries.
-	std::string search_file() const
-	{
-		return m_search_file;
-	}
+	std::string search_file() const;
 
 	/// Path to the file with command-line history.
-	std::string cmdline_file() const
-	{
-		return m_cmdline_file;
-	}
+	std::string cmdline_file() const;
 };
 } // namespace newsboat
 
