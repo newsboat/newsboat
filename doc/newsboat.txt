@@ -981,7 +981,7 @@ by " ") and "download error" (indicated by "x").
 |======================================================================
 Identifier:Meaning
 [[articlelist-format-a]]<<articlelist-format-a,+a+>>:Article author
-[[articlelist-format-D]]<<articlelist-format-D,+D+>>:Publication date
+[[articlelist-format-D]]<<articlelist-format-D,+D+>>:Publication date. This can be tweaked further with <<datetime-format,+datetime-format+>>
 [[articlelist-format-f]]<<articlelist-format-f,+f+>>:Article flags
 [[articlelist-format-i]]<<articlelist-format-i,+i+>>:Article index
 [[articlelist-format-t]]<<articlelist-format-t,+t+>>:Article title
