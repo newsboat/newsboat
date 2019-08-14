@@ -1049,7 +1049,8 @@ void ItemListFormAction::prepare()
 	auto itemlist_format =
 		cfg->get_configvalue("articlelist-format");
 
-	if (invalidation_mode == InvalidationMode::COMPLETE) {
+	switch (invalidation_mode) {
+	case InvalidationMode::COMPLETE:
 		listfmt.clear();
 
 		for (const auto& item : visible_items) {
@@ -1059,7 +1060,9 @@ void ItemListFormAction::prepare()
 				datetime_format);
 			listfmt.add_line(line, item.second);
 		}
-	} else if (invalidation_mode == InvalidationMode::PARTIAL) {
+		break;
+
+	case InvalidationMode::PARTIAL:
 		for (const auto& itempos : invalidated_itempos) {
 			auto item = visible_items[itempos];
 			auto line = item2formatted_line(item,
@@ -1068,10 +1071,7 @@ void ItemListFormAction::prepare()
 				datetime_format);
 			listfmt.set_line(itempos, line, item.second);
 		}
-	} else {
-		LOG(Level::ERROR,
-			"invalidation_mode is neither COMPLETE nor "
-			"PARTIAL");
+		break;
 	}
 
 	f->modify("items",
