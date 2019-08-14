@@ -120,13 +120,13 @@ void ItemListFormAction::process_operation(Operation op,
 			} else {
 				rsscache->mark_feed_items_deleted(feed->rssurl());
 			}
-			invalidate(InvalidationMode::COMPLETE);
+			invalidate_everything();
 		}
 	} break;
 	case OP_PURGE_DELETED: {
 		ScopeMeasure m1("OP_PURGE_DELETED");
 		feed->purge_deleted_items();
-		invalidate(InvalidationMode::COMPLETE);
+		invalidate_everything();
 	} break;
 	case OP_OPENBROWSER_AND_MARK: {
 		LOG(Level::INFO,
@@ -190,7 +190,7 @@ void ItemListFormAction::process_operation(Operation op,
 				"in "
 				"browser and marking read");
 			open_unread_items_in_browser(feed, true);
-			invalidate(InvalidationMode::COMPLETE);
+			invalidate_everything();
 		}
 	} break;
 	case OP_TOGGLEITEMREAD: {
@@ -506,7 +506,7 @@ void ItemListFormAction::process_operation(Operation op,
 			LOG(Level::INFO,
 				"ItemListFormAction: reloading current feed");
 			v->get_ctrl()->get_reloader()->reload(pos);
-			invalidate(InvalidationMode::COMPLETE);
+			invalidate_everything();
 		} else {
 			v->show_error(
 				_("Error: you can't reload search results."));
@@ -635,7 +635,7 @@ void ItemListFormAction::process_operation(Operation op,
 					f->set("itempos", "0");
 				}
 			}
-			invalidate(InvalidationMode::COMPLETE);
+			invalidate_everything();
 			v->set_status("");
 		} catch (const DbException& e) {
 			v->show_error(strprintf::fmt(
@@ -662,7 +662,7 @@ void ItemListFormAction::process_operation(Operation op,
 				    "show-read-articles")) {
 				f->set("itempos", "0");
 			}
-			invalidate(InvalidationMode::COMPLETE);
+			invalidate_everything();
 		}
 		v->set_status("");
 		break;
@@ -678,7 +678,7 @@ void ItemListFormAction::process_operation(Operation op,
 			apply_filter = false;
 		}
 		save_filterpos();
-		invalidate(InvalidationMode::COMPLETE);
+		invalidate_everything();
 		break;
 	case OP_PIPE_TO:
 		if (visible_items.size() != 0) {
@@ -743,8 +743,7 @@ void ItemListFormAction::process_operation(Operation op,
 						matcher.parse(FILTER_UNREAD_ITEMS);
 					} else {
 						apply_filter = true;
-						invalidate(InvalidationMode::
-								COMPLETE);
+						invalidate_everything();
 						save_filterpos();
 					}
 				}
@@ -770,7 +769,7 @@ void ItemListFormAction::process_operation(Operation op,
 		break;
 	case OP_CLEARFILTER:
 		apply_filter = false;
-		invalidate(InvalidationMode::COMPLETE);
+		invalidate_everything();
 		save_filterpos();
 		break;
 	case OP_SORT: {
@@ -835,7 +834,7 @@ void ItemListFormAction::process_operation(Operation op,
 		}
 	} break;
 	case OP_INT_RESIZE:
-		invalidate(InvalidationMode::COMPLETE);
+		invalidate_everything();
 		break;
 	default:
 		ListFormAction::process_operation(op, automatic, args);
@@ -905,7 +904,7 @@ void ItemListFormAction::qna_end_setfilter()
 		}
 
 		apply_filter = true;
-		invalidate(InvalidationMode::COMPLETE);
+		invalidate_everything();
 		save_filterpos();
 	}
 }
@@ -1010,7 +1009,7 @@ void ItemListFormAction::prepare()
 	if (sort_strategy != old_sort_strategy) {
 		feed->sort(sort_strategy);
 		old_sort_strategy = sort_strategy;
-		invalidate(InvalidationMode::COMPLETE);
+		invalidate_everything();
 	}
 
 	try {
@@ -1038,7 +1037,7 @@ void ItemListFormAction::prepare()
 	unsigned int width = utils::to_u(f->get("items:w"));
 
 	if (old_width != width) {
-		invalidate(InvalidationMode::COMPLETE);
+		invalidate_everything();
 		old_width = width;
 	}
 
@@ -1141,7 +1140,7 @@ void ItemListFormAction::init()
 	f->set("msg", "");
 	set_keymap_hints();
 	apply_filter = !(cfg->get_configvalue_as_bool("show-read-articles"));
-	invalidate(InvalidationMode::COMPLETE);
+	invalidate_everything();
 	do_update_visible_items();
 	if (cfg->get_configvalue_as_bool("goto-first-unread")) {
 		jump_to_next_unread_item(true);
@@ -1377,7 +1376,7 @@ int ItemListFormAction::get_pos(unsigned int realidx)
 void ItemListFormAction::recalculate_form()
 {
 	FormAction::recalculate_form();
-	invalidate(InvalidationMode::COMPLETE);
+	invalidate_everything();
 
 	std::string itemposname = f->get("itempos");
 	unsigned int itempos = utils::to_u(itemposname);
@@ -1492,7 +1491,7 @@ void ItemListFormAction::set_feed(std::shared_ptr<RssFeed> fd)
 		fd->title());
 	feed = fd;
 	feed->load();
-	invalidate(InvalidationMode::COMPLETE);
+	invalidate_everything();
 	do_update_visible_items();
 }
 
