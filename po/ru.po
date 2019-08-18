@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2019-05-26 15:56+0300\n"
-"PO-Revision-Date: 2018-08-03 22:54+0300\n"
+"PO-Revision-Date: 2019-08-18 15:34+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -1076,7 +1076,7 @@ msgstr "Сохранить заметку"
 
 #: src/keymap.cpp:64
 msgid "Go to next article"
-msgstr "Перейти к следующей непрочитанной заметке"
+msgstr "Перейти к следующей заметке"
 
 #: src/keymap.cpp:69
 msgid "Go to previous article"
