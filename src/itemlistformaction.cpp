@@ -197,7 +197,7 @@ void ItemListFormAction::process_operation(Operation op,
 		LOG(Level::INFO,
 			"ItemListFormAction: toggling item read at pos `%s'",
 			itemposname);
-		if (itemposname.length() > 0) {
+		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			v->set_status(_("Toggling read flag for article..."));
 			try {
 				if (automatic && args->size() > 0) {
