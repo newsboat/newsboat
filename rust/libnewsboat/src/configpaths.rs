@@ -1,5 +1,6 @@
 use cliargsparser::CliArgsParser;
 use dirs;
+use gettextrs::gettext;
 use libc;
 use logger::{self, Level};
 use std::fs::{self, DirBuilder};
@@ -59,8 +60,14 @@ impl ConfigPaths {
         if m_env_home.is_none() {
             let uid = unsafe { libc::getuid() };
 
-            // TODO: i18n
-            config_paths.m_error_message = format!("Fatal error: couldn't determine home directory!\nPlease set the HOME environment variable or add a valid user for UID {}!", uid);
+            config_paths.m_error_message = fmt!(
+                &gettext(
+                    "Fatal error: couldn't determine home directory!\n\
+                     Please set the HOME environment variable or add \
+                     a valid user for UID %u!"
+                ),
+                uid
+            );
 
             return config_paths;
         }
