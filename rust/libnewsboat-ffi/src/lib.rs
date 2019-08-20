@@ -24,13 +24,11 @@ fn abort_on_panic<F: FnOnce() -> R + UnwindSafe, R>(function: F) -> R {
 }
 
 #[no_mangle]
-pub extern "C" fn rs_cstring_free(string: *mut c_char) {
+pub unsafe extern "C" fn rs_cstring_free(string: *mut c_char) {
     abort_on_panic(|| {
-        unsafe {
-            if string.is_null() {
-                return;
-            }
-            CString::from_raw(string);
-        };
+        if string.is_null() {
+            return;
+        }
+        CString::from_raw(string);
     })
 }

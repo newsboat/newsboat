@@ -10,29 +10,27 @@ pub extern "C" fn rs_fmtstrformatter_new() -> *mut c_void {
 }
 
 #[no_mangle]
-pub extern "C" fn rs_fmtstrformatter_free(fmt: *mut c_void) {
+pub unsafe extern "C" fn rs_fmtstrformatter_free(fmt: *mut c_void) {
     abort_on_panic(|| {
         if fmt.is_null() {
             return;
         }
-        unsafe {
-            Box::from_raw(fmt as *mut FmtStrFormatter);
-        }
+        Box::from_raw(fmt as *mut FmtStrFormatter);
     })
 }
 
 #[no_mangle]
-pub extern "C" fn rs_fmtstrformatter_register_fmt(
+pub unsafe extern "C" fn rs_fmtstrformatter_register_fmt(
     fmt: *mut c_void,
     key: c_char,
     value: *const c_char,
 ) {
     abort_on_panic(|| {
-        let mut fmt = unsafe {
+        let mut fmt = {
             assert!(!fmt.is_null());
             Box::from_raw(fmt as *mut FmtStrFormatter)
         };
-        let value = unsafe {
+        let value = {
             assert!(!value.is_null());
             CStr::from_ptr(value)
         }
@@ -49,17 +47,17 @@ pub extern "C" fn rs_fmtstrformatter_register_fmt(
 }
 
 #[no_mangle]
-pub extern "C" fn rs_fmtstrformatter_do_format(
+pub unsafe extern "C" fn rs_fmtstrformatter_do_format(
     fmt: *mut c_void,
     format: *const c_char,
     width: u32,
 ) -> *mut c_char {
     abort_on_panic(|| {
-        let fmt = unsafe {
+        let fmt = {
             assert!(!fmt.is_null());
             Box::from_raw(fmt as *mut FmtStrFormatter)
         };
-        let format = unsafe {
+        let format = {
             assert!(!format.is_null());
             CStr::from_ptr(format)
         }
