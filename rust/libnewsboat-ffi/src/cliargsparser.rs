@@ -37,7 +37,7 @@ pub extern "C" fn destroy_rs_cliargsparser(object: *mut c_void) {
 
 fn with_cliargsparser<F, T>(object: *mut c_void, action: F, default: T) -> T
 where
-    F: RefUnwindSafe + Fn(&Box<CliArgsParser>) -> T,
+    F: RefUnwindSafe + Fn(&CliArgsParser) -> T,
     T: UnwindSafe,
 {
     abort_on_panic(|| {
@@ -55,7 +55,7 @@ where
 
 fn with_cliargsparser_str<F>(object: *mut c_void, action: F) -> *mut c_char
 where
-    F: RefUnwindSafe + Fn(&Box<CliArgsParser>) -> &str,
+    F: RefUnwindSafe + Fn(&CliArgsParser) -> &str,
 {
     with_cliargsparser(
         object,
@@ -66,7 +66,7 @@ where
 
 fn with_cliargsparser_opt_str<F>(object: *mut c_void, action: F) -> *mut c_char
 where
-    F: RefUnwindSafe + Fn(&Box<CliArgsParser>) -> &Option<String>,
+    F: RefUnwindSafe + Fn(&CliArgsParser) -> &Option<String>,
 {
     with_cliargsparser(
         object,
