@@ -30,7 +30,7 @@ pub extern "C" fn destroy_rs_cliargsparser(object: *mut c_void) {
             return;
         }
         unsafe {
-            Box::from_raw(object);
+            Box::from_raw(object as *mut CliArgsParser);
         }
     })
 }
