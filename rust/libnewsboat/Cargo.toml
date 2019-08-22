@@ -12,6 +12,7 @@ once_cell = "0.1.6"
 regex = "1.0"
 url = "1.7"
 dirs = "1.0.4"
+xdg = "2.2.0"
 backtrace = "= 0.3"
 unicode-width = "0.1.5"
 nom = "^4.1"
@@ -44,3 +45,4 @@ features = [ "gettext-system" ]
 [dev-dependencies]
 tempfile = "3"
 proptest = "0.7"
+section_testing = "0.0.4"

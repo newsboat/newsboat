@@ -22,5 +22,6 @@ freebsd_task:
 32bit_ubuntu_task:
     container:
         dockerfile: docker/ubuntu_18.04-i686.dockerfile
+        memory: 8GB
     build_script: make -j3 --keep-going all test
     test_script: ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"

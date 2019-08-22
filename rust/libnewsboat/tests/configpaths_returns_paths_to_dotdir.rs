@@ -1,0 +1,52 @@
+extern crate libnewsboat;
+extern crate tempfile;
+
+use self::libnewsboat::configpaths::ConfigPaths;
+use self::tempfile::TempDir;
+use std::env;
+use std::fs;
+
+#[test]
+fn t_returns_paths_to_newsboat_dotdir_if_no_newsboat_dirs_exist() {
+    let tmp = TempDir::new().unwrap();
+    let newsboat_dir = tmp.path().join(".newsboat");
+    fs::create_dir_all(&newsboat_dir).ok();
+
+    env::set_var("HOME", tmp.path());
+
+    // ConfigPaths rely on these variables, so let's sanitize them to ensure
+    // that the tests aren't affected
+    env::remove_var("XDG_CONFIG_HOME");
+    env::remove_var("XDG_DATA_HOME");
+
+    let paths = ConfigPaths::new();
+    assert!(paths.initialized());
+    assert_eq!(
+        paths.url_file(),
+        newsboat_dir.join("urls").to_str().unwrap()
+    );
+    assert_eq!(
+        paths.cache_file(),
+        newsboat_dir.join("cache.db").to_str().unwrap()
+    );
+    assert_eq!(
+        paths.lock_file(),
+        newsboat_dir.join("cache.db.lock").to_str().unwrap()
+    );
+    assert_eq!(
+        paths.config_file(),
+        newsboat_dir.join("config").to_str().unwrap()
+    );
+    assert_eq!(
+        paths.queue_file(),
+        newsboat_dir.join("queue").to_str().unwrap()
+    );
+    assert_eq!(
+        paths.search_file(),
+        newsboat_dir.join("history.search").to_str().unwrap()
+    );
+    assert_eq!(
+        paths.cmdline_file(),
+        newsboat_dir.join("history.cmdline").to_str().unwrap()
+    );
+}

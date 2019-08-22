@@ -50,7 +50,7 @@ matrix:
   include:
     - compiler: gcc
       os: osx
-      rust: 1.25.0
+      rust: 1.26.0
       env:
         - COMPILER=g++
         - GCOV=/usr/bin/gcov
@@ -114,7 +114,7 @@ matrix:
     - compiler: gcc-4.9
       os: linux
       dist: trusty
-      rust: 1.25.0
+      rust: 1.26.0
       addons:
         apt:
           sources:

@@ -23,7 +23,7 @@ newsboat can be compiled.
 
 - GCC 4.9 or newer, or Clang 3.6 or newer
 - Stable [Rust](https://www.rust-lang.org/en-US/) and Cargo (Rust's package
-    manager) (1.25.0 or newer)
+    manager) (1.26.0 or newer)
 - [STFL (version 0.21 or newer)](http://www.clifford.at/stfl/)
 - [SQLite3 (version 3.5 or newer)](http://www.sqlite.org/download.html)
 - [libcurl (version 7.21.6 or newer)](http://curl.haxx.se/download.html)
