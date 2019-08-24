@@ -51,11 +51,11 @@ impl ConfigPaths {
             data_dir: PathBuf::new(),
             config_dir: PathBuf::new(),
 
-            url_file: URLS_FILENAME.to_owned(),
-            cache_file: CACHE_FILENAME.to_owned(),
-            config_file: CONFIG_FILENAME.to_owned(),
+            url_file: String::new(),
+            cache_file: String::new(),
+            config_file: String::new(),
             lock_file: String::new(),
-            queue_file: QUEUE_FILENAME.to_owned(),
+            queue_file: String::new(),
             search_file: String::new(),
             cmdline_file: String::new(),
 
@@ -214,10 +214,6 @@ impl ConfigPaths {
 
         if migrated {
             // Re-running to pick up XDG dirs
-            self.url_file = URLS_FILENAME.into();
-            self.cache_file = CACHE_FILENAME.into();
-            self.config_file = CONFIG_FILENAME.into();
-            self.queue_file = QUEUE_FILENAME.into();
             self.find_dirs();
         } else {
             migrated = self.migrate_data_from_newsbeuter_simple();
@@ -240,29 +236,17 @@ impl ConfigPaths {
         self.find_dirs_xdg();
 
         // in config
-        self.url_file = self
-            .config_dir
-            .join(&self.url_file)
-            .to_string_lossy()
-            .into();
+        self.url_file = self.config_dir.join(URLS_FILENAME).to_string_lossy().into();
         self.config_file = self
             .config_dir
-            .join(&self.config_file)
+            .join(CONFIG_FILENAME)
             .to_string_lossy()
             .into();
 
         // in data
-        self.cache_file = self
-            .data_dir
-            .join(&self.cache_file)
-            .to_string_lossy()
-            .into();
+        self.cache_file = self.data_dir.join(CACHE_FILENAME).to_string_lossy().into();
         self.lock_file = self.cache_file.clone() + LOCK_SUFFIX;
-        self.queue_file = self
-            .data_dir
-            .join(&self.queue_file)
-            .to_string_lossy()
-            .into();
+        self.queue_file = self.data_dir.join(QUEUE_FILENAME).to_string_lossy().into();
         self.search_file = self
             .data_dir
             .join(SEARCH_HISTORY_FILENAME)
