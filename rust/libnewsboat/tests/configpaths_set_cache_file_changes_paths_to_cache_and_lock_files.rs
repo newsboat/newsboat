@@ -18,23 +18,13 @@ fn t_configpaths_set_cache_file_changes_paths_to_cache_and_lock_files() {
     let mut paths = ConfigPaths::new();
     assert!(paths.initialized());
 
-    assert_eq!(
-        paths.cache_file(),
-        newsboat_dir.join("cache.db").to_str().unwrap()
-    );
-    assert_eq!(
-        paths.lock_file(),
-        newsboat_dir.join("cache.db.lock").to_str().unwrap()
-    );
+    assert_eq!(paths.cache_file(), newsboat_dir.join("cache.db"));
+    assert_eq!(paths.lock_file(), newsboat_dir.join("cache.db.lock"));
 
     let new_cache = path::Path::new("something/entirely different.sqlite3");
-    paths.set_cache_file(new_cache.to_string_lossy().into_owned());
-    assert_eq!(paths.cache_file(), new_cache.to_str().unwrap());
+    paths.set_cache_file(new_cache.to_path_buf());
+    assert_eq!(paths.cache_file(), new_cache);
 
-    let lock_file_path = {
-        let mut path = new_cache.to_string_lossy().into_owned();
-        path.push_str(".lock");
-        path
-    };
+    let lock_file_path = path::Path::new("something/entirely different.sqlite3.lock");
     assert_eq!(paths.lock_file(), lock_file_path);
 }

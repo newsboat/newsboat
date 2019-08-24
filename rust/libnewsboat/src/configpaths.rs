@@ -30,13 +30,13 @@ pub struct ConfigPaths {
     data_dir: PathBuf,
     config_dir: PathBuf,
 
-    url_file: String,
-    cache_file: String,
-    config_file: String,
-    lock_file: String,
-    queue_file: String,
-    search_file: String,
-    cmdline_file: String,
+    url_file: PathBuf,
+    cache_file: PathBuf,
+    config_file: PathBuf,
+    lock_file: PathBuf,
+    queue_file: PathBuf,
+    search_file: PathBuf,
+    cmdline_file: PathBuf,
 
     silent: bool,
     using_nonstandard_configs: bool,
@@ -51,13 +51,13 @@ impl ConfigPaths {
             data_dir: PathBuf::new(),
             config_dir: PathBuf::new(),
 
-            url_file: String::new(),
-            cache_file: String::new(),
-            config_file: String::new(),
-            lock_file: String::new(),
-            queue_file: String::new(),
-            search_file: String::new(),
-            cmdline_file: String::new(),
+            url_file: PathBuf::new(),
+            cache_file: PathBuf::new(),
+            config_file: PathBuf::new(),
+            lock_file: PathBuf::new(),
+            queue_file: PathBuf::new(),
+            search_file: PathBuf::new(),
+            cmdline_file: PathBuf::new(),
 
             silent: false,
             using_nonstandard_configs: false,
@@ -236,27 +236,15 @@ impl ConfigPaths {
         self.find_dirs_xdg();
 
         // in config
-        self.url_file = self.config_dir.join(URLS_FILENAME).to_string_lossy().into();
-        self.config_file = self
-            .config_dir
-            .join(CONFIG_FILENAME)
-            .to_string_lossy()
-            .into();
+        self.url_file = self.config_dir.join(URLS_FILENAME);
+        self.config_file = self.config_dir.join(CONFIG_FILENAME);
 
         // in data
-        self.cache_file = self.data_dir.join(CACHE_FILENAME).to_string_lossy().into();
-        self.lock_file = self.cache_file.clone() + LOCK_SUFFIX;
-        self.queue_file = self.data_dir.join(QUEUE_FILENAME).to_string_lossy().into();
-        self.search_file = self
-            .data_dir
-            .join(SEARCH_HISTORY_FILENAME)
-            .to_string_lossy()
-            .into();
-        self.cmdline_file = self
-            .data_dir
-            .join(CMDLINE_HISTORY_FILENAME)
-            .to_string_lossy()
-            .into();
+        self.cache_file = self.data_dir.join(CACHE_FILENAME);
+        self.lock_file = self.data_dir.join(CACHE_FILENAME.to_owned() + LOCK_SUFFIX);
+        self.queue_file = self.data_dir.join(QUEUE_FILENAME);
+        self.search_file = self.data_dir.join(SEARCH_HISTORY_FILENAME);
+        self.cmdline_file = self.data_dir.join(CMDLINE_HISTORY_FILENAME);
     }
 
     fn find_dirs_xdg(&mut self) {
@@ -297,19 +285,19 @@ impl ConfigPaths {
     /// Initializes paths to config, cache etc. from CLI arguments.
     pub fn process_args(&mut self, args: &CliArgsParser) {
         if let Some(ref url_file) = args.url_file {
-            self.url_file = url_file.to_string();
+            self.url_file = Path::new(url_file).to_owned();
         }
 
         if let Some(ref cache_file) = args.cache_file {
-            self.cache_file = cache_file.to_string();
+            self.cache_file = Path::new(cache_file).to_owned();
         }
 
         if let Some(ref lock_file) = args.lock_file {
-            self.lock_file = lock_file.to_string();
+            self.lock_file = Path::new(lock_file).to_owned();
         }
 
         if let Some(ref config_file) = args.config_file {
-            self.config_file = config_file.to_string();
+            self.config_file = Path::new(config_file).to_owned();
         }
 
         self.silent = args.silent;
@@ -319,7 +307,7 @@ impl ConfigPaths {
     /// Migrate configs and data from Newsbeuter if they exist. Return `true` if migrated
     /// something, `false` otherwise.
     pub fn try_migrate_from_newsbeuter(&mut self) -> bool {
-        if !self.using_nonstandard_configs && !Path::new(&self.url_file).exists() {
+        if !self.using_nonstandard_configs && !&self.url_file.exists() {
             return self.migrate_data_from_newsbeuter();
         }
 
@@ -328,51 +316,58 @@ impl ConfigPaths {
     }
 
     /// Path to the URLs file.
-    pub fn url_file(&self) -> String {
-        self.url_file.clone()
+    pub fn url_file(&self) -> &Path {
+        &self.url_file
     }
 
     /// Path to the cache file.
-    pub fn cache_file(&self) -> String {
-        self.cache_file.clone()
+    pub fn cache_file(&self) -> &Path {
+        &self.cache_file
     }
 
     /// Sets path to the cache file.
     // FIXME: this is actually a kludge that lets Controller change the path
     // midway. That logic should be moved into ConfigPaths, and this method
     // removed.
-    pub fn set_cache_file(&mut self, path: String) {
+    pub fn set_cache_file(&mut self, mut path: PathBuf) {
         self.cache_file = path.clone();
-        self.lock_file = path + LOCK_SUFFIX;
+        self.lock_file = {
+            let current_extension = path
+                .extension()
+                .and_then(|p| Some(p.to_string_lossy().into_owned()))
+                .unwrap_or_else(|| String::new());
+            path.set_extension(current_extension + LOCK_SUFFIX);
+            path
+        };
     }
 
     /// Path to the config file.
-    pub fn config_file(&self) -> String {
-        self.config_file.clone()
+    pub fn config_file(&self) -> &Path {
+        &self.config_file
     }
 
     /// Path to the lock file.
     ///
     /// \note This changes when path to config file changes.
-    pub fn lock_file(&self) -> String {
-        self.lock_file.clone()
+    pub fn lock_file(&self) -> &Path {
+        &self.lock_file
     }
 
     /// \brief Path to the queue file.
     ///
     /// Queue file stores enqueued podcasts. It's written by Newsboat, and read by Podboat.
-    pub fn queue_file(&self) -> String {
-        self.queue_file.clone()
+    pub fn queue_file(&self) -> &Path {
+        &self.queue_file
     }
 
     /// Path to the file with previous search queries.
-    pub fn search_file(&self) -> String {
-        self.search_file.clone()
+    pub fn search_file(&self) -> &Path {
+        &self.search_file
     }
 
     /// Path to the file with command-line history.
-    pub fn cmdline_file(&self) -> String {
-        self.cmdline_file.clone()
+    pub fn cmdline_file(&self) -> &Path {
+        &self.cmdline_file
     }
 }
 

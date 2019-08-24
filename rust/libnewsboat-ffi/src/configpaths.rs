@@ -5,6 +5,7 @@ use libnewsboat::configpaths::ConfigPaths;
 use std::ffi::{CStr, CString};
 use std::mem;
 use std::panic::{RefUnwindSafe, UnwindSafe};
+use std::path::Path;
 use std::ptr;
 
 #[no_mangle]
@@ -53,6 +54,13 @@ where
     )
 }
 
+unsafe fn with_configpaths_path<F>(object: *mut c_void, action: F) -> *mut c_char
+where
+    F: RefUnwindSafe + Fn(&mut ConfigPaths) -> &Path,
+{
+    with_configpaths_string(object, |o| action(o).to_string_lossy().into_owned())
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn rs_configpaths_initialized(object: *mut c_void) -> bool {
     with_configpaths(object, |o| o.initialized(), false)
@@ -94,12 +102,12 @@ pub unsafe extern "C" fn rs_configpaths_create_dirs(object: *mut c_void) -> bool
 
 #[no_mangle]
 pub unsafe extern "C" fn rs_configpaths_url_file(object: *mut c_void) -> *mut c_char {
-    with_configpaths_string(object, |o| o.url_file())
+    with_configpaths_path(object, |o| o.url_file())
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn rs_configpaths_cache_file(object: *mut c_void) -> *mut c_char {
-    with_configpaths_string(object, |o| o.cache_file())
+    with_configpaths_path(object, |o| o.cache_file())
 }
 
 #[no_mangle]
@@ -114,31 +122,35 @@ pub unsafe extern "C" fn rs_configpaths_set_cache_file(
         }
         .to_string_lossy()
         .into_owned();
-        with_configpaths(object, |o| o.set_cache_file(path.to_owned()), ())
+        with_configpaths(
+            object,
+            |o| o.set_cache_file(Path::new(&path).to_owned()),
+            (),
+        )
     })
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn rs_configpaths_config_file(object: *mut c_void) -> *mut c_char {
-    with_configpaths_string(object, |o| o.config_file())
+    with_configpaths_path(object, |o| o.config_file())
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn rs_configpaths_lock_file(object: *mut c_void) -> *mut c_char {
-    with_configpaths_string(object, |o| o.lock_file())
+    with_configpaths_path(object, |o| o.lock_file())
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn rs_configpaths_queue_file(object: *mut c_void) -> *mut c_char {
-    with_configpaths_string(object, |o| o.queue_file())
+    with_configpaths_path(object, |o| o.queue_file())
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn rs_configpaths_search_file(object: *mut c_void) -> *mut c_char {
-    with_configpaths_string(object, |o| o.search_file())
+    with_configpaths_path(object, |o| o.search_file())
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn rs_configpaths_cmdline_file(object: *mut c_void) -> *mut c_char {
-    with_configpaths_string(object, |o| o.cmdline_file())
+    with_configpaths_path(object, |o| o.cmdline_file())
 }
