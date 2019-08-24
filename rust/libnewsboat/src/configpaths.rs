@@ -15,6 +15,13 @@ pub const NEWSBEUTER_SUBDIR_XDG: &str = "newsbeuter";
 pub const NEWSBEUTER_CONFIG_SUBDIR: &str = ".newsbeuter";
 pub const LOCK_SUFFIX: &str = ".lock";
 
+const URLS_FILENAME: &str = "urls";
+const CACHE_FILENAME: &str = "cache.db";
+const CONFIG_FILENAME: &str = "config";
+const QUEUE_FILENAME: &str = "queue";
+const SEARCH_HISTORY_FILENAME: &str = "history.search";
+const CMDLINE_HISTORY_FILENAME: &str = "history.cmdline";
+
 #[derive(Debug)]
 pub struct ConfigPaths {
     env_home: PathBuf,
@@ -44,11 +51,11 @@ impl ConfigPaths {
             data_dir: PathBuf::new(),
             config_dir: PathBuf::new(),
 
-            url_file: String::from("urls"),
-            cache_file: String::from("cache.db"),
-            config_file: String::from("config"),
+            url_file: URLS_FILENAME.to_owned(),
+            cache_file: CACHE_FILENAME.to_owned(),
+            config_file: CONFIG_FILENAME.to_owned(),
             lock_file: String::new(),
-            queue_file: String::from("queue"),
+            queue_file: QUEUE_FILENAME.to_owned(),
             search_file: String::new(),
             cmdline_file: String::new(),
 
@@ -135,14 +142,22 @@ impl ConfigPaths {
         // We ignore the return codes because it's okay if some files are missing.
 
         // in config
-        let _ = migrate_file(&newsbeuter_config_dir, &self.config_dir, "urls");
-        let _ = migrate_file(&newsbeuter_config_dir, &self.config_dir, "config");
+        let _ = migrate_file(&newsbeuter_config_dir, &self.config_dir, URLS_FILENAME);
+        let _ = migrate_file(&newsbeuter_config_dir, &self.config_dir, CONFIG_FILENAME);
 
         // in data
-        let _ = migrate_file(&newsbeuter_data_dir, &self.data_dir, "cache.db");
-        let _ = migrate_file(&newsbeuter_data_dir, &self.data_dir, "queue");
-        let _ = migrate_file(&newsbeuter_data_dir, &self.data_dir, "history.search");
-        let _ = migrate_file(&newsbeuter_data_dir, &self.data_dir, "history.cmdline");
+        let _ = migrate_file(&newsbeuter_data_dir, &self.data_dir, CACHE_FILENAME);
+        let _ = migrate_file(&newsbeuter_data_dir, &self.data_dir, QUEUE_FILENAME);
+        let _ = migrate_file(
+            &newsbeuter_data_dir,
+            &self.data_dir,
+            SEARCH_HISTORY_FILENAME,
+        );
+        let _ = migrate_file(
+            &newsbeuter_data_dir,
+            &self.data_dir,
+            CMDLINE_HISTORY_FILENAME,
+        );
 
         return true;
     }
@@ -184,12 +199,12 @@ impl ConfigPaths {
         };
 
         // We ignore the return codes because it's okay if some files are missing.
-        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, "urls");
-        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, "cache.db");
-        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, "config");
-        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, "queue");
-        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, "history.search");
-        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, "history.cmdline");
+        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, URLS_FILENAME);
+        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, CACHE_FILENAME);
+        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, CONFIG_FILENAME);
+        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, QUEUE_FILENAME);
+        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, SEARCH_HISTORY_FILENAME);
+        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, CMDLINE_HISTORY_FILENAME);
 
         return true;
     }
@@ -199,10 +214,10 @@ impl ConfigPaths {
 
         if migrated {
             // Re-running to pick up XDG dirs
-            self.url_file = "urls".into();
-            self.cache_file = "cache.db".into();
-            self.config_file = "config".into();
-            self.queue_file = "queue".into();
+            self.url_file = URLS_FILENAME.into();
+            self.cache_file = CACHE_FILENAME.into();
+            self.config_file = CONFIG_FILENAME.into();
+            self.queue_file = QUEUE_FILENAME.into();
             self.find_dirs();
         } else {
             migrated = self.migrate_data_from_newsbeuter_simple();
@@ -250,12 +265,12 @@ impl ConfigPaths {
             .into();
         self.search_file = self
             .data_dir
-            .join("history.search")
+            .join(SEARCH_HISTORY_FILENAME)
             .to_string_lossy()
             .into();
         self.cmdline_file = self
             .data_dir
-            .join("history.cmdline")
+            .join(CMDLINE_HISTORY_FILENAME)
             .to_string_lossy()
             .into();
     }
