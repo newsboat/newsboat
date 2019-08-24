@@ -69,8 +69,6 @@ void FeedListFormAction::init()
 	 * DownloadThreads.
 	 */
 	v->get_ctrl()->get_reloader()->spawn_reloadthread();
-
-	apply_filter = !(cfg->get_configvalue_as_bool("show-read-feeds"));
 }
 
 FeedListFormAction::~FeedListFormAction() {}
@@ -303,7 +301,7 @@ REDO:
 				v->get_ctrl()->mark_all_read(pos);
 				do_redraw = true;
 				v->set_status("");
-				if (feeds_shown > (pos + 1) && !apply_filter) {
+				if (feeds_shown > (pos + 1) && !is_filtered()) {
 					f->set("feedpos",
 						std::to_string(pos + 1));
 				}
@@ -323,10 +321,8 @@ REDO:
 			"FeedListFormAction: toggling show-read-feeds");
 		if (cfg->get_configvalue_as_bool("show-read-feeds")) {
 			cfg->set_configvalue("show-read-feeds", "no");
-			apply_filter = true;
 		} else {
 			cfg->set_configvalue("show-read-feeds", "yes");
-			apply_filter = false;
 		}
 		save_filterpos();
 		do_redraw = true;
@@ -453,8 +449,7 @@ REDO:
 		}
 		break;
 	case OP_CLEARFILTER:
-		apply_filter =
-			!(cfg->get_configvalue_as_bool("show-read-feeds"));
+		apply_filter = false;
 		m.parse(FILTER_UNREAD_FEEDS);
 		do_redraw = true;
 		save_filterpos();
@@ -517,7 +512,7 @@ void FeedListFormAction::update_visible_feeds(
 	for (const auto& feed : feeds) {
 		feed->set_index(i + 1);
 		if ((tag == "" || feed->matches_tag(tag)) &&
-			(!apply_filter || m.matches(feed.get())) &&
+			(!is_filtered() || m.matches(feed.get())) &&
 			!feed->hidden()) {
 			visible_feeds.push_back(FeedPtrPosPair(feed, i));
 		}

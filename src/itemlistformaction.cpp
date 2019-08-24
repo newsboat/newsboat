@@ -672,10 +672,8 @@ void ItemListFormAction::process_operation(Operation op,
 			"ItemListFormAction: toggling show-read-articles");
 		if (cfg->get_configvalue_as_bool("show-read-articles")) {
 			cfg->set_configvalue("show-read-articles", "no");
-			apply_filter = true;
 		} else {
 			cfg->set_configvalue("show-read-articles", "yes");
-			apply_filter = false;
 		}
 		save_filterpos();
 		invalidate_everything();
@@ -988,7 +986,7 @@ void ItemListFormAction::do_update_visible_items()
 	unsigned int i = 0;
 	for (const auto& item : items) {
 		item->set_index(i + 1);
-		if (!apply_filter || matcher.matches(item.get())) {
+		if (!is_filtered() || matcher.matches(item.get())) {
 			new_visible_items.push_back(ItemPtrPosPair(item, i));
 		}
 		i++;
@@ -1139,7 +1137,6 @@ void ItemListFormAction::init()
 	f->set("itempos", "0");
 	f->set("msg", "");
 	set_keymap_hints();
-	apply_filter = !(cfg->get_configvalue_as_bool("show-read-articles"));
 	invalidate_everything();
 	do_update_visible_items();
 	if (cfg->get_configvalue_as_bool("goto-first-unread")) {

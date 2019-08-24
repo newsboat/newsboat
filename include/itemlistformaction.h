@@ -29,9 +29,12 @@ public:
 	void set_redraw(bool b) override
 	{
 		FormAction::set_redraw(b);
-		apply_filter = !(v->get_cfg()->get_configvalue_as_bool(
-			"show-read-articles"));
 		invalidate_everything();
+	}
+
+	bool is_filtered() {
+		return apply_filter ||
+		       !v->get_cfg()->get_configvalue_as_bool("show-read-articles");
 	}
 
 	void set_feed(std::shared_ptr<RssFeed> fd);
