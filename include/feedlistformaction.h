@@ -27,13 +27,6 @@ public:
 	KeyMapHintEntry* get_keymap_hint() override;
 	std::shared_ptr<RssFeed> get_feed();
 
-	void set_redraw(bool b) override
-	{
-		FormAction::set_redraw(b);
-		apply_filter =
-			!(cfg->get_configvalue_as_bool("show-read-feeds"));
-	}
-
 	std::string id() const override
 	{
 		return "feedlist";
