@@ -19,8 +19,6 @@
 #include "utils.h"
 #include "view.h"
 
-#define FILTER_UNREAD_ITEMS "unread != \"no\""
-
 namespace newsboat {
 
 ItemListFormAction::ItemListFormAction(View* vv,
@@ -44,7 +42,6 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	, rsscache(cc)
 	, filters(f)
 {
-	assert(true == matcher.parse(FILTER_UNREAD_ITEMS));
 	search_dummy_feed->set_search_feed(true);
 }
 
@@ -667,15 +664,12 @@ void ItemListFormAction::process_operation(Operation op,
 		v->set_status("");
 		break;
 	case OP_TOGGLESHOWREAD:
-		matcher.parse(FILTER_UNREAD_ITEMS);
 		LOG(Level::DEBUG,
 			"ItemListFormAction: toggling show-read-articles");
 		if (cfg->get_configvalue_as_bool("show-read-articles")) {
 			cfg->set_configvalue("show-read-articles", "no");
-			apply_filter = true;
 		} else {
 			cfg->set_configvalue("show-read-articles", "yes");
-			apply_filter = false;
 		}
 		save_filterpos();
 		invalidate_everything();
@@ -740,7 +734,6 @@ void ItemListFormAction::process_operation(Operation op,
 							  "command `%s': %s"),
 							newfilter,
 							matcher.get_parse_error()));
-						matcher.parse(FILTER_UNREAD_ITEMS);
 					} else {
 						apply_filter = true;
 						invalidate_everything();
@@ -985,10 +978,13 @@ void ItemListFormAction::do_update_visible_items()
 	 * (if applicable) whether an items matches the currently active filter.
 	 */
 
+	bool show_read = cfg->get_configvalue_as_bool("show-read-articles");
+
 	unsigned int i = 0;
 	for (const auto& item : items) {
 		item->set_index(i + 1);
-		if (!apply_filter || matcher.matches(item.get())) {
+		if ((show_read || item->unread()) &&
+		    (!apply_filter || matcher.matches(item.get()))) {
 			new_visible_items.push_back(ItemPtrPosPair(item, i));
 		}
 		i++;
@@ -1139,7 +1135,6 @@ void ItemListFormAction::init()
 	f->set("itempos", "0");
 	f->set("msg", "");
 	set_keymap_hints();
-	apply_filter = !(cfg->get_configvalue_as_bool("show-read-articles"));
 	invalidate_everything();
 	do_update_visible_items();
 	if (cfg->get_configvalue_as_bool("goto-first-unread")) {
