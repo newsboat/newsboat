@@ -20,8 +20,6 @@
 #include "utils.h"
 #include "view.h"
 
-#define FILTER_UNREAD_FEEDS "unread_count != \"0\""
-
 namespace newsboat {
 
 FeedListFormAction::FeedListFormAction(View* vv,
@@ -43,7 +41,6 @@ FeedListFormAction::FeedListFormAction(View* vv,
 	, total_feeds(0)
 	, filters(f)
 {
-	assert(true == m.parse(FILTER_UNREAD_FEEDS));
 	valid_cmds.push_back("tag");
 	valid_cmds.push_back("goto");
 	std::sort(valid_cmds.begin(), valid_cmds.end());
@@ -316,7 +313,6 @@ REDO:
 		}
 	} break;
 	case OP_TOGGLESHOWREAD:
-		m.parse(FILTER_UNREAD_FEEDS);
 		LOG(Level::INFO,
 			"FeedListFormAction: toggling show-read-feeds");
 		if (cfg->get_configvalue_as_bool("show-read-feeds")) {
@@ -420,7 +416,6 @@ REDO:
 							  "command `%s': %s"),
 							newfilter,
 							m.get_parse_error()));
-						m.parse(FILTER_UNREAD_FEEDS);
 					} else {
 						save_filterpos();
 						apply_filter = true;
@@ -450,7 +445,6 @@ REDO:
 		break;
 	case OP_CLEARFILTER:
 		apply_filter = false;
-		m.parse(FILTER_UNREAD_FEEDS);
 		do_redraw = true;
 		save_filterpos();
 		break;
@@ -507,11 +501,13 @@ void FeedListFormAction::update_visible_feeds(
 
 	visible_feeds.clear();
 
-	unsigned int i = 0;
+	bool show_read = cfg->get_configvalue_as_bool("show-read-feeds");
 
+	unsigned int i = 0;
 	for (const auto& feed : feeds) {
 		feed->set_index(i + 1);
 		if ((tag == "" || feed->matches_tag(tag)) &&
+			(show_read || feed->unread_item_count() > 0) &&
 			(!is_filtered() || m.matches(feed.get())) &&
 			!feed->hidden()) {
 			visible_feeds.push_back(FeedPtrPosPair(feed, i));
@@ -891,7 +887,6 @@ void FeedListFormAction::op_end_setfilter()
 		if (!m.parse(filtertext)) {
 			v->show_error(
 				_("Error: couldn't parse filter command!"));
-			m.parse(FILTER_UNREAD_FEEDS);
 		} else {
 			save_filterpos();
 			apply_filter = true;
