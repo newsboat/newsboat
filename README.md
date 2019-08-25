@@ -39,6 +39,9 @@ newsboat can be compiled.
 - DocBook XML
 - DocBook XSL
 
+Developers will also need [`xtr`](https://github.com/woboq/tr) (can be installed
+with `cargo install xtr`).
+
 Installation
 ------------
 
