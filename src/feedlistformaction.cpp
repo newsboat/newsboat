@@ -298,7 +298,8 @@ REDO:
 				v->get_ctrl()->mark_all_read(pos);
 				do_redraw = true;
 				v->set_status("");
-				if (feeds_shown > (pos + 1) && !is_filtered()) {
+				bool show_read = cfg->get_configvalue_as_bool("show-read-feeds");
+				if (feeds_shown > (pos + 1) && show_read) {
 					f->set("feedpos",
 						std::to_string(pos + 1));
 				}
@@ -508,7 +509,7 @@ void FeedListFormAction::update_visible_feeds(
 		feed->set_index(i + 1);
 		if ((tag == "" || feed->matches_tag(tag)) &&
 			(show_read || feed->unread_item_count() > 0) &&
-			(!is_filtered() || m.matches(feed.get())) &&
+			(!apply_filter || m.matches(feed.get())) &&
 			!feed->hidden()) {
 			visible_feeds.push_back(FeedPtrPosPair(feed, i));
 		}

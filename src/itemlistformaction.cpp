@@ -984,7 +984,7 @@ void ItemListFormAction::do_update_visible_items()
 	for (const auto& item : items) {
 		item->set_index(i + 1);
 		if ((show_read || item->unread()) &&
-		    (!is_filtered() || matcher.matches(item.get()))) {
+		    (!apply_filter || matcher.matches(item.get()))) {
 			new_visible_items.push_back(ItemPtrPosPair(item, i));
 		}
 		i++;
