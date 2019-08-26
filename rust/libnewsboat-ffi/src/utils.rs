@@ -319,9 +319,9 @@ pub extern "C" fn rs_is_valid_color(input: *const c_char) -> bool {
 }
 
 #[no_mangle]
-pub extern "C" fn rs_get_basename(input: *const c_char) -> *mut c_char {
+pub unsafe extern "C" fn rs_get_basename(input: *const c_char) -> *mut c_char {
     abort_on_panic(|| {
-        let rs_input = unsafe { CStr::from_ptr(input) };
+        let rs_input = CStr::from_ptr(input);
         let rs_input = rs_input.to_string_lossy();
         let output = utils::get_basename(&rs_input);
         let result = CString::new(output).unwrap();
