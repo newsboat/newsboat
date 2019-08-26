@@ -39,6 +39,8 @@
 #include "globals.h"
 #include "inoreaderapi.h"
 #include "inoreaderurlreader.h"
+#include "feedlyapi.h"
+#include "feedlyurlreader.h"
 #include "itemrenderer.h"
 #include "logger.h"
 #include "newsblurapi.h"
@@ -292,6 +294,9 @@ int Controller::run(const CliArgsParser& args)
 		api = new InoreaderApi(&cfg);
 		urlcfg = new InoreaderUrlReader(
 			&cfg, configpaths.url_file(), api);
+	} else if (type == "feedly") {
+		api = new FeedlyApi(&cfg);
+		urlcfg = new FeedlyUrlReader(&cfg, configpaths.url_file(), api);
 	} else {
 		std::cerr << strprintf::fmt(_("ERROR: Unknown urls-source `%s'"),
 				type) << std::endl;
@@ -347,6 +352,11 @@ int Controller::run(const CliArgsParser& args)
 			msg = strprintf::fmt(
 					_("It looks like you haven't configured any "
 						"feeds in your Inoreader account. Please do "
+						"so, and try again."));
+		} else if (type == "feedly") {
+			msg = strprintf::fmt(
+					_("It looks like you haven't configured any "
+						"feeds in your Feedly account. Please do "
 						"so, and try again."));
 		} else {
 			assert(0); // shouldn't happen

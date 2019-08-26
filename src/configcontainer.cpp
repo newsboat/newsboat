@@ -126,6 +126,8 @@ ConfigContainer::ConfigContainer()
 	{"max-download-speed", ConfigData("0", ConfigDataType::INT)},
 	{"max-downloads", ConfigData("1", ConfigDataType::INT)},
 	{"max-items", ConfigData("0", ConfigDataType::INT)},
+	{"feedly-access-token", ConfigData("", ConfigDataType::STR)},
+	{"feedly-flag-star", ConfigData("", ConfigDataType::STR)},
 	{"newsblur-login", ConfigData("", ConfigDataType::STR)},
 	{"newsblur-min-items", ConfigData("20", ConfigDataType::INT)},
 	{"newsblur-password", ConfigData("", ConfigDataType::STR)},
