@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2019-08-25 11:25+0300\n"
-"PO-Revision-Date: 2019-08-25 16:47+0200\n"
+"PO-Revision-Date: 2019-08-26 12:12+0200\n"
 "Last-Translator: Leandro Noferini <leandro@noferini.org>\n"
 "Language-Team: Claudio M. Alessi <somppy@gmail.com>\n"
 "Language: it\n"
@@ -307,7 +307,7 @@ msgstr "Errore: apertura del file cache `%s' fallita: %s"
 
 #: src/controller.cpp:279
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
-msgstr ""
+msgstr "ERRORE: Devi impostare `cookie-cache` per usare NewsBlur.\n"
 
 #: src/controller.cpp:287
 #, c-format
@@ -467,7 +467,7 @@ msgstr "Posizione non valida!"
 
 #: src/dirbrowserformaction.cpp:236
 msgid "Directory: "
-msgstr ""
+msgstr "Directory: "
 
 #: src/dirbrowserformaction.cpp:260
 #, c-format
@@ -625,7 +625,7 @@ msgstr "Filtro: "
 
 #: src/feedlistformaction.cpp:486 src/view.cpp:229
 msgid "Do you really want to quit (y:Yes n:No)? "
-msgstr "Vuoi veramente uscire (s:Si n:No)?"
+msgstr "Vuoi veramente uscire (s:Sì n:No)?"
 
 #: src/feedlistformaction.cpp:487 src/filebrowserformaction.cpp:137
 #: src/itemlistformaction.cpp:400 src/view.cpp:231
@@ -707,7 +707,7 @@ msgstr "Lista feed - %u non letti, %u totali"
 #: src/filebrowserformaction.cpp:132
 #, c-format
 msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
-msgstr "Vuoi veramente sovrascrivere `%s' (s:Si n:No)? "
+msgstr "Vuoi veramente sovrascrivere `%s' (s:Sì n:No)? "
 
 #: src/filebrowserformaction.cpp:137
 msgid "n"
@@ -867,25 +867,25 @@ msgstr "Errore: nessuna voce selezionata!"
 #: src/itemlistformaction.cpp:402
 #, c-format
 msgid "Overwrite `%s' in `%s?' (y:Yes n:No)"
-msgstr ""
+msgstr "Sovrascrivere `%s` in `%s`? (s:Sì n:No)"
 
 #: src/itemlistformaction.cpp:453
 msgid "yanq"
-msgstr ""
+msgstr "sanq"
 
 #: src/itemlistformaction.cpp:457
 #, c-format
 msgid ""
 "Overwrite `%s' in `%s'? There are %d more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
-msgstr ""
+msgstr "Sovrascrivere `%s` in `%s`? Ci sono ancora %d conflitti come il presente (s:Sì a:Sì a tutti n:No q:No a tutti)"
 
 #: src/itemlistformaction.cpp:464
 #, c-format
 msgid ""
 "Overwrite `%s' in `%s'? There are no more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
-msgstr ""
+msgstr "Sovrascrivere `%s` in `%s`? Non ci sono altri conflitti come il presente (s:Sì a:Sì a tutti n:No q:No a tutti)"
 
 #: src/itemlistformaction.cpp:512
 msgid "Error: you can't reload search results."
@@ -1104,7 +1104,6 @@ msgid "Save article"
 msgstr "Salva articolo"
 
 #: src/keymap.cpp:61
-#,
 msgid "Save articles"
 msgstr "Salva articolo"
 
