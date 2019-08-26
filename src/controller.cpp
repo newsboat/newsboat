@@ -292,8 +292,7 @@ int Controller::run(const CliArgsParser& args)
 		urlcfg = new OcNewsUrlReader(configpaths.url_file(), api);
 	} else if (type == "inoreader") {
 		api = new InoreaderApi(&cfg);
-		urlcfg = new InoreaderUrlReader(
-			&cfg, configpaths.url_file(), api);
+		urlcfg = new InoreaderUrlReader(&cfg, configpaths.url_file(), api);
 	} else if (type == "feedly") {
 		api = new FeedlyApi(&cfg);
 		urlcfg = new FeedlyUrlReader(&cfg, configpaths.url_file(), api);
