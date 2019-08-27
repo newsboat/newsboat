@@ -319,6 +319,17 @@ pub extern "C" fn rs_is_valid_color(input: *const c_char) -> bool {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn rs_get_basename(input: *const c_char) -> *mut c_char {
+    abort_on_panic(|| {
+        let rs_input = CStr::from_ptr(input);
+        let rs_input = rs_input.to_string_lossy();
+        let output = utils::get_basename(&rs_input);
+        let result = CString::new(output).unwrap();
+        result.into_raw()
+    })
+}
+
+#[no_mangle]
 pub extern "C" fn rs_is_valid_attribute(attribute: *const c_char) -> bool {
     abort_on_panic(|| {
         let rs_attribute = unsafe { CStr::from_ptr(attribute) };

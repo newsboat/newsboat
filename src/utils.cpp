@@ -13,7 +13,6 @@
 #include <fcntl.h>
 #include <iconv.h>
 #include <langinfo.h>
-#include <libgen.h>
 #include <libxml/uri.h>
 #include <locale>
 #include <mutex>
@@ -881,23 +880,7 @@ std::string utils::get_content(xmlNode* node)
 
 std::string utils::get_basename(const std::string& url)
 {
-	std::string retval;
-	xmlURIPtr uri = xmlParseURI(url.c_str());
-	if (uri && uri->path) {
-		std::string path(uri->path);
-		// check for path ending with an empty filename
-		if (path[path.length() - 1] != '/') {
-			char* base = basename(uri->path);
-			if (base) {
-				// check for empty path
-				if (base[0] != '/') {
-					retval = std::string(base);
-				}
-			}
-		}
-		xmlFreeURI(uri);
-	}
-	return retval;
+	return RustString(rs_get_basename(url.c_str()));
 }
 
 unsigned long utils::get_auth_method(const std::string& type)

@@ -68,6 +68,8 @@ bool rs_is_valid_podcast_type(const char* mimetype);
 
 char* rs_get_command_output(const char* str);
 
+char* rs_get_basename(const char* str);
+
 void rs_run_command(const char* command, const char* param);
 
 char* rs_run_program(char* argv[], const char* input);

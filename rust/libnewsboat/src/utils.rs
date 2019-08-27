@@ -199,6 +199,25 @@ pub fn censor_url(url: &str) -> String {
     }
 }
 
+/// Get basename from a URL if available else return an empty string
+/// ```
+/// use libnewsboat::utils::get_basename;
+/// assert_eq!(get_basename("https://example.com/"), "");
+/// assert_eq!(get_basename("https://example.org/?param=value#fragment"), "");
+/// assert_eq!(get_basename("https://example.org/path/to/?param=value#fragment"), "");
+/// assert_eq!(get_basename("https://example.org/file.mp3"), "file.mp3");
+/// assert_eq!(get_basename("https://example.org/path/to/file.mp3?param=value#fragment"), "file.mp3");
+/// ```
+pub fn get_basename(input: &str) -> String {
+    match Url::parse(input) {
+        Ok(url) => match url.path_segments() {
+            Some(segments) => segments.last().unwrap().to_string(),
+            None => String::from(""),
+        },
+        Err(_) => String::from(""),
+    }
+}
+
 pub fn get_default_browser() -> String {
     use std::env;
     env::var("BROWSER").unwrap_or_else(|_| "lynx".to_string())
