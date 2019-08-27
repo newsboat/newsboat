@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2019-08-25 11:25+0300\n"
-"PO-Revision-Date: 2019-08-26 12:12+0200\n"
+"PO-Revision-Date: 2019-08-26 23:02+0200\n"
 "Last-Translator: Leandro Noferini <leandro@noferini.org>\n"
 "Language-Team: Claudio M. Alessi <somppy@gmail.com>\n"
 "Language: it\n"
@@ -135,7 +135,7 @@ msgstr ""
 msgid ""
 "It bundles an alphanum algorithm implementation licensed under the MIT "
 "license: http://www.davekoelle.com/alphanum.html"
-msgstr ""
+msgstr "Include l'implementazione dell'algoritmo alphanum, sotto licenza MIT: http://www.davekoelle.com/alphanum.html"
 
 #: newsboat.cpp:192
 #, c-format
