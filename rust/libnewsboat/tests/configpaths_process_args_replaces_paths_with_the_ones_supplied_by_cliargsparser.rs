@@ -2,6 +2,7 @@ extern crate libnewsboat;
 
 use self::libnewsboat::{cliargsparser::CliArgsParser, configpaths::ConfigPaths};
 use std::env;
+use std::path::Path;
 
 #[test]
 fn t_configpaths_process_args_replaces_paths_with_the_ones_supplied_by_cliargsparser() {
@@ -11,19 +12,19 @@ fn t_configpaths_process_args_replaces_paths_with_the_ones_supplied_by_cliargspa
     env::remove_var("XDG_CONFIG_HOME");
     env::remove_var("XDG_DATA_HOME");
 
-    let url_file = "my urls file".to_string();
-    let cache_file = "/path/to/cache file.db".to_string();
-    let lock_file = cache_file.clone() + &".lock";
-    let config_file = "this is a/config".to_string();
+    let url_file = Path::new("my urls file");
+    let cache_file = Path::new("/path/to/cache file.db");
+    let lock_file = Path::new("/path/to/cache file.db.lock");
+    let config_file = Path::new("this is a/config");
 
     let parser = CliArgsParser::new(vec![
         "newsboat".to_string(),
         "-u".to_string(),
-        url_file.clone(),
+        url_file.to_string_lossy().into_owned(),
         "-c".to_string(),
-        cache_file.clone(),
+        cache_file.to_string_lossy().into_owned(),
         "-C".to_string(),
-        config_file.clone(),
+        config_file.to_string_lossy().into_owned(),
         "-q".to_string(),
     ]);
 

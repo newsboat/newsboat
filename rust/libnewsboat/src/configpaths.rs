@@ -15,52 +15,59 @@ pub const NEWSBEUTER_SUBDIR_XDG: &str = "newsbeuter";
 pub const NEWSBEUTER_CONFIG_SUBDIR: &str = ".newsbeuter";
 pub const LOCK_SUFFIX: &str = ".lock";
 
+const URLS_FILENAME: &str = "urls";
+const CACHE_FILENAME: &str = "cache.db";
+const CONFIG_FILENAME: &str = "config";
+const QUEUE_FILENAME: &str = "queue";
+const SEARCH_HISTORY_FILENAME: &str = "history.search";
+const CMDLINE_HISTORY_FILENAME: &str = "history.cmdline";
+
 #[derive(Debug)]
 pub struct ConfigPaths {
-    m_env_home: PathBuf,
-    m_error_message: String,
+    env_home: PathBuf,
+    error_message: String,
 
-    m_data_dir: PathBuf,
-    m_config_dir: PathBuf,
+    data_dir: PathBuf,
+    config_dir: PathBuf,
 
-    m_url_file: String,
-    m_cache_file: String,
-    m_config_file: String,
-    m_lock_file: String,
-    m_queue_file: String,
-    m_search_file: String,
-    m_cmdline_file: String,
+    url_file: PathBuf,
+    cache_file: PathBuf,
+    config_file: PathBuf,
+    lock_file: PathBuf,
+    queue_file: PathBuf,
+    search_file: PathBuf,
+    cmdline_file: PathBuf,
 
-    m_silent: bool,
-    m_using_nonstandard_configs: bool,
+    silent: bool,
+    using_nonstandard_configs: bool,
 }
 
 impl ConfigPaths {
     pub fn new() -> ConfigPaths {
         let mut config_paths = ConfigPaths {
-            m_env_home: PathBuf::new(),
-            m_error_message: String::new(),
+            env_home: PathBuf::new(),
+            error_message: String::new(),
 
-            m_data_dir: PathBuf::new(),
-            m_config_dir: PathBuf::new(),
+            data_dir: PathBuf::new(),
+            config_dir: PathBuf::new(),
 
-            m_url_file: String::from("urls"),
-            m_cache_file: String::from("cache.db"),
-            m_config_file: String::from("config"),
-            m_lock_file: String::new(),
-            m_queue_file: String::from("queue"),
-            m_search_file: String::new(),
-            m_cmdline_file: String::new(),
+            url_file: PathBuf::new(),
+            cache_file: PathBuf::new(),
+            config_file: PathBuf::new(),
+            lock_file: PathBuf::new(),
+            queue_file: PathBuf::new(),
+            search_file: PathBuf::new(),
+            cmdline_file: PathBuf::new(),
 
-            m_silent: false,
-            m_using_nonstandard_configs: false,
+            silent: false,
+            using_nonstandard_configs: false,
         };
 
-        let m_env_home = dirs::home_dir();
-        if m_env_home.is_none() {
+        let env_home = dirs::home_dir();
+        if env_home.is_none() {
             let uid = unsafe { libc::getuid() };
 
-            config_paths.m_error_message = fmt!(
+            config_paths.error_message = fmt!(
                 &gettext(
                     "Fatal error: couldn't determine home directory!\n\
                      Please set the HOME environment variable or add \
@@ -75,7 +82,7 @@ impl ConfigPaths {
         // hitting this branch means we found a home directory
         // we can now safely call unwrap on all other functions in the dirs crate
 
-        config_paths.m_env_home = m_env_home.unwrap();
+        config_paths.env_home = env_home.unwrap();
         config_paths.find_dirs();
         config_paths
     }
@@ -117,44 +124,52 @@ impl ConfigPaths {
             return false;
         }
 
-        self.m_config_dir = newsboat_config_dir;
-        self.m_data_dir = newsboat_data_dir;
+        self.config_dir = newsboat_config_dir;
+        self.data_dir = newsboat_data_dir;
 
-        if !self.m_silent {
+        if !self.silent {
             eprintln!("Migrating configs and data from Newsbeuter's XDG dirs...");
         }
 
-        if !try_mkdir(&self.m_config_dir) {
+        if !try_mkdir(&self.config_dir) {
             return false;
         }
 
-        if !try_mkdir(&self.m_data_dir) {
+        if !try_mkdir(&self.data_dir) {
             return false;
         }
 
         // We ignore the return codes because it's okay if some files are missing.
 
         // in config
-        let _ = migrate_file(&newsbeuter_config_dir, &self.m_config_dir, "urls");
-        let _ = migrate_file(&newsbeuter_config_dir, &self.m_config_dir, "config");
+        let _ = migrate_file(&newsbeuter_config_dir, &self.config_dir, URLS_FILENAME);
+        let _ = migrate_file(&newsbeuter_config_dir, &self.config_dir, CONFIG_FILENAME);
 
         // in data
-        let _ = migrate_file(&newsbeuter_data_dir, &self.m_data_dir, "cache.db");
-        let _ = migrate_file(&newsbeuter_data_dir, &self.m_data_dir, "queue");
-        let _ = migrate_file(&newsbeuter_data_dir, &self.m_data_dir, "history.search");
-        let _ = migrate_file(&newsbeuter_data_dir, &self.m_data_dir, "history.cmdline");
+        let _ = migrate_file(&newsbeuter_data_dir, &self.data_dir, CACHE_FILENAME);
+        let _ = migrate_file(&newsbeuter_data_dir, &self.data_dir, QUEUE_FILENAME);
+        let _ = migrate_file(
+            &newsbeuter_data_dir,
+            &self.data_dir,
+            SEARCH_HISTORY_FILENAME,
+        );
+        let _ = migrate_file(
+            &newsbeuter_data_dir,
+            &self.data_dir,
+            CMDLINE_HISTORY_FILENAME,
+        );
 
         return true;
     }
 
     fn migrate_data_from_newsbeuter_simple(&self) -> bool {
-        let newsbeuter_dir = self.m_env_home.join(NEWSBEUTER_CONFIG_SUBDIR);
+        let newsbeuter_dir = self.env_home.join(NEWSBEUTER_CONFIG_SUBDIR);
 
         if !newsbeuter_dir.is_dir() {
             return false;
         }
 
-        let newsboat_dir = self.m_env_home.join(NEWSBOAT_CONFIG_SUBDIR);
+        let newsboat_dir = self.env_home.join(NEWSBOAT_CONFIG_SUBDIR);
 
         if newsboat_dir.exists() {
             log!(
@@ -165,7 +180,7 @@ impl ConfigPaths {
             return false;
         }
 
-        if !self.m_silent {
+        if !self.silent {
             eprintln!("Migrating configs and data from Newsbeuter's dotdir...");
         }
 
@@ -173,7 +188,7 @@ impl ConfigPaths {
             Ok(_) => (),
             Err(ref e) if e.kind() == io::ErrorKind::AlreadyExists => (),
             Err(err) => {
-                if !self.m_silent {
+                if !self.silent {
                     eprintln!(
                         "Aborting migration because mkdir on {:?} failed: {}",
                         newsboat_dir, err
@@ -184,12 +199,12 @@ impl ConfigPaths {
         };
 
         // We ignore the return codes because it's okay if some files are missing.
-        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, "urls");
-        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, "cache.db");
-        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, "config");
-        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, "queue");
-        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, "history.search");
-        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, "history.cmdline");
+        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, URLS_FILENAME);
+        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, CACHE_FILENAME);
+        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, CONFIG_FILENAME);
+        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, QUEUE_FILENAME);
+        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, SEARCH_HISTORY_FILENAME);
+        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, CMDLINE_HISTORY_FILENAME);
 
         return true;
     }
@@ -199,10 +214,6 @@ impl ConfigPaths {
 
         if migrated {
             // Re-running to pick up XDG dirs
-            self.m_url_file = "urls".into();
-            self.m_cache_file = "cache.db".into();
-            self.m_config_file = "config".into();
-            self.m_queue_file = "queue".into();
             self.find_dirs();
         } else {
             migrated = self.migrate_data_from_newsbeuter_simple();
@@ -212,52 +223,28 @@ impl ConfigPaths {
     }
 
     pub fn create_dirs(&self) -> bool {
-        return try_mkdir(&self.m_config_dir) && try_mkdir(&self.m_data_dir);
+        return try_mkdir(&self.config_dir) && try_mkdir(&self.data_dir);
     }
 
     fn find_dirs(&mut self) {
-        self.m_config_dir = self.m_env_home.join(NEWSBOAT_CONFIG_SUBDIR);
+        self.config_dir = self.env_home.join(NEWSBOAT_CONFIG_SUBDIR);
 
-        self.m_data_dir = self.m_config_dir.clone();
+        self.data_dir = self.config_dir.clone();
 
         // Will change config_dir and data_dir to point to XDG if XDG
         // directories are available.
         self.find_dirs_xdg();
 
         // in config
-        self.m_url_file = self
-            .m_config_dir
-            .join(&self.m_url_file)
-            .to_string_lossy()
-            .into();
-        self.m_config_file = self
-            .m_config_dir
-            .join(&self.m_config_file)
-            .to_string_lossy()
-            .into();
+        self.url_file = self.config_dir.join(URLS_FILENAME);
+        self.config_file = self.config_dir.join(CONFIG_FILENAME);
 
         // in data
-        self.m_cache_file = self
-            .m_data_dir
-            .join(&self.m_cache_file)
-            .to_string_lossy()
-            .into();
-        self.m_lock_file = self.m_cache_file.clone() + LOCK_SUFFIX;
-        self.m_queue_file = self
-            .m_data_dir
-            .join(&self.m_queue_file)
-            .to_string_lossy()
-            .into();
-        self.m_search_file = self
-            .m_data_dir
-            .join("history.search")
-            .to_string_lossy()
-            .into();
-        self.m_cmdline_file = self
-            .m_data_dir
-            .join("history.cmdline")
-            .to_string_lossy()
-            .into();
+        self.cache_file = self.data_dir.join(CACHE_FILENAME);
+        self.lock_file = self.data_dir.join(CACHE_FILENAME.to_owned() + LOCK_SUFFIX);
+        self.queue_file = self.data_dir.join(QUEUE_FILENAME);
+        self.search_file = self.data_dir.join(SEARCH_HISTORY_FILENAME);
+        self.cmdline_file = self.data_dir.join(CMDLINE_HISTORY_FILENAME);
     }
 
     fn find_dirs_xdg(&mut self) {
@@ -276,8 +263,8 @@ impl ConfigPaths {
          * At this point, we're confident we'll be using XDG. We don't check if
          * data dir exists, because if it doesn't we'll create it. */
 
-        self.m_config_dir = config_dir;
-        self.m_data_dir = data_dir;
+        self.config_dir = config_dir;
+        self.data_dir = data_dir;
     }
 
     /// Indicates if the object can be used.
@@ -285,42 +272,42 @@ impl ConfigPaths {
     /// If this method returned `false`, the cause for initialization failure can be found using
     /// `error_message()`.
     pub fn initialized(&self) -> bool {
-        !self.m_env_home.as_os_str().is_empty()
+        !self.env_home.as_os_str().is_empty()
     }
 
     /// Returns explanation why initialization failed.
     ///
     /// \note You shouldn't call this unless `initialized()` returns `false`.
     pub fn error_message(&self) -> &str {
-        &self.m_error_message
+        &self.error_message
     }
 
     /// Initializes paths to config, cache etc. from CLI arguments.
     pub fn process_args(&mut self, args: &CliArgsParser) {
         if let Some(ref url_file) = args.url_file {
-            self.m_url_file = url_file.to_string();
+            self.url_file = Path::new(url_file).to_owned();
         }
 
         if let Some(ref cache_file) = args.cache_file {
-            self.m_cache_file = cache_file.to_string();
+            self.cache_file = Path::new(cache_file).to_owned();
         }
 
         if let Some(ref lock_file) = args.lock_file {
-            self.m_lock_file = lock_file.to_string();
+            self.lock_file = Path::new(lock_file).to_owned();
         }
 
         if let Some(ref config_file) = args.config_file {
-            self.m_config_file = config_file.to_string();
+            self.config_file = Path::new(config_file).to_owned();
         }
 
-        self.m_silent = args.silent;
-        self.m_using_nonstandard_configs = args.using_nonstandard_configs();
+        self.silent = args.silent;
+        self.using_nonstandard_configs = args.using_nonstandard_configs();
     }
 
     /// Migrate configs and data from Newsbeuter if they exist. Return `true` if migrated
     /// something, `false` otherwise.
     pub fn try_migrate_from_newsbeuter(&mut self) -> bool {
-        if !self.m_using_nonstandard_configs && !Path::new(&self.m_url_file).exists() {
+        if !self.using_nonstandard_configs && !&self.url_file.exists() {
             return self.migrate_data_from_newsbeuter();
         }
 
@@ -329,51 +316,58 @@ impl ConfigPaths {
     }
 
     /// Path to the URLs file.
-    pub fn url_file(&self) -> String {
-        self.m_url_file.clone()
+    pub fn url_file(&self) -> &Path {
+        &self.url_file
     }
 
     /// Path to the cache file.
-    pub fn cache_file(&self) -> String {
-        self.m_cache_file.clone()
+    pub fn cache_file(&self) -> &Path {
+        &self.cache_file
     }
 
     /// Sets path to the cache file.
     // FIXME: this is actually a kludge that lets Controller change the path
     // midway. That logic should be moved into ConfigPaths, and this method
     // removed.
-    pub fn set_cache_file(&mut self, path: String) {
-        self.m_cache_file = path.clone();
-        self.m_lock_file = path + LOCK_SUFFIX;
+    pub fn set_cache_file(&mut self, mut path: PathBuf) {
+        self.cache_file = path.clone();
+        self.lock_file = {
+            let current_extension = path
+                .extension()
+                .and_then(|p| Some(p.to_string_lossy().into_owned()))
+                .unwrap_or_else(|| String::new());
+            path.set_extension(current_extension + LOCK_SUFFIX);
+            path
+        };
     }
 
     /// Path to the config file.
-    pub fn config_file(&self) -> String {
-        self.m_config_file.clone()
+    pub fn config_file(&self) -> &Path {
+        &self.config_file
     }
 
     /// Path to the lock file.
     ///
     /// \note This changes when path to config file changes.
-    pub fn lock_file(&self) -> String {
-        self.m_lock_file.clone()
+    pub fn lock_file(&self) -> &Path {
+        &self.lock_file
     }
 
     /// \brief Path to the queue file.
     ///
     /// Queue file stores enqueued podcasts. It's written by Newsboat, and read by Podboat.
-    pub fn queue_file(&self) -> String {
-        self.m_queue_file.clone()
+    pub fn queue_file(&self) -> &Path {
+        &self.queue_file
     }
 
     /// Path to the file with previous search queries.
-    pub fn search_file(&self) -> String {
-        self.m_search_file.clone()
+    pub fn search_file(&self) -> &Path {
+        &self.search_file
     }
 
     /// Path to the file with command-line history.
-    pub fn cmdline_file(&self) -> String {
-        self.m_cmdline_file.clone()
+    pub fn cmdline_file(&self) -> &Path {
+        &self.cmdline_file
     }
 }
 

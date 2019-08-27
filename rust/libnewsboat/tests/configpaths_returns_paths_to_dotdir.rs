@@ -21,32 +21,11 @@ fn t_returns_paths_to_newsboat_dotdir_if_no_newsboat_dirs_exist() {
 
     let paths = ConfigPaths::new();
     assert!(paths.initialized());
-    assert_eq!(
-        paths.url_file(),
-        newsboat_dir.join("urls").to_str().unwrap()
-    );
-    assert_eq!(
-        paths.cache_file(),
-        newsboat_dir.join("cache.db").to_str().unwrap()
-    );
-    assert_eq!(
-        paths.lock_file(),
-        newsboat_dir.join("cache.db.lock").to_str().unwrap()
-    );
-    assert_eq!(
-        paths.config_file(),
-        newsboat_dir.join("config").to_str().unwrap()
-    );
-    assert_eq!(
-        paths.queue_file(),
-        newsboat_dir.join("queue").to_str().unwrap()
-    );
-    assert_eq!(
-        paths.search_file(),
-        newsboat_dir.join("history.search").to_str().unwrap()
-    );
-    assert_eq!(
-        paths.cmdline_file(),
-        newsboat_dir.join("history.cmdline").to_str().unwrap()
-    );
+    assert_eq!(paths.url_file(), newsboat_dir.join("urls"));
+    assert_eq!(paths.cache_file(), newsboat_dir.join("cache.db"));
+    assert_eq!(paths.lock_file(), newsboat_dir.join("cache.db.lock"));
+    assert_eq!(paths.config_file(), newsboat_dir.join("config"));
+    assert_eq!(paths.queue_file(), newsboat_dir.join("queue"));
+    assert_eq!(paths.search_file(), newsboat_dir.join("history.search"));
+    assert_eq!(paths.cmdline_file(), newsboat_dir.join("history.cmdline"));
 }
