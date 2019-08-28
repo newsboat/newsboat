@@ -1628,22 +1628,3 @@ msgstr "nessun canale RSS trovato"
 #: rss/rssparserfactory.cpp:31
 msgid "unsupported feed format"
 msgstr "formato feed non supportato"
-
-#, fuzzy
-#~ msgid "%s: %s: invalid loglevel value"
-#~ msgstr "%s: %d: livello loglevel non valido"
-
-#, fuzzy
-#~ msgid "'%s' is not a valid key command"
-#~ msgstr "`%s' non è una tasto di comando valido"
-
-#~ msgid "Type `%s -vv' for more information."
-#~ msgstr "Digita `%s -vv' per maggiori informazioni."
-
-#~ msgid "clean up cache thoroughly"
-#~ msgstr "pulisci accuratamente la cache"
-
-#~ msgid "Error: trying to download feed `%s' returned HTTP status code %ld."
-#~ msgstr ""
-#~ "Errore: provando a scaricare il feed `%s' è ritornato un codice di stato "
-#~ "HTTP %ld."
