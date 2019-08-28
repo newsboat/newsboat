@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2019-08-28 21:01+0300\n"
+"POT-Creation-Date: 2019-08-28 21:18+0300\n"
 "PO-Revision-Date: 2017-07-19 20:19+0300\n"
 "Last-Translator: Alejandro Gallo <aamsgallo@gmail.com>\n"
 "Language-Team: Alejandro Gallo <aamsgallo@gmail.com>\n"
@@ -1648,6 +1648,15 @@ msgid ""
 msgstr ""
 "Per favor defineix la variable d'entorn HOME, o afegeix un usuari vàlid per "
 "la UID %u!"
+
+msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
+msgstr ""
+
+msgid "Migrating configs and data from Newsbeuter's dotdir..."
+msgstr ""
+
+msgid "Aborting migration because mkdir on {:?} failed: {}"
+msgstr ""
 
 #, fuzzy
 #~ msgid "'%s' is not a valid key command"

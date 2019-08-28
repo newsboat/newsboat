@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat-2.12\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2019-08-28 21:01+0300\n"
+"POT-Creation-Date: 2019-08-28 21:18+0300\n"
 "PO-Revision-Date: 2018-08-08 10:17+0200\n"
 "Last-Translator: Dennis Öberg <contact@dennisoberg.se>\n"
 "Language-Team: Niklas Grahn <terra.unknown@yahoo.com>\n"
@@ -1628,6 +1628,15 @@ msgstr ""
 "Fatalt fel: kunde inte fastställa hemkatalog!\n"
 "Var god ställ in HOME-miljövariabeln eller lägg till en giltig användare för "
 "UID %u!"
+
+msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
+msgstr ""
+
+msgid "Migrating configs and data from Newsbeuter's dotdir..."
+msgstr ""
+
+msgid "Aborting migration because mkdir on {:?} failed: {}"
+msgstr ""
 
 #, fuzzy
 #~ msgid "'%s' is not a valid key command"
