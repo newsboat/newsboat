@@ -309,7 +309,7 @@ extract:
 
 
 msgmerge:
-	for f in $(POFILES) ; do msgmerge -U $$f $(POTFILE) ; done
+	for f in $(POFILES) ; do msgmerge --backup=off -U $$f $(POTFILE) ; done
 
 %.mo: %.po
 	$(MSGFMT) --check --statistics -o $@ $<
