@@ -333,6 +333,15 @@ pub unsafe extern "C" fn rs_get_basename(input: *const c_char) -> *mut c_char {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn rs_mkdir_parents(path: *const c_char, mode: u32) -> isize {
+    abort_on_panic(|| {
+        let rs_input = CStr::from_ptr(path);
+        let rs_input = rs_input.to_string_lossy();
+        utils::mkdir_parents(&rs_input, mode)
+    })
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn rs_is_valid_attribute(attribute: *const c_char) -> bool {
     abort_on_panic(|| {
         let rs_attribute = CStr::from_ptr(attribute);
