@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2019-08-28 21:01+0300\n"
+"POT-Creation-Date: 2019-08-29 22:14+0300\n"
 "PO-Revision-Date: 2019-01-09 20:42+0100\n"
 "Last-Translator: Michal Siemek <carnophage@dobramama.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -1635,6 +1635,16 @@ msgstr ""
 "Błąd krytyczny: nie można ustalić katalogu domowego!\n"
 "Proszę ustawić zmienną środowiskową HOME lub dodać prawidłowego użytkownika "
 "o UID %u!"
+
+msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
+msgstr ""
+
+msgid "Migrating configs and data from Newsbeuter's dotdir..."
+msgstr ""
+
+#, fuzzy
+msgid "Aborting migration because mkdir on `%s' failed: %s"
+msgstr "Błąd: otwarcie pliku pamięci podręcznej '%s' nieudane: %s"
 
 #, fuzzy
 #~ msgid "'%s' is not a valid key command"

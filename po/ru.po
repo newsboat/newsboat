@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2019-08-28 21:01+0300\n"
+"POT-Creation-Date: 2019-08-29 22:14+0300\n"
 "PO-Revision-Date: 2019-08-18 15:34+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
@@ -1637,3 +1637,13 @@ msgstr ""
 "Фатальная ошибка: не удалось определить домашнюю директорию!\n"
 "Пожалуйста, задайте значение переменной окружения HOME или добавьте "
 "подходящего пользователя для UID %u!"
+
+msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
+msgstr ""
+
+msgid "Migrating configs and data from Newsbeuter's dotdir..."
+msgstr ""
+
+#, fuzzy
+msgid "Aborting migration because mkdir on `%s' failed: %s"
+msgstr "Ошибка: попытка открыть файл кэша `%s' завершилась неудачей: %s"

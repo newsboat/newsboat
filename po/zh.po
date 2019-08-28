@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 0.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2019-08-28 21:01+0300\n"
+"POT-Creation-Date: 2019-08-29 22:14+0300\n"
 "PO-Revision-Date: 2007-11-21 22:51+0100\n"
 "Last-Translator: josh yu <joshyupeng@gmail.com>\n"
 "Language-Team: Chinese <joshyupeng@gmail.com>\n"
@@ -1640,6 +1640,16 @@ msgid ""
 "Fatal error: couldn't determine home directory!\n"
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr "请设置主目录的环境变量，或者添加一个有效的用户其UID为 %u!"
+
+msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
+msgstr ""
+
+msgid "Migrating configs and data from Newsbeuter's dotdir..."
+msgstr ""
+
+#, fuzzy
+msgid "Aborting migration because mkdir on `%s' failed: %s"
+msgstr "错误:打开缓存文件`%s' 失败:%s"
 
 #, fuzzy
 #~ msgid "'%s' is not a valid key command"

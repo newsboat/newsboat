@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2019-08-28 21:01+0300\n"
+"POT-Creation-Date: 2019-08-29 22:14+0300\n"
 "PO-Revision-Date: 2019-06-25 21:08+0200\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
@@ -1640,6 +1640,16 @@ msgstr ""
 "Fataler Fehler: Das Heimatverzeichnis konnte nicht ermittelt werden!\n"
 "Bitte setzen Sie die Umgebungsvariable HOME oder fügen Sie einen gültigen "
 "Benutzer für UID %u hinzu!"
+
+msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
+msgstr ""
+
+msgid "Migrating configs and data from Newsbeuter's dotdir..."
+msgstr ""
+
+#, fuzzy
+msgid "Aborting migration because mkdir on `%s' failed: %s"
+msgstr "Fehler: Das Öffnen der Zwischenspeicherdatei `%s' schlug fehl: %s"
 
 #~ msgid "'%s' is not a valid key command"
 #~ msgstr "`%s' ist kein gültiges Tastenkommando"
