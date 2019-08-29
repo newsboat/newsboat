@@ -336,8 +336,11 @@ pub unsafe extern "C" fn rs_get_basename(input: *const c_char) -> *mut c_char {
 pub unsafe extern "C" fn rs_mkdir_parents(path: *const c_char, mode: u32) -> isize {
     abort_on_panic(|| {
         let rs_input = CStr::from_ptr(path);
-        let rs_input = rs_input.to_string_lossy();
-        utils::mkdir_parents(&rs_input, mode)
+        let rs_input = rs_input.to_string_lossy().into_owned();
+        match utils::mkdir_parents(&rs_input, mode) {
+            Ok(()) => 0,
+            Err(_) => -1,
+        }
     })
 }
 

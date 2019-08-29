@@ -14,7 +14,7 @@ use self::url::percent_encoding::*;
 use self::url::Url;
 use libc::c_ulong;
 use logger::{self, Level};
-use std::fs;
+use std::fs::DirBuilder;
 use std::io::{self, Write};
 use std::os::unix::fs::DirBuilderExt;
 use std::path::{Path, PathBuf};
@@ -480,16 +480,11 @@ pub fn getcwd() -> Result<PathBuf, io::Error> {
 }
 
 /// Recursively create directories if missing and set permissions accordingly.
-pub fn mkdir_parents(p: &str, mode: u32) -> isize {
-    let path = Path::new(p);
-    let result = fs::DirBuilder::new()
+pub fn mkdir_parents<R: AsRef<Path>>(p: &R, mode: u32) -> io::Result<()> {
+    DirBuilder::new()
         .mode(mode)
         .recursive(true) // directories created with same security and permissions
-        .create(path);
-    match result {
-        Ok(()) => 0,
-        Err(_) => -1,
-    }
+        .create(p.as_ref())
 }
 
 /// Counts graphemes in a given string.
@@ -1000,7 +995,7 @@ mod tests {
         assert_eq!(path.exists(), false);
 
         let result = mkdir_parents(&path, mode);
-        assert_eq!(result, 0);
+        assert!(result.is_ok());
         assert_eq!(path.exists(), true);
 
         let file_type_mask = 0o7777;
@@ -1009,6 +1004,6 @@ mod tests {
 
         // rerun on existing directories
         let result = mkdir_parents(&path, mode);
-        assert_eq!(result, 0);
+        assert!(result.is_ok());
     }
 }
