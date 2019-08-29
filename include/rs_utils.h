@@ -78,7 +78,7 @@ char* rs_program_version();
 
 unsigned int rs_newsboat_version_major();
 
-int rs_mkdir_parents(const char* path, const unsigned int mode);
+int rs_mkdir_parents(const char* path, const std::uint32_t mode);
 
 class RustString {
 private:

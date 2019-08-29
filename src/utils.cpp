@@ -943,7 +943,7 @@ unsigned int utils::gentabs(const std::string& str)
  * exist. */
 int utils::mkdir_parents(const std::string& p, mode_t mode)
 {
-	return rs_mkdir_parents(p.c_str(), (int) mode);
+	return rs_mkdir_parents(p.c_str(), static_cast<std::uint32_t>(mode));
 }
 
 std::string utils::make_title(const std::string& const_url)
