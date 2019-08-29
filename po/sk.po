@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.10.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2019-08-28 21:18+0300\n"
+"POT-Creation-Date: 2019-08-29 22:14+0300\n"
 "PO-Revision-Date: 2017-12-25 00:38+0100\n"
 "Last-Translator: František Hájik <ferko.hajik@gmail.com>\n"
 "Language-Team: František Hájik <ferko.hajik@gmail.com>\n"
@@ -1647,8 +1647,9 @@ msgstr ""
 msgid "Migrating configs and data from Newsbeuter's dotdir..."
 msgstr ""
 
-msgid "Aborting migration because mkdir on {:?} failed: {}"
-msgstr ""
+#, fuzzy
+msgid "Aborting migration because mkdir on `%s' failed: %s"
+msgstr "Chyba: otvorenie \"cache\" súboru `%s' zlyhalo: %s"
 
 #, fuzzy
 #~ msgid "'%s' is not a valid key command"

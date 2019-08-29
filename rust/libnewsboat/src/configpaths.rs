@@ -128,7 +128,10 @@ impl ConfigPaths {
         self.data_dir = newsboat_data_dir;
 
         if !self.silent {
-            eprintln!(&gettext("Migrating configs and data from Newsbeuter's XDG dirs..."));
+            eprintln!(
+                "{}",
+                &gettext("Migrating configs and data from Newsbeuter's XDG dirs...")
+            );
         }
 
         if !try_mkdir(&self.config_dir) {
@@ -181,7 +184,10 @@ impl ConfigPaths {
         }
 
         if !self.silent {
-            eprintln!(&gettext("Migrating configs and data from Newsbeuter's dotdir..."));
+            eprintln!(
+                "{}",
+                &gettext("Migrating configs and data from Newsbeuter's dotdir...")
+            );
         }
 
         match mkdir(&newsboat_dir, 0o700) {
@@ -190,8 +196,12 @@ impl ConfigPaths {
             Err(err) => {
                 if !self.silent {
                     eprintln!(
-                        &gettext("Aborting migration because mkdir on {:?} failed: {}"),
-                        newsboat_dir, err
+                        "{}",
+                        &fmt!(
+                            &gettext("Aborting migration because mkdir on `%s' failed: %s"),
+                            &newsboat_dir.to_string_lossy().into_owned(),
+                            err.to_string()
+                        )
                     );
                 }
                 return false;

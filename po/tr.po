@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 1.2\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2019-08-28 21:18+0300\n"
+"POT-Creation-Date: 2019-08-29 22:14+0300\n"
 "PO-Revision-Date: 2008-11-18 14:41+0200\n"
 "Last-Translator: H.Gökhan SARI <hsa2@difuzyon.net>\n"
 "Language-Team: Türkçe <en@li.org>\n"
@@ -1647,8 +1647,9 @@ msgstr ""
 msgid "Migrating configs and data from Newsbeuter's dotdir..."
 msgstr ""
 
-msgid "Aborting migration because mkdir on {:?} failed: {}"
-msgstr ""
+#, fuzzy
+msgid "Aborting migration because mkdir on `%s' failed: %s"
+msgstr "Hata: `%s' önbellek dosyası açılamadı: %s"
 
 #, fuzzy
 #~ msgid "'%s' is not a valid key command"
