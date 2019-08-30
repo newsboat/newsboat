@@ -5,9 +5,3 @@ authors = ["Alexander Batischev <eual.jp@gmail.com>"]
 
 [dependencies]
 libc = "0.2"
-
-[target.'cfg(target_pointer_width = "32")'.dependencies]
-strprintf-32bit = { path = "../strprintf-32bit" }
-
-[target.'cfg(target_pointer_width = "64")'.dependencies]
-strprintf-64bit = { path = "../strprintf-64bit" }

@@ -29,14 +29,14 @@ use traits::*;
 
 // Re-exporting platform-specific format specifiers.
 #[cfg(target_pointer_width = "32")]
-extern crate strprintf_32bit;
+mod format_specifiers_32bit;
 #[cfg(target_pointer_width = "32")]
-pub use strprintf_32bit::format_specifiers::*;
+pub use format_specifiers_32bit::*;
 
 #[cfg(target_pointer_width = "64")]
-extern crate strprintf_64bit;
+mod format_specifiers_64bit;
 #[cfg(target_pointer_width = "64")]
-pub use strprintf_64bit::format_specifiers::*;
+pub use format_specifiers_64bit::*;
 
 /// Helper function to `fmt!`. **Use it only through that macro!**
 ///
