@@ -1,6 +1,7 @@
 use clap::{App, Arg};
 use gettextrs::gettext;
 use libc::{EXIT_FAILURE, EXIT_SUCCESS};
+use std::path::PathBuf;
 
 use logger::Level;
 
@@ -13,15 +14,15 @@ pub struct CliArgsParser {
     pub silent: bool,
 
     /// If this contains some value, it's the path to the OPML file that should be imported.
-    pub importfile: Option<String>,
+    pub importfile: Option<PathBuf>,
 
     /// If this contains some value, it's the path to the file from which the list of read articles
     /// should be imported.
-    pub readinfo_import_file: Option<String>,
+    pub readinfo_import_file: Option<PathBuf>,
 
     /// If this contains some value, it's the path to the file to which the list of read articles
     /// should be exported.
-    pub readinfo_export_file: Option<String>,
+    pub readinfo_export_file: Option<PathBuf>,
 
     /// If this contains some value, the creator of `CliArgsParser` object should call
     /// `exit(return_code)`.
@@ -42,17 +43,17 @@ pub struct CliArgsParser {
     pub refresh_on_start: bool,
 
     /// If this contains some value, it's the path to the url file specified by the user.
-    pub url_file: Option<String>,
+    pub url_file: Option<PathBuf>,
 
     /// If this contains some value, it's the path to the lock file derived from the cache file
     /// path specified by the user.
-    pub lock_file: Option<String>,
+    pub lock_file: Option<PathBuf>,
 
     /// If this contains some value, it's the path to the cache file specified by the user.
-    pub cache_file: Option<String>,
+    pub cache_file: Option<PathBuf>,
 
     /// If this contains some value, it's the path to the config file specified by the user.
-    pub config_file: Option<String>,
+    pub config_file: Option<PathBuf>,
 
     /// A vector of Newsboat commands to execute. Empty means user didn't specify any commands to
     /// run.
@@ -61,7 +62,7 @@ pub struct CliArgsParser {
     pub cmds_to_execute: Vec<String>,
 
     /// If this contains some value, it's the path to the log file specified by the user.
-    pub log_file: Option<String>,
+    pub log_file: Option<PathBuf>,
 
     /// If this contains some value, it's the log level specified by the user.
     pub log_level: Option<Level>,
@@ -206,21 +207,21 @@ impl CliArgsParser {
                 args.should_print_usage = true;
                 args.return_code = Some(EXIT_FAILURE);
             } else {
-                args.importfile = Some(importfile.to_string());
+                args.importfile = Some(PathBuf::from(importfile));
             }
         }
 
         if let Some(url_file) = matches.value_of(URL_FILE) {
-            args.url_file = Some(url_file.to_string());
+            args.url_file = Some(PathBuf::from(url_file));
         }
 
         if let Some(cache_file) = matches.value_of(CACHE_FILE) {
-            args.cache_file = Some(cache_file.to_string());
-            args.lock_file = Some(cache_file.to_string() + LOCK_SUFFIX);
+            args.cache_file = Some(PathBuf::from(cache_file));
+            args.lock_file = Some(PathBuf::from(cache_file.to_string() + LOCK_SUFFIX));
         }
 
         if let Some(config_file) = matches.value_of(CONFIG_FILE) {
-            args.config_file = Some(config_file.to_string());
+            args.config_file = Some(PathBuf::from(config_file));
         }
 
         // Casting u64 to usize. Highly unlikely that the user will hit the limit, even if we were
@@ -242,7 +243,7 @@ impl CliArgsParser {
                 args.should_print_usage = true;
                 args.return_code = Some(EXIT_FAILURE);
             } else {
-                args.readinfo_import_file = Some(importfile.to_string());
+                args.readinfo_import_file = Some(PathBuf::from(importfile));
             }
         }
 
@@ -251,12 +252,12 @@ impl CliArgsParser {
                 args.should_print_usage = true;
                 args.return_code = Some(EXIT_FAILURE);
             } else {
-                args.readinfo_export_file = Some(exportfile.to_string());
+                args.readinfo_export_file = Some(PathBuf::from(exportfile));
             }
         }
 
         if let Some(log_file) = matches.value_of(LOG_FILE) {
-            args.log_file = Some(log_file.to_string());
+            args.log_file = Some(PathBuf::from(log_file));
         }
 
         if let Some(log_level_str) = matches.value_of(LOG_LEVEL) {
@@ -323,18 +324,17 @@ mod tests {
 
     #[test]
     fn t_sets_do_import_and_importfile_if_dash_i_is_provided() {
-        let filename = "blogroll.opml".to_string();
+        let filename = "blogroll.opml";
 
         let check = |opts| {
             let args = CliArgsParser::new(opts);
-
-            assert_eq!(args.importfile, Some(filename.clone()));
+            assert_eq!(args.importfile, Some(PathBuf::from(filename)));
         };
 
         check(vec![
             "newsboat".to_string(),
             "-i".to_string(),
-            filename.clone(),
+            filename.to_string(),
         ]);
         check(vec![
             "newsboat".to_string(),
@@ -424,19 +424,19 @@ mod tests {
 
     #[test]
     fn t_sets_url_file_set_url_file_and_using_nonstandard_configs_if_dash_u_is_provided() {
-        let filename = "urlfile".to_string();
+        let filename = "urlfile";
 
         let check = |opts| {
             let args = CliArgsParser::new(opts);
 
-            assert_eq!(args.url_file, Some(filename.clone()));
+            assert_eq!(args.url_file, Some(PathBuf::from(filename)));
             assert!(args.using_nonstandard_configs());
         };
 
         check(vec![
             "newsboat".to_string(),
             "-u".to_string(),
-            filename.clone(),
+            filename.to_string(),
         ]);
 
         check(vec![
@@ -447,20 +447,23 @@ mod tests {
 
     #[test]
     fn t_sets_proper_fields_when_dash_c_is_provided() {
-        let filename = "cache.db".to_string();
+        let filename = "cache.db";
 
         let check = |opts| {
             let args = CliArgsParser::new(opts);
 
-            assert_eq!(args.cache_file, Some(filename.clone()));
-            assert_eq!(args.lock_file, Some(filename.clone() + ".lock"));
+            assert_eq!(args.cache_file, Some(PathBuf::from(filename)));
+            assert_eq!(
+                args.lock_file,
+                Some(PathBuf::from(filename.to_string() + LOCK_SUFFIX))
+            );
             assert!(args.using_nonstandard_configs());
         };
 
         check(vec![
             "newsboat".to_string(),
             "-c".to_string(),
-            filename.clone(),
+            filename.to_string(),
         ]);
         check(vec![
             "newsboat".to_string(),
@@ -470,19 +473,19 @@ mod tests {
 
     #[test]
     fn t_sets_config_file_if_dash_capital_c_is_provided() {
-        let filename = "config file".to_string();
+        let filename = "config file";
 
         let check = |opts| {
             let args = CliArgsParser::new(opts);
 
-            assert_eq!(args.config_file, Some(filename.clone()));
+            assert_eq!(args.config_file, Some(PathBuf::from(filename)));
             assert!(args.using_nonstandard_configs());
         };
 
         check(vec![
             "newsboat".to_string(),
             "-C".to_string(),
-            filename.clone(),
+            filename.to_string(),
         ]);
         check(vec![
             "newsboat".to_string(),
@@ -623,12 +626,12 @@ mod tests {
 
     #[test]
     fn t_sets_readinfo_import_file_if_dash_capital_i_is_provided() {
-        let filename = "filename".to_string();
+        let filename = "filename";
 
         let check = |opts| {
             let args = CliArgsParser::new(opts);
 
-            assert_eq!(args.readinfo_import_file, Some(filename.clone()));
+            assert_eq!(args.readinfo_import_file, Some(PathBuf::from(filename)));
         };
 
         check(vec![
@@ -644,12 +647,12 @@ mod tests {
 
     #[test]
     fn t_sets_readinfo_export_file_if_dash_capital_e_is_provided() {
-        let filename = "filename".to_string();
+        let filename = "filename";
 
         let check = |opts| {
             let args = CliArgsParser::new(opts);
 
-            assert_eq!(args.readinfo_export_file, Some(filename.clone()));
+            assert_eq!(args.readinfo_export_file, Some(PathBuf::from(filename)));
         };
 
         check(vec![
@@ -693,18 +696,18 @@ mod tests {
 
     #[test]
     fn t_sets_set_log_file_and_log_file_if_dash_d_is_provided() {
-        let filename = "log file.txt".to_string();
+        let filename = "log file.txt";
 
         let check = |opts| {
             let args = CliArgsParser::new(opts);
 
-            assert_eq!(args.log_file, Some(filename.clone()));
+            assert_eq!(args.log_file, Some(PathBuf::from(filename)));
         };
 
         check(vec![
             "newsboat".to_string(),
             "-d".to_string(),
-            filename.clone(),
+            filename.to_string(),
         ]);
         check(vec![
             "newsboat".to_string(),
