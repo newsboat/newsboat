@@ -301,12 +301,15 @@ mo-files: $(MOFILES)
 
 extract:
 	$(RM) $(POTFILE)
-	xgettext -c/ -k_ -k_s -o $(POTFILE) *.cpp src/*.cpp rss/*.cpp
+	xgettext -c/ -k_ -k_s -o po/cpp.pot *.cpp src/*.cpp rss/*.cpp
+	xtr rust/libnewsboat/src/lib.rs --omit-header -o po/rust.pot
+	cat po/cpp.pot po/rust.pot > $(POTFILE)
+	$(RM) -f po/cpp.pot po/rust.pot
 	sed -i 's#Report-Msgid-Bugs-To: \\n#Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\\n#' $(POTFILE)
 
 
 msgmerge:
-	for f in $(POFILES) ; do msgmerge -U $$f $(POTFILE) ; done
+	for f in $(POFILES) ; do msgmerge --backup=off -U $$f $(POTFILE) ; done
 
 %.mo: %.po
 	$(MSGFMT) --check --statistics -o $@ $<
