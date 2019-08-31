@@ -50,6 +50,8 @@ char* rs_make_title(const char* str);
 
 char* rs_getcwd();
 
+int rs_strnaturalcmp(const char* a, const char *b);
+
 void rs_cstring_free(char* str);
 
 char* rs_get_default_browser();

@@ -26,7 +26,6 @@
 #include <unistd.h>
 #include <unordered_set>
 
-#include "3rd-party/alphanum.hpp"
 #include "config.h"
 #include "logger.h"
 #include "strprintf.h"
@@ -976,7 +975,7 @@ std::string utils::getcwd()
 
 int utils::strnaturalcmp(const std::string& a, const std::string& b)
 {
-	return doj::alphanum_comp(a, b);
+	return rs_strnaturalcmp(a.c_str(), b.c_str());
 }
 
 void utils::remove_soft_hyphens(std::string& text)
