@@ -1439,13 +1439,21 @@ void ItemListFormAction::handle_op_saveall() {
 			save_article(fpath, visible_items[0].first);
 		}
 	} else {
-		int nfiles_exist = 0;
+		std::vector<std::string> filenames;
 		for (const auto &item : visible_items) {
-			const std::string filename = v->get_filename_suggestion(item.first->title());
-			const std::string fpath = directory + filename;
+			filenames.emplace_back(
+					v->get_filename_suggestion(item.first->title()));
+		}
 
+		const auto unique_filenames = std::set<std::string>(
+				std::begin(filenames),
+				std::end(filenames));
+
+		int nfiles_exist = filenames.size() - unique_filenames.size();
+		for (const auto& filename : unique_filenames) {
+			const auto filepath = directory + filename;
 			struct stat sbuf;
-			if (::stat(fpath.c_str(), &sbuf) != -1) {
+			if (::stat(filepath.c_str(), &sbuf) != -1) {
 				nfiles_exist++;
 			}
 		}
@@ -1457,14 +1465,15 @@ void ItemListFormAction::handle_op_saveall() {
 		}
 
 		bool overwrite_all = false;
-		for (const auto &item : visible_items) {
-			const std::string filename = v->get_filename_suggestion(item.first->title());
-			const std::string fpath = directory + filename;
+		for (size_t item_idx = 0; item_idx < filenames.size(); ++item_idx) {
+			const auto filename = filenames[item_idx];
+			const auto filepath = directory + filename;
+			auto item = visible_items[item_idx].first;
 
 			struct stat sbuf;
-			if (::stat(fpath.c_str(), &sbuf) != -1) {
+			if (::stat(filepath.c_str(), &sbuf) != -1) {
 				if (overwrite_all) {
-					save_article(fpath, item.first);
+					save_article(filepath, item);
 					continue;
 				}
 
@@ -1489,12 +1498,10 @@ void ItemListFormAction::handle_op_saveall() {
 				}
 
 				if (c == input_options.at(0)) {
-					save_article(fpath,
-								 item.first);
+					save_article(filepath, item);
 				} else if (c == input_options.at(1)) {
 					overwrite_all = true;
-					save_article(fpath,
-								 item.first);
+					save_article(filepath, item);
 				} else if (c == input_options.at(2)) {
 					continue;
 				} else if (c == input_options.at(3)) {
@@ -1502,7 +1509,7 @@ void ItemListFormAction::handle_op_saveall() {
 				}
 			} else {
 				// Create file since it does not exist
-				save_article(fpath, item.first);
+				save_article(filepath, item);
 			}
 		}
 	}
