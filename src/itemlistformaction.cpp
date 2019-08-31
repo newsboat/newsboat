@@ -1421,8 +1421,9 @@ void ItemListFormAction::handle_op_saveall() {
 					  "(y:Yes n:No)"),
 					filename, directory),
 					input_options);
-			if (!c)
+			if (!c) {
 				return;
+			}
 			unsigned int n_options = ((std::string) "yn").length();
 			if (input_options.length() < n_options) {
 				return;
@@ -1456,47 +1457,48 @@ void ItemListFormAction::handle_op_saveall() {
 
 			struct stat sbuf;
 			if (::stat(fpath.c_str(), &sbuf) != -1) {
-				if (!overwrite_all) {
-					std::string input_options = _("yanq");
-					char c;
-					if (nfiles_exist > 1) {
-						c = v->confirm(strprintf::fmt(
-								_("Overwrite `%s' in `%s'? "
-								  "There are %d more conflicts like this "
-								  "(y:Yes a:Yes to all n:No q:No to all)"),
-								  filename, directory, --nfiles_exist),
-								  input_options);
-					} else {
-						c = v->confirm(strprintf::fmt(
-								_("Overwrite `%s' in `%s'? "
-								  "There are no more conflicts like this "
-								  "(y:Yes a:Yes to all n:No q:No to all)"),
-								  filename, directory),
-								  input_options);
-					}
-					if (!c) {
-						break;
-					}
-
-					unsigned int n_options = ((std::string) "yanq").length();
-					if (input_options.length() < n_options) {
-						break;
-					}
-
-					if (c == input_options.at(0)) {
-						save_article(fpath,
-									 item.first);
-					} else if (c == input_options.at(1)) {
-						overwrite_all = true;
-						save_article(fpath,
-									 item.first);
-					} else if (c == input_options.at(2)) {
-						continue;
-					} else if (c == input_options.at(3)) {
-						break;
-					}
-				} else {
+				if (overwrite_all) {
 					save_article(fpath, item.first);
+					continue;
+				}
+
+				std::string input_options = _("yanq");
+				char c;
+				if (nfiles_exist > 1) {
+					c = v->confirm(strprintf::fmt(
+							_("Overwrite `%s' in `%s'? "
+							  "There are %d more conflicts like this "
+							  "(y:Yes a:Yes to all n:No q:No to all)"),
+							  filename, directory, --nfiles_exist),
+							  input_options);
+				} else {
+					c = v->confirm(strprintf::fmt(
+							_("Overwrite `%s' in `%s'? "
+							  "There are no more conflicts like this "
+							  "(y:Yes a:Yes to all n:No q:No to all)"),
+							  filename, directory),
+							  input_options);
+				}
+				if (!c) {
+					break;
+				}
+
+				unsigned int n_options = ((std::string) "yanq").length();
+				if (input_options.length() < n_options) {
+					break;
+				}
+
+				if (c == input_options.at(0)) {
+					save_article(fpath,
+								 item.first);
+				} else if (c == input_options.at(1)) {
+					overwrite_all = true;
+					save_article(fpath,
+								 item.first);
+				} else if (c == input_options.at(2)) {
+					continue;
+				} else if (c == input_options.at(3)) {
+					break;
 				}
 			} else {
 				// get file since it does not exist
