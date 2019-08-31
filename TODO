@@ -1,5 +1,0 @@
-- in the article view, the headers should be an own color configuration element
-- when reload is finished, the focus shall be in the current form's list
-- implement RFC 5005 (http://www.ietf.org/rfc/rfc5005.txt)
-- implement a single key with which it is possible to go through all unread articles (like space in slrn)
-- make it configurable whether "n" jumps to the next feed or stays in the same.
