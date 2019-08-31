@@ -1430,13 +1430,13 @@ void ItemListFormAction::handle_op_saveall() {
 			}
 
 			if (c == input_options.at(0)) {
-				save_article(filename, visible_items[0].first);
+				save_article(fpath, visible_items[0].first);
 			} else if (c == input_options.at(1)) {
 				return;
 			}
 		} else {
-			// get file since it does not exist
-			save_article(filename, visible_items[0].first);
+			// Create file since it does not exist
+			save_article(fpath, visible_items[0].first);
 		}
 	} else {
 		int nfiles_exist = 0;
@@ -1501,7 +1501,7 @@ void ItemListFormAction::handle_op_saveall() {
 					break;
 				}
 			} else {
-				// get file since it does not exist
+				// Create file since it does not exist
 				save_article(fpath, item.first);
 			}
 		}
