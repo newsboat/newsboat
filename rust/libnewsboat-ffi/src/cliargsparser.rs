@@ -5,6 +5,7 @@ use libnewsboat::logger::Level;
 use std::ffi::{CStr, CString};
 use std::mem;
 use std::panic::{RefUnwindSafe, UnwindSafe};
+use std::path::PathBuf;
 use std::ptr;
 use std::slice;
 
@@ -64,20 +65,18 @@ where
     )
 }
 
-unsafe fn with_cliargsparser_opt_str<F>(object: *mut c_void, action: F) -> *mut c_char
+unsafe fn with_cliargsparser_opt_pathbuf<F>(object: *mut c_void, action: F) -> *mut c_char
 where
-    F: RefUnwindSafe + Fn(&CliArgsParser) -> &Option<String>,
+    F: RefUnwindSafe + Fn(&CliArgsParser) -> &Option<PathBuf>,
 {
     with_cliargsparser(
         object,
         |o| {
-            let opt = action(o);
-            // Converting &Option<String> -> String - either cloned contents of Some(), or an empty
-            // string
-            let opt = opt
-                .as_ref()
-                .map(String::clone)
-                .unwrap_or_else(|| String::new());
+            let opt: &Option<PathBuf> = action(o);
+            let opt: String = match opt.to_owned() {
+                Some(path) => path.to_string_lossy().to_string(),
+                None => String::new(),
+            };
             CString::new(opt).unwrap().into_raw()
         },
         ptr::null_mut(),
@@ -106,7 +105,7 @@ pub unsafe extern "C" fn rs_cliargsparser_program_name(object: *mut c_void) -> *
 
 #[no_mangle]
 pub unsafe extern "C" fn rs_cliargsparser_importfile(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_opt_str(object, |o| &o.importfile)
+    with_cliargsparser_opt_pathbuf(object, |o| &o.importfile)
 }
 
 #[no_mangle]
@@ -116,7 +115,7 @@ pub unsafe extern "C" fn rs_cliargsparser_do_read_import(object: *mut c_void) ->
 
 #[no_mangle]
 pub unsafe extern "C" fn rs_cliargsparser_readinfo_import_file(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_opt_str(object, |o| &o.readinfo_import_file)
+    with_cliargsparser_opt_pathbuf(object, |o| &o.readinfo_import_file)
 }
 
 #[no_mangle]
@@ -126,7 +125,7 @@ pub unsafe extern "C" fn rs_cliargsparser_do_read_export(object: *mut c_void) ->
 
 #[no_mangle]
 pub unsafe extern "C" fn rs_cliargsparser_readinfo_export_file(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_opt_str(object, |o| &o.readinfo_export_file)
+    with_cliargsparser_opt_pathbuf(object, |o| &o.readinfo_export_file)
 }
 
 #[no_mangle]
@@ -176,7 +175,7 @@ pub unsafe extern "C" fn rs_cliargsparser_set_url_file(object: *mut c_void) -> b
 
 #[no_mangle]
 pub unsafe extern "C" fn rs_cliargsparser_url_file(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_opt_str(object, |o| &o.url_file)
+    with_cliargsparser_opt_pathbuf(object, |o| &o.url_file)
 }
 
 #[no_mangle]
@@ -186,7 +185,7 @@ pub unsafe extern "C" fn rs_cliargsparser_set_lock_file(object: *mut c_void) -> 
 
 #[no_mangle]
 pub unsafe extern "C" fn rs_cliargsparser_lock_file(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_opt_str(object, |o| &o.lock_file)
+    with_cliargsparser_opt_pathbuf(object, |o| &o.lock_file)
 }
 
 #[no_mangle]
@@ -196,7 +195,7 @@ pub unsafe extern "C" fn rs_cliargsparser_set_cache_file(object: *mut c_void) ->
 
 #[no_mangle]
 pub unsafe extern "C" fn rs_cliargsparser_cache_file(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_opt_str(object, |o| &o.cache_file)
+    with_cliargsparser_opt_pathbuf(object, |o| &o.cache_file)
 }
 
 #[no_mangle]
@@ -206,7 +205,7 @@ pub unsafe extern "C" fn rs_cliargsparser_set_config_file(object: *mut c_void) -
 
 #[no_mangle]
 pub unsafe extern "C" fn rs_cliargsparser_config_file(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_opt_str(object, |o| &o.config_file)
+    with_cliargsparser_opt_pathbuf(object, |o| &o.config_file)
 }
 
 #[no_mangle]
@@ -249,7 +248,7 @@ pub unsafe extern "C" fn rs_cliargsparser_set_log_file(object: *mut c_void) -> b
 
 #[no_mangle]
 pub unsafe extern "C" fn rs_cliargsparser_log_file(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_opt_str(object, |o| &o.log_file)
+    with_cliargsparser_opt_pathbuf(object, |o| &o.log_file)
 }
 
 #[no_mangle]

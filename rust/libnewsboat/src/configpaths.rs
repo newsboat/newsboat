@@ -296,19 +296,19 @@ impl ConfigPaths {
     /// Initializes paths to config, cache etc. from CLI arguments.
     pub fn process_args(&mut self, args: &CliArgsParser) {
         if let Some(ref url_file) = args.url_file {
-            self.url_file = Path::new(url_file).to_owned();
+            self.url_file = url_file.to_owned();
         }
 
         if let Some(ref cache_file) = args.cache_file {
-            self.cache_file = Path::new(cache_file).to_owned();
+            self.cache_file = cache_file.to_owned();
         }
 
         if let Some(ref lock_file) = args.lock_file {
-            self.lock_file = Path::new(lock_file).to_owned();
+            self.lock_file = lock_file.to_owned();
         }
 
         if let Some(ref config_file) = args.config_file {
-            self.config_file = Path::new(config_file).to_owned();
+            self.config_file = config_file.to_owned();
         }
 
         self.silent = args.silent;
