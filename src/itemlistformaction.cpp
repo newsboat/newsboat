@@ -378,17 +378,22 @@ void ItemListFormAction::process_operation(Operation op,
 	case OP_SAVEALL: {
 		LOG(Level::INFO,
 			"ItemListFormAction: saving all items");
+
+		if (visible_items.empty()) {
+			break;
+		}
+
+		std::string directory = v->run_dirbrowser();
+
+		if (directory.empty()) {
+			return;
+		}
+
+		if (directory.back() != '/') {
+			directory = directory + "/";
+		}
+
 		if (visible_items.size() == 1) {
-			std::string directory = v->run_dirbrowser();
-
-			if (directory == "") {
-				return;
-			}
-
-			if (directory.back() != '/') {
-				directory = directory + "/";
-			}
-
 			const std::string filename = v->get_filename_suggestion(visible_items[0].first->title());
 			const std::string fpath = directory + filename;
 
@@ -417,17 +422,7 @@ void ItemListFormAction::process_operation(Operation op,
 				save_article(filename, visible_items[0].first);
 			}
 
-		} else if (visible_items.size() > 1) {
-			std::string directory = v->run_dirbrowser();
-
-			if (directory == "") {
-				return;
-			}
-
-			if (directory.back() != '/') {
-				directory = directory + "/";
-			}
-
+		} else {
 			int nfiles_exist = 0;
 			for (const auto &item : visible_items) {
 				const std::string filename = v->get_filename_suggestion(item.first->title());
