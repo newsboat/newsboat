@@ -1,6 +1,8 @@
+extern crate std;
 extern crate curl_sys;
 extern crate dirs;
 extern crate libc;
+extern crate natord;
 extern crate rand;
 extern crate regex;
 extern crate unicode_segmentation;
@@ -477,6 +479,10 @@ pub fn make_title(rs_str: String) -> String {
 pub fn getcwd() -> Result<PathBuf, io::Error> {
     use std::env;
     env::current_dir()
+}
+
+pub fn strnaturalcmp(a: &str, b: &str) -> std::cmp::Ordering {
+    natord::compare(a, b)
 }
 
 /// Recursively create directories if missing and set permissions accordingly.

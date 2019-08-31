@@ -300,6 +300,20 @@ pub extern "C" fn rs_getcwd() -> *mut c_char {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn rs_strnaturalcmp(a: *const c_char, b: *const c_char) -> isize {
+    use std::cmp::Ordering;
+    abort_on_panic(|| {
+        let a = CStr::from_ptr(a).to_string_lossy();
+        let b = CStr::from_ptr(b).to_string_lossy();
+        match utils::strnaturalcmp(&a, &b) {
+            Ordering::Less => -1,
+            Ordering::Equal => 0,
+            Ordering::Greater => 1,
+        }
+    })
+}
+
+#[no_mangle]
 pub extern "C" fn rs_get_default_browser() -> *mut c_char {
     abort_on_panic(|| {
         let browser = utils::get_default_browser();
