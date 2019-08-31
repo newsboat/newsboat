@@ -7,7 +7,9 @@ use std::fs::{self, DirBuilder};
 use std::io;
 use std::os::unix::fs::DirBuilderExt;
 use std::path::{Path, PathBuf};
+use utils;
 use xdg;
+
 
 pub const NEWSBOAT_SUBDIR_XDG: &str = "newsboat";
 pub const NEWSBOAT_CONFIG_SUBDIR: &str = ".newsboat";
@@ -382,11 +384,7 @@ impl ConfigPaths {
 }
 
 fn try_mkdir<R: AsRef<Path>>(path: R) -> bool {
-    DirBuilder::new()
-        .recursive(true)
-        .mode(0o700)
-        .create(path.as_ref())
-        .is_ok()
+    utils::mkdir_parents(&path.as_ref(), 0o700).is_ok()
 }
 
 fn mkdir<R: AsRef<Path>>(path: R, mode: u32) -> io::Result<()> {
