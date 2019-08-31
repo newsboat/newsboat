@@ -1432,7 +1432,7 @@ void ItemListFormAction::handle_op_saveall() {
 			if (c == input_options.at(0)) {
 				save_article(filename, visible_items[0].first);
 			} else if (c == input_options.at(1)) {
-				save_article(filename, visible_items[0].first);
+				return;
 			}
 		} else {
 			// get file since it does not exist
