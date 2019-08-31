@@ -657,11 +657,20 @@ void ItemListFormAction::process_operation(Operation op,
 			_("Sort by "
 			  "(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"),
 			input_options);
-		if (!c)
+		if (!c) {
 			break;
-		unsigned int n_options = ((std::string) "dtfalgr").length();
-		if (input_options.length() < n_options)
+		}
+
+		// Check that the number of translated answers is the same as the
+		// number of answers we expect to handle. If it doesn't, just give up.
+		// That'll prevent this function from sorting anything, so users will
+		// complain, and we'll ask them to update the translation. A bit lame,
+		// but it's better than mishandling the answer.
+		const auto n_options = ((std::string) "dtfalgr").length();
+		if (input_options.length() < n_options) {
 			break;
+		}
+
 		if (c == input_options.at(0)) {
 			cfg->set_configvalue("article-sort-order", "date-asc");
 		} else if (c == input_options.at(1)) {
@@ -685,11 +694,20 @@ void ItemListFormAction::process_operation(Operation op,
 			_("Reverse Sort by "
 			  "(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"),
 			input_options);
-		if (!c)
+		if (!c) {
 			break;
-		unsigned int n_options = ((std::string) "dtfalgr").length();
-		if (input_options.length() < n_options)
+		}
+
+		// Check that the number of translated answers is the same as the
+		// number of answers we expect to handle. If it doesn't, just give up.
+		// That'll prevent this function from sorting anything, so users will
+		// complain, and we'll ask them to update the translation. A bit lame,
+		// but it's better than mishandling the answer.
+		const auto n_options = ((std::string) "dtfalgr").length();
+		if (input_options.length() < n_options) {
 			break;
+		}
+
 		if (c == input_options.at(0)) {
 			cfg->set_configvalue("article-sort-order", "date-desc");
 		} else if (c == input_options.at(1)) {
@@ -1424,7 +1442,13 @@ void ItemListFormAction::handle_op_saveall() {
 			if (!c) {
 				return;
 			}
-			unsigned int n_options = ((std::string) "yn").length();
+
+			// Check that the number of translated answers is the same as the
+			// number of answers we expect to handle. If it doesn't, just give
+			// up. That'll prevent this function from saving anything, so users
+			// will complain, and we'll ask them to update the translation.
+			// A bit lame, but it's better than mishandling the answer.
+			const auto n_options = ((std::string) "yn").length();
 			if (input_options.length() < n_options) {
 				return;
 			}
@@ -1458,6 +1482,11 @@ void ItemListFormAction::handle_op_saveall() {
 			}
 		}
 
+		// Check that the number of translated answers is the same as the
+		// number of answers we expect to handle. If it doesn't, just give up.
+		// That'll prevent this function from saving anything, so users will
+		// complain, and we'll ask them to update the translation. A bit lame,
+		// but it's better than mishandling the answer.
 		const std::string input_options = _("yanq");
 		const auto n_options = ((std::string) "yanq").length();
 		if (input_options.length() < n_options) {
