@@ -1,10 +1,10 @@
-extern crate std;
 extern crate curl_sys;
 extern crate dirs;
 extern crate libc;
 extern crate natord;
 extern crate rand;
 extern crate regex;
+extern crate std;
 extern crate unicode_segmentation;
 extern crate unicode_width;
 extern crate url;
@@ -1016,29 +1016,29 @@ mod tests {
     #[test]
     fn t_strnaturalcmp() {
         use std::cmp::Ordering;
-        assert_eq!(strnaturalcmp("",""), Ordering::Equal);
-        assert_eq!(strnaturalcmp("","a"), Ordering::Less);
-        assert_eq!(strnaturalcmp("a",""), Ordering::Greater);
-        assert_eq!(strnaturalcmp("a","a"), Ordering::Equal);
-        assert_eq!(strnaturalcmp("","9"), Ordering::Less);
-        assert_eq!(strnaturalcmp("9",""), Ordering::Greater);
-        assert_eq!(strnaturalcmp("1","1"), Ordering::Equal);
-        assert_eq!(strnaturalcmp("1","2"), Ordering::Less);
-        assert_eq!(strnaturalcmp("3","2"), Ordering::Greater);
-        assert_eq!(strnaturalcmp("a1","a1"), Ordering::Equal);
-        assert_eq!(strnaturalcmp("a1","a2"), Ordering::Less);
-        assert_eq!(strnaturalcmp("a2","a1"), Ordering::Greater);
-        assert_eq!(strnaturalcmp("a1a2","a1a3"), Ordering::Less);
-        assert_eq!(strnaturalcmp("a1a2","a1a0"), Ordering::Greater);
-        assert_eq!(strnaturalcmp("134","122"), Ordering::Greater);
-        assert_eq!(strnaturalcmp("12a3","12a3"), Ordering::Equal);
-        assert_eq!(strnaturalcmp("12a1","12a0"), Ordering::Greater);
-        assert_eq!(strnaturalcmp("12a1","12a2"), Ordering::Less);
-        assert_eq!(strnaturalcmp("a","aa"), Ordering::Less);
-        assert_eq!(strnaturalcmp("aaa","aa"), Ordering::Greater);
-        assert_eq!(strnaturalcmp("Alpha 2","Alpha 2"), Ordering::Equal);
-        assert_eq!(strnaturalcmp("Alpha 2","Alpha 2A"), Ordering::Less);
-        assert_eq!(strnaturalcmp("Alpha 2 B","Alpha 2"), Ordering::Greater);
+        assert_eq!(strnaturalcmp("", ""), Ordering::Equal);
+        assert_eq!(strnaturalcmp("", "a"), Ordering::Less);
+        assert_eq!(strnaturalcmp("a", ""), Ordering::Greater);
+        assert_eq!(strnaturalcmp("a", "a"), Ordering::Equal);
+        assert_eq!(strnaturalcmp("", "9"), Ordering::Less);
+        assert_eq!(strnaturalcmp("9", ""), Ordering::Greater);
+        assert_eq!(strnaturalcmp("1", "1"), Ordering::Equal);
+        assert_eq!(strnaturalcmp("1", "2"), Ordering::Less);
+        assert_eq!(strnaturalcmp("3", "2"), Ordering::Greater);
+        assert_eq!(strnaturalcmp("a1", "a1"), Ordering::Equal);
+        assert_eq!(strnaturalcmp("a1", "a2"), Ordering::Less);
+        assert_eq!(strnaturalcmp("a2", "a1"), Ordering::Greater);
+        assert_eq!(strnaturalcmp("a1a2", "a1a3"), Ordering::Less);
+        assert_eq!(strnaturalcmp("a1a2", "a1a0"), Ordering::Greater);
+        assert_eq!(strnaturalcmp("134", "122"), Ordering::Greater);
+        assert_eq!(strnaturalcmp("12a3", "12a3"), Ordering::Equal);
+        assert_eq!(strnaturalcmp("12a1", "12a0"), Ordering::Greater);
+        assert_eq!(strnaturalcmp("12a1", "12a2"), Ordering::Less);
+        assert_eq!(strnaturalcmp("a", "aa"), Ordering::Less);
+        assert_eq!(strnaturalcmp("aaa", "aa"), Ordering::Greater);
+        assert_eq!(strnaturalcmp("Alpha 2", "Alpha 2"), Ordering::Equal);
+        assert_eq!(strnaturalcmp("Alpha 2", "Alpha 2A"), Ordering::Less);
+        assert_eq!(strnaturalcmp("Alpha 2 B", "Alpha 2"), Ordering::Greater);
 
         assert_eq!(strnaturalcmp("aa10", "aa2"), Ordering::Greater);
     }
