@@ -10,7 +10,6 @@ use std::path::{Path, PathBuf};
 use utils;
 use xdg;
 
-
 pub const NEWSBOAT_SUBDIR_XDG: &str = "newsboat";
 pub const NEWSBOAT_CONFIG_SUBDIR: &str = ".newsboat";
 pub const NEWSBEUTER_SUBDIR_XDG: &str = "newsbeuter";
