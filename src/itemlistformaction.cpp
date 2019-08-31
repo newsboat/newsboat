@@ -1450,6 +1450,12 @@ void ItemListFormAction::handle_op_saveall() {
 			}
 		}
 
+		const std::string input_options = _("yanq");
+		const auto n_options = ((std::string) "yanq").length();
+		if (input_options.length() < n_options) {
+			return;
+		}
+
 		bool overwrite_all = false;
 		for (const auto &item : visible_items) {
 			const std::string filename = v->get_filename_suggestion(item.first->title());
@@ -1462,7 +1468,6 @@ void ItemListFormAction::handle_op_saveall() {
 					continue;
 				}
 
-				std::string input_options = _("yanq");
 				char c;
 				if (nfiles_exist > 1) {
 					c = v->confirm(strprintf::fmt(
@@ -1480,11 +1485,6 @@ void ItemListFormAction::handle_op_saveall() {
 							  input_options);
 				}
 				if (!c) {
-					break;
-				}
-
-				unsigned int n_options = ((std::string) "yanq").length();
-				if (input_options.length() < n_options) {
 					break;
 				}
 
