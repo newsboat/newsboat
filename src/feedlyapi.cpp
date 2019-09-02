@@ -262,7 +262,7 @@ std::vector<TaggedFeedUrl> FeedlyApi::get_subscribed_urls() {
   std::vector<TaggedFeedUrl> urls;
   LOG(Level::INFO, "FeedlyApi::get_subscribed_urls");
 
-  std::string access_token = "";
+  std::string access_token = cfg->get_configvalue("feedly-access-token");
 
   std::string result;
   CURL *handle = curl_easy_init();

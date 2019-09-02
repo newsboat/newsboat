@@ -253,6 +253,7 @@ ConfigContainer::ConfigContainer()
 			"newsblur",
 			"feedhq",
 			"ocnews",
+			"feedly",
 			"inoreader"}))},
 	{"use-proxy", ConfigData("no", ConfigDataType::BOOL)},
 	{"user-agent", ConfigData("", ConfigDataType::STR)},
