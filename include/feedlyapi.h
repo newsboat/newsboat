@@ -1,12 +1,11 @@
 #ifndef NEWSBOAT_FEEDLYAPI_H_
 #define NEWSBOAT_FEEDLYAPI_H_
 
-#include <json.h>
-//#include <libxml/tree.h>
+#include <json-c/json.h>
 
 #include <unordered_map>
 #include "remoteapi.h"
-#include "urlreader.h"
+#include "rss/feed.h"
 
 namespace newsboat {
 
@@ -22,6 +21,7 @@ public:
 	virtual bool update_article_flags(const std::string& oldflags,
 		const std::string& newflags,
 		const std::string& guid);
+	rsspp::Feed fetch_feed(const std::string& id);
 
 private:
 	std::string star_flag;

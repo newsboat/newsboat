@@ -14,6 +14,7 @@
 #include "htmlrenderer.h"
 #include "logger.h"
 #include "newsblurapi.h"
+#include "feedlyapi.h"
 #include "ocnewsapi.h"
 #include "rss/exception.h"
 #include "rss/parser.h"
@@ -41,6 +42,7 @@ RssParser::RssParser(const std::string& uri,
 	is_ttrss = cfgcont->get_configvalue("urls-source") == "ttrss";
 	is_newsblur = cfgcont->get_configvalue("urls-source") == "newsblur";
 	is_ocnews = cfgcont->get_configvalue("urls-source") == "ocnews";
+	is_feedly = cfgcont->get_configvalue("urls-source") == "feedly";
 }
 
 RssParser::~RssParser() {}
@@ -160,6 +162,8 @@ void RssParser::retrieve_uri(const std::string& uri)
 		fetch_newsblur(uri);
 	} else if (is_ocnews) {
 		fetch_ocnews(uri);
+	} else if (is_feedly) {
+		fetch_feedly(uri);
 	} else if (utils::is_http_url(uri)) {
 		download_http(uri);
 	} else if (utils::is_exec_url(uri)) {
@@ -624,6 +628,17 @@ void RssParser::fetch_newsblur(const std::string& feed_id)
 	}
 	LOG(Level::INFO,
 		"RssParser::fetch_newsblur: f.items.size = %" PRIu64,
+		static_cast<uint64_t>(f.items.size()));
+}
+
+void RssParser::fetch_feedly(const std::string& feed_id)
+{
+	FeedlyApi* fapi = dynamic_cast<FeedlyApi*>(api);
+	if (fapi) {
+		f = fapi->fetch_feed(feed_id);
+	}
+	LOG(Level::INFO,
+		"RssParser::fetch_feedly: f.items.size = %" PRIu64,
 		static_cast<uint64_t>(f.items.size()));
 }
 

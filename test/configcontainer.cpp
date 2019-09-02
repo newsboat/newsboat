@@ -288,6 +288,10 @@ TEST_CASE(
 		"feedhq-url",
 		"feedlist-format",
 		"feedlist-title-format",
+		"feedly-login",
+		"feedly-min-items",
+		"feedly-password",
+		"feedly-access-token"
 	};
 	results = cfg.get_suggestions(key2);
 	const std::unordered_set<std::string> results_set2(
