@@ -258,81 +258,40 @@ bool FeedlyApi::mark_all_read(const std::string& feedurl)
 	return true;
 }
 
-std::vector<TaggedFeedUrl> FeedlyApi::get_subscribed_urls() {
-  std::vector<TaggedFeedUrl> urls;
-  LOG(Level::INFO, "FeedlyApi::get_subscribed_urls");
+bool FeedlyApi::star_article(const std::string& guid, bool star)
+{
+	json_object* jobj =  json_object_new_object();
+	json_object_object_add(jobj, "type", json_object_new_string("entries"));
+	std::string action = star ? "markAsSaved" : "markAsUnsaved";
+	json_object_object_add(jobj, "action", json_object_new_string(action.c_str()));
 
-  std::string access_token = cfg->get_configvalue("feedly-access-token");
+	json_object* jarray = json_object_new_array();
+	json_object_array_add(jarray, json_object_new_string(guid.c_str()));
+	json_object_object_add(jobj,"entryIds", jarray);
 
-  std::string result;
-  CURL *handle = curl_easy_init();
-  curl_easy_setopt(handle, CURLOPT_NOSIGNAL, 1);
-  curl_easy_setopt(handle, CURLOPT_ENCODING, "gzip, deflate");
-
-  curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1);
-  curl_easy_setopt(handle, CURLOPT_MAXREDIRS, 10);
-  curl_easy_setopt(handle, CURLOPT_FAILONERROR, 1);
-  curl_easy_setopt(handle, CURLOPT_URL, "http://feedly.com/v3/collections");
-  curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
-
-  std::string auth_header;
-  curl_slist *custom_headers{};
-  auth_header = strprintf::fmt("Authorization: Bearer %s", access_token);
-  custom_headers = curl_slist_append(custom_headers, auth_header.c_str());
-  curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
-
-  curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
-
-  curl_easy_perform(handle);
-  curl_easy_cleanup(handle);
-  curl_slist_free_all(custom_headers);
-
-  json_object *reply = json_tokener_parse(result.c_str());
-  if (reply == nullptr) {
-    LOG(Level::ERROR, "FeedlyApi::get_subscribed_urls: failed to parse "
-                      "response as JSON.");
-  }
-
-  struct array_list *collections = json_object_get_array(reply);
-  int num_cols = array_list_length(collections);
-
-  for (int i = 0; i < num_cols; i++) {
-    // grab collection.
-    json_object *col = json_object_array_get_idx(reply, i);
-
-    json_object *node{};
-    json_object_object_get_ex(col, "label", &node);
-    const char *col_label = json_object_get_string(node);
-
-    json_object *feeds_obj{};
-    json_object_object_get_ex(col, "feeds", &feeds_obj);
-    struct array_list *feeds = json_object_get_array(feeds_obj);
-    int num_feeds = array_list_length(feeds);
-    for (int i = 0; i < num_feeds; i++) {
-      std::vector<std::string> tags;
-      // grab feed.
-      json_object *feed = json_object_array_get_idx(feeds_obj, i);
-
-      json_object *node{};
-      json_object_object_get_ex(feed, "id", &node);
-      const char *feed_id = json_object_get_string(node);
-
-      json_object_object_get_ex(feed, "title", &node);
-      const char *feed_title = json_object_get_string(node);
-      // TODO: use GET /v3/feeds/:feedId for more topics.
-
-      tags.push_back(std::string("~") + feed_title);
-      tags.push_back(std::string(col_label));
-
-      char *encoded_id = curl_easy_escape(handle, feed_id, 0);
-      std::string url =
-          strprintf::fmt("%s?streamId=%s", FEEDLY_FEED_PREFIX, encoded_id);
-      urls.push_back(TaggedFeedUrl(url, tags));
-    }
-  }
-
-  json_object_put(reply);
-  return urls;
+	std::string req_data = json_object_to_json_string(jobj);
+	request_url(MARKER_URI, &req_data);
+	//TODO: handle error with request_url
+	return true;
 }
 
-} // namespace newsboat
+bool FeedlyApi::update_article_flags(const std::string& oldflags,
+	const std::string& newflags,
+	const std::string& guid)
+{
+	// TODO: lots of possible integrations..
+	LOG(Level::DEBUG, "FeedlyApi::update-article_flags=%s,%s,%s", oldflags,
+		newflags, guid);
+	bool success = true;
+	if (star_flag.length() > 0) {
+		if (strchr(oldflags.c_str(), star_flag[0]) == nullptr &&
+			strchr(newflags.c_str(), star_flag[0]) != nullptr) {
+			success = star_article(guid, true);
+		} else if (strchr(oldflags.c_str(), star_flag[0]) != nullptr &&
+			strchr(newflags.c_str(), star_flag[0]) == nullptr) {
+			success = star_article(guid, false);
+		}
+	}
+	return success;
+}
+}

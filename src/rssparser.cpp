@@ -401,6 +401,16 @@ void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed)
 				x->set_unread_nowrite(false);
 				x->set_override_unread(true);
 			}
+			if (std::find(start, finish, "feedly:unread") !=
+				finish) {
+				x->set_unread_nowrite(true);
+				x->set_override_unread(true);
+			}
+			if (std::find(start, finish, "feedly:read") !=
+				finish) {
+				x->set_unread_nowrite(false);
+				x->set_override_unread(true);
+			}
 			if (std::find(start, finish, "ocnews:unread") !=
 				finish) {
 				x->set_unread_nowrite(true);
