@@ -3,6 +3,4 @@ members = [
     "rust/libnewsboat",
     "rust/libnewsboat-ffi",
     "rust/strprintf",
-    "rust/strprintf-32bit",
-    "rust/strprintf-64bit",
 ]

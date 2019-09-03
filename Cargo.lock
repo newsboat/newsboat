@@ -689,17 +689,7 @@ name = "strprintf"
 version = "0.1.0"
 dependencies = [
  "libc 0.2.48 (registry+https://github.com/rust-lang/crates.io-index)",
- "strprintf-32bit 0.1.0",
- "strprintf-64bit 0.1.0",
 ]
-
-[[package]]
-name = "strprintf-32bit"
-version = "0.1.0"
-
-[[package]]
-name = "strprintf-64bit"
-version = "0.1.0"
 
 [[package]]
 name = "syn"
