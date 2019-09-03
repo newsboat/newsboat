@@ -375,126 +375,9 @@ void ItemListFormAction::process_operation(Operation op,
 			v->show_error(_("Error: no item selected!"));
 		}
 	} break;
-	case OP_SAVEALL: {
-		LOG(Level::INFO,
-			"ItemListFormAction: saving all items");
-		if (visible_items.size() == 1) {
-			std::string directory = v->run_dirbrowser();
-
-			if (directory == "") {
-				return;
-			}
-
-			if (directory.back() != '/') {
-				directory = directory + "/";
-			}
-
-			const std::string filename = v->get_filename_suggestion(visible_items[0].first->title());
-			const std::string fpath = directory + filename;
-
-			struct stat sbuf;
-			if (::stat(fpath.c_str(), &sbuf) != -1) {
-				std::string input_options = _("yn");
-				char c = v->confirm(strprintf::fmt(
-						_("Overwrite `%s' in `%s?' "
-						  "(y:Yes n:No)"),
-						filename, directory),
-						input_options);
-				if (!c)
-					break;
-				unsigned int n_options = ((std::string) "yn").length();
-				if (input_options.length() < n_options) {
-					break;
-				}
-
-				if (c == input_options.at(0)) {
-					save_article(filename, visible_items[0].first);
-				} else if (c == input_options.at(1)) {
-					save_article(filename, visible_items[0].first);
-				}
-			} else {
-				// get file since it does not exist
-				save_article(filename, visible_items[0].first);
-			}
-
-		} else if (visible_items.size() > 1) {
-			std::string directory = v->run_dirbrowser();
-
-			if (directory == "") {
-				return;
-			}
-
-			if (directory.back() != '/') {
-				directory = directory + "/";
-			}
-
-			int nfiles_exist = 0;
-			for (const auto &item : visible_items) {
-				const std::string filename = v->get_filename_suggestion(item.first->title());
-				const std::string fpath = directory + filename;
-
-				struct stat sbuf;
-				if (::stat(fpath.c_str(), &sbuf) != -1) {
-					nfiles_exist++;
-				}
-			}
-
-			bool overwrite_all = false;
-			for (const auto &item : visible_items) {
-				const std::string filename = v->get_filename_suggestion(item.first->title());
-				const std::string fpath = directory + filename;
-
-				struct stat sbuf;
-				if (::stat(fpath.c_str(), &sbuf) != -1) {
-					if (!overwrite_all) {
-						std::string input_options = _("yanq");
-						char c;
-						if (nfiles_exist > 1) {
-							c = v->confirm(strprintf::fmt(
-									_("Overwrite `%s' in `%s'? "
-									  "There are %d more conflicts like this "
-									  "(y:Yes a:Yes to all n:No q:No to all)"),
-									  filename, directory, --nfiles_exist),
-									  input_options);
-						} else {
-							c = v->confirm(strprintf::fmt(
-									_("Overwrite `%s' in `%s'? "
-									  "There are no more conflicts like this "
-									  "(y:Yes a:Yes to all n:No q:No to all)"),
-									  filename, directory),
-									  input_options);
-						}
-						if (!c) {
-							break;
-						}
-
-						unsigned int n_options = ((std::string) "yanq").length();
-						if (input_options.length() < n_options) {
-							break;
-						}
-
-						if (c == input_options.at(0)) {
-							save_article(fpath,
-										 item.first);
-						} else if (c == input_options.at(1)) {
-							overwrite_all = true;
-							save_article(fpath,
-										 item.first);
-						} else if (c == input_options.at(2)) {
-							continue;
-						} else if (c == input_options.at(3)) {
-							break;
-						}
-					} else {
-						save_article(fpath, item.first);
-					}
-				} else {
-					// get file since it does not exist
-					save_article(fpath, item.first);
-				}
-			}
-		}
-	} break;
+	case OP_SAVEALL:
+		handle_op_saveall();
+		break;
 	case OP_HELP:
 		v->push_help();
 		break;
@@ -774,11 +657,20 @@ void ItemListFormAction::process_operation(Operation op,
 			_("Sort by "
 			  "(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"),
 			input_options);
-		if (!c)
+		if (!c) {
 			break;
-		unsigned int n_options = ((std::string) "dtfalgr").length();
-		if (input_options.length() < n_options)
+		}
+
+		// Check that the number of translated answers is the same as the
+		// number of answers we expect to handle. If it doesn't, just give up.
+		// That'll prevent this function from sorting anything, so users will
+		// complain, and we'll ask them to update the translation. A bit lame,
+		// but it's better than mishandling the answer.
+		const auto n_options = ((std::string) "dtfalgr").length();
+		if (input_options.length() < n_options) {
 			break;
+		}
+
 		if (c == input_options.at(0)) {
 			cfg->set_configvalue("article-sort-order", "date-asc");
 		} else if (c == input_options.at(1)) {
@@ -802,11 +694,20 @@ void ItemListFormAction::process_operation(Operation op,
 			_("Reverse Sort by "
 			  "(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"),
 			input_options);
-		if (!c)
+		if (!c) {
 			break;
-		unsigned int n_options = ((std::string) "dtfalgr").length();
-		if (input_options.length() < n_options)
+		}
+
+		// Check that the number of translated answers is the same as the
+		// number of answers we expect to handle. If it doesn't, just give up.
+		// That'll prevent this function from sorting anything, so users will
+		// complain, and we'll ask them to update the translation. A bit lame,
+		// but it's better than mishandling the answer.
+		const auto n_options = ((std::string) "dtfalgr").length();
+		if (input_options.length() < n_options) {
 			break;
+		}
+
 		if (c == input_options.at(0)) {
 			cfg->set_configvalue("article-sort-order", "date-desc");
 		} else if (c == input_options.at(1)) {
@@ -1504,6 +1405,141 @@ std::string ItemListFormAction::title()
 			utils::remove_soft_hyphens(feedtitle);
 			return strprintf::fmt(
 				_("Article List - %s"), feedtitle);
+		}
+	}
+}
+
+void ItemListFormAction::handle_op_saveall() {
+	LOG(Level::INFO,
+		"ItemListFormAction: saving all items");
+
+	if (visible_items.empty()) {
+		return;
+	}
+
+	std::string directory = v->run_dirbrowser();
+
+	if (directory.empty()) {
+		return;
+	}
+
+	if (directory.back() != '/') {
+		directory = directory + "/";
+	}
+
+	if (visible_items.size() == 1) {
+		const std::string filename = v->get_filename_suggestion(visible_items[0].first->title());
+		const std::string fpath = directory + filename;
+
+		struct stat sbuf;
+		if (::stat(fpath.c_str(), &sbuf) != -1) {
+			std::string input_options = _("yn");
+			char c = v->confirm(strprintf::fmt(
+					_("Overwrite `%s' in `%s?' "
+					  "(y:Yes n:No)"),
+					filename, directory),
+					input_options);
+			if (!c) {
+				return;
+			}
+
+			// Check that the number of translated answers is the same as the
+			// number of answers we expect to handle. If it doesn't, just give
+			// up. That'll prevent this function from saving anything, so users
+			// will complain, and we'll ask them to update the translation.
+			// A bit lame, but it's better than mishandling the answer.
+			const auto n_options = ((std::string) "yn").length();
+			if (input_options.length() < n_options) {
+				return;
+			}
+
+			if (c == input_options.at(0)) {
+				save_article(fpath, visible_items[0].first);
+			} else if (c == input_options.at(1)) {
+				return;
+			}
+		} else {
+			// Create file since it does not exist
+			save_article(fpath, visible_items[0].first);
+		}
+	} else {
+		std::vector<std::string> filenames;
+		for (const auto &item : visible_items) {
+			filenames.emplace_back(
+					v->get_filename_suggestion(item.first->title()));
+		}
+
+		const auto unique_filenames = std::set<std::string>(
+				std::begin(filenames),
+				std::end(filenames));
+
+		int nfiles_exist = filenames.size() - unique_filenames.size();
+		for (const auto& filename : unique_filenames) {
+			const auto filepath = directory + filename;
+			struct stat sbuf;
+			if (::stat(filepath.c_str(), &sbuf) != -1) {
+				nfiles_exist++;
+			}
+		}
+
+		// Check that the number of translated answers is the same as the
+		// number of answers we expect to handle. If it doesn't, just give up.
+		// That'll prevent this function from saving anything, so users will
+		// complain, and we'll ask them to update the translation. A bit lame,
+		// but it's better than mishandling the answer.
+		const std::string input_options = _("yanq");
+		const auto n_options = ((std::string) "yanq").length();
+		if (input_options.length() < n_options) {
+			return;
+		}
+
+		bool overwrite_all = false;
+		for (size_t item_idx = 0; item_idx < filenames.size(); ++item_idx) {
+			const auto filename = filenames[item_idx];
+			const auto filepath = directory + filename;
+			auto item = visible_items[item_idx].first;
+
+			struct stat sbuf;
+			if (::stat(filepath.c_str(), &sbuf) != -1) {
+				if (overwrite_all) {
+					save_article(filepath, item);
+					continue;
+				}
+
+				char c;
+				if (nfiles_exist > 1) {
+					c = v->confirm(strprintf::fmt(
+							_("Overwrite `%s' in `%s'? "
+							  "There are %d more conflicts like this "
+							  "(y:Yes a:Yes to all n:No q:No to all)"),
+							  filename, directory, --nfiles_exist),
+							  input_options);
+				} else {
+					c = v->confirm(strprintf::fmt(
+							_("Overwrite `%s' in `%s'? "
+							  "There are no more conflicts like this "
+							  "(y:Yes a:Yes to all n:No q:No to all)"),
+							  filename, directory),
+							  input_options);
+				}
+				if (!c) {
+					break;
+				}
+
+				if (c == input_options.at(0)) {
+					save_article(filepath, item);
+				} else if (c == input_options.at(1)) {
+					overwrite_all = true;
+					save_article(filepath, item);
+				} else if (c == input_options.at(2)) {
+					continue;
+				} else if (c == input_options.at(3)) {
+					break;
+				}
+			} else {
+				// Create file since it does not exist
+				save_article(filepath, item);
+			}
 		}
 	}
 }

@@ -24,7 +24,7 @@ namespace newsboat {
 
 		std::string id() const override
 		{
-			return "filebrowser";
+			return "dirbrowser";
 		}
 		std::string title() override;
 

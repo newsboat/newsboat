@@ -150,11 +150,20 @@ REDO:
 			  "(f)irsttag/(t)itle/(a)rticlecount/"
 			  "(u)nreadarticlecount/(l)astupdated/(n)one?"),
 			input_options);
-		if (!c)
+		if (!c) {
 			break;
-		unsigned int n_options = ((std::string) "ftaun").length();
-		if (input_options.length() < n_options)
+		}
+
+		// Check that the number of translated answers is the same as the
+		// number of answers we expect to handle. If it doesn't, just give up.
+		// That'll prevent this function from sorting anything, so users will
+		// complain, and we'll ask them to update the translation. A bit lame,
+		// but it's better than mishandling the answer.
+		const auto n_options = ((std::string) "ftaun").length();
+		if (input_options.length() < n_options) {
 			break;
+		}
+
 		if (c == input_options.at(0)) {
 			cfg->set_configvalue(
 				"feed-sort-order", "firsttag-desc");
@@ -180,11 +189,20 @@ REDO:
 			  "(f)irsttag/(t)itle/(a)rticlecount/"
 			  "(u)nreadarticlecount/(l)astupdated/(n)one?"),
 			input_options);
-		if (!c)
+		if (!c) {
 			break;
-		unsigned int n_options = ((std::string) "ftaun").length();
-		if (input_options.length() < n_options)
+		}
+
+		// Check that the number of translated answers is the same as the
+		// number of answers we expect to handle. If it doesn't, just give up.
+		// That'll prevent this function from sorting anything, so users will
+		// complain, and we'll ask them to update the translation. A bit lame,
+		// but it's better than mishandling the answer.
+		const auto n_options = ((std::string) "ftaun").length();
+		if (input_options.length() < n_options) {
 			break;
+		}
+
 		if (c == input_options.at(0)) {
 			cfg->set_configvalue("feed-sort-order", "firsttag-asc");
 		} else if (c == input_options.at(1)) {
