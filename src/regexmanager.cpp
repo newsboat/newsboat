@@ -217,9 +217,12 @@ int RegexManager::article_matches(Matchable* item)
 
 void RegexManager::remove_last_regex(const std::string& location)
 {
-	std::vector<regex_t*>& regexes = locations[location].first;
+	auto& regexes = locations[location].first;
+	if (regexes.empty()) {
+		return;
+	}
 
-	auto it = regexes.begin() + regexes.size() - 1;
+	auto it = regexes.end() - 1;
 	delete *it;
 	regexes.erase(it);
 }
