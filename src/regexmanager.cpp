@@ -26,7 +26,10 @@ RegexManager::~RegexManager()
 	for (const auto& location : locations) {
 		if (location.second.first.size() > 0) {
 			for (const auto& regex : location.second.first) {
-				delete regex;
+				if (regex != nullptr) {
+					regfree(regex);
+					delete regex;
+				}
 			}
 		}
 	}
@@ -70,6 +73,7 @@ void RegexManager::remove_last_regex(const std::string& location)
 	}
 
 	auto it = regexes.end() - 1;
+	regfree(*it);
 	delete *it;
 	regexes.erase(it);
 }
@@ -123,11 +127,11 @@ std::string RegexManager::extract_outer_marker(std::string str, const int index)
 void RegexManager::quote_and_highlight(std::string& str,
 	const std::string& location)
 {
-	std::vector<regex_t*>& regexes = locations[location].first;
+	auto& regexes = locations[location].first;
 
 	unsigned int i = 0;
 	for (const auto& regex : regexes) {
-		if (!regex) {
+		if (regex == nullptr) {
 			continue;
 		}
 		regmatch_t pmatch;
@@ -237,6 +241,7 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>& param
 		locations[location].first.push_back(rx);
 		locations[location].second.push_back(colorstr);
 	} else {
+		regfree(rx);
 		delete rx;
 		for (auto& location : locations) {
 			LOG(Level::DEBUG,
