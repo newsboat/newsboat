@@ -94,7 +94,7 @@ void RegexManager::handle_action(const std::string& action,
 			}
 			for (unsigned int i = 4; i < params.size(); ++i) {
 				if (params[i] != "default") {
-					if (colorstr.length() > 0) {
+					if (!colorstr.empty()) {
 						colorstr.append(",");
 					}
 					colorstr.append("attr=");
@@ -167,7 +167,7 @@ void RegexManager::handle_action(const std::string& action,
 			colorstr.append(fgcolor);
 		}
 		if (bgcolor != "default") {
-			if (colorstr.length() > 0) {
+			if (!colorstr.empty()) {
 				colorstr.append(",");
 			}
 			colorstr.append("bg=");
@@ -181,7 +181,7 @@ void RegexManager::handle_action(const std::string& action,
 
 		for (unsigned int i = 3; i < params.size(); i++) {
 			if (params[i] != "default") {
-				if (colorstr.length() > 0) {
+				if (!colorstr.empty()) {
 					colorstr.append(",");
 				}
 				colorstr.append("attr=");
@@ -249,7 +249,7 @@ std::string RegexManager::extract_outer_marker(std::string str, const int index)
 	std::stack<std::string> tagstack;
 	int offset = 0;
 
-	if (str.length() == 0) {
+	if (str.empty()) {
 		return "";
 	}
 
