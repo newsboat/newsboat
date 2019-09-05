@@ -7,30 +7,32 @@
 
 using namespace newsboat;
 
-struct testMatchable : public Matchable {
+struct MatcherMockMatchable : public Matchable {
 	virtual bool has_attribute(const std::string& attribname)
 	{
 		if (attribname == "abcd" || attribname == "AAAA" ||
-			attribname == "tags")
+			attribname == "tags") {
 			return true;
+		}
 		return false;
 	}
 
 	virtual std::string get_attribute(const std::string& attribname)
 	{
-		if (attribname == "abcd")
+		if (attribname == "abcd") {
 			return "xyz";
-		if (attribname == "AAAA")
+		} else if (attribname == "AAAA") {
 			return "12345";
-		if (attribname == "tags")
+		} else if (attribname == "tags") {
 			return "foo bar baz quux";
+		}
 		return "";
 	}
 };
 
 TEST_CASE("Operator `=` checks if field has given value", "[Matcher]")
 {
-	testMatchable mock;
+	MatcherMockMatchable mock;
 	Matcher m;
 
 	m.parse("abcd = \"xyz\"");
@@ -42,7 +44,7 @@ TEST_CASE("Operator `=` checks if field has given value", "[Matcher]")
 
 TEST_CASE("Operator `!=` checks if field doesn't have given value", "[Matcher]")
 {
-	testMatchable mock;
+	MatcherMockMatchable mock;
 	Matcher m;
 
 	m.parse("abcd != \"uiop\"");
@@ -54,7 +56,7 @@ TEST_CASE("Operator `!=` checks if field doesn't have given value", "[Matcher]")
 
 TEST_CASE("Operator `=~` checks if field matches given regex", "[Matcher]")
 {
-	testMatchable mock;
+	MatcherMockMatchable mock;
 	Matcher m;
 
 	m.parse("AAAA =~ \".\"");
@@ -78,7 +80,7 @@ TEST_CASE("Operator `=~` checks if field matches given regex", "[Matcher]")
 
 TEST_CASE("Matcher throws if expression contains undefined fields", "[Matcher]")
 {
-	testMatchable mock;
+	MatcherMockMatchable mock;
 	Matcher m;
 
 	m.parse("BBBB =~ \"foo\"");
@@ -100,7 +102,7 @@ TEST_CASE("Matcher throws if expression contains undefined fields", "[Matcher]")
 TEST_CASE("Matcher throws if regex passed to `=~` or `!~` is invalid",
 	"[Matcher]")
 {
-	testMatchable mock;
+	MatcherMockMatchable mock;
 	Matcher m;
 
 	m.parse("AAAA =~ \"[[\"");
@@ -113,7 +115,7 @@ TEST_CASE("Matcher throws if regex passed to `=~` or `!~` is invalid",
 TEST_CASE("Operator `!~` checks if field doesn't match given regex",
 	"[Matcher]")
 {
-	testMatchable mock;
+	MatcherMockMatchable mock;
 	Matcher m;
 
 	m.parse("AAAA !~ \".\"");
@@ -135,7 +137,7 @@ TEST_CASE("Operator `!~` checks if field doesn't match given regex",
 TEST_CASE("Operator `#` checks if \"tags\" field contains given value",
 	"[Matcher]")
 {
-	testMatchable mock;
+	MatcherMockMatchable mock;
 	Matcher m;
 
 	m.parse("tags # \"foo\"");
@@ -166,7 +168,7 @@ TEST_CASE("Operator `#` checks if \"tags\" field contains given value",
 TEST_CASE("Operator `!#` checks if \"tags\" field doesn't contain given value",
 	"[Matcher]")
 {
-	testMatchable mock;
+	MatcherMockMatchable mock;
 	Matcher m;
 
 	m.parse("tags !# \"nein\"");
@@ -181,7 +183,7 @@ TEST_CASE(
 	"value",
 	"[Matcher]")
 {
-	testMatchable mock;
+	MatcherMockMatchable mock;
 	Matcher m;
 
 	m.parse("AAAA > 12344");
@@ -203,7 +205,7 @@ TEST_CASE(
 TEST_CASE("Operator `between` checks if field's value is in given range",
 	"[Matcher]")
 {
-	testMatchable mock;
+	MatcherMockMatchable mock;
 	Matcher m;
 
 	m.parse("AAAA between 0:12345");
