@@ -10,7 +10,7 @@
 
 using namespace newsboat;
 
-TEST_CASE("generate_opml creates an XML document with feed URLs in OPML format",
+TEST_CASE("opml::generate creates an XML document with feed URLs in OPML format",
 		"[Opml]")
 {
 	const auto check =
@@ -25,6 +25,8 @@ TEST_CASE("generate_opml creates an XML document with feed URLs in OPML format",
 			xmlSaveCtxtPtr context = xmlSaveToBuffer(buffer, nullptr, 0);
 			xmlSaveDoc(context, opml);
 			xmlSaveClose(context);
+
+			xmlFreeDoc(opml);
 
 			const std::string opmlText(
 					reinterpret_cast<char*>(buffer->content),
