@@ -191,10 +191,13 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>& param
 	std::string colorstr;
 	if (params[2] != "default") {
 		colorstr.append("fg=");
-		if (!utils::is_valid_color(params[2]))
+		if (!utils::is_valid_color(params[2])) {
+			regfree(rx);
+			delete rx;
 			throw ConfigHandlerException(strprintf::fmt(
 				_("`%s' is not a valid color"),
 				params[2]));
+		}
 		colorstr.append(params[2]);
 	}
 	if (params.size() > 3) {
@@ -204,6 +207,8 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>& param
 			}
 			colorstr.append("bg=");
 			if (!utils::is_valid_color(params[3])) {
+				regfree(rx);
+				delete rx;
 				throw ConfigHandlerException(
 					strprintf::fmt(
 						_("`%s' is not a valid "
@@ -220,6 +225,8 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>& param
 				colorstr.append("attr=");
 				if (!utils::is_valid_attribute(
 						params[i])) {
+					regfree(rx);
+					delete rx;
 					throw ConfigHandlerException(
 						strprintf::fmt(
 							_("`%s' is not "
