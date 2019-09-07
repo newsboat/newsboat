@@ -307,6 +307,7 @@ Feed Parser::parse_xmlnode(xmlNode* node)
 				const char* version = (const char*)xmlGetProp(
 					node, (const xmlChar*)"version");
 				if (!version) {
+					xmlFree((void*)version);
 					throw Exception(_("no RSS version"));
 				}
 				if (strcmp(version, "0.91") == 0)
@@ -342,6 +343,7 @@ Feed Parser::parse_xmlnode(xmlNode* node)
 					} else {
 						const char * version = (const char *)xmlGetProp(node, (const xmlChar *)"version");
 						if (!version) {
+							xmlFree((void*)version);
 							throw Exception(_(
 								"invalid Atom "
 								"version"));
