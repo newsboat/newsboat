@@ -25,3 +25,50 @@ freebsd_task:
         memory: 8GB
     build_script: make -j3 --keep-going all test
     test_script: ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"
+
+macos_task:
+    osx_instance:
+        image: mojave-base
+
+    install_script:
+        - brew update
+        - brew install "rust" && rustc --version
+        - brew install gcc || brew link --overwrite gcc
+        - brew install python
+        - export PATH=/usr/local/opt/python/libexec/bin:$PATH
+        - brew outdated "pkg-config" || brew upgrade "pkg-config"
+        - brew install "gettext" && brew link --force "gettext"
+        - brew outdated "sqlite" || brew upgrade "sqlite"
+        - brew outdated "curl" || brew upgrade "curl"
+        - brew install "libstfl"
+        - brew install "json-c"
+        - brew install "asciidoc"
+        - brew install "docbook-xsl"
+        - brew install "libxml2"
+        - brew install "pyenv" || brew upgrade "pyenv"
+        - eval "$(pyenv init -)"
+        - pip3 install cpp-coveralls
+        - pyenv rehash
+
+    env:
+        GCOV: /usr/bin/gcov
+        XML_CATALOG_FILES: /usr/local/etc/xml/catalog
+        PKG_CONFIG_PATH: /usr/local/opt/libxml2/lib/pkgconfig:$PKG_CONFIG_PATH
+        RUST_BACKTRACE: 1
+
+    build_script:
+        - make --jobs=3 --keep-going all test
+        # We want to run both C++ and Rust tests, but we also want this entire
+        # command to fail if one of the test suites fails. That's why we store
+        # the C++'s exit code and chain it to Rust's in the end.
+        - ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"
+
+    matrix:
+        - name: clang
+          env:
+              CC: clang
+              CXX: clang++
+        - name: gcc
+          env:
+              CC: gcc
+              CXX: g++
