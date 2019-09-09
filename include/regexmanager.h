@@ -32,6 +32,10 @@ private:
 	std::vector<std::string> cheat_store_for_dump_config;
 	std::vector<std::pair<std::shared_ptr<Matcher>, int>> matchers;
 
+	void handle_highlight_action(const std::vector<std::string>& params);
+	void handle_highlight_article_action(
+			const std::vector<std::string>& params);
+
 public:
 	std::vector<std::string>& get_attrs(const std::string& loc)
 	{
