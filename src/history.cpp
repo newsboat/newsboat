@@ -2,80 +2,66 @@
 
 #include <fstream>
 
+#include "rs_utils.h"
+
+extern "C" {
+	void* rs_history_new();
+
+	void rs_history_free(void* hst);
+
+	void rs_history_add_line(
+		void* hst,
+		const char* line);
+
+	char* rs_history_prev(void* hst);
+
+	char* rs_history_next(void* hst);
+
+	void rs_history_load_from_file(
+		void* hst,
+		const char* file);
+
+	void rs_history_save_to_file(
+		void* fmt,
+		const char* file,
+                unsigned int limit);
+}
+
 namespace newsboat {
 
 History::History()
-	: idx(0)
 {
+	rs_hst = rs_history_new();
 }
 
-History::~History() {}
+History::~History()
+{
+	rs_history_free(rs_hst);
+}
 
 void History::add_line(const std::string& line)
 {
-	/*
-	 * When a line is added, we need to do so and
-	 * reset the index so that the next prev/next
-	 * operations start from the beginning again.
-	 */
-	if (line.length() > 0) {
-		lines.insert(lines.begin(), line);
-	}
-	idx = 0;
+	rs_history_add_line(rs_hst, line.c_str());
 }
 
 std::string History::prev()
 {
-	if (idx < lines.size()) {
-		return lines[idx++];
-	}
-	if (lines.size() == 0) {
-		return "";
-	}
-	return lines[idx - 1];
+	return RustString(rs_history_prev(rs_hst));
 }
 
 std::string History::next()
 {
-	if (idx > 0) {
-		return lines[--idx];
-	}
-	return "";
+	return RustString(rs_history_next(rs_hst));
 }
 
 void History::load_from_file(const std::string& file)
 {
-	std::fstream f;
-	f.open(file.c_str(), std::fstream::in);
-	if (f.is_open()) {
-		std::string line;
-		do {
-			std::getline(f, line);
-			if (!f.eof() && line.length() > 0) {
-				add_line(line);
-			}
-		} while (!f.eof());
-	}
+	rs_history_load_from_file(rs_hst, file.c_str());
 }
 
 void History::save_to_file(const std::string& file, unsigned int limit)
 {
-	if (limit == 0) {
-		return;
-	}
-
-	std::fstream f;
-	f.open(file.c_str(), std::fstream::out | std::fstream::trunc);
-	if (f.is_open()) {
-		if (limit > lines.size())
-			limit = lines.size();
-		if (limit > 0) {
-			for (unsigned int i = limit - 1; i > 0; i--) {
-				f << lines[i] << std::endl;
-			}
-			f << lines[0] << std::endl;
-		}
-	}
+	rs_history_save_to_file(rs_hst, file.c_str(), limit);
 }
 
 } // namespace newsboat

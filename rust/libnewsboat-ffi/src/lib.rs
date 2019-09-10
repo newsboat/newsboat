@@ -10,6 +10,7 @@ use std::process::abort;
 pub mod cliargsparser;
 pub mod configpaths;
 pub mod fmtstrformatter;
+pub mod history;
 pub mod human_panic;
 pub mod logger;
 pub mod utils;
