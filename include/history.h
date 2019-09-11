@@ -2,7 +2,6 @@
 #define NEWSBOAT_HISTORY_H_
 
 #include <string>
-#include <vector>
 
 namespace newsboat {
 

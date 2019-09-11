@@ -88,7 +88,7 @@ pub unsafe extern "C" fn rs_history_load_from_file(hst: *mut c_void, file: *cons
         .to_string_lossy()
         .into_owned();
 
-        hst.load_from_file(file).unwrap();
+        let _ = hst.load_from_file(file);
 
         // Do not deallocate the object - C still has a pointer to it
         mem::forget(hst);
@@ -113,7 +113,7 @@ pub unsafe extern "C" fn rs_history_save_to_file(
         .to_string_lossy()
         .into_owned();
 
-        hst.save_to_file(file, limit).unwrap();
+        let _ = hst.save_to_file(file, limit);
 
         // Do not deallocate the object - C still has a pointer to it
         mem::forget(hst);
