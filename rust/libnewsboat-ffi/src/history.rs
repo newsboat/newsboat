@@ -48,6 +48,12 @@ pub unsafe extern "C" fn rs_history_prev(hst: *mut c_void) -> *mut c_char {
             Box::from_raw(hst as *mut History)
         };
         let result = hst.prev();
+        // Panic here can't happen because:
+        // 1. panic can only happen if `result` contains null bytes;
+        // 2. `result` either contains what `line` in `rs_history_add_line` contained
+        // and `line` is a null-terminated string from c
+        // 3. or `result` is an empty string so we are certain that `result`
+        // doesn't have null bytes in the middle.
         let result = CString::new(result).unwrap().into_raw();
 
         // Do not deallocate the object - C still has a pointer to it
@@ -65,6 +71,12 @@ pub unsafe extern "C" fn rs_history_next(hst: *mut c_void) -> *mut c_char {
             Box::from_raw(hst as *mut History)
         };
         let result = hst.next();
+        // Panic here can't happen because:
+        // 1. panic can only happen if `result` contains null bytes;
+        // 2. `result` either contains what `line` in `rs_history_add_line` contained
+        // and `line` is a null-terminated string from c
+        // 3. or `result` is an empty string so we are certain that `result`
+        // doesn't have null bytes in the middle.
         let result = CString::new(result).unwrap().into_raw();
 
         // Do not deallocate the object - C still has a pointer to it
@@ -88,6 +100,8 @@ pub unsafe extern "C" fn rs_history_load_from_file(hst: *mut c_void, file: *cons
         .to_string_lossy()
         .into_owned();
 
+        // Original C++ code did nothing if it failed to open file.
+        // Returns a [must_use] type so safely ignoring the value.
         let _ = hst.load_from_file(file);
 
         // Do not deallocate the object - C still has a pointer to it
@@ -113,6 +127,8 @@ pub unsafe extern "C" fn rs_history_save_to_file(
         .to_string_lossy()
         .into_owned();
 
+        // Original C++ code did nothing if it failed to open file.
+        // Returns a [must_use] type so safely ignoring the value.
         let _ = hst.save_to_file(file, limit);
 
         // Do not deallocate the object - C still has a pointer to it
