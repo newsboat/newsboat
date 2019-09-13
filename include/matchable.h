@@ -15,5 +15,10 @@ public:
 
 } // namespace newsboat
 
+extern "C" {
+bool matchable_has_attribute(void *ptr, char *attr);
+char* matchable_get_attribute(void *ptr, char *attr);
+}
+
 #endif /* NEWSBOAT_MATCHABLE_H_ */
 
