@@ -27,3 +27,4 @@ pub mod configpaths;
 pub mod fmtstrformatter;
 pub mod history;
 pub mod filterparser;
+pub mod matcher;

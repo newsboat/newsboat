@@ -5,14 +5,14 @@ use nom::*;
 use nom::types::CompleteStr;
 
 #[derive(Debug, Clone)]
-enum Value {
+pub enum Value {
     Str(String),
     Int(i32),
     Range(i32, i32)
 }
 
 #[derive(Debug, Clone)]
-enum Expression {
+pub enum Expression {
     And(Box<Expression>, Box<Expression>),
     Or(Box<Expression>, Box<Expression>),
     Condition{
@@ -142,8 +142,8 @@ fn expression(input: CompleteStr) -> IResult<CompleteStr, Expression> {
     })
 }
 
-fn parse(input: CompleteStr) -> Result<Expression, Err<CompleteStr>> {
-    let result = do_parse!(input,
+pub fn parse(input: &str) -> Result<Expression, Err<CompleteStr>> {
+    let result = do_parse!(CompleteStr(input),
         parse: alt!(expression | parens | condition) >>
         (parse)
     );
