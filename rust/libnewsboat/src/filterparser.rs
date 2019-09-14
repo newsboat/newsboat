@@ -12,14 +12,17 @@ pub enum Value {
 }
 
 #[derive(Debug, Clone)]
+pub struct Condition {
+    attribute: String,
+    op: String,
+    value: Value
+}
+
+#[derive(Debug, Clone)]
 pub enum Expression {
     And(Box<Expression>, Box<Expression>),
     Or(Box<Expression>, Box<Expression>),
-    Condition{
-        attribute: String,
-        op: String,
-        value: Value
-    },
+    Condition(Condition)
 }
 
 named!(operators<CompleteStr, CompleteStr>,
@@ -105,7 +108,14 @@ fn condition(input: CompleteStr) -> IResult<CompleteStr, Expression>{
         let op = tuple.1.to_string();
         let value: Value = tuple.2;
 
-        (result.0, Expression::Condition{ attribute, op, value })
+        (
+            result.0,
+            Expression::Condition(
+                Condition {
+                    attribute, op, value
+                }
+            )
+        )
     })
 }
 
