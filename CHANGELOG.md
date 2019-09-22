@@ -1,14 +1,39 @@
 # Changes for Newsboat
 
 
-## 2.17 - expected 2019-09-22
+## 2.17 - 2019-09-22
+
+Lists below only mention user-visible changes, but I would also like to
+acknowledge contributions from the following people: Raphael Nestler, kpcyrd,
+and seanBE.
 
 ### Added
+- FreeBSD and Linux i686 jobs on continuous integration servers. We won't break
+    the build on these platforms ever again (Alexander Batischev)
+- Documentation for `macro-prefix` settings (Lysander Trischler)
+- `save-all` operation, to save all articles in the feed (Romeu Vieira)
+- `dirbrowser-title-format` setting, used in the DirBrowser dialog invoked by
+    `save-all` operation (Romeu Vieira)
+- `dirbrowser` context in `bind-key` command, to add bindings to DirBrowser
+    dialog invoked by `save-all` (Alexander Batischev)
+- `selecttag-format` setting, to control how the lines in "Select tag" dialog
+    look (Penguin-Guru, Alexander Batischev) (#588)
 ### Changed
-### Deprecated
+- Bumped minimum required Rust version to 1.26.0
+- Update vendored version of nlohmann/json to 3.7.0
+- Update vendored version of Catch2 to 2.9.2
+- Update Italian translations (Leandro Noferini)
 ### Removed
+- Some unnecessary work done at startup time, shaving off 6% in my tests
+    (Alexander Batischev)
 ### Fixed
-### Security
+- `newsboat --version` not displaying the version (Alexander Batischev) (#579)
+- Processing backticks inside comments (Jan Staněk)
+- Use-after-free crash when opening an article (Juho Pohjala) (#189)
+- Crash on `toggle-item-read` in an empty feed (Nikos Tsipinakis)
+- Un-applying a filter when command is ran (Nikos Tsipinakis) (#607)
+- Numerous memory leaks detected by Clang's AddressSanitizer (Alexander
+    Batischev) (#620, #621, #623, #624)
 
 
 
