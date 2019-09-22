@@ -1,6 +1,17 @@
 # Changes for Newsboat
 
 
+## 2.18 - expected 2019-12-22
+
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+
+
 ## 2.17 - 2019-09-22
 
 Lists below only mention user-visible changes, but I would also like to
