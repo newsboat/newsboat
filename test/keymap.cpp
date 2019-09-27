@@ -61,12 +61,40 @@ TEST_CASE(
 		}
 	}
 
-	SECTION("\"all\" context clears the keymap from all key bindings") {
+	SECTION("\"all\" context clears the keymap from all defined keybindings") {
 		KeyMap k(KM_NEWSBOAT);
 		k.unset_all_keys("all");
 
-		for (int i = OP_NB_MIN; i < OP_NB_MAX; ++i) {
+		for (int i = OP_NB_MIN; i < OP_SK_MAX; ++i) {
 			REQUIRE(k.getkey(static_cast<Operation>(i), "all") == "<none>");
+		}
+	}
+
+	SECTION("\"all\" context doesn't clear the keymap from internal keybindings") {
+		KeyMap default_keymap(KM_NEWSBOAT);
+		KeyMap unset_keymap(KM_NEWSBOAT);
+		unset_keymap.unset_all_keys("all");
+
+		for (int i = OP_INT_MIN; i < OP_INT_MAX; ++i) {
+			REQUIRE(default_keymap.getkey(static_cast<Operation>(i), "all")
+				== unset_keymap.getkey(static_cast<Operation>(i), "all"));
+		}
+	}
+
+	SECTION("Contexts don't have their internal keybindings cleared") {
+		const auto contexts = { "feedlist", "filebrowser", "help", "articlelist",
+			"article", "tagselection", "filterselection", "urlview", "podbeuter",
+			"dialogs", "dirbrowser" };
+		KeyMap default_keymap(KM_NEWSBOAT);
+
+		for (const auto& context : contexts) {
+			KeyMap unset_keymap(KM_NEWSBOAT);
+			unset_keymap.unset_all_keys(context);
+
+			for (int i = OP_INT_MIN; i < OP_INT_MAX; ++i) {
+				REQUIRE(default_keymap.getkey(static_cast<Operation>(i), "all")
+					== unset_keymap.getkey(static_cast<Operation>(i), "all"));
+			}
 		}
 	}
 

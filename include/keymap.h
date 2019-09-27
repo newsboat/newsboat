@@ -181,6 +181,7 @@ public:
 
 private:
 	bool is_valid_context(const std::string& context);
+	std::map<std::string, Operation> get_internal_operations() const;
 	std::string getopname(Operation op);
 	std::map<std::string, std::map<std::string, Operation>> keymap_;
 	std::map<std::string, std::vector<MacroCmd>> macros_;
