@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2019-08-29 22:14+0300\n"
-"PO-Revision-Date: 2019-06-25 21:08+0200\n"
+"PO-Revision-Date: 2019-09-28 21:27+0200\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -196,9 +196,8 @@ msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Datei öffnen&Datei speichern? - %f"
 
 #: src/configcontainer.cpp:237
-#, fuzzy
 msgid "%N %V - %?O?Open Directory&Save File? - %f"
-msgstr "%N %V - %?O?Datei öffnen&Datei speichern? - %f"
+msgstr "%N %V - %?O?Verzeichnis öffnen&Datei speichern? - %f"
 
 #: src/configcontainer.cpp:240
 msgid "%N %V - Help"
@@ -462,12 +461,12 @@ msgstr "Ungültige Position!"
 
 #: src/dirbrowserformaction.cpp:236
 msgid "Directory: "
-msgstr ""
+msgstr "Verzeichnis: "
 
 #: src/dirbrowserformaction.cpp:260
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s - Save Files - %s"
-msgstr "%s %s - Datei speichern - %s"
+msgstr "%s %s - Dateien speichern - %s"
 
 #: src/dirbrowserformaction.cpp:268 src/filebrowserformaction.cpp:259
 #: src/pbview.cpp:342 src/selectformaction.cpp:193 src/selectformaction.cpp:196
@@ -480,9 +479,9 @@ msgid "Save"
 msgstr "Speichern"
 
 #: src/dirbrowserformaction.cpp:379
-#, fuzzy, c-format
+#, c-format
 msgid "Save Files - %s"
-msgstr "Datei speichern - %s"
+msgstr "Dateien speichern - %s"
 
 #: src/download.cpp:65
 msgid "queued"
@@ -862,11 +861,11 @@ msgstr "Fehler: Keinen Artikel ausgewählt!"
 #: src/itemlistformaction.cpp:399
 #, c-format
 msgid "Overwrite `%s' in `%s?' (y:Yes n:No)"
-msgstr ""
+msgstr "„%s“ in „%s“ überschreiben (j:Ja n:Nein)"
 
 #: src/itemlistformaction.cpp:450
 msgid "yanq"
-msgstr ""
+msgstr "jank"
 
 #: src/itemlistformaction.cpp:454
 #, c-format
@@ -874,6 +873,8 @@ msgid ""
 "Overwrite `%s' in `%s'? There are %d more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
 msgstr ""
+"„%s“ in „%s“ überschreiben? Es gibt %d weitere Konflikte (j:Ja a:Alle "
+"überschreiben n:Nein k:Keine überschreiben)"
 
 #: src/itemlistformaction.cpp:461
 #, c-format
@@ -881,6 +882,8 @@ msgid ""
 "Overwrite `%s' in `%s'? There are no more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
 msgstr ""
+"„%s“ in „%s“ überschreiben? Es gibt keine weiteren Konflikte (j:Ja a:Alle "
+"überschreiben n:Nein k:Keine überschreiben)"
 
 #: src/itemlistformaction.cpp:509
 msgid "Error: you can't reload search results."
@@ -1098,7 +1101,6 @@ msgid "Save article"
 msgstr "Artikel speichern"
 
 #: src/keymap.cpp:61
-#, fuzzy
 msgid "Save articles"
 msgstr "Artikel speichern"
 
@@ -1642,17 +1644,10 @@ msgstr ""
 "Benutzer für UID %u hinzu!"
 
 msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
-msgstr ""
+msgstr "Migriere Konfigurationen und Daten aus Newsbeuters XDG-Verzeichnissen..."
 
 msgid "Migrating configs and data from Newsbeuter's dotdir..."
-msgstr ""
+msgstr "Migriere Konfigurationen und Daten aus „~/.newsbeuter/“..."
 
-#, fuzzy
 msgid "Aborting migration because mkdir on `%s' failed: %s"
-msgstr "Fehler: Das Öffnen der Zwischenspeicherdatei `%s' schlug fehl: %s"
-
-#~ msgid "'%s' is not a valid key command"
-#~ msgstr "`%s' ist kein gültiges Tastenkommando"
-
-#~ msgid "Type `%s -vv' for more information."
-#~ msgstr "Für mehr Information `%s -vv' eingeben."
+msgstr "Abbruch der Migration aufgrund eines Fehlers beim Anlegen des Verzeichnisses „%s“: %s"
