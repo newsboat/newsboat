@@ -288,10 +288,7 @@ mod tests {
         // illegal single %
         assert_eq!(fmt.do_format("%", 0), "");
         assert_eq!(fmt.do_format("%%", 0), "%");
-        assert_eq!(
-            fmt.do_format("%a%b%c", 0),
-            "АБВбукваещё одна переменная"
-        );
+        assert_eq!(fmt.do_format("%a%b%c", 0), "АБВбукваещё одна переменная");
         assert_eq!(
             fmt.do_format("%%%a%%%b%%%c%%", 0),
             "%АБВ%буква%ещё одна переменная%"
@@ -425,10 +422,7 @@ mod tests {
         // The total length of the string is specified in the argument to do_format
 
         // Default (zero) is \"as long as needed to fit all the values\"
-        assert_eq!(
-            fmt.do_format("%x%> %y", 0),
-            "example string пример строки"
-        );
+        assert_eq!(fmt.do_format("%x%> %y", 0), "example string пример строки");
 
         assert_eq!(
             fmt.do_format("%x%> %y", 30),
@@ -447,10 +441,7 @@ mod tests {
         fmt.register_fmt('x', "example string".to_string());
         fmt.register_fmt('y', "пример строки".to_string());
 
-        assert_eq!(
-            fmt.do_format("%x%>m%y", 0),
-            "example stringmпример строки"
-        );
+        assert_eq!(fmt.do_format("%x%>m%y", 0), "example stringmпример строки");
         assert_eq!(
             fmt.do_format("%x%>k%y", 30),
             "example stringkkkпример строки"
@@ -483,14 +474,8 @@ mod tests {
 
         assert_eq!(fmt.do_format("%?t?non-empty&empty?", 0), "non-empty");
         assert_eq!(fmt.do_format("%?m?non-empty&empty?", 0), "empty");
-        assert_eq!(
-            fmt.do_format("%?t?непустое&пустое?", 0),
-            "непустое"
-        );
-        assert_eq!(
-            fmt.do_format("%?m?непустое&пустое?", 0),
-            "пустое"
-        );
+        assert_eq!(fmt.do_format("%?t?непустое&пустое?", 0), "непустое");
+        assert_eq!(fmt.do_format("%?m?непустое&пустое?", 0), "пустое");
     }
 
     #[test]
@@ -500,10 +485,7 @@ mod tests {
         fmt.register_fmt('t', "this is a non-empty string".to_string());
         fmt.register_fmt('m', String::new());
 
-        assert_eq!(
-            fmt.do_format("%?t?непустое?", 0),
-            "непустое"
-        );
+        assert_eq!(fmt.do_format("%?t?непустое?", 0), "непустое");
         assert_eq!(fmt.do_format("%?m?непустое?", 0), "");
     }
 

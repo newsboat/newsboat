@@ -377,10 +377,8 @@ filter feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
 NewsBlur
 ~~~~~~~~
 
-https://newsblur.com/[NewsBlur] is a successor to Google Reader. Configuration
-basically works the same as with <<_the_old_reader,The Old Reader>>.
-
-First, set your <<urls-source,`urls-source`>>:
+https://newsblur.com/[NewsBlur] is a successor to Google Reader. To use it, set
+your <<urls-source,`urls-source`>>:
 
 	urls-source "newsblur"
 
@@ -395,6 +393,10 @@ instead of `"`.
 See also <<newsblur-passwordfile,`newsblur-passwordfile`>>,
 <<newsblur-passwordeval,`newsblur-passwordeval`>>, and
 <<_passwords_for_external_apis>>.
+
+Finally, set a path to the file where Newsboat can store the HTTP cookies:
+
+    cookie-cache "~/.newsboat/cookies.txt"
 
 When you start Newsboat, it will download the feeds that you configured
 in NewsBlur. Please take a closer look at the
