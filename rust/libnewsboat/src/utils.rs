@@ -16,6 +16,7 @@ use self::url::percent_encoding::*;
 use self::url::Url;
 use libc::c_ulong;
 use logger::{self, Level};
+use std::borrow::Cow;
 use std::fs::DirBuilder;
 use std::io::{self, Write};
 use std::os::unix::fs::DirBuilderExt;
@@ -545,6 +546,16 @@ pub fn newsboat_major_version() -> u32 {
     env!("CARGO_PKG_VERSION_MAJOR").parse::<u32>().unwrap()
 }
 
+/// Returns the part of the string before first # character (or the whole input string if there are
+/// no # character in it).
+pub fn strip_comments(line: &str) -> Cow<str> {
+    if let Some(index) = line.find('#') {
+        Cow::from(&line[0..index])
+    } else {
+        Cow::from(line)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     extern crate tempfile;
@@ -1041,5 +1052,26 @@ mod tests {
         assert_eq!(strnaturalcmp("Alpha 2 B", "Alpha 2"), Ordering::Greater);
 
         assert_eq!(strnaturalcmp("aa10", "aa2"), Ordering::Greater);
+    }
+
+    #[test]
+    fn t_strip_comments() {
+        // no comments in line
+        assert_eq!(strip_comments(""), "");
+        assert_eq!(strip_comments("\t\n"), "\t\n");
+        assert_eq!(strip_comments("some directive "), "some directive ");
+
+        // fully commented line
+        assert_eq!(strip_comments("#"), "");
+        assert_eq!(strip_comments("# #"), "");
+        assert_eq!(strip_comments("# comment"), "");
+
+        // partially commented line
+        assert_eq!(strip_comments("directive # comment"), "directive ");
+        assert_eq!(
+            strip_comments("directive # comment # another"),
+            "directive "
+        );
+        assert_eq!(strip_comments("directive#comment"), "directive");
     }
 }

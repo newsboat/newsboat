@@ -78,14 +78,7 @@ void append_escapes(std::string& str, char c)
 
 std::string utils::strip_comments(const std::string& line)
 {
-	/*
-	 * This functions returns only the non-comment part of the line,
-	 * which can then be safely evaluated and tokenized.
-	 *
-	 * If no comments are present on the line, the whole line is returned.
-	 */
-	auto hash_pos = line.find_first_of("#");
-	return line.substr(0, hash_pos);
+	return RustString(rs_strip_comments(line.c_str()));
 }
 
 std::vector<std::string> utils::tokenize_quoted(const std::string& str,
