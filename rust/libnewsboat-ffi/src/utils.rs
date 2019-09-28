@@ -500,7 +500,7 @@ pub unsafe extern "C" fn rs_strip_comments(line: *const c_char) -> *mut c_char {
 
         // `result` contains a subset of `line`, which is a C string. Thus, we conclude that
         // `result` doesn't contain null bytes. Therefore, `CString::new` always returns `Some`.
-        let result = CString::new(result.into_owned()).unwrap();
+        let result = CString::new(result).unwrap();
         result.into_raw()
     })
 }

@@ -16,7 +16,6 @@ use self::url::percent_encoding::*;
 use self::url::Url;
 use libc::c_ulong;
 use logger::{self, Level};
-use std::borrow::Cow;
 use std::fs::DirBuilder;
 use std::io::{self, Write};
 use std::os::unix::fs::DirBuilderExt;
@@ -547,13 +546,41 @@ pub fn newsboat_major_version() -> u32 {
 }
 
 /// Returns the part of the string before first # character (or the whole input string if there are
-/// no # character in it).
-pub fn strip_comments(line: &str) -> Cow<str> {
-    if let Some(index) = line.find('#') {
-        Cow::from(&line[0..index])
-    } else {
-        Cow::from(line)
+/// no # character in it). Pound characters inside double quotes and backticks are ignored.
+pub fn strip_comments(line: &str) -> &str {
+    let mut prev_was_backslash = false;
+    let mut inside_quotes = false;
+    let mut inside_backticks = false;
+
+    let mut first_pound_chr_idx = line.len();
+
+    for (idx, chr) in line.char_indices() {
+        if chr == '\\' {
+            prev_was_backslash = true;
+            continue;
+        } else if chr == '"' {
+            // If the quote is escaped, do nothing
+            if !prev_was_backslash {
+                inside_quotes = !inside_quotes;
+            }
+        } else if chr == '`' {
+            // If the backtick is escaped, do nothing
+            if !prev_was_backslash {
+                inside_backticks = !inside_backticks;
+            }
+        } else if chr == '#' {
+            if !inside_quotes && !inside_backticks {
+                first_pound_chr_idx = idx;
+                break;
+            }
+        }
+
+        // We call `continue` when we run into a backslash; here, we handle all the other
+        // characters, which clearly *aren't* a backslash
+        prev_was_backslash = false;
     }
+
+    &line[0..first_pound_chr_idx]
 }
 
 #[cfg(test)]
@@ -1073,5 +1100,30 @@ mod tests {
             "directive "
         );
         assert_eq!(strip_comments("directive#comment"), "directive");
+
+        // ignores # characters inside double quotes (#652)
+        let expected = r#"highlight article "[-=+#_*~]{3,}.*" green default"#;
+        let input = expected.to_owned() + "# this is a comment";
+        assert_eq!(strip_comments(&input), expected);
+
+        let expected =
+            r#"highlight all "(https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+" blue default bold"#;
+        let input = expected.to_owned() + "#heresacomment";
+        assert_eq!(strip_comments(&input), expected);
+
+        // Escaped double quote inside double quotes is not treated as closing quote
+        let expected = r#"test "here \"goes # nothing\" etc" hehe"#;
+        let input = expected.to_owned() + "# and here is a comment";
+        assert_eq!(strip_comments(&input), expected);
+
+        // Ignores # characters inside backticks
+        let expected = r#"one `two # three` four"#;
+        let input = expected.to_owned() + "# and a comment, of course";
+        assert_eq!(strip_comments(&input), expected);
+
+        // Escaped backtick inside backticks is not treated as closing
+        let expected = r#"some `other \` tricky # test` hehe"#;
+        let input = expected.to_owned() + "#here goescomment";
+        assert_eq!(strip_comments(&input), expected);
     }
 }
