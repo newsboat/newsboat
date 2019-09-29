@@ -150,6 +150,62 @@ TEST_CASE("tokenize_quoted() doesn't un-escape escaped backticks", "[utils]")
 	REQUIRE(tokens[1] == "\\`foobar `bla`\\`");
 }
 
+TEST_CASE("tokenize_quoted stops tokenizing once it found a # character "
+		"(outside of double quotes)",
+		"[utils]")
+{
+	std::vector<std::string> tokens;
+
+	SECTION("A string consisting of just a comment")
+	{
+		tokens = utils::tokenize_quoted("# just a comment");
+		REQUIRE(tokens.empty());
+	}
+
+	SECTION("A string with one quoted substring")
+	{
+		tokens = utils::tokenize_quoted(R"#("a test substring" # !!!)#");
+		REQUIRE(tokens.size() == 1);
+		REQUIRE(tokens[0] == "a test substring");
+	}
+
+	SECTION("A string with two quoted substrings")
+	{
+		tokens = utils::tokenize_quoted(R"#("first sub" "snd" # comment)#");
+		REQUIRE(tokens.size() == 2);
+		REQUIRE(tokens[0] == "first sub");
+		REQUIRE(tokens[1] == "snd");
+	}
+
+	SECTION("A comment containing # character")
+	{
+		tokens = utils::tokenize_quoted(R"#(one # a comment with # char)#");
+		REQUIRE(tokens.size() == 1);
+		REQUIRE(tokens[0] == "one");
+	}
+
+	SECTION("A # character inside quoted substring is ignored")
+	{
+		tokens = utils::tokenize_quoted(R"#(this "will # be" ignored)#");
+		REQUIRE(tokens.size() == 3);
+		REQUIRE(tokens[0] == "this");
+		REQUIRE(tokens[1] == "will # be");
+		REQUIRE(tokens[2] == "ignored");
+	}
+}
+
+TEST_CASE("tokenize_quoted does not consider escaped pound sign (\\#) "
+		"a beginning of a comment",
+		"[utils]")
+{
+	const auto tokens = utils::tokenize_quoted(R"#(one \# two three # ???)#");
+	REQUIRE(tokens.size() == 4);
+	REQUIRE(tokens[0] == "one");
+	REQUIRE(tokens[1] == "\\#");
+	REQUIRE(tokens[2] == "two");
+	REQUIRE(tokens[3] == "three");
+}
+
 TEST_CASE("tokenize_nl() split a string into delimiters and fields", "[utils]")
 {
 	std::vector<std::string> tokens;
