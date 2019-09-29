@@ -59,6 +59,16 @@ TEST_CASE("evaluate_backticks replaces command in backticks with its output",
 		REQUIRE_NOTHROW(cfgparser.parse("data/config-space-backticks"));
 		REQUIRE_FALSE(keys.get_operation("s", "all") == OP_NIL);
 	}
+
+	SECTION("Unbalanced backtick does *not* start a command")
+	{
+		const auto input1 = std::string("one `echo two three");
+		REQUIRE(ConfigParser::evaluate_backticks(input1) == input1);
+
+		const auto input2 = std::string("this `echo is a` test `here");
+		const auto expected2 = std::string("this is a test `here");
+		REQUIRE(ConfigParser::evaluate_backticks(input2) == expected2);
+	}
 }
 
 TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
