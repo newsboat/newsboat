@@ -865,6 +865,7 @@ mod tests {
             get_command_output("a-program-that-is-guaranteed-to-not-exists"),
             "".to_string()
         );
+        assert_eq!(get_command_output("echo c\" d e"), "".to_string());
     }
 
     #[test]

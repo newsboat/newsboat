@@ -69,6 +69,24 @@ TEST_CASE("evaluate_backticks replaces command in backticks with its output",
 		const auto expected2 = std::string("this is a test `here");
 		REQUIRE(ConfigParser::evaluate_backticks(input2) == expected2);
 	}
+
+	// One might think that putting one or both backticks inside a string will
+	// "escape" them, the same way as backslash does. But it doesn't, and
+	// shouldn't: when parsing a config, we need to evaluate *all* commands
+	// there are, no matter where they're placed.
+	SECTION("Backticks inside double quotes are not ignored")
+	{
+		const auto input1 = std::string(R"#("`echo hello`")#");
+		REQUIRE(ConfigParser::evaluate_backticks(input1) == R"#("hello")#");
+
+		const auto input2 = std::string(R"#(a "b `echo c" d e` f)#");
+		// The line above asks the shell to run 'echo c" d e', which is an
+		// invalid command--the double quotes are not closed. The standard
+		// output of that command would be empty, so nothing will be inserted
+		// in place of backticks.
+		const auto expected2 = std::string(R"#(a "b  f)#");
+		REQUIRE(ConfigParser::evaluate_backticks(input2) == expected2);
+	}
 }
 
 TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")

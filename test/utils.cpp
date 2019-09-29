@@ -307,6 +307,7 @@ TEST_CASE("get_command_output()", "[utils]")
 		"a-program-that-is-guaranteed-to-not-exists"));
 	REQUIRE(utils::get_command_output(
 			"a-program-that-is-guaranteed-to-not-exists") == "");
+	REQUIRE(utils::get_command_output("echo c\" d e") == "");
 }
 
 TEST_CASE("extract_filter()", "[utils]")
