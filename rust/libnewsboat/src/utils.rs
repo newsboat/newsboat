@@ -559,8 +559,8 @@ pub fn strip_comments(line: &str) -> &str {
             prev_was_backslash = true;
             continue;
         } else if chr == '"' {
-            // If the quote is escaped, do nothing
-            if !prev_was_backslash {
+            // If the quote is escaped or we're inside backticks, do nothing
+            if !prev_was_backslash && !inside_backticks {
                 inside_quotes = !inside_quotes;
             }
         } else if chr == '`' {

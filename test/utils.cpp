@@ -329,7 +329,7 @@ TEST_CASE("strip_comments is not confused by nested double quotes and backticks"
 		"[utils]")
 {
 	{
-		const auto expected = std::string(R"#("`" ... ` )#");
+		const auto expected = std::string(R"#("`" ... ` `"` ")#");
 		const auto input = expected + "#comment";
 		REQUIRE(utils::strip_comments(input) == expected);
 	}
@@ -338,6 +338,13 @@ TEST_CASE("strip_comments is not confused by nested double quotes and backticks"
 		const auto expected = std::string(R"#(aaa ` bbb "ccc ddd" e` dd)#");
 		const auto input = expected + "# a comment string";
 		REQUIRE(utils::strip_comments(input) == expected);
+	}
+
+	{
+        const auto expected =
+			std::string(R"#(option "this `weird " command` for value")#");
+        const auto input = expected + "#and a comment";
+        REQUIRE(utils::strip_comments(input) == expected);
 	}
 }
 
