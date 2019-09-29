@@ -1084,6 +1084,14 @@ TEST_CASE("unescape_url() takes a percent-encoded string and returns the string 
 
 }
 
+TEST_CASE("gentabs() calculates padding tabs based on stringwidth", "[utils]")
+{
+	REQUIRE(utils::gentabs("") == 4);
+	REQUIRE(utils::gentabs("aaaaaaa") == 4);
+	REQUIRE(utils::gentabs("aaaaaaaa") == 3);
+	REQUIRE(utils::gentabs("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa") == 1);
+}
+
 TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 		"the path now exists",
 		"[utils]")

@@ -347,6 +347,15 @@ pub unsafe extern "C" fn rs_get_basename(input: *const c_char) -> *mut c_char {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn rs_gentabs(input: *const c_char) -> usize {
+    abort_on_panic(|| {
+        let rs_str = CStr::from_ptr(input);
+        let rs_str = rs_str.to_string_lossy().into_owned();
+        utils::gentabs(&rs_str)
+    })
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn rs_mkdir_parents(path: *const c_char, mode: u32) -> isize {
     abort_on_panic(|| {
         let rs_input = CStr::from_ptr(path);
