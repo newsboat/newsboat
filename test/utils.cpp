@@ -275,6 +275,14 @@ TEST_CASE(
 	}
 }
 
+TEST_CASE("strip_comments ignores escaped # characters (\\#)")
+{
+	const auto expected =
+		std::string(R"#(one two \# three four)#");
+	const auto input = expected + "# and a comment";
+	REQUIRE(utils::strip_comments(input) == expected);
+}
+
 TEST_CASE("strip_comments ignores # characters inside double quotes",
 		"[utils][issue652]")
 {

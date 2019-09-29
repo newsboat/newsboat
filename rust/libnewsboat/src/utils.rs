@@ -569,7 +569,7 @@ pub fn strip_comments(line: &str) -> &str {
                 inside_backticks = !inside_backticks;
             }
         } else if chr == '#' {
-            if !inside_quotes && !inside_backticks {
+            if !prev_was_backslash && !inside_quotes && !inside_backticks {
                 first_pound_chr_idx = idx;
                 break;
             }
@@ -1125,6 +1125,11 @@ mod tests {
         // Escaped backtick inside backticks is not treated as closing
         let expected = r#"some `other \` tricky # test` hehe"#;
         let input = expected.to_owned() + "#here goescomment";
+        assert_eq!(strip_comments(&input), expected);
+
+        // Ignores escaped # characters (\\#)
+        let expected = r#"one two \# three four"#;
+        let input = expected.to_owned() + "# and a comment";
         assert_eq!(strip_comments(&input), expected);
     }
 }
