@@ -171,6 +171,21 @@ pub unsafe extern "C" fn rs_censor_url(url: *const c_char) -> *mut c_char {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn rs_quote_for_stfl(string: *const c_char) -> *mut c_char {
+    abort_on_panic(|| {
+        let rs_string = CStr::from_ptr(string);
+        let rs_string = rs_string.to_string_lossy();
+        CString::new(utils::quote_for_stfl(&rs_string))
+            // CString::new declares returning a NulError if the passed string contains \0-bytes.
+            // Unwrap is checked here, because quote_for_stfl receives a regular, c-style string,
+            // and only inserts additional, non-null bytes ('>'), so unwrapping it will always
+            // succeed.
+            .unwrap()
+            .into_raw()
+    })
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn rs_trim_end(input: *const c_char) -> *mut c_char {
     abort_on_panic(|| {
         let rs_input = CStr::from_ptr(input);
