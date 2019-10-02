@@ -1,14 +1,21 @@
 # Changes for Newsboat
 
 
-## 2.18 - expected 2019-12-22
+## 2.17.1 - 2019-10-02
 
 ### Added
+- Mention that `cookie-cache` setting uses Netscape file format (Alexander
+    Batischev on a prod from f-a)
+
 ### Changed
-### Deprecated
-### Removed
+- Update German translation (Lysander Trischler) 
+
 ### Fixed
-### Security
+- Feeds not updating when `max-items` is set (#650). This negates some of the
+    performance improvement we got in 2.17, but we haven't measured how much;
+    it's guaranteed to not be any slower than 2.16.1 (Alexander Batischev)
+- Failing to start if config contains `#` that doesn't start a comment, e.g.
+    inside regular or filter expression (#652) (Alexander Batischev)
 
 
 
@@ -29,14 +36,17 @@ and seanBE.
     dialog invoked by `save-all` (Alexander Batischev)
 - `selecttag-format` setting, to control how the lines in "Select tag" dialog
     look (Penguin-Guru, Alexander Batischev) (#588)
+ 
 ### Changed
 - Bumped minimum required Rust version to 1.26.0
 - Update vendored version of nlohmann/json to 3.7.0
 - Update vendored version of Catch2 to 2.9.2
 - Update Italian translations (Leandro Noferini)
+
 ### Removed
 - Some unnecessary work done at startup time, shaving off 6% in my tests
     (Alexander Batischev)
+
 ### Fixed
 - `newsboat --version` not displaying the version (Alexander Batischev) (#579)
 - Processing backticks inside comments (Jan Staněk)
