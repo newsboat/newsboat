@@ -489,3 +489,18 @@ pub extern "C" fn rs_program_version() -> *mut c_char {
 pub extern "C" fn rs_newsboat_version_major() -> u32 {
     abort_on_panic(|| utils::newsboat_major_version())
 }
+
+#[no_mangle]
+pub unsafe extern "C" fn rs_strip_comments(line: *const c_char) -> *mut c_char {
+    abort_on_panic(|| {
+        let line = CStr::from_ptr(line);
+        let line = line.to_str().expect("line contained invalid UTF-8");
+
+        let result = utils::strip_comments(line);
+
+        // `result` contains a subset of `line`, which is a C string. Thus, we conclude that
+        // `result` doesn't contain null bytes. Therefore, `CString::new` always returns `Some`.
+        let result = CString::new(result).unwrap();
+        result.into_raw()
+    })
+}

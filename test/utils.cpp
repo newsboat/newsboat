@@ -150,6 +150,62 @@ TEST_CASE("tokenize_quoted() doesn't un-escape escaped backticks", "[utils]")
 	REQUIRE(tokens[1] == "\\`foobar `bla`\\`");
 }
 
+TEST_CASE("tokenize_quoted stops tokenizing once it found a # character "
+		"(outside of double quotes)",
+		"[utils]")
+{
+	std::vector<std::string> tokens;
+
+	SECTION("A string consisting of just a comment")
+	{
+		tokens = utils::tokenize_quoted("# just a comment");
+		REQUIRE(tokens.empty());
+	}
+
+	SECTION("A string with one quoted substring")
+	{
+		tokens = utils::tokenize_quoted(R"#("a test substring" # !!!)#");
+		REQUIRE(tokens.size() == 1);
+		REQUIRE(tokens[0] == "a test substring");
+	}
+
+	SECTION("A string with two quoted substrings")
+	{
+		tokens = utils::tokenize_quoted(R"#("first sub" "snd" # comment)#");
+		REQUIRE(tokens.size() == 2);
+		REQUIRE(tokens[0] == "first sub");
+		REQUIRE(tokens[1] == "snd");
+	}
+
+	SECTION("A comment containing # character")
+	{
+		tokens = utils::tokenize_quoted(R"#(one # a comment with # char)#");
+		REQUIRE(tokens.size() == 1);
+		REQUIRE(tokens[0] == "one");
+	}
+
+	SECTION("A # character inside quoted substring is ignored")
+	{
+		tokens = utils::tokenize_quoted(R"#(this "will # be" ignored)#");
+		REQUIRE(tokens.size() == 3);
+		REQUIRE(tokens[0] == "this");
+		REQUIRE(tokens[1] == "will # be");
+		REQUIRE(tokens[2] == "ignored");
+	}
+}
+
+TEST_CASE("tokenize_quoted does not consider escaped pound sign (\\#) "
+		"a beginning of a comment",
+		"[utils]")
+{
+	const auto tokens = utils::tokenize_quoted(R"#(one \# two three # ???)#");
+	REQUIRE(tokens.size() == 4);
+	REQUIRE(tokens[0] == "one");
+	REQUIRE(tokens[1] == "\\#");
+	REQUIRE(tokens[2] == "two");
+	REQUIRE(tokens[3] == "three");
+}
+
 TEST_CASE("tokenize_nl() split a string into delimiters and fields", "[utils]")
 {
 	std::vector<std::string> tokens;
@@ -219,6 +275,79 @@ TEST_CASE(
 	}
 }
 
+TEST_CASE("strip_comments ignores escaped # characters (\\#)")
+{
+	const auto expected =
+		std::string(R"#(one two \# three four)#");
+	const auto input = expected + "# and a comment";
+	REQUIRE(utils::strip_comments(input) == expected);
+}
+
+TEST_CASE("strip_comments ignores # characters inside double quotes",
+		"[utils][issue652]")
+{
+	SECTION("Real-world cases from issue 652") {
+		const auto expected1 =
+			std::string(R"#(highlight article "[-=+#_*~]{3,}.*" green default)#");
+		const auto input1 = expected1 + "# this is a comment";
+		REQUIRE(utils::strip_comments(input1) == expected1);
+
+		const auto expected2 =
+			std::string(R"#(highlight all "(https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+" blue default bold)#");
+		const auto input2 = expected2 + "#heresacomment";
+		REQUIRE(utils::strip_comments(input2) == expected2);
+	}
+
+	SECTION("Escaped double quote inside double quotes is not treated "
+			"as closing quote")
+	{
+		const auto expected =
+			std::string(R"#(test "here \"goes # nothing\" etc" hehe)#");
+		const auto input = expected + "# and here is a comment";
+		REQUIRE(utils::strip_comments(input) == expected);
+	}
+}
+
+TEST_CASE("strip_comments ignores # characters inside backticks", "[utils]")
+{
+	SECTION("Simple case") {
+		const auto expected = std::string(R"#(one `two # three` four)#");
+		const auto input = expected + "# and a comment, of course";
+		REQUIRE(utils::strip_comments(input) == expected);
+	}
+
+	SECTION("Escaped backtick inside backticks is not treated as closing")
+	{
+		const auto expected =
+			std::string(R"#(some `other \` tricky # test` hehe)#");
+		const auto input = expected + "#here goescomment";
+		REQUIRE(utils::strip_comments(input) == expected);
+	}
+}
+
+TEST_CASE("strip_comments is not confused by nested double quotes and backticks",
+		"[utils]")
+{
+	{
+		const auto expected = std::string(R"#("`" ... ` `"` ")#");
+		const auto input = expected + "#comment";
+		REQUIRE(utils::strip_comments(input) == expected);
+	}
+
+	{
+		const auto expected = std::string(R"#(aaa ` bbb "ccc ddd" e` dd)#");
+		const auto input = expected + "# a comment string";
+		REQUIRE(utils::strip_comments(input) == expected);
+	}
+
+	{
+        const auto expected =
+			std::string(R"#(option "this `weird " command` for value")#");
+        const auto input = expected + "#and a comment";
+        REQUIRE(utils::strip_comments(input) == expected);
+	}
+}
+
 TEST_CASE(
 	"consolidate_whitespace replaces multiple consecutive"
 	"whitespace with a single space",
@@ -249,6 +378,7 @@ TEST_CASE("get_command_output()", "[utils]")
 		"a-program-that-is-guaranteed-to-not-exists"));
 	REQUIRE(utils::get_command_output(
 			"a-program-that-is-guaranteed-to-not-exists") == "");
+	REQUIRE(utils::get_command_output("echo c\" d e") == "");
 }
 
 TEST_CASE("extract_filter()", "[utils]")

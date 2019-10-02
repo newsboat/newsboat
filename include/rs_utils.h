@@ -82,6 +82,8 @@ unsigned int rs_newsboat_version_major();
 
 int rs_mkdir_parents(const char* path, const std::uint32_t mode);
 
+char* rs_strip_comments(const char* line);
+
 class RustString {
 private:
 	char* str;
