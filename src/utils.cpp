@@ -746,14 +746,7 @@ std::string utils::censor_url(const std::string& url)
 
 std::string utils::quote_for_stfl(std::string str)
 {
-	unsigned int len = str.length();
-	for (unsigned int i = 0; i < len; ++i) {
-		if (str[i] == '<') {
-			str.insert(i + 1, ">");
-			++len;
-		}
-	}
-	return str;
+	return RustString(rs_quote_for_stfl(str.c_str()));
 }
 
 void utils::trim(std::string& str)

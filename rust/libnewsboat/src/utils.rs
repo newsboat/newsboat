@@ -203,6 +203,17 @@ pub fn censor_url(url: &str) -> String {
     }
 }
 
+/// Quote a string for use with stfl by replacing all occurences of "<" with "<>"
+/// ```
+/// use libnewsboat::utils::quote_for_stfl;
+/// assert_eq!(&quote_for_stfl("<"), "<>");
+/// assert_eq!(&quote_for_stfl("<<><><><"), "<><>><>><>><>");
+/// assert_eq!(&quote_for_stfl("test"), "test");
+/// ```
+pub fn quote_for_stfl(string: &str) -> String {
+    return string.replace("<", "<>");
+}
+
 /// Get basename from a URL if available else return an empty string
 /// ```
 /// use libnewsboat::utils::get_basename;
