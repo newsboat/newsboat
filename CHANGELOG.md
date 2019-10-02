@@ -1,6 +1,17 @@
 # Changes for Newsboat
 
 
+## Unreleased - expected 2019-12-22
+
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+
+
 ## 2.17.1 - 2019-10-02
 
 ### Added
@@ -8,7 +19,7 @@
     Batischev on a prod from f-a)
 
 ### Changed
-- Update German translation (Lysander Trischler) 
+- Update German translation (Lysander Trischler)
 
 ### Fixed
 - Feeds not updating when `max-items` is set (#650). This negates some of the
@@ -36,7 +47,7 @@ and seanBE.
     dialog invoked by `save-all` (Alexander Batischev)
 - `selecttag-format` setting, to control how the lines in "Select tag" dialog
     look (Penguin-Guru, Alexander Batischev) (#588)
- 
+
 ### Changed
 - Bumped minimum required Rust version to 1.26.0
 - Update vendored version of nlohmann/json to 3.7.0
