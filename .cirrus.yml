@@ -1,8 +1,11 @@
 freebsd_task:
-    freebsd_instance:
-        matrix:
-            - image: freebsd-11-2-release-amd64
-            - image: freebsd-12-0-release-amd64
+    matrix:
+        - name: FreeBSD 11.2
+          freebsd_instance:
+            image: freebsd-11-2-release-amd64
+        - name: FreeBSD 12.0
+          freebsd_instance:
+            image: freebsd-12-0-release-amd64
 
     install_script: pkg install -y rust gmake asciidoc pkgconf stfl curl json-c ncurses openssl sqlite3 gettext-tools
     setup_script:
@@ -20,6 +23,7 @@ freebsd_task:
     test_script: su testuser -c 'cd ~ && ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"'
 
 32bit_ubuntu_task:
+    name: Ubuntu 18.04 i686
     container:
         dockerfile: docker/ubuntu_18.04-i686.dockerfile
         memory: 8GB
@@ -64,11 +68,11 @@ macos_task:
         - ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"
 
     matrix:
-        - name: clang
+        - name: macOS Clang
           env:
               CC: clang
               CXX: clang++
-        - name: gcc
+        - name: macOS GCC
           env:
               CC: gcc
               CXX: g++
