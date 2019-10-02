@@ -917,11 +917,7 @@ std::wstring utils::clean_nonprintable_characters(std::wstring text)
 
 unsigned int utils::gentabs(const std::string& str)
 {
-	int tabcount = 4 - (utils::strwidth(str) / 8);
-	if (tabcount <= 0) {
-		tabcount = 1;
-	}
-	return tabcount;
+	return rs_gentabs(str.c_str());
 }
 
 /* Like mkdir(), but creates ancestors (parent directories) if they don't

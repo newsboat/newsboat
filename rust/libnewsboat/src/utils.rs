@@ -16,6 +16,7 @@ use self::url::percent_encoding::*;
 use self::url::Url;
 use libc::c_ulong;
 use logger::{self, Level};
+use std::cmp::max;
 use std::fs::DirBuilder;
 use std::io::{self, Write};
 use std::os::unix::fs::DirBuilderExt;
@@ -494,6 +495,45 @@ pub fn getcwd() -> Result<PathBuf, io::Error> {
 
 pub fn strnaturalcmp(a: &str, b: &str) -> std::cmp::Ordering {
     natord::compare(a, b)
+}
+
+/// Calculate the number of padding tabs when formatting columns
+///
+/// The number of tabs will be adjusted by the width of the given string.  Usually, a column will
+/// consist of 4 tabs, 8 characters each.  Each column will consist of at least one tab.
+///
+/// ```
+/// use libnewsboat::utils::gentabs;
+///
+/// fn genstring(len: usize) -> String {
+///     return std::iter::repeat("a").take(len).collect::<String>();
+/// }
+///
+/// assert_eq!(gentabs(""), 4);
+/// assert_eq!(gentabs("a"), 4);
+/// assert_eq!(gentabs("aa"), 4);
+/// assert_eq!(gentabs("aaa"), 4);
+/// assert_eq!(gentabs("aaaa"), 4);
+/// assert_eq!(gentabs("aaaaa"), 4);
+/// assert_eq!(gentabs("aaaaaa"), 4);
+/// assert_eq!(gentabs("aaaaaaa"), 4);
+/// assert_eq!(gentabs("aaaaaaaa"), 3);
+/// assert_eq!(gentabs(&genstring(8)), 3);
+/// assert_eq!(gentabs(&genstring(9)), 3);
+/// assert_eq!(gentabs(&genstring(15)), 3);
+/// assert_eq!(gentabs(&genstring(16)), 2);
+/// assert_eq!(gentabs(&genstring(20)), 2);
+/// assert_eq!(gentabs(&genstring(24)), 1);
+/// assert_eq!(gentabs(&genstring(32)), 1);
+/// assert_eq!(gentabs(&genstring(100)), 1);
+/// ```
+pub fn gentabs(string: &str) -> usize {
+    let tabcount = strwidth(string) / 8;
+    if tabcount >= 4 {
+        1
+    } else {
+        4 - tabcount
+    }
 }
 
 /// Recursively create directories if missing and set permissions accordingly.

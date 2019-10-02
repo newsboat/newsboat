@@ -82,6 +82,8 @@ char* rs_program_version();
 
 unsigned int rs_newsboat_version_major();
 
+unsigned int rs_gentabs(const char* path);
+
 int rs_mkdir_parents(const char* path, const std::uint32_t mode);
 
 char* rs_strip_comments(const char* line);
