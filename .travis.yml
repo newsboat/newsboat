@@ -81,7 +81,7 @@ matrix:
         *osx_deps
     - compiler: gcc-8
       os: linux
-      dist: trusty
+      dist: xenial
       addons:
         apt:
           sources:
@@ -97,12 +97,12 @@ matrix:
         - ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"
     - compiler: clang-8
       os: linux
-      dist: trusty
+      dist: xenial
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-8
+            - llvm-toolchain-xenial-8
           packages:
             - clang-8
             - llvm-8
@@ -113,7 +113,7 @@ matrix:
       script: *release_build_script
     - compiler: gcc-4.9
       os: linux
-      dist: trusty
+      dist: xenial
       rust: 1.26.0
       addons:
         apt:
@@ -129,7 +129,7 @@ matrix:
         *install_coveralls
     - compiler: gcc-4.9
       os: linux
-      dist: trusty
+      dist: xenial
       addons:
         apt:
           sources:
@@ -144,7 +144,7 @@ matrix:
         *install_coveralls
     - compiler: gcc-5
       os: linux
-      dist: trusty
+      dist: xenial
       addons:
         apt:
           sources:
@@ -159,7 +159,7 @@ matrix:
         *install_coveralls
     - compiler: gcc-6
       os: linux
-      dist: trusty
+      dist: xenial
       addons:
         apt:
           sources:
@@ -174,7 +174,7 @@ matrix:
         *install_coveralls
     - compiler: gcc-7
       os: linux
-      dist: trusty
+      dist: xenial
       addons:
         apt:
           sources:
@@ -189,7 +189,7 @@ matrix:
         *install_coveralls
     - compiler: gcc-8
       os: linux
-      dist: trusty
+      dist: xenial
       addons:
         apt:
           sources:
@@ -204,7 +204,7 @@ matrix:
         *install_coveralls
     - compiler: gcc-9
       os: linux
-      dist: trusty
+      dist: xenial
       addons:
         apt:
           sources:
@@ -219,7 +219,7 @@ matrix:
         *install_coveralls
     - compiler: clang
       os: linux
-      dist: trusty
+      dist: xenial
       addons:
         apt:
           sources:
@@ -233,12 +233,12 @@ matrix:
         *install_coveralls
     - compiler: clang-4.0
       os: linux
-      dist: trusty
+      dist: xenial
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-4.0
+            - llvm-toolchain-xenial-4.0
           packages:
             - clang-4.0
             - llvm-4.0
@@ -250,12 +250,12 @@ matrix:
         *install_coveralls
     - compiler: clang-5.0
       os: linux
-      dist: trusty
+      dist: xenial
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-5.0
+            - llvm-toolchain-xenial-5.0
           packages:
             - clang-5.0
             - llvm-5.0
@@ -267,12 +267,12 @@ matrix:
         *install_coveralls
     - compiler: clang-6.0
       os: linux
-      dist: trusty
+      dist: xenial
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-6.0
+            - llvm-toolchain-xenial-6.0
           packages:
             - clang-6.0
             - llvm-6.0
@@ -284,12 +284,12 @@ matrix:
         *install_coveralls
     - compiler: clang-7
       os: linux
-      dist: trusty
+      dist: xenial
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-7
+            - llvm-toolchain-xenial-7
           packages:
             - clang-7
             - llvm-7
@@ -301,12 +301,12 @@ matrix:
         *install_coveralls
     - compiler: clang-8
       os: linux
-      dist: trusty
+      dist: xenial
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-8
+            - llvm-toolchain-xenial-8
           packages:
             - clang-8
             - llvm-8
