@@ -43,27 +43,35 @@ by running the following command on the commandline:
 
 Dependencies
 ~~~~~~~~~~~~
-Newsboat depends on a number of libraries to function correctly. This table
-lists these dependencies. Please be aware that the list libraries may
-themselves depend on other libraries. These dependencies are not listed here.
-Please also be aware that you need a recent C++ compiler.
+Newsboat depends on a number of libraries, which need to be installed before
+Newsboat can be compiled.
 
+// UPDATE README.md IF YOU CHANGE THIS LIST
 - GCC 4.9 or newer, or Clang 3.6 or newer
+- Stable https://www.rust-lang.org/en-US/[Rust] and Cargo (Rust's package
+  manager) (1.26.0 or newer)
 - http://www.clifford.at/stfl/[STFL (version 0.21 or newer)]
 - http://www.sqlite.org/download.html[SQLite3 (version 3.5 or newer)]
-- http://curl.haxx.se/download.html[libcurl (version 7.18.0 or newer)]
-- ftp://ftp.gnu.org/gnu/gettext/[GNU gettext (on systems that don't provide
-  gettext in the libc)]
+- http://curl.haxx.se/download.html[libcurl (version 7.21.6 or newer)]
+- Header files for the SSL library that libcurl uses. You can find out which
+    library that is from the output of `curl --version`; most often that's
+    OpenSSL, sometimes GnuTLS, or maybe something else.
+- GNU gettext (on systems that don't provide gettext in the libc):
+  ftp://ftp.gnu.org/gnu/gettext/
 - http://pkg-config.freedesktop.org/wiki/[pkg-config]
-- http://xmlsoft.org/downloads.html[libxml2]
+- http://xmlsoft.org/downloads.html[libxml2, xmllint, and xsltproc]
 - https://github.com/json-c/json-c/wiki[json-c (version 0.11 or newer)]
+- http://www.methods.co.nz/asciidoc/INSTALL.html[asciidoc]
+- DocBook XML
+- DocBook XSL
+// UPDATE README.md IF YOU CHANGE THIS LIST
 
-If you intend to modify and regenerate the filter language parser, you will also
-need Coco/R for C++, which you can download from
-http://www.ssw.uni-linz.ac.at/coco/[]. The Coco/R binary must be installed as
-`cococpp` in your `PATH`. Debian users only need to install the package
-`coco-cpp`. Use the `regenerate-parser` make target to regenerate the necessary
-files.
+Developers will also need:
+
+- https://github.com/woboq/tr[`xtr`] (can be installed with `cargo install
+  xtr`)
+- http://www.ssw.uni-linz.ac.at/coco/[Coco/R for C++], needed to re-generate
+  filter language parser using `regenerate-parser` target.
 
 
 Compiling and Installing
