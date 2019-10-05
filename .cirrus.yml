@@ -1,8 +1,11 @@
 freebsd_task:
-    freebsd_instance:
-        matrix:
-            - image: freebsd-11-2-release-amd64
-            - image: freebsd-12-0-release-amd64
+    matrix:
+        - name: FreeBSD 11.2
+          freebsd_instance:
+            image: freebsd-11-2-release-amd64
+        - name: FreeBSD 12.0
+          freebsd_instance:
+            image: freebsd-12-0-release-amd64
 
     install_script: pkg install -y rust gmake asciidoc pkgconf stfl curl json-c ncurses openssl sqlite3 gettext-tools
     setup_script:
@@ -20,8 +23,67 @@ freebsd_task:
     test_script: su testuser -c 'cd ~ && ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"'
 
 32bit_ubuntu_task:
+    name: Linux i686
     container:
         dockerfile: docker/ubuntu_18.04-i686.dockerfile
         memory: 8GB
-    build_script: make -j3 --keep-going all test
-    test_script: ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"
+    build_script: &build_script
+        - make -j3 --keep-going all test
+    test_script: &test_script
+        # We want to run both C++ and Rust tests, but we also want this entire
+        # command to fail if one of the test suites fails. That's why we store
+        # the C++'s exit code and chain it to Rust's in the end.
+        - ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"
+
+macos_task:
+    osx_instance:
+        image: mojave-base
+
+    install_script:
+        - brew update
+        - brew install rustup-init
+        - brew install gcc || brew link --overwrite gcc
+        - brew install python
+        - export PATH=/usr/local/opt/python/libexec/bin:$PATH
+        - brew outdated "pkg-config" || brew upgrade "pkg-config"
+        - brew install "gettext" && brew link --force "gettext"
+        - brew outdated "sqlite" || brew upgrade "sqlite"
+        - brew outdated "curl" || brew upgrade "curl"
+        - brew install "libstfl"
+        - brew install "json-c"
+        - brew install "asciidoc"
+        - brew install "docbook-xsl"
+        - brew install "libxml2"
+        - brew install "pyenv" || brew upgrade "pyenv"
+        - rustup-init -y --default-toolchain $RUST
+        - eval "$(pyenv init -)"
+        - pip3 install cpp-coveralls
+        - pyenv rehash
+        - rustc --version && cargo --version
+
+    env:
+        GCOV: /usr/bin/gcov
+        XML_CATALOG_FILES: /usr/local/etc/xml/catalog
+        PKG_CONFIG_PATH: /usr/local/opt/libxml2/lib/pkgconfig:$PKG_CONFIG_PATH
+        RUST_BACKTRACE: 1
+        PATH: $HOME/.cargo/bin:$PATH
+
+    build_script: *build_script
+    test_script: *test_script
+
+    matrix:
+        - name: macOS Clang Rust stable
+          env:
+              CC: clang
+              CXX: clang++
+              RUST: stable
+        - name: macOS GCC Rust stable
+          env:
+              CC: gcc
+              CXX: g++
+              RUST: stable
+        - name: macOS GCC Rust 1.26.0
+          env:
+              CC: gcc
+              CXX: g++
+              RUST: 1.26.0
