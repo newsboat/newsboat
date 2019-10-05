@@ -476,13 +476,13 @@ void KeyMap::unset_key(const std::string& key, const std::string& context)
 void KeyMap::unset_all_keys(const std::string& context)
 {
 	LOG(Level::DEBUG, "KeyMap::unset_all_keys(%s) called", context);
+	auto internal_ops_only = get_internal_operations();
 	if (context == "all") {
-		keymap_.clear();
-	} else {
-		auto& key_operation_map = keymap_[context];
-		for (auto& map : key_operation_map) {
-			map.second = OP_NIL;
+		for (unsigned int i = 0; contexts[i] != nullptr; i++) {
+			keymap_[contexts[i]] = internal_ops_only;
 		}
+	} else {
+		keymap_[context] = std::move(internal_ops_only);
 	}
 }
 
@@ -705,6 +705,17 @@ bool KeyMap::is_valid_context(const std::string& context)
 			return true;
 	}
 	return false;
+}
+
+std::map<std::string, Operation> KeyMap::get_internal_operations() const
+{
+	std::map<std::string, Operation> internal_ops;
+	for (int i = 0; opdescs[i].op != OP_NIL; ++i) {
+		if (opdescs[i].flags & KM_INTERNAL) {
+			internal_ops[opdescs[i].default_key] = opdescs[i].op;
+		}
+	}
+	return internal_ops;
 }
 
 unsigned short KeyMap::get_flag_from_context(const std::string& context)
