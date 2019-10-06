@@ -311,6 +311,24 @@ matrix:
         - GCOV="llvm-cov-8 gcov"
       before_install:
         *install_coveralls
+    - compiler: clang-9
+      os: linux
+      dist: bionic
+      addons:
+        apt:
+          sources:
+            - sourceline: "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-9 main"
+              key_url: "https://apt.llvm.org/llvm-snapshot.gpg.key"
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
+          packages:
+            - clang-9
+            - llvm-9
+            - *clang_deps
+      env:
+        - COMPILER=clang++-9
+        - GCOV="llvm-cov-9 gcov"
+      before_install:
+        *install_coveralls
     - addons:
         apt:
           packages:
