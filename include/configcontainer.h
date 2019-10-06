@@ -2,6 +2,7 @@
 #define NEWSBOAT_CONFIGCONTAINER_H_
 
 #include <unordered_set>
+#include <mutex>
 
 #include "configparser.h"
 
@@ -94,6 +95,7 @@ public:
 
 private:
 	std::map<std::string, ConfigData> config_data;
+	std::recursive_mutex config_data_mtx;
 
 	bool is_bool(const std::string& s);
 	bool is_int(const std::string& s);

@@ -257,7 +257,9 @@ ConfigContainer::ConfigContainer()
 {
 }
 
-ConfigContainer::~ConfigContainer() {}
+ConfigContainer::~ConfigContainer() {
+	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
+}
 
 void ConfigContainer::register_commands(ConfigParser& cfgparser)
 {
@@ -265,6 +267,7 @@ void ConfigContainer::register_commands(ConfigParser& cfgparser)
 	// parser
 	// -> if the resp. config option is encountered, it is passed to the
 	// ConfigContainer
+	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	for (const auto& cfg : config_data) {
 		cfgparser.register_handler(cfg.first, this);
 	}
@@ -273,6 +276,7 @@ void ConfigContainer::register_commands(ConfigParser& cfgparser)
 void ConfigContainer::handle_action(const std::string& action,
 	const std::vector<std::string>& params)
 {
+	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	ConfigData& cfgdata = config_data[action];
 
 	// ConfigDataType::INVALID indicates that the action didn't exist, and
@@ -348,6 +352,7 @@ bool ConfigContainer::is_int(const std::string& s)
 
 std::string ConfigContainer::get_configvalue(const std::string& key)
 {
+	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	std::string retval = config_data[key].value;
 	if (config_data[key].type == ConfigDataType::PATH) {
 		retval = utils::resolve_tilde(retval);
@@ -357,6 +362,7 @@ std::string ConfigContainer::get_configvalue(const std::string& key)
 
 int ConfigContainer::get_configvalue_as_int(const std::string& key)
 {
+	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	std::istringstream is(config_data[key].value);
 	int i;
 	is >> i;
@@ -365,6 +371,7 @@ int ConfigContainer::get_configvalue_as_int(const std::string& key)
 
 bool ConfigContainer::get_configvalue_as_bool(const std::string& key)
 {
+	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	std::string value = config_data[key].value;
 	return (value == "true" || value == "yes");
 }
@@ -376,16 +383,19 @@ void ConfigContainer::set_configvalue(const std::string& key,
 		"ConfigContainer::set_configvalue(%s, %s) called",
 		key,
 		value);
+	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	config_data[key].value = value;
 }
 
 void ConfigContainer::reset_to_default(const std::string& key)
 {
+	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	config_data[key].value = config_data[key].default_value;
 }
 
 void ConfigContainer::toggle(const std::string& key)
 {
+	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	if (config_data[key].type == ConfigDataType::BOOL) {
 		set_configvalue(key,
 			std::string(get_configvalue_as_bool(key) ? "false"
@@ -395,6 +405,7 @@ void ConfigContainer::toggle(const std::string& key)
 
 void ConfigContainer::dump_config(std::vector<std::string>& config_output)
 {
+	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	for (const auto& cfg : config_data) {
 		std::string configline = cfg.first + " ";
 		assert(cfg.second.type != ConfigDataType::INVALID);
@@ -441,6 +452,7 @@ std::vector<std::string> ConfigContainer::get_suggestions(
 	const std::string& fragment)
 {
 	std::vector<std::string> result;
+	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	for (const auto& cfg : config_data) {
 		if (cfg.first.substr(0, fragment.length()) == fragment)
 			result.push_back(cfg.first);
