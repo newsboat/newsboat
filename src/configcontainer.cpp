@@ -41,6 +41,7 @@ ConfigContainer::ConfigContainer()
 		  {"confirm-exit", ConfigData("no", ConfigDataType::BOOL)},
 		  {"cookie-cache", ConfigData("", ConfigDataType::PATH)},
 		  {"datetime-format", ConfigData("%b %d", ConfigDataType::STR)},
+		  {"decsync-dir", ConfigData("", ConfigDataType::PATH)},
 		  {"delete-read-articles-on-quit",
 			  ConfigData("false", ConfigDataType::BOOL)},
 		  {"display-article-progress",
@@ -213,7 +214,8 @@ ConfigContainer::ConfigContainer()
 					  "newsblur",
 					  "feedhq",
 					  "ocnews",
-					  "inoreader"}))},
+					  "inoreader",
+					  "decsync"}))},
 		  {"use-proxy", ConfigData("no", ConfigDataType::BOOL)},
 		  {"user-agent", ConfigData("", ConfigDataType::STR)},
 

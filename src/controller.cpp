@@ -30,6 +30,7 @@
 #include "configexception.h"
 #include "configparser.h"
 #include "dbexception.h"
+#include "decsyncapi.h"
 #include "downloadthread.h"
 #include "exception.h"
 #include "feedhqapi.h"
@@ -301,6 +302,9 @@ int Controller::run(const CliArgsParser& args)
 		api = new InoreaderApi(&cfg);
 		urlcfg = new InoreaderUrlReader(
 			&cfg, configpaths.url_file(), api);
+	} else if (type == "decsync") {
+		api = new DecsyncApi(&cfg);
+		urlcfg = new DecsyncUrlReader(configpaths.url_file(), api);
 	} else {
 		LOG(Level::ERROR,
 			"unknown urls-source `%s'",
@@ -356,6 +360,11 @@ int Controller::run(const CliArgsParser& args)
 			msg = strprintf::fmt(
 				_("It looks like you haven't configured any "
 				  "feeds in your Inoreader account. Please do "
+				  "so, and try again."));
+		} else if (type == "decsync") {
+			msg = strprintf::fmt(
+				_("It looks like you haven't configured any "
+				  "feeds in your DecSync directory. Please do "
 				  "so, and try again."));
 		} else {
 			assert(0); // shouldn't happen

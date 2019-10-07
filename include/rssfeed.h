@@ -67,6 +67,10 @@ public:
 	{
 		return items_;
 	}
+	const std::vector<std::shared_ptr<RssItem>>& items() const
+	{
+		return items_;
+	}
 	void add_item(std::shared_ptr<RssItem> item)
 	{
 		items_.push_back(item);
