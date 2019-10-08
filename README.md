@@ -19,8 +19,11 @@ Dependencies
 ------------
 
 Newsboat depends on a number of libraries, which need to be installed before
-newsboat can be compiled.
+Newsboat can be compiled.
 
+<!--
+    UPDATE doc/newsboat.txt IF YOU CHANGE THIS LIST
+-->
 - GCC 4.9 or newer, or Clang 3.6 or newer
 - Stable [Rust](https://www.rust-lang.org/en-US/) and Cargo (Rust's package
     manager) (1.26.0 or newer)
@@ -38,9 +41,19 @@ newsboat can be compiled.
 - [asciidoc](http://www.methods.co.nz/asciidoc/INSTALL.html)
 - DocBook XML
 - DocBook XSL
+<!--
+    UPDATE doc/newsboat.txt IF YOU CHANGE THIS LIST
+-->
 
 Developers will also need [`xtr`](https://github.com/woboq/tr) (can be installed
 with `cargo install xtr`).
+
+Developers will also need:
+
+- [`xtr`](https://github.com/woboq/tr) (can be installed with `cargo install
+  xtr`)
+- [Coco/R for C++](http://www.ssw.uni-linz.ac.at/coco/), needed to re-generate
+- filter language parser using `regenerate-parser` target.
 
 Installation
 ------------
