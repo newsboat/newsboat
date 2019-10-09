@@ -20,7 +20,7 @@ addons:
   apt:
     packages: &clang_deps
     - *global_deps
-    - g++-4.9 # required for some niceties in C++ standard library
+    - g++ # required for some niceties in C++ standard library
 
 install_coveralls_commands: &install_coveralls
   - pip install --user cpp-coveralls
@@ -81,11 +81,11 @@ matrix:
         *osx_deps
     - compiler: gcc-8
       os: linux
-      dist: trusty
+      dist: bionic
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
           packages:
             - g++-8
             - *global_deps
@@ -97,12 +97,11 @@ matrix:
         - ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"
     - compiler: clang-8
       os: linux
-      dist: trusty
+      dist: bionic
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-8
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
           packages:
             - clang-8
             - llvm-8
@@ -113,12 +112,12 @@ matrix:
       script: *release_build_script
     - compiler: gcc-4.9
       os: linux
-      dist: trusty
+      dist: xenial
       rust: 1.26.0
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
           packages:
             - g++-4.9
             - *global_deps
@@ -129,11 +128,11 @@ matrix:
         *install_coveralls
     - compiler: gcc-4.9
       os: linux
-      dist: trusty
+      dist: xenial
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
           packages:
             - g++-4.9
             - *global_deps
@@ -144,11 +143,11 @@ matrix:
         *install_coveralls
     - compiler: gcc-5
       os: linux
-      dist: trusty
+      dist: bionic
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
           packages:
             - g++-5
             - *global_deps
@@ -159,11 +158,11 @@ matrix:
         *install_coveralls
     - compiler: gcc-6
       os: linux
-      dist: trusty
+      dist: bionic
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
           packages:
             - g++-6
             - *global_deps
@@ -174,11 +173,11 @@ matrix:
         *install_coveralls
     - compiler: gcc-7
       os: linux
-      dist: trusty
+      dist: bionic
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
           packages:
             - g++-7
             - *global_deps
@@ -189,11 +188,11 @@ matrix:
         *install_coveralls
     - compiler: gcc-8
       os: linux
-      dist: trusty
+      dist: bionic
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
           packages:
             - g++-8
             - *global_deps
@@ -204,11 +203,11 @@ matrix:
         *install_coveralls
     - compiler: gcc-9
       os: linux
-      dist: trusty
+      dist: bionic
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
           packages:
             - g++-9
             - *global_deps
@@ -219,11 +218,11 @@ matrix:
         *install_coveralls
     - compiler: clang
       os: linux
-      dist: trusty
+      dist: bionic
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
           packages:
             - *clang_deps
       env:
@@ -233,12 +232,12 @@ matrix:
         *install_coveralls
     - compiler: clang-4.0
       os: linux
-      dist: trusty
+      dist: xenial
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-4.0
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
+            - llvm-toolchain-xenial-4.0
           packages:
             - clang-4.0
             - llvm-4.0
@@ -250,12 +249,11 @@ matrix:
         *install_coveralls
     - compiler: clang-5.0
       os: linux
-      dist: trusty
+      dist: bionic
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-5.0
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
           packages:
             - clang-5.0
             - llvm-5.0
@@ -267,12 +265,11 @@ matrix:
         *install_coveralls
     - compiler: clang-6.0
       os: linux
-      dist: trusty
+      dist: bionic
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-6.0
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
           packages:
             - clang-6.0
             - llvm-6.0
@@ -284,12 +281,11 @@ matrix:
         *install_coveralls
     - compiler: clang-7
       os: linux
-      dist: trusty
+      dist: bionic
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-7
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
           packages:
             - clang-7
             - llvm-7
@@ -301,12 +297,11 @@ matrix:
         *install_coveralls
     - compiler: clang-8
       os: linux
-      dist: trusty
+      dist: bionic
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-8
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
           packages:
             - clang-8
             - llvm-8
@@ -314,6 +309,24 @@ matrix:
       env:
         - COMPILER=clang++-8
         - GCOV="llvm-cov-8 gcov"
+      before_install:
+        *install_coveralls
+    - compiler: clang-9
+      os: linux
+      dist: bionic
+      addons:
+        apt:
+          sources:
+            - sourceline: "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-9 main"
+              key_url: "https://apt.llvm.org/llvm-snapshot.gpg.key"
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
+          packages:
+            - clang-9
+            - llvm-9
+            - *clang_deps
+      env:
+        - COMPILER=clang++-9
+        - GCOV="llvm-cov-9 gcov"
       before_install:
         *install_coveralls
     - addons:
