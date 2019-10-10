@@ -376,6 +376,8 @@ void RssFeed::set_feedptrs(std::shared_ptr<RssFeed> self)
 
 std::string RssFeed::get_status()
 {
+	std::lock_guard<std::mutex> guard(status_mutex_);
+
 	switch (status_) {
 	case DlStatus::SUCCESS:
 		return " ";
