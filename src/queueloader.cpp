@@ -210,13 +210,8 @@ std::string QueueLoader::get_filename(const std::string& str)
 	snprintf(buf, sizeof(buf), "%s", str.c_str());
 	char* base = basename(buf);
 	if (!base || strlen(base) == 0) {
-		char lbuf[128];
 		time_t t = time(nullptr);
-		strftime(lbuf,
-			sizeof(lbuf),
-			"%Y-%b-%d-%H%M%S.unknown",
-			localtime(&t));
-		fn.append(lbuf);
+		fn.append(utils::mt_strf_localtime("%Y-%b-%d-%H%M%S.unknown", t));
 	} else {
 		fn.append(utils::replace_all(base, "'", "%27"));
 	}

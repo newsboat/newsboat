@@ -436,12 +436,10 @@ rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 
 			int updated_time = item_obj["updated"];
 			time_t updated = static_cast<time_t>(updated_time);
-			char rfc822_date[128];
-			strftime(rfc822_date,
-				sizeof(rfc822_date),
-				"%a, %d %b %Y %H:%M:%S %z",
-				gmtime(&updated));
-			item.pubDate = rfc822_date;
+
+			item.pubDate = utils::mt_strf_localtime(
+					"%a, %d %b %Y %H:%M:%S %z",
+					updated);
 			item.pubDate_ts = updated;
 
 			f.items.push_back(item);

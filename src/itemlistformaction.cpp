@@ -995,7 +995,9 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	fmt.register_fmt('i', strprintf::fmt("%u", item.second + 1));
 	fmt.register_fmt('f', gen_flags(item.first));
 	fmt.register_fmt('D',
-		gen_datestr(item.first->pubDate_timestamp(), datetime_format));
+		utils::mt_strf_localtime(
+			datetime_format,
+			item.first->pubDate_timestamp()));
 	if (feed->rssurl() != item.first->feedurl() &&
 		item.first->get_feedptr() != nullptr) {
 		auto feedtitle = utils::quote_for_stfl(
@@ -1352,15 +1354,6 @@ std::string ItemListFormAction::gen_flags(std::shared_ptr<RssItem> item)
 		flags.append(" ");
 	}
 	return flags;
-}
-
-std::string ItemListFormAction::gen_datestr(time_t t,
-	const std::string& datetimeformat)
-{
-	char datebuf[64];
-	struct tm* stm = localtime(&t);
-	strftime(datebuf, sizeof(datebuf), datetimeformat.c_str(), stm);
-	return datebuf;
 }
 
 void ItemListFormAction::prepare_set_filterpos()

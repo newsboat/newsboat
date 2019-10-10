@@ -142,6 +142,9 @@ namespace utils {
 
 	/// Newsboat's major version number.
 	unsigned int newsboat_version_major();
+
+	/// Threadsafe combination of strftime() and localtime()
+	std::string mt_strf_localtime(const std::string& format, time_t t);
 }
 
 } // namespace newsboat

@@ -6,6 +6,8 @@
 
 #include "exception.h"
 
+#include "utils.h"
+
 namespace rsspp {
 
 std::string RssParser::get_content(xmlNode* node)
@@ -134,12 +136,7 @@ std::string RssParser::__w3cdtf_to_rfc822(const std::string& w3cdtf)
 	// https://github.com/akrennmair/newsbeuter/issues/369
 	stm.tm_isdst = -1;
 	time_t gmttime = mktime(&stm) + offs;
-	char datebuf[256];
-	strftime(datebuf,
-		sizeof(datebuf),
-		"%a, %d %b %Y %H:%M:%S +0000",
-		localtime(&gmttime));
-	return datebuf;
+	return newsboat::utils::mt_strf_localtime("%a, %d %b %Y %H:%M:%S +0000", gmttime);
 }
 
 bool RssParser::node_is(xmlNode* node, const char* name, const char* ns_uri)
