@@ -236,6 +236,7 @@ doc/keycmds-linked.dsv: doc/keycmds.dsv
 
 fmt:
 	clang-format --style=file -i *.cpp doc/*.cpp include/*.h rss/*.h rss/*.cpp src/*.cpp test/*.h test/*.cpp
+	$(CARGO) fmt
 
 cppcheck:
 	cppcheck -j$(CPPCHECK_JOBS) --force --enable=all --suppress=unusedFunction \
