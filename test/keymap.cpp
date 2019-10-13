@@ -130,8 +130,6 @@ TEST_CASE("getkey()", "[KeyMap]")
 	{
 		REQUIRE(k.getkey(OP_OPEN, "all") == "ENTER");
 		REQUIRE(k.getkey(OP_TOGGLEITEMREAD, "all") == "N");
-		REQUIRE(k.getkey(static_cast<Operation>(30000), "all") ==
-			"<none>");
 	}
 
 	SECTION("Returns context-specific bindings only in that context")
